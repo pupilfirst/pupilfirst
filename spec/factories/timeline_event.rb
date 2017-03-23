@@ -7,7 +7,7 @@ FactoryGirl.define do
     timeline_event_type
 
     factory :timeline_event_with_image do
-      image { Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec', 'support', 'uploads', 'resources', 'pdf-thumbnail.png')) }
+      image { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-thumbnail.png')) }
     end
 
     factory :timeline_event_with_links do
@@ -17,6 +17,11 @@ FactoryGirl.define do
           { title: 'Public URL', url: 'https://google.com', private: false }
         ]
       end
+    end
+
+    trait :verified do
+      verified_status TimelineEvent::VERIFIED_STATUS_VERIFIED
+      verified_at { Time.now }
     end
   end
 end

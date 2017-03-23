@@ -35,7 +35,7 @@ module Svapp
 
     # Add some paths to autoload
     %w(presenters services forms/concerns).each do |folder|
-      config.autoload_paths.push "#{Rails.root}/app/#{folder}"
+      config.autoload_paths.push(Rails.root.join('app', folder))
     end
   end
 end

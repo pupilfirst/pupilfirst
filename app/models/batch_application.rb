@@ -35,7 +35,7 @@ class BatchApplication < ApplicationRecord
   scope :paid_today, -> { payment_complete.where('payments.paid_at > ?', Time.now.in_time_zone('Asia/Kolkata').beginning_of_day) }
   scope :payment_initiated_today, -> { payment_initiated.where('payments.created_at > ?', Time.now.in_time_zone('Asia/Kolkata').beginning_of_day) }
 
-  scope :from_state, -> (state) { joins(:college).where(colleges: { state_id: state.id }) }
+  scope :from_state, ->(state) { joins(:college).where(colleges: { state_id: state.id }) }
   scope :from_other_states, -> { joins(:college).where.not(colleges: { state_id: State.focused_for_admissions.pluck(:id) }) }
 
   # a single scope for states - specify a State or :non_focused or :all.

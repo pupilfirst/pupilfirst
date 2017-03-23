@@ -163,7 +163,7 @@ class Startup < ApplicationRecord
 
   before_destroy do
     # Clear out associations from associated Founders (and pending ones).
-    Founder.where(startup_id: id).update_all(startup_id: nil, startup_admin: nil)
+    Founder.where(startup_id: id).update_all(startup_id: nil, startup_admin: nil) # rubocop:disable Rails/SkipsModelValidations
   end
 
   def approved?
@@ -382,7 +382,7 @@ class Startup < ApplicationRecord
 
   # Update stage stored in database. Do not trigger callbacks, to avoid callback loop.
   def update_stage!
-    update_column(:stage, current_stage)
+    update_column(:stage, current_stage) # rubocop:disable Rails/SkipsModelValidations
   end
 
   def latest_help_wanted

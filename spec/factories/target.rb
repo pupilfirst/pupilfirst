@@ -6,6 +6,7 @@ FactoryGirl.define do
     target_type { Target.valid_target_types.sample }
     days_to_complete { 1 + rand(60) }
     target_group
+    timeline_event_type
 
     transient do
       batch nil
@@ -13,12 +14,16 @@ FactoryGirl.define do
       group_index nil
     end
 
+    trait :for_founders do
+      role Target::ROLE_FOUNDER
+    end
+
     trait :for_startup do
       role { Founder.valid_roles.sample }
     end
 
     trait :with_rubric do
-      rubric { Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf')) }
+      rubric { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf')) }
     end
 
     trait :with_program_week do

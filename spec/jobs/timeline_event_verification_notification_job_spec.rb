@@ -72,7 +72,7 @@ describe TimelineEventVerificationNotificationJob do
 
     it 'sends slack notification to the founder who submitted, to other team members and the public slack channel for verified startup target' do
       expect(PublicSlackTalk).to receive(:post_message).with(message: expected_founder_message_for_startup_target, founder: timeline_event_for_startup.founder)
-      expect(PublicSlackTalk).to receive(:post_message).with(message: expected_team_message, founders: timeline_event_for_startup.startup&.founders - [timeline_event_for_startup.founder])
+      expect(PublicSlackTalk).to receive(:post_message).with(message: expected_team_message, founders: (timeline_event_for_startup.startup&.founders || []) - [timeline_event_for_startup.founder])
       expect(PublicSlackTalk).to receive(:post_message).with(message: expected_public_message, channel: timeline_event_for_startup.startup.batch.slack_channel)
       subject.perform_now(timeline_event_for_startup)
     end

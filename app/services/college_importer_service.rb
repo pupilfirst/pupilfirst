@@ -20,7 +20,7 @@ class CollegeImporterService
   private
 
   def load_data
-    @parsed_data = YAML.load(open(source_yml_url).read)
+    @parsed_data = YAML.safe_load(open(source_yml_url).read)
   end
 
   def rebuild_colleges

@@ -41,7 +41,7 @@ class Resource < ApplicationRecord
 
   scope :public_resources, -> { where(share_status: SHARE_STATUS_PUBLIC).order('title') }
   # scope to search title
-  scope :title_matches, -> (search_key) { where("lower(title) LIKE ?", "%#{search_key.downcase}%") }
+  scope :title_matches, ->(search_key) { where("lower(title) LIKE ?", "%#{search_key.downcase}%") }
 
   # Custom scope to allow AA to filter by intersection of tags.
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }

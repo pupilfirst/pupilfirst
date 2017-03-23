@@ -115,14 +115,16 @@ class IntercomClient
 
   # total number of new users
   def new_users_count
-    return 0 unless user_count_by_segment.present?
-    user_count_by_segment.find { |h| h.key? 'New' }['New']
+    return 0 if user_count_by_segment.blank?
+    new_segment = user_count_by_segment.find { |h| h.key? 'New' }
+    new_segment.present? ? new_segment['New'] : 0
   end
 
   # total number of active users
   def active_users_count
-    return 0 unless user_count_by_segment.present?
-    user_count_by_segment.find { |h| h.key? 'Active' }['Active']
+    return 0 if user_count_by_segment.blank?
+    active_segment = user_count_by_segment.find { |h| h.key? 'Active' }
+    active_segment.present? ? active_segment['Active'] : 0
   end
 
   # fetch the latest n open conversations

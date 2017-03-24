@@ -406,6 +406,7 @@ class Startup < ApplicationRecord
   end
 
   def restartable_levels
-    Level.where(number: 2..(level.number - 1))
+    return Level.none if level.number < 2
+    Level.where(number: 1..(level.number - 1))
   end
 end

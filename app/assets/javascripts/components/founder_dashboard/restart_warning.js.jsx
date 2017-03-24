@@ -5,7 +5,7 @@ class FounderDashboardRestartWarning extends React.Component {
         <div className="alert alert-warning">
           <span>
             <i className="fa fa-exclamation-triangle" aria-hidden="true"></i>
-            &nbsp;Your startup has requested a restart! We advise you to wait for it's approval before completing further tasks.
+            &nbsp;Your startup has requested a restart! We advise you to wait for its approval before completing further tasks.
           </span>
         </div>
       </div>

@@ -7,9 +7,9 @@
     - founder_visits.order('visits.started_at DESC').limit(10).each do |visit|
       .recent-visit
         ' &nbsp;#{visit.started_at.strftime('%b %e, %H:%M')}:
-        = link_to visit.user.founder.fullname, admin_founder_path(visit.user.founder)
+        = link_to visit.logged_in_user.founder.fullname, admin_founder_path(visit.logged_in_user.founder)
         ' &nbsp;&dash;
-        = link_to visit.user.founder.startup.product_name, admin_startup_path(visit.user.founder.startup)
+        = link_to visit.logged_in_user.founder.startup.product_name, admin_startup_path(visit.logged_in_user.founder.startup)
 
   .footer-spacer
 

@@ -28,14 +28,7 @@
   p #{simple_format(event.detailed_description)}
 
   - if current_founder && startup.founder?(current_founder)
-    - if event.verified_or_needs_improvement?
-      .old-to-edit href="#" data-toggle="tooltip" title="To delete this event, please write to help@sv.co."
-        button.btn.btn-danger.btn-sm.btn-flat.btn-with-default-padding.disabled.margin-right-5.delete-link
-          i.fa.fa-times
-          | &nbsp;Delete
-    - else
-      = button_to founder_startup_timeline_event_url(event),
-        method: :delete, class: 'btn btn-danger btn-sm btn-flat btn-with-default-padding',
-        data: { confirm: 'This action cannot be reversed. Are you sure?' } do
+    .old-to-edit href="#" data-toggle="tooltip" title="To delete this event, please write to help@sv.co."
+      button.btn.btn-danger.btn-sm.btn-flat.btn-with-default-padding.disabled.margin-right-5.delete-link
         i.fa.fa-times
-        | &nbsp; Delete
+        | &nbsp;Delete

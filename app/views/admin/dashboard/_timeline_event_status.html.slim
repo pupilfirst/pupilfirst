@@ -1,13 +1,13 @@
 - TimelineEvent.valid_verified_status.each do |verified_status|
   .dashboard-item
-    - timeline_events = TimelineEvent.not_dropped_out.for_batch_id_in(selected_batch_ids).where(verified_status: verified_status).order('verified_at DESC').includes(:timeline_event_type, :startup)
+    - timeline_events = TimelineEvent.not_dropped_out.for_batch_id_in(selected_batch_ids).where(verified_status: verified_status).order('verified_at DESC')
     .heading Timeline Events - #{verified_status}
 
     .content
       ol
         - events_to_list = verified_status == TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT ? timeline_events.not_improved : timeline_events
         - if events_to_list.present?
-          - events_to_list.limit(10).each do |timeline_event|
+          - events_to_list.limit(10).includes(:startup, :timeline_event_type).each do |timeline_event|
             li = link_to "#{timeline_event.startup.product_name} - #{timeline_event.title}", admin_timeline_event_path(timeline_event)
 
     .footer-spacer

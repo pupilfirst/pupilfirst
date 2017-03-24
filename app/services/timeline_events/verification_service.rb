@@ -56,6 +56,7 @@ module TimelineEvents
     def mark_not_accepted
       TimelineEvent.transaction do
         @timeline_event.mark_not_accepted!
+        cancel_reset_request if @timeline_event.timeline_event_type.end_iteration?
       end
     end
 
@@ -128,11 +129,17 @@ module TimelineEvents
       TimelineEvents::FacebookPostJob.perform_later(@timeline_event)
     end
 
-    def reset_startup_level
-      startup = @timeline_event.startup
-      return if startup.requested_restart_level.blank?
+    def startup
+      @startup ||= @timeline_event.startup
+    end
 
+    def reset_startup_level
+      return if startup.requested_restart_level.blank?
       Startups::RestartService.new(startup.admin).restart(startup.requested_restart_level)
+    end
+
+    def cancel_reset_request
+      Startups::RestartService.new(startup.admin).cancel
     end
   end
 end

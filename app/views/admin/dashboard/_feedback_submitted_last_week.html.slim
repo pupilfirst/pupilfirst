@@ -1,5 +1,5 @@
 .dashboard-item
-  - startup_feedback_from_last_week = StartupFeedback.for_batch_id_in(selected_batch_ids).where('startup_feedback.created_at > ?', 1.week.ago).order('startup_feedback.created_at DESC')
+  - startup_feedback_from_last_week = StartupFeedback.for_batch_id_in(selected_batch_ids).where('startup_feedback.created_at > ?', 1.week.ago).includes(:faculty, :startup).order('startup_feedback.created_at DESC')
 
   .heading Feedback Submitted Last Week
 

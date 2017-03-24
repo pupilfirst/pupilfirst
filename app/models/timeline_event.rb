@@ -211,6 +211,7 @@ class TimelineEvent < ApplicationRecord
   end
 
   def founder_can_modify?
+    return false if end_iteration?
     !verified_or_needs_improvement?
   end
 

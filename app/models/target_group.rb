@@ -12,6 +12,12 @@ class TargetGroup < ApplicationRecord
   scope :sorted_by_week, -> { joins(:program_week).order('program_weeks.number ASC') }
 
   def display_name
-    "W#{program_week.number}: #{name}"
+    if level.present?
+      "L#{level.number}: #{name}"
+    elsif program_week.present?
+      "W#{program_week.number}: #{name}"
+    else
+      name
+    end
   end
 end

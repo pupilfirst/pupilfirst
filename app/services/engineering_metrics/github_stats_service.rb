@@ -4,13 +4,20 @@ module EngineeringMetrics
       @token = ENV.fetch('GITHUB_ACCESS_TOKEN')
     end
 
+    AUTHORS = %w(harigopal ajaleelp mahesh-sv vinutv).freeze
+
     def contributions
       contributions = fetch('repos/SVdotCO/sv.co/stats/contributors')
       contributions.reject! { |c| !c['author']['login'].in?(AUTHORS) }
       contributions.map { |c| pretty_contribution(c) }
     end
 
-    AUTHORS = %w(harigopal ajaleelp mahesh-sv vinutv).freeze
+    # returns commits per founder per week for last 10 weeks
+    def commits_trend
+      contributions.each_with_object({}) do |developer_stats, result|
+        result[developer_stats[:name].to_sym] = developer_stats[:recent_weeks].map { |_k, a| a[:commits] }
+      end
+    end
 
     private
 

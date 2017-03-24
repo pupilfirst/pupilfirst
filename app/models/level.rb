@@ -5,4 +5,8 @@ class Level < ApplicationRecord
   has_many :target_groups
   has_many :startups
   has_many :targets
+
+  def display_name
+    "Level #{number}: #{name}"
+  end
 end

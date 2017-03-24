@@ -50,6 +50,14 @@ GIT
     quilt (0.1.0)
 
 GIT
+  remote: https://github.com/harigopal/rails_server_timings.git
+  revision: 63578ba85c50cf63858a9588e23b1ed0ac2f8b24
+  branch: increase-temporal-resolution
+  specs:
+    rails_server_timings (1.0.2)
+      railties (>= 3.0.0)
+
+GIT
   remote: https://github.com/harigopal/shortener.git
   revision: fa07d7225acc802483ba5cf611bb2b4fc371d06d
   branch: 74-rails-5-support
@@ -891,6 +899,7 @@ DEPENDENCIES
   rails-assets-trix!
   rails-assets-waypoints!
   rails_12factor
+  rails_server_timings (~> 1.0)!
   rails_stats
   react-rails
   recaptcha

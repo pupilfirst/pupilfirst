@@ -111,6 +111,10 @@ gem 'pretender' # Log in as another user in Rails
 gem 'file_validators' # Adds file validators to ActiveModel.
 gem 'diffy' # Easy Diffing in Ruby.
 
+# Server Timing headers for Rails apps. https://github.com/dpogue/rails_server_timings
+# TODO: Switch to main gem when fix is deployed / PR is accepted.
+gem 'rails_server_timings', '~> 1.0', github: 'harigopal/rails_server_timings', branch: 'increase-temporal-resolution'
+
 # Rails assets!
 source 'https://rails-assets.org' do
   gem 'rails-assets-pnotify' # Superb notifications library. http://sciactive.github.io/pnotify/

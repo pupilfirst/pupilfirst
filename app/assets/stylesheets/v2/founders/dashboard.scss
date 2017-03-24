@@ -547,6 +547,11 @@
     z-index: 0;
   }
 }
+.founder-dashboard-target-group__container--final {
+  &:before {
+    bottom: 0;
+  }
+}
 
 .founder-dashboard-target-group__box {
   background-color: white;
@@ -559,8 +564,19 @@
   position: relative;
 }
 
+.founder-dashboard-target-group__milestone-label {
+  position: relative;
+  top: -6px;
+  display: inline-block;
+  padding: 5px 15px;
+  color: white;
+  letter-spacing: 0.03rem;
+  @include border-radius(0 0 10px 10px);
+  background-color: $alert-background;
+}
+
 .founder-dashboard-target-group__header {
-  padding: 30px;
+  padding: 6px 30px 30px;
 }
 
 .founder-dashboard-target-group__header-info {

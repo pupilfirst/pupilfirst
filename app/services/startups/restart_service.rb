@@ -30,5 +30,9 @@ module Startups
     def restart(level)
       @startup.update!(iteration: @startup.iteration + 1, level: level, requested_restart_level: nil)
     end
+
+    def cancel
+      @startup.update(requested_restart_level: nil)
+    end
   end
 end

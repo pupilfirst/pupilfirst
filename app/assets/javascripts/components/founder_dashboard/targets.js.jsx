@@ -42,7 +42,7 @@ class FounderDashboardTargets extends React.Component {
     return (
       <div>
         { this.props.eligibleToLevelUp &&
-        <FounderDashboardLevelUpNotification/>
+        <FounderDashboardLevelUpNotification authenticityToken={ this.props.authenticityToken }/>
         }
 
         <FounderDashboardActionBar filter='targets' filterData={ this.filterData() } pickFilterCB={ this.pickFilter }
@@ -57,5 +57,6 @@ FounderDashboardTargets.propTypes = {
   currentLevel: React.PropTypes.number,
   levels: React.PropTypes.object,
   openTimelineBuilderCB: React.PropTypes.func,
-  eligibleToLevelUp: React.PropTypes.bool
+  eligibleToLevelUp: React.PropTypes.bool,
+  authenticityToken: React.PropTypes.string
 };

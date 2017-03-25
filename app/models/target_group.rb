@@ -6,7 +6,7 @@ class TargetGroup < ApplicationRecord
 
   validates :name, presence: true
   validates :description, presence: true
-  validates :sort_index, presence: true, uniqueness: { scope: [:program_week_id] }
+  validates :sort_index, presence: true
   validates :level, presence: true
 
   scope :sorted_by_week, -> { joins(:program_week).order('program_weeks.number ASC') }

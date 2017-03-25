@@ -204,6 +204,9 @@ en:
           *Description:* %{event_description}
           %{links_attached_notice}
         needs_improvement: *slack_notifications_public_verified
+    karma_points:
+      founder: 'You have been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
+      startup: 'Your startup <%{startup_url}|%{startup_product_name}> has been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
 
     connect_sessions:
       founder_reminder: ":exclamation: *Reminder:* Your startup (%{startup_name}) has an office hour with <%{faculty_url}|%{faculty_name}> starting in 30 minutes! You can <%{meeting_link}|click here> to join the meeting when it's time."

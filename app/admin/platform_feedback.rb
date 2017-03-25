@@ -59,12 +59,7 @@ ActiveAdmin.register PlatformFeedback do
     platform_feedback = PlatformFeedback.find params[:id]
 
     if params[:karma_point].present?
-      KarmaPoint.create!(
-        source: platform_feedback,
-        founder: platform_feedback.founder,
-        activity_type: "Submitted Platform Feedback on #{platform_feedback.created_at.strftime('%b %d, %Y')}",
-        points: params[:karma_point]
-      )
+      KarmaPoints::CreateService.new(platform_feedback, params[:karma_point]).execute
     end
 
     platform_feedback.update(notes: params[:notes]) if params[:notes].present?

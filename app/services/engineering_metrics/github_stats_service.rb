@@ -4,8 +4,8 @@ module EngineeringMetrics
       @token = ENV.fetch('GITHUB_ACCESS_TOKEN')
     end
 
-    # fetch data for any Github API end-point.
-    def fetch(path)
+    # get data from any Github API end-point.
+    def get(path)
       url = 'https://api.github.com/' + path
       JSON.parse(RestClient.get(url, Authorization: "token #{@token}"))
     end
@@ -14,7 +14,7 @@ module EngineeringMetrics
 
     # contribution details per founder per week - including additions, deletions and commits
     def contributions
-      contributions = fetch('repos/SVdotCO/sv.co/stats/contributors')
+      contributions = get('repos/SVdotCO/sv.co/stats/contributors')
       contributions.reject! { |c| !c['author']['login'].in?(AUTHORS) }
       contributions.map { |c| pretty_contribution(c) }
     end
@@ -28,7 +28,7 @@ module EngineeringMetrics
 
     # additions and deletions per week for last 10 weeks
     def code_frequency
-      fetch('repos/SVdotCO/sv.co/stats/code_frequency')[-10..-1]
+      get('repos/SVdotCO/sv.co/stats/code_frequency')[-10..-1]
     end
 
     private

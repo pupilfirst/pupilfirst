@@ -17,9 +17,12 @@ class FounderDashboardTargetCollection extends React.Component {
       <div className="founder-dashboard-target-group__container p-x-1 m-x-auto">
         <div className="founder-dashboard-target-group__box">
           <div className="founder-dashboard-target-group__header text-xs-center">
+            { this.props.milestone &&
             <div className="founder-dashboard-target-group__milestone-label text-uppercase font-semibold">
               Milestone Targets
             </div>
+            }
+
             <h4 className="brand-primary font-regular m-t-2">
               { this.props.name }
             </h4>
@@ -41,5 +44,10 @@ FounderDashboardTargetCollection.propTypes = {
   description: React.PropTypes.string,
   targets: React.PropTypes.array,
   openTimelineBuilderCB: React.PropTypes.func,
-  displayDate: React.PropTypes.bool
+  displayDate: React.PropTypes.bool,
+  milestone: React.PropTypes.bool
+};
+
+FounderDashboardTargetCollection.defaultProps = {
+  milestone: false
 };

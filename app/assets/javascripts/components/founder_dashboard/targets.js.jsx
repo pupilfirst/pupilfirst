@@ -17,7 +17,7 @@ class FounderDashboardTargets extends React.Component {
     return this.targetGroups().map(function (targetGroup) {
       return <FounderDashboardTargetCollection key={ targetGroup.id } name={ targetGroup.name }
         description={ targetGroup.description } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }
-        targets={ targetGroup.targets }/>
+        targets={ targetGroup.targets } milestone={ targetGroup.milestone }/>
     }, this);
   }
 

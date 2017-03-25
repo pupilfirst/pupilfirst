@@ -53,6 +53,14 @@ module Founders
       redirect_to dashboard_founder_path
     end
 
+    # POST /founder/startup/level_up
+    def level_up
+      startup = current_founder.startup
+      raise_not_found unless Startups::LevelUpEligibilityService.new(startup).eligible?
+      Startups::LevelUpService.new(startup).execute
+      redirect_back(fallback_location: dashboard_founder_path)
+    end
+
     private
 
     def skip_container

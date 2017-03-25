@@ -30,6 +30,10 @@ Rails.application.routes.draw do
     end
 
     resource :startup, only: [:edit, :update] do
+      scope module: 'founders', controller: 'dashboard' do
+        post 'level_up'
+      end
+
       resources :timeline_events, only: [:create, :destroy, :update]
       resources :team_members, except: [:index]
     end

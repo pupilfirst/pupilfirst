@@ -87,13 +87,7 @@ module TimelineEvents
       points = points_for_new_status
       return if points.zero?
 
-      KarmaPoint.create!(
-        source: @timeline_event,
-        founder: founder,
-        startup: @timeline_event.startup,
-        activity_type: "Added a new Timeline event - #{@timeline_event.title}",
-        points: points
-      )
+      KarmaPoints::CreateService.new(@timeline_event, points).execute
     end
 
     def founder

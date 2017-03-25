@@ -105,11 +105,9 @@ class ConnectRequest < ApplicationRecord
     rating = rating.to_i
     return false if rating < 3
 
-    karma_point = KarmaPoint.find_or_initialize_by(source: self)
-    karma_point.startup = startup
-    karma_point.points = points_for_rating(rating)
-    karma_point.activity_type = "Connect session with faculty member #{faculty.name}"
-    karma_point.save!
+    if KarmaPoint.find_by(source: self).blank?
+      KarmaPoints::CreateService.new(self, points_for_rating(rating)).execute
+    end
   end
 
   private

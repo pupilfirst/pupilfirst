@@ -59,12 +59,11 @@ ActiveAdmin.register PublicSlackMessage do
       return
     end
 
-    karma_point = KarmaPoint.create!(
-      source: public_slack_message,
-      points: params[:commit].delete('+').to_i,
-      activity_type: params[:activity_type],
-      founder: public_slack_message.founder
-    )
+    karma_point = KarmaPoints::CreateService.new(
+      public_slack_message,
+      params[:commit].delete('+').to_i,
+      activity_type: params[:activity_type]
+    ).execute
 
     render json: {
       public_slack_message_id: public_slack_message.id,

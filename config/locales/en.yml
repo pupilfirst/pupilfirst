@@ -212,6 +212,9 @@ en:
           *Description:* %{event_description}
           %{links_attached_notice}
         needs_improvement: *slack_notifications_public_verified
+    karma_points:
+      founder: 'You have been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
+      startup: 'Your startup <%{startup_url}|%{startup_product_name}> has been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
 
     targets:
       new_target:

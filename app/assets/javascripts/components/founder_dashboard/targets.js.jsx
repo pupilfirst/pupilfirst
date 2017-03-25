@@ -14,10 +14,14 @@ class FounderDashboardTargets extends React.Component {
   }
 
   targetCollections() {
-    return this.targetGroups().map(function (targetGroup) {
+    let collectionLength = this.targetGroups().length;
+
+    return this.targetGroups().map(function (targetGroup, targetGroupIndex) {
+      let finalCollection = collectionLength === targetGroupIndex + 1;
+
       return <FounderDashboardTargetCollection key={ targetGroup.id } name={ targetGroup.name }
         description={ targetGroup.description } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }
-        targets={ targetGroup.targets } milestone={ targetGroup.milestone }/>
+        targets={ targetGroup.targets } milestone={ targetGroup.milestone } finalCollection={ finalCollection }/>
     }, this);
   }
 

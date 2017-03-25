@@ -10,7 +10,7 @@ class FounderDashboardChoresFilterOption extends React.Component {
       all: 'fa-filter',
       pending: 'fa-hourglass-start',
       submitted: 'fa-check-square-o',
-      completed: 'fa-thumbs-o-up',
+      complete: 'fa-thumbs-o-up',
       not_accepted: 'fa-thumbs-o-down',
       needs_improvement: 'fa-line-chart'
     }[status];
@@ -31,3 +31,7 @@ class FounderDashboardChoresFilterOption extends React.Component {
     );
   }
 }
+
+FounderDashboardChoresFilterOption.propTypes = {
+  name: React.PropTypes.string
+};

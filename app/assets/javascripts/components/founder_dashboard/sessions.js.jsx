@@ -55,7 +55,8 @@ class FounderDashboardSessions extends React.Component {
         <FounderDashboardTargetCollection key='sessions-upcoming' name='Upcoming Sessions' displayDate={ true }
           targets={ this.upcomingSessions() } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }/>
         <FounderDashboardTargetCollection key='sessions-past' name='Past Sessions' displayDate={ true }
-          targets={ this.pastSessions() } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }/>
+          targets={ this.pastSessions() } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }
+          finalCollection={ true }/>
       </div>
     );
   }

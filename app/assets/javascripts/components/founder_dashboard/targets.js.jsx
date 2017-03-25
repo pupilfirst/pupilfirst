@@ -14,10 +14,14 @@ class FounderDashboardTargets extends React.Component {
   }
 
   targetCollections() {
-    return this.targetGroups().map(function (targetGroup) {
+    let collectionLength = this.targetGroups().length;
+
+    return this.targetGroups().map(function (targetGroup, targetGroupIndex) {
+      let finalCollection = collectionLength === targetGroupIndex + 1;
+
       return <FounderDashboardTargetCollection key={ targetGroup.id } name={ targetGroup.name }
         description={ targetGroup.description } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }
-        targets={ targetGroup.targets }/>
+        targets={ targetGroup.targets } milestone={ targetGroup.milestone } finalCollection={ finalCollection }/>
     }, this);
   }
 
@@ -42,7 +46,7 @@ class FounderDashboardTargets extends React.Component {
     return (
       <div>
         { this.props.eligibleToLevelUp &&
-        <FounderDashboardLevelUpNotification/>
+        <FounderDashboardLevelUpNotification authenticityToken={ this.props.authenticityToken }/>
         }
 
         <FounderDashboardActionBar filter='targets' filterData={ this.filterData() } pickFilterCB={ this.pickFilter }
@@ -57,5 +61,6 @@ FounderDashboardTargets.propTypes = {
   currentLevel: React.PropTypes.number,
   levels: React.PropTypes.object,
   openTimelineBuilderCB: React.PropTypes.func,
-  eligibleToLevelUp: React.PropTypes.bool
+  eligibleToLevelUp: React.PropTypes.bool,
+  authenticityToken: React.PropTypes.string
 };

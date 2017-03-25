@@ -35,7 +35,15 @@ module Targets
     end
 
     def linked_event
-      @linked_event ||= owner.timeline_events.where(target: @target).last
+      @linked_event ||= begin
+        linked_events = owner.timeline_events.where(target: @target)
+
+        if @target.target? && @target.target_group&.level == current_level
+          linked_events = linked_events.where(iteration: current_iteration)
+        end
+
+        linked_events
+      end.last
     end
 
     def owner_events
@@ -44,6 +52,14 @@ module Targets
 
     def owner
       @owner ||= @target.founder_role? ? @founder : @founder.startup
+    end
+
+    def current_level
+      @current_level ||= owner.is_a?(Startup) ? owner.level : owner.startup.level
+    end
+
+    def current_iteration
+      @current_iteration ||= owner.is_a?(Startup) ? owner.iteration : owner.startup.iteration
     end
 
     def completed_prerequisites_ids

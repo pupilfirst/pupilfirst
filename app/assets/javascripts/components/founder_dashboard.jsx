@@ -82,7 +82,8 @@ class FounderDashboard extends React.Component {
 
         { this.state.activeTab === 'targets' &&
         <FounderDashboardTargets currentLevel={ this.props.currentLevel } levels={ this.state.levels }
-          openTimelineBuilderCB={ this.openTimelineBuilder } eligibleToLevelUp={ this.props.eligibleToLevelUp }/>
+          openTimelineBuilderCB={ this.openTimelineBuilder } eligibleToLevelUp={ this.props.eligibleToLevelUp }
+          authenticityToken={ this.props.authenticityToken }/>
         }
 
         { this.state.activeTab === 'chores' &&

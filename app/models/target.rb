@@ -100,6 +100,11 @@ class Target < ApplicationRecord
     session_at.present?
   end
 
+  # A 'proper' target is neither a session, nor a chore. These are repeatable across iterations.
+  def target?
+    !(session? || chore?)
+  end
+
   # this is included in the target JSONs the DashboardDataService responds with
   alias has_rubric rubric?
 end

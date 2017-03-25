@@ -49,6 +49,7 @@ class TimelineEvent < ApplicationRecord
   validates :founder_id, presence: true
   validates :timeline_event_type, presence: true
   validates :description, presence: true
+  validates :iteration, presence: true
 
   before_validation do
     if verified_status_changed?

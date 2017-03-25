@@ -11,12 +11,22 @@ class FounderDashboardLevelUpNotification extends React.Component {
             button below to proceed to the next level. New challenges await!
           </p>
 
-          <button className="btn btn-with-icon btn-md btn-primary btn-founder-dashboard-level-up text-uppercase m-t-2">
-            <i className="fa fa-arrow-right"/>
-            Level Up
-          </button>
+          <form className="m-t-2" action="/founder/startup/level_up" acceptCharset="UTF-8" method="post">
+            <input name="utf8" type="hidden" value="✓"/>
+            <input type="hidden" name="authenticity_token" value={ this.props.authenticityToken }/>
+
+            <button className="btn btn-with-icon btn-md btn-primary btn-founder-dashboard-level-up text-uppercase"
+              type="submit">
+              <i className="fa fa-arrow-right"/>
+              Level Up
+            </button>
+          </form>
         </div>
       </div>
     );
   }
 }
+
+FounderDashboardLevelUpNotification.propTypes = {
+  authenticityToken: React.PropTypes.string
+};

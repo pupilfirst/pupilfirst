@@ -4,7 +4,7 @@ class FounderDashboardChoresFilter extends React.Component {
 
     this.dropdownStatuses = this.dropdownStatuses.bind(this);
 
-    validStatuses = ['all', 'pending', 'submitted', 'completed', 'not_accepted', 'needs_improvement'];
+    validStatuses = ['all', 'pending', 'submitted', 'complete', 'not_accepted', 'needs_improvement'];
   }
 
   dropdownStatuses() {
@@ -18,7 +18,7 @@ class FounderDashboardChoresFilter extends React.Component {
       all: 'All Chores',
       pending: 'Pending',
       submitted: 'Submitted',
-      completed: 'Completed',
+      complete: 'Complete',
       not_accepted: 'Not Accepted',
       needs_improvement: 'Needs Improvement'
     }[status];

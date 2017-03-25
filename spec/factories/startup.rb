@@ -7,6 +7,7 @@ FactoryGirl.define do
     f.website { Faker::Internet.domain_name }
     f.email { Faker::Internet.email }
     f.batch
+    f.iteration 1
 
     after(:build) do |startup|
       startup.founders << create(:founder, startup: startup, startup_admin: true)

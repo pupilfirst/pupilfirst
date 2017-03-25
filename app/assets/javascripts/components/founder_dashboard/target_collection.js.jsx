@@ -2,7 +2,11 @@ class FounderDashboardTargetCollection extends React.Component {
   targets() {
     if (this.props.targets.length < 1) {
       return (
-        <div className="text-xs-center m-b-2">No results to display!</div>
+        <div className="founder-dashboard-target-noresult text-xs-center p-y-2">
+          <img className="founder-dashboard-target-noresult__icon m-x-auto"
+            src={'/assets/founders/dashboard/no-results-icon.svg'}/>
+          <h4 className="m-t-1 font-regular">No results to display!</h4>
+        </div>
       )
     } else {
       return this.props.targets.map(function (target) {

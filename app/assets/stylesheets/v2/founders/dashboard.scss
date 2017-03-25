@@ -664,6 +664,14 @@
   margin-right: 1rem;
   float: left;
 }
+.founder-dashboard-target-noresult {
+  border-top: 1px solid $gray-border;
+}
+.founder-dashboard-target-noresult__icon {
+  width: 120px;
+  display: inline-block;
+}
+
 
 .founder-dashboard-target-header__title {
   float: left;

@@ -9,18 +9,18 @@
   height: 48px;
   margin-bottom: 30px;
 
+  @include media-breakpoint-up(md) {
+    display: flex;
+    justify-content: center;
+  }
+
   @include media-breakpoint-down(sm) {
     margin: 0 1rem 0 1rem;
   }
 }
 
 .founder-dashboard-togglebar__toggle {
-  position: absolute;
-
-  @include media-breakpoint-up(md) {
-    left: 50%;
-    transform: translateX(-50%);
-  }
+  position: relative;
 }
 
 .founder-dashboard-togglebar__toggle-group {

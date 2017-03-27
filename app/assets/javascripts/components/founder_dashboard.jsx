@@ -83,17 +83,17 @@ class FounderDashboard extends React.Component {
         { this.state.activeTab === 'targets' &&
         <FounderDashboardTargets currentLevel={ this.props.currentLevel } levels={ this.state.levels }
           openTimelineBuilderCB={ this.openTimelineBuilder } eligibleToLevelUp={ this.props.eligibleToLevelUp }
-          authenticityToken={ this.props.authenticityToken }/>
+          authenticityToken={ this.props.authenticityToken } iconPaths={ this.props.iconPaths }/>
         }
 
         { this.state.activeTab === 'chores' &&
         <FounderDashboardChores currentLevel={ this.props.currentLevel } chores={ this.state.chores }
-          openTimelineBuilderCB={ this.openTimelineBuilder }/>
+          openTimelineBuilderCB={ this.openTimelineBuilder } iconPaths={ this.props.iconPaths }/>
         }
 
         { this.state.activeTab === 'sessions' &&
         <FounderDashboardSessions sessions={ this.state.sessions } sessionTags={ this.props.sessionTags }
-          openTimelineBuilderCB={ this.openTimelineBuilder }/>
+          openTimelineBuilderCB={ this.openTimelineBuilder } iconPaths={ this.props.iconPaths }/>
         }
 
         { this.state.timelineBuilderVisible &&
@@ -116,5 +116,6 @@ FounderDashboard.propTypes = {
   timelineEventTypes: React.PropTypes.object,
   allowFacebookShare: React.PropTypes.bool,
   authenticityToken: React.PropTypes.string,
-  eligibleToLevelUp: React.PropTypes.bool
+  eligibleToLevelUp: React.PropTypes.bool,
+  iconPaths: React.PropTypes.object
 };

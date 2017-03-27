@@ -20,7 +20,7 @@
 #founder-dashboard
   == render 'dashboard_header'
 
-  == react_component('FounderDashboard', @react_data.merge(authenticityToken: form_authenticity_token))
+  == react_component('FounderDashboard', @react_data.merge(authenticityToken: form_authenticity_token, iconPaths: { personalTodo: image_path('founders/dashboard/target-type-icons/personal_todo_icon.svg'), noResults: image_path('founders/dashboard/no-results-icon.svg')}))
 
   / .founder-dashboard-container
   /   .fixed-dashboard-header

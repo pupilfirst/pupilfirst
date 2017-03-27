@@ -43,7 +43,7 @@ class FounderDashboardTarget extends React.Component {
     return (
       <div className={ this.containerClasses() }>
         <FounderDashboardTargetHeader onClickCB={ this.handleClick } descriptionOpen={ this.state.showDescription }
-          target={ this.props.target } displayDate={ this.props.displayDate }/>
+          target={ this.props.target } displayDate={ this.props.displayDate } iconPaths={ this.props.iconPaths }/>
 
         <div className='founder-dashboard-target__description-container' id={ this.sliderId() }>
           <FounderDashboardTargetDescription key={ 'description-' + this.props.target.id }
@@ -57,5 +57,6 @@ class FounderDashboardTarget extends React.Component {
 FounderDashboardTarget.propTypes = {
   target: React.PropTypes.object,
   openTimelineBuilderCB: React.PropTypes.func,
-  displayDate: React.PropTypes.bool
+  displayDate: React.PropTypes.bool,
+  iconPaths: React.PropTypes.object
 };

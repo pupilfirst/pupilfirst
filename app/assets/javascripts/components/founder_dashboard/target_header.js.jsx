@@ -108,7 +108,7 @@ class FounderDashboardTargetHeader extends React.Component {
     return (
       <div className={ this.containerClasses() } onClick={ this.props.onClickCB }>
         <img className="founder-dashboard-target-header__icon"
-          src={'/assets/founders/dashboard/target-type-icons/personal_todo_icon.svg'}/>
+          src={ this.props.iconPaths.personalTodo }/>
 
         <div className="founder-dashboard-target-header__title">
           <h6 className="founder-dashboard-target-header__headline">
@@ -142,7 +142,8 @@ FounderDashboardTargetHeader.propTypes = {
   onClickCB: React.PropTypes.func,
   descriptionOpen: React.PropTypes.bool,
   target: React.PropTypes.object,
-  displayDate: React.PropTypes.bool
+  displayDate: React.PropTypes.bool,
+  iconPaths: React.PropTypes.object
 };
 
 FounderDashboardTargetHeader.defaultProps = {

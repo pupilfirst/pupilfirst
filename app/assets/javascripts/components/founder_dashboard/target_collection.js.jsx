@@ -4,14 +4,14 @@ class FounderDashboardTargetCollection extends React.Component {
       return (
         <div className="founder-dashboard-target-noresult text-xs-center p-y-2">
           <img className="founder-dashboard-target-noresult__icon m-x-auto"
-            src={'/assets/founders/dashboard/no-results-icon.svg'}/>
+            src={ this.props.iconPaths.noResults }/>
           <h4 className="m-t-1 font-regular">No results to display!</h4>
         </div>
       )
     } else {
       return this.props.targets.map(function (target) {
-        return <FounderDashboardTarget key={ target.id } target={ target }
-        openTimelineBuilderCB={ this.props.openTimelineBuilderCB } displayDate={ this.props.displayDate }/>
+        return <FounderDashboardTarget key={ target.id } target={ target } iconPaths={ this.props.iconPaths }
+          openTimelineBuilderCB={ this.props.openTimelineBuilderCB } displayDate={ this.props.displayDate }/>
       }, this);
     }
   }
@@ -60,7 +60,8 @@ FounderDashboardTargetCollection.propTypes = {
   openTimelineBuilderCB: React.PropTypes.func,
   displayDate: React.PropTypes.bool,
   milestone: React.PropTypes.bool,
-  finalCollection: React.PropTypes.bool
+  finalCollection: React.PropTypes.bool,
+  iconPaths: React.PropTypes.object
 };
 
 FounderDashboardTargetCollection.defaultProps = {

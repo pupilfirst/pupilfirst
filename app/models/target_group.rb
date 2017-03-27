@@ -9,7 +9,7 @@ class TargetGroup < ApplicationRecord
   validates :sort_index, presence: true
   validates :level, presence: true
 
-  scope :sorted_by_week, -> { joins(:program_week).order('program_weeks.number ASC') }
+  scope :sorted_by_level, -> { joins(:level).order('levels.number ASC') }
 
   def display_name
     if level.present?

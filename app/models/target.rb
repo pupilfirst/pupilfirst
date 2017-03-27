@@ -52,7 +52,14 @@ class Target < ApplicationRecord
   validates :role, presence: true, inclusion: { in: valid_roles }
   validates :title, presence: true
   validates :description, presence: true
-  validates :days_to_complete, presence: true
+
+  validate :days_to_complete_or_session_at_should_be_present
+
+  def days_to_complete_or_session_at_should_be_present
+    return if days_to_complete.present? || session_at.present?
+    errors[:days_to_complete] << 'if blank, session_at should be set'
+    errors[:session_at] << 'if blank, days_to_complete should be set'
+  end
 
   validate :type_of_target_must_be_unique
 
@@ -77,6 +84,11 @@ class Target < ApplicationRecord
   def vanilla_target_must_have_target_group
     return if chore || session?
     errors[:target_group] << 'is required if target is not a chore or session' unless target_group.present?
+  end
+
+  def display_name
+    return title if level.blank?
+    "L#{level.number}: #{title}"
   end
 
   def founder_role?

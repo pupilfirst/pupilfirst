@@ -26,7 +26,7 @@ ActiveAdmin.register Target do
 
     if batch_id.present?
       batch = Batch.find(batch_id)
-      batch.target_groups.sorted_by_week
+      batch.target_groups.sorted_by_level
     else
       [['Select Batch first', '']]
     end

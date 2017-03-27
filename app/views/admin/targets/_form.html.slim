@@ -35,11 +35,7 @@
     = f.input :target_type, collection: Target.valid_target_types
     = f.input :timeline_event_type, include_blank: 'Select default timeline event type'
     = f.input :points_earnable
-
-    = f.input :prerequisite_targets,
-      collection: @target.target_group.present? ? @target.batch.targets.where.not(id: @target.id) : [],
-      include_blank: @target.target_group.present? ? false : 'Assign a target group and save this target first'
-
+    = f.input :prerequisite_targets, collection: Target.where.not(id: @target.id).includes(:level)
     = f.input :slideshow_embed
     = f.input :video_embed
     = f.input :resource_url
@@ -47,7 +43,7 @@
     = f.input :assigner, collection: Faculty.active.order(:name), include_blank: false
 
     = f.input :target_group,
-      collection: (@target.batch.present? ? @target.batch.target_groups : TargetGroup.all).sorted_by_week.includes(:program_week)
+      collection: TargetGroup.all.sorted_by_level.includes(:level, :program_week)
 
     = f.input :sort_index
     = f.input :days_to_complete

@@ -50,8 +50,12 @@ ActiveAdmin.register Target do
     selectable_column
 
     column :batch do |target|
-      if target.target_group.present?
+      target_group = target.target_group
+
+      if target_group.present? && target_group.program_week.present?
         "##{target.target_group.program_week.batch.batch_number}"
+      else
+        content_tag(:em, 'N/A')
       end
     end
 

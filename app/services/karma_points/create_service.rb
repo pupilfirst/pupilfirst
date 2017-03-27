@@ -40,7 +40,7 @@ module KarmaPoints
     end
 
     def startup
-      @startup = @source.startup || @source.founder.startup
+      @startup = (@source.respond_to?(:startup) && @source.startup) || @source.founder.startup
     end
 
     def activity_type

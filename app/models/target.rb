@@ -79,6 +79,11 @@ class Target < ApplicationRecord
     errors[:target_group] << 'is required if target is not a chore or session' unless target_group.present?
   end
 
+  def display_name
+    return title if level.blank?
+    "L#{level.number}: #{title}"
+  end
+
   def founder_role?
     role == Target::ROLE_FOUNDER
   end

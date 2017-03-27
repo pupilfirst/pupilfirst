@@ -1,6 +1,21 @@
 ## Ongoing
 
-- Design and implementation of Stage 1 of switch to subscription model is ongoing. [[Trello]](https://trello.com/c/r5wuULZ2)
+- Internal metrics collection is being worked on. [[Trello]](https://trello.com/c/IvCcRtXu)
+- Karma point notifications are being implemented. [[Trello]](https://trello.com/c/BdPlBTGX)
+
+## 2017.03.27
+
+- Design and implementation of Stage 1 of switch to subscription model is complete. [[Trello]](https://trello.com/c/r5wuULZ2)
+- A service has been created to daily prune the list of users in Intercom to keep costs down. [[Trello]](https://trello.com/c/lBEco17T)
+- `Rails.llog` and all related code have been removed. [[Trello]](https://trello.com/c/gh7pcaFX)
+- Fixed a crash on founder profile edit page when uploading non-image file as college identification. [[Trello]](https://trello.com/c/8ZXzD8If)
+- `en.yml` was cleaned up. [[Trello]](https://trello.com/c/X3Ac3XeA)
+- Unused _lita_ handlers were cleaned up. [[Trello]](https://trello.com/c/dmXeSDWB)
+- The `Server-Timing` header was added to all responses. [[Trello]](https://trello.com/c/Ag856i6b)
+- The version of Ruby used was updated to 2.4.1. [[Trello]](https://trello.com/c/0gEMn3vl)
+- All gems were locked to their minor version to allow _safe_ `bundle update`, and all gems were updated. [[Trello]](https://trello.com/c/Irx7Scg2)
+- AWS security was improved. [[Trello]](https://trello.com/c/1f4midHS)
+- Cloudflare's paid _Polish_ feature was turned on to automatically compress cached images. [[Trello]](https://trello.com/c/nZdODoqS)
 
 ## 2017.03.20
 

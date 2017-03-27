@@ -1,3 +1,17 @@
+### 27 March, 2017
+
+#### Features
+
+  - The founder dashboard has been rebuilt to better match our program's objectives and for greater ease of use.
+
+#### Performance
+
+  - We've enabled a _Cloudflare_ feature which offers automatic image compression, this should help users with slow internet connections.
+
+#### Bugfixes
+
+  - Fixed a crash on founder profile edit page when uploading non-image files as college identification.
+
 ### 20 March, 2017
 
 #### Features

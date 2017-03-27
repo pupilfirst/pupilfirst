@@ -337,7 +337,6 @@
 
 .filter-targets-dropdown__menu {
   padding: 0;
-  width: 100%;
   box-shadow: 0 2px 10px 0 lighten($gray-light, 40%);
 
   @include media-breakpoint-down(xs) {

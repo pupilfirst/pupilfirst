@@ -1,6 +1,5 @@
 require 'rails_helper'
 
-# Note: This spec uses a lot of `trigger('click')` instead of `.click` to avoid issues with ongoing animations.
 feature 'Timeline Builder', broken: true do
   include UserSpecHelper
 
@@ -35,27 +34,27 @@ feature 'Timeline Builder', broken: true do
     attach_file 'Cover Image', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'users', 'college_id.jpg')), visible: false
 
     # Open the link form.
-    find('.timeline-builder__upload-section-tab.link-upload').trigger('click')
+    find('.timeline-builder__upload-section-tab.link-upload').click
     expect(page).to have_content('Please enter a full URL, starting with http(s).')
 
     fill_in 'Link Title', with: 'Link to SV.CO'
     fill_in 'URL', with: 'https://www.sv.co'
     select 'Private', from: 'Link Visibility'
-    find('.timeline-builder__attachment-button').trigger('click')
+    find('.timeline-builder__attachment-button').click
     expect(page).to_not have_content('Please enter a full URL, starting with http(s).') # ensure link section is closed
 
-    find('.timeline-builder__upload-section-tab.file-upload').trigger('click')
+    find('.timeline-builder__upload-section-tab.file-upload').click
     expect(page).to have_selector('.timeline-builder__file-label')
 
     fill_in 'File Title', with: 'A PDF File'
     attach_file 'timeline-builder__file-input', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf')), visible: false
-    find('.timeline-builder__attachment-button').trigger('click')
+    find('.timeline-builder__attachment-button').click
     expect(page).to_not have_selector('.timeline-builder__file-label') # ensure file section is closed
 
-    find('.timeline-builder__upload-section-tab.date-of-event').trigger('click')
+    find('.timeline-builder__upload-section-tab.date-of-event').click
     expect(page).to have_content('Date of event')
 
-    find('.timeline-builder__attachment-button').trigger('click')
+    find('.timeline-builder__attachment-button').click
     expect(page).to_not have_content('Date of event') # ensure date section is closed
 
     select timeline_event_type.title, from: 'Timeline Event Type'
@@ -94,30 +93,30 @@ feature 'Timeline Builder', broken: true do
     click_button 'Add Event'
 
     # File fields empty.
-    find('.timeline-builder__upload-section-tab.file-upload').trigger('click')
+    find('.timeline-builder__upload-section-tab.file-upload').click
     expect(page).to have_selector('.timeline-builder__file-label')
-    find('.timeline-builder__attachment-button').trigger('click')
+    find('.timeline-builder__attachment-button').click
 
     expect(page).to have_content('Enter a valid title!')
     expect(page).to have_content('Choose a valid file!')
 
-    find('.timeline-builder__upload-section-tab.file-upload').trigger('click')
+    find('.timeline-builder__upload-section-tab.file-upload').click
     expect(page).to_not have_selector('.timeline-builder__file-label')
 
     # Link fields empty.
     find('.timeline-builder__upload-section-tab.link-upload').click
     expect(page).to have_content('Please enter a full URL, starting with http(s).')
-    find('.timeline-builder__attachment-button').trigger('click')
+    find('.timeline-builder__attachment-button').click
 
     expect(page).to have_content('Enter a valid title!')
     expect(page).to have_content('Enter a valid URL!')
 
-    find('.timeline-builder__upload-section-tab.link-upload').trigger('click')
+    find('.timeline-builder__upload-section-tab.link-upload').click
     expect(page).to_not have_content('Please enter a full URL, starting with http(s).')
 
     # Description just a bunch of spaces.
     find('.timeline-builder__textarea').set('   ')
-    find_button('Submit').trigger('click')
+    find_button('Submit').click
     expect(page).to have_content('Please add a summary describing the event.')
 
     find('.timeline-builder__textarea').set('description text')
@@ -126,11 +125,11 @@ feature 'Timeline Builder', broken: true do
     click_button 'Submit'
     expect(page).to have_content('Please select a date for the event.')
 
-    find('.timeline-builder__upload-section-tab.date-of-event').trigger('click')
+    find('.timeline-builder__upload-section-tab.date-of-event').click
     find('.timeline-builder__attachment-button').click
 
     # Timeline event type missing.
-    find_button('Submit').trigger('click')
+    find_button('Submit').click
     expect(page).to have_content('Please select an appropriate timeline event type.')
   end
 end

@@ -18,30 +18,30 @@ feature 'Batch Application Payment' do
     click_button 'START', match: :first
 
     expect(page).to have_content('Have you contributed to Open Source?')
-    page.find('label[for="answer-option-No"]').trigger('click')
-    find_button('Next').trigger('click')
+    page.find('label[for="answer-option-No"]').click
+    find_button('Next').click
     expect(page).to have_content('a technical course at Coursera')
-    page.find('label[for="answer-option-No"]').trigger('click')
-    find_button('Next').trigger('click')
+    page.find('label[for="answer-option-No"]').click
+    find_button('Next').click
     expect(page).to have_content('Have you built websites')
-    page.find('label[for="answer-option-No"]').trigger('click')
-    find_button('Next').trigger('click')
+    page.find('label[for="answer-option-No"]').click
+    find_button('Next').click
 
     expect(page).to have_text('You have not cleared our basic screening process.')
 
     click_button 'Restart'
 
-    page.find('.applicant-screening__cover.non-coder-cover').find('button').trigger('click')
+    page.find('.applicant-screening__cover.non-coder-cover').find('button').click
 
     expect(page).to have_content('Have you ever worked with a developer')
-    page.find('label[for="answer-option-Yes"]').trigger('click')
-    find_button('Next').trigger('click')
+    page.find('label[for="answer-option-Yes"]').click
+    find_button('Next').click
     expect(page).to have_content('Have you ever made money')
-    page.find('label[for="answer-option-Yes"]').trigger('click')
-    find_button('Next').trigger('click')
+    page.find('label[for="answer-option-Yes"]').click
+    find_button('Next').click
     expect(page).to have_content('Have you ever led a team')
-    page.find('label[for="answer-option-Yes"]').trigger('click')
-    find_button('Next').trigger('click')
+    page.find('label[for="answer-option-Yes"]').click
+    find_button('Next').click
 
     expect(page).to have_text('your first task is to find the coder')
 

@@ -72,16 +72,13 @@ RSpec.configure do |config|
   config.filter_run_excluding broken: true
 end
 
-# Use poltergeist as JS driver.
-require 'capybara/poltergeist'
+# require 'capybara/selenium/driver'
 
-Capybara.register_driver :poltergeist do |app|
-  # TODO: Javascript errors are being ignored here because YouTube is bugged at the moment and raising:
-  # ReferenceError: Can't find variable: ytcfg
-  Capybara::Poltergeist::Driver.new(app, timeout: 120, js_errors: false)
+Capybara.register_driver :selenium do |app|
+  Capybara::Selenium::Driver.new(app, browser: :chrome)
 end
 
-Capybara.javascript_driver = :poltergeist
+# Capybara.current_driver = :selenium
 
 # Increase Capybara's default maximum wait time to 5 seconds to allow for some slow responds (timeline builder).
 Capybara.default_max_wait_time = 5

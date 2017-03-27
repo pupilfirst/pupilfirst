@@ -37,7 +37,7 @@ feature 'MoocStudent Sign In' do
       expect(page).to have_text('Sign in to SV.CO')
 
       # Let's use email login method.
-      page.find('a.switch-to-email').trigger('click') # can't use click_link because element has no href.
+      page.find('a.switch-to-email').click # can't use click_link because element has no href.
 
       # The form must now change.
       expect(page).to have_text('Sign in with your SV.CO ID')

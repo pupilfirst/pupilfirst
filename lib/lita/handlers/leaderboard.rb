@@ -61,7 +61,12 @@ module Lita
             ':rank_nochange:'
           end
 
-          signed_change_in_rank = format('%+d', change_in_rank).rjust(3)
+          signed_change_in_rank = if change_in_rank.zero?
+            '---'
+          else
+            format('%+d', change_in_rank).rjust(3)
+          end
+
           rank_list += "*#{format('%02d', rank)}.* #{indicator}`#{signed_change_in_rank}` - <#{Rails.application.routes.url_helpers.startup_url(startup)}|#{startup.product_name}>\n"
         end
 

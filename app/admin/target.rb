@@ -60,6 +60,16 @@ ActiveAdmin.register Target do
       target.level.present? ? target.level : target.target_group&.level
     end
 
+    column :type do |target|
+      if target.chore?
+        'Chore'
+      elsif target.session?
+        'Session'
+      else
+        'Target'
+      end
+    end
+
     column :target_group
     column :sort_index
 

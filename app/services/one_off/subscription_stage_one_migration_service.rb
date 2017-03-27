@@ -1,12 +1,16 @@
 module OneOff
   # This service migrates data for stage 1 of the transition from 6-month program to continuous intake SaaS model.
   class SubscriptionStageOneMigrationService
+    include Loggable
+
     def execute
       add_level_to_startups
       update_chores_and_sessions
       level_startups
       upgrade_legacy_startups
       remove_stale_targets
+
+      log 'All done!'
     end
 
     private
@@ -17,7 +21,7 @@ module OneOff
       startups_without_level = Startup.includes(:level).where(levels: { id: nil })
 
       if startups_without_level.any?
-        Rails.logger.info "There are #{startups_without_level.count} startups without level. Setting them to level 1..."
+        log "There are #{startups_without_level.count} startups without level. Setting them to level 1..."
         startups_without_level.update(level: first_level)
       end
     end
@@ -26,7 +30,7 @@ module OneOff
     def update_chores_and_sessions
       targets_with_group = Target.joins(:target_group)
 
-      Rails.logger.info "Checking #{targets_with_group.count} targets for update..."
+      log "Checking #{targets_with_group.count} targets for update..."
 
       targets_with_group.each do |target|
         # If target is a session or a chore, remove from target group.
@@ -40,18 +44,18 @@ module OneOff
       empty_target_groups = TargetGroup.includes(:targets).where(targets: { id: nil })
 
       if empty_target_groups.any?
-        Rails.logger.info "Removing #{empty_target_groups.count} empty targets groups..."
+        log "Removing #{empty_target_groups.count} empty targets groups..."
         empty_target_groups.destroy_all
       end
     end
 
     # Move startups to their appropriate level.
     def level_startups
-      Rails.logger.info 'Levelling up startups...'
+      log 'Levelling up startups...'
 
       Startup.where(batch: current_batch).each do |startup|
         while Startups::LevelUpEligibilityService.new(startup).eligible?
-          Rails.logger.debug "Levelling up ##{startup.id} #{startup.name} to level #{startup.level.number + 1}..."
+          log "Levelling up ##{startup.id} #{startup.name} to level #{startup.level.number + 1}..."
           Startups::LevelUpService.new(startup).execute
         end
       end
@@ -62,7 +66,7 @@ module OneOff
       legacy_startups = Startup.where.not(batch: current_batch)
 
       if legacy_startups.any?
-        Rails.logger.info "Upgrading #{legacy_startups.count} legacy startups..."
+        log "Upgrading #{legacy_startups.count} legacy startups..."
         legacy_startups.update(iteration: 2)
       end
     end
@@ -72,7 +76,7 @@ module OneOff
       targets_without_group = Target.includes(:target_group).where(target_groups: { id: nil }, session_at: nil, chore: false)
 
       if targets_without_group.any?
-        Rails.logger.info "Removing #{targets_without_group.count} stale targets..."
+        log "Removing #{targets_without_group.count} stale targets..."
         targets_without_group.destroy_all
       end
     end

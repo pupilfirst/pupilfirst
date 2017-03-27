@@ -3,7 +3,7 @@ class StartupDecorator < Draper::Decorator
 
   def identicon_logo
     base64_logo = Startups::IdenticonLogoService.new(model).base64_svg
-    h.image_tag("data:image/svg+xml;base64,#{base64_logo}", class: 'startup-logo')
+    h.image_tag("data:image/svg+xml;base64,#{base64_logo}", class: 'founder-dashboard-header__startup-logo')
   end
 
   def completed_targets_count
@@ -11,9 +11,9 @@ class StartupDecorator < Draper::Decorator
   end
 
   def completed_targets_percentage
-    batch_targets = batch.targets.count
-    return 0 unless batch_targets.positive?
-    ((completed_targets_count.to_f / batch_targets) * 100).to_i
+    targets_count = Target.count
+    return 0 unless targets_count.positive?
+    ((completed_targets_count.to_f / targets_count) * 100).to_i
   end
 
   def leaderboard_rank

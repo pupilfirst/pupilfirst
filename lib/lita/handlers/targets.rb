@@ -1,5 +1,6 @@
 module Lita
   module Handlers
+    # TODO: This handler needs to be updated to fetch all targets for founder's startup's level.
     class Targets < Handler
       route(
         /^targets\s*\?*\s*info\s*(\d)\s*$|^targets\s*\?*\s*$/i,
@@ -108,14 +109,9 @@ module Lita
         "*#{index + 1}.* #{target.title} _(#{target_status_message(target)})_"
       end
 
-      def target_status_message(target)
-        if target.expired?
-          'Expired'
-        elsif target.done?
-          'Done'
-        else
-          "Pending - Due on #{target.due_date.strftime '%A, %b %d'}"
-        end
+      # TODO: Use Targets::StatusService to get target status for founder.
+      def target_status_message(_target)
+        raise 'Not yet implemented'
       end
 
       def chosen_target

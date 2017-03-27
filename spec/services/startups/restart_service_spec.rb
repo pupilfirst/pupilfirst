@@ -11,11 +11,11 @@ describe Startups::RestartService do
   let(:startup) { create :startup, level: level_4, iteration: iteration }
   let(:reason) { Faker::Lorem.paragraph }
 
-  describe '#restart' do
+  describe '#request_restart' do
     context 'when the level is lower than permitted' do
       it 'raises Startups::RestartService::LevelInvalid' do
         expect do
-          subject.new(startup, startup.admin).restart(level_0, reason)
+          subject.new(startup.admin).request_restart(level_0, reason)
         end.to raise_error(Startups::RestartService::LevelInvalid)
       end
     end
@@ -23,14 +23,14 @@ describe Startups::RestartService do
     context "when level is not less than startup's level" do
       it 'raises Startups::RestartService::LevelInvalid' do
         expect do
-          subject.new(startup, startup.admin).restart(level_4, reason)
+          subject.new(startup.admin).request_restart(level_4, reason)
         end.to raise_error(Startups::RestartService::LevelInvalid)
       end
     end
 
     context 'when the level is proper' do
       before do
-        subject.new(startup, startup.admin).restart(level_2, reason)
+        subject.new(startup.admin).request_restart(level_2, reason)
       end
 
       it 'creates a timeline event marking end of iteration' do
@@ -43,8 +43,7 @@ describe Startups::RestartService do
       end
 
       it 'updates the startup' do
-        expect(startup.reload.level).to eq(level_2)
-        expect(startup.iteration).to eq(iteration + 1)
+        expect(startup.reload.requested_restart_level).to eq(level_2)
       end
     end
   end

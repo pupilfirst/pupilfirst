@@ -1,5 +1,5 @@
 module Startups
-  # This service can be used to check whether a startup is eligible to _level up_ - to move up a level in the main
+  # This service should be used to check whether a startup is eligible to _level up_ - to move up a level in the main
   # program - it does this by checking whether all milestone targets have been completed.
   class LevelUpEligibilityService
     def initialize(startup)
@@ -9,11 +9,11 @@ module Startups
     def eligible?
       milestone_targets.all? do |target|
         if target.founder_role?
-          startup.founders.all? do |founder|
+          @startup.founders.all? do |founder|
             target_completed?(target, founder)
           end
         else
-          target_completed?(target, startup.admin?)
+          target_completed?(target, @startup.admin)
         end
       end
     end

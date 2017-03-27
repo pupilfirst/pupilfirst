@@ -4,7 +4,7 @@ class TimelineEventsController < ApplicationController
   # POST /founder/startup/timeline_events
   def create
     timeline_event = TimelineEvent.new
-    @timeline_builder_form = TimelineBuilderForm.new(timeline_event)
+    @timeline_builder_form = Founders::TimelineBuilderForm.new(timeline_event)
 
     if @timeline_builder_form.validate(timeline_builder_params)
       @timeline_builder_form.save(current_founder)

@@ -12,7 +12,6 @@ $(window).bind 'rails:flash', (e, params) ->
       nonblock_opacity: .2
 
 select2Initializations = ->
-  $('#q_ransack_tagged_with').select2(width: '100%');
   $('#q_product_name').select2(width: '100%');
   $('#vocalist_ping_channel').select2(width: '300px');
   $('#vocalist_ping_startups').select2(width: '300px');

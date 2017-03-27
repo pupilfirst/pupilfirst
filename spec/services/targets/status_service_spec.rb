@@ -32,11 +32,6 @@ describe Targets::StatusService do
           event_for_prerequisite_target.update!(verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED)
         end
 
-        it 'returns expired if the due date is over' do
-          target.update!(days_to_complete: 0)
-          expect(subject.status).to eq(Targets::StatusService::STATUS_EXPIRED)
-        end
-
         it 'returns pending if the due date is not over' do
           target.update!(days_to_complete: 60)
           expect(subject.status).to eq(Targets::StatusService::STATUS_PENDING)

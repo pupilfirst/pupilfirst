@@ -49,6 +49,7 @@ class TimelineEvent < ApplicationRecord
   validates :founder_id, presence: true
   validates :timeline_event_type, presence: true
   validates :description, presence: true
+  validates :iteration, presence: true
 
   before_validation do
     if verified_status_changed?
@@ -211,6 +212,7 @@ class TimelineEvent < ApplicationRecord
   end
 
   def founder_can_modify?
+    return false if end_iteration?
     !verified_or_needs_improvement?
   end
 

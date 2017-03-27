@@ -12,11 +12,18 @@ class Target < ApplicationRecord
   has_one :batch, through: :target_group
   belongs_to :level
 
+  acts_as_taggable
   mount_uploader :rubric, RubricUploader
 
   scope :founder, -> { where(role: ROLE_FOUNDER) }
   scope :not_founder, -> { where.not(role: ROLE_FOUNDER) }
-  scope :due_on, ->(date) { where(due_date: date.beginning_of_day..date.end_of_day) }
+
+  # Custom scope to allow AA to filter by intersection of tags.
+  scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
+
+  def self.ransackable_scopes(_auth)
+    %i(ransack_tagged_with)
+  end
 
   ROLE_FOUNDER = 'founder'
 
@@ -88,39 +95,8 @@ class Target < ApplicationRecord
     role == Target::ROLE_FOUNDER
   end
 
-  # TODO: Update or excise revision notifications for the new level based program framework:
-  # attempts to use after_update hook of activeadmin, overriding its update action or writing a after_filter for update didnt work
-  # after_update :notify_revision, if: :crucial_revision?
-
-  # def notify_revision
-  #   PublicSlackTalk.post_message message: revision_as_slack_message, founders: slack_targets
-  # end
-  #
-  # def crucial_revision?
-  #   title_changed? || description_changed? || completion_instructions_changed?
-  # end
-  #
-  # def revision_as_slack_message
-  #   message = "Hey! #{assigner.name} has revised the target (<#{Rails.application.routes.url_helpers.startup_url(startup)}|#{title}>) "\
-  #   "he recently assigned to #{assignee.is_a?(Startup) ? 'your startup ' + startup.product_name : 'you'}\n"
-  #   message += "The revised title is: #{title}\n" if title_changed?
-  #   message += "The description now reads: \"#{ApplicationController.helpers.strip_tags description}\"\n" if description_changed?
-  #   message += "Completion Instructions were modified to: \"#{completion_instructions}\"\n" if completion_instructions_changed?
-  #   message
-  # end
-
   def rubric_filename
     rubric.sanitized_file.original_filename
-  end
-
-  # due date for the target calculated using days_to_complete starting from program_week start.
-  def due_date
-    return nil unless days_to_complete.present?
-
-    week_start = target_group&.program_week&.start_date
-    return nil unless week_start.present?
-
-    week_start + days_to_complete.days
   end
 
   def status(founder)
@@ -135,4 +111,12 @@ class Target < ApplicationRecord
   def session?
     session_at.present?
   end
+
+  # A 'proper' target is neither a session, nor a chore. These are repeatable across iterations.
+  def target?
+    !(session? || chore?)
+  end
+
+  # this is included in the target JSONs the DashboardDataService responds with
+  alias has_rubric rubric?
 end

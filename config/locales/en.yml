@@ -65,11 +65,14 @@ en:
   dashboard:
     show:
       tour:
-        intro: Welcome to your dashboard! All your progress during the course of the program will be available here. The entire program is divided into program weeks, each of which will have target groups and associated targets.
-        week_number: Indicates the program week number. The target groups to be completed in the indicated week will be listed below.
+        intro: Welcome to your personal dashboard! Your startup's journey through multiple levels of this program will be available here.
+        toggle_bar: The program consists of targets, chores and sessions. You complete these at your pace to move up through levels.
+        targets: Each level has a set of prescribed compulsory targets. You will have to redo these if you restart your journey at any level.
+        chores: Chores are tasks which need to be completed only once in your Startup Journey.
+        sessions: A number of live and recorded sessions guide you as you progress.
         target_group: Your target groups will have all the targets listed along with its completion status.
-        target: The target pane will have the name of the target and its completion status. On clicking the target, you will get detailed information on the target, founder status, the due date and the target submission button.
-        target_details: Detailed information on the target, its due-date and founder-wise status.
+        target: The target pane will have the name of the target and its completion status. On clicking the target, you will get detailed information on the target, founder status and the target submission button.
+        target_details: Detailed information on the target and founder-wise status.
         target_status: This indicates the present status of the target.
         add_event: Click to add timeline events for your startup. Once approved by the SV.CO team, (most) timeline events are displayed to the public.
         performance: Indicates the performance of your startup.
@@ -80,14 +83,6 @@ en:
         description_70_html: "Your team is performing better than most of the batch. Attempt to get more <em>Wow</em> grades for important targets to advance."
         description_90_html: "Your team is performing exceptionally. Great stuff, we have high hopes from you :)"
       target_filters:
-        expires_soon:
-          filter_text: 'Expiring within 7 days'
-          title: 'Targets Expiring Soon'
-          description: 'The listed targets expire within 7 days and are pending submission'
-        expired:
-          filter_text: 'Expired'
-          title: 'Expired Targets'
-          description: 'The listed targets have expired. You can still try submitting!'
         not_accepted:
           filter_text: 'Not Accepted'
           title: 'Targets with Unacceptable Submissions'
@@ -121,7 +116,6 @@ en:
       complete: 'Complete'
       needs_improvement: 'Needs Improvement'
       submitted: 'Submitted'
-      expired: 'Expired'
       pending: 'Pending'
       unavailable: 'Locked'
       not_accepted: 'Not Accepted'
@@ -129,7 +123,6 @@ en:
       complete: 'Target Completed'
       needs_improvement: 'Submission Needs Improvement'
       submitted: 'Submission Being Verified'
-      expired: 'Target Expired'
       pending: 'Target Pending'
       unavailable: 'Target Locked'
       not_accepted: 'Submission Not Accepted'
@@ -137,7 +130,6 @@ en:
       complete: 'Completed on %{date}'
       needs_improvement: 'Consider feedback and try re-submitting!'
       submitted: 'Submitted on %{date}'
-      expired: 'You can still try submitting!'
       pending: 'Follow completion instructions and submit!'
       unavailable: 'Complete prerequisites first!'
       not_accepted: 'Re-submit based on feedback!'
@@ -216,19 +208,6 @@ en:
       founder: 'You have been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
       startup: 'Your startup <%{startup_url}|%{startup_product_name}> has been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
 
-    targets:
-      new_target:
-        salutation: "Hey! %{assigner} has assigned %{assignee} a new target: *<%{startup_url}|%{title}>*\n"
-        description: "Description: \"%{description}\"\n"
-        resouce_url: "The faculty has also provided <%{resource_url}|a useful link> to assist you.\n"
-        due_date: "The due date to complete this target is :exclamation: *%{due_date}*"
-      mild_reminder: ":timer_clock: *Reminder:* %{assignee} a target - _<%{startup_url}|%{title}>_ - assigned by %{assigner} due in 5 days!"
-      strong_reminder: ":exclamation: *Urgent:* It seems that the target - _<%{startup_url}|%{title}>_ - assigned to %{assignee} by %{assigner} due in 2 days is not yet complete! Please complete the same at the earliest and submit the corresponding timeline entry for verification!"
-      batch_deploy:
-        salutation: "Attention Founders! %{assigner} has assigned all startups in the %{batch_name} batch a new target: %{title}\n"
-        description: "Description: \"%{description}\"\n "
-        resouce_url: "The faculty has also provided <%{resource_url}|a useful link> to assist you.\n"
-        due_date: "The due date to complete this target is :exclamation: *%{due_date}*"
     connect_sessions:
       founder_reminder: ":exclamation: *Reminder:* Your startup (%{startup_name}) has an office hour with <%{faculty_url}|%{faculty_name}> starting in 30 minutes! You can <%{meeting_link}|click here> to join the meeting when it's time."
       faculty_reminder: ":exclamation: *Reminder:* You have an office hour with the founders of <%{startup_url}|%{startup_name}> starting in 30 minutes!\nThe founders plan to discuss the following questions:\n %{questions}\nYou can <%{meeting_link}|click here> to join the meeting when it's time."

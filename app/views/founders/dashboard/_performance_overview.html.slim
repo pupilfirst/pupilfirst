@@ -1,4 +1,4 @@
-.performance-overview.modal.fade
+#performance-overview-modal.performance-overview.modal.fade
   .modal-dialog
     .modal-content
       .modal-header
@@ -13,25 +13,29 @@
         .startup-stats
           .stats-section
             svg viewbox=("0 0 32 32")
-              circle.circle-primary cx="16" cy="16" r="16"
+              circle.circle-primary cx="16" cy="16" r="16" style=("stroke-dasharray: #{@batch.week_percentage} #{100 - @batch.week_percentage};")
             .status-chart-data.img-circle.text-xs-center
-              p Week
+              p
+                | Week
               h5.brand-primary.font-regular.m-b-0
-                i.fa.fa-refresh.fa-spin.fa-fw
+                |  #{@batch.present_week_number || '0'}/24
           .stats-section
             svg viewbox=("0 0 32 32")
-              circle.circle-secondary cx="16" cy="16" r="16"
+              circle.circle-secondary cx="16" cy="16" r="16" style=("stroke-dasharray: #{@startup.completed_targets_percentage} #{100 - @startup.completed_targets_percentage};")
             .status-chart-data.img-circle.text-xs-center
-              p Targets
+              p
+                | Tasks
               h5.brand-secondary.font-regular.m-b-0
-                i.fa.fa-refresh.fa-spin.fa-fw
+                | #{@startup.completed_targets_count}/#{Target.count}
           .stats-section.leaderboard-rank-section.text-xs-center
             | Leaderboard Rank
             .leaderboard-rank.font-semibold.alert-background
-              i.fa.fa-refresh.fa-spin.fa-fw
-            p Loading...
+              | #{@startup.leaderboard_rank}
+            p
+              | Last Week Karma : #{@startup.last_week_karma}
         .performance-meter.text-xs-center
           .performance-bar
-            .performance-pointer.text-uppercase.font-semibold style="left: 45%" Loading...
+            .performance-pointer.text-uppercase.font-semibold data-value=@startup.relative_performance
+              | #{@startup.performance_label}
           p.performance-description
-            | Please wait while we load your performance metrics. This might take a few seconds.
+            == t("dashboard.show.performance_descriptions.description_#{@startup.relative_performance}_html")

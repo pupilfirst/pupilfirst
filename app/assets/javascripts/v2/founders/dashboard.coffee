@@ -1,5 +1,5 @@
 targetAccordion = ->
-  scope = $('.target-accordion .target-title-link')
+  scope = $('.target-accordion .founder-dashboard-target-header__container')
   scope.off('click')
 
   scope.on('click', (t) ->
@@ -9,7 +9,7 @@ targetAccordion = ->
     if $(this).hasClass('active')
       $(this).removeClass 'active'
     else
-      $(this).closest('.target-accordion').find('.target-title-link.active').removeClass 'active'
+      $(this).closest('.target-accordion').find('.founder-dashboard-target-header__container.active').removeClass 'active'
       $(this).addClass 'active'
       $(this).parent().addClass 'open'
     dropDown.stop(false, true).slideToggle(200)
@@ -81,23 +81,6 @@ setPerformancePointer = ->
     else 'green'
   $('.performance-pointer')[0].style.color = color
 
-viewSlidesModal = ->
-  scope = $('.view-slides-btn')
-  scope.off('click')
-
-  scope.on('click', (event) ->
-    slidesModal = $('.view-slides')
-    viewSlidesButton = $(event.target).closest('button')
-
-    slidesModal.on 'show.bs.modal', ->
-      $('#slides-wrapper').html(viewSlidesButton.data('embed-code'))
-
-    slidesModal.on 'hide.bs.modal', ->
-      $('#slides-wrapper').html('')
-
-    slidesModal.modal()
-  )
-
 giveATour = ->
   startTour() if $('#dashboard-show-tour').data('tour-flag')
 
@@ -110,19 +93,31 @@ startTour = ->
     skipLabel: 'Close',
     steps: [
       {
-        element: $('.startup-profile')[0],
+        element: $('.founder-dashboard-header__container')[0],
         intro: startupShowTour.data('intro')
       },
       {
-        element: $('.program-week-number')[0],
-        intro: startupShowTour.data('programWeekNumber')
+        element: $('.founder-dashboard-togglebar__toggle-group')[0],
+        intro: startupShowTour.data('toggleBar')
       },
       {
-        element: $('.target-group-header')[0],
+        element: $('.founder-dashboard-togglebar__toggle-btn')[0],
+        intro: startupShowTour.data('targets')
+      },
+      {
+        element: $('.founder-dashboard-togglebar__toggle-btn')[1],
+        intro: startupShowTour.data('chores')
+      },
+      {
+        element: $('.founder-dashboard-togglebar__toggle-btn')[2],
+        intro: startupShowTour.data('sessions')
+      },
+      {
+        element: $('.founder-dashboard-target-group__container')[0],
         intro: startupShowTour.data('targetGroup')
       },
       {
-        element: $('.target-title-link')[0],
+        element: $('.founder-dashboard-target-header__container')[0],
         intro: startupShowTour.data('target')
 
       },
@@ -131,50 +126,24 @@ startTour = ->
         intro: startupShowTour.data('targetDetails')
       },
       {
-        element: $('.target-status')[0],
+        element: $('.founder-dashboard-target-header__status-badge')[0],
         intro: startupShowTour.data('targetStatus')
       },
       {
-        element: $('#add-event-button')[0],
+        element: $('.btn-timeline-builder')[0],
         intro: startupShowTour.data('addEvent')
-      },
-      {
-        element: $('#performance-button')[0],
-        intro: startupShowTour.data('performance')
       }
     ]
   )
 
   # Open the first target so that its contents are available for intro-ing.
-  $('.target-title-link:first').trigger('click')
+  $('.founder-dashboard-target-header__container:first').trigger('click')
 
   tour.start()
 
 hideIntercomOnSmallScreen = ->
     # TODO: There might be a better way to do this!
     window.Intercom('shutdown') if window.innerWidth < 576
-
-loadPerformanceOnDemand = ->
-  $('#performance-button').click (event) ->
-    performanceOverview = $('.performance-overview')
-
-    # Open the modal.
-    performanceOverview.modal()
-
-    # Load performance data using AJAX if required.
-    unless performanceOverview.data('loaded') || performanceOverview.data('loading')
-      performanceOverview.data('loading', true)
-      performanceUrl = $(event.target).closest('button').data('performanceUrl')
-
-      $.get(performanceUrl).done((data) ->
-        performanceOverview.find('.modal-body').html(data)
-        setPerformancePointer()
-        performanceOverview.data('loaded', true)
-      ).fail(->
-        console.log("Failed to load performance data from server. :-(")
-      ).always(->
-        performanceOverview.data('loading', false)
-      )
 
 loadProgramWeekOnDemand = ->
   loadingElement = $('.js-program-week__loading')
@@ -209,11 +178,10 @@ loadProgramWeekOnDemand = ->
 
 $(document).on 'turbolinks:load', ->
   if $('#founder-dashboard').length
-    targetAccordion()
-    handleTimelineBuilderModal()
-    handleTimelineBuilderPopoversHiding()
+#    targetAccordion()
+#    handleTimelineBuilderModal()
+#    handleTimelineBuilderPopoversHiding()
     giveATour()
-    viewSlidesModal()
     hideIntercomOnSmallScreen()
-    loadPerformanceOnDemand()
-    loadProgramWeekOnDemand()
+    setPerformancePointer()
+#    loadProgramWeekOnDemand()

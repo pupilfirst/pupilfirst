@@ -24,8 +24,6 @@ class TargetDecorator < Draper::Decorator
         'fa-thumbs-o-up'
       when Targets::StatusService::STATUS_NEEDS_IMPROVEMENT
         'fa-line-chart'
-      when Targets::StatusService::STATUS_EXPIRED
-        'fa-hourglass-end'
       when Targets::StatusService::STATUS_NOT_ACCEPTED
         'fa-thumbs-o-down'
       when Targets::StatusService::STATUS_UNAVAILABLE
@@ -69,7 +67,7 @@ class TargetDecorator < Draper::Decorator
   end
 
   def submittable?(founder)
-    status(founder).in? [Targets::StatusService::STATUS_PENDING, Targets::StatusService::STATUS_NEEDS_IMPROVEMENT, Targets::StatusService::STATUS_NOT_ACCEPTED, Targets::StatusService::STATUS_EXPIRED, Targets::StatusService::STATUS_COMPLETE]
+    status(founder).in? [Targets::StatusService::STATUS_PENDING, Targets::StatusService::STATUS_NEEDS_IMPROVEMENT, Targets::StatusService::STATUS_NOT_ACCEPTED, Targets::StatusService::STATUS_COMPLETE]
   end
 
   def re_submittable?(founder)
@@ -86,13 +84,5 @@ class TargetDecorator < Draper::Decorator
 
   def team_or_personal
     founder_role? ? 'Personal' : 'Team'
-  end
-
-  def self.fa_icon_for_filter(filter)
-    { Founders::TargetsFilterService::EXPIRES_IN_A_WEEK => 'fa-clock-o',
-      Founders::TargetsFilterService::EXPIRED => 'fa-hourglass-end',
-      Founders::TargetsFilterService::NOT_ACCEPTED => 'fa-thumbs-o-down',
-      Founders::TargetsFilterService::NEEDS_IMPROVEMENT => 'fa-line-chart',
-      Founders::TargetsFilterService::ALL_TARGETS => 'fa-list-ul' }[filter]
   end
 end

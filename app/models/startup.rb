@@ -116,6 +116,7 @@ class Startup < ApplicationRecord
 
   belongs_to :batch
   belongs_to :level
+  belongs_to :requested_restart_level, class_name: 'Level'
 
   # use the old name attribute as an alias for legal_registered_name
   alias_attribute :name, :legal_registered_name
@@ -402,5 +403,10 @@ class Startup < ApplicationRecord
   def self.leaderboard_toppers_for_batch(batch, count: 3)
     # returns ids of n toppers on the leaderboard
     Startups::PerformanceService.new.leaderboard(batch)[0..count - 1].map { |startup, _rank, _points| startup.id }
+  end
+
+  def restartable_levels
+    return Level.none if level.number < 2
+    Level.where(number: 1..(level.number - 1))
   end
 end

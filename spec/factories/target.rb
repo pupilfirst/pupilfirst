@@ -6,11 +6,16 @@ FactoryGirl.define do
     target_type { Target.valid_target_types.sample }
     days_to_complete { 1 + rand(60) }
     target_group
+    timeline_event_type
 
     transient do
       batch nil
       week_number nil
       group_index nil
+    end
+
+    trait :for_founders do
+      role Target::ROLE_FOUNDER
     end
 
     trait :for_startup do

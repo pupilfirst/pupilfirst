@@ -3,7 +3,10 @@ const TimelineBuilder = React.createClass({
     timelineEventTypes: React.PropTypes.object,
     selectedTimelineEventTypeId: React.PropTypes.number,
     targetId: React.PropTypes.number,
-    allowFacebookShare: React.PropTypes.bool
+    allowFacebookShare: React.PropTypes.bool,
+    authenticityToken: React.PropTypes.string,
+    closeTimelineBuilderCB: React.PropTypes.func,
+    targetSubmissionCB: React.PropTypes.func
   },
 
   getInitialState: function () {
@@ -30,8 +33,26 @@ const TimelineBuilder = React.createClass({
   },
 
   componentDidMount: function () {
-    // Remove all file inputs from hidden form.
-    $('.timeline-builder-hidden-form').find('input[type="file"]').remove();
+    let timelineBuilderModal = $('.timeline-builder');
+
+    // Now show the form. Ensure it can only be closed by clicking appropriate button.
+    timelineBuilderModal.modal({
+      show: true,
+      keyboard: false,
+      backdrop: 'static'
+    });
+
+    timelineBuilderModal.on('hide.bs.modal', this.destroyPopovers);
+    timelineBuilderModal.on('hidden.bs.modal', this.props.closeTimelineBuilderCB);
+  },
+
+  destroyPopovers: function () {
+    $('.js-timeline-builder__textarea').popover('dispose');
+    $('.date-of-event').popover('dispose');
+    $('.js-timeline-builder__timeline-event-type-select-wrapper').popover('dispose');
+    $('.js-timeline-builder__submit-button').popover('dispose');
+    $('.image-upload').popover('dispose');
+    $('.timeline-builder__social-bar-toggle-switch').popover('dispose');
   },
 
   generateKey: function () {
@@ -266,12 +287,16 @@ const TimelineBuilder = React.createClass({
   },
 
   handleSubmissionComplete: function () {
-    // Reload the window after 100ms.
-    setTimeout(function () {
-      window.location.reload();
-    }, 100);
-
+    // show done on timeline builder
     this.setState({submissionSuccessful: true});
+
+    // mark target submitted, if applicable
+    if (this.props.targetId) {
+      this.props.targetSubmissionCB(this.props.targetId);
+    };
+
+    // hide the timeline builder
+    $('.timeline-builder').modal('hide');
   },
 
   sampleText: function () {
@@ -307,33 +332,51 @@ const TimelineBuilder = React.createClass({
 
   render: function () {
     return (
-      <div>
-        <TimelineBuilderTextArea showError={ this.state.showDescriptionError } resetErrorsCB={ this.resetErrors }
-                                 placeholder={ this.sampleText() } textChangeCB={ this.updateDescription }/>
+      <div className="timeline-builder modal fade">
+        <div className="modal-dialog timeline-builder__popup">
+          <div className="modal-content timeline-builder__popup-content">
+            <div className="timeline-builder__popup-body">
+              <button type="button" className="close timeline-builder__modal-close" data-dismiss="modal"
+                aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
 
-        <TimelineBuilderSocialBar description={ this.state.description }
-                                  allowFacebookShare={ this.props.allowFacebookShare }/>
+              <form className="timeline-builder-hidden-form js-timeline-builder__hidden-form"
+                action="/founder/startup/timeline_events" acceptCharset="UTF-8" method="post">
+                <input name="utf8" type="hidden" value="✓"/>
+                <input type="hidden" name="authenticity_token" value={ this.props.authenticityToken }/>
+              </form>
 
-        { this.hasAttachments() &&
-        <TimelineBuilderAttachments attachments={ this.attachments() } removeAttachmentCB={ this.removeAttachment }/>
-        }
+              <TimelineBuilderTextArea showError={ this.state.showDescriptionError } resetErrorsCB={ this.resetErrors }
+                placeholder={ this.sampleText() } textChangeCB={ this.updateDescription }/>
 
-        <TimelineBuilderAttachmentForm currentForm={ this.currentForm() } previousForm={ this.state.previousForm }
-                                       addAttachmentCB={ this.addData } selectedDate={ this.state.date }
-                                       showSelectedFileError={ this.state.showSelectedFileError }
-                                       resetErrorsCB={ this.resetErrors }/>
+              <TimelineBuilderSocialBar description={ this.state.description }
+                allowFacebookShare={ this.props.allowFacebookShare }/>
 
-        <TimelineBuilderActionBar formClickedCB={ this.toggleForm } currentForm={ this.currentForm() }
-                                  submitCB={ this.submit } timelineEventTypes={ this.props.timelineEventTypes }
-                                  addDataCB={ this.addData } coverImage={ this.state.coverImage }
-                                  imageButtonKey={ this.state.imageButtonKey } selectedDate={ this.state.date }
-                                  submissionProgress={ this.state.submissionProgress }
-                                  attachmentAllowed={ this.attachmentAllowed() }
-                                  showDateError={ this.state.showDateError } resetErrorsCB={ this.resetErrors }
-                                  showEventTypeError={this.state.showEventTypeError}
-                                  timelineEventTypeId={ this.timelineEventTypeIdForSelect() }
-                                  hasSubmissionError={ this.state.hasSubmissionError }
-                                  submissionSuccessful={ this.state.submissionSuccessful }/>
+              { this.hasAttachments() &&
+              <TimelineBuilderAttachments attachments={ this.attachments() }
+                removeAttachmentCB={ this.removeAttachment }/>
+              }
+
+              <TimelineBuilderAttachmentForm currentForm={ this.currentForm() } previousForm={ this.state.previousForm }
+                addAttachmentCB={ this.addData } selectedDate={ this.state.date }
+                showSelectedFileError={ this.state.showSelectedFileError }
+                resetErrorsCB={ this.resetErrors }/>
+
+              <TimelineBuilderActionBar formClickedCB={ this.toggleForm } currentForm={ this.currentForm() }
+                submitCB={ this.submit } timelineEventTypes={ this.props.timelineEventTypes }
+                addDataCB={ this.addData } coverImage={ this.state.coverImage }
+                imageButtonKey={ this.state.imageButtonKey } selectedDate={ this.state.date }
+                submissionProgress={ this.state.submissionProgress }
+                attachmentAllowed={ this.attachmentAllowed() }
+                showDateError={ this.state.showDateError } resetErrorsCB={ this.resetErrors }
+                showEventTypeError={this.state.showEventTypeError}
+                timelineEventTypeId={ this.timelineEventTypeIdForSelect() }
+                hasSubmissionError={ this.state.hasSubmissionError }
+                submissionSuccessful={ this.state.submissionSuccessful }/>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }

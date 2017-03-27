@@ -23,12 +23,17 @@ Rails.application.routes.draw do
 
   resource :founder, only: [:edit, :update] do
     member do
-      get 'dashboard'
-      get 'performance_stats'
-      get 'load_program_week'
+      scope module: 'founders', controller: 'dashboard' do
+        get 'dashboard'
+        post 'startup_restart'
+      end
     end
 
     resource :startup, only: [:edit, :update] do
+      scope module: 'founders', controller: 'dashboard' do
+        post 'level_up'
+      end
+
       resources :timeline_events, only: [:create, :destroy, :update]
       resources :team_members, except: [:index]
     end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170320105803) do
+ActiveRecord::Schema.define(version: 20170325074414) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -615,9 +615,10 @@ ActiveRecord::Schema.define(version: 20170320105803) do
     t.string   "prototype_link"
     t.string   "product_video_link"
     t.integer  "batch_id"
-    t.boolean  "dropped_out",           default: false
+    t.boolean  "dropped_out",                default: false
     t.integer  "level_id"
     t.integer  "iteration"
+    t.integer  "requested_restart_level_id"
     t.index ["batch_id"], name: "index_startups_on_batch_id", using: :btree
     t.index ["level_id"], name: "index_startups_on_level_id", using: :btree
     t.index ["slug"], name: "index_startups_on_slug", unique: true, using: :btree
@@ -756,7 +757,9 @@ ActiveRecord::Schema.define(version: 20170320105803) do
     t.integer  "improved_timeline_event_id"
     t.integer  "target_id"
     t.boolean  "share_on_facebook",          default: false
+    t.integer  "iteration",                  default: 1,     null: false
     t.index ["founder_id"], name: "index_timeline_events_on_founder_id", using: :btree
+    t.index ["iteration"], name: "index_timeline_events_on_iteration", using: :btree
     t.index ["startup_id"], name: "index_timeline_events_on_startup_id", using: :btree
     t.index ["timeline_event_type_id"], name: "index_timeline_events_on_timeline_event_type_id", using: :btree
   end

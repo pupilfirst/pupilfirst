@@ -41,6 +41,7 @@ module TimelineEvents
         @timeline_event.verify!
         update_karma_points
         post_on_facebook if @timeline_event.share_on_facebook
+        reset_startup_level if @timeline_event.timeline_event_type.end_iteration?
       end
     end
 
@@ -48,12 +49,14 @@ module TimelineEvents
       TimelineEvent.transaction do
         @timeline_event.mark_needs_improvement!
         update_karma_points
+        reset_startup_level if @timeline_event.timeline_event_type.end_iteration?
       end
     end
 
     def mark_not_accepted
       TimelineEvent.transaction do
         @timeline_event.mark_not_accepted!
+        cancel_reset_request if @timeline_event.timeline_event_type.end_iteration?
       end
     end
 
@@ -118,6 +121,19 @@ module TimelineEvents
 
     def post_on_facebook
       TimelineEvents::FacebookPostJob.perform_later(@timeline_event)
+    end
+
+    def startup
+      @startup ||= @timeline_event.startup
+    end
+
+    def reset_startup_level
+      return if startup.requested_restart_level.blank?
+      Startups::RestartService.new(startup.admin).restart(startup.requested_restart_level)
+    end
+
+    def cancel_reset_request
+      Startups::RestartService.new(startup.admin).cancel
     end
   end
 end

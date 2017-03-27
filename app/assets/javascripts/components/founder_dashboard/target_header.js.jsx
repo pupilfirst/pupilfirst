@@ -104,11 +104,19 @@ class FounderDashboardTargetHeader extends React.Component {
     }[this.props.target.status];
   }
 
+  headerIcon() {
+    if (typeof(this.props.target.session_at) === 'undefined' || this.props.target.session_at === null) {
+      return this.props.target.role === 'founder' ? this.props.iconPaths.personalTodo : this.props.iconPaths.teamTodo;
+    } else {
+      return this.props.iconPaths.attendSession;
+    }
+  }
+
   render() {
     return (
       <div className={ this.containerClasses() } onClick={ this.props.onClickCB }>
         <img className="founder-dashboard-target-header__icon"
-          src={ this.props.iconPaths.personalTodo }/>
+          src={ this.headerIcon() }/>
 
         <div className="founder-dashboard-target-header__title">
           <h6 className="founder-dashboard-target-header__headline">

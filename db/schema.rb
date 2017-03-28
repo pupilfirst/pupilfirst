@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170325074414) do
+ActiveRecord::Schema.define(version: 20170328101024) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -271,6 +271,12 @@ ActiveRecord::Schema.define(version: 20170325074414) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+  end
+
+  create_table "engineering_metrics", force: :cascade do |t|
+    t.integer "week_start"
+    t.json    "metrics",    default: {}, null: false
+    t.index ["week_start"], name: "index_engineering_metrics_on_week_start", using: :btree
   end
 
   create_table "faculty", force: :cascade do |t|

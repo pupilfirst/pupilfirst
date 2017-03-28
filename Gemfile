@@ -87,7 +87,6 @@ gem 'intercom-rails', '~> 0.3' # The easiest way to install Intercom in a Rails 
 gem 'intercom', '~> 3.5' # Ruby bindings for the Intercom API
 gem 'jspdf-rails', '~> 1.0' # HTML5 client-side pdf generation - for certificates
 gem 'draper', '= 3.0.0.pre1' # Decorators/View-Models for Rails Applications # TODO: Pre-release version for Rails 5 support. Upgrade to stable when available.
-gem 'skylight', '~> 1.1' # Skylight agent for Ruby https://www.skylight.io
 gem 'responders', '~> 2.3' # A set of Rails responders to dry up your application (respond_to / with)
 gem 'prawn', '~> 2.1' # Used to generate dynmaic portions of agreement pdfs
 gem 'prawn-table', '~> 0.2' # Support for drawing tables in prawn pdfs
@@ -171,6 +170,7 @@ group :development, :test do
 end
 
 group :production do
+  gem 'skylight', '~> 1.1' # Skylight agent for Ruby https://www.skylight.io
   gem 'rails_12factor', '~> 0.0' # Makes running your Rails app easier. Based on the ideas behind 12factor.net.
   gem 'dalli', '~> 2.7' # High performance memcached client for Ruby. https://github.com/petergoldstein/dalli
 end

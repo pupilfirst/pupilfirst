@@ -216,4 +216,6 @@ Rails.application.routes.draw do
 
   # used for shortened urls from the shortener gem
   get '/:id', to: 'shortener/shortened_urls#show'
+
+  match '/trello/bug_webhook', to: 'trello#bug_webhook', via: :all
 end

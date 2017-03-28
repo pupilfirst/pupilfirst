@@ -314,6 +314,22 @@ class Founder < ApplicationRecord
     facebook_token_available? && Founders::FacebookService.new(self).token_valid?(fb_access_token)
   end
 
+  # Override the default method to compute the URL if stored value is blank?
+  def resume_url
+    @resume_url ||= begin
+      if super.present?
+        super
+      else
+        resume_event = timeline_events.verified
+          .joins(:timeline_event_type)
+          .where(timeline_event_types: { key: TimelineEventType::TYPE_RESUME_SUBMISSION })
+          .last
+
+        resume_event&.first_attachment_url
+      end
+    end
+  end
+
   private
 
   def batch_start_date

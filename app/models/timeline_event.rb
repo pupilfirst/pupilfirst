@@ -172,7 +172,6 @@ class TimelineEvent < ApplicationRecord
     add_link_for_new_wireframe!
     add_link_for_new_prototype!
     add_link_for_new_video!
-    add_link_for_new_resume!
   end
 
   def revert_to_pending!
@@ -279,56 +278,38 @@ class TimelineEvent < ApplicationRecord
     image&.sanitized_file&.original_filename
   end
 
+  def first_attachment_url
+    @first_attachment_url ||= first_file_url || first_link_url
+  end
+
   private
 
   def privileged_founder?(founder)
     founder.present? && startup.founders.include?(founder)
   end
 
-  def add_link_for_new_resume!
-    return unless timeline_event_type.resume_submission?
-
-    first_attachment_url do |attachment_url|
-      founder.update!(resume_url: attachment_url)
-    end
-  end
-
   def add_link_for_new_deck!
     return unless timeline_event_type.new_deck?
-
-    first_attachment_url do |attachment_url|
-      startup.update!(presentation_link: attachment_url)
-    end
+    return if first_attachment_url.blank?
+    startup.update!(presentation_link: first_attachment_url)
   end
 
   def add_link_for_new_wireframe!
     return unless timeline_event_type.new_wireframe?
-
-    first_attachment_url do |attachment_url|
-      startup.update!(wireframe_link: attachment_url)
-    end
+    return if first_attachment_url.blank?
+    startup.update!(wireframe_link: first_attachment_url)
   end
 
   def add_link_for_new_prototype!
     return unless timeline_event_type.new_prototype?
-
-    first_attachment_url do |attachment_url|
-      startup.update!(prototype_link: attachment_url)
-    end
+    return if first_attachment_url.blank?
+    startup.update!(prototype_link: first_attachment_url)
   end
 
   def add_link_for_new_video!
     return unless timeline_event_type.new_video?
-
-    first_attachment_url do |attachment_url|
-      startup.update!(product_video_link: attachment_url)
-    end
-  end
-
-  def first_attachment_url
-    attachment_url = first_file_url || first_link_url
-    return if attachment_url.blank?
-    yield attachment_url
+    return if first_attachment_url.blank?
+    startup.update!(product_video_link: first_attachment_url)
   end
 
   def first_file_url

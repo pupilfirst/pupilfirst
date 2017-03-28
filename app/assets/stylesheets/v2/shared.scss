@@ -116,6 +116,9 @@
     text-align: left;
     margin-left: 20px;
   }
+  @include media-breakpoint-down(xs) {
+    margin-left: 0;
+  }
 }
 
 .founder-dashboard-header__product-title {

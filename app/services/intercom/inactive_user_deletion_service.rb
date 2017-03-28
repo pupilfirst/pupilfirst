@@ -9,6 +9,7 @@ module Intercom
       'Stale Payment Initiated' => 'Payment Initiated',
       'Stale Conversing Users' => 'Conversing Users',
       'Stale Applicants' => 'Applicants',
+      'Stale Users' => 'Stale Users',
       'Stale Leads' => 'Stale Leads'
     }.freeze
 

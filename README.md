@@ -6,19 +6,17 @@
 
 ### Install Dependencies
 
-  *  Ruby - Use [rbenv](https://github.com/rbenv/rbenv) to install version specified in `.ruby-version`.
-
 #### OSX
 
+  *  Ruby - Use [rbenv](https://github.com/rbenv/rbenv) to install version specified in `.ruby-version`.
   *  imagemagick - `brew install imagemagick`
   *  postgresql - Install [Postgres.app](http://postgresapp.com) and follow instructions.
-  *  PhantomJS - `brew install phantomjs`
   *  puma-dev - `brew install puma/puma/puma-dev`
 
 ### Configure
 
   *  Setup `database.yml` for postgresql.
-  *  copy `example.env` to `.env` and set the variables as required.
+  *  Copy `example.env` to `.env` and set the variables as required.
   *  Load environment key for Rollbar from Heroku with:
 
     heroku config -s --app sv-co | grep ROLLBAR_ACCESS_TOKEN >> .env
@@ -38,7 +36,7 @@
 
 ### Database setup
 
-    $ rake db:setup
+    $ rails db:setup
 
 ### Use [puma-dev](https://github.com/puma/puma-dev) to run the application.
 
@@ -55,9 +53,10 @@ To restart the server:
 
     touch tmp/restart.txt
 
-If it crashes, gets stuck, etc., kill everything from the master process down.
+If it crashes, gets stuck, etc., kill the master process.
 
     ps -ef | grep puma
+    kill -9 [PUMA_PROCESS_ID]
 
 ## Testing
 
@@ -69,7 +68,7 @@ To execute all tests manually, run:
 
 ### Regenerating Knapsack Reports
 
-[Knapsack]() is used to split specs across CI nodes to speed up tests. To update Knapsack's report on all specs, run:
+[Knapsack](https://github.com/ArturT/knapsack) is used to split specs across CI nodes to speed up tests. To update Knapsack's report on all specs, run:
 
     KNAPSACK_GENERATE_REPORT=true rspec
 
@@ -83,18 +82,18 @@ To generate spec coverage report using _simplecov_, run:
 
 Background jobs are written as Rails ActiveJob-s, and deferred using Delayed::Job in the production environment.
 
-To run any jobs in the development environment, simply run:
+By default, the development and test environment run jobs in-line. If you've manually configured the application to defer them instead, you can execute the jobs with:
 
     $ rake jobs:workoff
 
 ## Deployment
 
-[Codeship](https://codeship.com) takes care of deploying after running tests. Simply push to master branch, and the rest is taken care of.
+[Codeship](https://codeship.com) runs specs once commit are pushed to Github. When push is to the `master` branch, and if specs pass, Codeship marks the commit as successful on Github. This prompts Heroku to pick up the commit and deploy a new instance - so the entire process is automated.
 
-There are two buildpacks:
+We use two buildpacks at Heroku:
 
   1. Heroku's default ruby buildpack: https://github.com/heroku/heroku-buildpack-ruby
-  2. Custom rake tasks (for migrations): https://github.com/gunpowderlabs/buildpack-ruby-rake-deploy-tasks
+  2. Custom rake tasks (to run DB migrations): https://github.com/gunpowderlabs/buildpack-ruby-rake-deploy-tasks
 
 ### Manual deployment.
 
@@ -102,15 +101,15 @@ Set up heroku to have access to sv-co app.
 
 Add heroku remote:
 
-    $ git remote add heroku-production git@heroku.com:sv-co.git
+    $ git remote add heroku git@heroku.com:sv-co.git
 
 Then, to deploy:
 
-* From `master` branch, `git push heroku-production` will push local master to production (sv.co)
+* From `master` branch, `git push heroku` will push local master to production (sv.co)
 
 To safely deploy:
 
-    $ rspec && git push heroku-production && heroku run rake db:migrate --app sv-co && heroku restart --app sv-co
+    $ rspec && git push heroku && heroku run rake db:migrate --app sv-co && heroku restart --app sv-co
 
 ## Coding style conventions
 
@@ -133,4 +132,4 @@ Basic coding conventions are defined in the .editorconfig file. Download plugin 
 ### CSS
 
 * Use SCSS everywhere.
-* Naming: Dash-separated ID-s and classes - `.some-class, #some-id`
+* Use [BEM](http://getbem.com) for naming classes - `block__element`, or `block__element--modifier`

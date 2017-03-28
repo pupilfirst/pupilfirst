@@ -23,7 +23,7 @@ const TimelineBuilder = React.createClass({
       submissionProgress: null,
       hasSubmissionError: false,
       submissionSuccessful: false,
-      showDescriptionError: false,
+      descriptionError: null,
       showDateError: false,
       showEventTypeError: false,
       showSelectedFileError: false,
@@ -244,7 +244,12 @@ const TimelineBuilder = React.createClass({
 
   validate: function () {
     if ($('.timeline-builder__textarea').val().trim().length == 0) {
-      this.setState({showDescriptionError: true});
+      this.setState({descriptionError: 'description_missing'});
+      return false;
+    }
+
+    if ($('.timeline-builder__textarea').val().trim().length > 500) {
+      this.setState({descriptionError: 'description_too_long'});
       return false;
     }
 
@@ -263,7 +268,7 @@ const TimelineBuilder = React.createClass({
 
   resetErrors: function () {
     this.setState({
-      showDescriptionError: false,
+      descriptionError: null,
       showDateError: false,
       showEventTypeError: false,
       showSelectedFileError: false
@@ -293,7 +298,7 @@ const TimelineBuilder = React.createClass({
     // mark target submitted, if applicable
     if (this.props.targetId) {
       this.props.targetSubmissionCB(this.props.targetId);
-    };
+    }
 
     // hide the timeline builder
     $('.timeline-builder').modal('hide');
@@ -347,7 +352,7 @@ const TimelineBuilder = React.createClass({
                 <input type="hidden" name="authenticity_token" value={ this.props.authenticityToken }/>
               </form>
 
-              <TimelineBuilderTextArea showError={ this.state.showDescriptionError } resetErrorsCB={ this.resetErrors }
+              <TimelineBuilderTextArea error={ this.state.descriptionError } resetErrorsCB={ this.resetErrors }
                 placeholder={ this.sampleText() } textChangeCB={ this.updateDescription }/>
 
               <TimelineBuilderSocialBar description={ this.state.description }

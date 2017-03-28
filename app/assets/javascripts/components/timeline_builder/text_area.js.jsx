@@ -5,11 +5,20 @@ class TimelineBuilderTextArea extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.props.showError) {
-      $('.js-timeline-builder__textarea').popover('show');
+    if (this.props.error !== null) {
+      let popover = $('.js-timeline-builder__textarea').popover({
+        title: this.errorTitle(),
+        content: this.errorDescription()
+      });
+
+      popover.popover('show');
     } else {
       $('.js-timeline-builder__textarea').popover('hide');
     }
+  }
+
+  componentWillUpdate() {
+    $('.js-timeline-builder__textarea').popover('dispose');
   }
 
   resetErrors() {
@@ -24,12 +33,29 @@ class TimelineBuilderTextArea extends React.Component {
     }
   }
 
+  errorTitle() {
+    switch (this.props.error) {
+      case 'description_missing':
+        return 'Description Missing!';
+      case 'description_too_long':
+        return 'Description is too long!';
+    }
+  }
+
+  errorDescription() {
+    switch (this.props.error) {
+      case 'description_missing':
+        return 'Please add a summary describing the event.';
+      case 'description_too_long':
+        return 'Please restrict description to under 500 characters.';
+    }
+  }
+
   render() {
     return (
       <textarea className="form-control js-timeline-builder__textarea timeline-builder__textarea" rows="4"
-                data-toggle="popover" data-title="Description Missing!" placeholder={ this.placeholder() }
-                data-content="Please add a summary describing the event." data-placement="bottom" data-trigger="manual"
-                onFocus={ this.resetErrors } onChange={ this.props.textChangeCB } maxLength="500"/>
+        data-toggle="popover" placeholder={ this.placeholder() } data-placement="bottom" data-trigger="manual"
+        onFocus={ this.resetErrors } onChange={ this.props.textChangeCB } maxLength="500"/>
     )
   }
 }
@@ -39,4 +65,8 @@ TimelineBuilderTextArea.propTypes = {
   resetErrorsCB: React.PropTypes.func,
   placeholder: React.PropTypes.string,
   textChangeCB: React.PropTypes.func
+};
+
+TimelineBuilderTextArea.defaultProps = {
+  error: null
 };

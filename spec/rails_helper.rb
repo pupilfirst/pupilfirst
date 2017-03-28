@@ -72,13 +72,23 @@ RSpec.configure do |config|
   config.filter_run_excluding broken: true
 end
 
-# require 'capybara/selenium/driver'
-
 Capybara.register_driver :selenium do |app|
   Capybara::Selenium::Driver.new(app, browser: :chrome)
 end
 
-# Capybara.current_driver = :selenium
+# Use rspec-retry to retry pesky intermittent failures.
+require 'rspec/retry'
+
+RSpec.configure do |config|
+  # Show retry status in spec process.
+  config.verbose_retry = true
+
+  # Try twice (retry once).
+  config.default_retry_count = 2
+
+  # Only retry when Selenium raises Net::ReadTimeout.
+  config.exceptions_to_retry = [Net::ReadTimeout]
+end
 
 # Increase Capybara's default maximum wait time to 5 seconds to allow for some slow responds (timeline builder).
 Capybara.default_max_wait_time = 5

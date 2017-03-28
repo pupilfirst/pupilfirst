@@ -24,7 +24,7 @@ feature 'Resources' do
     PublicSlackTalk.mock = false
   end
 
-  scenario 'founder visits resources page' do
+  scenario 'user visits resources page' do
     visit resources_path
 
     expect(page).to have_selector('.resource', count: 2)
@@ -32,25 +32,22 @@ feature 'Resources' do
     expect(page).to have_text(public_resource_2.title[0..10])
   end
 
-  scenario 'founder visits resource page' do
-    visit resources_path
+  scenario 'user visits restricted resource page' do
+    visit resource_path(approved_resource_for_all)
     expect(page).to have_text('Approved Startups get access to exclusive content produced by Faculty')
   end
 
-  scenario 'founder downloads resource', js: true do
-    visit resources_path
+  scenario 'user can download public resource' do
+    visit resource_path(public_resource_1)
 
-    new_window = window_opened_by { click_on 'Download', match: :first }
-
-    within_window new_window do
-      expect(page.response_headers['Content-Type']).to eq('application/pdf')
-    end
+    expect(page).to have_text(public_resource_1.title)
+    expect(page).to have_link('Download', download_resource_url(public_resource_1))
   end
 
   context 'With a video resource' do
     let!(:public_resource_2) { create :video_resource }
 
-    scenario 'founder can stream resource' do
+    scenario 'user can stream resource' do
       visit resources_path
 
       page.find('.stream-resource').click
@@ -63,7 +60,7 @@ feature 'Resources' do
     let!(:video_embed_code) { '<iframe src="https://www.youtube.com/sample"></iframe>' }
     let!(:public_video_embed_resource) { create :resource, file: nil, video_embed: video_embed_code }
 
-    scenario 'founder can stream video embed' do
+    scenario 'user can stream video embed' do
       visit resources_path
 
       page.find('.stream-resource').click

@@ -68,11 +68,7 @@ feature 'Faculty Connect' do
         visit faculty_index_path
 
         page.find('a.connect-link').click
-
-        click_on 'Submit Request'
-
-        # Attempting to submit the form without writing questions should show error.
-        expect(page).to have_selector('.form-group.connect_request_questions.has-error')
+        click_button 'Submit Request'
 
         # Fill something in as questions.
         questions = <<~QUESTIONS

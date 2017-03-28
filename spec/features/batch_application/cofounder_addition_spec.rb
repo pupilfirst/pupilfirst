@@ -13,10 +13,7 @@ feature 'Cofounder addition' do
     sign_in_user(batch_applicant.user, referer: apply_continue_path)
 
     expect(page).to have_content('Build your dream startup team now')
-
-    # TODO: Replace this with click_link when PhantomJS moves to next version. It currently doesn't render flexbox correctly:
-    # See: https://github.com/ariya/phantomjs/issues/14365
-    find_link('Add cofounder details').trigger('click')
+    click_link('Add cofounder details')
 
     # The page should ask for details of one co-founder.
     expect(page).to have_selector('.cofounder.content-box', count: 1)
@@ -29,8 +26,8 @@ feature 'Cofounder addition' do
     select "My college isn't listed", from: 'College'
     fill_in 'Name of your college', with: Faker::Lorem.words(3).join(' ')
 
-    # The link doesn't have an href. Hence the trigger('click')
-    page.find('.cofounders-form__add-cofounder-button').trigger('click')
+    # The link doesn't have an href. Hence find to click.
+    page.find('.cofounders-form__add-cofounder-button').click
 
     expect(page).to have_selector('.cofounder.content-box', count: 2)
 

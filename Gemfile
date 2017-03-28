@@ -143,6 +143,7 @@ group :development do
   gem 'derailed_benchmarks', '~> 1.3'
   gem 'stackprof', '~> 0.2' # Required by derailed_benchmarks.
   gem 'oink', '~> 0.10' # Log parser to identify actions which significantly increase VM heap size
+  gem 'chromedriver-helper', '~> 1.1' # Easy installation and use of chromedriver, the Chromium project's selenium webdriver adapter.
 end
 
 group :test do
@@ -150,7 +151,7 @@ group :test do
   gem 'faker', '~> 1.7' # A library for generating fake data such as names, addresses, and phone numbers.
   gem 'capybara', '~> 2.13' # For RSpec feature tests.
   gem 'capybara-email', '~> 2.5' # Test ActionMailer and Mailer messages with Capybara
-  gem 'poltergeist', '~> 1.14' # A PhantomJS driver for Capybara
+  gem 'selenium-webdriver', '~> 3.3'
   gem 'capybara-screenshot', '~> 1.0' # Save screenshots on failure!
   gem 'database_cleaner', '~> 1.5' # Database cleaner can handle complex DB cleanup strategies for test (feature vs regular tests).
 end

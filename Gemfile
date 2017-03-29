@@ -163,11 +163,11 @@ group :development, :test do
   gem 'webmock', '~> 2.3' # Mocking web requests.
   gem 'rubocop', '~> 0.47', require: false # Ruby Style Guide.
   gem 'bundler-audit', '~> 0.5', require: false # Audit gems in gemfile.lock for reported vulnerabilities
-  gem 'simplecov', '~> 0.14', require: false # Code coverage for Ruby 1.9+
   gem 'overcommit', '~> 0.38', require: false # A fully configurable and extendable Git hook manager
   gem 'fuubar', '~> 2.2' # The instafailing RSpec progress bar formatter.
   gem 'knapsack', '~> 1.13' # Knapsack splits tests across CI nodes so that tests will run comparable time on each node.
   gem 'rails_stats', '~> 1.0' # external/replacement version of rake stats
+  gem 'coveralls', require: false
 end
 
 group :production do

@@ -74,9 +74,9 @@ To execute all tests manually, run:
 
 ### Generating coverage report
 
-To generate spec coverage report using _simplecov_, run:
+To run specs and push the coverage report to _Coveralls_, ensure ENV contains COVERALLS_REPO_TOKEN and run:
 
-    COVERAGE=true rspec
+    bundle exec coveralls push
 
 ## Services
 

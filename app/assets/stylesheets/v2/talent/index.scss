@@ -473,10 +473,6 @@
   }
 
   .action-form-icon {
-    background-image: asset-url("talent/Invest-hire-board.png");
-    background-repeat: no-repeat;
-    height: 82px;
-    width: 126px;
     margin: 0 auto 25px;
   }
   .talent-form-popup {
@@ -489,32 +485,32 @@
       }
     }
     label {
+      display: block;
       font-weight: 400;
       color: #646464;
+      margin-right: 20px;
     }
     input {
       border-radius: 5px;
       box-shadow: none;
       border-color: #E0E0E0;
-      max-width: 300px;
     }
-    .action-submit {
-      background-color: #3AA828;
-      border: 0;
-      border-radius: 20px;
-      padding: 10px 30px;
-      text-transform: uppercase;
-      font-weight: 600;
+    .interest-check-box {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+      width: 20px;
+      height: 20px;
     }
     .talent-action-checklist {
       border: 1px solid #ECECEC;
       border-radius: 5px;
-      padding: 20px;
+      padding: 30px 20px 0px;
       margin: auto;
       position: relative;
-      max-width: 650px;
+      max-width: 360px;
       margin-bottom: 25px;
-      text-align: center;
+      text-align: left;
 
       h4 {
         position: absolute;
@@ -553,7 +549,6 @@
           width: 20px;
           height: 20px;
           margin: 1px 0 0 -25px;
-
         }
       }
 
@@ -562,7 +557,7 @@
       }
     }
     .investor-details {
-      max-width: 480px;
+      max-width: 360px;
       margin: auto;
     }
   }

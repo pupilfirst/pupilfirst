@@ -1,23 +1,22 @@
 .modal.action-form.invest-hire-modal aria-hidden="true" aria-labelledby="Invest_Hire_Talents" role="dialog" tabindex="-1" data-show-on-load=(@show_form ? 'true' : nil) class="#{'fade' unless Rails.env.test?}"
-  .modal-dialog.modal-lg
+  .modal-dialog
     .modal-content
       .modal-header.text-center
         button.close type="button" data-dismiss="modal" aria-label="Close"
           span aria-hidden="true"
             | &times;
-        .action-form-icon.modal-title
+        .action-form-icon.modal-title.text-xs-center
+          h3.font-semibold
+            | Invest &amp; Hire
       .talent-form-popup
         = simple_form_for @talent_form, url: talent_contact_url,
-          method: :post,
-          html: { class: 'form-horizontal' },
-          wrapper: :horizontal_form,
-          wrapper_mappings: { file: :horizontal_file_input, boolean: :horizontal_boolean } do |f|
+          method: :post do |f|
 
           .talent-action-checklist
-            h4.font-weight-300
+            h4.text-xs-center
               | Tick all that you are interested in:
-            = f.input :query_type, label: 'Interested in:', collection: TalentForm::VALID_QUERY_TYPES, as: :check_boxes
-          .investor-details
+            = f.input :query_type, label: 'Interested in:', collection: TalentForm::VALID_QUERY_TYPES, as: :check_boxes, input_html: { class: 'interest-check-box' }
+          .investor-details.clearfix
             = f.input :name, label: 'Name', input_html: { maxlength: 50 }
             = f.input :email, type: 'email', label: 'Email address', input_html: { maxlength: 50 }
             = f.input :mobile, label: 'Mobile number', input_html: { maxlength: 20 }
@@ -25,6 +24,7 @@
             = f.input :website, label: 'Website', input_html: { maxlength: 50 }
 
             .form-group
-              .col-sm-9.col-sm-offset-3
-                = button_tag type: :submit, class: 'btn btn-primary action-submit' do
-                  | &nbsp;Submit
+              .row
+                .col-sm-9
+                  = button_tag type: :submit, class: 'btn btn-primary btn-md text-uppercase' do
+                    | &nbsp;Submit

@@ -17,18 +17,21 @@ describe Intercom::InactiveUserDeletionService do
     let(:sendinblue_client) { double 'SendinBlue Client' }
     let(:intercom_client) { double 'Intercom Client' }
 
-    let(:intercom_user_1) { double 'Intercom User', email: Faker::Internet.email, name: Faker::Name.name, phone: nil, custom_attributes: {} }
-    let(:intercom_user_2) { double 'Intercom User', email: Faker::Internet.email, name: Faker::Name.name, phone: nil, custom_attributes: { 'phone' => '9876543210' } }
-    let(:intercom_user_3) { double 'Intercom User', email: Faker::Internet.email, name: Faker::Name.name, phone: '7896543210', custom_attributes: {} }
-    let(:intercom_user_4) { double 'Intercom User', email: Faker::Internet.email, name: Faker::Name.name, phone: nil, custom_attributes: { 'college' => Faker::Lorem.word } }
-    let(:intercom_user_5) { double 'Intercom User', email: Faker::Internet.email, name: Faker::Name.name, phone: nil, custom_attributes: { 'university' => Faker::Lorem.word } }
-    let(:intercom_user_6) { double 'Intercom User', email: Faker::Internet.email, name: Faker::Name.name, phone: nil, custom_attributes: {} }
+    let(:location_data_1) { OpenStruct.new(city_name: Faker::Name.name, region_name: Faker::Name.name) }
+    let(:location_data_2) { OpenStruct.new }
+
+    let(:intercom_user_1) { double 'Intercom User', email: Faker::Internet.email, name: Faker::Name.name, phone: nil, custom_attributes: {}, location_data: location_data_1 }
+    let(:intercom_user_2) { double 'Intercom User', email: Faker::Internet.email, name: Faker::Name.name, phone: nil, custom_attributes: { 'phone' => '9876543210' }, location_data: location_data_2 }
+    let(:intercom_user_3) { double 'Intercom User', email: Faker::Internet.email, name: Faker::Name.name, phone: '7896543210', custom_attributes: {}, location_data: location_data_2 }
+    let(:intercom_user_4) { double 'Intercom User', email: Faker::Internet.email, name: Faker::Name.name, phone: nil, custom_attributes: { 'college' => Faker::Lorem.word }, location_data: location_data_2 }
+    let(:intercom_user_5) { double 'Intercom User', email: Faker::Internet.email, name: Faker::Name.name, phone: nil, custom_attributes: { 'university' => Faker::Lorem.word }, location_data: location_data_2 }
+    let(:intercom_user_6) { double 'Intercom User', email: Faker::Internet.email, name: Faker::Name.name, phone: nil, custom_attributes: {}, location_data: location_data_2 }
 
     let(:segment_1_contact) do
       {
         email: intercom_user_1.email,
         listid: [1],
-        attributes: { NAME: intercom_user_1.name }
+        attributes: { NAME: intercom_user_1.name, CITY: intercom_user_1.location_data.city_name, STATE: intercom_user_1.location_data.region_name }
       }
     end
 

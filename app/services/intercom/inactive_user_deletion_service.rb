@@ -64,13 +64,38 @@ module Intercom
     end
 
     def sendinblue_attributes(user)
-      attributes = {}
-      attributes[:NAME] = user.name if user.name.present?
-      attributes[:PHONE] = user.custom_attributes['phone'] if user.custom_attributes['phone'].present?
-      attributes[:PHONE] = user.phone if user.phone.present?
-      attributes[:COLLEGE] = user.custom_attributes['college'] if user.custom_attributes['college'].present?
-      attributes[:UNIVERSITY] = user.custom_attributes['university'] if user.custom_attributes['university'].present?
-      attributes
+      name_attribute(user)
+        .merge(phone_attribute(user))
+        .merge(education_attributes(user))
+        .merge(location_attributes(user))
+    end
+
+    def name_attribute(user)
+      user.name.present? ? { NAME: user.name } : {}
+    end
+
+    def phone_attribute(user)
+      if user.custom_attributes['phone'].present?
+        { PHONE: user.custom_attributes['phone'] }
+      elsif user.phone.present?
+        { PHONE: user.phone }
+      else
+        {}
+      end
+    end
+
+    def education_attributes(user)
+      education_attributes = {}
+      education_attributes[:COLLEGE] = user.custom_attributes['college'] if user.custom_attributes['college'].present?
+      education_attributes[:UNIVERSITY] = user.custom_attributes['university'] if user.custom_attributes['university'].present?
+      education_attributes
+    end
+
+    def location_attributes(user)
+      location_attributes = {}
+      location_attributes[:CITY] = user.location_data.city_name if user.location_data.city_name.present?
+      location_attributes[:STATE] = user.location_data.region_name if user.location_data.region_name.present?
+      location_attributes
     end
 
     def delete_from_intercom(segment)

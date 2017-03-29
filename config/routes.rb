@@ -218,4 +218,6 @@ Rails.application.routes.draw do
   get '/:id', to: 'shortener/shortened_urls#show'
 
   match '/trello/bug_webhook', to: 'trello#bug_webhook', via: :all
+
+  post '/heroku/deploy_webhook', to: 'heroku#deploy_webhook'
 end

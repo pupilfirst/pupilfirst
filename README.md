@@ -2,6 +2,8 @@
 
 [ ![Codeship Status for SVdotCO/sv.co](https://codeship.com/projects/badb7400-4c67-0134-4ebf-52026d0c47d6/status?branch=master)](https://codeship.com/projects/170220)
 
+[![Coverage Status](https://coveralls.io/repos/github/SVdotCO/sv.co/badge.svg?t=mDmBGC)](https://coveralls.io/github/SVdotCO/sv.co)
+
 ## Setup for development
 
 ### Install Dependencies

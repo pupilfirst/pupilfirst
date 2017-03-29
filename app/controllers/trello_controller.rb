@@ -1,4 +1,6 @@
 class TrelloController < ApplicationController
+  skip_before_action :verify_authenticity_token, only: :bug_webhook
+
   def bug_webhook
     unless request.head?
       action_type = params.dig('trello', 'action', 'type')
@@ -7,6 +9,7 @@ class TrelloController < ApplicationController
       valid_label = label_id == Rails.application.secrets.trello['bug_label_id']
 
       if valid_type && valid_label
+        logger.info "Trello#bug_webhook: Received #{action_type} activity from Trello"
         stats_service = EngineeringMetrics::MetricsStoreService.new
         action_type == 'addLabelToCard' ? stats_service.increment(:bugs) : stats_service.decrement(:bugs)
       end

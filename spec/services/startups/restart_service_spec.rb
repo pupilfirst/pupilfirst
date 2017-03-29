@@ -39,7 +39,7 @@ describe Startups::RestartService do
         expect(last_timeline_event.timeline_event_type).to eq(tet_end_iteration)
         expect(last_timeline_event.description).to eq(reason)
         expect(last_timeline_event.founder).to eq(startup.admin)
-        expect(last_timeline_event.event_on).to eq(Date.today)
+        expect(last_timeline_event.event_on).to eq(Time.zone.today)
       end
 
       it 'updates the startup' do

@@ -3,14 +3,17 @@
 
 class Resource < ApplicationRecord
   include FriendlyId
-  friendly_id :slug_candidates, use: [:slugged, :finders]
+  friendly_id :slug_candidates, use: %i(slugged finders)
   acts_as_taggable
 
   belongs_to :batch
   belongs_to :startup
 
   def slug_candidates
-    [:title, [:title, :updated_at]]
+    [
+      :title,
+      %i(title updated_at)
+    ]
   end
 
   def should_generate_new_friendly_id?

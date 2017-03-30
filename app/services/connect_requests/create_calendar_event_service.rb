@@ -51,13 +51,13 @@ module ConnectRequests
     def attendees
       list = [{ 'email' => faculty.email, 'displayName' => faculty.name, 'responseStatus' => 'needsAction' }]
 
-      list + startup.founders.map do |founder|
+      list + (startup.founders.map do |founder|
         {
           'email' => founder.email,
           'displayName' => founder.fullname,
           'responseStatus' => 'needsAction'
         }
-      end
+      end)
     end
   end
 end

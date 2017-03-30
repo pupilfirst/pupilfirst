@@ -1,9 +1,3 @@
-require 'coveralls'
-Coveralls.wear!('rails')
-
-require 'coveralls/rake/task'
-Coveralls::RakeTask.new
-
 if ENV['CI'] == 'true' || ENV['KNAPSACK_GENERATE_REPORT'] == 'true'
   require 'knapsack'
   Knapsack::Adapters::RSpecAdapter.bind

@@ -29,8 +29,7 @@ module BatchApplications
     end
 
     def msp_coupon_applied?
-      return false unless coupon.present?
-
+      return false if coupon.blank?
       coupon.coupon_type == Coupon::TYPE_MSP
     end
 

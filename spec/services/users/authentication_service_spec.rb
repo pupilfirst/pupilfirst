@@ -20,7 +20,7 @@ describe Users::AuthenticationService do
       it 'generates new login token' do
         expect do
           subject.mail_login_token('valid_email@example.com', 'www.example.com', true)
-        end.to change { user.reload.login_token }
+        end.to(change { user.reload.login_token })
       end
 
       it 'emails login link to user' do

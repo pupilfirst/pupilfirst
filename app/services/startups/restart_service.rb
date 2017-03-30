@@ -11,7 +11,7 @@ module Startups
     end
 
     def request_restart(level, reason)
-      raise LevelInvalid if level.number < 1 || !(level.number < @startup.level.number)
+      raise LevelInvalid if level.number < 1 || level.number >= @startup.level.number
 
       Startup.transaction do
         # Create a timeline event to mark this.

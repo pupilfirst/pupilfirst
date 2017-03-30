@@ -175,7 +175,9 @@ class IntercomClient
   # rubocop:disable MethodLength, Metrics/PerceivedComplexity, Metrics/AbcSize
   def strip_user_ids_from_segment(segment_name)
     users = get_users_by_segment(segment_name)
-    raise 'No Users found in the Segment' unless users.present?
+
+    raise 'No Users found in the Segment' if users.blank?
+
     user_emails = users.values
 
     all_users.each_with_index do |user, index|
@@ -205,24 +207,31 @@ class IntercomClient
       end
     end
   end
+
   # rubocop:enable MethodLength, Metrics/PerceivedComplexity, Metrics/AbcSize
 
   def get_segment_id(segment_name)
     segment_id = nil
+
     rescued_call { intercom_client.segments.all }.each do |segment|
       next unless segment.name == segment_name
       segment_id = segment.id
     end
+
     segment_id
   end
 
   def get_users_by_segment(segment_name)
     segment_id = get_segment_id(segment_name)
-    raise 'Could not Fetch Segment Id' unless segment_id.present?
+
+    raise 'Could not Fetch Segment Id' if segment_id.blank?
+
     users_by_segment = {}
+
     rescued_call { intercom_client.users.find_all(segment_id: segment_id) }.each do |user|
       users_by_segment[user.id] = user.email
     end
+
     users_by_segment
   end
 end

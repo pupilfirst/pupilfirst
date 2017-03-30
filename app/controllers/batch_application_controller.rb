@@ -132,7 +132,7 @@ class BatchApplicationController < ApplicationController
 
   # GET /apply/stage/:stage_number/complete
   def complete
-    return redirect_to(apply_continue_path) unless current_application&.status&.in?([:submitted, :promoted])
+    return redirect_to(apply_continue_path) unless current_application&.status&.in?(%i(submitted promoted))
     stage_number = (current_application&.status == :promoted ? application_stage_number - 1 : application_stage_number)
     try "stage_#{stage_number}_complete"
     render "stage_#{stage_number}_complete"
@@ -245,7 +245,8 @@ class BatchApplicationController < ApplicationController
   def stage_2
     @payment_form = BatchApplications::PaymentForm.new(current_application)
     @coupon = current_application.coupons.last
-    unless @coupon.present?
+
+    if @coupon.blank?
       @coupon_form = BatchApplications::CouponForm.new(OpenStruct.new)
       @coupon_form.prepopulate!(current_application)
     end
@@ -442,19 +443,19 @@ class BatchApplicationController < ApplicationController
     # User must be logged in
     authenticate_user!
 
-    unless current_user.batch_applicant.present?
+    if current_user.batch_applicant.blank?
       flash[:notice] = 'You are not an applicant. Please go through the registration process.'
       redirect_to apply_url
       return
     end
 
-    unless current_user.batch_applicant.batch_applications.any?
+    if current_user.batch_applicant.batch_applications.blank?
       flash[:notice] = 'You have not submitted an application. Please go through the registration process.'
       redirect_to apply_url
       return
     end
 
-    unless current_application.present?
+    if current_application.blank?
       flash[:notice] = 'You are part of an application, but are not the team lead. If you wish to create a new application as team lead, please go through the registration process.'
       redirect_to apply_url
     end

@@ -34,7 +34,7 @@ class ConnectRequestController < ApplicationController
   # GET /connect_request/:id/join_session(/:token)
   def join_session
     @connect_request = retrieve_connect_request
-    raise_not_found unless @connect_request.present?
+    raise_not_found if @connect_request.blank?
   end
 
   private

@@ -23,14 +23,14 @@ module BatchApplications
     end
 
     def do_not_delete_all_cofounders
-      unpersisted_cofounders = cofounders.select { |cofounder| !cofounder.model.persisted? }
+      unpersisted_cofounders = cofounders.reject { |cofounder| cofounder.model.persisted? }
       return if unpersisted_cofounders.any?
 
       persisted_cofounders = cofounders.select { |cofounder| cofounder.model.persisted? }
       return if persisted_cofounders.blank?
 
-      return if persisted_cofounders.select do |persisted_cofounder|
-        persisted_cofounder.delete != 'on'
+      return if persisted_cofounders.reject do |persisted_cofounder|
+        persisted_cofounder.delete == 'on'
       end.present?
 
       errors[:base] << 'You must have at least one cofounder.'

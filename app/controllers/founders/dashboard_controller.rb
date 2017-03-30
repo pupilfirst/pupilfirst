@@ -36,7 +36,7 @@ module Founders
     # POST /founder/startup_restart
     def startup_restart
       startup = current_founder.startup
-      raise_not_found unless startup.restartable_levels.present?
+      raise_not_found if startup.restartable_levels.blank?
 
       @restart_form = Founders::StartupRestartForm.new(OpenStruct.new)
 

@@ -8,7 +8,7 @@ git_source(:github) { |repository_path| "https://github.com/#{repository_path}.g
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '= 5.0.2'
 
-gem 'dotenv-rails', '~> 2.2', groups: [:development, :test]
+gem 'dotenv-rails', '~> 2.2', groups: %i(development test)
 
 gem 'inherited_resources', '= 1.7.0', github: 'activeadmin/inherited_resources' # Required for Rails 5 support for activeadmin. TODO: Remove when activeadmin 1.0.0 is released, which is when I'm guessing this gem will be removed.
 gem 'activeadmin', '= 1.0.0.pre5', github: 'activeadmin/activeadmin' # Tracking master for Rails 5 support. TODO: Revert to rubygems version when 1.0.0 is released.
@@ -161,13 +161,16 @@ group :development, :test do
   gem 'coderay', '~> 1.1' # Pretty syntax highlighting on rspec failure snippets.
   gem 'pry-rails', '~> 0.3.5' # Pry debugger.
   gem 'webmock', '~> 2.3' # Mocking web requests.
-  gem 'rubocop', '~> 0.47', require: false # Ruby Style Guide.
+
+  # TODO: Upgrade when Rubocop moves beyond buggy v0.48.
+  gem 'rubocop', '= 0.47.1', require: false # Ruby Style Guide.
+
   gem 'bundler-audit', '~> 0.5', require: false # Audit gems in gemfile.lock for reported vulnerabilities
   gem 'overcommit', '~> 0.38', require: false # A fully configurable and extendable Git hook manager
   gem 'fuubar', '~> 2.2' # The instafailing RSpec progress bar formatter.
   gem 'knapsack', '~> 1.13' # Knapsack splits tests across CI nodes so that tests will run comparable time on each node.
   gem 'rails_stats', '~> 1.0' # external/replacement version of rake stats
-  gem 'coveralls', require: false
+  gem 'coveralls', '~> 0.8', require: false
 end
 
 group :production do

@@ -93,7 +93,8 @@ class TimelineEvent < ApplicationRecord
   before_validation :build_description
 
   def build_description
-    return unless !description.present? && auto_populated
+    return unless description.blank? && auto_populated
+
     self.description = case timeline_event_type.key
       when 'joined_svco'
         'We just registered our startup on SV.CO. Looking forward to an amazing learning experience!'
@@ -216,12 +217,12 @@ class TimelineEvent < ApplicationRecord
   end
 
   def public_link?
-    links.select { |l| !l[:private] }.present?
+    links.reject { |l| l[:private] }.present?
   end
 
   def points_for_grade
     minimum_point_for_target = target&.points_earnable
-    return minimum_point_for_target unless grade.present?
+    return minimum_point_for_target if grade.blank?
 
     multiplier = {
       GRADE_GOOD => 1,
@@ -235,7 +236,7 @@ class TimelineEvent < ApplicationRecord
   # A hidden timeline event is not displayed to user if user isn't logged in, or isn't the founder linked to event.
   def hidden_from?(viewer)
     return false unless timeline_event_type.founder_event?
-    return true unless viewer.present?
+    return true if viewer.blank?
     founder != viewer
   end
 

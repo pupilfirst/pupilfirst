@@ -62,7 +62,7 @@ class BatchApplicant < ApplicationRecord
   mount_uploader :letter_from_parent, BatchApplicantDocumentUploader
 
   def applied_to?(batch)
-    return false unless batch_applications.present?
+    return false if batch_applications.blank?
 
     batch_applications.find_by(batch_id: batch.id).present?
   end
@@ -78,8 +78,8 @@ class BatchApplicant < ApplicationRecord
   end
 
   def profile_complete?
-    required_fields = [:name, :role, :born_on, :gender, :parent_name, :current_address, :permanent_address, :address_proof, :phone, :id_proof_type, :id_proof_number, :id_proof]
-    required_fields += [:income_proof, :letter_from_parent, :college_contact] if income_proofs_required?
+    required_fields = %i(name role born_on gender parent_name current_address permanent_address address_proof phone id_proof_type id_proof_number id_proof)
+    required_fields += %i(income_proof letter_from_parent college_contact) if income_proofs_required?
 
     required_fields.all? { |field| self[field].present? }
   end

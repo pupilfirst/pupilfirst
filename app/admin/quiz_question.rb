@@ -2,7 +2,7 @@ ActiveAdmin.register QuizQuestion do
   include DisableIntercom
 
   menu parent: 'SixWays'
-  permit_params :course_module_id, :question, answer_options_attributes: [:id, :value, :correct_answer, :hint_text, :_destroy]
+  permit_params :course_module_id, :question, answer_options_attributes: %i(id value correct_answer hint_text _destroy)
 
   index do
     selectable_column

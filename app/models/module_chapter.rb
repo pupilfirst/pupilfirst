@@ -29,7 +29,7 @@ class ModuleChapter < ApplicationRecord
 
     # ensure key is title or url
     json.map(&:symbolize_keys).each do |link|
-      next if link.keys == [:title, :url]
+      next if link.keys == %i(title url)
       errors[:serialized_links] << 'keys have to be title and url'
       return false
     end

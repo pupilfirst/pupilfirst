@@ -8,7 +8,7 @@ class IntercomController < ApplicationController
     raise 'Unexpected Intercom Webhook Topic' unless params[:topic] == 'user.created'
 
     email = params.dig(:data, :item, :email)
-    raise 'Could not retreive email from Webhook POST' unless email.present?
+    raise 'Could not retrieve email from Webhook POST' if email.blank?
 
     IntercomClient.new.strip_user_id(email)
     head :ok

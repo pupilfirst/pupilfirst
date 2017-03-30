@@ -21,7 +21,7 @@ class UserSignInForm < Reform::Form
 
   def user
     @user ||= begin
-      User.with_email(email).first unless email.blank?
+      User.with_email(email).first if email.present?
     end
   end
 

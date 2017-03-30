@@ -3,7 +3,7 @@ ActiveAdmin.register CouponUsage do
 
   menu parent: 'Admissions'
 
-  actions :all, except: [:destroy, :new]
+  actions :all, except: %i(destroy new)
 
   scope :all
   scope :redeemed

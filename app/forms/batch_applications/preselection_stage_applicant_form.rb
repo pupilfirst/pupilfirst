@@ -54,7 +54,7 @@ module BatchApplications
     end
 
     def file_required?(field)
-      !model.public_send(field).present?
+      model.public_send(field).blank?
     end
 
     def file_help_extra(field)
@@ -62,7 +62,7 @@ module BatchApplications
     end
 
     def save_uploaded_files
-      files = [:address_proof, :id_proof, :income_proof, :letter_from_parent]
+      files = %i(address_proof id_proof income_proof letter_from_parent)
       files -= errors.keys
 
       files.each do |valid_file|

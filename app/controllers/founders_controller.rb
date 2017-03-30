@@ -1,6 +1,6 @@
 class FoundersController < ApplicationController
   before_action :authenticate_founder!, except: :founder_profile
-  before_action :skip_container, only: [:founder_profile, :dashboard]
+  before_action :skip_container, only: %i(founder_profile dashboard)
 
   def founder_profile
     @founder = Founder.friendly.find(params[:slug])

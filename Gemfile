@@ -170,7 +170,7 @@ group :development, :test do
   gem 'fuubar', '~> 2.2' # The instafailing RSpec progress bar formatter.
   gem 'knapsack', '~> 1.13' # Knapsack splits tests across CI nodes so that tests will run comparable time on each node.
   gem 'rails_stats', '~> 1.0' # external/replacement version of rake stats
-  gem 'coveralls', '~> 0.8', require: false
+  gem 'codecov', '~> 0.1', require: false
 end
 
 group :production do

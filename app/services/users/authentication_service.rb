@@ -18,7 +18,7 @@ module Users
     end
 
     def mail_login_token
-      return user_not_found_error unless @user.present?
+      return user_not_found_error if @user.blank?
 
       @user.regenerate_login_token
 

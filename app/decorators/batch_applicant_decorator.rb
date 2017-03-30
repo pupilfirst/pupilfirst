@@ -14,7 +14,7 @@ class BatchApplicantDecorator < Draper::Decorator
   end
 
   def age
-    return nil unless born_on.present?
+    return nil if born_on.blank?
     Date.today.year - born_on.year
   end
 

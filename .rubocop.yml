@@ -51,6 +51,8 @@ Metrics/BlockLength:
 
 # Concessions (remove these if possible / appropriate).
 
+Style/MixinGrouping:
+  Enabled: false # this should be removed after bug in v0.48 is resolved.
 Bundler/OrderedGems:
   Enabled: false # we have a ton of gems, grouped arbitrarily. Could be tackled later.
 Style/FrozenStringLiteralComment:

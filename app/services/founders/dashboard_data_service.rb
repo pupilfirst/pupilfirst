@@ -75,7 +75,7 @@ module Founders
               methods: :has_rubric,
               include: {
                 assigner: {
-                  only: [:id, :name]
+                  only: %i(id name)
                 }
               }
             }
@@ -120,18 +120,15 @@ module Founders
     end
 
     def target_group_fields
-      [:id, :name, :description, :milestone]
+      %i(id name description milestone)
     end
 
     def target_fields
-      [
-        :id, :role, :title, :description, :completion_instructions, :resource_url, :slideshow_embed, :video_embed,
-        :days_to_complete, :points_earnable, :timeline_event_type_id, :session_at
-      ]
+      %i(id role title description completion_instructions resource_url slideshow_embed video_embed days_to_complete points_earnable timeline_event_type_id session_at)
     end
 
     def assigner_fields
-      [:id, :name]
+      %i(id name)
     end
   end
 end

@@ -30,8 +30,9 @@ module Lita
 
       # construct the leaderboard response to be send
       def leaderboard_response_message
-        return '_There appears to be no live batches on SV.CO now !_' unless Batch.live.present?
-        if @batch_requested && !Batch.live.where(batch_number: @batch_requested).present?
+        return '_There appears to be no live batches on SV.CO now !_' if Batch.live.blank?
+
+        if @batch_requested && Batch.live.where(batch_number: @batch_requested).blank?
           return "_There appears to be no live Batch #{@batch_requested} on SV.CO now !_"
         end
 

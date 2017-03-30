@@ -76,14 +76,14 @@ class Target < ApplicationRecord
 
   def chore_or_session_must_have_level
     return unless chore || session?
-    errors[:level] << 'is required for chore/session' unless level.present?
+    errors[:level] << 'is required for chore/session' if level.blank?
   end
 
   validate :vanilla_target_must_have_target_group
 
   def vanilla_target_must_have_target_group
     return if chore || session?
-    errors[:target_group] << 'is required if target is not a chore or session' unless target_group.present?
+    errors[:target_group] << 'is required if target is not a chore or session' if target_group.blank?
   end
 
   def display_name

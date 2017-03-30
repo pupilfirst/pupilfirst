@@ -45,7 +45,7 @@ module Lita
 
         # dont bother if the message reacted to cant be found in our db
         reaction_to = ::PublicSlackMessage.find_by(timestamp: payload[:item]['ts'])
-        return unless reaction_to.present?
+        return if reaction_to.blank?
 
         # extract details from payload
         reaction_author_slack_username = payload[:user].metadata['mention_name']
@@ -67,11 +67,11 @@ module Lita
 
         # dont bother if the message reacted to cant be found in our db
         reaction_to = ::PublicSlackMessage.find_by(timestamp: payload[:item]['ts'])
-        return unless reaction_to.present?
+        return if reaction_to.blank?
 
         # dont bother if the removed reaction could not be found
         removed_reaction = reaction_to.reactions.where(slack_username: payload[:user].metadata['mention_name'], body: ":#{payload[:name]}:").first
-        return unless removed_reaction.present?
+        return if removed_reaction.blank?
 
         # Delete karma points assigned to removed reaction, if any
         KarmaPoint.where(source: removed_reaction).destroy_all

@@ -15,7 +15,7 @@ module EngineeringMetrics
     # contribution details per founder per week - including additions, deletions and commits
     def contributions
       contributions = get('repos/SVdotCO/sv.co/stats/contributors')
-      contributions.reject! { |c| !c['author']['login'].in?(AUTHORS) }
+      contributions.select! { |c| c['author']['login'].in?(AUTHORS) }
       contributions.map { |c| pretty_contribution(c) }
     end
 

@@ -19,7 +19,6 @@ class ResourcesController < ApplicationController
 
     @resource.increment_downloads(current_user)
     @stream_video = @resource.file&.url || @resource.video_embed
-
   rescue ActiveRecord::RecordNotFound
     alert_message = 'Could not find the requested resource! '
 

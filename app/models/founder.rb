@@ -89,8 +89,8 @@ class Founder < ApplicationRecord
 
   def slug_candidates
     [
-      [:name],
-      [:name, :id]
+      %i(name),
+      %i(name id)
     ]
   end
 
@@ -114,7 +114,7 @@ class Founder < ApplicationRecord
   #
   # TODO: Possibly useless method.
   def email_required?
-    !invitation_token.present?
+    invitation_token.blank?
   end
 
   mount_uploader :avatar, AvatarUploader
@@ -251,13 +251,13 @@ class Founder < ApplicationRecord
 
   # Return the 'next-applicable' profile completion instruction as a string
   def profile_completion_instruction
-    return 'Join the SV.CO Public Slack and update your slack username!' unless slack_user_id.present?
-    return 'Update your Skype Id' unless skype_id.present?
+    return 'Join the SV.CO Public Slack and update your slack username!' if slack_user_id.blank?
+    return 'Update your Skype Id' if skype_id.blank?
     return 'Provide at-least one of your social profiles!' unless social_url_present?
-    return 'Update your communication address!' unless communication_address.present?
-    return 'Write a one-liner about yourself!' unless about.present?
-    return 'Upload your legal ID proof!' unless identification_proof.present?
-    return 'Submit a resume to your timeline to complete your profile!' unless resume_url.present?
+    return 'Update your communication address!' if communication_address.blank?
+    return 'Write a one-liner about yourself!' if about.blank?
+    return 'Upload your legal ID proof!' if identification_proof.blank?
+    return 'Submit a resume to your timeline to complete your profile!' if resume_url.blank?
   end
 
   # Make sure a new team lead is assigned before destroying the present one

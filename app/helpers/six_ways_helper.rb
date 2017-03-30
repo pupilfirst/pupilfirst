@@ -1,7 +1,7 @@
 # rubocop:disable Metrics/ModuleLength
 module SixWaysHelper
   def previous_page_path
-    return '#' unless @chapter.present?
+    return '#' if @chapter.blank?
     return previous_chapter_path unless chapter_number == 1
     return '#' if module_number == 1
     return quiz_of_previous_module if previous_module.quiz?
@@ -9,7 +9,7 @@ module SixWaysHelper
   end
 
   def next_page_path
-    return '#' unless @chapter.present?
+    return '#' if @chapter.blank?
     return next_chapter_path unless last_chapter?
     return quiz_of_this_module if @module.quiz?
     return start_of_next_module unless last_module?
@@ -17,7 +17,7 @@ module SixWaysHelper
   end
 
   def previous_button_title
-    return 'Previous' unless @chapter.present?
+    return 'Previous' if @chapter.blank?
     return previous_chapter.name unless chapter_number == 1
     return 'Previous Chapter' if module_number == 1
     return 'Retake Previous Quiz' if previous_module.quiz?
@@ -25,7 +25,7 @@ module SixWaysHelper
   end
 
   def next_button_title
-    return 'Next' unless @chapter.present?
+    return 'Next' if @chapter.blank?
     return next_chapter.name unless last_chapter?
     return 'Take Quiz' if @module.quiz?
     next_module.module_chapters.find_by(chapter_number: 1).name unless last_module?

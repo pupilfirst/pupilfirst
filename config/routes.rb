@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users, only: [:sessions, :omniauth_callbacks], controllers: { sessions: 'users/sessions', omniauth_callbacks: 'users/omniauth_callbacks' }
+  devise_for :users, only: %i(sessions omniauth_callbacks), controllers: { sessions: 'users/sessions', omniauth_callbacks: 'users/omniauth_callbacks' }
 
   devise_scope :user do
     post 'users/send_login_email', controller: 'users/sessions', action: 'send_login_email', as: 'user_send_login_email'
@@ -21,7 +21,7 @@ Rails.application.routes.draw do
 
   ActiveAdmin.routes(self)
 
-  resource :founder, only: [:edit, :update] do
+  resource :founder, only: %i(edit update) do
     member do
       scope module: 'founders', controller: 'dashboard' do
         get 'dashboard'
@@ -29,13 +29,13 @@ Rails.application.routes.draw do
       end
     end
 
-    resource :startup, only: [:edit, :update] do
+    resource :startup, only: %i(edit update) do
       scope module: 'founders', controller: 'dashboard' do
         post 'level_up'
       end
 
-      resources :timeline_events, only: [:create, :destroy, :update]
-      resources :team_members, except: [:index]
+      resources :timeline_events, only: %i(create destroy update)
+      resources :team_members, except: %i(index)
     end
   end
 
@@ -45,7 +45,7 @@ Rails.application.routes.draw do
     post 'disconnect'
   end
 
-  resources :startups, only: [:index, :show] do
+  resources :startups, only: %i(index show) do
     collection do
       post 'team_leader_consent'
     end
@@ -73,7 +73,7 @@ Rails.application.routes.draw do
     post 'contact', action: 'send_contact_email'
   end
 
-  resources :faculty, only: [:index, :show] do
+  resources :faculty, only: %i(index show) do
     post 'connect', on: :member
     collection do
       get 'filter/:active_tab', to: 'faculty#index'
@@ -137,7 +137,7 @@ Rails.application.routes.draw do
   resources :universities, only: :index
   resources :colleges, only: :index
 
-  resource :platform_feedback, only: [:create]
+  resource :platform_feedback, only: %i(create)
 
   # Redirect + webhook from Instamojo
   scope 'instamojo', as: 'instamojo', controller: 'instamojo' do
@@ -209,7 +209,7 @@ Rails.application.routes.draw do
     post 'callback'
   end
 
-  resource :impersonation, only: %w(destroy)
+  resource :impersonation, only: %i(destroy)
 
   # TODO: Remove this route once PayTM is correctly configured with '/paytm/callback' as the redirect_url.
   post '/', to: 'home#paytm_callback'

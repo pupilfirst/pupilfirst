@@ -52,7 +52,7 @@ ActiveAdmin.register PlatformFeedback do
       row :created_at
     end
 
-    render partial: 'assign_karma_point_form', locals: { platform_feedback: feedback } unless feedback.karma_point.present?
+    render partial: 'assign_karma_point_form', locals: { platform_feedback: feedback } if feedback.karma_point.blank?
   end
 
   member_action :assign_karma_point, method: :post do

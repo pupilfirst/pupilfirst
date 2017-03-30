@@ -33,7 +33,7 @@ module ActiveAdmin
 
     # Returns links to tags separated by a separator string.
     def linked_tags(tags, separator: ', ')
-      return unless tags.present?
+      return if tags.blank?
 
       tags.map do |tag|
         link_to tag.name, admin_tag_path(tag)

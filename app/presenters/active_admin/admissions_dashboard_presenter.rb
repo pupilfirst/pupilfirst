@@ -8,9 +8,7 @@ module ActiveAdmin
     end
 
     # overall metrics in the hash returned by the AdmissionStatsService
-    OVERALL_STATS_METRICS = [
-      :total_applications, :total_applicants, :total_universities, :total_states, :total_visits, :paid_from_earlier_rounds
-    ].freeze
+    OVERALL_STATS_METRICS = %i(total_applications total_applicants total_universities total_states total_visits paid_from_earlier_rounds).freeze
 
     # define a bunch of methods to dig the overall metrics from the stats hash
     OVERALL_STATS_METRICS.each do |m|
@@ -20,10 +18,7 @@ module ActiveAdmin
     end
 
     # state-wise metrics in the hash returned by the AdmissionStatsService
-    STATE_STATS_METRICS = [
-      :paid_applications, :paid_applications_today, :payment_initiated, :payment_initiated_today,
-      :submitted_applications, :submitted_applications_today, :conversion_percentage
-    ].freeze
+    STATE_STATS_METRICS = %i(paid_applications paid_applications_today payment_initiated payment_initiated_today submitted_applications submitted_applications_today conversion_percentage).freeze
 
     # define a bunch of methods to dig the state-wise metrics from the stats hash
     STATE_STATS_METRICS.each do |m|

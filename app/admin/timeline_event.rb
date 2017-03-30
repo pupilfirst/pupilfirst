@@ -1,8 +1,8 @@
 ActiveAdmin.register TimelineEvent do
   include DisableIntercom
 
-  permit_params :description, :timeline_event_type_id, :image, :event_on, :startup_id,
-    :founder_id, :serialized_links, :improved_timeline_event_id, timeline_event_files_attributes: [:id, :title, :file, :private, :_destroy]
+  permit_params :description, :timeline_event_type_id, :image, :event_on, :startup_id, :founder_id, :serialized_links,
+    :improved_timeline_event_id, timeline_event_files_attributes: %i(id title file private _destroy)
 
   filter :startup_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'Batch'
 
@@ -16,7 +16,7 @@ ActiveAdmin.register TimelineEvent do
 
   filter :founder, collection: proc {
     batch_id = params.dig(:q, :startup_batch_id_eq)
-    batch_id = Batch.last.id unless batch_id.present?
+    batch_id = Batch.last.id if batch_id.blank?
     Founder.joins(:startup).where(startups: { batch_id: batch_id }).distinct.order(:name)
   }
 
@@ -120,7 +120,7 @@ ActiveAdmin.register TimelineEvent do
   end
 
   member_action :save_feedback, method: :post do
-    raise unless params[:feedback].present?
+    raise if params[:feedback].blank?
 
     timeline_event = TimelineEvent.find(params[:id])
     reference_url = startup_url(timeline_event.startup, anchor: "event-#{timeline_event.id}")

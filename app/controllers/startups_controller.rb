@@ -1,5 +1,5 @@
 class StartupsController < ApplicationController
-  before_action :authenticate_founder!, except: [:show, :index, :timeline_event_show, :paged_events]
+  before_action :authenticate_founder!, except: %i(show index timeline_event_show paged_events)
 
   # GET /startups
   def index

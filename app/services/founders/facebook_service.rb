@@ -21,7 +21,8 @@ module Founders
     def basic_info
       raise 'UnAuthorized Founder' unless @founder.facebook_token_available? && token_valid?(@founder.fb_access_token)
 
-      result = api(@founder.fb_access_token).get_object(:me, fields: [:name, :picture, :link])
+      result = api(@founder.fb_access_token).get_object(:me, fields: %i(name picture link))
+
       {
         name: result['name'],
         picture_url: result.dig('picture', 'data', 'url'),

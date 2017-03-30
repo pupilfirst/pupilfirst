@@ -3,12 +3,12 @@ ActiveAdmin.register BatchApplicant do
 
   menu parent: 'Admissions', label: 'Applicants'
 
-  # rubocop:disable Style/AlignArray
   permit_params :name, :email, :phone, :role, :team_lead, :reference, :college_id, :notes, :fee_payment_method,
     :born_on, :gender, :parent_name, :current_address, :permanent_address, :id_proof_type, :id_proof_number, :id_proof,
-    :address_proof, batch_application_ids: [], tag_list: [], college_attributes: [:name, :also_known_as, :city,
-      :state_id, :established_year, :website, :contact_numbers, :replacement_university_id]
-  # rubocop:enable Style/AlignArray
+    :address_proof,
+    batch_application_ids: [],
+    tag_list: [],
+    college_attributes: %i(name also_known_as city state_id established_year website contact_numbers replacement_university_id)
 
   scope :all, default: true
   scope :submitted_application

@@ -8,7 +8,7 @@ git_source(:github) { |repository_path| "https://github.com/#{repository_path}.g
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '= 5.0.2'
 
-gem 'dotenv-rails', '~> 2.2', groups: [:development, :test]
+gem 'dotenv-rails', '~> 2.2', groups: %i(development test)
 
 gem 'inherited_resources', '= 1.7.0', github: 'activeadmin/inherited_resources' # Required for Rails 5 support for activeadmin. TODO: Remove when activeadmin 1.0.0 is released, which is when I'm guessing this gem will be removed.
 gem 'activeadmin', '= 1.0.0.pre5', github: 'activeadmin/activeadmin' # Tracking master for Rails 5 support. TODO: Revert to rubygems version when 1.0.0 is released.

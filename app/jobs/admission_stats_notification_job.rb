@@ -4,7 +4,7 @@ class AdmissionStatsNotificationJob < ApplicationJob
 
   def perform
     @application_round = ApplicationRound.open_for_applications.order('starts_at DESC').first
-    return unless application_round.present?
+    return if application_round.blank?
     @stats = AdmissionStatsService.load_stats(application_round)
 
     slack_webhook_url = Rails.application.secrets.slack_general_webhook_url

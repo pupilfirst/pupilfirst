@@ -33,7 +33,7 @@ class EmailApplicantsJob < ApplicationJob
 
   def send_application_progress_mails(applications)
     applications.each do |application|
-      next unless application.team_lead.present?
+      next if application.team_lead.blank?
 
       BatchApplicantMailer.application_progress(
         @batch,
@@ -45,7 +45,7 @@ class EmailApplicantsJob < ApplicationJob
 
   def send_application_rejection_mails(applications)
     applications.each do |application|
-      next unless application.team_lead.present?
+      next if application.team_lead.blank?
 
       BatchApplicantMailer.application_rejection(
         @batch,

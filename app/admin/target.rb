@@ -6,39 +6,14 @@ ActiveAdmin.register Target do
     :remote_rubric_url, :target_group_id, :target_type, :points_earnable, :timeline_event_type_id, :sort_index,
     :session_at, :chore, :level_id, prerequisite_target_ids: [], tag_list: []
 
+  filter :title
   filter :session_at_not_null, as: :boolean, label: 'Session?'
   filter :chore, label: 'Chore?'
-  filter :target_group_program_week_batch_id_eq, label: 'Batch', as: :select, collection: proc { Batch.all }
-
-  filter :target_group_program_week_id_eq, as: :select, label: 'Program Week', collection: proc {
-    batch_id = params.dig(:q, :target_group_program_week_batch_id_eq)
-
-    if batch_id.present?
-      batch = Batch.find(batch_id)
-      batch.program_weeks.order(:number)
-    else
-      [['Select Batch first', '']]
-    end
-  }
-
-  filter :target_group, collection: proc {
-    batch_id = params.dig(:q, :target_group_program_week_batch_id_eq)
-
-    if batch_id.present?
-      batch = Batch.find(batch_id)
-      batch.target_groups.sorted_by_level
-    else
-      [['Select Batch first', '']]
-    end
-  }
-
+  filter :target_group, collection: TargetGroup.all.includes(:level)
   filter :level
   filter :assigner
   filter :role, as: :select, collection: Target.valid_roles
   filter :timeline_event_type
-  filter :program_week
-  filter :title
-  filter :target_type, as: :select, collection: Target.valid_target_types
 
   filter :ransack_tagged_with,
     as: :select,
@@ -48,7 +23,7 @@ ActiveAdmin.register Target do
 
   controller do
     def scoped_collection
-      super.includes target_group: { program_week: :batch }
+      super.includes :level, target_group: :level
     end
   end
 

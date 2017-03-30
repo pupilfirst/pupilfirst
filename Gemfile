@@ -161,7 +161,10 @@ group :development, :test do
   gem 'coderay', '~> 1.1' # Pretty syntax highlighting on rspec failure snippets.
   gem 'pry-rails', '~> 0.3.5' # Pry debugger.
   gem 'webmock', '~> 2.3' # Mocking web requests.
-  gem 'rubocop', '~> 0.47', require: false # Ruby Style Guide.
+
+  # TODO: Upgrade when Rubocop moves beyond buggy v0.48.
+  gem 'rubocop', '= 0.47.1', require: false # Ruby Style Guide.
+
   gem 'bundler-audit', '~> 0.5', require: false # Audit gems in gemfile.lock for reported vulnerabilities
   gem 'overcommit', '~> 0.38', require: false # A fully configurable and extendable Git hook manager
   gem 'fuubar', '~> 2.2' # The instafailing RSpec progress bar formatter.

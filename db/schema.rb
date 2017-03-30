@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170328101024) do
+ActiveRecord::Schema.define(version: 20170330070614) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -689,8 +689,8 @@ ActiveRecord::Schema.define(version: 20170328101024) do
     t.text     "description"
     t.string   "completion_instructions"
     t.string   "resource_url"
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
     t.text     "slideshow_embed"
     t.integer  "assigner_id"
     t.string   "rubric"
@@ -705,7 +705,11 @@ ActiveRecord::Schema.define(version: 20170328101024) do
     t.text     "video_embed"
     t.datetime "last_session_at"
     t.integer  "level_id"
+    t.string   "key"
+    t.string   "link_to_complete"
+    t.string   "submittability",          default: "resubmittable", null: false
     t.index ["chore"], name: "index_targets_on_chore", using: :btree
+    t.index ["key"], name: "index_targets_on_key", using: :btree
     t.index ["level_id"], name: "index_targets_on_level_id", using: :btree
     t.index ["session_at"], name: "index_targets_on_session_at", using: :btree
     t.index ["timeline_event_type_id"], name: "index_targets_on_timeline_event_type_id", using: :btree

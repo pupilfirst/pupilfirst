@@ -45,6 +45,14 @@ class Target < ApplicationRecord
     [TYPE_TODO, TYPE_ATTEND, TYPE_READ, TYPE_LEARN].freeze
   end
 
+  SUBMITTABILITY_RESUBMITTABLE = 'resubmittable'
+  SUBMITTABILITY_SUBMITTABLE_ONCE = 'submittable_once'
+  SUBMITTABILITY_NOT_SUBMITTABLE = 'not_submittable'
+
+  def self.valid_submittability_values
+    [SUBMITTABILITY_RESUBMITTABLE, SUBMITTABILITY_SUBMITTABLE_ONCE, SUBMITTABILITY_NOT_SUBMITTABLE].freeze
+  end
+
   # Need to allow these two to be read for AA form.
   attr_reader :startup_id, :founder_id
 
@@ -52,6 +60,8 @@ class Target < ApplicationRecord
   validates :role, presence: true, inclusion: { in: valid_roles }
   validates :title, presence: true
   validates :description, presence: true
+  validates :key, uniqueness: true, allow_nil: true
+  validates :submittability, inclusion: { in: valid_submittability_values }
 
   validate :days_to_complete_or_session_at_should_be_present
 
@@ -85,6 +95,8 @@ class Target < ApplicationRecord
     return if chore || session?
     errors[:target_group] << 'is required if target is not a chore or session' unless target_group.present?
   end
+
+  normalize_attribute :key
 
   def display_name
     return title if level.blank?

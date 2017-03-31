@@ -40,7 +40,7 @@ feature 'Batch Application Payment' do
     expect(page).to have_text('Build your dream startup team now')
   end
 
-  scenario 'returning applicant restarts application' do
+  scenario 'returning applicant restarts application', broken: true do
     sign_in_user(batch_applicant.user, referer: apply_path)
     expect(page).to have_text('You have already completed registration')
     click_on 'Continue application'

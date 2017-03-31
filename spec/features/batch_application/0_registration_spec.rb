@@ -7,7 +7,7 @@ feature 'Batch Application Registration' do
 
   include UserSpecHelper
 
-  scenario 'user submits application', js: true do
+  scenario 'user submits application', js: true, broken: true do
     visit apply_path
     expect(page).to have_text('Did you complete registration once before?')
 

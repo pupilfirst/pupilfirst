@@ -24,4 +24,14 @@ class AdmissionsController < ApplicationController
       render 'apply'
     end
   end
+
+  # GET /admissions/screening
+  def screening
+    authorize :admissions
+  end
+
+  # POST /admissions/screening
+  def screening_submit
+    # TODO: Do stuff.
+  end
 end

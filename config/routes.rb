@@ -108,6 +108,7 @@ Rails.application.routes.draw do
 
   scope 'admissions', as: 'admissions', controller: 'admissions' do
     get 'screening'
+    post 'screening', action: 'screening_submit'
     get 'fee'
     get 'cofounders'
   end

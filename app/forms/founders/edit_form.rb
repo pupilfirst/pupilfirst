@@ -72,7 +72,7 @@ module Founders
     end
 
     def age_more_than_18
-      errors.add(:born_on, 'must be at least 18 years old') if born_on > 18.years.ago.end_of_year
+      errors.add(:born_on, 'must be at least 18 years old') if born_on.present? && born_on > 18.years.ago.end_of_year
     end
 
     # Manually coerce year_of_graduation to number.

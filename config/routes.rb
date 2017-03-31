@@ -104,9 +104,9 @@ Rails.application.routes.draw do
   end
 
   get 'apply', to: 'admissions#apply'
+  post 'apply', to: 'admissions#register'
 
   scope 'admissions', as: 'admissions', controller: 'admissions' do
-    post 'register'
     get 'screening'
     get 'fee'
     get 'cofounders'

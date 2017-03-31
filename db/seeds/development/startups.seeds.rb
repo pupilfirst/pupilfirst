@@ -1,12 +1,14 @@
 require_relative 'helper'
 
-after 'development:founders', 'development:timeline_event_types', 'development:batches', 'development:categories' do
+after 'development:levels', 'development:founders', 'development:timeline_event_types', 'development:batches', 'development:categories' do
   puts 'Seeding startups'
 
   batch = Batch.find_by(batch_number: 2)
+  level_1 = Level.find_by(number: 1)
 
   # Startup with live agreement.
   super_startup = Startup.new(
+    level: level_1,
     name: 'Super Startup',
     product_name: 'Super Product',
     product_description: 'This really is a superb product! ;)',

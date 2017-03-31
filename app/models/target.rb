@@ -2,6 +2,12 @@
 # frozen_string_literal: true
 
 class Target < ApplicationRecord
+  KEY_ADMISSIONS_SCREENING = 'admissions_screening'
+  KEY_ADMISSIONS_FEE_PAYMENT = 'admissions_fee_payment'
+  KEY_ADMISSIONS_COFOUNDER_ADDITION = 'admissions_cofounder_addition'
+  KEY_ADMISSIONS_FOUNDER_EMAIL_VERIFICATION = 'admissions_founder_email_verification'
+  KEY_ADMISSIONS_PRE_SELECTION = 'admissions_pre_selection'
+
   belongs_to :assigner, class_name: 'Faculty'
   belongs_to :timeline_event_type, optional: true
   has_many :timeline_events
@@ -26,9 +32,10 @@ class Target < ApplicationRecord
   end
 
   ROLE_FOUNDER = 'founder'
+  ROLE_TEAM = 'team'
 
   def self.target_roles
-    [ROLE_FOUNDER]
+    [ROLE_FOUNDER, ROLE_TEAM].freeze
   end
 
   # See en.yml's target.role
@@ -56,7 +63,7 @@ class Target < ApplicationRecord
   # Need to allow these two to be read for AA form.
   attr_reader :startup_id, :founder_id
 
-  validates :target_type, inclusion: { in: valid_target_types }
+  validates :target_type, inclusion: { in: valid_target_types }, allow_nil: true
   validates :role, presence: true, inclusion: { in: valid_roles }
   validates :title, presence: true
   validates :description, presence: true

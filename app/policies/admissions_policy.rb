@@ -6,18 +6,18 @@ class AdmissionsPolicy
   end
 
   def screening?
-    user_level = user&.founder&.startup&.level
+    level = user&.founder&.startup&.level
 
     # User's startup level should be available.
-    return false if user_level.nil?
+    return false if level.nil?
 
     # User's startup level should be zero.
-    return false if user_level != 0
+    return false if level.number != 0
 
     # User should not have completed the related target.
-    screening_target = user.founder.targets.find_by(key: Target::KEY_ADMISSIONS_SCREENING)
+    screening_target = level.targets.find_by(key: Target::KEY_ADMISSIONS_SCREENING)
 
-    screening_target.status != Targets::StatusService::STATUS_COMPLETE
+    screening_target.status(user.founder) != Targets::StatusService::STATUS_COMPLETE
   end
 
   def screening_submit?

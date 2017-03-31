@@ -35,6 +35,11 @@ class AdmissionsController < ApplicationController
 
   # POST /admissions/screening
   def screening_submit
+    authorize :admissions
+
     # TODO: Do stuff.
+
+    flash[:success] = 'Screening target has been marked as completed!'
+    redirect_to dashboard_founder_path
   end
 end

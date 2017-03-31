@@ -4,7 +4,7 @@ class Level < ApplicationRecord
 
   has_many :target_groups
   has_many :startups
-  has_many :targets
+  has_many :targets, through: :target_groups
 
   def display_name
     "Level #{number}: #{name}"

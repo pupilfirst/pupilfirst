@@ -40,7 +40,7 @@ class FounderDashboard extends React.Component {
   pendingCount(targetType) {
     let targets = targetType == 'chores' ? this.state.chores : this.state.sessions;
 
-    return targets.filter(function(target) {
+    return targets.filter(function (target) {
       return target.status === 'pending';
     }).length;
   }
@@ -49,7 +49,7 @@ class FounderDashboard extends React.Component {
     let updatedLevels = $.extend(true, {}, this.state.levels);
     let updateSubmissionStatus = this.updateSubmissionStatus;
 
-    $.each(updatedLevels, function(index, level) {
+    $.each(updatedLevels, function (index, level) {
       $.each(level.target_groups, function (index, targetGroup) {
         targetGroup.targets = updateSubmissionStatus(targetGroup.targets.slice(), targetId);
       })
@@ -62,7 +62,7 @@ class FounderDashboard extends React.Component {
   }
 
   updateSubmissionStatus(targets, targetId) {
-    $.each(targets, function(index, target) {
+    $.each(targets, function (index, target) {
       if (target.id === targetId) {
         target.status = 'submitted';
         return false;
@@ -92,15 +92,17 @@ class FounderDashboard extends React.Component {
         }
 
         { this.state.activeTab === 'sessions' &&
-        <FounderDashboardSessions sessions={ this.state.sessions } sessionTags={ this.props.sessionTags }
-          openTimelineBuilderCB={ this.openTimelineBuilder } iconPaths={ this.props.iconPaths }/>
+        <FounderDashboardSessions currentLevel={ this.props.currentLevel } sessions={ this.state.sessions }
+          sessionTags={ this.props.sessionTags } openTimelineBuilderCB={ this.openTimelineBuilder }
+          iconPaths={ this.props.iconPaths }/>
         }
 
         { this.state.timelineBuilderVisible &&
         <TimelineBuilder timelineEventTypes={ this.props.timelineEventTypes }
           allowFacebookShare={ this.props.allowFacebookShare } authenticityToken={ this.props.authenticityToken }
           closeTimelineBuilderCB={ this.closeTimelineBuilder } targetId={ this.state.timelineBuilderParams.targetId }
-          selectedTimelineEventTypeId={ this.state.timelineBuilderParams.selectedTimelineEventTypeId } targetSubmissionCB={ this.handleTargetSubmission }/>
+          selectedTimelineEventTypeId={ this.state.timelineBuilderParams.selectedTimelineEventTypeId }
+          targetSubmissionCB={ this.handleTargetSubmission }/>
         }
       </div>
     );

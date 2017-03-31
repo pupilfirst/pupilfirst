@@ -50,8 +50,11 @@ class FounderDashboardTargets extends React.Component {
         <FounderDashboardLevelUpNotification authenticityToken={ this.props.authenticityToken }/>
         }
 
+        { this.props.currentLevel !== 0 &&
         <FounderDashboardActionBar filter='targets' filterData={ this.filterData() } pickFilterCB={ this.pickFilter }
           openTimelineBuilderCB={ this.props.openTimelineBuilderCB }/>
+        }
+
         { this.targetCollections() }
       </div>
     );

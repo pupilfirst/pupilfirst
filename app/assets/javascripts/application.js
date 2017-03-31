@@ -51,7 +51,6 @@
 //= require home
 //= require faculty
 //= require startups
-//= require timeline_events
 //= require resources
 //= require batch_applications
 //= require team_members

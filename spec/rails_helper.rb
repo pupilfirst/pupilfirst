@@ -4,10 +4,10 @@ ENV['RAILS_ENV'] ||= 'test'
 # Enable coverage checking by Codecov and Simplecov.
 if ENV['CI'] == 'true' || ENV['COVERAGE'] == 'true'
   require 'simplecov'
-  SimpleCov.start('rails')
-
   require 'codecov'
-  SimpleCov.formatter = SimpleCov::Formatter::Codecov
+  require 'coveralls'
+  SimpleCov.formatters = [SimpleCov::Formatter::Codecov, Coveralls::SimpleCov::Formatter]
+  SimpleCov.start('rails')
 end
 
 require 'spec_helper'

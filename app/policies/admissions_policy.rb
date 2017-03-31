@@ -15,7 +15,7 @@ class AdmissionsPolicy
     return false if level.number != 0
 
     # User should not have completed the related target.
-    screening_target = level.targets.find_by(key: Target::KEY_ADMISSIONS_SCREENING)
+    screening_target = Target.find_by(key: Target::KEY_ADMISSIONS_SCREENING)
 
     screening_target.status(user.founder) != Targets::StatusService::STATUS_COMPLETE
   end

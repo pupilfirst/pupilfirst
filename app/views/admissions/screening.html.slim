@@ -8,6 +8,4 @@
     h3.application-stage-1-header__description Let&rsquo;s find out if you are a right fit for our program.
     h2.application-stage-1-header__question.font-semibold Do you know how to code?
 
-  == react_component('ApplicantScreening', { coderIconPath: image_path('apply/batch_application/programmer-icon.svg'), nonCoderIconPath: image_path('apply/batch_application/hipster-icon.svg') })
-
-  = form_tag apply_stage_submit_path(stage_number: 1), method: :post, id: 'applicant-screening__hidden-form'
+  == react_component('ApplicantScreening', { coderIconPath: image_path('apply/batch_application/programmer-icon.svg'), nonCoderIconPath: image_path('apply/batch_application/hipster-icon.svg'), formAuthenticityToken: form_authenticity_token })

@@ -1,7 +1,8 @@
 module TimelineEvents
   class VerificationService
-    def initialize(timeline_event)
+    def initialize(timeline_event, notify: true)
       @timeline_event = timeline_event
+      @notify = notify
       @target = @timeline_event.target
     end
 
@@ -27,7 +28,7 @@ module TimelineEvents
           raise 'Unexpected status specified!'
       end
 
-      TimelineEventVerificationNotificationJob.perform_later @timeline_event
+      TimelineEventVerificationNotificationJob.perform_later(@timeline_event) if @notify
 
       [@timeline_event, applicable_points]
     end

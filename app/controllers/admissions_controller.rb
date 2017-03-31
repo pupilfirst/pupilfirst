@@ -37,7 +37,7 @@ class AdmissionsController < ApplicationController
   def screening_submit
     authorize :admissions
 
-    # TODO: Do stuff.
+    Admissions::CompleteTargetService.new(current_founder, Target::KEY_ADMISSIONS_SCREENING).execute
 
     flash[:success] = 'Screening target has been marked as completed!'
     redirect_to dashboard_founder_path

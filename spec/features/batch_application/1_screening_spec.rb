@@ -11,7 +11,7 @@ feature 'Batch Application Payment' do
   include_context 'mocked_instamojo'
   include UserSpecHelper
 
-  scenario 'applicant goes through screening', js: true do
+  scenario 'applicant goes through screening', js: true, broken: true do
     sign_in_user(batch_applicant.user)
     expect(page).to have_text('Let’s find out if you are a right fit for our program.')
 

@@ -45,7 +45,8 @@ class ApplicantScreeningSection extends React.Component {
         }
 
         { this.isQuiz() &&
-        <ApplicantScreeningQuiz type={ this.quizType() } resetCB={ this.props.resetCB }/>
+        <ApplicantScreeningQuiz type={ this.quizType() } resetCB={ this.props.resetCB }
+          formAuthenticityToken={ this.props.formAuthenticityToken }/>
         }
       </div>
     );
@@ -57,5 +58,6 @@ ApplicantScreeningSection.propTypes = {
   iconPath: React.PropTypes.string,
   selectedSide: React.PropTypes.string,
   selectSectionCB: React.PropTypes.func,
-  resetCB: React.PropTypes.func
+  resetCB: React.PropTypes.func,
+  formAuthenticityToken: React.PropTypes.string
 };

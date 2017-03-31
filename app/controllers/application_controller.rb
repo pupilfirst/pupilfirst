@@ -26,6 +26,9 @@ class ApplicationController < ActionController::Base
     raise ActionController::UnknownFormat, 'Not Acceptable'
   end
 
+  # Pundit authorization error should cause a 404.
+  rescue_from Pundit::NotAuthorizedError, with: :raise_not_found
+
   def raise_not_found
     raise ActionController::RoutingError, 'Not Found'
   end

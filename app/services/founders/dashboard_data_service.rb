@@ -5,7 +5,7 @@ module Founders
     end
 
     def levels
-      @levels ||= (1..startup.level.number).each_with_object({}) do |level_number, levels|
+      @levels ||= (0..startup.level.number).each_with_object({}) do |level_number, levels|
         level = Level.find_by(number: level_number)
 
         levels[level_number] = {

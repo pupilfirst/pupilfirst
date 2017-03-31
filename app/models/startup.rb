@@ -117,6 +117,7 @@ class Startup < ApplicationRecord
   belongs_to :batch
   belongs_to :level
   belongs_to :requested_restart_level, class_name: 'Level'
+  has_one :payment, dependent: :restrict_with_error
 
   # use the old name attribute as an alias for legal_registered_name
   alias_attribute :name, :legal_registered_name

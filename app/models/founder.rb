@@ -38,6 +38,7 @@ class Founder < ApplicationRecord
   belongs_to :user
   belongs_to :college, optional: true
   has_one :batch_applicant
+  has_one :payment, dependent: :restrict_with_error
 
   scope :batched, -> { joins(:startup).merge(Startup.batched) }
   scope :for_batch_id_in, ->(ids) { joins(:startup).where(startups: { batch_id: ids }) }

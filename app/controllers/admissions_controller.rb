@@ -1,10 +1,13 @@
 class AdmissionsController < ApplicationController
+  layout 'application_v2'
+
   # GET /apply
   def apply
-    @founder_registration = Founders::RegistrationForm.new
+    @founder_registration_form = Founders::RegistrationForm.new(Founder.new)
+    @founder_registration_form.prepopulate!(current_user) if current_user.present?
   end
 
-  # POST /apply/register
+  # POST /apply
   def register
     form = Founders::RegistrationForm.new
 

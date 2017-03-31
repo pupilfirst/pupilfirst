@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170330070614) do
+ActiveRecord::Schema.define(version: 20170331093427) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -362,6 +362,8 @@ ActiveRecord::Schema.define(version: 20170330070614) do
     t.string   "fb_access_token"
     t.datetime "fb_token_expires_at"
     t.integer  "backlog"
+    t.string   "reference"
+    t.string   "college_text"
     t.index ["college_id"], name: "index_founders_on_college_id", using: :btree
     t.index ["invitation_token"], name: "index_founders_on_invitation_token", unique: true, using: :btree
     t.index ["invited_by_id"], name: "index_founders_on_invited_by_id", using: :btree

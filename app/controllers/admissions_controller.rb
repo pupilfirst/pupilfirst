@@ -21,7 +21,7 @@ class AdmissionsController < ApplicationController
         # Sign in user immediately to allow him to proceed to screening.
         sign_in founder.user
 
-        redirect_to admissions_screening_path
+        redirect_to dashboard_founder_path
       end
     else
       render 'apply'

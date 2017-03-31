@@ -1,5 +1,5 @@
-= simple_form_for @batch_application.form,
-  url: apply_register_path,
+= simple_form_for @founder_registration_form,
+  url: apply_path,
   wrapper: :vertical_form do |f|
 
   - if f.object.errors.present?
@@ -17,9 +17,9 @@
     h4.form-section-title.m-b-1
       | Apply Now
     .simple-form-container
-      = f.input :name, label: false, placeholder: 'Full Name of Team Lead', input_html: { maxlength: 250 }
+      = f.input :name, label: false, placeholder: 'Full Name of Founder', input_html: { maxlength: 250 }
 
-      = f.input :email, label: false, placeholder: 'Team Leads Email Address',
+      = f.input :email, label: false, placeholder: 'Email Address',
         input_html: { maxlength: 250, type: 'email' }
 
       = f.input :email_confirmation, label: false, placeholder: 'Please repeat your Email Address',
@@ -51,4 +51,4 @@
           input_html: { maxlength: 250, disabled: true }
 
       div
-        = f.submit 'Submit my application', class: 'btn btn-primary btn-md text-uppercase'
+        = f.submit 'Submit', class: 'btn btn-primary btn-md text-uppercase'

@@ -32,11 +32,11 @@ readmoreFAQ = ->
     moreLink: '<a class="read-more-link" href="#">Read More</a>'
 
 emailsShouldMatch = ->
-  batchApplicationForm = $('#new_batch_applications_registration')
+  founderRegistrationForm = $('#new_founders_registration')
 
-  if batchApplicationForm.length
-    emailInput = $('#batch_applications_registration_email')
-    emailConfirmationInput = $('#batch_applications_registration_email_confirmation')
+  if founderRegistrationForm.length
+    emailInput = $('#founders_registration_email')
+    emailConfirmationInput = $('#founders_registration_email_confirmation')
 
     validateEmailMatch = ->
       email = emailInput.val()
@@ -56,16 +56,8 @@ emailsShouldMatch = ->
     emailInput.blur ->
       validateEmailMatch() if emailConfirmationInput.val().length
 
-getCollegeInputSelector = ->
-  collegeInput = $('#batch_applications_registration_college_id')
-
-  if collegeInput.length == 0
-    collegeInput = $('#batch_applications_prospective_applicant_college_id')
-
-  collegeInput
-
 setupSelect2Inputs = ->
-  collegeInput = getCollegeInputSelector()
+  collegeInput = $('#founders_registration_college_id')
 
   if collegeInput.length
     collegeSearchUrl = collegeInput.data('searchUrl')
@@ -87,31 +79,29 @@ setupSelect2Inputs = ->
         cache: true
 
 destroySelect2Inputs = ->
-  collegeInput = getCollegeInputSelector()
+  collegeInput = $('#founders_registration_college_id')
 
   if collegeInput.length
     collegeInput.select2('destroy')
     collegeInput.val('')
 
 toggleReferenceTextField = ->
-  if $('#batch_applications_registration_reference').val() == 'Other (Please Specify)'
-    referenceTextInput = $('#batch_applications_registration_reference_text')
+  if $('#founders_registration_reference').val() == 'Other (Please Specify)'
+    referenceTextInput = $('#founders_registration_reference_text')
     referenceTextInput.parent().parent().removeClass('hidden-xs-up')
-    $('#batch_applications_registration_reference').parent().addClass('hidden-xs-up')
+    $('#founders_registration_reference').parent().addClass('hidden-xs-up')
     referenceTextInput.focus()
 
 setupTogglingReferenceField = ->
-  if $('#batch_applications_registration_reference').length
+  if $('#founders_registration_reference').length
     toggleReferenceTextField()
-    $('#batch_applications_registration_reference').change toggleReferenceTextField
+    $('#founders_registration_reference').change toggleReferenceTextField
 
 toggleCollegeTextField = ->
   formName = null
 
-  if $('#batch_applications_registration_college_id').val() == 'other'
-    formName = 'batch_applications_registration'
-  else if $('#batch_applications_prospective_applicant_college_id').val() == 'other'
-    formName = 'batch_applications_prospective_applicant'
+  if $('#founders_registration_college_id').val() == 'other'
+    formName = 'founders_registration'
 
   if formName != null
     collegeTextInput = $("##{formName}_college_text")
@@ -121,13 +111,9 @@ toggleCollegeTextField = ->
     collegeTextInput.focus()
 
 setupTogglingCollegeField = ->
-  if $('#batch_applications_registration_college_id').length
+  if $('#founders_registration_college_id').length
     toggleCollegeTextField()
-    $('#batch_applications_registration_college_id').change toggleCollegeTextField
-
-  if $('#batch_applications_prospective_applicant_college_id').length
-    toggleCollegeTextField()
-    $('#batch_applications_prospective_applicant_college_id').change toggleCollegeTextField
+    $('#founders_registration_college_id').change toggleCollegeTextField
 
 setupStickyStartApplicationForm = ->
   stickApplicationForm()
@@ -176,22 +162,8 @@ helpIntercomPopup = ->
     e.preventDefault()
     Intercom('show')
 
-setupOldApplicationCertificateDownloadButtons = ->
-  $('.download-old-application-certificate').click (event) ->
-    certificateBackground = $('#application-certificate-background').data('background')
-
-    downloadCertificateButton = $(event.target)
-    teamMembers = downloadCertificateButton.closest('.application-certificate-data').data('teamMembers')
-    codeScore = downloadCertificateButton.closest('.application-certificate-data').data('codeScore')
-    videoScore = downloadCertificateButton.closest('.application-certificate-data').data('videoScore')
-    result = downloadCertificateButton.closest('.application-certificate-data').data('result')
-
-    doc = buildApplicationCertificate(certificateBackground, teamMembers, codeScore, videoScore, result)
-    doc.save('Certificate.pdf')
-
 $(document).on 'page:change', setupTogglingCollegeField
 $(document).on 'page:change', setupTogglingReferenceField
-$(document).on 'page:change', setupOldApplicationCertificateDownloadButtons
 $(document).on 'page:change', scrolltoStartapplicationForm
 $(document).on 'page:change', stickyApplyButtonOnApplyPage
 $(document).on 'page:change', helpIntercomPopup
@@ -199,7 +171,7 @@ $(document).on 'page:change', readmoreFAQ
 $(document).on 'page:before-change', destroyWaypoints
 
 $(document).on 'turbolinks:load', ->
-  if $('#batch-application__index').length
+  if $('#admissions__apply').length
     setupSelect2Inputs()
     setupStickyStartApplicationForm()
     emailsShouldMatch()

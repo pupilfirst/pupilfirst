@@ -2,50 +2,23 @@
   title SV.CO Apply Now
   meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
 
-#batch-application__index
+#admissions__apply
 
 .container
-  .alert-info.alert.m-t-2.m-b-0.text-xs-center
-    i.fa.fa-bell-o
-    ' &nbsp;Applications for our January 2017 batch is now closed.
   .row.application-process
     .col-lg-8.col-md-12
-      - if current_application.present? && current_application.team_lead == current_batch_applicant
+      - if current_user&.founder.present?
         .card.content-box.notice-with-link.m-t-2.m-b-0
           .notice.strong-notice
             ' You have already completed registration.
           .link
-            = link_to 'Continue application', apply_continue_path, class: 'btn btn-primary btn-md text-uppercase'
+            = link_to 'Go to Dashboard', dashboard_founder_path, class: 'btn btn-primary btn-md text-uppercase'
       - elsif current_user.blank?
         .card.content-box.notice-with-link.m-t-2.m-b-0
           .notice.strong-notice
-            ' Did you complete registration once before?
+            ' Are you a registered founder?
           .link
-            = link_to 'Sign In to Continue', new_user_session_path(referer: apply_continue_path), class: 'btn btn-primary btn-md text-uppercase'
-
-      - if @batch_application.old_applications(current_batch_applicant).any?
-        #application-certificate-background data-background=@batch_application.old_applications(current_batch_applicant).first.certificate_background_image_base64
-        .card.content-box.m-t-2.m-b-0
-          h3.m-b-2 Previous Applications
-
-          .table-responsive
-            table.table
-              thead
-                tr
-                  th Batch
-                  th Status
-                  th Results
-              tbody
-                - @batch_application.old_applications(current_batch_applicant).each do |old_application|
-                  tr.application-certificate-data data-team-members=old_application.team_member_names data-code-score=old_application.percentile_code_score data-video-score=old_application.percentile_video_score data-result=old_application.preliminary_result
-                    td = old_application.batch.batch_number
-                    td #{old_application.status.to_s.capitalize} at stage #{old_application.application_stage.number}
-                    td
-                      - if old_application.merits_certificate?
-                        button.btn.btn-secondary.btn-sm.download-old-application-certificate
-                          | Download Certificate
-                      - else
-                        em Did not complete coding / video task.
+            = link_to 'Sign In to Continue', new_user_session_path(referer: apply_path), class: 'btn btn-primary btn-md text-uppercase'
 
       .application-process-left.content-box.m-t-2.m-b-2
         .admission-process.clearfix
@@ -118,138 +91,6 @@
             ' Our <strong>Program</strong>
           .slideshare-embed
             iframe.slideshare-frame src="//www.slideshare.net/slideshow/embed_code/key/2w0Ffb4moASiss" width="100%" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" allowfullscreen="allowfullscreen"
-        /.important-dates
-          h2
-            ' Important <strong>Dates</strong>
-
-          .table-responsive
-            table.table
-              tr
-                th Batch
-                td #4
-                td #5
-              tr
-                th Apply as a Team Lead
-                td
-                  .hidden-xs-down September 1 &mdash; October 10
-                  .hidden-sm-up Sep 1 &ndash; Oct 10
-                td
-                  .hidden-xs-down October 14 &mdash; November 21
-                  .hidden-sm-up Oct 14 &ndash; Nov 21
-              tr
-                th Perform Coding &amp; Video Task
-                td
-                  .hidden-xs-down September 1 &mdash; October 20
-                  .hidden-sm-up Sep 1 &ndash; Oct 20
-                td
-                  .hidden-xs-down October 14 &mdash; December 5
-                  .hidden-sm-up Oct 14 &ndash; Dec 5
-              tr
-                th Team Interviews
-                td
-                  .hidden-xs-down December 18 &mdash; December 20
-                  .hidden-sm-up Dec 18 &ndash; Dec 20
-                td
-                  .hidden-xs-down December 18 &mdash; December 20
-                  .hidden-sm-up Dec 18 &ndash; Dec 20
-              tr
-                th Batch Starts
-                td
-                  .hidden-xs-down January 2
-                  .hidden-sm-up Jan 2
-                td
-                  .hidden-xs-down January 2
-                  .hidden-sm-up Jan 2
-
-          .program-slides.m-t-3
-            .slide-item.content-box
-              .program-day.blue-day
-                | Day 1/180
-              .row
-                .col-md-8.col-sm-8
-                  h3
-                    | Form A Real Company
-                  ul
-                    li Build a Startup while in College
-                    li No prior skills needed
-                .col-md-4.col-sm-4
-                  .program-slide-icon
-                    = image_tag 'apply/batch_application/real_company.svg'
-            .slide-item.content-box
-              .program-day.green-day
-                | Day 30/180
-              .row
-                .col-md-8.col-sm-8
-                  h3
-                    | Select a Business Idea
-                  ul
-                    li All Ideas are industry grade
-                    li Can be done by student startups
-                  .partner-section
-                    .partner-logo
-                      = image_tag 'apply/batch_application/tracxn-logo.png', class: 'img-fluid'
-                    p
-                      | Ratan Tata is an investor in Tracxn Labs, our Research Partner
-                .col-md-4.col-sm-4
-                  .program-slide-icon
-                    = image_tag 'apply/batch_application/business_idea.svg'
-            .slide-item.content-box
-              .program-day.blue-day
-                | Day 90/180
-              .row
-                .col-md-8.col-sm-8
-                  h3
-                    | Build a Real Prototype
-                  ul
-                    li Create working prototypes
-                    li  Entire team works together
-                .col-md-4.col-sm-4
-                  .program-slide-icon
-                    = image_tag 'apply/batch_application/prototyping.svg'
-            .slide-item.content-box
-              .program-day.green-day
-                | Day 120/180
-              .row
-                .col-md-8.col-sm-8
-                  h3
-                    | Learn from the Experts
-                  ul
-                    li Our Faculty have build world class products
-                    li Our Visiting Faculty are startup leaders
-                .col-md-4.col-sm-4
-                  .program-slide-icon
-                    = image_tag 'apply/batch_application/experts.svg'
-            .slide-item.content-box
-              .program-day.blue-day
-                | Day 150/180
-              .row
-                .col-md-8.col-sm-8
-                  h3
-                    | Launch to Real Customers
-                  ul
-                    li Learn to launch a real product in market
-                    li Learn from real customer feedback
-                  .partner-section
-                    .partner-logo
-                      = image_tag 'apply/batch_application/fb_start-logo.png', class: 'img-fluid'
-                    p
-                      | All teams Receive support from Facebook FB Start team
-                .col-md-4.col-sm-4
-                  .program-slide-icon
-                    = image_tag 'apply/batch_application/launch.svg'
-            .slide-item.content-box
-              .program-day.green-day
-                | Day 180/180
-              .row
-                .col-md-8.col-sm-8
-                  h3
-                    | Graduate with Global Exposure
-                  ul
-                    li Win 1 week Silicon Valley Scholarship
-                    li Create your startup or get great startup jobs.
-                .col-md-4.col-sm-4
-                  .program-slide-icon
-                    = image_tag 'apply/batch_application/graduate.svg'
 
         .application-faq.m-b-2#faqs
           h2
@@ -310,172 +151,11 @@
             p
               ' Please email your doubts or questions to <strong>help@sv.co</strong>
 
-        /.fees-section#fees
-          #microsoft-student-partners.panel-group
-            .card
-              h4
-                a.card-block.accordion-toggle.collapsed data-parent="#microsoft-student-partners" data-toggle="collapse" href="#msp-info"
-                  | For Microsoft Student Partners
-              #msp-info.card-text.collapse
-                p.m-b-1
-                  ' We've partnered with Microsoft to help Microsoft Student Partners build startups while in
-                  ' college. If you are a Microsoft Student Partner, then form a team of 2 to 10 students. The
-                  ' team needs to have at least one Microsoft Student Partner.
-
-                h3 Key Benefits for Microsoft Student Partner Teams
-
-                ul
-                  li
-                    ' For Microsoft Student Partners, the team Application Fee of &#8377;3000 will be waived off.
-                    ' The Microsoft Student Partner has to be the team lead and apply online using his Microsoft Student
-                    ' Partner email address using the application form on this page. Send a mail from the same address
-                    ' to #{mail_to 'help@sv.co'} with the subject:
-                    ' <strong>Microsoft Student Partner Application for SV.CO</strong>.
-                    ' We will respond within 48 hours after promoting the application to the next stage: Coding
-                    ' &amp; Video Challenge, which will skip the payment procedure. Please do not make the payment for
-                    | the application.
-                  li
-                    ' Microsoft Student Partners can refer the programme to other Microsoft Student
-                    ' Partners. If both the teams get selected, we will give 5% scholarship on the programme fee.
-                  li Teams which get selected to SV.CO Programme get access to Microsoft Bizspark.
-
-                h3 Upon Graduation
-
-                ul
-                  li Teams which get selected to SV.CO will be applicants to the Imagine Cup programme.
-                  li Teams at graduation will be referred to Microsoft India Accelerator programme.
-
-                p
-                  ' Selection for graduation perks will be based on Microsoft's internal criteria. Our teams become
-                  | qualified leads for Microsoft's larger ecosystem.
-
-          h2
-            ' <strong>Fees</strong>
-          #fee-accordion.panel-group
-            .card
-              h4
-                a.card-block.accordion-toggle.collapsed data-parent="#fee-accordion" data-toggle="collapse" href="#application-fee"
-                  | Registration Fee
-              #application-fee.card-text.collapse.in
-                h3
-                  ' &#8377;3,000 per team.
-                p
-                  ' Teams who apply and complete the Coding &amp; Video round gets a certificate with scores received from SV.CO. If selected, we will deduct the Registration Fee from the Program Fee. The Registration Fee is not refundable.
-
-            .card
-              h4
-                a.card-block.accordion-toggle data-parent="#fee-accordion" data-toggle="collapse" href="#program-fee"
-                  | Program Fee
-              #program-fee.collapse
-                .card-text
-                  h3
-                    ' &#8377;37,500 per founder.
-
-            .card
-              h4
-                a.card-block.accordion-toggle data-parent="#fee-accordion" data-toggle="collapse" href="#scholorship"
-                  | Paytm Scholarships
-              #scholorship.collapse
-                .card-text
-                  h3
-                    ' Paytm Scholarships
-                  p
-                    ' We're excited to partner with Paytm to offer full merit-based scholarships to <strong>30 deserving founders</strong>. There is no separate application for scholarship, we'll award them automatically based on your team scores in the selection rounds. Scholarships are awarded to individual founders and not to the team as a whole.
-                  p
-                    ' Scholarship Awards will be based on the following rules:
-                  ul.m-t-1
-                    li Only candidates who successfully clear the selection process will be awarded scholarships.
-                    li If your parent's annual income is below ₹3,50,000, you are eligible for financial aid and will be considered first, in order of your team ranking in the selection rounds. When you come for the Personal Interview round, please carry a letter from your College Principal and HOD that states this fact.
-                    li The remaining scholarships will be automatically awarded based on your ranking in the selection rounds.
-                  p If you have any doubts about scholarships, write to us at help@sv.co
-
-
-            .card
-              h4
-                a.card-block.accordion-toggle data-parent="#fee-accordion" data-toggle="collapse" href="#success-fee"
-                  | Success Fee
-              #success-fee.collapse
-                .card-text.text-xs-center
-                  .row
-                    .col-md-6.success-fee-box.clearfix
-                      .percent 2.5%
-                      .detail arranger's fee on a funding introduction.
-                    .col-md-6.success-fee-box.clearfix
-                      .percent 5%
-                      .detail lead fee (for 3 years) on a businesss lead introduction.
-                  .row
-                    .col-md-6.success-fee-box.clearfix
-                      .percent 10%
-                      .detail of salary received (for the 1<sup>st</sup> year) on a hiring introduction.
-                    .col-md-6.success-fee-box.clearfix
-                      .percent 20%
-                      .detail of combined compensation on an acqui-hire introduction.
-                  .row
-                    .col-md-12.success-fee-box.last-fee-box.clearfix
-                      .centered-fee-box
-                        .percent 30% Discount
-                        .detail for a right to invest in any funding round. <strong>No upfront equity</strong>.
-
-            .card
-              h4
-                a.card-block.accordion-toggle data-parent="#fee-accordion" data-toggle="collapse" href="#referal-program-applicants"
-                  | Referral Program for Paid Applicants
-              #referal-program-applicants.collapse
-                .card-text
-                  p We're introducing a great way to reduce your Program Fee. For Applicants who have paid, refer teams and for each team you refer that gets selected, get 5% off your Program Fee. If you refer 20 teams that go on to be selected, you can attend this course for free!
-                  p Terms:
-                  ul.m-t-1
-                    li 5% discount on Program Fee for each Selected Team referred. To both the Referred & Referring Teams.
-                    li To qualify, Referred Team must clear the selection rounds (Coding & Video test and Personal Interview) and pay the Program Fee, sign Agreements and be part of the next Batch for the discount to apply.
-                    li Proof to be Submitted: Teams must forward the Registration Fee payment receipt of the referred teams to help@sv.co within 15 days of Application Submission. Both Teams can claim the fee deduction immediately when selected.
-
-
-            .card
-              h4
-                a.card-block.accordion-toggle data-parent="#fee-accordion" data-toggle="collapse" href="#referal-program-students"
-                  | For IEDC Volunteers
-              #referal-program-students.collapse
-                .card-text
-                  p We're offering special perks for IEDC Volunteers:
-                  ul.m-t-1
-                    li
-                      | Teams who have at least one IEDC Volunteer have their Registration Fee of ₹3000 per team refunded.
-                      ul.m-t-1
-                        li To qualify, IEDC Volunteers must attend the <a href="https://keralastartupmission.wordpress.com/2016/07/27/iedc-summit-2016-on-august-23-2016/">KSUM IEDC Student Meet</a> on August 23, 2016 & make sure to meet the SV.CO representative and register their email address.
-                        li To qualify, teams must ensure to apply via the IEDC Volunteer Registered Email IDs.
-                        li Proof to be Submitted: Registered IEDC Volunteers must forward their Registration Fee payment receipt to help@sv.co within 15 days of Application Submission. We will credit the refund within 3 working days of receipt.
-                    li
-                      | When a Registered IEDC Volunteer refers other teams to apply, they get ₹1000 from their Registration Fee refunded.
-                      ul.m-t-1
-                        li To qualify, IEDC Volunteers must attend the <a href="https://keralastartupmission.wordpress.com/2016/07/27/iedc-summit-2016-on-august-23-2016/">KSUM IEDC Student Meet</a> on August 23, 2016 & make sure to meet the SV.CO representative and register their email address.
-                        li To qualify, Referred Teams must pay the Registration Fee.
-                        li Proof to be Submitted: Registered IEDC Volunteers must forward the Registration Fee payment receipt of their Referred Teams to help@sv.co within 15 days of Application Submission. We will credit the refund to the Teams within 3 working days of receipt.
-
-            .card
-              h4
-                a.card-block.accordion-toggle data-parent="#fee-accordion" data-toggle="collapse" href="#refund-cancellation-contact"
-                  | Registration Refunds, Cancellation &amp; Contact
-              #refund-cancellation-contact.collapse
-                .card-text
-                  h3 Refunds
-                  p There is no refund for the Registration Fee of ₹3000 per team. All products are sold “as is”. You assume the responsibility for your purchase, and no refunds will be issued.
-                  h3 Cancellation
-                  p There is a 100% Registration Fee penalty for cancellation. We would like only serious teams to apply.
-                  h3 Contact
-                  p For any more information about the above policies, please email help@sv.co. or contact:
-                  p
-                    ' SV.CO <br/>
-                    ' 1<sup>st</sup> Floor, 777, JK Heritage <br/>
-                    ' 80ft Road, 4<sup>th</sup> Block, Koramangala<br/>
-                    ' Bengaluru — 560034. <br />
-                    ' Mobile: +91.9995225741
-
     .col-lg-4.col-md-12#start-application-process
       .m-t-2
-        - if @batch_application.applications_open?
+        - if current_user&.founder.blank?
           == render 'application_form'
-        - else
-          == render 'prospective_applicant_form'
+
 
 a#sticky-start-application.btn.btn-primary.btn-md.text-uppercase.sticky-application-button.hidden-md-up href="#start-application-process"
   | Start Application

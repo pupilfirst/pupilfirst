@@ -103,6 +103,15 @@ Rails.application.routes.draw do
     post 'contact'
   end
 
+  get 'apply', to: 'admissions#apply'
+
+  scope 'admissions', as: 'admissions', controller: 'admissions' do
+    post 'register'
+    get 'screening'
+    get 'fee'
+    get 'cofounders'
+  end
+
   scope 'apply', as: 'apply', controller: 'batch_application' do
     get '', action: 'index'
     post 'register'

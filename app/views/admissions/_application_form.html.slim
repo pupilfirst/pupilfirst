@@ -1,0 +1,54 @@
+= simple_form_for @batch_application.form,
+  url: apply_register_path,
+  wrapper: :vertical_form do |f|
+
+  - if f.object.errors.present?
+    .alert.alert-warning.alert-dismissable.fade.in role='alert'
+
+      strong There were problems with your submission.
+      | &nbsp;Please check all fields and try again.
+
+      - if f.object.errors[:base].present?
+        ul.m-t-1
+          - f.object.errors[:base].each do |error_message|
+            li #{error_message}
+
+  .application-start-form.content-box.m-b-2
+    h4.form-section-title.m-b-1
+      | Apply Now
+    .simple-form-container
+      = f.input :name, label: false, placeholder: 'Full Name of Team Lead', input_html: { maxlength: 250 }
+
+      = f.input :email, label: false, placeholder: 'Team Leads Email Address',
+        input_html: { maxlength: 250, type: 'email' }
+
+      = f.input :email_confirmation, label: false, placeholder: 'Please repeat your Email Address',
+        input_html: { maxlength: 250, type: 'email' }
+
+      = f.input :phone, label: false, placeholder: 'Mobile phone number',
+        input_html: { maxlength: 17, type: 'tel', pattern: MobileNumberValidator::FORM_EXPRESSION }
+
+      = f.input :reference, label: false,
+        collection: proc { BatchApplicant.reference_sources },
+        required: false,
+        include_blank: 'How did you hear about us?'
+
+      .hidden-xs-up
+        = f.input :reference_text, label: false, placeholder: 'How did you hear about us?', required: false
+
+      = f.input :college_id,
+        as: :select,
+        label: false,
+        input_html: { value: nil, 'data-search-url' => colleges_url },
+        required: true,
+        collection: [["My college isn't listed", 'other']]
+
+      .hidden-xs-up
+        = f.input :college_text,
+          label: false,
+          placeholder: 'Name of your college',
+          required: true,
+          input_html: { maxlength: 250, disabled: true }
+
+      div
+        = f.submit 'Submit my application', class: 'btn btn-primary btn-md text-uppercase'

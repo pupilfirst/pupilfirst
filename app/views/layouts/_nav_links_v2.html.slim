@@ -6,7 +6,7 @@
     - if current_founder && !current_founder.exited && current_founder.startup.present?
       li.nav-item role="presentation"
         a.nav-link href="#{dashboard_founder_url}" Dashboard
-    - if current_founder && current_founder.startup.present?
+    - if policy(current_founder&.startup).show?
       li.nav-item role="presentation"
         a.nav-link href="#{startup_url(current_founder.startup)}" Timeline
     li.nav-item role="presentation"

@@ -12,6 +12,7 @@ class StartupsController < ApplicationController
   def show
     @skip_container = true
     @startup = Startup.friendly.find(params[:id])
+    authorize @startup, :show?
 
     if params[:show_feedback].present?
       if current_founder.present?
@@ -53,10 +54,12 @@ class StartupsController < ApplicationController
 
   def edit
     @startup = current_founder.startup
+    authorize @startup
   end
 
   def update
     @startup = current_founder.startup
+    authorize @startup
 
     if @startup.update(startup_params)
       flash[:success] = 'Startup details have been updated.'

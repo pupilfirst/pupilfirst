@@ -9,7 +9,7 @@ class AdmissionsController < ApplicationController
 
   # POST /apply
   def register
-    form = Founders::RegistrationForm.new
+    form = Founders::RegistrationForm.new(Founder.new)
 
     if form.validate(params[:founders_registration])
       begin

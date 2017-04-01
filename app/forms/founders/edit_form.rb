@@ -30,6 +30,7 @@ module Founders
     validate :slack_username_must_exist
     validate :college_must_exist
     validate :roles_must_be_valid
+    validate :age_more_than_18
 
     delegate :avatar?, :college_identification?, to: :model
 
@@ -68,6 +69,10 @@ module Founders
       return if College.find(college_id).present?
 
       errors[:college_id] << 'is invalid'
+    end
+
+    def age_more_than_18
+      errors.add(:born_on, 'must be at least 18 years old') if born_on.present? && born_on > 18.years.ago.end_of_year
     end
 
     # Manually coerce year_of_graduation to number.

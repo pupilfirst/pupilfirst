@@ -5,9 +5,6 @@
     - if current_founder && !current_founder.exited && current_founder.startup.present?
       li role="presentation"
         a.top-nav-link href="#{dashboard_founder_url}" Dashboard
-    - if current_founder
-      li role="presentation"
-        a.top-nav-link href="#{activity_url}" Activity
     - unless current_founder
       li role="presentation"
         = link_to 'Invest & Hire', talent_path, class: 'top-nav-link'

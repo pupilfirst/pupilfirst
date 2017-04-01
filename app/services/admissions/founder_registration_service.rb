@@ -27,7 +27,7 @@ module Admissions
     end
 
     def create_blank_startup
-      name_generator = ProductNameGeneratorService.new
+      name_generator = Startups::ProductNameGeneratorService.new
       name = name_generator.fun_name
 
       while Startup.find_by(product_name: name).present?

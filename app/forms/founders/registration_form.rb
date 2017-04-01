@@ -50,26 +50,14 @@ module Founders
     end
 
     def save
-      founder = Founder.create!(
-        {
-          name: name,
-          email: email,
-          phone: phone,
-          reference: supplied_reference
-        }.merge(college_details)
-      )
-      # Send login email when all's done.
-      user = User.with_email(email).first || User.create!(email: email)
-      UserSessionMailer.send_login_token(founder.user, nil, true).deliver_later
+      founder_params = {
+        name: name,
+        email: email,
+        phone: phone,
+        reference: supplied_reference
+      }.merge(college_details)
 
-      # Update user info of founder
-      founder.update!(user: user)
-
-      # Update user info on intercom
-      IntercomNewApplicantCreateJob.perform_later founder if founder.present?
-
-      # Return the founder
-      founder
+      Admissions::FounderRegistrationService.new(founder_params).execute
     end
 
     def supplied_reference

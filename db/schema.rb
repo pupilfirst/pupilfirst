@@ -810,6 +810,7 @@ ActiveRecord::Schema.define(version: 20170401074551) do
     t.boolean  "sign_out_at_next_request"
     t.datetime "email_bounced_at"
     t.string   "email_bounce_type"
+    t.datetime "confirmed_at"
   end
 
   create_table "visits", id: :uuid, default: nil, force: :cascade do |t|

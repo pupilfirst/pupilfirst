@@ -1,0 +1,19 @@
+- content_for :head do
+  title SV.CO Apply Now
+  meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
+
+.secondary-banner
+  .container
+    .application-stages-head.text-xs-center
+      h1 Update Founder Details
+
+#batch-application__cofounders-form data-college-search-url=colleges_url
+
+.container
+  .m-b-2
+    .row
+      .col-lg-6.offset-lg-3.col-md-8.offset-md-2
+        .text-xs-center.m-b-1.m-t-2
+          h3.m-b-2 Founders in your team
+
+        = react_component('FoundersForm', { authenticityToken: form_authenticity_token, founders: @form.founders_for_react, errors: @form.errors, collegesUrl: colleges_url, collegeNames: @form.college_names })

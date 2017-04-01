@@ -1,5 +1,6 @@
 class AdmissionsController < ApplicationController
   layout 'application_v2'
+  before_action :skip_container, only: %i(founders founders_submit)
 
   # GET /apply
   def apply
@@ -9,7 +10,7 @@ class AdmissionsController < ApplicationController
 
   # POST /apply
   def register
-    form = Founders::RegistrationForm.new
+    form = Founders::RegistrationForm.new(Founder.new)
 
     if form.validate(params[:founders_registration])
       begin
@@ -41,5 +42,23 @@ class AdmissionsController < ApplicationController
 
     flash[:success] = 'Screening target has been marked as completed!'
     redirect_to dashboard_founder_path
+  end
+
+  # GET /admissions/founders
+  def founders
+    authorize :admissions
+    @form = Admissions::FoundersForm.new(current_founder.startup)
+    @form.prepopulate
+  end
+
+  # POST /admissions/founders
+  def founders_submit
+    authorize :admissions
+  end
+
+  private
+
+  def skip_container
+    @skip_container = true
   end
 end

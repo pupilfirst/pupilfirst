@@ -75,8 +75,8 @@ class Founder < ApplicationRecord
     [GENDER_MALE, GENDER_FEMALE, GENDER_OTHER]
   end
 
-  validates :born_on, presence: true
-  validates :gender, inclusion: { in: valid_gender_values }
+  validates :born_on, presence: true, allow_nil: true
+  validates :gender, inclusion: { in: valid_gender_values }, allow_nil: true
   validates :email, uniqueness: true, allow_nil: true
 
   validate :age_more_than_18

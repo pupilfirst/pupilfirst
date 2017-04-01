@@ -13,6 +13,8 @@ describe TimelineEventTypes::ListService do
   let!(:te_suggested_6) { create :timeline_event_type, suggested_stage: TimelineEventType::TYPE_STAGE_EFFICIENCY, role: TimelineEventType::ROLE_DESIGN }
   let!(:te_suggested_7) { create :timeline_event_type, suggested_stage: TimelineEventType::TYPE_STAGE_CUSTOMER, role: TimelineEventType::ROLE_FOUNDER }
 
+  let(:te_founder_email_verification) { TimelineEventType.find_by(key: TimelineEventType::TYPE_FOUNDER_UPDATE) }
+
   describe '#list' do
     it 'returns grouped list of timeline events' do
       expected_return = {
@@ -52,6 +54,10 @@ describe TimelineEventTypes::ListService do
           te_suggested_7.id => {
             title: te_suggested_7.title,
             sample: te_suggested_7.sample
+          },
+          te_founder_email_verification.id => {
+            title: te_founder_email_verification.title,
+            sample: te_founder_email_verification.sample
           }
         }
       }

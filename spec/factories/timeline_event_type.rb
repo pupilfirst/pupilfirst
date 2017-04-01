@@ -39,5 +39,11 @@ FactoryGirl.define do
       role 'Product'
       title 'End of Iteration'
     end
+
+    trait :founder_update do
+      key TimelineEventType::TYPE_FOUNDER_UPDATE
+      role TimelineEventType::ROLE_FOUNDER
+      title 'Founder Update'
+    end
   end
 end

@@ -1,4 +1,4 @@
-class CofoundersFormCofounderInput extends React.Component {
+class FoundersFormFounderInput extends React.Component {
   componentDidMount() {
     document.getElementById(this.inputId()).focus();
   }
@@ -30,11 +30,11 @@ class CofoundersFormCofounderInput extends React.Component {
   }
 
   inputName() {
-    return "batch_applications_cofounders[cofounders_attributes][" + this.props.index + "][" + this.props.name + "]";
+    return "batch_applications_founders[founders_attributes][" + this.props.index + "][" + this.props.name + "]";
   }
 
   inputId() {
-    return "cofounders-form__cofounder-" + this.props.name + "-input-" + this.props.index;
+    return "founders-form__founder-" + this.props.name + "-input-" + this.props.index;
   }
 
   hasError() {
@@ -60,7 +60,7 @@ class CofoundersFormCofounderInput extends React.Component {
   }
 }
 
-CofoundersFormCofounderInput.PropTypes = {
+FoundersFormFounderInput.PropTypes = {
   label: React.PropTypes.string,
   index: React.PropTypes.number,
   maxLength: React.PropTypes.number,

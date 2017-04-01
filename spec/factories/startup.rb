@@ -8,7 +8,7 @@ FactoryGirl.define do
     f.email { Faker::Internet.email }
     f.batch
     f.iteration 1
-    f.level
+    f.level { create :level, :one }
 
     after(:build) do |startup|
       startup.founders << create(:founder, startup: startup, startup_admin: true)

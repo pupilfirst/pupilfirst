@@ -1,0 +1,121 @@
+module Admissions
+  class FoundersForm < Reform::Form
+    collection :founders, populate_if_empty: Founder do
+      property :id
+      property :name, validates: { presence: true, length: { maximum: 250 } }
+      property :email, validates: { presence: true, length: { maximum: 250 }, format: { with: EmailValidator::REGULAR_EXPRESSION, message: "doesn't look like an email" } }
+      property :phone, validates: { presence: true, mobile_number: true }
+      property :college_id
+      property :college_text, validates: { length: { maximum: 250 } }
+      property :delete, virtual: true
+    end
+
+    validate :minimum_two_founders_required
+    validate :limit_founders_count
+    validate :do_not_repeat_founders
+    validate :founder_must_have_college_id_or_text
+
+    def limit_founders_count
+      unless founders.count.in? 2..6
+        errors[:base] << 'You can have maximum 6 founders, and a minimum of 2.'
+      end
+    end
+
+    def minimum_two_founders_required
+      unpersisted_founders = founders.reject { |founder| founder.model.persisted? }
+      return if unpersisted_founders.any?
+
+      persisted_founders = founders.select { |founder| founder.model.persisted? }
+      return if persisted_founders.blank?
+
+      return if persisted_founders.reject do |persisted_founder|
+        persisted_founder.delete == 'on'
+      end.present?
+
+      errors[:base] << 'You must have at least two founders.'
+    end
+
+    def do_not_repeat_founders
+      previous_emails = []
+      has_error = false
+
+      founders.each do |founder|
+        if previous_emails.include? founder.email
+          has_error = true
+          founder.errors[:email] << 'has been mentioned before'
+        else
+          previous_emails << founder.email
+        end
+      end
+
+      errors[:base] << "It looks like you've repeated some founder email addresses." if has_error
+    end
+
+    def founder_must_have_college_id_or_text
+      founders.each do |founder|
+        next if founder.college_text.present?
+        next if College.find_by(id: founder.college_id).present?
+
+        errors[:base] << "Please pick a college for #{founder.name}."
+
+        if founder.college_id.blank?
+          founder.errors[:college_text] << "can't be blank"
+        else
+          founder.errors[:college_id] << 'must be selected'
+        end
+      end
+    end
+
+    def prepopulate
+      self.founders = [Founder.new] if founders.empty?
+    end
+
+    def save
+      founders.each do |founder|
+        if founder.id.present?
+          update_founder(founder)
+        else
+          create_founder(founder)
+        end
+      end
+    end
+
+    def create_founder(_founder)
+      raise 'Not yet implemented'
+      # applicant = BatchApplicant.with_email(founder.email).first
+      # applicant = BatchApplicant.create!(email: founder.email) if applicant.blank?
+      # applicant.update!(college_details(founder).merge(name: founder.name, phone: founder.phone))
+      # model.batch_applicants << applicant
+    end
+
+    def update_founder(_founder)
+      raise 'Not yet implemented'
+      # persisted_founder = model.founders.find(founder.id)
+      #
+      # if founder.delete == 'on'
+      #   persisted_founder.destroy!
+      # else
+      #   persisted_founder.update!(college_details(founder).merge(name: founder.name, phone: founder.phone))
+      # end
+    end
+
+    def college_details(founder)
+      if founder.college_text.present?
+        { college_text: founder.college_text }
+      else
+        { college_id: founder.college_id }
+      end
+    end
+
+    def college_names
+      founders.each_with_object({}) do |founder, names|
+        next if founder.college_id.nil?
+        names[founder.college_id] = College.find(founder.college_id).name
+      end
+    end
+
+    def founders_for_react
+      JSON.parse(founders.to_json).map { |c| c.slice('fields', 'errors') }
+    end
+  end
+end

@@ -5,7 +5,7 @@ describe Startups::LevelUpEligibilityService do
 
   subject { described_class.new(startup) }
 
-  let(:level_1) { create :level, number: 1 }
+  let(:level_1) { create :level, :one }
   let(:startup) { create :startup, level: level_1 }
   let(:milestone_targets) { create :target_group, level: level_1, milestone: true }
   let(:founder_target) { create :target, :for_founders, target_group: milestone_targets }

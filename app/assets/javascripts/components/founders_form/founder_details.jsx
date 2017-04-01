@@ -1,10 +1,10 @@
-class CofoundersFormCofounderDetails extends React.Component {
+class FoundersFormFounderDetails extends React.Component {
   constructor(props) {
     super(props);
 
     let useCollegeText = false;
 
-    if (props.cofounder.fields.college_id === null && props.cofounder.fields.college_text != null) {
+    if (props.founder.fields.college_id === null && props.founder.fields.college_text != null) {
       useCollegeText = true;
     }
 
@@ -54,7 +54,7 @@ class CofoundersFormCofounderDetails extends React.Component {
   }
 
   selectId() {
-    return "cofounders-form__college-select-" + this.props.index;
+    return "founders-form__college-select-" + this.props.index;
   }
 
   handleCollegeChange(event) {
@@ -65,27 +65,27 @@ class CofoundersFormCofounderDetails extends React.Component {
   }
 
   errorForField(field) {
-    if (this.props.cofounder.errors[field]) {
-      return this.props.cofounder.errors[field][0];
+    if (this.props.founder.errors[field]) {
+      return this.props.founder.errors[field][0];
     } else {
       return null;
     }
   }
 
-  cofounderValue(field) {
-    return this.props.cofounder.fields[field];
+  founderValue(field) {
+    return this.props.founder.fields[field];
   }
 
   hasCollege() {
-    return this.cofounderValue('college_id') !== null;
+    return this.founderValue('college_id') !== null;
   }
 
   persisted() {
-    return (typeof(this.cofounderValue('id')) !== 'undefined') && (this.cofounderValue('id') !== null) && (this.cofounderValue('id') !== '');
+    return (typeof(this.founderValue('id')) !== 'undefined') && (this.founderValue('id') !== null) && (this.founderValue('id') !== '');
   }
 
   deleteCheckboxId() {
-    return "cofounders-form__cofounder-delete-checkbox-" + this.props.index;
+    return "founders-form__founder-delete-checkbox-" + this.props.index;
   }
 
   handleDelete() {
@@ -94,29 +94,29 @@ class CofoundersFormCofounderDetails extends React.Component {
 
   render() {
     return (
-      <div className="cofounder content-box">
+      <div className="founders-form__founder-content-box content-box">
         { this.canDelete() &&
-        <div className="cofounder-delete-button" onClick={ this.handleDelete }>
+        <div className="founders-form__founder-delete-button" onClick={ this.handleDelete }>
           <i className="fa fa-times-circle"/>
         </div>
         }
 
         {this.persisted() &&
-        <input className="hidden" type="hidden" value={ this.cofounderValue('id') }
-          name={ "batch_applications_cofounders[cofounders_attributes][" + this.props.index + "][id]" }/>
+        <input className="hidden" type="hidden" value={ this.founderValue('id') }
+          name={ "batch_applications_founders[founders_attributes][" + this.props.index + "][id]" }/>
         }
 
-        <CofoundersFormCofounderInput label="Name" index={ this.props.index } key={ "name-" + this.props.generatedKey }
-          maxLength={ 250 } name="name" type="string" value={ this.cofounderValue('name') }
+        <FoundersFormFounderInput label="Name" index={ this.props.index } key={ "name-" + this.props.generatedKey }
+          maxLength={ 250 } name="name" type="string" value={ this.founderValue('name') }
           error={ this.errorForField('name') }/>
 
-        <CofoundersFormCofounderInput label="Email address" index={ this.props.index }
+        <FoundersFormFounderInput label="Email address" index={ this.props.index }
           key={ "email-" + this.props.generatedKey } maxLength={ 250 } name="email" type="email"
-          error={ this.errorForField('email') } value={ this.cofounderValue('email') } disabled={ this.persisted() }/>
+          error={ this.errorForField('email') } value={ this.founderValue('email') } disabled={ this.persisted() }/>
 
-        <CofoundersFormCofounderInput label="Mobile phone number" index={ this.props.index }
+        <FoundersFormFounderInput label="Mobile phone number" index={ this.props.index }
           key={ "phone-" + this.props.generatedKey } maxLength={ 17 } name="phone" type="tel"
-          pattern="\+?[0-9]{8,16}" value={ this.cofounderValue('phone') } error={ this.errorForField('phone') }/>
+          pattern="\+?[0-9]{8,16}" value={ this.founderValue('phone') } error={ this.errorForField('phone') }/>
 
         { !this.state.useCollegeText &&
         <div className="form-group select required">
@@ -124,12 +124,12 @@ class CofoundersFormCofounderDetails extends React.Component {
             <abbr title="required">*</abbr> College
           </label>
 
-          <select defaultValue={ this.cofounderValue('college_id') } className="form-control select required"
+          <select defaultValue={ this.founderValue('college_id') } className="form-control select required"
             required="required" aria-required="true" id={ this.selectId() }
-            name={ "batch_applications_cofounders[cofounders_attributes][" + this.props.index + "][college_id]" }>
+            name={ "batch_applications_founders[founders_attributes][" + this.props.index + "][college_id]" }>
             <option value=""/>
             { this.hasCollege() &&
-            <option value={ this.cofounderValue('college_id') }>{ this.props.collegeName }</option>
+            <option value={ this.founderValue('college_id') }>{ this.props.collegeName }</option>
             }
             { !this.hasCollege() &&
             <option value="other">My college isn't listed</option>
@@ -139,10 +139,10 @@ class CofoundersFormCofounderDetails extends React.Component {
         }
 
         { this.state.useCollegeText &&
-        <CofoundersFormCofounderInput label="Name of your college" index={ this.props.index } type="string"
+        <FoundersFormFounderInput label="Name of your college" index={ this.props.index } type="string"
           key={ "college-text-" + this.props.generatedKey } maxLength={ 250 }
           error={ this.errorForField('college_text') }
-          name="college_text" value={ this.cofounderValue('college_text') }/>
+          name="college_text" value={ this.founderValue('college_text') }/>
         }
 
         {this.persisted() &&
@@ -150,9 +150,9 @@ class CofoundersFormCofounderDetails extends React.Component {
           <div className="checkbox">
             <label className="boolean optional" htmlFor={ this.deleteCheckboxId() }>
               <input className="boolean optional" type="checkbox" defaultChecked={ false }
-                name={ "batch_applications_cofounders[cofounders_attributes][" + this.props.index + "][delete]" }
+                name={ "batch_applications_founders[founders_attributes][" + this.props.index + "][delete]" }
                 id={ this.deleteCheckboxId() }/>
-              &nbsp;Delete this cofounder
+              &nbsp;Delete this founder
             </label>
           </div>
         </div>
@@ -162,8 +162,8 @@ class CofoundersFormCofounderDetails extends React.Component {
   }
 }
 
-CofoundersFormCofounderDetails.propTypes = {
-  cofounder: React.PropTypes.object,
+FoundersFormFounderDetails.propTypes = {
+  founder: React.PropTypes.object,
   collegesUrl: React.PropTypes.string,
   index: React.PropTypes.number,
   collegeName: React.PropTypes.string,

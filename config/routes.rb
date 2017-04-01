@@ -110,7 +110,8 @@ Rails.application.routes.draw do
     get 'screening'
     post 'screening', action: 'screening_submit'
     get 'fee'
-    get 'cofounders'
+    get 'founders'
+    post 'founders', action: 'founders_submit'
   end
 
   scope 'apply', as: 'apply', controller: 'batch_application' do

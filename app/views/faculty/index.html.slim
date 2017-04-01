@@ -4,41 +4,38 @@
 
 #faculty
   .container
-    h1.page-header.header-light Faculty
+    h1.page-header.header-light.text-xs-center.m-t-2 Faculty
 
-    p.introduction
+    p.introduction.text-xs-center.m-x-auto
       ' We've assembled some of the best entrepreneurs and domain experts to help you learn about entrepreneurship and
       | what it means to become a founder. If you join SV.CO, you'll have access to the best startup talent in India.
 
-    #tabbed-content
-      ul#faculty-nav.nav.nav-tabs.nav-justified
-        li role="presentation"
-          a.inactive-spacer #{('. ' * 10).html_safe}
-        li role="presentation" class=active_tab('team')
-          a.cursor-pointer.tab-title data-target="#team" aria-controls="team" role="tab" Team
-        li role="presentation" class=active_tab('visiting-faculty')
-          a.cursor-pointer.tab-title data-target="#visiting-faculty" aria-controls="visiting-faculty" role="tab" Visiting faculty
-        li role="presentation" class=active_tab('advisory-board')
-          a.cursor-pointer.tab-title data-target="#advisory-board" aria-controls="advisory-board" role="tab" Advisory board
-        li role="presentation" class=active_tab('alumni')
-          a.cursor-pointer.tab-title data-target="#alumni" aria-controls="alumni" role="tab" Alumni
-        li role="presentation"
-          a.inactive-spacer #{('. ' * 10).html_safe}
+    .faculty-container.m-x-auto
+      #tabbed-content
+        ul#faculty-nav.nav.nav-tabs.faculty-nav__tab
+          li.nav-item.faculty-nav__tab-item role="presentation"
+            a.nav-link.cursor-pointer.faculty-nav__tab-title class=active_tab('team') data-target="#team" aria-controls="team" role="tab" Team
+          li.nav-item.faculty-nav__tab-item role="presentation"
+            a.nav-link.cursor-pointer.faculty-nav__tab-title class=active_tab('visiting-faculty') data-target="#visiting-faculty" aria-controls="visiting-faculty" role="tab" Visiting faculty
+          li.nav-item.faculty-nav__tab-item role="presentation"
+            a.nav-link.cursor-pointer.faculty-nav__tab-title class=active_tab('advisory-board') data-target="#advisory-board" aria-controls="advisory-board" role="tab" Advisory board
+          li.nav-item.faculty-nav__tab-item role="presentation"
+            a.nav-link.cursor-pointer.faculty-nav__tab-title class=active_tab('alumni') data-target="#alumni" aria-controls="alumni" role="tab" Alumni
 
-      .tab-content
-        .tab-pane#team role="tabpanel" class=active_tab('team')
-          .faculty-cards-container
-            - Faculty.active.team.each do |member|
-              = render 'faculty_card', member: member
-        .tab-pane#visiting-faculty role="tabpanel" class=active_tab('visiting-faculty')
-          .faculty-cards-container
-            - Faculty.active.visiting_faculty.each do |member|
-              = render 'faculty_card', member: member
-        .tab-pane#advisory-board role="tabpanel" class=active_tab('advisory-board')
-          .faculty-cards-container
-            - Faculty.active.advisory_board.each do |member|
-              = render 'faculty_card', member: member
-        .tab-pane#alumni role="tabpanel" class=active_tab('alumni')
-          .faculty-cards-container
-            - Faculty.active.alumni.each do |member|
-              = render 'faculty_card', member: member
+        .tab-content
+          .tab-pane#team role="tabpanel" class=active_tab('team')
+            .faculty-cards-container.row.row-eq-height
+              - Faculty.active.team.each do |member|
+                = render 'faculty_card', member: member
+          .tab-pane#visiting-faculty role="tabpanel" class=active_tab('visiting-faculty')
+            .faculty-cards-container.row.row-eq-height
+              - Faculty.active.visiting_faculty.each do |member|
+                = render 'faculty_card', member: member
+          .tab-pane#advisory-board role="tabpanel" class=active_tab('advisory-board')
+            .faculty-cards-container.row.row-eq-height
+              - Faculty.active.advisory_board.each do |member|
+                = render 'faculty_card', member: member
+          .tab-pane#alumni role="tabpanel" class=active_tab('alumni')
+            .faculty-cards-container.row.row-eq-height
+              - Faculty.active.alumni.each do |member|
+                = render 'faculty_card', member: member

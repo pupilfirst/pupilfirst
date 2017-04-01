@@ -56,6 +56,7 @@
 //= require components
 
 // Controller-specific
+//= require v2/faculty
 // require faculty
 // require startups
 // require timeline_events

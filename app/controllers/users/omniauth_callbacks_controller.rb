@@ -14,6 +14,7 @@ module Users
       if user.present?
         sign_in user
         remember_me user
+        Users::ConfirmationService.new(user).execute
         redirect_to origin || after_sign_in_path_for(user)
       else
         flash[:notice] = "Your email address: #{email} is not registered at SV.CO"

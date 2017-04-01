@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170331122621) do
+ActiveRecord::Schema.define(version: 20170401061320) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -810,6 +810,7 @@ ActiveRecord::Schema.define(version: 20170331122621) do
     t.boolean  "sign_out_at_next_request"
     t.datetime "email_bounced_at"
     t.string   "email_bounce_type"
+    t.datetime "confirmed_at"
   end
 
   create_table "visits", id: :uuid, default: nil, force: :cascade do |t|

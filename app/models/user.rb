@@ -19,4 +19,9 @@ class User < ApplicationRecord
   def email_bounced?
     email_bounced_at.present?
   end
+
+  # True if the user has ever signed in, handled by Users::ConfirmationService.
+  def confirmed?
+    confirmed_at.present?
+  end
 end

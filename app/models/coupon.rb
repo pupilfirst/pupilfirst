@@ -1,9 +1,9 @@
 class Coupon < ApplicationRecord
   has_many :coupon_usages
-  has_many :batch_applications, through: :coupon_usages
-  belongs_to :referrer, class_name: 'BatchApplicant'
+  has_many :startups, through: :coupon_usages
+  belongs_to :referrer, class_name: 'Founder'
 
-  scope :referrals, -> { where.not(referrer_id: nil) }
+  scope :referral, -> { where.not(referrer_id: nil) }
 
   TYPE_DISCOUNT = -'Discount'
   TYPE_MSP = -'Microsoft Student Partner'
@@ -31,8 +31,8 @@ class Coupon < ApplicationRecord
     redeem_count < redeem_limit
   end
 
-  def mark_redeemed!(batch_application)
-    coupon_usage = CouponUsage.where(coupon: self, batch_application: batch_application).last
+  def mark_redeemed!(startup)
+    coupon_usage = CouponUsage.where(coupon: self, startup: startup).last
     coupon_usage.update!(redeemed_at: Time.now)
   end
 

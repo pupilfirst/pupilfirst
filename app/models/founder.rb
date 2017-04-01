@@ -39,6 +39,9 @@ class Founder < ApplicationRecord
   belongs_to :college, optional: true
   has_one :batch_applicant
   has_one :payment, dependent: :restrict_with_error
+  has_one :referral_coupon, class_name: 'Coupon', foreign_key: 'referrer_id'
+  has_many :coupon_usages, through: :referral_coupon
+  has_many :referred_startups, class_name: 'Startup', through: :coupon_usages, source: 'startup'
 
   scope :batched, -> { joins(:startup).merge(Startup.batched) }
   scope :for_batch_id_in, ->(ids) { joins(:startup).where(startups: { batch_id: ids }) }
@@ -62,6 +65,7 @@ class Founder < ApplicationRecord
   scope :not_exited, -> { where.not(exited: true) }
 
   scope :with_email, ->(email) { where('lower(email) = ?', email.downcase) }
+  scope :with_referrals, -> { joins(:referred_startups).distinct }
 
   def self.ransackable_scopes(_auth)
     %i(ransack_tagged_with)

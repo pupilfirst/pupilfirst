@@ -9,7 +9,7 @@ ActiveAdmin.register Coupon do
   filter :validity_in, as: :select, collection: %w(Valid Invalid), label: 'Validity'
 
   scope :all
-  scope :referrals
+  scope :referral
 
   index do
     selectable_column

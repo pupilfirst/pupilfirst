@@ -1,5 +1,5 @@
 module Admissions
-  # The service creates a founder, a user and an intercom user, on new founder registration.
+  # The service creates a founder, a user, a blank startup for the founder and an intercom user, on new founder registration.
   class FounderRegistrationService
     def initialize(founder_params)
       @founder_params = founder_params
@@ -7,6 +7,7 @@ module Admissions
 
     def execute
       founder = create_founder
+      create_blank_startup
       create_or_update_user
       create_intercom_applicant
       founder
@@ -23,6 +24,20 @@ module Admissions
         college_id: @founder_params[:college_id],
         college_text: @founder_params[:college_text]
       )
+    end
+
+    def create_blank_startup
+      name_generator = ProductNameGeneratorService.new
+      name = name_generator.fun_name
+
+      while Startup.find_by(product_name: name).present?
+        name = name_generator.fun_name
+      end
+
+      startup = Startup.create!(product_name: name)
+
+      # Update startup info of founder
+      @founder.update!(startup: startup)
     end
 
     def create_or_update_user

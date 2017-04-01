@@ -3,9 +3,9 @@ require 'rails_helper'
 describe Startups::LevelUpService do
   subject { described_class.new(startup) }
 
-  let!(:level_1) { create :level, number: 1 }
-  let!(:level_2) { create :level, number: 2 }
-  let!(:level_5) { create :level, number: 5 }
+  let!(:level_1) { create :level, :one }
+  let!(:level_2) { create :level, :two }
+  let!(:level_5) { create :level, :five }
 
   describe '#execute' do
     context 'when the startup is at maximum level' do

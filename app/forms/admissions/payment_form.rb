@@ -1,11 +1,7 @@
 module BatchApplications
   class PaymentForm < Reform::Form
-    property :team_size, virtual: true, validates: { inclusion: %w(2 3 4 5 6) }
-
     def save
-      BatchApplication.transaction do
-        model.update! team_size: team_size
-
+      Startup.transaction do
         # If payment is present
         if model.payment.present?
           # and the amount is the same as last time

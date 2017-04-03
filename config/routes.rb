@@ -165,9 +165,6 @@ Rails.application.routes.draw do
   # Previous transparency page re-directed to story
   get 'transparency', to: redirect('/story')
 
-  # Activity from startups.
-  get 'activity', as: 'activity', to: 'timeline_events#activity'
-
   # Public Changelog.
   get 'changelog', to: 'home#changelog'
 

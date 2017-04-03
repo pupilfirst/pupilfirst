@@ -6,6 +6,7 @@ class FacultyController < ApplicationController
   def index
     @active_tab = params[:active_tab].present? ? params[:active_tab] : 'team'
     @skip_container = true
+    render layout: 'application_v2'
   end
 
   # GET /faculty/:slug

@@ -1,18 +1,13 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV['RAILS_ENV'] ||= 'test'
 
-# Enable coverage checking by Coveralls and Simplecov.
+# Enable coverage checking by Codecov and Simplecov.
 if ENV['CI'] == 'true' || ENV['COVERAGE'] == 'true'
   require 'simplecov'
+  require 'codecov'
   require 'coveralls'
-
-  unless ENV['COVERAGE'] == 'true'
-    SimpleCov.formatter = Coveralls::SimpleCov::Formatter
-  end
-
-  SimpleCov.start('rails') do
-    add_filter 'app/secrets'
-  end
+  SimpleCov.formatters = [SimpleCov::Formatter::Codecov, Coveralls::SimpleCov::Formatter]
+  SimpleCov.start('rails')
 end
 
 require 'spec_helper'

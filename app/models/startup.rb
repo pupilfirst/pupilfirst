@@ -148,6 +148,8 @@ class Startup < ApplicationRecord
 
   validates :pitch, length: { maximum: MAX_PITCH_CHARACTERS, message: "must be within #{MAX_PITCH_CHARACTERS} characters" }
 
+  validates :level, presence: true
+
   # New set of validations for incubation wizard
   store :metadata, accessors: [:updated_from]
 

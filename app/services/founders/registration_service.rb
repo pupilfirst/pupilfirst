@@ -36,7 +36,7 @@ module Founders
         name = name_generator.fun_name
       end
 
-      startup = Startup.create!(product_name: name)
+      startup = Startup.create!(product_name: name, level: Level.zero)
 
       # Update startup info of founder
       @founder.update!(startup: startup)

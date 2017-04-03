@@ -1,16 +1,18 @@
-module Admissions
+module Founders
   # The service creates a founder, a user, a blank startup for the founder and an intercom user, on new founder registration.
-  class FounderRegistrationService
+  class RegistrationService
     def initialize(founder_params)
       @founder_params = founder_params
     end
 
-    def execute
-      founder = create_founder
-      create_blank_startup
-      create_or_update_user
-      create_intercom_applicant
-      founder
+    def register
+      Founder.transaction do
+        founder = create_founder
+        create_blank_startup
+        create_or_update_user
+        create_intercom_applicant
+        founder
+      end
     end
 
     private

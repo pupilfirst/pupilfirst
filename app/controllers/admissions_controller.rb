@@ -4,19 +4,19 @@ class AdmissionsController < ApplicationController
 
   # GET /apply
   def apply
-    @founder_registration_form = Founders::RegistrationForm.new(Founder.new)
-    @founder_registration_form.prepopulate!(current_user) if current_user.present?
+    @form = Founders::RegistrationForm.new(Founder.new)
+    @form.prepopulate(current_user) if current_user.present?
   end
 
   # POST /apply
   def register
-    form = Founders::RegistrationForm.new(Founder.new)
+    @form = Founders::RegistrationForm.new(Founder.new)
 
-    if form.validate(params[:founders_registration])
+    if @form.validate(params[:founders_registration])
       begin
-        founder = form.save
+        founder = @form.save
       rescue Postmark::InvalidMessageError
-        form.errors[:base] << t('batch_application.create.email_error')
+        @form.errors[:base] << t('batch_application.create.email_error')
         render 'apply'
       else
         # Sign in user immediately to allow him to proceed to screening.

@@ -41,7 +41,7 @@ module Founders
       errors[:email_confirmation] << 'email addresses do not match'
     end
 
-    def prepopulate!(user)
+    def prepopulate(user)
       return if user.mooc_student.blank?
 
       self.name = user.mooc_student.name
@@ -57,7 +57,7 @@ module Founders
         reference: supplied_reference
       }.merge(college_details)
 
-      Admissions::FounderRegistrationService.new(founder_params).execute
+      Founders::RegistrationService.new(founder_params).register
     end
 
     def supplied_reference

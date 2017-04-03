@@ -8,10 +8,9 @@ module Founders
     # GET /founder/dashboard
     def dashboard
       @startup = current_founder.startup&.decorate
-      @batch = @startup&.batch&.decorate
 
       # founders without proper startups will not have dashboards
-      raise_not_found unless @startup.present? && @batch.present?
+      raise_not_found unless @startup.present?
 
       dashboard_data_service = Founders::DashboardDataService.new(current_founder)
       list_service = TimelineEventTypes::ListService.new(@startup)

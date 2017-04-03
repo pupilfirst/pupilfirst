@@ -71,5 +71,6 @@
 
 == render 'view-embed'
 /== render 'timeline_builder'
-== render 'performance_overview'
+- if @startup.level != Level.zero
+  == render 'performance_overview'
 == render 'startup_restart_form'

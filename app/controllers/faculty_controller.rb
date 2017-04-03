@@ -13,6 +13,7 @@ class FacultyController < ApplicationController
   def show
     @faculty = Faculty.friendly.find(params[:id])
     @skip_container = true
+    render layout: 'application_v2'
   end
 
   # POST /faculty/:id/connect

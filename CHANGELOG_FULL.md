@@ -1,7 +1,21 @@
 ## Ongoing
 
-- Internal metrics collection is being worked on. [[Trello]](https://trello.com/c/IvCcRtXu)
-- Karma point notifications are being implemented. [[Trello]](https://trello.com/c/BdPlBTGX)
+- Admissions reboot (level zero) is being implemented. [[Trello]](https://trello.com/c/CDcL2dG3)
+- Remaining pages with V1 styling are being ported to V2. [[Trello]](https://trello.com/c/EwhCpesZ)
+
+## 2017.04.03
+
+- Karma point notifications have been implemented. [[Trello]](https://trello.com/c/BdPlBTGX)
+- Fixed issues with old SSL certificate (expired). [[Trello]](https://trello.com/c/DzhbmnEI)
+- Added form-level validation for founder age on profile edit form. [[Trello]](https://trello.com/c/R0T2ATMI)
+- The `/activity` page was removed because it had low activity, and wasn't linked from anywhere in the v2 design pages. [[Trello]](https://trello.com/c/EI2kpdPQ)
+- Added a check to validate length of timeline event description before submitting on the timeline builder. [[Trello]](https://trello.com/c/n3ypLoxM)
+- Founder `resume_url` is now computed by default instead of saving the timeline event file / link URL when resume event is verified. [[Trello]](https://trello.com/c/tvyDeNfR)
+- Added location information to emails exported from Intercom to SendInBlue. [[Trello]](https://trello.com/c/5zW43FSk)
+- Improved Intercom `InactiveUserDeletionService` to remove all stale users instead of just _conversing users_. [[Trello]](https://trello.com/c/qtK7vbZ4)
+- Poltergeist / PhantomJS was replaced with Selenium / Chrome to increase reliability of JS-dependant feature specs. [[Trello]](https://trello.com/c/So7Hr7S7)
+- Fixed incorrect positioning on _Add Event_ button on the founder dashboard when viewing using mobile devices. [[Trello]](https://trello.com/c/VYd5fqFH)
+- Fixed broken styling of the contact form on the `/talent` page. [[Trello]](https://trello.com/c/OwAz4LaG)
 
 ## 2017.03.27
 

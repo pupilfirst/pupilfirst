@@ -13,6 +13,6 @@ class TargetsController < ApplicationController
   end
 
   def restrict_to_founder
-    raise_not_found unless current_founder.present? && current_founder.startup.batch == target.batch
+    raise_not_found unless current_founder.present?
   end
 end

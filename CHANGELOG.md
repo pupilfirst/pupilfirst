@@ -1,3 +1,24 @@
+### 3 April, 2017
+
+#### Features
+
+- Founders now receive notifications from Vocalist when they receive karma points.
+
+#### UX and UI
+
+- Added a check to validate length of timeline event description before submitting information from the timeline builder.
+
+#### Content
+
+- The `/activity` page was removed because it had very little activity (ouch) in terms of page-views and was outdated.
+
+#### Bugfixes
+
+- Fixed broken validation for founder's date of birth on profile edit form.
+- Fixed an issue with the resume link on founder profile which caused it to point to outdated / incorrect locations.
+- Fixed incorrect positioning on _Add Event_ button on the founder dashboard when viewing using mobile devices.
+- Fixed broken styling of the contact form on the `/talent` page.
+
 ### 27 March, 2017
 
 #### Features

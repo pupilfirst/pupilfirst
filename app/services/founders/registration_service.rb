@@ -24,7 +24,8 @@ module Founders
         phone: @founder_params[:phone],
         reference: @founder_params[:reference],
         college_id: @founder_params[:college_id],
-        college_text: @founder_params[:college_text]
+        college_text: @founder_params[:college_text],
+        startup_admin: true
       )
     end
 

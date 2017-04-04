@@ -16,14 +16,6 @@ class Payment < ApplicationRecord
     [Instamojo::PAYMENT_REQUEST_STATUS_PENDING, Instamojo::PAYMENT_REQUEST_STATUS_SENT]
   end
 
-  validate :must_have_batch_application
-  validates :batch_applicant_id, presence: true
-
-  def must_have_batch_application
-    return if batch_application_id.present? || original_batch_application_id.present?
-    errors[:base] << 'one of batch_application_id or original_batch_application_id must be present'
-  end
-
   def status
     if paid?
       STATUS_PAID

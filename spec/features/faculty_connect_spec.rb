@@ -67,7 +67,7 @@ feature 'Faculty Connect' do
         # Reload the page.
         visit faculty_index_path
 
-        page.find('a.connect-link').click
+        page.find('.connect-link').click
         click_button 'Submit Request'
 
         # Fill something in as questions.

@@ -73,12 +73,18 @@ class StartupsController < ApplicationController
     events.count > page * 20
   end
 
+  # TODO: This method should be replaced with a Form to validate input from the filter.
   def load_startups
     batch_id = params.dig(:startups_filter, :batch)
     batch_scope = batch_id.present? ? Startup.where(batch_id: batch_id) : Startup.batched
 
     category_id = params.dig(:startups_filter, :category)
-    category_scope = category_id.present? ? Startup.joins(:startup_categories).where(startup_categories: { id: category_id }) : Startup.unscoped
+
+    category_scope = if category_id.present? && StartupCategory.find_by(id: category_id).present?
+      Startup.joins(:startup_categories).where(startup_categories: { id: category_id })
+    else
+      Startup.unscoped
+    end
 
     stage = params.dig(:startups_filter, :stage)
     stage_scope = stage.present? ? Startup.where(stage: stage) : Startup.unscoped

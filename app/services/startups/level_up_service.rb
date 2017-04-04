@@ -7,7 +7,11 @@ module Startups
 
     def execute
       if next_level.present?
-        @startup.update!(level: next_level)
+        if next_level.number == 1
+          @startup.update!(level: next_level, program_started_at: Time.zone.now)
+        else
+          @startup.update!(level: next_level)
+        end
       else
         raise 'Maximum level reached - cannot level up.'
       end

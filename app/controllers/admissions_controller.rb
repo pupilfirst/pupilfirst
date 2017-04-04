@@ -46,13 +46,30 @@ class AdmissionsController < ApplicationController
 
   # GET /admissions/fee
   def fee
-    @payment_form = Admissions::PaymentForm.new(current_startup)
+    @payment_form = Admissions::PaymentForm.new(current_founder)
     @coupon = current_startup.coupons.last
 
     if @coupon.blank?
       @coupon_form = Admissions::CouponForm.new(OpenStruct.new)
       @coupon_form.prepopulate!(current_founder)
     end
+  end
+
+  # Payment stage submission handler.
+  def fee_submit
+    # Re-direct back if applied coupon is not valid anymore
+    return if applied_coupon_not_valid? || payment_bypassed?
+
+    @form = Admissions::PaymentForm.new(current_founder)
+    begin
+      payment = @form.save
+    rescue Instamojo::PaymentRequestCreationFailed
+      flash[:error] = 'We were unable to contact our payment partner. Please try again in a few minutes.'
+      redirect_to admissions_fee_path
+      return
+    end
+
+    observable_redirect_to(payment.long_url)
   end
 
   # Handle coupon codes submissions
@@ -97,5 +114,27 @@ class AdmissionsController < ApplicationController
   def remove_latest_coupon
     latest_coupon = current_startup.coupons.last
     current_startup.coupon_usages.where(coupon: latest_coupon).last.delete
+  end
+
+  def applied_coupon_not_valid?
+    coupon = current_startup.latest_coupon
+    return false if coupon.blank? || coupon.still_valid?
+
+    remove_latest_coupon
+    flash[:error] = 'The coupon you applied is no longer valid. Try again!'
+    redirect_to admissions_fee_path
+    true
+  end
+
+  def payment_bypassed?
+    return false unless current_startup.fee.zero? || Rails.env.development?
+
+    bypass_payment
+    true
+  end
+
+  def bypass_payment
+    flash[:success] = 'Paymet Bypassed!'
+    redirect_to dashboard_founder_path
   end
 end

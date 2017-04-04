@@ -57,7 +57,7 @@
           #applicant-fee-data.hidden-xs-up
           .simple-form-container.m-t-2
             = simple_form_for @payment_form,
-              url: apply_stage_submit_path(stage_number: 2),
+              url: admissions_fee_path,
               method: :post do |f|
 
               /= f.input :team_size,

@@ -110,6 +110,7 @@ Rails.application.routes.draw do
     get 'screening'
     post 'screening', action: 'screening_submit'
     get 'fee'
+    post 'fee', action: 'fee_submit'
     post 'coupon_submit'
     patch 'coupon_remove'
     get 'founders'

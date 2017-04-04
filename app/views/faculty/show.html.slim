@@ -88,9 +88,9 @@
                                 hint: "We've noticed that the first 10 minutes of a Faculty Connect session are the most productive. "\
                                 "So it's a good idea to spend that time on questions you'd like to get answered. Type in relevant questions above. "\
                                 "As an example, if you are talking to a Marketing & Sales faculty, ask questions about making a sales plan or completing a customer acquisition target."
-                              = f.submit 'Submit Request', class: 'btn btn-primary'
+                              = f.submit 'Submit Request', class: 'btn btn-primary text-uppercase'
 
-                    a.btn.btn-ghost-primary.btn-sm.connect-link.faculty-connect-btn.text-uppercase data-toggle="modal" data-target="#faculty-connect-modal-#{@faculty.id}"
+                    .btn.btn-ghost-primary.btn-sm.connect-link.faculty-connect-btn.text-uppercase data-toggle="modal" data-target="#faculty-connect-modal-#{@faculty.id}"
                       | Connect
                 - elsif current_founder&.can_view_connect?
                   .disabled.btn.btn-ghost-primary.btn-sm.connect-link.faculty-connect-btn.text-uppercase data-toggle='tooltip' data-placement='top' title="Faculty Connect is only available to #{current_founder.startup.admin.fullname} (your team lead)"

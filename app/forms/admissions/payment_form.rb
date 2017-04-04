@@ -1,4 +1,4 @@
-module BatchApplications
+module Admissions
   class PaymentForm < Reform::Form
     def save
       Startup.transaction do

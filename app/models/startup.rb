@@ -31,6 +31,8 @@ class Startup < ApplicationRecord
   # agreement duration in years
   AGREEMENT_DURATION = 5
 
+  APPLICATION_FEE = 1000
+
   def self.valid_product_progress_values
     [
       PRODUCT_PROGRESS_IDEA, PRODUCT_PROGRESS_MOCKUP, PRODUCT_PROGRESS_PROTOTYPE, PRODUCT_PROGRESS_PRIVATE_BETA,
@@ -414,5 +416,17 @@ class Startup < ApplicationRecord
   def restartable_levels
     return Level.none if level.number < 2
     Level.where(number: 1..(level.number - 1))
+  end
+
+  def fee
+    latest_coupon.present? ? discounted_fee : APPLICATION_FEE
+  end
+
+  def latest_coupon
+    coupons&.last
+  end
+
+  def discounted_fee
+    (APPLICATION_FEE * (1 - (latest_coupon.discount_percentage.to_f / 100))).round
   end
 end

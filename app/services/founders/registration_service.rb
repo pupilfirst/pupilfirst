@@ -45,11 +45,12 @@ module Founders
 
     def create_or_update_user
       user = User.with_email(@founder.email).first || User.create!(email: @founder.email)
-      # Send login email when all's done.
-      UserSessionMailer.send_login_token(@founder.user, nil, true).deliver_later
 
       # Update user info of founder
       @founder.update!(user: user)
+
+      # Send login email when all's done.
+      UserSessionMailer.send_login_token(@founder.user, nil, true).deliver_later
     end
 
     def create_intercom_applicant

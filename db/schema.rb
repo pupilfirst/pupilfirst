@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170401074551) do
+ActiveRecord::Schema.define(version: 20170404092459) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -631,6 +631,7 @@ ActiveRecord::Schema.define(version: 20170401074551) do
     t.integer  "level_id"
     t.integer  "iteration",                  default: 1
     t.integer  "requested_restart_level_id"
+    t.datetime "program_started_at"
     t.index ["batch_id"], name: "index_startups_on_batch_id", using: :btree
     t.index ["level_id"], name: "index_startups_on_level_id", using: :btree
     t.index ["slug"], name: "index_startups_on_slug", unique: true, using: :btree

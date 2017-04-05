@@ -429,4 +429,19 @@ class Startup < ApplicationRecord
   def discounted_fee
     (APPLICATION_FEE * (1 - (latest_coupon.discount_percentage.to_f / 100))).round
   end
+
+  def present_week_number
+    return nil if level.number.zero?
+    return 1 if Date.today == program_started_at
+
+    days_elapsed = (Date.today - program_started_at)
+    weeks_elapsed = days_elapsed.to_f / 7
+
+    # Let's round up.
+    weeks_elapsed.ceil
+  end
+
+  def week_percentage
+    ((present_week_number.to_f / 24) * 100).to_i
+  end
 end

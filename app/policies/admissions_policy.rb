@@ -6,17 +6,23 @@ class AdmissionsPolicy
   end
 
   def screening?
-    return false if level.number != 0
-    target_incomplete?(Target::KEY_ADMISSIONS_SCREENING)
+    level_zero? && target_incomplete?(Target::KEY_ADMISSIONS_SCREENING)
   end
 
   def screening_submit?
     screening?
   end
 
+  def fee?
+    level_zero? && target_complete?(Target::KEY_ADMISSIONS_SCREENING) && target_incomplete?(Target::KEY_ADMISSIONS_FEE_PAYMENT)
+  end
+
+  alias fee_submit? fee?
+  alias coupon_submit? fee?
+  alias coupon_remove? fee?
+
   def founders?
-    return false if level.number != 0
-    target_incomplete?(Target::KEY_ADMISSIONS_COFOUNDER_ADDITION)
+    level_zero? && target_incomplete?(Target::KEY_ADMISSIONS_COFOUNDER_ADDITION)
   end
 
   def founders_submit?
@@ -31,7 +37,17 @@ class AdmissionsPolicy
     target.status(user.founder) != Targets::StatusService::STATUS_COMPLETE
   end
 
+  # User should have completed the prerequisite target.
+  def target_complete?(key)
+    target = Target.find_by(key: key)
+    target.status(user.founder) == Targets::StatusService::STATUS_COMPLETE
+  end
+
   def level
     @level ||= user&.founder&.startup&.level
+  end
+
+  def level_zero?
+    level.number.zero?
   end
 end

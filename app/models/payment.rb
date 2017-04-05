@@ -66,7 +66,7 @@ class Payment < ApplicationRecord
   end
 
   def perform_post_payment_tasks!
-    Admissions::PostPaymentService.new(self).execute
+    Admissions::PostPaymentService.new(payment: self).execute
   end
 
   # Remove direct relation from application to payment and store the relationship as 'original batch application'

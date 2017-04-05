@@ -46,6 +46,8 @@ class AdmissionsController < ApplicationController
 
   # GET /admissions/fee
   def fee
+    authorize :admissions
+
     @payment_form = Admissions::PaymentForm.new(current_founder)
     @coupon = current_startup.coupons.last
 
@@ -57,6 +59,8 @@ class AdmissionsController < ApplicationController
 
   # Payment stage submission handler.
   def fee_submit
+    authorize :admissions
+
     # Re-direct back if applied coupon is not valid anymore
     return if applied_coupon_not_valid? || payment_bypassed?
 
@@ -88,6 +92,8 @@ class AdmissionsController < ApplicationController
 
   # Remove an applied coupon
   def coupon_remove
+    authorize :admissions
+
     remove_latest_coupon
     flash[:success] = 'Coupon removed successfully!'
     redirect_to admissions_fee_path
@@ -134,7 +140,8 @@ class AdmissionsController < ApplicationController
   end
 
   def bypass_payment
-    flash[:success] = 'Paymet Bypassed!'
+    Admissions::PostPaymentService.new(founder: current_founder).execute
+    flash[:success] = 'Payment Bypassed!'
     redirect_to dashboard_founder_path
   end
 end

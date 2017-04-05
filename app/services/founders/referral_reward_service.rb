@@ -2,7 +2,7 @@ module Founders
   class ReferralRewardService
     def initialize(founder)
       @founder = founder
-      @referrer = @founder.referrer
+      @referrer = @founder.startup.referrer
     end
 
     def execute

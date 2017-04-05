@@ -444,4 +444,8 @@ class Startup < ApplicationRecord
   def week_percentage
     ((present_week_number.to_f / 24) * 100).to_i
   end
+
+  def referrer
+    referrers&.last
+  end
 end

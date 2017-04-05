@@ -66,25 +66,7 @@ class Payment < ApplicationRecord
   end
 
   def perform_post_payment_tasks!
-    # Log payment time, if unrecorded.
-    update!(paid_at: Time.now) if paid_at.blank?
-
-    # update the team leads latest payment date
-    batch_applicant.update!(latest_payment_at: paid_at)
-
-    # mark the coupon applied, if any, as redeemed
-    batch_application.latest_coupon.mark_redeemed!(batch_application) if batch_application.latest_coupon.present?
-
-    # create a referral coupon for the current applicant
-    batch_applicant.generate_referral_coupon!
-
-    # initiate referral refund if current applicant was referred by someone
-    BatchApplicants::ReferralRewardService.new(batch_applicant).execute if batch_applicant.referrer.present?
-
-    # Let the batch application (if still linked) take care of its stuff.
-    batch_application&.perform_post_payment_tasks!
-
-    IntercomLastApplicantEventUpdateJob.perform_later(batch_applicant, 'payment_complete') unless Rails.env.test?
+    Admissions::PostPaymentService.new(self).execute
   end
 
   # Remove direct relation from application to payment and store the relationship as 'original batch application'

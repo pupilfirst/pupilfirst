@@ -28,6 +28,8 @@ module Admissions
           "#{@founder.name} has passed the screening stage of the SV.CO admissions process."
         when Target::KEY_ADMISSIONS_FOUNDER_EMAIL_VERIFICATION
           "#{@founder.name} has confirmed his email address by signing in."
+        when Target::KEY_ADMISSIONS_FEE_PAYMENT
+          "#{@founder.startup} has paid their admission registration fee"
         else
           raise "CompleteTargetService does not know how to generate description for #{@key}"
       end

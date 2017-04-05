@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 # Happy path of cofounder addition is tested in applying_to_sv_co_spec.rb
-feature 'Cofounder addition' do
+feature 'Cofounder addition', disabled: true do
   include UserSpecHelper
 
   let(:application_round) { create :application_round, :screening_stage }

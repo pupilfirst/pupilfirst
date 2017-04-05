@@ -18,4 +18,10 @@ class FounderMailer < ApplicationMailer
     @founder = connect_request.startup.admin
     mail(to: @founder.email, subject: "Feedback for your recent faculty connect session with faculty member #{@faculty.name}")
   end
+
+  def referral_reward(referrer, applicant)
+    @referrer = referrer
+    @applicant = applicant
+    mail(to: referrer.email, subject: 'You have a successful referral at SV.CO!')
+  end
 end

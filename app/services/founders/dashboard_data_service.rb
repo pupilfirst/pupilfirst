@@ -35,7 +35,7 @@ module Founders
     def sessions
       @sessions ||= begin
         targets = Target.includes(:assigner, :level, :taggings).where.not(session_at: nil)
-          .order(:sort_index)
+          .order(session_at: :desc)
           .as_json(
             only: target_fields,
             methods: :has_rubric,

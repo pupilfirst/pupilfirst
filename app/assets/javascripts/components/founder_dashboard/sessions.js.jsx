@@ -12,7 +12,7 @@ class FounderDashboardSessions extends React.Component {
   upcomingSessions() {
     return this.filteredSessions().filter(function (target) {
       return moment(target.session_at).isAfter(moment());
-    });
+    }).reverse();
   }
 
   pastSessions() {

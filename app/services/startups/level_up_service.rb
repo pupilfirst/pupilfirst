@@ -8,7 +8,7 @@ module Startups
     def execute
       if next_level.present?
         if next_level.number == 1
-          @startup.update!(level: next_level, program_started_at: Time.zone.now)
+          @startup.update!(level: next_level, program_started_on: Time.zone.now)
         else
           @startup.update!(level: next_level)
         end

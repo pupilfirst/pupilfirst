@@ -434,9 +434,9 @@ class Startup < ApplicationRecord
 
   def present_week_number
     return nil if level.number.zero?
-    return 1 if Date.today == program_started_at
+    return 1 if Date.today == program_started_on
 
-    days_elapsed = (Date.today - program_started_at)
+    days_elapsed = (Date.today - program_started_on)
     weeks_elapsed = days_elapsed.to_f / 7
 
     # Let's round up.

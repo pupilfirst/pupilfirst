@@ -640,7 +640,7 @@ ActiveRecord::Schema.define(version: 20170406063655) do
     t.integer  "level_id"
     t.integer  "iteration",                  default: 1
     t.integer  "requested_restart_level_id"
-    t.date     "program_started_at"
+    t.date     "program_started_on"
     t.boolean  "agreements_verified"
     t.index ["batch_id"], name: "index_startups_on_batch_id", using: :btree
     t.index ["level_id"], name: "index_startups_on_level_id", using: :btree

@@ -36,9 +36,9 @@ module Founders
 
     def sessions
       @sessions ||= begin
-        targets = Target.includes(:assigner, :level, :taggings).where.not(session_at: nil)
-          .order(:sort_index)
-          .decorate
+        targets = Target.includes(:assigner, :level, :taggings).where.not(session_at: nil).order(:sort_index)
+        targets = targets.where(level: Level.zero) if startup.level == Level.zero
+        targets = targets.decorate
           .as_json(
             only: target_fields,
             methods: :has_rubric,

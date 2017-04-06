@@ -19,7 +19,6 @@ module Founders
       @chores ||= begin
         targets = Target.includes(:assigner, :level).where(chore: true)
           .order(:sort_index)
-          .decorate
           .as_json(
             only: target_fields,
             methods: :has_rubric,
@@ -37,7 +36,6 @@ module Founders
       @sessions ||= begin
         targets = Target.includes(:assigner, :level, :taggings).where.not(session_at: nil)
           .order(:sort_index)
-          .decorate
           .as_json(
             only: target_fields,
             methods: :has_rubric,
@@ -66,7 +64,6 @@ module Founders
     def target_groups(level)
       groups = level.target_groups.includes(targets: :assigner)
         .order('target_groups.sort_index', 'targets.sort_index')
-        .decorate
         .as_json(
           only: target_group_fields,
           include: {

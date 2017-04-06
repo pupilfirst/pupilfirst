@@ -23,7 +23,8 @@ after 'development:levels', 'development:founders', 'development:timeline_event_
     facebook_link: 'https://facebook.com/superstartup',
     product_video_link: 'https://www.youtube.com/ourvideo',
     prototype_link: 'https://www.github.com/superstartup',
-    wireframe_link: 'https://drive.google.com/superstartup/wireframe'
+    wireframe_link: 'https://drive.google.com/superstartup/wireframe',
+    program_started_on: 8.weeks.ago
   )
 
   # ...whose founder is Some One.
@@ -47,7 +48,8 @@ after 'development:levels', 'development:founders', 'development:timeline_event_
     product_description: 'Earths Mightiest Heroes joined forces to take on threats that were too big for any one hero to tackle.',
     agreement_signed_at: 2.years.ago,
     website: 'https://www.avengers.co',
-    startup_categories: [StartupCategory.second, StartupCategory.last]
+    startup_categories: [StartupCategory.second, StartupCategory.last],
+    program_started_on: 4.weeks.ago
   )
 
   # make ironman the team lead
@@ -61,4 +63,9 @@ after 'development:levels', 'development:founders', 'development:timeline_event_
   avengers_startup.founders << Founder.find_by(email: 'hulk@avengers.co')
   avengers_startup.founders << Founder.find_by(email: 'thor@avengers.co')
   avengers_startup.save!
+
+  # Assign both startups to the first batch
+  # TODO: This has to be removed after excising all code that requires a batch
+  super_startup.update!(batch: Batch.first)
+  avengers_startup.update!(batch: Batch.first)
 end

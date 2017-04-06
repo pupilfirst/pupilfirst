@@ -9,6 +9,7 @@ FactoryGirl.define do
     f.batch
     f.iteration 1
     f.level { create :level, :one }
+    f.program_started_on { rand(8.weeks).seconds.ago }
 
     after(:build) do |startup|
       startup.founders << create(:founder, startup: startup, startup_admin: true)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170405095119) do
+ActiveRecord::Schema.define(version: 20170406063655) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -364,6 +364,15 @@ ActiveRecord::Schema.define(version: 20170405095119) do
     t.integer  "backlog"
     t.string   "reference"
     t.string   "college_text"
+    t.string   "fee_payment_method"
+    t.string   "parent_name"
+    t.string   "id_proof_type"
+    t.string   "id_proof_number"
+    t.string   "income_proof"
+    t.string   "letter_from_parent"
+    t.string   "college_contact"
+    t.string   "permanent_address"
+    t.string   "address_proof"
     t.index ["college_id"], name: "index_founders_on_college_id", using: :btree
     t.index ["invitation_token"], name: "index_founders_on_invitation_token", unique: true, using: :btree
     t.index ["invited_by_id"], name: "index_founders_on_invited_by_id", using: :btree

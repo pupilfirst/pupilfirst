@@ -22,10 +22,10 @@ ActiveAdmin.register Startup do
   filter :startup_categories
   filter :dropped_out
 
-  scope :batched_and_approved, default: true
-  scope :batched
+  scope :admitted, default: true
   scope :inactive_for_week
   scope :endangered
+  scope :level_zero
   scope :all
 
   controller do

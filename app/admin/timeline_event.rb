@@ -25,8 +25,9 @@ ActiveAdmin.register TimelineEvent do
   filter :created_at
   filter :verified_at
 
+  scope :from_admitted_startups, default: true
+  scope :from_level_0_startups
   scope :all
-  scope :batched
   scope :not_improved
 
   config.sort_order = 'updated_at_desc'

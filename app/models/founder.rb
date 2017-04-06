@@ -43,6 +43,8 @@ class Founder < ApplicationRecord
   has_many :coupon_usages, through: :referral_coupon
   has_many :referred_startups, class_name: 'Startup', through: :coupon_usages, source: 'startup'
 
+  scope :admitted, -> { joins(:startup).merge(Startup.admitted) }
+  scope :level_zero, -> { joins(:startup).merge(Startup.level_zero) }
   scope :batched, -> { joins(:startup).merge(Startup.batched) }
   scope :for_batch_id_in, ->(ids) { joins(:startup).where(startups: { batch_id: ids }) }
   scope :not_dropped_out, -> { joins(:startup).merge(Startup.not_dropped_out) }
@@ -60,7 +62,7 @@ class Founder < ApplicationRecord
   scope :active_on_web, ->(since, upto) { joins(user: :visits).where(visits: { started_at: since..upto }) }
 
   scope :inactive, lambda {
-    where(exited: false).where.not(id: active_on_slack(Time.now.beginning_of_week, Time.now)).where.not(id: active_on_web(Time.now.beginning_of_week, Time.now))
+    admitted.where(exited: false).where.not(id: active_on_slack(Time.now.beginning_of_week, Time.now)).where.not(id: active_on_web(Time.now.beginning_of_week, Time.now))
   }
   scope :not_exited, -> { where.not(exited: true) }
 

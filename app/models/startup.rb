@@ -44,6 +44,8 @@ class Startup < ApplicationRecord
     [REGISTRATION_TYPE_PRIVATE_LIMITED, REGISTRATION_TYPE_PARTNERSHIP, REGISTRATION_TYPE_LLP]
   end
 
+  scope :admitted, -> { joins(:level).where('levels.number > ?', 0) }
+  scope :level_zero, -> { joins(:level).where(levels: { number: 0 }) }
   scope :batched, -> { where.not(batch_id: nil) }
   scope :approved, -> { where.not(dropped_out: true) }
   scope :dropped_out, -> { where(dropped_out: true) }
@@ -83,14 +85,14 @@ class Startup < ApplicationRecord
       .pluck(:id)
 
     # Filter them out.
-    batched.approved.not_dropped_out.where.not(id: startups_with_karma_ids)
+    batched.approved.admitted.not_dropped_out.where.not(id: startups_with_karma_ids)
   end
 
   def self.endangered
     startups_with_karma_ids = joins(:karma_points)
       .where(karma_points: { created_at: 3.weeks.ago..Time.now })
       .pluck(:id)
-    batched.approved.not_dropped_out.where.not(id: startups_with_karma_ids)
+    batched.approved.admitted.not_dropped_out.where.not(id: startups_with_karma_ids)
   end
 
   # Find all by specific category.

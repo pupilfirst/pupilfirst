@@ -13,10 +13,10 @@ ActiveAdmin.register Founder do
 
   menu label: 'Founders'
 
-  scope :all
-  scope :batched
-  scope :missing_startups
+  scope :admitted, default: true
   scope :inactive
+  scope :level_zero
+  scope :all
 
   filter :startup_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'Batch'
   filter :email

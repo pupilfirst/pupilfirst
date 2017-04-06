@@ -62,6 +62,8 @@ class TimelineEvent < ApplicationRecord
   accepts_nested_attributes_for :timeline_event_files, allow_destroy: true
 
   scope :end_of_iteration_events, -> { where(timeline_event_type: TimelineEventType.end_iteration) }
+  scope :from_admitted_startups, -> { joins(:startup).merge(Startup.admitted) }
+  scope :from_level_0_startups, -> { joins(:startup).merge(Startup.level_zero) }
   scope :batched, -> { joins(:startup).merge(Startup.batched) }
   scope :not_dropped_out, -> { joins(:startup).merge(Startup.not_dropped_out) }
   scope :verified, -> { where(verified_status: VERIFIED_STATUS_VERIFIED) }

@@ -14,15 +14,10 @@
 
 .container
   .m-t-3
-    == render 'application_progress'
 
   .row
     .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
-      - if @batch_application.agreements_verified
+      - if current_startup.agreements_verified
         == render 'agreements_submission'
       - else
         == render 'agreements_builder'
-
-      .m-b-3.offset-md-3.col-md-6
-        - if current_batch_applicant.referral_coupon.present?
-          == render 'referral_coupon'

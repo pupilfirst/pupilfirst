@@ -111,6 +111,21 @@ class AdmissionsController < ApplicationController
     authorize :admissions
   end
 
+  # GET /admissions/preselection
+  def preselection
+    @startup = current_startup.decorate
+    @founder = current_founder.decorate
+
+    @form = if @startup.agreements_verified?
+      Admissions::PreselectionStageSubmissionForm.new(current_startup)
+    else
+      Admissions::PreselectionStageApplicantForm.new(current_founder)
+    end
+  end
+
+  # POST /admissions/preselection
+  def preselection_submit; end
+
   private
 
   def skip_container

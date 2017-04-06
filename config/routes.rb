@@ -115,6 +115,8 @@ Rails.application.routes.draw do
     patch 'coupon_remove'
     get 'founders'
     post 'founders', action: 'founders_submit'
+    get 'preselection'
+    post 'preselection', action: 'preselection_submit'
   end
 
   scope 'apply', as: 'apply', controller: 'batch_application' do

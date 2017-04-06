@@ -4,7 +4,7 @@
       ' <strong>Agreements Verified!</strong>
     h4.font-regular.brand-secondary
       ' Your agreements have been verified by SV.CO as acceptable. Follow instructions below for their submission.
-  .agreements-next-steps
+  .agreements-next-stepss
     h3.font-semibold
       | Next Steps:
     .agreement-instructions
@@ -27,14 +27,14 @@
         li
           p Upload a copy of your Partnership Deed below.
           p <em>Note:</em>&nbsp;Do <strong>not</strong> send us your Original Partnership Deed.
-    - total_fee = @batch_application.total_course_fee
+    - total_fee = 10000
     - if total_fee > 0
       .fee-instructions.m-t-2.m-b-2
         h5.font-semibold.instructions-head.brand-primary
           | Fee:
         == render 'payment_instructions', total_fee: total_fee
   .simple-form-container
-    = bootstrap_form_for(@form, url: apply_stage_submit_path, layout: :horizontal, label_col: 'col-sm-3', control_col: 'col-sm-9') do |f|
+    = bootstrap_form_for(@form, url: admissions_preselection_path, layout: :horizontal, label_col: 'col-sm-3', control_col: 'col-sm-9') do |f|
       = f.file_field :partnership_deed, label_class: 'col-form-label', label: 'Partnership Deed', class: 'form-control', help: "#{@form.deed_help_extra}Scan copy of <strong>completed and signed</strong> partnership deed.".html_safe, required: !@form.model.partnership_deed.present?
       = f.text_field :courier_name, label_class: 'col-form-label', help: 'FedEx, DHL etc.', required: true, label: 'Courier Name'
       = f.text_field :courier_number, label_class: 'col-form-label', required: true, label: 'Courier Tracking Number'

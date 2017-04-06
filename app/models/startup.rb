@@ -450,4 +450,28 @@ class Startup < ApplicationRecord
   def referrer
     referrers&.last
   end
+
+  def founder_eligible_for_refund
+    founders.order('name ASC').find_by(fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE)
+  end
+
+  # Returns remaining course fee for a given applicant.
+  def founder_course_fee(founder)
+    raise "Founder##{founder.id} does not belong to Startup##{id}" unless founders.include?(founder)
+
+    refund_amount = payment&.refunded? ? 0 : payment&.amount.to_i
+
+    if refund_amount.positive? && founder == founder_eligible_for_refund
+      COURSE_FEE - refund_amount
+    elsif founder.fee_payment_method == Founder::PAYMENT_METHOD_REGULAR_FEE
+      COURSE_FEE
+    else
+      0
+    end
+  end
+
+  # Need to iterate over founders since each could have different payment method.
+  def total_course_fee
+    founders.map { |founder| founder_course_fee(founder) }.sum
+  end
 end

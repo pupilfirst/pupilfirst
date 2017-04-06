@@ -31,9 +31,9 @@
       ' Write to #{mail_to 'help@sv.co'} for any queries.
 
   h5.m-t-3.font-semibold.brand-secondary Fee Payment Status
-  == render 'payment_status_table', batch_application: @batch_application
+  == render 'payment_status_table'
 
-  - total_fee = @batch_application.total_course_fee
+  - total_fee = @startup.total_course_fee
   - if total_fee > 0
     .fees-section.p-t-2.p-b-2
       #payment-instructions.panel-group

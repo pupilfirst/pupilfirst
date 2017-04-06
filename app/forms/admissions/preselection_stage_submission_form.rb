@@ -1,4 +1,4 @@
-module BatchApplications
+module Admissions
   class PreselectionStageSubmissionForm < Reform::Form
     property :courier_name, validates: { presence: true }
     property :courier_number, validates: { presence: true }

@@ -19,6 +19,13 @@ class Founder < ApplicationRecord
   COFOUNDER_ACCEPTED = 'accepted'
   COFOUNDER_REJECTED = 'rejected'
 
+  PAYMENT_METHOD_HARDSHIP_SCHOLARSHIP = -'Hardship Scholarship'
+  PAYMENT_METHOD_REGULAR_FEE = -'Regular Fee'
+  PAYMENT_METHOD_MERIT_SCHOLARSHIP = -'Merit Scholarship'
+  REQUIRES_INCOME_PROOF = [PAYMENT_METHOD_HARDSHIP_SCHOLARSHIP].freeze
+  FEE_PAYMENT_METHODS = [PAYMENT_METHOD_REGULAR_FEE, PAYMENT_METHOD_HARDSHIP_SCHOLARSHIP, PAYMENT_METHOD_MERIT_SCHOLARSHIP].freeze
+  ID_PROOF_TYPES = ['Aadhaar Card', 'Driving License', 'Passport', 'Voters ID'].freeze
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   # devise :invitable, :database_authenticatable, :confirmable, :recoverable, :rememberable, :trackable, :validatable
@@ -80,6 +87,8 @@ class Founder < ApplicationRecord
   validates :born_on, presence: true, allow_nil: true
   validates :gender, inclusion: { in: valid_gender_values }, allow_nil: true
   validates :email, uniqueness: true, allow_nil: true
+  validates :fee_payment_method, inclusion: { in: FEE_PAYMENT_METHODS }, allow_nil: true
+  validates :id_proof_type, inclusion: { in: ID_PROOF_TYPES }, allow_nil: true
 
   validate :age_more_than_18
 
@@ -345,6 +354,17 @@ class Founder < ApplicationRecord
       redeem_limit: Coupon::REFERRAL_LIMIT,
       referrer: self
     )
+  end
+
+  def profile_complete?
+    required_fields = %i(name roles born_on gender parent_name communication_address permanent_address address_proof phone id_proof_type id_proof_number identification_proof)
+    required_fields += %i(income_proof letter_from_parent college_contact) if income_proofs_required?
+
+    required_fields.all? { |field| self[field].present? }
+  end
+
+  def income_proofs_required?
+    fee_payment_method.in?(REQUIRES_INCOME_PROOF)
   end
 
   private

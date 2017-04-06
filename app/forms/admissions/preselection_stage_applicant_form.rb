@@ -1,20 +1,20 @@
-module BatchApplications
+module Admissions
   class PreselectionStageApplicantForm < Reform::Form
     property :id, writeable: false
     property :name, validates: { presence: true, length: { maximum: 250 } }
     property :email, writeable: false
-    property :role, validates: { presence: true, inclusion: Founder.valid_roles }
+    property :roles, validates: { presence: true, inclusion: Founder.valid_roles }
     property :gender, validates: { presence: true, inclusion: Founder.valid_gender_values }
     property :born_on, validates: { presence: true }
     property :parent_name, validates: { presence: true }
     property :permanent_address, validates: { presence: true }
     property :address_proof, validates: { presence: true }
-    property :permanent_address_is_current_address, virtual: true
-    property :current_address
+    property :permanent_address_is_communication_address, virtual: true
+    property :communication_address
     property :phone, validates: { presence: true, mobile_number: true }
     property :id_proof_type, validates: { presence: true }
     property :id_proof_number, validates: { presence: true }
-    property :id_proof, validates: { presence: true }
+    property :identification_proof, validates: { presence: true }
     property :income_proof, validates: { presence: true, if: :requires_income_proof? }
     property :letter_from_parent, validates: { presence: true, if: :requires_income_proof? }
     property :college_contact, validates: { presence: true, mobile_number: true, if: :requires_income_proof? }
@@ -23,7 +23,7 @@ module BatchApplications
     property :fee_payment_method, writeable: false
 
     def requires_income_proof?
-      fee_payment_method.in?(BatchApplicant::REQUIRES_INCOME_PROOF)
+      fee_payment_method.in?(Founder::REQUIRES_INCOME_PROOF)
     end
 
     validate :ensure_applicant_is_adult
@@ -36,7 +36,7 @@ module BatchApplications
     end
 
     def current_address_is_available
-      return if current_address.present?
+      return if communication_address.present?
       return if permanent_address_is_current_address == '1'
       errors[:current_address] << 'is required'
     end
@@ -75,7 +75,7 @@ module BatchApplications
     def save
       save_uploaded_files
 
-      self.current_address = permanent_address if permanent_address_is_current_address == '1'
+      self.communication_address = permanent_address if permanent_address_is_communication_address == '1'
 
       model.update!(
         name: name,
@@ -84,7 +84,7 @@ module BatchApplications
         born_on: born_on,
         parent_name: parent_name,
         permanent_address: permanent_address,
-        current_address: current_address,
+        communication_address: communication_address,
         phone: phone,
         id_proof_type: id_proof_type,
         id_proof_number: id_proof_number,

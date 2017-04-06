@@ -1,0 +1,17 @@
+.table-responsive
+  table.table.table-sm.payment-status-table.p-a-1#payment-status-table
+    thead.thead-default
+      tr
+        th Founder Name
+        th Profile Completion
+        th Fee Payment Method
+        th Confirmation Status
+    tbody
+      / Put the team lead at the top of the table.
+      - [current_startup.founders.order('name ASC')].flatten.each do |startup_founder|
+        - founder = startup_founder.decorate
+        tr
+          td #{founder.name}
+          td #{founder.profile_completion_status}
+          td #{founder.payment_method_with_fee(current_startup)}
+          td #{founder.confirmation_status}

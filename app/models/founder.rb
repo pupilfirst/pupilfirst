@@ -140,6 +140,9 @@ class Founder < ApplicationRecord
   process_in_background :college_identification
 
   mount_uploader :identification_proof, IdentificationProofUploader
+  mount_uploader :address_proof, AddressProofUploader
+  mount_uploader :income_proof, IncomeProofUploader
+  mount_uploader :letter_from_parent, LetterFromParentUploader
 
   normalize_attribute :startup_id, :invitation_token, :twitter_url, :linkedin_url, :name, :slack_username, :resume_url,
     :semester, :year_of_graduation

@@ -118,13 +118,71 @@ class AdmissionsController < ApplicationController
 
     @form = if @startup.agreements_verified?
       Admissions::PreselectionStageSubmissionForm.new(current_startup)
+    elsif params[:update_profile]
+      founder = @startup.founders.find(params[:update_profile])
+      Admissions::PreselectionStageApplicantForm.new(founder)
+    end
+  end
+
+  def update_founder
+    @founder = current_founder.decorate
+    founder_params = params[:admissions_preselection_stage_applicant]
+    founder = current_startup.founders.find(founder_params[:id])
+    @form = Admissions::PreselectionStageApplicantForm.new(founder)
+
+    if @form.validate(founder_params)
+      @form.save
+      flash[:success] = 'Applicant details were successfully saved.'
+      redirect_to admissions_preselection_path
     else
-      Admissions::PreselectionStageApplicantForm.new(current_founder)
+      # Special dispensation, since this form can have up to four file fields. It would be super-irritating to users to
+      # lose uploads to validation failure.
+      @form.save_uploaded_files
+      flash[:error] = 'We were unable to save applicant details because of errors. Please try again.'
+      render 'preselection'
     end
   end
 
   # POST /admissions/preselection
   def preselection_submit; end
+
+  # GET /apply/stage/6/partnership_deed
+  # respond with PDF version of the partnership deed created using Prawn
+  def partnership_deed
+    @startup = current_startup.decorate
+
+    unless @startup.partnership_deed_ready?
+      flash[:error] = 'Could not generate Partnership Deed. Ensure details of all founders are provided!'
+      redirect_to admissions_preselection_path
+      return
+    end
+
+    respond_to do |format|
+      format.pdf do
+        pdf = Startups::PartnershipDeedPdfBuilderService.build(current_startup)
+        send_data pdf.to_pdf, type: 'application/pdf', filename: 'Partnership_Deed', disposition: 'inline'
+      end
+    end
+  end
+
+  # GET /apply/stage/6/incubation_agreement
+  # respond with PDF version of the digital incubation services agreement created using Prawn
+  def incubation_agreement
+    @startup = current_startup.decorate
+
+    unless @startup.incubation_agreement_ready?
+      flash[:error] = 'Could not generate Agreement. Ensure details of all founders are provided!'
+      redirect_to admissions_preselection_path
+      return
+    end
+
+    respond_to do |format|
+      format.pdf do
+        agreement_pdf = Startups::IncubationAgreementPdfBuilderService.build(startup)
+        send_data agreement_pdf.to_pdf, type: 'application/pdf', filename: 'Incubation_Agreement', disposition: 'inline'
+      end
+    end
+  end
 
   private
 

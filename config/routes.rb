@@ -117,6 +117,7 @@ Rails.application.routes.draw do
     post 'founders', action: 'founders_submit'
     get 'preselection'
     post 'preselection', action: 'preselection_submit'
+    patch 'update_founder'
   end
 
   scope 'apply', as: 'apply', controller: 'batch_application' do

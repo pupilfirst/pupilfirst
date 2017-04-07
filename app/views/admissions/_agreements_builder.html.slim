@@ -39,16 +39,16 @@
       #payment-instructions.panel-group
         .card
           h4
-            a.card-block.accordion-toggle.collapsed data-parent="#payment-instructions" data-toggle="collapse" href="#payment-info"
+            a.card-block.accordion-toggle.collapsed data-parent="#paycoment-instructions" data-toggle="collapse" href="#payment-info"
               | Payment Instructions
           #payment-info.collapse.payment-instructions
             == render 'payment_instructions', total_fee: total_fee
 
   == render('update_applicant_form') if @form.present?
 
-  - unless @form.present?
+  - @form.blank?
     .row.eq-height
-      - if @batch_application.partnership_deed_ready?
+      - if @startup.partnership_deed_ready?
         .col-md-6
           a.download-partnership-deed href=apply_pre_selection_stage_partnership_deed_path(format: :pdf) target='_blank'
             .alert.alert-success.text-xs-center
@@ -56,7 +56,7 @@
                 i.fa.fa-download
               | Your <strong>Partnership Deed</strong> is ready. Download, Sign and Send for Verification Now!
 
-      - if @batch_application.incubation_agreement_ready?
+      - if @startup.incubation_agreement_ready?
         .col-md-6
           a.download-partnership-deed href=apply_pre_selection_stage_incubation_agreement_path(format: :pdf) target='_blank'
             .alert.alert-success.text-xs-center

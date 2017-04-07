@@ -37,7 +37,7 @@ module Admissions
 
     def current_address_is_available
       return if communication_address.present?
-      return if permanent_address_is_current_address == '1'
+      return if permanent_address_is_communication_address == '1'
       errors[:current_address] << 'is required'
     end
 
@@ -58,11 +58,11 @@ module Admissions
     end
 
     def file_help_extra(field)
-      model.public_send(field).present? ? "Upload another file if you wish to replace <code>#{model.filename(field)}</code><br/>" : ''
+      model.persisted? && model.public_send(field).present? ? "Upload another file if you wish to replace <code>#{model.filename(field)}</code><br/>" : ''
     end
 
     def save_uploaded_files
-      files = %i(address_proof id_proof income_proof letter_from_parent)
+      files = %i(address_proof identification_proof income_proof letter_from_parent)
       files -= errors.keys
 
       files.each do |valid_file|
@@ -79,7 +79,7 @@ module Admissions
 
       model.update!(
         name: name,
-        role: role,
+        roles: roles,
         gender: gender,
         born_on: born_on,
         parent_name: parent_name,

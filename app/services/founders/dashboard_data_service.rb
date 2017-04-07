@@ -20,7 +20,6 @@ module Founders
       @chores ||= begin
         targets = Target.includes(:assigner, :level).where(chore: true)
           .order(:sort_index)
-          .decorate
           .as_json(
             only: target_fields,
             methods: :has_rubric,
@@ -36,23 +35,23 @@ module Founders
 
     def sessions
       @sessions ||= begin
-        targets = Target.includes(:assigner, :level, :taggings).where.not(session_at: nil).order(:sort_index)
-        targets = targets.where(level: Level.zero) if startup.level == Level.zero
-        targets = targets.decorate
-          .as_json(
-            only: target_fields,
-            methods: :has_rubric,
-            include: {
-              assigner: { only: assigner_fields },
-              level: { only: [:number] },
-              taggings: {
-                only: [],
-                include: {
-                  tag: { only: [:name] }
-                }
+        targets = Target.includes(:assigner, :level, :taggings).where.not(session_at: nil).order(session_at: :desc)
+        targets = targets.where(level: Level.zero) if startup.level.number.zero?
+
+        targets = targets.as_json(
+          only: target_fields,
+          methods: :has_rubric,
+          include: {
+            assigner: { only: assigner_fields },
+            level: { only: [:number] },
+            taggings: {
+              only: [],
+              include: {
+                tag: { only: [:name] }
               }
             }
-          )
+          }
+        )
 
         targets_with_status(targets)
       end
@@ -67,7 +66,6 @@ module Founders
     def target_groups(level)
       groups = level.target_groups.includes(targets: :assigner)
         .order('target_groups.sort_index', 'targets.sort_index')
-        .decorate
         .as_json(
           only: target_group_fields,
           include: {

@@ -33,13 +33,11 @@ feature 'Faculty Weekly Slots' do
       visit weekly_slots_faculty_index_path(faculty.token)
       expect(page).to have_text("Slots for #{faculty.name}")
       expect(page).to have_text('20 mins per week for the first 6 months this year')
-      expect(page).to have_selector('.weekly-slots__connect-slot--selected', count: 1)
-      expect(page.find('.weekly-slots__connect-slot--selected', match: :first)).to have_text('07:00')
+      expect(page).to have_selector('.weekly-slots__connect-slot--selected', count: 1, text: '07:00')
 
       click_on 'Tue'
-      expect(page.find('li.active')).to have_text('Tue')
-      expect(page).to have_selector('.weekly-slots__connect-slot--selected', count: 1)
-      expect(page.find('.weekly-slots__connect-slot--selected', match: :first)).to have_text('08:00')
+      expect(page).to have_selector('a.active', text: 'Tue')
+      expect(page).to have_selector('.weekly-slots__connect-slot--selected', count: 1, text: '08:00')
     end
 
     scenario 'User removes a present slot' do
@@ -66,7 +64,7 @@ feature 'Faculty Weekly Slots' do
 
       # Add a fourth slot on Tuesday 22:00
       click_on 'Tue'
-      expect(page.find('li.active')).to have_text('Tue')
+      expect(page).to have_selector('a.active', text: 'Tue')
       expect(page.find('.weekly-slots__connect-slot[data-day="2"][data-time="22.0"]')[:class]).to_not include('weekly-slots__connect-slot--selected')
       page.find('.weekly-slots__connect-slot[data-day="2"][data-time="22.0"]').click
       expect(page.find('.weekly-slots__connect-slot[data-day="2"][data-time="22.0"]')[:class]).to include('weekly-slots__connect-slot--selected')

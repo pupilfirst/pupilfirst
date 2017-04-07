@@ -1,0 +1,33 @@
+.faculty-slotes__header {
+  border-bottom: 1px solid $gray-border;
+}
+.weekly-slots__connect-slot {
+  display: inline-block;
+  padding: 6px;
+  border: 1px solid grey;
+  margin: 3px;
+  color: $dark-secondary;
+  cursor: pointer;
+}
+
+.weekly_slots__footer-notes {
+  @include media-breakpoint-down(sm) {
+    margin-bottom: 1rem;
+  }
+}
+
+.weekly-slots__connect-slot--selected {
+  background-color: green;
+  color: white;
+}
+
+.weekly-slots__connect-slot--requested {
+  background-color: grey;
+  color: white;
+  cursor: not-allowed;
+
+  &:hover {
+    text-decoration: none;
+    color: white;
+  }
+}

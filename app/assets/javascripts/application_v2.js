@@ -48,7 +48,7 @@
 //= require gemini-scrollbar
 
 // Shared
-// require _shared
+//= require v2/_shared
 //= require v2/navbar
 //= require v2/footer
 
@@ -56,8 +56,6 @@
 //= require components
 
 // Controller-specific
-//= require v2/faculty
-// require faculty
 // require startups
 // require timeline_events
 // require transparency
@@ -68,6 +66,7 @@
 //= require v2/tour
 //= require v2/talent
 //= require v2/founders
+//= require v2/faculty
 //= require v2/story
 //= require v2/six_ways
 //= require v2/users

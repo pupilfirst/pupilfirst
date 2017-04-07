@@ -13,6 +13,7 @@ class FacultyController < ApplicationController
   def show
     @faculty = Faculty.friendly.find(params[:id])
     @skip_container = true
+    render layout: 'application_v2'
   end
 
   # POST /faculty/:id/connect
@@ -35,6 +36,7 @@ class FacultyController < ApplicationController
   # GET /faculty/weekly_slots/:token
   def weekly_slots
     @slot_list = create_slot_list_for @faculty
+    render layout: 'application_v2'
   end
 
   # POST /faculty/save_weekly_slots/:token

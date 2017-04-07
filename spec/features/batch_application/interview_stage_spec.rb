@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Application Interview Stage' do
+feature 'Application Interview Stage', disabled: true do
   include UserSpecHelper
 
   let(:application_round) { create :application_round, :interview_stage }

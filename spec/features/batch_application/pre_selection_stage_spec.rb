@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Pre-selection Stage' do
+feature 'Pre-selection Stage', disabled: true do
   include UserSpecHelper
 
   let(:application_round) { create :application_round, :pre_selection_stage }

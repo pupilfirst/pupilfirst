@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Batch Application Coding Stage' do
+feature 'Batch Application Coding Stage', disabled: true do
   # Things that are assumed to exist.
   let(:batch) { create :batch }
   let!(:application_round) { create :application_round, :screening_stage, batch: batch }

@@ -24,4 +24,12 @@ class FounderMailer < ApplicationMailer
     @applicant = applicant
     mail(to: referrer.email, subject: 'You have a successful referral at SV.CO!')
   end
+
+  # Invite an applicant founder to join a startup.
+  def invite(founder, startup)
+    @founder = founder
+    @startup = startup
+
+    mail(to: founder.email, subject: 'You have been invited to join a startup at SV.CO')
+  end
 end

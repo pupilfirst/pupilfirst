@@ -36,6 +36,7 @@ class Founder < ApplicationRecord
   has_many :requests
   belongs_to :father, class_name: 'Name'
   belongs_to :startup
+  belongs_to :invited_startup, class_name: 'Startup'
   belongs_to :university
   has_many :karma_points, dependent: :destroy
   has_many :timeline_events
@@ -159,6 +160,7 @@ class Founder < ApplicationRecord
   end
 
   has_secure_token :auth_token
+  has_secure_token :invitation_token
 
   before_validation :remove_at_symbol_from_slack_username
 
@@ -371,6 +373,10 @@ class Founder < ApplicationRecord
   end
 
   delegate level_zero?: :startup
+
+  def invited
+    invited_startup.present?
+  end
 
   private
 

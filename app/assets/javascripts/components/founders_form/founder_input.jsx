@@ -30,7 +30,7 @@ class FoundersFormFounderInput extends React.Component {
   }
 
   inputName() {
-    return "batch_applications_founders[founders_attributes][" + this.props.index + "][" + this.props.name + "]";
+    return "admissions_founders[founders_attributes][" + this.props.index + "][" + this.props.name + "]";
   }
 
   inputId() {

@@ -8,29 +8,25 @@ module Admissions
       property :college_id
       property :college_text, validates: { length: { maximum: 250 } }
       property :delete, virtual: true
+      property :invited, virtual: true, default: false
     end
 
     validate :minimum_two_founders_required
-    validate :limit_founders_count
+    validate :maximum_six_founders_allowed
     validate :do_not_repeat_founders
     validate :founder_must_have_college_id_or_text
 
-    def limit_founders_count
-      unless founders.count.in? 2..6
-        errors[:base] << 'You can have maximum 6 founders, and a minimum of 2.'
+    def maximum_six_founders_allowed
+      if founders.count > 6
+        errors[:base] << 'You can have maximum six founders.'
       end
     end
 
     def minimum_two_founders_required
       unpersisted_founders = founders.reject { |founder| founder.model.persisted? }
-      return if unpersisted_founders.any?
+      persisted_founders = founders.select { |founder| founder.model.persisted? && founder.delete != 'on' }
 
-      persisted_founders = founders.select { |founder| founder.model.persisted? }
-      return if persisted_founders.blank?
-
-      return if persisted_founders.reject do |persisted_founder|
-        persisted_founder.delete == 'on'
-      end.present?
+      return if (unpersisted_founders + persisted_founders).count >= 2
 
       errors[:base] << 'You must have at least two founders.'
     end
@@ -67,7 +63,14 @@ module Admissions
     end
 
     def prepopulate
-      self.founders = [Founder.new] if founders.empty?
+      self.founders = founders.map do |existing_founder|
+        # Force email to value from database.
+        existing_founder.email = model.founders.find(existing_founder.id).email if existing_founder.id.present?
+
+        existing_founder
+      end
+
+      self.founders += model.invited_founders
     end
 
     def save
@@ -75,28 +78,35 @@ module Admissions
         if founder.id.present?
           update_founder(founder)
         else
-          create_founder(founder)
+          invite_founder(founder)
         end
       end
     end
 
-    def create_founder(_founder)
-      raise 'Not yet implemented'
-      # applicant = BatchApplicant.with_email(founder.email).first
-      # applicant = BatchApplicant.create!(email: founder.email) if applicant.blank?
-      # applicant.update!(college_details(founder).merge(name: founder.name, phone: founder.phone))
-      # model.batch_applicants << applicant
+    def invite_founder(founder)
+      Founders::InvitationService.new(
+        model,
+        college_details(founder).merge(
+          name: founder.name, email: founder.email, phone: founder.phone
+        )
+      ).execute
     end
 
-    def update_founder(_founder)
-      raise 'Not yet implemented'
-      # persisted_founder = model.founders.find(founder.id)
-      #
-      # if founder.delete == 'on'
-      #   persisted_founder.destroy!
-      # else
-      #   persisted_founder.update!(college_details(founder).merge(name: founder.name, phone: founder.phone))
-      # end
+    def update_founder(founder)
+      persisted_founder = model.founders.find_by(id: founder.id) || model.invited_founders.find(founder.id)
+
+      if founder.delete == 'on'
+        if persisted_founder.startup == model
+          persisted_founder.startup = nil
+        elsif persisted_founder.invited_startup == model
+          persisted_founder.invited_startup = nil
+          persisted_founder.invitation_token = nil
+        end
+
+        persisted_founder.save!
+      else
+        persisted_founder.update!(college_details(founder).merge(name: founder.name, phone: founder.phone))
+      end
     end
 
     def college_details(founder)
@@ -115,7 +125,7 @@ module Admissions
     end
 
     def founders_for_react
-      JSON.parse(founders.to_json).map { |c| c.slice('fields', 'errors') }
+      founders.as_json.map { |c| c.slice('fields', 'errors') }
     end
   end
 end

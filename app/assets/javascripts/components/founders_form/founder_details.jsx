@@ -103,7 +103,7 @@ class FoundersFormFounderDetails extends React.Component {
 
         {this.persisted() &&
         <input className="hidden" type="hidden" value={ this.founderValue('id') }
-          name={ "batch_applications_founders[founders_attributes][" + this.props.index + "][id]" }/>
+          name={ "admissions_founders[founders_attributes][" + this.props.index + "][id]" }/>
         }
 
         <FoundersFormFounderInput label="Name" index={ this.props.index } key={ "name-" + this.props.generatedKey }
@@ -126,7 +126,7 @@ class FoundersFormFounderDetails extends React.Component {
 
           <select defaultValue={ this.founderValue('college_id') } className="form-control select required"
             required="required" aria-required="true" id={ this.selectId() }
-            name={ "batch_applications_founders[founders_attributes][" + this.props.index + "][college_id]" }>
+            name={ "admissions_founders[founders_attributes][" + this.props.index + "][college_id]" }>
             <option value=""/>
             { this.hasCollege() &&
             <option value={ this.founderValue('college_id') }>{ this.props.collegeName }</option>
@@ -150,7 +150,7 @@ class FoundersFormFounderDetails extends React.Component {
           <div className="checkbox">
             <label className="boolean optional" htmlFor={ this.deleteCheckboxId() }>
               <input className="boolean optional" type="checkbox" defaultChecked={ false }
-                name={ "batch_applications_founders[founders_attributes][" + this.props.index + "][delete]" }
+                name={ "admissions_founders[founders_attributes][" + this.props.index + "][delete]" }
                 id={ this.deleteCheckboxId() }/>
               &nbsp;Delete this founder
             </label>

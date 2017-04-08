@@ -108,7 +108,34 @@ class AdmissionsController < ApplicationController
 
   # POST /admissions/founders
   def founders_submit
+    founders
+
+    if @form.validate(params[:admissions_founders])
+      @form.save
+      redirect_to dashboard_founder_path
+    else
+      render 'founders'
+    end
+  end
+
+  # GET /admissions/accept_invitation?token=
+  def accept_invitation
     authorize :admissions
+
+    founder = Founder.find_by(invitation_token: params[:token])
+
+    if founder.blank?
+      flash[:error] = 'The token that was supplied is not valid.'
+      redirect_to root_path
+    elsif founder.startup&.level&.number&.positive?
+      flash[:error] = 'Your current startup has already begun the program.'
+      redirect_to root_path
+    else
+      Founders::AcceptInvitationService.new(founder).execute
+      flash[:success] = "You have successfully joined #{founder.reload.startup.admin.name}'s startup"
+      sign_in founder.user
+      redirect_to dashboard_founder_path
+    end
   end
 
   # GET /admissions/preselection

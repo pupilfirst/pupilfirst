@@ -106,7 +106,7 @@ class FoundersForm extends React.Component {
         </div>
         }
 
-        <form className="simple_form form-horizontal" action={ this.props.path } acceptCharset="UTF-8" method="post">
+        <form className="simple_form form-horizontal" acceptCharset="UTF-8" method="post">
           <input name="utf8" type="hidden" value="✓"/>
           <input type="hidden" name="authenticity_token" value={ this.props.authenticityToken }/>
 
@@ -143,7 +143,6 @@ class FoundersForm extends React.Component {
 
 FoundersForm.propTypes = {
   authenticityToken: React.PropTypes.string,
-  path: React.PropTypes.string,
   founders: React.PropTypes.array,
   errors: React.PropTypes.object,
   collegesUrl: React.PropTypes.string,

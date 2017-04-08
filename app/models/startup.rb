@@ -101,6 +101,7 @@ class Startup < ApplicationRecord
   end
 
   has_many :founders
+  has_many :invited_founders, class_name: 'Founder', foreign_key: 'invited_startup_id'
 
   has_and_belongs_to_many :startup_categories do
     def <<(_category)

@@ -22,11 +22,16 @@ class AdmissionsPolicy
   alias coupon_remove? fee?
 
   def founders?
-    level_zero? && target_incomplete?(Target::KEY_ADMISSIONS_COFOUNDER_ADDITION)
+    level_zero? && target_complete?(Target::KEY_ADMISSIONS_FEE_PAYMENT)
   end
 
   def founders_submit?
     founders?
+  end
+
+  def accept_invitation?
+    # Authorization is handled in the controller using supplied token.
+    true
   end
 
   private

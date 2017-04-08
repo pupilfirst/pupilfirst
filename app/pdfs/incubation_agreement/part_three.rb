@@ -1,7 +1,7 @@
 module IncubationAgreement
   class PartThree < ApplicationPdf
-    def initialize(batch_application)
-      @batch_application = batch_application.decorate
+    def initialize(startup)
+      @startup = startup.decorate
       super()
     end
 
@@ -19,7 +19,7 @@ module IncubationAgreement
     end
 
     def fee
-      @batch_application.total_course_fee
+      @startup.total_course_fee
     end
 
     def fee_in_words

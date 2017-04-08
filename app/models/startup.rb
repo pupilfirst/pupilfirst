@@ -32,6 +32,7 @@ class Startup < ApplicationRecord
   AGREEMENT_DURATION = 5
 
   APPLICATION_FEE = 1000
+  COURSE_FEE = 37_500
 
   def self.valid_product_progress_values
     [
@@ -453,14 +454,14 @@ class Startup < ApplicationRecord
   end
 
   def founder_eligible_for_refund
-    founders.order('name ASC').find_by(fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE)
+    founders.order('name ASC').find_by(fee_payment_method: Founder::PAYMENT_METHOD_REGULAR_FEE)
   end
 
   # Returns remaining course fee for a given applicant.
   def founder_course_fee(founder)
     raise "Founder##{founder.id} does not belong to Startup##{id}" unless founders.include?(founder)
 
-    refund_amount = payment&.refunded? ? 0 : payment&.amount.to_i
+    refund_amount = payment&.amount.to_i
 
     if refund_amount.positive? && founder == founder_eligible_for_refund
       COURSE_FEE - refund_amount

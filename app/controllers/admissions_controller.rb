@@ -205,7 +205,7 @@ class AdmissionsController < ApplicationController
 
     respond_to do |format|
       format.pdf do
-        agreement_pdf = Startups::IncubationAgreementPdfBuilderService.build(startup)
+        agreement_pdf = Startups::IncubationAgreementPdfBuilderService.build(@startup)
         send_data agreement_pdf.to_pdf, type: 'application/pdf', filename: 'Incubation_Agreement', disposition: 'inline'
       end
     end

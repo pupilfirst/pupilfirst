@@ -1,7 +1,7 @@
 module PartnershipDeed
   class PartnershipDeedPdf < ApplicationPdf
-    def initialize(batch_application)
-      @batch_application = batch_application.decorate
+    def initialize(startup)
+      @startup = startup.decorate
       super()
     end
 
@@ -30,11 +30,11 @@ module PartnershipDeed
 
     def add_partner_details
       move_down 5
-      batch_applicants.each_with_index { |applicant, index| add_founder_to_partners(applicant, index) }
+      founders.each_with_index { |founder, index| add_founder_to_partners(founder, index) }
     end
 
-    def add_founder_to_partners(batch_applicant, index)
-      @applicant = batch_applicant.decorate
+    def add_founder_to_partners(founder, index)
+      @founder = founder.decorate
       @index = index
       text partner_description, inline_format: true, indent_paragraphs: 30
       move_down 5
@@ -45,13 +45,13 @@ module PartnershipDeed
         'partnership_deed.declaration.partner_description',
         index: @index + 1,
         ordinalized_index: ORDINALIZE[@index],
-        name: @applicant.name,
-        son_or_daughter: @applicant.son_or_daughter,
-        parent_name: @applicant.parent_name,
-        age: @applicant.age,
-        current_address: @applicant.current_address.squish,
-        id_proof_type: @applicant.id_proof_type,
-        id_proof_number: @applicant.id_proof_number
+        name: @founder.name,
+        son_or_daughter: @founder.son_or_daughter,
+        parent_name: @founder.parent_name,
+        age: @founder.age,
+        current_address: @founder.communication_address.squish,
+        id_proof_type: @founder.id_proof_type,
+        id_proof_number: @founder.id_proof_number
       )
     end
 
@@ -87,7 +87,7 @@ module PartnershipDeed
       move_down 15
       stroke_horizontal_rule
       move_down 10
-      text t('partnership_deed.s3.part_2', team_lead_address: @batch_application.team_lead.current_address.squish), inline_format: true
+      text t('partnership_deed.s3.part_2', team_lead_address: @startup.admin.communication_address.squish), inline_format: true
 
       # Section 4: Partnership Business
       move_down 10
@@ -165,7 +165,7 @@ module PartnershipDeed
     def add_capital_contribution_table
       move_down 10
       table_rows = [['<b>Partner</b>', '<b>Amount</b>']]
-      batch_applicants.each_with_index do |_batch_applicant, index|
+      founders.each_with_index do |_founder, index|
         table_rows << ["#{ORDINALIZE[index]} Partner", 'Rs. 1000']
       end
 
@@ -176,7 +176,7 @@ module PartnershipDeed
       move_down 10
       share_per_founder = format('%g', format('%.2f', (100.to_f / founders_count)))
       table_rows = [['<b>Partner</b>', '<b>Sharing Ratio (in percentage)</b>']]
-      batch_applicants.each_with_index do |_batch_applicant, index|
+      founders.each_with_index do |_founder, index|
         table_rows << ["#{ORDINALIZE[index]} Partner", "#{share_per_founder}%"]
       end
 
@@ -186,15 +186,15 @@ module PartnershipDeed
     def add_signatures
       move_down 10
       text t('partnership_deed.signatures.header')
-      batch_applicants.each_with_index { |applicant, index| add_signature_section(applicant, index) }
+      founders.each_with_index { |founder, index| add_signature_section(founder, index) }
     end
 
-    def add_signature_section(applicant, index)
+    def add_signature_section(founder, index)
       move_down 15
       text 'Signed and delivered by'
       move_down 10
       text '____________________________________'
-      text applicant.name
+      text founder.name
       text "(The #{ORDINALIZE[index]} Partner)"
     end
 
@@ -202,11 +202,11 @@ module PartnershipDeed
     HUMANIZE = %w(One Two Three Four Five Six Seven Eight Nine Ten).freeze
 
     def founders_count
-      @founders_count ||= batch_applicants.count
+      @founders_count ||= founders.count
     end
 
-    def batch_applicants
-      @batch_applicants ||= [@batch_application.team_lead] + @batch_application.cofounders.to_a
+    def founders
+      @founders ||= @startup.founders.to_a
     end
   end
 end

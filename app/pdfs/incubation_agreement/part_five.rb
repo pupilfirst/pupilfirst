@@ -1,8 +1,8 @@
 module IncubationAgreement
   class PartFive < ApplicationPdf
-    def initialize(batch_application)
-      @batch_application = batch_application.decorate
-      @team_lead = @batch_application.team_lead.decorate
+    def initialize(startup)
+      @startup = startup.decorate
+      @team_lead = @startup.admin.decorate
       super()
     end
 
@@ -39,21 +39,21 @@ module IncubationAgreement
         'incubation_agreement.part_five.party_details',
         title: 'Startup',
         name: @team_lead.name,
-        designation: "#{@team_lead.role.capitalize} Lead",
-        address: @team_lead.current_address.squish,
+        designation: "#{@team_lead.roles.capitalize} Lead",
+        address: @team_lead.communication_address.squish,
         email: @team_lead.email
       ), inline_format: true
     end
 
     def add_founder_details
-      @batch_application.batch_applicants.each_with_index do |applicant, index|
+      @startup.founders.each_with_index do |applicant, index|
         move_down 10
         text t(
           'incubation_agreement.part_five.party_details',
           title: "Founder #{index + 1}",
           name: applicant.name,
-          designation: "#{applicant.role.capitalize} Lead",
-          address: applicant.current_address.squish,
+          designation: "#{applicant.roles.capitalize} Lead",
+          address: applicant.communication_address.squish,
           email: applicant.email
         ), inline_format: true
       end

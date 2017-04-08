@@ -1,7 +1,7 @@
 module IncubationAgreement
   class PartNine < ApplicationPdf
-    def initialize(batch_application)
-      @batch_application = batch_application.decorate
+    def initialize(startup)
+      @startup = startup.decorate
       super()
     end
 
@@ -26,17 +26,17 @@ module IncubationAgreement
         text t('incubation_agreement.part_nine.sign_on_behalf',
           name: '__________________________________',
           designation: 'Startup',
-          by_name: @batch_application.team_lead.name,
+          by_name: @startup.admin.name,
           title: 'Team Lead')
-        @batch_application.batch_applicants.each_with_index { |applicant, index| add_founder_signature(applicant, index) }
+        @startup.founders.each_with_index { |founder, index| add_founder_signature(founder, index) }
       end
     end
 
-    def add_founder_signature(applicant, index)
+    def add_founder_signature(founder, index)
       move_down 15
       text t(
         'incubation_agreement.part_nine.founder_sign',
-        name: applicant.name,
+        name: founder.name,
         index: index + 1
       )
     end

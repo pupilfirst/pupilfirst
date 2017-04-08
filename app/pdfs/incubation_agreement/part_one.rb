@@ -1,8 +1,8 @@
 module IncubationAgreement
   class PartOne < ApplicationPdf
-    def initialize(batch_application)
-      @batch_application = batch_application.decorate
-      @team_lead = @batch_application.team_lead.decorate
+    def initialize(startup)
+      @startup = startup.decorate
+      @team_lead = @startup.admin.decorate
       super()
     end
 
@@ -56,7 +56,7 @@ module IncubationAgreement
       move_down 10
       text t(
         'incubation_agreement.startup_details',
-        address: @team_lead.current_address.squish,
+        address: @team_lead.communication_address.squish,
         team_lead_name: "#{@team_lead.mr_or_ms} #{@team_lead.name}",
         age: @team_lead.age,
         son_or_daughter: @team_lead.son_or_daughter,
@@ -65,20 +65,20 @@ module IncubationAgreement
     end
 
     def add_founders
-      batch_applicants.each_with_index { |applicant, index| add_founder_details(applicant, index) }
+      founders.each_with_index { |founder, index| add_founder_details(founder, index) }
     end
 
-    def add_founder_details(batch_applicant, index)
-      applicant = batch_applicant.decorate
+    def add_founder_details(founder, index)
+      founder = founder.decorate
       move_down 10
       add_and_seperator
       text t(
         'incubation_agreement.founder_details',
-        name: applicant.name,
-        age: applicant.age,
-        son_or_daughter: applicant.son_or_daughter,
-        parent_name: applicant.parent_name,
-        address: applicant.current_address.squish,
+        name: founder.name,
+        age: founder.age,
+        son_or_daughter: founder.son_or_daughter,
+        parent_name: founder.parent_name,
+        address: founder.communication_address.squish,
         index: index + 1,
         party_number: ORDINALIZE[index + 2]
       ), inline_format: true
@@ -91,12 +91,12 @@ module IncubationAgreement
 
     def founders_list
       list = []
-      batch_applicants.each_with_index { |_applicant, index| list << "Founder #{index + 1}" }
+      founders.each_with_index { |_founder, index| list << "Founder #{index + 1}" }
       list.to_sentence
     end
 
-    def batch_applicants
-      @batch_applicants ||= @batch_application.batch_applicants
+    def founders
+      @founders ||= @startup.founders
     end
 
     ORDINALIZE = %w(First Second Third Fourth Fifth Sixth Seventh Eighth Ninth Tenth Eleventh Twelfth).freeze

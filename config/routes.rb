@@ -119,6 +119,8 @@ Rails.application.routes.draw do
     get 'preselection'
     post 'preselection', action: 'preselection_submit'
     patch 'update_founder'
+    get 'partnership_deed'
+    get 'incubation_agreement'
   end
 
   scope 'apply', as: 'apply', controller: 'batch_application' do

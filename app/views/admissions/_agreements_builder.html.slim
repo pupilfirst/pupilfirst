@@ -46,11 +46,11 @@
 
   == render('update_applicant_form') if @form.present?
 
-  - @form.blank?
+  - if @form.blank?
     .row.eq-height
       - if @startup.partnership_deed_ready?
         .col-md-6
-          a.download-partnership-deed href=apply_pre_selection_stage_partnership_deed_path(format: :pdf) target='_blank'
+          a.download-partnership-deed href=admissions_partnership_deed_path(format: :pdf) target='_blank'
             .alert.alert-success.text-xs-center
               .download-icon
                 i.fa.fa-download
@@ -58,7 +58,7 @@
 
       - if @startup.incubation_agreement_ready?
         .col-md-6
-          a.download-partnership-deed href=apply_pre_selection_stage_incubation_agreement_path(format: :pdf) target='_blank'
+          a.download-partnership-deed href=admissions_incubation_agreement_path(format: :pdf) target='_blank'
             .alert.alert-success.text-xs-center
               .download-icon
                 i.fa.fa-download

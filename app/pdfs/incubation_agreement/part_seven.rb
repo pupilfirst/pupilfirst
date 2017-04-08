@@ -1,7 +1,7 @@
 module IncubationAgreement
   class PartSeven < ApplicationPdf
-    def initialize(batch_application)
-      @batch_application = batch_application.decorate
+    def initialize(startup)
+      @startup = startup.decorate
       super()
     end
 
@@ -20,22 +20,22 @@ module IncubationAgreement
     end
 
     def add_founder_details
-      @batch_application.batch_applicants.each_with_index do |batch_applicant, index|
-        applicant = batch_applicant.decorate
+      @startup.founders.each_with_index do |founder, index|
+        founder = founder.decorate
         move_down 10
         text t(
           'incubation_agreement.part_seven.founder_details',
           index: index + 1,
-          name: applicant.name,
-          designation: "#{applicant.role.capitalize} Lead",
-          son_or_daughter: applicant.son_or_daughter,
-          parent_name: applicant.parent_name,
-          age: applicant.age,
-          id_proof_type: applicant.id_proof_type,
-          id_proof_number: applicant.id_proof_number,
-          current_address: applicant.current_address.squish,
-          permanent_address: applicant.permanent_address.squish,
-          phone: applicant.phone
+          name: founder.name,
+          designation: "#{founder.roles.capitalize} Lead",
+          son_or_daughter: founder.son_or_daughter,
+          parent_name: founder.parent_name,
+          age: founder.age,
+          id_proof_type: founder.id_proof_type,
+          id_proof_number: founder.id_proof_number,
+          current_address: founder.communication_address.squish,
+          permanent_address: founder.permanent_address.squish,
+          phone: founder.phone
         )
       end
     end

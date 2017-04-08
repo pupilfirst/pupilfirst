@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170407090909) do
+ActiveRecord::Schema.define(version: 20170408112035) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -644,6 +644,10 @@ ActiveRecord::Schema.define(version: 20170407090909) do
     t.integer  "requested_restart_level_id"
     t.date     "program_started_on"
     t.boolean  "agreements_verified"
+    t.string   "courier_name"
+    t.string   "courier_number"
+    t.string   "partnership_deed"
+    t.string   "payment_reference"
     t.index ["batch_id"], name: "index_startups_on_batch_id", using: :btree
     t.index ["level_id"], name: "index_startups_on_level_id", using: :btree
     t.index ["slug"], name: "index_startups_on_slug", unique: true, using: :btree

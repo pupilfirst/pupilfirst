@@ -27,10 +27,11 @@
           a.dropdown-toggle.logged-in-avatar-link data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
             = image_tag profile_image_url(current_founder, gravatar_size: 40, avatar_version: :thumb), class: 'logged-in-user-link img-circle'
           ul.dropdown-menu
-            li role="presentation"
-              = link_to founder_profile_path(slug: current_founder.slug) do
-                i.fa.fa-list-ul
-                | Profile
+            - if policy(current_founder).founder_profile?
+              li role="presentation"
+                = link_to founder_profile_path(slug: current_founder.slug) do
+                  i.fa.fa-list-ul
+                  | Profile
             li role="presentation"
               a href="#" data-toggle="modal" data-target="#platform-feedback-modal"
                 i.fa.fa-comment-o

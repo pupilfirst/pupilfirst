@@ -17,7 +17,7 @@ footer
             .sitemap.pull-left
               div
                 - if current_user
-                  - if current_founder
+                  - if policy(current_founder).founder_profile?
                     = link_to 'Profile', founder_profile_path(slug: current_founder.slug)
                   - else
                     = link_to 'Sign Out', destroy_user_session_path, method: :delete

@@ -370,6 +370,8 @@ class Founder < ApplicationRecord
     fee_payment_method.in?(REQUIRES_INCOME_PROOF)
   end
 
+  delegate level_zero?: :startup
+
   private
 
   def batch_start_date

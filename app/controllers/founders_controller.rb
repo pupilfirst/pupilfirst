@@ -4,17 +4,21 @@ class FoundersController < ApplicationController
 
   def founder_profile
     @founder = Founder.friendly.find(params[:slug])
+    authorize @founder
+
     @timeline = @founder.activity_timeline
   end
 
   # GET /founders/:id/edit
   def edit
     @founder = current_founder.decorate
+    authorize @founder
   end
 
   # PATCH /founders/:id
   def update
     @founder = current_founder.decorate
+    authorize @founder
     form = @founder.form
 
     if form.validate(params[:founders_edit])

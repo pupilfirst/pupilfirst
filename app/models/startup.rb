@@ -474,4 +474,8 @@ class Startup < ApplicationRecord
   def total_course_fee
     founders.map { |founder| founder_course_fee(founder) }.sum
   end
+
+  def level_zero?
+    level.number.zero?
+  end
 end

@@ -13,11 +13,11 @@ after 'development:target_groups', 'development:timeline_event_types' do
   # Compulsory Level 0 targets.
   level_0_milestone_group = Level.find_by(number: 0).target_groups.find_by(milestone: true)
 
-  screening_target = Target.create!(days_to_complete: 1, title: 'Go through Screening', role: Target::ROLE_TEAM, timeline_event_type: team_update, submittability: Target::SUBMITTABILITY_SUBMITTABLE_ONCE, link_to_complete: '/apply/screening', key: Target::KEY_ADMISSIONS_SCREENING, target_group: level_0_milestone_group, description: paragraph)
+  screening_target = Target.create!(days_to_complete: 1, title: 'Go through Screening', role: Target::ROLE_TEAM, timeline_event_type: team_update, submittability: Target::SUBMITTABILITY_SUBMITTABLE_ONCE, link_to_complete: '/admissions/screening', key: Target::KEY_ADMISSIONS_SCREENING, target_group: level_0_milestone_group, description: paragraph)
 
-  fee_target = Target.create!(days_to_complete: 1, title: 'Pay Admission Fee', role: Target::ROLE_TEAM, timeline_event_type: team_update, submittability: Target::SUBMITTABILITY_SUBMITTABLE_ONCE, link_to_complete: '/apply/fee', key: Target::KEY_ADMISSIONS_FEE_PAYMENT, target_group: level_0_milestone_group, description: paragraph, prerequisite_targets: [screening_target])
+  fee_target = Target.create!(days_to_complete: 1, title: 'Pay Admission Fee', role: Target::ROLE_TEAM, timeline_event_type: team_update, submittability: Target::SUBMITTABILITY_SUBMITTABLE_ONCE, link_to_complete: '/admissions/fee', key: Target::KEY_ADMISSIONS_FEE_PAYMENT, target_group: level_0_milestone_group, description: paragraph, prerequisite_targets: [screening_target])
 
-  cofounder_target = Target.create!(days_to_complete: 1, title: 'Add co-founders', role: Target::ROLE_TEAM, timeline_event_type: team_update, link_to_complete: '/apply/cofounders', key: Target::KEY_ADMISSIONS_COFOUNDER_ADDITION, target_group: level_0_milestone_group, description: paragraph, prerequisite_targets: [fee_target])
+  cofounder_target = Target.create!(days_to_complete: 1, title: 'Add co-founders', role: Target::ROLE_TEAM, timeline_event_type: team_update, link_to_complete: '/admissions/cofounders', key: Target::KEY_ADMISSIONS_COFOUNDER_ADDITION, target_group: level_0_milestone_group, description: paragraph, prerequisite_targets: [fee_target])
 
   coding_target = Target.create!(days_to_complete: 30, title: 'Submit coding task', role: Target::ROLE_TEAM, timeline_event_type: team_update, target_group: level_0_milestone_group, description: paragraph, prerequisite_targets: [fee_target])
 

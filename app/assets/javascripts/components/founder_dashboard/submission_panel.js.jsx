@@ -94,7 +94,11 @@ class FounderDashboardSubmissionPanel extends React.Component {
   }
 
   handleSubmitClick() {
-    this.props.openTimelineBuilderCB(this.props.target.id, this.props.target.timeline_event_type_id)
+    if (this.props.target.link_to_complete) {
+      window.location.href = this.props.target.link_to_complete
+    } else {
+      this.props.openTimelineBuilderCB(this.props.target.id, this.props.target.timeline_event_type_id);
+    }
   }
 
   render() {

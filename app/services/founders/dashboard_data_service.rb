@@ -123,7 +123,7 @@ module Founders
     end
 
     def target_fields
-      %i(id role title description completion_instructions resource_url slideshow_embed video_embed days_to_complete points_earnable timeline_event_type_id session_at)
+      %i(id role title description completion_instructions resource_url slideshow_embed video_embed days_to_complete points_earnable timeline_event_type_id session_at link_to_complete)
     end
 
     def assigner_fields

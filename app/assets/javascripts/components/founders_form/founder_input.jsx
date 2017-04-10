@@ -1,8 +1,4 @@
 class FoundersFormFounderInput extends React.Component {
-  componentDidMount() {
-    document.getElementById(this.inputId()).focus();
-  }
-
   wrapperClasses() {
     let baseClasses = "form-group required " + this.props.type;
 

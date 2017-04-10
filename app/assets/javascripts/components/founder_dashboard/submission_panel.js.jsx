@@ -106,11 +106,7 @@ class FounderDashboardSubmissionPanel extends React.Component {
   }
 
   handleSubmitClick() {
-    if (this.props.target.link_to_complete) {
-      window.location.href = this.props.target.link_to_complete
-    } else {
-      this.props.openTimelineBuilderCB(this.props.target.id, this.props.target.timeline_event_type_id);
-    }
+    this.props.openTimelineBuilderCB(this.props.target.id, this.props.target.timeline_event_type_id);
   }
 
   render() {
@@ -137,11 +133,20 @@ class FounderDashboardSubmissionPanel extends React.Component {
           <div className="submit-instruction font-regular">
             <p>{ this.props.target.completion_instructions }</p>
           </div>
+          { this.props.target.link_to_complete &&
+          <a href={this.props.target.link_to_complete}
+                  className="btn btn-with-icon btn-md btn-secondary text-uppercase btn-timeline-builder js-founder-dashboard__trigger-builder">
+            <i className="fa fa-upload"/>
+            { this.submitButtonText() }
+          </a>
+          }
+          { !this.props.target.link_to_complete &&
           <button onClick={ this.handleSubmitClick }
-            className="btn btn-with-icon btn-md btn-secondary text-uppercase btn-timeline-builder js-founder-dashboard__trigger-builder">
+                  className="btn btn-with-icon btn-md btn-secondary text-uppercase btn-timeline-builder js-founder-dashboard__trigger-builder">
             <i className="fa fa-upload"/>
             { this.submitButtonText() }
           </button>
+          }
         </div>
         }
       </div>

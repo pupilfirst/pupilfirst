@@ -6,7 +6,19 @@ class FounderDashboardSubmissionPanel extends React.Component {
   }
 
   isSubmittable() {
-    return !(['unavailable', 'submitted'].indexOf(this.props.target.status) != -1);
+    return !(this.isNotSubmittable() || this.singleSubmissionComplete() || this.submissionBlocked());
+  }
+
+  isNotSubmittable() {
+    return this.props.target.submittability === 'not_submittable';
+  }
+
+  singleSubmissionComplete() {
+    return this.props.target.submittability === 'submittable_once' && !this.isPending();
+  }
+
+  submissionBlocked() {
+    return ['unavailable', 'submitted'].indexOf(this.props.target.status) != -1;
   }
 
   isPending() {

@@ -13,7 +13,8 @@
         .startup-founders.hidden-xs-down
           .hidden-xs-down
             - @startup.founders.not_exited.each do |founder|
-              a.founder-avatar-bubble href=founder_profile_path(founder.slug)
+              - url = policy(founder).founder_profile? ? founder_profile_path(founder.slug) : '#'
+              a.founder-avatar-bubble href=url
                 = image_tag profile_image_url(founder, avatar_version: :mid), class: 'img-circle'
           .hidden-sm-up
             - if @startup.founders.count > 4

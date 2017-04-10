@@ -118,6 +118,13 @@ class AdmissionsController < ApplicationController
     end
   end
 
+  # POST /admissions/team_lead
+  def team_lead
+    Founders::BecomeTeamLeadService.new(current_founder).execute
+    flash[:success] = 'You are now the team lead!'
+    redirect_back(fallback_location: admissions_founders_path)
+  end
+
   # GET /admissions/accept_invitation?token=
   def accept_invitation
     authorize :admissions

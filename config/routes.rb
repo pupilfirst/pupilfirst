@@ -115,6 +115,7 @@ Rails.application.routes.draw do
     patch 'coupon_remove'
     get 'founders'
     post 'founders', action: 'founders_submit'
+    post 'team_lead'
     get 'accept_invitation'
     get 'preselection'
     patch 'preselection', action: 'preselection_submit'

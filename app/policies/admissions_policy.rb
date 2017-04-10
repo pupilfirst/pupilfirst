@@ -29,6 +29,10 @@ class AdmissionsPolicy
     founders?
   end
 
+  def team_lead?
+    founders? && !user.founder.startup_admin?
+  end
+
   def accept_invitation?
     # Authorization is handled in the controller using supplied token.
     true

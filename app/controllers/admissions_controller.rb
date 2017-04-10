@@ -140,18 +140,23 @@ class AdmissionsController < ApplicationController
 
   # GET /admissions/preselection
   def preselection
+    authorize :admissions
+
     @startup = current_startup.decorate
     @founder = current_founder.decorate
 
     @form = if @startup.agreements_verified?
-      Admissions::PreselectionStageSubmissionForm.new(current_startup)
+      Admissions::PreselectionStageSubmissionForm.new(@startup)
     elsif params[:update_profile]
       founder = @startup.founders.find(params[:update_profile])
       Admissions::PreselectionStageApplicantForm.new(founder)
     end
   end
 
+  # PATCH /admissions/update_founder
   def update_founder
+    authorize :admissions
+
     @founder = current_founder.decorate
     founder_params = params[:admissions_preselection_stage_applicant]
     founder = current_startup.founders.find(founder_params[:id])
@@ -171,11 +176,28 @@ class AdmissionsController < ApplicationController
   end
 
   # POST /admissions/preselection
-  def preselection_submit; end
+  def preselection_submit
+    authorize :admissions
+
+    @startup = current_startup.decorate
+    @form = Admissions::PreselectionStageSubmissionForm.new(@startup)
+
+    if @form.validate(params[:admissions_preselection_stage_submission])
+      @form.save
+      flash[:success] = 'Startup agreements were successfully saved.'
+      redirect_to dashboard_founder_path
+    else
+      @form.save_partnership_deed
+      flash[:error] = 'We were unable to save details because of errors. Please try again.'
+      render 'preselection'
+    end
+  end
 
   # GET /apply/stage/6/partnership_deed
   # respond with PDF version of the partnership deed created using Prawn
   def partnership_deed
+    authorize :admissions
+
     @startup = current_startup.decorate
 
     unless @startup.partnership_deed_ready?
@@ -195,6 +217,8 @@ class AdmissionsController < ApplicationController
   # GET /apply/stage/6/incubation_agreement
   # respond with PDF version of the digital incubation services agreement created using Prawn
   def incubation_agreement
+    authorize :admissions
+
     @startup = current_startup.decorate
 
     unless @startup.incubation_agreement_ready?

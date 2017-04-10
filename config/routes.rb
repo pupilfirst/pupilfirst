@@ -117,7 +117,7 @@ Rails.application.routes.draw do
     post 'founders', action: 'founders_submit'
     get 'accept_invitation'
     get 'preselection'
-    post 'preselection', action: 'preselection_submit'
+    patch 'preselection', action: 'preselection_submit'
     patch 'update_founder'
     get 'partnership_deed'
     get 'incubation_agreement'

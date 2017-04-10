@@ -11,19 +11,15 @@ module Admissions
     end
 
     def save
-      ApplicationSubmission.transaction do
-        # create a placebo submission to mark stage complete
-        model.application_submissions.create!(
-          application_stage: ApplicationStage.pre_selection_stage,
-          notes: "Fee payment reference: #{payment_reference}. Agreement couriered via #{courier_name} (reference: #{courier_number})"
-        )
-
-        # update batch application with given details
-        super
-      end
+      model.update!(
+        courier_name: courier_name,
+        courier_number: courier_number,
+        partnership_deed: partnership_deed,
+        payment_reference: payment_reference
+      )
 
       # update intercom last_applicant_event
-      IntercomLastApplicantEventUpdateJob.perform_later(model.team_lead, 'agreements_sent') unless Rails.env.test?
+      IntercomLastApplicantEventUpdateJob.perform_later(model.admin, 'agreements_sent') unless Rails.env.test?
     end
 
     def deed_help_extra

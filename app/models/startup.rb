@@ -3,6 +3,7 @@
 
 class Startup < ApplicationRecord
   include FriendlyId
+  include PrivateFilenameRetrievable
   acts_as_taggable
 
   # For an explanation of these legacy values, see linked trello card.
@@ -191,6 +192,7 @@ class Startup < ApplicationRecord
   end
 
   mount_uploader :logo, LogoUploader
+  mount_uploader :partnership_deed, PartnershipDeedUploader
   process_in_background :logo
 
   normalize_attribute :pitch, :product_description, :email, :phone

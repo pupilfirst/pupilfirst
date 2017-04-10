@@ -12,13 +12,13 @@ class FoundersController < ApplicationController
   # GET /founders/:id/edit
   def edit
     @founder = current_founder.decorate
-    authorize @founder
+    authorize @founder.model
   end
 
   # PATCH /founders/:id
   def update
     @founder = current_founder.decorate
-    authorize @founder
+    authorize @founder.model
     form = @founder.form
 
     if form.validate(params[:founders_edit])

@@ -7,6 +7,7 @@ class Target < ApplicationRecord
   KEY_ADMISSIONS_COFOUNDER_ADDITION = 'admissions_cofounder_addition'
   KEY_ADMISSIONS_FOUNDER_EMAIL_VERIFICATION = 'admissions_founder_email_verification'
   KEY_ADMISSIONS_PRE_SELECTION = 'admissions_pre_selection'
+  KEY_ADMISSIONS_ATTEND_INTERVIEW = 'admissions_attend_interview'
 
   belongs_to :assigner, class_name: 'Faculty'
   belongs_to :timeline_event_type, optional: true

@@ -100,14 +100,9 @@ RSpec.configure do |config|
   config.exceptions_to_retry = [Net::ReadTimeout]
 
   # Ensure the target for founder email verification is present for all specs.
-  config.before(:all) do
-    founder_update = create :timeline_event_type, :founder_update
-    create :target, key: Target::KEY_ADMISSIONS_FOUNDER_EMAIL_VERIFICATION, timeline_event_type: founder_update
-  end
-
-  config.after(:all) do
-    Target.where(key: Target::KEY_ADMISSIONS_FOUNDER_EMAIL_VERIFICATION).delete_all
-    TimelineEventType.where(key: TimelineEventType::TYPE_FOUNDER_UPDATE).delete_all
+  config.before do
+    founder_update = FactoryGirl.create :timeline_event_type, :founder_update
+    FactoryGirl.create :target, key: Target::KEY_ADMISSIONS_FOUNDER_EMAIL_VERIFICATION, timeline_event_type: founder_update
   end
 end
 

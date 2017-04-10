@@ -1,3 +1,13 @@
+### 10 April, 2017
+
+#### UX and UI
+
+  - Sessions on the founder dashboard are now ordered closest to most distant in time for both upcoming and past session lists.
+
+#### Bugfixes
+
+  - Fixed a bug that prevented founders from viewing target rubrics.
+
 ### 3 April, 2017
 
 #### Features

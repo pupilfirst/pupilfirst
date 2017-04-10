@@ -111,7 +111,7 @@ class AdmissionsController < ApplicationController
     founders
 
     if @form.validate(params[:admissions_founders])
-      @form.save
+      @form.save(current_founder)
       redirect_to dashboard_founder_path
     else
       render 'founders'

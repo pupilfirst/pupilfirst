@@ -29,7 +29,9 @@ module Admissions
         when Target::KEY_ADMISSIONS_FOUNDER_EMAIL_VERIFICATION
           "#{@founder.name} has confirmed his email address by signing in."
         when Target::KEY_ADMISSIONS_FEE_PAYMENT
-          "#{@founder.startup} has paid their admission registration fee"
+          "#{@founder.name} has paid the admission registration fee"
+        when Target::KEY_ADMISSIONS_COFOUNDER_ADDITION
+          "#{@founder.name} has added co-founders details"
         else
           raise "CompleteTargetService does not know how to generate description for #{@key}"
       end

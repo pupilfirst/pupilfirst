@@ -64,7 +64,8 @@ module Targets
 
     def completed_prerequisites_ids
       @completed_prerequisites_ids ||= begin
-        owner_events.where(target: @target.prerequisite_targets.pluck(:id)).select(:target_id).distinct
+        events = @founder.startup.timeline_events.verified_or_needs_improvement
+        events.where(target: @target.prerequisite_targets.pluck(:id)).select(:target_id).distinct
       end
     end
   end

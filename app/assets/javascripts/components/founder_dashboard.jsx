@@ -82,7 +82,7 @@ class FounderDashboard extends React.Component {
 
         { this.state.activeTab === 'targets' &&
         <FounderDashboardTargets currentLevel={ this.props.currentLevel } levels={ this.state.levels }
-          openTimelineBuilderCB={ this.openTimelineBuilder } eligibleToLevelUp={ this.props.eligibleToLevelUp }
+          openTimelineBuilderCB={ this.openTimelineBuilder } levelUpEligibility={ this.props.levelUpEligibility }
           authenticityToken={ this.props.authenticityToken } iconPaths={ this.props.iconPaths }/>
         }
 
@@ -118,6 +118,6 @@ FounderDashboard.propTypes = {
   timelineEventTypes: React.PropTypes.object,
   allowFacebookShare: React.PropTypes.bool,
   authenticityToken: React.PropTypes.string,
-  eligibleToLevelUp: React.PropTypes.bool,
+  levelUpEligibility: React.PropTypes.string,
   iconPaths: React.PropTypes.object
 };

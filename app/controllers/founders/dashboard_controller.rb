@@ -24,7 +24,7 @@ module Founders
         sessionTags: dashboard_data_service.session_tags,
         timelineEventTypes: list_service.list,
         allowFacebookShare: current_founder.facebook_token_available?,
-        eligibleToLevelUp: Startups::LevelUpEligibilityService.new(@startup).eligible?
+        levelUpEligibility: Startups::LevelUpEligibilityService.new(@startup, current_founder).eligibility
       }
 
       @restart_form = Founders::StartupRestartForm.new(OpenStruct.new) if @startup.restartable_levels.present?

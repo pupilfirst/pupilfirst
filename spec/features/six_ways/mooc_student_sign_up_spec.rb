@@ -47,6 +47,8 @@ feature 'MoocStudent Sign In' do
 
       click_link 'Sign-up as Student'
 
+      expect(page).to have_content('Please tell us more about yourself!')
+
       fill_in 'Name', with: 'John Doe'
       fill_in 'Mobile number', with: '9876543210'
       choose 'Male'

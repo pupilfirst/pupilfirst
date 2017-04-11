@@ -126,13 +126,15 @@ class FoundersForm extends React.Component {
             <div className="pull-sm-left m-b-1">
               <a className="btn btn-secondary btn-md founders-form__add-founder-button text-uppercase"
                 onClick={ this.addFounder }>
-                <i className="fa fa-plus"/> Add founder
+                <i className="fa fa-plus" aria-hidden="true"/>&nbsp;&nbsp;Add founder
               </a>
             </div>
             }
 
             <div className="pull-sm-right m-b-1">
-              <button type="submit" className="btn btn-primary btn-md text-uppercase">Save founders</button>
+              <button type="submit" className="btn btn-primary btn-md text-uppercase">
+                <i className="fa fa-floppy-o" aria-hidden="true"/>&nbsp;&nbsp;Save founders
+              </button>
             </div>
           </div>
         </form>

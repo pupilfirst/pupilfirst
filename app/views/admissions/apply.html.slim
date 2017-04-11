@@ -7,7 +7,7 @@
 .container
   .row.application-process
     .col-lg-8.col-md-12
-      - if current_user&.founder.present?
+      - if current_user&.founder&.startup.present?
         .card.content-box.notice-with-link.m-t-2.m-b-0
           .notice.strong-notice
             ' You have already completed registration.
@@ -153,7 +153,7 @@
 
     .col-lg-4.col-md-12#start-application-process
       .m-t-2
-        - if current_user&.founder.blank?
+        - if current_user&.founder&.startup.blank?
           == render 'application_form'
 
 

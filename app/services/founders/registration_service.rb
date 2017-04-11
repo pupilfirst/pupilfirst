@@ -18,7 +18,9 @@ module Founders
     private
 
     def create_founder
-      @founder = Founder.create!(
+      @founder = Founder.where(email: @founder_params[:email]).first_or_create!
+
+      @founder.update!(
         name: @founder_params[:name],
         email: @founder_params[:email],
         phone: @founder_params[:phone],
@@ -27,6 +29,8 @@ module Founders
         college_text: @founder_params[:college_text],
         startup_admin: true
       )
+
+      @founder
     end
 
     def create_blank_startup

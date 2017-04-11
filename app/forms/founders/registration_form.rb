@@ -22,7 +22,7 @@ module Founders
       return if email.blank?
       founder = Founder.with_email(email).first
 
-      return if founder.blank?
+      return if founder&.startup.blank?
 
       errors[:base] << 'You have already completed this step. Please sign in instead.'
     end
@@ -42,11 +42,15 @@ module Founders
     end
 
     def prepopulate(user)
-      return if user.mooc_student.blank?
+      prepopulate_from(user.mooc_student)
+      prepopulate_from(user.founder)
+    end
 
-      self.name = user.mooc_student.name
-      self.email = user.mooc_student.email
-      self.phone = user.mooc_student.phone
+    def prepopulate_from(entry)
+      return if entry.blank?
+      self.name = entry.name
+      self.email = entry.email
+      self.phone = entry.phone
     end
 
     def save

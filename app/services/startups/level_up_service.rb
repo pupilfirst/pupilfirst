@@ -8,7 +8,7 @@ module Startups
     def execute
       if next_level.present?
         if next_level.number == 1
-          @startup.update!(level: next_level, program_started_on: Time.zone.now)
+          enroll_for_level_one
         else
           @startup.update!(level: next_level)
         end
@@ -21,6 +21,25 @@ module Startups
 
     def next_level
       @next_level ||= Level.find_by(number: @startup.level.number + 1)
+    end
+
+    def enroll_for_level_one
+      Startup.transaction do
+        @startup.update!(level: next_level, program_started_on: Time.zone.now)
+        @startup.timeline_events.create!(
+          founder: @startup.admin,
+          timeline_event_type: TimelineEventType.find_by(key: 'joined_svco'),
+          event_on: Time.zone.now,
+          iteration: @startup.iteration,
+          description: event_description,
+          verified_at: Time.zone.now,
+          verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED
+        )
+      end
+    end
+
+    def event_description
+      'We have successfully completed the admission process through Level 0. Excited to be part of the SV.CO tribe!'
     end
   end
 end

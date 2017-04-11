@@ -99,10 +99,9 @@ RSpec.configure do |config|
   # Only retry when Selenium raises Net::ReadTimeout.
   config.exceptions_to_retry = [Net::ReadTimeout]
 
-  # Ensure the target for founder email verification is present for all specs.
+  # Set user confirmation service to test mode to prevent it from creating timeline events.
   config.before do
-    founder_update = FactoryGirl.create :timeline_event_type, :founder_update
-    FactoryGirl.create :target, key: Target::KEY_ADMISSIONS_FOUNDER_EMAIL_VERIFICATION, timeline_event_type: founder_update
+    Users::ConfirmationService.test = true
   end
 end
 

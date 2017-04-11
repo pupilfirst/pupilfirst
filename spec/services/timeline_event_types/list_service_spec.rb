@@ -54,10 +54,6 @@ describe TimelineEventTypes::ListService do
           te_suggested_7.id => {
             title: te_suggested_7.title,
             sample: te_suggested_7.sample
-          },
-          te_founder_email_verification.id => {
-            title: te_founder_email_verification.title,
-            sample: te_founder_email_verification.sample
           }
         }
       }

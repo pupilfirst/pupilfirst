@@ -4,6 +4,10 @@ module Users
   class ConfirmationService
     include Loggable
 
+    class << self
+      attr_accessor :test
+    end
+
     def initialize(user)
       @user = user
     end
@@ -14,7 +18,9 @@ module Users
       log "Confirming user with email #{@user.email}"
 
       # Create a timeline event for corresponding target if user is a startup founder.
-      if @user.founder&.startup.present?
+      #
+      # Skip this if running in test mode.
+      if @user.founder&.startup.present? && !self.class.test
         Admissions::CompleteTargetService.new(@user.founder, Target::KEY_ADMISSIONS_FOUNDER_EMAIL_VERIFICATION).execute
       end
 

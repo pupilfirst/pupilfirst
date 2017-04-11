@@ -7,6 +7,16 @@ describe Users::ConfirmationService do
   let(:founder) { startup.admin }
   let(:user) { founder.user }
 
+  before do
+    # Disable test mode for running specs here.
+    subject.test = false
+
+    founder_update = FactoryGirl.create :timeline_event_type, :founder_update
+    create :target, key: Target::KEY_ADMISSIONS_FOUNDER_EMAIL_VERIFICATION, timeline_event_type: founder_update
+  end
+
+  after { subject.test = true }
+
   context 'when user is signing in for the first time' do
     it 'sets confirmed_at for user' do
       expect do

@@ -65,17 +65,15 @@ en:
   dashboard:
     show:
       tour:
-        intro: Welcome to your personal dashboard! Your startup's journey through multiple levels of this program will be available here.
-        toggle_bar: The program consists of targets, chores and sessions. You complete these at your pace to move up through levels.
-        targets: Each level has a set of prescribed compulsory targets. You will have to redo these if you restart your journey at any level.
+        intro: Welcome to your personal dashboard! Your startup's journey through this program will be showcased here.
+        toggle_bar: The program consists of targets, chores and sessions. You complete these as you progress.
+        targets: This tab lists the targets that need to be completed based on the present stage of your startup. As you progress, you will be assigned with new targets that will guide you through the startup journey.
         chores: Chores are tasks which need to be completed only once in your Startup Journey.
         sessions: A number of live and recorded sessions guide you as you progress.
         target_group: Your target groups will have all the targets listed along with its completion status.
-        target: The target pane will have the name of the target and its completion status. On clicking the target, you will get detailed information on the target, founder status and the target submission button.
-        target_details: Detailed information on the target and founder-wise status.
+        target: The target pane will have the name of the target and its completion status. On clicking the target, you will get detailed information on the target, the status and the target submission button.
+        target_details: Detailed information on the target and its completion status.
         target_status: This indicates the present status of the target.
-        add_event: Click to add timeline events for your startup. Once approved by the SV.CO team, (most) timeline events are displayed to the public.
-        performance: Indicates the performance of your startup.
       performance_descriptions:
         description_10_html: "Your team seems to be struggling. Make sure you have completed all targets before deadline, and get better grades in your submissions."
         description_30_html: "Your team is performing okay, but it's slightly behind the rest of the batch. If you have any Needs Improvement targets, put in the work to make them Verified with <em>Great</em> or <em>Wow</em> grades."

@@ -1,7 +1,11 @@
 ## Ongoing
 
 - Admissions reboot (level zero) is being implemented. [[Trello]](https://trello.com/c/CDcL2dG3)
-- Remaining pages with V1 styling are being ported to V2. [[Trello]](https://trello.com/c/EwhCpesZ)
+
+## 2017.04.10
+
+- Fixed a bug that prevented founders from viewing target rubrics. [[Trello]](https://trello.com/c/LlYoVzzt)
+- Fixed ordering of sessions on the founder dashboard so they are always shown closest to furthest in both upcoming and past session lists. [[Trello]](https://trello.com/c/gziXKIv5)
 
 ## 2017.04.03
 

@@ -66,6 +66,6 @@ class AdmissionsPolicy
   end
 
   def level_zero?
-    level.number.zero?
+    level&.number&.zero?
   end
 end

@@ -29,7 +29,7 @@ module Admissions
         when Target::KEY_ADMISSIONS_FEE_PAYMENT
           "#{@founder.name} has paid the admission registration fee"
         when Target::KEY_ADMISSIONS_COFOUNDER_ADDITION
-          "#{@founder.name} has added co-founders details"
+          "#{@founder.name} is the first co-founder to accept invitation!"
         else
           raise "CompleteTargetService does not know how to generate description for #{@key}"
       end

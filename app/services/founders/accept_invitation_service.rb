@@ -13,11 +13,21 @@ module Founders
 
       Founder.transaction do
         accept_invitation
+        complete_cofounder_addition_target
         clean_up
       end
     end
 
     private
+
+    # Complete the target asking founder to add co-founders.
+    def complete_cofounder_addition_target
+      target = Target.find_by(key: Target::KEY_ADMISSIONS_COFOUNDER_ADDITION)
+
+      if target.status(@founder) != Targets::StatusService::STATUS_COMPLETE
+        Admissions::CompleteTargetService.new(@founder, Target::KEY_ADMISSIONS_COFOUNDER_ADDITION).execute
+      end
+    end
 
     def accept_invitation
       @founder.update!(

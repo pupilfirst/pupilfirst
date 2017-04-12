@@ -22,8 +22,11 @@ module Startups
           target_completed?(target)
         end
 
-        return ELIGIBILITY_COFOUNDERS_PENDING if @cofounders_pending
-        return ELIGIBILITY_ELIGIBLE if all_targets_complete
+        if all_targets_complete
+          return ELIGIBILITY_COFOUNDERS_PENDING if @cofounders_pending
+          return ELIGIBILITY_ELIGIBLE
+        end
+
         ELIGIBILITY_NOT_ELIGIBLE
       end
     end

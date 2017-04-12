@@ -1,5 +1,7 @@
 module Admissions
   class FoundersForm < Reform::Form
+    attr_accessor :current_founder
+
     collection :founders, populate_if_empty: Founder do
       property :id
       property :name, validates: { presence: true, length: { maximum: 250 } }
@@ -16,10 +18,16 @@ module Admissions
     validate :do_not_repeat_founders
     validate :founder_must_have_college_id_or_text
     validate :team_lead_cannot_be_deleted
+    validate :current_founder_cannot_be_deleted
 
     def team_lead_cannot_be_deleted
       team_lead = founders.find { |founder| Founder.find_by(id: founder.id).startup_admin? }
-      errors[:base] << 'Team lead cannot be deleted' if team_lead.delete == 'on'
+      errors[:base] << 'Team lead cannot be deleted.' if team_lead.delete == 'on'
+    end
+
+    def current_founder_cannot_be_deleted
+      logged_in_founder = founders.find { |founder| founder.id.to_i == current_founder.id }
+      errors[:base] << 'You cannot delete yourself.' if logged_in_founder.delete == 'on'
     end
 
     def maximum_six_founders_allowed

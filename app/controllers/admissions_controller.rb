@@ -110,6 +110,8 @@ class AdmissionsController < ApplicationController
   def founders_submit
     founders
 
+    @form.current_founder = current_founder
+
     if @form.validate(params[:admissions_founders])
       @form.save(current_founder)
       flash[:success] = 'Details of founders have been saved!'

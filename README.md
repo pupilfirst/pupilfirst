@@ -13,9 +13,18 @@
   *  postgresql - Install [Postgres.app](http://postgresapp.com) and follow instructions.
   *  puma-dev - `brew install puma/puma/puma-dev`
 
+#### Troubleshoot
+
+  * If installation of of `pg` gem crashes, asking for `libpq-fe.h`, install the gem with:
+
+```
+gem install pg -- --with-pg-config=/Applications/Postgres.app/Contents/Versions/9.X/bin/pg_config
+```
+
+  * If _puma-dev_ crashes when starting the application with `bundle: not found` in the logs, create a `.powenv` file in the root of the repository and add commands to load the _rbenv_ environment.
+
 ### Configure
 
-  *  Setup `database.yml` for postgresql.
   *  Copy `example.env` to `.env` and set the variables as required.
   *  Load environment key for Rollbar from Heroku with:
 

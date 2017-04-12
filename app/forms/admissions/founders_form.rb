@@ -15,6 +15,12 @@ module Admissions
     validate :maximum_six_founders_allowed
     validate :do_not_repeat_founders
     validate :founder_must_have_college_id_or_text
+    validate :team_lead_cannot_be_deleted
+
+    def team_lead_cannot_be_deleted
+      team_lead = founders.find { |founder| Founder.find_by(id: founder.id).startup_admin? }
+      errors[:base] << 'Team lead cannot be deleted' if team_lead.delete == 'on'
+    end
 
     def maximum_six_founders_allowed
       if founders.count > 6

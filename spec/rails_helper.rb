@@ -98,11 +98,6 @@ RSpec.configure do |config|
 
   # Only retry when Selenium raises Net::ReadTimeout.
   config.exceptions_to_retry = [Net::ReadTimeout]
-
-  # Set user confirmation service to test mode to prevent it from creating timeline events.
-  config.before do
-    Users::ConfirmationService.test = true
-  end
 end
 
 # Increase Capybara's default maximum wait time to 5 seconds to allow for some slow responds (timeline builder).

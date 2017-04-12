@@ -92,12 +92,28 @@ class FoundersFormFounderDetails extends React.Component {
     this.props.deleteCB(this.props.index);
   }
 
+  deleteText() {
+    if (this.props.founder.fields.invited) {
+      return 'Delete invitation';
+    } else {
+      return 'Remove this founder';
+    }
+  }
+
   render() {
     return (
       <div className="founders-form__founder-content-box content-box">
         { this.canDelete() &&
         <div className="founders-form__founder-delete-button" onClick={ this.handleDelete }>
           <i className="fa fa-times-circle"/>
+        </div>
+        }
+
+        { this.props.founder.fields.invited &&
+        <div className="alert alert-warning" role="alert">
+          <i className="fa fa-exclamation-triangle"/>&nbsp;&nbsp;
+          <strong>Invitation pending:</strong> This founder hasn't yet accepted the invitation to join your startup.
+          Please let them know that an email has been sent to their mailbox with a link to accept your invitation.
         </div>
         }
 
@@ -152,7 +168,7 @@ class FoundersFormFounderDetails extends React.Component {
               <input className="boolean optional" type="checkbox" defaultChecked={ false }
                 name={ "admissions_founders[founders_attributes][" + this.props.index + "][delete]" }
                 id={ this.deleteCheckboxId() }/>
-              &nbsp;Delete this founder
+              &nbsp;&nbsp;{ this.deleteText() }
             </label>
           </div>
         </div>

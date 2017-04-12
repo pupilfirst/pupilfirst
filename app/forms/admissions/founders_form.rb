@@ -10,7 +10,7 @@ module Admissions
       property :college_id
       property :college_text, validates: { length: { maximum: 250 } }
       property :delete, virtual: true
-      property :invited, virtual: true, default: false
+      property :invited, writeable: false
     end
 
     validate :minimum_two_founders_required

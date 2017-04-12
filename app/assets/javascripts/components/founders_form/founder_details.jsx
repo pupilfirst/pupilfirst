@@ -9,7 +9,8 @@ class FoundersFormFounderDetails extends React.Component {
     }
 
     this.state = {
-      useCollegeText: useCollegeText
+      useCollegeText: useCollegeText,
+      focusOnCollegeText: false
     };
 
     this.handleCollegeChange = this.handleCollegeChange.bind(this);
@@ -60,7 +61,7 @@ class FoundersFormFounderDetails extends React.Component {
   handleCollegeChange(event) {
     if (event.target.value === 'other') {
       this.destroySelect2();
-      this.setState({useCollegeText: true});
+      this.setState({useCollegeText: true, focusOnCollegeText: true});
     }
   }
 
@@ -156,7 +157,7 @@ class FoundersFormFounderDetails extends React.Component {
 
         { this.state.useCollegeText &&
         <FoundersFormFounderInput label="Name of your college" index={ this.props.index } type="string"
-          key={ "college-text-" + this.props.generatedKey } maxLength={ 250 }
+          key={ "college-text-" + this.props.generatedKey } maxLength={ 250 } autofocus={ this.state.focusOnCollegeText }
           error={ this.errorForField('college_text') }
           name="college_text" value={ this.founderValue('college_text') }/>
         }

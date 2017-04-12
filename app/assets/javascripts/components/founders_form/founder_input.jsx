@@ -1,4 +1,10 @@
 class FoundersFormFounderInput extends React.Component {
+  componentDidMount() {
+    if (this.props.autofocus) {
+      $('#' + this.inputId()).focus();
+    }
+  }
+
   wrapperClasses() {
     let baseClasses = "form-group required " + this.props.type;
 
@@ -57,6 +63,7 @@ class FoundersFormFounderInput extends React.Component {
 }
 
 FoundersFormFounderInput.PropTypes = {
+  autofocus: React.PropTypes.bool,
   label: React.PropTypes.string,
   index: React.PropTypes.number,
   maxLength: React.PropTypes.number,
@@ -66,4 +73,8 @@ FoundersFormFounderInput.PropTypes = {
   error: React.PropTypes.string,
   value: React.PropTypes.string,
   disabled: React.PropTypes.bool,
+};
+
+FoundersFormFounderInput.defaultProps = {
+  autofocus: false
 };

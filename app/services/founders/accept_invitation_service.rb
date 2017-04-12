@@ -22,9 +22,7 @@ module Founders
 
     # Complete the target asking founder to add co-founders.
     def complete_cofounder_addition_target
-      target = Target.find_by(key: Target::KEY_ADMISSIONS_COFOUNDER_ADDITION)
-
-      if target.status(@founder) != Targets::StatusService::STATUS_COMPLETE
+      if cofounder_addition_target.status(@founder) != Targets::StatusService::STATUS_COMPLETE
         Admissions::CompleteTargetService.new(@founder, Target::KEY_ADMISSIONS_COFOUNDER_ADDITION).execute
       end
     end
@@ -42,23 +40,40 @@ module Founders
       return if original_startup.blank?
 
       if original_startup.founders.any?
-        # Make another founder the team lead.
-        another_founder = original_startup.founders.where.not(id: @founder.id).first
-        Founders::BecomeTeamLeadService.new(another_founder).execute
+        preserve_startup
       else
-        # There are no founders, so cancel all invitations, if any.
-        if original_startup.invited_founders.any?
-          original_startup.invited_founders.each do |invited_founder|
-            invited_founder.update!(
-              invited_startup: nil,
-              invitation_token: nil
-            )
-          end
-        end
-
-        # And delete the startup.
-        original_startup.destroy!
+        delete_startup
       end
+    end
+
+    def preserve_startup
+      # Make another founder the team lead.
+      another_founder = original_startup.founders.where.not(id: @founder.id).first
+      Founders::BecomeTeamLeadService.new(another_founder).execute
+
+      # Delete timeline event associated with cofounder addition target, if number of founders has dropped to one.
+      if original_startup.founders.count == 1
+        cofounder_addition_target.timeline_events.find_by(startup: original_startup).destroy!
+      end
+    end
+
+    def delete_startup
+      # There are no founders, so cancel all invitations, if any.
+      if original_startup.invited_founders.any?
+        original_startup.invited_founders.each do |invited_founder|
+          invited_founder.update!(
+            invited_startup: nil,
+            invitation_token: nil
+          )
+        end
+      end
+
+      # And delete the startup.
+      original_startup.destroy!
+    end
+
+    def cofounder_addition_target
+      @cofounder_addition_target ||= Target.find_by(key: Target::KEY_ADMISSIONS_COFOUNDER_ADDITION)
     end
 
     def original_startup

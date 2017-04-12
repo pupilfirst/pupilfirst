@@ -102,7 +102,12 @@ class FounderDashboardSubmissionPanel extends React.Component {
   }
 
   submitButtonText() {
-    return this.isPending() ? 'Submit' : 'Re-Submit';
+    let hasLinkToComplete = this.props.target.link_to_complete
+    if (hasLinkToComplete !== null) {
+      return this.isPending() ? 'Complete' : 'Update';
+    } else {
+      return this.isPending() ? 'Submit' : 'Re-Submit';
+    }
   }
 
   handleSubmitClick() {

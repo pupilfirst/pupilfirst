@@ -215,13 +215,6 @@ ActiveAdmin.register Founder do
       row :communication_address
 
       row :designation
-
-      row :identification_proof do
-        if founder.identification_proof.present?
-          link_to 'Click here to open in new window', founder.identification_proof.url, target: '_blank'
-        end
-      end
-
       row :college
 
       row :university do |founder|
@@ -269,6 +262,35 @@ ActiveAdmin.register Founder do
         row :angel_co_url
         row :github_url
         row :behance_url
+      end
+    end
+
+    panel 'Admissions Data' do
+      attributes_table_for founder do
+        row :fee_payment_method
+        row :identification_proof do
+          if founder.identification_proof.present?
+            link_to 'Click here to open in new window', founder.identification_proof.url, target: '_blank'
+          end
+        end
+        row :id_proof_type
+        row :id_proof_number
+        row :permanent_address
+        row :address_proof do
+          if founder.address_proof.present?
+            link_to 'Click here to open in new window', founder.address_proof.url, target: '_blank'
+          end
+        end
+        row :income_proof do
+          if founder.income_proof.present?
+            link_to 'Click here to open in new window', founder.income_proof.url, target: '_blank'
+          end
+        end
+        row :letter_from_parent do
+          if founder.letter_from_parent.present?
+            link_to 'Click here to open in new window', founder.letter_from_parent.url, target: '_blank'
+          end
+        end
       end
     end
   end

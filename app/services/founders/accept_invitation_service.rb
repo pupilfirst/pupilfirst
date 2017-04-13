@@ -68,6 +68,11 @@ module Founders
         end
       end
 
+      # Refund successful payments.
+      startup.payments.paid.each do |payment|
+        Payments::RefundService.new(payment).execute
+      end
+
       # And delete the startup.
       original_startup.destroy!
     end

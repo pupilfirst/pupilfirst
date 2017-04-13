@@ -29,7 +29,7 @@ module Admissions
     end
 
     def create_new_payment
-      PaymentCreateService.new(model).execute
+      Payments::CreateService.new(model).execute
     end
   end
 end

@@ -310,6 +310,17 @@ ActiveAdmin.register Startup do
 
       row :registration_type
       row :address
+      row :program_started_on
+      row :agreements_verified
+
+      row :partnership_deed do
+        if startup.partnership_deed.present?
+          link_to 'Click here to open in new window', startup.partnership_deed.url, target: '_blank'
+        end
+      end
+
+      row :courier_name
+      row :courier_number
     end
   end
 

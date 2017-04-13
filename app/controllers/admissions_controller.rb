@@ -113,7 +113,7 @@ class AdmissionsController < ApplicationController
     @form.current_founder = current_founder
 
     if @form.validate(params[:admissions_founders])
-      @form.save(current_founder)
+      @form.save
       flash[:success] = 'Details of founders have been saved!'
       redirect_to dashboard_founder_path
     else

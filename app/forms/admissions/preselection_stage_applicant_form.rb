@@ -79,7 +79,7 @@ module Admissions
 
       model.update!(
         name: name,
-        roles: roles,
+        roles: [roles],
         gender: gender,
         born_on: born_on,
         parent_name: parent_name,

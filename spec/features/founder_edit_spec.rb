@@ -4,7 +4,7 @@ include UserSpecHelper
 
 feature 'Founder Edit' do
   let(:startup) { create :startup }
-  let(:founder) { create :founder }
+  let(:founder) { create :founder, college: nil, college_text: 'Anon College of Engineering' }
   let(:new_founder_name) { Faker::Name.name }
 
   before do

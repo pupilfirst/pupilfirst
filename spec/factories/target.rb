@@ -1,5 +1,7 @@
 FactoryGirl.define do
   factory :target do
+    initialize_with { key.present? ? Target.where(key: key).first_or_initialize : Target.new }
+
     title { Faker::Lorem.words(6).join ' ' }
     role { Target.valid_roles.sample }
     description { Faker::Lorem.words(200).join ' ' }
@@ -7,6 +9,7 @@ FactoryGirl.define do
     days_to_complete { 1 + rand(60) }
     target_group
     timeline_event_type
+    key nil
 
     transient do
       batch nil
@@ -29,5 +32,12 @@ FactoryGirl.define do
     trait :with_program_week do
       target_group { TargetGroup.find_by(sort_index: group_index) || create(:target_group, batch: batch, week_number: week_number) }
     end
+
+    trait(:admissions_fee_payment) do
+      key Target::KEY_ADMISSIONS_FEE_PAYMENT
+      prerequisite_targets { [create(:target, :admissions_screening)] }
+    end
+
+    trait(:admissions_screening) { key Target::KEY_ADMISSIONS_SCREENING }
   end
 end

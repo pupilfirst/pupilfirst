@@ -29,7 +29,7 @@
         input_html: { maxlength: 17, type: 'tel', pattern: MobileNumberValidator::FORM_EXPRESSION }
 
       = f.input :reference, label: false,
-        collection: proc { BatchApplicant.reference_sources },
+        collection: proc { t('models.founder.references') },
         required: false,
         include_blank: 'How did you hear about us?'
 

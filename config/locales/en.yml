@@ -20,6 +20,20 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  models:
+    founder:
+      references:
+        - "Friend"
+        - "Seniors"
+        - "#StartinCollege Event"
+        - "Newspaper/Magazine"
+        - "TV"
+        - "SV.CO Blog"
+        - "Instagram"
+        - "Facebook"
+        - "Twitter"
+        - "Microsoft Student Partner"
+        - "Other (Please Specify)"
   home:
     index:
       main_bleed_message_html: "SV.CO is for ambitious students who desire to learn how to build a <strong>real</strong> startup and experience <strong>Silicon Valley</strong> while still in college."

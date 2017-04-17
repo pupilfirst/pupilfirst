@@ -4,6 +4,8 @@ module Founders
 
   # This service can be used by founders in Level 0 to accept invitation to another startup.
   class AcceptInvitationService
+    include Loggable
+
     def initialize(founder)
       @founder = founder
     end
@@ -70,7 +72,12 @@ module Founders
 
       # Refund successful payments.
       if original_startup.payment.present?
-        Payments::RefundService.new(original_startup.payment).execute
+        if original_startup.payment.refundable?
+          log "Attempting to refund payment from Founder ##{@founder.id} - #{@founder.name}..."
+          Payments::RefundService.new(original_startup.payment).execute
+        else
+          log "Founder ##{@founder.id} - #{@founder.name} has a payment which cannot be refunded (more than a week old)."
+        end
       end
 
       # And delete the startup.

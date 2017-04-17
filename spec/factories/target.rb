@@ -30,7 +30,12 @@ FactoryGirl.define do
     end
 
     trait :with_program_week do
-      target_group { TargetGroup.find_by(sort_index: group_index) || create(:target_group, batch: batch, week_number: week_number) }
+      target_group { TargetGroup.find_by(sort_index: group_index) || create(:target_group) }
+    end
+
+    trait(:admissions_cofounder_addition) do
+      key Target::KEY_ADMISSIONS_COFOUNDER_ADDITION
+      prerequisite_targets { [create(:target, :admissions_fee_payment)] }
     end
 
     trait(:admissions_fee_payment) do

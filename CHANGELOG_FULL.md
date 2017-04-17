@@ -1,6 +1,12 @@
 ## Ongoing
 
 - Admissions reboot (level zero) is being implemented. [[Trello]](https://trello.com/c/CDcL2dG3)
+- Founder target completion bubbles are being restored to dashboard target description. [[Trello]](https://trello.com/c/7rz5KVTW)
+
+## 2017.04.17
+
+- AA: Add a Level filter to Startup#index. [[Trello]](https://trello.com/c/7CKPqiVx)
+- Content on the a few web pages were updated. [[Trello]](https://trello.com/c/mNaBcuEC)
 
 ## 2017.04.10
 

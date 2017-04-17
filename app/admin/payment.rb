@@ -21,19 +21,30 @@ ActiveAdmin.register Payment do
   end
 
   index do
-    column :batch_application do |payment|
+    column 'Startup / Application' do |payment|
       if payment.batch_application.present?
         link_to payment.batch_application.display_name, admin_batch_application_path(payment.batch_application)
       elsif payment.original_batch_application.present?
         em do
           link_to "#{payment.original_batch_application.display_name} (Archived)", admin_batch_application_path(payment.original_batch_application)
         end
+      elsif payment.startup.present?
+        link_to payment.startup.product_name, admin_startup_path(payment.startup)
       else
         em 'Missing'
       end
     end
 
-    column :batch_applicant
+    column 'Founder / Applicant' do |payment|
+      if payment.founder.present?
+        link_to payment.founder.name, admin_founder_path(payment.founder)
+      elsif payment.batch_applicant.present?
+        link_to payment.batch_applicant.name, admin_batch_applicant_path(payment.batch_applicant)
+      else
+        em 'Missing'
+      end
+    end
+
     column :amount
     column(:status) { |payment| t("payment.status.#{payment.status}") }
     column :refunded

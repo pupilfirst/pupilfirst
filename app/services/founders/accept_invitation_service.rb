@@ -69,12 +69,12 @@ module Founders
       end
 
       # Refund successful payments.
-      startup.payments.paid.each do |payment|
-        Payments::RefundService.new(payment).execute
+      if original_startup.payment.present?
+        Payments::RefundService.new(original_startup.payment).execute
       end
 
       # And delete the startup.
-      original_startup.destroy!
+      original_startup.reload.destroy!
     end
 
     def cofounder_addition_target

@@ -17,7 +17,8 @@ module Admissions
         iteration: @founder.startup.iteration
       )
 
-      TimelineEvents::VerificationService.new(timeline_event).update_status(TimelineEvent::VERIFIED_STATUS_VERIFIED)
+      TimelineEvents::VerificationService.new(timeline_event, notify: false)
+        .update_status(TimelineEvent::VERIFIED_STATUS_VERIFIED)
     end
 
     private

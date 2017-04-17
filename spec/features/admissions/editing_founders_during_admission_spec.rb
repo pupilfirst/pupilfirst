@@ -21,6 +21,8 @@ feature 'Editing founders during admission' do
   end
 
   context 'when founder has compeleted prerequisites' do
+    let!(:tet_team_update) { create :timeline_event_type, :team_update }
+
     before do
       complete_target founder, screening_target
       complete_target founder, fee_payment_target
@@ -53,15 +55,70 @@ feature 'Editing founders during admission' do
 
       expect(page).to have_content('Details of founders have been saved!')
 
+      # Number of founders and invited founders should be correct.
       expect(startup.founders.count).to eq(1)
       expect(startup.invited_founders.count).to eq(1)
 
       invited_founder = startup.invited_founders.first
 
+      # Invited founder details should be correct.
       expect(invited_founder.name).to eq(name)
       expect(invited_founder.email).to eq(email)
       expect(invited_founder.phone).to eq(mobile)
       expect(invited_founder.college_text).to eq(college_name)
+
+      # Invited founder should receive an email.
+      open_email(email)
+
+      expect(current_email).to have_content('You have been invited to join a startup at SV.CO.')
+    end
+
+    scenario 'founder invites another who has already completed payment', js: true do
+      another_startup = create :level_0_startup
+      payment = create :payment, :paid, startup: another_startup
+      another_founder = another_startup.admin
+
+      sign_in_user(founder.user, referer: admissions_founders_path)
+
+      expect(page).to have_content('You are the team lead.')
+
+      page.find('.founders-form__add-founder-button').click
+
+      expect(page).to have_selector('.founders-form__founder-content-box', count: 2)
+
+      within all('.founders-form__founder-content-box').last do
+        fill_in 'Name', with: another_founder.name
+        fill_in 'Email address', with: another_founder.email
+        fill_in 'Mobile phone number', with: another_founder.phone
+        select "My college isn't listed", from: 'College'
+        fill_in 'Name of your college', with: Faker::Lorem.words(3).join(' ')
+      end
+
+      click_button 'Save founders'
+
+      expect(page).to have_content('Details of founders have been saved!')
+
+      # Invited startup should have changed.
+      expect(another_founder.reload.invited_startup).to eq(startup)
+      expect(another_founder.startup).to eq(another_startup)
+
+      # Accept invitation.
+      open_email(another_founder.email)
+
+      expect(current_email).to have_content('You have been invited to join a startup at SV.CO.')
+
+      click_here_path = '/' + current_email.find_link('click here')[:href].split('/')[-2..-1].join('/')
+      visit click_here_path
+
+      expect(page).to have_content "You have successfully joined #{founder.name}'s startup"
+
+      # Payment should get refunded.
+      expect(payment.reload.refunded?).to eq(true)
+      expect(payment.reload.startup).to eq(nil)
+
+      # Founder should now be in the new startup.
+      expect(another_founder.reload.startup).to eq(startup)
+      expect(another_founder.invited_startup).to eq(nil)
     end
   end
 end

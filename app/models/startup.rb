@@ -32,8 +32,8 @@ class Startup < ApplicationRecord
   # agreement duration in years
   AGREEMENT_DURATION = 5
 
-  APPLICATION_FEE = 1000
-  COURSE_FEE = 37_500
+  APPLICATION_FEE = 3000
+  COURSE_FEE = 50_000
 
   def self.valid_product_progress_values
     [

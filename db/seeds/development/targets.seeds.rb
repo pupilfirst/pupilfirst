@@ -28,7 +28,7 @@ after 'development:target_groups', 'development:timeline_event_types' do
   Target.create!(days_to_complete: 15, title: 'Pre-selection', role: Target::ROLE_TEAM, timeline_event_type: team_update, key: Target::KEY_ADMISSIONS_PRE_SELECTION, target_group: level_0_milestone_group, description: paragraph, prerequisite_targets: [interview_target], link_to_complete: '/admissions/preselection')
 
   # Random targets, session and chores for every level
-  (0..4).each do |level_number|
+  (1..4).each do |level_number|
     level = Level.find_by(number: level_number)
 
     # 3 normal targets per target_group

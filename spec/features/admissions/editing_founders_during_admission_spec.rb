@@ -13,7 +13,7 @@ feature 'Editing founders during admission' do
   let!(:cofounder_addition_target) { create :target, :admissions_cofounder_addition, target_group: level_0_targets }
 
   context "when founder hasn't completed prerequisites" do
-    it 'blocks founder from editing founders' do
+    scenario 'founder is blocked from editing founders' do
       sign_in_user(founder.user, referer: admissions_founders_path)
 
       expect(page).to have_content("The page you were looking for doesn't exist.")
@@ -26,7 +26,7 @@ feature 'Editing founders during admission' do
       complete_target founder, fee_payment_target
     end
 
-    it 'allows founder to manage founder details', js: true do
+    scenario 'founder adds a cofounder', js: true do
       sign_in_user(founder.user, referer: admissions_founders_path)
 
       expect(page).to have_content('You are the team lead.')
@@ -47,8 +47,6 @@ feature 'Editing founders during admission' do
         fill_in 'Mobile phone number', with: mobile
         select "My college isn't listed", from: 'College'
         fill_in 'Name of your college', with: college_name
-        # select "My college isn't listed", from: 'founders-form__college-select-1'
-        # fill_in 'founders-form__founder-college_text-input-1', with: 'ASDF College of Engineering'
       end
 
       click_button 'Save founders'

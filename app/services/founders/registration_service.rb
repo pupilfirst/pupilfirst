@@ -34,13 +34,7 @@ module Founders
     end
 
     def create_blank_startup
-      name_generator = Startups::ProductNameGeneratorService.new
-      name = name_generator.fun_name
-
-      while Startup.find_by(product_name: name).present?
-        name = name_generator.fun_name
-      end
-
+      name = Startups::ProductNameGeneratorService.new.fun_name
       startup = Startup.create!(product_name: name, level: Level.zero)
 
       # Update startup info of founder

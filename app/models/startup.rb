@@ -139,7 +139,7 @@ class Startup < ApplicationRecord
   friendly_id :slug
 
   validates :slug, format: { with: /\A[a-z0-9\-_]+\z/i }, allow_nil: true
-  validates :product_name, presence: true, uniqueness: { case_sensitive: false, scope: :batch_id }
+  validates :product_name, presence: true
 
   # TODO: probably stale
   validates :registration_type, presence: true, if: ->(startup) { startup.validate_registration_type }

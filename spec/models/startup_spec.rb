@@ -3,30 +3,6 @@ require 'rails_helper'
 describe Startup do
   subject { create :startup }
 
-  context 'when a startup with name Foo Bar exists' do
-    let(:one_batch) { create :batch }
-    let(:another_batch) { create :batch }
-    let!(:existing_startup) { create :startup, product_name: 'Foo Bar', batch: one_batch }
-
-    context 'when attempting to create another startup Foo Bar' do
-      context 'in another batch' do
-        it 'succeeds' do
-          expect do
-            create :startup, product_name: 'Foo Bar', batch: another_batch
-          end.to change(Startup, :count).by(1)
-        end
-      end
-
-      context 'in the same batch' do
-        it 'fails' do
-          expect do
-            create :startup, product_name: 'Foo Bar', batch: one_batch
-          end.to raise_error(ActiveRecord::RecordInvalid)
-        end
-      end
-    end
-  end
-
   context 'when startup is destroyed' do
     let(:startup) { create :startup }
 

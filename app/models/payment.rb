@@ -44,6 +44,11 @@ class Payment < ApplicationRecord
     instamojo_payment_status == Instamojo::PAYMENT_STATUS_FAILED
   end
 
+  def refundable?
+    return false unless paid?
+    paid_at >= 1.week.ago
+  end
+
   def refresh_payment!(payment_id)
     # Store the payment ID.
     update!(instamojo_payment_id: payment_id)

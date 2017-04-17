@@ -3,6 +3,7 @@ require 'rails_helper'
 feature 'Feedback Popup' do
   let(:founder) { create :founder }
   let(:startup) { create :startup }
+  let!(:target_group) { create :target_group, level: startup.level, milestone: true }
   let(:faculty) { create :faculty }
   let!(:feedback) { create :startup_feedback, faculty: faculty, startup: startup }
 

@@ -139,5 +139,20 @@ feature 'Edit founders' do
       expect(another_startup.reload.admin).to eq(yet_another_founder)
       expect(another_startup.founders.count).to eq(1)
     end
+
+    scenario 'a founder assumes role of team lead', js: true do
+      another_founder = create :founder, startup: startup
+
+      sign_in_user(another_founder.user, referer: admissions_founders_path)
+
+      expect(page).to have_content("Your team lead is #{founder.name}.")
+
+      accept_alert do
+        click_button 'Become the team lead'
+      end
+
+      expect(page).to have_content('You are the team lead.')
+      expect(startup.reload.admin).to eq(another_founder)
+    end
   end
 end

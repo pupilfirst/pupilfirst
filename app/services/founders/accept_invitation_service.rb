@@ -36,6 +36,9 @@ module Founders
         invitation_token: nil,
         startup_admin: false
       )
+
+      # Set confirmed_at if it's not already set.
+      Users::ConfirmationService.new(user).execute
     end
 
     def clean_up

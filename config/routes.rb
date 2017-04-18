@@ -39,6 +39,10 @@ Rails.application.routes.draw do
     end
   end
 
+  scope 'founder/dashboard', controller: 'founders/dashboard', as: 'dashboard' do
+    get 'founder_target_statuses/:target_id', action: 'founder_target_statuses'
+  end
+
   scope 'founder/facebook', as: 'founder_facebook', controller: 'founders/facebook_connect' do
     post 'connect'
     get 'connect_callback'

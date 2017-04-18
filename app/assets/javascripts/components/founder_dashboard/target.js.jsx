@@ -3,7 +3,8 @@ class FounderDashboardTarget extends React.Component {
     super(props);
 
     this.state = {
-      showDescription: false
+      showDescription: false,
+      fetchFounderStatuses: false
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -19,9 +20,12 @@ class FounderDashboardTarget extends React.Component {
 
   animateDescription(open) {
     if (open) {
-      $('#' + this.sliderId()).slideDown()
+      if (!this.state.fetchFounderStatuses) {
+        this.setState({fetchFounderStatuses: true});
+      }
+      $('#' + this.sliderId()).slideDown();
     } else {
-      $('#' + this.sliderId()).slideUp()
+      $('#' + this.sliderId()).slideUp();
     }
   }
 
@@ -47,7 +51,9 @@ class FounderDashboardTarget extends React.Component {
 
         <div className='founder-dashboard-target__description-container' id={ this.sliderId() }>
           <FounderDashboardTargetDescription key={ 'description-' + this.props.target.id }
-            target={ this.props.target } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }/>
+            target={ this.props.target } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }
+                                             founderDetails={ this.props.founderDetails}
+                                             fetchFounderStatuses={ this.state.fetchFounderStatuses }/>
         </div>
       </div>
     );
@@ -58,5 +64,6 @@ FounderDashboardTarget.propTypes = {
   target: React.PropTypes.object,
   openTimelineBuilderCB: React.PropTypes.func,
   displayDate: React.PropTypes.bool,
-  iconPaths: React.PropTypes.object
+  iconPaths: React.PropTypes.object,
+  founderDetails: React.PropTypes.array
 };

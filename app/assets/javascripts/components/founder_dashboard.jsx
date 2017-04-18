@@ -83,18 +83,20 @@ class FounderDashboard extends React.Component {
         { this.state.activeTab === 'targets' &&
         <FounderDashboardTargets currentLevel={ this.props.currentLevel } levels={ this.state.levels }
           openTimelineBuilderCB={ this.openTimelineBuilder } levelUpEligibility={ this.props.levelUpEligibility }
-          authenticityToken={ this.props.authenticityToken } iconPaths={ this.props.iconPaths }/>
+          authenticityToken={ this.props.authenticityToken } iconPaths={ this.props.iconPaths }
+          founderDetails={this.props.founderDetails}/>
         }
 
         { this.state.activeTab === 'chores' &&
         <FounderDashboardChores currentLevel={ this.props.currentLevel } chores={ this.state.chores }
-          openTimelineBuilderCB={ this.openTimelineBuilder } iconPaths={ this.props.iconPaths }/>
+          openTimelineBuilderCB={ this.openTimelineBuilder } iconPaths={ this.props.iconPaths }
+                                founderDetails={this.props.founderDetails}/>
         }
 
         { this.state.activeTab === 'sessions' &&
         <FounderDashboardSessions currentLevel={ this.props.currentLevel } sessions={ this.state.sessions }
           sessionTags={ this.props.sessionTags } openTimelineBuilderCB={ this.openTimelineBuilder }
-          iconPaths={ this.props.iconPaths }/>
+          iconPaths={ this.props.iconPaths } founderDetails={this.props.founderDetails}/>
         }
 
         { this.state.timelineBuilderVisible &&
@@ -119,5 +121,6 @@ FounderDashboard.propTypes = {
   allowFacebookShare: React.PropTypes.bool,
   authenticityToken: React.PropTypes.string,
   levelUpEligibility: React.PropTypes.string,
-  iconPaths: React.PropTypes.object
+  iconPaths: React.PropTypes.object,
+  founderDetails: React.PropTypes.array
 };

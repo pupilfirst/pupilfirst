@@ -12,20 +12,7 @@ module Founders
       # founders without proper startups will not have dashboards
       raise_not_found unless @startup.present?
 
-      dashboard_data_service = Founders::DashboardDataService.new(current_founder)
-      list_service = TimelineEventTypes::ListService.new(@startup)
-
-      @react_data = {
-        currentLevel: @startup.level.number,
-        requestedRestartLevel: @startup.requested_restart_level&.number,
-        levels: dashboard_data_service.levels,
-        chores: dashboard_data_service.chores,
-        sessions: dashboard_data_service.sessions,
-        sessionTags: dashboard_data_service.session_tags,
-        timelineEventTypes: list_service.list,
-        allowFacebookShare: current_founder.facebook_token_available?,
-        levelUpEligibility: Startups::LevelUpEligibilityService.new(@startup, current_founder).eligibility
-      }
+      load_react_data
 
       @restart_form = Founders::StartupRestartForm.new(OpenStruct.new) if @startup.restartable_levels.present?
 
@@ -60,6 +47,17 @@ module Founders
       redirect_back(fallback_location: dashboard_founder_path)
     end
 
+    # GET /founder/dashboard/founder_target_statuses/:target_id
+    def founder_target_statuses
+      target = Target.find(params[:target_id])
+      founder_statuses = current_founder.startup.founders.each_with_object([]) do |founder, statuses|
+        statuses << { founder.id => Targets::StatusService.new(target, founder).status }
+        # statuses[founder.id] = Targets::StatusService.new(target, founder).status
+      end
+
+      render json: founder_statuses
+    end
+
     private
 
     def skip_container
@@ -75,6 +73,35 @@ module Founders
 
     def startup_restart_params
       params.require(:founders_startup_restart).permit(:level_id, :reason)
+    end
+
+    def founder_details
+      @startup.founders.not_exited.each_with_object([]) do |founder, array|
+        array << { founderId: founder.id, founderName: founder.name, profileImageUrl: profile_image_url(founder, avatar_version: :mid) }
+      end
+    end
+
+    def dashboard_data_service
+      @dashboard_data_service ||= Founders::DashboardDataService.new(current_founder)
+    end
+
+    def list_service
+      @list_service ||= TimelineEventTypes::ListService.new(@startup)
+    end
+
+    def load_react_data
+      @react_data = {
+        currentLevel: @startup.level.number,
+        requestedRestartLevel: @startup.requested_restart_level&.number,
+        levels: dashboard_data_service.levels,
+        chores: dashboard_data_service.chores,
+        sessions: dashboard_data_service.sessions,
+        sessionTags: dashboard_data_service.session_tags,
+        timelineEventTypes: list_service.list,
+        allowFacebookShare: current_founder.facebook_token_available?,
+        eligibleToLevelUp: Startups::LevelUpEligibilityService.new(@startup, current_founder).eligible?,
+        founderDetails: founder_details
+      }
     end
   end
 end

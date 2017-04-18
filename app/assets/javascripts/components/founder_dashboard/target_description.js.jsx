@@ -25,6 +25,8 @@ class FounderDashboardTargetDescription extends React.Component {
 
         <p className="target-description-content font-light" dangerouslySetInnerHTML={{__html: this.props.target.description}}/>
 
+        { this.props.target.role === 'founder' && <FounderDashboardFounderStatusPanel founderDetails={ this.props.founderDetails } targetId={ this.props.target.id} fetchStatus={this.props.fetchFounderStatuses}/> }
+
         <FounderDashboardResourcesBar target={ this.props.target }/>
 
         <FounderDashboardSubmissionPanel target={ this.props.target }
@@ -36,5 +38,7 @@ class FounderDashboardTargetDescription extends React.Component {
 
 FounderDashboardTargetDescription.propTypes = {
   target: React.PropTypes.object,
-  openTimelineBuilderCB: React.PropTypes.func
+  openTimelineBuilderCB: React.PropTypes.func,
+  founderDetails: React.PropTypes.array,
+  fetchFounderStatuses: React.PropTypes.bool
 };

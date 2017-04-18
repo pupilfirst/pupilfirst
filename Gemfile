@@ -172,7 +172,6 @@ group :development, :test do
   gem 'knapsack', '~> 1.13' # Knapsack splits tests across CI nodes so that tests will run comparable time on each node.
   gem 'rails_stats', '~> 1.0' # external/replacement version of rake stats
   gem 'codecov', '~> 0.1', require: false
-  gem 'coveralls', '~> 0.8', require: false
 end
 
 group :production do

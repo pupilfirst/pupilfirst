@@ -38,7 +38,7 @@ module Founders
       )
 
       # Set confirmed_at if it's not already set.
-      Users::ConfirmationService.new(user).execute
+      Users::ConfirmationService.new(@founder.user).execute
     end
 
     def clean_up

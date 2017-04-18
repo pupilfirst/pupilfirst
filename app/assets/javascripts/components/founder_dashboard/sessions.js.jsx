@@ -72,5 +72,5 @@ FounderDashboardSessions.propTypes = {
   sessions: React.PropTypes.array,
   sessionTags: React.PropTypes.array,
   openTimelineBuilderCB: React.PropTypes.func,
-  iconPaths: React.PropTypes.array
+  iconPaths: React.PropTypes.object
 };

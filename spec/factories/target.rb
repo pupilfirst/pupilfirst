@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :target do
-    initialize_with { key.present? ? Target.where(key: key).first_or_initialize : Target.new }
+    initialize_with { key.present? ? Target.where(key: key).first_or_initialize(attributes) : Target.new(attributes) }
 
     title { Faker::Lorem.words(6).join ' ' }
     role { Target.valid_roles.sample }

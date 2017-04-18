@@ -1,18 +1,19 @@
 require 'rails_helper'
 
-feature 'Batch Application Payment' do
-  # Things that are assumed to exist.
-  let(:batch) { create :batch }
-  let!(:application_round) { create :application_round, :screening_stage, batch: batch }
-  let(:screening_stage) { create :application_stage, number: 1 }
-  let!(:batch_application) { create :batch_application, application_round: application_round, application_stage: screening_stage }
-  let(:batch_applicant) { batch_application.team_lead }
-
-  include_context 'mocked_instamojo'
+feature 'Screening' do
   include UserSpecHelper
 
-  scenario 'applicant goes through screening', js: true, broken: true do
-    sign_in_user(batch_applicant.user)
+  let(:startup) { create :level_0_startup }
+  let(:founder) { startup.admin }
+  let(:level_0) { create :level, :zero }
+  let(:level_0_targets) { create :target_group, milestone: true, level: level_0 }
+  let!(:screening_target) { create :target, :admissions_screening, target_group: level_0_targets }
+  let!(:fee_payment_target) { create :target, :admissions_fee_payment, target_group: level_0_targets }
+  let!(:tet_team_update) { create :timeline_event_type, :team_update }
+
+  scenario 'applicant goes through screening', js: true do
+    sign_in_user(founder.user, referer: admissions_screening_path)
+
     expect(page).to have_text('Let’s find out if you are a right fit for our program.')
 
     click_button 'START', match: :first
@@ -47,6 +48,7 @@ feature 'Batch Application Payment' do
 
     click_button 'Continue Application'
 
-    expect(page).to have_content('Registration Fee')
+    expect(page).to have_content('Screening target has been marked as completed!')
+    expect(page).to have_selector('.founder-dashboard-target-header__status-badge', text: 'Complete')
   end
 end

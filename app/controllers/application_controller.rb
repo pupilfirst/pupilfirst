@@ -265,4 +265,25 @@ class ApplicationController < ActionController::Base
   def pretender
     @pretender = true if current_user != true_user
   end
+
+  def profile_image_url(founder, gravatar_size: 100, avatar_version: :full)
+    if founder.avatar?
+      if founder.avatar_processing?
+        founder.avatar_url
+      else
+        case avatar_version
+          when :thumb
+            founder.avatar.thumb.url
+          when :mid
+            founder.avatar.mid.url
+          else
+            founder.avatar_url
+        end
+      end
+    else
+      founder.gravatar_url(size: gravatar_size, default: 'identicon')
+    end
+  end
+
+  helper_method :profile_image_url
 end

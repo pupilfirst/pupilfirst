@@ -54,10 +54,11 @@ class FounderDashboardSessions extends React.Component {
           openTimelineBuilderCB={ this.props.openTimelineBuilderCB } pickFilterCB={ this.chooseTags }/>
         <FounderDashboardTargetCollection key='sessions-upcoming' name='Upcoming Sessions' displayDate={ true }
           targets={ this.upcomingSessions() } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }
-          iconPaths={ this.props.iconPaths }/>
+          iconPaths={ this.props.iconPaths } founderDetails={ this.props.founderDetails}/>
         <FounderDashboardTargetCollection key='sessions-past' name='Past Sessions' displayDate={ true }
           targets={ this.pastSessions() } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }
-          finalCollection={ true } iconPaths={ this.props.iconPaths }/>
+          finalCollection={ true } iconPaths={ this.props.iconPaths }
+                                          founderDetails={ this.props.founderDetails}/>
       </div>
     );
   }
@@ -67,5 +68,5 @@ FounderDashboardSessions.propTypes = {
   sessions: React.PropTypes.array,
   sessionTags: React.PropTypes.array,
   openTimelineBuilderCB: React.PropTypes.func,
-  iconPaths: React.PropTypes.object
+  iconPaths: React.PropTypes.array
 };

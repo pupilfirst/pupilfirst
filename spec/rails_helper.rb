@@ -5,8 +5,7 @@ ENV['RAILS_ENV'] ||= 'test'
 if ENV['CI'] == 'true' || ENV['COVERAGE'] == 'true'
   require 'simplecov'
   require 'codecov'
-  require 'coveralls'
-  SimpleCov.formatters = [SimpleCov::Formatter::Codecov, Coveralls::SimpleCov::Formatter]
+  SimpleCov.formatter = SimpleCov::Formatter::Codecov
   SimpleCov.start('rails')
 end
 

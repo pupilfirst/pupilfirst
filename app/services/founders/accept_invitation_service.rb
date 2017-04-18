@@ -49,13 +49,15 @@ module Founders
     end
 
     def preserve_startup
-      # Make another founder the team lead.
-      another_founder = original_startup.founders.where.not(id: @founder.id).first
-      Founders::BecomeTeamLeadService.new(another_founder).execute
+      # Make another founder the team lead if this founder was the admin.
+      if original_startup.admin.blank?
+        another_founder = original_startup.founders.where.not(id: @founder.id).first
+        Founders::BecomeTeamLeadService.new(another_founder).execute
+      end
 
       # Delete timeline event associated with cofounder addition target, if number of founders has dropped to one.
       if original_startup.founders.count == 1
-        cofounder_addition_target.timeline_events.find_by(startup: original_startup).destroy!
+        cofounder_addition_target.timeline_events.find_by(startup: original_startup)&.destroy!
       end
     end
 

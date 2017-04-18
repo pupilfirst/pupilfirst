@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Editing founders during admission' do
+feature 'Edit founders' do
   include UserSpecHelper
   include FounderSpecHelper
 
@@ -114,11 +114,30 @@ feature 'Editing founders during admission' do
 
       # Payment should get refunded.
       expect(payment.reload.refunded?).to eq(true)
-      expect(payment.reload.startup).to eq(nil)
+      expect(payment.startup).to eq(nil)
 
       # Founder should now be in the new startup.
       expect(another_founder.reload.startup).to eq(startup)
       expect(another_founder.invited_startup).to eq(nil)
+    end
+
+    scenario 'founder accepts invitation to another startup when already in a startup with other members' do
+      another_startup = create :level_0_startup
+      payment = create :payment, :paid, startup: another_startup
+      another_founder = another_startup.admin
+      another_founder.update!(invited_startup: startup, invitation_token: 'TEST_TOKEN')
+      yet_another_founder = create :founder, startup: another_startup
+
+      visit admissions_accept_invitation_path(token: 'TEST_TOKEN')
+
+      # Payment should still exist.
+      expect(payment.reload.refunded?).to eq(false)
+      expect(payment.founder).to eq(another_founder)
+      expect(payment.startup).to eq(another_startup)
+
+      # yet_another_founder should now be the team lead.
+      expect(another_startup.reload.admin).to eq(yet_another_founder)
+      expect(another_startup.founders.count).to eq(1)
     end
   end
 end

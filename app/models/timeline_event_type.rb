@@ -107,4 +107,8 @@ class TimelineEventType < ApplicationRecord
   def self.help_wanted
     find_by(key: TYPE_HELP_WANTED)
   end
+
+  def self.team_update
+    find_by(key: TYPE_TEAM_UPDATE)
+  end
 end

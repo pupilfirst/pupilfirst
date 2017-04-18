@@ -193,7 +193,7 @@ class AdmissionsController < ApplicationController
     @form = Admissions::PreselectionStageSubmissionForm.new(@startup)
 
     if @form.validate(params[:admissions_preselection_stage_submission])
-      @form.save
+      @form.save(current_founder)
       flash[:success] = 'Startup agreements were successfully saved.'
       redirect_to dashboard_founder_path
     else

@@ -10,7 +10,7 @@ module Admissions
       model.update(partnership_deed: partnership_deed)
     end
 
-    def save
+    def save(current_founder)
       model.update!(
         courier_name: courier_name,
         courier_number: courier_number,
@@ -20,6 +20,18 @@ module Admissions
 
       # update intercom last_applicant_event
       IntercomLastApplicantEventUpdateJob.perform_later(model.admin, 'agreements_sent') unless Rails.env.test?
+
+      # Create a timeline event in submitted state.
+      target = Target.find_by(key: Target::KEY_ADMISSIONS_PRE_SELECTION)
+
+      target.timeline_events.create!(
+        founder: current_founder,
+        startup: model,
+        description: 'Pre-selection information has been submitted to the SV.CO team',
+        timeline_event_type: TimelineEventType.team_update,
+        event_on: Time.zone.now,
+        iteration: model.iteration
+      )
     end
 
     def deed_help_extra

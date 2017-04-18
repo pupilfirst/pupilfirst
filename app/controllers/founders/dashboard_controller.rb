@@ -42,7 +42,7 @@ module Founders
     # POST /founder/startup/level_up
     def level_up
       startup = current_founder.startup
-      raise_not_found unless Startups::LevelUpEligibilityService.new(startup).eligible?
+      raise_not_found unless Startups::LevelUpEligibilityService.new(startup, current_founder).eligible?
       Startups::LevelUpService.new(startup).execute
       redirect_back(fallback_location: dashboard_founder_path)
     end

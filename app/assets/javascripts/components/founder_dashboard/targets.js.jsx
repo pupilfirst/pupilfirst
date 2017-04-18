@@ -48,7 +48,7 @@ class FounderDashboardTargets extends React.Component {
       <div>
         { this.props.levelUpEligibility !== 'not_eligible' &&
         <FounderDashboardLevelUpNotification authenticityToken={ this.props.authenticityToken }
-          levelUpEligibility={ this.props.levelUpEligibility }/>
+          levelUpEligibility={ this.props.levelUpEligibility } currentLevel={ this.props.currentLevel }/>
         }
 
         { this.props.currentLevel !== 0 &&

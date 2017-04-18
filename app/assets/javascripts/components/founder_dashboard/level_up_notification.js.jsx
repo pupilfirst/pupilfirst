@@ -1,15 +1,30 @@
 class FounderDashboardLevelUpNotification extends React.Component {
+  eligibleNotificationTitle() {
+    if (this.props.currentLevel === 0) {
+      return('Congratulations! You are now SV.CO Founders.');
+    } else {
+      return('Ready to Level Up!');
+    }
+  }
+
+  eligibleNotificationText() {
+    if (this.props.currentLevel === 0) {
+      return('You have successfully completed the first step in your startup journey. We are proud to have you join our collective. Hit Level Up to continue your journey and unlock a series of cool targets, sessions and chores on the way.');
+    } else {
+      return('Congratulations! You have successfully completed all milestone targets required to level up. Click the button below to proceed to the next level. New challenges await!');
+    }
+  }
+
   render() {
     return (
       <div className="founder-dashboard-levelup-notification__container p-x-1 m-x-auto">
         { this.props.levelUpEligibility === 'eligible' &&
         <div className="founder-dashboard-levelup-notification__box text-xs-center p-a-3">
           <h1>{ '\uD83C\uDF89' }</h1>
-          <h3 className="brand-primary font-regular">Ready to Level Up!</h3>
+          <h3 className="brand-primary font-regular">{ this.eligibleNotificationTitle() }</h3>
 
           <p className="founder-dashboard-levelup__description m-x-auto">
-            Congratulations! You have successfully completed all milestone targets required to level up. Click the
-            button below to proceed to the next level. New challenges await!
+            { this.eligibleNotificationText() }
           </p>
 
           <form className="m-t-2" action="/founder/startup/level_up" acceptCharset="UTF-8" method="post">
@@ -42,5 +57,6 @@ class FounderDashboardLevelUpNotification extends React.Component {
 
 FounderDashboardLevelUpNotification.propTypes = {
   authenticityToken: React.PropTypes.string,
-  levelUpEligibility: React.PropTypes.string
+  levelUpEligibility: React.PropTypes.string,
+  currentLevel: React.PropTypes.number,
 };

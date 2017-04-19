@@ -37,9 +37,11 @@ module Founders
     end
 
     def sessions
+      applicable_levels = startup.level.number.zero? ? 0 : [1, 2, 3, 4]
+
       @sessions ||= begin
         targets = Target.includes(:assigner, :level, :taggings).where.not(session_at: nil)
-          .order(session_at: :desc)
+          .where(levels: { number: applicable_levels }).order(session_at: :desc)
           .as_json(
             only: target_fields,
             methods: :has_rubric,

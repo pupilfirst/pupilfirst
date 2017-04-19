@@ -17,8 +17,12 @@ module Founders
     end
 
     def chores
+      applicable_levels = startup.level.number.zero? ? 0 : (1..startup.level.number).to_a
+
       @chores ||= begin
-        targets = Target.includes(:assigner, :level).where(chore: true)
+        targets = Target.includes(:assigner, :level)
+          .where(chore: true)
+          .where(levels: { number: applicable_levels })
           .order(:sort_index)
           .as_json(
             only: target_fields,
@@ -34,24 +38,25 @@ module Founders
     end
 
     def sessions
-      @sessions ||= begin
-        targets = Target.includes(:assigner, :level, :taggings).where.not(session_at: nil).order(session_at: :desc)
-        targets = targets.where(level: Level.zero) if startup.level.number.zero?
+      applicable_levels = startup.level.number.zero? ? 0 : [1, 2, 3, 4]
 
-        targets = targets.as_json(
-          only: target_fields,
-          methods: :has_rubric,
-          include: {
-            assigner: { only: assigner_fields },
-            level: { only: [:number] },
-            taggings: {
-              only: [],
-              include: {
-                tag: { only: [:name] }
+      @sessions ||= begin
+        targets = Target.includes(:assigner, :level, :taggings).where.not(session_at: nil)
+          .where(levels: { number: applicable_levels }).order(session_at: :desc)
+          .as_json(
+            only: target_fields,
+            methods: :has_rubric,
+            include: {
+              assigner: { only: assigner_fields },
+              level: { only: [:number] },
+              taggings: {
+                only: [],
+                include: {
+                  tag: { only: [:name] }
+                }
               }
             }
-          }
-        )
+          )
 
         targets_with_status(targets)
       end

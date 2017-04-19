@@ -128,6 +128,8 @@ Rails.application.routes.draw do
     get 'incubation_agreement'
   end
 
+  resources :prospective_applicants, only: %i(create)
+
   scope 'apply', as: 'apply', controller: 'batch_application' do
     get '', action: 'index'
     post 'register'

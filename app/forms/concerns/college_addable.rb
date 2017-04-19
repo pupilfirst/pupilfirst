@@ -1,6 +1,6 @@
 # This module is included in:
-#   BatchApplications::RegistrationForm
-#   BatchApplications::ProspectiveApplicantForm,
+#   Founders::RegistrationForm
+#   ProspectiveApplicants::RegistrationForm,
 #   MoocStudentSignupForm
 #
 module CollegeAddable

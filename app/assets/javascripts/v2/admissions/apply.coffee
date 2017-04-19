@@ -59,6 +59,9 @@ emailsShouldMatch = ->
 setupSelect2Inputs = ->
   collegeInput = $('#founders_registration_college_id')
 
+  if collegeInput.length == 0
+    collegeInput = $('#prospective_applicants_registration_college_id')
+
   if collegeInput.length
     collegeSearchUrl = collegeInput.data('searchUrl')
 
@@ -81,6 +84,9 @@ setupSelect2Inputs = ->
 destroySelect2Inputs = ->
   collegeInput = $('#founders_registration_college_id')
 
+  if collegeInput.length == 0
+    collegeInput = $('#prospective_applicants_registration_college_id')
+
   if collegeInput.length
     collegeInput.select2('destroy')
     collegeInput.val('')
@@ -102,6 +108,8 @@ toggleCollegeTextField = ->
 
   if $('#founders_registration_college_id').val() == 'other'
     formName = 'founders_registration'
+  else if $('#prospective_applicants_registration_college_id').val() == 'other'
+    formName = 'prospective_applicants_registration'
 
   if formName != null
     collegeTextInput = $("##{formName}_college_text")
@@ -111,9 +119,14 @@ toggleCollegeTextField = ->
     collegeTextInput.focus()
 
 setupTogglingCollegeField = ->
-  if $('#founders_registration_college_id').length
+  collegeInput = $('#founders_registration_college_id')
+
+  if collegeInput.length == 0
+    collegeInput = $('#prospective_applicants_registration_college_id')
+
+  if collegeInput.length
     toggleCollegeTextField()
-    $('#founders_registration_college_id').change toggleCollegeTextField
+    collegeInput.change toggleCollegeTextField
 
 setupStickyStartApplicationForm = ->
   stickApplicationForm()

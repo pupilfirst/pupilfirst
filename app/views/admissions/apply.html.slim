@@ -153,8 +153,11 @@
 
     .col-lg-4.col-md-12#start-application-process
       .m-t-2
-        - if current_user&.founder&.startup.blank?
-          == render 'application_form'
+        - if current_founder&.startup.blank?
+          - if feature_active?('continuous_admissions')
+            == render 'application_form'
+          - else
+            == render 'batch_application/prospective_applicant_form'
 
 
 a#sticky-start-application.btn.btn-primary.btn-md.text-uppercase.sticky-application-button.hidden-md-up href="#start-application-process"

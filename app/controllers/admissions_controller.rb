@@ -4,7 +4,13 @@ class AdmissionsController < ApplicationController
 
   # GET /apply
   def apply
-    @form = Founders::RegistrationForm.new(Founder.new)
+    if feature_active?('continuous_admissions')
+      @form = Founders::RegistrationForm.new(Founder.new)
+    else
+      @form ||= ProspectiveApplicants::RegistrationForm.new(ProspectiveApplicant.new)
+      @prospective_applicant = ProspectiveApplicant.new.decorate
+    end
+
     @form.prepopulate(current_user) if current_user.present?
   end
 

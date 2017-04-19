@@ -4,20 +4,20 @@
   .application-open-text
     p.font-regular.m-y-1
       span.bigger-text
-        ' Admissions to the June 2017 batch
-      ' is expected to start by
+        ' Admissions
+      ' will open in
       span.font-semibold.brand-secondary.bigger-text
-        | March, 2017.
+        | May, 2017.
 
   - if @prospective_applicant.submitted?
     .application-open-text
       p.font-regular.m-t-1
         span.bigger-text
           ' Thank you for your interest!
-        ' We'll send you an email when admissions for the next batch is about to open.
+        ' We'll send you an email when admissions open.
   - else
-    = simple_form_for @prospective_applicant.form,
-      url: apply_notify_path,
+    = simple_form_for @form,
+      url: prospective_applicants_path,
       wrapper: :vertical_form do |f|
       .simple-form-container
         = f.input :name, label: false, placeholder: 'Your Name', input_html: { maxlength: 250 }

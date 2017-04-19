@@ -1,6 +1,7 @@
 module Founders
   class RegistrationForm < Reform::Form
     include CollegeAddable
+    include AdmissionsPrepopulatable
     include EmailBounceValidatable
 
     property :name, validates: { presence: true, length: { maximum: 250 } }
@@ -39,18 +40,6 @@ module Founders
       return if email == email_confirmation
       errors[:base] << 'Supplied email address and its confirmation do not match.'
       errors[:email_confirmation] << 'email addresses do not match'
-    end
-
-    def prepopulate(user)
-      prepopulate_from(user.mooc_student)
-      prepopulate_from(user.founder)
-    end
-
-    def prepopulate_from(entry)
-      return if entry.blank?
-      self.name = entry.name
-      self.email = entry.email
-      self.phone = entry.phone
     end
 
     def save

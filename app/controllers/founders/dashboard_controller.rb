@@ -51,7 +51,7 @@ module Founders
     # GET /founder/dashboard/founder_target_statuses/:target_id
     def founder_target_statuses
       target = Target.find(params[:target_id])
-      founder_statuses = current_founder.startup.founders.each_with_object([]) do |founder, statuses|
+      founder_statuses = current_founder.startup.founders.not_exited.each_with_object([]) do |founder, statuses|
         statuses << { founder.id => Targets::StatusService.new(target, founder).status }
         # statuses[founder.id] = Targets::StatusService.new(target, founder).status
       end

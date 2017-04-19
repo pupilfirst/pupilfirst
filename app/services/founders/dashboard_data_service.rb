@@ -16,8 +16,12 @@ module Founders
     end
 
     def chores
+      applicable_levels = startup.level.number.zero? ? 0 : (1..startup.level.number).to_a
+
       @chores ||= begin
-        targets = Target.includes(:assigner, :level).where(chore: true)
+        targets = Target.includes(:assigner, :level)
+          .where(chore: true)
+          .where(levels: { number: applicable_levels })
           .order(:sort_index)
           .as_json(
             only: target_fields,

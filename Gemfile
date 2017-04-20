@@ -93,7 +93,7 @@ gem 'prawn-table', '~> 0.2' # Support for drawing tables in prawn pdfs
 gem 'combine_pdf', '~> 0.2' # Used to combine sections of agreement pdfs
 gem 'rollbar', '~> 2.14' # Exception tracking and logging from Ruby to Rollbar https://rollbar.com
 gem 'humanize', '~> 1.3' # Convert numbers to english words
-gem 'quilt', '= 0.1.0', github: 'harigopal/quilt' # A Ruby library for generating identicons.
+gem 'scarf', '= 0.2.0' # A Ruby library for generating initial avatars and identicons.
 gem 'descriptive_statistics', '~> 2.5', require: 'descriptive_statistics/safe' # Used to calculate basic stat measures such as std. deviation (eg: To calculate relative performance of startups)
 
 # Omniauth providers

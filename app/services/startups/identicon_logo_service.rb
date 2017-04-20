@@ -5,7 +5,7 @@ module Startups
     end
 
     def base64_svg
-      logo = Quilt::Identicon.new "#{@startup.product_name}.#{@startup.id}", options
+      logo = Scarf::Identicon.new "#{@startup.product_name}.#{@startup.id}", options
       Base64.encode64(logo.to_blob)
     end
 

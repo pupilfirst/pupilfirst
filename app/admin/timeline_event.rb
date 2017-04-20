@@ -90,8 +90,12 @@ ActiveAdmin.register TimelineEvent do
 
       points = params[:points].present? ? params[:points].to_i : nil
 
-      TimelineEvents::VerificationService.new(timeline_event).update_status(status, grade: params[:grade], points: points)
-      head :ok
+      begin
+        TimelineEvents::VerificationService.new(timeline_event).update_status(status, grade: params[:grade], points: points)
+        head :ok
+      rescue TimelineEvents::VerificationNotAllowedException => e
+        render json: { error: e.message }.to_json, status: 403
+      end
     else
       # someone else already reviewed this event! Ask javascript to reload page.
       render json: { error: 'Event no longer pending review! Refreshing your dashboard.' }.to_json, status: 422

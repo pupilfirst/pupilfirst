@@ -29,6 +29,9 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
   }
 
   saveReview(event) {
+    // https://facebook.github.io/react/docs/events.html#event-pooling
+    event.persist();
+
     // clear all error messages
     this.setState({statusMissing: false, gradingMissing: false});
 
@@ -63,7 +66,11 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
         error: function (response) {
           let error = (response.responseJSON && response.responseJSON.error) ? response.responseJSON.error : 'Something went wrong at the server. Try again';
           alert(error);
-          location.reload();
+          if (response.status === 422) {
+            location.reload();
+          } else {
+            event.target.innerHTML = 'Save Review'
+          }
         }
       });
     }

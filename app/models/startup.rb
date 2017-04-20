@@ -483,4 +483,8 @@ class Startup < ApplicationRecord
   def level_zero?
     level.number.zero?
   end
+
+  def fee_payment_methods_missing?
+    founders.pluck(:fee_payment_method).any?(&:nil?)
+  end
 end

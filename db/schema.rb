@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170408112035) do
+ActiveRecord::Schema.define(version: 20170420065025) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -462,10 +462,12 @@ ActiveRecord::Schema.define(version: 20170408112035) do
     t.boolean  "refunded"
     t.integer  "founder_id"
     t.integer  "startup_id"
+    t.integer  "original_startup_id"
     t.index ["batch_applicant_id"], name: "index_payments_on_batch_applicant_id", using: :btree
     t.index ["batch_application_id"], name: "index_payments_on_batch_application_id", using: :btree
     t.index ["founder_id"], name: "index_payments_on_founder_id", using: :btree
     t.index ["original_batch_application_id"], name: "index_payments_on_original_batch_application_id", using: :btree
+    t.index ["original_startup_id"], name: "index_payments_on_original_startup_id", using: :btree
     t.index ["startup_id"], name: "index_payments_on_startup_id", using: :btree
   end
 
@@ -874,6 +876,7 @@ ActiveRecord::Schema.define(version: 20170408112035) do
   add_foreign_key "payments", "batch_applications"
   add_foreign_key "payments", "founders"
   add_foreign_key "payments", "startups"
+  add_foreign_key "payments", "startups", column: "original_startup_id"
   add_foreign_key "resources", "batches"
   add_foreign_key "round_stages", "application_rounds"
   add_foreign_key "startup_feedback", "faculty"

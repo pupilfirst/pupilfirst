@@ -1,6 +1,7 @@
 class Payment < ApplicationRecord
   belongs_to :batch_application
   belongs_to :original_batch_application, class_name: 'BatchApplication'
+  belongs_to :original_startup, class_name: 'Startup'
   belongs_to :batch_applicant
   belongs_to :startup
   belongs_to :founder
@@ -74,10 +75,10 @@ class Payment < ApplicationRecord
     Admissions::PostPaymentService.new(payment: self).execute
   end
 
-  # Remove direct relation from application to payment and store the relationship as 'original batch application'
+  # Remove direct relation from startup to payment and store the relationship as 'original startup'
   def archive!
-    self.original_batch_application_id = batch_application_id
-    self.batch_application_id = nil
+    self.original_startup_id = startup_id
+    self.startup_id = nil
     save!
   end
 end

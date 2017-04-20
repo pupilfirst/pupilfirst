@@ -125,6 +125,7 @@ class Startup < ApplicationRecord
   belongs_to :level
   belongs_to :requested_restart_level, class_name: 'Level'
   has_one :payment, dependent: :restrict_with_error
+  has_many :archived_payments, class_name: 'Payment', foreign_key: 'original_startup_id'
   has_many :coupon_usages
   has_many :coupons, through: :coupon_usages
   has_many :referrers, through: :coupons

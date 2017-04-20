@@ -39,7 +39,7 @@ class AdmissionsPolicy
   end
 
   def preselection?
-    level_zero? && target_complete?(Target::KEY_ADMISSIONS_ATTEND_INTERVIEW) && target_incomplete?(Target::KEY_ADMISSIONS_PRE_SELECTION)
+    level_zero? && target_complete?(Target::KEY_ADMISSIONS_ATTEND_INTERVIEW) && target_pending?(Target::KEY_ADMISSIONS_PRE_SELECTION)
   end
 
   alias preselection_submit? preselection?
@@ -59,6 +59,11 @@ class AdmissionsPolicy
   def target_complete?(key)
     target = Target.find_by(key: key)
     target.status(user.founder) == Targets::StatusService::STATUS_COMPLETE
+  end
+
+  def target_pending?(key)
+    target = Target.find_by(key: key)
+    target.pending?(user.founder)
   end
 
   def level

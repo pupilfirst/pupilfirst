@@ -123,6 +123,10 @@ class Target < ApplicationRecord
     @status[founder.id] ||= Targets::StatusService.new(self, founder).status
   end
 
+  def pending?(founder)
+    status(founder) == Targets::StatusService::STATUS_PENDING
+  end
+
   def stats_service
     @stats_service ||= Targets::StatsService.new(self)
   end

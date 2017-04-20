@@ -84,7 +84,7 @@ class FounderDashboard extends React.Component {
         <FounderDashboardTargets currentLevel={ this.props.currentLevel } levels={ this.state.levels }
           openTimelineBuilderCB={ this.openTimelineBuilder } levelUpEligibility={ this.props.levelUpEligibility }
           authenticityToken={ this.props.authenticityToken } iconPaths={ this.props.iconPaths }
-          founderDetails={this.props.founderDetails}/>
+          founderDetails={this.props.founderDetails} maxLevelNumber={ this.props.maxLevelNumber }/>
         }
 
         { this.state.activeTab === 'chores' &&
@@ -122,5 +122,6 @@ FounderDashboard.propTypes = {
   authenticityToken: React.PropTypes.string,
   levelUpEligibility: React.PropTypes.string,
   iconPaths: React.PropTypes.object,
-  founderDetails: React.PropTypes.array
+  founderDetails: React.PropTypes.array,
+  maxLevelNumber: React.PropTypes.number
 };

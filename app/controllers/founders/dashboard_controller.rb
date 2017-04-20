@@ -100,6 +100,7 @@ module Founders
         timelineEventTypes: list_service.list,
         allowFacebookShare: current_founder.facebook_token_available?,
         levelUpEligibility: Startups::LevelUpEligibilityService.new(@startup, current_founder).eligibility,
+        maxLevelNumber: Level.maximum.number,
         founderDetails: founder_details
       }
     end

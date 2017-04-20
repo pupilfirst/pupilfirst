@@ -13,4 +13,8 @@ class Level < ApplicationRecord
   def self.zero
     Level.find_by(number: 0)
   end
+
+  def self.maximum
+    order(:number).last
+  end
 end

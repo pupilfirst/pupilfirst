@@ -173,7 +173,6 @@ class AdmissionsController < ApplicationController
   def update_founder
     authorize :admissions
 
-    @founder = current_founder.decorate
     founder_params = params[:admissions_preselection_stage_applicant]
     founder = current_startup.founders.find(founder_params[:id])
     @form = Admissions::PreselectionStageApplicantForm.new(founder)
@@ -187,6 +186,9 @@ class AdmissionsController < ApplicationController
       # lose uploads to validation failure.
       @form.save_uploaded_files
       flash[:error] = 'We were unable to save applicant details because of errors. Please try again.'
+
+      @founder = current_founder.decorate
+      @startup = current_startup.decorate
       render 'preselection'
     end
   end
@@ -195,8 +197,7 @@ class AdmissionsController < ApplicationController
   def preselection_submit
     authorize :admissions
 
-    @startup = current_startup.decorate
-    @form = Admissions::PreselectionStageSubmissionForm.new(@startup)
+    @form = Admissions::PreselectionStageSubmissionForm.new(current_startup)
 
     if @form.validate(params[:admissions_preselection_stage_submission])
       @form.save(current_founder)
@@ -205,6 +206,9 @@ class AdmissionsController < ApplicationController
     else
       @form.save_partnership_deed
       flash[:error] = 'We were unable to save details because of errors. Please try again.'
+
+      @founder = current_founder.decorate
+      @startup = current_startup.decorate
       render 'preselection'
     end
   end

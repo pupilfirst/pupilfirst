@@ -180,15 +180,19 @@ feature 'Pre-selection Stage' do
         startup.update(agreements_verified: true)
       end
 
+      def fill_in_submission_form
+        attach_file 'Partnership Deed', pdf_path
+        fill_in 'Courier Name', with: 'DTDC'
+        fill_in 'Courier Tracking Number', with: 'D1234567A'
+        fill_in 'Payment Reference', with: 'HDFC123456'
+      end
+
       scenario 'when user submits payment details' do
         sign_in_user(current_founder.user, referer: admissions_preselection_path)
         expect(page).to have_content('Your agreements have been verified by SV.CO as acceptable.')
         expect(page).to have_content('Transfer your total fee – ₹47,000')
 
-        attach_file 'Partnership Deed', pdf_path
-        fill_in 'Courier Name', with: 'DTDC'
-        fill_in 'Courier Tracking Number', with: 'D1234567A'
-        fill_in 'Payment Reference', with: 'HDFC123456'
+        fill_in_submission_form
         click_button 'Submit'
 
         expect(page).to have_selector('.founder-dashboard-header__product-title')
@@ -199,6 +203,19 @@ feature 'Pre-selection Stage' do
         sign_in_user(current_founder.user, referer: admissions_preselection_path)
         click_button 'Submit'
         expect(page).to have_selector('.form-group.row.has-danger', count: 4)
+      end
+
+      scenario 'when preselection submission is verified', js: true do
+        sign_in_user(current_founder.user, referer: admissions_preselection_path)
+
+        fill_in_submission_form
+        click_button 'Submit'
+
+        TimelineEvent.last.update(verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED)
+
+        visit dashboard_founder_path
+
+        expect(page).to have_content('You have successfully completed the first step in your startup journey. We are proud to have you join our collective.')
       end
     end
   end

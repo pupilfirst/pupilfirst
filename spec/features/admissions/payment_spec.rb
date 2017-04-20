@@ -14,6 +14,7 @@ feature 'Admission Fee Payment' do
   let!(:tet_team_update) { create :timeline_event_type, :team_update }
   let(:referrer_founder) { create :founder }
   let(:coupon) { create :coupon, referrer: referrer_founder }
+  let(:sample_payment) { create :payment, amount: 1000 }
 
   before do
     sign_in_user founder.user
@@ -114,6 +115,30 @@ feature 'Admission Fee Payment' do
       # the coupon must be now marked redeemed for the startup
       coupon_usage = CouponUsage.where(coupon: coupon, startup: startup).last
       expect(coupon_usage.redeemed_at).to_not eq(nil)
+    end
+  end
+
+  # test an edge case of archiving pending payment requests
+  context 'Founder has an incomplete payment request' do
+    before do
+      # assign the startup an existing payment
+      sample_payment.update!(startup: startup)
+
+      complete_target founder, screening_target
+      visit admissions_fee_path
+    end
+
+    scenario 'Founder resubmits the payment form' do
+      # he issues a new payment request
+      expect(page).to have_content('You need to pay Rs. 3000')
+      click_on 'Pay Now'
+      expect(page).to have_content("redirected to: #{long_url}")
+
+      # the existing payment must be archived and a new one created
+      payment = Payment.last
+      startup.reload
+      expect(startup.payment).to eq(payment)
+      expect(startup.archived_payments).to include(sample_payment)
     end
   end
 end

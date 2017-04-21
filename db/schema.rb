@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170420065025) do
+ActiveRecord::Schema.define(version: 20170421064930) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -862,6 +862,16 @@ ActiveRecord::Schema.define(version: 20170420065025) do
     t.index ["user_id", "user_type"], name: "index_visits_on_user_id_and_user_type", using: :btree
   end
 
+  create_table "weekly_karma_points", force: :cascade do |t|
+    t.datetime "week_starting_at"
+    t.integer  "startup_id"
+    t.integer  "level_id"
+    t.integer  "points"
+    t.index ["level_id"], name: "index_weekly_karma_points_on_level_id", using: :btree
+    t.index ["startup_id"], name: "index_weekly_karma_points_on_startup_id", using: :btree
+    t.index ["week_starting_at", "level_id"], name: "index_weekly_karma_points_on_week_starting_at_and_level_id", using: :btree
+  end
+
   add_foreign_key "admin_users", "users"
   add_foreign_key "application_rounds", "batches"
   add_foreign_key "batch_applicants", "founders"
@@ -886,4 +896,6 @@ ActiveRecord::Schema.define(version: 20170420065025) do
   add_foreign_key "timeline_event_files", "timeline_events"
   add_foreign_key "timeline_events", "startups"
   add_foreign_key "user_activities", "users"
+  add_foreign_key "weekly_karma_points", "levels"
+  add_foreign_key "weekly_karma_points", "startups"
 end

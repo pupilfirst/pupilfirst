@@ -129,6 +129,7 @@ class Startup < ApplicationRecord
   has_many :coupon_usages
   has_many :coupons, through: :coupon_usages
   has_many :referrers, through: :coupons
+  has_many :weekly_karma_points
 
   # use the old name attribute as an alias for legal_registered_name
   alias_attribute :name, :legal_registered_name

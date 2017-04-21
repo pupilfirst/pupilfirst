@@ -233,7 +233,7 @@ class ApplicationController < ActionController::Base
   def image_sources
     <<~IMAGE_SOURCES.squish
       img-src
-      'self' data: blob: https://blog.sv.co http://www.startatsv.com https://sv-assets.sv.co https://secure.gravatar.com
+      'self' data: blob: https://blog.sv.co http://www.startatsv.com https://sv-assets.sv.co
       https://uploaded-assets.sv.co #{google_analytics_csp[:image]} #{inspectlet_csp[:image]} #{facebook_csp[:image]}
       #{intercom_csp[:image]} #{instagram_csp[:image]};
     IMAGE_SOURCES
@@ -276,24 +276,17 @@ class ApplicationController < ActionController::Base
     @pretender = true if current_user != true_user
   end
 
-  def profile_image_url(founder, gravatar_size: 100, avatar_version: :full)
-    if founder.avatar?
-      if founder.avatar_processing?
-        founder.avatar_url
-      else
-        case avatar_version
-          when :thumb
-            founder.avatar.thumb.url
-          when :mid
-            founder.avatar.mid.url
-          else
-            founder.avatar_url
-        end
-      end
-    else
-      founder.gravatar_url(size: gravatar_size, default: 'identicon')
+  def avatar(name, founder: nil, version: :mid, background_shape: :circle)
+    if founder.present? && founder.avatar? && !founder.avatar_processing?
+      return helpers.image_tag(founder.avatar.public_send(version).url).html_safe
     end
+
+    Scarf::InitialAvatar.new(
+      name,
+      font_family: ['Source Sans Pro', 'sans-serif'],
+      background_shape: background_shape
+    ).svg.html_safe
   end
 
-  helper_method :profile_image_url
+  helper_method :avatar
 end

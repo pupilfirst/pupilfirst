@@ -77,7 +77,11 @@ module Founders
 
     def founder_details
       @startup.founders.not_exited.each_with_object([]) do |founder, array|
-        array << { founderId: founder.id, founderName: founder.name, profileImageUrl: profile_image_url(founder, avatar_version: :mid) }
+        array << {
+          founderId: founder.id,
+          founderName: founder.name,
+          avatar: avatar(founder.name, founder: founder)
+        }
       end
     end
 

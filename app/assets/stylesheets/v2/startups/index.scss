@@ -302,7 +302,7 @@
       .founder-tooltip-content {
         pointer-events: auto;
         opacity: 1;
-        transform: translate3d(0,0,0) rotate3d(0,0,0,0);
+        transform: translate3d(0, 0, 0) rotate3d(0, 0, 0, 0);
       }
       .founder-tooltip-item {
         &:after {
@@ -349,7 +349,7 @@
   margin: 0 0 10px -150px;
   bottom: 100%;
   text-align: left;
-  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   background: white;
   opacity: 0;
   @include border-radius(5px);
@@ -369,29 +369,34 @@
   }
 
   &:after {
-  	border-color: rgba(245, 245, 245, 0);
-  	border-top-color: $dark-primary-background;
-  	border-width: 10px;
-  	margin-left: -10px;
+    border-color: rgba(245, 245, 245, 0);
+    border-top-color: $dark-primary-background;
+    border-width: 10px;
+    margin-left: -10px;
   }
 
   &:before {
-  	border-color: rgba(229, 229, 229, 0);
-  	border-top-color: darken($gray-border, 10%);
-  	border-width: 11px;
-  	margin-left: -11px;
+    border-color: rgba(229, 229, 229, 0);
+    border-top-color: darken($gray-border, 10%);
+    border-width: 11px;
+    margin-left: -11px;
   }
 }
 
 .founder-tooltip-thumbnail {
   position: relative;
   z-index: 1;
-  height: 100px;
+  max-height: 100px;
   display: block;
   float: left;
   @include border-radius(5px 0 0 5px);
   margin-right: 10px;
   border-right: 1px dashed $gray-border;
+
+  img, svg {
+    width: 100px;
+    height: 100px;
+  }
 }
 
 .tooltip-popup {
@@ -426,7 +431,7 @@
   border-radius: 50%;
   background: white;
   border: 2px solid $gray-border;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .founder-avatar__thumbnail--image {

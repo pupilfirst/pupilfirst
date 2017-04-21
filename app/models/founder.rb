@@ -5,10 +5,8 @@ class Founder < ApplicationRecord
   extend FriendlyId
   extend Forwardable
 
-  include Gravtastic
   include PrivateFilenameRetrievable
 
-  gravtastic
   acts_as_taggable
 
   GENDER_MALE = 'male'

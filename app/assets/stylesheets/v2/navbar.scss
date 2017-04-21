@@ -237,3 +237,13 @@
     @include media-breakpoint-down(sm) { display: inline-block; }
   }
 }
+
+.navbar__avatar-wrapper {
+  width: 42px;
+  height: 42px;
+
+  svg, img {
+    border: 2px solid $gray-border;
+    border-radius: 50%;
+  }
+}

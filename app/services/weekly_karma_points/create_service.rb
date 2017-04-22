@@ -36,14 +36,14 @@ module WeeklyKarmaPoints
 
     # Returns startups active last week along with total karma points earned for the week
     def startups_with_points_last_week
-      Startup.not_dropped_out.joins(:karma_points)
+      Startup.admitted.not_dropped_out.joins(:karma_points)
         .where('karma_points.created_at > ?', last_week_start_date)
         .where('karma_points.created_at < ?', last_week_end_date).group(:startup_id).sum(:points)
     end
 
     # Returns id's of all startups that had some activity in the last 2 months
     def active_startups
-      Startup.not_dropped_out.joins(:karma_points).where('karma_points.created_at > ?', 2.months.ago).distinct.pluck(:id)
+      Startup.admitted.not_dropped_out.joins(:karma_points).where('karma_points.created_at > ?', 2.months.ago).distinct.pluck(:id)
     end
 
     # Returns ids of startups that had no activity last week but are active startups in the platform

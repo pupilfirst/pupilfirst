@@ -4,6 +4,7 @@ puts 'Seeding faculty'
 
 Faculty.create!(
   name: 'Mickey Mouse',
+  email: 'mickeymouse@example.com',
   title: 'CEO',
   key_skills: Faker::Lorem.words(3).join(', '),
   linkedin_url: 'https://linkedin.com',
@@ -14,6 +15,7 @@ Faculty.create!(
 
 Faculty.create!(
   name: 'Minne Mouse',
+  email: 'minniemouse@example.com',
   title: 'CTO',
   key_skills: Faker::Lorem.words(3).join(', '),
   linkedin_url: 'https://linkedin.com',

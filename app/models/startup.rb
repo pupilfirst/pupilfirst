@@ -123,6 +123,7 @@ class Startup < ApplicationRecord
 
   belongs_to :batch
   belongs_to :level
+  belongs_to :maximum_level, class_name: 'Level'
   belongs_to :requested_restart_level, class_name: 'Level'
   has_one :payment, dependent: :restrict_with_error
   has_many :archived_payments, class_name: 'Payment', foreign_key: 'original_startup_id'

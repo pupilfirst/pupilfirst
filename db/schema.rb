@@ -10,11 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170420065025) do
+ActiveRecord::Schema.define(version: 20170422075115) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
 
   create_table "active_admin_comments", force: :cascade do |t|
@@ -650,8 +649,10 @@ ActiveRecord::Schema.define(version: 20170420065025) do
     t.string   "courier_number"
     t.string   "partnership_deed"
     t.string   "payment_reference"
+    t.integer  "maximum_level_id"
     t.index ["batch_id"], name: "index_startups_on_batch_id", using: :btree
     t.index ["level_id"], name: "index_startups_on_level_id", using: :btree
+    t.index ["maximum_level_id"], name: "index_startups_on_maximum_level_id", using: :btree
     t.index ["slug"], name: "index_startups_on_slug", unique: true, using: :btree
     t.index ["stage"], name: "index_startups_on_stage", using: :btree
   end
@@ -881,6 +882,7 @@ ActiveRecord::Schema.define(version: 20170420065025) do
   add_foreign_key "round_stages", "application_rounds"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startups", "levels"
+  add_foreign_key "startups", "levels", column: "maximum_level_id"
   add_foreign_key "target_groups", "levels"
   add_foreign_key "team_members", "startups"
   add_foreign_key "timeline_event_files", "timeline_events"

@@ -165,8 +165,7 @@ ActiveAdmin.register TimelineEvent do
 
   collection_action :review_timeline_events do
     if can? :quick_review, TimelineEvent
-      batch = Batch.current
-      @review_data = TimelineEvents::ReviewDataService.new(batch).data
+      @review_data = TimelineEvents::ReviewDataService.new.data
       render 'review_timeline_events'
     else
       flash[:error] = 'Not authorized to access page.'

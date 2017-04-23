@@ -2,12 +2,8 @@ module TimelineEvents
   class ReviewDataService
     include RoutesResolvable
 
-    def initialize(batch)
-      @batch = batch
-    end
-
     def data
-      batch_timeline_events.pending.includes(:timeline_event_type, [founder: :user], :startup, :target, :timeline_event_files, [improvement_of: :timeline_event_type]).order('timeline_events.created_at').each_with_object({}) do |event, hash|
+      TimelineEvent.pending.includes(:timeline_event_type, [founder: :user], :startup, :target, :timeline_event_files, [improvement_of: :timeline_event_type]).order('timeline_events.created_at').each_with_object({}) do |event, hash|
         hash[event.id] = {
           event_id: event.id,
           title: event.title,
@@ -51,10 +47,6 @@ module TimelineEvents
         improvement_of: event.improvement_of,
         improvement_of_title: event.improvement_of&.title
       )
-    end
-
-    def batch_timeline_events
-      TimelineEvent.where(founder: @batch.founders)
     end
 
     def feedback_url(timeline_event)

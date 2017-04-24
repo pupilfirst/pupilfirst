@@ -47,6 +47,12 @@ describe Founders::RegistrationService do
         expect(new_founder.reference).to eq(founder_params[:reference])
         expect(new_founder.college_text).to eq(founder_params[:college_text])
         expect(new_founder.startup.product_name).to eq(name_generator.fun_name)
+
+        new_startup = new_founder.startup
+
+        expect(new_startup.product_name).to_not be_blank
+        expect(new_startup.level).to eq(level_zero)
+        expect(new_startup.maximum_level).to eq(level_zero)
       end
     end
 

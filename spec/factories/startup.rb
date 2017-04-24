@@ -7,6 +7,7 @@ FactoryGirl.define do
     end
 
     level { create :level, :zero }
+    maximum_level { level }
   end
 
   factory :startup do |f|

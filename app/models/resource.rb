@@ -6,8 +6,11 @@ class Resource < ApplicationRecord
   friendly_id :slug_candidates, use: %i(slugged finders)
   acts_as_taggable
 
+  # TODO: Remove association to batch ensuring no loss of data in production
   belongs_to :batch
+
   belongs_to :startup
+  belongs_to :level
 
   def slug_candidates
     [
@@ -58,14 +61,14 @@ class Resource < ApplicationRecord
   def self.for(founder)
     if !founder&.exited && founder&.startup&.approved?
       where(
-        'share_status = ? OR (share_status = ? AND batch_id IS ? AND startup_id IS ?) OR '\
-        '(share_status = ? AND batch_id = ? AND startup_id IS ?) OR (share_status = ? AND startup_id = ?)',
+        'share_status = ? OR (share_status = ? AND level_id IS ? AND startup_id IS ?) OR '\
+        '(share_status = ? AND level_id = ? AND startup_id IS ?) OR (share_status = ? AND startup_id = ?)',
         SHARE_STATUS_PUBLIC,
         SHARE_STATUS_APPROVED,
         nil,
         nil,
         SHARE_STATUS_APPROVED,
-        founder.startup&.batch&.id,
+        founder.startup&.level&.id,
         nil,
         SHARE_STATUS_APPROVED,
         founder.startup&.id
@@ -105,10 +108,10 @@ class Resource < ApplicationRecord
   def founders_to_notify
     if startup_id.present?
       startup.founders
-    elsif batch_id.present?
-      Founder.where(startup: batch.startups)
+    elsif level_id.present?
+      Founder.where(startup: level.startups)
     else
-      Founder.where(startup: Startup.batched_and_approved)
+      Founder.where(startup: Startup.approved)
     end
   end
 

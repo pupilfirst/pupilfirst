@@ -557,7 +557,9 @@ ActiveRecord::Schema.define(version: 20170422075115) do
     t.integer  "batch_id"
     t.integer  "startup_id"
     t.text     "video_embed"
+    t.integer  "level_id"
     t.index ["batch_id"], name: "index_resources_on_batch_id", using: :btree
+    t.index ["level_id"], name: "index_resources_on_level_id", using: :btree
     t.index ["share_status", "batch_id"], name: "index_resources_on_share_status_and_batch_id", using: :btree
     t.index ["slug"], name: "index_resources_on_slug", using: :btree
     t.index ["startup_id"], name: "index_resources_on_startup_id", using: :btree
@@ -879,6 +881,7 @@ ActiveRecord::Schema.define(version: 20170422075115) do
   add_foreign_key "payments", "startups"
   add_foreign_key "payments", "startups", column: "original_startup_id"
   add_foreign_key "resources", "batches"
+  add_foreign_key "resources", "levels"
   add_foreign_key "round_stages", "application_rounds"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startups", "levels"

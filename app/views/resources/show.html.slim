@@ -26,8 +26,8 @@ h1.m-b-1 #{@resource.title}
 
   .pull-md-left.resource-description-and-links
     - if @resource.for_approved?
-      .batch-exclusive-badge.text-uppercase.m-t-1
-        | Batch Exclusive
+      .level-exclusive-badge.text-uppercase.m-t-1
+        | Level Exclusive
 
     p.m-t-1 = simple_format @resource.description
     == render 'tags', resource: @resource, fade: false

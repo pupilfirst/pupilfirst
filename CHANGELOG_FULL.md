@@ -1,6 +1,16 @@
 ## Ongoing
 
-- Admissions reboot (level zero) is being implemented. [[Trello]](https://trello.com/c/CDcL2dG3)
+- Library (resources) restrictions are being updated to use levels. [[Trello]](https://trello.com/c/kQoAQU8H)
+- Leaderboard is being updated to work with levels. [[Trello]](https://trello.com/c/txJeGp9d)
+
+## 2017.04.24
+
+- Founder completion bubbles have been restored to target description on the founder dashboard. [[Trello]](https://trello.com/c/7rz5KVTW)
+- Only chored up to level (and excluding zero, when applicable) are loaded. Sessions gets a similar filter on `DashboardDataService`. [[Trello]](https://trello.com/c/QnUwh0rN)
+- Gravatars have been replaced with initial icons as placeholder avatars for all users. [[Trello]](https://trello.com/c/K9HSGaAV)
+- Faculty connect is restricted to Level 1+ startups. [[Trello]](https://trello.com/c/K7ANtikP)
+- The timeline event review interface has been updated to ignore batch when loading pending timeline events. [[Trello]](https://trello.com/c/8628Cl2N)
+- Code related to the Coveralls service has been removed. [[Trello]](https://trello.com/c/GBWSDXwM)
 
 ## 2017.04.10
 

@@ -488,4 +488,8 @@ class Startup < ApplicationRecord
   def fee_payment_methods_missing?
     founders.pluck(:fee_payment_method).any?(&:nil?)
   end
+
+  def eligible_to_connect?(faculty)
+    Startups::ConnectRequestEligibilityService.new(self, faculty).eligible?
+  end
 end

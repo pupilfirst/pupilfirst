@@ -18,8 +18,10 @@ class FacultyController < ApplicationController
 
   # POST /faculty/:id/connect
   def connect
-    questions = params[:connect_request][:questions]
     faculty = Faculty.friendly.find(params[:id])
+    authorize faculty
+
+    questions = params[:connect_request][:questions]
     connect_slot = faculty.connect_slots.find(params[:connect_request][:connect_slot])
     connect_request = connect_slot.build_connect_request(startup: current_founder.startup, questions: questions)
 

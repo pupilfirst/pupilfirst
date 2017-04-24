@@ -32,31 +32,4 @@
           i.fa.fa-check-circle
           | &nbsp;Available for Connect
 
-        - if current_founder.try(:can_connect?)
-          - if current_founder.pending_connect_request_for?(member)
-            .disabled.btn.btn-primary.btn-sm.text-uppercase.connect-link data-toggle='tooltip' data-placement='top' title="You already have a pending connect request with this faculty member. Please write to help@sv.co if you would like to reschedule."
-              | Connect
-          - else
-            .modal.faculty-connect-modal class="#{'fade' unless Rails.env.test?}" role="dialog" id="faculty-connect-modal-#{member.id}"
-              .modal-dialog
-                .modal-content
-                  .modal-header
-                    button.close data-dismiss="modal" type="button"  &times;
-                    h4.modal-title Connect with #{member.name}
-                  .modal-body
-                    = simple_form_for current_founder.startup.connect_requests.new, url: connect_faculty_url(member) do |f|
-                      = f.input :connect_slot, as: :select, collection: connect_slots, include_blank: false, label: 'Pick a slot.'
-                      = f.input :questions, label: 'What questions would you like to ask the faculty member?', input_html: { maxlength: ConnectRequest::MAX_QUESTIONS_LENGTH, rows: 6 },
-                        hint: "We've noticed that the first 10 minutes of a Faculty Connect session are the most productive. "\
-                        "So it's a good idea to spend that time on questions you'd like to get answered. Type in relevant questions above. "\
-                        "As an example, if you are talking to a Marketing & Sales faculty, ask questions about making a sales plan or completing a customer acquisition target."
-                      = f.submit 'Submit Request', class: 'btn btn-primary btn-sm'
-
-            .btn.btn-primary.btn-sm.connect-link data-toggle="modal" data-target="#faculty-connect-modal-#{member.id}"
-              | Connect
-        - elsif current_founder.try(:can_view_connect?)
-          .disabled.btn.btn-primary.btn-sm.connect-link data-toggle='tooltip' data-placement='top' title="Faculty Connect is only available to #{current_founder.startup.admin.fullname} (your team lead)"
-            | Connect
-        - else
-          .disabled.btn.btn-primary.btn-sm.connect-link data-toggle='tooltip' data-placement='top' title="Faculty Connect is only available once you are a selected founder"
-            | Connect
+        == render 'connect_button', faculty: member

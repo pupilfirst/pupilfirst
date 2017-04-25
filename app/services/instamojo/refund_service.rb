@@ -1,4 +1,4 @@
-module Instamojo
+class Instamojo
   # Raised if an invalid type value is supplied to #create.
   InvalidTypeException = Class.new(StandardError)
 

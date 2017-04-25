@@ -44,7 +44,7 @@ class Resource < ApplicationRecord
   mount_uploader :file, ResourceFileUploader
   mount_uploader :thumbnail, ResourceThumbnailUploader
 
-  scope :public_resources, -> { where(share_status: SHARE_STATUS_PUBLIC).order('title') }
+  scope :public_resources, -> { where(level_id: nil).order('title') }
   # scope to search title
   scope :title_matches, ->(search_key) { where("lower(title) LIKE ?", "%#{search_key.downcase}%") }
 

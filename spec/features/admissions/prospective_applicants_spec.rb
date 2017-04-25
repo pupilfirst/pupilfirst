@@ -4,7 +4,9 @@ feature 'Prospective Applicants' do
   context 'when no batch is open for applications' do
     let!(:previous_batch) { create :batch }
 
-    scenario 'user can register for notification', js: true, broken: true do
+    scenario 'user can register for notification', js: true do
+      pending 'Needs to be updated for continuous admissions process'
+
       visit apply_path
       expect(page).to have_content(/Admissions to the (.*?) batch is expected to start by/)
 

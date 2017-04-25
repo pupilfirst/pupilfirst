@@ -7,7 +7,9 @@ feature 'Batch Application Registration' do
 
   include UserSpecHelper
 
-  scenario 'user submits application', js: true, broken: true do
+  scenario 'user submits application', js: true do
+    pending 'Needs to be updated for continuous admissions process'
+
     visit apply_path
     expect(page).to have_text('Did you complete registration once before?')
 

@@ -130,34 +130,6 @@ Rails.application.routes.draw do
 
   resources :prospective_applicants, only: %i(create)
 
-  scope 'apply', as: 'apply', controller: 'batch_application' do
-    get '', action: 'index'
-    post 'register'
-    post 'notify'
-    get 'continue'
-    post 'restart', action: 'restart_application'
-    get 'cofounders', action: 'cofounders_form'
-    post 'cofounders', action: 'cofounders_save'
-    post 'coupon_submit'
-    patch 'coupon_remove'
-
-    scope 'stage/:stage_number', as: 'stage' do
-      get '', action: 'ongoing'
-      post 'submit'
-      patch 'submit'
-      get 'complete'
-      post 'restart'
-      get 'expired'
-      get 'rejected'
-    end
-
-    scope 'stage/6', as: 'pre_selection_stage' do
-      get 'partnership_deed'
-      get 'incubation_agreement'
-      patch 'update_applicant'
-    end
-  end
-
   # webhook url for intercom user create - used to strip them off user_id
   post 'intercom_user_create', controller: 'intercom', action: 'user_create'
 

@@ -20,7 +20,7 @@ class ResourcesController < ApplicationController
 
     @resource.increment_downloads(current_user)
     @stream_video = @resource.file&.url || @resource.video_embed
-  rescue ActiveRecord::RecordNotFound
+  rescue ActiveRecord::RecordNotFound, Pundit::NotAuthorizedError
     alert_message = 'Could not find the requested resource! '
 
     alert_message += if current_founder.present?

@@ -10,11 +10,12 @@ ActiveAdmin.register Resource do
   end
 
   filter :startup,
-    collection: Startup.approved.order(:product_name),
+    collection: -> { Startup.approved.order(:product_name) },
     label: 'Product'
 
   filter :share_status,
-    collection: Resource.valid_share_statuses
+    as: :select,
+    collection: -> { Resource.valid_share_statuses }
 
   filter :ransack_tagged_with,
     as: :select,

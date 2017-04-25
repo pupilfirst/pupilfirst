@@ -24,10 +24,10 @@ feature 'Faculty Connect' do
   scenario 'User visits faculty page' do
     visit faculty_index_path
 
-    # There should be two faculty cards.
+    # There should be three faculty cards.
     expect(page).to have_selector('.faculty-card', count: 3)
 
-    # One of these cards should have a disabled connect button.
+    # Two of these cards should have disabled connect buttons.
     expect(page.find('.faculty-card', text: faculty_1.name)).to have_selector('.available-marker')
     expect(page).to have_selector(".disabled.connect-link[title='Faculty Connect is only available once you are a selected founder']", count: 2)
   end
@@ -36,7 +36,7 @@ feature 'Faculty Connect' do
     let(:startup) { create :startup }
     let(:founder) { startup.founders.where.not(id: startup.admin.id).first }
 
-    scenario 'Founder visits faculty page' do
+    scenario 'Non-admin founder visits faculty page' do
       sign_in_user(founder.user, referer: faculty_index_path)
 
       # Two of the three cards should have a disabled connect button with a special message for non-admins.
@@ -66,7 +66,7 @@ feature 'Faculty Connect' do
         scenario 'Founder visits faculty page' do
           sign_in_user(founder.user, referer: faculty_index_path)
 
-          # One of the two cards should have a disabled connect button with a special message for non-admins.
+          # Two cards should have disabled connect buttons with a special message.
           expect(page).to have_selector('.available-marker', count: 2)
           expect(page).to have_selector(".disabled.connect-link[title='You already have a pending connect request " \
             "with this faculty member. Please write to help@sv.co if you would like to reschedule.']", count: 1)
@@ -93,7 +93,9 @@ feature 'Faculty Connect' do
         click_on 'Submit Request'
 
         # The connect button should now be disabled.
-        expect(page).to have_selector('.connect-link.disabled')
+        #
+        # data-original-title is used here instead of the title prop because Bootstrap tooltip modifies the element.
+        expect(page).to have_selector(".disabled.connect-link[data-original-title='You already have a pending connect request with this faculty member. Please write to help@sv.co if you would like to reschedule.']", count: 1)
 
         # Verify data.
         connect_request = startup.connect_requests.last

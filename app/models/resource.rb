@@ -32,7 +32,6 @@ class Resource < ApplicationRecord
 
   validates :title, presence: true
   validates :description, presence: true
-  validates :share_status, inclusion: { in: valid_share_statuses }
 
   validate :file_or_video_embed_must_be_present
 

@@ -61,18 +61,18 @@ RSpec.describe Resource, type: :model, broken: true do
     end
   end
 
-  describe '#for_approved?' do
+  describe '#level_exclusive?' do
     context 'when share_status is public' do
       it 'returns false' do
-        expect(subject.for_approved?).to be_falsey
+        expect(subject.level_exclusive?).to be_falsey
       end
     end
 
     context 'when share status is approved' do
-      subject { create :resource, share_status: Resource::SHARE_STATUS_APPROVED }
+      subject { create :resource, level: level_1 }
 
       it 'returns true' do
-        expect(subject.for_approved?).to be_truthy
+        expect(subject.level_exclusive?).to be_truthy
       end
     end
   end

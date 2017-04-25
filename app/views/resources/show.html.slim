@@ -25,7 +25,7 @@ h1.m-b-1 #{@resource.title}
         = image_tag 'resources/thumbnail_default.png'
 
   .pull-md-left.resource-description-and-links
-    - if @resource.for_approved?
+    - if @resource.level_exclusive?
       .level-exclusive-badge.text-uppercase.m-t-1
         | Level Exclusive
 

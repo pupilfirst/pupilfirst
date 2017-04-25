@@ -5,7 +5,7 @@
         = image_tag resource.thumbnail.url
       - else
         = image_tag 'resources/thumbnail_default.png', class: 'img-responsive'
-    - if resource.for_approved?
+    - if resource.level_exclusive?
       .level-exclusive
         p.text-uppercase
           | Level Exclusive

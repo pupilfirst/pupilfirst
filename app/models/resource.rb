@@ -57,8 +57,8 @@ class Resource < ApplicationRecord
 
   delegate :content_type, to: :file
 
-  def for_approved?
-    share_status == SHARE_STATUS_APPROVED
+  def level_exclusive?
+    level.present?
   end
 
   def stream?
@@ -76,7 +76,7 @@ class Resource < ApplicationRecord
 
   # Notify on slack when a new resource is uploaded
   def notify_on_slack
-    if for_approved?
+    if level_exclusive?
       PublicSlackTalk.post_message message: new_resource_message, founders: founders_to_notify
     else
       PublicSlackTalk.post_message message: new_resource_message, channel: '#resources'
@@ -85,10 +85,10 @@ class Resource < ApplicationRecord
 
   # returns an array of founders who needs to be notified of the new resource
   def founders_to_notify
-    if startup_id.present?
+    if startup.present?
       startup.founders
-    elsif level_id.present?
-      Founder.where(startup: level.startups)
+    elsif level.present?
+      Founder.where(startup: Startup.joins(:maximum_level).where('levels.number >= ?', level.number))
     else
       Founder.where(startup: Startup.approved)
     end
@@ -96,7 +96,7 @@ class Resource < ApplicationRecord
 
   # message to be send to slack for new resources
   def new_resource_message
-    message = "*A new #{for_approved? ? 'private resource (for approved startups)' : 'public resource'}"\
+    message = "*A new #{level_exclusive? ? ('private resource for Level ' + level.number.to_s) : 'public resource'}"\
     " has been uploaded to the SV.CO Startup Library*: \n"
     message += "*Title:* #{title}\n"
     message += "*Description:* #{description}\n"

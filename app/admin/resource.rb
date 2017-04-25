@@ -46,14 +46,10 @@ ActiveAdmin.register Resource do
     end
 
     column 'Shared with' do |resource|
-      if resource.for_approved?
-        if resource.startup.present?
-          link_to resource.startup.product_name, admin_startup_path(resource.startup)
-        elsif resource.level.present?
-          link_to resource.level.display_name, admin_level_path(resource.level)
-        else
-          'All levels'
-        end
+      if resource.startup.present?
+        link_to resource.startup.product_name, admin_startup_path(resource.startup)
+      elsif resource.level.present?
+        link_to resource.level.display_name, admin_level_path(resource.level)
       else
         'Public'
       end
@@ -78,14 +74,10 @@ ActiveAdmin.register Resource do
       end
 
       row 'Shared with' do |resource|
-        if resource.for_approved?
-          if resource.startup.present?
-            link_to resource.startup.product_name, admin_startup_path(resource.startup)
-          elsif resource.level.present?
-            link_to resource.level.display_name, admin_level_path(resource.level)
-          else
-            'All levels'
-          end
+        if resource.startup.present?
+          link_to resource.startup.product_name, admin_startup_path(resource.startup)
+        elsif resource.level.present?
+          link_to resource.level.display_name, admin_level_path(resource.level)
         else
           'Public'
         end

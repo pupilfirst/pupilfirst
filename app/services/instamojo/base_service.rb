@@ -1,4 +1,4 @@
-module Instamojo
+class Instamojo
   CouldNotParseResponseException = Class.new(StandardError)
   RequestFailedException = Class.new(StandardError)
 

@@ -11,7 +11,7 @@ feature 'Resources' do
   let(:startup) { create :startup, level: level_1 }
 
   let!(:public_resource) { create :resource }
-  let!(:approved_resource) { create :resource, level: level_0 }
+  let!(:level_0_resource) { create :resource, level: level_0 }
   let!(:level_1_resource) { create :resource, level: level_1 }
   let!(:level_2_resource) { create :resource, level: level_2 }
 
@@ -32,7 +32,7 @@ feature 'Resources' do
   end
 
   scenario 'user visits restricted resource page' do
-    visit resource_path(approved_resource)
+    visit resource_path(level_0_resource)
     expect(page).to have_text('Approved Startups get access to exclusive content produced by Faculty')
   end
 
@@ -89,8 +89,8 @@ feature 'Resources' do
         expect(page).to have_text(public_resource.title[0..10])
       end
 
-      scenario 'Founder visits approved resource page' do
-        visit resource_path(approved_resource)
+      scenario 'Founder visits level 0 resource page' do
+        visit resource_path(level_0_resource)
         # should be redirected to the index page
         expect(page).to have_text('This is just a small sample of resources available in the SV.CO Startup Library')
       end
@@ -103,7 +103,7 @@ feature 'Resources' do
         # public resources + resources upto his level should be shown
         expect(page).to have_selector('.resource', count: 3)
         expect(page).to have_text(public_resource.title[0..10])
-        expect(page).to have_text(approved_resource.title[0..10])
+        expect(page).to have_text(level_0_resource.title[0..10])
         expect(page).to have_text(level_1_resource.title[0..10])
       end
     end

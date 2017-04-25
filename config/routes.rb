@@ -223,9 +223,8 @@ Rails.application.routes.draw do
   end
 
   resources :targets, only: [] do
-    member do
-      get 'download_rubric'
-    end
+    get 'select2_search', on: :collection
+    get 'download_rubric', on: :member
   end
 
   scope 'paytm', as: 'paytm', controller: 'paytm' do

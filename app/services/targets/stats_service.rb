@@ -32,11 +32,11 @@ module Targets
     end
 
     def pending_assignees
-      assignees_in_batch.select { |assignee| status_for(assignee) == Targets::StatusService::STATUS_PENDING }
+      assignees.select { |assignee| status_for(assignee) == Targets::StatusService::STATUS_PENDING }
     end
 
     def unavailable_assignees
-      assignees_in_batch.select { |assignee| status_for(assignee) == Targets::StatusService::STATUS_UNAVAILABLE }
+      assignees.select { |assignee| status_for(assignee) == Targets::StatusService::STATUS_UNAVAILABLE }
     end
 
     private
@@ -64,16 +64,8 @@ module Targets
       Startup.where(id: events.map(&:startup_id))
     end
 
-    def assignees_in_batch
-      @target.founder_role? ? founders_in_batch : startups_in_batch
-    end
-
-    def founders_in_batch
-      @target.batch.founders.not_exited
-    end
-
-    def startups_in_batch
-      @target.batch.startups
+    def assignees
+      @target.founder_role? ? Founder.not_exited : Startup.all
     end
 
     def status_for(assignee)

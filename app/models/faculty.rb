@@ -15,7 +15,8 @@ class Faculty < ApplicationRecord
   has_many :targets, dependent: :restrict_with_error, foreign_key: 'assigner_id'
   has_many :connect_slots, dependent: :destroy
   has_many :connect_requests, through: :connect_slots
-  belongs_to :founder # link alumni faculty to their founder profile
+  belongs_to :founder, optional: true # link alumni faculty to their founder profile
+  belongs_to :level, optional: true
 
   CATEGORY_TEAM = 'team'
   CATEGORY_VISITING_FACULTY = 'visiting_faculty'

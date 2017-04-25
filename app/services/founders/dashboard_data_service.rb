@@ -5,7 +5,8 @@ module Founders
     end
 
     def levels
-      @levels ||= (1..startup.level.number).each_with_object({}) do |level_number, levels|
+      start_level = startup.level.number.zero? ? 0 : 1
+      @levels ||= (start_level..startup.level.number).each_with_object({}) do |level_number, levels|
         level = Level.find_by(number: level_number)
 
         levels[level_number] = {
@@ -128,7 +129,7 @@ module Founders
     end
 
     def target_fields
-      %i(id role title description completion_instructions resource_url slideshow_embed video_embed days_to_complete points_earnable timeline_event_type_id session_at)
+      %i(id role title description completion_instructions resource_url slideshow_embed video_embed days_to_complete points_earnable timeline_event_type_id session_at link_to_complete submittability)
     end
 
     def assigner_fields

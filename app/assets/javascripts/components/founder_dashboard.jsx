@@ -40,7 +40,7 @@ class FounderDashboard extends React.Component {
   pendingCount(targetType) {
     let targets = targetType == 'chores' ? this.state.chores : this.state.sessions;
 
-    return targets.filter(function(target) {
+    return targets.filter(function (target) {
       return target.status === 'pending';
     }).length;
   }
@@ -49,7 +49,7 @@ class FounderDashboard extends React.Component {
     let updatedLevels = $.extend(true, {}, this.state.levels);
     let updateSubmissionStatus = this.updateSubmissionStatus;
 
-    $.each(updatedLevels, function(index, level) {
+    $.each(updatedLevels, function (index, level) {
       $.each(level.target_groups, function (index, targetGroup) {
         targetGroup.targets = updateSubmissionStatus(targetGroup.targets.slice(), targetId);
       })
@@ -62,7 +62,7 @@ class FounderDashboard extends React.Component {
   }
 
   updateSubmissionStatus(targets, targetId) {
-    $.each(targets, function(index, target) {
+    $.each(targets, function (index, target) {
       if (target.id === targetId) {
         target.status = 'submitted';
         return false;
@@ -82,9 +82,9 @@ class FounderDashboard extends React.Component {
 
         { this.state.activeTab === 'targets' &&
         <FounderDashboardTargets currentLevel={ this.props.currentLevel } levels={ this.state.levels }
-          openTimelineBuilderCB={ this.openTimelineBuilder } eligibleToLevelUp={ this.props.eligibleToLevelUp }
+          openTimelineBuilderCB={ this.openTimelineBuilder } levelUpEligibility={ this.props.levelUpEligibility }
           authenticityToken={ this.props.authenticityToken } iconPaths={ this.props.iconPaths }
-                                 founderDetails={this.props.founderDetails}/>
+          founderDetails={this.props.founderDetails} maxLevelNumber={ this.props.maxLevelNumber }/>
         }
 
         { this.state.activeTab === 'chores' &&
@@ -94,16 +94,17 @@ class FounderDashboard extends React.Component {
         }
 
         { this.state.activeTab === 'sessions' &&
-        <FounderDashboardSessions sessions={ this.state.sessions } sessionTags={ this.props.sessionTags }
-          openTimelineBuilderCB={ this.openTimelineBuilder } iconPaths={ this.props.iconPaths }
-                                  founderDetails={this.props.founderDetails}/>
+        <FounderDashboardSessions currentLevel={ this.props.currentLevel } sessions={ this.state.sessions }
+          sessionTags={ this.props.sessionTags } openTimelineBuilderCB={ this.openTimelineBuilder }
+          iconPaths={ this.props.iconPaths } founderDetails={this.props.founderDetails}/>
         }
 
         { this.state.timelineBuilderVisible &&
         <TimelineBuilder timelineEventTypes={ this.props.timelineEventTypes }
           allowFacebookShare={ this.props.allowFacebookShare } authenticityToken={ this.props.authenticityToken }
           closeTimelineBuilderCB={ this.closeTimelineBuilder } targetId={ this.state.timelineBuilderParams.targetId }
-          selectedTimelineEventTypeId={ this.state.timelineBuilderParams.selectedTimelineEventTypeId } targetSubmissionCB={ this.handleTargetSubmission }/>
+          selectedTimelineEventTypeId={ this.state.timelineBuilderParams.selectedTimelineEventTypeId }
+          targetSubmissionCB={ this.handleTargetSubmission }/>
         }
       </div>
     );
@@ -119,7 +120,8 @@ FounderDashboard.propTypes = {
   timelineEventTypes: React.PropTypes.object,
   allowFacebookShare: React.PropTypes.bool,
   authenticityToken: React.PropTypes.string,
-  eligibleToLevelUp: React.PropTypes.bool,
+  levelUpEligibility: React.PropTypes.string,
   iconPaths: React.PropTypes.object,
-  founderDetails: React.PropTypes.array
+  founderDetails: React.PropTypes.array,
+  maxLevelNumber: React.PropTypes.number
 };

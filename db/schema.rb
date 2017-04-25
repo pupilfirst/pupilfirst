@@ -10,11 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170328101024) do
+ActiveRecord::Schema.define(version: 20170422090657) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
 
   create_table "active_admin_comments", force: :cascade do |t|
@@ -228,12 +227,12 @@ ActiveRecord::Schema.define(version: 20170328101024) do
 
   create_table "coupon_usages", force: :cascade do |t|
     t.integer  "coupon_id"
-    t.integer  "batch_application_id"
+    t.integer  "startup_id"
     t.datetime "redeemed_at"
     t.datetime "rewarded_at"
     t.text     "notes"
-    t.index ["batch_application_id"], name: "index_coupon_usages_on_batch_application_id", using: :btree
     t.index ["coupon_id"], name: "index_coupon_usages_on_coupon_id", using: :btree
+    t.index ["startup_id"], name: "index_coupon_usages_on_startup_id", using: :btree
   end
 
   create_table "coupons", force: :cascade do |t|
@@ -301,7 +300,9 @@ ActiveRecord::Schema.define(version: 20170328101024) do
     t.string   "compensation"
     t.string   "slack_username"
     t.string   "slack_user_id"
+    t.integer  "level_id"
     t.index ["category"], name: "index_faculty_on_category", using: :btree
+    t.index ["level_id"], name: "index_faculty_on_level_id", using: :btree
     t.index ["slug"], name: "index_faculty_on_slug", unique: true, using: :btree
   end
 
@@ -362,9 +363,22 @@ ActiveRecord::Schema.define(version: 20170328101024) do
     t.string   "fb_access_token"
     t.datetime "fb_token_expires_at"
     t.integer  "backlog"
+    t.string   "reference"
+    t.string   "college_text"
+    t.string   "fee_payment_method"
+    t.string   "parent_name"
+    t.string   "id_proof_type"
+    t.string   "id_proof_number"
+    t.string   "income_proof"
+    t.string   "letter_from_parent"
+    t.string   "college_contact"
+    t.string   "permanent_address"
+    t.string   "address_proof"
+    t.integer  "invited_startup_id"
     t.index ["college_id"], name: "index_founders_on_college_id", using: :btree
     t.index ["invitation_token"], name: "index_founders_on_invitation_token", unique: true, using: :btree
     t.index ["invited_by_id"], name: "index_founders_on_invited_by_id", using: :btree
+    t.index ["invited_startup_id"], name: "index_founders_on_invited_startup_id", using: :btree
     t.index ["name"], name: "index_founders_on_name", using: :btree
     t.index ["slug"], name: "index_founders_on_slug", unique: true, using: :btree
     t.index ["university_id"], name: "index_founders_on_university_id", using: :btree
@@ -447,9 +461,15 @@ ActiveRecord::Schema.define(version: 20170328101024) do
     t.integer  "batch_applicant_id"
     t.string   "notes"
     t.boolean  "refunded"
+    t.integer  "founder_id"
+    t.integer  "startup_id"
+    t.integer  "original_startup_id"
     t.index ["batch_applicant_id"], name: "index_payments_on_batch_applicant_id", using: :btree
     t.index ["batch_application_id"], name: "index_payments_on_batch_application_id", using: :btree
+    t.index ["founder_id"], name: "index_payments_on_founder_id", using: :btree
     t.index ["original_batch_application_id"], name: "index_payments_on_original_batch_application_id", using: :btree
+    t.index ["original_startup_id"], name: "index_payments_on_original_startup_id", using: :btree
+    t.index ["startup_id"], name: "index_payments_on_startup_id", using: :btree
   end
 
   create_table "platform_feedback", force: :cascade do |t|
@@ -539,7 +559,9 @@ ActiveRecord::Schema.define(version: 20170328101024) do
     t.integer  "batch_id"
     t.integer  "startup_id"
     t.text     "video_embed"
+    t.integer  "level_id"
     t.index ["batch_id"], name: "index_resources_on_batch_id", using: :btree
+    t.index ["level_id"], name: "index_resources_on_level_id", using: :btree
     t.index ["share_status", "batch_id"], name: "index_resources_on_share_status_and_batch_id", using: :btree
     t.index ["slug"], name: "index_resources_on_slug", using: :btree
     t.index ["startup_id"], name: "index_resources_on_startup_id", using: :btree
@@ -623,10 +645,18 @@ ActiveRecord::Schema.define(version: 20170328101024) do
     t.integer  "batch_id"
     t.boolean  "dropped_out",                default: false
     t.integer  "level_id"
-    t.integer  "iteration"
+    t.integer  "iteration",                  default: 1
     t.integer  "requested_restart_level_id"
+    t.date     "program_started_on"
+    t.boolean  "agreements_verified"
+    t.string   "courier_name"
+    t.string   "courier_number"
+    t.string   "partnership_deed"
+    t.string   "payment_reference"
+    t.integer  "maximum_level_id"
     t.index ["batch_id"], name: "index_startups_on_batch_id", using: :btree
     t.index ["level_id"], name: "index_startups_on_level_id", using: :btree
+    t.index ["maximum_level_id"], name: "index_startups_on_maximum_level_id", using: :btree
     t.index ["slug"], name: "index_startups_on_slug", unique: true, using: :btree
     t.index ["stage"], name: "index_startups_on_stage", using: :btree
   end
@@ -689,8 +719,8 @@ ActiveRecord::Schema.define(version: 20170328101024) do
     t.text     "description"
     t.string   "completion_instructions"
     t.string   "resource_url"
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
     t.text     "slideshow_embed"
     t.integer  "assigner_id"
     t.string   "rubric"
@@ -705,7 +735,11 @@ ActiveRecord::Schema.define(version: 20170328101024) do
     t.text     "video_embed"
     t.datetime "last_session_at"
     t.integer  "level_id"
+    t.string   "key"
+    t.string   "link_to_complete"
+    t.string   "submittability",          default: "resubmittable", null: false
     t.index ["chore"], name: "index_targets_on_chore", using: :btree
+    t.index ["key"], name: "index_targets_on_key", using: :btree
     t.index ["level_id"], name: "index_targets_on_level_id", using: :btree
     t.index ["session_at"], name: "index_targets_on_session_at", using: :btree
     t.index ["timeline_event_type_id"], name: "index_targets_on_timeline_event_type_id", using: :btree
@@ -800,6 +834,7 @@ ActiveRecord::Schema.define(version: 20170328101024) do
     t.boolean  "sign_out_at_next_request"
     t.datetime "email_bounced_at"
     t.string   "email_bounce_type"
+    t.datetime "confirmed_at"
   end
 
   create_table "visits", id: :uuid, default: nil, force: :cascade do |t|
@@ -841,13 +876,19 @@ ActiveRecord::Schema.define(version: 20170328101024) do
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"
   add_foreign_key "connect_slots", "faculty"
+  add_foreign_key "faculty", "levels"
   add_foreign_key "founders", "colleges"
   add_foreign_key "founders", "users"
   add_foreign_key "payments", "batch_applications"
+  add_foreign_key "payments", "founders"
+  add_foreign_key "payments", "startups"
+  add_foreign_key "payments", "startups", column: "original_startup_id"
   add_foreign_key "resources", "batches"
+  add_foreign_key "resources", "levels"
   add_foreign_key "round_stages", "application_rounds"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startups", "levels"
+  add_foreign_key "startups", "levels", column: "maximum_level_id"
   add_foreign_key "target_groups", "levels"
   add_foreign_key "team_members", "startups"
   add_foreign_key "timeline_event_files", "timeline_events"

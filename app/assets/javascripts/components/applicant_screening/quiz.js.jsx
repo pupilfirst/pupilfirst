@@ -24,7 +24,7 @@ class ApplicantScreeningQuiz extends React.Component {
 
         { this.state.quizPassed !== null &&
         <ApplicantScreeningQuizResult passed={ this.state.quizPassed } resetCB={ this.props.resetCB }
-          type={ this.props.type }/>
+          type={ this.props.type } formAuthenticityToken={ this.props.formAuthenticityToken }/>
         }
       </div>
     );
@@ -33,5 +33,6 @@ class ApplicantScreeningQuiz extends React.Component {
 
 ApplicantScreeningQuiz.propTypes = {
   type: React.PropTypes.string,
-  resetCB: React.PropTypes.func
+  resetCB: React.PropTypes.func,
+  formAuthenticityToken: React.PropTypes.string
 };

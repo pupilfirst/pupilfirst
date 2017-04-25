@@ -5,9 +5,10 @@ class InstamojoController < ApplicationController
   def redirect
     payment = Payment.find_by instamojo_payment_request_id: params[:payment_request_id]
     payment.refresh_payment!(params[:payment_id])
-    payment.perform_post_payment_tasks!
+    Admissions::PostPaymentService.new(payment: payment).execute
 
-    redirect_to apply_continue_path(from: 'instamojo')
+    flash[:success] = 'Your payment has been recorded.'
+    redirect_to dashboard_founder_path
   end
 
   # POST /instamojo/webhook
@@ -25,7 +26,7 @@ class InstamojoController < ApplicationController
       update_params[:instamojo_payment_request_status] = 'Completed' if params[:status] == 'Credit'
 
       payment.update update_params
-      payment.perform_post_payment_tasks!
+      Admissions::PostPaymentService.new(payment: payment).execute
 
       head :ok
     else

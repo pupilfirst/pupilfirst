@@ -21,10 +21,4 @@ class BatchApplicantMailer < ApplicationMailer
     @team_lead = batch_application.team_lead
     mail(to: @team_lead.email, subject: 'Your chance to reapply at SV.CO, for FREE!')
   end
-
-  def referral_reward(referrer, applicant)
-    @referrer = referrer
-    @applicant = applicant
-    mail(to: referrer.email, subject: 'You have a successful referral at SV.CO!')
-  end
 end

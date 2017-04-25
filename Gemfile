@@ -56,7 +56,6 @@ gem 'font-awesome-rails', '~> 4.7' # Icons from font-awesome!
 gem 'unobtrusive_flash', '= 3.1.0', github: 'mobmewireless/unobtrusive_flash', branch: 'master'
 
 gem 'friendly_id', '~> 5.2' # Slugs for links. http://norman.github.io/friendly_id
-gem 'gravtastic', '~> 3.2' # Use gravatars as fallback avatars
 gem 'require_all', '~> 1.4' # Easier folder require-s.
 gem 'lita', '= 5.0.0', github: 'svdotco/lita', require: false # Lita without rack version limitation. TODO: Replace with official version when it drops rack < v2 limitation.
 gem 'lita-slack', '= 1.8.0', github: 'litaio/lita-slack', require: false # Lita adapter for Slack. TODO: removing github repo tracking when gem is updated
@@ -93,7 +92,7 @@ gem 'prawn-table', '~> 0.2' # Support for drawing tables in prawn pdfs
 gem 'combine_pdf', '~> 0.2' # Used to combine sections of agreement pdfs
 gem 'rollbar', '~> 2.14' # Exception tracking and logging from Ruby to Rollbar https://rollbar.com
 gem 'humanize', '~> 1.3' # Convert numbers to english words
-gem 'scarf', '= 0.2.0' # A Ruby library for generating initial avatars and identicons.
+gem 'scarf', '~> 0.2' # A Ruby library for generating initial avatars and identicons.
 gem 'descriptive_statistics', '~> 2.5', require: 'descriptive_statistics/safe' # Used to calculate basic stat measures such as std. deviation (eg: To calculate relative performance of startups)
 
 # Omniauth providers
@@ -106,6 +105,7 @@ gem 'pretender', '~> 0.2' # Log in as another user in Rails
 gem 'file_validators', '~> 2.1' # Adds file validators to ActiveModel.
 gem 'diffy', '~> 3.2' # Easy Diffing in Ruby.
 gem 'rails_server_timings', '~> 1.0' # Server Timing headers for Rails apps. https://github.com/dpogue/rails_server_timings
+gem 'pundit', '~> 1.1' # Minimal authorization through OO design and pure Ruby classes.
 
 # Rails assets!
 source 'https://rails-assets.org' do

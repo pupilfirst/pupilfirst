@@ -112,10 +112,11 @@
   }
 
   .logged-in-avatar-link {
-    img {
-      max-width: 40px;
-      max-height: 40px;
+    svg, img {
+      width: 40px;
+      height: 40px;
       border: 1px solid #a0a0a0;
+      border-radius: 50%;
     }
 
     // Push down the logo a 10px since default padding plus height of image is 10px short of header height (centers it).

@@ -24,23 +24,26 @@ class FounderDashboardFounderStatusPanel extends React.Component {
 
   setInitialStatuses() {
     let initialStatuses = [];
+
     this.props.founderDetails.map(function(founderDetail) {
       let entry = {};
       entry[founderDetail.founderId] = 'loading';
       initialStatuses.push(entry);
-    })
+    });
+
     return initialStatuses;
   }
 
   render() {
     return (
-      <div className="startup-founders">
+      <div className="founder-dashboard__avatars">
         { this.state.founderStatuses.map(function(founderStatus){
           let id = Object.keys(founderStatus)[0];
           let status = founderStatus[id];
           let founder = $.grep(this.props.founderDetails, function(e){ return e.founderId == id; })[0];
-          let url = founder.profileImageUrl;
-          return <FounderDashboardFounderBubble name={founder.founderName} url={url} status={status} key={id + '-' + this.props.targetId}/>
+          let avatar = founder.avatar;
+
+          return <FounderDashboardFounderBubble name={founder.founderName} avatar={avatar} status={status} key={id + '-' + this.props.targetId}/>
         }, this)}
       </div>
     )
@@ -51,4 +54,4 @@ FounderDashboardFounderStatusPanel.PropTypes = {
   founderDetails: React.PropTypes.array,
   targetId: React.PropTypes.number,
   fetchStatus: React.PropTypes.bool
-}
+};

@@ -7,7 +7,7 @@ class FounderDashboardFounderBubble extends React.Component {
   statusIcon() {
     if (this.props.status === 'complete') {
       return 'fa fa-check-circle brand-primary';
-    } else if ( this.props.status === 'loading') {
+    } else if (this.props.status === 'loading') {
       return 'fa fa-refresh fa-spin brand-primary';
     } else {
       return 'fa fa-exclamation-circle alert-background';
@@ -38,11 +38,12 @@ class FounderDashboardFounderBubble extends React.Component {
 
   render() {
     return (
-      <a className="founder-avatar-bubble" onMouseEnter={this.showTooltip} onMouseLeave={this.hideTooltip}>
-        <div className="target-complete-check img-circle">
+      <a className="founder-dashboard__avatar-wrapper" onMouseEnter={this.showTooltip} onMouseLeave={this.hideTooltip}>
+        <div className="founder-dashboard__avatar-check">
           <i className={this.statusIcon()}/>
         </div>
-        <img className="img-circle" src={this.props.url}/>
+
+        <span dangerouslySetInnerHTML={ {__html: this.props.avatar} }/>
       </a>
     );
   }
@@ -50,6 +51,6 @@ class FounderDashboardFounderBubble extends React.Component {
 
 FounderDashboardFounderBubble.propTypes = {
   name: React.PropTypes.string,
-  url: React.PropTypes.string,
+  avatar: React.PropTypes.string,
   status: React.PropTypes.string
 };

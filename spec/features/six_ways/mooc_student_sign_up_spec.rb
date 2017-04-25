@@ -15,6 +15,8 @@ feature 'MoocStudent Sign In' do
 
       click_link 'Sign-up as Student'
 
+      expect(page).to have_content('Please tell us more about yourself!')
+
       fill_in 'Name', with: 'John Doe'
       fill_in 'Email', with: 'johndoe@sv.co'
       fill_in 'Mobile number', with: '9876543210'
@@ -44,6 +46,8 @@ feature 'MoocStudent Sign In' do
       sign_in_user(user, referer: six_ways_start_path)
 
       click_link 'Sign-up as Student'
+
+      expect(page).to have_content('Please tell us more about yourself!')
 
       fill_in 'Name', with: 'John Doe'
       fill_in 'Mobile number', with: '9876543210'

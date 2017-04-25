@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Startups::OnboardService do
+describe Startups::OnboardService, disabled: true do
   let(:closed_round) { create :application_round, :closed_stage }
   let(:batch_application) { create :batch_application, :closed_stage, application_round: closed_round }
   let!(:batch_application_expired) { create :batch_application, :pre_selection_stage, application_round: closed_round }

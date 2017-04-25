@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe InstamojoController do
+describe InstamojoController, broken: true do
   let(:payment_stage) { create :application_stage, :payment }
   let!(:coding_stage) { create :application_stage, :coding }
 

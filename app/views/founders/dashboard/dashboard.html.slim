@@ -12,8 +12,6 @@
   data-target=t('dashboard.show.tour.target')
   data-target-details=t('dashboard.show.tour.target_details')
   data-target-status=t('dashboard.show.tour.target_status')
-  data-add-event=t('dashboard.show.tour.add_event')
-  data-performance=t('dashboard.show.tour.performance')
   data-tour-flag=@tour.to_s
   ]
 
@@ -21,6 +19,7 @@
   == render 'dashboard_header'
 
   - icon_paths = { personalTodo: image_path('founders/dashboard/target-type-icons/personal_todo_icon.svg'), noResults: image_path('founders/dashboard/no-results-icon.svg'), teamTodo: image_path('founders/dashboard/target-type-icons/team_todo_icon.svg'), attendSession: image_path('founders/dashboard/target-type-icons/attend_session_icon.svg') }
+
   == react_component('FounderDashboard', @react_data.merge(authenticityToken: form_authenticity_token, iconPaths: icon_paths))
 
   / .founder-dashboard-container
@@ -72,5 +71,6 @@
 
 == render 'view-embed'
 /== render 'timeline_builder'
-== render 'performance_overview'
+- if @startup.level != Level.zero
+  == render 'performance_overview'
 == render 'startup_restart_form'

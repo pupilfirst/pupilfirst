@@ -4,9 +4,9 @@ describe Startups::RestartService do
   subject { described_class }
 
   let!(:tet_end_iteration) { create :tet_end_iteration }
-  let!(:level_0) { create :level, number: 0 }
-  let!(:level_2) { create :level, number: 2 }
-  let!(:level_4) { create :level, number: 4 }
+  let!(:level_0) { create :level, :zero }
+  let!(:level_2) { create :level, :two }
+  let!(:level_4) { create :level, :four }
   let(:iteration) { rand(2) + 1 }
   let(:startup) { create :startup, level: level_4, iteration: iteration }
   let(:reason) { Faker::Lorem.paragraph }

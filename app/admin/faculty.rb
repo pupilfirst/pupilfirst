@@ -2,7 +2,7 @@ ActiveAdmin.register Faculty do
   include DisableIntercom
 
   permit_params :name, :email, :title, :key_skills, :linkedin_url, :category, :image, :sort_index, :self_service,
-    :current_commitment, :founder_id, :inactive, :about, :commitment, :compensation, :slack_username
+    :current_commitment, :founder_id, :inactive, :about, :commitment, :compensation, :slack_username, :level_id
 
   controller do
     def find_resource
@@ -27,7 +27,7 @@ ActiveAdmin.register Faculty do
     column :category
     column :name
     column :email
-    column :title
+    column :level
     column :sort_index
     actions
   end
@@ -39,6 +39,7 @@ ActiveAdmin.register Faculty do
       f.input :category, as: :select, collection: Faculty.valid_categories
       f.input :name
       f.input :email
+      f.input :level, collection: Level.where.not(number: 0)
       f.input :title
       f.input :about
       f.input :image, as: :file

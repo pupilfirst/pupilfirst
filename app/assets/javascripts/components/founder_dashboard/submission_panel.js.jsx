@@ -6,7 +6,19 @@ class FounderDashboardSubmissionPanel extends React.Component {
   }
 
   isSubmittable() {
-    return !(['unavailable', 'submitted'].indexOf(this.props.target.status) != -1);
+    return !(this.isNotSubmittable() || this.singleSubmissionComplete() || this.submissionBlocked());
+  }
+
+  isNotSubmittable() {
+    return this.props.target.submittability === 'not_submittable';
+  }
+
+  singleSubmissionComplete() {
+    return this.props.target.submittability === 'submittable_once' && !this.isPending();
+  }
+
+  submissionBlocked() {
+    return ['unavailable', 'submitted'].indexOf(this.props.target.status) != -1;
   }
 
   isPending() {
@@ -90,11 +102,16 @@ class FounderDashboardSubmissionPanel extends React.Component {
   }
 
   submitButtonText() {
-    return this.isPending() ? 'Submit' : 'Re-Submit';
+    let hasLinkToComplete = this.props.target.link_to_complete
+    if (hasLinkToComplete !== null) {
+      return this.isPending() ? 'Complete' : 'Update';
+    } else {
+      return this.isPending() ? 'Submit' : 'Re-Submit';
+    }
   }
 
   handleSubmitClick() {
-    this.props.openTimelineBuilderCB(this.props.target.id, this.props.target.timeline_event_type_id)
+    this.props.openTimelineBuilderCB(this.props.target.id, this.props.target.timeline_event_type_id);
   }
 
   render() {
@@ -121,11 +138,20 @@ class FounderDashboardSubmissionPanel extends React.Component {
           <div className="submit-instruction font-regular">
             <p>{ this.props.target.completion_instructions }</p>
           </div>
+          { this.props.target.link_to_complete &&
+          <a href={this.props.target.link_to_complete}
+                  className="btn btn-with-icon btn-md btn-secondary text-uppercase btn-timeline-builder js-founder-dashboard__trigger-builder">
+            <i className="fa fa-upload"/>
+            { this.submitButtonText() }
+          </a>
+          }
+          { !this.props.target.link_to_complete &&
           <button onClick={ this.handleSubmitClick }
-            className="btn btn-with-icon btn-md btn-secondary text-uppercase btn-timeline-builder js-founder-dashboard__trigger-builder">
+                  className="btn btn-with-icon btn-md btn-secondary text-uppercase btn-timeline-builder js-founder-dashboard__trigger-builder">
             <i className="fa fa-upload"/>
             { this.submitButtonText() }
           </button>
+          }
         </div>
         }
       </div>

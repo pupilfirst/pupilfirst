@@ -1,0 +1,44 @@
+.content-box.application-stages-content.m-t-3.m-b-3
+  .congrats-box.m-b-3.p-a-1.text-xs-center
+    h3.brand-secondary
+      ' <strong>Agreements Verified!</strong>
+    h4.font-regular.brand-secondary
+      ' Your agreements have been verified by SV.CO as acceptable. Follow instructions below for their submission.
+  .agreements-next-stepss
+    h3.font-semibold
+      | Next Steps:
+    .agreement-instructions
+      h5.font-semibold.instructions-head.brand-secondary
+        | Agreements:
+      ul
+        li
+          p
+            ' Courier the <strong>original</strong> completed and signed Digital Incubation Services agreement
+            br
+            | to SV.CO and enter Courier details below.
+        li
+          p The address to Courier:
+          p
+            | SV.CO, 1<sup>st</sup> Floor, 777, JK Heritage
+            br
+            | 80ft Road, 4<sup>th</sup> Block, Koramangala,
+            br
+            | Bengaluru 560034
+        li
+          p Upload a copy of your Partnership Deed below.
+          p <em>Note:</em>&nbsp;Do <strong>not</strong> send us your Original Partnership Deed.
+    - total_fee = @startup.total_course_fee
+    - if total_fee > 0
+      .fee-instructions.m-t-2.m-b-2
+        h5.font-semibold.instructions-head.brand-primary
+          | Fee:
+        == render 'payment_instructions', total_fee: total_fee
+  .simple-form-container
+    = bootstrap_form_for(@form, url: admissions_preselection_path, layout: :horizontal, label_col: 'col-sm-3', control_col: 'col-sm-9') do |f|
+      = f.file_field :partnership_deed, label_class: 'col-form-label', label: 'Partnership Deed', class: 'form-control', help: "#{@form.deed_help_extra}Scan copy of <strong>completed and signed</strong> partnership deed.".html_safe, required: !@form.model.partnership_deed.present?
+      = f.text_field :courier_name, label_class: 'col-form-label', help: 'FedEx, DHL etc.', required: true, label: 'Courier Name'
+      = f.text_field :courier_number, label_class: 'col-form-label', required: true, label: 'Courier Tracking Number'
+      = f.text_field :payment_reference, label_class: 'col-form-label', required: true, label: 'Payment Reference', help: 'Reference number supplied by your bank corresponding to transfer of fees.'
+      .form-group.row
+        .offset-sm-3.col-sm-9
+          = f.submit 'Submit', class: 'btn btn-secondary btn-md text-uppercase', data: { :'disable-with' => 'Uploading...' }

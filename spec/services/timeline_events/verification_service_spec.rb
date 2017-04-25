@@ -83,6 +83,28 @@ describe TimelineEvents::VerificationService do
           expect(timeline_event.karma_point).to eq(nil)
         end
       end
+
+      context 'when a status update is prohibited due to a missing prerequisite' do
+        before do
+          # make the target a special one with prerequisite conditions
+          target.update!(key: Target::KEY_ADMISSIONS_ATTEND_INTERVIEW)
+        end
+
+        it 'raises VerificationNotAllowed exception when the prerequisite is not fulfilled' do
+          expect do
+            subject.update_status(TimelineEvent::VERIFIED_STATUS_VERIFIED)
+          end.to raise_error(TimelineEvents::VerificationNotAllowedException)
+        end
+
+        it 'functions as usual if the prerequisites are fulfilled' do
+          # Fulfill prerequisites
+          startup.founders.update_all(fee_payment_method: Founder::PAYMENT_METHOD_REGULAR_FEE) # rubocop:disable Rails/SkipsModelValidations
+
+          expect do
+            subject.update_status(TimelineEvent::VERIFIED_STATUS_VERIFIED)
+          end.to_not raise_error
+        end
+      end
     end
   end
 end

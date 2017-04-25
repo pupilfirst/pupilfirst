@@ -36,6 +36,7 @@ module Users
 
         sign_in @user
         remember_me @user unless params[:shared_device] == 'true'
+        Users::ConfirmationService.new(@user).execute
 
         flash[:success] = response[:message]
         redirect_to after_sign_in_path_for(@user)

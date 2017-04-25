@@ -6,8 +6,11 @@ class Resource < ApplicationRecord
   friendly_id :slug_candidates, use: %i(slugged finders)
   acts_as_taggable
 
+  # TODO: Remove association to batch ensuring no loss of data in production
   belongs_to :batch
+
   belongs_to :startup
+  belongs_to :level
 
   def slug_candidates
     [
@@ -29,7 +32,6 @@ class Resource < ApplicationRecord
 
   validates :title, presence: true
   validates :description, presence: true
-  validates :share_status, inclusion: { in: valid_share_statuses }
 
   validate :file_or_video_embed_must_be_present
 
@@ -42,7 +44,7 @@ class Resource < ApplicationRecord
   mount_uploader :file, ResourceFileUploader
   mount_uploader :thumbnail, ResourceThumbnailUploader
 
-  scope :public_resources, -> { where(share_status: SHARE_STATUS_PUBLIC).order('title') }
+  scope :public_resources, -> { where(level_id: nil).order('title') }
   # scope to search title
   scope :title_matches, ->(search_key) { where("lower(title) LIKE ?", "%#{search_key.downcase}%") }
 
@@ -55,28 +57,8 @@ class Resource < ApplicationRecord
 
   delegate :content_type, to: :file
 
-  def self.for(founder)
-    if !founder&.exited && founder&.startup&.approved?
-      where(
-        'share_status = ? OR (share_status = ? AND batch_id IS ? AND startup_id IS ?) OR '\
-        '(share_status = ? AND batch_id = ? AND startup_id IS ?) OR (share_status = ? AND startup_id = ?)',
-        SHARE_STATUS_PUBLIC,
-        SHARE_STATUS_APPROVED,
-        nil,
-        nil,
-        SHARE_STATUS_APPROVED,
-        founder.startup&.batch&.id,
-        nil,
-        SHARE_STATUS_APPROVED,
-        founder.startup&.id
-      ).order('title')
-    else
-      public_resources
-    end
-  end
-
-  def for_approved?
-    share_status == SHARE_STATUS_APPROVED
+  def level_exclusive?
+    level.present?
   end
 
   def stream?
@@ -94,7 +76,7 @@ class Resource < ApplicationRecord
 
   # Notify on slack when a new resource is uploaded
   def notify_on_slack
-    if for_approved?
+    if level_exclusive?
       PublicSlackTalk.post_message message: new_resource_message, founders: founders_to_notify
     else
       PublicSlackTalk.post_message message: new_resource_message, channel: '#resources'
@@ -103,18 +85,18 @@ class Resource < ApplicationRecord
 
   # returns an array of founders who needs to be notified of the new resource
   def founders_to_notify
-    if startup_id.present?
+    if startup.present?
       startup.founders
-    elsif batch_id.present?
-      Founder.where(startup: batch.startups)
+    elsif level.present?
+      Founder.where(startup: Startup.joins(:maximum_level).where('levels.number >= ?', level.number))
     else
-      Founder.where(startup: Startup.batched_and_approved)
+      Founder.where(startup: Startup.approved)
     end
   end
 
   # message to be send to slack for new resources
   def new_resource_message
-    message = "*A new #{for_approved? ? 'private resource (for approved startups)' : 'public resource'}"\
+    message = "*A new #{level_exclusive? ? ('private resource for Level ' + level.number.to_s) : 'public resource'}"\
     " has been uploaded to the SV.CO Startup Library*: \n"
     message += "*Title:* #{title}\n"
     message += "*Description:* #{description}\n"

@@ -6,7 +6,7 @@
     - if current_founder && !current_founder.exited && current_founder.startup.present?
       li.nav-item role="presentation"
         a.nav-link href="#{dashboard_founder_url}" Dashboard
-    - if current_founder && current_founder.startup.present?
+    - if current_founder&.startup.present? && policy(current_founder.startup).show?
       li.nav-item role="presentation"
         a.nav-link href="#{startup_url(current_founder.startup)}" Timeline
     li.nav-item role="presentation"
@@ -25,12 +25,14 @@
       - if current_founder
         li.nav-item role="presentation" class="dropdown"
           a.dropdown-toggle.logged-in-avatar-link data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
-            = image_tag profile_image_url(current_founder, gravatar_size: 40, avatar_version: :thumb), class: 'logged-in-user-link img-circle'
+            .navbar__avatar-wrapper
+              == avatar(current_founder.name, founder: current_founder)
           ul.dropdown-menu
-            li role="presentation"
-              = link_to founder_profile_path(slug: current_founder.slug) do
-                i.fa.fa-list-ul
-                | Profile
+            - if policy(current_founder).founder_profile?
+              li role="presentation"
+                = link_to founder_profile_path(slug: current_founder.slug) do
+                  i.fa.fa-list-ul
+                  | Profile
             li role="presentation"
               a href="#" data-toggle="modal" data-target="#platform-feedback-modal"
                 i.fa.fa-comment-o

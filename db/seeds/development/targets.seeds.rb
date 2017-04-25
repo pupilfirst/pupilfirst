@@ -3,135 +3,54 @@ require_relative 'helper'
 after 'development:target_groups', 'development:timeline_event_types' do
   puts 'Seeding targets'
 
-  batch = Batch.find_by(batch_number: 2)
-  founder = Founder.find_by(email: 'someone@sv.co')
+  def paragraph
+    Faker::Lorem.paragraphs.join("\n\n")
+  end
+
   founder_update = TimelineEventType.find_by(key: 'founder_update')
   team_update = TimelineEventType.find_by(key: 'team_update')
 
-  # 1st week 1st group targets - all completed
-  target_group = batch.program_weeks.find_by(number: 1).target_groups.find_by(sort_index: 1)
-  target_details = [
-    { title: 'Add Info to your Startup Profile', role: 'product', timeline_event_type: founder_update },
-    { title: 'Add Info to your Founder Profile', role: 'founder', timeline_event_type: founder_update },
-    { title: 'Join Public Slack', role: 'founder', days_to_complete: 3, timeline_event_type: founder_update }
-  ]
+  # Compulsory Level 0 targets.
+  level_0_milestone_group = Level.find_by(number: 0).target_groups.find_by(milestone: true)
 
-  target_details.each do |details|
-    target = Target.create!({
-      description: Faker::Lorem.words(10).join(' '),
-      target_group: target_group,
-      target_type: Target::TYPE_TODO,
-      days_to_complete: 7
-    }.merge(details))
+  screening_target = Target.create!(days_to_complete: 1, title: 'Go through Screening', role: Target::ROLE_TEAM, timeline_event_type: team_update, submittability: Target::SUBMITTABILITY_SUBMITTABLE_ONCE, link_to_complete: '/admissions/screening', key: Target::KEY_ADMISSIONS_SCREENING, target_group: level_0_milestone_group, description: paragraph)
 
-    founder.timeline_events.create!(
-      startup: founder.startup,
-      timeline_event_type: TimelineEventType.all.sample,
-      event_on: batch.start_date + 3.days,
-      description: Faker::Lorem.words(10).join(' '),
-      verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED,
-      verified_at: 1.week.ago,
-      target: target
-    )
-  end
+  fee_target = Target.create!(days_to_complete: 1, title: 'Pay Admission Fee', role: Target::ROLE_TEAM, timeline_event_type: team_update, submittability: Target::SUBMITTABILITY_SUBMITTABLE_ONCE, link_to_complete: '/admissions/fee', key: Target::KEY_ADMISSIONS_FEE_PAYMENT, target_group: level_0_milestone_group, description: paragraph, prerequisite_targets: [screening_target])
 
-  # 1st week 2nd group targets - partially completed
-  target_group = batch.program_weeks.find_by(number: 1).target_groups.find_by(sort_index: 2)
-  target_details = [
-    { title: 'Apply for a Passport', role: 'founder', days_to_complete: 5, timeline_event_type: founder_update },
-    { title: 'Open a Personal Bank Account', role: 'founder', days_to_complete: 10, timeline_event_type: founder_update },
-    { title: 'Confirm Partnership Registration', role: 'product', days_to_complete: 10, timeline_event_type: team_update },
-    { title: 'Apply for a Company PAN Card', role: 'product', days_to_complete: 20, timeline_event_type: team_update },
-    { title: 'Open Company Bank Account', role: 'product', days_to_complete: 15, timeline_event_type: team_update },
-    { title: 'Apply for AWS Credits', role: 'product', days_to_complete: 15, timeline_event_type: team_update }
-  ]
+  cofounder_target = Target.create!(days_to_complete: 1, title: 'Add co-founders', role: Target::ROLE_TEAM, timeline_event_type: team_update, link_to_complete: '/admissions/founders', key: Target::KEY_ADMISSIONS_COFOUNDER_ADDITION, target_group: level_0_milestone_group, description: paragraph, prerequisite_targets: [fee_target])
 
-  target_details.each do |details|
-    Target.create!({
-      description: Faker::Lorem.words(10).join(' '),
-      target_type: Target::TYPE_TODO,
-      target_group: target_group,
-    }.merge(details))
-  end
+  coding_target = Target.create!(days_to_complete: 30, title: 'Submit coding task', role: Target::ROLE_TEAM, timeline_event_type: team_update, target_group: level_0_milestone_group, description: paragraph, prerequisite_targets: [fee_target])
 
-  # mark one target as not accepted
-  founder.timeline_events.create!(
-    startup: founder.startup,
-    timeline_event_type: TimelineEventType.all.sample,
-    event_on: batch.start_date + 5.days,
-    description: Faker::Lorem.words(10).join(' '),
-    verified_status: TimelineEvent::VERIFIED_STATUS_NOT_ACCEPTED,
-    target: target_group.targets.find_by(title: 'Confirm Partnership Registration')
-  )
+  video_target = Target.create!(days_to_complete: 15, title: 'Submit video task', role: Target::ROLE_TEAM, timeline_event_type: team_update, target_group: level_0_milestone_group, description: paragraph, prerequisite_targets: [fee_target])
 
-  # add a prerequisite for one target
-  target_group.targets.find_by(title: 'Apply for a Company PAN Card').prerequisite_targets << target_group.targets.find_by(title: 'Confirm Partnership Registration')
+  interview_target = Target.create!(days_to_complete: 30, title: 'Attend Interview', role: Target::ROLE_TEAM, timeline_event_type: team_update, target_group: level_0_milestone_group, description: paragraph, prerequisite_targets: [cofounder_target, coding_target, video_target], key: Target::KEY_ADMISSIONS_ATTEND_INTERVIEW)
 
-  # mark one target as pending
-  founder.timeline_events.create!(
-    startup: founder.startup,
-    timeline_event_type: TimelineEventType.all.sample,
-    event_on: batch.start_date + 9.days,
-    description: Faker::Lorem.words(10).join(' '),
-    verified_status: TimelineEvent::VERIFIED_STATUS_PENDING,
-    target: target_group.targets.find_by(title: 'Open Company Bank Account')
-  )
+  Target.create!(days_to_complete: 15, title: 'Pre-selection', role: Target::ROLE_TEAM, timeline_event_type: team_update, key: Target::KEY_ADMISSIONS_PRE_SELECTION, target_group: level_0_milestone_group, description: paragraph, prerequisite_targets: [interview_target], link_to_complete: '/admissions/preselection')
 
-  # mark one target as needs improvement
-  founder.timeline_events.create!(
-    startup: founder.startup,
-    timeline_event_type: TimelineEventType.all.sample,
-    event_on: batch.start_date + 9.days,
-    description: Faker::Lorem.words(10).join(' '),
-    verified_status: TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT,
-    target: target_group.targets.find_by(title: 'Apply for AWS Credits')
-  )
+  # Random targets, session and chores for every level
+  (1..4).each do |level_number|
+    level = Level.find_by(number: level_number)
 
-  # 1st week 3rd group targets - all pending
-  target_group = batch.program_weeks.find_by(number: 1).target_groups.find_by(sort_index: 3)
-  target_details = [
-    { title: 'Framework Expectations', role: 'product', type: Target::TYPE_ATTEND, days: 20 },
-    { title: 'Town Hall #1', role: 'product', type: Target::TYPE_ATTEND, days: 1 },
-    { title: 'What is SaaS?', role: 'product', type: Target::TYPE_ATTEND, days: 1 }
-  ]
+    # 3 normal targets per target_group
+    level.target_groups.each do |target_group|
+      3.times do
+        target_group.targets.create!(days_to_complete: [7, 10, 14].sample, title: Faker::Lorem.sentence, role: Target.valid_roles.sample, timeline_event_type: TimelineEventType.all.sample, target_group: target_group, description: paragraph)
+      end
+    end
 
-  target_details.each do |details|
-    Target.create!(
-      title: details[:title],
-      role: details[:role],
-      description: Faker::Lorem.words(10).join(' '),
-      target_type: details[:type],
-      days_to_complete: details[:days],
-      target_group: target_group,
-    )
-  end
+    # 3 chores per level
+    3.times do
+      Target.create!(days_to_complete: [7, 10, 14].sample, title: Faker::Lorem.sentence, role: Target.valid_roles.sample, timeline_event_type: TimelineEventType.all.sample, chore: true, level: level, description: paragraph)
+    end
 
-  # 1st week 4th group target - pending
-  Target.create!(
-    title: "Freshdesk's Story",
-    role: 'product',
-    description: Faker::Lorem.words(10).join(' '),
-    target_type: Target::TYPE_ATTEND,
-    days_to_complete: 1,
-    target_group: batch.program_weeks.find_by(number: 1).target_groups.find_by(sort_index: 4),
-  )
+    # 3 upcoming sessions per level
+    3.times do
+      Target.create!(days_to_complete: [7, 10, 14].sample, title: Faker::Lorem.sentence, role: Target.valid_roles.sample, timeline_event_type: TimelineEventType.all.sample, session_at: rand(4.weeks).seconds.from_now, level: level, description: paragraph)
+    end
 
-  # 1st week 5th group targets - all pending
-  target_group = batch.program_weeks.find_by(number: 1).target_groups.find_by(sort_index: 5)
-  target_details = [
-    { title: 'Study the Idea Library', role: 'product', type: Target::TYPE_TODO, days: 14 },
-    { title: 'Shortlist Ideas', role: 'product', type: Target::TYPE_TODO, days: 14 },
-    { title: 'Design Experiments, Surveys & Interviews', role: 'product', type: Target::TYPE_TODO, days: 20 }
-  ]
-
-  target_details.each do |details|
-    Target.create!(
-      title: details[:title],
-      role: details[:role],
-      description: Faker::Lorem.words(10).join(' '),
-      target_type: details[:type],
-      days_to_complete: details[:days],
-      target_group: target_group,
-    )
+    # 3 past sessions per level
+    3.times do
+      Target.create!(days_to_complete: [7, 10, 14].sample, title: Faker::Lorem.sentence, role: Target.valid_roles.sample, timeline_event_type: TimelineEventType.all.sample, session_at: rand(4.weeks).seconds.ago, level: level, description: paragraph)
+    end
   end
 end

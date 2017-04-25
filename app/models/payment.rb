@@ -1,7 +1,10 @@
 class Payment < ApplicationRecord
   belongs_to :batch_application
   belongs_to :original_batch_application, class_name: 'BatchApplication'
+  belongs_to :original_startup, class_name: 'Startup'
   belongs_to :batch_applicant
+  belongs_to :startup
+  belongs_to :founder
 
   STATUS_REQUESTED = -'requested'
   STATUS_PAID = -'paid'
@@ -12,14 +15,6 @@ class Payment < ApplicationRecord
 
   def self.payment_requested_statuses
     [Instamojo::PAYMENT_REQUEST_STATUS_PENDING, Instamojo::PAYMENT_REQUEST_STATUS_SENT]
-  end
-
-  validate :must_have_batch_application
-  validates :batch_applicant_id, presence: true
-
-  def must_have_batch_application
-    return if batch_application_id.present? || original_batch_application_id.present?
-    errors[:base] << 'one of batch_application_id or original_batch_application_id must be present'
   end
 
   def status
@@ -50,6 +45,11 @@ class Payment < ApplicationRecord
     instamojo_payment_status == Instamojo::PAYMENT_STATUS_FAILED
   end
 
+  def refundable?
+    return false unless paid?
+    paid_at >= 1.week.ago
+  end
+
   def refresh_payment!(payment_id)
     # Store the payment ID.
     update!(instamojo_payment_id: payment_id)
@@ -72,31 +72,13 @@ class Payment < ApplicationRecord
   end
 
   def perform_post_payment_tasks!
-    # Log payment time, if unrecorded.
-    update!(paid_at: Time.now) if paid_at.blank?
-
-    # update the team leads latest payment date
-    batch_applicant.update!(latest_payment_at: paid_at)
-
-    # mark the coupon applied, if any, as redeemed
-    batch_application.latest_coupon.mark_redeemed!(batch_application) if batch_application.latest_coupon.present?
-
-    # create a referral coupon for the current applicant
-    batch_applicant.generate_referral_coupon!
-
-    # initiate referral refund if current applicant was referred by someone
-    BatchApplicants::ReferralRewardService.new(batch_applicant).execute if batch_applicant.referrer.present?
-
-    # Let the batch application (if still linked) take care of its stuff.
-    batch_application&.perform_post_payment_tasks!
-
-    IntercomLastApplicantEventUpdateJob.perform_later(batch_applicant, 'payment_complete') unless Rails.env.test?
+    Admissions::PostPaymentService.new(payment: self).execute
   end
 
-  # Remove direct relation from application to payment and store the relationship as 'original batch application'
+  # Remove direct relation from startup to payment and store the relationship as 'original startup'
   def archive!
-    self.original_batch_application_id = batch_application_id
-    self.batch_application_id = nil
+    self.original_startup_id = startup_id
+    self.startup_id = nil
     save!
   end
 end

@@ -1,21 +1,4 @@
 class ApplicantScreeningQuizResult extends React.Component {
-  constructor(props) {
-    super(props);
-    this.submit = this.submit.bind(this);
-  }
-
-  submit() {
-    if (this.props.passed) {
-      $('#applicant-screening__hidden-form').submit();
-    } else {
-      this.props.resetCB();
-    }
-  }
-
-  buttonText() {
-    return this.props.passed ? 'Continue Application' : 'Restart'
-  }
-
   buttonClasses() {
     let classes = "btn btn-with-icon btn-md text-uppercase";
 
@@ -69,9 +52,22 @@ class ApplicantScreeningQuizResult extends React.Component {
         <ApplicantScreeningNonCoderFailed/>
         }
 
-        <button className={ this.buttonClasses() } onClick={ this.submit }>
-          <i className={ this.buttonIconClasses() }/> { this.buttonText() }
+        { this.props.passed &&
+        <form acceptCharset="UTF-8" method="post">
+          <input name="utf8" type="hidden" value="✓"/>
+          <input type="hidden" name="authenticity_token" value={ this.props.formAuthenticityToken }/>
+
+          <button type='submit' className={ this.buttonClasses() }>
+            <i className={ this.buttonIconClasses() }/> Continue Application
+          </button>
+        </form>
+        }
+
+        { !this.props.passed &&
+        <button className={ this.buttonClasses() } onClick={ this.props.resetCB }>
+          <i className={ this.buttonIconClasses() }/> Restart
         </button>
+        }
       </div>
     );
   }
@@ -80,5 +76,6 @@ class ApplicantScreeningQuizResult extends React.Component {
 ApplicantScreeningQuizResult.propTypes = {
   passed: React.PropTypes.bool,
   resetCB: React.PropTypes.func,
-  type: React.PropTypes.string
+  type: React.PropTypes.string,
+  formAuthenticityToken: React.PropTypes.string
 };

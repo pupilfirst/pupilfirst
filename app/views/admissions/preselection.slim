@@ -1,0 +1,23 @@
+/ Stage six is pre-selection. We have shortlisted teams for the batch, and need to ask them to do a few things.
+
+- content_for :head do
+  title SV.CO Apply Now
+  meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
+
+.secondary-banner
+  .container
+    .stages-alert-icon.m-x-auto
+      = image_tag 'apply/batch_application/accepted-icon.svg'
+    .application-stages-head.text-xs-center
+      h1
+        ' Your Startup awaits!
+
+.container
+  .m-t-3
+
+  .row
+    .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
+      - if current_startup.agreements_verified
+        == render 'agreements_submission'
+      - else
+        == render 'agreements_builder'

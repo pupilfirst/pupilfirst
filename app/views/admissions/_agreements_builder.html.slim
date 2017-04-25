@@ -1,0 +1,65 @@
+.content-box.application-stages-content.m-t-3.m-b-3
+  .congrats-box.p-a-1.text-xs-center
+    h3.brand-secondary
+      ' <strong>Congratulations!</strong> &#128144;
+    h4.font-regular.brand-secondary
+      ' This is the first step on an exciting journey that will help
+      br
+      ' you build a startup &amp; teach you amazing skills that
+      | will change your life.
+  .content-box.m-t-2
+    iframe.video-box width="100%" src="https://www.youtube.com/embed/rAuHl1vU5O8" frameborder="0" allowfullscreen="allowfullscreen"
+  .preselection-steps.m-t-2
+    h5.font-semibold.brand-secondary
+      | Next Steps:
+
+    ul.m-b-0
+      li
+        p
+          | Provide profile details for <strong>each founder</strong> in the table below.
+      li
+        p
+          | Download and print the <strong>Partnership Deed</strong> and <strong>Digital Incubation Services Agreement</strong> from the links that appear.
+      li
+        p
+          | Sign and Initial both documents as instructed on their Cover Page.
+      li
+        p
+          | <strong>Email scanned copies</strong> of the signed documents to help@sv.co for verification.
+
+    p
+      ' Write to #{mail_to 'help@sv.co'} for any queries.
+
+  h5.m-t-3.font-semibold.brand-secondary Fee Payment Status
+  == render 'payment_status_table'
+
+  - total_fee = @startup.total_course_fee
+  - if total_fee > 0
+    .fees-section.p-t-2.p-b-2
+      #payment-instructions.panel-group
+        .card
+          h4
+            a.card-block.accordion-toggle.collapsed data-parent="#paycoment-instructions" data-toggle="collapse" href="#payment-info"
+              | Payment Instructions
+          #payment-info.collapse.payment-instructions
+            == render 'payment_instructions', total_fee: total_fee
+
+  == render('update_applicant_form') if @form.present?
+
+  - if @form.blank?
+    .row.eq-height
+      - if @startup.partnership_deed_ready?
+        .col-md-6
+          a.download-partnership-deed href=admissions_partnership_deed_path(format: :pdf) target='_blank'
+            .alert.alert-success.text-xs-center
+              .download-icon
+                i.fa.fa-download
+              | Your <strong>Partnership Deed</strong> is ready. Download, Sign and Send for Verification Now!
+
+      - if @startup.incubation_agreement_ready?
+        .col-md-6
+          a.download-partnership-deed href=admissions_incubation_agreement_path(format: :pdf) target='_blank'
+            .alert.alert-success.text-xs-center
+              .download-icon
+                i.fa.fa-download
+              | Your <strong>Agreement with SV.CO</strong> is ready. Download, Sign and Send for Verification Now!

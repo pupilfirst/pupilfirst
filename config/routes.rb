@@ -107,33 +107,28 @@ Rails.application.routes.draw do
     post 'contact'
   end
 
-  scope 'apply', as: 'apply', controller: 'batch_application' do
-    get '', action: 'index'
-    post 'register'
-    post 'notify'
-    get 'continue'
-    post 'restart', action: 'restart_application'
-    get 'cofounders', action: 'cofounders_form'
-    post 'cofounders', action: 'cofounders_save'
+  get 'apply', to: 'admissions#apply'
+  post 'apply', to: 'admissions#register'
+
+  scope 'admissions', as: 'admissions', controller: 'admissions' do
+    get 'screening'
+    post 'screening', action: 'screening_submit'
+    get 'fee'
+    post 'fee', action: 'fee_submit'
     post 'coupon_submit'
     patch 'coupon_remove'
-
-    scope 'stage/:stage_number', as: 'stage' do
-      get '', action: 'ongoing'
-      post 'submit'
-      patch 'submit'
-      get 'complete'
-      post 'restart'
-      get 'expired'
-      get 'rejected'
-    end
-
-    scope 'stage/6', as: 'pre_selection_stage' do
-      get 'partnership_deed'
-      get 'incubation_agreement'
-      patch 'update_applicant'
-    end
+    get 'founders'
+    post 'founders', action: 'founders_submit'
+    post 'team_lead'
+    get 'accept_invitation'
+    get 'preselection'
+    patch 'preselection', action: 'preselection_submit'
+    patch 'update_founder'
+    get 'partnership_deed'
+    get 'incubation_agreement'
   end
+
+  resources :prospective_applicants, only: %i(create)
 
   # webhook url for intercom user create - used to strip them off user_id
   post 'intercom_user_create', controller: 'intercom', action: 'user_create'

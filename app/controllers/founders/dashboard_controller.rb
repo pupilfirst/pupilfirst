@@ -8,10 +8,9 @@ module Founders
     # GET /founder/dashboard
     def dashboard
       @startup = current_founder.startup&.decorate
-      @batch = @startup&.batch&.decorate
 
       # founders without proper startups will not have dashboards
-      raise_not_found unless @startup.present? && @batch.present?
+      raise_not_found unless @startup.present?
 
       load_react_data
 
@@ -43,7 +42,7 @@ module Founders
     # POST /founder/startup/level_up
     def level_up
       startup = current_founder.startup
-      raise_not_found unless Startups::LevelUpEligibilityService.new(startup).eligible?
+      raise_not_found unless Startups::LevelUpEligibilityService.new(startup, current_founder).eligible?
       Startups::LevelUpService.new(startup).execute
       redirect_back(fallback_location: dashboard_founder_path)
     end
@@ -78,7 +77,11 @@ module Founders
 
     def founder_details
       @startup.founders.not_exited.each_with_object([]) do |founder, array|
-        array << { founderId: founder.id, founderName: founder.name, profileImageUrl: profile_image_url(founder, avatar_version: :mid) }
+        array << {
+          founderId: founder.id,
+          founderName: founder.name,
+          avatar: avatar(founder.name, founder: founder)
+        }
       end
     end
 
@@ -100,7 +103,8 @@ module Founders
         sessionTags: dashboard_data_service.session_tags,
         timelineEventTypes: list_service.list,
         allowFacebookShare: current_founder.facebook_token_available?,
-        eligibleToLevelUp: Startups::LevelUpEligibilityService.new(@startup).eligible?,
+        levelUpEligibility: Startups::LevelUpEligibilityService.new(@startup, current_founder).eligibility,
+        maxLevelNumber: Level.maximum.number,
         founderDetails: founder_details
       }
     end

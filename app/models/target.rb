@@ -2,6 +2,12 @@
 # frozen_string_literal: true
 
 class Target < ApplicationRecord
+  KEY_ADMISSIONS_SCREENING = 'admissions_screening'
+  KEY_ADMISSIONS_FEE_PAYMENT = 'admissions_fee_payment'
+  KEY_ADMISSIONS_COFOUNDER_ADDITION = 'admissions_cofounder_addition'
+  KEY_ADMISSIONS_PRE_SELECTION = 'admissions_pre_selection'
+  KEY_ADMISSIONS_ATTEND_INTERVIEW = 'admissions_attend_interview'
+
   belongs_to :assigner, class_name: 'Faculty'
   belongs_to :timeline_event_type, optional: true
   has_many :timeline_events
@@ -26,9 +32,10 @@ class Target < ApplicationRecord
   end
 
   ROLE_FOUNDER = 'founder'
+  ROLE_TEAM = 'team'
 
   def self.target_roles
-    [ROLE_FOUNDER]
+    [ROLE_FOUNDER, ROLE_TEAM].freeze
   end
 
   # See en.yml's target.role
@@ -45,13 +52,23 @@ class Target < ApplicationRecord
     [TYPE_TODO, TYPE_ATTEND, TYPE_READ, TYPE_LEARN].freeze
   end
 
+  SUBMITTABILITY_RESUBMITTABLE = 'resubmittable'
+  SUBMITTABILITY_SUBMITTABLE_ONCE = 'submittable_once'
+  SUBMITTABILITY_NOT_SUBMITTABLE = 'not_submittable'
+
+  def self.valid_submittability_values
+    [SUBMITTABILITY_RESUBMITTABLE, SUBMITTABILITY_SUBMITTABLE_ONCE, SUBMITTABILITY_NOT_SUBMITTABLE].freeze
+  end
+
   # Need to allow these two to be read for AA form.
   attr_reader :startup_id, :founder_id
 
-  validates :target_type, inclusion: { in: valid_target_types }
+  validates :target_type, inclusion: { in: valid_target_types }, allow_nil: true
   validates :role, presence: true, inclusion: { in: valid_roles }
   validates :title, presence: true
   validates :description, presence: true
+  validates :key, uniqueness: true, allow_nil: true
+  validates :submittability, inclusion: { in: valid_submittability_values }
 
   validate :days_to_complete_or_session_at_should_be_present
 
@@ -86,6 +103,8 @@ class Target < ApplicationRecord
     errors[:target_group] << 'is required if target is not a chore or session' if target_group.blank?
   end
 
+  normalize_attribute :key
+
   def display_name
     return title if level.blank?
     "L#{level.number}: #{title}"
@@ -102,6 +121,10 @@ class Target < ApplicationRecord
   def status(founder)
     @status ||= {}
     @status[founder.id] ||= Targets::StatusService.new(self, founder).status
+  end
+
+  def pending?(founder)
+    status(founder) == Targets::StatusService::STATUS_PENDING
   end
 
   def stats_service

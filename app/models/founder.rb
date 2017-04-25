@@ -5,10 +5,8 @@ class Founder < ApplicationRecord
   extend FriendlyId
   extend Forwardable
 
-  include Gravtastic
   include PrivateFilenameRetrievable
 
-  gravtastic
   acts_as_taggable
 
   GENDER_MALE = 'male'
@@ -18,6 +16,13 @@ class Founder < ApplicationRecord
   COFOUNDER_PENDING = 'pending'
   COFOUNDER_ACCEPTED = 'accepted'
   COFOUNDER_REJECTED = 'rejected'
+
+  PAYMENT_METHOD_HARDSHIP_SCHOLARSHIP = -'Hardship Scholarship'
+  PAYMENT_METHOD_REGULAR_FEE = -'Regular Fee'
+  PAYMENT_METHOD_MERIT_SCHOLARSHIP = -'Merit Scholarship'
+  REQUIRES_INCOME_PROOF = [PAYMENT_METHOD_HARDSHIP_SCHOLARSHIP].freeze
+  FEE_PAYMENT_METHODS = [PAYMENT_METHOD_REGULAR_FEE, PAYMENT_METHOD_HARDSHIP_SCHOLARSHIP, PAYMENT_METHOD_MERIT_SCHOLARSHIP].freeze
+  ID_PROOF_TYPES = ['Aadhaar Card', 'Driving License', 'Passport', 'Voters ID'].freeze
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -29,6 +34,7 @@ class Founder < ApplicationRecord
   has_many :requests
   belongs_to :father, class_name: 'Name'
   belongs_to :startup
+  belongs_to :invited_startup, class_name: 'Startup'
   belongs_to :university
   has_many :karma_points, dependent: :destroy
   has_many :timeline_events
@@ -38,7 +44,13 @@ class Founder < ApplicationRecord
   belongs_to :user
   belongs_to :college, optional: true
   has_one :batch_applicant
+  has_one :payment, dependent: :restrict_with_error
+  has_one :referral_coupon, class_name: 'Coupon', foreign_key: 'referrer_id'
+  has_many :coupon_usages, through: :referral_coupon
+  has_many :referred_startups, class_name: 'Startup', through: :coupon_usages, source: 'startup'
 
+  scope :admitted, -> { joins(:startup).merge(Startup.admitted) }
+  scope :level_zero, -> { joins(:startup).merge(Startup.level_zero) }
   scope :batched, -> { joins(:startup).merge(Startup.batched) }
   scope :for_batch_id_in, ->(ids) { joins(:startup).where(startups: { batch_id: ids }) }
   scope :not_dropped_out, -> { joins(:startup).merge(Startup.not_dropped_out) }
@@ -56,11 +68,12 @@ class Founder < ApplicationRecord
   scope :active_on_web, ->(since, upto) { joins(user: :visits).where(visits: { started_at: since..upto }) }
 
   scope :inactive, lambda {
-    where(exited: false).where.not(id: active_on_slack(Time.now.beginning_of_week, Time.now)).where.not(id: active_on_web(Time.now.beginning_of_week, Time.now))
+    admitted.where(exited: false).where.not(id: active_on_slack(Time.now.beginning_of_week, Time.now)).where.not(id: active_on_web(Time.now.beginning_of_week, Time.now))
   }
   scope :not_exited, -> { where.not(exited: true) }
 
   scope :with_email, ->(email) { where('lower(email) = ?', email.downcase) }
+  scope :with_referrals, -> { joins(:referred_startups).distinct }
 
   def self.ransackable_scopes(_auth)
     %i(ransack_tagged_with)
@@ -70,9 +83,11 @@ class Founder < ApplicationRecord
     [GENDER_MALE, GENDER_FEMALE, GENDER_OTHER]
   end
 
-  validates :born_on, presence: true
-  validates :gender, inclusion: { in: valid_gender_values }
+  validates :born_on, presence: true, allow_nil: true
+  validates :gender, inclusion: { in: valid_gender_values }, allow_nil: true
   validates :email, uniqueness: true, allow_nil: true
+  validates :fee_payment_method, inclusion: { in: FEE_PAYMENT_METHODS }, allow_nil: true
+  validates :id_proof_type, inclusion: { in: ID_PROOF_TYPES }, allow_nil: true
 
   validate :age_more_than_18
 
@@ -124,6 +139,9 @@ class Founder < ApplicationRecord
   process_in_background :college_identification
 
   mount_uploader :identification_proof, IdentificationProofUploader
+  mount_uploader :address_proof, AddressProofUploader
+  mount_uploader :income_proof, IncomeProofUploader
+  mount_uploader :letter_from_parent, LetterFromParentUploader
 
   normalize_attribute :startup_id, :invitation_token, :twitter_url, :linkedin_url, :name, :slack_username, :resume_url,
     :semester, :year_of_graduation
@@ -140,6 +158,7 @@ class Founder < ApplicationRecord
   end
 
   has_secure_token :auth_token
+  has_secure_token :invitation_token
 
   before_validation :remove_at_symbol_from_slack_username
 
@@ -186,12 +205,12 @@ class Founder < ApplicationRecord
 
   # The option to create connect requests is restricted to team leads of batched, approved startups.
   def can_connect?
-    startup.present? && startup.approved? && startup.batched? && startup_admin?
+    startup.present? && startup.approved? && !level_zero? && startup_admin?
   end
 
   # The option to view some info about creating connect requests is restricted to non-lead members of batched, approved startups.
   def can_view_connect?
-    startup.present? && startup.approved? && startup.batched? && !startup_admin?
+    startup.present? && startup.approved? && !level_zero? && !startup_admin?
   end
 
   def pending_connect_request_for?(faculty)
@@ -328,6 +347,33 @@ class Founder < ApplicationRecord
         resume_event&.first_attachment_url
       end
     end
+  end
+
+  def generate_referral_coupon!
+    Coupon.create!(
+      code: rand(36**6).to_s(36),
+      coupon_type: Coupon::TYPE_DISCOUNT,
+      discount_percentage: Coupon::REFERRAL_DISCOUNT,
+      redeem_limit: Coupon::REFERRAL_LIMIT,
+      referrer: self
+    )
+  end
+
+  def profile_complete?
+    required_fields = %i(name roles born_on gender parent_name communication_address permanent_address address_proof phone id_proof_type id_proof_number identification_proof)
+    required_fields += %i(income_proof letter_from_parent college_contact) if income_proofs_required?
+
+    required_fields.all? { |field| self[field].present? }
+  end
+
+  def income_proofs_required?
+    fee_payment_method.in?(REQUIRES_INCOME_PROOF)
+  end
+
+  delegate level_zero?: :startup
+
+  def invited
+    invited_startup.present?
   end
 
   private

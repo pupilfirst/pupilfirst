@@ -12,6 +12,7 @@ class StartupsController < ApplicationController
   def show
     @skip_container = true
     @startup = Startup.friendly.find(params[:id])
+    authorize @startup, :show?
 
     if params[:show_feedback].present?
       if current_founder.present?
@@ -53,10 +54,12 @@ class StartupsController < ApplicationController
 
   def edit
     @startup = current_founder.startup
+    authorize @startup
   end
 
   def update
     @startup = current_founder.startup
+    authorize @startup
 
     if @startup.update(startup_params)
       flash[:success] = 'Startup details have been updated.'
@@ -76,7 +79,7 @@ class StartupsController < ApplicationController
   # TODO: This method should be replaced with a Form to validate input from the filter.
   def load_startups
     batch_id = params.dig(:startups_filter, :batch)
-    batch_scope = batch_id.present? ? Startup.where(batch_id: batch_id) : Startup.batched
+    batch_scope = batch_id.present? ? Startup.where(batch_id: batch_id) : Startup.all
 
     category_id = params.dig(:startups_filter, :category)
 
@@ -89,7 +92,7 @@ class StartupsController < ApplicationController
     stage = params.dig(:startups_filter, :stage)
     stage_scope = stage.present? ? Startup.where(stage: stage) : Startup.unscoped
 
-    unsorted_startups = Startup.approved.merge(batch_scope).merge(category_scope).merge(stage_scope)
+    unsorted_startups = Startup.admitted.approved.merge(batch_scope).merge(category_scope).merge(stage_scope)
 
     # HACK: account for startups with latest_team_event_date = nil while sorting
     @startups = unsorted_startups.select(&:latest_team_event_date).sort_by(&:latest_team_event_date).reverse + unsorted_startups.reject(&:latest_team_event_date)

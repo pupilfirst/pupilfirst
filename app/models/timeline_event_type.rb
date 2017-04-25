@@ -11,6 +11,8 @@ class TimelineEventType < ApplicationRecord
   TYPE_NEW_VIDEO = 'new_video'
   TYPE_HELP_WANTED = 'help_wanted'
   TYPE_RESUME_SUBMISSION = 'resume_submission'
+  TYPE_TEAM_UPDATE = 'team_update'
+  TYPE_FOUNDER_UPDATE = 'founder_update'
 
   TYPE_STAGE_IDEA = 'moved_to_idea_discovery'
   TYPE_STAGE_PROTOTYPE = 'moved_to_prototyping'
@@ -104,5 +106,9 @@ class TimelineEventType < ApplicationRecord
 
   def self.help_wanted
     find_by(key: TYPE_HELP_WANTED)
+  end
+
+  def self.team_update
+    find_by(key: TYPE_TEAM_UPDATE)
   end
 end

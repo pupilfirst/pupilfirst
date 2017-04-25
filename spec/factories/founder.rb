@@ -2,8 +2,9 @@ FactoryGirl.define do
   factory :founder do
     user
     name { Faker::Name.name }
-    born_on { 20.years.ago }
-    gender Founder::GENDER_MALE
-    email { Faker::Internet.email }
+    email { Faker::Internet.email(name) }
+    sequence(:phone) { |n| (9_876_543_210 + n).to_s }
+    college
+    reference { I18n.t('models.founder.references').sample }
   end
 end

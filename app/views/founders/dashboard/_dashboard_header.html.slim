@@ -10,20 +10,21 @@
         h3.founder-dashboard-header__product-title.font-semibold
           | #{@startup.product_name}
         - if @startup.name.present?
-        .startup-founders.hidden-xs-down
+        .founder-dashboard__avatars.hidden-xs-down
           .hidden-xs-down
             - @startup.founders.not_exited.each do |founder|
-              a.founder-avatar-bubble href=founder_profile_path(founder.slug)
-                = image_tag profile_image_url(founder, avatar_version: :mid), class: 'img-circle'
+              - url = policy(founder).founder_profile? ? founder_profile_path(founder.slug) : '#'
+              a.founder-dashboard__avatar-wrapper href=url
+                = avatar(founder.name, founder: founder)
           .hidden-sm-up
             - if @startup.founders.count > 4
               - @startup.founders.order(:id).limit(3).each do |founder|
-                .founder-avatar-bubble
-                  = image_tag profile_image_url(founder, avatar_version: :thumb), class: 'img-circle'
-              .founder-avatar-bubble.text-xs-center.reamining-founders
-                span.reamining-founders-count
+                .founder-dashboard__avatar-wrapper
+                  = avatar(founder.name, founder: founder, version: :thumb)
+              .founder-avatar-bubble.text-xs-center.remaining-founders
+                span.remaining-founders-count
                   | +#{@startup.founders.count - 3}
             - else
               - @startup.founders.each do |founder|
-                .founder-avatar-bubble
-                  = image_tag profile_image_url(founder, avatar_version: :thumb), class: 'img-circle'
+                .founder-dashboard__avatar-wrapper
+                  = avatar(founder.name, founder: founder, version: :thumb)

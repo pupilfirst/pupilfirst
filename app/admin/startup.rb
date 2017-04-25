@@ -4,7 +4,7 @@ ActiveAdmin.register Startup do
   permit_params :product_name, :product_description, :legal_registered_name, :website, :email, :logo, :facebook_link,
     :twitter_link, :created_at, :updated_at, :dropped_out, :registration_type, :agreement_signed_at,
     :presentation_link, :product_video_link, :wireframe_link, :prototype_link, :slug, :batch_id, :level_id,
-    startup_category_ids: [], founder_ids: [], tag_list: []
+    :partnership_deed, :payment_reference, :agreements_verified, startup_category_ids: [], founder_ids: [], tag_list: []
 
   filter :product_name, as: :select
   filter :level
@@ -23,10 +23,10 @@ ActiveAdmin.register Startup do
   filter :startup_categories
   filter :dropped_out
 
-  scope :batched_and_approved, default: true
-  scope :batched
+  scope :admitted, default: true
   scope :inactive_for_week
   scope :endangered
+  scope :level_zero
   scope :all
 
   controller do
@@ -50,6 +50,8 @@ ActiveAdmin.register Startup do
     column :product do |startup|
       link_to startup.display_name, admin_startup_path(startup)
     end
+
+    column :level
 
     column :timeline_events do |startup|
       ol do
@@ -97,6 +99,8 @@ ActiveAdmin.register Startup do
   csv do
     column :product_name
     column :product_description
+    column(:level) { |startup| startup.level.number }
+    column(:maximum_level) { |startup| startup.maximum_level.number }
     column(:timeline_link) { |startup| startup_url(startup) }
     column :presentation_link
     column :product_video_link
@@ -216,6 +220,7 @@ ActiveAdmin.register Startup do
       end
 
       row :level
+      row :maximum_level
       row :batch
       row :iteration
 
@@ -310,6 +315,18 @@ ActiveAdmin.register Startup do
 
       row :registration_type
       row :address
+      row :program_started_on
+      row :agreements_verified
+
+      row :partnership_deed do
+        if startup.partnership_deed.present?
+          link_to 'Click here to open in new window', startup.partnership_deed.url, target: '_blank'
+        end
+      end
+
+      row :courier_name
+      row :courier_number
+      row :payment_reference
     end
   end
 

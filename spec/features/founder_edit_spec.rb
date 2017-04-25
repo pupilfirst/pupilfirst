@@ -3,8 +3,13 @@ require 'rails_helper'
 include UserSpecHelper
 
 feature 'Founder Edit' do
-  let(:founder) { create :founder }
+  let(:startup) { create :startup }
+  let(:founder) { create :founder, college: nil, college_text: 'Anon College of Engineering' }
   let(:new_founder_name) { Faker::Name.name }
+
+  before do
+    startup.founders << founder
+  end
 
   context 'Active founder visits edit page of his profile' do
     before :each do

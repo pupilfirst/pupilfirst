@@ -19,7 +19,7 @@ feature 'Manual User Sign Out' do
       visit edit_founder_startup_path
 
       # User should be signed out.
-      expect(page).to have_content('Checkout the latest images from our #StartInCollege campaign!')
+      expect(page).to have_content('Check out the latest images from our #StartInCollege campaign!')
 
       # Log the user in again.
       user.regenerate_login_token
@@ -35,7 +35,7 @@ feature 'Manual User Sign Out' do
         visit edit_founder_startup_path
 
         # User should be signed out.
-        expect(page).to have_content('Checkout the latest images from our #StartInCollege campaign!')
+        expect(page).to have_content('Check out the latest images from our #StartInCollege campaign!')
       end
     end
   end
@@ -54,7 +54,7 @@ feature 'Manual User Sign Out' do
         visit edit_founder_startup_path
 
         # User should be signed out.
-        expect(page).to have_content('Checkout the latest images from our #StartInCollege campaign!')
+        expect(page).to have_content('Check out the latest images from our #StartInCollege campaign!')
       end
     end
   end

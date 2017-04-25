@@ -1,17 +1,30 @@
 require_relative 'helper'
 
-after 'development:founders', 'development:timeline_event_types', 'development:batches', 'development:categories' do
+after 'development:levels', 'development:founders', 'development:timeline_event_types', 'development:batches', 'development:categories' do
   puts 'Seeding startups'
 
-  batch = Batch.find_by(batch_number: 2)
+  # Level 0 startup.
+  level_0 = Level.zero
+  john_doe = Founder.find_by(email: 'johndoe@example.com')
+
+  john_doe.create_startup!(
+    product_name: 'Unfinished Swan',
+    level: level_0,
+    maximum_level: level_0,
+    admin: john_doe
+  )
+
+  level_1 = Level.find_by(number: 1)
+  level_2 = Level.find_by(number: 2)
 
   # Startup with live agreement.
   super_startup = Startup.new(
+    level: level_1,
+    maximum_level: level_1,
     name: 'Super Startup',
     product_name: 'Super Product',
     product_description: 'This really is a superb product! ;)',
     agreement_signed_at: 18.months.ago,
-    batch: batch,
     website: 'https://www.superstartup.in',
     logo: File.open(File.join(Rails.root, "app/assets/images/logo.png")),
     presentation_link: 'https://slideshare.net/superstartupdeck',
@@ -22,7 +35,8 @@ after 'development:founders', 'development:timeline_event_types', 'development:b
     facebook_link: 'https://facebook.com/superstartup',
     product_video_link: 'https://www.youtube.com/ourvideo',
     prototype_link: 'https://www.github.com/superstartup',
-    wireframe_link: 'https://drive.google.com/superstartup/wireframe'
+    wireframe_link: 'https://drive.google.com/superstartup/wireframe',
+    program_started_on: 8.weeks.ago
   )
 
   # ...whose founder is Some One.
@@ -41,12 +55,14 @@ after 'development:founders', 'development:timeline_event_types', 'development:b
   # a second avengers startup
   avengers_startup = Startup.new(
     name: 'The Avengers',
+    level: level_2,
+    maximum_level: level_2,
     product_name: 'SuperHeroes',
     product_description: 'Earths Mightiest Heroes joined forces to take on threats that were too big for any one hero to tackle.',
     agreement_signed_at: 2.years.ago,
-    batch: batch,
     website: 'https://www.avengers.co',
-    startup_categories: [StartupCategory.second, StartupCategory.last]
+    startup_categories: [StartupCategory.second, StartupCategory.last],
+    program_started_on: 4.weeks.ago
   )
 
   # make ironman the team lead
@@ -60,4 +76,9 @@ after 'development:founders', 'development:timeline_event_types', 'development:b
   avengers_startup.founders << Founder.find_by(email: 'hulk@avengers.co')
   avengers_startup.founders << Founder.find_by(email: 'thor@avengers.co')
   avengers_startup.save!
+
+  # Assign both startups to the first batch
+  # TODO: This has to be removed after excising all code that requires a batch
+  super_startup.update!(batch: Batch.first)
+  avengers_startup.update!(batch: Batch.first)
 end

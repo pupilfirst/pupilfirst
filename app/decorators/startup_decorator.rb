@@ -41,4 +41,11 @@ class StartupDecorator < Draper::Decorator
   def performance_service
     @performance_service ||= Startups::PerformanceService.new
   end
+
+  def founders_profiles_complete?
+    founders.all?(&:profile_complete?)
+  end
+
+  alias partnership_deed_ready? founders_profiles_complete?
+  alias incubation_agreement_ready? founders_profiles_complete?
 end

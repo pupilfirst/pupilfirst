@@ -3,15 +3,15 @@ module TimelineEvents
     include RoutesResolvable
 
     def data
-      TimelineEvent.pending.includes(:timeline_event_type, [founder: :user], :startup, :target, :timeline_event_files, [improvement_of: :timeline_event_type]).order('timeline_events.created_at').each_with_object({}) do |event, hash|
+      TimelineEvent.pending.includes(:timeline_event_type, [founder: :user], [startup: :level], :target, :timeline_event_files, [improvement_of: :timeline_event_type]).order('timeline_events.created_at').each_with_object({}) do |event, hash|
         hash[event.id] = {
           event_id: event.id,
           title: event.title,
-          user_id: event.founder.user.id,
           event_on: event.event_on.strftime('%b %d, %Y'),
           created_at: event.created_at.strftime('%b %d %H:%M'),
           description: event.description,
-          feedback_url: feedback_url(event)
+          feedback_url: feedback_url(event),
+          level_scope: level_scope(event)
         }
 
         hash[event.id] = merge_attachment_details(event, hash[event.id])
@@ -32,6 +32,7 @@ module TimelineEvents
 
     def merge_owner_details(event, hash)
       hash.merge(
+        user_id: event.founder.user.id,
         founder_id: event.founder_id,
         founder_name: event.founder.name,
         startup_id: event.startup_id,
@@ -61,6 +62,10 @@ module TimelineEvents
 
     def impersonate_url(timeline_event)
       url_helpers.impersonate_admin_user_url(timeline_event.founder.user, referer: timeline_event.share_url)
+    end
+
+    def level_scope(event)
+      event.startup.level.number.positive? ? 'admitted' : 'levelZero'
     end
   end
 end

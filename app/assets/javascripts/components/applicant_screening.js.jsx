@@ -44,10 +44,10 @@ class ApplicantScreening extends React.Component {
       <div className={ this.containerClasses() }>
         <ApplicantScreeningSection key={ "section-left-" + this.state.baseKey } side="left"
           selectSectionCB={ this.selectSectionCB } resetCB={ this.resetCB } selectedSide={ this.state.selectedSide }
-          iconPath={ this.props.coderIconPath }/>
+          iconPath={ this.props.coderIconPath } formAuthenticityToken={ this.props.formAuthenticityToken }/>
         <ApplicantScreeningSection key={ "section-right-" + this.state.baseKey } side="right"
           selectSectionCB={ this.selectSectionCB } resetCB={ this.resetCB } selectedSide={ this.state.selectedSide }
-          iconPath={ this.props.nonCoderIconPath }/>
+          iconPath={ this.props.nonCoderIconPath } formAuthenticityToken={ this.props.formAuthenticityToken }/>
       </div>
     );
   }
@@ -55,5 +55,6 @@ class ApplicantScreening extends React.Component {
 
 ApplicantScreening.propTypes = {
   coderIconPath: React.PropTypes.string,
-  nonCoderIconPath: React.PropTypes.string
+  nonCoderIconPath: React.PropTypes.string,
+  formAuthenticityToken: React.PropTypes.string
 };

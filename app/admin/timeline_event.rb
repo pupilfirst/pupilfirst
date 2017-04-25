@@ -25,8 +25,9 @@ ActiveAdmin.register TimelineEvent do
   filter :created_at
   filter :verified_at
 
+  scope :from_admitted_startups, default: true
+  scope :from_level_0_startups
   scope :all
-  scope :batched
   scope :not_improved
 
   config.sort_order = 'updated_at_desc'
@@ -89,8 +90,12 @@ ActiveAdmin.register TimelineEvent do
 
       points = params[:points].present? ? params[:points].to_i : nil
 
-      TimelineEvents::VerificationService.new(timeline_event).update_status(status, grade: params[:grade], points: points)
-      head :ok
+      begin
+        TimelineEvents::VerificationService.new(timeline_event).update_status(status, grade: params[:grade], points: points)
+        head :ok
+      rescue TimelineEvents::VerificationNotAllowedException => e
+        render json: { error: e.message }.to_json, status: 403
+      end
     else
       # someone else already reviewed this event! Ask javascript to reload page.
       render json: { error: 'Event no longer pending review! Refreshing your dashboard.' }.to_json, status: 422

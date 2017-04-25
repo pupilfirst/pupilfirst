@@ -113,7 +113,7 @@ startTour = ->
         intro: startupShowTour.data('sessions')
       },
       {
-        element: $('.founder-dashboard-target-group__container')[0],
+        element: $('.founder-dashboard-target-group__header')[0],
         intro: startupShowTour.data('targetGroup')
       },
       {
@@ -128,10 +128,6 @@ startTour = ->
       {
         element: $('.founder-dashboard-target-header__status-badge')[0],
         intro: startupShowTour.data('targetStatus')
-      },
-      {
-        element: $('.btn-timeline-builder')[0],
-        intro: startupShowTour.data('addEvent')
       }
     ]
   )

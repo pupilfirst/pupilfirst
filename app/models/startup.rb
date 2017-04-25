@@ -3,6 +3,7 @@
 
 class Startup < ApplicationRecord
   include FriendlyId
+  include PrivateFilenameRetrievable
   acts_as_taggable
 
   # For an explanation of these legacy values, see linked trello card.
@@ -31,6 +32,9 @@ class Startup < ApplicationRecord
   # agreement duration in years
   AGREEMENT_DURATION = 5
 
+  APPLICATION_FEE = 3000
+  COURSE_FEE = 50_000
+
   def self.valid_product_progress_values
     [
       PRODUCT_PROGRESS_IDEA, PRODUCT_PROGRESS_MOCKUP, PRODUCT_PROGRESS_PROTOTYPE, PRODUCT_PROGRESS_PRIVATE_BETA,
@@ -42,6 +46,8 @@ class Startup < ApplicationRecord
     [REGISTRATION_TYPE_PRIVATE_LIMITED, REGISTRATION_TYPE_PARTNERSHIP, REGISTRATION_TYPE_LLP]
   end
 
+  scope :admitted, -> { joins(:level).where('levels.number > ?', 0) }
+  scope :level_zero, -> { joins(:level).where(levels: { number: 0 }) }
   scope :batched, -> { where.not(batch_id: nil) }
   scope :approved, -> { where.not(dropped_out: true) }
   scope :dropped_out, -> { where(dropped_out: true) }
@@ -81,14 +87,14 @@ class Startup < ApplicationRecord
       .pluck(:id)
 
     # Filter them out.
-    batched.approved.not_dropped_out.where.not(id: startups_with_karma_ids)
+    batched.approved.admitted.not_dropped_out.where.not(id: startups_with_karma_ids)
   end
 
   def self.endangered
     startups_with_karma_ids = joins(:karma_points)
       .where(karma_points: { created_at: 3.weeks.ago..Time.now })
       .pluck(:id)
-    batched.approved.not_dropped_out.where.not(id: startups_with_karma_ids)
+    batched.approved.admitted.not_dropped_out.where.not(id: startups_with_karma_ids)
   end
 
   # Find all by specific category.
@@ -97,6 +103,7 @@ class Startup < ApplicationRecord
   end
 
   has_many :founders
+  has_many :invited_founders, class_name: 'Founder', foreign_key: 'invited_startup_id'
 
   has_and_belongs_to_many :startup_categories do
     def <<(_category)
@@ -116,7 +123,14 @@ class Startup < ApplicationRecord
 
   belongs_to :batch
   belongs_to :level
+  belongs_to :maximum_level, class_name: 'Level'
   belongs_to :requested_restart_level, class_name: 'Level'
+  has_one :payment, dependent: :restrict_with_error
+  has_many :archived_payments, class_name: 'Payment', foreign_key: 'original_startup_id'
+  has_many :coupon_usages
+  has_many :coupons, through: :coupon_usages
+  has_many :referrers, through: :coupons
+  has_many :resources
 
   # use the old name attribute as an alias for legal_registered_name
   alias_attribute :name, :legal_registered_name
@@ -128,7 +142,7 @@ class Startup < ApplicationRecord
   friendly_id :slug
 
   validates :slug, format: { with: /\A[a-z0-9\-_]+\z/i }, allow_nil: true
-  validates :product_name, presence: true, uniqueness: { case_sensitive: false, scope: :batch_id }
+  validates :product_name, presence: true
 
   # TODO: probably stale
   validates :registration_type, presence: true, if: ->(startup) { startup.validate_registration_type }
@@ -143,6 +157,8 @@ class Startup < ApplicationRecord
   validates :product_description, length: { maximum: MAX_PRODUCT_DESCRIPTION_CHARACTERS, message: "must be within #{MAX_PRODUCT_DESCRIPTION_CHARACTERS} characters" }
 
   validates :pitch, length: { maximum: MAX_PITCH_CHARACTERS, message: "must be within #{MAX_PITCH_CHARACTERS} characters" }
+
+  validates :level, presence: true
 
   # New set of validations for incubation wizard
   store :metadata, accessors: [:updated_from]
@@ -179,6 +195,7 @@ class Startup < ApplicationRecord
   end
 
   mount_uploader :logo, LogoUploader
+  mount_uploader :partnership_deed, PartnershipDeedUploader
   process_in_background :logo
 
   normalize_attribute :pitch, :product_description, :email, :phone
@@ -408,5 +425,72 @@ class Startup < ApplicationRecord
   def restartable_levels
     return Level.none if level.number < 2
     Level.where(number: 1..(level.number - 1))
+  end
+
+  def fee
+    latest_coupon.present? ? discounted_fee : APPLICATION_FEE
+  end
+
+  def latest_coupon
+    coupons&.last
+  end
+
+  def discounted_fee
+    (APPLICATION_FEE * (1 - (latest_coupon.discount_percentage.to_f / 100))).round
+  end
+
+  def present_week_number
+    return nil if level.number.zero?
+    return 1 if Date.today == program_started_on
+
+    days_elapsed = (Date.today - program_started_on)
+    weeks_elapsed = days_elapsed.to_f / 7
+
+    # Let's round up.
+    weeks_elapsed.ceil
+  end
+
+  def week_percentage
+    ((present_week_number.to_f / 24) * 100).to_i
+  end
+
+  def referrer
+    referrers&.last
+  end
+
+  def founder_eligible_for_refund
+    founders.order('name ASC').find_by(fee_payment_method: Founder::PAYMENT_METHOD_REGULAR_FEE)
+  end
+
+  # Returns remaining course fee for a given applicant.
+  def founder_course_fee(founder)
+    raise "Founder##{founder.id} does not belong to Startup##{id}" unless founders.include?(founder)
+
+    refund_amount = payment&.amount.to_i
+
+    if refund_amount.positive? && founder == founder_eligible_for_refund
+      COURSE_FEE - refund_amount
+    elsif founder.fee_payment_method == Founder::PAYMENT_METHOD_REGULAR_FEE
+      COURSE_FEE
+    else
+      0
+    end
+  end
+
+  # Need to iterate over founders since each could have different payment method.
+  def total_course_fee
+    founders.map { |founder| founder_course_fee(founder) }.sum
+  end
+
+  def level_zero?
+    level.number.zero?
+  end
+
+  def fee_payment_methods_missing?
+    founders.pluck(:fee_payment_method).any?(&:nil?)
+  end
+
+  def eligible_to_connect?(faculty)
+    Startups::ConnectRequestEligibilityService.new(self, faculty).eligible?
   end
 end

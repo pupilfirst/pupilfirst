@@ -12,6 +12,11 @@
 - The timeline event review interface has been updated to ignore batch when loading pending timeline events. [[Trello]](https://trello.com/c/8628Cl2N)
 - Code related to the Coveralls service has been removed. [[Trello]](https://trello.com/c/GBWSDXwM)
 
+## 2017.04.17
+
+- AA: Add a Level filter to Startup#index. [[Trello]](https://trello.com/c/7CKPqiVx)
+- Content on the a few web pages were updated. [[Trello]](https://trello.com/c/mNaBcuEC)
+
 ## 2017.04.10
 
 - Fixed a bug that prevented founders from viewing target rubrics. [[Trello]](https://trello.com/c/LlYoVzzt)

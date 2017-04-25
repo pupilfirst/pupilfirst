@@ -1,13 +1,19 @@
 module TimelineEvents
+  # raised if any prerequisite condition for verification is not met
+  VerificationNotAllowedException = Class.new(StandardError)
+
   class VerificationService
-    def initialize(timeline_event)
+    def initialize(timeline_event, notify: true)
       @timeline_event = timeline_event
+      @notify = notify
       @target = @timeline_event.target
     end
 
     # rubocop:disable Metrics/CyclomaticComplexity
     def update_status(status, grade: nil, points: nil)
       raise 'Unexpected grade specified' unless grade.blank? || grade.in?(TimelineEvent.valid_grades)
+
+      ensure_update_allowed
 
       @grade = grade
       @points = points
@@ -27,7 +33,7 @@ module TimelineEvents
           raise 'Unexpected status specified!'
       end
 
-      TimelineEventVerificationNotificationJob.perform_later @timeline_event
+      TimelineEventVerificationNotificationJob.perform_later(@timeline_event) if @notify
 
       [@timeline_event, applicable_points]
     end
@@ -134,6 +140,12 @@ module TimelineEvents
 
     def cancel_reset_request
       Startups::RestartService.new(startup.admin).cancel
+    end
+
+    def ensure_update_allowed
+      # all founders should have their fee payment method set before passing them in the interview
+      return unless @target && @target.key == Target::KEY_ADMISSIONS_ATTEND_INTERVIEW
+      raise VerificationNotAllowedException, "Fee payment methods missing! Assign them for all founders of '#{startup.name}' and retry." if startup.fee_payment_methods_missing?
     end
   end
 end

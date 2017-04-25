@@ -1,0 +1,34 @@
+= content_for :heading
+  | You have been invited to join a startup at SV.CO
+
+= content_for :salutation
+  | Hello #{@founder.name},
+
+= content_for :body
+  p
+    ' You have been invited to join a startup at SV.CO. This startup's team lead is
+    ' #{@startup.admin.name}, and it is currently going through the application process
+    | to join the 6-month startup program at SV.CO.
+
+  - invitation_url = admissions_accept_invitation_url(token: @founder.invitation_token)
+
+  - if @founder.startup.present? && @founder.startup.founders.count > 1
+    p
+      ' You are already a member of a startup going through the application process. If you accept this
+      | invitation, you will be removed from it.
+
+  - elsif @founder.payment.present? && @founder.payment.refundable?
+    p
+      ' You are eligible for refund of the application fee for your previous sign-up. We will attempt to
+      | process the refund if you accept this invitation.
+
+  p
+    ' Please #{link_to 'click here', invitation_url} to accept the invitation and join the startup as a co-founder.
+
+  p
+    ' If you're unable to click on the link above, then please copy and paste the following URL into your browser's
+    | address bar:
+
+  p.monospace = invitation_url
+
+  p Reach out to us at #{mail_to 'help@sv.co'} in case of any queries.

@@ -97,14 +97,12 @@ describe TimelineEvents::VerificationService do
         end
 
         it 'functions as usual if the prerequisites are fulfilled' do
-          # fulfill the prerequisites
-          # rubocop:disable Rails/SkipsModelValidations
-          startup.founders.update_all(fee_payment_method: Founder::PAYMENT_METHOD_REGULAR_FEE)
-          # rubocop:enable Rails/SkipsModelValidations
+          # Fulfill prerequisites
+          startup.founders.update_all(fee_payment_method: Founder::PAYMENT_METHOD_REGULAR_FEE) # rubocop:disable Rails/SkipsModelValidations
 
           expect do
             subject.update_status(TimelineEvent::VERIFIED_STATUS_VERIFIED)
-          end.to_not raise_error(TimelineEvents::VerificationNotAllowedException)
+          end.to_not raise_error
         end
       end
     end

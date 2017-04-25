@@ -1,4 +1,8 @@
 class ResourcePolicy < ApplicationPolicy
+  def show?
+    scope.where(id: record.id).exists?
+  end
+
   def download?
     show?
   end
@@ -12,13 +16,16 @@ class ResourcePolicy < ApplicationPolicy
       # public resources for everyone
       resources = scope.where(level_id: nil, startup_id: nil)
 
-      # + resources for the startup
       startup = user&.founder&.startup
-      resources = resources.or(scope.where(startup: startup)) if startup.present?
 
-      # + resources based on the startup's maximum level
-      maximum_level = startup&.maximum_level
-      resources = resources.or(scope.where('levels.number <= ?', maximum_level.number)) if maximum_level.present?
+      if startup && !startup.dropped_out
+        # + resources for the startup
+        resources = resources.or(scope.where(startup: startup))
+
+        # + resources based on the startup's maximum level
+        maximum_level = startup&.maximum_level
+        resources = resources.or(scope.where('levels.number <= ?', maximum_level.number)) if maximum_level.present?
+      end
 
       resources
     end

@@ -58,26 +58,6 @@ class Resource < ApplicationRecord
 
   delegate :content_type, to: :file
 
-  def self.for(founder)
-    if !founder&.exited && founder&.startup&.approved?
-      where(
-        'share_status = ? OR (share_status = ? AND level_id IS ? AND startup_id IS ?) OR '\
-        '(share_status = ? AND level_id = ? AND startup_id IS ?) OR (share_status = ? AND startup_id = ?)',
-        SHARE_STATUS_PUBLIC,
-        SHARE_STATUS_APPROVED,
-        nil,
-        nil,
-        SHARE_STATUS_APPROVED,
-        founder.startup&.level&.id,
-        nil,
-        SHARE_STATUS_APPROVED,
-        founder.startup&.id
-      ).order('title')
-    else
-      public_resources
-    end
-  end
-
   def for_approved?
     share_status == SHARE_STATUS_APPROVED
   end

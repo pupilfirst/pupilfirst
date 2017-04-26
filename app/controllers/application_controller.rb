@@ -90,7 +90,7 @@ class ApplicationController < ActionController::Base
   end
 
   def feature_active?(feature)
-    Rails.env.development? || Rails.env.test? || Feature.active?(feature, current_founder)
+    Feature.active?(feature, current_founder)
   end
 
   helper_method :feature_active?

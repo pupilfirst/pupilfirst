@@ -1,30 +1,48 @@
 require 'rails_helper'
 
-feature 'Batch Application Registration' do
-  # Things that are assumed to exist.
-  let(:batch) { create :batch }
-  let!(:application_round) { create :application_round, :screening_stage, batch: batch }
+feature 'Founder Registration' do
+  let(:startup) { create :startup }
+  let(:founder) { create :founder }
+
+  # setup minimum stuff to display a dashboard
+  let!(:level_0) { create :level, :zero }
+  let(:level_0_targets) { create :target_group, milestone: true, level: level_0 }
+  let!(:screening_target) { create :target, :admissions_screening, target_group: level_0_targets }
 
   include UserSpecHelper
 
-  scenario 'user submits application', js: true do
-    pending 'Needs to be updated for continuous admissions process'
+  context 'user is already signed in as founder', js: true do
+    before do
+      startup.founders << founder
+      sign_in_user founder.user
+    end
 
-    visit apply_path
-    expect(page).to have_text('Did you complete registration once before?')
+    scenario 'user visits the apply page' do
+      visit apply_path
+      expect(page).to have_text('You have already completed registration.')
+      expect(page).to have_link('Go to Dashboard')
+    end
+  end
 
-    # user fills the form and submits
-    fill_in 'batch_applications_registration_name', with: 'Jack Sparrow'
-    fill_in 'batch_applications_registration_email', with: 'elcapitan@sv.co'
-    fill_in 'batch_applications_registration_email_confirmation', with: 'elcapitan@sv.co'
-    fill_in 'batch_applications_registration_phone', with: '9876543210'
+  context 'user is a new visitor' do
+    scenario 'user registers as a founder', js: true do
+      visit apply_path
+      expect(page).to have_text('Are you a registered founder?')
+      expect(page).to have_link('Sign In to Continue')
 
-    # Fill in college name because we don't want to bother with dynamically loaded select2.
-    select "My college isn't listed", from: 'batch_applications_registration_college_id'
-    fill_in 'batch_applications_registration_college_text', with: 'Swash Bucklers Training Institute'
+      # fill in the registration form
+      expect(page).to have_text('Apply Now')
+      fill_in 'founders_registration_name', with: 'Jack Sparrow'
+      fill_in 'founders_registration_email', with: 'elcapitan@sv.co'
+      fill_in 'founders_registration_email_confirmation', with: 'elcapitan@sv.co'
+      fill_in 'founders_registration_phone', with: '9876543210'
+      select "My college isn't listed", from: 'founders_registration_college_id'
+      fill_in 'founders_registration_college_text', with: 'Swash Bucklers Training Institute'
 
-    click_on 'Submit my application'
+      click_on 'Submit'
 
-    expect(page).to have_text('Do you know how to code?')
+      # founder must have reached his new dashboard with the tour triggere
+      expect(page).to have_text('Welcome to your personal dashboard!')
+    end
   end
 end

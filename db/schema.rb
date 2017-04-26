@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170422090657) do
+ActiveRecord::Schema.define(version: 20170426071327) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
 
   create_table "active_admin_comments", force: :cascade do |t|
@@ -551,10 +552,9 @@ ActiveRecord::Schema.define(version: 20170422090657) do
     t.string   "thumbnail"
     t.string   "title"
     t.text     "description"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
-    t.string   "share_status"
-    t.integer  "downloads",    default: 0
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.integer  "downloads",   default: 0
     t.string   "slug"
     t.integer  "batch_id"
     t.integer  "startup_id"
@@ -562,7 +562,6 @@ ActiveRecord::Schema.define(version: 20170422090657) do
     t.integer  "level_id"
     t.index ["batch_id"], name: "index_resources_on_batch_id", using: :btree
     t.index ["level_id"], name: "index_resources_on_level_id", using: :btree
-    t.index ["share_status", "batch_id"], name: "index_resources_on_share_status_and_batch_id", using: :btree
     t.index ["slug"], name: "index_resources_on_slug", using: :btree
     t.index ["startup_id"], name: "index_resources_on_startup_id", using: :btree
   end

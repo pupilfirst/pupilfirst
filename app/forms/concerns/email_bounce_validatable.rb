@@ -1,4 +1,4 @@
-# This module is included in BatchApplications::RegistrationForm and UserSignInForm
+# This module is included in UserSignInForm and Founders::RegistrationForm.
 module EmailBounceValidatable
   extend ActiveSupport::Concern
 

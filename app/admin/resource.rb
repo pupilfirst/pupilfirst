@@ -1,7 +1,7 @@
 ActiveAdmin.register Resource do
   include DisableIntercom
 
-  permit_params :title, :description, :file, :thumbnail, :share_status, :level_id, :startup_id, :video_embed, tag_list: []
+  permit_params :title, :description, :file, :thumbnail, :level_id, :startup_id, :video_embed, tag_list: []
 
   controller do
     def find_resource
@@ -12,10 +12,6 @@ ActiveAdmin.register Resource do
   filter :startup,
     collection: -> { Startup.approved.order(:product_name) },
     label: 'Product'
-
-  filter :share_status,
-    as: :select,
-    collection: -> { Resource.valid_share_statuses }
 
   filter :ransack_tagged_with,
     as: :select,
@@ -39,12 +35,6 @@ ActiveAdmin.register Resource do
   index do
     selectable_column
 
-    column :share_status do |resource|
-      if resource.share_status.present?
-        t("resource.share_status.#{resource.share_status}")
-      end
-    end
-
     column 'Shared with' do |resource|
       if resource.startup.present?
         link_to resource.startup.product_name, admin_startup_path(resource.startup)
@@ -67,12 +57,6 @@ ActiveAdmin.register Resource do
 
   show do
     attributes_table do
-      row :share_status do |resource|
-        if resource.share_status.present?
-          t("resource.share_status.#{resource.share_status}")
-        end
-      end
-
       row 'Shared with' do |resource|
         if resource.startup.present?
           link_to resource.startup.product_name, admin_startup_path(resource.startup)
@@ -113,11 +97,6 @@ ActiveAdmin.register Resource do
     f.semantic_errors(*f.object.errors.keys)
 
     f.inputs 'Resource details' do
-      f.input :share_status,
-        as: :select,
-        collection: Resource.valid_share_statuses.map { |s| [t("resource.share_status.#{s}"), s] },
-        include_blank: false
-
       f.input :level, label: 'Shared with Level', placeholder: 'Leave this unselected to share with all levels.'
       f.input :startup, label: 'Shared with Startup'
       f.input :file, as: :file

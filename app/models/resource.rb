@@ -23,13 +23,6 @@ class Resource < ApplicationRecord
     title_changed? || super
   end
 
-  SHARE_STATUS_PUBLIC = 'public'
-  SHARE_STATUS_APPROVED = 'approved'
-
-  def self.valid_share_statuses
-    [SHARE_STATUS_PUBLIC, SHARE_STATUS_APPROVED]
-  end
-
   validates :title, presence: true
   validates :description, presence: true
 

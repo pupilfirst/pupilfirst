@@ -204,6 +204,7 @@ ActiveAdmin.register Founder do
       row :about
       row :born_on
       row :parent_name
+      row :gender
       row :slack_username
       row :slack_user_id
       row 'Skype Id' do

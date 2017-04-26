@@ -40,6 +40,7 @@
     = f.input :video_embed
     = f.input :resource_url
     = f.input :completion_instructions
+    = f.input :link_to_complete
     = f.input :assigner, collection: Faculty.active.order(:name), include_blank: false
 
     = f.input :target_group,

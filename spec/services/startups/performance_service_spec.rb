@@ -10,15 +10,9 @@ describe Startups::PerformanceService do
   let!(:startup_2) { create :startup, level: level_1 }
   let!(:startup_3) { create :startup, level: level_1 }
 
-  current_time = Time.zone.now
-
   # The week starts at Monday 6 PM IST and ends at Monday 5:59:59 IST for leaderboard calculation.
   # Set 'week_starting_at' for weekly_karma_point accordingly to generate correct leaderboard
-  week_starting_at = if current_time.wday == 1 && current_time.hour < 18
-    (1.week.ago - 1.day).beginning_of_week + 18.hours
-  else
-    1.week.ago.beginning_of_week + 18.hours
-  end
+  week_starting_at = DatesService.last_week_start_date
 
   # assign weekly karma points to the startups
   let!(:week_karma_point_of_startup_1) { create :weekly_karma_point, startup: startup_1, level: level_1, points: 50, week_starting_at: week_starting_at }

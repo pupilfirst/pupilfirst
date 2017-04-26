@@ -1,27 +1,35 @@
 class IntercomNewApplicantCreateJob < ApplicationJob
   queue_as :default
-  attr_reader :applicant
 
-  def perform(applicant)
-    return if Rails.env.test?
+  class << self
+    attr_writer :mock
 
-    @applicant = applicant
+    def mock?
+      defined?(@mock) ? @mock : Rails.env.test?
+    end
+  end
+
+  def perform(founder)
+    return if self.class.mock?
+
     intercom = IntercomClient.new
-    user = intercom.find_or_create_user(email: applicant.email, name: applicant.name)
+    user = intercom.find_or_create_user(email: founder.email, name: founder.name)
 
-    intercom.update_user(user, phone: applicant.phone, college: applicant_college_name, application_round: open_round_name, university: applicant_university)
-    IntercomLastApplicantEventUpdateJob.perform_later(applicant, 'submitted_application')
+    intercom.update_user(
+      user,
+      phone: founder.phone,
+      college: founder_college_name(founder),
+      university: founder_university(founder)
+    )
+
+    IntercomLastApplicantEventUpdateJob.perform_later(founder, 'submitted_application')
   end
 
-  def open_round_name
-    ApplicationRound.open_round.display_name
+  def founder_college_name(founder)
+    founder.college&.name || founder.college_text
   end
 
-  def applicant_college_name
-    applicant.college&.name || applicant.college_text
-  end
-
-  def applicant_university
-    applicant.college&.replacement_university&.name
+  def founder_university(founder)
+    founder.college&.replacement_university&.name
   end
 end

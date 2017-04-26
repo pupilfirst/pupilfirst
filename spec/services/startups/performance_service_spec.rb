@@ -2,9 +2,8 @@ require 'rails_helper'
 
 describe Startups::PerformanceService do
   subject { described_class.new }
-  include ActiveSupport::Testing::TimeHelpers
 
-  let(:level_1) { create :level, :one }
+  let!(:level_1) { create :level, :one }
 
   # create startups in the same level
   let!(:startup_1) { create :startup, level: level_1 }

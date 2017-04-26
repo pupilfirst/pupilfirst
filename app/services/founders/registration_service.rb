@@ -42,7 +42,7 @@ module Founders
     end
 
     def create_or_update_user
-      user = User.with_email(@founder.email).first || User.create!(email: @founder.email)
+      user = User.with_email(@founder.email) || User.create!(email: @founder.email)
 
       # Update user info of founder
       @founder.update!(user: user)

@@ -14,7 +14,11 @@ class User < ApplicationRecord
 
   validates :email, presence: true, uniqueness: true, email: true
 
-  scope :with_email, ->(email) { where('lower(email) = ?', email.downcase) }
+  # rubocop:disable Rails/FindBy
+  def self.with_email(email)
+    where('lower(email) = ?', email.downcase).first
+  end
+  # rubocop:enable Rails/FindBy
 
   def email_bounced?
     email_bounced_at.present?

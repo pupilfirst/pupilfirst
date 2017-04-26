@@ -9,7 +9,7 @@ module Founders
     end
 
     def execute
-      founder = Founder.with_email(@attributes[:email]).first
+      founder = Founder.with_email(@attributes[:email])
 
       if founder.present?
         if founder.startup.present?
@@ -20,7 +20,7 @@ module Founders
         founder.regenerate_invitation_token
       else
         # Find or create user.
-        user = User.with_email(@attributes[:email]).first
+        user = User.with_email(@attributes[:email])
         user = User.create!(email: @attributes[:email]) if user.blank?
 
         # Create the founder.

@@ -21,7 +21,7 @@ module Founders
     # Applicant with application should be blocked from submitting the form. Zhe should login instead.
     def do_not_reapply
       return if email.blank?
-      founder = Founder.with_email(email).first
+      founder = Founder.with_email(email)
 
       return if founder&.startup.blank?
 

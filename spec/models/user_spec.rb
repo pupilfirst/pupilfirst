@@ -13,7 +13,7 @@ describe User, type: :model do
   describe '#with_email' do
     it 'performs case-insensitive search by email' do
       user = create(:user, email: 'random@example.com')
-      fetched_user = User.with_email('Random@example.com').first
+      fetched_user = User.with_email('Random@example.com')
       expect(fetched_user).to eq(user)
     end
   end

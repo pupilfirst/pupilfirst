@@ -71,9 +71,13 @@ class Founder < ApplicationRecord
     admitted.where(exited: false).where.not(id: active_on_slack(Time.now.beginning_of_week, Time.now)).where.not(id: active_on_web(Time.now.beginning_of_week, Time.now))
   }
   scope :not_exited, -> { where.not(exited: true) }
-
-  scope :with_email, ->(email) { where('lower(email) = ?', email.downcase) }
   scope :with_referrals, -> { joins(:referred_startups).distinct }
+
+  # rubocop:disable Rails/FindBy
+  def self.with_email(email)
+    where('lower(email) = ?', email.downcase).first
+  end
+  # rubocop:enable Rails/FindBy
 
   def self.ransackable_scopes(_auth)
     %i(ransack_tagged_with)

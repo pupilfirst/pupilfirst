@@ -27,7 +27,7 @@ class AdminUser < ApplicationRecord
   after_create :link_to_user
 
   def link_to_user
-    user = User.with_email(email).first
+    user = User.with_email(email)
     user = User.create!(email: email) if user.blank?
     update!(user: user)
   end

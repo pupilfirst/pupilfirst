@@ -11,7 +11,7 @@ module MoocStudents
     def register
       User.transaction do
         # Find or create the user entry.
-        user = User.with_email(attributes[:email]).first
+        user = User.with_email(attributes[:email])
         user = User.create!(email: attributes[:email]) if user.blank?
 
         # Find or initialize the user entry.

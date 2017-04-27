@@ -88,6 +88,10 @@ const TimelineBuilder = React.createClass({
     }
   },
 
+  hideFileForm: function() {
+    this.setState({showFileForm: false, previousForm: 'file'});
+  },
+
   hasAttachments: function () {
     return this.state.links.length > 0 || !$.isEmptyObject(this.state.files) || this.state.coverImage != null;
   },
@@ -366,7 +370,7 @@ const TimelineBuilder = React.createClass({
               <TimelineBuilderAttachmentForm currentForm={ this.currentForm() } previousForm={ this.state.previousForm }
                 addAttachmentCB={ this.addData } selectedDate={ this.state.date }
                 showSelectedFileError={ this.state.showSelectedFileError }
-                resetErrorsCB={ this.resetErrors }/>
+                resetErrorsCB={ this.resetErrors } hideFileForm={ this.hideFileForm }/>
 
               <TimelineBuilderActionBar formClickedCB={ this.toggleForm } currentForm={ this.currentForm() }
                 submitCB={ this.submit } timelineEventTypes={ this.props.timelineEventTypes }

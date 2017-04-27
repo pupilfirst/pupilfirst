@@ -10,8 +10,7 @@ gem 'rails', '= 5.0.2'
 
 gem 'dotenv-rails', '~> 2.2', groups: %i(development test)
 
-gem 'inherited_resources', '= 1.7.0', github: 'activeadmin/inherited_resources' # Required for Rails 5 support for activeadmin. TODO: Remove when activeadmin 1.0.0 is released, which is when I'm guessing this gem will be removed.
-gem 'activeadmin', '= 1.0.0.pre5', github: 'activeadmin/activeadmin' # Tracking master for Rails 5 support. TODO: Revert to rubygems version when 1.0.0 is released.
+gem 'activeadmin', '~> 1.0.0' # The administration framework for Ruby on Rails applications. https://activeadmin.info
 gem 'flattened_active_admin', '~> 0.0' # better looking and customizable activeadmin
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
 gem 'carrierwave', '~> 0.11' # One uploader to rule them all.

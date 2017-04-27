@@ -65,7 +65,6 @@ gem 'recaptcha', '~> 3.4', require: 'recaptcha/rails' # ReCaptcha helpers for ru
 gem 'groupdate', '~> 3.2' # The simplest way to group temporal data. https://github.com/ankane/groupdate
 gem 'videojs_rails', '~> 4.12' # Video JS for Rails 3.1+ Asset Pipeline. https://github.com/seanbehan/videojs_rails
 gem 'react-rails', '~> 1.10' # For automatically transforming JSX and using React in Rails.
-gem 'has_secure_token', '~> 1.0' # Used to create tokens for models (eg: for Faculty). TODO: Will be included with ActiveRecord in Rails 5.
 gem 'ahoy_matey', '~> 1.5' # Analytics for Rails
 gem 'acts-as-taggable-on', '~> 4.0' # Tag a single model on several contexts.
 gem 'will_paginate-bootstrap4', '~> 0.1' # This gem integrates the Twitter Bootstrap pagination component with the will_paginate pagination gem.

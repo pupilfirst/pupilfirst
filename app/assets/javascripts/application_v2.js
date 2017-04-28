@@ -60,7 +60,6 @@
 // require timeline_events
 // require transparency
 //= require v2/home
-//= require v2/batch_application
 //= require v2/resources
 //= require v2/about
 //= require v2/tour

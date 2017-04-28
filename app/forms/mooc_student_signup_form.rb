@@ -16,7 +16,7 @@ class MoocStudentSignupForm < Reform::Form
   def mooc_student_must_not_exist
     return if email.blank?
 
-    user = User.with_email(email).first
+    user = User.with_email(email)
     return if user.blank?
     return if user.mooc_student.blank?
     errors[:email] << 'is already registered for the course. Log in instead?'

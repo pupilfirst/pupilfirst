@@ -1,33 +1,4 @@
 GIT
-  remote: https://github.com/activeadmin/activeadmin.git
-  revision: fc08c0faff09d8257860c80fd81ee4278fc186be
-  specs:
-    activeadmin (1.0.0.pre5)
-      arbre (>= 1.1.1)
-      bourbon
-      coffee-rails
-      formtastic (~> 3.1)
-      formtastic_i18n
-      inherited_resources (~> 1.7)
-      jquery-rails
-      jquery-ui-rails
-      kaminari (>= 0.15, < 2.0)
-      railties (>= 4.0, < 5.1)
-      ransack (~> 1.3)
-      sass-rails
-      sprockets (< 4.1)
-
-GIT
-  remote: https://github.com/activeadmin/inherited_resources.git
-  revision: eea3aa21f3867dc182e4db24d1c765bdbcb3df34
-  specs:
-    inherited_resources (1.7.0)
-      actionpack (>= 3.2, < 5.1)
-      has_scope (~> 0.6)
-      railties (>= 3.2, < 5.1)
-      responders
-
-GIT
   remote: https://github.com/ajaleelp/valid_url.git
   revision: 7548e04df02e6281ef0b00f9d0db73a85a8de594
   branch: patch-1
@@ -126,6 +97,20 @@ GEM
       erubis (~> 2.7.0)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
+    activeadmin (1.0.0)
+      arbre (>= 1.1.1)
+      bourbon
+      coffee-rails
+      formtastic (~> 3.1)
+      formtastic_i18n
+      inherited_resources (~> 1.7)
+      jquery-rails
+      jquery-ui-rails
+      kaminari (>= 0.15, < 2.0)
+      railties (>= 4.2, < 5.2)
+      ransack (~> 1.3)
+      sass-rails
+      sprockets (< 4.1)
     activejob (5.0.2)
       activesupport (= 5.0.2)
       globalid (>= 0.3.6)
@@ -182,7 +167,7 @@ GEM
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
-    bourbon (4.3.3)
+    bourbon (4.3.4)
       sass (~> 3.4)
       thor (~> 0.19)
     browser (2.3.0)
@@ -385,14 +370,11 @@ GEM
     get_process_mem (0.2.1)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
-    gravtastic (3.2.6)
     groupdate (3.2.0)
       activesupport (>= 3)
     has_scope (0.7.0)
       actionpack (>= 4.1, < 5.1)
       activesupport (>= 4.1, < 5.1)
-    has_secure_token (1.0.0)
-      activerecord (>= 3.0)
     hashdiff (0.3.2)
     hashie (3.5.5)
     heapy (0.1.2)
@@ -408,6 +390,11 @@ GEM
     i18n (0.8.1)
     ice_nine (0.11.2)
     inflecto (0.0.2)
+    inherited_resources (1.7.1)
+      actionpack (>= 3.2, < 5.1)
+      has_scope (~> 0.6)
+      railties (>= 3.2, < 5.1)
+      responders
     iniparse (1.4.2)
     insensitive_hash (0.3.3)
     intercom (3.5.12)
@@ -713,7 +700,7 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (>= 1.1, < 3)
-    scarf (0.2.0)
+    scarf (0.2.5)
     seedbank (0.4.0)
     select2-rails (4.0.3)
       thor (~> 0.14)
@@ -765,7 +752,7 @@ GEM
     turbolinks (5.0.1)
       turbolinks-source (~> 5)
     turbolinks-source (5.0.0)
-    tzinfo (1.2.2)
+    tzinfo (1.2.3)
       thread_safe (~> 0.1)
     uber (0.1.0)
     uglifier (3.1.9)
@@ -811,7 +798,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activeadmin (= 1.0.0.pre5)!
+  activeadmin (~> 1.0.0)
   acts-as-taggable-on (~> 4.0)
   addressable (~> 2.5)
   ahoy_matey (~> 1.5)
@@ -855,11 +842,8 @@ DEPENDENCIES
   fuubar (~> 2.2)
   gaffe (~> 1.2)
   google_calendar (= 0.6.2)!
-  gravtastic (~> 3.2)
   groupdate (~> 3.2)
-  has_secure_token (~> 1.0)
   humanize (~> 1.3)
-  inherited_resources (= 1.7.0)!
   intercom (~> 3.5)
   intercom-rails (~> 0.3)
   jbuilder (~> 2.6)
@@ -922,7 +906,7 @@ DEPENDENCIES
   rspec-retry
   rubocop (= 0.47.1)
   sass-rails (~> 5.0)
-  scarf (= 0.2.0)
+  scarf (~> 0.2)
   seedbank (~> 0.4)
   select2-rails (~> 4.0)
   selenium-webdriver (~> 3.3)

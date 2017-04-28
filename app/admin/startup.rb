@@ -51,6 +51,8 @@ ActiveAdmin.register Startup do
       link_to startup.display_name, admin_startup_path(startup)
     end
 
+    column :level
+
     column :timeline_events do |startup|
       ol do
         startup.timeline_events.includes(:timeline_event_type).order('updated_at DESC').limit(5).each do |event|
@@ -97,6 +99,8 @@ ActiveAdmin.register Startup do
   csv do
     column :product_name
     column :product_description
+    column(:level) { |startup| startup.level.number }
+    column(:maximum_level) { |startup| startup.maximum_level.number }
     column(:timeline_link) { |startup| startup_url(startup) }
     column :presentation_link
     column :product_video_link
@@ -216,6 +220,7 @@ ActiveAdmin.register Startup do
       end
 
       row :level
+      row :maximum_level
       row :batch
       row :iteration
 

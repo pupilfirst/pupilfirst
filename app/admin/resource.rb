@@ -1,7 +1,7 @@
 ActiveAdmin.register Resource do
   include DisableIntercom
 
-  permit_params :title, :description, :file, :thumbnail, :share_status, :batch_id, :startup_id, :video_embed, tag_list: []
+  permit_params :title, :description, :file, :thumbnail, :level_id, :startup_id, :video_embed, tag_list: []
 
   controller do
     def find_resource
@@ -10,11 +10,8 @@ ActiveAdmin.register Resource do
   end
 
   filter :startup,
-    collection: Startup.batched.order(:product_name),
+    collection: -> { Startup.approved.order(:product_name) },
     label: 'Product'
-
-  filter :share_status,
-    collection: Resource.valid_share_statuses
 
   filter :ransack_tagged_with,
     as: :select,
@@ -22,7 +19,7 @@ ActiveAdmin.register Resource do
     label: 'Tags',
     collection: -> { Resource.tag_counts_on(:tags).pluck(:name).sort }
 
-  filter :batch
+  filter :level
   filter :title
   filter :description
 
@@ -38,21 +35,11 @@ ActiveAdmin.register Resource do
   index do
     selectable_column
 
-    column :share_status do |resource|
-      if resource.share_status.present?
-        t("resource.share_status.#{resource.share_status}")
-      end
-    end
-
     column 'Shared with' do |resource|
-      if resource.for_approved?
-        if resource.startup.present?
-          link_to resource.startup.product_name, admin_startup_path(resource.startup)
-        elsif resource.batch.present?
-          link_to resource.batch.display_name, admin_batch_path(resource.batch)
-        else
-          'All batches'
-        end
+      if resource.startup.present?
+        link_to resource.startup.product_name, admin_startup_path(resource.startup)
+      elsif resource.level.present?
+        link_to resource.level.display_name, admin_level_path(resource.level)
       else
         'Public'
       end
@@ -70,21 +57,11 @@ ActiveAdmin.register Resource do
 
   show do
     attributes_table do
-      row :share_status do |resource|
-        if resource.share_status.present?
-          t("resource.share_status.#{resource.share_status}")
-        end
-      end
-
       row 'Shared with' do |resource|
-        if resource.for_approved?
-          if resource.startup.present?
-            link_to resource.startup.product_name, admin_startup_path(resource.startup)
-          elsif resource.batch.present?
-            link_to resource.batch.display_name, admin_batch_path(resource.batch)
-          else
-            'All batches'
-          end
+        if resource.startup.present?
+          link_to resource.startup.product_name, admin_startup_path(resource.startup)
+        elsif resource.level.present?
+          link_to resource.level.display_name, admin_level_path(resource.level)
         else
           'Public'
         end
@@ -120,12 +97,7 @@ ActiveAdmin.register Resource do
     f.semantic_errors(*f.object.errors.keys)
 
     f.inputs 'Resource details' do
-      f.input :share_status,
-        as: :select,
-        collection: Resource.valid_share_statuses.map { |s| [t("resource.share_status.#{s}"), s] },
-        include_blank: false
-
-      f.input :batch, label: 'Shared with Batch', placeholder: 'Leave this unselected to share with all batches.'
+      f.input :level, label: 'Shared with Level', placeholder: 'Leave this unselected to share with all levels.'
       f.input :startup, label: 'Shared with Startup'
       f.input :file, as: :file
       f.input :thumbnail, as: :file

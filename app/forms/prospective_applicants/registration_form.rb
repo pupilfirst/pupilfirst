@@ -11,7 +11,7 @@ module ProspectiveApplicants
     property :college_text, validates: { length: { maximum: 250 } }
 
     def save
-      prospective_applicant = ProspectiveApplicant.with_email(email).first
+      prospective_applicant = ProspectiveApplicant.with_email(email)
       prospective_applicant = ProspectiveApplicant.new(email: email) if prospective_applicant.blank?
 
       prospective_applicant.update!({

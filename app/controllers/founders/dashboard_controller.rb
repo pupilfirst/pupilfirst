@@ -77,7 +77,11 @@ module Founders
 
     def founder_details
       @startup.founders.not_exited.each_with_object([]) do |founder, array|
-        array << { founderId: founder.id, founderName: founder.name, profileImageUrl: profile_image_url(founder, avatar_version: :mid) }
+        array << {
+          founderId: founder.id,
+          founderName: founder.name,
+          avatar: avatar(founder.name, founder: founder)
+        }
       end
     end
 
@@ -100,6 +104,7 @@ module Founders
         timelineEventTypes: list_service.list,
         allowFacebookShare: current_founder.facebook_token_available?,
         levelUpEligibility: Startups::LevelUpEligibilityService.new(@startup, current_founder).eligibility,
+        maxLevelNumber: Level.maximum.number,
         founderDetails: founder_details
       }
     end

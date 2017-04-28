@@ -4,6 +4,10 @@ FactoryGirl.define do
     title { Faker::Name.title }
     category Faculty::CATEGORY_TEAM
     image { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'support', 'uploads', 'faculty', 'donald_duck.jpg')) }
-    email { Faker::Internet.email }
+
+    trait :connectable do
+      email { Faker::Internet.email }
+      level { create :level, :one }
+    end
   end
 end

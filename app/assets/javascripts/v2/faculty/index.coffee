@@ -1,5 +1,5 @@
 select2ForConnectSlot = ->
-  $('#connect_request_connect_slot').select2()
+  $('#connect_request_connect_slot').select2(width: '100%')
 
 newConnectRequestFormHandler = ->
   $('form.new_connect_request').submit (event) ->
@@ -13,7 +13,6 @@ newConnectRequestFormHandler = ->
       event.preventDefault()
 
 tabTitleManager = ->
-  # If we're on the right page...
   if $('#faculty-nav').length > 0
     # Javascript to enable link to tab
     url = document.location.toString()
@@ -28,6 +27,19 @@ tabTitleManager = ->
       updatedURL = "/faculty/filter/#{tabName}"
       history.replaceState({turbolinks: true, url: updatedURL}, document.title, updatedURL)
 
-$(document).on 'page:change', select2ForConnectSlot
-$(document).on 'page:change', newConnectRequestFormHandler
-$(document).on 'page:change', tabTitleManager
+destroySelect2Inputs = ->
+  connectSlotInput = $('#connect_request_connect_slot')
+
+  if connectSlotInput.length
+    connectSlotInput.select2('destroy')
+    connectSlotInput.val('')
+
+$(document).on 'turbolinks:load', ->
+  if $('#faculty__index').length
+    select2ForConnectSlot()
+    newConnectRequestFormHandler()
+    tabTitleManager()
+
+$(document).on 'turbolinks:before-cache', ->
+  if $('#faculty__index').length
+    destroySelect2Inputs()

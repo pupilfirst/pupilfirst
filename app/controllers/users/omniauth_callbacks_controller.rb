@@ -9,7 +9,7 @@ module Users
       raise_not_found if auth_hash.blank?
       email = auth_hash.dig(:info, :email)
       raise_not_found if email.blank?
-      user = User.with_email(email).first
+      user = User.with_email(email)
 
       if user.present?
         sign_in user

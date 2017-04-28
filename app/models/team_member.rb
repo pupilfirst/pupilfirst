@@ -4,9 +4,6 @@ class TeamMember < ApplicationRecord
   mount_uploader :avatar, AvatarUploader
   process_in_background :avatar
 
-  include Gravtastic
-  gravtastic
-
   serialize :roles
 
   before_validation do

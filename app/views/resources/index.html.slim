@@ -9,8 +9,8 @@
       - if current_founder.present? && (@resources.count > Resource.public_resources.count)
         p.font-light
           ' You currently have access to exclusive resources that are marked clearly by a
-          span.batch-exclusive-text.text-uppercase
-            ' Batch Exclusive
+          span.level-exclusive-text.text-uppercase
+            ' Level Exclusive
           | badge. Please do not share these resources outside your founding team. Thank you!
       - else
         p.font-light

@@ -123,6 +123,7 @@ class Startup < ApplicationRecord
 
   belongs_to :batch
   belongs_to :level
+  belongs_to :maximum_level, class_name: 'Level'
   belongs_to :requested_restart_level, class_name: 'Level'
   has_one :payment, dependent: :restrict_with_error
   has_many :archived_payments, class_name: 'Payment', foreign_key: 'original_startup_id'
@@ -130,6 +131,7 @@ class Startup < ApplicationRecord
   has_many :coupons, through: :coupon_usages
   has_many :referrers, through: :coupons
   has_many :weekly_karma_points
+  has_many :resources
 
   # use the old name attribute as an alias for legal_registered_name
   alias_attribute :name, :legal_registered_name
@@ -487,5 +489,9 @@ class Startup < ApplicationRecord
 
   def fee_payment_methods_missing?
     founders.pluck(:fee_payment_method).any?(&:nil?)
+  end
+
+  def eligible_to_connect?(faculty)
+    Startups::ConnectRequestEligibilityService.new(self, faculty).eligible?
   end
 end

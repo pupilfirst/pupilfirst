@@ -11,7 +11,25 @@ loadFoundersForStartup = ->
       $('#timeline_event_founder_id').html(data.founder_options)
 
 setupTargetSelect2 = ->
-  $('.js-admin-timeline-events__link-target-select').select2();
+  targetSelect = $('.js-admin-timeline-events__link-target-select')
+  if targetSelect.length
+    targetSelect.select2
+      minimumInputLength: 3,
+      ajax:
+        url: '/targets/select2_search',
+        dataType: 'json',
+        delay: 500,
+        data: (params) ->
+          return {
+            q: params.term
+          }
+        ,
+        processResults: (data, params) ->
+          return { results: data }
+        cache: true
+
+destroySelect2Inputs = ->
+  $('.js-admin-timeline-events__link-target-select').select2('destroy');
 
 $(document).on 'page:change', betterFormControls
 $(document).on 'page:change', loadFoundersForStartup
@@ -19,3 +37,7 @@ $(document).on 'page:change', loadFoundersForStartup
 $(document).on 'turbolinks:load', ->
   if $('.admin-timeline_events__show').length
     setupTargetSelect2()
+
+$(document).on 'turbolinks:before-cache', ->
+  if $('.admin-timeline_events__show').length
+    destroySelect2Inputs()

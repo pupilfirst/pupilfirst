@@ -5,10 +5,10 @@
         = image_tag resource.thumbnail.url
       - else
         = image_tag 'resources/thumbnail_default.png', class: 'img-responsive'
-    - if resource.for_approved?
-      .batch-exclusive
+    - if resource.level_exclusive?
+      .level-exclusive
         p.text-uppercase
-          | Batch Exclusive
+          | Level Exclusive
 
     .resource-content
       h3.m-b-2

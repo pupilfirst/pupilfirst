@@ -7,6 +7,7 @@ FactoryGirl.define do
     end
 
     level { create :level, :zero }
+    maximum_level { level }
   end
 
   factory :startup do |f|
@@ -19,6 +20,7 @@ FactoryGirl.define do
     f.batch
     f.iteration 1
     f.level { create :level, :one }
+    f.maximum_level { level }
     f.program_started_on { rand(8.weeks).seconds.ago }
 
     after(:build) do |startup|

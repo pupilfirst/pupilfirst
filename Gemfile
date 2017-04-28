@@ -10,8 +10,7 @@ gem 'rails', '= 5.0.2'
 
 gem 'dotenv-rails', '~> 2.2', groups: %i(development test)
 
-gem 'inherited_resources', '= 1.7.0', github: 'activeadmin/inherited_resources' # Required for Rails 5 support for activeadmin. TODO: Remove when activeadmin 1.0.0 is released, which is when I'm guessing this gem will be removed.
-gem 'activeadmin', '= 1.0.0.pre5', github: 'activeadmin/activeadmin' # Tracking master for Rails 5 support. TODO: Revert to rubygems version when 1.0.0 is released.
+gem 'activeadmin', '~> 1.0.0' # The administration framework for Ruby on Rails applications. https://activeadmin.info
 gem 'flattened_active_admin', '~> 0.0' # better looking and customizable activeadmin
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
 gem 'carrierwave', '~> 0.11' # One uploader to rule them all.
@@ -56,7 +55,6 @@ gem 'font-awesome-rails', '~> 4.7' # Icons from font-awesome!
 gem 'unobtrusive_flash', '= 3.1.0', github: 'mobmewireless/unobtrusive_flash', branch: 'master'
 
 gem 'friendly_id', '~> 5.2' # Slugs for links. http://norman.github.io/friendly_id
-gem 'gravtastic', '~> 3.2' # Use gravatars as fallback avatars
 gem 'require_all', '~> 1.4' # Easier folder require-s.
 gem 'lita', '= 5.0.0', github: 'svdotco/lita', require: false # Lita without rack version limitation. TODO: Replace with official version when it drops rack < v2 limitation.
 gem 'lita-slack', '= 1.8.0', github: 'litaio/lita-slack', require: false # Lita adapter for Slack. TODO: removing github repo tracking when gem is updated
@@ -67,7 +65,6 @@ gem 'recaptcha', '~> 3.4', require: 'recaptcha/rails' # ReCaptcha helpers for ru
 gem 'groupdate', '~> 3.2' # The simplest way to group temporal data. https://github.com/ankane/groupdate
 gem 'videojs_rails', '~> 4.12' # Video JS for Rails 3.1+ Asset Pipeline. https://github.com/seanbehan/videojs_rails
 gem 'react-rails', '~> 1.10' # For automatically transforming JSX and using React in Rails.
-gem 'has_secure_token', '~> 1.0' # Used to create tokens for models (eg: for Faculty). TODO: Will be included with ActiveRecord in Rails 5.
 gem 'ahoy_matey', '~> 1.5' # Analytics for Rails
 gem 'acts-as-taggable-on', '~> 4.0' # Tag a single model on several contexts.
 gem 'will_paginate-bootstrap4', '~> 0.1' # This gem integrates the Twitter Bootstrap pagination component with the will_paginate pagination gem.
@@ -93,7 +90,7 @@ gem 'prawn-table', '~> 0.2' # Support for drawing tables in prawn pdfs
 gem 'combine_pdf', '~> 0.2' # Used to combine sections of agreement pdfs
 gem 'rollbar', '~> 2.14' # Exception tracking and logging from Ruby to Rollbar https://rollbar.com
 gem 'humanize', '~> 1.3' # Convert numbers to english words
-gem 'scarf', '= 0.2.0' # A Ruby library for generating initial avatars and identicons.
+gem 'scarf', '~> 0.2' # A Ruby library for generating initial avatars and identicons.
 gem 'descriptive_statistics', '~> 2.5', require: 'descriptive_statistics/safe' # Used to calculate basic stat measures such as std. deviation (eg: To calculate relative performance of startups)
 
 # Omniauth providers

@@ -19,6 +19,7 @@
   == render 'dashboard_header'
 
   - icon_paths = { personalTodo: image_path('founders/dashboard/target-type-icons/personal_todo_icon.svg'), noResults: image_path('founders/dashboard/no-results-icon.svg'), teamTodo: image_path('founders/dashboard/target-type-icons/team_todo_icon.svg'), attendSession: image_path('founders/dashboard/target-type-icons/attend_session_icon.svg') }
+
   == react_component('FounderDashboard', @react_data.merge(authenticityToken: form_authenticity_token, iconPaths: icon_paths))
 
   / .founder-dashboard-container

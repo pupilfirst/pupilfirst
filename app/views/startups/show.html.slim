@@ -165,7 +165,8 @@
                   .media
                     .media-left
                       a.media-object href=founder_profile_url(slug: founder.slug)
-                        .founder-image style="background-image: url('#{profile_image_url founder, gravatar_size: 128, avatar_version: :mid}');"
+                        .founder-image
+                          == avatar(founder.name, founder: founder, background_shape: :square)
                     .media-body
                       .media-heading
                         = link_to truncated_founder_name(founder.fullname), founder_profile_url(slug: founder.slug)
@@ -190,7 +191,8 @@
                   .media
                     .media-left
                       .media-object
-                        .founder-image style="background-image: url('#{profile_image_url team_member, gravatar_size: 128, avatar_version: :mid}');"
+                        .founder-image
+                          == avatar(team_member.name, founder: team_member, background_shape: :square)
                     .media-body
                       h4.media-heading #{truncated_founder_name team_member.name}
                       p.designation #{founder_roles(team_member.roles)}

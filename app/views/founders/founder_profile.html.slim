@@ -8,7 +8,8 @@
       .row.row-eq-height
         .col-md-2
           #complete-profile-left.profile data-toggle='tooltip' data-placement='bottom' title="#{@founder == current_founder ? @founder.profile_completion_instruction : ''}"
-            = image_tag profile_image_url(@founder, gravatar_size: 140, avatar_version: :mid), class: 'img-responsive'
+            .founder_profile__avatar
+              == avatar(@founder.name, founder: @founder, background_shape: :square)
             - if current_founder == @founder && !@founder.exited
               .progress-container
                 .progress.profile-progress

@@ -1,14 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe Faculty, type: :model do
-  let!(:faculty) { create :faculty }
+  let!(:faculty) { create :faculty, :connectable }
   let!(:connect_slot) { create :connect_slot }
 
   describe '.valid_categories' do
     it 'returns valid categories' do
-      categories = Faculty.valid_categories
-      expect(categories.count).to eq(4)
-      expect(categories - [Faculty::CATEGORY_TEAM, Faculty::CATEGORY_ADVISORY_BOARD, Faculty::CATEGORY_VISITING_FACULTY, Faculty::CATEGORY_ALUMNI]).to be_empty
+      expect(Faculty.valid_categories - [Faculty::CATEGORY_TEAM, Faculty::CATEGORY_ADVISORY_BOARD, Faculty::CATEGORY_VISITING_FACULTY, Faculty::CATEGORY_ALUMNI]).to be_empty
     end
   end
 

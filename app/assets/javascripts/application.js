@@ -52,5 +52,4 @@
 //= require faculty
 //= require startups
 //= require resources
-//= require batch_applications
 //= require team_members

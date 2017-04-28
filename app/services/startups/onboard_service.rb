@@ -52,7 +52,7 @@ module Startups
     def create_founder(applicant, startup, team_lead:)
       return applicant.founder if applicant.founder.present?
 
-      user = User.with_email(applicant.email).first
+      user = User.with_email(applicant.email)
       user = User.create!(email: applicant.email) if user.blank?
 
       # Create founder for startup.

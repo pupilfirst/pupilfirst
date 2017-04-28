@@ -5,10 +5,8 @@ class Founder < ApplicationRecord
   extend FriendlyId
   extend Forwardable
 
-  include Gravtastic
   include PrivateFilenameRetrievable
 
-  gravtastic
   acts_as_taggable
 
   GENDER_MALE = 'male'
@@ -73,9 +71,13 @@ class Founder < ApplicationRecord
     admitted.where(exited: false).where.not(id: active_on_slack(Time.now.beginning_of_week, Time.now)).where.not(id: active_on_web(Time.now.beginning_of_week, Time.now))
   }
   scope :not_exited, -> { where.not(exited: true) }
-
-  scope :with_email, ->(email) { where('lower(email) = ?', email.downcase) }
   scope :with_referrals, -> { joins(:referred_startups).distinct }
+
+  # rubocop:disable Rails/FindBy
+  def self.with_email(email)
+    where('lower(email) = ?', email.downcase).first
+  end
+  # rubocop:enable Rails/FindBy
 
   def self.ransackable_scopes(_auth)
     %i(ransack_tagged_with)
@@ -146,7 +148,7 @@ class Founder < ApplicationRecord
   mount_uploader :letter_from_parent, LetterFromParentUploader
 
   normalize_attribute :startup_id, :invitation_token, :twitter_url, :linkedin_url, :name, :slack_username, :resume_url,
-    :semester, :year_of_graduation
+    :semester, :year_of_graduation, :gender
 
   before_save :capitalize_name_fragments
 
@@ -207,12 +209,12 @@ class Founder < ApplicationRecord
 
   # The option to create connect requests is restricted to team leads of batched, approved startups.
   def can_connect?
-    startup.present? && startup.approved? && startup.batched? && startup_admin?
+    startup.present? && startup.approved? && !level_zero? && startup_admin?
   end
 
   # The option to view some info about creating connect requests is restricted to non-lead members of batched, approved startups.
   def can_view_connect?
-    startup.present? && startup.approved? && startup.batched? && !startup_admin?
+    startup.present? && startup.approved? && !level_zero? && !startup_admin?
   end
 
   def pending_connect_request_for?(faculty)

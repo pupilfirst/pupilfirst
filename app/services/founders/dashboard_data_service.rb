@@ -112,8 +112,9 @@ module Founders
       target_data['status'] = target.status(@founder).to_s
 
       # Add time of submission of last event, necessary for submitted and completed state.
-      if target_data['status'].in?([Targets::StatusService::STATUS_SUBMITTED, Targets::StatusService::STATUS_COMPLETE])
-        target_data['submitted_at'] = target.timeline_events.last.created_at.iso8601
+      if target_data['status'].in?([Targets::StatusService::STATUS_SUBMITTED.to_s, Targets::StatusService::STATUS_COMPLETE.to_s])
+        timeline_events = target.founder_role? ? @founder.timeline_events : @founder.startup.timeline_events
+        target_data['submitted_at'] = timeline_events.where(target: target).last.created_at.iso8601
       end
 
       target_data

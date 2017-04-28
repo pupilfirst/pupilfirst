@@ -1,3 +1,9 @@
+### 24 April, 2017
+
+#### Features
+
+  - Individual founder completion status has been restored to target description on the founder dashboard.
+
 ### 10 April, 2017
 
 #### UX and UI

@@ -2,7 +2,7 @@ class ResourcesController < ApplicationController
   layout 'application_v2'
 
   def index
-    load_resources
+    @resources = policy_scope(Resource.left_joins(:level)).includes(:tags)
     filter_resources_by_tags
     filter_resources_by_search
     filter_resources_by_date
@@ -13,13 +13,14 @@ class ResourcesController < ApplicationController
   end
 
   def show
-    @resource = Resource.for(current_founder).find(params[:id])
+    @resource = Resource.find(params[:id])
+    authorize @resource
 
     return unless params[:watch].present? && @resource.stream?
 
     @resource.increment_downloads(current_user)
     @stream_video = @resource.file&.url || @resource.video_embed
-  rescue ActiveRecord::RecordNotFound
+  rescue ActiveRecord::RecordNotFound, Pundit::NotAuthorizedError
     alert_message = 'Could not find the requested resource! '
 
     alert_message += if current_founder.present?
@@ -32,16 +33,13 @@ class ResourcesController < ApplicationController
   end
 
   def download
-    resource = Resource.for(current_founder).find(params[:id])
+    resource = Resource.find(params[:id])
+    authorize resource
     resource.increment_downloads(current_user)
     redirect_to resource.file.url
   end
 
   private
-
-  def load_resources
-    @resources = Resource.for(current_founder).includes(:tags)
-  end
 
   def filter_resources_by_tags
     return if params[:tags].blank?

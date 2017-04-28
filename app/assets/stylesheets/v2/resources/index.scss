@@ -6,7 +6,7 @@
   p {
     font-size: 1rem;
 
-    .batch-exclusive-text {
+    .level-exclusive-text {
       background-color: $alert-background;
       color: white;
       margin: 0 6px;
@@ -193,7 +193,7 @@
   }
 }
 
-.batch-exclusive {
+.level-exclusive {
   text-align: center;
   position: absolute;
   top: 0px;

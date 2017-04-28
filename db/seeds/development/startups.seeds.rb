@@ -7,9 +7,12 @@ after 'development:levels', 'development:founders', 'development:timeline_event_
   level_0 = Level.zero
   john_doe = Founder.find_by(email: 'johndoe@example.com')
 
-  unfinished_swan = Startup.create!(product_name: 'Unfinished Swan', level: level_0, admin: john_doe)
-  unfinished_swan.founders << john_doe
-  unfinished_swan.save!
+  john_doe.create_startup!(
+    product_name: 'Unfinished Swan',
+    level: level_0,
+    maximum_level: level_0,
+    admin: john_doe
+  )
 
   level_1 = Level.find_by(number: 1)
   level_2 = Level.find_by(number: 2)
@@ -17,6 +20,7 @@ after 'development:levels', 'development:founders', 'development:timeline_event_
   # Startup with live agreement.
   super_startup = Startup.new(
     level: level_1,
+    maximum_level: level_1,
     name: 'Super Startup',
     product_name: 'Super Product',
     product_description: 'This really is a superb product! ;)',
@@ -52,6 +56,7 @@ after 'development:levels', 'development:founders', 'development:timeline_event_
   avengers_startup = Startup.new(
     name: 'The Avengers',
     level: level_2,
+    maximum_level: level_2,
     product_name: 'SuperHeroes',
     product_description: 'Earths Mightiest Heroes joined forces to take on threats that were too big for any one hero to tackle.',
     agreement_signed_at: 2.years.ago,

@@ -69,7 +69,7 @@
           }
         }
         @media (min-width: $screen-sm-max) {
-            padding-left: 0;
+          padding-left: 0;
         }
       }
       .social-connect {
@@ -483,7 +483,7 @@
         }
       }
 
-      @media (min-width: $screen-sm-min) and (max-width:$screen-sm-max) {
+      @media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
         border: 0;
         margin-top: 0;
         margin-bottom: 20px;
@@ -866,6 +866,14 @@
   display: flex;
 
   @media (max-width: $screen-sm-max) {
-      display: block;
+    display: block;
+  }
+}
+
+.founder_profile__avatar {
+  img, svg {
+    display: block;
+    width: 150px;
+    height: 150px;
   }
 }

@@ -1,20 +1,26 @@
 require 'rails_helper'
 
-describe InstamojoController, broken: true do
-  let(:payment_stage) { create :application_stage, :payment }
-  let!(:coding_stage) { create :application_stage, :coding }
+describe InstamojoController do
+  include FounderSpecHelper
 
-  let(:application_round) { create :application_round, :screening_stage }
-  let(:batch_application) { create :batch_application, application_stage: payment_stage, application_round: application_round }
+  let(:level_0) { create :level, :zero }
+  let(:level_0_targets) { create :target_group, milestone: true, level: level_0 }
+  let!(:screening_target) { create :target, :admissions_screening, target_group: level_0_targets }
+  let!(:fee_payment_target) { create :target, :admissions_fee_payment, target_group: level_0_targets }
+  let!(:tet_team_update) { create :timeline_event_type, :team_update }
+
+  let(:founder) { create :founder }
+  let(:startup) { create :startup, level: level_0 }
+
   let(:instamojo_payment_request_id) { SecureRandom.hex }
   let(:long_url) { Faker::Internet.url }
   let(:short_url) { Faker::Internet.url }
 
   let(:payment) do
     create :payment,
-      batch_application: batch_application,
-      batch_applicant: batch_application.team_lead,
-      amount: batch_application.fee,
+      startup: startup,
+      founder: founder,
+      amount: startup.fee,
       instamojo_payment_request_id: instamojo_payment_request_id,
       instamojo_payment_request_status: 'Pending',
       short_url: short_url,
@@ -22,6 +28,11 @@ describe InstamojoController, broken: true do
   end
 
   let(:payment_id) { SecureRandom.hex }
+
+  before do
+    startup.founders << founder
+    complete_target founder, screening_target
+  end
 
   describe 'GET redirect' do
     before do
@@ -45,13 +56,15 @@ describe InstamojoController, broken: true do
       expect(payment.instamojo_payment_status).to eq('Credit')
       expect(payment.fees).to eq(123.45)
 
-      # Expect the application to have moved to coding stage.
-      expect(payment.batch_application.application_stage).to eq(ApplicationStage.coding_stage)
+      # payment target should now be marked complete
+      founder = payment.founder
+      fee_payment_status = Targets::StatusService.new(fee_payment_target, founder).status
+      expect(fee_payment_status).to eq(Targets::StatusService::STATUS_COMPLETE)
     end
 
-    it 'redirects to continue page with a from parameter' do
+    it 'redirects to founder dashboard' do
       get :redirect, params: { payment_request_id: payment.instamojo_payment_request_id, payment_id: payment_id }
-      expect(response).to redirect_to(apply_continue_path(from: 'instamojo'))
+      expect(response).to redirect_to(dashboard_founder_path)
     end
   end
 
@@ -76,8 +89,10 @@ describe InstamojoController, broken: true do
       expect(payment.instamojo_payment_status).to eq('Credit')
       expect(payment.fees).to eq(43.21)
 
-      # Expect the application to have moved to coding stage.
-      expect(payment.batch_application.application_stage).to eq(ApplicationStage.coding_stage)
+      # payment target should now be marked complete
+      founder = payment.founder
+      fee_payment_status = Targets::StatusService.new(fee_payment_target, founder).status
+      expect(fee_payment_status).to eq(Targets::StatusService::STATUS_COMPLETE)
     end
 
     context 'when mac is incorrect or missing' do

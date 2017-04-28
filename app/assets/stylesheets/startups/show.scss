@@ -86,6 +86,11 @@ h1.product-name {
       width: 128px;
       height: 128px;
       background-size: cover;
+
+      img, svg {
+        width: 128px;
+        height: 128px;
+      }
     }
 
     .media-heading {

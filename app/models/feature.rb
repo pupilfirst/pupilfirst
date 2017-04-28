@@ -12,24 +12,35 @@ class Feature < ApplicationRecord
     errors[:value] << 'must be valid JSON'
   end
 
-  # {"email_regexes": ["\S*(@mobme.in|sv.co)$"], "emails": ["someone@sv.co"]}
-  #     OR
-  # {"active": true}
-  def self.active?(key, founder = nil)
-    feature = find_by(key: key)
+  class << self
+    attr_writer :skip_override
 
-    return false unless feature
+    # {"email_regexes": ["\S*(@mobme.in|sv.co)$"], "emails": ["someone@sv.co"]}
+    #     OR
+    # {"active": true}
+    def active?(key, founder = nil)
+      return true if overridden?
 
-    parsed_value = begin
-      JSON.parse(feature.value).with_indifferent_access
-    rescue JSON::ParserError
-      return false
+      feature = find_by(key: key)
+
+      return false unless feature
+
+      parsed_value = begin
+        JSON.parse(feature.value).with_indifferent_access
+      rescue JSON::ParserError
+        return false
+      end
+
+      return true if parsed_value[:active].present?
+      return true if feature.active_for_founder?(founder, parsed_value)
+
+      false
     end
 
-    return true if parsed_value[:active].present?
-    return true if feature.active_for_founder?(founder, parsed_value)
-
-    false
+    def overridden?
+      return false if @skip_override
+      Rails.env.development? || Rails.env.test?
+    end
   end
 
   def active_for_founder?(founder, parsed_value)

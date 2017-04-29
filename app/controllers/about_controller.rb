@@ -14,7 +14,7 @@ class AboutController < ApplicationController
 
   # GET /about/leaderboard
   def leaderboard
-    @levels = Level.where.not(number: 0) # All levels except admissions
+    @levels = Level.where.not(number: 0).order(number: :desc) # All levels except admissions
     @leaderboards = leaderboards_for(@levels)
     render layout: 'application_v2'
   end

@@ -1,7 +1,8 @@
 FactoryGirl.define do
   factory :weekly_karma_point do
-    startup { create :startup }
+    startup
+    week_starting_at { DatesService.last_week_start_date }
     points { [50, 60, 70, 80, 90].sample }
-    level { create :level, :one }
+    level
   end
 end

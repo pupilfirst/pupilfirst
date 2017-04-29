@@ -1,77 +1,86 @@
 module Lita
   module Handlers
     class Leaderboard < Handler
-      route(/\Aleaderboard\s*\?*\s*(\d*)\s*\?*\z/i, :leaderboard, command: true, help: { 'leaderboard? [BATCH NUMBER]' => I18n.t('slack.help.leaderboard') })
+      route(
+        /\Aleaderboard\s*\?*\s*(\d*)\s*\?*\z/i,
+        :leaderboard,
+        command: true,
+        help: {
+          'leaderboard [LEVEL NUMBER]' => I18n.t('slack.help.leaderboard')
+        }
+      )
 
       def leaderboard(response)
         ActiveRecord::Base.connection_pool.with_connection do
           # check if a particular batch was requested by parsing the regex matches
-          @batch_requested = response.match_data[1].present? ? response.match_data[1].to_i : nil
+          @level = response.match_data[1].present? ? Level.find_by(number: response.match_data[1].to_i) : nil
+          @level = nil if @level&.number&.zero?
 
-          # reply immediately with a relevant 'please wait' message
-          send_wait_message(response)
-
-          begin
+          if @level.nil?
+            send_level_required_message(response)
+          else
             response.reply leaderboard_response_message
-          rescue
-            response.reply(':confused: Oops! Something seems wrong. Please try again later!')
           end
         end
       end
 
       # send a relevant please wait method
-      def send_wait_message(response)
-        if @batch_requested.present?
-          response.reply("Please wait while I fetch the leaderboard for Batch #{@batch_requested} :simple_smile:")
-        else
-          response.reply('Please wait while I fetch the leaderboards of all current batches for you :simple_smile:')
-        end
+      def send_level_required_message(response)
+        response.reply('Please supply the level number for which leaderboard is required! Try `leaderboard [1-4]`')
       end
 
       # construct the leaderboard response to be send
       def leaderboard_response_message
-        return '_There appears to be no live batches on SV.CO now !_' if Batch.live.blank?
+        response = leaderboard_heading
 
-        if @batch_requested && Batch.live.where(batch_number: @batch_requested).blank?
-          return "_There appears to be no live Batch #{@batch_requested} on SV.CO now !_"
+        # Now build the content of the leaderboard.
+        leaderboard = Startups::LeaderboardService.new.leaderboard_with_change_in_rank(@level)
+
+        inactive_startups = 0
+
+        leaderboard.each do |startup, rank, points, change_in_rank|
+          if points.zero?
+            inactive_startups += 1
+          else
+            response += leaderboard_line(startup, rank, change_in_rank)
+          end
         end
 
-        # Build response considering batch requested, if any
-        response = ''
-
-        # TODO: The batch is hard-coded to Batch 3 for now. Replace with Batch.live when batches are cleaned up.
-        batches = Batch.where(batch_number: 3)
-        # batches = @batch_requested.present? ? Batch.where(batch_number: @batch_requested) : Batch.live
-        batches.each do |batch|
-          response += "*<#{Rails.application.routes.url_helpers.about_leaderboard_url}\
-          |Leaderboard for Batch #{batch.batch_number} (#{batch.name}) #{DatesService.last_week_start_date.strftime('%B %-d')} to #{DatesService.last_week_end_date.strftime('%B %-d')}>:* \n#{ranked_list_for_batch batch}"
+        # Add number of inactive startups, if any.
+        if inactive_startups.positive?
+          response += "\nThere #{'is'.pluralize(inactive_startups)} #{inactive_startups} #{'startup'.pluralize(inactive_startups)} in this level which #{'was'.pluralize(inactive_startups)} inactive during this period."
         end
 
         response
       end
 
-      def ranked_list_for_batch(batch)
-        rank_list = ''
-        ranked_startups = Startups::PerformanceService.new.leaderboard_with_change_in_rank(batch)
-        ranked_startups.each do |startup, rank, _points, change_in_rank|
-          indicator = if change_in_rank.negative?
-            ':rank_down:'
-          elsif change_in_rank.positive?
-            ':rank_up:'
-          else
-            ':rank_nochange:'
-          end
+      # Build the heading of the response.
+      def leaderboard_heading
+        leaderboard_url = Rails.application.routes.url_helpers.about_leaderboard_url
+        title = "Leaderboard for Level #{@level.number}"
+        start_date = DatesService.last_week_start_date.strftime('%B %-d')
+        end_date = DatesService.last_week_end_date.strftime('%B %-d')
 
-          signed_change_in_rank = if change_in_rank.zero?
-            '---'
-          else
-            format('%+d', change_in_rank).rjust(3)
-          end
+        "*<#{leaderboard_url}|#{title}> - #{start_date} to #{end_date}:*\n"
+      end
 
-          rank_list += "*#{format('%02d', rank)}.* #{indicator}`#{signed_change_in_rank}` - <#{Rails.application.routes.url_helpers.startup_url(startup)}|#{startup.product_name}>\n"
+      # Return one l
+      def leaderboard_line(startup, rank, change_in_rank)
+        indicator = if change_in_rank.negative?
+          ':rank_down:'
+        elsif change_in_rank.positive?
+          ':rank_up:'
+        else
+          ':rank_nochange:'
         end
 
-        rank_list
+        signed_change_in_rank = if change_in_rank.zero?
+          '---'
+        else
+          format('%+d', change_in_rank).rjust(3)
+        end
+
+        "*#{format('%02d', rank)}.* #{indicator}`#{signed_change_in_rank}` - <#{Rails.application.routes.url_helpers.startup_url(startup)}|#{startup.product_name}>\n"
       end
     end
 

@@ -73,11 +73,9 @@ class Founder < ApplicationRecord
   scope :not_exited, -> { where.not(exited: true) }
   scope :with_referrals, -> { joins(:referred_startups).distinct }
 
-  # rubocop:disable Rails/FindBy
   def self.with_email(email)
-    where('lower(email) = ?', email.downcase).first
+    where('lower(email) = ?', email.downcase).first # rubocop:disable Rails/FindBy
   end
-  # rubocop:enable Rails/FindBy
 
   def self.ransackable_scopes(_auth)
     %i(ransack_tagged_with)

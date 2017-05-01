@@ -1,3 +1,14 @@
+### 1 May, 2017
+
+#### UX and UI
+
+  - The file drawer on the timeline builder component now automatically closes when the discard button is clicked.
+
+#### Bugfixes
+
+  - After submitting a target from the founder dashboard, the date of submission was being reported incorrectly - it was always showing the current date. This has been fixed.
+  - Fixed a crash on the founder edit page for users who had uploaded their identification proof.
+
 ### 24 April, 2017
 
 #### Features

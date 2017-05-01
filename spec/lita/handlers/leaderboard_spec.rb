@@ -59,6 +59,20 @@ describe Lita::Handlers::Leaderboard do
           subject.leaderboard(response)
         end
       end
+
+      context 'when there are active startups in requested level' do
+        let(:leaderboard) do
+          [
+            [startup_1, 1, 0, 1],
+            [startup_2, 1, 0, -1]
+          ]
+        end
+
+        it 'replies that there are no active startups in the level' do
+          expect(response).to receive(:reply).with('All startups at this level were inactive during this period.')
+          subject.leaderboard(response)
+        end
+      end
     end
   end
 end

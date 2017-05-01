@@ -31,11 +31,26 @@ module Lita
 
       # construct the leaderboard response to be send
       def leaderboard_response_message
-        response = leaderboard_heading
-
-        # Now build the content of the leaderboard.
+        # Load the leaderboard.
         leaderboard = Startups::LeaderboardService.new.leaderboard_with_change_in_rank(@level)
 
+        # Return simple message if there are no active startups in this leaderboard.
+        if leaderboard.none? { |_s, _r, points, _c| points.positive? }
+          return 'All startups at this level were inactive during this period.'
+        end
+
+        # Add rows to the leaderboard.
+        inactive_startups, response = add_leaderboard_rows(leaderboard, leaderboard_heading)
+
+        # Add number of inactive startups, if any.
+        if inactive_startups.positive?
+          response += "\nThere #{'is'.pluralize(inactive_startups)} #{inactive_startups} #{'startup'.pluralize(inactive_startups)} in this level which #{'was'.pluralize(inactive_startups)} inactive during this period."
+        end
+
+        response
+      end
+
+      def add_leaderboard_rows(leaderboard, response)
         inactive_startups = 0
 
         leaderboard.each do |startup, rank, points, change_in_rank|
@@ -46,12 +61,7 @@ module Lita
           end
         end
 
-        # Add number of inactive startups, if any.
-        if inactive_startups.positive?
-          response += "\nThere #{'is'.pluralize(inactive_startups)} #{inactive_startups} #{'startup'.pluralize(inactive_startups)} in this level which #{'was'.pluralize(inactive_startups)} inactive during this period."
-        end
-
-        response
+        [inactive_startups, response]
       end
 
       # Build the heading of the response.

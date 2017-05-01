@@ -1,29 +1,33 @@
 module Startups
   class LeaderboardService
-    # returns leaderboard array of [startup, rank, points]
-    def leaderboard(level, start_date: nil)
-      week_start_date = start_date || last_week_start_date
-
-      raise 'Leaderboard cannot be generated for Level 0' if level.number.zero?
-
-      @leaderboard = Hash.new do |hash, key|
-        hash[key] = rank_list(level, week_start_date)
-      end
-
-      @leaderboard[[level, week_start_date]]
+    def initialize(level)
+      @level = level
     end
 
-    def leaderboard_with_change_in_rank(level)
-      current_leaderboard = leaderboard(level)
+    # returns leaderboard array of [startup, rank, points]
+    def leaderboard(start_date: nil)
+      week_start_date = start_date || last_week_start_date
+
+      raise 'Leaderboard cannot be generated for Level 0' if @level.number.zero?
+
+      @leaderboard = Hash.new do |hash, key|
+        hash[key] = rank_list(@level, week_start_date)
+      end
+
+      @leaderboard[[@level, week_start_date]]
+    end
+
+    def leaderboard_with_change_in_rank
+      current_leaderboard = leaderboard
 
       start_date_last_week = last_week_start_date - 7.days
 
       # Set rank change to zero if no WeeklyKarmaPoint is created for the level last week
-      change_in_rank = if WeeklyKarmaPoint.where(week_starting_at: start_date_last_week, level_id: level.id).blank?
+      change_in_rank = if WeeklyKarmaPoint.where(week_starting_at: start_date_last_week, level_id: @level.id).blank?
         Array.new(current_leaderboard.count, 0)
       else
         # Calculate change in rank by checking against the previous leaderboard.
-        previous_leaderboard = leaderboard(level, start_date: start_date_last_week)
+        previous_leaderboard = leaderboard(start_date: start_date_last_week)
 
         current_leaderboard.map do |startup, rank, _points|
           previous_rank = previous_leaderboard.detect do |previous_startup, _previous_rank, _previous_points|

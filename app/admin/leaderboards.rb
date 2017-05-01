@@ -11,10 +11,10 @@ ActiveAdmin.register_page 'Leaderboards' do
       @week_start_date = start_date.present? ? DateTime.parse(start_date) : DatesService.last_week_start_date
 
       if params[:karma_points_filter].present?
-        @leaderboard = Startups::LeaderboardService.new.leaderboard(@level, start_date: @week_start_date)
+        @leaderboard = Startups::LeaderboardService.new(@level).leaderboard(start_date: @week_start_date)
         @rank_changes_present = false
       else
-        @leaderboard_with_change_in_rank = Startups::LeaderboardService.new.leaderboard_with_change_in_rank(@level)
+        @leaderboard_with_change_in_rank = Startups::LeaderboardService.new(@level).leaderboard_with_change_in_rank
         @rank_changes_present = true
       end
     end

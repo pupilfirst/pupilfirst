@@ -32,7 +32,7 @@ module Lita
       # construct the leaderboard response to be send
       def leaderboard_response_message
         # Load the leaderboard.
-        leaderboard = Startups::LeaderboardService.new.leaderboard_with_change_in_rank(@level)
+        leaderboard = Startups::LeaderboardService.new(@level).leaderboard_with_change_in_rank
 
         # Return simple message if there are no active startups in this leaderboard.
         if leaderboard.none? { |_s, _r, points, _c| points.positive? }

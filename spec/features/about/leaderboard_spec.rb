@@ -24,8 +24,8 @@ feature 'Leaderboard' do
     end
 
     before do
-      allow(Startups::LeaderboardService).to receive(:new).and_return(leaderboard_service)
-      allow(leaderboard_service).to receive(:leaderboard_with_change_in_rank).with(level_one).and_return(leaderboard)
+      allow(Startups::LeaderboardService).to receive(:new).with(level_one).and_return(leaderboard_service)
+      allow(leaderboard_service).to receive(:leaderboard_with_change_in_rank).and_return(leaderboard)
     end
 
     scenario 'user visits leaderboard page' do

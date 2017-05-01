@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Startups::LeaderboardService do
-  subject { described_class.new }
+  subject { described_class }
 
   # Create two levels to check leaderboards created for each level.
   let!(:level_1) { create :level, :one }
@@ -49,15 +49,15 @@ describe Startups::LeaderboardService do
 
   describe '#leaderboard' do
     it 'returns the leaderboard of the specified level' do
-      expect(subject.leaderboard(level_1)).to eq(@leaderboard_for_level_1)
-      expect(subject.leaderboard(level_2)).to eq(@leaderboard_for_level_2)
+      expect(subject.new(level_1).leaderboard).to eq(@leaderboard_for_level_1)
+      expect(subject.new(level_2).leaderboard).to eq(@leaderboard_for_level_2)
     end
   end
 
   describe '#leaderboard_with_change_in_rank' do
     it 'returns the leaderboard of the specified level with change in rank compared to previous week' do
-      expect(subject.leaderboard_with_change_in_rank(level_1)).to eq(@leaderboard_with_change_in_rank_l1)
-      expect(subject.leaderboard_with_change_in_rank(level_2)).to eq(@leaderboard_with_change_in_rank_l2)
+      expect(subject.new(level_1).leaderboard_with_change_in_rank).to eq(@leaderboard_with_change_in_rank_l1)
+      expect(subject.new(level_2).leaderboard_with_change_in_rank).to eq(@leaderboard_with_change_in_rank_l2)
     end
   end
 end

@@ -47,7 +47,7 @@ class AboutController < ApplicationController
     return nil if levels.blank?
 
     levels.each_with_object({}) do |level, leaderboards|
-      leaderboards[level.number] = Startups::LeaderboardService.new.leaderboard_with_change_in_rank(level)
+      leaderboards[level.number] = Startups::LeaderboardService.new(level).leaderboard_with_change_in_rank
     end
   end
 end

@@ -1,7 +1,7 @@
 module Startups
   class PerformanceService
     def leaderboard_rank(specified_startup)
-      leaderboard_for_run = Startups::LeaderboardService.new.leaderboard(specified_startup.level)
+      leaderboard_for_run = Startups::LeaderboardService.new(specified_startup.level).leaderboard
       return if leaderboard_for_run.nil?
       leaderboard_for_run.detect { |startup, _rank, _points| startup == specified_startup }&.second
     end

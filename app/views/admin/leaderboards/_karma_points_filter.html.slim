@@ -1,15 +1,13 @@
 = form_for :karma_points_filter, url: admin_leaderboards_path, method: :get, html: { class: 'filter_form' } do |f|
   div.filter_form_field.filter_select
-    = f.label :batch, 'Batch'
-    = f.select :batch, options_for_select(Batch.all.map { |batch| [batch.name, batch.id] }, params[:karma_points_filter].try(:[], :batch)), include_blank: true
-  div.filter_form_field.filter_date_range
-    = f.label :after, 'After'
-    = f.text_field :after, value: params[:karma_points_filter].try(:[], :after)
-  div.filter_form_field.filter_date_range
-    = f.label :before, 'Before'
-    = f.text_field :before, value: params[:karma_points_filter].try(:[], :before)
+    = f.label :level, 'Level'
+    = f.select :level, options_for_select(levels_for_filter, @level.number)
+
+  div.filter_form_field.filter_select
+    = f.label :week_starting_at, 'Week Start Date'
+    = f.select :week_starting_at, options_for_select(week_start_dates_for_filter, @week_start_date)
 
   div.buttons
     = submit_tag 'Filter'
     - if params[:karma_points_filter]
-      = link_to 'Clear Filter', admin_leaderboards_path, class: 'clear_filters_btn'
+      = link_to 'Clear Filters', admin_leaderboards_path, class: 'admin-leaderboards__clear-filter'

@@ -1,3 +1,23 @@
 a.not-a-link {
   cursor: default;
 }
+
+.admin-leaderboards__startup-count-split {
+  padding-top: 0.6rem;
+}
+
+a.admin-leaderboards__clear-filter {
+  border-radius: 200px;
+  display: inline-block;
+  font-weight: bold;
+  font-size: 1.0em;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  line-height: 12px;
+  margin-right: 3px;
+  text-decoration: none;
+  padding: 7px 16px 6px;
+  -webkit-font-smoothing: antialiased;
+  background: #f0f0f0;
+  border-color: #c7c7c7;
+  color: #5E6469;
+}

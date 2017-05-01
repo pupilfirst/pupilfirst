@@ -1,13 +1,23 @@
-h2 Startup Karma for Batch #{@batch.name} (##{@batch.id})
+h2 Startup Karma for Level ##{@level.number}: #{@level.name}
 
-ul
-  li
-    - active_count = @leaderboard.present? ? @leaderboard.count : 0
-    strong Active teams:
-    | &nbsp;#{active_count}
-  li
-    strong Inactive teams:
-    | &nbsp;#{Startup.not_dropped_out.where(batch: @batch).count - active_count}
+.admin-leaderboards__startup-count-split
+  ul
+    - if @leaderboard.present? || @leaderboard_with_change_in_rank.present?
+      li
+        - leaderboard = @leaderboard.present? ? @leaderboard : @leaderboard_with_change_in_rank
+        - active_startups_count = leaderboard.count { |leaderboard_array| leaderboard_array[2] > 0 }
+        strong Active teams:
+        | &nbsp;#{active_startups_count}
+      li
+        strong Inactive teams this week:
+        | &nbsp;#{leaderboard.count - active_startups_count}
+
+      / Show startups inactive for than 2 months when the most recent leaderboard is shown.
+      - if @leaderboard_with_change_in_rank.present?
+        li
+          strong Inactive for more than 2 months:
+          | &nbsp;#{Startup.not_dropped_out.where(level: @level).count - leaderboard.count}
+
 
 - if @leaderboard.present? || @leaderboard_with_change_in_rank.present?
   - leaderboard = @rank_changes_present ? @leaderboard_with_change_in_rank : @leaderboard
@@ -35,9 +45,9 @@ ul
           td = points
 
 - else
-  p This batch does not have a leaderboard now!
+  p This level does not have a leaderboard for the week!
 
-h2 Founder Karma for Batch #{@batch.name} (##{@batch.id})
+h2 Founder Karma for Level ##{@level.number}: #{@level.name}
 
 table.index_table
   thead
@@ -48,7 +58,7 @@ table.index_table
       th.sorted-desc.sortable
         a.not-a-link href='#' Karma Points
   tbody
-    - founders_by_karma(batch: @batch, after: @after, before: @before).each_with_index do |points_array, idx|
+    - founders_by_karma(level: @level, week_starting_at: @week_start_date).each_with_index do |points_array, idx|
       - founder_id, points = points_array
       - founder = Founder.includes(:startup).find(founder_id)
       tr class="#{(idx + 1).even? ? 'even' : 'odd'}"

@@ -1,7 +1,21 @@
 ## Ongoing
 
-- Library (resources) restrictions are being updated to use levels. [[Trello]](https://trello.com/c/kQoAQU8H)
 - Leaderboard is being updated to work with levels. [[Trello]](https://trello.com/c/txJeGp9d)
+
+## 2017.05.01
+
+- Access to faculty connect is now restricted using levels. [[Trello]](https://trello.com/c/CfDKI1cF)
+- Access to resources (library) is now restricted using levels. [[Trello]](https://trello.com/c/kQoAQU8H)
+- Timeline events can now be linked to chores and sessions from the admin interface. [[Trello]](https://trello.com/c/N4RTjVrp)
+- Fixed a bug that resulted in incorrect date being displayed as target submission date on the founder dashboard. [[Trello](https://trello.com/c/0c6ck3f7)
+- Specs for `InstamojoController`, prospective applicant registration, and founder registration were restored. Trello. [[1]](https://trello.com/c/2ydQ5s84)[[2]](https://trello.com/c/Uti8YQH8)[[3]](https://trello.com/c/2Joid3ts)
+- New target fields were added to admin interface. [[Trello]](https://trello.com/c/Lt45mtM4)
+- Stale `share_status` field was removed from the `resources` table. [[Trello]](https://trello.com/c/exTXFnP8)
+- Fixed intercom actions for new admissions process. [[Trello]](https://trello.com/c/0BmLDVry)
+- Subscription stage 2 was merged into `master` - the new admissions process is still hidden under a feature flag. [[Trello]](https://trello.com/c/vC8Vnv3F)
+- The `with_email` scope was replaced with a method to return the first entry found. [[Trello]](https://trello.com/c/jCbftY0f)
+- The file drawer on the timeline builder now automatically closes when the discard button is clicked. [[Trello]](https://trello.com/c/O6wtgBkv)
+- Fixed a buggy switch to private S3 bucket storage for founder's identification proof files. Trello. [[1]](https://trello.com/c/0nwbDLin)[[2]](https://trello.com/c/pJ5HUX1l)
 
 ## 2017.04.24
 

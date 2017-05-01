@@ -12,6 +12,7 @@
   *  imagemagick - `brew install imagemagick`
   *  postgresql - Install [Postgres.app](http://postgresapp.com) and follow instructions.
   *  puma-dev - `brew install puma/puma/puma-dev`
+  *  redis - `brew install redis`
 
 #### Troubleshoot
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170502093255) do
+ActiveRecord::Schema.define(version: 20170502101829) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -274,10 +274,8 @@ ActiveRecord::Schema.define(version: 20170502093255) do
   end
 
   create_table "engineering_metrics", force: :cascade do |t|
-    t.integer  "week_start"
     t.json     "metrics",       default: {}, null: false
     t.datetime "week_start_at"
-    t.index ["week_start"], name: "index_engineering_metrics_on_week_start", using: :btree
   end
 
   create_table "faculty", force: :cascade do |t|

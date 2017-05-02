@@ -1,8 +1,8 @@
 module EngineeringMetrics
   class MetricsStoreService
     def initialize
-      week_start = Time.zone.now.beginning_of_week.to_i
-      @entry = EngineeringMetric.find_or_create_by(week_start: week_start)
+      week_start = Time.zone.now.beginning_of_week
+      @entry = EngineeringMetric.find_or_create_by(week_start_at: week_start)
     end
 
     def increment(metric)

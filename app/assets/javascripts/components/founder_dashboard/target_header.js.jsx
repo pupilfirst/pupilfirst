@@ -18,7 +18,7 @@ class FounderDashboardTargetHeader extends React.Component {
 
   targetType() {
     return <span className="founder-dashboard-target-header__type-tag hidden-sm-down">
-      { this.props.target.role === 'founder' ? 'Founder' : 'Team' }:
+      { this.props.target.target_type_description }:
       </span>;
   }
 

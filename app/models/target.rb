@@ -138,4 +138,16 @@ class Target < ApplicationRecord
 
   # this is included in the target JSONs the DashboardDataService responds with
   alias has_rubric rubric?
+
+  def target_type_description
+    role = founder_role? ? 'Founder ' : 'Team '
+    type = if session?
+      'Session'
+    elsif chore?
+      'Chore'
+    else
+      'Target'
+    end
+    role + type
+  end
 end

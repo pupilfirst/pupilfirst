@@ -20,7 +20,7 @@ html lang='en'
     = csrf_meta_tags
     = yield :head
 
-    link rel="icon" href="#{image_url 'favicon.png'}"
+    link rel="icon" href=image_url('layouts/shared/favicon.png')
 
   body
     - unless @hide_layout_header

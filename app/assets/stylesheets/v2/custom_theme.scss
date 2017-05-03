@@ -1,6 +1,7 @@
 html, body {
   overflow-x: hidden;
 }
+
 body {
   font-family: 'Source Sans Pro', sans-serif;
   background-color: $primary-background;
@@ -31,18 +32,23 @@ h1, h2, h3, h4, h5, h6,
 p {
   margin-bottom: 0;
 }
+
 .font-light {
   font-weight: $font-light;
 }
+
 .font-regular {
   font-weight: $font-regular;
 }
+
 .font-semibold {
   font-weight: $font-semibold;
 }
+
 .font-bold {
   font-weight: $font-bold;
 }
+
 // **********  Overriding Bootstrap classes **********
 
 // **********  Custom style **********
@@ -50,30 +56,39 @@ p {
 .brand-primary {
   color: $brand-primary;
 }
+
 .brand-secondary {
   color: $brand-secondary;
 }
+
 .light-primary {
   color: $light-primary;
 }
+
 .light-secondary {
   color: $light-secondary;
 }
+
 .dark-primary {
   color: $dark-primary;
 }
+
 .dark-secondary {
- color: $dark-secondary;
+  color: $dark-secondary;
 }
+
 .alert-background {
   color: $alert-background;
 }
+
 .dark-grey-text {
   color: $dark-grey-text;
 }
+
 .light-grey-text {
   color: $light-grey-text;
 }
+
 .brand-danger {
   color: $brand-danger;
 }
@@ -104,12 +119,15 @@ p {
     width: 100%;
   }
 }
+
 .btn-sm {
   padding: 6px 18px;
 }
+
 .btn-md {
   padding: 12px 24px;
 }
+
 .btn-lg {
   padding: 15px 32px;
 }
@@ -135,6 +153,7 @@ p {
     box-shadow: $box-shadow-btn;
   }
 }
+
 .btn-secondary {
   @include button-variant($btn-secondary-color, $light-secondary, $btn-secondary-border);
 
@@ -192,6 +211,7 @@ p {
     box-shadow: $box-shadow-btn;
   }
 }
+
 .btn-with-icon {
   i {
     margin-right: 5px;
@@ -203,6 +223,7 @@ p {
   @extend .m-x-auto;
   max-width: 45rem;
 }
+
 .content-box {
   padding: 30px;
   background-color: white;
@@ -210,6 +231,7 @@ p {
   border-radius: 5px;
   border: 1px solid $gray-border;
 }
+
 .secondary-banner {
   padding: 35px 0;
   background: rgba(255, 255, 255, 1) asset-url("apply/application-process-stages-bg.svg") no-repeat center center;
@@ -217,6 +239,7 @@ p {
   position: relative;
   border-bottom: 1px solid $gray-border;
 }
+
 .banner-head {
   padding: 25px 0 0;
 
@@ -238,6 +261,7 @@ p {
   border-bottom: 1px solid $gray-border;
   padding-bottom: 10px;
 }
+
 .simple-form-container {
   .form-group {
     margin-bottom: 1.25rem;
@@ -249,15 +273,17 @@ p {
         margin-bottom: 10px;
       }
     }
+
     select {
       appearance: none;
       position: relative;
-      background: asset-url('down-arrow.svg') no-repeat 97% 50%;
+      background: asset-url('shared/arrow-down.svg') no-repeat 97% 50%;
       background-size: 15px 15px;
       color: $light-grey-text;
       font-weight: $font-regular;
       text-shadow: 0 0 0 #000;
     }
+
     .radio, .radio-inline {
       padding-top: 7px;
       margin-right: 20px;
@@ -296,6 +322,7 @@ p {
     display: none;
   }
 }
+
 .content-head {
   position: relative;
   padding-top: 40px;
@@ -351,6 +378,7 @@ p {
     transform: translateX(-50%);
   }
 }
+
 .read-more {
   position: relative;
   overflow: hidden;
@@ -362,7 +390,7 @@ p {
   text-align: center;
   display: inline-block;
   position: relative;
-  background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
   bottom: 0;
   left: 0;
   height: 30px;
@@ -372,15 +400,19 @@ p {
   text-align: center;
   width: 100%;
 }
+
 .has-error {
   @extend .has-danger;
 }
+
 .help-block {
   color: red;
 }
+
 .header-spacer {
   padding-top: 85px;
 }
+
 .video-modal {
   .modal-dialog {
     @include media-breakpoint-down(md) {
@@ -420,6 +452,7 @@ p {
     }
   }
 }
+
 .success-box, .alert-box {
   padding: 15px;
   @include border-radius(10px);
@@ -438,6 +471,7 @@ p {
     margin-right: 15px;
   }
 }
+
 .alert-box {
   background-color: $alert-background;
   border: 1px solid darken($alert-background, 20%);
@@ -446,6 +480,7 @@ p {
     content: '\f0a2';
   }
 }
+
 .success-box {
   background-color: $light-primary;
   border: 1px solid $brand-primary;
@@ -460,6 +495,7 @@ p {
     display: none;
   }
 }
+
 .video-box {
   width: 100%;
   height: 315px;
@@ -510,7 +546,6 @@ p {
     background-color: $primary-background;
   }
 }
-
 
 // Override Pagination style
 .pagination {

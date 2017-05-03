@@ -20,16 +20,33 @@
           .link
             = link_to 'Sign In to Continue', new_user_session_path(referer: apply_path), class: 'btn btn-primary btn-md text-uppercase'
 
-      .application-process-left.content-box.m-t-2.m-b-2
+      .application-process-left.content-box.m-t-2.m-b-2.p-b-0
+        .school-of-saas__section.clearfix
+          h2
+            ' <strong>Apply now</strong> to School of SaaS
+
+          p.school-of-saas__section--text
+            ' It&rsquo;s an industry guided startup program for student teams.
+            ' We take you on a journey of knowledge, skills and experience which
+            ' prepares you for the world of startups. SV.CO School of SaaS has 4
+            ' levels before you graduate. Its completely online, student friendly
+            | and can be done at your own pace.
+
         .admission-process.clearfix
           h2
-            ' Unique <strong>Admission Process</strong>
-            br
-            | to show team skills
+            ' <strong>Begin your startup journey</strong> with Level 0
           p
-            ' We don’t have exams at Admission or Graduation. Instead, at both
-            ' stages we look at the real product that you have built to measure your
-            | knowledge. We encourage you to use the Internet to help solve problems.
+            ' We don&rsquo;t have exams at admission or graduation in SV.CO.
+            ' Instead, at both stages we look at the real product that you have
+            | built to measure your knowledge and skills.
+          blockquote.blockquote.m-t-1
+            p
+              ' &ldquo;Level 0 at SV.CO is a great experience for students to learn the
+              ' basics of building a startup like team formation, product building,
+              ' communication skills by actually doing all of them. It gives a confidence
+              | that you can actually build a startup while in college&rdquo;
+            footer.blockquote-footer
+              ' Arun. P, Alumni of SV.CO
           .row.m-t-1
             .col-md-4
               .process-box.arrow-right
@@ -88,9 +105,16 @@
                   | Batch Start
         .our-program
           h2
-            ' Our <strong>Program</strong>
-          .slideshare-embed
-            iframe.slideshare-frame src="//www.slideshare.net/slideshow/embed_code/key/2w0Ffb4moASiss" width="100%" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" allowfullscreen="allowfullscreen"
+            ' <strong>Alpha Launch</strong> at School of SaaS
+          .program-video__embed
+            iframe.program-video__embed--frame src="https://www.youtube.com/embed/os-u03IryvA" width="100%" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" allowfullscreen="allowfullscreen"
+          p.program-video__embed--description.m-t-1
+            ' Alpha Launch is one of our key physical events at the School of SaaS.
+            ' It is hosted by Freshdesk where all the teams across India travel to
+            ' chennai once during the programme. You get a chance to launch the Alpha
+            ' version of the prototype in front of SaaS experts who provide valuable
+            | feedback and guide you through the journey.
+
 
         .application-faq.m-b-2#faqs
           h2

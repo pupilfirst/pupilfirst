@@ -3,7 +3,7 @@
 
   h2 {
     position: relative;
-    margin-bottom: 50px;
+    margin-bottom: 40px;
     font-size: 1.875rem;
 
     strong {
@@ -19,6 +19,11 @@
       bottom: -20px;
     }
   }
+}
+
+.school-of-saas__section--text {
+  font-size: 1.125rem;
+  font-weight: $font-light;
 }
 
 .admission-process, .important-dates, .application-faq, .our-program {
@@ -140,7 +145,7 @@
     }
   }
 }
-.slideshare-embed {
+.program-video__embed {
   position: relative;
   width: 100%;
   max-width: 100%;
@@ -149,15 +154,20 @@
   @include border-radius(5px);
   box-shadow: 0 0 10px $gray-border;
   overflow: hidden;
+}
 
-  .slideshare-frame {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    max-width: 100%;
-    height: 100%;
-  }
+.program-video__embed--frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+}
+
+.program-video__embed--description {
+  font-size: 1rem;
+  color: $dark-grey-text;
 }
 
 .admission-process{
@@ -170,6 +180,7 @@
   background-color: $light-secondary;
   padding: 30px 15px;
   margin: 0 -30px;
+  @include border-radius(0 0 5px 5px);
 
   .help-icon {
     display: block;

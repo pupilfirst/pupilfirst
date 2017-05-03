@@ -5,6 +5,7 @@ module Lita
 
       def changelog(response)
         response.reply latest_change_log
+        Ahoy::Tracker.new.track Visit::EVENT_VOCALIST_COMMAND, command: Visit::VOCALIST_COMMAND_CHANGELOG
       end
 
       def latest_change_log

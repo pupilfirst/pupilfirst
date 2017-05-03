@@ -7,6 +7,7 @@ module Lita
         @response = response
         @term = response.match_data[1].present? ? response.match_data[1] : nil
         fetch_definition
+        Ahoy::Tracker.new.track Visit::EVENT_VOCALIST_COMMAND, command: Visit::VOCALIST_COMMAND_GLOSSARY
       end
 
       def fetch_definition

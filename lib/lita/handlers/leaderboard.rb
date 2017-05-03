@@ -17,6 +17,7 @@ module Lita
             response.reply(':confused: Oops! Something seems wrong. Please try again later!')
           end
         end
+        Ahoy::Tracker.new.track Visit::EVENT_VOCALIST_COMMAND, command: Visit::VOCALIST_COMMAND_LEADERBOARD
       end
 
       # send a relevant please wait method

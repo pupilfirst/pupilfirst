@@ -1,7 +1,7 @@
 .faculty-profile-card {
   background-color: white;
   border-radius: 5px;
-  box-shadow: 0 0 5px 0 rgba(0,0,0,0.1);
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
   padding: 0;
   overflow: hidden;
 
@@ -81,6 +81,7 @@
   //   margin: auto;
   // }
 }
+
 .faculty-profile-right {
   padding: 0;
 
@@ -92,7 +93,7 @@
     border-radius: 5px;
     overflow: hidden;
     display: flex;
-    box-shadow: 0 0 5px 0 rgba(0,0,0,0.1);
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
 
     h3 {
       font-size: 14px;
@@ -122,17 +123,19 @@
           background-size: 13px 14px;
 
           &.about-icon {
-            background-image: asset-url("faculty/about-icon.svg");
+            background-image: asset-url("faculty/show/summary-icon-about.svg");
           }
           &.skills-icon {
-            background-image: asset-url("faculty/skills-icon.svg");
+            background-image: asset-url("faculty/show/summary-icon-skills.svg");
           }
         }
+
         p {
           padding-left: 20px;
           line-height: 22px;
           white-space: pre-wrap;
         }
+
         .skill-box {
           span {
             display: inline-block;

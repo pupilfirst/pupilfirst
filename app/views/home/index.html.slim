@@ -552,7 +552,7 @@
       .row.instagram-image-container
         - @instagram_images.each_with_index do |image, index|
           .col-sm-4.col-md-3.col-lg-2.instagram-images-wrapper style="background-image: url('#{image[:image_url]}');" class="#{index > 3 ? 'hidden-md-down' : ''}"
-            img.instagram-spacer src=image_path('home/instagram_square_spacer.png')
+            img.instagram-spacer src=image_path('home/index/instagram-section-square-spacer.png')
             a.instagram-overlay href=image[:instagram_link] target='_blank'
               - if image.key?(:caption)
                 .caption = image[:caption][:text]

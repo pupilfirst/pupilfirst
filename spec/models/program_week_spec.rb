@@ -5,7 +5,7 @@ RSpec.describe ProgramWeek, type: :model do
   let(:batch) { create :batch }
 
   it 'ensures uniqueness of week number in batch' do
-    subject.create! name: 'foo', number: 1, batch: batch, icon_name: ProgramWeek.icon_name_options.sample
+    subject.create! name: 'foo', number: 1, batch: batch
 
     expect do
       subject.create! name: 'bar', number: 1, batch: batch

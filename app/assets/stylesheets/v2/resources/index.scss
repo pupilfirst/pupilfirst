@@ -94,7 +94,7 @@
   select {
     appearance: none;
     position: relative;
-    background: asset-url('down-arrow.svg') no-repeat 95% 50%;
+    background: asset-url('shared/arrow-down.svg') no-repeat 95% 50%;
     background-size: 12px 12px;
     color: $light-grey-text;
     font-weight: $font-regular;

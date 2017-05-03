@@ -10,7 +10,7 @@
           .col-md-6.push-md-6
             .content-box.user-login.m-b-1
               .sign-in-kid.m-x-auto.m-b-1
-                = image_tag 'founders/sessions/sign-in-kid.svg', class: 'img-fluid m-x-auto'
+                = image_tag 'users/sessions/new/sign-in-kid.svg', class: 'img-fluid m-x-auto'
               #sign-in-with-federated class=hidden_sign_in_class('federated')
                 h3.text-xs-center.m-b-2 Sign in to SV.CO
 
@@ -41,7 +41,7 @@
                   = f.hidden_field :referer
 
                   .wrapped-input
-                    = image_tag 'founders/sessions/email.svg'
+                    = image_tag 'users/sessions/new/email.svg'
                     = f.text_field :email, required: true, placeholder: 'SV.CO ID (email)', maxlength: 250, type: 'email'
                     - if f.object.errors[:email].present?
                       p.error-under-input = f.object.errors[:email].join(', ')
@@ -62,7 +62,7 @@
           .col-md-6.pull-md-6
             .login-notice.content-box.text-xs-center
               .notice-section.with-border-btm
-                = image_tag 'founders/sessions/sv-spaceship.svg', class: 'img-fluid m-x-auto'
+                = image_tag 'users/sessions/new/sv-spaceship.svg', class: 'img-fluid m-x-auto'
                 h4
                   = link_to apply_path, class: "batch-link-head" do
                     ' Applications to
@@ -71,7 +71,7 @@
                     br
                     ' <strong>Click here</strong> to get started.
               .notice-section
-                = image_tag 'founders/sessions/fly-a-kite.svg', class: 'img-fluid m-x-auto'
+                = image_tag 'users/sessions/new/fly-a-kite.svg', class: 'img-fluid m-x-auto'
                 h4
                   = link_to six_ways_path, class: "startincollege-link-head" do
                     ' Looking for the

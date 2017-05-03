@@ -15,9 +15,4 @@ class ProgramWeek < ApplicationRecord
     return nil if batch&.start_date.blank?
     batch.start_date + ((number - 1) * 7).days
   end
-
-  def self.icon_name_options
-    path = File.absolute_path(Rails.root.join('app', 'assets', 'images', 'founders', 'dashboard', 'program-week-icons'))
-    Dir.entries(path).reject { |f| File.directory? f }
-  end
 end

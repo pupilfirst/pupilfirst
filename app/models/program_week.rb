@@ -5,7 +5,6 @@ class ProgramWeek < ApplicationRecord
 
   validates :name, presence: true
   validates :number, presence: true, uniqueness: { scope: [:batch_id] }
-  validates :icon_name, presence: true
 
   def display_name
     "W#{number}: #{name}"

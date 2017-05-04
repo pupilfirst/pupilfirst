@@ -234,7 +234,7 @@ p {
 
 .secondary-banner {
   padding: 35px 0;
-  background: rgba(255, 255, 255, 1) asset-url("apply/application-process-stages-bg.svg") no-repeat center center;
+  background: rgba(255, 255, 255, 1) asset-url("custom_theme/secondary-banner-background.svg") no-repeat center center;
   background-size: cover;
   position: relative;
   border-bottom: 1px solid $gray-border;
@@ -335,38 +335,46 @@ p {
     display: block;
 
     &.startincollege-initiative-icon {
-      background-image: asset-url("apply/startincollege-initiative-icon.svg");
+      background-image: asset-url("custom_theme/content-title-icon-startincollege-initiative.svg");
       height: 75px;
     }
+
     &.graduated-icon {
-      background-image: asset-url("apply/graduated-icon.svg");
+      background-image: asset-url("custom_theme/content-title-icon-graduated.svg");
       height: 75px;
     }
+
     &.program-icon {
-      background-image: asset-url("apply/program-icon.svg");
+      background-image: asset-url("custom_theme/content-title-icon-program.svg");
       height: 50px;
     }
+
     &.program-partners-icon {
-      background-image: asset-url("apply/program-partners-icon.svg");
+      background-image: asset-url("custom_theme/content-title-icon-program-partners.svg");
       height: 43px;
     }
+
     &.faq-icon {
-      background-image: asset-url("apply/faq-icon.svg");
+      background-image: asset-url("custom_theme/content-title-icon-faq.svg");
       height: 60px;
     }
+
     &.fees-icon {
-      background-image: asset-url("apply/fees-icon.svg");
+      background-image: asset-url("custom_theme/content-title-icon-fees.svg");
       height: 62px;
     }
+
     &.winner-icon {
-      background-image: asset-url("apply/first-batch-graduation.svg");
+      background-image: asset-url("custom_theme/content-title-icon-winner.svg");
       height: 75px;
     }
+
     &.campaign-images-icon {
-      background-image: asset-url("apply/startincollege-campaign-icon.svg");
+      background-image: asset-url("custom_theme/content-title-icon-startincollege-campaign.svg");
       height: 75px;
     }
   }
+
   &:before {
     content: '';
     width: 60px;

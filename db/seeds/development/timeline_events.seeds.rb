@@ -3,30 +3,25 @@ require_relative 'helper'
 after 'development:startups' do
   puts 'Seeding timeline_events'
 
-  super_startup = Startup.find_by(product_name: 'Super Product')
   avengers_startup = Startup.find_by(product_name: 'SuperHeroes')
 
-  # generate the default joined SV.CO event for both startups
-  Startups::PrepopulateTimelineService.new(super_startup).execute
-  Startups::PrepopulateTimelineService.new(avengers_startup).execute
-
-  VERIFIED = TimelineEvent::VERIFIED_STATUS_VERIFIED
-  PENDING = TimelineEvent::VERIFIED_STATUS_PENDING
-  NEEDS_IMPROVEMENT = TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT
+  status_verified = TimelineEvent::VERIFIED_STATUS_VERIFIED
+  status_pending = TimelineEvent::VERIFIED_STATUS_PENDING
+  status_needs_improvement = TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT
 
   # Add a one-liner verified entry for avengers
   events_list = [
-    [avengers_startup, 'one_liner', 'ironman@avengers.co', 'We came up with a new one-liner for avengers: Everyone creates the thing they fear.', VERIFIED]
+    [avengers_startup, 'one_liner', 'ironman@avengers.co', 'We came up with a new one-liner for avengers: Everyone creates the thing they fear.', status_verified]
   ]
 
   # Add a pending 'team-formed' pending entry for avengers
   events_list += [
-    [avengers_startup, 'team_formed', 'ironman@avengers.co', 'We formed our team to fight the evil!', PENDING]
+    [avengers_startup, 'team_formed', 'ironman@avengers.co', 'We formed our team to fight the evil!', status_pending]
   ]
 
   # Add a 'new_product_deck' for avengers which needs improvement
   events_list += [
-    [avengers_startup, 'new_product_deck', 'ironman@avengers.co', 'We have a new presentation about us!', NEEDS_IMPROVEMENT]
+    [avengers_startup, 'new_product_deck', 'ironman@avengers.co', 'We have a new presentation about us!', status_needs_improvement]
   ]
 
   # create all events in the events_list
@@ -38,7 +33,7 @@ after 'development:startups' do
       event_on: Time.now,
       description: description,
       verified_status: verified_status,
-      verified_at: (verified_status==VERIFIED ? Time.now : nil)
+      verified_at: (verified_status == status_verified ? Time.now : nil)
     )
   end
 end

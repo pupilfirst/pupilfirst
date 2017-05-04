@@ -28,7 +28,7 @@
         = @startup.product_name.present? ? @startup.product_name : 'Untitled Product'
         - if @startup.timeline_verified?
           a#verified-icon data-toggle="tooltip" data-placement="top" title="Timeline verified by SV.CO" href="#"
-            img.timeline-verified.margin-left-10 src='#{image_url 'timeline/verified.gif'}'
+            img.timeline-verified.margin-left-10 src='#{image_url 'startups/show/timeline-verified.gif'}'
         - if current_founder &&  !current_founder.exited && @startup.founder?(current_founder)
           small.edit-startup-link
             a href=edit_founder_startup_path
@@ -61,7 +61,7 @@
               .col-sm-6.col-md-12
                 .media
                   .media-left
-                    img.media-object alt="Industry icon" src="#{image_url 'timeline/icons/industry.png'}"
+                    img.media-object alt="Industry icon" src="#{image_url 'startups/show/data-icon-industry.png'}"
                   .media-body
                     h4.media-heading Industry
                     p.data-content #{@startup.startup_categories.pluck(:name).join(', ')}
@@ -69,7 +69,7 @@
               .col-sm-6.col-md-12
                 .media
                   .media-left
-                    img.media-object alt="Website icon" src="#{image_url 'timeline/icons/website.png'}"
+                    img.media-object alt="Website icon" src="#{image_url 'startups/show/data-icon-website.png'}"
                   .media-body
                     h4.media-heading Website
                     p.data-content
@@ -80,7 +80,7 @@
               .col-sm-6.col-md-12
                 .media
                   .media-left
-                    img.media-object alt="Product Deck icon" src="#{image_url 'timeline/icons/startup_deck.png'}"
+                    img.media-object alt="Product Deck icon" src="#{image_url 'startups/show/data-icon-startup-deck.png'}"
                   .media-body
                     h4.media-heading Product Deck
                     p.data-content
@@ -91,7 +91,7 @@
               .col-sm-6.col-md-12
                 .media
                   .media-left
-                    img.media-object alt="Product Video icon" src="#{image_url 'timeline/icons/startup_deck.png'}"
+                    img.media-object alt="Product Video icon" src="#{image_url 'startups/show/data-icon-startup-deck.png'}"
                   .media-body
                     h4.media-heading Product Video
                     p.data-content
@@ -102,7 +102,7 @@
               .col-sm-6.col-md-12
                 .media
                   .media-left
-                    img.media-object alt="Wireframe icon" src="#{image_url 'timeline/icons/startup_deck.png'}"
+                    img.media-object alt="Wireframe icon" src="#{image_url 'startups/show/data-icon-startup-deck.png'}"
                   .media-body
                     h4.media-heading Design Wireframe
                     p.data-content
@@ -113,7 +113,7 @@
               .col-sm-6.col-md-12
                 .media
                   .media-left
-                    img.media-object alt="Prototype icon" src="#{image_url 'timeline/icons/startup_deck.png'}"
+                    img.media-object alt="Prototype icon" src="#{image_url 'startups/show/data-icon-startup-deck.png'}"
                   .media-body
                     h4.media-heading Product Prototype
                     p.data-content
@@ -123,14 +123,14 @@
             .col-sm-6.col-md-12
               .media
                 .media-left
-                  img.media-object alt="Team Size icon" src="#{image_url 'timeline/icons/team_size.png'}"
+                  img.media-object alt="Team Size icon" src="#{image_url 'startups/show/data-icon-team-size.png'}"
                 .media-body
                   h4.media-heading Team Size
                   p.data-content #{@startup.founders.count + @startup.team_members.count}
             .col-sm-6.col-md-12
               .media
                 .media-left
-                  img.media-object alt="Stage icon" src="#{image_url 'timeline/icons/stage.png'}"
+                  img.media-object alt="Stage icon" src="#{image_url 'startups/show/data-icon-stage.png'}"
                 .media-body
                   h4.media-heading Stage Startup is In
                   p.data-content #{TimelineEventType::STAGE_NAMES[@startup.stage] }
@@ -138,7 +138,7 @@
               .col-sm-6.col-md-12
                 .media
                   .media-left
-                    img.media-object alt="Iteration icon" src="#{image_url 'timeline/icons/iteration.png'}"
+                    img.media-object alt="Iteration icon" src="#{image_url 'startups/show/data-icon-iteration.png'}"
                   .media-body
                     h4.media-heading Product Iteration
                     p.data-content #{@startup.iteration.ordinalize}
@@ -146,7 +146,7 @@
               .col-sm-6.col-md-12
                 .media
                   .media-left
-                    img.media-object alt="Days Lapsed icon" src="#{image_url 'timeline/icons/iteration.png'}"
+                    img.media-object alt="Days Lapsed icon" src="#{image_url 'startups/show/data-icon-iteration.png'}"
                   .media-body
                     h4.media-heading Days Elapsed
                     p.data-content
@@ -206,7 +206,7 @@
           .tl-iteration
             p#focused-event
               | Focused Event
-            = image_tag 'timeline/dash.png'
+            = image_tag 'startups/show/dash.png'
           ul
             == render 'timeline_event', event: @timeline_event_for_og.decorate, startup: @startup
 
@@ -215,7 +215,7 @@
           .tl-iteration
             p
               | Timeline
-            = image_tag 'timeline/dash.png'
+            = image_tag 'startups/show/dash.png'
           ul#timeline-list
             = render 'events_by_page', events: @events_for_display, page: 1, startup: @startup, more: @has_more_events
       - else
@@ -223,7 +223,7 @@
           .tl-iteration
             p
               | No timeline events to show!
-            = image_tag 'timeline/dash.png'
+            = image_tag 'startups/show/dash.png'
 
 - if @startup.founder?(current_founder)
   #improvement-modal.modal.fade [role="dialog"

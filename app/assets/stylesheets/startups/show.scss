@@ -551,7 +551,6 @@ h1.product-name {
 
 .tour-button {
   color: #3a9343;
-  background-color: #1db1ed;
   border: 1px solid #1db1ed;
   border-radius: 50%;
   width: 35px;
@@ -559,10 +558,8 @@ h1.product-name {
   margin: 0 0 0 10px;
   vertical-align: middle;
   display: inline-block;
-  background-image: asset-url("timeline/tour-icon.svg");
-  background-repeat: no-repeat;
   background-size: 22px;
-  background-position: center center;
+  background: #1db1ed asset-url("startups/show/tour-icon.svg") no-repeat center center;
   box-shadow: 0 0 2px 2px #ddd;
   outline: none;
   overflow: hidden;

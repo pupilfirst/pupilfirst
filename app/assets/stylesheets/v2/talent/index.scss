@@ -1,8 +1,8 @@
 .talent-hero {
-  background-image: asset-url("talent/talent_strip_bg.png"), asset-url("talent/Banner-bg.png");
-  height: auto;
+  background-image: asset-url("talent/index/banner-top-strip.png"), asset-url("talent/index/banner-background.png");
   background-repeat: repeat-x;
   background-position: center top;
+  height: auto;
 }
 
 .talent-hero-headline {
@@ -153,20 +153,25 @@
   background-repeat: no-repeat;
 
   &.acquihire-team-icon {
-    background-image: asset-url("talent/Acquihire-teams-icon.svg");
+    background-image: asset-url("talent/index/talent-tab-icon-acquihire.svg");
   }
+
   &.hire-founders-icon {
-    background-image: asset-url("talent/Hire-founders-icon.svg");
+    background-image: asset-url("talent/index/talent-tab-icon-hire-founders.svg");
   }
+
   &.invest-in-startups-icon {
-    background-image: asset-url("talent/Invest-in-stratups-icon.svg");
+    background-image: asset-url("talent/index/talent-tab-icon-invest.svg");
   }
+
   &.accelerate-icon {
-    background-image: asset-url("talent/Accelerate-icon.svg");
+    background-image: asset-url("talent/index/talent-tab-icon-accelerate.svg.svg");
   }
+
   @include media-breakpoint-down(sm) {
     margin: 0;
   }
+
   @include media-breakpoint-between(sm, md) {
     width: 30px;
     height: 30px;
@@ -194,7 +199,7 @@
 .talent-video-playlist, .testimonial-video {
   width: 100%;
   height: 330px;
-  box-shadow: 0 0 15px 0 rgba(0,0,0,0.15);
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15);
   border: 5px solid #ffffff;
 
   @include media-breakpoint-down(sm) {
@@ -212,9 +217,9 @@
     border-right: 1px solid $gray-border;
 
     .company-logo {
-      display:flex;
-      justify-content:center;
-      align-items:center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       height: 140px;
       width: 185px;
       margin: auto;
@@ -236,7 +241,7 @@
 }
 
 .talkto-founders {
-  background-color: rgba(246,246,246,0.75);
+  background-color: rgba(246, 246, 246, 0.75);
   border-top: 1px solid $gray-border;
 
   h3 {
@@ -261,8 +266,8 @@
     .ways-icon {
       background-position: center center;
       background-repeat: no-repeat;
-      border: 1px solid rgba(0,137,208,0.4);
-      box-shadow: 0 0 9px 0 rgba(0,0,0,0.08);
+      border: 1px solid rgba(0, 137, 208, 0.4);
+      box-shadow: 0 0 9px 0 rgba(0, 0, 0, 0.08);
       width: 100px;
       height: 100px;
       padding: 0;
@@ -271,11 +276,13 @@
       display: block;
 
       &.faculty-join-icon {
-        background-image: asset-url("talent/join-faculty-icon.svg");
+        background-image: asset-url("talent/index/talk-to-founders-icon-join-faculty.svg");
       }
+
       &.broadcast-icon {
-        background-image: asset-url("talent/broadcast-icon.svg");
+        background-image: asset-url("talent/index/talk-to-founders-icon-broadcast.svg");
       }
+
       @include media-breakpoint-down(sm) {
         margin-bottom: 15px;
       }
@@ -324,8 +331,9 @@
   margin-top: 55px;
   outline: none;
 }
+
 .testimonial-container {
-  background-color: rgba(254,245,230,0.25);
+  background-color: rgba(254, 245, 230, 0.25);
   border: 1px solid #F1DAB4;
   border-width: 1px 0;
 }
@@ -376,17 +384,19 @@
     display: block;
 
     &.graduates-join-icon {
-      background-image: asset-url("talent/talent-icon.svg");
+      background-image: asset-url("talent/index/heading-icon-graduation.svg");
       width: 60px;
       height: 72px;
     }
+
     &.talkto-graduates-icon {
-      background-image: asset-url("talent/talk-to-founders-icon.svg");
+      background-image: asset-url("talent/index/heading-icon-talk-to-founders.svg");
       width: 70px;
       height: 72px;
     }
+
     &.testimonial-icon {
-      background-image: asset-url("talent/testimonial-icon.svg");
+      background-image: asset-url("talent/index/heading-icon-testimonials.svg");
       width: 74px;
       height: 66px;
     }
@@ -430,6 +440,7 @@
     }
   }
 }
+
 .slick-prev, .slick-next {
   border: 1px solid #D2D2D2;
   border-radius: 50%;
@@ -443,23 +454,24 @@
     opacity: 1;
   }
 }
+
 .slick-prev {
   &:before {
     content: '\f104';
     color: #D2D2D2;
   }
 }
+
 .slick-next {
   &:before {
     content: '\f105';
     color: #D2D2D2;
   }
 }
+
 .action-form {
   .modal-content {
-    background-image: asset-url("talent/Banner-bg.png");
-    background-repeat: repeat-x;
-    background-position: 140px -120px;
+    background: asset-url("talent/index/banner-background.png") repeat-x 140px -120px;
     padding: 40px;
 
     .modal-header {
@@ -562,9 +574,9 @@
     }
   }
 }
+
 .footer-action {
-  background-image: asset-url("talent/Banner-bg.png");
-  background-repeat: repeat-x;
+  background: asset-url("talent/index/banner-background.png") repeat-x;
 
   .footer-action-box {
     max-width: 720px;

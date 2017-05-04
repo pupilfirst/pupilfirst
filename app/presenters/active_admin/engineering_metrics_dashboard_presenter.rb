@@ -8,7 +8,7 @@ module ActiveAdmin
     delegate :commits_trend, to: :github_service
 
     def code_frequency
-      github_service.code_frequency&.map { |w| "#{w[1]}:#{w[2]}" }.join(', ')
+      github_service.code_frequency&.map { |w| "#{w[1]}:#{w[2]}" }&.join(', ')
     end
 
     def last_week_bugs

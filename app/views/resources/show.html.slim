@@ -22,7 +22,7 @@ h1.m-b-1 #{@resource.title}
       - if @resource.thumbnail.present?
         = image_tag @resource.thumbnail.url
       - else
-        = image_tag 'resources/thumbnail_default.png'
+        = image_tag 'resources/shared/default-thumbnail.png'
 
   .pull-md-left.resource-description-and-links
     - if @resource.level_exclusive?

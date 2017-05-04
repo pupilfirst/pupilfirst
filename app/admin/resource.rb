@@ -81,9 +81,9 @@ ActiveAdmin.register Resource do
 
       row :thumbnail do |resource|
         if resource.thumbnail.present?
-          img src: resource.thumbnail_url
+          image_tag resource.thumbnail_url
         else
-          image_tag 'resources/thumbnail_default.png'
+          image_tag 'resources/shared/default-thumbnail.png'
         end
       end
 

@@ -4,7 +4,7 @@
       - if resource.thumbnail.present?
         = image_tag resource.thumbnail.url
       - else
-        = image_tag 'resources/thumbnail_default.png', class: 'img-responsive'
+        = image_tag 'resources/shared/default-thumbnail.png', class: 'img-responsive'
     - if resource.level_exclusive?
       .level-exclusive
         p.text-uppercase

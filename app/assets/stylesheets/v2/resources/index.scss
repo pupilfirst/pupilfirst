@@ -60,7 +60,6 @@
       background-image: none;
       box-shadow: none;
       font-size: 0.75rem;
-      color: $light-grey-text;
       margin: 6px 0 3px 5px;
       padding: 3px 7px 3px 20px;
     }
@@ -97,8 +96,7 @@
     position: relative;
     background: asset-url('shared/arrow-down.svg') no-repeat 95% 50%;
     background-size: 12px 12px;
-    color: $light-grey-text;
-    font-weight: $font-regular;
+    color: $dark-grey-text;
     text-shadow: 0 0 0 #000;
     background-color: white;
   }

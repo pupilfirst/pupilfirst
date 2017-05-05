@@ -36,10 +36,12 @@ destroySelect2Inputs = ->
 
 $(document).on 'turbolinks:load', ->
   if $('#faculty__index').length
-    select2ForConnectSlot()
     newConnectRequestFormHandler()
     tabTitleManager()
 
+  if $('#faculty__index').length || $('#faculty__show').length
+    select2ForConnectSlot()
+
 $(document).on 'turbolinks:before-cache', ->
-  if $('#faculty__index').length
+  if $('#faculty__index').length || $('#faculty__show').length
     destroySelect2Inputs()

@@ -26,7 +26,7 @@ after 'development:levels', 'development:founders', 'development:timeline_event_
     product_description: 'This really is a superb product! ;)',
     agreement_signed_at: 18.months.ago,
     website: 'https://www.superstartup.in',
-    logo: File.open(File.join(Rails.root, 'app/assets/images/shared/logo-color.svg')),
+    logo: File.open(File.join(Rails.root, 'app/assets/images/mailer/logo-mailer.png')),
     presentation_link: 'https://slideshare.net/superstartupdeck',
     legal_registered_name: 'SuperTech Ltd',
     startup_categories: [StartupCategory.first, StartupCategory.second],

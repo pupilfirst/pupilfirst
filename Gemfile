@@ -104,6 +104,7 @@ gem 'file_validators', '~> 2.1' # Adds file validators to ActiveModel.
 gem 'diffy', '~> 3.2' # Easy Diffing in Ruby.
 gem 'rails_server_timings', '~> 1.0' # Server Timing headers for Rails apps. https://github.com/dpogue/rails_server_timings
 gem 'pundit', '~> 1.1' # Minimal authorization through OO design and pure Ruby classes.
+gem 'github-linguist', '~> 5.0', require: false # Language Savant. https://github.com/github/linguist
 
 # Rails assets!
 source 'https://rails-assets.org' do

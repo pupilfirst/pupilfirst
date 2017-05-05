@@ -158,7 +158,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.5.0' # Duh.
   gem 'coderay', '~> 1.1' # Pretty syntax highlighting on rspec failure snippets.
   gem 'pry-rails', '~> 0.3.5' # Pry debugger.
-  gem 'webmock', '~> 2.3' # Mocking web requests.
+  gem 'webmock', '~> 3.0' # Mocking web requests.
 
   # TODO: Upgrade when Rubocop moves beyond buggy v0.48.
   gem 'rubocop', '= 0.47.1', require: false # Ruby Style Guide.

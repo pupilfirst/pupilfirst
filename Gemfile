@@ -108,7 +108,6 @@ gem 'pundit', '~> 1.1' # Minimal authorization through OO design and pure Ruby c
 # Rails assets!
 source 'https://rails-assets.org' do
   gem 'rails-assets-pnotify', '~> 3.0' # Superb notifications library. http://sciactive.github.io/pnotify/
-  gem 'rails-assets-curioussolutions-datetimepicker', '~> 0.1' # Responsive datetimepicker for timeline builder form.
   gem 'rails-assets-trix', '~> 0.10' # rich text editor from basecamp ( used for eg in the description for targets)
   gem 'rails-assets-bootstrap-tabcollapse', '~> 0.2' # Bootstrap plugin that switches bootstrap tabs component to collapse component for small screens.
   gem 'rails-assets-masonry', '~> 4.1' # Masonry works by placing elements in optimal position based on available vertical space.
@@ -158,7 +157,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.5.0' # Duh.
   gem 'coderay', '~> 1.1' # Pretty syntax highlighting on rspec failure snippets.
   gem 'pry-rails', '~> 0.3.5' # Pry debugger.
-  gem 'webmock', '~> 2.3' # Mocking web requests.
+  gem 'webmock', '~> 3.0' # Mocking web requests.
 
   # TODO: Upgrade when Rubocop moves beyond buggy v0.48.
   gem 'rubocop', '= 0.47.1', require: false # Ruby Style Guide.

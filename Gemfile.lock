@@ -552,7 +552,6 @@ GEM
       sprockets-rails (>= 2.0.0)
     rails-assets-bootstrap-tabcollapse (0.2.7)
     rails-assets-chartkick (2.2.3)
-    rails-assets-curioussolutions-datetimepicker (0.1.37)
     rails-assets-datetimepicker (2.5.4)
       rails-assets-jquery (>= 1.7.2)
       rails-assets-jquery-mousewheel (>= 3.1.13)
@@ -875,7 +874,6 @@ DEPENDENCIES
   rails (= 5.0.2)
   rails-assets-bootstrap-tabcollapse (~> 0.2)!
   rails-assets-chartkick (~> 2.2)!
-  rails-assets-curioussolutions-datetimepicker (~> 0.1)!
   rails-assets-datetimepicker (~> 2.5)!
   rails-assets-gemini-scrollbar (~> 1.5)!
   rails-assets-intro.js (~> 2.4)!

@@ -145,6 +145,7 @@
     }
   }
 }
+
 .program-video__embed {
   position: relative;
   width: 100%;
@@ -170,12 +171,13 @@
   color: $dark-grey-text;
 }
 
-.admission-process{
+.admission-process {
   p {
     font-size: 1.125rem;
     font-weight: $font-light;
   }
 }
+
 .help-section {
   background-color: $light-secondary;
   padding: 30px 15px;
@@ -193,6 +195,7 @@
       box-shadow: 0 0 2px $dark-secondary;
     }
   }
+
   .help-intercom-link {
     color: #FFF794;
 
@@ -200,6 +203,7 @@
       color: #F3EA76;
     }
   }
+
   h2 {
     color: white;
     margin-bottom: 40px;
@@ -216,6 +220,7 @@
     }
   }
 }
+
 .fees-section {
   padding: 30px 0;
 
@@ -483,6 +488,7 @@
     }
   }
 }
+
 .application-start-form {
   padding: 30px;
   background-color: white;
@@ -517,6 +523,7 @@
     }
   }
 }
+
 .sticky-application-button {
   position: fixed;
   right: 7em;
@@ -541,6 +548,7 @@
     }
   }
 }
+
 .application-faq {
   background-color: white;
   position: relative;
@@ -583,6 +591,7 @@
     display: block;
   }
 }
+
 .ready-to-apply {
   background-color: white;
   border: 0 solid $gray-border;
@@ -597,9 +606,11 @@
     }
   }
 }
+
 .application-closed-icon {
   max-width: 230px;
 }
+
 .application-open-text {
   p {
     font-size: 0.875rem;

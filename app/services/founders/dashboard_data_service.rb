@@ -2,6 +2,61 @@ module Founders
   class DashboardDataService
     def initialize(founder)
       @founder = founder
+      @level = @founder.startup.level
+    end
+
+    def all_targets
+      @all_targets ||= begin
+        vanilla_targets = Target.includes(:assigner, :level, :taggings).targets
+          .joins(target_group: :level).where('levels.number <= ?', @level.number)
+        chores = Target.includes(:assigner, :level, :taggings).chores.upto_level(@level)
+        sessions = Target.includes(:assigner, :level, :taggings).sessions.upto_level(@level)
+
+        vanilla_targets + chores + sessions
+      end
+    end
+
+    def vanilla_targets
+      all_targets.select(&:target_group_id?)
+    end
+
+    def new_chores
+      all_targets.select(&:chore?)
+        .sort do |a, b|
+          if a.sort_index && b.sort_index
+            a.sort_index <=> b.sort_index
+          else
+            a.sort_index ? -1 : 1
+          end
+        end
+        .as_json(
+          only: target_fields,
+          methods: %i(has_rubric target_type_description),
+          include: {
+            assigner: { only: assigner_fields },
+            level: { only: [:number] }
+          }
+        )
+    end
+
+    def new_sessions
+      all_targets.select(&:session_at?)
+        .sort do |a, b|
+          if a.sort_index && b.sort_index
+            a.sort_index <=> b.sort_index
+          else
+            a.sort_index ? -1 : 1
+          end
+        end
+        .as_json(
+          only: target_fields,
+          methods: %i(has_rubric target_type_description),
+          include: {
+            assigner: { only: assigner_fields },
+            level: { only: [:number] },
+            taggings: taggings_fields
+          }
+        )
     end
 
     def levels
@@ -134,6 +189,15 @@ module Founders
 
     def assigner_fields
       %i(id name)
+    end
+
+    def taggings_fields
+      {
+        only: [],
+        include: {
+          tag: { only: [:name] }
+        }
+      }
     end
   end
 end

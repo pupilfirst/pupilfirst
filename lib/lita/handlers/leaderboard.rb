@@ -22,6 +22,7 @@ module Lita
             response.reply leaderboard_response_message
           end
         end
+        Ahoy::Tracker.new.track Visit::EVENT_VOCALIST_COMMAND, command: Visit::VOCALIST_COMMAND_LEADERBOARD
       end
 
       # send a relevant please wait method

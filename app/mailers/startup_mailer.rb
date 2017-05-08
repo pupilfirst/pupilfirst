@@ -20,13 +20,4 @@ class StartupMailer < ApplicationMailer
     send_to = connect_request.startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
     mail(to: send_to, subject: 'Connect Request confirmed.')
   end
-
-  # Mail sent to startup right after it has been imported using Startups::OnboardService
-  #
-  # @param startup [Startup] Newly created Startup
-  def batch_start(startup)
-    @startup = startup
-    send_to = startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
-    mail(to: send_to, subject: 'Your startup journey awaits!')
-  end
 end

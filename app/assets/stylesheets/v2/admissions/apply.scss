@@ -3,7 +3,7 @@
 
   h2 {
     position: relative;
-    margin-bottom: 50px;
+    margin-bottom: 40px;
     font-size: 1.875rem;
 
     strong {
@@ -19,6 +19,57 @@
       bottom: -20px;
     }
   }
+}
+
+.school-of-saas__section--text {
+  font-size: 1.125rem;
+  font-weight: $font-light;
+}
+
+.alumni-testimonial {
+  background-image: asset-url("admissions/apply/arun-p-testimonial.png");
+  height: 290px;
+  margin: 0 -30px;
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  @include media-breakpoint-down(sm) {
+    &:before {
+      position: absolute;
+      content:"";
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      z-index:0;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+  }
+}
+.alumni-testimonial__quote {
+  color: white;
+  font-size: 1rem;
+  line-height: 1.6;
+  letter-spacing: 0.03rem;
+}
+.alumni-testimonial__quote-text {
+  position: relative;
+
+  &:before {
+    position: absolute;
+    width: 60px;
+    height: 4px;
+    top: -15px;
+    left: 0;
+    content: "";
+    border-top: 4px solid $light-primary;
+  }
+}
+
+.alumni-testimonial__name {
+  margin-top: 15px;
+  font-size: 1.125rem;
 }
 
 .admission-process, .important-dates, .application-faq, .our-program {
@@ -140,7 +191,8 @@
     }
   }
 }
-.slideshare-embed {
+
+.program-video__embed {
   position: relative;
   width: 100%;
   max-width: 100%;
@@ -149,27 +201,32 @@
   @include border-radius(5px);
   box-shadow: 0 0 10px $gray-border;
   overflow: hidden;
-
-  .slideshare-frame {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    max-width: 100%;
-    height: 100%;
-  }
 }
 
-.admission-process{
-  p {
-    font-size: 1.125rem;
-    font-weight: $font-light;
-  }
+.program-video__embed--frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
 }
+
+.program-video__embed--description {
+  font-size: 1rem;
+  color: $dark-grey-text;
+}
+
+.admission-process-text {
+  font-size: 1.125rem;
+  font-weight: $font-light;
+}
+
 .help-section {
   background-color: $light-secondary;
   padding: 30px 15px;
   margin: 0 -30px;
+  @include border-radius(0 0 5px 5px);
 
   .help-icon {
     display: block;
@@ -182,6 +239,7 @@
       box-shadow: 0 0 2px $dark-secondary;
     }
   }
+
   .help-intercom-link {
     color: #FFF794;
 
@@ -189,6 +247,7 @@
       color: #F3EA76;
     }
   }
+
   h2 {
     color: white;
     margin-bottom: 40px;
@@ -205,6 +264,7 @@
     }
   }
 }
+
 .fees-section {
   padding: 30px 0;
 
@@ -472,6 +532,7 @@
     }
   }
 }
+
 .application-start-form {
   padding: 30px;
   background-color: white;
@@ -506,6 +567,7 @@
     }
   }
 }
+
 .sticky-application-button {
   position: fixed;
   right: 7em;
@@ -530,6 +592,7 @@
     }
   }
 }
+
 .application-faq {
   background-color: white;
   position: relative;
@@ -572,6 +635,7 @@
     display: block;
   }
 }
+
 .ready-to-apply {
   background-color: white;
   border: 0 solid $gray-border;
@@ -586,9 +650,11 @@
     }
   }
 }
+
 .application-closed-icon {
   max-width: 230px;
 }
+
 .application-open-text {
   p {
     font-size: 0.875rem;

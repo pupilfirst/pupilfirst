@@ -20,23 +20,41 @@
           .link
             = link_to 'Sign In to Continue', new_user_session_path(referer: apply_path), class: 'btn btn-primary btn-md text-uppercase'
 
-      .application-process-left.content-box.m-t-2.m-b-2
+      .application-process-left.content-box.m-t-2.m-b-2.p-b-0
+        .school-of-saas__section.clearfix
+          h2
+            ' <strong>Apply now</strong> to School of SaaS
+
+          p.school-of-saas__section--text
+            ' It&rsquo;s an industry guided startup program for student teams.
+            ' We take you on a journey of knowledge, skills and experience which
+            ' prepares you for the world of startups. SV.CO School of SaaS has four
+            ' levels before you graduate. It&rsquo;s completely online, student friendly,
+            | and can be completed at your own pace.
+
         .admission-process.clearfix
           h2
-            ' Unique <strong>Admission Process</strong>
-            br
-            | to show team skills
-          p
-            ' We don’t have exams at Admission or Graduation. Instead, at both
-            ' stages we look at the real product that you have built to measure your
-            | knowledge. We encourage you to use the Internet to help solve problems.
+            ' <strong>Begin your startup journey</strong> with Level 0
+          .admission-process-text
+            ' We don&rsquo;t have exams during admission or graduation at SV.CO.
+            ' Instead, at both stages, we look your ability to build a real product
+            | to measure your knowledge and skills.
+          .alumni-testimonial.m-y-2
+            .col-md-7.offset-md-5.alumni-testimonial__quote.m-t-2
+              p.alumni-testimonial__quote-text
+                ' &ldquo;Level 0 at SV.CO is a great experience for students to learn the
+                ' basics of building a startup like team formation, product building,
+                ' communication skills by actually doing all of them. It gives a confidence
+                ' that you can actually build a startup while in college&rdquo;
+              p.alumni-testimonial__name
+                | &mdash; Arun. P, Alumni of SV.CO
           .row.m-t-1
             .col-md-4
               .process-box.arrow-right
                 .stage-number
                   | 1
                 .process-icon.m-x-auto
-                  = image_tag 'apply/batch_application/team_lead.svg'
+                  = image_tag 'admissions/apply/process-team-lead.svg'
                 h5
                   ' Apply
                   br
@@ -46,7 +64,7 @@
                 .stage-number
                   | 2
                 .process-icon.m-x-auto
-                  = image_tag 'apply/batch_application/co_founders.svg'
+                  = image_tag 'admissions/apply/process-add-cofounders.svg'
                 h5
                   ' Add
                   br
@@ -56,7 +74,7 @@
                 .stage-number
                   | 3
                 .process-icon.m-x-auto
-                  = image_tag 'apply/batch_application/task.svg'
+                  = image_tag 'admissions/apply/process-perform-tasks.svg'
                 h5
                   ' Perform Coding
                   br
@@ -67,7 +85,7 @@
                 .stage-number
                   | 4
                 .process-icon.m-x-auto
-                  = image_tag 'apply/batch_application/interview.svg'
+                  = image_tag 'admissions/apply/process-attend-interview.svg'
                 h5
                   | Interview
             .col-md-4
@@ -75,7 +93,7 @@
                 .stage-number
                   | 5
                 .process-icon.m-x-auto
-                  = image_tag 'apply/batch_application/selection_notification.svg'
+                  = image_tag 'admissions/apply/process-selection-notification.svg'
                 h5
                   | Selection Notification
             .col-md-4.pull-md-8
@@ -83,14 +101,20 @@
                 .stage-number
                   | 6
                 .process-icon.m-x-auto
-                  = image_tag 'apply/batch_application/batch_start.svg'
+                  = image_tag 'admissions/apply/process-batch-start.svg'
                 h5
                   | Batch Start
         .our-program
           h2
-            ' Our <strong>Program</strong>
-          .slideshare-embed
-            iframe.slideshare-frame src="//www.slideshare.net/slideshow/embed_code/key/2w0Ffb4moASiss" width="100%" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" allowfullscreen="allowfullscreen"
+            ' <strong>Alpha Launch</strong> at School of SaaS
+          .program-video__embed
+            iframe.program-video__embed--frame src="https://www.youtube.com/embed/os-u03IryvA" width="100%" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" allowfullscreen="allowfullscreen"
+          p.program-video__embed--description.m-t-1
+            ' Alpha Launch is one of our key physical events at the School of SaaS.
+            ' It is hosted by Freshdesk where all the teams across India travel to
+            ' Chennai once during the programme. You get a chance to launch the Alpha
+            ' version of the prototype in front of SaaS experts who provide valuable
+            | feedback and guide you through the journey.
 
         .application-faq.m-b-2#faqs
           h2
@@ -144,12 +168,16 @@
         .help-section.clearfix
           .col-md-3
             a.help-intercom-link.help-icon href= "#"
-              = image_tag 'apply/batch_application/intercom-chat-icon.svg'
+              = image_tag 'admissions/apply/intercom-chat-icon.svg'
           .col-md-9
             h2
               ' We are here to <strong>help you</strong>
             p
               ' Please email your doubts or questions to <strong>help@sv.co</strong>
+              br
+              ' or
+              a.help-intercom-link href= "#"
+                strong talk to us using the friendly chat window.
 
     .col-lg-4.col-md-12#start-application-process
       .m-t-2

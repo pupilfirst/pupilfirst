@@ -24,7 +24,7 @@
     .verified-status-notice href="#" data-toggle="tooltip" title="We are sorry, but this event is not acceptable. Please create a new event based on feedback and resubmit for approval."
       i.fa.fa-exclamation-circle
       | &nbsp;Not Accepted
-  = image_tag 'timeline/dash.png'
+  = image_tag 'startups/show/dash.png'
   p #{simple_format(event.detailed_description)}
 
   - if current_founder && startup.founder?(current_founder)

@@ -278,13 +278,10 @@
 }
 
 .applicant-screening__quiz {
-  background-color: white;
   padding: 1.875rem;
   display: none;
   width: 100%;
-  background-image: asset-url('apply/batch_application/screening-bg.svg');
-  background-position: bottom center;
-  background-repeat: no-repeat;
+  background: white asset-url('admissions/screening/quiz-background.svg') no-repeat bottom center;
 }
 
 .applicant-screening__question-section {

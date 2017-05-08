@@ -21,7 +21,6 @@ ActiveAdmin.register ProgramWeek do
       f.input :batch
       f.input :name
       f.input :number
-      f.input :icon_name, collection: ProgramWeek.icon_name_options
     end
 
     f.actions

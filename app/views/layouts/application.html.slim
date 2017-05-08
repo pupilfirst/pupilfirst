@@ -20,11 +20,11 @@ html lang='en'
     = csrf_meta_tags
     = yield :head
 
-    link rel="icon" href="#{image_url 'favicon.png'}"
+    link rel="icon" href=image_url('layouts/shared/favicon.png')
 
   body
-    section#header class="#{@large_header_class ? "large-header #{@large_header_class} navbar-start-transparent" : ''}"
-      nav.navbar.navbar-default role="navigation" class="#{@large_header_class ? '' : 'shrink'}"
+    section#header
+      nav.navbar.navbar-default.shrink role="navigation"
         - if @sitewide_notice
           .sitewide-notice
             .container
@@ -39,8 +39,7 @@ html lang='en'
               span.icon-bar
               span.icon-bar
             a.navbar-brand href="#{dashboard_or_root_url}"
-              img.site-logo#site-logo src="#{image_url 'SV.CO-Logo.svg'}" class="#{@large_header_class ? 'hide' : ''}" alt='Logo of SV.CO'
-              img.site-logo#site-logo-white src="#{image_url 'logo_white.png'}" class="#{@large_header_class ? '' : 'hide'}" alt='Logo of SV.CO'
+              img.site-logo src="#{image_url 'shared/logo-color.svg'}" alt='Logo of SV.CO'
 
           = render 'layouts/nav_links'
 

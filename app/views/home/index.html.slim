@@ -2,7 +2,7 @@
   meta property="og:title" content="SV.CO"
   meta property="og:type" content="website"
   meta property="og:url" content=root_url
-  meta property="og:image" content=image_url('logo.png')
+  meta property="og:image" content=image_url('shared/logo-color.svg')
 
 - if startup_village_redirect?
   - content_for :sitewide_notice
@@ -44,14 +44,14 @@
       .campaign-analysis.m-t-3.m-b-3.clearfix
         .col-md-2.offset-md-1.col-xs-6
           .analysis-icon.m-x-auto
-            = image_tag 'home/college-icon.svg'
+            = image_tag 'home/index/campaign-icon-college.svg'
           p
             = university_count_from_applications
             span
               | Universities
         .col-md-2.col-xs-6
           .analysis-icon.m-x-auto
-            = image_tag 'home/startup-partner-icon.svg'
+            = image_tag 'home/index/campaign-icon-startup-partner.svg'
 
           p
             ' 20
@@ -59,7 +59,7 @@
               |	Graduation Partners
         .col-md-2.col-xs-6
           .analysis-icon.m-x-auto
-            = image_tag 'home/graduation-icon.svg'
+            = image_tag 'home/index/campaign-icon-graduation.svg'
 
           p
             ' 6
@@ -67,7 +67,7 @@
               | Ways to Graduate
         .col-md-2.col-xs-6
           .analysis-icon.m-x-auto
-            = image_tag 'home/scholarship-icon.svg'
+            = image_tag 'home/index/campaign-icon-scholarship.svg'
 
           p
             ' 30
@@ -75,7 +75,7 @@
               | Scholarships by Paytm
         .col-md-2.col-xs-12
           .analysis-icon.m-x-auto
-            = image_tag 'home/states-icon.svg'
+            = image_tag 'home/index/campaign-icon-states.svg'
 
           p
             ' 29
@@ -87,33 +87,33 @@
             h4
               | Official Silicon Valley Host Partner
             .official-partner-logo
-              = image_tag 'home/official-partners/facebook-logo.svg', class: "img-fluid facebook-logo"
+              = image_tag 'home/index/start-in-college-partner-logo-facebook.svg', class: "img-fluid facebook-logo"
           .col-md-3.m-x-auto
             h4
               | Official Scholarship Partner
             .official-partner-logo
-              = image_tag 'home/official-partners/paytm-logo.svg', class: "img-fluid paytm-logo"
+              = image_tag 'home/index/start-in-college-partner-logo-paytm.svg', class: "img-fluid paytm-logo"
           .col-md-3.m-x-auto
             h4
               | Official Cloud Partner
             .official-partner-logo
-              = image_tag 'home/official-partners/digitalocean-logo.svg', class: "img-fluid digitalocean-logo"
+              = image_tag 'home/index/start-in-college-partner-logo-digitalocean.svg', class: "img-fluid digitalocean-logo"
           .col-md-3.m-x-auto
             h4
               | Official Outreach Partner
             .official-partner-logo
-              = image_tag 'home/official-partners/FICCI-logo.svg', class: "img-fluid ficci-logo"
+              = image_tag 'home/index/start-in-college-partner-logo-ficci.svg', class: "img-fluid ficci-logo"
         .support-partners.clearfix
           .col-md-6
             h4
               | Supported By
 
             .official-partner-logo.support-partner-logo
-              = image_tag 'home/official-partners/NSTEDB-Govt-of-India.png', class: "img-fluid"
+              = image_tag 'home/index/start-in-college-partner-logo-nstedb.png', class: "img-fluid"
               p
                 | NSTEDB Govt. of India
             .official-partner-logo.support-partner-logo
-              = image_tag 'home/official-partners/US-embassy.png', class: "img-fluid"
+              = image_tag 'home/index/start-in-college-partner-logo-us-embassy.png', class: "img-fluid"
               p
                 | Embassy of the United States
           .col-md-6
@@ -121,17 +121,17 @@
               | Official State Partners
 
             .official-partner-logo
-              = image_tag 'home/official-partners/KSUM.png', class: "img-fluid"
+              = image_tag 'home/index/start-in-college-partner-logo-ksum.png', class: "img-fluid"
               p
                 | Kerala Startup Mission
 
             .official-partner-logo
-              = image_tag 'home/official-partners/GTU.png', class: "img-fluid"
+              = image_tag 'home/index/start-in-college-partner-logo-gtu.png', class: "img-fluid"
               p
                 | Gujarat Technological University
 
             .official-partner-logo
-              = image_tag 'home/official-partners/t-hub.png', class: "img-fluid"
+              = image_tag 'home/index/start-in-college-partner-logo-t-hub.png', class: "img-fluid"
               p
                 | T-HUB
       .text-xs-center
@@ -146,7 +146,7 @@
         .graduation-carousel
           .slide-item
             a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-1"
-              = image_tag 'apply/graduation-video-thumbnail-1.png'
+              = image_tag 'home/index/graduation-video-thumbnail-1.png'
             .graduate-data.text-xs-center
               h4
                 | <strong>Jibin Jose</strong>
@@ -157,7 +157,7 @@
 
           .slide-item
             a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-3"
-              = image_tag 'apply/graduation-video-thumbnail-3.png'
+              = image_tag 'home/index/graduation-video-thumbnail-2.png'
             .graduate-data.text-xs-center
               h4
                 | <strong>Spenwise</strong>
@@ -168,7 +168,7 @@
 
           .slide-item
             a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-4"
-              = image_tag 'apply/graduation-video-thumbnail-4.png'
+              = image_tag 'home/index/graduation-video-thumbnail-3.png'
             .graduate-data.text-xs-center
               h4
                 | <strong>Z-Pay</strong>
@@ -179,7 +179,7 @@
 
           .slide-item
             a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
-              = image_tag 'apply/graduation-video-thumbnail-5.png'
+              = image_tag 'home/index/graduation-video-thumbnail-4.png'
             .graduate-data.text-xs-center
               h4
                 | <strong>Varghese George</strong>
@@ -190,7 +190,7 @@
 
           .slide-item
             a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
-              = image_tag 'apply/sriram.png'
+              = image_tag 'home/index/graduation-video-thumbnail-sriram.png'
             .graduate-data.text-xs-center
               h4
                 | <strong>Sreeram Narayanan</strong>
@@ -201,7 +201,7 @@
 
           .slide-item
             a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
-              = image_tag 'apply/arun-p.png'
+              = image_tag 'home/index/graduation-video-thumbnail-arun-p.png'
             .graduate-data.text-xs-center
               h4
                 | <strong>Arun P</strong>
@@ -212,7 +212,7 @@
 
           .slide-item
             a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
-              = image_tag 'apply/aravind-sai.png'
+              = image_tag 'home/index/graduation-video-thumbnail-aravind-sai.png'
             .graduate-data.text-xs-center
               h4
                 | <strong>Aravind Sai</strong>
@@ -223,7 +223,7 @@
 
           .slide-item
             a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
-              = image_tag 'apply/sachu.png'
+              = image_tag 'home/index/graduation-video-thumbnail-sachu.png'
             .graduate-data.text-xs-center
               h4
                 | <strong>Sachu Shylan</strong>
@@ -234,7 +234,7 @@
 
           .slide-item
             a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
-              = image_tag 'apply/ajayson.png'
+              = image_tag 'home/index/graduation-video-thumbnail-ajayson.png'
             .graduate-data.text-xs-center
               h4
                 | <strong>Ajayson</strong>
@@ -245,7 +245,7 @@
 
           .slide-item
             a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-6"
-              = image_tag 'apply/graduation-video-thumbnail-6.png'
+              = image_tag 'home/index/graduation-video-thumbnail-5.png'
             .graduate-data.text-xs-center
               h4
                 | <strong>Six ways to Success</strong>
@@ -267,7 +267,7 @@
             li Selection to Zone Startups, Mumbai
 
           .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
-            = image_tag 'home/success-stories/spenwise-logo.png', class: "img-fluid"
+            = image_tag 'home/index/success-stories-logo-spenwise.png', class: 'img-fluid'
 
         .story-box.content-box
           h4.text-xs-center.font-semibold
@@ -278,7 +278,7 @@
             li In talks with banks for deploying prototype
 
           .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
-            = image_tag 'home/success-stories/SYM-logo.png', class: "img-fluid"
+            = image_tag 'home/index/success-stories-logo-sym.png', class: 'img-fluid'
 
         .story-box.content-box
           h4.text-xs-center.font-semibold
@@ -289,7 +289,7 @@
             li Ranked among the TOP 15 Startups in the world at the CES’14 TechCrunch Hardware Battlefield
 
           .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
-            = image_tag 'home/success-stories/finrobotics-logo.png', class: "img-fluid"
+            = image_tag 'home/index/success-stories-logo-finrobotics.png', class: 'img-fluid'
 
         .story-box.content-box
           h4.text-xs-center.font-semibold
@@ -301,7 +301,7 @@
             li Winners, Intel App4India Contest
 
           .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
-            = image_tag 'home/success-stories/mindhelix-logo.png', class: "img-fluid"
+            = image_tag 'home/index/success-stories-logo-mindhelix.png', class: 'img-fluid'
 
         .story-box.content-box
           h4.text-xs-center.font-semibold
@@ -311,7 +311,7 @@
             li Top 5 in Start-up Competition, 2015 - Wharton India Economic Forum
 
           .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
-            = image_tag 'home/success-stories/jiffstore-logo.png', class: "img-fluid"
+            = image_tag 'home/index/success-stories-logo-jiffstore.png', class: 'img-fluid'
 
         .story-box.content-box
           h4.text-xs-center.font-semibold
@@ -321,7 +321,7 @@
 
 
           .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
-            = image_tag 'home/success-stories/itraveller-logo.png', class: "img-fluid"
+            = image_tag 'home/index/success-stories-logo-itraveller.png', class: 'img-fluid'
 
         .story-box.content-box
           h4.text-xs-center.font-semibold
@@ -333,7 +333,7 @@
             li Won the Red Herring Asia Award consecutively in 2013 and 2014
 
           .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
-            = image_tag 'home/success-stories/asimov-logo.png', class: "img-fluid"
+            = image_tag 'home/index/success-stories-logo-asimov.png', class: 'img-fluid'
 
         .story-box.content-box
           h4.text-xs-center.font-semibold
@@ -346,7 +346,7 @@
             li Acquired by FullContact in 2016.
 
           .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
-            = image_tag 'home/success-stories/profoundis-logo.png', class: "img-fluid"
+            = image_tag 'home/index/success-stories-logo-profoundis.png', class: 'img-fluid'
 
         .story-box.content-box
           h4.text-xs-center.font-semibold
@@ -357,7 +357,7 @@
             li Represented India for University Rover Challenge USA, Mars Society Utah
 
           .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
-            = image_tag 'home/success-stories/reckone-logo.png', class: "img-fluid"
+            = image_tag 'home/index/success-stories-logo-reckone.png', class: 'img-fluid'
 
         .story-box.content-box
           h4.text-xs-center.font-semibold
@@ -368,7 +368,7 @@
             li Selected to participate in the Flat6Labs accelerator program, Abu Dhabi
 
           .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
-            = image_tag 'home/success-stories/flip-logo.png', class: "img-fluid"
+            = image_tag 'home/index/success-stories-logo-flip.png', class: 'img-fluid'
 
         .story-box.content-box
           h4.text-xs-center.font-semibold
@@ -377,7 +377,7 @@
             li Won the Vodafone AppStar contest in “Best app for good – India” category
 
           .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
-            = image_tag 'home/success-stories/livares-logo.png', class: "img-fluid"
+            = image_tag 'home/index/success-stories-logo-livares.png', class: 'img-fluid'
 
         .story-box.content-box
           h4.text-xs-center.font-semibold
@@ -386,7 +386,7 @@
             li Won the GREAT Tech Rocketships Initiative 2015 & invited to visit UK as part of UK Trade & Investment (UKTI) delegation
 
           .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
-            = image_tag 'home/success-stories/agrima-logo.png', class: "img-fluid"
+            = image_tag 'home/index/success-stories-logo-agrima.png', class: 'img-fluid'
 
         .story-box.content-box
           h4.text-xs-center.font-semibold
@@ -396,7 +396,7 @@
             li Best emerging IT start-up award from NASSCOM, 2013
 
           .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
-            = image_tag 'home/success-stories/cognicor-logo.png', class: "img-fluid"
+            = image_tag 'home/index/success-stories-logo-cognicor.png', class: 'img-fluid'
 
         .story-box.content-box
           h4.text-xs-center.font-semibold
@@ -408,9 +408,7 @@
             li Got selected for the United Nations Millennial Development Programme UNCTAD EMPRETEC
 
           .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
-            = image_tag 'home/success-stories/mocioun-logo.png', class: "img-fluid"
-
-
+            = image_tag 'home/index/success-stories-logo-mocioun.png', class: 'img-fluid'
 
   .program-partners
     .container
@@ -421,126 +419,126 @@
         .col-lg-2.col-md-3.col-sm-4
           .card.m-x-auto
             .image-block
-              = image_tag 'talent/tally-logo.png', class: "img-fluid"
+              = image_tag 'shared/partner_logos/tally.png', class: 'img-fluid'
             .card-block
               p.card-text Graduation Partner
 
         .col-lg-2.col-md-3.col-sm-4
           .card.m-x-auto
             .image-block
-              = image_tag 'talent/Freshdesk-logo.png', class: "img-fluid"
+              = image_tag 'shared/partner_logos/freshdesk.png', class: 'img-fluid'
             .card-block
               p.card-text Graduation Partner
 
         .col-lg-2.col-md-3.col-sm-4
           .card.m-x-auto
             .image-block
-              = image_tag 'talent/freecharge-logo.png', class: "img-fluid"
+              = image_tag 'shared/partner_logos/freecharge.png', class: 'img-fluid'
             .card-block
               p.card-text Graduation Partner
 
         .col-lg-2.col-md-3.col-sm-4
           .card.m-x-auto
             .image-block
-              = image_tag 'talent/ola-logo.png', class: "img-fluid"
+              = image_tag 'shared/partner_logos/ola.png', class: 'img-fluid'
             .card-block
               p.card-text Graduation Partner
 
         .col-lg-2.col-md-3.col-sm-4
           .card.m-x-auto
             .image-block
-              = image_tag 'talent/goqii-logo.png', class: "img-fluid"
+              = image_tag 'shared/partner_logos/goqii.png', class: 'img-fluid'
             .card-block
               p.card-text Graduation Partner
 
         .col-lg-2.col-md-3.col-sm-4
           .card.m-x-auto
             .image-block
-              = image_tag 'talent/microsoft-ventures-logo.png'
+              = image_tag 'shared/partner_logos/microsoft-ventures.png'
             .card-block
               p.card-text Graduation Partner
 
         .col-lg-2.col-md-3.col-sm-4
           .card.m-x-auto
             .image-block
-              = image_tag 'talent/Citrus-logo.png', class: "img-fluid"
+              = image_tag 'shared/partner_logos/citrus.png', class: 'img-fluid'
             .card-block
               p.card-text Graduation Partner
 
         .col-lg-2.col-md-3.col-sm-4
           .card.m-x-auto
             .image-block
-              = image_tag 'talent/AHventures-logo.png', class: "img-fluid"
+              = image_tag 'shared/partner_logos/ah-ventures.png', class: 'img-fluid'
             .card-block
               p.card-text Graduation Partner
 
         .col-lg-2.col-md-3.col-sm-4
           .card.m-x-auto
             .image-block
-              = image_tag 'talent/Flat6labs-logo.png', class: "img-fluid"
+              = image_tag 'shared/partner_logos/flat-6-labs.png', class: 'img-fluid'
             .card-block
               p.card-text Graduation Partner
 
         .col-lg-2.col-md-3.col-sm-4
           .card.m-x-auto
             .image-block
-              = image_tag 'talent/Goodmethods-logo.png', class: "img-fluid"
+              = image_tag 'shared/partner_logos/good-methods.png', class: 'img-fluid'
             .card-block
               p.card-text Graduation Partner
 
         .col-lg-2.col-md-3.col-sm-4
           .card.m-x-auto
             .image-block
-              = image_tag 'talent/Kalaaricapital-logo.png', class: "img-fluid"
+              = image_tag 'shared/partner_logos/kalaari-capital.png', class: 'img-fluid'
             .card-block
               p.card-text Graduation Partner
 
         .col-lg-2.col-md-3.col-sm-4
           .card.m-x-auto
             .image-block
-              = image_tag 'apply/indian-angel-network-logo.png', class: "img-fluid"
+              = image_tag 'home/index/program-partner-logo-indian-angel-network.png', class: 'img-fluid'
             .card-block
               p.card-text Graduation Partner
 
         .col-lg-2.col-md-3.col-sm-4
           .card.m-x-auto
             .image-block
-              = image_tag 'apply/aws-logo.png', class: "img-fluid"
+              = image_tag 'home/index/program-partner-logo-aws.png', class: 'img-fluid'
             .card-block
               p.card-text Resource Partner
 
         .col-lg-2.col-md-3.col-sm-4
           .card.m-x-auto
             .image-block
-              = image_tag 'apply/dotco-logo.png'
+              = image_tag 'home/index/program-partner-logo-dotco.png'
             .card-block
               p.card-text Resource Partner
 
         .col-lg-2.col-md-3.col-sm-4
           .card.m-x-auto
             .image-block
-              = image_tag 'apply/GTU-logo.png'
+              = image_tag 'home/index/program-partner-logo-gtu.png'
             .card-block
               p.card-text University Partner
 
         .col-lg-2.col-md-3.col-sm-4
           .card.m-x-auto
             .image-block
-              = image_tag 'home/official-partners/blusynergy-logo.png'
+              = image_tag 'home/index/program-partner-logo-blusynergy.png'
             .card-block
               p.card-text Program Partner
 
         .col-lg-2.col-md-3.col-sm-4
           .card.m-x-auto
             .image-block
-              = image_tag 'home/official-partners/hasura.png'
+              = image_tag 'home/index/program-partner-logo-hasura.png'
             .card-block
               p.card-text Graduation Partner
 
         .col-lg-2.col-md-3.col-sm-4
           .card.m-x-auto
             .image-block
-              = image_tag 'home/official-partners/exotel-logo.png'
+              = image_tag 'home/index/program-partner-logo-exotel.png'
             .card-block
               p.card-text Graduation Partner
 
@@ -554,7 +552,7 @@
       .row.instagram-image-container
         - @instagram_images.each_with_index do |image, index|
           .col-sm-4.col-md-3.col-lg-2.instagram-images-wrapper style="background-image: url('#{image[:image_url]}');" class="#{index > 3 ? 'hidden-md-down' : ''}"
-            img.instagram-spacer src=image_path('home/instagram_square_spacer.png')
+            img.instagram-spacer src=image_path('home/index/instagram-section-square-spacer.png')
             a.instagram-overlay href=image[:instagram_link] target='_blank'
               - if image.key?(:caption)
                 .caption = image[:caption][:text]

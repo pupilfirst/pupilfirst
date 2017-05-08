@@ -17,7 +17,7 @@
     .transparency-intro.clearfix.m-b-2
       .col-md-4.push-md-8
         .transparency-initiative-image
-          = image_tag 'story/SV-storybook-mockup.png', class: "img-fluid"
+          = image_tag 'home/story/sv-storybook-mockup.png', class: "img-fluid"
 
       .col-md-8.pull-md-4
         #transparency-intiative.document-section
@@ -31,9 +31,18 @@
           section#founding-agreements.document-section
             h3.header-light.blue-shadow-left Founding Agreements
             span.last-updated Last Updated February 16, 2016
-            p  Our physical incubator was approved under the <a href="http://www.nstedb.com/institutional/tbi.htm">National Incubator Scheme</a> by the Department of Science and Technology, Government of India. To comply with the scheme requirements, we legally formed ITIH-TBI (Indian Telecom Innovation Hub — Technology Business Incubator), a charitable society registered under the Travancore Literary, Scientific and Charitable Societies Act, 1955.
-            p List of documents available:
-            ul.list-unstyled
+
+            p
+              ' Our physical incubator was approved under the
+              ' #{link_to 'National Incubator Scheme', 'http://www.nstedb.com/institutional/tbi.htm', target: '_blank'}
+              ' by the Department of Science and Technology, Government of India. To comply with the scheme
+              ' requirements, we legally formed ITIH-TBI (Indian Telecom Innovation Hub &mdash; Technology Business
+              ' Incubator), a charitable society registered under the Travancore Literary, Scientific and
+              | Charitable Societies Act, 1955.
+
+            p.m-t-1 List of documents available:
+
+            ul.list-unstyled.m-t-1
               li
                 p
                   ' #{link_to 'TBI Guidelines from National Science and Technology Entrepreneurship Development Board (NSTEDB)', 'https://goo.gl/Q8iliC', target: '_blank'} are general guidelines for setting up a Technology Business Incubator in the country.
@@ -83,35 +92,36 @@
           section#audited-financial-report.document-section.clearfix
             h3.header-light.blue-shadow-left Audited Financial Reports
             span.last-updated Last Updated February 15, 2016
-            p
-              ' These are audited financial reports for ITIH-TBI from FY 2009/10 to FY 2014/15.
-            ul.list-unstyled.pull-left
-              li
-                p
-                  | #{link_to 'Audited Financials: FY 2009/10', 'https://goo.gl/ObuRMy', target: '_blank'}
-              li
-                p
-                  | #{link_to 'Audited Financials: FY 2010/11', 'https://goo.gl/u7Fds7', target: '_blank'}
-              li
-                p
-                  | #{link_to 'Audited Financials: FY 2011/12', 'https://goo.gl/lI0G5a', target: '_blank'}
-            ul.list-unstyled.pull-left
-              li
-                p
-                  | #{link_to 'Audited Financials: FY 2012/13', 'https://goo.gl/i87hg2', target: '_blank'}
-              li
-                p
-                  | #{link_to 'Audited Financials: FY 2013/14', 'https://goo.gl/FN20e8', target: '_blank'}
-              li
-                p
-                  | #{link_to 'Audited Financials: FY 2014/15', 'https://goo.gl/biMdjH', target: '_blank'}
+            p These are audited financial reports for ITIH-TBI from FY 2009/10 to FY 2014/15.
+
+            .m-t-1
+              ul.list-unstyled.pull-left
+                li
+                  p
+                    | #{link_to 'Audited Financials: FY 2009/10', 'https://goo.gl/ObuRMy', target: '_blank'}
+                li
+                  p
+                    | #{link_to 'Audited Financials: FY 2010/11', 'https://goo.gl/u7Fds7', target: '_blank'}
+                li
+                  p
+                    | #{link_to 'Audited Financials: FY 2011/12', 'https://goo.gl/lI0G5a', target: '_blank'}
+              ul.list-unstyled.pull-left
+                li
+                  p
+                    | #{link_to 'Audited Financials: FY 2012/13', 'https://goo.gl/i87hg2', target: '_blank'}
+                li
+                  p
+                    | #{link_to 'Audited Financials: FY 2013/14', 'https://goo.gl/FN20e8', target: '_blank'}
+                li
+                  p
+                    | #{link_to 'Audited Financials: FY 2014/15', 'https://goo.gl/biMdjH', target: '_blank'}
 
           section#utilisation-certificates.document-section.section-bg
             h3.header-light.blue-shadow-left Utilisation Certificates
             span.last-updated Last Updated February 15, 2016
-            p
-              ' These are statements of recurring &amp; captial expenses for grants received.
-            ul.list-unstyled
+            p These are statements of recurring &amp; captial expenses for grants received.
+
+            ul.list-unstyled.m-t-1
               li
                 p
                   | #{link_to 'Utilisation Certificates: Capital (FY 2011/12 & FY 2012/13)', 'https://goo.gl/hdBnJ3', target: '_blank'}
@@ -130,7 +140,8 @@
             span.last-updated Last Updated February 16, 2016
             p.text-limit
               ' These are documents pertaining to seed funds distributed through ITIH-TBI from National Science and Technology Entrepreneurship Development Board (NSTEDB), Department of Science and Technology (DST), Government of India.
-            ul.list-unstyled
+
+            ul.list-unstyled.m-t-1
               li
                 p.text-limit
                   | #{link_to 'Guidelines for Seed Support System (SSS)', 'https://goo.gl/1I1zN1', target: '_blank'} from NSTEDB, DST, GoI.
@@ -147,9 +158,12 @@
           section#crowdfunding-study.document-section.section-bg
             h3.header-light.blue-shadow-left Crowdfunding Study by IIM-A
             span.last-updated Last Updated February 15, 2016
+
             p.text-limit
-              ' This is an interesting crowdfunding study done by professors at IIM Ahmedabad regarding the pioneering work done by Startup Village in assisting hardware startups to raise money via crowdfunding.
-            ul.list-unstyled
+              ' This is an interesting crowdfunding study done by professors at IIM Ahmedabad regarding the
+              | pioneering work done by Startup Village in assisting hardware startups to raise money via crowdfunding.
+
+            ul.list-unstyled.m-t-1
               li
                 p
                   | #{link_to 'Angels and Crowds (Case)', 'https://goo.gl/zc8Mvu', target: '_blank'}
@@ -163,9 +177,12 @@
           section#host-institute-change.document-section.section-bg
             h3.header-light.blue-shadow-left Host Institute Change
             span.last-updated Last Updated June 23, 2016
+
             p.text-limit
-              ' Department of Science and Technology, Government of India, has approved the transition of host institute to SV.CO as per its letter dated 31<sup>st</sup> May 2016.
-            ul.list-unstyled
+              ' Department of Science and Technology, Government of India, has approved the transition of host
+              | institute to SV.CO as per its letter dated 31<sup>st</sup> May 2016.
+
+            ul.list-unstyled.m-t-1
               li
                 p.text-limit
                   | #{link_to 'Recommendation from DST for change of host institute', 'https://goo.gl/vgOM7Z', target: '_blank'} is a letter from DST, Government of India indicating its approval of the transition of host institute to SV.CO.
@@ -208,10 +225,10 @@
               ' This is a list of all queries received and responses sent by Startup Village under the
               ' #{link_to 'Right to Information Act, 2005.', 'http://righttoinformation.gov.in', target: '_blank'}
               | Please note that because Startup Village receives requests forwarded from Government organizations and does not respond to RTI requests directly, the final responses might be limited to information published as part of relevant Government records.
-            p
-              ' Requests are ordered in reverse chronological order. If you'd like clarification on any of these, please write to
-              ' #{link_to 'help@sv.co', 'mailto:help@sv.co'}.
-            ul.list-unstyled
+            p.m-t-1
+              ' Requests are ordered in reverse chronological order. If you'd like clarification on any of these,
+              | please write to #{link_to 'help@sv.co', 'mailto:help@sv.co'}.
+            ul.list-unstyled.m-t-1
               li
                 p
                   em February 25, 2016:

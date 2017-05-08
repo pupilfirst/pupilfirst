@@ -5,7 +5,6 @@ class ProgramWeek < ApplicationRecord
 
   validates :name, presence: true
   validates :number, presence: true, uniqueness: { scope: [:batch_id] }
-  validates :icon_name, presence: true
 
   def display_name
     "W#{number}: #{name}"
@@ -14,10 +13,5 @@ class ProgramWeek < ApplicationRecord
   def start_date
     return nil if batch&.start_date.blank?
     batch.start_date + ((number - 1) * 7).days
-  end
-
-  def self.icon_name_options
-    path = File.absolute_path(Rails.root.join('app', 'assets', 'images', 'founders', 'dashboard', 'program-week-icons'))
-    Dir.entries(path).reject { |f| File.directory? f }
   end
 end

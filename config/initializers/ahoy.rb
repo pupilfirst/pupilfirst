@@ -2,7 +2,7 @@ module Ahoy
   class Store < Ahoy::Stores::ActiveRecordStore
     # User is actually 'founder' in our case.
     def user
-      controller.true_user
+      controller&.true_user
     end
   end
 end

@@ -1,9 +1,10 @@
 .tour-banner {
-  background: rgba(255, 255, 255, 1) asset-url("tour/tour-illustration.svg") no-repeat center top;
+  background: rgba(255, 255, 255, 1) asset-url("home/tour/tour-illustration.svg") no-repeat center top;
   background-size: cover;
   height: 320px;
   border-bottom: 1px solid $gray-border;
 }
+
 .tour-banner-head {
   padding: 160px 0 0;
   max-width: 600px;
@@ -38,7 +39,7 @@
       padding: 0;
       position: relative;
       border-color: $gray-border;
-      box-shadow: 0 0 10px 0 rgba(0,0,0,0.06);
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.06);
 
       &:before, &:after {
         left: 50%;
@@ -80,10 +81,11 @@
       }
     }
     @include media-breakpoint-down(xs) {
-        display: block;
+      display: block;
     }
   }
 }
+
 .tour-block {
   padding: 40px 0;
   border-bottom: 1px solid $gray-border;
@@ -122,11 +124,13 @@
     text-align: center;
   }
 }
+
 .back-to-top {
   display: inline-block;
   padding-top: 15px;
   font-weight: $font-semibold;
 }
+
 .tour-videos {
   position: relative;
   background-color: white;
@@ -148,6 +152,7 @@
     }
   }
 }
+
 .why-sv-video {
   margin: auto;
   padding: 40px 0;
@@ -162,7 +167,7 @@
     transition: all .2s;
   }
   &:before {
-    content: asset-url('apply/play-button.svg');
+    content: asset-url('shared/play-button.svg');
     width: 50px;
     height: 50px;
     top: 40%;

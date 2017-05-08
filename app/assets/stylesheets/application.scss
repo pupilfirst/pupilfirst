@@ -13,7 +13,6 @@
 // Rails Assets.
 @import "pnotify";
 @import "intro.js/introjs.scss";
-@import "perfect-scrollbar";
 @import "slick-carousel/slick.scss";
 @import "slick-carousel/slick-theme.scss";
 
@@ -21,14 +20,10 @@
 @import "shared";
 @import "fonts";
 @import "navbar";
-@import "header";
 @import "footer";
 @import "errors";
 
 // Controller-specific
-@import 'home';
-@import 'faculty';
-@import 'resources';
 @import 'startups';
 @import 'founders';
 @import 'team_members';

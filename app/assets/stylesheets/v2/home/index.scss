@@ -70,40 +70,37 @@
   background-size: cover;
 
   &.background-image-1 {
-    background-image: asset-url("home/background-image-1.jpg");
+    background-image: asset-url("home/index/header-background-1.jpg");
 
     @include media-breakpoint-down(xs) {
-      background-image: asset-url("home/mobile/background-image-1.jpg");
+      background-image: asset-url("home/index/header-background-mobile-1.jpg");
     }
   }
+
   &.background-image-2 {
-    background-image: asset-url("home/background-image-2.jpg");
+    background-image: asset-url("home/index/header-background-2.jpg");
 
     @include media-breakpoint-down(xs) {
-      background-image: asset-url("home/mobile/background-image-2.jpg");
+      background-image: asset-url("home/index/header-background-mobile-2.jpg");
     }
   }
+
   &.background-image-3 {
-    background-image: asset-url("home/background-image-3.jpg");
+    background-image: asset-url("home/index/header-background-3.jpg");
 
     @include media-breakpoint-down(xs) {
-      background-image: asset-url("home/mobile/background-image-3.jpg");
+      background-image: asset-url("home/index/header-background-mobile-3.jpg");
     }
   }
+
   &.background-image-4 {
-    background-image: asset-url("home/background-image-4.jpg");
+    background-image: asset-url("home/index/header-background-4.jpg");
 
     @include media-breakpoint-down(xs) {
-      background-image: asset-url("home/mobile/background-image-4.jpg");
+      background-image: asset-url("home/index/header-background-mobile-4.jpg");
     }
   }
-  &.background-image-5 {
-    background-image: asset-url("home/background-image-5.jpg");
 
-    @include media-breakpoint-down(xs) {
-      background-image: asset-url("home/mobile/background-image-5.jpg");
-    }
-  }
   @include media-breakpoint-down(sm) {
     background-size: cover;
     height: auto;
@@ -506,7 +503,7 @@
         background: radial-gradient(ellipse at center, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.5) 100%);
       }
       &:after {
-        content: asset-url('apply/play-button.svg');
+        content: asset-url('shared/play-button.svg');
         width: 50px;
         height: 50px;
         top: 40%;

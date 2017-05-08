@@ -213,7 +213,6 @@ class AdmissionsController < ApplicationController
     end
   end
 
-  # GET /apply/stage/6/partnership_deed
   # respond with PDF version of the partnership deed created using Prawn
   def partnership_deed
     authorize :admissions
@@ -234,7 +233,6 @@ class AdmissionsController < ApplicationController
     end
   end
 
-  # GET /apply/stage/6/incubation_agreement
   # respond with PDF version of the digital incubation services agreement created using Prawn
   def incubation_agreement
     authorize :admissions

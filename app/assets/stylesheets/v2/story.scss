@@ -1,7 +1,8 @@
 .story-bg {
-  background: asset-url("story/story-illustration.svg") no-repeat center center;
+  background: asset-url("home/story/story-illustration.svg") no-repeat center center;
   height: 160px;
 }
+
 .document-section {
   padding-bottom: 30px;
   padding-top: 30px;
@@ -23,6 +24,7 @@
     max-width: 460px;
   }
 }
+
 .transparency-content {
   background-color: #f7f8fa;
 
@@ -112,8 +114,7 @@
           padding: 35px 30px;
 
           &.impact-report-link {
-            background-color: #936a79;
-            background-image: asset-url("story/imapct-report-bg.png");
+            background: #936a79 asset-url("home/story/imapct-report-bg.png");
             background-size: cover;
             box-shadow: inset -1px 0 0 0 white;
 
@@ -123,8 +124,7 @@
             }
           }
           &.sv-handbook-link {
-            background-color: #254582;
-            background-image: asset-url("story/sv-handbook-bg.png");
+            background: #254582 asset-url("home/story/sv-handbook-bg.png");
             background-size: cover;
           }
           &:hover, &:focus {
@@ -159,34 +159,40 @@
         }
       }
       .section-bg {
-        background-image: asset-url("story/transparency-sprite-bg.png");
-        background-repeat: no-repeat;
-        background-position: right top;
+        background: asset-url("home/story/transparency-sprite-bg.png") no-repeat right top;
 
         &#statement-expenses {
           background-position: right 0;
         }
+
         &#utilisation-certificates {
           background-position: right -160px;
         }
+
         &#seed-fund-utilisation {
           background-position: right -335px;
         }
+
         &#crowdfunding-study {
           background-position: right -745px;
         }
+
         &#dst-scheme-details-study {
           background-position: right -955px;
         }
+
         &#dst-completion-report {
           background-position: right -865px;
         }
+
         &#proffessor-report {
           background-position: right -1380px;
         }
+
         &#recognition-certificate {
           background-position: right -1540px;
         }
+
         @include media-breakpoint-down(xs) {
           background-image: none;
         }
@@ -204,8 +210,8 @@
     max-width: 370px;
 
     ul {
-      margin:0;
-      padding:0;
+      margin: 0;
+      padding: 0;
 
       li {
         a {
@@ -217,7 +223,7 @@
           padding: 12px 20px 12px 60px;
 
           &.nav-active {
-              color:#ccc;
+            color: #ccc;
           }
 
           &:before, &:after {
@@ -269,39 +275,39 @@
   }
 }
 
-
 .btn-anim:after {
-	content: '';
-	position: absolute;
-	z-index: -1;
-	transition: all 0.3s;
-}
-.btn-anim:before {
-	position: absolute;
-	height: 100%;
-	left: 0;
-	top: 0;
-	line-height: 3;
-	font-size: 140%;
-	width: 60px;
+  content: '';
+  position: absolute;
+  z-index: -1;
+  transition: all 0.3s;
 }
 
-.highlight-link{
-	overflow: hidden;
+.btn-anim:before {
+  position: absolute;
+  height: 100%;
+  left: 0;
+  top: 0;
+  line-height: 3;
+  font-size: 140%;
+  width: 60px;
+}
+
+.highlight-link {
+  overflow: hidden;
 }
 
 .highlight-link:after {
-	width: 30%;
-	height: 200%;
-	background: rgba(255,255,255,0.1);
-	z-index: 0;
-	right: 0;
-	top: 0;
-	margin: -5px 0 0 -5px;
-	transform-origin: 0 0;
-	transform: rotate(-35deg);
+  width: 30%;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.1);
+  z-index: 0;
+  right: 0;
+  top: 0;
+  margin: -5px 0 0 -5px;
+  transform-origin: 0 0;
+  transform: rotate(-35deg);
 }
 
 .highlight-link:hover:after {
-	width: 40%;
+  width: 40%;
 }

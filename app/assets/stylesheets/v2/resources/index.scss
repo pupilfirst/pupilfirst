@@ -1,7 +1,8 @@
 .library-banner-illustration {
-  background: asset-url("resources/Library-illustration.svg") no-repeat right center;
+  background: asset-url("resources/index/banner.svg") no-repeat right center;
   height: 160px;
 }
+
 .library-banner-content {
   p {
     font-size: 1rem;
@@ -59,7 +60,6 @@
       background-image: none;
       box-shadow: none;
       font-size: 0.75rem;
-      color: $light-grey-text;
       margin: 6px 0 3px 5px;
       padding: 3px 7px 3px 20px;
     }
@@ -94,10 +94,9 @@
   select {
     appearance: none;
     position: relative;
-    background: asset-url('down-arrow.svg') no-repeat 95% 50%;
+    background: asset-url('shared/arrow-down.svg') no-repeat 95% 50%;
     background-size: 12px 12px;
-    color: $light-grey-text;
-    font-weight: $font-regular;
+    color: $dark-grey-text;
     text-shadow: 0 0 0 #000;
     background-color: white;
   }
@@ -175,7 +174,6 @@
     }
     .description {
       font-size: 0.875rem;
-      color: $light-grey-text;
       overflow: hidden;
       position: relative;
       max-height: 45px;

@@ -235,7 +235,7 @@ class ApplicationController < ActionController::Base
       img-src
       'self' data: blob: https://blog.sv.co http://www.startatsv.com https://sv-assets.sv.co
       https://uploaded-assets.sv.co #{google_analytics_csp[:image]} #{inspectlet_csp[:image]} #{facebook_csp[:image]}
-      #{intercom_csp[:image]} #{instagram_csp[:image]};
+      #{intercom_csp[:image]} #{instagram_csp[:image]} https://codecov.io;
     IMAGE_SOURCES
   end
 

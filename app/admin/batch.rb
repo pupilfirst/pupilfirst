@@ -20,13 +20,7 @@ ActiveAdmin.register Batch do
     column :start_date
     column :end_date
 
-    actions do |batch|
-      if batch.application_rounds.present? && !batch.invites_sent?
-        span do
-          link_to 'Invite all founders', selected_applications_admin_batch_path(batch)
-        end
-      end
-    end
+    actions
   end
 
   show do |batch|
@@ -36,7 +30,6 @@ ActiveAdmin.register Batch do
       row :description
       row :start_date
       row :end_date
-      row :invites_sent_at
       row :slack_channel
     end
 
@@ -116,30 +109,5 @@ ActiveAdmin.register Batch do
     end
 
     redirect_to admin_batch_path(batch)
-  end
-
-  member_action :selected_applications do
-    @batch = Batch.find params[:id]
-    render 'batch_invite_page'
-  end
-
-  action_item :invite_all, only: :show, if: proc { !resource.invites_sent? } do
-    link_to('Invite All Founders', selected_applications_admin_batch_path(Batch.find(params[:id])))
-  end
-
-  member_action :invite_all_selected do
-    batch = Batch.find params[:id]
-
-    raise("Invites have already been sent for Batch##{batch.id}") if batch.invites_sent?
-
-    Startups::OnboardService.new(batch).execute
-
-    if batch.invites_sent?
-      flash[:success] = 'Invites sent to all selected candidates!'
-    else
-      flash[:error] = 'Something went wrong. Please try inviting again!'
-    end
-
-    redirect_to selected_applications_admin_batch_path(batch)
   end
 end

@@ -23,10 +23,6 @@ class BatchApplicationDecorator < Draper::Decorator
     Batch.open_for_applications.any?
   end
 
-  def certificate_background_image_base64
-    APP_CONSTANTS[:certificate_background_base64]
-  end
-
   def team_member_names
     batch_applicants.pluck(:name).sort
   end

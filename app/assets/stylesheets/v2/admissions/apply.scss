@@ -26,6 +26,52 @@
   font-weight: $font-light;
 }
 
+.alumni-testimonial {
+  background-image: asset-url("admissions/apply/arun-p-testimonial.png");
+  height: 290px;
+  margin: 0 -30px;
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  @include media-breakpoint-down(sm) {
+    &:before {
+      position: absolute;
+      content:"";
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      z-index:0;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+  }
+}
+.alumni-testimonial__quote {
+  color: white;
+  font-size: 1rem;
+  line-height: 1.6;
+  letter-spacing: 0.03rem;
+}
+.alumni-testimonial__quote-text {
+  position: relative;
+
+  &:before {
+    position: absolute;
+    width: 60px;
+    height: 4px;
+    top: -15px;
+    left: 0;
+    content: "";
+    border-top: 4px solid $light-primary;
+  }
+}
+
+.alumni-testimonial__name {
+  margin-top: 15px;
+  font-size: 1.125rem;
+}
+
 .admission-process, .important-dates, .application-faq, .our-program {
   padding: 30px 0;
 
@@ -171,11 +217,9 @@
   color: $dark-grey-text;
 }
 
-.admission-process {
-  p {
-    font-size: 1.125rem;
-    font-weight: $font-light;
-  }
+.admission-process-text {
+  font-size: 1.125rem;
+  font-weight: $font-light;
 }
 
 .help-section {

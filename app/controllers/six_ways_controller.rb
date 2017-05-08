@@ -156,10 +156,6 @@ class SixWaysController < ApplicationController
     module_exists? && module_has_chapter?
   end
 
-  def lock_under_feature_flag
-    raise_not_found unless feature_active? :start_in_college
-  end
-
   def grade_submission
     answers = params[:quiz_submission][:questions_attributes].values
 

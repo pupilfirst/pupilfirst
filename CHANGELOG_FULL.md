@@ -1,6 +1,21 @@
 ## Ongoing
 
-- Leaderboard is being updated to work with levels. [[Trello]](https://trello.com/c/txJeGp9d)
+- An attempt to improve the load time of founder dashboard is in progress. [[Trello]](https://trello.com/c/1eW5xiJp)
+- An admin interface page for tracking engineering metrics is being built. [[Trello]](https://trello.com/c/IvCcRtXu)
+
+## 2017.05.08
+
+- Leaderboard has been updated to display different lists for different levels. Leaderboards are also cached in the database. [[Trello]](https://trello.com/c/txJeGp9d)
+- All unused image assets were removed from the repository. [[Trello]](https://trello.com/c/b5gw4MAt)
+- Styling for v2 Resource pages were correctly merged into the v2 folder. [[Trello]](https://trello.com/c/vvKerDaL)
+- Content on the `/apply` page was updated. Trello. [[1]](https://trello.com/c/8gynvjOj)[[2]](https://trello.com/c/I82P7jpU)
+- All use of Vocalist commands is now logged using Ahoy Events. [[Trello]](https://trello.com/c/1Q1d09bp)
+- Fixed a crash when prospective applicant form error is handled server-side. [[Trello]](https://trello.com/c/gvIegqoy)
+- Founder college identification files were moved to the private S3 bucket. [[Trello]](https://trello.com/c/DB1i8bPp)
+- The company name and bank account details were updated on the admissions preselection page. [[Trello]](https://trello.com/c/dkYGmr8G)
+- The _Batch Invite_ page was removed from the administration interface. [[Trello]](https://trello.com/c/947mH2JH)
+- Target titles on the founder dashboard were updated to be more descriptive. [[Trello]](https://trello.com/c/lZCxO2XF)
+- A rake task / service was created to log weekly engineering statistics. [[Trello]](https://trello.com/c/xN92yNL0)
 
 ## 2017.05.01
 

@@ -8,6 +8,8 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   # inflect.singular /^(ox)en/i, '\1'
   # inflect.irregular 'person', 'people'
   inflect.uncountable %w(startup_feedback faculty platform_feedback)
+  inflect.irregular 'is', 'are'
+  inflect.irregular 'was', 'were'
 end
 
 # These inflection rules are supported but not enabled by default:

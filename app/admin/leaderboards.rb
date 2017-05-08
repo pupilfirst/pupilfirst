@@ -7,14 +7,14 @@ ActiveAdmin.register_page 'Leaderboards' do
 
   controller do
     def index
-      @batch = Batch.find_by(id: params[:karma_points_filter].try(:[], :batch)) || Batch.current_or_last
-      @after = start_date.present? ? Date.parse(start_date) : DatesService.last_week_start_date
-      @before = end_date.present? ? Date.parse(end_date) : DatesService.last_week_end_date
+      @level = Level.find_by(number: level_number) || Level.find_by(number: 1)
+      @week_start_date = start_date.present? ? DateTime.parse(start_date) : DatesService.last_week_start_date
+
       if params[:karma_points_filter].present?
-        @leaderboard = Startups::PerformanceService.new.leaderboard(@batch, start_date: @after, end_date: @before)
+        @leaderboard = Startups::LeaderboardService.new(@level).leaderboard(start_date: @week_start_date)
         @rank_changes_present = false
       else
-        @leaderboard_with_change_in_rank = Startups::PerformanceService.new.leaderboard_with_change_in_rank(@batch)
+        @leaderboard_with_change_in_rank = Startups::LeaderboardService.new(@level).leaderboard_with_change_in_rank
         @rank_changes_present = true
       end
     end
@@ -22,15 +22,15 @@ ActiveAdmin.register_page 'Leaderboards' do
     private
 
     def start_date
-      params[:karma_points_filter].try(:[], :after)
+      params[:karma_points_filter].try(:[], :week_starting_at)
     end
 
-    def end_date
-      params[:karma_points_filter].try(:[], :before)
+    def level_number
+      params[:karma_points_filter].try(:[], :level)
     end
   end
 
-  sidebar :filter_by_batch_and_date do
+  sidebar :filter_by_level_and_week_start_date do
     render 'admin/leaderboards/karma_points_filter'
   end
 

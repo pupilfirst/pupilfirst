@@ -1,3 +1,17 @@
+### 8 May, 2017
+
+#### Features
+
+  - Weekly leaderboards have been updated to display level-wise ranking.
+
+#### UX and UI
+
+  - Target titles on the founder dashboard were updated to be a bit more descriptive.
+
+#### Bugfixes
+
+  - Fixed a crash that could occur when submitting the notification form on `/apply` page.
+
 ### 1 May, 2017
 
 #### UX and UI

@@ -14,9 +14,8 @@ class AboutController < ApplicationController
 
   # GET /about/leaderboard
   def leaderboard
-    # TODO: correct @live_batches once the test batches are cleaned up.
-    @live_batches = Batch.where(batch_number: 3) # Startup.available_batches.live
-    @leaderboards = leaderboards_for(@live_batches)
+    @levels = Level.where.not(number: 0).order(number: :desc) # All levels except admissions
+    @leaderboards = leaderboards_for(@levels)
     render layout: 'application_v2'
   end
 
@@ -44,11 +43,11 @@ class AboutController < ApplicationController
     verify_recaptcha(model: @contact_form, message: 'Whoops. Verification of Recaptcha failed. Please try again.')
   end
 
-  def leaderboards_for(batches)
-    return nil if batches.blank?
+  def leaderboards_for(levels)
+    return nil if levels.blank?
 
-    batches.each_with_object({}) do |batch, leaderboards|
-      leaderboards[batch.batch_number] = Startups::PerformanceService.new.leaderboard_with_change_in_rank(batch)
+    levels.each_with_object({}) do |level, leaderboards|
+      leaderboards[level.number] = Startups::LeaderboardService.new(level).leaderboard_with_change_in_rank
     end
   end
 end

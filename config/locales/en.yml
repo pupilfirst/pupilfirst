@@ -175,7 +175,7 @@ en:
     help:
       targets: Get a list of targets recently assigned to you and your team.
       targets_info: Get detailed information about a target from list.
-      leaderboard: Get the last published leaderboard for Batch N.
+      leaderboard: Get the last published leaderboard for supplied level.
       state_of_svco: Get the present state of startups in Batch N, including inactive and endangered startups. Access restricted to SV.CO admins.
       expired_team_targets: Get a list of all team targets which expired last week - for every startup in the batch.
       expired_founder_targets: Get a list of all individual targets which expired last week - for every founder in the batch.

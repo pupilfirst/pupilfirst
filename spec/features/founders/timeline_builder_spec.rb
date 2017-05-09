@@ -25,7 +25,6 @@ feature 'Timeline Builder' do
     click_button 'Add Event'
     find('.timeline-builder__textarea').set(description)
 
-    # TODO: Enable this and the corresponding expectation below when facebook share is ready.
     # Mark to be shared on facebook
     find('.timeline-builder__social-bar-toggle-switch-handle').click
 

@@ -10,8 +10,8 @@ class TrelloController < ApplicationController
 
       if valid_type && valid_label
         logger.info "Trello#bug_webhook: Received #{action_type} activity from Trello"
-        stats_service = EngineeringMetrics::MetricsStoreService.new
-        action_type == 'addLabelToCard' ? stats_service.increment(:bugs) : stats_service.decrement(:bugs)
+        metrics_store = EngineeringMetrics::MetricsStoreService.new
+        action_type == 'addLabelToCard' ? metrics_store.increment(:bugs) : metrics_store.decrement(:bugs)
       end
     end
 

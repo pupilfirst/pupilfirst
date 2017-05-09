@@ -10,7 +10,7 @@ module EngineeringMetrics
       JSON.parse(RestClient.get(url, Authorization: "token #{@token}"))
     end
 
-    AUTHORS = %w(harigopal ajaleelp mahesh-sv vinutv).freeze
+    AUTHORS = %w(harigopal ajaleelp mahesh-krishnakumar vinutv).freeze
 
     # contribution details per founder per week - including additions, deletions and commits
     def contributions

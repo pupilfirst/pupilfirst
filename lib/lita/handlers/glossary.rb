@@ -4,10 +4,12 @@ module Lita
       route(/\Adefine\s*\?*\s*([a-z\-\s]*)\?*\z/i, :definition, command: true, help: { 'define TERM' => I18n.t('slack.help.glossary') })
 
       def definition(response)
-        @response = response
-        @term = response.match_data[1].present? ? response.match_data[1] : nil
-        fetch_definition
-        Ahoy::Tracker.new.track Visit::EVENT_VOCALIST_COMMAND, command: Visit::VOCALIST_COMMAND_GLOSSARY
+        ActiveRecord::Base.connection_pool.with_connection do
+          @response = response
+          @term = response.match_data[1].present? ? response.match_data[1] : nil
+          fetch_definition
+          Ahoy::Tracker.new.track Visit::EVENT_VOCALIST_COMMAND, command: Visit::VOCALIST_COMMAND_GLOSSARY
+        end
       end
 
       def fetch_definition

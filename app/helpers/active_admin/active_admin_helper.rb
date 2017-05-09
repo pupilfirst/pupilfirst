@@ -22,10 +22,11 @@ module ActiveAdmin
       end
     end
 
-    def founders_by_karma(batch:, after:, before:)
+    def founders_by_karma(level:, week_starting_at:)
+      week_end_date = week_starting_at + 1.week
       Founder.joins(:startup, :karma_points)
-        .where(startups: { batch_id: batch.id })
-        .where(karma_points: { created_at: (after.beginning_of_day..before.end_of_day) })
+        .where(startups: { level_id: level.id })
+        .where(karma_points: { created_at: (week_starting_at..week_end_date) })
         .group(:founder_id)
         .sum(:points)
         .sort_by { |_founder_id, points| points }.reverse

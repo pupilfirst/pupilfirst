@@ -37,7 +37,6 @@
 
 // Rails assets
 //= require intro.js/intro.js
-//= require perfect-scrollbar
 //= require slick-carousel/slick.js
 
 // Shared
@@ -48,7 +47,5 @@
 
 // Controller-specific
 //= require home
-//= require faculty
 //= require startups
-//= require resources
 //= require team_members

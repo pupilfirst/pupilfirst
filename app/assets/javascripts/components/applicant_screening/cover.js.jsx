@@ -20,7 +20,7 @@ class ApplicantScreeningCover extends React.Component {
       <div className={ this.containerClasses() }>
         <div className="applicant-screening__cover-content">
           <div className="applicant-screening__icon img-circle">
-            <img src={ this.props.iconPath }/>
+            <img className="applicant-screening__icon-img" src={ this.props.iconPath }/>
           </div>
 
           <h2 className="applicant-screening-choice">

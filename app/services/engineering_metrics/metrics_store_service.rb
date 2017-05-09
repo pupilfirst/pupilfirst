@@ -47,10 +47,35 @@ module EngineeringMetrics
       require 'rugged'
       require 'linguist'
 
-      repo = Rugged::Repository.new(File.absolute_path(Rails.root))
+      prepare_repository
+      repo = Rugged::Repository.new(Rails.root.to_s)
       project = Linguist::Repository.new(repo, repo.head.target_id)
       current_entry.metrics[:loc] = project.languages
       current_entry.save!
+    end
+
+    # This method creates a new Git repository in the root of the app. This is requires for Rugged::Repository
+    # to work, which is in turn required by Linguist for
+    def prepare_repository
+      return unless Rails.env.production?
+      root_path = Rails.root.to_s
+
+      commands = <<~COMMANDS
+        cd #{root_path}
+        git init
+        git config user.name "Vocalist"
+        git config user.email "hosting@sv.co"
+
+        echo ".apt/" >> .gitignore
+        echo ".profile.d/" >> .gitignore
+        echo "vendor/" >> .gitignore
+        echo "public/assets" >> .gitignore
+
+        git add .
+        git commit -m "Rugged commit"
+      COMMANDS
+
+      system(commands)
     end
 
     def record_github_stats

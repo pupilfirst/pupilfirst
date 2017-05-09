@@ -7,7 +7,7 @@ module ActiveAdmin
     end
 
     def commit_trend
-      counts = last_week_metrics['github']['commits_trend'] || []
+      counts = last_week_metrics.dig('github', 'commits_trend') || []
 
       counts.map do |author, commits|
         {
@@ -25,7 +25,9 @@ module ActiveAdmin
         { name: 'Deletion', data: {} }
       ]
 
-      last_week_metrics['github']['code_frequency']&.map do |time, additions, deletions|
+      counts = last_week_metrics.dig('github', 'code_frequency') || []
+
+      counts.map do |time, additions, deletions|
         trend[0][:data][Time.at(time)] = additions
         trend[1][:data][Time.at(time)] = -deletions
       end
@@ -46,7 +48,7 @@ module ActiveAdmin
     end
 
     def language_trend
-      languages = last_week_metrics['loc'].keys
+      languages = last_week_metrics['loc']&.keys || []
 
       languages.map do |language|
         {

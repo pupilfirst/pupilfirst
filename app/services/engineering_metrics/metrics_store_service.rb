@@ -1,7 +1,16 @@
 module EngineeringMetrics
   class MetricsStoreService
+    include Loggable
+
     def execute
+      log 'Recording code coverage...'
       record_code_coverage
+
+      log 'Recording language split...'
+      record_language_split
+
+      log 'Recording Github stats...'
+      record_github_stats
     end
 
     def increment(metric)
@@ -30,6 +39,28 @@ module EngineeringMetrics
 
       # Save the retrieved coverage data.
       current_entry.metrics[:coverage] = coverage
+      current_entry.save!
+    end
+
+    # Use linguist to store programming-language
+    def record_language_split
+      require 'rugged'
+      require 'linguist'
+
+      repo = Rugged::Repository.new(File.absolute_path(Rails.root))
+      project = Linguist::Repository.new(repo, repo.head.target_id)
+      current_entry.metrics[:loc] = project.languages
+      current_entry.save!
+    end
+
+    def record_github_stats
+      github_service = EngineeringMetrics::GithubStatsService.new
+
+      current_entry.metrics[:github] = {
+        code_frequency: github_service.code_frequency,
+        commits_trend: github_service.commits_trend
+      }
+
       current_entry.save!
     end
   end

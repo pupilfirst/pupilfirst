@@ -1,14 +1,13 @@
 require 'rails_helper'
 
-feature 'Timeline Builder', broken: true do
+feature 'Timeline Builder' do
   include UserSpecHelper
 
-  let(:startup) { create :startup }
-  let(:batch) { startup.batch }
+  let(:level) { create :level, :one }
+  let(:startup) { create :startup, level: level }
   let(:founder) { startup.admin }
 
-  let(:program_week) { create :program_week, batch: batch, number: 1 }
-  let(:target_group) { create :target_group, program_week: program_week }
+  let(:target_group) { create :target_group, milestone: true }
   let(:timeline_event_type) { create :timeline_event_type }
 
   let!(:pending_target) do
@@ -131,5 +130,9 @@ feature 'Timeline Builder', broken: true do
     # Timeline event type missing.
     find_button('Submit').click
     expect(page).to have_content('Please select an appropriate timeline event type.')
+
+    # Facebook connect missing
+    find('.timeline-builder__social-bar-toggle-switch-handle').click
+    expect(page).to have_content('Facebook Connect Missing!')
   end
 end

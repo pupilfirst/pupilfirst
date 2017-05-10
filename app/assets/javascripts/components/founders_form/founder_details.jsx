@@ -36,11 +36,19 @@ class FoundersFormFounderDetails extends React.Component {
             q: params.term
           }
         },
-        processResults: function (data, params) {
+        processResults: function (data) {
           return {results: data}
         },
         cache: true
       }
+    });
+
+    // TODO: Remove this positioning hack when select2 bug is fixed. https://trello.com/c/H5l3oL7o
+    let select2Instance = collegeSelect.data('select2');
+
+    select2Instance.on('results:message', function () {
+      this.dropdown._resizeDropdown();
+      this.dropdown._positionDropdown();
     });
 
     collegeSelect.on('change', this.handleCollegeChange)
@@ -157,7 +165,8 @@ class FoundersFormFounderDetails extends React.Component {
 
         { this.state.useCollegeText &&
         <FoundersFormFounderInput label="Name of your college" index={ this.props.index } type="string"
-          key={ "college-text-" + this.props.generatedKey } maxLength={ 250 } autofocus={ this.state.focusOnCollegeText }
+          key={ "college-text-" + this.props.generatedKey } maxLength={ 250 }
+          autofocus={ this.state.focusOnCollegeText }
           error={ this.errorForField('college_text') }
           name="college_text" value={ this.founderValue('college_text') }/>
         }

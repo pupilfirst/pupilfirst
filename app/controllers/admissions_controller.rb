@@ -71,6 +71,7 @@ class AdmissionsController < ApplicationController
     return if applied_coupon_not_valid? || payment_bypassed?
 
     @form = Admissions::PaymentForm.new(current_founder)
+
     begin
       payment = @form.save
     rescue Instamojo::PaymentRequestCreationFailed

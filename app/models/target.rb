@@ -27,10 +27,6 @@ class Target < ApplicationRecord
   # Custom scope to allow AA to filter by intersection of tags.
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
 
-  scope :chores, -> { where(chore: true) }
-  scope :sessions, -> { where.not(session_at: nil) }
-  scope :targets, -> { where.not(target_group_id: nil) }
-
   def self.ransackable_scopes(_auth)
     %i(ransack_tagged_with)
   end

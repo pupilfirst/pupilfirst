@@ -135,14 +135,5 @@ module Founders
     def assigner_fields
       %i(id name)
     end
-
-    def taggings_fields
-      {
-        only: [],
-        include: {
-          tag: { only: [:name] }
-        }
-      }
-    end
   end
 end

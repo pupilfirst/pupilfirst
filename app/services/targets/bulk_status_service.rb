@@ -14,7 +14,7 @@ module Targets
     # returns array of all 'submitted' target_ids and statuses
     # note: all targets missing will have a 'pending' status
     def statuses
-      event_statuses_for_all_targets.map do |target_id, event_status|
+      event_statuses_for_all_targets.map do |target_id, event_status, event_date|
         status = begin
           if prerequisites_pending?(target_id)
             STATUS_UNAVAILABLE
@@ -27,7 +27,7 @@ module Targets
             end
           end
         end
-        [target_id, status]
+        [target_id, status, event_date]
       end
     end
 
@@ -38,7 +38,7 @@ module Targets
       @event_statuses_for_founder_targets ||= @founder.timeline_events.where.not(target_id: nil)
         .where(target: Target.founder)
         .select("DISTINCT ON(target_id) *").order("target_id, created_at DESC")
-        .map { |event| [event.target_id, event.verified_status] }
+        .map { |event| [event.target_id, event.verified_status, event.created_at.iso8601] }
     end
 
     # all submitted startup target_ids and status of corresponding latest events
@@ -46,7 +46,7 @@ module Targets
       @event_statuses_for_startup_targets ||= @founder.startup.timeline_events.where.not(target_id: nil)
         .where(target: Target.not_founder)
         .select("DISTINCT ON(target_id) *").order("target_id, created_at DESC")
-        .map { |event| [event.target_id, event.verified_status] }
+        .map { |event| [event.target_id, event.verified_status, event.created_at.iso8601] }
     end
 
     # All submitted target_ids and status of corresponding latest events

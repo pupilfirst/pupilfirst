@@ -7,10 +7,10 @@ module Founders
 
     def all_targets
       @all_targets ||= begin
-        vanilla_targets = Target.includes(:assigner, :level, :taggings).targets
-          .joins(target_group: :level).where('levels.number <= ?', @level.number)
-        chores = Target.includes(:assigner, :level, :taggings).chores.upto_level(@level)
-        sessions = Target.includes(:assigner, :level, :taggings).sessions.upto_level(@level)
+        targets = Target.includes(:assigner, :level, :taggings)
+        vanilla_targets = filter_for_level(targets.targets.joins(target_group: :level))
+        chores = filter_for_level(targets.chores.joins(:level))
+        sessions = filter_for_level(targets.sessions.joins(:level))
 
         vanilla_targets + chores + sessions
       end
@@ -20,43 +20,43 @@ module Founders
       all_targets.select(&:target_group_id?)
     end
 
-    def new_chores
-      all_targets.select(&:chore?)
-        .sort do |a, b|
-          if a.sort_index && b.sort_index
-            a.sort_index <=> b.sort_index
-          else
-            a.sort_index ? -1 : 1
+    def chores
+      @chores ||= begin
+        chores = all_targets.select(&:chore?)
+          .sort do |a, b|
+            if a.sort_index && b.sort_index
+              a.sort_index <=> b.sort_index
+            else
+              a.sort_index ? -1 : 1
+            end
           end
-        end
-        .as_json(
-          only: target_fields,
-          methods: %i(has_rubric target_type_description),
-          include: {
-            assigner: { only: assigner_fields },
-            level: { only: [:number] }
-          }
-        )
+          .as_json(
+            only: target_fields,
+            methods: %i(has_rubric target_type_description),
+            include: {
+              assigner: { only: assigner_fields },
+              level: { only: [:number] }
+            }
+          )
+        targets_with_status(chores)
+      end
     end
 
-    def new_sessions
-      all_targets.select(&:session_at?)
-        .sort do |a, b|
-          if a.sort_index && b.sort_index
-            a.sort_index <=> b.sort_index
-          else
-            a.sort_index ? -1 : 1
-          end
-        end
-        .as_json(
-          only: target_fields,
-          methods: %i(has_rubric target_type_description),
-          include: {
-            assigner: { only: assigner_fields },
-            level: { only: [:number] },
-            taggings: taggings_fields
-          }
-        )
+    def sessions
+      @sessions ||= begin
+        sessions = all_targets.select(&:session_at?)
+          .sort_by { |session| session['session_at'] }.reverse
+          .as_json(
+            only: target_fields,
+            methods: %i(has_rubric target_type_description),
+            include: {
+              assigner: { only: assigner_fields },
+              level: { only: [:number] },
+              taggings: taggings_fields
+            }
+          )
+        targets_with_status(sessions)
+      end
     end
 
     def levels
@@ -71,57 +71,15 @@ module Founders
       end
     end
 
-    def chores
-      applicable_levels = startup.level.number.zero? ? 0 : (1..startup.level.number).to_a
-
-      @chores ||= begin
-        targets = Target.includes(:assigner, :level)
-          .where(chore: true)
-          .where(levels: { number: applicable_levels })
-          .order(:sort_index)
-          .as_json(
-            only: target_fields,
-            methods: %i(has_rubric target_type_description),
-            include: {
-              assigner: { only: assigner_fields },
-              level: { only: [:number] }
-            }
-          )
-
-        targets_with_status(targets)
-      end
-    end
-
-    def sessions
-      applicable_levels = startup.level.number.zero? ? 0 : [1, 2, 3, 4]
-
-      @sessions ||= begin
-        targets = Target.includes(:assigner, :level, :taggings).where.not(session_at: nil)
-          .where(levels: { number: applicable_levels }).order(session_at: :desc)
-          .as_json(
-            only: target_fields,
-            methods: %i(has_rubric target_type_description),
-            include: {
-              assigner: { only: assigner_fields },
-              level: { only: [:number] },
-              taggings: {
-                only: [],
-                include: {
-                  tag: { only: [:name] }
-                }
-              }
-            }
-          )
-
-        targets_with_status(targets)
-      end
-    end
-
     def session_tags
       @session_tags ||= Target.tag_counts_on(:tags).pluck(:name)
     end
 
     private
+
+    def filter_for_level(targets)
+      @level == Level.zero ? targets.where(level: @level) : targets.where('levels.number BETWEEN ? AND ?', 1, @level.number)
+    end
 
     def target_groups(level)
       groups = level.target_groups.includes(targets: :assigner)
@@ -161,18 +119,18 @@ module Founders
     end
 
     def target_data_with_status(target_data)
-      target = Target.find(target_data['id'])
-
       # Add status of target to compiled data.
-      target_data['status'] = target.status(@founder).to_s
-
+      target_data['status'] = target_statuses.find { |e| e[0] == target_data['id'] }&.second || Targets::BulkStatusService::STATUS_PENDING
       # Add time of submission of last event, necessary for submitted and completed state.
-      if target_data['status'].in?([Targets::StatusService::STATUS_SUBMITTED.to_s, Targets::StatusService::STATUS_COMPLETE.to_s])
-        timeline_events = target.founder_role? ? @founder.timeline_events : @founder.startup.timeline_events
-        target_data['submitted_at'] = timeline_events.where(target: target).last.created_at.iso8601
+      if target_data['status'].in?([Targets::BulkStatusService::STATUS_SUBMITTED, Targets::BulkStatusService::STATUS_COMPLETE])
+        target_data['submitted_at'] = target_statuses.find { |e| e[0] == target_data['id'] }&.third
       end
 
       target_data
+    end
+
+    def target_statuses
+      @target_statuses ||= Targets::BulkStatusService.new(@founder).statuses
     end
 
     def startup

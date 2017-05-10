@@ -30,7 +30,6 @@ class Target < ApplicationRecord
   scope :chores, -> { where(chore: true) }
   scope :sessions, -> { where.not(session_at: nil) }
   scope :targets, -> { where.not(target_group_id: nil) }
-  scope :upto_level, ->(level) { joins(:level).where('levels.number <= ?', level.number) }
 
   def self.ransackable_scopes(_auth)
     %i(ransack_tagged_with)

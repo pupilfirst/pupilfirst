@@ -79,7 +79,7 @@ class FounderDashboardTargetHeader extends React.Component {
   statusString() {
     switch (this.props.target.status) {
       case 'complete':
-        return 'Complete';
+        return 'Completed';
       case 'needs_improvement':
         return 'Needs Improvement';
       case 'submitted':

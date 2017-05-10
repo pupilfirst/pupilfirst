@@ -11,7 +11,7 @@ describe WeeklyKarmaPoints::CreateService do
   let(:level_two) { create :level, :two }
   let(:l2_startup_1) { create :startup, level: level_two }
   let(:l2_startup_2) { create :startup, level: level_two }
-  let(:test_time) { Time.parse('2017-04-24 17:55:00 +0530') }
+  let(:test_time) { Time.parse('2017-04-24 18:01:00 +0530') }
 
   before do
     travel_to(test_time) do

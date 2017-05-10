@@ -1,11 +1,11 @@
 module WeeklyKarmaPoints
   # The service creates entries of weekly karma points for active startups. This will be used to create
-  # leaderboards level-wise. The service will be executed by a task scheduled to run every Monday at 5:55 PM IST
+  # leaderboards level-wise. The service will be executed by a task scheduled to run every Monday at 18:00 IST
   #
   # @param week_at [Time] Set this to compute karma points for the week containing supplied time.
   class CreateService
-    def initialize(week_at: nil)
-      @week_at = week_at || Time.zone.now
+    def initialize(week_at: 1.hour.ago)
+      @week_at = week_at
     end
 
     def execute

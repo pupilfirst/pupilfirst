@@ -1,5 +1,9 @@
 module Startups
   class LeaderboardService
+    def self.pending?
+      WeeklyKarmaPoint.where(week_starting_at: DatesService.last_week_start_date).blank?
+    end
+
     def initialize(level)
       @level = level
     end

@@ -35,18 +35,6 @@ module ActiveAdmin
       trend
     end
 
-    def bugs_trend
-      last_10_metrics.reverse.each_with_object({}) do |metric, trend|
-        trend[metric[1]] = metric[0].dig('bugs') || 0
-      end
-    end
-
-    def deploys_trend
-      last_10_metrics.reverse.each_with_object({}) do |metric, trend|
-        trend[metric[1]] = metric[0].dig('deploys') || 0
-      end
-    end
-
     def language_trend
       languages = last_week_metrics['loc']&.keys || []
 
@@ -57,6 +45,12 @@ module ActiveAdmin
             result[week_start_at] = metrics.dig('loc', language)
           end
         }
+      end
+    end
+
+    def trend(type)
+      last_10_metrics.reverse.each_with_object({}) do |metric, trend|
+        trend[metric[1]] = metric[0].dig(type.to_s) || 0
       end
     end
 

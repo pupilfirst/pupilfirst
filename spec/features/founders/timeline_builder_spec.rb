@@ -4,6 +4,7 @@ feature 'Timeline Builder' do
   include UserSpecHelper
 
   let(:level) { create :level, :one }
+  let(:level_zero) { create :level, :zero }
   let(:startup) { create :startup, level: level }
   let(:founder) { create :founder, startup: startup, fb_access_token: Faker::Lorem.word, fb_token_expires_at: 2.days.from_now }
 
@@ -139,7 +140,18 @@ feature 'Timeline Builder' do
 
       # Facebook connect missing
       find('.timeline-builder__social-bar-toggle-switch-handle').click
-      expect(page).to have_content('Facebook Connect Missing!')
+      expect(page).to have_content('Feature Unavailable!')
+    end
+
+    scenario 'Level 0 founder tries to toggle Facebook connect' do
+      # easy hack to mimic a Level 0 founder's Facebook share eligibility
+      expect_any_instance_of(Founder).to receive(:facebook_share_eligibility).and_return('not_admitted')
+
+      visit dashboard_founder_path
+      click_button 'Add Event'
+      find('.timeline-builder__social-bar-toggle-switch-handle').click
+      expect(page).to have_content('Feature Unavailable!')
+      expect(page).to have_content('Facebook share is only available for founders above Level 0!')
     end
   end
 end

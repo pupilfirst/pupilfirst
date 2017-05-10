@@ -3,7 +3,7 @@ const TimelineBuilder = React.createClass({
     timelineEventTypes: React.PropTypes.object,
     selectedTimelineEventTypeId: React.PropTypes.number,
     targetId: React.PropTypes.number,
-    allowFacebookShare: React.PropTypes.bool,
+    facebookShareEligibility: React.PropTypes.string,
     authenticityToken: React.PropTypes.string,
     closeTimelineBuilderCB: React.PropTypes.func,
     targetSubmissionCB: React.PropTypes.func
@@ -200,7 +200,7 @@ const TimelineBuilder = React.createClass({
       let formData = new FormData(form[0]);
       let share_on_facebook = false;
 
-      if (this.props.allowFacebookShare) {
+      if (this.props.facebookShareEligibility == 'eligible') {
         share_on_facebook = $('.timeline-builder__social-bar-toggle-switch-input').prop('checked');
       }
 
@@ -360,7 +360,7 @@ const TimelineBuilder = React.createClass({
                 placeholder={ this.sampleText() } textChangeCB={ this.updateDescription }/>
 
               <TimelineBuilderSocialBar description={ this.state.description }
-                allowFacebookShare={ this.props.allowFacebookShare }/>
+                                        facebookShareEligibility={ this.props.facebookShareEligibility }/>
 
               { this.hasAttachments() &&
               <TimelineBuilderAttachments attachments={ this.attachments() }

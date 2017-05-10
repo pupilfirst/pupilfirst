@@ -101,7 +101,7 @@ class FounderDashboard extends React.Component {
 
         { this.state.timelineBuilderVisible &&
         <TimelineBuilder timelineEventTypes={ this.props.timelineEventTypes }
-          allowFacebookShare={ this.props.allowFacebookShare } authenticityToken={ this.props.authenticityToken }
+                         facebookShareEligibility={ this.props.facebookShareEligibility } authenticityToken={ this.props.authenticityToken }
           closeTimelineBuilderCB={ this.closeTimelineBuilder } targetId={ this.state.timelineBuilderParams.targetId }
           selectedTimelineEventTypeId={ this.state.timelineBuilderParams.selectedTimelineEventTypeId }
           targetSubmissionCB={ this.handleTargetSubmission }/>
@@ -118,7 +118,7 @@ FounderDashboard.propTypes = {
   sessions: React.PropTypes.array,
   sessionTags: React.PropTypes.array,
   timelineEventTypes: React.PropTypes.object,
-  allowFacebookShare: React.PropTypes.bool,
+  facebookShareEligibility: React.PropTypes.string,
   authenticityToken: React.PropTypes.string,
   levelUpEligibility: React.PropTypes.string,
   iconPaths: React.PropTypes.object,

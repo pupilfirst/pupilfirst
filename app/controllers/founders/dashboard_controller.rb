@@ -102,7 +102,7 @@ module Founders
         sessions: dashboard_data_service.sessions,
         sessionTags: dashboard_data_service.session_tags,
         timelineEventTypes: list_service.list,
-        allowFacebookShare: current_founder.facebook_token_available?,
+        facebookShareEligibility: current_founder.facebook_share_eligibility,
         levelUpEligibility: Startups::LevelUpEligibilityService.new(@startup, current_founder).eligibility,
         maxLevelNumber: Level.maximum.number,
         founderDetails: founder_details

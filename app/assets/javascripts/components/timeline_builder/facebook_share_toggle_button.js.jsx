@@ -5,10 +5,10 @@ class TimelineBuilderFacebookShareToggleButton extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.disabled) {
+    if (this.notEligible()) {
       $('.timeline-builder__social-bar-toggle-switch').popover({
-        title: 'Facebook Connect Missing!',
-        content: 'Please <a href="/founder/edit">connect your profile to Facebook</a> first to use this feature.',
+        title: 'Feature Unavailable!',
+        content: this.notEligibleMessage(),
         html: true,
         placement: 'bottom',
         trigger: 'manual'
@@ -21,7 +21,7 @@ class TimelineBuilderFacebookShareToggleButton extends React.Component {
   }
 
   showPopover() {
-    if (this.props.disabled) {
+    if (this.notEligible()) {
       $('.timeline-builder__social-bar-toggle-switch').popover('show');
 
       setTimeout(function () {
@@ -30,11 +30,23 @@ class TimelineBuilderFacebookShareToggleButton extends React.Component {
     }
   }
 
+  notEligible() {
+    return this.props.facebookShareEligibility != 'eligible';
+  }
+
+  notEligibleMessage() {
+    if (this.props.facebookShareEligibility == 'not_admitted') {
+      return 'Facebook share is only available for founders above Level 0!';
+    } else {
+      return 'Please <a href="/founder/edit">connect your profile to Facebook</a> first to use this feature.';
+    }
+  }
+
   render() {
     return (
       <label className="timeline-builder__social-bar-toggle-switch" onClick={ this.showPopover }>
         <input type="checkbox" className="timeline-builder__social-bar-toggle-switch-input"
-               disabled={ this.props.disabled }/>
+               disabled={ this.notEligible() }/>
         <span className="timeline-builder__social-bar-toggle-switch-label" data-on="SHARE" data-off="SHARE"/>
         <span className="timeline-builder__social-bar-toggle-switch-handle">
             <i className="fa fa-facebook"/>
@@ -45,5 +57,5 @@ class TimelineBuilderFacebookShareToggleButton extends React.Component {
 }
 
 TimelineBuilderFacebookShareToggleButton.propTypes = {
-  disabled: React.PropTypes.bool
+  facebookShareEligibility: React.PropTypes.string
 };

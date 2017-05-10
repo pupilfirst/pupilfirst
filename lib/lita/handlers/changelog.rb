@@ -4,8 +4,10 @@ module Lita
       route(/\Achangelog\s*\?*\s*\z/i, :changelog, command: true, help: { 'changelog ?' => I18n.t('slack.help.changelog') })
 
       def changelog(response)
-        response.reply latest_change_log
-        Ahoy::Tracker.new.track Visit::EVENT_VOCALIST_COMMAND, command: Visit::VOCALIST_COMMAND_CHANGELOG
+        ActiveRecord::Base.connection_pool.with_connection do
+          response.reply latest_change_log
+          Ahoy::Tracker.new.track Visit::EVENT_VOCALIST_COMMAND, command: Visit::VOCALIST_COMMAND_CHANGELOG
+        end
       end
 
       def latest_change_log

@@ -104,6 +104,7 @@ gem 'file_validators', '~> 2.1' # Adds file validators to ActiveModel.
 gem 'diffy', '~> 3.2' # Easy Diffing in Ruby.
 gem 'rails_server_timings', '~> 1.0' # Server Timing headers for Rails apps. https://github.com/dpogue/rails_server_timings
 gem 'pundit', '~> 1.1' # Minimal authorization through OO design and pure Ruby classes.
+gem 'github-linguist', '~> 5.0', require: false # Language Savant. https://github.com/github/linguist
 
 # Rails assets!
 source 'https://rails-assets.org' do
@@ -119,7 +120,8 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-tether', '~> 1.4' # A positioning engine to make overlays, tooltips and dropdowns better
   gem 'rails-assets-readmore', '~> 2.2' # A lightweight jQuery plugin for collapsing and expanding long blocks of text with "Read more" and "Close" links.
   gem 'rails-assets-waypoints', '~> 4.0' # Waypoints is a library that makes it easy to execute a function whenever you scroll to an element.
-  gem 'rails-assets-chartkick', '~> 2.2' # chartkick lib for admissions dashboard charts
+  gem 'rails-assets-Chart-js', '~> 2.5' # Simple yet flexible JavaScript charting for designers & developers.
+  gem 'rails-assets-chartkick', '~> 2.2' # Create beautiful charts with one line of JavaScript.
   gem 'rails-assets-gemini-scrollbar', '~> 1.5' # Custom overlay-scrollbars with native scrolling mechanism for web applications
   gem 'rails-assets-datetimepicker', '~> 2.5' # jQuery Plugin Date and Time Picker
   gem 'rails-assets-moment', '~> 2.18' # Parse, validate, manipulate, and display dates in javascript. http://momentjs.com

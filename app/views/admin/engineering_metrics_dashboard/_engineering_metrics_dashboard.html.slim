@@ -1,34 +1,31 @@
-table
-  tbody
-    tr
-      td
-        ul
-          li
-            h3
-              ' Code Coverage:
-              a href='https://codecov.io/gh/SVdotCO/sv.co' target='_blank'
-                img src=@presenter.codecov_badge_url
-          li
-            h3 Deploys Last Week: #{@presenter.last_week_deploys}
-          li
-            h3 Deploys trend:
-            p.sparkline-tag-large #{@presenter.deploys_trend}
-          li
-            h3 Bug Reports Last Week: #{@presenter.last_week_bugs}
-          li
-            h3 Bugs trend:
-            p.sparkline-tag-large #{@presenter.bugs_trend}
+#admin__engineering-metrics-dashboard
 
-      td
-        ul
-          li
-            h3 Commits Trend:
-            ul
-              - @presenter.commits_trend.each do |trend|
-                  li.margin-bottom-20
-                    '#{trend[0].to_s}:
-                    span.sparkline-tag-large #{trend[1].join(', ')}
-          li
-            h3
-              ' Additions/Deletions Trend:
-              span.sparkline-tag-large #{@presenter.code_frequency}
+- if @presenter.codecov_badge_url.present?
+  div
+    a href='https://codecov.io/gh/SVdotCO/sv.co' target='_blank'
+      = image_tag @presenter.codecov_badge_url
+
+.engineering-metrics-dashboard__graph-container
+  h2.margin-top-20 Deploys
+
+  #engineering-metrics-dashboard__deploys data-chart-data=@presenter.deploys_trend.to_json
+
+.engineering-metrics-dashboard__graph-container
+  h2.margin-top-20 Bugs
+
+  #engineering-metrics-dashboard__bugs data-chart-data=@presenter.bugs_trend.to_json
+
+.engineering-metrics-dashboard__graph-container
+  h2.margin-top-20 Commit trend
+
+  #engineering-metrics-dashboard__commit-trend data-chart-data=@presenter.commit_trend.to_json
+
+.engineering-metrics-dashboard__graph-container
+  h2.margin-top-20 Additions / Deletions trend
+
+  #engineering-metrics-dashboard__additions-deletions data-chart-data=@presenter.code_frequency.to_json
+
+.engineering-metrics-dashboard__graph-container
+  h2.margin-top-20 LOC Split
+
+  #engineering-metrics-dashboard__loc data-chart-data=@presenter.language_trend.to_json

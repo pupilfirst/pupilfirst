@@ -335,6 +335,11 @@ class Founder < ApplicationRecord
     facebook_token_available? && Founders::FacebookService.new(self).token_valid?(fb_access_token)
   end
 
+  def facebook_share_eligibility
+    return 'not_admitted' if startup.level_zero?
+    facebook_token_available? ? 'eligible' : 'token_unavailable'
+  end
+
   # Override the default method to compute the URL if stored value is blank?
   def resume_url
     @resume_url ||= begin

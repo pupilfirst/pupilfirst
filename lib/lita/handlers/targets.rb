@@ -29,9 +29,9 @@ module Lita
           else
             response.reply_privately I18n.t('slack.handlers.targets.unknown_username', slack_username: slack_username)
           end
-        end
 
-        Ahoy::Tracker.new.track Visit::EVENT_VOCALIST_COMMAND, command: Visit::VOCALIST_COMMAND_TARGETS
+          Ahoy::Tracker.new.track Visit::EVENT_VOCALIST_COMMAND, command: Visit::VOCALIST_COMMAND_TARGETS
+        end
       end
 
       def command_value

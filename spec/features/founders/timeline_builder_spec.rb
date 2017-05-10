@@ -1,14 +1,14 @@
 require 'rails_helper'
 
-feature 'Timeline Builder', broken: true do
+feature 'Timeline Builder' do
   include UserSpecHelper
 
-  let(:startup) { create :startup }
-  let(:batch) { startup.batch }
-  let(:founder) { startup.admin }
+  let(:level) { create :level, :one }
+  let(:level_zero) { create :level, :zero }
+  let(:startup) { create :startup, level: level }
+  let(:founder) { create :founder, startup: startup, fb_access_token: Faker::Lorem.word, fb_token_expires_at: 2.days.from_now }
 
-  let(:program_week) { create :program_week, batch: batch, number: 1 }
-  let(:target_group) { create :target_group, program_week: program_week }
+  let(:target_group) { create :target_group, milestone: true }
   let(:timeline_event_type) { create :timeline_event_type }
 
   let!(:pending_target) do
@@ -26,9 +26,8 @@ feature 'Timeline Builder', broken: true do
     click_button 'Add Event'
     find('.timeline-builder__textarea').set(description)
 
-    # TODO: Enable this and the corresponding expectation below when facebook share is ready.
     # Mark to be shared on facebook
-    # find('.timeline-builder__social-bar-toggle-switch-handle').click
+    find('.timeline-builder__social-bar-toggle-switch-handle').click
 
     # Pick a cover image.
     attach_file 'Cover Image', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'users', 'college_id.jpg')), visible: false
@@ -86,50 +85,73 @@ feature 'Timeline Builder', broken: true do
     expect(file.private).to eq(false)
 
     expect(te.event_on).to eq(Date.today)
-    # expect(te.share_on_facebook).to eq(true)
+    expect(te.share_on_facebook).to eq(true)
   end
 
-  scenario 'Founder encounters errors when using timeline builder', js: true do
-    click_button 'Add Event'
+  context 'Founder unsuccessful in submitting event', js: true do
+    before do
+      # Reset the facebook token, to create error while trying to enable facebook share
+      founder.update!(fb_access_token: nil, fb_token_expires_at: nil)
+      visit dashboard_founder_path
+    end
 
-    # File fields empty.
-    find('.timeline-builder__upload-section-tab.file-upload').click
-    expect(page).to have_selector('.timeline-builder__file-label')
-    find('.timeline-builder__attachment-button').click
+    scenario 'Founder encounters errors when using timeline builder', js: true do
+      click_button 'Add Event'
 
-    expect(page).to have_content('Enter a valid title!')
-    expect(page).to have_content('Choose a valid file!')
+      # File fields empty.
+      find('.timeline-builder__upload-section-tab.file-upload').click
+      expect(page).to have_selector('.timeline-builder__file-label')
+      find('.timeline-builder__attachment-button').click
 
-    find('.timeline-builder__upload-section-tab.file-upload').click
-    expect(page).to_not have_selector('.timeline-builder__file-label')
+      expect(page).to have_content('Enter a valid title!')
+      expect(page).to have_content('Choose a valid file!')
 
-    # Link fields empty.
-    find('.timeline-builder__upload-section-tab.link-upload').click
-    expect(page).to have_content('Please enter a full URL, starting with http(s).')
-    find('.timeline-builder__attachment-button').click
+      find('.timeline-builder__upload-section-tab.file-upload').click
+      expect(page).to_not have_selector('.timeline-builder__file-label')
 
-    expect(page).to have_content('Enter a valid title!')
-    expect(page).to have_content('Enter a valid URL!')
+      # Link fields empty.
+      find('.timeline-builder__upload-section-tab.link-upload').click
+      expect(page).to have_content('Please enter a full URL, starting with http(s).')
+      find('.timeline-builder__attachment-button').click
 
-    find('.timeline-builder__upload-section-tab.link-upload').click
-    expect(page).to_not have_content('Please enter a full URL, starting with http(s).')
+      expect(page).to have_content('Enter a valid title!')
+      expect(page).to have_content('Enter a valid URL!')
 
-    # Description just a bunch of spaces.
-    find('.timeline-builder__textarea').set('   ')
-    find_button('Submit').click
-    expect(page).to have_content('Please add a summary describing the event.')
+      find('.timeline-builder__upload-section-tab.link-upload').click
+      expect(page).to_not have_content('Please enter a full URL, starting with http(s).')
 
-    find('.timeline-builder__textarea').set('description text')
+      # Description just a bunch of spaces.
+      find('.timeline-builder__textarea').set('   ')
+      find_button('Submit').click
+      expect(page).to have_content('Please add a summary describing the event.')
 
-    # Date missing.
-    click_button 'Submit'
-    expect(page).to have_content('Please select a date for the event.')
+      find('.timeline-builder__textarea').set('description text')
 
-    find('.timeline-builder__upload-section-tab.date-of-event').click
-    find('.timeline-builder__attachment-button').click
+      # Date missing.
+      click_button 'Submit'
+      expect(page).to have_content('Please select a date for the event.')
 
-    # Timeline event type missing.
-    find_button('Submit').click
-    expect(page).to have_content('Please select an appropriate timeline event type.')
+      find('.timeline-builder__upload-section-tab.date-of-event').click
+      find('.timeline-builder__attachment-button').click
+
+      # Timeline event type missing.
+      find_button('Submit').click
+      expect(page).to have_content('Please select an appropriate timeline event type.')
+
+      # Facebook connect missing
+      find('.timeline-builder__social-bar-toggle-switch-handle').click
+      expect(page).to have_content('Feature Unavailable!')
+    end
+
+    scenario 'Level 0 founder tries to toggle Facebook connect' do
+      # easy hack to mimic a Level 0 founder's Facebook share eligibility
+      expect_any_instance_of(Founder).to receive(:facebook_share_eligibility).and_return('not_admitted')
+
+      visit dashboard_founder_path
+      click_button 'Add Event'
+      find('.timeline-builder__social-bar-toggle-switch-handle').click
+      expect(page).to have_content('Feature Unavailable!')
+      expect(page).to have_content('Facebook share is only available for founders above Level 0!')
+    end
   end
 end

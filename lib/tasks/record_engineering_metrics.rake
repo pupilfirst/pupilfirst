@@ -1,4 +1,4 @@
-desc 'Record code-coverage and commit stats end of every week'
+desc 'Record engineering metrics at the end of every week'
 task record_engineering_metrics: [:environment] do
-  EngineeringMetricsRecordJob.perform_later
+  EngineeringMetrics::MetricsStoreService.new.execute
 end

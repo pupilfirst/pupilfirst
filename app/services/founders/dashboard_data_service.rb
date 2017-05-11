@@ -107,17 +107,17 @@ module Founders
 
     def target_data_with_status(target_data)
       # Add status of target to compiled data.
-      target_data['status'] = target_statuses.find { |e| e[0] == target_data['id'] }&.second || Targets::BulkStatusService::STATUS_PENDING
+      target_data['status'] = bulk_status_service.status(target_data['id'])
       # Add time of submission of last event, necessary for submitted and completed state.
-      if target_data['status'].in?([Targets::BulkStatusService::STATUS_SUBMITTED, Targets::BulkStatusService::STATUS_COMPLETE])
-        target_data['submitted_at'] = target_statuses.find { |e| e[0] == target_data['id'] }&.third
+      if target_data['status'].in?([Target::STATUS_SUBMITTED, Target::STATUS_COMPLETE])
+        target_data['submitted_at'] = bulk_status_service.submitted_at(target_data['id'])
       end
 
       target_data
     end
 
-    def target_statuses
-      @target_statuses ||= Targets::BulkStatusService.new(@founder).statuses
+    def bulk_status_service
+      @bulk_status_service ||= Targets::BulkStatusService.new(@founder)
     end
 
     def startup

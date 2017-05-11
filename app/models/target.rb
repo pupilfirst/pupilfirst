@@ -8,6 +8,13 @@ class Target < ApplicationRecord
   KEY_ADMISSIONS_PRE_SELECTION = 'admissions_pre_selection'
   KEY_ADMISSIONS_ATTEND_INTERVIEW = 'admissions_attend_interview'
 
+  STATUS_COMPLETE = :complete
+  STATUS_NEEDS_IMPROVEMENT = :needs_improvement
+  STATUS_SUBMITTED = :submitted
+  STATUS_PENDING = :pending
+  STATUS_UNAVAILABLE = :unavailable
+  STATUS_NOT_ACCEPTED = :not_accepted
+
   belongs_to :assigner, class_name: 'Faculty'
   belongs_to :timeline_event_type, optional: true
   has_many :timeline_events

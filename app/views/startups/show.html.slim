@@ -231,6 +231,7 @@
     data-faculty="#{@feedback_to_show&.faculty&.name}"
     data-attachment-url="#{@feedback_to_show&.attachment&.url}"
     data-attachment-name="#{@feedback_to_show&.attachment_file_name}"]
+
     .modal-dialog
       .modal-content
         .modal-header
@@ -238,11 +239,15 @@
           h4.modal-title
         .modal-body style="overflow:auto;"
           .feedback-text
+
           .attachment.hidden
-            .attachment-name.grey-text.fa.fa-paperclip
+            i.fa.fa-paperclip
+            | &nbsp
+            span.attachment-name.grey-text
+
             a.attachment-download-btn.grey-text.margin-left-10.btn.btn-default.btn-xs target="_blank"
               i.fa.fa-download
-              | &nbsp;
+              | &nbsp;&nbsp;
               | Download
         .modal-footer
           button.btn.btn-default data-dismiss="modal" type="button"  Close

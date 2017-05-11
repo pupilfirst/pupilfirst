@@ -64,17 +64,21 @@
               .text-xs-center.m-t-2
                 .paywith-instamojo
                   div
+                    - payment_button_text = 'Pay Now'
+
                     h3.m-b-1
                       - if current_startup.fee == 0
+                        - payment_button_text = 'Skip Payment'
                         ' Hurray! You can now proceed without any payment.
                       - else
                         ' You need to pay
                         - if current_startup.fee < Startup::APPLICATION_FEE
                           del
                             ' Rs. #{Startup::APPLICATION_FEE}
+
                         span.brand-secondary.font-semibold
                           ' Rs. #{current_startup.fee}
                         br
-                        | to proceed to the next targets.
+                        | to proceed.
 
-                    = f.submit 'Pay Now', class: 'btn btn-primary btn-md text-uppercase'
+                    = f.submit payment_button_text, class: 'btn btn-primary btn-md text-uppercase'

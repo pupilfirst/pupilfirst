@@ -308,6 +308,10 @@ ActiveAdmin.register Founder do
     )
   end
 
+  action_item :impersonate, only: :show, if: proc { can? :impersonate, User } do
+    link_to 'Impersonate', impersonate_admin_user_path(founder.user), method: :post
+  end
+
   action_item :public_slack_messages, only: :show, if: proc { Founder.friendly.find(params[:id]).slack_username.present? } do
     link_to 'Public Slack Messages', admin_public_slack_messages_path(q: { founder_id_eq: params[:id] })
   end

@@ -25,33 +25,35 @@
 
       .row
         .offset-md-2.col-md-8
-          .coupon-form-container.text-xs-center
+          .coupon-form-container.text-xs-center.m-x-auto
             - if @coupon.present?
-              .coupon-applied-box.p-b-1
-                ' Coupon with code
-                span.coupon-box
-                  | #{@coupon.code}
-                | applied!
+              .discount-coupon__box.discount-coupon-applied-box.p-a-1
+                p.discount-coupon-applied-box__message.font-semibold
+                  ' Coupon with code
+                  span.discount-coupon-applied--code.dark-secondary
+                    | #{@coupon.code}
+                  | applied!
 
-              - if @coupon.instructions.present?
-                .coupon-instructions.m-t-1
-                  p
-                    span.font-semibold
-                      ' Note:
-                    | #{@coupon.instructions}
-              = button_to 'Remove', admissions_coupon_remove_path, method: :patch, class: 'btn btn-ghost-secondary btn-sm text-uppercase m-t-1'
+                - if @coupon.instructions.present?
+                  .coupon-instructions.m-t-1
+                    p
+                      span.font-semibold
+                        ' Note:
+                      | #{@coupon.instructions}
+                = button_to 'Remove', admissions_coupon_remove_path, method: :patch, class: 'btn btn-ghost-secondary btn-sm text-uppercase m-t-1'
             - else
-              #coupon-form-show.coupon-form-show.brand-secondary.font-semibold
-                ' Have a discount coupon?
-              #coupon-form.simple-form-container.hidden-xs-up
+              #coupon-form-show.discount-coupon__box.discount-coupon__box--show.brand-secondary.font-semibold.p-a-1
+                h4.font-semibold.dark-secondary.m-a-0
+                  ' Have a discount coupon?
+              #coupon-form.discount-coupon__box.discount-coupon__box--form.simple-form-container.hidden-xs-up.p-a-1
                 = simple_form_for @coupon_form,
                   url: admissions_coupon_submit_path,
                   method: :post do |f|
 
                   = f.input :code, label: false, autofocus: true, placeholder: 'Enter Code'
-                  = f.submit 'Apply Code', class: 'btn btn-secondary btn-sm text-uppercase'
-                  #coupon-form-hide.coupon-form-hide.hidden-xs-up.btn.btn-ghost-secondary.btn-sm.text-uppercase
+                  #coupon-form-hide.coupon-form-hide.hidden-xs-up.btn.btn-ghost-secondary.btn-sm.text-uppercase.m-r-1.discount-coupon__box-btn
                     ' Hide
+                  = f.submit 'Apply Code', class: 'btn btn-secondary btn-sm text-uppercase discount-coupon__box-btn'
 
           #applicant-fee-data.hidden-xs-up
           .simple-form-container.m-t-2

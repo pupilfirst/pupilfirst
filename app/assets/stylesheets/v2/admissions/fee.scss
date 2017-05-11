@@ -1,0 +1,38 @@
+.coupon-form-container {
+  @include media-breakpoint-up(sm) {
+    width: 260px;
+  }
+}
+.discount-coupon__box-btn {
+  @include media-breakpoint-down(sm) {
+    margin-bottom: 1rem;
+  }
+}
+
+.discount-coupon__box {
+  @include border-radius(10px);
+  border: 1px dashed $brand-secondary;
+  transition: all .2s;
+  background-color: lighten($light-secondary, 50%);
+
+}
+.discount-coupon__box--show {
+  cursor: pointer;
+
+  &:hover {
+    background-color: lighten($light-secondary, 40%);
+  }
+}
+
+.discount-coupon-applied-box__message {
+  line-height: 2;
+  font-size: 1rem;
+}
+
+.discount-coupon-applied--code {
+  @include border-radius(5px);
+  border: 1px dashed $brand-secondary;
+  padding: 5px;
+  margin-right: 6px;
+  background-color: lighten($light-secondary, 40%);
+}

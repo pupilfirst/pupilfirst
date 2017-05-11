@@ -1,5 +1,5 @@
 module ActiveAdmin
-  class AdmissionsDashboardPresenter
+  class AdmissionsDashboardPresenter < ApplicationPresenter
     attr_reader :stats, :selected_round_ids
 
     def initialize(application_round_id)
@@ -54,6 +54,83 @@ module ActiveAdmin
 
     def paid_applications_by_team_size
       BatchApplication.where(application_round_id: selected_round_ids).payment_complete.group(:team_size).count.sort.to_h.to_json
+    end
+
+    def startups_split
+      default = {
+        'Screening' => 0,
+        'Fee Payment' => 0,
+        'Cofounder Addition' => 0,
+        'Both Tasks' => 0,
+        'Coding Task' => 0,
+        'Video Task' => 0,
+        'Interview' => 0,
+        'Pre-selection' => 0
+      }
+
+      level_0.startups.each_with_object(default) do |startup, split|
+        split[stage(startup)] += 1
+      end
+    end
+
+    def level_0
+      @level_0 ||= Level.find_by(number: 0)
+    end
+
+    # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    def stage(startup)
+      team_lead = startup.admin
+
+      if incomplete?(screening_target, team_lead)
+        'Screening'
+      elsif incomplete?(fee_payment_target, team_lead)
+        'Fee Payment'
+      elsif incomplete?(cofounder_addition_target, team_lead)
+        'Cofounder Addition'
+      elsif incomplete?(coding_task_target, team_lead) && incomplete?(video_task_target, team_lead)
+        'Both Tasks'
+      elsif incomplete?(coding_task_target, team_lead)
+        'Coding Task'
+      elsif incomplete?(video_task_target, team_lead)
+        'Video Task'
+      elsif incomplete?(attend_interview_target, team_lead)
+        'Interview'
+      elsif incomplete?(pre_selection_target, team_lead)
+        'Pre-selection'
+      end
+    end
+    # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+
+    def screening_target
+      @screening_target ||= Target.find_by(key: Target::KEY_ADMISSIONS_SCREENING)
+    end
+
+    def fee_payment_target
+      @fee_payment_target ||= Target.find_by(key: Target::KEY_ADMISSIONS_FEE_PAYMENT)
+    end
+
+    def cofounder_addition_target
+      @cofounder_addition_target ||= Target.find_by(key: Target::KEY_ADMISSIONS_COFOUNDER_ADDITION)
+    end
+
+    def coding_task_target
+      @coding_task_target ||= Target.find_by(key: Target::KEY_ADMISSIONS_CODING_TASK)
+    end
+
+    def video_task_target
+      @video_task_target ||= Target.find_by(key: Target::KEY_ADMISSIONS_VIDEO_TASK)
+    end
+
+    def attend_interview_target
+      @attend_interview_target ||= Target.find_by(key: Target::KEY_ADMISSIONS_ATTEND_INTERVIEW)
+    end
+
+    def pre_selection_target
+      @pre_selection_target ||= Target.find_by(key: Target::KEY_ADMISSIONS_PRE_SELECTION)
+    end
+
+    def incomplete?(target, team_lead)
+      target.status(team_lead) != Targets::StatusService::STATUS_COMPLETE
     end
   end
 end

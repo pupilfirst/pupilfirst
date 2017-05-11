@@ -23,3 +23,11 @@ displayPaidApplicationsByTeamSize = ->
 $(document).on 'page:change', ->
   if $('.admissions-dashboard-container').length > 0
     displayAllCharts()
+
+chartLevelZeroAge = ->
+  chartData = $('#admissions-dashboard__level-zero-age').data('chartData')
+  new Chartkick.ColumnChart('admissions-dashboard__level-zero-age', chartData)
+
+$(document).on 'turbolinks:load', ->
+  if $('#admin__admissions-dashboard').length
+    chartLevelZeroAge()

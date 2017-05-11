@@ -1,29 +1,11 @@
-- ongoing_rounds = ApplicationRound.opened_for_applications.order('campaign_start_at DESC')
-- if ongoing_rounds.any?
-  table.admissions-dashboard-progress
-    thead
-      tr
-        th Application Round
-        th #1 Screening
-        th #2 Payment
-        th #3 Coding Test
-        th #4 Video Test
-        th #5 Interview
-        th #6 Pre-Selection
-        th #7 Closed
-    tbody
-      - ongoing_rounds.each do |open_round|
-        tr
-          th = open_round.display_name
-          - open_round.round_stages.joins(:application_stage).order('application_stages.number ASC').each do |stage|
-            td
-              .start-time #{stage.starts_at.strftime('%b %d %H:%M')}
+#admin__admissions-dashboard
 
-              - if stage.ends_at.present?
-                .end-time #{stage.ends_at.strftime('%b %d %H:%M')}
-                .clear-both
-                progress value=(Time.now - stage.starts_at) max=(stage.ends_at - stage.starts_at)
+h2 Current status for level 0 startups
+#admissions-dashboard__level-zero-age data-chart-data=@presenter.startups_split.to_a.to_json
 
+h1 style="margin: 3rem 0;"
+  | Ignore data and graphs below!
+  span style="font-size: 50%;" &nbsp; They're deprecated, and pending removal / replacement.
 
 .table_tools
   ul.scopes.table_tools_segmented_control style="width: calc((100% - 10px)); float: right;"

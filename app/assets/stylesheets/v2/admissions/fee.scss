@@ -3,6 +3,7 @@
     width: 260px;
   }
 }
+
 .discount-coupon__box-btn {
   @include media-breakpoint-down(sm) {
     margin-bottom: 1rem;
@@ -15,7 +16,12 @@
   transition: all .2s;
   background-color: lighten($light-secondary, 50%);
 
+  span.help-block {
+    display: inline-block;
+    margin-top: 0.5rem;
+  }
 }
+
 .discount-coupon__box--show {
   cursor: pointer;
 

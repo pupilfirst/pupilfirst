@@ -7,11 +7,11 @@ module Admissions
     validate :founder_must_be_msp, if: :msp_coupon_applied?
 
     def code_must_be_valid
-      errors[:code] << 'code not valid' unless coupon.present? && coupon.still_valid?
+      errors[:code] << 'code is not valid' unless coupon.present? && coupon.still_valid?
     end
 
     def founder_must_be_msp
-      errors[:code] << 'code only valid for Microsoft Student Partners' unless founder_has_msp_email?
+      errors[:code] << 'code is only valid for Microsoft Student Partners' unless founder_has_msp_email?
     end
 
     def apply_coupon!(startup)

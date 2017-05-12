@@ -16,13 +16,19 @@ feature 'Timeline Builder' do
   end
 
   let(:description) { Faker::Lorem.sentence }
+  let(:dashboard_toured) { true }
 
   before do
-    founder.update!(dashboard_toured: true)
-    sign_in_user founder.user, referer: dashboard_founder_path
+    founder.update!(dashboard_toured: dashboard_toured)
   end
 
   scenario 'Founder submits an event', js: true do
+    sign_in_user founder.user, referer: dashboard_founder_path
+
+    # Close the PNotify message to ensure no overlap with other elements under test
+    find('.ui-pnotify').hover
+    find('.ui-pnotify-closer').click
+
     click_button 'Add Event'
     find('.timeline-builder__textarea').set(description)
 
@@ -92,10 +98,15 @@ feature 'Timeline Builder' do
     before do
       # Reset the facebook token, to create error while trying to enable facebook share
       founder.update!(fb_access_token: nil, fb_token_expires_at: nil)
-      visit dashboard_founder_path
     end
 
     scenario 'Founder encounters errors when using timeline builder', js: true do
+      sign_in_user founder.user, referer: dashboard_founder_path
+
+      # Close the PNotify message to ensure no overlap with other elements under test
+      find('.ui-pnotify').hover
+      find('.ui-pnotify-closer').click
+
       click_button 'Add Event'
 
       # File fields empty.
@@ -147,7 +158,12 @@ feature 'Timeline Builder' do
       # easy hack to mimic a Level 0 founder's Facebook share eligibility
       expect_any_instance_of(Founder).to receive(:facebook_share_eligibility).and_return('not_admitted')
 
-      visit dashboard_founder_path
+      sign_in_user founder.user, referer: dashboard_founder_path
+
+      # Close the PNotify message to ensure no overlap with other elements under test
+      find('.ui-pnotify').hover
+      find('.ui-pnotify-closer').click
+
       click_button 'Add Event'
       find('.timeline-builder__social-bar-toggle-switch-handle').click
       expect(page).to have_content('Feature Unavailable!')

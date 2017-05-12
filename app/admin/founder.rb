@@ -169,6 +169,7 @@ ActiveAdmin.register Founder do
       row :slug
       row :email
       row :name
+      row :reference
 
       row :tags do |founder|
         linked_tags(founder.tags)

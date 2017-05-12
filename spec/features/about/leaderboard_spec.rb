@@ -25,6 +25,7 @@ feature 'Leaderboard' do
 
     before do
       allow(Startups::LeaderboardService).to receive(:new).with(level_one).and_return(leaderboard_service)
+      allow(Startups::LeaderboardService).to receive(:pending?).and_return(false)
       allow(leaderboard_service).to receive(:leaderboard_with_change_in_rank).and_return(leaderboard)
     end
 
@@ -51,6 +52,19 @@ feature 'Leaderboard' do
       scenario 'user is shown that there are no active startups' do
         visit about_leaderboard_path
         expect(page).to have_content('All startups at this level were inactive during this period.')
+      end
+    end
+
+    context 'when the leaderboard for last week has not been generated' do
+      let(:leaderboard) { [] }
+
+      before do
+        allow(Startups::LeaderboardService).to receive(:pending?).and_return(true)
+      end
+
+      it 'asks the user to wait for leaderboard to be generated' do
+        visit about_leaderboard_path
+        expect(page).to have_content('Please wait while the leaderboard for the last week is generated.')
       end
     end
   end

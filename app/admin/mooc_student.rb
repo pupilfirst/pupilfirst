@@ -51,6 +51,10 @@ ActiveAdmin.register MoocStudent do
     actions
   end
 
+  action_item :impersonate, only: :show, if: proc { can? :impersonate, User } do
+    link_to 'Impersonate', impersonate_admin_user_path(mooc_student.user), method: :post
+  end
+
   form do |f|
     f.semantic_errors(*f.object.errors.keys)
 

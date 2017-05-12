@@ -27,6 +27,7 @@ describe Lita::Handlers::Leaderboard do
 
     before do
       allow(Startups::LeaderboardService).to receive(:new).with(level_one).and_return(leaderboard_service)
+      allow(Startups::LeaderboardService).to receive(:pending?).and_return(false)
       allow(leaderboard_service).to receive(:leaderboard_with_change_in_rank).and_return(leaderboard)
     end
 
@@ -71,6 +72,28 @@ describe Lita::Handlers::Leaderboard do
         it 'replies that there are no active startups in the level' do
           expect(response).to receive(:reply).with('All startups at this level were inactive during this period.')
           subject.leaderboard(response)
+        end
+      end
+
+      context 'when the leaderboard is empty' do
+        let(:leaderboard) { [] }
+
+        context 'when leaderboard has not been generated' do
+          before do
+            allow(Startups::LeaderboardService).to receive(:pending?).and_return(true)
+          end
+
+          it 'replies that the leaderboard is being generated' do
+            expect(response).to receive(:reply).with('The leaderboard for last week is being generated. Please try again after a minute.')
+            subject.leaderboard(response)
+          end
+        end
+
+        context 'when the leaderboard has been generated' do
+          it 'replies that there are no active startups in the level' do
+            expect(response).to receive(:reply).with('All startups at this level were inactive during this period.')
+            subject.leaderboard(response)
+          end
         end
       end
     end

@@ -33,6 +33,10 @@ module Lita
 
       # construct the leaderboard response to be send
       def leaderboard_response_message
+        if Startups::LeaderboardService.pending?
+          return 'The leaderboard for last week is being generated. Please try again after a minute.'
+        end
+
         # Load the leaderboard.
         leaderboard = Startups::LeaderboardService.new(@level).leaderboard_with_change_in_rank
 

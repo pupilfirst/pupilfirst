@@ -1,31 +1,37 @@
 #admin__engineering-metrics-dashboard
 
-- if @presenter.codecov_badge_url.present?
-  div
-    a href='https://codecov.io/gh/SVdotCO/sv.co' target='_blank'
-      = image_tag @presenter.codecov_badge_url
-
 .engineering-metrics-dashboard__graph-container
   h2.margin-top-20 Deploys
 
-  #engineering-metrics-dashboard__deploys data-chart-data=@presenter.deploys_trend.to_json
+  #engineering-metrics-dashboard__deploys data-chart-data=@presenter.trend(:deploys).to_json
 
 .engineering-metrics-dashboard__graph-container
   h2.margin-top-20 Bugs
 
-  #engineering-metrics-dashboard__bugs data-chart-data=@presenter.bugs_trend.to_json
+  #engineering-metrics-dashboard__bugs data-chart-data=@presenter.trend(:bugs).to_json
 
 .engineering-metrics-dashboard__graph-container
-  h2.margin-top-20 Commit trend
+  h2.margin-top-20 Git commits
 
   #engineering-metrics-dashboard__commit-trend data-chart-data=@presenter.commit_trend.to_json
 
 .engineering-metrics-dashboard__graph-container
-  h2.margin-top-20 Additions / Deletions trend
+  h2.margin-top-20 LOC change
 
   #engineering-metrics-dashboard__additions-deletions data-chart-data=@presenter.code_frequency.to_json
 
 .engineering-metrics-dashboard__graph-container
-  h2.margin-top-20 LOC Split
+  h2.margin-top-20 LOC language split
 
   #engineering-metrics-dashboard__loc data-chart-data=@presenter.language_trend.to_json
+
+.engineering-metrics-dashboard__graph-container
+  h2.margin-top-20
+    ' Test coverage
+    - if @presenter.codecov_badge_url.present?
+      span
+        ' &nbsp;
+        a href='https://codecov.io/gh/SVdotCO/sv.co' target='_blank'
+          = image_tag @presenter.codecov_badge_url
+
+  #engineering-metrics-dashboard__coverage data-chart-data=@presenter.trend(:coverage).to_json

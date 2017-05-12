@@ -92,8 +92,8 @@ feature 'Admission Fee Payment' do
       fill_in 'admissions_coupon_code', with: coupon.code
       click_button 'Apply Code'
 
-      # he should be shown the discounted amount
-      expect(page).to have_content('You need to pay Rs. 3000 Rs. 2250 to proceed to the next targets.')
+      # He should be shown the discounted amount. The original amount is crossed out (not detected by this test).
+      expect(page).to have_content('You need to pay Rs. 3000 Rs. 2250 to proceed.')
 
       click_on 'Pay Now'
 

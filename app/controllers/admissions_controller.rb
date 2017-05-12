@@ -92,7 +92,7 @@ class AdmissionsController < ApplicationController
       flash[:success] = 'Coupon applied successfully!'
       redirect_to admissions_fee_path
     else
-      flash.now[:error] = 'Coupon not valid!'
+      flash.now[:error] = 'Coupon code is not valid!'
       render 'fee'
     end
   end

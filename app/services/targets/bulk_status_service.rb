@@ -44,8 +44,7 @@ module Targets
     # mapping from the event's verified status to the associated targets completion status, accounting for iteration mismatches
     def target_status(event)
       target = applicable_targets.find { |t| t.id == event.target_id }
-
-      if target.target_group_id.present? && event.iteration != @founder.startup.iteration
+      if target&.target_group_id.present? && event.iteration != @founder.startup.iteration
         Target::STATUS_PENDING
       else
         case event.verified_status
@@ -101,7 +100,7 @@ module Targets
       prerequisites = all_target_prerequisites[target.id]
       return true unless prerequisites.present?
 
-      prerequisites.all? { |id| submitted_targets_statuses[id].present? } && prerequisites.all? { |id| submitted_targets_statuses[id][:status] == Target::STATUS_COMPLETE }
+      prerequisites.all? { |id| submitted_targets_statuses[id].present? } && prerequisites.all? { |id| submitted_targets_statuses[id][:status].in? [Target::STATUS_COMPLETE, Target::STATUS_NEEDS_IMPROVEMENT] }
     end
 
     # all target-prerequisite mappings

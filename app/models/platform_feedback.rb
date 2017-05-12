@@ -20,7 +20,7 @@ class PlatformFeedback < ApplicationRecord
   end
 
   def self.founders_with_scores
-    Founder.find PlatformFeedback.scored.pluck(:founder_id).uniq
+    Founder.joins(:platform_feedback).merge(PlatformFeedback.scored).distinct
   end
 
   def self.promoters

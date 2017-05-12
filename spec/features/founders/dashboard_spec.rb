@@ -224,5 +224,8 @@ feature 'Founder Dashboard' do
     # Check whether end_iteration timeline event is created
     te = TimelineEvent.last
     expect(te.timeline_event_type).to eq(tet_end_iteration)
+
+    # Check whether startup requested level for restart is set.
+    expect(startup.reload.requested_restart_level).to eq(level_2)
   end
 end

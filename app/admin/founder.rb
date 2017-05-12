@@ -219,7 +219,13 @@ ActiveAdmin.register Founder do
       row :communication_address
 
       row :designation
-      row :college
+      row :college do |founder|
+        if founder.college.present?
+          link_to founder.college.name, admin_college_path(founder.college)
+        elsif founder.college_text.present?
+          founder.college_text
+        end
+      end
 
       row :university do |founder|
         university = founder.college&.replacement_university

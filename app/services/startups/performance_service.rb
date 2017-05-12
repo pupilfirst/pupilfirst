@@ -15,7 +15,7 @@ module Startups
     # returns a relative performance measure for a startup as a %
     def relative_performance(startup)
       @level = startup.level
-      karma = last_week_karma(startup)
+      karma = last_week_karma(startup) || 0
       relative_measure(karma)
     end
 

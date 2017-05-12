@@ -19,13 +19,11 @@ module Targets
 
     # returns status and submission date for all applicable targets
     def statuses
-      # TODO: Account for iterations
       @statuses ||= submitted_targets_statuses.merge(unsubmitted_targets_statuses)
     end
 
     def submitted_targets_statuses
       @submitted_targets_statuses ||= begin
-        # statuses for all founder targets
         founder_events = @founder.timeline_events.where.not(target_id: nil)
           .where(target: Target.founder)
           .select("DISTINCT ON(target_id) *").order("target_id, created_at DESC")
@@ -43,13 +41,19 @@ module Targets
       end
     end
 
-    # mapping from the event's verified status to the associated targets completion status
+    # mapping from the event's verified status to the associated targets completion status, accounting for iteration mismatches
     def target_status(event)
-      case event.verified_status
-        when TimelineEvent::VERIFIED_STATUS_VERIFIED then Target::STATUS_COMPLETE
-        when TimelineEvent::VERIFIED_STATUS_NOT_ACCEPTED then Target::STATUS_NOT_ACCEPTED
-        when TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT then Target::STATUS_NEEDS_IMPROVEMENT
-        else Target::STATUS_SUBMITTED
+      target = applicable_targets.find { |t| t.id == event.target_id }
+
+      if target.target_group_id.present? && event.iteration != @founder.startup.iteration
+        Target::STATUS_PENDING
+      else
+        case event.verified_status
+          when TimelineEvent::VERIFIED_STATUS_VERIFIED then Target::STATUS_COMPLETE
+          when TimelineEvent::VERIFIED_STATUS_NOT_ACCEPTED then Target::STATUS_NOT_ACCEPTED
+          when TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT then Target::STATUS_NEEDS_IMPROVEMENT
+          else Target::STATUS_SUBMITTED
+        end
       end
     end
 
@@ -67,10 +71,12 @@ module Targets
 
     # all applicable targets for the founder
     def applicable_targets
-      vanilla_targets = filter_for_level(Target.joins(target_group: :level))
-      chores = filter_for_level(Target.where(chore: true).joins(:level))
-      sessions = filter_for_level(Target.where.not(session_at: nil).joins(:level))
-      vanilla_targets + chores + sessions
+      @applicable_targets ||= begin
+        vanilla_targets = filter_for_level(Target.joins(target_group: :level))
+        chores = filter_for_level(Target.where(chore: true).joins(:level))
+        sessions = filter_for_level(Target.where.not(session_at: nil).joins(:level))
+        vanilla_targets + chores + sessions
+      end
     end
 
     # Filter the given set of targets/chores/sessions based on current level.

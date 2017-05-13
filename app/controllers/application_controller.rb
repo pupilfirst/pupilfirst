@@ -27,6 +27,9 @@ class ApplicationController < ActionController::Base
     raise ActionController::UnknownFormat, 'Not Acceptable'
   end
 
+  # Pundit should alwasy look at the true_user
+  alias pundit_user true_user
+
   # Pundit authorization error should cause a 404.
   rescue_from Pundit::NotAuthorizedError, with: :raise_not_found
 

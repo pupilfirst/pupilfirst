@@ -382,6 +382,10 @@ class Founder < ApplicationRecord
     invited_startup.present?
   end
 
+  def completed_targets_count
+    Targets::BulkStatusService.new(self).completed_targets_count
+  end
+
   private
 
   def batch_start_date

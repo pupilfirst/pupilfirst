@@ -15,6 +15,11 @@ module Targets
       statuses[target_id][:submitted_at]
     end
 
+    # return number of completed targets
+    def completed_targets_count
+      statuses.values.select { |t| t[:status] == :complete }.count
+    end
+
     private
 
     # returns status and submission date for all applicable targets

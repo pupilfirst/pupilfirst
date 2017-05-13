@@ -53,37 +53,43 @@ ActiveAdmin.register Founder do
     selectable_column
     column :name
 
-    column :product_name, sortable: 'founders.startup_id' do |founder|
-      if founder.startup.present?
-        a href: admin_startup_path(founder.startup) do
-          span do
-            founder.startup.try(:product_name)
-          end
-
-          if founder.startup.name.present?
+    if params['scope'] == 'level_zero'
+      column :email
+      column :phone
+      column('Targets Completed', &:completed_targets_count)
+    else
+      column :product_name, sortable: 'founders.startup_id' do |founder|
+        if founder.startup.present?
+          a href: admin_startup_path(founder.startup) do
             span do
-              " (#{founder.startup.name})"
+              founder.startup.try(:product_name)
+            end
+
+            if founder.startup.name.present?
+              span do
+                " (#{founder.startup.name})"
+              end
             end
           end
         end
       end
-    end
 
-    column 'Total Karma (Personal)' do |founder|
-      points = founder.karma_points&.sum(:points)
-      if points.present?
-        link_to points, admin_karma_points_path(q: { founder_id_eq: founder.id })
-      else
-        'Not Available'
+      column 'Total Karma (Personal)' do |founder|
+        points = founder.karma_points&.sum(:points)
+        if points.present?
+          link_to points, admin_karma_points_path(q: { founder_id_eq: founder.id })
+        else
+          'Not Available'
+        end
       end
-    end
 
-    column 'Total Karma (Team)' do |founder|
-      points = founder.startup&.karma_points&.sum(:points)
-      if points.present?
-        link_to points, admin_karma_points_path(q: { startup_id_eq: founder.startup&.id })
-      else
-        'Not Available'
+      column 'Total Karma (Team)' do |founder|
+        points = founder.startup&.karma_points&.sum(:points)
+        if points.present?
+          link_to points, admin_karma_points_path(q: { startup_id_eq: founder.startup&.id })
+        else
+          'Not Available'
+        end
       end
     end
 

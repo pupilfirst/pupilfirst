@@ -51,7 +51,6 @@ class Founder < ApplicationRecord
 
   scope :admitted, -> { joins(:startup).merge(Startup.admitted) }
   scope :level_zero, -> { joins(:startup).merge(Startup.level_zero) }
-  scope :batched, -> { joins(:startup).merge(Startup.batched) }
   scope :for_batch_id_in, ->(ids) { joins(:startup).where(startups: { batch_id: ids }) }
   scope :not_dropped_out, -> { joins(:startup).merge(Startup.not_dropped_out) }
   scope :startup_members, -> { where 'startup_id IS NOT NULL' }
@@ -205,12 +204,12 @@ class Founder < ApplicationRecord
     startup.present? && startup.approved?
   end
 
-  # The option to create connect requests is restricted to team leads of batched, approved startups.
+  # The option to create connect requests is restricted to team leads of approved startups.
   def can_connect?
     startup.present? && startup.approved? && !level_zero? && startup_admin?
   end
 
-  # The option to view some info about creating connect requests is restricted to non-lead members of batched, approved startups.
+  # The option to view some info about creating connect requests is restricted to non-lead members of approved startups.
   def can_view_connect?
     startup.present? && startup.approved? && !level_zero? && !startup_admin?
   end

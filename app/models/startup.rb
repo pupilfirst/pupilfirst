@@ -48,7 +48,6 @@ class Startup < ApplicationRecord
 
   scope :admitted, -> { joins(:level).where('levels.number > ?', 0) }
   scope :level_zero, -> { joins(:level).where(levels: { number: 0 }) }
-  scope :batched, -> { where.not(batch_id: nil) }
   scope :approved, -> { where.not(dropped_out: true) }
   scope :dropped_out, -> { where(dropped_out: true) }
   scope :not_dropped_out, -> { where.not(dropped_out: true) }
@@ -56,7 +55,6 @@ class Startup < ApplicationRecord
   scope :agreement_live, -> { where('agreement_signed_at > ?', AGREEMENT_DURATION.years.ago) }
   scope :agreement_expired, -> { where('agreement_signed_at < ?', AGREEMENT_DURATION.years.ago) }
   scope :timeline_verified, -> { joins(:timeline_events).where(timeline_events: { verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED }).distinct }
-  scope :batched_and_approved, -> { batched.approved }
 
   # Custom scope to allow AA to filter by intersection of tags.
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
@@ -87,14 +85,14 @@ class Startup < ApplicationRecord
       .pluck(:id)
 
     # Filter them out.
-    batched.approved.admitted.not_dropped_out.where.not(id: startups_with_karma_ids)
+    approved.admitted.not_dropped_out.where.not(id: startups_with_karma_ids)
   end
 
   def self.endangered
     startups_with_karma_ids = joins(:karma_points)
       .where(karma_points: { created_at: 3.weeks.ago..Time.now })
       .pluck(:id)
-    batched.approved.admitted.not_dropped_out.where.not(id: startups_with_karma_ids)
+    approved.admitted.not_dropped_out.where.not(id: startups_with_karma_ids)
   end
 
   # Find all by specific category.
@@ -189,10 +187,6 @@ class Startup < ApplicationRecord
 
   def dropped_out?
     dropped_out == true
-  end
-
-  def batched?
-    batch.present?
   end
 
   mount_uploader :logo, LogoUploader
@@ -415,7 +409,7 @@ class Startup < ApplicationRecord
 
   # TODO: What the heck does this method do? Is there a better way to write this?
   def self.available_batches
-    Batch.where(id: Startup.batched.pluck(:batch_id).uniq)
+    Batch.where(id: Startup.where.not(batch_id: nil).pluck(:batch_id).uniq)
   end
 
   def self.leaderboard_toppers_for_batch(batch, count: 3)

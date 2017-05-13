@@ -64,7 +64,6 @@ class TimelineEvent < ApplicationRecord
   scope :end_of_iteration_events, -> { where(timeline_event_type: TimelineEventType.end_iteration) }
   scope :from_admitted_startups, -> { joins(:startup).merge(Startup.admitted) }
   scope :from_level_0_startups, -> { joins(:startup).merge(Startup.level_zero) }
-  scope :batched, -> { joins(:startup).merge(Startup.batched) }
   scope :not_dropped_out, -> { joins(:startup).merge(Startup.not_dropped_out) }
   scope :verified, -> { where(verified_status: VERIFIED_STATUS_VERIFIED) }
   scope :pending, -> { where(verified_status: VERIFIED_STATUS_PENDING) }
@@ -73,7 +72,7 @@ class TimelineEvent < ApplicationRecord
   scope :verified_or_needs_improvement, -> { where(verified_status: [VERIFIED_STATUS_VERIFIED, VERIFIED_STATUS_NEEDS_IMPROVEMENT]) }
   scope :has_image, -> { where.not(image: nil) }
   scope :from_approved_startups, -> { joins(:startup).merge(Startup.approved) }
-  scope :showcase, -> { includes(:timeline_event_type, :startup).verified.from_approved_startups.batched.not_private.order('timeline_events.event_on DESC') }
+  scope :showcase, -> { includes(:timeline_event_type, :startup).verified.from_approved_startups.not_private.order('timeline_events.event_on DESC') }
   scope :help_wanted, -> { where(timeline_event_type: TimelineEventType.help_wanted) }
   scope :for_batch, ->(batch) { joins(:startup).where(startups: { batch_id: batch.id }) }
   scope :for_batch_id_in, ->(ids) { joins(:startup).where(startups: { batch_id: ids }) }

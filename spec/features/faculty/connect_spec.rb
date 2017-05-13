@@ -32,7 +32,7 @@ feature 'Faculty Connect' do
     expect(page).to have_selector(".disabled.connect-link[title='Faculty Connect is only available once you are a selected founder']", count: 2)
   end
 
-  context 'User is founder of batched-approved startup' do
+  context 'User is founder of approved startup' do
     let(:startup) { create :startup }
     let(:founder) { startup.founders.where.not(id: startup.admin.id).first }
 
@@ -73,7 +73,7 @@ feature 'Faculty Connect' do
         end
       end
 
-      scenario 'Admin of batched-approved startup creates connect request', js: true do
+      scenario 'Admin of approved startup creates connect request', js: true do
         sign_in_user(founder.user, referer: faculty_index_path)
 
         expect(page).to have_selector('.connect-link[data-toggle="modal"]', count: 1)

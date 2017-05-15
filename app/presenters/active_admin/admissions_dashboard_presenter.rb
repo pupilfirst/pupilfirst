@@ -58,14 +58,15 @@ module ActiveAdmin
 
     def startups_split
       default = {
-        'Screening' => 0,
-        'Fee Payment' => 0,
-        'Cofounder Addition' => 0,
-        'Both Tasks' => 0,
-        'Coding Task' => 0,
-        'Video Task' => 0,
-        'Interview' => 0,
-        'Pre-selection' => 0
+        'Signed Up' => 0,
+        'Screening Completed' => 0,
+        'Fee Paid' => 0,
+        'Co-founders Added' => 0,
+        'Video Task Passed' => 0,
+        'Coding Task Passed' => 0,
+        'Coding & Video Task Passed' => 0,
+        'Interview Passed' => 0,
+        'Pre-Selection Done' => 0
       }
 
       level_0.startups.each_with_object(default) do |startup, split|
@@ -81,22 +82,24 @@ module ActiveAdmin
     def stage(startup)
       team_lead = startup.admin
 
-      if incomplete?(screening_target, team_lead)
-        'Screening'
-      elsif incomplete?(fee_payment_target, team_lead)
-        'Fee Payment'
-      elsif incomplete?(cofounder_addition_target, team_lead)
-        'Cofounder Addition'
-      elsif incomplete?(coding_task_target, team_lead) && incomplete?(video_task_target, team_lead)
-        'Both Tasks'
-      elsif incomplete?(coding_task_target, team_lead)
-        'Coding Task'
-      elsif incomplete?(video_task_target, team_lead)
-        'Video Task'
-      elsif incomplete?(attend_interview_target, team_lead)
-        'Interview'
-      elsif incomplete?(pre_selection_target, team_lead)
-        'Pre-selection'
+      if complete?(pre_selection_target, team_lead)
+        'Pre-Selection Done'
+      elsif complete?(attend_interview_target, team_lead)
+        'Interview Passed'
+      elsif complete?(coding_task_target, team_lead) && complete?(video_task_target, team_lead)
+        'Coding & Video Task Passed'
+      elsif complete?(coding_task_target, team_lead)
+        'Coding Task Passed'
+      elsif complete?(video_task_target, team_lead)
+        'Video Task Passed'
+      elsif complete?(cofounder_addition_target, team_lead)
+        'Co-founders Added'
+      elsif complete?(fee_payment_target, team_lead)
+        'Fee Paid'
+      elsif complete?(screening_target, team_lead)
+        'Screening Completed'
+      else
+        'Signed Up'
       end
     end
     # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
@@ -129,8 +132,8 @@ module ActiveAdmin
       @pre_selection_target ||= Target.find_by(key: Target::KEY_ADMISSIONS_PRE_SELECTION)
     end
 
-    def incomplete?(target, team_lead)
-      target.status(team_lead) != Targets::StatusService::STATUS_COMPLETE
+    def complete?(target, team_lead)
+      target.status(team_lead).in? [Targets::StatusService::STATUS_COMPLETE, Targets::StatusService::STATUS_NEEDS_IMPROVEMENT]
     end
   end
 end

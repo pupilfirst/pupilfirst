@@ -145,7 +145,7 @@ class Founder < ApplicationRecord
   mount_uploader :letter_from_parent, LetterFromParentUploader
 
   normalize_attribute :startup_id, :invitation_token, :twitter_url, :linkedin_url, :name, :slack_username, :resume_url,
-    :semester, :year_of_graduation, :gender
+    :semester, :year_of_graduation, :gender, :fee_payment_method, :id_proof_type
 
   before_save :capitalize_name_fragments
 

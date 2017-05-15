@@ -1,3 +1,17 @@
+### 15 May, 2017
+
+#### Features
+
+  - SV.CO now has a [continuous admissions process at Level 0](https://www.sv.co/apply).
+
+#### Performance
+
+  - The founder dashboard page should now load _much_ faster than before (about 6x faster on average) - we've re-worked a significant chunk of the data-loading process for the page.
+
+#### UX and UI
+
+  - A minor improvement was made to the styling of attachment download option on the timeline event feedback modal.
+
 ### 8 May, 2017
 
 #### Features

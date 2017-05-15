@@ -1,7 +1,21 @@
 ## Ongoing
 
-- An attempt to improve the load time of founder dashboard is in progress. [[Trello]](https://trello.com/c/1eW5xiJp)
-- An admin interface page for tracking engineering metrics is being built. [[Trello]](https://trello.com/c/IvCcRtXu)
+- _Nothing major._
+
+## 2017.05.17
+
+- Continuous admission process to SV.CO is live! [[Trello]](https://trello.com/c/CDcL2dG3)
+- Load time of Founder dashboard has been drastically reduced by introducing `Targets::BulkStatusService` [[Trello]](https://trello.com/c/1eW5xiJp)
+- An admin interface page for tracking engineering metrics has been deployed. [[Trello]](https://trello.com/c/IvCcRtXu)
+- Feature specs for timeline builder has been restored. [[Trello]](https://trello.com/c/EWg6ulrR)
+- Weekly karma points are created at 6:00 PM every week on Monday, and a processing message is displayed on front-end and via vocalist if generation is incomplete. Trello. [[1]](https://trello.com/c/1WE46vnm)[[2]](https://trello.com/c/R1dzEWtF)
+- Feature specs for founder dashboard have been rebuilt. [[Trello]](https://trello.com/c/xexlZwZ8)
+- The `batched` scope has been excised from the codebase. [[Trello]](https://trello.com/c/VBdDRl5g)
+- A bunch of bugs were quashed and a number of improvements were made to the admissions flow. [[Trello]](https://trello.com/c/XyFxaBVk)
+- Basic stats were added to admin interface's admissions dashboard. [[Trello]](https://trello.com/c/4KlhMD33)
+- The impersonate action link was added to admin interface show pages for _founder_ and _MOOC student_. [[Trello]](https://trello.com/c/NivSQmNk)
+- The styling of attachment download option on timeline event feedback was improved. [[Trello]](https://trello.com/c/VUtxnuen)
+- Added a delete restriction to `College` if it is in use by a `Founder`. [[Trello]](https://trello.com/c/aSVrTGyS)
 
 ## 2017.05.08
 

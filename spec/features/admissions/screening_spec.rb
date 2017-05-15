@@ -50,5 +50,8 @@ feature 'Screening' do
 
     expect(page).to have_content('Screening target has been marked as completed!')
     expect(page).to have_selector('.founder-dashboard-target-header__status-badge', text: 'Complete')
+
+    # founder should be markes as a Hustler
+    expect(founder.reload.hacker).to eq(false)
   end
 end

@@ -56,6 +56,7 @@ class ApplicantScreeningQuizResult extends React.Component {
         <form acceptCharset="UTF-8" method="post">
           <input name="utf8" type="hidden" value="✓"/>
           <input type="hidden" name="authenticity_token" value={ this.props.formAuthenticityToken }/>
+          <input type="hidden" name="founder_skill" value={ this.props.type } />
 
           <button type='submit' className={ this.buttonClasses() }>
             <i className={ this.buttonIconClasses() }/> Continue Application

@@ -66,7 +66,7 @@ feature 'Founder Dashboard' do
   context 'when founder has not visited dashboard before' do
     let(:dashboard_toured) { false }
 
-    scenario 'founder visits dashboard', js: true do
+    scenario 'founder sees tour of dashboard', js: true do
       # I expect to see the tour.
       sign_in_user founder.user, referer: dashboard_founder_path
       expect(page).to have_selector('.introjs-tooltipReferenceLayer', visible: false)
@@ -74,7 +74,7 @@ feature 'Founder Dashboard' do
   end
 
   context 'when founder has exited the programme' do
-    scenario 'founder visits dashboard', js: true do
+    scenario 'ex-founder attempts to visit dashboard', js: true do
       founder.update!(exited: true)
       sign_in_user founder.user, referer: dashboard_founder_path
       expect(page).to have_text('not an active founder anymore')

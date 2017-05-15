@@ -98,71 +98,78 @@ ActiveAdmin.register Founder do
   end
 
   csv do
-    column :id
-    column :email
-    column :name
+    if params['scope'] == 'level_zero'
+      column :name
+      column :email
+      column :phone
+      column('Targets Completed', &:completed_targets_count)
+    else
+      column :id
+      column :email
+      column :name
 
-    column :team_lead do |founder|
-      founder.startup_admin? ? "Yes" : "No"
+      column :team_lead do |founder|
+        founder.startup_admin? ? "Yes" : "No"
+      end
+
+      column :product do |founder|
+        founder.startup&.product_name
+      end
+
+      column :company do |founder|
+        founder.startup&.legal_registered_name
+      end
+
+      column :batch do |founder|
+        founder.startup&.batch&.display_name
+      end
+
+      column :roles do |founder|
+        founder.roles.join ', '
+      end
+
+      column 'Total Karma (Personal)' do |founder|
+        founder.karma_points&.sum(:points) || 'Not Available'
+      end
+
+      column 'Total Karma (Team)' do |founder|
+        founder.startup&.karma_points&.sum(:points) || 'Not Available'
+      end
+
+      column :phone
+      column :gender
+      column :born_on
+      column :communication_address
+      column :about
+
+      column :college do |founder|
+        founder.college&.name
+      end
+
+      column :university do |founder|
+        founder.college&.replacement_university&.name
+      end
+
+      column :roll_number
+      column :course
+      column :semester
+      column :year_of_graduation
+
+      column :slack_username
+      column(:skype_username) { |founder| founder.skype_id } # rubocop:disable Style/SymbolProc
+
+      column :startup_admin?
+      column :slug
+
+      column :resume_url
+      column :linkedin_url
+      column :twitter_url
+      column :personal_website_url
+      column :blog_url
+      column :angel_co_url
+      column :github_url
+      column :behance_url
     end
-
-    column :product do |founder|
-      founder.startup&.product_name
-    end
-
-    column :company do |founder|
-      founder.startup&.legal_registered_name
-    end
-
-    column :batch do |founder|
-      founder.startup&.batch&.display_name
-    end
-
-    column :roles do |founder|
-      founder.roles.join ', '
-    end
-
-    column 'Total Karma (Personal)' do |founder|
-      founder.karma_points&.sum(:points) || 'Not Available'
-    end
-
-    column 'Total Karma (Team)' do |founder|
-      founder.startup&.karma_points&.sum(:points) || 'Not Available'
-    end
-
-    column :phone
-    column :gender
-    column :born_on
-    column :communication_address
-    column :about
-
-    column :college do |founder|
-      founder.college&.name
-    end
-
-    column :university do |founder|
-      founder.college&.replacement_university&.name
-    end
-
-    column :roll_number
-    column :course
-    column :semester
-    column :year_of_graduation
-
-    column :slack_username
-    column(:skype_username) { |founder| founder.skype_id } # rubocop:disable Style/SymbolProc
-
-    column :startup_admin?
-    column :slug
-
-    column :resume_url
-    column :linkedin_url
-    column :twitter_url
-    column :personal_website_url
-    column :blog_url
-    column :angel_co_url
-    column :github_url
-    column :behance_url
   end
 
   member_action :remove_from_startup, method: :post do

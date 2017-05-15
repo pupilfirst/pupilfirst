@@ -5,6 +5,10 @@ class TimelineEventVerificationNotificationJob < ApplicationJob
     # few common attributes
     @timeline_event = timeline_event
     @startup = @timeline_event.startup
+
+    # not applicable for level zero startups
+    return if @startup.level_zero?
+
     @startup_url = Rails.application.routes.url_helpers.startup_url(@startup)
     @timeline_event_url = @startup_url + "#event-#{@timeline_event.id}"
 

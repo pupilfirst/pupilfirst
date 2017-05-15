@@ -50,10 +50,8 @@ class FounderDashboardSessions extends React.Component {
   render() {
     return (
       <div>
-        { this.props.currentLevel !== 0 &&
         <FounderDashboardActionBar filter='sessions' filterData={ {tags: this.props.sessionTags} }
-          openTimelineBuilderCB={ this.props.openTimelineBuilderCB } pickFilterCB={ this.chooseTags }/>
-        }
+          openTimelineBuilderCB={ this.props.openTimelineBuilderCB } pickFilterCB={ this.chooseTags } currentLevel={ this.props.currentLevel }/>
 
         <FounderDashboardTargetCollection key='sessions-upcoming' name='Upcoming Sessions' displayDate={ true }
           targets={ this.upcomingSessions() } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }

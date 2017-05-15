@@ -31,6 +31,7 @@ ActiveAdmin.register Founder do
   filter :roles_cont, as: :select, collection: Founder.valid_roles, label: 'Role'
   filter :college_name_contains
   filter :roll_number
+  filter :created_at, label: 'Registered on'
 
   permit_params :name, :email, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :slack_username, :born_on,
     :startup_admin, :communication_address, :identification_proof, :phone, :invitation_token, :college_id, :roll_number,

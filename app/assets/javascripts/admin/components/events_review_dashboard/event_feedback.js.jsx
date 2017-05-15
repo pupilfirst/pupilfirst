@@ -70,8 +70,7 @@ class EventsReviewDashboardEventFeedback extends React.Component {
         { !this.state.showFeedbackForm &&
         <div>
           { this.state.feedbackId != null &&
-          <EventsReviewDashboardFeedbackActions feedbackId={ this.state.feedbackId } founderId={ this.state.founderId }
-            eventId={ this.props.eventId }/>
+          <EventsReviewDashboardFeedbackActions feedbackId={ this.state.feedbackId } founderId={ this.state.founderId } levelZero={ this.props.levelZero } eventId={ this.props.eventId }/>
           }
           { this.state.feedbackId == null &&
           <div>
@@ -99,3 +98,8 @@ class EventsReviewDashboardEventFeedback extends React.Component {
     );
   }
 }
+
+EventsReviewDashboardEventFeedback.propTypes = {
+  eventId: React.PropTypes.number,
+  levelZero: React.PropTypes.bool
+};

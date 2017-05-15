@@ -67,7 +67,7 @@ class EventsReviewDashboardFeedbackActions extends React.Component {
         <span>Sending...</span>
         }
 
-        { !this.state.slackSent && !this.state.sending &&
+        { !this.props.levelZero && !this.state.slackSent && !this.state.sending &&
         <a className="cursor-pointer" onClick={ this.sendSlackFeedback }>
           <i className="fa fa-slack"/> Send feedback via Slack.
         </a>
@@ -99,5 +99,6 @@ class EventsReviewDashboardFeedbackActions extends React.Component {
 EventsReviewDashboardFeedbackActions.propTypes = {
   feedbackId: React.PropTypes.number,
   founderId: React.PropTypes.number,
-  eventId: React.PropTypes.number
+  eventId: React.PropTypes.number,
+  levelZero: React.PropTypes.bool
 };

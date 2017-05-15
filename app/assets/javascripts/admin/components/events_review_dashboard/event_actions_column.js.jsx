@@ -17,7 +17,7 @@ class EventsReviewDashboardEventActionsColumn extends React.Component {
           </a>
         </div>
 
-        <EventsReviewDashboardEventFeedback eventId={this.props.eventData['event_id']}/>
+        <EventsReviewDashboardEventFeedback eventId={this.props.eventData['event_id']} levelZero={this.props.eventData['level_scope'] == 'levelZero'}/>
 
         <EventsReviewDashboardEventStatusUpdate eventId={this.props.eventData['event_id']}
                                                 targetId={this.props.eventData['target_id']}

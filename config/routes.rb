@@ -197,6 +197,7 @@ Rails.application.routes.draw do
   resources :targets, only: [] do
     get 'select2_search', on: :collection
     get 'download_rubric', on: :member
+    get 'prerequisite_targets', on: :member
   end
 
   scope 'paytm', as: 'paytm', controller: 'paytm' do

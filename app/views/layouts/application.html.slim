@@ -30,6 +30,13 @@ html lang='en'
             .container
               p == yield :sitewide_notice
         == render 'layouts/pretender' if @pretender
+        - unless current_founder.present?
+          .sitewide-notice
+            .container
+              p.font-bold
+                i.fa.fa-bell-o.faa-tada.animated
+                ' &nbsp;&nbsp;Admissions to SV.CO are now open!&nbsp;&nbsp;
+                ' #{link_to 'Apply Now', apply_path, class: 'btn btn-sm'}
 
         .container
           .navbar-header

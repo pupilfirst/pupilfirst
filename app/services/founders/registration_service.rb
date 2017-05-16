@@ -43,6 +43,7 @@ module Founders
 
     def create_or_update_user
       user = User.with_email(@founder.email) || User.create!(email: @founder.email)
+      user.regenerate_login_token if user.login_token.blank?
 
       # Update user info of founder
       @founder.update!(user: user)

@@ -24,6 +24,7 @@
 //= require select2-full
 //= require googleanalytics/autotrack
 //= require google_analytics
+//= require google_analytics_events
 //= require facebook_pixel
 //= require shift_for_hash
 //= require founders

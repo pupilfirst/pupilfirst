@@ -28,6 +28,6 @@ handleGAEvents = ->
   # someone just clicked the 'Pay Now' button on the fee page
   if $('#pay-now-button').length
     $('#pay-now-button').on('click', (event) ->
-      ga('send', 'event', 'Admission-Milestones', 'Payment Initiated')
+      ga('send', 'event', 'Admission-Milestones', 'Payment Initiated'))
 
 $(document).on 'page:change', handleGAEvents

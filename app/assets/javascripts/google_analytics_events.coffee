@@ -25,4 +25,9 @@ handleGAEvents = ->
     if (event.data == YT.PlayerState.ENDED)
       ga('send', 'event', 'Video', 'complete', 'Alpha launch')
 
+  # someone just clicked the 'Pay Now' button on the fee page
+  if $('#pay-now-button').length
+    $('#pay-now-button').on('click', (event) ->
+      ga('send', 'event', 'Admission-Milestones', 'Payment Initiated')
+
 $(document).on 'page:change', handleGAEvents

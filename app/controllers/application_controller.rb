@@ -243,7 +243,7 @@ class ApplicationController < ActionController::Base
     <<~SCRIPT_SOURCES.squish
       script-src
       'self' 'unsafe-eval' https://ajax.googleapis.com https://blog.sv.co https://www.youtube.com
-      http://www.startatsv.com https://sv-assets.sv.co #{recaptcha_csp[:script]} #{google_analytics_csp[:script]}
+      https://s.ytimg.com http://www.startatsv.com https://sv-assets.sv.co #{recaptcha_csp[:script]} #{google_analytics_csp[:script]}
       #{inspectlet_csp[:script]} #{facebook_csp[:script]} #{intercom_csp[:script]}
       #{instagram_csp[:script]} #{web_console_csp[:script]};
     SCRIPT_SOURCES

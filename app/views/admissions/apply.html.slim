@@ -2,6 +2,8 @@
   title SV.CO Apply Now
   meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
 
+  = javascript_include_tag 'https://www.youtube.com/iframe_api', async: true
+
 #admissions__apply
 
 .container
@@ -138,7 +140,7 @@
           h2
             ' <strong>Life beyond Level 0 - Sneak Peek</strong>
           .program-video__embed
-            iframe.program-video__embed--frame src="https://www.youtube.com/embed/os-u03IryvA" width="100%" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" allowfullscreen="allowfullscreen"
+            iframe.program-video__embed--frame#alpha-launch-video__embed src="https://www.youtube.com/embed/os-u03IryvA" enablejsapi="1" width="100%" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" allowfullscreen="allowfullscreen"
           p.program-video__embed--description.m-t-1
             ' Alpha Launch, hosted by Freshdesk - the #1 SaaS company in India - is one of our key events
             ' at the School of SaaS. Teams across India travel to Chennai once during the programme to launch

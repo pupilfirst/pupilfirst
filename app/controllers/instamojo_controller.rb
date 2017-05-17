@@ -8,7 +8,7 @@ class InstamojoController < ApplicationController
     Admissions::PostPaymentService.new(payment: payment).execute
 
     flash[:success] = 'Your payment has been recorded.'
-    redirect_to dashboard_founder_path
+    redirect_to dashboard_founder_path(stage: 'payment_complete')
   end
 
   # POST /instamojo/webhook

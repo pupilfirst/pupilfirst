@@ -50,7 +50,7 @@ class AdmissionsController < ApplicationController
     current_founder.update!(hacker: params['founder_skill'] == 'coder')
 
     flash[:success] = 'Screening target has been marked as completed!'
-    redirect_to dashboard_founder_path
+    redirect_to dashboard_founder_path(stage: 'screening_complete')
   end
 
   # GET /admissions/fee

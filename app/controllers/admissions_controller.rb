@@ -288,6 +288,6 @@ class AdmissionsController < ApplicationController
   def bypass_payment
     Admissions::PostPaymentService.new(founder: current_founder).execute
     flash[:success] = 'Payment Bypassed!'
-    redirect_to dashboard_founder_path
+    redirect_to dashboard_founder_path(stage: 'payment_complete')
   end
 end

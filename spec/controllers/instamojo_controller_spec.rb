@@ -62,9 +62,9 @@ describe InstamojoController do
       expect(fee_payment_status).to eq(Targets::StatusService::STATUS_COMPLETE)
     end
 
-    it 'redirects to founder dashboard' do
+    it 'redirects to founder dashboard with the stage param set' do
       get :redirect, params: { payment_request_id: payment.instamojo_payment_request_id, payment_id: payment_id }
-      expect(response).to redirect_to(dashboard_founder_path)
+      expect(response).to redirect_to(dashboard_founder_path(stage: 'payment_complete'))
     end
   end
 

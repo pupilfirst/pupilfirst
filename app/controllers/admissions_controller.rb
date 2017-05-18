@@ -49,6 +49,9 @@ class AdmissionsController < ApplicationController
     # Mark founder skill - Hacker or Hustler?
     current_founder.update!(hacker: params['founder_skill'] == 'coder')
 
+    # Mark as screening completed on Intercom
+    Intercom::LevelZeroStageUpdateJob.perform_later(current_founder, 'Screening Completed')
+
     flash[:success] = 'Screening target has been marked as completed!'
     redirect_to dashboard_founder_path(stage: 'screening_complete')
   end

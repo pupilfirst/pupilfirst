@@ -16,7 +16,8 @@ module Admissions
       # mark the payment target complete
       Admissions::CompleteTargetService.new(@founder, Target::KEY_ADMISSIONS_FEE_PAYMENT).execute
 
-      IntercomLastApplicantEventUpdateJob.perform_later(@founder, 'payment_complete') unless Rails.env.test?
+      # IntercomLastApplicantEventUpdateJob.perform_later(@founder, 'payment_complete') unless Rails.env.test?
+      Intercom::LevelZeroStageUpdateJob.perform_later(founder, 'Payment Completed') unless Rails.env.test?
     end
 
     private

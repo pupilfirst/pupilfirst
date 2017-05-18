@@ -27,12 +27,15 @@ class FounderDashboardToggleBar extends React.Component {
           </div>
         </div>
 
-        <div className="founder-dashboard-add-event__container pull-xs-right hidden-md-up">
-          <button onClick={ this.openTimelineBuilder }
-            className="btn btn-md btn-secondary text-uppercase founder-dashboard-add-event__btn js-founder-dashboard__trigger-builder">
-            <i className="fa fa-plus" aria-hidden="true"/><span className="sr-only">Add Timeline Event</span>
-          </button>
-        </div>
+        {
+          this.props.currentLevel != 0 &&
+          <div className="founder-dashboard-add-event__container pull-xs-right hidden-md-up">
+            <button onClick={ this.openTimelineBuilder }
+                    className="btn btn-md btn-secondary text-uppercase founder-dashboard-add-event__btn js-founder-dashboard__trigger-builder">
+              <i className="fa fa-plus" aria-hidden="true"/><span className="sr-only">Add Timeline Event</span>
+            </button>
+          </div>
+        }
       </div>
     );
   }
@@ -44,4 +47,5 @@ FounderDashboardToggleBar.propTypes = {
   openTimelineBuilderCB: React.PropTypes.func,
   pendingChores: React.PropTypes.number,
   pendingSessions: React.PropTypes.number,
+  currentLevel: React.PropTypes.number
 };

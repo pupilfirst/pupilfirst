@@ -5,7 +5,14 @@ describe TargetsController do
 
   let!(:startup) { create :startup }
   let!(:target) { create :target, :with_rubric }
-  let!(:prerequisite_target) { create :target }
+  let!(:pending_prerequisite_target) { create :target }
+  let!(:completed_prerequisite_target) { create :target }
+  let!(:completion_event) do
+    create :timeline_event,
+      startup: startup, founder: startup.admin,
+      target: completed_prerequisite_target,
+      verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED
+  end
 
   describe 'GET download_rubric' do
     context 'when user is not logged in' do
@@ -42,11 +49,11 @@ describe TargetsController do
 
     context 'when target has prerequisite targets' do
       before do
-        target.prerequisite_targets << prerequisite_target
+        target.prerequisite_targets << [pending_prerequisite_target, completed_prerequisite_target]
       end
-      it 'returns a hash with ids mapped to target title' do
+      it 'returns a hash of pending prerequisites with ids mapped to target title' do
         get :prerequisite_targets, params: { id: target.id }
-        expect(JSON.parse(response.body)).to eq(prerequisite_target.id.to_s => prerequisite_target.title)
+        expect(JSON.parse(response.body)).to eq(pending_prerequisite_target.id.to_s => pending_prerequisite_target.title)
       end
     end
   end

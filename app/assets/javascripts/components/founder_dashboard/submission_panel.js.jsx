@@ -1,8 +1,28 @@
 class FounderDashboardSubmissionPanel extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {prerequisiteTargets: {}};
 
     this.handleSubmitClick = this.handleSubmitClick.bind(this);
+    this.updatePrerequisites = this.updatePrerequisites.bind(this);
+    this.prerequisiteTargetsList = this.prerequisiteTargetsList.bind(this);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.fetchTargetPrerequisite && !this.props.fetchTargetPrerequisite) {
+      // fetch the target prerequisites
+      console.log('Fetching target prerequisites');
+
+      let that = this;
+      $.ajax({
+        url: '/targets/' + that.props.target.id + '/prerequisite_targets',
+        success: that.updatePrerequisites
+      });
+    }
+  }
+
+  updatePrerequisites(response) {
+    this.setState({prerequisiteTargets: response});
   }
 
   isSubmittable() {
@@ -86,7 +106,7 @@ class FounderDashboardSubmissionPanel extends React.Component {
       case 'pending':
         return 'Follow completion instructions and submit!';
       case 'unavailable':
-        return 'Complete prerequisites first!';
+        return this.prerequisiteTargetsList();
       case 'not_accepted':
         return 'Re-submit based on feedback!';
     }
@@ -98,6 +118,18 @@ class FounderDashboardSubmissionPanel extends React.Component {
     } else {
       console.error('submittedAt() called for target with status ' + this.props.target.status);
       return null;
+    }
+  }
+
+  prerequisiteTargetsList() {
+    if (Object.keys(this.state.prerequisiteTargets).length > 0) {
+      let targetsList = [];
+      Object.keys(this.state.prerequisiteTargets).forEach(function(target, _index) {
+        targetsList.push(this.state.prerequisiteTargets[target]);
+      }, this);
+      return 'Pending Prerequisites: ' + targetsList.join(', ');
+    } else {
+      return 'Loading prerequisites';
     }
   }
 
@@ -161,5 +193,6 @@ class FounderDashboardSubmissionPanel extends React.Component {
 
 FounderDashboardSubmissionPanel.propTypes = {
   target: React.PropTypes.object,
-  openTimelineBuilderCB: React.PropTypes.func
+  openTimelineBuilderCB: React.PropTypes.func,
+  fetchTargetPrerequisite: React.PropTypes.bool
 };

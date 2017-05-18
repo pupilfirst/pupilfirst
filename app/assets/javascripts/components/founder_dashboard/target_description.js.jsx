@@ -44,7 +44,8 @@ class FounderDashboardTargetDescription extends React.Component {
         <FounderDashboardResourcesBar target={ this.props.target }/>
 
         <FounderDashboardSubmissionPanel target={ this.props.target }
-          openTimelineBuilderCB={ this.props.openTimelineBuilderCB }/>
+          openTimelineBuilderCB={ this.props.openTimelineBuilderCB }
+          fetchTargetPrerequisite={ this.props.fetchTargetPrerequisite}/>
       </div>
     );
   }
@@ -54,5 +55,6 @@ FounderDashboardTargetDescription.propTypes = {
   target: React.PropTypes.object,
   openTimelineBuilderCB: React.PropTypes.func,
   founderDetails: React.PropTypes.array,
-  fetchFounderStatuses: React.PropTypes.bool
+  fetchFounderStatuses: React.PropTypes.bool,
+  fetchTargetPrerequisite: React.PropTypes.bool
 };

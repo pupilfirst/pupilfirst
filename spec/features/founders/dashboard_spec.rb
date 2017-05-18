@@ -151,6 +151,7 @@ feature 'Founder Dashboard' do
     find('.founder-dashboard-target-header__status-badge.unavailable').click
     within("#founder-dashboard-target__description-container-#{target_with_prerequisites.id}") do
       expect(page).to have_content('Target Locked')
+      expect(page).to have_content("Pending Prerequisites: #{pending_target.title}")
       expect(page).to_not have_button('Submit')
     end
 

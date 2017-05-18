@@ -16,6 +16,8 @@ class TargetsController < ApplicationController
     authorize :target
     target = Target.find(params[:id])
     prerequisite_targets = target.prerequisite_targets.each_with_object({}) do |p_target, hash|
+      status = Targets::StatusService.new(p_target, current_founder).status
+      next if status.in? [Target::STATUS_COMPLETE, Target::STATUS_NEEDS_IMPROVEMENT]
       hash[p_target.id] = p_target.title
     end
     render json: prerequisite_targets

@@ -4,7 +4,8 @@ class FounderDashboardTarget extends React.Component {
 
     this.state = {
       showDescription: false,
-      fetchFounderStatuses: false
+      fetchFounderStatuses: false,
+      fetchTargetPrerequisite: false
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -22,6 +23,9 @@ class FounderDashboardTarget extends React.Component {
     if (open) {
       if (!this.state.fetchFounderStatuses) {
         this.setState({fetchFounderStatuses: true});
+      }
+      if (this.props.target['status'] == 'unavailable' && !this.state.fetchTargetPrerequisite) {
+        this.setState({fetchTargetPrerequisite: true});
       }
       $('#' + this.sliderId()).slideDown();
     } else {
@@ -52,8 +56,8 @@ class FounderDashboardTarget extends React.Component {
         <div className='founder-dashboard-target__description-container' id={ this.sliderId() }>
           <FounderDashboardTargetDescription key={ 'description-' + this.props.target.id }
             target={ this.props.target } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }
-                                             founderDetails={ this.props.founderDetails}
-                                             fetchFounderStatuses={ this.state.fetchFounderStatuses }/>
+            founderDetails={ this.props.founderDetails} fetchFounderStatuses={ this.state.fetchFounderStatuses }
+                                             fetchTargetPrerequisite={this.state.fetchTargetPrerequisite}/>
         </div>
       </div>
     );

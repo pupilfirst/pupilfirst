@@ -4,4 +4,5 @@ class TargetPolicy < ApplicationPolicy
   end
 
   alias prerequisite_targets? download_rubric?
+  alias founder_statuses? download_rubric?
 end

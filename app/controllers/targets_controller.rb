@@ -22,4 +22,16 @@ class TargetsController < ApplicationController
     end
     render json: prerequisite_targets
   end
+
+  # GET /targets/:id/founder_statuses
+  def founder_statuses
+    authorize :target
+
+    target = Target.find(params[:id])
+    founder_statuses = current_founder.startup.founders.not_exited.each_with_object([]) do |founder, statuses|
+      statuses << { founder.id => Targets::StatusService.new(target, founder).status }
+    end
+
+    render json: founder_statuses
+  end
 end

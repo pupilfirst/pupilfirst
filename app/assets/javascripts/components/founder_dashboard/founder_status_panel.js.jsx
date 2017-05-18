@@ -12,7 +12,7 @@ class FounderDashboardFounderStatusPanel extends React.Component {
 
       let that = this;
       $.ajax({
-        url: '/founder/dashboard/founder_target_statuses/' + that.props.targetId,
+        url: '/targets/' + that.props.targetId + '/founder_statuses',
         success: that.updateStatus
       });
     }

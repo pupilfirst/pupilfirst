@@ -12,6 +12,20 @@ class FounderDashboardTargetDescription extends React.Component {
     }
   }
 
+  componentDidMount() {
+    // Ugly ugly hack to handle the Read SV story target
+    // Opens the SV story in a new tab and triggers a GA event
+    let storyURL = 'https://drive.google.com/file/d/0B57vU-yugIcOazNWUlB0cGl6cVU/view';
+    if (this.props.target.description.indexOf(storyURL) !== -1) {
+      let link = $('a[href="' + storyURL + '"]')
+      link.on('click', function(event) {
+        event.preventDefault();
+        window.open(storyURL);
+        ga('send', 'event', 'Link', 'click', 'SV-Story');
+      });
+    }
+  }
+
   render() {
     return (
       <div className="target-description">

@@ -38,8 +38,7 @@ class FounderDashboardActionBar extends React.Component {
       <div className="founder-dashboard-actionbar__container p-x-1 m-x-auto">
         <div className="founder-dashboard-actionbar__box clearfix">
           { this.props.filter === 'targets' &&
-          <FounderDashboardTargetsFilter levels={ this.props.filterData.levels }
-            pickFilterCB={ this.props.pickFilterCB } chosenLevel={ this.props.filterData.chosenLevel }/>
+          <FounderDashboardTargetsFilter levels={ this.props.filterData.levels } pickFilterCB={ this.props.pickFilterCB } chosenLevel={ this.props.filterData.chosenLevel } currentLevel={ this.props.currentLevel }/>
           }
 
           { this.props.filter === 'chores' &&

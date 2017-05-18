@@ -352,6 +352,11 @@
   }
 }
 
+.filter-targets-dropdown__menu-item--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .filter-targets-dropdown__icon {
   color: $brand-primary;
   margin-right: 5px;
@@ -370,6 +375,16 @@
     font-size: 1rem;
     line-height: 0.5;
     @include fa-icon(angle-down);
+  }
+}
+
+.filter-targets-dropdown__selection {
+  @include media-breakpoint-down(xs) {
+    width: 170px;
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 }
 

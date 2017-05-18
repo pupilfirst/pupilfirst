@@ -27,14 +27,8 @@ class FounderDashboardTargets extends React.Component {
   }
 
   filterData() {
-    let levels = {};
-
-    for (let level = 1; level <= this.props.currentLevel; level++) {
-      levels[level] = this.props.levels[level].name;
-    }
-
     return {
-      levels: levels,
+      levels: this.props.programLevels,
       chosenLevel: this.state.chosenLevel
     };
   }
@@ -69,5 +63,6 @@ FounderDashboardTargets.propTypes = {
   authenticityToken: React.PropTypes.string,
   iconPaths: React.PropTypes.object,
   founderDetails: React.PropTypes.array,
-  maxLevelNumber: React.PropTypes.number
+  maxLevelNumber: React.PropTypes.number,
+  programLevels: React.PropTypes.object
 };

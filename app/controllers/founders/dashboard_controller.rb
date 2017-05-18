@@ -105,8 +105,15 @@ module Founders
         facebookShareEligibility: current_founder.facebook_share_eligibility,
         levelUpEligibility: Startups::LevelUpEligibilityService.new(@startup, current_founder).eligibility,
         maxLevelNumber: Level.maximum.number,
-        founderDetails: founder_details
+        founderDetails: founder_details,
+        programLevels: program_levels
       }
+    end
+
+    def program_levels
+      Level.all.order(:number).each_with_object({}) do |level, hash|
+        hash[level.number] = level.name
+      end
     end
   end
 end

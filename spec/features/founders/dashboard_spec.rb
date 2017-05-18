@@ -12,6 +12,7 @@ feature 'Founder Dashboard' do
   let!(:level_2) { create :level, :two }
   let!(:level_3) { create :level, :three }
   let!(:level_4) { create :level, :four }
+  let!(:level_5) { create :level, :five }
 
   # Target group we're interested in. Create milestone
   let!(:target_group_1) { create :target_group, level: level_1, milestone: true }
@@ -113,7 +114,9 @@ feature 'Founder Dashboard' do
     # Check the level filters in the action bar.
     find('.filter-targets-dropdown__button').click
     within('.filter-targets-dropdown__menu') do
-      expect(page).to have_selector('.filter-targets-dropdown__menu-item', count: 4)
+      expect(page).to have_selector('.filter-targets-dropdown__menu-item', count: 5)
+      expect(page).to have_selector('.fa-lock', count: 1)
+      expect(page).to have_selector('.fa-unlock', count: 4)
     end
 
     ####

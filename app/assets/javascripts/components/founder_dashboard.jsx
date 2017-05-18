@@ -76,7 +76,8 @@ class FounderDashboard extends React.Component {
       <div className="founder-dashboard-container p-b-2">
         <FounderDashboardToggleBar selected={ this.state.activeTab } chooseTabCB={ this.chooseTab }
           openTimelineBuilderCB={ this.openTimelineBuilder } pendingChores={ this.pendingCount('chores') }
-          pendingSessions={ this.pendingCount('sessions') }/>
+          pendingSessions={ this.pendingCount('sessions') }
+        currentLevel={ this.props.currentLevel }/>
 
         { this.props.requestedRestartLevel && <FounderDashboardRestartWarning/> }
 
@@ -84,7 +85,7 @@ class FounderDashboard extends React.Component {
         <FounderDashboardTargets currentLevel={ this.props.currentLevel } levels={ this.state.levels }
           openTimelineBuilderCB={ this.openTimelineBuilder } levelUpEligibility={ this.props.levelUpEligibility }
           authenticityToken={ this.props.authenticityToken } iconPaths={ this.props.iconPaths }
-          founderDetails={this.props.founderDetails} maxLevelNumber={ this.props.maxLevelNumber }/>
+          founderDetails={this.props.founderDetails} maxLevelNumber={ this.props.maxLevelNumber } programLevels={ this.props.programLevels}/>
         }
 
         { this.state.activeTab === 'chores' &&
@@ -123,5 +124,6 @@ FounderDashboard.propTypes = {
   levelUpEligibility: React.PropTypes.string,
   iconPaths: React.PropTypes.object,
   founderDetails: React.PropTypes.array,
-  maxLevelNumber: React.PropTypes.number
+  maxLevelNumber: React.PropTypes.number,
+  programLevels: React.PropTypes.object
 };

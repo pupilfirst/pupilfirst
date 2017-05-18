@@ -52,10 +52,8 @@ class FounderDashboardTargets extends React.Component {
                                              maxLevelNumber={ this.props.maxLevelNumber }/>
         }
 
-        { this.props.currentLevel !== 0 &&
         <FounderDashboardActionBar filter='targets' filterData={ this.filterData() } pickFilterCB={ this.pickFilter }
-          openTimelineBuilderCB={ this.props.openTimelineBuilderCB }/>
-        }
+          openTimelineBuilderCB={ this.props.openTimelineBuilderCB } currentLevel={ this.props.currentLevel }/>
 
         { this.targetCollections() }
       </div>

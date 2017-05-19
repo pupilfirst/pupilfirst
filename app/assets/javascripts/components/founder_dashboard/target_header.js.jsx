@@ -151,7 +151,8 @@ FounderDashboardTargetHeader.propTypes = {
   descriptionOpen: React.PropTypes.bool,
   target: React.PropTypes.object,
   displayDate: React.PropTypes.bool,
-  iconPaths: React.PropTypes.object
+  iconPaths: React.PropTypes.object,
+  gradeDetails: React.PropTypes.object
 };
 
 FounderDashboardTargetHeader.defaultProps = {

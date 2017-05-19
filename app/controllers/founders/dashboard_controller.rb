@@ -95,7 +95,8 @@ module Founders
         levelUpEligibility: Startups::LevelUpEligibilityService.new(@startup, current_founder).eligibility,
         maxLevelNumber: Level.maximum.number,
         founderDetails: founder_details,
-        programLevels: program_levels
+        programLevels: program_levels,
+        targetGrades: Targets::BulkGradeService.new(current_founder).grades
       }
     end
 

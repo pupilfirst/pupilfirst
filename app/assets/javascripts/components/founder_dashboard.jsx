@@ -85,19 +85,19 @@ class FounderDashboard extends React.Component {
         <FounderDashboardTargets currentLevel={ this.props.currentLevel } levels={ this.state.levels }
           openTimelineBuilderCB={ this.openTimelineBuilder } levelUpEligibility={ this.props.levelUpEligibility }
           authenticityToken={ this.props.authenticityToken } iconPaths={ this.props.iconPaths }
-          founderDetails={this.props.founderDetails} maxLevelNumber={ this.props.maxLevelNumber } programLevels={ this.props.programLevels}/>
+          founderDetails={this.props.founderDetails} maxLevelNumber={ this.props.maxLevelNumber } programLevels={ this.props.programLevels} targetGrades={ this.props.targetGrades }/>
         }
 
         { this.state.activeTab === 'chores' &&
         <FounderDashboardChores currentLevel={ this.props.currentLevel } chores={ this.state.chores }
           openTimelineBuilderCB={ this.openTimelineBuilder } iconPaths={ this.props.iconPaths }
-                                founderDetails={this.props.founderDetails}/>
+                                founderDetails={this.props.founderDetails} targetGrades={ this.props.targetGrades }/>
         }
 
         { this.state.activeTab === 'sessions' &&
         <FounderDashboardSessions currentLevel={ this.props.currentLevel } sessions={ this.state.sessions }
           sessionTags={ this.props.sessionTags } openTimelineBuilderCB={ this.openTimelineBuilder }
-          iconPaths={ this.props.iconPaths } founderDetails={this.props.founderDetails}/>
+          iconPaths={ this.props.iconPaths } founderDetails={this.props.founderDetails} targetGrades={ this.props.targetGrades }/>
         }
 
         { this.state.timelineBuilderVisible &&
@@ -125,5 +125,6 @@ FounderDashboard.propTypes = {
   iconPaths: React.PropTypes.object,
   founderDetails: React.PropTypes.array,
   maxLevelNumber: React.PropTypes.number,
-  programLevels: React.PropTypes.object
+  programLevels: React.PropTypes.object,
+  targetGrades: React.PropTypes.object
 };

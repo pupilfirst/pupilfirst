@@ -22,7 +22,7 @@ module Admissions
           create_new_payment
         end
 
-        Intercom::LevelZeroStageUpdateJob.perform_later(current_founder, 'Payment Initiated')
+        Intercom::LevelZeroStageUpdateJob.perform_later(model, 'Payment Initiated')
       end
 
       startup.payment

@@ -4,6 +4,12 @@ module Targets
       @founder = founder
     end
 
+    def grade(target_id)
+      grades[target_id][:grade]
+    end
+
+    private
+
     def grades
       @grades ||= begin
         founder_events = @founder.timeline_events.verified_or_needs_improvement.where.not(target_id: nil)

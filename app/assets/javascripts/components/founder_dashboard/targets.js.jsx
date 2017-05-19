@@ -22,7 +22,7 @@ class FounderDashboardTargets extends React.Component {
       return <FounderDashboardTargetCollection key={ targetGroup.id } name={ targetGroup.name }
         description={ targetGroup.description } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }
         targets={ targetGroup.targets } milestone={ targetGroup.milestone } finalCollection={ finalCollection }
-        iconPaths={ this.props.iconPaths } founderDetails={ this.props.founderDetails } targetGrades={ this.props.targetGrades }/>
+        iconPaths={ this.props.iconPaths } founderDetails={ this.props.founderDetails }/>
     }, this);
   }
 
@@ -64,6 +64,5 @@ FounderDashboardTargets.propTypes = {
   iconPaths: React.PropTypes.object,
   founderDetails: React.PropTypes.array,
   maxLevelNumber: React.PropTypes.number,
-  programLevels: React.PropTypes.object,
-  targetGrades: React.PropTypes.object
+  programLevels: React.PropTypes.object
 };

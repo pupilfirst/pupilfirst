@@ -12,7 +12,7 @@ class FounderDashboardTargetCollection extends React.Component {
       return this.props.targets.map(function (target) {
         return <FounderDashboardTarget key={ target.id } target={ target } iconPaths={ this.props.iconPaths }
           openTimelineBuilderCB={ this.props.openTimelineBuilderCB } displayDate={ this.props.displayDate }
-                                       founderDetails={ this.props.founderDetails} gradeDetails={ this.props.targetGrades[target.id] }/>
+                                       founderDetails={ this.props.founderDetails}/>
       }, this);
     }
   }
@@ -63,8 +63,7 @@ FounderDashboardTargetCollection.propTypes = {
   milestone: React.PropTypes.bool,
   finalCollection: React.PropTypes.bool,
   iconPaths: React.PropTypes.object,
-  founderDetails: React.PropTypes.array,
-  targetGrades: React.PropTypes.object
+  founderDetails: React.PropTypes.array
 };
 
 FounderDashboardTargetCollection.defaultProps = {

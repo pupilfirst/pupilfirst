@@ -21,6 +21,11 @@ ActiveAdmin.register Target do
     label: 'Tags',
     collection: -> { Target.tag_counts_on(:tags).pluck(:name).sort }
 
+  scope :all, default: true
+  scope :vanilla_targets
+  scope :chores
+  scope :sessions
+
   controller do
     def scoped_collection
       super.includes :level, target_group: :level

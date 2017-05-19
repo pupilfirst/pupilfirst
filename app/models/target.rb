@@ -32,6 +32,9 @@ class Target < ApplicationRecord
 
   scope :founder, -> { where(role: ROLE_FOUNDER) }
   scope :not_founder, -> { where.not(role: ROLE_FOUNDER) }
+  scope :vanilla_targets, -> { where.not(target_group_id: nil) }
+  scope :chores, -> { where(chore: true) }
+  scope :sessions, -> { where.not(session_at: nil) }
 
   # Custom scope to allow AA to filter by intersection of tags.
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }

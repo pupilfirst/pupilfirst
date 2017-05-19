@@ -22,7 +22,7 @@ module Admissions
           create_new_payment
         end
 
-        IntercomLastApplicantEventUpdateJob.perform_later(startup.admin, 'payment_initiated') unless Rails.env.test?
+        Intercom::LevelZeroStageUpdateJob.perform_later(current_founder, 'Payment Initiated')
       end
 
       startup.payment

@@ -48,6 +48,8 @@ class AdmissionsController < ApplicationController
 
     # Mark founder skill - Hacker or Hustler?
     current_founder.update!(hacker: params['founder_skill'] == 'coder')
+    skill = params['founder_skill'] == 'coder' ? 'Hacker' : 'Hustler'
+    Intercom::FounderSkillUpdateJob.perform_later(current_founder, skill)
 
     # Mark as screening completed on Intercom
     Intercom::LevelZeroStageUpdateJob.perform_later(current_founder, 'Screening Completed')

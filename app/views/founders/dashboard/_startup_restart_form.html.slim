@@ -2,27 +2,26 @@
   .modal-dialog
     .modal-content
       .modal-header
-        | Restart your startup journey!
+        | Pivot your startup journey!
         button.close.modal-close aria-label="Close" data-dismiss="modal" type="button"
           span aria-hidden="true"
             | &times;
       .modal-body
         - if @startup.requested_restart_level.present?
           .alert.alert-danger role="alert"
-            | Your startup has already requested a restart! Please wait for approval.
+            | Your startup has already submitted a pivot request! Please wait for approval.
         - elsif @startup.restartable_levels.present?
           .simple-form-container
             = simple_form_for @restart_form, url: startup_restart_founder_path, method: :post do |f|
               = f.input :level_id, label: 'Pick a level to return to:',
                 collection: current_founder.startup.restartable_levels,
                 include_blank: false
-              = f.input :reason, label: 'Why do you want to restart?',
+              = f.input :reason, label: 'Why do you want to pivot?',
                 input_html: { maxlength: 300, rows: 6 },
-                as: :text,
-                placeholder: 'Let us know why you plan to restart your startup journey from the above level.'
+                as: :text
 
               = button_tag type: :submit, class: 'btn btn-primary text-uppercase' do
-                | Request Restart
+                | Request For a Pivot
         - else
           .alert.alert-warning role="alert"
             | Too soon! Your startup does not have a level it can restart from yet.

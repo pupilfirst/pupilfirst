@@ -219,10 +219,10 @@ feature 'Founder Dashboard' do
     expect(page).to have_selector('#startup-restart-form')
 
     within('#startup-restart-form') do
-      expect(page).to have_text('Restart your startup journey!')
+      expect(page).to have_text('Pivot your startup journey!')
       select level_2.name.to_s, from: 'founders_startup_restart_level_id'
       fill_in 'founders_startup_restart_reason', with: Faker::Lorem.sentence
-      click_on 'Request Restart'
+      click_on 'Request For a Pivot'
     end
 
     # Check whether end_iteration timeline event is created

@@ -72,7 +72,7 @@ class FounderDashboardActionBar extends React.Component {
 
                   <a className="dropdown-item filter-targets-dropdown__menu-item" data-toggle="modal"
                      data-target="#startup-restart-form" role="button">
-                    Restart
+                    Pivot
                   </a>
                 </div>
               </div>

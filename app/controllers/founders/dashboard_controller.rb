@@ -31,7 +31,7 @@ module Founders
         reason = startup_restart_params.fetch(:reason)
         Startups::RestartService.new(current_founder).request_restart(level, reason)
 
-        flash[:success] = 'Your request for restart has been submitted successfully!'
+        flash[:success] = 'Your request for a pivot has been submitted successfully!'
       else
         flash[:error] = 'Something went wrong. Please try again!'
       end

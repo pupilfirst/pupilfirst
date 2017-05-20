@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170515081600) do
+ActiveRecord::Schema.define(version: 20170520065211) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -738,6 +738,8 @@ ActiveRecord::Schema.define(version: 20170515081600) do
     t.string   "key"
     t.string   "link_to_complete"
     t.string   "submittability",          default: "resubmittable", null: false
+    t.boolean  "archived",                default: false
+    t.index ["archived"], name: "index_targets_on_archived", using: :btree
     t.index ["chore"], name: "index_targets_on_chore", using: :btree
     t.index ["key"], name: "index_targets_on_key", using: :btree
     t.index ["level_id"], name: "index_targets_on_level_id", using: :btree

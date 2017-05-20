@@ -21,7 +21,7 @@ module Founders
 
       @chores ||= begin
         targets = Target.includes(:assigner, :level)
-          .where(chore: true)
+          .where(chore: true, archived: false)
           .where(levels: { number: applicable_levels })
           .order(:sort_index)
           .as_json(
@@ -41,7 +41,8 @@ module Founders
       applicable_levels = startup.level.number.zero? ? 0 : (1..Level.maximum.number).to_a
 
       @sessions ||= begin
-        targets = Target.includes(:assigner, :level, :taggings).where.not(session_at: nil)
+        targets = Target.includes(:assigner, :level, :taggings)
+          .where.not(session_at: nil).where(archived: false)
           .where(levels: { number: applicable_levels }).order(session_at: :desc)
           .as_json(
             only: target_fields,
@@ -49,12 +50,7 @@ module Founders
             include: {
               assigner: { only: assigner_fields },
               level: { only: [:number] },
-              taggings: {
-                only: [],
-                include: {
-                  tag: { only: [:name] }
-                }
-              }
+              taggings: taggings_field
             }
           )
 
@@ -85,6 +81,8 @@ module Founders
             }
           }
         )
+
+      trim_archived_targets(groups)
 
       dashboard_decorate_groups(groups)
     end
@@ -119,6 +117,13 @@ module Founders
       target_data
     end
 
+    def trim_archived_targets(groups)
+      groups.map do |group|
+        group['targets'] = group['targets'].keep_if { |target| target['archived'] == false }
+        group
+      end
+    end
+
     def bulk_status_service
       @bulk_status_service ||= Targets::BulkStatusService.new(@founder)
     end
@@ -136,11 +141,20 @@ module Founders
     end
 
     def target_fields
-      %i(id role title description completion_instructions resource_url slideshow_embed video_embed days_to_complete points_earnable timeline_event_type_id session_at link_to_complete submittability)
+      %i(id role title description completion_instructions resource_url slideshow_embed video_embed days_to_complete points_earnable timeline_event_type_id session_at link_to_complete submittability archived)
     end
 
     def assigner_fields
       %i(id name)
+    end
+
+    def taggings_field
+      {
+        only: [],
+        include: {
+          tag: { only: [:name] }
+        }
+      }
     end
   end
 end

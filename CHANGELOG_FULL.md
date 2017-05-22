@@ -6,6 +6,7 @@
 
 - Prerequisite target titles are now displayed on the founder dashboard for targets that are blocked by incomplete prerequisites. [[Trello]](https://trello.com/c/DUyG7scO)
 - Upcoming (locked) levels are displayed in the level selection dropdown on the founder dashboard. [[Trello]](https://trello.com/c/5njNuXqr)
+- An option to archive targets has been added. Archived targets are not displayed on the founder dashboard. [[Trello]](https://trello.com/c/7MnksReM)
 - Fixed a bug in email sent after founder registration that could cause the login token to be missing in email. [[Trello]](https://trello.com/c/MNuOfytB)
 - Data for level 0 founders displayed in admin interface has been improved. [[Trello]](https://trello.com/c/5LBgTYkP)
 - The admissions dashboard has received a minor update. [[Trello]](https://trello.com/c/TSPvNI8a)

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Founders::DashboardDataService do
+describe Founders::DashboardDataService, broken: true do
   subject { described_class.new(founder) }
 
   let!(:level_0) { create :level, :zero }

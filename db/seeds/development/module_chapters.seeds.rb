@@ -52,4 +52,28 @@ after 'development:course_modules' do
     name: 'Baby Business',
     chapter_number: 1
   )
+
+  ModuleChapter.create!(
+    course_module: CourseModule.find_by(module_number: 4),
+    name: 'Three Roles',
+    chapter_number: 1
+  )
+
+  ModuleChapter.create!(
+    course_module: CourseModule.find_by(module_number: 4),
+    name: 'The Product Role',
+    chapter_number: 2
+  )
+
+  ModuleChapter.create!(
+    course_module: CourseModule.find_by(module_number: 4),
+    name: 'The Design Role',
+    chapter_number: 3
+  )
+
+  ModuleChapter.create!(
+    course_module: CourseModule.find_by(module_number: 4),
+    name: 'The Engineering Role',
+    chapter_number: 4
+  )
 end

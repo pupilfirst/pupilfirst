@@ -1,3 +1,14 @@
+### 22 May, 2017
+
+#### UX and UI
+
+  - Titles of prerequisite targets are now displayed on the founder dashboard for targets that are blocked by incomplete prerequisites.
+  - Upcoming (locked) levels are displayed in the level selection dropdown on the founder dashboard.
+
+#### Bugfixes
+
+  - Fixed a bug in the email sent after founder registration that could affect existing users of SV.CO.
+
 ### 15 May, 2017
 
 #### Features

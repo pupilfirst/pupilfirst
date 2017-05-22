@@ -1,8 +1,21 @@
 ## Ongoing
 
-- _Nothing major._
+- The `DashboardDataService` is being spec-d. [[Trello]](https://trello.com/c/7Y5lBcE9)
 
-## 2017.05.17
+## 2017.05.22
+
+- Prerequisite target titles are now displayed on the founder dashboard for targets that are blocked by incomplete prerequisites. [[Trello]](https://trello.com/c/DUyG7scO)
+- Upcoming (locked) levels are displayed in the level selection dropdown on the founder dashboard. [[Trello]](https://trello.com/c/5njNuXqr)
+- Fixed a bug in email sent after founder registration that could cause the login token to be missing in email. [[Trello]](https://trello.com/c/MNuOfytB)
+- Data for level 0 founders displayed in admin interface has been improved. [[Trello]](https://trello.com/c/5LBgTYkP)
+- The admissions dashboard has received a minor update. [[Trello]](https://trello.com/c/TSPvNI8a)
+- The Review timeline events admin interface has been updated to remove the _Send to Slack_ feature for level 0 events. [[Trello]](https://trello.com/c/ejDHvdIj)
+- After admissions screening, the hacker / hustler selection is saved. This data is also sent to Intercom. Trello. [[1]](https://trello.com/c/bl2JLkjW)[[2]](https://trello.com/c/ZuLlgDhZ)
+- A few google analytics events (admissions) are now triggered from the client-side. [[Trello]](https://trello.com/c/s1bp0Rj2)
+- The action retrieving founder target status for individual targets was moved from `Founders::DashboardController` to `TargetsController`. [[Trello]](https://trello.com/c/SxBQmNtF)
+- Fixed an issue with impersonation that caused admin users (impersonating any user) to not see the targets under _Link Target_ dropdown in a timeline event view page. [[Trello]](https://trello.com/c/1j0PupBF)
+
+## 2017.05.15
 
 - Continuous admission process to SV.CO is live! [[Trello]](https://trello.com/c/CDcL2dG3)
 - Load time of Founder dashboard has been drastically reduced by introducing `Targets::BulkStatusService` [[Trello]](https://trello.com/c/1eW5xiJp)

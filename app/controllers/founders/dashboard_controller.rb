@@ -36,7 +36,7 @@ module Founders
         flash[:error] = 'Something went wrong. Please try again!'
       end
 
-      redirect_to dashboard_founder_path
+      redirect_to dashboard_founder_path(from: 'startup_restart')
     end
 
     # POST /founder/startup/level_up
@@ -44,7 +44,7 @@ module Founders
       startup = current_founder.startup
       raise_not_found unless Startups::LevelUpEligibilityService.new(startup, current_founder).eligible?
       Startups::LevelUpService.new(startup).execute
-      redirect_back(fallback_location: dashboard_founder_path)
+      redirect_back(fallback_location: dashboard_founder_path(from: 'level_up'))
     end
 
     private

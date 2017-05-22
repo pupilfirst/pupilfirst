@@ -64,7 +64,7 @@ describe InstamojoController do
 
     it 'redirects to founder dashboard with the stage param set' do
       get :redirect, params: { payment_request_id: payment.instamojo_payment_request_id, payment_id: payment_id }
-      expect(response).to redirect_to(dashboard_founder_path(stage: 'payment_complete'))
+      expect(response).to redirect_to(dashboard_founder_path(from: 'instamojo_redirect'))
     end
   end
 

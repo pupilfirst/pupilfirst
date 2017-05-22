@@ -18,7 +18,6 @@ module Founders
 
     def chores
       applicable_levels = startup.level.number.zero? ? 0 : (1..startup.level.number).to_a
-
       @chores ||= begin
         targets = Target.includes(:assigner, :level)
           .where(chore: true, archived: false)

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Founders::DashboardDataService, broken: true do
+describe Founders::DashboardDataService do
   subject { described_class.new(founder) }
 
   let!(:level_0) { create :level, :zero }
@@ -11,15 +11,15 @@ describe Founders::DashboardDataService, broken: true do
   let!(:target_group_0) { create :target_group, level: level_0, milestone: true }
   let!(:target_group_1) { create :target_group, level: level_1, milestone: true }
   let!(:target_group_2) { create :target_group, level: level_2, milestone: true }
-  let!(:level_0_vanilla_targets) { create_list :target, 5, target_group: target_group_0 }
-  let!(:level_1_vanilla_targets) { create_list :target, 5, target_group: target_group_1 }
-  let!(:level_2_vanilla_targets) { create_list :target, 5, target_group: target_group_2 }
-  let!(:level_0_chores) { create_list :target, 5, chore: true, target_group: nil, level: level_0 }
-  let!(:level_1_chores) { create_list :target, 5, chore: true, target_group: nil, level: level_1 }
-  let!(:level_2_chores) { create_list :target, 5, chore: true, target_group: nil, level: level_2 }
-  let!(:level_0_sessions) { create_list :target, 5, session_at: Time.now, target_group: nil, level: level_0 }
-  let!(:level_1_sessions) { create_list :target, 5, session_at: Time.now, target_group: nil, level: level_1 }
-  let!(:level_2_sessions) { create_list :target, 5, session_at: Time.now, target_group: nil, level: level_2 }
+  let!(:level_0_vanilla_targets) { create_list :target, 2, target_group: target_group_0 }
+  let!(:level_1_vanilla_targets) { create_list :target, 2, target_group: target_group_1 }
+  let!(:level_2_vanilla_targets) { create_list :target, 2, target_group: target_group_2 }
+  let!(:level_0_chores) { create_list :target, 2, chore: true, target_group: nil, level: level_0 }
+  let!(:level_1_chores) { create_list :target, 2, chore: true, target_group: nil, level: level_1 }
+  let!(:level_2_chores) { create_list :target, 2, chore: true, target_group: nil, level: level_2 }
+  let!(:level_0_sessions) { create_list :target, 2, session_at: Time.now, target_group: nil, level: level_0 }
+  let!(:level_1_sessions) { create_list :target, 2, session_at: Time.now, target_group: nil, level: level_1 }
+  let!(:level_2_sessions) { create_list :target, 2, session_at: Time.now, target_group: nil, level: level_2 }
 
   describe '#levels' do
     context 'when the startup is in level 0' do
@@ -56,16 +56,25 @@ describe Founders::DashboardDataService, broken: true do
   describe '#sessions' do
     context 'when the startup is in level 0' do
       it 'responds with all sessions in level 0' do
-        expected_session_details = level_0_sessions.map { |session| session_details(session) }
-        expect(subject.sessions).to match_array(expected_session_details)
+        @expected_session_details = level_0_sessions.map { |session| session_details(session) }
+        expect(subject.sessions).to match_array(@expected_session_details)
       end
     end
 
     context 'when the startup is in a level n > 1' do
       it 'responds with all sessions in level 1 to n' do
         startup.update!(level: level_2)
-        expected_chore_details = (level_1_sessions + level_2_sessions).map { |chore| session_details(chore) }
-        expect(subject.sessions).to match_array(expected_chore_details)
+        @expected_session_details = (level_1_sessions + level_2_sessions).map { |session| session_details(session) }
+        expect(subject.sessions).to match_array(@expected_session_details)
+      end
+    end
+
+    after do |example|
+      if example.exception
+        puts 'Excepted session details:'
+        p @expected_session_details
+        puts "\nActual session details:"
+        p subject.sessions
       end
     end
   end

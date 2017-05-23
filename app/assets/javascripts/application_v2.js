@@ -25,7 +25,7 @@
 //= require moment
 //= require select2-full
 //= require sidebar-menu
-//= require googleanalytics/autotrack
+//= require autotrack
 //= require google_analytics
 //= require google_analytics_events
 //= require facebook_pixel

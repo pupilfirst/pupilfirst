@@ -9,31 +9,37 @@
 .container
   .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
     .content-box.m-t-3.m-b-3
-      h3.text-xs-center
-        | You have reached the end of this course.
-        br
-        | Your total score is <strong>#{@final_score} %</strong>.
-      h4
-        | You may now print your 'Course Completion Certificate' with the present grade or try improving your score by retaking the quizzes.
+      - if current_mooc_student.present?
+        h3.text-xs-center
+          | You have reached the end of this course.
+          br
+          | Your total score is <strong>#{@final_score} %</strong>.
+        h4
+          | You may now print your 'Course Completion Certificate' with the present grade or try improving your score by retaking the quizzes.
 
-      table.table
-        thead
-          tr
-            th #
-            th Module
-            th Score
-            th
-        tbody
-          - CourseModule.all.each do |course_module|
-            - next unless course_module.quiz?
+        table.table
+          thead
             tr
-              th scope="row"
-                ' #{course_module.module_number}
-              td #{course_module.name}
-              td #{current_mooc_student.score_for_module(course_module)} %
-              td #{link_to 'Retry', six_ways_quiz_path(course_module.id)}
+              th #
+              th Module
+              th Score
+              th
+          tbody
+            - CourseModule.all.each do |course_module|
+              - next unless course_module.quiz?
+              tr
+                th scope="row"
+                  ' #{course_module.module_number}
+                td #{course_module.name}
+                td #{current_mooc_student.score_for_module(course_module)} %
+                td #{link_to 'Retry', six_ways_quiz_path(course_module.id)}
 
-      = link_to 'Print Certificate', six_ways_completion_certificate_path, class: 'btn btn-primary btn-md text-uppercase pull-right'
+        = link_to 'Print Certificate', six_ways_completion_certificate_path, class: 'btn btn-primary btn-md text-uppercase pull-right'
+      - else
+        h3.text-xs-center
+          | Great work on completing the course.
+        h4.text-xs-center
+          | As a next step, apply to our six month entrepreneurship program #{link_to 'here', apply_path}.
 
       .text-xs-center
         h5 Let your friends know!

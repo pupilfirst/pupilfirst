@@ -115,7 +115,7 @@ class SixWaysController < ApplicationController
   # End of course page. Probably show grade and option to print certificate
   def course_end
     @skip_container = true
-    @final_score = current_mooc_student.score.round
+    @final_score = current_mooc_student.score.round if current_mooc_student.present?
   end
 
   # GET /sixways/completion_certificate

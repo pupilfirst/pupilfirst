@@ -3,7 +3,7 @@
   .card-block
     h3.card-title Certificate of Completion
     blockquote.card-blockquote
-      ' This is to certify that <em>#{current_mooc_student.name}</em> of <em>#{current_mooc_student.university.name}</em> has successfully completed the 'Six Ways To Graduate: An Introduction To Student Startups' course with a score of #{current_mooc_student.score} %.
+      ' This is to certify that <em>#{current_mooc_student.name}</em> of <em>#{current_mooc_student.college_name}</em> has successfully completed the 'Six Ways To Graduate: An Introduction To Student Startups' course with a score of #{current_mooc_student.score} %.
   .card-footer.text-xs-left
     = link_to 'Back', six_ways_course_end_path
     // TODO: Create MOOC course completion certificate.

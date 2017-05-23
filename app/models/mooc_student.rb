@@ -1,4 +1,6 @@
 class MoocStudent < ApplicationRecord
+  include CollegeNameable
+
   belongs_to :college
   belongs_to :user
 

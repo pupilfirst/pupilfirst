@@ -57,7 +57,9 @@ describe Founders::DashboardDataService do
     context 'when the startup is in level 0' do
       it 'responds with all sessions in level 0' do
         @expected_session_details = level_0_sessions.map { |session| session_details(session) }
-        expect(subject.sessions).to match_array(@expected_session_details)
+        @expected_session_details = @expected_session_details.sort_by { |e| e['id'] }
+        @actual_sessions = subject.sessions.sort_by { |s| s['id'] }
+        expect(@actual_sessions).to eq(@expected_session_details)
       end
     end
 
@@ -65,16 +67,18 @@ describe Founders::DashboardDataService do
       it 'responds with all sessions in level 1 to n' do
         startup.update!(level: level_2)
         @expected_session_details = (level_1_sessions + level_2_sessions).map { |session| session_details(session) }
-        expect(subject.sessions).to match_array(@expected_session_details)
+        @expected_session_details = @expected_session_details.sort_by { |e| e['id'] }
+        @actual_sessions = subject.sessions.sort_by { |s| s['id'] }
+        expect(@actual_sessions).to eq(@expected_session_details)
       end
     end
 
     after do |example|
       if example.exception
         puts 'Excepted session details:'
-        p @expected_session_details
+        p @expected_session_details.to_json
         puts "\nActual session details:"
-        p subject.sessions
+        p @actual_sessions.to_json
       end
     end
   end

@@ -165,7 +165,7 @@
   }
 
   &.accelerate-icon {
-    background-image: asset-url("talent/index/talent-tab-icon-accelerate.svg.svg");
+    background-image: asset-url("talent/index/talent-tab-icon-accelerate.svg");
   }
 
   @include media-breakpoint-down(sm) {

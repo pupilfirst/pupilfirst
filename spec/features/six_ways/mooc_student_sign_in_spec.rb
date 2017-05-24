@@ -3,7 +3,8 @@ require 'rails_helper'
 feature 'MoocStudent Sign In' do
   let!(:first_module) { create :course_module, :with_2_chapters, module_number: 1 }
   let!(:second_module) { create :course_module, :with_2_chapters, module_number: 2 }
-  let(:mooc_student) { create :mooc_student }
+  let(:college) { create :college }
+  let(:mooc_student) { create :mooc_student, college: college }
   let(:first_chapter_name) { first_module.module_chapters.find_by(chapter_number: 1).name }
 
   context 'User visits the sixways start page' do

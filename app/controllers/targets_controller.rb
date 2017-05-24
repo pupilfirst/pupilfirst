@@ -23,6 +23,18 @@ class TargetsController < ApplicationController
     render json: prerequisite_targets
   end
 
+  # GET /targets/:id/startup_feedback
+  def startup_feedback
+    authorize :target
+    target = Target.find(params[:id])
+    latest_feedbacks = Targets::FeedbackService.new(target, current_founder).latest_feedbacks
+    startup_feedback = latest_feedbacks&.each_with_object({}) do |feedback, hash|
+      hash[feedback.id] = feedback.feedback
+    end
+
+    render json: startup_feedback
+  end
+
   # GET /targets/:id/founder_statuses
   def founder_statuses
     authorize :target

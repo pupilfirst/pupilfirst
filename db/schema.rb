@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170520065211) do
+ActiveRecord::Schema.define(version: 20170523100138) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -606,14 +606,16 @@ ActiveRecord::Schema.define(version: 20170520065211) do
   create_table "startup_feedback", force: :cascade do |t|
     t.text     "feedback"
     t.string   "reference_url"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
     t.integer  "startup_id"
     t.datetime "sent_at"
     t.integer  "faculty_id"
     t.string   "activity_type"
     t.string   "attachment"
+    t.integer  "timeline_event_id"
     t.index ["faculty_id"], name: "index_startup_feedback_on_faculty_id", using: :btree
+    t.index ["timeline_event_id"], name: "index_startup_feedback_on_timeline_event_id", using: :btree
   end
 
   create_table "startups", force: :cascade do |t|
@@ -899,6 +901,7 @@ ActiveRecord::Schema.define(version: 20170520065211) do
   add_foreign_key "resources", "levels"
   add_foreign_key "round_stages", "application_rounds"
   add_foreign_key "startup_feedback", "faculty"
+  add_foreign_key "startup_feedback", "timeline_events"
   add_foreign_key "startups", "levels"
   add_foreign_key "startups", "levels", column: "maximum_level_id"
   add_foreign_key "target_groups", "levels"

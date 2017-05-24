@@ -5,8 +5,8 @@ module Targets
       @founder = founder
     end
 
-    def latest_feedback
-      return if latest_timeline_event.startup_feedback.blank?
+    def latest_feedbacks
+      return if latest_timeline_event&.startup_feedback.blank?
       latest_timeline_event.startup_feedback
     end
 

@@ -27,16 +27,4 @@ handleGAEvents = ->
         'videoName': 'Alpha launch'
       )
 
-  # someone just clicked the 'Pay Now' button on the fee page
-  if $('#pay-now-button').length
-    $('#pay-now-button').on('click', (event) ->
-      ga('send', 'event', 'Admission-Milestones', 'Payment Initiated')
-      # keeping it here for the time being. See: https://trello.com/c/FhjsWYzO
-      # Initiate the Facebook standard InitiateCheckout Event
-      fbq('track', 'InitiateCheckout')
-      # Also initiate a custom event
-      fbq('trackCustom', 'Payment Initiated')
-    )
-
-
 $(document).on 'page:change', handleGAEvents

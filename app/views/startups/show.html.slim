@@ -57,6 +57,13 @@
 
         .data-icons
           .row
+            .col-sm-6.col-md-12
+              .media
+                .media-left
+                  img.media-object alt="Stage icon" src="#{image_url 'startups/show/data-icon-stage.png'}"
+                .media-body
+                  h4.media-heading Startup Level
+                  p.data-content #{@startup.level.display_name}
             - if @startup.startup_categories.present?
               .col-sm-6.col-md-12
                 .media
@@ -127,13 +134,6 @@
                 .media-body
                   h4.media-heading Team Size
                   p.data-content #{@startup.founders.count + @startup.team_members.count}
-            .col-sm-6.col-md-12
-              .media
-                .media-left
-                  img.media-object alt="Stage icon" src="#{image_url 'startups/show/data-icon-stage.png'}"
-                .media-body
-                  h4.media-heading Stage Startup is In
-                  p.data-content #{TimelineEventType::STAGE_NAMES[@startup.stage] }
             - if @startup.timeline_events_for_display(current_founder).present?
               .col-sm-6.col-md-12
                 .media

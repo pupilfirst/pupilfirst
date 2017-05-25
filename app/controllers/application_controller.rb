@@ -224,7 +224,7 @@ class ApplicationController < ActionController::Base
 
   def image_sources
     <<~IMAGE_SOURCES.squish
-      img-src *;
+      img-src * data: blob:;
     IMAGE_SOURCES
   end
 

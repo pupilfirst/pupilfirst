@@ -27,8 +27,9 @@ class TargetsController < ApplicationController
   def startup_feedback
     authorize :target
     target = Target.find(params[:id])
-    latest_feedbacks = Targets::FeedbackService.new(target, current_founder).latest_feedbacks
-    startup_feedback = latest_feedbacks&.each_with_object({}) do |feedback, hash|
+    latest_feedback = Targets::FeedbackService.new(target, current_founder).feedback_for_latest_event
+
+    startup_feedback = latest_feedback.each_with_object({}) do |feedback, hash|
       hash[feedback.id] = feedback.feedback
     end
 

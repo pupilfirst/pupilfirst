@@ -484,6 +484,10 @@
   position: relative;
   outline: 0;
   font-size: 0.8125rem;
+  width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   &:first-child {
     padding-left: 0;

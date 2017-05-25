@@ -126,6 +126,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-datetimepicker', '~> 2.5' # jQuery Plugin Date and Time Picker
   gem 'rails-assets-moment', '~> 2.18' # Parse, validate, manipulate, and display dates in javascript. http://momentjs.com
   gem 'rails-assets-jquery', '~> 2.2' # TODO: Lock down jquery to v2 because v3 doesn't work well with AA.
+  gem 'rails-assets-autotrack', '~> 2.3' # Automatic and enhanced Google Analytics tracking for common user interactions on the web.
 end
 
 group :development do

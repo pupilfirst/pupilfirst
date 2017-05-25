@@ -2,7 +2,7 @@
 window.player = null
 window.videoPlayed = false
 
-handleGAEvents = ->
+handleYoutubeAPI = ->
   # Alpha launch video on apply page.
   window.onYouTubeIframeAPIReady = (event) ->
     window.player = new (YT.Player)(
@@ -27,4 +27,4 @@ handleGAEvents = ->
         'videoName': 'Alpha launch'
       )
 
-$(document).on 'page:change', handleGAEvents
+$(document).on 'page:change', handleYoutubeAPI

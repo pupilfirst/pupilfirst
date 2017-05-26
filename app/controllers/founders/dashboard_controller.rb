@@ -44,7 +44,7 @@ module Founders
       startup = current_founder.startup
       raise_not_found unless Startups::LevelUpEligibilityService.new(startup, current_founder).eligible?
       Startups::LevelUpService.new(startup).execute
-      redirect_back(fallback_location: dashboard_founder_path(from: 'level_up'))
+      redirect_to(dashboard_founder_path(from: 'level_up', from_level: startup.level.number - 1))
     end
 
     private

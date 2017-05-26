@@ -31,11 +31,6 @@ class StartupFeedback < ApplicationRecord
     end
   end
 
-  def timeline_event
-    return unless reference_url.present? && reference_url.match(REGEX_TIMELINE_EVENT_URL).present?
-    TimelineEvent.find_by(id: reference_url.match(REGEX_TIMELINE_EVENT_URL)[:event_id])
-  end
-
   def as_slack_message
     formatted_reference_url = reference_url.present? ? "<#{reference_url}|recent update>" : "recent update"
     salutation = "Hey! You have some feedback from #{faculty.name} on your #{formatted_reference_url}.\n"

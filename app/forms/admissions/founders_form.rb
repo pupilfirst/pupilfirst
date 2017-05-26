@@ -95,6 +95,7 @@ module Admissions
           invite_founder(founder)
         end
       end
+      Intercom::FounderTaggingJob.perform_later(current_founder, 'Added Co-founders')
     end
 
     def invite_founder(founder)

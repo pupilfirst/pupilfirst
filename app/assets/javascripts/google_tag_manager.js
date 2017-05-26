@@ -15,7 +15,7 @@ if (/sv\.co/.test(window.location.hostname)) {
 
   // Custom pageview event for turbolinks.
   document.addEventListener('turbolinks:load', function (event) {
-    let url = event.data.url;
+    var url = event.data.url;
 
     dataLayer.push({
       'event': 'pageView',

@@ -35,12 +35,7 @@ ActiveAdmin.register StartupFeedback do
       startup_feedback.feedback.html_safe
     end
 
-    column :reference_url do |startup_feedback|
-      if startup_feedback.reference_url.present?
-        link_to 'Link', startup_feedback.reference_url
-      end
-    end
-
+    column :timeline_event
     column :faculty
     column :created_at
 
@@ -104,6 +99,7 @@ ActiveAdmin.register StartupFeedback do
       end
 
       row :activity_type
+      row :timeline_event
 
       row :reference_url
       row :faculty

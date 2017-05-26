@@ -1,6 +1,6 @@
 require_relative 'helper'
 
-after 'development:startups' do
+after 'development:startups', 'development:target_groups', 'development:targets' do
   puts 'Seeding timeline_events'
 
   avengers_startup = Startup.find_by(product_name: 'SuperHeroes')
@@ -36,4 +36,20 @@ after 'development:startups' do
       verified_at: (verified_status == status_verified ? Time.now : nil)
     )
   end
+
+  # Complete a Level 2 milestone target for SuperHeroes.
+  level_2 = Level.find_by(number: 2)
+  target = TargetGroup.find_by(level: level_2, milestone: true).targets.first
+
+  TimelineEvent.create!(
+    startup: avengers_startup,
+    target: target,
+    timeline_event_type: target.timeline_event_type,
+    founder: avengers_startup.admin,
+    event_on: Time.now,
+    description: Faker::Lorem.paragraph,
+    verified_status: status_verified,
+    verified_at: Time.now,
+    grade: TimelineEvent::GRADE_GREAT
+  )
 end

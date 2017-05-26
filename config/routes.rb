@@ -196,6 +196,7 @@ Rails.application.routes.draw do
       get 'download_rubric'
       get 'prerequisite_targets'
       get 'founder_statuses'
+      get 'startup_feedback'
     end
   end
 

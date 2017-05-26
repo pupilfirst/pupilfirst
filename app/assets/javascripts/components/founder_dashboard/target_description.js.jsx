@@ -1,4 +1,11 @@
 class FounderDashboardTargetDescription extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {targetFeedback: {}};
+
+    this.updateStartupFeedback = this.updateStartupFeedback.bind(this);
+  }
+
   assigner() {
     if (typeof(this.props.target.assigner) === 'undefined' || this.props.target.assigner === null) {
       return null;
@@ -27,6 +34,23 @@ class FounderDashboardTargetDescription extends React.Component {
     }
   }
 
+  componentWillReceiveProps(newProps) {
+    if (newProps.fetchTargetFeedback && !this.props.fetchTargetFeedback) {
+      // fetch the feedbacks for the most recent timeline_event for the target
+      console.log('Fetching feedback for target submission');
+
+      let that = this;
+      $.ajax({
+        url: '/targets/' + that.props.target.id + '/startup_feedback',
+        success: that.updateStartupFeedback
+      });
+    }
+  }
+
+  updateStartupFeedback(response) {
+    this.setState({targetFeedback: response});
+  }
+
   render() {
     return (
       <div className="target-description">
@@ -39,6 +63,8 @@ class FounderDashboardTargetDescription extends React.Component {
         </h6>
 
         <p className="target-description-content font-light" dangerouslySetInnerHTML={{__html: this.props.target.description}}/>
+        <p className="target-description-content font-light" dangerouslySetInnerHTML={{__html: this.props.target.description}}/>
+
 
         { this.props.target.role === 'founder' && <FounderDashboardFounderStatusPanel founderDetails={ this.props.founderDetails } targetId={ this.props.target.id} fetchStatus={this.props.fetchFounderStatuses}/> }
 
@@ -57,5 +83,6 @@ FounderDashboardTargetDescription.propTypes = {
   openTimelineBuilderCB: React.PropTypes.func,
   founderDetails: React.PropTypes.array,
   fetchFounderStatuses: React.PropTypes.bool,
-  fetchTargetPrerequisite: React.PropTypes.bool
+  fetchTargetPrerequisite: React.PropTypes.bool,
+  fetchTargetFeedback: React.PropTypes.bool
 };

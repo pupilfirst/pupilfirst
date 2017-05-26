@@ -1,30 +1,30 @@
 # Global variables required for the YouTube API.
 window.player = null
-window.videoPlayed = false
 
 handleYoutubeAPI = ->
   # Alpha launch video on apply page.
-  window.onYouTubeIframeAPIReady = (event) ->
+  window.onYouTubeIframeAPIReady = ((event) ->
     window.player = new (YT.Player)(
       'alpha-launch-video__embed',
       events: { 'onStateChange': onPlayerStateChange }
     )
+  ).bind(this)
 
-  window.onPlayerStateChange = (event) ->
-    if (event.data == YT.PlayerState.PLAYING) && !window.alphaLaunchVideoPlayed
-      window.alphaLaunchVideoPlayed = true
+onPlayerStateChange = (event) ->
+  if (event.data == YT.PlayerState.PLAYING) && !window.alphaLaunchVideoPlayed
+    window.alphaLaunchVideoPlayed = true
 
-      dataLayer.push(
-        'event': 'video'
-        'videoState': 'play',
-        'videoName': 'Alpha launch'
-      )
+    dataLayer.push(
+      'event': 'video'
+      'videoState': 'play',
+      'videoName': 'Alpha launch'
+    )
 
-    if (event.data == YT.PlayerState.ENDED)
-      dataLayer.push(
-        'event': 'video'
-        'videoState': 'complete',
-        'videoName': 'Alpha launch'
-      )
+  if (event.data == YT.PlayerState.ENDED)
+    dataLayer.push(
+      'event': 'video'
+      'videoState': 'complete',
+      'videoName': 'Alpha launch'
+    )
 
 $(document).on 'page:change', handleYoutubeAPI

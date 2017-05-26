@@ -1,10 +1,14 @@
-.card.text-xs-center.m-t-2
-  .card-header Preview
-  .card-block
-    h3.card-title Certificate of Completion
-    blockquote.card-blockquote
-      ' This is to certify that <em>#{current_mooc_student.name}</em> of <em>#{current_mooc_student.college_name}</em> has successfully completed the 'Six Ways To Graduate: An Introduction To Student Startups' course with a score of #{current_mooc_student.score} %.
-  .card-footer.text-xs-left
-    = link_to 'Back', six_ways_course_end_path
-    // TODO: Create MOOC course completion certificate.
-    = link_to 'TODO: Download Certificate', '#', class: 'pull-right'
+.container
+  .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
+    .content-box.m-t-3.m-b-3.clearfix
+      h3 Preview
+      h3.card-title Certificate of Completion
+      blockquote.card-blockquote
+        ' This is to certify that <em>#{current_mooc_student.name}</em> of <em>#{current_mooc_student.college_name}</em> has successfully completed the 'Six Ways To Graduate: An Introduction To Student Startups' course with a score of #{current_mooc_student.score} %.
+      .clearfix.m-t-1
+        = link_to six_ways_course_end_path, class: 'btn btn-with-icon btn-secondary btn-md text-uppercase pull-xs-left m-b-1' do
+          i.fa.fa-chevron-left
+          | Back
+
+        // TODO: Create MOOC course completion certificate.
+        = link_to 'TODO: Download Certificate', '#', class: 'btn btn-primary btn-md text-uppercase pull-xs-right m-b-1'

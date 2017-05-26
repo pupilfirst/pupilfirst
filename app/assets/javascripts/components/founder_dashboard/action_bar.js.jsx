@@ -57,7 +57,7 @@ class FounderDashboardActionBar extends React.Component {
               <span>Add Event</span>
             </button>
 
-            { this.props.currentLevel != 0 &&
+            {
               <div className="btn-group">
                 <button className="btn btn-link founder-dashboard-actionbar__show-more-menu dropdown-toggle"
                         data-toggle="dropdown" type="button">
@@ -65,14 +65,20 @@ class FounderDashboardActionBar extends React.Component {
                 </button>
 
                 <div className="dropdown-menu filter-targets-dropdown__menu dropdown-menu-right">
-                  <a className="dropdown-item filter-targets-dropdown__menu-item" data-toggle="modal"
-                     data-target="#performance-overview-modal" role="button">
-                    Performance
-                  </a>
-
-                  <a className="dropdown-item filter-targets-dropdown__menu-item" data-toggle="modal"
-                     data-target="#startup-restart-form" role="button">
+                  { this.props.currentLevel != 0 &&
+                    <a className="dropdown-item filter-targets-dropdown__menu-item" data-toggle="modal"
+                       data-target="#performance-overview-modal" role="button">
+                      Performance
+                    </a>
+                  }
+                  { this.props.currentLevel != 0 &&
+                    <a className="dropdown-item filter-targets-dropdown__menu-item" data-toggle="modal"
+                    data-target="#startup-restart-form" role="button">
                     Pivot
+                    </a>
+                  }
+                  <a id="filter-targets-dropdown__tour-button" className="dropdown-item filter-targets-dropdown__menu-item" role="button">
+                  Take a Tour
                   </a>
                 </div>
               </div>

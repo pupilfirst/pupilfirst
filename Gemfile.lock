@@ -558,7 +558,6 @@ GEM
       railties (= 5.0.2)
       sprockets-rails (>= 2.0.0)
     rails-assets-Chart-js (2.5.0)
-    rails-assets-autotrack (2.3.2)
     rails-assets-bootstrap-tabcollapse (0.2.7)
     rails-assets-chartkick (2.2.3)
     rails-assets-datetimepicker (2.5.4)
@@ -884,7 +883,6 @@ DEPENDENCIES
   rack-mini-profiler (~> 0.10)
   rails (= 5.0.2)
   rails-assets-Chart-js (~> 2.5)!
-  rails-assets-autotrack (~> 2.3)!
   rails-assets-bootstrap-tabcollapse (~> 0.2)!
   rails-assets-chartkick (~> 2.2)!
   rails-assets-datetimepicker (~> 2.5)!

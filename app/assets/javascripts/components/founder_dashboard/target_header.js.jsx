@@ -141,7 +141,10 @@ class FounderDashboardTargetHeader extends React.Component {
       return <span>
         { filledStars }
         { emptyStars }
-        &nbsp;{ gradeString }!
+
+        <span className="hidden-sm-down">
+          &nbsp;{ gradeString }!
+        </span>
       </span>;
     }
   }

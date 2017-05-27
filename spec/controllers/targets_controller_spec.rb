@@ -83,7 +83,7 @@ describe TargetsController do
       cofounder = startup.founders.where(startup_admin: nil).first
       statuses = [{ startup.admin.id.to_s => Target::STATUS_COMPLETE.to_s }, { cofounder.id.to_s => Target::STATUS_PENDING.to_s }]
       get :founder_statuses, params: { id: founder_target.id }
-      expect(JSON.parse(response.body)).to eq(statuses)
+      expect(JSON.parse(response.body)).to match_array(statuses)
     end
   end
 

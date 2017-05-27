@@ -40,7 +40,7 @@
         .text-xs-center.m-b-2
           = render 'social_share'
         .text-xs-center
-          = link_to 'Print Certificate', six_ways_completion_certificate_path, class: 'btn btn-primary btn-md text-uppercase'
+          = link_to 'Print Certificate', six_ways_completion_certificate_path(format: :pdf), class: 'btn btn-primary btn-md text-uppercase', target: '_blank'
       - else
         h3.text-xs-center.font-semibold
           | Great work on completing the course.

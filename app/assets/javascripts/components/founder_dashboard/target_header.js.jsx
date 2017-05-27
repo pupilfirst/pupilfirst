@@ -127,12 +127,14 @@ class FounderDashboardTargetHeader extends React.Component {
       </span>;
     } else {
       let filledStars = _.times(grade).map(function (e, i) {
-        return <i className='fa fa-star founder-dashboard-target-header__status-badge-star'/>;
-      });
+        return <i key={ "filled-star-" + this.props.target.id + "-" + i }
+          className='fa fa-star founder-dashboard-target-header__status-badge-star'/>;
+      }, this);
 
       let emptyStars = _.times(3 - grade).map(function (e, i) {
-        return <i className='fa fa-star-o founder-dashboard-target-header__status-badge-star'/>;
-      });
+        return <i key={ "empty-star-" + this.props.target.id + "-" + i }
+          className='fa fa-star-o founder-dashboard-target-header__status-badge-star'/>;
+      }, this);
 
       let gradeString = this.props.target.grade.charAt(0).toUpperCase() + this.props.target.grade.slice(1);
 

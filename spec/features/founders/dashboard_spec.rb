@@ -98,6 +98,15 @@ feature 'Founder Dashboard' do
     find('.ui-pnotify').hover
     find('.ui-pnotify-closer').click
 
+    # Founder can manually start a dashboard tour.
+    find('.founder-dashboard-actionbar__show-more-menu-dots').click
+    find('a[id=filter-targets-dropdown__tour-button]').click
+    expect(page).to have_selector('.introjs-tooltipReferenceLayer', visible: false)
+    within('.introjs-tooltip') do
+      find('.introjs-skipbutton').click
+    end
+    find('.founder-dashboard-target-header__container--active').click
+
     # Open the performance window.
     find('.founder-dashboard-actionbar__show-more-menu-dots').click
     find('a[data-target="#performance-overview-modal"]').click

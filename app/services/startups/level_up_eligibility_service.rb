@@ -34,7 +34,7 @@ module Startups
     private
 
     def milestone_targets
-      @startup.level.target_groups.find_by(milestone: true).targets
+      @startup.level.target_groups.find_by(milestone: true).targets.where(archived: false)
     end
 
     def target_completed?(target)

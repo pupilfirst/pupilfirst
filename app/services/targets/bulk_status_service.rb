@@ -103,7 +103,7 @@ module Targets
 
     def prerequisites_completed?(target)
       prerequisites = all_target_prerequisites[target.id]
-      return true unless prerequisites.present?
+      return true if prerequisites.blank?
 
       prerequisites.all? { |id| submitted_targets_statuses[id].present? } && prerequisites.all? { |id| submitted_targets_statuses[id][:status].in? [Target::STATUS_COMPLETE, Target::STATUS_NEEDS_IMPROVEMENT] }
     end

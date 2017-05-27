@@ -34,7 +34,7 @@ module Svapp
     config.assets.paths << Rails.root.join('app', 'assets', 'fonts')
 
     # Add some paths to autoload
-    %w(presenters services forms/concerns).each do |folder|
+    %w[presenters services forms/concerns].each do |folder|
       config.autoload_paths.push(Rails.root.join('app', folder))
     end
   end

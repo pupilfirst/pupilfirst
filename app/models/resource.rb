@@ -3,7 +3,7 @@
 
 class Resource < ApplicationRecord
   include FriendlyId
-  friendly_id :slug_candidates, use: %i(slugged finders)
+  friendly_id :slug_candidates, use: %i[slugged finders]
   acts_as_taggable
 
   # TODO: Remove association to batch ensuring no loss of data in production
@@ -15,7 +15,7 @@ class Resource < ApplicationRecord
   def slug_candidates
     [
       :title,
-      %i(title updated_at)
+      %i[title updated_at]
     ]
   end
 
@@ -45,7 +45,7 @@ class Resource < ApplicationRecord
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
 
   def self.ransackable_scopes(_auth)
-    %i(ransack_tagged_with)
+    %i[ransack_tagged_with]
   end
 
   delegate :content_type, to: :file

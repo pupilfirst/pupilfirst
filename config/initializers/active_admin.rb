@@ -300,5 +300,5 @@ ActiveAdmin.setup do |config|
   # config.include_default_association_filters = true
 
   # Disable streaming of CSV export in development.
-  config.disable_streaming_in = %w(development staging)
+  config.disable_streaming_in = %w[development staging]
 end

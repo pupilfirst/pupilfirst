@@ -4,7 +4,7 @@ ActiveAdmin.register ApplicationRound do
   menu parent: 'Admissions'
 
   permit_params :batch_id, :number, :campaign_start_at, :target_application_count,
-    round_stages_attributes: %i(id application_stage_id starts_at ends_at _destroy)
+    round_stages_attributes: %i[id application_stage_id starts_at ends_at _destroy]
 
   filter :batch
   filter :number

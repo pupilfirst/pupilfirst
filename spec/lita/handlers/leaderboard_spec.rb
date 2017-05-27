@@ -32,7 +32,7 @@ describe Lita::Handlers::Leaderboard do
     end
 
     context 'when no level number is specified' do
-      let(:response) { double 'Lita Response Object', match_data: %w(leaderboard) }
+      let(:response) { double 'Lita Response Object', match_data: %w[leaderboard] }
 
       it 'requests user to supply level number' do
         expect(response).to receive(:reply).with('Please supply the level number for which leaderboard is required! Try `leaderboard [1-4]`')
@@ -42,7 +42,7 @@ describe Lita::Handlers::Leaderboard do
     end
 
     context 'when level number is specified' do
-      let(:response) { double 'Lita Response Object', match_data: %w(leaderboard 1) }
+      let(:response) { double 'Lita Response Object', match_data: %w[leaderboard 1] }
 
       it 'replies with leaderboard for requested level' do
         travel_to(test_time) do

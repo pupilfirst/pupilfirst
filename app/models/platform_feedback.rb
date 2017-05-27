@@ -9,7 +9,7 @@ class PlatformFeedback < ApplicationRecord
   mount_uploader :attachment, PlatformFeedbackAttachmentUploader
 
   def self.types_of_feedback
-    %w(Feature Suggestion Bug Other)
+    %w[Feature Suggestion Bug Other]
   end
 
   validates :feedback_type, inclusion: types_of_feedback

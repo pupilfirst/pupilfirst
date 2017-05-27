@@ -1,7 +1,7 @@
 class SixWaysController < ApplicationController
-  before_action :authorize_student, only: %w(completion_certificate)
-  before_action :block_student, only: %w(student_details create_student)
-  before_action :gtu_variables, only: %w(gtu_index)
+  before_action :authorize_student, only: %w[completion_certificate]
+  before_action :block_student, only: %w[student_details create_student]
+  before_action :gtu_variables, only: %w[gtu_index]
 
   helper_method :quiz_score
 

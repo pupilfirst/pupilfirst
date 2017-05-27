@@ -73,11 +73,9 @@ module WeeklyKarmaPoints
     # Returns a hash that maps active startups to its level.
     def startup_levels
       @startup_levels ||= begin
-
         active_startups.each_with_object({}) do |startup_id, hash|
           hash[startup_id] = Startup.find(startup_id).level_id
         end
-
       end
     end
   end

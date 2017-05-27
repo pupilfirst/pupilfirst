@@ -10,7 +10,7 @@ class MoocStudent < ApplicationRecord
   scope :completed_quiz, ->(course_module) { MoocStudent.joins(:quiz_attempts).where(quiz_attempts: { course_module_id: course_module.id }).distinct }
 
   def self.valid_semester_values
-    %w(I II III IV V VI VII VIII Graduated Other)
+    %w[I II III IV V VI VII VIII Graduated Other]
   end
 
   def score
@@ -31,7 +31,7 @@ class MoocStudent < ApplicationRecord
   end
 
   def completed_all_chapters?(course_module)
-    completed_chapters.count { |c| c[0] == course_module.module_number } == course_module.chapters_count
+    course_module.chapters_count == completed_chapters.count { |c| c[0] == course_module.module_number }
   end
 
   def completed_quiz?(course_module)

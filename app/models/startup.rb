@@ -60,7 +60,7 @@ class Startup < ApplicationRecord
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
 
   def self.ransackable_scopes(_auth)
-    %i(ransack_tagged_with)
+    %i[ransack_tagged_with]
   end
 
   # Returns the latest verified timeline event that has an image attached to it.

@@ -29,13 +29,13 @@ Rails/HasAndBelongsToMany:
 
 # Project styling
 
-Style/AlignParameters:
+Layout/AlignParameters:
   EnforcedStyle: with_fixed_indentation
-Style/MultilineOperationIndentation:
+Layout/MultilineOperationIndentation:
   EnforcedStyle: indented
-Style/MultilineMethodCallIndentation:
+Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
-Style/CaseIndentation:
+Layout/CaseIndentation:
   EnforcedStyle: end
   IndentOneStep: true
 Lint/EndAlignment:
@@ -69,3 +69,5 @@ Metrics/AbcSize:
   Max: 30 # default is 15.
 Style/GuardClause:
   Enabled: false # this thing is annoying, and can lead to not-as-readable code.
+Style/YodaCondition:
+  Enabled: false # buggy - sometimes complains about fixed code, and autocorrect doesn't work.

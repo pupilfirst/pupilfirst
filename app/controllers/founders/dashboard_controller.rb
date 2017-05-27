@@ -10,7 +10,7 @@ module Founders
       @startup = current_founder.startup&.decorate
 
       # founders without proper startups will not have dashboards
-      raise_not_found unless @startup.present?
+      raise_not_found if @startup.blank?
 
       load_react_data
 

@@ -99,6 +99,6 @@ module IncubationAgreement
       @founders ||= @startup.founders
     end
 
-    ORDINALIZE = %w(First Second Third Fourth Fifth Sixth Seventh Eighth Ninth Tenth Eleventh Twelfth).freeze
+    ORDINALIZE = %w[First Second Third Fourth Fifth Sixth Seventh Eighth Ninth Tenth Eleventh Twelfth].freeze
   end
 end

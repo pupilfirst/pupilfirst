@@ -13,7 +13,7 @@ class BatchApplicationDecorator < Draper::Decorator
     return [] if applicant.nil? || applicant.batch_applications.blank?
 
     applications = applicant.batch_applications.select do |application|
-      application.status.in? %i(expired complete rejected)
+      application.status.in? %i[expired complete rejected]
     end
 
     applications.map { |application| BatchApplicationDecorator.decorate(application) }

@@ -578,6 +578,7 @@ GEM
       rails-assets-jquery (>= 1.6)
     rails-assets-jquery.scrollTo (2.1.2)
       rails-assets-jquery (>= 1.8)
+    rails-assets-lodash (4.17.4)
     rails-assets-masonry (4.2.0)
       rails-assets-get-size (>= 2.0.2, < 3)
       rails-assets-outlayer (>= 2.1.0, < 3)
@@ -891,6 +892,7 @@ DEPENDENCIES
   rails-assets-jquery (~> 2.2)!
   rails-assets-jquery-stickit (~> 0.2)!
   rails-assets-jquery.scrollTo (~> 2.1)!
+  rails-assets-lodash (~> 4.17)!
   rails-assets-masonry (~> 4.1)!
   rails-assets-moment (~> 2.18)!
   rails-assets-perfect-scrollbar (~> 0.6)!

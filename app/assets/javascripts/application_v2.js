@@ -36,6 +36,7 @@
 //= require jquery.scrollTo
 //= require ahoy
 //= require jspdf
+//= require lodash
 
 // Rails assets
 //= require intro.js/intro.js

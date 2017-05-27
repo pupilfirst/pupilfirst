@@ -113,9 +113,9 @@ class FounderDashboardTargetHeader extends React.Component {
   }
 
   statusContents() {
-    let grade = ['good', 'great', 'wow'].indexOf(this.props.target.grade);
+    let grade = ['good', 'great', 'wow'].indexOf(this.props.target.grade) + 1;
 
-    if (grade === -1) {
+    if (grade === 0) {
       return <span>
         <span className="founder-dashboard-target-header__status-badge-icon">
           <i className={ this.statusIconClasses() }/>
@@ -126,11 +126,11 @@ class FounderDashboardTargetHeader extends React.Component {
         </span>
       </span>;
     } else {
-      let filledStars = [...Array(grade + 1)].map(function (e, i) {
+      let filledStars = _.times(grade).map(function (e, i) {
         return <i className='fa fa-star founder-dashboard-target-header__status-badge-star'/>;
       });
 
-      let emptyStars = [...Array(2 - grade)].map(function (e, i) {
+      let emptyStars = _.times(3 - grade).map(function (e, i) {
         return <i className='fa fa-star-o founder-dashboard-target-header__status-badge-star'/>;
       });
 

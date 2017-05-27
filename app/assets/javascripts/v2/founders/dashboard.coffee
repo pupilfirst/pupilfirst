@@ -83,8 +83,7 @@ setPerformancePointer = ->
     $('.performance-pointer')[0].style.color = color
 
 takeTourOnClick = ->
-  scope = $('#filter-targets-dropdown__tour-button')
-  scope.on('click', startTour)
+  $('#filter-targets-dropdown__tour-button').on('click', startTour)
 
 giveATour = ->
   startTour() if $('#dashboard-show-tour').data('tour-flag')

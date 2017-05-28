@@ -27,7 +27,7 @@ class FounderDashboardTargetDescription extends React.Component {
     if (this.props.target.description.indexOf(storyURL) !== -1) {
       let link = $('a[href="' + storyURL + '"]');
 
-      link.on('click', function(event) {
+      link.on('click', function (event) {
         event.preventDefault();
         window.open(storyURL);
       });
@@ -62,11 +62,12 @@ class FounderDashboardTargetDescription extends React.Component {
           { this.props.target.title }
         </h6>
 
-        <p className="target-description-content font-light" dangerouslySetInnerHTML={{__html: this.props.target.description}}/>
-        <p className="target-description-content font-light" dangerouslySetInnerHTML={{__html: this.props.target.description}}/>
+        <p className="target-description-content font-light"
+          dangerouslySetInnerHTML={{__html: this.props.target.description}}/>
 
-
-        { this.props.target.role === 'founder' && <FounderDashboardFounderStatusPanel founderDetails={ this.props.founderDetails } targetId={ this.props.target.id} fetchStatus={this.props.fetchFounderStatuses}/> }
+        { this.props.target.role === 'founder' &&
+        <FounderDashboardFounderStatusPanel founderDetails={ this.props.founderDetails }
+          targetId={ this.props.target.id} fetchStatus={this.props.fetchFounderStatuses}/> }
 
         <FounderDashboardResourcesBar target={ this.props.target }/>
 

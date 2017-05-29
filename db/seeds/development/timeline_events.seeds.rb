@@ -25,15 +25,15 @@ after 'development:startups', 'development:target_groups', 'development:targets'
   ]
 
   # create all events in the events_list
-  events_list.each do |startup, type_key, founder_email, description, verified_status|
+  events_list.each do |startup, type_key, founder_email, description, status|
     TimelineEvent.create!(
       startup: startup,
       timeline_event_type: TimelineEventType.find_by(key: type_key),
       founder: Founder.find_by(email: founder_email),
       event_on: Time.now,
       description: description,
-      verified_status: verified_status,
-      verified_at: (verified_status == status_verified ? Time.now : nil)
+      status: status,
+      verified_at: (status == status_verified ? Time.now : nil)
     )
   end
 
@@ -50,7 +50,7 @@ after 'development:startups', 'development:target_groups', 'development:targets'
       founder: avengers_startup.admin,
       event_on: Time.now,
       description: Faker::Lorem.paragraph,
-      verified_status: status_verified,
+      status: status_verified,
       verified_at: Time.now,
       grade: grade
     )

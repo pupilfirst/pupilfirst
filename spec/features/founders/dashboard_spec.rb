@@ -49,11 +49,11 @@ feature 'Founder Dashboard' do
 
   before do
     # Timeline events to take targets to specific states.
-    create(:timeline_event, startup: startup, target: completed_target_1, verified_status: TimelineEvent::STATUS_VERIFIED)
-    create(:timeline_event, startup: startup, target: completed_target_2, verified_status: TimelineEvent::STATUS_VERIFIED)
-    create(:timeline_event, startup: startup, target: completed_target_3, verified_status: TimelineEvent::STATUS_VERIFIED)
-    create(:timeline_event, startup: startup, target: not_accepted_target, verified_status: TimelineEvent::STATUS_NOT_ACCEPTED)
-    create(:timeline_event, startup: startup, target: needs_improvement_target, verified_status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT)
+    create(:timeline_event, startup: startup, target: completed_target_1, status: TimelineEvent::STATUS_VERIFIED)
+    create(:timeline_event, startup: startup, target: completed_target_2, status: TimelineEvent::STATUS_VERIFIED)
+    create(:timeline_event, startup: startup, target: completed_target_3, status: TimelineEvent::STATUS_VERIFIED)
+    create(:timeline_event, startup: startup, target: not_accepted_target, status: TimelineEvent::STATUS_NOT_ACCEPTED)
+    create(:timeline_event, startup: startup, target: needs_improvement_target, status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT)
 
     # Extra target groups in tested level.
     3.times do

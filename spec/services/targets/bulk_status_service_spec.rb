@@ -38,36 +38,36 @@ describe Targets::BulkStatusService do
 
     context 'when the founder target has a verified submission' do
       it 'returns :complete' do
-        founder_event.update!(target: founder_target, verified_status: TimelineEvent::STATUS_VERIFIED)
+        founder_event.update!(target: founder_target, status: TimelineEvent::STATUS_VERIFIED)
         expect(subject.status(founder_target.id)).to eq(Target::STATUS_COMPLETE)
       end
     end
 
     context 'when the founder target has a needs_improvement submission' do
       it 'returns :needs_improvement' do
-        founder_event.update!(target: founder_target, verified_status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT)
+        founder_event.update!(target: founder_target, status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT)
         expect(subject.status(founder_target.id)).to eq(Target::STATUS_NEEDS_IMPROVEMENT)
       end
     end
 
     context 'when the founder target has a not_accepted submission' do
       it 'returns :not_accepted' do
-        founder_event.update!(target: founder_target, verified_status: TimelineEvent::STATUS_NOT_ACCEPTED)
+        founder_event.update!(target: founder_target, status: TimelineEvent::STATUS_NOT_ACCEPTED)
         expect(subject.status(founder_target.id)).to eq(Target::STATUS_NOT_ACCEPTED)
       end
     end
 
     context 'when the founder has multiple submissions for target' do
       it 'returns status based on the latest submission' do
-        founder_event.update!(target: founder_target, verified_status: TimelineEvent::STATUS_NOT_ACCEPTED, created_at: 2.days.ago)
-        founder_event_2.update!(target: founder_target, verified_status: TimelineEvent::STATUS_VERIFIED, created_at: 1.day.ago)
+        founder_event.update!(target: founder_target, status: TimelineEvent::STATUS_NOT_ACCEPTED, created_at: 2.days.ago)
+        founder_event_2.update!(target: founder_target, status: TimelineEvent::STATUS_VERIFIED, created_at: 1.day.ago)
         expect(subject.status(founder_target.id)).to eq(Target::STATUS_COMPLETE)
       end
     end
 
     context 'when the co-founder has completed a startup target' do
       it 'returns :complete' do
-        co_founder_event.update!(target: startup_target, verified_status: TimelineEvent::STATUS_VERIFIED)
+        co_founder_event.update!(target: startup_target, status: TimelineEvent::STATUS_VERIFIED)
         expect(subject.status(startup_target.id)).to eq(Target::STATUS_COMPLETE)
       end
     end
@@ -82,14 +82,14 @@ describe Targets::BulkStatusService do
     context 'when the target has a completed prerequisite' do
       it 'returns :pending' do
         founder_target.prerequisite_targets << startup_target
-        co_founder_event.update!(target: startup_target, verified_status: TimelineEvent::STATUS_VERIFIED)
+        co_founder_event.update!(target: startup_target, status: TimelineEvent::STATUS_VERIFIED)
         expect(subject.status(founder_target.id)).to eq(Target::STATUS_PENDING)
       end
     end
 
     context 'when the startup iteration is different from a vanilla targets event iteration' do
       it 'ignores previous submission and returns :pending' do
-        founder_event.update!(target: founder_target, verified_status: TimelineEvent::STATUS_VERIFIED)
+        founder_event.update!(target: founder_target, status: TimelineEvent::STATUS_VERIFIED)
         startup.update!(iteration: 2)
         expect(subject.status(founder_target.id)).to eq(Target::STATUS_PENDING)
       end
@@ -97,7 +97,7 @@ describe Targets::BulkStatusService do
 
     context 'when the startup iteration is different from a chores event iteration' do
       it 'returns status from previous iteration' do
-        founder_event.update!(target: founder_chore, verified_status: TimelineEvent::STATUS_VERIFIED)
+        founder_event.update!(target: founder_chore, status: TimelineEvent::STATUS_VERIFIED)
         startup.update!(iteration: 2)
         expect(subject.status(founder_chore.id)).to eq(Target::STATUS_COMPLETE)
       end

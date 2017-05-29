@@ -20,7 +20,7 @@ ActiveAdmin.register TimelineEvent do
     Founder.joins(:startup).where(startups: { batch_id: batch_id }).distinct.order(:name)
   }
 
-  filter :verified_status, as: :select, collection: TimelineEvent.valid_statuses
+  filter :status, as: :select, collection: TimelineEvent.valid_statuses
   filter :grade, as: :select, collection: TimelineEvent.valid_grades
   filter :created_at
   filter :verified_at
@@ -66,13 +66,13 @@ ActiveAdmin.register TimelineEvent do
       end
     end
 
-    column :verified_status do |timeline_event|
+    column :status do |timeline_event|
       if timeline_event.verified?
         "Verified on #{timeline_event.verified_at.strftime('%d/%m/%y')}"
       elsif timeline_event.needs_improvement?
         "Marked needs improvement on #{timeline_event.verified_at.strftime('%d/%m/%y')}"
       else
-        timeline_event.verified_status
+        timeline_event.status
       end
     end
 
@@ -316,7 +316,7 @@ ActiveAdmin.register TimelineEvent do
       row :event_on
       row :share_on_facebook
 
-      row :verified_status
+      row :status
 
       row :verified_at
 

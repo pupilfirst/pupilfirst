@@ -22,14 +22,14 @@ describe Targets::StatusService do
     context 'when the target has no associated timeline event' do
       context 'when prerequisites are not complete' do
         it 'returns unavailable' do
-          event_for_prerequisite_target.update!(verified_status: TimelineEvent::STATUS_PENDING)
+          event_for_prerequisite_target.update!(status: TimelineEvent::STATUS_PENDING)
           expect(subject.status).to eq(Targets::StatusService::STATUS_UNAVAILABLE)
         end
       end
 
       context 'when prerequisites are complete' do
         before do
-          event_for_prerequisite_target.update!(verified_status: TimelineEvent::STATUS_VERIFIED)
+          event_for_prerequisite_target.update!(status: TimelineEvent::STATUS_VERIFIED)
         end
 
         it 'returns pending if the due date is not over' do
@@ -48,26 +48,26 @@ describe Targets::StatusService do
 
       before do
         # mark prerequisite target complete
-        event_for_prerequisite_target.update!(verified_status: TimelineEvent::STATUS_VERIFIED)
+        event_for_prerequisite_target.update!(status: TimelineEvent::STATUS_VERIFIED)
       end
 
       it 'returns submitted if the event is pending verification' do
-        event_for_target.update!(verified_status: TimelineEvent::STATUS_PENDING)
+        event_for_target.update!(status: TimelineEvent::STATUS_PENDING)
         expect(subject.status).to eq(Targets::StatusService::STATUS_SUBMITTED)
       end
 
       it 'returns complete if the event is verified' do
-        event_for_target.update!(verified_status: TimelineEvent::STATUS_VERIFIED)
+        event_for_target.update!(status: TimelineEvent::STATUS_VERIFIED)
         expect(subject.status).to eq(Targets::StatusService::STATUS_COMPLETE)
       end
 
       it 'returns needs_improvement if the event is marked needs_improvement' do
-        event_for_target.update!(verified_status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT)
+        event_for_target.update!(status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT)
         expect(subject.status).to eq(Targets::StatusService::STATUS_NEEDS_IMPROVEMENT)
       end
 
       it 'returns not_accepted if the event is marked not_accepted' do
-        event_for_target.update!(verified_status: TimelineEvent::STATUS_NOT_ACCEPTED)
+        event_for_target.update!(status: TimelineEvent::STATUS_NOT_ACCEPTED)
         expect(subject.status).to eq(Targets::StatusService::STATUS_NOT_ACCEPTED)
       end
     end

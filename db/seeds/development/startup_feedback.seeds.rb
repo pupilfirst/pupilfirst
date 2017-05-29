@@ -1,7 +1,7 @@
 require_relative 'helper'
 
 after 'development:timeline_events', 'development:faculty' do
-  event_needs_improvement = TimelineEvent.find_by(verified_status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT)
+  event_needs_improvement = TimelineEvent.find_by(status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT)
   mickey = Faculty.find_by(email: 'mickeymouse@example.com')
 
   StartupFeedback.create!(

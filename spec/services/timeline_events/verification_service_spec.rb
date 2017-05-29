@@ -4,7 +4,7 @@ describe TimelineEvents::VerificationService do
   subject { described_class.new(timeline_event) }
 
   let(:timeline_event) { create :timeline_event }
-  let(:timeline_event_2) { create :timeline_event, verified_status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT }
+  let(:timeline_event_2) { create :timeline_event, status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT }
   let(:karma_point) { create :karma_point, points: 10 }
   let(:target) { create :target, points_earnable: 10 }
   let(:startup) { create :startup }

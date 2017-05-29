@@ -13,7 +13,7 @@ module MoocStudents
       move_down 5
       text "of <i>'#{@mooc_student.college_name}'</i>", align: :center, inline_format: true
       move_down 67
-      text_box "#{@mooc_student.score}%", at: [458, y], style: :bold, size: 16
+      text_box "#{@mooc_student.score.round}%", at: [458, y], style: :bold, size: 16
       self
     end
   end

@@ -20,7 +20,7 @@ ActiveAdmin.register TimelineEvent do
     Founder.joins(:startup).where(startups: { batch_id: batch_id }).distinct.order(:name)
   }
 
-  filter :verified_status, as: :select, collection: TimelineEvent.valid_verified_status
+  filter :verified_status, as: :select, collection: TimelineEvent.valid_statuses
   filter :grade, as: :select, collection: TimelineEvent.valid_grades
   filter :created_at
   filter :verified_at

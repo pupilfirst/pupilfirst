@@ -28,7 +28,7 @@ class TimelineEvent < ApplicationRecord
   STATUS_VERIFIED = 'Verified'
   STATUS_NOT_ACCEPTED = 'Not Accepted'
 
-  def self.valid_verified_status
+  def self.valid_statuses
     [STATUS_VERIFIED, STATUS_PENDING, STATUS_NEEDS_IMPROVEMENT, STATUS_NOT_ACCEPTED]
   end
 
@@ -43,7 +43,7 @@ class TimelineEvent < ApplicationRecord
   normalize_attribute :grade
 
   validates :grade, inclusion: { in: valid_grades }, allow_nil: true
-  validates :verified_status, inclusion: { in: valid_verified_status }
+  validates :verified_status, inclusion: { in: valid_statuses }
   validates :verified_at, presence: true, if: proc { verified? || needs_improvement? }
   validates :event_on, presence: true
   validates :startup_id, presence: true

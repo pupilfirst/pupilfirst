@@ -5,7 +5,7 @@
 
     .content
       ol
-        - events_to_list = verified_status == TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT ? timeline_events.not_improved : timeline_events
+        - events_to_list = verified_status == TimelineEvent::STATUS_NEEDS_IMPROVEMENT ? timeline_events.not_improved : timeline_events
         - if events_to_list.present?
           - events_to_list.limit(10).includes(:startup, :timeline_event_type).each do |timeline_event|
             li = link_to "#{timeline_event.startup.product_name} - #{timeline_event.title}", admin_timeline_event_path(timeline_event)
@@ -18,6 +18,6 @@
       span.sparkline-tag #{trend.join(', ')}
 
     - params = { q: { verified_status_equals: verified_status, startup_batch_id_in: selected_batch_ids } }
-    - params = params.merge(scope: 'not_improved') if verified_status == TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT
+    - params = params.merge(scope: 'not_improved') if verified_status == TimelineEvent::STATUS_NEEDS_IMPROVEMENT
     a.button.view-all href=admin_timeline_events_path(params)
       | View All (#{events_to_list.count})

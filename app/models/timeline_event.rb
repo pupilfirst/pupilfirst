@@ -23,13 +23,13 @@ class TimelineEvent < ApplicationRecord
 
   MAX_DESCRIPTION_CHARACTERS = 500
 
-  VERIFIED_STATUS_PENDING = 'Pending'
-  VERIFIED_STATUS_NEEDS_IMPROVEMENT = 'Needs Improvement'
-  VERIFIED_STATUS_VERIFIED = 'Verified'
-  VERIFIED_STATUS_NOT_ACCEPTED = 'Not Accepted'
+  STATUS_PENDING = 'Pending'
+  STATUS_NEEDS_IMPROVEMENT = 'Needs Improvement'
+  STATUS_VERIFIED = 'Verified'
+  STATUS_NOT_ACCEPTED = 'Not Accepted'
 
   def self.valid_verified_status
-    [VERIFIED_STATUS_VERIFIED, VERIFIED_STATUS_PENDING, VERIFIED_STATUS_NEEDS_IMPROVEMENT, VERIFIED_STATUS_NOT_ACCEPTED]
+    [STATUS_VERIFIED, STATUS_PENDING, STATUS_NEEDS_IMPROVEMENT, STATUS_NOT_ACCEPTED]
   end
 
   GRADE_GOOD = 'good'
@@ -57,7 +57,7 @@ class TimelineEvent < ApplicationRecord
       self.verified_at = Time.now if verified? || needs_improvement?
       self.verified_at = nil if pending? || not_accepted?
     end
-    self.verified_status ||= VERIFIED_STATUS_PENDING
+    self.verified_status ||= STATUS_PENDING
   end
 
   accepts_nested_attributes_for :timeline_event_files, allow_destroy: true
@@ -66,11 +66,11 @@ class TimelineEvent < ApplicationRecord
   scope :from_admitted_startups, -> { joins(:startup).merge(Startup.admitted) }
   scope :from_level_0_startups, -> { joins(:startup).merge(Startup.level_zero) }
   scope :not_dropped_out, -> { joins(:startup).merge(Startup.not_dropped_out) }
-  scope :verified, -> { where(verified_status: VERIFIED_STATUS_VERIFIED) }
-  scope :pending, -> { where(verified_status: VERIFIED_STATUS_PENDING) }
-  scope :needs_improvement, -> { where(verified_status: VERIFIED_STATUS_NEEDS_IMPROVEMENT) }
-  scope :not_accepted, -> { where(verified_status: VERIFIED_STATUS_NOT_ACCEPTED) }
-  scope :verified_or_needs_improvement, -> { where(verified_status: [VERIFIED_STATUS_VERIFIED, VERIFIED_STATUS_NEEDS_IMPROVEMENT]) }
+  scope :verified, -> { where(verified_status: STATUS_VERIFIED) }
+  scope :pending, -> { where(verified_status: STATUS_PENDING) }
+  scope :needs_improvement, -> { where(verified_status: STATUS_NEEDS_IMPROVEMENT) }
+  scope :not_accepted, -> { where(verified_status: STATUS_NOT_ACCEPTED) }
+  scope :verified_or_needs_improvement, -> { where(verified_status: [STATUS_VERIFIED, STATUS_NEEDS_IMPROVEMENT]) }
   scope :has_image, -> { where.not(image: nil) }
   scope :from_approved_startups, -> { joins(:startup).merge(Startup.approved) }
   scope :showcase, -> { includes(:timeline_event_type, :startup).verified.from_approved_startups.not_private.order('timeline_events.event_on DESC') }
@@ -164,12 +164,12 @@ class TimelineEvent < ApplicationRecord
 
   def update_and_require_reverification(params)
     params[:verified_at] = nil
-    params[:verified_status] = VERIFIED_STATUS_PENDING
+    params[:verified_status] = STATUS_PENDING
     update(params)
   end
 
   def verify!
-    update!(verified_status: VERIFIED_STATUS_VERIFIED, verified_at: Time.now)
+    update!(verified_status: STATUS_VERIFIED, verified_at: Time.now)
 
     add_link_for_new_deck!
     add_link_for_new_wireframe!
@@ -178,35 +178,35 @@ class TimelineEvent < ApplicationRecord
   end
 
   def revert_to_pending!
-    update!(verified_status: VERIFIED_STATUS_PENDING, verified_at: nil)
+    update!(verified_status: STATUS_PENDING, verified_at: nil)
   end
 
   def mark_needs_improvement!
-    update!(verified_status: VERIFIED_STATUS_NEEDS_IMPROVEMENT, verified_at: Time.now)
+    update!(verified_status: STATUS_NEEDS_IMPROVEMENT, verified_at: Time.now)
   end
 
   def mark_not_accepted!
-    update!(verified_status: VERIFIED_STATUS_NOT_ACCEPTED, verified_at: nil)
+    update!(verified_status: STATUS_NOT_ACCEPTED, verified_at: nil)
   end
 
   def verified?
-    verified_status == VERIFIED_STATUS_VERIFIED
+    verified_status == STATUS_VERIFIED
   end
 
   def pending?
-    verified_status == VERIFIED_STATUS_PENDING
+    verified_status == STATUS_PENDING
   end
 
   def needs_improvement?
-    verified_status == VERIFIED_STATUS_NEEDS_IMPROVEMENT
+    verified_status == STATUS_NEEDS_IMPROVEMENT
   end
 
   def not_accepted?
-    verified_status == VERIFIED_STATUS_NOT_ACCEPTED
+    verified_status == STATUS_NOT_ACCEPTED
   end
 
   def to_be_graded?
-    ([VERIFIED_STATUS_VERIFIED, VERIFIED_STATUS_NEEDS_IMPROVEMENT].include? verified_status) && karma_point.blank?
+    ([STATUS_VERIFIED, STATUS_NEEDS_IMPROVEMENT].include? verified_status) && karma_point.blank?
   end
 
   def verified_or_needs_improvement?

@@ -11,14 +11,14 @@ describe TargetsController do
     create :timeline_event,
       startup: startup, founder: startup.admin,
       target: completed_prerequisite_target,
-      verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED
+      verified_status: TimelineEvent::STATUS_VERIFIED
   end
   let!(:founder_target) { create :target, role: Target::ROLE_FOUNDER }
   let!(:completion_event_2) do
     create :timeline_event,
       startup: startup, founder: startup.admin,
       target: founder_target,
-      verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED
+      verified_status: TimelineEvent::STATUS_VERIFIED
   end
 
   let!(:faculty) { create :faculty }

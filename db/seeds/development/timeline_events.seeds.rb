@@ -5,9 +5,9 @@ after 'development:startups', 'development:target_groups', 'development:targets'
 
   avengers_startup = Startup.find_by(product_name: 'SuperHeroes')
 
-  status_verified = TimelineEvent::VERIFIED_STATUS_VERIFIED
-  status_pending = TimelineEvent::VERIFIED_STATUS_PENDING
-  status_needs_improvement = TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT
+  status_verified = TimelineEvent::STATUS_VERIFIED
+  status_pending = TimelineEvent::STATUS_PENDING
+  status_needs_improvement = TimelineEvent::STATUS_NEEDS_IMPROVEMENT
 
   # Add a one-liner verified entry for avengers
   events_list = [

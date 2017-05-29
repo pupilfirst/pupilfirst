@@ -20,7 +20,7 @@ FactoryGirl.define do
     end
 
     trait :verified do
-      verified_status TimelineEvent::VERIFIED_STATUS_VERIFIED
+      verified_status TimelineEvent::STATUS_VERIFIED
       verified_at { Time.now }
     end
   end

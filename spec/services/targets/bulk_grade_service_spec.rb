@@ -17,7 +17,7 @@ describe Targets::BulkGradeService do
       founder: founder,
       startup: startup,
       target: founder_target,
-      verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED,
+      verified_status: TimelineEvent::STATUS_VERIFIED,
       grade: TimelineEvent::GRADE_WOW
   end
 
@@ -26,7 +26,7 @@ describe Targets::BulkGradeService do
       founder: co_founder,
       startup: startup,
       target: startup_target,
-      verified_status: TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT
+      verified_status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT
   end
 
   before do

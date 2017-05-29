@@ -83,9 +83,9 @@ ActiveAdmin.register TimelineEvent do
     timeline_event = TimelineEvent.find(params[:id])
     if timeline_event.pending?
       status = {
-        needs_improvement: TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT,
-        not_accepted: TimelineEvent::VERIFIED_STATUS_NOT_ACCEPTED,
-        verified: TimelineEvent::VERIFIED_STATUS_VERIFIED
+        needs_improvement: TimelineEvent::STATUS_NEEDS_IMPROVEMENT,
+        not_accepted: TimelineEvent::STATUS_NOT_ACCEPTED,
+        verified: TimelineEvent::STATUS_VERIFIED
       }.fetch(params[:status].to_sym)
 
       points = params[:points].present? ? params[:points].to_i : nil

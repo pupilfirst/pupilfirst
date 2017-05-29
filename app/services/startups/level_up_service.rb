@@ -36,7 +36,7 @@ module Startups
           iteration: @startup.iteration,
           description: event_description,
           verified_at: Time.zone.now,
-          verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED
+          verified_status: TimelineEvent::STATUS_VERIFIED
         )
       end
     end

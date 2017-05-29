@@ -177,18 +177,6 @@ class TimelineEvent < ApplicationRecord
     add_link_for_new_video!
   end
 
-  def revert_to_pending!
-    update!(status: STATUS_PENDING, status_updated_at: nil)
-  end
-
-  def mark_needs_improvement!
-    update!(status: STATUS_NEEDS_IMPROVEMENT, status_updated_at: Time.now)
-  end
-
-  def mark_not_accepted!
-    update!(status: STATUS_NOT_ACCEPTED, status_updated_at: nil)
-  end
-
   def verified?
     status == STATUS_VERIFIED
   end

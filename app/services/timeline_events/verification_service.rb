@@ -53,7 +53,7 @@ module TimelineEvents
 
     def mark_needs_improvement
       TimelineEvent.transaction do
-        @timeline_event.mark_needs_improvement!
+        @timeline_event.update!(status: STATUS_NEEDS_IMPROVEMENT, status_updated_at: Time.zone.now)
         update_karma_points
         reset_startup_level if @timeline_event.timeline_event_type.end_iteration?
       end
@@ -61,14 +61,14 @@ module TimelineEvents
 
     def mark_not_accepted
       TimelineEvent.transaction do
-        @timeline_event.mark_not_accepted!
+        @timeline_event.update!(status: STATUS_NOT_ACCEPTED, status_updated_at: Time.zone.now)
         cancel_reset_request if @timeline_event.timeline_event_type.end_iteration?
       end
     end
 
     def mark_pending
       TimelineEvent.transaction do
-        @timeline_event.revert_to_pending!
+        @timeline_event.update!(status: STATUS_PENDING, status_updated_at: Time.zone.now)
       end
     end
 

@@ -8,6 +8,7 @@ class TimelineEvent < ApplicationRecord
   belongs_to :target
 
   has_one :karma_point, as: :source
+  has_many :startup_feedback
   has_many :timeline_event_files, dependent: :destroy
 
   belongs_to :improved_timeline_event, class_name: 'TimelineEvent'

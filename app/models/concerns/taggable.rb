@@ -11,7 +11,7 @@ module Taggable
 
   module ClassMethods
     def ransackable_scopes(_auth)
-      %i(ransack_tagged_with)
+      %i[ransack_tagged_with]
     end
   end
 end

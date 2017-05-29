@@ -1,16 +1,3 @@
-# https://github.com/intercom/intercom-rails#content-security-policy-level-2-csp-support
-module CoreExtensions
-  module IntercomRails
-    module AutoInclude
-      def self.csp_sha256_hook(controller, sha256)
-        return if controller.class.in?([Rails::MailersController, Rails::InfoController, Delayed::Web::JobsController])
-        return if defined?(LetterOpenerWeb) && controller.class == LetterOpenerWeb::LettersController
-        controller.add_csp_hash(sha256)
-      end
-    end
-  end
-end
-
 IntercomRails.config do |config|
   # == Intercom app_id
   #
@@ -28,7 +15,7 @@ IntercomRails.config do |config|
   # == Enabled Environments
   # Which environments is auto inclusion of the Javascript enabled for
   #
-  config.enabled_environments = %w(development production)
+  config.enabled_environments = %w[development production]
 
   # == Current user method/variable
   # The method/variable that contains the logged in user in your controllers.

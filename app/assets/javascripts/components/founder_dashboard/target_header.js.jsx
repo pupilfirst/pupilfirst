@@ -112,6 +112,43 @@ class FounderDashboardTargetHeader extends React.Component {
     }
   }
 
+  statusContents() {
+    let grade = ['good', 'great', 'wow'].indexOf(this.props.target.grade) + 1;
+
+    if (grade === 0) {
+      return <span>
+        <span className="founder-dashboard-target-header__status-badge-icon">
+          <i className={ this.statusIconClasses() }/>
+        </span>
+
+        <span className="hidden-sm-down">
+          { this.statusString() }
+        </span>
+      </span>;
+    } else {
+      let filledStars = _.times(grade).map(function (e, i) {
+        return <i key={ "filled-star-" + this.props.target.id + "-" + i }
+          className='fa fa-star founder-dashboard-target-header__status-badge-star'/>;
+      }, this);
+
+      let emptyStars = _.times(3 - grade).map(function (e, i) {
+        return <i key={ "empty-star-" + this.props.target.id + "-" + i }
+          className='fa fa-star-o founder-dashboard-target-header__status-badge-star'/>;
+      }, this);
+
+      let gradeString = this.props.target.grade.charAt(0).toUpperCase() + this.props.target.grade.slice(1);
+
+      return <span>
+        { filledStars }
+        { emptyStars }
+
+        <span className="hidden-sm-down">
+          &nbsp;{ gradeString }!
+        </span>
+      </span>;
+    }
+  }
+
   render() {
     return (
       <div className={ this.containerClasses() } onClick={ this.props.onClickCB }>
@@ -133,13 +170,7 @@ class FounderDashboardTargetHeader extends React.Component {
         </div>
 
         <div className={ this.statusBadgeClasses() }>
-          <span className="founder-dashboard-target-header__status-badge-icon">
-            <i className={ this.statusIconClasses() }/>
-          </span>
-
-          <span className="hidden-sm-down">
-            { this.statusString() }
-          </span>
+          { this.statusContents() }
         </div>
       </div>
     );

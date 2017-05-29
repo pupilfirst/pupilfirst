@@ -1,7 +1,7 @@
 require_relative 'helper'
 
 after 'development:levels' do
-  puts 'Seeding target groups'
+  puts 'Seeding target_groups'
 
   group_data = {
     0 => ['Admission Process'],

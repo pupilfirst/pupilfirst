@@ -1,7 +1,7 @@
 require_relative 'helper'
 
 after 'development:faculty' do
-  puts 'Seeding connect slots'
+  puts 'Seeding connect_slots'
 
   mickey = Faculty.find_by(email: 'mickeymouse@example.com')
   minnie = Faculty.find_by(email: 'minniemouse@example.com')

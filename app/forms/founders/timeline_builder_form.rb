@@ -66,6 +66,17 @@ module Founders
         create_files(timeline_event)
 
         TimelineEvents::AfterFounderSubmitJob.perform_later(timeline_event)
+
+        add_intercom_tag(founder)
+      end
+    end
+
+    # Add task submission tags on Intercom if applicable
+    def add_intercom_tag(founder)
+      if target&.key == Target::KEY_ADMISSIONS_CODING_TASK
+        Intercom::FounderTaggingJob.perform_later(founder, 'Coding Task Submitted')
+      elsif target&.key == Target::KEY_ADMISSIONS_VIDEO_TASK
+        Intercom::FounderTaggingJob.perform_later(founder, 'Video Task Submitted')
       end
     end
 

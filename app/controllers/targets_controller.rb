@@ -7,7 +7,7 @@ class TargetsController < ApplicationController
 
   # GET /targets/select2_search
   def select2_search
-    raise_not_found unless true_user.admin_user.present?
+    raise_not_found if true_user.admin_user.blank?
     render json: Targets::Select2SearchService.search_for_target(params[:q])
   end
 
@@ -21,6 +21,19 @@ class TargetsController < ApplicationController
       hash[p_target.id] = p_target.title
     end
     render json: prerequisite_targets
+  end
+
+  # GET /targets/:id/startup_feedback
+  def startup_feedback
+    authorize :target
+    target = Target.find(params[:id])
+    latest_feedback = Targets::FeedbackService.new(target, current_founder).feedback_for_latest_event
+
+    startup_feedback = latest_feedback.each_with_object({}) do |feedback, hash|
+      hash[feedback.id] = feedback.feedback
+    end
+
+    render json: startup_feedback
   end
 
   # GET /targets/:id/founder_statuses

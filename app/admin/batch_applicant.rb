@@ -8,7 +8,7 @@ ActiveAdmin.register BatchApplicant do
     :address_proof,
     batch_application_ids: [],
     tag_list: [],
-    college_attributes: %i(name also_known_as city state_id established_year website contact_numbers replacement_university_id)
+    college_attributes: %i[name also_known_as city state_id established_year website contact_numbers replacement_university_id]
 
   scope :all, default: true
   scope :submitted_application
@@ -261,7 +261,7 @@ ActiveAdmin.register BatchApplicant do
       f.input :address_proof
     end
 
-    if f.object.college.blank? || !f.object.college&.persisted?
+    unless f.object.college&.persisted?
       div class: 'aa_batch_applicant_enable_create_college' do
         span { check_box_tag 'aa_batch_applicant_enable_create_college_checkbox' }
         span { label_tag 'aa_batch_applicant_enable_create_college_checkbox', 'Enable the form to create new college?' }

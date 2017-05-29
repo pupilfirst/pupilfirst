@@ -10,7 +10,7 @@ module Founders
       @startup = current_founder.startup&.decorate
 
       # founders without proper startups will not have dashboards
-      raise_not_found unless @startup.present?
+      raise_not_found if @startup.blank?
 
       load_react_data
 
@@ -36,7 +36,7 @@ module Founders
         flash[:error] = 'Something went wrong. Please try again!'
       end
 
-      redirect_to dashboard_founder_path
+      redirect_to dashboard_founder_path(from: 'startup_restart')
     end
 
     # POST /founder/startup/level_up
@@ -44,7 +44,7 @@ module Founders
       startup = current_founder.startup
       raise_not_found unless Startups::LevelUpEligibilityService.new(startup, current_founder).eligible?
       Startups::LevelUpService.new(startup).execute
-      redirect_back(fallback_location: dashboard_founder_path)
+      redirect_to(dashboard_founder_path(from: 'level_up', from_level: startup.level.number - 1))
     end
 
     private

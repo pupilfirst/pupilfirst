@@ -1,6 +1,6 @@
 class FacultyController < ApplicationController
-  layout 'error', except: %i(index connect show)
-  before_action :validate_faculty, except: %i(index connect show)
+  layout 'error', except: %i[index connect show]
+  before_action :validate_faculty, except: %i[index connect show]
 
   # GET /faculty
   def index

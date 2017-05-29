@@ -5,7 +5,7 @@ ActiveAdmin.register BatchApplication do
 
   permit_params :application_round_id, :application_stage_id, :university_id, :team_achievement, :team_lead_id,
     :college, :state, :team_size, :agreements_verified,
-    batch_applicants_attributes: %i(id fee_payment_method), tag_list: []
+    batch_applicants_attributes: %i[id fee_payment_method], tag_list: []
 
   batch_action :promote, confirm: 'Are you sure?' do |ids|
     promoted = 0

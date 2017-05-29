@@ -198,8 +198,8 @@ module PartnershipDeed
       text "(The #{ORDINALIZE[index]} Partner)"
     end
 
-    ORDINALIZE = %w(First Second Third Fourth Fifth Sixth Seventh Eighth Ninth Tenth).freeze
-    HUMANIZE = %w(One Two Three Four Five Six Seven Eight Nine Ten).freeze
+    ORDINALIZE = %w[First Second Third Fourth Fifth Sixth Seventh Eighth Ninth Tenth].freeze
+    HUMANIZE = %w[One Two Three Four Five Six Seven Eight Nine Ten].freeze
 
     def founders_count
       @founders_count ||= founders.count

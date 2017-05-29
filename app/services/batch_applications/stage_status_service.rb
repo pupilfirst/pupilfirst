@@ -15,7 +15,7 @@ module BatchApplications
       elsif stage_number < application_stage_number
         :complete
       else
-        application_status.in?(%i(ongoing submitted promoted)) ? :pending : :not_applicable
+        application_status.in?(%i[ongoing submitted promoted]) ? :pending : :not_applicable
       end
     end
   end

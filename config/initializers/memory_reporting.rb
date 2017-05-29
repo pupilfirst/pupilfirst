@@ -4,7 +4,7 @@ if ENV['MEMORY_REPORTING']
   Thread.new do
     report_path = File.absolute_path(Rails.root.join('memory_report.csv'))
     Rails.logger.debug "Writing report to: #{report_path}"
-    `echo "#{%w(time rss heap_live_slots).join(',')}" > #{report_path}`
+    `echo "#{%w[time rss heap_live_slots].join(',')}" > #{report_path}`
 
     loop do
       pid = Process.pid

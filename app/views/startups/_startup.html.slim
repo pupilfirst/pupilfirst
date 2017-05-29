@@ -51,9 +51,9 @@
       p.startup-details__description.font-light
         = startup.product_description
       .startups-attachments
-        span.startup-attachments__link title="#{TimelineEventType::STAGE_NAMES[startup.stage]} Stage"
-          img.startups-link__icon alt="Product Stage" src="#{image_url 'startups/index/attachments-icon-stage.svg'}"
-          ' #{TimelineEventType::STAGE_NAMES[startup.stage]}
+        span.startup-attachments__link data-toggle="tooltip" data-placement="top" title=startup.level.display_name
+          img.startups-link__icon alt="Startup Level" src="#{image_url 'startups/index/attachments-icon-stage.svg'}"
+          ' #{startup.level.name}
 
         - if startup.presentation_link?
           a.startup-attachments__link href="#{short_url(startup.presentation_link)}" target="_blank" title="Product Deck"

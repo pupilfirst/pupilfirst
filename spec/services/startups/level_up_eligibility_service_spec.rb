@@ -14,6 +14,9 @@ describe Startups::LevelUpEligibilityService do
   let(:non_milestone_founder_target) { create :target, :for_founders, target_group: non_milestone_targets }
   let(:non_milestone_startup_target) { create :target, :for_startup, target_group: non_milestone_targets }
 
+  # Presence of an archived milestone target should not alter results.
+  let!(:archived_startup_target) { create :target, :for_startup, target_group: milestone_targets, archived: true }
+
   describe '#eligibility' do
     context 'when startup has completed all milestone targets' do
       it "returns 'eligible'" do

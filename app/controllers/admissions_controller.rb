@@ -1,6 +1,6 @@
 class AdmissionsController < ApplicationController
   layout 'application_v2'
-  before_action :skip_container, only: %i(founders founders_submit)
+  before_action :skip_container, only: %i[founders founders_submit]
 
   # GET /apply
   def apply
@@ -28,7 +28,7 @@ class AdmissionsController < ApplicationController
         # Sign in user immediately to allow him to proceed to screening.
         sign_in founder.user
 
-        redirect_to dashboard_founder_path
+        redirect_to dashboard_founder_path(from: 'register')
       end
     else
       render 'apply'
@@ -55,7 +55,7 @@ class AdmissionsController < ApplicationController
     Intercom::LevelZeroStageUpdateJob.perform_later(current_founder, 'Screening Completed')
 
     flash[:success] = 'Screening target has been marked as completed!'
-    redirect_to dashboard_founder_path(stage: 'screening_complete')
+    redirect_to dashboard_founder_path(from: 'screening_submit')
   end
 
   # GET /admissions/fee
@@ -130,7 +130,7 @@ class AdmissionsController < ApplicationController
     if @form.validate(params[:admissions_founders])
       @form.save
       flash[:success] = 'Details of founders have been saved!'
-      redirect_to dashboard_founder_path
+      redirect_to dashboard_founder_path(from: 'founder_submit')
     else
       render 'founders'
     end
@@ -159,7 +159,7 @@ class AdmissionsController < ApplicationController
       Founders::AcceptInvitationService.new(founder).execute
       flash[:success] = "You have successfully joined #{founder.reload.startup.admin.name}'s startup"
       sign_in founder.user
-      redirect_to dashboard_founder_path
+      redirect_to dashboard_founder_path(from: 'accept_invitation')
     end
   end
 
@@ -211,7 +211,7 @@ class AdmissionsController < ApplicationController
     if @form.validate(params[:admissions_preselection_stage_submission])
       @form.save(current_founder)
       flash[:success] = 'Startup agreements were successfully saved.'
-      redirect_to dashboard_founder_path
+      redirect_to dashboard_founder_path(from: 'preselection_submit')
     else
       @form.save_partnership_deed
       flash[:error] = 'We were unable to save details because of errors. Please try again.'
@@ -293,6 +293,6 @@ class AdmissionsController < ApplicationController
   def bypass_payment
     Admissions::PostPaymentService.new(founder: current_founder).execute
     flash[:success] = 'Payment Bypassed!'
-    redirect_to dashboard_founder_path(stage: 'payment_complete')
+    redirect_to dashboard_founder_path(from: 'bypass_payment')
   end
 end

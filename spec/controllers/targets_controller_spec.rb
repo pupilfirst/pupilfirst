@@ -21,6 +21,9 @@ describe TargetsController do
       verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED
   end
 
+  let!(:faculty) { create :faculty }
+  let!(:target_feedback) { create :startup_feedback, timeline_event: completion_event_2, faculty: faculty, startup: startup }
+
   describe 'GET download_rubric' do
     it 'raises not found error when a founder is not signed in' do
       expect do
@@ -80,7 +83,28 @@ describe TargetsController do
       cofounder = startup.founders.where(startup_admin: nil).first
       statuses = [{ startup.admin.id.to_s => Target::STATUS_COMPLETE.to_s }, { cofounder.id.to_s => Target::STATUS_PENDING.to_s }]
       get :founder_statuses, params: { id: founder_target.id }
-      expect(JSON.parse(response.body)).to eq(statuses)
+      expect(JSON.parse(response.body)).to match_array(statuses)
+    end
+  end
+
+  describe 'GET startup_feedback' do
+    before do
+      sign_in startup.admin.user
+    end
+
+    context 'when target has no feedbacks' do
+      it 'returns an empty hash' do
+        get :startup_feedback, params: { id: completed_prerequisite_target.id }
+        expect(JSON.parse(response.body)).to eq({})
+      end
+    end
+
+    context 'when target has feedbacks' do
+      it 'returns a hash of startup feedbacks with ids mapped to the feedback' do
+        expected_response = { target_feedback.id.to_s => target_feedback.feedback.to_s }
+        get :startup_feedback, params: { id: founder_target.id }
+        expect(JSON.parse(response.body)).to eq(expected_response)
+      end
     end
   end
 end

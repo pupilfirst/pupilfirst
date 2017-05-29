@@ -69,14 +69,6 @@ class ApplicationController < ActionController::Base
     @current_batch_applicant ||= current_user&.batch_applicant
   end
 
-  # Hack to allow Intercom to insert its script's hash into our CSP.
-  def add_csp_hash(hash)
-    current_csp = response.headers['Content-Security-Policy']
-    csp_components = current_csp.split ' '
-    csp_components.insert(csp_components.index('script-src') + 3, "'unsafe-inline' #{hash}")
-    response.headers['Content-Security-Policy'] = csp_components.join ' '
-  end
-
   # sets a permanent signed cookie. Additional options such as :tld_length can be passed via the options_hash
   # eg: set_cookie(:token, 'abcd', { 'tld_length' => 1 })
   def set_cookie(key, value, options_hash = {})
@@ -176,7 +168,7 @@ class ApplicationController < ActionController::Base
 
   def google_analytics_csp
     {
-      image: 'https://www.google-analytics.com https://stats.g.doubleclick.net',
+      image: 'https://www.google-analytics.com https://stats.g.doubleclick.net https://www.google.com/pagead/ga-audiences',
       script: 'https://www.google-analytics.com',
       connect: 'https://www.google-analytics.com'
     }
@@ -214,10 +206,10 @@ class ApplicationController < ActionController::Base
     }
   end
 
-  def web_console_csp
-    return {} unless Rails.env.development?
-
-    { script: "'sha256-kyVR4MSQgwMT/9qlHjJ54ne+O5IgATAix8tiQwZqKbI=' 'sha256-N8P082RH9sZuH82Ho7454s+117pCE2iWh5PWBDp/T60='" }
+  def gtm_csp
+    {
+      script: 'https://www.googletagmanager.com'
+    }
   end
 
   def frame_sources
@@ -232,20 +224,17 @@ class ApplicationController < ActionController::Base
 
   def image_sources
     <<~IMAGE_SOURCES.squish
-      img-src
-      'self' data: blob: https://blog.sv.co http://www.startatsv.com https://sv-assets.sv.co
-      https://uploaded-assets.sv.co #{google_analytics_csp[:image]} #{inspectlet_csp[:image]} #{facebook_csp[:image]}
-      #{intercom_csp[:image]} #{instagram_csp[:image]} https://codecov.io;
+      img-src * data: blob:;
     IMAGE_SOURCES
   end
 
   def script_sources
     <<~SCRIPT_SOURCES.squish
       script-src
-      'self' 'unsafe-eval' https://ajax.googleapis.com https://blog.sv.co https://www.youtube.com
-      https://s.ytimg.com http://www.startatsv.com https://sv-assets.sv.co #{recaptcha_csp[:script]} #{google_analytics_csp[:script]}
-      #{inspectlet_csp[:script]} #{facebook_csp[:script]} #{intercom_csp[:script]}
-      #{instagram_csp[:script]} #{web_console_csp[:script]};
+      'self' 'unsafe-eval' 'unsafe-inline' https://ajax.googleapis.com https://blog.sv.co https://www.youtube.com
+      https://s.ytimg.com http://www.startatsv.com https://sv-assets.sv.co #{recaptcha_csp[:script]}
+      #{google_analytics_csp[:script]} #{inspectlet_csp[:script]} #{facebook_csp[:script]} #{intercom_csp[:script]}
+      #{gtm_csp[:script]} #{instagram_csp[:script]};
     SCRIPT_SOURCES
   end
 

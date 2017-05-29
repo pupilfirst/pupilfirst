@@ -14,7 +14,6 @@ html lang='en'
     = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => 'reload'
 
     // Scripts
-    = javascript_include_tag 'https://www.google-analytics.com/analytics.js', async: true
     = javascript_include_tag 'application', 'data-turbolinks-track' => 'reload'
 
     = csrf_meta_tags
@@ -23,6 +22,10 @@ html lang='en'
     link rel="icon" href=image_url('layouts/shared/favicon.png')
 
   body
+    - if Rails.env.production?
+      noscript
+        iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N2LS39W" height="0" width="0" style="display:none;visibility:hidden"
+
     section#header
       nav.navbar.navbar-default.shrink role="navigation"
         - if @sitewide_notice

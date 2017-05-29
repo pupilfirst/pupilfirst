@@ -21,6 +21,9 @@ feature 'Pre-selection Stage' do
   let!(:application_fee_payment) { create :payment, :paid, founder: current_founder, startup: startup }
   let(:image_path) { File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'users', 'college_id.jpg')) }
   let(:pdf_path) { File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf')) }
+  let!(:tet_joined) { create :tet_joined }
+  let!(:l1_milestones) { create :target_group, level: level_1, milestone: true }
+  let!(:level_1) { create :level, :one }
 
   context "when founder hasn't completed prerequisites" do
     scenario 'founder is blocked from accessing preselection page' do
@@ -216,6 +219,14 @@ feature 'Pre-selection Stage' do
         visit dashboard_founder_path
 
         expect(page).to have_content('You have successfully completed the first step in your startup journey. We are proud to have you join our collective.')
+
+        click_button 'Level Up'
+
+        expect(page).to have_content(l1_milestones.name)
+        expect(page).to have_content(l1_milestones.description)
+
+        # Also ensure the Page path is correct (analytics requirement).
+        expect(page).to have_current_path(dashboard_founder_path(from: 'level_up', from_level: 0))
       end
     end
   end

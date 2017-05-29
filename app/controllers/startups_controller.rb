@@ -1,5 +1,5 @@
 class StartupsController < ApplicationController
-  before_action :authenticate_founder!, except: %i(show index timeline_event_show paged_events)
+  before_action :authenticate_founder!, except: %i[show index timeline_event_show paged_events]
 
   # GET /startups
   def index
@@ -89,10 +89,10 @@ class StartupsController < ApplicationController
       Startup.unscoped
     end
 
-    stage = params.dig(:startups_filter, :stage)
-    stage_scope = stage.present? ? Startup.where(stage: stage) : Startup.unscoped
+    level_id = params.dig(:startups_filter, :level)
+    level_scope = level_id.present? ? Startup.where(level_id: level_id) : Startup.unscoped
 
-    unsorted_startups = Startup.admitted.approved.merge(batch_scope).merge(category_scope).merge(stage_scope)
+    unsorted_startups = Startup.admitted.approved.merge(batch_scope).merge(category_scope).merge(level_scope)
 
     # HACK: account for startups with latest_team_event_date = nil while sorting
     @startups = unsorted_startups.select(&:latest_team_event_date).sort_by(&:latest_team_event_date).reverse + unsorted_startups.reject(&:latest_team_event_date)
@@ -101,7 +101,7 @@ class StartupsController < ApplicationController
   def load_filter_options
     @batches = Startup.available_batches.order('batch_number DESC')
     @categories = StartupCategory.joins(:startups).where.not(startups: { batch_id: nil }).distinct
-    @stages = Startup.all.pluck(:stage).uniq
+    @levels = Level.where('number > ?', 0).order(:number)
   end
 
   def startup_params

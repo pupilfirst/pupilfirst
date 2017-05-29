@@ -82,6 +82,9 @@ setPerformancePointer = ->
       else 'green'
     $('.performance-pointer')[0].style.color = color
 
+takeTourOnClick = ->
+  $('#filter-targets-dropdown__tour-button').on('click', startTour)
+
 giveATour = ->
   startTour() if $('#dashboard-show-tour').data('tour-flag')
 
@@ -181,4 +184,5 @@ $(document).on 'turbolinks:load', ->
     giveATour()
     hideIntercomOnSmallScreen()
     setPerformancePointer()
+    takeTourOnClick()
 #    loadProgramWeekOnDemand()

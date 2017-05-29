@@ -1,6 +1,7 @@
 class StartupFeedback < ApplicationRecord
   belongs_to :startup
   belongs_to :faculty
+  belongs_to :timeline_event
   attr_accessor :send_email, :event_id, :event_status
 
   scope :for_batch, ->(batch) { joins(:startup).where(startups: { batch_id: batch.id }) }
@@ -28,11 +29,6 @@ class StartupFeedback < ApplicationRecord
     else
       false
     end
-  end
-
-  def timeline_event
-    return unless reference_url.present? && reference_url.match(REGEX_TIMELINE_EVENT_URL).present?
-    TimelineEvent.find_by(id: reference_url.match(REGEX_TIMELINE_EVENT_URL)[:event_id])
   end
 
   def as_slack_message

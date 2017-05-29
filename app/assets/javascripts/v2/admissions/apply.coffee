@@ -29,11 +29,7 @@ readmoreFAQ = ->
     speed: 200
     collapsedHeight: 200
     lessLink: '<a class="read-less-link" href="#">Read Less</a>'
-    moreLink: '<a id="read-more-link" class="read-more-link" href="#">Read More</a>'
-
-  # This GA event had to be set here :(
-  $('#read-more-link').on('click', (event) ->
-    ga('send', 'event', 'Link', 'click', 'FAQ read-more'))
+    moreLink: '<a id="gtm__read-more-link" class="read-more-link" href="#">Read More</a>'
 
 emailsShouldMatch = ->
   founderRegistrationForm = $('#new_founders_registration')

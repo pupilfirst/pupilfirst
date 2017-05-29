@@ -26,14 +26,6 @@ module Targets
       @target.prerequisite_targets.where.not(id: completed_prerequisites_ids)
     end
 
-    private
-
-    def status_from_event
-      return STATUS_COMPLETE if linked_event.verified?
-      return STATUS_NOT_ACCEPTED if linked_event.not_accepted?
-      linked_event.needs_improvement? ? STATUS_NEEDS_IMPROVEMENT : STATUS_SUBMITTED
-    end
-
     def linked_event
       @linked_event ||= begin
         linked_events = owner.timeline_events.where(target: @target)
@@ -42,8 +34,16 @@ module Targets
           linked_events = linked_events.where(iteration: current_iteration)
         end
 
-        linked_events
-      end.last
+        linked_events.order('created_at DESC')
+      end.first
+    end
+
+    private
+
+    def status_from_event
+      return STATUS_COMPLETE if linked_event.verified?
+      return STATUS_NOT_ACCEPTED if linked_event.not_accepted?
+      linked_event.needs_improvement? ? STATUS_NEEDS_IMPROVEMENT : STATUS_SUBMITTED
     end
 
     def owner_events

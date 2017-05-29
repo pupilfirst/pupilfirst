@@ -65,7 +65,7 @@ describe Lita::Handlers::Targets do
       end
 
       context 'when asked for information about specific target' do
-        let(:response) { double 'Lita Response Object', match_data: %w(targets 1) }
+        let(:response) { double 'Lita Response Object', match_data: %w[targets 1] }
 
         context 'when choice is valid' do
           it 'replies with basic information about target' do
@@ -109,7 +109,7 @@ describe Lita::Handlers::Targets do
         end
 
         context 'when choice is invalid' do
-          let(:response) { double 'Lita Response Object', match_data: %w(targets 6) }
+          let(:response) { double 'Lita Response Object', match_data: %w[targets 6] }
 
           it 'responds with an error message' do
             expect(response).to receive(:reply_privately).with(

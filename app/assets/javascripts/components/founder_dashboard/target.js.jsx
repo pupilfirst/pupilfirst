@@ -5,7 +5,8 @@ class FounderDashboardTarget extends React.Component {
     this.state = {
       showDescription: false,
       fetchFounderStatuses: false,
-      fetchTargetPrerequisite: false
+      fetchTargetPrerequisite: false,
+      fetchTargetFeedback: false
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -23,6 +24,10 @@ class FounderDashboardTarget extends React.Component {
     if (open) {
       if (!this.state.fetchFounderStatuses) {
         this.setState({fetchFounderStatuses: true});
+      }
+      if (this.props.target['status'] == 'complete' || this.props.target['status'] == 'needs_improvement' ||
+        this.props.target['status'] == 'not_accepted' && !this.state.fetchTargetFeedback) {
+        this.setState({fetchTargetFeedback: true});
       }
       if (this.props.target['status'] == 'unavailable' && !this.state.fetchTargetPrerequisite) {
         this.setState({fetchTargetPrerequisite: true});
@@ -57,7 +62,8 @@ class FounderDashboardTarget extends React.Component {
           <FounderDashboardTargetDescription key={ 'description-' + this.props.target.id }
             target={ this.props.target } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }
             founderDetails={ this.props.founderDetails} fetchFounderStatuses={ this.state.fetchFounderStatuses }
-                                             fetchTargetPrerequisite={this.state.fetchTargetPrerequisite}/>
+                                             fetchTargetPrerequisite={this.state.fetchTargetPrerequisite}
+                                             fetchTargetFeedback={this.state.fetchTargetFeedback}/>
         </div>
       </div>
     );

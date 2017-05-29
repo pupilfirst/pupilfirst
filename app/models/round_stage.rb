@@ -7,9 +7,7 @@ class RoundStage < ApplicationRecord
 
   # It is possible for RoundStage to be instantiated without application stage (an error captured by validation above),
   # but in order to handle that error, we should treat it as a possible case in this related validation.
-  # rubocop:disable Style/DoubleNegation
-  validates :ends_at, presence: true, unless: proc { |round_stage| !!round_stage.application_stage&.final_stage? }
-  # rubocop:enable Style/DoubleNegation
+  validates :ends_at, presence: true, unless: proc { |round_stage| round_stage.application_stage.present? && round_stage.application_stage.final_stage? }
 
   validate :should_start_before_end
 

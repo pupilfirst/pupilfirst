@@ -69,6 +69,7 @@ gem 'ahoy_matey', '~> 1.5' # Analytics for Rails
 gem 'acts-as-taggable-on', '~> 4.0' # Tag a single model on several contexts.
 gem 'will_paginate-bootstrap4', '~> 0.1' # This gem integrates the Twitter Bootstrap pagination component with the will_paginate pagination gem.
 gem 'sendinblue', '~> 2.4' # This is SendinBlue provided API V2 Ruby GEM
+gem 'email_inquire', '~> 0.6' # Validate email for format, common typos and one-time email providers
 
 # TODO: Switch to vendor's version of 'shortener' gem when Rails 5 support has been added.
 gem 'shortener', '= 0.5.5', github: 'harigopal/shortener', branch: '74-rails-5-support' # generate short SV.CO urls for files, links etc

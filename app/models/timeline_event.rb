@@ -44,7 +44,7 @@ class TimelineEvent < ApplicationRecord
 
   validates :grade, inclusion: { in: valid_grades }, allow_nil: true
   validates :status, inclusion: { in: valid_statuses }
-  validates :verified_at, presence: true, if: proc { verified? || needs_improvement? }
+  validates :status_updated_at, presence: true, if: proc { verified? || needs_improvement? }
   validates :event_on, presence: true
   validates :startup_id, presence: true
   validates :founder_id, presence: true
@@ -54,8 +54,8 @@ class TimelineEvent < ApplicationRecord
 
   before_validation do
     if status_changed?
-      self.verified_at = Time.now if verified? || needs_improvement?
-      self.verified_at = nil if pending? || not_accepted?
+      self.status_updated_at = Time.now if verified? || needs_improvement?
+      self.status_updated_at = nil if pending? || not_accepted?
     end
     self.status ||= STATUS_PENDING
   end
@@ -163,13 +163,13 @@ class TimelineEvent < ApplicationRecord
   end
 
   def update_and_require_reverification(params)
-    params[:verified_at] = nil
+    params[:status_updated_at] = nil
     params[:status] = STATUS_PENDING
     update(params)
   end
 
   def verify!
-    update!(status: STATUS_VERIFIED, verified_at: Time.now)
+    update!(status: STATUS_VERIFIED, status_updated_at: Time.now)
 
     add_link_for_new_deck!
     add_link_for_new_wireframe!
@@ -178,15 +178,15 @@ class TimelineEvent < ApplicationRecord
   end
 
   def revert_to_pending!
-    update!(status: STATUS_PENDING, verified_at: nil)
+    update!(status: STATUS_PENDING, status_updated_at: nil)
   end
 
   def mark_needs_improvement!
-    update!(status: STATUS_NEEDS_IMPROVEMENT, verified_at: Time.now)
+    update!(status: STATUS_NEEDS_IMPROVEMENT, status_updated_at: Time.now)
   end
 
   def mark_not_accepted!
-    update!(status: STATUS_NOT_ACCEPTED, verified_at: nil)
+    update!(status: STATUS_NOT_ACCEPTED, status_updated_at: nil)
   end
 
   def verified?

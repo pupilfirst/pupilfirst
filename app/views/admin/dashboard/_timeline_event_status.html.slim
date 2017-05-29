@@ -1,6 +1,6 @@
 - TimelineEvent.valid_statuses.each do |status|
   .dashboard-item
-    - timeline_events = TimelineEvent.not_dropped_out.for_batch_id_in(selected_batch_ids).where(status: status).order('verified_at DESC')
+    - timeline_events = TimelineEvent.not_dropped_out.for_batch_id_in(selected_batch_ids).where(status: status).order('status_updated_at DESC')
     .heading Timeline Events - #{status}
 
     .content

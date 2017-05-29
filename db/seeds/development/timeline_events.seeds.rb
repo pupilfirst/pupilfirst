@@ -33,7 +33,7 @@ after 'development:startups', 'development:target_groups', 'development:targets'
       event_on: Time.now,
       description: description,
       status: status,
-      verified_at: (status == status_verified ? Time.now : nil)
+      status_updated_at: (status == status_verified ? Time.now : nil)
     )
   end
 
@@ -51,7 +51,7 @@ after 'development:startups', 'development:target_groups', 'development:targets'
       event_on: Time.now,
       description: Faker::Lorem.paragraph,
       status: status_verified,
-      verified_at: Time.now,
+      status_updated_at: Time.now,
       grade: grade
     )
   end

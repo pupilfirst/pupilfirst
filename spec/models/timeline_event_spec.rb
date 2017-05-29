@@ -8,7 +8,7 @@ RSpec.describe TimelineEvent, type: :model do
       subject.verify!
       subject.reload
       expect(subject.status).to eq(TimelineEvent::STATUS_VERIFIED)
-      expect(subject.verified_at).to be_present
+      expect(subject.status_updated_at).to be_present
     end
 
     context 'when timeline event has an attachment' do

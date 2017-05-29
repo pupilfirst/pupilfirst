@@ -23,7 +23,7 @@ ActiveAdmin.register TimelineEvent do
   filter :status, as: :select, collection: TimelineEvent.valid_statuses
   filter :grade, as: :select, collection: TimelineEvent.valid_grades
   filter :created_at
-  filter :verified_at
+  filter :status_updated_at
 
   scope :from_admitted_startups, default: true
   scope :from_level_0_startups
@@ -68,9 +68,9 @@ ActiveAdmin.register TimelineEvent do
 
     column :status do |timeline_event|
       if timeline_event.verified?
-        "Verified on #{timeline_event.verified_at.strftime('%d/%m/%y')}"
+        "Verified on #{timeline_event.status_updated_at.strftime('%d/%m/%y')}"
       elsif timeline_event.needs_improvement?
-        "Marked needs improvement on #{timeline_event.verified_at.strftime('%d/%m/%y')}"
+        "Marked needs improvement on #{timeline_event.status_updated_at.strftime('%d/%m/%y')}"
       else
         timeline_event.status
       end
@@ -318,7 +318,7 @@ ActiveAdmin.register TimelineEvent do
 
       row :status
 
-      row :verified_at
+      row :status_updated_at
 
       row('Linked Target') do
         if timeline_event.target.present?

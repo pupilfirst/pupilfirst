@@ -9,18 +9,38 @@
       h3
         | You have completed the #StartInCollege course!
 .container
-  .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
-    .content-box.m-t-3.m-b-3.clearfix
-      - if current_mooc_student.present?
+  - if current_mooc_student.present?
+    .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
+      .content-box.m-t-3.m-b-2.text-xs-center.clearfix
         h3.text-xs-center.m-b-1.font-regular
           | You have reached the end of this course.
           br
-          | Your total score is <strong>#{@final_score} %</strong>.
+          ' Your total score is <strong>#{@final_score} %</strong>.
         - if @final_score > 30
-          p.text-xs-center.m-b-2
-            ' You may now print your 'Course Completion Certificate' with the present
+          h4.text-xs-center.m-b-1.font-regular
+            | That's a great score! You're pretty good at this #{"\u{1F642}"}
+        h4.text-xs-center
+          ' You have won
+          span.brand-primary
+            ' <strong>10% off to apply for the advanced program</strong>.
+          | Head to sv.co/apply"
+
+        .offset-md-2.col-md-8.m-t-1
+          .coupon-form-container.m-x-auto
+            .discount-coupon__box.text-xs-center.p-a-1
+              h5.font-semibold.m-b-1 Copy your Coupon Code
+              span.discount-coupon-applied--code.dark-secondary
+                | SVCOUP007
+
+        = link_to 'Apply Now', apply_path, class: 'btn btn-primary btn-md text-uppercase m-t-1'
+
+    .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
+      .content-box.m-b-3.clearfix
+        - if @final_score > 30
+          h4.text-xs-center.m-b-2
+            ' You may now <strong>print your 'Course Completion Certificate'</strong>
             br
-            | grade or try improving your score by retaking the quizzes.
+            | with the present grade or try improving your score by retaking the quizzes.#{"\u{1F447}"}
         - else
           p.text-xs-center.m-b-2
             | Unfortunately, your score is not sufficient to merit a certificate.
@@ -48,7 +68,10 @@
         - if @final_score > 30
           .text-xs-center
             = link_to 'Print Certificate', six_ways_completion_certificate_path(format: :pdf), class: 'btn btn-primary btn-md text-uppercase', target: '_blank'
-      - else
+
+  - else
+    .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
+      .content-box.m-t-3.m-b-1.clearfix
         h3.text-xs-center.font-semibold
           | Great work on completing the course.
         h4.text-xs-center

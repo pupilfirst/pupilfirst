@@ -47,24 +47,36 @@
             ' an option to <strong>visit Silicon Valley</strong> #{"\u{2708}"}, <strong>Investors,
             | Incubators, Accelerators</strong> and a lot more await you ! SV.CO Graduations are going to be epic!
           hr
-          p.school-of-saas__section--text
+          h3.text-xs-center.font-semibold.m-t-2
             ' Here are 4 special things about our program:
           br
-          ul.school-of-saas__section--ul
-            li
+          ul.school-of-saas__section--ul.list-unstyled.text-xs-center
+            li.school-of-saas__program-feature.col-md-6.p-y-2
+              .school-of-saas__program-feature-icon.m-x-auto
+                = image_tag 'admissions/apply/program-feature-completely-online.svg', class: 'img-fluid'
               p.school-of-saas__section--text
-                ' <strong>Completely Online</strong> — Be located <em>anywhere</em> in India!
-            li
+                ' <strong>Completely Online</strong>
+                p Be located <em>anywhere</em> in India!
+            li.school-of-saas__program-feature.col-md-6.p-y-2
+              .school-of-saas__program-feature-icon.m-x-auto
+                = image_tag 'admissions/apply/program-feature-students-only.svg', class: 'img-fluid'
               p.school-of-saas__section--text
-                ' <strong>Designed for Student Teams</strong> — Startup with your friends!
-            li
+                ' <strong>Designed for Student Teams</strong>
+                p Startup with your friends!
+            li.school-of-saas__program-feature.col-md-6.p-y-2
+              .school-of-saas__program-feature-icon.m-x-auto
+                = image_tag 'admissions/apply/program-feature-software.svg', class: 'img-fluid'
               p.school-of-saas__section--text
-                ' <strong>Exclusively for software ideas</strong> —
-                a#saas-article-link href='https://www.forbes.com/sites/suparnagoswami/2017/01/23/why-indian-saas-startups-are-set-to-rule-the-world/#54dbe9ff1329' target='_blank'
-                  ' Indian SaaS is booming!
-            li
+                ' <strong>Exclusively for software ideas</strong>
+                p
+                  a#saas-article-link href='https://www.forbes.com/sites/suparnagoswami/2017/01/23/why-indian-saas-startups-are-set-to-rule-the-world/#54dbe9ff1329' target='_blank'
+                    | Indian SaaS is booming!
+            li.school-of-saas__program-feature.col-md-6.p-y-2
+              .school-of-saas__program-feature-icon.m-x-auto
+                = image_tag 'admissions/apply/program-feature-learnig-levels.svg', class: 'img-fluid'
               p.school-of-saas__section--text
-                ' <strong>5 Levels of Learning</strong> — Level 0 is the admission process.
+                ' <strong>5 Levels of Learning</strong>
+                p Level 0 is the admission process.
 
         .admission-process.clearfix
           h2

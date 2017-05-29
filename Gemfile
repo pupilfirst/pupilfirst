@@ -143,6 +143,7 @@ group :development do
   gem 'stackprof', '~> 0.2' # Required by derailed_benchmarks.
   gem 'oink', '~> 0.10' # Log parser to identify actions which significantly increase VM heap size
   gem 'chromedriver-helper', '~> 1.1' # Easy installation and use of chromedriver, the Chromium project's selenium webdriver adapter.
+  gem 'logchange', '~> 0.0' # An alternative approach to managing a changelog.
 end
 
 group :test do

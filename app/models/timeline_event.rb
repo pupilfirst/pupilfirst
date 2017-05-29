@@ -44,7 +44,6 @@ class TimelineEvent < ApplicationRecord
 
   validates :grade, inclusion: { in: valid_grades }, allow_nil: true
   validates :status, inclusion: { in: valid_statuses }
-  validates :status_updated_at, presence: true, if: proc { verified? || needs_improvement? }
   validates :event_on, presence: true
   validates :startup_id, presence: true
   validates :founder_id, presence: true
@@ -53,10 +52,7 @@ class TimelineEvent < ApplicationRecord
   validates :iteration, presence: true
 
   before_validation do
-    if status_changed?
-      self.status_updated_at = Time.now if verified? || needs_improvement?
-      self.status_updated_at = nil if pending? || not_accepted?
-    end
+    self.status_updated_at = Time.zone.now if status_changed?
     self.status ||= STATUS_PENDING
   end
 
@@ -163,13 +159,13 @@ class TimelineEvent < ApplicationRecord
   end
 
   def update_and_require_reverification(params)
-    params[:status_updated_at] = nil
+    params[:status_updated_at] = Time.zone.now
     params[:status] = STATUS_PENDING
     update(params)
   end
 
   def verify!
-    update!(status: STATUS_VERIFIED, status_updated_at: Time.now)
+    update!(status: STATUS_VERIFIED, status_updated_at: Time.zone.now)
 
     add_link_for_new_deck!
     add_link_for_new_wireframe!

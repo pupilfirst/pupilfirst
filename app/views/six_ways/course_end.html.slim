@@ -16,10 +16,16 @@
           | You have reached the end of this course.
           br
           | Your total score is <strong>#{@final_score} %</strong>.
-        p.text-xs-center.m-b-2
-          ' You may now print your 'Course Completion Certificate' with the present
-          br
-          | grade or try improving your score by retaking the quizzes.
+        - if @final_score > 30
+          p.text-xs-center.m-b-2
+            ' You may now print your 'Course Completion Certificate' with the present
+            br
+            | grade or try improving your score by retaking the quizzes.
+        - else
+          p.text-xs-center.m-b-2
+            | Unfortunately, your score is not sufficient to merit a certificate.
+            br
+            | You can try improving your score by retaking the quizzes.
 
         table.table
           thead
@@ -39,8 +45,9 @@
                 td #{link_to 'Retry', six_ways_quiz_path(course_module.id)}
         .text-xs-center.m-b-2
           = render 'social_share'
-        .text-xs-center
-          = link_to 'Print Certificate', six_ways_completion_certificate_path(format: :pdf), class: 'btn btn-primary btn-md text-uppercase', target: '_blank'
+        - if @final_score > 30
+          .text-xs-center
+            = link_to 'Print Certificate', six_ways_completion_certificate_path(format: :pdf), class: 'btn btn-primary btn-md text-uppercase', target: '_blank'
       - else
         h3.text-xs-center.font-semibold
           | Great work on completing the course.

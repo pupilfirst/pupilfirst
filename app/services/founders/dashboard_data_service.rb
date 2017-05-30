@@ -25,7 +25,7 @@ module Founders
           .order(:sort_index)
           .as_json(
             only: target_fields,
-            methods: %i(has_rubric target_type_description),
+            methods: %i[has_rubric target_type_description],
             include: {
               assigner: { only: assigner_fields },
               level: { only: [:number] }
@@ -45,7 +45,7 @@ module Founders
           .where(levels: { number: applicable_levels }).order(session_at: :desc)
           .as_json(
             only: target_fields,
-            methods: %i(has_rubric target_type_description),
+            methods: %i[has_rubric target_type_description],
             include: {
               assigner: { only: assigner_fields },
               level: { only: [:number] },
@@ -71,10 +71,10 @@ module Founders
           include: {
             targets: {
               only: target_fields,
-              methods: %i(has_rubric target_type_description),
+              methods: %i[has_rubric target_type_description],
               include: {
                 assigner: {
-                  only: %i(id name)
+                  only: %i[id name]
                 }
               }
             }
@@ -136,15 +136,15 @@ module Founders
     end
 
     def target_group_fields
-      %i(id name description milestone)
+      %i[id name description milestone]
     end
 
     def target_fields
-      %i(id role title description completion_instructions resource_url slideshow_embed video_embed days_to_complete points_earnable timeline_event_type_id session_at link_to_complete submittability archived)
+      %i[id role title description completion_instructions resource_url slideshow_embed video_embed days_to_complete points_earnable timeline_event_type_id session_at link_to_complete submittability archived]
     end
 
     def assigner_fields
-      %i(id name)
+      %i[id name]
     end
 
     def taggings_field

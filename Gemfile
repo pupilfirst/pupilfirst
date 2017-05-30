@@ -8,7 +8,7 @@ git_source(:github) { |repository_path| "https://github.com/#{repository_path}.g
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '= 5.0.2'
 
-gem 'dotenv-rails', '~> 2.2', groups: %i(development test)
+gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 
 gem 'activeadmin', '~> 1.0.0' # The administration framework for Ruby on Rails applications. https://activeadmin.info
 gem 'flattened_active_admin', '~> 0.0' # better looking and customizable activeadmin
@@ -144,6 +144,7 @@ group :development do
   gem 'stackprof', '~> 0.2' # Required by derailed_benchmarks.
   gem 'oink', '~> 0.10' # Log parser to identify actions which significantly increase VM heap size
   gem 'chromedriver-helper', '~> 1.1' # Easy installation and use of chromedriver, the Chromium project's selenium webdriver adapter.
+  gem 'logchange', '~> 0.0' # An alternative approach to managing a changelog.
 end
 
 group :test do
@@ -164,7 +165,7 @@ group :development, :test do
   gem 'webmock', '~> 3.0' # Mocking web requests.
 
   # TODO: Upgrade when Rubocop moves beyond buggy v0.48.
-  gem 'rubocop', '= 0.47.1', require: false # Ruby Style Guide.
+  gem 'rubocop', '~> 0.49', require: false # Ruby Style Guide.
 
   gem 'bundler-audit', '~> 0.5', require: false # Audit gems in gemfile.lock for reported vulnerabilities
   gem 'overcommit', '~> 0.38', require: false # A fully configurable and extendable Git hook manager

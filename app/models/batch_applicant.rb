@@ -78,8 +78,8 @@ class BatchApplicant < ApplicationRecord
   end
 
   def profile_complete?
-    required_fields = %i(name role born_on gender parent_name current_address permanent_address address_proof phone id_proof_type id_proof_number id_proof)
-    required_fields += %i(income_proof letter_from_parent college_contact) if income_proofs_required?
+    required_fields = %i[name role born_on gender parent_name current_address permanent_address address_proof phone id_proof_type id_proof_number id_proof]
+    required_fields += %i[income_proof letter_from_parent college_contact] if income_proofs_required?
 
     required_fields.all? { |field| self[field].present? }
   end

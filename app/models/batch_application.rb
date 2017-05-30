@@ -40,7 +40,7 @@ class BatchApplication < ApplicationRecord
 
   # a single scope for states - specify a State or :non_focused or :all.
   def self.for_states(scope)
-    raise 'Unexpected Argument. Must be a State or :non_focused or :all' unless scope.is_a?(State) || scope.in?(%i(non_focused all))
+    raise 'Unexpected Argument. Must be a State or :non_focused or :all' unless scope.is_a?(State) || scope.in?(%i[non_focused all])
 
     if scope.is_a?(State)
       joins(:college).where(colleges: { state_id: scope.id })

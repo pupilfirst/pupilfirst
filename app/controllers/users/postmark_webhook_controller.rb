@@ -13,7 +13,7 @@ module Users
     private
 
     def target_bounce_types
-      %w(HardBounce BadEmailAddress SpamComplaint)
+      %w[HardBounce BadEmailAddress SpamComplaint]
     end
 
     def mark_user_unemailable

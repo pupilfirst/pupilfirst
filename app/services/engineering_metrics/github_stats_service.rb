@@ -2,7 +2,7 @@ module EngineeringMetrics
   class GithubStatsService
     include Loggable
 
-    AUTHORS = %w(harigopal ajaleelp mahesh-krishnakumar vinutv).freeze
+    AUTHORS = %w[harigopal ajaleelp mahesh-krishnakumar vinutv].freeze
 
     def initialize
       @token = Rails.application.secrets.github['access_token']

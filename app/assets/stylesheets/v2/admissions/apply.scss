@@ -33,6 +33,27 @@
   margin-top: 10px;
 }
 
+.school-of-saas__program-feature {
+  @include media-breakpoint-up(md) {
+    &:nth-child(odd) {
+      border-right: 1px solid $gray-border;
+    }
+    &:nth-child(-n+2) {
+      border-bottom: 1px solid $gray-border;
+    }
+  }
+
+  @include media-breakpoint-down(sm) {
+    &:nth-child(-n+3) {
+      border-bottom: 1px solid $gray-border;
+    }
+  }
+}
+
+.school-of-saas__program-feature-icon {
+  max-width: 250px;
+}
+
 .alumni-testimonial {
   background-image: asset-url("admissions/apply/arun-p-testimonial.png");
   height: 290px;

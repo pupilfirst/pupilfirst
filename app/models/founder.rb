@@ -77,7 +77,7 @@ class Founder < ApplicationRecord
   end
 
   def self.ransackable_scopes(_auth)
-    %i(ransack_tagged_with)
+    %i[ransack_tagged_with]
   end
 
   def self.valid_gender_values
@@ -105,8 +105,8 @@ class Founder < ApplicationRecord
 
   def slug_candidates
     [
-      %i(name),
-      %i(name id)
+      %i[name],
+      %i[name id]
     ]
   end
 
@@ -187,7 +187,7 @@ class Founder < ApplicationRecord
   end
 
   def self.valid_roles
-    %w(product engineering design)
+    %w[product engineering design]
   end
 
   def roles
@@ -366,8 +366,8 @@ class Founder < ApplicationRecord
   end
 
   def profile_complete?
-    required_fields = %i(name roles born_on gender parent_name communication_address permanent_address address_proof phone id_proof_type id_proof_number identification_proof)
-    required_fields += %i(income_proof letter_from_parent college_contact) if income_proofs_required?
+    required_fields = %i[name roles born_on gender parent_name communication_address permanent_address address_proof phone id_proof_type id_proof_number identification_proof]
+    required_fields += %i[income_proof letter_from_parent college_contact] if income_proofs_required?
 
     required_fields.all? { |field| self[field].present? }
   end

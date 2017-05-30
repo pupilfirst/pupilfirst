@@ -15,7 +15,7 @@ ActiveAdmin.register CourseModule do
   filter :module_number
 
   permit_params :name, :module_number, :publish_at,
-    module_chapters_attributes: %i(id chapter_number name serialized_links _destroy)
+    module_chapters_attributes: %i[id chapter_number name serialized_links _destroy]
 
   form do |f|
     f.semantic_errors(*f.object.errors.keys)

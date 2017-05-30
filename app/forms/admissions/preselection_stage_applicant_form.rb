@@ -62,7 +62,7 @@ module Admissions
     end
 
     def save_uploaded_files
-      files = %i(address_proof identification_proof income_proof letter_from_parent)
+      files = %i[address_proof identification_proof income_proof letter_from_parent]
       files -= errors.keys
 
       files.each do |valid_file|

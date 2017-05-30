@@ -23,7 +23,7 @@ describe Users::ConfirmationService do
     it 'does not update confirmed_at' do
       expect do
         subject.new(user).execute
-      end.to_not change { user.reload.confirmed_at }
+      end.to_not(change { user.reload.confirmed_at })
     end
   end
 end

@@ -2,7 +2,7 @@ ActiveAdmin.register TimelineEvent do
   include DisableIntercom
 
   permit_params :description, :timeline_event_type_id, :image, :event_on, :startup_id, :founder_id, :serialized_links,
-    :improved_timeline_event_id, timeline_event_files_attributes: %i(id title file private _destroy)
+    :improved_timeline_event_id, timeline_event_files_attributes: %i[id title file private _destroy]
 
   filter :startup_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'Batch'
 

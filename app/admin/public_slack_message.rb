@@ -74,7 +74,7 @@ ActiveAdmin.register PublicSlackMessage do
     }
   end
 
-  index download_links: %i(txt json xml) do
+  index download_links: %i[txt json xml] do
     # selectable_column
 
     column :author do |message|

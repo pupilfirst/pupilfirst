@@ -61,18 +61,16 @@ module Startups
 
     # Compare each startup and points entry against the previous one to determine the rank.
     def rank(startup_and_points)
-      startup_and_points.each_with_object([]) do |startup_points, startup_points_rank|
-        startup, points = startup_points
-
-        # rubocop:disable Style/ElseAlignment, Style/IndentationWidth, Lint/EndAlignment
-        startup_points_rank << if startup_points_rank.blank?
+      startup_and_points.each_with_object([]) do |(startup, points), startup_points_rank|
+        startup_rank_with_points = if startup_points_rank.blank?
           [startup, 1, points]
         elsif startup_points_rank.last[2] == points
           [startup, startup_points_rank.last[1], points]
         else
           [startup, startup_points_rank.length + 1, points]
         end
-        # rubocop:enable Style/ElseAlignment, Style/IndentationWidth, Lint/EndAlignment
+
+        startup_points_rank << startup_rank_with_points
       end
     end
 

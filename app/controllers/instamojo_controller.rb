@@ -38,7 +38,7 @@ class InstamojoController < ApplicationController
 
   def authentic_request?
     salt = Rails.application.secrets.instamojo_salt
-    data = (params.keys - %w(controller action mac)).sort.map { |key| params[key] }.join '|'
+    data = (params.keys - %w[controller action mac]).sort.map { |key| params[key] }.join '|'
     digest = OpenSSL::Digest.new('sha1')
     computed_mac = OpenSSL::HMAC.hexdigest(digest, salt, data)
 

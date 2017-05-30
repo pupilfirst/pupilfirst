@@ -4,19 +4,21 @@ module Founders
     include AdmissionsPrepopulatable
     include EmailBounceValidatable
 
+    attr_reader :replacement_hint
+
     property :name, validates: { presence: true, length: { maximum: 250 } }
     property :email, validates: { presence: true, length: { maximum: 250 }, email: true }
-    property :email_confirmation, virtual: true, validates: { presence: true, length: { maximum: 250 }, email: true }
     property :phone, validates: { presence: true, mobile_number: true }
     property :reference
     property :reference_text, virtual: true
+    property :ignore_email_hint, virtual: true
     property :college_id, validates: { presence: true }
     property :college_text, validates: { length: { maximum: 250 } }
 
     # Custom validations.
     validate :do_not_reapply
     validate :college_should_exist
-    validate :emails_should_match
+    validate :email_should_be_valid
 
     # Applicant with application should be blocked from submitting the form. Zhe should login instead.
     def do_not_reapply
@@ -36,10 +38,17 @@ module Founders
       errors[:college_id] << 'is invalid'
     end
 
-    def emails_should_match
-      return if email == email_confirmation
-      errors[:base] << 'Supplied email address and its confirmation do not match.'
-      errors[:email_confirmation] << 'email addresses do not match'
+    def email_should_be_valid
+      email_validation = EmailInquire.validate(email)
+      return if email_validation.valid?
+      return if ignore_email_hint == 'true'
+
+      if email_validation.hint?
+        errors[:base] << 'email could be incorrect'
+        @replacement_hint = email_validation.replacement
+      else
+        errors[:email] << 'email addresses not valid'
+      end
     end
 
     def save

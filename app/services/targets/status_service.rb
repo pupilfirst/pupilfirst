@@ -55,11 +55,11 @@ module Targets
     end
 
     def current_level
-      @current_level ||= owner.is_a?(Startup) ? owner.level : owner.startup.level
+      @current_level ||= owner.respond_to?(:level) ? owner.level : owner.startup.level
     end
 
     def current_iteration
-      @current_iteration ||= owner.is_a?(Startup) ? owner.iteration : owner.startup.iteration
+      @current_iteration ||= owner.respond_to?(:iteration) ? owner.iteration : owner.startup.iteration
     end
 
     def completed_prerequisites_ids

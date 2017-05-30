@@ -13,8 +13,11 @@ module Admissions
       # handle coupons
       perform_coupon_tasks
 
-      # mark the payment target complete
-      Admissions::CompleteTargetService.new(@founder, Target::KEY_ADMISSIONS_FEE_PAYMENT).execute
+      # mark the payment target complete, if not yet
+      fee_target = Target.find_by(key: Target::KEY_ADMISSIONS_FEE_PAYMENT)
+      if fee_target.status(@founder) != Targets::StatusService::STATUS_COMPLETE
+        Admissions::CompleteTargetService.new(@founder, Target::KEY_ADMISSIONS_FEE_PAYMENT).execute
+      end
 
       # IntercomLastApplicantEventUpdateJob.perform_later(@founder, 'payment_complete') unless Rails.env.test?
       Intercom::LevelZeroStageUpdateJob.perform_later(@founder, 'Payment Completed')

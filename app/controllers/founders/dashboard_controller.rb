@@ -54,10 +54,18 @@ module Founders
       @target = Target.find_by(id: params[:id])
       raise_not_found if @target.blank?
 
-      dashboard
-      append_target_details
+      respond_to do |format|
+        format.html do
+          dashboard
+          append_target_details
 
-      render 'dashboard'
+          render 'dashboard'
+        end
+
+        format.json do
+          render json: { response: 'TODO' }
+        end
+      end
     end
 
     private

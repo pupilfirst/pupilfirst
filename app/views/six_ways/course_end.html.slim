@@ -18,7 +18,7 @@
           ' Your total score is <strong>#{@final_score}%</strong>.
         - if @final_score > 30
           h4.text-xs-center.m-b-1.font-regular
-            | That's a great score! You're pretty good at this #{"\u{1F642}"}
+            | That's a great score! You're pretty good at this. #{"\u{1F642}"}
           - coupon_code = Coupon.where(coupon_type: Coupon::TYPE_MOOC_MERIT).last&.code
           - if coupon_code.present?
             h4.text-xs-center
@@ -37,11 +37,12 @@
 
     .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
       .content-box.m-b-3.clearfix
-        - if @final_score > 30
+        - if @final_score >= 30
           h4.text-xs-center.m-b-2
-            ' You may now <strong>print your 'Course Completion Certificate'</strong>
-            br
-            | with the present grade or try improving your score by retaking the quizzes.#{"\u{1F447}"}
+            ' You can now <strong>print your Course Completion Certificate</strong>.
+          - if @final_score < 100
+            h4.text-xs-center.m-b-2
+              | You can also try improving your score by retaking the quizzes.
         - else
           p.text-xs-center.m-b-2
             | Unfortunately, your score is not sufficient to merit a certificate.
@@ -66,7 +67,7 @@
                 td #{link_to 'Retry', six_ways_quiz_path(course_module.id)}
         .text-xs-center.m-b-2
           = render 'social_share'
-        - if @final_score > 30
+        - if @final_score >= 30
           .text-xs-center
             = link_to 'Print Certificate', six_ways_completion_certificate_path(format: :pdf), class: 'btn btn-primary btn-md text-uppercase', target: '_blank'
 
@@ -76,6 +77,6 @@
         h3.text-xs-center.font-semibold
           | Great work on completing the course.
         h4.text-xs-center
-          | As a next step, apply to our six month entrepreneurship program #{link_to 'here', apply_path}.
+          | As a next step, apply to our #{link_to 'six month entrepreneurship program', apply_path}.
         .text-xs-center.m-t-2
           = render 'social_share'

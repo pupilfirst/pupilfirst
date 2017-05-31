@@ -1,6 +1,4 @@
 class MoocStudent < ApplicationRecord
-  include CollegeNameable
-
   belongs_to :college
   belongs_to :user
 
@@ -46,5 +44,9 @@ class MoocStudent < ApplicationRecord
 
   def started_course?
     completed_chapters.present?
+  end
+
+  def college_name
+    college&.name || college_text
   end
 end

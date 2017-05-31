@@ -26,19 +26,11 @@ module Targets
       @target.prerequisite_targets.where.not(id: completed_prerequisites_ids)
     end
 
-    def linked_event
-      @linked_event ||= begin
-        linked_events = owner.timeline_events.where(target: @target)
-
-        if @target.target? && @target.target_group&.level == current_level
-          linked_events = linked_events.where(iteration: current_iteration)
-        end
-
-        linked_events.order('created_at DESC')
-      end.first
-    end
-
     private
+
+    def linked_event
+      @target.latest_linked_event(@founder)
+    end
 
     def status_from_event
       return STATUS_COMPLETE if linked_event.verified?

@@ -6,8 +6,7 @@ module Targets
     end
 
     def feedback_for_latest_event
-      return [] if latest_timeline_event&.startup_feedback.blank?
-      latest_timeline_event.startup_feedback
+      @target.latest_linked_event(@founder).startup_feedback.order('created_at').last
     end
 
     private

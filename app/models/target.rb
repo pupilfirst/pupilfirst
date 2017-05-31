@@ -162,4 +162,21 @@ class Target < ApplicationRecord
     end
     role + type
   end
+
+  # Returns the latest event linked to this target from a founder. If a team target, it responds with the latest event from the team
+  def latest_linked_event(founder)
+    owner = founder_role? ? founder : founder.startup
+    linked_events = owner.timeline_events.where(target: self)
+
+    # account for iteration if vanilla target
+    if target? && target_group&.level == founder.startup.level
+      linked_events = linked_events.where(iteration: founder.startup.iteration)
+    end
+
+    linked_events.order('created_at').last
+  end
+
+  def latest_feedback(founder)
+    latest_linked_event(founder)&.startup_feedback&.order('created_at')&.last
+  end
 end

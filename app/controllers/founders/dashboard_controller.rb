@@ -47,6 +47,19 @@ module Founders
       redirect_to(dashboard_founder_path(from: 'level_up', from_level: startup.level.number - 1))
     end
 
+    # GET /founder/dashboard/targets/:id(/:slug)
+    def target_details
+      # TODO: Add Pundit authorization
+
+      @target = Target.find_by(id: params[:id])
+      raise_not_found if @target.blank?
+
+      dashboard
+      append_target_details
+
+      render 'dashboard'
+    end
+
     private
 
     def skip_container
@@ -103,6 +116,10 @@ module Founders
       Level.all.order(:number).each_with_object({}) do |level, hash|
         hash[level.number] = level.name
       end
+    end
+
+    def append_target_details
+      @react_data = @react_data.merge(selectedTarget: { id: @target.id })
     end
   end
 end

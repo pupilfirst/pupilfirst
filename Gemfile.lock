@@ -456,7 +456,7 @@ GEM
       rb-inotify (~> 0.9, >= 0.9.7)
       ruby_dep (~> 1.2)
     lita-default-handlers (0.1.0)
-    logchange (0.0.4)
+    logchange (1.0.1)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     mail (2.6.5)
@@ -870,7 +870,7 @@ DEPENDENCIES
   listen (~> 3.1)
   lita (= 5.0.0)!
   lita-slack (= 1.8.0)!
-  logchange (~> 0.0)
+  logchange (~> 1.0)
   mini_magick (~> 4.6)
   oink (~> 0.10)
   omniauth-facebook (~> 4.0)

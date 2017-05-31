@@ -7,6 +7,10 @@ module Admissions
     end
 
     def execute
+      # skip if the fee target is already completed
+      fee_target = Target.find_by(key: Target::KEY_ADMISSIONS_FEE_PAYMENT)
+      return if fee_target.status(@founder) == Targets::StatusService::STATUS_COMPLETE
+
       # Log payment time, if unrecorded.
       @payment.update!(paid_at: Time.now) if @payment && @payment.paid_at.blank?
 

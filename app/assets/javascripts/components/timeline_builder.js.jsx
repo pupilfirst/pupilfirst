@@ -13,7 +13,7 @@ const TimelineBuilder = React.createClass({
     return {
       links: [],
       files: {},
-      date: null,
+      date: this.today(),
       coverImage: null,
       showLinkForm: false,
       showFileForm: false,
@@ -337,6 +337,10 @@ const TimelineBuilder = React.createClass({
   updateDescription: function () {
     let description = $('.js-timeline-builder__textarea').val().trim();
     this.setState({description: description});
+  },
+
+  today: function() {
+    return moment().format('YYYY-MM-DD');
   },
 
   render: function () {

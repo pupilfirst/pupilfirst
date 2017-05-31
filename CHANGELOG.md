@@ -1,3 +1,19 @@
+### 29 May, 2017
+
+#### UX and UI
+
+  - Grades for completed targets are now displayed on the target header on the founder dashboard, next to the title.
+  - An option to retake the tour of the founder dashboard has been added to the action-bar dropdown.
+
+#### Content
+
+  - Startup's level is now displayed instead of the older _stage_ property on the `/startups` index page, and on all timeline pages.
+
+#### Bugfixes
+
+  - Fixed a bug which caused the description text to be repeated once within founder dashboard's target description accordions.
+  - Fixed an incorrect path to an image on the `/talent` page causing a 404.
+
 ### 22 May, 2017
 
 #### UX and UI

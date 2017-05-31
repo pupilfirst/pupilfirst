@@ -1,6 +1,6 @@
 class AdmissionsController < ApplicationController
   layout 'application_v2'
-  before_action :skip_container, only: %i[founders founders_submit]
+  before_action :skip_container, only: %i[founders founders_submit fee]
 
   # GET /apply
   def apply

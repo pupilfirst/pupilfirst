@@ -61,7 +61,7 @@ class TimelineBuilderDateForm extends React.Component {
         <label className="col-md-2 form-group col-form-label text-xs-right">Date of event</label>
         <div className="col-md-9 form-group">
           <label className="sr-only" htmlFor="timeline-builder__date-input">Date of Event</label>
-          <input id="timeline-builder__date-input" type="text" className="js-timeline-builder__date-input timeline-builder__date-input form-control" placeholder="YYYY-MM-DD" onChange={ this.handleChange }/>
+          <input id="timeline-builder__date-input" type="text" className="js-timeline-builder__date-input timeline-builder__date-input form-control" placeholder={ this.today() } onChange={ this.handleChange }/>
         </div>
         <div className="col-md-1 form-group timeline-builder__attachment-datepicker-form-btn">
           <button type="submit" className="btn btn-secondary timeline-builder__attachment-button" onClick={ this.handleSubmit }>

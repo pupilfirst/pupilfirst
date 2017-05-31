@@ -125,7 +125,7 @@ class SixWaysController < ApplicationController
     respond_to do |format|
       format.pdf do
         pdf = MoocStudents::CompletionCertificate.new(current_mooc_student).build
-        send_data pdf.render, type: 'application/pdf', filename: 'Partnership_Deed', disposition: 'inline'
+        send_data pdf.render, type: 'application/pdf', filename: 'SV SixWays Certificate', disposition: 'inline'
       end
     end
   end

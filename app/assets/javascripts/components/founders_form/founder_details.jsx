@@ -22,36 +22,38 @@ class FoundersFormFounderDetails extends React.Component {
   }
 
   componentDidMount() {
-    let collegeSelect = $('#' + this.selectId());
+    if (!this.state.useCollegeText) {
+      let collegeSelect = $('#' + this.selectId());
 
-    collegeSelect.select2({
-      minimumInputLength: 3,
-      placeholder: 'Please pick your college',
-      ajax: {
-        url: this.props.collegesUrl,
-        dataType: 'json',
-        delay: 500,
-        data: function (params) {
-          return {
-            q: params.term
-          }
-        },
-        processResults: function (data) {
-          return {results: data}
-        },
-        cache: true
-      }
-    });
+      collegeSelect.select2({
+        minimumInputLength: 3,
+        placeholder: 'Please pick your college',
+        ajax: {
+          url: this.props.collegesUrl,
+          dataType: 'json',
+          delay: 500,
+          data: function (params) {
+            return {
+              q: params.term
+            }
+          },
+          processResults: function (data) {
+            return {results: data}
+          },
+          cache: true
+        }
+      });
 
-    // TODO: Remove this positioning hack when select2 bug is fixed. https://trello.com/c/H5l3oL7o
-    let select2Instance = collegeSelect.data('select2');
+      // TODO: Remove this positioning hack when select2 bug is fixed. https://trello.com/c/H5l3oL7o
+      let select2Instance = collegeSelect.data('select2');
 
-    select2Instance.on('results:message', function () {
-      this.dropdown._resizeDropdown();
-      this.dropdown._positionDropdown();
-    });
+      select2Instance.on('results:message', function () {
+        this.dropdown._resizeDropdown();
+        this.dropdown._positionDropdown();
+      });
 
-    collegeSelect.on('change', this.handleCollegeChange)
+      collegeSelect.on('change', this.handleCollegeChange);
+    }
   }
 
   componentWillUnmount() {

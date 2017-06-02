@@ -809,3 +809,18 @@
     height: auto;
   }
 }
+
+.sixways__social-share {
+  display: inline-block;
+  border: 1px solid $gray-border;
+  @include border-radius(5px);
+}
+
+.sixways__social-share-facebook {
+  color: #3b5998;
+}
+
+.sixways__social-share-twitter {
+  color: #00aced;
+}
+

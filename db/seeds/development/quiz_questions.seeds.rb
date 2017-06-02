@@ -1,6 +1,6 @@
 require_relative 'helper'
 
-after 'development:module_chapters' do
+after 'module_chapters' do
   puts 'Seeding quiz_questions'
 
   module_2 = CourseModule.find_by(module_number: 2)

@@ -6,6 +6,7 @@ feature 'Founder Registration' do
   let!(:level_0) { create :level, :zero }
   let(:level_0_targets) { create :target_group, milestone: true, level: level_0 }
   let!(:screening_target) { create :target, :admissions_screening, target_group: level_0_targets }
+  let!(:fee_payment_target) { create :target, :admissions_fee_payment, target_group: level_0_targets }
 
   context 'User is already a founder' do
     let(:startup) { create :level_0_startup }

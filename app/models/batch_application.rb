@@ -11,8 +11,8 @@ class BatchApplication < ApplicationRecord
   has_many :application_submissions, dependent: :destroy
   has_and_belongs_to_many :batch_applicants
   accepts_nested_attributes_for :batch_applicants
-  has_one :college, through: :team_lead
   belongs_to :team_lead, class_name: 'BatchApplicant'
+  has_one :college, through: :team_lead
   belongs_to :university
   has_one :payment, dependent: :restrict_with_error
   has_many :archived_payments, class_name: 'Payment', foreign_key: 'original_batch_application_id'

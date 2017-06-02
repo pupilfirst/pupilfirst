@@ -23,6 +23,14 @@ GIT
       rails (>= 3.0.7)
 
 GIT
+  remote: https://github.com/lardawge/carrierwave_backgrounder.git
+  revision: 460394b0e2c0cf0c192be9c1a60bcf9dfb1f9e4d
+  specs:
+    carrierwave_backgrounder (0.4.2)
+      carrierwave (>= 0.5, < 2.0)
+      mime-types (~> 2.99)
+
+GIT
   remote: https://github.com/litaio/lita-slack.git
   revision: 8c02e9f7f8776d3c0f9a2bae20152f2966363cce
   specs:
@@ -193,18 +201,14 @@ GEM
     capybara-screenshot (1.0.14)
       capybara (>= 1.0, < 3)
       launchy
-    carrierwave (0.11.2)
-      activemodel (>= 3.2.0)
-      activesupport (>= 3.2.0)
-      json (>= 1.7)
+    carrierwave (1.1.0)
+      activemodel (>= 4.0.0)
+      activesupport (>= 4.0.0)
       mime-types (>= 1.16)
-      mimemagic (>= 0.3.0)
     carrierwave-bombshelter (0.2.2)
       activesupport (>= 3.2.0)
       carrierwave
       fastimage
-    carrierwave_backgrounder (0.4.2)
-      carrierwave (~> 0.5)
     charlock_holmes (0.7.3)
     childprocess (0.6.3)
       ffi (~> 1.0, >= 1.0.11)
@@ -462,10 +466,7 @@ GEM
       mime-types (>= 1.16, < 4)
     memory_profiler (0.9.8)
     method_source (0.8.2)
-    mime-types (3.1)
-      mime-types-data (~> 3.2015)
-    mime-types-data (3.2016.0521)
-    mimemagic (0.3.2)
+    mime-types (2.99.3)
     mini_magick (4.7.0)
     mini_portile2 (2.1.0)
     minitest (5.10.2)
@@ -823,9 +824,9 @@ DEPENDENCIES
   capybara (~> 2.13)
   capybara-email (~> 2.5)
   capybara-screenshot (~> 1.0)
-  carrierwave (~> 0.11)
+  carrierwave (~> 1.1)
   carrierwave-bombshelter (~> 0.2)
-  carrierwave_backgrounder (~> 0.4)
+  carrierwave_backgrounder (= 0.4.2)!
   chromedriver-helper (~> 1.1)
   codecov (~> 0.1)
   coderay (~> 1.1)

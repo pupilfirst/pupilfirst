@@ -13,8 +13,11 @@ gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 gem 'activeadmin', '~> 1.0.0' # The administration framework for Ruby on Rails applications. https://activeadmin.info
 gem 'flattened_active_admin', '~> 0.0' # better looking and customizable activeadmin
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
-gem 'carrierwave', '~> 0.11' # One uploader to rule them all.
-gem 'carrierwave_backgrounder', '~> 0.4' # Backgrounder for carrierwave.
+gem 'carrierwave', '~> 1.1' # One uploader to rule them all.
+
+# TODO: Switch to carrierwave_backgrounder from rubygems when a version (with support for Carrierwave v1) is released.
+# TODO: carrierwave_backgrounder is also holding back the version of mime-types in use. Check for updates.
+gem 'carrierwave_backgrounder', '= 0.4.2', github: 'lardawge/carrierwave_backgrounder' # Backgrounder for carrierwave.
 gem 'carrierwave-bombshelter', '~> 0.2' # Protects your carrierwave from image bombs (and such).
 
 # Required by Carrierwave to upload to S3.

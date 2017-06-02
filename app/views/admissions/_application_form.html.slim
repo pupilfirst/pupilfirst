@@ -40,7 +40,8 @@
         label: false,
         input_html: { value: nil, 'data-search-url' => colleges_url },
         required: true,
-        collection: [["My college isn't listed", 'other']]
+        collection: @form.college_collection,
+        selected: @form.college_id
 
       .hidden-xs-up
         = f.input :college_text,

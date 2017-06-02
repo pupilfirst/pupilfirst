@@ -65,5 +65,13 @@ module Founders
     def supplied_reference
       reference_text.present? ? reference_text : reference
     end
+
+    def college_collection
+      if college_id.present?
+        [[College.find(college_id).name, college_id]]
+      else
+        [["My college isn't listed", 'other']]
+      end
+    end
   end
 end

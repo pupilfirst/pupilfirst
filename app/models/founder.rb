@@ -116,7 +116,7 @@ class Founder < ApplicationRecord
   end
 
   def should_generate_new_friendly_id?
-    name_changed? || super
+    name_changed? || saved_change_to_name? || super
   end
 
   # TODO: Remove this method when all instance of it being used are gone. https://trello.com/c/yh0Mkfir

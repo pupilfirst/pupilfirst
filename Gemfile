@@ -5,8 +5,8 @@ source 'https://rubygems.org'
 # Required to suppress warnings about insecure :github source.
 git_source(:github) { |repository_path| "https://github.com/#{repository_path}.git" }
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '= 5.0.2'
+# Ruby on Rails. http://rubyonrails.org
+gem 'rails', '~> 5.1.1'
 
 gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 

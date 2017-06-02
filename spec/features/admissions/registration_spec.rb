@@ -87,6 +87,8 @@ feature 'Founder Registration' do
       click_on 'Yes'
       click_on 'Submit'
 
+      expect(page).to have_selector('.introjs-tooltipReferenceLayer', visible: false)
+
       last_founder = Founder.last
       expect(last_founder.email).to eq('test@gmail.com')
     end
@@ -95,6 +97,8 @@ feature 'Founder Registration' do
       expect(page).to have_text('Did you mean test@gmail.com?')
       click_on 'No'
       click_on 'Submit'
+
+      expect(page).to have_selector('.introjs-tooltipReferenceLayer', visible: false)
 
       last_founder = Founder.last
       expect(last_founder.email).to eq('test@gamil.com')

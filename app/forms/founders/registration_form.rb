@@ -67,7 +67,7 @@ module Founders
     end
 
     def college_collection
-      if college_id.present?
+      if college_id.present? && college_id != 'other'
         [[College.find(college_id).name, college_id]]
       else
         [["My college isn't listed", 'other']]

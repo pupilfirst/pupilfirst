@@ -81,6 +81,7 @@ feature 'Founder Registration' do
 
       click_on 'Submit'
     end
+
     scenario 'User accepts the email hint', js: true do
       expect(page).to have_text('Did you mean test@gmail.com?')
       click_on 'Yes'

@@ -1,0 +1,11 @@
+---
+timestamp: '2017-06-05T07:35:37Z'
+title: Improve founder registration form by eliminating email repitition and by hinting
+  the applicant of possible errors in email input.
+trello: https://trello.com/c/PzHR2QQj
+private: false
+description: Gem email_inquire is now used to validate email in the founder registration
+  form. The email input has to pass the email_inquire validation for form submission.
+  The user will also get a hint on certain commonly found errors in email input and has
+  the option to accept or reject the hint.
+category: feature

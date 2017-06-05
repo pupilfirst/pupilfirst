@@ -21,6 +21,20 @@ class FounderDashboard extends React.Component {
     this.handleTargetSubmission = this.handleTargetSubmission.bind(this);
     this.targetOverlayCloseCB = this.targetOverlayCloseCB.bind(this);
     this.selectTargetCB = this.selectTargetCB.bind(this);
+    this.handlePopState = this.handlePopState.bind(this);
+  }
+
+  componentDidMount() {
+    window.onpopstate = this.handlePopState;
+  }
+
+  handlePopState(event) {
+    if (event.state.targetId) {
+      this.setState({selectedTarget: this.targetDetails(event.state.targetId, event.state.targetType)});
+    } else {
+      $('.target-overlay__modal').modal('hide');
+      this.setState({selectedTarget: null});
+    }
   }
 
   chooseTab(tab) {
@@ -75,7 +89,9 @@ class FounderDashboard extends React.Component {
   }
 
   targetOverlayCloseCB() {
+    $('.target-overlay__modal').modal('hide');
     this.setState({selectedTarget: null});
+    history.pushState({},'','/founder/dashboard')
   }
 
   targetDetails(targetId, targetType) {
@@ -95,7 +111,7 @@ class FounderDashboard extends React.Component {
 
   selectTargetCB(targetId, targetType) {
     this.setState({selectedTarget: this.targetDetails(targetId, targetType)});
-    // TODO: Push appropriate URL to browser history
+    history.pushState({targetId: targetId, targetType: targetType},'','/founder/dashboard/targets/' + targetId)
   }
 
   render() {

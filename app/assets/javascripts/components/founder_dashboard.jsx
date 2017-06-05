@@ -95,18 +95,21 @@ class FounderDashboard extends React.Component {
   }
 
   targetDetails(targetId, targetType) {
-    if (targetType === 'target') {
-      let targets = _.flatMap(_.flatMap(this.props.levels, 'target_groups'), 'targets')
-      return _.find(targets, ['id', targetId]);
-    } else if (targetType === 'chore') {
-      return _.find(this.props.chores, ['id', targetId]);
-    } else if (targetType === 'session') {
-      return _.find(this.props.sessions, ['id', targetId]);
-    } else {
-      return null;
+    let collection = {
+      'target': _.flatMap(_.flatMap(this.props.levels, 'target_groups'), 'targets'),
+      'chore': this.props.chores,
+      'session': this.props.sessions
+    };
+
+    let target = _.find(collection[targetType], ['id', targetId]);
+
+    // append the latest feedback and founder statuses if available
+    if (this.props.initialTargetId && this.props.initialTargetId === targetId) {
+      target['latestFeedback'] = this.props.initialTargetLatestFeedback;
+      target['founderStatuses'] = this.props.initialTargetFounderStatuses;
     }
 
-    // TODO: Append founder statuses and latest feedback if targetId === initialTargetId
+    return target;
   }
 
   selectTargetCB(targetId, targetType) {

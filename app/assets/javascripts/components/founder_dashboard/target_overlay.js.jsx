@@ -7,6 +7,12 @@ class FounderDashboardTargetOverlay extends React.Component  {
       keyboard: false,
       backdrop: 'static'
     });
+
+    // fetch extra info, if missing
+    if (!_.has(this.props.target, 'latestFeedback')) {
+      // TODO
+      console.log('Need to fetch more information');
+    }
   }
 
   render() {

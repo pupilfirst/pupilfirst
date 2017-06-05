@@ -114,14 +114,20 @@ class SixWaysController < ApplicationController
   #
   # End of course page. Probably show grade and option to print certificate
   def course_end
-    @final_score = current_mooc_student.score.round
+    @skip_container = true
+    @final_score = current_mooc_student.score.round if current_mooc_student.present?
   end
 
   # GET /sixways/completion_certificate
   #
-  # Display the completion certificate with provision to download as pdf
+  # Display the completion certificate as a pdf
   def completion_certificate
-    # There's nothing to load.
+    respond_to do |format|
+      format.pdf do
+        pdf = MoocStudents::CompletionCertificate.new(current_mooc_student).build
+        send_data pdf.render, type: 'application/pdf', filename: 'SV SixWays Certificate', disposition: 'inline'
+      end
+    end
   end
 
   private

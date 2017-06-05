@@ -13,7 +13,7 @@ module SixWaysHelper
     return next_chapter_path unless last_chapter?
     return quiz_of_this_module if @module.quiz?
     return start_of_next_module unless last_module?
-    '#'
+    six_ways_course_end_path
   end
 
   def previous_button_title
@@ -29,7 +29,7 @@ module SixWaysHelper
     return next_chapter.name unless last_chapter?
     return 'Take Quiz' if @module.quiz?
     next_module.module_chapters.find_by(chapter_number: 1).name unless last_module?
-    'Next'
+    'Finish'
   end
 
   def module_number

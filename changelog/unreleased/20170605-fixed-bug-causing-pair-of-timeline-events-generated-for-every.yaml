@@ -1,0 +1,8 @@
+---
+timestamp: '2017-06-05T10:38:35Z'
+title: Fixed bug causing pair of timeline events generated for every payment.
+trello: https://trello.com/c/xP0VjDzg
+private: true
+description: The InstamojoController was triggering PostPaymentService both on receiving
+  a redirect as well as the webhook.
+category: bugfix

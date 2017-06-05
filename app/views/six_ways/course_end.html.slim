@@ -5,40 +5,78 @@
 .secondary-banner
   .container
     .application-stages-head.text-xs-center
-      h1 Hurray! You have completed the #StartInCollege course!
+      h1 Hurray! #{"\u{1F389}"}
+      h3
+        | You have completed the #StartInCollege course!
 .container
-  .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
-    .content-box.m-t-3.m-b-3
-      h3.text-xs-center
-        | You have reached the end of this course.
-        br
-        | Your total score is <strong>#{@final_score} %</strong>.
-      h4
-        | You may now print your 'Course Completion Certificate' with the present grade or try improving your score by retaking the quizzes.
+  - if current_mooc_student.present?
+    .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
+      .content-box.m-t-3.m-b-2.text-xs-center.clearfix
+        h3.text-xs-center.m-b-1.font-regular
+          | You have reached the end of this course.
+          br
+          ' Your total score is <strong>#{@final_score}%</strong>.
+        - if @final_score > 30
+          h4.text-xs-center.m-b-1.font-regular
+            | That's a great score! You're pretty good at this. #{"\u{1F642}"}
+          - coupon_code = Coupon.where(coupon_type: Coupon::TYPE_MOOC_MERIT).last&.code
+          - if coupon_code.present?
+            h4.text-xs-center
+              ' You have won
+              span.brand-primary
+                ' <strong>10% off to apply for our advanced program</strong>.
 
-      table.table
-        thead
-          tr
-            th #
-            th Module
-            th Score
-            th
-        tbody
-          - CourseModule.all.each do |course_module|
-            - next unless course_module.quiz?
+            .offset-md-2.col-md-8.m-t-1
+              .coupon-form-container.m-x-auto
+                .discount-coupon__box.text-xs-center.p-a-1
+                  h5.font-semibold.m-b-1 Your Coupon Code:
+                  span.discount-coupon-applied--code.dark-secondary
+                    | #{coupon_code}
+
+            = link_to 'Apply Now', apply_path, class: 'btn btn-primary btn-md text-uppercase m-t-1'
+
+    .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
+      .content-box.m-b-3.clearfix
+        - if @final_score >= 30
+          h4.text-xs-center.m-b-2
+            ' You can now <strong>print your Course Completion Certificate</strong>.
+          - if @final_score < 100
+            h4.text-xs-center.m-b-2
+              | You can also try improving your score by retaking the quizzes.
+        - else
+          p.text-xs-center.m-b-2
+            | Unfortunately, your score is not sufficient to merit a certificate.
+            br
+            | You can try improving your score by retaking the quizzes.
+
+        table.table
+          thead
             tr
-              th scope="row"
-                ' #{course_module.module_number}
-              td #{course_module.name}
-              td #{current_mooc_student.score_for_module(course_module)} %
-              td #{link_to 'Retry', six_ways_quiz_path(course_module.id)}
+              th #
+              th Module
+              th Score
+              th
+          tbody
+            - CourseModule.all.each do |course_module|
+              - next unless course_module.quiz?
+              tr
+                th scope="row"
+                  ' #{course_module.module_number}
+                td #{course_module.name}
+                td #{current_mooc_student.score_for_module(course_module)} %
+                td #{link_to 'Retry', six_ways_quiz_path(course_module.id)}
+        .text-xs-center.m-b-2
+          = render 'social_share'
+        - if @final_score >= 30
+          .text-xs-center
+            = link_to 'Print Certificate', six_ways_completion_certificate_path(format: :pdf), class: 'btn btn-primary btn-md text-uppercase', target: '_blank'
 
-      = link_to 'Print Certificate', six_ways_completion_certificate_path, class: 'btn btn-primary btn-md text-uppercase pull-right'
-
-      .text-xs-center
-        h5 Let your friends know!
-        a href="https://www.facebook.com/sharer/sharer.php?u=sv.co/sixways" target="_blank"
-          i.fa.fa-facebook-square.fa-2x
-        - default_tweet = URI.escape "I just completed the Sixwayx MOOC course by @SVdotCO and scored #{@final_score} %. Great experience! sv.co/sixways #StartInCollege"
-        a.margin-left-10 href="https://twitter.com/intent/tweet?text=#{default_tweet}&url=sv.co/sixways" target="_blank"
-          i.fa.fa-twitter-square.fa-2x
+  - else
+    .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
+      .content-box.m-t-3.m-b-1.clearfix
+        h3.text-xs-center.font-semibold
+          | Great work on completing the course.
+        h4.text-xs-center
+          | As a next step, apply to our #{link_to 'six month entrepreneurship program', apply_path}.
+        .text-xs-center.m-t-2
+          = render 'social_share'

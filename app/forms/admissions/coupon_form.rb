@@ -1,25 +1,27 @@
 module Admissions
   class CouponForm < Reform::Form
+    attr_accessor :founder
+
     property :code, virtual: true, validates: { presence: true }
-    property :founder_email, virtual: true
 
     validate :code_must_be_valid
-    validate :founder_must_be_msp, if: :msp_coupon_applied?
+    validate :coupon_must_be_applicable
 
     def code_must_be_valid
       errors[:code] << 'code is not valid' unless coupon.present? && coupon.still_valid?
     end
 
-    def founder_must_be_msp
-      errors[:code] << 'code is only valid for Microsoft Student Partners' unless founder_has_msp_email?
+    def coupon_must_be_applicable
+      return if coupon.blank?
+      errors[:code] << applicability_service.error_message unless applicability_service.applicable?
     end
 
-    def apply_coupon!(startup)
-      CouponUsage.create!(coupon: coupon, startup: startup)
+    def apply_coupon
+      CouponUsage.create!(coupon: coupon, startup: founder.startup)
     end
 
     def prepopulate!(founder)
-      self.founder_email = founder&.email
+      self.founder = founder
     end
 
     private
@@ -28,13 +30,8 @@ module Admissions
       Coupon.find_by(code: code)
     end
 
-    def msp_coupon_applied?
-      return false if coupon.blank?
-      coupon.coupon_type == Coupon::TYPE_MSP
-    end
-
-    def founder_has_msp_email?
-      (founder_email =~ /@studentpartner.com\z/).present?
+    def applicability_service
+      @applicability_service ||= Coupons::ApplicabilityService.new(coupon, founder)
     end
   end
 end

@@ -5,14 +5,28 @@ module Targets
       @founder = founder
     end
 
-    def feedback_for_latest_event
-      @target.latest_linked_event(@founder).startup_feedback.order('created_at').last
+    def latest_feedback_details
+      return nil if latest_feedback.blank?
+
+      {
+        facultyName: faculty.name,
+        feedback: latest_feedback.feedback,
+        facultySlackId: faculty.slack_user_id
+      }
     end
 
     private
 
-    def latest_timeline_event
-      Targets::StatusService.new(@target, @founder).linked_event
+    def latest_feedback
+      @latest_feedback ||= linked_event&.startup_feedback&.order('created_at')&.last
+    end
+
+    def faculty
+      @faculty ||= latest_feedback.faculty
+    end
+
+    def linked_event
+      @target.latest_linked_event(@founder)
     end
   end
 end

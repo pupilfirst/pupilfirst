@@ -25,7 +25,7 @@ module Founders
           .order(:sort_index)
           .as_json(
             only: target_fields,
-            methods: %i[has_rubric target_type_description],
+            methods: %i[has_rubric target_type target_type_description],
             include: {
               assigner: { only: assigner_fields },
               level: { only: [:number] }
@@ -45,7 +45,7 @@ module Founders
           .where(levels: { number: applicable_levels }).order(session_at: :desc)
           .as_json(
             only: target_fields,
-            methods: %i[has_rubric target_type_description],
+            methods: %i[has_rubric target_type target_type_description],
             include: {
               assigner: { only: assigner_fields },
               level: { only: [:number] },
@@ -71,7 +71,7 @@ module Founders
           include: {
             targets: {
               only: target_fields,
-              methods: %i[has_rubric target_type_description],
+              methods: %i[has_rubric target_type target_type_description],
               include: {
                 assigner: {
                   only: %i[id name]

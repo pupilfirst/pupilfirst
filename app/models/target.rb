@@ -139,13 +139,18 @@ class Target < ApplicationRecord
     @stats_service ||= Targets::StatsService.new(self)
   end
 
+  def target_type
+    return :chore if chore?
+    session_at.present? ? :session : :target
+  end
+
   def session?
-    session_at.present?
+    target_type == :session
   end
 
   # A 'proper' target is neither a session, nor a chore. These are repeatable across iterations.
   def target?
-    !(session? || chore?)
+    target_type == :target
   end
 
   # this is included in the target JSONs the DashboardDataService responds with

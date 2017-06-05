@@ -1,0 +1,44 @@
+---
+changelog:
+- timestamp: '2017-06-05T12:27:30Z'
+  changes:
+  - timestamp: '2017-06-05T10:39:58Z'
+    title: Set default date for timeline-event submission to the present day.
+    trello: https://trello.com/c/rHSRHMy8
+    private: false
+    category: ui
+  - timestamp: '2017-06-05T10:38:35Z'
+    title: Fixed bug causing pair of timeline events generated for every payment.
+    trello: https://trello.com/c/xP0VjDzg
+    private: true
+    description: The InstamojoController was triggering PostPaymentService both on
+      receiving a redirect as well as the webhook.
+    category: bugfix
+  - timestamp: '2017-06-05T08:05:47Z'
+    title: Added icons to four program features described on the /apply page.
+    trello: https://trello.com/c/HNPpkAlW
+    private: true
+    category: ui
+  - timestamp: '2017-06-05T07:35:37Z'
+    title: Improve founder registration form by eliminating email repetition and by
+      hinting the applicant of possible errors in email input.
+    trello: https://trello.com/c/PzHR2QQj
+    private: false
+    description: Gem email_inquire is now used to validate email in the founder registration
+      form. The email input has to pass the email_inquire validation for form submission.
+      The user will also get a hint on certain commonly found errors in email input
+      and has the option to accept or reject the hint.
+    category: feature
+  - timestamp: '2017-06-05T06:49:51Z'
+    title: Fourth and final module for the SixWays MOOC has been released.
+    trello: https://trello.com/c/8kgMZU6H
+    private: false
+    category: content
+  - timestamp: '2017-05-30T10:14:54Z'
+    title: Create an AnalyticsStateService to generate state data for a user and use
+      that to send tags to Inspectlet
+    trello: https://trello.com/c/F3QJEjO4
+    private: true
+  - timestamp: '2017-05-29T09:29:29Z'
+    title: Added logchange to project.
+    private: true

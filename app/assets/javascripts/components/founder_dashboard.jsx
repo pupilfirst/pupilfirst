@@ -11,13 +11,16 @@ class FounderDashboard extends React.Component {
       timelineBuilderParams: {
         targetId: null,
         selectedTimelineEventTypeId: null
-      }
+      },
+      selectedTarget: this.targetDetails(this.props.initialTargetId, this.props.initialTargetType)
     };
 
     this.chooseTab = this.chooseTab.bind(this);
     this.closeTimelineBuilder = this.closeTimelineBuilder.bind(this);
     this.openTimelineBuilder = this.openTimelineBuilder.bind(this);
     this.handleTargetSubmission = this.handleTargetSubmission.bind(this);
+    this.targetOverlayCloseCB = this.targetOverlayCloseCB.bind(this);
+    this.selectTargetCB = this.selectTargetCB.bind(this);
   }
 
   chooseTab(tab) {
@@ -71,6 +74,30 @@ class FounderDashboard extends React.Component {
     return targets;
   }
 
+  targetOverlayCloseCB() {
+    this.setState({selectedTarget: null});
+  }
+
+  targetDetails(targetId, targetType) {
+    if (targetType === 'target') {
+      let targets = _.flatMap(_.flatMap(this.props.levels, 'target_groups'), 'targets')
+      return _.find(targets, ['id', targetId]);
+    } else if (targetType === 'chore') {
+      return _.find(this.props.chores, ['id', targetId]);
+    } else if (targetType === 'session') {
+      return _.find(this.props.sessions, ['id', targetId]);
+    } else {
+      return null;
+    }
+
+    // TODO: Append founder statuses and latest feedback if targetId === initialTargetId
+  }
+
+  selectTargetCB(targetId, targetType) {
+    this.setState({selectedTarget: this.targetDetails(targetId, targetType)});
+    // TODO: Push appropriate URL to browser history
+  }
+
   render() {
     return (
       <div className="founder-dashboard-container p-b-2">
@@ -85,19 +112,19 @@ class FounderDashboard extends React.Component {
         <FounderDashboardTargets currentLevel={ this.props.currentLevel } levels={ this.state.levels }
           openTimelineBuilderCB={ this.openTimelineBuilder } levelUpEligibility={ this.props.levelUpEligibility }
           authenticityToken={ this.props.authenticityToken } iconPaths={ this.props.iconPaths }
-          founderDetails={this.props.founderDetails} maxLevelNumber={ this.props.maxLevelNumber } programLevels={ this.props.programLevels}/>
+          founderDetails={this.props.founderDetails} maxLevelNumber={ this.props.maxLevelNumber } programLevels={ this.props.programLevels} selectTargetCB={this.selectTargetCB}/>
         }
 
         { this.state.activeTab === 'chores' &&
         <FounderDashboardChores currentLevel={ this.props.currentLevel } chores={ this.state.chores }
           openTimelineBuilderCB={ this.openTimelineBuilder } iconPaths={ this.props.iconPaths }
-                                founderDetails={this.props.founderDetails}/>
+                                founderDetails={this.props.founderDetails} selectTargetCB={this.selectTargetCB}/>
         }
 
         { this.state.activeTab === 'sessions' &&
         <FounderDashboardSessions currentLevel={ this.props.currentLevel } sessions={ this.state.sessions }
           sessionTags={ this.props.sessionTags } openTimelineBuilderCB={ this.openTimelineBuilder }
-          iconPaths={ this.props.iconPaths } founderDetails={this.props.founderDetails}/>
+          iconPaths={ this.props.iconPaths } founderDetails={this.props.founderDetails} selectTargetCB={this.selectTargetCB}/>
         }
 
         { this.state.timelineBuilderVisible &&
@@ -106,6 +133,10 @@ class FounderDashboard extends React.Component {
           closeTimelineBuilderCB={ this.closeTimelineBuilder } targetId={ this.state.timelineBuilderParams.targetId }
           selectedTimelineEventTypeId={ this.state.timelineBuilderParams.selectedTimelineEventTypeId }
           targetSubmissionCB={ this.handleTargetSubmission }/>
+        }
+
+        { this.state.selectedTarget &&
+        <FounderDashboardTargetOverlay target={ this.state.selectedTarget } closeCB={ this.targetOverlayCloseCB }/>
         }
       </div>
     );
@@ -125,5 +156,9 @@ FounderDashboard.propTypes = {
   iconPaths: React.PropTypes.object,
   founderDetails: React.PropTypes.array,
   maxLevelNumber: React.PropTypes.number,
-  programLevels: React.PropTypes.object
+  programLevels: React.PropTypes.object,
+  initialTargetId: React.PropTypes.number,
+  initialTargetType: React.PropTypes.string,
+  initialTargetFounderStatuses: React.PropTypes.array,
+  initialTargetLatestFeedback: React.PropTypes.object
 };

@@ -43,11 +43,11 @@ class FounderDashboardChores extends React.Component {
 
         <FounderDashboardTargetCollection key='chores-current-level' name='Chores for current level'
           targets={ this.choresForCurrentLevel() } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }
-          iconPaths={ this.props.iconPaths } founderDetails={ this.props.founderDetails}/>
+          iconPaths={ this.props.iconPaths } founderDetails={ this.props.founderDetails} selectTargetCB={ this.props.selectTargetCB }/>
         { this.props.currentLevel != 0 &&
         <FounderDashboardTargetCollection key='chores-previous-levels' name='Chores for previous levels'
           targets={ this.choresForPreviousLevels() } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }
-          finalCollection={ true } iconPaths={ this.props.iconPaths } founderDetails={ this.props.founderDetails}/>
+          finalCollection={ true } iconPaths={ this.props.iconPaths } founderDetails={ this.props.founderDetails} selectTargetCB={ this.props.selectTargetCB }/>
         }
       </div>
     );
@@ -59,5 +59,6 @@ FounderDashboardChores.propTypes = {
   chores: React.PropTypes.array,
   openTimelineBuilderCB: React.PropTypes.func,
   iconPaths: React.PropTypes.object,
-  founderDetails: React.PropTypes.array
+  founderDetails: React.PropTypes.array,
+  selectTargetCB: React.PropTypes.func
 };

@@ -13,11 +13,7 @@ class FounderDashboardTarget extends React.Component {
   }
 
   handleClick() {
-    let newShowDescription = !this.state.showDescription;
-
-    this.setState({showDescription: newShowDescription});
-
-    this.animateDescription(newShowDescription);
+    this.props.selectTargetCB(this.props.target.id, this.props.target.target_type);
   }
 
   animateDescription(open) {
@@ -75,5 +71,6 @@ FounderDashboardTarget.propTypes = {
   openTimelineBuilderCB: React.PropTypes.func,
   displayDate: React.PropTypes.bool,
   iconPaths: React.PropTypes.object,
-  founderDetails: React.PropTypes.array
+  founderDetails: React.PropTypes.array,
+  selectTargetCB: React.PropTypes.func
 };

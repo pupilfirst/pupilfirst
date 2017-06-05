@@ -48,24 +48,15 @@ module Founders
     end
 
     # GET /founder/dashboard/targets/:id(/:slug)
-    def target_details
+    def target_overlay
       # TODO: Add Pundit authorization
 
       @target = Target.find_by(id: params[:id])
       raise_not_found if @target.blank?
 
-      respond_to do |format|
-        format.html do
-          dashboard
-          append_target_details
-
-          render 'dashboard'
-        end
-
-        format.json do
-          render json: { response: 'TODO' }
-        end
-      end
+      dashboard
+      set_initial_target
+      render 'dashboard'
     end
 
     private
@@ -126,8 +117,24 @@ module Founders
       end
     end
 
-    def append_target_details
-      @react_data = @react_data.merge(selectedTarget: { id: @target.id })
+    def set_initial_target
+      @react_data[:initialTargetId] = @target.id
+      @react_data[:initialTargetType] = @target.target_type
+      append_founder_statuses
+      append_startup_feedback
+    end
+
+    def append_founder_statuses
+      return unless @target.founder_role?
+
+      founders = current_founder.startup.founders.not_exited
+      @react_data[:initialTargetFounderStatuses] = founders.each_with_object([]) do |founder, statuses|
+        statuses << { founder.id => Targets::StatusService.new(@target, founder).status }
+      end
+    end
+
+    def append_startup_feedback
+      @react_data[:initialTargetLatestFeedback] = Targets::FeedbackService.new(@target, current_founder).latest_feedback_details
     end
   end
 end

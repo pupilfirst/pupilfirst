@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170531054508) do
+ActiveRecord::Schema.define(version: 20170606055847) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -728,7 +728,7 @@ ActiveRecord::Schema.define(version: 20170531054508) do
     t.string   "rubric"
     t.integer  "timeline_event_type_id"
     t.integer  "days_to_complete"
-    t.string   "target_type"
+    t.string   "target_action_type"
     t.integer  "target_group_id"
     t.integer  "points_earnable"
     t.integer  "sort_index",              default: 999

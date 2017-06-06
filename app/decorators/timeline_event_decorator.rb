@@ -12,7 +12,7 @@ class TimelineEventDecorator < Draper::Decorator
   end
 
   def target_prefix
-    case target.target_type
+    case target.target_action_type
       when Target::TYPE_TODO
         'executing'
       when Target::TYPE_ATTEND

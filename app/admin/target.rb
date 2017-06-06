@@ -3,7 +3,7 @@ ActiveAdmin.register Target do
 
   permit_params :assigner_id, :role, :title, :description, :resource_url,
     :completion_instructions, :days_to_complete, :slideshow_embed, :video_embed, :completed_at, :completion_comment, :rubric, :link_to_complete, :key, :submittability, :archived,
-    :remote_rubric_url, :target_group_id, :target_type, :points_earnable, :timeline_event_type_id, :sort_index,
+    :remote_rubric_url, :target_group_id, :target_action_type, :points_earnable, :timeline_event_type_id, :sort_index,
     :session_at, :chore, :level_id, prerequisite_target_ids: [], tag_list: []
 
   filter :title
@@ -107,7 +107,7 @@ ActiveAdmin.register Target do
       row :batch
       row :target_group
       row :sort_index
-      row :target_type
+      row :target_action_type
       row :points_earnable
 
       row :role do

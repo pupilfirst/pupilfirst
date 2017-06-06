@@ -60,7 +60,7 @@ class Target < ApplicationRecord
   TYPE_READ = 'Read'
   TYPE_LEARN = 'Learn'
 
-  def self.valid_target_types
+  def self.valid_target_action_types
     [TYPE_TODO, TYPE_ATTEND, TYPE_READ, TYPE_LEARN].freeze
   end
 
@@ -75,7 +75,7 @@ class Target < ApplicationRecord
   # Need to allow these two to be read for AA form.
   attr_reader :startup_id, :founder_id
 
-  validates :target_type, inclusion: { in: valid_target_types }, allow_nil: true
+  validates :target_action_type, inclusion: { in: valid_target_action_types }, allow_nil: true
   validates :role, presence: true, inclusion: { in: valid_roles }
   validates :title, presence: true
   validates :description, presence: true

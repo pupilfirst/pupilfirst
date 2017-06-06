@@ -139,7 +139,7 @@ group :development do
   # gem 'better_errors' # Better error info on the front-end.
   # gem 'binding_of_caller' # For advanced better_errors features - REPL, local/instance variable inspection etc.
   gem 'web-console', '~> 3.4' # TODO: Restored until better_errors speeds up again.
-  gem 'listen', '~> 3.1' # The Listen gem listens to file modifications and notifies you about the changes.
+  gem 'listen', '>= 3.0.5', '< 3.2' # The Listen gem listens to file modifications and notifies you about the changes.
   gem 'rack-mini-profiler', '~> 0.10' # Middleware that displays speed badge for every html page.
 
   # Go faster, off the Rails - Benchmarks for your whole Rails app

@@ -21,13 +21,13 @@ module TimelineEvents
       @new_status = status
 
       case @new_status
-        when TimelineEvent::VERIFIED_STATUS_VERIFIED
+        when TimelineEvent::STATUS_VERIFIED
           mark_verified
-        when TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT
+        when TimelineEvent::STATUS_NEEDS_IMPROVEMENT
           mark_needs_improvement
-        when TimelineEvent::VERIFIED_STATUS_NOT_ACCEPTED
+        when TimelineEvent::STATUS_NOT_ACCEPTED
           mark_not_accepted
-        when TimelineEvent::VERIFIED_STATUS_PENDING
+        when TimelineEvent::STATUS_PENDING
           mark_pending
         else
           raise 'Unexpected status specified!'
@@ -53,7 +53,7 @@ module TimelineEvents
 
     def mark_needs_improvement
       TimelineEvent.transaction do
-        @timeline_event.mark_needs_improvement!
+        @timeline_event.update!(status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT, status_updated_at: Time.zone.now)
         update_karma_points
         reset_startup_level if @timeline_event.timeline_event_type.end_iteration?
       end
@@ -61,14 +61,14 @@ module TimelineEvents
 
     def mark_not_accepted
       TimelineEvent.transaction do
-        @timeline_event.mark_not_accepted!
+        @timeline_event.update!(status: TimelineEvent::STATUS_NOT_ACCEPTED, status_updated_at: Time.zone.now)
         cancel_reset_request if @timeline_event.timeline_event_type.end_iteration?
       end
     end
 
     def mark_pending
       TimelineEvent.transaction do
-        @timeline_event.revert_to_pending!
+        @timeline_event.update!(status: TimelineEvent::STATUS_PENDING, status_updated_at: Time.zone.now)
       end
     end
 
@@ -104,9 +104,9 @@ module TimelineEvents
     end
 
     def applicable_points
-      return 0 unless @new_status.in?([TimelineEvent::VERIFIED_STATUS_VERIFIED, TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT]) && points_for_target.present?
+      return 0 unless @new_status.in?([TimelineEvent::STATUS_VERIFIED, TimelineEvent::STATUS_NEEDS_IMPROVEMENT]) && points_for_target.present?
 
-      return points_for_target unless @grade.present? && @new_status == TimelineEvent::VERIFIED_STATUS_VERIFIED
+      return points_for_target unless @grade.present? && @new_status == TimelineEvent::STATUS_VERIFIED
 
       points_for_target * grade_multiplier
     end

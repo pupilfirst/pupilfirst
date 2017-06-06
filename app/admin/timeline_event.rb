@@ -20,10 +20,10 @@ ActiveAdmin.register TimelineEvent do
     Founder.joins(:startup).where(startups: { batch_id: batch_id }).distinct.order(:name)
   }
 
-  filter :verified_status, as: :select, collection: TimelineEvent.valid_verified_status
+  filter :status, as: :select, collection: TimelineEvent.valid_statuses
   filter :grade, as: :select, collection: TimelineEvent.valid_grades
   filter :created_at
-  filter :verified_at
+  filter :status_updated_at
 
   scope :from_admitted_startups, default: true
   scope :from_level_0_startups
@@ -66,13 +66,13 @@ ActiveAdmin.register TimelineEvent do
       end
     end
 
-    column :verified_status do |timeline_event|
+    column :status do |timeline_event|
       if timeline_event.verified?
-        "Verified on #{timeline_event.verified_at.strftime('%d/%m/%y')}"
+        "Verified on #{timeline_event.status_updated_at.strftime('%d/%m/%y')}"
       elsif timeline_event.needs_improvement?
-        "Marked needs improvement on #{timeline_event.verified_at.strftime('%d/%m/%y')}"
+        "Marked needs improvement on #{timeline_event.status_updated_at.strftime('%d/%m/%y')}"
       else
-        timeline_event.verified_status
+        timeline_event.status
       end
     end
 
@@ -83,9 +83,9 @@ ActiveAdmin.register TimelineEvent do
     timeline_event = TimelineEvent.find(params[:id])
     if timeline_event.pending?
       status = {
-        needs_improvement: TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT,
-        not_accepted: TimelineEvent::VERIFIED_STATUS_NOT_ACCEPTED,
-        verified: TimelineEvent::VERIFIED_STATUS_VERIFIED
+        needs_improvement: TimelineEvent::STATUS_NEEDS_IMPROVEMENT,
+        not_accepted: TimelineEvent::STATUS_NOT_ACCEPTED,
+        verified: TimelineEvent::STATUS_VERIFIED
       }.fetch(params[:status].to_sym)
 
       points = params[:points].present? ? params[:points].to_i : nil
@@ -316,9 +316,9 @@ ActiveAdmin.register TimelineEvent do
       row :event_on
       row :share_on_facebook
 
-      row :verified_status
+      row :status
 
-      row :verified_at
+      row :status_updated_at
 
       row('Linked Target') do
         if timeline_event.target.present?

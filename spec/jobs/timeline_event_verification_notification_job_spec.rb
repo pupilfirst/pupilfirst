@@ -9,8 +9,8 @@ describe TimelineEventVerificationNotificationJob do
   let!(:startup_target) { create :target, role: "product" }
   let!(:timeline_event_type_founder) { create :timeline_event_type, role: TimelineEventType::ROLE_FOUNDER }
   let!(:timeline_event_type_startup) { create :timeline_event_type, role: TimelineEventType::ROLE_DESIGN }
-  let!(:timeline_event_for_founder) { create :timeline_event, founder: founder, startup: startup, target: founder_target, timeline_event_type: timeline_event_type_founder, verified_status: "Verified" }
-  let!(:timeline_event_for_startup) { create :timeline_event_with_links, founder: founder, startup: startup, target: startup_target, timeline_event_type: timeline_event_type_startup, verified_status: "Verified" }
+  let!(:timeline_event_for_founder) { create :timeline_event, founder: founder, startup: startup, target: founder_target, timeline_event_type: timeline_event_type_founder, status: "Verified" }
+  let!(:timeline_event_for_startup) { create :timeline_event_with_links, founder: founder, startup: startup, target: startup_target, timeline_event_type: timeline_event_type_startup, status: "Verified" }
   let(:startup_url) { Rails.application.routes.url_helpers.startup_url(startup) }
 
   let(:links_attached_notice) do

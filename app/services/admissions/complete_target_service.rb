@@ -18,7 +18,7 @@ module Admissions
       )
 
       TimelineEvents::VerificationService.new(timeline_event, notify: false)
-        .update_status(TimelineEvent::VERIFIED_STATUS_VERIFIED)
+        .update_status(TimelineEvent::STATUS_VERIFIED)
     end
 
     private

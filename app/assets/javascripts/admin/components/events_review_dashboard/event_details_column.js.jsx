@@ -40,7 +40,7 @@ class EventsReviewDashboardEventDetailsColumn extends React.Component {
         <div>
           <strong>Improvement of: </strong>
           <a href={'/admin/timeline_events/' + this.props.eventData['improvement_of']['id']} target='_blank'>
-            {this.props.eventData['improvement_of_title'] + ' (' + this.props.eventData['improvement_of']['verified_status'] + ')'}
+            {this.props.eventData['improvement_of_title'] + ' (' + this.props.eventData['improvement_of']['status'] + ')'}
           </a>
           <br/>
         </div>

@@ -5,9 +5,9 @@ after 'development:startups', 'development:target_groups', 'development:targets'
 
   avengers_startup = Startup.find_by(product_name: 'SuperHeroes')
 
-  status_verified = TimelineEvent::VERIFIED_STATUS_VERIFIED
-  status_pending = TimelineEvent::VERIFIED_STATUS_PENDING
-  status_needs_improvement = TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT
+  status_verified = TimelineEvent::STATUS_VERIFIED
+  status_pending = TimelineEvent::STATUS_PENDING
+  status_needs_improvement = TimelineEvent::STATUS_NEEDS_IMPROVEMENT
 
   # Add a one-liner verified entry for avengers
   events_list = [
@@ -25,15 +25,15 @@ after 'development:startups', 'development:target_groups', 'development:targets'
   ]
 
   # create all events in the events_list
-  events_list.each do |startup, type_key, founder_email, description, verified_status|
+  events_list.each do |startup, type_key, founder_email, description, status|
     TimelineEvent.create!(
       startup: startup,
       timeline_event_type: TimelineEventType.find_by(key: type_key),
       founder: Founder.find_by(email: founder_email),
       event_on: Time.now,
       description: description,
-      verified_status: verified_status,
-      verified_at: (verified_status == status_verified ? Time.now : nil)
+      status: status,
+      status_updated_at: (status == status_verified ? Time.now : nil)
     )
   end
 
@@ -50,8 +50,8 @@ after 'development:startups', 'development:target_groups', 'development:targets'
       founder: avengers_startup.admin,
       event_on: Time.now,
       description: Faker::Lorem.paragraph,
-      verified_status: status_verified,
-      verified_at: Time.now,
+      status: status_verified,
+      status_updated_at: Time.now,
       grade: grade
     )
   end

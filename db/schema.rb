@@ -793,9 +793,9 @@ ActiveRecord::Schema.define(version: 20170531054508) do
     t.datetime "created_at",                                 null: false
     t.datetime "updated_at",                                 null: false
     t.date     "event_on"
-    t.datetime "verified_at"
+    t.datetime "status_updated_at"
     t.integer  "timeline_event_type_id"
-    t.string   "verified_status"
+    t.string   "status"
     t.string   "grade"
     t.integer  "founder_id"
     t.integer  "improved_timeline_event_id"

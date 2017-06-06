@@ -45,7 +45,7 @@ describe Startups::LevelUpService do
         # A verified Joined SV event must have been created.
         event = startup.timeline_events.last
         expect(event.timeline_event_type).to eq(joined_svco_tet)
-        expect(event.verified_status).to eq(TimelineEvent::VERIFIED_STATUS_VERIFIED)
+        expect(event.status).to eq(TimelineEvent::STATUS_VERIFIED)
       end
     end
   end

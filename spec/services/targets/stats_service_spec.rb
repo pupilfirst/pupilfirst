@@ -15,20 +15,20 @@ describe Targets::StatsService do
 
     # mark prerequisite complete for everyone except first startup
     (Startup.all - [Startup.first]).each do |startup|
-      create(:timeline_event, startup: startup, target: prerequisite_target, verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED)
+      create(:timeline_event, startup: startup, target: prerequisite_target, status: TimelineEvent::STATUS_VERIFIED)
     end
 
     # second startup completed the target
-    create(:timeline_event, startup: Startup.second, target: target, verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED)
+    create(:timeline_event, startup: Startup.second, target: target, status: TimelineEvent::STATUS_VERIFIED)
 
     # third startup's submission was rejected
-    create(:timeline_event, startup: Startup.third, target: target, verified_status: TimelineEvent::VERIFIED_STATUS_NOT_ACCEPTED)
+    create(:timeline_event, startup: Startup.third, target: target, status: TimelineEvent::STATUS_NOT_ACCEPTED)
 
     # fourth startup's submission was marked needs improvement
-    create(:timeline_event, startup: Startup.fourth, target: target, verified_status: TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT)
+    create(:timeline_event, startup: Startup.fourth, target: target, status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT)
 
     # fifth startup's submission is pending verification
-    create(:timeline_event, startup: Startup.fifth, target: target, verified_status: TimelineEvent::VERIFIED_STATUS_PENDING)
+    create(:timeline_event, startup: Startup.fifth, target: target, status: TimelineEvent::STATUS_PENDING)
   end
 
   describe '#counts' do

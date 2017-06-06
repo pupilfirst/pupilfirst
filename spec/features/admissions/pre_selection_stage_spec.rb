@@ -214,7 +214,7 @@ feature 'Pre-selection Stage' do
         fill_in_submission_form
         click_button 'Submit'
 
-        TimelineEvent.last.update(verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED)
+        TimelineEvent.last.update(status: TimelineEvent::STATUS_VERIFIED)
 
         visit dashboard_founder_path
 

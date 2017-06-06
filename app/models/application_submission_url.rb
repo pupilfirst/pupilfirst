@@ -2,7 +2,7 @@ class ApplicationSubmissionUrl < ApplicationRecord
   belongs_to :application_submission
 
   # Is scored by
-  belongs_to :admin_user
+  belongs_to :admin_user, optional: true
 
   validates :name, presence: true
   validates :url, presence: true, url: true

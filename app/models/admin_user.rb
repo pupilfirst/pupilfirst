@@ -5,7 +5,7 @@ class AdminUser < ApplicationRecord
   TYPE_SUPERADMIN = 'superadmin'
   TYPE_FACULTY = 'faculty'
 
-  belongs_to :faculty
+  belongs_to :faculty, optional: true
   belongs_to :user
 
   # Scores submissions

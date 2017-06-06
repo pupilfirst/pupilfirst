@@ -31,11 +31,9 @@ class Founder < ApplicationRecord
   serialize :roles
 
   has_many :public_slack_messages
-  has_many :requests
-  belongs_to :father, class_name: 'Name'
-  belongs_to :startup
-  belongs_to :invited_startup, class_name: 'Startup'
-  belongs_to :university
+  belongs_to :startup, optional: true
+  belongs_to :invited_startup, class_name: 'Startup', optional: true
+  belongs_to :university, optional: true
   has_many :karma_points, dependent: :destroy
   has_many :timeline_events
   has_many :visits, as: :user

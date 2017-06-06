@@ -1,8 +1,7 @@
 class KarmaPoint < ApplicationRecord
-  belongs_to :founder
-  belongs_to :startup
-
-  belongs_to :source, polymorphic: true
+  belongs_to :founder, optional: true
+  belongs_to :startup, optional: true
+  belongs_to :source, polymorphic: true, optional: true
 
   validates :source_id, uniqueness: { scope: [:source_type] }, allow_nil: true
   validates :points, presence: true

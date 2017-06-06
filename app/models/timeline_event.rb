@@ -5,13 +5,13 @@ class TimelineEvent < ApplicationRecord
   belongs_to :startup
   belongs_to :founder
   belongs_to :timeline_event_type
-  belongs_to :target
+  belongs_to :target, optional: true
 
   has_one :karma_point, as: :source
   has_many :startup_feedback
   has_many :timeline_event_files, dependent: :destroy
 
-  belongs_to :improved_timeline_event, class_name: 'TimelineEvent'
+  belongs_to :improved_timeline_event, class_name: 'TimelineEvent', optional: true
   has_one :improvement_of, class_name: 'TimelineEvent', foreign_key: 'improved_timeline_event_id'
 
   mount_uploader :image, TimelineImageUploader
@@ -46,9 +46,6 @@ class TimelineEvent < ApplicationRecord
   validates :verified_status, inclusion: { in: valid_verified_status }
   validates :verified_at, presence: true, if: proc { verified? || needs_improvement? }
   validates :event_on, presence: true
-  validates :startup_id, presence: true
-  validates :founder_id, presence: true
-  validates :timeline_event_type, presence: true
   validates :description, presence: true
   validates :iteration, presence: true
 

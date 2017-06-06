@@ -13,11 +13,9 @@ Bundler.require(*Rails.groups)
 module Svapp
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    # This is currently disabled because of the age of this repository. Enable after thorough testing.
     #
-    # Also see initializers/new_framework_defaults.rb, which needs to be removed.
-    #
-    # config.load_defaults 5.1
+    # Note: This is not the original Rails version. However, this is the easiest way to enforce the latest defaults.
+    config.load_defaults 5.1
 
     config.assets.precompile << 'delayed/web/application.css'
     # Settings in config/environments/* take precedence over those specified here.

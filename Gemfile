@@ -5,16 +5,19 @@ source 'https://rubygems.org'
 # Required to suppress warnings about insecure :github source.
 git_source(:github) { |repository_path| "https://github.com/#{repository_path}.git" }
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '= 5.0.2'
+# Ruby on Rails. http://rubyonrails.org
+gem 'rails', '~> 5.1.1'
 
 gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 
 gem 'activeadmin', '~> 1.0.0' # The administration framework for Ruby on Rails applications. https://activeadmin.info
 gem 'flattened_active_admin', '~> 0.0' # better looking and customizable activeadmin
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
-gem 'carrierwave', '~> 0.11' # One uploader to rule them all.
-gem 'carrierwave_backgrounder', '~> 0.4' # Backgrounder for carrierwave.
+gem 'carrierwave', '~> 1.1' # One uploader to rule them all.
+
+# TODO: Switch to carrierwave_backgrounder from rubygems when a version (with support for Carrierwave v1) is released.
+# TODO: carrierwave_backgrounder is also holding back the version of mime-types in use. Check for updates.
+gem 'carrierwave_backgrounder', '= 0.4.2', github: 'lardawge/carrierwave_backgrounder' # Backgrounder for carrierwave.
 gem 'carrierwave-bombshelter', '~> 0.2' # Protects your carrierwave from image bombs (and such).
 
 # Required by Carrierwave to upload to S3.
@@ -136,7 +139,7 @@ group :development do
   # gem 'better_errors' # Better error info on the front-end.
   # gem 'binding_of_caller' # For advanced better_errors features - REPL, local/instance variable inspection etc.
   gem 'web-console', '~> 3.4' # TODO: Restored until better_errors speeds up again.
-  gem 'listen', '~> 3.1' # The Listen gem listens to file modifications and notifies you about the changes.
+  gem 'listen', '>= 3.0.5', '< 3.2' # The Listen gem listens to file modifications and notifies you about the changes.
   gem 'rack-mini-profiler', '~> 0.10' # Middleware that displays speed badge for every html page.
 
   # Go faster, off the Rails - Benchmarks for your whole Rails app

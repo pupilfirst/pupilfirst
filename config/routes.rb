@@ -198,6 +198,7 @@ Rails.application.routes.draw do
       get 'prerequisite_targets'
       get 'founder_statuses'
       get 'startup_feedback'
+      get 'details'
     end
   end
 

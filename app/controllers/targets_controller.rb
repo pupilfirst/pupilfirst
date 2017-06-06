@@ -47,4 +47,22 @@ class TargetsController < ApplicationController
 
     render json: founder_statuses
   end
+
+  # GET /targets/:id/details
+  def details
+    authorize :target
+    target = Target.find(params[:id])
+
+    if target.founder_role?
+      founder_statuses = current_founder.startup.founders.not_exited.each_with_object([]) do |founder, statuses|
+        statuses << { founder.id => Targets::StatusService.new(target, founder).status }
+      end
+    end
+
+    latest_feedback = Targets::FeedbackService.new(target, current_founder).latest_feedback_details
+
+    latest_event = target.latest_linked_event(current_founder)
+
+    render json: { founderStatuses: founder_statuses, latestEvent: latest_event, latestFeedback: latest_feedback }
+  end
 end

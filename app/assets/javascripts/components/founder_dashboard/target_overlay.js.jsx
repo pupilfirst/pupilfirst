@@ -1,4 +1,11 @@
 class FounderDashboardTargetOverlay extends React.Component  {
+  constructor(props) {
+    super(props);
+    this.state = _.merge({...props.target}, {founderStatuses: null, latestEvent: null, latestFeedback: null});
+
+    this.updateDetails = this.updateDetails.bind(this);
+  }
+
   componentDidMount() {
     let targetOverlayModal = $('.target-overlay__modal');
 
@@ -8,11 +15,19 @@ class FounderDashboardTargetOverlay extends React.Component  {
       backdrop: 'static'
     });
 
-    // fetch extra info, if missing
-    if (!_.has(this.props.target, 'latestFeedback')) {
-      // TODO
-      console.log('Need to fetch more information');
-    }
+    let that = this;
+    $.ajax({
+      url: '/targets/' + that.props.target.id + '/details',
+      success: that.updateDetails
+    });
+  }
+
+  updateDetails(response) {
+    this.setState({
+      founderStatuses: response.founderStatuses,
+      latestEvent: response.latestEvent,
+      latestFeedback: response.latestFeedback
+    });
   }
 
   render() {
@@ -21,7 +36,7 @@ class FounderDashboardTargetOverlay extends React.Component  {
         <div className="target-overlay__modal-dialog modal-dialog" role="document">
           <div className="target-overlay__modal-content modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Details of target {this.props.target.id}:</h5>
+              <h5 className="modal-title">Details of target {this.state.id}:</h5>
               <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={ this.props.closeCB }>
                 <span aria-hidden="true">&times;</span>
               </button>

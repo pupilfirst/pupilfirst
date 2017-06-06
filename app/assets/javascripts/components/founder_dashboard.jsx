@@ -101,15 +101,7 @@ class FounderDashboard extends React.Component {
       'session': this.props.sessions
     };
 
-    let target = _.find(collection[targetType], ['id', targetId]);
-
-    // append the latest feedback and founder statuses if available
-    if (this.props.initialTargetId && this.props.initialTargetId === targetId) {
-      target['latestFeedback'] = this.props.initialTargetLatestFeedback;
-      target['founderStatuses'] = this.props.initialTargetFounderStatuses;
-    }
-
-    return target;
+    return _.find(collection[targetType], ['id', targetId]);
   }
 
   selectTargetCB(targetId, targetType) {
@@ -177,7 +169,5 @@ FounderDashboard.propTypes = {
   maxLevelNumber: React.PropTypes.number,
   programLevels: React.PropTypes.object,
   initialTargetId: React.PropTypes.number,
-  initialTargetType: React.PropTypes.string,
-  initialTargetFounderStatuses: React.PropTypes.array,
-  initialTargetLatestFeedback: React.PropTypes.object
+  initialTargetType: React.PropTypes.string
 };

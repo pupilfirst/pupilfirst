@@ -1,13 +1,4 @@
 GIT
-  remote: https://github.com/ajaleelp/valid_url.git
-  revision: 7548e04df02e6281ef0b00f9d0db73a85a8de594
-  branch: patch-1
-  specs:
-    valid_url (0.0.4)
-      addressable
-      rails
-
-GIT
   remote: https://github.com/desheikh/rails-bootstrap-forms.git
   revision: b582ebffd99b9df5dd03d1b1a8d29d5426e1258b
   branch: master
@@ -32,6 +23,15 @@ GIT
       faye-websocket (>= 0.8.0)
       lita (>= 4.7.1)
       multi_json
+
+GIT
+  remote: https://github.com/mahesh-krishnakumar/valid_url.git
+  revision: 2c1f5b9191136e4eb6b1d369e2ebadfd8a10360a
+  branch: patch-1
+  specs:
+    valid_url (0.0.4)
+      addressable
+      rails
 
 GIT
   remote: https://github.com/mobmewireless/unobtrusive_flash.git
@@ -950,4 +950,4 @@ RUBY VERSION
    ruby 2.4.1p111
 
 BUNDLED WITH
-   1.15.0
+   1.15.1

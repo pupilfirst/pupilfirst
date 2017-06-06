@@ -42,7 +42,7 @@ gem 'bootstrap_form', '= 2.5.2', github: 'desheikh/rails-bootstrap-forms', branc
 
 # TODO: The zones list in the gem was outdated.
 # Have updated and submitted a PR (https://github.com/ralovets/valid_url/pull/10). Using a personal fork until it's merged.
-gem 'valid_url', '= 0.0.4', github: 'ajaleelp/valid_url', branch: 'patch-1' # New url validataion gem
+gem 'valid_url', '= 0.0.4', github: 'mahesh-krishnakumar/valid_url', branch: 'patch-1' # New url validataion gem
 gem 'roadie-rails', '~> 1.1' # CSS management for e-mails.
 gem 'passenger', '~> 5.0' # Passenger web-server.
 gem 'delayed_job_active_record', '~> 4.1' # Delayed Job for deferring tasks.

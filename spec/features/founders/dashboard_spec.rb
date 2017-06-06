@@ -234,6 +234,8 @@ feature 'Founder Dashboard' do
       click_on 'Request For a Pivot'
     end
 
+    visit dashboard_founder_path
+
     # Check whether end_iteration timeline event is created
     te = TimelineEvent.last
     expect(te.timeline_event_type).to eq(tet_end_iteration)

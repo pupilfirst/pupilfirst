@@ -1,5 +1,5 @@
 class MoocStudent < ApplicationRecord
-  belongs_to :college, optional: true
+  belongs_to :college
   belongs_to :user
 
   has_many :quiz_attempts

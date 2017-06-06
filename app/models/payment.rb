@@ -1,10 +1,10 @@
 class Payment < ApplicationRecord
-  belongs_to :batch_application, optional: true
-  belongs_to :original_batch_application, class_name: 'BatchApplication', optional: true
-  belongs_to :original_startup, class_name: 'Startup', optional: true
-  belongs_to :batch_applicant, optional: true
-  belongs_to :startup, optional: true
-  belongs_to :founder, optional: true
+  belongs_to :batch_application
+  belongs_to :original_batch_application, class_name: 'BatchApplication'
+  belongs_to :original_startup, class_name: 'Startup'
+  belongs_to :batch_applicant
+  belongs_to :startup
+  belongs_to :founder
 
   STATUS_REQUESTED = -'requested'
   STATUS_PAID = -'paid'

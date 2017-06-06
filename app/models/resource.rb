@@ -7,10 +7,10 @@ class Resource < ApplicationRecord
   acts_as_taggable
 
   # TODO: Remove association to batch ensuring no loss of data in production
-  belongs_to :batch, optional: true
+  belongs_to :batch
 
-  belongs_to :startup, optional: true
-  belongs_to :level, optional: true
+  belongs_to :startup
+  belongs_to :level
 
   def slug_candidates
     [
@@ -20,7 +20,7 @@ class Resource < ApplicationRecord
   end
 
   def should_generate_new_friendly_id?
-    title_changed? || saved_change_to_title? || super
+    title_changed? || super
   end
 
   validates :title, presence: true
@@ -87,16 +87,16 @@ class Resource < ApplicationRecord
     end
   end
 
-  # Message to be send to slack for new resources.
+  # message to be send to slack for new resources
   def new_resource_message
     message = "*A new #{level_exclusive? ? ('private resource for Level ' + level.number.to_s) : 'public resource'}"\
     " has been uploaded to the SV.CO Startup Library*: \n"
     message += "*Title:* #{title}\n"
     message += "*Description:* #{description}\n"
-    message + "*URL:* #{Rails.application.routes.url_helpers.resource_url(id: slug, host: 'https://sv.co')}"
+    message + "*URL:* #{Rails.application.routes.url_helpers.resource_url(self, host: 'https://sv.co')}"
   end
 
-  # Ensure titles are capitalized.
+  # ensure titles are capitalized
   before_save do
     self.title = title.titlecase(humanize: false, underscore: false)
   end

@@ -17,15 +17,15 @@ class Target < ApplicationRecord
   STATUS_UNAVAILABLE = :unavailable
   STATUS_NOT_ACCEPTED = :not_accepted
 
-  belongs_to :assigner, class_name: 'Faculty', optional: true
+  belongs_to :assigner, class_name: 'Faculty'
   belongs_to :timeline_event_type, optional: true
   has_many :timeline_events
   has_many :target_prerequisites
   has_many :prerequisite_targets, through: :target_prerequisites
-  belongs_to :target_group, optional: true
+  belongs_to :target_group
   has_one :program_week, through: :target_group
   has_one :batch, through: :target_group
-  belongs_to :level, optional: true
+  belongs_to :level
 
   acts_as_taggable
   mount_uploader :rubric, RubricUploader

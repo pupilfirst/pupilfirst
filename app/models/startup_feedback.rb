@@ -1,7 +1,7 @@
 class StartupFeedback < ApplicationRecord
   belongs_to :startup
   belongs_to :faculty
-  belongs_to :timeline_event, optional: true
+  belongs_to :timeline_event
   attr_accessor :send_email, :event_id, :event_status
 
   scope :for_batch, ->(batch) { joins(:startup).where(startups: { batch_id: batch.id }) }
@@ -10,7 +10,9 @@ class StartupFeedback < ApplicationRecord
   # mount uploader for attachment
   mount_uploader :attachment, StartupFeedbackAttachmentUploader
 
+  validates :faculty_id, presence: true
   validates :feedback, presence: true
+  validates :startup_id, presence: true
 
   REGEX_TIMELINE_EVENT_URL = %r{startups/.*event-(?<event_id>[\d]+)}
 

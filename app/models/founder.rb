@@ -31,9 +31,11 @@ class Founder < ApplicationRecord
   serialize :roles
 
   has_many :public_slack_messages
-  belongs_to :startup, optional: true
-  belongs_to :invited_startup, class_name: 'Startup', optional: true
-  belongs_to :university, optional: true
+  has_many :requests
+  belongs_to :father, class_name: 'Name'
+  belongs_to :startup
+  belongs_to :invited_startup, class_name: 'Startup'
+  belongs_to :university
   has_many :karma_points, dependent: :destroy
   has_many :timeline_events
   has_many :visits, as: :user
@@ -114,7 +116,7 @@ class Founder < ApplicationRecord
   end
 
   def should_generate_new_friendly_id?
-    name_changed? || saved_change_to_name? || super
+    name_changed? || super
   end
 
   # TODO: Remove this method when all instance of it being used are gone. https://trello.com/c/yh0Mkfir

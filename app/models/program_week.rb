@@ -1,7 +1,7 @@
 class ProgramWeek < ApplicationRecord
   has_many :target_groups
   has_many :targets, through: :target_groups
-  belongs_to :batch, optional: true
+  belongs_to :batch
 
   validates :name, presence: true
   validates :number, presence: true, uniqueness: { scope: [:batch_id] }

@@ -14,7 +14,7 @@ class FacultyImageUploader < CarrierWave::Uploader::Base
   process resize_to_fill: [300, 360]
 
   # Add a white list of extensions which are allowed to be uploaded.
-  def extension_whitelist
+  def extension_white_list
     %w[jpg jpeg gif png]
   end
 end

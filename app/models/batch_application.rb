@@ -5,15 +5,15 @@ class BatchApplication < ApplicationRecord
   APPLICATION_FEE = 1000
   COURSE_FEE = 37_500
 
-  belongs_to :application_round, optional: true
-  belongs_to :application_stage, optional: true
+  belongs_to :application_round
+  belongs_to :application_stage
   has_one :batch, through: :application_round
   has_many :application_submissions, dependent: :destroy
   has_and_belongs_to_many :batch_applicants
   accepts_nested_attributes_for :batch_applicants
-  belongs_to :team_lead, class_name: 'BatchApplicant'
   has_one :college, through: :team_lead
-  belongs_to :university, optional: true
+  belongs_to :team_lead, class_name: 'BatchApplicant'
+  belongs_to :university
   has_one :payment, dependent: :restrict_with_error
   has_many :archived_payments, class_name: 'Payment', foreign_key: 'original_batch_application_id'
   belongs_to :startup, optional: true

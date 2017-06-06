@@ -1,7 +1,7 @@
 class Coupon < ApplicationRecord
   has_many :coupon_usages
   has_many :startups, through: :coupon_usages
-  belongs_to :referrer, class_name: 'Founder', optional: true
+  belongs_to :referrer, class_name: 'Founder'
 
   scope :referral, -> { where.not(referrer_id: nil) }
 

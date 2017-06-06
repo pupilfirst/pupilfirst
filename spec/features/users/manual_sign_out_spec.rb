@@ -29,14 +29,14 @@ feature 'Manual User Sign Out' do
       expect(page).to have_content('Edit your startup profile')
       click_link('Add new team member')
       expect(page).to have_content('List new team member')
-    end
 
-    # After 1 week, he should be signed out again if the boolean is still set.
-    travel_to 8.days.from_now do
-      visit edit_founder_startup_path
+      # After 1 week, he should be signed out again if the boolean is still set.
+      travel_to 1.week.from_now do
+        visit edit_founder_startup_path
 
-      # User should be signed out.
-      expect(page).to have_content('Check out the latest images from our #StartInCollege campaign!')
+        # User should be signed out.
+        expect(page).to have_content('Check out the latest images from our #StartInCollege campaign!')
+      end
     end
   end
 

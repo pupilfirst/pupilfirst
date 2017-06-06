@@ -8,9 +8,9 @@ module Founders
     def register
       Founder.transaction do
         founder = create_founder
-        create_blank_startup(founder)
-        create_intercom_applicant(founder)
-        send_login_email(founder)
+        create_blank_startup
+        create_or_update_user
+        create_intercom_applicant
         founder
       end
     end
@@ -18,9 +18,9 @@ module Founders
     private
 
     def create_founder
-      founder = Founder.where(email: @founder_params[:email]).first_or_create!(user: user)
+      @founder = Founder.where(email: @founder_params[:email]).first_or_create!
 
-      founder.update!(
+      @founder.update!(
         name: @founder_params[:name],
         email: @founder_params[:email],
         phone: @founder_params[:phone],
@@ -30,33 +30,31 @@ module Founders
         startup_admin: true
       )
 
-      founder
+      @founder
     end
 
-    def create_blank_startup(founder)
+    def create_blank_startup
       name = Startups::ProductNameGeneratorService.new.fun_name
       startup = Startup.create!(product_name: name, level: Level.zero, maximum_level: Level.zero)
 
       # Update startup info of founder
-      founder.update!(startup: startup)
+      @founder.update!(startup: startup)
     end
 
-    def user
-      @user ||= begin
-        u = User.with_email(@founder_params[:email]) || User.create!(email: @founder_params[:email])
-        u.regenerate_login_token if u.login_token.blank?
-        u
-      end
+    def create_or_update_user
+      user = User.with_email(@founder.email) || User.create!(email: @founder.email)
+      user.regenerate_login_token if user.login_token.blank?
+
+      # Update user info of founder
+      @founder.update!(user: user)
+
+      # Send login email when all's done.
+      UserSessionMailer.send_login_token(@founder.user, nil, true).deliver_later
     end
 
-    # Send login email when all's done.
-    def send_login_email(founder)
-      UserSessionMailer.send_login_token(founder.user, nil, true).deliver_later
-    end
-
-    # Create or update user info on Intercom.
-    def create_intercom_applicant(founder)
-      IntercomNewApplicantCreateJob.perform_later(founder)
+    def create_intercom_applicant
+      # Create or update user info on intercom
+      IntercomNewApplicantCreateJob.perform_later @founder if @founder.present?
     end
   end
 end

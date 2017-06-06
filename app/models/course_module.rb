@@ -3,7 +3,7 @@ class CourseModule < ApplicationRecord
   friendly_id :name, use: :slugged
 
   def should_generate_new_friendly_id?
-    name_changed? || saved_change_to_name? || super
+    name_changed? || super
   end
 
   has_many :quiz_questions

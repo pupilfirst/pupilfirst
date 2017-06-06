@@ -547,7 +547,7 @@
   max-width: 50rem;
   position: relative;
 
-  &:before {
+  &:not(:last-child):before {
     content: '';
     position: absolute;
     top: 0;

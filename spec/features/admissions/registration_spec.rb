@@ -6,6 +6,7 @@ feature 'Founder Registration' do
   let!(:level_0) { create :level, :zero }
   let(:level_0_targets) { create :target_group, milestone: true, level: level_0 }
   let!(:screening_target) { create :target, :admissions_screening, target_group: level_0_targets }
+  let!(:fee_payment_target) { create :target, :admissions_fee_payment, target_group: level_0_targets }
 
   context 'User is already a founder' do
     let(:startup) { create :level_0_startup }
@@ -18,7 +19,7 @@ feature 'Founder Registration' do
 
       fill_in 'founders_registration_name', with: founder.name
       fill_in 'founders_registration_email', with: founder.email
-      fill_in 'founders_registration_email_confirmation', with: founder.email
+      # fill_in 'founders_registration_email_confirmation', with: founder.email
       fill_in 'founders_registration_phone', with: founder.phone
       select "My college isn't listed", from: 'founders_registration_college_id'
       fill_in 'founders_registration_college_text', with: founder.college.name
@@ -47,7 +48,7 @@ feature 'Founder Registration' do
       expect(page).to have_text('Apply Now')
       fill_in 'founders_registration_name', with: 'Jack Sparrow'
       fill_in 'founders_registration_email', with: 'elcapitan@sv.co'
-      fill_in 'founders_registration_email_confirmation', with: 'elcapitan@sv.co'
+      # fill_in 'founders_registration_email_confirmation', with: 'elcapitan@sv.co'
       fill_in 'founders_registration_phone', with: '9876543210'
       select "My college isn't listed", from: 'founders_registration_college_id'
       fill_in 'founders_registration_college_text', with: 'Swash Bucklers Training Institute'
@@ -64,6 +65,43 @@ feature 'Founder Registration' do
       expect(last_founder.email).to eq('elcapitan@sv.co')
       expect(last_founder.phone).to eq('9876543210')
       expect(last_founder.college_text).to eq('Swash Bucklers Training Institute')
+    end
+  end
+
+  context 'User is a new visitor and makes a possible mistake in the email' do
+    before do
+      visit apply_path
+
+      # Fill in the registration form.
+      fill_in 'founders_registration_name', with: 'Jack Sparrow'
+      fill_in 'founders_registration_email', with: 'test@gamil.com'
+      fill_in 'founders_registration_phone', with: '9876543210'
+      select "My college isn't listed", from: 'founders_registration_college_id'
+      fill_in 'founders_registration_college_text', with: 'Swash Bucklers Training Institute'
+
+      click_on 'Submit'
+    end
+
+    scenario 'User accepts the email hint', js: true do
+      expect(page).to have_text('Did you mean test@gmail.com?')
+      click_on 'Yes'
+      click_on 'Submit'
+
+      expect(page).to have_selector('.introjs-tooltipReferenceLayer', visible: false)
+
+      last_founder = Founder.last
+      expect(last_founder.email).to eq('test@gmail.com')
+    end
+
+    scenario 'User rejects the email hint', js: true do
+      expect(page).to have_text('Did you mean test@gmail.com?')
+      click_on 'No'
+      click_on 'Submit'
+
+      expect(page).to have_selector('.introjs-tooltipReferenceLayer', visible: false)
+
+      last_founder = Founder.last
+      expect(last_founder.email).to eq('test@gamil.com')
     end
   end
 end

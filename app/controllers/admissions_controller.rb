@@ -1,6 +1,6 @@
 class AdmissionsController < ApplicationController
   layout 'application_v2'
-  before_action :skip_container, only: %i[founders founders_submit]
+  before_action :skip_container, only: %i[founders founders_submit fee]
 
   # GET /apply
   def apply
@@ -96,7 +96,7 @@ class AdmissionsController < ApplicationController
     fee
 
     if @coupon_form.validate(params[:admissions_coupon])
-      @coupon_form.apply_coupon!(current_startup)
+      @coupon_form.apply_coupon
       flash[:success] = 'Coupon applied successfully!'
       redirect_to admissions_fee_path
     else

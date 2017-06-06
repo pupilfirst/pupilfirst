@@ -1,0 +1,20 @@
+.secondary-banner
+  .container
+    .col-md-5.col-sm-5
+      .banner-head
+        h1 Changelog
+        p
+          | (Bi)weekly updates. Regular iteration FTW!
+    .col-md-7.changelog-bg
+
+.container
+  .row
+    .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
+      .content-box.changelog-section.m-t-3.m-b-1
+        - @changelog_releases.each do |release|
+          == render 'changelog_release', release: release
+
+  .row
+    .offset-lg-1.offset-xl-2.col-lg-10
+      .m-b-3
+        = link_to('View Changelog Archive', changelog_archive_path, class: 'btn btn-success')

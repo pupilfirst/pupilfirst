@@ -32,10 +32,10 @@ gem 'slim', '~> 3.0' # Slim templating.
 gem 'turbolinks', '~> 5.0' # Quicker page navigation. https://github.com/turbolinks/turbolinks
 gem 'uglifier', '~> 3.1' # JavaScript compressor.
 gem 'rest-client', '~> 2.0' # Used to contact Fast Alerts' API.
-gem 'cancancan', '~> 1.16' # Used to manage administrator types and roles in the ActiveAdmin interface.
+gem 'cancancan', '~> 2.0' # Used to manage administrator types and roles in the ActiveAdmin interface.
 gem 'select2-rails', '~> 4.0' # Select2 javascript select box improvement library, using in ActiveAdmin interface.
 gem 'bootstrap-sass', '~> 3.3' # Official Sass port of Bootstrap.
-gem 'autoprefixer-rails', '~> 6.7' # Autoprefixer for Ruby and Ruby on Rails.
+gem 'autoprefixer-rails', '~> 7.1' # Autoprefixer for Ruby and Ruby on Rails.
 gem 'simple_form', '~> 3.4' # Simple-form with support for Bootstrap 3.
 gem 'simple_form_fancy_uploads', '~> 0.2' # simple_form custom inputs to get image/link previews with file uploads. https://github.com/apeacox/simple_form_fancy_uploads
 gem 'bootstrap_form', '= 2.5.2', github: 'desheikh/rails-bootstrap-forms', branch: 'master' # TODO: Replace this with v4 branch of bootstrap-ruby/rails-bootstrap-forms See https://trello.com/c/7wUOmaeM
@@ -64,11 +64,12 @@ gem 'google_calendar', '= 0.6.2', github: 'northworld/google_calendar' # Thin wr
 gem 'recaptcha', '~> 3.4', require: 'recaptcha/rails' # ReCaptcha helpers for ruby apps http://github.com/ambethia/recaptcha
 gem 'groupdate', '~> 3.2' # The simplest way to group temporal data. https://github.com/ankane/groupdate
 gem 'videojs_rails', '~> 4.12' # Video JS for Rails 3.1+ Asset Pipeline. https://github.com/seanbehan/videojs_rails
-gem 'react-rails', '~> 1.10' # For automatically transforming JSX and using React in Rails.
+gem 'react-rails', '~> 2.2' # For automatically transforming JSX and using React in Rails.
 gem 'ahoy_matey', '~> 1.5' # Analytics for Rails
-gem 'acts-as-taggable-on', '~> 4.0' # Tag a single model on several contexts.
+gem 'acts-as-taggable-on', '~> 5.0' # Tag a single model on several contexts.
 gem 'will_paginate-bootstrap4', '~> 0.1' # This gem integrates the Twitter Bootstrap pagination component with the will_paginate pagination gem.
 gem 'sendinblue', '~> 2.4' # This is SendinBlue provided API V2 Ruby GEM
+gem 'email_inquire', '~> 0.6' # Validate email for format, common typos and one-time email providers
 
 # TODO: Switch to vendor's version of 'shortener' gem when Rails 5 support has been added.
 gem 'shortener', '= 0.5.5', github: 'harigopal/shortener', branch: '74-rails-5-support' # generate short SV.CO urls for files, links etc
@@ -83,11 +84,11 @@ gem 'postmark-rails', '~> 0.15' # Official integration library for using Rails a
 gem 'intercom-rails', '~> 0.3' # The easiest way to install Intercom in a Rails app.
 gem 'intercom', '~> 3.5' # Ruby bindings for the Intercom API
 gem 'jspdf-rails', '~> 1.0' # HTML5 client-side pdf generation - for certificates
-gem 'draper', '= 3.0.0.pre1' # Decorators/View-Models for Rails Applications # TODO: Pre-release version for Rails 5 support. Upgrade to stable when available.
+gem 'draper', '~> 3.0' # Decorators/View-Models for Rails Applications # TODO: Pre-release version for Rails 5 support. Upgrade to stable when available.
 gem 'responders', '~> 2.3' # A set of Rails responders to dry up your application (respond_to / with)
 gem 'prawn', '~> 2.1' # Used to generate dynmaic portions of agreement pdfs
 gem 'prawn-table', '~> 0.2' # Support for drawing tables in prawn pdfs
-gem 'combine_pdf', '~> 0.2' # Used to combine sections of agreement pdfs
+gem 'combine_pdf', '~> 1.0' # Used to combine sections of agreement pdfs
 gem 'rollbar', '~> 2.14' # Exception tracking and logging from Ruby to Rollbar https://rollbar.com
 gem 'humanize', '~> 1.3' # Convert numbers to english words
 gem 'scarf', '~> 0.2' # A Ruby library for generating initial avatars and identicons.
@@ -143,7 +144,7 @@ group :development do
   gem 'stackprof', '~> 0.2' # Required by derailed_benchmarks.
   gem 'oink', '~> 0.10' # Log parser to identify actions which significantly increase VM heap size
   gem 'chromedriver-helper', '~> 1.1' # Easy installation and use of chromedriver, the Chromium project's selenium webdriver adapter.
-  gem 'logchange', '~> 0.0' # An alternative approach to managing a changelog.
+  gem 'logchange', '~> 1.0' # An alternative approach to managing a changelog.
 end
 
 group :test do
@@ -162,10 +163,7 @@ group :development, :test do
   gem 'coderay', '~> 1.1' # Pretty syntax highlighting on rspec failure snippets.
   gem 'pry-rails', '~> 0.3.5' # Pry debugger.
   gem 'webmock', '~> 3.0' # Mocking web requests.
-
-  # TODO: Upgrade when Rubocop moves beyond buggy v0.48.
   gem 'rubocop', '~> 0.49', require: false # Ruby Style Guide.
-
   gem 'bundler-audit', '~> 0.5', require: false # Audit gems in gemfile.lock for reported vulnerabilities
   gem 'overcommit', '~> 0.38', require: false # A fully configurable and extendable Git hook manager
   gem 'fuubar', '~> 2.2' # The instafailing RSpec progress bar formatter.

@@ -1,6 +1,22 @@
 ## Ongoing
 
-- The `DashboardDataService` is being spec-d. [[Trello]](https://trello.com/c/7Y5lBcE9)
+- The final module for the MOOC, along with a completion certificate is being prepared. [[Trello]](https://trello.com/c/8kgMZU6H)
+- Design for founder dashboard target's expanded view is in progress. [[Trello]](https://trello.com/c/l92nYs9k)
+- The `email_inquire` library is being introduced to improve email parsing on the admissions founder registration form. [[Trello]](https://trello.com/c/PzHR2QQj)
+
+## 2017.05.29
+
+- Multiple changes to content were made, related to the admissions process. Trello. [[1]](https://trello.com/c/Vsbplwaa)[[2]](https://trello.com/c/Radw7HxV)
+- Google Tag Manager has been integrated with the codebase, replacing separate Google Analytics and Facebook Pixel integrations. Content-security policy rules have been greatly relaxed to allow this. [[Trello]](https://trello.com/c/GhzoYkCl)
+- Grade for a completed target is now displayed on the target header component, replacing the contents of the status badge. [[Trello]](https://trello.com/c/8DNdYGaz)
+- An option to retake the tour of the dashboard was added to the action-bar dropdown on the page. [[Trello]](https://trello.com/c/Wqdw2Yen)
+- Startup's level is now displayed everywhere its stage used to be. [[Trello]](https://trello.com/c/WSBfBhdY)
+- More user state information is now sent to Intercom. [[Trello]](https://trello.com/c/hj5qcA1b)
+- The `DashboardDataService` has been spec-d. [[Trello]](https://trello.com/c/7Y5lBcE9)
+- Fixed a `404` for an image on the `/talent` page. [[Trello]](https://trello.com/c/WslHyBbn)
+- Fixed a bug which caused target description to be displayed twice for each target on the founder dashboard. [[Trello]](https://trello.com/c/EI2Y9WIa)
+- The redirect URL for founders levelling up to Level 1 was customized for analytics purpose. [[Trello]](https://trello.com/c/h2aMl5NR)
+- The _lodash_ library was added to the codebase. [[Trello]](https://trello.com/c/kGt6ky9x)
 
 ## 2017.05.22
 

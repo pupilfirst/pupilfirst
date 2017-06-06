@@ -1,15 +1,22 @@
-sendFounderDataToInspectlet = ->
-  inspectletData = $('#inspectlet-data')
-  emailAddress = inspectletData.data 'FounderEmail'
+sendUserDataToInspectlet = ->
+  analyticsData = $('#analytics-data')
+  state = analyticsData.data('state')
 
-  if __insp? and emailAddress
-    productName = inspectletData.data 'productName'
-    startupBatch = inspectletData.data 'startupBatch'
+  if __insp? and state?
+    __insp.push ['identify', state.email]
 
-    if emailAddress
-      __insp.push ['identify', emailAddress]
+    productName = analyticsData.data 'productName'
+    startupBatch = analyticsData.data 'startupBatch'
 
-    if productName || startupBatch
-      __insp.push ['tagSession', {email: emailAddress, productName: productName, startupBatch: startupBatch}]
+    startup = state['startup']
 
-$(document).on 'page:change', sendFounderDataToInspectlet
+    if startup?
+      __insp.push ['tagSession', {
+        email: state.email,
+        name: state.name,
+        startupId: startup['id'],
+        productName: startup['product_name'],
+        admissionsStage: startup['admissions_stage']
+      }]
+
+$(document).on 'turbolinks:load', sendUserDataToInspectlet

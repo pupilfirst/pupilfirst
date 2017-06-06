@@ -62,5 +62,5 @@ html lang='en'
       .container
         == yield
 
-    /- if current_founder.try(:just_signed_in)
-    /  == render 'layouts/inspectlet'
+    - if current_founder.try(:just_signed_in)
+      == render 'layouts/analytics_data'

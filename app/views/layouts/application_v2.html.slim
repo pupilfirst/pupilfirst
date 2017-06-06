@@ -71,5 +71,5 @@ html lang='en'
     - unless @hide_layout_footer
       == render 'layouts/footer_v2'
 
-    /- if current_founder.try(:just_signed_in)
-    /  == render 'layouts/inspectlet'
+    - if current_founder.try(:just_signed_in)
+      == render 'layouts/analytics_data'

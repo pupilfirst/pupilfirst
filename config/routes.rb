@@ -149,9 +149,6 @@ Rails.application.routes.draw do
   # Previous transparency page re-directed to story
   get 'transparency', to: redirect('/story')
 
-  # Public Changelog.
-  get 'changelog', to: 'home#changelog'
-
   # Application process tour of SV.CO
   get 'tour', to: 'home#tour'
 
@@ -203,6 +200,12 @@ Rails.application.routes.draw do
   scope 'paytm', as: 'paytm', controller: 'paytm' do
     get 'pay'
     post 'callback'
+  end
+
+  # Public change log
+  scope 'changelog', as: 'changelog', controller: 'changelog' do
+    get '/', action: 'index'
+    get 'archive'
   end
 
   resource :impersonation, only: %i[destroy]

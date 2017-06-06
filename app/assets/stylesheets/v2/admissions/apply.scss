@@ -694,3 +694,12 @@
     }
   }
 }
+
+.application-form__email-hint-button {
+  @include media-breakpoint-down(xs) {
+    display: inline-block;
+    width: auto;
+    color: white;
+    margin-top: 0.3rem;
+  }
+}

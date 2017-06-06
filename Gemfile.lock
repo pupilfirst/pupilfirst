@@ -16,7 +16,7 @@ GIT
 
 GIT
   remote: https://github.com/harigopal/shortener.git
-  revision: fa07d7225acc802483ba5cf611bb2b4fc371d06d
+  revision: eee21eea4d636a46ccf9c76b473bfc89f84144d8
   branch: 74-rails-5-support
   specs:
     shortener (0.5.5)

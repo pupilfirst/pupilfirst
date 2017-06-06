@@ -20,13 +20,6 @@ class HomeController < ApplicationController
     raise_not_found
   end
 
-  # GET /changelog
-  def changelog
-    @skip_container = true
-    @changelog = File.read(File.absolute_path(Rails.root.join('CHANGELOG.md')))
-    render layout: 'application_v2'
-  end
-
   # GET /tour
   def tour
     @skip_container = true

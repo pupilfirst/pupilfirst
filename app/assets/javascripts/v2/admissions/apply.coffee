@@ -31,31 +31,6 @@ readmoreFAQ = ->
     lessLink: '<a class="read-less-link" href="#">Read Less</a>'
     moreLink: '<a id="gtm__read-more-link" class="read-more-link" href="#">Read More</a>'
 
-emailsShouldMatch = ->
-  founderRegistrationForm = $('#new_founders_registration')
-
-  if founderRegistrationForm.length
-    emailInput = $('#founders_registration_email')
-    emailConfirmationInput = $('#founders_registration_email_confirmation')
-
-    validateEmailMatch = ->
-      email = emailInput.val()
-
-      if email != emailConfirmationInput.val()
-        unless emailConfirmationInput.parent().find('span').length
-          emailConfirmationInput.after('<span class="help-block">email addresses do not match</span>')
-
-        emailConfirmationInput.parent().addClass('has-error')
-      else
-        emailConfirmationInput.parent().find('span').remove()
-        emailConfirmationInput.parent().removeClass('has-error')
-
-    emailConfirmationInput.blur ->
-      validateEmailMatch()
-
-    emailInput.blur ->
-      validateEmailMatch() if emailConfirmationInput.val().length
-
 setupSelect2Inputs = ->
   collegeInput = $('#founders_registration_college_id')
 
@@ -175,6 +150,22 @@ helpIntercomPopup = ->
     e.preventDefault()
     Intercom('show')
 
+setupPasswordHintButtons = ->
+  $('#application-form__password-hint-accept').on('click', replaceEmailWithHint)
+  $('#application-form__password-hint-reject').on('click', acceptEmailInputfromUser)
+
+replaceEmailWithHint = (event) ->
+  $('#founders_registration_email').val($('#founders_registration_email').data('replacementHint'))
+  event.preventDefault()
+  $(event.target).closest('.help-block').slideUp()
+
+acceptEmailInputfromUser = (event) ->
+  $('#founders_registration_ignore_email_hint').val('true')
+  event.preventDefault()
+  $(event.target).closest('.help-block').slideUp()
+
+
+
 $(document).on 'page:change', setupTogglingCollegeField
 $(document).on 'page:change', setupTogglingReferenceField
 $(document).on 'page:change', scrolltoStartapplicationForm
@@ -187,7 +178,7 @@ $(document).on 'turbolinks:load', ->
   if $('#admissions__apply').length
     setupSelect2Inputs()
     setupStickyStartApplicationForm()
-    emailsShouldMatch()
+    setupPasswordHintButtons()
 
 $(document).on 'turbolinks:before-cache', ->
   if $('.admission-process').length

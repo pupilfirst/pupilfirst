@@ -134,7 +134,8 @@ ActiveAdmin.register TimelineEvent do
       feedback: params[:feedback],
       startup: timeline_event.startup,
       reference_url: reference_url,
-      faculty: current_admin_user&.faculty
+      faculty: current_admin_user&.faculty,
+      timeline_event: timeline_event
     )
 
     founder_params = feedback.for_founder? ? { founder_id: feedback.timeline_event.founder.id } : {}

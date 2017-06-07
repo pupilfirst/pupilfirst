@@ -26,7 +26,7 @@ footer
                   - else
                     = link_to 'Sign Out', destroy_user_session_path, method: :delete
                 - else
-                  = link_to 'Sign In', new_user_session_path
+                  = link_to 'Sign In', new_user_session_path, rel: 'nofollow'
               div
                 = link_to 'About', about_path
               div

@@ -20,7 +20,7 @@
           .notice.strong-notice
             ' Are you a registered founder?
           .link
-            = link_to 'Sign In to Continue', new_user_session_path(referer: apply_path), class: 'btn btn-primary btn-md text-uppercase'
+            = link_to 'Sign In to Continue', new_user_session_path(referer: apply_path), class: 'btn btn-primary btn-md text-uppercase', rel: 'nofollow'
 
       .application-process-left.content-box.m-t-2.m-b-2.p-b-0
         .school-of-saas__section.clearfix

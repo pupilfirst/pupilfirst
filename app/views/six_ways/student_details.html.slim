@@ -17,7 +17,7 @@
     .content-box.m-t-3.m-b-3
       - unless current_user.present?
         .alert.alert-success
-          p Did this once before? #{link_to 'Log in', new_user_session_path(referer: six_ways_start_url)} instead.
+          p Did this once before? #{link_to 'Log in', new_user_session_path(referer: six_ways_start_url), rel: 'nofollow'} instead.
 
       h5.form-section-title.font-semibold.m-b-2
         | Sign up for '#StartInCollege Six Ways'!

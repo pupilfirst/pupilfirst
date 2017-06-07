@@ -37,4 +37,4 @@
         li role="presentation" = link_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'top-nav-link'
 
     - elsif @hide_sign_in.blank?
-      li role="presentation" = link_to 'Sign In', new_user_session_path, class: 'top-nav-link'
+      li role="presentation" = link_to 'Sign In', new_user_session_path, class: 'top-nav-link', rel: 'nofollow'

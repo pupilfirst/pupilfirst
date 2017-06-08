@@ -1,8 +1,8 @@
+//= require rails-ujs
 
 //= require jquery
 //= require tether
 //= require bootstrap4_alpha3/bootstrap
-//= require jquery_ujs
 
 //= require turbolinks
 //= require turbolinks_compatibility

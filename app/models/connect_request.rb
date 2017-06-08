@@ -41,7 +41,7 @@ class ConnectRequest < ApplicationRecord
   after_save :post_confirmation_tasks
 
   def post_confirmation_tasks
-    return unless status_changed? && confirmed? && confirmed_at.blank?
+    return unless saved_change_to_status? && confirmed? && confirmed_at.blank?
     ConnectRequests::CreateCalendarEventService.new(self).execute if Rails.env.production?
     send_mails_for_confirmed
     save_confirmation_time!

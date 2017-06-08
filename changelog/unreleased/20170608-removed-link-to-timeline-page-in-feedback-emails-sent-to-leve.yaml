@@ -1,0 +1,10 @@
+---
+timestamp: '2017-06-08T06:26:57Z'
+title: Removed link to timeline page in feedback emails sent to Level 0 startups -
+  since the timeline page is only active for Level 1+ startups
+trello: https://trello.com/c/rSTg2GIT
+private: false
+description: The feedback to Level 0 startups will definitely be associated with a
+  target in the absence of adding any manual timeline events. Hence added the target
+  name to the feedback email.
+category: bugfix

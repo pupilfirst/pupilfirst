@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170531054508) do
+ActiveRecord::Schema.define(version: 20170608104250) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -576,6 +576,17 @@ ActiveRecord::Schema.define(version: 20170531054508) do
     t.integer "application_round_id"
     t.index ["application_round_id"], name: "index_round_stages_on_application_round_id"
     t.index ["application_stage_id"], name: "index_round_stages_on_application_stage_id"
+  end
+
+  create_table "short_urls", force: :cascade do |t|
+    t.text "url", null: false
+    t.string "key", limit: 10, null: false
+    t.integer "uses", default: 0
+    t.datetime "expires_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["key"], name: "index_short_urls_on_key", unique: true
+    t.index ["url"], name: "index_short_urls_on_url"
   end
 
   create_table "shortened_urls", id: :serial, force: :cascade do |t|

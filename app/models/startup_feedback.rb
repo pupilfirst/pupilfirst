@@ -12,21 +12,15 @@ class StartupFeedback < ApplicationRecord
 
   validates :feedback, presence: true
 
-  REGEX_TIMELINE_EVENT_URL = %r{startups/.*event-(?<event_id>[\d]+)}
-
   normalize_attribute :activity_type
 
   # Returns all feedback for a given timeline event.
   def self.for_timeline_event(event)
-    where('reference_url LIKE ?', "%event-#{event.id}").order('updated_at desc')
+    where(timeline_event: event).order('updated_at desc')
   end
 
   def for_timeline_event?
-    if reference_url.present? && reference_url.match(REGEX_TIMELINE_EVENT_URL).present?
-      true
-    else
-      false
-    end
+    timeline_event.present? ? true : false
   end
 
   def as_slack_message

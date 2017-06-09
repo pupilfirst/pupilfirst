@@ -1,0 +1,8 @@
+---
+timestamp: '2017-06-09T06:25:03Z'
+title: Mark internal links to the sign-page as nofollows.
+trello: https://trello.com/c/zI6w5W5z
+private: true
+description: All links to the sign-in page were modified to have a 'rel=nofollow'
+  attribute to aid SEO.
+category: feature

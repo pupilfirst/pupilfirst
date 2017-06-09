@@ -47,7 +47,7 @@ class AdmissionsController < ApplicationController
     Admissions::CompleteTargetService.new(current_founder, Target::KEY_ADMISSIONS_SCREENING).execute
 
     # Mark founder skill - Hacker or Hustler?
-    current_founder.update!(hacker: params['founder_skill'] == 'coder')
+    current_founder.update!(hacker: params['founder_skill'] == 'coder', github_url: params['github_url'])
     skill = params['founder_skill'] == 'coder' ? 'Hacker' : 'Hustler'
     Intercom::FounderSkillUpdateJob.perform_later(current_founder, skill)
 

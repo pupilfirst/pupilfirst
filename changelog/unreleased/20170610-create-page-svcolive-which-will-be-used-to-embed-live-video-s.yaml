@@ -1,0 +1,9 @@
+---
+timestamp: '2017-06-10T06:55:13Z'
+title: Create page sv.co/live which will be used to embed live video streams of SVCO
+  webinars and to display upcoming live events.
+trello: https://trello.com/c/5IZr9e4S
+private: false
+description: The video embed links will be updated over a commit once the event is
+  live. The upcoming event creatives will then be hidden by commenting the code.
+category: feature

@@ -1,0 +1,40 @@
+.facebook-live__container {
+  p {
+    font-weight: $font-light;
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+}
+
+.facebook-live__cover-image {
+  width: 600px;
+  margin: auto;
+  min-height: 200px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.facebook-live-video__embed {
+  overflow:hidden;
+  position:relative;
+  height:0;
+}
+
+.facebook-live-video__embed-frame {
+  margin: 2% 10%;
+}
+
+.facebook-live__rsvp-btn {
+  padding: 15px 45px;
+  font-size: 1rem;
+  background-color: $facebook-color;
+  border: 1px solid $facebook-color;
+  color: white;
+
+  &:hover {
+    color: white;
+    background-color: darken($facebook-color, 10%);
+  }
+}

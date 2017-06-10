@@ -152,6 +152,9 @@ Rails.application.routes.draw do
   # Application process tour of SV.CO
   get 'tour', to: 'home#tour'
 
+  # Startup village live page
+  get 'live', to: 'home#live'
+
   root 'home#index'
 
   # custom defined 404 route to use with shortener gem's config

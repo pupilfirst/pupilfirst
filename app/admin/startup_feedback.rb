@@ -2,7 +2,7 @@ ActiveAdmin.register StartupFeedback do
   include DisableIntercom
 
   menu parent: 'Startups', label: 'Feedback'
-  permit_params :feedback, :reference_url, :startup_id, :send_email, :faculty_id, :activity_type, :attachment
+  permit_params :feedback, :reference_url, :startup_id, :send_email, :faculty_id, :activity_type, :attachment, :timeline_event_id
 
   preserve_default_filters!
   filter :startup_product_name, as: :select, collection: proc { Startup.all.order(:product_name).pluck(:product_name).uniq }

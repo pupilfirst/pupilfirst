@@ -16,7 +16,22 @@ feature 'Screening' do
 
     expect(page).to have_text('Let’s find out if you are a right fit for our program.')
 
-    click_button 'START', match: :first
+    page.find('.applicant-screening__cover.non-coder-cover').find('button').click
+
+    expect(page).to have_content('Have you ever worked with a developer')
+    page.find('label[for="answer-option-No"]').click
+    find_button('Next').click
+    expect(page).to have_content('Have you ever made money')
+    page.find('label[for="answer-option-No"]').click
+    find_button('Next').click
+    expect(page).to have_content('Have you ever led a team')
+    page.find('label[for="answer-option-No"]').click
+    find_button('Next').click
+
+    expect(page).to have_text('You have not cleared our basic evaluation process.')
+
+    click_button 'Restart'
+    page.find('.applicant-screening__cover.coder-cover').find('button').click
 
     expect(page).to have_content('Have you contributed to Open Source?')
     page.find('label[for="answer-option-No"]').click
@@ -27,31 +42,20 @@ feature 'Screening' do
     expect(page).to have_content('Have you built websites')
     page.find('label[for="answer-option-No"]').click
     find_button('Next').click
-
-    expect(page).to have_text('You have not cleared our basic screening process.')
-
-    click_button 'Restart'
-
-    page.find('.applicant-screening__cover.non-coder-cover').find('button').click
-
-    expect(page).to have_content('Have you ever worked with a developer')
-    page.find('label[for="answer-option-Yes"]').click
-    find_button('Next').click
-    expect(page).to have_content('Have you ever made money')
-    page.find('label[for="answer-option-Yes"]').click
-    find_button('Next').click
-    expect(page).to have_content('Have you ever led a team')
-    page.find('label[for="answer-option-Yes"]').click
+    expect(page).to have_content('Do you have a public Github/BitBucket profile?')
+    fill_in 'github-url', with: 'https://github.com/profile'
     find_button('Next').click
 
-    expect(page).to have_text('your first task is to find the coder')
+    expect(page).to have_text('You have cleared the screening process')
 
     click_button 'Continue Application'
 
     expect(page).to have_content('Screening target has been marked as completed!')
     expect(page).to have_selector('.founder-dashboard-target-header__status-badge', text: 'Complete')
 
-    # founder should be markes as a Hustler
-    expect(founder.reload.hacker).to eq(false)
+    # founder should be markes as a Hacker
+    expect(founder.reload.hacker).to eq(true)
+    # founder's github url must be saved
+    expect(founder.github_url).to eq('https://github.com/profile')
   end
 end

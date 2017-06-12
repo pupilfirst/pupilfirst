@@ -185,7 +185,8 @@ class ApplicationController < ActionController::Base
   def facebook_csp
     {
       image: 'https://www.facebook.com/tr/ https://scontent.xx.fbcdn.net',
-      script: 'https://connect.facebook.net'
+      script: 'https://connect.facebook.net',
+      frame: 'https://www.facebook.com'
     }
   end
 
@@ -218,7 +219,7 @@ class ApplicationController < ActionController::Base
       data:
       https://sv-co-public-slackin.herokuapp.com https://www.google.com
       #{typeform_csp[:frame]} #{youtube_csp[:frame]} #{slideshare_csp[:frame]} #{speakerdeck_csp[:frame]}
-      #{google_form_csp[:frame]};
+      #{google_form_csp[:frame]} #{facebook_csp[:frame]};
     FRAME_SOURCES
   end
 

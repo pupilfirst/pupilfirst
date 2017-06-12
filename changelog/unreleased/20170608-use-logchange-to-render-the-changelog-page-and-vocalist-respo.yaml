@@ -1,9 +1,0 @@
----
-timestamp: '2017-06-08T05:34:51Z'
-title: Use logchange gem to render the changelog page and vocalist response.
-trello: https://trello.com/c/jgGXrcZS
-private: true
-description: The changelog gem is now used to log any change in the app. The changes
-  will be logged based on the template created for the app. All the released changes
-  for appear in the changelog page. All the other changes that were manually logged
-  in CHANGELOG.md will now be shown in a separate archive list.

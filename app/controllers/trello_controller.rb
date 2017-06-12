@@ -6,7 +6,7 @@ class TrelloController < ApplicationController
       action_type = params.dig('trello', 'action', 'type')
       label_id = params.dig('trello', 'action', 'data', 'label', 'id')
       valid_type = action_type.in? %w[addLabelToCard removeLabelFromCard]
-      valid_label = label_id == Rails.application.secrets.trello['bug_label_id']
+      valid_label = label_id == Rails.application.secrets.trello[:bug_label_id]
 
       if valid_type && valid_label
         logger.info "Trello#bug_webhook: Received #{action_type} activity from Trello"

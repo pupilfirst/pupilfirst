@@ -60,8 +60,10 @@ ActiveAdmin.register Founder do
       column 'Skill' do |founder|
         if founder.hacker.nil?
           'Unknown'
+        elsif founder.hacker
+          founder.github_url.present? ? 'Hacker with Github' : 'Hacker'
         else
-          founder.hacker ? 'Hacker' : 'Hustler'
+          'Hustler'
         end
       end
       column('Targets Completed', &:completed_targets_count)
@@ -112,8 +114,10 @@ ActiveAdmin.register Founder do
       column 'Skill' do |founder|
         if founder.hacker.nil?
           'Unknown'
+        elsif founder.hacker
+          founder.github_url.present? ? 'Hacker with Github' : 'Hacker'
         else
-          founder.hacker ? 'Hacker' : 'Hustler'
+          'Hustler'
         end
       end
       column('Targets Completed', &:completed_targets_count)

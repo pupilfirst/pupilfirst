@@ -5,4 +5,4 @@ h3 = release[:week_title]
 
   ul
     - changes.each do |change|
-      li = change
+      li == Kramdown::Document.new(change).to_html

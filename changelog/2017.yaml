@@ -1,5 +1,112 @@
 ---
 changelog:
+- timestamp: '2017-06-12T07:31:39Z'
+  changes:
+  - timestamp: '2017-06-12T07:29:59Z'
+    title: DigitalOcean server has been taken down. See description for details.
+    trello:
+    - https://trello.com/c/NVv6kvhs
+    - https://trello.com/c/COlEn8oe
+    - https://trello.com/c/S6vmGmZD
+    private: true
+    description: The Cachet application which was behind status.sv.co was removed
+      for SEO reasons, which left the DigitalOcean server doing nothing but redirects.
+      All redirects were therefore moved to CloudFlare using its PageRules feature,
+      and the DigitalOcean server was taken down.
+    category: operations
+  - timestamp: '2017-06-12T07:25:41Z'
+    title: The list of scientist names used to generate product names has been expanded.
+    trello: https://trello.com/c/rHPHVyNX
+    private: true
+  - timestamp: '2017-06-12T07:22:09Z'
+    title: Added missing .pdf extension to certificate file made available at the
+      end of SixWays MOOC.
+    trello: https://trello.com/c/mJgXsVh6
+    private: false
+    category: bugfix
+  - timestamp: '2017-06-12T07:20:16Z'
+    title: Removed chores from previous levels section on level zero.
+    trello: https://trello.com/c/A2RCuwvh
+    private: false
+    category: content
+  - timestamp: '2017-06-10T06:55:13Z'
+    title: Create page `sv.co/live` which will be used to embed live video streams of
+      SV.CO webinars and to display upcoming live events.
+    trello: https://trello.com/c/5IZr9e4S
+    private: false
+    description: The video embed links will be updated over a commit once the event
+      is live. The upcoming event creatives will then be hidden by commenting the
+      code.
+    category: feature
+  - timestamp: '2017-06-09T12:39:00Z'
+    title: Hackers with Github profiles are now tracked on Intercom too.
+    private: true
+    category: feature
+  - timestamp: '2017-06-09T12:26:59Z'
+    title: UTM params, if any, are now sent to Intercom.
+    trello: https://trello.com/c/1zN8e3p2
+    private: true
+    category: feature
+  - timestamp: '2017-06-09T08:53:49Z'
+    title: Level 0 screening now asks hackers for their Github/BitBucket URLs.
+    trello: https://trello.com/c/Cc9fg6B4
+    private: false
+    description: A fourth question requesting Github/Bitbucket URL was added for hackers
+      during screening. Providing any link is considered a success. The link is then
+      stored in the founders github_url, and the founder explicitly marked as a 'Hacker
+      with Github' in admin.
+    category: content
+  - timestamp: '2017-06-09T06:25:03Z'
+    title: Mark internal links to the sign-page as nofollows.
+    trello: https://trello.com/c/zI6w5W5z
+    private: true
+    description: All links to the sign-in page were modified to have a 'rel=nofollow'
+      attribute to aid SEO.
+  - timestamp: '2017-06-08T07:11:08Z'
+    title: Vocalist pings can now be targeted to levels as well as just team leads.
+    trello: https://trello.com/c/cbQv1o0C
+    private: true
+    category: feature
+  - timestamp: '2017-06-08T06:26:57Z'
+    title: Removed link to timeline page in feedback emails sent to Level 0 startups
+      - since the timeline page is only active for Level 1+ startups
+    trello: https://trello.com/c/rSTg2GIT
+    private: false
+    description: The feedback to Level 0 startups will definitely be associated with
+      a target in the absence of adding any manual timeline events. Hence added the
+      target name to the feedback email.
+    category: bugfix
+  - timestamp: '2017-06-08T06:12:55Z'
+    title: Fix incorrect linking of URLs supplied by the founder for his profile.
+    trello: https://trello.com/c/c6j9XZ3U
+    private: false
+    description: Ensure http:// presence in the URLs supplied by the founder for his
+      url. Earlier founder_edit_form validations did not take care of this. Updated
+      valid_url gem for the same.
+    category: bugfix
+  - timestamp: '2017-06-08T05:34:51Z'
+    title: Use logchange gem to render the changelog page and vocalist response.
+    trello: https://trello.com/c/jgGXrcZS
+    private: true
+    description: The changelog gem is now used to log any change in the app. The changes
+      will be logged based on the template created for the app. All the released changes
+      for appear in the changelog page. All the other changes that were manually logged
+      in CHANGELOG.md will now be shown in a separate archive page.
+  - timestamp: '2017-06-08T04:01:00Z'
+    title: Content on the sixways index page has been updated to match actual course
+      content.
+    trello: https://trello.com/c/zkd8n6ms
+    private: true
+    category: content
+  - timestamp: '2017-06-06T10:55:17Z'
+    title: Upgrade to Rails 5.1
+    trello: https://trello.com/c/9ergqqen
+    private: true
+  - timestamp: '2017-06-06T10:46:25Z'
+    title: TimelineEvent's `verified_at` attribute has been renamed as `status_updated_at`,
+      and `verified_status` as just `status`.
+    trello: https://trello.com/c/HfsImQcd
+    private: true
 - timestamp: '2017-06-05T12:27:30Z'
   changes:
   - timestamp: '2017-06-05T10:39:58Z'

@@ -1,3 +1,5 @@
+- timeline_event = params[:startup_feedback][:timeline_event_id].present? ? TimelineEvent.find(params[:startup_feedback][:timeline_event_id]) : nil
+
 = semantic_form_for [:admin, @startup_feedback] do |f|
   = f.semantic_errors *f.object.errors.keys
   = f.inputs 'Feedback details' do
@@ -13,7 +15,10 @@
     = f.input :activity_type
     = f.input :reference_url, label: 'Reference URL'
     = f.input :attachment, as: :file
-    = f.input :timeline_event, input_html: { disabled: true }
+
+    - if timeline_event.present?
+      = f.input :timeline_event_id, as: :hidden, input_html: { value: timeline_event.id }
+      div Timeline Event from #{timeline_event.startup.product_name} for type #{timeline_event.title} will be linked to this feedback.
 
   = f.submit
 br

@@ -70,3 +70,4 @@
 //= require v2/six_ways
 //= require v2/users
 //= require v2/admissions
+//= require v2/intercom_settings

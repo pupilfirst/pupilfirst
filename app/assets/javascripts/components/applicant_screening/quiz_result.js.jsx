@@ -57,6 +57,7 @@ class ApplicantScreeningQuizResult extends React.Component {
           <input name="utf8" type="hidden" value="✓"/>
           <input type="hidden" name="authenticity_token" value={ this.props.formAuthenticityToken }/>
           <input type="hidden" name="founder_skill" value={ this.props.type } />
+          <input type="hidden" name="github_url" value={ this.props.githubURL } />
 
           <button type='submit' className={ this.buttonClasses() }>
             <i className={ this.buttonIconClasses() }/> Continue Application
@@ -78,5 +79,6 @@ ApplicantScreeningQuizResult.propTypes = {
   passed: React.PropTypes.bool,
   resetCB: React.PropTypes.func,
   type: React.PropTypes.string,
-  formAuthenticityToken: React.PropTypes.string
+  formAuthenticityToken: React.PropTypes.string,
+  githubURL: React.PropTypes.string
 };

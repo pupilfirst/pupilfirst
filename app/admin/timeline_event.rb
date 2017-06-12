@@ -189,8 +189,7 @@ ActiveAdmin.register TimelineEvent do
       new_admin_startup_feedback_path(
         startup_feedback: {
           startup_id: timeline_event.startup.id,
-          reference_url: startup_url(timeline_event.startup, anchor: "event-#{timeline_event.id}"),
-          event_id: timeline_event.id
+          timeline_event_id: timeline_event.id
         }
       )
     )

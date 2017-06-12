@@ -47,8 +47,12 @@ class AdmissionsController < ApplicationController
     Admissions::CompleteTargetService.new(current_founder, Target::KEY_ADMISSIONS_SCREENING).execute
 
     # Mark founder skill - Hacker or Hustler?
-    current_founder.update!(hacker: params['founder_skill'] == 'coder')
-    skill = params['founder_skill'] == 'coder' ? 'Hacker' : 'Hustler'
+    current_founder.update!(hacker: params['founder_skill'] == 'coder', github_url: params['github_url'])
+    skill = if params['founder_skill'] == 'coder'
+      params['github_url'].present? ? 'Hacker with Github' : 'Hacker'
+    else
+      'Hustler'
+    end
     Intercom::FounderSkillUpdateJob.perform_later(current_founder, skill)
 
     # Mark as screening completed on Intercom

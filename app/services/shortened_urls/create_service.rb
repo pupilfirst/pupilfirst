@@ -1,4 +1,4 @@
-module ShortUrls
+module ShortenedUrls
   # Used to shorten URLs.
   class ShortenService
     def new(url)

@@ -1,8 +1,0 @@
----
-timestamp: '2017-06-08T06:12:55Z'
-title: Prefix http:// to the URLs supplied by the founder for his profile
-trello: https://trello.com/c/c6j9XZ3U
-private: false
-description: Ensure http:// presence in the URLs supplied by the founder for his url. Earlier founder_edit_form validations did not
- take care of this. Updated valid_url gem for the same.
-category: bugfix

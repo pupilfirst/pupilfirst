@@ -1,7 +1,0 @@
----
-timestamp: '2017-06-06T10:46:25Z'
-title: Improved the naming of timeline-event's status and verification datetime.
-trello: https://trello.com/c/HfsImQcd
-private: true
-description: The verified_at attribute has been renamed as status_updated_at, and
-  verified_status as just status.

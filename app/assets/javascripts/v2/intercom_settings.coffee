@@ -10,6 +10,10 @@ storeIntercomSettings = ->
   if !_.isEmpty(utmParams)
     _.extend(window.intercomSettings, utmParams)
 
+  # also append the value in document.referrer if available
+  if !_.isEmpty(document.referrer)
+    _.extend(window.intercomSettings, {referrer_url: document.referrer})
+
 getUtmParams = (query) ->
   _.chain(query)
     .replace('?', '') # remove the starting ?

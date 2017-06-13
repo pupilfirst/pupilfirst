@@ -221,7 +221,7 @@ Rails.application.routes.draw do
   post '/heroku/deploy_webhook', to: 'heroku#deploy_webhook'
 
   # Handle redirects of short URLs.
-  get 'r/:unique_key', to: 'shortened_urls#redirect'
+  get 'r/:unique_key', to: 'shortened_urls#redirect', as: 'short'
 
   # Handle shortener-gem form URLs for a while (backward compatibility).
   get '/:unique_key', to: 'shortened_urls#redirect', constraints: { unique_key: /[0-9a-z]{5}/ }

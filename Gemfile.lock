@@ -6,14 +6,6 @@ GIT
     bootstrap_form (2.5.2)
 
 GIT
-  remote: https://github.com/harigopal/shortener.git
-  revision: eee21eea4d636a46ccf9c76b473bfc89f84144d8
-  branch: 74-rails-5-support
-  specs:
-    shortener (0.5.5)
-      rails (>= 3.0.7)
-
-GIT
   remote: https://github.com/lardawge/carrierwave_backgrounder.git
   revision: 460394b0e2c0cf0c192be9c1a60bcf9dfb1f9e4d
   specs:
@@ -927,7 +919,6 @@ DEPENDENCIES
   select2-rails (~> 4.0)
   selenium-webdriver (~> 3.3)
   sendinblue (~> 2.4)
-  shortener (= 0.5.5)!
   simple_form (~> 3.4)
   simple_form_fancy_uploads (~> 0.2)
   skylight (~> 1.1)

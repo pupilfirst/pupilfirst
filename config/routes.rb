@@ -157,9 +157,6 @@ Rails.application.routes.draw do
 
   root 'home#index'
 
-  # custom defined 404 route to use with shortener gem's config
-  get '/404', to: 'home#not_found'
-
   # /slack redirected to /about/slack
   get '/slack', to: redirect('/about/slack')
 
@@ -216,10 +213,13 @@ Rails.application.routes.draw do
   # TODO: Remove this route once PayTM is correctly configured with '/paytm/callback' as the redirect_url.
   post '/', to: 'home#paytm_callback'
 
-  # used for shortened urls from the shortener gem
-  get '/:id', to: 'shortener/shortened_urls#show'
-
   match '/trello/bug_webhook', to: 'trello#bug_webhook', via: :all
 
   post '/heroku/deploy_webhook', to: 'heroku#deploy_webhook'
+
+  # Handle redirects of short URLs.
+  get 'r/:unique_key', to: 'shortened_urls#redirect', as: 'short_redirect'
+
+  # Handle shortener-gem form URLs for a while (backward compatibility).
+  get '/:unique_key', to: 'shortened_urls#redirect', constraints: { unique_key: /[0-9a-z]{5}/ }
 end

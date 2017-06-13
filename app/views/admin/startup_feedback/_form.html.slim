@@ -1,4 +1,4 @@
-- timeline_event = params[:startup_feedback][:timeline_event_id].present? ? TimelineEvent.find(params[:startup_feedback][:timeline_event_id]) : nil
+- timeline_event = params.dig(:startup_feedback, :timeline_event_id).present? ? TimelineEvent.find(params.dig(:startup_feedback, :timeline_event_id)) : nil
 
 = semantic_form_for [:admin, @startup_feedback] do |f|
   = f.semantic_errors *f.object.errors.keys

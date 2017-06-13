@@ -34,8 +34,11 @@
                   ul.m-t-1
                     - f.object.errors[:base].each do |error_message|
                       li #{error_message}
+            = f.hidden_field :ignore_email_hint, value: false
             = f.input :name, required: true
-            = f.input :email, required: true, disabled: @disable_email
+            = f.input :email, required: true, disabled: @disable_email ,
+              input_html: { maxlength: 250, type: 'email', data: { replacement_hint: @form.replacement_hint } },
+              hint: @form.replacement_hint.present? ? "Did you mean <strong>#{@form.replacement_hint}</strong>?<br/><a id='mooc-student-form__password-hint-accept' href='#' class='btn btn-sm btn-success mooc-student-form__email-hint-button m-r-1'>Yes</a><a id='mooc-student-form__password-hint-reject' href='#' class='btn btn-sm btn-danger mooc-student-form__email-hint-button'>No</a>".html_safe : nil
 
             = f.input :phone,
               label: 'Mobile number',

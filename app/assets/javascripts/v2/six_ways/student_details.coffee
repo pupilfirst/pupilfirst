@@ -43,9 +43,24 @@ toggleCollegeTextField = ->
     $("#mooc_student_signup_college_id").parent().parent().addClass('hidden-xs-up')
     collegeTextInput.focus()
 
+setupPasswordHintButtons = ->
+  $('#mooc-student-form__password-hint-accept').on('click', replaceEmailWithHint)
+  $('#mooc-student-form__password-hint-reject').on('click', acceptEmailInputfromUser)
+
+replaceEmailWithHint = (event) ->
+  $('#mooc_student_signup_email').val($('#mooc_student_signup_email').data('replacementHint'))
+  event.preventDefault()
+  $(event.target).closest('.help-block').slideUp()
+
+acceptEmailInputfromUser = (event) ->
+  $('#mooc_student_signup_ignore_email_hint').val('true')
+  event.preventDefault()
+  $(event.target).closest('.help-block').slideUp()
+
 $(document).on 'page:change', setupTogglingCollegeField
 
 $(document).on 'turbolinks:load', ->
   if $('#six-ways__student-details').length
     setupStateSelect2()
     setupCollegeSelect2()
+    setupPasswordHintButtons()

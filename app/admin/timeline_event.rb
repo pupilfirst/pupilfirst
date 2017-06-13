@@ -128,12 +128,10 @@ ActiveAdmin.register TimelineEvent do
     raise if params[:feedback].blank?
 
     timeline_event = TimelineEvent.find(params[:id])
-    reference_url = startup_url(timeline_event.startup, anchor: "event-#{timeline_event.id}")
 
     feedback = StartupFeedback.create!(
       feedback: params[:feedback],
       startup: timeline_event.startup,
-      reference_url: reference_url,
       faculty: current_admin_user&.faculty,
       timeline_event: timeline_event
     )

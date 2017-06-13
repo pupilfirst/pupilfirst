@@ -642,8 +642,6 @@ GEM
       execjs
       railties (>= 3.2)
       tilt
-    recaptcha (3.4.0)
-      json
     redis (3.3.3)
     redis-namespace (1.5.3)
       redis (~> 3.0, >= 3.0.4)
@@ -913,7 +911,6 @@ DEPENDENCIES
   rails_server_timings (~> 1.0)
   rails_stats (~> 1.0)
   react-rails (~> 2.2)
-  recaptcha (~> 3.4)
   reform (~> 2.2)
   reform-rails (~> 0.1)
   require_all (~> 1.4)

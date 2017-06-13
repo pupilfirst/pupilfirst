@@ -64,7 +64,6 @@ gem 'lita-slack', '= 1.8.0', github: 'litaio/lita-slack', require: false # Lita 
 gem 'kramdown', '~> 1.13' # kramdown is a fast, pure Ruby Markdown superset converter, using a strict syntax definition and supporting several common extensions. http://kramdown.gettalong.org
 gem 'gaffe', '~> 1.2' # Custom error pages. https://github.com/mirego/gaffe
 gem 'google_calendar', '= 0.6.2', github: 'northworld/google_calendar' # Thin wrapper over Google Calendar API.
-gem 'recaptcha', '~> 3.4', require: 'recaptcha/rails' # ReCaptcha helpers for ruby apps http://github.com/ambethia/recaptcha
 gem 'groupdate', '~> 3.2' # The simplest way to group temporal data. https://github.com/ankane/groupdate
 gem 'videojs_rails', '~> 4.12' # Video JS for Rails 3.1+ Asset Pipeline. https://github.com/seanbehan/videojs_rails
 gem 'react-rails', '~> 2.2' # For automatically transforming JSX and using React in Rails.

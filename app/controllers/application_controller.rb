@@ -158,10 +158,6 @@ class ApplicationController < ActionController::Base
     { frame: 'google.com *.google.com' }
   end
 
-  def recaptcha_csp
-    { script: 'www.google.com www.gstatic.com apis.google.com' }
-  end
-
   def youtube_csp
     { frame: 'https://www.youtube.com' }
   end
@@ -233,7 +229,7 @@ class ApplicationController < ActionController::Base
     <<~SCRIPT_SOURCES.squish
       script-src
       'self' 'unsafe-eval' 'unsafe-inline' https://ajax.googleapis.com https://blog.sv.co https://www.youtube.com
-      https://s.ytimg.com http://www.startatsv.com https://sv-assets.sv.co #{recaptcha_csp[:script]}
+      https://s.ytimg.com http://www.startatsv.com https://sv-assets.sv.co
       #{google_analytics_csp[:script]} #{inspectlet_csp[:script]} #{facebook_csp[:script]} #{intercom_csp[:script]}
       #{gtm_csp[:script]} #{instagram_csp[:script]};
     SCRIPT_SOURCES

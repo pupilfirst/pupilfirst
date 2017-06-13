@@ -43,5 +43,27 @@ describe ShortenedUrls::ShortenService do
         expect { subject.short_url }.to raise_error('Too many retries to generate unique_key for short URL.')
       end
     end
+
+    context 'when a unique key is supplied' do
+      subject { described_class.new(full_url, unique_key: 'unique-key') }
+
+      it 'uses the supplied unique key' do
+        expect(subject.short_url).to eq('http://localhost:3000/r/unique-key')
+      end
+
+      context 'when a different unique key is supplied for existing URL' do
+        it 'updates the unique key in use' do
+          create :shortened_url, url: full_url, unique_key: 'old-key'
+          expect { subject.short_url }.to change { ShortenedUrl.find_by(url: full_url).unique_key }.from('old-key').to('unique-key')
+        end
+
+        context 'when the supplied key is in use' do
+          it 'raises an exception' do
+            create :shortened_url, url: 'https://twitter.com', unique_key: 'unique-key'
+            expect { subject.short_url }.to raise_exception(ShortenedUrls::ShortenService::UniqueKeyUnavailable)
+          end
+        end
+      end
+    end
   end
 end

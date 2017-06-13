@@ -7,7 +7,7 @@ ActiveAdmin.register_page 'Short URLs' do
 
   content do
     if params[:shorten].present?
-      shortened_url = ShortenedUrls::ShortenService.new(params[:shorten]).shortened_url
+      shortened_url = ShortenedUrls::ShortenService.new(params[:shorten], unique_key: params[:unique_key]).shortened_url
       render 'submitted_url_result', shortened_url: shortened_url
     end
 
@@ -28,9 +28,13 @@ ActiveAdmin.register_page 'Short URLs' do
   page_action :shorten, method: :post do
     form = Admin::ShortenUrlForm.new(ShortenedUrl.new)
 
+    # Normalize the incoming URL.
+    params[:admin_shorten_url][:url] = Addressable::URI.parse(params[:admin_shorten_url][:url]).normalize.to_s
+
     if form.validate(params[:admin_shorten_url])
-      normalized_url = Addressable::URI.parse(form.url).normalize.to_s
-      redirect_to admin_short_urls_url(shorten: normalized_url, unique_key: form.unique_key)
+      parameters = { shorten: form.url }
+      parameters[:unique_key] = form.unique_key if form.unique_key.present?
+      redirect_to admin_short_urls_url(parameters)
     else
       render '_form', locals: { form: form }
     end

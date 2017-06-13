@@ -27,6 +27,7 @@ module ShortenedUrls
     private
 
     def update_shortened_url(shortened_url)
+      shortened_url.update!(expires_at: @expires_at) if @expires_at.present?
       return shortened_url if @unique_key.nil? || shortened_url.unique_key == @unique_key
       ensure_uniqueness_of_key
       shortened_url.update!(unique_key: @unique_key)

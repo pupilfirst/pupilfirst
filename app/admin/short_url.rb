@@ -7,7 +7,14 @@ ActiveAdmin.register_page 'Short URLs' do
 
   content do
     if params[:shorten].present?
-      shortened_url = ShortenedUrls::ShortenService.new(params[:shorten], unique_key: params[:unique_key]).shortened_url
+      expires_at = params[:expires_at].present? ? Time.parse(params[:expires_at]) : nil
+
+      shortened_url = ShortenedUrls::ShortenService.new(
+        params[:shorten],
+        unique_key: params[:unique_key],
+        expires_at: expires_at
+      ).shortened_url
+
       render 'submitted_url_result', shortened_url: shortened_url
     end
 
@@ -34,6 +41,7 @@ ActiveAdmin.register_page 'Short URLs' do
     if form.validate(params[:admin_shorten_url])
       parameters = { shorten: form.url }
       parameters[:unique_key] = form.unique_key if form.unique_key.present?
+      parameters[:expires_at] = form.expires_at if form.expires_at.present?
       redirect_to admin_short_urls_url(parameters)
     else
       render '_form', locals: { form: form }

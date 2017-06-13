@@ -66,4 +66,25 @@ describe ShortenedUrls::ShortenService do
       end
     end
   end
+
+  describe '#shortened_url' do
+    context 'when expires_at is supplied' do
+      let(:one_day_from_now) { 1.day.from_now }
+      subject { described_class.new(full_url, expires_at: one_day_from_now) }
+
+      it 'sets the expiration time for new URL' do
+        expect(subject.shortened_url.expires_at).to eq(one_day_from_now)
+      end
+
+      context 'when URL aready exists' do
+        let(:one_day_ago) { 1.day.ago }
+
+        it 'updates expiration time' do
+          create :shortened_url, url: full_url, expires_at: one_day_ago
+
+          expect { subject.shortened_url }.to change { ShortenedUrl.find_by(url: full_url).expires_at }.from(one_day_ago).to(one_day_from_now)
+        end
+      end
+    end
+  end
 end

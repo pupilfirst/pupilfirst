@@ -17,8 +17,8 @@ describe TimelineEventVerificationNotificationJob do
     notice = "*Public Links attached:*\n"
     timeline_event_for_startup.links.each.with_index(1) do |link, index|
       next if link[:private]
-      short_url = Shortener::ShortenedUrl.generate(link[:url])
-      notice += "#{index}. <https://sv.co/#{short_url.unique_key}|#{link[:title]}>\n"
+      shortened_url = ShortenedUrls::ShortenService.new(link[:url]).shortened_url
+      notice += "#{index}. <https://sv.co/r/#{shortened_url.unique_key}|#{link[:title]}>\n"
     end
     notice
   end

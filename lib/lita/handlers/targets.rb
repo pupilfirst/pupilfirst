@@ -82,16 +82,16 @@ module Lita
 
       def add_optional_resource_url(optional)
         if chosen_target.resource_url.present?
-          shortened_url = Shortener::ShortenedUrl.generate chosen_target.resource_url
-          url_with_host = "https://sv.co/#{shortened_url.unique_key}"
+          shortened_url = ShortenedUrls::ShortenService.new(chosen_target.resource_url).shortened_url
+          url_with_host = "https://sv.co/r/#{shortened_url.unique_key}"
           optional << "*Linked Resource:* <#{url_with_host}|#{url_with_host}>"
         end
       end
 
       def add_optional_rubric(optional)
         if chosen_target.rubric.present?
-          shortened_url = Shortener::ShortenedUrl.generate(chosen_target.rubric_url, expires_at: 10.minutes.from_now)
-          url_with_host = "https://sv.co/#{shortened_url.unique_key}"
+          shortened_url = ShortenedUrls::ShortenService.new(chosen_target.rubric_url, expires_at: 10.minutes.from_now).shortened_url
+          url_with_host = "https://sv.co/r/#{shortened_url.unique_key}"
           optional << "*Rubric:* <#{url_with_host}|#{chosen_target.rubric_filename}> _(link expires in 10 minutes)_"
         end
       end

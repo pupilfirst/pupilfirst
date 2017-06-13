@@ -15,11 +15,6 @@ class HomeController < ApplicationController
     render layout: 'application_v2'
   end
 
-  # used by the 'shortener' gem's config
-  def not_found
-    raise_not_found
-  end
-
   # GET /tour
   def tour
     @skip_container = true

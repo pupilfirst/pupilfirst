@@ -6,35 +6,33 @@ ActiveAdmin.register_page 'Short URLs' do
   menu parent: 'Dashboard'
 
   content do
-    if params[:shortened].present?
-      shortened_url = Shortener::ShortenedUrl.find_by url: params[:shortened]
+    if params[:shorten].present?
+      shortened_url = ShortenedUrls::ShortenService.new(params[:shorten]).shortened_url
       render 'submitted_url_result', shortened_url: shortened_url
     end
 
-    render 'form'
+    render 'form', form: Admin::ShortenUrlForm.new(ShortenedUrl.new)
 
-    table_for Shortener::ShortenedUrl.order('created_at DESC').limit(10), class: 'aa-short-urls-table' do
-      caption "10 most recent shortened URL-s (of #{Shortener::ShortenedUrl.count} total)"
+    table_for ShortenedUrl.order('created_at DESC').limit(10), class: 'aa-short-urls-table' do
+      caption "10 most recent shortened URL-s (of #{ShortenedUrl.count} total)"
 
       column :url
 
       column :short_url do |short_url|
-        url = "https://www.sv.co/#{short_url.unique_key}"
+        url = "https://sv.co/r/#{short_url.unique_key}"
         link_to url, url
       end
     end
   end
 
   page_action :shorten, method: :post do
-    url_to_shorten = params.dig(:short_urls, :url)
+    form = Admin::ShortenUrlForm.new(ShortenedUrl.new)
 
-    if url_to_shorten.present?
-      addressable_url = Addressable::URI.parse(url_to_shorten).normalize.to_s
-      shortened_url = Shortener::ShortenedUrl.generate addressable_url
-      redirect_to admin_short_urls_url(shortened: shortened_url&.url)
+    if form.validate(params[:admin_shorten_url])
+      normalized_url = Addressable::URI.parse(form.url).normalize.to_s
+      redirect_to admin_short_urls_url(shorten: normalized_url, unique_key: form.unique_key)
     else
-      flash[:error] = 'Need a URL to shorten!'
-      redirect_to admin_short_urls_url
+      render '_form', locals: { form: form }
     end
   end
 end

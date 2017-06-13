@@ -10,10 +10,14 @@ module ShortenedUrls
 
     # @return [String] Return a shortened URL of the form sv.co/r/xxxxxx
     def short_url
-      @short_url ||= begin
+      url_helpers.short_redirect_url(unique_key: shortened_url.unique_key)
+    end
+
+    # @return [ShortenedUrl] Return an instance of Shortened URL corresponding to supplied URL.
+    def shortened_url
+      @shortened_url ||= begin
         shortened_url = ShortenedUrl.find_by(url: @url)
-        key = shortened_url.present? ? shortened_url.unique_key : create_shortened_url.unique_key
-        url_helpers.short_url(unique_key: key)
+        shortened_url.present? ? shortened_url : create_shortened_url
       end
     end
 

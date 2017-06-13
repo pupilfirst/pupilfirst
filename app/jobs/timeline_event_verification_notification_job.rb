@@ -89,10 +89,11 @@ class TimelineEventVerificationNotificationJob < ApplicationJob
     return '' unless @timeline_event.public_link?
 
     notice = "*Public Links attached:*\n"
+
     @timeline_event.links.each.with_index(1) do |link, index|
       next if link[:private]
-      short_url = Shortener::ShortenedUrl.generate(link[:url])
-      notice += "#{index}. <https://sv.co/#{short_url.unique_key}|#{link[:title]}>\n"
+      shortened_url = ShortenedUrls::ShortenService.new(link[:url]).shortened_url
+      notice += "#{index}. <https://sv.co/r/#{shortened_url.unique_key}|#{link[:title]}>\n"
     end
 
     notice

@@ -1,0 +1,9 @@
+---
+timestamp: '2017-06-13T11:35:50Z'
+title: Replace shortener with custom solution
+trello: https://trello.com/c/NG4FR0nY
+private: true
+description: This removes the shortener gem, and implements existing functionality
+  (and more) with custom code. This replaces the default behavior of redirecting to
+  a 404 page when an unknown /:id URL is encountered  by responding with a 404 status
+  response.

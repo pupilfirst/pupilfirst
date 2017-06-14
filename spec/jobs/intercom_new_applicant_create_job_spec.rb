@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe IntercomNewApplicantCreateJob, broken: true do
+describe IntercomNewApplicantCreateJob do
   subject { described_class }
 
   let(:startup) { create :level_0_startup }
@@ -30,7 +30,7 @@ describe IntercomNewApplicantCreateJob, broken: true do
       university: founder.college.replacement_university.name
     )
 
-    expect(IntercomLastApplicantEventUpdateJob).to receive(:perform_later).with(founder, 'submitted_application')
+    expect(Intercom::LevelZeroStageUpdateJob).to receive(:perform_later).with(founder, 'Signed Up')
 
     subject.perform_now(founder)
   end

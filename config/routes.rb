@@ -222,4 +222,7 @@ Rails.application.routes.draw do
 
   # Handle shortener-gem form URLs for a while (backward compatibility).
   get '/:unique_key', to: 'shortened_urls#redirect', constraints: { unique_key: /[0-9a-z]{5}/ }
+
+  # Temporary hunt page
+  get '/hunt', to: 'home#hunt'
 end

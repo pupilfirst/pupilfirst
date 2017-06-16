@@ -1,7 +1,7 @@
 html
   head
     = stylesheet_link_tag 'application_v2', media: 'all', 'data-turbolinks-track' => 'reload'
-  body style='background-color:black' data-clue='Tumingin sa likod na pinto 405'
+  body style='background-color:black'
     h3.p-a-3.text-xs-center style='color:white'
       ' "there is a force within
       br
@@ -29,4 +29,4 @@ html
       br
       ' - <em>Rumi</em>
     div.text-xs-center
-      = image_tag('home/x-ray_body.jpg')
+      = image_tag('home/x-ray_body.jpg', data: { clue: 'Tumingin sa likod ng pinto sa c apat na' })

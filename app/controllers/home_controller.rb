@@ -1,6 +1,5 @@
 class HomeController < ApplicationController
   skip_before_action :verify_authenticity_token, only: :paytm_callback
-  skip_after_action :intercom_rails_auto_include, only: %w[hunt]
 
   def index
     @skip_container = true
@@ -52,11 +51,6 @@ class HomeController < ApplicationController
   # TODO: Remove this route once PayTM is correctly configured with '/paytm/callback' as the redirect_url.
   def paytm_callback
     # There's nothing to load.
-  end
-
-  # GET /hunt - temporary URL for SVTOSV treasure hunt :)
-  def hunt
-    render layout: false
   end
 
   protected

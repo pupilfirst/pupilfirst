@@ -179,6 +179,7 @@ GEM
     bundler-audit (0.5.0)
       bundler (~> 1.2)
       thor (~> 0.18)
+    callsite (0.0.11)
     cancancan (2.0.0)
     capybara (2.14.0)
       addressable
@@ -460,6 +461,10 @@ GEM
     mail (2.6.5)
       mime-types (>= 1.16, < 4)
     memory_profiler (0.9.8)
+    meta_request (0.4.3)
+      callsite (~> 0.0, >= 0.0.11)
+      rack-contrib (>= 1.1, < 3)
+      railties (>= 3.0.0, < 5.2.0)
     method_source (0.8.2)
     mime-types (2.99.3)
     mini_magick (4.7.0)
@@ -538,6 +543,8 @@ GEM
     rack (2.0.3)
     rack-attack (5.0.1)
       rack
+    rack-contrib (1.2.0)
+      rack (>= 0.9.1)
     rack-mini-profiler (0.10.5)
       rack (>= 1.2.0)
     rack-test (0.6.3)
@@ -864,6 +871,7 @@ DEPENDENCIES
   lita (= 5.0.0)!
   lita-slack (= 1.8.0)!
   logchange (~> 1.0)
+  meta_request
   mini_magick (~> 4.6)
   oink (~> 0.10)
   omniauth-facebook (~> 4.0)

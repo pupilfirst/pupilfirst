@@ -143,6 +143,7 @@ group :development do
   gem 'oink', '~> 0.10' # Log parser to identify actions which significantly increase VM heap size
   gem 'chromedriver-helper', '~> 1.1' # Easy installation and use of chromedriver, the Chromium project's selenium webdriver adapter.
   gem 'logchange', '~> 1.0' # An alternative approach to managing a changelog.
+  gem 'meta_request' # Chrome extension for Rails development. https://github.com/dejan/rails_panel
 end
 
 group :test do

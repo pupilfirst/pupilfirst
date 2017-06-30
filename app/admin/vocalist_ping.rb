@@ -19,7 +19,7 @@ ActiveAdmin.register_page 'Vocalist Ping' do
       if response&.errors?
         flash[:error] = response.error_message
       else
-        flash[:success] = 'Pings send successfully!'
+        flash[:success] = 'Pings sent successfully!'
       end
 
       redirect_to admin_vocalist_ping_path

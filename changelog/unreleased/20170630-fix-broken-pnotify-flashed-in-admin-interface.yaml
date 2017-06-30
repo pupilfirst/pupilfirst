@@ -1,0 +1,8 @@
+---
+timestamp: '2017-06-30T06:30:14Z'
+title: Fix broken PNotify flashed in admin interface.
+trello: https://trello.com/c/ezsIKLcL
+private: true
+description: Flash messages were broken all across the admin interface because the
+  initialization code wasn't updated after PNotity was upgraded.
+category: bugfix

@@ -20,7 +20,7 @@ module StartupFeedbackModule
       response = if Rails.env.development?
         OpenStruct.new(errors: {})
       else
-        PublicSlackTalk.post_message message: @startup_feedback.as_slack_message, founders: founders
+        PublicSlack::MessageService.new.execute message: @startup_feedback.as_slack_message, founders: founders
       end
 
       # Fail if no response was received from PublicSlackTalk.

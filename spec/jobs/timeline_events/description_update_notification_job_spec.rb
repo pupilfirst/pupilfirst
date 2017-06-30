@@ -30,7 +30,7 @@ describe TimelineEvents::DescriptionUpdateNotificationJob do
 
   describe '#perform' do
     it 'sends diff to author of timeline event' do
-      expect(PublicSlackTalk).to receive(:post_message).with(message: expected_heading, founder: timeline_event.founder)
+      expect_any_instance_of(PublicSlack::MessageService).to receive(:execute).with(message: expected_heading, founder: timeline_event.founder)
       expect(PublicSlackTalk).to receive(:new).with(message: 'ignored', founder: timeline_event.founder).and_return(mock_public_slack_talk)
       expect(mock_public_slack_talk).to receive(:upload_file).with(expected_diff, 'diff', expected_filename)
 

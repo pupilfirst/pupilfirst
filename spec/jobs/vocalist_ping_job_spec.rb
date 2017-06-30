@@ -31,13 +31,13 @@ describe VocalistPingJob do
   describe '#perform' do
     it 'sends slack notification to a founder on the karma points awarded to him for Founder
     target/Slack Activity/Platform Feedback' do
-      expect(PublicSlackTalk).to receive(:post_message).with(message: expected_founder_message, founder: founder)
+      expect_any_instance_of(PublicSlack::MessageService).to receive(:execute).with(message: expected_founder_message, founder: founder)
       subject.perform_now(expected_founder_message, founder: founder)
     end
 
     it 'sends slack notification to all founders in a startup for the karma points awarded
     for Startup targets/Timeline Events/Connect Requests' do
-      expect(PublicSlackTalk).to receive(:post_message).with(message: expected_startup_message, founders: startup.founders)
+      expect_any_instance_of(PublicSlack::MessageService).to receive(:execute).with(message: expected_startup_message, founders: startup.founders)
       subject.perform_now(expected_startup_message, founders)
     end
   end

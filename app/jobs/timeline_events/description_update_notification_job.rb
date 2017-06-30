@@ -7,7 +7,7 @@ module TimelineEvents
       @old_description = old_description
 
       if diff.present?
-        PublicSlackTalk.post_message(message: heading, founder: @timeline_event.founder)
+        PublicSlack::MessageService.new.execute(message: heading, founder: @timeline_event.founder)
         PublicSlackTalk.new(message: 'ignored', founder: @timeline_event.founder).upload_file(diff_without_newline_notice, 'diff', filename)
       end
     end

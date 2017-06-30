@@ -17,23 +17,27 @@ class VocalistPingForm < Reform::Form
   end
 
   def valid_channels
-    @valid_channels ||= PublicSlackTalk.valid_channel_names
+    @valid_channels ||= PublicSlack::MessageService.new.valid_channel_names
   end
 
   def send_pings
+    service = PublicSlack::MessageService.new
+
     if founders.present?
-      PublicSlackTalk.post_message message: message, founders: Founder.find(founders)
+      service.execute message: message, founders: Founder.find(founders)
     elsif startups.present?
       founders = Founder.where(startup: startups)
       founders = founders.where(startup_admin: true) if team_leads_only == '1'
-      PublicSlackTalk.post_message message: message, founders: founders
+      service.execute message: message, founders: founders
     elsif levels.present?
       founders = Founder.joins(startup: :level).where(startups: { level: levels })
       founders = founders.where(startup_admin: true) if team_leads_only == '1'
-      PublicSlackTalk.post_message message: message, founders: founders
+      service.execute message: message, founders: founders
     else
-      PublicSlackTalk.post_message message: message, channel: channel
+      service.execute message: message, channel: channel
     end
+
+    service
   end
 
   def clean_up_targets

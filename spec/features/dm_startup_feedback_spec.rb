@@ -20,6 +20,14 @@ feature 'DM Startup Feedback' do
       .to_return(body: '{"ok":true}')
   end
 
+  before do
+    PublicSlack::MessageService.mock = false
+  end
+
+  after do
+    PublicSlack::MessageService.mock = true
+  end
+
   before :each do
     # Sign in as admin
     sign_in_user(admin.user)

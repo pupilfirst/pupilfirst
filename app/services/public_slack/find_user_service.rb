@@ -1,4 +1,4 @@
-module Slack
+module PublicSlack
   ApiFailedException = Class.new(StandardError)
   UserNotFoundException = Class.new(StandardError)
 

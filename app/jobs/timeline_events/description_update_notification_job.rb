@@ -8,7 +8,8 @@ module TimelineEvents
 
       if diff.present?
         PublicSlack::MessageService.new.execute(message: heading, founder: @timeline_event.founder)
-        PublicSlackTalk.new(message: 'ignored', founder: @timeline_event.founder).upload_file(diff_without_newline_notice, 'diff', filename)
+
+        PublicSlack::SendFileService.new(@timeline_event.founder, diff_without_newline_notice, 'diff', filename).execute
       end
     end
 

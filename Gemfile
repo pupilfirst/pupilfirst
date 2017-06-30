@@ -6,7 +6,7 @@ source 'https://rubygems.org'
 git_source(:github) { |repository_path| "https://github.com/#{repository_path}.git" }
 
 # Ruby on Rails. http://rubyonrails.org
-gem 'rails', '~> 5.1.1'
+gem 'rails', '~> 5.1.2'
 
 gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 
@@ -143,7 +143,7 @@ group :development do
   gem 'oink', '~> 0.10' # Log parser to identify actions which significantly increase VM heap size
   gem 'chromedriver-helper', '~> 1.1' # Easy installation and use of chromedriver, the Chromium project's selenium webdriver adapter.
   gem 'logchange', '~> 1.0' # An alternative approach to managing a changelog.
-  gem 'meta_request' # Chrome extension for Rails development. https://github.com/dejan/rails_panel
+  gem 'meta_request', '~> 0.4' # Chrome extension for Rails development. https://github.com/dejan/rails_panel
 end
 
 group :test do

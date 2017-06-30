@@ -158,7 +158,7 @@ group :test do
 end
 
 group :development, :test do
-  gem 'rspec-rails', '~> 3.5.0' # Duh.
+  gem 'rspec-rails', '~> 3.5' # Duh.
   gem 'coderay', '~> 1.1' # Pretty syntax highlighting on rspec failure snippets.
   gem 'pry-rails', '~> 0.3.5' # Pry debugger.
   gem 'webmock', '~> 3.0' # Mocking web requests.

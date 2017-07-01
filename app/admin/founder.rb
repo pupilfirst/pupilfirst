@@ -120,6 +120,7 @@ ActiveAdmin.register Founder do
           'Hustler'
         end
       end
+      column :reference
       column('Targets Completed', &:completed_targets_count)
     else
       column :id

@@ -40,9 +40,7 @@ after 'development:application_stages', 'development:batch_applicants', 'admin_u
   end
 
   def create_application(applicant, application_attributes)
-    application = applicant.batch_applications.create!(application_attributes)
-    application.update!(team_lead: applicant)
-    application
+    applicant.batch_applications.create!(application_attributes.merge(team_lead: applicant))
   end
 
   def create_payment(application)

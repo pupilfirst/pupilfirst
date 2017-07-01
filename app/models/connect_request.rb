@@ -40,13 +40,17 @@ class ConnectRequest < ApplicationRecord
 
   after_save :post_confirmation_tasks
 
+  # TODO: Probably move this out to a ConnectRequestConfirmationService? (https://trello.com/c/6gLM94OJ)
   def post_confirmation_tasks
     return unless saved_change_to_status? && confirmed? && confirmed_at.blank?
-    ConnectRequests::CreateCalendarEventService.new(self).execute if Rails.env.production?
     send_mails_for_confirmed
     save_confirmation_time!
     create_faculty_connect_session_rating_job
-    create_faculty_connect_session_reminder_job
+
+    if Rails.env.production?
+      ConnectRequests::CreateCalendarEventService.new(self).execute
+      create_faculty_connect_session_reminder_job
+    end
   end
 
   def save_confirmation_time!

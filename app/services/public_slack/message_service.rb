@@ -24,7 +24,7 @@ module PublicSlack
       @founders = target[:founders]
 
       # ensure one and only one target is specified
-      raise ArgumentError, 'specify one of channel, founder or founders' unless [@channel, @founder, @founders].one?
+      raise ArgumentError, 'specify one of channel, founder or founders' unless [@channel, @founder, @founders].reject(&:blank?).one?
 
       if @channel.present?
         raise 'could not validate channel specified' unless channel_valid?

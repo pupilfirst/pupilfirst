@@ -1,7 +1,0 @@
----
-timestamp: '2017-07-01T05:30:20Z'
-title: Github/Bitbucket URLs collected during screening are now validated.
-trello: https://trello.com/c/i0NcflTG
-private: false
-description: A simple /github|bitbucket/ regex validation was included.
-category: feature

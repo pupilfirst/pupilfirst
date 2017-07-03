@@ -1,7 +1,0 @@
----
-timestamp: '2017-07-01T11:30:50Z'
-title: Set intercom delayed jobs as low priority compared to others.
-trello: https://trello.com/c/bQ9bvUmR
-private: true
-description: 'This introduces two named queues: `low_priority` and `high_priority`
-  that can be used to alter the order in which jobs are executed by default.'

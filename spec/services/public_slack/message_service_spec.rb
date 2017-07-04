@@ -11,24 +11,24 @@ describe PublicSlack::MessageService do
     PublicSlack::MessageService.mock = true
   end
 
-  describe '.execute' do
+  describe '.post' do
     let(:founder_1) { create :founder }
     let(:founder_2) { create :founder }
 
     it 'raises ArgumentError if no target specified' do
-      expect { subject.execute message: 'Hello' }.to raise_error(ArgumentError, 'specify one of channel, founder or founders')
+      expect { subject.post message: 'Hello' }.to raise_error(ArgumentError, 'specify one of channel, founder or founders')
     end
 
     it 'raises ArgumentError if multiple targets specified' do
-      expect { subject.execute message: 'Hello', channel: '#general', founder: founder_1 }.to raise_error(
+      expect { subject.post message: 'Hello', channel: '#general', founder: founder_1 }.to raise_error(
         ArgumentError, 'specify one of channel, founder or founders'
       )
 
-      expect { subject.execute message: 'Hello', founder: founder_1, founders: [founder_1, founder_2] }.to raise_error(
+      expect { subject.post message: 'Hello', founder: founder_1, founders: [founder_1, founder_2] }.to raise_error(
         ArgumentError, 'specify one of channel, founder or founders'
       )
 
-      expect { subject.execute message: 'Hello', channel: '#general', founders: [founder_1, founder_2] }.to raise_error(
+      expect { subject.post message: 'Hello', channel: '#general', founders: [founder_1, founder_2] }.to raise_error(
         ArgumentError, 'specify one of channel, founder or founders'
       )
     end
@@ -36,16 +36,16 @@ describe PublicSlack::MessageService do
     context 'when targets are correctly specified' do
       context 'when valid channel is supplied' do
         it 'sends message to channel' do
-          expect_any_instance_of(PublicSlack::MessageService).to receive(:channel_valid?).and_return(true)
-          expect_any_instance_of(PublicSlack::MessageService).to receive(:post_to_channel)
-          subject.execute message: 'Hello', channel: '#general'
+          expect(subject).to receive(:channel_valid?).and_return(true)
+          expect(subject).to receive(:post_to_channel)
+          subject.post message: 'Hello', channel: '#general'
         end
 
         context 'when supplied channel is invalid' do
           it 'fails' do
-            expect_any_instance_of(PublicSlack::MessageService).to receive(:channel_valid?).and_return(false)
+            expect(subject).to receive(:channel_valid?).and_return(false)
 
-            expect { subject.execute message: 'Hello', channel: '#general' }.to raise_error(
+            expect { subject.post message: 'Hello', channel: '#general' }.to raise_error(
               'could not validate channel specified'
             )
           end
@@ -54,39 +54,39 @@ describe PublicSlack::MessageService do
 
       context 'when single founder is supplied' do
         it 'send message to founder' do
-          expect_any_instance_of(PublicSlack::MessageService).to receive(:post_to_founder).once
-          subject.execute message: 'Hello', founder: founder_1
+          expect(subject).to receive(:post_to_founder).once
+          subject.post message: 'Hello', founder: founder_1
         end
       end
 
       context 'when multiple founders are supplied' do
         it 'send messages to all founders' do
-          expect_any_instance_of(PublicSlack::MessageService).to receive(:post_to_founders).once
-          subject.execute message: 'Hello', founders: [founder_1, founder_2]
+          expect(subject).to receive(:post_to_founders).once
+          subject.post message: 'Hello', founders: [founder_1, founder_2]
         end
       end
 
       context 'when slack responds with an error' do
         it 'records the error' do
-          expect_any_instance_of(PublicSlack::MessageService).to receive(:channel_valid?).and_return(true)
+          expect(subject).to receive(:channel_valid?).and_return(true)
           stub_request(:get, "https://slack.com/api/chat.postMessage?token=xxxxxx&channel=channel_name"\
             "&link_names=1&text=hello&as_user=true&unfurl_links=false")
             .to_return(body: '{"error": "some error"}')
 
-          subject.execute message: 'hello', channel: 'channel_name'
-          expect(subject.errors).to eq('Slack' => 'some error')
+          response = subject.post message: 'hello', channel: 'channel_name'
+          expect(response.errors).to eq('channel_name' => 'some error')
         end
       end
 
       context 'when an HTTP error occurs' do
         it 'records the error' do
-          expect_any_instance_of(PublicSlack::MessageService).to receive(:channel_valid?).and_return(true)
+          expect(subject).to receive(:channel_valid?).and_return(true)
           stub_request(:get, "https://slack.com/api/chat.postMessage?token=xxxxxx&channel=channel_name"\
             "&link_names=1&text=hello&as_user=true&unfurl_links=false")
             .to_return(body: 'some error', status: 500)
 
-          subject.execute message: 'hello', channel: 'channel_name'
-          expect(subject.errors).to eq('RestClient' => 'some error')
+          response = subject.post message: 'hello', channel: 'channel_name'
+          expect(response.errors).to eq('RestClient' => 'some error')
         end
       end
     end

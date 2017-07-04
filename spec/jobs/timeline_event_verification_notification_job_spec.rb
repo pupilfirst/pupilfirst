@@ -64,16 +64,20 @@ describe TimelineEventVerificationNotificationJob do
     )
   end
 
+  let(:mock_message_service) { instance_double PublicSlack::MessageService }
+
   describe '#perform' do
     it 'sends slack notification to the founder who created the timeline event for verified founder target' do
-      expect_any_instance_of(PublicSlack::MessageService).to receive(:execute).with(message: expected_founder_message_for_founder_target, founder: timeline_event_for_founder.founder)
+      expect(PublicSlack::MessageService).to receive(:new).and_return(mock_message_service)
+      expect(mock_message_service).to receive(:post).with(message: expected_founder_message_for_founder_target, founder: timeline_event_for_founder.founder)
       subject.perform_now(timeline_event_for_founder)
     end
 
     it 'sends slack notification to the founder who submitted, to other team members and the public slack channel for verified startup target' do
-      expect_any_instance_of(PublicSlack::MessageService).to receive(:execute).with(message: expected_founder_message_for_startup_target, founder: timeline_event_for_startup.founder)
-      expect_any_instance_of(PublicSlack::MessageService).to receive(:execute).with(message: expected_team_message, founders: (timeline_event_for_startup.startup&.founders || []) - [timeline_event_for_startup.founder])
-      expect_any_instance_of(PublicSlack::MessageService).to receive(:execute).with(message: expected_public_message, channel: timeline_event_for_startup.startup.batch.slack_channel)
+      expect(PublicSlack::MessageService).to receive(:new).and_return(mock_message_service)
+      expect(mock_message_service).to receive(:post).with(message: expected_founder_message_for_startup_target, founder: timeline_event_for_startup.founder)
+      expect(mock_message_service).to receive(:post).with(message: expected_team_message, founders: (timeline_event_for_startup.startup&.founders || []) - [timeline_event_for_startup.founder])
+      expect(mock_message_service).to receive(:post).with(message: expected_public_message, channel: timeline_event_for_startup.startup.batch.slack_channel)
       subject.perform_now(timeline_event_for_startup)
     end
   end

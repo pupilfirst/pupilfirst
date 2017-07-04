@@ -7,7 +7,7 @@ describe FacultyConnectSessionReminderJob do
     let(:connect_request) { create :connect_request, status: ConnectRequest::STATUS_REQUESTED }
 
     it 'does nothing' do
-      expect_any_instance_of(PublicSlack::MessageService).to_not receive(:execute)
+      expect_any_instance_of(PublicSlack::MessageService).to_not receive(:post)
 
       subject.perform_now connect_request.id
     end
@@ -20,8 +20,8 @@ describe FacultyConnectSessionReminderJob do
 
     it 'notifies the faculty, founders and ops team on slack' do
       expect(PublicSlack::MessageService).to receive(:new).and_return(mock_message_service)
-      expect(mock_message_service).to receive(:execute).with(message: instance_of(String), founders: connect_request.startup.founders)
-      expect(mock_message_service).to receive(:execute).with(message: instance_of(String), founder: connect_request.faculty)
+      expect(mock_message_service).to receive(:post).with(message: instance_of(String), founders: connect_request.startup.founders)
+      expect(mock_message_service).to receive(:post).with(message: instance_of(String), founder: connect_request.faculty)
 
       subject.perform_now connect_request.id
     end

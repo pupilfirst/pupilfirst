@@ -12,15 +12,15 @@ class FacultyConnectSessionReminderJob < ApplicationJob
   end
 
   def remind_founders_on_slack
-    public_slack_message_service.execute message: reminder_for_founder, founders: connect_request.startup.founders
+    public_slack_message_service.post message: reminder_for_founder, founders: connect_request.startup.founders
   end
 
   def remind_faculty_on_slack
-    public_slack_message_service.execute message: reminder_for_faculty, founder: connect_request.faculty
+    public_slack_message_service.post message: reminder_for_faculty, founder: connect_request.faculty
   end
 
   def remind_ops_team_on_slack
-    public_slack_message_service.execute message: reminder_for_ops_team, founders: Faculty.ops_team
+    public_slack_message_service.post message: reminder_for_ops_team, founders: Faculty.ops_team
   end
 
   private

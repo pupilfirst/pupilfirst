@@ -3,6 +3,7 @@ require 'rails_helper'
 describe TimelineEvents::DescriptionUpdateNotificationJob do
   subject { described_class }
 
+  let(:mock_message_service) { instance_double(PublicSlack::MessageService) }
   let(:mock_send_file_service) { instance_double(PublicSlack::SendFileService) }
   let(:new_line) { Faker::Lorem.sentence }
   let(:unchanged_line) { Faker::Lorem.sentence }
@@ -30,7 +31,8 @@ describe TimelineEvents::DescriptionUpdateNotificationJob do
 
   describe '#perform' do
     it 'sends diff to author of timeline event' do
-      expect_any_instance_of(PublicSlack::MessageService).to receive(:execute).with(message: expected_heading, founder: timeline_event.founder)
+      expect(PublicSlack::MessageService).to receive(:new).and_return(mock_message_service)
+      expect(mock_message_service).to receive(:post).with(message: expected_heading, founder: timeline_event.founder)
       expect(PublicSlack::SendFileService).to receive(:new).with(timeline_event.founder, expected_diff, 'diff', expected_filename).and_return(mock_send_file_service)
       expect(mock_send_file_service).to receive(:execute)
 

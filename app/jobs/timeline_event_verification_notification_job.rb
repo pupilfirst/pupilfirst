@@ -25,15 +25,15 @@ class TimelineEventVerificationNotificationJob < ApplicationJob
 
   private
 
-  def public_slack_talk_service
-    @public_slack_talk_service ||= PublicSlack::MessageService.new
+  def public_slack_message_service
+    @public_slack_message_service ||= PublicSlack::MessageService.new
   end
 
   def send_founder_message
     target = { founder: @timeline_event.founder }
 
     slack_message = message('founder', event_status, event_type: event_type)
-    public_slack_talk_service.execute({ message: slack_message }.merge(target))
+    public_slack_message_service.post({ message: slack_message }.merge(target))
   end
 
   def send_team_message
@@ -43,7 +43,7 @@ class TimelineEventVerificationNotificationJob < ApplicationJob
 
     slack_message = message('team', event_status)
 
-    public_slack_talk_service.execute({ message: slack_message }.merge(target))
+    public_slack_message_service.post({ message: slack_message }.merge(target))
   end
 
   def send_public_message
@@ -53,7 +53,7 @@ class TimelineEventVerificationNotificationJob < ApplicationJob
 
     slack_message = message('public', event_status)
 
-    public_slack_talk_service.execute({ message: slack_message }.merge(target))
+    public_slack_message_service.post({ message: slack_message }.merge(target))
   end
 
   def event_type

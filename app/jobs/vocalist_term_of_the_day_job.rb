@@ -10,7 +10,7 @@ class VocalistTermOfTheDayJob < ApplicationJob
       > _*Definition:* #{term.definition}_
     MESSAGE
 
-    PublicSlack::MessageService.new.execute message: message, channel: channel
+    PublicSlack::MessageService.new.post message: message, channel: channel
   end
 
   def salutation

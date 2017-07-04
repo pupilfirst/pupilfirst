@@ -28,16 +28,20 @@ describe VocalistPingJob do
     { founders: startup.founders.pluck(:id) }
   end
 
+  let(:mock_message_service) { instance_double(PublicSlack::MessageService) }
+
   describe '#perform' do
     it 'sends slack notification to a founder on the karma points awarded to him for Founder
     target/Slack Activity/Platform Feedback' do
-      expect_any_instance_of(PublicSlack::MessageService).to receive(:execute).with(message: expected_founder_message, founder: founder)
+      expect(PublicSlack::MessageService).to receive(:new).and_return(mock_message_service)
+      expect(mock_message_service).to receive(:post).with(message: expected_founder_message, founder: founder)
       subject.perform_now(expected_founder_message, founder: founder)
     end
 
     it 'sends slack notification to all founders in a startup for the karma points awarded
     for Startup targets/Timeline Events/Connect Requests' do
-      expect_any_instance_of(PublicSlack::MessageService).to receive(:execute).with(message: expected_startup_message, founders: startup.founders)
+      expect(PublicSlack::MessageService).to receive(:new).and_return(mock_message_service)
+      expect(mock_message_service).to receive(:post).with(message: expected_startup_message, founders: startup.founders)
       subject.perform_now(expected_startup_message, founders)
     end
   end

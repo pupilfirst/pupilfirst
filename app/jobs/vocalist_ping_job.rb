@@ -5,7 +5,7 @@ class VocalistPingJob < ApplicationJob
 
   def perform(message, recipients)
     Rails.logger.info "Sending message to recipients : #{recipients.inspect}"
-    PublicSlack::MessageService.new.execute({ message: message }.merge(parsed_recipients(recipients)))
+    PublicSlack::MessageService.new.post({ message: message }.merge(parsed_recipients(recipients)))
   end
 
   private

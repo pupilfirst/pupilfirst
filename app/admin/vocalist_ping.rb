@@ -16,8 +16,8 @@ ActiveAdmin.register_page 'Vocalist Ping' do
     if form.validate(params[:vocalist_ping])
       response = form.send_pings
 
-      if response&.errors?
-        flash[:error] = response.error_message
+      if response.errors.any?
+        flash[:error] = response.errors.values[0]
       else
         flash[:success] = 'Pings sent successfully!'
       end

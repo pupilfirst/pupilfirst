@@ -194,6 +194,10 @@ class TimelineEvent < ApplicationRecord
     verified? || needs_improvement?
   end
 
+  def founder_can_delete?
+    !(verified_or_needs_improvement? || startup_feedback.present?)
+  end
+
   def founder_can_modify?
     return false if end_iteration?
     !verified_or_needs_improvement?

@@ -1,0 +1,9 @@
+---
+timestamp: '2017-07-04T11:20:41Z'
+title: Fix a bug that could cause a crash when attempting to delete timeline events
+  with feedback.
+trello: https://trello.com/c/g1jU8Shu
+private: false
+description: This was caused by the foreign key on the feedback table. Presence of
+  feedback now blocks the founder from deleting events.
+category: bugfix

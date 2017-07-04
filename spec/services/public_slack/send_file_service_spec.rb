@@ -8,7 +8,7 @@ describe PublicSlack::SendFileService do
   describe '.execute' do
     it 'does nothing if founder has no slack_user_id' do
       expect(RestClient).to_not receive(:post)
-      subject.execute
+      subject.upload
     end
 
     it 'posts to the slack API with the correct payload if founder has a slack_user_id' do
@@ -23,7 +23,7 @@ describe PublicSlack::SendFileService do
                   filename: 'filename' }
 
       expect(RestClient).to receive(:post).with(slack_url, payload).and_return('{"ok": "true"}')
-      subject.execute
+      subject.upload
     end
   end
 end

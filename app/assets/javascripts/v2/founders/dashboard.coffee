@@ -176,6 +176,13 @@ loadProgramWeekOnDemand = ->
       )
   })
 
+stickTargetOverlayHeader = (scope = StickScope.Parent) ->
+  # $('.target-overlay-header').stickit('destroy')
+  $('.target-overlay-header').stickit
+    top: 0,
+    screenMinWidth: 992,
+    scope: scope
+
 $(document).on 'turbolinks:load', ->
   if $('#founder-dashboard').length
 #    targetAccordion()
@@ -185,4 +192,5 @@ $(document).on 'turbolinks:load', ->
     hideIntercomOnSmallScreen()
     setPerformancePointer()
     takeTourOnClick()
+    stickTargetOverlayHeader()
 #    loadProgramWeekOnDemand()

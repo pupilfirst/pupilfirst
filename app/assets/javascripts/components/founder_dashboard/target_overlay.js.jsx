@@ -7,13 +7,13 @@ class FounderDashboardTargetOverlay extends React.Component  {
   }
 
   componentDidMount() {
-    let targetOverlayModal = $('.target-overlay__modal');
+    {/*let targetOverlayModal = $('.target-overlay__modal');
 
     targetOverlayModal.modal({
       show: true,
       keyboard: false,
       backdrop: 'static'
-    });
+    });*/}
 
     let that = this;
     $.ajax({
@@ -32,17 +32,28 @@ class FounderDashboardTargetOverlay extends React.Component  {
 
   render() {
     return(
-      <div className="target-overlay__modal modal fade">
-        <div className="target-overlay__modal-dialog modal-dialog" role="document">
-          <div className="target-overlay__modal-content modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">Details of target {this.state.id}:</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={ this.props.closeCB }>
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <p>TODO</p>
+      <div className="target-overlay__modal p-a-0">
+        <div className="target-overlay__modal-dialog">
+          <div className="target-overlay__modal-content">
+            <div className="target-overlay-wrapper m-x-auto p-x-1 p-t-3">
+              <div className="target-overlay-container clearfix">
+                <div className="target-overlay-header clearfix">
+                  {/*<h5 className="modal-title">Details of target {this.state.id}:</h5>*/}
+                  <FounderDashboardTargetHeaderTitle target={ this.props.target }/>
+                  <FounderDashboardTargetStatusBadge target={ this.props.target }/>
+                  <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={ this.props.closeCB }>
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div className="clearfix">
+                  <div className="col-md-8">
+                    <FounderDashboardTargetDescription target={ this.props.target }/>
+                  </div>
+                  <div className="col-md-4">
+
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

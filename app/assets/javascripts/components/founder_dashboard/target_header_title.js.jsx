@@ -1,14 +1,4 @@
-class FounderDashboardTargetHeader extends React.Component {
-  containerClasses() {
-    let classes = 'founder-dashboard-target-header__container clearfix';
-
-    if (this.props.descriptionOpen) {
-      classes += '  founder-dashboard-target-header__container--active';
-    }
-
-    return classes;
-  }
-
+class FounderDashboardTargetHeaderTitle extends React.Component {
   targetType() {
     return <span className="founder-dashboard-target-header__type-tag hidden-sm-down">
       { this.props.target.target_type_description }:
@@ -69,20 +59,11 @@ class FounderDashboardTargetHeader extends React.Component {
     }
   }
 
-  headerIcon() {
-    if (typeof(this.props.target.session_at) === 'undefined' || this.props.target.session_at === null) {
-      return this.props.target.role === 'founder' ? this.props.iconPaths.personalTodo : this.props.iconPaths.teamTodo;
-    } else {
-      return this.props.iconPaths.attendSession;
-    }
-  }
+
 
   render() {
     return (
-      <div className={ this.containerClasses() } onClick={ this.props.onClickCB }>
-        <img className="founder-dashboard-target-header__icon"
-          src={ this.headerIcon() }/>
-
+      <div>
         <div className="founder-dashboard-target-header__title">
           <h6 className="founder-dashboard-target-header__headline">
             { this.targetType() }
@@ -96,20 +77,16 @@ class FounderDashboardTargetHeader extends React.Component {
             </div>
           </div>
         </div>
-
-        <FounderDashboardTargetStatusBadge target={ this.props.target }/>
       </div>
     );
   }
 }
-
-FounderDashboardTargetHeader.propTypes = {
+FounderDashboardTargetHeaderTitle.propTypes = {
   descriptionOpen: React.PropTypes.bool,
   target: React.PropTypes.object,
   displayDate: React.PropTypes.bool,
   iconPaths: React.PropTypes.object
 };
-
-FounderDashboardTargetHeader.defaultProps = {
+FounderDashboardTargetHeaderTitle.defaultProps = {
   displayDate: false
 };

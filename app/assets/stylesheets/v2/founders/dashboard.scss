@@ -1,6 +1,6 @@
 .founder-dashboard-container {
   background-color: #F5F5F5;
-  position: relative;
+  // position: relative;
 }
 
 .founder-dashboard-togglebar__container {
@@ -743,7 +743,7 @@
   border-left: 1px solid darken($gray-border, 10%);
 }
 
-.founder-dashboard-target-header__status-badge {
+.founder-dashboard-target-status-badge__container {
   float: right;
   padding: 7px 15px;
   font-size: 0.75rem;
@@ -787,9 +787,6 @@
 }
 
 .target-description {
-  padding: 15px 30px 20px 55px;
-  margin-left: 1rem;
-
   .target-description-btn {
     font-size: 0.875rem;
   }
@@ -811,8 +808,8 @@
     }
   }
   .target-description-content {
-    font-size: 1.125rem;
-    line-height: 1.8;
+    font-size: 1rem;
+    line-height: 1.5;
     letter-spacing: 0.01rem;
   }
   .btn-timeline-builder {

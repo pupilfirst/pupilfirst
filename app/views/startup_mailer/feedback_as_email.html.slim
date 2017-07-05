@@ -5,7 +5,7 @@
   | Hi,
 
 = content_for :body
-  - update_for = @startup_feedback.for_timeline_event? ? 'recent timeline entry' : 'recent updates'
+  - update_for = @startup_feedback.timeline_event.present? ? 'recent timeline entry' : 'recent updates'
   - startup_update = @startup_feedback.startup.level_zero? ? update_for + ' for target ' : link_to(update_for, @startup_feedback.reference_url)
   - target_info = @startup_feedback.startup.level_zero? ? @startup_feedback.timeline_event.target.title : ''
 

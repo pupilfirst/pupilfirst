@@ -22,10 +22,6 @@ class HomeController < ApplicationController
     render layout: 'application_v2'
   end
 
-  def live
-    render layout: 'application_v2'
-  end
-
   # GET /policies/privacy
   def privacy
     privacy_policy = File.read(File.absolute_path(Rails.root.join('privacy_policy.md')))

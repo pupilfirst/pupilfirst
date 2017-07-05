@@ -1,5 +1,104 @@
 ---
 changelog:
+- timestamp: '2017-07-03T11:29:24Z'
+  changes:
+  - timestamp: '2017-07-01T12:47:45Z'
+    title: Update timeline event type seed data for development.
+    trello: https://trello.com/c/qiLfVGhE
+    private: true
+  - timestamp: '2017-07-01T11:30:50Z'
+    title: Set intercom delayed jobs as low priority compared to others.
+    trello: https://trello.com/c/bQ9bvUmR
+    private: true
+    description: 'This introduces two named queues: `low_priority` and `high_priority`
+      that can be used to alter the order in which jobs are executed by default.'
+  - timestamp: '2017-07-01T05:32:48Z'
+    title: UTM campaign params and referrer sources for visits are now sent to Intercom.
+    trello: https://trello.com/c/1zN8e3p2
+    private: true
+    category: feature
+  - timestamp: '2017-07-01T05:30:20Z'
+    title: Github / Bitbucket URLs collected during screening are now validated.
+    trello: https://trello.com/c/i0NcflTG
+    private: false
+    description: A simple /github|bitbucket/ regex validation was included.
+    category: ui
+  - timestamp: '2017-07-01T05:20:33Z'
+    title: Excised the stale recaptcha gem and all related code.
+    trello: https://trello.com/c/KwqerwIz
+    private: true
+  - timestamp: '2017-07-01T05:18:29Z'
+    title: The pool of scientist names and colors for naming are now in a convenient
+      YAML file.
+    trello: https://trello.com/c/DBOKALVx
+    private: true
+  - timestamp: '2017-07-01T05:16:35Z'
+    title: Cleaned up a couple of broken/stale specs.
+    trello: https://trello.com/c/w7o6qLrJ
+    private: true
+  - timestamp: '2017-07-01T05:15:28Z'
+    title: MOOC students are now issued discount coupons for applying to SV.CO after
+      course completion.
+    trello: https://trello.com/c/qSkP5hSy
+    private: false
+    description: A special 'Sixways MOOC Merit' coupon type was created which is applicable
+      for students with a MOOC score > 30
+    category: feature
+  - timestamp: '2017-07-01T05:07:34Z'
+    title: Converted the PublicSlackTalk lib into a PublicSlack::MessageService
+    trello: https://trello.com/c/OzCDcoJb
+    private: true
+  - timestamp: '2017-06-30T07:58:01Z'
+    title: The `/live` page has been removed.
+    trello: https://trello.com/c/N8jfI1wY
+    private: true
+    category: content
+  - timestamp: '2017-06-30T06:30:14Z'
+    title: Fix broken PNotify flashed in admin interface.
+    trello: https://trello.com/c/ezsIKLcL
+    private: true
+    description: Flash messages were broken all across the admin interface because
+      the initialization code wasn't updated after PNotity was upgraded.
+    category: bugfix
+  - timestamp: '2017-06-30T05:50:01Z'
+    title: Add meta_request gem, used by the Rails panel chrome addon
+    trello: https://trello.com/c/zghy179q
+    private: true
+  - timestamp: '2017-06-29T07:55:07Z'
+    title: Replace link to StartInCollege with link to Help Center (Intercom)
+    trello: https://trello.com/c/QS4dkkIh
+    private: true
+  - timestamp: '2017-06-14T08:15:53Z'
+    title: The SV.CO logo has been updated.
+    trello: https://trello.com/c/JLGtnwwE
+    private: false
+    category: ui
+  - timestamp: '2017-06-13T11:35:50Z'
+    title: Replace shortener with custom solution
+    trello: https://trello.com/c/NG4FR0nY
+    private: true
+    description: This removes the shortener gem, and implements existing functionality
+      (and more) with custom code. This replaces the default behavior of redirecting
+      to a 404 page when an unknown /:id URL is encountered  by responding with a
+      404 status response.
+  - timestamp: '2017-06-13T08:10:21Z'
+    title: Improve the validation of email input in MOOC student signup form to avoid
+      common typos.
+    trello: https://trello.com/c/zfKGgNB1
+    private: false
+    description: 'Email_inquire validation is added to the email field in the MOOC
+      student sign-up form. This will provide email hints to correct common errors
+      such as xxx@gamil.com, xxx@gmsil.com etc. '
+    category: ui
+  - timestamp: '2017-06-13T05:46:42Z'
+    title: Feedback for timeline event shouldn't set reference URL - no usage of reference
+      URL in this context should exist
+    trello: https://trello.com/c/imfHIC3k
+    private: true
+    description: Removed all instances where reference_url was stored when a startup_feedback
+      is saved for a timeline_event. The StartupFeedback model methods are also updated
+      to use timeline_event_id instead of reference_url to obtain the associated timeline_event.
+    category: bugfix
 - timestamp: '2017-06-12T07:31:39Z'
   changes:
   - timestamp: '2017-06-12T07:29:59Z'
@@ -30,8 +129,8 @@ changelog:
     private: false
     category: content
   - timestamp: '2017-06-10T06:55:13Z'
-    title: Create page `sv.co/live` which will be used to embed live video streams of
-      SV.CO webinars and to display upcoming live events.
+    title: Create page `sv.co/live` which will be used to embed live video streams
+      of SV.CO webinars and to display upcoming live events.
     trello: https://trello.com/c/5IZr9e4S
     private: false
     description: The video embed links will be updated over a commit once the event

@@ -5,11 +5,11 @@ describe ResourcesController do
   let!(:video_resource) { create :video_resource }
 
   before :all do
-    PublicSlackTalk.mock = true
+    PublicSlack::MessageService.mock = true
   end
 
   after :all do
-    PublicSlackTalk.mock = false
+    PublicSlack::MessageService.mock = false
   end
 
   describe 'GET download' do

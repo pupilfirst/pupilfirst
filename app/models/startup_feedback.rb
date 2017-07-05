@@ -19,10 +19,6 @@ class StartupFeedback < ApplicationRecord
     where(timeline_event: event).order('updated_at desc')
   end
 
-  def for_timeline_event?
-    timeline_event.present? ? true : false
-  end
-
   def as_slack_message
     formatted_reference_url = reference_url.present? ? "<#{reference_url}|recent update>" : "recent update"
     salutation = "Hey! You have some feedback from #{faculty.name} on your #{formatted_reference_url}.\n"
@@ -36,6 +32,6 @@ class StartupFeedback < ApplicationRecord
   end
 
   def for_founder?
-    for_timeline_event? && timeline_event&.founder_event?
+    timeline_event.present? && timeline_event&.founder_event?
   end
 end

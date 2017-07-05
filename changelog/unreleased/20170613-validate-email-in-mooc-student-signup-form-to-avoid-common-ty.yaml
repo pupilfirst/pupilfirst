@@ -1,8 +1,0 @@
----
-timestamp: '2017-06-13T08:10:21Z'
-title: Validate email in MOOC student signup form to avoid common typos in email input.
-trello: https://trello.com/c/zfKGgNB1
-private: true
-description: 'Email_inquire validation is added to the email field in the MOOC student
-  sign-up form. This will provide email hints to correct common errors such as xxx@gamil.com,
-  xxx@gmsil.com etc. '

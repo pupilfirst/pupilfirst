@@ -8,22 +8,26 @@ class FacultyConnectSessionReminderJob < ApplicationJob
 
     remind_founders_on_slack
     remind_faculty_on_slack
-    remind_ops_team_on_slack
+    remind_ops_team_on_slack if Rails.env.production?
   end
 
   def remind_founders_on_slack
-    PublicSlackTalk.post_message message: reminder_for_founder, founders: connect_request.startup.founders
+    public_slack_message_service.post message: reminder_for_founder, founders: connect_request.startup.founders
   end
 
   def remind_faculty_on_slack
-    PublicSlackTalk.post_message message: reminder_for_faculty, founder: connect_request.faculty
+    public_slack_message_service.post message: reminder_for_faculty, founder: connect_request.faculty
   end
 
   def remind_ops_team_on_slack
-    PublicSlackTalk.post_message message: reminder_for_ops_team, founders: Faculty.ops_team
+    public_slack_message_service.post message: reminder_for_ops_team, founders: Faculty.ops_team
   end
 
   private
+
+  def public_slack_message_service
+    @public_slack_message_service ||= PublicSlack::MessageService.new
+  end
 
   def connect_request
     @connect_request ||= ConnectRequest.find_by id: @connect_request_id

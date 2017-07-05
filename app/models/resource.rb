@@ -70,9 +70,9 @@ class Resource < ApplicationRecord
   # Notify on slack when a new resource is uploaded
   def notify_on_slack
     if level_exclusive?
-      PublicSlackTalk.post_message message: new_resource_message, founders: founders_to_notify
+      PublicSlack::MessageService.new.post message: new_resource_message, founders: founders_to_notify
     else
-      PublicSlackTalk.post_message message: new_resource_message, channel: '#resources'
+      PublicSlack::MessageService.new.post message: new_resource_message, channel: '#resources'
     end
   end
 

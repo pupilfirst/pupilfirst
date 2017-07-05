@@ -3,8 +3,8 @@ class TrelloController < ApplicationController
 
   def bug_webhook
     unless request.head?
-      action_type = params.dig('trello', 'action', 'type')
-      label_id = params.dig('trello', 'action', 'data', 'label', 'id')
+      action_type = params.dig(:trello, :action, :type)
+      label_id = params.dig(:trello, :action, :data, :label, :id)
       valid_type = action_type.in? %w[addLabelToCard removeLabelFromCard]
       valid_label = label_id == Rails.application.secrets.trello[:bug_label_id]
 

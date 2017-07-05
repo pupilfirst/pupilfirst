@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170613111921) do
+ActiveRecord::Schema.define(version: 20170614062800) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -656,6 +656,7 @@ ActiveRecord::Schema.define(version: 20170613111921) do
     t.string "partnership_deed"
     t.string "payment_reference"
     t.integer "maximum_level_id"
+    t.string "admission_stage"
     t.index ["batch_id"], name: "index_startups_on_batch_id"
     t.index ["level_id"], name: "index_startups_on_level_id"
     t.index ["maximum_level_id"], name: "index_startups_on_maximum_level_id"

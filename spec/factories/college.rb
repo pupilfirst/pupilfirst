@@ -6,7 +6,7 @@ FactoryGirl.define do
 
     after(:build) do |college|
       # Use the same state as college.
-      college.replacement_university = create(:replacement_university, state: college.state)
+      college.university = create(:university, state: college.state)
     end
   end
 end

@@ -6,7 +6,7 @@ class BatchApplicantDecorator < Draper::Decorator
   end
 
   def university_name
-    college&.replacement_university&.name
+    college&.university&.name
   end
 
   def batch_name

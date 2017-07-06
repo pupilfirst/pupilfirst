@@ -8,7 +8,7 @@ ActiveAdmin.register BatchApplicant do
     :address_proof,
     batch_application_ids: [],
     tag_list: [],
-    college_attributes: %i[name also_known_as city state_id established_year website contact_numbers replacement_university_id]
+    college_attributes: %i[name also_known_as city state_id established_year website contact_numbers university_id]
 
   scope :all, default: true
   scope :submitted_application
@@ -261,7 +261,7 @@ ActiveAdmin.register BatchApplicant do
         cf.input :established_year
         cf.input :website
         cf.input :contact_numbers
-        cf.input :replacement_university_id, label: 'University', as: :select, collection: ReplacementUniversity.all
+        cf.input :university_id, as: :select, collection: University.all
       end
     end
 

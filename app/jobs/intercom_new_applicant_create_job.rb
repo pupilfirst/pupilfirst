@@ -31,6 +31,6 @@ class IntercomNewApplicantCreateJob < ApplicationJob
   end
 
   def founder_university(founder)
-    founder.college&.replacement_university&.name
+    founder.college&.university&.name
   end
 end

@@ -1,4 +1,4 @@
-class ReplacementUniversity < ApplicationRecord
+class University < ApplicationRecord
   validates :name, presence: true
 
   belongs_to :state

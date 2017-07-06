@@ -1,4 +1,4 @@
-ActiveAdmin.register ReplacementUniversity do
+ActiveAdmin.register University do
   include DisableIntercom
 
   menu parent: 'Admissions'
@@ -11,7 +11,7 @@ ActiveAdmin.register ReplacementUniversity do
     column :name
 
     column :colleges do |university|
-      link_to university.colleges.count, admin_colleges_path(q: { replacement_university_id_eq: university.id })
+      link_to university.colleges.count, admin_colleges_path(q: { university_id_eq: university.id })
     end
 
     column :state

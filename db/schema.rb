@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170706100739) do
+ActiveRecord::Schema.define(version: 20170706104040) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -197,9 +197,9 @@ ActiveRecord::Schema.define(version: 20170706100739) do
     t.string "established_year"
     t.string "website"
     t.string "contact_numbers"
-    t.integer "replacement_university_id"
-    t.index ["replacement_university_id"], name: "index_colleges_on_replacement_university_id"
+    t.integer "university_id"
     t.index ["state_id"], name: "index_colleges_on_state_id"
+    t.index ["university_id"], name: "index_colleges_on_university_id"
   end
 
   create_table "connect_requests", id: :serial, force: :cascade do |t|
@@ -533,14 +533,6 @@ ActiveRecord::Schema.define(version: 20170706100739) do
     t.index ["course_module_id"], name: "index_quiz_questions_on_course_module_id"
   end
 
-  create_table "replacement_universities", id: :serial, force: :cascade do |t|
-    t.string "name"
-    t.integer "state_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["state_id"], name: "index_replacement_universities_on_state_id"
-  end
-
   create_table "resources", id: :serial, force: :cascade do |t|
     t.string "file"
     t.string "thumbnail"
@@ -799,6 +791,14 @@ ActiveRecord::Schema.define(version: 20170706100739) do
     t.index ["iteration"], name: "index_timeline_events_on_iteration"
     t.index ["startup_id"], name: "index_timeline_events_on_startup_id"
     t.index ["timeline_event_type_id"], name: "index_timeline_events_on_timeline_event_type_id"
+  end
+
+  create_table "universities", id: :serial, force: :cascade do |t|
+    t.string "name"
+    t.integer "state_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["state_id"], name: "index_universities_on_state_id"
   end
 
   create_table "user_activities", id: :serial, force: :cascade do |t|

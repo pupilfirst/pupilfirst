@@ -77,7 +77,7 @@ class AdmissionStatsService
   end
 
   def total_universities
-    ReplacementUniversity.joins(batch_applications: :application_round).where(application_rounds: { id: selected_round_ids }).distinct.count
+    University.joins(batch_applications: :application_round).where(application_rounds: { id: selected_round_ids }).distinct.count
   end
 
   def total_locations

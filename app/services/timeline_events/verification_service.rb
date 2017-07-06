@@ -48,7 +48,7 @@ module TimelineEvents
         update_karma_points
         post_on_facebook if @timeline_event.share_on_facebook
         reset_startup_level if @timeline_event.timeline_event_type.end_iteration?
-        update_admission_stage if @target.key.in?([Target::KEY_ADMISSIONS_CODING_TASK, Target::KEY_ADMISSIONS_VIDEO_TASK, Target::KEY_ADMISSIONS_ATTEND_INTERVIEW, Target::KEY_ADMISSIONS_PRE_SELECTION])
+        update_admission_stage if @target.present? && @target.key.in?([Target::KEY_ADMISSIONS_CODING_TASK, Target::KEY_ADMISSIONS_VIDEO_TASK, Target::KEY_ADMISSIONS_ATTEND_INTERVIEW, Target::KEY_ADMISSIONS_PRE_SELECTION])
       end
     end
 

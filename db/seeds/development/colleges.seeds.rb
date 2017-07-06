@@ -1,12 +1,12 @@
-after 'development:replacement_universities' do
+after 'development:universities' do
   puts 'Seeding colleges'
 
   kerala = State.find_by name: 'Kerala'
   gujarat = State.find_by name: 'Gujarat'
 
-  cusat = ReplacementUniversity.find_by name: 'Cochin University of Science and Technology, Kochi'
-  ukt = ReplacementUniversity.find_by name: 'University of Kerala, Thiruvananthapuram'
-  gtu = ReplacementUniversity.find_by name: 'Gujarat Technological University, Ahmedabad'
+  cusat = University.find_by name: 'Cochin University of Science and Technology, Kochi'
+  ukt = University.find_by name: 'University of Kerala, Thiruvananthapuram'
+  gtu = University.find_by name: 'Gujarat Technological University, Ahmedabad'
 
   [
     ['Cochin University of Science and Technology, Kochi', 'Ernakulam', kerala, cusat, nil],
@@ -19,7 +19,7 @@ after 'development:replacement_universities' do
     college = College.where(name: college_details[0]).first_or_initialize
     college.city = college_details[1]
     college.state = college_details[2]
-    college.replacement_university = college_details[3]
+    college.university = college_details[3]
     college.also_known_as = college_details[4]
     college.save!
   end

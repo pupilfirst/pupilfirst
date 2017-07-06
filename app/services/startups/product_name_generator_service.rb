@@ -11,7 +11,7 @@ module Startups
     private
 
     def pool
-      @pool ||= YAML.load_file('startup_name_pool.yml')
+      @pool ||= YAML.load_file('app/services/startups/product_name_generator_service/startup_name_pool.yml')
     end
   end
 end

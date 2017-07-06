@@ -3,8 +3,8 @@ ActiveAdmin.register BatchApplication do
 
   menu parent: 'Admissions', label: 'Applications', priority: 1
 
-  permit_params :application_round_id, :application_stage_id, :university_id, :team_achievement, :team_lead_id,
-    :college, :state, :team_size, :agreements_verified,
+  permit_params :application_round_id, :application_stage_id, :team_achievement, :team_lead_id,
+    :college, :team_size, :agreements_verified,
     batch_applicants_attributes: %i[id fee_payment_method], tag_list: []
 
   batch_action :promote, confirm: 'Are you sure?' do |ids|
@@ -59,8 +59,6 @@ ActiveAdmin.register BatchApplication do
 
   filter :team_lead_name_eq, label: 'Team Lead Name'
   filter :team_lead_college_state_id_eq, label: 'State', as: :select, collection: proc { State.all }
-  filter :university_location, label: 'University location (Deprecated)', as: :select, collection: proc { University.all.pluck(:location).uniq }
-  filter :state, label: 'State (Deprecated)'
   filter :team_lead_reference_contains, label: 'Reference contains'
   filter :swept_in_at_not_null, as: :boolean, label: 'Swept In'
   filter :agreements_verified
@@ -111,11 +109,7 @@ ActiveAdmin.register BatchApplication do
         span "#{team_lead.college_text} "
         span admin_create_college_link(team_lead.college_text)
       elsif batch_application.college_text.present?
-        span "#{batch_application.college_text} "
-
-        span do
-          content_tag :em, '(Deprecated)'
-        end
+        span batch_application.college_text
       else
         content_tag :em, 'Missing'
       end
@@ -124,18 +118,6 @@ ActiveAdmin.register BatchApplication do
     column :state do |application|
       if application.team_lead&.college.present?
         link_to application.team_lead.college.state.name, admin_state_path(application.team_lead.college.state)
-      elsif application&.state.present?
-        span "#{application.state} "
-
-        span do
-          content_tag :em, '(Old data)'
-        end
-      elsif application&.university.present?
-        span "#{application.university.location} "
-
-        span do
-          content_tag :em, '(Old data)'
-        end
       else
         content_tag :em, 'Unknown'
       end
@@ -251,7 +233,7 @@ ActiveAdmin.register BatchApplication do
     end
 
     column :state do |batch_application|
-      batch_application.college&.state&.name || batch_application.state
+      batch_application.college&.state&.name
     end
 
     column :team_size
@@ -316,16 +298,6 @@ ActiveAdmin.register BatchApplication do
       row :generate_certificate
       row :agreements_verified
       row :college
-
-      row 'University (Deprecated)' do |batch_application|
-        if batch_application.university.present?
-          link_to batch_application.university.name, admin_university_path(batch_application.university)
-        end
-      end
-
-      row 'State (Deprecated)' do |batch_application|
-        batch_application.university&.location || batch_application.state
-      end
     end
 
     panel 'Technical details' do

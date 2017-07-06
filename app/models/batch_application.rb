@@ -13,7 +13,6 @@ class BatchApplication < ApplicationRecord
   accepts_nested_attributes_for :batch_applicants
   belongs_to :team_lead, class_name: 'BatchApplicant'
   has_one :college, through: :team_lead
-  belongs_to :university, optional: true
   has_one :payment, dependent: :restrict_with_error
   has_many :archived_payments, class_name: 'Payment', foreign_key: 'original_batch_application_id'
   belongs_to :startup, optional: true
@@ -200,12 +199,6 @@ class BatchApplication < ApplicationRecord
 
     # If application is at stage 2, :rejected state gets certificate, and :expired does not.
     status == :rejected
-  end
-
-  # Returns name of states with most number of applications - excludes 'Other' if present
-  # this was included to dynamically calculate the top states for Admissions Dashboard. Later replaced by the pre-selected list of states i.e State.focused_for_admissions
-  def self.top_states(n)
-    joins(:university).group(:location).count.sort_by { |_k, v| v }.reverse[0..(n - 1)].to_h.keys - ['Other']
   end
 
   # Returns applicant eligible for receiving refund of the application fee. This refund is to be applied on the course fee.

@@ -7,7 +7,7 @@ class Visit < ApplicationRecord
   scope :last_week, -> { where('started_at > ?', 1.week.ago.beginning_of_day) }
 
   EVENT_VOCALIST_COMMAND = -'Vocalist Command'
-  VOCALIST_COMMAND_GLOSSARY = -'glossary'
+
   VOCALIST_COMMAND_LEADERBOARD = -'leaderboard'
   VOCALIST_COMMAND_CHANGELOG = -'changelog'
   VOCALIST_COMMAND_TARGETS = -'targets'

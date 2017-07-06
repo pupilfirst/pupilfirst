@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170613111921) do
+ActiveRecord::Schema.define(version: 20170706054322) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
+  enable_extension "pg_stat_statements"
 
   create_table "active_admin_comments", id: :serial, force: :cascade do |t|
     t.string "namespace"
@@ -385,13 +385,6 @@ ActiveRecord::Schema.define(version: 20170613111921) do
     t.index ["slug"], name: "index_founders_on_slug", unique: true
     t.index ["university_id"], name: "index_founders_on_university_id"
     t.index ["user_id"], name: "index_founders_on_user_id"
-  end
-
-  create_table "glossary_terms", id: :serial, force: :cascade do |t|
-    t.string "term"
-    t.text "definition"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "karma_points", id: :serial, force: :cascade do |t|

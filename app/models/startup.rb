@@ -29,6 +29,13 @@ class Startup < ApplicationRecord
 
   SV_STATS_LINK = 'bit.ly/svstats2'
 
+  ADMISSION_STAGE_SIGNED_UP = 'Signed Up'
+  ADMISSION_STAGE_SCREENING_COMPLETED = 'Screening Completed'
+  ADMISSION_STAGE_FEE_PAID = 'Fee Paid'
+  ADMISSION_STAGE_CODING_AND_VIDEO_PASSED = 'Coding & Video Passed'
+  ADMISSION_STAGE_INTERVIEW_PASSED = 'Interview Passed'
+  ADMISSION_STAGE_PRESELECTION_DONE = 'Pre-Selection Done'
+
   # agreement duration in years
   AGREEMENT_DURATION = 5
 

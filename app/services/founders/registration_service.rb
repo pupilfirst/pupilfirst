@@ -35,7 +35,7 @@ module Founders
 
     def create_blank_startup(founder)
       name = Startups::ProductNameGeneratorService.new.fun_name
-      startup = Startup.create!(product_name: name, level: Level.zero, maximum_level: Level.zero)
+      startup = Startup.create!(product_name: name, level: Level.zero, maximum_level: Level.zero, admission_stage: Startup::ADMISSION_STAGE_SIGNED_UP)
 
       # Update startup info of founder
       founder.update!(startup: startup)

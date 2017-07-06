@@ -19,6 +19,10 @@ module Admissions
 
       TimelineEvents::VerificationService.new(timeline_event, notify: false)
         .update_status(TimelineEvent::STATUS_VERIFIED)
+
+      if @key.in?([Target::KEY_ADMISSIONS_SCREENING, Target::KEY_ADMISSIONS_FEE_PAYMENT])
+        @founder.startup.update!(admission_stage: admission_stage)
+      end
     end
 
     private
@@ -38,6 +42,15 @@ module Admissions
 
     def team_update
       TimelineEventType.find_by(key: TimelineEventType::TYPE_TEAM_UPDATE)
+    end
+
+    def admission_stage
+      case @key
+        when Target::KEY_ADMISSIONS_SCREENING
+          Startup::ADMISSION_STAGE_SCREENING_COMPLETED
+        when Target::KEY_ADMISSIONS_FEE_PAYMENT
+          Startup::ADMISSION_STAGE_FEE_PAID
+      end
     end
   end
 end

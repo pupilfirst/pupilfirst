@@ -10,6 +10,7 @@ FactoryGirl.define do
     target_group
     timeline_event_type
     key nil
+    sequence(:sort_index)
 
     transient do
       batch nil

@@ -175,4 +175,5 @@ group :production do
   gem 'skylight', '~> 1.1' # Skylight agent for Ruby https://www.skylight.io
   gem 'rails_12factor', '~> 0.0' # Makes running your Rails app easier. Based on the ideas behind 12factor.net.
   gem 'dalli', '~> 2.7' # High performance memcached client for Ruby. https://github.com/petergoldstein/dalli
+  gem 'scout_apm' # detailed Rails application performance analysis.
 end

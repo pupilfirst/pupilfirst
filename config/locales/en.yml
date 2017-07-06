@@ -36,7 +36,7 @@ en:
         - "Other (Please Specify)"
   home:
     index:
-      main_bleed_message_html: "SV.CO is for ambitious students who desire to learn how to build a <strong>real</strong> startup and experience <strong>Silicon Valley</strong> while still in college."
+      main_bleed_message_html: "SV.CO is for ambitious students who want to learn how to build a <strong>real</strong> startup and experience <strong>Silicon Valley</strong> while still in college."
       background_1_messages:
         secondary_html: "Varghese, Sidharth, Rakhul and Renjith of Z-Pay built a prototype during SV.CO&apos;s six month startup course and got acqui-hired by Tally Solutions, Bangalore."
       background_2_messages:

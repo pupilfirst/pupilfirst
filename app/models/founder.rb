@@ -33,7 +33,6 @@ class Founder < ApplicationRecord
   has_many :public_slack_messages
   belongs_to :startup, optional: true
   belongs_to :invited_startup, class_name: 'Startup', optional: true
-  belongs_to :university, optional: true
   has_many :karma_points, dependent: :destroy
   has_many :timeline_events
   has_many :visits, as: :user
@@ -52,8 +51,6 @@ class Founder < ApplicationRecord
   scope :for_batch_id_in, ->(ids) { joins(:startup).where(startups: { batch_id: ids }) }
   scope :not_dropped_out, -> { joins(:startup).merge(Startup.not_dropped_out) }
   scope :startup_members, -> { where 'startup_id IS NOT NULL' }
-  # TODO: Do we need this anymore ?
-  scope :student_entrepreneurs, -> { where.not(university_id: nil) }
   scope :missing_startups, -> { where('startup_id NOT IN (?)', Startup.pluck(:id)) }
   scope :non_founders, -> { where(startup_id: nil) }
   scope :in_batch, ->(batch) { joins(:startup).where(startups: { batch_id: batch.id }) }

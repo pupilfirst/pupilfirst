@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170706054322) do
+ActiveRecord::Schema.define(version: 20170706100739) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -799,13 +799,6 @@ ActiveRecord::Schema.define(version: 20170706054322) do
     t.index ["iteration"], name: "index_timeline_events_on_iteration"
     t.index ["startup_id"], name: "index_timeline_events_on_startup_id"
     t.index ["timeline_event_type_id"], name: "index_timeline_events_on_timeline_event_type_id"
-  end
-
-  create_table "universities", id: :serial, force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "location"
   end
 
   create_table "user_activities", id: :serial, force: :cascade do |t|

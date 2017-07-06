@@ -61,7 +61,7 @@
 
             = f.input :semester, as: :select, collection: MoocStudent.valid_semester_values, include_blank: 'Select your semester'
             = f.input :state,
-              collection: proc { University.valid_state_names },
+              collection: proc { State.names_for_mooc_student },
               include_blank: 'Please pick your state',
               required: true
 

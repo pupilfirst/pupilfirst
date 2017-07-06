@@ -57,83 +57,14 @@ module ActiveAdmin
     end
 
     def startups_split
-      default = {
-        'Signed Up' => 0,
-        'Screening Completed' => 0,
-        'Fee Paid' => 0,
-        'Co-founders Added' => 0,
-        'Video Task Passed' => 0,
-        'Coding Task Passed' => 0,
-        'Coding & Video Task Passed' => 0,
-        'Interview Passed' => 0,
-        'Pre-Selection Done' => 0
-      }
-
-      level_0.startups.each_with_object(default) do |startup, split|
-        split[stage(startup)] += 1
+      stages = [Startup::ADMISSION_STAGE_SIGNED_UP, Startup::ADMISSION_STAGE_SCREENING_COMPLETED, Startup::ADMISSION_STAGE_FEE_PAID, Startup::ADMISSION_STAGE_CODING_AND_VIDEO_PASSED, Startup::ADMISSION_STAGE_INTERVIEW_PASSED, Startup::ADMISSION_STAGE_PRESELECTION_DONE]
+      stages.each_with_object({}) do |stage, hash|
+        hash[stage] = Startup.where(admission_stage: stage).count
       end
     end
 
     def level_0
       @level_0 ||= Level.find_by(number: 0)
-    end
-
-    # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-    def stage(startup)
-      team_lead = startup.admin
-
-      if complete?(pre_selection_target, team_lead)
-        'Pre-Selection Done'
-      elsif complete?(attend_interview_target, team_lead)
-        'Interview Passed'
-      elsif complete?(coding_task_target, team_lead) && complete?(video_task_target, team_lead)
-        'Coding & Video Task Passed'
-      elsif complete?(coding_task_target, team_lead)
-        'Coding Task Passed'
-      elsif complete?(video_task_target, team_lead)
-        'Video Task Passed'
-      elsif complete?(cofounder_addition_target, team_lead)
-        'Co-founders Added'
-      elsif complete?(fee_payment_target, team_lead)
-        'Fee Paid'
-      elsif complete?(screening_target, team_lead)
-        'Screening Completed'
-      else
-        'Signed Up'
-      end
-    end
-    # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-
-    def screening_target
-      @screening_target ||= Target.find_by(key: Target::KEY_ADMISSIONS_SCREENING)
-    end
-
-    def fee_payment_target
-      @fee_payment_target ||= Target.find_by(key: Target::KEY_ADMISSIONS_FEE_PAYMENT)
-    end
-
-    def cofounder_addition_target
-      @cofounder_addition_target ||= Target.find_by(key: Target::KEY_ADMISSIONS_COFOUNDER_ADDITION)
-    end
-
-    def coding_task_target
-      @coding_task_target ||= Target.find_by(key: Target::KEY_ADMISSIONS_CODING_TASK)
-    end
-
-    def video_task_target
-      @video_task_target ||= Target.find_by(key: Target::KEY_ADMISSIONS_VIDEO_TASK)
-    end
-
-    def attend_interview_target
-      @attend_interview_target ||= Target.find_by(key: Target::KEY_ADMISSIONS_ATTEND_INTERVIEW)
-    end
-
-    def pre_selection_target
-      @pre_selection_target ||= Target.find_by(key: Target::KEY_ADMISSIONS_PRE_SELECTION)
-    end
-
-    def complete?(target, team_lead)
-      target.status(team_lead).in? [Targets::StatusService::STATUS_COMPLETE, Targets::StatusService::STATUS_NEEDS_IMPROVEMENT]
     end
   end
 end

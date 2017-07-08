@@ -9,10 +9,6 @@ feature 'MoocStudent Sign In' do
   let(:mooc_student) { create :mooc_student, college: college }
   let(:first_chapter_name) { first_module.module_chapters.find_by(chapter_number: 1).name }
 
-  before do
-    create :state, name: 'Kerala'
-  end
-
   context 'User visits the sixways start page' do
     scenario 'User signs up for MOOC', js: true do
       visit six_ways_start_path
@@ -28,7 +24,6 @@ feature 'MoocStudent Sign In' do
       select "My college isn't listed", from: 'mooc_student_signup_college_id'
       fill_in 'mooc_student_signup_college_text', with: 'Doe Learning Centre'
       select 'Graduated', from: 'Semester'
-      select 'Kerala', from: 'State'
 
       click_button 'Sign up'
 
@@ -59,7 +54,6 @@ feature 'MoocStudent Sign In' do
       select "My college isn't listed", from: 'mooc_student_signup_college_id'
       fill_in 'mooc_student_signup_college_text', with: 'Doe Learning Centre'
       select 'Graduated', from: 'Semester'
-      select 'Kerala', from: 'State'
 
       click_button 'Sign up'
 

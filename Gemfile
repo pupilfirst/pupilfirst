@@ -47,8 +47,8 @@ gem 'bootstrap_form', '= 2.5.2', github: 'desheikh/rails-bootstrap-forms', branc
 # Have updated and submitted a PR (https://github.com/ralovets/valid_url/pull/10). Using a personal fork until it's merged.
 gem 'valid_url', '= 0.0.4', github: 'mahesh-krishnakumar/valid_url', branch: 'patch-1' # New url validataion gem
 gem 'roadie-rails', '~> 1.1' # CSS management for e-mails.
-gem 'puma' # The Puma ruby web server.
-gem 'rack-timeout' # Abort requests that are taking too long - recommended by Heroku to use with Puma
+gem 'puma', '~> 3.9' # The Puma ruby web server.
+gem 'rack-timeout', '~> 0.4' # Abort requests that are taking too long - recommended by Heroku to use with Puma
 gem 'delayed_job_active_record', '~> 4.1' # Delayed Job for deferring tasks.
 gem 'delayed-web', '~> 0.4' # A rails engine that provides a simple web interface for exposing the Delayed::Job queue.
 gem 'seedbank', '~> 0.4' # Better organized seed data.
@@ -177,5 +177,5 @@ group :production do
   gem 'rails_12factor', '~> 0.0' # Makes running your Rails app easier. Based on the ideas behind 12factor.net.
   gem 'dalli', '~> 2.7' # High performance memcached client for Ruby. https://github.com/petergoldstein/dalli
   gem 'scout_apm' # detailed Rails application performance analysis.
-  gem 'heroku-deflater' # Enable gzip compression on heroku, but don't compress images.
+  gem 'heroku-deflater', '~> 0.6' # Enable gzip compression on heroku, but don't compress images.
 end

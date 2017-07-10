@@ -1,0 +1,6 @@
+---
+timestamp: '2017-07-06T08:12:17Z'
+title: Remove the glossary (define) command from Vocalist's vocabulary.
+trello: https://trello.com/c/uoEptOCp
+private: true
+description: This removes the command, the glossary_terms table, and all related code.

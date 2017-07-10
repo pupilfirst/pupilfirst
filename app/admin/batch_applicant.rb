@@ -8,7 +8,7 @@ ActiveAdmin.register BatchApplicant do
     :address_proof,
     batch_application_ids: [],
     tag_list: [],
-    college_attributes: %i[name also_known_as city state_id established_year website contact_numbers replacement_university_id]
+    college_attributes: %i[name also_known_as city state_id established_year website contact_numbers university_id]
 
   scope :all, default: true
   scope :submitted_application
@@ -65,8 +65,6 @@ ActiveAdmin.register BatchApplicant do
     end
 
     column :state do |batch_applicant|
-      application = batch_applicant.batch_applications.last
-
       if batch_applicant.college.present?
         if batch_applicant.college.state.present?
           link_to batch_applicant.college.state.name, admin_state_path(batch_applicant.college.state)
@@ -75,18 +73,6 @@ ActiveAdmin.register BatchApplicant do
         end
       elsif batch_applicant.college_text.present?
         content_tag :em, 'No linked college'
-      elsif application&.state.present?
-        span "#{application.state} "
-
-        span do
-          content_tag :em, '(Old data)'
-        end
-      elsif application&.university.present?
-        span "#{application.university.location} "
-
-        span do
-          content_tag :em, '(Old data)'
-        end
       else
         content_tag :em, 'Unknown - Please fix'
       end
@@ -275,7 +261,7 @@ ActiveAdmin.register BatchApplicant do
         cf.input :established_year
         cf.input :website
         cf.input :contact_numbers
-        cf.input :replacement_university_id, label: 'University', as: :select, collection: ReplacementUniversity.all
+        cf.input :university_id, as: :select, collection: University.all
       end
     end
 

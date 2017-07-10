@@ -129,7 +129,6 @@ Rails.application.routes.draw do
   # webhook url for intercom user create - used to strip them off user_id
   post 'intercom_user_create', controller: 'intercom', action: 'user_create'
 
-  resources :universities, only: :index
   resources :colleges, only: :index
 
   resource :platform_feedback, only: %i[create]

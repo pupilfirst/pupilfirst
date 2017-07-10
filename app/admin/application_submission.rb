@@ -60,18 +60,6 @@ ActiveAdmin.register ApplicationSubmission do
       application = application_submission.batch_application
       if application.team_lead&.college.present?
         link_to application.team_lead.college.state.name, admin_state_path(application.team_lead.college.state)
-      elsif application&.state.present?
-        span "#{application.state} "
-
-        span do
-          content_tag :em, '(Old data)'
-        end
-      elsif application&.university.present?
-        span "#{application.university.location} "
-
-        span do
-          content_tag :em, '(Old data)'
-        end
       else
         content_tag :em, 'Unknown'
       end

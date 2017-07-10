@@ -16,7 +16,7 @@ ActiveAdmin.register State do
     end
 
     column :universities do |state|
-      state.replacement_universities.count
+      state.universities.count
     end
 
     actions

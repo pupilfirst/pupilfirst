@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170613111921) do
+ActiveRecord::Schema.define(version: 20170708081824) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
+  enable_extension "pg_stat_statements"
 
   create_table "active_admin_comments", id: :serial, force: :cascade do |t|
     t.string "namespace"
@@ -197,9 +197,9 @@ ActiveRecord::Schema.define(version: 20170613111921) do
     t.string "established_year"
     t.string "website"
     t.string "contact_numbers"
-    t.integer "replacement_university_id"
-    t.index ["replacement_university_id"], name: "index_colleges_on_replacement_university_id"
+    t.integer "university_id"
     t.index ["state_id"], name: "index_colleges_on_state_id"
+    t.index ["university_id"], name: "index_colleges_on_university_id"
   end
 
   create_table "connect_requests", id: :serial, force: :cascade do |t|
@@ -387,13 +387,6 @@ ActiveRecord::Schema.define(version: 20170613111921) do
     t.index ["user_id"], name: "index_founders_on_user_id"
   end
 
-  create_table "glossary_terms", id: :serial, force: :cascade do |t|
-    t.string "term"
-    t.text "definition"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "karma_points", id: :serial, force: :cascade do |t|
     t.integer "founder_id"
     t.integer "points"
@@ -434,7 +427,6 @@ ActiveRecord::Schema.define(version: 20170613111921) do
     t.string "name"
     t.string "college_text"
     t.string "semester"
-    t.string "state"
     t.string "gender"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -538,14 +530,6 @@ ActiveRecord::Schema.define(version: 20170613111921) do
     t.integer "course_module_id"
     t.text "question"
     t.index ["course_module_id"], name: "index_quiz_questions_on_course_module_id"
-  end
-
-  create_table "replacement_universities", id: :serial, force: :cascade do |t|
-    t.string "name"
-    t.integer "state_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["state_id"], name: "index_replacement_universities_on_state_id"
   end
 
   create_table "resources", id: :serial, force: :cascade do |t|
@@ -810,9 +794,10 @@ ActiveRecord::Schema.define(version: 20170613111921) do
 
   create_table "universities", id: :serial, force: :cascade do |t|
     t.string "name"
+    t.integer "state_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "location"
+    t.index ["state_id"], name: "index_universities_on_state_id"
   end
 
   create_table "user_activities", id: :serial, force: :cascade do |t|

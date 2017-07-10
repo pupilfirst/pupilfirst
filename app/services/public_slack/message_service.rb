@@ -9,7 +9,7 @@ module PublicSlack
 
       def valid_channel_names
         token = Rails.application.secrets.slack_token
-        channel_list = get_json "https://slack.com/api/channels.list?token=#{token}"
+        channel_list = JSON.parse(RestClient.get("https://slack.com/api/channels.list?token=#{token}"))
         channel_list['channels'].map { |c| '#' + c['name'] }
       end
     end
@@ -93,7 +93,7 @@ module PublicSlack
     end
 
     def get_json(url)
-      JSON.parse RestClient.get(url)
+      JSON.parse(RestClient.get(url))
     end
   end
 end

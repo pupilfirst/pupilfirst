@@ -24,7 +24,6 @@ feature 'MoocStudent Sign In' do
       select "My college isn't listed", from: 'mooc_student_signup_college_id'
       fill_in 'mooc_student_signup_college_text', with: 'Doe Learning Centre'
       select 'Graduated', from: 'Semester'
-      select 'Kerala', from: 'State'
 
       click_button 'Sign up'
 
@@ -55,7 +54,6 @@ feature 'MoocStudent Sign In' do
       select "My college isn't listed", from: 'mooc_student_signup_college_id'
       fill_in 'mooc_student_signup_college_text', with: 'Doe Learning Centre'
       select 'Graduated', from: 'Semester'
-      select 'Kerala', from: 'State'
 
       click_button 'Sign up'
 

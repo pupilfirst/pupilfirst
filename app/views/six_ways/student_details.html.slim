@@ -60,10 +60,6 @@
                 input_html: {maxlength: 250, disabled: true}
 
             = f.input :semester, as: :select, collection: MoocStudent.valid_semester_values, include_blank: 'Select your semester'
-            = f.input :state,
-              collection: proc { State.names_for_mooc_student },
-              include_blank: 'Please pick your state',
-              required: true
 
             .offset-sm-3
               .simple-form-submit

@@ -1,0 +1,6 @@
+---
+timestamp: '2017-07-08T08:33:20Z'
+title: Remove state field from MoocStudent.
+trello: https://trello.com/c/4C1AjrNk
+private: true
+description: This removes the field from the table, and all its usages in code.

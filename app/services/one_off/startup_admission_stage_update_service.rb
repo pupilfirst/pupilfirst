@@ -8,6 +8,7 @@ module OneOff
 
     private
 
+    # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     def stage(startup)
       team_lead = startup.admin
 
@@ -19,12 +20,15 @@ module OneOff
         'Coding & Video Passed'
       elsif complete?(fee_payment_target, team_lead)
         'Fee Paid'
+      elsif startup.payment.present?
+        'Payment Initiated'
       elsif complete?(screening_target, team_lead)
         'Screening Completed'
       else
         'Signed Up'
       end
     end
+    # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
     def screening_target
       @screening_target ||= Target.find_by(key: Target::KEY_ADMISSIONS_SCREENING)

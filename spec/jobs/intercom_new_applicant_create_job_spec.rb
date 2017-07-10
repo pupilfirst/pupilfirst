@@ -27,7 +27,8 @@ describe IntercomNewApplicantCreateJob do
       intercom_user,
       phone: founder.phone,
       college: founder.college.name,
-      university: founder.college.university.name
+      university: founder.college.university.name,
+      supplied_reference: founder.reference
     )
 
     expect(Intercom::LevelZeroStageUpdateJob).to receive(:perform_later).with(founder, 'Signed Up')

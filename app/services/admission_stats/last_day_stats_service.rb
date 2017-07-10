@@ -1,6 +1,6 @@
 module AdmissionStats
-  class YesterdayStatsService
-    def load_stats
+  class LastDayStatsService
+    def load
       {
         'Signed Up' => signed_up,
         'Screening Completed' => screening_completed,

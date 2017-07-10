@@ -1,0 +1,7 @@
+---
+timestamp: '2017-07-10T08:06:58Z'
+title: Send the reference supplied during sign-up to Intercom
+trello: https://trello.com/c/AohPAS0o
+private: true
+description: The intercom field is named 'Supplied Reference' to avoid confusion.
+category: feature

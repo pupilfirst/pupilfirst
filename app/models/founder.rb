@@ -40,6 +40,7 @@ class Founder < ApplicationRecord
   has_many :platform_feedback
   belongs_to :user
   belongs_to :college, optional: true
+  has_one :university, through: :college
   has_one :batch_applicant
   has_one :payment, dependent: :restrict_with_error
   has_one :referral_coupon, class_name: 'Coupon', foreign_key: 'referrer_id'
@@ -379,6 +380,12 @@ class Founder < ApplicationRecord
 
   def completed_targets_count
     Targets::BulkStatusService.new(self).completed_targets_count
+  end
+
+  def self.reference_sources
+    ['Friend', 'Seniors', '#StartinCollege Event', 'Newspaper/Magazine',
+     'TV', 'SV.CO Blog', 'Instagram', 'Facebook', 'Twitter', 'Microsoft Student Partner',
+     'Other (Please Specify)']
   end
 
   private

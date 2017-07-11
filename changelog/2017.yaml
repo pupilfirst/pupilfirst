@@ -8,7 +8,7 @@ changelog:
     private: true
     description: The new admission dashboard will show cumulative data for startup
       stages, daily status for signup, signups by location and signups by reference
-    category: operations
+    category: feature
   - timestamp: '2017-07-10T08:06:58Z'
     title: Send the reference supplied during sign-up to Intercom
     trello: https://trello.com/c/AohPAS0o
@@ -27,7 +27,7 @@ changelog:
   - timestamp: '2017-07-06T08:12:17Z'
     title: Remove the glossary (define) command from Vocalist's vocabulary.
     trello: https://trello.com/c/uoEptOCp
-    private: true
+    private: false
     description: This removes the command, the glossary_terms table, and all related
       code.
   - timestamp: '2017-07-04T11:20:41Z'

@@ -1,5 +1,43 @@
 ---
 changelog:
+- timestamp: '2017-07-11T07:58:25Z'
+  changes:
+  - timestamp: '2017-07-11T07:50:28Z'
+    title: '"Modify existing Admission dashboard in admin to show relevant data"'
+    trello: https://trello.com/c/WXfstuT6
+    private: true
+    description: The new admission dashboard will show cumulative data for startup
+      stages, daily status for signup, signups by location and signups by reference
+    category: operations
+  - timestamp: '2017-07-10T08:06:58Z'
+    title: Send the reference supplied during sign-up to Intercom
+    trello: https://trello.com/c/AohPAS0o
+    private: true
+    description: The intercom field is named 'Supplied Reference' to avoid confusion.
+    category: feature
+  - timestamp: '2017-07-08T08:33:20Z'
+    title: Remove state field from MoocStudent.
+    trello: https://trello.com/c/4C1AjrNk
+    private: true
+    description: This removes the field from the table, and all its usages in code.
+  - timestamp: '2017-07-06T11:16:12Z'
+    title: Rename ReplacementUniversity to University.
+    trello: https://trello.com/c/Hsm6msa7
+    private: true
+  - timestamp: '2017-07-06T08:12:17Z'
+    title: Remove the glossary (define) command from Vocalist's vocabulary.
+    trello: https://trello.com/c/uoEptOCp
+    private: true
+    description: This removes the command, the glossary_terms table, and all related
+      code.
+  - timestamp: '2017-07-04T11:20:41Z'
+    title: Fix a bug that could cause a crash when attempting to delete timeline events
+      with feedback.
+    trello: https://trello.com/c/g1jU8Shu
+    private: false
+    description: This was caused by the foreign key on the feedback table. Presence
+      of feedback now blocks the founder from deleting events.
+    category: bugfix
 - timestamp: '2017-07-03T11:29:24Z'
   changes:
   - timestamp: '2017-07-01T12:47:45Z'

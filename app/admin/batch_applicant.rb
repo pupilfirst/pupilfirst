@@ -184,18 +184,8 @@ ActiveAdmin.register BatchApplicant do
     column :email
     column :phone
     column :gender
-
-    column :applications do |batch_applicant|
-      if batch_applicant.batch_applications.present?
-        batch_applicant.batch_applications.map do |application|
-          if application.team_lead == batch_applicant
-            "Team lead on #{application.application_round.display_name}"
-          else
-            "Cofounder on #{application.application_round.display_name}"
-          end
-        end.join(', ')
-      end
-    end
+    column :role
+    column :reference
 
     column :college do |batch_applicant|
       college = batch_applicant.college
@@ -203,14 +193,31 @@ ActiveAdmin.register BatchApplicant do
     end
 
     column :college_text
-
-    column 'Latest Application Id' do |batch_applicant|
-      batch_applicant.batch_applications.last.id
-    end
-
+    column :born_on
+    column :parent_name
+    column :current_address
     column :permanent_address
 
+    column :applications do |batch_applicant|
+      batch_applicant.batch_applications.map do |application|
+        if application.team_lead == batch_applicant
+          "Team lead on application ##{application.id}"
+        else
+          "Cofounder on application ##{application.id}"
+        end
+      end.join(', ')
+    end
+
+    column :startup do |batch_applicant|
+      admitted_application = batch_applicant.batch_applications.find { |batch_application| batch_application.startup.present? }
+
+      if admitted_application.present?
+        "Startup ##{admitted_application.startup.id} - #{admitted_application.startup.product_name}"
+      end
+    end
+
     column :created_at
+    column :updated_at
   end
 
   form do |f|

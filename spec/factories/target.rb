@@ -30,10 +30,6 @@ FactoryGirl.define do
       rubric { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf')) }
     end
 
-    trait :with_program_week do
-      target_group { TargetGroup.find_by(sort_index: group_index) || create(:target_group) }
-    end
-
     trait(:admissions_cofounder_addition) do
       key Target::KEY_ADMISSIONS_COFOUNDER_ADDITION
       role Target::ROLE_TEAM

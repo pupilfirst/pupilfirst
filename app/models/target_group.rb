@@ -1,7 +1,5 @@
 class TargetGroup < ApplicationRecord
   has_many :targets
-  belongs_to :program_week, optional: true
-  has_one :batch, through: :program_week
   belongs_to :level
 
   validates :name, presence: true
@@ -13,8 +11,6 @@ class TargetGroup < ApplicationRecord
   def display_name
     if level.present?
       "L#{level.number}: #{name}"
-    elsif program_week.present?
-      "W#{program_week.number}: #{name}"
     else
       name
     end

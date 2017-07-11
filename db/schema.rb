@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170708081824) do
+ActiveRecord::Schema.define(version: 20170711084121) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -478,16 +478,6 @@ ActiveRecord::Schema.define(version: 20170708081824) do
     t.index ["founder_id"], name: "index_platform_feedback_on_founder_id"
   end
 
-  create_table "program_weeks", id: :serial, force: :cascade do |t|
-    t.string "name"
-    t.integer "number"
-    t.string "icon_name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "batch_id"
-    t.index ["batch_id"], name: "index_program_weeks_on_batch_id"
-  end
-
   create_table "prospective_applicants", id: :serial, force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -684,12 +674,10 @@ ActiveRecord::Schema.define(version: 20170708081824) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "program_week_id"
     t.integer "sort_index"
     t.boolean "milestone"
     t.integer "level_id"
     t.index ["level_id"], name: "index_target_groups_on_level_id"
-    t.index ["program_week_id"], name: "index_target_groups_on_program_week_id"
     t.index ["sort_index"], name: "index_target_groups_on_sort_index"
   end
 

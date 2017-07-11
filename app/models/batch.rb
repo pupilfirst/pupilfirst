@@ -4,9 +4,6 @@ class Batch < ApplicationRecord
   has_many :application_rounds, dependent: :destroy
   has_many :batch_applications, through: :application_rounds
   has_many :batch_applicants, through: :batch_applications
-  has_many :program_weeks
-  has_many :target_groups, through: :program_weeks
-  has_many :targets, through: :program_weeks
 
   scope :live, -> { where('start_date <= ? and end_date >= ?', Time.now, Time.now) }
   scope :not_completed, -> { where('end_date >= ?', Time.now) }

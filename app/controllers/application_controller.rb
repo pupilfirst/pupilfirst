@@ -209,6 +209,12 @@ class ApplicationController < ActionController::Base
     }
   end
 
+  def public_s3_csp
+    {
+      media: 'https://s3.amazonaws.com/sv-co-public/'
+    }
+  end
+
   def frame_sources
     <<~FRAME_SOURCES.squish
       frame-src
@@ -250,7 +256,7 @@ class ApplicationController < ActionController::Base
 
   def media_sources
     <<~MEDIA_SOURCES.squish
-      media-src 'self' #{resource_csp[:media]} #{intercom_csp[:media]};
+      media-src 'self' #{resource_csp[:media]} #{intercom_csp[:media]} #{public_s3_csp[:media]};
     MEDIA_SOURCES
   end
 

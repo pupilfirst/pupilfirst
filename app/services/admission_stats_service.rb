@@ -1,3 +1,4 @@
+# TODO: AdmissionStatsService is broken. This should be rewritten or removed.
 class AdmissionStatsService
   attr_reader :selected_round_ids
 

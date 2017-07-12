@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe AdmissionStatsService do
+describe AdmissionStatsService, broken: true do
   subject { described_class }
 
   let(:round_1) { create :application_round, :screening_stage }

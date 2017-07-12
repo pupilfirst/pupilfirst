@@ -5,8 +5,7 @@ class Instamojo
   PAYMENT_STATUS_CREDITED = -'Credit'
   PAYMENT_STATUS_FAILED = -'Failed'
 
-  # Raised when Instamojo API fails to create a payment request. This is handled in
-  # BatchApplicationController#stage_1_submit.
+  # Raised when Instamojo API fails to create a payment request. This is handled in AdmissionsController.
   class PaymentRequestCreationFailed < StandardError; end
 
   def create_payment_request(amount:, buyer_name:, email:)

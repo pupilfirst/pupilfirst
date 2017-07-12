@@ -9,7 +9,6 @@ $(window).bind 'rails:flash', (e, params) ->
 
 select2Initializations = ->
   $('#q_product_name').select2(width: '100%');
-  $('#application_submission_batch_application_id').select2(width: '300px');
 
 # Manually link site_title logo to /admin as activeskin messes up setting config.site_title_link
 $(document).on 'page:change', ->

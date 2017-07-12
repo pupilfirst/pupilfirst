@@ -117,7 +117,6 @@ class Startup < ApplicationRecord
     end
   end
 
-  has_one :batch_application, dependent: :restrict_with_error
   has_many :timeline_events, dependent: :destroy
   has_many :startup_feedback, dependent: :destroy
   has_many :karma_points, dependent: :restrict_with_exception

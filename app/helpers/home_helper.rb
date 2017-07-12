@@ -30,7 +30,7 @@ module HomeHelper
 
   def university_count_from_applications
     Rails.cache.fetch('home/university_count', expires_in: 1.hour) do
-      University.joins(:batch_applications).distinct.count
+      University.joins(:founders).distinct.count
     end
   end
 end

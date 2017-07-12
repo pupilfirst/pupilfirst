@@ -3,8 +3,6 @@ class State < ApplicationRecord
 
   has_many :colleges
   has_many :universities
-  has_many :batch_applicants, through: :colleges
-  has_many :batch_applications, through: :batch_applicants
 
   # Special states of interest for our admission campaign
   FOCUSED_FOR_ADMISSIONS = ['Kerala', 'Andhra Pradesh', 'Telangana', 'Tamil Nadu', 'Gujarat'].freeze

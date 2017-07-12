@@ -34,6 +34,9 @@ en:
         - "Twitter"
         - "Microsoft Student Partner"
         - "Other (Please Specify)"
+  admissions:
+    register:
+      email_error: "Our email delivery service refused to accept the supplied address. Please ensure that it is a valid email address. If you're still having issues, please contact us using live chat or at help@sv.co"
   home:
     index:
       main_bleed_message_html: "SV.CO is for ambitious students who desire to learn how to build a <strong>real</strong> startup and experience <strong>Silicon Valley</strong> while still in college."
@@ -50,15 +53,6 @@ en:
       requested: Requested
       paid: Paid
       failed: Failed
-  batch_application:
-    create:
-      email_error: "Our email delivery service refused to accept the supplied address. Please ensure that it is a valid email address. If you're still having issues, please contact us using live chat or at help@sv.co"
-    general:
-      applications_close_soon_html: Applications for batch %{batch_number} will close on <strong>%{deadline}</strong>. You have <strong>%{delta}</strong> to submit your application.
-    stage_1:
-      payment_start: Pay Fees Online
-      payment_retry: Retry Payment
-      payment_skip: Proceed to Next Stage
   faculty:
     commitment:
       part_time: Part-Time

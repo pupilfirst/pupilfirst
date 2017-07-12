@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170711084121) do
+ActiveRecord::Schema.define(version: 20170712102036) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
+  enable_extension "pg_stat_statements"
 
   create_table "active_admin_comments", id: :serial, force: :cascade do |t|
     t.string "namespace"
@@ -66,115 +66,6 @@ ActiveRecord::Schema.define(version: 20170711084121) do
     t.string "value"
     t.text "hint_text"
     t.index ["quiz_question_id"], name: "index_answer_options_on_quiz_question_id"
-  end
-
-  create_table "application_rounds", id: :serial, force: :cascade do |t|
-    t.integer "batch_id"
-    t.integer "number"
-    t.datetime "campaign_start_at"
-    t.integer "target_application_count"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["batch_id"], name: "index_application_rounds_on_batch_id"
-  end
-
-  create_table "application_stages", id: :serial, force: :cascade do |t|
-    t.string "name"
-    t.integer "number"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "final_stage"
-  end
-
-  create_table "application_submission_urls", id: :serial, force: :cascade do |t|
-    t.string "name"
-    t.string "url"
-    t.integer "score"
-    t.integer "application_submission_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "admin_user_id"
-    t.index ["admin_user_id"], name: "index_application_submission_urls_on_admin_user_id"
-    t.index ["application_submission_id"], name: "index_application_submission_urls_on_application_submission_id"
-  end
-
-  create_table "application_submissions", id: :serial, force: :cascade do |t|
-    t.integer "application_stage_id"
-    t.integer "batch_application_id"
-    t.integer "score"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.text "notes"
-    t.string "file"
-    t.text "feedback_for_team"
-    t.index ["application_stage_id"], name: "index_application_submissions_on_application_stage_id"
-    t.index ["batch_application_id"], name: "index_application_submissions_on_batch_application_id"
-  end
-
-  create_table "batch_applicants", id: :serial, force: :cascade do |t|
-    t.string "name"
-    t.string "gender"
-    t.string "email"
-    t.string "phone"
-    t.string "role"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "reference", default: "Other"
-    t.text "notes"
-    t.datetime "latest_payment_at"
-    t.integer "college_id"
-    t.string "college_text"
-    t.string "fee_payment_method"
-    t.date "born_on"
-    t.string "parent_name"
-    t.text "current_address"
-    t.text "permanent_address"
-    t.string "id_proof_number"
-    t.string "id_proof"
-    t.string "address_proof"
-    t.string "id_proof_type"
-    t.string "income_proof"
-    t.string "letter_from_parent"
-    t.string "college_contact"
-    t.integer "founder_id"
-    t.integer "user_id"
-    t.index ["college_id"], name: "index_batch_applicants_on_college_id"
-    t.index ["founder_id"], name: "index_batch_applicants_on_founder_id"
-    t.index ["user_id"], name: "index_batch_applicants_on_user_id"
-  end
-
-  create_table "batch_applicants_applications", id: false, force: :cascade do |t|
-    t.integer "batch_applicant_id", null: false
-    t.integer "batch_application_id", null: false
-    t.index ["batch_applicant_id", "batch_application_id"], name: "idx_applicants_applications_on_applicant_id_and_application_id"
-    t.index ["batch_application_id", "batch_applicant_id"], name: "idx_applications_applicants_on_application_id_and_applicant_id"
-  end
-
-  create_table "batch_applications", id: :serial, force: :cascade do |t|
-    t.integer "application_stage_id"
-    t.integer "university_id"
-    t.text "team_achievement"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "team_lead_id"
-    t.string "college_text"
-    t.string "state"
-    t.integer "team_size", default: 2
-    t.datetime "swept_at"
-    t.datetime "swept_in_at"
-    t.boolean "agreements_verified", default: false
-    t.string "courier_name"
-    t.string "courier_number"
-    t.string "partnership_deed"
-    t.string "payment_reference"
-    t.integer "startup_id"
-    t.integer "application_round_id"
-    t.boolean "generate_certificate", default: false
-    t.index ["application_round_id"], name: "index_batch_applications_on_application_round_id"
-    t.index ["application_stage_id"], name: "index_batch_applications_on_application_stage_id"
-    t.index ["startup_id"], name: "index_batch_applications_on_startup_id"
-    t.index ["team_lead_id"], name: "index_batch_applications_on_team_lead_id"
-    t.index ["university_id"], name: "index_batch_applications_on_university_id"
   end
 
   create_table "batches", id: :serial, force: :cascade do |t|
@@ -438,7 +329,6 @@ ActiveRecord::Schema.define(version: 20170711084121) do
   end
 
   create_table "payments", id: :serial, force: :cascade do |t|
-    t.integer "batch_application_id"
     t.string "instamojo_payment_request_id"
     t.string "instamojo_payment_request_status"
     t.string "instamojo_payment_id"
@@ -451,17 +341,12 @@ ActiveRecord::Schema.define(version: 20170711084121) do
     t.datetime "updated_at", null: false
     t.datetime "webhook_received_at"
     t.datetime "paid_at"
-    t.integer "original_batch_application_id"
-    t.integer "batch_applicant_id"
     t.string "notes"
     t.boolean "refunded"
     t.integer "founder_id"
     t.integer "startup_id"
     t.integer "original_startup_id"
-    t.index ["batch_applicant_id"], name: "index_payments_on_batch_applicant_id"
-    t.index ["batch_application_id"], name: "index_payments_on_batch_application_id"
     t.index ["founder_id"], name: "index_payments_on_founder_id"
-    t.index ["original_batch_application_id"], name: "index_payments_on_original_batch_application_id"
     t.index ["original_startup_id"], name: "index_payments_on_original_startup_id"
     t.index ["startup_id"], name: "index_payments_on_startup_id"
   end
@@ -539,17 +424,6 @@ ActiveRecord::Schema.define(version: 20170711084121) do
     t.index ["level_id"], name: "index_resources_on_level_id"
     t.index ["slug"], name: "index_resources_on_slug"
     t.index ["startup_id"], name: "index_resources_on_startup_id"
-  end
-
-  create_table "round_stages", id: :serial, force: :cascade do |t|
-    t.integer "application_stage_id"
-    t.datetime "starts_at"
-    t.datetime "ends_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "application_round_id"
-    t.index ["application_round_id"], name: "index_round_stages_on_application_round_id"
-    t.index ["application_stage_id"], name: "index_round_stages_on_application_stage_id"
   end
 
   create_table "shortened_urls", id: :serial, force: :cascade do |t|
@@ -856,24 +730,17 @@ ActiveRecord::Schema.define(version: 20170711084121) do
   end
 
   add_foreign_key "admin_users", "users"
-  add_foreign_key "application_rounds", "batches"
-  add_foreign_key "batch_applicants", "founders"
-  add_foreign_key "batch_applicants", "users"
-  add_foreign_key "batch_applications", "application_rounds"
-  add_foreign_key "batch_applications", "startups"
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"
   add_foreign_key "connect_slots", "faculty"
   add_foreign_key "faculty", "levels"
   add_foreign_key "founders", "colleges"
   add_foreign_key "founders", "users"
-  add_foreign_key "payments", "batch_applications"
   add_foreign_key "payments", "founders"
   add_foreign_key "payments", "startups"
   add_foreign_key "payments", "startups", column: "original_startup_id"
   add_foreign_key "resources", "batches"
   add_foreign_key "resources", "levels"
-  add_foreign_key "round_stages", "application_rounds"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"
   add_foreign_key "startups", "levels"

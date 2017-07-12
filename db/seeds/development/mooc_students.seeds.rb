@@ -11,7 +11,6 @@ after 'development:states', 'development:users', 'development:colleges' do
     name: 'MOOC Student',
     college: college,
     semester: MoocStudent.valid_semester_values.sample,
-    state: State.all.sample.name,
     gender: Founder.valid_gender_values.sample,
     user: user,
     phone: '9876543210'

@@ -33,30 +33,6 @@ ActiveAdmin.register Batch do
       row :slack_channel
     end
 
-    panel 'Application Rounds' do
-      batch.application_rounds.order('number ASC').each do |application_round|
-        application_round.round_stages.joins(:application_stage).order('application_stage.number') do |round_stage|
-          attributes_table_for round_stage do
-            row :application_stage
-            row :starts_at
-            row :ends_at
-          end
-        end
-      end
-    end
-
-    panel 'Targets' do
-      batch.targets.each do |target|
-        ul do
-          li do
-            span do
-              link_to target.title, admin_target_path(target)
-            end
-          end
-        end
-      end
-    end
-
     panel 'Technical details' do
       attributes_table_for batch do
         row :id

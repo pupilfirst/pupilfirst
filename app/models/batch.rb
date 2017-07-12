@@ -5,9 +5,6 @@ class Batch < ApplicationRecord
   has_many :batch_applications, through: :application_rounds
   has_many :batch_applicants, through: :batch_applications
 
-  scope :live, -> { where('start_date <= ? and end_date >= ?', Time.now, Time.now) }
-  scope :not_completed, -> { where('end_date >= ?', Time.now) }
-
   scope :open_for_applications, lambda {
     joins(:application_rounds).merge(ApplicationRound.open_for_applications)
   }

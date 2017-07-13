@@ -8,9 +8,9 @@ setupSiliconValleyCarousel = ->
     fade: true
     responsive: [
       {
-        breakpoint: 768,
+        breakpoint: 1200,
         settings: {
-          dots: false
+          arrows: false
           fade: false
         }
       }

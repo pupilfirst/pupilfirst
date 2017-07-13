@@ -19,281 +19,309 @@
 
 - content_for :header
 
-.big-container
-  .home-hero__container
-    .home-hero__message-wrapper.text-xs-center
+section.home-hero__container
+  .home-hero__message-wrapper.text-xs-center
+    .container
       .home-hero__message-title
         h1.home-hero__message-title-head
           ' Immersive Learning Experience to Build
           .font-semibold
             | Campus Startups
         .p-t-1
-          = link_to 'Apply Now', apply_path, class: 'btn btn-primary btn-lg home-apply-btn'
+          = link_to 'Apply Now', apply_path, class: 'btn btn-primary btn-lg home-apply__button'
 
-    = video_tag 'https://s3.amazonaws.com/sv-co-public/videos/header_background_clip.mp4', preload: 'none', autoplay: true, loop: true, class: 'hidden-sm-down home-hero__video'
+  = video_tag 'https://s3.amazonaws.com/sv-co-public/videos/header_background_clip.mp4', preload: 'none', autoplay: true, loop: true, class: 'hidden-sm-down home-hero__video'
 
-  section.sixways-container
-    .container
-      .home-section__head.m-t-3.m-b-2
-        h3.home-section__head-title.text-xs-center.font-black
-          | 6 Different ways to Establish your Career
-        .home-section__head-subtitle.m-x-auto
-          p.text-xs-center
-            ' SV.CO Startup founders start early in college to gain professional
-            | startup skills and explore graduation options during their final year
+section.home-partners__container.p-y-2.hidden-sm-down
+  .container.home-partners__box
+    .col-md-2
+      = image_tag 'home/index/sv-partner-facebook.svg', class: 'img-fluid m-x-auto home-partners__logo home-partners__logo--facebook'
 
-      .col-md-4
-        .six-ways-card.m-y-1
-          .six-ways-card__thumbnail
-            = image_tag 'home/index/graduation-video-thumbnail-1.png', class: 'img-fluid six-ways-card__thumbnail-image'
+    .col-md-2
+      = image_tag 'home/index/sv-partner-us-embassy.png', class: 'img-fluid m-x-auto home-partners__logo home-partners__logo--us-embassy'
 
-            h3.six-ways-card__thumbnail-text.font-regular.text-xs-center
+    .col-md-2
+      = image_tag 'home/index/sv-partner-freshworks.svg', class: 'img-fluid m-x-auto home-partners__logo home-partners__logo--freshworks'
+
+    .col-md-2
+      = image_tag 'home/index/sv-partner-ksum.png', class: 'img-fluid m-x-auto home-partners__logo home-partners__logo--ksum'
+
+    .col-md-2
+      = image_tag 'home/index/sv-partner-paytm.svg', class: 'img-fluid m-x-auto home-partners__logo home-partners__logo--paytm'
+
+    .col-md-2
+      = image_tag 'home/index/sv-partner-microsoft-ventures.png', class: 'img-fluid m-x-auto home-partners__logo home-partners__logo--ms-ventures'
+
+section.six-ways-card__container.p-y-3
+  .container
+    .home-section__head.m-b-2
+      h3.home-section__head-title.text-xs-center.font-black
+        | 6 Different ways to Establish your Career
+      .home-section__head-subtitle.m-x-auto
+        p.text-xs-center
+          ' SV.CO Startup founders start early in college to gain professional
+          | startup skills and explore graduation options during their final year
+
+    .col-md-4
+      a.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#itraveller-story-video"
+        .six-ways-card__thumbnail
+          = image_tag 'home/index/itraveller-story.jpg', class: 'img-fluid six-ways-card__thumbnail-image'
+
+          h3.six-ways-card__thumbnail-text.font-regular
+            span.six-ways-card__thumbnail-text--small
               ' Get Funded for Your
-              br
-              | Startups
+            br
+            | Startups
+        .six-ways-card__story-detail.clearfix
+          .six-ways-card__story-title.pull-xs-left
+            | Story of iTraveller
+          .six-ways-card__play-button-container
+            .six-ways-card__play-button.pull-xs-right
 
-          .six-ways-card__story-detail.clearfix
-              a.six-ways-card__story-title.pull-xs-left href="#" data-toggle="modal" data-target="#graduatesVideo-1"
-               | Story of iTraveller
-              .six-ways-card__play-button-container
-                a.six-ways-card__play-button.pull-xs-right href="#" data-toggle="modal" data-target="#graduatesVideo-1"
+    .col-md-4
+      a.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#profoundis-story-video"
+        .six-ways-card__thumbnail
+          = image_tag 'home/index/profoundis-story.jpg', class: 'img-fluid six-ways-card__thumbnail-image'
 
-      .col-md-4
-        .six-ways-card.m-y-1
-          .six-ways-card__thumbnail
-            = image_tag 'home/index/graduation-video-thumbnail-1.png', class: 'img-fluid six-ways-card__thumbnail-image'
+          h3.six-ways-card__thumbnail-text.font-regular
+            span.six-ways-card__thumbnail-text--small
+              ' Join a
+            br
+            | Startup Accelerator
 
-            h3.six-ways-card__thumbnail-text.font-regular.text-xs-center
-              ' Join a Startup
-              br
-              | Accelerator
+        .six-ways-card__story-detail.clearfix
+          .six-ways-card__story-title.pull-xs-left
+            | Story of Profoundis
+          .six-ways-card__play-button-container
+            .six-ways-card__play-button.pull-xs-right
 
-          .six-ways-card__story-detail.clearfix
-              a.six-ways-card__story-title.pull-xs-left href="#" data-toggle="modal" data-target="#graduatesVideo-1"
-               | Story of iTraveller
-              .six-ways-card__play-button-container
-                a.six-ways-card__play-button.pull-xs-right href="#" data-toggle="modal" data-target="#graduatesVideo-1"
+    .col-md-4
+      a.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#z-pay-story-video"
+        .six-ways-card__thumbnail
+          = image_tag 'home/index/z-pay.jpg', class: 'img-fluid six-ways-card__thumbnail-image'
 
-      .col-md-4
-        .six-ways-card.m-y-1
-          .six-ways-card__thumbnail
-            = image_tag 'home/index/graduation-video-thumbnail-1.png', class: 'img-fluid six-ways-card__thumbnail-image'
-
-            h3.six-ways-card__thumbnail-text.font-regular.text-xs-center
+          h3.six-ways-card__thumbnail-text.font-regular
+            span.six-ways-card__thumbnail-text--small
               ' Get Aqui-Hired
-              br
-              | as a Team
+            br
+            | as a Team
 
-          .six-ways-card__story-detail.clearfix
-              a.six-ways-card__story-title.pull-xs-left href="#" data-toggle="modal" data-target="#graduatesVideo-1"
-               | Story of iTraveller
-              .six-ways-card__play-button-container
-                a.six-ways-card__play-button.pull-xs-right href="#" data-toggle="modal" data-target="#graduatesVideo-1"
+        .six-ways-card__story-detail.clearfix
+          .six-ways-card__story-title.pull-xs-left
+            | Z-pay Acquihired by Tally
+          .six-ways-card__play-button-container
+            .six-ways-card__play-button.pull-xs-right
 
-      .col-md-4
-        .six-ways-card.m-y-1
-          .six-ways-card__thumbnail
-            = image_tag 'home/index/graduation-video-thumbnail-1.png', class: 'img-fluid six-ways-card__thumbnail-image'
+    .col-md-4
+      a.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#hiring-story-video"
+        .six-ways-card__thumbnail
+          = image_tag 'home/index/hiring-story.jpg', class: 'img-fluid six-ways-card__thumbnail-image'
 
-            h3.six-ways-card__thumbnail-text.font-regular.text-xs-center
+          h3.six-ways-card__thumbnail-text.font-regular
+            span.six-ways-card__thumbnail-text--small
               ' Get Hired in a Startup
-              br
-              | with Better Skills
+            br
+            | with Better Skills
 
-          .six-ways-card__story-detail.clearfix
-              a.six-ways-card__story-title.pull-xs-left href="#" data-toggle="modal" data-target="#graduatesVideo-1"
-               | Story of iTraveller
-              .six-ways-card__play-button-container
-                a.six-ways-card__play-button.pull-xs-right href="#" data-toggle="modal" data-target="#graduatesVideo-1"
+        .six-ways-card__story-detail.clearfix
+          .six-ways-card__story-title.pull-xs-left
+            | Hiring at SV.CO
+          .six-ways-card__play-button-container
+            .six-ways-card__play-button.pull-xs-right
 
-      .col-md-4
-        .six-ways-card.m-y-1
-          .six-ways-card__thumbnail
-            = image_tag 'home/index/graduation-video-thumbnail-1.png', class: 'img-fluid six-ways-card__thumbnail-image'
+    .col-md-4
+      a.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#wowmakers-story-video"
+        .six-ways-card__thumbnail
+          = image_tag 'home/index/wowmakers-story.jpg', class: 'img-fluid six-ways-card__thumbnail-image'
 
-            h3.six-ways-card__thumbnail-text.font-regular.text-xs-center
-              ' Run a Self
-              br
-              | Sustainable Startup
+          h3.six-ways-card__thumbnail-text.font-regular
+            span.six-ways-card__thumbnail-text--small
+              ' Run a
+            br
+            | Self Sustainable Startup
 
-          .six-ways-card__story-detail.clearfix
-              a.six-ways-card__story-title.pull-xs-left href="#" data-toggle="modal" data-target="#graduatesVideo-1"
-               | Story of iTraveller
-              .six-ways-card__play-button-container
-                a.six-ways-card__play-button.pull-xs-right href="#" data-toggle="modal" data-target="#graduatesVideo-1"
+        .six-ways-card__story-detail.clearfix
+          .six-ways-card__story-title.pull-xs-left
+            | Story of Wowmakers
+          .six-ways-card__play-button-container
+            .six-ways-card__play-button.pull-xs-right
 
-      .col-md-4
-        .six-ways-card.m-y-1
-          .six-ways-card__thumbnail
-            = image_tag 'home/index/graduation-video-thumbnail-1.png', class: 'img-fluid six-ways-card__thumbnail-image'
+    .col-md-4
+      a.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#higher-studies-story-video"
+        .six-ways-card__thumbnail
+          = image_tag 'home/index/higher-studies.jpg', class: 'img-fluid six-ways-card__thumbnail-image'
 
-            h3.six-ways-card__thumbnail-text.font-regular.text-xs-center
+          h3.six-ways-card__thumbnail-text.font-regular
+            span.six-ways-card__thumbnail-text--small
               ' Go for Higher Studies
-              br
-              | with Stronger Resume
+            br
+            | with Stronger Resume
 
-          .six-ways-card__story-detail.clearfix
-              a.six-ways-card__story-title.pull-xs-left href="#" data-toggle="modal" data-target="#graduatesVideo-1"
-               | Story of iTraveller
-              .six-ways-card__play-button-container
-                a.six-ways-card__play-button.pull-xs-right href="#" data-toggle="modal" data-target="#graduatesVideo-1"
+        .six-ways-card__story-detail.clearfix
+          .six-ways-card__story-title.pull-xs-left
+            | Access to Global Universities
+          .six-ways-card__play-button-container
+            .six-ways-card__play-button.pull-xs-right
 
-      .text-xs-center.m-y-2
-        = link_to 'Learn More', apply_path, class: 'btn btn-primary btn-lg text-uppercase'
+  .container
+    .text-xs-center.m-t-2
+      = link_to 'Learn More', apply_path, class: 'btn btn-primary btn-lg home-apply__button'
 
-  section.program-feature-container
-    .container
-      .home-section__head.m-t-3.m-b-2
-        h3.home-section__head-title.text-xs-center.font-black
-          | Programme Designed Exclusively for YOU
-        .home-section__head-subtitle.m-x-auto
-          p.text-xs-center
-            ' The programme is exclusively for software startups which can be built while you
-            | are in college and the platform enables you to learn from wherever you are.
-
+section.program-feature__container.p-y-3
+  .container
+    .home-section__head.m-b-2
+      h3.home-section__head-title.text-xs-center.font-black
+        | Programme Designed Exclusively for YOU
+      .home-section__head-subtitle.m-x-auto
+        p.text-xs-center
+          ' The programme is exclusively for software startups which can be built while you
+          | are in college and the platform enables you to learn from wherever you are.
+    .program-feature__box
       .col-md-7
         .row
           .col-md-6
-            .program-feature-card
-              = image_tag 'home/index/graduation-video-thumbnail-1.png', class: 'img-fluid'
-              .program-feature-card__title
-                h3.program-feature-card__title-text.font-regular
+            a.program-feature__card href="#{apply_path}"
+              = image_tag 'home/index/learn-from-experts.jpg', class: 'img-fluid'
+              .program-feature__card-title
+                h3.program-feature__card-title-text.font-regular
                   ' Learn from experts
                   br
                   | across the world
 
-                = link_to 'Learn More', apply_path, class: 'program-feature-card__title-link'
+                p.program-feature__card-title-link
+                  | Learn More
 
           .col-md-6
-            .program-feature-card
-              = image_tag 'home/index/graduation-video-thumbnail-1.png', class: 'img-fluid'
-              .program-feature-card__title
-                h3.program-feature-card__title-text.font-regular
-                  ' Build a Startup
+            a.program-feature__card href="#{apply_path}"
+              = image_tag 'home/index/stratup-with-friends.jpg', class: 'img-fluid'
+              .program-feature__card-title
+                h3.program-feature__card-title-text.font-regular
+                  ' Build a startup
                   br
                   | with your friends
 
-                = link_to 'Learn More', apply_path, class: 'program-feature-card__title-link'
+                p.program-feature__card-title-link
+                  | Learn More
+
           .col-md-6
-            .program-feature-card
-              = image_tag 'home/index/graduation-video-thumbnail-1.png', class: 'img-fluid'
-              .program-feature-card__title
-                h3.program-feature-card__title-text.font-regular
+            a.program-feature__card href="#{apply_path}"
+              = image_tag 'home/index/showcase-skills.jpg', class: 'img-fluid'
+              .program-feature__card-title
+                h3.program-feature__card-title-text.font-regular
                   ' Showcase your skills at
                   br
                   | SV.CO events
 
-                = link_to 'Learn More', apply_path, class: 'program-feature-card__title-link'
+                p.program-feature__card-title-link
+                  | Learn More
+
           .col-md-6
-            .program-feature-card
-              = image_tag 'home/index/graduation-video-thumbnail-1.png', class: 'img-fluid'
-              .program-feature-card__title
-                h3.program-feature-card__title-text.font-regular
+            a.program-feature__card href="#{apply_path}"
+              = image_tag 'home/index/idea-pool.jpg', class: 'img-fluid'
+              .program-feature__card-title
+                h3.program-feature__card-title-text.font-regular
                   ' Choose from a pool of
                   br
                   | ideas if you don’t have one
 
-                = link_to 'Learn More', apply_path, class: 'program-feature-card__title-link'
+                p.program-feature__card-title-link
+                  | Learn More
 
-      .col-md-5.p-r-0
-        .program-feature-card
-          = image_tag 'home/index/graduation-video-thumbnail-1.png', class: 'img-fluid'
-          .program-feature-card__title
-            h3.program-feature-card__title-text.font-regular
-              ' Learn
+      .col-md-5
+        a.program-feature__card href="#{apply_path}"
+          = image_tag 'home/index/start-in-college.jpg', class: 'program-feature__college-img'
+          .program-feature__card-title
+            h3.program-feature__card-title-text.program-feature__card-title-text--big.font-regular
+              span.program-feature__card-title-text--big-highlight.font-semibold
+                ' Learn
               br
-              ' wherever you are
-              br
-              ' alongside your
+              ' wherever you are alongside your
               br
               | college degree
 
-            = link_to 'Learn More', apply_path, class: 'program-feature-card__title-link'
+            p.program-feature__card-title-link
+              | Learn More
 
-    .container
-      .text-xs-center.m-y-2
-        = link_to 'Learn More', apply_path, class: 'btn btn-primary btn-lg text-uppercase'
+  .container
+    .text-xs-center.m-t-2
+      = link_to 'Learn More', apply_path, class: 'btn btn-primary btn-lg home-apply__button'
 
-  section.silicon-valley-itinerary-container
-    .container
-      .home-section__head.m-b-2
-        h3.home-section__head-title.text-xs-center.font-black
-          | Spend your summer in Silicon Valley, USA
-        .home-section__head-subtitle.m-x-auto
-          p.text-xs-center
-            ' We recently flew India’s largest delegation of startups to Silicon
-            ' Valley for one week. Our vision is to take a delegation of 250
-            | startups on a Flight of Dreams for a period of two weeks.
+section.silicon-valley-itinerary__container.p-y-3
+  .container
+    .home-section__head.m-b-2
+      h3.home-section__head-title.text-xs-center.font-black
+        | Spend your summer in Silicon Valley, USA
+      .home-section__head-subtitle.m-x-auto
+        p.text-xs-center
+          ' We recently flew India’s largest delegation of startups to Silicon
+          ' Valley for one week. Our vision is to take a delegation of 250
+          | startups on a Flight of Dreams for a period of two weeks.
 
-      .silicon-valley-itinerary__slider.m-x-auto
-        .silicon-valley-itinerary__slider-item.m-x-auto
-          = image_tag 'home/index/day1-svtosv.png', class: 'm-x-auto silicon-valley-itinerary__image img-fluid'
-        .silicon-valley-itinerary__slider-item.m-x-auto
-          = image_tag 'home/index/day1-svtosv.png', class: 'm-x-auto silicon-valley-itinerary__image img-fluid'
-        .silicon-valley-itinerary__slider-item.m-x-auto
-          = image_tag 'home/index/day1-svtosv.png', class: 'm-x-auto silicon-valley-itinerary__image img-fluid  '
+    .silicon-valley-itinerary__slider.m-x-auto
+      .silicon-valley-itinerary__slider-item.m-x-auto
+        = image_tag 'home/index/day1-svtosv.png', class: 'm-x-auto silicon-valley-itinerary__image img-fluid'
+      .silicon-valley-itinerary__slider-item.m-x-auto
+        = image_tag 'home/index/day2-svtosv.png', class: 'm-x-auto silicon-valley-itinerary__image img-fluid'
+      .silicon-valley-itinerary__slider-item.m-x-auto
+        = image_tag 'home/index/day3-svtosv.png', class: 'm-x-auto silicon-valley-itinerary__image img-fluid'
+      .silicon-valley-itinerary__slider-item.m-x-auto
+        = image_tag 'home/index/day4-svtosv.png', class: 'm-x-auto silicon-valley-itinerary__image img-fluid'
+      .silicon-valley-itinerary__slider-item.m-x-auto
+        = image_tag 'home/index/day5-svtosv.png', class: 'm-x-auto silicon-valley-itinerary__image img-fluid'
+      .silicon-valley-itinerary__slider-item.m-x-auto
+        = image_tag 'home/index/day6-svtosv.png', class: 'm-x-auto silicon-valley-itinerary__image img-fluid'
 
-  section.home-testimonial-container
-    .container
-      .home-section__head.m-b-2
-        h3.home-section__head-title.text-xs-center.font-black
-          | Time to make your parents REALLY proud
+section.home-testimonial__container.p-y-3
+  .container
+    .home-section__head.m-b-2
+      h3.home-section__head-title.text-xs-center.font-black
+        | Time to make your parents REALLY proud
 
-      .home-testimonial-box.clearfix.m-x-auto
-        .home-testimonial-image.col-md-4.p-a-0
-          = image_tag 'home/index/suraj-family.png', class: 'img-fluid'
-        .home-testimonial-text.col-md-8
-          p.font-light
-            ' “I was really worried when he said he wanted to do a startup in his college.
-            ' I thought college was all about grades, attendance but then when I see him
-            ' code all the day in his room and ask money for his company and not for shopping.
-            ' It feels really great. When he told me about his experience in Silicon Valley,
-            | he seems to have a lot of fun doing that.”
-          p
-            ' &ndash; Subbalakshmi Rajan
-            | (Suraj Rajan’s Mother)
+    .home-testimonial__box.clearfix.m-x-auto
+      .home-testimonial__image-container.col-md-4.p-a-0
+        = image_tag 'home/index/suraj-family.png', class: 'img-fluid m-x-auto home-testimonial__image'
+      .home-testimonial__text.col-md-8
+        p
+          ' “I was really worried when he said he wanted to do a startup in his college.
+          ' I thought college was all about grades, attendance but then when I see him
+          ' code all the day in his room and ask money for his company and not for shopping.
+          ' It feels really great. When he told me about his experience in Silicon Valley,
+          | he seems to have a lot of fun doing that.”
+        p.font-semibold.p-t-1
+          ' &ndash; Subbalakshmi Rajan
+          .font-regular.home-testimonial__text--author-sub
+            | (Suraj Rajan&rsquo;s Mother)
 
-  section.home-call-to-action-container
-    .container
-      .home-call-to-action__box.text-xs-center.p-t-3.p-b-2
-        h3.home-section__head-title.home-call-to-action__head.font-black Ready to be a part of the SV.CO experience?
-        p.home-call-to-action__sub-head Get started by submitting an application today.
+section.home-call-to-action__container.p-y-3
+  .container
+    .home-call-to-action__box.text-xs-center
+      h3.home-section__head-title.home-call-to-action__head.font-black Ready to be a part of the SV.CO experience?
+      p.home-call-to-action__sub-head Get started by submitting an application today.
 
-        .text-xs-center.m-y-2
-          = link_to 'Apply Now', apply_path, class: 'btn btn-primary btn-lg home-call-to-action__button'
+      .text-xs-center.m-t-1
+        = link_to 'Apply Now', apply_path, class: 'btn btn-primary btn-lg home-call-to-action__button'
 
+== render 'layouts/footer_v2'
 
-
-  == render 'layouts/footer_v2'
-
-#graduatesVideo-1.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
+#itraveller-story-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
     .modal-content
       .modal-header
         button.close aria-label="Close" data-dismiss="modal" type="button"
           span aria-hidden="true" &times;
       .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/AzABLPISPQU" frameborder="0" allowfullscreen="allowfullscreen"
+        iframe.video-frame src="https://www.youtube.com/embed/KufIL6ZS1lk" frameborder="0" allowfullscreen="allowfullscreen"
 
-#graduatesVideo-2.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
+#profoundis-story-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
     .modal-content
       .modal-header
         button.close aria-label="Close" data-dismiss="modal" type="button"
           span aria-hidden="true" &times;
       .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/k13C6C_MzCE" frameborder="0" allowfullscreen="allowfullscreen"
+        iframe.video-frame src="https://www.youtube.com/embed/vjDdSdfitKY" frameborder="0" allowfullscreen="allowfullscreen"
 
-#graduatesVideo-3.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-      .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/xBaaBVlK5Ws" frameborder="0" allowfullscreen="allowfullscreen"
-
-#graduatesVideo-4.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
+#z-pay-story-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
     .modal-content
       .modal-header
@@ -302,7 +330,7 @@
       .modal-body
         iframe.video-frame src="https://www.youtube.com/embed/pwmVitwaeL0" frameborder="0" allowfullscreen="allowfullscreen"
 
-#graduatesVideo-5.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
+#hiring-story-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
     .modal-content
       .modal-header
@@ -311,38 +339,20 @@
       .modal-body
         iframe.video-frame src="https://www.youtube.com/embed/XBjkCUW1lFQ" frameborder="0" allowfullscreen="allowfullscreen"
 
-#graduatesVideo-6.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
+#wowmakers-story-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
     .modal-content
       .modal-header
         button.close aria-label="Close" data-dismiss="modal" type="button"
           span aria-hidden="true" &times;
       .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/AaoW1W7wZLk" frameborder="0" allowfullscreen="allowfullscreen"
+        iframe.video-frame src="https://www.youtube.com/embed/R8LhGtoeaUc" frameborder="0" allowfullscreen="allowfullscreen"
 
-#graduatesVideo-7.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
+#higher-studies-story-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
     .modal-content
       .modal-header
         button.close aria-label="Close" data-dismiss="modal" type="button"
           span aria-hidden="true" &times;
       .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/ut-J7cuQpzI" frameborder="0" allowfullscreen="allowfullscreen"
-
-#graduatesVideo-8.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-      .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/z2e5o5ftgRc" frameborder="0" allowfullscreen="allowfullscreen"
-
-#graduatesVideo-9.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-      .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/qEZ1RamKt6k" frameborder="0" allowfullscreen="allowfullscreen"
+        iframe.video-frame src="https://www.youtube.com/embed/BxPH9XyQRsM" frameborder="0" allowfullscreen="allowfullscreen"

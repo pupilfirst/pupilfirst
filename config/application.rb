@@ -42,13 +42,5 @@ module Svapp
     %w[presenters services forms/concerns].each do |folder|
       config.autoload_paths.push(Rails.root.join('app', folder))
     end
-
-    # Add the rack-cors middleware to serve CORS header for static assets
-    config.middleware.insert_before 0, Rack::Cors do
-      allow do
-        origins %w[https://www.sv.co https://sv.co]
-        resource '*'
-      end
-    end
   end
 end

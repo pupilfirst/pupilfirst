@@ -117,6 +117,14 @@ Rails.application.configure do
   # Postmark
   config.action_mailer.delivery_method = :postmark
   config.action_mailer.postmark_settings = { api_token: ENV['POSTMARK_API_TOKEN'] }
+
+  # Add the rack-cors middleware to serve CORS header for static assets
+  config.middleware.insert_before 0, Rack::Cors do
+    allow do
+      origins %w[https://www.sv.co https://sv.co]
+      resource '*'
+    end
+  end
 end
 
 Rails.application.default_url_options = Rails.application.config.action_mailer.default_url_options

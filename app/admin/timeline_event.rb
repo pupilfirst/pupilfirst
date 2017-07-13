@@ -27,8 +27,8 @@ ActiveAdmin.register TimelineEvent do
 
   scope :from_admitted_startups, default: true
   scope :from_level_0_startups
+  scope('Not Improved') { |scope| scope.needs_improvement.not_improved }
   scope :all
-  scope :not_improved
 
   config.sort_order = 'updated_at_desc'
 

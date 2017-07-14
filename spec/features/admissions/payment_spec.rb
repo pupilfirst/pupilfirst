@@ -45,10 +45,11 @@ feature 'Admission Fee Payment' do
     before do
       complete_target founder, screening_target
       complete_target founder, cofounder_addition_target
-      visit admissions_fee_path
     end
 
     scenario 'He completes payment without applying any coupon' do
+      visit admissions_fee_path
+
       # he will be asked to pay the full amount
       expect(page).to have_content('Team membership fee is Rs. 1000')
       click_on 'Pay Now'
@@ -78,6 +79,8 @@ feature 'Admission Fee Payment' do
     end
 
     scenario 'He completes payment applying a referral coupon' do
+      visit admissions_fee_path
+
       # page should have coupon form
       expect(page).to have_content('Have a discount coupon?')
 
@@ -118,6 +121,17 @@ feature 'Admission Fee Payment' do
       # the coupon must be now marked redeemed for the startup
       coupon_usage = CouponUsage.where(coupon: coupon, startup: startup).last
       expect(coupon_usage.redeemed_at).to_not eq(nil)
+    end
+
+    context 'when there are confirmed and unconfirmed founders' do
+      let!(:confirmed_founder) { create :founder, startup: startup }
+      let!(:unconfirmed_founder) { create :founder, invited_startup: startup }
+
+      scenario 'logged in founder needs to pay for both confirmed and unconfirmed founders' do
+        visit admissions_fee_path
+
+        expect(page).to have_content('Team membership fee is Rs. 3000')
+      end
     end
   end
 

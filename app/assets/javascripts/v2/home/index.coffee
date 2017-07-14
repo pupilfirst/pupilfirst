@@ -21,18 +21,11 @@ stopVideosOnModalClose = ->
     modalIframe = $(event.target).find('iframe')
     modalIframe.attr 'src', modalIframe.attr('src')
 
-showInstagramImageOverlays = ->
-  $('.instagram-overlay').hover ->
-    $(this).addClass('overlay-enabled')
-  , ->
-    $(this).removeClass('overlay-enabled')
-
 scrollmeDownIcon = ->
   $('.icon-scroll').click (e) ->
     e.preventDefault()
     $('html, body').animate
       scrollTop: $($.attr(this, 'href')).offset().top, 500
 
-$(document).on 'page:change', showInstagramImageOverlays
 $(document).on 'page:change', scrollmeDownIcon
 $(document).on 'page:change', setupSiliconValleyCarousel

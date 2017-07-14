@@ -5,7 +5,6 @@ class HomeController < ApplicationController
     @skip_container = true
     @sitewide_notice = true if %w[startupvillage.in].include?(params[:redirect_from])
     @hide_nav_links = false
-    @instagram_images = Instagram.load_latest_images
 
     render layout: 'home'
   end

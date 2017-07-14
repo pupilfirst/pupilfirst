@@ -15,7 +15,7 @@ feature 'Admission Fee Payment' do
   let!(:tet_team_update) { create :timeline_event_type, :team_update }
   let(:referrer_founder) { create :founder }
   let(:coupon) { create :coupon, referrer: referrer_founder }
-  let(:sample_payment) { create :payment, amount: 1000 }
+  let(:sample_payment) { create :payment, amount: 500 }
 
   before do
     sign_in_user founder.user
@@ -36,7 +36,7 @@ feature 'Admission Fee Payment' do
       visit admissions_fee_path
 
       # successfully shows the founder the payment page
-      expect(page).to have_content('You now need to pay the registration fee.')
+      expect(page).to have_content('You now need to pay the program fee.')
     end
   end
 
@@ -50,7 +50,7 @@ feature 'Admission Fee Payment' do
 
     scenario 'He completes payment without applying any coupon' do
       # he will be asked to pay the full amount
-      expect(page).to have_content('You need to pay Rs. 3000')
+      expect(page).to have_content('Team membership fee is Rs. 1000')
       click_on 'Pay Now'
 
       # he must be re-directed to the payment's long_url.
@@ -59,7 +59,7 @@ feature 'Admission Fee Payment' do
       payment = Payment.last
       # his startup should now have a payment with the right amount
       expect(payment.startup).to eq(startup)
-      expect(payment.amount).to eq(3000)
+      expect(payment.amount).to eq(1000.0)
 
       # mimic a successful payment
       payment.update!(
@@ -89,20 +89,20 @@ feature 'Admission Fee Payment' do
       # he removes the applied coupon
       click_button 'Remove'
       expect(page).to have_content('Have a discount coupon?')
-      expect(page).to have_content('You need to pay Rs. 3000')
+      expect(page).to have_content('Team membership fee is Rs. 1000')
 
       # he applies it back :)
       fill_in 'admissions_coupon_code', with: coupon.code
       click_button 'Apply Code'
 
       # He should be shown the discounted amount. The original amount is crossed out (not detected by this test).
-      expect(page).to have_content('You need to pay Rs. 3000 Rs. 2250 to proceed.')
+      expect(page).to have_content('Team membership fee is Rs. 1000 Rs. 750.')
 
       click_on 'Pay Now'
 
       # payment created should be for the discounted amount
       payment = Payment.last
-      expect(payment.amount).to eq(2250.0)
+      expect(payment.amount).to eq(750.0)
 
       # the ReferralRewardService will be called later
       expect_any_instance_of(Founders::ReferralRewardService).to receive(:execute)
@@ -134,7 +134,7 @@ feature 'Admission Fee Payment' do
 
     scenario 'Founder resubmits the payment form' do
       # he issues a new payment request
-      expect(page).to have_content('You need to pay Rs. 3000')
+      expect(page).to have_content('Team membership fee is Rs. 1000')
       click_on 'Pay Now'
       expect(page).to have_content("redirected to: #{long_url}")
 

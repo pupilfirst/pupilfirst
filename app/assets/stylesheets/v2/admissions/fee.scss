@@ -42,3 +42,10 @@
   margin-right: 6px;
   background-color: lighten($light-secondary, 40%);
 }
+
+.admissions-fee__important-points {
+  list-style-type: none;
+  text-align: center;
+  padding: 0;
+  font-size: 110%;
+}

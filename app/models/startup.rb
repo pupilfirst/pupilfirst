@@ -40,7 +40,6 @@ class Startup < ApplicationRecord
   # agreement duration in years
   AGREEMENT_DURATION = 5
 
-  APPLICATION_FEE = 3000
   COURSE_FEE = 50_000
 
   def self.valid_product_progress_values
@@ -429,16 +428,24 @@ class Startup < ApplicationRecord
     Level.where(number: 1..(level.number - 1))
   end
 
+  def billing_founders_count
+    @billing_founders_count ||= founders.count + invited_founders.count
+  end
+
   def fee
-    latest_coupon.present? ? discounted_fee : APPLICATION_FEE
+    if latest_coupon.present?
+      (undiscounted_fee * (1 - (latest_coupon.discount_percentage.to_f / 100))).round
+    else
+      undiscounted_fee
+    end
+  end
+
+  def undiscounted_fee
+    @undiscounted_fee ||= Founder::FEE * billing_founders_count
   end
 
   def latest_coupon
     coupons&.last
-  end
-
-  def discounted_fee
-    (APPLICATION_FEE * (1 - (latest_coupon.discount_percentage.to_f / 100))).round
   end
 
   def present_week_number

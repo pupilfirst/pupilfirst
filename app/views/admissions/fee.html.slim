@@ -7,14 +7,21 @@
 .secondary-banner
   .container
     .application-stages-head.text-xs-center
-      h1 Registration Fee
+      h1 Program Fee
       h4.m-x-auto Payment pending
 .container
   .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
     .content-box.m-t-3.m-b-3.apply-submitted
-      h3.text-xs-center.m-b-2
+      h3.text-xs-center.m-b-1
         ' You now need to
-        span.brand-secondary.font-semibold pay the registration fee.
+        span.brand-secondary.font-semibold pay the program fee.&nbsp;
+      ul.admissions-fee__important-points.m-b-2
+        li
+          strong Please note the following important points!
+        li The fee is for a <strong>one-month subscription</strong> to the SV.CO program.
+        li It covers your team of <strong>#{current_startup.billing_founders_count} founders</strong>.
+        li You will not be able to change the number of team members after payment.
+        li After payment, you will need to contact the SV.CO team to alter your team.
 
       - if current_startup.payment.present?
         .alert.alert-warning.m-t-1
@@ -71,14 +78,12 @@
                         - payment_button_text = 'Skip Payment'
                         ' Hurray! You can now proceed without any payment.
                       - else
-                        ' You need to pay
-                        - if current_startup.fee < Startup::APPLICATION_FEE
-                          del
-                            ' Rs. #{Startup::APPLICATION_FEE}
-
-                        span.brand-secondary.font-semibold
-                          ' Rs. #{current_startup.fee}
+                        ' Team membership fee is
+                        - if current_startup.undiscounted_fee != current_startup.fee
+                          del Rs. #{current_startup.undiscounted_fee}
+                        span.brand-secondary.font-semibold &nbsp;Rs. #{current_startup.fee}.
                         br
-                        | to proceed.
+                        br
+                        | Please pay the first month&rsquo;s fee.
 
                     = f.submit payment_button_text, class: 'btn btn-primary btn-md text-uppercase', id: 'pay-now-button'

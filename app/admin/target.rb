@@ -104,7 +104,6 @@ ActiveAdmin.register Target do
         end
       end
 
-      row :batch
       row :target_group
       row :sort_index
       row :target_type

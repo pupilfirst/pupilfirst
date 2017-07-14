@@ -6,226 +6,438 @@
 
 #admissions__apply
 
-.container
-  .row.application-process
-    .col-lg-8.col-md-12
-      - if current_user&.founder&.startup.present?
-        .card.content-box.notice-with-link.m-t-2.m-b-0
-          .notice.strong-notice
-            ' You have already completed registration.
-          .link
-            = link_to 'Go to Dashboard', dashboard_founder_path, class: 'btn btn-primary btn-md text-uppercase'
-      - elsif current_user.blank?
-        .card.content-box.notice-with-link.m-t-2.m-b-0
-          .notice.strong-notice
-            ' Are you a registered founder?
-          .link
-            = link_to 'Sign In to Continue', new_user_session_path(referer: apply_path), class: 'btn btn-primary btn-md text-uppercase', rel: 'nofollow'
+section.apply-hero__banner
+  .apply-hero__message-container.text-xs-center
+    .container
+      h1.apply-hero__message-text.font-black
+        .apply-hero__message-text--small Welcome to
+        | SV.CO School of SaaS
+      p
+        | Learn to build software products and gain professional startup skills
 
-      .application-process-left.content-box.m-t-2.m-b-2.p-b-0
-        .school-of-saas__section.clearfix
-          h2
-            ' <strong>Build your first Internet Startup</strong>
+      .p-t-1
+        = link_to 'Start Now', apply_path, class: 'btn btn-primary btn-lg home-apply__button'
 
-          p.school-of-saas__section--text
-            ' Keen to startup while in college? Thereʼs no reason you shouldnʼt. Itʼs quite
-            ' an experience in itself! After all, <strong>we started up in college</strong>
-            ' and lived to tell the tale. #{"\u{1f60e}"}
-          hr
-          p.school-of-saas__section--text
-            a href='https://blog.sv.co/startup-village-ranked-1-amongst-indian-incubators-b78b5b281572' target='_blank'
-            ' After being ranked #1 for incubating startups,
-            ' we have now figured out the best way to help startups <strong>completely online</strong>.
-            ' Based on our experiences, we'll <strong>guide you daily</strong> for the next 6 months, and as-and-when required, even further.
-          hr
-          p.school-of-saas__section--text
-            ' If you don't want to continue with your startup at any point, we have got you covered.
-            ' We can <strong>help you get a job</strong> or <strong>get acqui-hired</strong>.
-          hr
-          p.school-of-saas__section--text
-            ' However, if your startup goes on to build a product with customers;
-            ' an option to <strong>visit Silicon Valley</strong> #{"\u{2708}"}, <strong>Investors,
-            | Incubators, Accelerators</strong> and a lot more await you ! SV.CO Graduations are going to be epic!
-          hr
-          h3.text-xs-center.font-semibold.m-t-2
-            ' Here are 4 special things about our program:
-          br
-          ul.school-of-saas__section--ul.list-unstyled.text-xs-center
-            li.school-of-saas__program-feature.col-md-6.p-y-2
-              .school-of-saas__program-feature-icon.m-x-auto
-                = image_tag 'admissions/apply/program-feature-completely-online.svg', class: 'img-fluid'
-              p.school-of-saas__section--text
-                ' <strong>Completely Online</strong>
-                p Be located <em>anywhere</em> in India!
-            li.school-of-saas__program-feature.col-md-6.p-y-2
-              .school-of-saas__program-feature-icon.m-x-auto
-                = image_tag 'admissions/apply/program-feature-students-only.svg', class: 'img-fluid'
-              p.school-of-saas__section--text
-                ' <strong>Designed for Student Teams</strong>
-                p Startup with your friends!
-            li.school-of-saas__program-feature.col-md-6.p-y-2
-              .school-of-saas__program-feature-icon.m-x-auto
-                = image_tag 'admissions/apply/program-feature-software.svg', class: 'img-fluid'
-              p.school-of-saas__section--text
-                ' <strong>Exclusively for software ideas</strong>
-                p
-                  a#saas-article-link href='https://www.forbes.com/sites/suparnagoswami/2017/01/23/why-indian-saas-startups-are-set-to-rule-the-world/#54dbe9ff1329' target='_blank'
-                    | Indian SaaS is booming!
-            li.school-of-saas__program-feature.col-md-6.p-y-2
-              .school-of-saas__program-feature-icon.m-x-auto
-                = image_tag 'admissions/apply/program-feature-learning-levels.svg', class: 'img-fluid'
-              p.school-of-saas__section--text
-                ' <strong>5 Levels of Learning</strong>
-                p Level 0 is the admission process.
+section.apply-partners__container.m-x-auto
+  .container.apply-partners__box
+    .col-md-4
+      p.apply-partners__text.text-uppercase Silicon Valley Host
+      = image_tag 'home/index/sv-partner-facebook.svg', class: 'img-fluid apply-partners__logo--facebook'
 
-        .admission-process.clearfix
-          h2
-            ' Your journey begins with <strong>Level 0 - Admissions</strong>
-          .admission-process-text
-            ' Level 0 is where you impress us with your ability to form a team, build a product and attract customers. It's a learning experience in itself!
-          .alumni-testimonial.m-y-2
-            .col-md-7.offset-md-5.alumni-testimonial__quote.m-t-2
-              p.alumni-testimonial__quote-text
-                ' &ldquo;In Level 0, we solved a real problem, built a product super fast and had fun doing it&rdquo;
-              p.alumni-testimonial__name
-                | &mdash; Arun. P, Alumni of SV.CO
-          .row.m-t-1
-            .col-md-4
-              .process-box.arrow-right
-                .stage-number
-                  | 1
-                .process-icon.m-x-auto
-                  = image_tag 'admissions/apply/process-team-lead.svg'
-                h5
-                  ' Apply
+    .col-md-4
+      p.apply-partners__text.text-uppercase Program Partner
+      = image_tag 'home/index/sv-partner-freshworks.svg', class: 'img-fluid apply-partners__logo--freshworks'
+
+    .col-md-4
+      p.apply-partners__text.text-uppercase Scholarship Partner
+      = image_tag 'home/index/sv-partner-paytm.svg', class: 'img-fluid apply-partners__logo--paytm'
+
+section.school-of-saas__container.p-y-3
+  .container
+    .apply-section__head.m-b-2
+      h3.apply-section__head-title.text-xs-center.font-black
+        | What is School of SaaS ?
+      .apply-section__head-subtitle.m-x-auto
+        p.text-xs-center
+          ' It’s a school built for Internet Era.  Just like you have multiple
+          | branches of engineering, we have school on technologies like SaaS, Fintech.
+
+    .container.school-of-saas__feature-box.school-of-saas__feature-box--bottom-border.p-a-0.m-t-3
+      .col-md-4.school-of-saas__feature-card.p-a-0
+        = image_tag 'admissions/apply/student-founders-icon.svg', class: 'school-of-saas__feature-icon'
+        h3.school-of-saas__feature-card-title.text-xs-center.m-t-1
+          ' Students are
+          .font-semibold
+            | Startup Founders
+      .col-md-4.school-of-saas__feature-card.p-a-0
+        = image_tag 'admissions/apply/faculty-icon.svg', class: 'school-of-saas__feature-icon'
+        h3.school-of-saas__feature-card-title.text-xs-center.m-t-1
+          ' Faculty Members are
+          .font-semibold
+            | Entrepreneurs
+      .col-md-4.school-of-saas__feature-card.p-a-0
+        = image_tag 'admissions/apply/targets-icon.svg', class: 'school-of-saas__feature-icon'
+        h3.school-of-saas__feature-card-title.text-xs-center.m-t-1
+          ' Exams are
+          .font-semibold
+            | Micro Targets
+
+    .container.school-of-saas__feature-box.p-a-0
+      .col-md-4.school-of-saas__feature-card.p-a-0
+        = image_tag 'admissions/apply/silicon-valley-trip-icon.svg', class: 'school-of-saas__feature-icon'
+        h3.school-of-saas__feature-card-title.text-xs-center.m-t-1
+          ' Internship is a
+          .font-semibold
+            | Silicon Valley trip
+      .col-md-4.school-of-saas__feature-card.p-a-0
+        = image_tag 'admissions/apply/sixways-icon.svg', class: 'school-of-saas__feature-icon'
+        h3.school-of-saas__feature-card-title.text-xs-center.m-t-1
+          ' Placements are
+          .font-semibold
+            | 6 ways to graduate
+      .col-md-4.school-of-saas__feature-card.p-a-0
+        = image_tag 'admissions/apply/online-icon.svg', class: 'school-of-saas__feature-icon'
+        h3.school-of-saas__feature-card-title.text-xs-center.m-t-1
+          ' Classrooms are
+          .font-semibold
+            | Completely Online
+
+  .container
+    .saas-program__box.clearfix.m-t-3
+      .col-md-5.saas-program__program-requirements
+        h2.saas-program__program-requirements-head.m-b-0
+          ' Program
+          .font-semibold
+            | Requirements
+
+        ul.list-unstyled.m-t-2
+          li.saas-program__program-requirements-list-item.m-b-2
+            .saas-program__program-requirements-content
+              h4.saas-program__program-requirements-title.font-semibold.m-b-0
+                | Ideal team
+              p.saas-program__program-requirements-text
+                ' Developer, Designer and
+                br
+                | Product (Min 2-4)
+
+          li.saas-program__program-requirements-list-item.m-b-2
+            .saas-program__program-requirements-content
+              h4.saas-program__program-requirements-title.font-semibold.m-b-0
+                | Time required
+              p.saas-program__program-requirements-text
+                ' Learn at your pace
+                br
+                | (10 hours/week to complete in 6 months)
+
+          li.saas-program__program-requirements-list-item
+            .saas-program__program-requirements-content
+              h4.saas-program__program-requirements-title.font-semibold.m-b-0
+                | Startup Idea
+              p.saas-program__program-requirements-text
+                ' Choose from a pool of ideas
+                br
+                | if you don’t have one.
+
+      .col-md-7.school-of-saas__program-promises
+        .col-md-7.p-a-0
+          h2.saas-program__program-promises-head.m-b-0
+            ' Our
+            .font-semibold
+              | Promises
+          ul.list-unstyled.m-t-2
+            li.saas-program__program-promises-list-item.m-b-2
+              .saas-program__program-promises-content
+                h4.saas-program__program-promises-title.font-semibold.m-b-0
+                  ' Mini Startup Experience
                   br
-                  | as a Team Lead
-            .col-md-4
-              .process-box.arrow-right.process-box-green
-                .stage-number
-                  | 2
-                .process-icon.m-x-auto
-                  = image_tag 'admissions/apply/process-add-cofounders.svg'
-                h5
-                  ' Form
-                  br
-                  | Team
-            .col-md-4
-              .process-box.arrow-down
-                .stage-number
-                  | 3
-                .process-icon.m-x-auto
-                  = image_tag 'admissions/apply/process-perform-tasks.svg'
-                h5
-                  ' Perform Coding
-                  br
-                  | &amp; Video Task
-          .row
-            .col-md-4.push-md-8
-              .process-box.arrow-left.process-box-green
-                .stage-number
-                  | 4
-                .process-icon.m-x-auto
-                  = image_tag 'admissions/apply/process-attend-interview.svg'
-                h5
-                  | Attend Interview
-            .col-md-4
-              .process-box.arrow-left
-                .stage-number
-                  | 5
-                .process-icon.m-x-auto
-                  = image_tag 'admissions/apply/process-selection-notification.svg'
-                h5
-                  | Get Selected
-            .col-md-4.pull-md-8
-              .process-box.arrow-down.process-box-green
-                .stage-number
-                  | 6
-                .process-icon.m-x-auto
-                  = image_tag 'admissions/apply/process-batch-start.svg'
-                h5
-                  | Start Program
-        .our-program
-          h2
-            ' <strong>Life beyond Level 0 - Sneak Peek</strong>
-          .program-video__embed
-            iframe.program-video__embed--frame#alpha-launch-video__embed src="https://www.youtube.com/embed/TfLMV-XkfGw?enablejsapi=1" width="100%" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" allowfullscreen="allowfullscreen"
-          p.program-video__embed--description.m-t-1
-            ' Alpha Launch, hosted by Freshdesk - the #1 SaaS company in India - is one of our key events
-            ' at the School of SaaS. Teams across India travel to Chennai once during the programme to launch
-            ' the Alpha version of their prototypes in front of SaaS experts.
+                  | during admissions
 
-        .application-faq.m-b-2#faqs
-          h2
-            | <strong>Frequently asked Questions</strong>
-          .row
-            .read-more
-              .eq-height
-                .col-md-6
-                  ul
-                    li
-                      h5
-                        | Do I need a team to apply?
-                      p
-                        ' Like you need a team to play football, you need a team
-                        ' to build a startup. In real companies, individuals
-                        ' come together to work as a team. SV.CO brings real
-                        ' world experience to students. You need to bring a team
-                        | and we can teach you how to build a startup.
-                    li
-                      h5
-                        | Can I apply even if I don&rsquo;t have an idea?
-                      p
-                        ' Students in college don&rsquo;t have industry experience. To overcome this, we have a
-                        ' carefully researched list of good industry ideas which students in colleges can build. Each
-                        ' idea costs &#8377;10,000 of research by business analysts. You can thus apply, even if you
-                        | don&rsquo;t have an idea.
-                    li
-                      h5
-                        | Is SV.CO only for college students?
-                      p
-                        ' Yes. However, if you are within 3 years of graduating
-                        | from a college, we will accept your application.
+            li.saas-program__program-promises-list-item.m-b-2
+              .saas-program__program-promises-content
+                h4.saas-program__program-promises-title.font-semibold.m-b-0
+                  | Live Sessions with Entrepreneurs
 
-                .col-md-6
-                  ul
-                    li
-                      h5
-                        | I don’t have co-founders. Can I apply alone?
-                      p
-                        ' Like a football team has a goalkeeper, defender, mid-fielder
-                        ' and forward, a good startup has a programmer/coder, a sales person,
-                        ' a design person and one person for operations. You need all four
-                        | roles filled to work together on an idea. Thus, you cannot apply alone.
-                    li
-                      h5
-                        | Do I need programmers in my team?
-                      p
-                        ' Yes. Founding Teams of Apple, Microsoft, Google and
-                        ' Facebook had at least one programmer. You need at least
-                        | one co-founders who is a programmer in your team to apply.
-        .help-section.clearfix
-          .col-md-3
-            a.help-intercom-link.help-icon href= "#"
-              = image_tag 'admissions/apply/intercom-chat-icon.svg'
-          .col-md-9
-            h2
-              ' We are here to <strong>help you</strong>
-            p
-              ' Please email your doubts or questions to <strong>help@sv.co</strong>
-              br
-              ' or
-              a.help-intercom-link href= "#"
-                strong talk to us using the friendly chat window.
+            li.saas-program__program-promises-list-item.m-b-2
+              .saas-program__program-promises-content
+                h4.saas-program__program-promises-title.font-semibold.m-b-0
+                  | One on One Mentorship
 
-    .col-lg-4.col-md-12#start-application-process
-      .m-t-2
-        - if current_founder&.startup.blank?
-          - if feature_active?('continuous_admissions')
-            == render 'application_form'
-          - else
-            == render 'admissions/prospective_applicant_form'
+            li.saas-program__program-promises-list-item
+              .saas-program__program-promises-content
+                h4.saas-program__program-promises-title.font-semibold.m-b-0
+                  | Merchandise at every level
 
+            .p-t-2
+              = link_to 'Many More', apply_path, class: 'saas-program__program-promises-more-link font-semibold'
 
-a#sticky-start-application.btn.btn-primary.btn-md.text-uppercase.sticky-application-button.hidden-md-up href="#start-application-process"
-  | Start Application
+        .col-md-5.p-a-0
+          .saas-program__graduation-support
+            h2.font-semibold.saas-program__graduation-support-year.m-b-0
+              | 5
+            h4.saas-program__graduation-support-sub-text.m-b-0
+              | year long
+              .font-semibold
+                | Graduation Support
+
+    .p-t-3.text-xs-center
+      = link_to 'Start Now', apply_path, class: 'btn btn-primary btn-lg home-apply__button'
+
+section.apply-form__container.p-y-3
+  .container
+    .apply-section__head.m-b-2
+      h3.apply-section__head-title.apply-section__head-title--white.text-xs-center.font-black
+        .font-light
+          ' Entrepreneurship is all about doing.
+        | Start Now
+  .apply-form__box.m-x-auto
+    - if current_founder&.startup.blank?
+      - if feature_active?('continuous_admissions')
+        == render 'application_form'
+    - else
+        == render 'admissions/prospective_applicant_form'
+
+section.program-framework__container.p-y-3
+  .container
+    .apply-section__head.m-b-2
+      h3.apply-section__head-title.text-xs-center.font-black
+        .font-light
+          ' Programme
+        | Framework
+    .program-framework__box.m-x-auto
+      ul.program-framework__timeline.list-unstyled
+        li.program-framework__timeline-level data-date=("Level 0")
+          .program-framework__timeline-details
+            h3.program-framework__timeline-title.m-b-0 Registration
+            p.program-framework__timeline-content
+              ' Basics skills for Entrepreneurship
+              ' SV.CO Merchandise
+              ' Pay Admission Fee
+              ' Coding &amp; Video task submission
+              ' Feedback &amp; participation Certificate
+              ' Pay Programme Fee &amp; Sign Agreement with SV.CO
+
+        li.program-framework__timeline-level data-date=("Level 1")
+          .program-framework__timeline-details
+            h3.program-framework__timeline-title.m-b-0 Registration
+            p.program-framework__timeline-content
+              ' Basics skills for Entrepreneurship
+              ' SV.CO Merchandise
+              ' Pay Admission Fee
+              ' Coding &amp; Video task submission
+              ' Feedback &amp; participation Certificate
+              ' Pay Programme Fee &amp; Sign Agreement with SV.CO
+
+        li.program-framework__timeline-level data-date=("Level 1")
+          .program-framework__timeline-details
+            h3.program-framework__timeline-title.m-b-0 Registration
+            p.program-framework__timeline-content
+              ' Basics skills for Entrepreneurship
+              ' SV.CO Merchandise
+              ' Pay Admission Fee
+              ' Coding &amp; Video task submission
+              ' Feedback &amp; participation Certificate
+              ' Pay Programme Fee &amp; Sign Agreement with SV.CO
+
+/ .container
+/   .row.application-process
+/     .col-lg-8.col-md-12
+/       - if current_user&.founder&.startup.present?
+/         .card.content-box.notice-with-link.m-t-2.m-b-0
+/           .notice.strong-notice
+/             ' You have already completed registration.
+/           .link
+/             = link_to 'Go to Dashboard', dashboard_founder_path, class: 'btn btn-primary btn-md text-uppercase'
+/       - elsif current_user.blank?
+/         .card.content-box.notice-with-link.m-t-2.m-b-0
+/           .notice.strong-notice
+/             ' Are you a registered founder?
+/           .link
+/             = link_to 'Sign In to Continue', new_user_session_path(referer: apply_path), class: 'btn btn-primary btn-md text-uppercase', rel: 'nofollow'
+/
+/       .application-process-left.content-box.m-t-2.m-b-2.p-b-0
+/         .school-of-saas__section.clearfix
+/           h2
+/             ' <strong>Build your first Internet Startup</strong>
+/
+/           p.school-of-saas__section--text
+/             ' Keen to startup while in college? Thereʼs no reason you shouldnʼt. Itʼs quite
+/             ' an experience in itself! After all, <strong>we started up in college</strong>
+/             ' and lived to tell the tale. #{"\u{1f60e}"}
+/           hr
+/           p.school-of-saas__section--text
+/             a href='https://blog.sv.co/startup-village-ranked-1-amongst-indian-incubators-b78b5b281572' target='_blank'
+/             ' After being ranked #1 for incubating startups,
+/             ' we have now figured out the best way to help startups <strong>completely online</strong>.
+/             ' Based on our experiences, we'll <strong>guide you daily</strong> for the next 6 months, and as-and-when required, even further.
+/           hr
+/           p.school-of-saas__section--text
+/             ' If you don't want to continue with your startup at any point, we have got you covered.
+/             ' We can <strong>help you get a job</strong> or <strong>get acqui-hired</strong>.
+/           hr
+/           p.school-of-saas__section--text
+/             ' However, if your startup goes on to build a product with customers;
+/             ' an option to <strong>visit Silicon Valley</strong> #{"\u{2708}"}, <strong>Investors,
+/             | Incubators, Accelerators</strong> and a lot more await you ! SV.CO Graduations are going to be epic!
+/           hr
+/           h3.text-xs-center.font-semibold.m-t-2
+/             ' Here are 4 special things about our program:
+/           br
+/           ul.school-of-saas__section--ul.list-unstyled.text-xs-center
+/             li.school-of-saas__program-feature.col-md-6.p-y-2
+/               .school-of-saas__program-feature-icon.m-x-auto
+/                 = image_tag 'admissions/apply/program-feature-completely-online.svg', class: 'img-fluid'
+/               p.school-of-saas__section--text
+/                 ' <strong>Completely Online</strong>
+/                 p Be located <em>anywhere</em> in India!
+/             li.school-of-saas__program-feature.col-md-6.p-y-2
+/               .school-of-saas__program-feature-icon.m-x-auto
+/                 = image_tag 'admissions/apply/program-feature-students-only.svg', class: 'img-fluid'
+/               p.school-of-saas__section--text
+/                 ' <strong>Designed for Student Teams</strong>
+/                 p Startup with your friends!
+/             li.school-of-saas__program-feature.col-md-6.p-y-2
+/               .school-of-saas__program-feature-icon.m-x-auto
+/                 = image_tag 'admissions/apply/program-feature-software.svg', class: 'img-fluid'
+/               p.school-of-saas__section--text
+/                 ' <strong>Exclusively for software ideas</strong>
+/                 p
+/                   a#saas-article-link href='https://www.forbes.com/sites/suparnagoswami/2017/01/23/why-indian-saas-startups-are-set-to-rule-the-world/#54dbe9ff1329' target='_blank'
+/                     | Indian SaaS is booming!
+/             li.school-of-saas__program-feature.col-md-6.p-y-2
+/               .school-of-saas__program-feature-icon.m-x-auto
+/                 = image_tag 'admissions/apply/program-feature-learning-levels.svg', class: 'img-fluid'
+/               p.school-of-saas__section--text
+/                 ' <strong>5 Levels of Learning</strong>
+/                 p Level 0 is the admission process.
+/
+/         .admission-process.clearfix
+/           h2
+/             ' Your journey begins with <strong>Level 0 - Admissions</strong>
+/           .admission-process-text
+/             ' Level 0 is where you impress us with your ability to form a team, build a product and attract customers. It's a learning experience in itself!
+/           .alumni-testimonial.m-y-2
+/             .col-md-7.offset-md-5.alumni-testimonial__quote.m-t-2
+/               p.alumni-testimonial__quote-text
+/                 ' &ldquo;In Level 0, we solved a real problem, built a product super fast and had fun doing it&rdquo;
+/               p.alumni-testimonial__name
+/                 | &mdash; Arun. P, Alumni of SV.CO
+/           .row.m-t-1
+/             .col-md-4
+/               .process-box.arrow-right
+/                 .stage-number
+/                   | 1
+/                 .process-icon.m-x-auto
+/                   = image_tag 'admissions/apply/process-team-lead.svg'
+/                 h5
+/                   ' Apply
+/                   br
+/                   | as a Team Lead
+/             .col-md-4
+/               .process-box.arrow-right.process-box-green
+/                 .stage-number
+/                   | 2
+/                 .process-icon.m-x-auto
+/                   = image_tag 'admissions/apply/process-add-cofounders.svg'
+/                 h5
+/                   ' Form
+/                   br
+/                   | Team
+/             .col-md-4
+/               .process-box.arrow-down
+/                 .stage-number
+/                   | 3
+/                 .process-icon.m-x-auto
+/                   = image_tag 'admissions/apply/process-perform-tasks.svg'
+/                 h5
+/                   ' Perform Coding
+/                   br
+/                   | &amp; Video Task
+/           .row
+/             .col-md-4.push-md-8
+/               .process-box.arrow-left.process-box-green
+/                 .stage-number
+/                   | 4
+/                 .process-icon.m-x-auto
+/                   = image_tag 'admissions/apply/process-attend-interview.svg'
+/                 h5
+/                   | Attend Interview
+/             .col-md-4
+/               .process-box.arrow-left
+/                 .stage-number
+/                   | 5
+/                 .process-icon.m-x-auto
+/                   = image_tag 'admissions/apply/process-selection-notification.svg'
+/                 h5
+/                   | Get Selected
+/             .col-md-4.pull-md-8
+/               .process-box.arrow-down.process-box-green
+/                 .stage-number
+/                   | 6
+/                 .process-icon.m-x-auto
+/                   = image_tag 'admissions/apply/process-batch-start.svg'
+/                 h5
+/                   | Start Program
+/         .our-program
+/           h2
+/             ' <strong>Life beyond Level 0 - Sneak Peek</strong>
+/           .program-video__embed
+/             iframe.program-video__embed--frame#alpha-launch-video__embed src="https://www.youtube.com/embed/TfLMV-XkfGw?enablejsapi=1" width="100%" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" allowfullscreen="allowfullscreen"
+/           p.program-video__embed--description.m-t-1
+/             ' Alpha Launch, hosted by Freshdesk - the #1 SaaS company in India - is one of our key events
+/             ' at the School of SaaS. Teams across India travel to Chennai once during the programme to launch
+/             ' the Alpha version of their prototypes in front of SaaS experts.
+/
+/         .application-faq.m-b-2#faqs
+/           h2
+/             | <strong>Frequently asked Questions</strong>
+/           .row
+/             .read-more
+/               .eq-height
+/                 .col-md-6
+/                   ul
+/                     li
+/                       h5
+/                         | Do I need a team to apply?
+/                       p
+/                         ' Like you need a team to play football, you need a team
+/                         ' to build a startup. In real companies, individuals
+/                         ' come together to work as a team. SV.CO brings real
+/                         ' world experience to students. You need to bring a team
+/                         | and we can teach you how to build a startup.
+/                     li
+/                       h5
+/                         | Can I apply even if I don&rsquo;t have an idea?
+/                       p
+/                         ' Students in college don&rsquo;t have industry experience. To overcome this, we have a
+/                         ' carefully researched list of good industry ideas which students in colleges can build. Each
+/                         ' idea costs &#8377;10,000 of research by business analysts. You can thus apply, even if you
+/                         | don&rsquo;t have an idea.
+/                     li
+/                       h5
+/                         | Is SV.CO only for college students?
+/                       p
+/                         ' Yes. However, if you are within 3 years of graduating
+/                         | from a college, we will accept your application.
+/
+/                 .col-md-6
+/                   ul
+/                     li
+/                       h5
+/                         | I don’t have co-founders. Can I apply alone?
+/                       p
+/                         ' Like a football team has a goalkeeper, defender, mid-fielder
+/                         ' and forward, a good startup has a programmer/coder, a sales person,
+/                         ' a design person and one person for operations. You need all four
+/                         | roles filled to work together on an idea. Thus, you cannot apply alone.
+/                     li
+/                       h5
+/                         | Do I need programmers in my team?
+/                       p
+/                         ' Yes. Founding Teams of Apple, Microsoft, Google and
+/                         ' Facebook had at least one programmer. You need at least
+/                         | one co-founders who is a programmer in your team to apply.
+/         .help-section.clearfix
+/           .col-md-3
+/             a.help-intercom-link.help-icon href= "#"
+/               = image_tag 'admissions/apply/intercom-chat-icon.svg'
+/           .col-md-9
+/             h2
+/               ' We are here to <strong>help you</strong>
+/             p
+/               ' Please email your doubts or questions to <strong>help@sv.co</strong>
+/               br
+/               ' or
+/               a.help-intercom-link href= "#"
+/                 strong talk to us using the friendly chat window.
+/
+/     .col-lg-4.col-md-12#start-application-process
+/       .m-t-2
+/         - if current_founder&.startup.blank?
+/           - if feature_active?('continuous_admissions')
+/             == render 'application_form'
+/           - else
+/             == render 'admissions/prospective_applicant_form'
+/
+/
+/ a#sticky-start-application.btn.btn-primary.btn-md.text-uppercase.sticky-application-button.hidden-md-up href="#start-application-process"
+/   | Start Application

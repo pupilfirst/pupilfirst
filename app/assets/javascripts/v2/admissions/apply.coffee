@@ -23,6 +23,9 @@ $(document).on 'page:change', stopVideosOnModalClose
 $(document).on 'page:change', setupProgramCarousel
 
 # !!! NEW STUFF !!!
+expandFramework = ->
+  $('.program-framework__timeline-title').click (e) ->
+    $(this).next().slideToggle()
 
 readmoreFAQ = ->
   $('.read-more').readmore
@@ -173,6 +176,7 @@ $(document).on 'page:change', stickyApplyButtonOnApplyPage
 $(document).on 'page:change', helpIntercomPopup
 $(document).on 'page:change', readmoreFAQ
 $(document).on 'page:before-change', destroyWaypoints
+$(document).on 'page:change', expandFramework
 
 $(document).on 'turbolinks:load', ->
   if $('#admissions__apply').length

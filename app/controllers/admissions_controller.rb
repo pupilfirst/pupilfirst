@@ -4,6 +4,7 @@ class AdmissionsController < ApplicationController
 
   # GET /apply
   def apply
+    @skip_container = true
     if feature_active?('continuous_admissions')
       @form = Founders::RegistrationForm.new(Founder.new)
     else

@@ -8,13 +8,10 @@ module OneOff
 
     private
 
-    # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     def stage(startup)
       team_lead = startup.admin
 
-      if complete?(pre_selection_target, team_lead)
-        'Pre-Selection Done'
-      elsif complete?(attend_interview_target, team_lead)
+      if complete?(attend_interview_target, team_lead)
         'Interview Passed'
       elsif pending?(attend_interview_target, team_lead)
         'Coding & Video Passed'
@@ -28,7 +25,6 @@ module OneOff
         'Signed Up'
       end
     end
-    # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
     def screening_target
       @screening_target ||= Target.find_by(key: Target::KEY_ADMISSIONS_SCREENING)
@@ -52,10 +48,6 @@ module OneOff
 
     def attend_interview_target
       @attend_interview_target ||= Target.find_by(key: Target::KEY_ADMISSIONS_ATTEND_INTERVIEW)
-    end
-
-    def pre_selection_target
-      @pre_selection_target ||= Target.find_by(key: Target::KEY_ADMISSIONS_PRE_SELECTION)
     end
 
     def complete?(target, team_lead)

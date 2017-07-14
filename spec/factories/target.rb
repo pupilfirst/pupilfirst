@@ -52,11 +52,5 @@ FactoryGirl.define do
       key Target::KEY_ADMISSIONS_ATTEND_INTERVIEW
       prerequisite_targets { [create(:target, :admissions_cofounder_addition)] }
     end
-
-    trait(:admissions_pre_selection) do
-      role Target::ROLE_TEAM
-      key Target::KEY_ADMISSIONS_PRE_SELECTION
-      prerequisite_targets { [create(:target, :admissions_attend_interview)] }
-    end
   end
 end

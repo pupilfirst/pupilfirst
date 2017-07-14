@@ -70,7 +70,7 @@ class FoundersForm extends React.Component {
   }
 
   addFounderAllowed() {
-    return this.state.founders.length < 6
+    return this.state.founders.length < 4
   }
 
   hasErrors() {

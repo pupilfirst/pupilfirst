@@ -3,7 +3,7 @@ class HomeController < ApplicationController
 
   def index
     @skip_container = true
-    @sitewide_notice = true if %w[startupvillage.in registration].include?(params[:redirect_from])
+    @sitewide_notice = true if %w[startupvillage.in].include?(params[:redirect_from])
     @hide_nav_links = false
     @instagram_images = Instagram.load_latest_images
 

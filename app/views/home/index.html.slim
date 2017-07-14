@@ -3,21 +3,12 @@
   meta property="og:type" content="website"
   meta property="og:url" content=root_url
   meta property="og:image" content=image_url('shared/logo-color.svg')
+  meta name="description" content="SV.CO, or Startup Village is a learning platform for entrepreneurs that verifies results, and rewards founders with a real degree from partner Universities."
 
 - if startup_village_redirect?
   - content_for :sitewide_notice
     ' <strong>SV.CO</strong> is the next phase of the Startup Village story.
     ' #{link_to 'Read more here', 'https://www.sv.co/cwlg8', class: 'btn btn-sm', target: '_blank'}
-
-- if registration_redirect?
-  - content_for :sitewide_notice
-    ' You have successfully registered on SV.CO. Please wait for your team lead to complete registration.
-
-- content_for :head
-  title SV.CO: India’s No 1 Digital Incubator For Students
-  meta name="description" content="SV.CO, or Startup Village is a learning platform for entrepreneurs that verifies results, and rewards founders with a real degree from partner Universities."
-
-- content_for :header
 
 section.home-hero__container
   .home-hero__message-wrapper.text-xs-center

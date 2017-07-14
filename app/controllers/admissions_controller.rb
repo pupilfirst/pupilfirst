@@ -121,8 +121,14 @@ class AdmissionsController < ApplicationController
   # GET /admissions/founders
   def founders
     authorize :admissions
-    @form = Admissions::FoundersForm.new(current_founder.startup)
-    @form.prepopulate
+
+    fee_payment_target = Target.find_by(key: Target::KEY_ADMISSIONS_FEE_PAYMENT)
+    if fee_payment_target.status(current_founder) == Targets::StatusService::STATUS_COMPLETE
+      @fee_paid = true
+    else
+      @form = Admissions::FoundersForm.new(current_founder.startup)
+      @form.prepopulate
+    end
   end
 
   # POST /admissions/founders

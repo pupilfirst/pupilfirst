@@ -154,4 +154,20 @@ feature 'Edit founders' do
       expect(startup.reload.admin).to eq(another_founder)
     end
   end
+
+  context 'when the startup has already completed the initial payment' do
+    let!(:tet_team_update) { create :timeline_event_type, :team_update }
+
+    before do
+      complete_target founder, screening_target
+      complete_target founder, cofounder_addition_target
+      complete_target founder, fee_payment_target
+    end
+
+    scenario 'founder is informed he cant edit the team anymore' do
+      sign_in_user(founder.user, referer: admissions_founders_path)
+
+      expect(page).to have_content('Team modifications are only allowed before you make your first payment')
+    end
+  end
 end

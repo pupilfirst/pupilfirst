@@ -1,0 +1,5 @@
+---
+timestamp: '2017-07-14T06:14:00Z'
+title: Speed up check for presence of timeline events on AA dashboard.
+private: true
+category: performance

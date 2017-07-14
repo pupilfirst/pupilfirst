@@ -11,7 +11,6 @@ class MoocStudentSignupForm < Reform::Form
   property :college_id, validates: { presence: true }
   property :college_text, validates: { length: { maximum: 250 } }
   property :semester, validates: { presence: true, inclusion: MoocStudent.valid_semester_values }
-  property :state, validates: { presence: true, length: { maximum: 250 } }
   property :ignore_email_hint, virtual: true
 
   validate :mooc_student_must_not_exist

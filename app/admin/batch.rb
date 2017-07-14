@@ -33,47 +33,11 @@ ActiveAdmin.register Batch do
       row :slack_channel
     end
 
-    panel 'Application Rounds' do
-      batch.application_rounds.order('number ASC').each do |application_round|
-        application_round.round_stages.joins(:application_stage).order('application_stage.number') do |round_stage|
-          attributes_table_for round_stage do
-            row :application_stage
-            row :starts_at
-            row :ends_at
-          end
-        end
-      end
-    end
-
-    panel 'Targets' do
-      batch.targets.each do |target|
-        ul do
-          li do
-            span do
-              link_to target.title, admin_target_path(target)
-            end
-          end
-        end
-      end
-    end
-
     panel 'Technical details' do
       attributes_table_for batch do
         row :id
         row :created_at
         row :updated_at
-      end
-    end
-
-    panel 'Batch Emails' do
-      ul do
-        li do
-          span do
-            link_to 'Send batch progress email', send_email_admin_batch_path(batch, type: 'batch_progress'), method: :post, data: { confirm: 'Are you sure?' }
-          end
-
-          span " - These should be sent after a batch has progressed from one stage to another. It notifies applicants who have progressed, and sends a rejection mail to those who haven't (rejection mail is not sent for applications in stage 1)."
-        end
       end
     end
   end
@@ -91,23 +55,5 @@ ActiveAdmin.register Batch do
     end
 
     f.actions
-  end
-
-  member_action :send_email, method: :post do
-    batch = Batch.find params[:id]
-
-    case params[:type]
-      when 'batch_progress'
-        if batch.initial_stage? || batch.final_stage?
-          flash[:error] = 'Mails not sent. Batch is in first stage, or is closed.'
-        else
-          EmailApplicantsJob.perform_later(batch)
-          flash[:success] = 'Mails have been queued'
-        end
-      else
-        flash[:error] = "Mails not sent. Unknown type '#{params[:type]}' requested."
-    end
-
-    redirect_to admin_batch_path(batch)
   end
 end

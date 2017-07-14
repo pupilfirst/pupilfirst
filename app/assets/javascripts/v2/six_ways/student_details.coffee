@@ -1,12 +1,3 @@
-matchOutsideIndia = (term, text) ->
-  return true if text.toUpperCase().indexOf(term.toUpperCase()) == 0 || text.toUpperCase().indexOf('INDIA') >= 0
-  false
-
-setupStateSelect2 = ->
-  $.fn.select2.amd.require ['select2/compat/matcher'], (oldMatcher) ->
-    $('#mooc_student_signup_state').select2
-      matcher: oldMatcher(matchOutsideIndia)
-
 setupCollegeSelect2 = ->
   collegeInput = $('#mooc_student_signup_college_id')
 
@@ -61,6 +52,5 @@ $(document).on 'page:change', setupTogglingCollegeField
 
 $(document).on 'turbolinks:load', ->
   if $('#six-ways__student-details').length
-    setupStateSelect2()
     setupCollegeSelect2()
     setupPasswordHintButtons()

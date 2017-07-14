@@ -15,7 +15,6 @@ class ApplicationController < ActionController::Base
   helper_method :current_mooc_student
   helper_method :current_founder
   helper_method :current_startup
-  helper_method :current_batch_applicant
 
   # When in production, respond to requests that ask for unhandled formats with 406.
   rescue_from ActionView::MissingTemplate do |exception|
@@ -63,10 +62,6 @@ class ApplicationController < ActionController::Base
 
   def current_startup
     @current_startup ||= current_founder&.startup
-  end
-
-  def current_batch_applicant
-    @current_batch_applicant ||= current_user&.batch_applicant
   end
 
   # sets a permanent signed cookie. Additional options such as :tld_length can be passed via the options_hash

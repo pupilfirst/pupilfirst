@@ -1,3 +1,3 @@
-web: bundle exec passenger start -p $PORT --nginx-config-template config/nginx.conf.erb --max-pool-size $MAX_POOL_SIZE
+web: bundle exec puma -C config/puma.rb
 worker: rake jobs:work
 vocalist: rake lita:vocalist

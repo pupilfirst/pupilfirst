@@ -22,7 +22,7 @@ class AdmissionsController < ApplicationController
       begin
         founder = @form.save
       rescue Postmark::InvalidMessageError
-        @form.errors[:base] << t('batch_application.create.email_error')
+        @form.errors[:base] << t('admissions.register.email_error')
         render 'apply'
       else
         # Sign in user immediately to allow him to proceed to screening.

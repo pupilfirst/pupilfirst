@@ -1,5 +1,5 @@
 class Select2Presenter
-  # Searches for a university with a term. Always returns 'other' university in search results.
+  # Searches for a college with a term. Always returns 'other' college in search results.
   def self.search_for_college(term)
     colleges = College.joins(:state)
     query_words = term.split

@@ -440,17 +440,6 @@
         | become faculty themselves and mentor their juniors.
       ' #{link_to 'Back to top', '#', class: 'back-to-top'}
 
-- if @batches_open.present?
-  - batch = @batches_open.first
-  .ready-to-apply
-    .container
-      h3.text-xs-center.content-head
-        span.content-title-icon.graduated-icon
-        | Ready to Apply?
-
-      .text-xs-center
-        = link_to 'Start Application', apply_path, class: 'btn btn-primary btn-md text-uppercase', id: 'start-application'
-
 #watchIntroVideo.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
     .modal-content
@@ -468,7 +457,3 @@
           span aria-hidden="true" &times;
       .modal-body
         iframe.video-frame src="https://www.youtube.com/embed/AzABLPISPQU" frameborder="0" allowfullscreen="allowfullscreen"
-
-- batch = @batches_open.first if @batches_open.present?
-
-= link_to 'Start Application', apply_path, class: 'btn btn-primary btn-xs text-uppercase sticky-application-button', id: 'tour-sticky-application-button' if batch

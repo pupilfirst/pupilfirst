@@ -10,6 +10,7 @@ FactoryGirl.define do
     target_group
     timeline_event_type
     key nil
+    sequence(:sort_index)
 
     transient do
       batch nil
@@ -27,10 +28,6 @@ FactoryGirl.define do
 
     trait :with_rubric do
       rubric { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf')) }
-    end
-
-    trait :with_program_week do
-      target_group { TargetGroup.find_by(sort_index: group_index) || create(:target_group) }
     end
 
     trait(:admissions_cofounder_addition) do

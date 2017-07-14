@@ -19,7 +19,8 @@ class IntercomNewApplicantCreateJob < ApplicationJob
       user,
       phone: founder.phone,
       college: founder_college_name(founder),
-      university: founder_university(founder)
+      university: founder_university(founder),
+      supplied_reference: founder.reference
     )
 
     # IntercomLastApplicantEventUpdateJob.perform_later(founder, 'submitted_application')
@@ -31,6 +32,6 @@ class IntercomNewApplicantCreateJob < ApplicationJob
   end
 
   def founder_university(founder)
-    founder.college&.replacement_university&.name
+    founder.college&.university&.name
   end
 end

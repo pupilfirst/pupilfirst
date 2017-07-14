@@ -1,12 +1,14 @@
-puts 'Seeding universities'
+after 'development:states' do
+  puts 'Seeding universities (idempotent)'
 
-universities = [
-  ['Gujarat Technical University', 'Gujarat'],
-  ['Kerala University', 'Kerala'],
-  ['Cochin University of Science and Technology', 'Kerala'],
-  ['-- Other University not in this List --', 'Other']
-]
+  gujarat = State.find_by(name: 'Gujarat')
+  kerala = State.find_by(name: 'Kerala')
 
-universities.each do |university|
-  University.create! name: university[0], location: university[1]
+  [
+    ['Gujarat Technological University, Ahmedabad', gujarat],
+    ['University of Kerala, Thiruvananthapuram', kerala],
+    ['Cochin University of Science and Technology, Kochi', kerala]
+  ].each do |university_data|
+    University.where(name: university_data[0], state: university_data[1]).first_or_create!
+  end
 end

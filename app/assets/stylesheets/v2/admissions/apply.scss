@@ -875,27 +875,6 @@
     font-weight: $font-semibold;
   }
   .simple-form-container {
-    .batch_application_university_id {
-      position: relative;
-
-      .control-label {
-        position: absolute;
-        z-index: 1;
-        padding: 8px;
-        @include border-radius(0.25rem 0 0 0.25rem);
-        margin: 0;
-        background-color: white;
-        border: 1px solid $gray-border;
-      }
-      .university_select {
-        z-index: 2;
-
-        > a {
-          background-color: transparent;
-          padding-left: 75px;
-        }
-      }
-    }
     .form-group {
       margin-bottom: 15px;
 

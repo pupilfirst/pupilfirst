@@ -1,0 +1,9 @@
+---
+timestamp: '2017-07-12T08:09:22Z'
+title: SV.CO now runs on Puma! We changed our server-of-choice from Phusion Passenger
+  to the more popular Puma.
+trello: https://trello.com/c/OLJ9RVoG
+private: false
+description: The shift included introducing a timeout of 20 seconds using the rack-timeout
+  gem and gzip compression using the heroku-deflater gem.
+category: operations

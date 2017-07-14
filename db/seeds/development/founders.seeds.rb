@@ -10,7 +10,7 @@ after 'development:colleges' do
     name: 'John Doe',
     email: 'johndoe@example.com',
     phone: '9876543210',
-    reference: BatchApplicant.reference_sources.sample,
+    reference: Founder.reference_sources.sample,
     college: College.first,
     user: john_doe,
     startup_admin: true

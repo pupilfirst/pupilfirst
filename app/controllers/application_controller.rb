@@ -15,7 +15,6 @@ class ApplicationController < ActionController::Base
   helper_method :current_mooc_student
   helper_method :current_founder
   helper_method :current_startup
-  helper_method :current_batch_applicant
 
   # When in production, respond to requests that ask for unhandled formats with 406.
   rescue_from ActionView::MissingTemplate do |exception|
@@ -63,10 +62,6 @@ class ApplicationController < ActionController::Base
 
   def current_startup
     @current_startup ||= current_founder&.startup
-  end
-
-  def current_batch_applicant
-    @current_batch_applicant ||= current_user&.batch_applicant
   end
 
   # sets a permanent signed cookie. Additional options such as :tld_length can be passed via the options_hash
@@ -196,13 +191,6 @@ class ApplicationController < ActionController::Base
     }
   end
 
-  def instagram_csp
-    {
-      script: 'https://api.instagram.com',
-      image: 'scontent.cdninstagram.com'
-    }
-  end
-
   def gtm_csp
     {
       script: 'https://www.googletagmanager.com'
@@ -237,7 +225,7 @@ class ApplicationController < ActionController::Base
       'self' 'unsafe-eval' 'unsafe-inline' https://ajax.googleapis.com https://blog.sv.co https://www.youtube.com
       https://s.ytimg.com http://www.startatsv.com https://sv-assets.sv.co
       #{google_analytics_csp[:script]} #{inspectlet_csp[:script]} #{facebook_csp[:script]} #{intercom_csp[:script]}
-      #{gtm_csp[:script]} #{instagram_csp[:script]};
+      #{gtm_csp[:script]};
     SCRIPT_SOURCES
   end
 

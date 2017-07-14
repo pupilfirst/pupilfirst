@@ -4,7 +4,7 @@ ActiveAdmin.register Payment do
   menu parent: 'Admissions'
   actions :index, :show
 
-  filter :batch_applicant_name_contains
+  filter :founder_name_contains
   filter :amount
   filter :fees
   filter :refunded
@@ -14,32 +14,18 @@ ActiveAdmin.register Payment do
   scope :requested
   scope :paid
 
-  controller do
-    def scoped_collection
-      super.includes :batch_applicant, batch_application: [:team_lead]
-    end
-  end
-
   index do
-    column 'Startup / Application' do |payment|
-      if payment.batch_application.present?
-        link_to payment.batch_application.display_name, admin_batch_application_path(payment.batch_application)
-      elsif payment.original_batch_application.present?
-        em do
-          link_to "#{payment.original_batch_application.display_name} (Archived)", admin_batch_application_path(payment.original_batch_application)
-        end
-      elsif payment.startup.present?
+    column :startup do |payment|
+      if payment.startup.present?
         link_to payment.startup.product_name, admin_startup_path(payment.startup)
       else
         em 'Missing'
       end
     end
 
-    column 'Founder / Applicant' do |payment|
+    column :founder do |payment|
       if payment.founder.present?
         link_to payment.founder.name, admin_founder_path(payment.founder)
-      elsif payment.batch_applicant.present?
-        link_to payment.batch_applicant.name, admin_batch_applicant_path(payment.batch_applicant)
       else
         em 'Missing'
       end
@@ -49,32 +35,7 @@ ActiveAdmin.register Payment do
     column(:status) { |payment| t("payment.status.#{payment.status}") }
     column :refunded
 
-    actions do |payment|
-      if payment.batch_application.present?
-        span do
-          link_to(
-            'Archive',
-            archive_admin_payment_path(payment),
-            class: 'member_link',
-            method: :post,
-            data: { confirm: 'Are you sure?' }
-          )
-        end
-      end
-    end
-  end
-
-  action_item :archive, only: :show do
-    if payment.batch_application.present?
-      link_to 'Archive', archive_admin_payment_path(payment), method: :post
-    end
-  end
-
-  member_action :archive, method: :post do
-    payment = Payment.find(params[:id])
-    payment.archive!
-    flash[:success] = "Payment ##{payment.id} has been archived!"
-    redirect_to admin_payments_path
+    actions
   end
 
   action_item :mark_refunded, only: :show do
@@ -92,23 +53,18 @@ ActiveAdmin.register Payment do
   end
 
   csv do
-    column :application do |payment|
-      batch_application = payment.batch_application
-
-      if batch_application.present?
-        "Application ##{payment.batch_application.id} to batch #{payment.batch_application.batch.batch_number}"
-      else
-        'Missing'
-      end
+    column :startup do |payment|
+      startup = payment.startup
+      "Startup ##{payment.startup.id} - #{payment.startup.product_name}" if startup.present?
     end
 
     column :status do |payment|
       t("payment.status.#{payment.status}")
     end
 
-    column :team_lead do |payment|
-      team_lead = payment&.batch_application&.team_lead || payment.batch_applicant
-      "#{team_lead.name} (#{team_lead.phone})" if team_lead.present?
+    column :founder do |payment|
+      founder = payment.founder
+      "#{founder.name} (#{founder.phone})" if founder.present?
     end
 
     column :amount

@@ -65,7 +65,7 @@ class CollegeImporterService
       established_year: established_year,
       website: website,
       contact_numbers: contact,
-      replacement_university_id: university.id
+      university_id: university.id
     )
   end
 
@@ -82,7 +82,7 @@ class CollegeImporterService
   end
 
   def create_university(state, university)
-    university = university.present? ? ReplacementUniversity.find_or_create_by!(name: university) : OpenStruct.new
+    university = university.present? ? University.find_or_create_by!(name: university) : OpenStruct.new
 
     # If university's state isn't set yet, set it as college's state.
     if university.state.blank? && state.present? && university.persisted?

@@ -15,7 +15,7 @@ module Users
     private
 
     def name
-      @user.founder&.name || @user.batch_applicant&.name || @user.mooc_student&.name
+      @user.founder&.name || @user.mooc_student&.name
     end
 
     def startup
@@ -23,7 +23,7 @@ module Users
     end
 
     def phone
-      @user.founder&.phone || @user.batch_applicant&.phone || @user.mooc_student&.phone
+      @user.founder&.phone || @user.mooc_student&.phone
     end
   end
 end

@@ -1,0 +1,7 @@
+---
+timestamp: '2017-07-12T09:21:27Z'
+title: Removed all code related to batch applicants and applications.
+trello: https://trello.com/c/uy1IL6fh
+private: true
+description: This removes just the code. Database tables should be removed once this
+  change is live in production.

@@ -1,0 +1,5 @@
+---
+timestamp: '2017-07-13T07:00:21Z'
+title: Index status column on the timeline_events table.
+private: true
+category: performance

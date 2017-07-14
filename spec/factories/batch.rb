@@ -15,7 +15,7 @@ FactoryGirl.define do
     # batch with 10 targets for startups in the first week first group
     trait :with_targets_for_startups do
       after(:create) do |batch|
-        create_list(:target, 10, :with_program_week, :for_startup, batch: batch, week_number: 1, group_index: 1)
+        create_list(:target, 10, :for_startup, batch: batch, week_number: 1, group_index: 1)
       end
     end
 

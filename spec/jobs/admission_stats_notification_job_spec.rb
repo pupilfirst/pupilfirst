@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe AdmissionStatsNotificationJob do
+describe AdmissionStatsNotificationJob, broken: true do
   subject { described_class }
 
   let!(:application_round) { create :application_round }

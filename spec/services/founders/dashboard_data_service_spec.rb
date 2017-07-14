@@ -89,7 +89,7 @@ describe Founders::DashboardDataService do
       'name' => target_group.name,
       'description' => target_group.description,
       'milestone' => target_group.milestone,
-      'targets' => target_group.targets.where.not(target_group_id: nil).map { |target| target_details(target) }
+      'targets' => target_group.targets.where.not(target_group_id: nil).order(:sort_index).map { |target| target_details(target) }
     }
   end
 

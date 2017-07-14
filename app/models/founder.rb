@@ -33,7 +33,6 @@ class Founder < ApplicationRecord
   has_many :public_slack_messages
   belongs_to :startup, optional: true
   belongs_to :invited_startup, class_name: 'Startup', optional: true
-  belongs_to :university, optional: true
   has_many :karma_points, dependent: :destroy
   has_many :timeline_events
   has_many :visits, as: :user
@@ -41,7 +40,7 @@ class Founder < ApplicationRecord
   has_many :platform_feedback
   belongs_to :user
   belongs_to :college, optional: true
-  has_one :batch_applicant
+  has_one :university, through: :college
   has_one :payment, dependent: :restrict_with_error
   has_one :referral_coupon, class_name: 'Coupon', foreign_key: 'referrer_id'
   has_many :coupon_usages, through: :referral_coupon
@@ -52,8 +51,6 @@ class Founder < ApplicationRecord
   scope :for_batch_id_in, ->(ids) { joins(:startup).where(startups: { batch_id: ids }) }
   scope :not_dropped_out, -> { joins(:startup).merge(Startup.not_dropped_out) }
   scope :startup_members, -> { where 'startup_id IS NOT NULL' }
-  # TODO: Do we need this anymore ?
-  scope :student_entrepreneurs, -> { where.not(university_id: nil) }
   scope :missing_startups, -> { where('startup_id NOT IN (?)', Startup.pluck(:id)) }
   scope :non_founders, -> { where(startup_id: nil) }
   scope :in_batch, ->(batch) { joins(:startup).where(startups: { batch_id: batch.id }) }
@@ -382,6 +379,12 @@ class Founder < ApplicationRecord
 
   def completed_targets_count
     Targets::BulkStatusService.new(self).completed_targets_count
+  end
+
+  def self.reference_sources
+    ['Friend', 'Seniors', '#StartinCollege Event', 'Newspaper/Magazine',
+     'TV', 'SV.CO Blog', 'Instagram', 'Facebook', 'Twitter', 'Microsoft Student Partner',
+     'Other (Please Specify)']
   end
 
   private

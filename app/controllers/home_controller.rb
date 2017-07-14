@@ -3,9 +3,8 @@ class HomeController < ApplicationController
 
   def index
     @skip_container = true
-    @sitewide_notice = true if %w[startupvillage.in registration].include?(params[:redirect_from])
+    @sitewide_notice = true if %w[startupvillage.in].include?(params[:redirect_from])
     @hide_nav_links = false
-    @instagram_images = Instagram.load_latest_images
 
     render layout: 'home'
   end
@@ -18,7 +17,6 @@ class HomeController < ApplicationController
   # GET /tour
   def tour
     @skip_container = true
-    @batches_open = Batch.open_for_applications
     render layout: 'application_v2'
   end
 

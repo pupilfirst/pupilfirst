@@ -1,23 +1,24 @@
 #admin__admissions-dashboard
 
-h2 Current status for level 0 startups
-#admissions-dashboard__level-zero-age data-chart-data=@presenter.startups_split.to_a.to_json
-
-h1 style="margin: 3rem 0;"
-  | Ignore data and graphs below!
-  span style="font-size: 50%;" &nbsp; They're deprecated, and pending removal / replacement.
-
-.table_tools
-  ul.scopes.table_tools_segmented_control style="width: calc((100% - 10px)); float: right;"
-    li class="#{ (multiple_rounds_selected? ? 'selected':'') + ' scope' }"
-      a.table_tools_button href=admin_admissions_dashboard_path All Rounds
-    - ApplicationRound.opened_for_applications.order('campaign_start_at DESC').each do |application_round|
-      li class="#{ (([application_round.id] == selected_round_ids) ? 'selected' : '') + ' scope' }"
-        a.table_tools_button href=admin_admissions_dashboard_path(round: application_round) #{application_round.display_name}
+.admissions-dashboard-item.full-width
+  .heading Current stages of Level 0 Startups as on - #{Time.now.strftime('%B %d')}
+  .content
+    - @startups_stage_split.each do |stage, value|
+      .admission-dashboard-data-block
+        .admission-dashboard-data-block__title
+          = stage
+        .admission-dashboard-data-block__value
+          = value
+.admissions-dashboard-item.full-width
+  .heading Last Day Stats for Level 0 Startups - #{1.day.ago.strftime('%B %d')}
+  .content
+    - @last_day_stats.each do |stage, value|
+      .admission-dashboard-data-block
+        .admission-dashboard-data-block__title
+          = stage
+        .admission-dashboard-data-block__value
+          = value
 
 .admissions-dashboard-container
-  == render 'admission_stats'
   == render 'paid_applicants_by_reference'
   == render 'paid_applications_by_location'
-  == render 'paid_applications_by_date'
-  == render 'paid_applications_by_team_size'

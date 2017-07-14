@@ -10,6 +10,7 @@ feature 'Admission Fee Payment' do
   let(:level_0) { create :level, :zero }
   let(:level_0_targets) { create :target_group, milestone: true, level: level_0 }
   let!(:screening_target) { create :target, :admissions_screening, target_group: level_0_targets }
+  let!(:cofounder_addition_target) { create :target, :admissions_cofounder_addition, target_group: level_0_targets }
   let!(:fee_payment_target) { create :target, :admissions_fee_payment, target_group: level_0_targets }
   let!(:tet_team_update) { create :timeline_event_type, :team_update }
   let(:referrer_founder) { create :founder }
@@ -22,15 +23,16 @@ feature 'Admission Fee Payment' do
 
   # ensure authorization is in place
   context 'Founder visits fee payment page' do
-    scenario 'He has not completed prerequisite screening' do
+    scenario 'He has not completed the cofounder addition prerequisite' do
       visit admissions_fee_path
 
       # raises 404 as founder is not yet authorized
       expect(page).to have_content("The page you were looking for doesn't exist.")
     end
 
-    scenario 'He has completed the prerequisite screening' do
+    scenario 'He has completed the cofounder addition prerequisite' do
       complete_target founder, screening_target
+      complete_target founder, cofounder_addition_target
       visit admissions_fee_path
 
       # successfully shows the founder the payment page
@@ -42,6 +44,7 @@ feature 'Admission Fee Payment' do
   context 'Authorized founder attempts to pay the registration fees' do
     before do
       complete_target founder, screening_target
+      complete_target founder, cofounder_addition_target
       visit admissions_fee_path
     end
 
@@ -125,6 +128,7 @@ feature 'Admission Fee Payment' do
       sample_payment.update!(startup: startup)
 
       complete_target founder, screening_target
+      complete_target founder, cofounder_addition_target
       visit admissions_fee_path
     end
 

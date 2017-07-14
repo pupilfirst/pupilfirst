@@ -12,7 +12,7 @@ feature 'Edit founders' do
   let!(:fee_payment_target) { create :target, :admissions_fee_payment, target_group: level_0_targets }
   let!(:cofounder_addition_target) { create :target, :admissions_cofounder_addition, target_group: level_0_targets }
 
-  context "when founder hasn't completed prerequisites" do
+  context "when founder hasn't completed the screening prerequisites" do
     scenario 'founder is blocked from editing founders' do
       sign_in_user(founder.user, referer: admissions_founders_path)
 
@@ -20,12 +20,11 @@ feature 'Edit founders' do
     end
   end
 
-  context 'when founder has compeleted prerequisites' do
+  context 'when founder has compeleted the screening prerequisite' do
     let!(:tet_team_update) { create :timeline_event_type, :team_update }
 
     before do
       complete_target founder, screening_target
-      complete_target founder, fee_payment_target
     end
 
     scenario 'founder adds a cofounder', js: true do

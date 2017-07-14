@@ -33,13 +33,13 @@ FactoryGirl.define do
     trait(:admissions_cofounder_addition) do
       key Target::KEY_ADMISSIONS_COFOUNDER_ADDITION
       role Target::ROLE_TEAM
-      prerequisite_targets { [create(:target, :admissions_fee_payment)] }
+      prerequisite_targets { [create(:target, :admissions_screening)] }
     end
 
     trait(:admissions_fee_payment) do
       key Target::KEY_ADMISSIONS_FEE_PAYMENT
       role Target::ROLE_TEAM
-      prerequisite_targets { [create(:target, :admissions_screening)] }
+      prerequisite_targets { [create(:target, :admissions_cofounder_addition)] }
     end
 
     trait(:admissions_screening) do

@@ -36,7 +36,7 @@ feature 'Admission Fee Payment' do
       visit admissions_fee_path
 
       # successfully shows the founder the payment page
-      expect(page).to have_content('You now need to pay the program fee.')
+      expect(page).to have_content('You now need to pay the membership fee.')
     end
   end
 

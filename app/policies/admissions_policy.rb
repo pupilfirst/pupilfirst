@@ -38,15 +38,6 @@ class AdmissionsPolicy
     true
   end
 
-  def preselection?
-    level_zero? && target_complete?(Target::KEY_ADMISSIONS_ATTEND_INTERVIEW) && target_pending?(Target::KEY_ADMISSIONS_PRE_SELECTION)
-  end
-
-  alias preselection_submit? preselection?
-  alias partnership_deed? preselection?
-  alias update_founder? preselection?
-  alias incubation_agreement? preselection?
-
   private
 
   # User should not have completed the related target.

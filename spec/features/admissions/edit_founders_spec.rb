@@ -54,6 +54,9 @@ feature 'Edit founders' do
 
       expect(page).to have_content('Details of founders have been saved!')
 
+      # The cofounder addition target should have been completed.
+      expect(cofounder_addition_target.status(founder)).to eq(Targets::StatusService::STATUS_COMPLETE)
+
       # Number of founders and invited founders should be correct.
       expect(startup.founders.count).to eq(1)
       expect(startup.invited_founders.count).to eq(1)

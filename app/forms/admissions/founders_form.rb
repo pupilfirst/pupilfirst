@@ -95,6 +95,12 @@ module Admissions
           invite_founder(founder)
         end
       end
+
+      # Complete the cofounder addition target, if it hasn't been marked as such already.
+      if cofounder_addition_target.status(current_founder) != Targets::StatusService::STATUS_COMPLETE
+        Admissions::CompleteTargetService.new(current_founder, Target::KEY_ADMISSIONS_COFOUNDER_ADDITION).execute
+      end
+
       Intercom::FounderTaggingJob.perform_later(current_founder, 'Added Co-founders')
     end
 
@@ -141,6 +147,12 @@ module Admissions
 
     def founders_for_react
       founders.as_json.map { |c| c.slice('fields', 'errors') }
+    end
+
+    private
+
+    def cofounder_addition_target
+      @cofounder_addition_target ||= Target.find_by(key: Target::KEY_ADMISSIONS_COFOUNDER_ADDITION)
     end
   end
 end

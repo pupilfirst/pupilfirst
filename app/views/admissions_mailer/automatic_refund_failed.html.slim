@@ -1,0 +1,21 @@
+= content_for :heading
+  | Automatic Refund Failed
+
+= content_for :salutation
+  | Hello administrators,
+
+= content_for :body
+  p
+    ' A payment made for a <em>now-deleted</em> startup could not be automatically refunded because it was more than a
+    | week old.
+
+  p Please manually refund this payment to the payee. Details follow:
+
+  p
+    | <strong>Payment ID:</strong> #{@payment.id}<br/>
+    | <strong>Payment Amount:</strong> #{@payment.amount}<br/>
+    - if @payment.founder.present?
+      | <strong>Founder ID:</strong> #{@payment.founder.id}<br/>
+      | <strong>Founder Name:</strong> #{@payment.founder.name}<br/>
+      | <strong>Founder Email:</strong> #{@payment.founder.email}<br/>
+      | <strong>Founder Phone:</strong> #{@payment.founder.phone}<br/>

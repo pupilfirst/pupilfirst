@@ -15,10 +15,13 @@
       h3.text-xs-center.m-b-1
         ' You now need to
         span.brand-secondary.font-semibold pay the membership fee.&nbsp;
-      ul.admissions-fee__important-points.m-b-2
+
+      ul.admissions-fee__important-points.m-b-1
         li
           strong Please note the following important points!
         li The fee is for a <strong>one-month subscription</strong> to the SV.CO program.
+
+      ul.admissions-fee__important-points.m-b-2
         li It covers your team of <strong>#{current_startup.billing_founders_count} founders</strong>.
         li You will not be able to change the number of team members after payment.
         li After payment, you will need to contact the SV.CO team to alter your team.
@@ -80,8 +83,8 @@
                       - else
                         ' Team membership fee is
                         - if current_startup.undiscounted_fee != current_startup.fee
-                          del Rs. #{current_startup.undiscounted_fee}
-                        span.brand-secondary.font-semibold &nbsp;Rs. #{current_startup.fee}.
+                          ' <del>&#8377;#{current_startup.undiscounted_fee}</del>
+                        span.brand-secondary.font-semibold &#8377;#{current_startup.fee}.
                         br
                         br
                         | Please pay the first month&rsquo;s fee.

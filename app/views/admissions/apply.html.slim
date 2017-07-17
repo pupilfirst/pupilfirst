@@ -149,9 +149,6 @@ section.school-of-saas__container.p-y-3
                 h4.saas-program__program-promises-title.font-semibold.m-b-0
                   | Merchandise at every level
 
-            .p-t-2
-              = link_to 'Many More', apply_path, class: 'saas-program__program-promises-more-link font-semibold'
-
         .col-md-5.p-a-0
           .saas-program__graduation-support
             h2.font-semibold.saas-program__graduation-support-year.m-b-0
@@ -207,14 +204,14 @@ section.application-fee__container.p-y-3
             .program-fee__title--small
               ' Monthly Fee:
             .font-semibold
-              | &#8377; 1000 per founder
+              | <del>&#8377;4000</del> &#8377;1000 per founder
 
         .col-md-6.p-a-0
           h3.program-fee__title
             .program-fee__title--small
               ' Silicon valley:
             .font-semibold
-              | &#8377; 2,50,000
+              | &#8377;2,50,000
 
 #apply-form.apply-form__container.p-y-3
   - if current_founder&.startup.blank?
@@ -250,13 +247,13 @@ section.program-framework__container.p-t-3
 
             ul.program-framework__timeline-content.list-unstyled
               li
-                p &ndash; Basics skills for entrepreneurship
+                p &ndash; Understand the Mission of SV.CO
               li
-                p &ndash; SV.CO merchandise
+                p &ndash; Team Formation & Membership Fee
               li
-                p.font-semibold &ndash; Feedback &amp; participation certificate
+                p.font-semibold &ndash; Join the Startup Village Collective
               li
-                = link_to 'Read More', apply_path, class: 'program-framework__timeline-content-link font-semibold'
+                = link_to 'Read More', 'https://help.sv.co', class: 'program-framework__timeline-content-link font-semibold', target: '_blank'
 
         li.program-framework__timeline-level data-level=("LEVEL 1")
           .program-framework__timeline-details
@@ -275,7 +272,7 @@ section.program-framework__container.p-t-3
               li
                 p.font-semibold &ndash; Finalising product features for alpha
               li
-                = link_to 'Read More', apply_path, class: 'program-framework__timeline-content-link font-semibold'
+                = link_to 'Read More', 'https://help.sv.co', class: 'program-framework__timeline-content-link font-semibold', target: '_blank'
 
         li.program-framework__timeline-level data-level=("LEVEL 2")
           .program-framework__timeline-details
@@ -294,7 +291,7 @@ section.program-framework__container.p-t-3
               li
                 p.font-semibold &ndash; Make a Product Summary
               li
-                = link_to 'Read More', apply_path, class: 'program-framework__timeline-content-link font-semibold'
+                = link_to 'Read More', 'https://help.sv.co', class: 'program-framework__timeline-content-link font-semibold', target: '_blank'
 
         li.program-framework__timeline-level data-level=("LEVEL 3")
           .program-framework__timeline-details
@@ -313,7 +310,7 @@ section.program-framework__container.p-t-3
               li
                 p.font-semibold &ndash; Alpha launch &amp; feedback at Freshworks HQ, Chennai
               li
-                = link_to 'Read More', apply_path, class: 'program-framework__timeline-content-link font-semibold'
+                = link_to 'Read More', 'https://help.sv.co', class: 'program-framework__timeline-content-link font-semibold', target: '_blank'
 
         li.program-framework__timeline-level data-level=("LEVEL 4")
           .program-framework__timeline-details.p-b-0
@@ -330,7 +327,7 @@ section.program-framework__container.p-t-3
               li
                 p.font-semibold &ndash; Live session on finding customers
               li
-                = link_to 'Read More', apply_path, class: 'program-framework__timeline-content-link font-semibold'
+                = link_to 'Read More', 'https://help.sv.co', class: 'program-framework__timeline-content-link font-semibold', target: '_blank'
 
 section.startup-ecosystem__container.p-y-3
   .container
@@ -438,21 +435,8 @@ section.apply-faq__container.p-y-3
         .card-header.apply-faq__collapse-card-header.p-a-0
           h4.font-regular.apply-faq__collapse-card-title.m-b-0
             a data-parent="#" data-toggle="collapse" href="#apply-faq__4"
-              | 4. What&rsquo;s the selection procedure like?
+              | 4. What does an ideal team that can be part of SV.CO look like?
         #apply-faq__4.collapse
-          .card-block.apply-faq__collapse-card-block
-            p
-              ' We&rsquo;ll test this using a Coding &amp; Video test. The Coding test checks
-              ' for engineering ability and the Video test checks for communication
-              ' ability. After this first round, we have a Personal Interview round
-              | where the team meets us in person.
-
-      .card.apply-faq__collapse-card
-        .card-header.apply-faq__collapse-card-header.p-a-0
-          h4.font-regular.apply-faq__collapse-card-title.m-b-0
-            a data-parent="#" data-toggle="collapse" href="#apply-faq__5"
-              | 5. What does an ideal team that can be part of SV.CO look like?
-        #apply-faq__5.collapse
           .card-block.apply-faq__collapse-card-block
             p
               ' You need to have at least 2 members and maximum 4. Team members must
@@ -468,9 +452,9 @@ section.apply-faq__container.p-y-3
       .card.apply-faq__collapse-card
         .card-header.apply-faq__collapse-card-header.p-a-0
           h4.font-regular.apply-faq__collapse-card-title.m-b-0
-            a data-parent="#" data-toggle="collapse" href="#apply-faq__6"
-              | 6. Will SV.CO fund startups?
-        #apply-faq__6.collapse
+            a data-parent="#" data-toggle="collapse" href="#apply-faq__5"
+              | 5. Will SV.CO fund startups?
+        #apply-faq__5.collapse
           .card-block.apply-faq__collapse-card-block
             ' We do not directly fund startups. Instead, we take them through a
             ' guided learning program where they learn how to build a great startup.

@@ -171,7 +171,7 @@ section.program-feature__container.p-y-3
       .col-md-7
         .row
           .col-md-6
-            a.program-feature__card href="#{apply_path}"
+            .program-feature__card
               = image_tag 'home/index/learn-from-experts.jpg', class: 'img-fluid'
               .program-feature__card-title
                 h3.program-feature__card-title-text.font-regular
@@ -179,11 +179,11 @@ section.program-feature__container.p-y-3
                   br
                   | across the world
 
-                p.program-feature__card-title-link
+                /program-feature__card-title-link
                   | Learn More
 
           .col-md-6
-            a.program-feature__card href="#{apply_path}"
+            .program-feature__card
               = image_tag 'home/index/stratup-with-friends.jpg', class: 'img-fluid'
               .program-feature__card-title
                 h3.program-feature__card-title-text.font-regular
@@ -191,11 +191,11 @@ section.program-feature__container.p-y-3
                   br
                   | with your friends
 
-                p.program-feature__card-title-link
+                /p.program-feature__card-title-link
                   | Learn More
 
           .col-md-6
-            a.program-feature__card href="#{apply_path}"
+            .program-feature__card
               = image_tag 'home/index/showcase-skills.jpg', class: 'img-fluid'
               .program-feature__card-title
                 h3.program-feature__card-title-text.font-regular
@@ -203,23 +203,23 @@ section.program-feature__container.p-y-3
                   br
                   | SV.CO events
 
-                p.program-feature__card-title-link
+                /p.program-feature__card-title-link
                   | Learn More
 
           .col-md-6
-            a.program-feature__card href="#{apply_path}"
+            .program-feature__card
               = image_tag 'home/index/idea-pool.jpg', class: 'img-fluid'
               .program-feature__card-title
                 h3.program-feature__card-title-text.font-regular
                   ' Choose from a pool of
                   br
-                  | ideas if you don’t have one
+                  | ideas if you don&rsquo;t have one
 
-                p.program-feature__card-title-link
+                /p.program-feature__card-title-link
                   | Learn More
 
       .col-md-5
-        a.program-feature__card href="#{apply_path}"
+        .program-feature__card
           = image_tag 'home/index/start-in-college.jpg', class: 'program-feature__college-img'
           .program-feature__card-title
             h3.program-feature__card-title-text.program-feature__card-title-text--big.font-regular
@@ -230,7 +230,7 @@ section.program-feature__container.p-y-3
               br
               | college degree
 
-            p.program-feature__card-title-link
+            /p.program-feature__card-title-link
               | Learn More
 
   .container
@@ -273,11 +273,11 @@ section.home-testimonial__container.p-y-3
         = image_tag 'home/index/suraj-family.png', class: 'img-fluid m-x-auto home-testimonial__image'
       .home-testimonial__text.col-md-8
         p
-          ' “I was really worried when he said he wanted to do a startup in his college.
-          ' I thought college was all about grades, attendance but then when I see him
-          ' code all the day in his room and ask money for his company and not for shopping.
-          ' It feels really great. When he told me about his experience in Silicon Valley,
-          | he seems to have a lot of fun doing that.”
+          ' &ldquo;I was really worried when he said that he wanted to do a startup in his college.
+          ' I thought college was all about grades and attendance but then I saw him
+          ' code all the day in his room. He spends money for his company and not for shopping.
+          ' It feels really great. He told me about his experience in Silicon Valley,
+          | and he seems to have a learnt a lot from that experience.&rdquo;
         p.font-semibold.p-t-1
           ' &ndash; Subbalakshmi Rajan
           .font-regular.home-testimonial__text--author-sub

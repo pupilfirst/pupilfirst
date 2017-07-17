@@ -1,34 +1,11 @@
-# rubocop:disable Metrics/ModuleLength
 module ActiveAdmin
   module DashboardHelper
-    def days_elapsed
-      (Date.today - batch_selected.start_date).to_i + 1
-    end
-
-    def batch_duration
-      (batch_selected.end_date - batch_selected.start_date).to_i
-    end
-
-    def percentage_completed_days
-      ((days_elapsed.to_f / batch_duration) * 100).round
-    end
-
-    def batch_progress_text
-      if batch_selected.start_date > Time.now
-        "Batch starting on #{batch_selected.start_date.strftime('%B %e')}"
-      elsif batch_selected.end_date < Time.now
-        "Batch ended on #{batch_selected.end_date.strftime('%B %e')}"
-      else
-        "Day #{days_elapsed} of #{batch_duration} — #{percentage_completed_days}% of Program Complete"
-      end
-    end
-
     def total_founder_count
       Founder.not_dropped_out.not_exited.count
     end
 
     def dau_on_slack
-      Founder.active_founders_on_slack(since: Time.now.beginning_of_day, upto: Time.now, batch: batch_selected)
+      Founder.active_founders_on_slack(since: Time.now.beginning_of_day, upto: Time.now)
     end
 
     def percentage_dau_on_slack
@@ -36,7 +13,7 @@ module ActiveAdmin
     end
 
     def dau_on_web
-      Founder.active_founders_on_web(since: Time.now.beginning_of_day, upto: Time.now, batch: batch_selected)
+      Founder.active_founders_on_web(since: Time.now.beginning_of_day, upto: Time.now)
     end
 
     def percentage_dau_on_web
@@ -52,7 +29,7 @@ module ActiveAdmin
     end
 
     def wau_on_slack
-      Founder.active_founders_on_slack(since: Time.now.beginning_of_week, upto: Time.now, batch: batch_selected)
+      Founder.active_founders_on_slack(since: Time.now.beginning_of_week, upto: Time.now)
     end
 
     def percentage_wau_on_slack
@@ -60,7 +37,7 @@ module ActiveAdmin
     end
 
     def wau_on_web
-      Founder.active_founders_on_web(since: Time.now.beginning_of_week, upto: Time.now, batch: batch_selected)
+      Founder.active_founders_on_web(since: Time.now.beginning_of_week, upto: Time.now)
     end
 
     def percentage_wau_on_web
@@ -76,7 +53,7 @@ module ActiveAdmin
     end
 
     def mau_on_slack
-      Founder.active_founders_on_slack(since: Time.now.beginning_of_month, upto: Time.now, batch: batch_selected)
+      Founder.active_founders_on_slack(since: Time.now.beginning_of_month, upto: Time.now)
     end
 
     def percentage_mau_on_slack
@@ -84,7 +61,7 @@ module ActiveAdmin
     end
 
     def mau_on_web
-      Founder.active_founders_on_web(since: Time.now.beginning_of_month, upto: Time.now, batch: batch_selected)
+      Founder.active_founders_on_web(since: Time.now.beginning_of_month, upto: Time.now)
     end
 
     def percentage_mau_on_web
@@ -101,20 +78,20 @@ module ActiveAdmin
 
     def wau_trend_on_slack
       7.downto(0).to_a.map do |x|
-        Founder.active_founders_on_slack(since: x.week.ago.beginning_of_week, upto: x.week.ago.end_of_week, batch: batch_selected).count
+        Founder.active_founders_on_slack(since: x.week.ago.beginning_of_week, upto: x.week.ago.end_of_week).count
       end
     end
 
     def wau_trend_on_web
       7.downto(0).to_a.map do |x|
-        Founder.active_founders_on_web(since: x.week.ago.beginning_of_week, upto: x.week.ago.end_of_week, batch: batch_selected).count
+        Founder.active_founders_on_web(since: x.week.ago.beginning_of_week, upto: x.week.ago.end_of_week).count
       end
     end
 
     def wau_trend_in_total
       7.downto(0).to_a.map do |x|
-        (Founder.active_founders_on_slack(since: x.week.ago.beginning_of_week, upto: x.week.ago.end_of_week, batch: batch_selected) +
-          Founder.active_founders_on_web(since: x.week.ago.beginning_of_week, upto: x.week.ago.end_of_week, batch: batch_selected)).compact.uniq.count
+        (Founder.active_founders_on_slack(since: x.week.ago.beginning_of_week, upto: x.week.ago.end_of_week) +
+          Founder.active_founders_on_web(since: x.week.ago.beginning_of_week, upto: x.week.ago.end_of_week)).compact.uniq.count
       end
     end
 
@@ -134,10 +111,6 @@ module ActiveAdmin
 
     def count_of_ps
       PlatformFeedback.founders_with_scores.count
-    end
-
-    def multiple_batches_selected?
-      selected_batch_ids.count > 1
     end
 
     def conversation_url(id)

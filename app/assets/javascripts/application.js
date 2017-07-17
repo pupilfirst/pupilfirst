@@ -25,7 +25,6 @@
 //= require select2-full
 //= require google_tag_manager
 //= require youtube
-//= require shift_for_hash
 //= require founders
 //= require limit_max_int
 //= require inspectlet

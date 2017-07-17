@@ -77,7 +77,7 @@ describe TimelineEventVerificationNotificationJob do
       expect(PublicSlack::MessageService).to receive(:new).and_return(mock_message_service)
       expect(mock_message_service).to receive(:post).with(message: expected_founder_message_for_startup_target, founder: timeline_event_for_startup.founder)
       expect(mock_message_service).to receive(:post).with(message: expected_team_message, founders: (timeline_event_for_startup.startup&.founders || []) - [timeline_event_for_startup.founder])
-      expect(mock_message_service).to receive(:post).with(message: expected_public_message, channel: timeline_event_for_startup.startup.batch.slack_channel)
+      expect(mock_message_service).to receive(:post).with(message: expected_public_message, channel: TimelineEventVerificationNotificationJob::SLACK_CHANNEL)
       subject.perform_now(timeline_event_for_startup)
     end
   end

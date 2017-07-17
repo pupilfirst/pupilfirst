@@ -217,18 +217,24 @@ section.application-fee__container.p-y-3
               | &#8377; 2,50,000
 
 #apply-form.apply-form__container.p-y-3
-  .container
-    .apply-section__head.m-b-2
-      h3.apply-section__head-title.apply-section__head-title--white.text-xs-center.font-black
-        .font-light
-          ' Entrepreneurship is all about doing.
-        | Start Now
-  .apply-form__box.m-x-auto
-    - if current_founder&.startup.blank?
-      - if feature_active?('continuous_admissions')
-        == render 'application_form'
-    - else
-        == render 'admissions/prospective_applicant_form'
+  - if current_founder&.startup.blank?
+    .container
+      .apply-section__head.m-b-2
+        h3.apply-section__head-title.apply-section__head-title--white.text-xs-center.font-black
+          .font-light
+            ' Entrepreneurship is all about doing.
+          | Start Now
+    .apply-form__box.m-x-auto
+      == render 'application_form'
+  - else
+    .container
+      .apply-section__head
+        h3.apply-section__head-title.apply-section__head-title--white.text-xs-center.font-black
+          .font-light
+            ' You have already completed registration.
+        .p-t-1.text-xs-center
+          a.btn.btn-primary.btn-lg.home-apply__button href=dashboard_founder_path
+            | Go to Dashboard
 
 section.program-framework__container.p-t-3
   .container

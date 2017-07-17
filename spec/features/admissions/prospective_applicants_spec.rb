@@ -1,6 +1,7 @@
 require 'rails_helper'
 
-feature 'Prospective Applicants' do
+# TODO: Prospective applicants doesn't exist any more.
+feature 'Prospective Applicants', broken: true do
   before { Feature.skip_override = true }
   after { Feature.skip_override = false }
 

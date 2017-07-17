@@ -48,7 +48,7 @@ module TimelineEvents
         update_karma_points
         post_on_facebook if @timeline_event.share_on_facebook
         reset_startup_level if @timeline_event.timeline_event_type.end_iteration?
-        update_admission_stage if @target.present? && @target.key.in?([Target::KEY_ADMISSIONS_CODING_TASK, Target::KEY_ADMISSIONS_VIDEO_TASK, Target::KEY_ADMISSIONS_ATTEND_INTERVIEW, Target::KEY_ADMISSIONS_PRE_SELECTION])
+        update_admission_stage if @target.present? && @target.key == Target::KEY_ADMISSIONS_ATTEND_INTERVIEW
       end
     end
 
@@ -150,16 +150,7 @@ module TimelineEvents
     end
 
     def update_admission_stage
-      if @target.key.in?([Target::KEY_ADMISSIONS_CODING_TASK, Target::KEY_ADMISSIONS_VIDEO_TASK])
-        interview_status = Target.find_by(key: Target::KEY_ADMISSIONS_ATTEND_INTERVIEW).status(@timeline_event.founder)
-        if interview_status == Targets::StatusService::STATUS_PENDING
-          startup.update!(admission_stage: Startup::ADMISSION_STAGE_CODING_AND_VIDEO_PASSED)
-        end
-      elsif @target.key == Target::KEY_ADMISSIONS_ATTEND_INTERVIEW
-        startup.update!(admission_stage: Startup::ADMISSION_STAGE_INTERVIEW_PASSED)
-      else
-        startup.update!(admission_stage: Startup::ADMISSION_STAGE_PRESELECTION_DONE)
-      end
+      startup.update!(admission_stage: Startup::ADMISSION_STAGE_INTERVIEW_PASSED)
     end
   end
 end

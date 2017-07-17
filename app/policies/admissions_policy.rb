@@ -14,7 +14,7 @@ class AdmissionsPolicy
   end
 
   def fee?
-    level_zero? && target_complete?(Target::KEY_ADMISSIONS_SCREENING) && target_incomplete?(Target::KEY_ADMISSIONS_FEE_PAYMENT)
+    level_zero? && target_complete?(Target::KEY_ADMISSIONS_COFOUNDER_ADDITION) && target_incomplete?(Target::KEY_ADMISSIONS_FEE_PAYMENT)
   end
 
   alias fee_submit? fee?
@@ -22,7 +22,7 @@ class AdmissionsPolicy
   alias coupon_remove? fee?
 
   def founders?
-    level_zero? && target_complete?(Target::KEY_ADMISSIONS_FEE_PAYMENT)
+    level_zero? && target_complete?(Target::KEY_ADMISSIONS_SCREENING)
   end
 
   def founders_submit?
@@ -37,15 +37,6 @@ class AdmissionsPolicy
     # Authorization is handled in the controller using supplied token.
     true
   end
-
-  def preselection?
-    level_zero? && target_complete?(Target::KEY_ADMISSIONS_ATTEND_INTERVIEW) && target_pending?(Target::KEY_ADMISSIONS_PRE_SELECTION)
-  end
-
-  alias preselection_submit? preselection?
-  alias partnership_deed? preselection?
-  alias update_founder? preselection?
-  alias incubation_agreement? preselection?
 
   private
 

@@ -1,4 +1,4 @@
-module Admissions
+module Graduations
   class PreselectionStageApplicantForm < Reform::Form
     property :id, writeable: false
     property :name, validates: { presence: true, length: { maximum: 250 } }

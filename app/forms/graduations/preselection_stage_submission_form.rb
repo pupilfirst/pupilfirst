@@ -1,4 +1,4 @@
-module Admissions
+module Graduations
   class PreselectionStageSubmissionForm < Reform::Form
     property :courier_name, validates: { presence: true }
     property :courier_number, validates: { presence: true }
@@ -21,10 +21,7 @@ module Admissions
       # update intercom last_applicant_event
       IntercomLastApplicantEventUpdateJob.perform_later(model.admin, 'agreements_sent') unless Rails.env.test?
 
-      # Create a timeline event in submitted state.
-      target = Target.find_by(key: Target::KEY_ADMISSIONS_PRE_SELECTION)
-
-      target.timeline_events.create!(
+      TimelineEvent.create!(
         founder: current_founder,
         startup: model,
         description: 'Pre-selection information has been submitted to the SV.CO team',

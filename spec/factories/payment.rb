@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :payment do
     startup
-    founder { startup.admin }
+    founder { startup.founders.first }
     instamojo_payment_request_id { SecureRandom.hex }
     instamojo_payment_request_status 'Pending'
     amount 3000

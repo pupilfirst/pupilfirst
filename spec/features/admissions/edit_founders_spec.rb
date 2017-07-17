@@ -12,7 +12,7 @@ feature 'Edit founders' do
   let!(:fee_payment_target) { create :target, :admissions_fee_payment, target_group: level_0_targets }
   let!(:cofounder_addition_target) { create :target, :admissions_cofounder_addition, target_group: level_0_targets }
 
-  context "when founder hasn't completed prerequisites" do
+  context "when founder hasn't completed the screening prerequisites" do
     scenario 'founder is blocked from editing founders' do
       sign_in_user(founder.user, referer: admissions_founders_path)
 
@@ -20,12 +20,11 @@ feature 'Edit founders' do
     end
   end
 
-  context 'when founder has compeleted prerequisites' do
+  context 'when founder has compeleted the screening prerequisite' do
     let!(:tet_team_update) { create :timeline_event_type, :team_update }
 
     before do
       complete_target founder, screening_target
-      complete_target founder, fee_payment_target
     end
 
     scenario 'founder adds a cofounder', js: true do
@@ -54,6 +53,9 @@ feature 'Edit founders' do
       click_button 'Save founders'
 
       expect(page).to have_content('Details of founders have been saved!')
+
+      # The cofounder addition target should have been completed.
+      expect(cofounder_addition_target.status(founder)).to eq(Targets::StatusService::STATUS_COMPLETE)
 
       # Number of founders and invited founders should be correct.
       expect(startup.founders.count).to eq(1)
@@ -153,6 +155,22 @@ feature 'Edit founders' do
 
       expect(page).to have_content('You are the team lead.')
       expect(startup.reload.admin).to eq(another_founder)
+    end
+  end
+
+  context 'when the startup has already completed the initial payment' do
+    let!(:tet_team_update) { create :timeline_event_type, :team_update }
+
+    before do
+      complete_target founder, screening_target
+      complete_target founder, cofounder_addition_target
+      complete_target founder, fee_payment_target
+    end
+
+    scenario 'founder is informed he cant edit the team anymore' do
+      sign_in_user(founder.user, referer: admissions_founders_path)
+
+      expect(page).to have_content('Team modifications are only allowed before you make your first payment')
     end
   end
 end

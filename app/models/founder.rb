@@ -24,6 +24,9 @@ class Founder < ApplicationRecord
   FEE_PAYMENT_METHODS = [PAYMENT_METHOD_REGULAR_FEE, PAYMENT_METHOD_HARDSHIP_SCHOLARSHIP, PAYMENT_METHOD_MERIT_SCHOLARSHIP].freeze
   ID_PROOF_TYPES = ['Aadhaar Card', 'Driving License', 'Passport', 'Voters ID'].freeze
 
+  # Monthly fee amount for founders.
+  FEE = 1000
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   # devise :invitable, :database_authenticatable, :confirmable, :recoverable, :rememberable, :trackable, :validatable

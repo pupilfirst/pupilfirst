@@ -117,11 +117,7 @@ Rails.application.routes.draw do
     post 'founders', action: 'founders_submit'
     post 'team_lead'
     get 'accept_invitation'
-    get 'preselection'
-    patch 'preselection', action: 'preselection_submit'
     patch 'update_founder'
-    get 'partnership_deed'
-    get 'incubation_agreement'
   end
 
   resources :prospective_applicants, only: %i[create]

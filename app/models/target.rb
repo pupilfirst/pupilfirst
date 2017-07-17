@@ -5,10 +5,7 @@ class Target < ApplicationRecord
   KEY_ADMISSIONS_SCREENING = 'admissions_screening'
   KEY_ADMISSIONS_FEE_PAYMENT = 'admissions_fee_payment'
   KEY_ADMISSIONS_COFOUNDER_ADDITION = 'admissions_cofounder_addition'
-  KEY_ADMISSIONS_CODING_TASK = 'admissions_coding_task'
-  KEY_ADMISSIONS_VIDEO_TASK = 'admissions_video_task'
   KEY_ADMISSIONS_ATTEND_INTERVIEW = 'admissions_attend_interview'
-  KEY_ADMISSIONS_PRE_SELECTION = 'admissions_pre_selection'
 
   STATUS_COMPLETE = :complete
   STATUS_NEEDS_IMPROVEMENT = :needs_improvement

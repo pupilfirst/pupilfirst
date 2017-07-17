@@ -3,12 +3,11 @@ ActiveAdmin.register Startup do
 
   permit_params :product_name, :product_description, :legal_registered_name, :website, :email, :logo, :facebook_link,
     :twitter_link, :created_at, :updated_at, :dropped_out, :registration_type, :agreement_signed_at,
-    :presentation_link, :product_video_link, :wireframe_link, :prototype_link, :slug, :batch_id, :level_id,
+    :presentation_link, :product_video_link, :wireframe_link, :prototype_link, :slug, :level_id,
     :partnership_deed, :payment_reference, :agreements_verified, startup_category_ids: [], founder_ids: [], tag_list: []
 
   filter :product_name, as: :select
   filter :level
-  filter :batch
   filter :stage, as: :select, collection: proc { stages_collection }
 
   filter :ransack_tagged_with,
@@ -106,7 +105,6 @@ ActiveAdmin.register Startup do
     column :product_video_link
     column :wireframe_link
     column :prototype_link
-    column :batch
     column(:founders) { |startup| startup.founders.pluck(:name).join ', ' }
     column(:team_members) { |startup| startup.team_members.pluck(:name).join ', ' }
     column(:women_cofounders) { |startup| startup.founders.where(gender: Founder::GENDER_FEMALE).count }
@@ -221,7 +219,6 @@ ActiveAdmin.register Startup do
 
       row :level
       row :maximum_level
-      row :batch
       row :iteration
 
       row :tags do

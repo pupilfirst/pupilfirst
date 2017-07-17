@@ -418,11 +418,6 @@ class Startup < ApplicationRecord
     Batch.where(id: Startup.where.not(batch_id: nil).pluck(:batch_id).uniq)
   end
 
-  def self.leaderboard_toppers_for_batch(batch, count: 3)
-    # returns ids of n toppers on the leaderboard
-    Startups::PerformanceService.new.leaderboard(batch)[0..count - 1].map { |startup, _rank, _points| startup.id }
-  end
-
   def restartable_levels
     return Level.none if level.number < 2
     Level.where(number: 1..(level.number - 1))
@@ -460,7 +455,11 @@ class Startup < ApplicationRecord
   end
 
   def week_percentage
-    ((present_week_number.to_f / 24) * 100).to_i
+    if present_week_number >= 24
+      100
+    else
+      ((present_week_number.to_f / 24) * 100).to_i
+    end
   end
 
   def referrer

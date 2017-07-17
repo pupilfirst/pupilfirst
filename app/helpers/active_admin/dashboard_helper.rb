@@ -24,7 +24,7 @@ module ActiveAdmin
     end
 
     def total_founder_count
-      Founder.not_dropped_out.not_exited.in_batch(batch_selected).count
+      Founder.not_dropped_out.not_exited.count
     end
 
     def dau_on_slack

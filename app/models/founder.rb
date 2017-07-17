@@ -51,12 +51,10 @@ class Founder < ApplicationRecord
 
   scope :admitted, -> { joins(:startup).merge(Startup.admitted) }
   scope :level_zero, -> { joins(:startup).merge(Startup.level_zero) }
-  scope :for_batch_id_in, ->(ids) { joins(:startup).where(startups: { batch_id: ids }) }
   scope :not_dropped_out, -> { joins(:startup).merge(Startup.not_dropped_out) }
   scope :startup_members, -> { where 'startup_id IS NOT NULL' }
   scope :missing_startups, -> { where('startup_id NOT IN (?)', Startup.pluck(:id)) }
   scope :non_founders, -> { where(startup_id: nil) }
-  scope :in_batch, ->(batch) { joins(:startup).where(startups: { batch_id: batch.id }) }
 
   # Custom scope to allow AA to filter by intersection of tags.
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
@@ -299,13 +297,13 @@ class Founder < ApplicationRecord
   end
 
   # method to return the list of active founders on slack for a given duration
-  def self.active_founders_on_slack(since:, upto: Time.now, batch: Batch.current_or_last)
-    Founder.not_dropped_out.not_exited.in_batch(batch).active_on_slack(since, upto).distinct
+  def self.active_founders_on_slack(since:, upto: Time.now)
+    Founder.not_dropped_out.not_exited.active_on_slack(since, upto).distinct
   end
 
   # method to return the list of active founders on web for a given duration
-  def self.active_founders_on_web(since:, upto: Time.now, batch: Batch.current_or_last)
-    Founder.not_dropped_out.not_exited.in_batch(batch).active_on_web(since, upto).distinct
+  def self.active_founders_on_web(since:, upto: Time.now)
+    Founder.not_dropped_out.not_exited.active_on_web(since, upto).distinct
   end
 
   def any_targets?

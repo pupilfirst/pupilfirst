@@ -4,9 +4,6 @@ class StartupFeedback < ApplicationRecord
   belongs_to :timeline_event, optional: true
   attr_accessor :send_email, :event_id, :event_status
 
-  scope :for_batch, ->(batch) { joins(:startup).where(startups: { batch_id: batch.id }) }
-  scope :for_batch_id_in, ->(ids) { joins(:startup).where(startups: { batch_id: ids }) }
-
   # mount uploader for attachment
   mount_uploader :attachment, StartupFeedbackAttachmentUploader
 

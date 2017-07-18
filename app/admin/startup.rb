@@ -21,6 +21,7 @@ ActiveAdmin.register Startup do
   filter :registration_type, as: :select, collection: proc { Startup.valid_registration_types }
   filter :startup_categories
   filter :dropped_out
+  filter :created_at
 
   scope :admitted, default: true
   scope :inactive_for_week

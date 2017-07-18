@@ -14,20 +14,18 @@
             li #{error_message}
 
   .application-start-form.content-box.m-b-2
-    h4.form-section-title.m-b-1
-      | Apply Now
     .simple-form-container
       = f.hidden_field :ignore_email_hint, value: false
-      = f.input :name, label: false, placeholder: 'Full Name of Founder', input_html: { maxlength: 250 }
+      = f.input :name, placeholder: 'Full Name of Founder', input_html: { maxlength: 250 }
 
-      = f.input :email, label: false, placeholder: 'Email Address',
+      = f.input :email, placeholder: 'Email Address',
         input_html: { maxlength: 250, type: 'email', data: { replacement_hint: @form.replacement_hint } },
         hint: @form.replacement_hint.present? ? "Did you mean <strong>#{@form.replacement_hint}</strong>?<br/><a id='application-form__password-hint-accept' href='#' class='btn btn-sm btn-success application-form__email-hint-button m-r-1'>Yes</a><a id='application-form__password-hint-reject' href='#' class='btn btn-sm btn-danger application-form__email-hint-button'>No</a>".html_safe : nil
 
-      = f.input :phone, label: false, placeholder: 'Mobile phone number',
+      = f.input :phone, placeholder: 'Mobile phone number',
         input_html: { maxlength: 17, type: 'tel', pattern: MobileNumberValidator::FORM_EXPRESSION }
 
-      = f.input :reference, label: false,
+      = f.input :reference,
         collection: proc { t('models.founder.references') },
         required: false,
         include_blank: 'How did you hear about us?'
@@ -37,8 +35,7 @@
 
       = f.input :college_id,
         as: :select,
-        label: false,
-        input_html: { value: nil, 'data-search-url' => colleges_url },
+        input_html: { class: 'sd', value: nil, 'data-search-url' => colleges_url },
         required: true,
         collection: @form.college_collection,
         selected: @form.college_id
@@ -51,4 +48,4 @@
           input_html: { maxlength: 250, disabled: true }
 
       div
-        = f.submit 'Submit', class: 'btn btn-primary btn-md text-uppercase'
+        = f.submit 'Apply Now', class: 'btn btn-primary btn-md apply-form__submit-button'

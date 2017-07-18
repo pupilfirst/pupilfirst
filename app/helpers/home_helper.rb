@@ -15,10 +15,6 @@ module HomeHelper
     params[:redirect_from] == 'startupvillage.in'
   end
 
-  def registration_redirect?
-    params[:redirect_from] == 'registration'
-  end
-
   def university_count_from_applications
     Rails.cache.fetch('home/university_count', expires_in: 1.hour) do
       University.joins(:founders).distinct.count

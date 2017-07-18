@@ -1,16 +1,10 @@
 class AdmissionsController < ApplicationController
   layout 'application_v2'
-  before_action :skip_container, only: %i[founders founders_submit fee]
+  before_action :skip_container, only: %i[apply register founders founders_submit fee]
 
   # GET /apply
   def apply
-    if feature_active?('continuous_admissions')
-      @form = Founders::RegistrationForm.new(Founder.new)
-    else
-      @form ||= ProspectiveApplicants::RegistrationForm.new(ProspectiveApplicant.new)
-      @prospective_applicant = ProspectiveApplicant.new.decorate
-    end
-
+    @form = Founders::RegistrationForm.new(Founder.new)
     @form.prepopulate(current_user) if current_user.present?
   end
 
@@ -31,6 +25,7 @@ class AdmissionsController < ApplicationController
         redirect_to dashboard_founder_path(from: 'register')
       end
     else
+      flash.now[:error] = 'There were problems with your submission. Please check the form and retry.'
       render 'apply'
     end
   end

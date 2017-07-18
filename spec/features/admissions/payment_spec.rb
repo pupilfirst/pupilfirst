@@ -51,7 +51,7 @@ feature 'Admission Fee Payment' do
       visit admissions_fee_path
 
       # he will be asked to pay the full amount
-      expect(page).to have_content('Team membership fee is Rs. 1000')
+      expect(page).to have_content('Team membership fee is ₹1000')
       click_on 'Pay Now'
 
       # he must be re-directed to the payment's long_url.
@@ -92,14 +92,14 @@ feature 'Admission Fee Payment' do
       # he removes the applied coupon
       click_button 'Remove'
       expect(page).to have_content('Have a discount coupon?')
-      expect(page).to have_content('Team membership fee is Rs. 1000')
+      expect(page).to have_content('Team membership fee is ₹1000')
 
       # he applies it back :)
       fill_in 'admissions_coupon_code', with: coupon.code
       click_button 'Apply Code'
 
       # He should be shown the discounted amount. The original amount is crossed out (not detected by this test).
-      expect(page).to have_content('Team membership fee is Rs. 1000 Rs. 750.')
+      expect(page).to have_content('Team membership fee is ₹1000 ₹750.')
 
       click_on 'Pay Now'
 
@@ -130,7 +130,7 @@ feature 'Admission Fee Payment' do
       scenario 'logged in founder needs to pay for both confirmed and unconfirmed founders' do
         visit admissions_fee_path
 
-        expect(page).to have_content('Team membership fee is Rs. 3000')
+        expect(page).to have_content('Team membership fee is ₹3000')
       end
     end
   end
@@ -148,7 +148,7 @@ feature 'Admission Fee Payment' do
 
     scenario 'Founder resubmits the payment form' do
       # he issues a new payment request
-      expect(page).to have_content('Team membership fee is Rs. 1000')
+      expect(page).to have_content('Team membership fee is ₹1000')
       click_on 'Pay Now'
       expect(page).to have_content("redirected to: #{long_url}")
 

@@ -191,16 +191,15 @@ class ApplicationController < ActionController::Base
     }
   end
 
-  def instagram_csp
-    {
-      script: 'https://api.instagram.com',
-      image: 'scontent.cdninstagram.com'
-    }
-  end
-
   def gtm_csp
     {
       script: 'https://www.googletagmanager.com'
+    }
+  end
+
+  def public_s3_csp
+    {
+      media: 'https://s3.amazonaws.com/sv-co-public/'
     }
   end
 
@@ -226,7 +225,7 @@ class ApplicationController < ActionController::Base
       'self' 'unsafe-eval' 'unsafe-inline' https://ajax.googleapis.com https://blog.sv.co https://www.youtube.com
       https://s.ytimg.com http://www.startatsv.com https://sv-assets.sv.co
       #{google_analytics_csp[:script]} #{inspectlet_csp[:script]} #{facebook_csp[:script]} #{intercom_csp[:script]}
-      #{gtm_csp[:script]} #{instagram_csp[:script]};
+      #{gtm_csp[:script]};
     SCRIPT_SOURCES
   end
 
@@ -245,7 +244,7 @@ class ApplicationController < ActionController::Base
 
   def media_sources
     <<~MEDIA_SOURCES.squish
-      media-src 'self' #{resource_csp[:media]} #{intercom_csp[:media]};
+      media-src 'self' #{resource_csp[:media]} #{intercom_csp[:media]} #{public_s3_csp[:media]};
     MEDIA_SOURCES
   end
 

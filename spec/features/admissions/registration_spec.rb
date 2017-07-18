@@ -24,7 +24,7 @@ feature 'Founder Registration' do
       select "My college isn't listed", from: 'founders_registration_college_id'
       fill_in 'founders_registration_college_text', with: founder.college.name
 
-      click_on 'Submit'
+      click_on 'Apply Now'
 
       expect(page).to have_content('You have already completed this step. Please sign in instead.')
     end
@@ -41,11 +41,8 @@ feature 'Founder Registration' do
     scenario 'User registers as a founder', js: true do
       visit apply_path
 
-      expect(page).to have_text('Are you a registered founder?')
-      expect(page).to have_link('Sign In to Continue')
-
       # Fill in the registration form.
-      expect(page).to have_text('Apply Now')
+      expect(page).to have_button('Apply Now')
       fill_in 'founders_registration_name', with: 'Jack Sparrow'
       fill_in 'founders_registration_email', with: 'elcapitan@sv.co'
       # fill_in 'founders_registration_email_confirmation', with: 'elcapitan@sv.co'
@@ -53,7 +50,7 @@ feature 'Founder Registration' do
       select "My college isn't listed", from: 'founders_registration_college_id'
       fill_in 'founders_registration_college_text', with: 'Swash Bucklers Training Institute'
 
-      click_on 'Submit'
+      click_on 'Apply Now'
 
       # Founder must have reached his new dashboard with the tour triggered.
       expect(page).to have_text('Welcome to your personal dashboard!')
@@ -79,13 +76,13 @@ feature 'Founder Registration' do
       select "My college isn't listed", from: 'founders_registration_college_id'
       fill_in 'founders_registration_college_text', with: 'Swash Bucklers Training Institute'
 
-      click_on 'Submit'
+      click_on 'Apply Now'
     end
 
     scenario 'User accepts the email hint', js: true do
       expect(page).to have_text('Did you mean test@gmail.com?')
       click_on 'Yes'
-      click_on 'Submit'
+      click_on 'Apply Now'
 
       expect(page).to have_selector('.introjs-tooltipReferenceLayer', visible: false)
 
@@ -96,7 +93,7 @@ feature 'Founder Registration' do
     scenario 'User rejects the email hint', js: true do
       expect(page).to have_text('Did you mean test@gmail.com?')
       click_on 'No'
-      click_on 'Submit'
+      click_on 'Apply Now'
 
       expect(page).to have_selector('.introjs-tooltipReferenceLayer', visible: false)
 

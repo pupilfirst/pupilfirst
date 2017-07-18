@@ -19,7 +19,7 @@ h2.page-header Delete my Startup
 - if @startup.admin?(current_founder)
   - if @startup.approved? || @startup.dropped_out?
     .alert.alert-danger
-      ' You are currently #{@startup.approved? ? 'enrolled in' : 'a dropout of'} an SV.CO Batch! To delete your startup timeline, contact your SV.CO representative.
+      ' You are currently #{@startup.approved? ? 'enrolled in' : 'a dropout from'} SV.CO! To delete your startup timeline, contact your SV.CO representative.
 - else
   p Only the team leader can delete a startup's profile.
 

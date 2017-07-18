@@ -233,17 +233,17 @@ class Founder < ApplicationRecord
     end
   end
 
-  # If founder is part of a batched startup, it returns batch's date range - otherwise founder creation time to 'now'.
   def activity_date_range
     (activity_timeline_start_date.beginning_of_day..activity_timeline_end_date.end_of_day)
   end
 
+  # Latest of founder creation date or 7 months ago
   def activity_timeline_start_date
-    batch_start_date.future? ? Date.today : batch_start_date
+    [created_at.to_date, 7.months.ago.to_date].max
   end
 
   def activity_timeline_end_date
-    batch_end_date.future? ? Date.today : batch_end_date
+    Date.today
   end
 
   # Returns true if any of the social URL are stored. Used on profile page.
@@ -389,14 +389,6 @@ class Founder < ApplicationRecord
   end
 
   private
-
-  def batch_start_date
-    startup.present? && startup.batch.present? ? startup.batch.start_date : created_at.to_date
-  end
-
-  def batch_end_date
-    startup.present? && startup.batch.present? ? startup.batch.end_date : Date.today
-  end
 
   def blank_activity_timeline
     start_date = activity_timeline_start_date.beginning_of_month

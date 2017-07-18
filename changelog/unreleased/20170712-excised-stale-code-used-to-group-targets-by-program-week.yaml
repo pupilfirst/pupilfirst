@@ -1,6 +1,0 @@
----
-timestamp: '2017-07-12T08:05:01Z'
-title: Excised stale code used to group targets by program week.
-trello: https://trello.com/c/nlaKkOKz
-private: true
-description: The ProgramWeek table was dropped and all related code/foreign keys removed.

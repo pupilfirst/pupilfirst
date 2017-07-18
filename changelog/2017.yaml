@@ -1,5 +1,62 @@
 ---
 changelog:
+- timestamp: '2017-07-18T06:43:27Z'
+  changes:
+  - timestamp: '2017-07-14T06:14:00Z'
+    title: Speed up check for presence of timeline events on AA dashboard.
+    private: true
+    category: performance
+  - timestamp: '2017-07-13T07:00:21Z'
+    title: Index status column on the timeline_events table.
+    private: true
+    category: performance
+  - timestamp: '2017-07-13T06:56:54Z'
+    title: Clean up the not_improved scope used by AA Dashboard and TimelineEvent#index
+    private: true
+  - timestamp: '2017-07-12T09:21:27Z'
+    title: Removed all code related to batch applicants and applications.
+    trello: https://trello.com/c/uy1IL6fh
+    private: true
+    description: This removes just the code. Database tables should be removed once
+      this change is live in production.
+  - timestamp: '2017-07-12T08:11:37Z'
+    title: Fixed a couple of errors that crept in due to the current batch crossing
+      the set batch end date.
+    trello: https://trello.com/c/HCm1396q
+    private: true
+    description: The week progress in the performance panel does not show a maximum
+      week of 24 now. Also, the batch end date was extended to August 1 so as not
+      to break other stuff.
+    category: bugfix
+  - timestamp: '2017-07-12T08:09:22Z'
+    title: SV.CO now runs on Puma! We changed our server-of-choice from Phusion Passenger
+      to the more popular Puma.
+    trello: https://trello.com/c/OLJ9RVoG
+    private: false
+    description: The shift included introducing a timeout of 20 seconds using the
+      rack-timeout gem and gzip compression using the heroku-deflater gem.
+    category: operations
+  - timestamp: '2017-07-12T08:05:01Z'
+    title: Excised stale code used to group targets by program week.
+    trello: https://trello.com/c/nlaKkOKz
+    private: true
+    description: The ProgramWeek table was dropped and all related code/foreign keys
+      removed.
+  - timestamp: '2017-07-12T08:01:09Z'
+    title: Unused TargetOverview page for admin and a related service was excised.
+    trello: https://trello.com/c/PPG4RjX2
+    private: true
+  - timestamp: '2017-07-12T07:59:41Z'
+    title: Fixed stale bug-producing code for Facebook connnect.
+    trello: https://trello.com/c/xAGXMEmT
+    private: false
+    description: The Facebook API version under use was deprecated. The newer version
+      had a mismatch in the response structure.
+    category: bugfix
+  - timestamp: '2017-07-11T08:54:26Z'
+    title: Excised the stale ProgramWeek model and all its usages
+    trello: https://trello.com/c/nlaKkOKz
+    private: true
 - timestamp: '2017-07-11T07:58:25Z'
   changes:
   - timestamp: '2017-07-11T07:50:28Z'

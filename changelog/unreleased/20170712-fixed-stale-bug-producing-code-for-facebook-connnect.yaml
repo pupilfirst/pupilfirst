@@ -1,8 +1,0 @@
----
-timestamp: '2017-07-12T07:59:41Z'
-title: Fixed stale bug-producing code for Facebook connnect.
-trello: https://trello.com/c/xAGXMEmT
-private: true
-description: The Facebook API version under use was deprecated. The newer version
-  had a mismatch in the response structure.
-category: bugfix

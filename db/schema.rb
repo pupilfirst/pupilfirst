@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170713065814) do
+ActiveRecord::Schema.define(version: 20170718074147) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "pg_trgm"
   enable_extension "pg_stat_statements"
+  enable_extension "pg_trgm"
 
   create_table "active_admin_comments", id: :serial, force: :cascade do |t|
     t.string "namespace"
@@ -416,11 +416,9 @@ ActiveRecord::Schema.define(version: 20170713065814) do
     t.datetime "updated_at", null: false
     t.integer "downloads", default: 0
     t.string "slug"
-    t.integer "batch_id"
     t.integer "startup_id"
     t.text "video_embed"
     t.integer "level_id"
-    t.index ["batch_id"], name: "index_resources_on_batch_id"
     t.index ["level_id"], name: "index_resources_on_level_id"
     t.index ["slug"], name: "index_resources_on_slug"
     t.index ["startup_id"], name: "index_resources_on_startup_id"
@@ -740,7 +738,6 @@ ActiveRecord::Schema.define(version: 20170713065814) do
   add_foreign_key "payments", "founders"
   add_foreign_key "payments", "startups"
   add_foreign_key "payments", "startups", column: "original_startup_id"
-  add_foreign_key "resources", "batches"
   add_foreign_key "resources", "levels"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"

@@ -1,0 +1,7 @@
+---
+timestamp: '2017-07-18T08:01:43Z'
+title: Remove foreign key constraint on Payment's original_startup_id column.
+trello: https://trello.com/c/fBU2jAzv
+private: true
+description: This removes the constraint and allows startups to be deleted even if
+  they're still linked to a payment via the original_startup_id column.

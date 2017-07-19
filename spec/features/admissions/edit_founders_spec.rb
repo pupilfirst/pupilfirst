@@ -20,7 +20,7 @@ feature 'Edit founders' do
     end
   end
 
-  context 'when founder has compeleted the screening prerequisite' do
+  context 'when founder has completed the screening prerequisite' do
     let!(:tet_team_update) { create :timeline_event_type, :team_update }
 
     before do
@@ -155,6 +155,31 @@ feature 'Edit founders' do
 
       expect(page).to have_content('You are the team lead.')
       expect(startup.reload.admin).to eq(another_founder)
+    end
+
+    scenario 'founder invites another from a higher level', js: true do
+      admitted_lead = create(:startup).admin
+
+      sign_in_user(founder.user, referer: admissions_founders_path)
+
+      expect(page).to have_content('You are the team lead.')
+
+      page.find('.founders-form__add-founder-button').click
+
+      expect(page).to have_selector('.founders-form__founder-content-box', count: 2)
+
+      within all('.founders-form__founder-content-box').last do
+        fill_in 'Name', with: admitted_lead.name
+        fill_in 'Email address', with: admitted_lead.email
+        fill_in 'Mobile phone number', with: admitted_lead.phone
+        select "My college isn't listed", from: 'College'
+        fill_in 'Name of your college', with: Faker::Lorem.words(3).join(' ')
+      end
+
+      click_button 'Save founders'
+
+      expect(page).to have_content("It looks like you've attempted to invite founders who are at Level 1 or above.")
+      expect(page).to have_content('is already an admitted founder')
     end
   end
 

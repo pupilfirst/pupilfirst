@@ -92,6 +92,10 @@ class Founder < ApplicationRecord
     errors.add(:born_on, 'must be at least 18 years old') if born_on && born_on > 18.years.ago.end_of_year
   end
 
+  def admitted?
+    startup.present? && startup.level.number.positive?
+  end
+
   before_validation do
     # Remove blank roles, if any.
     roles.delete('')

@@ -19,6 +19,20 @@ module Admissions
     validate :founder_must_have_college_id_or_text
     validate :team_lead_cannot_be_deleted
     validate :current_founder_cannot_be_deleted
+    validate :cannot_invite_admitted_founders
+
+    def cannot_invite_admitted_founders
+      has_error = false
+
+      founders.each do |founder|
+        if Founder.with_email(founder.email)&.admitted?
+          has_error = true
+          founder.errors[:email] << 'is already an admitted founder'
+        end
+      end
+
+      errors[:base] << "It looks like you've attempted to invite founders who are at Level 1 or above." if has_error
+    end
 
     def team_lead_cannot_be_deleted
       team_lead = founders.find { |founder| Founder.find_by(id: founder.id).startup_admin? }

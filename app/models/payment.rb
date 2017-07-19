@@ -1,10 +1,7 @@
 class Payment < ApplicationRecord
-  belongs_to :batch_application
-  belongs_to :original_batch_application, class_name: 'BatchApplication'
-  belongs_to :original_startup, class_name: 'Startup'
-  belongs_to :batch_applicant
-  belongs_to :startup
-  belongs_to :founder
+  belongs_to :original_startup, class_name: 'Startup', optional: true
+  belongs_to :startup, optional: true
+  belongs_to :founder, optional: true
 
   STATUS_REQUESTED = -'requested'
   STATUS_PAID = -'paid'
@@ -45,9 +42,15 @@ class Payment < ApplicationRecord
     instamojo_payment_status == Instamojo::PAYMENT_STATUS_FAILED
   end
 
+  # A payment is refundable if it is younger than a week, and it was registered as paid by Instamojo.
   def refundable?
     return false unless paid?
-    paid_at >= 1.week.ago
+    credited? && paid_at >= 1.week.ago
+  end
+
+  # A payment is credited (money received) only if Instamojo reports it as such.
+  def credited?
+    instamojo_payment_status == Instamojo::PAYMENT_STATUS_CREDITED
   end
 
   def refresh_payment!(payment_id)

@@ -10,7 +10,6 @@ ActiveAdmin.register MoocStudent do
   filter :phone
   filter :college_name_contains
   filter :semester
-  filter :state
   filter :gender, as: :select, collection: Founder.valid_gender_values
   filter :created_at
 
@@ -46,7 +45,13 @@ ActiveAdmin.register MoocStudent do
       end
     end
 
-    column :state
+    column :state do |mooc_student|
+      if mooc_student.college.present?
+        mooc_student.college.state.name
+      else
+        em 'Unknown'
+      end
+    end
 
     actions
   end
@@ -62,7 +67,6 @@ ActiveAdmin.register MoocStudent do
       f.input :name
       f.input :college_id, as: :select, input_html: { 'data-search-url' => colleges_url }, collection: f.object.college.present? ? [f.object.college] : []
       f.input :college_text, label: 'College as text'
-      f.input :state, as: :select, collection: University.valid_state_names
       f.input :gender, as: :select, collection: Founder.valid_gender_values, include_blank: false
       f.input :phone
     end
@@ -77,6 +81,5 @@ ActiveAdmin.register MoocStudent do
     column :gender
     column(:college) { |student| student.college.present? ? student.college.name : student.college_text }
     column :semester
-    column :state
   end
 end

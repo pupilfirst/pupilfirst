@@ -10,7 +10,7 @@ module Founders
 
     def get_access_token_info(code)
       token_info = oauth.get_access_token_info(code)
-      [token_info['access_token'], token_info['expires'].to_i.seconds.from_now]
+      [token_info['access_token'], token_info['expires_in'].to_i.seconds.from_now]
     end
 
     def save_facebook_info!(token, expires)

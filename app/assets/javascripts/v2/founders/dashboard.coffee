@@ -1,21 +1,3 @@
-targetAccordion = ->
-  scope = $('.target-accordion .founder-dashboard-target-header__container')
-  scope.off('click')
-
-  scope.on('click', (t) ->
-    dropDown = $(this).closest('.target').find('.target-description')
-    $(this).closest('.target-accordion').find('.target-description').not(dropDown).slideUp(200)
-    $('.target').removeClass 'open'
-    if $(this).hasClass('active')
-      $(this).removeClass 'active'
-    else
-      $(this).closest('.target-accordion').find('.founder-dashboard-target-header__container.active').removeClass 'active'
-      $(this).addClass 'active'
-      $(this).parent().addClass 'open'
-    dropDown.stop(false, true).slideToggle(200)
-    t.preventDefault()
-  )
-
 resetTimelineBuilderAndShow = ->
   timelineBuilderContainer = $('[data-react-class="TimelineBuilder"]')
 
@@ -27,48 +9,6 @@ resetTimelineBuilderAndShow = ->
 
   # ...and show the modal.
   $('.timeline-builder').modal(backdrop: 'static')
-
-handleTimelineBuilderPopoversHiding = ->
-  # Hide all error popovers if modal is closed
-  $('.timeline-builder').on('hide.bs.modal', (event) ->
-    $('.js-timeline-builder__textarea').popover('dispose');
-    $('.date-of-event').popover('dispose');
-    $('.js-timeline-builder__timeline-event-type-select-wrapper').popover('dispose');
-    $('.js-timeline-builder__submit-button').popover('dispose');
-    $('.image-upload').popover('dispose');
-    $('.timeline-builder__social-bar-toggle-switch').popover('dispose');
-  )
-
-handleTimelineBuilderModal = ->
-  scope = $('.js-founder-dashboard__trigger-builder')
-  scope.off('click')
-
-  scope.on('click', (event) ->
-    submitButton = $(event.target)
-
-    selectedTimelineEventTypeId = submitButton.data('timelineEventTypeId')
-    selectedTargetId = submitButton.data('targetId')
-
-    timelineBuilderContainer = $('[data-react-class="TimelineBuilder"]')
-    timelineBuilderHiddenForm = $('.js-timeline-builder__hidden-form')
-
-    # Amend the props with target ID and selected timeline event type.
-    reactProps = JSON.parse(timelineBuilderContainer.attr('data-react-props'))
-
-    if selectedTargetId
-      reactProps['targetId'] = selectedTargetId
-    else
-      delete reactProps['targetId']
-
-    if selectedTimelineEventTypeId
-      reactProps['selectedTimelineEventTypeId'] = selectedTimelineEventTypeId
-    else
-      delete reactProps['selectedTimelineEventTypeId']
-
-    timelineBuilderContainer.attr('data-react-props', JSON.stringify(reactProps))
-
-    resetTimelineBuilderAndShow()
-  )
 
 setPerformancePointer = ->
   if $('.performance-pointer').length
@@ -145,52 +85,9 @@ hideIntercomOnSmallScreen = ->
     # TODO: There might be a better way to do this!
     window.Intercom('shutdown') if window.innerWidth < 576
 
-loadProgramWeekOnDemand = ->
-  loadingElement = $('.js-program-week__loading')
-  return unless loadingElement.length
-
-  new Waypoint.Inview({
-    element: loadingElement[0]
-    enter: (direction) ->
-      return if loadingElement.data('loading')
-      loadingElement.data('loading', true)
-      weekUrl = loadingElement.data('weekUrl')
-      thisWaypoint = this
-
-      $.get(weekUrl).done((data) ->
-        programWeek = loadingElement.closest('.program-week')
-        programWeek.replaceWith(data)
-
-        # Set up loading waypoint for the next week.
-        loadProgramWeekOnDemand()
-
-        # Set up click listeners on the new program week.
-        handleTimelineBuilderModal()
-        targetAccordion()
-        viewSlidesModal()
-      ).fail(->
-        console.log("Failed to load week's data from server. :-(")
-      ).always(->
-        # Delete this waypoint.
-        thisWaypoint.destroy()
-      )
-  })
-
-stickTargetOverlayHeader = (scope = StickScope.Parent) ->
-  # $('.target-overlay-header').stickit('destroy')
-  $('.target-overlay-header').stickit
-    top: 0,
-    screenMinWidth: 992,
-    scope: scope
-
 $(document).on 'turbolinks:load', ->
   if $('#founder-dashboard').length
-#    targetAccordion()
-#    handleTimelineBuilderModal()
-#    handleTimelineBuilderPopoversHiding()
     giveATour()
     hideIntercomOnSmallScreen()
     setPerformancePointer()
     takeTourOnClick()
-    stickTargetOverlayHeader()
-#    loadProgramWeekOnDemand()

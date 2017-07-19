@@ -11,35 +11,54 @@
 
 .container
   .m-b-2
-    .row
-      .m-t-2
+    - if @fee_paid
+      .row
+        .m-t-2
+          .col-xl-6.offset-xl-3.col-lg-8.offset-lg-2.col-md-10.offset-md-1
+            .card
+              .card-block
+                h3.card-title <strong>You have already paid for your current team!</strong>
+
+                p.card-text
+                  ' Team modifications are only allowed before you make your first payment.
+                  | Your team has already completed payment for #{current_startup.billing_founders_count} founders.
+                p.card-text.m-t-1
+                  |  For any further assitance, please contact our
+                  = link_to ' Help Centre.', 'https://help.sv.co'
+                hr
+                  = link_to dashboard_founder_path, class: 'btn btn-info text-uppercase', 'aria-hidden' => 'true' do
+                    i.fa.fa-chevron-left
+                    | &nbsp;&nbsp;Return to dashboard
+    - else
+      .row
+        .m-t-2
+          .col-xl-6.offset-xl-3.col-lg-8.offset-lg-2.col-md-10.offset-md-1
+            - team_lead = @form.model.admin
+
+            .card
+              .card-block
+                - if team_lead == current_founder
+                  h3.card-title <strong>You</strong> are the team lead.
+                - else
+                  h3.card-title Your team lead is <strong>#{team_lead.name}</strong>.
+
+                p.card-text The team lead acts as SV.CO's single point of contact during the admissions process, and beyond.
+
+                - if team_lead == current_founder
+                  p.card-text.m-t-1 Any other team member can assume the role of team lead. If you want some else to accept this role, instruct them to sign in and visit this page.
+                - else
+                  p.card-text.m-t-1 You can assume the role of team lead for this startup.
+                  = button_to 'Become the team lead', admissions_team_lead_path, class: 'btn btn-primary m-t-1 text-uppercase', data: { confirm: 'Are you sure?', disable_with: 'Assuming role...' }
+
+      .row
         .col-xl-6.offset-xl-3.col-lg-8.offset-lg-2.col-md-10.offset-md-1
-          - team_lead = @form.model.admin
+          .text-xs-center.m-b-1.m-t-2
+            h3.m-b-2 Founders in your team
 
-          .card
-            .card-block
-              - if team_lead == current_founder
-                h3.card-title <strong>You</strong> are the team lead.
-              - else
-                h3.card-title Your team lead is <strong>#{team_lead.name}</strong>.
+          = react_component('FoundersForm', { authenticityToken: form_authenticity_token, founders: @form.founders_for_react, errors: @form.errors, collegesUrl: colleges_url, collegeNames: @form.college_names })
 
-              p.card-text The team lead acts as SV.CO's single point of contact during the admissions process, and beyond.
+          hr
 
-              - if team_lead == current_founder
-                p.card-text.m-t-1 Any other team member can assume the role of team lead. If you want some else to accept this role, instruct them to sign in and visit this page.
-              - else
-                p.card-text.m-t-1 You can assume the role of team lead for this startup.
-                = button_to 'Become the team lead', admissions_team_lead_path, class: 'btn btn-primary m-t-1 text-uppercase', data: { confirm: 'Are you sure?', disable_with: 'Assuming role...' }
-
-    .row
-      .col-xl-6.offset-xl-3.col-lg-8.offset-lg-2.col-md-10.offset-md-1
-        .text-xs-center.m-b-1.m-t-2
-          h3.m-b-2 Founders in your team
-
-        = react_component('FoundersForm', { authenticityToken: form_authenticity_token, founders: @form.founders_for_react, errors: @form.errors, collegesUrl: colleges_url, collegeNames: @form.college_names })
-
-        hr
-
-        = link_to dashboard_founder_path, class: 'btn btn-info text-uppercase', 'aria-hidden' => 'true' do
-          i.fa.fa-chevron-left
-          | &nbsp;&nbsp;Return to dashboard
+          = link_to dashboard_founder_path, class: 'btn btn-info text-uppercase', 'aria-hidden' => 'true' do
+            i.fa.fa-chevron-left
+            | &nbsp;&nbsp;Return to dashboard

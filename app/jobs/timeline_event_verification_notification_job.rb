@@ -25,11 +25,15 @@ class TimelineEventVerificationNotificationJob < ApplicationJob
 
   private
 
+  def public_slack_message_service
+    @public_slack_message_service ||= PublicSlack::MessageService.new
+  end
+
   def send_founder_message
     target = { founder: @timeline_event.founder }
 
     slack_message = message('founder', event_status, event_type: event_type)
-    PublicSlackTalk.post_message({ message: slack_message }.merge(target))
+    public_slack_message_service.post({ message: slack_message }.merge(target))
   end
 
   def send_team_message
@@ -39,7 +43,7 @@ class TimelineEventVerificationNotificationJob < ApplicationJob
 
     slack_message = message('team', event_status)
 
-    PublicSlackTalk.post_message({ message: slack_message }.merge(target))
+    public_slack_message_service.post({ message: slack_message }.merge(target))
   end
 
   def send_public_message
@@ -49,7 +53,7 @@ class TimelineEventVerificationNotificationJob < ApplicationJob
 
     slack_message = message('public', event_status)
 
-    PublicSlackTalk.post_message({ message: slack_message }.merge(target))
+    public_slack_message_service.post({ message: slack_message }.merge(target))
   end
 
   def event_type
@@ -89,10 +93,11 @@ class TimelineEventVerificationNotificationJob < ApplicationJob
     return '' unless @timeline_event.public_link?
 
     notice = "*Public Links attached:*\n"
+
     @timeline_event.links.each.with_index(1) do |link, index|
       next if link[:private]
-      short_url = Shortener::ShortenedUrl.generate(link[:url])
-      notice += "#{index}. <https://sv.co/#{short_url.unique_key}|#{link[:title]}>\n"
+      shortened_url = ShortenedUrls::ShortenService.new(link[:url]).shortened_url
+      notice += "#{index}. <https://sv.co/r/#{shortened_url.unique_key}|#{link[:title]}>\n"
     end
 
     notice

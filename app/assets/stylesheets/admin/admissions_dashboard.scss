@@ -23,7 +23,6 @@
 }
 
 .admissions-dashboard-item {
-  float: left;
   width: calc(50% - 15px);
   background-color: white;
   margin: 0 15px 15px 0;
@@ -56,4 +55,24 @@
 .full-width {
   width: 100%;
   height: auto;
+}
+
+.admission-dashboard-data-block {
+  margin-left: 10px;
+  margin-right: 10px;
+  width: auto;
+  float: left;
+}
+
+
+.admission-dashboard-data-block__title {
+  text-align: center;
+  font-weight: bold;
+  width: auto;
+}
+
+.admission-dashboard-data-block__value {
+  text-align: center;
+  font-weight: normal;
+  width: auto;
 }

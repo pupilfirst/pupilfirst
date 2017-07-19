@@ -5,32 +5,34 @@ module Lita
 
       def changelog(response)
         ActiveRecord::Base.connection_pool.with_connection do
-          response.reply latest_change_log
+          response.reply latest_changelog
           Ahoy::Tracker.new.track Visit::EVENT_VOCALIST_COMMAND, command: Visit::VOCALIST_COMMAND_CHANGELOG
         end
       end
 
-      def latest_change_log
-        load_file
-        extract_latest_log
-        format_for_slack
-      end
-
-      def load_file
-        @changelog_file = File.read(File.absolute_path(Rails.root.join('CHANGELOG.md')))
-      end
-
-      def extract_latest_log
-        @latest_log = @changelog_file.strip.split(/^###\s/)[1]
-      end
-
-      def format_for_slack
+      def latest_changelog
         salutation = "*Here are the latest changes on the SV.CO platform. Visit sv.co/changelog for more.*\n\n"
+        salutation + latest_changes
+      end
 
-        # replace '####' with slack-friendly '>'
-        @latest_log.gsub!(/####/, '> ')
+      def latest_release
+        @latest_release ||= Changelog::PublicChangesService.new.releases[0]
+      end
 
-        salutation + @latest_log
+      def latest_changes
+        compiled_changes = ''
+
+        latest_release[:categories].each do |category, changes|
+          compiled_changes += "*#{category}*\n\n"
+
+          changes.each do |change|
+            compiled_changes += "> #{change}\n"
+          end
+
+          compiled_changes += "\n"
+        end
+
+        compiled_changes
       end
     end
 

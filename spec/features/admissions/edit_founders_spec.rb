@@ -12,7 +12,7 @@ feature 'Edit founders' do
   let!(:fee_payment_target) { create :target, :admissions_fee_payment, target_group: level_0_targets }
   let!(:cofounder_addition_target) { create :target, :admissions_cofounder_addition, target_group: level_0_targets }
 
-  context "when founder hasn't completed prerequisites" do
+  context "when founder hasn't completed the screening prerequisites" do
     scenario 'founder is blocked from editing founders' do
       sign_in_user(founder.user, referer: admissions_founders_path)
 
@@ -20,12 +20,11 @@ feature 'Edit founders' do
     end
   end
 
-  context 'when founder has compeleted prerequisites' do
+  context 'when founder has completed the screening prerequisite' do
     let!(:tet_team_update) { create :timeline_event_type, :team_update }
 
     before do
       complete_target founder, screening_target
-      complete_target founder, fee_payment_target
     end
 
     scenario 'founder adds a cofounder', js: true do
@@ -54,6 +53,9 @@ feature 'Edit founders' do
       click_button 'Save founders'
 
       expect(page).to have_content('Details of founders have been saved!')
+
+      # The cofounder addition target should have been completed.
+      expect(cofounder_addition_target.status(founder)).to eq(Targets::StatusService::STATUS_COMPLETE)
 
       # Number of founders and invited founders should be correct.
       expect(startup.founders.count).to eq(1)
@@ -153,6 +155,47 @@ feature 'Edit founders' do
 
       expect(page).to have_content('You are the team lead.')
       expect(startup.reload.admin).to eq(another_founder)
+    end
+
+    scenario 'founder invites another from a higher level', js: true do
+      admitted_lead = create(:startup).admin
+
+      sign_in_user(founder.user, referer: admissions_founders_path)
+
+      expect(page).to have_content('You are the team lead.')
+
+      page.find('.founders-form__add-founder-button').click
+
+      expect(page).to have_selector('.founders-form__founder-content-box', count: 2)
+
+      within all('.founders-form__founder-content-box').last do
+        fill_in 'Name', with: admitted_lead.name
+        fill_in 'Email address', with: admitted_lead.email
+        fill_in 'Mobile phone number', with: admitted_lead.phone
+        select "My college isn't listed", from: 'College'
+        fill_in 'Name of your college', with: Faker::Lorem.words(3).join(' ')
+      end
+
+      click_button 'Save founders'
+
+      expect(page).to have_content("It looks like you've attempted to invite founders who are at Level 1 or above.")
+      expect(page).to have_content('is already an admitted founder')
+    end
+  end
+
+  context 'when the startup has already completed the initial payment' do
+    let!(:tet_team_update) { create :timeline_event_type, :team_update }
+
+    before do
+      complete_target founder, screening_target
+      complete_target founder, cofounder_addition_target
+      complete_target founder, fee_payment_target
+    end
+
+    scenario 'founder is informed he cant edit the team anymore' do
+      sign_in_user(founder.user, referer: admissions_founders_path)
+
+      expect(page).to have_content('Team modifications are only allowed before you make your first payment')
     end
   end
 end

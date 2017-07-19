@@ -29,10 +29,16 @@ class Startup < ApplicationRecord
 
   SV_STATS_LINK = 'bit.ly/svstats2'
 
+  ADMISSION_STAGE_SIGNED_UP = 'Signed Up'
+  ADMISSION_STAGE_SCREENING_COMPLETED = 'Screening Completed'
+  ADMISSION_STAGE_PAYMENT_INITIATED = 'Payment Initiated'
+  ADMISSION_STAGE_FEE_PAID = 'Fee Paid'
+  ADMISSION_STAGE_INTERVIEW_PASSED = 'Interview Passed'
+  ADMISSION_STAGE_PRESELECTION_DONE = 'Pre-Selection Done'
+
   # agreement duration in years
   AGREEMENT_DURATION = 5
 
-  APPLICATION_FEE = 3000
   COURSE_FEE = 50_000
 
   def self.valid_product_progress_values
@@ -54,7 +60,7 @@ class Startup < ApplicationRecord
   scope :agreement_signed, -> { where 'agreement_signed_at IS NOT NULL' }
   scope :agreement_live, -> { where('agreement_signed_at > ?', AGREEMENT_DURATION.years.ago) }
   scope :agreement_expired, -> { where('agreement_signed_at < ?', AGREEMENT_DURATION.years.ago) }
-  scope :timeline_verified, -> { joins(:timeline_events).where(timeline_events: { verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED }).distinct }
+  scope :timeline_verified, -> { joins(:timeline_events).where(timeline_events: { status: TimelineEvent::STATUS_VERIFIED }).distinct }
 
   # Custom scope to allow AA to filter by intersection of tags.
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
@@ -109,7 +115,6 @@ class Startup < ApplicationRecord
     end
   end
 
-  has_one :batch_application, dependent: :restrict_with_error
   has_many :timeline_events, dependent: :destroy
   has_many :startup_feedback, dependent: :destroy
   has_many :karma_points, dependent: :restrict_with_exception
@@ -119,10 +124,10 @@ class Startup < ApplicationRecord
   has_one :admin, -> { where(startup_admin: true) }, class_name: 'Founder', foreign_key: 'startup_id'
   accepts_nested_attributes_for :admin
 
-  belongs_to :batch
+  belongs_to :batch, optional: true
   belongs_to :level
   belongs_to :maximum_level, class_name: 'Level'
-  belongs_to :requested_restart_level, class_name: 'Level'
+  belongs_to :requested_restart_level, class_name: 'Level', optional: true
   has_one :payment, dependent: :restrict_with_error
   has_many :archived_payments, class_name: 'Payment', foreign_key: 'original_startup_id'
   has_many :coupon_usages
@@ -422,16 +427,24 @@ class Startup < ApplicationRecord
     Level.where(number: 1..(level.number - 1))
   end
 
+  def billing_founders_count
+    @billing_founders_count ||= founders.count + invited_founders.count
+  end
+
   def fee
-    latest_coupon.present? ? discounted_fee : APPLICATION_FEE
+    if latest_coupon.present?
+      (undiscounted_fee * (1 - (latest_coupon.discount_percentage.to_f / 100))).round
+    else
+      undiscounted_fee
+    end
+  end
+
+  def undiscounted_fee
+    @undiscounted_fee ||= Founder::FEE * billing_founders_count
   end
 
   def latest_coupon
     coupons&.last
-  end
-
-  def discounted_fee
-    (APPLICATION_FEE * (1 - (latest_coupon.discount_percentage.to_f / 100))).round
   end
 
   def present_week_number

@@ -7,7 +7,7 @@ describe FacultyConnectSessionReminderJob do
     let(:connect_request) { create :connect_request, status: ConnectRequest::STATUS_REQUESTED }
 
     it 'does nothing' do
-      expect(PublicSlackTalk).to_not receive(:post_message)
+      expect_any_instance_of(PublicSlack::MessageService).to_not receive(:post)
 
       subject.perform_now connect_request.id
     end
@@ -16,11 +16,12 @@ describe FacultyConnectSessionReminderJob do
   context 'when the job is still relevant' do
     let(:connect_slot) { create :connect_slot, slot_at: 20.minutes.from_now }
     let(:connect_request) { create :connect_request, status: ConnectRequest::STATUS_CONFIRMED, connect_slot: connect_slot }
+    let(:mock_message_service) { instance_double PublicSlack::MessageService }
 
     it 'notifies the faculty, founders and ops team on slack' do
-      expect(PublicSlackTalk).to receive(:post_message).with(message: instance_of(String), founders: connect_request.startup.founders)
-      expect(PublicSlackTalk).to receive(:post_message).with(message: instance_of(String), founder: connect_request.faculty)
-      expect(PublicSlackTalk).to receive(:post_message).with(message: instance_of(String), founders: Faculty.ops_team)
+      expect(PublicSlack::MessageService).to receive(:new).and_return(mock_message_service)
+      expect(mock_message_service).to receive(:post).with(message: instance_of(String), founders: connect_request.startup.founders)
+      expect(mock_message_service).to receive(:post).with(message: instance_of(String), founder: connect_request.faculty)
 
       subject.perform_now connect_request.id
     end

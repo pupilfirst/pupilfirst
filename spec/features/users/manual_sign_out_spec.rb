@@ -19,7 +19,7 @@ feature 'Manual User Sign Out' do
       visit edit_founder_startup_path
 
       # User should be signed out.
-      expect(page).to have_content('Check out the latest images from our #StartInCollege campaign!')
+      expect(page).to have_content('Immersive Learning Experience to Build Campus Startups')
 
       # Log the user in again.
       user.regenerate_login_token
@@ -29,14 +29,14 @@ feature 'Manual User Sign Out' do
       expect(page).to have_content('Edit your startup profile')
       click_link('Add new team member')
       expect(page).to have_content('List new team member')
+    end
 
-      # After 1 week, he should be signed out again if the boolean is still set.
-      travel_to 1.week.from_now do
-        visit edit_founder_startup_path
+    # After 1 week, he should be signed out again if the boolean is still set.
+    travel_to 8.days.from_now do
+      visit edit_founder_startup_path
 
-        # User should be signed out.
-        expect(page).to have_content('Check out the latest images from our #StartInCollege campaign!')
-      end
+      # User should be signed out.
+      expect(page).to have_content('Immersive Learning Experience to Build Campus Startups')
     end
   end
 
@@ -54,7 +54,7 @@ feature 'Manual User Sign Out' do
         visit edit_founder_startup_path
 
         # User should be signed out.
-        expect(page).to have_content('Check out the latest images from our #StartInCollege campaign!')
+        expect(page).to have_content('Immersive Learning Experience to Build Campus Startups')
       end
     end
   end

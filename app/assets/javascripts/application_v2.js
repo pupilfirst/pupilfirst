@@ -1,8 +1,8 @@
+//= require rails-ujs
 
 //= require jquery
 //= require tether
 //= require bootstrap4_alpha3/bootstrap
-//= require jquery_ujs
 
 //= require turbolinks
 //= require turbolinks_compatibility
@@ -27,7 +27,6 @@
 //= require sidebar-menu
 //= require google_tag_manager
 //= require youtube
-//= require shift_for_hash
 //= require founders
 //= require limit_max_int
 //= require inspectlet
@@ -70,3 +69,4 @@
 //= require v2/six_ways
 //= require v2/users
 //= require v2/admissions
+//= require v2/intercom_settings

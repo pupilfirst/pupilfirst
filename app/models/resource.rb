@@ -7,10 +7,10 @@ class Resource < ApplicationRecord
   acts_as_taggable
 
   # TODO: Remove association to batch ensuring no loss of data in production
-  belongs_to :batch
+  belongs_to :batch, optional: true
 
-  belongs_to :startup
-  belongs_to :level
+  belongs_to :startup, optional: true
+  belongs_to :level, optional: true
 
   def slug_candidates
     [
@@ -20,7 +20,7 @@ class Resource < ApplicationRecord
   end
 
   def should_generate_new_friendly_id?
-    title_changed? || super
+    title_changed? || saved_change_to_title? || super
   end
 
   validates :title, presence: true
@@ -70,9 +70,9 @@ class Resource < ApplicationRecord
   # Notify on slack when a new resource is uploaded
   def notify_on_slack
     if level_exclusive?
-      PublicSlackTalk.post_message message: new_resource_message, founders: founders_to_notify
+      PublicSlack::MessageService.new.post message: new_resource_message, founders: founders_to_notify
     else
-      PublicSlackTalk.post_message message: new_resource_message, channel: '#resources'
+      PublicSlack::MessageService.new.post message: new_resource_message, channel: '#resources'
     end
   end
 
@@ -87,16 +87,16 @@ class Resource < ApplicationRecord
     end
   end
 
-  # message to be send to slack for new resources
+  # Message to be send to slack for new resources.
   def new_resource_message
     message = "*A new #{level_exclusive? ? ('private resource for Level ' + level.number.to_s) : 'public resource'}"\
     " has been uploaded to the SV.CO Startup Library*: \n"
     message += "*Title:* #{title}\n"
     message += "*Description:* #{description}\n"
-    message + "*URL:* #{Rails.application.routes.url_helpers.resource_url(self, host: 'https://sv.co')}"
+    message + "*URL:* #{Rails.application.routes.url_helpers.resource_url(id: slug, host: 'https://sv.co')}"
   end
 
-  # ensure titles are capitalized
+  # Ensure titles are capitalized.
   before_save do
     self.title = title.titlecase(humanize: false, underscore: false)
   end

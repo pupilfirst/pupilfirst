@@ -12,4 +12,8 @@ module ApplicationHelper
   def dashboard_or_root_url
     current_founder&.startup.present? ? dashboard_founder_url : root_url
   end
+
+  def short_url(full_url, expires_at: nil)
+    ShortenedUrls::ShortenService.new(full_url, expires_at: expires_at).short_url
+  end
 end

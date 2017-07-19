@@ -1,23 +1,23 @@
-- TimelineEvent.valid_verified_status.each do |verified_status|
+- TimelineEvent.valid_statuses.each do |status|
   .dashboard-item
-    - timeline_events = TimelineEvent.not_dropped_out.for_batch_id_in(selected_batch_ids).where(verified_status: verified_status).order('verified_at DESC')
-    .heading Timeline Events - #{verified_status}
+    - timeline_events = TimelineEvent.not_dropped_out.for_batch_id_in(selected_batch_ids).where(status: status).order('status_updated_at DESC')
+    .heading Timeline Events - #{status}
 
     .content
       ol
-        - events_to_list = verified_status == TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT ? timeline_events.not_improved : timeline_events
-        - if events_to_list.present?
+        - events_to_list = status == TimelineEvent::STATUS_NEEDS_IMPROVEMENT ? timeline_events.not_improved : timeline_events
+        - if events_to_list.exists?
           - events_to_list.limit(10).includes(:startup, :timeline_event_type).each do |timeline_event|
             li = link_to "#{timeline_event.startup.product_name} - #{timeline_event.title}", admin_timeline_event_path(timeline_event)
 
     .footer-spacer
 
-    - trend = TimelineEvent.for_batch_id_in(selected_batch_ids).where(verified_status: verified_status).group_by_week('timeline_events.created_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
+    - trend = TimelineEvent.for_batch_id_in(selected_batch_ids).where(status: status).group_by_week('timeline_events.created_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
 
     .left-of-button
       span.sparkline-tag #{trend.join(', ')}
 
-    - params = { q: { verified_status_equals: verified_status, startup_batch_id_in: selected_batch_ids } }
-    - params = params.merge(scope: 'not_improved') if verified_status == TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT
+    - params = { q: { status_equals: status, startup_batch_id_in: selected_batch_ids } }
+    - params = params.merge(scope: 'not_improved') if status == TimelineEvent::STATUS_NEEDS_IMPROVEMENT
     a.button.view-all href=admin_timeline_events_path(params)
       | View All (#{events_to_list.count})

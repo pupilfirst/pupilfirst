@@ -5,16 +5,19 @@ source 'https://rubygems.org'
 # Required to suppress warnings about insecure :github source.
 git_source(:github) { |repository_path| "https://github.com/#{repository_path}.git" }
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '= 5.0.2'
+# Ruby on Rails. http://rubyonrails.org
+gem 'rails', '~> 5.1.2'
 
 gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 
 gem 'activeadmin', '~> 1.0.0' # The administration framework for Ruby on Rails applications. https://activeadmin.info
 gem 'flattened_active_admin', '~> 0.0' # better looking and customizable activeadmin
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
-gem 'carrierwave', '~> 0.11' # One uploader to rule them all.
-gem 'carrierwave_backgrounder', '~> 0.4' # Backgrounder for carrierwave.
+gem 'carrierwave', '~> 1.1' # One uploader to rule them all.
+
+# TODO: Switch to carrierwave_backgrounder from rubygems when a version (with support for Carrierwave v1) is released.
+# TODO: carrierwave_backgrounder is also holding back the version of mime-types in use. Check for updates.
+gem 'carrierwave_backgrounder', '= 0.4.2', github: 'lardawge/carrierwave_backgrounder' # Backgrounder for carrierwave.
 gem 'carrierwave-bombshelter', '~> 0.2' # Protects your carrierwave from image bombs (and such).
 
 # Required by Carrierwave to upload to S3.
@@ -42,9 +45,10 @@ gem 'bootstrap_form', '= 2.5.2', github: 'desheikh/rails-bootstrap-forms', branc
 
 # TODO: The zones list in the gem was outdated.
 # Have updated and submitted a PR (https://github.com/ralovets/valid_url/pull/10). Using a personal fork until it's merged.
-gem 'valid_url', '= 0.0.4', github: 'ajaleelp/valid_url', branch: 'patch-1' # New url validataion gem
+gem 'valid_url', '= 0.0.4', github: 'mahesh-krishnakumar/valid_url', branch: 'patch-1' # New url validataion gem
 gem 'roadie-rails', '~> 1.1' # CSS management for e-mails.
-gem 'passenger', '~> 5.0' # Passenger web-server.
+gem 'puma', '~> 3.9' # The Puma ruby web server.
+gem 'rack-timeout', '~> 0.4' # Abort requests that are taking too long - recommended by Heroku to use with Puma
 gem 'delayed_job_active_record', '~> 4.1' # Delayed Job for deferring tasks.
 gem 'delayed-web', '~> 0.4' # A rails engine that provides a simple web interface for exposing the Delayed::Job queue.
 gem 'seedbank', '~> 0.4' # Better organized seed data.
@@ -61,7 +65,6 @@ gem 'lita-slack', '= 1.8.0', github: 'litaio/lita-slack', require: false # Lita 
 gem 'kramdown', '~> 1.13' # kramdown is a fast, pure Ruby Markdown superset converter, using a strict syntax definition and supporting several common extensions. http://kramdown.gettalong.org
 gem 'gaffe', '~> 1.2' # Custom error pages. https://github.com/mirego/gaffe
 gem 'google_calendar', '= 0.6.2', github: 'northworld/google_calendar' # Thin wrapper over Google Calendar API.
-gem 'recaptcha', '~> 3.4', require: 'recaptcha/rails' # ReCaptcha helpers for ruby apps http://github.com/ambethia/recaptcha
 gem 'groupdate', '~> 3.2' # The simplest way to group temporal data. https://github.com/ankane/groupdate
 gem 'videojs_rails', '~> 4.12' # Video JS for Rails 3.1+ Asset Pipeline. https://github.com/seanbehan/videojs_rails
 gem 'react-rails', '~> 2.2' # For automatically transforming JSX and using React in Rails.
@@ -70,10 +73,6 @@ gem 'acts-as-taggable-on', '~> 5.0' # Tag a single model on several contexts.
 gem 'will_paginate-bootstrap4', '~> 0.1' # This gem integrates the Twitter Bootstrap pagination component with the will_paginate pagination gem.
 gem 'sendinblue', '~> 2.4' # This is SendinBlue provided API V2 Ruby GEM
 gem 'email_inquire', '~> 0.6' # Validate email for format, common typos and one-time email providers
-
-# TODO: Switch to vendor's version of 'shortener' gem when Rails 5 support has been added.
-gem 'shortener', '= 0.5.5', github: 'harigopal/shortener', branch: '74-rails-5-support' # generate short SV.CO urls for files, links etc
-
 gem 'titleize', '~> 1.4' # better titleizing, modifies Inflector.titleize from default rails
 gem 'addressable', '~> 2.5' # Addressable is a replacement for the URI implementation that is part of Ruby's standard library. https://github.com/sporkmonger/addressable
 gem 'reform', '~> 2.2' # Form objects decoupled from models. http://www.trailblazer.to/gems/reform
@@ -106,6 +105,7 @@ gem 'diffy', '~> 3.2' # Easy Diffing in Ruby.
 gem 'rails_server_timings', '~> 1.0' # Server Timing headers for Rails apps. https://github.com/dpogue/rails_server_timings
 gem 'pundit', '~> 1.1' # Minimal authorization through OO design and pure Ruby classes.
 gem 'github-linguist', '~> 5.0', require: false # Language Savant. https://github.com/github/linguist
+gem 'rack-cors', '~>0.4', require: 'rack/cors' # Rack Middleware for handling CORS, required to serve static assets such as fonts
 
 # Rails assets!
 source 'https://rails-assets.org' do
@@ -136,7 +136,7 @@ group :development do
   # gem 'better_errors' # Better error info on the front-end.
   # gem 'binding_of_caller' # For advanced better_errors features - REPL, local/instance variable inspection etc.
   gem 'web-console', '~> 3.4' # TODO: Restored until better_errors speeds up again.
-  gem 'listen', '~> 3.1' # The Listen gem listens to file modifications and notifies you about the changes.
+  gem 'listen', '>= 3.0.5', '< 3.2' # The Listen gem listens to file modifications and notifies you about the changes.
   gem 'rack-mini-profiler', '~> 0.10' # Middleware that displays speed badge for every html page.
 
   # Go faster, off the Rails - Benchmarks for your whole Rails app
@@ -145,6 +145,7 @@ group :development do
   gem 'oink', '~> 0.10' # Log parser to identify actions which significantly increase VM heap size
   gem 'chromedriver-helper', '~> 1.1' # Easy installation and use of chromedriver, the Chromium project's selenium webdriver adapter.
   gem 'logchange', '~> 1.0' # An alternative approach to managing a changelog.
+  gem 'meta_request', '~> 0.4' # Chrome extension for Rails development. https://github.com/dejan/rails_panel
 end
 
 group :test do
@@ -159,7 +160,7 @@ group :test do
 end
 
 group :development, :test do
-  gem 'rspec-rails', '~> 3.5.0' # Duh.
+  gem 'rspec-rails', '~> 3.5' # Duh.
   gem 'coderay', '~> 1.1' # Pretty syntax highlighting on rspec failure snippets.
   gem 'pry-rails', '~> 0.3.5' # Pry debugger.
   gem 'webmock', '~> 3.0' # Mocking web requests.
@@ -176,4 +177,6 @@ group :production do
   gem 'skylight', '~> 1.1' # Skylight agent for Ruby https://www.skylight.io
   gem 'rails_12factor', '~> 0.0' # Makes running your Rails app easier. Based on the ideas behind 12factor.net.
   gem 'dalli', '~> 2.7' # High performance memcached client for Ruby. https://github.com/petergoldstein/dalli
+  gem 'scout_apm' # detailed Rails application performance analysis.
+  gem 'heroku-deflater', '~> 0.6' # Enable gzip compression on heroku, but don't compress images.
 end

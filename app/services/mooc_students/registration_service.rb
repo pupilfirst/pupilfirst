@@ -15,7 +15,9 @@ module MoocStudents
         user = User.create!(email: attributes[:email]) if user.blank?
 
         # Find or initialize the user entry.
-        mooc_student = MoocStudent.where(user_id: user.id).first_or_create!(attributes)
+        mooc_student = MoocStudent.where(user_id: user.id).first_or_create!(
+          @attributes.slice(:name, :email, :phone, :gender, :college_id, :college_text, :semester)
+        )
 
         # Send the user a login email, welcoming him / her to SixWays.
         if @send_sign_in_email

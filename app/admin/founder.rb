@@ -60,8 +60,10 @@ ActiveAdmin.register Founder do
       column 'Skill' do |founder|
         if founder.hacker.nil?
           'Unknown'
+        elsif founder.hacker
+          founder.github_url.present? ? 'Hacker with Github' : 'Hacker'
         else
-          founder.hacker ? 'Hacker' : 'Hustler'
+          'Hustler'
         end
       end
       column('Targets Completed', &:completed_targets_count)
@@ -112,10 +114,13 @@ ActiveAdmin.register Founder do
       column 'Skill' do |founder|
         if founder.hacker.nil?
           'Unknown'
+        elsif founder.hacker
+          founder.github_url.present? ? 'Hacker with Github' : 'Hacker'
         else
-          founder.hacker ? 'Hacker' : 'Hustler'
+          'Hustler'
         end
       end
+      column :reference
       column('Targets Completed', &:completed_targets_count)
     else
       column :id
@@ -161,7 +166,7 @@ ActiveAdmin.register Founder do
       end
 
       column :university do |founder|
-        founder.college&.replacement_university&.name
+        founder.college&.university&.name
       end
 
       column :roll_number
@@ -264,10 +269,10 @@ ActiveAdmin.register Founder do
       end
 
       row :university do |founder|
-        university = founder.college&.replacement_university
+        university = founder.college&.university
 
         if university.present?
-          link_to university.name, admin_replacement_university_path(university)
+          link_to university.name, admin_university_path(university)
         end
       end
 

@@ -5,13 +5,13 @@ class TimelineEvent < ApplicationRecord
   belongs_to :startup
   belongs_to :founder
   belongs_to :timeline_event_type
-  belongs_to :target
+  belongs_to :target, optional: true
 
   has_one :karma_point, as: :source
   has_many :startup_feedback
   has_many :timeline_event_files, dependent: :destroy
 
-  belongs_to :improved_timeline_event, class_name: 'TimelineEvent'
+  belongs_to :improved_timeline_event, class_name: 'TimelineEvent', optional: true
   has_one :improvement_of, class_name: 'TimelineEvent', foreign_key: 'improved_timeline_event_id'
 
   mount_uploader :image, TimelineImageUploader
@@ -23,13 +23,13 @@ class TimelineEvent < ApplicationRecord
 
   MAX_DESCRIPTION_CHARACTERS = 500
 
-  VERIFIED_STATUS_PENDING = 'Pending'
-  VERIFIED_STATUS_NEEDS_IMPROVEMENT = 'Needs Improvement'
-  VERIFIED_STATUS_VERIFIED = 'Verified'
-  VERIFIED_STATUS_NOT_ACCEPTED = 'Not Accepted'
+  STATUS_PENDING = 'Pending'
+  STATUS_NEEDS_IMPROVEMENT = 'Needs Improvement'
+  STATUS_VERIFIED = 'Verified'
+  STATUS_NOT_ACCEPTED = 'Not Accepted'
 
-  def self.valid_verified_status
-    [VERIFIED_STATUS_VERIFIED, VERIFIED_STATUS_PENDING, VERIFIED_STATUS_NEEDS_IMPROVEMENT, VERIFIED_STATUS_NOT_ACCEPTED]
+  def self.valid_statuses
+    [STATUS_VERIFIED, STATUS_PENDING, STATUS_NEEDS_IMPROVEMENT, STATUS_NOT_ACCEPTED]
   end
 
   GRADE_GOOD = 'good'
@@ -43,21 +43,14 @@ class TimelineEvent < ApplicationRecord
   normalize_attribute :grade
 
   validates :grade, inclusion: { in: valid_grades }, allow_nil: true
-  validates :verified_status, inclusion: { in: valid_verified_status }
-  validates :verified_at, presence: true, if: proc { verified? || needs_improvement? }
+  validates :status, inclusion: { in: valid_statuses }
   validates :event_on, presence: true
-  validates :startup_id, presence: true
-  validates :founder_id, presence: true
-  validates :timeline_event_type, presence: true
   validates :description, presence: true
   validates :iteration, presence: true
 
   before_validation do
-    if verified_status_changed?
-      self.verified_at = Time.now if verified? || needs_improvement?
-      self.verified_at = nil if pending? || not_accepted?
-    end
-    self.verified_status ||= VERIFIED_STATUS_PENDING
+    self.status_updated_at = Time.zone.now if status_changed?
+    self.status ||= STATUS_PENDING
   end
 
   accepts_nested_attributes_for :timeline_event_files, allow_destroy: true
@@ -66,11 +59,11 @@ class TimelineEvent < ApplicationRecord
   scope :from_admitted_startups, -> { joins(:startup).merge(Startup.admitted) }
   scope :from_level_0_startups, -> { joins(:startup).merge(Startup.level_zero) }
   scope :not_dropped_out, -> { joins(:startup).merge(Startup.not_dropped_out) }
-  scope :verified, -> { where(verified_status: VERIFIED_STATUS_VERIFIED) }
-  scope :pending, -> { where(verified_status: VERIFIED_STATUS_PENDING) }
-  scope :needs_improvement, -> { where(verified_status: VERIFIED_STATUS_NEEDS_IMPROVEMENT) }
-  scope :not_accepted, -> { where(verified_status: VERIFIED_STATUS_NOT_ACCEPTED) }
-  scope :verified_or_needs_improvement, -> { where(verified_status: [VERIFIED_STATUS_VERIFIED, VERIFIED_STATUS_NEEDS_IMPROVEMENT]) }
+  scope :verified, -> { where(status: STATUS_VERIFIED) }
+  scope :pending, -> { where(status: STATUS_PENDING) }
+  scope :needs_improvement, -> { where(status: STATUS_NEEDS_IMPROVEMENT) }
+  scope :not_accepted, -> { where(status: STATUS_NOT_ACCEPTED) }
+  scope :verified_or_needs_improvement, -> { where(status: [STATUS_VERIFIED, STATUS_NEEDS_IMPROVEMENT]) }
   scope :has_image, -> { where.not(image: nil) }
   scope :from_approved_startups, -> { joins(:startup).merge(Startup.approved) }
   scope :showcase, -> { includes(:timeline_event_type, :startup).verified.from_approved_startups.not_private.order('timeline_events.event_on DESC') }
@@ -78,7 +71,7 @@ class TimelineEvent < ApplicationRecord
   scope :for_batch, ->(batch) { joins(:startup).where(startups: { batch_id: batch.id }) }
   scope :for_batch_id_in, ->(ids) { joins(:startup).where(startups: { batch_id: ids }) }
   scope :not_private, -> { where(timeline_event_type: TimelineEventType.where.not(role: TimelineEventType::ROLE_FOUNDER)) }
-  scope :not_improved, -> { needs_improvement.joins(:target).where(improved_timeline_event_id: nil) }
+  scope :not_improved, -> { joins(:target).where(improved_timeline_event_id: nil) }
 
   after_initialize :make_links_an_array
 
@@ -163,13 +156,13 @@ class TimelineEvent < ApplicationRecord
   end
 
   def update_and_require_reverification(params)
-    params[:verified_at] = nil
-    params[:verified_status] = VERIFIED_STATUS_PENDING
+    params[:status_updated_at] = Time.zone.now
+    params[:status] = STATUS_PENDING
     update(params)
   end
 
   def verify!
-    update!(verified_status: VERIFIED_STATUS_VERIFIED, verified_at: Time.now)
+    update!(status: STATUS_VERIFIED, status_updated_at: Time.zone.now)
 
     add_link_for_new_deck!
     add_link_for_new_wireframe!
@@ -177,40 +170,32 @@ class TimelineEvent < ApplicationRecord
     add_link_for_new_video!
   end
 
-  def revert_to_pending!
-    update!(verified_status: VERIFIED_STATUS_PENDING, verified_at: nil)
-  end
-
-  def mark_needs_improvement!
-    update!(verified_status: VERIFIED_STATUS_NEEDS_IMPROVEMENT, verified_at: Time.now)
-  end
-
-  def mark_not_accepted!
-    update!(verified_status: VERIFIED_STATUS_NOT_ACCEPTED, verified_at: nil)
-  end
-
   def verified?
-    verified_status == VERIFIED_STATUS_VERIFIED
+    status == STATUS_VERIFIED
   end
 
   def pending?
-    verified_status == VERIFIED_STATUS_PENDING
+    status == STATUS_PENDING
   end
 
   def needs_improvement?
-    verified_status == VERIFIED_STATUS_NEEDS_IMPROVEMENT
+    status == STATUS_NEEDS_IMPROVEMENT
   end
 
   def not_accepted?
-    verified_status == VERIFIED_STATUS_NOT_ACCEPTED
+    status == STATUS_NOT_ACCEPTED
   end
 
   def to_be_graded?
-    ([VERIFIED_STATUS_VERIFIED, VERIFIED_STATUS_NEEDS_IMPROVEMENT].include? verified_status) && karma_point.blank?
+    ([STATUS_VERIFIED, STATUS_NEEDS_IMPROVEMENT].include? status) && karma_point.blank?
   end
 
   def verified_or_needs_improvement?
     verified? || needs_improvement?
+  end
+
+  def founder_can_delete?
+    !(verified_or_needs_improvement? || startup_feedback.present?)
   end
 
   def founder_can_modify?

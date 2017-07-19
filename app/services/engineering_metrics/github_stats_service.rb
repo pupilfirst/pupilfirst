@@ -5,7 +5,7 @@ module EngineeringMetrics
     AUTHORS = %w[harigopal ajaleelp mahesh-krishnakumar vinutv].freeze
 
     def initialize
-      @token = Rails.application.secrets.github['access_token']
+      @token = Rails.application.secrets.github[:access_token]
     end
 
     # Get data from any Github API end-point.

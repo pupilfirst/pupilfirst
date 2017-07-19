@@ -5,10 +5,7 @@ class Target < ApplicationRecord
   KEY_ADMISSIONS_SCREENING = 'admissions_screening'
   KEY_ADMISSIONS_FEE_PAYMENT = 'admissions_fee_payment'
   KEY_ADMISSIONS_COFOUNDER_ADDITION = 'admissions_cofounder_addition'
-  KEY_ADMISSIONS_CODING_TASK = 'admissions_coding_task'
-  KEY_ADMISSIONS_VIDEO_TASK = 'admissions_video_task'
   KEY_ADMISSIONS_ATTEND_INTERVIEW = 'admissions_attend_interview'
-  KEY_ADMISSIONS_PRE_SELECTION = 'admissions_pre_selection'
 
   STATUS_COMPLETE = :complete
   STATUS_NEEDS_IMPROVEMENT = :needs_improvement
@@ -17,15 +14,14 @@ class Target < ApplicationRecord
   STATUS_UNAVAILABLE = :unavailable
   STATUS_NOT_ACCEPTED = :not_accepted
 
-  belongs_to :assigner, class_name: 'Faculty'
+  belongs_to :assigner, class_name: 'Faculty', optional: true
   belongs_to :timeline_event_type, optional: true
   has_many :timeline_events
   has_many :target_prerequisites
   has_many :prerequisite_targets, through: :target_prerequisites
-  belongs_to :target_group
-  has_one :program_week, through: :target_group
+  belongs_to :target_group, optional: true
   has_one :batch, through: :target_group
-  belongs_to :level
+  belongs_to :level, optional: true
 
   acts_as_taggable
   mount_uploader :rubric, RubricUploader

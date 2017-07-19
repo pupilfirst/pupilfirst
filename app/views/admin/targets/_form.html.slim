@@ -46,7 +46,7 @@
     = f.input :assigner, collection: Faculty.active.order(:name), include_blank: false
 
     = f.input :target_group,
-      collection: TargetGroup.all.sorted_by_level.includes(:level, :program_week)
+      collection: TargetGroup.all.sorted_by_level.includes(:level)
 
     = f.input :sort_index
     = f.input :days_to_complete

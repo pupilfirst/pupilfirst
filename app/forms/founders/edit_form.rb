@@ -55,10 +55,10 @@ module Founders
       return if Rails.env.development?
 
       begin
-        model.slack_user_id = Slack::FindUserService.new(slack_username).id
-      rescue Slack::UserNotFoundException
+        model.slack_user_id = PublicSlack::FindUserService.new(slack_username).id
+      rescue PublicSlack::UserNotFoundException
         errors.add(:slack_username, 'username is not registered on SV.CO Public Slack')
-      rescue Slack::ApiFailedException
+      rescue PublicSlack::ApiFailedException
         errors.add(:slack_username, 'unable to validate username from Slack. Please try again')
       end
     end

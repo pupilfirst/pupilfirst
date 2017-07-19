@@ -1,0 +1,345 @@
+---
+changelog:
+- timestamp: '2017-07-18T06:43:27Z'
+  changes:
+  - timestamp: '2017-07-14T06:14:00Z'
+    title: Speed up check for presence of timeline events on AA dashboard.
+    private: true
+    category: performance
+  - timestamp: '2017-07-13T07:00:21Z'
+    title: Index status column on the timeline_events table.
+    private: true
+    category: performance
+  - timestamp: '2017-07-13T06:56:54Z'
+    title: Clean up the not_improved scope used by AA Dashboard and TimelineEvent#index
+    private: true
+  - timestamp: '2017-07-12T09:21:27Z'
+    title: Removed all code related to batch applicants and applications.
+    trello: https://trello.com/c/uy1IL6fh
+    private: true
+    description: This removes just the code. Database tables should be removed once
+      this change is live in production.
+  - timestamp: '2017-07-12T08:11:37Z'
+    title: Fixed a couple of errors that crept in due to the current batch crossing
+      the set batch end date.
+    trello: https://trello.com/c/HCm1396q
+    private: true
+    description: The week progress in the performance panel does not show a maximum
+      week of 24 now. Also, the batch end date was extended to August 1 so as not
+      to break other stuff.
+    category: bugfix
+  - timestamp: '2017-07-12T08:09:22Z'
+    title: SV.CO now runs on Puma! We changed our server-of-choice from Phusion Passenger
+      to the more popular Puma.
+    trello: https://trello.com/c/OLJ9RVoG
+    private: true
+    description: The shift included introducing a timeout of 20 seconds using the
+      rack-timeout gem and gzip compression using the heroku-deflater gem.
+    category: operations
+  - timestamp: '2017-07-12T08:05:01Z'
+    title: Excised stale code used to group targets by program week.
+    trello: https://trello.com/c/nlaKkOKz
+    private: true
+    description: The ProgramWeek table was dropped and all related code/foreign keys
+      removed.
+  - timestamp: '2017-07-12T08:01:09Z'
+    title: Unused TargetOverview page for admin and a related service was excised.
+    trello: https://trello.com/c/PPG4RjX2
+    private: true
+  - timestamp: '2017-07-12T07:59:41Z'
+    title: Fixed stale bug-producing code for Facebook connnect.
+    trello: https://trello.com/c/xAGXMEmT
+    private: false
+    description: The Facebook API version under use was deprecated. The newer version
+      had a mismatch in the response structure.
+    category: bugfix
+  - timestamp: '2017-07-11T08:54:26Z'
+    title: Excised the stale ProgramWeek model and all its usages
+    trello: https://trello.com/c/nlaKkOKz
+    private: true
+- timestamp: '2017-07-11T07:58:25Z'
+  changes:
+  - timestamp: '2017-07-11T07:50:28Z'
+    title: '"Modify existing Admission dashboard in admin to show relevant data"'
+    trello: https://trello.com/c/WXfstuT6
+    private: true
+    description: The new admission dashboard will show cumulative data for startup
+      stages, daily status for signup, signups by location and signups by reference
+    category: feature
+  - timestamp: '2017-07-10T08:06:58Z'
+    title: Send the reference supplied during sign-up to Intercom
+    trello: https://trello.com/c/AohPAS0o
+    private: true
+    description: The intercom field is named 'Supplied Reference' to avoid confusion.
+    category: feature
+  - timestamp: '2017-07-08T08:33:20Z'
+    title: Remove state field from MoocStudent.
+    trello: https://trello.com/c/4C1AjrNk
+    private: true
+    description: This removes the field from the table, and all its usages in code.
+  - timestamp: '2017-07-06T11:16:12Z'
+    title: Rename ReplacementUniversity to University.
+    trello: https://trello.com/c/Hsm6msa7
+    private: true
+  - timestamp: '2017-07-06T08:12:17Z'
+    title: Remove the glossary (define) command from Vocalist's vocabulary.
+    trello: https://trello.com/c/uoEptOCp
+    private: false
+    description: This removes the command, the glossary_terms table, and all related
+      code.
+  - timestamp: '2017-07-04T11:20:41Z'
+    title: Fix a bug that could cause a crash when attempting to delete timeline events
+      with feedback.
+    trello: https://trello.com/c/g1jU8Shu
+    private: false
+    description: This was caused by the foreign key on the feedback table. Presence
+      of feedback now blocks the founder from deleting events.
+    category: bugfix
+- timestamp: '2017-07-03T11:29:24Z'
+  changes:
+  - timestamp: '2017-07-01T12:47:45Z'
+    title: Update timeline event type seed data for development.
+    trello: https://trello.com/c/qiLfVGhE
+    private: true
+  - timestamp: '2017-07-01T11:30:50Z'
+    title: Set intercom delayed jobs as low priority compared to others.
+    trello: https://trello.com/c/bQ9bvUmR
+    private: true
+    description: 'This introduces two named queues: `low_priority` and `high_priority`
+      that can be used to alter the order in which jobs are executed by default.'
+  - timestamp: '2017-07-01T05:32:48Z'
+    title: UTM campaign params and referrer sources for visits are now sent to Intercom.
+    trello: https://trello.com/c/1zN8e3p2
+    private: true
+    category: feature
+  - timestamp: '2017-07-01T05:30:20Z'
+    title: Github / Bitbucket URLs collected during screening are now validated.
+    trello: https://trello.com/c/i0NcflTG
+    private: false
+    description: A simple /github|bitbucket/ regex validation was included.
+    category: ui
+  - timestamp: '2017-07-01T05:20:33Z'
+    title: Excised the stale recaptcha gem and all related code.
+    trello: https://trello.com/c/KwqerwIz
+    private: true
+  - timestamp: '2017-07-01T05:18:29Z'
+    title: The pool of scientist names and colors for naming are now in a convenient
+      YAML file.
+    trello: https://trello.com/c/DBOKALVx
+    private: true
+  - timestamp: '2017-07-01T05:16:35Z'
+    title: Cleaned up a couple of broken/stale specs.
+    trello: https://trello.com/c/w7o6qLrJ
+    private: true
+  - timestamp: '2017-07-01T05:15:28Z'
+    title: MOOC students are now issued discount coupons for applying to SV.CO after
+      course completion.
+    trello: https://trello.com/c/qSkP5hSy
+    private: false
+    description: A special 'Sixways MOOC Merit' coupon type was created which is applicable
+      for students with a MOOC score > 30
+    category: feature
+  - timestamp: '2017-07-01T05:07:34Z'
+    title: Converted the PublicSlackTalk lib into a PublicSlack::MessageService
+    trello: https://trello.com/c/OzCDcoJb
+    private: true
+  - timestamp: '2017-06-30T07:58:01Z'
+    title: The `/live` page has been removed.
+    trello: https://trello.com/c/N8jfI1wY
+    private: true
+    category: content
+  - timestamp: '2017-06-30T06:30:14Z'
+    title: Fix broken PNotify flashed in admin interface.
+    trello: https://trello.com/c/ezsIKLcL
+    private: true
+    description: Flash messages were broken all across the admin interface because
+      the initialization code wasn't updated after PNotity was upgraded.
+    category: bugfix
+  - timestamp: '2017-06-30T05:50:01Z'
+    title: Add meta_request gem, used by the Rails panel chrome addon
+    trello: https://trello.com/c/zghy179q
+    private: true
+  - timestamp: '2017-06-29T07:55:07Z'
+    title: Replace link to StartInCollege with link to Help Center (Intercom)
+    trello: https://trello.com/c/QS4dkkIh
+    private: true
+  - timestamp: '2017-06-14T08:15:53Z'
+    title: The SV.CO logo has been updated.
+    trello: https://trello.com/c/JLGtnwwE
+    private: false
+    category: ui
+  - timestamp: '2017-06-13T11:35:50Z'
+    title: Replace shortener with custom solution
+    trello: https://trello.com/c/NG4FR0nY
+    private: true
+    description: This removes the shortener gem, and implements existing functionality
+      (and more) with custom code. This replaces the default behavior of redirecting
+      to a 404 page when an unknown /:id URL is encountered  by responding with a
+      404 status response.
+  - timestamp: '2017-06-13T08:10:21Z'
+    title: Improve the validation of email input in MOOC student signup form to avoid
+      common typos.
+    trello: https://trello.com/c/zfKGgNB1
+    private: false
+    description: 'Email_inquire validation is added to the email field in the MOOC
+      student sign-up form. This will provide email hints to correct common errors
+      such as xxx@gamil.com, xxx@gmsil.com etc. '
+    category: ui
+  - timestamp: '2017-06-13T05:46:42Z'
+    title: Feedback for timeline event shouldn't set reference URL - no usage of reference
+      URL in this context should exist
+    trello: https://trello.com/c/imfHIC3k
+    private: true
+    description: Removed all instances where reference_url was stored when a startup_feedback
+      is saved for a timeline_event. The StartupFeedback model methods are also updated
+      to use timeline_event_id instead of reference_url to obtain the associated timeline_event.
+    category: bugfix
+- timestamp: '2017-06-12T07:31:39Z'
+  changes:
+  - timestamp: '2017-06-12T07:29:59Z'
+    title: DigitalOcean server has been taken down. See description for details.
+    trello:
+    - https://trello.com/c/NVv6kvhs
+    - https://trello.com/c/COlEn8oe
+    - https://trello.com/c/S6vmGmZD
+    private: true
+    description: The Cachet application which was behind status.sv.co was removed
+      for SEO reasons, which left the DigitalOcean server doing nothing but redirects.
+      All redirects were therefore moved to CloudFlare using its PageRules feature,
+      and the DigitalOcean server was taken down.
+    category: operations
+  - timestamp: '2017-06-12T07:25:41Z'
+    title: The list of scientist names used to generate product names has been expanded.
+    trello: https://trello.com/c/rHPHVyNX
+    private: true
+  - timestamp: '2017-06-12T07:22:09Z'
+    title: Added missing .pdf extension to certificate file made available at the
+      end of SixWays MOOC.
+    trello: https://trello.com/c/mJgXsVh6
+    private: false
+    category: bugfix
+  - timestamp: '2017-06-12T07:20:16Z'
+    title: Removed chores from previous levels section on level zero.
+    trello: https://trello.com/c/A2RCuwvh
+    private: false
+    category: content
+  - timestamp: '2017-06-10T06:55:13Z'
+    title: Create page `sv.co/live` which will be used to embed live video streams
+      of SV.CO webinars and to display upcoming live events.
+    trello: https://trello.com/c/5IZr9e4S
+    private: false
+    description: The video embed links will be updated over a commit once the event
+      is live. The upcoming event creatives will then be hidden by commenting the
+      code.
+    category: feature
+  - timestamp: '2017-06-09T12:39:00Z'
+    title: Hackers with Github profiles are now tracked on Intercom too.
+    private: true
+    category: feature
+  - timestamp: '2017-06-09T12:26:59Z'
+    title: UTM params, if any, are now sent to Intercom.
+    trello: https://trello.com/c/1zN8e3p2
+    private: true
+    category: feature
+  - timestamp: '2017-06-09T08:53:49Z'
+    title: Level 0 screening now asks hackers for their Github/BitBucket URLs.
+    trello: https://trello.com/c/Cc9fg6B4
+    private: false
+    description: A fourth question requesting Github/Bitbucket URL was added for hackers
+      during screening. Providing any link is considered a success. The link is then
+      stored in the founders github_url, and the founder explicitly marked as a 'Hacker
+      with Github' in admin.
+    category: content
+  - timestamp: '2017-06-09T06:25:03Z'
+    title: Mark internal links to the sign-page as nofollows.
+    trello: https://trello.com/c/zI6w5W5z
+    private: true
+    description: All links to the sign-in page were modified to have a 'rel=nofollow'
+      attribute to aid SEO.
+  - timestamp: '2017-06-08T07:11:08Z'
+    title: Vocalist pings can now be targeted to levels as well as just team leads.
+    trello: https://trello.com/c/cbQv1o0C
+    private: true
+    category: feature
+  - timestamp: '2017-06-08T06:26:57Z'
+    title: Removed link to timeline page in feedback emails sent to Level 0 startups
+      - since the timeline page is only active for Level 1+ startups
+    trello: https://trello.com/c/rSTg2GIT
+    private: false
+    description: The feedback to Level 0 startups will definitely be associated with
+      a target in the absence of adding any manual timeline events. Hence added the
+      target name to the feedback email.
+    category: bugfix
+  - timestamp: '2017-06-08T06:12:55Z'
+    title: Fix incorrect linking of URLs supplied by the founder for his profile.
+    trello: https://trello.com/c/c6j9XZ3U
+    private: false
+    description: Ensure http:// presence in the URLs supplied by the founder for his
+      url. Earlier founder_edit_form validations did not take care of this. Updated
+      valid_url gem for the same.
+    category: bugfix
+  - timestamp: '2017-06-08T05:34:51Z'
+    title: Use logchange gem to render the changelog page and vocalist response.
+    trello: https://trello.com/c/jgGXrcZS
+    private: true
+    description: The changelog gem is now used to log any change in the app. The changes
+      will be logged based on the template created for the app. All the released changes
+      for appear in the changelog page. All the other changes that were manually logged
+      in CHANGELOG.md will now be shown in a separate archive page.
+  - timestamp: '2017-06-08T04:01:00Z'
+    title: Content on the sixways index page has been updated to match actual course
+      content.
+    trello: https://trello.com/c/zkd8n6ms
+    private: true
+    category: content
+  - timestamp: '2017-06-06T10:55:17Z'
+    title: Upgrade to Rails 5.1
+    trello: https://trello.com/c/9ergqqen
+    private: true
+  - timestamp: '2017-06-06T10:46:25Z'
+    title: TimelineEvent's `verified_at` attribute has been renamed as `status_updated_at`,
+      and `verified_status` as just `status`.
+    trello: https://trello.com/c/HfsImQcd
+    private: true
+- timestamp: '2017-06-05T12:27:30Z'
+  changes:
+  - timestamp: '2017-06-05T10:39:58Z'
+    title: Set default date for timeline-event submission to the present day.
+    trello: https://trello.com/c/rHSRHMy8
+    private: false
+    category: ui
+  - timestamp: '2017-06-05T10:38:35Z'
+    title: Fixed bug causing pair of timeline events generated for every payment.
+    trello: https://trello.com/c/xP0VjDzg
+    private: true
+    description: The InstamojoController was triggering PostPaymentService both on
+      receiving a redirect as well as the webhook.
+    category: bugfix
+  - timestamp: '2017-06-05T08:05:47Z'
+    title: Added icons to four program features described on the /apply page.
+    trello: https://trello.com/c/HNPpkAlW
+    private: true
+    category: ui
+  - timestamp: '2017-06-05T07:35:37Z'
+    title: Improve founder registration form by eliminating email repetition and by
+      hinting the applicant of possible errors in email input.
+    trello: https://trello.com/c/PzHR2QQj
+    private: false
+    description: Gem email_inquire is now used to validate email in the founder registration
+      form. The email input has to pass the email_inquire validation for form submission.
+      The user will also get a hint on certain commonly found errors in email input
+      and has the option to accept or reject the hint.
+    category: feature
+  - timestamp: '2017-06-05T06:49:51Z'
+    title: Fourth and final module for the SixWays MOOC has been released.
+    trello: https://trello.com/c/8kgMZU6H
+    private: false
+    category: content
+  - timestamp: '2017-05-30T10:14:54Z'
+    title: Create an AnalyticsStateService to generate state data for a user and use
+      that to send tags to Inspectlet
+    trello: https://trello.com/c/F3QJEjO4
+    private: true
+  - timestamp: '2017-05-29T09:29:29Z'
+    title: Added logchange to project.
+    private: true

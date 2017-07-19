@@ -16,11 +16,11 @@ feature 'Resources' do
   let!(:level_2_resource) { create :resource, level: level_2 }
 
   before :all do
-    PublicSlackTalk.mock = true
+    PublicSlack::MessageService.mock = true
   end
 
   after :all do
-    PublicSlackTalk.mock = false
+    PublicSlack::MessageService.mock = false
   end
 
   scenario 'user visits resources page' do

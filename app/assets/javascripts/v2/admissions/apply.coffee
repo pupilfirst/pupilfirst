@@ -1,35 +1,22 @@
-setupProgramCarousel = ->
-  $('.program-slides').slick
-    infinite: true
-    adaptiveHeight: true
-    autoplay: true
-    autoplaySpeed: 10000
-
-avoidwidowsTypography = ->
-  $('h5').each ->
-    wordArray = $(this).text().split(' ')
-    if wordArray.length > 1
-      wordArray[wordArray.length - 2] += '&nbsp;' + wordArray[wordArray.length - 1]
-      wordArray.pop()
-      $(this).html wordArray.join(' ')
-
 stopVideosOnModalClose = ->
   $('.video-modal').on 'hide.bs.modal', (event) ->
     modalIframe = $(event.target).find('iframe')
     modalIframe.attr 'src', modalIframe.attr('src')
 
-$(document).on 'page:change', avoidwidowsTypography
 $(document).on 'page:change', stopVideosOnModalClose
-$(document).on 'page:change', setupProgramCarousel
 
 # !!! NEW STUFF !!!
+expandFramework = ->
+  $('.program-framework__timeline-title').click (e) ->
+    $(this).next().slideToggle()
+    $(this).toggleClass('active')
 
-readmoreFAQ = ->
-  $('.read-more').readmore
-    speed: 200
-    collapsedHeight: 200
-    lessLink: '<a class="read-less-link" href="#">Read Less</a>'
-    moreLink: '<a id="gtm__read-more-link" class="read-more-link" href="#">Read More</a>'
+faqCollapse = ->
+  $('.collapse.in').prev('.apply-faq__collapse-card-header').addClass 'active'
+  $('.apply-faq__collapse').on('show.bs.collapse', (a) ->
+    $(a.target).prev('.apply-faq__collapse-card-header').addClass 'active')
+  $('.apply-faq__collapse').on('hide.bs.collapse', (a) ->
+    $(a.target).prev('.apply-faq__collapse-card-header').removeClass 'active')
 
 setupSelect2Inputs = ->
   collegeInput = $('#founders_registration_college_id')
@@ -103,48 +90,6 @@ setupTogglingCollegeField = ->
     toggleCollegeTextField()
     collegeInput.change toggleCollegeTextField
 
-setupStickyStartApplicationForm = ->
-  stickApplicationForm()
-
-  $('#fee-accordion').on 'show.bs.collapse', ->
-    stickApplicationForm(scope = StickScope.Document)
-
-  $('#fee-accordion').on 'shown.bs.collapse', ->
-    stickApplicationForm()
-
-  $('#fee-accordion').on 'hidden.bs.collapse', ->
-    stickApplicationForm()
-
-stickApplicationForm = (scope = StickScope.Parent) ->
-  $('#start-application-process').stickit('destroy')
-  $('#start-application-process').stickit
-    top: 0,
-    screenMinWidth: 992,
-    scope: scope
-
-scrolltoStartapplicationForm = ->
-  $('#sticky-start-application').click (e) ->
-    e.preventDefault()
-    $('html, body').animate
-      scrollTop: $($.attr(this, 'href')).offset().top, 500
-
-stickyApplyButtonOnApplyPage = ->
-  if $('.application-process').length
-    visibilityToggle = new Waypoint.Inview
-      element: $('#start-application-process')[0]
-      enter: (direction) ->
-        if direction == 'down'
-          $('#sticky-start-application').addClass('hidden-xs-up')
-          $('#intercom-container').addClass('hidden-xs-down')
-      exited: (direction) ->
-        if direction == 'up'
-          $('#sticky-start-application').removeClass('hidden-xs-up')
-          $('#intercom-container').removeClass('hidden-xs-down')
-
-destroyWaypoints = ->
-  if $('.application-process').length
-    Waypoint.destroyAll()
-
 helpIntercomPopup = ->
   $(".help-intercom-link").click (e) ->
     e.preventDefault()
@@ -168,16 +113,13 @@ acceptEmailInputfromUser = (event) ->
 
 $(document).on 'page:change', setupTogglingCollegeField
 $(document).on 'page:change', setupTogglingReferenceField
-$(document).on 'page:change', scrolltoStartapplicationForm
-$(document).on 'page:change', stickyApplyButtonOnApplyPage
 $(document).on 'page:change', helpIntercomPopup
-$(document).on 'page:change', readmoreFAQ
-$(document).on 'page:before-change', destroyWaypoints
+$(document).on 'page:change', expandFramework
+$(document).on 'page:change', faqCollapse
 
 $(document).on 'turbolinks:load', ->
   if $('#admissions__apply').length
     setupSelect2Inputs()
-    setupStickyStartApplicationForm()
     setupPasswordHintButtons()
 
 $(document).on 'turbolinks:before-cache', ->

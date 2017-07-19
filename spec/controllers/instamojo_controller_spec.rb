@@ -6,6 +6,7 @@ describe InstamojoController do
   let(:level_0) { create :level, :zero }
   let(:level_0_targets) { create :target_group, milestone: true, level: level_0 }
   let!(:screening_target) { create :target, :admissions_screening, target_group: level_0_targets }
+  let!(:cofounder_addition_target) { create :target, :admissions_cofounder_addition, target_group: level_0_targets }
   let!(:fee_payment_target) { create :target, :admissions_fee_payment, target_group: level_0_targets }
   let!(:tet_team_update) { create :timeline_event_type, :team_update }
 
@@ -32,6 +33,7 @@ describe InstamojoController do
   before do
     startup.founders << founder
     complete_target founder, screening_target
+    complete_target founder, cofounder_addition_target
   end
 
   describe 'GET redirect' do

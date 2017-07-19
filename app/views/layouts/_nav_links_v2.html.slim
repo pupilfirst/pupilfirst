@@ -20,7 +20,7 @@
       li.nav-item role="presentation"
         = link_to 'About', about_path, class: 'nav-link'
     li.nav-item role="presentation"
-      = link_to '#StartInCollege', six_ways_path, class: 'nav-link'
+      = link_to 'Help Center', 'https://help.sv.co', class: 'nav-link'
     - if current_user
       - if current_founder
         li.nav-item role="presentation" class="dropdown"
@@ -42,6 +42,6 @@
                 i.fa.fa-sign-out
                 | Logout
       - else
-        li.nav-item role="presentation" = link_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'btn-signin btn btn-secondary btn-sm'
+        li.nav-item role="presentation" = link_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'btn btn-secondary btn-sm btn-signin'
     - else
-      li.nav-item role="presentation" = link_to 'Sign In', new_user_session_path, class: 'btn-signin btn btn-primary btn-sm'
+      li.nav-item role="presentation" = link_to 'Sign In', new_user_session_path, class: 'btn btn-primary btn-sm btn-signin', rel: 'nofollow'

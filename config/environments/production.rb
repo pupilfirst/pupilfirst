@@ -14,6 +14,11 @@ Rails.application.configure do
   config.consider_all_requests_local = false
   config.action_controller.perform_caching = true
 
+  # Attempt to read encrypted secrets from `config/secrets.yml.enc`.
+  # Requires an encryption key in `ENV["RAILS_MASTER_KEY"]` or
+  # `config/secrets.yml.key`.
+  config.read_encrypted_secrets = true
+
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
@@ -112,6 +117,14 @@ Rails.application.configure do
   # Postmark
   config.action_mailer.delivery_method = :postmark
   config.action_mailer.postmark_settings = { api_token: ENV['POSTMARK_API_TOKEN'] }
+
+  # Add the rack-cors middleware to serve CORS header for static assets
+  config.middleware.insert_before 0, Rack::Cors do
+    allow do
+      origins %w[https://www.sv.co https://sv.co]
+      resource '*'
+    end
+  end
 end
 
 Rails.application.default_url_options = Rails.application.config.action_mailer.default_url_options

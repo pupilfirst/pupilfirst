@@ -10,6 +10,7 @@ FactoryGirl.define do
     target_group
     timeline_event_type
     key nil
+    sequence(:sort_index)
 
     transient do
       batch nil
@@ -29,20 +30,16 @@ FactoryGirl.define do
       rubric { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf')) }
     end
 
-    trait :with_program_week do
-      target_group { TargetGroup.find_by(sort_index: group_index) || create(:target_group) }
-    end
-
     trait(:admissions_cofounder_addition) do
       key Target::KEY_ADMISSIONS_COFOUNDER_ADDITION
       role Target::ROLE_TEAM
-      prerequisite_targets { [create(:target, :admissions_fee_payment)] }
+      prerequisite_targets { [create(:target, :admissions_screening)] }
     end
 
     trait(:admissions_fee_payment) do
       key Target::KEY_ADMISSIONS_FEE_PAYMENT
       role Target::ROLE_TEAM
-      prerequisite_targets { [create(:target, :admissions_screening)] }
+      prerequisite_targets { [create(:target, :admissions_cofounder_addition)] }
     end
 
     trait(:admissions_screening) do
@@ -54,12 +51,6 @@ FactoryGirl.define do
       role Target::ROLE_TEAM
       key Target::KEY_ADMISSIONS_ATTEND_INTERVIEW
       prerequisite_targets { [create(:target, :admissions_cofounder_addition)] }
-    end
-
-    trait(:admissions_pre_selection) do
-      role Target::ROLE_TEAM
-      key Target::KEY_ADMISSIONS_PRE_SELECTION
-      prerequisite_targets { [create(:target, :admissions_attend_interview)] }
     end
   end
 end

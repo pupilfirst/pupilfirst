@@ -5,11 +5,8 @@ class AdminUser < ApplicationRecord
   TYPE_SUPERADMIN = 'superadmin'
   TYPE_FACULTY = 'faculty'
 
-  belongs_to :faculty
+  belongs_to :faculty, optional: true
   belongs_to :user
-
-  # Scores submissions
-  has_many :application_submission_urls
 
   mount_uploader :avatar, AvatarUploader
   process_in_background :avatar

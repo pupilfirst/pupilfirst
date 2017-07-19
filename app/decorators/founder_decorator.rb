@@ -2,7 +2,7 @@ class FounderDecorator < Draper::Decorator
   delegate_all
 
   def identification_proof_hint
-    hint = "Must be one of #{BatchApplicant::ID_PROOF_TYPES.join ' / '}"
+    hint = "Must be one of #{Founder::ID_PROOF_TYPES.join ' / '}"
 
     return hint if identification_proof.blank?
 

@@ -34,6 +34,9 @@ en:
         - "Twitter"
         - "Microsoft Student Partner"
         - "Other (Please Specify)"
+  admissions:
+    register:
+      email_error: "Our email delivery service refused to accept the supplied address. Please ensure that it is a valid email address. If you're still having issues, please contact us using live chat or at help@sv.co"
   home:
     index:
       main_bleed_message_html: "SV.CO is for ambitious students who desire to learn how to build a <strong>real</strong> startup and experience <strong>Silicon Valley</strong> while still in college."
@@ -50,15 +53,6 @@ en:
       requested: Requested
       paid: Paid
       failed: Failed
-  batch_application:
-    create:
-      email_error: "Our email delivery service refused to accept the supplied address. Please ensure that it is a valid email address. If you're still having issues, please contact us using live chat or at help@sv.co"
-    general:
-      applications_close_soon_html: Applications for batch %{batch_number} will close on <strong>%{deadline}</strong>. You have <strong>%{delta}</strong> to submit your application.
-    stage_1:
-      payment_start: Pay Fees Online
-      payment_retry: Retry Payment
-      payment_skip: Proceed to Next Stage
   faculty:
     commitment:
       part_time: Part-Time
@@ -109,9 +103,6 @@ en:
     search_results:
       zero_results: "We\'re sorry, but it looks like there are no resources %{tag_text} %{search_text}.  Try changing your filter conditions %{login_text}."
       results_caption: "Showing resources %{tag_text} %{search_text}:"
-  recaptcha:
-    errors:
-      verification_failed: Verification of Recaptcha failed. Please try again.
 
   role:
     team: Team
@@ -179,7 +170,6 @@ en:
       state_of_svco: Get the present state of startups in Batch N, including inactive and endangered startups. Access restricted to SV.CO admins.
       expired_team_targets: Get a list of all team targets which expired last week - for every startup in the batch.
       expired_founder_targets: Get a list of all individual targets which expired last week - for every founder in the batch.
-      glossary: Get definitions and references of a commanly used TERM in the startup ecosystem.
       changelog: Get a snippet of the latest changes on the SV.CO Platform
     handlers:
       targets:
@@ -188,8 +178,6 @@ en:
         unknown_username: |
           I'm sorry, but your slack mention name `@%{slack_username}` isn't known to me.
           Please update your slack mention name on your SV.CO profile, and try asking me again.
-      glossary:
-        term_not_found: "The term `%{term}` could not be found in our records."
 
   slack_notifications:
     timeline_events:

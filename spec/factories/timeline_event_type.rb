@@ -3,7 +3,7 @@ FactoryGirl.define do
     sample_text { Faker::Lorem.words(10).join ' ' }
     proof_required { Faker::Lorem.words(10).join ' ' }
     badge File.open(Rails.root.join('spec', 'support', 'uploads', 'timeline_event_types', 'default.png'))
-    key { |n| "#{Faker::Lorem.word}-#{n}" }
+    sequence(:key) { |n| "#{Faker::Lorem.word}-#{n}" }
     role { TimelineEventType::ROLE_OTHER }
     title { Faker::Lorem.words(2).join ' ' }
 

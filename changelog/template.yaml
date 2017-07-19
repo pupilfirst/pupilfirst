@@ -1,4 +1,4 @@
 trello: Add a link, or an array of links.
 private: Set to true or false. true if this should be hidden from public changelog.
 description: Add additional information (hidden from public changelog), if any.
-category: Use one of 'feature', 'performance', 'content', 'ui', 'bugfix', or leave empty.
+category: Use one of 'feature', 'performance', 'content', 'ui', 'bugfix', 'operations', or leave empty.

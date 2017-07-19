@@ -1,3 +1,71 @@
+.apply-hero__banner {
+  height: 370px;
+  position: relative;
+  background-color: #000;
+  background-image: asset-url("admissions/apply/apply-hero-banner.jpg");
+  background-size: cover;
+  background-position: center center;
+}
+
+.apply-hero__message-container {
+  display: flex;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  color: white;
+  width: 100%;
+  height: 370px;
+}
+
+.apply-hero__message-text {
+  color: white;
+}
+
+.apply-hero__message-text--small {
+  font-size: 1.4rem;
+}
+
+.apply-partners__container {
+  background-color: white;
+  padding: 2rem 0;
+
+  @include media-breakpoint-down (sm) {
+    padding-top: 0;
+  }
+}
+
+.apply-partners__box {
+  max-width: 50rem;
+}
+
+.apply-partners__logo--facebook {
+  height: 40px;
+}
+
+.apply-partners__logo--freshworks {
+  height: 35px;
+}
+
+.apply-partners__logo--paytm {
+  height: 35px;
+}
+
+.apply-partners__text {
+  font-size: 0.75rem;
+  display: inline-block;
+  color: $light-grey-text;
+  letter-spacing: 0.05rem;
+  border-bottom: 1px solid $gray-border;
+  padding-bottom: 5px;
+  margin-bottom: 20px;
+
+  @include media-breakpoint-down (sm) {
+    margin-bottom: 10px;
+    margin-top: 20px;
+  }
+}
+
 .application-process {
   position: relative;
 
@@ -21,10 +89,67 @@
   }
 }
 
+.apply-section__head-title {
+  font-size: 1.875rem;
+}
+
+.apply-section__head-title--white {
+  color: white;
+}
+
+.apply-section__head-subtitle {
+  max-width: 34rem;
+  font-size: 1rem;
+}
+
 .school-of-saas__section--text {
   font-size: 1.125rem;
   font-weight: $font-light;
   margin-top: 10px;
+}
+
+.school-of-saas__container {
+  overflow: hidden;
+  border-top: 1px solid $gray-border;
+  background-color: $primary-background;
+}
+
+.school-of-saas__feature-box {
+  max-width: 50rem;
+}
+
+.school-of-saas__feature-box--bottom-border {
+  border-bottom: 1px solid $gray-border;
+
+  @include media-breakpoint-down (sm) {
+    border: 0;
+  }
+}
+
+.school-of-saas__feature-card {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  height: 180px;
+  border: 1px solid $gray-border;
+  border-width: 0 1px 0 0;
+
+  &:last-child {
+    border-right: 0;
+  }
+  @include media-breakpoint-down (sm) {
+    border-width: 0 0 1px 0;
+  }
+}
+
+.school-of-saas__feature-card-title {
+  font-size: 1.25rem;
+}
+
+.school-of-saas__feature-icon {
+  width: 62px;
+  height: 62px;
 }
 
 .school-of-saas__section--ul {
@@ -33,532 +158,457 @@
   margin-top: 10px;
 }
 
-.school-of-saas__program-feature {
-  @include media-breakpoint-up(md) {
-    &:nth-child(odd) {
-      border-right: 1px solid $gray-border;
-    }
-    &:nth-child(-n+2) {
-      border-bottom: 1px solid $gray-border;
-    }
-  }
-
-  @include media-breakpoint-down(sm) {
-    &:nth-child(-n+3) {
-      border-bottom: 1px solid $gray-border;
-    }
-  }
-}
-
-.school-of-saas__program-feature-icon {
-  max-width: 250px;
-}
-
-.alumni-testimonial {
-  background-image: asset-url("admissions/apply/arun-p-testimonial.png");
-  height: 290px;
-  margin: 0 -30px;
-  display: flex;
-  align-items: center;
-  position: relative;
-
-  @include media-breakpoint-down(sm) {
-    &:before {
-      position: absolute;
-      content:"";
-      top:0;
-      left:0;
-      width:100%;
-      height:100%;
-      z-index:0;
-      background-color: rgba(0, 0, 0, 0.5);
-    }
-  }
-}
-.alumni-testimonial__quote {
-  color: white;
-  font-size: 1rem;
-  line-height: 1.6;
-  letter-spacing: 0.03rem;
-}
-.alumni-testimonial__quote-text {
-  position: relative;
-
-  &:before {
-    position: absolute;
-    width: 60px;
-    height: 4px;
-    top: -15px;
-    left: 0;
-    content: "";
-    border-top: 4px solid $light-primary;
-  }
-}
-
-.alumni-testimonial__name {
-  margin-top: 15px;
-  font-size: 1.125rem;
-}
-
-.admission-process, .important-dates, .application-faq, .our-program {
-  padding: 30px 0;
-
-  .process-box {
-    @include border-radius(10px);
-    padding: 20px;
-    margin: 15px 0;
-    position: relative;
-    height: 160px;
-    text-align: center;
-    border: 1px solid $light-secondary;
-
-    .process-icon {
-      width: 120px;
-    }
-    .stage-number {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 35px;
-      height: 35px;
-      text-align: center;
-      vertical-align: middle;
-      color: white;
-      font-size: 1.25rem;
-      font-weight: $font-semibold;
-      @include border-radius(8px 0 10px 0);
-      background-color: $light-secondary;
-    }
-    &:before, &:after {
-      border: solid transparent;
-      content: '';
-      height: 0;
-      width: 0;
-      position: absolute;
-      pointer-events: none;
-
-      @include media-breakpoint-down(sm) {
-        content: none;
-      }
-    }
-    &:after {
-      border-color: rgba(255, 255, 255, 0);
-      border-width: 15px;
-    }
-    &:before {
-      border-color: rgba(10, 165, 227, 0);
-      border-width: 16px;
-    }
-    &.arrow-right {
-      &:before, &:after {
-        left: 100%;
-        top: 50%;
-      }
-      &:after {
-        border-left-color: #ffffff;
-        margin-top: -15px;
-      }
-      &:before {
-        border-left-color: $light-secondary;
-        margin-top: -16px;
-      }
-    }
-    &.arrow-left {
-      &:before, &:after {
-        right: 100%;
-        top: 50%;
-      }
-      &:after {
-        border-right-color: #ffffff;
-        margin-top: -15px;
-      }
-      &:before {
-        border-right-color: $light-secondary;
-        margin-top: -16px;
-      }
-    }
-    &.process-box-green {
-      border: 1px solid $light-primary;
-
-      .stage-number {
-        background-color: $light-primary;
-      }
-
-      &.arrow-right {
-        &:before {
-          border-left-color: $light-primary;
-          margin-top: -16px;
-        }
-      }
-      &.arrow-left {
-        &:before {
-          border-right-color: $light-primary;
-          margin-top: -16px;
-        }
-      }
-      &.arrow-down {
-        &:before {
-          border-top-color: $light-primary;
-          margin-left: -16px;
-        }
-      }
-    }
-    &.arrow-down {
-      &:before, &:after {
-        top: 100%;
-        left: 50%;
-      }
-      &:after {
-        border-top-color: #ffffff;
-        margin-left: -15px;
-      }
-      &:before {
-        border-top-color: #0AA5E3;
-        margin-left: -16px;
-      }
-    }
-  }
-}
-
-.program-video__embed {
-  position: relative;
-  width: 100%;
-  max-width: 100%;
-  height: 0;
-  padding-bottom: 62%;
+.saas-program__box {
   @include border-radius(5px);
-  box-shadow: 0 0 10px $gray-border;
+  background-color: white;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 
-.program-video__embed--frame {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  max-width: 100%;
-  height: 100%;
-}
+.saas-program__program-requirements {
+  background: rgb(83,168,103);
+  background: linear-gradient(135deg, rgb(83,168,103) 0%,rgb(13,113,186) 100%);
+  padding: 30px;
+  @include border-radius(5px 0 0 5px);
 
-.program-video__embed--description {
-  font-size: 1rem;
-  color: $dark-grey-text;
-}
-
-.admission-process-text {
-  font-size: 1.125rem;
-  font-weight: $font-light;
-}
-
-.help-section {
-  background-color: $light-secondary;
-  padding: 30px 15px;
-  margin: 0 -30px;
-  @include border-radius(0 0 5px 5px);
-
-  .help-icon {
-    display: block;
-    @include border-radius(50%);
-
-    @include media-breakpoint-down(sm) {
-      max-width: 100px;
-    }
-    &:hover, &:focus {
-      box-shadow: 0 0 2px $dark-secondary;
-    }
-  }
-
-  .help-intercom-link {
-    color: #FFF794;
-
-    &:hover {
-      color: #F3EA76;
-    }
-  }
-
-  h2 {
-    color: white;
-    margin-bottom: 40px;
-    &:before {
-      border-bottom: 3px solid white;
-    }
-  }
-  p {
-    font-size: 1.125rem;
-    color: white;
-
-    strong {
-      font-weight: $font-semibold;
-    }
+  @include media-breakpoint-down (sm) {
+    @include border-radius(5px 5px 0 0);
   }
 }
 
-.fees-section {
-  padding: 30px 0;
-
-  .accordion-toggle {
-    position: relative;
-    box-shadow: $box-shadow-hover;
-
-    &:before {
-      @include fa-icon(angle-up);
-      float: right;
-      color: $light-grey-text;
-    }
-
-    &.collapsed {
-      &:before {
-        @include fa-icon(angle-down);
-      }
-    }
-  }
-  h4 {
-    margin-bottom: 0;
-  }
-  h3 {
-    line-height: 1.3;
-    font-weight: $font-regular;
-  }
-  .card-block {
-    display: block;
-  }
-  .card-text {
-    padding: 20px 35px;
-
-    p {
-      font-size: 1rem;
-      line-height: 1.6;
-    }
-  }
-  ul {
-    li {
-      font-size: 1rem;
-      line-height: 1.6;
-      padding-bottom: 15px;
-    }
-  }
-
-  .success-fee-box {
-    border-style: solid;
-    border-color: $gray-border;
-    border-width: 1px 1px 0 0;
-    text-align: left;
-    align-items: center;
-    padding: 20px;
-
-    .centered-fee-box {
-      width: 70%;
-      margin: 0 auto;
-      border-right: 0;
-
-      .detail {
-        width: 58%;
-      }
-    }
-
-    .percent {
-      font-weight: 600;
-      font-size: 1.25rem;
-      float: left;
-      width: fit-content;
-      padding-top: 0.4rem;
-    }
-
-    .detail {
-      font-weight: 300;
-      font-size: 1rem;
-      padding-left: 15px;
-      line-height: 1.4;
-      float: left;
-      width: 78%;
-
-      strong {
-        font-weight: $font-semibold;
-      }
-    }
-
-    &:nth-child(2n) {
-      border-right: 0;
-    }
-
-    &:last-child {
-      border-right: 0;
-    }
-
-    @include media-breakpoint-down(sm) {
-      width: 100%;
-      border-width: 0 0 1px 0;
-      padding: 30px 15px;
-
-      &.last-fee-box {
-        border-bottom: 0;
-      }
-
-      .centered-fee-box {
-
-        width: 100%;
-
-        .percent {
-          width: 30%;
-        }
-
-        .detail {
-          width: 68%;
-        }
-      }
-    }
-  }
+.saas-program__program-requirements-head {
+  color: white;
+  display: inline-block;
+  border-bottom: 4px solid white;
+  padding-bottom: 15px;
 }
 
-.program-slides {
+.saas-program__program-requirements-list-item {
+  color: white;
   position: relative;
-  max-width: 560px;
+
+  &:before {
+    display: inline-block;
+    position: absolute;
+    top: 2px;
+    @include fa-icon(check-circle);
+  }
+}
+
+.saas-program__program-requirements-content {
+  display: inline-block;
+  padding-left: 25px;
+}
+
+.saas-program__program-requirements-title {
+  color: white;
+  padding-bottom: 5px;
+}
+
+.saas-program__program-requirements-text {
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.school-of-saas__program-promises {
+  padding: 30px;
+}
+
+.saas-program__program-promises-head {
+  display: inline-block;
+  border-bottom: 4px solid $gray-border;
+  padding-bottom: 15px;
+}
+
+.application-fee__container {
+  overflow: hidden;
+  border-top: 1px solid $gray-border;
+  background-color: white;
+}
+
+.current-batch-data__box {
+  display: flex;
+  max-width: 52rem;
+  text-align: center;
+  align-content: flex-end;
   margin: auto;
-  padding-bottom: 0;
 
-  @include media-breakpoint-down(sm) {
-    padding-bottom: 80px;
+  @include media-breakpoint-down (sm) {
+    flex-direction: column;
+  }
+}
+
+.current-batch-data_head {
+  border-bottom: 1px solid $gray-border;
+  display: inline-block;
+  padding-bottom: 10px;
+}
+
+.current-batch-data__coloumn {
+  width: 20%;
+  padding: 0 1rem;
+  border: 2px solid $gray-border;
+  border-width: 0 0 0 2px;
+
+  &:first-child {
+    border-width: 0 0 0 0;
+
+    @include media-breakpoint-down (sm) {
+      border-width: 0 0 1px 0;
+    }
   }
 
-  .slide-item {
-    height: 260px;
-    margin: 0 20px;
-    padding: 20px;
-    position: relative;
-    background-color: transparent;
-    outline: none;
+  @include media-breakpoint-down (sm) {
+    display: inline-block;
+    width: auto;
+    text-align: center;
+    border-width: 0 0 1px 0;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+  }
+}
 
-    .program-day {
-      padding: 0 20px;
-      text-align: center;
-      width: 180px;
-      height: 50px;
-      font-size: 1.125rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      @include border-radius(5px 0 5px 0);
-      color: white;
-      position: relative;
-      left: -20px;
-      top: -20px;
+.program-fee__container {
+  max-width: 36rem;
+  text-align: center;
+  background-color: white;
+  box-shadow: 0 0 30px 0 rgba(10, 165, 227, 0.3);
+  border: 1px solid $light-secondary;
+  @include border-radius(5px)
+}
 
-      &.blue-day {
-        background-color: $light-secondary;
-      }
-      &.green-day {
-        background-color: $light-primary;
-      }
-    }
-    .program-slide-icon {
-      @include media-breakpoint-down(sm) {
-        display: none;
-      }
-    }
-    h3 {
-      @include media-breakpoint-down(xs) {
-        font-size: 1.25rem;
-      }
-    }
-    ul {
-      list-style: none;
-      padding-left: 30px;
-      margin-bottom: 15px;
+.program-fee__title {
+  margin-bottom: 0;
 
-      li {
-        position: relative;
-        margin-top: 5px;
-        padding-top: 4px;
+  @include media-breakpoint-down (sm) {
+    margin-bottom: 1rem;
+  }
+}
 
-        &:before {
-          content: '';
-          width: 12px;
-          height: 12px;
-          position: absolute;
-          display: inline-block;
-          left: -30px;
-          top: 8px;
-          @include border-radius(50%);
-          border: 1px solid $light-primary;
-          margin-right: 10px;
-        }
-      }
-    }
-    .partner-section {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-top: 1px solid $gray-border;
-      padding-top: 10px;
 
-      .partner-logo {
-        width: 100px;
-      }
-      p {
-        margin-left: 10px;
-        padding-left: 10px;
-        border-left: 1px solid $gray-border;
-      }
-    }
-    @include media-breakpoint-down(sm) {
-      height: 300px;
-      margin: 0;
+.program-fee__title--small {
+  font-size: 1.125rem;
+}
+
+// Apply form
+.apply-form__container {
+  background: rgb(83,168,103);
+  background: linear-gradient(135deg, rgb(83,168,103) 0%,rgb(13,113,186) 100%);
+  padding: 30px;
+}
+
+.apply-form__box {
+  max-width: 360px;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.3);
+}
+
+.apply-form__submit-button {
+    width: 100%;
+    margin-top: 15px;
+}
+
+.saas-program__program-promises-list-item {
+  position: relative;
+
+  &:before {
+    color: $light-primary;
+    display: inline-block;
+    position: absolute;
+    top: 4px;
+    @include fa-icon(check-circle);
+  }
+}
+
+.saas-program__program-promises-content {
+  display: inline-block;
+  padding-left: 25px;
+}
+
+.saas-program__program-promises-title {
+  line-height: 1.3;
+}
+
+.saas-program__program-promises-more-link {
+  font-size: 1rem;
+  line-height: 1.3;
+  margin-left: 25px;
+  text-decoration: underline;
+}
+
+.saas-program__graduation-support {
+  padding: 30px;
+  margin-top: 125px;
+  border: 1px solid $alert-background;
+  @include border-radius (10px);
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1);
+
+  @include media-breakpoint-down (sm) {
+    margin-top: 0;
+  }
+}
+
+.saas-program__graduation-support-year {
+  font-size: 4.5rem;
+  line-height: 1;
+}
+
+.saas-program__graduation-support-sub-text {
+  line-height: 1.4;
+}
+
+
+// Framework Section
+.program-framework__box {
+  max-width: 40rem;
+}
+
+.program-framework__timeline {
+  position: relative;
+  margin: 2em auto 0;
+  padding-left: 3em;
+  text-align: left;
+  padding-bottom: 3rem;
+  margin-left: 10em;
+  margin-right: 3em;
+
+  @include media-breakpoint-down (sm) {
+    margin-left: 1em;
+    margin-right: 0;
+  }
+
+  &:before {
+    content: '';
+    height: auto;
+    border-left: 0.25em solid $gray-border;
+    position: absolute;
+    left: 0;
+    top: 1rem;
+    bottom: 0;
+  }
+}
+
+.program-framework__timeline-content {
+  display: none;
+  font-size: 1rem;
+  background: white;
+  border: 1px solid $gray-border;
+  border-width: 0 1px 1px 1px;
+  font-size: 1rem;
+  padding: 1rem;
+  box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.05);
+
+  > li {
+    padding-bottom: 5px;
+  }
+}
+
+.program-framework__timeline-content-link {
+  font-size: 0.875rem;
+  text-decoration: underline;
+  margin-left: 12px;
+}
+
+.program-framework__timeline-level {
+  width: 100%;
+  vertical-align: middle;
+  position: relative;
+
+  &:before, &:after {
+    position: absolute;
+    display: block;
+    top: 1rem;
+  }
+  &:before {
+    left: -8rem;
+    color: black;
+    content: attr(data-level);
+    color: $light-grey-text;
+    letter-spacing: 0.04rem;
+    text-align: right;
+    top: 1rem;
+
+    @include media-breakpoint-down (sm) {
+      left: 0;
+      font-size: 0.875rem;
+      z-index: 1;
+      top: -1.5rem;
     }
   }
-  .slick-prev, .slick-next {
-    border: 1px solid $brand-secondary;
-    @include border-radius(50%);
-    background-color: white;
-    box-shadow: $box-shadow;
-    height: 40px;
-    width: 40px;
-    top: 50%;
-    bottom: 0px;
-    margin: 0 15px;
-    z-index: 1;
-    transition: all .2s;
+  &:after {
+    border: 3px solid $light-primary;
+    left: -3.25rem;
+    top: 1rem;
+    background: white;
+    border-radius: 50%;
+    height: 1.5rem;
+    width: 1.5rem;
+    content: "";
+  }
+  &:first-of-type {
+    .program-framework__timeline-content {
+      display: block;
+    }
+  }
+}
 
+.program-framework__timeline-details {
+  padding: 0 0 2rem 0;
+  text-align: left;
+  position: relative;
+
+  @include media-breakpoint-down (sm) {
+    padding: 0 0 3rem 0;
+  }
+}
+
+.program-framework__timeline-title {
+  line-height: 1;
+  font-size: 1.125rem;
+  cursor: pointer;
+  margin-bottom: 0;
+  padding: 1rem;
+  border: 1px solid $gray-border;
+  background-color: white;
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.05);
+
+  &:before {
+    content: '\f106';
+    font-size: 1rem;
+    position: absolute;
+    font-family: 'FontAwesome';
+    right: 1rem;
+    top: 20px;
+    transform: rotate(180deg);
+    transition: all 0.2s;
+  }
+
+  &.active {
     &:before {
-      font-size: 18px;
-      vertical-align: middle;
-      opacity: 1;
+      transform: rotate(0deg);
     }
-    &:hover, &:focus, &:active {
-      box-shadow: $box-shadow-hover;
+  }
+}
 
+// Startup ecosystem
+.startup-ecosystem__container {
+  overflow: hidden;
+  border-top: 1px solid $gray-border;
+  background-color: white;
+}
+
+.startup-ecosystem-video__box {
+  display: block;
+  background-color: white;
+  box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.1);
+  @include border-radius(5px);
+  overflow: hidden;
+  transition: all .2s;
+
+  &:hover {
+    box-shadow: 0 4px 30px 0 rgba(0, 0, 0, 0.2);
+
+    .startup-ecosystem-video__thumbnail {
       &:before {
-        color: $light-secondary;
+        background: rgba(0,0,0,0.2);
       }
     }
-    @include media-breakpoint-down(sm) {
-      top: auto;
-    }
   }
-  .slick-prev {
-    left: -70px;
+}
+
+.startup-ecosystem-video__thumbnail {
+  display: block;
+  position:relative;
+  @include border-radius(5px 5px 0px 0px) ;
+  overflow: hidden;
+
+  &:before {
+    position: absolute;
+    content:'';
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    z-index: 1;
+    background: rgba(0,0,0,0.3);
+    transition: all .2s;
+  }
+}
+
+.startup-ecosystem-video__thumbnail-image {
+  position: relative;
+}
+
+.startup-ecosystem-video__play-button {
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+  background-image: asset-url('shared/play-button.svg');
+  width: 40px;
+  height: 40px;
+  @include border-radius(50%);
+
+  &:hover {
+    box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.2);
+  }
+}
+
+.startup-ecosystem-video__detail {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+
+// FAQ
+.apply-faq__container {
+  overflow: hidden;
+  border-top: 1px solid $gray-border;
+  background-color: $primary-background;
+}
+
+.apply-faq__collapse {
+  max-width: 36rem;
+}
+
+.apply-faq__collapse-card {
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.apply-faq__collapse-card-header {
+  background-color: white;
+  margin-bottom: -1px;
+
+  a {
+    display: block;
+    padding: 1.25rem;
 
     &:before {
-      @include fa-icon(angle-left);
-      color: $brand-secondary;
-    }
-
-    @include media-breakpoint-down(sm) {
-      right: 50%;
-      left: auto;
-    }
-  }
-  .slick-next {
-    right: -70px;
-
-    &:before {
-      @include fa-icon(angle-right);
-      color: $brand-secondary;
-    }
-    @include media-breakpoint-down(sm) {
-      left: 50%;
-      right: auto;
+      content: '\f106';
+      font-size: 18px;
+      position: absolute;
+      font-family: 'FontAwesome';
+      right: 1.25rem;
+      top: 22px;
+      transform: rotate(180deg);
+      transition: all 0.2s;
     }
   }
+  &.active {
+    a {
+      &:before {
+        transform: rotate(0deg);
+      }
+    }
+  }
+}
+
+.apply-faq__collapse-card-block {
+  font-size: 1rem;
+  line-height: 1.8;
+  overflow: hidden;
 }
 
 .application-start-form {
@@ -569,29 +619,20 @@
     font-weight: $font-semibold;
   }
   .simple-form-container {
-    .batch_application_university_id {
-      position: relative;
-
-      .control-label {
-        position: absolute;
-        z-index: 1;
-        padding: 8px;
-        @include border-radius(0.25rem 0 0 0.25rem);
-        margin: 0;
-        background-color: white;
-        border: 1px solid $gray-border;
-      }
-      .university_select {
-        z-index: 2;
-
-        > a {
-          background-color: transparent;
-          padding-left: 75px;
-        }
-      }
-    }
     .form-group {
       margin-bottom: 15px;
+
+      .select2-selection--single {
+        height: 40px;
+      }
+
+      .select2-selection__rendered {
+        line-height: 40px;
+      }
+      .select2-selection__arrow {
+        height: 40px;
+        right: 8px;
+      }
     }
   }
 }
@@ -621,41 +662,6 @@
   }
 }
 
-.application-faq {
-  background-color: white;
-  position: relative;
-
-  ul {
-    li {
-      list-style: none;
-      line-height: 1.65rem;
-      padding-bottom: 30px;
-      position: relative;
-
-      &:before {
-        @include fa-icon(circle-o);
-        color: $brand-secondary;
-        position: absolute;
-        left: -25px;
-        top: 6px;
-      }
-    }
-  }
-  h4 {
-    margin-left: 15px;
-    padding-bottom: 10px;
-    margin-bottom: 15px;
-    border-bottom: 1px solid $gray-border;
-  }
-  h5 {
-    display: inline-block;
-    font-weight: $font-semibold;
-    line-height: 1.65rem;
-  }
-  p {
-    letter-spacing: 0.01rem;
-  }
-}
 
 .eq-height {
   display: flex;

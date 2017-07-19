@@ -1,7 +1,7 @@
 class StartupFeedback < ApplicationRecord
   belongs_to :startup
   belongs_to :faculty
-  belongs_to :timeline_event
+  belongs_to :timeline_event, optional: true
   attr_accessor :send_email, :event_id, :event_status
 
   scope :for_batch, ->(batch) { joins(:startup).where(startups: { batch_id: batch.id }) }
@@ -10,25 +10,13 @@ class StartupFeedback < ApplicationRecord
   # mount uploader for attachment
   mount_uploader :attachment, StartupFeedbackAttachmentUploader
 
-  validates :faculty_id, presence: true
   validates :feedback, presence: true
-  validates :startup_id, presence: true
-
-  REGEX_TIMELINE_EVENT_URL = %r{startups/.*event-(?<event_id>[\d]+)}
 
   normalize_attribute :activity_type
 
   # Returns all feedback for a given timeline event.
   def self.for_timeline_event(event)
-    where('reference_url LIKE ?', "%event-#{event.id}").order('updated_at desc')
-  end
-
-  def for_timeline_event?
-    if reference_url.present? && reference_url.match(REGEX_TIMELINE_EVENT_URL).present?
-      true
-    else
-      false
-    end
+    where(timeline_event: event).order('updated_at desc')
   end
 
   def as_slack_message
@@ -44,6 +32,6 @@ class StartupFeedback < ApplicationRecord
   end
 
   def for_founder?
-    for_timeline_event? && timeline_event&.founder_event?
+    timeline_event.present? && timeline_event&.founder_event?
   end
 end

@@ -1,6 +1,7 @@
 CarrierWave.configure do |config|
   if Rails.env.production?
-    config.storage = :fog
+    config.fog_provider = 'fog/aws'
+
     config.fog_credentials = {
       provider: 'AWS', # required
       aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'], # required
@@ -11,8 +12,9 @@ CarrierWave.configure do |config|
       path_style: true
     }
 
+    config.storage = :fog
     config.fog_public = true # optional, defaults to true
-    config.fog_attributes = { 'Cache-Control' => 'max-age=315576000' } # optional, defaults to {}
+    config.fog_attributes = { cache_control: "max-age=#{1.year.to_i}" } # optional, defaults to {}
     config.cache_dir = Rails.root.join('tmp', 'uploads') # To let CarrierWave work on Heroku.
     config.fog_directory = ENV['S3_BUCKET_NAME'] || "svapp-#{Rails.env}"
     # config.asset_host       = "https://#{ENV["S3_BUCKET_NAME"]}.s3.amazonaws.com/#{ENV['S3_BUCKET_NAME']}"

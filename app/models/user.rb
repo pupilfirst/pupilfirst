@@ -1,7 +1,6 @@
 class User < ApplicationRecord
   has_one :mooc_student, dependent: :restrict_with_error
   has_one :founder, dependent: :restrict_with_error
-  has_one :batch_applicant, dependent: :restrict_with_error
   has_one :admin_user, dependent: :restrict_with_error
   has_many :user_activities
   has_many :visits, as: :user

@@ -1,3 +1,4 @@
+# TODO: AdmissionStatsNotificationJob is broken. This needs to be rewritten.
 class AdmissionStatsNotificationJob < ApplicationJob
   queue_as :default
   attr_reader :application_round, :stats

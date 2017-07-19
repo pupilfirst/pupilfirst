@@ -7,6 +7,8 @@ class ApplicantScreeningQuestion extends React.Component {
         return "Have you <em>completed</em> a technical course at Coursera, Udacity or other MOOCs?";
       case(3):
         return "Have you built websites and/or apps?";
+      case(4):
+        return "Do you have a public Github/BitBucket profile?";
       default:
         console.error("Unexpected question number: " + this.props.questionNumber);
         return null;

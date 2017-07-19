@@ -52,10 +52,10 @@ module Targets
       if target&.target_group_id.present? && event.iteration != @founder.startup.iteration
         Target::STATUS_PENDING
       else
-        case event.verified_status
-          when TimelineEvent::VERIFIED_STATUS_VERIFIED then Target::STATUS_COMPLETE
-          when TimelineEvent::VERIFIED_STATUS_NOT_ACCEPTED then Target::STATUS_NOT_ACCEPTED
-          when TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT then Target::STATUS_NEEDS_IMPROVEMENT
+        case event.status
+          when TimelineEvent::STATUS_VERIFIED then Target::STATUS_COMPLETE
+          when TimelineEvent::STATUS_NOT_ACCEPTED then Target::STATUS_NOT_ACCEPTED
+          when TimelineEvent::STATUS_NEEDS_IMPROVEMENT then Target::STATUS_NEEDS_IMPROVEMENT
           else Target::STATUS_SUBMITTED
         end
       end

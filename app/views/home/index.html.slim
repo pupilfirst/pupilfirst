@@ -3,609 +3,316 @@
   meta property="og:type" content="website"
   meta property="og:url" content=root_url
   meta property="og:image" content=image_url('shared/logo-color.svg')
+  meta name="description" content="SV.CO, or Startup Village is a learning platform for entrepreneurs that verifies results, and rewards founders with a real degree from partner Universities."
 
 - if startup_village_redirect?
   - content_for :sitewide_notice
     ' <strong>SV.CO</strong> is the next phase of the Startup Village story.
     ' #{link_to 'Read more here', 'https://www.sv.co/cwlg8', class: 'btn btn-sm', target: '_blank'}
 
-- if registration_redirect?
-  - content_for :sitewide_notice
-    ' You have successfully registered on SV.CO. Please wait for your team lead to complete registration.
-
-- content_for :head
-  title SV.CO: India’s No 1 Digital Incubator For Students
-  meta name="description" content="SV.CO, or Startup Village is a learning platform for entrepreneurs that verifies results, and rewards founders with a real degree from partner Universities."
-
-- content_for :header
-
-.big-container
-  .full-screen-background class="background-image-#{background_image_number}"
+section.home-hero__container
+  .home-hero__message-wrapper.text-xs-center
     .container
-      .header-container class="header-#{hero_text_alignment}"
-        .hero-text class="hero-text-#{hero_text_alignment}"
-          h1 = t('home.index.main_bleed_message_html')
-          h4 = t("home.index.background_#{background_image_number}_messages.secondary_html")
-          - if current_founder.blank?
-            = link_to 'Apply Now', apply_path, class: 'btn btn-primary btn-lg text-uppercase home-apply-btn'
-            - if current_mooc_student.present?
-              = link_to 'Continue Sixways Course', start_or_continue_path, class: 'btn btn-secondary btn-lg continue-sixways-btn home-apply-btn text-uppercase'
-          - else
-            = link_to 'Go To Dashboard', dashboard_founder_path, class: 'btn btn-primary btn-lg text-uppercase home-apply-btn'
-    a.icon-scroll href="#startincollege-initiative"
+      .home-hero__message-title
+        h1.home-hero__message-title-head
+          ' Immersive Learning Experience to Build
+          .font-semibold
+            | Campus Startups
+        .p-t-1
+          = link_to 'Apply Now', apply_path, class: 'btn btn-primary btn-lg home-apply__button'
 
-  #startincollege-initiative.startincollege-section
-    .container
-      h3.text-xs-center.content-head
-        span.content-title-icon.startincollege-initiative-icon
-        | #StartInCollege Initiative
-      .startincollege-intro.m-x-auto.text-xs-center
-        p.font-light
-          ' <strong>#StartInCollege</strong> is <strong>India's largest student entrepreneurship campaign</strong>
-          ' that aims to reach out to all engineering students in the country. We believe
-          | that the current crop of students is capable of creating the next generation of India's great startups.
-      .campaign-analysis.m-t-3.m-b-3.clearfix
-        .col-md-2.offset-md-1.col-xs-6
-          .analysis-icon.m-x-auto
-            = image_tag 'home/index/campaign-icon-college.svg'
-          p
-            = university_count_from_applications
-            span
-              | Universities
-        .col-md-2.col-xs-6
-          .analysis-icon.m-x-auto
-            = image_tag 'home/index/campaign-icon-startup-partner.svg'
+  = video_tag 'https://s3.amazonaws.com/sv-co-public/videos/header_background_clip.mp4', preload: 'none', autoplay: true, loop: true, class: 'hidden-sm-down home-hero__video'
 
-          p
-            ' 20
-            span
-              |	Graduation Partners
-        .col-md-2.col-xs-6
-          .analysis-icon.m-x-auto
-            = image_tag 'home/index/campaign-icon-graduation.svg'
+section.home-partners__container.p-y-2.hidden-sm-down
+  .container.home-partners__box
+    .col-md-2
+      = image_tag 'home/index/sv-partner-facebook.svg', class: 'img-fluid m-x-auto home-partners__logo home-partners__logo--facebook'
 
-          p
-            ' 6
-            span
-              | Ways to Graduate
-        .col-md-2.col-xs-6
-          .analysis-icon.m-x-auto
-            = image_tag 'home/index/campaign-icon-scholarship.svg'
+    .col-md-2
+      = image_tag 'home/index/sv-partner-us-embassy.png', class: 'img-fluid m-x-auto home-partners__logo home-partners__logo--us-embassy'
 
-          p
-            ' 30
-            span
-              | Scholarships by Paytm
-        .col-md-2.col-xs-12
-          .analysis-icon.m-x-auto
-            = image_tag 'home/index/campaign-icon-states.svg'
+    .col-md-2
+      = image_tag 'home/index/sv-partner-freshworks.svg', class: 'img-fluid m-x-auto home-partners__logo home-partners__logo--freshworks'
 
-          p
-            ' 29
-            span
-              |	States
-      .official-partners.m-b-3
-        .highlight-partners.clearfix
-          .col-md-3.m-x-auto
-            h4
-              | Official Silicon Valley Host Partner
-            .official-partner-logo
-              = image_tag 'home/index/start-in-college-partner-logo-facebook.svg', class: "img-fluid facebook-logo"
-          .col-md-3.m-x-auto
-            h4
-              | Official Scholarship Partner
-            .official-partner-logo
-              = image_tag 'home/index/start-in-college-partner-logo-paytm.svg', class: "img-fluid paytm-logo"
-          .col-md-3.m-x-auto
-            h4
-              | Official Cloud Partner
-            .official-partner-logo
-              = image_tag 'home/index/start-in-college-partner-logo-digitalocean.svg', class: "img-fluid digitalocean-logo"
-          .col-md-3.m-x-auto
-            h4
-              | Official Outreach Partner
-            .official-partner-logo
-              = image_tag 'home/index/start-in-college-partner-logo-ficci.svg', class: "img-fluid ficci-logo"
-        .support-partners.clearfix
+    .col-md-2
+      = image_tag 'home/index/sv-partner-ksum.png', class: 'img-fluid m-x-auto home-partners__logo home-partners__logo--ksum'
+
+    .col-md-2
+      = image_tag 'home/index/sv-partner-paytm.svg', class: 'img-fluid m-x-auto home-partners__logo home-partners__logo--paytm'
+
+    .col-md-2
+      = image_tag 'home/index/sv-partner-microsoft-ventures.png', class: 'img-fluid m-x-auto home-partners__logo home-partners__logo--ms-ventures'
+
+section.six-ways-card__container.p-y-3
+  .container
+    .home-section__head.m-b-2
+      h3.home-section__head-title.text-xs-center.font-black
+        | 6 Different ways to Establish your Career
+      .home-section__head-subtitle.m-x-auto
+        p.text-xs-center
+          ' SV.CO Startup founders start early in college to gain professional
+          | startup skills and explore graduation options during their final year
+
+    .col-md-4
+      a.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#itraveller-story-video"
+        .six-ways-card__thumbnail
+          = image_tag 'home/index/itraveller-story.jpg', class: 'img-fluid six-ways-card__thumbnail-image'
+
+          h3.six-ways-card__thumbnail-text.font-regular
+            span.six-ways-card__thumbnail-text--small
+              ' Get Funded for Your
+            br
+            | Startups
+        .six-ways-card__story-detail.clearfix
+          .six-ways-card__story-title.pull-xs-left
+            | Story of iTraveller
+          .six-ways-card__play-button-container
+            .six-ways-card__play-button.pull-xs-right
+
+    .col-md-4
+      a.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#profoundis-story-video"
+        .six-ways-card__thumbnail
+          = image_tag 'home/index/profoundis-story.jpg', class: 'img-fluid six-ways-card__thumbnail-image'
+
+          h3.six-ways-card__thumbnail-text.font-regular
+            span.six-ways-card__thumbnail-text--small
+              ' Join a
+            br
+            | Startup Accelerator
+
+        .six-ways-card__story-detail.clearfix
+          .six-ways-card__story-title.pull-xs-left
+            | Story of Profoundis
+          .six-ways-card__play-button-container
+            .six-ways-card__play-button.pull-xs-right
+
+    .col-md-4
+      a.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#z-pay-story-video"
+        .six-ways-card__thumbnail
+          = image_tag 'home/index/z-pay.jpg', class: 'img-fluid six-ways-card__thumbnail-image'
+
+          h3.six-ways-card__thumbnail-text.font-regular
+            span.six-ways-card__thumbnail-text--small
+              ' Get Aqui-Hired
+            br
+            | as a Team
+
+        .six-ways-card__story-detail.clearfix
+          .six-ways-card__story-title.pull-xs-left
+            | Z-pay Acquihired by Tally
+          .six-ways-card__play-button-container
+            .six-ways-card__play-button.pull-xs-right
+
+    .col-md-4
+      a.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#hiring-story-video"
+        .six-ways-card__thumbnail
+          = image_tag 'home/index/hiring-story.jpg', class: 'img-fluid six-ways-card__thumbnail-image'
+
+          h3.six-ways-card__thumbnail-text.font-regular
+            span.six-ways-card__thumbnail-text--small
+              ' Get Hired in a Startup
+            br
+            | with Better Skills
+
+        .six-ways-card__story-detail.clearfix
+          .six-ways-card__story-title.pull-xs-left
+            | Hiring at SV.CO
+          .six-ways-card__play-button-container
+            .six-ways-card__play-button.pull-xs-right
+
+    .col-md-4
+      a.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#wowmakers-story-video"
+        .six-ways-card__thumbnail
+          = image_tag 'home/index/wowmakers-story.jpg', class: 'img-fluid six-ways-card__thumbnail-image'
+
+          h3.six-ways-card__thumbnail-text.font-regular
+            span.six-ways-card__thumbnail-text--small
+              ' Run a
+            br
+            | Self Sustainable Startup
+
+        .six-ways-card__story-detail.clearfix
+          .six-ways-card__story-title.pull-xs-left
+            | Story of Wowmakers
+          .six-ways-card__play-button-container
+            .six-ways-card__play-button.pull-xs-right
+
+    .col-md-4
+      a.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#higher-studies-story-video"
+        .six-ways-card__thumbnail
+          = image_tag 'home/index/higher-studies.jpg', class: 'img-fluid six-ways-card__thumbnail-image'
+
+          h3.six-ways-card__thumbnail-text.font-regular
+            span.six-ways-card__thumbnail-text--small
+              ' Go for Higher Studies
+            br
+            | with Stronger Resume
+
+        .six-ways-card__story-detail.clearfix
+          .six-ways-card__story-title.pull-xs-left
+            | Access to Global Universities
+          .six-ways-card__play-button-container
+            .six-ways-card__play-button.pull-xs-right
+
+  .container
+    .text-xs-center.m-t-2
+      = link_to 'Learn More', apply_path, class: 'btn btn-primary btn-lg home-apply__button'
+
+section.program-feature__container.p-y-3
+  .container
+    .home-section__head.m-b-2
+      h3.home-section__head-title.text-xs-center.font-black
+        | Programme Designed Exclusively for YOU
+      .home-section__head-subtitle.m-x-auto
+        p.text-xs-center
+          ' The programme is exclusively for software startups which can be built while you
+          | are in college and the platform enables you to learn from wherever you are.
+    .program-feature__box
+      .col-md-7
+        .row
           .col-md-6
-            h4
-              | Supported By
+            .program-feature__card
+              = image_tag 'home/index/learn-from-experts.jpg', class: 'img-fluid'
+              .program-feature__card-title
+                h3.program-feature__card-title-text.font-regular
+                  ' Learn from experts
+                  br
+                  | across the world
 
-            .official-partner-logo.support-partner-logo
-              = image_tag 'home/index/start-in-college-partner-logo-nstedb.png', class: "img-fluid"
-              p
-                | NSTEDB Govt. of India
-            .official-partner-logo.support-partner-logo
-              = image_tag 'home/index/start-in-college-partner-logo-us-embassy.png', class: "img-fluid"
-              p
-                | Embassy of the United States
+                /program-feature__card-title-link
+                  | Learn More
+
           .col-md-6
-            h4
-              | Official State Partners
+            .program-feature__card
+              = image_tag 'home/index/stratup-with-friends.jpg', class: 'img-fluid'
+              .program-feature__card-title
+                h3.program-feature__card-title-text.font-regular
+                  ' Build a startup
+                  br
+                  | with your friends
 
-            .official-partner-logo
-              = image_tag 'home/index/start-in-college-partner-logo-ksum.png', class: "img-fluid"
-              p
-                | Kerala Startup Mission
+                /p.program-feature__card-title-link
+                  | Learn More
 
-            .official-partner-logo
-              = image_tag 'home/index/start-in-college-partner-logo-gtu.png', class: "img-fluid"
-              p
-                | Gujarat Technological University
+          .col-md-6
+            .program-feature__card
+              = image_tag 'home/index/showcase-skills.jpg', class: 'img-fluid'
+              .program-feature__card-title
+                h3.program-feature__card-title-text.font-regular
+                  ' Showcase your skills at
+                  br
+                  | SV.CO events
 
-            .official-partner-logo
-              = image_tag 'home/index/start-in-college-partner-logo-t-hub.png', class: "img-fluid"
-              p
-                | T-HUB
-      .text-xs-center
-        = link_to 'Read More', apply_path, class: 'btn btn-primary btn-lg text-uppercase'
+                /p.program-feature__card-title-link
+                  | Learn More
 
-  #graduation-slide-section.graduated-slide
-    .container-fluid
-      .row
-        h3.text-xs-center.content-head
-          span.content-title-icon.graduated-icon
-          | Successful Student Founders
-        .graduation-carousel
-          .slide-item
-            a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-1"
-              = image_tag 'home/index/graduation-video-thumbnail-1.png'
-            .graduate-data.text-xs-center
-              h4
-                | <strong>Jibin Jose</strong>
-                br
-                | 0 to Million-Dollar Campus Startup
-              p
-                | “After” Silicon Valley exposure
+          .col-md-6
+            .program-feature__card
+              = image_tag 'home/index/idea-pool.jpg', class: 'img-fluid'
+              .program-feature__card-title
+                h3.program-feature__card-title-text.font-regular
+                  ' Choose from a pool of
+                  br
+                  | ideas if you don&rsquo;t have one
 
-          .slide-item
-            a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-3"
-              = image_tag 'home/index/graduation-video-thumbnail-2.png'
-            .graduate-data.text-xs-center
-              h4
-                | <strong>Spenwise</strong>
-                br
-                | 0 to 1-Crore Value in Six Months
-              p
-                | Admission to Accelerator
+                /p.program-feature__card-title-link
+                  | Learn More
 
-          .slide-item
-            a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-4"
-              = image_tag 'home/index/graduation-video-thumbnail-3.png'
-            .graduate-data.text-xs-center
-              h4
-                | <strong>Z-Pay</strong>
-                br
-                | 0 to 7 Lacs CTC in six months
-              p
-                | Team Acquihired by Tally
+      .col-md-5
+        .program-feature__card
+          = image_tag 'home/index/start-in-college.jpg', class: 'program-feature__college-img'
+          .program-feature__card-title
+            h3.program-feature__card-title-text.program-feature__card-title-text--big.font-regular
+              span.program-feature__card-title-text--big-highlight.font-semibold
+                ' Learn
+              br
+              ' wherever you are alongside your
+              br
+              | college degree
 
-          .slide-item
-            a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
-              = image_tag 'home/index/graduation-video-thumbnail-4.png'
-            .graduate-data.text-xs-center
-              h4
-                | <strong>Varghese George</strong>
-                br
-                | CTC 7 Lacs
-              p
-                | Team Acquihired by Tally
+            /p.program-feature__card-title-link
+              | Learn More
 
-          .slide-item
-            a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
-              = image_tag 'home/index/graduation-video-thumbnail-sriram.png'
-            .graduate-data.text-xs-center
-              h4
-                | <strong>Sreeram Narayanan</strong>
-                br
-                | CTC 7 Lacs
-              p
-                | Hired by Tally Solutions
+  .container
+    .text-xs-center.m-t-2
+      = link_to 'Learn More', apply_path, class: 'btn btn-primary btn-lg home-apply__button'
 
-          .slide-item
-            a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
-              = image_tag 'home/index/graduation-video-thumbnail-arun-p.png'
-            .graduate-data.text-xs-center
-              h4
-                | <strong>Arun P</strong>
-                br
-                | CTC 6 Lacs
-              p
-                | Hired by Goqii
+section.silicon-valley-itinerary__container.p-y-3
+  .container
+    .home-section__head.m-b-2
+      h3.home-section__head-title.text-xs-center.font-black
+        | Spend your summer in Silicon Valley, USA
+      .home-section__head-subtitle.m-x-auto
+        p.text-xs-center
+          ' We recently flew India’s largest delegation of startups to Silicon
+          ' Valley for one week. Our vision is to take a delegation of 250
+          | startups on a Flight of Dreams for a period of two weeks.
 
-          .slide-item
-            a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
-              = image_tag 'home/index/graduation-video-thumbnail-aravind-sai.png'
-            .graduate-data.text-xs-center
-              h4
-                | <strong>Aravind Sai</strong>
-                br
-                | CTC 12.6 Lacs
-              p
-                | Hired by Goqii
+    .silicon-valley-itinerary__slider.m-x-auto
+      .silicon-valley-itinerary__slider-item.m-x-auto
+        = image_tag 'home/index/day1-svtosv.png', class: 'm-x-auto silicon-valley-itinerary__image img-fluid'
+      .silicon-valley-itinerary__slider-item.m-x-auto
+        = image_tag 'home/index/day2-svtosv.png', class: 'm-x-auto silicon-valley-itinerary__image img-fluid'
+      .silicon-valley-itinerary__slider-item.m-x-auto
+        = image_tag 'home/index/day3-svtosv.png', class: 'm-x-auto silicon-valley-itinerary__image img-fluid'
+      .silicon-valley-itinerary__slider-item.m-x-auto
+        = image_tag 'home/index/day4-svtosv.png', class: 'm-x-auto silicon-valley-itinerary__image img-fluid'
+      .silicon-valley-itinerary__slider-item.m-x-auto
+        = image_tag 'home/index/day5-svtosv.png', class: 'm-x-auto silicon-valley-itinerary__image img-fluid'
+      .silicon-valley-itinerary__slider-item.m-x-auto
+        = image_tag 'home/index/day6-svtosv.png', class: 'm-x-auto silicon-valley-itinerary__image img-fluid'
 
-          .slide-item
-            a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
-              = image_tag 'home/index/graduation-video-thumbnail-sachu.png'
-            .graduate-data.text-xs-center
-              h4
-                | <strong>Sachu Shylan</strong>
-                br
-                | CTC 6 Lacs
-              p
-                | Hired by Good Methods Global
+section.home-testimonial__container.p-y-3
+  .container
+    .home-section__head.m-b-2
+      h3.home-section__head-title.text-xs-center.font-black
+        | Time to make your parents REALLY proud
 
-          .slide-item
-            a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
-              = image_tag 'home/index/graduation-video-thumbnail-ajayson.png'
-            .graduate-data.text-xs-center
-              h4
-                | <strong>Ajayson</strong>
-                br
-                | CTC 7 Lacs
-              p
-                | Hired by Tally Solutions
+    .home-testimonial__box.clearfix.m-x-auto
+      .home-testimonial__image-container.col-md-4.p-a-0
+        = image_tag 'home/index/suraj-family.png', class: 'img-fluid m-x-auto home-testimonial__image'
+      .home-testimonial__text.col-md-8
+        p
+          ' &ldquo;I was really worried when he said that he wanted to do a startup in his college.
+          ' I thought college was all about grades and attendance but then I saw him
+          ' code all the day in his room. He spends money for his company and not for shopping.
+          ' It feels really great. He told me about his experience in Silicon Valley,
+          | and he seems to have a learnt a lot from that experience.&rdquo;
+        p.font-semibold.p-t-1
+          ' &ndash; Subbalakshmi Rajan
+          .font-regular.home-testimonial__text--author-sub
+            | (Suraj Rajan&rsquo;s Mother)
 
-          .slide-item
-            a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-6"
-              = image_tag 'home/index/graduation-video-thumbnail-5.png'
-            .graduate-data.text-xs-center
-              h4
-                | <strong>Six ways to Success</strong>
-                br
-                | Graduation Options
+section.home-call-to-action__container.p-y-3
+  .container
+    .home-call-to-action__box.text-xs-center
+      h3.home-section__head-title.home-call-to-action__head.font-black Ready to be a part of the SV.CO experience?
+      p.home-call-to-action__sub-head Get started by submitting an application today.
 
-  .success-story
-    .container
-      h3.text-xs-center.content-head
-        span.content-title-icon.winner-icon
-        | Great Startups
-      .story-container.row
-        .story-box.content-box
-          h4.text-xs-center.font-semibold
-            | Spenwise
-          ul
-            li Part of Batch 1 of SV.CO's Digital Incubation Program
-            li Developed a great prototype in six months.
-            li Selection to Zone Startups, Mumbai
+      .text-xs-center.m-t-1
+        = link_to 'Apply Now', apply_path, class: 'btn btn-primary btn-lg home-call-to-action__button'
 
-          .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
-            = image_tag 'home/index/success-stories-logo-spenwise.png', class: 'img-fluid'
+== render 'layouts/footer_v2'
 
-        .story-box.content-box
-          h4.text-xs-center.font-semibold
-            | SYM
-          ul
-            li Part of Batch 1 of SV.CO's Digital Incubation Program
-            li Developed a great prototype in six months.
-            li In talks with banks for deploying prototype
-
-          .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
-            = image_tag 'home/index/success-stories-logo-sym.png', class: 'img-fluid'
-
-        .story-box.content-box
-          h4.text-xs-center.font-semibold
-            | Fin Robotics
-          ul
-            li Youngest Speaker at the Mobile World Congress 2013, Barcelona
-            li Ranked among the TOP 50 startups at the Pioneers Festival 2013 in Vienna
-            li Ranked among the TOP 15 Startups in the world at the CES’14 TechCrunch Hardware Battlefield
-
-          .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
-            = image_tag 'home/index/success-stories-logo-finrobotics.png', class: 'img-fluid'
-
-        .story-box.content-box
-          h4.text-xs-center.font-semibold
-            | MindHelix Technosol
-          ul
-            li NASSCOM Emerge Award
-            li NASSCOM mBillionth Award
-            li Runner up for World Youth Summit Awards, United Nations
-            li Winners, Intel App4India Contest
-
-          .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
-            = image_tag 'home/index/success-stories-logo-mindhelix.png', class: 'img-fluid'
-
-        .story-box.content-box
-          h4.text-xs-center.font-semibold
-            | Jiffstore
-          ul
-            li Top 100 innovative Product Companies - NASSCOM Product Conclave 2014
-            li Top 5 in Start-up Competition, 2015 - Wharton India Economic Forum
-
-          .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
-            = image_tag 'home/index/success-stories-logo-jiffstore.png', class: 'img-fluid'
-
-        .story-box.content-box
-          h4.text-xs-center.font-semibold
-            | iTraveller
-          ul
-            li Awarded as one among the top 30 global innovators in Travel Innovation Summit, Los Angeles
-
-
-          .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
-            = image_tag 'home/index/success-stories-logo-itraveller.png', class: 'img-fluid'
-
-        .story-box.content-box
-          h4.text-xs-center.font-semibold
-            | Asimov Robotics
-          ul
-            li Rated the Top 5 Innovators of 2012 by Deccan Chronicle
-            li The British High Commission rated them one of the Top 5 Innovators of 2013
-            li Shortlisted as One Of The 20 Great IDEAS of 2013 by Spiegel, Germany
-            li Won the Red Herring Asia Award consecutively in 2013 and 2014
-
-          .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
-            = image_tag 'home/index/success-stories-logo-asimov.png', class: 'img-fluid'
-
-        .story-box.content-box
-          h4.text-xs-center.font-semibold
-            | Profoundis Labs
-          ul
-            li First company from India to be selected to Startup Chile 2013
-            li Selected for the Microsoft Accelerator Program
-            li Top 20 Startups, Startup Bootcamp Lisbon
-            li Selected to the Silicon Valley Immersion Programme, Blackbox Connect 2013
-            li Acquired by FullContact in 2016.
-
-          .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
-            = image_tag 'home/index/success-stories-logo-profoundis.png', class: 'img-fluid'
-
-        .story-box.content-box
-          h4.text-xs-center.font-semibold
-            | Reckone Technologies
-          ul
-            li Awarded Rajeev Circle Fellowship, 2014
-            li Represented India for NASA Space Apps Challenge
-            li Represented India for University Rover Challenge USA, Mars Society Utah
-
-          .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
-            = image_tag 'home/index/success-stories-logo-reckone.png', class: 'img-fluid'
-
-        .story-box.content-box
-          h4.text-xs-center.font-semibold
-            | Flip Technologies
-          ul
-            li Won Next Big Idea Contest 2014 & chosen to be incubated at the Digital Media Zone (DMZ) at Ryerson University, Toronto
-            li Runner up of IIT Bombay Firehack 2014
-            li Selected to participate in the Flat6Labs accelerator program, Abu Dhabi
-
-          .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
-            = image_tag 'home/index/success-stories-logo-flip.png', class: 'img-fluid'
-
-        .story-box.content-box
-          h4.text-xs-center.font-semibold
-            | Livares Technologies
-          ul
-            li Won the Vodafone AppStar contest in “Best app for good – India” category
-
-          .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
-            = image_tag 'home/index/success-stories-logo-livares.png', class: 'img-fluid'
-
-        .story-box.content-box
-          h4.text-xs-center.font-semibold
-            | Agrima Infotech
-          ul
-            li Won the GREAT Tech Rocketships Initiative 2015 & invited to visit UK as part of UK Trade & Investment (UKTI) delegation
-
-          .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
-            = image_tag 'home/index/success-stories-logo-agrima.png', class: 'img-fluid'
-
-        .story-box.content-box
-          h4.text-xs-center.font-semibold
-            | Cognicor Technologies
-          ul
-            li Best Tech Startup Award from European Union in 2012
-            li Best emerging IT start-up award from NASSCOM, 2013
-
-          .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
-            = image_tag 'home/index/success-stories-logo-cognicor.png', class: 'img-fluid'
-
-        .story-box.content-box
-          h4.text-xs-center.font-semibold
-            | Mocioun TechLabs
-          ul
-            li India Leadership Award Nominee
-            li Winner Open Data Apps Challenge, Government of India & NASSCOM
-            li Panel Participant for 36th International Conference on Software Engineering
-            li Got selected for the United Nations Millennial Development Programme UNCTAD EMPRETEC
-
-          .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
-            = image_tag 'home/index/success-stories-logo-mocioun.png', class: 'img-fluid'
-
-  .program-partners
-    .container
-      h3.text-xs-center.content-head
-        span.content-title-icon.program-partners-icon
-        | Amazing Program Partners
-      .partner-container
-        .col-lg-2.col-md-3.col-sm-4
-          .card.m-x-auto
-            .image-block
-              = image_tag 'shared/partner_logos/tally.png', class: 'img-fluid'
-            .card-block
-              p.card-text Graduation Partner
-
-        .col-lg-2.col-md-3.col-sm-4
-          .card.m-x-auto
-            .image-block
-              = image_tag 'shared/partner_logos/freshdesk.png', class: 'img-fluid'
-            .card-block
-              p.card-text Graduation Partner
-
-        .col-lg-2.col-md-3.col-sm-4
-          .card.m-x-auto
-            .image-block
-              = image_tag 'shared/partner_logos/freecharge.png', class: 'img-fluid'
-            .card-block
-              p.card-text Graduation Partner
-
-        .col-lg-2.col-md-3.col-sm-4
-          .card.m-x-auto
-            .image-block
-              = image_tag 'shared/partner_logos/ola.png', class: 'img-fluid'
-            .card-block
-              p.card-text Graduation Partner
-
-        .col-lg-2.col-md-3.col-sm-4
-          .card.m-x-auto
-            .image-block
-              = image_tag 'shared/partner_logos/goqii.png', class: 'img-fluid'
-            .card-block
-              p.card-text Graduation Partner
-
-        .col-lg-2.col-md-3.col-sm-4
-          .card.m-x-auto
-            .image-block
-              = image_tag 'shared/partner_logos/microsoft-ventures.png'
-            .card-block
-              p.card-text Graduation Partner
-
-        .col-lg-2.col-md-3.col-sm-4
-          .card.m-x-auto
-            .image-block
-              = image_tag 'shared/partner_logos/citrus.png', class: 'img-fluid'
-            .card-block
-              p.card-text Graduation Partner
-
-        .col-lg-2.col-md-3.col-sm-4
-          .card.m-x-auto
-            .image-block
-              = image_tag 'shared/partner_logos/ah-ventures.png', class: 'img-fluid'
-            .card-block
-              p.card-text Graduation Partner
-
-        .col-lg-2.col-md-3.col-sm-4
-          .card.m-x-auto
-            .image-block
-              = image_tag 'shared/partner_logos/flat-6-labs.png', class: 'img-fluid'
-            .card-block
-              p.card-text Graduation Partner
-
-        .col-lg-2.col-md-3.col-sm-4
-          .card.m-x-auto
-            .image-block
-              = image_tag 'shared/partner_logos/good-methods.png', class: 'img-fluid'
-            .card-block
-              p.card-text Graduation Partner
-
-        .col-lg-2.col-md-3.col-sm-4
-          .card.m-x-auto
-            .image-block
-              = image_tag 'shared/partner_logos/kalaari-capital.png', class: 'img-fluid'
-            .card-block
-              p.card-text Graduation Partner
-
-        .col-lg-2.col-md-3.col-sm-4
-          .card.m-x-auto
-            .image-block
-              = image_tag 'home/index/program-partner-logo-indian-angel-network.png', class: 'img-fluid'
-            .card-block
-              p.card-text Graduation Partner
-
-        .col-lg-2.col-md-3.col-sm-4
-          .card.m-x-auto
-            .image-block
-              = image_tag 'home/index/program-partner-logo-aws.png', class: 'img-fluid'
-            .card-block
-              p.card-text Resource Partner
-
-        .col-lg-2.col-md-3.col-sm-4
-          .card.m-x-auto
-            .image-block
-              = image_tag 'home/index/program-partner-logo-dotco.png'
-            .card-block
-              p.card-text Resource Partner
-
-        .col-lg-2.col-md-3.col-sm-4
-          .card.m-x-auto
-            .image-block
-              = image_tag 'home/index/program-partner-logo-gtu.png'
-            .card-block
-              p.card-text University Partner
-
-        .col-lg-2.col-md-3.col-sm-4
-          .card.m-x-auto
-            .image-block
-              = image_tag 'home/index/program-partner-logo-blusynergy.png'
-            .card-block
-              p.card-text Program Partner
-
-        .col-lg-2.col-md-3.col-sm-4
-          .card.m-x-auto
-            .image-block
-              = image_tag 'home/index/program-partner-logo-hasura.png'
-            .card-block
-              p.card-text Graduation Partner
-
-        .col-lg-2.col-md-3.col-sm-4
-          .card.m-x-auto
-            .image-block
-              = image_tag 'home/index/program-partner-logo-exotel.png'
-            .card-block
-              p.card-text Graduation Partner
-
-      .text-xs-center
-        = link_to 'Become an SV.CO Partner', talent_path, class: 'btn btn-primary btn-lg text-uppercase'
-  .campaign-images-container
-    .container.hidden-sm-down
-      h3.text-xs-center.content-head
-        span.content-title-icon.campaign-images-icon
-        | Check out the latest images from our <strong>#StartInCollege</strong> campaign!
-      .row.instagram-image-container
-        - @instagram_images.each_with_index do |image, index|
-          .col-sm-4.col-md-3.col-lg-2.instagram-images-wrapper style="background-image: url('#{image[:image_url]}');" class="#{index > 3 ? 'hidden-md-down' : ''}"
-            img.instagram-spacer src=image_path('home/index/instagram-section-square-spacer.png')
-            a.instagram-overlay href=image[:instagram_link] target='_blank'
-              - if image.key?(:caption)
-                .caption = image[:caption][:text]
-              .metrics
-                i.fa.fa-heart
-                ' &nbsp;#{image[:likes_count]}&nbsp;&nbsp;
-                i.fa.fa-comment
-                ' &nbsp;#{image[:comments_count]}
-      .row.instagram-header-footer
-        .text-xs-center
-          a.btn.btn-md.btn-secondary href='https://www.instagram.com/svdotco' target='_blank'
-            i.fa.fa-instagram
-            ' &nbsp;&nbsp;Instagram
-          a.btn.btn-md.btn-secondary.m-l-1.m-r-1 href='https://twitter.com/svdotco' target='_blank'
-            i.fa.fa-twitter
-            ' &nbsp;&nbsp;Twitter
-          a.btn.btn-md.btn-secondary href='https://www.facebook.com/svdotco' target='_blank'
-            i.fa.fa-facebook
-            ' &nbsp;&nbsp;Facebook
-
-  == render 'layouts/footer_v2'
-
-#graduatesVideo-1.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
+#itraveller-story-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
     .modal-content
       .modal-header
         button.close aria-label="Close" data-dismiss="modal" type="button"
           span aria-hidden="true" &times;
       .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/AzABLPISPQU" frameborder="0" allowfullscreen="allowfullscreen"
+        iframe.video-frame src="https://www.youtube.com/embed/KufIL6ZS1lk" frameborder="0" allowfullscreen="allowfullscreen"
 
-#graduatesVideo-2.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
+#profoundis-story-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
     .modal-content
       .modal-header
         button.close aria-label="Close" data-dismiss="modal" type="button"
           span aria-hidden="true" &times;
       .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/k13C6C_MzCE" frameborder="0" allowfullscreen="allowfullscreen"
+        iframe.video-frame src="https://www.youtube.com/embed/vjDdSdfitKY" frameborder="0" allowfullscreen="allowfullscreen"
 
-#graduatesVideo-3.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-      .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/xBaaBVlK5Ws" frameborder="0" allowfullscreen="allowfullscreen"
-
-#graduatesVideo-4.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
+#z-pay-story-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
     .modal-content
       .modal-header
@@ -614,7 +321,7 @@
       .modal-body
         iframe.video-frame src="https://www.youtube.com/embed/pwmVitwaeL0" frameborder="0" allowfullscreen="allowfullscreen"
 
-#graduatesVideo-5.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
+#hiring-story-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
     .modal-content
       .modal-header
@@ -623,38 +330,20 @@
       .modal-body
         iframe.video-frame src="https://www.youtube.com/embed/XBjkCUW1lFQ" frameborder="0" allowfullscreen="allowfullscreen"
 
-#graduatesVideo-6.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
+#wowmakers-story-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
     .modal-content
       .modal-header
         button.close aria-label="Close" data-dismiss="modal" type="button"
           span aria-hidden="true" &times;
       .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/AaoW1W7wZLk" frameborder="0" allowfullscreen="allowfullscreen"
+        iframe.video-frame src="https://www.youtube.com/embed/R8LhGtoeaUc" frameborder="0" allowfullscreen="allowfullscreen"
 
-#graduatesVideo-7.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
+#higher-studies-story-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
     .modal-content
       .modal-header
         button.close aria-label="Close" data-dismiss="modal" type="button"
           span aria-hidden="true" &times;
       .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/ut-J7cuQpzI" frameborder="0" allowfullscreen="allowfullscreen"
-
-#graduatesVideo-8.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-      .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/z2e5o5ftgRc" frameborder="0" allowfullscreen="allowfullscreen"
-
-#graduatesVideo-9.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-      .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/qEZ1RamKt6k" frameborder="0" allowfullscreen="allowfullscreen"
+        iframe.video-frame src="https://www.youtube.com/embed/BxPH9XyQRsM" frameborder="0" allowfullscreen="allowfullscreen"

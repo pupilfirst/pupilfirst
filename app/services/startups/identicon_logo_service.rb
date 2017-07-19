@@ -17,7 +17,7 @@ module Startups
 
     def color
       possible_color = @startup.product_name.split.first.downcase
-      possible_color.in?(ProductNameGeneratorService::COLORS) ? possible_color : nil
+      possible_color.in?(ProductNameGeneratorService.new.colors) ? possible_color : nil
     end
   end
 end

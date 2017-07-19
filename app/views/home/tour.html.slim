@@ -100,89 +100,6 @@
           br
           |	Life Changing?
 
-#form-a-team.tour-block
-  section.container
-    .col-md-6.push-md-6
-      .tour-image
-        = image_tag 'home/tour/team.svg', class: 'img-fluid'
-    .col-md-6.pull-md-6
-      h2#first-title
-        | Form a Team
-      p
-        ' Founders begin by forming a well-rounded team. It&rsquo;s important that a great startup team has engineering,
-        | product, marketing &amp; sales and design skills.
-      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
-
-#pay-fee-apply.tour-block
-  section.container
-    .col-md-6
-      .tour-image
-        = image_tag 'home/tour/pay-apply.svg', class: 'img-fluid'
-    .col-md-6
-      h2
-        | Pay Fee &amp; Apply
-      p
-        ' Founders then pay a nominal Registration Fee (₹1000 per founder) to apply.
-        ' It's important at this stage to correctly fill in all co-founder details
-        | and differentiate your team by writing about a great team achievement.
-      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
-#coding-video-task.tour-block
-  section.container
-    .col-md-6.push-md-6
-      .tour-image
-        = image_tag 'home/tour/code-video.svg', class: 'img-fluid'
-    .col-md-6.pull-md-6
-      h2
-        | Coding &amp; Video Task
-      p
-        ' SV.CO has historically accepted about 1% of applicants, so the program is <strong>very competitive</strong>.
-        ' The first leg of the selection process is to complete a coding and video task.
-        | The coding task validates engineering ability and the video task ensures that founders can speak and pitch well.
-      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
-
-#personal-interview.tour-block
-  section.container
-    .col-md-6
-      .tour-image
-        = image_tag 'home/tour/interview.svg', class: 'img-fluid'
-    .col-md-6
-      h2
-        | Personal Interview
-      p
-        ' As a final filter, founders attend an in-person interview with the SV.CO team.
-        ' The interview is an informal half-hour session where we have a great lot of fun!
-        ' You can #{link_to 'view a previous interview', 'https://sv.co/library/sv-co-round-3-interview-experience-part-1-selected'}
-        | in our Startup Library.
-      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
-
-#sign-partnership.tour-block
-  section.container
-    .col-md-6.push-md-6
-      .tour-image
-        = image_tag 'home/tour/partnership.svg', class: 'img-fluid'
-    .col-md-6.pull-md-6
-      h2
-        | Sign Partnership Deed
-      p
-        ' Founders form a real legal entity when they join our program. The Partnership
-        ' that they form helps them get a jumpstart on interacting with other companies
-        ' and learning the basics of good governance. We have a
-        | #{link_to 'sample Partnership Deed available', 'https://sv.co/library/startup-partnership-deed'} for founders to sign.
-      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
-
-#legal-agreements.tour-block
-  section.container
-    .col-md-6
-      .tour-image
-        = image_tag 'home/tour/legal-agreement.svg', class: 'img-fluid'
-    .col-md-6
-      h2
-        | Sign Legal Agreements
-      p
-        ' All founders have to sign legal agreements with SV.CO  to be a part of the program. The agreements clarify
-        | our program details and enforce the Success Fee that founders have to commit to.
-      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
-
 #sign-up.tour-block
   section.container
     .col-md-6.push-md-6
@@ -193,9 +110,58 @@
       h2
         | Sign up at SV.CO
       p
-        ' Once accepted, founders can sign up at SV.CO! All founders receive access
-        ' to our online <strong>Verified Timeline</strong>, <strong>Startup Library</strong>,
-        | and a host of other perks and benefits.
+        ' Founders can #{link_to 'sign up at SV.CO', new_user_session_path} at any time. All founders start at our Admission Stage, where they form a team and understand about SV.CO's program and benefits.
+      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
+
+#legal-agreements.tour-block
+  section.container
+    .col-md-6
+      .tour-image
+        = image_tag 'home/tour/legal-agreement.svg', class: 'img-fluid'
+    .col-md-6
+      h2
+        | Understand Program Benefits &amp; Agreements
+      p
+        ' We would like student founders to get into their program with a lot of information about program benefits. We also inform upfront about founder responsibilities and our fee structure. Founders learn about our success fee and the agreements that they have to sign upfront. Student founders are also encouraged to take feedback from their parents before they join the program.
+      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
+
+#form-a-team.tour-block
+  section.container
+    .col-md-6.push-md-6
+      .tour-image
+        = image_tag 'home/tour/team.svg', class: 'img-fluid'
+    .col-md-6.pull-md-6
+      h2#first-title
+        | Form a Team
+      p
+        ' Founders in college begin by forming a well-rounded team. It&rsquo;s important that a great campus startup team has engineering,
+        | product, and design skills. They also need great communication skills (both written and spoken).
+      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
+
+#pay-fee-apply.tour-block
+  section.container
+    .col-md-6
+      .tour-image
+        = image_tag 'home/tour/pay-apply.svg', class: 'img-fluid'
+    .col-md-6
+      h2
+        | Pay Membership Fee &amp; Join the Collective
+      p
+        ' Founders then pay a Membership Fee (₹1000 per founder per month, down from the regular fee of ₹4000 per founder per month) to join the Collective.
+        ' It's important at this stage to correctly fill in all co-founder details &amp; understand the success fee structure correctly.
+      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
+
+#startup-profile.tour-block
+  section.container
+    .col-md-6.push-md-6
+      .tour-image
+        = image_tag 'home/tour/startup-profile.svg', class: 'img-fluid'
+    .col-md-6.pull-md-6
+      h2
+        | Fill up Founder Profile
+      p
+        ' Founders begin by filling up their Founder Profile. A complete Founder Profile
+        | leads to more graduation options and better visibility to industry mentors and other companies.
       ' #{link_to 'Back to top', '#', class: 'back-to-top'}
 
 #public-slack.tour-block
@@ -213,18 +179,46 @@
         | batch coordinators, but they can also receive peer support and learn from previous batches.
       ' #{link_to 'Back to top', '#', class: 'back-to-top'}
 
-#startup-profile.tour-block
+#coding-video-task.tour-block
   section.container
     .col-md-6.push-md-6
       .tour-image
-        = image_tag 'home/tour/startup-profile.svg', class: 'img-fluid'
+        = image_tag 'home/tour/code-video.svg', class: 'img-fluid'
     .col-md-6.pull-md-6
       h2
-        | Fill up Startup Profile
+        | Startup Basics
       p
-        ' Teams begin by filling up the Startup Profile. A complete Startup Profile
-        | leads to more graduation options and better visibility to industry mentors and other companies.
+        ' The very first stage is about learning startup basics. Founders also get a clear understanding of the engineering, product and design skills required to build a campus startup.
+        ' More importantly, their skills are benchmarked against an ideal campus startup team, and skill gaps are identified and an improvement plan developed.
       ' #{link_to 'Back to top', '#', class: 'back-to-top'}
+
+#personal-interview.tour-block
+  section.container
+    .col-md-6
+      .tour-image
+        = image_tag 'home/tour/interview.svg', class: 'img-fluid'
+    .col-md-6
+      h2
+        | Talk to SV.CO Founders
+      p
+        ' One of the first online experiences that a founding team goes through is a live online session where they meet one of the SV.CO founders. This is where either Sanjay, Gautham or Vishnu talks to the team and gives them a quick overview of the program, gets to know the team and helps them understand how best to proceed. This sort of personal attention is a hallmark of the program.
+      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
+
+#sign-partnership.tour-block
+  section.container
+    .col-md-6.push-md-6
+      .tour-image
+        = image_tag 'home/tour/partnership.svg', class: 'img-fluid'
+    .col-md-6.pull-md-6
+      h2
+        | Sign Partnership Deed
+      p
+        ' Founders can form a real legal entity when they join our program. The Partnership
+        ' that they form helps them get a jumpstart on interacting with other companies
+        ' and learning the basics of good governance. Some of our partners usually require a legal entity because this is where they deposit their partner credits and seed funds. We have a
+        | #{link_to 'sample Partnership Deed available', 'https://sv.co/library/startup-partnership-deed'} for founders to sign.
+      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
+
 
 #receive-first-target.tour-block
   section.container
@@ -440,17 +434,6 @@
         | become faculty themselves and mentor their juniors.
       ' #{link_to 'Back to top', '#', class: 'back-to-top'}
 
-- if @batches_open.present?
-  - batch = @batches_open.first
-  .ready-to-apply
-    .container
-      h3.text-xs-center.content-head
-        span.content-title-icon.graduated-icon
-        | Ready to Apply?
-
-      .text-xs-center
-        = link_to 'Start Application', apply_path, class: 'btn btn-primary btn-md text-uppercase', id: 'start-application'
-
 #watchIntroVideo.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
     .modal-content
@@ -468,7 +451,3 @@
           span aria-hidden="true" &times;
       .modal-body
         iframe.video-frame src="https://www.youtube.com/embed/AzABLPISPQU" frameborder="0" allowfullscreen="allowfullscreen"
-
-- batch = @batches_open.first if @batches_open.present?
-
-= link_to 'Start Application', apply_path, class: 'btn btn-primary btn-xs text-uppercase sticky-application-button', id: 'tour-sticky-application-button' if batch

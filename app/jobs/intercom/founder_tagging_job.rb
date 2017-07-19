@@ -1,6 +1,6 @@
 module Intercom
   class FounderTaggingJob < ApplicationJob
-    queue_as :default
+    queue_as :low_priority
 
     class << self
       attr_writer :mock

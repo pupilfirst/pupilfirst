@@ -1,16 +1,10 @@
 class AdmissionsController < ApplicationController
   layout 'application_v2'
-  before_action :skip_container, only: %i[founders founders_submit fee]
+  before_action :skip_container, only: %i[apply register founders founders_submit fee]
 
   # GET /apply
   def apply
-    if feature_active?('continuous_admissions')
-      @form = Founders::RegistrationForm.new(Founder.new)
-    else
-      @form ||= ProspectiveApplicants::RegistrationForm.new(ProspectiveApplicant.new)
-      @prospective_applicant = ProspectiveApplicant.new.decorate
-    end
-
+    @form = Founders::RegistrationForm.new(Founder.new)
     @form.prepopulate(current_user) if current_user.present?
   end
 
@@ -22,7 +16,7 @@ class AdmissionsController < ApplicationController
       begin
         founder = @form.save
       rescue Postmark::InvalidMessageError
-        @form.errors[:base] << t('batch_application.create.email_error')
+        @form.errors[:base] << t('admissions.register.email_error')
         render 'apply'
       else
         # Sign in user immediately to allow him to proceed to screening.
@@ -31,6 +25,7 @@ class AdmissionsController < ApplicationController
         redirect_to dashboard_founder_path(from: 'register')
       end
     else
+      flash.now[:error] = 'There were problems with your submission. Please check the form and retry.'
       render 'apply'
     end
   end
@@ -47,8 +42,12 @@ class AdmissionsController < ApplicationController
     Admissions::CompleteTargetService.new(current_founder, Target::KEY_ADMISSIONS_SCREENING).execute
 
     # Mark founder skill - Hacker or Hustler?
-    current_founder.update!(hacker: params['founder_skill'] == 'coder')
-    skill = params['founder_skill'] == 'coder' ? 'Hacker' : 'Hustler'
+    current_founder.update!(hacker: params['founder_skill'] == 'coder', github_url: params['github_url'])
+    skill = if params['founder_skill'] == 'coder'
+      params['github_url'].present? ? 'Hacker with Github' : 'Hacker'
+    else
+      'Hustler'
+    end
     Intercom::FounderSkillUpdateJob.perform_later(current_founder, skill)
 
     # Mark as screening completed on Intercom
@@ -117,8 +116,14 @@ class AdmissionsController < ApplicationController
   # GET /admissions/founders
   def founders
     authorize :admissions
-    @form = Admissions::FoundersForm.new(current_founder.startup)
-    @form.prepopulate
+
+    fee_payment_target = Target.find_by(key: Target::KEY_ADMISSIONS_FEE_PAYMENT)
+    if fee_payment_target.status(current_founder) == Targets::StatusService::STATUS_COMPLETE
+      @fee_paid = true
+    else
+      @form = Admissions::FoundersForm.new(current_founder.startup)
+      @form.prepopulate
+    end
   end
 
   # POST /admissions/founders
@@ -160,105 +165,6 @@ class AdmissionsController < ApplicationController
       flash[:success] = "You have successfully joined #{founder.reload.startup.admin.name}'s startup"
       sign_in founder.user
       redirect_to dashboard_founder_path(from: 'accept_invitation')
-    end
-  end
-
-  # GET /admissions/preselection
-  def preselection
-    authorize :admissions
-
-    @startup = current_startup.decorate
-    @founder = current_founder.decorate
-
-    @form = if @startup.agreements_verified?
-      Admissions::PreselectionStageSubmissionForm.new(@startup)
-    elsif params[:update_profile]
-      founder = @startup.founders.find(params[:update_profile])
-      Admissions::PreselectionStageApplicantForm.new(founder)
-    end
-  end
-
-  # PATCH /admissions/update_founder
-  def update_founder
-    authorize :admissions
-
-    founder_params = params[:admissions_preselection_stage_applicant]
-    founder = current_startup.founders.find(founder_params[:id])
-    @form = Admissions::PreselectionStageApplicantForm.new(founder)
-
-    if @form.validate(founder_params)
-      @form.save
-      flash[:success] = 'Applicant details were successfully saved.'
-      redirect_to admissions_preselection_path
-    else
-      # Special dispensation, since this form can have up to four file fields. It would be super-irritating to users to
-      # lose uploads to validation failure.
-      @form.save_uploaded_files
-      flash[:error] = 'We were unable to save applicant details because of errors. Please try again.'
-
-      @founder = current_founder.decorate
-      @startup = current_startup.decorate
-      render 'preselection'
-    end
-  end
-
-  # POST /admissions/preselection
-  def preselection_submit
-    authorize :admissions
-
-    @form = Admissions::PreselectionStageSubmissionForm.new(current_startup)
-
-    if @form.validate(params[:admissions_preselection_stage_submission])
-      @form.save(current_founder)
-      flash[:success] = 'Startup agreements were successfully saved.'
-      redirect_to dashboard_founder_path(from: 'preselection_submit')
-    else
-      @form.save_partnership_deed
-      flash[:error] = 'We were unable to save details because of errors. Please try again.'
-
-      @founder = current_founder.decorate
-      @startup = current_startup.decorate
-      render 'preselection'
-    end
-  end
-
-  # respond with PDF version of the partnership deed created using Prawn
-  def partnership_deed
-    authorize :admissions
-
-    @startup = current_startup.decorate
-
-    unless @startup.partnership_deed_ready?
-      flash[:error] = 'Could not generate Partnership Deed. Ensure details of all founders are provided!'
-      redirect_to admissions_preselection_path
-      return
-    end
-
-    respond_to do |format|
-      format.pdf do
-        pdf = Startups::PartnershipDeedPdfBuilderService.build(current_startup)
-        send_data pdf.to_pdf, type: 'application/pdf', filename: 'Partnership_Deed', disposition: 'inline'
-      end
-    end
-  end
-
-  # respond with PDF version of the digital incubation services agreement created using Prawn
-  def incubation_agreement
-    authorize :admissions
-
-    @startup = current_startup.decorate
-
-    unless @startup.incubation_agreement_ready?
-      flash[:error] = 'Could not generate Agreement. Ensure details of all founders are provided!'
-      redirect_to admissions_preselection_path
-      return
-    end
-
-    respond_to do |format|
-      format.pdf do
-        agreement_pdf = Startups::IncubationAgreementPdfBuilderService.build(@startup)
-        send_data agreement_pdf.to_pdf, type: 'application/pdf', filename: 'Incubation_Agreement', disposition: 'inline'
-      end
     end
   end
 

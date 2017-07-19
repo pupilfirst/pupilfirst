@@ -90,8 +90,8 @@ describe Lita::Handlers::Targets do
             end
 
             it 'replies with all available info' do
-              shortened_url = Shortener::ShortenedUrl.generate pending_founder_target.resource_url
-              url_with_host = "https://sv.co/#{shortened_url.unique_key}"
+              shortened_url = ShortenedUrls::ShortenService.new(pending_founder_target.resource_url).shortened_url
+              url_with_host = "https://sv.co/r/#{shortened_url.unique_key}"
 
               expect(response).to receive(:reply_privately).with <<~EXPECTED_REPLY
                 *#{pending_founder_target.title}*

@@ -37,12 +37,6 @@ class AboutController < ApplicationController
     params.require(:contact).permit(:name, :email, :mobile, :company, :query_type, :query)
   end
 
-  def recaptcha_valid?
-    return true if Rails.env.test?
-
-    verify_recaptcha(model: @contact_form, message: 'Whoops. Verification of Recaptcha failed. Please try again.')
-  end
-
   def leaderboards_for(levels)
     return nil if levels.blank?
 

@@ -15,7 +15,6 @@ class ApplicationController < ActionController::Base
   helper_method :current_mooc_student
   helper_method :current_founder
   helper_method :current_startup
-  helper_method :current_batch_applicant
 
   # When in production, respond to requests that ask for unhandled formats with 406.
   rescue_from ActionView::MissingTemplate do |exception|
@@ -63,10 +62,6 @@ class ApplicationController < ActionController::Base
 
   def current_startup
     @current_startup ||= current_founder&.startup
-  end
-
-  def current_batch_applicant
-    @current_batch_applicant ||= current_user&.batch_applicant
   end
 
   # sets a permanent signed cookie. Additional options such as :tld_length can be passed via the options_hash
@@ -158,10 +153,6 @@ class ApplicationController < ActionController::Base
     { frame: 'google.com *.google.com' }
   end
 
-  def recaptcha_csp
-    { script: 'www.google.com www.gstatic.com apis.google.com' }
-  end
-
   def youtube_csp
     { frame: 'https://www.youtube.com' }
   end
@@ -185,7 +176,8 @@ class ApplicationController < ActionController::Base
   def facebook_csp
     {
       image: 'https://www.facebook.com/tr/ https://scontent.xx.fbcdn.net',
-      script: 'https://connect.facebook.net'
+      script: 'https://connect.facebook.net',
+      frame: 'https://www.facebook.com'
     }
   end
 
@@ -199,16 +191,15 @@ class ApplicationController < ActionController::Base
     }
   end
 
-  def instagram_csp
-    {
-      script: 'https://api.instagram.com',
-      image: 'scontent.cdninstagram.com'
-    }
-  end
-
   def gtm_csp
     {
       script: 'https://www.googletagmanager.com'
+    }
+  end
+
+  def public_s3_csp
+    {
+      media: 'https://s3.amazonaws.com/sv-co-public/'
     }
   end
 
@@ -218,7 +209,7 @@ class ApplicationController < ActionController::Base
       data:
       https://sv-co-public-slackin.herokuapp.com https://www.google.com
       #{typeform_csp[:frame]} #{youtube_csp[:frame]} #{slideshare_csp[:frame]} #{speakerdeck_csp[:frame]}
-      #{google_form_csp[:frame]};
+      #{google_form_csp[:frame]} #{facebook_csp[:frame]};
     FRAME_SOURCES
   end
 
@@ -232,9 +223,9 @@ class ApplicationController < ActionController::Base
     <<~SCRIPT_SOURCES.squish
       script-src
       'self' 'unsafe-eval' 'unsafe-inline' https://ajax.googleapis.com https://blog.sv.co https://www.youtube.com
-      https://s.ytimg.com http://www.startatsv.com https://sv-assets.sv.co #{recaptcha_csp[:script]}
+      https://s.ytimg.com http://www.startatsv.com https://sv-assets.sv.co
       #{google_analytics_csp[:script]} #{inspectlet_csp[:script]} #{facebook_csp[:script]} #{intercom_csp[:script]}
-      #{gtm_csp[:script]} #{instagram_csp[:script]};
+      #{gtm_csp[:script]};
     SCRIPT_SOURCES
   end
 
@@ -253,7 +244,7 @@ class ApplicationController < ActionController::Base
 
   def media_sources
     <<~MEDIA_SOURCES.squish
-      media-src 'self' #{resource_csp[:media]} #{intercom_csp[:media]};
+      media-src 'self' #{resource_csp[:media]} #{intercom_csp[:media]} #{public_s3_csp[:media]};
     MEDIA_SOURCES
   end
 

@@ -118,11 +118,7 @@ Rails.application.routes.draw do
     post 'founders', action: 'founders_submit'
     post 'team_lead'
     get 'accept_invitation'
-    get 'preselection'
-    patch 'preselection', action: 'preselection_submit'
     patch 'update_founder'
-    get 'partnership_deed'
-    get 'incubation_agreement'
   end
 
   resources :prospective_applicants, only: %i[create]
@@ -130,7 +126,6 @@ Rails.application.routes.draw do
   # webhook url for intercom user create - used to strip them off user_id
   post 'intercom_user_create', controller: 'intercom', action: 'user_create'
 
-  resources :universities, only: :index
   resources :colleges, only: :index
 
   resource :platform_feedback, only: %i[create]
@@ -150,16 +145,10 @@ Rails.application.routes.draw do
   # Previous transparency page re-directed to story
   get 'transparency', to: redirect('/story')
 
-  # Public Changelog.
-  get 'changelog', to: 'home#changelog'
-
   # Application process tour of SV.CO
   get 'tour', to: 'home#tour'
 
   root 'home#index'
-
-  # custom defined 404 route to use with shortener gem's config
-  get '/404', to: 'home#not_found'
 
   # /slack redirected to /about/slack
   get '/slack', to: redirect('/about/slack')
@@ -207,15 +196,24 @@ Rails.application.routes.draw do
     post 'callback'
   end
 
+  # Public change log
+  scope 'changelog', as: 'changelog', controller: 'changelog' do
+    get '/', action: 'index'
+    get 'archive'
+  end
+
   resource :impersonation, only: %i[destroy]
 
   # TODO: Remove this route once PayTM is correctly configured with '/paytm/callback' as the redirect_url.
   post '/', to: 'home#paytm_callback'
 
-  # used for shortened urls from the shortener gem
-  get '/:id', to: 'shortener/shortened_urls#show'
-
   match '/trello/bug_webhook', to: 'trello#bug_webhook', via: :all
 
   post '/heroku/deploy_webhook', to: 'heroku#deploy_webhook'
+
+  # Handle redirects of short URLs.
+  get 'r/:unique_key', to: 'shortened_urls#redirect', as: 'short_redirect'
+
+  # Handle shortener-gem form URLs for a while (backward compatibility).
+  get '/:unique_key', to: 'shortened_urls#redirect', constraints: { unique_key: /[0-9a-z]{5}/ }
 end

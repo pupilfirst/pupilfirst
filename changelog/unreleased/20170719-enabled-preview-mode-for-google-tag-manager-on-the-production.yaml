@@ -1,0 +1,6 @@
+---
+timestamp: '2017-07-19T08:00:57Z'
+title: Enabled preview mode for Google Tag Manager on the production environment.
+trello: https://trello.com/c/OVAhGjO5
+private: true
+description: Involved white-listing multiple tag manager CSP endpoints.

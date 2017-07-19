@@ -4,20 +4,31 @@ ActiveAdmin.register TimelineEvent do
   permit_params :description, :timeline_event_type_id, :image, :event_on, :startup_id, :founder_id, :serialized_links,
     :improved_timeline_event_id, timeline_event_files_attributes: %i[id title file private _destroy]
 
-  filter :startup_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'Batch'
-
   filter :startup, label: 'Product', collection: proc {
-    batch_id = params.dig(:q, :startup_batch_id_eq)
-    batch_id.present? ? Startup.where(batch_id: batch_id).order(:product_name) : Startup.all.order(:product_name)
+    # The 'not_improved' scope is special. See scope definition below.
+    timeline_event_scope = if @current_scope.id == 'not_improved'
+      TimelineEvent.needs_improvement.not_improved
+    else
+      TimelineEvent.public_send(@current_scope.id)
+    end
+
+    # Only show startups in the filter that are applicable to the currently selected scope.
+    Startup.where(id: timeline_event_scope.distinct(:startup_id).pluck(:startup_id)).order(:product_name)
   }
 
   filter :timeline_event_type, collection: proc { TimelineEventType.all.order(:title) }
   filter :timeline_event_type_role_eq, as: :select, collection: TimelineEventType.valid_roles, label: 'Role'
 
   filter :founder, collection: proc {
-    batch_id = params.dig(:q, :startup_batch_id_eq)
-    batch_id = Batch.last.id if batch_id.blank?
-    Founder.joins(:startup).where(startups: { batch_id: batch_id }).distinct.order(:name)
+    # The 'not_improved' scope is special. See scope definition below.
+    timeline_event_scope = if @current_scope.id == 'not_improved'
+      TimelineEvent.needs_improvement.not_improved
+    else
+      TimelineEvent.public_send(@current_scope.id)
+    end
+
+    # Only show founders in the filter that are belong to startups applicable to the currently selected scope.
+    Founder.joins(:startup).where(startup_id: timeline_event_scope.distinct(:startup_id).pluck(:startup_id)).distinct.order(:name)
   }
 
   filter :status, as: :select, collection: TimelineEvent.valid_statuses

@@ -1,13 +1,5 @@
 module ActiveAdmin
   module ActiveAdminHelper
-    def selected_batch_ids
-      @selected_batch_ids ||= params[:batch].present? ? [Batch.find(params[:batch]).id] : Batch.all.pluck(:id)
-    end
-
-    def batch_selected
-      @batch_selected ||= Batch.find selected_batch_ids.first
-    end
-
     def sv_id_link(founder)
       if founder.present?
         link_to "#{founder.email} - #{founder.fullname} #{founder.phone.present? ? "(#{founder.phone}" : ''})", admin_founder_path(founder)

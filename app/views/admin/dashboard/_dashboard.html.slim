@@ -1,17 +1,7 @@
-.table_tools
-  ul.scopes.table_tools_segmented_control style="width: calc((100% - 10px)); float: right;"
-    li class="#{ (multiple_batches_selected? ? 'selected':'') + ' scope' }"
-      a.table_tools_button href=admin_dashboard_path All Batches
-    - Startup.available_batches.each do |batch|
-      li class="#{ (([batch.id] == selected_batch_ids) ? 'selected' : '') + ' scope' }"
-        a.table_tools_button href=admin_dashboard_path(batch: batch) #{batch.name} Batch
-
 .dashboard-container
-  - if multiple_batches_selected?
-    == render 'intercom_support_stats'
-    == render 'mooc_stats'
-
-  == render 'core_stats' unless multiple_batches_selected?
+  == render 'intercom_support_stats'
+  == render 'mooc_stats'
+  == render 'core_stats'
   == render 'visits'
   == render 'timeline_event_status'
   == render 'feedback_submitted_last_week'

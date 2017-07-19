@@ -12,7 +12,7 @@ module Lita
 
       def leaderboard(response)
         ActiveRecord::Base.connection_pool.with_connection do
-          # check if a particular batch was requested by parsing the regex matches
+          # check if a particular level was requested by parsing the regex matches
           @level = response.match_data[1].present? ? Level.find_by(number: response.match_data[1].to_i) : nil
           @level = nil if @level&.number&.zero?
 

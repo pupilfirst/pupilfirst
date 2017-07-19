@@ -68,8 +68,6 @@ class TimelineEvent < ApplicationRecord
   scope :from_approved_startups, -> { joins(:startup).merge(Startup.approved) }
   scope :showcase, -> { includes(:timeline_event_type, :startup).verified.from_approved_startups.not_private.order('timeline_events.event_on DESC') }
   scope :help_wanted, -> { where(timeline_event_type: TimelineEventType.help_wanted) }
-  scope :for_batch, ->(batch) { joins(:startup).where(startups: { batch_id: batch.id }) }
-  scope :for_batch_id_in, ->(ids) { joins(:startup).where(startups: { batch_id: ids }) }
   scope :not_private, -> { where(timeline_event_type: TimelineEventType.where.not(role: TimelineEventType::ROLE_FOUNDER)) }
   scope :not_improved, -> { joins(:target).where(improved_timeline_event_id: nil) }
 

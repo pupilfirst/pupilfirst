@@ -193,7 +193,7 @@ class ApplicationController < ActionController::Base
 
   def gtm_csp
     {
-      script: 'https://www.googletagmanager.com'
+      script: 'https://www.googletagmanager.com https://tagmanager.google.com/debug'
     }
   end
 

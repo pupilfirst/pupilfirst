@@ -66,11 +66,6 @@ class IntercomClient
     save_user(user)
   end
 
-  def add_batch_to_user(user, batch)
-    user.custom_attributes[:batch] = "#{batch.batch_number} #{batch.theme}"
-    save_user(user)
-  end
-
   def add_university_to_user(user, university)
     user.custom_attributes[:university] = university
     save_user(user)

@@ -33,7 +33,7 @@ describe Founder do
         10.times { create :public_slack_message, founder: founder, created_at: 30.minutes.ago }
         kp_now = create :karma_point, founder: founder, created_at: Time.now
 
-        # We won't expect the following events to be counted, since it's outside batch timing.
+        # We won't expect the following events to be counted, since it's outside activity timeline.
         create :timeline_event, startup: startup, created_at: 1.year.ago
         create :public_slack_message, founder: founder, created_at: 2.months.from_now
 

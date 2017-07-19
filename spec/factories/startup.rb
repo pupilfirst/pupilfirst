@@ -17,7 +17,6 @@ FactoryGirl.define do
     f.address { Faker::Lorem.words(6).join(' ') }
     f.website { Faker::Internet.domain_name }
     f.email { Faker::Internet.email }
-    f.batch
     f.iteration 1
     f.level { create :level, :one }
     f.maximum_level { level }

@@ -123,7 +123,7 @@ class ApplicationController < ActionController::Base
     [
       image_sources,
       script_sources,
-      "style-src 'self' 'unsafe-inline' fonts.googleapis.com https://sv-assets.sv.co;",
+      style_sources,
       connect_sources,
       font_sources,
       'child-src https://www.youtube.com;',
@@ -193,7 +193,8 @@ class ApplicationController < ActionController::Base
 
   def gtm_csp
     {
-      script: 'https://www.googletagmanager.com'
+      script: 'https://www.googletagmanager.com https://tagmanager.google.com/debug https://tagmanager.google.com/debug/',
+      style: 'https://tagmanager.google.com/debug/'
     }
   end
 
@@ -201,6 +202,13 @@ class ApplicationController < ActionController::Base
     {
       media: 'https://s3.amazonaws.com/sv-co-public/'
     }
+  end
+
+  def style_sources
+    <<~STYLE_SOURCES.squish
+      style-src 'self' 'unsafe-inline' fonts.googleapis.com https://sv-assets.sv.co
+      #{gtm_csp[:style]};
+    STYLE_SOURCES
   end
 
   def frame_sources

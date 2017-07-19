@@ -96,7 +96,7 @@ describe Founders::DashboardDataService do
   def target_details(target)
     result = target.as_json(
       only: subject.send(:target_fields),
-      methods: %i[has_rubric target_type_description],
+      methods: %i[has_rubric target_type target_type_description],
       include: {
         assigner: {
           only: %i[id name]

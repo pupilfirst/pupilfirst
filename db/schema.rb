@@ -737,7 +737,6 @@ ActiveRecord::Schema.define(version: 20170718075720) do
   add_foreign_key "founders", "users"
   add_foreign_key "payments", "founders"
   add_foreign_key "payments", "startups"
-  add_foreign_key "resources", "batches"
   add_foreign_key "resources", "levels"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"

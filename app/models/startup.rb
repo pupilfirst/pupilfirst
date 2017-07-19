@@ -124,7 +124,6 @@ class Startup < ApplicationRecord
   has_one :admin, -> { where(startup_admin: true) }, class_name: 'Founder', foreign_key: 'startup_id'
   accepts_nested_attributes_for :admin
 
-  belongs_to :batch, optional: true
   belongs_to :level
   belongs_to :maximum_level, class_name: 'Level'
   belongs_to :requested_restart_level, class_name: 'Level', optional: true
@@ -410,11 +409,6 @@ class Startup < ApplicationRecord
     label = product_name
     label += " (#{name})" if name.present?
     label
-  end
-
-  # TODO: What the heck does this method do? Is there a better way to write this?
-  def self.available_batches
-    Batch.where(id: Startup.where.not(batch_id: nil).pluck(:batch_id).uniq)
   end
 
   def restartable_levels

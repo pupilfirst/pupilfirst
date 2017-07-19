@@ -83,6 +83,8 @@ feature 'Founder Dashboard' do
   end
 
   scenario 'founder visits dashboard', js: true do
+    pending 'update to work with target overlay'
+
     sign_in_user founder.user, referer: dashboard_founder_path
 
     # There should be no tour.

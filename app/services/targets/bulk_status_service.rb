@@ -24,7 +24,10 @@ module Targets
 
     # returns status and submission date for all applicable targets
     def statuses
-      @statuses ||= submitted_targets_statuses.merge(unsubmitted_targets_statuses)
+      @statuses ||= begin
+        statuses = submitted_targets_statuses.merge(unsubmitted_targets_statuses)
+        reconfirm_prerequisites(statuses)
+      end
     end
 
     def submitted_targets_statuses
@@ -62,14 +65,16 @@ module Targets
     end
 
     def unsubmitted_targets_statuses
-      applicable_targets.each_with_object({}) do |target, result|
-        # skip if submitted target
-        next if submitted_targets_statuses[target.id].present?
+      @unsubmitted_targets_statuses ||= begin
+        applicable_targets.each_with_object({}) do |target, result|
+          # skip if submitted target
+          next if submitted_targets_statuses[target.id].present?
 
-        result[target.id] = {
-          status: unavailable_or_pending?(target),
-          submitted_at: nil
-        }
+          result[target.id] = {
+            status: unavailable_or_pending?(target),
+            submitted_at: nil
+          }
+        end
       end
     end
 
@@ -114,6 +119,26 @@ module Targets
         mapping[target_id] ||= []
         mapping[target_id] << prerequisite_target_id
       end
+    end
+
+    # Patch to account for the edge case of submitted targets having pending pre-requisites.
+    # The status in such cases is reverted to unavailable, irrespective of the available submission.
+    def reconfirm_prerequisites(statuses)
+      statuses.each do |target_id, _status_details|
+        # Unsubmitted targets do no need correction
+        next if target_id.in? unsubmitted_targets_statuses.keys
+
+        # Targets without any prerequisites at all also do not need correction
+        prerequisites = all_target_prerequisites[target_id]
+        next if prerequisites.blank?
+
+        # Targets without any pending prerequisites also do not need correction
+        next if prerequisites.all? { |id| statuses[id][:status].in? [Target::STATUS_COMPLETE, Target::STATUS_NEEDS_IMPROVEMENT] }
+
+        statuses[target_id] = { status: Target::STATUS_UNAVAILABLE, submitted_at: nil }
+      end
+
+      statuses
     end
   end
 end

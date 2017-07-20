@@ -44,7 +44,7 @@ class Founder < ApplicationRecord
   belongs_to :user
   belongs_to :college, optional: true
   has_one :university, through: :college
-  has_one :payment, dependent: :restrict_with_error
+  has_many :payments, dependent: :restrict_with_error
   has_one :referral_coupon, class_name: 'Coupon', foreign_key: 'referrer_id'
   has_many :coupon_usages, through: :referral_coupon
   has_many :referred_startups, class_name: 'Startup', through: :coupon_usages, source: 'startup'

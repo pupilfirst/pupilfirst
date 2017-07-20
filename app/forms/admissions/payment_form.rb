@@ -2,17 +2,18 @@ module Admissions
   class PaymentForm < Reform::Form
     def save
       startup = model.startup
+      payment = startup.payments.requested.last
 
       Startup.transaction do
-        # If payment is present
-        if startup.payment.present?
+        # If requested payment is present
+        if payment.present?
           # and the amount is the same as last time
-          if startup.payment.amount == startup.fee
+          if payment.amount == startup.fee
             # just return the payment
-            startup.payment
+            payment
           else
             # otherwise archive the old one
-            startup.payment.archive!
+            payment.archive!
 
             # and create a new payment.
             create_new_payment
@@ -25,7 +26,7 @@ module Admissions
         Intercom::LevelZeroStageUpdateJob.perform_later(model, 'Payment Initiated')
       end
 
-      startup.payment
+      startup.reload.payments.requested.last
     end
 
     def create_new_payment

@@ -26,7 +26,7 @@
         li You will not be able to change the number of team members after payment.
         li After payment, you will need to contact the SV.CO team to alter your team.
 
-      - if current_startup.payment.present?
+      - if current_startup.payments.requested.any?
         .alert.alert-warning.m-t-1
           i.fa.fa-warning
           ' &nbsp;It looks like you've attempted to pay at least once before, but didn't complete the process. Note that it

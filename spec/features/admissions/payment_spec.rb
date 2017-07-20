@@ -154,8 +154,7 @@ feature 'Admission Fee Payment' do
 
       # the existing payment must be archived and a new one created
       payment = Payment.last
-      startup.reload
-      expect(startup.payment).to eq(payment)
+      expect(startup.reload.payments.last).to eq(payment)
       expect(startup.archived_payments).to include(sample_payment)
     end
   end

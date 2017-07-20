@@ -1,0 +1,8 @@
+---
+timestamp: '2017-07-20T05:39:39Z'
+title: Fixed a crash that occured when attempting to invite a founder from an admitted
+  startup.
+trello: https://trello.com/c/SoaU3R7c
+private: false
+description: Updated the form to support the edge-case and report it as a form error.
+category: bugfix

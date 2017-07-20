@@ -702,10 +702,11 @@
 }
 
 .application-form__email-hint-button {
+  color: white !important;
+
   @include media-breakpoint-down(xs) {
     display: inline-block;
     width: auto;
-    color: white;
     margin-top: 0.3rem;
   }
 }

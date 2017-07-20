@@ -10,11 +10,14 @@ class FoundersFormFounderDetails extends React.Component {
 
     this.state = {
       useCollegeText: useCollegeText,
-      focusOnCollegeText: false
+      focusOnCollegeText: false,
+      emailHintHidden: false,
+      addHiddenIgnoreInput: false
     };
 
     this.handleCollegeChange = this.handleCollegeChange.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleReplacementChoiceCB = this.handleReplacementChoiceCB.bind(this);
   }
 
   canDelete() {
@@ -111,6 +114,25 @@ class FoundersFormFounderDetails extends React.Component {
     }
   }
 
+  replacementHint() {
+    if (typeof(this.props.founder.fields.replacement_hint) !== 'undefined') {
+      return this.props.founder.fields.replacement_hint;
+    }
+  }
+
+  handleReplacementChoiceCB(choice, emailInputId) {
+    if (choice === 'yes') {
+      $('#' + emailInputId).val(this.props.founder.fields.replacement_hint);
+      this.setState({emailHintHidden: true});
+    } else {
+      this.setState({emailHintHidden: true, addHiddenIgnoreInput: true});
+    }
+  }
+
+  showEmailHint() {
+    return this.replacementHint() !== null && !this.state.emailHintHidden;
+  }
+
   render() {
     return (
       <div className="founders-form__founder-content-box content-box">
@@ -133,13 +155,26 @@ class FoundersFormFounderDetails extends React.Component {
           name={ "admissions_founders[founders_attributes][" + this.props.index + "][id]" }/>
         }
 
+        {this.state.addHiddenIgnoreInput &&
+        <input className="hidden" type="hidden" value="true"
+               name={"admissions_founders[founders_attributes][" + this.props.index + "][ignore_email_hint]"}/>
+        }
+
         <FoundersFormFounderInput label="Name" index={ this.props.index } key={ "name-" + this.props.generatedKey }
           maxLength={ 250 } name="name" type="string" value={ this.founderValue('name') }
           error={ this.errorForField('name') }/>
 
         <FoundersFormFounderInput label="Email address" index={ this.props.index }
           key={ "email-" + this.props.generatedKey } maxLength={ 250 } name="email" type="email"
-          error={ this.errorForField('email') } value={ this.founderValue('email') } disabled={ this.persisted() }/>
+          error={ this.errorForField('email') } value={ this.founderValue('email') } disabled={ this.persisted() }
+                                  replacementHint={ this.replacementHint() }
+                                  handleReplacementChoiceCB={ this.handleReplacementChoiceCB }
+                                  showEmailHint={ this.showEmailHint() }/>
+
+        {this.persisted() &&
+        <input className="hidden" type="hidden" value={ this.founderValue('id') }
+               name={ "admissions_founders[founders_attributes][" + this.props.index + "][id]" }/>
+        }
 
         <FoundersFormFounderInput label="Mobile phone number" index={ this.props.index }
           key={ "phone-" + this.props.generatedKey } maxLength={ 17 } name="phone" type="tel"

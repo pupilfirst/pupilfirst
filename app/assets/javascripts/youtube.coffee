@@ -2,7 +2,7 @@
 window.player = null
 
 handleYoutubeAPI = ->
-  # Alpha launch video on apply page.
+  # Alpha launch video on join page.
   window.onYouTubeIframeAPIReady = ((event) ->
     window.player = new (YT.Player)(
       'alpha-launch-video__embed',

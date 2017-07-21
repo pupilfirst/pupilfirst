@@ -1,14 +1,14 @@
 class AdmissionsController < ApplicationController
   layout 'application_v2'
-  before_action :skip_container, only: %i[apply register founders founders_submit fee]
+  before_action :skip_container, only: %i[join register founders founders_submit fee]
 
-  # GET /apply
-  def apply
+  # GET /join
+  def join
     @form = Founders::RegistrationForm.new(Founder.new)
     @form.prepopulate(current_user) if current_user.present?
   end
 
-  # POST /apply
+  # POST /join
   def register
     @form = Founders::RegistrationForm.new(Founder.new)
 
@@ -17,7 +17,7 @@ class AdmissionsController < ApplicationController
         founder = @form.save
       rescue Postmark::InvalidMessageError
         @form.errors[:base] << t('admissions.register.email_error')
-        render 'apply'
+        render 'join'
       else
         # Sign in user immediately to allow him to proceed to screening.
         sign_in founder.user
@@ -26,7 +26,7 @@ class AdmissionsController < ApplicationController
       end
     else
       flash.now[:error] = 'There were problems with your submission. Please check the form and retry.'
-      render 'apply'
+      render 'join'
     end
   end
 

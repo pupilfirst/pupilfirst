@@ -1,0 +1,7 @@
+---
+timestamp: '2017-07-21T06:48:39Z'
+title: Fix BulkStatusService to report targets with pending prerequisites, and verified
+  timeline events as unavailable.
+trello: https://trello.com/c/IIKReUMt/3209-bulkstatusservice-is-reporting-unavailable-targets-as-completed-2
+private: true
+category: bugfix

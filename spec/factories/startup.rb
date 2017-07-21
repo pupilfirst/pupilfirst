@@ -27,16 +27,5 @@ FactoryGirl.define do
       startup.founders << create(:founder, startup: startup)
       startup.startup_categories = [create(:startup_category)]
     end
-
-    # TODO: Change this to a trait.
-    factory :incubated_startup do
-      agreement_signed_at { 18.months.ago }
-    end
-  end
-
-  factory :startup_application, class: Startup do |f|
-    f.name { Faker::Lorem.characters(20) }
-    f.pitch { Faker::Lorem.words(6).join(' ') }
-    f.website { Faker::Internet.domain_name }
   end
 end

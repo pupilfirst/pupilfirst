@@ -7,13 +7,12 @@ class Coupon < ApplicationRecord
 
   TYPE_DISCOUNT = -'Discount'
   TYPE_MSP = -'Microsoft Student Partner'
-  TYPE_MOOC_MERIT = -'Sixways MOOC Merit'
 
   REFERRAL_DISCOUNT = 25
   REFERRAL_LIMIT = 0
 
   def self.valid_coupon_types
-    [TYPE_DISCOUNT, TYPE_MSP, TYPE_MOOC_MERIT]
+    [TYPE_DISCOUNT, TYPE_MSP]
   end
 
   validates :code, uniqueness: true, presence: true, length: { in: 4..10 }

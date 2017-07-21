@@ -37,7 +37,7 @@ startTour = ->
     skipLabel: 'Close',
     steps: [
       {
-        element: $('.founder-dashboard-header__container')[0],
+        element: $('.founder-dashboard-header__startup-profile')[0],
         intro: startupShowTour.data('intro')
       },
       {
@@ -72,6 +72,9 @@ startTour = ->
       {
         element: $('.founder-dashboard-target-header__status-badge')[0],
         intro: startupShowTour.data('targetStatus')
+      },
+      {
+        intro: startupShowTour.data('finalMessage')
       }
     ]
   )

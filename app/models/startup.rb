@@ -494,4 +494,8 @@ class Startup < ApplicationRecord
   def eligible_to_connect?(faculty)
     Startups::ConnectRequestEligibilityService.new(self, faculty).eligible?
   end
+
+  def subscription_active?
+    payments.where('billing_end_at > ?', Time.now).paid.exists?
+  end
 end

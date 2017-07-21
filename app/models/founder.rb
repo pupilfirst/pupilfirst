@@ -377,6 +377,7 @@ class Founder < ApplicationRecord
   end
 
   delegate level_zero?: :startup
+  delegate subscription_active?: :startup
 
   def invited
     invited_startup.present?

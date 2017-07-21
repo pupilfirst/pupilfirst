@@ -53,7 +53,7 @@ feature 'Founder Registration' do
       click_on 'Apply Now'
 
       # Founder must have reached his new dashboard with the tour triggered.
-      expect(page).to have_text('Welcome to your personal dashboard!')
+      expect(page).to have_text("Team Target:#{screening_target.title}")
 
       last_founder = Founder.last
 
@@ -84,7 +84,7 @@ feature 'Founder Registration' do
       click_on 'Yes'
       click_on 'Apply Now'
 
-      expect(page).to have_selector('.introjs-tooltipReferenceLayer', visible: false)
+      expect(page).to have_text("Team Target:#{screening_target.title}")
 
       last_founder = Founder.last
       expect(last_founder.email).to eq('test@gmail.com')
@@ -95,7 +95,7 @@ feature 'Founder Registration' do
       click_on 'No'
       click_on 'Apply Now'
 
-      expect(page).to have_selector('.introjs-tooltipReferenceLayer', visible: false)
+      expect(page).to have_text("Team Target:#{screening_target.title}")
 
       last_founder = Founder.last
       expect(last_founder.email).to eq('test@gamil.com')

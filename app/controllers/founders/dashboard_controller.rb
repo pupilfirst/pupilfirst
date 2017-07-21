@@ -55,8 +55,7 @@ module Founders
 
     # Shall we take the founder on a tour of the dashboard?
     def tour_dashboard?
-      return false if current_founder.blank?
-      return false if current_founder.startup != @startup.model
+      return false if current_startup.level_zero?
       (current_founder.tour_dashboard? || params[:tour].present?)
     end
 

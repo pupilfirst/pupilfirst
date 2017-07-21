@@ -108,4 +108,23 @@ ActiveAdmin.register ConnectRequest do
 
     f.actions
   end
+
+  csv do
+    column :startup do |connect_request|
+      connect_request.startup.product_name
+    end
+    column :faculty_name do |connect_request|
+      connect_request.faculty.name
+    end
+    column :questions
+    column :status
+    column :meeting_link
+    column :created_at
+    column :updated_at
+    column :confirmed_at
+    column :feedback_mails_sent_at
+    column :rating_for_faculty
+    column :rating_for_team
+    column :connect_slot
+  end
 end

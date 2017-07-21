@@ -124,7 +124,6 @@ class Startup < ApplicationRecord
   has_one :admin, -> { where(startup_admin: true) }, class_name: 'Founder', foreign_key: 'startup_id'
   accepts_nested_attributes_for :admin
 
-  belongs_to :batch, optional: true
   belongs_to :level
   belongs_to :maximum_level, class_name: 'Level'
   belongs_to :requested_restart_level, class_name: 'Level', optional: true
@@ -412,16 +411,6 @@ class Startup < ApplicationRecord
     label
   end
 
-  # TODO: What the heck does this method do? Is there a better way to write this?
-  def self.available_batches
-    Batch.where(id: Startup.where.not(batch_id: nil).pluck(:batch_id).uniq)
-  end
-
-  def self.leaderboard_toppers_for_batch(batch, count: 3)
-    # returns ids of n toppers on the leaderboard
-    Startups::PerformanceService.new.leaderboard(batch)[0..count - 1].map { |startup, _rank, _points| startup.id }
-  end
-
   def restartable_levels
     return Level.none if level.number < 2
     Level.where(number: 1..(level.number - 1))
@@ -459,7 +448,11 @@ class Startup < ApplicationRecord
   end
 
   def week_percentage
-    ((present_week_number.to_f / 24) * 100).to_i
+    if present_week_number >= 24
+      100
+    else
+      ((present_week_number.to_f / 24) * 100).to_i
+    end
   end
 
   def referrer

@@ -1,6 +1,8 @@
 class TimelineEventVerificationNotificationJob < ApplicationJob
   queue_as :default
 
+  SLACK_CHANNEL = -'#firehose'
+
   def perform(timeline_event)
     # few common attributes
     @timeline_event = timeline_event
@@ -49,7 +51,7 @@ class TimelineEventVerificationNotificationJob < ApplicationJob
   def send_public_message
     return if @timeline_event.founder_event? || @timeline_event.not_accepted?
 
-    target = { channel: @timeline_event.startup.batch.slack_channel }
+    target = { channel: SLACK_CHANNEL }
 
     slack_message = message('public', event_status)
 

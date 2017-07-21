@@ -78,9 +78,6 @@ class StartupsController < ApplicationController
 
   # TODO: This method should be replaced with a Form to validate input from the filter.
   def load_startups
-    batch_id = params.dig(:startups_filter, :batch)
-    batch_scope = batch_id.present? ? Startup.where(batch_id: batch_id) : Startup.all
-
     category_id = params.dig(:startups_filter, :category)
 
     category_scope = if category_id.present? && StartupCategory.find_by(id: category_id).present?
@@ -92,15 +89,12 @@ class StartupsController < ApplicationController
     level_id = params.dig(:startups_filter, :level)
     level_scope = level_id.present? ? Startup.where(level_id: level_id) : Startup.unscoped
 
-    unsorted_startups = Startup.admitted.approved.merge(batch_scope).merge(category_scope).merge(level_scope)
-
-    # HACK: account for startups with latest_team_event_date = nil while sorting
-    @startups = unsorted_startups.select(&:latest_team_event_date).sort_by(&:latest_team_event_date).reverse + unsorted_startups.reject(&:latest_team_event_date)
+    # TODO: Sorting of @startups on Startups#index should be updated to use latest timeline event date.
+    @startups = Startup.admitted.approved.merge(category_scope).merge(level_scope).order(updated_at: 'DESC')
   end
 
   def load_filter_options
-    @batches = Startup.available_batches.order('batch_number DESC')
-    @categories = StartupCategory.joins(:startups).where.not(startups: { batch_id: nil }).distinct
+    @categories = StartupCategory.all
     @levels = Level.where('number > ?', 0).order(:number)
   end
 

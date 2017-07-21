@@ -38,11 +38,11 @@ section.school-of-saas__container.p-y-3
   .container
     .apply-section__head.m-b-2
       h3.apply-section__head-title.text-xs-center.font-black
-        | What is School of SaaS ?
+        | What is School of SaaS?
       .apply-section__head-subtitle.m-x-auto
         p.text-xs-center
-          ' It&rsquo;s a school built for Internet Era. Just like you have multiple
-          | branches of engineering, we have school on technologies like SaaS, Fintech.
+          ' It&rsquo;s a school built for the Internet Era. Just like you have multiple
+          | branches of engineering, we have schools on industry segments like SaaS &amp; Fintech.
 
     .container.school-of-saas__feature-box.school-of-saas__feature-box--bottom-border.p-a-0.m-t-3
       .col-md-4.school-of-saas__feature-card.p-a-0
@@ -99,15 +99,17 @@ section.school-of-saas__container.p-y-3
                 | Ideal team
               p.saas-program__program-requirements-text
                 ' Developer, Designer and
+                | a person in the Product role.
                 br
-                | Product (Min 2-4)
+                | Team size: 2 to 4 members.
 
           li.saas-program__program-requirements-list-item.m-b-2
             .saas-program__program-requirements-content
               h4.saas-program__program-requirements-title.font-semibold.m-b-0
                 | Time required
               p.saas-program__program-requirements-text
-                ' Learn at your pace
+                ' Learn at your pace.
+                | Smarter teams do multiple iterations faster.
                 br
                 | (10 hours/week to complete in 6 months)
 
@@ -117,7 +119,6 @@ section.school-of-saas__container.p-y-3
                 | Startup Idea
               p.saas-program__program-requirements-text
                 ' Choose from a pool of ideas
-                br
                 | if you don&rsquo;t have one.
 
       .col-md-7.school-of-saas__program-promises
@@ -130,9 +131,9 @@ section.school-of-saas__container.p-y-3
             li.saas-program__program-promises-list-item.m-b-2
               .saas-program__program-promises-content
                 h4.saas-program__program-promises-title.font-semibold.m-b-0
-                  ' Mini Startup Experience
+                  ' Build your Startup
                   br
-                  | during admissions
+                  | while you are in College
 
             li.saas-program__program-promises-list-item.m-b-2
               .saas-program__program-promises-content
@@ -147,7 +148,7 @@ section.school-of-saas__container.p-y-3
             li.saas-program__program-promises-list-item
               .saas-program__program-promises-content
                 h4.saas-program__program-promises-title.font-semibold.m-b-0
-                  | Merchandise at every level
+                  | New Perks at every level
 
         .col-md-5.p-a-0
           .saas-program__graduation-support
@@ -169,13 +170,13 @@ section.application-fee__container.p-y-3
        | Membership Fee &amp; Scholarships
      .apply-section__head-subtitle.m-x-auto
        p.text-xs-center
-         ' SV.CO is premium program for selected students only. Our students
+         ' SV.CO has a nominal fee for membership. But very few students advance through our stages and qualify for the premium Silicon Valley program. Our students
          ' believe that the  program is immersive and is a life changing experience.
          | This shared learning and experience makes you a part of the Startup Village Collective for life.
 
    .current-batch-data__container.text-xs-center
       h3.current-batch-data_head
-       | Current Batch Founders Data
+       | Existing Founder Data
 
       ul.list-unstyled.current-batch-data__box.m-t-2.m-b-3
         li.current-batch-data__coloumn
@@ -204,14 +205,22 @@ section.application-fee__container.p-y-3
             .program-fee__title--small
               ' Monthly Fee:
             .font-semibold
-              | <del>&#8377;4000</del> &#8377;1000 per founder
+              | <del>&#8377;4000</del> &#8377;1000
+            .program-fee__title--small
+              ' per founder.
+              br
+              ' Discounted fee only available for 2017.
 
         .col-md-6.p-a-0
           h3.program-fee__title
             .program-fee__title--small
-              ' Silicon valley:
+              ' Silicon Valley Program:
             .font-semibold
               | &#8377;2,50,000
+            .program-fee__title--small
+              ' Scholarships available for top program performers.
+              br
+              ' Separate qualification criteria apply.
 
 #apply-form.apply-form__container.p-y-3
   - if current_founder&.startup.blank?
@@ -253,7 +262,7 @@ section.program-framework__container.p-t-3
               li
                 p.font-semibold &ndash; Join the Startup Village Collective
               li
-                = link_to 'Learn More', 'https://help.sv.co', class: 'program-framework__timeline-content-link font-semibold', target: '_blank'
+                = link_to 'Learn More', 'https://help.sv.co/frequently-asked-questions', class: 'program-framework__timeline-content-link font-semibold', target: '_blank'
 
         li.program-framework__timeline-level data-level=('LEVEL 1')
           .program-framework__timeline-details
@@ -264,7 +273,7 @@ section.program-framework__container.p-t-3
               li
                 p &ndash; Select an idea
               li
-                p &ndash; Basic engineering &amp; design skills
+                p &ndash; Develop basic engineering &amp; design skills
               li
                 p &ndash; Live sessions by SV.CO &amp; Freshdesk
               li
@@ -272,7 +281,7 @@ section.program-framework__container.p-t-3
               li
                 p.font-semibold &ndash; Make a Product Summary
               li
-                = link_to 'Learn More', 'https://help.sv.co', class: 'program-framework__timeline-content-link font-semibold', target: '_blank'
+                = link_to 'Learn More', 'https://help.sv.co/frequently-asked-questions', class: 'program-framework__timeline-content-link font-semibold', target: '_blank'
 
         li.program-framework__timeline-level data-level=('LEVEL 2')
           .program-framework__timeline-details
@@ -285,13 +294,13 @@ section.program-framework__container.p-t-3
               li
                 p &ndash; Developing product &amp; design skills
               li
-                p &ndash; Technology stack
+                p &ndash; Choose your technology stack
               li
                 p &ndash; Live Sessions on alpha prototyping
               li
                 p.font-semibold &ndash; Finalising product features for alpha
               li
-                = link_to 'Learn More', 'https://help.sv.co', class: 'program-framework__timeline-content-link font-semibold', target: '_blank'
+                = link_to 'Learn More', 'https://help.sv.co/frequently-asked-questions', class: 'program-framework__timeline-content-link font-semibold', target: '_blank'
 
         li.program-framework__timeline-level data-level=('LEVEL 3')
           .program-framework__timeline-details
@@ -310,7 +319,7 @@ section.program-framework__container.p-t-3
               li
                 p.font-semibold &ndash; Alpha launch &amp; feedback at Freshworks HQ, Chennai
               li
-                = link_to 'Learn More', 'https://help.sv.co', class: 'program-framework__timeline-content-link font-semibold', target: '_blank'
+                = link_to 'Learn More', 'https://help.sv.co/frequently-asked-questions', class: 'program-framework__timeline-content-link font-semibold', target: '_blank'
 
         li.program-framework__timeline-level data-level=('LEVEL 4')
           .program-framework__timeline-details.p-b-0
@@ -327,7 +336,7 @@ section.program-framework__container.p-t-3
               li
                 p.font-semibold &ndash; Live session on finding customers
               li
-                = link_to 'Learn More', 'https://help.sv.co', class: 'program-framework__timeline-content-link font-semibold', target: '_blank'
+                = link_to 'Learn More', 'https://help.sv.co/frequently-asked-questions', class: 'program-framework__timeline-content-link font-semibold', target: '_blank'
 
 section.startup-ecosystem__container.p-y-3
   .container
@@ -404,7 +413,7 @@ section.apply-faq__container.p-y-3
             p
               ' It takes a lot of industry experience to come up with a great idea
               ' to start-up. As students, we know that you lack that experience.
-              ' To overcome this, we have a list of carefully industry ideas which
+              ' To overcome this, we have a list of carefully chosen industry ideas which
               ' students in colleges can build. Each idea costs &#8377;10,000 of research
               | by business analysts. You can thus apply, even if you don&rsquo;t have an idea.
 
@@ -416,8 +425,7 @@ section.apply-faq__container.p-y-3
         #apply-faq__2.collapse
           .card-block.apply-faq__collapse-card-block
             p
-              ' Yes. However, if you are within 3 years of graduating from a college,
-              | we may consider your application
+              ' Yes. We however, encourage exceptional school students to apply.
 
       .card.apply-faq__collapse-card
         .card-header.apply-faq__collapse-card-header.p-a-0
@@ -427,9 +435,10 @@ section.apply-faq__container.p-y-3
         #apply-faq__3.collapse
           .card-block.apply-faq__collapse-card-block
             p
-              ' Our course is only to college students and recent graduates: the only
+              ' Our program is only for college students: the only
               ' requirement is that you form a team, one (or more) team members should
-              | know how to code and communicate in English well.
+              ' know how to code and communicate in English well. We also encourage exceptional school students to
+              ' apply. Because of the nature of our program, it's very unlikely that graduates or experienced founders will benefit.
 
       .card.apply-faq__collapse-card
         .card-header.apply-faq__collapse-card-header.p-a-0
@@ -439,11 +448,8 @@ section.apply-faq__container.p-y-3
         #apply-faq__4.collapse
           .card-block.apply-faq__collapse-card-block
             p
-              ' You need to have at least 2 members and maximum 4. Team members must
-              ' have a mix of skills: there should be programming and communication
-              ' ability in the team. An ideal team will have somebody who knows how
-              ' to code, a person who can handle day-to-day operations,
-              | a designer, and a sales person.
+              ' You need to have at least 2 members and maximum 4. Ideally, team members must
+              ' have a mix of skills: <em>engineering</em> (software programming), <em>design</em> (UI, UX and Visual Design) and <em>product</em> (good knowledge of what makes a good software product). The SV.CO program does not teach these skills and assumes that student founders are confident and capable enough to pick up these skills during the program.
             p
               ' It&rsquo;s not necessary that team members be in the same college or course,
               ' but ideally, they should all work together in the same place for the
@@ -453,8 +459,18 @@ section.apply-faq__container.p-y-3
         .card-header.apply-faq__collapse-card-header.p-a-0
           h4.font-regular.apply-faq__collapse-card-title.m-b-0
             a data-parent="#" data-toggle="collapse" href="#apply-faq__5"
-              | 5. Will SV.CO fund startups?
+              | 5. When can I start the program?
         #apply-faq__5.collapse
+          .card-block.apply-faq__collapse-card-block
+            p
+              ' You can start the program today! Go to #{link_to 'the apply page', apply_path} and start your startup journey. Note: to complete the first stage, you need to form a team. This is because we strongly believe that a campus startup cannot be attempted by yourself: you require at least one person with complimentary skills.
+
+      .card.apply-faq__collapse-card
+        .card-header.apply-faq__collapse-card-header.p-a-0
+          h4.font-regular.apply-faq__collapse-card-title.m-b-0
+            a data-parent="#" data-toggle="collapse" href="#apply-faq__6"
+              | 6. Will SV.CO fund startups?
+        #apply-faq__6.collapse
           .card-block.apply-faq__collapse-card-block
             ' We do not directly fund startups. Instead, we take them through a
             ' guided learning program where they learn how to build a great startup.

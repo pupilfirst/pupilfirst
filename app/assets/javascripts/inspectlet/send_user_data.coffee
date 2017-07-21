@@ -5,9 +5,6 @@ sendUserDataToInspectlet = ->
   if __insp? and state?
     __insp.push ['identify', state.email]
 
-    productName = analyticsData.data 'productName'
-    startupBatch = analyticsData.data 'startupBatch'
-
     startup = state['startup']
 
     if startup?

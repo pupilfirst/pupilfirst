@@ -98,8 +98,8 @@ class FoundersForm extends React.Component {
 
           { this.hasBaseErrors() &&
           <ul className="m-t-1">
-            {this.baseErrorMessages().map(function (baseErrorMessage) {
-              return <li>{ baseErrorMessage }</li>;
+            {this.baseErrorMessages().map(function (baseErrorMessage,index) {
+              return <li key={"error-"+ index }>{ baseErrorMessage }</li>;
             })}
           </ul>
           }

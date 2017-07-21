@@ -1,5 +1,5 @@
 .dashboard-item
-  - connect_requests_requested = ConnectRequest.for_batch_id_in(selected_batch_ids).requested
+  - connect_requests_requested = ConnectRequest.requested
 
   .heading Connect Requests - Requested
 
@@ -13,10 +13,10 @@
 
   .footer-spacer
 
-  - trend = ConnectRequest.for_batch_id_in(selected_batch_ids).group_by_week('connect_requests.created_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
+  - trend = ConnectRequest.group_by_week('connect_requests.created_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
 
   .left-of-button
     span.sparkline-tag #{trend.join(', ')}
 
-  a.button.view-all href=admin_connect_requests_path(scope: 'requested', q: {batch_id_in: selected_batch_ids})
+  a.button.view-all href=admin_connect_requests_path(scope: 'requested')
     | View All (#{connect_requests_requested.count})

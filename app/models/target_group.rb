@@ -3,7 +3,6 @@ class TargetGroup < ApplicationRecord
   belongs_to :level
 
   validates :name, presence: true
-  validates :description, presence: true
   validates :sort_index, presence: true
 
   scope :sorted_by_level, -> { joins(:level).order('levels.number ASC') }

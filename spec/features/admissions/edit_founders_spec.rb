@@ -261,7 +261,7 @@ feature 'Edit founders' do
     scenario 'founder is informed he cant edit the team anymore' do
       sign_in_user(founder.user, referer: admissions_founders_path)
 
-      expect(page).to have_content('Team modifications are only allowed before you make your first payment')
+      expect(page).to have_content('You have already paid for your current team!')
     end
   end
 end

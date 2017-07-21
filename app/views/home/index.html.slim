@@ -26,27 +26,27 @@ section.home-hero__container
 section.home-partners__container.p-y-2.hidden-sm-down
   .container.home-partners__box
     .col-md-2
-      = image_tag 'home/index/sv-partner-facebook.svg', class: 'img-fluid m-x-auto home-partners__logo home-partners__logo--facebook'
+      = image_tag 'home/index/sv-partner-facebook.svg', class: 'img-fluid m-x-auto home-partners__logo home-partners__logo--facebook', alt: 'Facebook Logo'
 
     .col-md-2
-      = image_tag 'home/index/sv-partner-us-embassy.png', class: 'img-fluid m-x-auto home-partners__logo home-partners__logo--us-embassy'
+      = image_tag 'home/index/sv-partner-us-embassy.png', class: 'img-fluid m-x-auto home-partners__logo home-partners__logo--us-embassy', alt: 'US Embassy Logo'
 
     .col-md-2
-      = image_tag 'home/index/sv-partner-freshworks.svg', class: 'img-fluid m-x-auto home-partners__logo home-partners__logo--freshworks'
+      = image_tag 'home/index/sv-partner-freshworks.svg', class: 'img-fluid m-x-auto home-partners__logo home-partners__logo--freshworks', alt: 'Freshworks Logo'
 
     .col-md-2
-      = image_tag 'home/index/sv-partner-ksum.png', class: 'img-fluid m-x-auto home-partners__logo home-partners__logo--ksum'
+      = image_tag 'home/index/sv-partner-ksum.png', class: 'img-fluid m-x-auto home-partners__logo home-partners__logo--ksum', alt: 'KSUM Logo'
 
     .col-md-2
-      = image_tag 'home/index/sv-partner-paytm.svg', class: 'img-fluid m-x-auto home-partners__logo home-partners__logo--paytm'
+      = image_tag 'home/index/sv-partner-paytm.svg', class: 'img-fluid m-x-auto home-partners__logo home-partners__logo--paytm', alt: 'Paytm Logo'
 
     .col-md-2
-      = image_tag 'home/index/sv-partner-microsoft-ventures.png', class: 'img-fluid m-x-auto home-partners__logo home-partners__logo--ms-ventures'
+      = image_tag 'home/index/sv-partner-microsoft-ventures.png', class: 'img-fluid m-x-auto home-partners__logo home-partners__logo--ms-ventures', alt: 'Microsoft Ventures Logo'
 
 section.six-ways-card__container.p-y-3
   .container
     .home-section__head.m-b-2
-      h3.home-section__head-title.text-xs-center.font-black
+      h2#benifits.home-section__head-title.text-xs-center.font-black
         | 6 Different ways to Establish your Career
       .home-section__head-subtitle.m-x-auto
         p.text-xs-center
@@ -56,7 +56,7 @@ section.six-ways-card__container.p-y-3
     .col-md-4
       a.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#itraveller-story-video"
         .six-ways-card__thumbnail
-          = image_tag 'home/index/itraveller-story.jpg', class: 'img-fluid six-ways-card__thumbnail-image'
+          = image_tag 'home/index/six-ways-get-funded.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Get funded for your startup'
 
           h3.six-ways-card__thumbnail-text.font-regular
             span.six-ways-card__thumbnail-text--small
@@ -72,7 +72,7 @@ section.six-ways-card__container.p-y-3
     .col-md-4
       a.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#profoundis-story-video"
         .six-ways-card__thumbnail
-          = image_tag 'home/index/profoundis-story.jpg', class: 'img-fluid six-ways-card__thumbnail-image'
+          = image_tag 'home/index/six-ways-join-accelerator.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Join a startup accelerator'
 
           h3.six-ways-card__thumbnail-text.font-regular
             span.six-ways-card__thumbnail-text--small
@@ -89,11 +89,11 @@ section.six-ways-card__container.p-y-3
     .col-md-4
       a.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#z-pay-story-video"
         .six-ways-card__thumbnail
-          = image_tag 'home/index/z-pay.jpg', class: 'img-fluid six-ways-card__thumbnail-image'
+          = image_tag 'home/index/six-ways-get-acqui-hired.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Get acqui-hired as a team'
 
           h3.six-ways-card__thumbnail-text.font-regular
             span.six-ways-card__thumbnail-text--small
-              ' Get Aqui-Hired
+              ' Get Acqui-Hired
             br
             | as a Team
 
@@ -106,7 +106,7 @@ section.six-ways-card__container.p-y-3
     .col-md-4
       a.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#hiring-story-video"
         .six-ways-card__thumbnail
-          = image_tag 'home/index/hiring-story.jpg', class: 'img-fluid six-ways-card__thumbnail-image'
+          = image_tag 'home/index/six-ways-get-hired.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Get hired by a startup'
 
           h3.six-ways-card__thumbnail-text.font-regular
             span.six-ways-card__thumbnail-text--small
@@ -123,7 +123,7 @@ section.six-ways-card__container.p-y-3
     .col-md-4
       a.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#wowmakers-story-video"
         .six-ways-card__thumbnail
-          = image_tag 'home/index/wowmakers-story.jpg', class: 'img-fluid six-ways-card__thumbnail-image'
+          = image_tag 'home/index/six-ways-run-startup.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Run a startup of your own'
 
           h3.six-ways-card__thumbnail-text.font-regular
             span.six-ways-card__thumbnail-text--small
@@ -140,7 +140,7 @@ section.six-ways-card__container.p-y-3
     .col-md-4
       a.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#higher-studies-story-video"
         .six-ways-card__thumbnail
-          = image_tag 'home/index/higher-studies.jpg', class: 'img-fluid six-ways-card__thumbnail-image'
+          = image_tag 'home/index/six-ways-higher-studies.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Get admissions to global universities with a stronger resume'
 
           h3.six-ways-card__thumbnail-text.font-regular
             span.six-ways-card__thumbnail-text--small
@@ -161,7 +161,7 @@ section.six-ways-card__container.p-y-3
 section.program-feature__container.p-y-3
   .container
     .home-section__head.m-b-2
-      h3.home-section__head-title.text-xs-center.font-black
+      h2.home-section__head-title.text-xs-center.font-black
         | Programme Designed Exclusively for YOU
       .home-section__head-subtitle.m-x-auto
         p.text-xs-center
@@ -172,7 +172,7 @@ section.program-feature__container.p-y-3
         .row
           .col-md-6
             .program-feature__card
-              = image_tag 'home/index/learn-from-experts.jpg', class: 'img-fluid'
+              = image_tag 'home/index/program-learn-from-experts.jpg', class: 'img-fluid'
               .program-feature__card-title
                 h3.program-feature__card-title-text.font-regular
                   ' Learn from experts
@@ -184,7 +184,7 @@ section.program-feature__container.p-y-3
 
           .col-md-6
             .program-feature__card
-              = image_tag 'home/index/stratup-with-friends.jpg', class: 'img-fluid'
+              = image_tag 'home/index/program-build-startup.jpg', class: 'img-fluid'
               .program-feature__card-title
                 h3.program-feature__card-title-text.font-regular
                   ' Build a startup
@@ -196,7 +196,7 @@ section.program-feature__container.p-y-3
 
           .col-md-6
             .program-feature__card
-              = image_tag 'home/index/showcase-skills.jpg', class: 'img-fluid'
+              = image_tag 'home/index/program-events.jpg', class: 'img-fluid'
               .program-feature__card-title
                 h3.program-feature__card-title-text.font-regular
                   ' Showcase your skills at
@@ -208,7 +208,7 @@ section.program-feature__container.p-y-3
 
           .col-md-6
             .program-feature__card
-              = image_tag 'home/index/idea-pool.jpg', class: 'img-fluid'
+              = image_tag 'home/index/program-ideas.jpg', class: 'img-fluid'
               .program-feature__card-title
                 h3.program-feature__card-title-text.font-regular
                   ' Choose from a pool of
@@ -220,7 +220,7 @@ section.program-feature__container.p-y-3
 
       .col-md-5
         .program-feature__card
-          = image_tag 'home/index/start-in-college.jpg', class: 'program-feature__college-img'
+          = image_tag 'home/index/program-learn.jpg', class: 'program-feature__college-img'
           .program-feature__card-title
             h3.program-feature__card-title-text.program-feature__card-title-text--big.font-regular
               span.program-feature__card-title-text--big-highlight.font-semibold
@@ -240,7 +240,7 @@ section.program-feature__container.p-y-3
 section.silicon-valley-itinerary__container.p-y-3
   .container
     .home-section__head.m-b-2
-      h3.home-section__head-title.text-xs-center.font-black
+      h2.home-section__head-title.text-xs-center.font-black
         | Spend your summer in Silicon Valley, USA
       .home-section__head-subtitle.m-x-auto
         p.text-xs-center
@@ -250,27 +250,27 @@ section.silicon-valley-itinerary__container.p-y-3
 
     .silicon-valley-itinerary__slider.m-x-auto
       .silicon-valley-itinerary__slider-item.m-x-auto
-        = image_tag 'home/index/day1-svtosv.png', class: 'm-x-auto silicon-valley-itinerary__image img-fluid'
+        = image_tag 'home/index/svtosv-day1.png', class: 'm-x-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 1 Exploring San Fransisco'
       .silicon-valley-itinerary__slider-item.m-x-auto
-        = image_tag 'home/index/day2-svtosv.png', class: 'm-x-auto silicon-valley-itinerary__image img-fluid'
+        = image_tag 'home/index/svtosv-day2.png', class: 'm-x-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 2 at SV Bank, Intel and dinner hosted by Menlo Park City Council'
       .silicon-valley-itinerary__slider-item.m-x-auto
-        = image_tag 'home/index/day3-svtosv.png', class: 'm-x-auto silicon-valley-itinerary__image img-fluid'
+        = image_tag 'home/index/svtosv-day3.png', class: 'm-x-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 3 at Facebook HQ'
       .silicon-valley-itinerary__slider-item.m-x-auto
-        = image_tag 'home/index/day4-svtosv.png', class: 'm-x-auto silicon-valley-itinerary__image img-fluid'
+        = image_tag 'home/index/svtosv-day4.png', class: 'm-x-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 4 at Freshworks HQ and North Eastern University'
       .silicon-valley-itinerary__slider-item.m-x-auto
-        = image_tag 'home/index/day5-svtosv.png', class: 'm-x-auto silicon-valley-itinerary__image img-fluid'
+        = image_tag 'home/index/svtosv-day5.png', class: 'm-x-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 5 at Google and Bootup Ventures'
       .silicon-valley-itinerary__slider-item.m-x-auto
-        = image_tag 'home/index/day6-svtosv.png', class: 'm-x-auto silicon-valley-itinerary__image img-fluid'
+        = image_tag 'home/index/svtosv-day6.png', class: 'm-x-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 6 at Google Launchpad, Galvanize and Golden Gate Bridge'
 
 section.home-testimonial__container.p-y-3
   .container
     .home-section__head.m-b-2
-      h3.home-section__head-title.text-xs-center.font-black
+      h2#testimonial.home-section__head-title.text-xs-center.font-black
         | Time to make your parents REALLY proud
 
     .home-testimonial__box.clearfix.m-x-auto
       .home-testimonial__image-container.col-md-4.p-a-0
-        = image_tag 'home/index/suraj-family.png', class: 'img-fluid m-x-auto home-testimonial__image'
+        = image_tag 'home/index/testimonial-student-family.png', class: 'img-fluid m-x-auto home-testimonial__image', alt: "One of the student's family"
       .home-testimonial__text.col-md-8
         p
           ' &ldquo;I was really worried when he said that he wanted to do a startup in his college.
@@ -286,7 +286,7 @@ section.home-testimonial__container.p-y-3
 section.home-call-to-action__container.p-y-3
   .container
     .home-call-to-action__box.text-xs-center
-      h3.home-section__head-title.home-call-to-action__head.font-black Ready to be a part of the SV.CO experience?
+      h2.home-section__head-title.home-call-to-action__head.font-black Ready to be a part of the SV.CO experience?
       p.home-call-to-action__sub-head Get started by submitting an application today.
 
       .text-xs-center.m-t-1

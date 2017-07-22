@@ -89,7 +89,7 @@ class StartupsController < ApplicationController
     level_id = params.dig(:startups_filter, :level)
     level_scope = level_id.present? ? Startup.where(level_id: level_id) : Startup.unscoped
 
-    @startups = Startup.admitted.approved.merge(category_scope).merge(level_scope).order(timeline_updated_on: 'DESC')
+    @startups = Startup.includes(:level, :startup_categories, :startups_startup_categories).admitted.approved.merge(category_scope).merge(level_scope).order(timeline_updated_on: 'DESC')
   end
 
   def load_filter_options

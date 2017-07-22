@@ -387,7 +387,7 @@ class Startup < ApplicationRecord
       events_for_display = events_for_display.verified_or_needs_improvement
     end
 
-    decorated_events = events_for_display.order(:event_on, :updated_at).reverse_order.decorate
+    decorated_events = events_for_display.includes(:timeline_event_type, :target, :timeline_event_files).order(:event_on, :updated_at).reverse_order.decorate
 
     # Hide founder events from everyone other than author of event.
     decorated_events.reject { |event| event.hidden_from?(viewer) }

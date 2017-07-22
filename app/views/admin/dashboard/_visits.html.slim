@@ -1,5 +1,5 @@
 .dashboard-item
-  - founder_visits = Visit.joins(logged_in_user: { founder: :startup }).where(started_at: (3.weeks.ago..Time.now))
+  - founder_visits = Visit.includes(user: { founder: :startup }).joins(logged_in_user: { founder: :startup }).where(started_at: (3.weeks.ago..Time.now))
 
   .heading Recent visits (Only logged-in founders)
 

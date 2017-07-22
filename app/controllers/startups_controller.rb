@@ -89,8 +89,7 @@ class StartupsController < ApplicationController
     level_id = params.dig(:startups_filter, :level)
     level_scope = level_id.present? ? Startup.where(level_id: level_id) : Startup.unscoped
 
-    # TODO: Sorting of @startups on Startups#index should be updated to use latest timeline event date.
-    @startups = Startup.admitted.approved.merge(category_scope).merge(level_scope).order(updated_at: 'DESC')
+    @startups = Startup.admitted.approved.merge(category_scope).merge(level_scope).order(timeline_updated_on: 'DESC')
   end
 
   def load_filter_options

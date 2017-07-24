@@ -1,9 +1,7 @@
 ---
 timestamp: '2017-07-20T11:04:59Z'
-title: Introduce evalidation and ehinting for common errors in email inputs in cofounder
-  addition form
+title: Display hints for common errors / typos in the co-founders addition form of Level 0.
 trello: https://trello.com/c/02pKOqGo
 private: false
-description: 'email_inquire validation is now used to validate email entries in cofounder
-  addition form. '
+description: email_inquire validation is now used to validate email entries in cofounder addition form.
 category: feature

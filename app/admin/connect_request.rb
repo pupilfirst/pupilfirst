@@ -111,10 +111,10 @@ ActiveAdmin.register ConnectRequest do
 
   csv do
     column :startup do |connect_request|
-      connect_request.startup.product_name
+      connect_request.startup&.product_name
     end
     column :faculty_name do |connect_request|
-      connect_request.faculty.name
+      connect_request.faculty&.name
     end
     column :questions
     column :status

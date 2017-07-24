@@ -94,13 +94,13 @@ module Admissions
     end
 
     def email_should_be_valid
+      has_error = false
       founders.each do |founder|
         next if founder.id.present?
         email_validation = EmailInquire.validate(founder.email)
         next if email_validation.valid?
         next if founder.ignore_email_hint == 'true'
-
-        errors[:base] << "It looks like you've entered an invalid email address"
+        has_error = true
 
         if email_validation.hint?
           founder.errors[:email] << 'email could be incorrect'
@@ -109,6 +109,7 @@ module Admissions
           founder.errors[:email] << 'email addresses not valid'
         end
       end
+      errors[:base] << "It looks like you've entered an invalid email address" if has_error
     end
 
     def prepopulate

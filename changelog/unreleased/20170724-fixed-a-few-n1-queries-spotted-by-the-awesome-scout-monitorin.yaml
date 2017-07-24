@@ -1,0 +1,6 @@
+---
+timestamp: '2017-07-24T08:08:05Z'
+title: Fixed a few N+1 queries spotted by the awesome Scout monitoring tool.
+trello: https://trello.com/c/y5Vfphvk
+private: true
+category: performance

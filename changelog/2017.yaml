@@ -1,5 +1,102 @@
 ---
 changelog:
+- timestamp: '2017-07-24T09:50:36Z'
+  changes:
+  - timestamp: '2017-07-24T08:08:05Z'
+    title: Fixed a few N+1 queries spotted by the awesome Scout monitoring tool.
+    trello: https://trello.com/c/y5Vfphvk
+    private: true
+    category: performance
+  - timestamp: '2017-07-24T07:41:42Z'
+    title: We've released a brand new home page, and join page!
+    trello: https://trello.com/c/9lAooxys
+    private: false
+    category: content
+  - timestamp: '2017-07-24T07:39:29Z'
+    title: We've removed the lengthy admissions process on Level 0 and overhauled
+      the fee structure for our program - a new subscription model is in place.
+    trello: https://trello.com/c/Iu28zKSL
+    private: false
+    description: This removes the admissions process in favor of a quick entry to
+      Level 1, requiring that founders invite others, and pay the first month's fee.
+      That's it.
+    category: feature
+  - timestamp: '2017-07-21T10:52:16Z'
+    title: Update text of invitation mail sent to cofounders.
+    trello: https://trello.com/c/JyIRJuEq
+    private: true
+    category: content
+  - timestamp: '2017-07-21T10:37:38Z'
+    title: The `sv.co/apply` link now redirects to `sv.co/join`.
+    trello: https://trello.com/c/AqVVXRyD
+    private: false
+    description: This changes the path and all text that refers to the 'application'
+      process.
+  - timestamp: '2017-07-21T09:22:51Z'
+    title: Remove the special coupon for SixWays MOOC.
+    trello: https://trello.com/c/hSS8PPai
+    private: true
+  - timestamp: '2017-07-21T08:15:43Z'
+    title: Improve language related to changing team after payment.
+    trello: https://trello.com/c/rSsgUBIO
+    private: true
+  - timestamp: '2017-07-21T07:53:34Z'
+    title: The automatic tour of the dashboard has been moved to Level 1.
+    trello: https://trello.com/c/QewTLZG9
+    private: false
+    category: content
+  - timestamp: '2017-07-21T07:52:07Z'
+    title: Allow target group description to be blank
+    trello: https://trello.com/c/TSHvNviG
+    private: true
+  - timestamp: '2017-07-21T07:13:02Z'
+    title: Optimize home page for better search engine rankings
+    trello: https://trello.com/c/7Mh0lPoN
+    private: true
+    description: The overall structure of the homepage was improved by adding relevant
+      ids, prop names, file naming structure etc.
+  - timestamp: '2017-07-21T06:48:39Z'
+    title: Fix BulkStatusService to report targets with pending prerequisites, and
+      verified timeline events as unavailable.
+    trello: https://trello.com/c/IIKReUMt/3209-bulkstatusservice-is-reporting-unavailable-targets-as-completed-2
+    private: true
+    category: bugfix
+  - timestamp: '2017-07-20T11:04:59Z'
+    title: Hints for common errors / typos are now displayed in the co-founders invitation form
+      of Level 0.
+    trello: https://trello.com/c/02pKOqGo
+    private: false
+    description: email_inquire validation is now used to validate email entries in
+      cofounder addition form.
+    category: feature
+  - timestamp: '2017-07-20T05:39:39Z'
+    title: Fixed a crash that occured when attempting to invite a founder from an
+      admitted startup.
+    trello: https://trello.com/c/SoaU3R7c
+    private: false
+    description: Updated the form to support the edge-case and report it as a form
+      error.
+    category: bugfix
+  - timestamp: '2017-07-20T05:37:13Z'
+    title: The Batch model has been removed along with all its usages.
+    trello: https://trello.com/c/ONRlaBPN
+    private: true
+  - timestamp: '2017-07-19T08:00:57Z'
+    title: Enabled preview mode for Google Tag Manager on the production environment.
+    trello: https://trello.com/c/OVAhGjO5
+    private: true
+    description: Involved white-listing multiple tag manager CSP endpoints.
+  - timestamp: '2017-07-18T09:28:35Z'
+    title: Removed the totally stale admission_stats_service and related code
+    private: true
+    description: We no longer have admission stats. Its all going to be SaaS metrics
+      like churn from now on.
+  - timestamp: '2017-07-18T08:01:43Z'
+    title: Remove foreign key constraint on Payment's original_startup_id column.
+    trello: https://trello.com/c/fBU2jAzv
+    private: true
+    description: This removes the constraint and allows startups to be deleted even
+      if they're still linked to a payment via the original_startup_id column.
 - timestamp: '2017-07-18T06:43:27Z'
   changes:
   - timestamp: '2017-07-14T06:14:00Z'

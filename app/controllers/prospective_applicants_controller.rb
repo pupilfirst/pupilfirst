@@ -8,10 +8,10 @@ class ProspectiveApplicantsController < ApplicationController
     if @form.validate(params[:prospective_applicants_registration])
       prospective_applicant = @form.save
       session[:prospective_applicant_email] = prospective_applicant.email
-      redirect_to apply_path
+      redirect_to join_path
     else
       @prospective_applicant = ProspectiveApplicant.new.decorate
-      render 'admissions/apply'
+      render 'admissions/join'
     end
   end
 end

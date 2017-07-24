@@ -221,6 +221,7 @@ ActiveAdmin.register Startup do
       row :level
       row :maximum_level
       row :iteration
+      row :timeline_updated_on
 
       row :tags do
         linked_tags(startup.tags)

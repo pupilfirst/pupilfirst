@@ -42,7 +42,7 @@ module Startups
     end
 
     def event_description
-      'We have successfully completed the admission process through Level 0. Excited to be part of the SV.CO tribe!'
+      'The team has successfully completed Level 0 and joined the Startup Village Collective.'
     end
   end
 end

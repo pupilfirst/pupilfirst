@@ -30,11 +30,11 @@ module Admissions
     def description
       case @key
         when Target::KEY_ADMISSIONS_SCREENING
-          "#{@founder.name} has passed the screening stage of the SV.CO admissions process."
+          "#{@founder.name} has completed the screening target of SV.CO's Level 0."
         when Target::KEY_ADMISSIONS_FEE_PAYMENT
-          "#{@founder.name} has paid the admission registration fee"
+          "#{@founder.name} just completed payment for the first month of the SV.CO program."
         when Target::KEY_ADMISSIONS_COFOUNDER_ADDITION
-          "#{@founder.name} is the first co-founder to accept invitation!"
+          "#{@founder.name} has invited co-founders to join his startup."
         else
           raise "CompleteTargetService does not know how to generate description for #{@key}"
       end

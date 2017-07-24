@@ -4,7 +4,7 @@ class ChangelogController < ApplicationController
   # GET /changelog
   def index
     @skip_container = true
-    @changelog_releases = Changelog::PublicChangesService.new.releases
+    @changelog_releases = Changelog::ChangesService.new(current_user&.admin_user.present?).releases
   end
 
   # GET /changelog/archive

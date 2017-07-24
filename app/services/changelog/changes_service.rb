@@ -1,6 +1,6 @@
 module Changelog
-  # What does this class do?
-  class PublicChangesService
+  # Returns changelog entries grouped by week.
+  class ChangesService
     CATEGORY_MAP = {
       'feature' => 'Features',
       'ui' => 'UI and UX',
@@ -9,6 +9,13 @@ module Changelog
       'bugfix' => 'Bugfixes'
     }.freeze
 
+    # @param show_private [TrueClass, FalseClass] Set to true to show private changelog entries.
+    def initialize(show_private)
+      @show_private = show_private
+    end
+
+    # @return [Array] Array of changelog entries grouped by week. See method documentation for details.
+    #
     # Returns:
     #
     # [
@@ -16,8 +23,11 @@ module Changelog
     #     week_title: 'week start date',
     #     categories: {
     #       "Features": [
-    #         "change 1",
-    #         "change 2", ...
+    #         {
+    #           title: 'change',
+    #           description: 'optional description for change',
+    #           trello: OPTIONAL_TRELLO_LINK_STRING_OR_ARRAY
+    #         }, ...
     #       ], ...
     #     }
     #   },
@@ -35,12 +45,28 @@ module Changelog
 
     private
 
+    def hash_category(recorded_category)
+      CATEGORY_MAP[recorded_category] || 'Miscellaneous'
+    end
+
     def categorized_entries(release)
       changes = release['changes'].each_with_object(template) do |change, hash|
-        next if change['private']
-        hash[CATEGORY_MAP[change['category']] || 'Miscellaneous'] << change['title']
+        next if change['private'] && !@show_private
+
+        entry = { title: change['title'] }
+
+        if @show_private
+          entry[:description] = change['description'] if change['description'].present?
+          entry[:trello] = [change['trello']].flatten if change['trello'].present?
+        end
+
+        hash[hash_category(change['category'])] << entry
       end
 
+      remove_empty_categories(changes)
+    end
+
+    def remove_empty_categories(changes)
       changes.each_key { |key| changes.delete(key) if changes[key].blank? }
     end
 

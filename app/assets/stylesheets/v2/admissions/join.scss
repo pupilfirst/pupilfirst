@@ -279,16 +279,18 @@
 
 .program-fee__title {
   margin-bottom: 0;
+  font-size: 1.125rem;
+  font-weight: $font-light;
+  line-height: 1.5rem;
 
   @include media-breakpoint-down (sm) {
     margin-bottom: 1rem;
   }
 }
 
-
-.program-fee__title--small {
-  font-size: 1.125rem;
-  line-height: 1.3;
+.program-fee__title--large {
+  font-size: 1.5rem;
+  font-weight: $font-semibold;
 }
 
 // Apply form

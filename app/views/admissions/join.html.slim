@@ -200,28 +200,23 @@ section.application-fee__container.p-y-3
 
       .program-fee__container.m-x-auto.p-a-2.text-xs-center.clearfix
         .col-md-6.p-a-0
-          h3.program-fee__title
-            .program-fee__title--small
-              ' Monthly Fee:
-            .font-semibold
-              | <del>&#8377;4000</del> &#8377;1000
-            .program-fee__title--small
-              ' per founder.
-              br
-              ' Discounted fee only available for 2017.
+          .program-fee__title
+            ' Monthly Fee:
+            .program-fee__title--large <del>&#8377;4000</del> &#8377;1000
+            ' per founder.
+            br
+            ' Discounted fee only available for 2017.
 
         .col-md-6.p-a-0
-          h3.program-fee__title
-            .program-fee__title--small
-              ' Silicon Valley Program:
-            .font-semibold
+          .program-fee__title
+            ' Silicon Valley Program:
+            span.program-fee__title--large
               | &#8377;2,50,000
-              span.font-light.program-fee__title--small
-                ' &nbsp;(Optional)
-            .program-fee__title--small
-              ' Scholarships available for top program performers.
-              br
-              ' Separate qualification criteria apply.
+            ' &nbsp;(Optional)
+            br
+            ' Scholarships available for top program performers.
+            br
+            ' Separate qualification criteria apply.
 
 #join-form.apply-form__container.p-y-3
   - if current_founder&.startup.blank?

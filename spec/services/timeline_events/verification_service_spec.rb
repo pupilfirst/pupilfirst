@@ -9,6 +9,8 @@ describe TimelineEvents::VerificationService do
   let(:target) { create :target, points_earnable: 10 }
   let(:startup) { create :startup }
   let(:founder) { create :founder, startup: startup }
+  let(:tet_founder_update) { create :timeline_event_type, :founder_update }
+  let(:tet_team_update) { create :timeline_event_type, :team_update }
 
   before do
     # stub out vocalist notifications
@@ -104,6 +106,24 @@ describe TimelineEvents::VerificationService do
             subject.update_status(TimelineEvent::STATUS_VERIFIED)
           end.to_not raise_error
         end
+      end
+    end
+
+    context 'when a founder timeline event is verified' do
+      it 'does not update the startups timeline_updated_on' do
+        timeline_event.update!(timeline_event_type: tet_founder_update)
+        subject.update_status(TimelineEvent::STATUS_VERIFIED, points: 10)
+
+        expect(timeline_event.startup.timeline_updated_on).to eq(nil)
+      end
+    end
+
+    context 'when a team timeline event is verified' do
+      it 'updates the startups timeline_updated_on' do
+        timeline_event.update!(timeline_event_type: tet_team_update)
+        subject.update_status(TimelineEvent::STATUS_VERIFIED, points: 10)
+
+        expect(timeline_event.startup.timeline_updated_on).to eq(timeline_event.event_on)
       end
     end
   end

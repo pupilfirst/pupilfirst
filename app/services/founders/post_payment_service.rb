@@ -5,7 +5,13 @@ module Founders
     end
 
     def execute
-      # Do something.
+      raise 'PostPaymentService was called for an unpaid payment!' unless @payment.paid?
+
+      # If payment was made within the active billing period, there is nothing to be done.
+      return if @payment.billing_start_at.future?
+
+      # Otherwise, the billing period will have to be updated.
+      @payment.update!(billing_start_at: Time.zone.now, billing_end_at: 30.days.from_now)
     end
   end
 end

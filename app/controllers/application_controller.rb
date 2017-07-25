@@ -217,6 +217,13 @@ class ApplicationController < ActionController::Base
     }
   end
 
+  def instamojo_csp
+    {
+      script: 'https://js.instamojo.com/v1/checkout.js',
+      frame: 'https://test.instamojo.com/ https://www.instamojo.com/'
+    }
+  end
+
   def child_sources
     <<~CHILD_SOURCES.squish
       child-src https://www.youtube.com
@@ -237,7 +244,7 @@ class ApplicationController < ActionController::Base
       data:
       https://sv-co-public-slackin.herokuapp.com https://www.google.com
       #{typeform_csp[:frame]} #{youtube_csp[:frame]} #{slideshare_csp[:frame]} #{speakerdeck_csp[:frame]}
-      #{google_form_csp[:frame]} #{facebook_csp[:frame]};
+      #{google_form_csp[:frame]} #{facebook_csp[:frame]} #{instamojo_csp[:frame]};
     FRAME_SOURCES
   end
 
@@ -253,7 +260,7 @@ class ApplicationController < ActionController::Base
       'self' 'unsafe-eval' 'unsafe-inline' https://ajax.googleapis.com https://blog.sv.co https://www.youtube.com
       https://s.ytimg.com http://www.startatsv.com https://sv-assets.sv.co
       #{google_analytics_csp[:script]} #{inspectlet_csp[:script]} #{facebook_csp[:script]} #{intercom_csp[:script]}
-      #{gtm_csp[:script]};
+      #{gtm_csp[:script]} #{instamojo_csp[:script]};
     SCRIPT_SOURCES
   end
 

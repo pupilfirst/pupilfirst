@@ -23,6 +23,9 @@ Rails.application.routes.draw do
 
   resource :founder, only: %i[edit update] do
     member do
+      get 'fee'
+      post 'fee', action: 'fee_submit'
+
       scope module: 'founders', controller: 'dashboard' do
         get 'dashboard'
         post 'startup_restart'

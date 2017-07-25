@@ -16,14 +16,10 @@ module Payments
         founder: @founder
       )
 
-      unless @skip_payment || @skip_instamojo
-        response = create_instamojo_payment_request
+      payment.amount = @startup.fee unless @skip_payment
 
-        payment.amount = @startup.fee
-        payment.instamojo_payment_request_id = response[:id]
-        payment.instamojo_payment_request_status = response[:status]
-        payment.short_url = response[:short_url]
-        payment.long_url = response[:long_url]
+      unless @skip_payment || @skip_instamojo
+        payment = Instamojo::RequestPaymentService.new(payment).request
       end
 
       if @skip_payment
@@ -35,20 +31,6 @@ module Payments
 
       # Return the payment
       payment
-    end
-
-    private
-
-    def instamojo
-      @instamojo ||= Instamojo.new
-    end
-
-    def create_instamojo_payment_request
-      instamojo.create_payment_request(
-        amount: @startup.fee,
-        buyer_name: @founder.name,
-        email: @founder.email
-      )
     end
   end
 end

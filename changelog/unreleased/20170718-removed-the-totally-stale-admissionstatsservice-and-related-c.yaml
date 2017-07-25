@@ -1,6 +1,0 @@
----
-timestamp: '2017-07-18T09:28:35Z'
-title: Removed the totally stale admission_stats_service and related code
-private: true
-description: We no longer have admission stats. Its all going to be SaaS metrics like
-  churn from now on.

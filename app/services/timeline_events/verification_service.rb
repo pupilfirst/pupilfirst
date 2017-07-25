@@ -46,6 +46,7 @@ module TimelineEvents
       TimelineEvent.transaction do
         @timeline_event.verify!
         update_karma_points
+        update_timeline_updated_on
         post_on_facebook if @timeline_event.share_on_facebook
         reset_startup_level if @timeline_event.timeline_event_type.end_iteration?
         update_admission_stage if @target.present? && @target.key == Target::KEY_ADMISSIONS_ATTEND_INTERVIEW
@@ -56,6 +57,7 @@ module TimelineEvents
       TimelineEvent.transaction do
         @timeline_event.update!(status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT, status_updated_at: Time.zone.now)
         update_karma_points
+        update_timeline_updated_on
         reset_startup_level if @timeline_event.timeline_event_type.end_iteration?
       end
     end
@@ -151,6 +153,12 @@ module TimelineEvents
 
     def update_admission_stage
       startup.update!(admission_stage: Startup::ADMISSION_STAGE_INTERVIEW_PASSED)
+    end
+
+    def update_timeline_updated_on
+      return if @timeline_event.founder_event?
+
+      startup.update!(timeline_updated_on: @timeline_event.event_on)
     end
   end
 end

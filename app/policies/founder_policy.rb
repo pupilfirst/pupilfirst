@@ -4,11 +4,11 @@ class FounderPolicy < ApplicationPolicy
   end
 
   def edit?
-    founder_profile?
+    founder_profile? && record.subscription_active?
   end
 
   def update?
-    founder_profile?
+    edit?
   end
 
   def fee?

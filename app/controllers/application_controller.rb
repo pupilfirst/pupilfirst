@@ -102,6 +102,12 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def require_active_subscription
+    return if current_founder.subscription_active?
+    flash[:error] = 'You do not have an active subscription. Please renew your subscription and try again.'
+    redirect_to fee_founder_url
+  end
+
   def sign_out_if_required
     service = ::Users::ManualSignOutService.new(self, current_user)
     service.sign_out_if_required

@@ -2,6 +2,7 @@ module Founders
   class DashboardController < ApplicationController
     before_action :authenticate_founder!
     before_action :skip_container
+    before_action :require_active_subscription
 
     layout 'application_v2'
 

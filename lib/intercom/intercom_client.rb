@@ -17,7 +17,7 @@ class IntercomClient
 
   # find a user given his email
   def find_user(email)
-    all_users.select { |user| user.email == email }.first
+    rescued_call { intercom_client.users.find(email: email) }
   rescue Intercom::ResourceNotFound
     return nil
   end

@@ -49,10 +49,6 @@ Rails.application.routes.draw do
   end
 
   resources :startups, only: %i[index show] do
-    collection do
-      post 'team_leader_consent'
-    end
-
     member do
       get 'events/:page', action: 'paged_events', as: 'paged_events'
       get ':event_title/:event_id', action: 'timeline_event_show', as: 'timeline_event_show'

@@ -1,7 +1,7 @@
 #admin__admissions-dashboard
 
 .admissions-dashboard-item.full-width
-  .heading Current stages of Level 0 Startups as on - #{Time.now.strftime('%B %d')}
+  .heading Current stages of Level 0 Startups as on - #{Time.zone.now.strftime('%B %d')}
   .content
     - @startups_stage_split.each do |stage, value|
       .admission-dashboard-data-block
@@ -10,7 +10,7 @@
         .admission-dashboard-data-block__value
           = value
 .admissions-dashboard-item.full-width
-  .heading Last Day Stats for Level 0 Startups - #{1.day.ago.strftime('%B %d')}
+  .heading Funnel Stats for Level 0 Startups on #{1.day.ago.strftime('%B %d')}
   .content
     - @last_day_stats.each do |stage, value|
       .admission-dashboard-data-block

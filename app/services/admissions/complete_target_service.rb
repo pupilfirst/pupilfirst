@@ -50,6 +50,8 @@ module Admissions
           Startup::ADMISSION_STAGE_SCREENING_COMPLETED
         when Target::KEY_ADMISSIONS_FEE_PAYMENT
           Startup::ADMISSION_STAGE_FEE_PAID
+        when Target::KEY_ADMISSIONS_COFOUNDER_ADDITION
+          Startup::ADMISSION_STAGE_COFOUNDERS_ADDED
       end
     end
   end

@@ -31,10 +31,9 @@ class Startup < ApplicationRecord
 
   ADMISSION_STAGE_SIGNED_UP = 'Signed Up'
   ADMISSION_STAGE_SCREENING_COMPLETED = 'Screening Completed'
+  ADMISSION_STAGE_COFOUNDERS_ADDED = 'Added Cofounders'
   ADMISSION_STAGE_PAYMENT_INITIATED = 'Payment Initiated'
   ADMISSION_STAGE_FEE_PAID = 'Fee Paid'
-  ADMISSION_STAGE_INTERVIEW_PASSED = 'Interview Passed'
-  ADMISSION_STAGE_PRESELECTION_DONE = 'Pre-Selection Done'
 
   # agreement duration in years
   AGREEMENT_DURATION = 5

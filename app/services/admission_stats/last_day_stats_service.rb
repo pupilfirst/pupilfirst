@@ -2,10 +2,11 @@ module AdmissionStats
   class LastDayStatsService
     def load
       {
-        'Signed Up' => signed_up,
+        'Total Sign Ups' => signed_up,
         'Screening Completed' => screening_completed,
-        'Fee Paid' => fee_paid,
-        'Payment Initiated' => payment_initiated
+        'Added Cofounders' =>  cofounders_added,
+        'Payment Initiated' => payment_initiated,
+        'Fee Paid' => fee_paid
       }
     end
 
@@ -25,6 +26,10 @@ module AdmissionStats
 
     def payment_initiated
       Startup.level_zero.joins(:payment).merge(Payment.requested).where(payments: { created_at: yesterday }).count
+    end
+
+    def cofounders_added
+      verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_COFOUNDER_ADDITION }).where(created_at: yesterday).count
     end
 
     def yesterday

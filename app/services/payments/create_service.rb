@@ -3,17 +3,20 @@ module Payments
   #
   # Specifics of how this works can be controlled using options.
   class CreateService
-    def initialize(founder, skip_instamojo: false, skip_payment: false)
+    def initialize(founder, skip_instamojo: false, skip_payment: false, billing_start_at: Time.zone.now)
       @founder = founder
       @startup = founder.startup
       @skip_instamojo = skip_instamojo
       @skip_payment = skip_payment
+      @billing_start_at = billing_start_at
     end
 
-    def execute
+    def create
       payment = Payment.new(
         startup: @startup,
-        founder: @founder
+        founder: @founder,
+        billing_start_at: @billing_start_at,
+        billing_end_at: @billing_start_at + 30.days
       )
 
       payment.amount = @startup.fee unless @skip_payment

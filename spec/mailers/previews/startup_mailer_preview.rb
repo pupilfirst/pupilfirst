@@ -9,4 +9,9 @@ class StartupMailerPreview < ActionMailer::Preview
 
     StartupMailer.connect_request_confirmed(connect_request)
   end
+
+  def payment_reminder
+    payment = Payment.last
+    StartupMailer.payment_reminder(payment)
+  end
 end

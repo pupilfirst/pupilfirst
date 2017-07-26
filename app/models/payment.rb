@@ -89,4 +89,9 @@ class Payment < ApplicationRecord
     self.startup_id = nil
     save!
   end
+
+  def days_to_expiry
+    return if billing_end_at.blank?
+    (billing_end_at - Time.now).to_i / 1.day.to_i
+  end
 end

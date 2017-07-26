@@ -123,10 +123,10 @@ class ApplicationController < ActionController::Base
     [
       image_sources,
       script_sources,
-      "style-src 'self' 'unsafe-inline' fonts.googleapis.com https://sv-assets.sv.co;",
+      style_sources,
       connect_sources,
       font_sources,
-      'child-src https://www.youtube.com;',
+      child_sources,
       frame_sources,
       media_sources,
       object_sources
@@ -183,17 +183,31 @@ class ApplicationController < ActionController::Base
 
   def intercom_csp
     {
-      script: 'https://widget.intercom.io https://js.intercomcdn.com',
-      connect: 'https://api-ping.intercom.io https://nexus-websocket-a.intercom.io https://nexus-websocket-b.intercom.io wss://nexus-websocket-a.intercom.io wss://nexus-websocket-b.intercom.io https://api-iam.intercom.io https://js.intercomcdn.com https://uploads.intercomcdn.com',
+      script: 'https://widget.intercom.io https://js.intercomcdn.com https://app.intercom.io',
+      connect: [
+        'https://api.intercom.io',
+        'https://api-iam.intercom.io',
+        'https://api-ping.intercom.io',
+        'https://nexus-websocket-a.intercom.io',
+        'https://nexus-websocket-b.intercom.io',
+        'https://nexus-long-poller-a.intercom.io',
+        'https://nexus-long-poller-b.intercom.io',
+        'wss://nexus-websocket-a.intercom.io',
+        'wss://nexus-websocket-b.intercom.io',
+        'https://uploads.intercomcdn.com',
+        'https://uploads.intercomusercontent.com'
+      ].join(' '),
       font: 'https://js.intercomcdn.com',
-      image: 'https://js.intercomcdn.com https://static.intercomassets.com https://uploads.intercomcdn.com',
-      media: 'https://js.intercomcdn.com'
+      image: 'https://js.intercomcdn.com https://static.intercomassets.com https://uploads.intercomcdn.com https://uploads.intercomusercontent.com https://gifs.intercomcdn.com',
+      media: 'https://js.intercomcdn.com',
+      child: 'https://share.intercom.io https://player.vimeo.com https://fast.wistia.net'
     }
   end
 
   def gtm_csp
     {
-      script: 'https://www.googletagmanager.com'
+      script: 'https://www.googletagmanager.com https://tagmanager.google.com/debug https://tagmanager.google.com/debug/',
+      style: 'https://tagmanager.google.com/debug/'
     }
   end
 
@@ -201,6 +215,20 @@ class ApplicationController < ActionController::Base
     {
       media: 'https://s3.amazonaws.com/sv-co-public/'
     }
+  end
+
+  def child_sources
+    <<~CHILD_SOURCES.squish
+      child-src https://www.youtube.com
+      #{intercom_csp[:child]};
+    CHILD_SOURCES
+  end
+
+  def style_sources
+    <<~STYLE_SOURCES.squish
+      style-src 'self' 'unsafe-inline' fonts.googleapis.com https://sv-assets.sv.co
+      #{gtm_csp[:style]};
+    STYLE_SOURCES
   end
 
   def frame_sources

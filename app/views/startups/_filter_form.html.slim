@@ -2,10 +2,8 @@
   = simple_form_for :startups_filter, url: startups_path, method: :get do |f|
     .filter-box.row
       .col-md-3.filter-dropdown
-        = f.input :batch, collection: @batches, include_blank: 'Any', label: 'Batch', required: false, input_html: { class: 'filter-dropdown__select' }, selected: params.dig(:startups_filter, :batch)
+        = f.input :level, collection: @levels, label_method: ->(level) { level.display_name }, include_blank: 'Any', label: 'Level', required: false, input_html: { class: 'filter-dropdown__select' }, selected: params.dig(:startups_filter, :level)
       .col-md-3.filter-dropdown
         = f.input :category, collection: @categories, include_blank: 'Any', label: 'Category', required: false, input_html: { class: 'filter-dropdown__select' }, selected: params.dig(:startups_filter, :category)
-      .col-md-3.filter-dropdown
-        = f.input :level, collection: @levels, label_method: ->(level) { level.display_name }, include_blank: 'Any', label: 'Level', required: false, input_html: { class: 'filter-dropdown__select' }, selected: params.dig(:startups_filter, :level)
       .col-md-3
         = submit_tag 'FILTER', class: 'btn btn-primary filter-go-btn'

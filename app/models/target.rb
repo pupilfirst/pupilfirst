@@ -20,7 +20,6 @@ class Target < ApplicationRecord
   has_many :target_prerequisites
   has_many :prerequisite_targets, through: :target_prerequisites
   belongs_to :target_group, optional: true
-  has_one :batch, through: :target_group
   belongs_to :level, optional: true
 
   acts_as_taggable

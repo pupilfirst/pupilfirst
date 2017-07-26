@@ -1,5 +1,5 @@
 .dashboard-item
-  - inactive_startups = Startup.where(batch: selected_batch_ids).inactive_for_week
+  - inactive_startups = Startup.inactive_for_week
 
   .heading Inactive Startups last week
 
@@ -10,10 +10,10 @@
 
   .footer-spacer
 
-  - trend = [3.weeks.ago, 2.weeks.ago, 1.week.ago, Time.now].map { |time| Startup.where(batch: selected_batch_ids).inactive_for_week(date: time).count }
+  - trend = [3.weeks.ago, 2.weeks.ago, 1.week.ago, Time.now].map { |time| Startup.inactive_for_week(date: time).count }
 
   .left-of-button
     span.sparkline-tag #{trend.join(', ')}
 
-  a.button.view-all href=admin_startups_path(scope: 'inactive_for_week', q: {batch_id_in: selected_batch_ids })
+  a.button.view-all href=admin_startups_path(scope: 'inactive_for_week')
     | View All (#{inactive_startups.count})

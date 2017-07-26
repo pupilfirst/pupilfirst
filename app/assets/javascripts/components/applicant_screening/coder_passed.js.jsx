@@ -9,8 +9,8 @@ class ApplicantScreeningCoderPassed extends React.Component {
         </p>
 
         <p className="applicant-screening__quiz-result-text m-b-1">
-          In our current batch we have observed that teams with the above three roles make the most of our programme and
-          deliver good results. You can now proceed to the remaining targets. Good Luck!
+          Among our existing startups we have observed that teams with the above three skill sets make the most of our programme and
+          deliver good results. You can now continue and add your team members. Good Luck!
         </p>
       </div>
     );

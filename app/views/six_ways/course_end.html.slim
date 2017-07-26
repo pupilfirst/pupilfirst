@@ -16,24 +16,6 @@
           | You have reached the end of this course.
           br
           ' Your total score is <strong>#{@final_score}%</strong>.
-        - if @final_score > 30
-          h4.text-xs-center.m-b-1.font-regular
-            | That's a great score! You're pretty good at this. #{"\u{1F642}"}
-          - coupon_code = Coupon.where(coupon_type: Coupon::TYPE_MOOC_MERIT).last&.code
-          - if coupon_code.present?
-            h4.text-xs-center
-              ' You have won
-              span.brand-primary
-                ' <strong>25% off to apply for our advanced program</strong>.
-
-            .offset-md-2.col-md-8.m-t-1
-              .coupon-form-container.m-x-auto
-                .discount-coupon__box.text-xs-center.p-a-1
-                  h5.font-semibold.m-b-1 Your Coupon Code:
-                  span.discount-coupon-applied--code.dark-secondary
-                    | #{coupon_code}
-
-            = link_to 'Apply Now', apply_path, class: 'btn btn-primary btn-md text-uppercase m-t-1'
 
     .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
       .content-box.m-b-3.clearfix
@@ -77,6 +59,6 @@
         h3.text-xs-center.font-semibold
           | Great work on completing the course.
         h4.text-xs-center
-          | As a next step, apply to our #{link_to 'six month entrepreneurship program', apply_path}.
+          | As a next step, join to our #{link_to 'intensive entrepreneurship program', join_path}.
         .text-xs-center.m-t-2
           = render 'social_share'

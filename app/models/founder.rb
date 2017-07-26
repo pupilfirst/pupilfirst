@@ -51,12 +51,10 @@ class Founder < ApplicationRecord
 
   scope :admitted, -> { joins(:startup).merge(Startup.admitted) }
   scope :level_zero, -> { joins(:startup).merge(Startup.level_zero) }
-  scope :for_batch_id_in, ->(ids) { joins(:startup).where(startups: { batch_id: ids }) }
   scope :not_dropped_out, -> { joins(:startup).merge(Startup.not_dropped_out) }
   scope :startup_members, -> { where 'startup_id IS NOT NULL' }
   scope :missing_startups, -> { where('startup_id NOT IN (?)', Startup.pluck(:id)) }
   scope :non_founders, -> { where(startup_id: nil) }
-  scope :in_batch, ->(batch) { joins(:startup).where(startups: { batch_id: batch.id }) }
 
   # Custom scope to allow AA to filter by intersection of tags.
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
@@ -239,17 +237,17 @@ class Founder < ApplicationRecord
     end
   end
 
-  # If founder is part of a batched startup, it returns batch's date range - otherwise founder creation time to 'now'.
   def activity_date_range
     (activity_timeline_start_date.beginning_of_day..activity_timeline_end_date.end_of_day)
   end
 
+  # Latest of founder creation date or 7 months ago
   def activity_timeline_start_date
-    batch_start_date.future? ? Date.today : batch_start_date
+    [created_at.to_date, 7.months.ago.to_date].max
   end
 
   def activity_timeline_end_date
-    batch_end_date.future? ? Date.today : batch_end_date
+    Date.today
   end
 
   # Returns true if any of the social URL are stored. Used on profile page.
@@ -303,13 +301,13 @@ class Founder < ApplicationRecord
   end
 
   # method to return the list of active founders on slack for a given duration
-  def self.active_founders_on_slack(since:, upto: Time.now, batch: Batch.current_or_last)
-    Founder.not_dropped_out.not_exited.in_batch(batch).active_on_slack(since, upto).distinct
+  def self.active_founders_on_slack(since:, upto: Time.now)
+    Founder.not_dropped_out.not_exited.active_on_slack(since, upto).distinct
   end
 
   # method to return the list of active founders on web for a given duration
-  def self.active_founders_on_web(since:, upto: Time.now, batch: Batch.current_or_last)
-    Founder.not_dropped_out.not_exited.in_batch(batch).active_on_web(since, upto).distinct
+  def self.active_founders_on_web(since:, upto: Time.now)
+    Founder.not_dropped_out.not_exited.active_on_web(since, upto).distinct
   end
 
   def any_targets?
@@ -395,14 +393,6 @@ class Founder < ApplicationRecord
   end
 
   private
-
-  def batch_start_date
-    startup.present? && startup.batch.present? ? startup.batch.start_date : created_at.to_date
-  end
-
-  def batch_end_date
-    startup.present? && startup.batch.present? ? startup.batch.end_date : Date.today
-  end
 
   def blank_activity_timeline
     start_date = activity_timeline_start_date.beginning_of_month

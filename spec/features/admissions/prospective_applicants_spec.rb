@@ -7,7 +7,7 @@ feature 'Prospective Applicants', broken: true do
 
   context 'when no batch is open for applications' do
     scenario 'user can register for notification', js: true do
-      visit apply_path
+      visit join_path
       expect(page).to have_content('Admissions will open in')
 
       name = Faker::Name.name

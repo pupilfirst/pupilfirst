@@ -82,11 +82,12 @@ en:
         target: The target pane will have the name of the target and its completion status. On clicking the target, you will get detailed information on the target, the status and the target submission button.
         target_details: Detailed information on the target and its completion status.
         target_status: This indicates the present status of the target.
+        final_message: That&rsquo;s it for now. If you have any doubts, don&rsquo;t hesitate to contact the SV.CO team at help@sv.co.<br/><br/>Have fun!
       performance_descriptions:
         description_10_html: "Your team seems to be struggling. Make sure you have completed all targets before deadline, and get better grades in your submissions."
-        description_30_html: "Your team is performing okay, but it's slightly behind the rest of the batch. If you have any Needs Improvement targets, put in the work to make them Verified with <em>Great</em> or <em>Wow</em> grades."
-        description_50_html: "Your team is performing adequately, pretty much the same as the rest of your batch. <br /> Attempt to get <em>Great</em> and <em>Wow</em> grades for important targets to advance."
-        description_70_html: "Your team is performing better than most of the batch. Attempt to get more <em>Wow</em> grades for important targets to advance."
+        description_30_html: "Your team is performing okay, but it's slightly behind other startups in your level. If you have any Needs Improvement targets, put in the work to make them Verified with <em>Great</em> or <em>Wow</em> grades."
+        description_50_html: "Your team is performing adequately, pretty much the same as the other startups in your level. <br /> Attempt to get <em>Great</em> and <em>Wow</em> grades for important targets to advance."
+        description_70_html: "Your team is performing better than most startups in the same level. Attempt to get more <em>Wow</em> grades for important targets to advance."
         description_90_html: "Your team is performing exceptionally. Great stuff, we have high hopes from you :)"
       target_filters:
         not_accepted:
@@ -167,9 +168,6 @@ en:
       targets: Get a list of targets recently assigned to you and your team.
       targets_info: Get detailed information about a target from list.
       leaderboard: Get the last published leaderboard for supplied level.
-      state_of_svco: Get the present state of startups in Batch N, including inactive and endangered startups. Access restricted to SV.CO admins.
-      expired_team_targets: Get a list of all team targets which expired last week - for every startup in the batch.
-      expired_founder_targets: Get a list of all individual targets which expired last week - for every founder in the batch.
       changelog: Get a snippet of the latest changes on the SV.CO Platform
     handlers:
       targets:

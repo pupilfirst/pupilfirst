@@ -50,7 +50,7 @@ feature 'Screening' do
 
     expect(page).to have_text('You have cleared the screening process')
 
-    click_button 'Continue Application'
+    click_button 'Continue'
 
     expect(page).to have_content('Screening target has been marked as completed!')
     expect(page).to have_selector('.founder-dashboard-target-header__status-badge', text: 'Complete')

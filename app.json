@@ -1,0 +1,24 @@
+{
+  "environments": {
+    "test": {
+      "buildpacks": [
+        {
+          "url": "https://github.com/heroku/heroku-buildpack-apt"
+        },
+        {
+          "url": "heroku/ruby"
+        },
+        {
+          "url": "https://github.com/heroku/heroku-buildpack-xvfb-google-chrome"
+        }
+      ],
+      "scripts": {
+        "test": "bundle exec rubocop && bundle exec rspec"
+      },
+      "addons": [
+        "heroku-redis",
+        "heroku-postgresql"
+      ]
+    }
+  }
+}

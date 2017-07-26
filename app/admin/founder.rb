@@ -18,7 +18,6 @@ ActiveAdmin.register Founder do
   scope :level_zero
   scope :all
 
-  filter :startup_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'Batch'
   filter :email
   filter :name
 
@@ -137,10 +136,6 @@ ActiveAdmin.register Founder do
 
       column :company do |founder|
         founder.startup&.legal_registered_name
-      end
-
-      column :batch do |founder|
-        founder.startup&.batch&.display_name
       end
 
       column :roles do |founder|

@@ -6,9 +6,6 @@ class Resource < ApplicationRecord
   friendly_id :slug_candidates, use: %i[slugged finders]
   acts_as_taggable
 
-  # TODO: Remove association to batch ensuring no loss of data in production
-  belongs_to :batch, optional: true
-
   belongs_to :startup, optional: true
   belongs_to :level, optional: true
 

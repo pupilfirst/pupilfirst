@@ -1,6 +1,6 @@
 require_relative 'helper'
 
-after 'development:levels', 'development:founders', 'development:timeline_event_types', 'development:batches', 'development:categories' do
+after 'development:levels', 'development:founders', 'development:timeline_event_types', 'development:categories' do
   puts 'Seeding startups'
 
   # Level 0 startup.
@@ -76,9 +76,4 @@ after 'development:levels', 'development:founders', 'development:timeline_event_
   avengers_startup.founders << Founder.find_by(email: 'hulk@avengers.co')
   avengers_startup.founders << Founder.find_by(email: 'thor@avengers.co')
   avengers_startup.save!
-
-  # Assign both startups to the first batch
-  # TODO: This has to be removed after excising all code that requires a batch
-  super_startup.update!(batch: Batch.first)
-  avengers_startup.update!(batch: Batch.first)
 end

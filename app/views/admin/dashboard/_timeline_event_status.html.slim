@@ -1,6 +1,6 @@
 - TimelineEvent.valid_statuses.each do |status|
   .dashboard-item
-    - timeline_events = TimelineEvent.not_dropped_out.for_batch_id_in(selected_batch_ids).where(status: status).order('status_updated_at DESC')
+    - timeline_events = TimelineEvent.not_dropped_out.where(status: status).order('status_updated_at DESC')
     .heading Timeline Events - #{status}
 
     .content
@@ -12,12 +12,12 @@
 
     .footer-spacer
 
-    - trend = TimelineEvent.for_batch_id_in(selected_batch_ids).where(status: status).group_by_week('timeline_events.created_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
+    - trend = TimelineEvent.where(status: status).group_by_week('timeline_events.created_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
 
     .left-of-button
       span.sparkline-tag #{trend.join(', ')}
 
-    - params = { q: { status_equals: status, startup_batch_id_in: selected_batch_ids } }
+    - params = { q: { status_equals: status } }
     - params = params.merge(scope: 'not_improved') if status == TimelineEvent::STATUS_NEEDS_IMPROVEMENT
     a.button.view-all href=admin_timeline_events_path(params)
       | View All (#{events_to_list.count})

@@ -60,7 +60,7 @@ class ApplicantScreeningQuizResult extends React.Component {
           <input type="hidden" name="github_url" value={ this.props.githubURL } />
 
           <button type='submit' className={ this.buttonClasses() }>
-            <i className={ this.buttonIconClasses() }/> Continue Application
+            <i className={ this.buttonIconClasses() }/> Continue
           </button>
         </form>
         }

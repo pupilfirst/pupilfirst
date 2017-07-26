@@ -1,5 +1,5 @@
 = simple_form_for @form,
-  url: apply_path,
+  url: join_path,
   wrapper: :vertical_form do |f|
 
   - if f.object.errors.present?
@@ -48,4 +48,4 @@
           input_html: { maxlength: 250, disabled: true }
 
       div
-        = f.submit 'Apply Now', class: 'btn btn-primary btn-md apply-form__submit-button'
+        = f.submit 'Join Now', class: 'btn btn-primary btn-md apply-form__submit-button'

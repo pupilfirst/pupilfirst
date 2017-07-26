@@ -21,12 +21,12 @@ class AdminUser < ApplicationRecord
   validates :fullname, presence: true
   validates :admin_type, inclusion: { in: admin_user_types }, allow_nil: true
 
-  after_create :link_to_user
+  before_validation :link_to_user
 
   def link_to_user
     user = User.with_email(email)
     user = User.create!(email: email) if user.blank?
-    update!(user: user)
+    self.user = user
   end
 
   def display_name

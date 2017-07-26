@@ -76,7 +76,7 @@ class FounderDashboardTargetOverlay extends React.Component  {
             </div>
             <div className="target-overlay-content-wrapper clearfix">
               <div className="col-md-8 target-overlay__leftbar">
-                <TargetOverlayDescription iconPaths={ this.props.iconPaths } target={ this.props.target } founderDetails={ this.props.founderDetails } />
+                <TargetOverlayContentBlock iconPaths={ this.props.iconPaths } target={ this.props.target } founderDetails={ this.props.founderDetails } />
               </div>
               <div className="col-md-4 target-overlay__rightbar">
                 <div className="target-overlay__assigner-box">
@@ -88,8 +88,10 @@ class FounderDashboardTargetOverlay extends React.Component  {
                   <p className="target-overlay-timeline-submission__title">Latest Timeline Submission:</p>
                   <div className="target-overlay-timeline-submission__box">
                     <div className="target-overlay-timeline-submission__header p-a-1">
-                      <div className="target-overlay-timeline-submission__header-thumbnail m-r-1">
-
+                      <div className="target-overlay-timeline-submission__header-date-box m-r-1">
+                        <span className="target-overlay-timeline-submission__header-date font-semibold">20</span>
+                        <span className="target-overlay-timeline-submission__header-date--small">Jun</span>
+                        <span className="target-overlay-timeline-submission__header-date--small">2017</span>
                       </div>
                       <div className="target-overlay-timeline-submission__header-title">
                         <h5 className="font-semibold brand-secondary m-b-0">

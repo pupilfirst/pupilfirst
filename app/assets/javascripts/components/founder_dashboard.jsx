@@ -147,7 +147,7 @@ class FounderDashboard extends React.Component {
         }
 
         { this.state.selectedTarget &&
-        <FounderDashboardTargetOverlay target={ this.state.selectedTarget } closeCB={ this.targetOverlayCloseCB }/>
+        <FounderDashboardTargetOverlay iconPaths={ this.props.iconPaths } target={ this.state.selectedTarget } founderDetails={ this.props.founderDetails } closeCB={ this.targetOverlayCloseCB }/>
         }
       </div>
     );
@@ -165,6 +165,7 @@ FounderDashboard.propTypes = {
   authenticityToken: React.PropTypes.string,
   levelUpEligibility: React.PropTypes.string,
   iconPaths: React.PropTypes.object,
+  openTimelineBuilderCB: React.PropTypes.func,
   founderDetails: React.PropTypes.array,
   maxLevelNumber: React.PropTypes.number,
   programLevels: React.PropTypes.object,

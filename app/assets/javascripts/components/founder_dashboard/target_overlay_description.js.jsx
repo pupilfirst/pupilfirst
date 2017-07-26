@@ -1,22 +1,9 @@
-class FounderDashboardTargetDescription extends React.Component {
+class TargetOverlayDescription extends React.Component {
   constructor(props) {
     super(props);
     this.state = {targetFeedback: {}};
 
     this.updateStartupFeedback = this.updateStartupFeedback.bind(this);
-  }
-
-  assigner() {
-    if (typeof(this.props.target.assigner) === 'undefined' || this.props.target.assigner === null) {
-      return null;
-    } else {
-      return (
-        <h6 className="pull-sm-left target-overlay__assigner-name m-a-0">
-          Assigned by&nbsp;
-          <span className="font-regular">{ this.props.target.assigner.name }</span>
-        </h6>
-      );
-    }
   }
 
   componentDidMount() {
@@ -53,35 +40,29 @@ class FounderDashboardTargetDescription extends React.Component {
 
   render() {
     return (
-      <div className="target-description">
-        <div className="target-description-header clearfix m-b-1">
-          { this.assigner() }
+      <div className="target-overlay-description">
+        <div>
+          <img className="founder-dashboard-target-header__icon m-x-auto" src={ this.props.iconPaths.targetDescription }/>
         </div>
-
-        <h6 className="founder-dashboard-target-header__headline--sm hidden-md-up">
-          { this.props.target.title }
-        </h6>
-
-        <p className="target-description-content font-light"
-          dangerouslySetInnerHTML={{__html: this.props.target.description}}/>
-
-        { this.props.target.role === 'founder' &&
-        <FounderDashboardFounderStatusPanel founderDetails={ this.props.founderDetails }
-          targetId={ this.props.target.id} fetchStatus={this.props.fetchFounderStatuses}/> }
-
-        <FounderDashboardResourcesBar target={ this.props.target }/>
-
-        <FounderDashboardSubmissionPanel target={ this.props.target }
-          openTimelineBuilderCB={ this.props.openTimelineBuilderCB }
-          fetchTargetPrerequisite={ this.props.fetchTargetPrerequisite}/>
+        <h4 className="target-overlay-description__head font-semibold">Target Description</h4>
+        <div className="target-overlay-description__content">
+          <p className="font-light" dangerouslySetInnerHTML={{__html: this.props.target.description}}/>
+        </div>
+        <div className= "target-overlay__slideshow-embed target-overlay-description__content">
+          <div dangerouslySetInnerHTML={ { __html: this.props.target.slideshow_embed } }></div>
+        </div>
+        <div className= "target-overlay__slideshow-embed target-overlay-description__content">
+          <div dangerouslySetInnerHTML={ { __html: this.props.target.video_embed } }></div>
+        </div>
       </div>
     );
   }
 }
 
-FounderDashboardTargetDescription.propTypes = {
+TargetOverlayDescription.propTypes = {
   target: React.PropTypes.object,
   openTimelineBuilderCB: React.PropTypes.func,
+  iconPaths: React.PropTypes.object,
   founderDetails: React.PropTypes.array,
   fetchFounderStatuses: React.PropTypes.bool,
   fetchTargetPrerequisite: React.PropTypes.bool,

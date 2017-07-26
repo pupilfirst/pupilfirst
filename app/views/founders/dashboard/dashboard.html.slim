@@ -18,7 +18,14 @@
 #founder-dashboard
   == render 'dashboard_header'
 
-  - icon_paths = { personalTodo: image_path('founders/dashboard/target-type-icon-personal-todo.svg'), noResults: image_path('founders/dashboard/target-list-icon-no-results.svg'), teamTodo: image_path('founders/dashboard/target-type-icon-team-todo.svg'), attendSession: image_path('founders/dashboard/target-type-icon-attend-session.svg') }
+  - icon_paths = { personalTodo: image_path('founders/dashboard/target-type-icon-personal-todo.svg'), noResults: image_path('founders/dashboard/target-list-icon-no-results.svg'),
+    teamTodo: image_path('founders/dashboard/target-type-icon-team-todo.svg'),
+    attendSession: image_path('founders/dashboard/target-type-icon-attend-session.svg'),
+    targetDescription: image_path('founders/dashboard/target-overlay-description-icon.svg'),
+    videoEmbed: image_path('founders/dashboard/target-overlay-video-icon.svg'),
+    slideshowEmbed: image_path('founders/dashboard/target-overlay-slide-icon.svg'),
+    resourceLinks: image_path('founders/dashboard/target-overlay-resources-icon.svg'),
+    skillPickup: image_path('founders/dashboard/target-overlay-skills-icon.svg') }
 
   == react_component('FounderDashboard', @react_data.merge(authenticityToken: form_authenticity_token, iconPaths: icon_paths))
 

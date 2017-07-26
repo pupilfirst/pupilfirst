@@ -19,12 +19,11 @@
       ul.admissions-fee__important-points.m-b-1
         li
           strong Please note the following important points!
-        li The fee is for a <strong>one-month subscription</strong> to the SV.CO program.
 
       ul.admissions-fee__important-points.m-b-2
+        li The fee is for a <strong>one-month subscription</strong> to the SV.CO program.
         li It covers your team of <strong>#{current_startup.billing_founders_count} founders</strong>.
-        li You will not be able to change the number of team members after payment.
-        li After payment, you will need to contact the SV.CO team to alter your team.
+        li You can always change your team after you pay. Just reach us on #{mail_to 'help@sv.co'}.
 
       - if current_startup.payment.present?
         .alert.alert-warning.m-t-1

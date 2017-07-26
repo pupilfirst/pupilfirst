@@ -3,31 +3,32 @@ require 'rails_helper'
 describe Targets::StatsService do
   subject { described_class.new(target) }
 
-  # create a batch with targets for startups
-  let!(:batch) { create :batch, :just_started, :with_startups, :with_targets_for_startups }
-  # select a sample target for testing
   let(:target) { Target.first }
   let(:prerequisite_target) { Target.second }
 
   before do
-    # add prerequisite
+    # Create some startups and startup targets.
+    create_list :target, 10, :for_startup
+    create_list :startup, 10
+
+    # Configure a prerequisite.
     target.prerequisite_targets << prerequisite_target
 
-    # mark prerequisite complete for everyone except first startup
+    # Mark prerequisite complete for everyone except first startup.
     (Startup.all - [Startup.first]).each do |startup|
       create(:timeline_event, startup: startup, target: prerequisite_target, status: TimelineEvent::STATUS_VERIFIED)
     end
 
-    # second startup completed the target
+    # Second startup completed the target.
     create(:timeline_event, startup: Startup.second, target: target, status: TimelineEvent::STATUS_VERIFIED)
 
-    # third startup's submission was rejected
+    # Third startup's submission was rejected.
     create(:timeline_event, startup: Startup.third, target: target, status: TimelineEvent::STATUS_NOT_ACCEPTED)
 
-    # fourth startup's submission was marked needs improvement
+    # Fourth startup's submission was marked needs improvement.
     create(:timeline_event, startup: Startup.fourth, target: target, status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT)
 
-    # fifth startup's submission is pending verification
+    # Fifth startup's submission is pending verification.
     create(:timeline_event, startup: Startup.fifth, target: target, status: TimelineEvent::STATUS_PENDING)
   end
 

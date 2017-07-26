@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170718075720) do
+ActiveRecord::Schema.define(version: 20170722063827) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "pg_trgm"
   enable_extension "pg_stat_statements"
+  enable_extension "pg_trgm"
 
   create_table "active_admin_comments", id: :serial, force: :cascade do |t|
     t.string "namespace"
@@ -66,18 +66,6 @@ ActiveRecord::Schema.define(version: 20170718075720) do
     t.string "value"
     t.text "hint_text"
     t.index ["quiz_question_id"], name: "index_answer_options_on_quiz_question_id"
-  end
-
-  create_table "batches", id: :serial, force: :cascade do |t|
-    t.string "theme"
-    t.text "description"
-    t.date "start_date"
-    t.date "end_date"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "batch_number"
-    t.string "slack_channel"
-    t.datetime "invites_sent_at"
   end
 
   create_table "colleges", id: :serial, force: :cascade do |t|
@@ -416,11 +404,9 @@ ActiveRecord::Schema.define(version: 20170718075720) do
     t.datetime "updated_at", null: false
     t.integer "downloads", default: 0
     t.string "slug"
-    t.integer "batch_id"
     t.integer "startup_id"
     t.text "video_embed"
     t.integer "level_id"
-    t.index ["batch_id"], name: "index_resources_on_batch_id"
     t.index ["level_id"], name: "index_resources_on_level_id"
     t.index ["slug"], name: "index_resources_on_slug"
     t.index ["startup_id"], name: "index_resources_on_startup_id"
@@ -492,7 +478,6 @@ ActiveRecord::Schema.define(version: 20170718075720) do
     t.string "wireframe_link"
     t.string "prototype_link"
     t.string "product_video_link"
-    t.integer "batch_id"
     t.boolean "dropped_out", default: false
     t.integer "level_id"
     t.integer "iteration", default: 1
@@ -505,7 +490,7 @@ ActiveRecord::Schema.define(version: 20170718075720) do
     t.string "payment_reference"
     t.integer "maximum_level_id"
     t.string "admission_stage"
-    t.index ["batch_id"], name: "index_startups_on_batch_id"
+    t.date "timeline_updated_on"
     t.index ["level_id"], name: "index_startups_on_level_id"
     t.index ["maximum_level_id"], name: "index_startups_on_maximum_level_id"
     t.index ["slug"], name: "index_startups_on_slug", unique: true
@@ -739,7 +724,6 @@ ActiveRecord::Schema.define(version: 20170718075720) do
   add_foreign_key "founders", "users"
   add_foreign_key "payments", "founders"
   add_foreign_key "payments", "startups"
-  add_foreign_key "resources", "batches"
   add_foreign_key "resources", "levels"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"

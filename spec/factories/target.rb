@@ -13,7 +13,6 @@ FactoryGirl.define do
     sequence(:sort_index)
 
     transient do
-      batch nil
       week_number nil
       group_index nil
     end

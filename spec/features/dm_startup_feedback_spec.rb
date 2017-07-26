@@ -4,8 +4,7 @@ feature 'DM Startup Feedback' do
   include UserSpecHelper
 
   let!(:admin) { create :admin_user, admin_type: 'superadmin' }
-  let!(:batch) { create :batch }
-  let!(:startup) { create :startup, batch: batch }
+  let!(:startup) { create :startup }
   let!(:faculty) { create :faculty }
   let!(:startup_feedback) { create :startup_feedback, faculty: faculty, startup: startup }
 

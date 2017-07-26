@@ -2,7 +2,7 @@
   height: 370px;
   position: relative;
   background-color: #000;
-  background-image: asset-url("admissions/apply/apply-hero-banner.jpg");
+  background-image: asset-url("admissions/join/apply-hero-banner.jpg");
   background-size: cover;
   background-position: center center;
 }
@@ -279,15 +279,18 @@
 
 .program-fee__title {
   margin-bottom: 0;
+  font-size: 1.125rem;
+  font-weight: $font-light;
+  line-height: 1.5rem;
 
   @include media-breakpoint-down (sm) {
     margin-bottom: 1rem;
   }
 }
 
-
-.program-fee__title--small {
-  font-size: 1.125rem;
+.program-fee__title--large {
+  font-size: 1.5rem;
+  font-weight: $font-semibold;
 }
 
 // Apply form
@@ -702,10 +705,11 @@
 }
 
 .application-form__email-hint-button {
+  color: white !important;
+
   @include media-breakpoint-down(xs) {
     display: inline-block;
     width: auto;
-    color: white;
     margin-top: 0.3rem;
   }
 }

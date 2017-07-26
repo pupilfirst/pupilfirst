@@ -104,8 +104,9 @@ Rails.application.routes.draw do
     post 'contact'
   end
 
-  get 'apply', to: 'admissions#apply'
-  post 'apply', to: 'admissions#register'
+  get 'apply', to: redirect('/join')
+  get 'join', to: 'admissions#join'
+  post 'join', to: 'admissions#register'
 
   scope 'admissions', as: 'admissions', controller: 'admissions' do
     get 'screening'

@@ -26,14 +26,14 @@ Resource.create!(
   description: 'This is a restricted PDF file, meant to be accessible by approved startups!'
 )
 
-after 'development:batches' do
-  fintech_batch = Batch.find_by(batch_number: 1)
+after 'development:levels' do
+  level_one = Level.find_by(number: 1)
 
   Resource.create!(
     file: Rails.root.join(pdf_path).open,
     thumbnail: Rails.root.join(pdf_thumbnail_path).open,
-    title: 'PDF for batch 1 startups',
-    description: 'This is a restricted PDF file, meant to be accessible by approved startups of batch 1.',
-    batch: fintech_batch
+    title: 'PDF for level 1+ startups',
+    description: 'This is a restricted PDF file, meant to be accessible by approved startups of level 1 and above.',
+    level: level_one
   )
 end

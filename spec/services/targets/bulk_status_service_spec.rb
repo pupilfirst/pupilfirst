@@ -73,9 +73,18 @@ describe Targets::BulkStatusService do
     end
 
     context 'when the target has a pending prerequisite' do
-      it 'returns :un_available' do
+      it 'returns :unavailable' do
         founder_target.prerequisite_targets << startup_target
         expect(subject.status(founder_target.id)).to eq(Target::STATUS_UNAVAILABLE)
+      end
+
+      context 'when the target has been completed with a timeline event' do
+        it 'returns :unavailable' do
+          founder_event.update!(target: founder_target, status: TimelineEvent::STATUS_VERIFIED)
+          founder_target.prerequisite_targets << startup_target
+          puts "Status from StatusService: #{founder_target.status(founder)}"
+          expect(subject.status(founder_target.id)).to eq(Target::STATUS_UNAVAILABLE)
+        end
       end
     end
 

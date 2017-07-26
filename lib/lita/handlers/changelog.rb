@@ -16,7 +16,7 @@ module Lita
       end
 
       def latest_release
-        @latest_release ||= Changelog::PublicChangesService.new.releases[0]
+        @latest_release ||= Changelog::ChangesService.new(false).releases[0]
       end
 
       def latest_changes
@@ -26,7 +26,7 @@ module Lita
           compiled_changes += "*#{category}*\n\n"
 
           changes.each do |change|
-            compiled_changes += "> #{change}\n"
+            compiled_changes += "> #{change[:title]}\n"
           end
 
           compiled_changes += "\n"

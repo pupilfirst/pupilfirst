@@ -39,5 +39,5 @@
                 = render 'faculty_card', member: member
           .tab-pane#alumni role="tabpanel" class=active_tab('alumni')
             .faculty-cards-container.row.row-eq-height
-              - Faculty.active.alumni.each do |member|
+              - Faculty.active.alumni.includes(:founder).each do |member|
                 = render 'faculty_card', member: member

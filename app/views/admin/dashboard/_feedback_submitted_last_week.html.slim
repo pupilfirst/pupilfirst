@@ -1,5 +1,5 @@
 .dashboard-item
-  - startup_feedback_from_last_week = StartupFeedback.for_batch_id_in(selected_batch_ids).where('startup_feedback.created_at > ?', 1.week.ago).includes(:faculty, :startup).order('startup_feedback.created_at DESC')
+  - startup_feedback_from_last_week = StartupFeedback.where('startup_feedback.created_at > ?', 1.week.ago).includes(:faculty, :startup).order('startup_feedback.created_at DESC')
 
   .heading Feedback Submitted Last Week
 
@@ -10,10 +10,10 @@
 
   .footer-spacer
 
-  - trend = StartupFeedback.for_batch_id_in(selected_batch_ids).group_by_week('startup_feedback.created_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
+  - trend = StartupFeedback.group_by_week('startup_feedback.created_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
 
   .left-of-button
     span.sparkline-tag #{trend.join(', ')}
 
-  a.button.view-all href=admin_startup_feedback_index_path(q: { created_at_gteq: 1.week.ago.strftime('%Y-%m-%d'), startup_batch_id_in: selected_batch_ids })
+  a.button.view-all href=admin_startup_feedback_index_path(q: { created_at_gteq: 1.week.ago.strftime('%Y-%m-%d') })
     | View All (#{startup_feedback_from_last_week.count})

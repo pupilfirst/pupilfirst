@@ -1,3 +1,7 @@
+.timeline-builder {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
 .timeline-builder__popup {
   max-width: 45rem;
 }
@@ -5,6 +9,7 @@
 .timeline-builder__popup-content {
   border: 1px solid $gray-border;
   @include border-radius(10px);
+  box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.3);
   overflow: hidden;
 }
 

@@ -65,7 +65,7 @@ class TargetOverlayHeaderTitle extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="founder-dashboard-target-header__content">
         <img className="founder-dashboard-target-header__icon"
           src={ this.headerIcon() }/>
         <div className="target-overlay-header__title">

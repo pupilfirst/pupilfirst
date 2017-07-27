@@ -27,7 +27,7 @@ module Founders
             only: target_fields,
             methods: %i[has_rubric target_type target_type_description],
             include: {
-              assigner: { only: assigner_fields },
+              assigner: assigner_fields,
               level: { only: [:number] }
             }
           )
@@ -47,7 +47,7 @@ module Founders
             only: target_fields,
             methods: %i[has_rubric target_type target_type_description],
             include: {
-              assigner: { only: assigner_fields },
+              assigner: assigner_fields,
               level: { only: [:number] },
               taggings: taggings_field
             }
@@ -73,9 +73,7 @@ module Founders
               only: target_fields,
               methods: %i[has_rubric target_type target_type_description],
               include: {
-                assigner: {
-                  only: %i[id name]
-                }
+                assigner: assigner_fields
               }
             }
           }
@@ -144,7 +142,10 @@ module Founders
     end
 
     def assigner_fields
-      %i[id name]
+      {
+        only: %i[id name],
+        methods: :image_url
+      }
     end
 
     def taggings_field

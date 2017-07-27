@@ -48,16 +48,12 @@ class FounderDashboardTargetOverlay extends React.Component  {
   }
 
   assigner() {
-    if (typeof(this.props.target.assigner) === 'undefined' || this.props.target.assigner === null) {
-      return null;
-    } else {
-      return (
-        <h6 className="assigner-name m-a-0">
-          Assigned by&nbsp;
-          <div className="font-regular">{ this.props.target.assigner.name }</div>
-        </h6>
-      );
-    }
+    return (
+      <h6 className="assigner-name m-a-0">
+        Assigned by&nbsp;
+        <div className="font-regular">{ this.props.target.assigner.name }</div>
+      </h6>
+    );
   }
 
   updateDetails(response) {
@@ -86,8 +82,7 @@ class FounderDashboardTargetOverlay extends React.Component  {
               </div>
               <div className="col-md-4 target-overlay__rightbar">
                 <div className="target-overlay__assigner-box">
-                  <div className="target-overlay__assigner-avatar m-r-1">
-                  </div>
+                  <img className="target-overlay__assigner-avatar m-r-1" src={ this.props.target.assigner.image_url } />
                   { this.assigner() }
                 </div>
                 <div className="target-overlay-timeline-submission__container p-y-1">

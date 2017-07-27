@@ -15,7 +15,7 @@ describe Instamojo do
             email: 'foo@example.com',
             buyer_name: 'John Doe',
             amount: amount.to_s,
-            purpose: 'Application to SV.CO',
+            purpose: 'Monthly Fee for SV.CO',
             status: 'Pending',
             send_sms: true,
             send_email: true,
@@ -40,7 +40,7 @@ describe Instamojo do
             amount: amount.to_s,
             buyer_name: buyer_name,
             email: email,
-            purpose: 'Application to SV.CO',
+            purpose: 'Monthly Fee for SV.CO',
             redirect_url: 'http://localhost:3000/instamojo/redirect',
             send_email: 'false',
             send_sms: 'false'

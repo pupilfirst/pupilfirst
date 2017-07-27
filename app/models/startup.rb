@@ -34,6 +34,7 @@ class Startup < ApplicationRecord
   ADMISSION_STAGE_COFOUNDERS_ADDED = 'Added Cofounders'
   ADMISSION_STAGE_PAYMENT_INITIATED = 'Payment Initiated'
   ADMISSION_STAGE_FEE_PAID = 'Fee Paid'
+  ADMISSION_STAGE_ADMITTED = 'Admitted'
 
   # agreement duration in years
   AGREEMENT_DURATION = 5

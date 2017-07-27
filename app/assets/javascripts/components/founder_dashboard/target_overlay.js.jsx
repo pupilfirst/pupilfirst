@@ -52,6 +52,9 @@ class FounderDashboardTargetOverlay extends React.Component  {
       <div className="target-overlay__overlay">
         <div className="target-overlay__container m-x-auto p-x-1 p-y-3">
           <div className="target-overlay__body clearfix">
+            <button type="button" className="close target-overlay__overlay-close" aria-label="Close" onClick={ this.props.closeCB }>
+              <span aria-hidden="true">&times;</span>
+            </button>
             <div className="target-overlay__header clearfix">
               <TargetOverlayHeaderTitle iconPaths={ this.props.iconPaths } target={ this.props.target }/>
               <TargetOverlayStatusBadge target={ this.props.target }/>
@@ -62,9 +65,6 @@ class FounderDashboardTargetOverlay extends React.Component  {
                   <span>Submit</span>
                 </button>
               </div>
-              <button type="button" className="close target-overlay__overlay-close" aria-label="Close" onClick={ this.props.closeCB }>
-                <span aria-hidden="true">&times;</span>
-              </button>
             </div>
             <div className="target-overlay-content-wrapper clearfix">
               <div className="col-md-8 target-overlay__leftbar">

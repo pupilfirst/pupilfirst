@@ -141,11 +141,19 @@
   letter-spacing: 0.01rem;
   margin: 0 1rem 2rem 2.5rem;
   border-bottom: 1px solid $gray-border;
+
+  @include media-breakpoint-down (sm) {
+    margin: 0 0 2rem 0;
+  }
 }
 
 .target-overlay-content-block__header-icon {
   width: 1.125rem;
   margin-right: 1.375rem;
+
+  @include media-breakpoint-down (sm) {
+    margin-right: 0.75rem;
+  }
 }
 
  .target-overlay-content-block__embed-block {
@@ -154,6 +162,13 @@
 
   iframe {
     width: 100%;
+
+    @include media-breakpoint-down (sm) {
+      height: auto;
+    }
+  }
+  @include media-breakpoint-down (sm) {
+    margin: 0 0 2rem 0;
   }
 }
 
@@ -167,12 +182,21 @@
 
 .target-overlay__leftbar {
   padding: 1.5rem;
+
+  @include media-breakpoint-down (sm) {
+    padding-bottom: 0;
+  }
 }
 
 .target-overlay__rightbar {
   background-color: $primary-background;
   padding: 1.5rem;
-  border-left: 1px solid $gray-border;
+  border: 1px solid $gray-border;
+  border-width: 0 0 0 1px;
+
+  @include media-breakpoint-down (sm) {
+    border-width: 1px 0 0 0;
+  }
 }
 
 .target-overlay__assigner-box {

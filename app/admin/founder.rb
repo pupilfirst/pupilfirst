@@ -119,8 +119,22 @@ ActiveAdmin.register Founder do
           'Hustler'
         end
       end
+      column :team_lead do |founder|
+        founder.startup_admin? ? "Yes" : "No"
+      end
+      column :stage do |founder|
+        founder.startup&.admission_stage
+      end
       column :reference
-      column('Targets Completed', &:completed_targets_count)
+      column :college do |founder|
+        founder.college.present? ? founder.college.name : founder.college_text
+      end
+      column :state do |founder|
+        founder.college.present? ? founder.college.state.name : ''
+      end
+      column :created_at do |founder|
+        founder.startup.created_at.to_date
+      end
     else
       column :id
       column :email

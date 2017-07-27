@@ -33,10 +33,11 @@
                 = link_to founder_profile_path(slug: current_founder.slug) do
                   i.fa.fa-list-ul
                   | Profile
-            li role="presentation"
-              a href="#" data-toggle="modal" data-target="#platform-feedback-modal"
-                i.fa.fa-comment-o
-                | Submit Feedback
+            - if policy(PlatformFeedback).create?
+              li role="presentation"
+                a href="#" data-toggle="modal" data-target="#platform-feedback-modal"
+                  i.fa.fa-comment-o
+                  | Submit Feedback
             li role="presentation"
               = link_to destroy_user_session_path, method: :delete do
                 i.fa.fa-sign-out

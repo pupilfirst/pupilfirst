@@ -32,7 +32,6 @@ class FounderDashboard extends React.Component {
     if (event.state.targetId) {
       this.setState({selectedTarget: this.targetDetails(event.state.targetId, event.state.targetType)});
     } else {
-      $('.target-overlay__modal').modal('hide');
       this.setState({selectedTarget: null});
     }
   }
@@ -89,7 +88,6 @@ class FounderDashboard extends React.Component {
   }
 
   targetOverlayCloseCB() {
-    $('.target-overlay__modal').modal('hide');
     this.setState({selectedTarget: null});
     history.pushState({},'','/founder/dashboard')
   }

@@ -22,26 +22,22 @@ class TargetOverlayHeaderTitle extends React.Component {
   }
 
   targetDateString() {
-    if (this.props.displayDate) {
-      return this.sessionAtString();
-    } else {
+    if (typeof(this.props.target.session_at) === 'undefined' || this.props.target.session_at === null) {
       return this.daysToCompleteString();
+    } else {
+      return this.sessionAtString();
     }
   }
 
   sessionAtString() {
-    if (typeof(this.props.target.session_at) === 'undefined' || this.props.target.session_at === null) {
-      return null;
-    } else {
-      return (
-        <span>
-          Session at:
-          <span className="target-overlay-header__info-value">
-            { moment(this.props.target.session_at).format('MMM D, h:mm A') }
-          </span>
+    return (
+      <span>
+        Session at:
+        <span className="target-overlay-header__info-value">
+          { moment(this.props.target.session_at).format('MMM D, h:mm A') }
         </span>
-      );
-    }
+      </span>
+    );
   }
 
   daysToCompleteString() {
@@ -90,12 +86,6 @@ class TargetOverlayHeaderTitle extends React.Component {
   }
 }
 TargetOverlayHeaderTitle.propTypes = {
-  descriptionOpen: React.PropTypes.bool,
   target: React.PropTypes.object,
-  displayDate: React.PropTypes.bool,
   iconPaths: React.PropTypes.object
-};
-
-TargetOverlayHeaderTitle.defaultProps = {
-  displayDate: false
 };

@@ -15,7 +15,6 @@ feature 'Admission Fee Payment' do
   let!(:tet_team_update) { create :timeline_event_type, :team_update }
   let(:referrer_founder) { create :founder }
   let(:coupon) { create :coupon, referrer: referrer_founder }
-  let(:sample_payment) { create :payment, amount: 500 }
 
   before do
     sign_in_user founder.user
@@ -135,27 +134,30 @@ feature 'Admission Fee Payment' do
     end
   end
 
-  # test an edge case of archiving pending payment requests
+  # Test an edge case of archiving pending payment requests.
   context 'Founder has an incomplete payment request' do
-    before do
-      # assign the startup an existing payment
-      sample_payment.update!(startup: startup)
+    let!(:previous_payment) { create :payment, :requested, startup: startup, amount: 2000 }
 
+    before do
       complete_target founder, screening_target
+      startup.founders << create(:founder)
+      startup.founders << create(:founder)
       complete_target founder, cofounder_addition_target
-      visit admissions_fee_path
     end
 
     scenario 'Founder resubmits the payment form' do
-      # he issues a new payment request
-      expect(page).to have_content('Team membership fee is ₹1000')
+      visit admissions_fee_path
+      expect(page).to have_content('Team membership fee is ₹3000')
+
+      # He issues a new payment request.
       click_on 'Pay Now'
+
       expect(page).to have_content("redirected to: #{long_url}")
 
-      # the existing payment must be archived and a new one created
-      payment = Payment.last
-      expect(startup.reload.payments.last).to eq(payment)
-      expect(startup.archived_payments).to include(sample_payment)
+      # The previous payment must be archived and a new one created.
+      new_payment = startup.reload.payments.last
+      expect(new_payment).not_to eq(previous_payment)
+      expect(startup.archived_payments).to include(previous_payment)
     end
   end
 end

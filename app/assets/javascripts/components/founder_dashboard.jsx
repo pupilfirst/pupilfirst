@@ -74,7 +74,12 @@ class FounderDashboard extends React.Component {
     let updatedChores = updateSubmissionStatus(this.state.chores.slice(), targetId);
     let updatedSessions = updateSubmissionStatus(this.state.sessions.slice(), targetId);
 
-    this.setState({levels: updatedLevels, chores: updatedChores, sessions: updatedSessions});
+    let updatedSelectedTarget = this.state.selectedTarget;
+    if (this.state.selectedTarget && targetId === this.state.selectedTarget.id) {
+      updatedSelectedTarget.status = 'submitted';
+    }
+
+    this.setState({levels: updatedLevels, chores: updatedChores, sessions: updatedSessions, selectedTarget: updatedSelectedTarget});
   }
 
   updateSubmissionStatus(targets, targetId) {

@@ -82,7 +82,7 @@ class FounderDashboardTargetOverlay extends React.Component  {
             </div>
             <div className="target-overlay-content-wrapper clearfix">
               <div className="col-md-8 target-overlay__leftbar">
-                <TargetOverlayContentBlock iconPaths={ this.props.iconPaths } target={ this.props.target } founderDetails={ this.props.founderDetails } />
+                <TargetOverlayContentBlock iconPaths={ this.props.iconPaths } target={ this.props.target } />
               </div>
               <div className="col-md-4 target-overlay__rightbar">
                 <div className="target-overlay__assigner-box">

@@ -5,6 +5,8 @@ ActiveAdmin.register User do
   actions :index, :show
 
   filter :email
+  filter :founder_id_not_null, label: 'Is Founder', as: :boolean
+  filter :mooc_student_id_not_null, label: 'Is MOOC Student', as: :boolean
 
   controller do
     def scoped_collection

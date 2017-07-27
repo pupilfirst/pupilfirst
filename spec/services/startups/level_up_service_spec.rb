@@ -41,6 +41,7 @@ describe Startups::LevelUpService do
 
         # program_started_on must have been set.
         expect(startup.program_started_on).to_not eq(nil)
+        expect(startup.admission_stage).to eq(Startup::ADMISSION_STAGE_ADMITTED)
 
         # A verified Joined SV event must have been created.
         event = startup.timeline_events.last

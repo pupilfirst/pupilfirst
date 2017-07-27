@@ -9,20 +9,7 @@ ActiveAdmin.register ActsAsTaggableOn::Tag, as: 'Tag' do
 
   permit_params :name
 
-  filter :taggings_taggable_type_eq,
-    as: :select,
-    collection: proc { ActsAsTaggableOn::Tagging.distinct.pluck(:taggable_type) },
-    label: 'Taggable Type'
   filter :name
-
-  # Need to apply distinct after filtering since taggable type filter (above) is a join query that can return duplicates
-  # of a tag in its results.
-  controller do
-    def apply_filtering(chain)
-      @search = chain.ransack clean_search_params
-      @search.result(distinct: true)
-    end
-  end
 
   index do
     selectable_column

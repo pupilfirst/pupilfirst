@@ -4,8 +4,12 @@ ActiveAdmin.register StartupFeedback do
   menu parent: 'Startups', label: 'Feedback'
   permit_params :feedback, :reference_url, :startup_id, :send_email, :faculty_id, :activity_type, :attachment, :timeline_event_id
 
-  preserve_default_filters!
-  filter :startup_product_name, as: :select, collection: proc { Startup.all.order(:product_name).pluck(:product_name).uniq }
+  filter :startup_product_name, as: :string
+  filter :startup_name, as: :string
+  filter :faculty
+  filter :created_at
+  filter :sent_at
+  filter :activity_type
 
   controller do
     def scoped_collection

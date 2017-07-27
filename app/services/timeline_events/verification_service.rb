@@ -49,7 +49,6 @@ module TimelineEvents
         update_timeline_updated_on
         post_on_facebook if @timeline_event.share_on_facebook
         reset_startup_level if @timeline_event.timeline_event_type.end_iteration?
-        update_admission_stage if @target.present? && @target.key == Target::KEY_ADMISSIONS_ATTEND_INTERVIEW
       end
     end
 
@@ -149,10 +148,6 @@ module TimelineEvents
       # all founders should have their fee payment method set before passing them in the interview
       return unless @target && @target.key == Target::KEY_ADMISSIONS_ATTEND_INTERVIEW
       raise VerificationNotAllowedException, "Fee payment methods missing! Assign them for all founders of '#{startup.name}' and retry." if startup.fee_payment_methods_missing?
-    end
-
-    def update_admission_stage
-      startup.update!(admission_stage: Startup::ADMISSION_STAGE_INTERVIEW_PASSED)
     end
 
     def update_timeline_updated_on

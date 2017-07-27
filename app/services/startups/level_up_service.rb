@@ -27,7 +27,7 @@ module Startups
 
     def enroll_for_level_one
       Startup.transaction do
-        @startup.update!(level: next_level, program_started_on: Time.zone.now, maximum_level: next_level)
+        @startup.update!(level: next_level, program_started_on: Time.zone.now, maximum_level: next_level, admission_stage: Startup::ADMISSION_STAGE_ADMITTED)
 
         @startup.timeline_events.create!(
           founder: @startup.admin,

@@ -3,6 +3,7 @@ class PlatformFeedbackController < ApplicationController
 
   def create
     @platform_feedback = PlatformFeedback.new platform_feedback_params
+    authorize @platform_feedback
 
     if @platform_feedback.save!
       PlatformFeedbackMailer.new_platform_feedback(@platform_feedback).deliver_later

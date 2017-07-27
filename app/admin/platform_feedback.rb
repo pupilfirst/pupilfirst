@@ -5,6 +5,12 @@ ActiveAdmin.register PlatformFeedback do
 
   permit_params :founder_id, :feedback_type, :description, :attachment, :promoter_score, :notes
 
+  filter :founder_name, as: :string
+  filter :founder_email, as: :string
+  filter :feedback_type
+  filter :created_at
+  filter :notes
+
   index do
     selectable_column
 

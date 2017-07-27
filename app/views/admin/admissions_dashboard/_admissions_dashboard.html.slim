@@ -1,7 +1,7 @@
 #admin__admissions-dashboard
 
 .admissions-dashboard-item.full-width
-  .heading Current stages of Level 0 Startups as on - #{Time.zone.now.strftime('%B %d')}
+  .heading Current stages of Level 0 Startups as from - #{Time.zone.now.strftime('%B %d')}
   .content
     - @startups_stage_split.each do |stage, value|
       .admission-dashboard-data-block
@@ -10,7 +10,19 @@
         .admission-dashboard-data-block__value
           = value
 .admissions-dashboard-item.full-width
-  .heading Funnel Stats for Level 0 Startups on #{1.day.ago.strftime('%B %d')}
+  - start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day : 1.day.ago.beginning_of_day
+  - end_time = params[:to].present? ?  Date.parse(params[:to]).end_of_day : 1.day.ago.end_of_day
+  .heading Funnel Stats for Level 0 Startups from #{start_time.strftime('%c')} to #{end_time.strftime('%c')}
+  .admission-dashboard-stats-filter__heading Filter Stats by Date
+  = form_tag admin_admissions_dashboard_path, method: :get, class: 'admission-dashboard-stats-filter__form' do
+    .admission-dashboard-stats-filter__date-picker
+      = label_tag 'From', nil, class: 'admission-dashboard-stats-filter__date-picker-label'
+      = text_field_tag :from, params[:from] || Date.today, class: 'datepicker'
+    .admission-dashboard-stats-filter__date-picker
+      = label_tag 'To', nil, class: 'admission-dashboard-stats-filter__date-picker-label'
+      = text_field_tag :to, params[:to] || Date.today, class: 'datepicker'
+    .admission-dashboard-stats-filter__button
+      = submit_tag 'Get Stats'
   .content
     - @last_day_stats.each do |stage, value|
       .admission-dashboard-data-block

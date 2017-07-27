@@ -1,5 +1,9 @@
 module AdmissionStats
   class LastDayStatsService
+    def initialize(params)
+      @params = params
+    end
+
     def load
       {
         'Total Sign Ups' => signed_up,
@@ -13,23 +17,23 @@ module AdmissionStats
     private
 
     def signed_up
-      Startup.level_zero.where(created_at: yesterday).count
+      Startup.level_zero.where(created_at: date_range).count
     end
 
     def screening_completed
-      verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_SCREENING }).where(created_at: yesterday).count
+      verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_SCREENING }).where(created_at: date_range).count
     end
 
     def fee_paid
-      verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_FEE_PAYMENT }).where(created_at: yesterday).count
+      verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_FEE_PAYMENT }).where(created_at: date_range).count
     end
 
     def payment_initiated
-      Startup.level_zero.joins(:payment).merge(Payment.requested).where(payments: { created_at: yesterday }).count
+      Startup.level_zero.joins(:payment).merge(Payment.requested).where(payments: { created_at: date_range }).count
     end
 
     def cofounders_added
-      verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_COFOUNDER_ADDITION }).where(created_at: yesterday).count
+      verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_COFOUNDER_ADDITION }).where(created_at: date_range).count
     end
 
     def yesterday
@@ -38,6 +42,14 @@ module AdmissionStats
 
     def verified_timeline_events
       TimelineEvent.where(status: TimelineEvent::STATUS_VERIFIED)
+    end
+
+    def date_range
+      if @params.include?(:from)
+        Date.parse(@params[:from]).beginning_of_day..Date.parse(@params['to']).end_of_day
+      else
+        yesterday
+      end
     end
   end
 end

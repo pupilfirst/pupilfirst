@@ -76,3 +76,31 @@
   font-weight: normal;
   width: auto;
 }
+
+.admission-dashboard-stats-filter__form {
+  clear: both;
+  display: inline-block;
+  padding: 0 10px 10px;
+}
+
+.admission-dashboard-stats-filter__heading {
+  font-weight: bold;
+  padding: 10px;
+}
+
+.admission-dashboard-stats-filter__date-picker {
+  margin-right: 1rem;
+  float: left;
+
+  .datepicker {
+    width: auto;
+  }
+}
+
+.admission-dashboard-stats-filter__date-picker-label {
+  margin-right: 5px;
+}
+
+.admission-dashboard-stats-filter__button {
+  float: left;
+}

@@ -4,7 +4,7 @@ feature 'Founder Dashboard' do
   include UserSpecHelper
 
   # The basics.
-  let!(:startup) { create :startup, level: level_4 }
+  let!(:startup) { create :startup, :subscription_active, level: level_4 }
   let!(:founder) { create :founder, startup: startup }
 
   # Levels.

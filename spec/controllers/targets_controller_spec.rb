@@ -3,7 +3,7 @@ require 'rails_helper'
 describe TargetsController do
   include Devise::Test::ControllerHelpers
 
-  let!(:startup) { create :startup }
+  let!(:startup) { create :startup, :subscription_active }
   let!(:target) { create :target, :with_rubric }
   let!(:pending_prerequisite_target) { create :target }
   let!(:completed_prerequisite_target) { create :target }
@@ -92,15 +92,15 @@ describe TargetsController do
       sign_in startup.admin.user
     end
 
-    context 'when target has no feedbacks' do
+    context 'when target has no feedback' do
       it 'returns an empty hash' do
         get :startup_feedback, params: { id: completed_prerequisite_target.id }
         expect(JSON.parse(response.body)).to eq({})
       end
     end
 
-    context 'when target has feedbacks' do
-      it 'returns a hash of startup feedbacks with ids mapped to the feedback' do
+    context 'when target has feedback' do
+      it 'returns a hash of startup feedback with ids mapped to the feedback' do
         expected_response = { target_feedback.id.to_s => target_feedback.feedback.to_s }
         get :startup_feedback, params: { id: founder_target.id }
         expect(JSON.parse(response.body)).to eq(expected_response)

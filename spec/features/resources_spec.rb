@@ -8,7 +8,7 @@ feature 'Resources' do
   let(:level_2) { create :level, :two }
 
   let(:founder) { create :founder }
-  let(:startup) { create :startup, level: level_1 }
+  let(:startup) { create :startup, :subscription_active }
 
   let!(:public_resource) { create :resource }
   let!(:level_0_resource) { create :resource, level: level_0 }
@@ -40,7 +40,7 @@ feature 'Resources' do
     visit resource_path(public_resource)
 
     expect(page).to have_text(public_resource.title)
-    expect(page).to have_link('Download', download_resource_url(public_resource))
+    expect(page).to have_link('Download')
   end
 
   context 'With a video resource' do

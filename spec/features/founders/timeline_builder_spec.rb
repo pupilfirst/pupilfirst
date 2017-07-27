@@ -3,9 +3,7 @@ require 'rails_helper'
 feature 'Timeline Builder' do
   include UserSpecHelper
 
-  let(:level) { create :level, :one }
-  let(:level_zero) { create :level, :zero }
-  let(:startup) { create :startup, level: level }
+  let(:startup) { create :startup, :subscription_active }
   let(:founder) { create :founder, startup: startup, fb_access_token: Faker::Lorem.word, fb_token_expires_at: 2.days.from_now }
 
   let(:target_group) { create :target_group, milestone: true }

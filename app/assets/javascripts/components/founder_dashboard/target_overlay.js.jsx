@@ -7,6 +7,34 @@ class FounderDashboardTargetOverlay extends React.Component  {
     this.openTimelineBuilder = this.openTimelineBuilder.bind(this);
   }
 
+  componentDidMount() {
+    let that = this;
+    $.ajax({
+      url: '/targets/' + that.props.target.id + '/details',
+      success: that.updateDetails
+    });
+  }
+
+  isSubmittable() {
+    return !(this.isNotSubmittable() || this.singleSubmissionComplete() || this.submissionBlocked());
+  }
+
+  isNotSubmittable() {
+    return this.props.target.submittability === 'not_submittable';
+  }
+
+  singleSubmissionComplete() {
+    return this.props.target.submittability === 'submittable_once' && !this.isPending();
+  }
+
+  submissionBlocked() {
+    return ['unavailable', 'submitted'].indexOf(this.props.target.status) != -1;
+  }
+
+  isPending() {
+    return (this.props.target.status === 'pending');
+  }
+
   openTimelineBuilder() {
     if (this.props.currentLevel == 0){
       $('.js-founder-dashboard__action-bar-add-event-button').popover('show');
@@ -17,14 +45,6 @@ class FounderDashboardTargetOverlay extends React.Component  {
     } else {
       this.props.openTimelineBuilderCB();
     }
-  }
-
-  componentDidMount() {
-    let that = this;
-    $.ajax({
-      url: '/targets/' + that.props.target.id + '/details',
-      success: that.updateDetails
-    });
   }
 
   assigner() {
@@ -58,13 +78,7 @@ class FounderDashboardTargetOverlay extends React.Component  {
             <div className="target-overlay__header clearfix">
               <TargetOverlayHeaderTitle iconPaths={ this.props.iconPaths } target={ this.props.target }/>
               <TargetOverlayStatusBadge target={ this.props.target }/>
-              <div className="pull-xs-right">
-                <button onClick={ this.openTimelineBuilder }
-                  className="btn btn-with-icon btn-md btn-secondary text-uppercase btn-timeline-builder js-founder-dashboard__trigger-builder hidden-sm-down js-founder-dashboard__action-bar-add-event-button">
-                  <i className="fa fa-upload" aria-hidden="true"/>
-                  <span>Submit</span>
-                </button>
-              </div>
+              { this.isSubmittable() && <TargetOverlaySubmitButton target={ this.props.target } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }/> }
             </div>
             <div className="target-overlay-content-wrapper clearfix">
               <div className="col-md-8 target-overlay__leftbar">

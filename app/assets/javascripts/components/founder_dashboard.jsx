@@ -145,7 +145,8 @@ class FounderDashboard extends React.Component {
         }
 
         { this.state.selectedTarget &&
-        <FounderDashboardTargetOverlay iconPaths={ this.props.iconPaths } target={ this.state.selectedTarget } founderDetails={ this.props.founderDetails } closeCB={ this.targetOverlayCloseCB }/>
+        <FounderDashboardTargetOverlay iconPaths={ this.props.iconPaths } target={ this.state.selectedTarget } founderDetails={ this.props.founderDetails } closeCB={ this.targetOverlayCloseCB }
+          openTimelineBuilderCB={ this.openTimelineBuilder }/>
         }
       </div>
     );

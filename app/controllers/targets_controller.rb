@@ -1,6 +1,4 @@
 class TargetsController < ApplicationController
-  before_action :require_active_subscription
-
   # GET /targets/:id/download_rubric
   def download_rubric
     authorize :target

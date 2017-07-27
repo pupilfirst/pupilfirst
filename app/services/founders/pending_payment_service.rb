@@ -8,7 +8,7 @@ module Founders
 
     # @return [Payment] Returns a pending payment.
     def fetch
-      pending_payments = @founder.payments.pending
+      pending_payments = @founder.startup.payments.pending
 
       if pending_payments.count > 1
         raise MoreThanOnePendingPaymentsException, "Founder ##{@founder.id} has more than one pending payments with IDs: #{pending_payments.join(', ')}"

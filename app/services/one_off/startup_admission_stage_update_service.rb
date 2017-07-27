@@ -11,12 +11,12 @@ module OneOff
     def stage(startup)
       team_lead = startup.admin
 
-      if complete?(attend_interview_target, team_lead)
-        'Interview Passed'
-      elsif complete?(fee_payment_target, team_lead)
+      if complete?(fee_payment_target, team_lead)
         'Fee Paid'
       elsif startup.payment.present?
         'Payment Initiated'
+      elsif complete?(cofounder_addition_target, team_lead)
+        'Added Cofounders'
       elsif complete?(screening_target, team_lead)
         'Screening Completed'
       else

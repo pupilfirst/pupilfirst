@@ -672,9 +672,6 @@
   padding: 7px 15px;
   font-size: 0.75rem;
   letter-spacing: 0.02rem;
-  position: relative;
-  top: 8px;
-  right: 25px;
 
   @include media-breakpoint-up(md) {
     .founder-dashboard-target-header__status-badge-icon {
@@ -705,6 +702,13 @@
     background-color: rgba(46, 47, 51, 0.7);
   }
 }
+
+.founder-dashboard-target-header__status-badge-block {
+  position: relative;
+  top: 8px;
+  right: 25px;
+}
+
 
 .founder-dashboard-target-header__status-badge-star {
   padding-right: 1px;

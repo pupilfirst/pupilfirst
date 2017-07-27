@@ -70,7 +70,7 @@ startTour = ->
         intro: startupShowTour.data('targetDetails')
       },
       {
-        element: $('.founder-dashboard-target-header__status-badge')[0],
+        element: $('.founder-dashboard-target-status-badge__container')[0],
         intro: startupShowTour.data('targetStatus')
       },
       {

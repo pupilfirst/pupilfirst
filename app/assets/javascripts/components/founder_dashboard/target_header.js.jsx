@@ -96,8 +96,9 @@ class FounderDashboardTargetHeader extends React.Component {
             </div>
           </div>
         </div>
-
-        <FounderDashboardTargetStatusBadge target={ this.props.target }/>
+        <div className="founder-dashboard-target-header__status-badge-block">
+          <FounderDashboardTargetStatusBadge target={ this.props.target }/>
+        </div>
       </div>
     );
   }

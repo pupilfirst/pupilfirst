@@ -77,7 +77,7 @@ class FounderDashboardTargetOverlay extends React.Component  {
             </button>
             <div className="target-overlay__header clearfix">
               <TargetOverlayHeaderTitle iconPaths={ this.props.iconPaths } target={ this.props.target }/>
-              <div className="pull-xs-left"><FounderDashboardTargetStatusBadge target={ this.props.target }/></div>
+              <div className="pull-xs-left hidden-sm-down"><FounderDashboardTargetStatusBadge target={ this.props.target }/></div>
               { this.isSubmittable() && <TargetOverlaySubmitButton target={ this.props.target } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }/> }
             </div>
             <div className="target-overlay-content-wrapper clearfix">

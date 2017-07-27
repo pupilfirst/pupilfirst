@@ -18,26 +18,20 @@ class FounderDashboardTargetStatusBadge extends React.Component {
   }
 
   statusString() {
-    switch (this.props.target.status) {
-      case 'complete':
-        return 'Completed';
-      case 'needs_improvement':
-        return 'Needs Improvement';
-      case 'submitted':
-        return 'Submitted';
-      case 'pending':
-        return 'Pending';
-      case 'unavailable':
-        return 'Locked';
-      case 'not_accepted':
-        return 'Not Accepted';
-    }
+    return {
+      complete: 'Completed',
+      needs_improvement: 'Needs Improvement',
+      submitted: 'Submitted',
+      pending: 'Pending',
+      unavailable: 'Locked',
+      not_accepted: 'Not Accepted'
+    }[this.props.target.status];
   }
 
   statusContents() {
     let grade = ['good', 'great', 'wow'].indexOf(this.props.target.grade) + 1;
 
-    if (grade === 0) {
+    if (this.props.target.status != 'complete' || grade === 0) {
       return <span>
         <span className="founder-dashboard-target-header__status-badge-icon">
           <i className={ this.statusIconClasses() }/>

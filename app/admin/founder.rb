@@ -129,6 +129,9 @@ ActiveAdmin.register Founder do
       column :college do |founder|
         founder.college.present? ? founder.college.name : founder.college_text
       end
+      column :state do |founder|
+        founder.college.present? ? founder.college.state.name : ''
+      end
       column :created_at do |founder|
         founder.startup.created_at.to_date
       end

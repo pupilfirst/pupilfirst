@@ -31,7 +31,7 @@ class FounderDashboardTargetStatusBadge extends React.Component {
   statusContents() {
     let grade = ['good', 'great', 'wow'].indexOf(this.props.target.grade) + 1;
 
-    if (grade === 0) {
+    if (this.props.target.status != 'complete' || grade === 0) {
       return <span>
         <span className="founder-dashboard-target-header__status-badge-icon">
           <i className={ this.statusIconClasses() }/>

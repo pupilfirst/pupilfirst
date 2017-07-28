@@ -10,11 +10,11 @@ class TargetOverlayContentBlock extends React.Component {
           <p className="font-light" dangerouslySetInnerHTML={{__html: this.props.target.description}}/>
 
           { this.props.target.has_rubric &&
-          <a className="target-overlay-content-block__link m-t-1" target='_blank' href={'/targets/' + this.props.target.id + '/download_rubric'}>
-            <span className="target-overlay-content-block__link-icon">
+          <a className="target-overlay__link m-t-1" target='_blank' href={'/targets/' + this.props.target.id + '/download_rubric'}>
+            <span className="target-overlay__link-icon">
               <i className="fa fa-download"/>
             </span>
-            <span className="target-overlay-content-block__link-text">&nbsp;Download Rubric</span>
+            <span className="target-overlay__link-text">Download Rubric</span>
           </a>
           }
 
@@ -27,11 +27,11 @@ class TargetOverlayContentBlock extends React.Component {
               <h5 className="target-overlay-content-block__header m-a-0 pull-xs-left font-semibold">Resource Link</h5>
             </div>
             <div className="target-overlay-content-block__body">
-              <a className="target-overlay-content-block__link m-r-1 m-b-1" target='_blank' href={ this.props.target.resource_url }>
-                <span className="target-overlay-content-block__link-icon">
+              <a className="target-overlay__link m-r-1 m-b-1" target='_blank' href={ this.props.target.resource_url }>
+                <span className="target-overlay__link-icon">
                   <i className="fa fa-external-link"/>
                 </span>
-                <span className="target-overlay-content-block__link-text">&nbsp;Journey Deck Template</span>
+                <span className="target-overlay__link-text">Journey Deck Template</span>
               </a>
             </div>
           </div>

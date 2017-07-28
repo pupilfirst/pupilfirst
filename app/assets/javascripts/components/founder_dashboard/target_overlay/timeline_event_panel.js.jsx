@@ -25,6 +25,24 @@ class TargetOverlayTimelineEventPanel extends React.Component {
             </p>
             <div className="target-overlay-timeline-submission__content-attachments m-b-1 p-a-1">
               <h6 className="font-semibold">Attachments</h6>
+              <a className="target-overlay__link target-overlay__link--attachment" target='_blank' href="">
+                <span className="target-overlay__link-icon">
+                  <i className="fa fa-file-image-o"/>
+                </span>
+                <span className="target-overlay__link-text target-overlay__link--attachment-text">Cover Image</span>
+              </a>
+              <a className="target-overlay__link target-overlay__link--attachment" target='_blank' href="">
+                <span className="target-overlay__link-icon">
+                  <i className="fa fa-link"/>
+                </span>
+                <span className="target-overlay__link-text target-overlay__link--attachment-text">External</span>
+              </a>
+              <a className="target-overlay__link target-overlay__link--attachment" target='_blank' href="">
+                <span className="target-overlay__link-icon">
+                  <i className="fa fa-file-text-o"/>
+                </span>
+                <span className="target-overlay__link-text target-overlay__link--attachment-text">Keynote Presentation</span>
+              </a>
 
             </div>
             { this.props.feedback &&

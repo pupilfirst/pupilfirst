@@ -133,7 +133,7 @@
   }
 }
 
-.target-overlay-content-block__link {
+.target-overlay__link {
   background-color: lighten($light-secondary, 48%);
   display: inline-block;
   font-size: 0.75rem;
@@ -149,15 +149,28 @@
   }
 }
 
-.target-overlay-content-block__link-icon {
+.target-overlay__link-icon {
   padding: 5px 10px;
   display: inline-block;
   background-color: lighten($light-secondary, 40%);
   border-right: 1px solid lighten($brand-secondary, 10%);
 }
-.target-overlay-content-block__link-text {
+
+.target-overlay__link-text {
   display: inline-block;
   padding: 5px 10px;
+}
+
+.target-overlay__link--attachment {
+  display: inline-flex;
+  margin: 0 10px 10px 0;
+}
+
+.target-overlay__link--attachment-text {
+  max-width: 6rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
  .target-overlay-content-block__body--embed-block {
@@ -210,6 +223,7 @@
   height: 2.75rem;
   @include border-radius(50%);
   border: 2px solid $gray-border;
+  overflow: hidden;
 }
 
 .target-overlay__assigner-name {

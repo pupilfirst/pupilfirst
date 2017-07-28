@@ -82,7 +82,9 @@ class FounderDashboardTargetOverlay extends React.Component  {
               </div>
               <div className="col-md-4 target-overlay__rightbar">
                 <div className="target-overlay__assigner-box">
-                  <img className="target-overlay__assigner-avatar m-r-1" src={ this.props.target.assigner.image_url } />
+                  <span className="target-overlay__assigner-avatar m-r-1">
+                    <img className="img-fluid" src={ this.props.target.assigner.image_url } />
+                  </span>
                   { this.assigner() }
                 </div>
                 { this.state.latestEvent && <TargetOverlayTimelineEventPanel event={ this.state.latestEvent } feedback={ this.state.latestFeedback }/>}

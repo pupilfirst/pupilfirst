@@ -79,6 +79,7 @@ feature 'Admission Fee Payment' do
     end
 
     scenario 'He completes payment applying a referral coupon' do
+      pending 'Coupons to be modified'
       visit admissions_fee_path
 
       # page should have coupon form

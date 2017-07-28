@@ -12,9 +12,9 @@ class MembershipStatsNotificationJob < ApplicationJob
 
   def membership_stats
     <<~MESSAGE
-      **Here are the membership stats for yesterday:**
+      *Here are the membership stats for yesterday:*
 
-      > Unique Visits: **#{unique_visits_yesterday}**
+      > Unique Visits: *#{unique_visits_yesterday}*
       #{funnel_stats}
 
       <#{dashboard_url}|:bar_chart: View Dashboard>
@@ -25,7 +25,7 @@ class MembershipStatsNotificationJob < ApplicationJob
     stats = AdmissionStats::FunnelStatsService.new.load
 
     stats.each_with_object([]) do |(stat_title, stat_value), stats_array|
-      stats_array << "> #{stat_title}: **#{stat_value}**"
+      stats_array << "> #{stat_title}: *#{stat_value}*"
     end.join("\n")
   end
 

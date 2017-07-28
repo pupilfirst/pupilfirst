@@ -41,10 +41,6 @@ gem install pg -- --with-pg-config=/Applications/Postgres.app/Contents/Versions/
     $ overcommit --install
     $ overcommit --sign
 
-### Disable Skylight Dev Warning
-
-    $ skylight disable_dev_warning
-
 ### Database setup
 
     $ rails db:setup

@@ -16,7 +16,7 @@ module Payments
         startup: @startup,
         founder: @founder,
         billing_start_at: @billing_start_at,
-        billing_end_at: @billing_start_at + 30.days
+        billing_end_at: @billing_start_at + 1.month
       )
 
       payment.amount = @startup.fee unless @skip_payment

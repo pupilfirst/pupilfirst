@@ -7,14 +7,13 @@ module Payments
       return unless expiring_in_five_days.exists? || expiring_in_three_days.exists?
 
       expiring_in_five_days.each do |payment|
-        pending_payment = create_payment(payment.founder, payment)
-        update_billing_dates(pending_payment, payment)
+        create_payment(payment.founder, payment)
         email_team(payment)
       end
 
       expiring_in_three_days.each do |payment|
-        pending_payment = Payment.requested.find_by(startup: payment.startup)
-        pending_payment.exists? && email_team(payment)
+        pending_payment = Payment.pending.find_by(startup: payment.startup)
+        pending_payment.present? && email_team(payment)
       end
     end
 
@@ -29,7 +28,7 @@ module Payments
     end
 
     def create_payment(founder, last_payment)
-      Payments::CreateService.new(founder, skip_instamojo: true, billing_start_at: last_payment.billing_end_at).execute
+      Payments::CreateService.new(founder, skip_instamojo: true, billing_start_at: last_payment.billing_end_at).create
     end
 
     def email_team(payment)

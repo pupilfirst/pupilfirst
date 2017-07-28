@@ -85,7 +85,7 @@ class FounderDashboardTargetOverlay extends React.Component  {
                   <img className="target-overlay__assigner-avatar m-r-1" src={ this.props.target.assigner.image_url } />
                   { this.assigner() }
                 </div>
-                { this.state.latestEvent && <TargetOverlayTimelineEventPanel event={ this.state.latestEvent }/>}
+                { this.state.latestEvent && <TargetOverlayTimelineEventPanel event={ this.state.latestEvent } feedback={ this.state.latestFeedback }/>}
 
                 <div>
                   { this.props.target.role === 'founder' &&

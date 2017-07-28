@@ -11,7 +11,8 @@ module Targets
       {
         facultyName: faculty.name,
         feedback: latest_feedback.feedback,
-        facultySlackId: faculty.slack_user_id
+        facultySlackId: faculty.slack_user_id,
+        facultyImageUrl: faculty.image_url
       }
     end
 

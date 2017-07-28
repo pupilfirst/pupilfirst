@@ -27,23 +27,22 @@ class TargetOverlayTimelineEventPanel extends React.Component {
               <h6 className="font-semibold">Attachments</h6>
 
             </div>
+            { this.props.feedback &&
             <div className="target-overlay-timeline-submission__feedback m-t-1">
               <div className="target-overlay-timeline-submission__commenter-box">
-                <div className="target-overlay-timeline-submission__commenter-avatar">
-                </div>
+                <img className="target-overlay-timeline-submission__commenter-avatar" src={ this.props.feedback.facultyImageUrl }/>
                 <h6 className="assigner-name m-a-0">
                   Feedback by&nbsp;
-                  <div className="font-regular">Faculty Name</div>
+                  <div className="font-regular">{ this.props.feedback.facultyName }</div>
                 </h6>
               </div>
-              <p className="font-light">
-                Identify what helps in making you better. Like finding out the specific are that needs improvement
-              </p>
+              <p className="font-light" dangerouslySetInnerHTML={ { __html: this.props.feedback.feedback } } />
               <button className="btn btn-with-icon btn-md btn-primary text-uppercase m-t-1 discuss-on-slack__button">
                 <i className="fa fa-slack" aria-hidden="true"/>
                 <span>Discuss On Slack</span>
               </button>
             </div>
+            }
           </div>
         </div>
       </div>
@@ -52,5 +51,6 @@ class TargetOverlayTimelineEventPanel extends React.Component {
 }
 
 TargetOverlayTimelineEventPanel.propTypes = {
-  event: React.PropTypes.object
+  event: React.PropTypes.object,
+  feedback: React.PropTypes.object
 }

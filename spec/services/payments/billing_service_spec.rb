@@ -22,8 +22,8 @@ describe Payments::BillingService do
 
         pending_payment_created = Payment.last
         expect(pending_payment_created.startup).to eq(startup_1)
-        expect(pending_payment_created.billing_start_at).to eq(payment_expiring_in_five_days.billing_end_at)
-        expect(pending_payment_created.billing_end_at).to eq(payment_expiring_in_five_days.billing_end_at + 1.month)
+        expect(pending_payment_created.billing_start_at.to_i).to eq(payment_expiring_in_five_days.billing_end_at.to_i)
+        expect(pending_payment_created.billing_end_at.to_i).to eq((payment_expiring_in_five_days.billing_end_at + 1.month).to_i)
       end
 
       it 'sends reminder email for startups with payments expiring in 5 days and 3 days' do

@@ -1,0 +1,6 @@
+---
+timestamp: '2017-07-28T09:30:01Z'
+title: Only authorized users are now allowed to download private timeline event files.
+trello: https://trello.com/c/mFtymN3j
+private: true
+category: bugfix

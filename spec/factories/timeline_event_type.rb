@@ -28,7 +28,7 @@ FactoryGirl.define do
     end
 
     factory :tet_joined do
-      key 'joined_svco'
+      key TimelineEventType::TYPE_JOINED_SV_CO
       role 'Product'
       title 'Joined SV.CO'
       suggested_stage 'moved_to_idea_discovery'

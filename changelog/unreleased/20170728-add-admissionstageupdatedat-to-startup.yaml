@@ -1,0 +1,6 @@
+---
+timestamp: '2017-07-28T14:31:52Z'
+title: Add admission_stage_updated_at to Startup.
+trello: https://trello.com/c/72hbTDMk
+private: true
+description: This also adds a service to handle updating of the admission_stage field.

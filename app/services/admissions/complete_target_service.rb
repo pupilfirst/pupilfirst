@@ -21,7 +21,7 @@ module Admissions
         .update_status(TimelineEvent::STATUS_VERIFIED)
 
       if @key.in?([Target::KEY_ADMISSIONS_SCREENING, Target::KEY_ADMISSIONS_FEE_PAYMENT])
-        @founder.startup.update!(admission_stage: admission_stage)
+        Admissions::UpdateStageService.new(@founder.startup, admission_stage).execute
       end
     end
 

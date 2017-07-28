@@ -110,6 +110,7 @@ ActiveAdmin.register Founder do
       column :name
       column :email
       column :phone
+
       column 'Skill' do |founder|
         if founder.hacker.nil?
           'Unknown'
@@ -119,19 +120,29 @@ ActiveAdmin.register Founder do
           'Hustler'
         end
       end
+
       column :team_lead do |founder|
-        founder.startup_admin? ? "Yes" : "No"
+        founder.startup_admin? ? 'Yes' : 'No'
       end
+
       column :stage do |founder|
         founder.startup&.admission_stage
       end
+
+      column :stage_updated_at do |founder|
+        founder.startup&.admission_stage_updated_at
+      end
+
       column :reference
+
       column :college do |founder|
         founder.college.present? ? founder.college.name : founder.college_text
       end
+
       column :state do |founder|
         founder.college.present? ? founder.college.state.name : ''
       end
+
       column :created_at do |founder|
         founder.startup.created_at.to_date
       end

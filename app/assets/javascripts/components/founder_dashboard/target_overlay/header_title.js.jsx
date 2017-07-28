@@ -1,6 +1,6 @@
 class TargetOverlayHeaderTitle extends React.Component {
   targetType() {
-    return <span className="target-overlay-header__type-tag hidden-sm-down">
+    return <span className="target-overlay-header__type-tag">
       { this.props.target.target_type_description }:
       </span>;
   }

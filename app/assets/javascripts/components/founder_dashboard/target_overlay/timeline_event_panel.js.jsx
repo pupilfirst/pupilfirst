@@ -1,4 +1,23 @@
 class TargetOverlayTimelineEventPanel extends React.Component {
+  constructor(props) {
+    super(props);
+    this.slackButton = this.slackButton.bind(this);
+  }
+
+  slackButton() {
+    if(this.props.feedback.facultySlackUsername) {
+      return(
+        <a className="btn btn-with-icon btn-md btn-primary text-uppercase m-t-1 discuss-on-slack__button"
+           href={'https://svlabs-public.slack.com/messages/@' + this.props.feedback.facultySlackUsername} target="_blank">
+          <i className="fa fa-slack" aria-hidden="true"/>
+          <span>Discuss On Slack</span>
+        </a>
+      );
+    } else {
+      return null;
+    }
+  }
+
   render() {
     return(
       <div className="target-overlay-timeline-submission__container p-y-1">
@@ -54,11 +73,8 @@ class TargetOverlayTimelineEventPanel extends React.Component {
                   <div className="font-regular">{ this.props.feedback.facultyName }</div>
                 </h6>
               </div>
-              <p className="font-light" dangerouslySetInnerHTML={ { __html: this.props.feedback.feedback } } />
-              <button className="btn btn-with-icon btn-md btn-primary text-uppercase m-t-1 discuss-on-slack__button">
-                <i className="fa fa-slack" aria-hidden="true"/>
-                <span>Discuss On Slack</span>
-              </button>
+              <p className="font-light" dangerouslySetInnerHTML={ {__html: this.props.feedback.feedback} }/>
+              { this.slackButton() }
             </div>
             }
           </div>

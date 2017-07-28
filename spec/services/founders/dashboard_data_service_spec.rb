@@ -99,7 +99,8 @@ describe Founders::DashboardDataService do
       methods: %i[has_rubric target_type target_type_description],
       include: {
         assigner: {
-          only: %i[id name]
+          only: %i[id name],
+          methods: :image_url
         }
       }
     )

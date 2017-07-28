@@ -48,16 +48,12 @@ class FounderDashboardTargetOverlay extends React.Component  {
   }
 
   assigner() {
-    if (typeof(this.props.target.assigner) === 'undefined' || this.props.target.assigner === null) {
-      return null;
-    } else {
-      return (
-        <h6 className="assigner-name m-a-0">
-          Assigned by&nbsp;
-          <div className="font-regular">{ this.props.target.assigner.name }</div>
-        </h6>
-      );
-    }
+    return (
+      <h6 className="assigner-name m-a-0">
+        Assigned by&nbsp;
+        <div className="font-regular">{ this.props.target.assigner.name }</div>
+      </h6>
+    );
   }
 
   updateDetails(response) {
@@ -86,56 +82,10 @@ class FounderDashboardTargetOverlay extends React.Component  {
               </div>
               <div className="col-md-4 target-overlay__rightbar">
                 <div className="target-overlay__assigner-box">
-                  <div className="target-overlay__assigner-avatar m-r-1">
-                  </div>
+                  <img className="target-overlay__assigner-avatar m-r-1" src={ this.props.target.assigner.image_url } />
                   { this.assigner() }
                 </div>
-                <div className="target-overlay-timeline-submission__container p-y-1">
-                  <p className="target-overlay-timeline-submission__title">Latest Timeline Submission:</p>
-                  <div className="target-overlay-timeline-submission__box">
-                    <div className="target-overlay-timeline-submission__header p-a-1">
-                      <div className="target-overlay-timeline-submission__header-date-box m-r-1">
-                        <span className="target-overlay-timeline-submission__header-date font-semibold">20</span>
-                        <span className="target-overlay-timeline-submission__header-date--small">Jun</span>
-                        <span className="target-overlay-timeline-submission__header-date--small">2017</span>
-                      </div>
-                      <div className="target-overlay-timeline-submission__header-title">
-                        <h5 className="font-semibold brand-secondary m-b-0">
-                          Attended SV.CO Session
-                        </h5>
-                        <p className="target-overlay-timeline-submission__header-title-date">
-                          April 6, 2017 (139<sup>th</sup> day)
-                        </p>
-                      </div>
-                    </div>
-                    <div className="target-overlay-timeline-submission__content">
-                      <p className="font-light p-x-1">
-                        After watching How to Evaluate Progress: After attending session
-                        by Vishnu on evaluating Progress, we have understood the real
-                        meaning of progress for the point of view of a startup.
-                        Please find the attachment for Nuggets
-                      </p>
-                      <div className="target-overlay-timeline-submission__content-attachments m-b-1 p-a-1">
-                        <h6 className="font-semibold">Attachments</h6>
-
-                      </div>
-                      <div className="target-overlay-timeline-submission__feedback m-t-1">
-                        <div className="target-overlay-timeline-submission__commenter-box">
-                          <div className="target-overlay-timeline-submission__commenter-avatar">
-                          </div>
-                          { this.assigner() }
-                        </div>
-                        <p className="font-light">
-                          Identify what helps in making you better. Like finding out the specific are that needs improvement
-                        </p>
-                        <button className="btn btn-with-icon btn-md btn-primary text-uppercase m-t-1 discuss-on-slack__button">
-                          <i className="fa fa-slack" aria-hidden="true"/>
-                          <span>Discuss On Slack</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                { this.state.latestEvent && <TargetOverlayTimelineEventPanel event={ this.state.latestEvent } feedback={ this.state.latestFeedback }/>}
 
                 <div>
                   { this.props.target.role === 'founder' &&

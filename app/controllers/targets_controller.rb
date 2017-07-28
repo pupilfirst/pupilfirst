@@ -61,7 +61,10 @@ class TargetsController < ApplicationController
 
     latest_feedback = Targets::FeedbackService.new(target, current_founder).latest_feedback_details
 
-    latest_event = target.latest_linked_event(current_founder)
+    latest_event = target.latest_linked_event(current_founder).as_json(
+      only: %i[description event_on],
+      methods: %i[title days_elapsed_string]
+    )
 
     render json: { founderStatuses: founder_statuses, latestEvent: latest_event, latestFeedback: latest_feedback }
   end

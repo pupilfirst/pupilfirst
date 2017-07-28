@@ -268,10 +268,10 @@ class TimelineEvent < ApplicationRecord
     @first_attachment_url ||= first_file_url || first_link_url
   end
 
-  def days_elapsed_string
+  def days_elapsed
     start_date = startup.earliest_team_event_date
     return nil if start_date.blank?
-    ((event_on - start_date).to_i + 1).ordinalize
+    (event_on - start_date).to_i + 1
   end
 
   private

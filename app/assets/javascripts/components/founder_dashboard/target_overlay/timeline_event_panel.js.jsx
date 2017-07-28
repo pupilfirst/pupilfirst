@@ -15,7 +15,7 @@ class TargetOverlayTimelineEventPanel extends React.Component {
                 { this.props.event.title }
               </h5>
               <p className="target-overlay-timeline-submission__header-title-date">
-                { this.props.event.days_elapsed_string } Day
+                Day { this.props.event.days_elapsed }
               </p>
             </div>
           </div>

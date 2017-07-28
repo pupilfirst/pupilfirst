@@ -63,7 +63,7 @@ class TargetsController < ApplicationController
 
     latest_event = target.latest_linked_event(current_founder).as_json(
       only: %i[description event_on],
-      methods: %i[title days_elapsed_string]
+      methods: %i[title days_elapsed]
     )
 
     render json: { founderStatuses: founder_statuses, latestEvent: latest_event, latestFeedback: latest_feedback }

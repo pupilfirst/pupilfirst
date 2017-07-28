@@ -1,6 +1,6 @@
 module AdmissionStats
-  class LastDayStatsService
-    def initialize(params)
+  class FunnelStatsService
+    def initialize(params = {})
       @params = params
     end
 

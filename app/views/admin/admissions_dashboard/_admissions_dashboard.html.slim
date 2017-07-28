@@ -24,7 +24,7 @@
     .admission-dashboard-stats-filter__button
       = submit_tag 'Get Stats'
   .content
-    - @last_day_stats.each do |stage, value|
+    - @funnel_stats.each do |stage, value|
       .admission-dashboard-data-block
         .admission-dashboard-data-block__title
           = stage

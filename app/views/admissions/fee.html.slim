@@ -25,7 +25,7 @@
         li It covers your team of <strong>#{current_startup.billing_founders_count} founders</strong>.
         li You can always change your team after you pay. Just reach us on #{mail_to 'help@sv.co'}.
 
-      - if current_startup.payment.present?
+      - if current_startup.payments.requested.any?
         .alert.alert-warning.m-t-1
           i.fa.fa-warning
           ' &nbsp;It looks like you've attempted to pay at least once before, but didn't complete the process. Note that it
@@ -64,7 +64,6 @@
                     ' Hide
                   = f.submit 'Apply Code', class: 'btn btn-secondary btn-sm text-uppercase discount-coupon__box-btn'
 
-          #applicant-fee-data.hidden-xs-up
           .simple-form-container.m-t-2
             = simple_form_for @payment_form,
               url: admissions_fee_path,

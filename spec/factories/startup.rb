@@ -27,5 +27,11 @@ FactoryGirl.define do
       startup.founders << create(:founder, startup: startup)
       startup.startup_categories = [create(:startup_category)]
     end
+
+    trait(:subscription_active) do
+      after(:create) do |startup|
+        create :payment, :paid, startup: startup
+      end
+    end
   end
 end

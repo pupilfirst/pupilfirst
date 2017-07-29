@@ -59,7 +59,7 @@ module Users
     end
 
     def payment_present?
-      startup.payment.present?
+      startup.payments.any?
     end
 
     def screening_complete?

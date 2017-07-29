@@ -3,27 +3,26 @@ module Payments
   #
   # Specifics of how this works can be controlled using options.
   class CreateService
-    def initialize(founder, skip_instamojo: false, skip_payment: false)
+    def initialize(founder, skip_instamojo: false, skip_payment: false, billing_start_at: Time.zone.now)
       @founder = founder
       @startup = founder.startup
       @skip_instamojo = skip_instamojo
       @skip_payment = skip_payment
+      @billing_start_at = billing_start_at
     end
 
-    def execute
+    def create
       payment = Payment.new(
         startup: @startup,
-        founder: @founder
+        founder: @founder,
+        billing_start_at: @billing_start_at,
+        billing_end_at: @billing_start_at + 1.month
       )
 
-      unless @skip_payment || @skip_instamojo
-        response = create_instamojo_payment_request
+      payment.amount = @startup.fee unless @skip_payment
 
-        payment.amount = @startup.fee
-        payment.instamojo_payment_request_id = response[:id]
-        payment.instamojo_payment_request_status = response[:status]
-        payment.short_url = response[:short_url]
-        payment.long_url = response[:long_url]
+      unless @skip_payment || @skip_instamojo
+        payment = Instamojo::RequestPaymentService.new(payment).request
       end
 
       if @skip_payment
@@ -35,20 +34,6 @@ module Payments
 
       # Return the payment
       payment
-    end
-
-    private
-
-    def instamojo
-      @instamojo ||= Instamojo.new
-    end
-
-    def create_instamojo_payment_request
-      instamojo.create_payment_request(
-        amount: @startup.fee,
-        buyer_name: @founder.name,
-        email: @founder.email
-      )
     end
   end
 end

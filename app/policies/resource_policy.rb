@@ -16,7 +16,12 @@ class ResourcePolicy < ApplicationPolicy
       # public resources for everyone
       resources = scope.where(level_id: nil, startup_id: nil)
 
-      startup = user&.founder&.startup
+      founder = user&.founder
+
+      # Return public resources to founder with inactive subscription.
+      return resources unless founder&.subscription_active?
+
+      startup = founder&.startup
 
       if startup && !startup.dropped_out
         # + resources for the startup

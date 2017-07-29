@@ -382,7 +382,7 @@ ActiveAdmin.register TimelineEvent do
         end
 
         column :private do |link|
-          link[:private] ? status_tag('yes', :ok) : status_tag('no')
+          link[:private] ? status_tag('Yes') : status_tag('No')
         end
 
         column :actions do |link|

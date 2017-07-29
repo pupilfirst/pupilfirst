@@ -316,13 +316,14 @@ ActiveAdmin.register Founder do
     panel 'Social links' do
       attributes_table_for founder do
         row 'Facebook Connected' do |founder|
-          span class: "status_tag #{founder.fb_access_token.present? ? 'yes' : 'no'}" do
-            founder.fb_access_token.present?
-          end
           if founder.fb_access_token.present?
-            span style: "display:inline-block" do
+            status_tag('Connected', class: 'ok')
+
+            span style: 'display:inline-block' do
               button_to 'Disconnect', disconnect_from_facebook_admin_founder_path(founder), method: :patch
             end
+          else
+            status_tag('Not Connected', class: 'no')
           end
         end
         row :fb_token_expires_at

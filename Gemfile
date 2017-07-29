@@ -10,7 +10,7 @@ gem 'rails', '~> 5.1.2'
 
 gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 
-gem 'activeadmin', '~> 1.0.0' # The administration framework for Ruby on Rails applications. https://activeadmin.info
+gem 'activeadmin', '~> 1.1' # The administration framework for Ruby on Rails applications. https://activeadmin.info
 gem 'flattened_active_admin', '~> 0.0' # better looking and customizable activeadmin
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
 gem 'carrierwave', '~> 1.1' # One uploader to rule them all.

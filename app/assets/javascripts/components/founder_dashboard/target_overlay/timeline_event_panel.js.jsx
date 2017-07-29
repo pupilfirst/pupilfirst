@@ -7,7 +7,7 @@ class TargetOverlayTimelineEventPanel extends React.Component {
   slackButton() {
     if(this.props.feedback.facultySlackUsername) {
       return(
-        <a className="btn btn-with-icon btn-md btn-primary text-uppercase m-t-1 discuss-on-slack__button"
+        <a className="btn btn-with-icon btn-sm btn-primary m-t-1 discuss-on-slack__button"
            href={'https://svlabs-public.slack.com/messages/@' + this.props.feedback.facultySlackUsername} target="_blank">
           <i className="fa fa-slack" aria-hidden="true"/>
           <span>Discuss On Slack</span>
@@ -20,8 +20,8 @@ class TargetOverlayTimelineEventPanel extends React.Component {
 
   render() {
     return(
-      <div className="target-overlay-timeline-submission__container p-y-1">
-        <p className="target-overlay-timeline-submission__title">Latest Timeline Submission:</p>
+      <div className="target-overlay-timeline-submission__container p-b-1 m-t-1">
+        <p className="target-overlay-timeline-submission__title font-semibold">Latest Timeline Submission:</p>
         <div className="target-overlay-timeline-submission__box">
           <div className="target-overlay-timeline-submission__header p-a-1">
             <div className="target-overlay-timeline-submission__header-date-box m-r-1">
@@ -67,10 +67,12 @@ class TargetOverlayTimelineEventPanel extends React.Component {
             { this.props.feedback &&
             <div className="target-overlay-timeline-submission__feedback m-t-1">
               <div className="target-overlay-timeline-submission__commenter-box">
-                <img className="target-overlay-timeline-submission__commenter-avatar" src={ this.props.feedback.facultyImageUrl }/>
-                <h6 className="assigner-name m-a-0">
-                  Feedback by&nbsp;
-                  <div className="font-regular">{ this.props.feedback.facultyName }</div>
+                <span className="target-overlay-timeline-submission__commenter-avatar">
+                  <img className="img-fluid" src={ this.props.feedback.facultyImageUrl }/>
+                </span>
+                <h6 className="target-overlay-timeline-submission__commenter-name m-a-0">
+                  <span className="target-overlay-timeline-submission__commenter--small">Feedback by:</span>
+                  <span className="font-regular">{ this.props.feedback.facultyName }</span>
                 </h6>
               </div>
               <p className="font-light" dangerouslySetInnerHTML={ {__html: this.props.feedback.feedback} }/>

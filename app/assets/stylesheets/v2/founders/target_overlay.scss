@@ -109,12 +109,44 @@
   border-left: 1px solid darken($gray-border, 10%);
 }
 
+.target-overlay-content-block__prerequisites {
+  background-color: rgba(227, 180, 98, 0.1);
+  border: 1px solid $alert-background;
+  @include border-radius(5px);
+}
+
+.target-overlay-content-block__prerequisites-list {
+  list-style-type: decimal;
+  padding-left: 1rem;
+}
+
+.target-overlay-content-block__prerequisites-list-item {
+  padding: 0 0 12px;
+
+  &:last-child {
+    padding: 0;
+  }
+}
+
 .target-overlay-content-block__body {
   margin: 0 1rem 2rem 2.5rem;
   border-bottom: 1px solid $gray-border;
 
+  &:last-child {
+    border-bottom: 0;
+    margin-bottom: 0;
+  }
+
   @include media-breakpoint-down (sm) {
     margin: 0 0 2rem 0;
+  }
+
+  ul {
+    margin-top: 10px;
+
+    li {
+      padding-bottom: 10px;
+    }
   }
 }
 
@@ -230,9 +262,23 @@
   line-height: 1.3;
 }
 
+.target-overlay__assigner-name--small {
+  font-size: 0.75rem;
+  display: block;
+}
+
+.target-overlay-timeline-submission__container {
+  border-bottom: 1px solid $gray-border;
+}
+
 .target-overlay-timeline-submission__title {
   font-size: 1rem;
   padding-bottom: 5px;
+}
+
+.target-overlay-timeline-submission__content {
+  word-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 .target-overlay-timeline-submission__box {
@@ -253,6 +299,7 @@
   border: 1px solid $gray-border;
   text-align: center;
   flex-shrink: 0;
+  overflow: hidden;
   background-color: $dark-primary-background;
 }
 
@@ -300,7 +347,7 @@
 
   &:after {
     border-color: rgba(136, 183, 213, 0);
-    border-bottom-color: $primary-background;
+    border-bottom-color: $dark-primary-background;
     border-width: 9px;
     margin-left: -9px;
   }
@@ -325,10 +372,20 @@
   margin-right: 0.75rem;
   @include border-radius(50%);
   border: 2px solid $gray-border;
+  overflow: hidden;
+}
+
+.target-overlay-timeline-submission__commenter-name {
+  line-height: 1.2;
+}
+
+.target-overlay-timeline-submission__commenter--small {
+  font-size: 0.75rem;
+  display: block;
 }
 
 .discuss-on-slack__button {
  background-color: white;
- border: 1px solid #000;
+ border: 1px solid rgba(0, 0, 0, 0.6);
  color: $gray-dark;
 }

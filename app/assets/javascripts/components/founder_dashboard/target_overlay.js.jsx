@@ -49,10 +49,10 @@ class FounderDashboardTargetOverlay extends React.Component  {
 
   assigner() {
     return (
-      <h6 className="assigner-name m-a-0">
-        Assigned by&nbsp;
-        <div className="font-regular">{ this.props.target.assigner.name }</div>
-      </h6>
+      <h5 className="target-overlay__assigner-name m-a-0">
+        <span className="target-overlay__assigner-name--small">Assigned by:</span>
+        <span className="font-regular">{ this.props.target.assigner.name }</span>
+      </h5>
     );
   }
 
@@ -89,11 +89,13 @@ class FounderDashboardTargetOverlay extends React.Component  {
                 </div>
                 { this.state.latestEvent && <TargetOverlayTimelineEventPanel event={ this.state.latestEvent } feedback={ this.state.latestFeedback }/>}
 
-                <div>
-                  { this.props.target.role === 'founder' &&
+                { this.props.target.role === 'founder' &&
+                <div className="m-t-1">
+                  <p className="target-overlay-timeline-submission__title font-semibold">Completion Status:</p>
                   <FounderDashboardFounderStatusPanel founderDetails={ this.props.founderDetails }
-                    targetId={ this.props.target.id} fetchStatus={this.props.fetchFounderStatuses}/> }
+                    targetId={ this.props.target.id} fetchStatus={this.props.fetchFounderStatuses}/>
                 </div>
+                }
               </div>
             </div>
           </div>

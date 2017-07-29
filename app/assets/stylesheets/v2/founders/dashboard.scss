@@ -519,7 +519,7 @@
 
 .founder-dashboard-target-group__header-info {
   max-width: 28rem;
-  margin: 0 auto;
+  margin: 6px auto 0;
 }
 
 .founder-dashboard-target__container {
@@ -669,7 +669,7 @@
 
 .founder-dashboard-target-status-badge__container {
   float: right;
-  padding: 7px 15px;
+  padding: 5px 15px;
   font-size: 0.75rem;
   letter-spacing: 0.02rem;
 
@@ -684,22 +684,34 @@
     padding: 7px 10px;
   }
   &.needs-improvement {
-    background-color: rgba(10, 165, 227, 0.7);
+    background-color: rgba(10, 165, 227, 0.1);
+    border: 1px solid $brand-secondary;
+    color: $dark-secondary;
   }
   &.submitted {
-    background-color: rgba(0, 138, 193, 0.7);
+    background-color: rgba(0, 138, 193, 0.1);
+    border: 1px solid rgba(0, 138, 193, 0.9);
+    color: $dark-secondary;
   }
   &.pending {
-    background-color: rgba(227, 180, 98, 0.7);
+    background-color: rgba(227, 180, 98, 0.1);
+    border: 1px solid $alert-background;
+    color: darken($alert-background, 25%);
   }
   &.unavailable {
-    background-color: rgba(153, 153, 153, 0.7);
+    background-color: rgba(153, 153, 153, 0.2);
+    border: 1px solid rgba(153, 153, 153, 0.7);
+    color: $dark-grey-text;
   }
   &.complete {
-    background-color: rgba(50, 180, 117, 0.7);
+    background-color: rgba(50, 180, 117, 0.1);
+    border: 1px solid $brand-primary;
+    color: $dark-primary;
   }
   &.not-accepted {
-    background-color: rgba(46, 47, 51, 0.7);
+    background-color: rgba(217, 83, 80, 0.1);
+    border: 1px solid rgba(217, 83, 80, 0.7);
+    color: rgba(217, 83, 80, 1);
   }
 }
 
@@ -774,10 +786,11 @@
   img, svg {
     vertical-align: middle;
     display: inline-block;
-    margin-right: 0.5rem;
+    margin-right: 0.75rem;
     width: 40px;
     height: 40px;
-    border: 2px solid $gray-border;
+    border: 2px solid white;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
     border-radius: 50%;
   }
 }

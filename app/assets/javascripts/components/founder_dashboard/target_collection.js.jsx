@@ -38,13 +38,15 @@ class FounderDashboardTargetCollection extends React.Component {
             </div>
             }
 
-            <h4 className="brand-primary font-regular m-t-2">
+            <h3 className="font-semibold m-t-2 m-b-0">
               { this.props.name }
-            </h4>
+            </h3>
 
-            <div className="founder-dashboard-target-group__header-info">
+            { this.props.description &&
+            <p className="founder-dashboard-target-group__header-info">
               { this.props.description }
-            </div>
+            </p>
+            }
           </div>
 
           { this.targets() }

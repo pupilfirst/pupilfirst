@@ -11,7 +11,7 @@ class FounderDashboardTargetDescription extends React.Component {
       return null;
     } else {
       return (
-        <h6 className="pull-sm-left target-overlay__assigner-name m-a-0">
+        <h6 className="pull-sm-left assigner-name m-a-0">
           Assigned by&nbsp;
           <span className="font-regular">{ this.props.target.assigner.name }</span>
         </h6>

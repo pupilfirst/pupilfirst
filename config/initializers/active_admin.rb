@@ -18,7 +18,7 @@ ActiveAdmin.setup do |config|
   #
   # Note: Aim for an image that's 21px high so it fits in the header.
   #
-  config.site_title_image = 'admin/logo_40.png'
+  config.site_title_image = 'admin/sv-icon-white.png'
 
   # == Default Namespace
   #
@@ -181,21 +181,6 @@ ActiveAdmin.setup do |config|
   # resources or you can disable them globally from here.
   #
   # config.breadcrumb = false
-
-  # == Register Stylesheets & Javascripts
-  #
-  # We recommend using the built in Active Admin layout and loading
-  # up your own stylesheets / javascripts to customize the look
-  # and feel.
-  #
-  # To load a stylesheet:
-  #   config.register_stylesheet 'my_stylesheet.css'
-  #
-  # You can provide an options hash for more control, which is passed along to stylesheet_link_tag():
-  #   config.register_stylesheet 'my_print_stylesheet.css', media: :print
-  #
-  # To load a javascript file:
-  #   config.register_javascript 'my_javascript.js'
 
   # == CSV options
   #

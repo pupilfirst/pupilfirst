@@ -83,22 +83,9 @@ class TimelineEvent < ApplicationRecord
     self.links = [] if links.nil?
   end
 
-  before_validation :build_description
-
-  def build_description
-    return unless description.blank? && auto_populated
-
-    self.description = case timeline_event_type.key
-      when 'joined_svco'
-        'We just registered our startup on SV.CO. Looking forward to an amazing learning experience!'
-    end
-  end
-
   after_commit do
     startup.update_stage! if timeline_event_type.stage_change?
   end
-
-  attr_accessor :auto_populated
 
   # Accessors used by timeline builder form to create TimelineEventFile entries.
   # Should contain a hash: { identifier_key => uploaded_file, ... }

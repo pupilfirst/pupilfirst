@@ -137,7 +137,9 @@ module Admissions
         Admissions::CompleteTargetService.new(current_founder, Target::KEY_ADMISSIONS_COFOUNDER_ADDITION).execute
       end
 
+      # TODO: Remove this tag from intercom after a while (29/7/2017).
       Intercom::FounderTaggingJob.perform_later(current_founder, 'Added Co-founders')
+      Intercom::LevelZeroStageUpdateJob.perform_later(current_founder, Startup::ADMISSION_STAGE_COFOUNDERS_ADDED)
     end
 
     def invite_founder(founder)

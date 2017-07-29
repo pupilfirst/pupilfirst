@@ -7,11 +7,9 @@
 // For example, to change the sidebar width:
 // $sidebar-width: 242px;
 
-@import "admin/flattened_active_admin_variables";
 // Active Admin's got SASS!
-// Modified to use flattened active_admin
-@import "flattened_active_admin/mixins";
-@import "flattened_active_admin/base";
+@import 'active_admin/mixins';
+@import 'active_admin/base';
 
 // Rails Assets.
 @import "pnotify";

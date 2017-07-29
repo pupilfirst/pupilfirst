@@ -2,7 +2,7 @@ module OneOff
   class StartupAdmissionStageUpdateService
     def execute
       Startup.where(level: level_0).each do |startup|
-        startup.update!(admission_stage: stage(startup))
+        Admissions::UpdateStageService.new(startup, stage(startup)).execute
       end
     end
 

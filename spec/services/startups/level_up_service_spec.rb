@@ -3,7 +3,6 @@ require 'rails_helper'
 describe Startups::LevelUpService do
   subject { described_class.new(startup) }
 
-  let!(:level_0) { create :level, :zero }
   let!(:level_1) { create :level, :one }
   let!(:level_2) { create :level, :two }
   let!(:level_5) { create :level, :five }
@@ -30,7 +29,7 @@ describe Startups::LevelUpService do
     end
 
     context 'when startup is at level 0' do
-      let(:startup) { create :startup, level: level_0 }
+      let(:startup) { create :level_0_startup }
 
       it 'successfully enrolls the startup to level 1' do
         subject.execute

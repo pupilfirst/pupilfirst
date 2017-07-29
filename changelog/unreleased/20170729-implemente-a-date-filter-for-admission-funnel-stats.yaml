@@ -1,0 +1,8 @@
+---
+timestamp: '2017-07-29T10:41:55Z'
+title: Implemente a date filter for admission funnel stats
+trello: https://trello.com/c/nogAvwkK
+private: true
+description: Added an interface which will allow user to pic 'from' and 'to' date
+  to filter admission funnel stats.
+category: "'feature'"

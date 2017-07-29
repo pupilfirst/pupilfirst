@@ -25,14 +25,14 @@ class TargetOverlaySubmitButton extends React.Component {
       <div className="pull-xs-right">
         { this.props.target.link_to_complete &&
           <a href={ this.props.target.link_to_complete }
-                  className="btn btn-with-icon btn-md btn-secondary text-uppercase btn-timeline-builder js-founder-dashboard__trigger-builder hidden-sm-down js-founder-dashboard__action-bar-add-event-button">
+                  className="btn btn-with-icon btn-md btn-secondary text-uppercase btn-timeline-builder js-founder-dashboard__trigger-builder js-founder-dashboard__action-bar-add-event-button">
             <i className="fa fa-upload" aria-hidden="true"/>
             <span>{ this.submitButtonText() }</span>
           </a>
         }
         { !this.props.target.link_to_complete &&
           <button onClick={ this.openTimelineBuilder }
-                  className="btn btn-with-icon btn-md btn-secondary text-uppercase btn-timeline-builder js-founder-dashboard__trigger-builder hidden-sm-down js-founder-dashboard__action-bar-add-event-button">
+                  className="btn btn-with-icon btn-md btn-secondary text-uppercase btn-timeline-builder js-founder-dashboard__trigger-builder js-founder-dashboard__action-bar-add-event-button">
             <i className="fa fa-upload" aria-hidden="true"/>
             <span>{ this.submitButtonText() }</span>
           </button>

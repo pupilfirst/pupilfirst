@@ -74,7 +74,9 @@ class FounderDashboardTargetOverlay extends React.Component  {
             <div className="target-overlay__header clearfix">
               <TargetOverlayHeaderTitle iconPaths={ this.props.iconPaths } target={ this.props.target }/>
               <div className="pull-xs-left hidden-sm-down"><FounderDashboardTargetStatusBadge target={ this.props.target }/></div>
-              { this.isSubmittable() && <TargetOverlaySubmitButton target={ this.props.target } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }/> }
+              <div className="hidden-sm-down">
+                { this.isSubmittable() && <TargetOverlaySubmitButton target={ this.props.target } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }/> }
+              </div>
             </div>
             <div className="target-overlay-content-wrapper clearfix">
               <div className="col-md-8 target-overlay__leftbar">
@@ -99,6 +101,10 @@ class FounderDashboardTargetOverlay extends React.Component  {
               </div>
             </div>
           </div>
+        </div>
+        <div className="target-overlay__mobile-fixed-navbar hidden-sm-up clearfix">
+          <div className="pull-xs-left"><FounderDashboardTargetStatusBadge target={ this.props.target }/></div>
+          { this.isSubmittable() && <TargetOverlaySubmitButton target={ this.props.target } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }/> }
         </div>
       </div>
     );

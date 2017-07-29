@@ -29,6 +29,10 @@
   min-height: 100%;
   border-radius: 0;
   border: 0;
+
+  @include media-breakpoint-down (sm) {
+    margin-bottom: 50px;
+  }
 }
 
 .target-overlay__body {
@@ -388,4 +392,16 @@
  background-color: white;
  border: 1px solid rgba(0, 0, 0, 0.6);
  color: $gray-dark;
+}
+
+.target-overlay__mobile-fixed-navbar {
+  background-color: $primary-background;
+  position: fixed;
+  padding: 1rem;
+  width: 100%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-top: 1px solid $gray-border;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
 }

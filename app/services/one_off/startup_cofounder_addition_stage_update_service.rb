@@ -10,7 +10,7 @@ module OneOff
 
       startups_in_screening_completed_stage.each do |startup|
         te = startup.timeline_events.where(target: cofounder_addition_target)&.first
-        if te.verified?
+        if te.present? && te.verified?
           startup.update!(admission_stage: Startup::ADMISSION_STAGE_COFOUNDERS_ADDED, admission_stage_updated_at: te.created_at)
         end
       end

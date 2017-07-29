@@ -146,6 +146,14 @@ ActiveAdmin.register Founder do
       column :created_at do |founder|
         founder.startup.created_at.to_date
       end
+
+      column :tags do |founder|
+        tags = ''
+        founder.tags&.each do |tag|
+          tags += tag.name + ';'
+        end
+        tags
+      end
     else
       column :id
       column :email

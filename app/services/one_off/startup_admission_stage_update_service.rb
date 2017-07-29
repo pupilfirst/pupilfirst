@@ -1,7 +1,9 @@
 module OneOff
   class StartupAdmissionStageUpdateService
     def execute
-      Startup.where(level: level_0).each do |startup|
+      raise 'OneOff::StartupAdmissionStageUpdateService is outdated, and should be fixed'
+
+      Startup.where(level: level_0).each do |startup| # rubocop:disable Lint/UnreachableCode
         Admissions::UpdateStageService.new(startup, stage(startup)).execute
       end
     end
@@ -13,7 +15,7 @@ module OneOff
 
       if complete?(fee_payment_target, team_lead)
         'Fee Paid'
-      elsif startup.payment.present?
+      elsif startup.payments.any?
         'Payment Initiated'
       elsif complete?(cofounder_addition_target, team_lead)
         'Added Cofounders'

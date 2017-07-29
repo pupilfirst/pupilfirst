@@ -535,7 +535,7 @@ GEM
       rack
     rack-contrib (1.2.0)
       rack (>= 0.9.1)
-    rack-cors (0.4.1)
+    rack-cors (1.0.1)
     rack-mini-profiler (0.10.5)
       rack (>= 1.2.0)
     rack-test (0.6.3)
@@ -879,7 +879,7 @@ DEPENDENCIES
   pry-rails (~> 0.3.5)
   puma (~> 3.9)
   pundit (~> 1.1)
-  rack-cors (~> 0.4)
+  rack-cors (~> 1.0)
   rack-mini-profiler (~> 0.10)
   rack-timeout (~> 0.4)
   rails (~> 5.1.2)

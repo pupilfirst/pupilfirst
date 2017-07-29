@@ -76,16 +76,10 @@
                     - payment_button_text = 'Pay Now'
 
                     h3.m-b-1
-                      - if current_startup.fee == 0
-                        - payment_button_text = 'Skip Payment'
-                        ' Hurray! You can now proceed without any payment.
-                      - else
-                        ' Team membership fee is
-                        - if current_startup.undiscounted_fee != current_startup.fee
-                          ' <del>&#8377;#{current_startup.undiscounted_fee}</del>
-                        span.brand-secondary.font-semibold &#8377;#{current_startup.fee}.
-                        br
-                        br
-                        | Please pay the first month&rsquo;s fee.
+                      ' Team membership fee is
+                      span.brand-secondary.font-semibold &#8377;#{current_startup.fee}.
+                      br
+                      br
+                      | Please pay the first month&rsquo;s fee.
 
-                    = f.submit payment_button_text, class: 'btn btn-primary btn-md text-uppercase', id: 'pay-now-button'
+                  = f.submit payment_button_text, class: 'btn btn-primary btn-md text-uppercase', id: 'pay-now-button'

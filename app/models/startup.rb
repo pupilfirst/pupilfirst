@@ -417,15 +417,7 @@ class Startup < ApplicationRecord
   end
 
   def fee
-    if latest_coupon.present?
-      (undiscounted_fee * (1 - (latest_coupon.discount_percentage.to_f / 100))).round
-    else
-      undiscounted_fee
-    end
-  end
-
-  def undiscounted_fee
-    @undiscounted_fee ||= Founder::FEE * billing_founders_count
+    Founder::FEE * billing_founders_count
   end
 
   def latest_coupon

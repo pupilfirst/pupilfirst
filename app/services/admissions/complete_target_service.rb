@@ -20,8 +20,8 @@ module Admissions
       TimelineEvents::VerificationService.new(timeline_event, notify: false)
         .update_status(TimelineEvent::STATUS_VERIFIED)
 
-      if @key.in?([Target::KEY_ADMISSIONS_SCREENING, Target::KEY_ADMISSIONS_FEE_PAYMENT])
-        @founder.startup.update!(admission_stage: admission_stage)
+      if @key.in?([Target::KEY_ADMISSIONS_SCREENING, Target::KEY_ADMISSIONS_FEE_PAYMENT, Target::KEY_ADMISSIONS_COFOUNDER_ADDITION])
+        Admissions::UpdateStageService.new(@founder.startup, admission_stage).execute
       end
     end
 

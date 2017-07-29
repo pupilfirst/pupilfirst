@@ -27,11 +27,13 @@ module Startups
 
     def enroll_for_level_one
       Startup.transaction do
-        @startup.update!(level: next_level, program_started_on: Time.zone.now, maximum_level: next_level, admission_stage: Startup::ADMISSION_STAGE_ADMITTED)
+        @startup.update!(level: next_level, program_started_on: Time.zone.now, maximum_level: next_level)
+
+        Admissions::UpdateStageService.new(@startup, Startup::ADMISSION_STAGE_ADMITTED).execute
 
         @startup.timeline_events.create!(
           founder: @startup.admin,
-          timeline_event_type: TimelineEventType.find_by(key: 'joined_svco'),
+          timeline_event_type: TimelineEventType.find_by(key: TimelineEventType::TYPE_JOINED_SV_CO),
           event_on: Time.zone.now,
           iteration: @startup.iteration,
           description: event_description,

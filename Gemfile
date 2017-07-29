@@ -10,8 +10,7 @@ gem 'rails', '~> 5.1.2'
 
 gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 
-gem 'activeadmin', '~> 1.0.0' # The administration framework for Ruby on Rails applications. https://activeadmin.info
-gem 'flattened_active_admin', '~> 0.0' # better looking and customizable activeadmin
+gem 'activeadmin', '~> 1.1' # The administration framework for Ruby on Rails applications. https://activeadmin.info
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
 gem 'carrierwave', '~> 1.1' # One uploader to rule them all.
 
@@ -105,7 +104,7 @@ gem 'diffy', '~> 3.2' # Easy Diffing in Ruby.
 gem 'rails_server_timings', '~> 1.0' # Server Timing headers for Rails apps. https://github.com/dpogue/rails_server_timings
 gem 'pundit', '~> 1.1' # Minimal authorization through OO design and pure Ruby classes.
 gem 'github-linguist', '~> 5.0', require: false # Language Savant. https://github.com/github/linguist
-gem 'rack-cors', '~>0.4', require: 'rack/cors' # Rack Middleware for handling CORS, required to serve static assets such as fonts
+gem 'rack-cors', '~> 1.0', require: 'rack/cors' # Rack Middleware for handling CORS, required to serve static assets such as fonts
 
 # Rails assets!
 source 'https://rails-assets.org' do
@@ -174,7 +173,6 @@ group :development, :test do
 end
 
 group :production do
-  gem 'skylight', '~> 1.1' # Skylight agent for Ruby https://www.skylight.io
   gem 'rails_12factor', '~> 0.0' # Makes running your Rails app easier. Based on the ideas behind 12factor.net.
   gem 'dalli', '~> 2.7' # High performance memcached client for Ruby. https://github.com/petergoldstein/dalli
   gem 'scout_apm' # detailed Rails application performance analysis.

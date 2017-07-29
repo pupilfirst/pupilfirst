@@ -20,6 +20,8 @@ class TimelineEventType < ApplicationRecord
   TYPE_STAGE_EFFICIENCY = 'moved_to_efficiency'
   TYPE_STAGE_SCALE = 'moved_to_scale'
 
+  TYPE_JOINED_SV_CO = 'joined_svco'
+
   STAGES = [TYPE_STAGE_IDEA, TYPE_STAGE_PROTOTYPE, TYPE_STAGE_CUSTOMER, TYPE_STAGE_EFFICIENCY, TYPE_STAGE_SCALE].freeze
 
   STAGE_NAMES = {

@@ -142,7 +142,7 @@ class Startup < ApplicationRecord
   attr_reader :validate_registration_type
 
   # Friendly ID!
-  friendly_id :slug
+  friendly_id :slug_candidates, use: :slugged
 
   validates :slug, format: { with: /\A[a-z0-9\-_]+\z/i }, allow_nil: true
   validates :product_name, presence: true
@@ -173,9 +173,6 @@ class Startup < ApplicationRecord
     # If supplied \r\n for line breaks, replace those with just \n so that length validation works.
     self.product_description = product_description.gsub("\r\n", "\n") if product_description
 
-    # If slug isn't supplied, set one.
-    self.slug = generate_randomized_slug if slug.blank?
-
     # Default product name to 'Untitled Product' if absent
     self.product_name ||= 'Untitled Product'
   end
@@ -184,6 +181,8 @@ class Startup < ApplicationRecord
     # Clear out associations from associated Founders (and pending ones).
     Founder.where(startup_id: id).update_all(startup_id: nil, startup_admin: nil) # rubocop:disable Rails/SkipsModelValidations
   end
+
+  after_create :regenerate_slug
 
   def approved?
     dropped_out != true
@@ -302,28 +301,25 @@ class Startup < ApplicationRecord
     founders - [founder]
   end
 
-  # TODO: There's a possiblity that this will generate a slug that already exists, breaking uniqueness validation (DB level).
-  def generate_randomized_slug
-    if product_name.present?
-      "#{product_name.parameterize}-#{rand 1000}"
-    elsif name.present?
-      "#{name.parameterize}-#{rand 1000}"
-    else
-      "nameless-#{SecureRandom.hex(2)}"
-    end
+  def regenerate_slug
+    update_attribute(:slug, nil) # rubocop:disable Rails/SkipsModelValidations
+    save!
   end
 
-  def regenerate_slug!
-    # Create slug from name.
-    self.slug = product_name.parameterize
+  def should_generate_new_friendly_id?
+    new_record? || slug.nil?
+  end
 
-    begin
-      save!
-    rescue ActiveRecord::RecordNotUnique
-      # If it's taken, try adding a random number.
-      self.slug = "#{product_name.parameterize}-#{rand 1000}"
-      retry
-    end
+  # Try building a slug based on the following fields in
+  # increasing order of specificity.
+  def slug_candidates
+    name = product_name.parameterize
+
+    [
+      name,
+      [name, :id],
+      [name, :id, rand(1000)]
+    ]
   end
 
   ####
@@ -421,15 +417,7 @@ class Startup < ApplicationRecord
   end
 
   def fee
-    if latest_coupon.present?
-      (undiscounted_fee * (1 - (latest_coupon.discount_percentage.to_f / 100))).round
-    else
-      undiscounted_fee
-    end
-  end
-
-  def undiscounted_fee
-    @undiscounted_fee ||= Founder::FEE * billing_founders_count
+    Founder::FEE * billing_founders_count
   end
 
   def latest_coupon

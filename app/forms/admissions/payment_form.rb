@@ -21,7 +21,8 @@ module Admissions
           # If payment doesn't exist, create a new one.
           create_new_payment
         end
-        startup.update!(admission_stage: Startup::ADMISSION_STAGE_PAYMENT_INITIATED)
+
+        Admissions::UpdateStageService.new(startup, Startup::ADMISSION_STAGE_PAYMENT_INITIATED).execute
         Intercom::LevelZeroStageUpdateJob.perform_later(model, 'Payment Initiated')
       end
 

@@ -110,6 +110,7 @@ ActiveAdmin.register Founder do
       column :name
       column :email
       column :phone
+
       column 'Skill' do |founder|
         if founder.hacker.nil?
           'Unknown'
@@ -119,21 +120,39 @@ ActiveAdmin.register Founder do
           'Hustler'
         end
       end
+
       column :team_lead do |founder|
-        founder.startup_admin? ? "Yes" : "No"
+        founder.startup_admin? ? 'Yes' : 'No'
       end
+
       column :stage do |founder|
         founder.startup&.admission_stage
       end
+
+      column :stage_updated_at do |founder|
+        founder.startup&.admission_stage_updated_at
+      end
+
       column :reference
+
       column :college do |founder|
         founder.college.present? ? founder.college.name : founder.college_text
       end
+
       column :state do |founder|
         founder.college.present? ? founder.college.state.name : ''
       end
+
       column :created_at do |founder|
         founder.startup.created_at.to_date
+      end
+
+      column :tags do |founder|
+        tags = ''
+        founder.tags&.each do |tag|
+          tags += tag.name + ';'
+        end
+        tags
       end
     else
       column :id
@@ -305,13 +324,14 @@ ActiveAdmin.register Founder do
     panel 'Social links' do
       attributes_table_for founder do
         row 'Facebook Connected' do |founder|
-          span class: "status_tag #{founder.fb_access_token.present? ? 'yes' : 'no'}" do
-            founder.fb_access_token.present?
-          end
           if founder.fb_access_token.present?
-            span style: "display:inline-block" do
+            status_tag('Connected', class: 'ok')
+
+            span style: 'display:inline-block' do
               button_to 'Disconnect', disconnect_from_facebook_admin_founder_path(founder), method: :patch
             end
+          else
+            status_tag('Not Connected', class: 'no')
           end
         end
         row :fb_token_expires_at

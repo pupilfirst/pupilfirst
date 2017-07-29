@@ -360,9 +360,7 @@ ActiveAdmin.register TimelineEvent do
         column :title
 
         column :file do |timeline_event_file|
-          link_to timeline_event_file.filename,
-            download_startup_timeline_event_timeline_event_file_url(timeline_event.startup, timeline_event, timeline_event_file),
-            target: '_blank'
+          link_to timeline_event_file.filename, timeline_event_file.file.url, target: '_blank'
         end
 
         column :private
@@ -384,7 +382,7 @@ ActiveAdmin.register TimelineEvent do
         end
 
         column :private do |link|
-          link[:private] ? status_tag('yes', :ok) : status_tag('no')
+          link[:private] ? status_tag('Yes') : status_tag('No')
         end
 
         column :actions do |link|

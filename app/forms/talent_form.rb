@@ -12,7 +12,12 @@ class TalentForm < Reform::Form
   validate :query_type_must_be_valid
 
   def query_type_must_be_valid
-    query_type.delete('') if query_type.respond_to?(:delete)
+    unless query_type.respond_to?(:delete)
+      errors[:query_type] << 'is invalid'
+      return
+    end
+
+    query_type.delete('')
 
     if query_type.blank?
       errors[:query_type] << 'must select at least one'

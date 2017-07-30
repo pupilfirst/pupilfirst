@@ -19,20 +19,18 @@ class ResourcePolicy < ApplicationPolicy
       founder = user&.founder
 
       # Return public resources to founder with inactive subscription.
-      return resources unless founder&.subscription_active?
+      return resources unless founder&.startup.present? && founder.subscription_active?
 
-      startup = founder&.startup
+      startup = founder.startup
 
-      if startup && !startup.dropped_out
-        # + resources for the startup
-        resources = resources.or(scope.where(startup: startup))
+      return resources if startup.dropped_out?
 
-        # + resources based on the startup's maximum level
-        maximum_level = startup&.maximum_level
-        resources = resources.or(scope.where('levels.number <= ?', maximum_level.number)) if maximum_level.present?
-      end
+      # + resources for the startup
+      resources = resources.or(scope.where(startup: startup))
 
-      resources
+      # + resources based on the startup's maximum level
+      maximum_level = startup&.maximum_level
+      resources.or(scope.where('levels.number <= ?', maximum_level.number)) if maximum_level.present?
     end
   end
 end

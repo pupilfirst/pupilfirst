@@ -105,6 +105,7 @@ gem 'rails_server_timings', '~> 1.0' # Server Timing headers for Rails apps. htt
 gem 'pundit', '~> 1.1' # Minimal authorization through OO design and pure Ruby classes.
 gem 'github-linguist', '~> 5.0', require: false # Language Savant. https://github.com/github/linguist
 gem 'rack-cors', '~> 1.0', require: 'rack/cors' # Rack Middleware for handling CORS, required to serve static assets such as fonts
+gem 'recaptcha', require: 'recaptcha/rails'
 
 # Rails assets!
 source 'https://rails-assets.org' do

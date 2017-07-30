@@ -22,8 +22,9 @@
             = f.input :mobile, label: 'Mobile number', input_html: { maxlength: 20 }
             = f.input :organization, label: 'Organization', input_html: { maxlength: 50 }
             = f.input :website, label: 'Website', input_html: { maxlength: 50 }
+            = recaptcha_tags
 
-            .form-group
+            .form-group.m-t-1
               .row
                 .col-sm-9
                   = button_tag type: :submit, class: 'btn btn-primary btn-md text-uppercase' do

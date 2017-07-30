@@ -1,5 +1,5 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
-ENV['RAILS_ENV'] ||= 'test'
+ENV['RACK_ENV'] = ENV['RAILS_ENV'] ||= 'test'
 
 # Enable coverage checking by Codecov and Simplecov.
 if ENV['CI'] == 'true' || ENV['COVERAGE'] == 'true'

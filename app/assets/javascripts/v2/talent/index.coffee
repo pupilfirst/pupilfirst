@@ -61,12 +61,12 @@ clearAllFormInterests = ->
   $.each interestChoices, (index, selection) ->
     $("#talent_query_type_#{selection}").prop('checked', false)
 
-handleActionButtonClicks = ->
-  $('.talent-action-btn').click (event) ->
-    selection = $(event.target).data('selection')
-    clearAllFormInterests()
-    $("#talent_query_type_#{selection}").prop('checked', true)
-    $('.invest-hire-modal').modal('show')
+#handleActionButtonClicks = ->
+#  $('.talent-action-btn').click (event) ->
+#    selection = $(event.target).data('selection')
+#    clearAllFormInterests()
+#    $("#talent_query_type_#{selection}").prop('checked', true)
+#    $('.invest-hire-modal').modal('show')
 
 pauseVideosOnTalentTabSwitch = ->
   if $('.talent-tab-content').length > 0
@@ -77,7 +77,7 @@ pauseVideosOnTalentTabSwitch = ->
 
 $(document).on 'page:change', animateHeroHeadline
 $(document).on 'page:change', showTalentFormOnError
-$(document).on 'page:change', handleActionButtonClicks
+#$(document).on 'page:change', handleActionButtonClicks
 $(document).on 'page:change', pauseVideosOnTalentTabSwitch
 $(document).on 'page:change', setupCompanyCarousel
 $(document).on 'page:change', setupTestimonialCarousel

@@ -49,5 +49,5 @@
           input_html: { maxlength: 250, disabled: true }
 
       div
-        div class='g-recaptcha' data-sitekey=Rails.application.secrets.dig(:google, :recaptcha, :invisible, :site_key) data-callback= 'handleFounderJoinButton' data-size='invisible' data-badge='inline'
+        div class='g-recaptcha' data-sitekey=Rails.application.secrets.dig(:google, :recaptcha, :invisible, :site_key) data-callback='handleFounderJoinButton' data-size='invisible' data-badge='inline'
         = f.submit 'Join Now', class: 'btn btn-primary btn-md apply-form__submit-button'

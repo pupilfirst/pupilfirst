@@ -107,6 +107,7 @@ describe Founders::DashboardDataService do
 
     # append more details
     result['status'] = :pending
+    result['prerequisites'] = nil
 
     result
   end

@@ -20,6 +20,13 @@ module Targets
       statuses.values.select { |t| t[:status] == :complete }.count
     end
 
+    def prerequisite_targets(target_id)
+      target_ids = all_target_prerequisites[target_id]
+      return nil if target_ids.blank?
+
+      applicable_targets.select { |target| target.id.in?(target_ids) }.pluck(:id, :title)
+    end
+
     private
 
     # returns status and submission date for all applicable targets

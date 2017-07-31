@@ -46,7 +46,7 @@ module AdmissionStats
 
     def date_range
       if @params.include?(:from)
-        Date.parse(@params[:from]).beginning_of_day..Date.parse(@params['to']).end_of_day
+        Date.parse(@params[:from]).beginning_of_day..Date.parse(@params[:to]).end_of_day
       else
         yesterday
       end

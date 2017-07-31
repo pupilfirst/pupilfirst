@@ -37,13 +37,17 @@ class TargetOverlayContentBlock extends React.Component {
           }
         </div>
 
-        <div className="target-overlay-content-block__header p-b-1 clearfix">
-          <img className="target-overlay-content-block__header-icon pull-xs-left" src={ this.props.iconPaths.completionInstruction }/>
-          <h5 className="target-overlay-content-block__header m-a-0 pull-xs-left font-semibold">Completion Instruction</h5>
+        { this.props.target.completion_instructions &&
+        <div>
+          <div className="target-overlay-content-block__header p-b-1 clearfix">
+            <img className="target-overlay-content-block__header-icon pull-xs-left" src={ this.props.iconPaths.completionInstruction }/>
+            <h5 className="target-overlay-content-block__header m-a-0 pull-xs-left font-semibold">Completion Instruction</h5>
+          </div>
+          <div className="target-overlay-content-block__body target-overlay-content-block__body--description p-b-1">
+            <p className="font-light">{ this.props.target.completion_instructions }</p>
+          </div>
         </div>
-        <div className="target-overlay-content-block__body target-overlay-content-block__body--description p-b-1">
-          <p className="font-light">{ this.props.target.completion_instructions }</p>
-        </div>
+        }
 
         { this.props.target.resource_url &&
           <div>

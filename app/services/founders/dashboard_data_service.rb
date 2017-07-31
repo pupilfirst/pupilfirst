@@ -111,6 +111,9 @@ module Founders
       # add grade if completed
       target_data['grade'] = bulk_grade_service.grade(target_data['id']) if target_data['status'] == Target::STATUS_COMPLETE
 
+      # add array of prerequisites
+      target_data['prerequisites'] = bulk_status_service.prerequisite_targets(target_data['id'])
+
       target_data
     end
 

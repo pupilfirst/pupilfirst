@@ -1,6 +1,6 @@
 ---
 timestamp: '2017-07-24T10:36:34Z'
-title: Allow the public changelog page to display private logs and additional details
+title: The public changelog page now displays even private logs and additional details
   if the signed in user is an admin.
 private: true
 category: feature

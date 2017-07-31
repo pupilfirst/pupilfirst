@@ -1,6 +1,6 @@
 ---
 timestamp: '2017-07-31T10:30:45Z'
-title: Add recaptcha to founder registration form, sign in form and talent form.
+title: Added recaptcha to founder registration form, sign in form and talent form.
 trello: https://trello.com/c/4iSQq6Vp
 private: true
 description: The recaptcha for founder registration and sign in forms are invisible, whereas the one for talent form is visible. This also updates the privacy policy and terms of use to include links to Google's documents, as per their terms of service for Recaptcha.

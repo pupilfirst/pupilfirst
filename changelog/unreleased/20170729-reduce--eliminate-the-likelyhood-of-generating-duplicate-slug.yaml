@@ -1,6 +1,6 @@
 ---
 timestamp: '2017-07-29T05:46:41Z'
-title: Reduce / eliminate the likelyhood of generating duplicate slugs for startups.
+title: Reduced / eliminated the likelyhood of generating duplicate slugs for startups.
 trello: https://trello.com/c/GWUX2WCP
 private: false
 description: This updates the use of friendly_id to use its v5 feature of automatically

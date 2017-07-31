@@ -1,0 +1,7 @@
+---
+timestamp: '2017-07-31T10:30:45Z'
+title: Add invisible recaptcha to founder registration form.
+trello: https://trello.com/c/4iSQq6Vp
+private: true
+description: This also updates the privacy policy and terms of use to include links
+  to Google's documents, as per their terms of service for Recaptcha.

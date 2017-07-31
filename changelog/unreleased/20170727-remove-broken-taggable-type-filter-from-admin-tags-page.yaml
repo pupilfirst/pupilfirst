@@ -1,6 +1,0 @@
----
-timestamp: '2017-07-27T07:06:56Z'
-title: Removed broken taggable type filter from admin tags page
-private: true
-description: The page was crashing because of references to old non-existent methods.
-category: bugfix

@@ -1,8 +1,0 @@
----
-timestamp: '2017-07-25T03:56:27Z'
-title: Startups are now listed in the order of their latest public timeline entry.
-trello: https://trello.com/c/ZkB62vyX
-private: false
-description: A new timeline_updated_on service was added to Startup. This is updated
-  whenever a public event is verified/marked needs_improvement.
-category: feature

@@ -1,5 +1,133 @@
 ---
 changelog:
+- timestamp: '2017-07-31T12:08:17Z'
+  changes:
+  - timestamp: '2017-07-31T10:30:45Z'
+    title: Added recaptcha to founder registration form, sign in form and talent form.
+    trello: https://trello.com/c/4iSQq6Vp
+    private: true
+    description: The recaptcha for founder registration and sign in forms are invisible,
+      whereas the one for talent form is visible. This also updates the privacy policy
+      and terms of use to include links to Google's documents, as per their terms
+      of service for Recaptcha.
+  - timestamp: '2017-07-29T12:33:44Z'
+    title: We now require startups to pay a monthly fee. Reminder emails will be sent
+      5 days, and 3 days before subscription expires.
+    trello: https://trello.com/c/Lcajyxf2
+    private: false
+    category: feature
+  - timestamp: '2017-07-29T11:10:03Z'
+    title: Changed the congratulation message on screening completion.
+    trello: https://trello.com/c/x66JDaHU
+    private: true
+    category: "'content'"
+  - timestamp: '2017-07-29T11:01:29Z'
+    title: "'Help Center' in navigation tab now point to help.sv.co"
+    trello: https://trello.com/c/eDsBlfBI
+    private: false
+    description: "'Help Center' navigation was pointing to help.sv.co/frequently-asked-questions"
+    category: "'bugfix'"
+  - timestamp: '2017-07-29T10:57:08Z'
+    title: Removed coupon in admissions/fee and for fee amount calculations.
+    trello: https://trello.com/c/sZaEhfcO
+    private: true
+    description: Coupon will be hidden from admissions/fee till the referral flow
+      is implemented.  Removeee coupon check in Startup#fee as there won't be any
+      discounted pricing in future  by applying coupons
+  - timestamp: '2017-07-29T10:41:55Z'
+    title: Admission funnel stats can now be filtered by date.
+    trello: https://trello.com/c/nogAvwkK
+    private: true
+    description: Added an interface which will allow user to pic 'from' and 'to' date
+      to filter admission funnel stats.
+    category: "'feature'"
+  - timestamp: '2017-07-29T10:40:35Z'
+    title: Few new columns were added in the CSV for Level 0 founders.
+    trello: "[https://trello.com/c/CbXeyQrL, https://trello.com/c/4i1Z2zqh]"
+    private: true
+    description: Columns relevant to admissions team were added
+  - timestamp: '2017-07-29T10:38:20Z'
+    title: The admissions dashboard was updated with all present stages.
+    trello: https://trello.com/c/jktGcKcs
+    private: true
+    description: The admissions flow is now linear and all the stages 'Signed Up',
+      'Screening Complete', 'Added Cofounders', 'Payment Initiated', 'Paid' and 'Admitted'
+      are show in the dashboard
+  - timestamp: '2017-07-29T07:21:40Z'
+    title: Removed outdated flattened_active_admin library and revert to default styling.
+    private: true
+    category: ui
+  - timestamp: '2017-07-29T05:46:41Z'
+    title: Reduced / eliminated the likelyhood of generating duplicate slugs for startups.
+    trello: https://trello.com/c/GWUX2WCP
+    private: false
+    description: This updates the use of friendly_id to use its v5 feature of automatically
+      generating a slug from a list of candidates. The list also includes the ID of
+      the Startup, so it is unlikely that there will be any conflicts in the future.
+    category: bugfix
+  - timestamp: '2017-07-28T14:31:52Z'
+    title: Added admission_stage_updated_at to Startup.
+    trello: https://trello.com/c/72hbTDMk
+    private: true
+    description: This also adds a service to handle updating of the admission_stage
+      field.
+  - timestamp: '2017-07-28T09:30:01Z'
+    title: Only authorized users are now allowed to download private timeline event
+      files.
+    trello: https://trello.com/c/mFtymN3j
+    private: true
+    category: bugfix
+  - timestamp: '2017-07-28T07:27:56Z'
+    title: The Skylight addon has been removed in favor of using the paid plan of
+      Scout.
+    private: true
+  - timestamp: '2017-07-28T06:51:33Z'
+    title: The admission stats daily job was restored as a new MembershipStatsNotificationJob.
+    trello: https://trello.com/c/MOhmcGKP
+    private: true
+    category: feature
+  - timestamp: '2017-07-28T05:58:38Z'
+    title: Two remaining Intercom jobs were marked as low priority.
+    trello: https://trello.com/c/ma8wxFhk
+    private: true
+  - timestamp: '2017-07-28T05:57:41Z'
+    title: The option to submit platform feedback was removed for Level 0 founders.
+    trello: https://trello.com/c/CxcJTZ3L
+    private: true
+    category: bugfix
+  - timestamp: '2017-07-28T05:55:58Z'
+    title: Improved memory usage by rewriting filters in AA StartupFeedback#index
+    trello: https://trello.com/c/fhz0UqFY
+    private: true
+    category: performance
+  - timestamp: '2017-07-28T05:35:44Z'
+    title: Fixed inefficient lookup for user by email in the Intercom library.
+    trello: https://trello.com/c/9atvnu9K
+    private: true
+    description: The lookup was probably the cause for 99% of Intercom API call delays.
+    category: performance
+  - timestamp: '2017-07-27T07:06:56Z'
+    title: Removed broken taggable type filter from admin tags page
+    private: true
+    description: The page was crashing because of references to old non-existent methods.
+    category: bugfix
+  - timestamp: '2017-07-25T03:56:27Z'
+    title: Startups are now listed in the order of their latest public timeline entry.
+    trello: https://trello.com/c/ZkB62vyX
+    private: false
+    description: A new timeline_updated_on service was added to Startup. This is updated
+      whenever a public event is verified/marked needs_improvement.
+    category: feature
+  - timestamp: '2017-07-24T11:50:32Z'
+    title: Timeline event descriptions for automatically generated events were updated.
+    trello: https://trello.com/c/F2qMHR3C
+    private: true
+    category: content
+  - timestamp: '2017-07-24T10:36:34Z'
+    title: The public changelog page now displays even private logs and additional
+      details if the signed in user is an admin.
+    private: true
+    category: feature
 - timestamp: '2017-07-24T09:50:36Z'
   changes:
   - timestamp: '2017-07-24T08:08:05Z'
@@ -62,8 +190,8 @@ changelog:
     private: true
     category: bugfix
   - timestamp: '2017-07-20T11:04:59Z'
-    title: Hints for common errors / typos are now displayed in the co-founders invitation form
-      of Level 0.
+    title: Hints for common errors / typos are now displayed in the co-founders invitation
+      form of Level 0.
     trello: https://trello.com/c/02pKOqGo
     private: false
     description: email_inquire validation is now used to validate email entries in

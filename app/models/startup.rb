@@ -486,4 +486,8 @@ class Startup < ApplicationRecord
   def subscription_active?
     payments.where('billing_end_at > ?', Time.now).paid.exists?
   end
+
+  def self.admission_stages
+    [ADMISSION_STAGE_SIGNED_UP, ADMISSION_STAGE_SCREENING_COMPLETED, ADMISSION_STAGE_COFOUNDERS_ADDED, ADMISSION_STAGE_PAYMENT_INITIATED, ADMISSION_STAGE_FEE_PAID, ADMISSION_STAGE_ADMITTED].freeze
+  end
 end

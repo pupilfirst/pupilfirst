@@ -31,6 +31,7 @@ ActiveAdmin.register Founder do
   filter :college_name_contains
   filter :roll_number
   filter :created_at, label: 'Registered on'
+  filter :startup_admission_stage, as: :select, collection: Startup.admission_stages, label: 'Admission Stage'
 
   permit_params :name, :email, :hacker, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :slack_username, :born_on,
     :startup_admin, :communication_address, :identification_proof, :phone, :invitation_token, :college_id, :roll_number,
@@ -66,6 +67,9 @@ ActiveAdmin.register Founder do
         end
       end
       column('Targets Completed', &:completed_targets_count)
+      column 'Admission Stage' do |founder|
+        founder.startup.admission_stage
+      end
     else
       column :product_name, sortable: 'founders.startup_id' do |founder|
         if founder.startup.present?
@@ -153,6 +157,10 @@ ActiveAdmin.register Founder do
           tags += tag.name + ';'
         end
         tags
+      end
+
+      column :admission_stage do |founder|
+        founder.startup.admission_stage
       end
     else
       column :id

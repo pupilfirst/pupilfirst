@@ -26,7 +26,9 @@
     videoEmbed: image_path('founders/dashboard/target-overlay-video-icon.svg'),
     slideshowEmbed: image_path('founders/dashboard/target-overlay-slide-icon.svg'),
     resourceLinks: image_path('founders/dashboard/target-overlay-resources-icon.svg'),
-    completionInstruction: image_path('founders/dashboard/target-overlay-instruction-icon.svg') }
+    completionInstruction: image_path('founders/dashboard/target-overlay-instruction-icon.svg'),
+    closeButton: image_path('founders/dashboard/target-overlay-close-icon.svg'),
+    backButton: image_path('founders/dashboard/target-overlay-mobile-back-button.svg') }
 
   == react_component('FounderDashboard', @react_data.merge(authenticityToken: form_authenticity_token, iconPaths: icon_paths))
 

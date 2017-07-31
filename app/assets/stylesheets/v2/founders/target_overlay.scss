@@ -11,27 +11,41 @@
 
 .target-overlay__overlay-close {
   position: absolute;
-  right: 1rem;
-  top: 0;
-  font-size: 3rem;
+  display: flex;
+  align-items: center;
+  color: $light-grey-text;
+  padding: 0;
+  top: 0.625rem;
+  border: 0;
+  background-color: transparent;
   outline: 0;
 
   &:focus {
     outline: 0;
   }
+  &:hover {
+    opacity: 0.6;
+  }
+}
+.target-overlay__overlay-close-icon {
+  width: 1.75rem;
+  height: 1.75rem;
+  margin-right: 6px;
 }
 
 .target-overlay__container {
   max-width: 62rem;
   position: relative;
   width: 100%;
+  padding: 3rem 1rem;
   height: auto;
   min-height: 100%;
   border-radius: 0;
   border: 0;
 
   @include media-breakpoint-down (sm) {
-    margin-bottom: 50px;
+    margin-bottom: 30px;
+    padding-top: 1rem;
   }
 }
 
@@ -65,7 +79,7 @@
   margin-right: 10px;
 
   @include media-breakpoint-down(sm) {
-      margin: 0;
+    margin: 0;
   }
 }
 
@@ -245,6 +259,10 @@
     border-width: 1px 0 0 0;
     padding: 1.25rem;
   }
+
+  &:last-child {
+    border-bottom: 0;
+  }
 }
 
 .target-overlay__assigner-box {
@@ -397,11 +415,31 @@
 .target-overlay__mobile-fixed-navbar {
   background-color: $primary-background;
   position: fixed;
-  padding: 1rem;
   width: 100%;
   left: 0;
   right: 0;
   bottom: 0;
-  border-top: 1px solid $gray-border;
+  border: 1px solid $gray-border;
+  border-width: 1px 0;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+}
+
+.target-overlay__mobile-back-button {
+  border: 1px solid $gray-border;
+  border-width: 0 1px 0 0;
+  padding: 1rem;
+  background-color: $primary-background;
+  display: flex;
+  align-items: center;
+  color: $light-grey-text;
+}
+
+.target-overlay__mobile-back-button-icon {
+  width: 30px;
+  height: 30px;
+  margin-right: 5px;
+}
+
+.target-overlay__mobile-submit-button-container {
+  padding-top: 0.8125rem;
 }

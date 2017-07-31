@@ -66,10 +66,11 @@ class FounderDashboardTargetOverlay extends React.Component  {
   render() {
     return(
       <div className="target-overlay__overlay">
-        <div className="target-overlay__container m-x-auto p-x-1 p-y-3">
+        <div className="target-overlay__container m-x-auto">
           <div className="target-overlay__body clearfix">
-            <button type="button" className="close target-overlay__overlay-close" aria-label="Close" onClick={ this.props.closeCB }>
-              <span aria-hidden="true">&times;</span>
+            <button type="button" className="target-overlay__overlay-close hidden-sm-down" aria-label="Close" onClick={ this.props.closeCB }>
+              <img className="target-overlay__overlay-close-icon" src={ this.props.iconPaths.backButton }/>
+              <span>Back</span>
             </button>
             <div className="target-overlay__header clearfix">
               <TargetOverlayHeaderTitle iconPaths={ this.props.iconPaths } target={ this.props.target }/>
@@ -103,8 +104,13 @@ class FounderDashboardTargetOverlay extends React.Component  {
           </div>
         </div>
         <div className="target-overlay__mobile-fixed-navbar hidden-sm-up clearfix">
-          <div className="pull-xs-left"><FounderDashboardTargetStatusBadge target={ this.props.target }/></div>
-          { this.isSubmittable() && <TargetOverlaySubmitButton target={ this.props.target } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }/> }
+          <button type="button" className="target-overlay__mobile-back-button pull-xs-left" aria-label="Close" onClick={ this.props.closeCB }>
+            <img className="target-overlay__mobile-back-button-icon" src={ this.props.iconPaths.backButton }/>
+            <span>Back</span>
+          </button>
+          <div className="target-overlay__mobile-submit-button-container pull-xs-right p-r-1">
+            { this.isSubmittable() && <TargetOverlaySubmitButton target={ this.props.target } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }/> }
+          </div>
         </div>
       </div>
     );

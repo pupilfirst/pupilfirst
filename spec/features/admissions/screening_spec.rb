@@ -42,7 +42,7 @@ feature 'Screening' do
     expect(page).to have_content('Have you built websites')
     page.find('label[for="answer-option-No"]').click
     find_button('Next').click
-    expect(page).to have_content('Do you have a public Github/BitBucket profile?')
+    expect(page).to have_content('Do you have a public Github / BitBucket profile?')
     fill_in 'github-url', with: 'https://github.com/profile'
     find_button('Next').click
 

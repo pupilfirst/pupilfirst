@@ -25,9 +25,8 @@ class TargetOverlayTimelineEventPanel extends React.Component {
         <div className="target-overlay-timeline-submission__box">
           <div className="target-overlay-timeline-submission__header p-a-1">
             <div className="target-overlay-timeline-submission__header-date-box m-r-1">
-              <span className="target-overlay-timeline-submission__header-date font-semibold">{ moment(this.props.event.event_on).date() }</span>
-              <span className="target-overlay-timeline-submission__header-date--small">{ moment(this.props.event.event_on).format('MMM') }</span>
-              <span className="target-overlay-timeline-submission__header-date--small">{ moment(this.props.event.event_on).format('YYYY') }</span>
+              <span className="target-overlay-timeline-submission__header-date text-uppercase font-semibold">{ moment(this.props.event.event_on).format('MMM') }</span>
+              <span className="target-overlay-timeline-submission__header-date--large font-semibold">{ moment(this.props.event.event_on).date() }/{ moment(this.props.event.event_on).format('YY') }</span>
             </div>
             <div className="target-overlay-timeline-submission__header-title">
               <h5 className="font-semibold brand-secondary m-b-0">

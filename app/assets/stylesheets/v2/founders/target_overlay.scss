@@ -315,8 +315,8 @@
 }
 
 .target-overlay-timeline-submission__header-date-box {
-  width: 3.6rem;
-  height: 3.6rem;
+  width: 3.3rem;
+  height: 3.3rem;
   @include border-radius(5px);
   border: 1px solid $gray-border;
   text-align: center;
@@ -326,23 +326,19 @@
 }
 
 .target-overlay-timeline-submission__header-date {
-  font-size: 1rem;
+  font-size: 0.75rem;
   display: block;
+  color: white;
   line-height: 1.1;
-  background-color: white;
-  padding: 5px 0 5px;
+  background-color: #e46f61;
+  padding: 4px 0 4px;
   margin-bottom: 2px;
   border-bottom: 1px solid $gray-border;
 }
 
-.target-overlay-timeline-submission__header-date--small {
+.target-overlay-timeline-submission__header-date--large {
   display: block;
-  font-size: 0.6875rem;
-  line-height: 1.1;
-}
-
-.target-overlay-timeline-submission__header-title {
-
+  font-size: 1rem;
 }
 
 .target-overlay-timeline-submission__header-title-date {

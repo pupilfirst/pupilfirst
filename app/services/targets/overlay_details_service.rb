@@ -23,10 +23,10 @@ module Targets
 
     def latest_event_details
       {
-        description: latest_event.description,
-        event_on: latest_event.event_on,
-        title: latest_event.title,
-        days_elapsed: latest_event.days_elapsed,
+        description: latest_event&.description,
+        event_on: latest_event&.event_on,
+        title: latest_event&.title,
+        days_elapsed: latest_event&.days_elapsed,
         attachments: latest_event_attachments
       }
     end
@@ -40,6 +40,8 @@ module Targets
     end
 
     def latest_event_attachments
+      return nil if latest_event.blank?
+
       attachments = latest_event.timeline_event_files.each_with_object([]) do |file, array|
         array << { type: 'file', title: file.title, url: file.file_url }
       end

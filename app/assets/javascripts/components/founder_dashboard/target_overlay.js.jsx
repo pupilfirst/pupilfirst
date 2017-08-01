@@ -13,6 +13,12 @@ class FounderDashboardTargetOverlay extends React.Component  {
       url: '/targets/' + that.props.target.id + '/details',
       success: that.updateDetails
     });
+
+    document.body.classList.add('scroll-lock')
+  }
+
+  componentWillUnmount() {
+    document.body.classList.remove('scroll-lock')
   }
 
   isSubmittable() {

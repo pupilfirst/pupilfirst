@@ -6,9 +6,9 @@ class ApplicantScreeningQuestion extends React.Component {
       case(2):
         return "Have you <em>completed</em> a technical course at Coursera, Udacity or other MOOCs?";
       case(3):
-        return "Have you built websites and/or apps?";
+        return "Have you built websites and / or apps?";
       case(4):
-        return "Do you have a public Github/BitBucket profile?";
+        return "Do you have a public Github / BitBucket profile?";
       default:
         console.error("Unexpected question number: " + this.props.questionNumber);
         return null;
@@ -18,7 +18,7 @@ class ApplicantScreeningQuestion extends React.Component {
   nonCoderQuestion() {
     switch (this.props.questionNumber) {
       case(1):
-        return "Have you ever worked with a developer to design website/apps?";
+        return "Have you ever worked with a developer to design website / apps?";
       case(2):
         return "Have you ever made money while in college?";
       case(3):

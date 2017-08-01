@@ -19,7 +19,7 @@ section.home-hero__container
           .font-semibold
             | Campus Startups
         .p-t-1
-          = link_to 'Join Now', join_path, class: 'btn btn-primary btn-lg home-apply__button'
+          = link_to 'Join Now', join_path, class: 'btn btn-primary btn-lg home-apply__button', id: 'home-index__hero-join-link'
 
   = video_tag 'https://public-assets.sv.co/videos/header_background_clip.mp4', preload: 'none', autoplay: true, loop: true, class: 'hidden-sm-down home-hero__video'
 
@@ -54,7 +54,7 @@ section.six-ways-card__container.p-y-3
           | startup skills and explore graduation options during their final year
 
     .col-md-4
-      a.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#itraveller-story-video"
+      a#home-index__six-ways-funded-video.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#itraveller-story-video"
         .six-ways-card__thumbnail
           = image_tag 'home/index/six-ways-get-funded.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Get your startup funded'
 
@@ -70,7 +70,7 @@ section.six-ways-card__container.p-y-3
             .six-ways-card__play-button.pull-xs-right
 
     .col-md-4
-      a.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#profoundis-story-video"
+      a#home-index__six-ways-accelerator-video.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#profoundis-story-video"
         .six-ways-card__thumbnail
           = image_tag 'home/index/six-ways-join-accelerator.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Join a startup accelerator'
 
@@ -87,7 +87,7 @@ section.six-ways-card__container.p-y-3
             .six-ways-card__play-button.pull-xs-right
 
     .col-md-4
-      a.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#z-pay-story-video"
+      a#home-index__six-ways-acquihire-video.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#z-pay-story-video"
         .six-ways-card__thumbnail
           = image_tag 'home/index/six-ways-get-acqui-hired.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Get acqui-hired'
 
@@ -104,7 +104,7 @@ section.six-ways-card__container.p-y-3
             .six-ways-card__play-button.pull-xs-right
 
     .col-md-4
-      a.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#hiring-story-video"
+      a#home-index__six-ways-hired-video.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#hiring-story-video"
         .six-ways-card__thumbnail
           = image_tag 'home/index/six-ways-get-hired.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Get hired by a startup'
 
@@ -121,7 +121,7 @@ section.six-ways-card__container.p-y-3
             .six-ways-card__play-button.pull-xs-right
 
     .col-md-4
-      a.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#wowmakers-story-video"
+      a#home-index__six-ways-sustainable-video.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#wowmakers-story-video"
         .six-ways-card__thumbnail
           = image_tag 'home/index/six-ways-run-startup.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Run a startup of your own'
 
@@ -138,7 +138,7 @@ section.six-ways-card__container.p-y-3
             .six-ways-card__play-button.pull-xs-right
 
     .col-md-4
-      a.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#higher-studies-story-video"
+      a#home-index__six-ways-studies-video.six-ways-card__box.m-y-1 href="#" data-toggle="modal" data-target="#higher-studies-story-video"
         .six-ways-card__thumbnail
           = image_tag 'home/index/six-ways-higher-studies.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Get admissions to global universities with a stronger resume'
 
@@ -156,7 +156,7 @@ section.six-ways-card__container.p-y-3
 
   .container
     .text-xs-center.m-t-2
-      = link_to 'Learn More', join_path, class: 'btn btn-primary btn-lg home-apply__button'
+      = link_to 'Learn More', join_path, class: 'btn btn-primary btn-lg home-apply__button', id: 'home-index__six-ways-learn-more-link'
 
 section.program-feature__container.p-y-3
   .container
@@ -235,7 +235,7 @@ section.program-feature__container.p-y-3
 
   .container
     .text-xs-center.m-t-2
-      = link_to 'Learn More', join_path, class: 'btn btn-primary btn-lg home-apply__button'
+      = link_to 'Learn More', join_path, class: 'btn btn-primary btn-lg home-apply__button', id: 'home-index__programme-learn-more-link'
 
 section.silicon-valley-itinerary__container.p-y-3
   .container
@@ -290,7 +290,7 @@ section.home-call-to-action__container.p-y-3
       p.home-call-to-action__sub-head Get started by submitting an application today.
 
       .text-xs-center.m-t-1
-        = link_to 'Join Now', join_path, class: 'btn btn-primary btn-lg home-call-to-action__button'
+        = link_to 'Join Now', join_path, class: 'btn btn-primary btn-lg home-call-to-action__button', id: 'home-index__ready-join-now-link'
 
 == render 'layouts/footer_v2'
 

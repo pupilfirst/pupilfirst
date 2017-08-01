@@ -34,7 +34,7 @@ module Admissions
         when Target::KEY_ADMISSIONS_FEE_PAYMENT
           "#{@founder.name} just completed payment for the first month of the SV.CO program."
         when Target::KEY_ADMISSIONS_COFOUNDER_ADDITION
-          "#{@founder.name} has invited co-founders to join his startup."
+          "#{@founder.name} has invited co-founders to join their startup."
         else
           raise "CompleteTargetService does not know how to generate description for #{@key}"
       end

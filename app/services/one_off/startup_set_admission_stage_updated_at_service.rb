@@ -5,7 +5,9 @@ module OneOff
 
     # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength
     def execute
-      startups_with_admission_stage = Startup.where.not(admission_stage: nil)
+      raise 'OneOff::StartupSetAdmissionStageUpdatedAtService is outdated, and should be fixed'
+
+      startups_with_admission_stage = Startup.where.not(admission_stage: nil) # rubocop:disable Lint/UnreachableCode
 
       log "Updating admission_stage_updated_at for #{startups_with_admission_stage.count} startups..."
 
@@ -18,7 +20,7 @@ module OneOff
           when Startup::ADMISSION_STAGE_COFOUNDERS_ADDED
             startup.admission_stage_updated_at = timeline_event_at(startup, Target::KEY_ADMISSIONS_COFOUNDER_ADDITION)
           when Startup::ADMISSION_STAGE_PAYMENT_INITIATED
-            startup.admission_stage_updated_at = startup.payment.created_at
+            startup.admission_stage_updated_at = startup.payments.first.created_at
           when Startup::ADMISSION_STAGE_FEE_PAID
             startup.admission_stage_updated_at = timeline_event_at(startup, Target::KEY_ADMISSIONS_FEE_PAYMENT)
           when Startup::ADMISSION_STAGE_ADMITTED

@@ -12,22 +12,25 @@ class AdmissionsController < ApplicationController
   def register
     @form = Founders::RegistrationForm.new(Founder.new)
 
-    if @form.validate(params[:founders_registration])
-      begin
-        founder = @form.save
-      rescue Postmark::InvalidMessageError
-        @form.errors[:base] << t('admissions.register.email_error')
-        render 'join'
-      else
-        # Sign in user immediately to allow him to proceed to screening.
-        sign_in founder.user
+    if verify_recaptcha(model: @form, secret_key: Rails.application.secrets.dig(:google, :recaptcha, :invisible, :secret_key))
+      if @form.validate(params[:founders_registration])
+        begin
+          founder = @form.save
+        rescue Postmark::InvalidMessageError
+          @form.errors[:base] << t('admissions.register.email_error')
+        else
+          # Sign in user immediately to allow him to proceed to screening.
+          sign_in founder.user
 
-        redirect_to dashboard_founder_path(from: 'register')
+          redirect_to dashboard_founder_path(from: 'register')
+          return
+        end
+      else
+        flash.now[:error] = 'There were problems with your submission. Please check the form and retry.'
       end
-    else
-      flash.now[:error] = 'There were problems with your submission. Please check the form and retry.'
-      render 'join'
     end
+
+    render 'join'
   end
 
   # GET /admissions/screening

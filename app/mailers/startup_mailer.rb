@@ -20,4 +20,10 @@ class StartupMailer < ApplicationMailer
     send_to = connect_request.startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
     mail(to: send_to, subject: 'Connect Request confirmed.')
   end
+
+  def payment_reminder(payment)
+    @payment = payment
+    send_to = payment.startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
+    mail(to: send_to, subject: "Your SV.CO subscription expires in #{payment.days_to_expiry} days.")
+  end
 end

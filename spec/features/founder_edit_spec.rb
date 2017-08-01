@@ -3,7 +3,7 @@ require 'rails_helper'
 include UserSpecHelper
 
 feature 'Founder Edit' do
-  let(:startup) { create :startup }
+  let(:startup) { create :startup, :subscription_active }
   let(:founder) { create :founder, college: nil, college_text: 'Anon College of Engineering' }
   let(:new_founder_name) { Faker::Name.name }
 
@@ -53,6 +53,18 @@ feature 'Founder Edit' do
     scenario 'founder visits the edit page', js: true do
       visit edit_founder_path
       expect(page).to have_text('not an active founder anymore')
+    end
+  end
+
+  context 'Founder with inactive subscription attempts to edit his profile' do
+    let(:startup) { create :startup }
+
+    scenario 'founder visits the edit page' do
+      # Create a pending payment.
+      create :payment, startup: startup
+
+      sign_in_user(founder.user, referer: edit_founder_path)
+      expect(page).to have_content('Please pay the membership fee for the next month.')
     end
   end
 end

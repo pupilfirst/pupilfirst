@@ -112,7 +112,7 @@ class Instamojo
 
   def payment_request_params(amount, buyer_name, email)
     params = {
-      purpose: 'Application to SV.CO',
+      purpose: 'Monthly Fee for SV.CO',
       amount: amount.to_s,
       buyer_name: buyer_name,
       email: email,

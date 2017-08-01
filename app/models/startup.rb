@@ -127,7 +127,7 @@ class Startup < ApplicationRecord
   belongs_to :level
   belongs_to :maximum_level, class_name: 'Level'
   belongs_to :requested_restart_level, class_name: 'Level', optional: true
-  has_one :payment, dependent: :restrict_with_error
+  has_many :payments, dependent: :restrict_with_error
   has_many :archived_payments, class_name: 'Payment', foreign_key: 'original_startup_id'
   has_many :coupon_usages
   has_many :coupons, through: :coupon_usages
@@ -481,5 +481,13 @@ class Startup < ApplicationRecord
 
   def eligible_to_connect?(faculty)
     Startups::ConnectRequestEligibilityService.new(self, faculty).eligible?
+  end
+
+  def subscription_active?
+    payments.where('billing_end_at > ?', Time.now).paid.exists?
+  end
+
+  def self.admission_stages
+    [ADMISSION_STAGE_SIGNED_UP, ADMISSION_STAGE_SCREENING_COMPLETED, ADMISSION_STAGE_COFOUNDERS_ADDED, ADMISSION_STAGE_PAYMENT_INITIATED, ADMISSION_STAGE_FEE_PAID, ADMISSION_STAGE_ADMITTED].freeze
   end
 end

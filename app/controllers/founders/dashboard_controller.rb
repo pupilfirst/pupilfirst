@@ -2,6 +2,7 @@ module Founders
   class DashboardController < ApplicationController
     before_action :authenticate_founder!
     before_action :skip_container
+    before_action :require_active_subscription, if: :startup_is_admitted
 
     layout 'application_v2'
 
@@ -60,6 +61,11 @@ module Founders
     end
 
     private
+
+    def startup_is_admitted
+      return if current_founder.blank?
+      !current_founder.startup&.level_zero?
+    end
 
     def skip_container
       @skip_container = true

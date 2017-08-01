@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'Startup Edit' do
   let(:founder) { create :founder }
   let(:co_founder) { create :founder }
-  let!(:startup) { create :startup }
+  let!(:startup) { create :startup, :subscription_active }
 
   let(:new_product_name) { Faker::Lorem.words(rand(3) + 1).join ' ' }
   let(:new_product_description) { Faker::Lorem.words(12).join(' ').truncate(Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS) }

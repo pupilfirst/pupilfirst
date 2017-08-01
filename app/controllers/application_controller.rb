@@ -102,6 +102,12 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def require_active_subscription
+    return if current_founder.subscription_active?
+    flash[:error] = 'You do not have an active subscription. Please renew your subscription and try again.'
+    redirect_to fee_founder_url
+  end
+
   def sign_out_if_required
     service = ::Users::ManualSignOutService.new(self, current_user)
     service.sign_out_if_required
@@ -217,6 +223,19 @@ class ApplicationController < ActionController::Base
     }
   end
 
+  def instamojo_csp
+    {
+      script: 'https://js.instamojo.com/v1/checkout.js',
+      frame: 'https://test.instamojo.com/ https://www.instamojo.com/'
+    }
+  end
+
+  def recaptcha_csp
+    {
+      script: 'https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/'
+    }
+  end
+
   def child_sources
     <<~CHILD_SOURCES.squish
       child-src https://www.youtube.com
@@ -237,7 +256,7 @@ class ApplicationController < ActionController::Base
       data:
       https://sv-co-public-slackin.herokuapp.com https://www.google.com
       #{typeform_csp[:frame]} #{youtube_csp[:frame]} #{slideshare_csp[:frame]} #{speakerdeck_csp[:frame]}
-      #{google_form_csp[:frame]} #{facebook_csp[:frame]};
+      #{google_form_csp[:frame]} #{facebook_csp[:frame]} #{instamojo_csp[:frame]};
     FRAME_SOURCES
   end
 
@@ -253,7 +272,7 @@ class ApplicationController < ActionController::Base
       'self' 'unsafe-eval' 'unsafe-inline' https://ajax.googleapis.com https://blog.sv.co https://www.youtube.com
       https://s.ytimg.com http://www.startatsv.com https://sv-assets.sv.co
       #{google_analytics_csp[:script]} #{inspectlet_csp[:script]} #{facebook_csp[:script]} #{intercom_csp[:script]}
-      #{gtm_csp[:script]};
+      #{gtm_csp[:script]} #{instamojo_csp[:script]} #{recaptcha_csp[:script]};
     SCRIPT_SOURCES
   end
 

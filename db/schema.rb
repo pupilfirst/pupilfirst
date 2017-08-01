@@ -334,6 +334,8 @@ ActiveRecord::Schema.define(version: 20170728122038) do
     t.integer "founder_id"
     t.integer "startup_id"
     t.integer "original_startup_id"
+    t.datetime "billing_start_at"
+    t.datetime "billing_end_at"
     t.index ["founder_id"], name: "index_payments_on_founder_id"
     t.index ["original_startup_id"], name: "index_payments_on_original_startup_id"
     t.index ["startup_id"], name: "index_payments_on_startup_id"

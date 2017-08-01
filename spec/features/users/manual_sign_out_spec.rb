@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'Manual User Sign Out' do
   include ActiveSupport::Testing::TimeHelpers
 
-  let(:startup) { create :startup }
+  let(:startup) { create :startup, :subscription_active }
   let(:user) { startup.admin.user }
 
   scenario 'active user session is interrupted by the setting of the flag' do

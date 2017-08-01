@@ -1,8 +1,0 @@
----
-timestamp: '2017-07-29T10:57:08Z'
-title: Remove coupon in admissions/fee and for fee amount calculation
-trello: https://trello.com/c/sZaEhfcO
-private: true
-description: Coupon will be hidden from admissions/fee till the referral flow is implemented.  Removeee
-  coupon check in Startup#fee as there won't be any discounted pricing in future  by
-  applying coupons

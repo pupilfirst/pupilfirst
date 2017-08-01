@@ -37,3 +37,9 @@
 8. **Governing law**
 
     Any claim relating to SV.CO's web site shall be governed by the laws of the State of Kerala without regard to its conflict of law provisions.
+
+9. **Third Party Applications**
+
+    SV.CO uses third-party applications, websites and services to make available products and services to you (&ldquo;Third Party Applications&rdquo;), and your use of these Third Party Applications is subject to their terms of use. You understand and agree that SV.CO is not responsible or liable for the behavior, features, or content of any Third Party Application.
+
+    - **Google Recaptcha**: [Terms of Use](https://www.google.com/intl/en/policies/terms/)

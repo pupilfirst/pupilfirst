@@ -20,10 +20,15 @@ module Users
     # POST /user/send_email - find or create user from email received
     def send_login_email
       @form = UserSignInForm.new(OpenStruct.new)
-      if @form.validate(sign_in_params)
-        @form.save
+
+      if verify_recaptcha(model: @form, secret_key: Rails.application.secrets.dig(:google, :recaptcha, :invisible, :secret_key))
+        if @form.validate(sign_in_params)
+          @form.save
+        else
+          @sign_in_error = true
+          render 'new'
+        end
       else
-        @sign_in_error = true
         render 'new'
       end
     end

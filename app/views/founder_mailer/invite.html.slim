@@ -16,7 +16,7 @@
       ' You are already a member of a startup led by #{@founder.startup.admin.name}. If you accept this invitation,
       ' you will be removed from it.
 
-  - elsif @founder.payment.present? && @founder.payment.refundable?
+  - elsif @founder.payments.any? && @founder.payments.last.refundable?
     p
       ' You are eligible for refund of the membership fee for your previous sign-up. We will attempt to process the
       | refund if you accept this invitation.

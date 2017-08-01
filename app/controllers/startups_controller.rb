@@ -1,5 +1,6 @@
 class StartupsController < ApplicationController
   before_action :authenticate_founder!, except: %i[show index timeline_event_show paged_events]
+  before_action :require_active_subscription, only: %i[edit update]
 
   # GET /startups
   def index
@@ -52,11 +53,13 @@ class StartupsController < ApplicationController
     render layout: false
   end
 
+  # GET /founder/startup/edit
   def edit
     @startup = current_founder.startup
     authorize @startup
   end
 
+  # PATCH /founder/startup
   def update
     @startup = current_founder.startup
     authorize @startup

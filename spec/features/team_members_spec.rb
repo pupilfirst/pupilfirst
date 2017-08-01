@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature 'Team members spec' do
   let(:founder) { create :founder }
-  let(:startup) { create :startup }
+  let(:startup) { create :startup, :subscription_active }
 
   before do
     # Add founder as founder of startup.

@@ -68,7 +68,7 @@ module Founders
         end
       end
 
-      refund_and_unlink_payment(@original_startup.payment) if @original_startup.payment.present?
+      refund_and_unlink_payment(@original_startup.payments.last) if @original_startup.payments.any?
 
       # And delete the startup.
       @original_startup.reload.destroy!

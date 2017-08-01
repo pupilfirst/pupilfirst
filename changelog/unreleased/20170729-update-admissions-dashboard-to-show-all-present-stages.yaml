@@ -1,8 +1,0 @@
----
-timestamp: '2017-07-29T10:38:20Z'
-title: Update admissions dashboard to show all present stages
-trello: https://trello.com/c/jktGcKcs
-private: true
-description: The admissions flow is now linear and all the stages 'Signed Up', 'Screening
-  Complete', 'Added Cofounders', 'Payment Initiated', 'Paid' and 'Admitted' are show
-  in the dashboard

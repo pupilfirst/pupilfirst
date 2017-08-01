@@ -33,7 +33,7 @@ feature 'Faculty Connect' do
   end
 
   context 'User is founder of approved startup' do
-    let(:startup) { create :startup }
+    let(:startup) { create :startup, :subscription_active }
     let(:founder) { startup.founders.where.not(id: startup.admin.id).first }
 
     scenario 'Non-admin founder visits faculty page' do
@@ -50,7 +50,7 @@ feature 'Faculty Connect' do
       let(:founder) { startup.admin }
 
       context "Startup's level maxed out at two" do
-        let(:startup) { create :startup, maximum_level: level_two }
+        let(:startup) { create :startup, :subscription_active, maximum_level: level_two }
 
         scenario 'Founder visits faculty page' do
           sign_in_user(founder.user, referer: faculty_index_path)

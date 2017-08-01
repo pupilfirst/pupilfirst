@@ -7,7 +7,8 @@ class Payment < ApplicationRecord
   STATUS_PAID = -'paid'
   STATUS_FAILED = -'failed'
 
-  scope :requested, -> { where(instamojo_payment_request_status: payment_requested_statuses, instamojo_payment_status: nil, paid_at: nil) }
+  scope :pending, -> { where(paid_at: nil) }
+  scope :requested, -> { pending.where(instamojo_payment_request_status: payment_requested_statuses, instamojo_payment_status: nil) }
   scope :paid, -> { where.not(paid_at: nil) }
 
   def self.payment_requested_statuses
@@ -32,9 +33,13 @@ class Payment < ApplicationRecord
     instamojo_payment_request_status.in? Payment.payment_requested_statuses
   end
 
-  # An payment is considered processed when instamojo payment status is credited.
+  # A payment is considered paid when the paid_at time is set.
   def paid?
     paid_at.present?
+  end
+
+  def pending?
+    !paid?
   end
 
   # A payment has failed when instamojo payment status is failed.
@@ -83,5 +88,10 @@ class Payment < ApplicationRecord
     self.original_startup_id = startup_id
     self.startup_id = nil
     save!
+  end
+
+  def days_to_expiry
+    return if billing_end_at.blank?
+    ((billing_end_at - Time.now) / 1.day.to_f).ceil
   end
 end

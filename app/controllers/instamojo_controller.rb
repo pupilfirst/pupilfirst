@@ -5,7 +5,15 @@ class InstamojoController < ApplicationController
   def redirect
     payment = Payment.find_by instamojo_payment_request_id: params[:payment_request_id]
     payment.refresh_payment!(params[:payment_id])
-    Admissions::PostPaymentService.new(payment: payment).execute
+
+    # Log payment time, if unrecorded.
+    payment.update!(paid_at: Time.now)
+
+    if payment.startup.level_zero?
+      Admissions::PostPaymentService.new(payment: payment).execute
+    else
+      Founders::PostPaymentService.new(payment).execute
+    end
 
     flash[:success] = 'Your payment has been recorded.'
     redirect_to dashboard_founder_path(from: 'instamojo_redirect')
@@ -16,17 +24,20 @@ class InstamojoController < ApplicationController
     if authentic_request?
       payment = Payment.find_by instamojo_payment_request_id: params[:payment_request_id]
 
-      update_params = {
-        instamojo_payment_id: params[:payment_id],
-        instamojo_payment_status: params[:status],
-        fees: params[:fees],
-        webhook_received_at: Time.now
-      }
+      payment.instamojo_payment_id = params[:payment_id]
+      payment.instamojo_payment_status = params[:status]
+      payment.fees = params[:fees]
+      payment.webhook_received_at = Time.now
+      payment.instamojo_payment_request_status = 'Completed' if params[:status] == 'Credit'
+      payment.paid_at = Time.now if payment.paid_at.blank?
 
-      update_params[:instamojo_payment_request_status] = 'Completed' if params[:status] == 'Credit'
+      payment.save!
 
-      payment.update update_params
-      Admissions::PostPaymentService.new(payment: payment).execute
+      if payment.startup.level_zero?
+        Admissions::PostPaymentService.new(payment: payment).execute
+      else
+        Founders::PostPaymentService.new(payment).execute
+      end
 
       head :ok
     else

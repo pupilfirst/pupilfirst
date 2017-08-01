@@ -29,7 +29,7 @@ module AdmissionStats
     end
 
     def payment_initiated
-      Startup.level_zero.joins(:payment).merge(Payment.requested).where(payments: { created_at: date_range }).count
+      Startup.level_zero.joins(:payments).merge(Payment.requested).where(payments: { created_at: date_range }).count
     end
 
     def cofounders_added
@@ -46,7 +46,7 @@ module AdmissionStats
 
     def date_range
       if @params.include?(:from)
-        Date.parse(@params[:from]).beginning_of_day..Date.parse(@params['to']).end_of_day
+        Date.parse(@params[:from]).beginning_of_day..Date.parse(@params[:to]).end_of_day
       else
         yesterday
       end

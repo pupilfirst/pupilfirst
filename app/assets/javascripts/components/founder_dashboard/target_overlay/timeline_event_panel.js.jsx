@@ -2,6 +2,7 @@ class TargetOverlayTimelineEventPanel extends React.Component {
   constructor(props) {
     super(props);
     this.slackButton = this.slackButton.bind(this);
+    this.attachmentLinks = this.attachmentLinks.bind(this);
   }
 
   slackButton() {
@@ -16,6 +17,21 @@ class TargetOverlayTimelineEventPanel extends React.Component {
     } else {
       return null;
     }
+  }
+
+  attachmentLinks() {
+    return this.props.event.attachments.map(function (attachment) {
+        faClasses = attachment.type === 'file' ? 'fa fa-file-text-o' : 'fa fa-link'
+        return(
+          <a className="target-overlay__link target-overlay__link--attachment" target='_blank' href={ attachment.url } key={ attachment.url } >
+                <span className="target-overlay__link-icon">
+                  <i className={ faClasses }/>
+                </span>
+            <span className="target-overlay__link-text target-overlay__link--attachment-text">{ attachment.title }</span>
+          </a>
+        );
+      }
+    );
   }
 
   render() {
@@ -41,28 +57,12 @@ class TargetOverlayTimelineEventPanel extends React.Component {
             <p className="font-light p-x-1">
               { this.props.event.description }
             </p>
+            { !_.isEmpty(this.props.event.attachments) &&
             <div className="target-overlay-timeline-submission__content-attachments m-b-1 p-a-1">
               <h6 className="font-semibold">Attachments</h6>
-              <a className="target-overlay__link target-overlay__link--attachment" target='_blank' href="">
-                <span className="target-overlay__link-icon">
-                  <i className="fa fa-file-image-o"/>
-                </span>
-                <span className="target-overlay__link-text target-overlay__link--attachment-text">Cover Image</span>
-              </a>
-              <a className="target-overlay__link target-overlay__link--attachment" target='_blank' href="">
-                <span className="target-overlay__link-icon">
-                  <i className="fa fa-link"/>
-                </span>
-                <span className="target-overlay__link-text target-overlay__link--attachment-text">External</span>
-              </a>
-              <a className="target-overlay__link target-overlay__link--attachment" target='_blank' href="">
-                <span className="target-overlay__link-icon">
-                  <i className="fa fa-file-text-o"/>
-                </span>
-                <span className="target-overlay__link-text target-overlay__link--attachment-text">Keynote Presentation</span>
-              </a>
-
+              { this.attachmentLinks() }
             </div>
+            }
             { this.props.feedback &&
             <div className="target-overlay-timeline-submission__feedback m-t-1">
               <div className="target-overlay-timeline-submission__commenter-box">

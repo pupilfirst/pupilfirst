@@ -1,6 +1,7 @@
 module Founders
   class FacebookConnectController < ApplicationController
     before_action :authenticate_founder!
+    before_action :require_active_subscription
 
     def connect
       facebook_client = Founders::FacebookService.new(current_founder)

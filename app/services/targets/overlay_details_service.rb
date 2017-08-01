@@ -8,7 +8,7 @@ module Targets
     def all_details
       {
         founderStatuses: founder_statuses,
-        latestEvent: latest_event,
+        latestEvent: latest_event_details,
         latestFeedback: latest_feedback
       }
     end
@@ -21,15 +21,32 @@ module Targets
       end
     end
 
+    def latest_event_details
+      {
+        description: latest_event.description,
+        event_on: latest_event.event_on,
+        title: latest_event.title,
+        days_elapsed: latest_event.days_elapsed,
+        attachments: latest_event_attachments
+      }
+    end
+
     def latest_event
-      @target.latest_linked_event(@founder).as_json(
-        only: %i[description event_on],
-        methods: %i[title days_elapsed]
-      )
+      @latest_event ||= @target.latest_linked_event(@founder)
     end
 
     def latest_feedback
       Targets::FeedbackService.new(@target, @founder).latest_feedback_details
+    end
+
+    def latest_event_attachments
+      attachments = latest_event.timeline_event_files.each_with_object([]) do |file, array|
+        array << { type: 'file', title: file.title, url: file.file_url }
+      end
+
+      latest_event.links.each_with_object(attachments) do |link, array|
+        array << { type: 'link', title: link['title'], url: link['url'] }
+      end
     end
   end
 end

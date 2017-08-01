@@ -1,7 +1,8 @@
-= simple_form_for @form,
-  url: join_path,
-  wrapper: :vertical_form do |f|
+/ Load the Recaptcha API manually, because we're programmatically invoking the Invisible Recaptcha library.
+- unless Rails.env.test?
+  script src='https://www.google.com/recaptcha/api.js' async defer
 
+= simple_form_for @form, url: join_path, wrapper: :vertical_form, html: { 'data-test': Rails.env.test? } do |f|
   - if f.object.errors.present?
     .alert.alert-warning.alert-dismissable.fade.in role='alert'
 
@@ -48,4 +49,5 @@
           input_html: { maxlength: 250, disabled: true }
 
       div
+        div class='g-recaptcha' data-sitekey=Rails.application.secrets.dig(:google, :recaptcha, :invisible, :site_key) data-callback='handleFounderJoinButton' data-size='invisible' data-badge='inline'
         = f.submit 'Join Now', class: 'btn btn-primary btn-md apply-form__submit-button'

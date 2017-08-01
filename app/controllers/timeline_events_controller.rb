@@ -1,5 +1,6 @@
 class TimelineEventsController < ApplicationController
   before_action :authenticate_founder!, except: [:activity]
+  before_action :require_active_subscription
 
   # POST /founder/startup/timeline_events
   def create

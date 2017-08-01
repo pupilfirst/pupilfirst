@@ -1,0 +1,23 @@
+= content_for :heading
+  | SV.CO subscription expires in #{@payment.days_to_expiry} days.
+
+= content_for :salutation
+  | Hello!
+
+= content_for :body
+  p
+    ' Your SV.CO subscription expires in #{@payment.days_to_expiry} days. To continue having access
+    ' to our services please pay the monthly subscription fee of
+    strong
+      | <strong>&#8377;#{@payment.startup.fee}</strong>
+
+  p
+    ' You can #{link_to 'click here', fee_founder_url} to renew your subscription for the next month.
+
+  p
+    ' If you're unable to click on the link above, then please copy and paste the following
+    | link into your browser's address bar:
+
+  p.monospace = fee_founder_url
+
+  p Feel free to reach out to us at #{mail_to 'help@sv.co'} in case of any queries.

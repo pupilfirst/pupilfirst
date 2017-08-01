@@ -2,6 +2,10 @@
   title SV.CO Sign In
   meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
 
+/ Load the Recaptcha API manually, because we're programmatically invoking the Invisible Recaptcha library.
+- unless Rails.env.test?
+  script src='https://www.google.com/recaptcha/api.js' async defer
+
 .container
   .row
     .col-xl-10.offset-xl-1.col-lg-12
@@ -31,7 +35,7 @@
               #sign-in-with-email class=hidden_sign_in_class('email')
                 h3.text-xs-center.m-b-2 Sign in with your SV.CO ID
 
-                = form_for @form, url: user_send_login_email_path do |f|
+                = form_for @form, url: user_send_login_email_path, html: { 'data-test': Rails.env.test? } do |f|
                   - if f.object.errors.present? && f.object.errors[:base].present?
                     .alert.alert-warning.alert-dismissable.fade.in role='alert'
                       ul.m-b-0
@@ -52,6 +56,7 @@
                       = f.label :shared_device, 'Are you using a shared device?', class: 'css-label'
 
                   .text-xs-center
+                    div class='g-recaptcha' data-sitekey=Rails.application.secrets.dig(:google, :recaptcha, :invisible, :site_key) data-callback='handleSignInWithEmailButton' data-size='invisible' data-badge='inline'
                     = f.submit 'Email me a link to sign in', class: 'btn btn-primary btn-md text-uppercase sign-in-btn'
 
               .switch-sign-in-method-links.text-xs-center.m-t-2

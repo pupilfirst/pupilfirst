@@ -4,8 +4,8 @@ describe FacultyPolicy do
   subject { described_class }
 
   let(:level_0_startup) { create :level_0_startup }
-  let(:level_1_startup) { create :startup }
-  let(:level_2_startup) { create :startup, maximum_level: level_two }
+  let(:level_1_startup) { create :startup, :subscription_active }
+  let(:level_2_startup) { create :startup, :subscription_active, maximum_level: level_two }
   let(:level_one) { create :level, :one }
   let(:level_two) { create :level, :two }
 

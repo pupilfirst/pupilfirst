@@ -16,18 +16,21 @@ class ResourcePolicy < ApplicationPolicy
       # public resources for everyone
       resources = scope.where(level_id: nil, startup_id: nil)
 
-      startup = user&.founder&.startup
+      founder = user&.founder
 
-      if startup && !startup.dropped_out
-        # + resources for the startup
-        resources = resources.or(scope.where(startup: startup))
+      # Return public resources to founder with inactive subscription.
+      return resources unless founder&.startup.present? && founder.subscription_active?
 
-        # + resources based on the startup's maximum level
-        maximum_level = startup&.maximum_level
-        resources = resources.or(scope.where('levels.number <= ?', maximum_level.number)) if maximum_level.present?
-      end
+      startup = founder.startup
 
-      resources
+      return resources if startup.dropped_out?
+
+      # + resources for the startup
+      resources = resources.or(scope.where(startup: startup))
+
+      # + resources based on the startup's maximum level
+      maximum_level = startup&.maximum_level
+      resources.or(scope.where('levels.number <= ?', maximum_level.number)) if maximum_level.present?
     end
   end
 end

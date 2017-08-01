@@ -1,5 +1,6 @@
 class TeamMembersController < ApplicationController
   before_action :authenticate_founder!
+  before_action :require_active_subscription
 
   # GET /founder/startup/team_members/new
   def new

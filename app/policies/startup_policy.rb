@@ -3,7 +3,11 @@ class StartupPolicy < ApplicationPolicy
     record.level.number.positive?
   end
 
+  def edit?
+    show? && user&.founder&.startup == record && user&.founder&.subscription_active?
+  end
+
   def update?
-    show? && user&.founder&.startup == record
+    edit?
   end
 end

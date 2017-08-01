@@ -21,7 +21,6 @@ after 'development:levels', 'development:founders', 'development:timeline_event_
   super_startup = Startup.new(
     level: level_1,
     maximum_level: level_1,
-    name: 'Super Startup',
     product_name: 'Super Product',
     product_description: 'This really is a superb product! ;)',
     agreement_signed_at: 18.months.ago,

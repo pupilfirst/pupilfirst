@@ -150,11 +150,6 @@
   margin: 0 1rem 2rem 2.5rem;
   border-bottom: 1px solid $gray-border;
 
-  &:last-child {
-    border-bottom: 0;
-    margin-bottom: 0;
-  }
-
   @include media-breakpoint-down (sm) {
     margin: 0 0 2rem 0;
   }
@@ -214,6 +209,10 @@
 .target-overlay__link--attachment {
   display: inline-flex;
   margin: 0 10px 10px 0;
+
+  &:last-child {
+    margin-right: 0;
+  }
 }
 
 .target-overlay__link--attachment-text {
@@ -326,10 +325,11 @@
 }
 
 .target-overlay-timeline-submission__header-date {
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   display: block;
   color: white;
   line-height: 1.1;
+  letter-spacing: 0.04rem;
   background-color: #e46f61;
   padding: 4px 0 4px;
   margin-bottom: 2px;

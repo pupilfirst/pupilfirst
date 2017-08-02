@@ -562,13 +562,13 @@
   &:before {
     width: 8px;
     height: 8px;
-    border-right: 1px solid $light-grey-text;
-    border-bottom: 1px solid $light-grey-text;
     position: absolute;
     right: 30px;
-    content: " ";
-    top: 47%;
-    transform: rotate(-45deg);
+    color: $light-grey-text;
+    font-family: FontAwesome;
+    content: "\f105";
+    font-size: 1rem;
+    top: 37%;
     transition: all .2s;
   }
 
@@ -581,14 +581,16 @@
   }
   &.founder-dashboard-target-header__container--active {
     background-color: $primary-background;
-
-    &:before {
-      transform: rotate(45deg);
-    }
+    box-shadow: inset 0px 0px 20px 5px rgba(0, 0, 0, 0.05);
   }
 
   &:hover, &:focus {
     background-color: $primary-background;
+
+    &:before {
+      color: $brand-secondary;
+      transform: translate(4px, 0);
+    }
 
     .founder-dashboard-target-header__headline {
       color: $brand-secondary;

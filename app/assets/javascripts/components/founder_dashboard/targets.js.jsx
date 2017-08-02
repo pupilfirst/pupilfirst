@@ -20,9 +20,9 @@ class FounderDashboardTargets extends React.Component {
       let finalCollection = collectionLength === targetGroupIndex + 1;
 
       return <FounderDashboardTargetCollection key={ targetGroup.id } name={ targetGroup.name }
-        description={ targetGroup.description } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }
-        targets={ targetGroup.targets } milestone={ targetGroup.milestone } finalCollection={ finalCollection }
-        iconPaths={ this.props.iconPaths } founderDetails={ this.props.founderDetails } selectTargetCB={ this.props.selectTargetCB }/>
+        description={ targetGroup.description } targets={ targetGroup.targets } milestone={ targetGroup.milestone }
+        finalCollection={ finalCollection } iconPaths={ this.props.iconPaths } founderDetails={ this.props.founderDetails }
+                                               selectTargetCB={ this.props.selectTargetCB }/>
     }, this);
   }
 

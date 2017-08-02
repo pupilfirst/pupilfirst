@@ -54,11 +54,10 @@ class FounderDashboardSessions extends React.Component {
           openTimelineBuilderCB={ this.props.openTimelineBuilderCB } pickFilterCB={ this.chooseTags } currentLevel={ this.props.currentLevel }/>
 
         <FounderDashboardTargetCollection key='sessions-upcoming' name='Upcoming Sessions' displayDate={ true }
-          targets={ this.upcomingSessions() } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }
-          iconPaths={ this.props.iconPaths } founderDetails={ this.props.founderDetails} selectTargetCB={ this.props.selectTargetCB }/>
+          targets={ this.upcomingSessions() } iconPaths={ this.props.iconPaths } founderDetails={ this.props.founderDetails}
+                                          selectTargetCB={ this.props.selectTargetCB }/>
         <FounderDashboardTargetCollection key='sessions-past' name='Past Sessions' displayDate={ true }
-          targets={ this.pastSessions() } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }
-          finalCollection={ true } iconPaths={ this.props.iconPaths }
+          targets={ this.pastSessions() } finalCollection={ true } iconPaths={ this.props.iconPaths }
           founderDetails={ this.props.founderDetails} selectTargetCB={ this.props.selectTargetCB }/>
       </div>
     );

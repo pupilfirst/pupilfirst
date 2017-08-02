@@ -1,14 +1,4 @@
 class FounderDashboardTargetHeader extends React.Component {
-  containerClasses() {
-    let classes = 'founder-dashboard-target-header__container clearfix';
-
-    if (this.props.descriptionOpen) {
-      classes += '  founder-dashboard-target-header__container--active';
-    }
-
-    return classes;
-  }
-
   targetType() {
     return <span className="founder-dashboard-target-header__type-tag hidden-sm-down">
       { this.props.target.target_type_description }:
@@ -79,7 +69,7 @@ class FounderDashboardTargetHeader extends React.Component {
 
   render() {
     return (
-      <div className={ this.containerClasses() } onClick={ this.props.onClickCB }>
+      <div className='founder-dashboard-target-header__container clearfix' onClick={ this.props.onClickCB }>
         <img className="founder-dashboard-target-header__icon"
           src={ this.headerIcon() }/>
 
@@ -105,7 +95,7 @@ class FounderDashboardTargetHeader extends React.Component {
 }
 
 FounderDashboardTargetHeader.propTypes = {
-  descriptionOpen: React.PropTypes.bool,
+  onClickCB: React.PropTypes.func,
   target: React.PropTypes.object,
   displayDate: React.PropTypes.bool,
   iconPaths: React.PropTypes.object

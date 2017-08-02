@@ -37,7 +37,7 @@ startTour = ->
     skipLabel: 'Close',
     steps: [
       {
-        element: $('.founder-dashboard-header__startup-profile')[0],
+        element: $('.founder-dashboard-header__container')[0],
         intro: startupShowTour.data('intro')
       },
       {
@@ -57,17 +57,13 @@ startTour = ->
         intro: startupShowTour.data('sessions')
       },
       {
-        element: $('.founder-dashboard-target-group__header')[0],
+        element: $('.founder-dashboard-target-group__box')[0],
         intro: startupShowTour.data('targetGroup')
       },
       {
         element: $('.founder-dashboard-target-header__container')[0],
         intro: startupShowTour.data('target')
 
-      },
-      {
-        element: $('.target-description')[0],
-        intro: startupShowTour.data('targetDetails')
       },
       {
         element: $('.founder-dashboard-target-status-badge__container')[0],
@@ -78,9 +74,6 @@ startTour = ->
       }
     ]
   )
-
-  # Open the first target so that its contents are available for intro-ing.
-  $('.founder-dashboard-target-header__container:first').trigger('click')
 
   tour.start()
 

@@ -1,17 +1,8 @@
 class FounderDashboardTarget extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  handleClick() {
-    this.props.selectTargetCB(this.props.target.id, this.props.target.target_type);
-  }
-
   render() {
     return (
       <div className='founder-dashboard-target__container'>
-        <FounderDashboardTargetHeader onClickCB={ this.handleClick } target={ this.props.target }
+        <FounderDashboardTargetHeader onClickCB={ this.props.selectTargetCB } target={ this.props.target }
                                       displayDate={ this.props.displayDate } iconPaths={ this.props.iconPaths }/>
       </div>
     );

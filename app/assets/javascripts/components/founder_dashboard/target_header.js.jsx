@@ -1,4 +1,9 @@
 class FounderDashboardTargetHeader extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
   targetType() {
     return <span className="founder-dashboard-target-header__type-tag hidden-sm-down">
       { this.props.target.target_type_description }:
@@ -67,9 +72,17 @@ class FounderDashboardTargetHeader extends React.Component {
     }
   }
 
+  handleClick(event) {
+    // highlight the selected target
+    $('.founder-dashboard-target-header__container').removeClass('founder-dashboard-target-header__container--active')
+    event.target.closest('.founder-dashboard-target-header__container').classList.add('founder-dashboard-target-header__container--active')
+
+    this.props.onClickCB(this.props.target.id, this.props.target.target_type);
+  }
+
   render() {
     return (
-      <div className='founder-dashboard-target-header__container clearfix' onClick={ this.props.onClickCB }>
+      <div className='founder-dashboard-target-header__container clearfix' onClick={ this.handleClick }>
         <img className="founder-dashboard-target-header__icon"
           src={ this.headerIcon() }/>
 

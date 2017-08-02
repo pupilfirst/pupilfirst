@@ -21,6 +21,8 @@ module Targets
       end
     end
 
+    private
+
     def latest_event_details
       {
         description: latest_event&.description,

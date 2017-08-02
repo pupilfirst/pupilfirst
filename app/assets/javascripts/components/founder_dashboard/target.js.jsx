@@ -54,13 +54,13 @@ class FounderDashboardTarget extends React.Component {
         <FounderDashboardTargetHeader onClickCB={ this.handleClick } descriptionOpen={ this.state.showDescription }
           target={ this.props.target } displayDate={ this.props.displayDate } iconPaths={ this.props.iconPaths }/>
 
-        <div className='founder-dashboard-target__description-container' id={ this.sliderId() }>
-          <FounderDashboardTargetDescription key={ 'description-' + this.props.target.id }
-            target={ this.props.target } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }
-            founderDetails={ this.props.founderDetails} fetchFounderStatuses={ this.state.fetchFounderStatuses }
-                                             fetchTargetPrerequisite={this.state.fetchTargetPrerequisite}
-                                             fetchTargetFeedback={this.state.fetchTargetFeedback}/>
-        </div>
+        {/*<div className='founder-dashboard-target__description-container' id={ this.sliderId() }>*/}
+          {/*<FounderDashboardTargetDescription key={ 'description-' + this.props.target.id }*/}
+            {/*target={ this.props.target } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }*/}
+            {/*founderDetails={ this.props.founderDetails} fetchFounderStatuses={ this.state.fetchFounderStatuses }*/}
+                                             {/*fetchTargetPrerequisite={this.state.fetchTargetPrerequisite}*/}
+                                             {/*fetchTargetFeedback={this.state.fetchTargetFeedback}/>*/}
+        {/*</div>*/}
       </div>
     );
   }

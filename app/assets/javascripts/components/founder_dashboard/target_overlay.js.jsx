@@ -101,8 +101,7 @@ class FounderDashboardTargetOverlay extends React.Component  {
                 { this.props.target.role === 'founder' &&
                 <div className="m-t-1">
                   <p className="target-overlay-timeline-submission__title font-semibold">Completion Status:</p>
-                  <FounderDashboardFounderStatusPanel founderDetails={ this.props.founderDetails }
-                    targetId={ this.props.target.id} fetchStatus={this.props.fetchFounderStatuses}/>
+                  <TargetOverlayFounderStatusPanel founderDetails={ this.props.founderDetails } targetId={ this.props.target.id}/>
                 </div>
                 }
               </div>
@@ -127,7 +126,6 @@ FounderDashboardTargetOverlay.propTypes = {
   target: React.PropTypes.object,
   openTimelineBuilderCB: React.PropTypes.func,
   founderDetails: React.PropTypes.array,
-  fetchFounderStatuses: React.PropTypes.bool,
   closeCB: React.PropTypes.func,
   iconPaths: React.PropTypes.object
 };

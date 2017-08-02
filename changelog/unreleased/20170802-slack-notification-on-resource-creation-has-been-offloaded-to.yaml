@@ -1,0 +1,9 @@
+---
+timestamp: '2017-08-02T08:24:38Z'
+title: Slack notification on resource creation has been offloaded to a background
+  job.
+trello: https://trello.com/c/Xgm0dVur
+private: true
+description: This prevents the rack-timeout from kicking in when processing the upload
+  file request.
+category: bugfix

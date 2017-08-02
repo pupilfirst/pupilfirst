@@ -62,35 +62,8 @@ class Resource < ApplicationRecord
     end
   end
 
-  after_create :notify_on_slack
-
-  # Notify on slack when a new resource is uploaded
-  def notify_on_slack
-    if level_exclusive?
-      PublicSlack::MessageService.new.post message: new_resource_message, founders: founders_to_notify
-    else
-      PublicSlack::MessageService.new.post message: new_resource_message, channel: '#resources'
-    end
-  end
-
-  # returns an array of founders who needs to be notified of the new resource
-  def founders_to_notify
-    if startup.present?
-      startup.founders
-    elsif level.present?
-      Founder.where(startup: Startup.joins(:maximum_level).where('levels.number >= ?', level.number))
-    else
-      Founder.where(startup: Startup.approved)
-    end
-  end
-
-  # Message to be send to slack for new resources.
-  def new_resource_message
-    message = "*A new #{level_exclusive? ? ('private resource for Level ' + level.number.to_s) : 'public resource'}"\
-    " has been uploaded to the SV.CO Startup Library*: \n"
-    message += "*Title:* #{title}\n"
-    message += "*Description:* #{description}\n"
-    message + "*URL:* #{Rails.application.routes.url_helpers.resource_url(id: slug, host: 'https://sv.co')}"
+  after_create do
+    Resources::AfterCreateNotificationJob.perform_later(self)
   end
 
   # Ensure titles are capitalized.

@@ -1,5 +1,7 @@
 module PublicSlack
   class MessageService
+    include Loggable
+
     class << self
       attr_writer :mock
 
@@ -20,7 +22,10 @@ module PublicSlack
     end
 
     def post(message:, **target)
-      return if self.class.mock?
+      if self.class.mock?
+        log "Skipping post because of @mock flag:\n\n#{message}\n\nto targets: #{target.keys}"
+        return
+      end
 
       message = URI.escape message
       channel = target[:channel]

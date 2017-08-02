@@ -10,7 +10,8 @@ module AdmissionStats
         'Screening Completed' => screening_completed,
         'Added Cofounders' =>  cofounders_added,
         'Payment Initiated' => payment_initiated,
-        'Fee Paid' => fee_paid
+        'Fee Paid' => fee_paid,
+        'Revenue' => "₹#{revenue.to_i}"
       }
     end
 
@@ -26,6 +27,10 @@ module AdmissionStats
 
     def fee_paid
       verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_FEE_PAYMENT }).where(created_at: date_range).count
+    end
+
+    def revenue
+      Payment.where(paid_at: date_range).sum(:amount)
     end
 
     def payment_initiated

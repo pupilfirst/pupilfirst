@@ -1,0 +1,8 @@
+---
+timestamp: '2017-08-02T07:03:05Z'
+title: Add revenue to funnel stats on admissions dashboard.
+trello: https://trello.com/c/9LLgWRiV
+private: true
+description: This also adds the data point to the daily Slack notification since they
+  share the underlying service.
+category: feature

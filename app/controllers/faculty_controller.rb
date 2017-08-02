@@ -72,8 +72,8 @@ class FacultyController < ApplicationController
   def save_slots_in_list(list, faculty)
     start_date = 7.days.from_now.beginning_of_week.to_date
 
-    # reset next week slots to empty
-    faculty.connect_slots.next_week.destroy_all
+    # Reset next week slots to empty, while preserving slots with connect requests.
+    faculty.connect_slots.includes(:connect_request).where(connect_requests: { id: nil }).next_week.destroy_all
 
     list.keys.each do |day|
       day_number = day.to_i

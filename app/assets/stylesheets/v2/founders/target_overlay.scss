@@ -68,6 +68,14 @@
   }
 }
 
+.target-overlay__header-status-badge-container {
+  margin-top: 6px;
+
+  @include media-breakpoint-down (sm) {
+    margin-left: 2.5rem;
+  }
+}
+
 .founder-dashboard-target-header__content {
   display: flex;
   align-items: flex-start;
@@ -109,6 +117,10 @@
   font-size: 0.75rem;
   letter-spacing: 0.02rem;
   margin-top: 6px;
+
+  @include media-breakpoint-down(sm) {
+    margin-top: 3px;
+  }
 }
 
 .target-overlay-header__info-subtext {

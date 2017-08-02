@@ -37,7 +37,7 @@ class FounderDashboardTargetStatusBadge extends React.Component {
           <i className={ this.statusIconClasses() }/>
         </span>
 
-        <span className="hidden-sm-down">
+        <span>
           { this.statusString() }
         </span>
       </span>;
@@ -58,7 +58,7 @@ class FounderDashboardTargetStatusBadge extends React.Component {
         { filledStars }
         { emptyStars }
 
-        <span className="hidden-sm-down">
+        <span>
           &nbsp;{ gradeString }!
         </span>
       </span>;

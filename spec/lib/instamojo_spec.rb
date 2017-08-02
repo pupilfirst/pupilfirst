@@ -1,6 +1,18 @@
 require 'rails_helper'
 
 describe Instamojo do
+  before do
+    Rails.application.secrets.instamojo_url = 'https://www.example.com'
+    Rails.application.secrets.instamojo_api_key = 'API_KEY'
+    Rails.application.secrets.instamojo_auth_token = 'AUTH_TOKEN'
+  end
+
+  after do
+    Rails.application.secrets.instamojo_url = ENV['INSTAMOJO_API_URL']
+    Rails.application.secrets.instamojo_api_key = ENV['INSTAMOJO_API_KEY']
+    Rails.application.secrets.instamojo_auth_token = ENV['INSTAMOJO_AUTH_TOKEN']
+  end
+
   describe '#create_payment_request' do
     let(:amount) { rand(10_000) }
     let(:buyer_name) { Faker::Name.name }

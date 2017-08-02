@@ -34,7 +34,7 @@ module AdmissionStats
     end
 
     def payment_initiated
-      Startup.level_zero.joins(:payments).merge(Payment.requested).where(payments: { created_at: date_range }).count
+      Startup.joins(:payments).where(payments: { created_at: date_range }).count
     end
 
     def cofounders_added

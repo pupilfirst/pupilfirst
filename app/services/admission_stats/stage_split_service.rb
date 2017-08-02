@@ -2,9 +2,10 @@ module AdmissionStats
   class StageSplitService
     def startups_split
       stages = [Startup::ADMISSION_STAGE_SIGNED_UP, Startup::ADMISSION_STAGE_SCREENING_COMPLETED, Startup::ADMISSION_STAGE_COFOUNDERS_ADDED, Startup::ADMISSION_STAGE_PAYMENT_INITIATED, Startup::ADMISSION_STAGE_FEE_PAID, Startup::ADMISSION_STAGE_ADMITTED]
+
       stages.each_with_object({}) do |stage, hash|
         hash[stage] = if stage == Startup::ADMISSION_STAGE_ADMITTED
-          Startup.where(admission_stage: stage).joins(:timeline_events).where(timeline_events: { target: fee_payment_target }).where('timeline_events.status_updated_at > ?', date_time_for_admissions).count
+          Startup.where(admission_stage: stage).where('created_at > ?', date_time_for_admissions).count
         else
           Startup.where(admission_stage: stage).count
         end
@@ -18,7 +19,7 @@ module AdmissionStats
     end
 
     def date_time_for_admissions
-      DateTime.new(2017, 7, 10)
+      DateTime.new(2017, 5, 8)
     end
   end
 end

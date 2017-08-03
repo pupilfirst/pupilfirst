@@ -2,29 +2,29 @@
   ul.nav.navbar-nav.clearfix itemscope="itemscope" itemtype="http://www.schema.org/SiteNavigationElement"
     - unless current_founder
       li.nav-item role="presentation" itemprop="name"
-        = link_to 'Join', join_path, class: 'nav-link', itemprop: 'url'
+        = link_to 'Join', join_path, class: 'nav-link', itemprop: 'url', id: 'navbar-join-link'
     - if current_founder && !current_founder.exited && current_founder.startup.present?
       li.nav-item role="presentation"
-        a.nav-link href="#{dashboard_founder_url}" Dashboard
+        a#navbar-dashboard-link.nav-link href="#{dashboard_founder_url}" Dashboard
     - if current_founder&.startup.present? && policy(current_founder.startup).show?
       li.nav-item role="presentation"
-        a.nav-link href="#{startup_url(current_founder.startup)}" Timeline
+        a#navbar-timeline-link.nav-link href="#{startup_url(current_founder.startup)}" Timeline
     li.nav-item role="presentation" itemprop="name"
-      = link_to 'Startups', startups_path, class: 'nav-link', itemprop: 'url'
+      = link_to 'Startups', startups_path, class: 'nav-link', itemprop: 'url', id: 'navbar-startups-link'
     - unless current_founder
       li.nav-item role="presentation" itemprop="name"
-        = link_to 'Invest & Hire', talent_path, class: 'nav-link', itemprop: 'url'
+        = link_to 'Invest & Hire', talent_path, class: 'nav-link', itemprop: 'url', id: 'navbar-invest-hire-link'
     li.nav-item role="presentation" itemprop="name"
-      = link_to 'Faculty', faculty_index_path, class: 'nav-link', itemprop: 'url'
+      = link_to 'Faculty', faculty_index_path, class: 'nav-link', itemprop: 'url', id: 'navbar-faculty-link'
     - unless current_founder
       li.nav-item role="presentation" itemprop="name"
-        = link_to 'About', about_path, class: 'nav-link', itemprop: 'url'
+        = link_to 'About', about_path, class: 'nav-link', itemprop: 'url', id: 'navbar-about-link'
     li.nav-item role="presentation" itemprop="name"
-      = link_to 'Help Center', 'https://help.sv.co', class: 'nav-link', target: '_blank', itemprop: 'url'
+      = link_to 'Help Center', 'https://help.sv.co', class: 'nav-link', target: '_blank', itemprop: 'url', id: 'navbar-help-center-link'
     - if current_user
       - if current_founder
         li.nav-item role="presentation" class="dropdown"
-          a.dropdown-toggle.logged-in-avatar-link data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
+          a#navbar-profile-dropdown.dropdown-toggle.logged-in-avatar-link data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
             .navbar__avatar-wrapper
               == avatar(current_founder.name, founder: current_founder)
           ul.dropdown-menu
@@ -43,6 +43,6 @@
                 i.fa.fa-sign-out
                 | Logout
       - else
-        li.nav-item role="presentation" = link_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'btn btn-secondary btn-sm btn-signin'
+        li.nav-item role="presentation" = link_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'btn btn-secondary btn-sm btn-signin', id: 'navbar-sign-out-link'
     - else
-      li.nav-item role="presentation" itemprop="name" = link_to 'Sign In', new_user_session_path, class: 'btn btn-primary btn-sm btn-signin', rel: 'nofollow', itemprop: 'url'
+      li.nav-item role="presentation" itemprop="name" = link_to 'Sign In', new_user_session_path, class: 'btn btn-primary btn-sm btn-signin', rel: 'nofollow', itemprop: 'url', id: 'navbar-sign-in-link'

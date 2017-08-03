@@ -7,28 +7,28 @@ footer
           .footer-links.clearfix
             .sitemap.pull-left
               div
-                = link_to 'Join', join_path
+                = link_to 'Join', join_path, id: 'footer-sitemap-join-link'
               div
-                = link_to 'Startups', startups_path
+                = link_to 'Startups', startups_path, id: 'footer-sitemap-startups-link'
               div
-                = link_to 'Invest & Hire', talent_path
+                = link_to 'Invest & Hire', talent_path, id: 'footer-sitemap-invest-hire-link'
               div
-                = link_to 'Faculty', faculty_index_path
+                = link_to 'Faculty', faculty_index_path, id: 'footer-sitemap-faculty-link'
             .sitemap.pull-left
               div
                 - if current_user
                   - if current_founder && policy(current_founder).founder_profile?
-                    = link_to 'Profile', founder_profile_path(slug: current_founder.slug)
+                    = link_to 'Profile', founder_profile_path(slug: current_founder.slug), id: 'footer-sitemap-profile-link'
                   - else
-                    = link_to 'Sign Out', destroy_user_session_path, method: :delete
+                    = link_to 'Sign Out', destroy_user_session_path, method: :delete, id: 'footer-sitemap-sign-out-link'
                 - else
-                  = link_to 'Sign In', new_user_session_path, rel: 'nofollow'
+                  = link_to 'Sign In', new_user_session_path, rel: 'nofollow', id: 'footer-sitemap-sign-in-link'
               div
-                = link_to 'About', about_path
+                = link_to 'About', about_path, id: 'footer-sitemap-about-link'
               div
-                a href="http://blog.sv.co" Blog
+                a#footer-sitemap-blog-link href="http://blog.sv.co" Blog
               div
-                = link_to 'Tour', tour_path
+                = link_to 'Tour', tour_path, id: 'footer-sitemap-tour-link'
 
         .col-md-3.footer-column
           strong.text-uppercase Legal
@@ -37,7 +37,7 @@ footer
           div
             a#show-terms-of-use.cursor-pointer Terms of Use
           .hidden-sm-down
-            a href='http://www.go.co/' target='_blank'
+            a#footer-partner-dot-co-link href='http://www.go.co/' target='_blank'
               = image_tag 'layouts/footer_v2/partner-banner-dot-co.png', class: 'dot-co-banner'
 
         .col-md-3.footer-column
@@ -53,16 +53,16 @@ footer
         .col-md-3.footer-column
           strong.text-uppercase Connect
           div
-            ' Reach us at <strong>#{link_to 'help@sv.co', 'mailto:help@sv.co'}</strong>.
+            ' Reach us at <strong>#{link_to 'help@sv.co', 'mailto:help@sv.co', id: 'footer-connect-mail-link'}</strong>.
           .img-opacity
             span.social-link
-              a href='https://www.facebook.com/svdotco' target='_blank'
+              a#footer-connect-facebook-link href='https://www.facebook.com/svdotco' target='_blank'
                 i.fa.fa-facebook.fa-2x
             span.social-link
-              a href='https://twitter.com/svdotco' target='_blank'
+              a#footer-connect-twitter-link href='https://twitter.com/svdotco' target='_blank'
                 i.fa.fa-twitter.fa-2x
             span.social-link
-              a href='https://www.youtube.com/c/svdotco' target='_blank'
+              a#footer-connect-youtube-link href='https://www.youtube.com/c/svdotco' target='_blank'
                 i.fa.fa-youtube.fa-2x
           p &copy; 2017 SV.CO. All rights reserved.
 

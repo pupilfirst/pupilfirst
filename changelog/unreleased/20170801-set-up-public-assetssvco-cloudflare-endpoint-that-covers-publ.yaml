@@ -1,0 +1,7 @@
+---
+timestamp: '2017-08-01T10:24:42Z'
+title: Set up public-assets.sv.co Cloudflare endpoint that covers public S3 bucket
+  and use that for existing links.
+trello: https://trello.com/c/0WizXht6
+private: true
+category: operations

@@ -5,7 +5,7 @@
 
   .content
     ol
-      - connect_requests_requested.joins(:connect_slot).order('connect_slots.slot_at').limit(10).each do |connect_request|
+      - connect_requests_requested.includes(:startup, connect_slot: :faculty).order('connect_slots.slot_at').limit(10).each do |connect_request|
         - startup_name = connect_request.startup.product_name
         - faculty_name = connect_request.faculty.name
         - slot_time = connect_request.connect_slot.slot_at.strftime('%b %e, %l:%M %p')

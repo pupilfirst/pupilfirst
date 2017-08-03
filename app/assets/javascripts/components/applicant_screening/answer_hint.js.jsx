@@ -15,7 +15,7 @@ class ApplicantScreeningAnswerHint extends React.Component {
         }
       case(3):
         if (this.props.correctAnswer) {
-          return "Great stuff! Our program requires that your team has a great coder who has already built apps and/or websites, so you&rsquo;re on the right track."
+          return "Great stuff! Our program requires that your team has a great coder who has already built apps and / or websites, so you&rsquo;re on the right track."
         } else {
           return "If you haven&rsquo;t built real apps or websites, this might not be the right program to join. Building both a real startup and learning to code in six months is very difficult."
         }
@@ -31,7 +31,7 @@ class ApplicantScreeningAnswerHint extends React.Component {
         if (this.props.correctAnswer) {
           return 'Great! Students who work with developers tend to take the product role. The teams in our program require a product role which might be a right fit for you.';
         } else {
-          return "If you haven&rsquo;t worked with developers prior to this then this might not be the right program to join. Building a SaaS startup requires basic interest towards building a product.";
+          return "If you haven&rsquo;t worked with developers prior to this then this might not be the right program to join. Building a software startup requires basic interest towards building a product.";
         }
       case(2):
         if (this.props.correctAnswer) {

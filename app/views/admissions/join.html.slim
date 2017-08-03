@@ -17,7 +17,7 @@ section.apply-hero__banner
 
       .p-t-1
         / = link_to 'Start Now', join_path, class: 'btn btn-primary btn-lg home-apply__button'
-        a.btn.btn-primary.btn-lg.home-apply__button href="#join-form"
+        a#admissions-join__hero-start-link.btn.btn-primary.btn-lg.home-apply__button href="#join-form"
           | Start Now
 
 section.apply-partners__container.m-x-auto
@@ -160,7 +160,7 @@ section.school-of-saas__container.p-y-3
                 | Graduation Support
 
     .p-t-3.text-xs-center
-      a.btn.btn-primary.btn-lg.home-apply__button href="#join-form"
+      a#admissions-join__school-start-now-link.btn.btn-primary.btn-lg.home-apply__button href="#join-form"
         | Start Now
 
 section.application-fee__container.p-y-3
@@ -247,7 +247,7 @@ section.program-framework__container.p-t-3
       ul.program-framework__timeline.list-unstyled
         li.program-framework__timeline-level data-level=('LEVEL 0')
           .program-framework__timeline-details
-            h3.program-framework__timeline-title.dark-secondary.font-semibold.active
+            h3#admissions-join__framework-l0-heading.program-framework__timeline-title.dark-secondary.font-semibold.active
               | Admission at SV.CO
 
             ul.program-framework__timeline-content.list-unstyled
@@ -258,11 +258,11 @@ section.program-framework__container.p-t-3
               li
                 p.font-semibold &ndash; Join the Startup Village Collective
               li
-                = link_to 'Learn More', 'https://help.sv.co', class: 'program-framework__timeline-content-link font-semibold', target: '_blank'
+                = link_to 'Learn More', 'https://help.sv.co', class: 'program-framework__timeline-content-link font-semibold', target: '_blank', id: 'admissions-join__framework-l0-learn-more-link'
 
         li.program-framework__timeline-level data-level=('LEVEL 1')
           .program-framework__timeline-details
-            h3.program-framework__timeline-title.dark-secondary.font-semibold
+            h3#admissions-join__framework-l1-heading.program-framework__timeline-title.dark-secondary.font-semibold
               | Idea Validation
 
             ul.program-framework__timeline-content.list-unstyled
@@ -277,11 +277,11 @@ section.program-framework__container.p-t-3
               li
                 p.font-semibold &ndash; Make a Product Summary
               li
-                = link_to 'Learn More', 'https://help.sv.co', class: 'program-framework__timeline-content-link font-semibold', target: '_blank'
+                = link_to 'Learn More', 'https://help.sv.co', class: 'program-framework__timeline-content-link font-semibold', target: '_blank', id: 'admissions-join__framework-l1-learn-more-link'
 
         li.program-framework__timeline-level data-level=('LEVEL 2')
           .program-framework__timeline-details
-            h3.program-framework__timeline-title.dark-secondary.font-semibold
+            h3#admissions-join__framework-l2-heading.program-framework__timeline-title.dark-secondary.font-semibold
               | Decide What to Build
 
             ul.program-framework__timeline-content.list-unstyled
@@ -296,11 +296,11 @@ section.program-framework__container.p-t-3
               li
                 p.font-semibold &ndash; Finalising product features for alpha
               li
-                = link_to 'Learn More', 'https://help.sv.co', class: 'program-framework__timeline-content-link font-semibold', target: '_blank'
+                = link_to 'Learn More', 'https://help.sv.co', class: 'program-framework__timeline-content-link font-semibold', target: '_blank', id: 'admissions-join__framework-l2-learn-more-link'
 
         li.program-framework__timeline-level data-level=('LEVEL 3')
           .program-framework__timeline-details
-            h3.program-framework__timeline-title.dark-secondary.font-semibold
+            h3#admissions-join__framework-l3-heading.program-framework__timeline-title.dark-secondary.font-semibold
               | Develop an Alpha Product
 
             ul.program-framework__timeline-content.list-unstyled
@@ -315,11 +315,11 @@ section.program-framework__container.p-t-3
               li
                 p.font-semibold &ndash; Alpha launch &amp; feedback at Freshworks HQ, Chennai
               li
-                = link_to 'Learn More', 'https://help.sv.co', class: 'program-framework__timeline-content-link font-semibold', target: '_blank'
+                = link_to 'Learn More', 'https://help.sv.co', class: 'program-framework__timeline-content-link font-semibold', target: '_blank', id: 'admissions-join__framework-l3-learn-more-link'
 
         li.program-framework__timeline-level data-level=('LEVEL 4')
           .program-framework__timeline-details.p-b-0
-            h3.program-framework__timeline-title.dark-secondary.font-semibold
+            h3#admissions-join__framework-l4-heading.program-framework__timeline-title.dark-secondary.font-semibold
               | Discover the First Customer
 
             ul.program-framework__timeline-content.list-unstyled
@@ -332,7 +332,7 @@ section.program-framework__container.p-t-3
               li
                 p.font-semibold &ndash; Live session on finding customers
               li
-                = link_to 'Learn More', 'https://help.sv.co', class: 'program-framework__timeline-content-link font-semibold', target: '_blank'
+                = link_to 'Learn More', 'https://help.sv.co', class: 'program-framework__timeline-content-link font-semibold', target: '_blank', id: 'admissions-join__framework-l4-learn-more-link'
 
 section.startup-ecosystem__container.p-y-3
   .container
@@ -345,7 +345,7 @@ section.startup-ecosystem__container.p-y-3
 
     .startup-ecosystem-video__container
       .col-md-3
-        a.startup-ecosystem-video__box.m-y-1 href="#" data-toggle="modal" data-target="#admission-kochi-video"
+        a#admissions-join__exposure-kochi-video.startup-ecosystem-video__box.m-y-1 href="#" data-toggle="modal" data-target="#admission-kochi-video"
           .startup-ecosystem-video__thumbnail
             .startup-ecosystem-video__play-button
             = image_tag 'admissions/join/admissions-kochi-thumbnail.jpg', class: 'img-fluid startup-ecosystem-video__thumbnail-image'
@@ -357,7 +357,7 @@ section.startup-ecosystem__container.p-y-3
                 | &nbsp;Kochi
 
       .col-md-3
-        a.startup-ecosystem-video__box.m-y-1 href="#" data-toggle="modal" data-target="#alpha-day-chennai-video"
+        a#admissions-join__exposure-chennai-video.startup-ecosystem-video__box.m-y-1 href="#" data-toggle="modal" data-target="#alpha-day-chennai-video"
           .startup-ecosystem-video__thumbnail
             .startup-ecosystem-video__play-button
             = image_tag 'admissions/join/alpha-day-chennai-thumbnail.jpg', class: 'img-fluid startup-ecosystem-video__thumbnail-image'
@@ -369,7 +369,7 @@ section.startup-ecosystem__container.p-y-3
                 | &nbsp;Chennai
 
       .col-md-3
-        a.startup-ecosystem-video__box.m-y-1 href="#" data-toggle="modal" data-target="#customer-insights-bangalore-video"
+        a#admissions-join__exposure-bangalore-video.startup-ecosystem-video__box.m-y-1 href="#" data-toggle="modal" data-target="#customer-insights-bangalore-video"
           .startup-ecosystem-video__thumbnail
             .startup-ecosystem-video__play-button
             = image_tag 'admissions/join/customer-insigt-bangalore-thumbnail.jpg', class: 'img-fluid startup-ecosystem-video__thumbnail-image'
@@ -381,7 +381,7 @@ section.startup-ecosystem__container.p-y-3
                 | &nbsp;Bangalore
 
       .col-md-3
-        a.startup-ecosystem-video__box.m-y-1 href="#" data-toggle="modal" data-target="#silicon-valley-trip-video"
+        a#admissions-join__exposure-sv-video.startup-ecosystem-video__box.m-y-1 href="#" data-toggle="modal" data-target="#silicon-valley-trip-video"
           .startup-ecosystem-video__thumbnail
             .startup-ecosystem-video__play-button
             = image_tag 'admissions/join/silicon-valley-trip-thumbnail.jpg', class: 'img-fluid startup-ecosystem-video__thumbnail-image'
@@ -402,7 +402,7 @@ section.apply-faq__container.p-y-3
       .card.apply-faq__collapse-card
         .card-header.apply-faq__collapse-card-header.p-a-0
           h4.font-regular.apply-faq__collapse-card-title.m-b-0
-            a data-parent="#" data-toggle="collapse" href="#apply-faq__1"
+            a#admissions-join__faq-q1-heading data-parent="#" data-toggle="collapse" href="#apply-faq__1"
               | 1. Can I join even if I don&rsquo;t have an idea?
         #apply-faq__1.collapse.in
           .card-block.apply-faq__collapse-card-block
@@ -416,7 +416,7 @@ section.apply-faq__container.p-y-3
       .card.apply-faq__collapse-card
         .card-header.apply-faq__collapse-card-header.p-a-0
           h4.font-regular.apply-faq__collapse-card-title.m-b-0
-            a data-parent="#" data-toggle="collapse" href="#apply-faq__2"
+            a#admissions-join__faq-q2-heading data-parent="#" data-toggle="collapse" href="#apply-faq__2"
               | 2. Is SV.CO only for college students?
         #apply-faq__2.collapse
           .card-block.apply-faq__collapse-card-block
@@ -426,7 +426,7 @@ section.apply-faq__container.p-y-3
       .card.apply-faq__collapse-card
         .card-header.apply-faq__collapse-card-header.p-a-0
           h4.font-regular.apply-faq__collapse-card-title.m-b-0
-            a data-parent="#" data-toggle="collapse" href="#apply-faq__3"
+            a#admissions-join__faq-q3-heading data-parent="#" data-toggle="collapse" href="#apply-faq__3"
               | 3. Who is SV.CO designed for?
         #apply-faq__3.collapse
           .card-block.apply-faq__collapse-card-block
@@ -439,7 +439,7 @@ section.apply-faq__container.p-y-3
       .card.apply-faq__collapse-card
         .card-header.apply-faq__collapse-card-header.p-a-0
           h4.font-regular.apply-faq__collapse-card-title.m-b-0
-            a data-parent="#" data-toggle="collapse" href="#apply-faq__4"
+            a#admissions-join__faq-q4-heading data-parent="#" data-toggle="collapse" href="#apply-faq__4"
               | 4. What does an ideal team that can be part of SV.CO look like?
         #apply-faq__4.collapse
           .card-block.apply-faq__collapse-card-block
@@ -458,7 +458,7 @@ section.apply-faq__container.p-y-3
       .card.apply-faq__collapse-card
         .card-header.apply-faq__collapse-card-header.p-a-0
           h4.font-regular.apply-faq__collapse-card-title.m-b-0
-            a data-parent="#" data-toggle="collapse" href="#apply-faq__5"
+            a#admissions-join__faq-q5-heading data-parent="#" data-toggle="collapse" href="#apply-faq__5"
               | 5. When can I start the program?
         #apply-faq__5.collapse
           .card-block.apply-faq__collapse-card-block
@@ -471,7 +471,7 @@ section.apply-faq__container.p-y-3
       .card.apply-faq__collapse-card
         .card-header.apply-faq__collapse-card-header.p-a-0
           h4.font-regular.apply-faq__collapse-card-title.m-b-0
-            a data-parent="#" data-toggle="collapse" href="#apply-faq__6"
+            a#admissions-join__faq-q6-heading data-parent="#" data-toggle="collapse" href="#apply-faq__6"
               | 6. Will SV.CO fund startups?
         #apply-faq__6.collapse
           .card-block.apply-faq__collapse-card-block

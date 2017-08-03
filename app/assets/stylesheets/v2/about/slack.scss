@@ -14,3 +14,12 @@
     margin-bottom: 0.7rem;
   }
 }
+
+.about-slack__iframe {
+  border: 0;
+  height: 470px;
+  margin-left: -50px;
+  margin-top: -4rem;
+  width: 400px;
+  overflow-y: hidden;
+}

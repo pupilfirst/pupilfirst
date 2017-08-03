@@ -27,11 +27,12 @@ ActiveAdmin.register Founder do
     label: 'Tags',
     collection: -> { Founder.tag_counts_on(:tags).pluck(:name).sort }
 
+  filter :startup_level_id, as: :select, collection: Level.all.order(number: :asc)
+  filter :startup_admission_stage, as: :select, collection: Startup.admission_stages, label: 'Admission Stage'
   filter :roles_cont, as: :select, collection: Founder.valid_roles, label: 'Role'
   filter :college_name_contains
   filter :roll_number
   filter :created_at, label: 'Registered on'
-  filter :startup_admission_stage, as: :select, collection: Startup.admission_stages, label: 'Admission Stage'
 
   permit_params :name, :email, :hacker, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :slack_username, :born_on,
     :startup_admin, :communication_address, :identification_proof, :phone, :invitation_token, :college_id, :roll_number,

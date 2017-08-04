@@ -110,9 +110,11 @@ feature 'Target Overlay' do
     it 'displays the status for each founder' do
       find('.founder-dashboard-target-header__headline').click
 
-      expect(page).to have_selector('.target-overlay-timeline-submission__title', text: 'Completion Status')
-      expect(page).to have_selector('.founder-dashboard__avatar-wrapper', count: 2)
-      # TODO: Also check if the right people have the right status
+      within('.target-overlay__rightbar') do
+        expect(page).to have_selector('.target-overlay-timeline-submission__title', text: 'Completion Status')
+        expect(page).to have_selector('.founder-dashboard__avatar-wrapper', count: 2)
+        # TODO: Also check if the right people have the right status
+      end
     end
   end
 

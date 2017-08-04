@@ -21,26 +21,26 @@
 .container
   .resources.m-y-3
     .tag-filter
-      = form_tag nil, method: "get" do
-        = select_tag "tags", options_for_select(@resource_tags, params[:tags]), multiple: true, include_blank: true, id: "resources-index-tags", class: "tag-select"
-        = text_field_tag "search", params[:search], placeholder: 'Title contains', class: 'search-field'
-        = select_tag 'created_after', options_for_select(date_filter_options, params[:created_after]), include_blank: 'Added Anytime', class: 'search-field'
+      = form_for @form, url: resources_url, method: :get do |f|
+        = f.select :tags, options_for_select(@resource_tags, @filter_params[:tags]), { include_blank: true}, { multiple: true, class: 'tag-select' }
+        = f.text_field :search, value: @filter_params[:search], placeholder: 'Title contains', class: 'search-field'
+        = f.select :created_after, options_for_select(date_filter_options, @filter_params[:created_after]), { include_blank: 'Added Anytime' }, { class: 'search-field' }
         .filter-buttons
-          = button_tag name: "Filter", type: "submit", class: 'btn btn-secondary btn-with-icon text-uppercase' do
+          = f.button  :submit, class: 'btn btn-secondary btn-with-icon text-uppercase' do
             i.fa.fa-filter
             | Filter
-          - if params[:tags].present? || params[:search].present?
+          - if @filter_params[:tags].present? || @filter_params[:search].present?
             = link_to resources_path, class: 'btn btn-ghost-primary btn-with-icon text-uppercase' do
               i.fa.fa-refresh
               | Clear
 
     .row
-      - if @resources.blank?
+      - if @resources.blank? || @form.errors.present?
         .col-md-12
           .alert.alert-warning
             = zero_results_text.html_safe
       - else
-        - if params[:tags].present? || params[:search].present?
+        - if @filter_params[:tags].present? || @filter_params[:search].present?
           p.grey-text.show-result-text
             = results_caption
         - @resources.each do |resource|

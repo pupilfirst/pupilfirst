@@ -2,13 +2,28 @@ class ResourcesController < ApplicationController
   layout 'application_v2'
 
   def index
-    @resources = policy_scope(Resource.left_joins(:level)).includes(:tags)
-    filter_resources_by_tags
-    filter_resources_by_search
-    filter_resources_by_date
-    paginate_resources
-    load_resource_tags
+    resources = policy_scope(Resource.left_joins(:level)).includes(:tags)
+    @form = Resources::FilterForm.new(OpenStruct.new)
 
+    filter_params = {}
+    resources_filter = params[:resources_filter]
+
+    if resources_filter.present?
+      filter_params[:tags] = resources_filter[:tags]
+      filter_params[:search] = resources_filter[:search]
+      filter_params[:created_after] = resources_filter[:created_after]
+    end
+
+    filter_params[:tags] = params[:tags] if params[:tags].present?
+    @filter_params = filter_params
+
+    @resources = if @filter_params.present? && @form.validate(@filter_params.merge(page: params[:page]))
+      Resources::FilterService.new(@form, resources).resources
+    else
+      resources.paginate(page: 1, per_page: 9)
+    end
+
+    @resource_tags = @form.resource_tags
     @skip_container = true
   end
 
@@ -37,41 +52,5 @@ class ResourcesController < ApplicationController
     authorize resource
     resource.increment_downloads(current_user)
     redirect_to resource.file.url
-  end
-
-  private
-
-  def filter_resources_by_tags
-    return if params[:tags].blank?
-    @resources = @resources.tagged_with params[:tags]
-  end
-
-  def filter_resources_by_search
-    return if params[:search].blank?
-    @resources = @resources.title_matches(params[:search])
-  end
-
-  def filter_resources_by_date
-    return if params[:created_after].blank?
-    @resources = @resources.where('resources.created_at > ?', date_filter_values[params[:created_after].to_sym])
-  end
-
-  def paginate_resources
-    # Ensure page is valid.
-    page = params[:page].to_i.to_s == params[:page] ? params[:page] : nil
-    @resources = @resources.paginate(page: page, per_page: 9)
-  end
-
-  def load_resource_tags
-    @resource_tags = Resource.tag_counts_on(:tags).pluck(:name)
-  end
-
-  def date_filter_values
-    {
-      'Since Yesterday': 1.day.ago.beginning_of_day,
-      'Past Week': 1.week.ago,
-      'Past Month': 1.month.ago,
-      'Past Year': 1.year.ago
-    }
   end
 end

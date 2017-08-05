@@ -83,8 +83,6 @@ feature 'Founder Dashboard' do
   end
 
   scenario 'founder visits dashboard', js: true do
-    pending 'update to work with target overlay'
-
     sign_in_user founder.user, referer: dashboard_founder_path
 
     # There should be no tour.
@@ -107,7 +105,7 @@ feature 'Founder Dashboard' do
     within('.introjs-tooltip') do
       find('.introjs-skipbutton').click
     end
-    find('.founder-dashboard-target-header__container--active').click
+    find('.founder-dashboard-actionbar__box').click
 
     # Open the performance window.
     find('.founder-dashboard-actionbar__show-more-menu-dots').click
@@ -140,39 +138,8 @@ feature 'Founder Dashboard' do
     # Check whether there's one Milestone Target Group
     expect(page).to have_selector('.founder-dashboard-target-group__milestone-label', count: 1)
 
-    # Check whether clicking each target gives the correct information.
-
-    # TODO: Replace the following tests with corresponding ones for the new TargetOverlay component
-    # find('.founder-dashboard-target-header__status-badge.pending').click
-    # within('.founder-dashboard-target__container--open') do
-    #   expect(page).to have_content('Time required').and have_content('60 days').and have_button('Submit')
-    # end
-    #
-    # find('.founder-dashboard-target-header__status-badge.complete').click
-    # within("#founder-dashboard-target__description-container-#{completed_target_3.id}") do
-    #   expect(page).to have_content('Target Completed').and have_button('Re-Submit')
-    # end
-    #
-    # find('.founder-dashboard-target-header__status-badge.needs-improvement').click
-    # within("#founder-dashboard-target__description-container-#{needs_improvement_target.id}") do
-    #   expect(page).to have_content('Submission Needs Improvement').and have_button('Re-Submit')
-    # end
-    #
-    # find('.founder-dashboard-target-header__status-badge.not-accepted').click
-    # within("#founder-dashboard-target__description-container-#{not_accepted_target.id}") do
-    #   expect(page).to have_content('Submission Not Accepted').and have_button('Re-Submit')
-    # end
-    #
-    # find('.founder-dashboard-target-header__status-badge.unavailable').click
-    # within("#founder-dashboard-target__description-container-#{target_with_prerequisites.id}") do
-    #   expect(page).to have_content('Target Locked')
-    #   expect(page).to have_content("Pending Prerequisites: #{pending_target.title}")
-    #   expect(page).to_not have_button('Submit')
-    # end
-
     # Select another level and check if the correct data is displayed.
-    find('.filter-targets-dropdown__button').click
-    find('.filter-targets-dropdown__menu-item', text: 'Level 2').click
+    find('.filter-targets-dropdown__menu-item', text: "Level 2: #{level_2.name}").click
     expect(page).to have_selector('.founder-dashboard-target-group__box', count: 1)
     expect(page).to have_selector('.founder-dashboard-target-header__container', count: 1)
 

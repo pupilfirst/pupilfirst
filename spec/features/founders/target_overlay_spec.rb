@@ -8,6 +8,7 @@ feature 'Target Overlay' do
   let!(:founder) { startup.admin }
   let!(:target_group_1) { create :target_group, level: level_1, milestone: true }
   let!(:target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM }
+  let!(:prerequisite_target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM }
   let!(:timeline_event) { create :timeline_event, startup: startup, founder: founder, iteration: startup.iteration, status: TimelineEvent::STATUS_VERIFIED, links: [{ 'title' => 'Some Link', 'url' => 'https://www.example.com', 'private' => false }] }
   let!(:timeline_event_file) { create :timeline_event_file, timeline_event: timeline_event }
   let(:faculty) { create :faculty, slack_username: 'abcd' }
@@ -26,7 +27,7 @@ feature 'Target Overlay' do
       expect(page).to_not have_selector('.target-overlay__overlay')
 
       # Click on the target.
-      find('.founder-dashboard-target-header__headline').click
+      find('.founder-dashboard-target-header__headline', text: target.title).click
       # The overlay should now be visible.
       expect(page).to have_selector('.target-overlay__overlay')
       # And the page path must have changed
@@ -72,7 +73,7 @@ feature 'Target Overlay' do
     end
 
     it 'displays the latest submission and feedback for it' do
-      find('.founder-dashboard-target-header__headline').click
+      find('.founder-dashboard-target-header__headline', text: target.title).click
 
       # Within the timeline event panel:
       within('.target-overlay-timeline-submission__container') do
@@ -108,15 +109,76 @@ feature 'Target Overlay' do
     end
 
     it 'displays the status for each founder' do
-      find('.founder-dashboard-target-header__headline').click
+      find('.founder-dashboard-target-header__headline', text: target.title).click
 
       within('.target-overlay__rightbar') do
         expect(page).to have_selector('.target-overlay-timeline-submission__title', text: 'Completion Status')
         expect(page).to have_selector('.founder-dashboard__avatar-wrapper', count: 2)
-        # TODO: Also check if the right people have the right status
+        # TODO: Also check if the right people have the right status. This is now blocked by the bug reported here: https://trello.com/c/P9RNQQ3N
       end
     end
   end
 
-  # TODO: Check the back button works fine. Also if the status immediately changes to submitted on a timeline event submission
+  context 'when the founder clicks a locked target', js: true do
+    before do
+      target.prerequisite_targets << prerequisite_target
+      visit dashboard_founder_path
+    end
+
+    it 'informs about the pending prerequisite' do
+      find('.founder-dashboard-target-header__headline', text: target.title).click
+
+      # The target must be marked locked.
+      within('.target-overlay__header') do
+        expect(page).to have_selector('.founder-dashboard-target-header__status-badge-icon > i.fa-lock')
+        expect(page).to have_selector('.founder-dashboard-target-status-badge__container > span > span', text: 'Locked')
+      end
+
+      within('.target-overlay-content-block') do
+        expect(page).to have_selector('.target-overlay-content-block__prerequisites > h6', text: 'Pending Prerequisites:')
+        expect(page).to have_selector(".target-overlay-content-block__prerequisites-list-item > a[href='/founder/dashboard/targets/#{prerequisite_target.id}']", text: prerequisite_target.title)
+      end
+    end
+  end
+
+  context 'when the founder submits a new timeline event', js: true do
+    it 'changes the status to submitted right away' do
+      find('.founder-dashboard-target-header__headline', text: target.title).click
+
+      # The target must be pending.
+      within('.target-overlay__header') do
+        expect(page).to have_selector('.founder-dashboard-target-header__status-badge-icon > i.fa-clock-o')
+        expect(page).to have_selector('.founder-dashboard-target-status-badge__container > span > span', text: 'Pending')
+      end
+
+      find('.ui-pnotify').hover
+      find('.ui-pnotify-closer').click
+
+      find('.target-overlay__header').find('button.btn-timeline-builder').click
+      expect(page).to have_selector('.timeline-builder__popup-body')
+      find('.timeline-builder__textarea').set('Some description')
+      find('.js-timeline-builder__submit-button').click
+
+      # The target status badge must now say submitted.
+      within('.target-overlay__header') do
+        expect(page).to have_selector('.founder-dashboard-target-header__status-badge-icon > i.fa-hourglass-half')
+        expect(page).to have_selector('.founder-dashboard-target-status-badge__container > span > span', text: 'Submitted')
+      end
+    end
+  end
+
+  context 'when the founder clicks the back button from the overlay', js: true do
+    it 'takes him/her back to the dashboard' do
+      find('.founder-dashboard-target-header__headline', text: target.title).click
+      expect(page).to have_selector('.target-overlay__overlay')
+      expect(page).to have_current_path("/founder/dashboard/targets/#{target.id}")
+
+      find('.target-overlay__overlay-close-icon').click
+
+      # Founder must now be on the dashboard.
+      expect(page).to_not have_selector('.target-overlay__overlay')
+      expect(page).to have_selector('.founder-dashboard-target-group__container')
+      expect(page).to have_current_path('/founder/dashboard')
+    end
+  end
 end

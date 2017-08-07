@@ -1,6 +1,6 @@
 ---
 timestamp: '2017-08-01T07:51:52Z'
-title: Fix crash in startup feedback mailer for Level 1+ startups.
+title: Fixed crash in startup feedback mailer for Level 1+ startups.
 trello: https://trello.com/c/GKLxrjZ4
 private: true
 description: This was caused by a recent change that removed the setting of reference_url

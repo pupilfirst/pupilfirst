@@ -2,4 +2,8 @@
   .heading Sign Ups by Reference
 
   .content
+    = form_tag admin_admissions_dashboard_path, method: :get, class: 'admission-dashboard-reference-filter__form' do
+      = label_tag 'Admission Stage', nil, class: 'admission-dashboard-reference-filter__form-tag'
+      = select_tag 'stage', options_for_select(Startup.admission_stages, params[:stage]), include_blank: true, class: 'admission-dashboard-reference-filter__form-tag'
+      = submit_tag 'Filter'
     #paid_applicants_by_reference.chart-area data-chart-data="#{@applicants_by_reference}"

@@ -7,7 +7,7 @@ ActiveAdmin.register_page 'Admissions Dashboard' do
     def index
       @startups_stage_split = AdmissionStats::StageSplitService.new.startups_split
       @applicants_by_location = AdmissionStats::ApplicantsByLocationService.new.load
-      @applicants_by_reference = AdmissionStats::ApplicantsByReferenceService.new.load
+      @applicants_by_reference = AdmissionStats::ApplicantsByReferenceService.new.load(params[:stage])
       @funnel_stats = AdmissionStats::FunnelStatsService.new(params).load
     end
   end

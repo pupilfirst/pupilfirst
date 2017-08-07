@@ -1,5 +1,69 @@
 ---
 changelog:
+- timestamp: '2017-08-07T11:07:41Z'
+  changes:
+  - timestamp: '2017-08-07T10:08:56Z'
+    title: We now have an expanded target view in the dashboard. The target overlay
+      will have description, completion instructions, video embeds, timeline submissions
+      and feedbacks all in one place. This will also allow founders to share links
+      to specific targets with co-founders.
+    trello: "[https://trello.com/c/l92nYs9k,https://trello.com/c/9aQwfw5v,https://trello.com/c/O9f3BoJ7]"
+    private: false
+    category: feature
+  - timestamp: '2017-08-07T09:27:00Z'
+    title: Fixed a bug which prevented changing connect slots with a request
+    trello: https://trello.com/c/3ZgFLCO3
+    private: true
+    category: "'bugfix'"
+  - timestamp: '2017-08-07T08:56:03Z'
+    title: Added column 'Admission Stage' to Level 0 Founder csv
+    trello: https://trello.com/c/6oNoIYjo
+    private: true
+  - timestamp: '2017-08-07T07:11:24Z'
+    title: Introduced validations to resources filter form
+    trello: https://trello.com/c/KnGr4YkA
+    private: true
+    description: Reform::Form is now used for resources filter form to introduce appropriate
+      validations.
+  - timestamp: '2017-08-02T08:24:38Z'
+    title: Slack notification on resource creation has been offloaded to a background
+      job.
+    trello: https://trello.com/c/Xgm0dVur
+    private: true
+    description: This prevents the rack-timeout from kicking in when processing the
+      upload file request.
+    category: bugfix
+  - timestamp: '2017-08-02T07:14:23Z'
+    title: Added level filter to AA Founder#index.
+    trello: https://trello.com/c/S34ZLCKG
+    private: true
+    category: feature
+  - timestamp: '2017-08-02T07:03:05Z'
+    title: Added revenue to funnel stats on admissions dashboard.
+    trello: https://trello.com/c/9LLgWRiV
+    private: true
+    description: This also adds the data point to the daily Slack notification since
+      they share the underlying service.
+    category: feature
+  - timestamp: '2017-08-01T12:01:00Z'
+    title: Added IDs to links on navbar, footer, home, and join page to allow analytics
+      to track clicks correctly.
+    trello: https://trello.com/c/VpAxxyGW/3242-as-a-marketer-i-want-to-do-track-analytics-of-page-elements-in-home-and-join-page
+    private: true
+  - timestamp: '2017-08-01T10:24:42Z'
+    title: Set up public-assets.sv.co Cloudflare endpoint that covers public S3 bucket
+      and use that for existing links.
+    trello: https://trello.com/c/0WizXht6
+    private: true
+    category: operations
+  - timestamp: '2017-08-01T07:51:52Z'
+    title: Fixed crash in startup feedback mailer for Level 1+ startups.
+    trello: https://trello.com/c/GKLxrjZ4
+    private: true
+    description: This was caused by a recent change that removed the setting of reference_url
+      for feedback entries that were directly tied to timeline events. This updates
+      the mailer to generate the URL using the timeline event.
+    category: bugfix
 - timestamp: '2017-07-31T12:08:17Z'
   changes:
   - timestamp: '2017-07-31T10:30:45Z'

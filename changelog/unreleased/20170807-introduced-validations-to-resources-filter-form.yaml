@@ -1,7 +1,0 @@
----
-timestamp: '2017-08-07T07:11:24Z'
-title: Introduced validations to resources filter form
-trello: https://trello.com/c/KnGr4YkA
-private: true
-description: Reform::Form is now used for resources filter form to introduce appropriate
-  validations.

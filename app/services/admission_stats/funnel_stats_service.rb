@@ -1,7 +1,9 @@
 module AdmissionStats
   class FunnelStatsService
-    def initialize(params = {})
-      @params = params
+    def initialize(start_date, end_date)
+      start_date = start_date.present? ? Date.parse(start_date).beginning_of_day : 1.day.ago.beginning_of_day
+      end_date = end_date.present? ? Date.parse(end_date).end_of_day : 1.day.ago.end_of_day
+      @date_range = start_date..end_date
     end
 
     def load
@@ -18,43 +20,31 @@ module AdmissionStats
     private
 
     def signed_up
-      Startup.level_zero.where(created_at: date_range).count
+      Startup.level_zero.where(created_at: @date_range).count
     end
 
     def screening_completed
-      verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_SCREENING }).where(created_at: date_range).count
+      verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_SCREENING }).where(created_at: @date_range).count
     end
 
     def fee_paid
-      verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_FEE_PAYMENT }).where(created_at: date_range).count
+      verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_FEE_PAYMENT }).where(created_at: @date_range).count
     end
 
     def revenue
-      Payment.where(paid_at: date_range).sum(:amount)
+      Payment.where(paid_at: @date_range).sum(:amount)
     end
 
     def payment_initiated
-      Startup.joins(:payments).where(payments: { created_at: date_range }).count
+      Startup.joins(:payments).where(payments: { created_at: @date_range }).count
     end
 
     def cofounders_added
-      verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_COFOUNDER_ADDITION }).where(created_at: date_range).count
-    end
-
-    def yesterday
-      1.day.ago.beginning_of_day..1.day.ago.end_of_day
+      verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_COFOUNDER_ADDITION }).where(created_at: @date_range).count
     end
 
     def verified_timeline_events
-      TimelineEvent.where(status: TimelineEvent::STATUS_VERIFIED)
-    end
-
-    def date_range
-      if @params.include?(:from)
-        Date.parse(@params[:from]).beginning_of_day..Date.parse(@params[:to]).end_of_day
-      else
-        yesterday
-      end
+      @verified_timeline_events ||= TimelineEvent.where(status: TimelineEvent::STATUS_VERIFIED)
     end
   end
 end

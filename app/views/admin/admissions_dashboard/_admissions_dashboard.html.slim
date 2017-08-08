@@ -2,18 +2,19 @@
 
 .admissions-dashboard-item.full-width
   .heading Current stages of Level 0 Startups as from - #{Time.zone.now.strftime('%B %d')}
-  .content
+  .admissions-dashboard__item-content
     - @startups_stage_split.each do |stage, value|
       .admission-dashboard-data-block
         .admission-dashboard-data-block__title
           = stage
         .admission-dashboard-data-block__value
           = value
+
 .admissions-dashboard-item.full-width
   - start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day : 1.day.ago.beginning_of_day
   - end_time = params[:to].present? ?  Date.parse(params[:to]).end_of_day : 1.day.ago.end_of_day
 
-  .heading Funnel Stats for Level 0 Startups from #{start_time.strftime('%c')} to #{end_time.strftime('%c')}
+  .heading Funnel Stats for Level 0 Startups
 
   .admission-dashboard-stats-filter__heading Filter Stats by Date
 
@@ -27,13 +28,27 @@
     .admission-dashboard-stats-filter__button
       = submit_tag 'Get Stats'
 
-  .content
+  .admission-dashboard-stats-filter__heading From #{start_time.strftime('%b %d')} 00:00 to #{end_time.strftime('%b %d')} 23:59
+
+  .admissions-dashboard__item-content
     - @funnel_stats.each do |stage, value|
       .admission-dashboard-data-block
         .admission-dashboard-data-block__title
           = stage
         .admission-dashboard-data-block__value
           = value
+    .clear-both
+
+  .admission-dashboard-stats-filter__heading Since May 8
+
+  .admissions-dashboard__item-content
+    - @complete_funnel_stats.each do |stage, value|
+      .admission-dashboard-data-block
+        .admission-dashboard-data-block__title
+          = stage
+        .admission-dashboard-data-block__value
+          = value
+    .clear-both
 
 .admissions-dashboard-container
   == render 'paid_applicants_by_reference'

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170728122038) do
+ActiveRecord::Schema.define(version: 20170808100617) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -244,7 +244,6 @@ ActiveRecord::Schema.define(version: 20170728122038) do
     t.integer "backlog"
     t.string "reference"
     t.string "college_text"
-    t.string "fee_payment_method"
     t.string "parent_name"
     t.string "id_proof_type"
     t.string "id_proof_number"

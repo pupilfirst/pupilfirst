@@ -39,7 +39,7 @@ ActiveAdmin.register Founder do
     :startup_admin, :communication_address, :identification_proof, :phone, :invitation_token, :college_id, :roll_number,
     :course, :semester, :year_of_graduation, :twitter_url, :linkedin_url, :personal_website_url, :blog_url,
     :angel_co_url, :github_url, :behance_url, :gender, :skype_id, :exited, :id_proof_number,
-    :id_proof_type, :parent_name, :permanent_address, :address_proof, :income_proof, :fee_payment_method,
+    :id_proof_type, :parent_name, :permanent_address, :address_proof, :income_proof,
     :letter_from_parent, roles: [], tag_list: []
 
   batch_action :tag, form: proc { { tag: Founder.tag_counts_on(:tags).pluck(:name) } } do |ids, inputs|
@@ -357,7 +357,6 @@ ActiveAdmin.register Founder do
 
     panel 'Admissions Data' do
       attributes_table_for founder do
-        row :fee_payment_method
         row :identification_proof do
           if founder.identification_proof.present?
             link_to 'Click here to open in new window', founder.identification_proof.url, target: '_blank'

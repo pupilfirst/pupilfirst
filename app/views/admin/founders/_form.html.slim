@@ -44,7 +44,6 @@
     = f.input :behance_url
 
   = f.inputs 'Admissions Data'
-    = f.input :fee_payment_method, as: :select, collection: Founder::FEE_PAYMENT_METHODS
     = f.input :identification_proof, as: :file
     = f.input :id_proof_type, as: :select, collection: Founder::ID_PROOF_TYPES
     = f.input :id_proof_number
@@ -53,4 +52,3 @@
     = f.input :income_proof, as: :file
     = f.input :letter_from_parent, as: :file
   = f.submit
-

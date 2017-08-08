@@ -10,7 +10,8 @@ module ResourcesHelper
   end
 
   def tag_text
-    tags = params[:tags] || params[:resources_filter][:tags] - ['']
+    return if params[:resources_filter].blank?
+    tags = params[:resources_filter][:tags] - ['']
     tags.present? ? "tagged with \'#{tags.join(', ')}\'" : ''
   end
 

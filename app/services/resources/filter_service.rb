@@ -6,10 +6,9 @@ module Resources
     end
 
     def resources
-      resources = @form.tags.any?(&:present?) ? @resources.tagged_with(@form.tags) : @resources
+      resources = @form.tags.present? ? @resources.tagged_with(@form.tags) : @resources
       resources = filter_by_search(resources) if @form.search.present?
-      resources = filter_by_date(resources) if @form.created_after.present?
-      paginate(resources)
+      @form.created_after.present? ? filter_by_date(resources) : resources
     end
 
     private
@@ -20,11 +19,6 @@ module Resources
 
     def filter_by_date(resources)
       resources.where('resources.created_at > ?', date_filter_values[@form.created_after.to_sym])
-    end
-
-    def paginate(resources)
-      page = @form.page.present? ? @form.page : nil
-      resources.paginate(page: page, per_page: 9)
     end
 
     def date_filter_values

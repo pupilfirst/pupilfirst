@@ -1,32 +1,24 @@
 class ResourcesController < ApplicationController
   layout 'application_v2'
 
+  # GET /library
   def index
     resources = policy_scope(Resource.left_joins(:level)).includes(:tags)
     @form = Resources::FilterForm.new(OpenStruct.new)
 
-    filter_params = {}
-    resources_filter = params[:resources_filter]
-
-    if resources_filter.present?
-      filter_params[:tags] = resources_filter[:tags]
-      filter_params[:search] = resources_filter[:search]
-      filter_params[:created_after] = resources_filter[:created_after]
-    end
-
-    filter_params[:tags] = params[:tags] if params[:tags].present?
-    @filter_params = filter_params
-
-    @resources = if @filter_params.present? && @form.validate(@filter_params.merge(page: params[:page]))
-      Resources::FilterService.new(@form, resources).resources
+    filtered_resources, page = if @form.validate(filter_params)
+      [Resources::FilterService.new(@form, resources).resources, @form.page]
     else
-      resources.paginate(page: 1, per_page: 9)
+      [resources, 1]
     end
+
+    @resources = filtered_resources.paginate(page: page, per_page: 9)
 
     @resource_tags = @form.resource_tags
     @skip_container = true
   end
 
+  # GET /library/resource
   def show
     @resource = Resource.find(params[:id])
     authorize @resource
@@ -47,10 +39,18 @@ class ResourcesController < ApplicationController
     redirect_to resources_path, alert: alert_message
   end
 
+  # GET /library/resource/download
   def download
     resource = Resource.find(params[:id])
     authorize resource
     resource.increment_downloads(current_user)
     redirect_to resource.file.url
+  end
+
+  private
+
+  def filter_params
+    input_filter = params.include?(:resources_filter) ? params.require(:resources_filter).permit({ tags: [] }, :search, :created_after) : {}
+    input_filter.merge(page: params[:page])
   end
 end

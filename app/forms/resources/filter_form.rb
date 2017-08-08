@@ -10,12 +10,19 @@ module Resources
     validate :tags_must_be_in_the_list
 
     def tags_must_be_in_the_list
-      return if (tags - resource_tags - ['']).empty?
-      errors[:base] << 'Not a valid search criterion'
+      return if tags.blank?
+
+      # Remove the blank value supplied in the form.
+      self.tags -= ['']
+
+      return if (tags - resource_tags).empty?
+      errors[:base] << 'Invalid tag supplied.'
     end
 
     def page_number_should_be_valid
-      page.to_i.to_s == page
+      return if page.blank?
+      return if page.to_i.to_s == page
+      errors[:base] << 'Not a valid page number.'
     end
 
     def date_filter_options

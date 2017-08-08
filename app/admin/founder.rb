@@ -29,6 +29,7 @@ ActiveAdmin.register Founder do
 
   filter :startup_level_id, as: :select, collection: Level.all.order(number: :asc)
   filter :startup_admission_stage, as: :select, collection: Startup.admission_stages, label: 'Admission Stage'
+  filter :startup_id_null, as: :boolean, label: 'Without Startup'
   filter :roles_cont, as: :select, collection: Founder.valid_roles, label: 'Role'
   filter :college_name_contains
   filter :roll_number

@@ -64,6 +64,10 @@ class AdmissionsController < ApplicationController
   def fee
     authorize :admissions
 
+    # Add a tag to the founders visiting the fee payment page
+    current_founder.tag_list.add 'Visited Payment Page'
+    current_founder.save!
+
     @payment_form = Admissions::PaymentForm.new(current_founder)
     @coupon = current_startup.coupons.last
 

@@ -38,20 +38,8 @@ module Targets
       linked_event.needs_improvement? ? STATUS_NEEDS_IMPROVEMENT : STATUS_SUBMITTED
     end
 
-    def owner_events
-      owner.timeline_events.verified_or_needs_improvement
-    end
-
     def owner
       @owner ||= @target.founder_role? ? @founder : @founder.startup
-    end
-
-    def current_level
-      @current_level ||= owner.respond_to?(:level) ? owner.level : owner.startup.level
-    end
-
-    def current_iteration
-      @current_iteration ||= owner.respond_to?(:iteration) ? owner.iteration : owner.startup.iteration
     end
 
     def completed_prerequisites_ids

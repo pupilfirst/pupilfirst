@@ -41,11 +41,11 @@ module Targets
       @submitted_targets_statuses ||= begin
         founder_events = @founder.timeline_events.where.not(target_id: nil)
           .where(target: Target.founder)
-          .select("DISTINCT ON(target_id) *").order("target_id, created_at DESC")
+          .select('DISTINCT ON(target_id) *').order('target_id, created_at DESC')
 
         startup_events = @founder.startup.timeline_events.where.not(target_id: nil)
           .where(target: Target.not_founder)
-          .select("DISTINCT ON(target_id) *").order("target_id, created_at DESC")
+          .select('DISTINCT ON(target_id) *').order('target_id, created_at DESC')
 
         (founder_events + startup_events).each_with_object({}) do |event, result|
           result[event.target_id] = {
@@ -56,10 +56,15 @@ module Targets
       end
     end
 
-    # mapping from the event's verified status to the associated targets completion status, accounting for iteration mismatches
+    # Mapping from the latest event's verification status to the associated targets completion status, accounting for
+    # iteration mismatches - see details in inner documentation.
     def target_status(event)
       target = applicable_targets.find { |t| t.id == event.target_id }
-      if target&.target_group_id.present? && event.iteration != @founder.startup.iteration
+
+      # An event for a vanilla target (non-session/chore target) evaluates to pending if the event iteration is not
+      # equal to the startup's iteration. This allows pure-targets to be 'reset' when the startup pivots and moves to a
+      # new iteration, while preserving the status of chores and sessions.
+      if target&.target? && event.iteration != @founder.startup.iteration
         Target::STATUS_PENDING
       else
         case event.status
@@ -88,18 +93,16 @@ module Targets
     # all applicable targets for the founder
     def applicable_targets
       @applicable_targets ||= begin
-        vanilla_targets = filter_for_level(Target.joins(target_group: :level))
-        chores = filter_for_level(Target.where(chore: true).joins(:level))
+        vanilla_targets = filter_for_level(Target.joins(target_group: :level).where(session_at: nil))
         sessions = filter_for_level(Target.where.not(session_at: nil).joins(:level))
-        vanilla_targets + chores + sessions
+        vanilla_targets + sessions
       end
     end
 
-    # Filter the given set of targets/chores/sessions based on current level.
+    # Filter the given set of targets / sessions based on current level.
     #
-    # Only level zero targets are returned if current level is zero. Else,
-    # all targets between level one and current level are returned - except for sessions.
-    # For sessions, the upper limit is the maximum available level.
+    # Only level zero targets are returned if current level is zero. Else, all targets between level one and current
+    # level are returned - except for sessions. For sessions, the upper limit is the maximum available level.
     def filter_for_level(targets)
       if @level_number.zero?
         targets.where('levels.number = ?', 0)

@@ -49,10 +49,6 @@ startTour = ->
         intro: startupShowTour.data('targets')
       },
       {
-        element: $('.founder-dashboard-togglebar__toggle-btn')[1],
-        intro: startupShowTour.data('chores')
-      },
-      {
         element: $('.founder-dashboard-togglebar__toggle-btn')[2],
         intro: startupShowTour.data('sessions')
       },

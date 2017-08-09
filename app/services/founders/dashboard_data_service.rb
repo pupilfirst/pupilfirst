@@ -6,6 +6,7 @@ module Founders
 
     def levels
       start_level = startup.level.number.zero? ? 0 : 1
+
       @levels ||= (start_level..startup.level.number).each_with_object({}) do |level_number, levels|
         level = Level.find_by(number: level_number)
 
@@ -13,26 +14,6 @@ module Founders
           name: level.name,
           target_groups: target_groups(level)
         }
-      end
-    end
-
-    def chores
-      applicable_levels = startup.level.number.zero? ? 0 : (1..startup.level.number).to_a
-      @chores ||= begin
-        targets = Target.includes(:assigner, :level)
-          .where(chore: true, archived: false)
-          .where(levels: { number: applicable_levels })
-          .order(:sort_index)
-          .as_json(
-            only: target_fields,
-            methods: %i[has_rubric target_type target_type_description],
-            include: {
-              assigner: assigner_fields,
-              level: { only: [:number] }
-            }
-          )
-
-        dashboard_decorate(targets)
       end
     end
 
@@ -103,6 +84,7 @@ module Founders
     def dashboard_decorated_data(target_data)
       # Add status of target to compiled data.
       target_data['status'] = bulk_status_service.status(target_data['id'])
+
       # Add time of submission of last event, necessary for submitted and completed state.
       if target_data['status'].in?([Target::STATUS_SUBMITTED, Target::STATUS_COMPLETE])
         target_data['submitted_at'] = bulk_status_service.submitted_at(target_data['id'])
@@ -119,7 +101,7 @@ module Founders
 
     def trim_archived_targets(groups)
       groups.map do |group|
-        group['targets'] = group['targets'].keep_if { |target| target['archived'] == false }
+        group['targets'].reject! { |target| target['archived'] }
         group
       end
     end

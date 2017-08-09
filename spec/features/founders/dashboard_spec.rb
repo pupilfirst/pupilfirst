@@ -29,11 +29,11 @@ feature 'Founder Dashboard' do
   let!(:needs_improvement_target) { create :target, target_group: target_group_4, role: Target::ROLE_TEAM }
   let!(:target_with_prerequisites) { create :target, target_group: target_group_4, prerequisite_targets: [pending_target], role: Target::ROLE_TEAM }
 
-  # Create chores for different levels.
-  let!(:chore_1) { create :target, chore: true, level: level_4, target_group: nil }
-  let!(:chore_2) { create :target, chore: true, level: level_3, target_group: nil }
-  let!(:chore_3) { create :target, chore: true, level: level_2, target_group: nil }
-  let!(:chore_4) { create :target, chore: true, level: level_1, target_group: nil }
+  # Create chores for different target groups.
+  let!(:chore_1) { create :target, chore: true, target_group: target_group_4 }
+  let!(:chore_2) { create :target, chore: true, target_group: target_group_3 }
+  let!(:chore_3) { create :target, chore: true, target_group: target_group_2 }
+  let!(:chore_4) { create :target, chore: true, target_group: target_group_1 }
 
   # Create sessions for different levels.
   let!(:session_1) { create :target, target_group: nil, level: level_4, session_at: 2.hours.from_now }
@@ -141,32 +141,7 @@ feature 'Founder Dashboard' do
     # Select another level and check if the correct data is displayed.
     find('.filter-targets-dropdown__menu-item', text: "Level 2: #{level_2.name}").click
     expect(page).to have_selector('.founder-dashboard-target-group__box', count: 1)
-    expect(page).to have_selector('.founder-dashboard-target-header__container', count: 1)
-
-    ####
-    # Check whether the data in Chores tab is correct.
-    ####
-
-    find('.founder-dashboard-togglebar__toggle-btn', text: 'CHORES').click
-    within('.founder-dashboard-togglebar__toggle-btn', text: 'CHORES') do
-      expect(page).to have_selector('.founder-dashboard-togglebar__toggle-btn-notify', text: 4)
-    end
-
-    # Check chores for current level and previous levels.
-    expect(page).to have_selector('.founder-dashboard-target-group__box', count: 2)
-
-    within('.founder-dashboard-target-group__box', text: 'Chores for current level') do
-      expect(page).to have_selector('.founder-dashboard-target__container', count: 1)
-    end
-
-    within('.founder-dashboard-target-group__box', text: 'Chores for previous levels') do
-      expect(page).to have_selector('.founder-dashboard-target__container', count: 3)
-    end
-
-    # Check the target status filters.
-    find('.filter-targets-dropdown__button').click
-    find('.filter-targets-dropdown__menu-item', text: 'Needs Improvement').click
-    expect(page).to have_text('No results to display!', count: 2)
+    expect(page).to have_selector('.founder-dashboard-target-header__container', count: 2)
 
     ####
     # Check whether the data in Sessions tab is correct.

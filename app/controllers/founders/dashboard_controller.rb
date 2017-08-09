@@ -104,7 +104,6 @@ module Founders
         currentLevel: @startup.level.number,
         requestedRestartLevel: @startup.requested_restart_level&.number,
         levels: dashboard_data_service.levels,
-        chores: dashboard_data_service.chores,
         sessions: dashboard_data_service.sessions,
         sessionTags: dashboard_data_service.session_tags,
         timelineEventTypes: list_service.list,

@@ -4,7 +4,6 @@ class FounderDashboard extends React.Component {
 
     this.state = {
       levels: this.props.levels,
-      chores: this.props.chores,
       sessions: this.props.sessions,
       activeTab: 'targets',
       timelineBuilderVisible: false,
@@ -53,10 +52,8 @@ class FounderDashboard extends React.Component {
     this.setState({timelineBuilderVisible: true, timelineBuilderParams: builderParams});
   }
 
-  pendingCount(targetType) {
-    let targets = targetType == 'chores' ? this.state.chores : this.state.sessions;
-
-    return targets.filter(function (target) {
+  pendingSessionsCount() {
+    return this.state.sessions.filter(function (target) {
       return target.status === 'pending';
     }).length;
   }
@@ -71,7 +68,6 @@ class FounderDashboard extends React.Component {
       })
     });
 
-    let updatedChores = updateSubmissionStatus(this.state.chores.slice(), targetId);
     let updatedSessions = updateSubmissionStatus(this.state.sessions.slice(), targetId);
 
     let updatedSelectedTarget = this.state.selectedTarget;
@@ -79,7 +75,11 @@ class FounderDashboard extends React.Component {
       updatedSelectedTarget.status = 'submitted';
     }
 
-    this.setState({levels: updatedLevels, chores: updatedChores, sessions: updatedSessions, selectedTarget: updatedSelectedTarget});
+    this.setState({
+      levels: updatedLevels,
+      sessions: updatedSessions,
+      selectedTarget: updatedSelectedTarget
+    });
   }
 
   updateSubmissionStatus(targets, targetId) {
@@ -94,13 +94,17 @@ class FounderDashboard extends React.Component {
 
   targetOverlayCloseCB() {
     this.setState({selectedTarget: null});
-    history.pushState({},'','/founder/dashboard')
+    history.pushState({}, '', '/founder/dashboard')
   }
 
   targetDetails(targetId, targetType) {
+    // Chores should be picked from the list of targets.
+    if(targetType === 'chore') {
+      targetType = 'target'
+    }
+
     let collection = {
       'target': _.flatMap(_.flatMap(this.props.levels, 'target_groups'), 'targets'),
-      'chore': this.props.chores,
       'session': this.props.sessions
     };
 
@@ -109,49 +113,45 @@ class FounderDashboard extends React.Component {
 
   selectTargetCB(targetId, targetType) {
     this.setState({selectedTarget: this.targetDetails(targetId, targetType)});
-    history.pushState({targetId: targetId, targetType: targetType},'','/founder/dashboard/targets/' + targetId)
+    history.pushState({targetId: targetId, targetType: targetType}, '', '/founder/dashboard/targets/' + targetId)
   }
 
   render() {
     return (
       <div className="founder-dashboard-container p-b-2">
-        <FounderDashboardToggleBar selected={ this.state.activeTab } chooseTabCB={ this.chooseTab }
-          openTimelineBuilderCB={ this.openTimelineBuilder } pendingChores={ this.pendingCount('chores') }
-          pendingSessions={ this.pendingCount('sessions') }
-        currentLevel={ this.props.currentLevel }/>
+        <FounderDashboardToggleBar selected={this.state.activeTab} chooseTabCB={this.chooseTab}
+          openTimelineBuilderCB={this.openTimelineBuilder} pendingSessions={this.pendingSessionsCount('sessions')}
+          currentLevel={this.props.currentLevel}/>
 
-        { this.props.requestedRestartLevel && <FounderDashboardRestartWarning/> }
+        {this.props.requestedRestartLevel && <FounderDashboardRestartWarning/>}
 
-        { this.state.activeTab === 'targets' &&
-        <FounderDashboardTargets currentLevel={ this.props.currentLevel } levels={ this.state.levels }
-          openTimelineBuilderCB={ this.openTimelineBuilder } levelUpEligibility={ this.props.levelUpEligibility }
-          authenticityToken={ this.props.authenticityToken } iconPaths={ this.props.iconPaths }
-          founderDetails={this.props.founderDetails} maxLevelNumber={ this.props.maxLevelNumber } programLevels={ this.props.programLevels} selectTargetCB={this.selectTargetCB}/>
+        {this.state.activeTab === 'targets' &&
+        <FounderDashboardTargets currentLevel={this.props.currentLevel} levels={this.state.levels}
+          openTimelineBuilderCB={this.openTimelineBuilder} levelUpEligibility={this.props.levelUpEligibility}
+          authenticityToken={this.props.authenticityToken} iconPaths={this.props.iconPaths}
+          founderDetails={this.props.founderDetails} maxLevelNumber={this.props.maxLevelNumber}
+          programLevels={this.props.programLevels} selectTargetCB={this.selectTargetCB}/>
         }
 
-        { this.state.activeTab === 'chores' &&
-        <FounderDashboardChores currentLevel={ this.props.currentLevel } chores={ this.state.chores }
-          openTimelineBuilderCB={ this.openTimelineBuilder } iconPaths={ this.props.iconPaths }
-                                founderDetails={this.props.founderDetails} selectTargetCB={this.selectTargetCB}/>
+        {this.state.activeTab === 'sessions' &&
+        <FounderDashboardSessions currentLevel={this.props.currentLevel} sessions={this.state.sessions}
+          sessionTags={this.props.sessionTags} openTimelineBuilderCB={this.openTimelineBuilder}
+          iconPaths={this.props.iconPaths} founderDetails={this.props.founderDetails}
+          selectTargetCB={this.selectTargetCB}/>
         }
 
-        { this.state.activeTab === 'sessions' &&
-        <FounderDashboardSessions currentLevel={ this.props.currentLevel } sessions={ this.state.sessions }
-          sessionTags={ this.props.sessionTags } openTimelineBuilderCB={ this.openTimelineBuilder }
-          iconPaths={ this.props.iconPaths } founderDetails={this.props.founderDetails} selectTargetCB={this.selectTargetCB}/>
+        {this.state.timelineBuilderVisible &&
+        <TimelineBuilder timelineEventTypes={this.props.timelineEventTypes}
+          facebookShareEligibility={this.props.facebookShareEligibility}
+          authenticityToken={this.props.authenticityToken} targetSubmissionCB={this.handleTargetSubmission}
+          closeTimelineBuilderCB={this.closeTimelineBuilder} targetId={this.state.timelineBuilderParams.targetId}
+          selectedTimelineEventTypeId={this.state.timelineBuilderParams.selectedTimelineEventTypeId}/>
         }
 
-        { this.state.timelineBuilderVisible &&
-        <TimelineBuilder timelineEventTypes={ this.props.timelineEventTypes }
-                         facebookShareEligibility={ this.props.facebookShareEligibility } authenticityToken={ this.props.authenticityToken }
-          closeTimelineBuilderCB={ this.closeTimelineBuilder } targetId={ this.state.timelineBuilderParams.targetId }
-          selectedTimelineEventTypeId={ this.state.timelineBuilderParams.selectedTimelineEventTypeId }
-          targetSubmissionCB={ this.handleTargetSubmission }/>
-        }
-
-        { this.state.selectedTarget &&
-        <FounderDashboardTargetOverlay iconPaths={ this.props.iconPaths } target={ this.state.selectedTarget } founderDetails={ this.props.founderDetails } closeCB={ this.targetOverlayCloseCB }
-          openTimelineBuilderCB={ this.openTimelineBuilder }/>
+        {this.state.selectedTarget &&
+        <FounderDashboardTargetOverlay iconPaths={this.props.iconPaths} target={this.state.selectedTarget}
+          founderDetails={this.props.founderDetails} closeCB={this.targetOverlayCloseCB}
+          openTimelineBuilderCB={this.openTimelineBuilder}/>
         }
       </div>
     );
@@ -161,7 +161,6 @@ class FounderDashboard extends React.Component {
 FounderDashboard.propTypes = {
   currentLevel: React.PropTypes.number,
   levels: React.PropTypes.object,
-  chores: React.PropTypes.array,
   sessions: React.PropTypes.array,
   sessionTags: React.PropTypes.array,
   timelineEventTypes: React.PropTypes.object,

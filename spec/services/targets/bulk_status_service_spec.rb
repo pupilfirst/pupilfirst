@@ -11,7 +11,8 @@ describe Targets::BulkStatusService do
   let!(:target_group) { create :target_group, level: level_zero }
   let!(:founder_target) { create :target, :for_founders, target_group: target_group }
   let!(:startup_target) { create :target, :for_startup, target_group: target_group }
-  let!(:founder_chore) { create :target, target_group: nil, chore: true, level: level_zero }
+  let!(:founder_chore) { create :target, target_group: target_group, chore: true }
+  let!(:founder_session) { create :target, target_group: target_group, level: level_zero, session_at: 1.month.ago }
 
   let!(:founder_event) { create :timeline_event, founder: founder, startup: startup }
   let!(:founder_event_2) { create :timeline_event, founder: founder, startup: startup }
@@ -109,6 +110,14 @@ describe Targets::BulkStatusService do
         founder_event.update!(target: founder_chore, status: TimelineEvent::STATUS_VERIFIED)
         startup.update!(iteration: 2)
         expect(subject.status(founder_chore.id)).to eq(Target::STATUS_COMPLETE)
+      end
+    end
+
+    context 'when the startup iteration is different from a session event iteration' do
+      it 'ignores previous submission and returns :pending' do
+        founder_event.update!(target: founder_session, status: TimelineEvent::STATUS_VERIFIED)
+        startup.update!(iteration: 2)
+        expect(subject.status(founder_session.id)).to eq(Target::STATUS_COMPLETE)
       end
     end
   end

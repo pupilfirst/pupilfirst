@@ -14,9 +14,9 @@ describe Founders::DashboardDataService do
   let!(:level_0_vanilla_targets) { create_list :target, 2, target_group: target_group_0 }
   let!(:level_1_vanilla_targets) { create_list :target, 2, target_group: target_group_1 }
   let!(:level_2_vanilla_targets) { create_list :target, 2, target_group: target_group_2 }
-  let!(:level_0_chores) { create_list :target, 2, chore: true, target_group: nil, level: level_0 }
-  let!(:level_1_chores) { create_list :target, 2, chore: true, target_group: nil, level: level_1 }
-  let!(:level_2_chores) { create_list :target, 2, chore: true, target_group: nil, level: level_2 }
+  let!(:level_0_chores) { create_list :target, 2, chore: true, target_group: target_group_0 }
+  let!(:level_1_chores) { create_list :target, 2, chore: true, target_group: target_group_1 }
+  let!(:level_2_chores) { create_list :target, 2, chore: true, target_group: target_group_2 }
   let!(:level_0_sessions) { create_list :target, 2, session_at: Time.now, target_group: nil, level: level_0 }
   let!(:level_1_sessions) { create_list :target, 2, session_at: Time.now, target_group: nil, level: level_1 }
   let!(:level_2_sessions) { create_list :target, 2, session_at: Time.now, target_group: nil, level: level_2 }
@@ -32,23 +32,6 @@ describe Founders::DashboardDataService do
       it 'responds with all targets in level 1 to n' do
         startup.update!(level: level_2)
         expect(subject.levels).to eq(level_details(level_1).merge(level_details(level_2)))
-      end
-    end
-  end
-
-  describe '#chores' do
-    context 'when the startup is in level 0' do
-      it 'responds with all chores in level 0' do
-        expected_chore_details = level_0_chores.map { |chore| chore_details(chore) }
-        expect(subject.chores).to match_array(expected_chore_details)
-      end
-    end
-
-    context 'when the startup is in a level n > 1' do
-      it 'responds with all chores in level 1 to n' do
-        startup.update!(level: level_2)
-        expected_chore_details = (level_1_chores + level_2_chores).map { |chore| chore_details(chore) }
-        expect(subject.chores).to match_array(expected_chore_details)
       end
     end
   end
@@ -108,21 +91,13 @@ describe Founders::DashboardDataService do
     # append more details
     result['status'] = :pending
     result['prerequisites'] = nil
-
-    result
-  end
-
-  def chore_details(chore)
-    result = target_details(chore)
-    result['level'] = { 'number' => chore.level.number }
-
     result
   end
 
   def session_details(session)
-    result = chore_details(session)
+    result = target_details(session)
+    result['level'] = { 'number' => session.level.number }
     result['taggings'] = []
-
     result
   end
 end

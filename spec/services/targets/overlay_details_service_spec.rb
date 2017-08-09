@@ -20,6 +20,7 @@ describe Targets::OverlayDetailsService do
   describe '#all_details' do
     it 'returns the founder statuses, latest event and latest feedback' do
       founder_statuses = [{ founder_1.id => :complete }, { founder_2.id => :pending }]
+
       event = {
         description: timeline_event.description,
         event_on: timeline_event.event_on,
@@ -27,13 +28,20 @@ describe Targets::OverlayDetailsService do
         days_elapsed: timeline_event.days_elapsed,
         attachments: [{ type: 'link', title: 'Private URL', url: 'https://sv.co/private' }, { type: 'link', title: 'Public URL', url: 'https://google.com' }]
       }
+
       feedback = {
         facultyName: faculty.name,
         feedback: faculty_feedback.feedback,
         facultySlackUsername: faculty.slack_username,
         facultyImageUrl: faculty.image_url
       }
-      expect(subject.all_details).to eq(founderStatuses: founder_statuses, latestEvent: event, latestFeedback: feedback)
+
+      all_details = subject.all_details
+
+      expect(all_details).to include(:founderStatuses, :latestEvent, :latestFeedback)
+      expect(all_details[:founderStatuses]).to match_array(founder_statuses)
+      expect(all_details[:latestEvent]).to eq(event)
+      expect(all_details[:latestFeedback]).to eq(feedback)
     end
   end
 end

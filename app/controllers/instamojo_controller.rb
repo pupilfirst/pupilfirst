@@ -7,7 +7,10 @@ class InstamojoController < ApplicationController
     payment.refresh_payment!(params[:payment_id])
 
     # Log payment time, if unrecorded.
-    payment.update!(paid_at: Time.now)
+    if payment.paid_at.blank?
+      payment.paid_at = Time.zone.now
+      payment.save!
+    end
 
     if payment.startup.level_zero?
       Admissions::PostPaymentService.new(payment: payment).execute
@@ -27,9 +30,9 @@ class InstamojoController < ApplicationController
       payment.instamojo_payment_id = params[:payment_id]
       payment.instamojo_payment_status = params[:status]
       payment.fees = params[:fees]
-      payment.webhook_received_at = Time.now
+      payment.webhook_received_at = Time.zone.now
       payment.instamojo_payment_request_status = 'Completed' if params[:status] == 'Credit'
-      payment.paid_at = Time.now if payment.paid_at.blank?
+      payment.paid_at = Time.zone.now if payment.paid_at.blank?
 
       payment.save!
 

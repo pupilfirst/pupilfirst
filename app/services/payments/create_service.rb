@@ -26,7 +26,7 @@ module Payments
       end
 
       if @skip_payment
-        payment.paid_at = Time.now
+        payment.paid_at = Time.zone.now
         payment.notes = 'Payment has been skipped.'
       end
 

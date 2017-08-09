@@ -18,7 +18,7 @@ module Founders
     end
 
     def sessions
-      applicable_levels = startup.level.number.zero? ? 0 : (1..Level.maximum.number).to_a
+      applicable_levels = startup.level.number.zero? ? 0 : (1..startup.maximum_level.number).to_a
 
       @sessions ||= begin
         targets = Target.includes(:assigner, :level, :taggings)

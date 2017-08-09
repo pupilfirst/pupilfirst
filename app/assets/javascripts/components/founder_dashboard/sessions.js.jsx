@@ -50,15 +50,19 @@ class FounderDashboardSessions extends React.Component {
   render() {
     return (
       <div>
-        <FounderDashboardActionBar filter='sessions' filterData={ {tags: this.props.sessionTags} }
-          openTimelineBuilderCB={ this.props.openTimelineBuilderCB } pickFilterCB={ this.chooseTags } currentLevel={ this.props.currentLevel }/>
+        <FounderDashboardActionBar filter='sessions' filterData={{tags: this.props.sessionTags}}
+          openTimelineBuilderCB={this.props.openTimelineBuilderCB} pickFilterCB={this.chooseTags}
+          currentLevel={this.props.currentLevel}/>
 
-        <FounderDashboardTargetCollection key='sessions-upcoming' name='Upcoming Sessions' displayDate={ true }
-          targets={ this.upcomingSessions() } iconPaths={ this.props.iconPaths } founderDetails={ this.props.founderDetails}
-                                          selectTargetCB={ this.props.selectTargetCB }/>
-        <FounderDashboardTargetCollection key='sessions-past' name='Past Sessions' displayDate={ true }
-          targets={ this.pastSessions() } finalCollection={ true } iconPaths={ this.props.iconPaths }
-          founderDetails={ this.props.founderDetails} selectTargetCB={ this.props.selectTargetCB }/>
+        {this.upcomingSessions().length > 0 &&
+        <FounderDashboardTargetCollection key='sessions-upcoming' name='Upcoming Sessions' displayDate={true}
+          targets={this.upcomingSessions()} iconPaths={this.props.iconPaths} founderDetails={this.props.founderDetails}
+          selectTargetCB={this.props.selectTargetCB}/>
+        }
+
+        <FounderDashboardTargetCollection key='sessions-past' name='Past Sessions' displayDate={true}
+          targets={this.pastSessions()} finalCollection={true} iconPaths={this.props.iconPaths}
+          founderDetails={this.props.founderDetails} selectTargetCB={this.props.selectTargetCB}/>
       </div>
     );
   }

@@ -4,6 +4,8 @@ describe Targets::BulkStatusService do
   subject { described_class.new(founder) }
 
   let(:level_zero) { create :level, :zero }
+  let(:level_one) { create :level, :one }
+  let(:level_two) { create :level, :two }
   let!(:startup) { create :startup, level: level_zero }
   let(:founder) { create :founder }
   let(:co_founder) { create :founder }
@@ -97,27 +99,41 @@ describe Targets::BulkStatusService do
       end
     end
 
-    context 'when the startup iteration is different from a vanilla targets event iteration' do
-      it 'ignores previous submission and returns :pending' do
-        founder_event.update!(target: founder_target, status: TimelineEvent::STATUS_VERIFIED)
-        startup.update!(iteration: 2)
-        expect(subject.status(founder_target.id)).to eq(Target::STATUS_PENDING)
-      end
-    end
+    context 'when the startup is at a higher iteration' do
+      let!(:startup) { create :startup, level: level_two, iteration: 2 }
+      let!(:target_group_1) { create :target_group, level: level_one }
+      let!(:target_group_2) { create :target_group, level: level_two }
+      let(:founder_target_2) { create :target, :for_founders, target_group: target_group_2 }
+      let(:founder_target_1) { create :target, :for_founders, target_group: target_group_1 }
 
-    context 'when the startup iteration is different from a chores event iteration' do
-      it 'returns status from previous iteration' do
-        founder_event.update!(target: founder_chore, status: TimelineEvent::STATUS_VERIFIED)
-        startup.update!(iteration: 2)
-        expect(subject.status(founder_chore.id)).to eq(Target::STATUS_COMPLETE)
+      context 'when vanilla target event (from same level) iteration is different' do
+        it 'ignores previous submission and returns :pending' do
+          founder_event.update!(target: founder_target_2, status: TimelineEvent::STATUS_VERIFIED)
+          expect(subject.status(founder_target.id)).to eq(Target::STATUS_PENDING)
+        end
       end
-    end
 
-    context 'when the startup iteration is different from a session event iteration' do
-      it 'ignores previous submission and returns :pending' do
-        founder_event.update!(target: founder_session, status: TimelineEvent::STATUS_VERIFIED)
-        startup.update!(iteration: 2)
-        expect(subject.status(founder_session.id)).to eq(Target::STATUS_COMPLETE)
+      context 'when vanilla target event (from previous level) iteration is different' do
+        it 'returns status from previous iteration' do
+          founder_event.update!(target: founder_target_1, status: TimelineEvent::STATUS_VERIFIED)
+          expect(subject.status(founder_target.id)).to eq(Target::STATUS_COMPLETE)
+        end
+      end
+
+      context 'when chore event (from same level) iteration is different' do
+        it 'returns status from previous iteration' do
+          founder_event.update!(target: founder_chore, status: TimelineEvent::STATUS_VERIFIED)
+          startup.update!(iteration: 2)
+          expect(subject.status(founder_chore.id)).to eq(Target::STATUS_COMPLETE)
+        end
+      end
+
+      context 'when session event (from same level) iteration is different' do
+        it 'ignores previous submission and returns :pending' do
+          founder_event.update!(target: founder_session, status: TimelineEvent::STATUS_VERIFIED)
+          startup.update!(iteration: 2)
+          expect(subject.status(founder_session.id)).to eq(Target::STATUS_COMPLETE)
+        end
       end
     end
   end

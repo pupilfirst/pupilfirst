@@ -4,6 +4,11 @@ ActiveAdmin.register TargetGroup do
 
   permit_params :name, :description, :sort_index, :level_id, :milestone
 
+  filter :level
+  filter :name, as: :string
+  filter :description, as: :string
+  filter :milestone
+
   controller do
     def scoped_collection
       super.includes :level

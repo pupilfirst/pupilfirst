@@ -4,6 +4,9 @@ ActiveAdmin.register QuizQuestion do
   menu parent: 'SixWays'
   permit_params :course_module_id, :question, answer_options_attributes: %i[id value correct_answer hint_text _destroy]
 
+  filter :course_module
+  filter :question, as: :string
+
   index do
     selectable_column
     column :question

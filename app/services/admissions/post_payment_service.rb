@@ -17,6 +17,9 @@ module Admissions
       # mark the payment target complete
       Admissions::CompleteTargetService.new(@founder, Target::KEY_ADMISSIONS_FEE_PAYMENT).execute
 
+      # ensure the subscription window starts from time of payment
+      Founders::PostPaymentService.new(@payment).execute
+
       # IntercomLastApplicantEventUpdateJob.perform_later(@founder, 'payment_complete') unless Rails.env.test?
       Intercom::LevelZeroStageUpdateJob.perform_later(@founder, 'Payment Completed')
     end

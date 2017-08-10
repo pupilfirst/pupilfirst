@@ -204,8 +204,8 @@ class AdmissionsController < ApplicationController
   end
 
   def bypass_payment
-    Payments::CreateService.new(current_founder, skip_payment: true).create
-    Admissions::PostPaymentService.new(founder: current_founder).execute
+    payment = Payments::CreateService.new(current_founder, skip_payment: true).create
+    Admissions::PostPaymentService.new(founder: current_founder, payment: payment).execute
     flash[:success] = 'Payment Bypassed!'
     redirect_to dashboard_founder_path(from: 'bypass_payment')
   end

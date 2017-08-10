@@ -34,7 +34,7 @@
 
       .row
         .offset-md-2.col-md-8
-          /.coupon-form-container.text-xs-center.m-x-auto
+          .coupon-form-container.text-xs-center.m-x-auto
             - if @coupon.present?
               .discount-coupon__box.discount-coupon-applied-box.p-a-1
                 p.discount-coupon-applied-box__message.font-semibold
@@ -53,7 +53,7 @@
             - else
               #coupon-form-show.discount-coupon__box.discount-coupon__box--show.brand-secondary.font-semibold.p-a-1
                 h4.font-semibold.dark-secondary.m-a-0
-                  ' Have a discount coupon?
+                  ' Have a referral coupon?
               #coupon-form.discount-coupon__box.discount-coupon__box--form.simple-form-container.hidden-xs-up.p-a-1
                 = simple_form_for @coupon_form,
                   url: admissions_coupon_submit_path,

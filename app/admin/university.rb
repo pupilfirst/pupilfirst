@@ -5,6 +5,11 @@ ActiveAdmin.register University do
 
   permit_params :name, :state_id
 
+  filter :state
+  filter :colleges
+  filter :name, as: :string
+  filter :created_at
+
   index do
     selectable_column
 

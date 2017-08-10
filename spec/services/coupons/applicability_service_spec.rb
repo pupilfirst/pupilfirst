@@ -6,7 +6,7 @@ describe Coupons::ApplicabilityService do
   let!(:founder) { create :founder }
 
   describe '#applicable?' do
-    context 'when the coupon is of type DISCOUNT' do
+    context 'when the coupon is of type REFERRAL' do
       it 'returns true' do
         expect(subject.applicable?).to eq(true)
       end
@@ -26,7 +26,7 @@ describe Coupons::ApplicabilityService do
   end
 
   describe '#error_message' do
-    context 'when the coupon is of type DISCOUNT' do
+    context 'when the coupon is of type REFERRAL' do
       it 'returns nil' do
         expect(subject.error_message).to be_nil
       end

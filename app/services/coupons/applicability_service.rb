@@ -7,7 +7,7 @@ module Coupons
 
     def applicable?
       @applicable ||= case @coupon.coupon_type
-        when Coupon::TYPE_DISCOUNT then true
+        when Coupon::TYPE_REFERRAL then true
         when Coupon::TYPE_MSP then founder_has_msp_email?
       end
     end

@@ -5,19 +5,20 @@ class Coupon < ApplicationRecord
 
   scope :referral, -> { where.not(referrer_id: nil) }
 
+  # TODO: Now that it's all referral coupons, probably scrap coupon_type entirely.
   TYPE_DISCOUNT = -'Discount'
   TYPE_MSP = -'Microsoft Student Partner'
+  TYPE_REFERRAL = -'Referral'
 
   REFERRAL_DISCOUNT = 25
   REFERRAL_LIMIT = 0
 
   def self.valid_coupon_types
-    [TYPE_DISCOUNT, TYPE_MSP]
+    [TYPE_DISCOUNT, TYPE_MSP, TYPE_REFERRAL]
   end
 
   validates :code, uniqueness: true, presence: true, length: { in: 4..10 }
   validates :coupon_type, inclusion: { in: valid_coupon_types }
-  validates :discount_percentage, presence: true, inclusion: { in: 0..100, message: 'must be between 0 and 100' }
   validates :referrer_id, uniqueness: true, allow_nil: true
 
   def still_valid?

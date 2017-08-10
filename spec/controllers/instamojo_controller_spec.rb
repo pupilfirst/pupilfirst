@@ -25,7 +25,9 @@ describe InstamojoController do
       instamojo_payment_request_id: instamojo_payment_request_id,
       instamojo_payment_request_status: 'Pending',
       short_url: short_url,
-      long_url: long_url
+      long_url: long_url,
+      billing_start_at: Time.now,
+      billing_end_at: 1.month.from_now
   end
 
   let(:payment_id) { SecureRandom.hex }

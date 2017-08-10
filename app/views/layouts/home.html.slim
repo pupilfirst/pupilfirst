@@ -22,6 +22,13 @@ html lang='en'
 
   body
     section#header.home-header
+      - if @pretender
+        == render 'layouts/pretender'
+      - elsif @sitewide_notice
+        .sitewide-notice
+          .container
+            p == yield :sitewide_notice
+
       nav.navbar.home-navbar role="navigation"
         .container
           .navbar-header

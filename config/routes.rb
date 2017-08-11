@@ -39,9 +39,10 @@ Rails.application.routes.draw do
       end
 
       resources :timeline_events, only: %i[create destroy update]
-      resources :team_members, except: %i[index]
     end
   end
+
+  resources :team_members, except: %i[index show]
 
   scope 'founder/facebook', as: 'founder_facebook', controller: 'founders/facebook_connect' do
     post 'connect'

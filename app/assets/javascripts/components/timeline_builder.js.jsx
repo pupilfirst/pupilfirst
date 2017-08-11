@@ -355,7 +355,7 @@ const TimelineBuilder = React.createClass({
               </button>
 
               <form className="timeline-builder-hidden-form js-timeline-builder__hidden-form"
-                action="/founder/startup/timeline_events" acceptCharset="UTF-8" method="post">
+                action="/timeline_events" acceptCharset="UTF-8" method="post">
                 <input name="utf8" type="hidden" value="✓"/>
                 <input type="hidden" name="authenticity_token" value={ this.props.authenticityToken }/>
               </form>

@@ -14,7 +14,7 @@ class Target < ApplicationRecord
   STATUS_UNAVAILABLE = :unavailable
   STATUS_NOT_ACCEPTED = :not_accepted
 
-  belongs_to :assigner, class_name: 'Faculty', optional: true
+  belongs_to :assigner, class_name: 'Faculty'
   belongs_to :timeline_event_type, optional: true
   has_many :timeline_events
   has_many :target_prerequisites
@@ -55,7 +55,7 @@ class Target < ApplicationRecord
   TYPE_READ = 'Read'
   TYPE_LEARN = 'Learn'
 
-  def self.valid_target_types
+  def self.valid_target_action_types
     [TYPE_TODO, TYPE_ATTEND, TYPE_READ, TYPE_LEARN].freeze
   end
 
@@ -70,7 +70,7 @@ class Target < ApplicationRecord
   # Need to allow these two to be read for AA form.
   attr_reader :startup_id, :founder_id
 
-  validates :target_type, inclusion: { in: valid_target_types }, allow_nil: true
+  validates :target_action_type, inclusion: { in: valid_target_action_types }, allow_nil: true
   validates :role, presence: true, inclusion: { in: valid_roles }
   validates :title, presence: true
   validates :description, presence: true
@@ -85,32 +85,39 @@ class Target < ApplicationRecord
     errors[:session_at] << 'if blank, days_to_complete should be set'
   end
 
-  validate :type_of_target_must_be_unique
+  validate :chores_and_vanilla_targets_must_be_in_a_group
 
-  def type_of_target_must_be_unique
-    return if [target_group, session_at, chore].one?
-    errors[:base] << 'Target must be one of chore, session or a vanilla target'
+  def chores_and_vanilla_targets_must_be_in_a_group
+    return if session?
+    return if target_group.present?
+    errors[:base] << 'Vanilla targets and chores must be in a target group.'
   end
 
-  validate :chore_or_session_must_have_level
+  validate :can_be_one_of_chore_or_session
 
-  def chore_or_session_must_have_level
-    return unless chore || session?
-    errors[:level] << 'is required for chore/session' if level.blank?
+  def can_be_one_of_chore_or_session
+    return if [session_at, chore].one? || [session_at, chore].none?
+    errors[:base] << 'Target can be a chore, a session, or neither, but not both.'
   end
 
-  validate :vanilla_target_must_have_target_group
+  validate :session_must_have_level
 
-  def vanilla_target_must_have_target_group
-    return if chore || session?
-    errors[:target_group] << 'is required if target is not a chore or session' if target_group.blank?
+  def session_must_have_level
+    return unless session?
+    return if level.present?
+    errors[:level] << 'is required for a session' if level.blank?
   end
 
   normalize_attribute :key
 
   def display_name
-    return title if level.blank?
-    "L#{level.number}: #{title}"
+    if level.present?
+      "L#{level.number}: #{title}"
+    elsif target_group.present?
+      "L#{target_group.level.number}: #{title}"
+    else
+      title
+    end
   end
 
   def founder_role?
@@ -134,13 +141,18 @@ class Target < ApplicationRecord
     @stats_service ||= Targets::StatsService.new(self)
   end
 
+  def target_type
+    return :chore if chore?
+    session_at.present? ? :session : :target
+  end
+
   def session?
-    session_at.present?
+    target_type == :session
   end
 
   # A 'proper' target is neither a session, nor a chore. These are repeatable across iterations.
   def target?
-    !(session? || chore?)
+    target_type == :target
   end
 
   # this is included in the target JSONs the DashboardDataService responds with
@@ -156,5 +168,22 @@ class Target < ApplicationRecord
       'Target'
     end
     role + type
+  end
+
+  # Returns the latest event linked to this target from a founder. If a team target, it responds with the latest event from the team
+  def latest_linked_event(founder)
+    owner = founder_role? ? founder : founder.startup
+    linked_events = owner.timeline_events.where(target: self)
+
+    # Account for iteration if vanilla target.
+    if target? && target_group&.level == founder.startup.level
+      linked_events = linked_events.where(iteration: founder.startup.iteration)
+    end
+
+    linked_events.order('created_at').last
+  end
+
+  def latest_feedback(founder)
+    latest_linked_event(founder)&.startup_feedback&.order('created_at')&.last
   end
 end

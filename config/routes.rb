@@ -29,6 +29,7 @@ Rails.application.routes.draw do
       scope module: 'founders', controller: 'dashboard' do
         get 'dashboard'
         post 'startup_restart'
+        get 'dashboard/targets/:id(/:slug)', action: 'target_overlay'
       end
     end
 
@@ -36,11 +37,11 @@ Rails.application.routes.draw do
       scope module: 'founders', controller: 'dashboard' do
         post 'level_up'
       end
-
-      resources :timeline_events, only: %i[create destroy update]
-      resources :team_members, except: %i[index]
     end
   end
+
+  resources :team_members, except: %i[index show]
+  resources :timeline_events, only: %i[create destroy]
 
   scope 'founder/facebook', as: 'founder_facebook', controller: 'founders/facebook_connect' do
     post 'connect'
@@ -186,6 +187,7 @@ Rails.application.routes.draw do
       get 'prerequisite_targets'
       get 'founder_statuses'
       get 'startup_feedback'
+      get 'details'
     end
   end
 

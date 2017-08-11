@@ -52,7 +52,7 @@ module Founders
     def slack_username_must_exist
       return if slack_username.blank?
       return unless slack_username != model.slack_username
-      return if Rails.env.development?
+      return unless Rails.env.production?
 
       begin
         model.slack_user_id = PublicSlack::FindUserService.new(slack_username).id

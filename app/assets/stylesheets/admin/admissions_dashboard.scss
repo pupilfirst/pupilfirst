@@ -37,18 +37,20 @@
     font-weight: bold;
     padding: 10px;
   }
+}
 
-  .content {
-    line-height: 21px;
+.admissions-dashboard__item-content {
+  clear: both;
+  line-height: 21px;
+  margin-bottom: 0.5rem;
 
-    ul {
-      margin-left: 10px;
-    }
+  ul {
+    margin-left: 10px;
+  }
 
-    .chart-area {
-      padding: 10px;
-      height: 500px;
-    }
+  .chart-area {
+    padding: 10px;
+    height: 500px;
   }
 }
 
@@ -63,7 +65,6 @@
   width: auto;
   float: left;
 }
-
 
 .admission-dashboard-data-block__title {
   text-align: center;
@@ -86,6 +87,7 @@
 .admission-dashboard-stats-filter__heading {
   font-weight: bold;
   padding: 10px;
+  text-decoration: underline;
 }
 
 .admission-dashboard-stats-filter__date-picker {
@@ -103,4 +105,14 @@
 
 .admission-dashboard-stats-filter__button {
   float: left;
+}
+
+.admission-dashboard-reference-filter__form {
+  clear: both;
+  display: inline-block;
+  padding: 10px;
+}
+
+.admission-dashboard-reference-filter__form-tag {
+  margin-right: 5px;
 }

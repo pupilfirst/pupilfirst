@@ -125,7 +125,7 @@ class Faculty < ApplicationRecord
   def slack_username_must_exist
     return if slack_username.blank?
     return unless slack_username_changed?
-    return if Rails.env.development?
+    return unless Rails.env.production?
 
     response_json = JSON.parse(RestClient.get("https://slack.com/api/users.list?token=#{Rails.application.secrets.slack_token}"))
 

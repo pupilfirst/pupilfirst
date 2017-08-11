@@ -8,10 +8,6 @@ class TargetGroup < ApplicationRecord
   scope :sorted_by_level, -> { joins(:level).order('levels.number ASC') }
 
   def display_name
-    if level.present?
-      "L#{level.number}: #{name}"
-    else
-      name
-    end
+    "L#{level.number}: #{name}"
   end
 end

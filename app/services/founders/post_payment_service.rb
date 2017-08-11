@@ -11,7 +11,7 @@ module Founders
       return if @payment.billing_start_at.future?
 
       # Otherwise, the billing period will have to be updated.
-      @payment.update!(billing_start_at: Time.zone.now, billing_end_at: 30.days.from_now)
+      @payment.update!(billing_start_at: Time.zone.now, billing_end_at: 1.month.from_now)
     end
   end
 end

@@ -34,17 +34,6 @@ class FounderDecorator < Draper::Decorator
     end
   end
 
-  def confirmation_status
-    case fee_payment_method
-      when 'Regular Fee', 'Merit Scholarship'
-        'Confirmed'
-      when 'Hardship Scholarship'
-        'Valid on Submission of Documents'
-      else
-        'Not Available'
-    end
-  end
-
   def mr_or_ms
     if gender == Founder::GENDER_MALE
       'Mr'
@@ -62,17 +51,6 @@ class FounderDecorator < Draper::Decorator
       "<div class='tag tag-pill tag-primary m-r-1'><i class='fa fa-check-circle'></i>&nbsp;Complete</div><span class='text-nowrap'>#{h.link_to('<i class="fa fa-edit"></i> Edit'.html_safe, update_query, class: 'edit-btn')}</span>".html_safe
     else
       h.link_to('<i class="fa fa-list-alt"></i> Update profile'.html_safe, update_query)
-    end
-  end
-
-  def payment_method_with_fee(startup)
-    return 'Not Available' if fee_payment_method.blank?
-
-    if fee_payment_method == Founder::PAYMENT_METHOD_REGULAR_FEE
-      fee = startup.founder_course_fee(model)
-      "Regular Fee &ndash; <strong>&#8377;#{h.number_with_delimiter(fee)}</strong>".html_safe
-    else
-      fee_payment_method
     end
   end
 

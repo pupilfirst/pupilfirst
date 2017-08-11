@@ -25,8 +25,7 @@ after 'development:colleges' do
 
   # 5 more founders for avengers
   founders_list += [
-    ['ultron@avengers.co', 'Henry Jonathan Pym', 40.years.ago, Founder::GENDER_MALE, 9111111111],
-    ['wasp@avengers.co', 'Janet Dyne', 25.years.ago, Founder::GENDER_FEMALE, 9222222222],
+    ['widow@avengers.co', 'Janet Dyne', 25.years.ago, Founder::GENDER_FEMALE, 9222222222],
     ['ironman@avengers.co', 'Anthony Edward Tony Stark', 40.years.ago, Founder::GENDER_MALE, 9333333333],
     ['hulk@avengers.co', 'Robert Banner', 35.years.ago, Founder::GENDER_MALE, 9444444444],
     ['thor@avengers.co', 'Thor Odinson', 30.years.ago, Founder::GENDER_MALE, 9555555555]

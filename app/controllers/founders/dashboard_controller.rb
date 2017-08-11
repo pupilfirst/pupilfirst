@@ -48,6 +48,18 @@ module Founders
       redirect_to(dashboard_founder_path(from: 'level_up', from_level: startup.level.number - 1))
     end
 
+    # GET /founder/dashboard/targets/:id(/:slug)
+    def target_overlay
+      # TODO: Add Pundit authorization
+
+      @target = Target.find_by(id: params[:id])
+      raise_not_found if @target.blank?
+
+      dashboard
+      set_initial_target
+      render 'dashboard'
+    end
+
     private
 
     def startup_is_admitted
@@ -92,7 +104,6 @@ module Founders
         currentLevel: @startup.level.number,
         requestedRestartLevel: @startup.requested_restart_level&.number,
         levels: dashboard_data_service.levels,
-        chores: dashboard_data_service.chores,
         sessions: dashboard_data_service.sessions,
         sessionTags: dashboard_data_service.session_tags,
         timelineEventTypes: list_service.list,
@@ -109,5 +120,23 @@ module Founders
         hash[level.number] = level.name
       end
     end
+
+    def set_initial_target
+      @react_data[:initialTargetId] = @target.id
+      @react_data[:initialTargetType] = @target.target_type
+    end
+
+    # def append_founder_statuses
+    #   return unless @target.founder_role?
+    #
+    #   founders = current_founder.startup.founders.not_exited
+    #   @react_data[:initialTargetFounderStatuses] = founders.each_with_object([]) do |founder, statuses|
+    #     statuses << { founder.id => Targets::StatusService.new(@target, founder).status }
+    #   end
+    # end
+    #
+    # def append_startup_feedback
+    #   @react_data[:initialTargetLatestFeedback] = Targets::FeedbackService.new(@target, current_founder).latest_feedback_details
+    # end
   end
 end

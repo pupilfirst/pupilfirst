@@ -9,7 +9,8 @@ ActiveAdmin.register CouponUsage do
   scope :redeemed
   scope :referrals
 
-  preserve_default_filters!
+  filter :startup
+  filter :coupon
   filter :redeemed_at_not_null, as: :boolean, label: 'Redeemed'
   filter :rewarded_at_not_null, as: :boolean, label: 'Rewarded'
   filter :referrer, collection: proc { Founder.with_referrals }

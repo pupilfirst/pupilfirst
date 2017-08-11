@@ -3,6 +3,11 @@ ActiveAdmin.register QuizAttempt do
 
   menu parent: 'SixWays'
 
+  filter :course_module
+  filter :mooc_student
+  filter :taken_at
+  filter :score
+
   index do
     selectable_column
 

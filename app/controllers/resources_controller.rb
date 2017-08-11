@@ -1,17 +1,24 @@
 class ResourcesController < ApplicationController
   layout 'application_v2'
 
+  # GET /library
   def index
-    @resources = policy_scope(Resource.left_joins(:level)).includes(:tags)
-    filter_resources_by_tags
-    filter_resources_by_search
-    filter_resources_by_date
-    paginate_resources
-    load_resource_tags
+    resources = policy_scope(Resource.left_joins(:level)).includes(:tags)
+    @form = Resources::FilterForm.new(OpenStruct.new)
 
+    filtered_resources, page = if @form.validate(filter_params)
+      [Resources::FilterService.new(@form, resources).resources, @form.page]
+    else
+      [resources, 1]
+    end
+
+    @resources = filtered_resources.paginate(page: page, per_page: 9)
+
+    @resource_tags = @form.resource_tags
     @skip_container = true
   end
 
+  # GET /library/resource
   def show
     @resource = Resource.find(params[:id])
     authorize @resource
@@ -32,6 +39,7 @@ class ResourcesController < ApplicationController
     redirect_to resources_path, alert: alert_message
   end
 
+  # GET /library/resource/download
   def download
     resource = Resource.find(params[:id])
     authorize resource
@@ -41,37 +49,8 @@ class ResourcesController < ApplicationController
 
   private
 
-  def filter_resources_by_tags
-    return if params[:tags].blank?
-    @resources = @resources.tagged_with params[:tags]
-  end
-
-  def filter_resources_by_search
-    return if params[:search].blank?
-    @resources = @resources.title_matches(params[:search])
-  end
-
-  def filter_resources_by_date
-    return if params[:created_after].blank?
-    @resources = @resources.where('resources.created_at > ?', date_filter_values[params[:created_after].to_sym])
-  end
-
-  def paginate_resources
-    # Ensure page is valid.
-    page = params[:page].to_i.to_s == params[:page] ? params[:page] : nil
-    @resources = @resources.paginate(page: page, per_page: 9)
-  end
-
-  def load_resource_tags
-    @resource_tags = Resource.tag_counts_on(:tags).pluck(:name)
-  end
-
-  def date_filter_values
-    {
-      'Since Yesterday': 1.day.ago.beginning_of_day,
-      'Past Week': 1.week.ago,
-      'Past Month': 1.month.ago,
-      'Past Year': 1.year.ago
-    }
+  def filter_params
+    input_filter = params.include?(:resources_filter) ? params.require(:resources_filter).permit({ tags: [] }, :search, :created_after) : {}
+    input_filter.merge(page: params[:page])
   end
 end

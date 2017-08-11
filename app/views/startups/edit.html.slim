@@ -6,7 +6,7 @@
 
   = render 'team_members/table', team_members: @startup.team_members, team_member_being_edited: nil
 
-  = link_to new_founder_startup_team_member_url, class: 'btn btn-primary' do
+  = link_to new_team_member_url, class: 'btn btn-primary' do
     i.fa.fa-plus
     | &nbsp; Add new team member
 

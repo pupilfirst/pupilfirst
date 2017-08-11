@@ -1,4 +1,4 @@
-class FounderDashboardFounderBubble extends React.Component {
+class TargetOverlayFounderBubble extends React.Component {
   constructor(props) {
     super(props);
     this.showTooltip = this.showTooltip.bind(this);
@@ -49,7 +49,7 @@ class FounderDashboardFounderBubble extends React.Component {
   }
 }
 
-FounderDashboardFounderBubble.propTypes = {
+TargetOverlayFounderBubble.propTypes = {
   name: React.PropTypes.string,
   avatar: React.PropTypes.string,
   status: React.PropTypes.string

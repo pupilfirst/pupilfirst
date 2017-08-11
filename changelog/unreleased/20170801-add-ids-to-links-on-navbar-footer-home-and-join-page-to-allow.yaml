@@ -1,6 +1,0 @@
----
-timestamp: '2017-08-01T12:01:00Z'
-title: Add IDs to links on navbar, footer, home, and join page to allow analytics
-  to track clicks correctly.
-trello: https://trello.com/c/VpAxxyGW/3242-as-a-marketer-i-want-to-do-track-analytics-of-page-elements-in-home-and-join-page
-private: true

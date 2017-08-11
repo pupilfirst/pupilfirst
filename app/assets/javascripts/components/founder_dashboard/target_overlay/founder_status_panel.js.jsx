@@ -1,21 +1,16 @@
-class FounderDashboardFounderStatusPanel extends React.Component {
+class TargetOverlayFounderStatusPanel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {founderStatuses: this.setInitialStatuses()};
     this.updateStatus = this.updateStatus.bind(this);
   }
 
-  componentWillReceiveProps(newProps) {
-    if (newProps.fetchStatus && !this.props.fetchStatus) {
-      // fetch the founder statuses
-      console.log('Fetching founder statuses');
-
+  componentDidMount() {
       let that = this;
       $.ajax({
         url: '/targets/' + that.props.targetId + '/founder_statuses',
         success: that.updateStatus
       });
-    }
   }
 
   updateStatus(response) {
@@ -43,15 +38,14 @@ class FounderDashboardFounderStatusPanel extends React.Component {
           let founder = $.grep(this.props.founderDetails, function(e){ return e.founderId == id; })[0];
           let avatar = founder.avatar;
 
-          return <FounderDashboardFounderBubble name={founder.founderName} avatar={avatar} status={status} key={id + '-' + this.props.targetId}/>
+          return <TargetOverlayFounderBubble name={founder.founderName} avatar={avatar} status={status} key={id + '-' + this.props.targetId}/>
         }, this)}
       </div>
     )
   }
 }
 
-FounderDashboardFounderStatusPanel.PropTypes = {
+TargetOverlayFounderStatusPanel.PropTypes = {
   founderDetails: React.PropTypes.array,
-  targetId: React.PropTypes.number,
-  fetchStatus: React.PropTypes.bool
+  targetId: React.PropTypes.number
 };

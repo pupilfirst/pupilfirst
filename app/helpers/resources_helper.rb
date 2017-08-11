@@ -10,11 +10,14 @@ module ResourcesHelper
   end
 
   def tag_text
-    params[:tags].present? ? "tagged with \'#{params[:tags].join(', ')}\'" : ''
+    return if params[:resources_filter].blank?
+    tags = params[:resources_filter][:tags] - ['']
+    tags.present? ? "tagged with \'#{tags.join(', ')}\'" : ''
   end
 
   def search_text
-    params[:search].present? ? "whose title contains \'#{params[:search].downcase}\'" : ''
+    return if params[:resources_filter].blank?
+    params[:resources_filter][:search].present? ? "whose title contains \'#{params[:resources_filter][:search].downcase}\'" : ''
   end
 
   def date_filter_options

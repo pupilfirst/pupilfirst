@@ -16,12 +16,12 @@ after 'development:levels', 'development:founders', 'development:timeline_event_
 
   level_1 = Level.find_by(number: 1)
   level_2 = Level.find_by(number: 2)
+  level_3 = Level.find_by(number: 3)
 
   # Startup with live agreement.
   super_startup = Startup.new(
     level: level_1,
     maximum_level: level_1,
-    name: 'Super Startup',
     product_name: 'Super Product',
     product_description: 'This really is a superb product! ;)',
     agreement_signed_at: 18.months.ago,
@@ -39,40 +39,37 @@ after 'development:levels', 'development:founders', 'development:timeline_event_
     program_started_on: 8.weeks.ago
   )
 
-  # ...whose founder is Some One.
+  # ...whose admin is Some One.
   founder = Founder.find_by(email: 'someone@sv.co')
+  founder.update!(startup_admin: true)
   super_startup.founders << founder
-  super_startup.save!
 
-  # Make founder the startup admin.
-  founder.startup_admin = true
-  founder.save!
-
-  # Add two more co-founders
+  # Add two more co-founders.
   super_startup.founders << Founder.find_by(email: 'thedude@sv.co')
   super_startup.founders << Founder.find_by(email: 'thirdgal@sv.co')
+  super_startup.save!
 
-  # a second avengers startup
+  # A second 'Avengers' startup going through its second iteration.
   avengers_startup = Startup.new(
     name: 'The Avengers',
     level: level_2,
-    maximum_level: level_2,
+    maximum_level: level_3,
     product_name: 'SuperHeroes',
     product_description: 'Earths Mightiest Heroes joined forces to take on threats that were too big for any one hero to tackle.',
     agreement_signed_at: 2.years.ago,
     website: 'https://www.avengers.co',
     startup_categories: [StartupCategory.second, StartupCategory.last],
-    program_started_on: 4.weeks.ago
+    program_started_on: 4.weeks.ago,
+    iteration: 2
   )
 
-  # make ironman the team lead
+  # Make ironman the team lead.
   founder = Founder.find_by(email: 'ironman@avengers.co')
   founder.update!(startup_admin: true)
   avengers_startup.founders << founder
 
-  # Add all the other avengers as founders
-  avengers_startup.founders << Founder.find_by(email: 'ultron@avengers.co')
-  avengers_startup.founders << Founder.find_by(email: 'wasp@avengers.co')
+  # Add all the other avengers as founders.
+  avengers_startup.founders << Founder.find_by(email: 'widow@avengers.co')
   avengers_startup.founders << Founder.find_by(email: 'hulk@avengers.co')
   avengers_startup.founders << Founder.find_by(email: 'thor@avengers.co')
   avengers_startup.save!

@@ -13,7 +13,7 @@ module Payments
 
       expiring_in_three_days.each do |payment|
         pending_payment = Payment.pending.find_by(startup: payment.startup)
-        pending_payment.present? && email_team(payment)
+        email_team(payment) if pending_payment.present?
       end
     end
 
@@ -33,10 +33,6 @@ module Payments
 
     def email_team(payment)
       StartupMailer.payment_reminder(payment).deliver_later
-    end
-
-    def payment_created(startup)
-      Payment.where(startup: startup).order('created_at DESC').first
     end
   end
 end

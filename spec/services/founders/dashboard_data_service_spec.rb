@@ -6,6 +6,7 @@ describe Founders::DashboardDataService do
   let!(:level_0) { create :level, :zero }
   let!(:level_1) { create :level, :one }
   let!(:level_2) { create :level, :two }
+  let!(:level_3) { create :level, :three }
   let!(:startup) { create :startup, level: level_0 }
   let!(:founder) { create :founder, startup: startup }
   let!(:target_group_0) { create :target_group, level: level_0, milestone: true }
@@ -14,12 +15,13 @@ describe Founders::DashboardDataService do
   let!(:level_0_vanilla_targets) { create_list :target, 2, target_group: target_group_0 }
   let!(:level_1_vanilla_targets) { create_list :target, 2, target_group: target_group_1 }
   let!(:level_2_vanilla_targets) { create_list :target, 2, target_group: target_group_2 }
-  let!(:level_0_chores) { create_list :target, 2, chore: true, target_group: nil, level: level_0 }
-  let!(:level_1_chores) { create_list :target, 2, chore: true, target_group: nil, level: level_1 }
-  let!(:level_2_chores) { create_list :target, 2, chore: true, target_group: nil, level: level_2 }
+  let!(:level_0_chores) { create_list :target, 2, chore: true, target_group: target_group_0 }
+  let!(:level_1_chores) { create_list :target, 2, chore: true, target_group: target_group_1 }
+  let!(:level_2_chores) { create_list :target, 2, chore: true, target_group: target_group_2 }
   let!(:level_0_sessions) { create_list :target, 2, session_at: Time.now, target_group: nil, level: level_0 }
   let!(:level_1_sessions) { create_list :target, 2, session_at: Time.now, target_group: nil, level: level_1 }
   let!(:level_2_sessions) { create_list :target, 2, session_at: Time.now, target_group: nil, level: level_2 }
+  let!(:level_3_sessions) { create_list :target, 2, session_at: Time.now, target_group: nil, level: level_3 }
 
   describe '#levels' do
     context 'when the startup is in level 0' do
@@ -36,23 +38,6 @@ describe Founders::DashboardDataService do
     end
   end
 
-  describe '#chores' do
-    context 'when the startup is in level 0' do
-      it 'responds with all chores in level 0' do
-        expected_chore_details = level_0_chores.map { |chore| chore_details(chore) }
-        expect(subject.chores).to match_array(expected_chore_details)
-      end
-    end
-
-    context 'when the startup is in a level n > 1' do
-      it 'responds with all chores in level 1 to n' do
-        startup.update!(level: level_2)
-        expected_chore_details = (level_1_chores + level_2_chores).map { |chore| chore_details(chore) }
-        expect(subject.chores).to match_array(expected_chore_details)
-      end
-    end
-  end
-
   describe '#sessions' do
     context 'when the startup is in level 0' do
       it 'responds with all sessions in level 0' do
@@ -64,8 +49,8 @@ describe Founders::DashboardDataService do
     end
 
     context 'when the startup is in a level n > 1' do
-      it 'responds with all sessions in level 1 to n' do
-        startup.update!(level: level_2)
+      it "responds with all sessions in level 1 to startup's maximum level" do
+        startup.update!(level: level_1, maximum_level: level_2)
         expected_session_details = (level_1_sessions + level_2_sessions).map { |session| session_details(session.reload) }
         expected_session_details = expected_session_details.sort_by { |e| e['id'] }
         actual_sessions = subject.sessions.sort_by { |s| s['id'] }
@@ -96,31 +81,25 @@ describe Founders::DashboardDataService do
   def target_details(target)
     result = target.as_json(
       only: subject.send(:target_fields),
-      methods: %i[has_rubric target_type_description],
+      methods: %i[has_rubric target_type target_type_description],
       include: {
         assigner: {
-          only: %i[id name]
+          only: %i[id name],
+          methods: :image_url
         }
       }
     )
 
     # append more details
     result['status'] = :pending
-
-    result
-  end
-
-  def chore_details(chore)
-    result = target_details(chore)
-    result['level'] = { 'number' => chore.level.number }
-
+    result['prerequisites'] = nil
     result
   end
 
   def session_details(session)
-    result = chore_details(session)
+    result = target_details(session)
+    result['level'] = { 'number' => session.level.number }
     result['taggings'] = []
-
     result
   end
 end

@@ -7,7 +7,6 @@
   data-toggle-bar=t('dashboard.show.tour.toggle_bar')
   data-target-group=t('dashboard.show.tour.target_group')
   data-targets=t('dashboard.show.tour.targets')
-  data-chores=t('dashboard.show.tour.chores')
   data-sessions=t('dashboard.show.tour.sessions')
   data-target=t('dashboard.show.tour.target')
   data-target-details=t('dashboard.show.tour.target_details')
@@ -19,7 +18,15 @@
 #founder-dashboard
   == render 'dashboard_header'
 
-  - icon_paths = { personalTodo: image_path('founders/dashboard/target-type-icon-personal-todo.svg'), noResults: image_path('founders/dashboard/target-list-icon-no-results.svg'), teamTodo: image_path('founders/dashboard/target-type-icon-team-todo.svg'), attendSession: image_path('founders/dashboard/target-type-icon-attend-session.svg') }
+  - icon_paths = { personalTodo: image_path('founders/dashboard/target-type-icon-personal-todo.svg'), noResults: image_path('founders/dashboard/target-list-icon-no-results.svg'),
+    teamTodo: image_path('founders/dashboard/target-type-icon-team-todo.svg'),
+    attendSession: image_path('founders/dashboard/target-type-icon-attend-session.svg'),
+    targetDescription: image_path('founders/dashboard/target-overlay-description-icon.svg'),
+    videoEmbed: image_path('founders/dashboard/target-overlay-video-icon.svg'),
+    slideshowEmbed: image_path('founders/dashboard/target-overlay-slide-icon.svg'),
+    resourceLinks: image_path('founders/dashboard/target-overlay-resources-icon.svg'),
+    completionInstruction: image_path('founders/dashboard/target-overlay-instruction-icon.svg'),
+    backButton: image_path('founders/dashboard/target-overlay-back-icon.svg') }
 
   == react_component('FounderDashboard', @react_data.merge(authenticityToken: form_authenticity_token, iconPaths: icon_paths))
 

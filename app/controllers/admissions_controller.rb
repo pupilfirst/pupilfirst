@@ -64,6 +64,10 @@ class AdmissionsController < ApplicationController
   def fee
     authorize :admissions
 
+    # Add a tag to the founders visiting the fee payment page
+    current_founder.tag_list.add 'Visited Payment Page'
+    current_founder.save!
+
     @payment_form = Admissions::PaymentForm.new(current_founder)
     @coupon = current_startup.coupons.last
 
@@ -193,14 +197,15 @@ class AdmissionsController < ApplicationController
   end
 
   def payment_bypassed?
-    return false unless current_startup.fee.zero? || Rails.env.development?
+    return false unless Rails.env.development?
 
     bypass_payment
     true
   end
 
   def bypass_payment
-    Admissions::PostPaymentService.new(founder: current_founder).execute
+    payment = Payments::CreateService.new(current_founder, skip_payment: true).create
+    Admissions::PostPaymentService.new(founder: current_founder, payment: payment).execute
     flash[:success] = 'Payment Bypassed!'
     redirect_to dashboard_founder_path(from: 'bypass_payment')
   end

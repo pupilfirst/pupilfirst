@@ -17,11 +17,6 @@ class Founder < ApplicationRecord
   COFOUNDER_ACCEPTED = 'accepted'
   COFOUNDER_REJECTED = 'rejected'
 
-  PAYMENT_METHOD_HARDSHIP_SCHOLARSHIP = -'Hardship Scholarship'
-  PAYMENT_METHOD_REGULAR_FEE = -'Regular Fee'
-  PAYMENT_METHOD_MERIT_SCHOLARSHIP = -'Merit Scholarship'
-  REQUIRES_INCOME_PROOF = [PAYMENT_METHOD_HARDSHIP_SCHOLARSHIP].freeze
-  FEE_PAYMENT_METHODS = [PAYMENT_METHOD_REGULAR_FEE, PAYMENT_METHOD_HARDSHIP_SCHOLARSHIP, PAYMENT_METHOD_MERIT_SCHOLARSHIP].freeze
   ID_PROOF_TYPES = ['Aadhaar Card', 'Driving License', 'Passport', 'Voters ID'].freeze
 
   # Monthly fee amount for founders.
@@ -83,7 +78,6 @@ class Founder < ApplicationRecord
   validates :born_on, presence: true, allow_nil: true
   validates :gender, inclusion: { in: valid_gender_values }, allow_nil: true
   validates :email, uniqueness: true, allow_nil: true
-  validates :fee_payment_method, inclusion: { in: FEE_PAYMENT_METHODS }, allow_nil: true
   validates :id_proof_type, inclusion: { in: ID_PROOF_TYPES }, allow_nil: true
 
   validate :age_more_than_18
@@ -145,7 +139,7 @@ class Founder < ApplicationRecord
   mount_uploader :letter_from_parent, LetterFromParentUploader
 
   normalize_attribute :startup_id, :invitation_token, :twitter_url, :linkedin_url, :name, :slack_username, :resume_url,
-    :semester, :year_of_graduation, :gender, :fee_payment_method, :id_proof_type
+    :semester, :year_of_graduation, :gender, :id_proof_type
 
   before_save :capitalize_name_fragments
 
@@ -372,12 +366,11 @@ class Founder < ApplicationRecord
     required_fields.all? { |field| self[field].present? }
   end
 
-  def income_proofs_required?
-    fee_payment_method.in?(REQUIRES_INCOME_PROOF)
-  end
-
   delegate level_zero?: :startup
-  delegate subscription_active?: :startup
+
+  def subscription_active?
+    startup && startup.subscription_active?
+  end
 
   def invited
     invited_startup.present?

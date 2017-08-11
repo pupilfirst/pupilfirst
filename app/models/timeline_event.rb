@@ -140,12 +140,6 @@ class TimelineEvent < ApplicationRecord
     end
   end
 
-  def update_and_require_reverification(params)
-    params[:status_updated_at] = Time.zone.now
-    params[:status] = STATUS_PENDING
-    update(params)
-  end
-
   def verify!
     update!(status: STATUS_VERIFIED, status_updated_at: Time.zone.now)
 
@@ -177,15 +171,6 @@ class TimelineEvent < ApplicationRecord
 
   def verified_or_needs_improvement?
     verified? || needs_improvement?
-  end
-
-  def founder_can_delete?
-    !(verified_or_needs_improvement? || startup_feedback.present?)
-  end
-
-  def founder_can_modify?
-    return false if end_iteration?
-    !verified_or_needs_improvement?
   end
 
   def public_link?
@@ -253,6 +238,12 @@ class TimelineEvent < ApplicationRecord
 
   def first_attachment_url
     @first_attachment_url ||= first_file_url || first_link_url
+  end
+
+  def days_elapsed
+    start_date = startup.earliest_team_event_date
+    return nil if start_date.blank?
+    (event_on - start_date).to_i + 1
   end
 
   private

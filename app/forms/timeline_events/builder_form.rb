@@ -1,5 +1,5 @@
-module Founders
-  class TimelineBuilderForm < Reform::Form
+module TimelineEvents
+  class BuilderForm < Reform::Form
     # Add some slack to the max limit to allow for different length calculation at the front-end.
     MAX_DESCRIPTION_CHARACTERS = (TimelineEvent::MAX_DESCRIPTION_CHARACTERS * 1.1).to_i
 

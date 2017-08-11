@@ -37,22 +37,22 @@ after 'development:startups', 'development:target_groups', 'development:targets'
     )
   end
 
-  # Complete a Level 2 milestone targets for SuperHeroes.
-  level_2 = Level.find_by(number: 2)
+  # Complete all Level 1 and Level 2 targets for 'Avengers' startup on their first iteration.
+  [1, 2].each do |level_number|
+    Target.joins(target_group: :level).where(levels: { number: level_number }).each do |target|
+      grade = [TimelineEvent::GRADE_GOOD, TimelineEvent::GRADE_GREAT, TimelineEvent::GRADE_WOW].sample
 
-  TargetGroup.find_by(level: level_2, milestone: true).targets.each_with_index do |target, index|
-    grade = [TimelineEvent::GRADE_GOOD, TimelineEvent::GRADE_GREAT, TimelineEvent::GRADE_WOW][index]
-
-    TimelineEvent.create!(
-      startup: avengers_startup,
-      target: target,
-      timeline_event_type: target.timeline_event_type,
-      founder: avengers_startup.admin,
-      event_on: Time.now,
-      description: Faker::Lorem.paragraph,
-      status: status_verified,
-      status_updated_at: Time.now,
-      grade: grade
-    )
+      TimelineEvent.create!(
+        startup: avengers_startup,
+        target: target,
+        timeline_event_type: target.timeline_event_type,
+        founder: avengers_startup.admin,
+        event_on: Time.now,
+        description: Faker::Lorem.paragraph,
+        status: status_verified,
+        status_updated_at: Time.now,
+        grade: grade
+      )
+    end
   end
 end

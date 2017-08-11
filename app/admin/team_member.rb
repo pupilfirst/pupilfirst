@@ -5,6 +5,12 @@ ActiveAdmin.register TeamMember do
 
   permit_params :startup_id, :name, :email, :avatar, roles: []
 
+  filter :startup
+  filter :name, as: :string
+  filter :email, as: :string
+  filter :roles, as: :string
+  filter :created_at
+
   index do
     selectable_column
     column 'Product', :startup

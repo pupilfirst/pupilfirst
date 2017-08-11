@@ -6,14 +6,14 @@ class TimelineEventsController < ApplicationController
   def create
     timeline_event = TimelineEvent.new
     authorize timeline_event
-    timeline_builder_form = Founders::TimelineBuilderForm.new(timeline_event)
+    builder_form = TimelineEvents::BuilderForm.new(timeline_event)
 
-    if timeline_builder_form.validate(timeline_builder_params)
-      timeline_builder_form.save(current_founder)
+    if builder_form.validate(timeline_builder_params)
+      builder_form.save(current_founder)
       flash.now[:success] = 'Your timeline event will be reviewed soon!'
       head :ok
     else
-      raise "Validation of timeline event creation request failed. Error messages follow: #{timeline_builder_form.errors.to_json}"
+      raise "Validation of timeline event creation request failed. Error messages follow: #{builder_form.errors.to_json}"
     end
   end
 

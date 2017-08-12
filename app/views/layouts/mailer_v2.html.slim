@@ -15,6 +15,7 @@ html lang='en'
                     td.mailer-head__data
                       a.mailer-head__logo href="https://sv.co/" title="SV.CO" target="_blank"
                         = image_tag 'mailer/logo-mailer.png', class: 'mailer-head__logo-img'
+
                       a.mailer-head__link href="https://sv.co/" title="SV.CO" target="_blank"
                         ' www.sv.co
 
@@ -23,6 +24,8 @@ html lang='en'
                   tr
                     td.mailer-body__hero
                       h1.mailer-body__hero-title #{yield :heading}
+                      a.mailer-button href="https://sv.co/" title="SV.CO" target="_blank"
+                        | Join Now
                   tr
                     td.mailer-body__content
                       p.mailer-body__salutation #{yield :salutation}

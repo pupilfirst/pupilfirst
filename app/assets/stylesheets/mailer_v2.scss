@@ -37,6 +37,17 @@ table table table {
   max-width: 600px;
 }
 
+.mailer-button {
+  background: white;
+  color: #087CAA !important;
+  border-radius: 5px;
+  padding: 10px 40px;
+  margin-top: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+}
+
 .mailer-body__table {
   width: 100%;
   border: 1px solid #e5e5e5;

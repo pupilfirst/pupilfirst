@@ -9,9 +9,7 @@ ActiveAdmin.register Resource do
     end
   end
 
-  filter :startup,
-    collection: -> { Startup.approved.order(:product_name) },
-    label: 'Product'
+  filter :startup_product_name, as: :string, label: 'Product Name'
 
   filter :ransack_tagged_with,
     as: :select,
@@ -19,7 +17,7 @@ ActiveAdmin.register Resource do
     label: 'Tags',
     collection: -> { Resource.tag_counts_on(:tags).pluck(:name).sort }
 
-  filter :level
+  filter :level, collection: proc { Level.all.order(number: :asc) }
   filter :title
   filter :description
 

@@ -6,7 +6,7 @@ ActiveAdmin.register University do
   permit_params :name, :state_id
 
   filter :state
-  filter :colleges
+  filter :colleges_name, as: :string
   filter :name, as: :string
   filter :created_at
 

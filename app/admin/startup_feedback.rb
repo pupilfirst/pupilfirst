@@ -6,7 +6,7 @@ ActiveAdmin.register StartupFeedback do
 
   filter :startup_product_name, as: :string
   filter :startup_name, as: :string
-  filter :faculty
+  filter :faculty_name, as: :string
   filter :created_at
   filter :sent_at
   filter :activity_type

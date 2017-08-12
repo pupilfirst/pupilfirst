@@ -6,8 +6,8 @@ ActiveAdmin.register Startup do
     :presentation_link, :product_video_link, :wireframe_link, :prototype_link, :slug, :level_id,
     :partnership_deed, :payment_reference, :agreements_verified, startup_category_ids: [], founder_ids: [], tag_list: []
 
-  filter :product_name, as: :select
-  filter :level
+  filter :product_name, as: :string
+  filter :level, collection: proc { Level.all.order(number: :asc) }
   filter :stage, as: :select, collection: proc { stages_collection }
 
   filter :ransack_tagged_with,

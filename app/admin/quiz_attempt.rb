@@ -4,7 +4,7 @@ ActiveAdmin.register QuizAttempt do
   menu parent: 'SixWays'
 
   filter :course_module
-  filter :mooc_student
+  filter :mooc_student_name, as: :string
   filter :taken_at
   filter :score
 

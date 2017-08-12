@@ -9,7 +9,7 @@ ActiveAdmin.register College do
   filter :state_id_null, label: 'State missing?', as: :boolean
   filter :city
   filter :city_null, label: 'City missing?', as: :boolean
-  filter :university
+  filter :university_name, as: :string
   filter :university_id_null, label: 'University missing?', as: :boolean
   filter :name
   filter :also_known_as

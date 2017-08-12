@@ -12,9 +12,9 @@ ActiveAdmin.register Target do
   filter :chore, label: 'Chore?'
   filter :target_group, collection: TargetGroup.all.includes(:level)
   filter :level
-  filter :assigner
+  filter :assigner_name, as: :string
   filter :role, as: :select, collection: Target.valid_roles
-  filter :timeline_event_type
+  filter :timeline_event_type_title, as: :string
 
   filter :ransack_tagged_with,
     as: :select,

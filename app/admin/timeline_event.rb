@@ -4,33 +4,11 @@ ActiveAdmin.register TimelineEvent do
   permit_params :description, :timeline_event_type_id, :image, :event_on, :startup_id, :founder_id, :serialized_links,
     :improved_timeline_event_id, timeline_event_files_attributes: %i[id title file private _destroy]
 
-  filter :startup, label: 'Product', collection: proc {
-    # The 'not_improved' scope is special. See scope definition below.
-    timeline_event_scope = if @current_scope.id == 'not_improved'
-      TimelineEvent.needs_improvement.not_improved
-    else
-      TimelineEvent.public_send(@current_scope.id)
-    end
-
-    # Only show startups in the filter that are applicable to the currently selected scope.
-    Startup.where(id: timeline_event_scope.distinct(:startup_id).pluck(:startup_id)).order(:product_name)
-  }
-
-  filter :timeline_event_type, collection: proc { TimelineEventType.all.order(:title) }
+  filter :startup_product_name, as: :string, label: 'Product Name'
+  filter :startup_name, as: :string, label: 'Startup Name'
+  filter :timeline_event_type_title, as: :string
   filter :timeline_event_type_role_eq, as: :select, collection: TimelineEventType.valid_roles, label: 'Role'
-
-  filter :founder, collection: proc {
-    # The 'not_improved' scope is special. See scope definition below.
-    timeline_event_scope = if @current_scope.id == 'not_improved'
-      TimelineEvent.needs_improvement.not_improved
-    else
-      TimelineEvent.public_send(@current_scope.id)
-    end
-
-    # Only show founders in the filter that are belong to startups applicable to the currently selected scope.
-    Founder.joins(:startup).where(startup_id: timeline_event_scope.distinct(:startup_id).pluck(:startup_id)).distinct.order(:name)
-  }
-
+  filter :founder_name, as: :string
   filter :status, as: :select, collection: TimelineEvent.valid_statuses
   filter :grade, as: :select, collection: TimelineEvent.valid_grades
   filter :created_at

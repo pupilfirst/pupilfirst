@@ -58,7 +58,7 @@ class TargetOverlayTimelineEventPanel extends React.Component {
               { this.props.event.description }
             </p>
             { !_.isEmpty(this.props.event.attachments) &&
-            <div className="target-overlay-timeline-submission__content-attachments m-b-1 p-a-1">
+            <div className="target-overlay-timeline-submission__content-attachments p-x-1 p-t-1">
               <h6 className="font-semibold">Attachments</h6>
               { this.attachmentLinks() }
             </div>

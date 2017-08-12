@@ -16,7 +16,8 @@ Rails.application.config.assets.precompile += %w[
   active_admin.css
   application_v2.js
   active_admin.js
-  mails.css
+  mailer.css
+  mailer_v2.css
   video-js.swf vjs.eot vjs.svg vjs.ttf vjs.woff
   v2/completion_certificate.css
   v2/application_certificate.css

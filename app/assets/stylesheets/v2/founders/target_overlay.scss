@@ -158,6 +158,15 @@
   }
 }
 
+.target-overlay-content-block__container {
+  &:last-child {
+    .target-overlay-content-block__body {
+      border-bottom: 0px;
+      margin-bottom: 0;
+    }
+  }
+}
+
 .target-overlay-content-block__body {
   margin: 0 1rem 2rem 2.5rem;
   border-bottom: 1px solid $gray-border;

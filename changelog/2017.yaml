@@ -1,5 +1,43 @@
 ---
 changelog:
+- timestamp: '2017-08-14T10:38:33Z'
+  changes:
+  - timestamp: '2017-08-10T12:03:19Z'
+    title: Revised a few filters in admin pages in an attempt to increase performance.
+    trello: https://trello.com/c/Vu26n631
+    private: true
+    category: performance
+  - timestamp: '2017-08-09T10:10:04Z'
+    title: Implemented tagging of level zero founders who visit `admissions/fee`.
+    trello: https://trello.com/c/Aa8nA7ZR
+    private: true
+  - timestamp: '2017-08-09T09:48:05Z'
+    title: The chores tab has been removed from the founder dashboard. Non-repeatable targets have been
+      merged into the targets tab.
+    trello: https://trello.com/c/NwREp6e6
+    private: false
+    category: feature
+  - timestamp: '2017-08-08T11:17:14Z'
+    title: Removed fee_payment_method from Founder and its usages.
+    trello: https://trello.com/c/d5FGmGFu
+    private: true
+  - timestamp: '2017-08-08T07:08:31Z'
+    title: The founder dashboard _action bar_ is now hidden on Level 0, since it serves
+      no purpose at that point.
+    trello: https://trello.com/c/bhkr3mtg
+    private: false
+    category: ui
+  - timestamp: '2017-08-08T06:31:51Z'
+    title: Added cumulative funnel stats (since May 8) to admissions dashboard, and
+      to the daily Slack notification.
+    trello: https://trello.com/c/jzAjO8uT
+    private: true
+    category: feature
+  - timestamp: '2017-08-07T09:08:21Z'
+    title: Admins can now filter sign-up references by admission stage.
+    trello: https://trello.com/c/lwqOOnYW
+    private: true
+    category: feature
 - timestamp: '2017-08-07T11:07:41Z'
   changes:
   - timestamp: '2017-08-07T10:08:56Z'

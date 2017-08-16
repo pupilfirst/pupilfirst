@@ -67,6 +67,7 @@ class AdmissionsController < ApplicationController
     # Add a tag to the founders visiting the fee payment page
     current_founder.tag_list.add 'Visited Payment Page'
     current_founder.save!
+    Intercom::FounderTaggingJob.perform_later(current_founder, 'Visited Payment Page')
 
     @payment_form = Admissions::PaymentForm.new(current_founder)
     @coupon = current_startup.coupons.last

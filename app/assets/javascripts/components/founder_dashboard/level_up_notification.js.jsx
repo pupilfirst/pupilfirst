@@ -36,7 +36,7 @@ class FounderDashboardLevelUpNotification extends React.Component {
           </div>
 
           {this.props.currentLevel != this.props.maxLevelNumber &&
-          <form className="m-t-2" action="/founder/startup/level_up" acceptCharset="UTF-8" method="post">
+          <form className="m-t-2" action="/startup/level_up" acceptCharset="UTF-8" method="post">
             <input name="utf8" type="hidden" value="✓"/>
             <input type="hidden" name="authenticity_token" value={this.props.authenticityToken}/>
 

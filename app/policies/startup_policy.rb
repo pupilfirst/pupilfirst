@@ -10,4 +10,8 @@ class StartupPolicy < ApplicationPolicy
   def update?
     edit?
   end
+
+  def level_up?
+    Startups::LevelUpEligibilityService.new(record, user.founder).eligible?
+  end
 end

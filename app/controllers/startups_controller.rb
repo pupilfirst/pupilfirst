@@ -1,6 +1,6 @@
 class StartupsController < ApplicationController
   before_action :authenticate_founder!, except: %i[show index timeline_event_show paged_events]
-  before_action :require_active_subscription, only: %i[edit update]
+  before_action :require_active_subscription, except: %i[index show timeline_event_show paged_events]
 
   # GET /startups
   def index
@@ -70,6 +70,16 @@ class StartupsController < ApplicationController
     else
       render 'startups/edit'
     end
+  end
+
+  # POST /startup/level_up
+  def level_up
+    startup = current_founder.startup
+    raise_not_found if startup.blank?
+    authorize startup
+
+    Startups::LevelUpService.new(startup).execute
+    redirect_to(dashboard_founder_path(from: 'level_up', from_level: startup.level.number - 1))
   end
 
   private

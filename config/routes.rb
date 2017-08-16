@@ -33,11 +33,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resource :startup, only: %i[edit update] do
-      scope module: 'founders', controller: 'dashboard' do
-        post 'level_up'
-      end
-    end
+    resource :startup, only: %i[edit update]
   end
 
   resources :team_members, except: %i[index show]
@@ -47,6 +43,12 @@ Rails.application.routes.draw do
     post 'connect'
     get 'connect_callback'
     post 'disconnect'
+  end
+
+  resource :startup, only: [] do
+    member do
+      post 'level_up'
+    end
   end
 
   resources :startups, only: %i[index show] do

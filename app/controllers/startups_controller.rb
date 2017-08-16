@@ -53,13 +53,13 @@ class StartupsController < ApplicationController
     render layout: false
   end
 
-  # GET /founder/startup/edit
+  # GET /startups/:id/edit
   def edit
     @startup = current_founder.startup
     authorize @startup
   end
 
-  # PATCH /founder/startup
+  # PATCH /startups/:id
   def update
     @startup = current_founder.startup
     authorize @startup

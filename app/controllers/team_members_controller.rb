@@ -19,7 +19,7 @@ class TeamMembersController < ApplicationController
 
     if @team_member.save
       flash[:success] = 'Added new team member!'
-      redirect_to edit_founder_startup_url
+      redirect_to edit_startup_url(current_startup)
     else
       flash.now[:error] = 'Could not create new team member.'
       render 'create_or_edit'
@@ -43,7 +43,7 @@ class TeamMembersController < ApplicationController
 
     if @team_member.update(team_member_params)
       flash[:success] = 'Updated team member!'
-      redirect_to edit_founder_startup_url
+      redirect_to edit_startup_url(current_startup)
     else
       flash.now[:error] = 'Could not update team member.'
       render 'create_or_edit'
@@ -58,7 +58,7 @@ class TeamMembersController < ApplicationController
 
     if @team_member.destroy
       flash[:success] = 'Deleted team member!'
-      redirect_to edit_founder_startup_url
+      redirect_to edit_startup_url(current_startup)
     else
       flash[:error] = 'Could not delete team member.'
       render 'create_or_edit'

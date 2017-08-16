@@ -447,11 +447,6 @@ class Startup < ApplicationRecord
     referrers&.last
   end
 
-  # Need to iterate over founders since each could have different payment method.
-  def total_course_fee
-    founders.map { |founder| founder_course_fee(founder) }.sum
-  end
-
   def level_zero?
     level.number.zero?
   end

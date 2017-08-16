@@ -44,16 +44,6 @@ class FounderDecorator < Draper::Decorator
     end
   end
 
-  def profile_completion_status
-    update_query = "?update_profile=#{id}#update_founder_form"
-
-    if profile_complete?
-      "<div class='tag tag-pill tag-primary m-r-1'><i class='fa fa-check-circle'></i>&nbsp;Complete</div><span class='text-nowrap'>#{h.link_to('<i class="fa fa-edit"></i> Edit'.html_safe, update_query, class: 'edit-btn')}</span>".html_safe
-    else
-      h.link_to('<i class="fa fa-list-alt"></i> Update profile'.html_safe, update_query)
-    end
-  end
-
   private
 
   def fb_service

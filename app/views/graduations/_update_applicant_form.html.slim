@@ -25,12 +25,6 @@
     = f.text_field :id_proof_number, label_class: 'col-form-label', label: 'ID Proof Number', required: true
     = f.file_field :identification_proof, label_class: 'col-form-label', label: 'Proof of Identity', class: 'form-control', help: "#{@form.file_help_extra(:identification_proof)}Color Scan of <strong>self-attested copy</strong> of proof of identity.".html_safe, required: @form.file_required?(:identification_proof)
 
-    - if f.object.model.income_proofs_required?
-      h4.m-b-1 The following fields are required to verify income status.
-
-      = f.file_field :income_proof, label_class: 'col-form-label', label: 'Proof of Income', class: 'form-control', help: "#{@form.file_help_extra(:income_proof)}Scan of Income certificate / BPL Card / ITR of applicant's parents.".html_safe, required: @form.file_required?(:income_proof)
-      = f.file_field :letter_from_parent, label_class: 'col-form-label', label: 'Letter from Parent', class: 'form-control', help: "#{@form.file_help_extra(:letter_from_parent)}Scan of letter must be attested by Principal, or HOD at the applicant's college.".html_safe, required: @form.file_required?(:letter_from_parent)
-      = f.phone_field :college_contact, label_class: 'col-form-label', label: 'College Contact Number', help: 'Please supply the contact number of the person who attested the above letter.', required: true, maxlength: 17, pattern: MobileNumberValidator::FORM_EXPRESSION
     .form-group.row
       .offset-sm-3.col-sm-9
         = f.submit 'Update Profile', class: 'm-r-1 m-t-1 btn btn-primary btn-md text-uppercase', data: { :'disable-with' => 'Uploading...' }

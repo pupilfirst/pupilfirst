@@ -4,7 +4,7 @@ ActiveAdmin.register Payment do
   menu parent: 'Admissions'
   actions :index, :show
 
-  filter :founder_name_contains
+  filter :founder_name, as: :string
   filter :amount
   filter :fees
   filter :refunded

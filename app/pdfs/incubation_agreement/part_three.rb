@@ -18,9 +18,7 @@ module IncubationAgreement
       text t('incubation_agreement.part_three.body', fee: fee, fee_in_words: fee_in_words), inline_format: true, indent_paragraphs: 30, align: :justify
     end
 
-    def fee
-      @startup.total_course_fee
-    end
+    def fee; end
 
     def fee_in_words
       fee.humanize.titleize

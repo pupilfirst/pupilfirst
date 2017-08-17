@@ -9,6 +9,16 @@ ActiveAdmin.register ConnectRequest do
   scope :confirmed
   scope :requested
 
+  filter :connect_slot_faculty_name, as: :string, label: 'Name of Faculty'
+  filter :startup_product_name, as: :string
+  filter :questions
+  filter :status, as: :select, collection: ConnectRequest.valid_statuses
+  filter :meeting_link
+  filter :created_at
+  filter :confirmed_at
+  filter :rating_for_faculty
+  filter :rating_for_team
+
   controller do
     def scoped_collection
       super.includes :connect_slot

@@ -69,9 +69,8 @@
 }
 
 .target-overlay__header-status-badge-container {
-  margin-top: 6px;
-
   @include media-breakpoint-down (sm) {
+    margin-top: 6px;
     margin-left: 2.5rem;
   }
 }
@@ -155,6 +154,15 @@
 
   &:last-child {
     padding: 0;
+  }
+}
+
+.target-overlay-content-block__container {
+  &:last-child {
+    .target-overlay-content-block__body {
+      border-bottom: 0px;
+      margin-bottom: 0;
+    }
   }
 }
 
@@ -312,6 +320,7 @@
 .target-overlay-timeline-submission__content {
   word-wrap: break-word;
   white-space: pre-wrap;
+  padding-bottom: 1rem;
 }
 
 .target-overlay-timeline-submission__box {

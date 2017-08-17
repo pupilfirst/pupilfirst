@@ -5,7 +5,8 @@ ActiveAdmin.register TeamMember do
 
   permit_params :startup_id, :name, :email, :avatar, roles: []
 
-  filter :startup
+  filter :startup_product_name, as: :string, label: 'Product Name'
+  filter :startup_name, as: :string, label: 'Startup Name'
   filter :name, as: :string
   filter :email, as: :string
   filter :roles, as: :string

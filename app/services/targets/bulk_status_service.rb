@@ -64,7 +64,7 @@ module Targets
       # An event for a vanilla target (non-session/chore target) evaluates to pending if the event iteration is not
       # equal to the startup's iteration. This allows pure-targets to be 'reset' when the startup pivots and moves to a
       # new iteration, while preserving the status of chores and sessions.
-      if target&.target? && event.iteration != @founder.startup.iteration
+      if affected_by_iteration?(target) && event.iteration != @founder.startup.iteration
         Target::STATUS_PENDING
       else
         case event.status
@@ -74,6 +74,10 @@ module Targets
           else Target::STATUS_SUBMITTED
         end
       end
+    end
+
+    def affected_by_iteration?(target)
+      target&.target? && target.target_group.level.number >= @founder.startup.level.number
     end
 
     def unsubmitted_targets_statuses

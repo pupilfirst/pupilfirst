@@ -362,7 +362,6 @@ class Founder < ApplicationRecord
 
   def profile_complete?
     required_fields = %i[name roles born_on gender parent_name communication_address permanent_address address_proof phone id_proof_type id_proof_number identification_proof]
-    required_fields += %i[income_proof letter_from_parent college_contact] if income_proofs_required?
 
     required_fields.all? { |field| self[field].present? }
   end

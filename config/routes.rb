@@ -32,16 +32,10 @@ Rails.application.routes.draw do
         get 'dashboard/targets/:id(/:slug)', action: 'target_overlay'
       end
     end
-
-    resource :startup, only: %i[edit update] do
-      scope module: 'founders', controller: 'dashboard' do
-        post 'level_up'
-      end
-
-      resources :timeline_events, only: %i[create destroy update]
-      resources :team_members, except: %i[index]
-    end
   end
+
+  resources :team_members, except: %i[index show]
+  resources :timeline_events, only: %i[create destroy]
 
   scope 'founder/facebook', as: 'founder_facebook', controller: 'founders/facebook_connect' do
     post 'connect'
@@ -49,7 +43,13 @@ Rails.application.routes.draw do
     post 'disconnect'
   end
 
-  resources :startups, only: %i[index show] do
+  resource :startup, only: [] do
+    member do
+      post 'level_up'
+    end
+  end
+
+  resources :startups, only: %i[index show edit update] do
     member do
       get 'events/:page', action: 'paged_events', as: 'paged_events'
       get ':event_title/:event_id', action: 'timeline_event_show', as: 'timeline_event_show'

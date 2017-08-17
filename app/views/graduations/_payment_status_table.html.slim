@@ -10,8 +10,3 @@
       / Put the team lead at the top of the table.
       - [current_startup.founders.order('name ASC')].flatten.each do |startup_founder|
         - founder = startup_founder.decorate
-        tr
-          td #{founder.name}
-          td #{founder.profile_completion_status}
-          td #{founder.payment_method_with_fee(current_startup)}
-          td #{founder.confirmation_status}

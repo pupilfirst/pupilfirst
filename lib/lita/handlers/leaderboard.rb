@@ -96,7 +96,7 @@ module Lita
           format('%+d', change_in_rank).rjust(3)
         end
 
-        "*#{format('%02d', rank)}.* #{indicator}`#{signed_change_in_rank}` - <#{Rails.application.routes.url_helpers.startup_url(startup)}|#{startup.product_name}>\n"
+        "*#{format('%02d', rank)}.* #{indicator}`#{signed_change_in_rank}` - <#{Rails.application.routes.url_helpers.timeline_url(startup.id, startup.slug)}|#{startup.product_name}>\n"
       end
     end
 

@@ -100,7 +100,7 @@
                     span.resume-title View Resume
         - if @founder.startup&.logo.present?
           .col-md-3.startup-logo-profile
-            a.startup-logo-box href=startup_url(@founder.startup)
+            a.startup-logo-box href=timeline_url(@founder.startup.id, @founder.startup.slug)
               = image_tag @founder.startup.logo.url, alt: 'Startup logo', class: 'img-responsive'
 .profile-bg
   .container

@@ -19,7 +19,7 @@ class StartupFeedback < ApplicationRecord
   def as_slack_message
     formatted_reference_url = reference_url.present? ? "<#{reference_url}|recent update>" : "recent update"
     salutation = "Hey! You have some feedback from #{faculty.name} on your #{formatted_reference_url}.\n"
-    feedback_url = Rails.application.routes.url_helpers.startup_url(startup, show_feedback: id)
+    feedback_url = Rails.application.routes.url_helpers.timeline_url(startup.id, startup.slug, show_feedback: id)
     feedback_text = "<#{feedback_url}|Click here> to view the feedback."
     salutation + feedback_text
   end

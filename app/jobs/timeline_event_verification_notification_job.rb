@@ -11,8 +11,7 @@ class TimelineEventVerificationNotificationJob < ApplicationJob
     # not applicable for level zero startups
     return if @startup.level_zero?
 
-    @startup_url = Rails.application.routes.url_helpers.startup_url(@startup)
-    @timeline_event_url = @startup_url + "#event-#{@timeline_event.id}"
+    @startup_url = Rails.application.routes.url_helpers.timeline_url(@startup.id, @startup.slug)
 
     # return if invoked for a pending event - Pending events have no associated notifications, yet
     return if @timeline_event.pending?
@@ -84,7 +83,7 @@ class TimelineEventVerificationNotificationJob < ApplicationJob
     {
       startup_url: @startup_url,
       startup_product_name: @startup.product_name,
-      event_url: @timeline_event_url,
+      event_url: @timeline_event.share_url,
       event_title: @timeline_event.title,
       event_description: @timeline_event.description,
       links_attached_notice: links_attached_notice

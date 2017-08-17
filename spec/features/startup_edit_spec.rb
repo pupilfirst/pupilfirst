@@ -14,7 +14,7 @@ feature 'Startup Edit' do
     startup.founders << founder
 
     # Log in the founder.
-    visit user_token_url(token: founder.user.login_token, referer: edit_startup_path(startup))
+    visit user_token_url(token: founder.user.login_token, referer: edit_startup_path)
 
     # founder should now be on his startup edit page.
   end
@@ -56,7 +56,7 @@ feature 'Startup Edit' do
       startup.reload
       founder.reload
 
-      visit edit_startup_path(startup)
+      visit edit_startup_path
       expect(page).to have_text('To delete your startup timeline, contact your SV.CO representative.')
     end
   end

@@ -43,24 +43,30 @@ Rails.application.routes.draw do
     post 'disconnect'
   end
 
-  resource :startup, only: [] do
+  resource :startup, only: %i[edit update] do
     member do
       post 'level_up'
     end
   end
 
-  resources :startups, only: %i[index show edit update] do
+  resources :startups, only: %i[index] do
     member do
       get 'events/:page', action: 'paged_events', as: 'paged_events'
-      get ':event_title/:event_id', action: 'timeline_event_show', as: 'timeline_event_show'
-    end
 
-    resources :timeline_events, only: [] do
-      resources :timeline_event_files, only: [] do
-        member do
-          get 'download'
-        end
-      end
+      # TODO: Preserve this path for a while to allow old shares to work. This has been replaced by timeline_event_show path below.
+      get ':event_title/:event_id', action: 'timeline_event_show'
+    end
+  end
+
+  # TODO: Preserve this path until resume_url is not statically stored any more.
+  get 'startups/:startup_id/timeline_events/:timeline_event_id/timeline_event_files/:id/download', to: 'timeline_event_files#download'
+
+  get 'startups/:id(/:slug)', to: 'startups#show', as: 'timeline'
+  get 'startups/:id/:slug/e/:event_id/:event_title', to: 'startups#timeline_event_show', as: 'timeline_event_show'
+
+  resources :timeline_event_files, only: [] do
+    member do
+      get 'download'
     end
   end
 

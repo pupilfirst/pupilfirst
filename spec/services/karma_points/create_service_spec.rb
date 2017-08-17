@@ -44,7 +44,7 @@ describe KarmaPoints::CreateService do
         'slack_notifications.karma_points.startup',
         points: 40,
         activity_type: "Added a new Timeline event - #{timeline_event_for_startup_target.title}",
-        startup_url: Rails.application.routes.url_helpers.startup_url(startup),
+        startup_url: Rails.application.routes.url_helpers.timeline_url(startup.id, startup.slug),
         startup_product_name: startup.product_name
       )
     end
@@ -54,7 +54,7 @@ describe KarmaPoints::CreateService do
         'slack_notifications.karma_points.startup',
         points: 50,
         activity_type: "Connect session with faculty member #{connect_request.faculty.name}",
-        startup_url: Rails.application.routes.url_helpers.startup_url(startup),
+        startup_url: Rails.application.routes.url_helpers.timeline_url(startup.id, startup.slug),
         startup_product_name: startup.product_name
       )
     end

@@ -5,12 +5,10 @@ module Intercom
 
     # Map Intercom segments to SendinBlue list names
     SEGMENTS_TO_LIST = {
-      'Stale Paid Applicants' => 'Paid Applicants',
-      'Stale Payment Initiated' => 'Payment Initiated',
-      'Stale Conversing Users' => 'Conversing Users',
-      'Stale Applicants' => 'Applicants',
-      'Stale Users' => 'Stale Users',
-      'Stale Leads' => 'Stale Leads'
+      'Stale Applicants - Last Seen Known' => 'Stale Applicants',
+      'Stale Applicants - Last Seen Unknown' => 'Stale Applicants',
+      'Stale Leads - Email - Last Seen Known' => 'Stale Leads',
+      'Stale Leads - Email - Last Seen Unknown' => 'Stale Leads'
     }.freeze
 
     def initialize(mock: false)

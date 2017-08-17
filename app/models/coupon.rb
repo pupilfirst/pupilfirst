@@ -13,6 +13,9 @@ class Coupon < ApplicationRecord
   REFERRAL_DISCOUNT = 25
   REFERRAL_LIMIT = 0
 
+  USER_EXTENSION_DAYS = 15
+  REFERRER_EXTENSION_DAYS = 15
+
   def self.valid_coupon_types
     [TYPE_DISCOUNT, TYPE_MSP, TYPE_REFERRAL]
   end

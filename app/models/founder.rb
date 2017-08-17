@@ -352,8 +352,9 @@ class Founder < ApplicationRecord
   def generate_referral_coupon!
     Coupon.create!(
       code: rand(36**6).to_s(36),
-      coupon_type: Coupon::TYPE_DISCOUNT,
-      discount_percentage: Coupon::REFERRAL_DISCOUNT,
+      coupon_type: Coupon::TYPE_REFERRAL,
+      user_extension_days: Coupon::USER_EXTENSION_DAYS,
+      referrer_extension_days: Coupon::REFERRER_EXTENSION_DAYS,
       redeem_limit: Coupon::REFERRAL_LIMIT,
       referrer: self
     )

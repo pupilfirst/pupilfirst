@@ -2,6 +2,7 @@ class Coupon < ApplicationRecord
   has_many :coupon_usages
   has_many :startups, through: :coupon_usages
   belongs_to :referrer, class_name: 'Founder', optional: true
+  belongs_to :referrer_startup, class_name: 'Startup', optional: true
 
   scope :referral, -> { where.not(referrer_id: nil) }
 
@@ -19,6 +20,7 @@ class Coupon < ApplicationRecord
   validates :coupon_type, inclusion: { in: valid_coupon_types }
   validates :discount_percentage, presence: true, inclusion: { in: 0..100, message: 'must be between 0 and 100' }
   validates :referrer_id, uniqueness: true, allow_nil: true
+  validates :referrer_startup_id, uniqueness: true, allow_nil: true
 
   def still_valid?
     (expires_at.blank? || expires_at.future?) && redeems_left?

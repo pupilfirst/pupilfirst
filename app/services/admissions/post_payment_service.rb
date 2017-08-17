@@ -15,7 +15,7 @@ module Admissions
       Founders::PostPaymentService.new(@payment).execute
 
       # handle coupons
-      perform_coupon_tasks if applied_coupon.present?
+      perform_coupon_tasks
 
       # mark the payment target complete
       Admissions::CompleteTargetService.new(@founder, Target::KEY_ADMISSIONS_FEE_PAYMENT).execute
@@ -31,17 +31,19 @@ module Admissions
     end
 
     def perform_coupon_tasks
-      # mark the coupon applied as redeemed
-      applied_coupon.mark_redeemed!(@startup)
-
-      # Award the user the applicable extension
-      @payment.update!(billing_end_at: @payment.billing_end_at + applied_coupon.user_extension_days.days)
-
       # create a referral coupon for the current applicant
       @founder.generate_referral_coupon! if @founder.referral_coupon.blank?
 
-      # initiate referral refund if current applicant was referred by someone
-      Founders::ReferralRewardService.new(applied_coupon).execute
+      if applied_coupon.present?
+        # mark the coupon applied as redeemed
+        applied_coupon.mark_redeemed!(@startup)
+
+        # Award the user the applicable extension
+        @payment.update!(billing_end_at: @payment.billing_end_at + applied_coupon.user_extension_days.days)
+
+        # initiate referral refund if current applicant was referred by someone
+        Founders::ReferralRewardService.new(applied_coupon).execute
+      end
     end
   end
 end

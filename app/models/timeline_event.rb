@@ -226,8 +226,11 @@ class TimelineEvent < ApplicationRecord
   end
 
   def share_url
-    Rails.application.routes.url_helpers.timeline_event_show_startup_url(
-      id: startup.slug, event_title: title.parameterize, event_id: id
+    Rails.application.routes.url_helpers.timeline_event_show_url(
+      id: startup.id,
+      slug: startup.slug,
+      event_id: id,
+      event_title: title.parameterize
     )
   end
 
@@ -278,12 +281,8 @@ class TimelineEvent < ApplicationRecord
 
   def first_file_url
     first_file = timeline_event_files.first
-
-    if first_file.present?
-      Rails.application.routes.url_helpers.download_startup_timeline_event_timeline_event_file_url(
-        startup, self, first_file
-      )
-    end
+    return if first_file.blank?
+    Rails.application.routes.url_helpers.download_timeline_event_file_url(first_file)
   end
 
   def first_link_url

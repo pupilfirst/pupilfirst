@@ -26,9 +26,7 @@ RSpec.describe TimelineEvent, type: :model do
 
         it 'saves presentation link' do
           expect(subject.startup.presentation_link).to eq(
-            Rails.application.routes.url_helpers.download_startup_timeline_event_timeline_event_file_url(
-              subject.startup, subject, timeline_event_file
-            )
+            Rails.application.routes.url_helpers.download_timeline_event_file_url(timeline_event_file)
           )
         end
       end
@@ -38,9 +36,7 @@ RSpec.describe TimelineEvent, type: :model do
 
         it 'saves wireframe link' do
           expect(subject.startup.wireframe_link).to eq(
-            Rails.application.routes.url_helpers.download_startup_timeline_event_timeline_event_file_url(
-              subject.startup, subject, timeline_event_file
-            )
+            Rails.application.routes.url_helpers.download_timeline_event_file_url(timeline_event_file)
           )
         end
       end
@@ -50,9 +46,7 @@ RSpec.describe TimelineEvent, type: :model do
 
         it 'saves prototype link' do
           expect(subject.startup.prototype_link).to eq(
-            Rails.application.routes.url_helpers.download_startup_timeline_event_timeline_event_file_url(
-              subject.startup, subject, timeline_event_file
-            )
+            Rails.application.routes.url_helpers.download_timeline_event_file_url(timeline_event_file)
           )
         end
       end
@@ -72,9 +66,7 @@ RSpec.describe TimelineEvent, type: :model do
 
         it 'saves resume link' do
           expect(subject.founder.resume_url).to eq(
-            Rails.application.routes.url_helpers.download_startup_timeline_event_timeline_event_file_url(
-              subject.startup, subject, timeline_event_file
-            )
+            Rails.application.routes.url_helpers.download_timeline_event_file_url(timeline_event_file)
           )
         end
       end

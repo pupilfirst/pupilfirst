@@ -11,7 +11,7 @@ describe TimelineEventVerificationNotificationJob do
   let!(:timeline_event_type_startup) { create :timeline_event_type, role: TimelineEventType::ROLE_DESIGN }
   let!(:timeline_event_for_founder) { create :timeline_event, founder: founder, startup: startup, target: founder_target, timeline_event_type: timeline_event_type_founder, status: "Verified" }
   let!(:timeline_event_for_startup) { create :timeline_event_with_links, founder: founder, startup: startup, target: startup_target, timeline_event_type: timeline_event_type_startup, status: "Verified" }
-  let(:startup_url) { Rails.application.routes.url_helpers.startup_url(startup) }
+  let(:startup_url) { Rails.application.routes.url_helpers.timeline_url(startup.id, startup.slug) }
 
   let(:links_attached_notice) do
     notice = "*Public Links attached:*\n"
@@ -28,7 +28,7 @@ describe TimelineEventVerificationNotificationJob do
       'slack_notifications.timeline_events.founder.verified.founder_event',
       event_title: timeline_event_for_founder.title,
       startup_url: startup_url,
-      event_url: startup_url + "#event-#{timeline_event_for_founder.id}"
+      event_url: timeline_event_for_founder.share_url
     )
   end
 
@@ -37,7 +37,7 @@ describe TimelineEventVerificationNotificationJob do
       'slack_notifications.timeline_events.founder.verified.startup_event',
       event_title: timeline_event_for_startup.title,
       startup_url: startup_url,
-      event_url: startup_url + "#event-#{timeline_event_for_startup.id}",
+      event_url: timeline_event_for_startup.share_url,
       startup_product_name: startup.product_name
     )
   end
@@ -46,7 +46,7 @@ describe TimelineEventVerificationNotificationJob do
     I18n.t(
       'slack_notifications.timeline_events.team.verified',
       event_title: timeline_event_for_startup.title,
-      event_url: startup_url + "#event-#{timeline_event_for_startup.id}",
+      event_url: timeline_event_for_startup.share_url,
       startup_url: startup_url,
       startup_product_name: startup.product_name
     )
@@ -57,7 +57,7 @@ describe TimelineEventVerificationNotificationJob do
       'slack_notifications.timeline_events.public.verified',
       startup_url: startup_url,
       startup_product_name: startup.product_name,
-      event_url: startup_url + "#event-#{timeline_event_for_startup.id}",
+      event_url: timeline_event_for_startup.share_url,
       event_title: timeline_event_for_startup.title,
       event_description: timeline_event_for_startup.description,
       links_attached_notice: links_attached_notice

@@ -39,7 +39,7 @@ module ConnectRequests
     def calendar_event_description
       <<~DESCRIPTION
         Product: #{startup.display_name}
-        Timeline: #{Rails.application.routes.url_helpers.startup_url(startup, host: 'https://sv.co')}
+        Timeline: #{Rails.application.routes.url_helpers.timeline_url(startup.id, startup.slug, host: 'https://www.sv.co')}
         Team lead: #{startup.admin.fullname}
 
         Questions Asked:

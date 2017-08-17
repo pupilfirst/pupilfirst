@@ -11,11 +11,13 @@
   p
     ' This means that we'll no longer try to actively contact you or help your team. Your startup will also not be listed in any public listings or leaderboards &amp; your timeline will show a prominent notice that you have dropped out.
 
+  - timeline_link = timeline_url(@startup.id, @startup.slug)
+
   p
-    ' To reactivate your timeline, go #{link_to 'here', @startup } &amp; submit a New Product Deck timeline entry. We'll be processing your timeline update as a new startup, and acceptance will be based on our latest availability criteria.
+    ' To reactivate your timeline, go #{link_to 'here', timeline_link } &amp; submit a New Product Deck timeline entry. We'll be processing your timeline update as a new startup, and acceptance will be based on our latest availability criteria.
 
   p
     ' If you're unable to click on the link to your startup timeline (above), then please copy and paste the following
     | link into your browser's address bar:
 
-  p.monospace = startup_url(@startup)
+  p.monospace = timeline_link

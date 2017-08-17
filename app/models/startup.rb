@@ -317,8 +317,7 @@ class Startup < ApplicationRecord
 
     [
       name,
-      [name, :id],
-      [name, :id, rand(1000)]
+      [name, :id]
     ]
   end
 

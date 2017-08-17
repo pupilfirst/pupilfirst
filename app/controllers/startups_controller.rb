@@ -53,20 +53,20 @@ class StartupsController < ApplicationController
     render layout: false
   end
 
-  # GET /startups/:id/edit
+  # GET /startup/edit
   def edit
     @startup = current_founder.startup
     authorize @startup
   end
 
-  # PATCH /startups/:id
+  # PATCH /startup
   def update
     @startup = current_founder.startup
     authorize @startup
 
     if @startup.update(startup_params)
       flash[:success] = 'Startup details have been updated.'
-      redirect_to @startup
+      redirect_to timeline_path(@startup.id, @startup.slug)
     else
       render 'startups/edit'
     end

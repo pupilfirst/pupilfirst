@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170810101902) do
+ActiveRecord::Schema.define(version: 20170817072427) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -127,6 +127,7 @@ ActiveRecord::Schema.define(version: 20170810101902) do
     t.text "instructions"
     t.integer "user_extension_days"
     t.integer "referrer_extension_days"
+    t.integer "referrer_startup_id"
   end
 
   create_table "course_modules", id: :serial, force: :cascade do |t|

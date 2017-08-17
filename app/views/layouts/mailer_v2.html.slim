@@ -4,7 +4,7 @@ html lang='en'
     = stylesheet_link_tag 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600'
 
   body width="100%"
-    center style=("width: 100%; background: #f5f5f5; text-align: left; padding-top: 40px;")
+    center style=("width: 100%; background: #f5f5f5; text-align: left; padding-top: 30px;")
       table.mailer-table
         tbody
           tr
@@ -16,20 +16,20 @@ html lang='en'
                       a.mailer-head__logo href="https://sv.co/" title="SV.CO" target="_blank"
                         = image_tag 'mailer/logo-mailer.png', class: 'mailer-head__logo-img'
 
-                      a.mailer-head__link href="https://sv.co/" title="SV.CO" target="_blank"
-                        ' www.sv.co
-
               table.mailer-body__table
                 tbody
                   tr
                     td.mailer-body__hero
                       h1.mailer-body__hero-title #{yield :heading}
+                      p.mailer-body__hero-subtitle
+                        | Lorem ipsum dolor sit amet, consectetur.
                       a.mailer-button href="https://sv.co/" title="SV.CO" target="_blank"
                         | Join Now
                   tr
                     td.mailer-body__content
                       p.mailer-body__salutation #{yield :salutation}
                       = yield :body
+
                       p.mailer-body__signature Team SV.CO
 
                   tr

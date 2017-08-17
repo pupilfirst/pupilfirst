@@ -54,7 +54,7 @@
                 | &nbsp;
               | #{attachment[:title]}
           - else # it is a file
-            a.tl-link-button href="#{short_url(download_startup_timeline_event_timeline_event_file_url(startup, event, attachment[:file]))}" target="_blank"
+            a.tl-link-button href="#{short_url(download_timeline_event_file_url(attachment[:file]))}" target="_blank"
               - if attachment[:private]
                 i.fa.fa-user-secret
                 | &nbsp;

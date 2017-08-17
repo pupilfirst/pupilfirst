@@ -219,8 +219,8 @@ ActiveAdmin.register TimelineEvent do
 
   member_action :save_file_as_resume_url, method: :post do
     timeline_event = TimelineEvent.find(params[:id])
-    file = timeline_event.timeline_event_files.find(params[:file_id])
-    timeline_event.founder.update!(resume_url: download_startup_timeline_event_timeline_event_file_url(timeline_event.startup, timeline_event, file))
+    timeline_event_file = timeline_event.timeline_event_files.find(params[:file_id])
+    timeline_event.founder.update!(resume_url: download_timeline_event_file_url(timeline_event_file))
     flash[:success] = "Successfully updated founder's Resume URL."
     redirect_to action: :show
   end

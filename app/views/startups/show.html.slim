@@ -29,9 +29,9 @@
         - if @startup.timeline_verified?
           a#verified-icon data-toggle="tooltip" data-placement="top" title="Timeline verified by SV.CO" href="#"
             img.timeline-verified.margin-left-10 src='#{image_url 'startups/show/timeline-verified.gif'}'
-        - if current_founder &&  !current_founder.exited && @startup.founder?(current_founder)
+        - if policy(@startup).edit?
           small.edit-startup-link
-            a href=edit_founder_startup_path
+            a href=edit_startup_path
               i.fa.fa-pencil
       .startup-name
         - if @startup.name.present?

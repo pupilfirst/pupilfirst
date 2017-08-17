@@ -9,7 +9,7 @@ feature 'Feedback Popup' do
 
   context 'User visits a startup page with show_feedback in url params' do
     scenario 'User is not logged in' do
-      visit startup_path(startup, show_feedback: feedback.id)
+      visit timeline_path(startup.id, startup.slug, show_feedback: feedback.id)
 
       # user must be redirected to sign in page
       expect(page).to have_text('Sign in to SV.CO')
@@ -26,7 +26,7 @@ feature 'Feedback Popup' do
       visit user_token_path(token: founder.user.login_token)
 
       # try to visit the startup path with show_feedback flag set
-      visit startup_path(startup, show_feedback: feedback.id)
+      visit timeline_path(startup.id, startup.slug, show_feedback: feedback.id)
 
       # no feedback modal should be open
       expect(page).to have_text(startup.product_name)
@@ -40,7 +40,7 @@ feature 'Feedback Popup' do
       visit user_token_path(token: founder.user.login_token)
 
       # try to visit the startup path with show_feedback flag set
-      visit startup_path(startup, show_feedback: feedback.id)
+      visit timeline_path(startup.id, startup.slug, show_feedback: feedback.id)
 
       # no feedback modal should be open
       expect(page).to have_text(startup.product_name)

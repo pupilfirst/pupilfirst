@@ -317,8 +317,7 @@ class Startup < ApplicationRecord
 
     [
       name,
-      [name, :id],
-      [name, :id, rand(1000)]
+      [name, :id]
     ]
   end
 
@@ -445,11 +444,6 @@ class Startup < ApplicationRecord
 
   def referrer
     referrers&.last
-  end
-
-  # Need to iterate over founders since each could have different payment method.
-  def total_course_fee
-    founders.map { |founder| founder_course_fee(founder) }.sum
   end
 
   def level_zero?

@@ -3,7 +3,7 @@
 p
   em Please note that you can come back and change these details anytime.
 
-= simple_form_for @startup, url: founder_startup_path, :html => { :class => 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean, file: :horizontal_file_input } do |f|
+= simple_form_for @startup, url: startup_path, :html => { :class => 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean, file: :horizontal_file_input } do |f|
   = f.error_notification
   .panel-group#startup-form role="tablist"
     .panel.panel-default
@@ -47,7 +47,7 @@ p
           p
             ' The URL to your timeline is currently:
             code
-              = startup_url(@startup)
+              = timeline_url(@startup.id, @startup.slug)
           p
             ' You can change the last part of the URL, the <em>slug</em>, to something you prefer (as long as it is unique).
           = f.input :slug,
@@ -80,4 +80,4 @@ p
     .col-sm-offset-3.col-sm-9
       = f.submit class: 'btn btn-success btn-flat', value: 'Update startup profile'
       | &nbsp;
-      = link_to 'Cancel', startup_path(@startup), class: 'btn btn-default btn-flat'
+      = link_to 'Cancel', timeline_path(@startup.id, @startup.slug), class: 'btn btn-default btn-flat'

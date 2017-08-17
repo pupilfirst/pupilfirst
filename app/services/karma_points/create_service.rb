@@ -65,7 +65,7 @@ module KarmaPoints
 
     def message_params
       {
-        startup_url: Rails.application.routes.url_helpers.startup_url(startup),
+        startup_url: Rails.application.routes.url_helpers.timeline_url(startup.id, startup.slug),
         startup_product_name: startup.product_name,
         points: @points,
         activity_type: activity_type

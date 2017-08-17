@@ -11,6 +11,10 @@ ActiveAdmin.register Founder do
     end
   end
 
+  collection_action :search_founder do
+    render json: Founders::Select2SearchService.search_for_founder(params[:q])
+  end
+
   menu label: 'Founders'
 
   scope :admitted, default: true
@@ -385,10 +389,12 @@ ActiveAdmin.register Founder do
   end
 
   action_item :feedback, only: :show, if: proc { Founder.friendly.find(params[:id]).startup.present? } do
+    startup = Founder.friendly.find(params[:id]).startup
+
     link_to(
       'Record New Feedback',
       new_admin_startup_feedback_path(
-        startup_feedback: { startup_id: Founder.friendly.find(params[:id]).startup.id, reference_url: startup_url(Founder.friendly.find(params[:id]).startup) }
+        startup_feedback: { startup_id: Founder.friendly.find(params[:id]).startup.id, reference_url: timeline_url(startup.id, startup.slug) }
       )
     )
   end

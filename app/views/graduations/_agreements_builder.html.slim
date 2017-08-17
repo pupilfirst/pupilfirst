@@ -33,7 +33,7 @@
   h5.m-t-3.font-semibold.brand-secondary Fee Payment Status
   == render 'payment_status_table'
 
-  - total_fee = @startup.total_course_fee
+  - total_fee = 0
   - if total_fee > 0
     .fees-section.p-t-2.p-b-2
       #payment-instructions.panel-group

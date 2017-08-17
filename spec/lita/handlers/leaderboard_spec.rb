@@ -48,9 +48,9 @@ describe Lita::Handlers::Leaderboard do
         travel_to(test_time) do
           expected_response = <<~EXPECTED_RESPONSE.strip
             *<http://localhost:3000/about/leaderboard|Leaderboard for Level 1> - April 10 to April 17:*
-            *01.* :rank_up:` +1` - <http://localhost:3000/startups/#{startup_1.slug}|#{startup_1.product_name}>
-            *02.* :rank_nochange:`---` - <http://localhost:3000/startups/#{startup_2.slug}|#{startup_2.product_name}>
-            *02.* :rank_down:` -1` - <http://localhost:3000/startups/#{startup_3.slug}|#{startup_3.product_name}>
+            *01.* :rank_up:` +1` - <http://localhost:3000/startups/#{startup_1.id}/#{startup_1.slug}|#{startup_1.product_name}>
+            *02.* :rank_nochange:`---` - <http://localhost:3000/startups/#{startup_2.id}/#{startup_2.slug}|#{startup_2.product_name}>
+            *02.* :rank_down:` -1` - <http://localhost:3000/startups/#{startup_3.id}/#{startup_3.slug}|#{startup_3.product_name}>
 
             There are 2 startups in this level which were inactive during this period.
           EXPECTED_RESPONSE

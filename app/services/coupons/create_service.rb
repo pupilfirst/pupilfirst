@@ -2,7 +2,7 @@ module Coupons
   class CreateService
     USER_EXTENSION_DEFAULT = 15
     REFERRER_EXTENSION_DEFAULT = 10
-    REDEEM_LIMIT_DEFAULT = 0
+    REDEEM_LIMIT_DEFAULT = 6
 
     def generate_referral(startup)
       Coupon.create!(

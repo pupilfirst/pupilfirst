@@ -4,10 +4,18 @@ module Intercom
     include Loggable
 
     # Map Intercom segments to SendinBlue list names
-    SEGMENTS_FOR_BACKUP = Rails.application.secrets.intercom[:prune_segments][:archive].stringify_keys
+    SEGMENTS_FOR_BACKUP = if Rails.env.test?
+      JSON.parse(Rails.application.secrets.intercom[:prune_segments][:archive])
+    else
+      Rails.application.secrets.intercom[:prune_segments][:archive].stringify_keys
+    end
 
     # Intercom segments that will be cleaned up without backing up in SendinBlue
-    SEGMENTS_FOR_CLEANUP = Rails.application.secrets.intercom[:prune_segments][:delete]
+    SEGMENTS_FOR_CLEANUP = if Rails.env.test?
+      JSON.parse(Rails.application.secrets.intercom[:prune_segments][:delete])
+    else
+      Rails.application.secrets.intercom[:prune_segments][:delete]
+    end
 
     def initialize(mock: false)
       @mock = mock

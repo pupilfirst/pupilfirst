@@ -24,6 +24,8 @@ describe Intercom::InactiveUserDeletionService do
     let(:intercom_user_2) { double 'Intercom User', email: Faker::Internet.email, name: Faker::Name.name, phone: nil, custom_attributes: { 'phone' => '9876543210' }, location_data: location_data_2 }
     let(:intercom_user_3) { double 'Intercom User', email: Faker::Internet.email, name: Faker::Name.name, phone: '7896543210', custom_attributes: {}, location_data: location_data_2 }
     let(:intercom_user_4) { double 'Intercom User', email: Faker::Internet.email, name: Faker::Name.name, phone: nil, custom_attributes: { 'college' => Faker::Lorem.word }, location_data: location_data_2 }
+    let(:intercom_user_5) { double 'Intercom User', email: Faker::Internet.email, name: Faker::Name.name, phone: nil, custom_attributes: {}, location_data: location_data_1 }
+    let(:intercom_user_6) { double 'Intercom User', email: Faker::Internet.email, name: Faker::Name.name, phone: nil, custom_attributes: {}, location_data: location_data_1 }
 
     let(:segment_1_contact) do
       {
@@ -66,7 +68,9 @@ describe Intercom::InactiveUserDeletionService do
           OpenStruct.new(name: 'Stale Applicants - Last Seen Known', id: '11'),
           OpenStruct.new(name: 'Stale Applicants - Last Seen Unknown', id: '12'),
           OpenStruct.new(name: 'Stale Leads - Email - Last Seen Known', id: '13'),
-          OpenStruct.new(name: 'Stale Leads - Email - Last Seen Unknown', id: '14')
+          OpenStruct.new(name: 'Stale Leads - Email - Last Seen Unknown', id: '14'),
+          OpenStruct.new(name: 'Clean Up Leads - Delete often', id: '15'),
+          OpenStruct.new(name: 'Clean Up Leads - Delete often 2', id: '16')
         ]
       )
 
@@ -74,6 +78,8 @@ describe Intercom::InactiveUserDeletionService do
       allow(intercom_client).to receive_message_chain(:users, :find_all).with(segment_id: '12').and_return([intercom_user_2])
       allow(intercom_client).to receive_message_chain(:users, :find_all).with(segment_id: '13').and_return([intercom_user_3])
       allow(intercom_client).to receive_message_chain(:users, :find_all).with(segment_id: '14').and_return([intercom_user_4])
+      allow(intercom_client).to receive_message_chain(:users, :find_all).with(segment_id: '15').and_return([intercom_user_5])
+      allow(intercom_client).to receive_message_chain(:users, :find_all).with(segment_id: '16').and_return([intercom_user_6])
 
       allow(sendinblue_client).to receive(:get_lists).and_return(
         'data' => [
@@ -93,6 +99,8 @@ describe Intercom::InactiveUserDeletionService do
       expect(intercom_client).to receive_message_chain(:users, :submit_bulk_job).with(delete_items: [intercom_user_2])
       expect(intercom_client).to receive_message_chain(:users, :submit_bulk_job).with(delete_items: [intercom_user_3])
       expect(intercom_client).to receive_message_chain(:users, :submit_bulk_job).with(delete_items: [intercom_user_4])
+      expect(intercom_client).to receive_message_chain(:users, :submit_bulk_job).with(delete_items: [intercom_user_5])
+      expect(intercom_client).to receive_message_chain(:users, :submit_bulk_job).with(delete_items: [intercom_user_6])
 
       subject.execute
     end

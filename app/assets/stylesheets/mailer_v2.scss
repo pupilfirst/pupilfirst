@@ -60,35 +60,12 @@ table table table {
 }
 
 .mailer-head__data {
-  padding: 20px 40px;
-
-  @media screen and (max-width: 360px) {
-    text-align: center;
-    padding: 20px;
-  }
+  padding: 20px 30px;
+  text-align: center;
 }
 
 .mailer-head__logo {
   display: inline-block;
-  float: left;
-
-  @media screen and (max-width: 360px) {
-    float: none;
-  }
-}
-
-.mailer-head__link {
-  float: right;
-  color: #087CAA;
-  text-decoration: none;
-  font-size: 18px;
-  letter-spacing: 0.4;
-  font-weight: 600;
-  padding: 15px 0 0;
-
-  @media screen and (max-width: 360px) {
-    display: none;
-  }
 }
 
 .mailer-head__logo-img {
@@ -96,18 +73,13 @@ table table table {
 }
 
 .mailer-body__hero {
- padding: 40px;
+ padding: 25px 30px;
  color: white;
  text-align: center;
- background: rgba(96,177,88,1);
- background: linear-gradient(to right, rgba(96,177,88,1) 0%, rgba(33,130,162,1) 100%);
- background-image: asset-url("mailer/emailer-hero-pattern.png");
+ background-color: #0F9D58;
+ background: asset-url("mailer/emailer-hero-pattern.png"), linear-gradient(to right, #60b158 0%, #2182a2 100%);
  background-size: cover;
  width: 100%;
-
- @media screen and (max-width: 360px) {
-   padding: 20px;
- }
 
  a {
    color: white;
@@ -118,6 +90,7 @@ table table table {
   font-size: 30px;
   line-height: 1.2;
   margin: 0;
+  color: white;
 }
 
 .mailer-body__hero-subtitle {
@@ -128,12 +101,8 @@ table table table {
 .mailer-body__content {
   font-size: 16px;
   line-height: 1.4;
-  padding: 30px 40px;
+  padding: 30px;
   color: #333333;
-
-  @media screen and (max-width: 360px) {
-    padding: 20px;
-  }
 
   p {
     margin: 0 0 15px;
@@ -141,7 +110,7 @@ table table table {
   a {
     font-size: 18px;
     font-weight: 600;
-    color: #0775E9;
+    color: #0775E9 !important;
   }
 }
 
@@ -156,17 +125,13 @@ table table table {
 
 .mailer-body__social-table {
   border-top: 1px solid #e5e5e5;
-  padding: 30px 40px;
-
-  @media screen and (max-width: 360px) {
-    padding: 20px;
-  }
+  padding: 20px 10px;
 }
 
 .mailer-body__social-icon {
   width: 25px;
   display: inline-block;
-  margin: 0 15px;
+  margin: 10px 12px;
 }
 
 .mailer-body__social-icon-img {

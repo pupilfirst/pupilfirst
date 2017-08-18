@@ -1,0 +1,8 @@
+---
+timestamp: '2017-08-17T10:39:54Z'
+title: In admin/vocalist_ping, founders and startups will be loaded dynamically instead
+  of preloading for better performance
+trello: https://trello.com/c/yo5YMs0Q
+private: true
+description: Select2 search implemented for founder and startup fields in the form
+category: performance

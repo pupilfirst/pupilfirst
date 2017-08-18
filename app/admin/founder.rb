@@ -11,6 +11,10 @@ ActiveAdmin.register Founder do
     end
   end
 
+  collection_action :search_founder do
+    render json: Founders::Select2SearchService.search_for_founder(params[:q])
+  end
+
   menu label: 'Founders'
 
   scope :admitted, default: true

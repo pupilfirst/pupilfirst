@@ -24,8 +24,6 @@ describe Intercom::InactiveUserDeletionService do
     let(:intercom_user_2) { double 'Intercom User', email: Faker::Internet.email, name: Faker::Name.name, phone: nil, custom_attributes: { 'phone' => '9876543210' }, location_data: location_data_2 }
     let(:intercom_user_3) { double 'Intercom User', email: Faker::Internet.email, name: Faker::Name.name, phone: '7896543210', custom_attributes: {}, location_data: location_data_2 }
     let(:intercom_user_4) { double 'Intercom User', email: Faker::Internet.email, name: Faker::Name.name, phone: nil, custom_attributes: { 'college' => Faker::Lorem.word }, location_data: location_data_2 }
-    let(:intercom_user_5) { double 'Intercom User', email: Faker::Internet.email, name: Faker::Name.name, phone: nil, custom_attributes: { 'university' => Faker::Lorem.word }, location_data: location_data_2 }
-    let(:intercom_user_6) { double 'Intercom User', email: Faker::Internet.email, name: Faker::Name.name, phone: nil, custom_attributes: {}, location_data: location_data_2 }
 
     let(:segment_1_contact) do
       {
@@ -38,7 +36,7 @@ describe Intercom::InactiveUserDeletionService do
     let(:segment_2_contact) do
       {
         email: intercom_user_2.email,
-        listid: [2],
+        listid: [1],
         attributes: { NAME: intercom_user_2.name, PHONE: '9876543210' }
       }
     end
@@ -46,7 +44,7 @@ describe Intercom::InactiveUserDeletionService do
     let(:segment_3_contact) do
       {
         email: intercom_user_3.email,
-        listid: [3],
+        listid: [2],
         attributes: { NAME: intercom_user_3.name, PHONE: '7896543210' }
       }
     end
@@ -54,24 +52,8 @@ describe Intercom::InactiveUserDeletionService do
     let(:segment_4_contact) do
       {
         email: intercom_user_4.email,
-        listid: [4],
+        listid: [2],
         attributes: { NAME: intercom_user_4.name, COLLEGE: intercom_user_4.custom_attributes['college'] }
-      }
-    end
-
-    let(:segment_5_contact) do
-      {
-        email: intercom_user_5.email,
-        listid: [5],
-        attributes: { NAME: intercom_user_5.name, UNIVERSITY: intercom_user_5.custom_attributes['university'] }
-      }
-    end
-
-    let(:segment_6_contact) do
-      {
-        email: intercom_user_6.email,
-        listid: [6],
-        attributes: { NAME: intercom_user_6.name }
       }
     end
 
@@ -81,12 +63,10 @@ describe Intercom::InactiveUserDeletionService do
 
       allow(intercom_client).to receive_message_chain(:segments, :all).and_return(
         [
-          OpenStruct.new(name: 'Stale Paid Applicants', id: '11'),
-          OpenStruct.new(name: 'Stale Payment Initiated', id: '12'),
-          OpenStruct.new(name: 'Stale Conversing Users', id: '13'),
-          OpenStruct.new(name: 'Stale Applicants', id: '14'),
-          OpenStruct.new(name: 'Stale Users', id: '15'),
-          OpenStruct.new(name: 'Stale Leads', id: '16')
+          OpenStruct.new(name: 'Stale Applicants - Last Seen Known', id: '11'),
+          OpenStruct.new(name: 'Stale Applicants - Last Seen Unknown', id: '12'),
+          OpenStruct.new(name: 'Stale Leads - Email - Last Seen Known', id: '13'),
+          OpenStruct.new(name: 'Stale Leads - Email - Last Seen Unknown', id: '14')
         ]
       )
 
@@ -94,17 +74,11 @@ describe Intercom::InactiveUserDeletionService do
       allow(intercom_client).to receive_message_chain(:users, :find_all).with(segment_id: '12').and_return([intercom_user_2])
       allow(intercom_client).to receive_message_chain(:users, :find_all).with(segment_id: '13').and_return([intercom_user_3])
       allow(intercom_client).to receive_message_chain(:users, :find_all).with(segment_id: '14').and_return([intercom_user_4])
-      allow(intercom_client).to receive_message_chain(:users, :find_all).with(segment_id: '15').and_return([intercom_user_5])
-      allow(intercom_client).to receive_message_chain(:users, :find_all).with(segment_id: '16').and_return([intercom_user_6])
 
       allow(sendinblue_client).to receive(:get_lists).and_return(
         'data' => [
-          { 'name' => 'Paid Applicants', 'id' => 1 },
-          { 'name' => 'Payment Initiated', 'id' => 2 },
-          { 'name' => 'Conversing Users', 'id' => 3 },
-          { 'name' => 'Applicants', 'id' => 4 },
-          { 'name' => 'Stale Users', 'id' => 5 },
-          { 'name' => 'Stale Leads', 'id' => 6 }
+          { 'name' => 'Stale Applicants', 'id' => 1 },
+          { 'name' => 'Stale Leads', 'id' => 2 }
         ]
       )
     end
@@ -114,15 +88,11 @@ describe Intercom::InactiveUserDeletionService do
       expect(sendinblue_client).to receive(:create_update_user).with(segment_2_contact)
       expect(sendinblue_client).to receive(:create_update_user).with(segment_3_contact)
       expect(sendinblue_client).to receive(:create_update_user).with(segment_4_contact)
-      expect(sendinblue_client).to receive(:create_update_user).with(segment_5_contact)
-      expect(sendinblue_client).to receive(:create_update_user).with(segment_6_contact)
 
       expect(intercom_client).to receive_message_chain(:users, :submit_bulk_job).with(delete_items: [intercom_user_1])
       expect(intercom_client).to receive_message_chain(:users, :submit_bulk_job).with(delete_items: [intercom_user_2])
       expect(intercom_client).to receive_message_chain(:users, :submit_bulk_job).with(delete_items: [intercom_user_3])
       expect(intercom_client).to receive_message_chain(:users, :submit_bulk_job).with(delete_items: [intercom_user_4])
-      expect(intercom_client).to receive_message_chain(:users, :submit_bulk_job).with(delete_items: [intercom_user_5])
-      expect(intercom_client).to receive_message_chain(:users, :submit_bulk_job).with(delete_items: [intercom_user_6])
 
       subject.execute
     end

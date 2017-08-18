@@ -35,6 +35,10 @@ ActiveAdmin.register Startup do
     end
   end
 
+  collection_action :search_startup do
+    render json: Startups::Select2SearchService.search_for_startup(params[:q])
+  end
+
   batch_action :tag, form: proc { { tag: Startup.tag_counts_on(:tags).pluck(:name) } } do |ids, inputs|
     Startup.where(id: ids).each do |startup|
       startup.tag_list.add inputs[:tag]

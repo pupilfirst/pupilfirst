@@ -23,6 +23,7 @@ module CouponUsages
 
     def extend_pending_subscription
       pending_payment.update!(billing_end_at: pending_payment.billing_end_at + @coupon.referrer_extension_days.days)
+      StartupMailer.referral_reward(pending_payment, @coupon).deliver_later
     end
 
     def current_payment
@@ -31,6 +32,7 @@ module CouponUsages
 
     def extend_current_subscription
       current_payment.update!(billing_end_at: current_payment.billing_end_at + @coupon.referrer_extension_days.days)
+      StartupMailer.referral_reward(current_payment, @coupon).deliver_later
     end
   end
 end

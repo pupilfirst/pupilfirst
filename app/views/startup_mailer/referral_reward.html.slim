@@ -1,0 +1,14 @@
+= content_for :heading
+  | Congratulations. You win free SV.CO subscription credits!
+= content_for :salutation
+  | Hello!
+
+= content_for :body
+  p
+    ' A new startup (#{@referred_startup.product_name}) just joined SV.CO using your referral coupon. Your startup has earned #{@coupon.referrer_extension_days} days of free SV.CO subscription for this referral!
+    - if @payment.pending?
+      ' You will be credited with the extra days along with your next subscription renewal.
+    - elsif @payment.paid?
+      ' We have already extended your current subscription with the free credits.
+
+  p Feel free to reach out to us at #{mail_to 'help@sv.co'} in case of any queries.

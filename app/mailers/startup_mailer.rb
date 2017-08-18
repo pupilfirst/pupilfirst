@@ -26,4 +26,13 @@ class StartupMailer < ApplicationMailer
     send_to = payment.startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
     mail(to: send_to, subject: "Your SV.CO subscription expires in #{payment.days_to_expiry} days.")
   end
+
+  def referral_reward(payment, coupon)
+    @payment = payment
+    @referred_startup = payment.startup
+    @coupon = coupon
+    referrer_startup = coupon.referrer_startup
+    send_to = referrer_startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
+    mail(to: send_to, subject: 'Your startup has unlocked SV.CO referral rewards!')
+  end
 end

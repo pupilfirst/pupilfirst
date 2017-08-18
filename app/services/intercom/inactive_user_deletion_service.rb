@@ -4,12 +4,10 @@ module Intercom
     include Loggable
 
     # Map Intercom segments to SendinBlue list names
-    SEGMENTS_TO_LIST = {
-      'Stale Applicants - Last Seen Known' => 'Stale Applicants',
-      'Stale Applicants - Last Seen Unknown' => 'Stale Applicants',
-      'Stale Leads - Email - Last Seen Known' => 'Stale Leads',
-      'Stale Leads - Email - Last Seen Unknown' => 'Stale Leads'
-    }.freeze
+    SEGMENTS_FOR_BACKUP = Rails.application.secrets.intercom[:prune_segments][:archive].stringify_keys
+
+    # Intercom segments that will be cleaned up without backing up in SendinBlue
+    SEGMENTS_FOR_CLEANUP = Rails.application.secrets.intercom[:prune_segments][:delete]
 
     def initialize(mock: false)
       @mock = mock
@@ -24,12 +22,17 @@ module Intercom
         log "Deleting users from Intercom segment: #{segment}"
         delete_from_intercom(segment)
       end
+
+      SEGMENTS_FOR_CLEANUP.each do |segment|
+        log "Deleting users from Intercom segment: #{segment}"
+        delete_from_intercom(segment)
+      end
     end
 
     private
 
     def intercom_segments
-      SEGMENTS_TO_LIST.keys
+      SEGMENTS_FOR_BACKUP.keys
     end
 
     def upload_to_sendinblue(segment)
@@ -55,7 +58,7 @@ module Intercom
 
         {
           email: intercom_user.email,
-          listid: [list_id(SEGMENTS_TO_LIST[segment])],
+          listid: [list_id(SEGMENTS_FOR_BACKUP[segment])],
           attributes: sendinblue_attributes(intercom_user)
         }
       end - [nil]
@@ -102,9 +105,15 @@ module Intercom
       if @mock
         log "@intercom_client.users.submit_bulk_job(delete_items: [#{segment_users.count} users])"
       else
-        # Intercom API supports bulk jobs for only maximum 100 items per request. Split users to chunks of 100.
-        segment_users.each_slice(100).each do |segment_users_chunk|
+        # Split users to chunks of 83. As per intercom API documentation: "If you have a large number of operations to
+        # perform you should break these into groups of 83 or less (assuming your rate limit is 500 per minute) and
+        # send these groups every 10 seconds "
+        segment_users.each_slice(83).each do |segment_users_chunk|
           @intercom_client.users.submit_bulk_job(delete_items: segment_users_chunk)
+          log "deleted #{segment_users_chunk.count} users from segment: #{segment}"
+
+          # Add a delay of 10s to meet the API requirement.
+          sleep(10)
         end
       end
     end

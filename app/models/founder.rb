@@ -40,9 +40,6 @@ class Founder < ApplicationRecord
   belongs_to :college, optional: true
   has_one :university, through: :college
   has_many :payments, dependent: :restrict_with_error
-  has_one :referral_coupon, class_name: 'Coupon', foreign_key: 'referrer_id'
-  has_many :coupon_usages, through: :referral_coupon
-  has_many :referred_startups, class_name: 'Startup', through: :coupon_usages, source: 'startup'
 
   scope :admitted, -> { joins(:startup).merge(Startup.admitted) }
   scope :level_zero, -> { joins(:startup).merge(Startup.level_zero) }
@@ -61,7 +58,6 @@ class Founder < ApplicationRecord
     admitted.where(exited: false).where.not(id: active_on_slack(Time.now.beginning_of_week, Time.now)).where.not(id: active_on_web(Time.now.beginning_of_week, Time.now))
   }
   scope :not_exited, -> { where.not(exited: true) }
-  scope :with_referrals, -> { joins(:referred_startups).distinct }
 
   def self.with_email(email)
     where('lower(email) = ?', email.downcase).first # rubocop:disable Rails/FindBy
@@ -347,17 +343,6 @@ class Founder < ApplicationRecord
         resume_event&.first_attachment_url
       end
     end
-  end
-
-  def generate_referral_coupon!
-    Coupon.create!(
-      code: rand(36**6).to_s(36),
-      coupon_type: Coupon::TYPE_REFERRAL,
-      user_extension_days: Coupon::USER_EXTENSION_DAYS,
-      referrer_extension_days: Coupon::REFERRER_EXTENSION_DAYS,
-      redeem_limit: Coupon::REFERRAL_LIMIT,
-      referrer: self
-    )
   end
 
   def profile_complete?

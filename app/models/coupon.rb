@@ -1,21 +1,13 @@
 class Coupon < ApplicationRecord
-  has_many :coupon_usages
-  has_many :startups, through: :coupon_usages
-  belongs_to :referrer, class_name: 'Founder', optional: true
   belongs_to :referrer_startup, class_name: 'Startup', optional: true
+  has_many :coupon_usages
 
-  scope :referral, -> { where.not(referrer_id: nil) }
+  scope :referral, -> { where.not(referrer_startup_id: nil) }
 
   # TODO: Now that it's all referral coupons, probably scrap coupon_type entirely.
   TYPE_DISCOUNT = -'Discount'
   TYPE_MSP = -'Microsoft Student Partner'
   TYPE_REFERRAL = -'Referral'
-
-  REFERRAL_DISCOUNT = 25
-  REFERRAL_LIMIT = 0
-
-  USER_EXTENSION_DAYS = 15
-  REFERRER_EXTENSION_DAYS = 15
 
   def self.valid_coupon_types
     [TYPE_DISCOUNT, TYPE_MSP, TYPE_REFERRAL]
@@ -23,8 +15,9 @@ class Coupon < ApplicationRecord
 
   validates :code, uniqueness: true, presence: true, length: { in: 4..10 }
   validates :coupon_type, inclusion: { in: valid_coupon_types }
-  validates :referrer_id, uniqueness: true, allow_nil: true
   validates :referrer_startup_id, uniqueness: true, allow_nil: true
+  validates :user_extension_days, presence: true, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 31 }
+  validates :referrer_extension_days, presence: true, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 31 }
 
   def still_valid?
     (expires_at.blank? || expires_at.future?) && redeems_left?
@@ -35,11 +28,6 @@ class Coupon < ApplicationRecord
 
     redeem_count = coupon_usages.redeemed.count
     redeem_count < redeem_limit
-  end
-
-  def mark_redeemed!(startup)
-    coupon_usage = CouponUsage.where(coupon: self, startup: startup).last
-    coupon_usage.update!(redeemed_at: Time.now)
   end
 
   alias_attribute :name, :code

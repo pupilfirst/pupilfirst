@@ -20,7 +20,7 @@ ActiveAdmin.register Coupon do
     column :referrer_extension_days
     column :expires_at
     column :redeem_limit
-    column :referrer
+    column :referrer_startup
 
     actions
   end

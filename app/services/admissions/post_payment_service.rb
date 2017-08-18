@@ -14,36 +14,17 @@ module Admissions
       # ensure the subscription window starts from time of payment
       Founders::PostPaymentService.new(@payment).execute
 
-      # handle coupons
-      perform_coupon_tasks
+      # Create a referral coupon for the startup.
+      Coupons::CreateService.new.generate_referral(@startup) if @startup.referral_coupon.blank?
+
+      # handle coupon usage
+      CouponUsages::RedeemService.new(@startup.coupon_usage, @payment).execute if @startup.applied_coupon.present?
 
       # mark the payment target complete
       Admissions::CompleteTargetService.new(@founder, Target::KEY_ADMISSIONS_FEE_PAYMENT).execute
 
       # IntercomLastApplicantEventUpdateJob.perform_later(@founder, 'payment_complete') unless Rails.env.test?
       Intercom::LevelZeroStageUpdateJob.perform_later(@founder, 'Payment Completed')
-    end
-
-    private
-
-    def applied_coupon
-      @applied_coupon ||= @startup.latest_coupon
-    end
-
-    def perform_coupon_tasks
-      # create a referral coupon for the current applicant
-      @founder.generate_referral_coupon! if @founder.referral_coupon.blank?
-
-      if applied_coupon.present?
-        # mark the coupon applied as redeemed
-        applied_coupon.mark_redeemed!(@startup)
-
-        # Award the user the applicable extension
-        @payment.update!(billing_end_at: @payment.billing_end_at + applied_coupon.user_extension_days.days)
-
-        # initiate referral refund if current applicant was referred by someone
-        Founders::ReferralRewardService.new(applied_coupon).execute
-      end
     end
   end
 end

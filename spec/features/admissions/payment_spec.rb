@@ -13,8 +13,8 @@ feature 'Admission Fee Payment' do
   let!(:cofounder_addition_target) { create :target, :admissions_cofounder_addition, target_group: level_0_targets }
   let!(:fee_payment_target) { create :target, :admissions_fee_payment, target_group: level_0_targets }
   let!(:tet_team_update) { create :timeline_event_type, :team_update }
-  let(:referrer_founder) { create :founder }
-  let(:coupon) { create :coupon, referrer: referrer_founder }
+  let(:referrer_startup) { create :startup }
+  let(:coupon) { create :coupon, referrer_startup: referrer_startup }
 
   before do
     sign_in_user founder.user
@@ -74,15 +74,14 @@ feature 'Admission Fee Payment' do
       expect(fee_payment_status).to eq(Targets::StatusService::STATUS_COMPLETE)
 
       # he should now also have a referral coupon
-      expect(founder.referral_coupon).to_not eq(nil)
+      expect(startup.referral_coupon).to_not eq(nil)
     end
 
     scenario 'He completes payment applying a referral coupon' do
-      pending 'Coupons to be modified'
       visit admissions_fee_path
 
       # page should have coupon form
-      expect(page).to have_content('Have a discount coupon?')
+      expect(page).to have_content('Have a referral coupon?')
 
       # he applies the coupon
       fill_in 'admissions_coupon_code', with: coupon.code
@@ -91,36 +90,38 @@ feature 'Admission Fee Payment' do
 
       # he removes the applied coupon
       click_button 'Remove'
-      expect(page).to have_content('Have a discount coupon?')
-      expect(page).to have_content('Team membership fee is ₹1000')
+      expect(page).to have_content('Have a referral coupon?')
 
       # he applies it back :)
       fill_in 'admissions_coupon_code', with: coupon.code
       click_button 'Apply Code'
 
       # He should be shown the discounted amount. The original amount is crossed out (not detected by this test).
-      expect(page).to have_content('Team membership fee is ₹1000 ₹750.')
+      expect(page).to have_content('You will unlock 15 extra days of SV.CO subscription on fee payment!')
 
       click_on 'Pay Now'
 
-      # payment created should be for the discounted amount
-      payment = Payment.last
-      expect(payment.amount).to eq(750.0)
-
       # the ReferralRewardService will be called later
-      expect_any_instance_of(Founders::ReferralRewardService).to receive(:execute)
+      expect_any_instance_of(CouponUsages::ReferralRewardService).to receive(:execute)
 
       # mimic a successful payment
+      payment = Payment.last
       payment.update!(
         instamojo_payment_request_status: 'Completed',
         instamojo_payment_status: 'Credit',
         paid_at: Time.now
       )
+
+      # Store the current billing_end_at.
+      original_end_date = payment.billing_end_at
+
       Admissions::PostPaymentService.new(payment: payment).execute
 
-      # the coupon must be now marked redeemed for the startup
-      coupon_usage = CouponUsage.where(coupon: coupon, startup: startup).last
-      expect(coupon_usage.redeemed_at).to_not eq(nil)
+      # the coupon usage must be now marked redeemed for the startup
+      expect(startup.coupon_usage.redeemed_at).to_not eq(nil)
+
+      # the payment end_date should now be extended by 15 days
+      expect(payment.billing_end_at.beginning_of_minute).to eq((original_end_date + 15.days).beginning_of_minute)
     end
 
     context 'when there are confirmed and unconfirmed founders' do

@@ -70,7 +70,7 @@ class AdmissionsController < ApplicationController
     Intercom::FounderTaggingJob.perform_later(current_founder, 'Visited Payment Page')
 
     @payment_form = Admissions::PaymentForm.new(current_founder)
-    @coupon = current_startup.coupons.last
+    @coupon = current_startup.applied_coupon
 
     if @coupon.blank?
       @coupon_form = Admissions::CouponForm.new(OpenStruct.new)
@@ -183,14 +183,14 @@ class AdmissionsController < ApplicationController
   end
 
   def remove_latest_coupon
-    latest_coupon = current_startup.coupons.last
-    current_startup.coupon_usages.where(coupon: latest_coupon).last.delete
+    current_startup.coupon_usage.destroy!
   end
 
   def applied_coupon_not_valid?
-    coupon = current_startup.latest_coupon
+    coupon = current_startup.applied_coupon
     return false if coupon.blank? || coupon.still_valid?
 
+    # TODO: Confirm this area of code is tested in feature specs.
     remove_latest_coupon
     flash[:error] = 'The coupon you applied is no longer valid. Try again!'
     redirect_to admissions_fee_path

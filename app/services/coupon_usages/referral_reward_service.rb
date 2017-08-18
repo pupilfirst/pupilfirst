@@ -1,21 +1,24 @@
-module Founders
+module CouponUsages
   class ReferralRewardService
-    def initialize(coupon)
-      @coupon = coupon
-      @referrer = coupon.referrer
-      @startup = coupon.founder.startup
+    def initialize(coupon_usage)
+      @coupon_usage = coupon_usage
+      @coupon = @coupon_usage.coupon
+      @referrer_startup = @coupon.referrer_startup
     end
 
     def execute
-      return if @referrer.blank?
+      return if @referrer_startup.blank?
 
       pending_payment.present? ? extend_pending_subscription : extend_current_subscription
+
+      # Mark the coupon applied as rewarded.
+      @coupon_usage.update!(rewarded_at: Time.now)
     end
 
     private
 
     def pending_payment
-      @pending_payment ||= @startup.payments.pending.order(:billing_start_at).last
+      @pending_payment ||= @referrer_startup.payments.pending.order(:billing_start_at).last
     end
 
     def extend_pending_subscription
@@ -23,7 +26,7 @@ module Founders
     end
 
     def current_payment
-      @current_payment ||= @startup.payments.paid.order(:billing_start_at).last
+      @current_payment ||= @referrer_startup.payments.paid.order(:billing_start_at).last
     end
 
     def extend_current_subscription

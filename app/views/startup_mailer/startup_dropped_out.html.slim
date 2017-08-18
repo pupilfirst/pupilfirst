@@ -1,23 +1,22 @@
-= content_for :heading
-  | Important: Your team has been marked as a Dropout
+= content_for :title do
+  | Important: You&rsquo;ve Dropped Out
 
-= content_for :salutation
+= content_for :subtitle do
+  | Your team has been marked as a dropout.
+
+= content_for :salutation do
   | Hello,
 
-= content_for :body
+= content_for :body do
   p
-    ' We're sorry to say this, but because of inactivity, lack of progress or inability to meet targets, your startup is now considered a dropout from the SV.CO program.
-
-  p
-    ' This means that we'll no longer try to actively contact you or help your team. Your startup will also not be listed in any public listings or leaderboards &amp; your timeline will show a prominent notice that you have dropped out.
+    ' We&rsquo;re sorry to say this, but because of inactivity, lack of progress or inability to meet targets, your
+    | startup is now considered a dropout from the SV.CO program.
 
   - timeline_link = timeline_url(@startup.id, @startup.slug)
 
   p
-    ' To reactivate your timeline, go #{link_to 'here', timeline_link } &amp; submit a New Product Deck timeline entry. We'll be processing your timeline update as a new startup, and acceptance will be based on our latest availability criteria.
+    ' This means that we&rsquo;ll no longer try to actively contact you or help your team. Your startup will also not be
+    ' listed in any public listings or leaderboards &amp; your #{link_to 'timeline', timeline_link} will show a
+    | prominent notice that you have dropped out.
 
-  p
-    ' If you're unable to click on the link to your startup timeline (above), then please copy and paste the following
-    | link into your browser's address bar:
-
-  p.monospace = timeline_link
+  p In case of any queries, please contact #{mail_to 'help@sv.co'}

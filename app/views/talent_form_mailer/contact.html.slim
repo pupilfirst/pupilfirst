@@ -1,10 +1,15 @@
-= content_for :heading
-  | Talent Form: Interest shown by #{@name}
+= content_for :title do
+  | Talent Form Submission
 
-= content_for :salutation
+= content_for :subtitle do
+  | Interest shown by #{@name}
+
+= content_for :salutation do
   | Hello,
 
-= content_for :body
+= content_for :body do
+  p The talent form was submitted by a visitor with the following data:
+
   p
     | <strong>Name:</strong> #{@name}<br/>
     | <strong>Email:</strong> #{@email}<br/>

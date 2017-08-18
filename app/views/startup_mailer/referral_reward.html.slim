@@ -1,14 +1,23 @@
-= content_for :heading
-  | Congratulations. You win free SV.CO subscription credits!
-= content_for :salutation
-  | Hello!
+= content_for :title do
+  | Thank you for referring a startup to SV.CO
 
-= content_for :body
+= content_for :subtitle do
+  | You have won free SV.CO subscription time for your referral.
+
+= content_for :salutation do
+  | Hello, and thank you!
+
+= content_for :body do
   p
-    ' A new startup (#{@referred_startup.product_name}) just joined SV.CO using your referral coupon. Your startup has earned #{@coupon.referrer_extension_days} days of free SV.CO subscription for this referral!
+    ' A new startup &ndash; #{@referred_startup.product_name} &ndash; just joined SV.CO using your referral coupon. Your
+    ' startup has earned <strong>#{@coupon.referrer_extension_days} days</strong> of free SV.CO subscription for this
+    | referral.
+
+  p
     - if @payment.pending?
-      ' You will be credited with the extra days along with your next subscription renewal.
+      ' Your subscription will be extended with the reward period upon renewal of your subscription.
     - elsif @payment.paid?
-      ' We have already extended your current subscription with the free credits.
+      ' We have extended your current subscription with the reward period. Your subscription now ends on
+      | <strong>#{@payment.billing_end_at.strftime('%A, %b %d')}</strong>.
 
   p Feel free to reach out to us at #{mail_to 'help@sv.co'} in case of any queries.

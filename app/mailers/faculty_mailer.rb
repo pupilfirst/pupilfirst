@@ -13,7 +13,7 @@ class FacultyMailer < ApplicationMailer
     mail(to: faculty.email, subject: 'Connect slots for the upcoming week')
   end
 
-  # Mail sent a little while after the a confirmed connect request meeting occured.
+  # Mail sent a little while after the a confirmed connect request meeting occurred.
   #
   # @param connect_request [ConnectRequest] Request for a meeting which recently occurred.
   def connect_request_feedback(connect_request)

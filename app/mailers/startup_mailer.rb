@@ -3,7 +3,7 @@ class StartupMailer < ApplicationMailer
   def startup_dropped_out(startup)
     @startup = startup
     send_to = @startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
-    mail(to: send_to, subject: 'Incubation Request update.')
+    mail(to: send_to, subject: 'Your Startup has Dropped Out')
   end
 
   def feedback_as_email(startup_feedback, founder: nil)

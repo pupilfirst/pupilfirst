@@ -4,9 +4,7 @@
 = content_for :subtitle do
   | Lorem ipsum dolor sit amet, consectetur.
 
-= content_for :title_button_text do
-  | Join Now
-
+= content_for(:title_button_text, 'Join Now')
 = content_for(:title_button_link, apply_url)
 
 = content_for :salutation
@@ -17,7 +15,7 @@
     ' Diam quam vestibulum leo, at tristique justo velit non quam. Pellentesque
     | tortor ac, viverra odio. Quisque accumsan justo eu vulputate placerat.
 
-  p.monospace = download_timeline_event_file_url(TimelineEventFile.first)
+  p.monospace = dashboard_founder_url
 
   p
     ' Suspendisse consequat, nulla nec vulputate euismod, mi risus luctus est, eu mollis nibh nisi

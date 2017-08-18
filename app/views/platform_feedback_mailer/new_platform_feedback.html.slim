@@ -1,22 +1,29 @@
-= content_for :heading
-| Platform Feedback (#{@platform_feedback.feedback_type}) by #{@platform_feedback.founder.fullname}
+= content_for :title do
+  | Platform Feedback from <em>#{@platform_feedback.founder.fullname}</em>
 
-= content_for :salutation
-| Hello,
+= content_for :subtitle do
+  | The feedback is of type <em>#{@platform_feedback.feedback_type}</em>.
 
-= content_for :body
-  ' A new Platform Feedback with the following details was submitted by #{@platform_feedback.founder.fullname}:
-  p
-    | <strong>Type:</strong> #{@platform_feedback.feedback_type}<br/>
-    | <strong>Description:</strong> #{@platform_feedback.description}<br/>
-    - if @platform_feedback.attachment.present?
-      strong Attachment:&nbsp;
+= content_for :title_button_text do
+  | View in Admin Interface
 
-      a href=redirect_to_attachment_admin_platform_feedback_url(@platform_feedback)
-        | #{@platform_feedback.attachment_filename}
+= content_for(:title_button_link, admin_platform_feedback_url(@platform_feedback))
 
-      br
-    - if @platform_feedback.promoter_score.present?
-      | <strong>Promoter Score:</strong> #{@platform_feedback.promoter_score}<br/>
-  p
-    ' Please login at SV.CO as admin to follow up and assign karma points, if applicable.
+= content_for :salutation do
+  | Hello,
+
+= content_for :body do
+  p A new Platform Feedback with the following details was submitted by #{@platform_feedback.founder.fullname}:
+
+  p <strong>Type:</strong> #{@platform_feedback.feedback_type}
+  p <strong>Description:</strong> #{@platform_feedback.description}
+
+  - if @platform_feedback.attachment.present?
+    p
+      ' <strong>Attachment:</strong>
+      | #{link_to @platform_feedback.attachment_filename, redirect_to_attachment_admin_platform_feedback_url(@platform_feedback)}
+
+  - if @platform_feedback.promoter_score.present?
+    p <strong>Promoter Score:</strong> #{@platform_feedback.promoter_score}
+
+  p Please login at SV.CO as admin to follow up.

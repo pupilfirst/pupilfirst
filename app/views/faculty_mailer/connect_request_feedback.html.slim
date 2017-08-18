@@ -1,10 +1,13 @@
-= content_for :heading
-  | Please supply feedback for your recent faculty connect session with team members of #{@startup.display_name}
+= content_for :title do
+  | Feedback for Faculty Connect Session
 
-= content_for :salutation
+= content_for :subtitle do
+  | Please supply feedback for your recent faculty connect session with team members of #{@startup.display_name}.
+
+= content_for :salutation do
   | Hello #{@faculty.name},
 
-= content_for :body
+= content_for :body do
   p
     ' Our records indicate that a faculty connect session that was scheduled between you and team members of
     ' #{@startup.display_name}, should have ended recently. It would be a great help if you could supply some simple

@@ -1,30 +1,36 @@
-= content_for :heading
-  | Feedback from Faculty!
+- startup = @startup_feedback.startup
+- timeline_url = timeline_url(startup.id, startup.slug, show_feedback: @startup_feedback.id)
 
-= content_for :salutation
-  | Hi,
+= content_for :title do
+  | Feedback from Faculty
 
-= content_for :body
+= content_for :subtitle do
+  | #{@startup_feedback.faculty.name} has some feedback for your team.
+
+= content_for :title_button_text do
+  | View Feedback on Timeline
+
+= content_for(:title_button_link, timeline_url)
+
+= content_for :salutation do
+  | Hello,
+
+= content_for :body do
   - update_for = @startup_feedback.timeline_event.present? ? 'recent timeline entry' : 'recent updates'
   - update_link = @startup_feedback.timeline_event.present? ? @startup_feedback.timeline_event.share_url : @startup_feedback.reference_url
-  - startup_update = (@startup_feedback.startup.level_zero? || update_link.blank?) ? (update_for + ' for target ') : link_to(update_for, update_link)
-  - target_info = @startup_feedback.startup.level_zero? ? @startup_feedback.timeline_event.target.title : ''
+  - startup_update = (startup.level_zero? || update_link.blank?) ? (update_for + ' for target ') : link_to(update_for, update_link)
+  - target_info = startup.level_zero? ? @startup_feedback.timeline_event.target.title : ''
 
   p
     ' Here is some feedback from
     ' #{@startup_feedback.faculty.name} on your #{startup_update} <em>#{target_info}</em> that
     | might help you:
 
-  p
-    | #{simple_format(@startup_feedback.feedback)}
+  blockquote = simple_format(@startup_feedback.feedback)
 
-  - startup = @startup_feedback.startup
-  - timeline_url = timeline_url(startup.id, startup.slug, show_feedback: @startup_feedback.id)
-
-  - unless @startup_feedback.startup.level_zero?
+  - unless startup.level_zero?
     p
-      ' You can view
-      | #{link_to 'the full feedback at SV.CO', timeline_url}
-      | , including any file uploads attached to the feedback.
+      ' You can view #{link_to 'the full feedback at SV.CO', timeline_url}, including any files attached to the
+      | feedback.
 
   p Feel free to reach out to us at #{mail_to 'help@sv.co'} in case of any queries.

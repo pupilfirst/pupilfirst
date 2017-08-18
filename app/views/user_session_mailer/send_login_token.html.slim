@@ -1,22 +1,26 @@
-= content_for :heading
-  | Login to SV.CO!
+- if @referer.present?
+  - login_url = user_token_url(token: @user.login_token, referer: @referer, shared_device: @shared_device)
+- else
+  - login_url = user_token_url(token: @user.login_token, shared_device: @shared_device)
 
-= content_for :salutation
-  | Hi,
+= content_for :title do
+  | Sign In to SV.CO
 
-= content_for :body
-  - if @referer.present?
-    - login_url = user_token_url(token: @user.login_token, referer: @referer, shared_device: @shared_device)
-  - else
-    - login_url = user_token_url(token: @user.login_token, shared_device: @shared_device)
+= content_for :subtitle do
+  | This is a one-time link to sign in to SV.CO.
+
+= content_for(:title_button_text, 'Sign In')
+= content_for(:title_button_link, login_url)
+
+= content_for :salutation do
+  | Hello,
+
+= content_for :body do
+  p Please #{link_to 'click here', login_url} to login to your SV.CO account.
 
   p
-    ' Please #{link_to 'click here', login_url} to login to
-    | your SV.CO account!
-
-  p
-    ' If you're unable to click on the link above, then please copy and paste the following
-    | link into your browser's address bar:
+    ' If you&rsquo;re unable to click the link above, please copy and paste the following link into your browser&rsquo;s
+    | address bar:
 
   p.monospace = login_url
 

@@ -1,18 +1,28 @@
-= content_for :heading
-  | Get started with SixWays!
+- login_url = user_token_url(token: @mooc_student.user.login_token, referer: six_ways_start_url)
+
+= content_for :title
+  | Get started with SixWays
+
+= content_for :subtitle
+  | Thank you for signing up for SV.CO&rsquo;s MOOC.
+
+= content_for :title_button_text do
+  | Sign in &amp; Get Started
+
+= content_for(:title_button_link, login_url)
 
 = content_for :salutation
   | Hello,
 
 = content_for :body
-  p Thank you for signing up for SV.CO's SixWays MOOC.
-
-  - login_url = user_token_url(token: @mooc_student.user.login_token, referer: six_ways_start_url)
+  p
+    ' <strong>#StartInCollege Six Ways</strong> is SV.CO&rsquo;s free online course that tells you why &amp; how to build
+    | startups even while you are in college.
 
   p Please #{link_to 'click here', login_url} to login to your SV.CO account and get started!
 
   p
-    ' If you're unable to click on the link above, then please copy and paste the following link into your browser's
+    ' If you&rsquo;re unable to click the link above, please copy and paste the following link into your browser&rsquo;s
     | address bar:
 
   p.monospace = login_url

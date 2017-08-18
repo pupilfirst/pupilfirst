@@ -18,13 +18,17 @@ html lang='en'
 
               table.mailer-body__table
                 tbody
-                  tr
-                    td.mailer-body__hero
-                      h1.mailer-body__hero-title #{yield :heading}
-                      p.mailer-body__hero-subtitle
-                        | Lorem ipsum dolor sit amet, consectetur.
-                      a.mailer-button href="https://sv.co/" title="SV.CO" target="_blank"
-                        | Join Now
+                  - if content_for?(:title) || content_for?(:subtitle) || content_for?(:title_button_text)
+                    tr
+                      td.mailer-body__hero
+                        - if content_for?(:title)
+                          h1.mailer-body__hero-title #{yield :title}
+
+                        - if content_for?(:subtitle)
+                          p.mailer-body__hero-subtitle #{yield :subtitle}
+
+                        - if content_for?(:title_button_text)
+                          a.mailer-button href=yield(:title_button_link) title="SV.CO" target="_blank" #{yield :title_button_text}
                   tr
                     td.mailer-body__content
                       p.mailer-body__salutation #{yield :salutation}
@@ -47,7 +51,6 @@ html lang='en'
                 tbody
                   tr
                     td
-                      p &copy; 2017 SV.CO
                       p
                         ' This email has been sent to you by
                         = link_to 'SV.CO', root_url

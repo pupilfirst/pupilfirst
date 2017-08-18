@@ -1,5 +1,13 @@
-= content_for :heading
-  | Suspendisse consequat, nulla nec vulputate euismod
+= content_for :title do
+  | Suspendisse consequat, nulla nec.
+
+= content_for :subtitle do
+  | Lorem ipsum dolor sit amet, consectetur.
+
+= content_for :title_button_text do
+  | Join Now
+
+= content_for(:title_button_link, apply_url)
 
 = content_for :salutation
   | Hello John Doe,
@@ -8,6 +16,9 @@
   p
     ' Diam quam vestibulum leo, at tristique justo velit non quam. Pellentesque
     | tortor ac, viverra odio. Quisque accumsan justo eu vulputate placerat.
+
+  p.monospace = download_timeline_event_file_url(TimelineEventFile.first)
+
   p
     ' Suspendisse consequat, nulla nec vulputate euismod, mi risus luctus est, eu mollis nibh nisi
     ' luctus id. Sed varius, turpis sit amet consectetur bibendum, urna lorem luctus

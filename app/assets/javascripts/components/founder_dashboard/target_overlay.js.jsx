@@ -76,7 +76,7 @@ class FounderDashboardTargetOverlay extends React.Component  {
           <div className="target-overlay__body clearfix">
             <button type="button" className="target-overlay__overlay-close hidden-sm-down" aria-label="Close" onClick={ this.props.closeCB }>
               <img className="target-overlay__overlay-close-icon" src={ this.props.iconPaths.backButton }/>
-              <span>Back</span>
+              <span className="target-overlay__overlay-close-text">Back</span>
             </button>
             <div className="target-overlay__header clearfix">
               <TargetOverlayHeaderTitle iconPaths={ this.props.iconPaths } target={ this.props.target }/>
@@ -111,7 +111,7 @@ class FounderDashboardTargetOverlay extends React.Component  {
         <div className="target-overlay__mobile-fixed-navbar hidden-sm-up clearfix">
           <button type="button" className="target-overlay__mobile-back-button pull-xs-left" aria-label="Close" onClick={ this.props.closeCB }>
             <img className="target-overlay__mobile-back-button-icon" src={ this.props.iconPaths.backButton }/>
-            <span>Back</span>
+            <span className="target-overlay__mobile-back-button-text">Back</span>
           </button>
           <div className="target-overlay__mobile-submit-button-container pull-xs-right p-r-1">
             { this.isSubmittable() && <TargetOverlaySubmitButton target={ this.props.target } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }/> }

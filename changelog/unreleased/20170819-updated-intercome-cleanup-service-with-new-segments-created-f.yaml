@@ -1,0 +1,8 @@
+---
+timestamp: '2017-08-19T06:37:13Z'
+title: Updated intercome cleanup service with new segments created for reduced monthly
+  costs
+trello: https://trello.com/c/Ntlg3Ukz
+private: true
+description: The new segments will be pruned from intercom and backed up in sendinblue
+  as before. Two new segments are created just for cleanup without backing up in sendinblue

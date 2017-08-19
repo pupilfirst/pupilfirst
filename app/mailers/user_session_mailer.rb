@@ -2,7 +2,7 @@
 class UserSessionMailer < ApplicationMailer
   def send_login_token(user, referer, shared_device)
     @user = user
-    @referer = [referer, nil].sample
+    @referer = referer
     @shared_device = shared_device
     mail(to: @user.email, subject: 'Log in to SV.CO')
   end

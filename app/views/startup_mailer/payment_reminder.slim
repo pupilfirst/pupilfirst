@@ -1,5 +1,5 @@
 = content_for :title do
-  | SV.CO Subscription Expires Soon
+  | SV&#x2024;CO Subscription Expires Soon
 
 = content_for :subtitle do
   | Your subscription expires in #{@payment.days_to_expiry} days.
@@ -12,7 +12,7 @@
 
 = content_for :body do
   p
-    ' Your SV.CO subscription expires in #{@payment.days_to_expiry} days. To continue having access
+    ' Your SV&#x2024;CO subscription expires in #{@payment.days_to_expiry} days. To continue having access
     | to our services please pay the monthly subscription fee of <strong>&#8377;#{@payment.startup.fee}</strong>.
 
   p You can #{link_to 'click here', fee_founder_url} to renew your subscription for the next month.

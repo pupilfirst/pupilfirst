@@ -72,7 +72,7 @@ feature 'Edit founders' do
       # Invited founder should receive an email.
       open_email(email)
 
-      expect(current_email).to have_content('You have been invited to join a startup at SV.CO.')
+      expect(current_email).to have_content('You have been invited to join a startup')
     end
 
     scenario 'founder invites another who has already completed payment', js: true do
@@ -107,7 +107,7 @@ feature 'Edit founders' do
       # Accept invitation.
       open_email(another_founder.email)
 
-      expect(current_email).to have_content('You have been invited to join a startup at SV.CO.')
+      expect(current_email).to have_content('You have been invited to join a startup')
 
       click_here_path = '/' + current_email.find_link('click here')[:href].split('/')[-2..-1].join('/')
       visit click_here_path

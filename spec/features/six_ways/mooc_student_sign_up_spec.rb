@@ -32,7 +32,7 @@ feature 'MoocStudent Sign In' do
 
       mooc_student = MoocStudent.last
       expect(current_email.subject).to eq("Welcome to SV.CO's SixWays MOOC")
-      expect(current_email.body).to have_text('Thank you for signing up for SV.CO’s MOOC.')
+      expect(current_email.body).to have_text('Thank you for signing up for SV․CO’s MOOC.')
       expect(current_email.body).to have_text("token=#{mooc_student.user.login_token}")
       expect(current_email.body).to have_text(CGI.escape(six_ways_start_path))
     end

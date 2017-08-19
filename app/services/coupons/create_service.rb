@@ -16,7 +16,7 @@ module Coupons
     end
 
     def unique_code
-      code = SecureRandom.random_number(36**6).to_s(36)
+      code = SecureRandom.random_number(36**8).to_s(36)
       Coupon.exists?(code: code) ? unique_code : code
     end
   end

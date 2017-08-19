@@ -4,7 +4,7 @@
   | Invitation to join a startup
 
 = content_for :subtitle do
-  | You have been invited to join a startup at SV.CO.
+  | You have been invited to join a startup at SV&#x2024;CO.
 
 = content_for :title_button_text do
   | Accept Invitation
@@ -15,7 +15,7 @@
   | Hello #{@founder.name},
 
 = content_for :body do
-  p You have been invited to join a startup at SV.CO, whose team lead is #{@startup.admin.name}.
+  p You have been invited to join a startup at SV&#x2024;CO, whose team lead is #{@startup.admin.name}.
 
   - if @founder.startup.present? && @founder.startup.founders.count > 1
     p

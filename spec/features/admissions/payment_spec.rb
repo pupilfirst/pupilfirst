@@ -14,18 +14,19 @@ feature 'Admission Fee Payment' do
   let!(:fee_payment_target) { create :target, :admissions_fee_payment, target_group: level_0_targets }
   let!(:tet_team_update) { create :timeline_event_type, :team_update }
   let(:referrer_startup) { create :startup }
+  let(:referrer_payment) { create :payment, :paid, startup: referrer_startup }
   let(:coupon) { create :coupon, referrer_startup: referrer_startup }
 
   before do
     sign_in_user founder.user
   end
 
-  # ensure authorization is in place
+  # Ensure authorization is in place.
   context 'Founder visits fee payment page' do
     scenario 'He has not completed the cofounder addition prerequisite' do
       visit admissions_fee_path
 
-      # raises 404 as founder is not yet authorized
+      # Raises 404 as founder is not yet authorized.
       expect(page).to have_content("The page you were looking for doesn't exist.")
     end
 
@@ -34,12 +35,12 @@ feature 'Admission Fee Payment' do
       complete_target founder, cofounder_addition_target
       visit admissions_fee_path
 
-      # successfully shows the founder the payment page
+      # Successfully shows the founder the payment page.
       expect(page).to have_content('You now need to pay the membership fee.')
     end
   end
 
-  # ensure payment flow works with and without coupons
+  # Ensure payment flow works with and without coupons.
   context 'Authorized founder attempts to pay the registration fees' do
     before do
       complete_target founder, screening_target
@@ -49,19 +50,19 @@ feature 'Admission Fee Payment' do
     scenario 'He completes payment without applying any coupon' do
       visit admissions_fee_path
 
-      # he will be asked to pay the full amount
+      # He will be asked to pay the full amount.
       expect(page).to have_content('Team membership fee is ₹1000')
       click_on 'Pay Now'
 
-      # he must be re-directed to the payment's long_url.
+      # He must be re-directed to the payment's long_url.
       expect(page).to have_content("redirected to: #{long_url}")
 
       payment = Payment.last
-      # his startup should now have a payment with the right amount
+      # His startup should now have a payment with the right amount.
       expect(payment.startup).to eq(startup)
       expect(payment.amount).to eq(1000.0)
 
-      # mimic a successful payment
+      # Mimic a successful payment.
       payment.update!(
         instamojo_payment_request_status: 'Completed',
         instamojo_payment_status: 'Credit',
@@ -69,30 +70,32 @@ feature 'Admission Fee Payment' do
       )
       Admissions::PostPaymentService.new(payment: payment).execute
 
-      # payment target should now be marked complete
+      # Payment target should now be marked complete.
       fee_payment_status = Targets::StatusService.new(fee_payment_target, founder).status
       expect(fee_payment_status).to eq(Targets::StatusService::STATUS_COMPLETE)
 
-      # he should now also have a referral coupon
+      # He should now also have a referral coupon.
       expect(startup.referral_coupon).to_not eq(nil)
     end
 
     scenario 'He completes payment applying a referral coupon' do
       visit admissions_fee_path
 
-      # page should have coupon form
+      # Page should have coupon form.
       expect(page).to have_content('Have a referral coupon?')
 
-      # he applies the coupon
+      # He applies the coupon.
       fill_in 'admissions_coupon_code', with: coupon.code
       click_button 'Apply Code'
       expect(page).to have_content("Coupon with code #{coupon.code}applied!")
+      expect(startup.reload.coupon_usage).to_not eq(nil)
 
-      # he removes the applied coupon
+      # He removes the applied coupon.
       click_button 'Remove'
       expect(page).to have_content('Have a referral coupon?')
+      expect(startup.reload.coupon_usage).to eq(nil)
 
-      # he applies it back :)
+      # He applies it back :)
       fill_in 'admissions_coupon_code', with: coupon.code
       click_button 'Apply Code'
 
@@ -101,10 +104,7 @@ feature 'Admission Fee Payment' do
 
       click_on 'Pay Now'
 
-      # the ReferralRewardService will be called later
-      expect_any_instance_of(CouponUsages::ReferralRewardService).to receive(:execute)
-
-      # mimic a successful payment
+      # Mimic a successful payment.
       payment = Payment.last
       payment.update!(
         instamojo_payment_request_status: 'Completed',
@@ -112,16 +112,24 @@ feature 'Admission Fee Payment' do
         paid_at: Time.now
       )
 
-      # Store the current billing_end_at.
-      original_end_date = payment.billing_end_at
+      # Store the current billing_end_at for user and referrer.
+      user_end_date = payment.billing_end_at
+      referrer_end_date = referrer_payment.billing_end_at
 
       Admissions::PostPaymentService.new(payment: payment).execute
 
-      # the coupon usage must be now marked redeemed for the startup
-      expect(startup.coupon_usage.redeemed_at).to_not eq(nil)
+      # The coupon usage must be now marked redeemed for the startup.
+      expect(startup.reload.coupon_usage.redeemed_at).to_not eq(nil)
 
-      # the payment end_date should now be extended by 15 days
-      expect(payment.billing_end_at.beginning_of_minute).to eq((original_end_date + 15.days).beginning_of_minute)
+      # the user and referrer should have received 15 and 10 days subscription extension respectively
+      new_user_end_date = payment.billing_end_at.beginning_of_minute
+      new_referrer_end_date = referrer_payment.reload.billing_end_at.beginning_of_minute
+      expect(new_user_end_date).to eq((user_end_date + 15.days).beginning_of_minute)
+      expect(new_referrer_end_date).to eq((referrer_end_date + 10.days).beginning_of_minute)
+
+      # The referrer should have received an email informing of his/her reward.
+      open_email(referrer_startup.admin.email)
+      expect(current_email.subject).to include('Your startup has unlocked SV.CO referral rewards!')
     end
 
     context 'when there are confirmed and unconfirmed founders' do

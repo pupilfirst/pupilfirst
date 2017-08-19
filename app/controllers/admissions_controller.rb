@@ -190,7 +190,6 @@ class AdmissionsController < ApplicationController
     coupon = current_startup.applied_coupon
     return false if coupon.blank? || coupon.still_valid?
 
-    # TODO: Confirm this area of code is tested in feature specs.
     remove_latest_coupon
     flash[:error] = 'The coupon you applied is no longer valid. Try again!'
     redirect_to admissions_fee_path

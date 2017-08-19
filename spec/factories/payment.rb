@@ -13,6 +13,8 @@ FactoryGirl.define do
       instamojo_payment_request_status 'Pending'
       short_url { Faker::Internet.url }
       long_url { Faker::Internet.url }
+      billing_start_at 3.days.from_now
+      billing_end_at 33.days.from_now
     end
 
     trait :paid do

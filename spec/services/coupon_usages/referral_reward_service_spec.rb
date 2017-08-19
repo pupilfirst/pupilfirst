@@ -38,7 +38,7 @@ describe CouponUsages::ReferralRewardService do
         subject.execute
 
         # The current subscription should not have changed.
-        expect(paid_payment.reload.billing_end_at).to eq(paid_payment_end)
+        expect(paid_payment.reload.billing_end_at.beginning_of_minute).to eq(paid_payment_end.beginning_of_minute)
 
         # The pending payment should have expanded by 10 days.
         new_pending_payment_end = pending_payment.reload.billing_end_at.beginning_of_minute

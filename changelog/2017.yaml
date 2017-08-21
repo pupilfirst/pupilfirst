@@ -1,5 +1,45 @@
 ---
 changelog:
+- timestamp: '2017-08-21T08:51:27Z'
+  changes:
+  - timestamp: '2017-08-21T08:50:43Z'
+    title: 'A new referral scheme is now live! Startups can now refer new startups
+      and earn free SV.CO subsciption credits. '
+    trello: https://trello.com/c/JCnXm15m
+    private: false
+    description: The user and referrer each get 15 and 10 days of subscription extension
+      by default. Referral coupons were also created for all present level 1+ startups.
+      The coupon code is displayed to them on their timeline page for now.
+    category: feature
+  - timestamp: '2017-08-19T06:37:13Z'
+    title: Updated Intercom cleanup service with new segments created for reduced
+      monthly costs.
+    trello: https://trello.com/c/Ntlg3Ukz
+    private: true
+    description: The new segments will be pruned from Intercom and backed up in sendinblue
+      as before. Two new segments were created just for cleanup without backing up
+      in sendinblue.
+  - timestamp: '2017-08-18T11:53:25Z'
+    title: All emails have been updated to feature current design language.
+    trello: https://trello.com/c/Wkjjsi1Q
+    private: false
+    description: This updates content as well as styling of all emails sent by the
+      application.
+    category: ui
+  - timestamp: '2017-08-17T10:39:54Z'
+    title: In admin/vocalist_ping, founders and startups are now loaded dynamically
+      (instead of preloading) for better performance.
+    trello: https://trello.com/c/yo5YMs0Q
+    private: true
+    description: Select2 search was implemented for founder and startup fields in
+      the form.
+    category: performance
+  - timestamp: '2017-08-17T08:05:24Z'
+    title: Updated startup timeline and event URLs to be more resilient to change.
+      Updating a startup's slug will no longer break old links to the timeline.
+    trello: https://trello.com/c/dxeXR4Dm
+    private: false
+    category: feature
 - timestamp: '2017-08-14T10:38:33Z'
   changes:
   - timestamp: '2017-08-10T12:03:19Z'
@@ -12,8 +52,8 @@ changelog:
     trello: https://trello.com/c/Aa8nA7ZR
     private: true
   - timestamp: '2017-08-09T09:48:05Z'
-    title: The chores tab has been removed from the founder dashboard. Non-repeatable targets have been
-      merged into the targets tab.
+    title: The chores tab has been removed from the founder dashboard. Non-repeatable
+      targets have been merged into the targets tab.
     trello: https://trello.com/c/NwREp6e6
     private: false
     category: feature

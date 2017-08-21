@@ -3,7 +3,7 @@ ActiveAdmin.register_page 'Vocalist Ping' do
     include DisableIntercom
   end
 
-  menu parent: 'Dashboard', label: 'Send Vocalist Ping (Beta!)'
+  menu parent: 'Dashboard', label: 'Send Vocalist Ping'
 
   content do
     form = VocalistPingForm.new(OpenStruct.new)

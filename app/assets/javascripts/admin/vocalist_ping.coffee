@@ -1,6 +1,5 @@
 handleTargetChanges = ->
   $('#vocalist_ping_founders').on 'select2:select', () ->
-    console.log('Selected')
     clearSelection($('#vocalist_ping_startups')) if $('#vocalist_ping_startups').val()
     clearSelection($('#vocalist_ping_channel')) if $('#vocalist_ping_channel').val()
     clearSelection($('#vocalist_ping_levels')) if $('#vocalist_ping_levels').val()

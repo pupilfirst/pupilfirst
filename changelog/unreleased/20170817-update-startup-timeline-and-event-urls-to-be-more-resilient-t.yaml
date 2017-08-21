@@ -1,6 +1,6 @@
 ---
 timestamp: '2017-08-17T08:05:24Z'
-title: Update startup timeline and event URLs to be more resilient to change. Updating
+title: Updated startup timeline and event URLs to be more resilient to change. Updating
   a startup's slug will no longer break old links to the timeline.
 trello: https://trello.com/c/dxeXR4Dm
 private: false

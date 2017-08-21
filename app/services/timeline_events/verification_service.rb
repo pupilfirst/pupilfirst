@@ -1,7 +1,4 @@
 module TimelineEvents
-  # raised if any prerequisite condition for verification is not met
-  VerificationNotAllowedException = Class.new(StandardError)
-
   class VerificationService
     def initialize(timeline_event, notify: true)
       @timeline_event = timeline_event
@@ -11,7 +8,7 @@ module TimelineEvents
 
     # rubocop:disable Metrics/CyclomaticComplexity
     def update_status(status, grade: nil, points: nil)
-      raise 'Unexpected grade specified' unless grade.blank? || grade.in?(TimelineEvent.valid_grades)
+      raise UnexpectedGradeException unless grade.blank? || grade.in?(TimelineEvent.valid_grades)
 
       @grade = grade
       @points = points
@@ -28,7 +25,7 @@ module TimelineEvents
         when TimelineEvent::STATUS_PENDING
           mark_pending
         else
-          raise 'Unexpected status specified!'
+          raise UnexpectedStatusException
       end
 
       TimelineEventVerificationNotificationJob.perform_later(@timeline_event) if @notify

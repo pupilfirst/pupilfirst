@@ -82,8 +82,8 @@ ActiveAdmin.register TimelineEvent do
       begin
         TimelineEvents::VerificationService.new(timeline_event).update_status(status, grade: params[:grade], points: points)
         head :ok
-      rescue TimelineEvents::VerificationNotAllowedException => e
-        render json: { error: e.message }.to_json, status: 403
+      rescue TimelineEvents::ReviewInterfaceException => e
+        render json: { error: e.message }.to_json, status: 422
       end
     else
       # someone else already reviewed this event! Ask javascript to reload page.

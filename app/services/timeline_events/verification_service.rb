@@ -44,6 +44,7 @@ module TimelineEvents
         update_timeline_updated_on
         post_on_facebook if @timeline_event.share_on_facebook
         reset_startup_level if @timeline_event.timeline_event_type.end_iteration?
+        update_founder_resume if @timeline_event.timeline_event_type.resume_submission?
       end
     end
 
@@ -143,6 +144,19 @@ module TimelineEvents
       return if @timeline_event.founder_event?
 
       startup.update!(timeline_updated_on: @timeline_event.event_on)
+    end
+
+    def update_founder_resume
+      if @timeline_event.timeline_event_files.present?
+        resume_file = @timeline_event.timeline_event_files.first
+        if resume_file.private?
+          raise AttachmentPrivacyException
+        else
+          founder.update!(resume_file: resume_file)
+        end
+      else
+        raise AttachmentMissingException
+      end
     end
   end
 end

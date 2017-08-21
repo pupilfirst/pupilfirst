@@ -40,6 +40,7 @@ class Founder < ApplicationRecord
   belongs_to :college, optional: true
   has_one :university, through: :college
   has_many :payments, dependent: :restrict_with_error
+  belongs_to :resume_file, class_name: 'TimelineEventFile', optional: true
 
   scope :admitted, -> { joins(:startup).merge(Startup.admitted) }
   scope :level_zero, -> { joins(:startup).merge(Startup.level_zero) }

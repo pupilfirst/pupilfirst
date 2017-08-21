@@ -333,6 +333,12 @@ ActiveAdmin.register Founder do
       row :year_of_graduation
       row :backlog
       row :exited
+      row :resume_file do |founder|
+        if founder.resume_file.present?
+          resume_file = TimelineEventFile.find(founder.resume_file_id)
+          link_to resume_file.title, download_timeline_event_file_path(resume_file)
+        end
+      end
     end
 
     panel 'Social links' do

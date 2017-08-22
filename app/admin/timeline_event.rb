@@ -210,21 +210,6 @@ ActiveAdmin.register TimelineEvent do
     redirect_to action: :show
   end
 
-  member_action :save_link_as_resume_url, method: :post do
-    timeline_event = TimelineEvent.find(params[:id])
-    timeline_event.founder.update!(resume_url: timeline_event.links[params[:index].to_i][:url])
-    flash[:success] = "Successfully updated founder's Resume URL."
-    redirect_to action: :show
-  end
-
-  member_action :save_file_as_resume_url, method: :post do
-    timeline_event = TimelineEvent.find(params[:id])
-    timeline_event_file = timeline_event.timeline_event_files.find(params[:file_id])
-    timeline_event.founder.update!(resume_url: download_timeline_event_file_url(timeline_event_file))
-    flash[:success] = "Successfully updated founder's Resume URL."
-    redirect_to action: :show
-  end
-
   collection_action :founders_for_startup do
     @startup = Startup.find params[:startup_id]
     render 'founders_for_startup.json.erb'
@@ -342,12 +327,6 @@ ActiveAdmin.register TimelineEvent do
         end
 
         column :private
-
-        column :actions do |file|
-          if timeline_event.timeline_event_type.resume_submission?
-            link_to 'Save as Resume', save_file_as_resume_url_admin_timeline_event_path(file_id: file.id), method: :post, data: { confirm: 'Are you sure?' }
-          end
-        end
       end
 
       table_for timeline_event.links do
@@ -361,13 +340,6 @@ ActiveAdmin.register TimelineEvent do
 
         column :private do |link|
           link[:private] ? status_tag('Yes') : status_tag('No')
-        end
-
-        column :actions do |link|
-          if timeline_event.timeline_event_type.resume_submission?
-            index = timeline_event.links.find_index(link)
-            link_to 'Save as Resume', save_link_as_resume_url_admin_timeline_event_path(index: index), method: :post, data: { confirm: 'Are you sure?' }
-          end
         end
       end
     end

@@ -161,7 +161,7 @@ module TimelineEvents
       if resume_file.private?
         raise AttachmentPrivacyException
       else
-        founder.update!(resume_file: resume_file)
+        founder.update!(resume_file: resume_file, resume_url: nil)
       end
     end
 
@@ -170,7 +170,7 @@ module TimelineEvents
       if resume_link['private']
         raise AttachmentPrivacyException
       else
-        founder.update!(resume_url: resume_link['url'])
+        founder.update!(resume_url: resume_link['url'], resume_file: nil)
       end
     end
   end

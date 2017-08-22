@@ -5,5 +5,9 @@
         = f.input :level, collection: @levels, label_method: ->(level) { level.display_name }, include_blank: 'Any', label: 'Level', required: false, input_html: { class: 'filter-dropdown__select' }, selected: params.dig(:startups_filter, :level)
       .col-md-3.filter-dropdown
         = f.input :category, collection: @categories, include_blank: 'Any', label: 'Category', required: false, input_html: { class: 'filter-dropdown__select' }, selected: params.dig(:startups_filter, :category)
-      .col-md-3
-        = submit_tag 'FILTER', class: 'btn btn-primary filter-go-btn'
+      .col-md-6
+        = submit_tag 'FILTER', class: 'btn btn-primary filter-form-btn'
+        - if params.dig(:startups_filter, :level).present? || params.dig(:startups_filter, :category).present?
+          = link_to startups_path, class: 'btn btn-ghost-primary btn-with-icon text-uppercase filter-form-btn filter-reset-btn' do
+            i.fa.fa-refresh
+            | Clear

@@ -256,7 +256,7 @@ class Founder < ApplicationRecord
     score += 5 if communication_address.present?
     score += 10 if about.present?
     score += 10 if identification_proof.present?
-    score += 15 if resume_url.present? # has uploaded resume
+    score += 15 if resume_link.present? # has uploaded resume
     score
   end
 
@@ -268,7 +268,7 @@ class Founder < ApplicationRecord
     return 'Update your communication address!' if communication_address.blank?
     return 'Write a one-liner about yourself!' if about.blank?
     return 'Upload your legal ID proof!' if identification_proof.blank?
-    return 'Submit a resume to your timeline to complete your profile!' if resume_url.blank?
+    return 'Submit a resume to your timeline to complete your profile!' if resume_link.blank?
   end
 
   # Make sure a new team lead is assigned before destroying the present one
@@ -328,6 +328,10 @@ class Founder < ApplicationRecord
   def facebook_share_eligibility
     return 'not_admitted' if startup.level_zero?
     facebook_token_available? ? 'eligible' : 'token_unavailable'
+  end
+
+  def resume_link
+    resume_file.present? ? Rails.application.routes.url_helpers.download_timeline_event_file_url(resume_file) : resume_url
   end
 
   # Override the default method to compute the URL if stored value is blank?

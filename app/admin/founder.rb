@@ -222,7 +222,7 @@ ActiveAdmin.register Founder do
       column :startup_admin?
       column :slug
 
-      column :resume_url
+      column :resume, &:resume_link
       column :linkedin_url
       column :twitter_url
       column :personal_website_url
@@ -294,10 +294,6 @@ ActiveAdmin.register Founder do
         founder.skype_id
       end
 
-      row :resume_url do |founder|
-        link_to(founder.resume_url, founder.resume_url) if founder.resume_url.present?
-      end
-
       row :phone
       row :communication_address
 
@@ -333,11 +329,8 @@ ActiveAdmin.register Founder do
       row :year_of_graduation
       row :backlog
       row :exited
-      row :resume_file do |founder|
-        if founder.resume_file.present?
-          resume_file = TimelineEventFile.find(founder.resume_file_id)
-          link_to resume_file.title, download_timeline_event_file_path(resume_file)
-        end
+      row :resume do |founder|
+        link_to 'Download Resume', founder.resume_link if founder.resume_link.present?
       end
     end
 

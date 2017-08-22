@@ -148,14 +148,29 @@ module TimelineEvents
 
     def update_founder_resume
       if @timeline_event.timeline_event_files.present?
-        resume_file = @timeline_event.timeline_event_files.first
-        if resume_file.private?
-          raise AttachmentPrivacyException
-        else
-          founder.update!(resume_file: resume_file)
-        end
+        update_resume_file
+      elsif @timeline_event.links.present?
+        update_resume_link
       else
         raise AttachmentMissingException
+      end
+    end
+
+    def update_resume_file
+      resume_file = @timeline_event.timeline_event_files.first
+      if resume_file.private?
+        raise AttachmentPrivacyException
+      else
+        founder.update!(resume_file: resume_file)
+      end
+    end
+
+    def update_resume_link
+      resume_link = @timeline_event.links.first
+      if resume_link['private']
+        raise AttachmentPrivacyException
+      else
+        founder.update!(resume_url: resume_link['url'])
       end
     end
   end

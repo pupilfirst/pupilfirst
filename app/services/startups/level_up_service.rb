@@ -41,6 +41,11 @@ module Startups
           status: TimelineEvent::STATUS_VERIFIED
         )
       end
+
+      # Tag all founders on Intercom as 'Moved to Level 1'.
+      @startup.founders.not_exited.each do |founder|
+        Intercom::FounderTaggingJob.perform_later(founder, 'Moved to Level 1')
+      end
     end
 
     def event_description

@@ -30,8 +30,13 @@ describe Startups::LevelUpService do
 
     context 'when startup is at level 0' do
       let(:startup) { create :level_0_startup }
+      let!(:exited_founder) { create :founder, startup: startup, exited: true }
 
       it 'successfully enrolls the startup to level 1' do
+        # Non-exited founders of the startup will be tagged 'Moved to Level 1' on Intercom
+        expect(Intercom::FounderTaggingJob).to receive(:perform_later).with(startup.admin, 'Moved to Level 1')
+        expect(Intercom::FounderTaggingJob).to_not receive(:perform_later).with(exited_founder, 'Moved to Level 1')
+
         subject.execute
 
         # startup must have moved to Level 1.

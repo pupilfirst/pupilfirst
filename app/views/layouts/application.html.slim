@@ -33,7 +33,7 @@ html lang='en'
             .container
               p == yield :sitewide_notice
         == render 'layouts/pretender' if @pretender
-        == render 'layouts/pending_payment' if !current_startup.level_zero? && current_startup&.payments&.pending&.any?
+        == render 'layouts/pending_payment' if !current_startup&.level_zero? && current_startup&.payments&.pending&.any?
 
         .container
           .navbar-header

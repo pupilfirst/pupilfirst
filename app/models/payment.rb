@@ -6,6 +6,7 @@ class Payment < ApplicationRecord
   STATUS_REQUESTED = -'requested'
   STATUS_PAID = -'paid'
   STATUS_FAILED = -'failed'
+  STATUS_PENDING = -'pending for renewal'
 
   scope :pending, -> { where(paid_at: nil) }
   scope :requested, -> { pending.where(instamojo_payment_request_status: payment_requested_statuses, instamojo_payment_status: nil) }
@@ -22,6 +23,8 @@ class Payment < ApplicationRecord
       STATUS_FAILED
     elsif requested?
       STATUS_REQUESTED
+    elsif pending?
+      STATUS_PENDING
     else
       raise "Unexpected state of payment. Please inspect Payment ##{id}."
     end

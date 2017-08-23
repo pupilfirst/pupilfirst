@@ -16,4 +16,8 @@ module ApplicationHelper
   def short_url(full_url, expires_at: nil)
     ShortenedUrls::ShortenService.new(full_url, expires_at: expires_at).short_url
   end
+
+  def show_pending_payment_notice
+    !current_page?(fee_founder_path) && !current_startup&.level_zero? && current_startup&.payments&.pending&.any?
+  end
 end

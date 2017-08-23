@@ -1,7 +1,7 @@
 ActiveAdmin.register Resource do
   include DisableIntercom
 
-  permit_params :title, :description, :file, :thumbnail, :level_id, :startup_id, :video_embed, tag_list: []
+  permit_params :title, :description, :file, :thumbnail, :level_id, :startup_id, :target_id, :video_embed, tag_list: []
 
   controller do
     def find_resource
@@ -88,6 +88,7 @@ ActiveAdmin.register Resource do
       row :content_type
       row :created_at
       row :updated_at
+      row :target
     end
   end
 
@@ -107,6 +108,7 @@ ActiveAdmin.register Resource do
         as: :select,
         collection: Resource.tag_counts_on(:tags).pluck(:name),
         multiple: true
+      f.input :target_id, as: :select, collection: []
     end
 
     f.actions

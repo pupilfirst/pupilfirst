@@ -6,7 +6,6 @@ module Founders
     property :avatar, validates: { file_size: { less_than: 2.megabytes }, file_content_type: { allow: %w[image/jpeg image/png image/gif] }, limit_image_resolution: true }
     property :about, validates: { length: { maximum: 250 } }
     property :roles
-    property :slack_username
     property :skype_id
     property :communication_address, validates: { presence: true, length: { maximum: 250 } }
     property :identification_proof
@@ -26,8 +25,6 @@ module Founders
     property :behance_url, validates: { url: true, allow_blank: true }
 
     # Custom validations.
-    validate :slack_username_format
-    validate :slack_username_must_exist
     validate :college_must_exist
     validate :roles_must_be_valid
     validate :age_more_than_18
@@ -39,27 +36,6 @@ module Founders
         unless Founder.valid_roles.include?(role)
           errors.add(:roles, 'contained unrecognized value')
         end
-      end
-    end
-
-    def slack_username_format
-      return if slack_username.blank?
-      username_match = slack_username.match(/^@?([a-z\d\.\_\-]{,21})$/)
-      return if username_match.present?
-      errors.add(:slack_username, 'is not valid. Should only contain lower-case letters, numbers, periods, hyphen and underscores.')
-    end
-
-    def slack_username_must_exist
-      return if slack_username.blank?
-      return unless slack_username != model.slack_username
-      return unless Rails.env.production?
-
-      begin
-        model.slack_user_id = PublicSlack::FindUserService.new(slack_username).id
-      rescue PublicSlack::UserNotFoundException
-        errors.add(:slack_username, 'username is not registered on SV.CO Public Slack')
-      rescue PublicSlack::ApiFailedException
-        errors.add(:slack_username, 'unable to validate username from Slack. Please try again')
       end
     end
 

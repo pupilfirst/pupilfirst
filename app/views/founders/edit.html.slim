@@ -24,7 +24,6 @@ h2.margin-bottom-20 Editing #{@founder.fullname}'s profile
   - if @founder.startup.present?
     = f.input :roles, label: 'Role at Startup', as: :select, collection: Founder.valid_roles, label_method: ->(role) { t "role.#{role}" }, include_hidden: false, input_html: { multiple: true }, required: false
 
-  = f.input :slack_username, label: (link_to 'Public Slack Username<sup>?</sup></a>'.html_safe, about_slack_url, target: '_blank'), placeholder: 'mention_name (excluding @)', required: false
   = f.input :skype_id, label: 'Skype ID', required: false
   = f.input :communication_address
   = f.input :identification_proof, label: 'ID Proof', as: :file, hint: @founder.identification_proof_hint, required: false

@@ -43,6 +43,12 @@ Rails.application.routes.draw do
     post 'disconnect'
   end
 
+  scope 'founder/slack', as: 'founders_slack', controller: 'founders/slack_connect' do
+    get 'connect'
+    get 'callback'
+    post 'disconnect'
+  end
+
   resource :startup, only: %i[edit update] do
     member do
       post 'level_up'

@@ -8,11 +8,11 @@ module PublicSlack
       end
     end
 
-    def initialize(token: Rails.application.secrets.slack.dig(:app, :oauth_token))
+    def initialize(token: nil)
       @token = token
     end
 
-    def get(path, params)
+    def get(path, params: {})
       api_url = endpoint(path, params)
       response = RestClient.get(api_url)
       parsed_response = JSON.parse(response)
@@ -27,8 +27,10 @@ module PublicSlack
     private
 
     def endpoint(path, params)
-      final_params = params.merge(token: @token)
-      "#{URI.join('https://slack.com/api/', path)}?#{final_params.to_query}"
+      # Add the token to query if one is available.
+      query_params = @token.present? ? params.merge(token: @token) : params
+
+      "#{URI.join('https://slack.com/api/', path)}?#{query_params.to_query}"
     end
   end
 end

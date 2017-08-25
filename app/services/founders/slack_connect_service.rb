@@ -8,23 +8,56 @@ module Founders
 
     # @return [String] URL to redirect to where user will be asked to sign in with Slack and grant required permissions.
     def redirect_url
-      params = {
+      params = oauth_params.merge(
         scope: 'users.profile:write',
-        redirect_uri: url_helpers.founders_slack_callback_url,
-        client_id: Rails.application.secrets.slack.dig(:app, :client_id)
-      }
+        team: Rails.application.secrets.slack.dig(:team_ids, :public_slack)
+      )
 
-      "https://slack.com/oauth/authorize?scope=?#{params.to_query}"
+      "https://slack.com/oauth/authorize?#{params.to_query}"
     end
 
-    # Attempts to validate connection to Slack.
-    def connect(_params)
-      # noop
+    # Completes OAuth flow by exchanging OAuth code for OAuth access token.
+    #
+    # @param code [Hash] 'Code', received from Slack in redirect.
+    def connect(code)
+      params = oauth_params.merge(
+        client_secret: Rails.application.secrets.slack.dig(:app, :client_secret),
+        code: code
+      )
+
+      response = api(nil).get('oauth.access', params: params)
+
+      @founder.slack_access_token = response['access_token']
+      @founder.save!
     end
 
     # Disconnects a founder from his / her Slack account.
     def disconnect
       # noop
+    end
+
+    # Checks whether a supplied Slack OAuth access token is still valid.
+    #
+    # @param access_token [String] Slack token to test.
+    # @return [true, false] Returns true for valid, and false for not.
+    def token_valid?(access_token)
+      api(access_token).get('auth.test')
+      true
+    rescue PublicSlack::OperationFailureException
+      false
+    end
+
+    private
+
+    def oauth_params
+      {
+        client_id: Rails.application.secrets.slack.dig(:app, :client_id),
+        redirect_uri: url_helpers.founder_slack_callback_url
+      }
+    end
+
+    def api(token)
+      PublicSlack::ApiService.new(token: token)
     end
   end
 end

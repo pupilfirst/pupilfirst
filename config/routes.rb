@@ -43,7 +43,7 @@ Rails.application.routes.draw do
     post 'disconnect'
   end
 
-  scope 'founder/slack', as: 'founders_slack', controller: 'founders/slack_connect' do
+  scope 'founder/slack', as: 'founder_slack', controller: 'founders/slack_connect' do
     get 'connect'
     get 'callback'
     post 'disconnect'

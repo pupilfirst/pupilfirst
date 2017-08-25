@@ -72,8 +72,31 @@ hr
       | Facebook
     .col-xs-9
       = button_to founder_facebook_connect_path, class: 'btn btn-primary' do
-        span.connected-account__facebook-icon
+        span.connected-account__account-icon
           i.fa.fa-facebook-square.fa-2x
-        span.connected-account__facebook-label
+        span.connected-account__button-label
           | &nbsp;Connect
       .margin-top-10 Once connected, you can choose to post your personal and team events onto your Facebook wall.
+
+- if @founder.connected_to_slack?
+  .connected-account__container.margin-bottom-20
+    span.connected-account_icon
+      i.fa.fa-slack.fa-2x
+    .connected-account-profile
+      .connected-account-profile__link
+        ' You are connected. <strong>TODO: Show more info here.</strong>
+      = link_to 'Disconnect', founder_slack_connect_path, method: :post, class: 'btn btn-primary connected-account-profile__disconnect-btn'
+- else
+  .row.margin-bottom-20
+    .connected-account__label.col-xs-3.text-right
+      | Slack
+    .col-xs-9
+      = link_to founder_slack_connect_path, class: 'btn btn-primary' do
+        span.connected-account__account-icon
+          i.fa.fa-slack.fa-2x
+        span.connected-account__button-label
+          | &nbsp;Connect
+      .margin-top-10
+        ' Once connected, we will invite you to join the <code>#collective</code> channel reserved for members of the
+        ' Startup Village Collective. We'll also be to able to automatically keep your profile name on Slack up to date,
+        | in the required format, if you were to change your product's title.

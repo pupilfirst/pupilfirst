@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170823111249) do
+ActiveRecord::Schema.define(version: 20170825055303) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
+  enable_extension "pg_stat_statements"
 
   create_table "active_admin_comments", id: :serial, force: :cascade do |t|
     t.string "namespace"
@@ -257,6 +257,7 @@ ActiveRecord::Schema.define(version: 20170823111249) do
     t.integer "invited_startup_id"
     t.boolean "hacker"
     t.integer "resume_file_id"
+    t.string "slack_access_token"
     t.index ["college_id"], name: "index_founders_on_college_id"
     t.index ["hacker"], name: "index_founders_on_hacker"
     t.index ["invitation_token"], name: "index_founders_on_invitation_token", unique: true

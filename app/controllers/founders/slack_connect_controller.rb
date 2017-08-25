@@ -2,21 +2,17 @@ module Founders
   class SlackConnectController < ApplicationController
     before_action :authenticate_founder!
 
-    # POST /founders/slack/invite
-    #
-    # Send invitation to join Slack to founder.
-    def invite
-      current_founder
-    end
-
     # GET /founders/slack/connect
     def connect
+      authorize :slack_connect
       slack_connect_service = Founders::SlackConnectService.new(current_founder)
       observable_redirect_to(slack_connect_service.redirect_url)
     end
 
     # GET /founders/slack/callback
     def callback
+      authorize :slack_connect
+
       slack_connect_service = Founders::SlackConnectService.new(current_founder)
 
       if params[:code].present?
@@ -38,6 +34,8 @@ module Founders
 
     # POST /founders/slack/disconnect
     def disconnect
+      authorize :slack_connect
+
       slack_connect_service = Founders::SlackConnectService.new(current_founder)
       slack_connect_service.disconnect
       flash[:success] = 'Your SV.CO account has been disconnected from your Slack account.'

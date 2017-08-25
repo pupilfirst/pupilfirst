@@ -16,17 +16,16 @@ module Founders
       slack_connect_service = Founders::SlackConnectService.new(current_founder)
 
       if params[:code].present?
-        begin
-          slack_connect_service.connect(params[:code])
+        slack_connect_service.connect(params[:code])
 
-          # TODO: Update username on Slack if connect was successful.
+        # Update their Slack profile name.
+        Founders::UpdateSlackNameJob.perform_later(current_founder)
 
-          flash[:success] = 'Your Slack account has been connected successfully!'
-          # rescue # TODO: rescue specific errors
-          #   raise 'Unexpected Slack Response'
-        end
+        # TODO: Invite them to all channels.
+
+        flash[:success] = 'Your Slack account has been connected successfully!'
       else
-        flash[:error] = 'Did not received authorization from Slack.'
+        flash[:error] = 'Did not receive authorization from Slack.'
       end
 
       redirect_to edit_founder_path

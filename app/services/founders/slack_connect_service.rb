@@ -1,6 +1,7 @@
 module Founders
   class SlackConnectService
     include RoutesResolvable
+    include Loggable
 
     def initialize(founder)
       @founder = founder
@@ -29,11 +30,22 @@ module Founders
 
       @founder.slack_access_token = response['access_token']
       @founder.save!
+
+      log "Successfully assigned Slack access token to Founder##{@founder.id}."
     end
 
     # Disconnects a founder from his / her Slack account.
     def disconnect
-      # noop
+      # Attempt to revoke the access token.
+      api(@founder.slack_access_token).get('auth.revoke')
+
+      log "Successfully revoked Slack access token belonging to Founder##{@founder.id}."
+    rescue PublicSlack::OperationFailureException # rubocop:disable Lint/HandleExceptions
+      # It's okay if that fails.
+    ensure
+      # But make sure we delete the token from the database.
+      @founder.slack_access_token = nil
+      @founder.save!
     end
 
     # Checks whether a supplied Slack OAuth access token is still valid.

@@ -8,12 +8,15 @@ module PublicSlack
       end
     end
 
+    # @param token [String] Token to use with the API call, if any.
     def initialize(token: nil)
       @token = token
     end
 
-    def get(path, params: {})
-      api_url = endpoint(path, params)
+    # @param method [String] Slack API method to call
+    # @param params [Hash] Parameters to pass with the method call
+    def get(method, params: {})
+      api_url = endpoint(method, params)
       response = RestClient.get(api_url)
       parsed_response = JSON.parse(response)
       return parsed_response if parsed_response['ok']
@@ -26,11 +29,11 @@ module PublicSlack
 
     private
 
-    def endpoint(path, params)
+    def endpoint(method, params)
       # Add the token to query if one is available.
       query_params = @token.present? ? params.merge(token: @token) : params
 
-      "#{URI.join('https://slack.com/api/', path)}?#{query_params.to_query}"
+      "#{URI.join('https://slack.com/api/', method)}?#{query_params.to_query}"
     end
   end
 end

@@ -1,5 +1,5 @@
 - content_for :head
-  title SV.CO Edit Profile for #{@founder.fullname}
+title SV.CO Edit Profile for #{@founder.fullname}
 
 .margin-top-20
 h2.margin-bottom-20 Editing #{@founder.fullname}'s profile
@@ -79,13 +79,15 @@ hr
       .margin-top-10 Once connected, you can choose to post your personal and team events onto your Facebook wall.
 
 - if @founder.connected_to_slack?
-  .connected-account__container.margin-bottom-20
-    span.connected-account_icon
-      i.fa.fa-slack.fa-2x
-    .connected-account-profile
-      .connected-account-profile__link
-        ' You are connected. <strong>TODO: Show more info here.</strong>
-      = link_to 'Disconnect', founder_slack_connect_path, method: :post, class: 'btn btn-primary connected-account-profile__disconnect-btn'
+  .row.margin-bottom-20
+    .col-xs-9.col-xs-push-3
+      .connected-account__container
+        span.connected-account_icon
+          i.fa.fa-slack.fa-2x
+        .connected-account-profile
+          .connected-account-profile__link
+            ' You are connected. <strong>TODO: Show more info here.</strong>
+          = link_to 'Disconnect', founder_slack_disconnect_path, method: :post, class: 'btn btn-primary connected-account-profile__disconnect-btn', data: { confirm: 'Are you sure? You will need to manually update your Slack name to keep it in sync with your product name.' }
 - else
   .row.margin-bottom-20
     .connected-account__label.col-xs-3.text-right

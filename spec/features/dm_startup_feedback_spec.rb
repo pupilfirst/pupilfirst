@@ -45,7 +45,7 @@ feature 'DM Startup Feedback' do
     startup.reload
   end
 
-  context 'Admin visits startup feedback index page in AA' do
+  context 'Admin visits startup feedback index page in AA', pending: true do
     scenario 'Admin checks for the startup feedback in the list' do
       visit admin_startup_feedback_index_path
       expect(page).to have_text('Startup Feedback')

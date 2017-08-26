@@ -9,12 +9,9 @@ module Founders
 
     # @return [String] URL to redirect to where user will be asked to sign in with Slack and grant required permissions.
     def redirect_url
-      params = oauth_params.merge(
-        scope: 'users.profile:write',
-        team: Rails.application.secrets.slack.dig(:team_ids, :public_slack)
-      )
+      params = oauth_params.merge(scope: 'users.profile:write')
 
-      "https://slack.com/oauth/authorize?#{params.to_query}"
+      "https://#{Rails.application.secrets.slack[:name]}.slack.com/oauth?#{params.to_query}"
     end
 
     # Completes OAuth flow by exchanging OAuth code for OAuth access token.

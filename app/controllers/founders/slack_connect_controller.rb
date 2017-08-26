@@ -16,14 +16,19 @@ module Founders
       slack_connect_service = Founders::SlackConnectService.new(current_founder)
 
       if params[:code].present?
-        slack_connect_service.connect(params[:code])
+        begin
+          slack_connect_service.connect(params[:code])
 
-        # Update their Slack profile name.
-        Founders::UpdateSlackNameJob.perform_later(current_founder)
+          # Update their Slack profile name.
+          Founders::UpdateSlackNameJob.perform_later(current_founder)
 
-        # TODO: Invite them to all channels.
+          # Invite them to all channels.
+          Founders::InviteToSlackChannelsJob.perform_later(current_founder)
 
-        flash[:success] = 'Your Slack account has been connected successfully!'
+          flash[:success] = 'Your Slack account has been connected successfully!'
+        rescue Founders::SlackConnectService::TeamMismatchException
+          flash[:error] = 'Oops. It looks like you signed into a Slack other than SV.CO Public Slack. Please try again.'
+        end
       else
         flash[:error] = 'Did not receive authorization from Slack.'
       end

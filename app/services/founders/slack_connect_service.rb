@@ -28,7 +28,12 @@ module Founders
 
       response = api(nil).get('oauth.access', params: params)
 
+      if response['team_id'] != Rails.application.secrets.slack.dig(:team_ids, :public_slack)
+        raise Founders::SlackConnectService::TeamMismatchException
+      end
+
       @founder.slack_access_token = response['access_token']
+      @founder.slack_user_id = response['user_id']
       @founder.save!
 
       log "Successfully assigned Slack access token to Founder##{@founder.id}."

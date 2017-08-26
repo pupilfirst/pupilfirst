@@ -19,8 +19,15 @@ module PublicSlack
       api_url = endpoint(method, params)
       response = RestClient.get(api_url)
       parsed_response = JSON.parse(response)
+
       return parsed_response if parsed_response['ok']
-      raise PublicSlack::OperationFailureException, "Response from Slack API indicates failure: '#{response}'"
+
+      exception = PublicSlack::OperationFailureException.new(
+        "Response from Slack API indicates failure: '#{response}'",
+        parsed_response
+      )
+
+      raise exception
     rescue JSON::ParserError
       raise PublicSlack::ParseFailureException, "Failed to parse response as JSON: '#{response}'"
     rescue RestClient::Exception => e

@@ -57,9 +57,14 @@ module Founders
     end
 
     def save!
+      name_updated = model.name != name
+
       sync
       model.college_id = nil if college_id == 'other'
       model.save!
+
+      # Update Slack profile name if the name has been updated.
+      Founders::UpdateSlackNameJob.perform_later(model.reload) if name_updated
     end
   end
 end

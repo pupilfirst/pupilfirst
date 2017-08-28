@@ -185,6 +185,7 @@ p {
   &:focus,
   &.focus {
     background-color: $light-primary;
+    box-shadow: none;
   }
   &:active,
   &.active {
@@ -205,6 +206,7 @@ p {
   &:focus,
   &.focus {
     background-color: $light-secondary;
+    box-shadow: none;
   }
   &:active,
   &.active {

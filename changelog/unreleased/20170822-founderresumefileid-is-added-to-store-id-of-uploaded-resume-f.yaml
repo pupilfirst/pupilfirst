@@ -1,6 +1,0 @@
----
-timestamp: '2017-08-22T10:41:23Z'
-title: Founder.resume_file_id is added to store id of uploaded resume file. Founder.resume_url
-  will only store external links to resume
-trello: https://trello.com/c/hXvmhbkU
-private: true

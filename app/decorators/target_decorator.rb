@@ -9,14 +9,6 @@ class TargetDecorator < Draper::Decorator
     I18n.t("target.status.#{status(founder)}")
   end
 
-  def status_report_text(founder)
-    I18n.t("target.status_report.#{status(founder)}")
-  end
-
-  def status_hint_text(founder)
-    I18n.t("target.status_hint.#{status(founder)}", date: timeline_events&.last&.event_on&.strftime('%b %e'))
-  end
-
   # rubocop:disable Metrics/CyclomaticComplexity
   def status_fa_icon(founder)
     case status(founder)

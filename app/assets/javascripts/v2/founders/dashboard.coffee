@@ -73,13 +73,8 @@ startTour = ->
 
   tour.start()
 
-hideIntercomOnSmallScreen = ->
-    # TODO: There might be a better way to do this!
-    window.Intercom('shutdown') if window.innerWidth < 576
-
 $(document).on 'turbolinks:load', ->
   if $('#founder-dashboard').length
     giveATour()
-    hideIntercomOnSmallScreen()
     setPerformancePointer()
     takeTourOnClick()

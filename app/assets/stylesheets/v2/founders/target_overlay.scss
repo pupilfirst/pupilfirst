@@ -67,6 +67,9 @@
 
 .target-overlay__header {
   padding: 1.5rem;
+  position: relative;
+  z-index: 999;
+  background-color: white;
   border-bottom: 1px solid $gray-border;
 
   @include media-breakpoint-down (sm) {
@@ -79,6 +82,117 @@
     margin-top: 6px;
     margin-left: 2.5rem;
   }
+}
+
+.target-overlay__status-badge__block {
+  border: 1px solid $gray-border;
+  border-width: 0 0 1px 0;
+}
+
+.target-overlay__status-badge-container {
+  padding: 1rem 1.5rem 1rem 4rem;
+  display: block;
+  font-size: 0.875rem;
+  letter-spacing: 0.02rem;
+  white-space: normal;
+  @include border-radius(0px);
+  text-align: left;
+  animation: statusBadgeAnimate 0.5s;
+
+  .target-overlay__status-badge-icon {
+    margin-right: 5px;
+  }
+
+  @include media-breakpoint-down(sm) {
+    padding: 1rem;
+    text-align: center;
+  }
+  &.needs-improvement {
+    background-color: rgba(10, 165, 227, 0.15);
+    color: $dark-secondary;
+  }
+  &.submitted {
+    background-color: rgba(0, 138, 193, 0.15);
+    color: $dark-secondary;
+  }
+  &.pending {
+    background-color: rgba(227, 180, 98, 0.15);
+    color: darken($alert-background, 25%);
+  }
+  &.unavailable {
+    background-color: rgba(153, 153, 153, 0.2);
+    color: $dark-grey-text;
+  }
+  &.complete {
+    background-color: rgba(50, 180, 117, 0.15);
+    color: $dark-primary;
+  }
+  &.not-accepted {
+    background-color: rgba(217, 83, 80, 0.15);
+    color: rgba(217, 83, 80, 1);
+  }
+}
+
+.ripple-effect {
+  position: relative;
+  overflow: hidden;
+  transform: translate3d(0,0,0);
+
+  &:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle,#000 10%,transparent 10.01%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    transform: scale(10,10);
+    opacity: 0;
+    transition: transform .3s, opacity 0.3s;
+  }
+  &:active:after {
+    transform: scale(0,0);
+    opacity: .2;
+    transition: 0s;
+  }
+}
+
+.target-overlay__status-info-block {
+  display: inline-block;
+  padding-left: 10px;
+  margin: 0 0 0 10px;
+  border-left: 1px solid rgba(0,0,0,0.2);
+
+  @include media-breakpoint-down(xs) {
+    border-left: 0;
+    display: block;
+    margin: 10px 0 0 0;
+    padding: 0;
+  }
+}
+
+.target-overlay__status-badge-content {
+  display: inline-block;
+  font-size: 1rem;
+}
+
+.target-overlay__status-hint {
+  word-break: break-word;
+}
+
+@keyframes statusBadgeAnimate {
+  0% {
+		opacity: 0;
+    transform: scaleY(0);
+	}
+	100% {
+		opacity: 1;
+    transform: scaleY(1);
+	}
 }
 
 .founder-dashboard-target-header__content {
@@ -459,6 +573,11 @@
   display: flex;
   align-items: center;
   color: $light-grey-text;
+  transition: all 0.2s;
+
+  &:hover, &:focus {
+    box-shadow: inset -3px 0px 10px -4px rgba(0, 0, 0, 0.2);
+  }
 }
 
 .target-overlay__mobile-back-button-text {

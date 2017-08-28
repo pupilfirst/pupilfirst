@@ -21,6 +21,7 @@ class Target < ApplicationRecord
   has_many :prerequisite_targets, through: :target_prerequisites
   belongs_to :target_group, optional: true
   belongs_to :level, optional: true
+  has_many :resources
 
   acts_as_taggable
   mount_uploader :rubric, RubricUploader

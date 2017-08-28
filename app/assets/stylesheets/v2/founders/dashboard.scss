@@ -531,25 +531,6 @@
   &:last-child {
     @include border-radius(0 0 10px 10px);
   }
-
-  &.founder-dashboard-target__container--open {
-    box-shadow: 0 0 25px 1px #cecece;
-    z-index: 2;
-    @include border-radius(5px);
-
-    .founder-dashboard-target-header__container {
-      box-shadow: 0 0 10px 3px lighten($gray-light, 40%);
-
-      .founder-dashboard-target-header__headline {
-        color: $brand-secondary;
-      }
-    }
-  }
-}
-
-// Target description should start hidden.
-.founder-dashboard-target__description-container {
-  display: none;
 }
 
 .founder-dashboard-target-header__container {

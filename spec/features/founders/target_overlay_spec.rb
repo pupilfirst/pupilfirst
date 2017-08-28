@@ -43,8 +43,13 @@ feature 'Target Overlay' do
       within('.target-overlay__header') do
         expect(page).to have_selector('.target-overlay-header__headline', text: "Team Target:#{target.title}")
         expect(page).to have_selector('.target-overlay-header__info-subtext', text: 'Time required:60 days')
-        expect(page).to have_selector('.founder-dashboard-target-header__status-badge-icon > i.fa-clock-o')
-        expect(page).to have_selector('.founder-dashboard-target-status-badge__container > span > span', text: 'Pending')
+      end
+
+      # Within the status badge bar:
+      within('.target-overlay__status-badge__block') do
+        expect(page).to have_selector('.target-overlay__status-badge-icon > i.fa-clock-o')
+        expect(page).to have_selector('.target-overlay__status-badge-content > span', text: 'Pending')
+        expect(page).to have_selector('.target-overlay__status-hint', text: 'Follow completion instructions and submit!')
       end
 
       # Test the submit button.
@@ -129,9 +134,10 @@ feature 'Target Overlay' do
       find('.founder-dashboard-target-header__headline', text: target.title).click
 
       # The target must be marked locked.
-      within('.target-overlay__header') do
-        expect(page).to have_selector('.founder-dashboard-target-header__status-badge-icon > i.fa-lock')
-        expect(page).to have_selector('.founder-dashboard-target-status-badge__container > span > span', text: 'Locked')
+      within('.target-overlay__status-badge__block') do
+        expect(page).to have_selector('.target-overlay__status-badge-icon > i.fa-lock')
+        expect(page).to have_selector('.target-overlay__status-badge-content > span', text: 'Locked')
+        expect(page).to have_selector('.target-overlay__status-hint', text: 'Complete prerequisites first!')
       end
 
       within('.target-overlay-content-block') do
@@ -146,9 +152,10 @@ feature 'Target Overlay' do
       find('.founder-dashboard-target-header__headline', text: target.title).click
 
       # The target must be pending.
-      within('.target-overlay__header') do
-        expect(page).to have_selector('.founder-dashboard-target-header__status-badge-icon > i.fa-clock-o')
-        expect(page).to have_selector('.founder-dashboard-target-status-badge__container > span > span', text: 'Pending')
+      within('.target-overlay__status-badge__block') do
+        expect(page).to have_selector('.target-overlay__status-badge-icon > i.fa-clock-o')
+        expect(page).to have_selector('.target-overlay__status-badge-content > span', text: 'Pending')
+        expect(page).to have_selector('.target-overlay__status-hint', text: 'Follow completion instructions and submit!')
       end
 
       find('.ui-pnotify').hover
@@ -160,9 +167,10 @@ feature 'Target Overlay' do
       find('.js-timeline-builder__submit-button').click
 
       # The target status badge must now say submitted.
-      within('.target-overlay__header') do
-        expect(page).to have_selector('.founder-dashboard-target-header__status-badge-icon > i.fa-hourglass-half')
-        expect(page).to have_selector('.founder-dashboard-target-status-badge__container > span > span', text: 'Submitted')
+      within('.target-overlay__status-badge__block') do
+        expect(page).to have_selector('.target-overlay__status-badge-icon > i.fa-hourglass-half')
+        expect(page).to have_selector('.target-overlay__status-badge-content > span', text: 'Submitted')
+        expect(page).to have_selector('.target-overlay__status-hint', text: "Submitted on #{Date.today.strftime('%b %e')}")
       end
     end
   end

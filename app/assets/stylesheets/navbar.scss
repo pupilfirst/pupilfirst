@@ -54,6 +54,39 @@
   .navbar-container {
     padding: 15px 0;
   }
+
+  .sitewide-notice--warning {
+    background-color: #fdf5e7;
+    border: 1px solid #e5cd9e;
+    color: #9f752c;
+
+    a {
+      margin-left: 5px;
+      color: #9f752c;
+      border: 1px solid #e5cd9e;
+
+      &:hover, &:focus {
+        color: #9f6c18;
+      }
+    }
+  }
+
+  .sitewide-notice--error {
+    background-color: #f2dede;
+    border: 1px solid #e46f61;
+    color: #a94442;
+
+    a {
+      margin-left: 5px;
+      color: #a94442;
+      border: 1px solid #e46f61;
+
+      &:hover, &:focus {
+        color: #a94442;
+      }
+    }
+  }
+
   .site-logo {
     height: 55px;
   }

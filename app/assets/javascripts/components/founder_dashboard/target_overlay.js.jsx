@@ -80,10 +80,12 @@ class FounderDashboardTargetOverlay extends React.Component  {
             </button>
             <div className="target-overlay__header clearfix">
               <TargetOverlayHeaderTitle iconPaths={ this.props.iconPaths } target={ this.props.target }/>
-              <div className="pull-xs-left target-overlay__header-status-badge-container"><FounderDashboardTargetStatusBadge target={ this.props.target }/></div>
               <div className="hidden-sm-down">
                 { this.isSubmittable() && <TargetOverlaySubmitButton target={ this.props.target } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }/> }
               </div>
+            </div>
+            <div className="target-overlay__status-badge__block">
+              <TargetOverlayStatusBadgeBar target={ this.props.target }/>
             </div>
             <div className="target-overlay-content-wrapper clearfix">
               <div className="col-md-8 target-overlay__leftbar">
@@ -108,7 +110,7 @@ class FounderDashboardTargetOverlay extends React.Component  {
             </div>
           </div>
         </div>
-        <div className="target-overlay__mobile-fixed-navbar hidden-sm-up clearfix">
+        <div className="target-overlay__mobile-fixed-navbar hidden-md-up clearfix">
           <button type="button" className="target-overlay__mobile-back-button pull-xs-left" aria-label="Close" onClick={ this.props.closeCB }>
             <img className="target-overlay__mobile-back-button-icon" src={ this.props.iconPaths.backButton }/>
             <span className="target-overlay__mobile-back-button-text">Back</span>

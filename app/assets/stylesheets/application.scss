@@ -1,8 +1,10 @@
 // Bootstrap customization variables
-@import "bootstrap_btn_customization";
-
-@import "bootstrap-sprockets";
+@import "variables";
 @import "bootstrap";
+@import "bootstrap_btn_customization";
+@import "custom_theme";
+@import "custom_mixins";
+
 @import "font-awesome";
 
 // XDAN's datetimepicker

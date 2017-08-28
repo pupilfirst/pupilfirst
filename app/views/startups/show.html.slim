@@ -46,8 +46,8 @@
 
   / Container right
   .row
-    #data-points
-      .col-md-4.col-md-push-8
+    .col-lg-4.order-1.order-lg-2
+      #data-points
         - if @startup.founder?(current_founder) && @startup.referral_coupon.present?
           - coupon = @startup.referral_coupon
           .alert.alert-info
@@ -65,97 +65,87 @@
         .data-icons
           .row
             .col-sm-6.col-md-12
-              .media
-                .media-left
-                  img.media-object alt="Stage icon" src="#{image_url 'startups/show/data-icon-stage.png'}"
+              .media.mb-3.align-items-center
+                img.d-flex.mr-3 alt="Stage icon" src="#{image_url 'startups/show/data-icon-stage.png'}"
                 .media-body
-                  h4.media-heading Startup Level
+                  h6.my-0 Startup Level
                   p.data-content #{@startup.level.display_name}
             - if @startup.startup_categories.present?
               .col-sm-6.col-md-12
-                .media
-                  .media-left
-                    img.media-object alt="Industry icon" src="#{image_url 'startups/show/data-icon-industry.png'}"
+                .media.mb-3.align-items-center
+                  img.d-flex.mr-3 alt="Industry icon" src="#{image_url 'startups/show/data-icon-industry.png'}"
                   .media-body
-                    h4.media-heading Industry
+                    h6.my-0 Industry
                     p.data-content #{@startup.startup_categories.pluck(:name).join(', ')}
             - if @startup.website?
               .col-sm-6.col-md-12
-                .media
-                  .media-left
-                    img.media-object alt="Website icon" src="#{image_url 'startups/show/data-icon-website.png'}"
+                .media.mb-3.align-items-center
+                  img.d-flex.mr-3 alt="Website icon" src="#{image_url 'startups/show/data-icon-website.png'}"
                   .media-body
-                    h4.media-heading Website
+                    h6.my-0 Website
                     p.data-content
                       a href="#{@startup.website}" target="_blank"
                         ' #{@startup.website}
                         i.fa.fa-external-link
             - if @startup.presentation_link?
               .col-sm-6.col-md-12
-                .media
-                  .media-left
-                    img.media-object alt="Product Deck icon" src="#{image_url 'startups/show/data-icon-startup-deck.png'}"
+                .media.mb-3.align-items-center
+                  img.d-flex.mr-3 alt="Product Deck icon" src="#{image_url 'startups/show/data-icon-startup-deck.png'}"
                   .media-body
-                    h4.media-heading Product Deck
+                    h6.my-0 Product Deck
                     p.data-content
                       a href="#{short_url(@startup.presentation_link)}" target="_blank"
                         ' #{@startup.product_name} deck
                         i.fa.fa-external-link
             - if @startup.product_video_link?
               .col-sm-6.col-md-12
-                .media
-                  .media-left
-                    img.media-object alt="Product Video icon" src="#{image_url 'startups/show/data-icon-startup-deck.png'}"
+                .media.mb-3.align-items-center
+                  img.d-flex.mr-3 alt="Product Video icon" src="#{image_url 'startups/show/data-icon-startup-deck.png'}"
                   .media-body
-                    h4.media-heading Product Video
+                    h6.my-0 Product Video
                     p.data-content
                       a href="#{short_url(@startup.product_video_link)}" target="_blank"
                         ' #{@startup.product_name} video
                         i.fa.fa-external-link
             - if @startup.wireframe_link?
               .col-sm-6.col-md-12
-                .media
-                  .media-left
-                    img.media-object alt="Wireframe icon" src="#{image_url 'startups/show/data-icon-startup-deck.png'}"
+                .media.mb-3.align-items-center
+                  img.d-flex.mr-3 alt="Wireframe icon" src="#{image_url 'startups/show/data-icon-startup-deck.png'}"
                   .media-body
-                    h4.media-heading Design Wireframe
+                    h6.my-0 Design Wireframe
                     p.data-content
                       a href="#{short_url(@startup.wireframe_link)}" target="_blank"
                         ' #{@startup.product_name} design
                         i.fa.fa-external-link
             - if @startup.prototype_link?
               .col-sm-6.col-md-12
-                .media
-                  .media-left
-                    img.media-object alt="Prototype icon" src="#{image_url 'startups/show/data-icon-startup-deck.png'}"
+                .media.mb-3.align-items-center
+                  img.d-flex.mr-3 alt="Prototype icon" src="#{image_url 'startups/show/data-icon-startup-deck.png'}"
                   .media-body
-                    h4.media-heading Product Prototype
+                    h6.my-0 Product Prototype
                     p.data-content
                       a href="#{short_url(@startup.prototype_link)}" target="_blank"
                         ' #{@startup.product_name} prototype
                         i.fa.fa-external-link
             .col-sm-6.col-md-12
-              .media
-                .media-left
-                  img.media-object alt="Team Size icon" src="#{image_url 'startups/show/data-icon-team-size.png'}"
+              .media.mb-3.align-items-center
+                img.d-flex.mr-3 alt="Team Size icon" src="#{image_url 'startups/show/data-icon-team-size.png'}"
                 .media-body
-                  h4.media-heading Team Size
+                  h6.my-0 Team Size
                   p.data-content #{@startup.founders.count + @startup.team_members.count}
             - if @startup.timeline_events_for_display(current_founder).present?
               .col-sm-6.col-md-12
-                .media
-                  .media-left
-                    img.media-object alt="Iteration icon" src="#{image_url 'startups/show/data-icon-iteration.png'}"
+                .media.mb-3.align-items-center
+                  img.d-flex.mr-3 alt="Iteration icon" src="#{image_url 'startups/show/data-icon-iteration.png'}"
                   .media-body
-                    h4.media-heading Product Iteration
+                    h6.my-0 Product Iteration
                     p.data-content #{@startup.iteration.ordinalize}
             - if @startup.earliest_team_event_date.present?
               .col-sm-6.col-md-12
-                .media
-                  .media-left
-                    img.media-object alt="Days Lapsed icon" src="#{image_url 'startups/show/data-icon-iteration.png'}"
+                .media.mb-3.align-items-center
+                  img.d-flex.mr-3 alt="Days Lapsed icon" src="#{image_url 'startups/show/data-icon-iteration.png'}"
                   .media-body
-                    h4.media-heading Days Elapsed
+                    h6.my-0 Days Elapsed
                     p.data-content
                       ' #{(Date.today - @startup.earliest_team_event_date).to_i}
                       span.data-subcontent
@@ -164,21 +154,20 @@
                         ' #{@no_of_days} #{'day'.pluralize(@no_of_days)} ago)
         .row
           - if @startup.founders.not_exited.present?
-            .col-sm-6.col-md-12
+            .col-md-12
               h3 Founders
               hr
               - @startup.founders.not_exited.order(:name).each do |founder|
                 .data-founder
-                  .media
-                    .media-left
-                      a.media-object href=founder_profile_url(slug: founder.slug)
-                        .founder-image
-                          == avatar(founder.name, founder: founder, background_shape: :square)
+                  .media.align-items-center
+                    a.mr-3 href=founder_profile_url(slug: founder.slug)
+                      .founder-image
+                        == avatar(founder.name, founder: founder, background_shape: :square)
                     .media-body
                       .media-heading
                         = link_to truncated_founder_name(founder.fullname), founder_profile_url(slug: founder.slug)
                       p.designation #{founder_roles(founder.roles)}
-                      ul.social-links
+                      ul.founder__social-links
                         - if founder.twitter_url?
                           li
                             a href="#{founder.twitter_url}" target='_blank'
@@ -190,31 +179,27 @@
 
         .row
           - if @startup.team_members.present?
-            .col-sm-6.col-md-12
+            .col-md-12
               h3 Team
               hr
               - @startup.team_members.order(:name).each do |team_member|
                 .data-founder
-                  .media
-                    .media-left
-                      .media-object
-                        .founder-image
-                          == avatar(team_member.name, founder: team_member, background_shape: :square)
+                  .media.align-items-center
+                    .mr-3
+                      .founder-image
+                        == avatar(team_member.name, founder: team_member, background_shape: :square)
                     .media-body
                       h4.media-heading #{truncated_founder_name team_member.name}
                       p.designation #{founder_roles(team_member.roles)}
 
-    / Container right end
-
-    /Form to post new timeline event
-    .col-md-8.col-md-pull-4
+    .col-lg-8.order-2.order-lg-1
       - if @timeline_event_for_og.present?
-        .main-timeline
+        .main-timeline.border-gray
           .tl-iteration
             p#focused-event
               | Focused Event
             = image_tag 'startups/show/dash.png'
-          ul
+          ul.pa-0
             == render 'timeline_event', event: @timeline_event_for_og.decorate, startup: @startup
 
       - if @events_for_display.present?
@@ -223,7 +208,7 @@
             p
               | Timeline
             = image_tag 'startups/show/dash.png'
-          ul#timeline-list
+          ul#timeline-list.pl-0
             = render 'events_by_page', events: @events_for_display, page: 1, startup: @startup, more: @has_more_events
       - else
         .main-timeline
@@ -249,7 +234,7 @@
 
           .attachment.hidden
             i.fa.fa-paperclip
-            | &nbsp
+            | &nbsp;
             span.attachment-name.grey-text
 
             a.attachment-download-btn.grey-text.margin-left-10.btn.btn-default.btn-xs target="_blank"

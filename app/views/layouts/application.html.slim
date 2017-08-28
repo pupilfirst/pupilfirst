@@ -26,26 +26,28 @@ html lang='en'
       noscript
         iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N2LS39W" height="0" width="0" style="display:none;visibility:hidden"
 
-    section#header
-      nav.navbar.navbar-default.shrink role="navigation"
-        - if @sitewide_notice
-          .sitewide-notice
-            .container
-              p == yield :sitewide_notice
-        == render 'layouts/pretender' if @pretender
-        == render 'layouts/pending_payment' if !current_startup&.level_zero? && current_startup&.payments&.pending&.any?
+    - unless @hide_layout_header
+      - if @sitewide_notice
+        .sitewide-notice
+          .container
+            p == yield :sitewide_notice
+      == render 'layouts/pretender' if @pretender
+      == render 'layouts/pending_payment' if !current_startup&.level_zero? && current_startup&.payments&.pending&.any?
 
+      section#header.header
         .container
-          .navbar-header
-            button.navbar-toggle.collapsed type="button" data-toggle="collapse" data-target="#sv-navbar"
-              span.sr-only Toggle navigation
-              span.icon-bar
-              span.icon-bar
-              span.icon-bar
+          nav.navbar.navbar-expand-lg.navbar-light.navbar-container
             a.navbar-brand href="#{dashboard_or_root_url}"
               img.site-logo src="#{image_url 'shared/logo-color.svg'}" alt='Logo of SV.CO'
 
-          = render 'layouts/nav_links'
+            - unless @hide_nav_links
+              button.navbar-toggler.collapsed type="button" data-toggle="collapse" data-target="#sv-navbar"
+                span.sr-only Toggle navigation
+                span.icon-bar.top-bar
+                span.icon-bar.middle-bar
+                span.icon-bar.bottom-bar
+
+            = render 'layouts/nav_links'
 
       == yield :header
 

@@ -1,37 +1,44 @@
-#sv-navbar.collapse.navbar-collapse
-  ul.nav.navbar-nav.navbar-right
-    li role="presentation"
-      = link_to 'Startups', startups_path, class: 'top-nav-link'
+#sv-navbar.collapse.navbar-collapse.justify-content-end.navbar-link__container
+  ul.navbar-nav.align-items-lg-center
+    li.nav-item.navbar-nav__nav-item role="presentation"
+      = link_to 'Startups', startups_path, class: 'nav-item__link'
     - if current_founder && !current_founder.exited && current_founder.startup.present?
-      li role="presentation"
-        a.top-nav-link href="#{dashboard_founder_url}" Dashboard
+      li.nav-item.navbar-nav__nav-item role="presentation"
+        a.nav-item__link.navbar-nav__nav-item__link href="#{dashboard_founder_url}" Dashboard
     - unless current_founder
-      li role="presentation"
-        = link_to 'Invest & Hire', talent_path, class: 'top-nav-link'
-    li role="presentation"
-      = link_to 'Faculty', faculty_index_path, class: 'top-nav-link'
-    li role="presentation"
-      = link_to 'Library', resources_path, class: 'top-nav-link'
+      li.nav-item.navbar-nav__nav-item role="presentation"
+        = link_to 'Invest & Hire', talent_path, class: 'nav-item__link'
+    li.nav-item.navbar-nav__nav-item role="presentation"
+      = link_to 'Faculty', faculty_index_path, class: 'nav-item__link'
+    li.nav-item.navbar-nav__nav-item role="presentation"
+      = link_to 'Library', resources_path, class: 'nav-item__link'
     - unless current_founder
-      li role="presentation"
-        = link_to 'About', about_path, class: 'top-nav-link'
+      li.nav-item.navbar-nav__nav-item role="presentation"
+        = link_to 'About', about_path, class: 'nav-item__link'
+
     - if current_user
       - if current_founder
-        li role="presentation" class="dropdown"
-          a.dropdown-toggle.logged-in-avatar-link data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
-            == avatar(current_founder.name, founder: current_founder)
+        li.nav-item.navbar-nav__nav-item role="presentation" class="dropdown"
+          a#navbar-profile-dropdown.dropdown-toggle.logged-in-avatar-link data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
+            .navbar__avatar-wrapper
+              == avatar(current_founder.name, founder: current_founder)
           ul.dropdown-menu
             - if policy(current_founder).founder_profile?
               li role="presentation"
                 = link_to founder_profile_path(slug: current_founder.slug) do
                   i.fa.fa-list-ul
-                  | &nbsp;Profile
+                  | Profile
+            - if policy(PlatformFeedback).create?
+              li role="presentation"
+                a href="#" data-toggle="modal" data-target="#platform-feedback-modal"
+                  i.fa.fa-comment-o
+                  | Submit Feedback
             li role="presentation"
               = link_to destroy_user_session_path, method: :delete do
                 i.fa.fa-sign-out
-                | &nbsp;Logout
+                | Logout
       - else
-        li role="presentation" = link_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'top-nav-link'
+        li role="presentation" = link_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'nav-item__link'
 
     - elsif @hide_sign_in.blank?
-      li role="presentation" = link_to 'Sign In', new_user_session_path, class: 'top-nav-link', rel: 'nofollow'
+      li role="presentation" = link_to 'Sign In', new_user_session_path, class: 'nav-item__link', rel: 'nofollow'

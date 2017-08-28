@@ -9,7 +9,7 @@ module Founders
       observable_redirect_to(slack_connect_service.redirect_url)
     end
 
-    # GET /founders/slack/callback
+    # GET /founders/slack/callback?code=
     def callback
       authorize :slack_connect
 

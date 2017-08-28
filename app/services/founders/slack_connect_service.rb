@@ -23,7 +23,7 @@ module Founders
         code: code
       )
 
-      response = api(nil).get('oauth.access', params: params)
+      response = api.get('oauth.access', params: params)
 
       if response['team_id'] != Rails.application.secrets.slack.dig(:team_ids, :public_slack)
         raise Founders::SlackConnectService::TeamMismatchException
@@ -70,7 +70,7 @@ module Founders
       }
     end
 
-    def api(token)
+    def api(token = nil)
       PublicSlack::ApiService.new(token: token)
     end
   end

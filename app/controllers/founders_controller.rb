@@ -18,7 +18,7 @@ class FoundersController < ApplicationController
   # GET /founder/edit
   def edit
     @founder = current_founder.decorate
-    authorize @founder.model
+    authorize current_founder
   end
 
   # PATCH /founder

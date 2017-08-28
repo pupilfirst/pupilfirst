@@ -28,6 +28,21 @@ class TargetOverlayStatusBadgeBar extends React.Component {
     }[this.props.target.status];
   }
 
+  statusHintString() {
+    return {
+      complete: 'Completed on ' + this.submissionDate(),
+      needs_improvement: 'Consider feedback and try re-submitting!',
+      submitted: 'Submitted on ' + this.submissionDate(),
+      pending: 'Follow completion instructions and submit!',
+      unavailable: 'Complete prerequisites first!',
+      not_accepted: 'Re-submit based on feedback!'
+    }[this.props.target.status];
+  }
+
+  submissionDate() {
+    return moment(this.props.target.submitted_at).format('MMM D');
+  }
+
   statusContents() {
     let grade = ['good', 'great', 'wow'].indexOf(this.props.target.grade) + 1;
 
@@ -70,7 +85,7 @@ class TargetOverlayStatusBadgeBar extends React.Component {
       <div className={ this.containerClasses() }>
         { this.statusContents() }
         <div className="target-overlay__status-info-block">
-          <p className="target-overlay__status-hint font-regular">Consider feedback and try re-submitting!</p>
+          <p className="target-overlay__status-hint font-regular">{ this.statusHintString() }</p>
         </div>
       </div>
     );

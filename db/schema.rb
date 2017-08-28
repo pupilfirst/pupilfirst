@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170821074435) do
+ActiveRecord::Schema.define(version: 20170823111249) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "pg_trgm"
   enable_extension "pg_stat_statements"
+  enable_extension "pg_trgm"
 
   create_table "active_admin_comments", id: :serial, force: :cascade do |t|
     t.string "namespace"
@@ -411,6 +411,7 @@ ActiveRecord::Schema.define(version: 20170821074435) do
     t.integer "startup_id"
     t.text "video_embed"
     t.integer "level_id"
+    t.integer "target_id"
     t.index ["level_id"], name: "index_resources_on_level_id"
     t.index ["slug"], name: "index_resources_on_slug"
     t.index ["startup_id"], name: "index_resources_on_startup_id"

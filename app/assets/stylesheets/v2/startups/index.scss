@@ -77,8 +77,17 @@
   text-shadow: 0 0 0 $dark-grey-text;
 }
 
-.filter-go-btn {
-  margin-top: 32px;
+.filter-form-btn {
+  margin-top: 15px;
+  @include media-breakpoint-up(sm) {
+    margin-top: 32px;
+  }
+}
+
+.filter-reset-btn {
+  @include media-breakpoint-up(sm) {
+    margin-left: 10px;
+  }
 }
 
 .startup-card {

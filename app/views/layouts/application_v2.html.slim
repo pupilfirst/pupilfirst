@@ -31,6 +31,7 @@ html lang='en'
           .container
             p == yield :sitewide_notice
       == render 'layouts/pretender' if @pretender
+      == render 'layouts/pending_payment' if show_pending_payment_notice
 
       section#header.header
         nav.navbar role="navigation"

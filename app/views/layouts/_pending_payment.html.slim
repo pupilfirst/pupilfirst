@@ -1,0 +1,16 @@
+- if current_founder.subscription_active?
+  .sitewide-notice.sitewide-notice--warning
+    .container
+      p
+        span.font-semibold
+          ' Your SV.CO membership will expire on #{current_startup.subscription_end_date.strftime('%A, %b %d, %Y')}.
+        | Please renew your membership for an uninterrupted access to the platform.
+        = link_to 'Renew Now', fee_founder_path, class: 'btn btn-sm m-l-1'
+- else
+  .sitewide-notice.sitewide-notice--error
+    .container
+      p
+        span.font-semibold
+          ' Your SV.CO membership has expired!
+        | Please renew your membership to regain access to the platform.
+        = link_to 'Renew Now', fee_founder_path, class: 'btn btn-sm m-l-1'

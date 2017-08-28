@@ -58,9 +58,6 @@ Rails.application.routes.draw do
     end
   end
 
-  # TODO: Preserve this path until resume_url is not statically stored any more.
-  get 'startups/:startup_id/timeline_events/:timeline_event_id/timeline_event_files/:id/download', to: 'timeline_event_files#download'
-
   get 'startups/:id(/:slug)', to: 'startups#show', as: 'timeline'
   get 'startups/:id/:slug/e/:event_id/:event_title', to: 'startups#timeline_event_show', as: 'timeline_event_show'
 

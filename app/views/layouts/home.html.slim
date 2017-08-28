@@ -28,6 +28,7 @@ html lang='en'
         .sitewide-notice
           .container
             p == yield :sitewide_notice
+      == render 'layouts/pending_payment' if show_pending_payment_notice
 
       nav.navbar.home-navbar role="navigation"
         .container

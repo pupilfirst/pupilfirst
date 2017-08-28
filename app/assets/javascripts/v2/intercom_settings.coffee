@@ -27,7 +27,7 @@ setIntercomVisibility = () ->
   _.extend(window.intercomSettings, hide_default_launcher: launcherVisible())
 
 launcherVisible = () ->
-  /founder\/dashboard/.test(window.location.href) && window.innerWidth < 576
+  window.innerWidth < 576 && $('#founder-dashboard').length > 0
 
 $(document).ready ->
   storeIntercomSettings()

@@ -57,15 +57,17 @@ h2.margin-bottom-20 Editing #{@founder.fullname}'s profile
 h4 Connected Accounts
 hr
 - if @founder.facebook_token_valid?
-  .connected-account__container.margin-bottom-20
-    span.connected-account_icon
-      i.fa.fa-facebook-square.fa-2x
-    .connected-account-profile
-      .connected-account-profile__link
-        = link_to @founder.fb_basic_info[:link] do
-          = image_tag @founder.fb_basic_info[:picture_url], size: 35, class: 'img-circle connected-account-profile__avatar'
-          ' #{@founder.fb_basic_info[:name]}
-      = link_to 'Disconnect', founder_facebook_disconnect_path, method: :post, class: 'btn btn-primary connected-account-profile__disconnect-btn'
+  .row.margin-bottom-20
+    .col-xs-9.col-xs-push-3
+      .connected-account__container
+        span.connected-account_icon
+          i.fa.fa-facebook-square.fa-2x
+        .connected-account-profile
+          .connected-account-profile__link
+            = link_to @founder.fb_basic_info[:link] do
+              = image_tag @founder.fb_basic_info[:picture_url], size: 35, class: 'img-circle connected-account-profile__avatar'
+              ' #{@founder.fb_basic_info[:name]}
+          = link_to 'Disconnect', founder_facebook_disconnect_path, method: :post, class: 'btn btn-primary connected-account-profile__disconnect-btn'
 - else
   .row.margin-bottom-20
     .connected-account__label.col-xs-3.text-right

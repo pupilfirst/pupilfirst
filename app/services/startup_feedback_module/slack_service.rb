@@ -25,7 +25,7 @@ module StartupFeedbackModule
     private
 
     def slack_message
-      formatted_reference_url = @startup_feedback.reference_url.present? ? "<#{reference_url}|recent update>" : "recent update"
+      formatted_reference_url = @startup_feedback.reference_url.present? ? "<#{@startup_feedback.reference_url}|recent update>" : "recent update"
       salutation = "Hey! You have some feedback from #{@startup_feedback.faculty.name} on your #{formatted_reference_url}.\n"
       feedback_url = Rails.application.routes.url_helpers.timeline_url(@startup_feedback.startup.id, @startup_feedback.startup.slug, show_feedback: @startup_feedback.id)
       team_id = Rails.application.secrets.slack.dig(:team_ids, :public_slack)

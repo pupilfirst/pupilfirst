@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170823111249) do
+ActiveRecord::Schema.define(version: 20170829062452) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -117,7 +117,6 @@ ActiveRecord::Schema.define(version: 20170823111249) do
 
   create_table "coupons", id: :serial, force: :cascade do |t|
     t.string "code"
-    t.string "coupon_type"
     t.integer "discount_percentage"
     t.integer "redeem_limit", default: 0
     t.datetime "expires_at"

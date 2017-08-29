@@ -24,12 +24,12 @@ class Resource < ApplicationRecord
   validates :title, presence: true
   validates :description, presence: true
 
-  validate :file_or_video_embed_must_be_present
+  validate :resource_source_must_be_present
 
-  def file_or_video_embed_must_be_present
-    return if file.present? || video_embed.present?
+  def resource_source_must_be_present
+    return if file.present? || video_embed.present? || link.present?
 
-    errors[:base] << 'A video embed or file is required.'
+    errors[:base] << 'A video embed, file or link is required.'
   end
 
   mount_uploader :file, ResourceFileUploader

@@ -53,6 +53,7 @@ class Resource < ApplicationRecord
   end
 
   def stream?
+    return false if link.present?
     video_embed.present? || content_type.end_with?('/mp4')
   end
 

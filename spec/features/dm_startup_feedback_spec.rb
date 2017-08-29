@@ -5,43 +5,36 @@ feature 'DM Startup Feedback' do
 
   let!(:admin) { create :admin_user, admin_type: 'superadmin' }
   let!(:startup) { create :startup }
-  let!(:faculty) { create :faculty }
+  let!(:faculty) { create :faculty, slack_user_id: 'ABCDEFG' }
   let!(:startup_feedback) { create :startup_feedback, faculty: faculty, startup: startup }
 
+  let!(:slack_message) do
+    salutation = "Hey! You have some feedback from #{startup_feedback.faculty.name} on your <#{startup_feedback.reference_url}|recent update>.\n"
+    feedback_url = Rails.application.routes.url_helpers.timeline_url(startup_feedback.startup.id, startup_feedback.startup.slug, show_feedback: startup_feedback.id)
+    faculty_url = 'slack://user?team=XYZ1234&id=ABCDEFG'
+    feedback_text = "<#{feedback_url}|Click here> to view the feedback.\n"
+    ping_faculty = "<#{faculty_url}|Discuss with Faculty> about this feedback."
+    { text: salutation + feedback_text + ping_faculty }.to_query
+  end
+
   let!(:founder_1_request) do
-    stub_request(:get, 'https://slack.com/api/chat.postMessage?as_user=true&channel=DABCDEF&link_names=1'\
-    "&text=#{startup_feedback.as_slack_message}&token=xxxxxx&unfurl_links=false")
+    stub_request(:get, 'https://slack.com/api/chat.postMessage?as_user=true&channel=UABCDEF&link_names=1'\
+    "&#{slack_message}&token=xxxxxx&unfurl_links=false")
       .to_return(body: '{"ok":true}')
   end
   let!(:founder_2_request) do
-    stub_request(:get, 'https://slack.com/api/chat.postMessage?as_user=true&channel=D123456&link_names=1'\
-    "&text=#{startup_feedback.as_slack_message}&token=xxxxxx&unfurl_links=false")
+    stub_request(:get, 'https://slack.com/api/chat.postMessage?as_user=true&channel=U123456&link_names=1'\
+    "&#{slack_message}&token=xxxxxx&unfurl_links=false")
       .to_return(body: '{"ok":true}')
-  end
-
-  before do
-    PublicSlack::MessageService.mock = false
-  end
-
-  after do
-    PublicSlack::MessageService.mock = true
   end
 
   before :each do
     # Sign in as admin
     sign_in_user(admin.user)
 
-    # stub requests to slack API
-    stub_request(:get, "https://slack.com/api/users.list?token=xxxxxx")
-      .to_return(body: '{"ok":true,"members":[{"id":"UABCDEF","name":"founder1"},{"id":"U123456","name":"founder2"}]}')
-    stub_request(:get, "https://slack.com/api/im.open?token=xxxxxx&user=UABCDEF")
-      .to_return(body: '{"ok":true,"channel":{"id":"DABCDEF"}}')
-    stub_request(:get, "https://slack.com/api/im.open?token=xxxxxx&user=U123456")
-      .to_return(body: '{"ok":true,"channel":{"id":"D123456"}}')
-
     # add slack info for founders
-    startup.founders.first.update!(slack_username: 'founder1', slack_user_id: 'UABCDEF')
-    startup.founders.second.update!(slack_username: 'founder2', slack_user_id: 'U123456')
+    startup.founders.first.update!(slack_user_id: 'UABCDEF')
+    startup.founders.second.update!(slack_user_id: 'U123456')
     startup.reload
   end
 

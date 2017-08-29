@@ -119,7 +119,6 @@ class Faculty < ApplicationRecord
     end
   end
 
-  # TODO: Refactor this validation to use Slack::FindUserService
   validate :slack_username_must_exist
 
   def slack_username_must_exist
@@ -127,21 +126,15 @@ class Faculty < ApplicationRecord
     return unless slack_username_changed?
     return unless Rails.env.production?
 
-    response_json = JSON.parse(RestClient.get("https://slack.com/api/users.list?token=#{Rails.application.secrets.slack_token}"))
-
-    unless response_json['ok']
-      errors.add(:slack_username, 'unable to validate username from slack. Please try again')
-      return
+    begin
+      @new_slack_user_id = FacultyModule::SlackConnectService.new(self).slack_user_id
+    rescue PublicSlack::OperationFailureException
+      errors.add(:slack_username, "could not be validated using Slack's API. Contact the engineering team.")
     end
 
-    valid_names = response_json['members'].map { |m| m['name'] }
-    index = valid_names.index slack_username
+    return if @new_slack_user_id.present?
 
-    if index.present?
-      @new_slack_user_id = response_json['members'][index]['id']
-    else
-      errors.add(:slack_username, 'a user with this mention name does not exist on SV.CO Public Slack')
-    end
+    errors.add(:slack_username, 'does not exist on SV.CO Public Slack. Confirm username and try again.')
   end
 
   before_save :fetch_slack_user_id

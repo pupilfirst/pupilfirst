@@ -205,9 +205,6 @@ ActiveAdmin.register StartupFeedback do
 
     begin
       response = StartupFeedbackModule::SlackService.new(startup_feedback, founder: founder).send
-    rescue StartupFeedbackModule::SlackService::CommunicationFailure
-      flash[:error] = 'Could not communicate with Slack. Try again.'
-    else
       flash[:alert] = response
     end
 

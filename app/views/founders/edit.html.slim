@@ -1,5 +1,5 @@
 - content_for :head
-  title SV.CO Edit Profile for #{@founder.fullname}
+title SV.CO Edit Profile for #{@founder.fullname}
 
 .margin-top-20
 h2.margin-bottom-20 Editing #{@founder.fullname}'s profile
@@ -24,7 +24,6 @@ h2.margin-bottom-20 Editing #{@founder.fullname}'s profile
   - if @founder.startup.present?
     = f.input :roles, label: 'Role at Startup', as: :select, collection: Founder.valid_roles, label_method: ->(role) { t "role.#{role}" }, include_hidden: false, input_html: { multiple: true }, required: false
 
-  = f.input :slack_username, label: (link_to 'Public Slack Username<sup>?</sup></a>'.html_safe, about_slack_url, target: '_blank'), placeholder: 'mention_name (excluding @)', required: false
   = f.input :skype_id, label: 'Skype ID', required: false
   = f.input :communication_address
   = f.input :identification_proof, label: 'ID Proof', as: :file, hint: @founder.identification_proof_hint, required: false
@@ -73,8 +72,36 @@ hr
       | Facebook
     .col-xs-9
       = button_to founder_facebook_connect_path, class: 'btn btn-primary' do
-        span.connected-account__facebook-icon
+        span.connected-account__account-icon
           i.fa.fa-facebook-square.fa-2x
-        span.connected-account__facebook-label
+        span.connected-account__button-label
           | &nbsp;Connect
       .margin-top-10 Once connected, you can choose to post your personal and team events onto your Facebook wall.
+
+- if @founder.connected_to_slack?
+  .row.margin-bottom-20
+    .col-xs-9.col-xs-push-3
+      .connected-account__container
+        span.connected-account_icon
+          i.fa.fa-slack.fa-2x
+        .connected-account-profile
+          .connected-account-profile__link
+            ' You are connected to Slack.
+          = link_to 'Disconnect', founder_slack_disconnect_path, method: :post, class: 'btn btn-primary connected-account-profile__disconnect-btn', data: { confirm: 'Are you sure? You will need to manually update your Slack name to keep it in sync with your product name.' }
+- else
+  .row.margin-bottom-20
+    .connected-account__label.col-xs-3.text-right
+      | Slack
+    .col-xs-9
+      = link_to founder_slack_connect_path, class: 'btn btn-primary' do
+        span.connected-account__account-icon
+          i.fa.fa-slack.fa-2x
+        span.connected-account__button-label
+          | &nbsp;Connect
+      .margin-top-10
+        ' Once connected, we will automatically:
+        ul
+          li
+            ' Add you to all channels on our Public Slack, including those reserved for members of the Startup Village
+            | Collective.
+          li Keep your profile name on Slack up-to-date, in the required format.

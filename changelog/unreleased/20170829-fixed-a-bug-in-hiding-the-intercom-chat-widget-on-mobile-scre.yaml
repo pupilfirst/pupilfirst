@@ -1,0 +1,8 @@
+---
+timestamp: '2017-08-29T09:51:53Z'
+title: Fixed a bug in hiding the intercom chat widget on mobile screens.
+trello: https://trello.com/c/aWlggco9
+private: true
+description: Intercom's build-in hide_default_launcher boolean setting was used to
+  hide the widget on dashboard.
+category: bugfix

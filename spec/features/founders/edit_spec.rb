@@ -70,11 +70,9 @@ feature 'Founder Edit' do
 
   context 'founder has connected slack account' do
     let(:founder) do
-      create(:founder,
+      create(:founder, :connected_to_slack,
         born_on: 18.years.ago,
-        communication_address: 'Foo',
-        slack_access_token: 'SLACK_ACCESS_TOKEN',
-        slack_user_id: 'SLACK_USER_ID')
+        communication_address: 'Foo')
     end
 
     scenario 'founder updates his name' do

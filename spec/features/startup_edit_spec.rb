@@ -4,11 +4,16 @@ feature 'Startup Edit' do
   include UserSpecHelper
 
   let!(:startup) { create :startup, :subscription_active }
-  let(:founder) { startup.admin }
+  let(:founder) { create :founder }
 
   let(:new_product_name) { Faker::Lorem.words(rand(3) + 1).join ' ' }
   let(:new_product_description) { Faker::Lorem.words(12).join(' ').truncate(Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS) }
   let(:new_deck) { Faker::Internet.domain_name }
+
+  before do
+    startup.founders << founder
+    startup.save!
+  end
 
   context 'Founder visits edit page of his startup' do
     scenario 'Founder updates all required fields' do
@@ -48,9 +53,7 @@ feature 'Startup Edit' do
   end
 
   context 'when founder is connected to Slack' do
-    before do
-      founder.update(slack_access_token: 'SLACK_ACCESS_TOKEN', slack_user_id: 'SLACK_USER_ID')
-    end
+    let(:founder) { create :founder, :connected_to_slack }
 
     scenario 'Founder udpates product name' do
       # Stub the access token lookup.

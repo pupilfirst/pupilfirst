@@ -35,7 +35,7 @@ module Founders
 
       log "Successfully assigned Slack access token to Founder##{@founder.id}."
 
-      update_slack_username
+      perform_post_connect_tasks
 
       log 'All done.'
     end
@@ -66,6 +66,19 @@ module Founders
     end
 
     private
+
+    def perform_post_connect_tasks
+      update_slack_username
+
+      # Update their Slack profile name.
+      Founders::UpdateSlackNameJob.perform_later(@founder)
+
+      # Invite them to all channels.
+      Founders::InviteToSlackChannelsJob.perform_later(@founder)
+
+      # Tag the user on Intercom as having connected to Slack.
+      Intercom::FounderTaggingJob.perform_later(@founder, 'Connected Slack Account')
+    end
 
     def update_slack_username
       log 'Fetching username from Slack...'

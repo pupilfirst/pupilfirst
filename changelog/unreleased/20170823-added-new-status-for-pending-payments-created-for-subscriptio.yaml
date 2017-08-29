@@ -1,7 +1,0 @@
----
-timestamp: '2017-08-23T07:02:18Z'
-title: Added new status for pending payments created for subscription renewal that
-  caused admin/payments to fail
-trello: https://trello.com/c/jxvVtgcu
-private: true
-category: bugfix

@@ -23,5 +23,14 @@ getUtmParams = (query) ->
     .pickBy((value, key) -> _.startsWith(key, 'utm_')) # select the utm parameters
     .value()
 
+setIntercomVisibility = () ->
+  _.extend(window.intercomSettings, hide_default_launcher: launcherVisible())
+
+launcherVisible = () ->
+  window.innerWidth < 576 && $('#founder-dashboard').length > 0
+
 $(document).ready ->
   storeIntercomSettings()
+
+$(document).on 'turbolinks:load', ->
+  setIntercomVisibility()

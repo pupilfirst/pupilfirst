@@ -1,5 +1,46 @@
 ---
 changelog:
+- timestamp: '2017-08-28T11:29:22Z'
+  changes:
+  - timestamp: '2017-08-28T10:26:43Z'
+    title: Allow pie charts on the admins admission dashboard to be filtered by admission
+      stage.
+    trello: https://trello.com/c/lwqOOnYW
+    private: true
+    category: feature
+  - timestamp: '2017-08-28T10:24:20Z'
+    title: Finished setup of a new 'Moved to Level 1' tag on Intercom.
+    trello: https://trello.com/c/sJVLA73h
+    private: true
+    category: feature
+  - timestamp: '2017-08-28T10:21:44Z'
+    title: A handy 'Clear' button was added to the filter on startups page.
+    trello: https://trello.com/c/ISLr2LrA
+    private: false
+    category: feature
+  - timestamp: '2017-08-28T10:20:17Z'
+    title: Soon-to-expire/expired subscribers are now shown a site wide banner informing
+      the same.
+    trello: https://trello.com/c/wklbDxVp
+    private: false
+    category: feature
+  - timestamp: '2017-08-23T07:02:18Z'
+    title: Added new status for pending payments created for subscription renewal
+      that caused admin/payments to fail
+    trello: https://trello.com/c/jxvVtgcu
+    private: true
+    category: bugfix
+  - timestamp: '2017-08-22T10:44:44Z'
+    title: Resume will now be added to founder profile automatically when associated
+      timeline event is verified
+    trello: https://trello.com/c/yzNDDDiT
+    private: true
+    category: feature
+  - timestamp: '2017-08-22T10:41:23Z'
+    title: Founder.resume_file_id is added to store id of uploaded resume file. Founder.resume_url
+      will only store external links to resume
+    trello: https://trello.com/c/hXvmhbkU
+    private: true
 - timestamp: '2017-08-21T08:51:27Z'
   changes:
   - timestamp: '2017-08-21T08:50:43Z'

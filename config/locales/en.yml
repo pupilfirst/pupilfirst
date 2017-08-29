@@ -111,29 +111,6 @@ en:
     design: Design
     founder: All Founders
 
-  target:
-    status:
-      complete: 'Complete'
-      needs_improvement: 'Needs Improvement'
-      submitted: 'Submitted'
-      pending: 'Pending'
-      unavailable: 'Locked'
-      not_accepted: 'Not Accepted'
-    status_report:
-      complete: 'Target Completed'
-      needs_improvement: 'Submission Needs Improvement'
-      submitted: 'Submission Being Verified'
-      pending: 'Target Pending'
-      unavailable: 'Target Locked'
-      not_accepted: 'Submission Not Accepted'
-    status_hint:
-      complete: 'Completed on %{date}'
-      needs_improvement: 'Consider feedback and try re-submitting!'
-      submitted: 'Submitted on %{date}'
-      pending: 'Follow completion instructions and submit!'
-      unavailable: 'Complete prerequisites first!'
-      not_accepted: 'Re-submit based on feedback!'
-
   timeline_event:
     grade:
       good: 'Good'

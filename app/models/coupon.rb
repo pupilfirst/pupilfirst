@@ -4,17 +4,7 @@ class Coupon < ApplicationRecord
 
   scope :referral, -> { where.not(referrer_startup_id: nil) }
 
-  # TODO: Now that it's all referral coupons, probably scrap coupon_type entirely.
-  TYPE_DISCOUNT = -'Discount'
-  TYPE_MSP = -'Microsoft Student Partner'
-  TYPE_REFERRAL = -'Referral'
-
-  def self.valid_coupon_types
-    [TYPE_DISCOUNT, TYPE_MSP, TYPE_REFERRAL]
-  end
-
   validates :code, uniqueness: true, presence: true, length: { in: 4..10 }
-  validates :coupon_type, inclusion: { in: valid_coupon_types }
   validates :referrer_startup_id, uniqueness: true, allow_nil: true
   validates :user_extension_days, presence: true, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 31 }
   validates :referrer_extension_days, presence: true, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 31 }, if: proc { |coupon| coupon.referrer_startup_id.present? }

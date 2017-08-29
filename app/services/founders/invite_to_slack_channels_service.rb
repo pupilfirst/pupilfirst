@@ -58,7 +58,7 @@ module Founders
     end
 
     def api
-      @api ||= PublicSlack::ApiService.new(token: Rails.application.secrets.slack.dig(:app, :oauth_token))
+      @api ||= PublicSlack::ApiService.new(token: Rails.application.secrets.slack.dig(:app, :bot_oauth_token))
     end
   end
 end

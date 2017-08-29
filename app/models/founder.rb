@@ -152,13 +152,6 @@ class Founder < ApplicationRecord
   has_secure_token :auth_token
   has_secure_token :invitation_token
 
-  before_validation :remove_at_symbol_from_slack_username
-
-  def remove_at_symbol_from_slack_username
-    return unless slack_username.present? && slack_username.starts_with?('@')
-    self.slack_username = slack_username[1..-1]
-  end
-
   def display_name
     name.blank? ? email : name
   end

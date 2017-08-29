@@ -34,6 +34,10 @@ module Founders
       @founder.save!
 
       log "Successfully assigned Slack access token to Founder##{@founder.id}."
+
+      update_slack_username
+
+      log 'All done.'
     end
 
     # Disconnects a founder from his / her Slack account.
@@ -62,6 +66,15 @@ module Founders
     end
 
     private
+
+    def update_slack_username
+      log 'Fetching username from Slack...'
+
+      response = api(Rails.application.secrets.slack.dig(:app, :oauth_token)).get('users.info', params: { user: @founder.slack_user_id })
+
+      @founder.slack_username = response['user']['name']
+      @founder.save!
+    end
 
     def oauth_params
       {

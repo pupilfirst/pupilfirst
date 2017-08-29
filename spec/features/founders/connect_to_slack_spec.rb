@@ -33,6 +33,10 @@ feature 'Connect to Slack' do
     stub_request(:get, 'https://slack.com/api/oauth.access?client_id=CLIENT_ID&client_secret=CLIENT_SECRET&code=OAUTH_CODE&redirect_uri=http://localhost:3000/founder/slack/callback')
       .to_return(body: { ok: true, access_token: 'ACCESS_TOKEN', user_id: 'USER_ID' }.to_json)
 
+    # Stub the request to retrieve username from Slack.
+    stub_request(:get, 'https://slack.com/api/users.info?user=USER_ID')
+      .to_return(body: { ok: true, user: { name: 'USER_NAME' } }.to_json)
+
     # Stub the request to check whether token is valid.
     stub_request(:get, 'https://slack.com/api/auth.test?token=ACCESS_TOKEN').to_return(body: { ok: true }.to_json)
 
@@ -63,8 +67,9 @@ feature 'Connect to Slack' do
 
     visit(founder_slack_callback_path(code: 'OAUTH_CODE'))
 
-    expect(page).to have_content('You are connected to Slack.')
+    expect(page).to have_content('Your username on Slack is USER_NAME.')
     expect(founder.reload.slack_access_token).to eq('ACCESS_TOKEN')
     expect(founder.slack_user_id).to eq('USER_ID')
+    expect(founder.slack_username).to eq('USER_NAME')
   end
 end

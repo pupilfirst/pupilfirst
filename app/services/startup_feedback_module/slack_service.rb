@@ -3,13 +3,10 @@ module StartupFeedbackModule
     include Loggable
     include ActionView::Helpers::TextHelper
 
-    CommunicationFailure = Class.new(StandardError)
-
     def initialize(startup_feedback, founder: nil)
       @startup_feedback = startup_feedback
       @founder = founder
       @api = PublicSlack::ApiService.new(token: Rails.application.secrets.slack.dig(:app, :bot_oauth_token))
-      @errors = {}
     end
 
     def send
@@ -19,14 +16,10 @@ module StartupFeedbackModule
       log "Posting feedback to public slack for #{pluralize(founders.count, 'founder')}."
 
       # Post to Slack.
-      response = if Rails.env.development?
-        OpenStruct.new(errors: {})
-      else
-        send_message_to_founders(founders)
-      end
+      errors = Rails.env.development? ? [] : send_message_to_founders(founders)
 
       # Form appropriate flash message with details from response.
-      build_response(founders, response)
+      build_response(founders, errors)
     end
 
     private
@@ -43,9 +36,9 @@ module StartupFeedbackModule
       salutation + feedback_text + ping_faculty
     end
 
-    def build_response(founders, response)
-      success_names = Founder.find(founders.ids - response.errors.keys).map(&:slack_username).join(', ')
-      failure_names = Founder.find(founders.ids & response.errors.keys).map(&:fullname).join(', ')
+    def build_response(founders, errors)
+      success_names = Founder.find(founders.ids - errors).map(&:slack_username).join(', ')
+      failure_names = Founder.find(founders.ids & errors).map(&:fullname).join(', ')
       success_message = success_names.present? ? "Your feedback has been sent as DM to: #{success_names}.\n" : ''
       failure_message = failure_names.present? ? "Failed to ping: #{failure_names}" : ''
 
@@ -53,13 +46,15 @@ module StartupFeedbackModule
     end
 
     def send_message_to_founders(founders)
-      founders.each do |founder|
+      founders.each_with_object([]) do |founder, errors|
         params = { text: slack_message, channel: founder.slack_user_id, link_names: 1, as_user: 'true', unfurl_links: 'false' }
-        response = @api.get('chat.postMessage', params: params)
-        @errors[founder.id] = response['error'] unless response['ok']
-      end
 
-      OpenStruct.new(errors: @errors)
+        begin
+          @api.get('chat.postMessage', params: params)
+        rescue PublicSlack::OperationFailureException, PublicSlack::ParseFailureException, PublicSlack::TransportFailureException
+          errors << founder.id
+        end
+      end
     end
   end
 end

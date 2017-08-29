@@ -12,6 +12,7 @@ feature 'Connect to Slack' do
       app: {
         client_id: 'CLIENT_ID',
         client_secret: 'CLIENT_SECRET',
+        oauth_token: 'OAUTH_TOKEN',
         bot_oauth_token: 'BOT_OAUTH_TOKEN'
       },
       channels: {
@@ -35,7 +36,7 @@ feature 'Connect to Slack' do
       .to_return(body: { ok: true, access_token: 'ACCESS_TOKEN', user_id: 'USER_ID' }.to_json)
 
     # Stub the request to retrieve username from Slack.
-    stub_request(:get, 'https://slack.com/api/users.info?user=USER_ID')
+    stub_request(:get, 'https://slack.com/api/users.info?user=USER_ID&token=OAUTH_TOKEN')
       .to_return(body: { ok: true, user: { name: 'USER_NAME' } }.to_json)
 
     # Stub the request to check whether token is valid.
@@ -59,11 +60,11 @@ feature 'Connect to Slack' do
       .to_return(body: { ok: true, groups: [{ name: 'private-channel', id: 'PRIVATE_CHANNEL' }] }.to_json)
 
     # Stub the request to invite founder to public channels.
-    stub_request(:get, 'https://slack.com/api/channels.invite?channel=PUBLIC_CHANNEL&user=USER_ID&token=BOT_OAUTH_TOKEN')
+    stub_request(:get, 'https://slack.com/api/channels.invite?channel=PUBLIC_CHANNEL&user=USER_ID&token=OAUTH_TOKEN')
       .to_return(body: { ok: true }.to_json)
 
     # Stub the request to invite founder to public channels.
-    stub_request(:get, 'https://slack.com/api/groups.invite?channel=PRIVATE_CHANNEL&user=USER_ID&token=BOT_OAUTH_TOKEN')
+    stub_request(:get, 'https://slack.com/api/groups.invite?channel=PRIVATE_CHANNEL&user=USER_ID&token=OAUTH_TOKEN')
       .to_return(body: { ok: true }.to_json)
 
     visit(founder_slack_callback_path(code: 'OAUTH_CODE'))

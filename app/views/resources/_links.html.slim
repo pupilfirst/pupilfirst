@@ -1,5 +1,10 @@
 .resource-links
-  - if resource.file.present?
+  - if resource.link.present?
+    a.btn.btn-ghost-secondary.btn-sm.btn-with-icon.text-uppercase href=download_resource_url(resource) target='_blank'
+      i.fa.fa-external-link
+      | &nbsp; Visit
+
+  - elsif resource.file.present?
     a.btn.btn-ghost-secondary.btn-sm.btn-with-icon.text-uppercase href=download_resource_url(resource) target='_blank'
       i.fa.fa-download
       | &nbsp; Download

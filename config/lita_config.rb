@@ -6,7 +6,7 @@ Lita.configure do |config|
   config.robot.alias = '!'
 
   config.robot.adapter = :slack
-  config.adapters.slack.token = ENV['SLACK_TOKEN']
+  config.adapters.slack.token = Rails.application.secrets.slack.dig(:app, :bot_oauth_token)
 
   config.redis = { url: ENV['REDIS_URL'] }
 

@@ -7,7 +7,6 @@ module Coupons
     def generate_referral(startup)
       Coupon.create!(
         code: unique_code,
-        coupon_type: Coupon::TYPE_REFERRAL,
         user_extension_days: USER_EXTENSION_DEFAULT,
         referrer_extension_days: REFERRER_EXTENSION_DEFAULT,
         redeem_limit: REDEEM_LIMIT_DEFAULT,

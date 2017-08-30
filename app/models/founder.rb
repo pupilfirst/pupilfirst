@@ -152,13 +152,6 @@ class Founder < ApplicationRecord
   has_secure_token :auth_token
   has_secure_token :invitation_token
 
-  before_validation :remove_at_symbol_from_slack_username
-
-  def remove_at_symbol_from_slack_username
-    return unless slack_username.present? && slack_username.starts_with?('@')
-    self.slack_username = slack_username[1..-1]
-  end
-
   def display_name
     name.blank? ? email : name
   end
@@ -325,6 +318,11 @@ class Founder < ApplicationRecord
     facebook_token_available? && Founders::FacebookService.new(self).token_valid?(fb_access_token)
   end
 
+  def connected_to_slack?
+    return false if slack_access_token.blank?
+    Founders::SlackConnectService.new(self).token_valid?(slack_access_token)
+  end
+
   def facebook_share_eligibility
     return 'not_admitted' if startup.level_zero?
     facebook_token_available? ? 'eligible' : 'token_unavailable'
@@ -371,9 +369,10 @@ class Founder < ApplicationRecord
   end
 
   def self.reference_sources
-    ['Friend', 'Seniors', '#StartinCollege Event', 'Newspaper/Magazine',
-     'TV', 'SV.CO Blog', 'Instagram', 'Facebook', 'Twitter', 'Microsoft Student Partner',
-     'Other (Please Specify)']
+    [
+      'Friend', 'Seniors', '#StartinCollege Event', 'Newspaper/Magazine', 'TV', 'SV.CO Blog', 'Instagram', 'Facebook',
+      'Twitter', 'Microsoft Student Partner', 'Other (Please Specify)'
+    ]
   end
 
   private

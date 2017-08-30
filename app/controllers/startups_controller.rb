@@ -63,8 +63,9 @@ class StartupsController < ApplicationController
   def update
     @startup = current_founder.startup
     authorize @startup
+    update_service = Startups::UpdateService.new(@startup)
 
-    if @startup.update(startup_params)
+    if update_service.update(startup_params)
       flash[:success] = 'Startup details have been updated.'
       redirect_to timeline_path(@startup.id, @startup.slug)
     else

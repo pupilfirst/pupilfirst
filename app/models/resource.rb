@@ -24,12 +24,12 @@ class Resource < ApplicationRecord
   validates :title, presence: true
   validates :description, presence: true
 
-  validate :file_or_video_embed_must_be_present
+  validate :exactly_one_source_must_be_present
 
-  def file_or_video_embed_must_be_present
-    return if file.present? || video_embed.present?
+  def exactly_one_source_must_be_present
+    return if [file, video_embed, link].one?(&:present?)
 
-    errors[:base] << 'A video embed or file is required.'
+    errors[:base] << 'One and only one of a video embed, file or link must be present.'
   end
 
   mount_uploader :file, ResourceFileUploader
@@ -53,6 +53,7 @@ class Resource < ApplicationRecord
   end
 
   def stream?
+    return false if link.present?
     video_embed.present? || content_type.end_with?('/mp4')
   end
 

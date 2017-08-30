@@ -44,7 +44,7 @@ class ResourcesController < ApplicationController
     resource = Resource.find(params[:id])
     authorize resource
     resource.increment_downloads(current_user)
-    redirect_to resource.file.url
+    redirect_to(resource.link.present? ? resource.link : resource.file.url)
   end
 
   private

@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170823111249) do
+ActiveRecord::Schema.define(version: 20170829064547) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
+  enable_extension "pg_stat_statements"
 
   create_table "active_admin_comments", id: :serial, force: :cascade do |t|
     t.string "namespace"
@@ -117,7 +117,6 @@ ActiveRecord::Schema.define(version: 20170823111249) do
 
   create_table "coupons", id: :serial, force: :cascade do |t|
     t.string "code"
-    t.string "coupon_type"
     t.integer "discount_percentage"
     t.integer "redeem_limit", default: 0
     t.datetime "expires_at"
@@ -257,6 +256,7 @@ ActiveRecord::Schema.define(version: 20170823111249) do
     t.integer "invited_startup_id"
     t.boolean "hacker"
     t.integer "resume_file_id"
+    t.string "slack_access_token"
     t.index ["college_id"], name: "index_founders_on_college_id"
     t.index ["hacker"], name: "index_founders_on_hacker"
     t.index ["invitation_token"], name: "index_founders_on_invitation_token", unique: true
@@ -412,6 +412,7 @@ ActiveRecord::Schema.define(version: 20170823111249) do
     t.text "video_embed"
     t.integer "level_id"
     t.integer "target_id"
+    t.string "link"
     t.index ["level_id"], name: "index_resources_on_level_id"
     t.index ["slug"], name: "index_resources_on_slug"
     t.index ["startup_id"], name: "index_resources_on_startup_id"

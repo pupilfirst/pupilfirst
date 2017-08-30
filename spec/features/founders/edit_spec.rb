@@ -4,7 +4,7 @@ include UserSpecHelper
 
 feature 'Founder Edit' do
   let(:startup) { create :startup, :subscription_active }
-  let(:founder) { create :founder, college: nil, college_text: 'Anon College of Engineering' }
+  let(:founder) { create :founder, college: nil, college_text: 'Anon College of Engineering', born_on: 18.years.ago }
   let(:new_founder_name) { Faker::Name.name }
 
   before do
@@ -12,13 +12,9 @@ feature 'Founder Edit' do
   end
 
   context 'Active founder visits edit page of his profile' do
-    before :each do
-      # Log in the founder.
-      sign_in_user(founder.user, referer: edit_founder_path)
-      # founder should now be on his profile edit page.
-    end
-
     scenario 'Founder tries to submit a blank form' do
+      sign_in_user(founder.user, referer: edit_founder_path)
+
       expect(page).to have_text('Editing').and have_text('profile')
       fill_in 'founders_edit_name', with: ''
       fill_in 'founders_edit_born_on', with: ''
@@ -30,6 +26,8 @@ feature 'Founder Edit' do
     end
 
     scenario 'Founder fills in the required fields and submits' do
+      sign_in_user(founder.user, referer: edit_founder_path)
+
       expect(page).to have_text('Editing').and have_text('profile')
       fill_in 'founders_edit_name', with: new_founder_name
       fill_in 'founders_edit_born_on', with: '1997-01-15'
@@ -47,11 +45,11 @@ feature 'Founder Edit' do
   context 'Exited founder attempts to edit his profile' do
     before do
       founder.update!(exited: true)
-      sign_in_user(founder.user)
     end
 
     scenario 'founder visits the edit page', js: true do
-      visit edit_founder_path
+      sign_in_user(founder.user, referer: edit_founder_path)
+
       expect(page).to have_text('not an active founder anymore')
     end
   end
@@ -60,11 +58,45 @@ feature 'Founder Edit' do
     let(:startup) { create :startup }
 
     scenario 'founder visits the edit page' do
+      sign_in_user(founder.user, referer: edit_founder_path)
+
       # Create a pending payment.
       create :payment, startup: startup
 
       sign_in_user(founder.user, referer: edit_founder_path)
       expect(page).to have_content('Please pay the membership fee for the next month.')
+    end
+  end
+
+  context 'founder has connected slack account' do
+    let(:founder) do
+      create(:founder, :connected_to_slack,
+        born_on: 18.years.ago,
+        communication_address: 'Foo')
+    end
+
+    scenario 'founder updates his name' do
+      # Stub the access token lookup.
+      stub_request(:get, 'https://slack.com/api/auth.test?token=SLACK_ACCESS_TOKEN')
+        .to_return(body: { ok: true }.to_json)
+
+      # Stub the calls to update profile name on Slack for all founders.
+      stub_request(:get, "https://slack.com/api/users.profile.set?#{{
+        profile: {
+          first_name: new_founder_name,
+          last_name: "(#{startup.product_name})"
+        }.to_json,
+        token: 'SLACK_ACCESS_TOKEN'
+      }.to_query}").to_return(body: { ok: true }.to_json)
+
+      sign_in_user(founder.user, referer: edit_founder_path)
+
+      fill_in 'founders_edit_name', with: new_founder_name
+
+      click_on 'Update details'
+
+      expect(page).to have_content(new_founder_name)
+      expect(founder.reload.name).to eq(new_founder_name)
     end
   end
 end

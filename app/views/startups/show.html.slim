@@ -22,9 +22,9 @@
       p Please note that this startup has dropped out and is no longer a part of SV.CO!
 
   / Company Name Header
-  .row
+  .row.align-items-center
     .col-sm-8
-      h1.product-name
+      h1.product-name.mt-md-3
         = @startup.product_name.present? ? @startup.product_name : 'Untitled Product'
         - if @startup.timeline_verified?
           a#verified-icon data-toggle="tooltip" data-placement="top" title="Timeline verified by SV.CO" href="#"
@@ -38,13 +38,12 @@
           ' (by #{@startup.name})
 
     - if @startup.logo?
-      .col-sm-4.visible-md-block.visible-lg-block
+      .col-sm-4
         = image_tag "#{@startup.logo_url}", class: 'startup-logo'
 
   - if @startup.product_description?
     p.product-description #{@startup.product_description}
 
-  / Container right
   .row
     .col-lg-4.order-1.order-lg-2
       #data-points

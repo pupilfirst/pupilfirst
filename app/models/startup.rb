@@ -140,6 +140,7 @@ class Startup < ApplicationRecord
 
   has_many :weekly_karma_points
   has_many :resources
+  belongs_to :team_lead, class_name: 'Founder'
 
   # use the old name attribute as an alias for legal_registered_name
   alias_attribute :name, :legal_registered_name

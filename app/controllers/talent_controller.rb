@@ -5,12 +5,12 @@ class TalentController < ApplicationController
 
   # GET /talent
   def index
-    @talent_form = TalentForm.new(OpenStruct.new)
+    @talent_form = TalentForm.new(Reform::OpenForm.new)
   end
 
   # POST /talent/contact
   def contact
-    @talent_form = TalentForm.new(OpenStruct.new)
+    @talent_form = TalentForm.new(Reform::OpenForm.new)
 
     if verify_recaptcha
       if @talent_form.validate(talent_form_params)

@@ -13,7 +13,7 @@ describe Targets::OverlayDetailsService do
 
   describe '#founder_statuses' do
     it 'returns status for each founder for a founder target' do
-      expect(subject.founder_statuses).to eq([{ founder_1.id => :complete }, { founder_2.id => :pending }])
+      expect(subject.founder_statuses).to match_array([{ founder_1.id => :complete }, { founder_2.id => :pending }])
     end
   end
 

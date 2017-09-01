@@ -73,7 +73,7 @@ class AdmissionsController < ApplicationController
     @coupon = current_startup.applied_coupon
 
     if @coupon.blank?
-      @coupon_form = Admissions::CouponForm.new(OpenStruct.new)
+      @coupon_form = Admissions::CouponForm.new(Reform::OpenForm.new)
       @coupon_form.prepopulate!(current_founder)
     end
   end

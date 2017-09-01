@@ -16,7 +16,8 @@ gem 'carrierwave', '~> 1.1' # One uploader to rule them all.
 
 # TODO: Switch to carrierwave_backgrounder from rubygems when a version (with support for Carrierwave v1) is released.
 # TODO: carrierwave_backgrounder is also holding back the version of mime-types in use. Check for updates.
-gem 'carrierwave_backgrounder', '= 0.4.2', github: 'lardawge/carrierwave_backgrounder' # Backgrounder for carrierwave.
+# Backgrounder for carrierwave.
+gem 'carrierwave_backgrounder', '= 0.4.2', github: 'harigopal/carrierwave_backgrounder', branch: 'rails-5-1'
 gem 'carrierwave-bombshelter', '~> 0.2' # Protects your carrierwave from image bombs (and such).
 
 # Required by Carrierwave to upload to S3.

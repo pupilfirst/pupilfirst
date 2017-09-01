@@ -12,14 +12,14 @@ module Users
         flash[:alert] = 'You are already signed in.'
         redirect_to root_url
       else
-        form_data = OpenStruct.new(referer: params[:referer])
+        form_data = Reform::OpenForm.new(referer: params[:referer])
         @form = UserSignInForm.new(form_data)
       end
     end
 
     # POST /user/send_email - find or create user from email received
     def send_login_email
-      @form = UserSignInForm.new(OpenStruct.new)
+      @form = UserSignInForm.new(Reform::OpenForm.new)
 
       if verify_recaptcha(model: @form, secret_key: Rails.application.secrets.dig(:google, :recaptcha, :invisible, :secret_key))
         if @form.validate(sign_in_params)

@@ -28,7 +28,7 @@ describe Founders::PostPaymentService do
       let(:payment) { create :payment }
 
       it 'raises an error' do
-        expect { subject.execute }.to raise_error
+        expect { subject.execute }.to raise_error('PostPaymentService was called for an unpaid payment!')
       end
     end
   end

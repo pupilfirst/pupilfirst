@@ -93,7 +93,7 @@ class SixWaysController < ApplicationController
     @module = CourseModule.friendly.find(params[:module_name])
     @questions = @module.quiz_questions
 
-    @form = QuizSubmissionForm.new(OpenStruct.new)
+    @form = QuizSubmissionForm.new(Reform::OpenForm.new)
     @form.prepopulate! questions: @questions
     render layout: 'sixways'
   end

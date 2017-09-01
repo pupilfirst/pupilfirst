@@ -236,6 +236,10 @@ p {
   box-shadow: $box-shadow;
   border-radius: 5px;
   border: 1px solid $gray-border;
+
+  @include media-breakpoint-down(sm) {
+    padding: 1rem;
+  }
 }
 
 .secondary-banner {
@@ -270,10 +274,10 @@ p {
 
 .simple-form-container {
   .form-group {
-    margin-bottom: 1.25rem;
 
     .control-label {
       padding-top: 7px;
+      display: block;
 
       @include media-breakpoint-down(xs) {
         margin-bottom: 10px;
@@ -300,7 +304,7 @@ p {
     }
     .form-control {
       font-size: 0.875rem;
-      padding: 0.7rem 0.75rem;
+      padding: 0.5rem 0.75rem;
 
       &:focus {
         border-color: lighten($light-secondary, 20%);

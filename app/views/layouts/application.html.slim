@@ -1,7 +1,6 @@
 doctype html
 html lang='en'
   head
-    // Begin critial tags.
     meta charset="utf-8"
     meta http-equiv="X-UA-Compatible" content="IE=edge"
     meta name="viewport" content="width=device-width, initial-scale=1"
@@ -49,7 +48,8 @@ html lang='en'
 
             = render 'layouts/nav_links'
 
-      == yield :header
+    == yield :header
+    == render 'layouts/platform_feedback' if current_founder
 
     - if @skip_container
       == yield

@@ -1,5 +1,63 @@
 ---
 changelog:
+- timestamp: '2017-09-02T14:45:32Z'
+  changes:
+  - timestamp: '2017-09-02T14:25:16Z'
+    title: Library entries can now link to external resources.
+    trello: https://trello.com/c/7dut35rW
+    private: false
+    category: feature
+  - timestamp: '2017-09-02T14:19:38Z'
+    title: Upgraded to Bootstrap 4 beta on remaining pages.
+    trello: https://trello.com/c/CVNY4NHU
+    private: true
+    description: This is a quick and dirty port. Issues exist - see Trello card for
+      details.
+    category: ui
+  - timestamp: '2017-08-31T09:45:51Z'
+    title: Switched to using custom branch of carrierwave_backgrounder with fixes for
+      deprecation warnings.
+    trello: https://trello.com/c/wBJsDBpU
+    private: true
+  - timestamp: '2017-08-29T12:10:58Z'
+    title: Founders are now tagged on Intercom when they complete connecting their
+      Slack account to their SV.CO account.
+    trello: https://trello.com/c/1krRpsZj
+    private: true
+  - timestamp: '2017-08-29T12:09:00Z'
+    title: Added the ability to connect a founder's Slack account to his / her SV.CO
+      account. This allows us to automatically invite founders to appropriate Slack
+      channels, and keep the Slack profile name up-to-date in the required format.
+    trello: https://trello.com/c/fcG1hA8Q
+    private: false
+    category: feature
+  - timestamp: '2017-08-29T09:53:08Z'
+    title: The stale coupon_type field was removed from Coupon and all its usages
+      excised.
+    trello: https://trello.com/c/OmB7BNiQ
+    private: true
+  - timestamp: '2017-08-29T09:51:53Z'
+    title: Fixed a bug in hiding the intercom chat widget on mobile screens.
+    trello: https://trello.com/c/aWlggco9
+    private: true
+    description: Intercom's build-in hide_default_launcher boolean setting was used
+      to hide the widget on dashboard.
+    category: bugfix
+  - timestamp: '2017-08-29T09:49:29Z'
+    title: A _status bar_ was added to the target overlay to display detailed information about a target's status for the signed-in founder.
+    trello: https://trello.com/c/aWlggco9
+    private: false
+    category: feature
+  - timestamp: '2017-08-29T09:35:14Z'
+    title: A _Discuss with Faculty_ link has been added to Slack notifications sent for new feedback
+      from SV.CO team to founders.
+    trello: https://trello.com/c/av8tA8TI
+    private: false
+    category: feature
+  - timestamp: '2017-08-29T08:25:40Z'
+    title: Update Rails to 5.1.3.
+    trello: https://trello.com/c/WLa2TEpT
+    private: true
 - timestamp: '2017-08-28T11:29:22Z'
   changes:
   - timestamp: '2017-08-28T10:26:43Z'

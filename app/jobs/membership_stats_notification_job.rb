@@ -43,7 +43,8 @@ class MembershipStatsNotificationJob < ApplicationJob
   end
 
   def unique_visits_yesterday
-    Visit.where(started_at: 1.day.ago.beginning_of_day..1.day.ago.end_of_day).count
+    admitted_users = Founder.admitted.pluck(:user_id)
+    Visit.where(started_at: 1.day.ago.beginning_of_day..1.day.ago.end_of_day).where.not(user_id: admitted_users).count
   end
 
   def unique_visits_since_may_8

@@ -16,7 +16,8 @@ module AdmissionStats
         'Screening Completed' => screening_completed,
         'Added Cofounders' =>  cofounders_added,
         'Payment Initiated' => payment_initiated,
-        'Fee Paid' => fee_paid,
+        'Fee Paid Teams' => fee_paid_startups.count,
+        'Fee Paid Founders' => fee_paid_founders.count,
         'Revenue' => "₹#{revenue.to_i}"
       }
     end
@@ -31,8 +32,12 @@ module AdmissionStats
       verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_SCREENING }).where(created_at: @date_range).count
     end
 
-    def fee_paid
-      verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_FEE_PAYMENT }).where(created_at: @date_range).count
+    def fee_paid_startups
+      @fee_paid_startups ||= verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_FEE_PAYMENT }).where(created_at: @date_range).pluck(:startup_id)
+    end
+
+    def fee_paid_founders
+      Founder.where(startup: fee_paid_startups)
     end
 
     def revenue

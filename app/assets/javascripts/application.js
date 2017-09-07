@@ -41,6 +41,7 @@
 
 // Shared
 //= require _shared
+//= require footer
 
 // Components
 //= require components

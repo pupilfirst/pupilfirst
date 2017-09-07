@@ -22,7 +22,6 @@ footer {
       color: white;
       font-size: 13px;
       letter-spacing: 0.03rem;
-
     }
     .sitemap {
       margin-bottom: 10px;
@@ -62,6 +61,7 @@ footer {
       text-decoration: none;
 
       &:hover {
+        color: white;
         opacity: .8;
       }
     }
@@ -75,7 +75,7 @@ footer {
           color: $light-grey-text;
 
           &:hover {
-            opacity: .6;
+            color: white;
           }
         }
       }

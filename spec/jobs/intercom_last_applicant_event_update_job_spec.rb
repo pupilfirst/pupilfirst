@@ -4,7 +4,7 @@ describe IntercomLastApplicantEventUpdateJob do
   subject { described_class }
 
   let(:startup) { create :level_0_startup }
-  let(:founder) { startup.admin }
+  let(:founder) { startup.team_lead }
   let(:intercom_client) { instance_double IntercomClient }
   let(:intercom_user) { double 'Intercom User' }
 

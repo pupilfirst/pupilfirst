@@ -53,13 +53,12 @@ describe Founders::AcceptInvitationService do
 
         context 'when founder was the admin' do
           before do
-            original_startup.founders.update(startup_admin: false)
-            founder.update(startup_admin: true)
+            original_startup.update!(team_lead: founder)
           end
 
           it 'preserves the startup with another founder as team lead' do
             Founders::AcceptInvitationService.new(founder).execute
-            expect(original_startup.reload.admin).to_not eq(founder)
+            expect(original_startup.reload.team_lead).to_not eq(founder)
           end
         end
 
@@ -81,6 +80,7 @@ describe Founders::AcceptInvitationService do
       context 'when original startup becomes empty' do
         before do
           # Get rid of the additional founder from original startup.
+          original_startup.update!(team_lead: founder)
           original_startup.founders.where.not(id: founder.id).delete_all
         end
 

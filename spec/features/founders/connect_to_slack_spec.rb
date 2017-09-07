@@ -4,7 +4,7 @@ feature 'Connect to Slack' do
   include UserSpecHelper
 
   let(:startup) { create :startup, :subscription_active }
-  let(:founder) { startup.admin }
+  let(:founder) { startup.team_lead }
 
   before do
     Rails.application.secrets.slack = {

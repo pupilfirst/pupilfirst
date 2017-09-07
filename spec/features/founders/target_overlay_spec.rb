@@ -5,7 +5,7 @@ feature 'Target Overlay' do
 
   let!(:level_1) { create :level, :one }
   let!(:startup) { create :startup, :subscription_active, level: level_1 }
-  let!(:founder) { startup.admin }
+  let!(:founder) { startup.team_lead }
   let!(:target_group_1) { create :target_group, level: level_1, milestone: true }
   let!(:target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM }
   let!(:prerequisite_target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM }

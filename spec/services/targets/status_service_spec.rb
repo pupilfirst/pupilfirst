@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Targets::StatusService do
-  subject { described_class.new(target, startup.admin) }
+  subject { described_class.new(target, startup.team_lead) }
 
   let(:startup) { create :startup }
   let(:target) { create :target, role: Target::ROLE_FOUNDER, days_to_complete: 60 }

@@ -16,20 +16,20 @@ describe WeeklyKarmaPoints::CreateService do
   before do
     travel_to(test_time) do
       # Create last week's karma points.
-      create :karma_point, founder: l1_startup_1.admin, points: 100, created_at: 6.days.ago
-      create :karma_point, founder: l1_startup_2.admin, points: 50, created_at: 6.days.ago
-      create :karma_point, founder: l1_startup_2.admin, points: 25, created_at: 5.days.ago
-      create :karma_point, founder: l2_startup_1.admin, points: 80, created_at: 6.days.ago
-      create :karma_point, founder: l2_startup_2.admin, points: 50, created_at: 6.days.ago
-      create :karma_point, founder: l2_startup_2.admin, points: 40, created_at: 5.days.ago
+      create :karma_point, founder: l1_startup_1.team_lead, points: 100, created_at: 6.days.ago
+      create :karma_point, founder: l1_startup_2.team_lead, points: 50, created_at: 6.days.ago
+      create :karma_point, founder: l1_startup_2.team_lead, points: 25, created_at: 5.days.ago
+      create :karma_point, founder: l2_startup_1.team_lead, points: 80, created_at: 6.days.ago
+      create :karma_point, founder: l2_startup_2.team_lead, points: 50, created_at: 6.days.ago
+      create :karma_point, founder: l2_startup_2.team_lead, points: 40, created_at: 5.days.ago
 
       # Create karma points for two weeks ago.
-      create :karma_point, founder: l1_startup_1.admin, points: 70, created_at: 13.days.ago
-      create :karma_point, founder: l1_startup_2.admin, points: 40, created_at: 13.days.ago
-      create :karma_point, founder: l1_startup_2.admin, points: 35, created_at: 12.days.ago
-      create :karma_point, founder: l2_startup_1.admin, points: 50, created_at: 12.days.ago
-      create :karma_point, founder: l2_startup_1.admin, points: 50, created_at: 11.days.ago
-      create :karma_point, founder: l2_startup_2.admin, points: 60, created_at: 10.days.ago
+      create :karma_point, founder: l1_startup_1.team_lead, points: 70, created_at: 13.days.ago
+      create :karma_point, founder: l1_startup_2.team_lead, points: 40, created_at: 13.days.ago
+      create :karma_point, founder: l1_startup_2.team_lead, points: 35, created_at: 12.days.ago
+      create :karma_point, founder: l2_startup_1.team_lead, points: 50, created_at: 12.days.ago
+      create :karma_point, founder: l2_startup_1.team_lead, points: 50, created_at: 11.days.ago
+      create :karma_point, founder: l2_startup_2.team_lead, points: 60, created_at: 10.days.ago
     end
   end
 

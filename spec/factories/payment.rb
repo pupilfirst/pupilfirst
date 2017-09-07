@@ -5,7 +5,7 @@ FactoryGirl.define do
     amount 3000
 
     after(:create) do |payment|
-      payment.update!(founder: payment.startup.admin) if payment.founder.blank?
+      payment.update!(founder: payment.startup.team_lead) if payment.founder.blank?
     end
 
     trait :requested do

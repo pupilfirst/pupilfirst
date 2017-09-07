@@ -3,7 +3,8 @@ FactoryGirl.define do
     product_name { ['Red Ramanujan', 'Blue Bell', 'Crimson Copernicus'].sample }
 
     after(:build) do |startup|
-      startup.founders << create(:founder, startup: startup, startup_admin: true)
+      startup.founders << create(:founder, startup: startup)
+      startup.update!(team_lead: startup.founders.first)
     end
 
     level { create :level, :zero }
@@ -23,7 +24,7 @@ FactoryGirl.define do
     f.program_started_on { rand(8.weeks).seconds.ago }
 
     after(:build) do |startup|
-      startup.founders << create(:founder, startup: startup, startup_admin: true)
+      startup.team_lead = create(:founder, startup: startup)
       startup.founders << create(:founder, startup: startup)
       startup.startup_categories = [create(:startup_category)]
     end

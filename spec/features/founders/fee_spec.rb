@@ -4,7 +4,7 @@ feature 'Founder Monthly Fee Payment' do
   include UserSpecHelper
 
   let(:startup) { create :startup }
-  let(:founder) { startup.admin }
+  let(:founder) { startup.team_lead }
 
   context 'when there is no pending payment' do
     scenario 'founder visits fee payment page' do
@@ -24,8 +24,8 @@ feature 'Founder Monthly Fee Payment' do
       stub_request(:post, 'https://www.example.com/payment-requests/')
         .with(body: hash_including(
           amount: '2000.0',
-          buyer_name: startup.admin.name,
-          email: startup.admin.email
+          buyer_name: startup.team_lead.name,
+          email: startup.team_lead.email
         ))
         .to_return(body: {
           success: true,
@@ -50,7 +50,7 @@ feature 'Founder Monthly Fee Payment' do
     end
 
     scenario 'non-admin visits fee page' do
-      non_admin_founder = startup.founders.where(startup_admin: [false, nil]).first
+      non_admin_founder = startup.founders.where.not(id: startup.team_lead_id).first
       sign_in_user non_admin_founder.user, referer: fee_founder_path
       expect(page).to have_content('Please pay the membership fee for the next month.')
     end

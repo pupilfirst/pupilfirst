@@ -54,7 +54,7 @@
   &.active {
     background-color: $dark-primary-background;
     color: $brand-secondary;
-    box-shadow: inset 0 2px 5px -2px darken($dark-primary-background, 20%);
+    box-shadow: inset 0 0 15px 0 darken($dark-primary-background, 10%);
 
     &.focus {
       color: $brand-secondary;

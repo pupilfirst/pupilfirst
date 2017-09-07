@@ -1,0 +1,6 @@
+// ********** Mixin for font-awesome icon **********
+@mixin fa-icon($icon) {
+  display: inline-block;
+  @extend .fa;
+  @extend .fa-#{$icon};
+}

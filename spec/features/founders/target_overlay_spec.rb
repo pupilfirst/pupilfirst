@@ -170,7 +170,7 @@ feature 'Target Overlay' do
       within('.target-overlay__status-badge__block') do
         expect(page).to have_selector('.target-overlay__status-badge-icon > i.fa-hourglass-half')
         expect(page).to have_selector('.target-overlay__status-badge-content > span', text: 'Submitted')
-        expect(page).to have_selector('.target-overlay__status-hint', text: "Submitted on #{Date.today.strftime('%b %e')}")
+        expect(page).to have_selector('.target-overlay__status-hint', text: "Submitted on #{Date.today.strftime('%b %-e')}")
       end
     end
   end

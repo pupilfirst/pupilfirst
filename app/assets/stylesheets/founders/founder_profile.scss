@@ -55,7 +55,6 @@
     .profile-head {
       border-bottom: 1px solid #d2d2d2;
       padding: 5px 0 15px;
-      display: flex;
 
       .profile-name {
         h2 {
@@ -63,19 +62,12 @@
           font-size: 23px;
           margin: 0;
           position: relative;
-
-          @media (max-width: $screen-sm-max) {
-            padding: 5px 0;
-          }
-        }
-        @media (min-width: $screen-sm-max) {
-          padding-left: 0;
         }
       }
       .social-connect {
-        padding: 3px 0 0;
-        text-align: right;
-        align-self: center;
+        @include media-breakpoint-up(md) {
+          text-align: right;
+        }
 
         a {
           color: #fff;
@@ -99,20 +91,11 @@
             background-color: #333333;
           }
 
-          @media (max-width: $screen-sm-max) {
-            width: 35px;
-            height: 35px;
-            line-height: 34px;
+          @include media-breakpoint-down(md) {
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
           }
-        }
-        @media (max-width: $screen-md-max) {
-          text-align: left;
-          margin-top: 10px;
-        }
-        @media (max-width: $screen-sm-max) {
-          border-top: 1px solid #d2d2d2;
-          padding-top: 15px;
-          text-align: center;
         }
       }
       .founder-roll {
@@ -120,11 +103,6 @@
         font-size: 13px;
         font-weight: 300;
         display: inline-block;
-
-        @media (max-width: $screen-sm-max) {
-          display: block;
-          line-height: 20px;
-        }
       }
       .profile-edit-button {
         font-size: 13px;
@@ -146,13 +124,6 @@
           color: #0384b6;
           border-color: #0187ba;
         }
-        @media (max-width: $screen-sm-max) {
-          position: inherit;
-          margin-top: 10px;
-        }
-      }
-      @media (max-width: $screen-sm-max) {
-        display: block;
       }
     }
     .progress-container {
@@ -166,10 +137,6 @@
         .progress-bar {
           color: #000;
           line-height: 10px;
-        }
-        @media (max-width: $screen-md-max) {
-          margin: auto;
-          max-width: 145px;
         }
       }
       .progress-value {
@@ -195,55 +162,27 @@
         color: #0384b6;
         border-color: #0187ba;
       }
-      @media (max-width: $screen-md-max) {
-        margin: auto;
-        max-width: 145px;
-      }
     }
     .profile-detail {
-      padding-top: 15px;
-      padding-bottom: 0;
-
-      .profile-description {
-        p {
-          color: #6b6b6b;
-        }
-
-        @media (min-width: $screen-sm-max) {
-          padding-left: 0;
-        }
-      }
       .resume-link-section {
         border: 1px solid #d2d2d2;
         border-width: 0 0 0 1px;
-        padding-right: 0;
 
         .btn-resume-link {
           border-color: #2a6db6;
           color: #2a6db6;
           outline: 0;
-          border-radius: 5px;
-          transition: all .2s;
           width: 100%;
           text-align: left;
-
-          .resume-title {
-            padding: 5px 0 0 15px;
-          }
 
           &:hover, &:focus {
             color: #51a443;
             border-color: #51a443;
           }
-
-          @media (max-width: $screen-sm-max) {
-            width: auto;
-          }
         }
 
-        @media (max-width: $screen-md-min) {
-          padding: 15px 0;
-          border-width: 0 0 1px 0;
+        @include media-breakpoint-down(md) {
+          border-width: 0;
         }
       }
       .education-details {
@@ -262,13 +201,13 @@
           &.course-name {
             padding-left: 0;
 
-            @media (max-width: $screen-md-max) {
+            @include media-breakpoint-down (lg) {
               display: block;
               border: 0;
             }
           }
           &.semester-name {
-            @media (max-width: $screen-md-max) and (min-width: $screen-md-min) {
+              @include media-breakpoint-down (lg) {
               padding-left: 0;
             }
           }
@@ -286,8 +225,8 @@
               vertical-align: top;
               white-space: nowrap;
 
-              @media (max-width: $screen-md-max) {
-                max-width: inherit;
+              @include media-breakpoint-down(md) {
+                max-width: 100%;
               }
               + .tooltip > {
                 .tooltip-inner {
@@ -326,39 +265,23 @@
         }
       }
     }
+
+    .founder-about {
+      font-size: 1rem;
+    }
+
     .startup-logo-profile {
       border-left: 1px solid #d2d2d2;
-      margin-left: 15px;
       position: relative;
 
       .startup-logo-box {
         display: inline-block;
         max-width: 180px;
         outline: 0;
-
-        @media (min-width: $screen-sm-max) {
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-        }
-
-        @media (max-width: $screen-md-min) {
-          max-width: 180px;
-          border: 0;
-        }
       }
-
-      @media (max-width: $screen-md-min) {
-        border-left: 0;
-        padding: 15px 0 0;
-        margin-left: 0;
+      @include media-breakpoint-down(md) {
+        border-width: 0;
       }
-    }
-
-    @media (max-width: $screen-sm-max) {
-      text-align: center;
-      padding-bottom: 15px;
-      padding-top: 25px;
     }
   }
 }
@@ -368,8 +291,6 @@
 
   .activity-section {
     border-radius: 0;
-    margin-top: 30px;
-    margin-bottom: 30px;
     background-color: white;
     border: 1px solid #d2d2d2;
 
@@ -379,8 +300,12 @@
       padding: 25px 30px;
 
       h3 {
-        font-size: 16px;
+        font-size: 1rem;
         margin: 0;
+
+        @include media-breakpoint-down (md) {
+          font-size: 0.875rem;
+        }
       }
 
       span {
@@ -401,8 +326,8 @@
         }
       }
 
-      @media (max-width: $screen-sm-max) {
-        padding: 20px;
+      @include media-breakpoint-down (md) {
+        padding: 1rem;
       }
     }
 
@@ -413,17 +338,16 @@
         padding: 0;
         margin-bottom: 10px;
 
-        @media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
-          padding-right: 10px;
-          border-left: 0;
+        @include media-breakpoint-down (md) {
+          padding: 0 1rem;
         }
       }
 
       .all-activity-head {
-        color: white;
         padding: 15px;
 
         h3 {
+          color: white;
           font-size: 16px;
           margin: 0;
         }
@@ -444,11 +368,6 @@
         .logo-block {
           border-right: 1px solid #d2d2d2;
           padding: 15px 15px 15px 0;
-
-          @media (max-width: $screen-md-max) {
-            padding: 15px 10px 15px 0;
-            width: 20%;
-          }
         }
         .activity-count-block {
           padding-left: 25px;
@@ -468,27 +387,10 @@
             font-size: 12px;
             color: #9b9b9b;
           }
-
-          @media (max-width: $screen-md-max) {
-            padding-left: 15px;
-            width: 80%;
-          }
-        }
-
-        @media (max-width: $screen-xs-max) {
-          padding: 20px 15px;
-        }
-        @media (max-width: $screen-md-max) {
-          padding: 15px;
         }
       }
 
-      @media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
-        border: 0;
-        margin-top: 0;
-        margin-bottom: 20px;
-      }
-      @media (max-width: $screen-xs-max) {
+      @include media-breakpoint-down (md) {
         border: 0;
       }
     }
@@ -507,53 +409,26 @@
       .month-section {
         font-size: 0;
 
-        &:before {
-          border: 1px solid #dddddd;
-          border-radius: 20px;
-          content: "";
-          height: 20px;
-          left: 0;
-          position: absolute;
-          top: 25px;
-          width: 100%;
-
-          @media (max-width: $screen-md-max) {
-            height: 15px;
-          }
-        }
-
         li {
           display: inline-block;
           position: relative;
           margin: 25px 0;
-          z-index: 1;
           cursor: pointer;
           transition: all .2s;
 
-          &:nth-child(1) {
-            border-top-left-radius: 10px;
-            border-bottom-left-radius: 10px;
-          }
           &:before {
-            box-shadow: 1px 0px 0px 0px #56bfe7;
+            box-shadow: 1px 0px 0px 0px #999999;
             content: "";
             height: 60px;
-            left: -0.5px;
+            left: -1px;
             position: absolute;
             top: -20px;
             width: 100%;
-            z-index: -10;
+            z-index: 1;
           }
 
           &:first-child:before {
             border-left: 0;
-          }
-          &:first-child {
-
-            .week-section:nth-child(2) {
-              border-top-left-radius: 10px;
-              border-bottom-left-radius: 10px;
-            }
           }
 
           .month-name {
@@ -568,8 +443,8 @@
           }
 
           .week-section {
-            width: 25px;
-            height: 20px;
+            width: 1.25rem;
+            height: 1.25rem;
             display: inline-block;
             text-align: center;
             box-shadow: 0 0 0 1px #fff inset;
@@ -583,42 +458,38 @@
               height: 30px;
               padding-top: 5px;
             }
-
-            @media (max-width: $screen-md-max) {
-              width: 20px;
-              height: 15px;
-            }
           }
 
           a {
             padding: 0;
             outline: none;
-
-            &:hover, &:focus {
-              background-color: transparent
-            }
-          }
-
-          &:hover, &:focus, &.active {
-            box-shadow: 0 0 0 4px #b8ceeb, 1px 1px 10px #b8ceeb;
             position: relative;
             z-index: 1000;
+            display: inline-block;
 
-            .month-name, .week-name {
-              color: #2a6db6;
+            &:hover, &:focus {
+              background-color: transparent;
+            }
+
+            &:hover, &:focus, &.active {
+              box-shadow: 0 0 0 4px #b8ceeb, 1px 1px 10px #b8ceeb;
+              position: relative;
+              z-index: 1001;
+
+              .month-name, .week-name {
+                color: #2a6db6;
+              }
             }
           }
         }
       }
-
-      @media (max-width: $screen-sm-max) {
-        border: 1px solid #d2d2d2;
+      @include media-breakpoint-down(md) {
+        border: 0;
         border-radius: 5px;
       }
     }
-
-    @media (max-width: $screen-sm-max) {
-      padding: 0 15px;
+    @include media-breakpoint-down(md) {
+      padding: 0;
     }
   }
 
@@ -655,14 +526,17 @@
       content: " ";
       width: 1px;
       background-color: #d2d2d2;
-      left: 103px;
-      margin-left: -1px;
+      left: 99px;
+      margin-left: -2px;
 
-      @media (max-width: $screen-xs-max) {
-        left: 92px;
-        margin-left: -1px;
+      @include media-breakpoint-down (md) {
+        left: 113px;
+        margin-left: 0;
         display: block;
       }
+    }
+    @include media-breakpoint-down (md) {
+      padding: 1rem;
     }
   }
   .timeline-data {
@@ -691,9 +565,9 @@
         border: 0;
         padding: 0;
         position: relative;
-        box-shadow: 0;
-        width: calc(100% - 135px);
-        width: -webkit-calc(100% - 135px);
+        box-shadow: none;
+        width: calc(100% - 120px);
+        width: -webkit-calc(100% - 120px);
 
         .timeline-body {
           padding: 0;
@@ -703,16 +577,11 @@
             font-size: 14px;
           }
         }
-        @media (max-width: $screen-xs-max) {
-          margin-top: 0;
-          width: calc(100% - 105px);
-          width: -webkit-calc(100% - 105px);
-        }
       }
 
       .timeline-badge-custom {
         color: #fff;
-        left: 95px;
+        left: 90px;
         margin-left: 0;
         top: 3px;
         width: 15px;
@@ -728,10 +597,6 @@
         border-top-left-radius: 50%;
         border-bottom-right-radius: 50%;
         border-bottom-left-radius: 50%;
-
-        @media (max-width: $screen-xs-max) {
-          left: 84px;
-        }
       }
     }
   }
@@ -755,15 +620,14 @@
     .panel-heading {
       padding: 0;
       border: 0;
-      background-color: #fff;
 
       .panel-title {
-        padding: 25px 15px;
+        padding: 30px 15px;
+        margin: 0;
         border-bottom: 1px solid #d2d2d2;
 
         a {
           outline: 0;
-          display: block;
           position: relative;
           background-color: #fff;
           border-radius: 20px;
@@ -780,7 +644,6 @@
             width: 25px;
             height: 20px;
             display: block;
-            float: left;
             text-align: center;
             box-shadow: 1px 0 0 0 #fff inset;
             border: 1px solid #d2d2d2;
@@ -792,7 +655,7 @@
               box-shadow: none;
               border-left-width: 1px
             }
-            &:nth-last-child(2) {
+            &:nth-last-child(1) {
               border-top-right-radius: 10px;
               border-bottom-right-radius: 10px;
               border-right-width: 1px
@@ -810,18 +673,19 @@
           }
 
           .arrow {
-            float: right;
+            display: flex;
             position: relative;
             width: 20px;
             height: 20px;
             border: 1px solid #d2d2d2;
-            text-align: center;
+            justify-content: center;
             border-radius: 6px;
             color: #bbbbbb;
             border-color: #2a6db6;
             box-shadow: 0px 0px 5px #d2d2d2;
 
             &::before {
+              font-size: 1.125rem;
               content: '\f106';
               font-family: FontAwesome;
               color: #2a6db6;
@@ -850,10 +714,6 @@
       border-bottom: 1px solid #d2d2d2;
       list-style: none;
       position: relative;
-
-      @media (max-width: $screen-xs-max) {
-        padding: 15px;
-      }
     }
   }
 }
@@ -862,18 +722,12 @@
   margin: 0
 }
 
-.row-eq-height {
-  display: flex;
-
-  @media (max-width: $screen-sm-max) {
-    display: block;
-  }
-}
-
 .founder_profile__avatar {
+  @include border-radius(10px);
+  overflow: hidden;
+
   img, svg {
     display: block;
-    width: 150px;
-    height: 150px;
+    width: 100%;
   }
 }

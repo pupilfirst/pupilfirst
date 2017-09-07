@@ -1,0 +1,17 @@
+= simple_form_for team_member, wrapper: :vertical_form, wrapper_mappings: { check_boxes: :vertical_radio_and_checkboxes, file: :vertical_file_input } do |f|
+  legend
+    - if team_member.persisted?
+      ' Edit team member '#{team_member.name}'
+    - else
+      ' List new team member
+  .flex-column
+    = f.input :name
+    = f.input :roles, collection: Founder.valid_roles, label_method: proc { |role| t("role.#{role}") }, required: true, input_html: { multiple: true }
+    = f.input :email, label: 'Email address'
+    = f.input :avatar, as: :image_preview, input_html: { preview_version: :thumb, accept: 'image/*' }
+
+  .row.form-group
+    .col-sm-9
+      ' #{f.submit team_member.persisted? ? 'Update team member entry' : 'List new team member', class: 'btn btn-md btn-primary'}
+      / - if team_member.persisted?
+      = link_to 'Cancel', new_team_member_url, class: 'btn btn-md btn-ghost-secondary mt-3 mt-sm-0 ml-sm-3'

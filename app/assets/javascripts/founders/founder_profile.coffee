@@ -1,9 +1,9 @@
 # //= require bootstrap-tabcollapse
 
-$(document).on 'page:change', ->
+$(document).on 'turbolinks:load', ->
   $('#activityTab').tabCollapse
-    tabsClass: 'hidden-sm hidden-xs',
-    accordionClass: 'visible-sm visible-xs'
+    tabsClass: 'd-lg-block',
+    accordionClass: 'd-lg-none'
 
   $('#complete-profile-tooltip').tooltip
 

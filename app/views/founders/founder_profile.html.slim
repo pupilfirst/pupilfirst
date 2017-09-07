@@ -5,8 +5,8 @@
 .user-data-container
   .container
     .user-data-card
-      .row.row-eq-height
-        .col-md-2
+      .row
+        .col-md-2.pr-md-0
           #complete-profile-left.profile data-toggle='tooltip' data-placement='bottom' title="#{@founder == current_founder ? @founder.profile_completion_instruction : ''}"
             .founder_profile__avatar
               == avatar(@founder.name, founder: @founder, background_shape: :square)
@@ -28,9 +28,9 @@
                 a.profile-complete-button href=edit_founder_url
                   ' Complete Your Profile
         div class="col-md-#{@founder.startup&.logo.present? ? 7 : 10}"
-          .row.profile-data
-            .profile-head.clearfix
-              .col-lg-7.col-md-12.profile-name
+          .profile-data
+            .profile-head.d-lg-flex
+              .col-lg-6.profile-name.px-0.mt-2.mt-md-0.text-center.text-md-left
                 h2
                   = @founder.fullname
                   - if current_founder == @founder && !@founder.exited
@@ -44,7 +44,7 @@
                       ' &nbsp;at
                     = @founder.startup.product_name
               - if @founder.social_url_present?
-                .col-lg-5.col-md-12.social-connect
+                .col-lg-6.social-connect.px-0.mt-3.mt-lg-0.text-center.text-md-left.text-lg-right
                   - if @founder.personal_website_url.present?
                     a href=@founder.personal_website_url target='_blank'
                       i.fa.fa-globe
@@ -70,9 +70,9 @@
                     a href=@founder.blog_url target='_blank'
                       i.fa.fa-rss
 
-            .profile-detail.clearfix
-              .col-lg-9.col-md-8.profile-description
-                p
+            .profile-detail.d-md-flex.pt-3
+              .col-md-9.profile-description.pl-0.text-center.text-md-left
+                p.founder-about.pb-2
                   = @founder.about
                 .education-details
                   - if @founder.course.present?
@@ -93,21 +93,21 @@
                       | Year of Graduation:
                       strong
                         = @founder.year_of_graduation
-              .col-lg-3.col-md-4.resume-link-section
+              .col-md-3.d-flex.resume-link-section.px-sm-0.mt-3.mt-md-0.justify-content-center.align-items-center
                 - if @founder.resume_link.present?
-                  a.btn.btn-flat.btn-resume-link href=short_url(@founder.resume_link) type="button"
-                    = image_tag 'founders/profile/resume-icon.png'
-                    span.resume-title View Resume
+                  a.btn.btn-ghost-secondary.btn-with-icon.btn-xs target="_blank" href=short_url(@founder.resume_link)
+                    i.fa.fa-file-text-o
+                    span View Resume
         - if @founder.startup&.logo.present?
-          .col-md-3.startup-logo-profile
+          .col-md-3.startup-logo-profile.d-flex.align-items-center.justify-content-center.mt-3.mt-md-0
             a.startup-logo-box href=timeline_url(@founder.startup.id, @founder.startup.slug)
-              = image_tag @founder.startup.logo.url, alt: 'Startup logo', class: 'img-responsive'
-.profile-bg
+              = image_tag @founder.startup.logo.url, alt: 'Startup logo', class: 'img-fluid'
+.profile-bg.py-3
   .container
     .activity-section
-      .activity-head.clearfix
-        h3.pull-left Recent Activity
-        .activity-legend.pull-right title="A summary of Timeline Events, Public Slack Messages and Karma Points."
+      .activity-head.d-flex.align-items-center.justify-content-between
+        h3 Recent Activity
+        .activity-legend title="A summary of Timeline Events, Public Slack Messages and Karma Points."
           span Less
           ul.legend.list-unstyled
             li.activity-blank
@@ -117,19 +117,20 @@
           span More
       .activity-content
         .activity-calendar
-          ul#activityTab.month-section.list-unstyled.nav
+          ul#activityTab.month-section.list-unstyled.nav.d-none
             - @timeline.each do |month, data|
-              li class="#{month == @timeline.keys.last ? 'active' : ''}"
-                a.clearfix data-toggle="tab" href="##{month}"
-                  .month-name = month
-                  - data[:counts].each do |week_number, count_for_week|
-                    .week-section class=activity_class_for_count(count_for_week)
-                      span.week-name W#{week_number}
-                  .arrow.visible-sm.visible-xs
+              li
+                a.d-flex.justify-content-between data-toggle="tab" href="##{month}" class="#{month == @timeline.keys.last ? 'active' : ''}"
+                  span.d-flex
+                    .month-name = month
+                    - data[:counts].each do |week_number, count_for_week|
+                      .week-section class=activity_class_for_count(count_for_week)
+                        span.week-name W#{week_number}
+                  span.arrow
         .row
-          .col-md-8.tab-content.hidden-sm.hidden-xs
+          .col-lg-8.tab-content
             - @timeline.each do |month, data|
-              .tab-pane.fade id=month class="#{month == @timeline.keys.last ? 'active in' : ''}"
+              .tab-pane id=month class="#{month == @timeline.keys.last ? 'active in' : ''}"
                 - if data[:list].present?
                   .timeline
                     - data[:list].each do |data_entry|
@@ -164,14 +165,14 @@
                   .inactive-month
                     p Founder was inactive during this month.
 
-          .col-md-4.all-activity-counts.clearfix
-            .col-md-12.col-sm-6.col-xs-12.slack-messages
+          .col-lg-4.all-activity-counts.d-lg-flex.flex-lg-column
+            .slack-messages
               .all-activity-head.blue-head
                 h3.font-weight-400 Slack Messages
-              .all-activity-body.clearfix
-                .logo-block.pull-left
-                  = image_tag 'founders/profile/slack-logo.png', class: 'img-responsive'
-                .activity-count-block.pull-left
+              .all-activity-body.d-flex
+                .logo-block
+                  = image_tag 'founders/profile/slack-logo.png', class: 'img-fluid'
+                .activity-count-block
                   h2.font-weight-300
                     = @founder.public_slack_messages.where(created_at: @founder.activity_date_range).count
                     span messages
@@ -179,13 +180,13 @@
                     = @founder.activity_timeline_start_date.strftime '%b %d, %Y'
                     ' &nbsp;&mdash;
                     = @founder.activity_timeline_end_date.strftime '%b %d, %Y'
-            .col-md-12.col-sm-6.col-xs-12.karma-points
+            .karma-points
               .all-activity-head.green-head
                 h3.font-weight-400 Karma Points
-              .all-activity-body.clearfix
-                .logo-block.pull-left
-                  = image_tag 'founders/profile/karma-logo.png', class: 'img-responsive'
-                .activity-count-block.pull-left
+              .all-activity-body.d-flex
+                .logo-block
+                  = image_tag 'founders/profile/karma-logo.png', class: 'img-fluid'
+                .activity-count-block
                   h2.font-weight-300
                     = @founder.karma_points.where(created_at: @founder.activity_date_range).sum(:points)
                     span points

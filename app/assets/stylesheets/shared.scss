@@ -1,9 +1,9 @@
-@import "bootstrap/variables";
+// @import "bootstrap/variables";
 
 // Fix sizing of step container for intro.js
-.introjs-helperNumberLayer {
-  box-sizing: content-box;
-}
+// .introjs-helperNumberLayer {
+//   box-sizing: content-box;
+// }
 
 .header-light {
   font-weight: 200;
@@ -114,10 +114,6 @@ body {
 
 #analytics-data {
   display: none;
-}
-
-h1.page-header, h2.page-header {
-  @media (max-width: $screen-xs-max) { margin-top: 20px; }
 }
 
 span.strike { text-decoration: line-through; }

@@ -1,11 +1,8 @@
-@import 'variables';
 
 h1.product-name {
-  //font-family: 'Roboto', sans-serif;
   font-weight: 200;
   font-size: 50px;
   color: #2458a1;
-  margin: 20px 0 0;
 }
 
 .startup-name {
@@ -24,9 +21,7 @@ h1.product-name {
 }
 
 .startup-logo {
-  float: right;
   max-height: 70px;
-  margin-top: 20px;
 }
 
 .product-description {
@@ -38,19 +33,6 @@ h1.product-name {
 }
 
 #data-points {
-  //font-family: Roboto, sans-serif;
-  .media { margin-bottom: 6px; }
-
-  .data-icons {
-    .media-heading {
-      font-size: 90%;
-      margin-top: 5px;
-    }
-  }
-
-  hr { margin: 10px 0; }
-  h3 { font-size: 120%; }
-
   .data-content {
     font-size: 18px;
     font-weight: 300;
@@ -77,27 +59,24 @@ h1.product-name {
   }
 
   .data-founder {
-    height: 128px;
-    background-color: $light-grey-background;
-    margin: 10px 0;
-    box-shadow: 2px 2px 2px $grey-border;
+    background-color: $dark-primary-background;
+    margin: 1rem 0;
+    box-shadow: 0px 0px 5px $grey-border;
 
     .founder-image {
-      width: 128px;
-      height: 128px;
+      width: 100px;
+      height: 100px;
       background-size: cover;
 
       img, svg {
-        width: 128px;
-        height: 128px;
+        width: 100px;
+        height: 100px;
       }
     }
 
     .media-heading {
-      margin: 15px 0 10px;
-      text-transform: uppercase;
       font-size: 110%;
-      font-weight: 600;
+      font-weight: $font-semibold;
     }
 
     .designation {
@@ -148,12 +127,6 @@ h1.product-name {
   }
 }
 
-#timeline-builder-submit-button {
-  @media (max-width: $screen-xs-max) {
-    margin-top: 8px;
-  }
-}
-
 // Datepicker customizations
 .dtpicker-buttonCont .dtpicker-button { background: $theme-light-green; }
 
@@ -169,36 +142,27 @@ h1.product-name {
   }
 }
 
-.media-body {
-  position: relative;
-
-  ul.social-links {
-    position: absolute;
-    margin: 0;
-    bottom: 5px;
-    right: 10px;
-    font-size: 133%;
-
-    @media screen and (max-width: $screen-xs-max) {
-      font-size: 200%;
-    }
-  }
+.founder__social-links {
+  margin: 0;
+  bottom: 5px;
+  font-size: 1.5rem;
 }
+
 .learn-more {
   padding: 0;
   margin-top: 10px;
 
   .learn-more-btn, .download-rubric-btn, .review-test-btn {
-    margin-right: 10px;
+    margin-right:10px;
     margin-top: 10px;
     border-radius: 5px;
     background-color: white;
     font-weight: 400;
     transition: all 300ms ease-out;
 
-    @media screen and (max-width: $screen-xs-max) {
-      display: block;
-    }
+    // @media screen and (max-width: $screen-xs-max) {
+    //   display: block;
+    // }
   }
   .learn-more-btn {
     color: #337ab7;
@@ -256,14 +220,16 @@ h1.product-name {
 //
 
 .main-timeline {
-  border-right: 1px solid $grey-border;
+  border-right: 1px solid $gray-border;
   padding-right: 25px;
 
-  ul { padding: 0; }
+  @include media-breakpoint-down(sm) {
+    border-right: 0px;
+  }
 }
 
 .tl-iteration {
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid $gray-border;
   width: 100%;
   margin-bottom: 10px;
   text-align: center;
@@ -274,7 +240,6 @@ h1.product-name {
   p {
     width: 90%;
     margin: auto;
-    //font-family: 'Roboto';
     font-style: normal;
     font-weight: 300;
     font-size: 22px;
@@ -299,24 +264,7 @@ h1.product-name {
   }
 }
 
-@media screen and (max-width: 991px) {
-  .main-timeline {
-    border-right: 0 !important; }
-}
-
-@media screen and (max-width: 767px) {
-  .timeline-panel {
-    margin-top: 7px;
-    left: 5px; }
-
-  .timeline-badge {
-    left: 5px !important; }
-
-  #company_logo {
-    float: left !important; }
-}
-
-/*  time  line css */
+/*  timeline css */
 
 .timeline {
   list-style: none;
@@ -328,8 +276,8 @@ h1.product-name {
     bottom: 0;
     position: absolute;
     content: ' ';
-    width: 1px;
-    background-color: $grey-border;
+    width: 2px;
+    background-color: $gray-border;
     left: 50%;
     margin-left: -1.5px;
   }
@@ -350,9 +298,9 @@ h1.product-name {
     .timeline-panel {
       width: 42%;
       float: left;
-      border: 1px solid $dark-grey-border;
-      border-radius: 2px;
-      //padding: 20px;
+      border: 1px solid $gray-border;
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.05);
+      @include border-radius(10px);
       padding: 0 20px 20px;
       position: relative;
 
@@ -405,12 +353,11 @@ h1.product-name {
 
 .timeline-title-panel {
   margin-top: 0;
-  //font-family: 'Roboto';
   font-style: normal;
   font-weight: 300;
   font-size: 20px;
   color: black;
-  line-height: 40px;
+  line-height: 1.3;
   a {
     text-decoration: none;
     color: inherit;
@@ -453,7 +400,6 @@ h1.product-name {
 
   a {
     border: 1px solid $theme-dark-green;
-    //font-family: 'Roboto';
     font-style: normal;
     font-weight: 600;
     font-size: 12px;
@@ -485,10 +431,10 @@ h1.product-name {
   margin-top: 5px;
 }
 
-@media (max-width: 767px) {
+@include media-breakpoint-down(md) {
   .timeline {
     &:before {
-      left: 40px;
+      left: 35px;
     }
 
     li {
@@ -497,7 +443,7 @@ h1.product-name {
       }
 
       .timeline-badge {
-        left: 15px;
+        left: 0;
         margin-left: 0;
         top: 16px;
       }

@@ -19,7 +19,10 @@ section.home-hero__container
           .font-semibold
             | Campus Startups
         .p-t-1
-          = link_to 'Join Now', join_path, class: 'btn btn-primary btn-lg home-apply__button', id: 'home-index__hero-join-link'
+          - if current_founder.present?
+            = link_to 'Go to Dashboard', dashboard_founder_path, class: 'btn btn-primary btn-lg home-apply__button'
+          - else
+            = link_to 'Join Now', join_path, class: 'btn btn-primary btn-lg home-apply__button', id: 'home-index__hero-join-link'
 
   = video_tag 'https://public-assets.sv.co/videos/header_background_clip.mp4', preload: 'none', autoplay: true, loop: true, class: 'hidden-sm-down home-hero__video'
 

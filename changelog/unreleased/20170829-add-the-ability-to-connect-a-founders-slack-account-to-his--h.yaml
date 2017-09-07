@@ -1,8 +1,0 @@
----
-timestamp: '2017-08-29T12:09:00Z'
-title: Add the ability to connect a founder's Slack account to his / her SV.CO account.
-  This allows us to automatically invite founders to appropriate Slack channels, and
-  keep the Slack profile name up-to-date in the required format.
-trello: https://trello.com/c/fcG1hA8Q
-private: false
-category: feature

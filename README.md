@@ -15,6 +15,15 @@
   *  puma-dev - `brew install puma/puma/puma-dev`
   *  redis - `brew install redis`
 
+#### Ubuntu
+
+  * Install Ruby with [rbenv](https://github.com/rbenv/rbenv), as above.
+  * Install dependencies:
+
+```
+sudo apt-get install imagemagick cmake libicu-dev redis-server postgresql postgresql-contrib
+```
+
 #### Troubleshoot
 
   * If installation of of `pg` gem crashes, asking for `libpq-fe.h`, install the gem with:

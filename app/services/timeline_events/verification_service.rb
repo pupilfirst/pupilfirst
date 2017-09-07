@@ -133,11 +133,11 @@ module TimelineEvents
 
     def reset_startup_level
       return if startup.requested_restart_level.blank?
-      Startups::RestartService.new(startup.admin).restart(startup.requested_restart_level)
+      Startups::RestartService.new(startup.team_lead).restart(startup.requested_restart_level)
     end
 
     def cancel_reset_request
-      Startups::RestartService.new(startup.admin).cancel
+      Startups::RestartService.new(startup.team_lead).cancel
     end
 
     def update_timeline_updated_on

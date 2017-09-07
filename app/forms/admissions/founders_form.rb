@@ -38,7 +38,7 @@ module Admissions
     end
 
     def team_lead_cannot_be_deleted
-      team_lead = founders.find { |founder| Founder.find_by(id: founder.id).startup_admin? }
+      team_lead = founders.find { |founder| Founder.find_by(id: founder.id).team_lead? }
       errors[:base] << 'Team lead cannot be deleted.' if team_lead.delete == 'on'
     end
 

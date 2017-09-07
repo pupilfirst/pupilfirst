@@ -165,8 +165,8 @@ class Founder < ApplicationRecord
   end
 
   def remove_from_startup!
+    team_lead? ? startup.update!(team_lead: nil) : nil
     self.startup_id = nil
-    self.startup_admin = nil
     save! validate: false
   end
 
@@ -190,12 +190,12 @@ class Founder < ApplicationRecord
 
   # The option to create connect requests is restricted to team leads of approved startups.
   def can_connect?
-    startup.present? && startup.approved? && !level_zero? && startup_admin?
+    startup.present? && startup.approved? && !level_zero? && team_lead?
   end
 
   # The option to view some info about creating connect requests is restricted to non-lead members of approved startups.
   def can_view_connect?
-    startup.present? && startup.approved? && !level_zero? && !startup_admin?
+    startup.present? && startup.approved? && !level_zero? && !team_lead?
   end
 
   def pending_connect_request_for?(faculty)
@@ -268,10 +268,10 @@ class Founder < ApplicationRecord
   before_destroy :assign_new_team_lead
 
   def assign_new_team_lead
-    return unless startup_admin && startup.present?
+    return unless team_lead? && startup.present?
 
     team_lead_candidate = startup.founders.where.not(id: id).first
-    team_lead_candidate&.update!(startup_admin: true)
+    startup.update!(team_lead: team_lead_candidate)
   end
 
   # Should we give the founder a tour of the founder dashboard? If so, we shouldn't give it again.
@@ -373,6 +373,10 @@ class Founder < ApplicationRecord
       'Friend', 'Seniors', '#StartinCollege Event', 'Newspaper/Magazine', 'TV', 'SV.CO Blog', 'Instagram', 'Facebook',
       'Twitter', 'Microsoft Student Partner', 'Other (Please Specify)'
     ]
+  end
+
+  def team_lead?
+    startup&.team_lead_id == id
   end
 
   private

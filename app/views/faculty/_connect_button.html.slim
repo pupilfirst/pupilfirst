@@ -10,7 +10,7 @@
     div data-toggle="modal" data-target="#faculty-connect-modal-#{faculty.id}" class=button_classes
       | Connect
 - elsif current_founder&.startup&.eligible_to_connect?(faculty)
-  div data-toggle='tooltip' data-placement='top' title="Faculty Connect is only available to #{current_founder.startup.admin.fullname} (your team lead)" class="disabled #{button_classes}"
+  div data-toggle='tooltip' data-placement='top' title="Faculty Connect is only available to #{current_founder.startup.team_lead.fullname} (your team lead)" class="disabled #{button_classes}"
     | Connect
 - elsif current_founder&.startup.present? && !current_founder.level_zero?
   div data-toggle='tooltip' data-placement='top' title="To gain access to this faculty member, you need to reach Level #{faculty.level.number}!" class="disabled #{button_classes}"

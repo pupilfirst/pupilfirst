@@ -26,7 +26,7 @@ module IncubationAgreement
         text t('incubation_agreement.part_nine.sign_on_behalf',
           name: '__________________________________',
           designation: 'Startup',
-          by_name: @startup.admin.name,
+          by_name: @startup.team_lead.name,
           title: 'Team Lead')
         @startup.founders.each_with_index { |founder, index| add_founder_signature(founder, index) }
       end

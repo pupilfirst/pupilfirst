@@ -21,6 +21,7 @@
     = f.input :address
     = f.input :slug
     = f.input :payment_reference
+    = f.input :team_lead_id, as: :select, collection: @startup.founders.map{ |f| [f.to_s,f.id] }
 
     = f.input :tag_list,
       as: :select,

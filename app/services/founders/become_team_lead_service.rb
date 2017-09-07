@@ -8,12 +8,11 @@ module Founders
     end
 
     def execute
-      raise AlreadyTeamLeadException if startup&.admin == @founder
+      raise AlreadyTeamLeadException if startup&.team_lead == @founder
       raise NotMemberOfStartupException if startup.blank? || !@founder.in?(startup.founders)
 
       Founder.transaction do
-        startup.admin&.update!(startup_admin: false)
-        @founder.update!(startup_admin: true)
+        startup.update!(team_lead: @founder)
       end
     end
 

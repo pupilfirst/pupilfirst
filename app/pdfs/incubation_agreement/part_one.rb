@@ -2,7 +2,7 @@ module IncubationAgreement
   class PartOne < ApplicationPdf
     def initialize(startup)
       @startup = startup.decorate
-      @team_lead = @startup.admin.decorate
+      @team_lead = @startup.team_lead.decorate
       super()
     end
 

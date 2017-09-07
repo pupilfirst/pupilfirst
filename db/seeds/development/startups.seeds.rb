@@ -11,7 +11,7 @@ after 'development:levels', 'development:founders', 'development:timeline_event_
     product_name: 'Unfinished Swan',
     level: level_0,
     maximum_level: level_0,
-    admin: john_doe
+    team_lead: john_doe
   )
 
   level_1 = Level.find_by(number: 1)
@@ -41,7 +41,7 @@ after 'development:levels', 'development:founders', 'development:timeline_event_
 
   # ...whose admin is Some One.
   founder = Founder.find_by(email: 'someone@sv.co')
-  founder.update!(startup_admin: true)
+  super_startup.update!(team_lead: founder)
   super_startup.founders << founder
 
   # Add two more co-founders.
@@ -65,7 +65,7 @@ after 'development:levels', 'development:founders', 'development:timeline_event_
 
   # Make ironman the team lead.
   founder = Founder.find_by(email: 'ironman@avengers.co')
-  founder.update!(startup_admin: true)
+  avengers_startup.update!(team_lead: founder)
   avengers_startup.founders << founder
 
   # Add all the other avengers as founders.

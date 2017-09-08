@@ -37,7 +37,7 @@ class TargetOverlayTimelineEventPanel extends React.Component {
   render() {
     return(
       <div className="target-overlay-timeline-submission__container p-b-1 m-t-1">
-        <p className="target-overlay-timeline-submission__title font-semibold">Latest Timeline Submission:</p>
+        <h5 className="target-overlay-timeline-submission__title font-semibold">Latest Timeline Submission:</h5>
         <div className="target-overlay-timeline-submission__box">
           <div className="target-overlay-timeline-submission__header p-a-1">
             <div className="target-overlay-timeline-submission__header-date-box m-r-1">

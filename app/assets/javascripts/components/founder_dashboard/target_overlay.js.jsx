@@ -56,7 +56,7 @@ class FounderDashboardTargetOverlay extends React.Component  {
   assigner() {
     return (
       <h5 className="target-overlay__assigner-name m-a-0">
-        <span className="target-overlay__assigner-name--small">Assigned by:</span>
+        <span className="target-overlay__assigner-name-headline">Assigned by:</span>
         <span className="font-regular">{ this.props.target.assigner.name }</span>
       </h5>
     );
@@ -87,11 +87,11 @@ class FounderDashboardTargetOverlay extends React.Component  {
             <div className="target-overlay__status-badge__block">
               <TargetOverlayStatusBadgeBar target={ this.props.target }/>
             </div>
-            <div className="target-overlay-content-wrapper clearfix">
-              <div className="col-md-8 target-overlay__leftbar">
+            <div className="target-overlay__content-wrapper clearfix">
+              <div className="col-md-8 target-overlay__content-leftbar">
                 <TargetOverlayContentBlock iconPaths={ this.props.iconPaths } target={ this.props.target } />
               </div>
-              <div className="col-md-4 target-overlay__rightbar">
+              <div className="col-md-4 target-overlay__content-rightbar">
                 <div className="target-overlay__assigner-box">
                   <span className="target-overlay__assigner-avatar m-r-1">
                     <img className="img-fluid" src={ this.props.target.assigner.image_url } />
@@ -102,7 +102,7 @@ class FounderDashboardTargetOverlay extends React.Component  {
 
                 { this.props.target.role === 'founder' &&
                 <div className="m-t-1">
-                  <p className="target-overlay-timeline-submission__title font-semibold">Completion Status:</p>
+                  <h5 className="target-overlay-timeline-submission__title font-semibold">Completion Status:</h5>
                   <TargetOverlayFounderStatusPanel founderDetails={ this.props.founderDetails } targetId={ this.props.target.id}/>
                 </div>
                 }

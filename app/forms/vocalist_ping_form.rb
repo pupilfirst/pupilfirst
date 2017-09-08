@@ -20,6 +20,7 @@ class VocalistPingForm < Reform::Form
     @valid_channels ||= PublicSlack::MessageService.valid_channel_names
   end
 
+  # rubocop:disable Metrics/AbcSize
   def send_pings
     service = PublicSlack::MessageService.new
 
@@ -27,16 +28,17 @@ class VocalistPingForm < Reform::Form
       service.post message: message, founders: Founder.find(founders)
     elsif startups.present?
       founders = Founder.where(startup: startups)
-      founders = founders.where(startup_admin: true) if team_leads_only == '1'
+      founders = founders.where(id: startups.pluck(:team_lead_id)) if team_leads_only == '1'
       service.post message: message, founders: founders
     elsif levels.present?
       founders = Founder.joins(startup: :level).where(startups: { level: levels })
-      founders = founders.where(startup_admin: true) if team_leads_only == '1'
+      founders = founders.where(id: startups.pluck(:team_lead_id)) if team_leads_only == '1'
       service.post message: message, founders: founders
     else
       service.post message: message, channel: channel
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   def clean_up_targets
     founders.reject!(&:empty?)

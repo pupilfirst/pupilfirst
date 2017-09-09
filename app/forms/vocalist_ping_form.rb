@@ -6,39 +6,29 @@ class VocalistPingForm < Reform::Form
   property :founders
   property :message, validates: { presence: true }
 
-  property :channel_options
+  validate :one_and_only_one_target_must_be_present
 
-  validate :at_least_one_target_present
-
-  def at_least_one_target_present
+  def one_and_only_one_target_must_be_present
     clean_up_targets
-    return if channel.present? || startups.present? || founders.present? || levels.present?
-    errors[:base] << 'Please select a channel OR one or more levels OR startups OR founders!'
+    return if [channel.present?, startups.present?, founders.present?, levels.present?].one?
+    errors[:base] << 'Please select a channel, some levels, some startups, or some founders. Only one option is allowed.'
   end
 
   def valid_channels
     @valid_channels ||= PublicSlack::MessageService.valid_channel_names
   end
 
-  # rubocop:disable Metrics/AbcSize
   def send_pings
-    service = PublicSlack::MessageService.new
+    target = {
+      channel: channel,
+      levels: levels,
+      startups: startups,
+      team_leads_only: team_leads_only,
+      founders: founders
+    }
 
-    if founders.present?
-      service.post message: message, founders: Founder.find(founders)
-    elsif startups.present?
-      founders = Founder.where(startup: startups)
-      founders = founders.where(id: startups.pluck(:team_lead_id)) if team_leads_only == '1'
-      service.post message: message, founders: founders
-    elsif levels.present?
-      founders = Founder.joins(startup: :level).where(startups: { level: levels })
-      founders = founders.where(id: startups.pluck(:team_lead_id)) if team_leads_only == '1'
-      service.post message: message, founders: founders
-    else
-      service.post message: message, channel: channel
-    end
+    Admin::VocalistPingService.new(message, target).execute
   end
-  # rubocop:enable Metrics/AbcSize
 
   def clean_up_targets
     founders.reject!(&:empty?)

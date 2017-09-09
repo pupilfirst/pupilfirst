@@ -221,6 +221,7 @@ p {
 .container-md-center {
   @extend .m-x-auto;
   max-width: 45rem;
+  min-height: 100vh;
 }
 
 .content-box {

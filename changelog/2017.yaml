@@ -1,5 +1,24 @@
 ---
 changelog:
+- timestamp: '2017-09-11T16:21:18Z'
+  changes:
+  - timestamp: '2017-09-11T10:10:40Z'
+    title: The stale S3 bucket 'sv-co-public' was deleted.
+    trello: https://trello.com/c/yIclJ0d5
+    private: true
+    category: operations
+  - timestamp: '2017-09-11T10:08:14Z'
+    title: Daily admission stats now also reports total number of paid founders.
+    trello: https://trello.com/c/hrvU7SEr
+    private: true
+  - timestamp: '2017-09-11T10:06:33Z'
+    title: Level 1+ payments were excluded from the daily admission stats.
+    trello: https://trello.com/c/kx2DP1bh
+    private: true
+  - timestamp: '2017-09-11T05:42:17Z'
+    title: Replaced Founder.startup_admin with Startup.team_lead association to Founder
+    trello: https://trello.com/c/genECzyy
+    private: true
 - timestamp: '2017-09-02T14:45:32Z'
   changes:
   - timestamp: '2017-09-02T14:25:16Z'
@@ -15,8 +34,8 @@ changelog:
       details.
     category: ui
   - timestamp: '2017-08-31T09:45:51Z'
-    title: Switched to using custom branch of carrierwave_backgrounder with fixes for
-      deprecation warnings.
+    title: Switched to using custom branch of carrierwave_backgrounder with fixes
+      for deprecation warnings.
     trello: https://trello.com/c/wBJsDBpU
     private: true
   - timestamp: '2017-08-29T12:10:58Z'
@@ -44,13 +63,14 @@ changelog:
       to hide the widget on dashboard.
     category: bugfix
   - timestamp: '2017-08-29T09:49:29Z'
-    title: A _status bar_ was added to the target overlay to display detailed information about a target's status for the signed-in founder.
+    title: A _status bar_ was added to the target overlay to display detailed information
+      about a target's status for the signed-in founder.
     trello: https://trello.com/c/aWlggco9
     private: false
     category: feature
   - timestamp: '2017-08-29T09:35:14Z'
-    title: A _Discuss with Faculty_ link has been added to Slack notifications sent for new feedback
-      from SV.CO team to founders.
+    title: A _Discuss with Faculty_ link has been added to Slack notifications sent
+      for new feedback from SV.CO team to founders.
     trello: https://trello.com/c/av8tA8TI
     private: false
     category: feature

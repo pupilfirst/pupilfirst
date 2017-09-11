@@ -56,7 +56,7 @@ module Founders
 
     def startup_is_admitted
       return if current_founder.blank?
-      !current_founder.startup&.level_zero?
+      current_startup.present? && !current_startup.level_zero?
     end
 
     def skip_container

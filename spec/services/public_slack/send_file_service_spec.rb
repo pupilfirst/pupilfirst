@@ -16,7 +16,7 @@ describe PublicSlack::SendFileService do
       expect_any_instance_of(described_class).to receive(:channel).and_return('channel_id')
 
       slack_url = 'https://slack.com/api/files.upload'
-      payload = { token: 'xxxxxx',
+      payload = { token: 'BOT_OAUTH_TOKEN',
                   channels: 'channel_id',
                   content: 'content',
                   filetype: 'filetype',

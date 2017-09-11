@@ -69,7 +69,7 @@ describe PublicSlack::MessageService do
       context 'when slack responds with an error' do
         it 'records the error' do
           expect(subject).to receive(:channel_valid?).and_return(true)
-          stub_request(:get, "https://slack.com/api/chat.postMessage?token=xxxxxx&channel=channel_name"\
+          stub_request(:get, "https://slack.com/api/chat.postMessage?token=BOT_OAUTH_TOKEN&channel=channel_name"\
             "&link_names=1&text=hello&as_user=true&unfurl_links=false")
             .to_return(body: '{"error": "some error"}')
 
@@ -81,7 +81,7 @@ describe PublicSlack::MessageService do
       context 'when an HTTP error occurs' do
         it 'records the error' do
           expect(subject).to receive(:channel_valid?).and_return(true)
-          stub_request(:get, "https://slack.com/api/chat.postMessage?token=xxxxxx&channel=channel_name"\
+          stub_request(:get, "https://slack.com/api/chat.postMessage?token=BOT_OAUTH_TOKEN&channel=channel_name"\
             "&link_names=1&text=hello&as_user=true&unfurl_links=false")
             .to_return(body: 'some error', status: 500)
 

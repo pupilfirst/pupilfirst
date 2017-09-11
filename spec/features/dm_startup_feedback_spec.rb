@@ -19,12 +19,13 @@ feature 'DM Startup Feedback' do
 
   let!(:founder_1_request) do
     stub_request(:get, 'https://slack.com/api/chat.postMessage?as_user=true&channel=UABCDEF&link_names=1'\
-    "&#{slack_message}&token=xxxxxx&unfurl_links=false")
+    "&#{slack_message}&token=BOT_OAUTH_TOKEN&unfurl_links=false")
       .to_return(body: '{"ok":true}')
   end
+
   let!(:founder_2_request) do
     stub_request(:get, 'https://slack.com/api/chat.postMessage?as_user=true&channel=U123456&link_names=1'\
-    "&#{slack_message}&token=xxxxxx&unfurl_links=false")
+    "&#{slack_message}&token=BOT_OAUTH_TOKEN&unfurl_links=false")
       .to_return(body: '{"ok":true}')
   end
 

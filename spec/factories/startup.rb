@@ -3,29 +3,33 @@ FactoryGirl.define do
     product_name { ['Red Ramanujan', 'Blue Bell', 'Crimson Copernicus'].sample }
 
     after(:build) do |startup|
-      startup.founders << create(:founder, startup: startup)
-      startup.update!(team_lead: startup.founders.first)
+      # Add a team lead.
+      startup.team_lead = create(:founder, startup: startup)
     end
 
     level { create :level, :zero }
     maximum_level { level }
   end
 
-  factory :startup do |f|
+  factory :startup do
     sequence(:product_name) { |n| Faker::Lorem.words(rand(3) + 1).push(n).join(' ') }
-    f.product_description { Faker::Lorem.words(12).join(' ').truncate(Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS) }
-    f.name { Faker::Lorem.words(rand(3) + 1).join ' ' }
-    f.address { Faker::Lorem.words(6).join(' ') }
-    f.website { Faker::Internet.domain_name }
-    f.email { Faker::Internet.email }
-    f.iteration 1
-    f.level { create :level, :one }
-    f.maximum_level { level }
-    f.program_started_on { rand(8.weeks).seconds.ago }
+    product_description { Faker::Lorem.words(12).join(' ').truncate(Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS) }
+    name { Faker::Lorem.words(rand(3) + 1).join ' ' }
+    address { Faker::Lorem.words(6).join(' ') }
+    website { Faker::Internet.domain_name }
+    email { Faker::Internet.email }
+    iteration 1
+    level { create :level, :one }
+    maximum_level { level }
+    program_started_on { rand(8.weeks).seconds.ago }
 
     after(:build) do |startup|
+      # Add a team lead.
       startup.team_lead = create(:founder, startup: startup)
-      startup.founders << create(:founder, startup: startup)
+
+      # Add another founder.
+      create(:founder, startup: startup)
+
       startup.startup_categories = [create(:startup_category)]
     end
 

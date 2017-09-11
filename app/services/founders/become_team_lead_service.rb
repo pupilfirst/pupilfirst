@@ -8,7 +8,7 @@ module Founders
     end
 
     def execute
-      raiqse AlreadyTeamLeadException if @founder.team_lead?
+      raise AlreadyTeamLeadException if @founder.team_lead?
       raise NotMemberOfStartupException if startup.blank? || !@founder.in?(startup.founders)
 
       startup.update!(team_lead: @founder)

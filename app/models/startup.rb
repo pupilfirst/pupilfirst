@@ -122,9 +122,6 @@ class Startup < ApplicationRecord
   has_many :connect_requests, dependent: :destroy
   has_many :team_members, dependent: :destroy
 
-  has_one :admin, -> { where(startup_admin: true) }, class_name: 'Founder', foreign_key: 'startup_id'
-  accepts_nested_attributes_for :admin
-
   belongs_to :level
   belongs_to :maximum_level, class_name: 'Level'
   belongs_to :requested_restart_level, class_name: 'Level', optional: true

@@ -45,7 +45,7 @@ feature 'Startup Edit' do
       expect(page).to have_selector('div.form-group.startup_product_name.has-error')
     end
 
-    scenario 'Founder looks to delete his approved startup as startup_admin' do
+    scenario 'Founder looks to delete his approved startup as team lead' do
       sign_in_user(founder.user, referer: edit_startup_path)
 
       expect(page).to have_text('To delete your startup timeline, contact your SV.CO representative.')

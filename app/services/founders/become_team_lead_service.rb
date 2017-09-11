@@ -8,12 +8,10 @@ module Founders
     end
 
     def execute
-      raise AlreadyTeamLeadException if startup&.team_lead == @founder
+      raiqse AlreadyTeamLeadException if @founder.team_lead?
       raise NotMemberOfStartupException if startup.blank? || !@founder.in?(startup.founders)
 
-      Founder.transaction do
-        startup.update!(team_lead: @founder)
-      end
+      startup.update!(team_lead: @founder)
     end
 
     private

@@ -25,7 +25,7 @@ p.mb-2
               help: 'The name of your registered legal entity. Partnership/Pvt. Ltd./LLP etc.'
             = f.file_field :logo, label_class: 'col-form-label', label: 'Logo', class: 'form-control', required: false
             = f.select :startup_categories, options_from_collection_for_select(StartupCategory.all, :id, :name, @startup.startup_categories.pluck(:id)),
-              { help: 'Industries that your startup is involved in. Max 3.' }, { multiple: true }
+              { help: 'Industries that your startup is involved in. Max 3.' }, { name: 'startup[startup_category_ids][]', multiple: true }
 
     .card
       .card-header.p-0 role="tab"

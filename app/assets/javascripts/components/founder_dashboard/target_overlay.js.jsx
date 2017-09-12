@@ -1,7 +1,7 @@
 class FounderDashboardTargetOverlay extends React.Component  {
   constructor(props) {
     super(props);
-    this.state = _.merge({...props.target}, {latestEvent: null, latestFeedback: null});
+    this.state = _.merge({...props.target}, {latestEvent: null, latestFeedback: null, linkedResources: null});
 
     this.updateDetails = this.updateDetails.bind(this);
     this.openTimelineBuilder = this.openTimelineBuilder.bind(this);
@@ -65,7 +65,8 @@ class FounderDashboardTargetOverlay extends React.Component  {
   updateDetails(response) {
     this.setState({
       latestEvent: response.latestEvent,
-      latestFeedback: response.latestFeedback
+      latestFeedback: response.latestFeedback,
+      linkedResources: response.linkedResources
     });
   }
 
@@ -89,7 +90,7 @@ class FounderDashboardTargetOverlay extends React.Component  {
             </div>
             <div className="target-overlay__content-wrapper clearfix">
               <div className="col-md-8 target-overlay__content-leftbar">
-                <TargetOverlayContentBlock iconPaths={ this.props.iconPaths } target={ this.props.target } />
+                <TargetOverlayContentBlock iconPaths={ this.props.iconPaths } target={ this.props.target } linkedResources={this.state.linkedResources} />
               </div>
               <div className="col-md-4 target-overlay__content-rightbar">
                 <div className="target-overlay__assigner-box">

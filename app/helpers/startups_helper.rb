@@ -1,15 +1,10 @@
 module StartupsHelper
-  def registration_type_html(registration_type)
-    case registration_type
-      when Startup::REGISTRATION_TYPE_PARTNERSHIP
-        'Partnership'
-      when Startup::REGISTRATION_TYPE_PRIVATE_LIMITED
-        'Private Limited'
-      when Startup::REGISTRATION_TYPE_LLP
-        'Limited Liability Partnership'
-      else
-        '<em>Not Registered</em>'.html_safe
+  def registration_type_options(current_registration_type)
+    list = Startup.valid_registration_types.map do |registration_type|
+      [t("startup.edit.registration_types.#{registration_type}"), registration_type]
     end
+
+    options_for_select(list, current_registration_type)
   end
 
   def truncated_founder_name(name)

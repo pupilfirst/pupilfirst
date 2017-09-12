@@ -15,11 +15,11 @@
   | Hello #{@founder.name},
 
 = content_for :body do
-  p You have been invited to join a startup at SV&#x2024;CO, whose team lead is #{@startup.admin.name}.
+  p You have been invited to join a startup at SV&#x2024;CO, whose team lead is #{@startup.team_lead.name}.
 
   - if @founder.startup.present? && @founder.startup.founders.count > 1
     p
-      ' You are already a member of a startup led by #{@founder.startup.admin.name}. If you accept this invitation,
+      ' You are already a member of a startup led by #{@founder.startup.team_lead.name}. If you accept this invitation,
       | you will be removed from it.
   - elsif @founder.payments.any? && @founder.payments.last.refundable?
     p

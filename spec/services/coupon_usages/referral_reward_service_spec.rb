@@ -20,7 +20,7 @@ describe CouponUsages::ReferralRewardService do
         expect(new_paid_payment_end).to eq((paid_payment_end + 10.days).beginning_of_minute)
 
         # The referrer should have received the appropriate mail.
-        open_email(referrer_startup.admin.email)
+        open_email(referrer_startup.team_lead.email)
         expect(current_email.subject).to include('Your startup has unlocked SV.CO referral rewards!')
         expect(current_email.body).to include('We have extended your current subscription with the reward period.')
 
@@ -45,7 +45,7 @@ describe CouponUsages::ReferralRewardService do
         expect(new_pending_payment_end).to eq((pending_payment_end + 10.days).beginning_of_minute)
 
         # The referrer should have received the appropriate mail.
-        open_email(referrer_startup.admin.email)
+        open_email(referrer_startup.team_lead.email)
         expect(current_email.subject).to include('Your startup has unlocked SV.CO referral rewards!')
         expect(current_email.body).to include('Your subscription will be extended with the reward period upon renewal of your subscription.')
 

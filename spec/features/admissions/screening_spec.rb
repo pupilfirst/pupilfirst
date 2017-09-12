@@ -4,7 +4,7 @@ feature 'Screening' do
   include UserSpecHelper
 
   let(:startup) { create :level_0_startup }
-  let(:founder) { startup.admin }
+  let(:founder) { startup.team_lead }
   let(:level_0) { create :level, :zero }
   let(:level_0_targets) { create :target_group, milestone: true, level: level_0 }
   let!(:screening_target) { create :target, :admissions_screening, target_group: level_0_targets }

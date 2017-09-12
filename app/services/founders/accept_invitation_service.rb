@@ -26,8 +26,7 @@ module Founders
       @founder.update!(
         startup: @founder.invited_startup,
         invited_startup: nil,
-        invitation_token: nil,
-        startup_admin: false
+        invitation_token: nil
       )
 
       # Set confirmed_at if it's not already set.
@@ -36,6 +35,10 @@ module Founders
 
     def clean_up
       return if @original_startup.blank?
+
+      if @original_startup.team_lead == @founder
+        @original_startup.update!(team_lead: nil)
+      end
 
       if @original_startup.reload.founders.any?
         preserve_startup
@@ -46,7 +49,7 @@ module Founders
 
     def preserve_startup
       # Make another founder the team lead if this founder was the admin.
-      if @original_startup.admin.blank?
+      if @original_startup.team_lead.blank?
         another_founder = @original_startup.founders.where.not(id: @founder.id).first
         Founders::BecomeTeamLeadService.new(another_founder).execute
       end

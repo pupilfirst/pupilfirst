@@ -34,7 +34,7 @@ describe Startups::LevelUpService do
 
       it 'successfully enrolls the startup to level 1' do
         # Non-exited founders of the startup will be tagged 'Moved to Level 1' on Intercom
-        expect(Intercom::FounderTaggingJob).to receive(:perform_later).with(startup.admin, 'Moved to Level 1')
+        expect(Intercom::FounderTaggingJob).to receive(:perform_later).with(startup.team_lead, 'Moved to Level 1')
         expect(Intercom::FounderTaggingJob).to_not receive(:perform_later).with(exited_founder, 'Moved to Level 1')
 
         subject.execute

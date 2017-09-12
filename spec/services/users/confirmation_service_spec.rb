@@ -4,7 +4,7 @@ describe Users::ConfirmationService do
   subject { described_class }
 
   let(:startup) { create :startup }
-  let(:founder) { startup.admin }
+  let(:founder) { startup.team_lead }
   let(:user) { founder.user }
 
   context 'when user is signing in for the first time' do

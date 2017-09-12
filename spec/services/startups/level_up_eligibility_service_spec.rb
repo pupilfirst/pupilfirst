@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Startups::LevelUpEligibilityService do
   include FounderSpecHelper
 
-  subject { described_class.new(startup, startup.admin) }
+  subject { described_class.new(startup, startup.team_lead) }
 
   let(:level_1) { create :level, :one }
   let(:startup) { create :startup, level: level_1 }
@@ -20,11 +20,11 @@ describe Startups::LevelUpEligibilityService do
   describe '#eligibility' do
     context 'when startup has completed all milestone targets' do
       it "returns 'eligible'" do
-        complete_target startup.admin, founder_target
-        complete_target startup.admin, startup_target
+        complete_target startup.team_lead, founder_target
+        complete_target startup.team_lead, startup_target
 
         # Not all non-milestone targets need to be completed.
-        complete_target startup.admin, non_milestone_startup_target
+        complete_target startup.team_lead, non_milestone_startup_target
 
         expect(subject.eligibility).to eq('eligible')
       end
@@ -32,12 +32,12 @@ describe Startups::LevelUpEligibilityService do
 
     context 'when only admin has completed all milestone targets' do
       it "returns 'cofounders_pending'" do
-        complete_target startup.admin, non_milestone_founder_target
-        complete_target startup.admin, non_milestone_startup_target
-        complete_target startup.admin, startup_target
+        complete_target startup.team_lead, non_milestone_founder_target
+        complete_target startup.team_lead, non_milestone_startup_target
+        complete_target startup.team_lead, startup_target
 
         # Only the admin has completed the founder target.
-        create_verified_timeline_event startup.admin, founder_target
+        create_verified_timeline_event startup.team_lead, founder_target
 
         expect(subject.eligibility).to eq('cofounders_pending')
       end
@@ -45,8 +45,8 @@ describe Startups::LevelUpEligibilityService do
 
     context 'when milestone targets are incomplete' do
       it "returns 'not_eligible'" do
-        complete_target startup.admin, non_milestone_founder_target
-        complete_target startup.admin, non_milestone_startup_target
+        complete_target startup.team_lead, non_milestone_founder_target
+        complete_target startup.team_lead, non_milestone_startup_target
 
         expect(subject.eligibility).to eq('not_eligible')
       end
@@ -56,11 +56,11 @@ describe Startups::LevelUpEligibilityService do
   describe '#eligible?' do
     context 'when startup has completed all milestone targets' do
       it 'returns true' do
-        complete_target startup.admin, founder_target
-        complete_target startup.admin, startup_target
+        complete_target startup.team_lead, founder_target
+        complete_target startup.team_lead, startup_target
 
         # Not all non-milestone targets need to be completed.
-        complete_target startup.admin, non_milestone_startup_target
+        complete_target startup.team_lead, non_milestone_startup_target
 
         expect(subject.eligible?).to be true
       end
@@ -68,12 +68,12 @@ describe Startups::LevelUpEligibilityService do
 
     context 'when only admin has completed all milestone targets' do
       it 'returns false' do
-        complete_target startup.admin, non_milestone_founder_target
-        complete_target startup.admin, non_milestone_startup_target
-        complete_target startup.admin, startup_target
+        complete_target startup.team_lead, non_milestone_founder_target
+        complete_target startup.team_lead, non_milestone_startup_target
+        complete_target startup.team_lead, startup_target
 
         # Only the admin has completed the founder target.
-        create_verified_timeline_event startup.admin, founder_target
+        create_verified_timeline_event startup.team_lead, founder_target
 
         expect(subject.eligible?).to be false
       end

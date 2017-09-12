@@ -8,7 +8,7 @@ describe Founder do
       founder.remove_from_startup!
       founder.reload
       expect(founder.startup).to eq nil
-      expect(founder.startup_admin).to eq nil
+      expect(startup.team_lead_id).to_not eq founder.id
     end
   end
 

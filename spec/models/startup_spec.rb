@@ -79,8 +79,8 @@ describe Startup do
   end
 
   describe '#phone' do
-    it "returns startup admin's phone number" do
-      expect(subject.phone).to eq subject.admin.phone
+    it "returns startup team leads's phone number" do
+      expect(subject.phone).to eq subject.team_lead.phone
     end
   end
 end

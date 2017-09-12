@@ -8,7 +8,7 @@ describe ResourcePolicy do
   let(:level_2) { create :level, :two }
 
   let(:startup) { create :startup, :subscription_active }
-  let(:founder) { startup.founders.where(startup_admin: [false, nil]).first }
+  let(:founder) { startup.founders.where.not(id: startup.team_lead_id).first }
 
   let!(:public_resource) { create :resource }
   let!(:level_0_resource) { create :resource, level: level_0 }

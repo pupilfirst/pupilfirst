@@ -5,7 +5,7 @@ feature 'Edit founders' do
   include FounderSpecHelper
 
   let(:startup) { create :level_0_startup }
-  let(:founder) { startup.admin }
+  let(:founder) { startup.team_lead }
   let(:level_0) { create :level, :zero }
   let!(:level_0_targets) { create :target_group, milestone: true, level: level_0 }
   let!(:screening_target) { create :target, :admissions_screening, target_group: level_0_targets }
@@ -78,7 +78,7 @@ feature 'Edit founders' do
     scenario 'founder invites another who has already completed payment', js: true do
       another_startup = create :level_0_startup
       payment = create :payment, :paid, startup: another_startup
-      another_founder = another_startup.admin
+      another_founder = another_startup.team_lead
 
       sign_in_user(founder.user, referer: admissions_founders_path)
 
@@ -126,7 +126,7 @@ feature 'Edit founders' do
     scenario 'founder accepts invitation to another startup when already in a startup with other members' do
       another_startup = create :level_0_startup
       payment = create :payment, :paid, startup: another_startup
-      another_founder = another_startup.admin
+      another_founder = another_startup.team_lead
       another_founder.update!(invited_startup: startup, invitation_token: 'TEST_TOKEN')
       yet_another_founder = create :founder, startup: another_startup
 
@@ -138,7 +138,7 @@ feature 'Edit founders' do
       expect(payment.startup).to eq(another_startup)
 
       # yet_another_founder should now be the team lead.
-      expect(another_startup.reload.admin).to eq(yet_another_founder)
+      expect(another_startup.reload.team_lead).to eq(yet_another_founder)
       expect(another_startup.founders.count).to eq(1)
     end
 
@@ -154,11 +154,11 @@ feature 'Edit founders' do
       end
 
       expect(page).to have_content('You are the team lead.')
-      expect(startup.reload.admin).to eq(another_founder)
+      expect(startup.reload.team_lead).to eq(another_founder)
     end
 
     scenario 'founder invites another from a higher level', js: true do
-      admitted_lead = create(:startup).admin
+      admitted_lead = create(:startup).team_lead
 
       sign_in_user(founder.user, referer: admissions_founders_path)
 

@@ -9,14 +9,14 @@ describe TargetsController do
   let!(:completed_prerequisite_target) { create :target }
   let!(:completion_event) do
     create :timeline_event,
-      startup: startup, founder: startup.admin,
+      startup: startup, founder: startup.team_lead,
       target: completed_prerequisite_target,
       status: TimelineEvent::STATUS_VERIFIED
   end
   let!(:founder_target) { create :target, role: Target::ROLE_FOUNDER }
   let!(:completion_event_2) do
     create :timeline_event,
-      startup: startup, founder: startup.admin,
+      startup: startup, founder: startup.team_lead,
       target: founder_target,
       status: TimelineEvent::STATUS_VERIFIED
   end
@@ -32,7 +32,7 @@ describe TargetsController do
     end
 
     it 'redirects to the rubric URL when a founder is signed in' do
-      sign_in startup.admin.user
+      sign_in startup.team_lead.user
       get :download_rubric, params: { id: target.id }
       expect(response).to redirect_to(target.rubric_url)
     end
@@ -49,7 +49,7 @@ describe TargetsController do
 
     context 'when a founder is signed in' do
       before do
-        sign_in startup.admin.user
+        sign_in startup.team_lead.user
       end
 
       context 'when target has no prerequisite targets' do
@@ -79,9 +79,9 @@ describe TargetsController do
     end
 
     it 'responds with the founder statuses when a founder is signed in' do
-      sign_in startup.admin.user
-      cofounder = startup.founders.where(startup_admin: nil).first
-      statuses = [{ startup.admin.id.to_s => Target::STATUS_COMPLETE.to_s }, { cofounder.id.to_s => Target::STATUS_PENDING.to_s }]
+      sign_in startup.team_lead.user
+      cofounder = startup.founders.where.not(id: startup.team_lead.id).first
+      statuses = [{ startup.team_lead.id.to_s => Target::STATUS_COMPLETE.to_s }, { cofounder.id.to_s => Target::STATUS_PENDING.to_s }]
       get :founder_statuses, params: { id: founder_target.id }
       expect(JSON.parse(response.body)).to match_array(statuses)
     end
@@ -90,7 +90,7 @@ describe TargetsController do
   # TODO: Probably remove this as we now use the 'details' action whose response includes the latest feedback
   describe 'GET startup_feedback', broken: true do
     before do
-      sign_in startup.admin.user
+      sign_in startup.team_lead.user
     end
 
     context 'when target has no feedback' do

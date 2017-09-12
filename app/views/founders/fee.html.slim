@@ -19,10 +19,9 @@ script src="https://js.instamojo.com/v1/checkout.js"
         h3.text-xs-center.m-b-1
           ' Please pay the
           span.brand-secondary.font-semibold membership fee&nbsp;
-          | for the next month.
+          | to continue.
 
-        ul.admissions-fee__important-points.m-b-1
-          li The fee is for a <strong>one-month subscription</strong> to the SV.CO program.
+        ul.admissions-fee__important-points
           li It covers your team of <strong>#{current_startup.billing_founders_count} founders</strong>.
           li You can change your team at any time. Just reach us on #{mail_to 'help@sv.co'}.
 
@@ -33,18 +32,7 @@ script src="https://js.instamojo.com/v1/checkout.js"
             ' might take a few minutes for the payment status to update, if you experienced network issues after completing
             ' the payment. Please contact us at #{mail_to 'help@sv.co'} if you're experiencing any issue.
 
-        .simple-form-container.m-t-2
-          = simple_form_for(@monthly_fee_form, url: fee_founder_path, method: :post, remote: true, html: { id: 'monthly-fee-form' }) do |f|
-
-            .text-xs-center.m-t-2
-              .paywith-instamojo
-                div
-                  h3.m-b-1
-                    - if current_startup.fee == 0
-                      - payment_button_text = 'Skip Payment'
-                      ' Hurray! You can now proceed without any payment.
-                    - else
-                      ' Team membership fee is
-                      span.brand-secondary.font-semibold &#8377;#{current_startup.fee}.
-
-                  = f.submit 'Pay Now', class: 'btn btn-primary btn-md text-uppercase', id: 'pay-now-button', data: { 'disable-with': 'Please Wait...' }
+  .row
+    == render 'fee_offer', period: 1
+    == render 'fee_offer', period: 12
+    == render 'fee_offer', period: 6

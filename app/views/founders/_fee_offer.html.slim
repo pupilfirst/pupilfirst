@@ -1,0 +1,15 @@
+.col-sm-4
+  - period_string = period == 1 ? 'one month' : (period == 6 ? 'six months' : 'one year')
+  - undiscounted_fee = current_startup.fee(1) * period
+  - actual_fee = current_startup.fee(period)
+  - discount_percent = (undiscounted_fee - actual_fee) * 100 / undiscounted_fee
+  = form_with url: fee_founder_path, method: :post, id: 'founder-fee__form' do |form|
+    - if period != 1
+      p #{discount_percent}% off!
+    p
+      ' Fee for #{period_string} is
+      - if period != 1
+        ' <del>&#8377;#{undiscounted_fee}</del>
+      | &#8377;#{actual_fee}
+    = hidden_field_tag :period, period
+    = form.submit "Pay for #{period_string}"

@@ -415,8 +415,17 @@ class Startup < ApplicationRecord
     @billing_founders_count ||= founders.count + invited_founders.count
   end
 
-  def fee
-    Founder::FEE * billing_founders_count
+  def fee(period)
+    case period
+      when 1
+        Founder::FEE_MONTH
+      when 6
+        Founder::FEE_HALF_YEAR
+      when 12
+        Founder::FEE_YEAR
+      else
+        raise "Unexpected period supplied to Startup#fee - #{period}"
+    end * billing_founders_count
   end
 
   def present_week_number

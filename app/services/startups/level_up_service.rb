@@ -32,7 +32,7 @@ module Startups
         Admissions::UpdateStageService.new(@startup, Startup::ADMISSION_STAGE_ADMITTED).execute
 
         @startup.timeline_events.create!(
-          founder: @startup.admin,
+          founder: @startup.team_lead,
           timeline_event_type: TimelineEventType.find_by(key: TimelineEventType::TYPE_JOINED_SV_CO),
           event_on: Time.zone.now,
           iteration: @startup.iteration,

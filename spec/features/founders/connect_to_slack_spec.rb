@@ -4,23 +4,7 @@ feature 'Connect to Slack' do
   include UserSpecHelper
 
   let(:startup) { create :startup, :subscription_active }
-  let(:founder) { startup.admin }
-
-  before do
-    Rails.application.secrets.slack = {
-      name: 'sv',
-      app: {
-        client_id: 'CLIENT_ID',
-        client_secret: 'CLIENT_SECRET',
-        oauth_token: 'OAUTH_TOKEN',
-        bot_oauth_token: 'BOT_OAUTH_TOKEN'
-      },
-      channels: {
-        public: %w[public-channel],
-        private: %w[private-channel]
-      }
-    }
-  end
+  let(:founder) { startup.team_lead }
 
   scenario 'Founder connects profile to Slack' do
     sign_in_user founder.user, referer: edit_founder_path
@@ -33,7 +17,7 @@ feature 'Connect to Slack' do
 
     # Stub the request to retrieve access token from API.
     stub_request(:get, 'https://slack.com/api/oauth.access?client_id=CLIENT_ID&client_secret=CLIENT_SECRET&code=OAUTH_CODE&redirect_uri=http://localhost:3000/founder/slack/callback')
-      .to_return(body: { ok: true, access_token: 'ACCESS_TOKEN', user_id: 'USER_ID' }.to_json)
+      .to_return(body: { ok: true, access_token: 'ACCESS_TOKEN', user_id: 'USER_ID', team_id: 'XYZ1234' }.to_json)
 
     # Stub the request to retrieve username from Slack.
     stub_request(:get, 'https://slack.com/api/users.info?user=USER_ID&token=OAUTH_TOKEN')

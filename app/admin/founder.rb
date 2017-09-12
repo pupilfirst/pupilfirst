@@ -40,7 +40,7 @@ ActiveAdmin.register Founder do
   filter :created_at, label: 'Registered on'
 
   permit_params :name, :email, :hacker, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :born_on,
-    :startup_admin, :communication_address, :identification_proof, :phone, :invitation_token, :college_id, :roll_number,
+    :communication_address, :identification_proof, :phone, :invitation_token, :college_id, :roll_number,
     :course, :semester, :year_of_graduation, :twitter_url, :linkedin_url, :personal_website_url, :blog_url,
     :angel_co_url, :github_url, :behance_url, :gender, :skype_id, :exited, :id_proof_number,
     :id_proof_type, :parent_name, :permanent_address, :address_proof, :income_proof,
@@ -132,7 +132,7 @@ ActiveAdmin.register Founder do
       end
 
       column :team_lead do |founder|
-        founder.startup_admin? ? 'Yes' : 'No'
+        founder.team_lead? ? 'Yes' : 'No'
       end
 
       column :stage do |founder|
@@ -174,7 +174,7 @@ ActiveAdmin.register Founder do
       column :name
 
       column :team_lead do |founder|
-        founder.startup_admin? ? "Yes" : "No"
+        founder.team_lead? ? 'Yes' : 'No'
       end
 
       column :product do |founder|
@@ -219,7 +219,7 @@ ActiveAdmin.register Founder do
       column :slack_username
       column(:skype_username) { |founder| founder.skype_id } # rubocop:disable Style/SymbolProc
 
-      column :startup_admin?
+      column :team_lead?
       column :slug
 
       column :resume, &:resume_link
@@ -283,7 +283,9 @@ ActiveAdmin.register Founder do
         end
       end
 
-      row :startup_admin
+      row :team_lead do
+        founder.team_lead? ? 'Yes' : 'No'
+      end
       row :about
       row :born_on
       row :parent_name

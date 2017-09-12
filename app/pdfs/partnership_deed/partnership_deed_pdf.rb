@@ -87,7 +87,7 @@ module PartnershipDeed
       move_down 15
       stroke_horizontal_rule
       move_down 10
-      text t('partnership_deed.s3.part_2', team_lead_address: @startup.admin.communication_address.squish), inline_format: true
+      text t('partnership_deed.s3.part_2', team_lead_address: @startup.team_lead.communication_address.squish), inline_format: true
 
       # Section 4: Partnership Business
       move_down 10

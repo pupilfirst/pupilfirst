@@ -46,7 +46,7 @@ after 'development:startups', 'development:target_groups', 'development:targets'
         startup: avengers_startup,
         target: target,
         timeline_event_type: target.timeline_event_type,
-        founder: avengers_startup.admin,
+        founder: avengers_startup.team_lead,
         event_on: Time.now,
         description: Faker::Lorem.paragraph,
         status: status_verified,

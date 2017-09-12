@@ -18,20 +18,20 @@ describe FacultyPolicy do
       end
 
       it 'denies access to level 0 team-lead' do
-        expect(subject).to_not permit(level_0_startup.admin.user, faculty)
+        expect(subject).to_not permit(level_0_startup.team_lead.user, faculty)
       end
 
       it 'grants access to max level 1 team-lead' do
-        expect(subject).to permit(level_1_startup.admin.user, faculty)
+        expect(subject).to permit(level_1_startup.team_lead.user, faculty)
       end
 
       it 'denies access to max level 1 non-team-lead' do
-        non_admin = level_1_startup.founders.find { |founder| !founder.startup_admin }
+        non_admin = level_1_startup.founders.find { |founder| !founder.team_lead? }
         expect(subject).to_not permit(non_admin.user, faculty)
       end
 
       it 'grants access to max level 2 team-lead' do
-        expect(subject).to permit(level_2_startup.admin.user, faculty)
+        expect(subject).to permit(level_2_startup.team_lead.user, faculty)
       end
     end
 
@@ -39,15 +39,15 @@ describe FacultyPolicy do
       let(:faculty) { build :faculty, level: level_two }
 
       it 'denies access to max level 1 team lead' do
-        expect(subject).to_not permit(level_1_startup.admin.user, faculty)
+        expect(subject).to_not permit(level_1_startup.team_lead.user, faculty)
       end
 
       it 'grants access to max level 2 team lead' do
-        expect(subject).to permit(level_2_startup.admin.user, faculty)
+        expect(subject).to permit(level_2_startup.team_lead.user, faculty)
       end
 
       it 'denies access to max level 2 non-team-lead' do
-        non_admin = level_2_startup.founders.find { |founder| !founder.startup_admin }
+        non_admin = level_2_startup.founders.find { |founder| !founder.team_lead? }
         expect(subject).to_not permit(non_admin.user, faculty)
       end
     end

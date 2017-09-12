@@ -10,7 +10,7 @@ feature 'Founder Registration' do
 
   context 'User is already a founder' do
     let(:startup) { create :level_0_startup }
-    let(:founder) { startup.admin }
+    let(:founder) { startup.team_lead }
 
     scenario 'User is blocked from registering again', js: true do
       visit join_path

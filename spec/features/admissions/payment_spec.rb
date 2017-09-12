@@ -6,7 +6,7 @@ feature 'Admission Fee Payment' do
   include FounderSpecHelper
 
   let(:startup) { create :level_0_startup }
-  let(:founder) { startup.admin }
+  let(:founder) { startup.team_lead }
   let(:level_0) { create :level, :zero }
   let(:level_0_targets) { create :target_group, milestone: true, level: level_0 }
   let!(:screening_target) { create :target, :admissions_screening, target_group: level_0_targets }
@@ -128,7 +128,7 @@ feature 'Admission Fee Payment' do
       expect(new_referrer_end_date).to eq((referrer_end_date + 10.days).beginning_of_minute)
 
       # The referrer should have received an email informing of his/her reward.
-      open_email(referrer_startup.admin.email)
+      open_email(referrer_startup.team_lead.email)
       expect(current_email.subject).to include('Your startup has unlocked SV.CO referral rewards!')
     end
 

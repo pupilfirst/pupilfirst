@@ -5,7 +5,7 @@ feature 'Admission Level up' do
   include FounderSpecHelper
 
   let(:startup) { create :level_0_startup }
-  let(:founder) { startup.admin }
+  let(:founder) { startup.team_lead }
 
   let(:level_0) { create :level, :zero }
   let(:l0_target_group) { create :target_group, level: level_0, milestone: true }

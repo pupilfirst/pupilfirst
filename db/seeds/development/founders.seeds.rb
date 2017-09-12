@@ -12,8 +12,7 @@ after 'development:colleges' do
     phone: '9876543210',
     reference: Founder.reference_sources.sample,
     college: College.first,
-    user: john_doe,
-    startup_admin: true
+    user: john_doe
   )
 
   # 3 random founders for sv.co

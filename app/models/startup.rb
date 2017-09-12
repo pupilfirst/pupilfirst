@@ -122,9 +122,6 @@ class Startup < ApplicationRecord
   has_many :connect_requests, dependent: :destroy
   has_many :team_members, dependent: :destroy
 
-  has_one :admin, -> { where(startup_admin: true) }, class_name: 'Founder', foreign_key: 'startup_id'
-  accepts_nested_attributes_for :admin
-
   belongs_to :level
   belongs_to :maximum_level, class_name: 'Level'
   belongs_to :requested_restart_level, class_name: 'Level', optional: true
@@ -140,6 +137,7 @@ class Startup < ApplicationRecord
 
   has_many :weekly_karma_points
   has_many :resources
+  belongs_to :team_lead, class_name: 'Founder', optional: true
 
   # use the old name attribute as an alias for legal_registered_name
   alias_attribute :name, :legal_registered_name
@@ -185,7 +183,7 @@ class Startup < ApplicationRecord
 
   before_destroy do
     # Clear out associations from associated Founders (and pending ones).
-    Founder.where(startup_id: id).update_all(startup_id: nil, startup_admin: nil) # rubocop:disable Rails/SkipsModelValidations
+    Founder.where(startup_id: id).update_all(startup_id: nil) # rubocop:disable Rails/SkipsModelValidations
   end
 
   after_create :regenerate_slug
@@ -300,7 +298,7 @@ class Startup < ApplicationRecord
   end
 
   def phone
-    admin.try(:phone)
+    team_lead.try(:phone)
   end
 
   def cofounders(founder)
@@ -374,10 +372,6 @@ class Startup < ApplicationRecord
 
   def timeline_verified?
     approved? && timeline_events.verified.present?
-  end
-
-  def admin?(founder)
-    admin == founder
   end
 
   def timeline_events_for_display(viewer)

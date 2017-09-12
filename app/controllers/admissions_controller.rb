@@ -170,7 +170,7 @@ class AdmissionsController < ApplicationController
       redirect_to root_path
     else
       Founders::AcceptInvitationService.new(founder).execute
-      flash[:success] = "You have successfully joined #{founder.reload.startup.admin.name}'s startup"
+      flash[:success] = "You have successfully joined #{founder.reload.startup.team_lead.name}'s startup"
       sign_in founder.user
       redirect_to dashboard_founder_path(from: 'accept_invitation')
     end

@@ -1,11 +1,12 @@
 class TargetOverlayContentBlock extends React.Component {
   constructor(props) {
     super(props);
-    this.prerequisteLinks = this.prerequisteLinks.bind(this);
+    this.prerequisiteLinks = this.prerequisiteLinks.bind(this);
     this.hasPendingPrerequisites = this.hasPendingPrerequisites.bind(this);
+    this.resourceLinks = this.resourceLinks.bind(this);
   }
 
-  prerequisteLinks() {
+  prerequisiteLinks() {
     return this.props.target.prerequisites.map( function (targetDetail) {
         return(
           <li className="target-overlay-content-block__prerequisites-list-item" key={ targetDetail[0] }>
@@ -13,6 +14,20 @@ class TargetOverlayContentBlock extends React.Component {
               { targetDetail[1] }
             </a>
           </li>
+        );
+      }
+    )
+  }
+
+  resourceLinks() {
+    return this.props.linkedResources.map( function (resourceDetail) {
+        return(
+          <a className="target-overlay__link m-r-1 m-b-1" key={ resourceDetail.id } target='_blank' href={ '/library/' + resourceDetail.slug }>
+                <span className="target-overlay__link-icon">
+                  <i className="fa fa-external-link"/>
+                </span>
+            <span className="target-overlay__link-text">Learn More</span>
+          </a>
         );
       }
     )
@@ -30,7 +45,7 @@ class TargetOverlayContentBlock extends React.Component {
         <div className="target-overlay-content-block__prerequisites p-a-1 m-b-2">
           <h6 className="font-semibold m-b-1">Pending Prerequisites:</h6>
           <ol className="target-overlay-content-block__prerequisites-list m-b-0">
-            { this.prerequisteLinks() }
+            { this.prerequisiteLinks() }
           </ol>
         </div>
         }
@@ -106,6 +121,18 @@ class TargetOverlayContentBlock extends React.Component {
           </div>
         </div>
         }
+
+        { this.props.linkedResources &&
+        <div className="target-overlay-content-block__container">
+          <div className="target-overlay-content-block__header-container clearfix">
+            <img className="target-overlay-content-block__header-icon pull-xs-left" src={ this.props.iconPaths.resourceLinks }/>
+            <h5 className="target-overlay-content-block__header m-a-0 pull-xs-left font-semibold">Library Links</h5>
+          </div>
+          <div className="target-overlay-content-block__body">
+            { this.resourceLinks() }
+          </div>
+        </div>
+        }
       </div>
     );
   }
@@ -113,5 +140,6 @@ class TargetOverlayContentBlock extends React.Component {
 
 TargetOverlayContentBlock.propTypes = {
   target: React.PropTypes.object,
-  iconPaths: React.PropTypes.object
+  iconPaths: React.PropTypes.object,
+  linkedResources: React.PropTypes.array
 };

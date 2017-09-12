@@ -30,7 +30,7 @@ class AdmissionsPolicy
   end
 
   def team_lead?
-    founders? && !user.founder.startup_admin?
+    founders? && !user.founder.team_lead?
   end
 
   def accept_invitation?

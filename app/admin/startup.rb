@@ -4,7 +4,7 @@ ActiveAdmin.register Startup do
   permit_params :product_name, :product_description, :legal_registered_name, :website, :email, :logo, :facebook_link,
     :twitter_link, :created_at, :updated_at, :dropped_out, :registration_type, :agreement_signed_at,
     :presentation_link, :product_video_link, :wireframe_link, :prototype_link, :slug, :level_id,
-    :partnership_deed, :payment_reference, :agreements_verified, startup_category_ids: [], founder_ids: [], tag_list: []
+    :partnership_deed, :payment_reference, :agreements_verified, :team_lead_id, startup_category_ids: [], founder_ids: [], tag_list: []
 
   filter :product_name, as: :string
   filter :level, collection: proc { Level.all.order(number: :asc) }
@@ -177,12 +177,9 @@ ActiveAdmin.register Startup do
     Startup.transaction do
       startup = Startup.friendly.find(params[:id])
 
-      # Remove the old admin, if any.
-      startup.admin&.update!(startup_admin: nil)
-
       # Add the new admin.
       new_team_lead = startup.founders.friendly.find(params[:founder_id])
-      new_team_lead.update!(startup_admin: true)
+      startup.update!(team_lead: new_team_lead)
 
       flash[:success] = "The new team lead is now #{new_team_lead.display_name}"
     end
@@ -263,7 +260,7 @@ ActiveAdmin.register Startup do
       end
 
       row :phone do
-        startup.admin.try(:phone)
+        startup.team_lead.try(:phone)
       end
 
       row :address
@@ -290,7 +287,7 @@ ActiveAdmin.register Startup do
               end
 
               span do
-                if founder.startup_admin?
+                if founder.team_lead?
                   " &mdash; (Current Team Lead)".html_safe
                 else
                   " &mdash; #{link_to('Make Team Lead', change_admin_admin_startup_path(founder_id: founder),
@@ -301,6 +298,8 @@ ActiveAdmin.register Startup do
           end
         end
       end
+
+      row :team_lead
 
       row :team_members do
         if startup.team_members.present?

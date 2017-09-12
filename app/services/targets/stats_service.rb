@@ -73,7 +73,7 @@ module Targets
     end
 
     def representative(assignee)
-      assignee.is_a?(Founder) ? assignee : assignee.admin
+      assignee.is_a?(Founder) ? assignee : assignee.team_lead
     end
   end
 end

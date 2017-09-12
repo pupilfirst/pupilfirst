@@ -34,7 +34,7 @@ feature 'Faculty Connect' do
 
   context 'User is founder of approved startup' do
     let(:startup) { create :startup, :subscription_active }
-    let(:founder) { startup.founders.where.not(id: startup.admin.id).first }
+    let(:founder) { startup.founders.where.not(id: startup.team_lead.id).first }
 
     scenario 'Non-admin founder visits faculty page' do
       sign_in_user(founder.user, referer: faculty_index_path)
@@ -42,12 +42,12 @@ feature 'Faculty Connect' do
       # Two of the three cards should have a disabled connect button with a special message for non-admins.
       expect(page.find('.faculty-card', text: faculty_1.name)).to have_selector('.available-marker')
       expect(page.find('.faculty-card', text: faculty_2.name)).to have_selector('.available-marker')
-      expect(page).to have_selector(".disabled.connect-link[title='Faculty Connect is only available to #{startup.admin.fullname} (your team lead)']", count: 1)
+      expect(page).to have_selector(".disabled.connect-link[title='Faculty Connect is only available to #{startup.team_lead.fullname} (your team lead)']", count: 1)
       expect(page).to have_selector(".disabled.connect-link[title='To gain access to this faculty member, you need to reach Level 2!']", count: 1)
     end
 
     context 'Founder is admin of startup' do
-      let(:founder) { startup.admin }
+      let(:founder) { startup.team_lead }
 
       context "Startup's level maxed out at two" do
         let(:startup) { create :startup, :subscription_active, maximum_level: level_two }

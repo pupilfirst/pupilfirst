@@ -13,6 +13,8 @@ feature 'Target Overlay' do
   let!(:timeline_event_file) { create :timeline_event_file, timeline_event: timeline_event }
   let(:faculty) { create :faculty, slack_username: 'abcd' }
   let!(:feedback) { create :startup_feedback, timeline_event: timeline_event, startup: startup, faculty: faculty }
+  let!(:resource_1) { create :resource, target: target }
+  let!(:resource_2) { create :resource, target: target }
 
   before do
     founder.update!(dashboard_toured: true)
@@ -62,6 +64,12 @@ feature 'Target Overlay' do
       within('.target-overlay-content-block') do
         expect(page).to have_selector('.target-overlay-content-block__header', text: 'Description')
         expect(page).to have_selector('.target-overlay-content-block__body--description', text: target.description)
+
+        # Check resource links
+        expect(page).to have_selector('.target-overlay-content-block__header', text: 'Library Links')
+        expect(page).to have_selector('.target-overlay__link', count: 2)
+        expect(page).to have_link('Learn More', href: "/library/#{resource_1.slug}")
+        expect(page).to have_link('Learn More', href: "/library/#{resource_2.slug}")
       end
 
       # Within the assigner box:

@@ -68,8 +68,8 @@ feature 'Target Overlay' do
         # Check resource links
         expect(page).to have_selector('.target-overlay-content-block__header', text: 'Library Links')
         expect(page).to have_selector('.target-overlay__link', count: 2)
-        expect(page).to have_link('Learn More', href: "/library/#{resource_1.slug}")
-        expect(page).to have_link('Learn More', href: "/library/#{resource_2.slug}")
+        expect(page).to have_link(resource_1.title.to_s, href: "/library/#{resource_1.slug}")
+        expect(page).to have_link(resource_2.title.to_s, href: "/library/#{resource_2.slug}")
       end
 
       # Within the assigner box:

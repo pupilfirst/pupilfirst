@@ -13,7 +13,7 @@ module PublicSlack
 
     # Returns an array of slack_user_ids for founders ready to be pruned.
     def expired_founders
-      @aexpired_founders ||= begin
+      @expired_founders ||= begin
         latest_payments = Payment.paid.where.not(startup_id: nil).group(:startup_id).maximum(:billing_end_at)
         expired_startups = latest_payments.select do |_startup_id, billing_end_at|
           pruning_window_contains? billing_end_at
@@ -43,7 +43,8 @@ module PublicSlack
       log "Removing founder #{founder_slack_id} from group #{group_id}"
       params = { channel: group_id, user: founder_slack_id }
       api.get('groups.kick', params: params)
-      # TODO: Handle failures
+    rescue PublicSlack::OperationFailureException => e
+      raise e if e.parsed_response['error'] != 'not_in_group'
     end
 
     def api

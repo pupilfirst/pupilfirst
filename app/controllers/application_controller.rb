@@ -230,6 +230,12 @@ class ApplicationController < ActionController::Base
     }
   end
 
+  def cloudflare_csp
+    {
+      script: 'https://ajax.cloudflare.com/'
+    }
+  end
+
   def child_sources
     <<~CHILD_SOURCES.squish
       child-src https://www.youtube.com
@@ -266,7 +272,7 @@ class ApplicationController < ActionController::Base
       'self' 'unsafe-eval' 'unsafe-inline' https://ajax.googleapis.com https://blog.sv.co https://www.youtube.com
       https://s.ytimg.com http://www.startatsv.com https://sv-assets.sv.co
       #{google_analytics_csp[:script]} #{inspectlet_csp[:script]} #{facebook_csp[:script]} #{intercom_csp[:script]}
-      #{gtm_csp[:script]} #{instamojo_csp[:script]} #{recaptcha_csp[:script]};
+      #{gtm_csp[:script]} #{instamojo_csp[:script]} #{recaptcha_csp[:script]} #{cloudflare_csp[:script]};
     SCRIPT_SOURCES
   end
 

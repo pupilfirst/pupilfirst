@@ -3,11 +3,11 @@ require 'rails_helper'
 describe PublicSlack::MessageService do
   subject { described_class.new }
 
-  before do
+  before :all do
     PublicSlack::MessageService.mock = false
   end
 
-  after do
+  after :all do
     PublicSlack::MessageService.mock = true
   end
 

@@ -1,17 +1,19 @@
-= simple_form_for team_member, wrapper: :vertical_form, wrapper_mappings: { check_boxes: :vertical_radio_and_checkboxes, file: :vertical_file_input } do |f|
+= bootstrap_form_for(team_member, layout: :horizontal, label_col: 'col-sm-3', control_col: 'col-sm-9') do |f|
+  = f.error_summary
   legend
     - if team_member.persisted?
       ' Edit team member '#{team_member.name}'
     - else
       ' List new team member
   .flex-column
-    = f.input :name
-    = f.input :roles, collection: Founder.valid_roles, label_method: proc { |role| t("role.#{role}") }, required: true, input_html: { multiple: true }
-    = f.input :email, label: 'Email address'
-    = f.input :avatar, as: :image_preview, input_html: { preview_version: :thumb, accept: 'image/*' }
+    = f.text_field :name, required: true
+    = f.select :roles, options_for_select(Founder.valid_roles, @team_member.roles),
+      {}, { required: true, multiple: true }
+    = f.email_field :email, label_class: 'col-form-label', label: 'Email address', class: 'form-control', required: true
+    = f.file_field :avatar, as: :image_preview, label_class: 'col-form-label', label: 'Avatar', class: 'form-control'
 
   .row.form-group
-    .col-sm-9
+    .col-md-9.ml-auto
       ' #{f.submit team_member.persisted? ? 'Update team member entry' : 'List new team member', class: 'btn btn-md btn-primary'}
-      / - if team_member.persisted?
-      = link_to 'Cancel', new_team_member_url, class: 'btn btn-md btn-ghost-secondary mt-3 mt-sm-0 ml-sm-3'
+      - if team_member.persisted?
+        = link_to 'Cancel', new_team_member_url, class: 'btn btn-md btn-ghost-secondary mt-3 mt-sm-0 ml-sm-3'

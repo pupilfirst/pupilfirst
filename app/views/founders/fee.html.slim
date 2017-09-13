@@ -32,6 +32,42 @@ script src="https://js.instamojo.com/v1/checkout.js"
             ' might take a few minutes for the payment status to update, if you experienced network issues after completing
             ' the payment. Please contact us at #{mail_to 'help@sv.co'} if you're experiencing any issue.
 
+        - if policy(:admissions).coupon_submit? || policy(:admissions).coupon_remove?
+          .row
+            .offset-md-2.col-md-8
+              .coupon-form-container.text-xs-center.m-x-auto
+                - if policy(:admissions).coupon_remove?
+                  .discount-coupon__box.discount-coupon-applied-box.p-a-1
+                    p.discount-coupon-applied-box__message.font-semibold
+                      ' Coupon with code
+                      span.discount-coupon-applied--code.dark-secondary
+                        | #{@coupon.code}
+                      | applied!
+                    p.m-t-1
+                      ' You will unlock <strong>#{@coupon.user_extension_days} extra days</strong> of SV.CO subscription on fee payment!
+
+                    - if @coupon.instructions.present?
+                      .coupon-instructions.m-t-1
+                        p
+                          span.font-semibold
+                            ' Note:
+                          | #{@coupon.instructions}
+
+                    = button_to 'Remove', admissions_coupon_remove_path, method: :patch, class: 'btn btn-ghost-secondary btn-sm text-uppercase m-t-1'
+                - else
+                  #coupon-form-show.discount-coupon__box.discount-coupon__box--show.brand-secondary.font-semibold.p-a-1
+                    h4.font-semibold.dark-secondary.m-a-0
+                      ' Have a referral coupon?
+                  #coupon-form.discount-coupon__box.discount-coupon__box--form.simple-form-container.hidden-xs-up.p-a-1
+                    = simple_form_for @coupon_form,
+                      url: admissions_coupon_submit_path,
+                      method: :post do |f|
+
+                      = f.input :code, label: false, autofocus: true, placeholder: 'Enter Code'
+                      #coupon-form-hide.coupon-form-hide.hidden-xs-up.btn.btn-ghost-secondary.btn-sm.text-uppercase.m-r-1.discount-coupon__box-btn
+                        ' Hide
+                      = f.submit 'Apply Code', class: 'btn btn-secondary btn-sm text-uppercase discount-coupon__box-btn'
+
   .row
     == render 'fee_offer', period: 1
     == render 'fee_offer', period: 12

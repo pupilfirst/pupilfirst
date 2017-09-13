@@ -41,17 +41,23 @@ class FoundersController < ApplicationController
     @founder = current_founder
     authorize @founder
     @payment = Founders::PendingPaymentService.new(@founder).fetch
-    @monthly_fee_form = Founders::MonthlyFeeForm.new(@founder)
+    @fee_form = Founders::FeeForm.new(@founder)
+    @coupon = current_startup.applied_coupon
+    @coupon_form = Admissions::CouponForm.new(Reform::OpenForm.new, current_founder)
   end
 
   # POST /founder/fee
   def fee_submit
     fee
 
-    payment = @monthly_fee_form.save
+    if @fee_form.validate(fee_params)
+      payment = @fee_form.save
 
-    # Trigger the Instamojo library.
-    render js: "Instamojo.open('#{payment.long_url}');"
+      # Trigger the Instamojo library.
+      render js: "Instamojo.open('#{payment.long_url}');"
+    else
+      render js: 'alert("Something went wrong! Please refresh the page and try again.");'
+    end
   end
 
   private

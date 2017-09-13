@@ -1,6 +1,6 @@
 class FounderPolicy < ApplicationPolicy
   def founder_profile?
-    record.startup.present? && !record.level_zero?
+    record&.startup.present? && !record.level_zero?
   end
 
   def edit?
@@ -12,7 +12,7 @@ class FounderPolicy < ApplicationPolicy
   end
 
   def fee?
-    record.startup.present? && record.startup.payments.pending.any?
+    record&.startup.present? && record.startup.payments.pending.any?
   end
 
   def fee_submit?

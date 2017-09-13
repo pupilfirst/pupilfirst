@@ -70,12 +70,6 @@ class AdmissionsController < ApplicationController
     Intercom::FounderTaggingJob.perform_later(current_founder, 'Visited Payment Page')
 
     @payment_form = Admissions::PaymentForm.new(current_founder)
-    @coupon = current_startup.applied_coupon
-
-    if @coupon.blank?
-      @coupon_form = Admissions::CouponForm.new(Reform::OpenForm.new)
-      @coupon_form.prepopulate!(current_founder)
-    end
   end
 
   # Payment stage submission handler.
@@ -98,27 +92,29 @@ class AdmissionsController < ApplicationController
     observable_redirect_to(payment.long_url)
   end
 
-  # Handle coupon codes submissions
+  # Handle submission of coupon code.
   def coupon_submit
-    fee
+    authorize :admissions
 
-    if @coupon_form.validate(params[:admissions_coupon])
-      @coupon_form.apply_coupon
+    coupon_form = Admissions::CouponForm.new(Reform::OpenForm.new, current_founder)
+
+    if coupon_form.validate(params[:admissions_coupon])
+      coupon_form.apply_coupon
       flash[:success] = 'Coupon applied successfully!'
-      redirect_to admissions_fee_path
     else
-      flash.now[:error] = 'Coupon code is not valid!'
-      render 'fee'
+      flash[:error] = 'Coupon code is not valid!'
     end
+
+    redirect_to fee_founder_path
   end
 
-  # Remove an applied coupon
+  # Remove an applied coupon.
   def coupon_remove
     authorize :admissions
 
     remove_latest_coupon
     flash[:success] = 'Coupon removed successfully!'
-    redirect_to admissions_fee_path
+    redirect_to fee_founder_path
   end
 
   # GET /admissions/founders

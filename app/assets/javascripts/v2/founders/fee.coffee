@@ -11,5 +11,5 @@ toggleCouponForm = ->
   $('#coupon-form-show').toggleClass('hidden-xs-up')
 
 $(document).on 'turbolinks:load', ->
-  if $('#admissions__fee').length
+  if $('#founder__fee').length
     handleCouponFormVisibility()

@@ -1,5 +1,7 @@
 module Founders
-  class MonthlyFeeForm < Reform::Form
+  class FeeForm < Reform::Form
+    property :period, virtual: true, validates: { inclusion: { in: [1, 6, 12] } }
+
     def save
       payment = Founders::PendingPaymentService.new(model).fetch
 

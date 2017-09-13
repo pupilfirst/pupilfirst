@@ -23,7 +23,7 @@ after 'development:target_groups', 'development:timeline_event_types', 'developm
   cofounder_addition_target = Target.create!(days_to_complete: 1, title: 'Add co-founders', role: Target::ROLE_TEAM, timeline_event_type: team_update, link_to_complete: '/admissions/founders', key: Target::KEY_ADMISSIONS_COFOUNDER_ADDITION, target_group: level_0_milestone_group, description: paragraph, prerequisite_targets: [screening_target], assigner: faculty_1, target_action_type: Target::TYPE_TODO)
 
   # Fee payment target.
-  Target.create!(days_to_complete: 1, title: 'Pay Admission Fee', role: Target::ROLE_TEAM, timeline_event_type: team_update, submittability: Target::SUBMITTABILITY_SUBMITTABLE_ONCE, link_to_complete: '/admissions/fee', key: Target::KEY_ADMISSIONS_FEE_PAYMENT, target_group: level_0_milestone_group, description: paragraph, prerequisite_targets: [cofounder_addition_target], assigner: faculty_2, target_action_type: Target::TYPE_TODO)
+  Target.create!(days_to_complete: 1, title: 'Pay Admission Fee', role: Target::ROLE_TEAM, timeline_event_type: team_update, submittability: Target::SUBMITTABILITY_SUBMITTABLE_ONCE, link_to_complete: '/founder/fee', key: Target::KEY_ADMISSIONS_FEE_PAYMENT, target_group: level_0_milestone_group, description: paragraph, prerequisite_targets: [cofounder_addition_target], assigner: faculty_2, target_action_type: Target::TYPE_TODO)
 
   # Random targets, session and chores for every level
   (1..4).each do |level_number|

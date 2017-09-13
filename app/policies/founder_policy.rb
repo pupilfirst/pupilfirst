@@ -12,7 +12,7 @@ class FounderPolicy < ApplicationPolicy
   end
 
   def fee?
-    founder_profile? && record.startup.payments.pending.any?
+    record.startup.present? && record.startup.payments.pending.any?
   end
 
   def fee_submit?

@@ -108,7 +108,7 @@ By default, the development and test environment run jobs in-line. If you've man
 
 ## Deployment
 
-[Codeship](https://codeship.com) runs specs once commit are pushed to Github. When push is to the `master` branch, and if specs pass, Codeship marks the commit as successful on Github. This prompts Heroku to pick up the commit and deploy a new instance - so the entire process is automated.
+[TeamCity](https://ci.sv.co) runs specs once commit are pushed to Github. When push is to the `master` branch, and if specs pass, TeamCity marks the commit as successful on Github. This prompts Heroku to pick up the commit and deploy a new instance - so the entire process is automated.
 
 We use two buildpacks at Heroku:
 

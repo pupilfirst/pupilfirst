@@ -26,7 +26,7 @@ class TargetOverlayContentBlock extends React.Component {
                 <span className="target-overlay__link-icon">
                   <i className="fa fa-external-link"/>
                 </span>
-            <span className="target-overlay__link-text">Learn More</span>
+            <span className="target-overlay__link-text">{ resourceDetail.title }</span>
           </a>
         );
       }

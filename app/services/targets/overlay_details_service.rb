@@ -60,7 +60,7 @@ module Targets
       return nil if @target.resources.blank?
 
       @target.resources.each_with_object([]) do |resource, resource_details|
-        resource_details << { id: resource.id, slug: resource.slug }
+        resource_details << { id: resource.id, title: resource.title, slug: resource.slug }
       end
     end
   end

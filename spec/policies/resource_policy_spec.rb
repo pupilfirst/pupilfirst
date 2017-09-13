@@ -15,14 +15,6 @@ describe ResourcePolicy do
   let!(:level_1_resource) { create :resource, level: level_1 }
   let!(:level_2_resource) { create :resource, level: level_2 }
 
-  before :all do
-    PublicSlack::MessageService.mock = true
-  end
-
-  after :all do
-    PublicSlack::MessageService.mock = false
-  end
-
   permissions :show? do
     context 'when founder belongs to level 1 approved startup' do
       it 'allows access to public resource' do

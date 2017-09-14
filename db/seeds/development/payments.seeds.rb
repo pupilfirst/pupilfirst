@@ -9,7 +9,7 @@ after 'development:startups' do
   # A live subscription for 'Super Startup' and 'The Avengers'
   super_startup.payments.create!(
     founder: super_startup.team_lead,
-    amount: super_startup.fee(6),
+    amount: super_startup.fee(3),
     paid_at: 1.week.ago,
     billing_start_at: 1.week.ago,
     billing_end_at: 3.weeks.from_now

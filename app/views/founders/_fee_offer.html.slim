@@ -1,5 +1,5 @@
 .col-sm-4
-  - period_string = period == 1 ? 'one month' : (period == 6 ? 'six months' : 'one year')
+  - period_string = period == 1 ? 'one month' : (period == 3 ? 'three months' : 'six months')
   - undiscounted_fee = current_startup.fee(1) * period
   - actual_fee = current_startup.fee(period)
   - discount_percent = (undiscounted_fee - actual_fee) * 100 / undiscounted_fee

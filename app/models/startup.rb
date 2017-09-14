@@ -418,11 +418,11 @@ class Startup < ApplicationRecord
   def fee(period)
     case period
       when 1
-        Founder::FEE_MONTH
+        Founder::FEE_ONE_MONTH
+      when 3
+        Founder::FEE_THREE_MONTHS
       when 6
-        Founder::FEE_HALF_YEAR
-      when 12
-        Founder::FEE_YEAR
+        Founder::FEE_SIX_MONTHS
       else
         raise "Unexpected period supplied to Startup#fee - #{period}"
     end * billing_founders_count

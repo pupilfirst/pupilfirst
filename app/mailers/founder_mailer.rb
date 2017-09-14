@@ -16,4 +16,10 @@ class FounderMailer < ApplicationMailer
 
     mail(to: founder.email, subject: 'You have been invited to join a startup at SV.CO')
   end
+
+  # Inform founder when he is removed from slack due to subscription expiry
+  def slack_removal(founder)
+    @founder = founder
+    mail(to: @founder.email, subject: 'Your SV.CO Slack membership has been revoked!')
+  end
 end

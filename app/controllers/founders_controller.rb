@@ -48,10 +48,11 @@ class FoundersController < ApplicationController
 
   # POST /founder/fee
   def fee_submit
-    fee
+    authorize current_founder
+    fee_form = Founders::FeeForm.new(current_founder)
 
-    if @fee_form.validate(fee_params)
-      payment = @fee_form.save
+    if fee_form.validate(fee_params)
+      payment = fee_form.save
 
       # Trigger the Instamojo library.
       render js: "Instamojo.open('#{payment.long_url}');"
@@ -61,6 +62,10 @@ class FoundersController < ApplicationController
   end
 
   private
+
+  def fee_params
+    params.require(:fee).permit(:period)
+  end
 
   def skip_container
     @skip_container = true

@@ -1,19 +1,9 @@
 module Founders
   class FeeForm < Reform::Form
-    property :period, virtual: true, validates: { inclusion: { in: [1, 6, 12] } }
+    property :period, virtual: true, validates: { inclusion: { in: %w[1 3 6] } }
 
     def save
-      payment = Founders::PendingPaymentService.new(model).fetch
-
-      # Contact Instamojo to create request.
-      payment = if payment.requested?
-        Instamojo::VerifyPaymentRequestService.new(payment).verify
-      else
-        Instamojo::RequestPaymentService.new(payment).request
-      end
-
-      # Return updated payment.
-      payment
+      Founders::UpdatePendingPaymentService.new(model, period.to_i).update
     end
   end
 end

@@ -11,5 +11,5 @@
       - if period != 1
         ' <del>&#8377;#{undiscounted_fee}</del>
       | &#8377;#{actual_fee}
-    = hidden_field_tag :period, period
+    = hidden_field_tag 'fee[period]', period
     = form.submit "Pay for #{period_string}"

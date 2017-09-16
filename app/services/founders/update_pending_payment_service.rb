@@ -31,7 +31,7 @@ module Founders
     private
 
     def payment
-      @payment ||= Founders::PendingPaymentService.new(@founder).fetch
+      @payment ||= Startups::PendingPaymentService.new(@founder.startup).fetch
     end
 
     def rebuild_payment_request

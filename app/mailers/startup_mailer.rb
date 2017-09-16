@@ -27,12 +27,17 @@ class StartupMailer < ApplicationMailer
     mail(to: send_to, subject: "Your SV.CO subscription expires in #{payment.days_to_expiry} days.")
   end
 
-  def referral_reward(payment, coupon)
-    @payment = payment
-    @referred_startup = payment.startup
+  # @param referrer_startup [Startup] Startup receiving referral reward
+  # @param referred_startup [Startup] Startup that joined using the referral coupon
+  # @param coupon [Coupon] Referral coupon that was used
+  # @param reward_on_renewal [TrueClass, FalseClass] Boolean - whether reward will be delivered on renewal of subscription, or has already been rewarded.
+  def referral_reward(referrer_startup, referred_startup, coupon, reward_on_renewal)
+    @referrer_startup = referrer_startup
+    @referred_startup = referred_startup
     @coupon = coupon
-    referrer_startup = coupon.referrer_startup
-    send_to = referrer_startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
+    @reward_on_renewal = reward_on_renewal
+
+    send_to = @referrer_startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
     mail(to: send_to, subject: 'Your startup has unlocked SV.CO referral rewards!')
   end
 end

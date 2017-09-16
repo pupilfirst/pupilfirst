@@ -463,7 +463,11 @@ class Startup < ApplicationRecord
     [ADMISSION_STAGE_SIGNED_UP, ADMISSION_STAGE_SCREENING_COMPLETED, ADMISSION_STAGE_COFOUNDERS_ADDED, ADMISSION_STAGE_PAYMENT_INITIATED, ADMISSION_STAGE_FEE_PAID, ADMISSION_STAGE_ADMITTED].freeze
   end
 
+  def active_payment
+    payments.paid.order(:billing_end_at).last
+  end
+
   def subscription_end_date
-    payments.paid.order(:billing_end_at).last.billing_end_at
+    active_payment.billing_end_at
   end
 end

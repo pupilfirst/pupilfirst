@@ -38,11 +38,12 @@ class StartupMailerPreview < ActionMailer::Preview
   end
 
   def referral_reward
-    startup = Startup.find_by(product_name: 'Super Product') # Paid.
-    # startup = Startup.find_by(product_name: 'SuperHeroes') # Pending payment.
+    referrer_startup = Startup.find_by(product_name: 'Super Product')
+    referred_startup = Startup.find_by(product_name: 'Super Product')
 
-    payment = startup.payments.order(billing_end_at: :desc).first
-    coupon = Coupon.new(referrer_startup: startup, referrer_extension_days: 10)
-    StartupMailer.referral_reward(payment, coupon)
+    coupon = Coupon.new(referrer_startup: referrer_startup, referrer_extension_days: 10)
+
+    # The final flag controls message related to reward_on_renewal.
+    StartupMailer.referral_reward(referrer_startup, referred_startup, coupon, false)
   end
 end

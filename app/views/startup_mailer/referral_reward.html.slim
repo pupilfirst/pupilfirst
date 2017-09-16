@@ -9,15 +9,15 @@
 
 = content_for :body do
   p
-    ' A new startup &ndash; #{@referred_startup.product_name} &ndash; just joined SV&#x2024;CO using your referral coupon. Your
-    ' startup has earned <strong>#{@coupon.referrer_extension_days} days</strong> of free SV&#x2024;CO subscription for this
-    | referral.
+    ' A new startup &ndash; #{@referred_startup.product_name} &ndash; just joined SV&#x2024;CO using your referral
+    ' coupon. Your startup has earned <strong>#{@coupon.referrer_extension_days} days</strong> of free SV&#x2024;CO
+    | subscription for this referral.
 
   p
-    - if @payment.pending?
+    - if @reward_on_renewal
       ' Your subscription will be extended with the reward period upon renewal of your subscription.
-    - elsif @payment.paid?
+    - else
       ' We have extended your current subscription with the reward period. Your subscription now ends on
-      | <strong>#{@payment.billing_end_at.strftime('%A, %b %d')}</strong>.
+      | <strong>#{@referrer_startup.active_payment.billing_end_at.strftime('%A, %b %d')}</strong>.
 
   p Feel free to reach out to us at #{mail_to 'help@sv.co'} in case of any queries.

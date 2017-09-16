@@ -1,4 +1,5 @@
 module Coupons
+  # TODO: Coupons::CreateService.new.generate_referral should probably be Startups::CreateReferralCoupon.new(startup).create
   class CreateService
     USER_EXTENSION_DEFAULT = 15
     REFERRER_EXTENSION_DEFAULT = 10

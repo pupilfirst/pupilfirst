@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170916081514) do
+ActiveRecord::Schema.define(version: 20170918095847) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -416,6 +416,7 @@ ActiveRecord::Schema.define(version: 20170916081514) do
     t.index ["level_id"], name: "index_resources_on_level_id"
     t.index ["slug"], name: "index_resources_on_slug"
     t.index ["startup_id"], name: "index_resources_on_startup_id"
+    t.index ["target_id"], name: "index_resources_on_target_id"
   end
 
   create_table "shortened_urls", id: :serial, force: :cascade do |t|

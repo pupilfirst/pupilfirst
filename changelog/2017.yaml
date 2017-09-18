@@ -1,5 +1,34 @@
 ---
 changelog:
+- timestamp: '2017-09-18T11:11:28Z'
+  changes:
+  - timestamp: '2017-09-18T09:20:42Z'
+    title: Fixed broken styling of the faculty slot saved page
+    trello: https://trello.com/c/0DGD9uKl/
+    private: true
+    category: bugfix
+  - timestamp: '2017-09-15T07:02:57Z'
+    title: Upgrade to Ruby 2.4.2 and Rails 5.1.4.
+    trello: https://trello.com/c/DhdFGYWi
+    private: true
+    category: operations
+  - timestamp: '2017-09-13T11:29:12Z'
+    title: Added 'Library' to navigation bar for logged in founders
+    trello: https://trello.com/c/SOzuwjHP
+    private: false
+    category: feature
+  - timestamp: '2017-09-13T07:43:29Z'
+    title: Fixed misaligned data points on Startup timeline when viewing from mobile
+    trello: https://trello.com/c/D9HqzxYW
+    private: false
+    description: Add ajax.cloudflare.com to CSP list to allow Cloudflare's Mirage feature to work.
+    category: bugfix
+  - timestamp: '2017-09-12T12:33:36Z'
+    title: Targets will now show associated library links alongside other details
+      when expanded.
+    trello: https://trello.com/c/gfrPBHZ5
+    private: false
+    category: feature
 - timestamp: '2017-09-11T16:21:18Z'
   changes:
   - timestamp: '2017-09-11T10:10:40Z'

@@ -18,10 +18,10 @@ changelog:
     private: false
     category: feature
   - timestamp: '2017-09-13T07:43:29Z'
-    title: Add ajax.cloudflare.com to CSP list to allow Cloudflare's Mirage feature
-      to work.
+    title: Fixed misaligned data points on Startup timeline when viewing from mobile
     trello: https://trello.com/c/D9HqzxYW
-    private: true
+    private: false
+    description: Add ajax.cloudflare.com to CSP list to allow Cloudflare's Mirage feature to work.
     category: bugfix
   - timestamp: '2017-09-12T12:33:36Z'
     title: Targets will now show associated library links alongside other details

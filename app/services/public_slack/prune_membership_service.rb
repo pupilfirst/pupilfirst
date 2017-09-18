@@ -41,6 +41,7 @@ module PublicSlack
       log "Removing founder #{founder.name} from group #{group_id}"
       params = { channel: group_id, user: founder.slack_user_id }
       response = api.get('groups.kick', params: params)
+      # TODO: Prevent mail being sent for each channel!
       FounderMailer.slack_removal(founder).deliver_later if response['ok']
     rescue PublicSlack::OperationFailureException => e
       raise e if e.parsed_response['error'] != 'not_in_group'

@@ -9,7 +9,8 @@ module Targets
       {
         founderStatuses: founder_statuses,
         latestEvent: latest_event_details,
-        latestFeedback: latest_feedback
+        latestFeedback: latest_feedback,
+        linkedResources: linked_resources
       }
     end
 
@@ -52,6 +53,14 @@ module Targets
 
       latest_event.links.each_with_object(attachments) do |link, array|
         array << { type: 'link', title: link['title'], url: link['url'] }
+      end
+    end
+
+    def linked_resources
+      return nil if @target.resources.blank?
+
+      @target.resources.each_with_object([]) do |resource, resource_details|
+        resource_details << { id: resource.id, title: resource.title, slug: resource.slug }
       end
     end
   end

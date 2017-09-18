@@ -1,0 +1,7 @@
+---
+timestamp: '2017-09-13T07:43:29Z'
+title: Add ajax.cloudflare.com to CSP list to allow Cloudflare's Mirage feature to
+  work.
+trello: https://trello.com/c/D9HqzxYW
+private: true
+category: bugfix

@@ -15,14 +15,6 @@ feature 'Resources' do
   let!(:level_1_resource) { create :resource, level: level_1 }
   let!(:level_2_resource) { create :resource, level: level_2 }
 
-  before :all do
-    PublicSlack::MessageService.mock = true
-  end
-
-  after :all do
-    PublicSlack::MessageService.mock = false
-  end
-
   scenario 'user visits resources page' do
     visit resources_path
 

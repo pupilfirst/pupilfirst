@@ -38,10 +38,10 @@ class FoundersController < ApplicationController
 
   # GET /founder/fee
   def fee
-    @founder = current_founder
-    authorize @founder
-    @payment = Founders::PendingPaymentService.new(@founder).fetch
-    @fee_form = Founders::FeeForm.new(@founder)
+    authorize current_founder
+
+    @payment = Startups::PendingPaymentService.new(current_startup).fetch
+    @fee_form = Founders::FeeForm.new(current_founder)
     @coupon = current_startup.applied_coupon
     @coupon_form = Admissions::CouponForm.new(Reform::OpenForm.new, current_founder)
   end

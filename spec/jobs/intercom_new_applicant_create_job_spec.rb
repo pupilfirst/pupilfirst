@@ -8,13 +8,16 @@ describe IntercomNewApplicantCreateJob do
   let(:intercom_client) { instance_double IntercomClient }
   let(:intercom_user) { double 'Intercom User' }
 
-  before do
+  before :all do
     IntercomNewApplicantCreateJob.mock = false
-    allow(IntercomClient).to receive(:new).and_return(intercom_client)
   end
 
-  after do
+  after :all do
     IntercomNewApplicantCreateJob.mock = true
+  end
+
+  before do
+    allow(IntercomClient).to receive(:new).and_return(intercom_client)
   end
 
   it 'creates and updates user' do

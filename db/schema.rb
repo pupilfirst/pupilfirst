@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170914073119) do
+ActiveRecord::Schema.define(version: 20170916081514) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -499,6 +499,7 @@ ActiveRecord::Schema.define(version: 20170914073119) do
     t.date "timeline_updated_on"
     t.datetime "admission_stage_updated_at"
     t.bigint "team_lead_id"
+    t.integer "referral_reward_days", default: 0
     t.index ["level_id"], name: "index_startups_on_level_id"
     t.index ["maximum_level_id"], name: "index_startups_on_maximum_level_id"
     t.index ["slug"], name: "index_startups_on_slug", unique: true

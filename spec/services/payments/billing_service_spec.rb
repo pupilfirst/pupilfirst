@@ -23,16 +23,15 @@ describe Payments::BillingService do
         pending_payment_created = Payment.last
         expect(pending_payment_created.startup).to eq(startup_1)
         expect(pending_payment_created.billing_start_at.to_i).to eq(payment_expiring_in_five_days.billing_end_at.to_i)
-        expect(pending_payment_created.billing_end_at.to_i).to eq((payment_expiring_in_five_days.billing_end_at + 1.month).to_i)
       end
 
       it 'sends reminder email for startups with payments expiring in 5 days and 3 days' do
         expect { subject.new.execute }.to change { Payment.count }.by(1).and change { ActionMailer::Base.deliveries.count }.by(2)
 
         open_email(startup_1.team_lead.email)
-        expect(current_email).to have_content("Your SV․CO subscription expires in 5 days. To continue having access to our services please pay the monthly subscription fee of ₹#{startup_1.fee}")
+        expect(current_email).to have_content('Your SV․CO subscription expires in 5 days. To continue having access to our services please pay the subscription fee.')
         open_email(startup_2.team_lead.email)
-        expect(current_email).to have_content("Your SV․CO subscription expires in 3 days. To continue having access to our services please pay the monthly subscription fee of ₹#{startup_2.fee}")
+        expect(current_email).to have_content('Your SV․CO subscription expires in 3 days. To continue having access to our services please pay the subscription fee.')
       end
     end
 

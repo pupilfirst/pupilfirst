@@ -1,15 +1,38 @@
-.col-sm-4
-  - period_string = period == 1 ? 'one month' : (period == 3 ? 'three months' : 'six months')
+.col-sm-4.content-box.text-xs-center.fee-offer__box class=(period == 6 ? 'fee-offer__recommended' : '')
+  - period_string = period == 1 ? '1 month' : (period == 3 ? '3 months' : '6 months')
   - undiscounted_fee = current_startup.fee(1) * period
   - actual_fee = current_startup.fee(period)
   - discount_percent = (undiscounted_fee - actual_fee) * 100 / undiscounted_fee
-  = form_with url: fee_founder_path, method: :post, id: 'founder-fee__form' do |form|
-    - if period != 1
-      p #{discount_percent}% off!
-    p
-      ' Fee for #{period_string} is
+
+  - if period == 6
+    .fee-offer__recommended-notice
+      | Recommended!
+
+  h5.font-semibold.text-uppercase.fee-offer_period.p-b-1.m-b-2 #{period_string}
+
+  div
+    .fee-offer__amount-highlight
       - if period != 1
-        ' <del>&#8377;#{undiscounted_fee}</del>
-      | &#8377;#{actual_fee}
-    = hidden_field_tag 'fee[period]', period
-    = form.submit "Pay for #{period_string}"
+        h5.font-semibold.m-b-0
+          ' <del>&#8377;#{undiscounted_fee}</del>
+      h2.font-semibold.m-b-0
+        span.font-regular &#8377;
+        | #{actual_fee}
+      p
+        | for #{current_startup.billing_founders_count} founders
+
+  .fee-offer__discount.m-y-2
+    - if period != 1
+      h3.font-bold.brand-secondary #{discount_percent}% off!
+
+    - else
+      p Full price.
+
+    - if period == 6
+      p
+        | (Offer expires on September 30th, 2017)
+
+  = form_with url: fee_founder_path, method: :post, id: 'founder-fee__form' do |form|
+    .p-x-1
+      = hidden_field_tag 'fee[period]', period
+      = form.submit "Pay for #{period_string}", class: "btn btn-md text-uppercase #{(period == 6 ? 'btn-primary' : 'btn-ghost-primary')}"

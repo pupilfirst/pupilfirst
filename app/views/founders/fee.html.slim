@@ -17,11 +17,10 @@ script src="https://js.instamojo.com/v1/checkout.js"
     .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
       .content-box.m-t-3.m-b-3.apply-submitted
         h3.text-xs-center.m-b-1
-          ' Please pay the
-          span.brand-secondary.font-semibold membership fee&nbsp;
+          span.brand-secondary.font-semibold Please pay the membership fee&nbsp;
           | to continue.
 
-        ul.admissions-fee__important-points
+        ul.admissions-fee__important-points.m-b-1
           li It covers your team of <strong>#{current_startup.billing_founders_count} founders</strong>.
           li You can change your team at any time. Just reach us on #{mail_to 'help@sv.co'}.
 
@@ -68,7 +67,7 @@ script src="https://js.instamojo.com/v1/checkout.js"
                         ' Hide
                       = f.submit 'Apply Code', class: 'btn btn-secondary btn-sm text-uppercase discount-coupon__box-btn'
 
-  .row
+  .fee-offer__container.m-b-3
     == render 'fee_offer', period: 1
     == render 'fee_offer', period: 6
     == render 'fee_offer', period: 3

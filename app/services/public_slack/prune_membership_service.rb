@@ -2,11 +2,16 @@ module PublicSlack
   class PruneMembershipService
     include Loggable
 
+    def initialize
+      @pruned_founders = []
+    end
+
     def execute
       return if expired_founders.blank?
 
       log 'Removing expired founders from all private groups on Public Slack...'
       private_groups.each { |group_id| remove_expired_founders(group_id) }
+      @pruned_founders.each { |founder| FounderMailer.slack_removal(founder).deliver_later }
     end
 
     private
@@ -41,8 +46,7 @@ module PublicSlack
       log "Removing founder #{founder.name} from group #{group_id}"
       params = { channel: group_id, user: founder.slack_user_id }
       response = api.get('groups.kick', params: params)
-      # TODO: Prevent mail being sent for each channel!
-      FounderMailer.slack_removal(founder).deliver_later if response['ok']
+      @pruned_founders |= [founder] if response['ok']
     rescue PublicSlack::OperationFailureException => e
       raise e if e.parsed_response['error'] != 'not_in_group'
     end

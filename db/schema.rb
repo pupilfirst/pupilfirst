@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170918095847) do
+ActiveRecord::Schema.define(version: 20170919094613) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -412,6 +412,7 @@ ActiveRecord::Schema.define(version: 20170918095847) do
     t.integer "level_id"
     t.integer "target_id"
     t.string "link"
+    t.string "file_content_type"
     t.index ["level_id"], name: "index_resources_on_level_id"
     t.index ["slug"], name: "index_resources_on_slug"
     t.index ["startup_id"], name: "index_resources_on_startup_id"

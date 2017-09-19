@@ -68,8 +68,10 @@ class Resource < ApplicationRecord
     Resources::AfterCreateNotificationJob.perform_later(self)
   end
 
-  # Ensure titles are capitalized.
   before_save do
+    # Ensure titles are capitalized.
     self.title = title.titlecase(humanize: false, underscore: false)
+    # Store content_type of file in resource
+    self.file_content_type = file.content_type
   end
 end

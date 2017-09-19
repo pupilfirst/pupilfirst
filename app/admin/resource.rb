@@ -89,7 +89,7 @@ ActiveAdmin.register Resource do
         end
       end
 
-      row :content_type
+      row :file_content_type
       row :created_at
       row :updated_at
       row :target

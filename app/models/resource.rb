@@ -46,15 +46,13 @@ class Resource < ApplicationRecord
     %i[ransack_tagged_with]
   end
 
-  delegate :content_type, to: :file
-
   def level_exclusive?
     level.present?
   end
 
   def stream?
     return false if link.present?
-    video_embed.present? || content_type.end_with?('/mp4')
+    video_embed.present? || file_content_type.end_with?('/mp4')
   end
 
   def increment_downloads(user)

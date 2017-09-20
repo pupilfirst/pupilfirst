@@ -1,6 +1,6 @@
 module OneOff
-  # The service will migrate pending payments created using old instamojo account to the new instamojo account
-  class MigrateInstamojoPaymentsService
+  # The service will disable pending payment requests created in the old instamojo account
+  class DisableInstamojoPaymentsService
     def initialize(old_account_token)
       @old_account_token = old_account_token
     end
@@ -9,7 +9,6 @@ module OneOff
       change_api_key_to_old_account
       disable_pending_payments_from_old_account
       switch_api_key_to_new_account
-      create_pending_payments_in_new_account
     end
 
     private
@@ -17,12 +16,6 @@ module OneOff
     def disable_pending_payments_from_old_account
       pending_payments.each do |payment|
         Instamojo::DisablePaymentRequestService.new(payment).disable
-      end
-    end
-
-    def create_pending_payments_in_new_account
-      pending_payments.each do |payment|
-        Instamojo::RequestPaymentService.new(payment, 1).request
       end
     end
 

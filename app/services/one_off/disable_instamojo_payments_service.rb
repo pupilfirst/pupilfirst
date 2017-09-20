@@ -14,13 +14,9 @@ module OneOff
     private
 
     def disable_pending_payments_from_old_account
-      pending_payments.each do |payment|
+      Payment.requested.each do |payment|
         Instamojo::DisablePaymentRequestService.new(payment).disable
       end
-    end
-
-    def pending_payments
-      @pending_payments = Payment.requested.where('created_at > ?', DateTime.new(2017, 5, 8))
     end
 
     def change_api_key_to_old_account

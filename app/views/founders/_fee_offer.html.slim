@@ -35,4 +35,12 @@
   = form_with url: fee_founder_path, method: :post, id: 'founder-fee__form' do |form|
     .p-x-1
       = hidden_field_tag 'fee[period]', period
-      = form.submit "Pay for #{period_string}", class: "btn btn-md text-uppercase #{(period == 6 ? 'btn-primary' : 'btn-ghost-primary')}"
+
+      = form.button class: "btn btn-md text-uppercase btn-with-icon #{(period == 6 ? 'btn-primary' : 'btn-ghost-primary')} btn-disabled" do
+        i.fa.fa-spinner.fa-pulse
+        | Pay for #{period_string}
+      .fee-offer__error.brand-danger.m-t-1
+        i.fa.fa-warning
+        .font-semibold
+          ' Something went wrong!
+        | Please refresh the page and try again

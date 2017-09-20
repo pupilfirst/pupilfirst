@@ -114,7 +114,7 @@
   position: relative;
   z-index: 1;
   border: 1px solid $light-secondary;
-  height: 26.75rem;
+  min-height: 26.75rem;
   box-shadow: 0 0 20px 0 lighten($light-secondary, 30%);
 
   @include media-breakpoint-down(sm) {
@@ -136,4 +136,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.fee-offer__submit-btn {
+  box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
 }

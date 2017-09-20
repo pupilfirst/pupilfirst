@@ -9,7 +9,7 @@ describe Instamojo::DisablePaymentRequestService do
 
       it 'returns the payment without any modifications' do
         # Stub the request to disable payment request.
-        stub_request(:post, "https://www.example.com/payment-requests/#{payment.instamojo_payment_request_id}/disable")
+        stub_request(:post, "https://www.example.com/payment-requests/#{payment.instamojo_payment_request_id}/disable/")
           .with(headers: { 'X-Api-Key': 'API_KEY', 'X-Auth-Token': 'AUTH_TOKEN' })
           .to_return(body: { success: true }.to_json)
 

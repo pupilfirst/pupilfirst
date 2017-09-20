@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 feature 'Admission Fee Payment' do
-  include_context 'mocked_instamojo'
   include UserSpecHelper
   include FounderSpecHelper
 
@@ -16,15 +15,12 @@ feature 'Admission Fee Payment' do
   let(:referrer_startup) { create :startup }
   let(:referrer_payment) { create :payment, :paid, startup: referrer_startup }
   let(:coupon) { create :coupon, referrer_startup: referrer_startup }
-
-  before do
-    sign_in_user founder.user
-  end
+  let(:long_url) { Faker::Internet.url }
 
   # Ensure authorization is in place.
   context 'Founder visits fee payment page' do
     scenario 'He has not completed the cofounder addition prerequisite' do
-      visit admissions_fee_path
+      sign_in_user founder.user, referer: fee_founder_path
 
       # Raises 404 as founder is not yet authorized.
       expect(page).to have_content("The page you were looking for doesn't exist.")
@@ -33,42 +29,75 @@ feature 'Admission Fee Payment' do
     scenario 'He has completed the cofounder addition prerequisite' do
       complete_target founder, screening_target
       complete_target founder, cofounder_addition_target
-      visit admissions_fee_path
+      create :payment, startup: startup
+
+      sign_in_user founder.user, referer: fee_founder_path
 
       # Successfully shows the founder the payment page.
-      expect(page).to have_content('You now need to pay the membership fee.')
+      expect(page).to have_content('Please pay the membership fee to continue.')
     end
   end
 
   # Ensure payment flow works with and without coupons.
-  context 'Authorized founder attempts to pay the registration fees' do
+  context 'Authorized founder attempts to pay fees' do
+    let!(:payment) { create :payment, startup: startup }
+
     before do
       complete_target founder, screening_target
       complete_target founder, cofounder_addition_target
+      create :founder, startup: startup
+
+      # Stub the request to create new payment.
+      stub_request(:post, 'https://www.example.com/payment-requests/')
+        .with(body: hash_including(
+          amount: '2000.0',
+          buyer_name: founder.name,
+          email: founder.email,
+          purpose: 'Fee for SV.CO'
+        ))
+        .to_return(body: {
+          success: true,
+          payment_request: {
+            id: 'NEW_ID',
+            status: 'Pending',
+            shorturl: 'https://example.com/short',
+            longurl: long_url
+          }
+        }.to_json)
+
+      # Stub the request to refresh payment after redirect.
+      stub_request(:get, 'https://www.example.com/payment-requests/NEW_ID/PAYMENT_ID/')
+        .to_return(body: {
+          success: true,
+          payment_request: {
+            status: Instamojo::PAYMENT_REQUEST_STATUS_COMPLETED,
+            payment: {
+              status: Instamojo::PAYMENT_STATUS_CREDITED,
+              fees: 123.45
+            }
+          }
+        }.to_json)
     end
 
     scenario 'He completes payment without applying any coupon' do
-      visit admissions_fee_path
+      sign_in_user founder.user, referer: fee_founder_path
 
       # He will be asked to pay the full amount.
-      expect(page).to have_content('Team membership fee is ₹1000')
-      click_on 'Pay Now'
+      expect(page).to have_content('Please pay the membership fee to continue.')
+
+      click_on 'Pay for 1 month'
 
       # He must be re-directed to the payment's long_url.
-      expect(page).to have_content("redirected to: #{long_url}")
+      expect(page).to have_content("Instamojo.open('#{long_url}');")
 
-      payment = Payment.last
       # His startup should now have a payment with the right amount.
-      expect(payment.startup).to eq(startup)
-      expect(payment.amount).to eq(1000.0)
+      expect(payment.reload.amount).to eq(2000.0)
 
-      # Mimic a successful payment.
-      payment.update!(
-        instamojo_payment_request_status: 'Completed',
-        instamojo_payment_status: 'Credit',
-        paid_at: Time.now
-      )
-      Admissions::PostPaymentService.new(payment: payment).execute
+      # Mimic a successful payment, by redirecting to Instamojo redirect URL.
+      visit instamojo_redirect_path(payment_request_id: payment.instamojo_payment_request_id, payment_id: 'PAYMENT_ID')
+
+      # User should be redirected to dashboard after processing.
+      expect(page).to have_content('Pivot your startup journey!')
 
       # Payment target should now be marked complete.
       fee_payment_status = Targets::StatusService.new(fee_payment_target, founder).status
@@ -79,7 +108,7 @@ feature 'Admission Fee Payment' do
     end
 
     scenario 'He completes payment applying a referral coupon' do
-      visit admissions_fee_path
+      sign_in_user founder.user, referer: fee_founder_path
 
       # Page should have coupon form.
       expect(page).to have_content('Have a referral coupon?')
@@ -102,30 +131,25 @@ feature 'Admission Fee Payment' do
       # He should be shown the discounted amount. The original amount is crossed out (not detected by this test).
       expect(page).to have_content('You will unlock 15 extra days of SV.CO subscription on fee payment!')
 
-      click_on 'Pay Now'
+      click_on 'Pay for 1 month'
 
-      # Mimic a successful payment.
-      payment = Payment.last
-      payment.update!(
-        instamojo_payment_request_status: 'Completed',
-        instamojo_payment_status: 'Credit',
-        paid_at: Time.now
-      )
+      expect(page).to have_content("Instamojo.open('#{long_url}');")
 
-      # Store the current billing_end_at for user and referrer.
-      user_end_date = payment.billing_end_at
+      # Store the current billing_end_at for referrer.
       referrer_end_date = referrer_payment.billing_end_at
 
-      Admissions::PostPaymentService.new(payment: payment).execute
+      # Mimic a successful payment, by redirecting to Instamojo redirect URL.
+      visit instamojo_redirect_path(payment_request_id: payment.reload.instamojo_payment_request_id, payment_id: 'PAYMENT_ID')
+
+      # User should be redirected to dashboard after processing.
+      expect(page).to have_content('Pivot your startup journey!')
 
       # The coupon usage must be now marked redeemed for the startup.
       expect(startup.reload.coupon_usage.redeemed_at).to_not eq(nil)
 
-      # the user and referrer should have received 15 and 10 days subscription extension respectively
-      new_user_end_date = payment.billing_end_at.beginning_of_minute
-      new_referrer_end_date = referrer_payment.reload.billing_end_at.beginning_of_minute
-      expect(new_user_end_date).to eq((user_end_date + 15.days).beginning_of_minute)
-      expect(new_referrer_end_date).to eq((referrer_end_date + 10.days).beginning_of_minute)
+      # The user and referrer should have received 15 and 10 days subscription extension respectively.
+      expect(payment.reload.billing_end_at.beginning_of_minute).to eq((Time.zone.now + 1.month + 15.days).beginning_of_minute)
+      expect(referrer_payment.reload.billing_end_at.beginning_of_minute).to eq((referrer_end_date + 10.days).beginning_of_minute)
 
       # The referrer should have received an email informing of his/her reward.
       open_email(referrer_startup.team_lead.email)
@@ -133,20 +157,22 @@ feature 'Admission Fee Payment' do
     end
 
     context 'when there are confirmed and unconfirmed founders' do
+      # Add two more, one unconfirmed. Total is four, at this point.
       let!(:confirmed_founder) { create :founder, startup: startup }
       let!(:unconfirmed_founder) { create :founder, invited_startup: startup }
 
       scenario 'logged in founder needs to pay for both confirmed and unconfirmed founders' do
-        visit admissions_fee_path
+        sign_in_user founder.user, referer: fee_founder_path
 
-        expect(page).to have_content('Team membership fee is ₹3000')
+        within('.fee-offer__box', text: '1 month') do
+          expect(page).to have_content('₹4000 for 4 founders')
+        end
       end
     end
   end
 
-  # Test an edge case of archiving pending payment requests.
-  context 'Founder has an incomplete payment request' do
-    let!(:previous_payment) { create :payment, :requested, startup: startup, amount: 2000 }
+  context 'Founder has an incomplete, requested payment request' do
+    let!(:payment) { create :payment, :requested, startup: startup, amount: 2000 }
 
     before do
       complete_target founder, screening_target
@@ -156,18 +182,39 @@ feature 'Admission Fee Payment' do
     end
 
     scenario 'Founder resubmits the payment form' do
-      visit admissions_fee_path
-      expect(page).to have_content('Team membership fee is ₹3000')
+      sign_in_user founder.user, referer: fee_founder_path
 
-      # He issues a new payment request.
-      click_on 'Pay Now'
+      expect(page).to have_content("It looks like you've attempted to pay at least once before, but didn't complete the process.")
 
-      expect(page).to have_content("redirected to: #{long_url}")
+      # Stub the request to disable previous payment.
+      stub_request(:post, "https://www.example.com/payment-requests/#{payment.instamojo_payment_request_id}/disable/")
+        .to_return(body: { success: true }.to_json)
 
-      # The previous payment must be archived and a new one created.
-      new_payment = startup.reload.payments.last
-      expect(new_payment).not_to eq(previous_payment)
-      expect(startup.archived_payments).to include(previous_payment)
+      # Stub the request to create new payment.
+      stub_request(:post, 'https://www.example.com/payment-requests/')
+        .with(body: hash_including(
+          amount: '6000.0',
+          buyer_name: founder.name,
+          email: founder.email,
+          purpose: 'Fee for SV.CO'
+        ))
+        .to_return(body: {
+          success: true,
+          payment_request: {
+            id: 'NEW_ID',
+            status: 'Pending',
+            shorturl: 'https://example.com/short',
+            longurl: long_url
+          }
+        }.to_json)
+
+      # He chooses another period.
+      click_on 'Pay for 3 months'
+
+      expect(page).to have_content("Instamojo.open('#{long_url}');")
+
+      # The payment should have been updated.
+      expect(payment.reload.instamojo_payment_request_id).to eq('NEW_ID')
     end
   end
 end

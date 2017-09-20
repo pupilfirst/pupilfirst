@@ -6,6 +6,11 @@ class InstamojoController < ApplicationController
     payment = Payment.find_by instamojo_payment_request_id: params[:payment_request_id]
     payment.refresh_payment!(params[:payment_id])
 
+    # Ensure that the call to this route is for a payment that is in 'Credited' payment state.
+    if payment.instamojo_payment_status != Instamojo::PAYMENT_STATUS_CREDITED
+      raise "Unexpected payment request status #{payment.instamojo_payment_request_status} for redirected Payment ##{payment.id}"
+    end
+
     # Log payment time, if unrecorded.
     if payment.paid_at.blank?
       payment.paid_at = Time.zone.now

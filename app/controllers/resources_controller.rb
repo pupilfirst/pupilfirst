@@ -12,8 +12,7 @@ class ResourcesController < ApplicationController
       [resources, 1]
     end
 
-    @resources = filtered_resources.paginate(page: page, per_page: 9)
-
+    @resources = filtered_resources.page(page).per(9)
     @resource_tags = @form.resource_tags
     @skip_container = true
   end

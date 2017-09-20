@@ -46,4 +46,4 @@
         - @resources.each do |resource|
           = render 'resource', resource: resource
   .text-xs-center.m-b-2
-    = will_paginate @resources, renderer: WillPaginate::ActionView::BootstrapLinkRenderer
+    = paginate @resources, theme: 'twitter-bootstrap-4'

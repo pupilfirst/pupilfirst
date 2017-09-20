@@ -88,7 +88,7 @@ feature 'Admission Fee Payment' do
       click_on 'Pay for 1 month'
 
       # He must be re-directed to the payment's long_url.
-      expect(page).to have_content("Instamojo.open('#{long_url}');")
+      expect(page).to have_content({ long_url: long_url }.to_json)
 
       # His startup should now have a payment with the right amount.
       expect(payment.reload.amount).to eq(2000.0)
@@ -133,7 +133,7 @@ feature 'Admission Fee Payment' do
 
       click_on 'Pay for 1 month'
 
-      expect(page).to have_content("Instamojo.open('#{long_url}');")
+      expect(page).to have_content({ long_url: long_url }.to_json)
 
       # Store the current billing_end_at for referrer.
       referrer_end_date = referrer_payment.billing_end_at
@@ -211,7 +211,7 @@ feature 'Admission Fee Payment' do
       # He chooses another period.
       click_on 'Pay for 3 months'
 
-      expect(page).to have_content("Instamojo.open('#{long_url}');")
+      expect(page).to have_content({ long_url: long_url }.to_json)
 
       # The payment should have been updated.
       expect(payment.reload.instamojo_payment_request_id).to eq('NEW_ID')

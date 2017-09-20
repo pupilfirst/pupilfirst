@@ -55,9 +55,9 @@ class FoundersController < ApplicationController
       payment = fee_form.save
 
       # Trigger the Instamojo library.
-      render js: "Instamojo.open('#{payment.long_url}');"
+      render json: { long_url: payment.long_url }
     else
-      render js: 'alert("Something went wrong! Please refresh the page and try again.");'
+      render nothing: true, status: :unprocessable_entity
     end
   end
 

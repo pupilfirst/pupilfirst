@@ -39,7 +39,7 @@ feature 'Founder Monthly Fee Payment' do
       sign_in_user founder.user, referer: fee_founder_path
       expect(page).to have_content('Please pay the membership fee to continue.')
       click_button 'Pay for 1 month'
-      expect(page).to have_content("Instamojo.open('#{long_url}');")
+      expect(page).to have_content({ long_url: long_url }.to_json)
     end
 
     scenario 'non-admin visits fee page' do
@@ -85,7 +85,7 @@ feature 'Founder Monthly Fee Payment' do
       expect(page).to have_content('Please pay the membership fee to continue.')
       expect(page).to have_content("It looks like you've attempted to pay at least once before")
       click_button 'Pay for 3 months'
-      expect(page).to have_content("Instamojo.open('#{long_url}');")
+      expect(page).to have_content({ long_url: long_url }.to_json)
       expect(payment.reload.instamojo_payment_request_id).to eq('NEW_ID')
     end
 
@@ -106,7 +106,7 @@ feature 'Founder Monthly Fee Payment' do
       expect(page).to have_content('Please pay the membership fee to continue.')
       expect(page).to have_content("It looks like you've attempted to pay at least once before")
       click_button 'Pay for 1 month'
-      expect(page).to have_content("Instamojo.open('#{payment.long_url}');")
+      expect(page).to have_content({ long_url: payment.long_url }.to_json)
     end
   end
 end

@@ -1,7 +1,7 @@
 require_relative 'helper'
 
 after 'development:connect_slots', 'development:startups' do
-  puts 'Seeding connect requests'
+  puts 'Seeding connect_requests'
 
   mickey = Faculty.find_by(email: 'mickeymouse@example.com')
   super_startup = Startup.find_by(product_name: 'Super Product')

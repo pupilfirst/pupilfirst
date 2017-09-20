@@ -1,6 +1,6 @@
 class AdmissionsController < ApplicationController
   layout 'application_v2'
-  before_action :skip_container, only: %i[join register founders founders_submit fee]
+  before_action :skip_container, only: %i[join register founders founders_submit]
 
   # GET /join
   def join
@@ -58,38 +58,6 @@ class AdmissionsController < ApplicationController
 
     flash[:success] = 'Screening target has been marked as completed!'
     redirect_to dashboard_founder_path(from: 'screening_submit')
-  end
-
-  # GET /admissions/fee
-  def fee
-    authorize :admissions
-
-    # Add a tag to the founders visiting the fee payment page
-    current_founder.tag_list.add 'Visited Payment Page'
-    current_founder.save!
-    Intercom::FounderTaggingJob.perform_later(current_founder, 'Visited Payment Page')
-
-    @payment_form = Admissions::PaymentForm.new(current_founder)
-  end
-
-  # Payment stage submission handler.
-  def fee_submit
-    authorize :admissions
-
-    # Re-direct back if applied coupon is not valid anymore
-    return if applied_coupon_not_valid? || payment_bypassed?
-
-    @form = Admissions::PaymentForm.new(current_founder)
-
-    begin
-      payment = @form.save
-    rescue Instamojo::PaymentRequestCreationFailed
-      flash[:error] = 'We were unable to contact our payment partner. Please try again in a few minutes.'
-      redirect_to admissions_fee_path
-      return
-    end
-
-    observable_redirect_to(payment.long_url)
   end
 
   # Handle submission of coupon code.
@@ -190,19 +158,5 @@ class AdmissionsController < ApplicationController
     flash[:error] = 'The coupon you applied is no longer valid. Try again!'
     redirect_to admissions_fee_path
     true
-  end
-
-  def payment_bypassed?
-    return false unless Rails.env.development?
-
-    bypass_payment
-    true
-  end
-
-  def bypass_payment
-    payment = Payments::CreateService.new(current_founder, skip_payment: true).create
-    Admissions::PostPaymentService.new(founder: current_founder, payment: payment).execute
-    flash[:success] = 'Payment Bypassed!'
-    redirect_to dashboard_founder_path(from: 'bypass_payment')
   end
 end

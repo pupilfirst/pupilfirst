@@ -332,6 +332,7 @@ ActiveAdmin.register Startup do
       row :courier_number
       row :payment_reference
     end
+    active_admin_comments
   end
 
   form partial: 'admin/startups/form'

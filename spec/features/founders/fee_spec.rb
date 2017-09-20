@@ -18,9 +18,6 @@ feature 'Founder Monthly Fee Payment' do
     let!(:payment) { create :payment, startup: startup, amount: 2000 }
 
     before do
-      # Mock the Instamojo call
-      Rails.application.secrets.instamojo_url = 'https://www.example.com'
-
       stub_request(:post, 'https://www.example.com/payment-requests/')
         .with(body: hash_including(
           amount: '2000.0',
@@ -38,14 +35,10 @@ feature 'Founder Monthly Fee Payment' do
         }.to_json)
     end
 
-    after do
-      Rails.application.secrets.instamojo_url = ENV['INSTAMOJO_API_URL']
-    end
-
     scenario 'founder attempts payment' do
       sign_in_user founder.user, referer: fee_founder_path
       expect(page).to have_content('Please pay the membership fee to continue.')
-      click_button 'Pay for one month'
+      click_button 'Pay for 1 month'
       expect(page).to have_content("Instamojo.open('#{long_url}');")
     end
 
@@ -58,14 +51,6 @@ feature 'Founder Monthly Fee Payment' do
 
   context 'when there is a pending requested payment' do
     let!(:payment) { create :payment, :requested, startup: startup, amount: 4000 }
-
-    before do
-      Rails.application.secrets.instamojo_url = 'https://www.example.com'
-    end
-
-    after do
-      Rails.application.secrets.instamojo_url = ENV['INSTAMOJO_API_URL']
-    end
 
     scenario 'founder attempts payment again with different period' do
       # Stub the call to disable old payment request.
@@ -99,13 +84,13 @@ feature 'Founder Monthly Fee Payment' do
       sign_in_user founder.user, referer: fee_founder_path
       expect(page).to have_content('Please pay the membership fee to continue.')
       expect(page).to have_content("It looks like you've attempted to pay at least once before")
-      click_button 'Pay for three months'
+      click_button 'Pay for 3 months'
       expect(page).to have_content("Instamojo.open('#{long_url}');")
       expect(payment.reload.instamojo_payment_request_id).to eq('NEW_ID')
     end
 
     scenario 'founder attempts payment again with same period' do
-      # Stub the call to create new payment reqeust.
+      # Stub the call to validate existing payment reqeust.
       stub_request(:get, "https://www.example.com/payment-requests/#{payment.instamojo_payment_request_id}/")
         .to_return(body: {
           success: true,
@@ -120,7 +105,7 @@ feature 'Founder Monthly Fee Payment' do
       sign_in_user founder.user, referer: fee_founder_path
       expect(page).to have_content('Please pay the membership fee to continue.')
       expect(page).to have_content("It looks like you've attempted to pay at least once before")
-      click_button 'Pay for one month'
+      click_button 'Pay for 1 month'
       expect(page).to have_content("Instamojo.open('#{payment.long_url}');")
     end
   end

@@ -60,6 +60,14 @@ class FoundersController < ApplicationController
     authorize current_founder
     fee_form = Founders::FeeForm.new(current_founder)
 
+    if current_startup.level_zero?
+      if Startups::ValidateCouponUsageService.new(current_startup).invalid?
+        flash[:error] = 'The coupon you applied is no longer valid. Try again!'
+        redirect_to fee_founder_path
+        return
+      end
+    end
+
     if fee_form.validate(fee_params)
       payment = fee_form.save
 

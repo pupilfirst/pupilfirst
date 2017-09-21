@@ -51,10 +51,10 @@ GIT
 
 GIT
   remote: https://github.com/northworld/google_calendar.git
-  revision: 8fefec32dbd36d5c7c4b31e4aa196704d2cf5579
+  revision: 3cacb4087003fbb7144523b10ae4fe492a2515bc
   specs:
     google_calendar (0.6.2)
-      TimezoneParser (~> 0.2.0)
+      TimezoneParser (~> 0.3.0)
       json (>= 1.8.3)
       signet (~> 0.7)
 
@@ -79,7 +79,7 @@ GEM
   remote: https://rubygems.org/
   remote: https://rails-assets.org/
   specs:
-    TimezoneParser (0.2.0)
+    TimezoneParser (0.3.2)
       insensitive_hash
       tzinfo
     actioncable (5.1.4)
@@ -158,7 +158,7 @@ GEM
     arel (8.0.0)
     ast (2.3.0)
     attribute_normalizer (1.2.0)
-    autoprefixer-rails (7.1.3)
+    autoprefixer-rails (7.1.4)
       execjs
     axiom-types (0.1.1)
       descendants_tracker (~> 0.0.4)
@@ -216,7 +216,7 @@ GEM
       json
       simplecov
       url
-    coderay (1.1.1)
+    coderay (1.1.2)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
     coffee-rails (4.2.2)
@@ -226,7 +226,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.12.2)
-    combine_pdf (1.0.6)
+    combine_pdf (1.0.7)
       ruby-rc4 (>= 0.1.5)
     concurrent-ruby (1.0.5)
     connection_pool (2.2.1)
@@ -294,28 +294,28 @@ GEM
     dry-container (0.6.0)
       concurrent-ruby (~> 1.0)
       dry-configurable (~> 0.1, >= 0.1.3)
-    dry-core (0.3.1)
+    dry-core (0.3.3)
       concurrent-ruby (~> 1.0)
     dry-equalizer (0.2.0)
-    dry-logic (0.4.1)
+    dry-logic (0.4.2)
       dry-container (~> 0.2, >= 0.2.6)
       dry-core (~> 0.2)
       dry-equalizer (~> 0.2)
-    dry-types (0.11.0)
+    dry-types (0.12.0)
       concurrent-ruby (~> 1.0)
       dry-configurable (~> 0.1)
       dry-container (~> 0.3)
       dry-core (~> 0.2, >= 0.2.1)
       dry-equalizer (~> 0.2)
-      dry-logic (~> 0.4, >= 0.4.0)
+      dry-logic (~> 0.4, >= 0.4.2)
       inflecto (~> 0.0.0, >= 0.0.2)
-    dry-validation (0.11.0)
+    dry-validation (0.11.1)
       concurrent-ruby (~> 1.0)
       dry-configurable (~> 0.1, >= 0.1.3)
       dry-core (~> 0.2, >= 0.2.1)
       dry-equalizer (~> 0.2)
       dry-logic (~> 0.4, >= 0.4.0)
-      dry-types (~> 0.11.0)
+      dry-types (~> 0.12.0)
     email_inquire (0.7.0)
       damerau-levenshtein (~> 1.2)
     equalizer (0.0.11)
@@ -363,7 +363,7 @@ GEM
     formtastic (3.1.5)
       actionpack (>= 3.2.13)
     formtastic_i18n (0.6.0)
-    friendly_id (5.2.1)
+    friendly_id (5.2.2)
       activerecord (>= 4.0.0)
     fuubar (2.2.0)
       rspec-core (~> 3.0)
@@ -443,7 +443,7 @@ GEM
     koala (2.5.0)
       addressable
       faraday
-    kramdown (1.14.0)
+    kramdown (1.15.0)
     launchy (2.4.3)
       addressable (~> 2.3)
     letter_opener (1.4.1)
@@ -475,7 +475,7 @@ GEM
     mini_mime (0.1.4)
     mini_portile2 (2.3.0)
     minitest (5.10.3)
-    multi_json (1.12.1)
+    multi_json (1.12.2)
     multi_xml (0.6.0)
     multipart-post (2.0.0)
     netrc (0.11.0)
@@ -566,7 +566,7 @@ GEM
       bundler (>= 1.3.0)
       railties (= 5.1.4)
       sprockets-rails (>= 2.0.0)
-    rails-assets-Chart-js (2.6.0)
+    rails-assets-Chart-js (2.7.0)
     rails-assets-bootstrap-tabcollapse (0.2.7)
     rails-assets-chartkick (2.2.4)
     rails-assets-datetimepicker (2.5.4)
@@ -596,13 +596,13 @@ GEM
       rails-assets-ev-emitter (>= 1.0.0, < 2)
       rails-assets-fizzy-ui-utils (>= 2.0.0, < 3)
       rails-assets-get-size (>= 2.0.2, < 3)
-    rails-assets-perfect-scrollbar (0.8.0)
+    rails-assets-perfect-scrollbar (0.8.1)
     rails-assets-php-date-formatter (1.3.4)
     rails-assets-pnotify (3.2.1)
       rails-assets-jquery (>= 1.6)
     rails-assets-readmore (2.2.0)
       rails-assets-jquery (>= 2.1.4)
-    rails-assets-slick-carousel (1.7.1)
+    rails-assets-slick-carousel (1.8.0)
       rails-assets-jquery (>= 1.7)
     rails-assets-tether (1.4.0)
     rails-assets-trix (0.11.0)
@@ -646,7 +646,7 @@ GEM
       execjs
       railties (>= 3.2)
       tilt
-    recaptcha (4.3.1)
+    recaptcha (4.4.1)
       json
     redis (3.3.3)
     redis-namespace (1.5.3)
@@ -677,7 +677,7 @@ GEM
     roadie-rails (1.2.1)
       railties (>= 3.0, < 5.2)
       roadie (~> 3.1)
-    rollbar (2.15.1)
+    rollbar (2.15.4)
       multi_json
     rspec-core (3.6.0)
       rspec-support (~> 3.6.0)

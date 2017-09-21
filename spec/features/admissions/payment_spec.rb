@@ -169,6 +169,22 @@ feature 'Admission Fee Payment' do
         end
       end
     end
+
+    context 'when an applied coupon has expired' do
+      let(:coupon) { create :coupon, referrer_startup: referrer_startup, expires_at: 1.day.ago }
+      let!(:coupon_usage) { create :coupon_usage, coupon: coupon, startup: startup }
+
+      scenario 'founder tried to pay with expired coupon' do
+        sign_in_user founder.user, referer: fee_founder_path
+
+        expect(page).to have_content("Coupon with code #{coupon.code}applied!")
+
+        click_on 'Pay for 1 month'
+
+        # The coupon should get removed.
+        expect(page).to have_content('Have a referral coupon?')
+      end
+    end
   end
 
   context 'Founder has an incomplete, requested payment request' do

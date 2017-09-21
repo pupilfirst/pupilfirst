@@ -92,7 +92,7 @@ gem 'humanize', '~> 1.3' # Convert numbers to english words
 gem 'scarf', '~> 0.2' # A Ruby library for generating initial avatars and identicons.
 gem 'descriptive_statistics', '~> 2.5', require: 'descriptive_statistics/safe' # Used to calculate basic stat measures such as std. deviation (eg: To calculate relative performance of startups)
 gem 'kaminari', '~> 1.0' # Scope & Engine based, clean, powerful, customizable and sophisticated paginator.
-gem 'bootstrap4-kaminari-views', '~> 1.0' # Bootstrap 4 styling for Kaminari gem
+gem 'bootstrap4-kaminari-views', '= 1.0.0', github: 'mahesh-krishnakumar/bootstrap4-kaminari-views' # Bootstrap 4 styling for Kaminari gem
 
 # Omniauth providers
 gem 'omniauth-google-oauth2', '~> 0.4' # Oauth2 strategy for Google

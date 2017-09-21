@@ -25,6 +25,14 @@ GIT
       multi_json
 
 GIT
+  remote: https://github.com/mahesh-krishnakumar/bootstrap4-kaminari-views.git
+  revision: 5ad07179ca22db5d17684f21096bcd0fddc6e289
+  specs:
+    bootstrap4-kaminari-views (1.0.0)
+      kaminari (>= 0.13)
+      rails (>= 3.1)
+
+GIT
   remote: https://github.com/mahesh-krishnakumar/valid_url.git
   revision: 2c1f5b9191136e4eb6b1d369e2ebadfd8a10360a
   branch: patch-1
@@ -167,9 +175,6 @@ GEM
       autoprefixer-rails (>= 6.0.3)
       popper_js (~> 1.11.1)
       sass (>= 3.4.19)
-    bootstrap4-kaminari-views (1.0.0)
-      kaminari (>= 0.13)
-      rails (>= 3.1)
     browser (2.4.0)
     builder (3.2.3)
     bullet (5.6.1)
@@ -468,15 +473,15 @@ GEM
     mime-types-data (3.2016.0521)
     mini_magick (4.8.0)
     mini_mime (0.1.4)
-    mini_portile2 (2.2.0)
+    mini_portile2 (2.3.0)
     minitest (5.10.3)
     multi_json (1.12.1)
     multi_xml (0.6.0)
     multipart-post (2.0.0)
     netrc (0.11.0)
     nio4r (2.1.0)
-    nokogiri (1.8.0)
-      mini_portile2 (~> 2.2.0)
+    nokogiri (1.8.1)
+      mini_portile2 (~> 2.3.0)
     oauth2 (1.4.0)
       faraday (>= 0.8, < 0.13)
       jwt (~> 1.0)
@@ -817,7 +822,7 @@ DEPENDENCIES
   attribute_normalizer (~> 1.2.0.b)
   autoprefixer-rails (~> 7.1)
   bootstrap (~> 4.0.0.beta)
-  bootstrap4-kaminari-views (~> 1.0)
+  bootstrap4-kaminari-views (= 1.0.0)!
   bootstrap_form (= 2.5.2)!
   bullet (~> 5.5)
   bundler-audit (~> 0.5)

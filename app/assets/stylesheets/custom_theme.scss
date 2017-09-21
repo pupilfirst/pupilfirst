@@ -94,6 +94,7 @@ p {
   outline: none;
   border: 0;
   color: white;
+  cursor: pointer;
   font-weight: $font-semibold;
   font-size: $btn-text-size;
   letter-spacing: 0.04rem;
@@ -274,16 +275,11 @@ p {
   padding-bottom: 10px;
 }
 
-.simple-form-container {
+form {
   .form-group {
-
-    .control-label {
+    .form-control-label {
       padding-top: 7px;
       display: block;
-
-      @include media-breakpoint-down(xs) {
-        margin-bottom: 10px;
-      }
     }
 
     select {
@@ -294,6 +290,11 @@ p {
       color: $light-grey-text;
       font-weight: $font-regular;
       text-shadow: 0 0 0 #000;
+    }
+
+    .select2-selection {
+      border-color: $gray-border;
+      min-height: 2rem;
     }
 
     .radio, .radio-inline {
@@ -307,6 +308,8 @@ p {
     .form-control {
       font-size: 0.875rem;
       padding: 0.5rem 0.75rem;
+      line-height: normal;
+      border-color: $gray-border !important;
 
       &:focus {
         border-color: lighten($light-secondary, 20%);

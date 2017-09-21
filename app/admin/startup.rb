@@ -333,6 +333,7 @@ ActiveAdmin.register Startup do
       row :payment_reference
       row :referral_reward_days
     end
+    active_admin_comments
   end
 
   form partial: 'admin/startups/form'

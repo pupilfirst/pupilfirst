@@ -1,6 +1,6 @@
 class AdmissionsController < ApplicationController
   layout 'application_v2'
-  before_action :skip_container, only: %i[join register founders founders_submit fee]
+  before_action :skip_container, only: %i[join register founders founders_submit]
 
   # GET /join
   def join
@@ -60,65 +60,29 @@ class AdmissionsController < ApplicationController
     redirect_to dashboard_founder_path(from: 'screening_submit')
   end
 
-  # GET /admissions/fee
-  def fee
-    authorize :admissions
-
-    # Add a tag to the founders visiting the fee payment page
-    current_founder.tag_list.add 'Visited Payment Page'
-    current_founder.save!
-    Intercom::FounderTaggingJob.perform_later(current_founder, 'Visited Payment Page')
-
-    @payment_form = Admissions::PaymentForm.new(current_founder)
-    @coupon = current_startup.applied_coupon
-
-    if @coupon.blank?
-      @coupon_form = Admissions::CouponForm.new(Reform::OpenForm.new)
-      @coupon_form.prepopulate!(current_founder)
-    end
-  end
-
-  # Payment stage submission handler.
-  def fee_submit
-    authorize :admissions
-
-    # Re-direct back if applied coupon is not valid anymore
-    return if applied_coupon_not_valid? || payment_bypassed?
-
-    @form = Admissions::PaymentForm.new(current_founder)
-
-    begin
-      payment = @form.save
-    rescue Instamojo::PaymentRequestCreationFailed
-      flash[:error] = 'We were unable to contact our payment partner. Please try again in a few minutes.'
-      redirect_to admissions_fee_path
-      return
-    end
-
-    observable_redirect_to(payment.long_url)
-  end
-
-  # Handle coupon codes submissions
+  # Handle submission of coupon code.
   def coupon_submit
-    fee
+    authorize :admissions
 
-    if @coupon_form.validate(params[:admissions_coupon])
-      @coupon_form.apply_coupon
+    coupon_form = Admissions::CouponForm.new(Reform::OpenForm.new, current_founder)
+
+    if coupon_form.validate(params[:admissions_coupon])
+      coupon_form.apply_coupon
       flash[:success] = 'Coupon applied successfully!'
-      redirect_to admissions_fee_path
     else
-      flash.now[:error] = 'Coupon code is not valid!'
-      render 'fee'
+      flash[:error] = 'Coupon code is not valid!'
     end
+
+    redirect_to fee_founder_path
   end
 
-  # Remove an applied coupon
+  # Remove an applied coupon.
   def coupon_remove
     authorize :admissions
 
     remove_latest_coupon
     flash[:success] = 'Coupon removed successfully!'
-    redirect_to admissions_fee_path
+    redirect_to fee_founder_path
   end
 
   # GET /admissions/founders
@@ -184,29 +148,5 @@ class AdmissionsController < ApplicationController
 
   def remove_latest_coupon
     current_startup.coupon_usage.destroy!
-  end
-
-  def applied_coupon_not_valid?
-    coupon = current_startup.applied_coupon
-    return false if coupon.blank? || coupon.still_valid?
-
-    remove_latest_coupon
-    flash[:error] = 'The coupon you applied is no longer valid. Try again!'
-    redirect_to admissions_fee_path
-    true
-  end
-
-  def payment_bypassed?
-    return false unless Rails.env.development?
-
-    bypass_payment
-    true
-  end
-
-  def bypass_payment
-    payment = Payments::CreateService.new(current_founder, skip_payment: true).create
-    Admissions::PostPaymentService.new(founder: current_founder, payment: payment).execute
-    flash[:success] = 'Payment Bypassed!'
-    redirect_to dashboard_founder_path(from: 'bypass_payment')
   end
 end

@@ -1,0 +1,143 @@
+.coupon-form-container {
+  @include media-breakpoint-up(sm) {
+    width: 260px;
+  }
+}
+
+.discount-coupon__box-btn {
+  @include media-breakpoint-down(sm) {
+    margin-bottom: 1rem;
+  }
+}
+
+.discount-coupon__box {
+  @include border-radius(10px);
+  border: 1px dashed $brand-secondary;
+  transition: all .2s;
+  background-color: lighten($light-secondary, 50%);
+
+  span.help-block {
+    display: inline-block;
+    margin-top: 0.5rem;
+  }
+}
+
+.discount-coupon__box--show {
+  cursor: pointer;
+
+  &:hover {
+    background-color: lighten($light-secondary, 40%);
+  }
+}
+
+.discount-coupon-applied-box__message {
+  line-height: 2;
+  font-size: 1rem;
+}
+
+.discount-coupon-applied--code {
+  @include border-radius(5px);
+  border: 1px dashed $brand-secondary;
+  padding: 5px;
+  margin-right: 6px;
+  background-color: lighten($light-secondary, 40%);
+}
+
+.admissions-fee__important-points {
+  list-style-type: none;
+  text-align: center;
+  padding: 0;
+  font-size: 110%;
+  margin-bottom: 0;
+}
+
+.fee-offer__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @include media-breakpoint-down(sm) {
+    flex-direction: column-reverse;
+  }
+}
+
+.fee-offer__box {
+  min-height: 23rem;
+  padding: 0 0 2rem;
+
+  @include media-breakpoint-up(sm) {
+    &:first-child {
+      border-right: 0;
+      @include border-radius(5px 0 0 5px);
+    }
+    &:last-child {
+      border-left: 0;
+      @include border-radius(0 5px 5px 0);
+    }
+  }
+
+  @include media-breakpoint-down(sm) {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+}
+.fee-offer_period {
+  position: relative;
+  padding-top: 2rem;
+
+  &:before {
+    position: absolute;
+    content: '';
+    display: block;
+    width: 50px;
+    background-color: $gray-border;
+    height: 3px;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+  }
+}
+
+.fee-offer__amount-highlight {
+  padding: 0 2.25rem;
+  height: 6.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: $dark-primary-background;
+  border: 1px solid $gray-border;
+  @include border-radius(10px);
+}
+
+.fee-offer__recommended {
+  position: relative;
+  z-index: 1;
+  border: 1px solid $light-secondary;
+  min-height: 26.75rem;
+  box-shadow: 0 0 20px 0 lighten($light-secondary, 30%);
+
+  @include media-breakpoint-down(sm) {
+    order: 1;
+  }
+}
+
+.fee-offer__recommended-notice {
+  background-color: $light-secondary;
+  height: 30px;
+  line-height: 1.6;
+  color: white;
+  padding: 4px 0px;
+}
+
+.fee-offer__discount {
+  height: 3.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.fee-offer__submit-btn {
+  box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+}

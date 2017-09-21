@@ -9,30 +9,31 @@ module CouponUsages
     def execute
       return if @referrer_startup.blank?
 
-      pending_payment.present? ? extend_pending_subscription : extend_current_subscription
+      pending_payment.present? ? extend_reward_days : extend_current_subscription
 
-      # Mark the coupon applied as rewarded.
-      @coupon_usage.update!(rewarded_at: Time.now)
+      # Mark the coupon usage as rewarded.
+      @coupon_usage.update!(rewarded_at: Time.zone.now)
+
+      # Send an email notifying referrer of reward.
+      StartupMailer.referral_reward(@referrer_startup, @coupon_usage.startup, @coupon, pending_payment.present?).deliver_later
     end
 
     private
 
     def pending_payment
-      @pending_payment ||= @referrer_startup.payments.pending.order(:billing_start_at).last
+      @pending_payment ||= Startups::PendingPaymentService.new(@referrer_startup).fetch
     end
 
-    def extend_pending_subscription
-      pending_payment.update!(billing_end_at: pending_payment.billing_end_at + @coupon.referrer_extension_days.days)
-      StartupMailer.referral_reward(pending_payment, @coupon).deliver_later
+    # Record the reward days on the startup entry, to be 'paid out' later when the startup renews their subscription.
+    def extend_reward_days
+      @referrer_startup.referral_reward_days += @coupon.referrer_extension_days
+      @referrer_startup.save!
     end
 
-    def current_payment
-      @current_payment ||= @referrer_startup.payments.paid.order(:billing_start_at).last
-    end
-
+    # Record the reward immediately, to the active subscription payment entry.
     def extend_current_subscription
+      current_payment = @referrer_startup.payments.paid.order(:billing_start_at).last
       current_payment.update!(billing_end_at: current_payment.billing_end_at + @coupon.referrer_extension_days.days)
-      StartupMailer.referral_reward(current_payment, @coupon).deliver_later
     end
   end
 end

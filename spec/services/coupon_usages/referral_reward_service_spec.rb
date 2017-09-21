@@ -2,16 +2,16 @@ require 'rails_helper'
 
 describe CouponUsages::ReferralRewardService do
   subject { described_class.new(coupon_usage) }
-  let!(:referrer_startup) { create :startup }
+
+  let!(:paid_payment) { create :payment, :paid, startup: referrer_startup }
   let!(:coupon) { create :coupon, referrer_startup: referrer_startup }
   let!(:coupon_usage) { create :coupon_usage, coupon: coupon }
-  let!(:paid_payment) { create :payment, :paid, startup: referrer_startup }
-  let!(:pending_payment) { create :payment, :requested }
-  let!(:paid_payment_end) { paid_payment.billing_end_at }
-  let!(:pending_payment_end) { pending_payment.billing_end_at }
 
   describe '#execute' do
     context 'when the referrer startup does not have a pending payment' do
+      let!(:referrer_startup) { create :startup }
+      let!(:paid_payment_end) { paid_payment.billing_end_at }
+
       it 'add the referral reward extension to the current subscription' do
         subject.execute
 
@@ -30,19 +30,18 @@ describe CouponUsages::ReferralRewardService do
     end
 
     context 'when the referrer startup has a pending payment' do
+      let!(:referrer_startup) { create :startup, referral_reward_days: 10 }
+
       before do
-        # Assign the pending payment to the startup.
-        pending_payment.update!(startup: referrer_startup)
+        create :payment, :requested, startup: referrer_startup
       end
+
       it 'adds the referral reward extension to the pending payment' do
-        subject.execute
-
-        # The current subscription should not have changed.
-        expect(paid_payment.reload.billing_end_at.beginning_of_minute).to eq(paid_payment_end.beginning_of_minute)
-
-        # The pending payment should have expanded by 10 days.
-        new_pending_payment_end = pending_payment.reload.billing_end_at.beginning_of_minute
-        expect(new_pending_payment_end).to eq((pending_payment_end + 10.days).beginning_of_minute)
+        # The current subscription should not have changed, and startup should now have extra referral reward days.
+        expect do
+          subject.execute
+        end.to(not_change { paid_payment.reload.billing_end_at.beginning_of_minute }
+          .and((change { referrer_startup.reload.referral_reward_days }).from(10).to(20)))
 
         # The referrer should have received the appropriate mail.
         open_email(referrer_startup.team_lead.email)

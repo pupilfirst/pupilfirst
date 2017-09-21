@@ -5,6 +5,10 @@ class Instamojo
   PAYMENT_STATUS_CREDITED = -'Credit'
   PAYMENT_STATUS_FAILED = -'Failed'
 
+  # Other status values, for reference:
+  PAYMENT_REQUEST_STATUS_FAILED = -'Failed'
+  PAYMENT_REQUEST_STATUS_COMPLETED = -'Completed'
+
   # Raised when Instamojo API fails to create a payment request. This is handled in AdmissionsController.
   class PaymentRequestCreationFailed < StandardError; end
 
@@ -112,7 +116,7 @@ class Instamojo
 
   def payment_request_params(amount, buyer_name, email)
     params = {
-      purpose: 'Monthly Fee for SV.CO',
+      purpose: 'Fee for SV.CO',
       amount: amount.to_s,
       buyer_name: buyer_name,
       email: email,

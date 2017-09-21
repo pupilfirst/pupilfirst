@@ -22,6 +22,10 @@ class Founder < ApplicationRecord
   # Monthly fee amount for founders.
   FEE = 1000
 
+  FEE_ONE_MONTH = 1000
+  FEE_THREE_MONTHS = 2000
+  FEE_SIX_MONTHS = 3000
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   # devise :invitable, :database_authenticatable, :confirmable, :recoverable, :rememberable, :trackable, :validatable

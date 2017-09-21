@@ -32,7 +32,7 @@ describe Instamojo::DisablePaymentRequestService do
       let(:payment) { create :payment, :paid }
 
       it 'raises custom exception' do
-        expect { subject.disable }.to raise_error(Instamojo::DisablePaymentRequestService::NotPendingPaymentException)
+        expect { subject.disable }.to raise_error(Instamojo::NotPendingPaymentException)
       end
     end
   end

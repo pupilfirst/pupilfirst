@@ -9,7 +9,7 @@ class Instamojo
 
     def disable
       # This service can only disable pending payment requests.
-      raise Instamojo::DisablePaymentRequestService::NotPendingPaymentException unless @payment.requested?
+      raise Instamojo::NotPendingPaymentException unless @payment.requested?
 
       # Call the API route.
       post("payment-requests/#{@payment.instamojo_payment_request_id}/disable")

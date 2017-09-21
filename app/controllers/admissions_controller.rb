@@ -149,14 +149,4 @@ class AdmissionsController < ApplicationController
   def remove_latest_coupon
     current_startup.coupon_usage.destroy!
   end
-
-  def applied_coupon_not_valid?
-    coupon = current_startup.applied_coupon
-    return false if coupon.blank? || coupon.still_valid?
-
-    remove_latest_coupon
-    flash[:error] = 'The coupon you applied is no longer valid. Try again!'
-    redirect_to admissions_fee_path
-    true
-  end
 end

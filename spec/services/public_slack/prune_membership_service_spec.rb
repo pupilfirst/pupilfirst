@@ -2,10 +2,12 @@ require 'rails_helper'
 
 describe PublicSlack::PruneMembershipService do
   subject { described_class.new }
+
   let!(:startup) { create :startup, :subscription_active }
   let(:mock_api_service) { instance_double PublicSlack::ApiService }
   let(:group_ids) { { 'groups' => [{ 'id' => 'group_id_1' }, { 'id' => 'group_id_2' }] } }
   let(:ok_response) { { 'ok' => true } }
+
   let(:not_in_group_exception) do
     PublicSlack::OperationFailureException.new('_error_message', 'error' => 'not_in_group')
   end
@@ -18,12 +20,21 @@ describe PublicSlack::PruneMembershipService do
       end
     end
 
-    context 'when there is an expired founder to be pruned' do
+    context 'when there is an expired founder in pruning region' do
       before do
         # Expire the startup subscription.
         startup.payments.last.update!(billing_start_at: 4.weeks.ago, billing_end_at: 4.days.ago)
+
         # Have one founder with a slack_user_id.
         startup.founders.first.update!(slack_user_id: 'xxxxxx')
+
+        # Create two other expired startups, outside pruning region.
+        recent_expiry = create :payment, :paid, billing_end_at: 3.days.ago
+        not_recent_expiry = create :payment, :paid, billing_end_at: 5.days.ago
+
+        # These team leads should not be processed.
+        recent_expiry.startup.team_lead.update!(slack_user_id: rand(1_000_000))
+        not_recent_expiry.startup.team_lead.update!(slack_user_id: rand(1_000_000))
       end
 
       it 'requests her Slack removal and emails her about it' do

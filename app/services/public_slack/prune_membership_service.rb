@@ -10,6 +10,7 @@ module PublicSlack
       return if expired_founders.blank?
 
       log 'Removing expired founders from all private groups on Public Slack...'
+
       private_groups.each { |group_id| remove_expired_founders(group_id) }
       @pruned_founders.each { |founder| FounderMailer.slack_removal(founder).deliver_later }
     end
@@ -20,9 +21,11 @@ module PublicSlack
     def expired_founders
       @expired_founders ||= begin
         latest_payments = Payment.paid.where.not(startup_id: nil).group(:startup_id).maximum(:billing_end_at)
+
         expired_startups = latest_payments.select do |_startup_id, billing_end_at|
           pruning_window_contains? billing_end_at
         end.keys
+
         Founder.where(startup: expired_startups).where.not(slack_user_id: nil)
       end
     end

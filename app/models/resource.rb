@@ -46,15 +46,13 @@ class Resource < ApplicationRecord
     %i[ransack_tagged_with]
   end
 
-  delegate :content_type, to: :file
-
   def level_exclusive?
     level.present?
   end
 
   def stream?
     return false if link.present?
-    video_embed.present? || content_type.end_with?('/mp4')
+    video_embed.present? || file_content_type&.end_with?('/mp4')
   end
 
   def increment_downloads(user)
@@ -68,8 +66,15 @@ class Resource < ApplicationRecord
     Resources::AfterCreateNotificationJob.perform_later(self)
   end
 
-  # Ensure titles are capitalized.
   before_save do
+    # Ensure titles are capitalized.
     self.title = title.titlecase(humanize: false, underscore: false)
+  end
+
+  after_commit do
+    # If the file attribute has changed, store its content_type to avoid lookup from S3.
+    if previous_changes.key?(:file)
+      update!(file_content_type: reload.file.content_type)
+    end
   end
 end

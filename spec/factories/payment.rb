@@ -2,13 +2,14 @@ FactoryGirl.define do
   factory :payment do
     startup
     founder { startup.founders.first }
-    amount 3000
 
     after(:create) do |payment|
       payment.update!(founder: payment.startup.team_lead) if payment.founder.blank?
     end
 
     trait :requested do
+      period 1
+      amount Founder::FEE_ONE_MONTH
       instamojo_payment_request_id { SecureRandom.hex }
       instamojo_payment_request_status 'Pending'
       short_url { Faker::Internet.url }

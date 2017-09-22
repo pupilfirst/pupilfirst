@@ -28,7 +28,7 @@ module Payments
     end
 
     def create_payment(founder, last_payment)
-      Payments::CreateService.new(founder, skip_instamojo: true, billing_start_at: last_payment.billing_end_at).create
+      Payments::CreateService.new(founder, billing_start_at: last_payment.billing_end_at).create
     end
 
     def email_team(payment)

@@ -1,0 +1,7 @@
+---
+timestamp: '2017-09-20T06:32:01Z'
+title: Resources will now store content_type of private S3 files in column file_content_type
+  to avoid a network call to determine their type
+trello: https://trello.com/c/LPKXyMIl
+private: true
+category: bugfix

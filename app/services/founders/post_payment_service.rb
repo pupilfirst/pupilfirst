@@ -8,16 +8,34 @@ module Founders
     def execute
       raise 'PostPaymentService was called for an unpaid payment!' unless @payment.paid?
 
-      # If payment was made within the active billing period, there is nothing to be done.
-      return if @payment.billing_start_at.future?
+      Payment.transaction do
+        # If payment was made outside active billing period, set start time to 'now'.
+        @payment.billing_start_at = Time.zone.now if @payment.billing_start_at.blank? || @payment.billing_start_at.past?
 
-      # Otherwise, the billing period will have to be updated.
-      payment_duration = @payment.billing_end_at - @payment.billing_start_at
-      @payment.update!(billing_start_at: Time.zone.now, billing_end_at: Time.zone.now + payment_duration)
+        # Add payment period to billing start time to get billing end time.
+        @payment.billing_end_at = @payment.billing_start_at + @payment.period.months
 
-      # and the founders invited back to all channels on Slack.
-      return if @startup.blank? || @startup.level_zero?
+        # Add recorded referral reward, if any.
+        if startup.referral_reward_days.positive?
+          @payment.billing_end_at += startup.referral_reward_days.days
+
+          # Wipe the reward days once it has been assigned to a payment.
+          startup.referral_reward_days = 0
+          startup.save!
+        end
+
+        @payment.save!
+      end
+
+      # Invite founder back to all channels on Slack.
+      return if @startup.level_zero?
       @startup.founders.not_exited.each { |founder| Founders::InviteToSlackChannelsJob.perform_later(founder) }
+    end
+
+    private
+
+    def startup
+      @startup ||= @payment.startup
     end
   end
 end

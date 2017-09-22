@@ -2,10 +2,10 @@
   | Slack membership revoked!
 
 = content_for :subtitle do
-  | Your SV&#x2024;CO subscription has expired! You have been locked out from all our private Slack channels.
+  | You have been removed from all our private Slack channels.
 
 = content_for :title_button_text do
-  | Renew Subscription
+  | Renew SV&#x2024;CO Subscription
 
 = content_for(:title_button_link, fee_founder_url)
 
@@ -13,7 +13,12 @@
   | Hello #{@founder.name},
 
 = content_for :body do
-  p Our records show your SV&#x2024;CO subscription expired a few days back. We had to thus remove you from all our private Slack channels :(
-  p However, we would love to have you back! Simply #{link_to 'renew your subscription now', fee_founder_url} to get back in and continue your startup journey.
+  p
+    ' Our records show that your SV&#x2024;CO subscription expired a few days back. Because of this, we have removed you
+    | from all our private Slack channels. :-(
+
+  p
+    ' However, we would love to have you back! Simply #{link_to 'renew your subscription', fee_founder_url} to get
+    | back in and continue your startup journey.
 
   p Reach out to us at #{mail_to 'help@sv.co'} in case of any queries.

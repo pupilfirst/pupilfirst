@@ -42,10 +42,8 @@ feature 'Team members spec' do
       click_on 'Add new team member'
       click_on 'List new team member'
 
-      expect(page.find('.team_member_name')[:class]).to include('has-error')
-      expect(page.find('.team_member_roles')[:class]).to include('has-error')
-      expect(page).to have_text 'can\'t be blank'
-      expect(page).to have_text 'pick at least one'
+      expect(page).to have_content("Name can't be blank")
+      expect(page).to have_content('Roles pick at least one')
     end
 
     scenario 'founder attempts to choose more than two roles' do
@@ -57,8 +55,7 @@ feature 'Team members spec' do
       select 'Design', from: 'Roles'
       click_on 'List new team member'
 
-      expect(page.find('.team_member_roles')[:class]).to include('has-error')
-      expect(page).to have_text 'pick no more than two'
+      expect(page).to have_content('Roles pick no more than two')
     end
 
     context 'There is an existing team member' do

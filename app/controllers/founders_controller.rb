@@ -17,18 +17,21 @@ class FoundersController < ApplicationController
 
   # GET /founder/edit
   def edit
-    @founder = current_founder.decorate
     authorize current_founder
+
+    @founder = current_founder.decorate
+    @form = Founders::EditForm.new(current_founder)
   end
 
   # PATCH /founder
   def update
-    @founder = current_founder.decorate
-    authorize @founder.model
-    form = @founder.form
+    authorize current_founder
 
-    if form.validate(params[:founders_edit])
-      form.save!
+    @founder = current_founder.decorate
+    @form = Founders::EditForm.new(current_founder)
+
+    if @form.validate(params[:founders_edit])
+      @form.save!
       flash[:success] = 'Your profile has been updated.'
       redirect_to founder_profile_path(slug: @founder.slug)
     else

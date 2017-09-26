@@ -7,7 +7,7 @@
       ' List new team member
   .flex-column
     = f.text_field :name, required: true
-    = f.select :roles, options_for_select(Founder.valid_roles, @team_member.roles),
+    = f.select :roles, options_for_select((Founder.valid_roles.map { |r| [t("role.#{r}"), r] }), team_member.roles),
       {}, { required: true, multiple: true }
     = f.email_field :email, label_class: 'col-form-label', label: 'Email address', class: 'form-control', required: true
     = f.file_field :avatar, as: :image_preview, label_class: 'col-form-label', label: 'Avatar', class: 'form-control'

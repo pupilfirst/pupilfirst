@@ -4,7 +4,7 @@ module Users
 
     skip_before_action :verify_authenticity_token, only: [:developer]
 
-    # GET /users/auth/:provider/callback
+    # GET /users/auth/:action/callback
     def oauth_callback
       email = email_from_auth_hash
 
@@ -55,7 +55,7 @@ module Users
     end
 
     def provider_name
-      params[:provider].split('_').first.capitalize
+      params[:action].split('_').first.capitalize
     end
   end
 end

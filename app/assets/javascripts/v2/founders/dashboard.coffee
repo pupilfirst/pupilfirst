@@ -73,8 +73,15 @@ startTour = ->
 
   tour.start()
 
+setIntercomVisibility = ->
+  _.extend(window.intercomSettings, hide_default_launcher: launcherVisible())
+
+launcherVisible = ->
+  window.innerWidth < 576
+
 $(document).on 'turbolinks:load', ->
   if $('#founder-dashboard').length
     giveATour()
     setPerformancePointer()
     takeTourOnClick()
+    setIntercomVisibility()

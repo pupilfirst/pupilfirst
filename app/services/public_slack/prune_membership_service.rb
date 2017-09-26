@@ -20,19 +20,22 @@ module PublicSlack
     # Returns founders ready to be pruned.
     def expired_founders
       @expired_founders ||= begin
-        latest_payments = Payment.paid.where.not(startup_id: nil).group(:startup_id).maximum(:billing_end_at)
-
-        expired_startups = latest_payments.select do |_startup_id, billing_end_at|
-          pruning_window_contains? billing_end_at
-        end.keys
+        expired_startups = candidate_payments.each_with_object([]) do |payment, startups_array|
+          startups_array << payment.startup if payment.startup.active_payment == payment
+        end
 
         Founder.where(startup: expired_startups).where.not(slack_user_id: nil)
       end
     end
 
+    # All 'paid' payments which expire within the pruning window
+    def candidate_payments
+      Payment.paid.where(billing_end_at: pruning_window)
+    end
+
     # Boundaries of the pruning window. Modify this to change grace periods.
-    def pruning_window_contains?(datetime)
-      datetime.between?(4.days.ago.beginning_of_day, 4.days.ago.end_of_day)
+    def pruning_window
+      [4.days.ago.beginning_of_day..4.days.ago.end_of_day]
     end
 
     # Retrieve list of private groups and return an array of their group ids.

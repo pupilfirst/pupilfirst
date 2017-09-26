@@ -1,10 +1,4 @@
-class AdmissionsPolicy
-  attr_reader :user
-
-  def initialize(user, _admissions)
-    @user = user
-  end
-
+class AdmissionsPolicy < ApplicationPolicy
   def screening?
     level_zero? && target_incomplete?(Target::KEY_ADMISSIONS_SCREENING)
   end
@@ -13,13 +7,13 @@ class AdmissionsPolicy
     screening?
   end
 
-  def fee?
-    level_zero? && target_complete?(Target::KEY_ADMISSIONS_COFOUNDER_ADDITION) && target_incomplete?(Target::KEY_ADMISSIONS_FEE_PAYMENT)
+  def coupon_submit?
+    FounderPolicy.new(user, user.founder).fee? && user.founder.startup.applied_coupon.blank?
   end
 
-  alias fee_submit? fee?
-  alias coupon_submit? fee?
-  alias coupon_remove? fee?
+  def coupon_remove?
+    FounderPolicy.new(user, user.founder).fee? && user.founder.startup.applied_coupon.present?
+  end
 
   def founders?
     level_zero? && target_complete?(Target::KEY_ADMISSIONS_SCREENING)

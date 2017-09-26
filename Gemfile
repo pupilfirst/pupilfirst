@@ -1,4 +1,4 @@
-ruby '2.4.1'
+ruby '2.4.2'
 
 source 'https://rubygems.org'
 
@@ -6,7 +6,7 @@ source 'https://rubygems.org'
 git_source(:github) { |repository_path| "https://github.com/#{repository_path}.git" }
 
 # Ruby on Rails. http://rubyonrails.org
-gem 'rails', '~> 5.1.3'
+gem 'rails', '~> 5.1.4'
 
 gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 
@@ -70,7 +70,6 @@ gem 'videojs_rails', '~> 4.12' # Video JS for Rails 3.1+ Asset Pipeline. https:/
 gem 'react-rails', '~> 2.2' # For automatically transforming JSX and using React in Rails.
 gem 'ahoy_matey', '~> 1.5' # Analytics for Rails
 gem 'acts-as-taggable-on', '~> 5.0' # Tag a single model on several contexts.
-gem 'will_paginate-bootstrap4', '~> 0.1' # This gem integrates the Twitter Bootstrap pagination component with the will_paginate pagination gem.
 gem 'sendinblue', '~> 2.4' # This is SendinBlue provided API V2 Ruby GEM
 gem 'email_inquire', '~> 0.6' # Validate email for format, common typos and one-time email providers
 gem 'titleize', '~> 1.4' # better titleizing, modifies Inflector.titleize from default rails
@@ -92,6 +91,8 @@ gem 'rollbar', '~> 2.14' # Exception tracking and logging from Ruby to Rollbar h
 gem 'humanize', '~> 1.3' # Convert numbers to english words
 gem 'scarf', '~> 0.2' # A Ruby library for generating initial avatars and identicons.
 gem 'descriptive_statistics', '~> 2.5', require: 'descriptive_statistics/safe' # Used to calculate basic stat measures such as std. deviation (eg: To calculate relative performance of startups)
+gem 'kaminari', '~> 1.0' # Scope & Engine based, clean, powerful, customizable and sophisticated paginator.
+gem 'bootstrap4-kaminari-views', '= 1.0.0', github: 'mahesh-krishnakumar/bootstrap4-kaminari-views' # Bootstrap 4 styling for Kaminari gem
 
 # Omniauth providers
 gem 'omniauth-google-oauth2', '~> 0.4' # Oauth2 strategy for Google

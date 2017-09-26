@@ -1,7 +1,4 @@
 class Instamojo
-  CouldNotParseResponseException = Class.new(StandardError)
-  RequestFailedException = Class.new(StandardError)
-
   # Instamojo::BaseService should be used to inherit basic methods to contact Instamojo's API.
   #
   # Use specific services if they exist, or write them if you encounter missing functionality.
@@ -31,7 +28,12 @@ class Instamojo
       request['X-Api-Key'] = Rails.application.secrets.instamojo_api_key
       request['X-Auth-Token'] = Rails.application.secrets.instamojo_auth_token
 
-      raw_response = http(uri).request(request)
+      begin
+        raw_response = http(uri).request(request)
+      rescue SocketError, Net::HTTPServerError => e
+        raise Instamojo::TransportFailureException, "Failed because of #{e.class} with message: #{e.message}"
+      end
+
       parse(raw_response)
     end
 
@@ -39,11 +41,11 @@ class Instamojo
       response = begin
         JSON.parse(raw_response.body).with_indifferent_access
       rescue JSON::ParserError
-        raise CouldNotParseResponseException, "Failed to parse the response from Instamojo API as JSON: #{raw_response.body}"
+        raise Instamojo::CouldNotParseResponseException, "Failed to parse the response from Instamojo API as JSON: #{raw_response.body}"
       end
 
       unless response[:success]
-        raise RequestFailedException, "Response from Instamojo API was valid JSON, but the success key was not set to true: #{raw_response.body}"
+        raise Instamojo::RequestFailedException, "Response from Instamojo API was valid JSON, but the success key was not set to true: #{raw_response.body}"
       end
 
       response

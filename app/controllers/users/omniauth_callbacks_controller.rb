@@ -6,9 +6,7 @@ module Users
 
     # GET /users/auth/:provider/callback
     def oauth_callback
-      raise_not_found if auth_hash.blank?
-      email = auth_hash.dig(:info, :email)
-      raise_not_found if email.blank?
+      email = email_from_auth_hash
       user = User.with_email(email)
 
       if user.present?
@@ -41,6 +39,15 @@ module Users
     # redirects back to our website. The format for this return value is documented by Omniauth.
     def auth_hash
       request.env['omniauth.auth']
+    end
+
+    # This method validates the format of auth_hash. This ensures that we capture any 'oddities' as crashes, instead of
+    # letting issues get buried (we used to show a useless 404).
+    def email_from_auth_hash
+      raise "Auth hash is blank: #{auth_hash.inspect}" if auth_hash.blank?
+      email = auth_hash.dig(:info, :email)
+      return email if email.present?
+      raise "Auth hash does not contain email: #{auth_hash.inspect}"
     end
   end
 end

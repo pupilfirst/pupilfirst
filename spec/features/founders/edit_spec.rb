@@ -64,7 +64,7 @@ feature 'Founder Edit' do
       create :payment, startup: startup
 
       sign_in_user(founder.user, referer: edit_founder_path)
-      expect(page).to have_content('Please pay the membership fee for the next month.')
+      expect(page).to have_content('Please pay the membership fee to continue.')
     end
   end
 

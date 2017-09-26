@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170911065433) do
+ActiveRecord::Schema.define(version: 20170919094613) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -337,6 +337,7 @@ ActiveRecord::Schema.define(version: 20170911065433) do
     t.integer "original_startup_id"
     t.datetime "billing_start_at"
     t.datetime "billing_end_at"
+    t.integer "period", default: 1
     t.index ["founder_id"], name: "index_payments_on_founder_id"
     t.index ["original_startup_id"], name: "index_payments_on_original_startup_id"
     t.index ["startup_id"], name: "index_payments_on_startup_id"
@@ -412,9 +413,11 @@ ActiveRecord::Schema.define(version: 20170911065433) do
     t.integer "level_id"
     t.integer "target_id"
     t.string "link"
+    t.string "file_content_type"
     t.index ["level_id"], name: "index_resources_on_level_id"
     t.index ["slug"], name: "index_resources_on_slug"
     t.index ["startup_id"], name: "index_resources_on_startup_id"
+    t.index ["target_id"], name: "index_resources_on_target_id"
   end
 
   create_table "shortened_urls", id: :serial, force: :cascade do |t|
@@ -498,6 +501,7 @@ ActiveRecord::Schema.define(version: 20170911065433) do
     t.date "timeline_updated_on"
     t.datetime "admission_stage_updated_at"
     t.bigint "team_lead_id"
+    t.integer "referral_reward_days", default: 0
     t.index ["level_id"], name: "index_startups_on_level_id"
     t.index ["maximum_level_id"], name: "index_startups_on_maximum_level_id"
     t.index ["slug"], name: "index_startups_on_slug", unique: true

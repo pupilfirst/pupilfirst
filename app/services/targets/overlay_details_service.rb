@@ -57,10 +57,10 @@ module Targets
     end
 
     def linked_resources
-      return nil if @target.resources.blank?
+      return if @target.resources.blank?
 
-      @target.resources.each_with_object([]) do |resource, resource_details|
-        resource_details << { id: resource.id, title: resource.title, slug: resource.slug }
+      @target.resources.map do |resource|
+        { id: resource.id, title: resource.title, slug: resource.slug }
       end
     end
   end

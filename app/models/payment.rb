@@ -62,14 +62,13 @@ class Payment < ApplicationRecord
   end
 
   def refresh_payment!(payment_id)
-    # Store the payment ID.
-    update!(instamojo_payment_id: payment_id)
-
     # Fetch latest payment status from Instamojo.
     instamojo = Instamojo.new
     response = instamojo.payment_details(payment_request_id: instamojo_payment_request_id, payment_id: payment_id)
 
+    # Store the payment ID and returned attributes.
     update!(
+      instamojo_payment_id: payment_id,
       instamojo_payment_request_status: response[:payment_request_status],
       instamojo_payment_status: response[:payment_status],
       fees: response[:fees]

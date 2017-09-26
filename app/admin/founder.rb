@@ -334,6 +334,7 @@ ActiveAdmin.register Founder do
       row :resume do |founder|
         link_to 'Download Resume', founder.resume_link if founder.resume_link.present?
       end
+      active_admin_comments
     end
 
     panel 'Social links' do

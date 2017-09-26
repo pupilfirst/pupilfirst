@@ -132,13 +132,15 @@ module Admissions
         end
       end
 
-      # Complete the cofounder addition target, if it hasn't been marked as such already.
+      # If the cofounder addition target is not marked as completed...
       if cofounder_addition_target.status(current_founder) != Targets::StatusService::STATUS_COMPLETE
+        # Complete it...
         Admissions::CompleteTargetService.new(current_founder, Target::KEY_ADMISSIONS_COFOUNDER_ADDITION).execute
+
+        # ...and create a pending payment to allow the founder to pay the fee.
+        Payments::CreateService.new(current_founder).create
       end
 
-      # TODO: Remove this tag from intercom after a while (29/7/2017).
-      Intercom::FounderTaggingJob.perform_later(current_founder, 'Added Co-founders')
       Intercom::LevelZeroStageUpdateJob.perform_later(current_founder, Startup::ADMISSION_STAGE_COFOUNDERS_ADDED)
     end
 

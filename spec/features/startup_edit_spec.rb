@@ -41,8 +41,7 @@ feature 'Startup Edit' do
       fill_in 'startup_product_name', with: ''
       click_on 'Update startup profile'
 
-      expect(page).to have_text('Please review the problems below')
-      expect(page).to have_selector('div.form-group.startup_product_name.has-error')
+      expect(page).to have_text("Product name can't be blank")
     end
 
     scenario 'Founder looks to delete his approved startup as team lead' do

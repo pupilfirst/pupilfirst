@@ -16,13 +16,17 @@ feature 'Founder Edit' do
       sign_in_user(founder.user, referer: edit_founder_path)
 
       expect(page).to have_text('Editing').and have_text('profile')
+
       fill_in 'founders_edit_name', with: ''
       fill_in 'founders_edit_born_on', with: ''
       fill_in 'founders_edit_phone', with: ''
       fill_in 'founders_edit_communication_address', with: ''
-      click_on 'Update details'
+      click_button 'Save Changes'
 
-      expect(page).to have_text("can't be blank", count: 5)
+      expect(page).to have_content("Name can't be blank")
+      expect(page).to have_content("Born on can't be blank")
+      expect(page).to have_content("Phone can't be blank")
+      expect(page).to have_content("Communication address can't be blank")
     end
 
     scenario 'Founder fills in the required fields and submits' do
@@ -34,7 +38,7 @@ feature 'Founder Edit' do
       fill_in 'founders_edit_phone', with: '9876543210'
       fill_in 'founders_edit_communication_address', with: '37623 Gutmann MountainNorth Adelinetown25858-7040'
       select "My college isn't listed", from: 'founders_edit_college_id'
-      click_on 'Update details'
+      click_button 'Save Changes'
 
       expect(page).to have_text(new_founder_name)
       expect(page).to have_link('Complete Your Profile')
@@ -93,7 +97,7 @@ feature 'Founder Edit' do
 
       fill_in 'founders_edit_name', with: new_founder_name
 
-      click_on 'Update details'
+      click_button 'Save Changes'
 
       expect(page).to have_content(new_founder_name)
       expect(founder.reload.name).to eq(new_founder_name)

@@ -3,8 +3,8 @@
 p.mb-2
   em Please note that you can come back and change these details anytime.
 
-= simple_form_for @startup, url: startup_path, wrapper: :vertical_form, wrapper_mappings: { check_boxes: :vertical_radio_and_checkboxes, radio_buttons: :vertical_radio_and_checkboxes, boolean: :vertical_boolean, file: :vertical_file_input } do |f|
-  = f.error_notification
+= bootstrap_form_for(@startup, url: startup_path, layout: :horizontal, label_col: 'col-sm-3', control_col: 'col-sm-9') do |f|
+  = f.error_summary
   .panel-group#startup-form role="tablist"
     .card
       .card-header.p-0 role="tab"
@@ -14,20 +14,18 @@ p.mb-2
       #basic-details.collapse.show role="tabpanel"
         .card-body
           .flex-columm
-            = f.input :product_name, label: 'Product Name', required: true, input_html: { placeholder: 'Name of your Product', maxlength: 255 }
-            = f.input :product_description, label: 'Product One-liner', as: :text,
-              hint: "Describe your product in less than #{Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS} characters.",
-              input_html: { rows: 3, placeholder: "Description in less than #{Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS} characters", maxlength: Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS }
-            = f.input :presentation_link,
-              hint: 'Share the link to a presentation that showcases your product, in fair detail.',
-              input_html: { placeholder: 'https://slideshare.net/YourUsername/your-product-deck', maxlength: 255 },
-              label: 'Product Deck'
-            = f.input :legal_registered_name, label: 'Legal Registered Name', hint: 'The name of your registered legal entity. Partnership/Pvt. Ltd./LLP etc.'
-            = f.input :logo, as: :image_preview, input_html: { preview_version: :thumb, accept: 'image/*' }, required: false
-            = f.association :startup_categories,
-              hint: 'Industries that your startup is involved in. Max 3.',
-              as: :select,
-              label: 'Industries'
+            = f.text_field :product_name, label_class: 'col-form-label', label: 'Product Name', class: 'form-control', required: true
+            = f.text_area :product_description, label_class: 'col-form-label', label: 'Product One-liner', class: 'form-control',
+              help: "Describe your product in less than #{Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS} characters.",
+              placeholder: "Description in less than #{Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS} characters", maxlength: Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS
+            = f.text_field :presentation_link, label_class: 'col-form-label', label: 'Product Deck', class: 'form-control',
+              help: 'Share the link to a presentation that showcases your product, in fair detail.',
+              placeholder: 'https://slideshare.net/YourUsername/your-product-deck', maxlength: 255
+            = f.text_field :legal_registered_name, label_class: 'col-form-label', label: 'Legal Registered Name', class: 'form-control',
+              help: 'The name of your registered legal entity. Partnership/Pvt. Ltd./LLP etc.'
+            = f.file_field :logo, label_class: 'col-form-label', label: 'Logo', class: 'form-control', required: false
+            = f.select :startup_categories, options_from_collection_for_select(StartupCategory.all, :id, :name, @startup.startup_categories.pluck(:id)),
+              { help: 'Industries that your startup is involved in. Max 3.' }, { name: 'startup[startup_category_ids][]', multiple: true }
 
     .card
       .card-header.p-0 role="tab"
@@ -37,10 +35,10 @@ p.mb-2
       #contactinfo.collapse role="tabpanel"
         .card-body
           .flex-column
-            = f.input :email, input_html: { maxlength: 255 }, label: 'Contact Email'
-            = f.input :website, input_html: { placeholder: "You startup's website URL, if any.", maxlength: 255 }
-            = f.input :twitter_link, input_html: { placeholder: 'https://twitter.com/username', maxlength: 255 }
-            = f.input :facebook_link, input_html: { placeholder: 'https://facebook.com/username', maxlength: 255 }
+            = f.email_field :email, label_class: 'col-form-label', label: 'Contact Email', class: 'form-control', maxlength: 255
+            = f.text_field :website, label_class: 'col-form-label', label: 'Wesite', class: 'form-control', placeholder: "You startup's website URL, if any.", maxlength: 255
+            = f.text_field :twitter_link, placeholder: 'https://twitter.com/username', maxlength: 255
+            = f.text_field :facebook_link, placeholder: 'https://facebook.com/username', maxlength: 255
 
     .card
       .card-header.p-0 role="tab"
@@ -57,11 +55,9 @@ p.mb-2
             ' You can change the last part of the URL, the <em>slug</em>, to something you prefer (as long as it is unique).
 
           .flex-column
-            = f.input :slug,
-              label: 'URL Slug',
-              input_html: { maxlength: 255 },
-              placeholder: 'your-desired-link',
-              hint: 'Slug should only contain letters, numbers, and dashes.'
+            = f.text_field :slug, label_class: 'col-form-label', label: 'URL Slug', class: 'form-control',
+              placeholder: 'your-desired-link', maxlength: 255,
+              help: 'Slug should only contain letters, numbers, and dashes.'
 
     .card
       .card-header.p-0 role="tab"
@@ -71,19 +67,16 @@ p.mb-2
       #misc.collapse role="tabpanel"
         .card-body
           .flex-column
-            = f.input :product_video_link,
-              hint: 'Link to your product video, if available and public.',
-              input_html: { maxlength: 255 },
-              label: 'Product Video'
-            = f.input :prototype_link,
-              hint: 'Link to your product prototype, if available and public.',
-              input_html: { maxlength: 255 },
-              label: 'Product Prototype'
-            = f.input :wireframe_link,
-              hint: 'Link to your product wireframe, if available and public.',
-              input_html: { maxlength: 255 },
-              label: 'Wireframe'
-            = f.input :registration_type, collection: Startup.valid_registration_types, label_method: ->(obj) { registration_type_html(obj) }, include_blank: 'Not Registered'
+            = f.text_field :product_video_link, label_class: 'col-form-label', label: 'Product Video', class: 'form-control',
+              help: 'Link to your product video, if available and public.', maxlength: 255
+
+            = f.text_field :prototype_link, label_class: 'col-form-label', label: 'Product Prototype', class: 'form-control',
+              help: 'Link to your product prototype, if available and public.', maxlength: 255
+
+            = f.text_field :wireframe_link, label_class: 'col-form-label', label: 'Wireframe', class: 'form-control',
+              help: 'Link to your product wireframe, if available and public.', maxlength: 255
+
+            = f.select :registration_type, registration_type_options(@startup.registration_type), include_blank: 'Not Registered'
 
   .form-group.mt-3
     = f.submit class: 'btn btn-md btn-primary', value: 'Update startup profile'

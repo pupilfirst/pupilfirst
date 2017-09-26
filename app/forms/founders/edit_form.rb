@@ -33,6 +33,8 @@ module Founders
 
     def roles_must_be_valid
       roles.each do |role|
+        next if role.blank?
+
         unless Founder.valid_roles.include?(role)
           errors.add(:roles, 'contained unrecognized value')
         end

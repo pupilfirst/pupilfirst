@@ -1,5 +1,36 @@
 ---
 changelog:
+- timestamp: '2017-09-25T06:54:41Z'
+  changes:
+  - timestamp: '2017-09-25T06:36:22Z'
+    title: Switched to new Instamojo account - one that has up-to-date PAN and GST details
+      of the new company registration.
+    trello: https://trello.com/c/aZmTWH3h
+    private: true
+    description: Switching to the new account involved disabling all outstanding payment
+      requests on the old Instamojo account.
+    category: operations
+  - timestamp: '2017-09-25T06:34:55Z'
+    title: Extended subscription options have been added. Founders can now choose
+      to renew SV.CO subscription for one, three, or six months.
+    trello: https://trello.com/c/kFpHieZZ
+    private: false
+    category: feature
+  - timestamp: '2017-09-21T06:41:00Z'
+    title: Reactivated ActiveAdmin's comments feature for all resources, and manually
+      added the feature to startup and founder show pages to take down notes on prospective
+      leads.
+    trello: https://trello.com/c/GXQdO50u
+    private: true
+    category: feature
+    description: Manual activation of comments is required wherever `show` has been customized.
+  - timestamp: '2017-09-20T06:32:01Z'
+    title: Resources will now store content_type of private S3 files in column `file_content_type`
+      to avoid a network call to determine their type.
+    trello: https://trello.com/c/LPKXyMIl
+    private: true
+    category: bugfix
+    description: A one-off script has been executed to set `file_content_type` for all existing resources.
 - timestamp: '2017-09-18T11:11:28Z'
   changes:
   - timestamp: '2017-09-18T09:20:42Z'
@@ -16,12 +47,13 @@ changelog:
     title: Added 'Library' to navigation bar for logged in founders
     trello: https://trello.com/c/SOzuwjHP
     private: false
-    category: feature
+    category: ui
   - timestamp: '2017-09-13T07:43:29Z'
     title: Fixed misaligned data points on Startup timeline when viewing from mobile
     trello: https://trello.com/c/D9HqzxYW
     private: false
-    description: Add ajax.cloudflare.com to CSP list to allow Cloudflare's Mirage feature to work.
+    description: Add ajax.cloudflare.com to CSP list to allow Cloudflare's Mirage
+      feature to work.
     category: bugfix
   - timestamp: '2017-09-12T12:33:36Z'
     title: Targets will now show associated library links alongside other details

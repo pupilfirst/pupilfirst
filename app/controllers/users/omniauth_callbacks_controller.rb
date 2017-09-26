@@ -7,6 +7,12 @@ module Users
     # GET /users/auth/:provider/callback
     def oauth_callback
       email = email_from_auth_hash
+
+      if email.blank?
+        flash[:error] = "We're sorry, but we did not receive your email address from #{provider_name}. Please use another sign in method."
+        redirect_to new_user_session_path
+      end
+
       user = User.with_email(email)
 
       if user.present?
@@ -45,9 +51,11 @@ module Users
     # letting issues get buried (we used to show a useless 404).
     def email_from_auth_hash
       raise "Auth hash is blank: #{auth_hash.inspect}" if auth_hash.blank?
-      email = auth_hash.dig(:info, :email)
-      return email if email.present?
-      raise "Auth hash does not contain email: #{auth_hash.inspect}"
+      auth_hash.dig(:info, :email)
+    end
+
+    def provider_name
+      params[:provider].split('_').first.capitalize
     end
   end
 end

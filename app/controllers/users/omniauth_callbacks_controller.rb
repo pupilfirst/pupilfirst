@@ -11,6 +11,7 @@ module Users
       if email.blank?
         flash[:error] = "We're sorry, but we did not receive your email address from #{provider_name}. Please use another sign in method."
         redirect_to new_user_session_path
+        return
       end
 
       user = User.with_email(email)

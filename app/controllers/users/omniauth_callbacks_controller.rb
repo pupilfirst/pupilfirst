@@ -9,7 +9,7 @@ module Users
       email = email_from_auth_hash
 
       if email.blank?
-        flash[:error] = "We're sorry, but we did not receive your email address from #{provider_name}. Please use another sign in method."
+        flash[:error] = email_blank_flash
         redirect_to new_user_session_path
         return
       end
@@ -57,6 +57,21 @@ module Users
 
     def provider_name
       params[:action].split('_').first.capitalize
+    end
+
+    def email_blank_flash
+      message = "We're sorry, but we did not receive your email address from #{provider_name}. "
+
+      message += case provider_name
+        when 'Github'
+          'Please <a href="https://github.com/settings/profile" target="_blank">add a public email address to your Github profile</a> and try again.'
+        when 'Facebook'
+          'Please <a href="https://www.facebook.com/settings?tab=applications" target="_blank">remove SV.CO from your authorized apps list</a> and try signing in again.'
+        else
+          'Please sign in using another method.'
+      end
+
+      message.html_safe
     end
   end
 end

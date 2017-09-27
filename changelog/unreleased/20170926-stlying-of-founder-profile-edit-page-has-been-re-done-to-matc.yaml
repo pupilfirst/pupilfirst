@@ -1,0 +1,7 @@
+---
+timestamp: '2017-09-26T10:11:09Z'
+title: Stlying of founder profile edit page has been re-done to match design guidelines.
+trello: https://trello.com/c/g87j9Zyi
+private: false
+description: simple_form was replaced with bootstrap_form_for.
+category: ui

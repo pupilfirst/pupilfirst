@@ -415,8 +415,17 @@ class Startup < ApplicationRecord
     @billing_founders_count ||= founders.count + invited_founders.count
   end
 
-  def fee
-    Founder::FEE * billing_founders_count
+  def fee(period)
+    case period
+      when 1
+        Founder::FEE_ONE_MONTH
+      when 3
+        Founder::FEE_THREE_MONTHS
+      when 6
+        Founder::FEE_SIX_MONTHS
+      else
+        raise "Unexpected period supplied to Startup#fee - #{period}"
+    end * billing_founders_count
   end
 
   def present_week_number
@@ -454,7 +463,11 @@ class Startup < ApplicationRecord
     [ADMISSION_STAGE_SIGNED_UP, ADMISSION_STAGE_SCREENING_COMPLETED, ADMISSION_STAGE_COFOUNDERS_ADDED, ADMISSION_STAGE_PAYMENT_INITIATED, ADMISSION_STAGE_FEE_PAID, ADMISSION_STAGE_ADMITTED].freeze
   end
 
+  def active_payment
+    payments.paid.order(:billing_end_at).last
+  end
+
   def subscription_end_date
-    payments.paid.order(:billing_end_at).last.billing_end_at
+    active_payment.billing_end_at
   end
 end

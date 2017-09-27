@@ -1,0 +1,52 @@
+.col-sm-4.content-box.text-xs-center.fee-offer__box class=(period == 6 ? 'fee-offer__recommended' : '')
+  - period_string = period == 1 ? '1 month' : (period == 3 ? '3 months' : '6 months')
+  - undiscounted_fee = current_startup.fee(1) * period
+  - actual_fee = current_startup.fee(period)
+  - discount_percent = (undiscounted_fee - actual_fee) * 100 / undiscounted_fee
+
+  - if period == 6
+    .fee-offer__recommended-notice
+      | Recommended!
+
+  h5.font-semibold.text-uppercase.fee-offer_period.p-b-1.m-b-2 #{period_string}
+
+  div
+    .fee-offer__amount-highlight
+      - if period != 1
+        h5.font-semibold.m-b-0
+          ' <del>&#8377;#{undiscounted_fee}</del>
+      h2.font-semibold.m-b-0
+        span.font-regular &#8377;
+        ' #{actual_fee}
+      p
+        | for #{current_startup.billing_founders_count} founders
+
+  .fee-offer__discount.m-y-2
+    - if period != 1
+      h3.font-bold.brand-secondary #{discount_percent}% off!
+
+    - else
+      p Full price.
+
+    - if period == 6
+      p
+        | (Offer expires on September 30th, 2017)
+
+  = form_with url: fee_founder_path, method: :post, class: 'js-founder-fee__form' do |form|
+    .p-x-1
+      = hidden_field_tag 'fee[period]', period
+
+      .js-founder-fee__pay-button
+        = form.button class: "btn btn-md text-uppercase btn-with-icon #{(period == 6 ? 'btn-primary' : 'btn-ghost-primary')}" do
+          | Pay for #{period_string}
+
+  .js-founder-fee__disabled-pay-button.hidden-xs-up
+    button class="btn btn-md text-uppercase btn-with-icon btn-disabled"
+      i.fa.fa-spinner.fa-pulse
+      | Please wait...
+
+  .fee-offer__error.brand-danger.m-t-1.hidden-xs-up
+    i.fa.fa-warning
+    .font-semibold
+      ' Something went wrong!
+    | Please refresh the page and try again

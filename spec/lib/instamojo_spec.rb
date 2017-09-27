@@ -1,18 +1,6 @@
 require 'rails_helper'
 
 describe Instamojo do
-  before do
-    Rails.application.secrets.instamojo_url = 'https://www.example.com'
-    Rails.application.secrets.instamojo_api_key = 'API_KEY'
-    Rails.application.secrets.instamojo_auth_token = 'AUTH_TOKEN'
-  end
-
-  after do
-    Rails.application.secrets.instamojo_url = ENV['INSTAMOJO_API_URL']
-    Rails.application.secrets.instamojo_api_key = ENV['INSTAMOJO_API_KEY']
-    Rails.application.secrets.instamojo_auth_token = ENV['INSTAMOJO_AUTH_TOKEN']
-  end
-
   describe '#create_payment_request' do
     let(:amount) { rand(10_000) }
     let(:buyer_name) { Faker::Name.name }
@@ -27,7 +15,7 @@ describe Instamojo do
             email: 'foo@example.com',
             buyer_name: 'John Doe',
             amount: amount.to_s,
-            purpose: 'Monthly Fee for SV.CO',
+            purpose: 'Fee for SV.CO',
             status: 'Pending',
             send_sms: true,
             send_email: true,
@@ -52,7 +40,7 @@ describe Instamojo do
             amount: amount.to_s,
             buyer_name: buyer_name,
             email: email,
-            purpose: 'Monthly Fee for SV.CO',
+            purpose: 'Fee for SV.CO',
             redirect_url: 'http://localhost:3000/instamojo/redirect',
             send_email: 'false',
             send_sms: 'false'
@@ -128,7 +116,7 @@ describe Instamojo do
               email: 'foo@example.com',
               buyer_name: 'John Doe',
               amount: '2500.00',
-              purpose: 'FIFA 16',
+              purpose: 'Fee for SV.CO',
               status: 'Completed',
               send_sms: true,
               send_email: true,
@@ -207,7 +195,7 @@ describe Instamojo do
               email: 'foo@example.com',
               buyer_name: 'John Doe',
               amount: '2500.00',
-              purpose: 'FIFA 16',
+              purpose: 'Fee for SV.CO',
               status: 'Sent',
               send_sms: true,
               send_email: true,

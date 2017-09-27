@@ -58,6 +58,11 @@ en:
       part_time: Part-Time
       full_time: Full-Time
   startup:
+    edit:
+      registration_types:
+        private_limited: Private Limited
+        partnership: Partnership
+        llp: Limited Liability Partnership
     show:
       timeline_cards:
         needs_imprvement:

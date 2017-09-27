@@ -217,6 +217,26 @@ p {
   }
 }
 
+.btn-disabled {
+  background-color: $dark-primary-background;
+  cursor: not-allowed;
+  color: $light-grey-text;
+  border: 0;
+  box-shadow: none;
+
+  &:hover, &:focus, &:active {
+    @extend .btn-disabled;
+  }
+
+  &,
+  &:active {
+    &:focus,
+    &.focus {
+      @extend .btn-disabled;
+    }
+  }
+}
+
 // Default container style with border
 .container-md-center {
   @extend .m-x-auto;

@@ -4,9 +4,16 @@ module Users
 
     skip_before_action :verify_authenticity_token, only: [:developer]
 
-    # GET /users/auth/:provider/callback
+    # GET /users/auth/:action/callback
     def oauth_callback
       email = email_from_auth_hash
+
+      if email.blank?
+        flash[:error] = email_blank_flash
+        redirect_to new_user_session_path
+        return
+      end
+
       user = User.with_email(email)
 
       if user.present?
@@ -45,9 +52,26 @@ module Users
     # letting issues get buried (we used to show a useless 404).
     def email_from_auth_hash
       raise "Auth hash is blank: #{auth_hash.inspect}" if auth_hash.blank?
-      email = auth_hash.dig(:info, :email)
-      return email if email.present?
-      raise "Auth hash does not contain email: #{auth_hash.inspect}"
+      auth_hash.dig(:info, :email)
+    end
+
+    def provider_name
+      params[:action].split('_').first.capitalize
+    end
+
+    def email_blank_flash
+      message = "We're sorry, but we did not receive your email address from #{provider_name}. "
+
+      message += case provider_name
+        when 'Github'
+          'Please <a href="https://github.com/settings/profile" target="_blank">add a public email address to your Github profile</a> and try again.'
+        when 'Facebook'
+          'Please <a href="https://www.facebook.com/settings?tab=applications" target="_blank">remove SV.CO from your authorized apps list</a> and try signing in again.'
+        else
+          'Please sign in using another method.'
+      end
+
+      message.html_safe
     end
   end
 end

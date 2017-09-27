@@ -57,7 +57,7 @@ module Targets
     end
 
     def linked_resources
-      return [] if @target.resources.blank?
+      return if @target.resources.blank?
 
       @target.resources.map do |resource|
         { id: resource.id, title: resource.title, slug: resource.slug }

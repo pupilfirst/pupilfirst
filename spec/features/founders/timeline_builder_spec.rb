@@ -131,7 +131,7 @@ feature 'Timeline Builder' do
 
       # Description just a bunch of spaces.
       find('.timeline-builder__textarea').set('   ')
-      find_button('Submit').click
+      click_button('Submit')
       expect(page).to have_content('Please add a summary describing the event.')
 
       find('.timeline-builder__textarea').set('description text')
@@ -139,7 +139,7 @@ feature 'Timeline Builder' do
       find('.timeline-builder__attachment-button').click
 
       # Timeline event type missing.
-      find_button('Submit').click
+      click_button('Submit')
       expect(page).to have_content('Please select an appropriate timeline event type.')
 
       # Facebook connect missing

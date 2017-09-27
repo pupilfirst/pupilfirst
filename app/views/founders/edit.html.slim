@@ -4,53 +4,46 @@ title SV.CO Edit Profile for #{@founder.fullname}
   .content-box.my-3
     h2.mb-3 Editing #{@founder.fullname}'s profile
 
-    - form = @founder.form
-
-    = simple_form_for form, url: founder_path, wrapper: :vertical_form, wrapper_mappings: { check_boxes: :vertical_radio_and_checkboxes, radio_buttons: :vertical_radio_and_checkboxes, boolean: :vertical_boolean, file: :vertical_file_input } do |f|
+    = bootstrap_form_for(@form, url: founder_path, layout: :horizontal, label_col: 'col-sm-3', control_col: 'col-sm-9') do |f|
       .flex-column
-        = f.error_notification
+        = f.error_summary
 
-        = f.input :name, input_html: { maxlength: 255 }
-        = f.input :born_on, as: :string, label: 'Date of birth', placeholder: 'YYYY-MM-DD', input_html: { class: 'date-picker', data: { format: 'Y-m-d' } }
-        = f.input :phone, input_html: { maxlength: 17, type: 'tel', pattern: MobileNumberValidator::FORM_EXPRESSION }, label: 'Phone Number'
-
-        - if f.object.errors[:avatar].present?
-          = f.input :avatar, as: :file, input_html: { accept: 'image/*' }, required: false
-        - else
-          = f.input :avatar, as: :image_preview, input_html: { preview_version: :thumb, accept: 'image/*' }, required: false
-
-        = f.input :about, label: 'One-Liner', placeholder: 'One-liner about yourself', input_html: { maxlength: 255 }, required: false
-
+        = f.text_field :name, label_class: 'col-form-label', label: 'Name', required: true, maxlength: 255
+        = f.text_field :born_on, as: :string, label_class: 'col-form-label', label: 'Date of birth', class: 'date-picker', required: true, placeholder: 'YYYY-MM-DD', data: { format: 'Y-m-d' }
+        = f.telephone_field :phone, label_class: 'col-form-label', label: 'Phone Number', required: true, maxlength: 17, pattern: MobileNumberValidator::FORM_EXPRESSION
+        = f.file_field :avatar, label_class: 'col-form-label', label: 'Avatar', class: 'form-control', required: false
+        = f.text_field :about, label_class: 'col-form-label', label: 'One-Liner', placeholder: 'One-liner about yourself', maxlength: 255, required: false
         - if @founder.startup.present?
-          = f.input :roles, label: 'Role at Startup', as: :select, collection: Founder.valid_roles, label_method: ->(role) { t "role.#{role}" }, include_hidden: false, input_html: { multiple: true }, required: false
+          = f.select :roles, options_for_select((Founder.valid_roles.map { |r| [t("role.#{r}"), r] }), @founder.roles),
+            { label_class: 'col-form-label' }, { required: true, multiple: true }
+        = f.text_field :skype_id, label_class: 'col-form-label', label: 'Skype ID', required: false
+        = f.text_area :communication_address, label_class: 'col-form-label'
+        = f.file_field :identification_proof, label: 'ID Proof', required: false,
+            help: @founder.identification_proof_hint
 
-        = f.input :skype_id, label: 'Skype ID', required: false
-        = f.input :communication_address
-        = f.input :identification_proof, label: 'ID Proof', as: :file, hint: @founder.identification_proof_hint, required: false
+        - college_collection = f.object.model.college.present? ? [f.object.model.college] : [OpenStruct.new(name: "My college isn't listed", id: 'other')]
 
-        = f.input :college_id,
-          as: :select,
-          label: 'College',
-          placeholder: 'Please pick your college',
-          input_html: { 'data-search-url' => colleges_url },
-          collection: f.object.model.college.present? ? [f.object.model.college] : [["My college isn't listed", 'other']]
+        = f.select :college_id, options_from_collection_for_select(college_collection, :id, :name),
+          { label_class: 'col-form-label', help: 'Please pick your college' }, { 'data-search-url' => colleges_url }
+        = f.text_field :roll_number, label_class: 'col-form-label', label: 'University Roll Number', required: false
+        = f.file_field :college_identification, label_class: 'col-form-label', label: 'College Identification', class: 'form-control', required: false
+        = f.file_field :course, label_class: 'col-form-label', placeholder: 'B-tech in Computer Science', required: false
+        = f.select :semester, options_for_select(MoocStudent.valid_semester_values), include_blank: 'Pick your semester', label_class: 'col-form-label'
+        = f.select :year_of_graduation, options_for_select(2010..2025), include_blank: 'Pick the year when you graduate from college', label_class: 'col-form-label'
+        = f.number_field :backlog, placeholder: 'Zero, hopefully. :-)', label_class: 'col-form-label',
+          help: "The number of failed subjects or papers that you haven't yet cleared in your college course.", required: false
+        = f.text_field :twitter_url, label_class: 'col-form-label', label: 'Twitter Profile URL', maxlength: 255, required: false
+        = f.text_field :linkedin_url, label_class: 'col-form-label', label: 'LinkedIn Profile URL', maxlength: 255, required: false
+        = f.text_field :personal_website_url, label_class: 'col-form-label', label: 'Personal Website URL', maxlength: 255, required: false
+        = f.text_field :blog_url, label_class: 'col-form-label', label: 'Blog URL', maxlength: 255, required: false
+        = f.text_field :angel_co_url, label_class: 'col-form-label', label: 'AngelList Profile URL', maxlength: 255, required: false
+        = f.text_field :github_url, label_class: 'col-form-label', label: 'Github Profile URL', maxlength: 255, required: false
+        = f.text_field :behance_url, label_class: 'col-form-label', label: 'Behance Portfolio URL', maxlength: 255, required: false
 
-        = f.input :roll_number, label: 'University Roll Number', required: false
-        = f.input :college_identification, label: 'College Identification', as: :image_preview, input_html: { preview_version: :thumb, accept: 'image/*' }, required: false
-        = f.input :course, placeholder: 'B-tech in Computer Science', required: false
-        = f.input :semester, as: :select, required: false, collection: MoocStudent.valid_semester_values, include_blank: 'Pick your semester'
-        = f.input :year_of_graduation, as: :select, collection: 2010..2025, required: false, include_blank: 'Pick the year when you graduate from college'
-        = f.input :backlog, placeholder: 'Zero, hopefully. :-)', hint: "The number of failed subjects or papers that you haven't yet cleared in your college course.", required: false, input_html: { type: 'number' }
-        = f.input :twitter_url, label: 'Twitter Profile URL', input_html: { maxlength: 255 }, required: false
-        = f.input :linkedin_url, label: 'LinkedIn Profile URL', input_html: { maxlength: 255 }, required: false
-        = f.input :personal_website_url, label: 'Personal Website URL', input_html: { maxlength: 255 }, required: false
-        = f.input :blog_url, label: 'Blog URL', input_html: { maxlength: 255 }, required: false
-        = f.input :angel_co_url, label: 'AngelList Profile URL', input_html: { maxlength: 255 }, required: false
-        = f.input :github_url, label: 'Github Profile URL', input_html: { maxlength: 255 }, required: false
-        = f.input :behance_url, label: 'Behance Portfolio URL', input_html: { maxlength: 255 }, required: false
-
-        .form-group
-          = f.button :submit, 'Update details', class: 'btn btn-md btn-primary'
+        .row.form-group
+          .col-md-9.ml-auto
+            = f.button :submit, class: 'btn btn-md btn-primary text-uppercase'
+              | Save Changes
 
     .mt-4
       h4 Connected Accounts

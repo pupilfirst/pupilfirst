@@ -15,10 +15,6 @@ class FounderDecorator < Draper::Decorator
     @fb_basic_info ||= fb_service.basic_info
   end
 
-  def form
-    @form ||= Founders::EditForm.new(model)
-  end
-
   def age
     return nil if born_on.blank?
     Date.today.year - born_on.year

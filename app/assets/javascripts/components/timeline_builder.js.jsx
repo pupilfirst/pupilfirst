@@ -21,7 +21,7 @@ const TimelineBuilder = React.createClass({
       previousForm: null,
       imageButtonKey: this.generateKey(),
       submissionProgress: null,
-      hasSubmissionError: false,
+      submissionError: null,
       submissionSuccessful: false,
       descriptionError: null,
       showDateError: false,
@@ -88,7 +88,7 @@ const TimelineBuilder = React.createClass({
     }
   },
 
-  hideFileForm: function() {
+  hideFileForm: function () {
     this.setState({showFileForm: false, previousForm: 'file'});
   },
 
@@ -195,6 +195,14 @@ const TimelineBuilder = React.createClass({
       setTimeout(function () {
         that.setState({showSelectedFileError: false});
       }, 5000);
+    } else if (!navigator.onLine) {
+      this.setState({submissionError: 'offline'}, function () {
+        $('.js-timeline-builder__submit-button').popover('show');
+
+        setTimeout(function () {
+          $('.js-timeline-builder__submit-button').popover('hide');
+        }, 3000);
+      });
     } else if (this.validate()) {
       let form = $('.timeline-builder-hidden-form');
       let formData = new FormData(form[0]);
@@ -290,9 +298,16 @@ const TimelineBuilder = React.createClass({
     }
   },
 
-  handleSubmissionError: function () {
-    this.setState({hasSubmissionError: true});
-    $('.js-timeline-builder__submit-button').popover('show');
+  handleSubmissionError: function (jqXHR) {
+    if (jqXHR.status >= 500) {
+      this.setState({submissionError: '5XX'}, function () {
+        $('.js-timeline-builder__submit-button').popover('show');
+      });
+    } else {
+      this.setState({submissionError: 'other'}, function () {
+        $('.js-timeline-builder__submit-button').popover('show');
+      });
+    }
   },
 
   handleSubmissionComplete: function () {
@@ -339,7 +354,7 @@ const TimelineBuilder = React.createClass({
     this.setState({description: description});
   },
 
-  today: function() {
+  today: function () {
     return moment().format('YYYY-MM-DD');
   },
 
@@ -357,36 +372,36 @@ const TimelineBuilder = React.createClass({
               <form className="timeline-builder-hidden-form js-timeline-builder__hidden-form"
                 action="/timeline_events" acceptCharset="UTF-8" method="post">
                 <input name="utf8" type="hidden" value="✓"/>
-                <input type="hidden" name="authenticity_token" value={ this.props.authenticityToken }/>
+                <input type="hidden" name="authenticity_token" value={this.props.authenticityToken}/>
               </form>
 
-              <TimelineBuilderTextArea error={ this.state.descriptionError } resetErrorsCB={ this.resetErrors }
-                placeholder={ this.sampleText() } textChangeCB={ this.updateDescription }/>
+              <TimelineBuilderTextArea error={this.state.descriptionError} resetErrorsCB={this.resetErrors}
+                placeholder={this.sampleText()} textChangeCB={this.updateDescription}/>
 
-              <TimelineBuilderSocialBar description={ this.state.description }
-                                        facebookShareEligibility={ this.props.facebookShareEligibility }/>
+              <TimelineBuilderSocialBar description={this.state.description}
+                facebookShareEligibility={this.props.facebookShareEligibility}/>
 
-              { this.hasAttachments() &&
-              <TimelineBuilderAttachments attachments={ this.attachments() }
-                removeAttachmentCB={ this.removeAttachment }/>
+              {this.hasAttachments() &&
+              <TimelineBuilderAttachments attachments={this.attachments()}
+                removeAttachmentCB={this.removeAttachment}/>
               }
 
-              <TimelineBuilderAttachmentForm currentForm={ this.currentForm() } previousForm={ this.state.previousForm }
-                addAttachmentCB={ this.addData } selectedDate={ this.state.date }
-                showSelectedFileError={ this.state.showSelectedFileError }
-                resetErrorsCB={ this.resetErrors } hideFileForm={ this.hideFileForm }/>
+              <TimelineBuilderAttachmentForm currentForm={this.currentForm()} previousForm={this.state.previousForm}
+                addAttachmentCB={this.addData} selectedDate={this.state.date}
+                showSelectedFileError={this.state.showSelectedFileError}
+                resetErrorsCB={this.resetErrors} hideFileForm={this.hideFileForm}/>
 
-              <TimelineBuilderActionBar formClickedCB={ this.toggleForm } currentForm={ this.currentForm() }
-                submitCB={ this.submit } timelineEventTypes={ this.props.timelineEventTypes }
-                addDataCB={ this.addData } coverImage={ this.state.coverImage }
-                imageButtonKey={ this.state.imageButtonKey } selectedDate={ this.state.date }
-                submissionProgress={ this.state.submissionProgress }
-                attachmentAllowed={ this.attachmentAllowed() }
-                showDateError={ this.state.showDateError } resetErrorsCB={ this.resetErrors }
+              <TimelineBuilderActionBar formClickedCB={this.toggleForm} currentForm={this.currentForm()}
+                submitCB={this.submit} timelineEventTypes={this.props.timelineEventTypes}
+                addDataCB={this.addData} coverImage={this.state.coverImage}
+                imageButtonKey={this.state.imageButtonKey} selectedDate={this.state.date}
+                submissionProgress={this.state.submissionProgress}
+                attachmentAllowed={this.attachmentAllowed()}
+                showDateError={this.state.showDateError} resetErrorsCB={this.resetErrors}
                 showEventTypeError={this.state.showEventTypeError}
-                timelineEventTypeId={ this.timelineEventTypeIdForSelect() }
-                hasSubmissionError={ this.state.hasSubmissionError }
-                submissionSuccessful={ this.state.submissionSuccessful }/>
+                timelineEventTypeId={this.timelineEventTypeIdForSelect()}
+                submissionError={this.state.submissionError}
+                submissionSuccessful={this.state.submissionSuccessful}/>
             </div>
           </div>
         </div>

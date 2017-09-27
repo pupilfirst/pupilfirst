@@ -4,46 +4,49 @@
 
 .secondary-banner
   .container
-    .col-lg-5.col-md-7.library-banner-content.p-a-0
-      h1.m-b-1 Startup Library
-      - if current_founder.present? && (@resources.count > Resource.public_resources.count)
-        p.font-light
-          ' You currently have access to exclusive resources that are marked clearly by a
-          span.level-exclusive-text.text-uppercase
-            ' Level Exclusive
-          | badge. Please do not share these resources outside your founding team. Thank you!
-      - else
-        p.font-light
-          ' This is just a small sample of resources available in the SV.CO Startup Library. Approved Startups
-          | get access to exclusive content produced by Faculty, including presentations, video and audio clips.
-    .col-lg-7.col-md-5.hidden-sm-down.library-banner-illustration
+    .row
+      .col-lg-5.col-md-7.library-banner-content.p-a-0
+        h1.m-b-1 Startup Library
+        - if current_founder.present? && (@resources.count > Resource.public_resources.count)
+          p.font-light
+            ' You currently have access to exclusive resources that are marked clearly by a
+            span.level-exclusive-text.text-uppercase
+              ' Level Exclusive
+            | badge. Please do not share these resources outside your founding team. Thank you!
+        - else
+          p.font-light
+            ' This is just a small sample of resources available in the SV.CO Startup Library. Approved Startups
+            | get access to exclusive content produced by Faculty, including presentations, video and audio clips.
+      .col-lg-7.col-md-5.hidden-sm-down.library-banner-illustration
 
 .container
-  .resources.m-y-3
+  .resources.my-4
     .tag-filter
-      = form_for @form, url: resources_url, method: :get do |f|
-        = f.select :tags, options_for_select(@resource_tags, @form.tags), { include_blank: true}, { multiple: true, class: 'tag-select' }
-        = f.text_field :search, value: @form.search, placeholder: 'Title contains', class: 'search-field'
-        = f.select :created_after, options_for_select(date_filter_options, @form.created_after), { include_blank: 'Added Anytime' }, { class: 'search-field' }
-        .filter-buttons
-          = f.button  :submit, class: 'btn btn-secondary btn-with-icon text-uppercase' do
+      = bootstrap_form_for(@form, layout: :inline, url: resources_url, method: :get) do |f|
+        = f.select :tags, options_for_select(@resource_tags, @form.tags), { include_blank: true, hide_label: true }, { multiple: true, class: 'tag-select' }
+        = f.text_field :search, hide_label: true, value: @form.search, placeholder: 'Title contains', class: 'search-field'
+        = f.select :created_after, options_for_select(date_filter_options, @form.created_after), { include_blank: 'Added Anytime', hide_label: true }, { class: 'search-field' }
+        .filter-buttons.d-flex.d-sm-flex
+          = f.button :submit, class: 'btn btn-secondary btn-with-icon text-uppercase ml-sm-3' do
             i.fa.fa-filter
             | Filter
           - if @form.tags.present? || @form.search.present? || @form.created_after.present?
-            = link_to resources_path, class: 'btn btn-ghost-primary btn-with-icon text-uppercase' do
+            = link_to resources_path, class: 'btn btn-ghost-primary btn-with-icon text-uppercase ml-3' do
               i.fa.fa-refresh
               | Clear
 
     .row
       - if @resources.blank? || @form.errors.present?
         .col-md-12
-          .alert.alert-warning
+          .alert.alert-warning.mt-4
             = zero_results_text.html_safe
       - else
         - if @form.tags.present? || @form.search.present?
-          p.grey-text.show-result-text
-            = results_caption
+          .col-md-12
+            p.show-result-text.mt-3
+              = results_caption
         - @resources.each do |resource|
           = render 'resource', resource: resource
-  .text-xs-center.m-b-2
+
+  .d-flex.justify-content-center.my-4
     = paginate @resources, theme: 'twitter-bootstrap-4', window: 1

@@ -528,16 +528,6 @@ p {
   }
 }
 
-// Tags
-.tag-default {
-  border: 1px solid $gray-border;
-  color: $light-grey-text;
-
-  &:hover, &:focus {
-    background-color: darken($tag-default-bg, 30%) !important;
-  }
-}
-
 // Tab container
 .tab-content-container {
   background-color: white;

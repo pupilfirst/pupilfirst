@@ -19,7 +19,7 @@ feature 'Resources' do
     visit resources_path
 
     # user only sees the public resource
-    expect(page).to have_selector('.resource', count: 1)
+    expect(page).to have_selector('.resource-box', count: 1)
     expect(page).to have_text(public_resource.title[0..10])
   end
 
@@ -77,7 +77,7 @@ feature 'Resources' do
       scenario 'Founder visits resources page' do
         visit resources_path
         # only public resource is visible
-        expect(page).to have_selector('.resource', count: 1)
+        expect(page).to have_selector('.resource-box', count: 1)
         expect(page).to have_text(public_resource.title[0..10])
       end
 
@@ -93,7 +93,7 @@ feature 'Resources' do
         expect(page).to have_text('Please do not share these resources outside your founding team')
 
         # public resources + resources upto his level should be shown
-        expect(page).to have_selector('.resource', count: 3)
+        expect(page).to have_selector('.resource-box', count: 3)
         expect(page).to have_text(public_resource.title[0..10])
         expect(page).to have_text(level_0_resource.title[0..10])
         expect(page).to have_text(level_1_resource.title[0..10])

@@ -1,6 +1,4 @@
 class ResourcesController < ApplicationController
-  layout 'application_v2'
-
   # GET /library
   def index
     resources = policy_scope(Resource.left_joins(:level)).includes(:tags)
@@ -21,6 +19,7 @@ class ResourcesController < ApplicationController
   def show
     @resource = Resource.find(params[:id])
     authorize @resource
+    render layout: 'application_v2'
 
     return unless params[:watch].present? && @resource.stream?
 

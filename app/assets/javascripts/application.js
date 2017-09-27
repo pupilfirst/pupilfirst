@@ -50,3 +50,4 @@
 //= require home
 //= require startups
 //= require team_members
+//= require resources

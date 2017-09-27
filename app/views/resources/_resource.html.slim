@@ -1,5 +1,5 @@
 .col-lg-4.col-md-6
-  .resource.content-box
+  .resource-box.content-box.pb-0
     .resource-thumbnail
       - if resource.thumbnail.present?
         = image_tag resource.thumbnail.url
@@ -11,9 +11,10 @@
           | Level Exclusive
 
     .resource-content
-      h3.m-b-2
+      h4.mb-3
         = link_to truncate( resource.title, length: 50, separator: ' ' ), resource
       .description
         = simple_format resource.description
       = render 'tags', resource: resource, fade: true
     == render 'links', resource: resource, playing: false
+    = link_to 'Read More', resource, class: 'resource-box__read-more font-semibold text-center'

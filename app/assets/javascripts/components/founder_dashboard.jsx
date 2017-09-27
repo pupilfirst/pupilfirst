@@ -99,7 +99,7 @@ class FounderDashboard extends React.Component {
 
   targetDetails(targetId, targetType) {
     // Chores should be picked from the list of targets.
-    if(targetType === 'chore') {
+    if (targetType === 'chore') {
       targetType = 'target'
     }
 
@@ -142,7 +142,7 @@ class FounderDashboard extends React.Component {
 
         {this.state.timelineBuilderVisible &&
         <TimelineBuilder timelineEventTypes={this.props.timelineEventTypes}
-          facebookShareEligibility={this.props.facebookShareEligibility}
+          facebookShareEligibility={this.props.facebookShareEligibility} testMode={this.props.testMode}
           authenticityToken={this.props.authenticityToken} targetSubmissionCB={this.handleTargetSubmission}
           closeTimelineBuilderCB={this.closeTimelineBuilder} targetId={this.state.timelineBuilderParams.targetId}
           selectedTimelineEventTypeId={this.state.timelineBuilderParams.selectedTimelineEventTypeId}/>
@@ -173,5 +173,6 @@ FounderDashboard.propTypes = {
   maxLevelNumber: React.PropTypes.number,
   programLevels: React.PropTypes.object,
   initialTargetId: React.PropTypes.number,
-  initialTargetType: React.PropTypes.string
+  initialTargetType: React.PropTypes.string,
+  testMode: React.PropTypes.bool
 };

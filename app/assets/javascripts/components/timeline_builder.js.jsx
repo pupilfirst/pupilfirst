@@ -6,7 +6,8 @@ const TimelineBuilder = React.createClass({
     facebookShareEligibility: React.PropTypes.string,
     authenticityToken: React.PropTypes.string,
     closeTimelineBuilderCB: React.PropTypes.func,
-    targetSubmissionCB: React.PropTypes.func
+    targetSubmissionCB: React.PropTypes.func,
+    testMode: React.PropTypes.bool
   },
 
   getInitialState: function () {
@@ -358,9 +359,19 @@ const TimelineBuilder = React.createClass({
     return moment().format('YYYY-MM-DD');
   },
 
+  modalClasses: function () {
+    let classes = 'timeline-builder modal';
+
+    if (!this.props.testMode) {
+      classes += ' fade';
+    }
+
+    return classes;
+  },
+
   render: function () {
     return (
-      <div className="timeline-builder modal fade">
+      <div className={this.modalClasses()}>
         <div className="modal-dialog timeline-builder__popup">
           <div className="modal-content timeline-builder__popup-content">
             <div className="timeline-builder__popup-body">

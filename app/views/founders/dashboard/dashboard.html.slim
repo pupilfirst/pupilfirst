@@ -28,10 +28,11 @@
     completionInstruction: image_path('founders/dashboard/target-overlay-instruction-icon.svg'),
     backButton: image_path('founders/dashboard/target-overlay-back-icon.svg') }
 
-  == react_component('FounderDashboard', @react_data.merge(authenticityToken: form_authenticity_token, iconPaths: icon_paths))
+  == react_component('FounderDashboard', @react_data.merge(authenticityToken: form_authenticity_token, iconPaths: icon_paths, testMode: Rails.env.test?))
 
 == render 'view-embed'
-/== render 'timeline_builder'
+
 - if @startup.level != Level.zero
   == render 'performance_overview'
+
 == render 'startup_restart_form'

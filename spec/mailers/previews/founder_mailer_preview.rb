@@ -10,4 +10,9 @@ class FounderMailerPreview < ActionMailer::Preview
     founder.invitation_token = 'TEST_TOKEN_VALUE'
     FounderMailer.invite(founder, Startup.first)
   end
+
+  def slack_removal
+    founder = Founder.first
+    FounderMailer.slack_removal(founder)
+  end
 end

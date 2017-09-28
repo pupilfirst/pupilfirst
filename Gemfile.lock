@@ -438,8 +438,6 @@ GEM
       activerecord
       kaminari-core (= 1.0.1)
     kaminari-core (1.0.1)
-    knapsack (1.14.1)
-      rake
     koala (2.5.0)
       addressable
       faraday
@@ -870,7 +868,6 @@ DEPENDENCIES
   jquery-rails (~> 4.3)
   jspdf-rails (~> 1.0)
   kaminari (~> 1.0)
-  knapsack (~> 1.13)
   koala (~> 2.2)
   kramdown (~> 1.13)
   letter_opener_web (~> 1.3)

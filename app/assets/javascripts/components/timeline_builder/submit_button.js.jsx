@@ -25,7 +25,7 @@ class TimelineBuilderSubmitButton extends React.Component {
   submissionState() {
     if (this.props.submissionSuccessful) {
       return 'done';
-    } else if (this.props.hasSubmissionError) {
+    } else if (this.props.submissionError === '5XX' || this.props.submissionError === 'other') {
       return 'error';
     } else if (this.props.submissionProgress == 100) {
       return 'processing';
@@ -51,7 +51,7 @@ class TimelineBuilderSubmitButton extends React.Component {
   buttonClasses() {
     let classes = "btn btn-with-icon text-uppercase js-timeline-builder__submit-button";
 
-    if (this.props.hasSubmissionError) {
+    if (_.isString(this.props.submissionError) && this.props.submissionError !== 'offline') {
       return classes + ' btn-danger';
     } else {
       return classes + ' btn-primary';
@@ -73,17 +73,37 @@ class TimelineBuilderSubmitButton extends React.Component {
     }
   }
 
+  errorContent() {
+    switch (this.props.submissionError) {
+      case '5XX':
+        return "Oops! Something went wrong. The SV.CO team has been notified of this error. Please reload the page and try again, or contact us on Slack to speed us up!";
+      case 'offline':
+        return "You are not connected to the internet. Please check your internet connection and try again.";
+      default:
+        return "An unexpected error has occurred. Please refresh your page and try again. If this persists, please reach out to the SV.CO team for help."
+    }
+  }
+
+  errorTitle() {
+    switch (this.props.submissionError) {
+      case 'offline':
+        return "You're Offline";
+      default:
+        return "Unexpected Error";
+    }
+  }
+
   render() {
     return (
       <div className="timeline-builder__submit-container timeline-builder__select-section-tab">
-        <button type="submit" disabled={ this.submitDisabled() } className={ this.buttonClasses() }
-                onClick={ this.handleSubmit } data-title="Unexpected Error"
-                data-content="Oops! Something went wrong. The SV.CO team has been notified of this error. Please reload the page and try again, or contact us on Slack to speed us up!"
-                data-placement="bottom" data-trigger="manual">
-          { this.iconClasses() &&
-          <i className={ this.iconClasses() }/>
+        <button type="submit" disabled={this.submitDisabled()} className={this.buttonClasses()}
+          onClick={this.handleSubmit} data-title={this.errorTitle()}
+          data-content={this.errorContent()}
+          data-placement="bottom" data-trigger="manual">
+          {this.iconClasses() &&
+          <i className={this.iconClasses()}/>
           }
-          { this.submitLabel() }
+          {this.submitLabel()}
         </button>
       </div>
     )
@@ -93,6 +113,6 @@ class TimelineBuilderSubmitButton extends React.Component {
 TimelineBuilderSubmitButton.propTypes = {
   submissionProgress: React.PropTypes.number,
   submitCB: React.PropTypes.func,
-  hasSubmissionError: React.PropTypes.bool,
+  submissionError: React.PropTypes.string,
   submissionSuccessful: React.PropTypes.bool,
 };

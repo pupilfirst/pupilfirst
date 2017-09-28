@@ -1,0 +1,7 @@
+---
+timestamp: '2017-09-27T08:30:22Z'
+title: Prevent timeline builder modal from fading in when testing.
+trello: https://trello.com/c/85O6jT1o
+private: true
+description: This should improve reliability of tests that involve clicking inside
+  the modal.

@@ -13,6 +13,8 @@ module Startups
       if product_name_changed
         @startup.founders.each { |founder| Founders::UpdateSlackNameJob.perform_later(founder) }
       end
+
+      true
     end
   end
 end

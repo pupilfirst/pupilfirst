@@ -35,7 +35,7 @@ module PublicSlack
 
     # Boundaries of the pruning window. Modify this to change grace periods.
     def pruning_window
-      [4.days.ago.beginning_of_day..4.days.ago.end_of_day]
+      4.days.ago.beginning_of_day..4.days.ago.end_of_day
     end
 
     # Retrieve list of private groups and return an array of their group ids.

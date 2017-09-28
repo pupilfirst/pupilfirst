@@ -4,9 +4,56 @@
   background-color: #2A2826;
 }
 
-.teaser-container__loading-img {
-  width: 30%;
-  position: absolute;
-  top: 20%;
-  left: 35%;
+.teaser-container__box {
+  position: relative;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  .teaser-container__text {
+    fill: none;
+    stroke-width: 1;
+    stroke-linejoin: round;
+    stroke-dasharray: 70 330;
+    stroke-dashoffset: 0;
+    animation: stroke 6s infinite linear;
+    font-size: 4rem;
+
+    &:nth-child(5n + 1) {
+      stroke: #F2385A;
+      animation-delay: -1.2s;
+    }
+    &:nth-child(5n + 2) {
+      stroke: #F5A503;
+      animation-delay: -2.4s;
+    }
+
+    &:nth-child(5n + 3) {
+      stroke: #E9F1DF;
+      animation-delay: -3.6s;
+    }
+
+    &:nth-child(5n + 4) {
+      stroke: #56D9CD;
+      animation-delay: -4.8s;
+    }
+
+    &:nth-child(5n + 5) {
+      stroke: #3AA1BF;
+      animation-delay: -6s;
+    }
+  }
+
+  @keyframes stroke {
+    100% {
+      stroke-dashoffset: -400;
+    }
+  }
+  svg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
 }

@@ -177,12 +177,9 @@
                   = image_tag 'founders/profile/slack-logo.png', class: 'img-fluid'
                 .activity-count-block
                   h2.font-weight-300
-                    = @founder.public_slack_messages.where(created_at: @founder.activity_date_range).count
+                    = @founder.public_slack_messages.count
                     span messages
-                  p
-                    = @founder.activity_timeline_start_date.strftime '%b %d, %Y'
-                    ' &nbsp;&mdash;
-                    = @founder.activity_timeline_end_date.strftime '%b %d, %Y'
+                  p From #{@founder.created_at.strftime '%b %d, %Y'}
             .karma-points
               .all-activity-head.green-head
                 h3.font-weight-400 Karma Points
@@ -191,9 +188,6 @@
                   = image_tag 'founders/profile/karma-logo.png', class: 'img-fluid'
                 .activity-count-block
                   h2.font-weight-300
-                    = @founder.karma_points.where(created_at: @founder.activity_date_range).sum(:points)
+                    = @founder.karma_points.sum(:points)
                     span points
-                  p
-                    = @founder.activity_timeline_start_date.strftime '%b %d, %Y'
-                    ' &nbsp;&mdash;
-                    = @founder.activity_timeline_end_date.strftime '%b %d, %Y'
+                  p From #{@founder.created_at.strftime '%b %d, %Y'}

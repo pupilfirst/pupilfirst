@@ -7,7 +7,7 @@
 
 // Badge
 .resource-tags__badge {
-  border: 1px solid $gray-border;
+  border: 1px solid darken($gray-border, 20%);
   color: $light-grey-text;
   background-color: $primary-background;
   font-size: 0.75rem;

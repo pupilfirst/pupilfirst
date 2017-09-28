@@ -10,15 +10,3 @@
   color: white;
   font-weight: bold;
 }
-
-.resource-description-and-links {
-  max-width: 870px;
-
-  @include media-breakpoint-down(lg) {
-    max-width: 670px;
-  }
-
-  @include media-breakpoint-down(md) {
-    max-width: 450px;
-  }
-}

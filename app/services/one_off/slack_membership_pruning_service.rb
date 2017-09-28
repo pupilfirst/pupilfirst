@@ -1,6 +1,8 @@
 module OneOff
   # This one-off service is a simple modification of PublicSlack::PruneMembershipService. The pruning window has been replaced with a single expiration date threshold.
   class SlackMembershipPruningService
+    include Loggable
+
     def initialize
       @pruned_founders = []
     end

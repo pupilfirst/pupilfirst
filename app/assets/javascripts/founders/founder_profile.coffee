@@ -1,17 +1,22 @@
 # //= require bootstrap-tabcollapse
 
 $(document).on 'turbolinks:load', ->
+
+setupCalendarTabCollapse = ->
   $('#activityTab').tabCollapse
     tabsClass: 'd-lg-block',
     accordionClass: 'd-lg-none'
 
-  $('#complete-profile-tooltip').tooltip
+setupCompleteProfileTooltip = ->
+  $('#complete-profile-tooltip').tooltip()
 
-$(document).on 'mouseenter', '.course-tooltip', ->
-  $this = $(this)
+setupCourseTooltip = ->
+  $('.course-tooltip').tooltip
+    placement: 'bottom'
+    trigger: 'hover'
 
-  if @offsetWidth < @scrollWidth and !$this.attr('title')
-    $this.tooltip
-      title: $this.text()
-      placement: 'bottom'
-    $this.tooltip 'show'
+$(document).on 'turbolinks:load', ->
+  if $('#founder__founder-profile')
+    setupCalendarTabCollapse()
+    setupCompleteProfileTooltip()
+    setupCourseTooltip()

@@ -1,0 +1,22 @@
+.resource-links {
+  position: relative;
+
+  a {
+    &:first-child {
+      margin-right: 20px;
+    }
+
+    @include media-breakpoint-down(lg) {
+      padding: 6px 15px;
+
+      &:first-child {
+        margin-right: 10px;
+      }
+    }
+
+    @include media-breakpoint-down(xs) {
+      display: inline-block;
+      width: auto;
+    }
+  }
+}

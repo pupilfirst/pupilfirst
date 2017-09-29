@@ -1,19 +1,24 @@
 require 'rails_helper'
 
-describe Founder do
-  describe '#activity_timeline' do
-    include ActiveSupport::Testing::TimeHelpers
+describe Founders::ActivityTimelineService do
+  include ActiveSupport::Testing::TimeHelpers
 
+  subject { described_class.new(founder, to) }
+
+  let(:startup) { create :startup }
+  let(:founder) { startup.team_lead }
+  let(:to) { nil }
+
+  # Use this as reference time (replacement for Time.now).
+  let(:reference_time) { Time.parse 'Tue, 26 Jan 2016 02:00:00 IST +05:30' }
+
+  before do
+    founder.update!(created_at: reference_time - 1.year)
+  end
+
+  describe '#activities' do
     it 'returns activity count by month and week' do
-      # Use this as reference time (replacement for Time.now).
-      reference_time = Time.parse 'Tue, 26 Jan 2016 02:00:00 IST +05:30'
-
       travel_to(reference_time) do
-        # Set up the environment.
-        startup = create :startup
-        founder = startup.founders.first
-        founder.update!(created_at: 1.year.ago)
-
         # Events we expect should be counted in the timeline.
         5.times { create :public_slack_message, founder: founder, created_at: 1.month.ago }
         kp_3_weeks_ago = create :karma_point, founder: founder, created_at: 3.weeks.ago
@@ -28,12 +33,6 @@ describe Founder do
 
         # The expected response.
         expected_activity_timeline = {
-          'June' => {
-            counts: { 1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0 }
-          },
-          'July' => {
-            counts: { 1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0 }
-          },
           'August' => {
             counts: { 1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0, 6 => 0 }
           },
@@ -64,7 +63,7 @@ describe Founder do
           }
         }
 
-        expect(founder.activity_timeline).to eq(expected_activity_timeline)
+        expect(subject.activities).to eq(expected_activity_timeline)
       end
     end
   end

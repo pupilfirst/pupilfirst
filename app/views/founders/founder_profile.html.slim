@@ -1,6 +1,6 @@
 - content_for :head
-  title SV.CO Founder Profile for #{@founder.fullname}
-  meta name="description" content="This is a detailed founder profile for #{@founder.fullname}, includes bio, resume, activity on Public Slack and Karma Points earned."
+title SV.CO Founder Profile for #{@founder.fullname}
+meta name="description" content="This is a detailed founder profile for #{@founder.fullname}, includes bio, resume, activity on Public Slack and Karma Points earned."
 
 #founder__founder-profile
 
@@ -119,11 +119,23 @@
             li.activity-high
           span More
       .activity-content
+        - if @timeline.more_in_past?
+          = link_to "?to=#{(@timeline.past_date)}", class: 'btn btn-secondary founder-profile__activity-browse-button' do
+            i.fa.fa-backward
+            | &nbsp;Previous
+
+        - if @timeline.more_in_future?
+          = link_to "?to=#{@timeline.future_date}", class: 'btn btn-secondary founder-profile__activity-browse-button' do
+            i.fa.fa-forward
+            | &nbsp;Next
+
+        - activities = @timeline.activities
+
         .activity-calendar
           ul#activityTab.month-section.list-unstyled.nav.d-none
-            - @timeline.each do |month, data|
+            - activities.each do |month, data|
               li
-                a.d-flex.justify-content-between data-toggle="tab" href="##{month}" class="#{month == @timeline.keys.last ? 'active' : ''}"
+                a.d-flex.justify-content-between data-toggle="tab" href="##{month}" class="#{month == activities.keys.last ? 'active' : ''}"
                   span.d-flex
                     .month-name = month
                     - data[:counts].each do |week_number, count_for_week|
@@ -132,8 +144,8 @@
                   span.arrow
         .row
           .col-lg-8.tab-content
-            - @timeline.each do |month, data|
-              .tab-pane id=month class="#{month == @timeline.keys.last ? 'active in' : ''}"
+            - activities.each do |month, data|
+              .tab-pane id=month class="#{month == activities.keys.last ? 'active in' : ''}"
                 - if data[:list].present?
                   .timeline
                     - data[:list].each do |data_entry|

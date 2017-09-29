@@ -1,17 +1,6 @@
 require 'rails_helper'
 
 describe Founder do
-  describe '#remove_from_startup!' do
-    it 'disassociates a founder from startup completely' do
-      startup = create :startup
-      founder = startup.founders.first
-      founder.remove_from_startup!
-      founder.reload
-      expect(founder.startup).to eq nil
-      expect(startup.team_lead_id).to_not eq founder.id
-    end
-  end
-
   describe '#activity_timeline' do
     include ActiveSupport::Testing::TimeHelpers
 

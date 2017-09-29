@@ -168,12 +168,6 @@ class Founder < ApplicationRecord
     display_name
   end
 
-  def remove_from_startup!
-    team_lead? ? startup.update!(team_lead: nil) : nil
-    self.startup_id = nil
-    save! validate: false
-  end
-
   def self.valid_roles
     %w[product engineering design]
   end
@@ -266,16 +260,6 @@ class Founder < ApplicationRecord
     return 'Write a one-liner about yourself!' if about.blank?
     return 'Upload your legal ID proof!' if identification_proof.blank?
     return 'Submit a resume to your timeline to complete your profile!' if resume_link.blank?
-  end
-
-  # Make sure a new team lead is assigned before destroying the present one
-  before_destroy :assign_new_team_lead
-
-  def assign_new_team_lead
-    return unless team_lead? && startup.present?
-
-    team_lead_candidate = startup.founders.where.not(id: id).first
-    startup.update!(team_lead: team_lead_candidate)
   end
 
   # Should we give the founder a tour of the founder dashboard? If so, we shouldn't give it again.

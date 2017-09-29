@@ -1,6 +1,8 @@
 ActiveAdmin.register Founder do
   include DisableIntercom
 
+  actions :all, except: [:destroy]
+
   controller do
     def scoped_collection
       super.includes :startup
@@ -235,7 +237,7 @@ ActiveAdmin.register Founder do
 
   member_action :remove_from_startup, method: :post do
     founder = Founder.friendly.find params[:id]
-    founder.remove_from_startup!
+    Founders::RemoveFromStartupService.new(founder).execute
     redirect_to action: :show
   end
 

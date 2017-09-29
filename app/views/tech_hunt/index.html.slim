@@ -1,19 +1,10 @@
 head
   title SV.CO Tech Hunt
-  meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
-
+  meta name="description" content="SV.CO Hunt for tech-geeks"
   / TODO: Built a layout for all hunt pages.
   = stylesheet_link_tag 'application_v2', media: 'all', 'data-turbolinks-track' => 'reload'
-
 .teaser-container
   .teaser-container__box
-    / = image_tag 'tech_hunt/loading.gif', class: 'teaser-container__loading-img img-fluid'
-    svg viewbox=("0 0 600 300")
-      symbol#teaser-text
-        text dy=".35em" text-anchor="middle" x="50%" y="50%"
-          | Coming Soon...
-      use.teaser-container__text xlink:href="#teaser-text"
-      use.teaser-container__text xlink:href="#teaser-text"
-      use.teaser-container__text xlink:href="#teaser-text"
-      use.teaser-container__text xlink:href="#teaser-text"
-      use.teaser-container__text xlink:href="#teaser-text"
+    = image_tag 'tech_hunt/tech-loading.gif', class: 'teaser-container__loading-img img-fluid'
+    .teaser-container__text
+      | Coming soon

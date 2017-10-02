@@ -1,5 +1,7 @@
 module Founders
   class ActivityTimelineService
+    include Loggable
+
     def initialize(founder, to)
       @founder = founder
       @to = to
@@ -11,6 +13,8 @@ module Founders
         @founder.public_slack_messages.where(created_at: time_range)
 
       sorted_activity = all_activity.sort_by(&:created_at)
+
+      log "Blank Activity Timeline: #{blank_activity_timeline.to_json}"
 
       sorted_activity.each_with_object(blank_activity_timeline) do |activity, timeline|
         if activity.is_a? PublicSlackMessage

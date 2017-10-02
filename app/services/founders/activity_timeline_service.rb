@@ -132,6 +132,8 @@ module Founders
     end
 
     def increment_activity_count(timeline, month, week)
+      log "Increment activity count for month #{month}, week #{week}"
+
       timeline[month][:counts][week] ||= 0
       timeline[month][:counts][week] += 1
     end

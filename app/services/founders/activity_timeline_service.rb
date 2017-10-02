@@ -14,8 +14,6 @@ module Founders
 
       sorted_activity = all_activity.sort_by(&:created_at)
 
-      log "Blank Activity Timeline: #{blank_activity_timeline.to_json}"
-
       sorted_activity.each_with_object(blank_activity_timeline) do |activity, timeline|
         if activity.is_a? PublicSlackMessage
           add_public_slack_message_to_timeline(activity, timeline)
@@ -93,7 +91,11 @@ module Founders
     end
 
     def time_range
-      @time_range ||= (start_date.to_time.beginning_of_month..end_date.to_time.end_of_month)
+      @time_range ||= begin
+        start_time = start_date.in_time_zone('Asia/Calcutta').beginning_of_month
+        end_time = end_date.in_time_zone('Asia/Calcutta').end_of_month
+        (start_time..end_time)
+      end
     end
 
     def month_delta(from, to)
@@ -132,8 +134,6 @@ module Founders
     end
 
     def increment_activity_count(timeline, month, week)
-      log "Increment activity count for month #{month}, week #{week}"
-
       timeline[month][:counts][week] ||= 0
       timeline[month][:counts][week] += 1
     end

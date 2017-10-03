@@ -1,9 +1,9 @@
-.filter-box__container.m-b-1.p-y-1
+.filter-box__container.mt-4
   = simple_form_for :startups_filter, url: startups_path, method: :get do |f|
     .filter-box.row
-      .col-md-3.filter-dropdown
+      .col-md-3
         = f.input :level, collection: @levels, label_method: ->(level) { level.display_name }, include_blank: 'Any', label: 'Level', required: false, input_html: { class: 'filter-dropdown__select' }, selected: params.dig(:startups_filter, :level)
-      .col-md-3.filter-dropdown
+      .col-md-3
         = f.input :category, collection: @categories, include_blank: 'Any', label: 'Category', required: false, input_html: { class: 'filter-dropdown__select' }, selected: params.dig(:startups_filter, :category)
       .col-md-6
         = submit_tag 'FILTER', class: 'btn btn-primary filter-form-btn'

@@ -21,6 +21,9 @@ module PublicSlack
     def expired_founders
       @expired_founders ||= begin
         expired_startups = candidate_payments.each_with_object([]) do |payment, startups_array|
+          # Skip if the payment does not have an associated startup (for eg: an archived payment).
+          next if payment.startup.blank?
+
           startups_array << payment.startup if payment.startup.active_payment == payment
         end
 
@@ -28,7 +31,7 @@ module PublicSlack
       end
     end
 
-    # All 'paid' payments which expire within the pruning window
+    # All 'paid' payments which expire within the pruning window.
     def candidate_payments
       Payment.paid.where(billing_end_at: pruning_window)
     end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170919094613) do
+ActiveRecord::Schema.define(version: 20171003150744) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -353,6 +353,19 @@ ActiveRecord::Schema.define(version: 20170919094613) do
     t.datetime "updated_at"
     t.text "notes"
     t.index ["founder_id"], name: "index_platform_feedback_on_founder_id"
+  end
+
+  create_table "players", force: :cascade do |t|
+    t.string "name"
+    t.string "phone"
+    t.bigint "college_id"
+    t.string "college_text"
+    t.integer "stage", default: 0
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["college_id"], name: "index_players_on_college_id"
+    t.index ["user_id"], name: "index_players_on_user_id"
   end
 
   create_table "prospective_applicants", id: :serial, force: :cascade do |t|
@@ -736,6 +749,8 @@ ActiveRecord::Schema.define(version: 20170919094613) do
   add_foreign_key "founders", "users"
   add_foreign_key "payments", "founders"
   add_foreign_key "payments", "startups"
+  add_foreign_key "players", "colleges"
+  add_foreign_key "players", "users"
   add_foreign_key "resources", "levels"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"

@@ -1,7 +1,0 @@
----
-timestamp: '2017-09-28T09:07:46Z'
-title: Replace LimitImageResolutionValidator with RasterImageValidator.
-trello: https://trello.com/c/KaDrSTnT
-private: true
-description: This adds a check against file type in addition to existing resolution
-  check.

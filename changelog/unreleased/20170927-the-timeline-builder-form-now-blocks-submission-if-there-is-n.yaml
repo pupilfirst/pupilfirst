@@ -1,9 +1,0 @@
----
-timestamp: '2017-09-27T08:27:17Z'
-title: The _timeline builder_ form now blocks submission if there is no active internet
-  connection.
-trello: https://trello.com/c/4CjVHGc7
-private: false
-description: This introduces three separate error states for the submit button - handling
-  offline, 5xx and other error states.
-category: ui

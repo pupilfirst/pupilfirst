@@ -1,9 +1,0 @@
----
-timestamp: '2017-10-03T06:14:23Z'
-title: Fixed occasional crashes on the founder profile page.
-trello: https://trello.com/c/gaUNShoK
-private: false
-description: This was caused by converting date to time without accounting for timezone
-  - leading to presence of entries in the result from outside of the expected time
-  period.
-category: bugfix

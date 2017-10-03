@@ -1,8 +1,0 @@
----
-timestamp: '2017-10-03T06:58:00Z'
-title: Replaced the Founder#remove_from_startup! with a corresponding service.
-trello: https://trello.com/c/ZwotgUGc
-private: true
-description: A Founders::RemoveFromStartupService was implemented and used in the
-  admin side. A related (now stale) before_destroy hook was removed from the Founder
-  model.

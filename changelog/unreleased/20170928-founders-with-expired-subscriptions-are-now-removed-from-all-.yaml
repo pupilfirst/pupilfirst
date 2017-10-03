@@ -1,9 +1,0 @@
----
-timestamp: '2017-09-28T06:50:58Z'
-title: Founders with expired subscriptions are now removed from all private groups
-  on Slack.
-trello: https://trello.com/c/W9TiiVx7
-private: false
-description: A grace period of 3 days from susbcription is allowed before removal.
-  A daily rake task is scheduled at Heroku for the removal.
-category: feature

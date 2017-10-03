@@ -227,5 +227,6 @@ Rails.application.routes.draw do
   scope 'hunt', as: 'tech_hunt', controller: 'tech_hunt' do
     get '/', action: 'index'
     get 'q', action: 'question', as: 'question'
+    post 'sign_up'
   end
 end

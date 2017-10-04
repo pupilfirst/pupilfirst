@@ -3,8 +3,13 @@ head
   meta name="description" content="SV.CO Hunt for tech-geeks"
   / TODO: Built a layout for all hunt pages.
   = stylesheet_link_tag 'application_v2', media: 'all', 'data-turbolinks-track' => 'reload'
-.teaser-container
-  .teaser-container__box
-    = image_tag 'tech_hunt/tech-loading.gif', class: 'teaser-container__loading-img img-fluid'
-    .teaser-container__text
-      | Coming soon
+.hunt-home-container
+  - if @invitation_pending
+    .hunt-home__notice
+      = image_tag 'tech_hunt/loading.png', class: 'hunt-notice__img'
+      .hunt-notice__text
+        ' Your request for invite is still pending :(
+      .hunt-notice__text
+        ' Please check back later.
+      .hunt-notice__logout
+        = button_to 'Log Out', destroy_user_session_path, method: :delete, class: 'hunt-notice__logout-btn'

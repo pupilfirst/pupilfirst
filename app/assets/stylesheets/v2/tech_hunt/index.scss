@@ -1,8 +1,51 @@
-.teaser-container {
+.hunt-home-container {
   height: 100%;
   width: 100%;
   background-color: #262626;
 }
+
+.hunt-home__notice {
+  position: absolute;
+  width: 50%;
+  left: 25%;
+  height: 400px;
+  margin-top: 50px;
+  background-color: black;
+  border: 1px solid #51b848;
+  font-family: monospace;
+  color: white;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  @include media-breakpoint-down(md) {
+    width: 90%;
+    left: 5%;
+  }
+}
+
+.hunt-notice__img {
+  height: 100px;
+  margin-top: 50px;
+}
+
+.hunt-notice__text {
+  margin-top: 20px;
+}
+
+.hunt-notice__logout {
+  margin-top: 50px;
+}
+
+.hunt-notice__logout-btn {
+  color: #51b848;
+  border: 1px solid #51b848;
+  background-color: black;
+  padding: 5px;
+}
+
 .teaser-container__box {
   position: relative;
   display: flex;

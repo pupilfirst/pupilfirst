@@ -3,7 +3,13 @@ class TechHuntController < ApplicationController
 
   # GET /hunt
   def index
-    redirect_to tech_hunt_question_path if current_player.present?
+    if current_player.present?
+      if current_player.stage.positive?
+        redirect_to tech_hunt_question_path
+      else
+        @invitation_pending = true
+      end
+    end
   end
 
   # GET /hunt/q

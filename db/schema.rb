@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171003162519) do
+ActiveRecord::Schema.define(version: 20171004100421) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -265,6 +265,13 @@ ActiveRecord::Schema.define(version: 20171003162519) do
     t.index ["slug"], name: "index_founders_on_slug", unique: true
     t.index ["university_id"], name: "index_founders_on_university_id"
     t.index ["user_id"], name: "index_founders_on_user_id"
+  end
+
+  create_table "hunt_answers", force: :cascade do |t|
+    t.integer "stage"
+    t.string "answer"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "karma_points", id: :serial, force: :cascade do |t|

@@ -6,8 +6,12 @@ head
 
 .hunt-container
   .question-box-container
-    = render "question_#{@stage}"
+    = render "tech_hunt/questions/question_#{@stage}"
   .answer-box-container
     = form_for :answer, url: tech_hunt_answer_submit_path, html: { class: 'answer-box__form' } do |f|
       = f.text_field :answer, class: 'answer-box__text-field'
       = f.submit 'Submit', class: 'answer-box__submit-button'
+      - if @error
+        .answer-box__error-pane
+          i.fa.fa-exclamation-triangle
+          | &nbsp;Wrong answer! Try again.

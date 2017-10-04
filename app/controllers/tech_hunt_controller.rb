@@ -18,9 +18,19 @@ class TechHuntController < ApplicationController
 
   # POST /hunt/answer_submit
   def answer_submit
-    # answer = params[:answer][:answer]
-    # TODO: Check correctness and respond accordingly
-    raise
+    raise_not_found if current_player.blank?
+
+    @stage = current_player.stage
+
+    answer = params.dig(:answer, :answer)
+    if answer&.downcase == HuntAnswer.find_by(stage: @stage).answer.downcase
+      current_player.update!(stage: @stage + 1)
+      redirect_to tech_hunt_question_path
+      return
+    else
+      @error = true
+      render 'question'
+    end
   end
 
   # # POST /hunt/sign_up

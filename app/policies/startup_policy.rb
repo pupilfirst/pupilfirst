@@ -3,6 +3,16 @@ class StartupPolicy < ApplicationPolicy
     record.level.number.positive?
   end
 
+  def timeline_event_show?(timeline_event)
+    return true if timeline_event.verified_or_needs_improvement?
+
+    if timeline_event.founder_event?
+      timeline_event.founder.present? && timeline_event.founder == user&.founder
+    else
+      timeline_event.startup.present? && timeline_event.startup == user&.founder&.startup
+    end
+  end
+
   def update?
     # Can't see? Can't update.
     return false unless show?

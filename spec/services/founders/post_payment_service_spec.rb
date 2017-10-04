@@ -12,6 +12,11 @@ describe Founders::PostPaymentService do
   describe '#execute' do
     let(:payment) { create :payment, :paid }
 
+    before do
+      # Add slack_user_id to founders.
+      payment.startup.founders.each { |founder| founder.update!(slack_user_id: SecureRandom.uuid) }
+    end
+
     it 'invites founders back to Slack' do
       founders_count = payment.startup.founders.count
       expect(Founders::InviteToSlackChannelsService).to receive(:new).exactly(founders_count).times

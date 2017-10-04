@@ -84,7 +84,7 @@ module Founders
       first_day_of_each_month = (start_at..end_at).select { |d| d.day == 1 }
 
       first_day_of_each_month.each_with_object({}) do |first_day_of_month, blank_timeline|
-        blank_timeline[first_day_of_month.strftime('%B')] = {
+        blank_timeline[month_label(first_day_of_month)] = {
           counts: (1..WeekOfMonth.total_weeks(first_day_of_month)).each_with_object({}) { |w, o| o[w] = 0 }
         }
       end
@@ -103,7 +103,7 @@ module Founders
     end
 
     def add_public_slack_message_to_timeline(activity, timeline)
-      month = activity.created_at.strftime('%B')
+      month = month_label(activity.created_at)
 
       increment_activity_count(timeline, month, WeekOfMonth.week_of_month(activity.created_at))
 
@@ -116,7 +116,7 @@ module Founders
     end
 
     def add_timeline_event_to_timeline(activity, timeline)
-      month = activity.created_at.strftime('%B')
+      month = month_label(activity.created_at)
 
       increment_activity_count(timeline, month, WeekOfMonth.week_of_month(activity.created_at))
 
@@ -125,7 +125,7 @@ module Founders
     end
 
     def add_karma_point_to_timeline(activity, timeline)
-      month = activity.created_at.strftime('%B')
+      month = month_label(activity.created_at)
 
       increment_activity_count(timeline, month, WeekOfMonth.week_of_month(activity.created_at))
 
@@ -136,6 +136,14 @@ module Founders
     def increment_activity_count(timeline, month, week)
       timeline[month][:counts][week] ||= 0
       timeline[month][:counts][week] += 1
+    end
+
+    def month_label(time)
+      if time.month == 1 || time.month == 12
+        time.strftime("%b '%y")
+      else
+        time.strftime('%B')
+      end
     end
   end
 end

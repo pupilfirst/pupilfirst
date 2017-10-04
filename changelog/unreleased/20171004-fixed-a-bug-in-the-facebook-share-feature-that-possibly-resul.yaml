@@ -1,0 +1,7 @@
+---
+timestamp: '2017-10-04T08:59:42Z'
+title: Fixed a bug in the Facebook share feature that possibly resulted in missing
+  image and description in a shared timeline event link
+trello: https://trello.com/c/nyQ4CgO7
+private: false
+category: bugfix

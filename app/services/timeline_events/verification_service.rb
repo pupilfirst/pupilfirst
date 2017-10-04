@@ -42,10 +42,11 @@ module TimelineEvents
         @timeline_event.verify!
         update_karma_points
         update_timeline_updated_on
-        post_on_facebook if @timeline_event.share_on_facebook
         reset_startup_level if @timeline_event.timeline_event_type.end_iteration?
         update_founder_resume if @timeline_event.timeline_event_type.resume_submission?
       end
+
+      post_on_facebook if @timeline_event.share_on_facebook
     end
 
     def mark_needs_improvement

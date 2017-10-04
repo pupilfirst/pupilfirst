@@ -4,8 +4,10 @@ head
   / TODO: Built a layout for all hunt pages.
   = stylesheet_link_tag 'application_v2', media: 'all', 'data-turbolinks-track' => 'reload'
 
-body.hunt-question-body
-  .hunt-question-container
+.hunt-container
+  .question-box-container
     = render "question_#{@stage}"
-  / TODO: text box + submit button
-  .hunt-question-answer-box
+  .answer-box-container
+    = form_for :answer, url: tech_hunt_answer_submit_path, html: { class: 'answer-box__form' } do |f|
+      = f.text_field :answer, class: 'answer-box__text-field'
+      = f.submit 'Submit', class: 'answer-box__submit-button'

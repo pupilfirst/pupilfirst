@@ -45,13 +45,13 @@ describe Founders::ActivityTimelineService do
           'November' => {
             counts: { 1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0 }
           },
-          'December' => {
+          "Dec '15" => {
             counts: { 1 => 0, 2 => 0, 3 => 0, 4 => 5, 5 => 0 },
             list: [
               { type: :public_slack_message, count: 5 }
             ]
           },
-          'January' => {
+          "Jan '16" => {
             counts: { 1 => 0, 2 => 1, 3 => 1, 4 => 1, 5 => 11, 6 => 0 },
             list: [
               { type: :karma_point, karma_point: kp_3_weeks_ago },

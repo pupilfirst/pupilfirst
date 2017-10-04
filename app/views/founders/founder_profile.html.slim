@@ -125,7 +125,7 @@
             | &nbsp;Previous
 
         - if @timeline.more_in_future?
-          = link_to "?to=#{@timeline.future_date}", class: 'btn btn-secondary founder-profile__activity-browse-button' do
+          = link_to "?to=#{@timeline.future_date}", class: 'ml-md-1 btn btn-secondary founder-profile__activity-browse-button' do
             i.fa.fa-forward
             | &nbsp;Next
 
@@ -135,7 +135,7 @@
           ul#activityTab.month-section.list-unstyled.nav.d-none
             - activities.each do |month, data|
               li
-                a.d-flex.justify-content-between data-toggle="tab" href="##{month}" class="#{month == activities.keys.last ? 'active' : ''}"
+                a.d-flex.justify-content-between data-toggle="tab" href="##{month.parameterize}" class="#{month == activities.keys.last ? 'active' : ''}"
                   span.d-flex
                     .month-name = month
                     - data[:counts].each do |week_number, count_for_week|
@@ -145,7 +145,7 @@
         .row
           .col-lg-8.tab-content
             - activities.each do |month, data|
-              .tab-pane id=month class="#{month == activities.keys.last ? 'active in' : ''}"
+              .tab-pane id=month.parameterize class="#{month == activities.keys.last ? 'active in' : ''}"
                 - if data[:list].present?
                   .timeline
                     - data[:list].each do |data_entry|

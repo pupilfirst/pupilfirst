@@ -1,0 +1,9 @@
+---
+timestamp: '2017-10-04T04:39:53Z'
+title: Fixed a bug that allowed access to team event in a startup public timeline
+  though the event was pending verification
+trello: https://trello.com/c/wArOFixA
+private: true
+description: Added a policy that ensures access to team events only if verified and
+  founder events based on the user and verification status
+category: bugfix

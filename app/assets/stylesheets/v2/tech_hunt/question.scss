@@ -1,0 +1,43 @@
+.hunt-question-body {
+  background-color: #262626;
+}
+
+.hunt-question-container {
+  width: 50%;
+  height: 400px;
+  position: absolute;
+  left: 25%;
+  top: 10%;
+  background-color: black;
+  border: 1px solid #51b848;
+  font-family: monospace;
+  color: white;
+}
+
+.hunt-question-header {
+  width: 100%;
+  height: 40px;
+  padding: 10px;
+  border-bottom: 1px dashed white;
+}
+
+.hunt-question-header__level {
+  float: left;
+}
+
+.hunt-question-header__difficulty {
+  float: right;
+}
+
+.hunt-question__question-block {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.extra-large-text {
+  font-size: 3rem;
+}

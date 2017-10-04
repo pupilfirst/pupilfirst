@@ -1,0 +1,11 @@
+head
+  title SV.CO Tech Hunt
+  meta name="description" content="SV.CO Hunt for tech-geeks"
+  / TODO: Built a layout for all hunt pages.
+  = stylesheet_link_tag 'application_v2', media: 'all', 'data-turbolinks-track' => 'reload'
+
+body.hunt-question-body
+  .hunt-question-container
+    = render "question_#{@stage}"
+  / TODO: text box + submit button
+  .hunt-question-answer-box

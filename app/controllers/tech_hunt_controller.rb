@@ -46,10 +46,11 @@ class TechHuntController < ApplicationController
 
     answer = params.dig(:answer, :answer)
     if answer&.downcase == HuntAnswer.find_by(stage: @stage).answer.downcase
-      current_player.update!(stage: @stage + 1)
+      current_player.update!(stage: @stage + 1, attempts: current_player.attempts + 1)
       redirect_to tech_hunt_question_path
       return
     else
+      current_player.update!(attempts: current_player.attempts + 1)
       @error = true
       render 'question'
     end

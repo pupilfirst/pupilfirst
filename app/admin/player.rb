@@ -6,6 +6,7 @@ ActiveAdmin.register Player do
   filter :user_email_contains
   filter :name
   filter :stage
+  filter :attempts
   filter :college_name_contains
   filter :college_text
 
@@ -33,6 +34,7 @@ ActiveAdmin.register Player do
 
     column :stage
     column :showcase_link
+    column :attempts
 
     actions do |player|
       item 'Invite to Join', accept_request_admin_player_path(player), method: :post, class: 'member_link' if player.stage.zero?

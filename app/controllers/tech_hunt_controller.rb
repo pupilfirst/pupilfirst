@@ -59,7 +59,7 @@ class TechHuntController < ApplicationController
 
   # POST /unicorn
   def unicorn
-    render json: { success: true, answer: 'decacon' }
+    render json: { success: true, answer: HuntAnswer.find_by(stage: 4).answer }
   end
 
   private

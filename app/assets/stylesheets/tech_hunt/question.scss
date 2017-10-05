@@ -103,6 +103,16 @@
   margin-top: 10px;
 }
 
+.answer-box__logout-btn {
+  float: right;
+  margin-top: 1rem;
+  color: #51b848;
+  font-family: monospace;
+  border: 0;
+  background-color: #262626;
+  cursor: pointer;
+}
+
 .extra-large-text {
   font-size: 3rem;
   @include media-breakpoint-down(sm) {

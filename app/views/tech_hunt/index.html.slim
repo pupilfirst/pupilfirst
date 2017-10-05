@@ -24,6 +24,9 @@ body.hunt-home-container
             = f.submit 'Request Invite', class: 'hunt-register-form__submit-btn hunt-home__register-form-input'
       .hunt-notice__text
         ' *Provide us a link to check out your previous work, if possible :)
+      .hunt-notice__text
+        ' Already registered?
+        = link_to 'Login in instead.', new_user_session_path
 
 
 

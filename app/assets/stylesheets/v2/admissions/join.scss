@@ -20,10 +20,15 @@
 
 .apply-hero__message-text {
   color: white;
+  letter-spacing: 0.02rem;
 }
 
 .apply-hero__message-text--small {
   font-size: 1.4rem;
+}
+.apply-hero__message-subtitle {
+  color: white;
+  letter-spacing: 0.02rem;
 }
 
 .apply-partners__container {
@@ -36,19 +41,23 @@
 }
 
 .apply-partners__box {
-  max-width: 50rem;
+  max-width: 52rem;
 }
 
 .apply-partners__logo--facebook {
-  height: 40px;
+  height: 30px;
 }
 
 .apply-partners__logo--freshworks {
-  height: 35px;
+  height: 30px;
 }
 
 .apply-partners__logo--paytm {
-  height: 35px;
+  height: 26px;
+}
+
+.apply-partners__logo--tracxn {
+  height: 24px;
 }
 
 .apply-partners__text {
@@ -58,7 +67,7 @@
   letter-spacing: 0.05rem;
   border-bottom: 1px solid $gray-border;
   padding-bottom: 5px;
-  margin-bottom: 20px;
+  margin-bottom: 1rem;
 
   @include media-breakpoint-down (sm) {
     margin-bottom: 10px;

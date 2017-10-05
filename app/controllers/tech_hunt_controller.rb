@@ -1,5 +1,6 @@
 class TechHuntController < ApplicationController
   before_action :go_fullscreen
+  skip_after_action :intercom_rails_auto_include
 
   # GET /hunt
   def index

@@ -32,7 +32,21 @@ ActiveAdmin.register Player do
     end
 
     column :stage
+    column :showcase_link
 
-    actions
+    actions do |player|
+      item 'Invite to Join', accept_request_admin_player_path(player), method: :post, class: 'member_link' if player.stage.zero?
+    end
+  end
+
+  member_action :accept_request, method: :post do
+    player = Player.find params[:id]
+    player.update!(stage: 1)
+    PlayerMailer.welcome(player).deliver_later
+    redirect_back(fallback_location: admin_players_path)
+  end
+
+  action_item :accept_request, only: :show, if: proc { Player.find(params[:id]).stage.zero? } do
+    link_to 'Invite to Join', accept_request_admin_player_path(player), method: :post
   end
 end

@@ -1,13 +1,11 @@
-head
+- content_for :head
   title SV.CO Tech Hunt
   meta name="description" content="SV.CO Hunt for tech-geeks"
-  / TODO: Built a layout for all hunt pages.
-  = stylesheet_link_tag 'application_v2', media: 'all', 'data-turbolinks-track' => 'reload'
 
-.hunt-container
+body.hunt-container
   .question-box-container
     = render "tech_hunt/questions/question_#{@stage}"
-  .answer-box-container
+  .answer-box-container.my-3
     = form_for :answer, url: tech_hunt_answer_submit_path, html: { class: 'answer-box__form' } do |f|
       = f.text_field :answer, class: 'answer-box__text-field'
       = f.submit 'Submit', class: 'answer-box__submit-button'

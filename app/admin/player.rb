@@ -3,6 +3,7 @@ ActiveAdmin.register Player do
 
   actions :index, :show
 
+  filter :user_email_contains
   filter :name
   filter :stage
   filter :college_name_contains
@@ -10,7 +11,7 @@ ActiveAdmin.register Player do
 
   controller do
     def scoped_collection
-      super.includes :college
+      super.includes :college, :user
     end
   end
 

@@ -57,7 +57,8 @@ html lang='en'
       .container
         == yield
 
-    == render 'layouts/footer'
+    - unless @hide_layout_footer
+      == render 'layouts/footer'
 
     - if current_founder.try(:just_signed_in)
       == render 'layouts/analytics_data'

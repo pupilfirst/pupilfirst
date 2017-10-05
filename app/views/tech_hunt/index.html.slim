@@ -1,15 +1,29 @@
-head
+- content_for :head
   title SV.CO Tech Hunt
   meta name="description" content="SV.CO Hunt for tech-geeks"
-  / TODO: Built a layout for all hunt pages.
-  = stylesheet_link_tag 'application_v2', media: 'all', 'data-turbolinks-track' => 'reload'
-.hunt-home-container
+body.hunt-home-container
   - if @invitation_pending
     .hunt-home__notice
       = image_tag 'tech_hunt/loading.png', class: 'hunt-notice__img'
       .hunt-notice__text
-        ' Your request for invite is still pending :(
+        ' Your request for invite is under review.
       .hunt-notice__text
-        ' Please check back later.
+        ' We will email you once you are in! :)
       .hunt-notice__logout
         = button_to 'Log Out', destroy_user_session_path, method: :delete, class: 'hunt-notice__logout-btn'
+  - else
+    .hunt-home__notice
+      .hunt-notice__text.extra-large-text
+        ' SV.CO TechHunt
+      = bootstrap_form_for(@form, url: tech_hunt_register_path, layout: :horizontal, label_col: 'col-sm-3', control_col: 'col-sm-9', html: { class: 'hunt-home__register-form' }) do |f|
+        = f.text_field :name, class: 'hunt-home__register-form-input'
+        = f.text_field :email, class: 'hunt-home__register-form-input'
+        = f.text_field :showcase_link, label: 'Showcase*', class: 'hunt-home__register-form-input'
+        .row.form-group
+          .col-sm-9.ml-auto
+            = f.submit 'Request Invite', class: 'hunt-register-form__submit-btn hunt-home__register-form-input'
+      .hunt-notice__text
+        ' *Provide us a link to check out your previous work, if possible :)
+
+
+

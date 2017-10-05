@@ -1,5 +1,5 @@
 class TechHuntController < ApplicationController
-  layout false
+  before_action :go_fullscreen
 
   # GET /hunt
   def index
@@ -9,6 +9,18 @@ class TechHuntController < ApplicationController
       else
         @invitation_pending = true
       end
+    else
+      @form = TechHuntSignUpForm.new(Player.new)
+    end
+  end
+
+  # POST /hunt/register
+  def register
+    @form = TechHuntSignUpForm.new(Player.new)
+    if @form.validate(params[:tech_hunt_sign_up])
+      @form.save
+    else
+      render 'index'
     end
   end
 
@@ -51,4 +63,12 @@ class TechHuntController < ApplicationController
   #     render json: { success: false, errors: @form.errors }
   #   end
   # end
+
+  private
+
+  def go_fullscreen
+    @skip_container = true
+    @hide_layout_header = true
+    @hide_layout_footer = true
+  end
 end

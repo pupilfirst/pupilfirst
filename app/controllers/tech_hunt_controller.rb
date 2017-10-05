@@ -51,18 +51,10 @@ class TechHuntController < ApplicationController
     end
   end
 
-  # # POST /hunt/sign_up
-  # def sign_up
-  #   # TODO: Handle missing/ill-formed params[:player]
-  #
-  #   @form = TechHuntSignUpForm.new(Reform::OpenForm.new)
-  #   if @form.validate(player_params)
-  #     @form.save
-  #     render json: { success: true, next_step: 'Visit your inbox' }
-  #   else
-  #     render json: { success: false, errors: @form.errors }
-  #   end
-  # end
+  # POST /unicorn
+  def unicorn
+    render json: { success: true, answer: 'decacon' }
+  end
 
   private
 

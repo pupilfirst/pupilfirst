@@ -231,4 +231,6 @@ Rails.application.routes.draw do
     post 'answer_submit'
     # post 'sign_up'
   end
+
+  post 'unicorn', to: 'tech_hunt#unicorn'
 end

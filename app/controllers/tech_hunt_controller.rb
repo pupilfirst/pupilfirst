@@ -32,6 +32,9 @@ class TechHuntController < ApplicationController
     end
 
     @stage = current_player.stage
+
+    # Stub the hunt at level 5 for now.
+    @hide_answer_box = true if @stage == 5
   end
 
   # POST /hunt/answer_submit

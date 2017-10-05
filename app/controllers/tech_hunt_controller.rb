@@ -1,6 +1,7 @@
 class TechHuntController < ApplicationController
   before_action :go_fullscreen
   skip_after_action :intercom_rails_auto_include
+  skip_before_action :verify_authenticity_token, only: [:unicorn]
 
   # GET /hunt
   def index

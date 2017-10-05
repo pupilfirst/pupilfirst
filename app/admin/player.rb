@@ -41,7 +41,9 @@ ActiveAdmin.register Player do
 
   member_action :accept_request, method: :post do
     player = Player.find params[:id]
+    user = player.user
     player.update!(stage: 1)
+    user.regenerate_login_token if user.login_token.blank?
     PlayerMailer.welcome(player).deliver_later
     redirect_back(fallback_location: admin_players_path)
   end

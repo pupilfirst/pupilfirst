@@ -50,4 +50,5 @@
 //= require home
 //= require startups
 //= require team_members
+//= require faculty
 //= require resources

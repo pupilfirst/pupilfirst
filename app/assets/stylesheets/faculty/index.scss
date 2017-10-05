@@ -5,19 +5,13 @@
 // The prefooter shouldn't have any margin either; - appears to be unused ?
 // section#prefooter { margin-top: 0; }
 
-.faculty-container {
-  max-width: 56rem;
-}
-
 .faculty-card-info {
   text-align: center;
   padding: 1rem;
 }
 
 .faculty-card-info__content {
-  @include media-breakpoint-up(xs) {
-    min-height: 100px;
-  }
+  min-height: 100px;
 }
 
 .faculty-card-info__name {
@@ -46,7 +40,6 @@
 }
 
 .founder-profile-btn {
-  margin-top: 10px;
   display: inline-block;
   padding: 5px 10px;
   font-size: 11px;
@@ -95,13 +88,12 @@
         overflow: hidden;
         transition: all 0.3s;
 
-        @include media-breakpoint-down(sm) {
-          width: 220px;
-        }
-
         .faculty-image {
           display: block;
           position: relative;
+          display: flex;
+          align-items: start;
+          justify-content: center;
 
           &:before {
             content: '';
@@ -123,12 +115,10 @@
 
         .btn-view-profile {
           position: absolute;
-          left: 50%;
           bottom: 10px;
           text-decoration: none;
           opacity: 0;
           transition: all 0.3s;
-          transform: translateX(-50%);
           box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
           display: inline-block;
           padding: 3px 9px;
@@ -167,6 +157,7 @@
 
 .faculty-nav__tab {
   display: flex;
+  flex-wrap: nowrap;
   align-items: flex-end;
 
   .faculty-nav__tab-item {
@@ -184,6 +175,10 @@
       border: 0;
       color: $brand-secondary;
 
+      @include media-breakpoint-down(sm) {
+        padding: 0.5rem 0.5rem;
+      }
+
       &:hover {
         color: $dark-secondary;
         background-color: darken($primary-background, 3%);
@@ -192,8 +187,8 @@
       &.active {
         border: 0;
         color: $brand-primary;
-        box-shadow: 0 3px 0px 0px $light-primary;
-        background-color: $primary-background;
+        box-shadow: 0 4px 0px -1px $light-primary;
+        background-color: darken($primary-background, 2%);
       }
     }
   }
@@ -202,18 +197,23 @@
 .available-marker {
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
   position: absolute;
-  top: 205px;
-  left: 31px;
+  bottom: 10px;
   transition: all 0.5s;
   display: inline-block;
   padding: 3px 9px;
   border-radius: 20px;
   border: 1px solid $brand-primary;
   background-color: $brand-primary;
-  color: whitesmoke;
+  color: white;
   font-size: 85%;
 }
 
-.connect-link { margin-top: 8px; }
+.connect-link {
+  &.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background-color: $brand-primary;
+  }
+}
 
 .faculty-connect-modal { text-align: left; }

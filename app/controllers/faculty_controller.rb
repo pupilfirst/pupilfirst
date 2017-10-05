@@ -7,7 +7,6 @@ class FacultyController < ApplicationController
   def index
     @active_tab = params[:active_tab].present? ? params[:active_tab] : 'team'
     @skip_container = true
-    render layout: 'application_v2'
   end
 
   # GET /faculty/:slug
@@ -39,7 +38,6 @@ class FacultyController < ApplicationController
   # GET /faculty/weekly_slots/:token
   def weekly_slots
     @slot_list = create_slot_list_for @faculty
-    render layout: 'application_v2'
   end
 
   # POST /faculty/save_weekly_slots/:token

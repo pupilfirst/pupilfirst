@@ -221,9 +221,6 @@ Rails.application.routes.draw do
   # Handle redirects of short URLs.
   get 'r/:unique_key', to: 'shortened_urls#redirect', as: 'short_redirect'
 
-  # Temporary POST end-point for the tech-hunt
-  post 'unicorn', to: 'tech_hunt#unicorn'
-
   # Handle shortener-gem form URLs for a while (backward compatibility).
   get '/:unique_key', to: 'shortened_urls#redirect', constraints: { unique_key: /[0-9a-z]{5}/ }
 

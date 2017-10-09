@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171005143623) do
+ActiveRecord::Schema.define(version: 20171006063143) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -375,6 +375,18 @@ ActiveRecord::Schema.define(version: 20171005143623) do
     t.integer "attempts", default: 0
     t.index ["college_id"], name: "index_players_on_college_id"
     t.index ["user_id"], name: "index_players_on_user_id"
+  end
+
+  create_table "product_metrics", force: :cascade do |t|
+    t.string "category"
+    t.integer "value"
+    t.integer "delta_period"
+    t.integer "delta_value"
+    t.string "assignment_mode"
+    t.bigint "faculty_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["faculty_id"], name: "index_product_metrics_on_faculty_id"
   end
 
   create_table "prospective_applicants", id: :serial, force: :cascade do |t|

@@ -224,9 +224,6 @@ Rails.application.routes.draw do
   # Temporary POST end-point for the tech-hunt
   post 'unicorn', to: 'tech_hunt#unicorn'
 
-  # Handle shortener-gem form URLs for a while (backward compatibility).
-  get '/:unique_key', to: 'shortened_urls#redirect', constraints: { unique_key: /[0-9a-z]{5}/ }
-
   scope 'hunt', as: 'tech_hunt', controller: 'tech_hunt' do
     get '/', action: 'index'
     post 'register'
@@ -234,4 +231,11 @@ Rails.application.routes.draw do
     post 'answer_submit'
     # post 'sign_up'
   end
+
+  scope 'stats', controller: 'product_metrics' do
+    get '/', action: 'index'
+  end
+
+  # Handle shortener-gem form URLs for a while (backward compatibility).
+  get '/:unique_key', to: 'shortened_urls#redirect', constraints: { unique_key: /[0-9a-z]{5}/ }
 end

@@ -1,6 +1,7 @@
-.question-box
-  .question-box__header.clearfix
-    .question-header__left-pane Level: #{@stage}
-    .question-header__right-pane Difficulty: Easy
-  .question-box__content
-    = image_tag 'tech_hunt/random.jpg', class: 'img-fluid'
+.question-panel__header.clearfix
+  .question-panel-header__left-pane
+    ' Level: #{@stage}
+  .question-panel-header__right_pane
+    ' Difficulty: Easy
+.question-panel__content
+  = image_tag 'tech_hunt/random.jpg', class: 'question-panel__image'

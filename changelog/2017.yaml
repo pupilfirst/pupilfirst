@@ -1,5 +1,33 @@
 ---
 changelog:
+- timestamp: '2017-10-09T11:23:25Z'
+  changes:
+  - timestamp: '2017-10-09T11:23:19Z'
+    title: Deployed the first stage of SV.CO Tech-Hunt to attract more developers
+      to the platform.
+    trello: https://trello.com/c/cMKCrkY7
+    private: false
+    category: feature
+  - timestamp: '2017-10-04T08:59:42Z'
+    title: Fixed a bug in the Facebook share feature that possibly resulted in missing
+      image and description in a shared timeline event link
+    trello: https://trello.com/c/nyQ4CgO7
+    private: false
+    category: bugfix
+  - timestamp: '2017-10-04T08:48:32Z'
+    title: Labels on the founder profile activity graph now include the year when
+      it's either December or January.
+    trello: https://trello.com/c/ByQmSGxq
+    private: false
+    category: ui
+  - timestamp: '2017-10-04T04:39:53Z'
+    title: Fixed a bug that allowed access to team event in a startup public timeline
+      though the event was pending verification
+    trello: https://trello.com/c/wArOFixA
+    private: true
+    description: Added a policy that ensures access to team events only if verified
+      and founder events based on the user and verification status
+    category: bugfix
 - timestamp: '2017-10-03T08:32:09Z'
   changes:
   - timestamp: '2017-10-03T07:43:38Z'

@@ -1,10 +1,13 @@
 module ProductMetrics
   class CollectMetricsService
+    include Loggable
+
     def execute
-      automatic_categories.each do |category, delta_period|
+      automatic_categories do |category, delta_period|
         method_postfix = category.downcase.tr(' ', '_').strip
 
         ProductMetric.create!(
+          category: category,
           value: send("count_#{method_postfix}"),
           delta_period: delta_period
         )
@@ -15,7 +18,10 @@ module ProductMetrics
 
     def automatic_categories
       ProductMetric::VALID_CATEGORIES.each do |key, value|
-        yield key, value[:delta_period] if key[:automatic]
+        if value[:automatic]
+          log "Recording #{key}..."
+          yield key, value[:delta_period]
+        end
       end
     end
 
@@ -25,38 +31,38 @@ module ProductMetrics
     end
 
     # Number of admitted founders.
-    def count_founder
+    def count_founders
       Founder.admitted.count
     end
 
     # Number of states with admitted founders.
     def count_participating_states
-      College.joins(:founders, :state).merge(Founder.admitted).distinct(:state_id).count
+      College.joins({ founders: { startup: :level } }, :state).merge(Founder.admitted).distinct(:state_id).count
     end
 
     # Number of universities with admitted founders.
     def count_participating_universities
-      College.joins(:founders, :university).merge(Founder.admitted).distinct(:university_id).count
+      College.joins({ founders: { startup: :level } }, :university).merge(Founder.admitted).distinct(:university_id).count
     end
 
     # Number of colleges with admitted founders.
     def count_participating_colleges
-      College.joins(:founders).merge(Founder.admitted).distinct.count
+      College.joins(founders: { startup: :level }).merge(Founder.admitted).distinct.count
     end
 
-    # Number of founders before Level A.
+    # Number of founders on or before level 3.
     def count_student_explorers
-      # wip
+      Founder.joins(startup: :level).where(levels: { number: [1, 2, 3] }).count
     end
 
-    # Number of founder in Level B-C.
+    # Number of founder in Level 4 or 5.
     def count_student_alpha_engineers
-      # wip
+      Founder.joins(startup: :level).where(levels: { number: [4, 5] }).count
     end
 
-    # Number of founders in Level D-E.
+    # Number of founders in Level 6.
     def count_student_beta_engineers
-      # wip
+      Founder.joins(startup: :level).where(levels: { number: 6 }).count
     end
 
     # Number of live targets.
@@ -82,11 +88,6 @@ module ProductMetrics
     # Number of downloads of resources.
     def count_library_resource_downloads
       Resource.all.sum(:downloads)
-    end
-
-    # Time spent in days by founders on website.
-    def count_time_spent_on_website
-      Visit.joins(:founders)
     end
   end
 end

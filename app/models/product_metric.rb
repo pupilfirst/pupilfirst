@@ -12,17 +12,14 @@ class ProductMetric < ApplicationRecord
     'Student Leadership Team Members' => { automatic: false },
     'Student Coaches' => { automatic: false },
     'Targets' => { automatic: true },
-    'Faculty Sessions' => { automatic: true, delta_period: 3 },
-    'Faculty Sessions Recorded Minutes Watched' => { automatic: false },
+    'Faculty Sessions' => { automatic: true, delta_period: 6 },
     'Faculty Office Hours' => { automatic: true, delta_period: 3 },
     'Library Resources' => { automatic: true },
     'Library Resource Downloads' => { automatic: true, delta_period: 3 },
     'Slack Conversations' => { automatic: false },
     'Graduation Partners' => { automatic: false },
     'Community Architects' => { automatic: false },
-    'Blog Stories Published' => { automatic: false },
-    'Time Spent on Website' => { automatic: true, delta_period: 3 },
-    'Time Spent on Public Slack' => { automatic: false }
+    'Blog Stories Published' => { automatic: false }
   }.freeze
 
   belongs_to :faculty, optional: true

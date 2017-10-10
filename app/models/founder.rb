@@ -56,8 +56,8 @@ class Founder < ApplicationRecord
   # Custom scope to allow AA to filter by intersection of tags.
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
 
-  scope :active_on_slack, ->(since, upto) { joins(:public_slack_messages).where(public_slack_messages: { created_at: since..upto }) }
-  scope :active_on_web, ->(since, upto) { joins(user: :visits).where(visits: { started_at: since..upto }) }
+  scope :active_on_slack, ->(from, to) { joins(:public_slack_messages).where(public_slack_messages: { created_at: from..to }) }
+  scope :active_on_web, ->(from, to) { joins(user: :visits).where(visits: { started_at: from..to }) }
 
   scope :inactive, lambda {
     admitted.where(exited: false).where.not(id: active_on_slack(Time.now.beginning_of_week, Time.now)).where.not(id: active_on_web(Time.now.beginning_of_week, Time.now))
@@ -240,30 +240,8 @@ class Founder < ApplicationRecord
     end
   end
 
-  # method to return the list of active founders on slack for a given duration
-  def self.active_founders_on_slack(since:, upto: Time.now)
-    Founder.not_dropped_out.not_exited.active_on_slack(since, upto).distinct
-  end
-
-  # method to return the list of active founders on web for a given duration
-  def self.active_founders_on_web(since:, upto: Time.now)
-    Founder.not_dropped_out.not_exited.active_on_web(since, upto).distinct
-  end
-
   def any_targets?
     targets.present? || startup&.targets.present?
-  end
-
-  def latest_nps
-    platform_feedback.scored.order('created_at').last&.promoter_score
-  end
-
-  def promoter?
-    latest_nps.present? && latest_nps > 8
-  end
-
-  def detractor?
-    latest_nps.present? && latest_nps < 7
   end
 
   def facebook_token_available?

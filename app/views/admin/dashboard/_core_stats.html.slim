@@ -2,31 +2,33 @@
   .heading Core Stats
 
   .content
-    - if count_of_ps > 0
-      h6 #{promoter_score_text}
+    - if @core_stats[:nps_count] > 0
+      - nps = format("%+d", @core_stats[:nps])
+      - nps_count = pluralize(@core_stats[:nps_count], 'score')
+      h6 Net Promoter Score: #{nps} (from #{nps_count})
     hr
-    h6 Today
+    h6 Yesterday (#{1.day.ago.strftime('%B %e')})
     .user-count
-      ' Slack: #{dau_on_slack.count} (#{"%g" % ("%0.1f" % percentage_dau_on_slack)}%)
+      ' Slack: #{@core_stats[:slack][:dau]} (#{"%g" % ("%0.1f" % @core_stats[:slack][:percentage_dau])}%)
     .user-count
-      ' Web: #{dau_on_web.count} (#{"%g" % ("%0.1f" % percentage_dau_on_web)}%)
+      ' Web: #{@core_stats[:web][:dau]} (#{"%g" % ("%0.1f" % @core_stats[:web][:percentage_dau])}%)
     .user-count
-      ' Total: #{total_dau_count} (#{"%g" % ("%0.1f" % total_dau_percentage)}%)
+      ' Total: #{@core_stats[:total][:dau]} (#{"%g" % ("%0.1f" % @core_stats[:total][:percentage_dau])}%)
     .clearfix
-    h6 Weekly (#{Time.now.beginning_of_week.strftime('%B %e')} - Today)
+    h6 Last Week (#{8.days.ago.strftime('%B %e')} - #{1.day.ago.strftime('%B %e')})
     .user-count
-      ' Slack: #{wau_on_slack.count} (#{"%g" % ("%0.1f" % percentage_wau_on_slack)}%)
+      ' Slack: #{@core_stats[:slack][:wau]} (#{"%g" % ("%0.1f" % @core_stats[:slack][:percentage_wau])}%)
     .user-count
-      ' Web: #{wau_on_web.count} (#{"%g" % ("%0.1f" % percentage_wau_on_web)}%)
+        ' Web: #{@core_stats[:web][:wau]} (#{"%g" % ("%0.1f" % @core_stats[:web][:percentage_wau])}%)
     .user-count
-      ' Total: #{total_wau_count} (#{"%g" % ("%0.1f" % total_wau_percentage)}%)
-    h6 Current Month (#{Time.now.beginning_of_month.strftime('%B %d')} - Today)
+      ' Total: #{@core_stats[:total][:wau]} (#{"%g" % ("%0.1f" % @core_stats[:total][:percentage_wau])}%)
+    h6 Last Month (#{31.days.ago.strftime('%B %d')} - #{1.day.ago.strftime('%B %e')})
     .user-count
-      ' Slack: #{mau_on_slack.count} (#{"%g" % ("%0.1f" % percentage_mau_on_slack)}%)
+      ' Slack: #{@core_stats[:slack][:mau]} (#{"%g" % ("%0.1f" % @core_stats[:slack][:percentage_mau])}%)
     .user-count
-      ' Web: #{mau_on_web.count} (#{"%g" % ("%0.1f" % percentage_mau_on_web)}%)
+      ' Web: #{@core_stats[:web][:mau]} (#{"%g" % ("%0.1f" % @core_stats[:web][:percentage_mau])}%)
     .user-count
-      ' Total: #{total_mau_count} (#{"%g" % ("%0.1f" % total_mau_percentage)}%)
+      ' Total: #{@core_stats[:total][:mau]} (#{"%g" % ("%0.1f" % @core_stats[:total][:percentage_mau])}%)
   .footer-spacer
     .left-of-button.full-width
       .centered
@@ -34,7 +36,7 @@
         .label Web (WAU)
         .label Total (WAU)
       .centered
-        .sparkline-tag #{wau_trend_on_slack.join(', ')}
-        .sparkline-tag #{wau_trend_on_web.join(', ')}
-        .sparkline-tag #{wau_trend_in_total.join(', ')}
+        .sparkline-tag #{@core_stats[:slack][:wau_trend].join(', ')}
+        .sparkline-tag #{@core_stats[:web][:wau_trend].join(', ')}
+        .sparkline-tag #{@core_stats[:total][:wau_trend].join(', ')}
 

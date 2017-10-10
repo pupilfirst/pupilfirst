@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171005143623) do
+ActiveRecord::Schema.define(version: 20171010103026) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -480,6 +480,16 @@ ActiveRecord::Schema.define(version: 20171005143623) do
     t.integer "timeline_event_id"
     t.index ["faculty_id"], name: "index_startup_feedback_on_faculty_id"
     t.index ["timeline_event_id"], name: "index_startup_feedback_on_timeline_event_id"
+  end
+
+  create_table "startup_quotes", force: :cascade do |t|
+    t.string "guid"
+    t.string "link"
+    t.integer "post_count", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["guid"], name: "index_startup_quotes_on_guid"
+    t.index ["post_count"], name: "index_startup_quotes_on_post_count"
   end
 
   create_table "startups", id: :serial, force: :cascade do |t|

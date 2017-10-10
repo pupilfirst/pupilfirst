@@ -9,7 +9,8 @@ module ProductMetrics
         ProductMetric.create!(
           category: category,
           value: send("count_#{method_postfix}"),
-          delta_period: delta_period
+          delta_period: delta_period,
+          assignment_mode: ProductMetric::ASSIGNMENT_MODE_AUTOMATIC
         )
       end
     end

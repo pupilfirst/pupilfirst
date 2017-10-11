@@ -21,7 +21,7 @@ module Admin
     def nps
       promoters = latest_scored_feedback.count { |feedback| feedback.promoter_score > 8 }
       detractors = latest_scored_feedback.count { |feedback| feedback.promoter_score < 7 }
-      ((promoters - detractors).to_f / nps_count) * 100
+      nps_count.zero? ? 0 : ((promoters - detractors).to_f / nps_count) * 100
     end
 
     # Latest scored feedback per founder.
@@ -96,7 +96,7 @@ module Admin
 
     # Percentage of admitted founders for the given metric.
     def founder_percentage(metric)
-      (metric.to_f / founder_count) * 100
+      founder_count.zero? ? 0 : (metric.to_f / founder_count) * 100
     end
 
     SUBSCRIPTION_MODEL_START_DATE = Date.parse('2017-05-8').beginning_of_day

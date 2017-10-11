@@ -84,8 +84,8 @@ module Admin
 
     # Weekly Active User trend for the last 7 weeks for a specified platform.
     def wau_trend(platform)
-      7.downto(0).to_a.map do |x|
-        send("#{platform}_au_count", x.weeks.ago.beginning_of_week, x.weeks.ago.end_of_week)
+      8.downto(1).map do |x|
+        send("#{platform}_au_count", (8 * x).days.ago.beginning_of_day, (8 * x - 7).days.ago.end_of_day)
       end
     end
 

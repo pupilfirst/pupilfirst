@@ -31,9 +31,9 @@ describe Admin::CoreStatsService do
     # And the fourth founder was never active!
   end
 
-  describe '#fetch' do
+  describe '#stats' do
     it 'returns a hash containing all core stats' do
-      expect(subject.fetch).to eq(expected_stats)
+      expect(subject.stats).to eq(expected_stats)
     end
   end
 

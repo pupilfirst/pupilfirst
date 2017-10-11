@@ -1,12 +1,18 @@
+# Calculates the core stats of SV.CO.
+#
+# The calculated stats include the Net Promoter Score collected via platform feedback
+# as well as count and percentages of daily, weekly and monthly active users.
 module Admin
   class CoreStatsService
-    def fetch
+    SUBSCRIPTION_MODEL_START_DATE = Date.parse('2017-05-8').beginning_of_day.freeze
+
+    def stats
       {
         nps: nps,
         nps_count: nps_count,
-        slack: au_stats(:slack),
-        web: au_stats(:web),
-        total: au_stats(:total)
+        slack: active_user_stats(:slack),
+        web: active_user_stats(:web),
+        total: active_user_stats(:total)
       }
     end
 
@@ -14,7 +20,7 @@ module Admin
 
     # Count of founders who have given us an NPS.
     def nps_count
-      latest_scored_feedback.count
+      @nps_count ||= latest_scored_feedback.count
     end
 
     # The present NPS.
@@ -30,26 +36,28 @@ module Admin
     end
 
     # Daily, weekly and monthly active user stats on a given platform.
-    def au_stats(platform)
+    def active_user_stats(platform)
       {
-        dau: au_count(platform, :daily),
-        percentage_dau: au_percentage(platform, :daily),
-        wau: au_count(platform, :weekly),
-        percentage_wau: au_percentage(platform, :weekly),
-        mau: au_count(platform, :monthly),
-        percentage_mau: au_percentage(platform, :monthly),
+        dau: active_user_count(platform, :daily),
+        percentage_dau: active_user_percentage(platform, :daily),
+        wau: active_user_count(platform, :weekly),
+        percentage_wau: active_user_percentage(platform, :weekly),
+        mau: active_user_count(platform, :monthly),
+        percentage_mau: active_user_percentage(platform, :monthly),
         wau_trend: wau_trend(platform)
       }
     end
 
     # Count of admitted founders active on a specified platform for a specified duration.
-    def au_count(platform, duration)
-      send("#{platform}_au_count", start_time(duration))
+    def active_user_count(platform, duration)
+      send("#{platform}_active_user_count", start_time(duration))
     end
 
     # Percentage of admitted founders active on a specified platform for a specified duration.
-    def au_percentage(platform, duration)
-      founder_percentage(au_count(platform, duration))
+    def active_user_percentage(platform, duration)
+      founder_count = candidate_founders.count
+      value = active_user_count(platform, duration)
+      founder_count.zero? ? 0 : (value.to_f / founder_count) * 100
     end
 
     # Start time to count active users from for a specified duration (:daily, :weekly or :monthly).
@@ -58,48 +66,36 @@ module Admin
     end
 
     # Count of admitted founders active on Public Slack from a specified period, until yesterday.
-    def slack_au_count(start_time, end_time = 1.day.ago.end_of_day)
-      au_on_slack(start_time, end_time).distinct.count
+    def slack_active_user_count(start_time, end_time = 1.day.ago.end_of_day)
+      active_user_on_slack(start_time, end_time).distinct.count
     end
 
     # Count of admitted founders active on web from a specified period, until yesterday.
-    def web_au_count(start_time, end_time = 1.day.ago.end_of_day)
-      au_on_web(start_time, end_time).distinct.count
+    def web_active_user_count(start_time, end_time = 1.day.ago.end_of_day)
+      active_user_on_web(start_time, end_time).distinct.count
     end
 
     # Admitted founders active on Public Slack OR web in a specified window.
-    def total_au_count(start_time, end_time = 1.day.ago.end_of_day)
-      (au_on_slack(start_time, end_time) + au_on_web(start_time, end_time)).compact.uniq.count
+    def total_active_user_count(start_time, end_time = 1.day.ago.end_of_day)
+      (active_user_on_slack(start_time, end_time) + active_user_on_web(start_time, end_time)).compact.uniq.count
     end
 
     # Admitted founders active on Public Slack in a specified window.
-    def au_on_slack(start_time, end_time = 1.day.ago.end_of_day)
+    def active_user_on_slack(start_time, end_time = 1.day.ago.end_of_day)
       candidate_founders.active_on_slack(start_time, end_time)
     end
 
     # Admitted founders active on web in a specified window.
-    def au_on_web(start_time, end_time = 1.day.ago.end_of_day)
+    def active_user_on_web(start_time, end_time = 1.day.ago.end_of_day)
       candidate_founders.active_on_web(start_time, end_time)
     end
 
     # Weekly Active User trend for the last 7 weeks for a specified platform.
     def wau_trend(platform)
       8.downto(1).map do |x|
-        send("#{platform}_au_count", (8 * x).days.ago.beginning_of_day, (8 * x - 7).days.ago.end_of_day)
+        send("#{platform}_active_user_count", (8 * x).days.ago.beginning_of_day, (8 * x - 7).days.ago.end_of_day)
       end
     end
-
-    # Total number of admitted founders.
-    def founder_count
-      @founder_count ||= candidate_founders.count
-    end
-
-    # Percentage of admitted founders for the given metric.
-    def founder_percentage(metric)
-      founder_count.zero? ? 0 : (metric.to_f / founder_count) * 100
-    end
-
-    SUBSCRIPTION_MODEL_START_DATE = Date.parse('2017-05-8').beginning_of_day
 
     # Founders to be considered for calculating the metrics - includes only 'admitted' founders under the subscription model
     def candidate_founders

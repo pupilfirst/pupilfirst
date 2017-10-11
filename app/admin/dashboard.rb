@@ -4,7 +4,7 @@ ActiveAdmin.register_page 'Dashboard' do
 
     def index
       @presenter = ActiveAdmin::DashboardPresenter.new
-      @core_stats = Admin::CoreStatsService.new.fetch
+      @core_stats = Admin::CoreStatsService.new.stats
     end
   end
 

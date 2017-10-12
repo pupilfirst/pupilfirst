@@ -49,14 +49,26 @@ module PublicSlack
     private
 
     def channel_valid?(channel)
-      # Fetch list of all channels.
-      channel_list = get_json "https://slack.com/api/channels.list?token=#{@token}"
-      return false unless channel_list['ok']
+      channel.in? channel_names_and_ids(public_channels + private_groups)
+    end
 
-      # Verify channel with given name or id exists.
-      channel_names = channel_list['channels'].map { |c| '#' + c['name'] }
-      channel_ids = channel_list['channels'].map { |c| c['id'] }
-      channel.in?(channel_names + channel_ids)
+    def public_channels
+      response = get_json "https://slack.com/api/channels.list?token=#{@token}"
+
+      response['ok'] ? response['channels'] : []
+    end
+
+    def private_groups
+      response = get_json "https://slack.com/api/groups.list?token=#{@token}"
+
+      response['ok'] ? response['groups'] : []
+    end
+
+    def channel_names_and_ids(channel_list)
+      names = channel_list.map { |c| '#' + c['name'] }
+      ids = channel_list.map { |c| c['id'] }
+
+      names + ids
     end
 
     def post_to_channel(channel, message)

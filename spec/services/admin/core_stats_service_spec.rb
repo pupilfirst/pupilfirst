@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Admin::CoreStatsService do
+describe Admin::Dashboard::CoreStatsService do
   subject { described_class.new }
 
   # A couple of admitted (Level 1) startups with 2 founders each.

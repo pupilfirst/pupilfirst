@@ -13,7 +13,7 @@ ActiveAdmin.register CouponUsage do
   filter :coupon_code, as: :string
   filter :redeemed_at_not_null, as: :boolean, label: 'Redeemed'
   filter :rewarded_at_not_null, as: :boolean, label: 'Rewarded'
-  filter :referrer, collection: proc { Startup.with_referrals }
+  filter :referrer_startup, collection: -> { Startup.with_referrals }
 
   controller do
     def scoped_collection

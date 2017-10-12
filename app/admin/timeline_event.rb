@@ -7,10 +7,10 @@ ActiveAdmin.register TimelineEvent do
   filter :startup_product_name, as: :string, label: 'Product Name'
   filter :startup_name, as: :string, label: 'Startup Name'
   filter :timeline_event_type_title, as: :string
-  filter :timeline_event_type_role_eq, as: :select, collection: TimelineEventType.valid_roles, label: 'Role'
+  filter :timeline_event_type_role_eq, as: :select, collection: -> { TimelineEventType.valid_roles }, label: 'Role'
   filter :founder_name, as: :string
-  filter :status, as: :select, collection: TimelineEvent.valid_statuses
-  filter :grade, as: :select, collection: TimelineEvent.valid_grades
+  filter :status, as: :select, collection: -> { TimelineEvent.valid_statuses }
+  filter :grade, as: :select, collection: -> { TimelineEvent.valid_grades }
   filter :created_at
   filter :status_updated_at
 

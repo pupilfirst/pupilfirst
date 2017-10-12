@@ -17,7 +17,7 @@ ActiveAdmin.register AdminUser do
 
   filter :email
   filter :fullname
-  filter :admin_type, as: :select, collection: AdminUser.admin_user_types
+  filter :admin_type, as: :select, collection: -> { AdminUser.admin_user_types }
 
   form do |f|
     f.inputs 'Admin Details' do

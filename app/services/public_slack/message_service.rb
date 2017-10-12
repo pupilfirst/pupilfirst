@@ -16,9 +16,10 @@ module PublicSlack
       end
     end
 
-    def initialize
+    def initialize(unfurl_links: false)
       @token = Rails.application.secrets.slack_token
       @errors = {}
+      @unfurl_links = unfurl_links
     end
 
     def post(message:, **target)
@@ -63,7 +64,7 @@ module PublicSlack
       channel = '%23' + channel[1..-1] if channel[0] == '#'
 
       response = get_json "https://slack.com/api/chat.postMessage?token=#{@token}&channel=#{channel}&link_names=1"\
-      "&text=#{message}&as_user=true&unfurl_links=false"
+      "&text=#{message}&as_user=true&unfurl_links=#{@unfurl_links}"
       @errors[channel] = response['error'] unless response['ok']
     rescue RestClient::Exception => err
       @errors['RestClient'] = err.response.body

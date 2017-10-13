@@ -64,6 +64,8 @@ class Founder < ApplicationRecord
   }
   scope :not_exited, -> { where.not(exited: true) }
 
+  scope :subscribed, -> { joins(startup: :payments).merge(Payment.paid).where('payments.billing_end_at > ?', Time.now) }
+
   def self.with_email(email)
     where('lower(email) = ?', email.downcase).first # rubocop:disable Rails/FindBy
   end

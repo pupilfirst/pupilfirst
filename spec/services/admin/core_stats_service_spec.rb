@@ -4,7 +4,7 @@ describe Admin::Dashboard::CoreStatsService do
   subject { described_class.new }
 
   # A couple of admitted (Level 1) startups with 2 founders each.
-  let(:admitted_startups) { create_list :startup, 2 }
+  let(:admitted_startups) { create_list :startup, 2, :subscription_active }
 
   # Setup the required data:
   before do

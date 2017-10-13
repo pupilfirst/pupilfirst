@@ -99,7 +99,7 @@ module Admin
 
     # Founders to be considered for calculating the metrics - includes only 'admitted' founders under the subscription model
     def candidate_founders
-      Founder.admitted.not_dropped_out.not_exited.where('founders.created_at > ?', SUBSCRIPTION_MODEL_START_DATE)
+      Founder.subscribed.admitted.not_dropped_out.not_exited.where('founders.created_at > ?', SUBSCRIPTION_MODEL_START_DATE)
     end
   end
 end

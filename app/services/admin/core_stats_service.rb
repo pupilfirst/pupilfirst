@@ -1,8 +1,8 @@
-# Calculates the core stats of SV.CO.
-#
-# The calculated stats include the Net Promoter Score collected via platform feedback
-# as well as count and percentages of daily, weekly and monthly active users.
 module Admin
+  # Calculates the core stats of SV.CO.
+  #
+  # The calculated stats include the Net Promoter Score collected via platform feedback
+  # as well as count and percentages of daily, weekly and monthly active users.
   class CoreStatsService
     SUBSCRIPTION_MODEL_START_DATE = Date.parse('2017-05-8').beginning_of_day.freeze
 
@@ -25,14 +25,14 @@ module Admin
 
     # The present NPS.
     def nps
-      promoters = latest_scored_feedback.count { |feedback| feedback.promoter_score > 8 }
-      detractors = latest_scored_feedback.count { |feedback| feedback.promoter_score < 7 }
+      promoters = latest_scored_feedback.where('promoter_score > ?', 8).count
+      detractors = latest_scored_feedback.where('promoter_score < ?', 7).count
       nps_count.zero? ? 0 : ((promoters - detractors).to_f / nps_count) * 100
     end
 
     # Latest scored feedback per founder.
     def latest_scored_feedback
-      @latest_scored_feedback ||= PlatformFeedback.scored.select('DISTINCT ON (founder_id) *').order('founder_id, created_at DESC').to_a
+      PlatformFeedback.where(id: PlatformFeedback.select('distinct on (founder_id) id').order('founder_id, created_at desc'))
     end
 
     # Daily, weekly and monthly active user stats on a given platform.

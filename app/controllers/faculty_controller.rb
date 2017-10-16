@@ -3,18 +3,18 @@ class FacultyController < ApplicationController
   before_action :validate_faculty, except: %i[index connect show]
   before_action :require_active_subscription, only: %i[connect]
 
+  layout 'application_v2'
+
   # GET /faculty
   def index
     @active_tab = params[:active_tab].present? ? params[:active_tab] : 'team'
     @skip_container = true
-    render layout: 'application_v2'
   end
 
   # GET /faculty/:slug
   def show
     @faculty = Faculty.friendly.find(params[:id])
     @skip_container = true
-    render layout: 'application_v2'
   end
 
   # POST /faculty/:id/connect
@@ -39,7 +39,6 @@ class FacultyController < ApplicationController
   # GET /faculty/weekly_slots/:token
   def weekly_slots
     @slot_list = create_slot_list_for @faculty
-    render layout: 'application_v2'
   end
 
   # POST /faculty/save_weekly_slots/:token
@@ -50,6 +49,7 @@ class FacultyController < ApplicationController
     redirect_to action: 'slots_saved'
   end
 
+  # TODO: FacultyController#mark_unavailable should not be a GET.
   # GET /faculty/mark_unavailable/:token
   def mark_unavailable
     @faculty.connect_slots.next_week.destroy_all
@@ -60,7 +60,6 @@ class FacultyController < ApplicationController
   # GET /faculty/slots_saved/:token
   def slots_saved
     # There's nothing to load.
-    render layout: 'application_v2'
   end
 
   private

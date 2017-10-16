@@ -2,6 +2,12 @@
 changelog:
 - timestamp: '2017-10-16T10:14:20Z'
   changes:
+  - timestamp: '2017-10-16T11:49:14Z'
+    title: Removal of founders from private Slack groups are now followed by a Vocalist
+      announcement.
+    trello: https://trello.com/c/VmETXzcj
+    private: false
+    category: ui
   - timestamp: '2017-10-16T10:12:45Z'
     title: An acknowledgement is now emailed when founders submit feedback for the
       SV.CO platform.

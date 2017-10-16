@@ -85,12 +85,6 @@ To execute all tests manually, run:
 
     $ rspec
 
-### Regenerating Knapsack Reports
-
-[Knapsack](https://github.com/ArturT/knapsack) is used to split specs across CI nodes to speed up tests. To update Knapsack's report on all specs, run:
-
-    KNAPSACK_GENERATE_REPORT=true rspec
-
 ### Generating coverage report
 
 To generate spec coverage report, run:

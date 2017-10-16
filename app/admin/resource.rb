@@ -17,7 +17,7 @@ ActiveAdmin.register Resource do
     label: 'Tags',
     collection: -> { Resource.tag_counts_on(:tags).pluck(:name).sort }
 
-  filter :level, collection: proc { Level.all.order(number: :asc) }
+  filter :level, collection: -> { Level.all.order(number: :asc) }
   filter :title
   filter :description
 

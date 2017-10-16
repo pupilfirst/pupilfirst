@@ -1,30 +1,24 @@
 require 'rails_helper'
 
-describe Founder do
-  describe '#remove_from_startup!' do
-    it 'disassociates a founder from startup completely' do
-      startup = create :startup
-      founder = startup.founders.first
-      founder.remove_from_startup!
-      founder.reload
-      expect(founder.startup).to eq nil
-      expect(startup.team_lead_id).to_not eq founder.id
-    end
+describe Founders::ActivityTimelineService do
+  include ActiveSupport::Testing::TimeHelpers
+
+  subject { described_class.new(founder, to) }
+
+  let(:startup) { create :startup }
+  let(:founder) { startup.team_lead }
+  let(:to) { nil }
+
+  # Use this as reference time (replacement for Time.now).
+  let(:reference_time) { Time.parse 'Tue, 26 Jan 2016 02:00:00 IST +05:30' }
+
+  before do
+    founder.update!(created_at: reference_time - 1.year)
   end
 
-  describe '#activity_timeline' do
-    include ActiveSupport::Testing::TimeHelpers
-
+  describe '#activities' do
     it 'returns activity count by month and week' do
-      # Use this as reference time (replacement for Time.now).
-      reference_time = Time.parse 'Tue, 26 Jan 2016 02:00:00 IST +05:30'
-
       travel_to(reference_time) do
-        # Set up the environment.
-        startup = create :startup
-        founder = startup.founders.first
-        founder.update!(created_at: 1.year.ago)
-
         # Events we expect should be counted in the timeline.
         5.times { create :public_slack_message, founder: founder, created_at: 1.month.ago }
         kp_3_weeks_ago = create :karma_point, founder: founder, created_at: 3.weeks.ago
@@ -39,12 +33,6 @@ describe Founder do
 
         # The expected response.
         expected_activity_timeline = {
-          'June' => {
-            counts: { 1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0 }
-          },
-          'July' => {
-            counts: { 1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0 }
-          },
           'August' => {
             counts: { 1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0, 6 => 0 }
           },
@@ -57,13 +45,13 @@ describe Founder do
           'November' => {
             counts: { 1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0 }
           },
-          'December' => {
+          "Dec '15" => {
             counts: { 1 => 0, 2 => 0, 3 => 0, 4 => 5, 5 => 0 },
             list: [
               { type: :public_slack_message, count: 5 }
             ]
           },
-          'January' => {
+          "Jan '16" => {
             counts: { 1 => 0, 2 => 1, 3 => 1, 4 => 1, 5 => 11, 6 => 0 },
             list: [
               { type: :karma_point, karma_point: kp_3_weeks_ago },
@@ -75,7 +63,7 @@ describe Founder do
           }
         }
 
-        expect(founder.activity_timeline).to eq(expected_activity_timeline)
+        expect(subject.activities).to eq(expected_activity_timeline)
       end
     end
   end

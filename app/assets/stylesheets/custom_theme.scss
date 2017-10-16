@@ -310,7 +310,7 @@ form {
       font-size: 0.875rem;
       padding: 0.5rem 0.75rem;
       line-height: normal;
-      border-color: $gray-border !important;
+      border-color: $gray-border;
 
       &:focus {
         border-color: lighten($light-secondary, 20%);

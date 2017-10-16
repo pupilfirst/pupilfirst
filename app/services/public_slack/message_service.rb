@@ -16,14 +16,17 @@ module PublicSlack
       end
     end
 
-    def initialize
+    def initialize(unfurl_links: false)
       @token = Rails.application.secrets.slack_token
       @errors = {}
+      @unfurl_links = unfurl_links
     end
 
     def post(message:, **target)
+      log "Posting message to target: #{target.keys}"
+
       if self.class.mock?
-        log "Skipping post because of @mock flag:\n\n#{message}\n\nto targets: #{target.keys}"
+        log "Skipping post because of @mock flag:\n\n#{message}\n\nto target: #{target.keys}"
         return
       end
 
@@ -48,14 +51,26 @@ module PublicSlack
     private
 
     def channel_valid?(channel)
-      # Fetch list of all channels.
-      channel_list = get_json "https://slack.com/api/channels.list?token=#{@token}"
-      return false unless channel_list['ok']
+      channel.in? channel_names_and_ids(public_channels + private_groups)
+    end
 
-      # Verify channel with given name or id exists.
-      channel_names = channel_list['channels'].map { |c| '#' + c['name'] }
-      channel_ids = channel_list['channels'].map { |c| c['id'] }
-      channel.in?(channel_names + channel_ids)
+    def public_channels
+      response = get_json "https://slack.com/api/channels.list?token=#{@token}"
+
+      response['ok'] ? response['channels'] : []
+    end
+
+    def private_groups
+      response = get_json "https://slack.com/api/groups.list?token=#{@token}"
+
+      response['ok'] ? response['groups'] : []
+    end
+
+    def channel_names_and_ids(channel_list)
+      names = channel_list.map { |c| '#' + c['name'] }
+      ids = channel_list.map { |c| c['id'] }
+
+      names + ids
     end
 
     def post_to_channel(channel, message)
@@ -63,7 +78,7 @@ module PublicSlack
       channel = '%23' + channel[1..-1] if channel[0] == '#'
 
       response = get_json "https://slack.com/api/chat.postMessage?token=#{@token}&channel=#{channel}&link_names=1"\
-      "&text=#{message}&as_user=true&unfurl_links=false"
+      "&text=#{message}&as_user=true&unfurl_links=#{@unfurl_links}"
       @errors[channel] = response['error'] unless response['ok']
     rescue RestClient::Exception => err
       @errors['RestClient'] = err.response.body

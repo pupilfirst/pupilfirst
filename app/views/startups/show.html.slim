@@ -5,7 +5,7 @@
   - if @timeline_event_for_og.present?
     meta property="fb:app_id" content=ENV['FACEBOOK_KEY']
     meta property="og:type" content="article"
-    /meta property="og:rich_attachment" content="true"
+    meta property="og:url" content=@timeline_event_for_og.share_url
     meta property="og:title" content="#{@timeline_event_for_og.title} from #{@timeline_event_for_og.startup.product_name}"
     meta property="og:description" content=@timeline_event_for_og.description
     meta property="og:site_name" content="SV.CO"

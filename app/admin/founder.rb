@@ -1,6 +1,8 @@
 ActiveAdmin.register Founder do
   include DisableIntercom
 
+  actions :all, except: [:destroy]
+
   controller do
     def scoped_collection
       super.includes :startup
@@ -31,10 +33,10 @@ ActiveAdmin.register Founder do
     label: 'Tags',
     collection: -> { Founder.tag_counts_on(:tags).pluck(:name).sort }
 
-  filter :startup_level_id, as: :select, collection: Level.all.order(number: :asc)
-  filter :startup_admission_stage, as: :select, collection: Startup.admission_stages, label: 'Admission Stage'
+  filter :startup_level_id, as: :select, collection: -> { Level.all.order(number: :asc) }
+  filter :startup_admission_stage, as: :select, collection: -> { Startup.admission_stages }, label: 'Admission Stage'
   filter :startup_id_null, as: :boolean, label: 'Without Startup'
-  filter :roles_cont, as: :select, collection: Founder.valid_roles, label: 'Role'
+  filter :roles_cont, as: :select, collection: -> { Founder.valid_roles }, label: 'Role'
   filter :college_name_contains
   filter :roll_number
   filter :created_at, label: 'Registered on'
@@ -235,7 +237,7 @@ ActiveAdmin.register Founder do
 
   member_action :remove_from_startup, method: :post do
     founder = Founder.friendly.find params[:id]
-    founder.remove_from_startup!
+    Founders::RemoveFromStartupService.new(founder).execute
     redirect_to action: :show
   end
 

@@ -21,6 +21,9 @@ module PublicSlack
     def expired_founders
       @expired_founders ||= begin
         expired_startups = candidate_payments.each_with_object([]) do |payment, startups_array|
+          # Skip if the payment does not have an associated startup (for eg: an archived payment).
+          next if payment.startup.blank?
+
           startups_array << payment.startup if payment.startup.active_payment == payment
         end
 
@@ -28,7 +31,7 @@ module PublicSlack
       end
     end
 
-    # All 'paid' payments which expire within the pruning window
+    # All 'paid' payments which expire within the pruning window.
     def candidate_payments
       Payment.paid.where(billing_end_at: pruning_window)
     end
@@ -46,6 +49,7 @@ module PublicSlack
 
     def remove_expired_founders(group_id)
       expired_founders.each { |founder| remove_from_group(group_id, founder) }
+      notify_removal_on_slack(group_id)
     end
 
     def remove_from_group(group_id, founder)
@@ -55,6 +59,11 @@ module PublicSlack
       @pruned_founders |= [founder] if response['ok']
     rescue PublicSlack::OperationFailureException => e
       raise e if e.parsed_response['error'] != 'not_in_group'
+    end
+
+    def notify_removal_on_slack(channel_id)
+      message = I18n.t('slack.removal_notice')
+      PublicSlack::MessageService.new.post(message: message, channel: channel_id)
     end
 
     def api

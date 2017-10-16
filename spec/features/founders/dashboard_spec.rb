@@ -95,8 +95,7 @@ feature 'Founder Dashboard' do
     expect(page).to have_selector('.founder-dashboard-header__product-title', text: startup.product_name)
 
     # Close the PNotify message to ensure no overlap with other elements under test
-    find('.ui-pnotify').hover
-    find('.ui-pnotify-closer').click
+    find('.ui-pnotify').click
 
     # Founder can manually start a dashboard tour.
     find('.founder-dashboard-actionbar__show-more-menu-dots').click

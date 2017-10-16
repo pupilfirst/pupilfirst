@@ -24,8 +24,7 @@ feature 'Timeline Builder' do
     sign_in_user founder.user, referer: dashboard_founder_path
 
     # Close the PNotify message to ensure no overlap with other elements under test
-    find('.ui-pnotify').hover
-    find('.ui-pnotify-closer').click
+    find('.ui-pnotify').click
 
     click_button 'Add Event'
     find('.timeline-builder__textarea').set(description)
@@ -102,8 +101,7 @@ feature 'Timeline Builder' do
       sign_in_user founder.user, referer: dashboard_founder_path
 
       # Close the PNotify message to ensure no overlap with other elements under test
-      find('.ui-pnotify').hover
-      find('.ui-pnotify-closer').click
+      find('.ui-pnotify').click
 
       click_button 'Add Event'
 
@@ -154,8 +152,7 @@ feature 'Timeline Builder' do
       sign_in_user founder.user, referer: dashboard_founder_path
 
       # Close the PNotify message to ensure no overlap with other elements under test
-      find('.ui-pnotify').hover
-      find('.ui-pnotify-closer').click
+      find('.ui-pnotify').click
 
       click_button 'Add Event'
       find('.timeline-builder__social-bar-toggle-switch-handle').click

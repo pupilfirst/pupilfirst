@@ -11,8 +11,7 @@ class FoundersController < ApplicationController
   def founder_profile
     @founder = Founder.friendly.find(params[:slug])
     authorize @founder
-
-    @timeline = @founder.activity_timeline
+    @timeline = Founders::ActivityTimelineService.new(@founder, params[:to])
   end
 
   # GET /founder/edit

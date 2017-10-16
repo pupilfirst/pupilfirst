@@ -1,7 +1,0 @@
----
-timestamp: '2017-09-26T10:09:21Z'
-title: Sign-in page now displays an error message if OAuth provider doesn't supply
-  email address after signing in. It used to show an unhelpful 404.
-trello: https://trello.com/c/hLAIU3Hr
-private: false
-category: bugfix

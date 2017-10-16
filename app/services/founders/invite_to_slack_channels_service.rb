@@ -8,6 +8,9 @@ module Founders
     end
 
     def execute
+      # Do not proceed for founders without a stored Slack User ID.
+      return if @founder.slack_user_id.blank?
+
       log "Inviting Founder ##{@founder.id} to public channels..."
       public_channels.each { |channel_id| invite_to_channel('channels', channel_id) }
       log "Inviting Founder ##{@founder.id} to private channels..."

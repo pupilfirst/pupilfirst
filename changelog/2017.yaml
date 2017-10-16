@@ -1,5 +1,24 @@
 ---
 changelog:
+- timestamp: '2017-10-16T10:14:20Z'
+  changes:
+  - timestamp: '2017-10-16T10:12:45Z'
+    title: An acknowledgement is now emailed when founders submit feedback for the
+      SV.CO platform.
+    trello: https://trello.com/c/DMnbv25K
+    private: false
+    category: ui
+  - timestamp: '2017-10-16T07:01:09Z'
+    title: Removed reply-to from mail sent to help@sv.co.
+    private: true
+    category: bugfix
+  - timestamp: '2017-10-12T08:04:36Z'
+    title: 'Startup quotes (from startupvitamins.com) are now posted on the `#community`
+      channel on Public Slack, daily at 8 AM.'
+    trello: https://trello.com/c/oavfVbh8
+    private: false
+    description: This includes a daily service to store new quotes from startupvitamins.com.
+    category: feature
 - timestamp: '2017-10-09T11:23:25Z'
   changes:
   - timestamp: '2017-10-09T11:23:19Z'

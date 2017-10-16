@@ -23,8 +23,10 @@ module PublicSlack
     end
 
     def post(message:, **target)
+      log "Posting message to target: #{target.keys}"
+
       if self.class.mock?
-        log "Skipping post because of @mock flag:\n\n#{message}\n\nto targets: #{target.keys}"
+        log "Skipping post because of @mock flag:\n\n#{message}\n\nto target: #{target.keys}"
         return
       end
 

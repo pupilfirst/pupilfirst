@@ -106,7 +106,7 @@ class StartupsController < ApplicationController
   end
 
   def load_filter_options
-    @categories = StartupCategory.all
+    @categories = StartupCategory.order(:name)
     @levels = Level.where('number > ?', 0).order(:number)
   end
 

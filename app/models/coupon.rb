@@ -6,8 +6,9 @@ class Coupon < ApplicationRecord
 
   validates :code, uniqueness: true, presence: true, length: { in: 4..10 }
   validates :referrer_startup_id, uniqueness: true, allow_nil: true
-  validates :user_extension_days, presence: true, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 31 }
+  validates :user_extension_days, allow_nil: true, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 31 }
   validates :referrer_extension_days, presence: true, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 31 }, if: proc { |coupon| coupon.referrer_startup_id.present? }
+  validates :discount_percentage, allow_nil: true, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 100 }
 
   def still_valid?
     (expires_at.blank? || expires_at.future?) && redeems_left?

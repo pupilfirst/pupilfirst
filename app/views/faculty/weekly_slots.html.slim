@@ -4,7 +4,7 @@
 
 #faculty__weekly-slots
   h2.faculty-slotes__header.p-b-1.m-t-2 Slots for #{@faculty.name}
-  p.m-y-1 Modifying connect slots for the upcoming week of #{@faculty.email}
+  p.m-y-1 Modifying connect slots for the upcoming week of <code>#{@faculty.email}</code>
 
   .row
     .col-md-8
@@ -49,4 +49,5 @@
           ' Busy week ahead? Mark yourself unavailable for the coming week and you will receive no connect requests.
 
         .card-footer
-          .btn.btn-md.btn-danger.pull-xs-right href=mark_unavailable_faculty_index_path(params[:token]) Mark me unavailable
+          = button_to mark_unavailable_faculty_index_path(params[:token]), class: 'btn btn-md btn-danger pull-xs-right', method: :delete do
+            | Mark me unavailable

@@ -99,8 +99,7 @@
 }
 
 .fee-offer__amount-highlight {
-  padding: 0 2.25rem;
-  height: 6.25rem;
+  padding: 1rem 2.25rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -128,6 +127,17 @@
   line-height: 1.6;
   color: white;
   padding: 4px 0px;
+}
+
+.fee-offer__discount-details {
+  border-top: 1px dashed $light-secondary;
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+}
+
+.discount-details__title {
+  color: $brand-primary;
+  font-weight: bold;
 }
 
 .fee-offer__discount {

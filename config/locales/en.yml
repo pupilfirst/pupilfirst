@@ -103,6 +103,10 @@ en:
     search_results:
       zero_results: "We\'re sorry, but it looks like there are no resources %{tag_text} %{search_text}.  Try changing your filter conditions %{login_text}."
       results_caption: "Showing resources %{tag_text} %{search_text}:"
+  founder:
+    fee:
+      discount_benefit: <strong>%{percentage}% discount</strong> on the program fee
+      extension_benefit: <strong>%{extension} extra days</strong> of subscription
 
   role:
     team: Team

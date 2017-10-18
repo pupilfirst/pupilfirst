@@ -20,7 +20,7 @@ class Founder < ApplicationRecord
   ID_PROOF_TYPES = ['Aadhaar Card', 'Driving License', 'Passport', 'Voters ID'].freeze
 
   # Monthly fee amount for founders.
-  FEE = 1000
+  FEE = 4000
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable

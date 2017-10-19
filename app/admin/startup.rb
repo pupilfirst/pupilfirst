@@ -7,8 +7,8 @@ ActiveAdmin.register Startup do
     :partnership_deed, :payment_reference, :agreements_verified, :team_lead_id, startup_category_ids: [], founder_ids: [], tag_list: []
 
   filter :product_name, as: :string
-  filter :level, collection: proc { Level.all.order(number: :asc) }
-  filter :stage, as: :select, collection: proc { stages_collection }
+  filter :level, collection: -> { Level.all.order(number: :asc) }
+  filter :stage, as: :select, collection: -> { stages_collection }
 
   filter :ransack_tagged_with,
     as: :select,
@@ -18,7 +18,7 @@ ActiveAdmin.register Startup do
 
   filter :legal_registered_name
   filter :website
-  filter :registration_type, as: :select, collection: proc { Startup.valid_registration_types }
+  filter :registration_type, as: :select, collection: -> { Startup.valid_registration_types }
   filter :startup_categories
   filter :dropped_out
   filter :created_at
@@ -332,6 +332,7 @@ ActiveAdmin.register Startup do
       row :courier_number
       row :payment_reference
       row :referral_reward_days
+      row :founder_fee
     end
     active_admin_comments
   end

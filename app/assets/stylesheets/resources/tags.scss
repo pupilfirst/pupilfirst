@@ -1,0 +1,32 @@
+.resource-tags {
+  display: inline-flex;
+  overflow-x: hidden;
+  position: relative;
+  width: 100%;
+}
+
+// Badge
+.resource-tags__badge {
+  border: 1px solid darken($gray-border, 20%);
+  color: $light-grey-text;
+  background-color: $primary-background;
+  font-size: 0.75rem;
+  margin-right: 0.5rem;
+  letter-spacing: 0.02rem;
+
+  &:hover, &:focus {
+    background-color: darken($tag-default-bg, 30%) !important;
+  }
+}
+
+.resource-tags-fade {
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 10%;
+    height: 25px;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 90%);
+  }
+}

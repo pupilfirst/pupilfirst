@@ -5,7 +5,7 @@ ActiveAdmin.register TimelineEventType do
 
   filter :key
   filter :title
-  filter :role, as: :select, collection: TimelineEventType.valid_roles
+  filter :role, as: :select, collection: -> { TimelineEventType.valid_roles }
   filter :created_at
 
   index do

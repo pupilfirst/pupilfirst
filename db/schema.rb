@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171006063143) do
+ActiveRecord::Schema.define(version: 20171017105727) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -494,6 +494,16 @@ ActiveRecord::Schema.define(version: 20171006063143) do
     t.index ["timeline_event_id"], name: "index_startup_feedback_on_timeline_event_id"
   end
 
+  create_table "startup_quotes", force: :cascade do |t|
+    t.string "guid"
+    t.string "link"
+    t.integer "post_count", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["guid"], name: "index_startup_quotes_on_guid"
+    t.index ["post_count"], name: "index_startup_quotes_on_post_count"
+  end
+
   create_table "startups", id: :serial, force: :cascade do |t|
     t.string "logo"
     t.string "pitch"
@@ -536,6 +546,7 @@ ActiveRecord::Schema.define(version: 20171006063143) do
     t.datetime "admission_stage_updated_at"
     t.bigint "team_lead_id"
     t.integer "referral_reward_days", default: 0
+    t.integer "founder_fee"
     t.index ["level_id"], name: "index_startups_on_level_id"
     t.index ["maximum_level_id"], name: "index_startups_on_maximum_level_id"
     t.index ["slug"], name: "index_startups_on_slug", unique: true

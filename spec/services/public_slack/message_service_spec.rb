@@ -1,5 +1,6 @@
 require 'rails_helper'
 
+# TODO: Rewrite this spec when rebuilding the MessageService as planned here: https://trello.com/c/onrjenun
 describe PublicSlack::MessageService do
   subject { described_class.new }
 

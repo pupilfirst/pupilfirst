@@ -38,8 +38,7 @@ feature 'Target Overlay' do
       ## Ensure different components of the overlay display the appropriate details.
 
       # Close the pnotify first.
-      find('.ui-pnotify').hover
-      find('.ui-pnotify-closer').click
+      find('.ui-pnotify').click
 
       # Within the header:
       within('.target-overlay__header') do
@@ -165,8 +164,8 @@ feature 'Target Overlay' do
         expect(page).to have_selector('.target-overlay__status-hint', text: 'Follow completion instructions and submit!')
       end
 
-      find('.ui-pnotify').hover
-      find('.ui-pnotify-closer').click
+      # Close pnotify first.
+      find('.ui-pnotify').click
 
       find('.target-overlay__header').find('button.btn-timeline-builder').click
       expect(page).to have_selector('.timeline-builder__popup-body')

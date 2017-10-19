@@ -10,10 +10,10 @@ ActiveAdmin.register Target do
   filter :archived
   filter :session_at_not_null, as: :boolean, label: 'Session?'
   filter :chore, label: 'Chore?'
-  filter :target_group, collection: TargetGroup.all.includes(:level)
+  filter :target_group, collection: -> { TargetGroup.all.includes(:level).order('levels.number ASC') }
   filter :level
   filter :assigner_name, as: :string
-  filter :role, as: :select, collection: Target.valid_roles
+  filter :role, as: :select, collection: -> { Target.valid_roles }
   filter :timeline_event_type_title, as: :string
 
   filter :ransack_tagged_with,

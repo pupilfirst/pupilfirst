@@ -10,7 +10,7 @@ ActiveAdmin.register MoocStudent do
   filter :phone
   filter :college_name_contains
   filter :semester
-  filter :gender, as: :select, collection: Founder.valid_gender_values
+  filter :gender, as: :select, collection: -> { Founder.valid_gender_values }
   filter :created_at
 
   scope :all, default: true

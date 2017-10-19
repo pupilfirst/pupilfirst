@@ -2,33 +2,35 @@
   title SV.CO #{@resource.title}
   meta name="description" content="Get access to content produced by Startup Village faculty, including presentations, video and audio clips."
 
-ol.breadcrumb.m-t-2
+ol.breadcrumb.mt-3
   li.breadcrumb-item = link_to 'Home', root_path
   li.breadcrumb-item = link_to 'Startup Library', resources_path
   li.breadcrumb-item.active = @resource.title
 
-h1.m-b-1 #{@resource.title}
-
-.m-b-2.clearfix
-  - if @stream_video
-    .m-b-2
-      .embed-responsive.embed-responsive-16by9
-        - if @resource.video_embed
-          = @stream_video.html_safe
+.row.justify-content-md-center
+  .col-md-10.mb-3
+    .content-box
+      .row
+        - if @stream_video
+          .embed-responsive.embed-responsive-16by9
+            - if @resource.video_embed.present?
+              = @resource.video_embed.html_safe
+            - else
+              = videojs_rails sources: { mp4: @stream_video}, class: 'embed-responsive-item'
         - else
-          = videojs_rails sources: { mp4: @stream_video}, class: 'embed-responsive-item'
-  - else
-    .pull-md-left.m-r-2
-      - if @resource.thumbnail.present?
-        = image_tag @resource.thumbnail.url
-      - else
-        = image_tag 'resources/shared/default-thumbnail.png'
+          .col-md-3
+            - if @resource.thumbnail.present?
+              = image_tag @resource.thumbnail.url, class: "img-fluid"
+            - else
+              = image_tag 'resources/shared/default-thumbnail.png', class: "img-fluid"
 
-  .pull-md-left.resource-description-and-links
-    - if @resource.level_exclusive?
-      .level-exclusive-badge.text-uppercase.m-t-1
-        | Level Exclusive
+        .col-md-9.resource-description-and-links class="#{@stream_video ? 'px-0' : ''}"
+          h3.mb-2.mt-sm-2.mt-3 #{@resource.title}
+          - if @resource.level_exclusive?
+            .level-exclusive-badge.text-uppercase.m-t-1
+              | Level Exclusive
 
-    p.m-t-1 = simple_format @resource.description
-    == render 'tags', resource: @resource, fade: false
-    == render 'links', resource: @resource, playing: @stream_video.present?
+          = simple_format @resource.description
+          .my-2
+            == render 'tags', resource: @resource, fade: false
+          == render 'links', resource: @resource, playing: @stream_video.present?

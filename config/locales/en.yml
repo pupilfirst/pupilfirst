@@ -1,23 +1,18 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
+# ----------------------
+# Organization of en.yml
+# ----------------------
 #
-# To use the locales, use `I18n.t`:
+# models.MODEL.COLUMN = { key: display_value, ... }
+# services.SERVICE.*.key = display_value
+# jobs.JOB.*.key = display_value
+# libs.MODULE.*.key = display_value
+# CONTROLLER.ACTION.*.key = display_value
 #
-#     I18n.t 'hello'
+# CONTROLLER is always the plural version. For example: FoundersController#edit = founders.edit.*
 #
-# In views, this is aliased to just `t`:
+# Third-party customizations follow their own format. Record these at the end of the file. For example:
 #
-#     <%= t('hello') %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more, please read the Rails Internationalization guide
-# available at http://guides.rubyonrails.org/i18n.html.
+# activecord.* = Refer Activerecord documentation.
 
 en:
   models:
@@ -108,6 +103,10 @@ en:
     search_results:
       zero_results: "We\'re sorry, but it looks like there are no resources %{tag_text} %{search_text}.  Try changing your filter conditions %{login_text}."
       results_caption: "Showing resources %{tag_text} %{search_text}:"
+  founders:
+    fee:
+      discount_benefit: <strong>%{percentage}% discount</strong> on the program fee
+      extension_benefit: <strong>%{extension} extra days</strong> of subscription
 
   role:
     team: Team
@@ -157,6 +156,7 @@ en:
         unknown_username: |
           I'm sorry, but your slack mention name `@%{slack_username}` isn't known to me.
           Please update your slack mention name on your SV.CO profile, and try asking me again.
+    removal_notice: "I've just removed a few founders with expired subscriptions to keep this channel exclusive to active members."
 
   slack_notifications:
     timeline_events:

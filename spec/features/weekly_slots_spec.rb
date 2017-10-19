@@ -29,6 +29,7 @@ feature 'Faculty Weekly Slots' do
   context 'User visits weekly_slot page of faculty with connection slots', js: true do
     let!(:connection_slot_1) { create :connect_slot, faculty: faculty, slot_at: ConnectSlot.next_week_start + 7.hours }
     let!(:connection_slot_2) { create :connect_slot, faculty: faculty, slot_at: ConnectSlot.next_week_start + 32.hours }
+
     scenario 'User verifies present slots and commitment' do
       visit weekly_slots_faculty_index_path(faculty.token)
       expect(page).to have_text("Slots for #{faculty.name}")
@@ -76,6 +77,18 @@ feature 'Faculty Weekly Slots' do
       expect(faculty.reload.connect_slots.count).to eq(4)
       expect(faculty.connect_slots.find_by(slot_at: ConnectSlot.next_week_start + 11.hours + 30.minutes)).to be_present
       expect(faculty.connect_slots.find_by(slot_at: ConnectSlot.next_week_start + 46.hours)).to be_present
+    end
+
+    scenario 'User marks herself unavailable' do
+      visit weekly_slots_faculty_index_path(faculty.token)
+
+      expect(page).to have_content('Busy week ahead? Mark yourself unavailable')
+      expect(faculty.connect_slots.count).to eq(2)
+
+      click_button 'Mark me unavailable'
+
+      expect(page).to have_content('We have successfully recorded your availability for the upcoming week')
+      expect(faculty.reload.connect_slots.count).to eq(0)
     end
   end
 end

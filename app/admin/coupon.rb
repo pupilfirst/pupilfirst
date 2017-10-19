@@ -4,7 +4,7 @@ ActiveAdmin.register Coupon do
   menu parent: 'Admissions'
 
   permit_params :code, :discount_percentage, :expires_at, :redeem_limit,
-    :instructions, :user_extension_days, :discount_percentage
+    :instructions, :user_extension_days
 
   filter :validity_in, as: :select, collection: %w[Valid Invalid], label: 'Validity'
 

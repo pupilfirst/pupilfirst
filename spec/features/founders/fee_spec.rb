@@ -61,7 +61,7 @@ feature 'Founder Monthly Fee Payment' do
       stub_request(:post, 'https://www.example.com/payment-requests/')
         .with(body: hash_including(
           allow_repeated_payments: 'false',
-          amount: '16001.0',
+          amount: '16000.0',
           buyer_name: startup.team_lead.name,
           email: startup.team_lead.email,
           purpose: 'Fee for SV.CO',

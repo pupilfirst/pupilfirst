@@ -26,7 +26,7 @@ describe Startups::FeePayableService do
     end
 
     it 'returns the fee payable after accounting for all discounts' do
-      expect(subject.fee_payable(period: 3)).to eq(18_001)
+      expect(subject.fee_payable(period: 3)).to eq(18_000)
     end
   end
 end

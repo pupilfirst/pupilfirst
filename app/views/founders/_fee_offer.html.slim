@@ -18,7 +18,7 @@
         | for #{current_startup.billing_founders_count} founders
       .fee-offer__discount-details
         - if presenter.discount_applicable?
-          h6.discount-details__title DISCOUNT APPLIED
+          h6.fee-offer__discount-title DISCOUNT APPLIED
           p
             - if period != 1
               | #{presenter.bulk_package_discount}% off (Long-term Plan)
@@ -28,7 +28,7 @@
               br
             span.dark-secondary You save &#8377;#{presenter.discount_amount}!
         - else
-          h6.discount-details__title FULL PRICE
+          h6.fee-offer__discount-title FULL PRICE
 
   = form_with url: fee_founder_path, method: :post, class: 'js-founder-fee__form' do |form|
     .p-x-1

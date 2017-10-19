@@ -11,7 +11,7 @@ module Startups
       @startup = startup
     end
 
-    def fee_payable(period: 1)
+    def fee_payable(period:)
       fee = undiscounted_fee(period: period)
 
       # Apply bulk payment discount, if applicable.
@@ -21,10 +21,10 @@ module Startups
       fee = (fee - (coupon_discount * fee)) if discount_coupon_applied?
 
       # Return a minimum fee of Rs.1.
-      [1, fee.round].max
+      [1, fee.round(-1)].max
     end
 
-    def undiscounted_fee(period: 1)
+    def undiscounted_fee(period:)
       billing_founders_count * founder_fee * period
     end
 
@@ -39,10 +39,14 @@ module Startups
     end
 
     def bulk_payment_discount(period)
-      {
-        3 => DISCOUNT_PERCENTAGE_THREE_MONTHS,
-        6 => DISCOUNT_PERCENTAGE_SIX_MONTHS
-      }[period].to_f / 100
+      case period
+        when 3
+          DISCOUNT_PERCENTAGE_THREE_MONTHS
+        when 6
+          DISCOUNT_PERCENTAGE_SIX_MONTHS
+        else
+          raise 'Unexpected period specified'
+      end.to_f / 100
     end
 
     def coupon_discount

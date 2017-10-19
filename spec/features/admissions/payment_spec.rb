@@ -136,7 +136,7 @@ feature 'Admission Fee Payment' do
       # He should be shown his savings for all 3 plans.
       expect(page).to have_content('You save ₹2000')
       expect(page).to have_content('You save ₹30000')
-      expect(page).to have_content('You save ₹11999')
+      expect(page).to have_content('You save ₹12000')
 
       click_on 'Pay for 1 month'
 
@@ -219,7 +219,7 @@ feature 'Admission Fee Payment' do
       # Stub the request to create new payment.
       stub_request(:post, 'https://www.example.com/payment-requests/')
         .with(body: hash_including(
-          amount: '24001.0',
+          amount: '24000.0',
           buyer_name: founder.name,
           email: founder.email,
           purpose: 'Fee for SV.CO'

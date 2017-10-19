@@ -90,5 +90,10 @@ module ProductMetrics
     def count_library_resource_downloads
       Resource.all.sum(:downloads)
     end
+
+    # Number of recorded messages on Public Slack.
+    def count_slack_messages
+      PublicSlackMessage.count
+    end
   end
 end

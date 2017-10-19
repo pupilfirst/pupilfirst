@@ -16,7 +16,7 @@ class ProductMetric < ApplicationRecord
     'Faculty Office Hours' => { automatic: true, delta_period: 3 },
     'Library Resources' => { automatic: true },
     'Library Resource Downloads' => { automatic: true, delta_period: 3 },
-    'Slack Conversations' => { automatic: false },
+    'Slack Messages' => { automatic: true },
     'Graduation Partners' => { automatic: false },
     'Community Architects' => { automatic: false },
     'Blog Stories Published' => { automatic: false }

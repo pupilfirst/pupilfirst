@@ -1,5 +1,7 @@
+- presenter = Startups::StartupPresenter.new(self, startup)
+
 .col-lg-6.col-md-12
-  .startup-card.content-box.clearfix
+  .startup-card.content-box
     - if extra_links_present? startup
       .dropdown.external-links
         button.btn.btn-link.more-menu-dots.dropdown-toggle data-toggle="dropdown" type="button"
@@ -35,7 +37,7 @@
         - if startup.logo.present?
           = image_tag startup.logo.url, class: 'img-fluid'
         - else
-          = startup.product_name || startup.name
+          = presenter.identicon_logo
 
     .startup-details
       .startup-details__header
@@ -47,9 +49,14 @@
             span.startup-industry-icon
               i.fa.fa-address-card-o
             | #{startup.startup_categories.pluck(:name).join(', ')}
+      - if startup.product_description?
+        p.startup-details__description.font-light
+          = startup.product_description
+      - else
+        p.startup-details__description.font-light
+          em
+            | No description available!
 
-      p.startup-details__description.font-light
-        = startup.product_description
       .startups-attachments
         span.startup-attachments__link data-toggle="tooltip" data-placement="top" title=startup.level.display_name
           img.startups-link__icon alt="Startup Level" src="#{image_url 'startups/index/attachments-icon-stage.svg'}"
@@ -64,14 +71,14 @@
             img.startups-link__icon alt="Product Video" src="#{image_url 'startups/index/attachments-icon-video.svg'}"
             ' Product Video
 
-      .startupcard-footer.clearfix
+      .startupcard-footer
         - if startup.founders.not_exited.present?
           .founder-avatar-list
             - startup.founders.not_exited.order(:name).each do |founder|
               .founder-avatar.founder-tooltip.tooltip-popup
                 a.founder-tooltip-item.founder-avatar__thumbnail href=founder_profile_url(slug: founder.slug)
                   == avatar(founder.name, founder: founder, version: :thumb)
-                span.founder-tooltip-content.clearfix
+                span.founder-tooltip-content
                   .founder-tooltip-thumbnail
                     == avatar(founder.name, founder: founder, background_shape: :square)
                   .founder-tooltip-text

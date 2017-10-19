@@ -27,7 +27,7 @@
         input_html: { maxlength: 17, type: 'tel', pattern: MobileNumberValidator::FORM_EXPRESSION }
 
       = f.input :reference,
-        collection: proc { t('models.founder.references') },
+        collection: proc { Founder.valid_references },
         required: false,
         include_blank: 'How did you hear about us?'
 

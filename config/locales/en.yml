@@ -15,20 +15,6 @@
 # activecord.* = Refer Activerecord documentation.
 
 en:
-  models:
-    founder:
-      references:
-        - "Friend"
-        - "Seniors"
-        - "#StartinCollege Event"
-        - "Newspaper/Magazine"
-        - "TV"
-        - "SV.CO Blog"
-        - "Instagram"
-        - "Facebook"
-        - "Twitter"
-        - "Microsoft Student Partner"
-        - "Other (Please Specify)"
   admissions:
     register:
       email_error: "Our email delivery service refused to accept the supplied address. Please ensure that it is a valid email address. If you're still having issues, please contact us using live chat or at help@sv.co"

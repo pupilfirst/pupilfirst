@@ -5,7 +5,7 @@ FactoryGirl.define do
     email { Faker::Internet.email(name) }
     sequence(:phone) { |n| (9_876_543_210 + n).to_s }
     college
-    reference { I18n.t('models.founder.references').sample }
+    reference { Founder.valid_references.sample }
 
     trait(:connected_to_slack) do
       slack_user_id 'SLACK_USER_ID'

@@ -1,0 +1,112 @@
+.stats-hero__message-text {
+  font-size: 3.5rem;
+  color: $brand-secondary;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 0 rgba(255,255,255,0.01);
+  display: inline-block;
+  background: linear-gradient(45deg, rgba(22,123,181,1) 0%,rgba(17,149,207,1) 50%,rgba(50,180,117,1) 100%);
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  background-clip: text;
+}
+
+.stats-hero__message-text--small {
+  font-size: 1.875rem;
+}
+
+.general-stats__container {
+  background: rgb(22,123,181);
+  background: linear-gradient(45deg, rgba(22,123,181,1) 0%,rgba(17,149,207,1) 50%,rgba(50,180,117,1) 100%);
+}
+
+.typed-cursor {
+  @extend .stats-hero__message-text;
+  opacity: 1;
+  animation: typedjsBlink 0.7s infinite;
+}
+
+@keyframes typedjsBlink {
+  50% { opacity: 0.0; }
+}
+
+@-webkit-keyframes typedjsBlink {
+  0% { opacity: 1; }
+  50% { opacity: 0.0; }
+  100% { opacity: 1; }
+}
+
+.general-stats__title {
+  color: white;
+  position: relative;
+  font-size: 2.25rem;
+
+  &:before {
+    content: '';
+    position: absolute;
+    width: 80px;
+    height: 2px;
+    background-color: white;
+    top: 0;
+    left: 0;
+  }
+}
+.general-stats__title--small {
+  font-size: 2rem;
+}
+
+.general-stats__numbers-block {
+  border: 1px dashed white;
+  color: white;
+  @include border-radius(10px);
+}
+
+.general-stats__numbers-block-item {
+  height: 100%;
+  padding: 1rem;
+  border-right: 1px dashed white;
+
+  &:last-child {
+    border: 0;
+  }
+}
+
+.general-stats__numbers-block-text-large {
+  font-size: 3.75rem;
+  color: white;
+  margin: 0;
+  line-height: 1;
+}
+
+.stats-hero__message-text--medium {
+  font-size: 3rem;
+}
+
+.general-stats__numbers-block-text-small {
+  font-size: 1.875rem;
+  line-height: 1;
+}
+
+.program-stats__container {
+  position: relative;
+
+  &:before {
+    content:'';
+    position: absolute;
+    height: 100%;
+    width: 50%;
+    left: 0;
+    background-color: white;
+  }
+}
+
+.program-stats__student-journey {
+  border-right: 1px solid $gray-border;
+}
+
+
+.program-stats__student-journey-icon {
+  width: 10rem;
+  height: 10rem;
+  border: 1px solid $brand-secondary;
+  @include border-radius(20px);
+}

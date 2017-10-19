@@ -1,4 +1,67 @@
-h1 Stats go here.
+/ h1 Stats go here.
+/
+/ pre
+/   == @metrics.to_yaml
+- content_for :head do
+  title SV.CO Stats
+  meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
 
-pre
-  == @metrics.to_yaml
+#stats-index
+section.stats-hero__banner.secondary-banner
+  .stats-hero__message-container.text-left
+    .container
+      .row
+        .col-md-8
+          h1.stats-hero__message-text
+            p.stats-hero__message-text--small.font-light While you are reading this,
+            span#typed-strings
+              p
+                | 333 Student Developers
+              p
+                | 70 Campus Startups
+            span#typed
+            p.stats-hero__message-text--medium.font-light are building their products
+          p This month 30 students joined the SV.CO collective. That’s 215 in total.class_selector
+
+section.general-stats__container.py-5
+  .container
+    .row.align-items-center
+      .col-md-3
+        h3.general-stats__title.m-0.pt-3
+          .general-stats__title--small.font-light
+            | We have
+          | students from
+      .col-md-9.general-stats__numbers-block.d-flex.align-items-center.p-0
+        .col-md-4.general-stats__numbers-block-item.d-flex.align-items-center.justify-content-center.flex-column
+          h2.general-stats__numbers-block-text-large.font-bold 14
+          p.general-stats__numbers-block-text-small States
+        .col-md-4.general-stats__numbers-block-item.d-flex.align-items-center.justify-content-center.flex-column
+          h2.general-stats__numbers-block-text-large.font-bold 09
+          p.general-stats__numbers-block-text-small Universities
+        .col-md-4.general-stats__numbers-block-item.d-flex.align-items-center.justify-content-center.flex-column
+          h2.general-stats__numbers-block-text-large.font-bold 50
+          p.general-stats__numbers-block-text-small Colleges
+
+section.program-stats__container
+  .container
+    .row.m-0
+      .col-md-6.program-stats__student-journey
+        h3.text-center.pt-4 Our students right now are in the program as
+        ul.list-unstyled.student-journey__timeline
+          li.row
+            .col-md-4
+              .program-stats__student-journey-icon
+
+            .col-md-8
+              .program-stats__student-journey-content
+                h3 49 Explorers
+                p
+                  ' All students begin here. At this point
+                  | they’re just picking an idea. Blah Blah.
+
+
+
+      .col-md-6.program-stats__other-facts
+        h3.text-center.pt-4 Our program runs with
+
+

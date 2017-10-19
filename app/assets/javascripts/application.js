@@ -38,6 +38,8 @@
 // Rails assets
 //= require intro.js/intro.js
 //= require slick-carousel/slick.js
+//= require typedjs
+
 
 // Shared
 //= require _shared
@@ -50,3 +52,4 @@
 //= require home
 //= require startups
 //= require team_members
+//= require product_metrics

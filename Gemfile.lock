@@ -604,6 +604,7 @@ GEM
       rails-assets-jquery (>= 1.7)
     rails-assets-tether (1.4.0)
     rails-assets-trix (0.11.0)
+    rails-assets-typedjs (2.0.6)
     rails-assets-waypoints (4.0.1)
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
@@ -910,6 +911,7 @@ DEPENDENCIES
   rails-assets-slick-carousel (~> 1.6)!
   rails-assets-tether (~> 1.4)!
   rails-assets-trix (~> 0.10)!
+  rails-assets-typedjs!
   rails-assets-waypoints (~> 4.0)!
   rails_12factor (~> 0.0)
   rails_server_timings (~> 1.0)
@@ -950,4 +952,4 @@ RUBY VERSION
    ruby 2.4.2p198
 
 BUNDLED WITH
-   1.16.0.pre.2
+   1.16.0.pre.3

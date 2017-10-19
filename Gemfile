@@ -130,6 +130,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-moment', '~> 2.18' # Parse, validate, manipulate, and display dates in javascript. http://momentjs.com
   gem 'rails-assets-jquery', '~> 2.2' # TODO: Lock down jquery to v2 because v3 doesn't work well with AA.
   gem 'rails-assets-lodash', '~> 4.17' # A modern JavaScript utility library delivering modularity, performance, & extras.
+  gem 'rails-assets-typedjs' # A JavaScript Typing Animation Library.
 end
 
 group :development do

@@ -15,13 +15,13 @@ module Startups
       fee = undiscounted_fee(period: period)
 
       # Apply bulk payment discount, if applicable.
-      fee = (fee - (bulk_payment_discount(period) * fee)).round unless period == 1
+      fee = (fee - (bulk_payment_discount(period) * fee)) unless period == 1
 
       # Apply discount coupon, if any.
-      fee = (fee - (coupon_discount * fee)).round if discount_coupon_applied?
+      fee = (fee - (coupon_discount * fee)) if discount_coupon_applied?
 
       # Return a minimum fee of Rs.1.
-      [1, fee].max
+      [1, fee.round].max
     end
 
     def undiscounted_fee(period: 1)

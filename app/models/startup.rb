@@ -412,7 +412,7 @@ class Startup < ApplicationRecord
   end
 
   def billing_founders_count
-    @billing_founders_count ||= founders.count + invited_founders.count
+    @billing_founders_count ||= founders.not_exited.count + invited_founders.count
   end
 
   def present_week_number

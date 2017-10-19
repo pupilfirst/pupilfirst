@@ -9,7 +9,7 @@ FactoryGirl.define do
 
     trait :requested do
       period 1
-      amount Founder::FEE
+      amount { Founder::FEE * startup.billing_founders_count }
       instamojo_payment_request_id { SecureRandom.hex }
       instamojo_payment_request_status 'Pending'
       short_url { Faker::Internet.url }

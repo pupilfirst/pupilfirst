@@ -14,7 +14,7 @@ title SV.CO Edit Profile for #{@founder.fullname}
         = f.file_field :avatar, label_class: 'col-form-label', label: 'Avatar', class: 'form-control', required: false
         = f.text_field :about, label_class: 'col-form-label', label: 'One-Liner', placeholder: 'One-liner about yourself', maxlength: 255, required: false
         - if @founder.startup.present?
-          = f.select :roles, options_for_select((Founder.valid_roles.map { |r| [t("role.#{r}"), r] }), @founder.roles),
+          = f.select :roles, options_for_select((Founder.valid_roles.map { |r| [t("models.founder.role.#{r}"), r] }), @founder.roles),
             { label_class: 'col-form-label' }, { required: true, multiple: true }
         = f.text_field :skype_id, label_class: 'col-form-label', label: 'Skype ID', required: false
         = f.text_area :communication_address, label_class: 'col-form-label'

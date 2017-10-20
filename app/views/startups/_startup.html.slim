@@ -79,7 +79,7 @@
                       = founder.fullname
                     - if founder.roles.present?
                       .founder-tooltip-role
-                        = founder.roles.map { |role| t("role.#{role}") }.join ', '
+                        = founder.roles.map { |role| t("models.founder.role.#{role}") }.join ', '
                     a.founder-profile-view-link href=founder_profile_url(slug: founder.slug)
                       span.founder-profile-view-link__icon.i.fa.fa-user-circle-o
                       | View Profile

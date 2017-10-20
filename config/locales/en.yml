@@ -16,11 +16,17 @@
 
 en:
   models:
-    startup:
-      registration_type:
-        private_limited: Private Limited
-        partnership: Partnership
-        llp: Limited Liability Partnership
+    faculty:
+      commitment:
+        part_time: Part-Time
+        full_time: Full-Time
+
+    founder:
+      # Founder.roles is actually an array. But the translation applies to each value individually.
+      role: &founder-role
+        product: Product
+        engineering: Engineering
+        design: Design
 
     payment:
       status:
@@ -28,10 +34,20 @@ en:
         paid: Paid
         failed: Failed
 
-    faculty:
-      commitment:
-        part_time: Part-Time
-        full_time: Full-Time
+    startup:
+      registration_type:
+        private_limited: Private Limited
+        partnership: Partnership
+        llp: Limited Liability Partnership
+
+    target:
+      role:
+        <<: *founder-role
+        team: Team
+        founder: All Founders
+
+    team_member:
+      role: *founder-role
 
   admissions:
     register:
@@ -90,13 +106,6 @@ en:
 #####                                                            #####
 ## Strings below this point need to be organized using the standard ##
 #####                                                            #####
-
-  role:
-    team: Team
-    product: Product
-    engineering: Engineering
-    design: Design
-    founder: All Founders
 
   timeline_event:
     grade:

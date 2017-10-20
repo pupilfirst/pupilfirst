@@ -261,7 +261,7 @@ ActiveAdmin.register Founder do
 
       row :roles do |founder|
         founder.roles.map do |role|
-          t("role.#{role}")
+          t("models.founder.role.#{role}")
         end.join ', '
       end
 

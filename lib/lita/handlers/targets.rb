@@ -47,7 +47,7 @@ module Lita
           response_message = <<~REPLY
             *#{chosen_target.title}*
             *Status:* #{target_status_message(chosen_target)}
-            *Role:* #{I18n.t("role.#{chosen_target.role}")}
+            *Role:* #{I18n.t("models.target.role.#{chosen_target.role}")}
             *Assigner:* #{chosen_target.assigner.name}
             *Description:* #{ActionView::Base.full_sanitizer.sanitize chosen_target.description}
           REPLY

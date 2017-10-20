@@ -1,7 +1,7 @@
 module StartupsHelper
   def registration_type_options(current_registration_type)
     list = Startup.valid_registration_types.map do |registration_type|
-      [t("startup.edit.registration_types.#{registration_type}"), registration_type]
+      [t("models.startup.registration_type.#{registration_type}"), registration_type]
     end
 
     options_for_select(list, current_registration_type)

@@ -16,6 +16,11 @@
 
 en:
   models:
+    startup:
+      registration_type:
+        private_limited: Private Limited
+        partnership: Partnership
+        llp: Limited Liability Partnership
     payment:
       status:
         requested: Requested
@@ -25,7 +30,6 @@ en:
       commitment:
         part_time: Part-Time
         full_time: Full-Time
-
 
   admissions:
     register:
@@ -48,11 +52,6 @@ en:
 
 
   startup:
-    edit:
-      registration_types:
-        private_limited: Private Limited
-        partnership: Partnership
-        llp: Limited Liability Partnership
     show:
       timeline_cards:
         needs_imprvement:

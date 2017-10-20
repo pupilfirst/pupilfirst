@@ -1,7 +1,7 @@
 module Lita
   module Handlers
     class ChangeLog < Handler
-      route(/\Achangelog\s*\?*\s*\z/i, :changelog, command: true, help: { 'changelog ?' => I18n.t('slack.help.changelog') })
+      route(/\Achangelog\s*\?*\s*\z/i, :changelog, command: true, help: { 'changelog ?' => I18n.t('libs.lita.handlers.changelog.help') })
 
       def changelog(response)
         ActiveRecord::Base.connection_pool.with_connection do

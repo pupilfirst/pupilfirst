@@ -25,7 +25,7 @@ describe TimelineEventVerificationNotificationJob do
 
   let(:expected_founder_message_for_founder_target) do
     I18n.t(
-      'slack_notifications.timeline_events.founder.verified.founder_event',
+      'jobs.timeline_event_verification_notification.founder.verified.founder_event',
       event_title: timeline_event_for_founder.title,
       startup_url: startup_url,
       event_url: timeline_event_for_founder.share_url
@@ -34,7 +34,7 @@ describe TimelineEventVerificationNotificationJob do
 
   let(:expected_founder_message_for_startup_target) do
     I18n.t(
-      'slack_notifications.timeline_events.founder.verified.startup_event',
+      'jobs.timeline_event_verification_notification.founder.verified.startup_event',
       event_title: timeline_event_for_startup.title,
       startup_url: startup_url,
       event_url: timeline_event_for_startup.share_url,
@@ -44,7 +44,7 @@ describe TimelineEventVerificationNotificationJob do
 
   let(:expected_team_message) do
     I18n.t(
-      'slack_notifications.timeline_events.team.verified',
+      'jobs.timeline_event_verification_notification.team.verified',
       event_title: timeline_event_for_startup.title,
       event_url: timeline_event_for_startup.share_url,
       startup_url: startup_url,
@@ -54,7 +54,7 @@ describe TimelineEventVerificationNotificationJob do
 
   let(:expected_public_message) do
     I18n.t(
-      'slack_notifications.timeline_events.public.verified',
+      'jobs.timeline_event_verification_notification.public.verified',
       startup_url: startup_url,
       startup_product_name: startup.product_name,
       event_url: timeline_event_for_startup.share_url,

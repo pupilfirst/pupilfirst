@@ -27,7 +27,7 @@ module TimelineEvents
 
     def heading
       I18n.t(
-        'jobs.timeline_event.description_update_notification.heading',
+        'jobs.timeline_events.description_update_notification.heading',
         event_title: @timeline_event.title,
         event_url: @timeline_event.share_url
       )

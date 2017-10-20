@@ -73,9 +73,9 @@ class TimelineEventVerificationNotificationJob < ApplicationJob
 
   def message(target, status, event_type: nil)
     if target == 'founder'
-      I18n.t "slack_notifications.timeline_events.#{target}.#{status}.#{event_type}", message_params
+      I18n.t("jobs.timeline_event_verification_notification.#{target}.#{status}.#{event_type}", message_params)
     else
-      I18n.t "slack_notifications.timeline_events.#{target}.#{status}", message_params
+      I18n.t("jobs.timeline_event_verification_notification.#{target}.#{status}", message_params)
     end
   end
 

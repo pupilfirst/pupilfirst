@@ -21,11 +21,13 @@ en:
         private_limited: Private Limited
         partnership: Partnership
         llp: Limited Liability Partnership
+
     payment:
       status:
         requested: Requested
         paid: Paid
         failed: Failed
+
     faculty:
       commitment:
         part_time: Part-Time
@@ -34,6 +36,7 @@ en:
   admissions:
     register:
       email_error: "Our email delivery service refused to accept the supplied address. Please ensure that it is a valid email address. If you're still having issues, please contact us using live chat or at help@sv.co"
+
   home:
     index:
       main_bleed_message_html: "SV.CO is for ambitious students who desire to learn how to build a <strong>real</strong> startup and experience <strong>Silicon Valley</strong> while still in college."
@@ -46,15 +49,10 @@ en:
       background_4_messages:
         secondary_html: "Ajmal, Aswin, Balram and Kishan of Spenwise built a prototype during SV.CO&apos;s six month startup course and got selected at Zone Startups, Mumbai to continue their startup journey."
 
-
-
-
-
-
-  startup:
+  startups:
     show:
       timeline_cards:
-        needs_imprvement:
+        needs_improvement:
           tooltip_text:
             founder: We have verified this event, but you can do better! If you have time, submit a new revised event based on our feedback.
             public: This event is verified by SV.CO but our Faculty submitted feedback asking for further improvements.
@@ -64,6 +62,11 @@ en:
             founder: Thank you for improving this event with a later event!
             public: This event was improved upon with a later submission!
           status_text: Improved Later
+
+#####                                                            #####
+## Strings below this point need to be organized using the standard ##
+#####                                                            #####
+
   dashboard:
     show:
       tour:

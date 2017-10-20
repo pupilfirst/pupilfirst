@@ -63,6 +63,7 @@ class StartupsController < ApplicationController
   # GET /startup/edit
   def edit
     @startup = current_founder.startup
+    @form = Startups::EditForm.new(@startup)
     authorize @startup
   end
 
@@ -70,9 +71,10 @@ class StartupsController < ApplicationController
   def update
     @startup = current_founder.startup
     authorize @startup
-    update_service = Startups::UpdateService.new(@startup)
+    @form = Startups::EditForm.new(@startup)
 
-    if update_service.update(startup_params)
+    if @form.validate(params[:startups_edit])
+      @form.save!
       flash[:success] = 'Startup details have been updated.'
       redirect_to timeline_path(@startup.id, @startup.slug)
     else
@@ -100,15 +102,6 @@ class StartupsController < ApplicationController
   def load_filter_options
     @categories = StartupCategory.order(:name)
     @levels = Level.where('number > ?', 0).order(:number)
-  end
-
-  def startup_params
-    params.require(:startup).permit(
-      :legal_registered_name, :address, :pitch, :website, :email, :logo, :remote_logo_url, :facebook_link,
-      :twitter_link, :product_name, :product_description,
-      { startup_category_ids: [] }, { founders_attributes: [:id] },
-      :registration_type, :presentation_link, :product_video_link, :wireframe_link, :prototype_link, :slug
-    )
   end
 
   def startup_registration_params

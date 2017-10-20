@@ -3,7 +3,7 @@
 p.mb-2
   em Please note that you can come back and change these details anytime.
 
-= bootstrap_form_for(@startup, url: startup_path, layout: :horizontal, label_col: 'col-sm-3', control_col: 'col-sm-9') do |f|
+= bootstrap_form_for(@form, url: startup_path, layout: :horizontal, label_col: 'col-sm-3', control_col: 'col-sm-9') do |f|
   = f.error_summary
   .panel-group#startup-form role="tablist"
     .card
@@ -24,8 +24,8 @@ p.mb-2
             = f.text_field :legal_registered_name, label_class: 'col-form-label', label: 'Legal Registered Name', class: 'form-control',
               help: 'The name of your registered legal entity. Partnership/Pvt. Ltd./LLP etc.'
             = f.file_field :logo, label_class: 'col-form-label', label: 'Logo', class: 'form-control', required: false
-            = f.select :startup_categories, options_from_collection_for_select(StartupCategory.all, :id, :name, @startup.startup_categories.pluck(:id)),
-              { help: 'Industries that your startup is involved in. Max 3.' }, { name: 'startup[startup_category_ids][]', multiple: true }
+            = f.select :startup_category_ids, options_from_collection_for_select(StartupCategory.all, :id, :name, @startup.startup_categories.pluck(:id)),
+              { label_class: 'col-form-label', label: 'Startup Categories', help: 'Industries that your startup is involved in. Max 3.' } , multiple: true
 
     .card
       .card-header.p-0 role="tab"

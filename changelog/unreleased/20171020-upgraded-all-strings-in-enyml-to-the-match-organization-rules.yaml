@@ -1,0 +1,6 @@
+---
+timestamp: '2017-10-20T11:59:34Z'
+title: Upgraded all strings in `en.yml` to the match organization rules.
+trello: https://trello.com/c/l9gDqjuQ
+private: true
+description: This commit touches a lot of files. Watch out for mistakes.

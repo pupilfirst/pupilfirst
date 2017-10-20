@@ -82,14 +82,14 @@ en:
         description_70_html: "Your team is performing better than most startups in the same level. Attempt to get more <em>Wow</em> grades for important targets to advance."
         description_90_html: "Your team is performing exceptionally. Great stuff, we have high hopes from you :)"
 
+  resources:
+    index:
+      zero_results: "We&rsquo;re sorry, but it looks like there are no resources %{tag_text} %{search_text}.  Try changing your filter conditions %{login_text}."
+      results_caption: "Showing resources %{tag_text} %{search_text}:"
+
 #####                                                            #####
 ## Strings below this point need to be organized using the standard ##
 #####                                                            #####
-
-  resource:
-    search_results:
-      zero_results: "We\'re sorry, but it looks like there are no resources %{tag_text} %{search_text}.  Try changing your filter conditions %{login_text}."
-      results_caption: "Showing resources %{tag_text} %{search_text}:"
 
   role:
     team: Team

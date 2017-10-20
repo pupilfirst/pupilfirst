@@ -308,7 +308,7 @@ ActiveAdmin.register TimelineEvent do
 
       row(:grade) do
         if timeline_event.grade.present?
-          t("timeline_event.grade.#{timeline_event.grade}")
+          t("models.timeline_event.grade.#{timeline_event.grade}")
         end
       end
 

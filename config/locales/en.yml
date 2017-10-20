@@ -49,6 +49,12 @@ en:
     team_member:
       role: *founder-role
 
+    timeline_event:
+      grade:
+        good: 'Good'
+        great: 'Great'
+        wow: 'Wow!'
+
   admissions:
     register:
       email_error: "Our email delivery service refused to accept the supplied address. Please ensure that it is a valid email address. If you're still having issues, please contact us using live chat or at help@sv.co"
@@ -106,12 +112,6 @@ en:
 #####                                                            #####
 ## Strings below this point need to be organized using the standard ##
 #####                                                            #####
-
-  timeline_event:
-    grade:
-      good: 'Good'
-      great: 'Great'
-      wow: 'Wow!'
 
   datepicker:
     dformat: '%d/%m/%Y'        # display format of the date (this is the default, can be ommited)

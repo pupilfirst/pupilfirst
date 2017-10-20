@@ -17,7 +17,7 @@ describe KarmaPoints::CreateService do
 
     let(:founder_message_for_founder_target) do
       I18n.t(
-        'slack_notifications.karma_points.founder',
+        'services.karma_points.create.founder_slack_notification',
         points: 10,
         activity_type: "Added a new Timeline event - #{timeline_event_for_founder_target.title}"
       )
@@ -25,7 +25,7 @@ describe KarmaPoints::CreateService do
 
     let(:founder_message_for_slack_activity) do
       I18n.t(
-        'slack_notifications.karma_points.founder',
+        'services.karma_points.create.founder_slack_notification',
         points: 20,
         activity_type: activity_type
       )
@@ -33,7 +33,7 @@ describe KarmaPoints::CreateService do
 
     let(:founder_message_for_platform_feedback) do
       I18n.t(
-        'slack_notifications.karma_points.founder',
+        'services.karma_points.create.founder_slack_notification',
         points: 30,
         activity_type: "Submitted Platform Feedback on #{platform_feedback.created_at.strftime('%b %d, %Y')}"
       )
@@ -41,7 +41,7 @@ describe KarmaPoints::CreateService do
 
     let(:team_message_for_startup_target) do
       I18n.t(
-        'slack_notifications.karma_points.startup',
+        'services.karma_points.create.startup_slack_notification',
         points: 40,
         activity_type: "Added a new Timeline event - #{timeline_event_for_startup_target.title}",
         startup_url: Rails.application.routes.url_helpers.timeline_url(startup.id, startup.slug),
@@ -51,7 +51,7 @@ describe KarmaPoints::CreateService do
 
     let(:team_message_for_connect_request) do
       I18n.t(
-        'slack_notifications.karma_points.startup',
+        'services.karma_points.create.startup_slack_notification',
         points: 50,
         activity_type: "Connect session with faculty member #{connect_request.faculty.name}",
         startup_url: Rails.application.routes.url_helpers.timeline_url(startup.id, startup.slug),

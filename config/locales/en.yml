@@ -2,13 +2,15 @@
 # Organization of en.yml
 # ----------------------
 #
-# jobs.JOB.*.key = display_value
+# jobs.[MODULE].JOB.*.key = display_value
 # libs.MODULE.*.key = display_value
 # models.MODEL.COLUMN = { key: display_value, ... }
 # services.MODULE.SERVICE.*.key = display_value
 # CONTROLLER.ACTION.*.key = display_value
 #
 # CONTROLLER is always the plural version. For example: FoundersController#edit = founders.edit.*
+#
+# Order alphabetically where possible.
 #
 # Third-party customizations follow their own format. Record these at the end of the file. For example:
 #
@@ -18,6 +20,40 @@
 # forget what the strings were for.
 
 en:
+  jobs:
+    faculty_connect_session_reminder:
+      founder_reminder: ":exclamation: *Reminder:* Your startup (%{startup_name}) has an office hour with <%{faculty_url}|%{faculty_name}> starting in 30 minutes! You can <%{meeting_link}|click here> to join the meeting when it's time."
+      faculty_reminder: ":exclamation: *Reminder:* You have an office hour with the founders of <%{startup_url}|%{startup_name}> starting in 30 minutes!\nThe founders plan to discuss the following questions:\n %{questions}\nYou can <%{meeting_link}|click here> to join the meeting when it's time."
+      ops_team_reminder: ":exclamation: *Reminder:* <%{startup_url}|%{startup_name}> has an office hour with <%{faculty_url}|%{faculty_name}> starting in 30 minutes. Follow up!"
+
+    timeline_events:
+      description_update_notification:
+        heading: >
+          An SV.CO faculty member has updated the description in your timeline event (<%{event_url}|%{event_title}>).
+          See changes below:
+
+    timeline_event_verification_notification:
+      founder:
+        verified:
+          founder_event: "Your new timeline entry (<%{event_url}|%{event_title}>) has been verified by SV.CO"
+          startup_event: "Your new timeline entry (<%{event_url}|%{event_title}>) for <%{startup_url}|%{startup_product_name}> has been verified by SV.CO"
+        needs_improvement:
+          founder_event: "Your new timeline entry (<%{event_url}|%{event_title}>) has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
+          startup_event: "Your new timeline entry (<%{event_url}|%{event_title}>) for <%{startup_url}|%{startup_product_name}> has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
+        not_accepted:
+          founder_event: "Your new timeline entry (<%{event_url}|%{event_title}>) has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
+          startup_event: "The new timeline entry (<%{event_url}|%{event_title}>) submitted by you for <%{startup_url}|%{startup_product_name}> has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
+      team:
+        verified: "Your startup <%{startup_url}|%{startup_product_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>"
+        needs_improvement: "Your startup <%{startup_url}|%{startup_product_name}> has a new timeline entry: (<%{event_url}|%{event_title}>) and has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
+        not_accepted: "The new timeline entry (<%{event_url}|%{event_title}>) submitted by  your startup <%{startup_url}|%{startup_product_name}> has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
+      public:
+        verified: &jobs-timeline_event_verification_notification-public-verified |
+          <%{startup_url}|%{startup_product_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>
+          *Description:* %{event_description}
+          %{links_attached_notice}
+        needs_improvement: *jobs-timeline_event_verification_notification-public-verified
+
   libs:
     lita:
       handlers:
@@ -79,6 +115,11 @@ en:
       prune_membership:
         removal_notice: "I've just removed a few founders with expired subscriptions to keep this channel exclusive to active members."
 
+    karma_points:
+      create:
+        founder_slack_notification: 'You have been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
+        startup_slack_notification: 'Your startup <%{startup_url}|%{startup_product_name}> has been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
+
   admissions:
     register:
       email_error: "Our email delivery service refused to accept the supplied address. Please ensure that it is a valid email address. If you're still having issues, please contact us using live chat or at help@sv.co"
@@ -132,45 +173,3 @@ en:
     index:
       zero_results: "We&rsquo;re sorry, but it looks like there are no resources %{tag_text} %{search_text}.  Try changing your filter conditions %{login_text}."
       results_caption: "Showing resources %{tag_text} %{search_text}:"
-
-#####                                                            #####
-## Strings below this point need to be organized using the standard ##
-#####                                                            #####
-
-  slack_notifications:
-    timeline_events:
-      founder:
-        verified:
-          founder_event: "Your new timeline entry (<%{event_url}|%{event_title}>) has been verified by SV.CO"
-          startup_event: "Your new timeline entry (<%{event_url}|%{event_title}>) for <%{startup_url}|%{startup_product_name}> has been verified by SV.CO"
-        needs_improvement:
-          founder_event: "Your new timeline entry (<%{event_url}|%{event_title}>) has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
-          startup_event: "Your new timeline entry (<%{event_url}|%{event_title}>) for <%{startup_url}|%{startup_product_name}> has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
-        not_accepted:
-          founder_event: "Your new timeline entry (<%{event_url}|%{event_title}>) has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
-          startup_event: "The new timeline entry (<%{event_url}|%{event_title}>) submitted by you for <%{startup_url}|%{startup_product_name}> has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
-      team:
-        verified: "Your startup <%{startup_url}|%{startup_product_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>"
-        needs_improvement: "Your startup <%{startup_url}|%{startup_product_name}> has a new timeline entry: (<%{event_url}|%{event_title}>) and has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
-        not_accepted: "The new timeline entry (<%{event_url}|%{event_title}>) submitted by  your startup <%{startup_url}|%{startup_product_name}> has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
-      public:
-        verified: &slack_notifications_public_verified |
-          <%{startup_url}|%{startup_product_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>
-          *Description:* %{event_description}
-          %{links_attached_notice}
-        needs_improvement: *slack_notifications_public_verified
-    karma_points:
-      founder: 'You have been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
-      startup: 'Your startup <%{startup_url}|%{startup_product_name}> has been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
-
-    connect_sessions:
-      founder_reminder: ":exclamation: *Reminder:* Your startup (%{startup_name}) has an office hour with <%{faculty_url}|%{faculty_name}> starting in 30 minutes! You can <%{meeting_link}|click here> to join the meeting when it's time."
-      faculty_reminder: ":exclamation: *Reminder:* You have an office hour with the founders of <%{startup_url}|%{startup_name}> starting in 30 minutes!\nThe founders plan to discuss the following questions:\n %{questions}\nYou can <%{meeting_link}|click here> to join the meeting when it's time."
-      ops_team_reminder: ":exclamation: *Reminder:* <%{startup_url}|%{startup_name}> has an office hour with <%{faculty_url}|%{faculty_name}> starting in 30 minutes. Follow up!"
-
-  jobs:
-    timeline_event:
-      description_update_notification:
-        heading: >
-          An SV.CO faculty member has updated the description in your timeline event (<%{event_url}|%{event_title}>).
-          See changes below:

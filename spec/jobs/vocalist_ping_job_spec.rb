@@ -8,7 +8,7 @@ describe VocalistPingJob do
 
   let(:expected_founder_message) do
     I18n.t(
-      'slack_notifications.karma_points.founder',
+      'services.karma_points.create.founder_slack_notification',
       points: 10,
       activity_type: Faker::Lorem.sentence
     )
@@ -16,7 +16,7 @@ describe VocalistPingJob do
 
   let(:expected_startup_message) do
     I18n.t(
-      'slack_notifications.karma_points.startup',
+      'services.karma_points.create.startup_slack_notification',
       points: 20,
       startup_url: Rails.application.routes.url_helpers.startup_url(startup),
       startup_product_name: startup.product_name,

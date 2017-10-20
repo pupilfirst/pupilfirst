@@ -38,37 +38,9 @@ class ConnectRequest < ApplicationRecord
 
   after_save :post_confirmation_tasks
 
-  # TODO: Probably move this out to a ConnectRequestConfirmationService? (https://trello.com/c/6gLM94OJ)
   def post_confirmation_tasks
     return unless saved_change_to_status? && confirmed? && confirmed_at.blank?
-    send_mails_for_confirmed
-    save_confirmation_time!
-    create_faculty_connect_session_rating_job
-
-    if Rails.env.production?
-      ConnectRequests::CreateCalendarEventService.new(self).execute
-      create_faculty_connect_session_reminder_job
-    end
-  end
-
-  def save_confirmation_time!
-    update!(confirmed_at: Time.now)
-  end
-
-  def create_faculty_connect_session_rating_job
-    if Rails.env.production?
-      FacultyConnectSessionRatingJob.set(wait_until: connect_slot.slot_at + 45.minutes).perform_later(id)
-    else
-      FacultyConnectSessionRatingJob.perform_later(id)
-    end
-  end
-
-  def create_faculty_connect_session_reminder_job
-    if Rails.env.production?
-      FacultyConnectSessionReminderJob.set(wait_until: connect_slot.slot_at - 30.minutes).perform_later(id)
-    else
-      FacultyConnectSessionReminderJob.perform_later(id)
-    end
+    ConnectRequests::ConfirmationService.new(self).execute
   end
 
   def time_for_feedback_mail?
@@ -85,11 +57,6 @@ class ConnectRequest < ApplicationRecord
 
   def feedback_mails_sent!
     update!(feedback_mails_sent_at: Time.now)
-  end
-
-  def send_mails_for_confirmed
-    FacultyMailer.connect_request_confirmed(self).deliver_later
-    StartupMailer.connect_request_confirmed(self).deliver_later
   end
 
   def requested?

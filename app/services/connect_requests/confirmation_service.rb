@@ -23,7 +23,7 @@ module ConnectRequests
     end
 
     def save_confirmation_time!
-      @connect_request.update!(confirmed_at: Time.now)
+      @connect_request.update!(confirmed_at: Time.zone.now)
     end
 
     def create_faculty_connect_session_rating_job
@@ -40,6 +40,10 @@ module ConnectRequests
       else
         FacultyConnectSessionReminderJob.perform_later(@connect_request.id)
       end
+    end
+
+    def connect_slot
+      @connect_slot = @connect_request.connect_slot
     end
   end
 end

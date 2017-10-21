@@ -43,7 +43,7 @@ module ConnectRequests
     end
 
     def connect_slot
-      @connect_slot = @connect_request.connect_slot
+      @connect_slot ||= @connect_request.connect_slot
     end
   end
 end

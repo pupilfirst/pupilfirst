@@ -1,4 +1,4 @@
-- session[:startup_id] = @startup.id
+- session[:startup_id] = current_startup.id
 
 p.mb-2
   em Please note that you can come back and change these details anytime.
@@ -24,7 +24,7 @@ p.mb-2
             = f.text_field :legal_registered_name, label_class: 'col-form-label', label: 'Legal Registered Name', class: 'form-control',
               help: 'The name of your registered legal entity. Partnership/Pvt. Ltd./LLP etc.'
             = f.file_field :logo, label_class: 'col-form-label', label: 'Logo', class: 'form-control', required: false
-            = f.select :startup_category_ids, options_from_collection_for_select(StartupCategory.all, :id, :name, @startup.startup_categories.pluck(:id)),
+            = f.select :startup_category_ids, options_from_collection_for_select(StartupCategory.all, :id, :name, current_startup.startup_categories.pluck(:id)),
               { label_class: 'col-form-label', label: 'Startup Categories', help: 'Industries that your startup is involved in. Max 3.' } , multiple: true
 
     .card
@@ -50,7 +50,7 @@ p.mb-2
           p
             ' The URL to your timeline is currently:
             code
-              = timeline_url(@startup.id, @startup.slug)
+              = timeline_url(current_startup.id, current_startup.slug)
           p.mb-2
             ' You can change the last part of the URL, the <em>slug</em>, to something you prefer (as long as it is unique).
 
@@ -76,8 +76,8 @@ p.mb-2
             = f.text_field :wireframe_link, label_class: 'col-form-label', label: 'Wireframe', class: 'form-control',
               help: 'Link to your product wireframe, if available and public.', maxlength: 255
 
-            = f.select :registration_type, registration_type_options(@startup.registration_type), include_blank: 'Not Registered'
+            = f.select :registration_type, registration_type_options(current_startup.registration_type), include_blank: 'Not Registered'
 
   .form-group.mt-3
     = f.submit class: 'btn btn-md btn-primary', value: 'Update startup profile'
-    = link_to 'Cancel', timeline_path(@startup.id, @startup.slug), class: 'btn btn-md btn-ghost-secondary mt-3 mt-sm-0 ml-sm-3'
+    = link_to 'Cancel', timeline_path(current_startup.id, current_startup.slug), class: 'btn btn-md btn-ghost-secondary mt-3 mt-sm-0 ml-sm-3'

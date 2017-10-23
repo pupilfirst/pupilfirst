@@ -62,21 +62,19 @@ class StartupsController < ApplicationController
 
   # GET /startup/edit
   def edit
-    @startup = current_founder.startup
-    @form = Startups::EditForm.new(@startup)
-    authorize @startup
+    authorize current_startup
+    @form = Startups::EditForm.new(current_startup)
   end
 
   # PATCH /startup
   def update
-    @startup = current_founder.startup
-    authorize @startup
-    @form = Startups::EditForm.new(@startup)
+    authorize current_startup
+    @form = Startups::EditForm.new(current_startup)
 
     if @form.validate(params[:startups_edit])
       @form.save!
       flash[:success] = 'Startup details have been updated.'
-      redirect_to timeline_path(@startup.id, @startup.slug)
+      redirect_to timeline_path(current_startup.id, current_startup.slug)
     else
       render 'startups/edit'
     end
@@ -84,12 +82,10 @@ class StartupsController < ApplicationController
 
   # POST /startup/level_up
   def level_up
-    startup = current_founder.startup
-    raise_not_found if startup.blank?
-    authorize startup
+    authorize current_startup
 
-    Startups::LevelUpService.new(startup).execute
-    redirect_to(dashboard_founder_path(from: 'level_up', from_level: startup.level.number - 1))
+    Startups::LevelUpService.new(current_startup).execute
+    redirect_to(dashboard_founder_path(from: 'level_up', from_level: current_startup.level.number - 1))
   end
 
   private

@@ -26,6 +26,10 @@ class StartupPolicy < ApplicationPolicy
     user.founder.subscription_active? && !user.founder.exited?
   end
 
+  def edit?
+    update?
+  end
+
   def level_up?
     if record.level.number.positive?
       # If level 1 or above, user must be able to update to level up.

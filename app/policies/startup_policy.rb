@@ -4,6 +4,7 @@ class StartupPolicy < ApplicationPolicy
   end
 
   def timeline_event_show?(timeline_event)
+    return false if timeline_event.blank?
     if timeline_event.founder_event?
       # Show founder events only to the founder who posted it.
       timeline_event.founder.present? && timeline_event.founder == user&.founder

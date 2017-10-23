@@ -14,7 +14,7 @@ describe TimelineEvents::VerificationService do
 
   before do
     # stub out vocalist notifications
-    allow(TimelineEventVerificationNotificationJob).to receive(:perform_later).and_return(true)
+    allow(TimelineEvents::VerificationNotificationJob).to receive(:perform_later).and_return(true)
   end
 
   describe '#update_status' do

@@ -25,4 +25,3 @@ describe ConnectRequests::ConfirmationService do
     end
   end
 end
-f

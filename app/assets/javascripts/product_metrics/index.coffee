@@ -9,6 +9,11 @@ typedjsAnimation = ->
   smartBackspace: false
   loop: true)
 
+counterUp = ->
+  $('.program-stats__counter').counterUp
+    time: 1000
+
 $(document).on 'turbolinks:load', ->
   if $('#stats-index')
     typedjsAnimation()
+    counterUp()

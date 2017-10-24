@@ -9,10 +9,8 @@ module ConnectRequests
       save_confirmation_time!
       create_faculty_connect_session_rating_job
 
-      if Rails.env.production?
-        ConnectRequests::CreateCalendarEventService.new(@connect_request).execute
-        create_faculty_connect_session_reminder_job
-      end
+      ConnectRequests::CreateCalendarEventService.new(@connect_request).execute
+      create_faculty_connect_session_reminder_job
     end
 
     private
@@ -27,19 +25,11 @@ module ConnectRequests
     end
 
     def create_faculty_connect_session_rating_job
-      if Rails.env.production?
-        FacultyConnectSessionRatingJob.set(wait_until: connect_slot.slot_at + 45.minutes).perform_later(@connect_request.id)
-      else
-        FacultyConnectSessionRatingJob.perform_later(@connect_request.id)
-      end
+      FacultyConnectSessionRatingJob.set(wait_until: connect_slot.slot_at + 45.minutes).perform_later(@connect_request.id)
     end
 
     def create_faculty_connect_session_reminder_job
-      if Rails.env.production?
-        FacultyConnectSessionReminderJob.set(wait_until: connect_slot.slot_at - 30.minutes).perform_later(@connect_request.id)
-      else
-        FacultyConnectSessionReminderJob.perform_later(@connect_request.id)
-      end
+      FacultyConnectSessionReminderJob.set(wait_until: connect_slot.slot_at - 30.minutes).perform_later(@connect_request.id)
     end
 
     def connect_slot

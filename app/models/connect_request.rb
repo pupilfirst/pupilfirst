@@ -36,13 +36,6 @@ class ConnectRequest < ApplicationRecord
     self.status = STATUS_REQUESTED if status.nil?
   end
 
-  after_save :post_confirmation_tasks
-
-  def post_confirmation_tasks
-    return unless saved_change_to_status? && confirmed? && confirmed_at.blank?
-    ConnectRequests::ConfirmationService.new(self).execute
-  end
-
   def time_for_feedback_mail?
     (connect_slot.slot_at + 40.minutes).past? ? true : false
   end

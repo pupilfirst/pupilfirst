@@ -46,7 +46,9 @@ Rails.application.configure do
   config.carrier_wave_storage = :file
 
   # Override Rails 5's default of :async, and force jobs to run inline.
-  config.active_job.queue_adapter = :inline
+  test_adapter = ActiveJob::QueueAdapters::TestAdapter.new
+  test_adapter.perform_enqueued_jobs = true
+  config.active_job.queue_adapter = test_adapter
 end
 
 Rails.application.default_url_options = Rails.application.config.action_mailer.default_url_options

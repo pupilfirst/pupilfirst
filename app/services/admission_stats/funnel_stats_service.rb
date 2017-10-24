@@ -18,6 +18,7 @@ module AdmissionStats
         'Payment Initiated' => payment_initiated,
         'Fee Paid Teams' => fee_paid_startups.count,
         'Fee Paid Founders' => fee_paid_founders.count,
+        'Renewals' => renewals_count,
         'Revenue' => "₹#{revenue.to_i}"
       }
     end
@@ -38,6 +39,13 @@ module AdmissionStats
 
     def fee_paid_founders
       Founder.where(startup: fee_paid_startups)
+    end
+
+    def renewals_count
+      Payment.joins(:startup)
+        .where(paid_at: @date_range)
+        .where.not(id: Payment.paid.select('distinct on (startup_id) id').order('startup_id, paid_at asc'))
+        .count
     end
 
     def revenue

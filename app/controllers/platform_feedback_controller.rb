@@ -6,7 +6,12 @@ class PlatformFeedbackController < ApplicationController
     authorize @platform_feedback
 
     if @platform_feedback.save!
+      # Mail help@sv.co about the submission.
       PlatformFeedbackMailer.new_platform_feedback(@platform_feedback).deliver_later
+
+      # Mail an acknowledgement to the founder.
+      PlatformFeedbackMailer.acknowledgement(@platform_feedback).deliver_later
+
       flash[:success] = 'Thank You! Your feedback has been sent to the SV.CO team!'
     else
       flash[:error] = 'Something went wrong while saving your feedback! Please try again.'

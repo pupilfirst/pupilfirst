@@ -12,8 +12,8 @@ module Founders
     def update
       if payment.requested?
         # An attempt to pay was made at least once before.
-        if @period == payment.period
-          log "Payment ##{@payment.id} period is unchanged. Returning payment after verifying validity at Instamojo..."
+        if payment.period == @period && payment.amount == fee_payable
+          log "Payment ##{@payment.id} period and amount are unchanged. Returning payment after verifying validity at Instamojo..."
 
           Instamojo::VerifyPaymentRequestService.new(payment, @period).verify
         else
@@ -40,6 +40,10 @@ module Founders
 
       # And create another request.
       Instamojo::RequestPaymentService.new(disabled_payment, @period).request
+    end
+
+    def fee_payable
+      Startups::FeePayableService.new(@founder.startup).fee_payable(period: @period)
     end
   end
 end

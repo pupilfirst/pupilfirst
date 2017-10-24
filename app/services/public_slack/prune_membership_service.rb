@@ -49,6 +49,7 @@ module PublicSlack
 
     def remove_expired_founders(group_id)
       expired_founders.each { |founder| remove_from_group(group_id, founder) }
+      notify_removal_on_slack(group_id)
     end
 
     def remove_from_group(group_id, founder)
@@ -58,6 +59,11 @@ module PublicSlack
       @pruned_founders |= [founder] if response['ok']
     rescue PublicSlack::OperationFailureException => e
       raise e if e.parsed_response['error'] != 'not_in_group'
+    end
+
+    def notify_removal_on_slack(channel_id)
+      message = I18n.t('slack.removal_notice')
+      PublicSlack::MessageService.new.post(message: message, channel: channel_id)
     end
 
     def api

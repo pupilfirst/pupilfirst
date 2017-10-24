@@ -38,12 +38,12 @@ module ProductMetrics
 
     # Number of states with admitted founders.
     def count_participating_states
-      College.joins({ founders: { startup: :level } }, :state).merge(Founder.admitted).distinct(:state_id).count
+      College.joins({ founders: { startup: :level } }, :state).merge(Founder.admitted).distinct(:state_id).count(:state_id)
     end
 
     # Number of universities with admitted founders.
     def count_participating_universities
-      College.joins({ founders: { startup: :level } }, :university).merge(Founder.admitted).distinct(:university_id).count
+      College.joins({ founders: { startup: :level } }, :university).merge(Founder.admitted).distinct(:university_id).count(:university_id)
     end
 
     # Number of colleges with admitted founders.
@@ -89,6 +89,11 @@ module ProductMetrics
     # Number of downloads of resources.
     def count_library_resource_downloads
       Resource.all.sum(:downloads)
+    end
+
+    # Number of recorded messages on Public Slack.
+    def count_slack_messages
+      PublicSlackMessage.count
     end
   end
 end

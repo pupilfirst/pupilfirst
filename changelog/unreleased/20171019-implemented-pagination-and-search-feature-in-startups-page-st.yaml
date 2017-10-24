@@ -1,0 +1,9 @@
+---
+timestamp: '2017-10-19T06:41:46Z'
+title: Implemented pagination and search feature in /startups page. Startups can now
+  be searched using startup or product name.
+trello: https://trello.com/c/YGuvZu45
+private: false
+description: Fixed missing startup logo icons along with this feature. Startups without
+  a logo will now have an identicon logo.
+category: feature

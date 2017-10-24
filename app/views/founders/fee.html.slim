@@ -42,8 +42,16 @@ script src="https://js.instamojo.com/v1/checkout.js"
                       span.discount-coupon-applied--code.dark-secondary
                         | #{@coupon.code}
                       | applied!
-                    p.m-t-1
-                      ' You will unlock <strong>#{@coupon.user_extension_days} extra days</strong> of SV.CO subscription on fee payment!
+
+                    - discount = @coupon.discount_percentage
+                    - extension = @coupon.user_extension_days
+                    - if discount.present?
+                      - benefit = t('founders.fee.discount_benefit', percentage: discount)
+                      - if extension.present?
+                        - benefit += ' and ' + t('founders.fee.extension_benefit', extension: extension)
+                    - else
+                      - benefit = t('founders.fee.extension_benefit', extension: extension)
+                    p.m-t-1 You have unlocked #{benefit.html_safe}.
 
                     - if @coupon.instructions.present?
                       .coupon-instructions.m-t-1

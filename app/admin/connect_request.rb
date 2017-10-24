@@ -12,7 +12,7 @@ ActiveAdmin.register ConnectRequest do
   filter :connect_slot_faculty_name, as: :string, label: 'Name of Faculty'
   filter :startup_product_name, as: :string
   filter :questions
-  filter :status, as: :select, collection: ConnectRequest.valid_statuses
+  filter :status, as: :select, collection: -> { ConnectRequest.valid_statuses }
   filter :meeting_link
   filter :created_at
   filter :confirmed_at

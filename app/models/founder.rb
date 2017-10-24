@@ -20,11 +20,7 @@ class Founder < ApplicationRecord
   ID_PROOF_TYPES = ['Aadhaar Card', 'Driving License', 'Passport', 'Voters ID'].freeze
 
   # Monthly fee amount for founders.
-  FEE = 1000
-
-  FEE_ONE_MONTH = 1000
-  FEE_THREE_MONTHS = 2000
-  FEE_SIX_MONTHS = 3000
+  FEE = 4000
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -56,13 +52,15 @@ class Founder < ApplicationRecord
   # Custom scope to allow AA to filter by intersection of tags.
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
 
-  scope :active_on_slack, ->(since, upto) { joins(:public_slack_messages).where(public_slack_messages: { created_at: since..upto }) }
-  scope :active_on_web, ->(since, upto) { joins(user: :visits).where(visits: { started_at: since..upto }) }
+  scope :active_on_slack, ->(from, to) { joins(:public_slack_messages).where(public_slack_messages: { created_at: from..to }) }
+  scope :active_on_web, ->(from, to) { joins(user: :visits).where(visits: { started_at: from..to }) }
 
   scope :inactive, lambda {
     admitted.where(exited: false).where.not(id: active_on_slack(Time.now.beginning_of_week, Time.now)).where.not(id: active_on_web(Time.now.beginning_of_week, Time.now))
   }
   scope :not_exited, -> { where.not(exited: true) }
+
+  scope :subscribed, -> { joins(startup: :payments).merge(Payment.paid).where('payments.billing_end_at > ?', Time.now) }
 
   def self.with_email(email)
     where('lower(email) = ?', email.downcase).first # rubocop:disable Rails/FindBy
@@ -240,30 +238,8 @@ class Founder < ApplicationRecord
     end
   end
 
-  # method to return the list of active founders on slack for a given duration
-  def self.active_founders_on_slack(since:, upto: Time.now)
-    Founder.not_dropped_out.not_exited.active_on_slack(since, upto).distinct
-  end
-
-  # method to return the list of active founders on web for a given duration
-  def self.active_founders_on_web(since:, upto: Time.now)
-    Founder.not_dropped_out.not_exited.active_on_web(since, upto).distinct
-  end
-
   def any_targets?
     targets.present? || startup&.targets.present?
-  end
-
-  def latest_nps
-    platform_feedback.scored.order('created_at').last&.promoter_score
-  end
-
-  def promoter?
-    latest_nps.present? && latest_nps > 8
-  end
-
-  def detractor?
-    latest_nps.present? && latest_nps < 7
   end
 
   def facebook_token_available?

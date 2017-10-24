@@ -7,6 +7,7 @@ describe PublicSlack::PruneMembershipService do
   let(:mock_api_service) { instance_double PublicSlack::ApiService }
   let(:group_ids) { { 'groups' => [{ 'id' => 'group_id_1' }, { 'id' => 'group_id_2' }] } }
   let(:ok_response) { { 'ok' => true } }
+  let(:mock_message_service) { instance_double PublicSlack::MessageService }
 
   let(:not_in_group_exception) do
     PublicSlack::OperationFailureException.new('_error_message', 'error' => 'not_in_group')
@@ -37,7 +38,7 @@ describe PublicSlack::PruneMembershipService do
         not_recent_expiry.startup.team_lead.update!(slack_user_id: rand(1_000_000))
       end
 
-      it 'requests her Slack removal and emails her about it' do
+      it 'requests her Slack removal, emails her about it and announces it on the channels' do
         expect(PublicSlack::ApiService).to receive(:new).and_return(mock_api_service)
         expect(mock_api_service).to receive(:get).with('groups.list').and_return(group_ids)
 
@@ -48,6 +49,12 @@ describe PublicSlack::PruneMembershipService do
         # Expect a not_in_group exception to be silently ignored.
         expect(mock_api_service).to receive(:get)
           .with('groups.kick', params: { channel: 'group_id_2', user: 'xxxxxx' }).and_raise(not_in_group_exception)
+
+        # Expect notifications to have been sent to both the channels.
+        expect(PublicSlack::MessageService).to receive(:new).twice.and_return(mock_message_service)
+        message = I18n.t('slack.removal_notice')
+        expect(mock_message_service).to receive(:post).with(message: message, channel: 'group_id_1')
+        expect(mock_message_service).to receive(:post).with(message: message, channel: 'group_id_2')
 
         subject.execute
 

@@ -65,6 +65,7 @@ ActiveAdmin.register Founder do
     if params['scope'] == 'level_zero'
       column :email
       column :phone
+
       column 'Skill' do |founder|
         if founder.hacker.nil?
           'Unknown'
@@ -74,7 +75,7 @@ ActiveAdmin.register Founder do
           'Hustler'
         end
       end
-      column('Targets Completed', &:completed_targets_count)
+
       column 'Admission Stage' do |founder|
         founder.startup.admission_stage
       end

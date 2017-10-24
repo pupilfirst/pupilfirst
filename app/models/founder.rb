@@ -296,10 +296,6 @@ class Founder < ApplicationRecord
     invited_startup.present?
   end
 
-  def completed_targets_count
-    Targets::BulkStatusService.new(self).completed_targets_count
-  end
-
   def self.reference_sources
     [
       'Friend', 'Seniors', '#StartinCollege Event', 'Newspaper/Magazine', 'TV', 'SV.CO Blog', 'Instagram', 'Facebook',

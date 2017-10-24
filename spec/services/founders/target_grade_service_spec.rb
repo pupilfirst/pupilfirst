@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Targets::BulkGradeService do
+describe Founders::TargetGradeService do
   subject { described_class.new(founder) }
 
   let(:level_zero) { create :level, :zero }

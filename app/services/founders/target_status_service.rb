@@ -1,5 +1,5 @@
-module Targets
-  class BulkStatusService
+module Founders
+  class TargetStatusService
     def initialize(founder)
       @founder = founder
       @level_number = founder.startup.level.number

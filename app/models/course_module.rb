@@ -8,8 +8,8 @@ class CourseModule < ApplicationRecord
 
   has_many :mooc_quiz_questions
 
-  has_many :quiz_attempts
-  has_many :mooc_students, through: :quiz_attempts
+  has_many :mooc_quiz_attempts
+  has_many :mooc_students, through: :mooc_quiz_attempts
 
   has_many :module_chapters
   accepts_nested_attributes_for :module_chapters, allow_destroy: true

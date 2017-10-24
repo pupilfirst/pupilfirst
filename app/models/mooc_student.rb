@@ -2,12 +2,12 @@ class MoocStudent < ApplicationRecord
   belongs_to :college, optional: true
   belongs_to :user
 
-  has_many :quiz_attempts
-  has_many :course_modules, through: :quiz_attempts
+  has_many :mooc_quiz_attempts
+  has_many :course_modules, through: :mooc_quiz_attempts
 
   serialize :completed_chapters, Array
 
-  scope :completed_quiz, ->(course_module) { MoocStudent.joins(:quiz_attempts).where(quiz_attempts: { course_module_id: course_module.id }).distinct }
+  scope :completed_quiz, ->(course_module) { MoocStudent.joins(:mooc_quiz_attempts).where(mooc_quiz_attempts: { course_module_id: course_module.id }).distinct }
 
   def self.valid_semester_values
     %w[I II III IV V VI VII VIII Graduated Other]
@@ -18,7 +18,7 @@ class MoocStudent < ApplicationRecord
   end
 
   def score_for_module(course_module)
-    quiz_attempts.where(course_module: course_module).order('created_at DESC').first&.score.to_i
+    mooc_quiz_attempts.where(course_module: course_module).order('created_at DESC').first&.score.to_i
   end
 
   def add_completed_chapter(chapter)
@@ -35,7 +35,7 @@ class MoocStudent < ApplicationRecord
   end
 
   def completed_quiz?(course_module)
-    !course_module.quiz? || quiz_attempts.where(course_module: course_module).present?
+    !course_module.quiz? || mooc_quiz_attempts.where(course_module: course_module).present?
   end
 
   def completed_module?(course_module)

@@ -175,7 +175,7 @@ class SixWaysController < ApplicationController
   end
 
   def save_grade
-    QuizAttempt.create!(course_module: @module, mooc_student: current_mooc_student, score: quiz_score, attempted_questions: @attempted, total_questions: @total)
+    MoocQuizAttempt.create!(course_module: @module, mooc_student: current_mooc_student, score: quiz_score, attempted_questions: @attempted, total_questions: @total)
   end
 
   def gtu_variables

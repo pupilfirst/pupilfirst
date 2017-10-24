@@ -1,4 +1,4 @@
-class QuizAttempt < ApplicationRecord
+class MoocQuizAttempt < ApplicationRecord
   belongs_to :course_module
   belongs_to :mooc_student
 

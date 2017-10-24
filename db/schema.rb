@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171024093750) do
+ActiveRecord::Schema.define(version: 20171024095430) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -328,6 +328,19 @@ ActiveRecord::Schema.define(version: 20171024093750) do
     t.index ["slug"], name: "index_module_chapters_on_slug"
   end
 
+  create_table "mooc_quiz_attempts", id: :serial, force: :cascade do |t|
+    t.integer "course_module_id"
+    t.integer "mooc_student_id"
+    t.datetime "taken_at"
+    t.float "score"
+    t.integer "total_questions"
+    t.integer "attempted_questions"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_module_id"], name: "index_mooc_quiz_attempts_on_course_module_id"
+    t.index ["mooc_student_id"], name: "index_mooc_quiz_attempts_on_mooc_student_id"
+  end
+
   create_table "mooc_quiz_questions", id: :serial, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -425,19 +438,6 @@ ActiveRecord::Schema.define(version: 20171024093750) do
     t.string "timestamp"
     t.integer "reaction_to_id"
     t.index ["founder_id"], name: "index_public_slack_messages_on_founder_id"
-  end
-
-  create_table "quiz_attempts", id: :serial, force: :cascade do |t|
-    t.integer "course_module_id"
-    t.integer "mooc_student_id"
-    t.datetime "taken_at"
-    t.float "score"
-    t.integer "total_questions"
-    t.integer "attempted_questions"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["course_module_id"], name: "index_quiz_attempts_on_course_module_id"
-    t.index ["mooc_student_id"], name: "index_quiz_attempts_on_mooc_student_id"
   end
 
   create_table "resources", id: :serial, force: :cascade do |t|

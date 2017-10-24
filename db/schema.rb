@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171024070617) do
+ActiveRecord::Schema.define(version: 20171024091925) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -327,6 +327,14 @@ ActiveRecord::Schema.define(version: 20171024070617) do
     t.index ["slug"], name: "index_module_chapters_on_slug"
   end
 
+  create_table "mooc_quiz_questions", id: :serial, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "course_module_id"
+    t.text "question"
+    t.index ["course_module_id"], name: "index_mooc_quiz_questions_on_course_module_id"
+  end
+
   create_table "mooc_students", id: :serial, force: :cascade do |t|
     t.string "email"
     t.string "name"
@@ -429,14 +437,6 @@ ActiveRecord::Schema.define(version: 20171024070617) do
     t.datetime "updated_at", null: false
     t.index ["course_module_id"], name: "index_quiz_attempts_on_course_module_id"
     t.index ["mooc_student_id"], name: "index_quiz_attempts_on_mooc_student_id"
-  end
-
-  create_table "quiz_questions", id: :serial, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "course_module_id"
-    t.text "question"
-    t.index ["course_module_id"], name: "index_quiz_questions_on_course_module_id"
   end
 
   create_table "resources", id: :serial, force: :cascade do |t|

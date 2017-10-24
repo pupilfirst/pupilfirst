@@ -1,4 +1,4 @@
-class QuizQuestion < ApplicationRecord
+class MoocQuizQuestion < ApplicationRecord
   belongs_to :course_module
   has_many :answer_options
   accepts_nested_attributes_for :answer_options, allow_destroy: true

@@ -91,7 +91,7 @@ class SixWaysController < ApplicationController
     raise_not_found unless module_exists?
     @skip_container = true
     @module = CourseModule.friendly.find(params[:module_name])
-    @questions = @module.quiz_questions
+    @questions = @module.mooc_quiz_questions
 
     @form = QuizSubmissionForm.new(Reform::OpenForm.new)
     @form.prepopulate! questions: @questions
@@ -167,7 +167,7 @@ class SixWaysController < ApplicationController
 
     @total = answers.count
     @attempted = answers.count { |a| a[:answer_id].present? }
-    @correct = answers.count { |a| a[:answer_id].to_i == QuizQuestion.find(a[:id]).correct_answer.id }
+    @correct = answers.count { |a| a[:answer_id].to_i == MoocQuizQuestion.find(a[:id]).correct_answer.id }
   end
 
   def quiz_score

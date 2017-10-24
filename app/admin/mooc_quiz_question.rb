@@ -1,4 +1,4 @@
-ActiveAdmin.register QuizQuestion do
+ActiveAdmin.register MoocQuizQuestion do
   include DisableIntercom
 
   menu parent: 'SixWays'

@@ -1,7 +1,5 @@
 / h1 Stats go here.
 /
-/ pre
-/   == @metrics.to_yaml
 - content_for :head do
   title SV.CO Stats
   meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
@@ -16,18 +14,20 @@ section.stats-hero__banner.secondary-banner
             p.stats-hero__message-text--small.font-light While you are reading this,
             span#typed-strings
               p
-                | 328 Student Developers
+                == @metrics['Founders']['value']
+                | &nbsp;Student Developers
               p
-                | 82 Campus Startups
-            span#typed
+                == @metrics['Startups']['value']
+                | &nbsp;Campus Startups
+            span#typed.font-semibold
             p.stats-hero__message-text--medium.font-light are building their products
 
           p.stats-hero__message-delta-text.mt-1.mt-md-2
             ' This month
-            span.font-semibold.brand-secondary.pr-1
+            span.font-semibold.brand-secondary.pr-1.program-stats__counter
               | 30 students
             ' joined the SV.CO collective. That’s
-            span.font-semibold.brand-secondary.pr-1
+            span.font-semibold.brand-secondary.pr-1.program-stats__counter
               | 215
             | in total
 
@@ -35,20 +35,23 @@ section.general-stats__container.py-4.py-md-5
   .container
     .row.align-items-center
       .col-md-3.text-center.text-md-left
-        h3.general-stats__title.m-0.pt-0.pt-md-3
+        h3.general-stats__title.m-0.pt-0.pt-md-3.font-semibold
           span.general-stats__title--small.font-light.pr-1.pr-md-0.d-md-block
             | We have
           | students from
       .col-md-9
         .general-stats__numbers-block.d-flex.align-items-center.p-0.my-3.my-md-0
           .col-md-4.general-stats__numbers-block-item.d-flex.align-items-center.justify-content-center.flex-column
-            h2.general-stats__numbers-block-text-large.font-bold 13
+            h2.general-stats__numbers-block-text-large.font-bold
+             == @metrics['Participating States']['value']
             p.general-stats__numbers-block-text-small States
           .col-md-4.general-stats__numbers-block-item.d-flex.align-items-center.justify-content-center.flex-column
-            h2.general-stats__numbers-block-text-large.font-bold 24
+            h2.general-stats__numbers-block-text-large.font-bold
+              == @metrics['Participating Universities']['value']
             p.general-stats__numbers-block-text-small Universities
           .col-md-4.general-stats__numbers-block-item.d-flex.align-items-center.justify-content-center.flex-column
-            h2.general-stats__numbers-block-text-large.font-bold 55
+            h2.general-stats__numbers-block-text-large.font-bold
+              == @metrics['Participating Colleges']['value']
             p.general-stats__numbers-block-text-small Colleges
 
 section.program-stats__container
@@ -66,7 +69,7 @@ section.program-stats__container
             .col-lg-8
               .program-stats__student-journey-content
                 h3.program-stats__student-journey-number.font-bold
-                  | 192
+                  == @metrics['Student Explorers']['value']
                   span.program-stats__student-journey-level.pl-1.pl-md-2
                     | Explorers
                 p.program-stats__student-journey-level-description
@@ -81,7 +84,7 @@ section.program-stats__container
             .col-lg-8
               .program-stats__student-journey-content
                 h3.program-stats__student-journey-number.font-bold
-                  | 71
+                  == @metrics['Student Alpha Engineers']['value']
                   span.program-stats__student-journey-level.pl-1.pl-md-2
                     | Alpha Engineers
                 p.program-stats__student-journey-level-description
@@ -96,7 +99,7 @@ section.program-stats__container
             .col-lg-8
               .program-stats__student-journey-content
                 h3.program-stats__student-journey-number.font-bold
-                  | 65
+                  == @metrics['Student Beta Engineers']['value']
                   span.program-stats__student-journey-level.pl-1.pl-md-2
                     | Beta Engineers
                 p.program-stats__student-journey-level-description
@@ -111,7 +114,7 @@ section.program-stats__container
             .col-lg-8
               .program-stats__student-journey-content
                 h3.program-stats__student-journey-number.font-bold
-                  | 25
+                  == @metrics['Student Heroes']['value']
                   span.program-stats__student-journey-level.pl-1.pl-md-2
                     | Heroes
                 p.program-stats__student-journey-level-description
@@ -126,7 +129,7 @@ section.program-stats__container
             .col-lg-8
               .program-stats__student-journey-content
                 h3.program-stats__student-journey-number.font-bold
-                  | 07
+                  == @metrics['Student Leadership Team Members']['value']
                   span.program-stats__student-journey-level.pl-1.pl-md-2
                     | Leardership Team
                 p.program-stats__student-journey-level-description
@@ -141,7 +144,7 @@ section.program-stats__container
             .col-lg-8
               .program-stats__student-journey-content
                 h3.program-stats__student-journey-number.font-bold
-                  | 02
+                  == @metrics['Student Coaches']['value']
                   span.program-stats__student-journey-level.pl-1.pl-md-2
                     | Coaches
                 p.program-stats__student-journey-level-description
@@ -152,96 +155,127 @@ section.program-stats__container
         h4.program-stats__other-facts-header.text-center.font-regular.my-5 Our program runs with
         .row.flex-lg-row
           .col-lg-6.d-flex
-            .program-stats__other-facts-box.text-center.d-flex.flex-column.align-items-center
+            .program-stats__other-facts-box.text-center.d-flex.flex-column.align-items-center.justify-content-between
               .program-stats__other-facts-box-content
                 = image_tag 'stats/slack-stats-icon.svg', class: 'img-fluid program-stats__other-facts-icon'
-                h3.font-bold.program-stats__other-facts-number.program-stats__counter 48,661
+                h3.font-bold.program-stats__other-facts-number.program-stats__counter
+                 == @metrics['Slack Messages']['value']
                 h6.font-semibold.program-stats__other-facts-title Slack Conversations
                 p.mb-3
                   | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-              .program-stats__delta-box
-                p 4432 messages in the last month.
 
           .col-lg-6.d-flex
-            .program-stats__other-facts-box.text-center.d-flex.flex-column.align-items-center
+            .program-stats__other-facts-box.text-center.d-flex.flex-column.align-items-center.justify-content-between
               .program-stats__other-facts-box-content
                 = image_tag 'stats/resources-stats-icon.svg', class: 'img-fluid program-stats__other-facts-icon'
-                h3.font-bold.program-stats__other-facts-number.program-stats__counter 21,652
+                h3.font-bold.program-stats__other-facts-number.program-stats__counter
+                  == @metrics['Library Resource Downloads']['value']
                 h6.font-semibold.program-stats__other-facts-title Resource Downloads
                 p.mb-3
                   | Lorem ipsum dolor sit amet, consectetur adipiscing.
 
+              .program-stats__delta-box
+                p
+                  == @metrics['Library Resource Downloads']['delta_value']
+                  ' &nbsp;downloads in the last
+                  == @metrics['Library Resource Downloads']['delta_period']
+                  | &nbsp;months.
+
           .col-lg-6.d-flex
-            .program-stats__other-facts-box.text-center.d-flex.flex-column.align-items-center
+            .program-stats__other-facts-box.text-center.d-flex.flex-column.align-items-center.justify-content-between.justify-content-between
               .program-stats__other-facts-box-content
                 = image_tag 'stats/office-hours-stats-icon.svg', class: 'img-fluid program-stats__other-facts-icon'
-                h3.font-bold.program-stats__other-facts-number.program-stats__counter 125
+                h3.font-bold.program-stats__other-facts-number.program-stats__counter
+                  == @metrics['Faculty Office Hours']['value']
                 h6.font-semibold.program-stats__other-facts-title Office Hours
                 p.mb-3
                   | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
 
+              .program-stats__delta-box
+                p
+                  == @metrics['Faculty Office Hours']['delta_value']
+                  ' &nbsp;downloads in the last
+                  == @metrics['Faculty Office Hours']['delta_period']
+                  | &nbsp;months.
+
           .col-lg-6.d-flex
-            .program-stats__other-facts-box.text-center.d-flex.flex-column.align-items-center
+            .program-stats__other-facts-box.text-center.d-flex.flex-column.align-items-center.justify-content-between
               .program-stats__other-facts-box-content
                 = image_tag 'stats/targets-stats-icon.svg', class: 'img-fluid program-stats__other-facts-icon'
-                h3.font-bold.program-stats__other-facts-number.program-stats__counter 197
+                h3.font-bold.program-stats__other-facts-number.program-stats__counter
+                  == @metrics['Targets']['value']
                 h6.font-semibold.program-stats__other-facts-title Targets to Complete
                 p.mb-3
                   | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
 
           .col-lg-6.d-flex
-            .program-stats__other-facts-box.text-center.d-flex.flex-column.align-items-center
+            .program-stats__other-facts-box.text-center.d-flex.flex-column.align-items-center.justify-content-between
               .program-stats__other-facts-box-content
                 = image_tag 'stats/library-stats-icon.svg', class: 'img-fluid program-stats__other-facts-icon'
-                h3.font-bold.program-stats__other-facts-number.program-stats__counter 217
+                h3.font-bold.program-stats__other-facts-number.program-stats__counter
+                  == @metrics['Library Resources']['value']
                 h6.font-semibold.program-stats__other-facts-title Library Resources
                 p.mb-3
                   | Lorem ipsum dolor sit amet, consectetur adipiscing.
 
+              .program-stats__delta-box
+                p
+                  == @metrics['Library Resources']['delta_value']
+                  ' &nbsp;downloads in the last
+                  == @metrics['Library Resources']['delta_period']
+                  | &nbsp;months.
+
+
           .col-lg-6.d-flex
-            .program-stats__other-facts-box.text-center.d-flex.flex-column.align-items-center
+            .program-stats__other-facts-box.text-center.d-flex.flex-column.align-items-center.justify-content-between
               .program-stats__other-facts-box-content
                 = image_tag 'stats/faculty-sessions-stats-icon.svg', class: 'img-fluid program-stats__other-facts-icon'
-                h3.font-bold.program-stats__other-facts-number.program-stats__counter 90
+                h3.font-bold.program-stats__other-facts-number.program-stats__counter
+                  == @metrics['Faculty Sessions']['value']
                 h6.font-semibold.program-stats__other-facts-title Faculty Sessions
                 p.mb-3
                   | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
 
+              .program-stats__delta-box
+                p
+                  == @metrics['Faculty Sessions']['delta_value']
+                  ' &nbsp;messages in the last
+                  == @metrics['Faculty Sessions']['delta_period']
+                  | &nbsp;months.
+
           .col-lg-6.d-flex
-            .program-stats__other-facts-box.text-center.d-flex.flex-column.align-items-center
+            .program-stats__other-facts-box.text-center.d-flex.flex-column.align-items-center.justify-content-between
               .program-stats__other-facts-box-content
                 = image_tag 'stats/community-architects-stats-icon.svg', class: 'img-fluid program-stats__other-facts-icon'
-                h3.font-bold.program-stats__other-facts-number.program-stats__counter 03
+                h3.font-bold.program-stats__other-facts-number.program-stats__counter
+                  == @metrics['Community Architects']['value']
                 h6.font-semibold.program-stats__other-facts-title Community Architects
                 p.mb-3
                   | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
 
           .col-lg-6.d-flex
-            .program-stats__other-facts-box.text-center.d-flex.flex-column.align-items-center
+            .program-stats__other-facts-box.text-center.d-flex.flex-column.align-items-center.justify-content-between
               .program-stats__other-facts-box-content
                 = image_tag 'stats/graduation-partners-stats-icon.svg', class: 'img-fluid program-stats__other-facts-icon'
-                h3.font-bold.program-stats__other-facts-number.program-stats__counter 10
+                h3.font-bold.program-stats__other-facts-number.program-stats__counter
+                  == @metrics['Graduation Partners']['value']
                 h6.font-semibold.program-stats__other-facts-title Graduation Partners
                 p.mb-3
                   | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
 
           .col-lg-6.d-flex
-            .program-stats__other-facts-box.text-center.d-flex.flex-column.align-items-center
+            .program-stats__other-facts-box.text-center.d-flex.flex-column.align-items-center.justify-content-between
               .program-stats__other-facts-box-content
                 = image_tag 'stats/published-stories-stats-icon.svg', class: 'img-fluid program-stats__other-facts-icon'
-                h3.font-bold.program-stats__other-facts-number.program-stats__counter 34
+                h3.font-bold.program-stats__other-facts-number.program-stats__counter
+                  == @metrics['Blog Stories Published']['value']
                 h6.font-semibold.program-stats__other-facts-title Published Stories
                 p.mb-3
                   | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
 
           .col-lg-6.d-flex
-            .program-stats__other-facts-box.text-center.d-flex.flex-column.align-items-center
+            .program-stats__other-facts-box.text-center.d-flex.flex-column.align-items-center.justify-content-between
               .program-stats__other-facts-box-content
-                = image_tag 'stats/minutes-watched-stats-icon.svg', class: 'img-fluid program-stats__other-facts-icon'
-                h3.font-bold.program-stats__other-facts-number.program-stats__counter 3400
-                h6.font-semibold.program-stats__other-facts-title Minutes Watched
-                p.mb-3
-                  | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
 
 section.stats-call-to-action__container
   .container

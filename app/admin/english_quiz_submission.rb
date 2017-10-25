@@ -18,6 +18,11 @@ ActiveAdmin.register EnglishQuizSubmission do
     end
 
     column :founder
+
+    column 'Correct Answer' do |submission|
+      submission.answer_option == submission.english_quiz_question.correct_answer
+    end
+
     column 'Answer Submitted' do |submission|
       submission.answer_option.value
     end

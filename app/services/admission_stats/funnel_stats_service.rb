@@ -17,7 +17,8 @@ module AdmissionStats
         'Added Cofounders' =>  cofounders_added,
         'Payment Initiated' => payment_initiated,
         'Fee Paid Teams' => fee_paid_startups.count,
-        'Fee Paid Founders' => fee_paid_founders.count,
+        'Fee Paid Founders (Joined)' => fee_paid_joined_founders.count,
+        'Fee Paid Founders (Invited)' => fee_paid_invited_founders.count,
         'Renewals' => renewals_count,
         'Revenue' => "₹#{revenue.to_i}"
       }
@@ -37,8 +38,12 @@ module AdmissionStats
       @fee_paid_startups ||= verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_FEE_PAYMENT }).where(created_at: @date_range).pluck(:startup_id)
     end
 
-    def fee_paid_founders
+    def fee_paid_joined_founders
       Founder.where(startup: fee_paid_startups)
+    end
+
+    def fee_paid_invited_founders
+      Founder.where(invited_startup: fee_paid_startups)
     end
 
     def renewals_count

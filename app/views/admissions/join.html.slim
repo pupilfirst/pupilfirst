@@ -1,6 +1,11 @@
 - content_for :head do
   title SV.CO Join Now
   meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
+  meta property="og:title" content="Join SV.CO"
+  meta property="og:type" content="website"
+  meta property="og:url" content=join_url
+  meta property="og:image" content=image_url('shared/logo-color.svg')
+  meta property="og:description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers. SV.CO's School of SaaS is built for the Internet Era. Just like you have multiple branches of engineering, we have schools on industry segments like SaaS & Fintech."
 
   = javascript_include_tag 'https://www.youtube.com/iframe_api', async: true
 

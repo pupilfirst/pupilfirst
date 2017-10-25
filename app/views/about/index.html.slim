@@ -5,7 +5,13 @@
 
 - content_for :head
   title About SV.CO: A learning platform for first-time founders
-  meta name="description" content="Startup Village is launching an online-first learning platform for first-time founders, supplying tools and resources needed to create a successful startup."
+  meta name="description" content=t('about.index.meta_description')
+  meta property="og:title" content="About SV.CO"
+  meta property="og:type" content="website"
+  meta property="og:url" content=about_url
+  meta property="og:image" content=image_url('home/index/svtosv-day2.png')
+  meta property="og:description" content=t('about.index.meta_description')
+  meta property="fb:app_id" content=Rails.application.secrets.facebook.dig(:app_id)
 
 ol.breadcrumb.m-t-2
   li.breadcrumb-item = link_to 'Home', root_path

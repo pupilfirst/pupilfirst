@@ -119,6 +119,10 @@ en:
         founder_slack_notification: 'You have been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
         startup_slack_notification: 'Your startup <%{startup_url}|%{startup_product_name}> has been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
 
+  about:
+    index:
+      meta_description: "Startup Village is launching an online-first learning platform for first-time founders, supplying tools and resources needed to create a successful startup."
+
   admissions:
     register:
       email_error: "Our email delivery service refused to accept the supplied address. Please ensure that it is a valid email address. If you're still having issues, please contact us using live chat or at help@sv.co"

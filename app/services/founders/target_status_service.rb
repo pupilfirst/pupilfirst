@@ -129,7 +129,7 @@ module Founders
 
     # all target-prerequisite mappings
     def all_target_prerequisites
-      @all_target_prerequisites ||= TargetPrerequisite.all.pluck(:target_id, :prerequisite_target_id).each_with_object({}) do |(target_id, prerequisite_target_id), mapping|
+      @all_target_prerequisites ||= TargetPrerequisite.joins(:target, :prerequisite_target).all.pluck(:target_id, :prerequisite_target_id).each_with_object({}) do |(target_id, prerequisite_target_id), mapping|
         mapping[target_id] ||= []
         mapping[target_id] << prerequisite_target_id
       end

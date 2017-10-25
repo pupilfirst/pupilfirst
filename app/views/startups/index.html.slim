@@ -1,6 +1,12 @@
 - content_for :head
   title SV.CO Startups
-  meta name="description" content="This is a summarized overview of all 'Level 1+ Startups' on SV.CO "
+  meta name="description" content="This is an overview of all startups that are a part of SV.CO"
+  meta property="og:title" content="Startups at SV.CO"
+  meta property="og:type" content="website"
+  meta property="og:url" content=startups_url
+  meta property="og:image" content=image_url('home/index/program-build-startup.jpg')
+  meta property="og:description" content="Startups at SV.CO build products that are laser-focused on real customers, and getting immediate feedback, for quicker iterations."
+  meta property="fb:app_id" content=Rails.application.secrets.facebook.dig(:app_id)
 
 .startups-banner
   .container

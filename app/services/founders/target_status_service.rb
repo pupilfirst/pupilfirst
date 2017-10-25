@@ -129,9 +129,10 @@ module Founders
 
     # all target-prerequisite mappings
     def all_target_prerequisites
-      @all_target_prerequisites ||= TargetPrerequisite.joins(:target, :prerequisite_target).all.pluck(:target_id, :prerequisite_target_id).each_with_object({}) do |(target_id, prerequisite_target_id), mapping|
-        mapping[target_id] ||= []
-        mapping[target_id] << prerequisite_target_id
+      @all_target_prerequisites ||= TargetPrerequisite.joins(:target).includes(:prerequisite_target).each_with_object({}) do |target_prerequisite, mapping|
+        next if target_prerequisite.prerequisite_target.archived?
+        mapping[target_prerequisite.target_id] ||= []
+        mapping[target_prerequisite.target_id] << target_prerequisite.prerequisite_target_id
       end
     end
 

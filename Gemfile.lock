@@ -583,6 +583,9 @@ GEM
       rails-assets-jquery (>= 1.2.2)
     rails-assets-jquery-stickit (0.2.14)
       rails-assets-jquery (>= 1.6)
+    rails-assets-jquery.counterup (2.1.0)
+      rails-assets-jquery (>= 1.5)
+      rails-assets-waypoints (>= 4.0)
     rails-assets-jquery.scrollTo (2.1.2)
       rails-assets-jquery (>= 1.8)
     rails-assets-lodash (4.17.4)
@@ -900,6 +903,7 @@ DEPENDENCIES
   rails-assets-intro.js (~> 2.4)!
   rails-assets-jquery (~> 2.2)!
   rails-assets-jquery-stickit (~> 0.2)!
+  rails-assets-jquery.counterup!
   rails-assets-jquery.scrollTo (~> 2.1)!
   rails-assets-lodash (~> 4.17)!
   rails-assets-masonry (~> 4.1)!

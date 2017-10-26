@@ -38,8 +38,9 @@
 // Rails assets
 //= require intro.js/intro.js
 //= require slick-carousel/slick.js
-//= require waypoints
+//= require waypoints/jquery.waypoints.js
 //= require typedjs
+//= require jquery.counterup
 
 // Shared
 //= require _shared

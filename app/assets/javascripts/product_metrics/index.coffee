@@ -1,7 +1,7 @@
 animateHeaderText = ->
   typed = new Typed(
-    '#typed',
-    stringsElement: '#typed-strings'
+    '#stats-hero__typed',
+    stringsElement: '#stats-hero__typed-strings'
     typeSpeed: 20
     backSpeed: 20
     backDelay: 3000

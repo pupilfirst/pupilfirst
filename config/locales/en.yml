@@ -139,20 +139,6 @@ en:
       background_4_messages:
         secondary_html: "Ajmal, Aswin, Balram and Kishan of Spenwise built a prototype during SV.CO&apos;s six month startup course and got selected at Zone Startups, Mumbai to continue their startup journey."
 
-  startups:
-    show:
-      timeline_cards:
-        needs_improvement:
-          tooltip_text:
-            founder: We have verified this event, but you can do better! If you have time, submit a new revised event based on our feedback.
-            public: This event is verified by SV.CO but our Faculty submitted feedback asking for further improvements.
-          status_text: Needs Improvement
-        improved_later:
-          tooltip_text:
-            founder: Thank you for improving this event with a later event!
-            public: This event was improved upon with a later submission!
-          status_text: Improved Later
-
   dashboard:
     dashboard:
       tour:
@@ -181,7 +167,43 @@ en:
       discount_benefit: <strong>%{percentage}% discount</strong> on the program fee
       extension_benefit: <strong>%{extension} extra days</strong> of subscription
 
+  product_metrics:
+    index:
+      student_journey:
+        explorers:
+          heading: "Explorers"
+          description_html: "All students start as explorers. This is the beginning of their journey with the Startup Village Collective."
+        alpha_engineers:
+          heading: "Alpha Engineers"
+          description_html: "Students jump right in, building an <em>Alpha</em> prototype of their product and demoing it to industry experts."
+        beta_engineers:
+          heading: "Beta Engineers"
+          description_html: "Continuous revisions using feedback from the SV.CO faculty, industry experts, and potential customers lead to the <em>Beta</em>."
+        heroes:
+          heading: 'Heroes'
+          description_html: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et."
+        leadership:
+          heading: "Leadership Team"
+          description_html: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et."
+        coaches:
+          heading: "Coaches"
+          description_html: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et."
+
   resources:
     index:
       zero_results: "We&rsquo;re sorry, but it looks like there are no resources %{tag_text} %{search_text}.  Try changing your filter conditions %{login_text}."
       results_caption: "Showing resources %{tag_text} %{search_text}:"
+
+  startups:
+    show:
+      timeline_cards:
+        needs_improvement:
+          tooltip_text:
+            founder: We have verified this event, but you can do better! If you have time, submit a new revised event based on our feedback.
+            public: This event is verified by SV.CO but our Faculty submitted feedback asking for further improvements.
+          status_text: Needs Improvement
+        improved_later:
+          tooltip_text:
+            founder: Thank you for improving this event with a later event!
+            public: This event was improved upon with a later submission!
+          status_text: Improved Later

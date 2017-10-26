@@ -1,3 +1,5 @@
+- presenter = ProductMetrics::IndexPresenter.new(self)
+
 - content_for :head do
   title SV.CO Stats
   meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
@@ -60,95 +62,8 @@ section.program-stats__container
         h4.program-stats__student-journey-header.text-center.font-regular.my-4.my-md-5
           | SV.CO Member Journey
         ul.list-unstyled.student-journey__timeline.text-center.text-lg-left
-          li.row.student-journey__timeline-item
-            .col-lg-4
-              .program-stats__student-journey-icon-box
-                = image_tag 'stats/explorer-icon.svg', class: 'img-fluid program-stats__student-journey-icon'
-
-            .col-lg-8
-              .program-stats__student-journey-content
-                h3.program-stats__student-journey-number.font-bold
-                  = @metrics['Student Explorers']['value']
-                  span.program-stats__student-journey-level.pl-1.pl-md-2
-                    | Explorers
-                p.program-stats__student-journey-level-description
-                  ' All students start as explorers. This is the beginning of their journey with the Startup Village
-                  | Collective.
-
-          li.row.student-journey__timeline-item
-            .col-lg-4
-              .program-stats__student-journey-icon-box
-                = image_tag 'stats/alpha-engineer-icon.svg', class: 'img-fluid program-stats__student-journey-icon'
-
-            .col-lg-8
-              .program-stats__student-journey-content
-                h3.program-stats__student-journey-number.font-bold
-                  = @metrics['Student Alpha Engineers']['value']
-                  span.program-stats__student-journey-level.pl-1.pl-md-2
-                    | Alpha Engineers
-                p.program-stats__student-journey-level-description
-                  ' Students jump right in, building an alpha prototype of their product and demoing it to industry
-                  | representatives.
-
-          li.row.student-journey__timeline-item
-            .col-lg-4
-              .program-stats__student-journey-icon-box
-                = image_tag 'stats/beta-engineer-icon.svg', class: 'img-fluid program-stats__student-journey-icon'
-
-            .col-lg-8
-              .program-stats__student-journey-content
-                h3.program-stats__student-journey-number.font-bold
-                  = @metrics['Student Beta Engineers']['value']
-                  span.program-stats__student-journey-level.pl-1.pl-md-2
-                    | Beta Engineers
-                p.program-stats__student-journey-level-description
-                  ' Continuous revisions using feedback from the SV.CO faculty, industry experts, and potential
-                  | customers lead to the <em>Beta</em>.
-
-          li.row.student-journey__timeline-item
-            .col-lg-4
-              .program-stats__student-journey-icon-box
-                = image_tag 'stats/hero-icon.svg', class: 'img-fluid program-stats__student-journey-icon'
-
-            .col-lg-8
-              .program-stats__student-journey-content
-                h3.program-stats__student-journey-number.font-bold
-                  = @metrics['Student Heroes']['value']
-                  span.program-stats__student-journey-level.pl-1.pl-md-2
-                    | Heroes
-                p.program-stats__student-journey-level-description
-                  ' Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                  | sed do eiusmod tempor incididunt ut labore et.
-
-          li.row.student-journey__timeline-item
-            .col-lg-4
-              .program-stats__student-journey-icon-box
-                = image_tag 'stats/leadership-icon.svg', class: 'img-fluid program-stats__student-journey-icon'
-
-            .col-lg-8
-              .program-stats__student-journey-content
-                h3.program-stats__student-journey-number.font-bold
-                  = @metrics['Student Leadership Team Members']['value']
-                  span.program-stats__student-journey-level.pl-1.pl-md-2
-                    | Leadership Team
-                p.program-stats__student-journey-level-description
-                  ' All students begin here. At this point
-                  | they’re just picking an idea. Blah Blah.
-
-          li.row.student-journey__timeline-item
-            .col-lg-4
-              .program-stats__student-journey-icon-box
-                = image_tag 'stats/coaches-icon.svg', class: 'img-fluid program-stats__student-journey-icon'
-
-            .col-lg-8
-              .program-stats__student-journey-content
-                h3.program-stats__student-journey-number.font-bold
-                  = @metrics['Student Coaches']['value']
-                  span.program-stats__student-journey-level.pl-1.pl-md-2
-                    | Coaches
-                p.program-stats__student-journey-level-description
-                  ' All students begin here. At this point
-                  | they’re just picking an idea. Blah Blah.
+          - presenter.member_journey_points.each do |journey_point|
+            == render 'student_journey_item', journey_point: journey_point
 
       .col-md-6.program-stats__other-facts.pr-md-0
         h4.program-stats__other-facts-header.text-center.font-regular.my-5 SV.CO Program Metrics
@@ -158,17 +73,25 @@ section.program-stats__container
               .program-stats__other-facts-box-content
                 = image_tag 'stats/slack-stats-icon.svg', class: 'img-fluid program-stats__other-facts-icon'
                 h3.font-bold.program-stats__other-facts-number.program-stats__counter
-                 = @metrics['Slack Messages']['value']
+                  = number_with_delimiter(@metrics['Slack Messages']['value'])
                 h6.font-semibold.program-stats__other-facts-title Slack Messages
                 p.mb-3
                   | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+
+              - if @metrics['Slack Messages'].fetch('delta_value', 0) > 0
+                .program-stats__delta-box
+                  p
+                    = @metrics['Library Resource Downloads']['delta_value']
+                    ' &nbsp;downloads in the last
+                    = @metrics['Library Resource Downloads']['delta_period']
+                    | &nbsp;months.
 
           .col-lg-6.d-flex
             .program-stats__other-facts-box.text-center.d-flex.flex-column.align-items-center.justify-content-between
               .program-stats__other-facts-box-content
                 = image_tag 'stats/resources-stats-icon.svg', class: 'img-fluid program-stats__other-facts-icon'
                 h3.font-bold.program-stats__other-facts-number.program-stats__counter
-                  = @metrics['Library Resource Downloads']['value']
+                  = number_with_delimiter(@metrics['Library Resource Downloads']['value'])
                 h6.font-semibold.program-stats__other-facts-title Resource Downloads
                 p.mb-3
                   | Lorem ipsum dolor sit amet, consectetur adipiscing.
@@ -272,10 +195,6 @@ section.program-stats__container
                 h6.font-semibold.program-stats__other-facts-title Published Stories
                 p.mb-3
                   | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-
-          .col-lg-6.d-flex
-            .program-stats__other-facts-box.text-center.d-flex.flex-column.align-items-center.justify-content-between
-              .program-stats__other-facts-box-content
 
 section.stats-call-to-action__container
   .container

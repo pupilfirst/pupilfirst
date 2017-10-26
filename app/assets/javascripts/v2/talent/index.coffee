@@ -45,8 +45,17 @@ setupTestimonialCarousel = ->
     videoContent.postMessage('{"event":"command","func":"stopVideo","args":""}', '*');
 
 animateHeroHeadline = ->
-  if $('.talent-hero').length > 0
-    $.codyhouseTextAnimation()
+  if $('.talent-hero')
+    typed = new Typed(
+      '.talent-hero__typed',
+      stringsElement: '.talent-hero__typed-strings'
+      typeSpeed: 20
+      backSpeed: 20
+      backDelay: 3000
+      cursorChar: '|'
+      smartBackspace: false
+      loop: true
+    )
 
 showTalentFormOnError = ->
   talentFormModal = $('.invest-hire-modal')

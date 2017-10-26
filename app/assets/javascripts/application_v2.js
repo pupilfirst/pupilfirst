@@ -45,6 +45,7 @@
 //= require waypoints
 //= require waypoints/shortcuts/inview
 //= require gemini-scrollbar
+//= require typedjs
 
 // Shared
 //= require v2/_shared

@@ -7,7 +7,7 @@
 
     = f.input :role,
       as: :select,
-      collection: Target.valid_roles.map { |r| [t("role.#{r}"), r] },
+      collection: Target.valid_roles.map { |r| [t("models.target.role.#{r}"), r] },
       include_blank: false
 
     = f.input :title

@@ -62,19 +62,19 @@ class StartupsController < ApplicationController
 
   # GET /startup/edit
   def edit
-    @startup = current_founder.startup
-    authorize @startup
+    authorize current_startup
+    @form = Startups::EditForm.new(current_startup)
   end
 
   # PATCH /startup
   def update
-    @startup = current_founder.startup
-    authorize @startup
-    update_service = Startups::UpdateService.new(@startup)
+    authorize current_startup
+    @form = Startups::EditForm.new(current_startup)
 
-    if update_service.update(startup_params)
+    if @form.validate(params[:startups_edit])
+      @form.save!
       flash[:success] = 'Startup details have been updated.'
-      redirect_to timeline_path(@startup.id, @startup.slug)
+      redirect_to timeline_path(current_startup.id, current_startup.slug)
     else
       render 'startups/edit'
     end
@@ -82,12 +82,10 @@ class StartupsController < ApplicationController
 
   # POST /startup/level_up
   def level_up
-    startup = current_founder.startup
-    raise_not_found if startup.blank?
-    authorize startup
+    authorize current_startup
 
-    Startups::LevelUpService.new(startup).execute
-    redirect_to(dashboard_founder_path(from: 'level_up', from_level: startup.level.number - 1))
+    Startups::LevelUpService.new(current_startup).execute
+    redirect_to(dashboard_founder_path(from: 'level_up', from_level: current_startup.level.number - 1))
   end
 
   private
@@ -100,15 +98,6 @@ class StartupsController < ApplicationController
   def load_filter_options
     @categories = StartupCategory.order(:name)
     @levels = Level.where('number > ?', 0).order(:number)
-  end
-
-  def startup_params
-    params.require(:startup).permit(
-      :legal_registered_name, :address, :pitch, :website, :email, :logo, :remote_logo_url, :facebook_link,
-      :twitter_link, :product_name, :product_description,
-      { startup_category_ids: [] }, { founders_attributes: [:id] },
-      :registration_type, :presentation_link, :product_video_link, :wireframe_link, :prototype_link, :slug
-    )
   end
 
   def startup_registration_params

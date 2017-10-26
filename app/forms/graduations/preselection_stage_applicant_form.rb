@@ -43,7 +43,7 @@ module Graduations
 
     def role_options
       Founder.valid_roles.each_with_object([]) do |role, options|
-        options << [I18n.t("role.#{role}"), role]
+        options << [I18n.t("models.founder.role.#{role}"), role]
       end
     end
 

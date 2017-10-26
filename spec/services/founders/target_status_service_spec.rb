@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Targets::BulkStatusService do
+describe Founders::TargetStatusService do
   subject { described_class.new(founder) }
 
   let(:level_zero) { create :level, :zero }

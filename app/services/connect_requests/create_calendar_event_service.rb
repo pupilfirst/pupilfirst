@@ -2,10 +2,12 @@ module ConnectRequests
   class CreateCalendarEventService
     def initialize(connect_request)
       @connect_request = connect_request
-      @google_calendar = GoogleCalendarService.new
+      @google_calendar = GoogleCalendarService.new if Rails.env.production?
     end
 
     def execute
+      return unless Rails.env.production?
+
       @google_calendar.create_event do |e|
         e.title = calendar_event_title
         e.start_time = @connect_request.slot_at.iso8601

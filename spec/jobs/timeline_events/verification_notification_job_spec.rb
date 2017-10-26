@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe TimelineEventVerificationNotificationJob do
+describe TimelineEvents::VerificationNotificationJob do
   subject { described_class }
 
   let!(:startup) { create :startup }
@@ -25,7 +25,7 @@ describe TimelineEventVerificationNotificationJob do
 
   let(:expected_founder_message_for_founder_target) do
     I18n.t(
-      'slack_notifications.timeline_events.founder.verified.founder_event',
+      'jobs.timeline_events.verification_notification.founder.verified.founder_event',
       event_title: timeline_event_for_founder.title,
       startup_url: startup_url,
       event_url: timeline_event_for_founder.share_url
@@ -34,7 +34,7 @@ describe TimelineEventVerificationNotificationJob do
 
   let(:expected_founder_message_for_startup_target) do
     I18n.t(
-      'slack_notifications.timeline_events.founder.verified.startup_event',
+      'jobs.timeline_events.verification_notification.founder.verified.startup_event',
       event_title: timeline_event_for_startup.title,
       startup_url: startup_url,
       event_url: timeline_event_for_startup.share_url,
@@ -44,7 +44,7 @@ describe TimelineEventVerificationNotificationJob do
 
   let(:expected_team_message) do
     I18n.t(
-      'slack_notifications.timeline_events.team.verified',
+      'jobs.timeline_events.verification_notification.team.verified',
       event_title: timeline_event_for_startup.title,
       event_url: timeline_event_for_startup.share_url,
       startup_url: startup_url,
@@ -54,7 +54,7 @@ describe TimelineEventVerificationNotificationJob do
 
   let(:expected_public_message) do
     I18n.t(
-      'slack_notifications.timeline_events.public.verified',
+      'jobs.timeline_events.verification_notification.public.verified',
       startup_url: startup_url,
       startup_product_name: startup.product_name,
       event_url: timeline_event_for_startup.share_url,
@@ -77,7 +77,7 @@ describe TimelineEventVerificationNotificationJob do
       expect(PublicSlack::MessageService).to receive(:new).and_return(mock_message_service)
       expect(mock_message_service).to receive(:post).with(message: expected_founder_message_for_startup_target, founder: timeline_event_for_startup.founder)
       expect(mock_message_service).to receive(:post).with(message: expected_team_message, founders: (timeline_event_for_startup.startup&.founders || []) - [timeline_event_for_startup.founder])
-      expect(mock_message_service).to receive(:post).with(message: expected_public_message, channel: TimelineEventVerificationNotificationJob::SLACK_CHANNEL)
+      expect(mock_message_service).to receive(:post).with(message: expected_public_message, channel: TimelineEvents::VerificationNotificationJob::SLACK_CHANNEL)
       subject.perform_now(timeline_event_for_startup)
     end
   end

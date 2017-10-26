@@ -55,7 +55,7 @@ ActiveAdmin.register Target do
     column :sort_index
 
     column :role do |target|
-      t("role.#{target.role}")
+      t("models.target.role.#{target.role}")
     end
 
     actions
@@ -110,7 +110,7 @@ ActiveAdmin.register Target do
       row :points_earnable
 
       row :role do
-        t("role.#{target.role}")
+        t("models.target.role.#{target.role}")
       end
 
       row :assigner

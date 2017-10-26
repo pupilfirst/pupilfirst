@@ -301,6 +301,20 @@ ActiveAdmin.register Startup do
 
       row :team_lead
 
+      row :invited_founders do
+        div do
+          if startup.invited_founders.present?
+            startup.invited_founders.each do |founder|
+              div do
+                span do
+                  link_to founder.display_name, [:admin, founder]
+                end
+              end
+            end
+          end
+        end
+      end
+
       row :team_members do
         if startup.team_members.present?
           ul do

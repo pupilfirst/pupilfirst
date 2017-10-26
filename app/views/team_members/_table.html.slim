@@ -1,31 +1,29 @@
 - if team_members.present?
-  table.table.table-striped.team-member-table
-    thead
-      tr
-        th.avatar-heading
-        th Name
-        th Email Address
-        th Role
-        th
-    tbody
-      - team_members.each do |team_member|
-        tr
-          td.team-member-avatar-thumb
-            == avatar(team_member.name, founder: team_member, background_shape: :square)
-          td = team_member.name
-          td = team_member.email
-          td = founder_roles(team_member.roles)
-          td
-            - if team_member_being_edited == team_member
-              ' #{link_to 'Editing...', '#', class: 'btn btn-primary btn-xs', disabled: true}
-            - else
-              ' #{link_to 'Edit', edit_team_member_url(team_member), class: 'btn btn-primary btn-xs'}
-
-            ' #{link_to 'Remove', team_member_url(team_member), method: :delete, class: 'btn btn-danger btn-xs', data: { confirm: 'Are you sure you want to remove this team member?' }}
+  .card.mb-3
+    .card-header
+      ' Current Team Members
+    - team_members.each do |team_member|
+      .card-body
+        .row
+          .col-sm-7.clearfix
+            .float-left.mr-3.team-member-avatar-thumb
+              == avatar(team_member.name, founder: team_member, background_shape: :square)
+            .float-left
+              h4.card-title = team_member.name
+              h6.card-subtitle.mb-2.text-muted = team_member.email
+          .col-sm
+            p.card-text <strong>Roles:</strong> #{founder_roles(team_member.roles)}
+            .mt-2
+              = link_to edit_team_member_url(team_member), class: 'card-link' do
+                i.fa.fa-edit
+                | &nbsp;Edit
+              = link_to team_member_url(team_member), method: :delete, class: 'card-link', data: { confirm: 'Are you sure you want to remove this team member?' } do
+                i.fa.fa-remove
+                | &nbsp;Remove
 - else
   p
     em
       ' There aren't any (non-founder) team members associated with your startup. Unlike founders, team members do
       ' not need an account at SV.CO.
 
-  p.mb-3 <em>Team members are listed on your timeline page, along with all founders.</em>
+  p.mb-3.mt-2 <em>Team members are listed on your timeline page, along with all founders.</em>

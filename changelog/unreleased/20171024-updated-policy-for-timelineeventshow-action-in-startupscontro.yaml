@@ -1,0 +1,7 @@
+---
+timestamp: '2017-10-24T09:33:03Z'
+title: Updated policy for timeline_event_show action in StartupsController to handle
+  nil case error
+trello: https://trello.com/c/KvoGiDxC
+private: true
+category: bugfix

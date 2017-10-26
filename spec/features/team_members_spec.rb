@@ -64,8 +64,8 @@ feature 'Team members spec' do
       scenario 'founder deletes existing team member' do
         visit edit_startup_url(startup)
 
-        within '.team-member-table' do
-          click_on 'Remove'
+        within('.card-body', text: team_member.name) do
+          click_link 'Remove'
         end
 
         expect(page).to have_text('There aren\'t any (non-founder) team members associated with your startup.')

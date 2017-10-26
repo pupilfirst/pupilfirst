@@ -52,7 +52,7 @@ describe PublicSlack::PruneMembershipService do
 
         # Expect notifications to have been sent to both the channels.
         expect(PublicSlack::MessageService).to receive(:new).twice.and_return(mock_message_service)
-        message = I18n.t('slack.removal_notice')
+        message = I18n.t('services.public_slack.prune_membership.removal_notice')
         expect(mock_message_service).to receive(:post).with(message: message, channel: 'group_id_1')
         expect(mock_message_service).to receive(:post).with(message: message, channel: 'group_id_2')
 

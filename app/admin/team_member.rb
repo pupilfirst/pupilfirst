@@ -20,7 +20,7 @@ ActiveAdmin.register TeamMember do
 
     column :roles do |team_member|
       team_member.roles.map do |role|
-        t("role.#{role}")
+        t("models.team_member.role.#{role}")
       end.join ', '
     end
 
@@ -42,7 +42,7 @@ ActiveAdmin.register TeamMember do
 
       row :roles do |team_member|
         team_member.roles.map do |role|
-          t("role.#{role}")
+          t("models.team_member.role.#{role}")
         end.join ', '
       end
 

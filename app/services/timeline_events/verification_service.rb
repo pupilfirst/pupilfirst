@@ -28,7 +28,7 @@ module TimelineEvents
           raise UnexpectedStatusException
       end
 
-      TimelineEventVerificationNotificationJob.perform_later(@timeline_event) if @notify
+      TimelineEvents::VerificationNotificationJob.perform_later(@timeline_event) if @notify
 
       [@timeline_event, applicable_points]
     end

@@ -7,8 +7,8 @@ module Lita
         :targets_handler,
         command: true,
         help: {
-          'targets' => I18n.t('slack.help.targets'),
-          'targets info [NUMBER]' => I18n.t('slack.help.targets_info')
+          'targets' => I18n.t('libs.lita.handlers.targets.help'),
+          'targets info [NUMBER]' => I18n.t('libs.lita.handlers.targets.help_info')
         }
       )
 
@@ -27,7 +27,7 @@ module Lita
               reply_with_targets_info
             end
           else
-            response.reply_privately I18n.t('slack.handlers.targets.unknown_username', slack_username: slack_username)
+            response.reply_privately I18n.t('libs.lita.handlers.targets.unknown_username', slack_username: slack_username)
           end
 
           Ahoy::Tracker.new.track Visit::EVENT_VOCALIST_COMMAND, command: Visit::VOCALIST_COMMAND_TARGETS
@@ -47,7 +47,7 @@ module Lita
           response_message = <<~REPLY
             *#{chosen_target.title}*
             *Status:* #{target_status_message(chosen_target)}
-            *Role:* #{I18n.t("role.#{chosen_target.role}")}
+            *Role:* #{I18n.t("models.target.role.#{chosen_target.role}")}
             *Assigner:* #{chosen_target.assigner.name}
             *Description:* #{ActionView::Base.full_sanitizer.sanitize chosen_target.description}
           REPLY
@@ -61,7 +61,7 @@ module Lita
       end
 
       def reply_with_choice_error
-        response.reply_privately I18n.t('slack.handlers.targets.choice_error', choices: (1..targets.count).to_a.join(', '))
+        response.reply_privately I18n.t('libs.lita.handlers.targets.choice_error', choices: (1..targets.count).to_a.join(', '))
       end
 
       def optional_target_data
@@ -103,7 +103,7 @@ module Lita
 
         response.reply_privately <<~REPLY
           #{targets_info}
-          #{I18n.t('slack.handlers.targets.more_info')}
+          #{I18n.t('libs.lita.handlers.targets.more_info')}
         REPLY
       end
 

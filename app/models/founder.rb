@@ -296,10 +296,6 @@ class Founder < ApplicationRecord
     invited_startup.present?
   end
 
-  def completed_targets_count
-    Targets::BulkStatusService.new(self).completed_targets_count
-  end
-
   def self.reference_sources
     [
       'Friend', 'Seniors', '#StartinCollege Event', 'Newspaper/Magazine', 'TV', 'SV.CO Blog', 'Instagram', 'Facebook',
@@ -309,5 +305,21 @@ class Founder < ApplicationRecord
 
   def team_lead?
     startup&.team_lead_id == id
+  end
+
+  def self.valid_references
+    [
+      'Friend',
+      'Seniors',
+      '#StartinCollege Event',
+      'Newspaper/Magazine',
+      'TV',
+      'SV.CO Blog',
+      'Instagram',
+      'Facebook',
+      'Twitter',
+      'Microsoft Student Partner',
+      'Other (Please Specify)'
+    ].freeze
   end
 end

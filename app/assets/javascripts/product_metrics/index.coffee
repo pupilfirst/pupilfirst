@@ -6,7 +6,6 @@ animateHeaderText = ->
     backSpeed: 20
     backDelay: 3000
     cursorChar: '_'
-    shuffle: true
     smartBackspace: false
     loop: true
   )

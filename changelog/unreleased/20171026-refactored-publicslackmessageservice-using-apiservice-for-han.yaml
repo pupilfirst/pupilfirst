@@ -1,0 +1,6 @@
+---
+timestamp: '2017-10-26T10:03:15Z'
+title: Refactored PublicSlack::MessageService using ApiService for handling Slack
+  API requests
+trello: https://trello.com/c/onrjenun
+private: true

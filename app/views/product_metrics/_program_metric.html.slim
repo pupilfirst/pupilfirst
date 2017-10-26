@@ -1,0 +1,18 @@
+- presenter = ProductMetrics::ProductMetricPresenter.new(self, metric)
+
+.col-lg-6.d-flex
+  .program-stats__other-facts-box.text-center.d-flex.flex-column.align-items-center.justify-content-between
+    .program-stats__other-facts-box-content
+      = image_tag "stats/#{presenter.icon_key}-stats-icon.svg", class: 'img-fluid program-stats__other-facts-icon'
+      h3.font-bold.program-stats__other-facts-number.program-stats__counter
+        = number_with_delimiter(@metrics[metric]['value'])
+      h6.font-semibold.program-stats__other-facts-title = presenter.heading
+      p.mb-3 = presenter.description
+
+    - if @metrics[metric].fetch('delta_value', 0) > 0
+      .program-stats__delta-box
+        p
+          = @metrics[metric]['delta_value']
+          ' &nbsp;#{presenter.delta_verb} in the last
+          = @metrics[metric]['delta_period']
+          | &nbsp;months.

@@ -8,18 +8,17 @@ module PublicSlack
       def mock?
         defined?(@mock) ? @mock : Rails.env.test? || Rails.env.development?
       end
-
-      def valid_channel_names
-        token = Rails.application.secrets.slack_token
-        channel_list = JSON.parse(RestClient.get("https://slack.com/api/channels.list?token=#{token}"))
-        channel_list['channels'].map { |c| '#' + c['name'] }
-      end
     end
 
     def initialize(unfurl_links: false)
       @token = Rails.application.secrets.slack_token
       @errors = {}
       @unfurl_links = unfurl_links
+    end
+
+    def valid_channel_names
+      channel_list = api.get('channels.list')
+      channel_list['channels'].map { |c| '#' + c['name'] }
     end
 
     def post(message:, **target)
@@ -30,7 +29,7 @@ module PublicSlack
         return
       end
 
-      message = URI.escape message
+      message = message
       channel = target[:channel]
       founder = target[:founder]
       founders = target[:founders]
@@ -50,18 +49,22 @@ module PublicSlack
 
     private
 
+    def api
+      @api ||= PublicSlack::ApiService.new(token: @token)
+    end
+
     def channel_valid?(channel)
       channel.in? channel_names_and_ids(public_channels + private_groups)
     end
 
     def public_channels
-      response = get_json "https://slack.com/api/channels.list?token=#{@token}"
+      response = api.get('channels.list')
 
       response['ok'] ? response['channels'] : []
     end
 
     def private_groups
-      response = get_json "https://slack.com/api/groups.list?token=#{@token}"
+      response = api.get('groups.list')
 
       response['ok'] ? response['groups'] : []
     end
@@ -74,14 +77,12 @@ module PublicSlack
     end
 
     def post_to_channel(channel, message)
-      # Make channel name url safe by replacing '#' with '%23', if any.
-      channel = '%23' + channel[1..-1] if channel[0] == '#'
-
-      response = get_json "https://slack.com/api/chat.postMessage?token=#{@token}&channel=#{channel}&link_names=1"\
-      "&text=#{message}&as_user=true&unfurl_links=#{@unfurl_links}"
-      @errors[channel] = response['error'] unless response['ok']
-    rescue RestClient::Exception => err
-      @errors['RestClient'] = err.response.body
+      params = message_params(channel, message, @unfurl_links)
+      begin
+        api.get('chat.postMessage', params: params)
+      rescue PublicSlack::TransportFailureException
+        @errors['HTTP Error'] = 'There seems to be a network issue. Please try after sometime'
+      end
     end
 
     # Post to each founder in the founders array.
@@ -103,17 +104,24 @@ module PublicSlack
       end
 
       # Fetch or create im_id for the founder.
-      im_id_response = get_json "https://slack.com/api/im.open?token=#{@token}&user=#{founder.slack_user_id}"
-      unless im_id_response['ok']
-        @errors[founder.id] = im_id_response['error']
+      begin
+        im_id_response = api.get('im.open', params: { user: founder.slack_user_id })
+      rescue PublicSlack::TransportFailureException
+        @errors['HTTP Error'] = 'There seems to be a network issue. Please try after sometime'
         return false
       end
 
       im_id_response['channel']['id']
     end
 
-    def get_json(url)
-      JSON.parse(RestClient.get(url))
+    def message_params(channel, message, unfurl_links)
+      {
+        channel: channel,
+        link_names: 1,
+        text: message,
+        as_user: true,
+        unfurl_links: unfurl_links
+      }
     end
   end
 end

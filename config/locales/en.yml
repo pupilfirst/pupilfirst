@@ -173,14 +173,14 @@ en:
         slack:
           heading: "Slack Messages"
           description_html: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod."
-          delta_verb: messages
+          delta_verb: messages posted
         targets:
           heading: "Targets to Complete"
           description_html: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod."
         faculty_sessions:
           heading: "Faculty Sessions"
           description_html: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod."
-          delta_verb: sessions
+          delta_verb: sessions added
         office_hours:
           heading: "Office Hours"
           description_html: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod."
@@ -188,7 +188,7 @@ en:
         resources:
           heading: "Library Resources"
           description_html: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod."
-          delta_verb: resources
+          delta_verb: resources added
         resource_downloads:
           heading: "Resource Downloads"
           description_html: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod."
@@ -196,15 +196,15 @@ en:
         graduation_partners:
           heading: "Graduation Partners"
           description_html: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod."
-          delta_verb: partners
+          delta_verb: partners added
         community_architects:
           heading: "Community Architects"
           description_html: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod."
-          delta_verb: architects
+          delta_verb: architects added
         published_stories:
           heading: "Published Stories"
           description_html: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod."
-          delta_verb: stories
+          delta_verb: stories posted
       student_journey:
         explorers:
           heading: "Explorers"

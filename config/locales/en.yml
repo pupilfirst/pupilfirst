@@ -172,26 +172,26 @@ en:
       product_metric:
         slack:
           heading: "Slack Messages"
-          description_html: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod."
+          description_html: "SV.CO's Public Slack channel allows open interaction between students and the faculty."
           delta_verb: messages posted
         targets:
           heading: "Targets to Complete"
-          description_html: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod."
+          description_html: "Students follow a guided path, completing targets and levelling up to improve their product."
         faculty_sessions:
           heading: "Faculty Sessions"
-          description_html: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod."
+          description_html: "Open sessions are conducted regularly with in-house faculty, and industry experts."
           delta_verb: sessions added
         office_hours:
           heading: "Office Hours"
-          description_html: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod."
+          description_html: "One-on-one office hours help keep students on track, and faculty apprised of their progress."
           delta_verb: hours
         resources:
           heading: "Library Resources"
-          description_html: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod."
+          description_html: "The Startup Library is a one-stop-shop for all resources that SV.CO provides."
           delta_verb: resources added
         resource_downloads:
           heading: "Resource Downloads"
-          description_html: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod."
+          description_html: "Founders can download industry-leading market-reports, theme-specific analysis, great live video &amp; presentation content."
           delta_verb: downloads
         graduation_partners:
           heading: "Graduation Partners"
@@ -203,7 +203,7 @@ en:
           delta_verb: architects added
         published_stories:
           heading: "Published Stories"
-          description_html: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod."
+          description_html: "SV.CO regularly publishes stories showcasing the incredible work done by students."
           delta_verb: stories posted
       student_journey:
         explorers:
@@ -217,13 +217,13 @@ en:
           description_html: "Continuous revisions using feedback from the SV.CO faculty, industry experts, and potential customers lead to the <em>Beta</em>."
         heroes:
           heading: 'Heroes'
-          description_html: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et."
+          description_html: "Students who receive funding for their product, or great job offers are <em>Heroes</em> to the collective."
         leadership:
           heading: "Leadership Team"
-          description_html: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et."
+          description_html: "Select <em>Heroes</em> get handpicked to the Leadership Team and become leaders who can influence the direction of SV.CO."
         coaches:
           heading: "Coaches"
-          description_html: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et."
+          description_html: "SV.CO members can rise to the position of <em>Coach</em>, teaching the community full time, and supporting the next generation of collective."
 
   resources:
     index:

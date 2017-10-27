@@ -1,6 +1,6 @@
 module Founders
   # Evaluates a founder's quiz submission and responds with the result section to be sent back.
-  class EvaluateEnglishQuizSubmission
+  class EvaluateEnglishQuizSubmissionService
     def initialize(founder, question, answer_option)
       @founder = founder
       @question = question

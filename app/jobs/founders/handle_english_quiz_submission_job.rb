@@ -13,7 +13,7 @@ module Founders
       answer_option = AnswerOption.find_by!(id: payload['actions'][0]['value'])
 
       # Call the service to evaluate the submission.
-      results_section = Founders::EvaluateEnglishQuizSubmission.new(founder, question, answer_option).evaluate
+      results_section = Founders::EvaluateEnglishQuizSubmissionService.new(founder, question, answer_option).evaluate
 
       # Replace the buttons section with the results section ...
       message = payload['original_message']

@@ -6,11 +6,11 @@
 
 #product-metrics__index
 
-section.stats-hero__banner.secondary-banner
+section.stats-hero__banner.secondary-banner.py-3
   .stats-hero__message-container.text-left
     .container
-      .row
-        .col-md-8.text-center.text-md-left
+      .row.align-items-center
+        .col-md-7.text-center.text-md-left
           .stats-hero__message-text
             p.stats-hero__message-text--small.font-light While you are reading this,
 
@@ -31,6 +31,10 @@ section.stats-hero__banner.secondary-banner
                 = @metrics['Founders']['delta_value']
               ' students joined the SV.CO collective in the last
               | #{pluralize(@metrics['Founders']['delta_period'], 'month')}.
+
+        .col-md-5
+          = image_tag "stats/stats-hero-banner.svg", class: 'img-fluid'
+
 
 section.general-stats__container.py-4.py-md-5
   .container

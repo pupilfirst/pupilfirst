@@ -1,11 +1,11 @@
 require_relative 'helper'
 
 after 'module_chapters' do
-  puts 'Seeding quiz_questions'
+  puts 'Seeding mooc_quiz_questions'
 
   module_2 = CourseModule.find_by(module_number: 2)
 
-  question = QuizQuestion.new(
+  question = MoocQuizQuestion.new(
     course_module: module_2,
     question: 'Is Fin Robotics a successful business?'
   )
@@ -30,7 +30,7 @@ after 'module_chapters' do
     hint_text: 'Thats right, they still have a long way to go.'
   )
 
-  question = QuizQuestion.new(
+  question = MoocQuizQuestion.new(
     course_module: module_2,
     question: 'Fin Robotics went through four failed products before building Fin. Was that a good thing?'
   )

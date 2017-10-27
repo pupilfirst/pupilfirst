@@ -113,7 +113,7 @@ feature 'Admission Fee Payment' do
       sign_in_user founder.user, referer: fee_founder_path
 
       # Page should have coupon form.
-      expect(page).to have_content('Have a referral coupon?')
+      expect(page).to have_content('Do you have a coupon?')
 
       # He applies the coupon.
       fill_in 'admissions_coupon_code', with: coupon.code
@@ -123,7 +123,7 @@ feature 'Admission Fee Payment' do
 
       # He removes the applied coupon.
       click_button 'Remove'
-      expect(page).to have_content('Have a referral coupon?')
+      expect(page).to have_content('Do you have a coupon?')
       expect(startup.reload.coupon_usage).to eq(nil)
 
       # He applies it back :)
@@ -192,7 +192,7 @@ feature 'Admission Fee Payment' do
         click_on 'Pay for 1 month'
 
         # The coupon should get removed.
-        expect(page).to have_content('Have a referral coupon?')
+        expect(page).to have_content('Do you have a coupon?')
       end
     end
   end

@@ -104,7 +104,7 @@ module SixWaysHelper
   end
 
   def last_quiz_attempted?
-    CourseModule.last_module.id == current_mooc_student&.quiz_attempts&.maximum(:course_module_id)
+    CourseModule.last_module.id == current_mooc_student&.mooc_quiz_attempts&.maximum(:course_module_id)
   end
 
   def start_of_next_module
@@ -202,7 +202,7 @@ module SixWaysHelper
   end
 
   def completed_quizzes_count
-    current_mooc_student.quiz_attempts.pluck(:course_module_id).uniq.count
+    current_mooc_student.mooc_quiz_attempts.pluck(:course_module_id).uniq.count
   end
 end
 # rubocop:enable Metrics/ModuleLength

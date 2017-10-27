@@ -9,7 +9,7 @@
       h6.font-semibold.program-stats__other-facts-title = presenter.heading
       p.mb-3 = presenter.description
 
-    - if @metrics[metric].fetch('delta_value', 0) > 0
+    - if @metrics[metric].fetch('delta_value', 0) > 0 && feature_active?(:stats_delta)
       .program-stats__delta-box
         p
           = @metrics[metric]['delta_value']

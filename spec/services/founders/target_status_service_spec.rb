@@ -100,10 +100,14 @@ describe Founders::TargetStatusService do
 
     context 'when the startup is at a higher iteration' do
       let!(:startup) { create :startup, level: level_two, iteration: 2 }
+      let!(:level_zero_target_group) { create :target_group, level: level_zero }
       let!(:level_one_target_group) { create :target_group, level: level_one }
       let!(:level_two_target_group) { create :target_group, level: level_two }
+      let!(:level_zero_target) { create :target, :for_founders, target_group: level_zero_target_group }
       let!(:level_one_target) { create :target, :for_founders, target_group: level_one_target_group }
       let!(:level_two_target) { create :target, :for_founders, target_group: level_two_target_group }
+      let!(:founder_chore) { create :target, target_group: level_one_target_group, chore: true }
+      let!(:founder_session) { create :target, target_group: level_one_target_group, level: level_one, session_at: 1.month.ago }
 
       context 'when vanilla target event (from same level) iteration is different' do
         it 'ignores previous submission and returns :pending' do
@@ -130,6 +134,13 @@ describe Founders::TargetStatusService do
         it 'returns status from previous iteration' do
           founder_event.update!(target: founder_session, status: TimelineEvent::STATUS_VERIFIED)
           expect(subject.status(founder_session.id)).to eq(Target::STATUS_COMPLETE)
+        end
+      end
+
+      context 'when vanilla target event is from level zero' do
+        it 'raises an error if startup is above level zero' do
+          founder_event.update!(target: level_zero_target, status: TimelineEvent::STATUS_VERIFIED)
+          expect { subject.status(level_zero_target.id) }.to raise_error(NoMethodError)
         end
       end
     end

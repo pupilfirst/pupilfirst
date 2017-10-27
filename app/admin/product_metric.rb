@@ -6,11 +6,11 @@ ActiveAdmin.register ProductMetric do
   permit_params :category, :value, :delta_period, :delta_value, :faculty_id
 
   filter :faculty_name, as: :string
-  filter :category, as: :select, collection: ProductMetric::VALID_CATEGORIES.keys
+  filter :category, as: :select, collection: -> { ProductMetric::VALID_CATEGORIES.keys }
   filter :value
   filter :delta_period
   filter :delta_value
-  filter :assignment_mode, as: :select, collection: ProductMetric.valid_assignment_modes
+  filter :assignment_mode, as: :select, collection: -> { ProductMetric.valid_assignment_modes }
   filter :created_at
   filter :updated_at
 

@@ -1,5 +1,5 @@
 module ProductMetrics
-  class ProductMetricPresenter < ApplicationPresenter
+  class ProgramMetricPresenter < ApplicationPresenter
     def initialize(view_context, metric)
       @metric = metric
       super(view_context)

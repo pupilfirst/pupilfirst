@@ -14,6 +14,6 @@ animateNumbers = ->
   $('.program-stats__counter').counterUp(time: 1000)
 
 $(document).on 'turbolinks:load', ->
-  if $('#product-metrics__index')
+  if $('#product-metrics__index').length > 0
     animateHeaderText()
     animateNumbers()

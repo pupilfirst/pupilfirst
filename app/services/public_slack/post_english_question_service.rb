@@ -1,10 +1,12 @@
 module PublicSlack
   # Selects the 'English question for the day' and triggers a job to send it to all founders.
   class PostEnglishQuestionService
-    def post
+    def post(target = nil)
       # Do nothing if we are out of questions.
       # TODO: Fallback to posting individual questions if so.
       return if question_for_the_day.blank?
+
+      channels = target.present? ? target : all_founders # The target argument is temporary - for testing.
 
       PublicSlack::PostEnglishQuestionJob.perform_later(attachments: question_as_slack_attachment, channels: channels)
     end
@@ -12,7 +14,7 @@ module PublicSlack
     private
 
     # The target audience is all founders with a slack_user_id.
-    def channels
+    def all_founders
       Founder.where.not(slack_user_id: nil).pluck(:slack_user_id)
     end
 

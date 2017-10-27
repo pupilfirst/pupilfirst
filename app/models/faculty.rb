@@ -5,6 +5,7 @@ class Faculty < ApplicationRecord
   # use name as slug
   include FriendlyId
   friendly_id :name, use: %i[slugged finders]
+  normalize_attribute :name
 
   mount_uploader :image, FacultyImageUploader
   process_in_background :image

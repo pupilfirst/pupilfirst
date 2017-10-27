@@ -32,19 +32,21 @@ module Founders
     # returns status and submission date for all applicable targets
     def statuses
       @statuses ||= begin
-        statuses = submitted_targets_statuses.merge(unsubmitted_targets_statuses)
+        statuses = submitted_target_statuses.merge(unsubmitted_target_statuses)
         reconfirm_prerequisites(statuses)
       end
     end
 
-    def submitted_targets_statuses
-      @submitted_targets_statuses ||= begin
+    def submitted_target_statuses
+      @submitted_target_statuses ||= begin
+        # Founder events for applicable targets
         founder_events = @founder.timeline_events.where.not(target_id: nil)
-          .where(target: Target.founder)
+          .where(target: Target.founder).where(target: applicable_targets)
           .select('DISTINCT ON(target_id) *').order('target_id, created_at DESC')
 
+        # Startup events for applicable targets
         startup_events = @founder.startup.timeline_events.where.not(target_id: nil)
-          .where(target: Target.not_founder)
+          .where(target: Target.not_founder).where(target: applicable_targets)
           .select('DISTINCT ON(target_id) *').order('target_id, created_at DESC')
 
         (founder_events + startup_events).each_with_object({}) do |event, result|
@@ -80,11 +82,11 @@ module Founders
       target&.target? && target.target_group.level.number >= @founder.startup.level.number
     end
 
-    def unsubmitted_targets_statuses
-      @unsubmitted_targets_statuses ||= begin
+    def unsubmitted_target_statuses
+      @unsubmitted_target_statuses ||= begin
         applicable_targets.each_with_object({}) do |target, result|
           # skip if submitted target
-          next if submitted_targets_statuses[target.id].present?
+          next if submitted_target_statuses[target.id].present?
 
           result[target.id] = {
             status: unavailable_or_pending?(target),
@@ -124,7 +126,7 @@ module Founders
       prerequisites = all_target_prerequisites[target.id]
       return true if prerequisites.blank?
 
-      prerequisites.all? { |id| submitted_targets_statuses[id].present? } && prerequisites.all? { |id| submitted_targets_statuses[id][:status].in? [Target::STATUS_COMPLETE, Target::STATUS_NEEDS_IMPROVEMENT] }
+      prerequisites.all? { |id| submitted_target_statuses[id].present? } && prerequisites.all? { |id| submitted_target_statuses[id][:status].in? [Target::STATUS_COMPLETE, Target::STATUS_NEEDS_IMPROVEMENT] }
     end
 
     # all target-prerequisite mappings
@@ -141,7 +143,7 @@ module Founders
     def reconfirm_prerequisites(statuses)
       statuses.each do |target_id, _status_details|
         # Unsubmitted targets do no need correction
-        next if target_id.in? unsubmitted_targets_statuses.keys
+        next if target_id.in? unsubmitted_target_statuses.keys
 
         # Targets without any prerequisites at all also do not need correction
         prerequisites = all_target_prerequisites[target_id]

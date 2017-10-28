@@ -9,6 +9,10 @@ class FounderDecorator < Draper::Decorator
     ("Choose another file if you wish to replace <code>#{filename(:identification_proof)}</code><br/>" + hint).html_safe
   end
 
+  def college_identification_hint
+    "Choose another file if you wish to replace <code>#{filename(:college_identification)}</code><br/>".html_safe
+  end
+
   def fb_basic_info
     return nil unless facebook_token_valid?
 

@@ -161,6 +161,8 @@ Rails.application.routes.draw do
   # /slack redirected to /about/slack
   get '/slack', to: redirect('/about/slack')
 
+  get '/dashboard', to: redirect('/founder/dashboard')
+
   # Also have /StartInCollege
   get 'StartInCollege', to: redirect('/startincollege')
 

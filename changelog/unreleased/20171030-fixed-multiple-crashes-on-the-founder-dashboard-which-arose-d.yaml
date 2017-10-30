@@ -1,0 +1,9 @@
+---
+timestamp: '2017-10-30T09:53:43Z'
+title: Fixed multiple crashes on the Founder dashboard which arose due to some edge-case
+  target configurations.
+trello: https://trello.com/c/4cEEqmMo
+private: false
+description: This occured initially due to the introduction of an archived pre-requisite
+  target in L0. More crashes ensued due to overly quick fixes, and other related edge-cases.
+category: bugfix

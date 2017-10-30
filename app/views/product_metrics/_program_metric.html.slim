@@ -3,7 +3,7 @@
 .col-lg-6.d-flex
   .program-stats__other-facts-box.text-center.d-flex.flex-column.align-items-center.justify-content-between
     .program-stats__other-facts-box-content
-      = image_tag "stats/#{presenter.icon_key}-stats-icon.svg", class: 'img-fluid program-stats__other-facts-icon'
+      = image_tag "product_metrics/index/#{presenter.icon_key}-stats-icon.svg", class: 'img-fluid program-stats__other-facts-icon'
       h3.font-bold.program-stats__other-facts-number.program-stats__counter
         = number_with_delimiter(@metrics[metric]['value'])
       h6.font-semibold.program-stats__other-facts-title = presenter.heading

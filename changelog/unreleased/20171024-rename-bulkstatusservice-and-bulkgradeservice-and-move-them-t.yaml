@@ -1,8 +1,0 @@
----
-timestamp: '2017-10-24T09:47:51Z'
-title: Rename BulkStatusService and BulkGradeService and move them to the Founders
-  module.
-trello: https://trello.com/c/XYiF2sQ3
-private: true
-description: This shuffles the related code around to match its nature. See Trello
-  card for details.

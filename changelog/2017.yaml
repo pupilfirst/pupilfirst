@@ -1,5 +1,84 @@
 ---
 changelog:
+- timestamp: '2017-10-30T10:47:17Z'
+  changes:
+  - timestamp: '2017-10-30T09:53:43Z'
+    title: Fixed multiple crashes on the Founder dashboard which arose due to some
+      edge-case target configurations.
+    trello: https://trello.com/c/4cEEqmMo
+    private: false
+    description: This occured initially due to the introduction of an archived pre-requisite
+      target in L0. More crashes ensued due to overly quick fixes, and other related
+      edge-cases.
+    category: bugfix
+  - timestamp: '2017-10-30T09:51:26Z'
+    title: Founders in L0 are now allowed (again) to create arbitrary timeline events.
+    trello: https://trello.com/c/4CblXKy1
+    private: true
+    description: This lets us create a 'post your Github profile' target for L0.
+  - timestamp: '2017-10-30T08:38:55Z'
+    title: Added OpenGraph meta tags for most public pages to make them share-friendly.
+    trello: https://trello.com/c/YDQ5Qmjf
+    private: false
+  - timestamp: '2017-10-30T07:21:11Z'
+    title: 'Bug fix: Prevent crash for coupons without extension days.'
+    trello: https://trello.com/c/FiwMRTEc
+    private: true
+    description: As discount coupons are now back, we cannot now assume all coupons
+      will have extension days set.
+    category: bugfix
+  - timestamp: '2017-10-30T05:47:48Z'
+    title: Fixed a crash caused by adding a prerequisite target in level zero
+    trello: https://trello.com/c/n3GzkhKT
+    private: true
+    description: 'The fix involved eliminating statuses of submitted targets from
+      Level 0 for admitted founders in Founders::TargetStatusService. Similar to method
+      #unsubmitted_target_statuses, #submitted_target_statuses should only take into
+      account statuses of #applicable_targets for all founders. This eliminates missing
+      status of #all_target_prerequisites '
+    category: bugfix
+  - timestamp: '2017-10-29T16:40:21Z'
+    title: Redirect /dashboard to /founder/dashboard
+    trello: https://trello.com/c/pBYaNfMn
+    private: true
+    description: This was required because of a mistake made in a promotional email.
+  - timestamp: '2017-10-26T10:03:15Z'
+    title: Refactored PublicSlack::MessageService using ApiService for handling Slack
+      API requests
+    trello: https://trello.com/c/onrjenun
+    private: true
+  - timestamp: '2017-10-25T10:54:56Z'
+    title: The styling of team members list displayed on the startup profile edit
+      page has been updated to work well on mobiles.
+    trello: https://trello.com/c/f2T7PuOn
+    private: false
+    description: This replaces the table list with v4 cards.
+    category: ui
+  - timestamp: '2017-10-25T07:35:23Z'
+    title: Implemented policies for authorization in ConnectRequestController
+    trello: https://trello.com/c/5fPCBqdX
+    private: true
+  - timestamp: '2017-10-24T09:47:51Z'
+    title: Rename BulkStatusService and BulkGradeService and move them to the Founders
+      module.
+    trello: https://trello.com/c/XYiF2sQ3
+    private: true
+    description: This shuffles the related code around to match its nature. See Trello
+      card for details.
+  - timestamp: '2017-10-24T09:34:50Z'
+    title: Extracted out post-confirmation tasks of connect requests into a service
+    trello: https://trello.com/c/6gLM94OJ/
+    private: true
+  - timestamp: '2017-10-24T09:33:03Z'
+    title: Updated policy for timeline_event_show action in StartupsController to
+      handle nil case error
+    trello: https://trello.com/c/KvoGiDxC
+    private: true
+    category: bugfix
+  - timestamp: '2017-10-24T07:15:11Z'
+    title: Add renewals count to admissions stats.
+    trello: https://trello.com/c/7AakHegk
+    private: true
 - timestamp: '2017-10-23T11:06:48Z'
   changes:
   - timestamp: '2017-10-23T07:50:00Z'

@@ -1,0 +1,8 @@
+---
+timestamp: '2017-10-30T07:21:11Z'
+title: 'Bug fix: Prevent crash for coupons without extension days.'
+trello: https://trello.com/c/FiwMRTEc
+private: true
+description: As discount coupons are now back, we cannot now assume all coupons will
+  have extension days set.
+category: bugfix

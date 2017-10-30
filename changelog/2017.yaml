@@ -1,10 +1,149 @@
 ---
 changelog:
+- timestamp: '2017-10-16T10:14:20Z'
+  changes:
+  - timestamp: '2017-10-16T11:49:14Z'
+    title: Removal of founders from private Slack groups are now followed by a Vocalist
+      announcement.
+    trello: https://trello.com/c/VmETXzcj
+    private: false
+    category: ui
+  - timestamp: '2017-10-16T10:12:45Z'
+    title: An acknowledgement is now emailed when founders submit feedback for the
+      SV.CO platform.
+    trello: https://trello.com/c/DMnbv25K
+    private: false
+    category: ui
+  - timestamp: '2017-10-16T07:01:09Z'
+    title: Removed reply-to from mail sent to help@sv.co.
+    private: true
+    category: bugfix
+  - timestamp: '2017-10-12T08:04:36Z'
+    title: 'Startup quotes (from startupvitamins.com) are now posted on the `#community`
+      channel on Public Slack, daily at 8 AM.'
+    trello: https://trello.com/c/oavfVbh8
+    private: false
+    description: This includes a daily service to store new quotes from startupvitamins.com.
+    category: feature
+- timestamp: '2017-10-09T11:23:25Z'
+  changes:
+  - timestamp: '2017-10-09T11:23:19Z'
+    title: Fixed a crash with after payment callbacks which was attempting to invite
+      Level 0 founders to Slack.
+    trello: https://trello.com/c/ICn30VYf
+    private: true
+    category: feature
+  - timestamp: '2017-10-09T11:23:19Z'
+    title: Deployed the first stage of SV.CO Tech-Hunt to attract more developers
+      to the platform.
+    trello: https://trello.com/c/cMKCrkY7
+    private: false
+    category: feature
+  - timestamp: '2017-10-04T08:59:42Z'
+    title: Fixed a bug in the Facebook share feature that possibly resulted in missing
+      image and description in shared timeline event links.
+    trello: https://trello.com/c/nyQ4CgO7
+    private: false
+    category: bugfix
+  - timestamp: '2017-10-04T08:48:32Z'
+    title: Labels on the founder profile activity graph now include the year when
+      it's either December or January.
+    trello: https://trello.com/c/ByQmSGxq
+    private: false
+    category: ui
+  - timestamp: '2017-10-04T04:39:53Z'
+    title: Fixed a bug that allowed access to team event in a startup public timeline
+      though the event was pending verification.
+    trello: https://trello.com/c/wArOFixA
+    private: true
+    description: Added a policy that ensures access to team events only if verified
+      and founder events based on the user and verification status.
+    category: bugfix
+- timestamp: '2017-10-03T08:32:09Z'
+  changes:
+  - timestamp: '2017-10-03T07:43:38Z'
+    title: Removed empty 'Library Links' section for targets without associated resources.
+    trello: https://trello.com/c/lmqzW4Cl
+    private: true
+    category: bugfix
+  - timestamp: '2017-10-03T07:01:26Z'
+    title: Fixed broken tab navigation on faculty page.
+    trello: https://trello.com/c/3iklbFmt
+    private: true
+    description: This was caused by a CloudFlare beta feature (Rocket Loader). Feature
+      disabled.
+    category: bugfix
+  - timestamp: '2017-10-03T06:58:00Z'
+    title: Replaced the Founder#remove_from_startup! with a corresponding service.
+    trello: https://trello.com/c/ZwotgUGc
+    private: true
+    description: A Founders::RemoveFromStartupService was implemented and used in
+      the admin side. A related (now stale) before_destroy hook was removed from the
+      Founder model.
+  - timestamp: '2017-10-03T06:53:58Z'
+    title: Deployed a teaser page for the upcoming SV.CO Tech-Hunt.
+    trello: https://trello.com/c/mDyxhUB7
+    private: false
+    category: feature
+  - timestamp: '2017-10-03T06:20:49Z'
+    title: The founder profile page has been updated to allow visitors to scan the
+      entire activity timeline of a founder, instead of just the last seven months.
+    trello: https://trello.com/c/mY04VMu9
+    private: false
+    category: feature
+  - timestamp: '2017-10-03T06:14:23Z'
+    title: Fixed occasional crashes on the founder profile page.
+    trello: https://trello.com/c/gaUNShoK
+    private: false
+    description: This was caused by converting date to time without accounting for
+      timezone - leading to presence of entries in the result from outside of the
+      expected time period.
+    category: bugfix
+  - timestamp: '2017-09-28T09:07:46Z'
+    title: Replace LimitImageResolutionValidator with RasterImageValidator.
+    trello: https://trello.com/c/KaDrSTnT
+    private: true
+    description: This adds a check against file type in addition to existing resolution
+      check.
+  - timestamp: '2017-09-28T06:50:58Z'
+    title: Founders with expired subscriptions are now removed from all private groups
+      on Slack.
+    trello: https://trello.com/c/W9TiiVx7
+    private: false
+    description: A grace period of 3 days from susbcription is allowed before removal.
+      A daily rake task is scheduled at Heroku for the removal.
+    category: feature
+  - timestamp: '2017-09-27T08:30:22Z'
+    title: Prevent timeline builder modal from fading in when testing.
+    trello: https://trello.com/c/85O6jT1o
+    private: true
+    description: This should improve reliability of tests that involve clicking inside
+      the modal.
+  - timestamp: '2017-09-27T08:27:17Z'
+    title: The _timeline builder_ form now blocks submission if there is no active
+      internet connection.
+    trello: https://trello.com/c/4CjVHGc7
+    private: false
+    description: This introduces three separate error states for the submit button
+      - handling offline, 5xx and other error states.
+    category: ui
+  - timestamp: '2017-09-26T10:11:09Z'
+    title: Stlying of founder profile edit page has been re-done to match design guidelines.
+    trello: https://trello.com/c/g87j9Zyi
+    private: false
+    description: simple_form was replaced with bootstrap_form_for.
+    category: ui
+  - timestamp: '2017-09-26T10:09:21Z'
+    title: Sign-in page now displays an error message if OAuth provider doesn't supply
+      email address after signing in. It used to show an unhelpful 404.
+    trello: https://trello.com/c/hLAIU3Hr
+    private: false
+    category: bugfix
 - timestamp: '2017-09-25T06:54:41Z'
   changes:
   - timestamp: '2017-09-25T06:36:22Z'
-    title: Switched to new Instamojo account - one that has up-to-date PAN and GST details
-      of the new company registration.
+    title: Switched to new Instamojo account - one that has up-to-date PAN and GST
+      details of the new company registration.
     trello: https://trello.com/c/aZmTWH3h
     private: true
     description: Switching to the new account involved disabling all outstanding payment
@@ -23,14 +162,16 @@ changelog:
     trello: https://trello.com/c/GXQdO50u
     private: true
     category: feature
-    description: Manual activation of comments is required wherever `show` has been customized.
+    description: Manual activation of comments is required wherever `show` has been
+      customized.
   - timestamp: '2017-09-20T06:32:01Z'
     title: Resources will now store content_type of private S3 files in column `file_content_type`
       to avoid a network call to determine their type.
     trello: https://trello.com/c/LPKXyMIl
     private: true
     category: bugfix
-    description: A one-off script has been executed to set `file_content_type` for all existing resources.
+    description: A one-off script has been executed to set `file_content_type` for
+      all existing resources.
 - timestamp: '2017-09-18T11:11:28Z'
   changes:
   - timestamp: '2017-09-18T09:20:42Z'

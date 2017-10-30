@@ -18,3 +18,5 @@
           = render @startups, cached: true
       - else
         p.alert.alert-warning No startups match the filter criteria provided!
+    .d-flex.justify-content-center.my-4
+      = paginate @startups, theme: 'twitter-bootstrap-4', window: 1

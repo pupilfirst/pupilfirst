@@ -1,3 +1,5 @@
+- presenter = Startups::ShowPresenter.new(self, @startup)
+
 - content_for :head
   title SV.CO Verified Timeline for #{@startup.product_name}
   meta name="description" content="#{@startup.display_name}: #{@startup.product_description}"
@@ -5,7 +7,7 @@
   - if @timeline_event_for_og.present?
     meta property="fb:app_id" content=ENV['FACEBOOK_KEY']
     meta property="og:type" content="article"
-    /meta property="og:rich_attachment" content="true"
+    meta property="og:url" content=@timeline_event_for_og.share_url
     meta property="og:title" content="#{@timeline_event_for_og.title} from #{@timeline_event_for_og.startup.product_name}"
     meta property="og:description" content=@timeline_event_for_og.description
     meta property="og:site_name" content="SV.CO"
@@ -40,6 +42,9 @@
     - if @startup.logo?
       .col-sm-4
         = image_tag "#{@startup.logo_url}", class: 'startup-logo'
+    - else
+      .col-sm-4
+        = presenter.identicon_logo
 
   - if @startup.product_description?
     p.product-description #{@startup.product_description}

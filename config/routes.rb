@@ -84,11 +84,12 @@ Rails.application.routes.draw do
 
   resources :faculty, only: %i[index show] do
     post 'connect', on: :member
+
     collection do
       get 'filter/:active_tab', to: 'faculty#index'
       get 'weekly_slots/:token', to: 'faculty#weekly_slots', as: 'weekly_slots'
       post 'save_weekly_slots/:token', to: 'faculty#save_weekly_slots', as: 'save_weekly_slots'
-      get 'mark_unavailable/:token', to: 'faculty#mark_unavailable', as: 'mark_unavailable'
+      delete 'weekly_slots/:token', to: 'faculty#mark_unavailable', as: 'mark_unavailable'
       get 'slots_saved/:token', to: 'faculty#slots_saved', as: 'slots_saved'
     end
   end
@@ -223,4 +224,12 @@ Rails.application.routes.draw do
 
   # Handle shortener-gem form URLs for a while (backward compatibility).
   get '/:unique_key', to: 'shortened_urls#redirect', constraints: { unique_key: /[0-9a-z]{5}/ }
+
+  scope 'hunt', as: 'tech_hunt', controller: 'tech_hunt' do
+    get '/', action: 'index'
+    post 'register'
+    get 'q', action: 'question', as: 'question'
+    post 'answer_submit'
+    # post 'sign_up'
+  end
 end

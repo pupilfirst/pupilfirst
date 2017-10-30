@@ -3,6 +3,8 @@ class FacultyController < ApplicationController
   before_action :validate_faculty, except: %i[index connect show]
   before_action :require_active_subscription, only: %i[connect]
 
+  layout 'application_v2'
+
   # GET /faculty
   def index
     @active_tab = params[:active_tab].present? ? params[:active_tab] : 'team'
@@ -13,7 +15,6 @@ class FacultyController < ApplicationController
   def show
     @faculty = Faculty.friendly.find(params[:id])
     @skip_container = true
-    render layout: 'application_v2'
   end
 
   # POST /faculty/:id/connect
@@ -44,21 +45,20 @@ class FacultyController < ApplicationController
   def save_weekly_slots
     list_of_slots = JSON.parse(params[:list_of_slots])
     save_slots_in_list list_of_slots, @faculty
-    flash.now[:success] = 'Your slots have been saved succesfully!'
+    flash[:success] = 'Your slots have been saved succesfully!'
     redirect_to action: 'slots_saved'
   end
 
-  # GET /faculty/mark_unavailable/:token
+  # DELETE /faculty/weekly_slots/:token
   def mark_unavailable
     @faculty.connect_slots.next_week.destroy_all
-    flash.now[:success] = 'Your have been marked unavailable for next week!'
+    flash[:success] = 'Your have been marked unavailable for next week!'
     redirect_to action: 'slots_saved'
   end
 
   # GET /faculty/slots_saved/:token
   def slots_saved
     # There's nothing to load.
-    render layout: 'application_v2'
   end
 
   private

@@ -12,7 +12,7 @@ ActiveAdmin.register Faculty do
 
   config.sort_order = 'sort_index_asc'
 
-  filter :category, as: :select, collection: Faculty.valid_categories
+  filter :category, as: :select, collection: -> { Faculty.valid_categories }
   filter :name
   filter :email
   filter :title

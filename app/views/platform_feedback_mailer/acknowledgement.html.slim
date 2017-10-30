@@ -1,0 +1,26 @@
+- founder = @platform_feedback.founder
+
+= content_for :title do
+  | Thank you for your feedback!
+
+= content_for :subtitle do
+  | Your feedback is essential in improving SV&#x2024;CO.
+
+= content_for :salutation do
+  | Hello #{founder.name},
+
+= content_for :body do
+  p
+    ' Our team has been notified of your feedback. We'll take a look at it as soon as possible. Your feedback submission
+    | is eligible to receive Karma Points. They will be awarded once our team evaluates your feedback.
+
+  p
+    ' If you&rsquo;d like to have a conversation with us regarding this, don&rsquo;t hesitate to contact us on Slack,
+    | or email us at #{mail_to 'help@sv.co'}.
+
+  p For the record, your feedback was:
+
+  p.monospace
+    <strong>Type:</strong> #{@platform_feedback.feedback_type}<br/><br/>
+    <strong>Description:</strong> #{@platform_feedback.description}<br/><br/>
+    <strong>Attachment present?</strong> #{@platform_feedback.attachment.present? ? 'Yes' : 'No'}<br/>

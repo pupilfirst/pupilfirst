@@ -1,0 +1,22 @@
+- content_for :head
+  title SV.CO Tech Hunt
+  meta name="description" content="SV.CO Hunt for tech-geeks"
+
+.question-box-container
+  .question-box
+    .question-box__title-bar
+      .float-left SV.CO TechHunt
+      .float-right
+        = button_to destroy_user_session_path, method: :delete, class: 'question-box__logout-btn' do
+          i.fa.fa-close
+    .question-box__question-panel
+      = render "tech_hunt/questions/question_#{@stage}"
+    .question-box__answer-panel
+      - unless @hide_answer_box
+        p.answer-panel__prompt class="#{@error ? 'answer-panel__prompt--error' : ''}"
+          - message = @error ? 'Wrong answer! Try again' : 'Enter your answer'
+          ' >&nbsp;#{message}:
+        = form_for :answer, url: tech_hunt_answer_submit_path, html: { class: 'answer-panel__form' } do |f|
+          p.answer-panel__prompt.float-left >&nbsp;
+          = f.text_field :answer, label: '>', class: 'answer-form__text-field', autocomplete: 'off', autofocus: true
+          = f.submit 'Submit', class: 'answer-form__submit-btn'

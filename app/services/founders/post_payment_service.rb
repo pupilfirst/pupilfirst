@@ -36,7 +36,9 @@ module Founders
       return if startup.level_zero?
 
       # Invite founder back to all channels on Slack.
-      startup.founders.not_exited.each { |founder| Founders::InviteToSlackChannelsJob.perform_later(founder) }
+      startup.founders.not_exited.each do |founder|
+        Founders::InviteToSlackChannelsJob.perform_later(founder) if founder.slack_user_id.present?
+      end
     end
 
     def startup

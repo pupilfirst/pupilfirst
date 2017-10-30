@@ -1,3 +1,5 @@
+- presenter = Startups::StartupPresenter.new(self, startup)
+
 .col-lg-6.col-md-12
   .startup-card.content-box
     - if extra_links_present? startup
@@ -35,7 +37,7 @@
         - if startup.logo.present?
           = image_tag startup.logo.url, class: 'img-fluid'
         - else
-          = startup.product_name || startup.name
+          = presenter.identicon_logo
 
     .startup-details
       .startup-details__header

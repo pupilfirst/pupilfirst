@@ -56,13 +56,15 @@ class Founder < ApplicationRecord
   # Custom scope to allow AA to filter by intersection of tags.
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
 
-  scope :active_on_slack, ->(since, upto) { joins(:public_slack_messages).where(public_slack_messages: { created_at: since..upto }) }
-  scope :active_on_web, ->(since, upto) { joins(user: :visits).where(visits: { started_at: since..upto }) }
+  scope :active_on_slack, ->(from, to) { joins(:public_slack_messages).where(public_slack_messages: { created_at: from..to }) }
+  scope :active_on_web, ->(from, to) { joins(user: :visits).where(visits: { started_at: from..to }) }
 
   scope :inactive, lambda {
     admitted.where(exited: false).where.not(id: active_on_slack(Time.now.beginning_of_week, Time.now)).where.not(id: active_on_web(Time.now.beginning_of_week, Time.now))
   }
   scope :not_exited, -> { where.not(exited: true) }
+
+  scope :subscribed, -> { joins(startup: :payments).merge(Payment.paid).where('payments.billing_end_at > ?', Time.now) }
 
   def self.with_email(email)
     where('lower(email) = ?', email.downcase).first # rubocop:disable Rails/FindBy
@@ -168,12 +170,6 @@ class Founder < ApplicationRecord
     display_name
   end
 
-  def remove_from_startup!
-    team_lead? ? startup.update!(team_lead: nil) : nil
-    self.startup_id = nil
-    save! validate: false
-  end
-
   def self.valid_roles
     %w[product engineering design]
   end
@@ -206,38 +202,6 @@ class Founder < ApplicationRecord
     startup.connect_requests.joins(:connect_slot).where(connect_slots: { faculty_id: faculty.id }, status: ConnectRequest::STATUS_REQUESTED).exists?
   end
 
-  # Returns data required to populate /founders/:slug
-  def activity_timeline
-    all_activity = karma_points.where(created_at: activity_date_range) +
-      timeline_events.where(created_at: activity_date_range) +
-      public_slack_messages.where(created_at: activity_date_range)
-
-    sorted_activity = all_activity.sort_by(&:created_at)
-
-    sorted_activity.each_with_object(blank_activity_timeline) do |activity, timeline|
-      if activity.is_a? PublicSlackMessage
-        add_public_slack_message_to_timeline(activity, timeline)
-      elsif activity.is_a? TimelineEvent
-        add_timeline_event_to_timeline(activity, timeline)
-      elsif activity.is_a? KarmaPoint
-        add_karma_point_to_timeline(activity, timeline)
-      end
-    end
-  end
-
-  def activity_date_range
-    (activity_timeline_start_date.beginning_of_day..activity_timeline_end_date.end_of_day)
-  end
-
-  # Latest of founder creation date or 7 months ago
-  def activity_timeline_start_date
-    [created_at.to_date, 7.months.ago.to_date].max
-  end
-
-  def activity_timeline_end_date
-    Date.today
-  end
-
   # Returns true if any of the social URL are stored. Used on profile page.
   def social_url_present?
     [twitter_url, linkedin_url, personal_website_url, blog_url, angel_co_url, github_url, behance_url, facebook_url].any?(&:present?)
@@ -268,16 +232,6 @@ class Founder < ApplicationRecord
     return 'Submit a resume to your timeline to complete your profile!' if resume_link.blank?
   end
 
-  # Make sure a new team lead is assigned before destroying the present one
-  before_destroy :assign_new_team_lead
-
-  def assign_new_team_lead
-    return unless team_lead? && startup.present?
-
-    team_lead_candidate = startup.founders.where.not(id: id).first
-    startup.update!(team_lead: team_lead_candidate)
-  end
-
   # Should we give the founder a tour of the founder dashboard? If so, we shouldn't give it again.
   def tour_dashboard?
     if dashboard_toured
@@ -288,30 +242,8 @@ class Founder < ApplicationRecord
     end
   end
 
-  # method to return the list of active founders on slack for a given duration
-  def self.active_founders_on_slack(since:, upto: Time.now)
-    Founder.not_dropped_out.not_exited.active_on_slack(since, upto).distinct
-  end
-
-  # method to return the list of active founders on web for a given duration
-  def self.active_founders_on_web(since:, upto: Time.now)
-    Founder.not_dropped_out.not_exited.active_on_web(since, upto).distinct
-  end
-
   def any_targets?
     targets.present? || startup&.targets.present?
-  end
-
-  def latest_nps
-    platform_feedback.scored.order('created_at').last&.promoter_score
-  end
-
-  def promoter?
-    latest_nps.present? && latest_nps > 8
-  end
-
-  def detractor?
-    latest_nps.present? && latest_nps < 7
   end
 
   def facebook_token_available?
@@ -381,54 +313,5 @@ class Founder < ApplicationRecord
 
   def team_lead?
     startup&.team_lead_id == id
-  end
-
-  private
-
-  def blank_activity_timeline
-    start_date = activity_timeline_start_date.beginning_of_month
-    end_date = activity_timeline_end_date.end_of_month
-
-    first_day_of_each_month = (start_date..end_date).select { |d| d.day == 1 }
-
-    first_day_of_each_month.each_with_object({}) do |first_day_of_month, blank_timeline|
-      blank_timeline[first_day_of_month.strftime('%B')] = { counts: (1..WeekOfMonth.total_weeks(first_day_of_month)).each_with_object({}) { |w, o| o[w] = 0 } }
-    end
-  end
-
-  def add_public_slack_message_to_timeline(activity, timeline)
-    month = activity.created_at.strftime('%B')
-
-    increment_activity_count(timeline, month, WeekOfMonth.week_of_month(activity.created_at))
-
-    if timeline[month][:list] && timeline[month][:list].last[:type] == :public_slack_message
-      timeline[month][:list].last[:count] += 1
-    else
-      timeline[month][:list] ||= []
-      timeline[month][:list] << { type: :public_slack_message, count: 1 }
-    end
-  end
-
-  def add_timeline_event_to_timeline(activity, timeline)
-    month = activity.created_at.strftime('%B')
-
-    increment_activity_count(timeline, month, WeekOfMonth.week_of_month(activity.created_at))
-
-    timeline[month][:list] ||= []
-    timeline[month][:list] << { type: :timeline_event, timeline_event: activity }
-  end
-
-  def add_karma_point_to_timeline(activity, timeline)
-    month = activity.created_at.strftime('%B')
-
-    increment_activity_count(timeline, month, WeekOfMonth.week_of_month(activity.created_at))
-
-    timeline[month][:list] ||= []
-    timeline[month][:list] << { type: :karma_point, karma_point: activity }
-  end
-
-  def increment_activity_count(timeline, month, week)
-    timeline[month][:counts][week] ||= 0
-    timeline[month][:counts][week] += 1
   end
 end

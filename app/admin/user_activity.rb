@@ -5,7 +5,7 @@ ActiveAdmin.register UserActivity do
   actions :index, :show
 
   filter :user, as: :select, collection: []
-  filter :activity_type, as: :select, collection: UserActivity.valid_activity_types
+  filter :activity_type, as: :select, collection: -> { UserActivity.valid_activity_types }
   config.sort_order = 'updated_at_desc'
 
   controller do

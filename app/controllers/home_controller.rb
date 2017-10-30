@@ -1,6 +1,8 @@
 class HomeController < ApplicationController
   skip_before_action :verify_authenticity_token, only: :paytm_callback
 
+  layout 'application_v2'
+
   def index
     @skip_container = true
     @sitewide_notice = true if %w[startupvillage.in].include?(params[:redirect_from])
@@ -11,13 +13,11 @@ class HomeController < ApplicationController
 
   def story
     @skip_container = true
-    render layout: 'application_v2'
   end
 
   # GET /tour
   def tour
     @skip_container = true
-    render layout: 'application_v2'
   end
 
   # GET /policies/privacy
@@ -27,7 +27,7 @@ class HomeController < ApplicationController
 
     respond_to do |format|
       format.json { render json: { policy: @privacy_policy_html } }
-      format.html { render layout: 'application_v2' }
+      format.html
     end
   end
 
@@ -38,7 +38,7 @@ class HomeController < ApplicationController
 
     respond_to do |format|
       format.json { render json: { policy: @terms_of_use_html } }
-      format.html { render layout: 'application_v2' }
+      format.html
     end
   end
 

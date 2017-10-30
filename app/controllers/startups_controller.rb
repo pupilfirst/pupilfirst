@@ -4,9 +4,18 @@ class StartupsController < ApplicationController
 
   # GET /startups
   def index
-    load_startups
-    load_filter_options
     @skip_container = true
+    startups = Startup.includes(:level, :startup_categories).admitted.approved.order(timeline_updated_on: 'DESC')
+    @form = Startups::FilterForm.new(Reform::OpenForm.new)
+
+    filtered_startups, page = if @form.validate(filter_params)
+      [Startups::FilterService.new(@form, startups).startups, @form.page]
+    else
+      [startups, 1]
+    end
+
+    @startups = filtered_startups.page(page).per(6)
+    load_filter_options
   end
 
   def show
@@ -35,11 +44,10 @@ class StartupsController < ApplicationController
 
     @timeline_event_for_og = @startup.timeline_events.find_by(id: params[:event_id])
 
-    if @timeline_event_for_og.blank? || @timeline_event_for_og.hidden_from?(current_founder)
+    unless StartupPolicy.new(current_user, @startup).timeline_event_show?(@timeline_event_for_og)
       raise_not_found
-    else
-      render 'show'
     end
+    render 'show'
   end
 
   # GET /startups/:id/events/:page
@@ -89,24 +97,8 @@ class StartupsController < ApplicationController
     events.count > page * 20
   end
 
-  # TODO: This method should be replaced with a Form to validate input from the filter.
-  def load_startups
-    category_id = params.dig(:startups_filter, :category)
-
-    category_scope = if category_id.present? && StartupCategory.find_by(id: category_id).present?
-      Startup.joins(:startup_categories).where(startup_categories: { id: category_id })
-    else
-      Startup.unscoped
-    end
-
-    level_id = params.dig(:startups_filter, :level)
-    level_scope = level_id.present? ? Startup.where(level_id: level_id) : Startup.unscoped
-
-    @startups = Startup.includes(:level, :startup_categories, :startups_startup_categories).admitted.approved.merge(category_scope).merge(level_scope).order(timeline_updated_on: 'DESC')
-  end
-
   def load_filter_options
-    @categories = StartupCategory.all
+    @categories = StartupCategory.order(:name)
     @levels = Level.where('number > ?', 0).order(:number)
   end
 
@@ -121,5 +113,10 @@ class StartupsController < ApplicationController
 
   def startup_registration_params
     params.require(:startup).permit(:product_name)
+  end
+
+  def filter_params
+    input_filter = params.include?(:startups_filter) ? params.require(:startups_filter).permit(:level_id, :search, :startup_category_id) : {}
+    input_filter.merge(page: params[:page])
   end
 end

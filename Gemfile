@@ -166,12 +166,10 @@ group :development, :test do
   gem 'coderay', '~> 1.1' # Pretty syntax highlighting on rspec failure snippets.
   gem 'pry-rails', '~> 0.3.5' # Pry debugger.
   gem 'webmock', '~> 3.0' # Mocking web requests.
-  gem 'rubocop', '~> 0.49', require: false # Ruby Style Guide.
+  gem 'rubocop', '~> 0.49.1', require: false # Ruby Style Guide.
   gem 'bundler-audit', '~> 0.5', require: false # Audit gems in gemfile.lock for reported vulnerabilities
   gem 'overcommit', '~> 0.38', require: false # A fully configurable and extendable Git hook manager
   gem 'fuubar', '~> 2.2' # The instafailing RSpec progress bar formatter.
-  gem 'knapsack', '~> 1.13' # Knapsack splits tests across CI nodes so that tests will run comparable time on each node.
-  gem 'rails_stats', '~> 1.0' # external/replacement version of rake stats
   gem 'codecov', '~> 0.1', require: false
 end
 

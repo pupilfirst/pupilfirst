@@ -1,40 +1,22 @@
+- presenter = Admin::Dashboard::CoreStatsPresenter.new(self, @core_stats)
+
 .dashboard-item
   .heading Core Stats
 
   .content
-    - if count_of_ps > 0
-      h6 #{promoter_score_text}
+    - if @core_stats[:nps_count] > 0
+      h6 #{presenter.nps_report}
     hr
-    h6 Today
-    .user-count
-      ' Slack: #{dau_on_slack.count} (#{"%g" % ("%0.1f" % percentage_dau_on_slack)}%)
-    .user-count
-      ' Web: #{dau_on_web.count} (#{"%g" % ("%0.1f" % percentage_dau_on_web)}%)
-    .user-count
-      ' Total: #{total_dau_count} (#{"%g" % ("%0.1f" % total_dau_percentage)}%)
-    .clearfix
-    h6 Weekly (#{Time.now.beginning_of_week.strftime('%B %e')} - Today)
-    .user-count
-      ' Slack: #{wau_on_slack.count} (#{"%g" % ("%0.1f" % percentage_wau_on_slack)}%)
-    .user-count
-      ' Web: #{wau_on_web.count} (#{"%g" % ("%0.1f" % percentage_wau_on_web)}%)
-    .user-count
-      ' Total: #{total_wau_count} (#{"%g" % ("%0.1f" % total_wau_percentage)}%)
-    h6 Current Month (#{Time.now.beginning_of_month.strftime('%B %d')} - Today)
-    .user-count
-      ' Slack: #{mau_on_slack.count} (#{"%g" % ("%0.1f" % percentage_mau_on_slack)}%)
-    .user-count
-      ' Web: #{mau_on_web.count} (#{"%g" % ("%0.1f" % percentage_mau_on_web)}%)
-    .user-count
-      ' Total: #{total_mau_count} (#{"%g" % ("%0.1f" % total_mau_percentage)}%)
+    - presenter.metrics.each do |metric|
+      h6 #{presenter.calculation_period(metric)}
+      - presenter.platforms.each do |platform|
+        .user-count #{presenter.stats_summary(platform, metric)}
+      .clearfix
   .footer-spacer
     .left-of-button.full-width
       .centered
-        .label Slack (WAU)
-        .label Web (WAU)
-        .label Total (WAU)
+        - presenter.platforms.each do |platform|
+          .label #{presenter.platform_name(platform)} (WAU)
       .centered
-        .sparkline-tag #{wau_trend_on_slack.join(', ')}
-        .sparkline-tag #{wau_trend_on_web.join(', ')}
-        .sparkline-tag #{wau_trend_in_total.join(', ')}
-
+        - presenter.platforms.each do |platform|
+          .sparkline-tag #{presenter.wau_trend(platform)}

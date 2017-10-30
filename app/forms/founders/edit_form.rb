@@ -3,7 +3,7 @@ module Founders
     property :name, validates: { presence: true }
     property :born_on, validates: { presence: true }
     property :phone, validates: { presence: true, mobile_number: true }
-    property :avatar, validates: { file_size: { less_than: 2.megabytes }, file_content_type: { allow: %w[image/jpeg image/png image/gif] }, limit_image_resolution: true }
+    property :avatar, validates: { file_size: { less_than: 2.megabytes }, file_content_type: { allow: %w[image/jpeg image/png image/gif] }, raster_image: true }
     property :about, validates: { length: { maximum: 250 } }
     property :roles
     property :skype_id
@@ -11,7 +11,7 @@ module Founders
     property :identification_proof
     property :college_id, validates: { presence: true }
     property :roll_number
-    property :college_identification, validates: { file_size: { less_than: 2.megabytes }, file_content_type: { allow: %w[image/jpeg image/png image/gif] }, limit_image_resolution: true }
+    property :college_identification, validates: { file_size: { less_than: 2.megabytes }, file_content_type: { allow: %w[image/jpeg image/png image/gif] }, raster_image: true }
     property :course
     property :semester, validates: { inclusion: MoocStudent.valid_semester_values, allow_blank: true }
     property :year_of_graduation, validates: { inclusion: (1990..2020), allow_blank: true }

@@ -1,0 +1,6 @@
+---
+timestamp: '2017-10-31T12:18:02Z'
+title: Fixed a bug caused by invoking a ConnectRequest method removed during refactoring.
+trello: https://trello.com/c/zujcWgJe
+private: true
+category: bugfix

@@ -44,8 +44,8 @@ feature 'Founder Edit' do
 
     scenario 'Founder fills in all fields and submits' do
       sign_in_user(founder.user, referer: edit_founder_path)
-
       expect(page).to have_text('Editing').and have_text('profile')
+
       fill_in 'founders_edit_name', with: founder_name
       fill_in 'founders_edit_born_on', with: '1997-01-15'
       fill_in 'founders_edit_phone', with: phone
@@ -103,6 +103,16 @@ feature 'Founder Edit' do
       expect(founder.angel_co_url).to eq("https://angel.co/#{username}")
       expect(founder.github_url).to eq("https://github.com/#{username}")
       expect(founder.behance_url).to eq("https://behance.net/#{username}")
+    end
+
+    scenario 'Founder tries to submit invalid values' do
+      sign_in_user(founder.user, referer: edit_founder_path)
+      expect(page).to have_text('Editing').and have_text('profile')
+
+      fill_in 'founders_edit_backlog', with: '-2'
+      click_button 'Save Changes'
+
+      expect(page).to have_content('Backlog must be greater than or equal to 0')
     end
   end
 

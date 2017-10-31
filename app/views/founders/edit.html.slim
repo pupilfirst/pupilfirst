@@ -11,7 +11,7 @@ title SV.CO Edit Profile for #{@founder.fullname}
         = f.text_field :name, label_class: 'col-form-label', label: 'Name', required: true, maxlength: 255
         = f.text_field :born_on, as: :string, label_class: 'col-form-label', label: 'Date of birth', class: 'date-picker', required: true, placeholder: 'YYYY-MM-DD', data: { format: 'Y-m-d' }
         = f.telephone_field :phone, label_class: 'col-form-label', label: 'Phone Number', required: true, maxlength: 17, pattern: MobileNumberValidator::FORM_EXPRESSION
-        = f.file_field :avatar, label_class: 'col-form-label', label: 'Avatar', class: 'form-control', required: false
+        = f.file_field :avatar, label_class: 'col-form-label', label: 'Avatar', class: 'form-control', required: false, help: @founder.avatar_hint
         = f.text_field :about, label_class: 'col-form-label', label: 'One-Liner', placeholder: 'One-liner about yourself', maxlength: 255, required: false
         - if @founder.startup.present?
           = f.select :roles, options_for_select((Founder.valid_roles.map { |r| [t("models.founder.role.#{r}"), r] }), @founder.roles),
@@ -26,6 +26,13 @@ title SV.CO Edit Profile for #{@founder.fullname}
         = f.select :college_id, options_from_collection_for_select(college_collection, :id, :name),
           { label_class: 'col-form-label', help: 'Please pick your college' }, { 'data-search-url' => colleges_url }
         = f.text_field :roll_number, label_class: 'col-form-label', label: 'University Roll Number', required: false
+
+        - if @founder.college_identification.present?
+          .row.justify-content-end
+            .col-sm-9
+              - image_url = @founder.college_identification.thumb.present? ? @founder.college_identification.thumb.url : @founder.college_identification.url
+              = image_tag(image_url, class: 'founder-edit__image-preview mb-2')
+
         = f.file_field :college_identification, label_class: 'col-form-label', label: 'College Identification', class: 'form-control', required: false, help: @founder.college_identification_hint
         = f.text_field :course, label_class: 'col-form-label', placeholder: 'B-tech in Computer Science', required: false
         = f.select :semester, options_for_select(MoocStudent.valid_semester_values), include_blank: 'Pick your semester', label_class: 'col-form-label'

@@ -10,7 +10,13 @@ class FounderDecorator < Draper::Decorator
   end
 
   def college_identification_hint
+    return if college_identification.blank?
     "Choose another file if you wish to replace <code>#{filename(:college_identification)}</code><br/>".html_safe
+  end
+
+  def avatar_hint
+    return if avatar.blank?
+    'Choose another file if you wish to replace your current avatar.'
   end
 
   def fb_basic_info

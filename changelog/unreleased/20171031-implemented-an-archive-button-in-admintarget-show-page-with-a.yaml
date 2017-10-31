@@ -1,0 +1,8 @@
+---
+timestamp: '2017-10-31T08:02:13Z'
+title: Implemented an archive button in admin/target show page with a warning while
+  attempting to archive a target
+trello: https://trello.com/c/0kSscYxF
+private: true
+description: Targets::ArchivalService will handle the cleanup of TargetPrerequisite
+  table entries when a target is archived

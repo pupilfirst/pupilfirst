@@ -1,5 +1,9 @@
-#admin-target__edit
+/ Only show valid targets as options for prerequisite target select2 input.
+- level_0_targets = Target.where.not(id: @target.id).joins(:level).where(level: Level.zero)
+- level_n_targets = Target.where.not(id: @target.id).joins(:level).where.not(level: Level.zero).where('levels.number <= ?', @target&.level&.number)
+- valid_prerequisite_targets = @target&.level&.number == 0 ? level_0_targets : level_n_targets
 
+#admin-target__edit
 = semantic_form_for [:admin, @target] do |f|
   = f.semantic_errors *f.object.errors.keys
   = f.inputs 'Target details' do
@@ -36,7 +40,7 @@
     = f.input :target_action_type, collection: Target.valid_target_action_types
     = f.input :timeline_event_type, include_blank: 'Select default timeline event type'
     = f.input :points_earnable
-    = f.input :prerequisite_targets, collection: Target.where.not(id: @target.id).includes(:level)
+    = f.input :prerequisite_targets, collection: valid_prerequisite_targets
     = f.input :slideshow_embed
     = f.input :video_embed
     = f.input :resource_url

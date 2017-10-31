@@ -5,7 +5,20 @@ include UserSpecHelper
 feature 'Founder Edit' do
   let(:startup) { create :startup, :subscription_active }
   let(:founder) { create :founder, college: nil, college_text: 'Anon College of Engineering', born_on: 18.years.ago }
-  let(:new_founder_name) { Faker::Name.name }
+  let(:founder_name) { Faker::Name.name }
+  let(:phone) { 9_876_543_210 + rand(10_000) }
+  let(:communication_address) { Faker::Address.full_address }
+  let(:username) { Faker::Internet.user_name(founder_name, %w[-]) }
+  let(:backlogs) { rand(10) }
+  let(:semester) { %w[I II III IV V VI VII VIII].sample }
+  let(:course) { "#{%w[B-tech PG-diploma M-tech Bachelors].sample} in #{Faker::Lorem.word.capitalize}" }
+  let(:roll_number) { "UNI00#{10_000 + rand(9_999)}" }
+  let(:roles) { %w[Product Design Engineering].sample(2) }
+  let(:one_liner) { Faker::Lorem.sentence }
+
+  def upload_path(file)
+    File.absolute_path(Rails.root.join('spec', 'support', 'uploads', file))
+  end
 
   before do
     startup.founders << founder
@@ -29,20 +42,77 @@ feature 'Founder Edit' do
       expect(page).to have_content("Communication address can't be blank")
     end
 
-    scenario 'Founder fills in the required fields and submits' do
+    scenario 'Founder fills in all fields and submits' do
       sign_in_user(founder.user, referer: edit_founder_path)
-
       expect(page).to have_text('Editing').and have_text('profile')
-      fill_in 'founders_edit_name', with: new_founder_name
+
+      fill_in 'founders_edit_name', with: founder_name
       fill_in 'founders_edit_born_on', with: '1997-01-15'
-      fill_in 'founders_edit_phone', with: '9876543210'
-      fill_in 'founders_edit_communication_address', with: '37623 Gutmann MountainNorth Adelinetown25858-7040'
+      fill_in 'founders_edit_phone', with: phone
+      attach_file 'founders_edit_avatar', upload_path('faculty/donald_duck.jpg')
+      fill_in 'founders_edit_about', with: one_liner
+
+      # Choose two roles.
+      roles.each do |role|
+        select role, from: 'founders_edit_roles'
+      end
+
+      fill_in 'founders_edit_skype_id', with: username
+      fill_in 'founders_edit_communication_address', with: communication_address
+      attach_file 'founders_edit_identification_proof', upload_path('resources/pdf-thumbnail.png')
       select "My college isn't listed", from: 'founders_edit_college_id'
+      fill_in 'founders_edit_roll_number', with: roll_number
+      attach_file 'founders_edit_college_identification', upload_path('users/college_id.jpg')
+      fill_in 'founders_edit_course', with: course
+      select semester, from: 'founders_edit_semester'
+      select (Time.zone.now.year + rand(4)).to_s, from: 'founders_edit_year_of_graduation'
+      fill_in 'founders_edit_backlog', with: backlogs
+      fill_in 'founders_edit_twitter_url', with: "https://twitter.com/#{username}"
+      fill_in 'founders_edit_linkedin_url', with: "https://linkedin.com/#{username}"
+      fill_in 'founders_edit_personal_website_url', with: "https://#{username}.com"
+      fill_in 'founders_edit_blog_url', with: "https://blog.#{username}.com"
+      fill_in 'founders_edit_angel_co_url', with: "https://angel.co/#{username}"
+      fill_in 'founders_edit_github_url', with: "https://github.com/#{username}"
+      fill_in 'founders_edit_behance_url', with: "https://behance.net/#{username}"
+
       click_button 'Save Changes'
 
-      expect(page).to have_text(new_founder_name)
+      expect(page).to have_text(founder_name)
       expect(page).to have_link('Complete Your Profile')
       expect(page).to have_selector('div.activity-section')
+
+      # Confirm that founder has, indeed, been updated.
+      expect(founder.reload.name).to eq(founder_name)
+      expect(founder.born_on).to eq(Date.parse('1997-01-15'))
+      expect(founder.phone).to eq(phone.to_s)
+      expect(founder.avatar.file.filename).to eq('donald_duck.jpg')
+      expect(founder.about).to eq(one_liner)
+      expect(founder.roles).to match_array(roles.map(&:downcase))
+      expect(founder.skype_id).to eq(username)
+      expect(founder.communication_address).to eq(communication_address)
+      expect(founder.identification_proof.file.filename).to eq('pdf-thumbnail.png')
+      expect(founder.roll_number).to eq(roll_number)
+      expect(founder.college_identification.file.filename).to eq('college_id.jpg')
+      expect(founder.course).to eq(course)
+      expect(founder.semester).to eq(semester)
+      expect(founder.backlog).to eq(backlogs)
+      expect(founder.twitter_url).to eq("https://twitter.com/#{username}")
+      expect(founder.linkedin_url).to eq("https://linkedin.com/#{username}")
+      expect(founder.personal_website_url).to eq("https://#{username}.com")
+      expect(founder.blog_url).to eq("https://blog.#{username}.com")
+      expect(founder.angel_co_url).to eq("https://angel.co/#{username}")
+      expect(founder.github_url).to eq("https://github.com/#{username}")
+      expect(founder.behance_url).to eq("https://behance.net/#{username}")
+    end
+
+    scenario 'Founder tries to submit invalid values' do
+      sign_in_user(founder.user, referer: edit_founder_path)
+      expect(page).to have_text('Editing').and have_text('profile')
+
+      fill_in 'founders_edit_backlog', with: '-2'
+      click_button 'Save Changes'
+
+      expect(page).to have_content('Backlog must be greater than or equal to 0')
     end
   end
 
@@ -87,7 +157,7 @@ feature 'Founder Edit' do
       # Stub the calls to update profile name on Slack for all founders.
       stub_request(:get, "https://slack.com/api/users.profile.set?#{{
         profile: {
-          first_name: new_founder_name,
+          first_name: founder_name,
           last_name: "(#{startup.product_name})"
         }.to_json,
         token: 'SLACK_ACCESS_TOKEN'
@@ -95,12 +165,12 @@ feature 'Founder Edit' do
 
       sign_in_user(founder.user, referer: edit_founder_path)
 
-      fill_in 'founders_edit_name', with: new_founder_name
+      fill_in 'founders_edit_name', with: founder_name
 
       click_button 'Save Changes'
 
-      expect(page).to have_content(new_founder_name)
-      expect(founder.reload.name).to eq(new_founder_name)
+      expect(page).to have_content(founder_name)
+      expect(founder.reload.name).to eq(founder_name)
     end
   end
 end

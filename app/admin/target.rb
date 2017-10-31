@@ -133,10 +133,43 @@ ActiveAdmin.register Target do
       row :completion_comment
       row :link_to_complete
       row :submittability
-      row :archived
+      row :archived do
+        div class: 'target-show__archival-status' do
+          target.archived ? 'Yes' : 'No'
+        end
+
+        div class: 'target-show__archive-button' do
+          span do
+            if !target.archived?
+              button_to(
+                'Archive Target',
+                archive_target_admin_target_path(target: { archived: true }),
+                method: :put, data: { confirm: 'Are you sure you want to archive this target? This will wipe the pre-requisite mappings of this target if any' }
+              )
+            else
+              button_to(
+                'Unarchive Target',
+                archive_target_admin_target_path(target: { archived: false }),
+                method: :put, data: { confirm: 'Are you sure you want to unarchive this target?' }
+              )
+            end
+          end
+        end
+      end
+
       row :created_at
       row :updated_at
     end
+  end
+
+  member_action :archive_target, method: :put do
+    target = Target.find params[:id]
+    params = permitted_params[:target]
+
+    Targets::ArchivalService.new(target, params).execute
+    message_text = params[:archived] == 'true' ? 'archived' : 'unarchived'
+    flash[:success] = "Target #{message_text} successfully!"
+    redirect_to action: :show
   end
 
   collection_action :founders_for_target do

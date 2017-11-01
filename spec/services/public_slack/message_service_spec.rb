@@ -74,8 +74,7 @@ describe PublicSlack::MessageService do
             "&link_names=1&text=hello&as_user=true&unfurl_links=false")
             .to_return(body: '{"error": "some error"}')
 
-          response = subject.post message: 'hello', channel: 'channel_name'
-          expect(response.errors).to eq('channel_name' => 'some error')
+          expect { subject.post message: 'hello', channel: 'channel_name' }.to raise_error(PublicSlack::OperationFailureException, %q(Response from Slack API indicates failure: '{"error": "some error"}'))
         end
       end
 
@@ -87,7 +86,7 @@ describe PublicSlack::MessageService do
             .to_return(body: 'some error', status: 500)
 
           response = subject.post message: 'hello', channel: 'channel_name'
-          expect(response.errors).to eq('RestClient' => 'some error')
+          expect(response.errors).to eq('HTTP Error' => 'There seems to be a network issue. Please try after sometime')
         end
       end
     end

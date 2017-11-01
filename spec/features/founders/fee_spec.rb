@@ -15,12 +15,12 @@ feature 'Founder Monthly Fee Payment' do
   end
 
   context 'when there is a pending payment' do
-    let!(:payment) { create :payment, startup: startup, amount: 2000 }
+    let!(:payment) { create :payment, startup: startup, amount: 8000 }
 
     before do
       stub_request(:post, 'https://www.example.com/payment-requests/')
         .with(body: hash_including(
-          amount: '2000.0',
+          amount: '8000.0',
           buyer_name: startup.team_lead.name,
           email: startup.team_lead.email
         ))
@@ -50,7 +50,7 @@ feature 'Founder Monthly Fee Payment' do
   end
 
   context 'when there is a pending requested payment' do
-    let!(:payment) { create :payment, :requested, startup: startup, amount: 4000 }
+    let!(:payment) { create :payment, :requested, startup: startup, amount: 8000 }
 
     scenario 'founder attempts payment again with different period' do
       # Stub the call to disable old payment request.
@@ -61,7 +61,7 @@ feature 'Founder Monthly Fee Payment' do
       stub_request(:post, 'https://www.example.com/payment-requests/')
         .with(body: hash_including(
           allow_repeated_payments: 'false',
-          amount: '4000.0',
+          amount: '16000.0',
           buyer_name: startup.team_lead.name,
           email: startup.team_lead.email,
           purpose: 'Fee for SV.CO',

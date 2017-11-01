@@ -62,7 +62,7 @@ module PublicSlack
     end
 
     def notify_removal_on_slack(channel_id)
-      message = I18n.t('slack.removal_notice')
+      message = I18n.t('services.public_slack.prune_membership.removal_notice')
       PublicSlack::MessageService.new.post(message: message, channel: channel_id)
     end
 

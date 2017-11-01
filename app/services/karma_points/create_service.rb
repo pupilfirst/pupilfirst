@@ -57,9 +57,9 @@ module KarmaPoints
 
     def message
       if founder.present?
-        I18n.t 'slack_notifications.karma_points.founder', message_params
+        I18n.t('services.karma_points.create.founder_slack_notification', message_params)
       else
-        I18n.t 'slack_notifications.karma_points.startup', message_params
+        I18n.t('services.karma_points.create.startup_slack_notification', message_params)
       end
     end
 

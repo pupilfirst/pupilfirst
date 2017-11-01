@@ -23,6 +23,9 @@ module Admissions
       # mark the payment target complete
       Admissions::CompleteTargetService.new(@founder, Target::KEY_ADMISSIONS_FEE_PAYMENT).execute
 
+      # Fix the current Founder::FEE as the perpetual founder_fee for this startup.
+      @startup.update!(founder_fee: Founder::FEE) if @startup.founder_fee.blank?
+
       # IntercomLastApplicantEventUpdateJob.perform_later(@founder, 'payment_complete') unless Rails.env.test?
       Intercom::LevelZeroStageUpdateJob.perform_later(@founder, 'Payment Completed')
     end

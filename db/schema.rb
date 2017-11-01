@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171010103026) do
+ActiveRecord::Schema.define(version: 20171024095430) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -65,6 +65,7 @@ ActiveRecord::Schema.define(version: 20171010103026) do
     t.boolean "correct_answer", default: false
     t.string "value"
     t.text "hint_text"
+    t.string "quiz_question_type"
     t.index ["quiz_question_id"], name: "index_answer_options_on_quiz_question_id"
   end
 
@@ -156,6 +157,24 @@ ActiveRecord::Schema.define(version: 20171010103026) do
   create_table "engineering_metrics", id: :serial, force: :cascade do |t|
     t.json "metrics", default: {}, null: false
     t.datetime "week_start_at"
+  end
+
+  create_table "english_quiz_questions", force: :cascade do |t|
+    t.string "question"
+    t.text "explanation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "english_quiz_submissions", force: :cascade do |t|
+    t.bigint "english_quiz_question_id"
+    t.bigint "founder_id"
+    t.bigint "answer_option_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["answer_option_id"], name: "index_english_quiz_submissions_on_answer_option_id"
+    t.index ["english_quiz_question_id"], name: "index_english_quiz_submissions_on_english_quiz_question_id"
+    t.index ["founder_id"], name: "index_english_quiz_submissions_on_founder_id"
   end
 
   create_table "faculty", id: :serial, force: :cascade do |t|
@@ -309,6 +328,27 @@ ActiveRecord::Schema.define(version: 20171010103026) do
     t.index ["slug"], name: "index_module_chapters_on_slug"
   end
 
+  create_table "mooc_quiz_attempts", id: :serial, force: :cascade do |t|
+    t.integer "course_module_id"
+    t.integer "mooc_student_id"
+    t.datetime "taken_at"
+    t.float "score"
+    t.integer "total_questions"
+    t.integer "attempted_questions"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_module_id"], name: "index_mooc_quiz_attempts_on_course_module_id"
+    t.index ["mooc_student_id"], name: "index_mooc_quiz_attempts_on_mooc_student_id"
+  end
+
+  create_table "mooc_quiz_questions", id: :serial, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "course_module_id"
+    t.text "question"
+    t.index ["course_module_id"], name: "index_mooc_quiz_questions_on_course_module_id"
+  end
+
   create_table "mooc_students", id: :serial, force: :cascade do |t|
     t.string "email"
     t.string "name"
@@ -377,6 +417,18 @@ ActiveRecord::Schema.define(version: 20171010103026) do
     t.index ["user_id"], name: "index_players_on_user_id"
   end
 
+  create_table "product_metrics", force: :cascade do |t|
+    t.string "category"
+    t.integer "value"
+    t.integer "delta_period"
+    t.integer "delta_value"
+    t.string "assignment_mode"
+    t.bigint "faculty_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["faculty_id"], name: "index_product_metrics_on_faculty_id"
+  end
+
   create_table "prospective_applicants", id: :serial, force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -398,27 +450,6 @@ ActiveRecord::Schema.define(version: 20171010103026) do
     t.string "timestamp"
     t.integer "reaction_to_id"
     t.index ["founder_id"], name: "index_public_slack_messages_on_founder_id"
-  end
-
-  create_table "quiz_attempts", id: :serial, force: :cascade do |t|
-    t.integer "course_module_id"
-    t.integer "mooc_student_id"
-    t.datetime "taken_at"
-    t.float "score"
-    t.integer "total_questions"
-    t.integer "attempted_questions"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["course_module_id"], name: "index_quiz_attempts_on_course_module_id"
-    t.index ["mooc_student_id"], name: "index_quiz_attempts_on_mooc_student_id"
-  end
-
-  create_table "quiz_questions", id: :serial, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "course_module_id"
-    t.text "question"
-    t.index ["course_module_id"], name: "index_quiz_questions_on_course_module_id"
   end
 
   create_table "resources", id: :serial, force: :cascade do |t|
@@ -534,6 +565,7 @@ ActiveRecord::Schema.define(version: 20171010103026) do
     t.datetime "admission_stage_updated_at"
     t.bigint "team_lead_id"
     t.integer "referral_reward_days", default: 0
+    t.integer "founder_fee"
     t.index ["level_id"], name: "index_startups_on_level_id"
     t.index ["maximum_level_id"], name: "index_startups_on_maximum_level_id"
     t.index ["slug"], name: "index_startups_on_slug", unique: true
@@ -763,6 +795,9 @@ ActiveRecord::Schema.define(version: 20171010103026) do
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"
   add_foreign_key "connect_slots", "faculty"
+  add_foreign_key "english_quiz_submissions", "answer_options"
+  add_foreign_key "english_quiz_submissions", "english_quiz_questions"
+  add_foreign_key "english_quiz_submissions", "founders"
   add_foreign_key "faculty", "levels"
   add_foreign_key "founders", "colleges"
   add_foreign_key "founders", "users"

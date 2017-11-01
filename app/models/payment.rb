@@ -81,10 +81,6 @@ class Payment < ApplicationRecord
     instamojo.raw_payment_request_details(instamojo_payment_request_id)
   end
 
-  def perform_post_payment_tasks!
-    Admissions::PostPaymentService.new(payment: self).execute
-  end
-
   # Remove direct relation from startup to payment and store the relationship as 'original startup'
   def archive!
     self.original_startup_id = startup_id

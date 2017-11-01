@@ -161,6 +161,8 @@ Rails.application.routes.draw do
   # /slack redirected to /about/slack
   get '/slack', to: redirect('/about/slack')
 
+  get '/dashboard', to: redirect('/founder/dashboard')
+
   # Also have /StartInCollege
   get 'StartInCollege', to: redirect('/startincollege')
 
@@ -215,6 +217,9 @@ Rails.application.routes.draw do
   # TODO: Remove this route once PayTM is correctly configured with '/paytm/callback' as the redirect_url.
   post '/', to: 'home#paytm_callback'
 
+  # Handle incoming interaction requests from Slack
+  post '/slack/interaction_webhook', to: 'slack#interaction_webhook'
+
   match '/trello/bug_webhook', to: 'trello#bug_webhook', via: :all
 
   post '/heroku/deploy_webhook', to: 'heroku#deploy_webhook'
@@ -222,8 +227,8 @@ Rails.application.routes.draw do
   # Handle redirects of short URLs.
   get 'r/:unique_key', to: 'shortened_urls#redirect', as: 'short_redirect'
 
-  # Handle shortener-gem form URLs for a while (backward compatibility).
-  get '/:unique_key', to: 'shortened_urls#redirect', constraints: { unique_key: /[0-9a-z]{5}/ }
+  # Temporary POST end-point for the tech-hunt
+  post 'unicorn', to: 'tech_hunt#unicorn'
 
   scope 'hunt', as: 'tech_hunt', controller: 'tech_hunt' do
     get '/', action: 'index'
@@ -232,4 +237,11 @@ Rails.application.routes.draw do
     post 'answer_submit'
     # post 'sign_up'
   end
+
+  scope 'stats', controller: 'product_metrics' do
+    get '/', action: 'index'
+  end
+
+  # Handle shortener-gem form URLs for a while (backward compatibility).
+  get '/:unique_key', to: 'shortened_urls#redirect', constraints: { unique_key: /[0-9a-z]{5}/ }
 end

@@ -21,7 +21,7 @@ describe InstamojoController do
     create :payment,
       startup: startup,
       founder: founder,
-      amount: startup.fee(1),
+      amount: Startups::FeePayableService.new(startup).undiscounted_fee(period: 1),
       instamojo_payment_request_id: instamojo_payment_request_id,
       instamojo_payment_request_status: 'Pending',
       short_url: short_url,

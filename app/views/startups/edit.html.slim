@@ -1,12 +1,12 @@
 - content_for :head
-  title SV.CO Edit #{@startup.product_name} Timeline
+  title SV.CO Edit #{current_startup.product_name} Timeline
 
 .container-md-center
   .content-box.my-3
     - if feature_active? :team_members
       h2#modify-team-members.mb-2 Modify team members
 
-      = render 'team_members/table', team_members: @startup.team_members, team_member_being_edited: nil
+      = render 'team_members/table', team_members: current_startup.team_members, team_member_being_edited: nil
 
       = link_to new_team_member_url, class: 'btn btn-with-icon btn-md btn-primary' do
         i.fa.fa-plus
@@ -18,6 +18,6 @@
 
     h2.mt-4 Delete my Startup
 
-    - if @startup.approved? || @startup.dropped_out?
+    - if current_startup.approved? || current_startup.dropped_out?
       .alert.alert-danger
-        ' You are currently #{@startup.approved? ? 'enrolled in' : 'a dropout from'} SV.CO! To delete your startup timeline, contact your SV.CO representative.
+        ' You are currently #{current_startup.approved? ? 'enrolled in' : 'a dropout from'} SV.CO! To delete your startup timeline, contact your SV.CO representative.

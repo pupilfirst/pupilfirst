@@ -22,7 +22,7 @@ describe Founders::UpdatePendingPaymentService do
       let(:startup) { create :startup, :subscription_active }
       let(:payment) { create :payment, :requested }
 
-      context 'when the payment period is unchanged' do
+      context 'when the payment period and amount are unchanged' do
         let(:period) { payment.period }
 
         it 'verifies and returns payment' do
@@ -37,6 +37,24 @@ describe Founders::UpdatePendingPaymentService do
         let(:period) { 3 }
 
         it 'rebuilds payment' do
+          allow(Instamojo::DisablePaymentRequestService).to receive(:new).and_return(disable_payment_request_service)
+          allow(disable_payment_request_service).to receive(:disable).and_return(disabled_payment)
+          allow(Instamojo::RequestPaymentService).to receive(:new).with(disabled_payment, period).and_return(request_payment_service)
+          allow(request_payment_service).to receive(:request).and_return(updated_payment)
+
+          expect(subject.update).to eq(updated_payment)
+        end
+      end
+
+      context 'when the payment amount is not anymore the fee payable' do
+        let(:discount_coupon) { create :coupon, discount_percentage: 20 }
+
+        before do
+          # Apply the discount coupon for the startup. This will change it's fee payable.
+          CouponUsage.create!(coupon: discount_coupon, startup: startup)
+        end
+
+        it 'rebuilds payment to match fee payable' do
           allow(Instamojo::DisablePaymentRequestService).to receive(:new).and_return(disable_payment_request_service)
           allow(disable_payment_request_service).to receive(:disable).and_return(disabled_payment)
           allow(Instamojo::RequestPaymentService).to receive(:new).with(disabled_payment, period).and_return(request_payment_service)

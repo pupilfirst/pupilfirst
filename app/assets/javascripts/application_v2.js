@@ -45,6 +45,7 @@
 //= require waypoints
 //= require waypoints/shortcuts/inview
 //= require gemini-scrollbar
+//= require typedjs
 
 // Shared
 //= require v2/_shared
@@ -64,7 +65,6 @@
 //= require v2/tour
 //= require v2/talent
 //= require v2/founders
-//= require v2/faculty
 //= require v2/story
 //= require v2/six_ways
 //= require v2/users

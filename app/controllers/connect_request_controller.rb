@@ -4,11 +4,9 @@ class ConnectRequestController < ApplicationController
 
   # GET /connect_request/:id/feedback/from_team/:token
   def feedback_from_team
-    admin = Founder.find_by(auth_token: params[:token])
-
-    raise_not_found if admin.blank?
-
-    connect_request = admin.startup.connect_requests.find(params[:id])
+    founder = Founder.find_by(auth_token: params[:token])
+    connect_request = founder&.startup&.connect_requests&.find(params[:id])
+    authorize connect_request
 
     if connect_request.update(rating_for_faculty: params[:rating])
       flash[:success] = 'Thank you! Your rating of the connect session has been saved.'
@@ -22,10 +20,8 @@ class ConnectRequestController < ApplicationController
   # GET /connect_request/:id/feedback/from_faculty/:token
   def feedback_from_faculty
     faculty = Faculty.find_by(token: params[:token])
-
-    raise_not_found if faculty.blank?
-
-    connect_request = faculty.connect_requests.find(params[:id])
+    connect_request = faculty&.connect_requests&.find(params[:id])
+    authorize connect_request
 
     @rating_recorded = true if connect_request.update(rating_for_team: params[:rating])
     @karma_points_added = true if connect_request.assign_karma_points(params[:rating])
@@ -33,23 +29,14 @@ class ConnectRequestController < ApplicationController
 
   # GET /connect_request/:id/join_session(/:token)
   def join_session
-    @connect_request = retrieve_connect_request
-    raise_not_found if @connect_request.blank?
+    @connect_request = ConnectRequest.find(params[:id])
+
+    unless ConnectRequestPolicy.new(current_user, @connect_request).join_session?(params[:token])
+      raise_not_found
+    end
   end
 
   private
-
-  def retrieve_connect_request
-    params[:token].present? ? retrieve_for_faculty : retrieve_for_founder
-  end
-
-  def retrieve_for_faculty
-    Faculty.find_by(token: params[:token])&.connect_requests&.confirmed&.find_by(id: params[:id])
-  end
-
-  def retrieve_for_founder
-    current_founder&.startup&.connect_requests&.confirmed&.find_by(id: params[:id])
-  end
 
   def authenticate_and_return
     return if current_founder.present?

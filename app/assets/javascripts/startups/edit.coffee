@@ -5,14 +5,14 @@ counter = (textBox, helpBlock, maxCharacters) ->
 
 updateProductDescription = ->
   helpBlock = $(".startup_product_description p.help-block")
-  textBox = $("#startup_product_description")
+  textBox = $("#startups_edit_product_description")
 
   # The value of max_chars should match the one in Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS
   counter(textBox, helpBlock, 150)
 
 $(document).on 'page:change', ->
-  $("#startup_product_description").click(updateProductDescription).on('input', updateProductDescription)
+  $("#startups_edit_product_description").click(updateProductDescription).on('input', updateProductDescription)
 
   # TODO: v4 of Select2 will replace maximumSelectionSize with maximumSelectionLength, so specifying both for the moment.
   # Remove maximumSelectionSize after confirming upgrade to Select2 > v4.
-  $('#startup_startup_categories').select2({ placeholder : 'Select Industries', maximumSelectionLength: 3, maximumSelectionSize: 3 })
+  $('#startups_edit_startup_category_ids').select2({ placeholder : 'Select Industries', maximumSelectionLength: 3, maximumSelectionSize: 3 })

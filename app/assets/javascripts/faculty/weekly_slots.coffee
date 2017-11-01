@@ -58,10 +58,10 @@ addTooltipsToRequestedSlots = ->
     placement: 'bottom'
 
 $(window).on 'load', ->
-  if $('#faculty__weekly-slots').length
+  if $('#faculty-weekly-slots').length
     markPresentSlots()
 
 $(document).on 'turbolinks:load', ->
-  if $('#faculty__weekly-slots').length
+  if $('#faculty-weekly-slots').length
     markPresentSlots()
     slotsClickHandler()

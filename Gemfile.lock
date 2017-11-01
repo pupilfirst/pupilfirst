@@ -583,6 +583,9 @@ GEM
       rails-assets-jquery (>= 1.2.2)
     rails-assets-jquery-stickit (0.2.14)
       rails-assets-jquery (>= 1.6)
+    rails-assets-jquery.counterup (2.1.0)
+      rails-assets-jquery (>= 1.5)
+      rails-assets-waypoints (>= 4.0)
     rails-assets-jquery.scrollTo (2.1.2)
       rails-assets-jquery (>= 1.8)
     rails-assets-lodash (4.17.4)
@@ -603,7 +606,8 @@ GEM
     rails-assets-slick-carousel (1.8.0)
       rails-assets-jquery (>= 1.7)
     rails-assets-tether (1.4.0)
-    rails-assets-trix (0.11.1)
+    rails-assets-trix (0.11.0)
+    rails-assets-typedjs (2.0.6)
     rails-assets-waypoints (4.0.1)
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
@@ -899,6 +903,7 @@ DEPENDENCIES
   rails-assets-intro.js (~> 2.4)!
   rails-assets-jquery (~> 2.2)!
   rails-assets-jquery-stickit (~> 0.2)!
+  rails-assets-jquery.counterup!
   rails-assets-jquery.scrollTo (~> 2.1)!
   rails-assets-lodash (~> 4.17)!
   rails-assets-masonry (~> 4.1)!
@@ -909,6 +914,7 @@ DEPENDENCIES
   rails-assets-slick-carousel (~> 1.6)!
   rails-assets-tether (~> 1.4)!
   rails-assets-trix (~> 0.10)!
+  rails-assets-typedjs!
   rails-assets-waypoints (~> 4.0)!
   rails_12factor (~> 0.0)
   rails_server_timings (~> 1.0)

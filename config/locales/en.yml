@@ -2,36 +2,131 @@
 # Organization of en.yml
 # ----------------------
 #
-# models.MODEL.COLUMN = { key: display_value, ... }
-# services.SERVICE.*.key = display_value
-# jobs.JOB.*.key = display_value
+# jobs.[MODULE].JOB.*.key = display_value
 # libs.MODULE.*.key = display_value
+# models.MODEL.COLUMN = { key: display_value, ... }
+# services.MODULE.SERVICE.*.key = display_value
 # CONTROLLER.ACTION.*.key = display_value
 #
 # CONTROLLER is always the plural version. For example: FoundersController#edit = founders.edit.*
 #
+# Order alphabetically where possible.
+#
 # Third-party customizations follow their own format. Record these at the end of the file. For example:
 #
 # activecord.* = Refer Activerecord documentation.
+#
+# Make sure you include links to documentation related to such third-party customizations for when we (undoubtedly)
+# forget what the strings were for.
 
 en:
+  jobs:
+    faculty_connect_session_reminder:
+      founder_reminder: ":exclamation: *Reminder:* Your startup (%{startup_name}) has an office hour with <%{faculty_url}|%{faculty_name}> starting in 30 minutes! You can <%{meeting_link}|click here> to join the meeting when it's time."
+      faculty_reminder: ":exclamation: *Reminder:* You have an office hour with the founders of <%{startup_url}|%{startup_name}> starting in 30 minutes!\nThe founders plan to discuss the following questions:\n %{questions}\nYou can <%{meeting_link}|click here> to join the meeting when it's time."
+      ops_team_reminder: ":exclamation: *Reminder:* <%{startup_url}|%{startup_name}> has an office hour with <%{faculty_url}|%{faculty_name}> starting in 30 minutes. Follow up!"
+
+    timeline_events:
+      description_update_notification:
+        heading: >
+          An SV.CO faculty member has updated the description in your timeline event (<%{event_url}|%{event_title}>).
+          See changes below:
+      verification_notification:
+        founder:
+          verified:
+            founder_event: "Your new timeline entry (<%{event_url}|%{event_title}>) has been verified by SV.CO"
+            startup_event: "Your new timeline entry (<%{event_url}|%{event_title}>) for <%{startup_url}|%{startup_product_name}> has been verified by SV.CO"
+          needs_improvement:
+            founder_event: "Your new timeline entry (<%{event_url}|%{event_title}>) has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
+            startup_event: "Your new timeline entry (<%{event_url}|%{event_title}>) for <%{startup_url}|%{startup_product_name}> has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
+          not_accepted:
+            founder_event: "Your new timeline entry (<%{event_url}|%{event_title}>) has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
+            startup_event: "The new timeline entry (<%{event_url}|%{event_title}>) submitted by you for <%{startup_url}|%{startup_product_name}> has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
+        team:
+          verified: "Your startup <%{startup_url}|%{startup_product_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>"
+          needs_improvement: "Your startup <%{startup_url}|%{startup_product_name}> has a new timeline entry: (<%{event_url}|%{event_title}>) and has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
+          not_accepted: "The new timeline entry (<%{event_url}|%{event_title}>) submitted by  your startup <%{startup_url}|%{startup_product_name}> has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
+        public:
+          verified: &jobs-timeline_events-verification_notification-public-verified |
+            <%{startup_url}|%{startup_product_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>
+            *Description:* %{event_description}
+            %{links_attached_notice}
+          needs_improvement: *jobs-timeline_events-verification_notification-public-verified
+
+  libs:
+    lita:
+      handlers:
+        changelog:
+          help: Get a snippet of the latest changes on the SV.CO Platform
+        leaderboard:
+          help: Get the last published leaderboard for supplied level.
+        targets:
+          help: Get a list of targets recently assigned to you and your team.
+          help_info: Get detailed information about a target from list.
+          choice_error: "I couldn't find your choice in my list of targets. It should be one of: `%{choices}`."
+          more_info: "Reply with `targets info [NUMBER]` for more information about a target."
+          unknown_username: |
+            I'm sorry, but your slack mention name `@%{slack_username}` isn't known to me.
+            Please update your slack mention name on your SV.CO profile, and try asking me again.
+
   models:
+    faculty:
+      commitment:
+        part_time: Part-Time
+        full_time: Full-Time
+
     founder:
-      references:
-        - "Friend"
-        - "Seniors"
-        - "#StartinCollege Event"
-        - "Newspaper/Magazine"
-        - "TV"
-        - "SV.CO Blog"
-        - "Instagram"
-        - "Facebook"
-        - "Twitter"
-        - "Microsoft Student Partner"
-        - "Other (Please Specify)"
+      # Founder.roles is actually an array. But the translation applies to each value individually.
+      role: &founder-role
+        product: Product
+        engineering: Engineering
+        design: Design
+
+    payment:
+      status:
+        requested: Requested
+        paid: Paid
+        failed: Failed
+
+    startup:
+      registration_type:
+        private_limited: Private Limited
+        partnership: Partnership
+        llp: Limited Liability Partnership
+
+    target:
+      role:
+        <<: *founder-role
+        team: Team
+        founder: All Founders
+
+    team_member:
+      role: *founder-role
+
+    timeline_event:
+      grade:
+        good: 'Good'
+        great: 'Great'
+        wow: 'Wow!'
+
+  services:
+    public_slack:
+      prune_membership:
+        removal_notice: "I've just removed a few founders with expired subscriptions to keep this channel exclusive to active members."
+
+    karma_points:
+      create:
+        founder_slack_notification: 'You have been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
+        startup_slack_notification: 'Your startup <%{startup_url}|%{startup_product_name}> has been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
+
+  about:
+    index:
+      meta_description: "Startup Village is launching an online-first learning platform for first-time founders, supplying tools and resources needed to create a successful startup."
+
   admissions:
     register:
       email_error: "Our email delivery service refused to accept the supplied address. Please ensure that it is a valid email address. If you're still having issues, please contact us using live chat or at help@sv.co"
+
   home:
     index:
       main_bleed_message_html: "SV.CO is for ambitious students who desire to learn how to build a <strong>real</strong> startup and experience <strong>Silicon Valley</strong> while still in college."
@@ -43,35 +138,9 @@ en:
         secondary_html: "Two amazing woman founders: Sarah of SYM and Arya of Walat. Both teams built complete prototypes during SV.CO&apos;s six-month startup program."
       background_4_messages:
         secondary_html: "Ajmal, Aswin, Balram and Kishan of Spenwise built a prototype during SV.CO&apos;s six month startup course and got selected at Zone Startups, Mumbai to continue their startup journey."
-  payment:
-    status:
-      requested: Requested
-      paid: Paid
-      failed: Failed
-  faculty:
-    commitment:
-      part_time: Part-Time
-      full_time: Full-Time
-  startup:
-    edit:
-      registration_types:
-        private_limited: Private Limited
-        partnership: Partnership
-        llp: Limited Liability Partnership
-    show:
-      timeline_cards:
-        needs_imprvement:
-          tooltip_text:
-            founder: We have verified this event, but you can do better! If you have time, submit a new revised event based on our feedback.
-            public: This event is verified by SV.CO but our Faculty submitted feedback asking for further improvements.
-          status_text: Needs Improvement
-        improved_later:
-          tooltip_text:
-            founder: Thank you for improving this event with a later event!
-            public: This event was improved upon with a later submission!
-          status_text: Improved Later
+
   dashboard:
-    show:
+    dashboard:
       tour:
         intro: Welcome to your personal dashboard! Your startup's journey through this program will be showcased here.
         toggle_bar: The program consists of targets and sessions. You complete these as you progress.
@@ -88,106 +157,89 @@ en:
         description_50_html: "Your team is performing adequately, pretty much the same as the other startups in your level. <br /> Attempt to get <em>Great</em> and <em>Wow</em> grades for important targets to advance."
         description_70_html: "Your team is performing better than most startups in the same level. Attempt to get more <em>Wow</em> grades for important targets to advance."
         description_90_html: "Your team is performing exceptionally. Great stuff, we have high hopes from you :)"
-      target_filters:
-        not_accepted:
-          filter_text: 'Not Accepted'
-          title: 'Targets with Unacceptable Submissions'
-          description: 'The listed target submissions are not accepted. Re-submit based on feedback!'
-        needs_improvement:
-          filter_text: 'Needs Improvement'
-          title: 'Targets which Need Improvement'
-          description: 'The listed targets need improvement. Consider feedback and try re-submitting!'
-        all_targets:
-          filter_text: 'All Targets'
-  resource:
-    search_results:
-      zero_results: "We\'re sorry, but it looks like there are no resources %{tag_text} %{search_text}.  Try changing your filter conditions %{login_text}."
+
+  faculty:
+    index:
+      meta_description: "Startup Village has assembled some of the best entrepreneurs and domain experts to help you learn what it means to become a founder. Join SV.CO to gain access."
+
+  founders:
+    fee:
+      discount_benefit: <strong>%{percentage}% discount</strong> on the program fee
+      extension_benefit: <strong>%{extension} extra days</strong> of subscription
+
+  product_metrics:
+    index:
+      product_metric:
+        slack:
+          heading: "Slack Messages"
+          description_html: "SV.CO's Public Slack channel allows open interaction between students and the faculty."
+          delta_verb: posted
+        targets:
+          heading: "Targets to Complete"
+          description_html: "Students follow a guided path, completing targets and levelling up to improve their product."
+        faculty_sessions:
+          heading: "Faculty Sessions"
+          description_html: "Open sessions are conducted regularly with in-house faculty, and industry experts."
+          delta_verb: added
+        office_hours:
+          heading: "Office Hours"
+          description_html: "One-on-one office hours help keep students on track, and faculty apprised of their progress."
+          delta_verb: hours
+        resources:
+          heading: "Library Resources"
+          description_html: "The Startup Library is a one-stop-shop for all resources that SV.CO provides."
+          delta_verb: added
+        resource_downloads:
+          heading: "Resource Downloads"
+          description_html: "Founders can download industry-leading market-reports, theme-specific analysis, great live video &amp; presentation content."
+          delta_verb: downloads
+        graduation_partners:
+          heading: "Graduation Partners"
+          description_html: "Partners we have on-boarded who tap into the founder pool from SV.CO program."
+          delta_verb: on-boarded
+        community_architects:
+          heading: "Community Architects"
+          description_html: "Students startup-enthusiasts who are in the grand pursuit of changing the higher education landscape in India."
+          delta_verb: added
+        published_stories:
+          heading: "Published Stories"
+          description_html: "SV.CO regularly publishes stories showcasing the incredible work done by students."
+          delta_verb: posted
+      student_journey:
+        explorers:
+          heading: "Explorers"
+          description_html: "All students start as explorers. This is the beginning of their journey with the Startup Village Collective."
+        alpha_engineers:
+          heading: "Alpha Engineers"
+          description_html: "Students jump right in, building an <em>Alpha</em> prototype of their product and demoing it to industry experts."
+        beta_engineers:
+          heading: "Beta Engineers"
+          description_html: "Continuous revisions using feedback from the SV.CO faculty, industry experts, and potential customers lead to the <em>Beta</em>."
+        heroes:
+          heading: 'Heroes'
+          description_html: "Students who receive funding for their product, or great job offers are <em>Heroes</em> to the collective."
+        leadership:
+          heading: "Leadership Team"
+          description_html: "Select <em>Heroes</em> get handpicked to the Leadership Team and become leaders who can influence the direction of SV.CO."
+        coaches:
+          heading: "Coaches"
+          description_html: "SV.CO members can rise to the position of <em>Coach</em>, teaching the community full time, and supporting the next generation of collective."
+
+  resources:
+    index:
+      zero_results: "We&rsquo;re sorry, but it looks like there are no resources %{tag_text} %{search_text}.  Try changing your filter conditions %{login_text}."
       results_caption: "Showing resources %{tag_text} %{search_text}:"
 
-  role:
-    team: Team
-    product: Product
-    engineering: Engineering
-    design: Design
-    founder: All Founders
-
-  timeline_event:
-    grade:
-      good: 'Good'
-      great: 'Great'
-      wow: 'Wow!'
-
-  datepicker:
-    dformat: '%d/%m/%Y'        # display format of the date (this is the default, can be ommited)
-    pformat: 'DD/MM/YYYY'      # picking format of the date (this is the default, can be ommited)
-    weekstart: 0               # the week starts on Sunday (this is the default, can be ommited)
-  timepicker:
-    dformat: '%R'              # display format of the time (this is the default, can be ommited)
-    pformat: 'HH:mm'
-
-  date:
-    datepicker: "dd/mm/yyyy"
-
-  errors:
-    messages:
-      not_found: 'Could not find an account with supplied email address'
-
-  activerecord:
-    errors:
-      models:
-        founder:
-          attributes:
-            email:
-              blank: "Please supply your registered email address."
-  slack:
-    help:
-      targets: Get a list of targets recently assigned to you and your team.
-      targets_info: Get detailed information about a target from list.
-      leaderboard: Get the last published leaderboard for supplied level.
-      changelog: Get a snippet of the latest changes on the SV.CO Platform
-    handlers:
-      targets:
-        choice_error: "I couldn't find your choice in my list of targets. It should be one of: `%{choices}`."
-        more_info: "Reply with `targets info [NUMBER]` for more information about a target."
-        unknown_username: |
-          I'm sorry, but your slack mention name `@%{slack_username}` isn't known to me.
-          Please update your slack mention name on your SV.CO profile, and try asking me again.
-    removal_notice: "I've just removed a few founders with expired subscriptions to keep this channel exclusive to active members."
-
-  slack_notifications:
-    timeline_events:
-      founder:
-        verified:
-          founder_event: "Your new timeline entry (<%{event_url}|%{event_title}>) has been verified by SV.CO"
-          startup_event: "Your new timeline entry (<%{event_url}|%{event_title}>) for <%{startup_url}|%{startup_product_name}> has been verified by SV.CO"
+  startups:
+    show:
+      timeline_cards:
         needs_improvement:
-          founder_event: "Your new timeline entry (<%{event_url}|%{event_title}>) has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
-          startup_event: "Your new timeline entry (<%{event_url}|%{event_title}>) for <%{startup_url}|%{startup_product_name}> has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
-        not_accepted:
-          founder_event: "Your new timeline entry (<%{event_url}|%{event_title}>) has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
-          startup_event: "The new timeline entry (<%{event_url}|%{event_title}>) submitted by you for <%{startup_url}|%{startup_product_name}> has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
-      team:
-        verified: "Your startup <%{startup_url}|%{startup_product_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>"
-        needs_improvement: "Your startup <%{startup_url}|%{startup_product_name}> has a new timeline entry: (<%{event_url}|%{event_title}>) and has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
-        not_accepted: "The new timeline entry (<%{event_url}|%{event_title}>) submitted by  your startup <%{startup_url}|%{startup_product_name}> has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
-      public:
-        verified: &slack_notifications_public_verified |
-          <%{startup_url}|%{startup_product_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>
-          *Description:* %{event_description}
-          %{links_attached_notice}
-        needs_improvement: *slack_notifications_public_verified
-    karma_points:
-      founder: 'You have been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
-      startup: 'Your startup <%{startup_url}|%{startup_product_name}> has been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
-
-    connect_sessions:
-      founder_reminder: ":exclamation: *Reminder:* Your startup (%{startup_name}) has an office hour with <%{faculty_url}|%{faculty_name}> starting in 30 minutes! You can <%{meeting_link}|click here> to join the meeting when it's time."
-      faculty_reminder: ":exclamation: *Reminder:* You have an office hour with the founders of <%{startup_url}|%{startup_name}> starting in 30 minutes!\nThe founders plan to discuss the following questions:\n %{questions}\nYou can <%{meeting_link}|click here> to join the meeting when it's time."
-      ops_team_reminder: ":exclamation: *Reminder:* <%{startup_url}|%{startup_name}> has an office hour with <%{faculty_url}|%{faculty_name}> starting in 30 minutes. Follow up!"
-
-  jobs:
-    timeline_event:
-      description_update_notification:
-        heading: >
-          An SV.CO faculty member has updated the description in your timeline event (<%{event_url}|%{event_title}>).
-          See changes below:
+          tooltip_text:
+            founder: We have verified this event, but you can do better! If you have time, submit a new revised event based on our feedback.
+            public: This event is verified by SV.CO but our Faculty submitted feedback asking for further improvements.
+          status_text: Needs Improvement
+        improved_later:
+          tooltip_text:
+            founder: Thank you for improving this event with a later event!
+            public: This event was improved upon with a later submission!
+          status_text: Improved Later

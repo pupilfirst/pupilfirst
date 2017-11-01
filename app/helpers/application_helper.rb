@@ -4,7 +4,7 @@ module ApplicationHelper
       '<em>No Role Selected</em>'.html_safe
     else
       roles.map do |role|
-        t("role.#{role}")
+        t("models.founder.role.#{role}")
       end.join ', '
     end
   end

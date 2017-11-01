@@ -2,8 +2,8 @@
   .modal-dialog
     .modal-content
       .modal-header
+        h5.font-semibold.modal-title Connect with #{faculty.name}
         button.close data-dismiss="modal" type="button"  &times;
-        h4.modal-title Connect with #{faculty.name}
       .modal-body
         = bootstrap_form_for current_founder.startup.connect_requests.new, url: connect_faculty_url(faculty) do |f|
           = f.collection_select :connect_slot, faculty.connect_slots.available_for_founder, :id, :to_s, label: 'Pick a slot: '
@@ -17,5 +17,5 @@
           p.mt-2
             ' As an example, if you are talking to a Marketing &amp; Sales faculty, ask questions about
             ' making a sales plan, or completing a customer acquisition target.
-
-          = f.submit 'Submit Request', class: 'btn btn-primary btn-sm mt-2'
+          .text-center
+            = f.submit 'Submit Request', class: 'btn btn-primary text-uppercase btn-md mt-4'

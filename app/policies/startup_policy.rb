@@ -4,6 +4,7 @@ class StartupPolicy < ApplicationPolicy
   end
 
   def timeline_event_show?(timeline_event)
+    return false if timeline_event.blank?
     if timeline_event.founder_event?
       # Show founder events only to the founder who posted it.
       timeline_event.founder.present? && timeline_event.founder == user&.founder
@@ -23,6 +24,10 @@ class StartupPolicy < ApplicationPolicy
 
     # Founder's subscription must be active, and he must not have existed.
     user.founder.subscription_active? && !user.founder.exited?
+  end
+
+  def edit?
+    update?
   end
 
   def level_up?

@@ -1,18 +1,28 @@
 - content_for :head
   title SV.CO Talent: Invest &amp Hire
-  meta name="description" content="Hire, Acqui-hire, invest and build a pipeline from India's best startup talent."
+  meta name="description" content="Hire, acqui-hire, invest and build a pipeline from India's best startup talent."
+  meta property="og:title" content="SV.CO Talent: Invest & Hire"
+  meta property="og:type" content="website"
+  meta property="og:url" content=talent_url
+  meta property="og:image" content=image_url('home/index/program-ideas.jpg')
+  meta property="og:video" content="https://www.youtube.com/v/SWR95X-lmz4"
+  meta property="og:description" content="Hire, acqui-hire, invest and build a pipeline from India's best startup talent. Discover great startups for your company, accelerator, or investment fund."
+  meta property="fb:app_id" content=Rails.application.secrets.facebook.dig(:app_id)
+
+#talent__index
 
 = render 'invest_hire_form'
 
 .talent-hero
   .container
     .hero-intro.text-xs-center
-      h1.talent-hero-headline.letters.talent-hero-headline__type
-        span Discover Great Startups for your
-        span.hero-words-wrapper
-          b.is-visible Investment Fund
-          b Company
-          b Accelerator
+      .talent-hero-headline.talent-hero-headline__type
+        span Discover Great Startups for Your
+        .talent-hero__typed-strings
+          p Investment Fund
+          p Company
+          p Accelerator
+        span.talent-hero__typed.font-semibold
     .tab-container.talent-nav-tab
       ul.nav.nav-tabs.nav-justified role="tablist"
         li.nav-item.talent-tab-item role="presentation"

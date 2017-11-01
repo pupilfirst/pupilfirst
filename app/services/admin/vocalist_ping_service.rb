@@ -6,7 +6,7 @@ module Admin
       @levels = target[:levels]
       @startups = target[:startups]
       @team_leads_only = target[:team_leads_only]
-      @founders = target[:founder]
+      @founders = target[:founders]
     end
 
     def execute
@@ -29,7 +29,7 @@ module Admin
 
     def ping_startups
       founders = Founder.where(startup: @startups)
-      founders = founders.where(id: @startups.select(:team_lead_id)) if @team_leads_only == '1'
+      founders = founders.where(id: Startup.where(id: @startups).select(:team_lead_id)) if @team_leads_only == '1'
       service.post message: @message, founders: founders
     end
 

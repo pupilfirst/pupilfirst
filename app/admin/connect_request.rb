@@ -23,6 +23,16 @@ ActiveAdmin.register ConnectRequest do
     def scoped_collection
       super.includes :connect_slot
     end
+
+    def update
+      super.tap do
+        resource.transaction do
+          if resource.saved_change_to_status? && resource.confirmed? && resource.confirmed_at.blank?
+            ConnectRequests::ConfirmationService.new(resource).execute
+          end
+        end
+      end
+    end
   end
 
   action_item :record_feedback, only: :show do

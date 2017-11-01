@@ -42,8 +42,16 @@ script src="https://js.instamojo.com/v1/checkout.js"
                       span.discount-coupon-applied--code.dark-secondary
                         | #{@coupon.code}
                       | applied!
-                    p.m-t-1
-                      ' You will unlock <strong>#{@coupon.user_extension_days} extra days</strong> of SV.CO subscription on fee payment!
+
+                    - discount = @coupon.discount_percentage
+                    - extension = @coupon.user_extension_days
+                    - if discount.present?
+                      - benefit = t('founders.fee.discount_benefit', percentage: discount)
+                      - if extension.present?
+                        - benefit += ' and ' + t('founders.fee.extension_benefit', extension: extension)
+                    - else
+                      - benefit = t('founders.fee.extension_benefit', extension: extension)
+                    p.m-t-1 You have unlocked #{benefit.html_safe}.
 
                     - if @coupon.instructions.present?
                       .coupon-instructions.m-t-1
@@ -56,7 +64,7 @@ script src="https://js.instamojo.com/v1/checkout.js"
                 - else
                   #coupon-form-show.discount-coupon__box.discount-coupon__box--show.brand-secondary.font-semibold.p-a-1
                     h4.font-semibold.dark-secondary.m-a-0
-                      ' Have a referral coupon?
+                      ' Do you have a coupon?
                   #coupon-form.discount-coupon__box.discount-coupon__box--form.simple-form-container.hidden-xs-up.p-a-1
                     = simple_form_for @coupon_form,
                       url: admissions_coupon_submit_path,

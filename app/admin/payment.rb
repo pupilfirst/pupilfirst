@@ -32,7 +32,7 @@ ActiveAdmin.register Payment do
     end
 
     column :amount
-    column(:status) { |payment| t("payment.status.#{payment.status}") }
+    column(:status) { |payment| t("models.payment.status.#{payment.status}") }
     column :refunded
 
     actions
@@ -59,7 +59,7 @@ ActiveAdmin.register Payment do
     end
 
     column :status do |payment|
-      t("payment.status.#{payment.status}")
+      t("models.payment.status.#{payment.status}")
     end
 
     column :founder do |payment|

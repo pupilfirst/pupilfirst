@@ -8,7 +8,7 @@ feature 'Startup Edit' do
 
   let(:new_product_name) { Faker::Lorem.words(rand(3) + 1).join ' ' }
   let(:new_product_description) { Faker::Lorem.words(12).join(' ').truncate(Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS) }
-  let(:new_deck) { Faker::Internet.domain_name }
+  let(:new_deck) { Faker::Internet.url }
 
   before do
     startup.founders << founder
@@ -19,9 +19,9 @@ feature 'Startup Edit' do
     scenario 'Founder updates all required fields' do
       sign_in_user(founder.user, referer: edit_startup_path)
 
-      fill_in 'startup_product_name', with: new_product_name
-      fill_in 'startup_product_description', with: new_product_description
-      fill_in 'startup_presentation_link', with: new_deck
+      fill_in 'startups_edit_product_name', with: new_product_name
+      fill_in 'startups_edit_product_description', with: new_product_description
+      fill_in 'startups_edit_presentation_link', with: new_deck
 
       click_on 'Update startup profile'
 
@@ -38,7 +38,7 @@ feature 'Startup Edit' do
     scenario 'Founder clears all required fields' do
       sign_in_user(founder.user, referer: edit_startup_path)
 
-      fill_in 'startup_product_name', with: ''
+      fill_in 'startups_edit_product_name', with: ''
       click_on 'Update startup profile'
 
       expect(page).to have_text("Product name can't be blank")
@@ -72,7 +72,7 @@ feature 'Startup Edit' do
         }.to_query}").to_return(body: { ok: true }.to_json)
       end
 
-      fill_in 'startup_product_name', with: new_product_name
+      fill_in 'startups_edit_product_name', with: new_product_name
       click_on 'Update startup profile'
 
       expect(page).to have_content(new_product_name)

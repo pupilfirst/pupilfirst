@@ -4,117 +4,118 @@
 
 #faculty__show
 
-.container.m-y-2
-  .col-md-3.col-sm-4.faculty-profile-card
-    = image_tag @faculty.image_url, class: 'img-responsive faculty-profile-image'
+.container.my-4
+  .row
+    .col-lg-3.col-md-5
+      .faculty-profile-card
+        = image_tag @faculty.image_url, class: 'img-responsive faculty-profile-image'
 
-    .faculty-profile-title
-      h3.text-xs-center.text-uppercase.font-semibold
-        = @faculty.name
-      h5.faculty-designation.text-xs-center.font-weight-400
-        = @faculty.title
-    .faculty-since.text-xs-center
-      | Faculty at SV.CO since&nbsp;
-      = @faculty.created_at.strftime('%B %Y')
-    .faculty-profile-card-footer.clearfix
-      - if @faculty.linkedin_url.present?
-        - if @faculty.average_rating.present?
-          .faculty-card-links.pull-xs-left
-            = link_to @faculty.linkedin_url, target: '_blank' do
-              i.fa.fa-linkedin
-        - else
-          .faculty-card-links
-            = link_to @faculty.linkedin_url, target: '_blank' do
-              i.fa.fa-linkedin
-      - if @faculty.average_rating.present?
-        - if @faculty.linkedin_url.present?
-          .faculty-rating.pull-xs-left
-            em
-              | Faculty Rating:
-              span.rating-stars
-                = faculty_rating_stars(@faculty.average_rating)
-        - else
-          .faculty-rating.text-xs-center
-            em
-              | Faculty Rating:
-              span.rating-stars
-                = faculty_rating_stars(@faculty.average_rating)
-  .col-md-9.col-sm-8.faculty-profile-right
-    .faculty-profile-details
-      .faculty-summary class="#{sidebar_present?(@faculty) ? 'col-md-8' : 'col-md-12'}"
-        h3.text-uppercase.font-semibold.brand-secondary
-          | Summary
-        .faculty-summary-section
-          h4.about-icon.text-uppercase.font-semibold
-            | About
-          p #{@faculty.about}
-
-        .faculty-summary-section
-          h4.skills-icon.text-uppercase.font-semibold
-            | Skills
-          p.skill-box
-            - @faculty.key_skills.split(',').each do |skill|
-              span = skill
-
-      - if sidebar_present?(@faculty)
-        .col-md-4.faculty-connect
-          - connect_slots = @faculty.connect_slots.available_for_founder
-
-          - if connect_slots.present?
+        .faculty-profile-title
+          h3.text-center.text-uppercase.font-semibold
+            = @faculty.name
+          h5.faculty-designation.text-center.font-weight-400
+            = @faculty.title
+        .faculty-since.text-center
+          | Faculty at SV.CO since&nbsp;
+          = @faculty.created_at.strftime('%B %Y')
+        .faculty-profile-card-footer.d-flex.align-items-center
+          - if @faculty.linkedin_url.present?
+            - if @faculty.average_rating.present?
+              = link_to @faculty.linkedin_url, class: 'faculty-card-links', target: '_blank' do
+                  i.fa.fa-linkedin
+            - else
+              = link_to @faculty.linkedin_url, class: 'faculty-card-links', target: '_blank' do
+                  i.fa.fa-linkedin
+          - if @faculty.average_rating.present?
+            - if @faculty.linkedin_url.present?
+              .faculty-rating
+                span.faculty-rating__heading
+                  | Faculty Rating:
+                span.rating-stars
+                  = faculty_rating_stars(@faculty.average_rating)
+            - else
+              .faculty-rating.text-center
+                span.faculty-rating__heading
+                  | Faculty Rating:
+                span.rating-stars
+                  = faculty_rating_stars(@faculty.average_rating)
+    .col-lg-9.col-md-7
+      .faculty-profile-right
+        .faculty-profile-details.d-md-flex.flex-md-column.flex-lg-row
+          .faculty-summary class="#{sidebar_present?(@faculty) ? 'col-lg-7' : 'col-12'}"
             h3.text-uppercase.font-semibold.brand-secondary
-              | Connect
-              - if current_founder&.can_connect?
-                span.online-signal.online.pull-xs-right
-              - else
-                span.online-signal.offline.pull-xs-right
+              | Summary
+            .faculty-summary-section
+              h4.about-icon.text-uppercase.font-semibold
+                | About
+              p #{@faculty.about}
 
-            .faculty-connect-availability.clearfix
-              .time-commitment.pull-xs-left
-                | Availability:
-                span
-                  | #{commitment_this_week} this week
-              .faculty-connect-link.pull-xs-right
-                == render 'connect_button', faculty: @faculty, ghost: true
+            .faculty-summary-section
+              h4.skills-icon.text-uppercase.font-semibold
+                | Skills
+              p.skill-box
+                - @faculty.key_skills.split(',').each do |skill|
+                  span = skill
 
-              - if @faculty.commitment.present? || @faculty.compensation.present?
-                .faculty-flags
-                  - if @faculty.commitment.present?
-                    span.time-commitment-flag data-toggle='tooltip' data-placement='top' title="This Faculty #{tooltip_for_commitment == 'part_time' ? "contributes to SV.CO #{t "faculty.commitment.#{tooltip_for_commitment}"}" : "works at SV.CO #{t "faculty.commitment.#{tooltip_for_commitment}"}"}."
-                      | #{t "faculty.commitment.#{@faculty.commitment}"} Faculty
-                  - if @faculty.compensation.present?
-                    span.compensation-flag data-toggle='tooltip' data-placement='top' title="This Faculty #{tooltip_for_compensation == 'volunteer' ? "#{tooltip_for_compensation}s pro-bono" : "is #{tooltip_for_compensation} for his work"} at SV.CO"
-                      = @faculty.compensation.capitalize
+          - if sidebar_present?(@faculty)
+            .col-lg-5.col-md-12.faculty-connect
+              - connect_slots = @faculty.connect_slots.available_for_founder
+
+              - if connect_slots.present?
+                h3.text-uppercase.font-semibold.brand-secondary.d-flex
+                  | Connect
+                  - if current_founder&.can_connect?
+                    span.online-signal.ml-auto.online
+                  - else
+                    span.online-signal.ml-auto.offline
+
+                .d-flex.faculty-connect-availability.align-items-center
+                  .time-commitment
+                    | Availability:
+                    span
+                      | #{commitment_this_week} this week
+                  .faculty-connect-link.ml-auto
+                    == render 'connect_button', faculty: @faculty, ghost: true
+
+                  - if @faculty.commitment.present? || @faculty.compensation.present?
+                    .faculty-flags
+                      - if @faculty.commitment.present?
+                        span.time-commitment-flag data-toggle='tooltip' data-placement='top' title="This Faculty #{tooltip_for_commitment == 'part_time' ? "contributes to SV.CO #{t("models.faculty.commitment.#{tooltip_for_commitment}")}" : "works at SV.CO #{t("models.faculty.commitment.#{tooltip_for_commitment}")}"}."
+                          | #{t("models.faculty.commitment.#{@faculty.commitment}")} Faculty
+                      - if @faculty.compensation.present?
+                        span.compensation-flag data-toggle='tooltip' data-placement='top' title="This Faculty #{tooltip_for_compensation == 'volunteer' ? "#{tooltip_for_compensation}s pro-bono" : "is #{tooltip_for_compensation} for his work"} at SV.CO"
+                          = @faculty.compensation.capitalize
 
 
-          - if past_connect_requests.present?
-            #faculty-show-xs-test.visible-sm-block.visible-xs-block
-            .past-connect-sessions
-              h3.text-uppercase.font-semibold.brand-secondary
-                | Past connect sessions
-              .connect-session-box
-                - @faculty.past_connect_requests.each do |request|
-                  .connect-session data-toggle="modal" data-target="#faculty-pastconnect-modal-#{request.id}"
-                    .media
-                      .media-left
-                        .date-box.text-xs-center
-                          span.date
-                            = request.connect_slot.slot_at.strftime('%d')
-                          span.month
-                            = request.connect_slot.slot_at.strftime('%b')
-                          span.year
-                            = request.connect_slot.slot_at.strftime('%Y')
-                      .media-body
-                        h4.media-heading.company-name.font-semibold
-                          = request.startup.product_name
-                        p
-                          = request.questions
+              - if past_connect_requests.present?
+                #faculty-show-xs-test.visible-sm-block.visible-xs-block
+                .past-connect-sessions
+                  h3.text-uppercase.font-semibold.brand-secondary
+                    | Past connect sessions
+                  .connect-session-box
+                    - @faculty.past_connect_requests.each do |request|
+                      .connect-session data-toggle="modal" data-target="#faculty-pastconnect-modal-#{request.id}"
+                        .media
+                          .media-left
+                            .date-box.text-center
+                              span.date
+                                = request.connect_slot.slot_at.strftime('%d')
+                              span.month
+                                = request.connect_slot.slot_at.strftime('%b')
+                              span.year
+                                = request.connect_slot.slot_at.strftime('%Y')
+                          .media-body.ml-2
+                            h4.media-heading.company-name.font-semibold
+                              = request.startup.product_name
+                            p
+                              = request.questions
 
-                  .modal.fade.faculty-pastconnect-modal role="dialog" id="faculty-pastconnect-modal-#{request.id}"
-                    .modal-dialog
-                      .modal-content
-                        .modal-header
-                          button.close data-dismiss="modal" type="button"  &times;
-                          h4.modal-title Past Connect Session with #{@faculty.name}
-                        .modal-body
-                          .past-connect-questions
-                            = request.questions
+                      .modal.faculty-pastconnect-modal role="dialog" id="faculty-pastconnect-modal-#{request.id}"
+                        .modal-dialog
+                          .modal-content
+                            .modal-header
+                              h5.font-semibold.modal-title Past Connect Session with #{@faculty.name}
+                              button.close data-dismiss="modal" type="button"  &times;
+                            .modal-body
+                              .past-connect-questions
+                                = request.questions

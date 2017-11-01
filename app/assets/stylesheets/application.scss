@@ -17,6 +17,7 @@
 @import "intro.js/introjs.scss";
 @import "slick-carousel/slick.scss";
 @import "slick-carousel/slick-theme.scss";
+@import "perfect-scrollbar";
 
 // Local.
 @import "shared";
@@ -31,6 +32,7 @@
 @import 'resources';
 @import 'faculty';
 @import 'tech_hunt';
+@import 'product_metrics';
 
 // Select2
 @import "select2";

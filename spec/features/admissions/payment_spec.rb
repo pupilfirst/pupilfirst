@@ -14,7 +14,7 @@ feature 'Admission Fee Payment' do
   let!(:tet_team_update) { create :timeline_event_type, :team_update }
   let(:referrer_startup) { create :startup }
   let(:referrer_payment) { create :payment, :paid, startup: referrer_startup }
-  let(:coupon) { create :coupon, referrer_startup: referrer_startup }
+  let(:coupon) { create :coupon, referrer_startup: referrer_startup, discount_percentage: 25 }
   let(:long_url) { Faker::Internet.url }
 
   # Ensure authorization is in place.
@@ -50,7 +50,6 @@ feature 'Admission Fee Payment' do
       # Stub the request to create new payment.
       stub_request(:post, 'https://www.example.com/payment-requests/')
         .with(body: hash_including(
-          amount: '2000.0',
           buyer_name: founder.name,
           email: founder.email,
           purpose: 'Fee for SV.CO'
@@ -91,7 +90,7 @@ feature 'Admission Fee Payment' do
       expect(page).to have_content({ long_url: long_url }.to_json)
 
       # His startup should now have a payment with the right amount.
-      expect(payment.reload.amount).to eq(2000.0)
+      expect(payment.reload.amount).to eq(8000.0)
 
       # Mimic a successful payment, by redirecting to Instamojo redirect URL.
       visit instamojo_redirect_path(payment_request_id: payment.instamojo_payment_request_id, payment_id: 'PAYMENT_ID')
@@ -105,13 +104,16 @@ feature 'Admission Fee Payment' do
 
       # He should now also have a referral coupon.
       expect(startup.referral_coupon).to_not eq(nil)
+
+      # The statup's founder fee must now be set to the current Founder::FEE.
+      expect(startup.reload.founder_fee).to eq(Founder::FEE)
     end
 
     scenario 'He completes payment applying a referral coupon' do
       sign_in_user founder.user, referer: fee_founder_path
 
       # Page should have coupon form.
-      expect(page).to have_content('Have a referral coupon?')
+      expect(page).to have_content('Do you have a coupon?')
 
       # He applies the coupon.
       fill_in 'admissions_coupon_code', with: coupon.code
@@ -121,7 +123,7 @@ feature 'Admission Fee Payment' do
 
       # He removes the applied coupon.
       click_button 'Remove'
-      expect(page).to have_content('Have a referral coupon?')
+      expect(page).to have_content('Do you have a coupon?')
       expect(startup.reload.coupon_usage).to eq(nil)
 
       # He applies it back :)
@@ -129,11 +131,19 @@ feature 'Admission Fee Payment' do
       click_button 'Apply Code'
 
       # He should be shown the discounted amount. The original amount is crossed out (not detected by this test).
-      expect(page).to have_content('You will unlock 15 extra days of SV.CO subscription on fee payment!')
+      expect(page).to have_content('You have unlocked 25% discount on the program fee and 15 extra days of subscription')
+
+      # He should be shown his savings for all 3 plans.
+      expect(page).to have_content('You save ₹2000')
+      expect(page).to have_content('You save ₹30000')
+      expect(page).to have_content('You save ₹12000')
 
       click_on 'Pay for 1 month'
 
       expect(page).to have_content({ long_url: long_url }.to_json)
+
+      # His startup should now have a payment with the discounted amount.
+      expect(payment.reload.amount).to eq(6000.0)
 
       # Store the current billing_end_at for referrer.
       referrer_end_date = referrer_payment.billing_end_at
@@ -165,7 +175,7 @@ feature 'Admission Fee Payment' do
         sign_in_user founder.user, referer: fee_founder_path
 
         within('.fee-offer__box', text: '1 month') do
-          expect(page).to have_content('₹4000 for 4 founders')
+          expect(page).to have_content('₹16000 for 4 founders')
         end
       end
     end
@@ -182,7 +192,7 @@ feature 'Admission Fee Payment' do
         click_on 'Pay for 1 month'
 
         # The coupon should get removed.
-        expect(page).to have_content('Have a referral coupon?')
+        expect(page).to have_content('Do you have a coupon?')
       end
     end
   end
@@ -209,7 +219,7 @@ feature 'Admission Fee Payment' do
       # Stub the request to create new payment.
       stub_request(:post, 'https://www.example.com/payment-requests/')
         .with(body: hash_including(
-          amount: '6000.0',
+          amount: '24000.0',
           buyer_name: founder.name,
           email: founder.email,
           purpose: 'Fee for SV.CO'

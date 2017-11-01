@@ -6,7 +6,7 @@ module Lita
         :leaderboard,
         command: true,
         help: {
-          'leaderboard [LEVEL NUMBER]' => I18n.t('slack.help.leaderboard')
+          'leaderboard [LEVEL NUMBER]' => I18n.t('libs.lita.handlers.leaderboard.help')
         }
       )
 

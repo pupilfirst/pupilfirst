@@ -83,18 +83,18 @@ module Founders
 
     def dashboard_decorated_data(target_data)
       # Add status of target to compiled data.
-      target_data['status'] = bulk_status_service.status(target_data['id'])
+      target_data['status'] = target_status_service.status(target_data['id'])
 
       # Add time of submission of last event, necessary for submitted and completed state.
       if target_data['status'].in?([Target::STATUS_SUBMITTED, Target::STATUS_COMPLETE])
-        target_data['submitted_at'] = bulk_status_service.submitted_at(target_data['id'])
+        target_data['submitted_at'] = target_status_service.submitted_at(target_data['id'])
       end
 
       # add grade if completed
-      target_data['grade'] = bulk_grade_service.grade(target_data['id']) if target_data['status'] == Target::STATUS_COMPLETE
+      target_data['grade'] = target_grade_service.grade(target_data['id']) if target_data['status'] == Target::STATUS_COMPLETE
 
       # add array of prerequisites
-      target_data['prerequisites'] = bulk_status_service.prerequisite_targets(target_data['id'])
+      target_data['prerequisites'] = target_status_service.prerequisite_targets(target_data['id'])
 
       target_data
     end
@@ -106,12 +106,12 @@ module Founders
       end
     end
 
-    def bulk_status_service
-      @bulk_status_service ||= Targets::BulkStatusService.new(@founder)
+    def target_status_service
+      @target_status_service ||= Founders::TargetStatusService.new(@founder)
     end
 
-    def bulk_grade_service
-      @bulk_grade_service ||= Targets::BulkGradeService.new(@founder)
+    def target_grade_service
+      @target_grade_service ||= Founders::TargetGradeService.new(@founder)
     end
 
     def startup

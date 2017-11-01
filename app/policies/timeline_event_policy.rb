@@ -1,12 +1,7 @@
 class TimelineEventPolicy < ApplicationPolicy
   def create?
     # User must be a founder with a startup.
-    return false if user&.founder&.startup.blank?
-
-    # The startup must be Level 1+.
-    return false if user.founder.startup.level_zero?
-
-    true
+    user&.founder&.startup.present?
   end
 
   def destroy?

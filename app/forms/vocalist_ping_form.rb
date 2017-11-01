@@ -15,7 +15,7 @@ class VocalistPingForm < Reform::Form
   end
 
   def valid_channels
-    @valid_channels ||= PublicSlack::MessageService.valid_channel_names
+    @valid_channels ||= PublicSlack::MessageService.new.valid_channel_names
   end
 
   def send_pings

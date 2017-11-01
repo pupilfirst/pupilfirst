@@ -1,6 +1,6 @@
 class TimelineEventsController < ApplicationController
-  before_action :authenticate_founder!, except: [:activity]
-  before_action :require_active_subscription
+  before_action :authenticate_founder!
+  before_action :require_active_subscription, except: %i[create]
 
   # POST /timeline_events
   def create
@@ -10,7 +10,7 @@ class TimelineEventsController < ApplicationController
 
     if builder_form.validate(timeline_builder_params)
       builder_form.save(current_founder)
-      flash.now[:success] = 'Your timeline event will be reviewed soon!'
+      flash.now[:success] = current_founder.level_zero? ? 'Your submission will be reviewed soon.' : 'Your timeline event will be reviewed soon!'
       head :ok
     else
       raise "Validation of timeline event creation request failed. Error messages follow: #{builder_form.errors.to_json}"

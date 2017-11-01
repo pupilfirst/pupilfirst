@@ -20,11 +20,7 @@ class Founder < ApplicationRecord
   ID_PROOF_TYPES = ['Aadhaar Card', 'Driving License', 'Passport', 'Voters ID'].freeze
 
   # Monthly fee amount for founders.
-  FEE = 1000
-
-  FEE_ONE_MONTH = 1000
-  FEE_THREE_MONTHS = 2000
-  FEE_SIX_MONTHS = 3000
+  FEE = 4000
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -45,6 +41,7 @@ class Founder < ApplicationRecord
   has_one :university, through: :college
   has_many :payments, dependent: :restrict_with_error
   belongs_to :resume_file, class_name: 'TimelineEventFile', optional: true
+  has_many :english_quiz_submissions
 
   scope :admitted, -> { joins(:startup).merge(Startup.admitted) }
   scope :level_zero, -> { joins(:startup).merge(Startup.level_zero) }
@@ -300,10 +297,6 @@ class Founder < ApplicationRecord
     invited_startup.present?
   end
 
-  def completed_targets_count
-    Targets::BulkStatusService.new(self).completed_targets_count
-  end
-
   def self.reference_sources
     [
       'Friend', 'Seniors', '#StartinCollege Event', 'Newspaper/Magazine', 'TV', 'SV.CO Blog', 'Instagram', 'Facebook',
@@ -313,5 +306,21 @@ class Founder < ApplicationRecord
 
   def team_lead?
     startup&.team_lead_id == id
+  end
+
+  def self.valid_references
+    [
+      'Friend',
+      'Seniors',
+      '#StartinCollege Event',
+      'Newspaper/Magazine',
+      'TV',
+      'SV.CO Blog',
+      'Instagram',
+      'Facebook',
+      'Twitter',
+      'Microsoft Student Partner',
+      'Other (Please Specify)'
+    ].freeze
   end
 end

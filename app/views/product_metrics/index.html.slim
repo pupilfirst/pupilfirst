@@ -1,0 +1,85 @@
+- presenter = ProductMetrics::IndexPresenter.new(self)
+
+- content_for :head do
+  title SV.CO Stats
+  meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
+
+#product-metrics__index
+
+section.stats-hero__banner.secondary-banner.py-3
+  .stats-hero__message-container.text-left
+    .container
+      .row.align-items-center
+        .col-md-7.text-center.text-md-left
+          .stats-hero__message-text
+            p.stats-hero__message-text--small.font-light While you are reading this,
+
+            #stats-hero__typed-strings
+              p
+                = @metrics['Founders']['value']
+                | &nbsp;Student Developers
+              p
+                = @metrics['Startups']['value']
+                | &nbsp;Campus Startups
+
+            span#stats-hero__typed.font-semibold
+            p.stats-hero__message-text--medium.font-light are building their products
+
+          - if @metrics['Founders']['delta_value'] > 0
+            p.stats-hero__message-delta-text.mt-1.mt-md-2
+              span.font-semibold.brand-secondary.pr-1.program-stats__counter
+                = @metrics['Founders']['delta_value']
+              ' students joined the SV.CO collective in the last
+              | #{pluralize(@metrics['Founders']['delta_period'], 'month')}.
+
+        .col-md-5
+          = image_tag 'product_metrics/index/stats-hero-banner.svg', class: 'img-fluid'
+
+
+section.general-stats__container.py-4.py-md-5
+  .container
+    .row.align-items-center
+      .col-md-3.text-center.text-md-left
+        h3.general-stats__title.m-0.pt-0.pt-md-3.font-semibold
+          span.general-stats__title--small.font-light.pr-1.pr-md-0.d-md-block
+            | We have
+          | students from
+      .col-md-9
+        .general-stats__numbers-block.d-flex.align-items-center.p-0.my-3.my-md-0
+          .col-md-4.general-stats__numbers-block-item.d-flex.align-items-center.justify-content-center.flex-column
+            h2.general-stats__numbers-block-text-large.font-bold
+              = @metrics['Participating States']['value']
+            p.general-stats__numbers-block-text-small States
+          .col-md-4.general-stats__numbers-block-item.d-flex.align-items-center.justify-content-center.flex-column
+            h2.general-stats__numbers-block-text-large.font-bold
+              = @metrics['Participating Universities']['value']
+            p.general-stats__numbers-block-text-small Universities
+          .col-md-4.general-stats__numbers-block-item.d-flex.align-items-center.justify-content-center.flex-column
+            h2.general-stats__numbers-block-text-large.font-bold
+              = @metrics['Participating Colleges']['value']
+            p.general-stats__numbers-block-text-small Colleges
+
+section.program-stats__container
+  .container.px-0.px-md-3
+    .row.m-0
+      .col-md-6.program-stats__student-journey.pl-md-0.pr-md-4
+        h4.program-stats__student-journey-header.text-center.font-regular.my-4.my-md-5
+          | SV.CO Member Journey
+        ul.list-unstyled.student-journey__timeline.text-center.text-lg-left
+          - presenter.member_journey_points.each do |journey_point|
+            == render 'student_journey_item', journey_point: journey_point
+
+      .col-md-6.program-stats__other-facts.pr-md-0
+        h4.program-stats__other-facts-header.text-center.font-regular.my-5 SV.CO Program Metrics
+        .row.flex-lg-row
+          - presenter.program_metrics.each do |metric|
+            == render 'program_metric', metric: metric
+
+section.stats-call-to-action__container
+  .container
+    .stats-call-to-action__box.text-center
+      h2.stats-section__head-title.stats-call-to-action__head.font-black Ready to be a part of the SV.CO experience?
+      p.stats-call-to-action__sub-head Get started by submitting an application today.
+
+      .text-xs-center.mt-4
+        = link_to 'Join Now', join_path, class: 'btn btn-primary btn-lg stats-call-to-action__button'

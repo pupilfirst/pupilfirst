@@ -17,16 +17,7 @@ describe Instamojo::RequestPaymentService do
 
   describe '#request' do
     it 'creates a new instamojo payment request and returns updated payment' do
-      amount = case period
-        when 1
-          1000
-        when 3
-          2000
-        when 6
-          3000
-        else
-          raise 'Unexpected period!'
-      end * startup.billing_founders_count
+      amount = Startups::FeePayableService.new(startup).fee_payable(period: period)
 
       expect(instamojo).to receive(:create_payment_request)
         .with(

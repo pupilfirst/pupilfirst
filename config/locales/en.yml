@@ -119,6 +119,10 @@ en:
         founder_slack_notification: 'You have been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
         startup_slack_notification: 'Your startup <%{startup_url}|%{startup_product_name}> has been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
 
+    founders:
+      evaluate_english_quis_submission:
+        explanation_footer: '> Feel free to ping our language coach <@U0A6X5MEY> for further discussions.'
+
   about:
     index:
       meta_description: "Startup Village is launching an online-first learning platform for first-time founders, supplying tools and resources needed to create a successful startup."

@@ -16,8 +16,15 @@ module Founders
       )
 
       # Return the results section.
-      result = { title: title, color: color }
-      result[:text] = @question.explanation if @question.explanation.present?
+      result = { title: title, color: color, mrkdwn_in: ['text'] }
+
+      # Add the default footer ...
+      explanation = I18n.t('services.founders.evaluate_english_quis_submission.explanation_footer')
+
+      # and prepend it with the question's explanation, if available.
+      explanation = "#{@question.explanation}\n\n#{explanation}" if @question.explanation.present?
+
+      result[:text] = explanation
 
       result
     end

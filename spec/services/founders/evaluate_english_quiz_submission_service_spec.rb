@@ -9,10 +9,13 @@ describe Founders::EvaluateEnglishQuizSubmissionService do
 
   describe '.evaluate' do
     it 'records the submission and returns the evaluation result' do
+      explanation_footer = I18n.t('services.founders.evaluate_english_quis_submission.explanation_footer')
+      explanation = "#{question.explanation}\n\n#{explanation_footer}"
       result = {
         title: 'You are right!',
         color: 'good',
-        text: question.explanation
+        mrkdwn_in: ['text'],
+        text: explanation
       }
 
       expect(subject.evaluate).to eq(result)

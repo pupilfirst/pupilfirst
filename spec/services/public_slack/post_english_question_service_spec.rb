@@ -29,7 +29,7 @@ describe PublicSlack::PostEnglishQuestionService do
         # Create a submission for the existing question.
         EnglishQuizSubmission.create!(
           english_quiz_question: quiz_question,
-          founder: founder_1,
+          quizee: founder_1,
           answer_option: quiz_question.answer_options.sample
         )
       end

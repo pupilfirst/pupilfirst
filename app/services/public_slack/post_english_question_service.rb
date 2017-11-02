@@ -6,9 +6,9 @@ module PublicSlack
       # TODO: Fallback to posting individual questions if so.
       return if question_for_the_day.blank?
 
-      channels = target.present? ? target : all_founders # The target argument is temporary - for testing.
+      channels = target.present? ? target : target_audience # The target argument is temporary - for testing.
 
-      # Spin up a job for each founder to be pinged.
+      # Spin up a job for each channel to be pinged.
       channels.each do |channel|
         Founders::PostEnglishQuestionJob.perform_later(attachments: question_as_slack_attachment, channel: channel)
       end
@@ -16,9 +16,18 @@ module PublicSlack
 
     private
 
-    # The target audience is all founders with a slack_user_id.
-    def all_founders
+    def target_audience
+      founder_slack_user_ids | faculty_slack_user_ids
+    end
+
+    # All founders with a slack_user_id.
+    def founder_slack_user_ids
       Founder.where.not(slack_user_id: nil).pluck(:slack_user_id)
+    end
+
+    # All active team and alumni faculty with a slack_user_id
+    def faculty_slack_user_ids
+      Faculty.where(category: %w[team alumni]).where(inactive: false).where.not(slack_user_id: nil).pluck(:slack_user_id)
     end
 
     # The oldest question without any user submissions yet.

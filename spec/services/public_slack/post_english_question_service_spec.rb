@@ -10,6 +10,8 @@ describe PublicSlack::PostEnglishQuestionService do
   let!(:founder_2) { create :founder, slack_user_id: 'slack_2' }
   # ... and one who is not .
   let!(:founder_3) { create :founder }
+  # A Slack connected team faculty too.
+  let!(:faculty) { create :faculty, category: 'team', slack_user_id: 'slack_3' }
 
   describe '.post' do
     context 'when there is an English Question without any submissions' do
@@ -17,6 +19,7 @@ describe PublicSlack::PostEnglishQuestionService do
         attachments = subject.send(:question_as_slack_attachment)
         expect(Founders::PostEnglishQuestionJob).to receive(:perform_later).with(channel: 'slack_1', attachments: attachments)
         expect(Founders::PostEnglishQuestionJob).to receive(:perform_later).with(channel: 'slack_2', attachments: attachments)
+        expect(Founders::PostEnglishQuestionJob).to receive(:perform_later).with(channel: 'slack_3', attachments: attachments)
         subject.post
       end
     end

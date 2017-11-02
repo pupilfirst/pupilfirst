@@ -8,7 +8,10 @@ module PublicSlack
 
       channels = target.present? ? target : all_founders # The target argument is temporary - for testing.
 
-      PublicSlack::PostEnglishQuestionJob.perform_later(attachments: question_as_slack_attachment, channels: channels)
+      # Spin up a job for each founder to be pinged.
+      channels.each do |channel|
+        Founders::PostEnglishQuestionJob.perform_later(attachments: question_as_slack_attachment, channel: channel)
+      end
     end
 
     private

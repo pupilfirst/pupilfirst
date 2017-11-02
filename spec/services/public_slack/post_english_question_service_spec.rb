@@ -15,7 +15,8 @@ describe PublicSlack::PostEnglishQuestionService do
     context 'when there is an English Question without any submissions' do
       it 'DMs the question to all founders with a slack_user_id' do
         attachments = subject.send(:question_as_slack_attachment)
-        expect(PublicSlack::PostEnglishQuestionJob).to receive(:perform_later).with(channels: %w[slack_1 slack_2], attachments: attachments)
+        expect(Founders::PostEnglishQuestionJob).to receive(:perform_later).with(channel: 'slack_1', attachments: attachments)
+        expect(Founders::PostEnglishQuestionJob).to receive(:perform_later).with(channel: 'slack_2', attachments: attachments)
         subject.post
       end
     end
@@ -31,7 +32,7 @@ describe PublicSlack::PostEnglishQuestionService do
       end
 
       it 'does nothing' do
-        expect(PublicSlack::PostEnglishQuestionJob).to_not receive(:perform_later)
+        expect(Founders::PostEnglishQuestionJob).to_not receive(:perform_later)
         subject.post
       end
     end

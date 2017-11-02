@@ -1,8 +1,9 @@
 module ProductMetrics
   class IndexPresenter < ApplicationPresenter
     PROGRAM_METRICS = {
-      'Slack Messages' => :slack,
       'Targets' => :targets,
+      'Timeline Events' => :timeline_events,
+      'Slack Messages' => :slack,
       'Faculty Sessions' => :faculty_sessions,
       'Faculty Office Hours' => :office_hours,
       'Library Resources' => :resources,

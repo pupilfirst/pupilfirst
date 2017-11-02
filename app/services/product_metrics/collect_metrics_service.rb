@@ -95,5 +95,9 @@ module ProductMetrics
     def count_slack_messages
       PublicSlackMessage.count
     end
+
+    def count_timeline_events
+      TimelineEvent.verified.joins(:startup).merge(Startup.admitted).count
+    end
   end
 end

@@ -209,6 +209,10 @@ en:
           heading: "Published Stories"
           description_html: "SV.CO regularly publishes stories showcasing the incredible work done by students."
           delta_verb: posted
+        timeline_events:
+          heading: "Timeline Events Verified"
+          description_html: "We verify all timeline updates by our admitted startups to showcase the startup journey"
+          delta_verb: sumbitted
       student_journey:
         explorers:
           heading: "Explorers"

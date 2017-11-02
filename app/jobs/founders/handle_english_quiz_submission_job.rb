@@ -1,7 +1,7 @@
 module Founders
   # Evaluates English quiz submissions and responds.
   class HandleEnglishQuizSubmissionJob < ApplicationJob
-    queue_as :default
+    queue_as :high_priority
 
     def perform(payload)
       founder = Founder.find_by!(slack_user_id: payload['user']['id'])

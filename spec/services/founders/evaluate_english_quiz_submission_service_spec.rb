@@ -20,7 +20,7 @@ describe Founders::EvaluateEnglishQuizSubmissionService do
 
       expect(subject.evaluate).to eq(result)
       expect(EnglishQuizSubmission.last).to have_attributes(
-        founder: founder,
+        quizee: founder,
         english_quiz_question: question,
         answer_option: answer_option
       )

@@ -4,7 +4,7 @@ module Founders
     queue_as :high_priority
 
     def perform(payload)
-      founder = Founder.find_by!(slack_user_id: payload['user']['id'])
+      quizee = Founder.find_by(slack_user_id: payload['user']['id']) || Faculty.find_by(slack_user_id: payload['user']['id'])
 
       # Parse the quiz question id from the callback_id.
       question_id = payload['callback_id'][/english_quiz_(\d+)/, 1]
@@ -13,7 +13,7 @@ module Founders
       answer_option = AnswerOption.find_by!(id: payload['actions'][0]['value'])
 
       # Call the service to evaluate the submission.
-      results_section = Founders::EvaluateEnglishQuizSubmissionService.new(founder, question, answer_option).evaluate
+      results_section = Founders::EvaluateEnglishQuizSubmissionService.new(quizee, question, answer_option).evaluate
 
       # Replace the buttons section with the results section ...
       message = payload['original_message']

@@ -18,6 +18,7 @@ class Faculty < ApplicationRecord
   has_many :connect_requests, through: :connect_slots
   belongs_to :founder, optional: true # link alumni faculty to their founder profile
   belongs_to :level, optional: true
+  has_many :english_quiz_submissions, foreign_key: 'quizee_id'
 
   CATEGORY_TEAM = 'team'
   CATEGORY_VISITING_FACULTY = 'visiting_faculty'

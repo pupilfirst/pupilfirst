@@ -21,17 +21,16 @@ describe PublicSlack::PostEnglishQuestionService do
         expect(Founders::PostEnglishQuestionJob).to receive(:perform_later).with(channel: 'slack_2', attachments: attachments)
         expect(Founders::PostEnglishQuestionJob).to receive(:perform_later).with(channel: 'slack_3', attachments: attachments)
         subject.post
+
+        # The posted_on must be now set.
+        expect(quiz_question.reload.posted_on).to eq(Date.today)
       end
     end
 
-    context 'when there is no new English Question without submissions' do
+    context 'when there is no new un-posted English' do
       before do
-        # Create a submission for the existing question.
-        EnglishQuizSubmission.create!(
-          english_quiz_question: quiz_question,
-          quizee: founder_1,
-          answer_option: quiz_question.answer_options.sample
-        )
+        # Mark the question as posted.
+        quiz_question.update!(posted_on: Date.today)
       end
 
       it 'does nothing' do

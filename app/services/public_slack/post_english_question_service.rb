@@ -12,6 +12,9 @@ module PublicSlack
       channels.each do |channel|
         Founders::PostEnglishQuestionJob.perform_later(attachments: question_as_slack_attachment, channel: channel)
       end
+
+      # Set the posted_on date for todays question.
+      question_for_the_day.update!(posted_on: Date.today)
     end
 
     private
@@ -30,11 +33,10 @@ module PublicSlack
       Faculty.where(category: %w[team alumni]).where(inactive: false).where.not(slack_user_id: nil).pluck(:slack_user_id)
     end
 
-    # The oldest question without any user submissions yet.
+    # The oldest question which is not yet marked posted.
     def question_for_the_day
       @question_for_the_day ||= begin
-        attempted_questions = EnglishQuizQuestion.joins(:english_quiz_submissions)
-        EnglishQuizQuestion.where.not(id: attempted_questions).order(created_at: :asc).first
+        EnglishQuizQuestion.where(posted_on: nil).order(created_at: :asc).first
       end
     end
 

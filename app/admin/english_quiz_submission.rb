@@ -2,7 +2,7 @@ ActiveAdmin.register EnglishQuizSubmission do
   menu parent: 'English Quiz', label: 'Submissions'
   actions :index
 
-  filter :english_quiz_question_created_at, as: :date_range, label: 'Question Date'
+  filter :english_quiz_question_posted_on, as: :date_range, label: 'Question Posted On'
 
   controller do
     def scoped_collection
@@ -11,8 +11,8 @@ ActiveAdmin.register EnglishQuizSubmission do
   end
 
   index do
-    column 'Question Date' do |submission|
-      date = submission.english_quiz_question.created_at.strftime('%b %d, %Y')
+    column 'Question Posted On' do |submission|
+      date = submission.english_quiz_question.posted_on.strftime('%b %d, %Y')
       link_to date, admin_english_quiz_question_path(submission.english_quiz_question)
     end
 

@@ -4,11 +4,17 @@ module Founders
     queue_as :high_priority
 
     def perform(payload)
-      quizee = Founder.find_by(slack_user_id: payload['user']['id']) || Faculty.find_by(slack_user_id: payload['user']['id'])
-
       # Parse the quiz question id from the callback_id.
       question_id = payload['callback_id'][/english_quiz_(\d+)/, 1]
       question = EnglishQuizQuestion.find_by!(id: question_id)
+
+      # Fetch the associated quizee - Founder or Faculty.
+      founder = Founder.find_by(slack_user_id: payload['user']['id'])
+      faculty = Faculty.find_by(slack_user_id: payload['user']['id'])
+      quizee = founder.present? ? founder : faculty
+
+      # Do nothing if the quizee has already answered this question.
+      return if quizee.english_quiz_submissions.where(english_quiz_question: question).present?
 
       answer_option = AnswerOption.find_by!(id: payload['actions'][0]['value'])
 

@@ -30,7 +30,7 @@ module PublicSlack
 
     # All active team and alumni faculty with a slack_user_id
     def faculty_slack_user_ids
-      Faculty.where(category: %w[team alumni]).where(inactive: false).where.not(slack_user_id: nil).pluck(:slack_user_id)
+      Faculty.where(category: %w[team alumni]).where(inactive: false).where.not(slack_user_id: nil).pluck(:slack_user_id) + ['U0A6X5MEY'] # manually adding @manojmohan
     end
 
     # The oldest question which is not yet marked posted.

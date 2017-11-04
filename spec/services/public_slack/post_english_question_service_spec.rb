@@ -20,6 +20,7 @@ describe PublicSlack::PostEnglishQuestionService do
         expect(Founders::PostEnglishQuestionJob).to receive(:perform_later).with(channel: 'slack_1', attachments: attachments)
         expect(Founders::PostEnglishQuestionJob).to receive(:perform_later).with(channel: 'slack_2', attachments: attachments)
         expect(Founders::PostEnglishQuestionJob).to receive(:perform_later).with(channel: 'slack_3', attachments: attachments)
+        expect(Founders::PostEnglishQuestionJob).to receive(:perform_later).with(channel: 'U0A6X5MEY', attachments: attachments) # because @manojmohan is hardwired as special-case
         subject.post
 
         # The posted_on must be now set.

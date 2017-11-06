@@ -166,7 +166,12 @@ ActiveAdmin.register Target do
     target = Target.find params[:id]
     params = permitted_params[:target]
 
-    Targets::ArchivalService.new(target, params).execute
+    if params[:archived] == 'true'
+      Targets::ArchivalService.new(target).archive
+    elsif params[:archived] == 'false'
+      Targets::ArchivalService.new(target).unarchive
+    end
+
     message_text = params[:archived] == 'true' ? 'archived' : 'unarchived'
     flash[:success] = "Target #{message_text} successfully!"
     redirect_to action: :show

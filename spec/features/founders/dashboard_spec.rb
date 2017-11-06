@@ -191,19 +191,4 @@ feature 'Founder Dashboard' do
     # Check whether startup requested level for restart is set.
     expect(startup.reload.requested_restart_level).to eq(level_2)
   end
-
-  context 'when a new pre-requisite target is added to the payment target in Level 0' do
-    let!(:level_zero_target) { create :target, target_group: target_group_0, days_to_complete: 60, role: Target::ROLE_TEAM }
-
-    before do
-      completed_fee_payment_target.prerequisite_targets << level_zero_target
-    end
-
-    it 'should not affect Level 1+ founders', js: true do
-      sign_in_user founder.user, referer: dashboard_founder_path
-
-      # Check if the dashboard has not crashed
-      expect(page).to have_selector('.founder-dashboard__avatar-wrapper', count: startup.founders.count)
-    end
-  end
 end

@@ -137,10 +137,17 @@ describe Founders::TargetStatusService do
         end
       end
 
-      context 'when vanilla target event is from level zero' do
-        it 'raises an error if startup is above level zero' do
+      # This ensures that a edge-case situation does not result in a crash: https://trello.com/c/F7oRFaPf
+      context 'when there is an incomplete prerequisite in level 0 for a completed target' do
+        before do
+          level_zero_target.prerequisite_targets << create(:target, :for_founders, target_group: level_zero_target_group)
+          level_zero_target.save!
+        end
+
+        it 'should return the status for a level 1 target' do
           founder_event.update!(target: level_zero_target, status: TimelineEvent::STATUS_VERIFIED)
-          expect { subject.status(level_zero_target.id) }.to raise_error(NoMethodError)
+
+          expect(subject.status(level_one_target.id)).to eq(:pending)
         end
       end
     end

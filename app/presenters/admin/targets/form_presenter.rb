@@ -7,16 +7,20 @@ module Admin
       end
 
       def valid_prerequisites
-        if !@target.persisted? || @target.level.blank?
-          live_targets
-        elsif @target.level.number.zero?
+        return live_targets if !@target.persisted? || (@target.level.blank? && @target.target_group&.level.blank?)
+
+        if level.number.zero?
           live_targets.where.not(id: @target.id).joins(:level).where(level: Level.zero)
         else
-          live_targets.where.not(id: @target.id).joins(:level).where.not(level: Level.zero).where('levels.number <= ?', @target.level.number)
+          live_targets.where.not(id: @target.id).joins(:level).where.not(level: Level.zero).where('levels.number <= ?', level.number)
         end
       end
 
       private
+
+      def level
+        @level ||= @target.level || @target.target_group.level
+      end
 
       def live_targets
         @live_targets ||= Target.live

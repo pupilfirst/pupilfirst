@@ -1,0 +1,6 @@
+---
+timestamp: '2017-11-06T06:35:19Z'
+title: Added spec to ensure presence of an incomplete pre-requisite in L0 doesn't
+  cause crashes in L1+
+trello: https://trello.com/c/F7oRFaPf
+private: true

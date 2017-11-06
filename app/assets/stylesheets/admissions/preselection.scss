@@ -1,0 +1,84 @@
+.preselection-steps {
+  ul {
+    padding-left: 1.125rem;
+
+    li {
+      list-style: circle;
+      line-height: 1.5;
+      padding-bottom: 10px;
+      font-size: 1rem;
+
+      p {
+        strong {
+          font-style: $font-semibold;
+        }
+      }
+    }
+  }
+}
+.payment-instructions {
+  padding: 2rem 2rem 1rem 1rem;
+}
+.payment-status-table {
+  border: 1px solid $light-primary;
+
+  th, td {
+    padding: 1rem;
+  }
+
+  thead {
+    tr {
+      th {
+        color: white;
+        background-color: $light-primary;
+      }
+    }
+  }
+  .edit-btn {
+    padding-top: 2px;
+  }
+  .tag {
+    line-height: 1.4;
+  }
+}
+.download-partnership-deed {
+  .download-icon {
+    i {
+      font-size: 3rem;
+    }
+  }
+  .alert {
+    height: 100%;
+    transition: all .2s;
+
+    @include media-breakpoint-up(md) {
+      margin-bottom: 0;
+    }
+
+    &:hover, &:focus {
+      opacity: 0.8;
+    }
+  }
+}
+
+.agreements-next-steps {
+  .agreement-instructions, .fee-instructions {
+    border-bottom: 1px solid $gray-border;
+  }
+  ul {
+    padding-left: 1.25rem;
+
+    li {
+      list-style: circle;
+      line-height: 1.5;
+      padding-bottom: 10px;
+      font-size: 1rem;
+
+      p {
+        strong {
+          font-style: $font-semibold;
+        }
+      }
+    }
+  }
+}

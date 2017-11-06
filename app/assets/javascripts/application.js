@@ -54,6 +54,7 @@
 //= require home
 //= require startups
 //= require team_members
+//= require admissions
 //= require faculty
 //= require resources
 //= require product_metrics

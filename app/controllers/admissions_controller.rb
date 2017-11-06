@@ -1,5 +1,4 @@
 class AdmissionsController < ApplicationController
-  layout 'application_v2'
   before_action :skip_container, only: %i[join register founders founders_submit]
 
   # GET /join

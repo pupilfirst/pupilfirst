@@ -25,7 +25,7 @@ section.stats-hero__banner.secondary-banner.py-3
             span#stats-hero__typed.font-semibold
             p.stats-hero__message-text--medium.font-light are building their products
 
-          - if @metrics['Founders']['delta_value'] > 0
+          - if @metrics['Founders']['delta_value'] > 0 && feature_active?(:stats_delta)
             p.stats-hero__message-delta-text.mt-1.mt-md-2
               span.font-semibold.brand-secondary.pr-1.program-stats__counter
                 = @metrics['Founders']['delta_value']

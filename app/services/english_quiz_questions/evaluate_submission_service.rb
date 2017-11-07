@@ -48,7 +48,7 @@ module EnglishQuizQuestions
 
     def explanation
       # Add the default footer to the result ...
-      explanation = I18n.t('services.founders.evaluate_english_quiz_submission.explanation_footer')
+      explanation = I18n.t('services.english_quiz_questions.evaluate_submission.explanation_footer')
       # and prepend it with the question's explanation, if available.
       explanation = "#{question.explanation}\n\n#{explanation}" if question.explanation.present?
 

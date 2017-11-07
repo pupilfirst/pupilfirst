@@ -120,8 +120,8 @@ en:
         founder_slack_notification: 'You have been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
         startup_slack_notification: 'Your startup <%{startup_url}|%{startup_product_name}> has been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
 
-    founders:
-      evaluate_english_quiz_submission:
+    english_quiz_questions:
+      evaluate_submission:
         explanation_footer: '> If you would like to know more about this topic, please post your questions on <#C0B1QFD7T|english> and tag our Language Coach, <@U0A6X5MEY>.'
 
   about:

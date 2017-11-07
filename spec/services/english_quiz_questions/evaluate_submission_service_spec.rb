@@ -18,7 +18,7 @@ describe EnglishQuizQuestions::EvaluateSubmissionService do
   describe '.evaluate' do
     context 'when the founder is responding to the question for the first time' do
       it 'records the submission and returns the evaluation result' do
-        explanation_footer = I18n.t('services.founders.evaluate_english_quis_submission.explanation_footer')
+        explanation_footer = I18n.t('services.english_quiz_questions.evaluate_submission.explanation_footer')
         explanation = "#{question.explanation}\n\n#{explanation_footer}"
         result = {
           title: 'You are right!',

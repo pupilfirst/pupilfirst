@@ -166,11 +166,8 @@ ActiveAdmin.register Target do
     target = Target.find params[:id]
     params = permitted_params[:target]
 
-    if params[:archived] == 'true'
-      Targets::ArchivalService.new(target).archive
-    elsif params[:archived] == 'false'
-      Targets::ArchivalService.new(target).unarchive
-    end
+    service = Targets::ArchivalService.new(target)
+    params[:archived] == 'true' ? service.archive : service.unarchive
 
     message_text = params[:archived] == 'true' ? 'archived' : 'unarchived'
     flash[:success] = "Target #{message_text} successfully!"

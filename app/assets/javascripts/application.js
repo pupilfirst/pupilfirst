@@ -52,6 +52,7 @@
 
 // Controller-specific
 //= require home
+//= require about
 //= require startups
 //= require team_members
 //= require admissions

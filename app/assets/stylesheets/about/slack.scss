@@ -16,10 +16,13 @@
 }
 
 .about-slack__iframe {
-  border: 0;
+  border: 1px solid $gray-border;
+  @include border-radius(5px);
   height: 470px;
-  margin-left: -50px;
-  margin-top: -4rem;
   width: 400px;
   overflow-y: hidden;
+
+  @include media-breakpoint-down (sm) {
+    width: 100%;
+  }
 }

@@ -177,7 +177,7 @@ en:
       product_metric:
         slack:
           heading: "Slack Messages"
-          description_html: "SV.CO's Public Slack channel allows open interaction between students and the faculty."
+          description_html: "SV.CO's <a href='/about/slack' target='_blank'>Public Slack</a> channel allows open interaction between students and the faculty."
           delta_verb: posted
         targets:
           heading: "Targets to Complete"
@@ -192,7 +192,7 @@ en:
           delta_verb: sessions
         resources:
           heading: "Library Resources"
-          description_html: "The Startup Library is a one-stop-shop for all resources that SV.CO provides."
+          description_html: "The <a href='/library' target='_blank'>Startup Library</a> is a one-stop-shop for all resources that SV.CO provides."
           delta_verb: added
         resource_downloads:
           heading: "Resource Downloads"
@@ -200,7 +200,7 @@ en:
           delta_verb: downloads
         graduation_partners:
           heading: "Graduation Partners"
-          description_html: "Partners we have on-boarded who tap into the founder pool from SV.CO program."
+          description_html: "<a href='/talent' target='_blank'>Partners<a> we have on-boarded who tap into the founder pool from SV.CO program."
           delta_verb: on-boarded
         community_architects:
           heading: "Community Architects"
@@ -217,7 +217,7 @@ en:
       student_journey:
         explorers:
           heading: "Explorers"
-          description_html: "All students start as explorers. This is the beginning of their journey with the Startup Village Collective."
+          description_html: "All <a href='/startups' target='_blank'>students</a> start as explorers. This is the beginning of their journey with the Startup Village Collective."
         alpha_engineers:
           heading: "Alpha Engineers"
           description_html: "Students jump right in, building an <em>Alpha</em> prototype of their product and demoing it to industry experts."

@@ -1,6 +1,8 @@
 module PublicSlack
   # Selects the 'English question for the day' and triggers a job to send it to all founders.
   class PostEnglishQuestionService
+    include Loggable
+
     def post(target = nil)
       # Do nothing if we are out of questions.
       # TODO: Fallback to posting individual questions if so.
@@ -10,7 +12,8 @@ module PublicSlack
 
       # Spin up a job for each channel to be pinged.
       channels.each do |channel|
-        Founders::PostEnglishQuestionJob.perform_later(attachments: question_as_slack_attachment, channel: channel)
+        post_to_channel(channel)
+        sleep 1
       end
 
       # Set the posted_on date for todays question.
@@ -72,6 +75,22 @@ module PublicSlack
     def options_as_buttons
       question_for_the_day.answer_options.each_with_object([]) do |answer_option, buttons|
         buttons << { name: 'answer_option', type: 'button', text: answer_option.value, value: answer_option.id }
+      end
+    end
+
+    # Post the question to the channel specefied.
+    def post_to_channel(channel)
+      params = { channel: channel, as_user: true, attachments: question_as_slack_attachment }
+      response = api_service.get('chat.postMessage', params: params)
+      log "Successfully posted English Question of the day to #{channel}" if response['ok']
+    rescue PublicSlack::OperationFailureException
+      return # ignore Slack exceptions for now.
+    end
+
+    def api_service
+      @api_service ||= begin
+        token = Rails.application.secrets.slack.dig(:app, :bot_oauth_token)
+        PublicSlack::ApiService.new(token: token)
       end
     end
   end

@@ -13,14 +13,25 @@ describe PublicSlack::PostEnglishQuestionService do
   # A Slack connected team faculty too.
   let!(:faculty) { create :faculty, category: 'team', slack_user_id: 'slack_3' }
 
+  let(:mock_api_service) { instance_double(PublicSlack::ApiService) }
+
   describe '.post' do
     context 'when there is an English Question without any submissions' do
       it 'DMs the question to all founders with a slack_user_id' do
-        attachments = subject.send(:question_as_slack_attachment)
-        expect(Founders::PostEnglishQuestionJob).to receive(:perform_later).with(channel: 'slack_1', attachments: attachments)
-        expect(Founders::PostEnglishQuestionJob).to receive(:perform_later).with(channel: 'slack_2', attachments: attachments)
-        expect(Founders::PostEnglishQuestionJob).to receive(:perform_later).with(channel: 'slack_3', attachments: attachments)
-        expect(Founders::PostEnglishQuestionJob).to receive(:perform_later).with(channel: 'U0A6X5MEY', attachments: attachments) # because @manojmohan is hardwired as special-case
+        expect(PublicSlack::ApiService).to receive(:new).and_return(mock_api_service)
+
+        expect(mock_api_service).to receive(:get)
+          .with('chat.postMessage', params: params('slack_1'))
+          .and_return('ok' => true)
+        expect(mock_api_service).to receive(:get)
+          .with('chat.postMessage', params: params('slack_2'))
+          .and_return('ok' => true)
+        expect(mock_api_service).to receive(:get)
+          .with('chat.postMessage', params: params('slack_3'))
+          .and_return('ok' => true)
+        expect(mock_api_service).to receive(:get)
+          .with('chat.postMessage', params: params('U0A6X5MEY'))
+          .and_return('ok' => true) # because @manojmohan is hardwired as special-case
         subject.post
 
         # The posted_on must be now set.
@@ -35,9 +46,15 @@ describe PublicSlack::PostEnglishQuestionService do
       end
 
       it 'does nothing' do
-        expect(Founders::PostEnglishQuestionJob).to_not receive(:perform_later)
+        expect(PublicSlack::ApiService).to_not receive(:new)
         subject.post
       end
     end
+  end
+
+  private
+
+  def params(slack_user_id)
+    { channel: slack_user_id, as_user: true, attachments: subject.send(:question_as_slack_attachment) }
   end
 end

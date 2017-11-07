@@ -76,9 +76,9 @@ module ProductMetrics
       Target.sessions.live.count
     end
 
-    # Number of hours spent in faculty connect sessions.
+    # Number of faculty connect sessions.
     def count_faculty_office_hours
-      ConnectRequest.completed.count / 2
+      ConnectRequest.completed.count
     end
 
     # Number of resources.

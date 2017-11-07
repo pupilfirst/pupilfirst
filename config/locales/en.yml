@@ -188,7 +188,7 @@ en:
         office_hours:
           heading: "Office Hours"
           description_html: "One-on-one office hours help keep students on track, and faculty apprised of their progress."
-          delta_verb: hours
+          delta_verb: sessions
         resources:
           heading: "Library Resources"
           description_html: "The Startup Library is a one-stop-shop for all resources that SV.CO provides."

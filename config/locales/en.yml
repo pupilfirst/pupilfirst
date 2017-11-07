@@ -87,6 +87,7 @@ en:
         requested: Requested
         paid: Paid
         failed: Failed
+        not_requested: Not Requested
 
     startup:
       registration_type:

@@ -58,4 +58,5 @@
 //= require admissions
 //= require faculty
 //= require resources
+//= require users
 //= require product_metrics

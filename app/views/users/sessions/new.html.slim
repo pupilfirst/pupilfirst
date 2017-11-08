@@ -6,81 +6,79 @@
 - unless Rails.env.test?
   script src='https://www.google.com/recaptcha/api.js' async defer
 
-.container
-  .row
-    .col-xl-10.offset-xl-1.col-lg-12
-      .login-container.m-t-2.m-b-3.clearfix
-        .row
-          .col-md-6.push-md-6
-            .content-box.user-login.m-b-1
-              .sign-in-kid.m-x-auto.m-b-1
-                = image_tag 'users/sessions/new/sign-in-kid.svg', class: 'img-fluid m-x-auto'
-              #sign-in-with-federated class=hidden_sign_in_class('federated')
-                h3.text-xs-center.m-b-2 Sign in to SV.CO
+.container.login-container.my-4.text-center
+  .row.flex-column-reverse.flex-md-row
+    .col-md-6
+      .login-notice.content-box.text-center
+        .notice-section.with-border-btm
+          = image_tag 'users/sessions/new/sv-spaceship.svg', class: 'img-fluid mx-auto'
+          h4
+            = link_to join_path, class: 'apply-link-head' do
+              ' Membership to the
+              br
+              | <strong>SV.CO Collective</strong> is open!
+              br
+              ' <u><strong>Go here</strong> to get started.</u>
+        .notice-section
+          = image_tag 'users/sessions/new/fly-a-kite.svg', class: 'img-fluid mx-auto'
+          h4
+            = link_to six_ways_path, class: 'startincollege-link-head', target: '_blank' do
+              ' Looking for the
+              br
+              |	<strong>#StartInCollege Six Ways</strong> course?
+              br
+              ' <u><strong>Go here</strong> to get started.</u>
+    .col-md-6
+      .content-box.user-login.mb-1.text-center
+        .sign-in-kid.mx-auto.mb-2
+          = image_tag 'users/sessions/new/sign-in-kid.svg', class: 'img-fluid mx-auto'
+        #sign-in-with-federated class=hidden_sign_in_class('federated')
+          h3.text-center.mb-3 Sign in to SV.CO
 
-                - if Rails.env.development?
-                  a.oauth-login.login-as-developer href=user_developer_omniauth_authorize_path(origin: params[:referer])
-                    i.fa.fa-code.oauth-icon
-                    | Continue as Developer
-                a.oauth-login.login-with-google href=user_google_oauth2_omniauth_authorize_path(origin: params[:referer])
-                  i.fa.fa-google.oauth-icon
-                  | Continue with Google
-                a.oauth-login.login-with-facebook href=user_facebook_omniauth_authorize_path(origin: params[:referer])
-                  i.fa.fa-facebook.oauth-icon
-                  | Continue with Facebook
-                a.oauth-login.login-with-github href=user_github_omniauth_authorize_path(origin: params[:referer])
-                  i.fa.fa-github.oauth-icon
-                  | Continue with Github
+          - if Rails.env.development?
+            a.oauth-login.login-as-developer href=user_developer_omniauth_authorize_path(origin: params[:referer])
+              i.fa.fa-code.oauth-icon
+              | Continue as Developer
+          a.oauth-login.login-with-google href=user_google_oauth2_omniauth_authorize_path(origin: params[:referer])
+            i.fa.fa-google.oauth-icon
+            | Continue with Google
+          a.oauth-login.login-with-facebook href=user_facebook_omniauth_authorize_path(origin: params[:referer])
+            i.fa.fa-facebook.oauth-icon
+            | Continue with Facebook
+          a.oauth-login.login-with-github href=user_github_omniauth_authorize_path(origin: params[:referer])
+            i.fa.fa-github.oauth-icon
+            | Continue with Github
 
-              #sign-in-with-email class=hidden_sign_in_class('email')
-                h3.text-xs-center.m-b-2 Sign in with your SV.CO ID
+        #sign-in-with-email.mb-3 class=hidden_sign_in_class('email')
+          h3.text-center.mb-3 Sign in with your SV.CO ID
 
-                = form_for @form, url: user_send_login_email_path, html: { 'data-test': Rails.env.test? } do |f|
-                  - if f.object.errors.present? && f.object.errors[:base].present?
-                    .alert.alert-warning.alert-dismissable.fade.in role='alert'
-                      ul.m-b-0
-                        - f.object.errors[:base].each do |error_message|
-                          li #{error_message}
+          = form_for @form, url: user_send_login_email_path, html: { 'data-test': Rails.env.test? } do |f|
+            - if f.object.errors.present? && f.object.errors[:base].present?
+              .alert.alert-warning.alert-dismissable.fade.show role='alert'
+                ul.mb-0
+                  - f.object.errors[:base].each do |error_message|
+                    li #{error_message}
 
-                  = f.hidden_field :referer
+            = f.hidden_field :referer
 
-                  .wrapped-input
-                    = image_tag 'users/sessions/new/email.svg'
-                    = f.text_field :email, required: true, placeholder: 'SV.CO ID (email)', maxlength: 250, type: 'email'
-                    - if f.object.errors[:email].present?
-                      p.error-under-input = f.object.errors[:email].join(', ')
+            .wrapped-input
+              = image_tag 'users/sessions/new/email.svg'
+              = f.text_field :email, required: true, placeholder: 'SV.CO ID (email)', maxlength: 250, type: 'email'
+              - if f.object.errors[:email].present?
+                p.error-under-input = f.object.errors[:email].join(', ')
 
-                  .remember-forgot.clearfix.m-t-1.m-b-2
-                    .login-option.text-xs-center
-                      = f.check_box :shared_device, class: 'css-checkbox'
-                      = f.label :shared_device, 'Are you using a shared device?', class: 'css-label'
+            .remember-forgot.mt-1.mb-2
+              .login-option.text-center
+                = f.check_box :shared_device, class: 'css-checkbox'
+                = f.label :shared_device, 'Are you using a shared device?', class: 'css-label'
 
-                  .text-xs-center
-                    div class='g-recaptcha' data-sitekey=Rails.application.secrets.dig(:google, :recaptcha, :invisible, :site_key) data-callback='handleSignInWithEmailButton' data-size='invisible' data-badge='inline'
-                    = f.submit 'Email me a link to sign in', class: 'btn btn-primary btn-md text-uppercase sign-in-btn'
+            .text-center
+              div class='g-recaptcha' data-sitekey=Rails.application.secrets.dig(:google, :recaptcha, :invisible, :site_key) data-callback='handleSignInWithEmailButton' data-size='invisible' data-badge='inline'
+              = f.submit 'Email me a link to sign in', class: 'btn btn-primary btn-md text-uppercase sign-in-btn'
 
-              .switch-sign-in-method-links.text-xs-center.m-t-2
-                a.switch-to-email class=hidden_sign_in_class('email', link: true)
-                  | Sign in with email
-                a.switch-to-federated class=hidden_sign_in_class('federated', link: true)
-                  | Sign in with Google, Facebook, or Github
-          .col-md-6.pull-md-6
-            .login-notice.content-box.text-xs-center
-              .notice-section.with-border-btm
-                = image_tag 'users/sessions/new/sv-spaceship.svg', class: 'img-fluid m-x-auto'
-                h4
-                  = link_to join_path, class: 'apply-link-head' do
-                    ' Membership to the
-                    br
-                    | <strong>SV.CO Collective</strong> is open!
-                    br
-                    ' <strong>Go here</strong> to get started.
-              .notice-section
-                = image_tag 'users/sessions/new/fly-a-kite.svg', class: 'img-fluid m-x-auto'
-                h4
-                  = link_to six_ways_path, class: 'startincollege-link-head' do
-                    ' Looking for the
-                    br
-                    |	<strong>#StartInCollege Six Ways</strong> course?
-                    br
-                    ' <strong>Go here</strong> to get started.
+        .switch-sign-in-method-links.text-center
+          a.switch-to-email.brand-secondary class=hidden_sign_in_class('email', link: true)
+            | Sign in with email
+          a.switch-to-federated.brand-secondary class=hidden_sign_in_class('federated', link: true)
+            | Sign in with Google, Facebook, or Github
+

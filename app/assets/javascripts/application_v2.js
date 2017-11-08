@@ -66,5 +66,4 @@
 //= require v2/founders
 //= require v2/story
 //= require v2/six_ways
-//= require v2/users
 //= require v2/intercom_settings

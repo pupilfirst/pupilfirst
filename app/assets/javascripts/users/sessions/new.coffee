@@ -11,15 +11,15 @@ switchSignIn = (method) ->
   emailLoginLink = $('a.switch-to-email')
 
   if method == 'email'
-    federatedLoginBlock.addClass('hidden-xs-up')
-    emailLoginBlock.removeClass('hidden-xs-up')
-    federatedLoginLink.removeClass('hidden-xs-up')
-    emailLoginLink.addClass('hidden-xs-up')
+    federatedLoginBlock.addClass('d-none')
+    emailLoginBlock.removeClass('d-none')
+    federatedLoginLink.removeClass('d-none')
+    emailLoginLink.addClass('d-none')
   else if method == 'federated'
-    federatedLoginBlock.removeClass('hidden-xs-up')
-    emailLoginBlock.addClass('hidden-xs-up')
-    federatedLoginLink.addClass('hidden-xs-up')
-    emailLoginLink.removeClass('hidden-xs-up')
+    federatedLoginBlock.removeClass('d-none')
+    emailLoginBlock.addClass('d-none')
+    federatedLoginLink.addClass('d-none')
+    emailLoginLink.removeClass('d-none')
   else
     console.error("Unknown method of login requested: #{method}")
 

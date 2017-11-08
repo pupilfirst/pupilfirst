@@ -17,7 +17,7 @@ nav aria-label="breadcrumb" role="navigation"
           - if @levels.present?
             span.h4.leaderboard__date-range.font-semibold.light-grey-text &nbsp;#{DatesService.last_week_start_date.strftime('%B %-d')} to #{DatesService.last_week_end_date.strftime('%B %-d')}
 
-        p
+        p.mb-2
           ' Leaderboards are how we track progress for our startups. They <strong>don't show</strong> the best startups at
           ' SV.CO. Rather, they show <strong>startups that have improved the most</strong> compared to the previous
           | leaderboard.

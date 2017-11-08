@@ -131,9 +131,6 @@ Rails.application.routes.draw do
 
   resources :prospective_applicants, only: %i[create]
 
-  # webhook url for intercom user create - used to strip them off user_id
-  post 'intercom_user_create', controller: 'intercom', action: 'user_create'
-
   resources :colleges, only: :index
 
   resource :platform_feedback, only: %i[create]
@@ -216,6 +213,11 @@ Rails.application.routes.draw do
 
   # TODO: Remove this route once PayTM is correctly configured with '/paytm/callback' as the redirect_url.
   post '/', to: 'home#paytm_callback'
+
+  scope 'intercom', as: 'intercom', controller: 'intercom' do
+    post 'user_create', action: 'user_create_webhook'
+    post 'unsubscribe', action: 'email_unsubscribe_webhook'
+  end
 
   # Handle incoming interaction requests from Slack
   post '/slack/interaction_webhook', to: 'slack#interaction_webhook'

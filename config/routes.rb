@@ -224,6 +224,9 @@ Rails.application.routes.draw do
 
   post '/heroku/deploy_webhook', to: 'heroku#deploy_webhook'
 
+  # Handle incoming unsubscribe webhooks from SendInBlue
+  post '/send_in_blue/unsubscribe', to: 'send_in_blue#unsubscribe_webhook'
+
   # Handle redirects of short URLs.
   get 'r/:unique_key', to: 'shortened_urls#redirect', as: 'short_redirect'
 

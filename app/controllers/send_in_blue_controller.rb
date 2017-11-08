@@ -1,0 +1,13 @@
+class SendInBlueController < ApplicationController
+  skip_before_action :verify_authenticity_token, only: :unsubscribe_webhook
+
+  def unsubscribe_webhook
+    # A safety check to ensure we are in-fact handling unsubscriptions.
+    raise 'Unexpected event received from SendInBlue' unless params['event'] == 'unsubscribed'
+
+    _email = params['email']
+    # TODO: Inform Intercom to mark this email address as unsubscribed.
+
+    head :ok
+  end
+end

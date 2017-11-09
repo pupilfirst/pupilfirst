@@ -60,7 +60,7 @@ module Lita
         "*<#{leaderboard_url}|#{title}> - #{start_date} to #{end_date}:*\n"
       end
 
-      # Return one line in the rank listq
+      # Return one line in the rank list
       def leaderboard_line(startup, rank, change_in_rank)
         indicator = if change_in_rank.negative?
           ':rank_down:'

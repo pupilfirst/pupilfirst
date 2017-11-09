@@ -5,8 +5,8 @@ class SendInBlueController < ApplicationController
     # A safety check to ensure we are in-fact handling unsubscriptions.
     raise 'Unexpected event received from SendInBlue' unless params['event'] == 'unsubscribed'
 
-    _email = params['email']
-    # TODO: Inform Intercom to mark this email address as unsubscribed.
+    email = params.fetch('email')
+    Intercom::UnsubscribeJob.perform_later(email)
 
     head :ok
   end

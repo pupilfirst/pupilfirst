@@ -21,8 +21,9 @@ class IntercomController < ApplicationController
     raise 'Unexpected Intercom Webhook Topic' unless params[:topic] == 'user.unsubscribed'
 
     email = params.dig(:data, :item, :email)
-    SendInBlue::UnsubscribeJob.perform_later(email)
+    raise 'Could not retrieve email from Webhook POST' if email.blank?
 
+    SendInBlue::UnsubscribeJob.perform_later(email)
     head :ok
   end
 end

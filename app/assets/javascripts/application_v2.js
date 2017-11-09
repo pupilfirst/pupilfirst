@@ -61,7 +61,6 @@
 // require transparency
 //= require v2/home
 //= require v2/resources
-//= require v2/tour
 //= require v2/talent
 //= require v2/founders
 //= require v2/story

@@ -82,27 +82,30 @@ feature 'Founder Edit' do
       expect(page).to have_selector('div.activity-section')
 
       # Confirm that founder has, indeed, been updated.
-      expect(founder.reload.name).to eq(founder_name)
-      expect(founder.born_on).to eq(Date.parse('1997-01-15'))
-      expect(founder.phone).to eq(phone.to_s)
+      expect(founder.reload).to have_attributes(
+        name: founder_name,
+        born_on: Date.parse('1997-01-15'),
+        phone: phone.to_s,
+        about: one_liner,
+        skype_id: username,
+        communication_address: communication_address,
+        roll_number: roll_number,
+        course: course,
+        semester: semester,
+        backlog: backlogs,
+        twitter_url: "https://twitter.com/#{username}",
+        linkedin_url: "https://linkedin.com/#{username}",
+        personal_website_url: "https://#{username}.com",
+        blog_url: "https://blog.#{username}.com",
+        angel_co_url: "https://angel.co/#{username}",
+        github_url: "https://github.com/#{username}",
+        behance_url: "https://behance.net/#{username}"
+      )
+
       expect(founder.avatar.file.filename).to eq('donald_duck.jpg')
-      expect(founder.about).to eq(one_liner)
       expect(founder.roles).to match_array(roles.map(&:downcase))
-      expect(founder.skype_id).to eq(username)
-      expect(founder.communication_address).to eq(communication_address)
       expect(founder.identification_proof.file.filename).to eq('pdf-thumbnail.png')
-      expect(founder.roll_number).to eq(roll_number)
       expect(founder.college_identification.file.filename).to eq('college_id.jpg')
-      expect(founder.course).to eq(course)
-      expect(founder.semester).to eq(semester)
-      expect(founder.backlog).to eq(backlogs)
-      expect(founder.twitter_url).to eq("https://twitter.com/#{username}")
-      expect(founder.linkedin_url).to eq("https://linkedin.com/#{username}")
-      expect(founder.personal_website_url).to eq("https://#{username}.com")
-      expect(founder.blog_url).to eq("https://blog.#{username}.com")
-      expect(founder.angel_co_url).to eq("https://angel.co/#{username}")
-      expect(founder.github_url).to eq("https://github.com/#{username}")
-      expect(founder.behance_url).to eq("https://behance.net/#{username}")
     end
 
     scenario 'Founder tries to submit invalid values' do

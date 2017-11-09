@@ -59,7 +59,7 @@ en:
         changelog:
           help: Get a snippet of the latest changes on the SV.CO Platform
         leaderboard:
-          help: Get the last published leaderboard for supplied level.
+          help: Get the last published leaderboard for all levels in the collective.
         targets:
           help: Get a list of targets recently assigned to you and your team.
           help_info: Get detailed information about a target from list.

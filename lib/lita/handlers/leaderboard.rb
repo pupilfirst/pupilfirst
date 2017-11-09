@@ -6,59 +6,42 @@ module Lita
         :leaderboard,
         command: true,
         help: {
-          'leaderboard [LEVEL NUMBER]' => I18n.t('libs.lita.handlers.leaderboard.help')
+          'leaderboard' => I18n.t('libs.lita.handlers.leaderboard.help')
         }
       )
 
       def leaderboard(response)
         ActiveRecord::Base.connection_pool.with_connection do
-          # check if a particular level was requested by parsing the regex matches
-          @level = response.match_data[1].present? ? Level.find_by(number: response.match_data[1].to_i) : nil
-          @level = nil if @level&.number&.zero?
-
-          if @level.nil?
-            send_level_required_message(response)
-          else
-            response.reply leaderboard_response_message
-          end
-
+          response.reply leaderboard_response
           Ahoy::Tracker.new.track Visit::EVENT_VOCALIST_COMMAND, command: Visit::VOCALIST_COMMAND_LEADERBOARD
         end
       end
 
-      # send a relevant please wait method
-      def send_level_required_message(response)
-        response.reply('Please supply the level number for which leaderboard is required! Try `leaderboard [1-4]`')
-      end
-
-      # construct the leaderboard response to be send
-      def leaderboard_response_message
+      # construct the consolidated leaderboard response for all levels
+      def leaderboard_response
         if Startups::LeaderboardService.pending?
           return 'The leaderboard for last week is being generated. Please try again after a minute.'
         end
 
-        # Load the leaderboard.
-        leaderboard = Startups::LeaderboardService.new(@level).leaderboard_with_change_in_rank
+        response_title = "*<#{leaderboard_url}|Leaderboards> - #{start_date} to #{end_date}:*\n"
+        leaderboard_response = ''
 
-        # Return simple message if there are no active startups in this leaderboard.
-        if leaderboard.none? { |_s, _r, points, _c| points.positive? }
-          return 'All startups at this level were inactive during this period.'
+        levels_for_leaderboard.each do |level|
+          leaderboard = Startups::LeaderboardService.new(level).leaderboard_with_change_in_rank
+
+          leaderboard_response += if leaderboard.none? { |_s, _r, points, _c| points.positive? }
+            "All startups in *Level #{level.number}* were inactive during this period.\n\n"
+          else
+            "\n*Level #{level.number}:*\n" + leaderboard_message_for_active_level(leaderboard) + "\n"
+          end
         end
 
-        # Add rows to the leaderboard.
-        inactive_startups, response = add_leaderboard_rows(leaderboard, leaderboard_heading)
-
-        # Add number of inactive startups, if any.
-        if inactive_startups.positive?
-          response += "\nThere #{'is'.pluralize(inactive_startups)} #{inactive_startups} #{'startup'.pluralize(inactive_startups)} in this level which #{'was'.pluralize(inactive_startups)} inactive during this period."
-        end
-
-        response
+        (response_title + leaderboard_response).strip
       end
 
-      def add_leaderboard_rows(leaderboard, response)
+      def add_leaderboard_rows(leaderboard)
         inactive_startups = 0
-
+        response = ''
         leaderboard.each do |startup, rank, points, change_in_rank|
           if points.zero?
             inactive_startups += 1
@@ -71,16 +54,13 @@ module Lita
       end
 
       # Build the heading of the response.
-      def leaderboard_heading
-        leaderboard_url = Rails.application.routes.url_helpers.about_leaderboard_url
-        title = "Leaderboard for Level #{@level.number}"
-        start_date = DatesService.last_week_start_date.strftime('%B %-d')
-        end_date = DatesService.last_week_end_date.strftime('%B %-d')
+      def leaderboard_heading(level)
+        title = "Leaderboard for Level #{level.number}"
 
         "*<#{leaderboard_url}|#{title}> - #{start_date} to #{end_date}:*\n"
       end
 
-      # Return one l
+      # Return one line in the rank listq
       def leaderboard_line(startup, rank, change_in_rank)
         indicator = if change_in_rank.negative?
           ':rank_down:'
@@ -97,6 +77,37 @@ module Lita
         end
 
         "*#{format('%02d', rank)}.* #{indicator}`#{signed_change_in_rank}` - <#{Rails.application.routes.url_helpers.timeline_url(startup.id, startup.slug)}|#{startup.product_name}>\n"
+      end
+
+      def levels_for_leaderboard
+        Level.where('number > ?', 0).order('number ASC')
+      end
+
+      def start_date
+        DatesService.last_week_start_date.strftime('%B %-d')
+      end
+
+      def end_date
+        DatesService.last_week_end_date.strftime('%B %-d')
+      end
+
+      def leaderboard_url
+        Rails.application.routes.url_helpers.about_leaderboard_url
+      end
+
+      def inactive_startup_message(inactive_startups)
+        "There #{'is'.pluralize(inactive_startups)} #{inactive_startups} #{'startup'.pluralize(inactive_startups)} in this level which #{'was'.pluralize(inactive_startups)} inactive during this period.\n"
+      end
+
+      def leaderboard_message_for_active_level(leaderboard)
+        # Add rows to the leaderboard.
+        inactive_startups, response = add_leaderboard_rows(leaderboard)
+
+        # Add number of inactive startups, if any.
+        if inactive_startups.positive?
+          response += inactive_startup_message(inactive_startups)
+        end
+        response
       end
     end
 

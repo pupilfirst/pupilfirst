@@ -348,6 +348,15 @@ ActiveAdmin.register Startup do
       row :referral_reward_days
       row :founder_fee
     end
+
+    panel 'Technical details' do
+      attributes_table_for startup do
+        row :id
+        row :created_at
+        row :updated_at
+      end
+    end
+
     active_admin_comments
   end
 

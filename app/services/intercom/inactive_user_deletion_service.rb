@@ -12,7 +12,7 @@ module Intercom
     def initialize(mock: false)
       @mock = mock
       @intercom_client = Intercom::Client.new(token: Rails.application.secrets.intercom_access_token)
-      @sendinblue_client = Sendinblue::Mailin.new('https://api.sendinblue.com/v2.0', Rails.application.secrets.sendinblue_api_key)
+      @sendinblue_client = Sendinblue::Mailin.new('https://api.sendinblue.com/v2.0', Rails.application.secrets.send_in_blue[:v2_api_key])
     end
 
     def execute

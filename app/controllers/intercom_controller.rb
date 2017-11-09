@@ -20,8 +20,8 @@ class IntercomController < ApplicationController
   def email_unsubscribe_webhook
     raise 'Unexpected Intercom Webhook Topic' unless params[:topic] == 'user.unsubscribed'
 
-    _email = params.dig(:data, :item, :email)
-    # TODO: Inform SendInBlue to mark this email as unsubscribed.
+    email = params.dig(:data, :item, :email)
+    SendInBlue::UnsubscribeJob.perform_later(email)
 
     head :ok
   end

@@ -244,7 +244,7 @@ Rails.application.routes.draw do
   end
 
   scope 'stats', controller: 'product_metrics' do
-    get '/', action: 'index'
+    get '/', action: 'index', as: 'stats'
   end
 
   # Handle shortener-gem form URLs for a while (backward compatibility).

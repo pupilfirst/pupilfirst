@@ -15,6 +15,8 @@
     - unless current_founder
       li.nav-item.navbar-nav__nav-item role="presentation"
         = link_to 'About', about_path, class: 'nav-item__link'
+    li.nav-item.navbar-nav__nav-item role="presentation"
+      = link_to 'Stats', stats_path, class: 'nav-item__link'
 
     - if current_user
       - if current_founder

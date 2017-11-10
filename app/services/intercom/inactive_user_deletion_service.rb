@@ -59,7 +59,8 @@ module Intercom
         {
           email: intercom_user.email,
           listid: [list_id(SEGMENTS_FOR_BACKUP[segment])],
-          attributes: sendinblue_attributes(intercom_user)
+          attributes: sendinblue_attributes(intercom_user),
+          blacklisted: (intercom_user.unsubscribed_from_emails ? 1 : 0)
         }
       end - [nil]
     end

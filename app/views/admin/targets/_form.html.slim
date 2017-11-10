@@ -38,8 +38,9 @@
     = f.input :timeline_event_type, include_blank: 'Select default timeline event type'
     = f.input :points_earnable
     = f.input :prerequisite_targets, collection: presenter.valid_prerequisites
-    = f.input :slideshow_embed
+    = f.input :youtube_video_id, label: 'YouTube Video ID', placeholder: 'For eg. S0PEA3R-6TU'
     = f.input :video_embed
+    = f.input :slideshow_embed
     = f.input :resource_url
     = f.input :completion_instructions
     = f.input :link_to_complete

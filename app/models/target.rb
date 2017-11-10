@@ -119,7 +119,7 @@ class Target < ApplicationRecord
     errors[:level] << 'should match level of target group'
   end
 
-  normalize_attribute :key
+  normalize_attribute :key, :slideshow_embed, :video_embed
 
   def display_name
     if level.present?

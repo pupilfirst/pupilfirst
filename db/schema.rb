@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171103081812) do
+ActiveRecord::Schema.define(version: 20171109093505) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -651,6 +651,7 @@ ActiveRecord::Schema.define(version: 20171103081812) do
     t.string "link_to_complete"
     t.string "submittability", default: "resubmittable", null: false
     t.boolean "archived", default: false
+    t.string "youtube_video_id"
     t.index ["archived"], name: "index_targets_on_archived"
     t.index ["chore"], name: "index_targets_on_chore"
     t.index ["key"], name: "index_targets_on_key"

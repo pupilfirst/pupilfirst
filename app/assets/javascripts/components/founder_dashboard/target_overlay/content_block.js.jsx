@@ -7,11 +7,11 @@ class TargetOverlayContentBlock extends React.Component {
   }
 
   prerequisiteLinks() {
-    return this.props.target.prerequisites.map( function (targetDetail) {
-        return(
-          <li className="target-overlay-content-block__prerequisites-list-item" key={ targetDetail[0] }>
+    return this.props.target.prerequisites.map(function (targetDetail) {
+        return (
+          <li className="target-overlay-content-block__prerequisites-list-item" key={targetDetail[0]}>
             <a target='_blank' href={"/founder/dashboard/targets/" + targetDetail[0]}>
-              { targetDetail[1] }
+              {targetDetail[1]}
             </a>
           </li>
         );
@@ -20,13 +20,14 @@ class TargetOverlayContentBlock extends React.Component {
   }
 
   resourceLinks() {
-    return this.props.linkedResources.map( function (resourceDetail) {
-        return(
-          <a className="target-overlay__link m-r-1 m-b-1" key={ resourceDetail.id } target='_blank' href={ '/library/' + resourceDetail.slug }>
+    return this.props.linkedResources.map(function (resourceDetail) {
+        return (
+          <a className="target-overlay__link m-r-1 m-b-1" key={resourceDetail.id} target='_blank'
+            href={'/library/' + resourceDetail.slug}>
                 <span className="target-overlay__link-icon">
                   <i className="fa fa-external-link"/>
                 </span>
-            <span className="target-overlay__link-text">{ resourceDetail.title }</span>
+            <span className="target-overlay__link-text">{resourceDetail.title}</span>
           </a>
         );
       }
@@ -37,28 +38,34 @@ class TargetOverlayContentBlock extends React.Component {
     return this.props.target.status === 'unavailable' && !!this.props.target.prerequisites;
   }
 
+  generatedEmbedSrc() {
+    return "https://www.youtube.com/embed/" + this.props.target.youtube_video_id + "?rel=0"
+  }
+
   render() {
     return (
       <div className="target-overlay-content-block">
 
-        { this.hasPendingPrerequisites() &&
+        {this.hasPendingPrerequisites() &&
         <div className="target-overlay-content-block__prerequisites p-a-1 m-b-2">
           <h6 className="font-semibold m-b-1">Pending Prerequisites:</h6>
           <ol className="target-overlay-content-block__prerequisites-list m-b-0">
-            { this.prerequisiteLinks() }
+            {this.prerequisiteLinks()}
           </ol>
         </div>
         }
         <div className="target-overlay-content-block__container">
           <div className="target-overlay-content-block__header-container clearfix">
-            <img className="target-overlay-content-block__header-icon pull-xs-left" src={ this.props.iconPaths.targetDescription }/>
+            <img className="target-overlay-content-block__header-icon pull-xs-left"
+              src={this.props.iconPaths.targetDescription}/>
             <h5 className="target-overlay-content-block__header m-a-0 pull-xs-left font-semibold">Description</h5>
           </div>
           <div className="target-overlay-content-block__body target-overlay-content-block__body--description p-b-1">
             <p className="font-light" dangerouslySetInnerHTML={{__html: this.props.target.description}}/>
 
-            { this.props.target.has_rubric &&
-            <a className="target-overlay__link m-t-1" target='_blank' href={'/targets/' + this.props.target.id + '/download_rubric'}>
+            {this.props.target.has_rubric &&
+            <a className="target-overlay__link m-t-1" target='_blank'
+              href={'/targets/' + this.props.target.id + '/download_rubric'}>
               <span className="target-overlay__link-icon">
                 <i className="fa fa-download"/>
               </span>
@@ -68,68 +75,88 @@ class TargetOverlayContentBlock extends React.Component {
           </div>
         </div>
 
-        { this.props.target.completion_instructions &&
+        {this.props.target.completion_instructions &&
         <div className="target-overlay-content-block__container">
           <div className="target-overlay-content-block__header-container clearfix">
-            <img className="target-overlay-content-block__header-icon pull-xs-left" src={ this.props.iconPaths.completionInstruction }/>
-            <h5 className="target-overlay-content-block__header m-a-0 pull-xs-left font-semibold">Completion Instruction</h5>
+            <img className="target-overlay-content-block__header-icon pull-xs-left"
+              src={this.props.iconPaths.completionInstruction}/>
+            <h5 className="target-overlay-content-block__header m-a-0 pull-xs-left font-semibold">Completion
+              Instruction</h5>
           </div>
           <div className="target-overlay-content-block__body target-overlay-content-block__body--description p-b-1">
-            <p className="font-light">{ this.props.target.completion_instructions }</p>
+            <p className="font-light">{this.props.target.completion_instructions}</p>
           </div>
         </div>
         }
 
-        { this.props.target.resource_url &&
-          <div className="target-overlay-content-block__container">
-            <div className="target-overlay-content-block__header-container clearfix">
-              <img className="target-overlay-content-block__header-icon pull-xs-left" src={ this.props.iconPaths.resourceLinks }/>
-              <h5 className="target-overlay-content-block__header m-a-0 pull-xs-left font-semibold">Resource Link</h5>
-            </div>
-            <div className="target-overlay-content-block__body">
-              <a className="target-overlay__link m-r-1 m-b-1" target='_blank' href={ this.props.target.resource_url }>
+        {this.props.target.resource_url &&
+        <div className="target-overlay-content-block__container">
+          <div className="target-overlay-content-block__header-container clearfix">
+            <img className="target-overlay-content-block__header-icon pull-xs-left"
+              src={this.props.iconPaths.resourceLinks}/>
+            <h5 className="target-overlay-content-block__header m-a-0 pull-xs-left font-semibold">Resource Link</h5>
+          </div>
+          <div className="target-overlay-content-block__body">
+            <a className="target-overlay__link m-r-1 m-b-1" target='_blank' href={this.props.target.resource_url}>
                 <span className="target-overlay__link-icon">
                   <i className="fa fa-external-link"/>
                 </span>
-                <span className="target-overlay__link-text">Learn More</span>
-              </a>
-            </div>
-          </div>
-        }
-
-
-        { this.props.target.slideshow_embed &&
-        <div className="target-overlay-content-block__container">
-          <div className="target-overlay-content-block__header-container clearfix">
-            <img className="target-overlay-content-block__header-icon pull-xs-left" src={ this.props.iconPaths.slideshowEmbed }/>
-            <h5 className="target-overlay-content-block__header m-a-0 pull-xs-left font-semibold">Presentation</h5>
-          </div>
-          <div className= "target-overlay-content-block__body target-overlay-content-block__body--embed-block p-b-1">
-            <div dangerouslySetInnerHTML={ { __html: this.props.target.slideshow_embed } }></div>
+              <span className="target-overlay__link-text">Learn More</span>
+            </a>
           </div>
         </div>
         }
 
-        { this.props.target.video_embed &&
+        {this.props.target.youtube_video_id &&
         <div className="target-overlay-content-block__container">
           <div className="target-overlay-content-block__header-container clearfix">
-            <img className="target-overlay-content-block__header-icon pull-xs-left" src={ this.props.iconPaths.videoEmbed }/>
+            <img className="target-overlay-content-block__header-icon pull-xs-left"
+              src={this.props.iconPaths.videoEmbed}/>
             <h5 className="target-overlay-content-block__header m-a-0 pull-xs-left font-semibold">Video</h5>
           </div>
-          <div className= "target-overlay-content-block__body target-overlay-content-block__body--embed-block p-b-1">
-            <div dangerouslySetInnerHTML={ { __html: this.props.target.video_embed } }></div>
+          <div className="target-overlay-content-block__body target-overlay-content-block__body--embed-block p-b-1">
+            <div>
+              <iframe width="640" height="360" src={this.generatedEmbedSrc()} frameborder="0" allowfullscreen/>
+            </div>
           </div>
         </div>
         }
 
-        { this.props.linkedResources &&
+        {this.props.target.slideshow_embed &&
         <div className="target-overlay-content-block__container">
           <div className="target-overlay-content-block__header-container clearfix">
-            <img className="target-overlay-content-block__header-icon pull-xs-left" src={ this.props.iconPaths.resourceLinks }/>
+            <img className="target-overlay-content-block__header-icon pull-xs-left"
+              src={this.props.iconPaths.slideshowEmbed}/>
+            <h5 className="target-overlay-content-block__header m-a-0 pull-xs-left font-semibold">Presentation</h5>
+          </div>
+          <div className="target-overlay-content-block__body target-overlay-content-block__body--embed-block p-b-1">
+            <div dangerouslySetInnerHTML={{__html: this.props.target.slideshow_embed}}></div>
+          </div>
+        </div>
+        }
+
+        {this.props.target.video_embed &&
+        <div className="target-overlay-content-block__container">
+          <div className="target-overlay-content-block__header-container clearfix">
+            <img className="target-overlay-content-block__header-icon pull-xs-left"
+              src={this.props.iconPaths.videoEmbed}/>
+            <h5 className="target-overlay-content-block__header m-a-0 pull-xs-left font-semibold">Video</h5>
+          </div>
+          <div className="target-overlay-content-block__body target-overlay-content-block__body--embed-block p-b-1">
+            <div dangerouslySetInnerHTML={{__html: this.props.target.video_embed}}></div>
+          </div>
+        </div>
+        }
+
+        {this.props.linkedResources &&
+        <div className="target-overlay-content-block__container">
+          <div className="target-overlay-content-block__header-container clearfix">
+            <img className="target-overlay-content-block__header-icon pull-xs-left"
+              src={this.props.iconPaths.resourceLinks}/>
             <h5 className="target-overlay-content-block__header m-a-0 pull-xs-left font-semibold">Library Links</h5>
           </div>
           <div className="target-overlay-content-block__body">
-            { this.resourceLinks() }
+            {this.resourceLinks()}
           </div>
         </div>
         }

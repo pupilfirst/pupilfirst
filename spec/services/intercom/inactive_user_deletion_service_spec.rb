@@ -6,7 +6,7 @@ describe Intercom::InactiveUserDeletionService do
   describe '.new' do
     it 'creates Intercom and SendInBlue API clients' do
       expect(Intercom::Client).to receive(:new).with(token: 'test_intercom_access_token')
-      expect(Sendinblue::Mailin).to receive(:new).with('https://api.sendinblue.com/v2.0', 'test_sendinblue_api_key')
+      expect(Sendinblue::Mailin).to receive(:new).with('https://api.sendinblue.com/v2.0', 'test_sendinblue_v2_api_key')
       subject.new
     end
   end

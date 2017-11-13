@@ -1,5 +1,6 @@
-#admin-target__edit
+- presenter = Admin::Targets::FormPresenter.new(self, @target)
 
+#admin-target__edit
 = semantic_form_for [:admin, @target] do |f|
   = f.semantic_errors *f.object.errors.keys
   = f.inputs 'Target details' do
@@ -36,9 +37,10 @@
     = f.input :target_action_type, collection: Target.valid_target_action_types
     = f.input :timeline_event_type, include_blank: 'Select default timeline event type'
     = f.input :points_earnable
-    = f.input :prerequisite_targets, collection: Target.where.not(id: @target.id).includes(:level)
-    = f.input :slideshow_embed
+    = f.input :prerequisite_targets, collection: presenter.valid_prerequisites
+    = f.input :youtube_video_id, label: 'YouTube Video ID', placeholder: 'For eg. S0PEA3R-6TU'
     = f.input :video_embed
+    = f.input :slideshow_embed
     = f.input :resource_url
     = f.input :completion_instructions
     = f.input :link_to_complete
@@ -52,6 +54,5 @@
     = f.input :days_to_complete
     = f.input :rubric, as: :file
     = f.input :remote_rubric_url
-    = f.input :archived
 
   = f.submit

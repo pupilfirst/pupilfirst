@@ -1,0 +1,11 @@
+---
+timestamp: '2017-11-10T06:48:00Z'
+title: Embedded YouTube videos in targets are now presented with a uniform set
+  of features which includes video info, links to YouTube, player controls, and
+  they don't display YouTube's suggestions for related videos.
+trello: https://trello.com/c/Wxl42API
+private: false
+description: Added `youtube_video_id` to `Target` to generate embed code in
+  uniform format. This also adds a one-off service to extract YouTube video IDs
+  from existing embeds and then clears those embeds.
+category: ui

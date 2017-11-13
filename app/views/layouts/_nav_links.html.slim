@@ -1,20 +1,31 @@
 #sv-navbar.collapse.navbar-collapse.justify-content-end.navbar-link__container
   ul.navbar-nav.align-items-lg-center
-    li.nav-item.navbar-nav__nav-item role="presentation"
-      = link_to 'Startups', startups_path, class: 'nav-item__link'
+    - unless current_founder
+      li.nav-item.navbar-nav__nav-item role="presentation"
+        = link_to 'Join', join_path, class: 'nav-item__link', itemprop: 'url', id: 'sv-navbar__join-link'
     - if current_founder && !current_founder.exited && current_founder.startup.present?
       li.nav-item.navbar-nav__nav-item role="presentation"
-        a.nav-item__link.navbar-nav__nav-item__link href="#{dashboard_founder_url}" Dashboard
+        a#sv-navbar__dashboard-link.nav-item__link href="#{dashboard_founder_url}" Dashboard
+    - if current_founder&.startup.present? && policy(current_founder.startup).show?
+      li.nav-item.navbar-nav__nav-item role="presentation"
+        a#sv-navbar__timeline-link.nav-item__link href="#{timeline_url(current_founder.startup.id, current_founder.startup.slug)}" Timeline
+    li.nav-item.navbar-nav__nav-item role="presentation"
+      = link_to 'Startups', startups_path, class: 'nav-item__link', id: 'sv-navbar__startups-link'
     - unless current_founder
       li.nav-item.navbar-nav__nav-item role="presentation"
-        = link_to 'Invest & Hire', talent_path, class: 'nav-item__link'
+        = link_to 'Invest & Hire', talent_path, class: 'nav-item__link', id: 'sv-navbar__talent-link'
     li.nav-item.navbar-nav__nav-item role="presentation"
-      = link_to 'Faculty', faculty_index_path, class: 'nav-item__link'
-    li.nav-item.navbar-nav__nav-item role="presentation"
-      = link_to 'Library', resources_path, class: 'nav-item__link'
+      = link_to 'Faculty', faculty_index_path, class: 'nav-item__link', id: 'sv-navbar__faculty-link'
     - unless current_founder
       li.nav-item.navbar-nav__nav-item role="presentation"
-        = link_to 'About', about_path, class: 'nav-item__link'
+        = link_to 'About', about_path, class: 'nav-item__link', id: 'sv-navbar__about-link'
+    - if current_founder && !current_founder.exited && current_founder.startup.present?
+      li.nav-item.navbar-nav__nav-item role="presentation"
+        = link_to 'Library', resources_path, class: 'nav-item__link', id: 'sv-navbar__library-link'
+    li.nav-item.navbar-nav__nav-item role="presentation"
+      = link_to 'Stats', stats_path, class: 'nav-item__link'
+    li.nav-item.navbar-nav__nav-item role="presentation"
+      = link_to 'Help Center', 'https://help.sv.co', class: 'nav-item__link', id: 'sv-navbar__help-link'
 
     - if current_user
       - if current_founder

@@ -76,9 +76,9 @@ module ProductMetrics
       Target.sessions.live.count
     end
 
-    # Number of hours spent in faculty connect sessions.
+    # Number of faculty connect sessions.
     def count_faculty_office_hours
-      ConnectRequest.completed.count / 2
+      ConnectRequest.completed.count
     end
 
     # Number of resources.
@@ -94,6 +94,10 @@ module ProductMetrics
     # Number of recorded messages on Public Slack.
     def count_slack_messages
       PublicSlackMessage.count
+    end
+
+    def count_timeline_events
+      TimelineEvent.verified.joins(:startup).merge(Startup.admitted).count
     end
   end
 end

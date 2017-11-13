@@ -5,17 +5,14 @@ class SlackController < ApplicationController
   before_action :verify_slack_token
 
   def interaction_webhook
-    # Delegate handling of submission to a job...
-    Founders::HandleEnglishQuizSubmissionJob.perform_later(payload) if english_quiz?
-    # and immediately respond with a 200.
-    head :ok
+    if english_quiz? && evaluation.present?
+      render json: evaluation.to_json
+    else
+      head :ok
+    end
   end
 
   private
-
-  def payload
-    @payload ||= JSON.parse(params[:payload])
-  end
 
   # Verify the request is indeed from our Slack app.
   def verify_slack_token
@@ -23,7 +20,15 @@ class SlackController < ApplicationController
     head :unauthorized
   end
 
+  def payload
+    @payload ||= JSON.parse(params[:payload])
+  end
+
   def english_quiz?
     payload['callback_id'].match?(/english_quiz_\d+/)
+  end
+
+  def evaluation
+    @evaluation ||= EnglishQuizQuestions::EvaluateSubmissionService.new(payload).evaluate
   end
 end

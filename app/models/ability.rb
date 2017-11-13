@@ -11,7 +11,7 @@ class Ability
         can :quick_review, TimelineEvent
       when AdminUser::TYPE_FACULTY
         can :read, :all
-        can :manage, [StartupFeedback, Resource]
+        can :manage, [StartupFeedback, Resource, EnglishQuizQuestion]
         can :update, [TimelineEvent]
     end
 

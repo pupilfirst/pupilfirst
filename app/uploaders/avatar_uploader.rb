@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class AvatarUploader < CarrierWave::Uploader::Base
-  include CarrierWave::Backgrounder::Delay
   include CarrierWave::MiniMagick
   include CarrierWave::BombShelter
 

@@ -131,9 +131,6 @@ Rails.application.routes.draw do
 
   resources :prospective_applicants, only: %i[create]
 
-  # webhook url for intercom user create - used to strip them off user_id
-  post 'intercom_user_create', controller: 'intercom', action: 'user_create'
-
   resources :colleges, only: :index
 
   resource :platform_feedback, only: %i[create]
@@ -217,12 +214,20 @@ Rails.application.routes.draw do
   # TODO: Remove this route once PayTM is correctly configured with '/paytm/callback' as the redirect_url.
   post '/', to: 'home#paytm_callback'
 
+  scope 'intercom', as: 'intercom', controller: 'intercom' do
+    post 'user_create', action: 'user_create_webhook'
+    post 'unsubscribe', action: 'email_unsubscribe_webhook'
+  end
+
   # Handle incoming interaction requests from Slack
   post '/slack/interaction_webhook', to: 'slack#interaction_webhook'
 
   match '/trello/bug_webhook', to: 'trello#bug_webhook', via: :all
 
   post '/heroku/deploy_webhook', to: 'heroku#deploy_webhook'
+
+  # Handle incoming unsubscribe webhooks from SendInBlue
+  post '/send_in_blue/unsubscribe', to: 'send_in_blue#unsubscribe_webhook'
 
   # Handle redirects of short URLs.
   get 'r/:unique_key', to: 'shortened_urls#redirect', as: 'short_redirect'
@@ -239,7 +244,7 @@ Rails.application.routes.draw do
   end
 
   scope 'stats', controller: 'product_metrics' do
-    get '/', action: 'index'
+    get '/', action: 'index', as: 'stats'
   end
 
   # Handle shortener-gem form URLs for a while (backward compatibility).

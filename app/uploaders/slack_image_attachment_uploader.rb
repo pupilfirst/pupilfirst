@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class SlackImageAttachmentUploader < CarrierWave::Uploader::Base
-  include CarrierWave::Backgrounder::Delay
   include CarrierWave::MiniMagick
   include CarrierWave::BombShelter
 

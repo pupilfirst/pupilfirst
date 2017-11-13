@@ -82,14 +82,15 @@ class Target < ApplicationRecord
   validate :days_to_complete_or_session_at_should_be_present
 
   def days_to_complete_or_session_at_should_be_present
-    return if days_to_complete.present? || session_at.present?
+    return if [days_to_complete, session_at].one?
+    errors[:base] << 'One of days_to_complete, or session_at should be set.'
     errors[:days_to_complete] << 'if blank, session_at should be set'
     errors[:session_at] << 'if blank, days_to_complete should be set'
   end
 
-  validate :chores_and_vanilla_targets_must_be_in_a_group
+  validate :vanilla_targets_must_be_in_a_group
 
-  def chores_and_vanilla_targets_must_be_in_a_group
+  def vanilla_targets_must_be_in_a_group
     return if session?
     return if target_group.present?
     errors[:base] << 'Vanilla targets and chores must be in a target group.'
@@ -99,7 +100,7 @@ class Target < ApplicationRecord
 
   def can_be_one_of_chore_or_session
     return if [session_at, chore].one? || [session_at, chore].none?
-    errors[:base] << 'Target can be a chore, a session, or neither, but not both.'
+    errors[:base] << "Target can be a chore, a session, or neither, but not both. Sessions are treated as chores anyway, since they don't need to be repeated."
   end
 
   validate :session_must_have_level
@@ -110,7 +111,15 @@ class Target < ApplicationRecord
     errors[:level] << 'is required for a session' if level.blank?
   end
 
-  normalize_attribute :key
+  validate :avoid_level_mismatch_with_group
+
+  def avoid_level_mismatch_with_group
+    return if target_group.blank? || level.blank?
+    return if level == target_group.level
+    errors[:level] << 'should match level of target group'
+  end
+
+  normalize_attribute :key, :slideshow_embed, :video_embed
 
   def display_name
     if level.present?

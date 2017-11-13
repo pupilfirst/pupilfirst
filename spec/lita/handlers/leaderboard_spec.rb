@@ -7,52 +7,69 @@ describe Lita::Handlers::Leaderboard do
 
   describe '#leaderboard' do
     let(:test_time) { Time.parse '2017-04-19 12:00:00 +0530' }
-    let(:leaderboard_service) { instance_double Startups::LeaderboardService }
+    let(:leaderboard_service_l1) { instance_double(Startups::LeaderboardService, leaderboard_with_change_in_rank: leaderboard_level_one) }
+    let(:leaderboard_service_l2) { instance_double(Startups::LeaderboardService, leaderboard_with_change_in_rank: leaderboard_level_two) }
+    let(:leaderboard_service_l3) { instance_double(Startups::LeaderboardService, leaderboard_with_change_in_rank: leaderboard_level_three) }
     let(:level_one) { create :level, :one }
-    let(:startup_1) { build :startup }
-    let(:startup_2) { build :startup }
-    let(:startup_3) { build :startup }
-    let(:startup_4) { build :startup }
-    let(:startup_5) { build :startup }
+    let(:level_two) { create :level, :two }
+    let(:level_three) { create :level, :three }
+    let!(:startup_1) { create :startup, level: level_one }
+    let!(:startup_2) { create :startup, level: level_one }
+    let!(:startup_3) { create :startup, level: level_one }
+    let!(:startup_4) { create :startup, level: level_two }
+    let!(:startup_5) { create :startup, level: level_two }
+    let!(:startup_6) { create :startup, level: level_two }
+    let!(:startup_7) { create :startup, level: level_three }
 
-    let(:leaderboard) do
+    let(:leaderboard_level_one) do
       [
         [startup_1, 1, 100, 1],
         [startup_2, 2, 70, 0],
-        [startup_3, 2, 70, -1],
-        [startup_4, 4, 0, 1],
-        [startup_5, 4, 0, -2]
+        [startup_3, 2, 70, -1]
       ]
     end
 
+    let(:leaderboard_level_two) do
+      [
+        [startup_4, 1, 100, 1],
+        [startup_5, 2, 70, 0],
+        [startup_6, 2, 0, -1]
+      ]
+    end
+
+    let(:leaderboard_level_three) do
+      [
+        [startup_7, 1, 0, 0]
+      ]
+    end
+
+    let!(:response) { double 'Lita Response Object', match_data: %w[leaderboard] }
+
     before do
-      allow(Startups::LeaderboardService).to receive(:new).with(level_one).and_return(leaderboard_service)
       allow(Startups::LeaderboardService).to receive(:pending?).and_return(false)
-      allow(leaderboard_service).to receive(:leaderboard_with_change_in_rank).and_return(leaderboard)
+      allow(Startups::LeaderboardService).to receive(:new).with(level_one).and_return(leaderboard_service_l1)
+      allow(Startups::LeaderboardService).to receive(:new).with(level_two).and_return(leaderboard_service_l2)
+      allow(Startups::LeaderboardService).to receive(:new).with(level_three).and_return(leaderboard_service_l3)
     end
 
-    context 'when no level number is specified' do
-      let(:response) { double 'Lita Response Object', match_data: %w[leaderboard] }
-
-      it 'requests user to supply level number' do
-        expect(response).to receive(:reply).with('Please supply the level number for which leaderboard is required! Try `leaderboard [1-4]`')
-
-        subject.leaderboard(response)
-      end
-    end
-
-    context 'when level number is specified' do
-      let(:response) { double 'Lita Response Object', match_data: %w[leaderboard 1] }
-
-      it 'replies with leaderboard for requested level' do
+    context 'when leaderboard is generated' do
+      it 'replies with leaderboard for all levels' do
         travel_to(test_time) do
           expected_response = <<~EXPECTED_RESPONSE.strip
-            *<http://localhost:3000/about/leaderboard|Leaderboard for Level 1> - April 10 to April 17:*
+            *<http://localhost:3000/about/leaderboard|Leaderboards> - April 10 to April 17:*
+
+            *Level 1:*
             *01.* :rank_up:` +1` - <http://localhost:3000/startups/#{startup_1.id}/#{startup_1.slug}|#{startup_1.product_name}>
             *02.* :rank_nochange:`---` - <http://localhost:3000/startups/#{startup_2.id}/#{startup_2.slug}|#{startup_2.product_name}>
             *02.* :rank_down:` -1` - <http://localhost:3000/startups/#{startup_3.id}/#{startup_3.slug}|#{startup_3.product_name}>
 
-            There are 2 startups in this level which were inactive during this period.
+
+            *Level 2:*
+            *01.* :rank_up:` +1` - <http://localhost:3000/startups/#{startup_4.id}/#{startup_4.slug}|#{startup_4.product_name}>
+            *02.* :rank_nochange:`---` - <http://localhost:3000/startups/#{startup_5.id}/#{startup_5.slug}|#{startup_5.product_name}>
+            There is 1 startup in this level which was inactive during this period.
+
+            All startups in *Level 3* were inactive during this period.
           EXPECTED_RESPONSE
 
           expect(response).to receive(:reply).with(expected_response)
@@ -60,41 +77,16 @@ describe Lita::Handlers::Leaderboard do
           subject.leaderboard(response)
         end
       end
+    end
 
-      context 'when there are active startups in requested level' do
-        let(:leaderboard) do
-          [
-            [startup_1, 1, 0, 1],
-            [startup_2, 1, 0, -1]
-          ]
-        end
-
-        it 'replies that there are no active startups in the level' do
-          expect(response).to receive(:reply).with('All startups at this level were inactive during this period.')
-          subject.leaderboard(response)
-        end
+    context 'when leaderboard has not been generated' do
+      before do
+        allow(Startups::LeaderboardService).to receive(:pending?).and_return(true)
       end
 
-      context 'when the leaderboard is empty' do
-        let(:leaderboard) { [] }
-
-        context 'when leaderboard has not been generated' do
-          before do
-            allow(Startups::LeaderboardService).to receive(:pending?).and_return(true)
-          end
-
-          it 'replies that the leaderboard is being generated' do
-            expect(response).to receive(:reply).with('The leaderboard for last week is being generated. Please try again after a minute.')
-            subject.leaderboard(response)
-          end
-        end
-
-        context 'when the leaderboard has been generated' do
-          it 'replies that there are no active startups in the level' do
-            expect(response).to receive(:reply).with('All startups at this level were inactive during this period.')
-            subject.leaderboard(response)
-          end
-        end
+      it 'replies that the leaderboard is being generated' do
+        expect(response).to receive(:reply).with('The leaderboard for last week is being generated. Please try again after a minute.')
+        subject.leaderboard(response)
       end
     end
   end

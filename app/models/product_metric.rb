@@ -12,6 +12,7 @@ class ProductMetric < ApplicationRecord
     'Leadership Team Members' => { automatic: false },
     'Coaches' => { automatic: false },
     'Targets' => { automatic: true },
+    'Timeline Events' => { automatic: true, delta_period: 3  },
     'Faculty Sessions' => { automatic: true, delta_period: 6 },
     'Faculty Office Hours' => { automatic: true, delta_period: 3 },
     'Library Resources' => { automatic: true },

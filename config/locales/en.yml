@@ -59,7 +59,7 @@ en:
         changelog:
           help: Get a snippet of the latest changes on the SV.CO Platform
         leaderboard:
-          help: Get the last published leaderboard for supplied level.
+          help: Get the last published leaderboard for all levels in the collective.
         targets:
           help: Get a list of targets recently assigned to you and your team.
           help_info: Get detailed information about a target from list.
@@ -87,6 +87,7 @@ en:
         requested: Requested
         paid: Paid
         failed: Failed
+        not_requested: Not Requested
 
     startup:
       registration_type:
@@ -118,6 +119,10 @@ en:
       create:
         founder_slack_notification: 'You have been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
         startup_slack_notification: 'Your startup <%{startup_url}|%{startup_product_name}> has been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
+
+    english_quiz_questions:
+      evaluate_submission:
+        explanation_footer: '> If you would like to know more about this topic, please post your questions on <#C0B1QFD7T|english> and tag our Language Coach, <@U0A6X5MEY>.'
 
   about:
     index:
@@ -172,7 +177,7 @@ en:
       product_metric:
         slack:
           heading: "Slack Messages"
-          description_html: "SV.CO's Public Slack channel allows open interaction between students and the faculty."
+          description_html: "SV.CO's <a href='/about/slack' target='_blank'>Public Slack</a> channel allows open interaction between students and the faculty."
           delta_verb: posted
         targets:
           heading: "Targets to Complete"
@@ -184,10 +189,10 @@ en:
         office_hours:
           heading: "Office Hours"
           description_html: "One-on-one office hours help keep students on track, and faculty apprised of their progress."
-          delta_verb: hours
+          delta_verb: sessions
         resources:
           heading: "Library Resources"
-          description_html: "The Startup Library is a one-stop-shop for all resources that SV.CO provides."
+          description_html: "The <a href='/library' target='_blank'>Startup Library</a> is a one-stop-shop for all resources that SV.CO provides."
           delta_verb: added
         resource_downloads:
           heading: "Resource Downloads"
@@ -195,7 +200,7 @@ en:
           delta_verb: downloads
         graduation_partners:
           heading: "Graduation Partners"
-          description_html: "Partners we have on-boarded who tap into the founder pool from SV.CO program."
+          description_html: "<a href='/talent' target='_blank'>Partners<a> we have on-boarded who tap into the founder pool from SV.CO program."
           delta_verb: on-boarded
         community_architects:
           heading: "Community Architects"
@@ -205,10 +210,14 @@ en:
           heading: "Published Stories"
           description_html: "SV.CO regularly publishes stories showcasing the incredible work done by students."
           delta_verb: posted
+        timeline_events:
+          heading: "Timeline Events Verified"
+          description_html: "We verify all timeline updates by our admitted startups to showcase the startup journey"
+          delta_verb: sumbitted
       student_journey:
         explorers:
           heading: "Explorers"
-          description_html: "All students start as explorers. This is the beginning of their journey with the Startup Village Collective."
+          description_html: "All <a href='/startups' target='_blank'>students</a> start as explorers. This is the beginning of their journey with the Startup Village Collective."
         alpha_engineers:
           heading: "Alpha Engineers"
           description_html: "Students jump right in, building an <em>Alpha</em> prototype of their product and demoing it to industry experts."
@@ -223,7 +232,7 @@ en:
           description_html: "Select <em>Heroes</em> get handpicked to the Leadership Team and become leaders who can influence the direction of SV.CO."
         coaches:
           heading: "Coaches"
-          description_html: "SV.CO members can rise to the position of <em>Coach</em>, teaching the community full time, and supporting the next generation of collective."
+          description_html: "SV.CO members who have built a product with 1M+ users or have raised ₹100Cr+ can rise to the position of <em>Coach</em>, teaching full-time and guiding the next generation of the collective."
 
   resources:
     index:

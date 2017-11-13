@@ -8,6 +8,7 @@ feature 'Founder Dashboard' do
   let!(:founder) { create :founder, startup: startup }
 
   # Levels.
+  let!(:level_0) { create :level, :zero }
   let!(:level_1) { create :level, :one }
   let!(:level_2) { create :level, :two }
   let!(:level_3) { create :level, :three }
@@ -15,6 +16,7 @@ feature 'Founder Dashboard' do
   let!(:level_5) { create :level, :five }
 
   # Target group we're interested in. Create milestone
+  let!(:target_group_0) { create :target_group, level: level_0, milestone: true }
   let!(:target_group_1) { create :target_group, level: level_1, milestone: true }
   let!(:target_group_2) { create :target_group, level: level_2, milestone: true }
   let!(:target_group_3) { create :target_group, level: level_3, milestone: true }
@@ -28,6 +30,7 @@ feature 'Founder Dashboard' do
   let!(:not_accepted_target) { create :target, target_group: target_group_4, role: Target::ROLE_TEAM }
   let!(:needs_improvement_target) { create :target, target_group: target_group_4, role: Target::ROLE_TEAM }
   let!(:target_with_prerequisites) { create :target, target_group: target_group_4, prerequisite_targets: [pending_target], role: Target::ROLE_TEAM }
+  let!(:completed_fee_payment_target) { create :target, target_group: target_group_0, days_to_complete: 60, role: Target::ROLE_TEAM, key: Target::KEY_ADMISSIONS_FEE_PAYMENT }
 
   # Create chores for different target groups.
   let!(:chore_1) { create :target, chore: true, target_group: target_group_4 }
@@ -54,6 +57,7 @@ feature 'Founder Dashboard' do
     create(:timeline_event, startup: startup, target: completed_target_3, status: TimelineEvent::STATUS_VERIFIED)
     create(:timeline_event, startup: startup, target: not_accepted_target, status: TimelineEvent::STATUS_NOT_ACCEPTED)
     create(:timeline_event, startup: startup, target: needs_improvement_target, status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT)
+    create(:timeline_event, startup: startup, target: completed_fee_payment_target, status: TimelineEvent::STATUS_VERIFIED)
 
     # Extra target groups in tested level.
     3.times do

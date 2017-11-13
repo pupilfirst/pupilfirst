@@ -111,5 +111,33 @@ describe InstamojoController do
         expect(response.status).to eq(401)
       end
     end
+
+    context 'when the payment has failed' do
+      it 'updates payment without marking it paid' do
+        data = "43.21|#{payment_id}|#{payment.instamojo_payment_request_id}|Failed"
+        digest = OpenSSL::Digest.new('sha1')
+        computed_mac = OpenSSL::HMAC.hexdigest(digest, 'TEST_SALT', data)
+
+        post :webhook, params: {
+          payment_request_id: payment.instamojo_payment_request_id,
+          payment_id: payment_id,
+          status: 'Failed',
+          fees: '43.21',
+          mac: computed_mac
+        }
+
+        payment.reload
+
+        expect(payment.instamojo_payment_id).to eq(payment_id)
+        expect(payment.instamojo_payment_request_status).to eq('Pending')
+        expect(payment.instamojo_payment_status).to eq('Failed')
+        expect(payment.fees).to eq(43.21)
+
+        # payment target should now be marked complete
+        founder = payment.founder
+        fee_payment_status = Targets::StatusService.new(fee_payment_target, founder).status
+        expect(fee_payment_status).to eq(Targets::StatusService::STATUS_PENDING)
+      end
+    end
   end
 end

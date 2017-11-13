@@ -6,12 +6,13 @@ FactoryGirl.define do
     role { Target.valid_roles.sample }
     description { Faker::Lorem.words(200).join ' ' }
     target_action_type { Target.valid_target_action_types.sample }
-    days_to_complete { 1 + rand(60) }
+    days_to_complete { session_at.present? ? nil : 1 + rand(60) }
     target_group
     timeline_event_type
-    key nil
     assigner { create :faculty }
     sequence(:sort_index)
+    key nil
+    session_at nil
 
     transient do
       week_number nil

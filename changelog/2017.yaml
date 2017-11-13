@@ -1,5 +1,47 @@
 ---
 changelog:
+- timestamp: '2017-11-06T09:27:21Z'
+  changes:
+  - timestamp: '2017-11-06T06:50:07Z'
+    title: The daily English quiz on Public Slack is now conducted by our bot, Vocalist!
+    trello: https://trello.com/c/2BWECCZi
+    private: false
+    description: The questions are sent privately to every founder (as well as our
+      team + alumni). Answers are collected via interactive buttons and responses
+      sent right away.
+    category: feature
+  - timestamp: '2017-11-06T06:35:19Z'
+    title: Added spec to ensure presence of an incomplete pre-requisite in L0 doesn't
+      cause crashes in L1+.
+    trello: https://trello.com/c/F7oRFaPf
+    private: true
+  - timestamp: '2017-11-01T06:14:29Z'
+    title: Only valid targets are now allowed, based on level, to be added as a prerequisite target
+      in admin/target edit
+    trello: https://trello.com/c/uGQwTQ5V
+    private: true
+  - timestamp: '2017-10-31T12:18:02Z'
+    title: Fixed a bug caused by invoking a `ConnectRequest` method which was removed during a previous refactor.
+    trello: https://trello.com/c/zujcWgJe
+    private: true
+    category: bugfix
+  - timestamp: '2017-10-31T11:43:10Z'
+    title: Fixed multiple bugs on the founder edit page that were introduced during
+      a design overhaul.
+    trello: https://trello.com/c/n0SsRMf6
+    private: false
+    description: This replaces the file field for course with a proper text field,
+      introduces preview image for college ID, hints for avatar and college ID, and
+      updates the spec to cover ALL fields on the form instead of just the essential
+      ones.
+    category: bugfix
+  - timestamp: '2017-10-31T08:02:13Z'
+    title: Implemented an archive button in `admin/target` show page with a warning
+      while attempting to archive a target.
+    trello: https://trello.com/c/0kSscYxF
+    private: true
+    description: "`Targets::ArchivalService` will handle the cleanup of `TargetPrerequisite`
+      table entries when a target is archived."
 - timestamp: '2017-10-30T10:47:17Z'
   changes:
   - timestamp: '2017-10-30T09:53:43Z'
@@ -523,7 +565,10 @@ changelog:
       will have description, completion instructions, video embeds, timeline submissions
       and feedbacks all in one place. This will also allow founders to share links
       to specific targets with co-founders.
-    trello: "[https://trello.com/c/l92nYs9k,https://trello.com/c/9aQwfw5v,https://trello.com/c/O9f3BoJ7]"
+    trello:
+      - https://trello.com/c/l92nYs9k
+      - https://trello.com/c/9aQwfw5v
+      - https://trello.com/c/O9f3BoJ7
     private: false
     category: feature
   - timestamp: '2017-08-07T09:27:00Z'
@@ -623,7 +668,9 @@ changelog:
     category: "'feature'"
   - timestamp: '2017-07-29T10:40:35Z'
     title: Few new columns were added in the CSV for Level 0 founders.
-    trello: "[https://trello.com/c/CbXeyQrL, https://trello.com/c/4i1Z2zqh]"
+    trello:
+      - https://trello.com/c/CbXeyQrL
+      - https://trello.com/c/4i1Z2zqh
     private: true
     description: Columns relevant to admissions team were added
   - timestamp: '2017-07-29T10:38:20Z'
@@ -1004,9 +1051,9 @@ changelog:
   - timestamp: '2017-06-12T07:29:59Z'
     title: DigitalOcean server has been taken down. See description for details.
     trello:
-    - https://trello.com/c/NVv6kvhs
-    - https://trello.com/c/COlEn8oe
-    - https://trello.com/c/S6vmGmZD
+      - https://trello.com/c/NVv6kvhs
+      - https://trello.com/c/COlEn8oe
+      - https://trello.com/c/S6vmGmZD
     private: true
     description: The Cachet application which was behind status.sv.co was removed
       for SEO reasons, which left the DigitalOcean server doing nothing but redirects.

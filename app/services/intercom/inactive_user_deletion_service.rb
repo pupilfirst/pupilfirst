@@ -12,7 +12,7 @@ module Intercom
     def initialize(mock: false)
       @mock = mock
       @intercom_client = Intercom::Client.new(token: Rails.application.secrets.intercom_access_token)
-      @sendinblue_client = Sendinblue::Mailin.new('https://api.sendinblue.com/v2.0', Rails.application.secrets.sendinblue_api_key)
+      @sendinblue_client = Sendinblue::Mailin.new('https://api.sendinblue.com/v2.0', Rails.application.secrets.send_in_blue[:v2_api_key])
     end
 
     def execute
@@ -59,7 +59,8 @@ module Intercom
         {
           email: intercom_user.email,
           listid: [list_id(SEGMENTS_FOR_BACKUP[segment])],
-          attributes: sendinblue_attributes(intercom_user)
+          attributes: sendinblue_attributes(intercom_user),
+          blacklisted: (intercom_user.unsubscribed_from_emails ? 1 : 0)
         }
       end - [nil]
     end

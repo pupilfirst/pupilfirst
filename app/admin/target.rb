@@ -1,10 +1,11 @@
 ActiveAdmin.register Target do
   include DisableIntercom
 
-  permit_params :assigner_id, :role, :title, :description, :resource_url,
-    :completion_instructions, :days_to_complete, :slideshow_embed, :video_embed, :completed_at, :completion_comment, :rubric, :link_to_complete, :key, :submittability, :archived,
-    :remote_rubric_url, :target_group_id, :target_action_type, :points_earnable, :timeline_event_type_id, :sort_index,
-    :session_at, :chore, :level_id, prerequisite_target_ids: [], tag_list: []
+  permit_params :assigner_id, :role, :title, :description, :resource_url, :completion_instructions, :days_to_complete,
+    :slideshow_embed, :video_embed, :completed_at, :completion_comment, :rubric, :link_to_complete, :key,
+    :submittability, :archived, :remote_rubric_url, :target_group_id, :target_action_type, :points_earnable,
+    :timeline_event_type_id, :sort_index, :youtube_video_id, :session_at, :chore, :level_id,
+    prerequisite_target_ids: [], tag_list: []
 
   filter :title
   filter :archived
@@ -125,18 +126,67 @@ ActiveAdmin.register Target do
         target.description.html_safe
       end
 
-      row :slideshow_embed
+      row :youtube_video_id do
+        if target.youtube_video_id.present?
+          span do
+            code target.youtube_video_id
+            span ' - '
+            a(href: "https://www.youtube.com/watch?v=#{target.youtube_video_id}", target: '_blank') do
+              'Open on YouTube'
+            end
+          end
+        else
+          em 'No YouTube Video ID available'
+        end
+      end
+
       row :video_embed
+      row :slideshow_embed
       row :resource_url
       row :completion_instructions
       row :days_to_complete
       row :completion_comment
       row :link_to_complete
       row :submittability
-      row :archived
+      row :archived do
+        div class: 'target-show__archival-status' do
+          target.archived ? 'Yes' : 'No'
+        end
+
+        div class: 'target-show__archive-button' do
+          span do
+            if !target.archived?
+              button_to(
+                'Archive Target',
+                archive_target_admin_target_path(target: { archived: true }),
+                method: :put, data: { confirm: 'Are you sure you want to archive this target? This will wipe the pre-requisite mappings of this target if any' }
+              )
+            else
+              button_to(
+                'Unarchive Target',
+                archive_target_admin_target_path(target: { archived: false }),
+                method: :put, data: { confirm: 'Are you sure you want to unarchive this target?' }
+              )
+            end
+          end
+        end
+      end
+
       row :created_at
       row :updated_at
     end
+  end
+
+  member_action :archive_target, method: :put do
+    target = Target.find params[:id]
+    params = permitted_params[:target]
+
+    service = Targets::ArchivalService.new(target)
+    params[:archived] == 'true' ? service.archive : service.unarchive
+
+    message_text = params[:archived] == 'true' ? 'archived' : 'unarchived'
+    flash[:success] = "Target #{message_text} successfully!"
+    redirect_to action: :show
   end
 
   collection_action :founders_for_target do

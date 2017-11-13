@@ -3,7 +3,13 @@ ActiveAdmin.register EnglishQuizQuestion do
   permit_params :question, :explanation, answer_options_attributes: %i[id value correct_answer _destroy]
 
   filter :explanation
-  filter :created_at
+  filter :posted_on
+
+  controller do
+    def scoped_collection
+      super.includes :correct_answer
+    end
+  end
 
   show do |english_quiz_question|
     attributes_table do
@@ -25,6 +31,7 @@ ActiveAdmin.register EnglishQuizQuestion do
       end
 
       row :explanation
+      row :posted_on
     end
   end
 
@@ -42,7 +49,7 @@ ActiveAdmin.register EnglishQuizQuestion do
     end
 
     column :explanation
-    column :created_at
+    column :posted_on
 
     actions
   end

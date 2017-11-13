@@ -1,5 +1,6 @@
 class InstamojoController < ApplicationController
   skip_before_action :verify_authenticity_token, only: :webhook
+  before_action :authenticate_webhook_request, only: :webhook
 
   # GET /instamojo/redirect?payment_request_id&payment_id
   def redirect
@@ -29,38 +30,39 @@ class InstamojoController < ApplicationController
 
   # POST /instamojo/webhook
   def webhook
-    if authentic_request?
-      payment = Payment.find_by instamojo_payment_request_id: params[:payment_request_id]
+    payment = Payment.find_by instamojo_payment_request_id: params[:payment_request_id]
 
-      payment.instamojo_payment_id = params[:payment_id]
-      payment.instamojo_payment_status = params[:status]
-      payment.fees = params[:fees]
-      payment.webhook_received_at = Time.zone.now
-      payment.instamojo_payment_request_status = 'Completed' if params[:status] == 'Credit'
+    payment.instamojo_payment_id = params[:payment_id]
+    payment.instamojo_payment_status = params[:status]
+    payment.fees = params[:fees]
+    payment.webhook_received_at = Time.zone.now
+
+    if params[:status] == Instamojo::PAYMENT_STATUS_CREDITED
+      payment.instamojo_payment_request_status = Instamojo::PAYMENT_REQUEST_STATUS_COMPLETED
       payment.paid_at = Time.zone.now if payment.paid_at.blank?
+    end
 
-      payment.save!
+    payment.save!
 
+    if payment.paid?
       if payment.startup.level_zero?
         Admissions::PostPaymentService.new(payment: payment).execute
       else
         Founders::PostPaymentService.new(payment).execute
       end
-
-      head :ok
-    else
-      head :unauthorized
     end
+
+    head :ok
   end
 
   private
 
-  def authentic_request?
+  def authenticate_webhook_request
     salt = Rails.application.secrets.instamojo_salt
     data = (params.keys - %w[controller action mac]).sort.map { |key| params[key] }.join '|'
     digest = OpenSSL::Digest.new('sha1')
     computed_mac = OpenSSL::HMAC.hexdigest(digest, salt, data)
 
-    params[:mac] == computed_mac
+    head(:unauthorized) if params[:mac] != computed_mac
   end
 end

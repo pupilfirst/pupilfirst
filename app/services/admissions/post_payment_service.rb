@@ -28,6 +28,9 @@ module Admissions
 
       # IntercomLastApplicantEventUpdateJob.perform_later(@founder, 'payment_complete') unless Rails.env.test?
       Intercom::LevelZeroStageUpdateJob.perform_later(@founder, 'Payment Completed')
+
+      # Send a notification to #memberships channel on our private Slack.
+      PrivateSlack::PaymentNotificationJob.perform_later(@founder)
     end
   end
 end

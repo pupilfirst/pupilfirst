@@ -23,6 +23,8 @@
       li.nav-item role="presentation"
         a#navbar-dashboard-link.nav-link href="#{resources_url}" Library
     li.nav-item role="presentation" itemprop="name"
+      = link_to 'Stats', stats_path, class: 'nav-link', itemprop: 'url', id: 'navbar-stats-link'
+    li.nav-item role="presentation" itemprop="name"
       = link_to 'Help Center', 'https://help.sv.co', class: 'nav-link', target: '_blank', itemprop: 'url', id: 'navbar-help-center-link'
     - if current_user
       - if current_founder

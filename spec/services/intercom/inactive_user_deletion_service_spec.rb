@@ -6,7 +6,7 @@ describe Intercom::InactiveUserDeletionService do
   describe '.new' do
     it 'creates Intercom and SendInBlue API clients' do
       expect(Intercom::Client).to receive(:new).with(token: 'test_intercom_access_token')
-      expect(Sendinblue::Mailin).to receive(:new).with('https://api.sendinblue.com/v2.0', 'test_sendinblue_api_key')
+      expect(Sendinblue::Mailin).to receive(:new).with('https://api.sendinblue.com/v2.0', 'test_sendinblue_v2_api_key')
       subject.new
     end
   end
@@ -20,18 +20,72 @@ describe Intercom::InactiveUserDeletionService do
     let(:location_data_1) { OpenStruct.new(city_name: Faker::Name.name, region_name: Faker::Name.name) }
     let(:location_data_2) { OpenStruct.new }
 
-    let(:intercom_user_1) { double 'Intercom User', email: Faker::Internet.email, name: Faker::Name.name, phone: nil, custom_attributes: {}, location_data: location_data_1 }
-    let(:intercom_user_2) { double 'Intercom User', email: Faker::Internet.email, name: Faker::Name.name, phone: nil, custom_attributes: { 'phone' => '9876543210' }, location_data: location_data_2 }
-    let(:intercom_user_3) { double 'Intercom User', email: Faker::Internet.email, name: Faker::Name.name, phone: '7896543210', custom_attributes: {}, location_data: location_data_2 }
-    let(:intercom_user_4) { double 'Intercom User', email: Faker::Internet.email, name: Faker::Name.name, phone: nil, custom_attributes: { 'college' => Faker::Lorem.word }, location_data: location_data_2 }
-    let(:intercom_user_5) { double 'Intercom User', email: Faker::Internet.email, name: Faker::Name.name, phone: nil, custom_attributes: {}, location_data: location_data_1 }
-    let(:intercom_user_6) { double 'Intercom User', email: Faker::Internet.email, name: Faker::Name.name, phone: nil, custom_attributes: {}, location_data: location_data_1 }
+    let(:intercom_user_1) do
+      double 'Intercom User',
+        email: Faker::Internet.email,
+        name: Faker::Name.name,
+        phone: nil,
+        unsubscribed_from_emails: false,
+        custom_attributes: {},
+        location_data: location_data_1
+    end
+
+    let(:intercom_user_2) do
+      double 'Intercom User',
+        email: Faker::Internet.email,
+        name: Faker::Name.name,
+        phone: nil,
+        unsubscribed_from_emails: false,
+        custom_attributes: { 'phone' => '9876543210' },
+        location_data: location_data_2
+    end
+
+    let(:intercom_user_3) do
+      double 'Intercom User',
+        email: Faker::Internet.email,
+        name: Faker::Name.name,
+        phone: '7896543210',
+        unsubscribed_from_emails: true,
+        custom_attributes: {},
+        location_data: location_data_2
+    end
+
+    let(:intercom_user_4) do
+      double 'Intercom User',
+        email: Faker::Internet.email,
+        name: Faker::Name.name,
+        phone: nil,
+        unsubscribed_from_emails: true,
+        custom_attributes: { 'college' => Faker::Lorem.word },
+        location_data: location_data_2
+    end
+
+    let(:intercom_user_5) do
+      double 'Intercom User',
+        email: Faker::Internet.email,
+        name: Faker::Name.name,
+        phone: nil,
+        unsubscribed_from_emails: false,
+        custom_attributes: {},
+        location_data: location_data_1
+    end
+
+    let(:intercom_user_6) do
+      double 'Intercom User',
+        email: Faker::Internet.email,
+        name: Faker::Name.name,
+        phone: nil,
+        unsubscribed_from_emails: false,
+        custom_attributes: {},
+        location_data: location_data_1
+    end
 
     let(:segment_1_contact) do
       {
         email: intercom_user_1.email,
         listid: [1],
-        attributes: { NAME: intercom_user_1.name, CITY: intercom_user_1.location_data.city_name, STATE: intercom_user_1.location_data.region_name }
+        attributes: { NAME: intercom_user_1.name, CITY: intercom_user_1.location_data.city_name, STATE: intercom_user_1.location_data.region_name },
+        blacklisted: 0
       }
     end
 
@@ -39,7 +93,8 @@ describe Intercom::InactiveUserDeletionService do
       {
         email: intercom_user_2.email,
         listid: [1],
-        attributes: { NAME: intercom_user_2.name, PHONE: '9876543210' }
+        attributes: { NAME: intercom_user_2.name, PHONE: '9876543210' },
+        blacklisted: 0
       }
     end
 
@@ -47,7 +102,8 @@ describe Intercom::InactiveUserDeletionService do
       {
         email: intercom_user_3.email,
         listid: [2],
-        attributes: { NAME: intercom_user_3.name, PHONE: '7896543210' }
+        attributes: { NAME: intercom_user_3.name, PHONE: '7896543210' },
+        blacklisted: 1
       }
     end
 
@@ -55,7 +111,8 @@ describe Intercom::InactiveUserDeletionService do
       {
         email: intercom_user_4.email,
         listid: [2],
-        attributes: { NAME: intercom_user_4.name, COLLEGE: intercom_user_4.custom_attributes['college'] }
+        attributes: { NAME: intercom_user_4.name, COLLEGE: intercom_user_4.custom_attributes['college'] },
+        blacklisted: 1
       }
     end
 

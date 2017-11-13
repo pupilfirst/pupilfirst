@@ -11,7 +11,8 @@ class FacultyConnectSessionRatingJob < ApplicationJob
     if !Rails.env.production? || connect_request.time_for_feedback_mail?
       send_mails(connect_request)
     else
-      connect_request.create_faculty_connect_session_rating_job
+      connect_slot = connect_request.connect_slot
+      FacultyConnectSessionRatingJob.set(wait_until: connect_slot.slot_at + 45.minutes).perform_later(@connect_request_id)
     end
   end
 

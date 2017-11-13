@@ -3,7 +3,7 @@ class SendInBlueController < ApplicationController
 
   def unsubscribe_webhook
     # A safety check to ensure we are in-fact handling unsubscriptions.
-    raise 'Unexpected event received from SendInBlue' unless params['event'] == 'unsubscribed'
+    raise "Unexpected event '#{params['event']}' received from SendInBlue" unless params['event'] == 'unsubscribed'
 
     email = params.fetch('email')
     Intercom::UnsubscribeJob.perform_later(email)

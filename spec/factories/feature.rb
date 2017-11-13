@@ -1,3 +1,6 @@
 FactoryGirl.define do
-  factory :feature
+  factory :feature do
+    key 'test_feature'
+    value { { active: false }.to_json }
+  end
 end

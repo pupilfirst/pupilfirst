@@ -1,8 +1,0 @@
----
-timestamp: '2017-11-13T10:39:20Z'
-title: The `Feature.active?` method now expects a user to be supplied instead of founder.
-trello: https://trello.com/c/Z8dbowbD
-private: true
-description: This means the choice to activate a feature or not is evaluated against all users, including admins,
-  instead of just founders.
-category: bugfix

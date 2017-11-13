@@ -38,7 +38,6 @@ setupTestimonialCarousel = ->
       }
     ]
 
-
   testimonialCarousel.on 'beforeChange', (event, slick, currentSlide, nextSlide) ->
     previousSlide = $(".testimonial-slide-item[data-slick-index='#{currentSlide}']")
     videoContent = previousSlide.find('iframe')[0].contentWindow

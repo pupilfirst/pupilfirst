@@ -1,5 +1,5 @@
 .talent-hero {
-  background-image: asset-url("talent/index/banner-top-strip.png"), asset-url("talent/index/banner-background.png");
+  background-image: asset-url("talent/index/banner-background.png");
   background-repeat: repeat-x;
   background-position: center top;
   height: auto;
@@ -9,10 +9,18 @@
   font-size: 2.25rem;
   min-height: 60px;
   margin: 0 0 40px;
-  padding-top: 70px;
+  padding-top: 40px;
 
   @include media-breakpoint-down(md) {
     font-size: 1.75rem;
+  }
+
+  .typed-cursor {
+    font-size: 2.25rem;
+    background: transparent;
+    text-shadow: 0 0 0 rgba(0,0,0, 1);
+    opacity: 1;
+    animation: typedjsBlink 0.7s infinite;
   }
 }
 
@@ -24,11 +32,6 @@
   position: relative;
   display: inline-block;
   font-weight: $font-regular;
-}
-
-.typed-cursor {
-  opacity: 1;
-  animation: typedjsBlink 0.7s infinite;
 }
 
 @keyframes typedjsBlink {
@@ -49,10 +52,8 @@
 
   .nav {
     background-color: $primary-background;
-    display: flex;
 
     .talent-tab-item {
-      flex: 1 1 100%;
       text-align: center;
 
       .talent-tab-link {
@@ -162,7 +163,7 @@
 }
 
 .company-slide {
-  margin: 45px 1px 60px 0;
+  margin: 60px 1px 60px 0;
 
   .slide-item {
     padding: 0 40px 10px;
@@ -196,7 +197,6 @@
 
 .talkto-founders {
   background-color: rgba(246, 246, 246, 0.75);
-  border-top: 1px solid $gray-border;
 
   h3 {
     font-size: 18px;
@@ -217,12 +217,16 @@
     padding: 25px 50px;
     margin: 25px auto 10px;
 
+    @include media-breakpoint-down(sm) {
+      padding: 1rem;
+    }
+
     .ways-icon {
       background-position: center center;
       background-repeat: no-repeat;
       border: 1px solid rgba(0, 137, 208, 0.4);
       box-shadow: 0 0 9px 0 rgba(0, 0, 0, 0.08);
-      width: 100px;
+      max-width: 100px;
       height: 100px;
       padding: 0;
       border-radius: 50%;
@@ -271,18 +275,10 @@
 }
 
 .talks-ways-section__box {
-  display: flex;
   text-align: left;
-  align-items: center;
-
-  @include media-breakpoint-down(sm) {
-    flex-direction: column;
-    text-align: center;
-  }
 }
 
 .testimonial-slide-item {
-  margin-top: 55px;
   outline: none;
 }
 
@@ -324,6 +320,12 @@
   @include media-breakpoint-down(sm) {
     font-size: 1rem;
   }
+}
+
+.graduates-join {
+  background-color: white;
+  border: 1px solid $gray-border;
+  border-width: 1px 0;
 }
 
 .graduate-subhead {
@@ -396,10 +398,12 @@
 }
 
 .slick-prev, .slick-next {
-  border: 1px solid #D2D2D2;
+  border: 1px solid $dark-grey-text;
   border-radius: 50%;
-  height: 24px;
-  width: 24px;
+  height: 40px;
+  width: 40px;
+  color: #333333;
+  background-color: white;
 
   &:before {
     font-family: FontAwesome;
@@ -407,19 +411,26 @@
     vertical-align: middle;
     opacity: 1;
   }
+  &:hover, &:focus {
+    background-color: white;
+  }
 }
 
 .slick-prev {
+  left: -35px;
+
   &:before {
     content: '\f104';
-    color: #D2D2D2;
+    color: $dark-grey-text;
   }
 }
 
 .slick-next {
+  right: -35px;
+
   &:before {
     content: '\f105';
-    color: #D2D2D2;
+    color: $dark-grey-text;
   }
 }
 

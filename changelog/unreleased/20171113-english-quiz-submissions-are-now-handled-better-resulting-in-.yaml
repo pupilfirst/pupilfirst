@@ -1,0 +1,10 @@
+---
+timestamp: '2017-11-13T06:57:45Z'
+title: English Quiz submissions are now handled better resulting in a faster response
+  by Vocalist.
+trello: https://trello.com/c/17qe0mgz
+private: false
+description: The previous approach of spinning up a Job to evaluate the submission
+  and responding via the response_url upon job completion was dropped. We now evaluate
+  the submission as soon as we receive it and respond right away.
+category: performance

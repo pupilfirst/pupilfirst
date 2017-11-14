@@ -214,6 +214,10 @@ en:
           heading: "Timeline Events Verified"
           description_html: "We verify all timeline updates by our admitted startups to showcase the startup journey"
           delta_verb: sumbitted
+        hours_of_learning:
+          heading: "Hours of Learning"
+          description_html: "SV.CO's private dashboard gives our students a guided path to learning the skills necessary for modern product development."
+          delta_verb: completed
       student_journey:
         explorers:
           heading: "Explorers"

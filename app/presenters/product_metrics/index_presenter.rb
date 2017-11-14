@@ -3,6 +3,7 @@ module ProductMetrics
     PROGRAM_METRICS = {
       'Targets' => :targets,
       'Timeline Events' => :timeline_events,
+      'Hours of Learning' => :hours_of_learning,
       'Slack Messages' => :slack,
       'Faculty Sessions' => :faculty_sessions,
       'Faculty Office Hours' => :office_hours,

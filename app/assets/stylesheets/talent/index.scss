@@ -435,50 +435,7 @@
 }
 
 .action-form {
-  .modal-content {
-    background: white asset-url("talent/index/banner-background.png") repeat-x 140px -120px;
-    padding: 40px;
-
-    .modal-header {
-      border: 0;
-      .close {
-        font-size: 22px;
-        margin-right: -30px;
-        margin-top: -32px;
-      }
-    }
-  }
-
-  .action-form-icon {
-    margin: 0 auto 25px;
-  }
   .talent-form-popup {
-    form {
-      margin: auto;
-      max-width: 650px;
-
-      @include media-breakpoint-down(sm) {
-        text-align: left;
-      }
-    }
-    label {
-      display: block;
-      font-weight: 400;
-      color: #646464;
-      margin-right: 20px;
-    }
-    input {
-      border-radius: 5px;
-      box-shadow: none;
-      border-color: #E0E0E0;
-    }
-    .interest-check-box {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 5px;
-      width: 20px;
-      height: 20px;
-    }
     .talent-action-checklist {
       border: 1px solid #ECECEC;
       border-radius: 5px;
@@ -505,27 +462,6 @@
           text-align: center;
           font-size: 15px;
           width: 230px;
-        }
-      }
-      .check_boxes {
-        &.control-label {
-          display: none;
-        }
-      }
-      .check-box-group {
-        display: inline-block;
-        margin: 10px;
-        color: #646464;
-      }
-      .checkbox-inline {
-        margin: 10px;
-        color: #646464;
-        margin: 10px 15px 0;
-
-        input {
-          width: 20px;
-          height: 20px;
-          margin: 1px 0 0 -25px;
         }
       }
 

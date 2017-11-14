@@ -8,6 +8,8 @@ module Lita
         response.reply random_response_to_thanks
       end
 
+      private
+
       def random_response_to_thanks
         ['You are welcome :simple_smile:', 'It was my pleasure! :blush:', 'Anytime :thumbsup:'].sample
       end

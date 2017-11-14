@@ -34,6 +34,8 @@ module Lita
         end
       end
 
+      private
+
       def command_value
         response.match_data[1]
       end

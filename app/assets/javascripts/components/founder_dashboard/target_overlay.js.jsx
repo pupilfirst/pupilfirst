@@ -85,7 +85,7 @@ class FounderDashboardTargetOverlay extends React.Component  {
                 { this.isSubmittable() && <TargetOverlaySubmitButton target={ this.props.target } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }/> }
               </div>
             </div>
-            <div className="target-overlay__status-badge__block">
+            <div className="target-overlay__status-badge-block">
               <TargetOverlayStatusBadgeBar target={ this.props.target }/>
             </div>
             <div className="target-overlay__content-wrapper clearfix">
@@ -103,7 +103,7 @@ class FounderDashboardTargetOverlay extends React.Component  {
 
                 { this.props.target.role === 'founder' &&
                 <div className="m-t-1">
-                  <h5 className="target-overlay-timeline-submission__title font-semibold">Completion Status:</h5>
+                  <h5 className="target-overaly__status-title font-semibold">Completion Status:</h5>
                   <TargetOverlayFounderStatusPanel founderDetails={ this.props.founderDetails } targetId={ this.props.target.id}/>
                 </div>
                 }

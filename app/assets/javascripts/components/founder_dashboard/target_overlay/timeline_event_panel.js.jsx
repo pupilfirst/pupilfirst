@@ -36,41 +36,41 @@ class TargetOverlayTimelineEventPanel extends React.Component {
 
   render() {
     return(
-      <div className="target-overlay-timeline-submission__container p-b-1 m-t-1">
-        <h5 className="target-overlay-timeline-submission__title font-semibold">Latest Timeline Submission:</h5>
-        <div className="target-overlay-timeline-submission__box">
-          <div className="target-overlay-timeline-submission__header p-a-1">
-            <div className="target-overlay-timeline-submission__header-date-box m-r-1">
-              <span className="target-overlay-timeline-submission__header-date text-uppercase font-semibold">{ moment(this.props.event.event_on).format('MMM') }</span>
-              <span className="target-overlay-timeline-submission__header-date--large font-semibold">{ moment(this.props.event.event_on).date() }/{ moment(this.props.event.event_on).format('YY') }</span>
+      <div className="target-overlay-timeline-event-panel__container p-b-1 m-t-1">
+        <h5 className="target-overlay-timeline-event-panel__title font-semibold">Latest Timeline Submission:</h5>
+        <div className="target-overlay-timeline-event-panel__box">
+          <div className="target-overlay-timeline-event-panel__header p-a-1">
+            <div className="target-overlay-timeline-event-panel__header-date-box m-r-1">
+              <span className="target-overlay-timeline-event-panel__header-date text-uppercase font-semibold">{ moment(this.props.event.event_on).format('MMM') }</span>
+              <span className="target-overlay-timeline-event-panel__header-date--large font-semibold">{ moment(this.props.event.event_on).date() }/{ moment(this.props.event.event_on).format('YY') }</span>
             </div>
-            <div className="target-overlay-timeline-submission__header-title">
+            <div className="target-overlay-timeline-event-panel__header-title">
               <h5 className="font-semibold brand-secondary m-b-0">
                 { this.props.event.title }
               </h5>
-              <p className="target-overlay-timeline-submission__header-title-date">
+              <p className="target-overlay-timeline-event-panel__header-title-date">
                 Day { this.props.event.days_elapsed }
               </p>
             </div>
           </div>
-          <div className="target-overlay-timeline-submission__content">
+          <div className="target-overlay-timeline-event-panel__content">
             <p className="font-light p-x-1">
               { this.props.event.description }
             </p>
             { !_.isEmpty(this.props.event.attachments) &&
-            <div className="target-overlay-timeline-submission__content-attachments p-x-1 p-t-1">
+            <div className="target-overlay-timeline-event-panel__content-attachments p-x-1 p-t-1">
               <h6 className="font-semibold">Attachments</h6>
               { this.attachmentLinks() }
             </div>
             }
             { this.props.feedback &&
-            <div className="target-overlay-timeline-submission__feedback m-t-1">
-              <div className="target-overlay-timeline-submission__commenter-box">
-                <span className="target-overlay-timeline-submission__commenter-avatar">
+            <div className="target-overlay-timeline-event-panel__feedback m-t-1">
+              <div className="target-overlay-timeline-event-panel__commenter-box">
+                <span className="target-overlay-timeline-event-panel__commenter-avatar">
                   <img className="img-fluid" src={ this.props.feedback.facultyImageUrl }/>
                 </span>
-                <h6 className="target-overlay-timeline-submission__commenter-name m-a-0">
-                  <span className="target-overlay-timeline-submission__commenter--small">Feedback by:</span>
+                <h6 className="target-overlay-timeline-event-panel__commenter-name m-a-0">
+                  <span className="target-overlay-timeline-event-panel__commenter-label">Feedback by:</span>
                   <span className="font-regular">{ this.props.feedback.facultyName }</span>
                 </h6>
               </div>

@@ -15,7 +15,7 @@ class Feature < ApplicationRecord
   class << self
     attr_writer :skip_override
 
-    # {"email_regexes": ["\S+@sv.co$"], "emails": ["someone@sv.co"]}
+    # {"email_regexes": ["\\S+@sv.co$"], "emails": ["someone@sv.co"]}
     #     OR
     # {"active": true}
     def active?(key, user = nil)

@@ -165,8 +165,8 @@ class TimelineEvent < ApplicationRecord
     status == STATUS_NOT_ACCEPTED
   end
 
-  def to_be_graded?
-    ([STATUS_VERIFIED, STATUS_NEEDS_IMPROVEMENT].include? status) && karma_point.blank?
+  def reviewed?
+    status.in?([STATUS_VERIFIED, STATUS_NEEDS_IMPROVEMENT, STATUS_NOT_ACCEPTED])
   end
 
   def verified_or_needs_improvement?

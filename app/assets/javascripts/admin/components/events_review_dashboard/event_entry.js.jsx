@@ -3,11 +3,14 @@ class EventsReviewDashboardEventEntry extends React.Component {
     return (
       <table className="review-dashboard__event-entry-table index">
         <tbody>
-          <tr>
-            <td><EventsReviewDashboardEventDetailsColumn eventData={this.props.eventData}/></td>
-            <td><EventsReviewDashboardEventDescriptionColumn eventData={this.props.eventData}/></td>
-            <td style={{width: '600px'}}><EventsReviewDashboardEventActionsColumn eventData={this.props.eventData} removeEventCB={this.props.removeEventCB}/></td>
-          </tr>
+        <tr>
+          <td><EventsReviewDashboardEventDetailsColumn eventData={this.props.eventData}/></td>
+          <td><EventsReviewDashboardEventDescriptionColumn eventData={this.props.eventData}/></td>
+          <td style={{width: '600px'}}>
+            <EventsReviewDashboardEventActionsColumn rootState={this.props.rootState}
+              setRootState={this.props.setRootState} eventData={this.props.eventData}/>
+          </td>
+        </tr>
         </tbody>
       </table>
     )
@@ -15,6 +18,7 @@ class EventsReviewDashboardEventEntry extends React.Component {
 };
 
 EventsReviewDashboardEventEntry.propTypes = {
-  eventData: React.PropTypes.object,
-  removeEventCB: React.PropTypes.func
+  rootState: React.PropTypes.object,
+  setRootState: React.PropTypes.func,
+  eventData: React.PropTypes.object
 };

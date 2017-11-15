@@ -7,6 +7,9 @@
 #= require react
 #= require react_ujs
 
+# Lodash goodness.
+#= require lodash
+
 # TODO: Remove require pnotify/pnotify.js when possible.
 # The extra require is needed to avoid issue with incorrect require-order in main file.
 #= require pnotify/pnotify.js

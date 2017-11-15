@@ -14,6 +14,7 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
     this.saveReview = this.saveReview.bind(this);
     this.radioInputId = this.radioInputId.bind(this);
     this.radioInputName = this.radioInputName.bind(this);
+    this.undoReview = this.undoReview.bind(this);
   }
 
   statusChange(event) {
@@ -37,7 +38,7 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
 
     if (!this.state.status) {
       this.setState({statusMissing: true});
-    } else if (this.state.status == 'verified' && (!this.state.grade && !this.state.points)) {
+    } else if (this.state.status === 'verified' && (!this.state.grade && !this.state.points)) {
       this.setState({gradingMissing: true});
     }
     else {
@@ -49,6 +50,8 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
       let points = this.state.points;
       let removeEvent = this.props.removeEventCB;
       let postUrl = '/admin/timeline_events/' + eventId + '/quick_review';
+      const that = this;
+
       $.post({
         url: postUrl,
         data: {status: status, grade: grade, points: points},
@@ -58,7 +61,8 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
             title: 'Event Reviewed',
             text: 'Event ' + eventId + ' marked ' + status
           });
-          removeEvent(eventId);
+
+          that.completeReview()
         },
         beforeSend: function () {
           event.target.innerHTML = 'Recording Review...'
@@ -76,12 +80,26 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
     }
   }
 
+  completeReview() {
+    const reviewDataClone = _.cloneDeep(this.props.rootState.reviewData);
+    reviewDataClone[this.props.eventId].reviewed = true;
+    this.props.setRootState({reviewData: reviewDataClone});
+  }
+
   radioInputId(name) {
     return name + '-' + this.props.eventId;
   }
 
   radioInputName(name) {
     return 'event-' + this.props.eventId + '-' + name;
+  }
+
+  alreadyReviewed() {
+    return (this.props.rootState.reviewData[this.props.eventId].reviewed === true);
+  }
+
+  undoReview() {
+    console.log("Undo the review...");
   }
 
   render() {
@@ -106,7 +124,7 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
         </label>
         <br/>
 
-        { this.state.status == 'verified' &&
+        { this.state.status === 'verified' &&
         <div>
           <br/>
           { this.props.targetId &&
@@ -140,18 +158,30 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
         <br/>
 
 
-        <a className='button cursor-pointer' onClick={ this.saveReview }>Save Review</a>
-        { this.state.statusMissing &&
-        <div style={{color: 'red'}}>Select a status first!</div>
+        {!this.alreadyReviewed() && <div>
+          <a className='button cursor-pointer' onClick={this.saveReview}>Save Review</a>
+          {this.state.statusMissing &&
+          <div style={{color: 'red'}}>Select a status first!</div>
+          }
+          {this.state.gradingMissing &&
+          <div style={{color: 'red'}}>Specify grade or point!</div>
+          }
+        </div>
         }
-        { this.state.gradingMissing &&
-        <div style={{color: 'red'}}>Specify grade or point!</div>
+
+        {this.alreadyReviewed() && <div>
+          <a className="button disabled">Save Review</a>
+          <a className='button cursor-pointer' onClick={this.undoReview}>Undo</a>
+        </div>
         }
       </div>
     )
   }
+}
+
+EventsReviewDashboardEventStatusUpdate.propTypes = {
+  rootState: React.PropTypes.object,
+  setRootState: React.PropTypes.func,
+  eventId: React.PropTypes.string,
+  targetId: React.PropTypes.string,
 };
-
-
-
-

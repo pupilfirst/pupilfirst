@@ -91,6 +91,18 @@ ActiveAdmin.register TimelineEvent do
     end
   end
 
+  member_action :undo_review, method: :post do
+    timeline_event = TimelineEvent.find(params[:id])
+
+    unless timeline_event.reviewed?
+      render json: { error: 'Event is pending review! Cannot undo.' }.to_json, status: 422
+      return
+    end
+
+    TimelineEvents::UndoVerificationService.new(timeline_event).execute
+    head :ok
+  end
+
   member_action :update_description, method: :post do
     timeline_event = TimelineEvent.find(params[:id])
     old_description = timeline_event.description

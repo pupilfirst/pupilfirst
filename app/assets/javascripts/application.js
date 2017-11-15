@@ -30,8 +30,8 @@
 //= require limit_max_int
 //= require inspectlet
 //= require video
-//= require jquery-stickit
 //= require jquery.scrollTo
+//= require jquery-stickit
 //= require ahoy
 //= require jspdf
 
@@ -40,6 +40,7 @@
 //= require perfect-scrollbar
 //= require slick-carousel/slick.js
 //= require waypoints/jquery.waypoints.js
+//= require waypoints
 //= require typedjs
 //= require jquery.counterup
 
@@ -58,6 +59,7 @@
 //= require team_members
 //= require admissions
 //= require faculty
+//= require story
 //= require resources
 //= require users
 //= require product_metrics

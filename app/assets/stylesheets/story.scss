@@ -84,7 +84,8 @@
         margin: 0;
 
         li {
-          margin-left: 60px;
+          margin-left: 3rem;
+          margin-bottom: 0.5rem;
 
           &:before {
             content: '\f0f6';
@@ -156,45 +157,6 @@
           @include media-breakpoint-down(md) {
             font-size: 32px;
           }
-        }
-      }
-      .section-bg {
-        background: asset-url("home/story/transparency-sprite-bg.png") no-repeat right top;
-
-        &#statement-expenses {
-          background-position: right 0;
-        }
-
-        &#utilisation-certificates {
-          background-position: right -160px;
-        }
-
-        &#seed-fund-utilisation {
-          background-position: right -335px;
-        }
-
-        &#crowdfunding-study {
-          background-position: right -745px;
-        }
-
-        &#dst-scheme-details-study {
-          background-position: right -955px;
-        }
-
-        &#dst-completion-report {
-          background-position: right -865px;
-        }
-
-        &#proffessor-report {
-          background-position: right -1380px;
-        }
-
-        &#recognition-certificate {
-          background-position: right -1540px;
-        }
-
-        @include media-breakpoint-down(xs) {
-          background-image: none;
         }
       }
     }

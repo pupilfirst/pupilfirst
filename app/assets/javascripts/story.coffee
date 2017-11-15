@@ -1,6 +1,5 @@
 prepPage = ->
-  $('#transparency-sidebar').stickit
-    top: 100
+  $('#transparency-sidebar').stickit(top: 20)
 
   sections = $('section')
   navElement = $('nav')

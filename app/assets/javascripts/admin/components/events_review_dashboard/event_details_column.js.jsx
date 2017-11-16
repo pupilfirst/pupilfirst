@@ -7,15 +7,16 @@ class EventsReviewDashboardEventDetailsColumn extends React.Component {
   }
 
   componentDidMount() {
-    let linkTargetInput = $(this.targetInputId());
+    const linkTargetInput = $(this.targetInputId());
     linkTargetInput.select2({placeholder: "Select Target"});
   }
 
   linkTarget() {
-    let eventId = this.props.eventData['event_id'];
-    let inputId = '#' + this.targetInputId();
-    let selectedTarget = $(inputId).val()
-    let postUrl = '/admin/timeline_events/' + eventId + '/link_target';
+    const eventId = this.props.eventData['event_id'];
+    const inputId = '#' + this.targetInputId();
+    const selectedTarget = $(inputId).val();
+    const postUrl = '/admin/timeline_events/' + eventId + '/link_target';
+
     $.post({
       url: postUrl,
       data: {target_id: selectedTarget},
@@ -34,9 +35,9 @@ class EventsReviewDashboardEventDetailsColumn extends React.Component {
   selectOptions() {
     return (<select id={this.targetInputId()}>
       { this.props.liveTargets.map(function (targetData) {
-        let id = Object.keys(targetData)[0];
-        let title = targetData[id];
-        return <option value=id>title</option>
+        const id = Object.keys(targetData)[0];
+        const title = targetData[id];
+        return <option value={id} key={id}>{title}</option>
       }, this)}
     </select>)
   }
@@ -87,7 +88,7 @@ class EventsReviewDashboardEventDetailsColumn extends React.Component {
               <select id={this.targetInputId()}>
                 { this.props.liveTargets.map(function (targetData) {
                   id = Object.keys(targetData)[0];
-                  return <option value={targetData.key}>{this.targetData.title}</option>
+                  return <option value={targetData.key}>{targetData.title}</option>
                 }, this)}
               </select> <br/><br/>
               <a className="button cursor-pointer" onClick={this.linkTarget}>Link Target</a>
@@ -136,7 +137,7 @@ class EventsReviewDashboardEventDetailsColumn extends React.Component {
       </div>
     )
   }
-};
+}
 
 EventsReviewDashboardEventDetailsColumn.propTypes = {
   eventData: React.PropTypes.object,

@@ -7,7 +7,9 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
       points: '',
       statusMissing: false,
       gradingMissing: false,
+      undoReviewInProgress: false
     };
+
     this.statusChange = this.statusChange.bind(this);
     this.gradeChange = this.gradeChange.bind(this);
     this.pointsChange = this.pointsChange.bind(this);
@@ -48,7 +50,6 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
       let status = this.state.status;
       let grade = this.state.grade;
       let points = this.state.points;
-      let removeEvent = this.props.removeEventCB;
       let postUrl = '/admin/timeline_events/' + eventId + '/quick_review';
       const that = this;
 
@@ -62,7 +63,7 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
             text: 'Event ' + eventId + ' marked ' + status
           });
 
-          that.completeReview()
+          that.updateReviewedFlag(true);
         },
         beforeSend: function () {
           event.target.innerHTML = 'Recording Review...'
@@ -80,12 +81,6 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
     }
   }
 
-  completeReview() {
-    const reviewDataClone = _.cloneDeep(this.props.rootState.reviewData);
-    reviewDataClone[this.props.eventId].reviewed = true;
-    this.props.setRootState({reviewData: reviewDataClone});
-  }
-
   radioInputId(name) {
     return name + '-' + this.props.eventId;
   }
@@ -99,7 +94,58 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
   }
 
   undoReview() {
-    console.log("Undo the review...");
+    if (this.state.undoReviewInProgress) {
+      return
+    }
+
+    console.log("Undoing the review...");
+
+    const eventId = this.props.eventId;
+    const undoUrl = '/admin/timeline_events/' + eventId + '/undo_review';
+    const that = this;
+
+    this.setState({undoReviewInProgress: true}, function () {
+      $.post({
+        url: undoUrl,
+        success: function () {
+          console.log('Event was successfully undo-d');
+
+          new PNotify({
+            title: 'Undo complete',
+            text: 'Event ' + eventId + ' marked pending.'
+          });
+
+          that.updateReviewedFlag(false);
+        },
+        error: function (response) {
+          const error = (response.responseJSON && response.responseJSON.error) ? response.responseJSON.error : 'Something went wrong at the server. Try again.';
+
+          alert(error);
+        }
+      }).always(function () {
+        that.setState({undoReviewInProgress: false});
+      });
+    });
+  }
+
+  updateReviewedFlag(flag) {
+    const reviewDataClone = _.cloneDeep(this.props.rootState.reviewData);
+    reviewDataClone[this.props.eventId].reviewed = flag;
+    this.props.setRootState({reviewData: reviewDataClone});
+  }
+
+  undoButtonClasses() {
+    const classes = "button cursor-pointer";
+
+    if (this.state.undoReviewInProgress) {
+      return classes + " disabled";
+    } else {
+      return classes;
+    }
+  }
+
+  undoButtonText() {
+    return this.state.undoReviewInProgress ? 'Undoing...' : 'Undo'
   }
 
   render() {
@@ -171,7 +217,7 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
 
         {this.alreadyReviewed() && <div>
           <a className="button disabled">Save Review</a>
-          <a className='button cursor-pointer' onClick={this.undoReview}>Undo</a>
+          <a className={ this.undoButtonClasses() } onClick={this.undoReview}>{ this.undoButtonText() }</a>
         </div>
         }
       </div>

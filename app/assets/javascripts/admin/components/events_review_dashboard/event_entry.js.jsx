@@ -6,16 +6,20 @@ class EventsReviewDashboardEventEntry extends React.Component {
           <tr>
             <td><EventsReviewDashboardEventDetailsColumn eventData={this.props.eventData} liveTargets={this.props.liveTargets}/></td>
             <td><EventsReviewDashboardEventDescriptionColumn eventData={this.props.eventData}/></td>
-            <td style={{width: '600px'}}><EventsReviewDashboardEventActionsColumn eventData={this.props.eventData} removeEventCB={this.props.removeEventCB}/></td>
+            <td style={{width: '600px'}}>
+              <EventsReviewDashboardEventActionsColumn rootState={this.props.rootState}
+                setRootState={this.props.setRootState} eventData={this.props.eventData}/>
+            </td>
           </tr>
         </tbody>
       </table>
     )
   }
-};
+}
 
 EventsReviewDashboardEventEntry.propTypes = {
+  rootState: React.PropTypes.object,
+  setRootState: React.PropTypes.func,
   eventData: React.PropTypes.object,
-  removeEventCB: React.PropTypes.func,
   liveTargets: React.PropTypes.array
 };

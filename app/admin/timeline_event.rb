@@ -91,6 +91,30 @@ ActiveAdmin.register TimelineEvent do
     end
   end
 
+  member_action :undo_review, method: :post do
+    timeline_event = TimelineEvent.find(params[:id])
+
+    unless timeline_event.reviewed?
+      if params[:redirect] == 'true'
+        flash[:success] = 'Event has not been reviewed. Undo is not possible.'
+        redirect_to admin_timeline_event_path(timeline_event)
+      else
+        render json: { error: 'Event is pending review! Cannot undo.' }.to_json, status: 422
+      end
+
+      return
+    end
+
+    TimelineEvents::UndoVerificationService.new(timeline_event).execute
+
+    if params[:redirect] == 'true'
+      flash[:success] = 'Event has been restored to pending state.'
+      redirect_to admin_timeline_event_path(timeline_event)
+    else
+      head :ok
+    end
+  end
+
   member_action :update_description, method: :post do
     timeline_event = TimelineEvent.find(params[:id])
     old_description = timeline_event.description
@@ -169,6 +193,10 @@ ActiveAdmin.register TimelineEvent do
 
   action_item :view, only: :show do
     link_to('View Timeline Entry', timeline_event.share_url, target: '_blank')
+  end
+
+  action_item :view, only: :show, if: proc { timeline_event.reviewed? } do
+    link_to('Undo Review', undo_review_admin_timeline_event_path(timeline_event, redirect: true), method: 'POST', data: { confirm: 'Are you sure? This will rollback all (possible) changes that were a result of the verification.' })
   end
 
   action_item :feedback, only: :show do

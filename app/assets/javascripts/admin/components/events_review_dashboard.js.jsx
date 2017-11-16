@@ -1,16 +1,24 @@
 class EventsReviewDashboard extends React.Component {
   constructor(props) {
     super(props);
-    this.removeEventCB = this.removeEventCB.bind(this);
-    this.changeScope = this.changeScope.bind(this);
+
     this.state = {reviewData: this.props.reviewData, selectedScope: 'all'};
+
+    this.changeScope = this.changeScope.bind(this);
+    this.setRootState = this.setRootState.bind(this);
   }
 
-  removeEventCB(eventID) {
-    console.log('Removing event with id ' + eventID);
-    let reviewData = this.state.reviewData;
-    delete(reviewData[eventID]);
-    this.setState({reviewData: reviewData});
+  setRootState(updater, callback) {
+    // newState can be object or function!
+    this.setState(updater, () => {
+      if (this.props.debug) {
+        console.log("setRootState", JSON.stringify(this.state));
+      }
+
+      if (callback) {
+        callback();
+      }
+    });
   }
 
   scopeClasses(scope) {
@@ -76,9 +84,10 @@ class EventsReviewDashboard extends React.Component {
         </div>
         <table>
           <tbody><tr><td>
-          { Object.keys(this.scopedReviewData()).map(function (key) {
+          { Object.keys(this.scopedReviewData()).map(function (eventId) {
             return (
-              <EventsReviewDashboardEventEntry eventData={ this.state.reviewData[key] } key={ key } removeEventCB={this.removeEventCB} liveTargets={this.props.liveTargets}/>
+              <EventsReviewDashboardEventEntry rootState={ this.state } setRootState={this.setRootState}
+                eventData={ this.state.reviewData[eventId] } key={ eventId } liveTargets={this.props.liveTargets}/>
               )}, this
           )}
           </td></tr></tbody>
@@ -86,9 +95,10 @@ class EventsReviewDashboard extends React.Component {
       </div>
     )
   }
-};
+}
 
 EventsReviewDashboard.propTypes = {
   reviewData: React.PropTypes.object,
-  liveTargets: React.PropTypes.array
+  liveTargets: React.PropTypes.array,
+  debug: React.PropTypes.bool
 };

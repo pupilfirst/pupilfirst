@@ -5,6 +5,8 @@ FactoryGirl.define do
     description { Faker::Lorem.words(10).join ' ' }
     event_on { 1.month.from_now }
     timeline_event_type
+    status TimelineEvent::STATUS_PENDING
+    status_updated_at { Time.zone.now }
 
     factory :timeline_event_with_image do
       image { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-thumbnail.png')) }
@@ -21,7 +23,6 @@ FactoryGirl.define do
 
     trait :verified do
       status TimelineEvent::STATUS_VERIFIED
-      status_updated_at { Time.now }
     end
   end
 end

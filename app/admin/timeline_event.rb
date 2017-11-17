@@ -231,12 +231,16 @@ ActiveAdmin.register TimelineEvent do
       # Assign as improved_timeline_event, if applicable
       TimelineEvents::MarkAsImprovedTargetService.new(timeline_event).execute
 
-      flash[:success] = 'Target has been linked.'
-    else
+      flash[:success] = 'Target has been linked.' if params[:ajax] != 'true'
+    elsif params[:ajax] != 'true'
       flash[:error] = 'A target must be picked for linking.'
     end
 
-    redirect_to action: :show
+    if params[:ajax] == 'true'
+      head :ok
+    else
+      redirect_to action: :show
+    end
   end
 
   collection_action :founders_for_startup do

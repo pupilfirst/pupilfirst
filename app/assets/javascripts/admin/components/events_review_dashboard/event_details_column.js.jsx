@@ -35,6 +35,30 @@ class EventsReviewDashboardEventDetailsColumn extends React.Component {
   componentDidMount() {
     const linkTargetInput = $(this.targetInputId());
     linkTargetInput.select2({placeholder: "Select Target"});
+    this.activateTargetSelect2()
+  }
+
+  activateTargetSelect2() {
+    const targetSelect = $('#' + this.targetInputId());
+
+    targetSelect.select2({
+      width: '100%',
+      minimumInputLength: 3,
+      ajax: {
+        url: '/targets/select2_search',
+        dataType: 'json',
+        delay: 500,
+        data: function (params) {
+          return {
+            q: params.term
+          }
+        },
+        processResults: function (data) {
+          return {results: data}
+        },
+        cache: true
+      }
+    });
   }
 
   linkTarget() {
@@ -53,6 +77,7 @@ class EventsReviewDashboardEventDetailsColumn extends React.Component {
           console.log('Linked target to timeline event.');
 
           new PNotify({
+            type: 'success',
             title: 'Linking complete',
             text: 'Event ' + eventId + ' has been linked to target with ID ' + selectedTargetId + '.'
           });
@@ -77,16 +102,6 @@ class EventsReviewDashboardEventDetailsColumn extends React.Component {
     eventData.target_title = targetName;
 
     this.props.setRootState({reviewData: reviewDataClone});
-  }
-
-  selectOptions() {
-    return (<select id={this.targetInputId()}>
-      {this.props.liveTargets.map(function (targetData) {
-        const id = Object.keys(targetData)[0];
-        const title = targetData[id];
-        return <option value={id} key={id}>{title}</option>
-      }, this)}
-    </select>)
   }
 
   targetInputId() {
@@ -150,9 +165,11 @@ class EventsReviewDashboardEventDetailsColumn extends React.Component {
             {!this.isTargetLinked() && <em>None</em>}
           </div>
 
-          <strong>{this.linkTargetLabel()}</strong><br/>
-          {this.selectOptions()}
-          <br/>
+          <div>
+            <strong>{this.linkTargetLabel()}</strong><br/>
+            <select id={this.targetInputId()}/>
+          </div>
+
           <a className={this.linkTargetButtonClasses()} onClick={this.linkTarget}>{this.linkTargetButtonText()}</a>
         </div>
         <br/>
@@ -202,6 +219,5 @@ class EventsReviewDashboardEventDetailsColumn extends React.Component {
 EventsReviewDashboardEventDetailsColumn.propTypes = {
   rootState: React.PropTypes.object,
   setRootState: React.PropTypes.func,
-  eventId: React.PropTypes.number,
-  liveTargets: React.PropTypes.array
+  eventId: React.PropTypes.number
 };

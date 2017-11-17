@@ -87,8 +87,7 @@ class EventsReviewDashboard extends React.Component {
           { Object.keys(this.scopedReviewData()).map(function (eventId) {
             return (
               <EventsReviewDashboardEventEntry rootState={ this.state } setRootState={this.setRootState}
-                eventData={ this.state.reviewData[eventId] } key={ eventId } liveTargets={this.props.liveTargets}
-                eventId={parseInt(eventId)}/>
+                eventData={ this.state.reviewData[eventId] } key={ eventId } eventId={parseInt(eventId)}/>
               )}, this
           )}
           </td></tr></tbody>
@@ -100,6 +99,5 @@ class EventsReviewDashboard extends React.Component {
 
 EventsReviewDashboard.propTypes = {
   reviewData: React.PropTypes.object,
-  liveTargets: React.PropTypes.array,
   debug: React.PropTypes.bool
 };

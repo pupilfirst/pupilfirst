@@ -183,7 +183,6 @@ ActiveAdmin.register TimelineEvent do
   collection_action :review_timeline_events do
     if can? :quick_review, TimelineEvent
       @review_data = TimelineEvents::ReviewDataService.new.data
-      @live_targets = Target.live.map { |target| { target.id => target.title } }
       render 'review_timeline_events'
     else
       flash[:error] = 'Not authorized to access page.'

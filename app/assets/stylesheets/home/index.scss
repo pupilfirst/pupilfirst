@@ -4,6 +4,13 @@
     top: 0;
     width: 100%;
     z-index: 99;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%,rgba(0,0,0,0) 100%);
+    box-shadow: none;
+    transition: linear .3s;
+
+    &.toggle-bg {
+      background-color: #000000;
+    }
 
     .btn-signin {
       border: 1px solid white;
@@ -16,13 +23,10 @@
     }
 
     .home-navbar {
-      background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%,rgba(0,0,0,0) 100%);
-      box-shadow: none;
       height: auto;
-      padding: 20px 0;
-      transition: linear .6s;
+      padding: 1.25rem 1rem;
 
-      .nav-link {
+      .nav-item__link {
         color: white;
       }
 
@@ -30,7 +34,7 @@
         .nav-item {
           border-top: 0;
         }
-        .nav-link {
+        .nav-item__link {
           font-size: 1.125rem;
 
           &:hover, &:focus {
@@ -45,12 +49,10 @@
           }
         }
       }
-      &.toggle-bg {
-        background-color: $light-primary;
-      }
       .navbar-toggler {
+        position: relative;
         .icon-bar {
-          background-color: white;
+          background-color: white !important;
         }
       }
     }
@@ -67,7 +69,7 @@
   background-size:cover;
 
   @include media-breakpoint-down (sm) {
-    height: 360px;
+    height: 420px;
   }
 }
 
@@ -87,12 +89,12 @@
   height: 640px;
 
   @include media-breakpoint-down (sm) {
-    height: 360px;
+    height: 420px;
   }
 }
 
 .home-hero__message-title {
-  margin-top: 6rem;
+  margin-top: 10rem;
 }
 
 .home-hero__message-title-head {
@@ -122,12 +124,7 @@
 }
 
 .home-partners__box {
-  display: flex;
-  align-items: center;
-
-  @include media-breakpoint-down (md) {
-    display: block;
-  }
+  max-width: 55rem;
 }
 
 .home-partners__logo--facebook {
@@ -147,7 +144,7 @@
 }
 
 .home-partners__logo--paytm {
-  height: 35px;
+  height: 25px;
 }
 
 .home-partners__logo--ms-ventures {
@@ -297,6 +294,10 @@
   z-index: 2;
   bottom: 0;
   width: 100%;
+
+  @include media-breakpoint-down (md) {
+    padding: 0 1rem 1rem;
+  }
 }
 
 .program-feature__card-title-text {
@@ -332,7 +333,7 @@
   width: 66rem;
 
   @include media-breakpoint-down(lg) {
-    width: auto;
+    width: 100%;
   }
 
   .slick-prev, .slick-next {
@@ -384,6 +385,7 @@
   margin: auto;
   padding: 10px;
   text-align: center;
+  outline: none;
 }
 
 .silicon-valley-itinerary__image {
@@ -414,29 +416,24 @@
   }
 }
 .home-testimonial__image-container {
-  @include media-breakpoint-between (xs, sm) {
-    border-radius: 50%;
-    width: 300px;
-    height: 300px;
+  @include media-breakpoint-down(sm) {
+    text-align: center;
+  }
+}
+.home-testimonial__image {
+  @include media-breakpoint-down(sm) {
+    @include border-radius(50%);
+    width: 200px;
+    height: 200px;
     overflow: hidden;
     margin: auto;
     position: relative;
     top: 1rem;
   }
-  @include media-breakpoint-down (xs) {
-    width: 100%;
-    height: auto;
-    border-radius: 0;
-    top: 0;
-  }
 }
-
 
 .home-testimonial__text {
   height: 310px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   padding: 30px 50px;
   font-size: 1rem;
   line-height: 1.6;

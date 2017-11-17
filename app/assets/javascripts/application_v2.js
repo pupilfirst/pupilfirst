@@ -58,8 +58,6 @@
 // Controller-specific
 // require startups
 // require timeline_events
-// require transparency
-//= require v2/home
 //= require v2/founders
 //= require v2/six_ways
 //= require v2/intercom_settings

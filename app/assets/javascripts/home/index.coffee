@@ -21,11 +21,7 @@ stopVideosOnModalClose = ->
     modalIframe = $(event.target).find('iframe')
     modalIframe.attr 'src', modalIframe.attr('src')
 
-scrollmeDownIcon = ->
-  $('.icon-scroll').click (e) ->
-    e.preventDefault()
-    $('html, body').animate
-      scrollTop: $($.attr(this, 'href')).offset().top, 500
 
-$(document).on 'page:change', scrollmeDownIcon
-$(document).on 'page:change', setupSiliconValleyCarousel
+$(document).on 'turbolinks:load', ->
+  if $('#home__index')
+    setupSiliconValleyCarousel()

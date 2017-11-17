@@ -10,10 +10,10 @@ html lang='en'
     title SV.CO: India&rsquo;s No 1 Digital Incubator For Students
 
     / Styles
-    = stylesheet_link_tag 'application_v2', media: 'all', 'data-turbolinks-track' => 'reload'
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => 'reload'
 
     / Scripts
-    = javascript_include_tag 'application_v2', 'data-turbolinks-track' => 'reload'
+    = javascript_include_tag 'application', 'data-turbolinks-track' => 'reload'
 
     = csrf_meta_tags
     = yield :head
@@ -21,7 +21,11 @@ html lang='en'
     link rel="icon" href=image_url('layouts/shared/favicon.png')
 
   body
-    section#header.home-header
+    - if Rails.env.production?
+      noscript
+        iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N2LS39W" height="0" width="0" style="display:none;visibility:hidden"
+
+    section#header.header.home-header
       - if @pretender
         == render 'layouts/pretender'
       - elsif @sitewide_notice
@@ -30,25 +34,23 @@ html lang='en'
             p == yield :sitewide_notice
       == render 'layouts/pending_payment' if show_pending_payment_notice
 
-      nav.navbar.home-navbar role="navigation"
-        .container
-          .navbar-header
-            - unless @hide_nav_links
-              button.navbar-toggler.collapsed.hidden-md-up type="button" data-toggle="collapse" data-target="#sv-navbar"
-                span.sr-only Toggle navigation
-                span.icon-bar.top-bar
-                span.icon-bar.middle-bar
-                span.icon-bar.bottom-bar
-
-            a#logo.navbar-brand href="#{dashboard_or_root_url}"
-              img.site-logo src="#{image_url 'shared/logo-white.svg'}" alt='Logo of SV.CO'
+      .container
+        nav.navbar.navbar-expand-lg.navbar-light.navbar-container.home-navbar
+          a#logo.navbar-brand href="#{dashboard_or_root_url}"
+            img.site-logo src="#{image_url 'shared/logo-white.svg'}" alt='Logo of SV.CO'
 
           - unless @hide_nav_links
-            = render 'layouts/nav_links_v2'
+            button.navbar-toggler.collapsed type="button" data-toggle="collapse" data-target="#sv-navbar"
+              span.sr-only Toggle navigation
+              span.icon-bar.top-bar
+              span.icon-bar.middle-bar
+              span.icon-bar.bottom-bar
 
-      == yield :header
+          - unless @hide_nav_links
+            = render 'layouts/nav_links'
 
-    == render 'layouts/platform_feedback_v2' if current_founder
+    == yield :header
+    == render 'layouts/platform_feedback' if current_founder
 
     - if @skip_container
       == yield

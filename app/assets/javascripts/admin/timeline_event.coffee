@@ -12,8 +12,10 @@ loadFoundersForStartup = ->
 
 setupTargetSelect2 = ->
   targetSelect = $('.js-admin-timeline-events__link-target-select')
+
   if targetSelect.length
     targetSelect.select2
+      width: '50%'
       minimumInputLength: 3,
       ajax:
         url: '/targets/select2_search',

@@ -133,8 +133,6 @@ feature 'Timeline Builder' do
       expect(page).to have_content('Please add a summary describing the event.')
 
       find('.timeline-builder__textarea').set('description text')
-      find('.timeline-builder__upload-section-tab.date-of-event').click
-      find('.timeline-builder__attachment-button').click
 
       # Timeline event type missing.
       click_button('Submit')

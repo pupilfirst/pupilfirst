@@ -1,6 +1,6 @@
 class SlackConnectPolicy < ApplicationPolicy
   def connect?
-    user&.founder&.subscription_active? && user.founder.slack_access_token.blank?
+    user&.founder&.subscription_active?
   end
 
   def callback?

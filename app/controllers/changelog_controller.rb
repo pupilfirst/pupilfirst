@@ -1,6 +1,4 @@
 class ChangelogController < ApplicationController
-  layout 'application_v2'
-
   # GET /changelog
   def index
     @skip_container = true

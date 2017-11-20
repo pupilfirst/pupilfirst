@@ -406,6 +406,12 @@ class Startup < ApplicationRecord
     label
   end
 
+  def name_with_team_lead
+    label = product_name
+    label += " (#{team_lead.name})" if team_lead.present?
+    label
+  end
+
   def restartable_levels
     return Level.none if level.number < 2
     Level.where(number: 1..(level.number - 1))

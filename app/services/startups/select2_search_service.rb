@@ -13,11 +13,11 @@ module Startups
       # Limit the number of object allocations.
       selected_startups = startups.limit(19)
 
-      select2_results = selected_startups.select(:id, :product_name).each_with_object([]) do |search_result, results|
+      select2_results = selected_startups.select(:id, :product_name, :team_lead_id).each_with_object([]) do |search_result, results|
         results <<
           {
             id: search_result.id,
-            text: search_result.product_name
+            text: search_result.name_with_team_lead
           }
       end
       select2_results

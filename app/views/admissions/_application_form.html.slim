@@ -1,4 +1,6 @@
 / Load the Recaptcha API manually, because we're programmatically invoking the Invisible Recaptcha library.
+- presenter = Admissions::ApplicationFormPresenter.new(self)
+
 - unless Rails.env.test?
   script src='https://www.google.com/recaptcha/api.js' async defer
 
@@ -23,13 +25,11 @@
 
       = f.phone_field :phone, placeholder: 'Mobile phone number', maxlength: 17, pattern: MobileNumberValidator::FORM_EXPRESSION, required: true
 
-      - college_collection = f.object.model.college.present? ? [f.object.model.college] : [OpenStruct.new(name: "My college isn't listed", id: 'other')]
-
-      = f.select :college_id, options_from_collection_for_select(college_collection, :id, :name),
+      = f.select :college_id, options_from_collection_for_select(presenter.college_collection(f), :id, :name, presenter.selected_college(f)&.id),
         { label_class: 'col-form-label', include_blank: 'Please pick your college' }, { 'data-search-url' => colleges_url, required: true }
 
       .d-none
-        = f.text_field :college_text, hide_label: true, placeholder: 'Name of your college', required: true, disabled: true
+        = f.text_field :college_text, label: 'College', placeholder: 'Name of your college', required: true, disabled: true
 
       = f.select :reference, Founder.valid_references, { include_blank: 'How did you hear about us?', label_class: 'col-form-label' }, { required: false }
 

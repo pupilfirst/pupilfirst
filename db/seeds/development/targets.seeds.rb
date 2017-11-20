@@ -43,13 +43,13 @@ after 'development:target_groups', 'development:timeline_event_types', 'developm
       target_group.targets.create!(days_to_complete: [7, 10, 14].sample, title: Faker::Lorem.sentence, role: Target.valid_roles.sample, timeline_event_type: TimelineEventType.all.sample, chore: true, description: paragraph, assigner: faculty_2, target_action_type: Target::TYPE_TODO)
 
       # Session.
-      target_group.targets.create!(days_to_complete: [7, 10, 14].sample, title: Faker::Lorem.sentence, role: Target.valid_roles.sample, timeline_event_type: TimelineEventType.all.sample, session_at: 1.month.ago, level: level, description: paragraph, assigner: faculty_2, video_embed: video_embed, target_action_type: Target::TYPE_ATTEND)
+      target_group.targets.create!(title: Faker::Lorem.sentence, role: Target.valid_roles.sample, timeline_event_type: TimelineEventType.all.sample, session_at: 1.month.ago, level: level, description: paragraph, assigner: faculty_2, video_embed: video_embed, target_action_type: Target::TYPE_ATTEND)
     end
 
     # One upcoming session per level.
-    Target.create!(days_to_complete: [7, 10, 14].sample, title: Faker::Lorem.sentence, role: Target.valid_roles.sample, timeline_event_type: TimelineEventType.all.sample, session_at: (rand(4) + 1).weeks.from_now, level: level, description: paragraph, assigner: faculty_1, video_embed: video_embed, target_action_type: Target::TYPE_ATTEND)
+    Target.create!(title: Faker::Lorem.sentence, role: Target.valid_roles.sample, timeline_event_type: TimelineEventType.all.sample, session_at: (rand(4) + 1).weeks.from_now, level: level, description: paragraph, assigner: faculty_1, video_embed: video_embed, target_action_type: Target::TYPE_ATTEND)
 
     # One past session per level.
-    Target.create!(days_to_complete: [7, 10, 14].sample, title: Faker::Lorem.sentence, role: Target.valid_roles.sample, timeline_event_type: TimelineEventType.all.sample, session_at: (rand(4) + 1).weeks.ago, level: level, description: paragraph, assigner: faculty_2, video_embed: video_embed, target_action_type: Target::TYPE_ATTEND)
+    Target.create!(title: Faker::Lorem.sentence, role: Target.valid_roles.sample, timeline_event_type: TimelineEventType.all.sample, session_at: (rand(4) + 1).weeks.ago, level: level, description: paragraph, assigner: faculty_2, video_embed: video_embed, target_action_type: Target::TYPE_ATTEND)
   end
 end

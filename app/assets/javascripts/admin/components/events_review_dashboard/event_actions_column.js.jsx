@@ -5,7 +5,7 @@ class EventsReviewDashboardEventActionsColumn extends React.Component {
       <div>
         <div className='margin-bottom-10'>
           <i className="fa fa-eye"/>&nbsp;
-          <a data-method="post" href={ this.props.eventData['impersonate_url'] } target='_blank'>
+          <a data-method="post" href={this.props.eventData['impersonate_url']} target='_blank'>
             Preview as Founder
           </a>
         </div>
@@ -17,17 +17,18 @@ class EventsReviewDashboardEventActionsColumn extends React.Component {
           </a>
         </div>
 
-        <EventsReviewDashboardEventFeedback eventId={this.props.eventData['event_id']} levelZero={this.props.eventData['level_scope'] == 'levelZero'}/>
+        <EventsReviewDashboardEventFeedback eventId={this.props.eventData['event_id']}
+          levelZero={this.props.eventData['level_scope'] === 'levelZero'}/>
 
-        <EventsReviewDashboardEventStatusUpdate eventId={this.props.eventData['event_id']}
-                                                targetId={this.props.eventData['target_id']}
-                                                removeEventCB={this.props.removeEventCB}/>
+        <EventsReviewDashboardEventStatusUpdate rootState={this.props.rootState} setRootState={this.props.setRootState}
+          eventId={'' + this.props.eventData['event_id']} targetId={'' + this.props.eventData['target_id']}/>
       </div>
     )
   }
 }
 
 EventsReviewDashboardEventActionsColumn.propTypes = {
-  eventData: React.PropTypes.object,
-  removeEventCB: React.PropTypes.func
+  rootState: React.PropTypes.object,
+  setRootState: React.PropTypes.func,
+  eventData: React.PropTypes.object
 };

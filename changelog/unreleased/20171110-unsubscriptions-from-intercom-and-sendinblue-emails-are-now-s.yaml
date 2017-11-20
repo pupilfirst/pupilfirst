@@ -1,8 +1,0 @@
----
-timestamp: '2017-11-10T10:48:48Z'
-title: Unsubscriptions from Intercom and SendInBlue emails are now synced.
-trello: https://trello.com/c/x6tYdvEB
-private: true
-description: Both SendInBlue and Intercom were configured to trigger webhooks when
-  the user unsubscribes. These are then propogated to the other service via it's API.
-category: feature

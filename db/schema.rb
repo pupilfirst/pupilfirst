@@ -454,6 +454,27 @@ ActiveRecord::Schema.define(version: 20171109093505) do
     t.index ["founder_id"], name: "index_public_slack_messages_on_founder_id"
   end
 
+  create_table "quiz_attempts", id: :serial, force: :cascade do |t|
+    t.integer "course_module_id"
+    t.integer "mooc_student_id"
+    t.datetime "taken_at"
+    t.float "score"
+    t.integer "total_questions"
+    t.integer "attempted_questions"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_module_id"], name: "index_quiz_attempts_on_course_module_id"
+    t.index ["mooc_student_id"], name: "index_quiz_attempts_on_mooc_student_id"
+  end
+
+  create_table "quiz_questions", id: :serial, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "course_module_id"
+    t.text "question"
+    t.index ["course_module_id"], name: "index_quiz_questions_on_course_module_id"
+  end
+
   create_table "resources", id: :serial, force: :cascade do |t|
     t.string "file"
     t.string "thumbnail"

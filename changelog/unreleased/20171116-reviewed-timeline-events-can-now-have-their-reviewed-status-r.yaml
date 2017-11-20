@@ -1,0 +1,9 @@
+---
+timestamp: '2017-11-16T09:44:57Z'
+title: Reviewed timeline events can now have their reviewed status rolled back via
+  the admin interface.
+trello: https://trello.com/c/55j4zRhT
+private: true
+description: This introduces `TimelineEvents::UndoVerificationService` which handles
+  the reversal of all changes introduced by verification of a timeline event.
+category: feature

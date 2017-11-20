@@ -81,7 +81,7 @@ class ApplicationController < ActionController::Base
   end
 
   def feature_active?(feature)
-    Feature.active?(feature, current_founder)
+    Feature.active?(feature, current_user)
   end
 
   helper_method :feature_active?

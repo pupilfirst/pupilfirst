@@ -6,8 +6,7 @@ module ProductMetrics
     end
 
     def key
-      return ProductMetrics::IndexPresenter::PROGRAM_METRICS[@metric] if ProductMetrics::IndexPresenter::PROGRAM_METRICS.key?(@metric)
-      raise "Cannot resolve icon for metric '#{@metric}'"
+      ProductMetrics::IndexPresenter::PROGRAM_METRICS.fetch(@metric)
     end
 
     def heading

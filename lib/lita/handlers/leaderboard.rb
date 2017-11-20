@@ -17,6 +17,8 @@ module Lita
         end
       end
 
+      private
+
       # construct the consolidated leaderboard response for all levels
       def leaderboard_response
         if Startups::LeaderboardService.pending?
@@ -39,7 +41,7 @@ module Lita
         (response_title + leaderboard_response).strip
       end
 
-      def add_leaderboard_rows(leaderboard)
+      def join_leaderboard_rows(leaderboard)
         inactive_startups = 0
         response = ''
         leaderboard.each do |startup, rank, points, change_in_rank|
@@ -101,7 +103,7 @@ module Lita
 
       def leaderboard_message_for_active_level(leaderboard)
         # Add rows to the leaderboard.
-        inactive_startups, response = add_leaderboard_rows(leaderboard)
+        inactive_startups, response = join_leaderboard_rows(leaderboard)
 
         # Add number of inactive startups, if any.
         if inactive_startups.positive?

@@ -1,6 +1,6 @@
 class TargetOverlayStatusBadgeBar extends React.Component {
   containerClasses() {
-    let classes = "target-overlay__status-badge-container tag tag-pill";
+    let classes = "target-overlay-status-badge-bar__badge-container tag tag-pill";
     let statusClass = this.props.target.status.replace('_', '-');
     classes += (' ' + statusClass);
     return classes;
@@ -47,8 +47,8 @@ class TargetOverlayStatusBadgeBar extends React.Component {
     let grade = ['good', 'great', 'wow'].indexOf(this.props.target.grade) + 1;
 
     if (this.props.target.status != 'complete' || grade === 0) {
-      return <div className="target-overlay__status-badge-content">
-        <span className="target-overlay__status-badge-icon">
+      return <div className="target-overlay-status-badge-bar__badge-content">
+        <span className="target-overlay-status-badge-bar__badge-icon">
           <i className={ this.statusIconClasses() }/>
         </span>
 
@@ -69,7 +69,7 @@ class TargetOverlayStatusBadgeBar extends React.Component {
 
       let gradeString = this.props.target.grade.charAt(0).toUpperCase() + this.props.target.grade.slice(1);
 
-      return <div className="target-overlay__status-badge-content">
+      return <div className="target-overlay-status-badge-bar__badge-content">
         { filledStars }
         { emptyStars }
 
@@ -84,8 +84,8 @@ class TargetOverlayStatusBadgeBar extends React.Component {
     return (
       <div className={ this.containerClasses() }>
         { this.statusContents() }
-        <div className="target-overlay__status-info-block">
-          <p className="target-overlay__status-hint font-regular">{ this.statusHintString() }</p>
+        <div className="target-overlay-status-badge-bar__info-block">
+          <p className="target-overlay-status-badge-bar__hint font-regular">{ this.statusHintString() }</p>
         </div>
       </div>
     );

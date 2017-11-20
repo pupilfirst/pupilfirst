@@ -1,4 +1,4 @@
-# Feature flags! Set any key and check for it with Feature.active?(key, [current_founder])
+# Feature flags! Set any key and check for it with Feature.active?(key, current_user)
 # See documentation of method to see how to store the JSON value.
 class Feature < ApplicationRecord
   validates :key, presence: true
@@ -15,10 +15,10 @@ class Feature < ApplicationRecord
   class << self
     attr_writer :skip_override
 
-    # {"email_regexes": ["\S*(@mobme.in|sv.co)$"], "emails": ["someone@sv.co"]}
+    # {"email_regexes": ["\\S+@sv.co$"], "emails": ["someone@sv.co"]}
     #     OR
     # {"active": true}
-    def active?(key, founder = nil)
+    def active?(key, user = nil)
       return true if overridden?
 
       feature = find_by(key: key)
@@ -32,7 +32,7 @@ class Feature < ApplicationRecord
       end
 
       return true if parsed_value[:active].present?
-      return true if feature.active_for_founder?(founder, parsed_value)
+      return true if feature.active_for_user?(user, parsed_value)
 
       false
     end
@@ -43,15 +43,15 @@ class Feature < ApplicationRecord
     end
   end
 
-  def active_for_founder?(founder, parsed_value)
-    return false unless founder
+  def active_for_user?(user, parsed_value)
+    return false unless user
 
     if parsed_value.include? :email_regexes
       parsed_value[:email_regexes].each do |email_regex|
-        return true if Regexp.new(email_regex).match(founder.email)
+        return true if Regexp.new(email_regex).match?(user.email)
       end
     end
 
-    true if parsed_value.include?(:emails) && parsed_value[:emails].include?(founder.email)
+    true if parsed_value.include?(:emails) && parsed_value[:emails].include?(user.email)
   end
 end

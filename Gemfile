@@ -178,6 +178,6 @@ end
 group :production do
   gem 'rails_12factor', '~> 0.0' # Makes running your Rails app easier. Based on the ideas behind 12factor.net.
   gem 'dalli', '~> 2.7' # High performance memcached client for Ruby. https://github.com/petergoldstein/dalli
-  gem 'scout_apm', '~> 2.3' # detailed Rails application performance analysis.
+  gem 'scout_apm', '~> 3.0.x' # detailed Rails application performance analysis.
   gem 'heroku-deflater', '~> 0.6' # Enable gzip compression on heroku, but don't compress images.
 end

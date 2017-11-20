@@ -1,5 +1,76 @@
 ---
 changelog:
+- timestamp: '2017-11-13T11:32:41Z'
+  changes:
+  - timestamp: '2017-11-13T10:39:20Z'
+    title: The `Feature.active?` method now expects a user to be supplied instead
+      of founder.
+    trello: https://trello.com/c/Z8dbowbD
+    private: true
+    description: This means the choice to activate a feature or not is evaluated against
+      all users, including admins, instead of just founders.
+    category: bugfix
+  - timestamp: '2017-11-13T06:57:45Z'
+    title: English Quiz submissions are now handled better resulting in a faster response
+      by Vocalist.
+    trello: https://trello.com/c/17qe0mgz
+    private: false
+    description: The previous approach of spinning up a Job to evaluate the submission
+      and responding via the response_url upon job completion was dropped. We now
+      evaluate the submission as soon as we receive it and respond right away.
+    category: performance
+  - timestamp: '2017-11-13T05:44:18Z'
+    title: 'A notification is now sent to Private Slack''s #memberships channel when
+      a team pays and joins the collective.'
+    trello: https://trello.com/c/adX2r0if
+    private: true
+    category: feature
+  - timestamp: '2017-11-10T10:48:48Z'
+    title: Unsubscriptions from Intercom and SendInBlue emails are now synced.
+    trello: https://trello.com/c/x6tYdvEB
+    private: true
+    description: Both SendInBlue and Intercom were configured to trigger webhooks
+      when the user unsubscribes. These are then propogated to the other service via
+      it's API.
+    category: feature
+  - timestamp: '2017-11-10T06:48:00Z'
+    title: Embedded YouTube videos in targets are now presented with a uniform set
+      of features which includes video info, links to YouTube, player controls, and
+      they don't display YouTube's suggestions for related videos.
+    trello: https://trello.com/c/Wxl42API
+    private: false
+    description: Added `youtube_video_id` to `Target` to generate embed code in uniform
+      format. This also adds a one-off service to extract YouTube video IDs from existing
+      embeds and then clears those embeds.
+    category: ui
+  - timestamp: '2017-11-09T10:34:47Z'
+    title: Modified vocalist response to leaderboard to have a single message containing
+      leaderboards for all levels
+    trello: https://trello.com/c/RRFEsoHK
+    private: false
+    category: ui
+  - timestamp: '2017-11-09T09:16:02Z'
+    title: List startup's ID on AA's `Startup#show`
+    trello: https://trello.com/c/kLZvkfRF
+    private: true
+  - timestamp: '2017-11-09T09:09:56Z'
+    title: We've released a new stats page, tracking metrics that are important to
+      SV.CO.
+    trello: https://trello.com/c/4waU9uAk
+    private: false
+    description: The page has been live for ~2 weeks, but the link to the page is
+      being made public now, after review of the data that it displays.
+    category: feature
+  - timestamp: '2017-11-08T08:10:03Z'
+    title: Validations for Target model were updated.
+    trello: https://trello.com/c/cSTLBhYi
+    private: true
+  - timestamp: '2017-11-07T09:12:41Z'
+    title: Updated stats page to modify few contents, add a new metric and to add
+      few links to other pages
+    trello: https://trello.com/c/KiF9IChW
+    private: true
+    category: content
 - timestamp: '2017-11-06T09:27:21Z'
   changes:
   - timestamp: '2017-11-06T06:50:07Z'
@@ -16,12 +87,13 @@ changelog:
     trello: https://trello.com/c/F7oRFaPf
     private: true
   - timestamp: '2017-11-01T06:14:29Z'
-    title: Only valid targets are now allowed, based on level, to be added as a prerequisite target
-      in admin/target edit
+    title: Only valid targets are now allowed, based on level, to be added as a prerequisite
+      target in admin/target edit
     trello: https://trello.com/c/uGQwTQ5V
     private: true
   - timestamp: '2017-10-31T12:18:02Z'
-    title: Fixed a bug caused by invoking a `ConnectRequest` method which was removed during a previous refactor.
+    title: Fixed a bug caused by invoking a `ConnectRequest` method which was removed
+      during a previous refactor.
     trello: https://trello.com/c/zujcWgJe
     private: true
     category: bugfix
@@ -566,9 +638,9 @@ changelog:
       and feedbacks all in one place. This will also allow founders to share links
       to specific targets with co-founders.
     trello:
-      - https://trello.com/c/l92nYs9k
-      - https://trello.com/c/9aQwfw5v
-      - https://trello.com/c/O9f3BoJ7
+    - https://trello.com/c/l92nYs9k
+    - https://trello.com/c/9aQwfw5v
+    - https://trello.com/c/O9f3BoJ7
     private: false
     category: feature
   - timestamp: '2017-08-07T09:27:00Z'
@@ -669,8 +741,8 @@ changelog:
   - timestamp: '2017-07-29T10:40:35Z'
     title: Few new columns were added in the CSV for Level 0 founders.
     trello:
-      - https://trello.com/c/CbXeyQrL
-      - https://trello.com/c/4i1Z2zqh
+    - https://trello.com/c/CbXeyQrL
+    - https://trello.com/c/4i1Z2zqh
     private: true
     description: Columns relevant to admissions team were added
   - timestamp: '2017-07-29T10:38:20Z'
@@ -1051,9 +1123,9 @@ changelog:
   - timestamp: '2017-06-12T07:29:59Z'
     title: DigitalOcean server has been taken down. See description for details.
     trello:
-      - https://trello.com/c/NVv6kvhs
-      - https://trello.com/c/COlEn8oe
-      - https://trello.com/c/S6vmGmZD
+    - https://trello.com/c/NVv6kvhs
+    - https://trello.com/c/COlEn8oe
+    - https://trello.com/c/S6vmGmZD
     private: true
     description: The Cachet application which was behind status.sv.co was removed
       for SEO reasons, which left the DigitalOcean server doing nothing but redirects.

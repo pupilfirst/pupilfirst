@@ -20,7 +20,8 @@ class ProductMetric < ApplicationRecord
     'Slack Messages' => { automatic: true },
     'Graduation Partners' => { automatic: false },
     'Community Architects' => { automatic: false },
-    'Blog Stories Published' => { automatic: false }
+    'Blog Stories Published' => { automatic: false },
+    'Hours of Learning' => { automatic: false }
   }.freeze
 
   ASSIGNMENT_MODE_AUTOMATIC = -'automatic'

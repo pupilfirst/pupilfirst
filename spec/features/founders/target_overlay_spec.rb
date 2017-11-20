@@ -47,10 +47,10 @@ feature 'Target Overlay' do
       end
 
       # Within the status badge bar:
-      within('.target-overlay__status-badge__block') do
-        expect(page).to have_selector('.target-overlay__status-badge-icon > i.fa-clock-o')
-        expect(page).to have_selector('.target-overlay__status-badge-content > span', text: 'Pending')
-        expect(page).to have_selector('.target-overlay__status-hint', text: 'Follow completion instructions and submit!')
+      within('.target-overlay__status-badge-block') do
+        expect(page).to have_selector('.target-overlay-status-badge-bar__badge-icon > i.fa-clock-o')
+        expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > span', text: 'Pending')
+        expect(page).to have_selector('.target-overlay-status-badge-bar__hint', text: 'Follow completion instructions and submit!')
       end
 
       # Test the submit button.
@@ -87,24 +87,24 @@ feature 'Target Overlay' do
       find('.founder-dashboard-target-header__headline', text: target.title).click
 
       # Within the timeline event panel:
-      within('.target-overlay-timeline-submission__container') do
-        expect(page).to have_selector('.target-overlay-timeline-submission__title', text: 'Latest Timeline Submission:')
-        expect(page).to have_selector('.target-overlay-timeline-submission__header-title > h5', text: timeline_event.title)
+      within('.target-overlay-timeline-event-panel__container') do
+        expect(page).to have_selector('.target-overlay-timeline-event-panel__title', text: 'Latest Timeline Submission:')
+        expect(page).to have_selector('.target-overlay-timeline-event-panel__header-title > h5', text: timeline_event.title)
         month_name = timeline_event.event_on.strftime('%b').upcase
-        expect(page).to have_selector('.target-overlay-timeline-submission__header-date', text: month_name)
+        expect(page).to have_selector('.target-overlay-timeline-event-panel__header-date', text: month_name)
         date = "#{timeline_event.event_on.strftime('%e').strip}/#{timeline_event.event_on.strftime('%y')}"
-        expect(page).to have_selector('.target-overlay-timeline-submission__header-date--large', text: date)
-        expect(page).to have_selector('.target-overlay-timeline-submission__header-title-date', text: 'Day 1')
-        expect(page).to have_selector('.target-overlay-timeline-submission__content > p', text: timeline_event.description)
+        expect(page).to have_selector('.target-overlay-timeline-event-panel__header-date--large', text: date)
+        expect(page).to have_selector('.target-overlay-timeline-event-panel__header-title-date', text: 'Day 1')
+        expect(page).to have_selector('.target-overlay-timeline-event-panel__content > p', text: timeline_event.description)
 
         # Attachments.
         expect(page).to have_selector("a[href='https://www.example.com'] > .target-overlay__link--attachment-text", text: 'Some Link')
         expect(page).to have_selector("a[href='#{timeline_event_file.file_url}'] > .target-overlay__link--attachment-text", text: timeline_event_file.title)
 
         # Latest Feedback.
-        expect(page).to have_selector('.target-overlay-timeline-submission__feedback > p', text: feedback.feedback)
-        expect(page).to have_selector(".target-overlay-timeline-submission__feedback > div > span > img[src='#{faculty.image_url}'")
-        expect(page).to have_selector('.target-overlay-timeline-submission__feedback > div > h6 > span', text: faculty.name)
+        expect(page).to have_selector('.target-overlay-timeline-event-panel__feedback > p', text: feedback.feedback)
+        expect(page).to have_selector(".target-overlay-timeline-event-panel__feedback > div > span > img[src='#{faculty.image_url}'")
+        expect(page).to have_selector('.target-overlay-timeline-event-panel__feedback > div > h6 > span', text: faculty.name)
 
         # Slack connect button.
         expect(page).to have_selector('a[href=\'https://svlabs-public.slack.com/messages/@abcd\']', text: 'Discuss On Slack')
@@ -123,7 +123,7 @@ feature 'Target Overlay' do
       find('.founder-dashboard-target-header__headline', text: target.title).click
 
       within('.target-overlay__content-rightbar') do
-        expect(page).to have_selector('.target-overlay-timeline-submission__title', text: 'Completion Status')
+        expect(page).to have_selector('.target-overaly__status-title', text: 'Completion Status')
         expect(page).to have_selector('.founder-dashboard__avatar-wrapper', count: 2)
         # TODO: Also check if the right people have the right status. This is now blocked by the bug reported here: https://trello.com/c/P9RNQQ3N
       end
@@ -140,10 +140,10 @@ feature 'Target Overlay' do
       find('.founder-dashboard-target-header__headline', text: target.title).click
 
       # The target must be marked locked.
-      within('.target-overlay__status-badge__block') do
-        expect(page).to have_selector('.target-overlay__status-badge-icon > i.fa-lock')
-        expect(page).to have_selector('.target-overlay__status-badge-content > span', text: 'Locked')
-        expect(page).to have_selector('.target-overlay__status-hint', text: 'Complete prerequisites first!')
+      within('.target-overlay__status-badge-block') do
+        expect(page).to have_selector('.target-overlay-status-badge-bar__badge-icon > i.fa-lock')
+        expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > span', text: 'Locked')
+        expect(page).to have_selector('.target-overlay-status-badge-bar__hint', text: 'Complete prerequisites first!')
       end
 
       within('.target-overlay-content-block') do
@@ -158,10 +158,10 @@ feature 'Target Overlay' do
       find('.founder-dashboard-target-header__headline', text: target.title).click
 
       # The target must be pending.
-      within('.target-overlay__status-badge__block') do
-        expect(page).to have_selector('.target-overlay__status-badge-icon > i.fa-clock-o')
-        expect(page).to have_selector('.target-overlay__status-badge-content > span', text: 'Pending')
-        expect(page).to have_selector('.target-overlay__status-hint', text: 'Follow completion instructions and submit!')
+      within('.target-overlay__status-badge-block') do
+        expect(page).to have_selector('.target-overlay-status-badge-bar__badge-icon > i.fa-clock-o')
+        expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > span', text: 'Pending')
+        expect(page).to have_selector('.target-overlay-status-badge-bar__hint', text: 'Follow completion instructions and submit!')
       end
 
       # Close pnotify first.
@@ -173,10 +173,10 @@ feature 'Target Overlay' do
       find('.js-timeline-builder__submit-button').click
 
       # The target status badge must now say submitted.
-      within('.target-overlay__status-badge__block') do
-        expect(page).to have_selector('.target-overlay__status-badge-icon > i.fa-hourglass-half')
-        expect(page).to have_selector('.target-overlay__status-badge-content > span', text: 'Submitted')
-        expect(page).to have_selector('.target-overlay__status-hint', text: "Submitted on #{Date.today.strftime('%b %-e')}")
+      within('.target-overlay__status-badge-block') do
+        expect(page).to have_selector('.target-overlay-status-badge-bar__badge-icon > i.fa-hourglass-half')
+        expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > span', text: 'Submitted')
+        expect(page).to have_selector('.target-overlay-status-badge-bar__hint', text: "Submitted on #{Date.today.strftime('%b %-e')}")
       end
     end
   end

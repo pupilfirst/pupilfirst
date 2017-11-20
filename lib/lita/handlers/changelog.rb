@@ -10,6 +10,8 @@ module Lita
         end
       end
 
+      private
+
       def latest_changelog
         salutation = "*Here are the latest changes on the SV.CO platform. Visit sv.co/changelog for more.*\n\n"
         salutation + latest_changes

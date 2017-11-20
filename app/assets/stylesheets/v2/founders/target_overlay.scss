@@ -84,12 +84,12 @@
   }
 }
 
-.target-overlay__status-badge__block {
+.target-overlay__status-badge-block {
   border: 1px solid $gray-border;
   border-width: 0 0 1px 0;
 }
 
-.target-overlay__status-badge-container {
+.target-overlay-status-badge-bar__badge-container {
   padding: 1rem 1.5rem 1rem 4rem;
   display: block;
   font-size: 0.875rem;
@@ -99,7 +99,7 @@
   text-align: left;
   animation: statusBadgeAnimate 0.5s;
 
-  .target-overlay__status-badge-icon {
+  .target-overlay-status-badge-bar__badge-icon {
     margin-right: 5px;
   }
 
@@ -161,7 +161,7 @@
   }
 }
 
-.target-overlay__status-info-block {
+.target-overlay-status-badge-bar__info-block {
   display: inline-block;
   padding-left: 10px;
   margin: 0 0 0 10px;
@@ -175,12 +175,12 @@
   }
 }
 
-.target-overlay__status-badge-content {
+.target-overlay-status-badge-bar__badge-content {
   display: inline-block;
   font-size: 1rem;
 }
 
-.target-overlay__status-hint {
+.target-overlay-status-badge-bar__hint {
   word-break: break-word;
 }
 
@@ -432,28 +432,28 @@
   display: block;
 }
 
-.target-overlay-timeline-submission__container {
+.target-overlay-timeline-event-panel__container {
   border-bottom: 1px solid $gray-border;
 }
 
-.target-overlay-timeline-submission__content {
+.target-overlay-timeline-event-panel__content {
   word-wrap: break-word;
   white-space: pre-wrap;
   padding-bottom: 1rem;
 }
 
-.target-overlay-timeline-submission__box {
+.target-overlay-timeline-event-panel__box {
   background-color: white;
   border: 1px solid $gray-border;
   @include border-radius(5px);
 }
 
-.target-overlay-timeline-submission__header {
+.target-overlay-timeline-event-panel__header {
   display: flex;
   align-items: center;
 }
 
-.target-overlay-timeline-submission__header-date-box {
+.target-overlay-timeline-event-panel__header-date-box {
   width: 3.3rem;
   height: 3.3rem;
   @include border-radius(5px);
@@ -464,7 +464,7 @@
   background-color: $dark-primary-background;
 }
 
-.target-overlay-timeline-submission__header-date {
+.target-overlay-timeline-event-panel__header-date {
   font-size: 0.6875rem;
   display: block;
   color: white;
@@ -476,16 +476,16 @@
   border-bottom: 1px solid $gray-border;
 }
 
-.target-overlay-timeline-submission__header-date--large {
+.target-overlay-timeline-event-panel__header-date--large {
   display: block;
   font-size: 1rem;
 }
 
-.target-overlay-timeline-submission__header-title-date {
+.target-overlay-timeline-event-panel__header-title-date {
   font-size: 0.75rem;
 }
 
-.target-overlay-timeline-submission__feedback {
+.target-overlay-timeline-event-panel__feedback {
   padding: 1rem;
   border-top: 1px solid $gray-border;
   @include border-radius(0 0 5px 5px);
@@ -518,13 +518,13 @@
   }
 }
 
-.target-overlay-timeline-submission__commenter-box {
+.target-overlay-timeline-event-panel__commenter-box {
   padding-bottom: 1rem;
   display: flex;
   align-items: center;
 }
 
-.target-overlay-timeline-submission__commenter-avatar {
+.target-overlay-timeline-event-panel__commenter-avatar {
   width: 2rem;
   height: 2rem;
   margin-right: 0.75rem;
@@ -533,11 +533,11 @@
   overflow: hidden;
 }
 
-.target-overlay-timeline-submission__commenter-name {
+.target-overlay-timeline-event-panel__commenter-name {
   line-height: 1.2;
 }
 
-.target-overlay-timeline-submission__commenter--small {
+.target-overlay-timeline-event-panel__commenter-label {
   font-size: 0.75rem;
   display: block;
 }

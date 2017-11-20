@@ -1,5 +1,47 @@
 ---
 changelog:
+- timestamp: '2017-11-20T11:44:43Z'
+  changes:
+  - timestamp: '2017-11-20T07:37:34Z'
+    title: A new metric - the 'Total Hours of Learning' on the SV.CO platform was
+      addded to the stats page.
+    trello: https://trello.com/c/g6w3LuqG
+    private: false
+    description: The value was obtained from Google Analytics (as the total hours
+      on page of the founder dashboard).
+    category: feature
+  - timestamp: '2017-11-20T07:35:55Z'
+    title: The TargetOverlay component on the founder dashboard and its children were
+      refactored to better adhere to BEM class-naming.
+    trello: https://trello.com/c/xX7Jx9zf
+    private: true
+  - timestamp: '2017-11-20T07:19:05Z'
+    title: The edit form on AA Resource#edit has been updated to search for linked
+      startup with Select2.
+    trello: https://trello.com/c/sQzNTUyL
+    private: true
+    description: Previous to this change, the page was preloading all startups into
+      the select list.
+    category: performance
+  - timestamp: '2017-11-20T06:33:18Z'
+    title: Fixed a bug that caused a `404` when founders clicked the _Connect to Slack_
+      button, if they'd connected to Slack sometime in the past.
+    private: false
+    category: bugfix
+  - timestamp: '2017-11-17T11:53:23Z'
+    title: Added option to link targets from the admin timeline events quick review
+      interface.
+    trello: https://trello.com/c/eQnpk1Bh
+    private: true
+    category: feature
+  - timestamp: '2017-11-16T09:44:57Z'
+    title: Reviewed timeline events can now have their reviewed status rolled back
+      via the admin interface.
+    trello: https://trello.com/c/55j4zRhT
+    private: true
+    description: This introduces `TimelineEvents::UndoVerificationService` which handles
+      the reversal of all changes introduced by verification of a timeline event.
+    category: feature
 - timestamp: '2017-11-13T11:32:41Z'
   changes:
   - timestamp: '2017-11-13T10:39:20Z'

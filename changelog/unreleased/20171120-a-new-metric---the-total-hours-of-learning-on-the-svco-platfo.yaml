@@ -1,9 +1,0 @@
----
-timestamp: '2017-11-20T07:37:34Z'
-title: A new metric - the 'Total Hours of Learning' on the SV.CO platform was addded
-  to the stats page.
-trello: https://trello.com/c/g6w3LuqG
-private: false
-description: The value was obtained from Google Analytics (as the total hours on page
-  of the founder dashboard).
-category: feature

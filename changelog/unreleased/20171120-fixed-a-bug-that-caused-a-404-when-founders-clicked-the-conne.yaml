@@ -1,6 +1,0 @@
----
-timestamp: '2017-11-20T06:33:18Z'
-title: Fixed a bug that caused a `404` when founders clicked the _Connect to Slack_
-  button, if they'd connected to Slack sometime in the past.
-private: false
-category: bugfix

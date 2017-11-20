@@ -92,15 +92,17 @@ setupPasswordHintButtons = ->
   $('#application-form__password-hint-accept').on('click', replaceEmailWithHint)
   $('#application-form__password-hint-reject').on('click', acceptEmailInputfromUser)
 
+dismissHint = (event) ->
+  event.preventDefault()
+  $(event.target).closest('.form-text').slideUp()
+
 replaceEmailWithHint = (event) ->
   $('#founders_registration_email').val($('#founders_registration_email').data('replacementHint'))
-  event.preventDefault()
-  $(event.target).closest('.help-block').slideUp()
+  dismissHint(event)
 
 acceptEmailInputfromUser = (event) ->
   $('#founders_registration_ignore_email_hint').val('true')
-  event.preventDefault()
-  $(event.target).closest('.help-block').slideUp()
+  dismissHint(event)
 
 # Callback function for invisible recaptcha present in the registration form. This callback is called when the recaptcha
 # verification is completed successfully - so a flag is set using a data attribute to indicate this.

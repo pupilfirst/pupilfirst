@@ -18,7 +18,7 @@
       = f.hidden_field :ignore_email_hint, value: false
       = f.text_field :name, placeholder: 'Full Name of Founder', maxlength: 250, required: true
 
-      = f.email_field :email, placeholder: 'Email Address', maxlength: 255, wrapper: { data: { replacement_hint: @form.replacement_hint } }, required: true,
+      = f.email_field :email, placeholder: 'Email Address', maxlength: 255, data: { replacement_hint: @form.replacement_hint }, required: true,
         help: @form.replacement_hint.present? ? "Did you mean <strong>#{@form.replacement_hint}</strong>?<br/><a id='application-form__password-hint-accept' href='#' class='btn btn-sm btn-ghost-primary application-form__email-hint-button mr-2'>Yes</a><a id='application-form__password-hint-reject' href='#' class='btn btn-sm btn-ghost-secondary application-form__email-hint-button'>No</a>".html_safe : nil
 
       = f.phone_field :phone, placeholder: 'Mobile phone number', maxlength: 17, pattern: MobileNumberValidator::FORM_EXPRESSION, required: true

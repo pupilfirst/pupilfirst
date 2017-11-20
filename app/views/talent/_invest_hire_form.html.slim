@@ -18,7 +18,7 @@
             = f.collection_check_boxes :query_type, presenter.query_type_collection, :input_value, :display_value, { hide_label: true }
           .investor-details.clearfix
             = f.text_field :name, label: 'Name', required: true, maxlength: 50
-            = f.email_field :email, type: 'email', required: true, maxlength: 50
+            = f.email_field :email, label: 'Email address', type: 'email', required: true, maxlength: 50
             = f.phone_field :mobile, label: 'Mobile number', required: true, maxlength: 20
             = f.text_field :organization, label: 'Organization', required: true, maxlength: 50
             = f.text_field :website, label: 'Website', required: true, maxlength: 50

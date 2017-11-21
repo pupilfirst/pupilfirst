@@ -4,8 +4,6 @@ module Founders
     before_action :skip_container
     before_action :require_active_subscription, if: :startup_is_admitted
 
-    layout 'application_v2'
-
     # GET /founder/dashboard
     def dashboard
       @startup = current_founder.startup&.decorate

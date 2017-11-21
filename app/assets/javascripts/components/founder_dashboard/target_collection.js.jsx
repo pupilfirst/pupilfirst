@@ -17,7 +17,7 @@ class FounderDashboardTargetCollection extends React.Component {
   }
 
   containerClasses() {
-    let classes = 'founder-dashboard-target-group__container p-x-1 m-x-auto';
+    let classes = 'founder-dashboard-target-group__container px-2 mx-auto';
 
     if (this.props.finalCollection) {
       classes += ' founder-dashboard-target-group__container--final';
@@ -30,14 +30,14 @@ class FounderDashboardTargetCollection extends React.Component {
     return (
       <div className={ this.containerClasses() }>
         <div className="founder-dashboard-target-group__box">
-          <div className="founder-dashboard-target-group__header text-xs-center">
+          <div className="founder-dashboard-target-group__header text-center">
             { this.props.milestone &&
             <div className="founder-dashboard-target-group__milestone-label text-uppercase font-semibold">
               Milestone Targets
             </div>
             }
 
-            <h3 className="font-semibold m-t-2 m-b-0">
+            <h3 className="font-semibold mt-3 mb-0">
               { this.props.name }
             </h3>
 

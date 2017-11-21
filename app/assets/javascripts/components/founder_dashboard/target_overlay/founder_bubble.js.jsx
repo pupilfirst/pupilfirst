@@ -10,7 +10,7 @@ class TargetOverlayFounderBubble extends React.Component {
     } else if (this.props.status === 'loading') {
       return 'fa fa-refresh fa-spin brand-primary';
     } else {
-      return 'fa fa-exclamation-circle alert-background';
+      return 'fa fa-exclamation-circle alert-text';
     }
   }
 

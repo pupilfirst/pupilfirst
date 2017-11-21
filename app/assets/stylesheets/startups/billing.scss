@@ -1,0 +1,12 @@
+.subscription-notice__text {
+  @extend .content-box;
+  text-align: center;
+  color: $dark-grey-text;
+  font-size: 1.5rem;
+  font-weight: $font-light;
+}
+
+.subscription-notice__text--danger {
+  @extend .subscription-notice__text;
+  border: 1px solid #e46f61;
+}

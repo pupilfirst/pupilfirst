@@ -30,20 +30,23 @@
 //= require limit_max_int
 //= require inspectlet
 //= require video
-//= require jquery-stickit
 //= require jquery.scrollTo
+//= require jquery-stickit
 //= require ahoy
 //= require jspdf
 
 // Rails assets
 //= require intro.js/intro.js
+//= require perfect-scrollbar
 //= require slick-carousel/slick.js
 //= require waypoints/jquery.waypoints.js
+//= require waypoints
 //= require typedjs
 //= require jquery.counterup
 
 // Shared
 //= require _shared
+//= require navbar
 //= require footer
 
 // Components
@@ -51,6 +54,13 @@
 
 // Controller-specific
 //= require home
+//= require about
 //= require startups
+//= require talent
 //= require team_members
+//= require admissions
+//= require faculty
+//= require story
+//= require resources
+//= require users
 //= require product_metrics

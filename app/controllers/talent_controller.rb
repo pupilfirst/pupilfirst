@@ -1,8 +1,6 @@
 class TalentController < ApplicationController
   before_action :skip_container
 
-  layout 'application_v2'
-
   # GET /talent
   def index
     @talent_form = TalentForm.new(Reform::OpenForm.new)

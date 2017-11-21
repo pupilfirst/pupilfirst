@@ -228,6 +228,12 @@ p {
   min-height: 100vh;
 }
 
+.container-sm-center {
+  @extend .mx-auto;
+  max-width: 32rem;
+  min-height: 100vh;
+}
+
 .content-box {
   padding: 30px;
   background-color: white;

@@ -1,52 +1,41 @@
 / Load the Recaptcha API manually, because we're programmatically invoking the Invisible Recaptcha library.
+- presenter = Admissions::ApplicationFormPresenter.new(self)
+
 - unless Rails.env.test?
   script src='https://www.google.com/recaptcha/api.js' async defer
 
-= simple_form_for @form, url: join_path, wrapper: :vertical_form, html: { 'data-test': Rails.env.test? } do |f|
-  - if f.object.errors.present?
-    .alert.alert-warning.alert-dismissable.fade.in role='alert'
+= bootstrap_form_for(@form, url: join_path, label_col: 'col-sm-3', control_col: 'col-sm-9', html: { 'data-test': Rails.env.test? }) do |f|
 
-      strong There were problems with your submission.
-      | &nbsp;Please check all fields and try again.
+  .application-start-form.content-box.mb-2
+    - if f.object.errors.present?
+      .alert.alert-warning.alert-dismissable.fade.show role='alert'
 
-      - if f.object.errors[:base].present?
-        ul.m-t-1
-          - f.object.errors[:base].each do |error_message|
-            li #{error_message}
+        strong There were problems with your submission.
+        | &nbsp;Please check all fields and try again.
 
-  .application-start-form.content-box.m-b-2
+        - if f.object.errors[:base].present?
+          .mt-1
+            = f.error_summary
     .simple-form-container
       = f.hidden_field :ignore_email_hint, value: false
-      = f.input :name, placeholder: 'Full Name of Founder', input_html: { maxlength: 250 }
+      = f.text_field :name, placeholder: 'Full Name of Founder', maxlength: 250, required: true
 
-      = f.input :email, placeholder: 'Email Address',
-        input_html: { maxlength: 250, type: 'email', data: { replacement_hint: @form.replacement_hint } },
-        hint: @form.replacement_hint.present? ? "Did you mean <strong>#{@form.replacement_hint}</strong>?<br/><a id='application-form__password-hint-accept' href='#' class='btn btn-sm btn-success application-form__email-hint-button m-r-1'>Yes</a><a id='application-form__password-hint-reject' href='#' class='btn btn-sm btn-danger application-form__email-hint-button'>No</a>".html_safe : nil
+      = f.email_field :email, placeholder: 'Email Address', maxlength: 255, data: { replacement_hint: @form.replacement_hint }, required: true,
+        help: @form.replacement_hint.present? ? "Did you mean <strong>#{@form.replacement_hint}</strong>?<br/><a id='application-form__password-hint-accept' href='#' class='btn btn-sm btn-ghost-primary application-form__email-hint-button mr-2'>Yes</a><a id='application-form__password-hint-reject' href='#' class='btn btn-sm btn-ghost-secondary application-form__email-hint-button'>No</a>".html_safe : nil
 
-      = f.input :phone, placeholder: 'Mobile phone number',
-        input_html: { maxlength: 17, type: 'tel', pattern: MobileNumberValidator::FORM_EXPRESSION }
+      = f.phone_field :phone, placeholder: 'Mobile phone number', maxlength: 17, pattern: MobileNumberValidator::FORM_EXPRESSION, required: true
 
-      = f.input :reference,
-        collection: proc { Founder.valid_references },
-        required: false,
-        include_blank: 'How did you hear about us?'
+      = f.select :college_id, options_from_collection_for_select(presenter.college_collection(f), :id, :name, presenter.selected_college(f)&.id),
+        { label_class: 'col-form-label', include_blank: 'Please pick your college' }, { 'data-search-url' => colleges_url, required: true }
 
-      .hidden-xs-up
-        = f.input :reference_text, label: false, placeholder: 'How did you hear about us?', required: false
+      .d-none
+        = f.text_field :college_text, label: 'College', placeholder: 'Name of your college', required: true, disabled: true
 
-      = f.input :college_id,
-        as: :select,
-        input_html: { class: 'sd', value: nil, 'data-search-url' => colleges_url },
-        required: true,
-        collection: @form.college_collection,
-        selected: @form.college_id
+      = f.select :reference, Founder.valid_references, { include_blank: 'How did you hear about us?', label_class: 'col-form-label' }, { required: false }
 
-      .hidden-xs-up
-        = f.input :college_text,
-          label: false,
-          placeholder: 'Name of your college',
-          required: true,
-          input_html: { maxlength: 250, disabled: true }
+      .d-none
+        = f.text_field :reference_text, hide_label: true, placeholder: 'How did you hear about us?', required: false
+
 
       div
         div class='g-recaptcha' data-sitekey=Rails.application.secrets.dig(:google, :recaptcha, :invisible, :site_key) data-callback='handleFounderJoinButton' data-size='invisible' data-badge='inline'

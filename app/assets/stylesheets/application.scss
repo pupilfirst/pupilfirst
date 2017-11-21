@@ -17,6 +17,7 @@
 @import "intro.js/introjs.scss";
 @import "slick-carousel/slick.scss";
 @import "slick-carousel/slick-theme.scss";
+@import "perfect-scrollbar";
 
 // Local.
 @import "shared";
@@ -25,12 +26,21 @@
 @import "footer";
 
 // Controller-specific
+@import 'home';
 @import 'startups';
+@import 'about';
+@import 'admissions';
 @import 'founders';
 @import 'team_members';
+@import 'talent';
+@import 'tour';
 @import 'resources';
+@import 'faculty';
+@import 'story';
+@import 'changelog';
 @import 'tech_hunt';
 @import 'product_metrics';
+@import 'users';
 
 // Select2
 @import "select2";

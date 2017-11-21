@@ -1,0 +1,49 @@
+.weekly-slots__tab-content {
+  border: 1px solid $gray-border;
+  border-width: 0 1px 1px 1px;
+  @include border-radius(0 0 5px 5px);
+}
+
+.weekly-slots__nav-tab {
+  border-color: $gray-border;
+}
+
+.faculty-slotes__header {
+  border-bottom: 1px solid $gray-border;
+}
+.weekly-slots__connect-slot {
+  display: inline-block;
+  padding: 8px;
+  border: 1px solid $gray-border;
+  @include border-radius(5px);
+  margin: 5px;
+  color: $dark-secondary;
+  cursor: pointer;
+  box-shadow: 0 0 8px 0 rgba(0,0,0,0.08);
+}
+
+.weekly_slots__footer-notes {
+  @include media-breakpoint-down(sm) {
+    margin-bottom: 1rem;
+  }
+}
+
+.weekly-slots__connect-slot--selected {
+  background-color: $brand-secondary;
+  color: white;
+}
+
+.weekly-slots__connect-slot--requested {
+  background-color: grey;
+  color: white;
+  cursor: not-allowed;
+
+  &:hover {
+    text-decoration: none;
+    color: white;
+  }
+}
+
+.weekly_slots_unavailable-notice-header {
+  border-bottom: 1px solid $gray-border;
+}

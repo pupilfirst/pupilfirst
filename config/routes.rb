@@ -52,6 +52,7 @@ Rails.application.routes.draw do
   resource :startup, only: %i[edit update] do
     member do
       post 'level_up'
+      get 'billing'
     end
   end
 

@@ -26,4 +26,8 @@ class User < ApplicationRecord
   def confirmed?
     confirmed_at.present?
   end
+
+  def admin?
+    admin_user.present?
+  end
 end

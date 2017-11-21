@@ -20,6 +20,24 @@ RSpec.describe Feature, type: :model do
       end
     end
 
+    context 'with an admin feature' do
+      before { create :feature, value: { admin: true }.to_json }
+
+      it 'returns true for admin users' do
+        admin_user = create(:admin_user)
+        expect(Feature.active?(:test_feature, admin_user.user)).to eq(true)
+      end
+
+      it 'returns false for non-admin users' do
+        user = create(:user)
+        expect(Feature.active?(:test_feature, user)).to eq(false)
+      end
+
+      it 'returns false for the public' do
+        expect(Feature.active?(:test_feature)).to eq(false)
+      end
+    end
+
     context 'with a regex feature' do
       before { create :feature, value: { email_regexes: %w[\S+@sv.co$ \S+@mobme.in$] }.to_json }
 

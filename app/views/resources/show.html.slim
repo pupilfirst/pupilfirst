@@ -2,10 +2,12 @@
   title SV.CO #{@resource.title}
   meta name="description" content="Get access to content produced by Startup Village faculty, including presentations, video and audio clips."
 
-ol.breadcrumb.mt-3
-  li.breadcrumb-item = link_to 'Home', root_path
-  li.breadcrumb-item = link_to 'Startup Library', resources_path
-  li.breadcrumb-item.active = @resource.title
+.row.justify-content-md-center
+    .col-md-10
+      ol.breadcrumb.mt-3
+        li.breadcrumb-item = link_to 'Home', root_path
+        li.breadcrumb-item = link_to 'Startup Library', resources_path
+        li.breadcrumb-item.active = @resource.title
 
 .row.justify-content-md-center
   .col-md-10.mb-3

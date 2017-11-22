@@ -16,8 +16,8 @@ module Startups
       end.html_safe
     end
 
-    def subscription_notice_class
-      subscription_end_date > 5.days.from_now ? 'subscription-notice__text' : 'subscription-notice__text--danger'
+    def subscription_notice_danger_class
+      'subscription-notice__text--danger' if subscription_end_date < 5.days.from_now
     end
 
     private

@@ -645,6 +645,19 @@ ActiveRecord::Schema.define(version: 20171122071238) do
     t.index ["sort_index"], name: "index_target_groups_on_sort_index"
   end
 
+  create_table "target_performance_criteria", force: :cascade do |t|
+    t.bigint "target_id"
+    t.bigint "performance_criterion_id"
+    t.string "rubric_good"
+    t.string "rubric_great"
+    t.string "rubric_wow"
+    t.integer "base_karma_points"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["performance_criterion_id"], name: "index_target_performance_criteria_on_performance_criterion_id"
+    t.index ["target_id"], name: "index_target_performance_criteria_on_target_id"
+  end
+
   create_table "target_prerequisites", id: :serial, force: :cascade do |t|
     t.integer "target_id"
     t.integer "prerequisite_target_id"
@@ -685,19 +698,6 @@ ActiveRecord::Schema.define(version: 20171122071238) do
     t.index ["level_id"], name: "index_targets_on_level_id"
     t.index ["session_at"], name: "index_targets_on_session_at"
     t.index ["timeline_event_type_id"], name: "index_targets_on_timeline_event_type_id"
-  end
-
-  create_table "targets_performance_criteria", force: :cascade do |t|
-    t.bigint "target_id"
-    t.bigint "performance_criterion_id"
-    t.string "rubric_good"
-    t.string "rubric_great"
-    t.string "rubric_wow"
-    t.integer "base_karma_points"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["performance_criterion_id"], name: "index_targets_performance_criteria_on_performance_criterion_id"
-    t.index ["target_id"], name: "index_targets_performance_criteria_on_target_id"
   end
 
   create_table "team_members", id: :serial, force: :cascade do |t|
@@ -863,8 +863,8 @@ ActiveRecord::Schema.define(version: 20171122071238) do
   add_foreign_key "startups", "levels"
   add_foreign_key "startups", "levels", column: "maximum_level_id"
   add_foreign_key "target_groups", "levels"
-  add_foreign_key "targets_performance_criteria", "performance_criteria"
-  add_foreign_key "targets_performance_criteria", "targets"
+  add_foreign_key "target_performance_criteria", "performance_criteria"
+  add_foreign_key "target_performance_criteria", "targets"
   add_foreign_key "team_members", "startups"
   add_foreign_key "timeline_event_files", "timeline_events"
   add_foreign_key "timeline_events", "startups"

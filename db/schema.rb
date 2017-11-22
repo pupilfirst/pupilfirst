@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171109093505) do
+ActiveRecord::Schema.define(version: 20171122071238) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -392,6 +392,12 @@ ActiveRecord::Schema.define(version: 20171109093505) do
     t.index ["startup_id"], name: "index_payments_on_startup_id"
   end
 
+  create_table "performance_criteria", force: :cascade do |t|
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "platform_feedback", id: :serial, force: :cascade do |t|
     t.string "feedback_type"
     t.string "attachment"
@@ -681,6 +687,19 @@ ActiveRecord::Schema.define(version: 20171109093505) do
     t.index ["timeline_event_type_id"], name: "index_targets_on_timeline_event_type_id"
   end
 
+  create_table "targets_performance_criteria", force: :cascade do |t|
+    t.bigint "target_id"
+    t.bigint "performance_criterion_id"
+    t.string "rubric_good"
+    t.string "rubric_great"
+    t.string "rubric_wow"
+    t.integer "base_karma_points"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["performance_criterion_id"], name: "index_targets_performance_criteria_on_performance_criterion_id"
+    t.index ["target_id"], name: "index_targets_performance_criteria_on_target_id"
+  end
+
   create_table "team_members", id: :serial, force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -701,6 +720,15 @@ ActiveRecord::Schema.define(version: 20171109093505) do
     t.datetime "updated_at", null: false
     t.string "title"
     t.index ["timeline_event_id"], name: "index_timeline_event_files_on_timeline_event_id"
+  end
+
+  create_table "timeline_event_grades", force: :cascade do |t|
+    t.bigint "timeline_event_id"
+    t.bigint "performance_criterion_id"
+    t.string "grade"
+    t.integer "karma_points"
+    t.index ["performance_criterion_id"], name: "index_timeline_event_grades_on_performance_criterion_id"
+    t.index ["timeline_event_id"], name: "index_timeline_event_grades_on_timeline_event_id"
   end
 
   create_table "timeline_event_types", id: :serial, force: :cascade do |t|
@@ -835,6 +863,8 @@ ActiveRecord::Schema.define(version: 20171109093505) do
   add_foreign_key "startups", "levels"
   add_foreign_key "startups", "levels", column: "maximum_level_id"
   add_foreign_key "target_groups", "levels"
+  add_foreign_key "targets_performance_criteria", "performance_criteria"
+  add_foreign_key "targets_performance_criteria", "targets"
   add_foreign_key "team_members", "startups"
   add_foreign_key "timeline_event_files", "timeline_events"
   add_foreign_key "timeline_events", "startups"

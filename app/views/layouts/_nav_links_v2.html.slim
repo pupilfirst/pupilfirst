@@ -33,7 +33,7 @@
             .navbar__avatar-wrapper
               == avatar(current_founder.name, founder: current_founder)
           ul.dropdown-menu
-            - if policy(current_founder).founder_profile?
+            - if current_startup && policy(current_founder).founder_profile?
               li role="presentation"
                 = link_to founder_profile_path(slug: current_founder.slug) do
                   i.fa.fa-list-ul

@@ -1,0 +1,28 @@
+.code-of-conduct__modal {
+  text-align: justify;
+}
+
+.code-of-conduct__modal-body {
+  padding: 25px;
+}
+
+.code-of-conduct__ordered-list {
+  padding: 0 25px;
+
+  // Breaking BEM here for convenience.
+  li {
+    margin-bottom: 0.7rem;
+  }
+}
+
+.about-slack__iframe {
+  border: 1px solid $gray-border;
+  @include border-radius(5px);
+  height: 470px;
+  width: 400px;
+  overflow-y: hidden;
+
+  @include media-breakpoint-down (sm) {
+    width: 100%;
+  }
+}

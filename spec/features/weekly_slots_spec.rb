@@ -37,7 +37,7 @@ feature 'Faculty Weekly Slots' do
       expect(page).to have_selector('.weekly-slots__connect-slot--selected', count: 1, text: '07:00')
 
       click_on 'Tue'
-      expect(page).to have_selector('a.active', text: 'Tue')
+      expect(page).to have_selector('a.active', text: 'TUE')
       expect(page).to have_selector('.weekly-slots__connect-slot--selected', count: 1, text: '08:00')
     end
 
@@ -65,7 +65,7 @@ feature 'Faculty Weekly Slots' do
 
       # Add a fourth slot on Tuesday 22:00
       click_on 'Tue'
-      expect(page).to have_selector('a.active', text: 'Tue')
+      expect(page).to have_selector('a.active', text: 'TUE')
       expect(page.find('.weekly-slots__connect-slot[data-day="2"][data-time="22.0"]')[:class]).to_not include('weekly-slots__connect-slot--selected')
       page.find('.weekly-slots__connect-slot[data-day="2"][data-time="22.0"]').click
       expect(page.find('.weekly-slots__connect-slot[data-day="2"][data-time="22.0"]')[:class]).to include('weekly-slots__connect-slot--selected')

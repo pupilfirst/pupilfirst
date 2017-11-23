@@ -2,68 +2,69 @@
   title SV.CO Leaderboard
   meta name="description" content="SV.CO tracks startups' progress using the Startup Village leaderboard, showing startups that have improved the most compared to the previous leaderboard."
 
-ol.breadcrumb.m-t-2
-  li.breadcrumb-item = link_to 'Home', root_path
-  li.breadcrumb-item = link_to 'About', about_path
-  li.breadcrumb-item.active Leaderboards
-
-h1
-  | Leaderboard
-  - if @levels.present?
-    span.h4.leaderboard__date-range.font-semibold.light-grey-text &nbsp;#{DatesService.last_week_start_date.strftime('%B %-d')} to #{DatesService.last_week_end_date.strftime('%B %-d')}
+nav aria-label="breadcrumb" role="navigation"
+  ol.breadcrumb.my-4
+    li.breadcrumb-item = link_to 'Home', root_path
+    li.breadcrumb-item = link_to 'About', about_path
+    li.breadcrumb-item.active Leaderboards
 
 .row
   .col-md-8
-    .about-text.font-light
-      p
-        ' Leaderboards are how we track progress for our startups. They <strong>don't show</strong> the best startups at
-        ' SV.CO. Rather, they show <strong>startups that have improved the most</strong> compared to the previous
-        | leaderboard.
+    .content-box.mb-3
+      .about-text
+        h1
+          | Leaderboard
+          - if @levels.present?
+            span.h4.leaderboard__date-range.font-semibold.light-grey-text &nbsp;#{DatesService.last_week_start_date.strftime('%B %-d')} to #{DatesService.last_week_end_date.strftime('%B %-d')}
 
-      ul.nav.nav-tabs role="tablist"
-        - @levels.each_with_index do |level, index|
-          li.nav-item
-            a.nav-link class="#{index==0 ? 'active' : ''}" href="#level#{level.number}" aria-controls="#{level.number}" role="tab" data-toggle="tab" Level #{level.number}
+        p.mb-2
+          ' Leaderboards are how we track progress for our startups. They <strong>don't show</strong> the best startups at
+          ' SV.CO. Rather, they show <strong>startups that have improved the most</strong> compared to the previous
+          | leaderboard.
 
-      .tab-content.tab-content-container
-        - @levels.each_with_index do |level, index|
-          .tab-pane.fade class="#{index==0 ? 'in active' : ''}" id="level#{level.number}" role="tabpanel"
-            - if @leaderboards[level.number].none? { |_s, _r, points, _c| points.positive? }
-              .leaderboard__inactive-startup-message.p-t-1
-                - if Startups::LeaderboardService.pending?
-                  h3
-                    strong Please wait while the leaderboard for the last week is generated.
-                  div
-                    i.fa.fa-refresh.fa-spin
-                    | &nbsp;&nbsp;This should take no more than a minute!
-                - else
-                  | All startups at this level were inactive during this period.
-            - else
-              table.table.table-striped
-                thead.brand-secondary
-                  tr
-                    th.font-semibold Rank
-                    th.font-semibold Product
-                    th.font-semibold Team Lead
-                tbody
-                  - startups_with_points = @leaderboards[level.number].select { |startup, rank, points, rank_change| points != 0 }
-                  - startups_with_points.each do |rank_array|
-                    - startup, rank, points, change_in_rank = rank_array
+        ul.nav.nav-tabs role="tablist"
+          - @levels.each_with_index do |level, index|
+            li.nav-item
+              a.nav-link class="#{index==0 ? 'active' : ''}" href="#level#{level.number}" aria-controls="#{level.number}" role="tab" data-toggle="tab" Level #{level.number}
+
+        .tab-content.tab-content-container
+          - @levels.each_with_index do |level, index|
+            .tab-pane.fade class="#{index==0 ? 'active show' : ''}" id="level#{level.number}" role="tabpanel"
+              - if @leaderboards[level.number].none? { |_s, _r, points, _c| points.positive? }
+                .leaderboard__inactive-startup-message.pt-3
+                  - if Startups::LeaderboardService.pending?
+                    h4.font-semibold
+                      | Please wait while the leaderboard for the last week is generated.
+                    div
+                      i.fa.fa-refresh.fa-spin.mr-2
+                      | This should take no more than a minute!
+                  - else
+                    | All startups at this level were inactive during this period.
+              - else
+                table.table.table-striped
+                  thead.brand-secondary
                     tr
-                      td.leaderboard__rank
-                        span.leaderboard__rank-number = rank
-                        span.leaderboard__rank-change
-                          i.fa class=change_in_rank_icon(change_in_rank)
-                          span.leaderboard__rank-delta = change_in_rank
-                      td = link_to "#{startup.product_name} #{startup.name.present? ? "(#{startup.name})" : ''}", timeline_path(startup.id, startup.slug)
-                      td = startup.team_lead.try(:fullname)
-              .leaderboard__inactive-startup-message
-                - inactive_startups_count = @leaderboards[level.number].count { |startup, rank, points, rank_change| points == 0 }
-                - if inactive_startups_count.positive?
-                  ' There #{'is'.pluralize(inactive_startups_count)} <strong>#{inactive_startups_count} #{'startup'.pluralize(inactive_startups_count)}</strong>
-                  ' in this level which #{'was'.pluralize(inactive_startups_count)} <strong>inactive</strong> from #{DatesService.last_week_start_date.strftime('%B %-d')}
-                  | to #{DatesService.last_week_end_date.strftime('%B %-d')}.
-
+                      th.font-semibold Rank
+                      th.font-semibold Product
+                      th.font-semibold Team Lead
+                  tbody
+                    - startups_with_points = @leaderboards[level.number].select { |startup, rank, points, rank_change| points != 0 }
+                    - startups_with_points.each do |rank_array|
+                      - startup, rank, points, change_in_rank = rank_array
+                      tr
+                        td.leaderboard__rank
+                          span.leaderboard__rank-number = rank
+                          span.leaderboard__rank-change
+                            i.fa class=change_in_rank_icon(change_in_rank)
+                            span.leaderboard__rank-delta = change_in_rank
+                        td = link_to "#{startup.product_name} #{startup.name.present? ? "(#{startup.name})" : ''}", timeline_path(startup.id, startup.slug)
+                        td = startup.team_lead.try(:fullname)
+                .leaderboard__inactive-startup-message
+                  - inactive_startups_count = @leaderboards[level.number].count { |startup, rank, points, rank_change| points == 0 }
+                  - if inactive_startups_count.positive?
+                    ' There #{'is'.pluralize(inactive_startups_count)} <strong>#{inactive_startups_count} #{'startup'.pluralize(inactive_startups_count)}</strong>
+                    ' in this level which #{'was'.pluralize(inactive_startups_count)} <strong>inactive</strong> from #{DatesService.last_week_start_date.strftime('%B %-d')}
+                    | to #{DatesService.last_week_end_date.strftime('%B %-d')}.
 
   .col-md-4
     = render partial: 'about_links'

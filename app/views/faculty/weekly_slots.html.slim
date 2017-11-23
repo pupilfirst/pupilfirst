@@ -2,25 +2,24 @@
   title SV.CO Faculty: The Best Startup Talent in India
   meta name="description" content="Startup Village has assembled some of the best entrepreneurs and domain experts to help you learn what it means to become a founder. Join SV.CO to gain access."
 
-#faculty__weekly-slots
-  h2.faculty-slotes__header.p-b-1.m-t-2 Slots for #{@faculty.name}
-  p.m-y-1 Modifying connect slots for the upcoming week of <code>#{@faculty.email}</code>
+#faculty-weekly-slots
+  h2.faculty-slotes__header.pb-2.mt-4 Slots for #{@faculty.name}
+  p.my-2 Modifying connect slots for the upcoming week of <code>#{@faculty.email}</code>
 
   .row
     .col-md-8
-      .card.content-box.p-a-0
-        h5.card-header.font-semibold #{next_week_start} - #{next_week_end}
+      .weekly-slots__card.card.content-box.p-0.my-4
+        h5.font-semibold.p-4 #{next_week_start} - #{next_week_end}
 
-        .card-block
-          ul.nav.nav-pills role="tablist"
+        .card-block.px-4.pb-4
+          ul.nav.nav-tabs.nav-fill.weekly-slots__nav-tab role="tablist"
             - for day in 1..7
               li.nav-item role="presentation"
-                a.nav-link class="#{day == 1 ? 'active' : ''}" href="#day#{day}" role="tab" data-toggle="tab" #{Date::ABBR_DAYNAMES[day%7]}
+                a.nav-link.text-uppercase.font-semibold class="#{day == 1 ? 'active' : ''}" href="#day#{day}" role="tab" data-toggle="tab" #{Date::ABBR_DAYNAMES[day%7]}
 
-          .tab-content
+          .tab-content.weekly-slots__tab-content.p-3
             - for day in 1..7
-              .tab-pane.fade class="#{day == 1 ? 'active in' : ''}" id="day#{day}" role='tabpanel'
-                br
+              .tab-pane.fade class="#{day == 1 ? 'active show' : ''}" id="day#{day}" role='tabpanel'
                 .connect-slots
                   - counter = 0
                   - (14..45).each do |slot|
@@ -36,16 +35,16 @@
                 p Each time slot is of 20 minutes duration.
                 p Please choose enough timeslots to meet or exceed your commitment to SV.CO.
                 p #{@faculty.current_commitment}
-            .col-md-3
+            .col-md-3.text-right
               = form_tag save_weekly_slots_faculty_index_path(params[:token]), method: :post do
                 = hidden_field_tag 'list_of_slots', value=@slot_list
                 = submit_tag 'Save', class: 'btn btn-md btn-primary text-uppercase pull-xs-right'
 
     .col-md-4
-      .card.content-box.p-a-0
-        h5.card-header.font-semibold #{next_week_start} - #{next_week_end}
+      .card.content-box.weekly_slots_unavailable-notice.p-0.my-4
+        h6.weekly_slots_unavailable-notice-header.font-semibold.p-4.m-0 #{next_week_start} - #{next_week_end}
 
-        .card-block
+        .card-block.p-4
           ' Busy week ahead? Mark yourself unavailable for the coming week and you will receive no connect requests.
 
         .card-footer

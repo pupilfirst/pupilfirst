@@ -12,38 +12,38 @@
 
 #faculty
   .container
-    h1.page-header.header-light.text-xs-center.m-t-2 Faculty
+    h1.page-header.header-light.text-center.mt-3 Faculty
 
-    p.introduction.text-xs-center.m-x-auto
+    p.introduction.text-xs-center.mx-auto
       ' We've assembled some of the best entrepreneurs and domain experts to help you learn about entrepreneurship and
       | what it means to become a founder. If you join SV.CO, you'll have access to the best startup talent in India.
 
-    .faculty-container.m-x-auto
+    .faculty-container.mx-auto
       #tabbed-content
         ul#faculty-nav.nav.nav-tabs.faculty-nav__tab
-          li.nav-item.faculty-nav__tab-item role="presentation"
-            a.nav-link.cursor-pointer.faculty-nav__tab-title class=active_tab('team') data-target="#team" aria-controls="team" role="tab" Team
-          li.nav-item.faculty-nav__tab-item role="presentation"
-            a.nav-link.cursor-pointer.faculty-nav__tab-title class=active_tab('visiting-faculty') data-target="#visiting-faculty" aria-controls="visiting-faculty" role="tab" Visiting faculty
-          li.nav-item.faculty-nav__tab-item role="presentation"
-            a.nav-link.cursor-pointer.faculty-nav__tab-title class=active_tab('advisory-board') data-target="#advisory-board" aria-controls="advisory-board" role="tab" Advisory board
-          li.nav-item.faculty-nav__tab-item role="presentation"
-            a.nav-link.cursor-pointer.faculty-nav__tab-title class=active_tab('alumni') data-target="#alumni" aria-controls="alumni" role="tab" Alumni
+          li.nav-item.faculty-nav__tab-item
+            a.nav-link.cursor-pointer.faculty-nav__tab-title class=active_tab('team') data-target="#team" data-toggle="tab" aria-controls="team" role="tab" Team
+          li.nav-item.faculty-nav__tab-item
+            a.nav-link.cursor-pointer.faculty-nav__tab-title class=active_tab('visiting-faculty') data-target="#visiting-faculty" data-toggle="tab" aria-controls="visiting-faculty" role="tab" Visiting faculty
+          li.nav-item.faculty-nav__tab-item
+            a.nav-link.cursor-pointer.faculty-nav__tab-title class=active_tab('advisory-board') data-target="#advisory-board" data-toggle="tab" aria-controls="advisory-board" role="tab" Advisory board
+          li.nav-item.faculty-nav__tab-item
+            a.nav-link.cursor-pointer.faculty-nav__tab-title class=active_tab('alumni') data-target="#alumni" aria-controls="alumni" data-toggle="tab" role="tab" Alumni
 
         .tab-content
           .tab-pane#team role="tabpanel" class=active_tab('team')
-            .faculty-cards-container.row.row-eq-height
+            .row.faculty-cards-container
               - Faculty.active.team.each do |member|
                 = render 'faculty_card', member: member
           .tab-pane#visiting-faculty role="tabpanel" class=active_tab('visiting-faculty')
-            .faculty-cards-container.row.row-eq-height
+            .row.faculty-cards-container
               - Faculty.active.visiting_faculty.each do |member|
                 = render 'faculty_card', member: member
           .tab-pane#advisory-board role="tabpanel" class=active_tab('advisory-board')
-            .faculty-cards-container.row.row-eq-height
+            .row.faculty-cards-container
               - Faculty.active.advisory_board.each do |member|
                 = render 'faculty_card', member: member
           .tab-pane#alumni role="tabpanel" class=active_tab('alumni')
-            .faculty-cards-container.row.row-eq-height
+            .row.faculty-cards-container
               - Faculty.active.alumni.includes(:founder).each do |member|
                 = render 'faculty_card', member: member

@@ -1,8 +1,6 @@
 class HomeController < ApplicationController
   skip_before_action :verify_authenticity_token, only: :paytm_callback
 
-  layout 'application_v2'
-
   def index
     @skip_container = true
     @sitewide_notice = true if %w[startupvillage.in].include?(params[:redirect_from])
@@ -13,11 +11,13 @@ class HomeController < ApplicationController
 
   def story
     @skip_container = true
+    render layout: 'application'
   end
 
   # GET /tour
   def tour
     @skip_container = true
+    render layout: 'application'
   end
 
   # GET /policies/privacy

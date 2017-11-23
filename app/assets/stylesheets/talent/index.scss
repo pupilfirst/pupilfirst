@@ -1,0 +1,495 @@
+.talent-hero {
+  background-image: asset-url("talent/index/banner-background.png");
+  background-repeat: repeat-x;
+  background-position: center top;
+  height: auto;
+}
+
+.talent-hero-headline {
+  font-size: 2.25rem;
+  min-height: 60px;
+  margin: 0 0 40px;
+  padding-top: 40px;
+
+  @include media-breakpoint-down(md) {
+    font-size: 1.75rem;
+  }
+
+  .typed-cursor {
+    font-size: 2.25rem;
+    background: transparent;
+    text-shadow: 0 0 0 rgba(0,0,0, 1);
+    opacity: 1;
+    animation: typedjsBlink 0.7s infinite;
+  }
+}
+
+.talent-hero__typed {
+  padding-left: 0.5rem;
+}
+
+.talent-hero__typed-strings {
+  position: relative;
+  display: inline-block;
+  font-weight: $font-regular;
+}
+
+@keyframes typedjsBlink {
+  50% { opacity: 0.0; }
+}
+
+@-webkit-keyframes typedjsBlink {
+  0% { opacity: 1; }
+  50% { opacity: 0.0; }
+  100% { opacity: 1; }
+}
+
+.talent-nav-tab {
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid $gray-border;
+  box-shadow: $box-shadow;
+  overflow: hidden;
+
+  .nav {
+    background-color: $primary-background;
+
+    .talent-tab-item {
+      text-align: center;
+
+      .talent-tab-link {
+        outline: 0;
+        text-transform: uppercase;
+        border-radius: 0;
+        border-right: 1px solid $gray-border;
+        padding: 15px 15px;
+        margin: 0;
+
+        &:focus, &:hover {
+          background-color: white;
+          border-top-color: white;
+          border-left-color: white;
+
+          .talent-tab-icon {
+            opacity: 1;
+          }
+        }
+
+        &.active {
+          background-color: white;
+          border-top-color: white;
+          border-left-color: white;
+
+          .talent-tab-icon {
+            opacity: 1;
+          }
+        }
+        @include media-breakpoint-down(lg) {
+          font-size: 0.75rem;
+        }
+        @include media-breakpoint-between(sm, md) {
+          font-size: 0.5rem;
+        }
+      }
+      &:last-child a {
+        border-right-color: white;
+      }
+    }
+  }
+}
+
+.talent-tab-icon {
+  opacity: 0.5;
+  height: 40px;
+  width: 40px;
+  background-size: contain;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 10px;
+  background-repeat: no-repeat;
+
+  &.acquihire-team-icon {
+    background-image: asset-url("talent/index/talent-tab-icon-acquihire.svg");
+  }
+
+  &.hire-founders-icon {
+    background-image: asset-url("talent/index/talent-tab-icon-hire-founders.svg");
+  }
+
+  &.invest-in-startups-icon {
+    background-image: asset-url("talent/index/talent-tab-icon-invest.svg");
+  }
+
+  &.accelerate-icon {
+    background-image: asset-url("talent/index/talent-tab-icon-accelerate.svg");
+  }
+
+  @include media-breakpoint-down(sm) {
+    margin: 0;
+  }
+
+  @include media-breakpoint-between(sm, md) {
+    width: 30px;
+    height: 30px;
+    display: block;
+    margin: 0 auto 10px;
+  }
+}
+
+.talent-tab-content {
+  padding: 30px;
+
+  p {
+    font-size: 16px;
+    line-height: 28px;
+  }
+  @include media-breakpoint-down(sm) {
+    text-align: center;
+  }
+}
+
+.talent-tab-content__header {
+  line-height: 1.4;
+}
+
+.talent-video-playlist, .testimonial-video {
+  width: 100%;
+  height: 330px;
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15);
+  border: 5px solid #ffffff;
+
+  @include media-breakpoint-down(sm) {
+    height: auto;
+  }
+}
+
+.company-slide {
+  margin: 60px 1px 60px 0;
+
+  .slide-item {
+    padding: 0 40px 10px;
+    min-height: 275px;
+    outline: none;
+    border-right: 1px solid $gray-border;
+
+    .company-logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 140px;
+      width: 185px;
+      margin: auto;
+
+      img {
+        margin: auto;
+        width: 100%;
+      }
+    }
+    p {
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 28px;
+    }
+    @include media-breakpoint-down(sm) {
+      border-right-width: 0px;
+    }
+  }
+}
+
+.talkto-founders {
+  background-color: rgba(246, 246, 246, 0.75);
+
+  h3 {
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: 300;
+    margin-top: 40px;
+
+    span {
+      display: block;
+    }
+  }
+
+  .talks-ways-container {
+    background-color: white;
+    border: 1px solid $gray-border;
+    border-radius: 10px;
+    max-width: 960px;
+    padding: 25px 50px;
+    margin: 25px auto 10px;
+
+    @include media-breakpoint-down(sm) {
+      padding: 1rem;
+    }
+
+    .ways-icon {
+      background-position: center center;
+      background-repeat: no-repeat;
+      border: 1px solid rgba(0, 137, 208, 0.4);
+      box-shadow: 0 0 9px 0 rgba(0, 0, 0, 0.08);
+      max-width: 100px;
+      height: 100px;
+      padding: 0;
+      border-radius: 50%;
+      margin: 0 auto;
+      display: block;
+
+      &.faculty-join-icon {
+        background-image: asset-url("talent/index/talk-to-founders-icon-join-faculty.svg");
+      }
+
+      &.broadcast-icon {
+        background-image: asset-url("talent/index/talk-to-founders-icon-broadcast.svg");
+      }
+
+      @include media-breakpoint-down(sm) {
+        margin-bottom: 15px;
+      }
+    }
+    .talks-ways-section {
+      padding-bottom: 15px;
+      padding-top: 25px;
+
+      @include media-breakpoint-down(sm) {
+        &:first-child {
+          border-bottom: 1px solid #ddd;
+        }
+      }
+    }
+
+    .talks-ways-content {
+      h4 {
+        font-size: 18px;
+        margin-top: 0;
+      }
+      p {
+        color: #666666;
+        font-weight: 300;
+        font-size: 14px;
+        line-height: 23px;
+      }
+      @include media-breakpoint-down(sm) {
+        text-align: center;
+      }
+    }
+  }
+}
+
+.talks-ways-section__box {
+  text-align: left;
+}
+
+.testimonial-slide-item {
+  outline: none;
+}
+
+.testimonial-container {
+  background-color: rgba(254, 245, 230, 0.25);
+  border: 1px solid #F1DAB4;
+  border-width: 1px 0;
+}
+
+.testimonial-head {
+  border-left: 3px solid #0089D0;
+  padding-left: 15px;
+  margin-top: 20px;
+
+  h2 {
+    font-size: 30px;
+    line-height: 21px;
+    margin: 0 0 15px;
+
+    @include media-breakpoint-down(sm) {
+      font-size: 24px;
+      line-height: 25px;
+      margin: 0 0 10px;
+    }
+  }
+  .role {
+    display: block;
+    font-size: 16px;
+    font-style: italic;
+    line-height: 15px;
+  }
+}
+
+.testimonial-quote {
+  font-size: 1.25rem;
+  line-height: 1.7;
+  padding: 30px 25px 0 15px;
+
+  @include media-breakpoint-down(sm) {
+    font-size: 1rem;
+  }
+}
+
+.graduates-join {
+  background-color: white;
+  border: 1px solid $gray-border;
+  border-width: 1px 0;
+}
+
+.graduate-subhead {
+  font-size: 26px;
+  color: #7F7F7F;
+  position: relative;
+
+  .graduate-subhead-icon {
+    background-position: center top;
+    background-repeat: no-repeat;
+    margin: 0 auto 15px;
+    display: block;
+
+    &.graduates-join-icon {
+      background-image: asset-url("talent/index/heading-icon-graduation.svg");
+      width: 60px;
+      height: 72px;
+    }
+
+    &.talkto-graduates-icon {
+      background-image: asset-url("talent/index/heading-icon-talk-to-founders.svg");
+      width: 70px;
+      height: 72px;
+    }
+
+    &.testimonial-icon {
+      background-image: asset-url("talent/index/heading-icon-testimonials.svg");
+      width: 74px;
+      height: 66px;
+    }
+  }
+  &:before {
+    content: '';
+    background-color: #0089D0;
+    height: 1px;
+    width: 140px;
+    display: inline-block;
+    border-bottom: 1px solid #0089D0;
+    position: absolute;
+    top: 135px;
+    transform: translateX(-50%);
+  }
+  @include media-breakpoint-down(sm) {
+    font-size: 25px;
+  }
+}
+
+.slick-dots {
+  li {
+    margin: 0 3px;
+    button {
+      &:before {
+        content: '\f111';
+        font-family: FontAwesome;
+        color: #D2D2D2;
+        font-size: 12px;
+        opacity: 1;
+      }
+    }
+    &.slick-active {
+      button {
+        &:before {
+          content: '\f10c';
+          color: #D2D2D2;
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
+.slick-prev, .slick-next {
+  border: 1px solid $dark-grey-text;
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  color: #333333;
+  background-color: white;
+
+  &:before {
+    font-family: FontAwesome;
+    font-size: 18px;
+    vertical-align: middle;
+    opacity: 1;
+  }
+  &:hover, &:focus {
+    background-color: white;
+  }
+}
+
+.slick-prev {
+  left: -35px;
+
+  &:before {
+    content: '\f104';
+    color: $dark-grey-text;
+  }
+}
+
+.slick-next {
+  right: -35px;
+
+  &:before {
+    content: '\f105';
+    color: $dark-grey-text;
+  }
+}
+
+.action-form {
+  .talent-form-popup {
+    .talent-action-checklist {
+      border: 1px solid #ECECEC;
+      border-radius: 5px;
+      padding: 30px 20px 0px;
+      margin: auto;
+      position: relative;
+      max-width: 360px;
+      margin-bottom: 25px;
+      text-align: left;
+
+      h4 {
+        position: absolute;
+        background-color: white;
+        margin: 0;
+        width: 280px;
+        line-height: 35px;
+        letter-spacing: 0.02em;
+        font-size: 18px;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+
+        @include media-breakpoint-down(sm) {
+          text-align: center;
+          font-size: 15px;
+          width: 230px;
+        }
+      }
+
+      @include media-breakpoint-down(sm) {
+        text-align: left;
+      }
+    }
+    .investor-details {
+      max-width: 360px;
+      margin: auto;
+    }
+  }
+}
+
+.footer-action {
+  background: asset-url("talent/index/banner-background.png") repeat-x;
+
+  .footer-action-box {
+    max-width: 720px;
+    margin: auto;
+    padding: 50px 0 40px;
+
+    h2 {
+      font-size: 22px;
+      line-height: 28px;
+      color: #7F7F7F;
+      margin: 0px 20px;
+    }
+  }
+}

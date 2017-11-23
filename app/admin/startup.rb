@@ -349,6 +349,39 @@ ActiveAdmin.register Startup do
       row :founder_fee
     end
 
+    if startup.level&.number&.positive?
+      panel 'Payment History' do
+        attributes_table_for startup do
+          row 'Subscription End Date' do
+            if startup.active_payment.present?
+              link_to startup.subscription_end_date.strftime('%b %d, %Y'), admin_payment_path(startup.active_payment)
+            end
+          end
+        end
+
+        table_for startup.payments.paid.order('billing_end_at DESC') do
+          column('Date') { |payment| payment.paid_at&.strftime('%d/%m/%Y') }
+          column('Subscription Period') do |payment|
+            start_date = payment.billing_start_at&.strftime('%b %d, %Y')
+            end_date = payment.billing_end_at&.strftime('%b %d, %Y')
+            "#{start_date} - #{end_date}"
+          end
+          column('Amount') { |payment| "&#8377;#{payment.amount}".html_safe }
+          column('Payee') do |payment|
+            payee = payment.founder
+            if payee.present?
+              link_to payee.name, admin_founder_path(payee)
+            else
+              'N/A'
+            end
+          end
+          column('Payment') do |payment|
+            link_to 'View', admin_payment_path(payment)
+          end
+        end
+      end
+    end
+
     panel 'Technical details' do
       attributes_table_for startup do
         row :id

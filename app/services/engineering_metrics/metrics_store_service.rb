@@ -44,38 +44,10 @@ module EngineeringMetrics
 
     # Use linguist to store programming-language
     def record_language_split
-      require 'rugged'
-      require 'linguist'
-
-      prepare_repository
-      repo = Rugged::Repository.new(Rails.root.to_s)
-      project = Linguist::Repository.new(repo, repo.head.target_id)
-      current_entry.metrics[:loc] = project.languages
+      root_path = File.absolute_path(Rails.root)
+      stats = `cd #{root_path} && yarn run --silent cloc . --exclude-list-file=cloc-exclude --exclude-lang=Markdown --yaml --quiet`
+      current_entry.metrics[:loc] = YAML.safe_load(stats).except('header', 'SUM')
       current_entry.save!
-    end
-
-    # This method creates a new Git repository in the root of the app. This is requires for Rugged::Repository
-    # to work, which is in turn required by Linguist for
-    def prepare_repository
-      return unless Rails.env.production?
-      root_path = Rails.root.to_s
-
-      commands = <<~COMMANDS
-        cd #{root_path}
-        git init
-        git config user.name "Vocalist"
-        git config user.email "hosting@sv.co"
-
-        echo ".apt/" >> .gitignore
-        echo ".profile.d/" >> .gitignore
-        echo "vendor/" >> .gitignore
-        echo "public/assets" >> .gitignore
-
-        git add .
-        git commit -m "Rugged commit"
-      COMMANDS
-
-      system(commands)
     end
 
     def record_github_stats

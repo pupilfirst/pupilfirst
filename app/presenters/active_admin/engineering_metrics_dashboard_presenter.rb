@@ -42,7 +42,7 @@ module ActiveAdmin
         {
           name: language,
           data: last_10_metrics.reverse.each_with_object({}) do |(metrics, week_start_at), result|
-            result[week_start_at] = metrics.dig('loc', language)
+            result[week_start_at] = metrics.dig('loc', language, 'code')
           end
         }
       end

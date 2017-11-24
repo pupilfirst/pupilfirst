@@ -1,0 +1,12 @@
+---
+timestamp: '2017-11-24T09:02:28Z'
+title: Replace github-linguist based LOC calculation with the cloc application.
+trello: https://trello.com/c/P9E1P6Ll
+private: true
+description: This removes github-linguist and its dependencies. This will mean the
+  removal of the apt buildpack on Heroku since it is not required, and the addition
+  of the nodejs buildpack since cloc is installed using yarn. The LOC calculation
+  made by github-lingust wasn't even LOC. It was calculating total size of code
+  per language. All stored stats related to this value will need to be removed from
+  the production database.
+category: bugfix

@@ -2,16 +2,5 @@ db/migrate
 public
 vendor
 changelog
-.bundle
+example.env
 log
-tmp
-node_modules
-yarn-error.log
-coverage
-tags
-.tags
-.idea
-.DS_Store
-.env
-.env.production
-.env.test

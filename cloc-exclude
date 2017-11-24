@@ -1,3 +1,4 @@
+bin
 db/migrate
 public
 vendor

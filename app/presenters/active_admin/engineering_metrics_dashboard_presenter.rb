@@ -19,6 +19,15 @@ module ActiveAdmin
       end
     end
 
+    def loc
+      last_loc = last_week_metrics.dig('loc')
+      return [] if last_loc.blank?
+
+      last_loc.to_a.map do |(language, stats)|
+        [language, stats['code']]
+      end
+    end
+
     def code_frequency
       trend = [
         { name: 'Addition', data: {} },

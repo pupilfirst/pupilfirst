@@ -16,14 +16,19 @@
   #engineering-metrics-dashboard__commit-trend data-chart-data=@presenter.commit_trend.to_json
 
 .engineering-metrics-dashboard__graph-container
+  h2.margin-top-20 Lines of code, split by languages
+
+  #engineering-metrics-dashboard__loc data-chart-data=@presenter.loc.to_json
+
+.engineering-metrics-dashboard__graph-container
   h2.margin-top-20 Change in LOC (Lines of Code)
 
   #engineering-metrics-dashboard__additions-deletions data-chart-data=@presenter.code_frequency.to_json
 
 .engineering-metrics-dashboard__graph-container
-  h2.margin-top-20 Split of languages in LOC
+  h2.margin-top-20 Language use trend
 
-  #engineering-metrics-dashboard__loc data-chart-data=@presenter.language_trend.to_json
+  #engineering-metrics-dashboard__language-trend data-chart-data=@presenter.language_trend.to_json
 
 .engineering-metrics-dashboard__graph-container
   h2.margin-top-20

@@ -22,8 +22,10 @@ class Target < ApplicationRecord
   belongs_to :target_group, optional: true
   belongs_to :level, optional: true
   has_many :resources
-  has_many :targets_performance_criteria
-  has_many :performance_criteria, through: :targets_performance_criteria
+  has_many :target_performance_criteria
+  has_many :performance_criteria, through: :target_performance_criteria
+
+  accepts_nested_attributes_for :target_performance_criteria, allow_destroy: true
 
   acts_as_taggable
   mount_uploader :rubric, RubricUploader

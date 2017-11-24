@@ -1,9 +1,8 @@
 module Admin
   module Targets
     class FormPresenter < ApplicationPresenter
-      def initialize(view_context, target)
+      def initialize(target)
         @target = target
-        super(view_context)
       end
 
       def valid_prerequisites

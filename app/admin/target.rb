@@ -5,7 +5,7 @@ ActiveAdmin.register Target do
     :slideshow_embed, :video_embed, :completed_at, :completion_comment, :rubric, :link_to_complete, :key,
     :submittability, :archived, :remote_rubric_url, :target_group_id, :target_action_type, :points_earnable,
     :timeline_event_type_id, :sort_index, :youtube_video_id, :session_at, :chore, :level_id,
-    prerequisite_target_ids: [], tag_list: []
+    prerequisite_target_ids: [], tag_list: [], target_performance_criteria_attributes: %i[id performance_criterion_id rubric_good rubric_great rubric_wow base_karma_points _destroy]
 
   filter :title
   filter :archived
@@ -194,5 +194,58 @@ ActiveAdmin.register Target do
     render 'founders_for_target.json.erb'
   end
 
-  form partial: 'admin/targets/form'
+  form do |f|
+    presenter = Admin::Targets::FormPresenter.new(target)
+    div id: 'admin-target__edit'
+
+    f.semantic_errors(*f.object.errors.keys)
+
+    f.inputs name: 'Target Details' do
+      f.input :role, as: :select, collection: Target.valid_roles.map { |r| [t("models.target.role.#{r}"), r] }, include_blank: false
+      f.input :title
+      f.input :key
+      f.input :chore
+      f.input :session_at, as: :string, input_html: { class: 'date-time-picker', data: { format: 'Y-m-d H:i:s O' } }
+      f.input :tag_list, as: :select, collection: Target.tag_counts_on(:tags).pluck(:name), multiple: true
+      f.input :level
+
+      f.input :description, as: :hidden
+
+      insert_tag(Arbre::HTML::Div, class: 'label-replica') do
+        content_tag('abbr', '*', title: 'required')
+      end
+
+      insert_tag(Arbre::HTML::Div) { content_tag 'trix-editor', nil, class: 'input-replica', input: 'target_description' }
+      insert_tag(Arbre::HTML::P, class: 'inline-errors-replica') { resource.errors[:description][0] } if resource.errors[:description].present?
+
+      f.input :target_action_type, collection: Target.valid_target_action_types
+      f.input :timeline_event_type, include_blank: 'Select default timeline event type'
+      f.input :points_earnable
+      f.input :prerequisite_targets, collection: presenter.valid_prerequisites
+      f.input :youtube_video_id, label: 'YouTube Video ID', placeholder: 'For eg. S0PEA3R-6TU'
+      f.input :video_embed
+      f.input :slideshow_embed
+      f.input :resource_url
+      f.input :completion_instructions
+      f.input :link_to_complete
+      f.input :submittability, collection: Target.valid_submittability_values
+      f.input :assigner, collection: Faculty.active.order(:name), include_blank: false
+      f.input :target_group, collection: TargetGroup.all.sorted_by_level.includes(:level)
+      f.input :sort_index
+      f.input :days_to_complete
+      f.input :rubric, as: :file
+      f.input :remote_rubric_url
+    end
+
+    f.inputs 'Performance Criteria' do
+      f.has_many :target_performance_criteria, heading: false, allow_destroy: true, new_record: 'Add PC' do |tpc|
+        tpc.input :performance_criterion
+        tpc.input :rubric_good
+        tpc.input :rubric_great
+        tpc.input :rubric_wow
+        tpc.input :base_karma_points
+      end
+    end
+    f.actions
+  end
 end

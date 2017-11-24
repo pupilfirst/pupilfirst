@@ -174,6 +174,25 @@ ActiveAdmin.register Target do
 
       row :created_at
       row :updated_at
+
+      if target.target_performance_criteria.present?
+        div do
+          table_for target.target_performance_criteria.includes(:performance_criterion) do
+            caption 'Target Performance Criteria'
+
+            column 'Performance Criterion' do |tpc|
+              a href: admin_performance_criteria_path(tpc.performance_criterion) do
+                tpc.performance_criterion.display_name.to_s
+              end
+            end
+
+            column :rubric_good
+            column :rubric_great
+            column :rubric_wow
+            column :base_karma_points
+          end
+        end
+      end
     end
   end
 

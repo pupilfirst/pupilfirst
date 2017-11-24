@@ -1,0 +1,9 @@
+---
+timestamp: '2017-11-24T06:24:40Z'
+title: We now have a billing page for our founders! The page displays their subscription
+  status and payment history.
+trello: https://trello.com/c/bXjy3pZZ
+private: false
+description: The page can be accessed via the navbar drop-down for all Level 1+ founders.
+  The startup admin page also now has a payment history table.
+category: feature

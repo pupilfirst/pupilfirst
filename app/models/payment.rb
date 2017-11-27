@@ -8,6 +8,16 @@ class Payment < ApplicationRecord
   STATUS_FAILED = -'failed'
   STATUS_NOT_REQUESTED = -'not_requested'
 
+  TYPE_ADMISSION = -'admission'
+  TYPE_RENEWAL = -'renewal'
+
+  def self.valid_payment_types
+    [TYPE_ADMISSION, TYPE_RENEWAL]
+  end
+
+  validates :payment_type, inclusion: valid_payment_types, allow_nil: true
+  validates :payment_type, presence: true, if: proc { |payment| payment.paid_at.present? }
+
   scope :pending, -> { where(paid_at: nil) }
   scope :requested, -> { pending.where(instamojo_payment_request_status: payment_requested_statuses, instamojo_payment_status: nil) }
   scope :paid, -> { where.not(paid_at: nil) }

@@ -1,7 +1,7 @@
 #admin__engineering-metrics-dashboard
 
 .engineering-metrics-dashboard__graph-container
-  h2.margin-top-20 Deploys
+  h2.margin-top-20 Deploys - Current Release <strong>#{@presenter.current_release}</strong>
 
   #engineering-metrics-dashboard__deploys data-chart-data=@presenter.trend(:deploys).to_json
 

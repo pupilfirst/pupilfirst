@@ -131,7 +131,7 @@ en:
         subscription_notice:
           expired: "Your SV.CO subscription expired on <span class='text-danger'>%{date}</span>!</br><a href='/founder/fee'>Renew your subscription now</a> to regain access."
           expiring_soon: "Your SV.CO subscription will expire on <span class='alert-text'>%{date}</span>.</br><a href='/founder/fee'>Renew your subscription now</a> for uninterrupted access."
-          active: "Your current SV.CO subscription expires on <span class='brand-primary'>%{date}</span>."
+          active: "Your SV.CO subscription expires on <span class='brand-primary'>%{date}</span>."
 
   about:
     index:

@@ -137,6 +137,11 @@ en:
     index:
       meta_description: "Startup Village is launching an online-first learning platform for first-time founders, supplying tools and resources needed to create a successful startup."
 
+  admin:
+    coupon:
+      form:
+        update_warning: "WARNING: This coupon is in use by one or more startups. Please DO NOT make changes to reward details since this will affect all teams using this coupon."
+
   admissions:
     register:
       email_error: "Our email delivery service refused to accept the supplied address. Please ensure that it is a valid email address. If you're still having issues, please contact us using live chat or at help@sv.co"

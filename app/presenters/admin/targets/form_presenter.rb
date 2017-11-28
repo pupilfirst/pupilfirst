@@ -15,6 +15,10 @@ module Admin
         end
       end
 
+      def error_class
+        @target.errors[:description].present? ? 'error-replica' : ''
+      end
+
       private
 
       def level

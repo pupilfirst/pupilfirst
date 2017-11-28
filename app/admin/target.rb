@@ -208,11 +208,6 @@ ActiveAdmin.register Target do
     redirect_to action: :show
   end
 
-  collection_action :founders_for_target do
-    @founders = Startup.find(params[:startup_id]).founders
-    render 'founders_for_target.json.erb'
-  end
-
   form do |f|
     presenter = Admin::Targets::FormPresenter.new(target)
     div id: 'admin-target__edit'
@@ -230,12 +225,16 @@ ActiveAdmin.register Target do
 
       f.input :description, as: :hidden
 
-      insert_tag(Arbre::HTML::Div, class: 'label-replica') do
-        content_tag('abbr', '*', title: 'required')
+      div class: 'label-replica' do
+        text_node 'Description'
+        abbr(title: 'required') { '*' }
       end
 
-      insert_tag(Arbre::HTML::Div) { content_tag 'trix-editor', nil, class: 'input-replica', input: 'target_description' }
-      insert_tag(Arbre::HTML::P, class: 'inline-errors-replica') { resource.errors[:description][0] } if resource.errors[:description].present?
+      insert_tag(Arbre::HTML::Div) { content_tag 'trix-editor', nil, class: 'input-replica' + ' ' + presenter.error_class, input: 'target_description' }
+
+      if resource.errors[:description].present?
+        para(class: 'inline-errors-replica') { resource.errors[:description][0] }
+      end
 
       f.input :target_action_type, collection: Target.valid_target_action_types
       f.input :timeline_event_type, include_blank: 'Select default timeline event type'

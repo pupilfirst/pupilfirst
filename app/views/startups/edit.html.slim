@@ -3,15 +3,6 @@
 
 .container-md-center
   .content-box.my-3
-    - if feature_active? :team_members
-      h2#modify-team-members.mb-2 Modify team members
-
-      = render 'team_members/table', team_members: current_startup.team_members, team_member_being_edited: nil
-
-      = link_to new_team_member_url, class: 'btn btn-with-icon btn-md btn-primary' do
-        i.fa.fa-plus
-        | Add new team member
-
     h2.mt-4 Edit your startup profile
 
     = render 'form'

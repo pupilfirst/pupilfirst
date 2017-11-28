@@ -111,7 +111,6 @@ ActiveAdmin.register Startup do
     column :wireframe_link
     column :prototype_link
     column(:founders) { |startup| startup.founders.pluck(:name).join ', ' }
-    column(:team_members) { |startup| startup.team_members.pluck(:name).join ', ' }
     column(:women_cofounders) { |startup| startup.founders.where(gender: Founder::GENDER_FEMALE).count }
     column :pitch
     column :website
@@ -309,18 +308,6 @@ ActiveAdmin.register Startup do
                 span do
                   link_to founder.display_name, [:admin, founder]
                 end
-              end
-            end
-          end
-        end
-      end
-
-      row :team_members do
-        if startup.team_members.present?
-          ul do
-            startup.team_members.each do |team_member|
-              li do
-                link_to team_member.name, admin_team_member_path(team_member)
               end
             end
           end

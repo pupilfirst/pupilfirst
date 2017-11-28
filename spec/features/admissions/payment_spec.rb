@@ -107,6 +107,9 @@ feature 'Admission Fee Payment' do
 
       # The statup's founder fee must now be set to the current Founder::FEE.
       expect(startup.reload.founder_fee).to eq(Founder::FEE)
+
+      # The payment should also be marked as an admission payment.
+      expect(payment.reload.payment_type).to eq(Payment::TYPE_ADMISSION)
     end
 
     scenario 'He completes payment applying a referral coupon' do

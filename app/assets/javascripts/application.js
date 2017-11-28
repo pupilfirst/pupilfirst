@@ -61,6 +61,7 @@
 //= require admissions
 //= require faculty
 //= require story
+//= require fb
 //= require resources
 //= require users
 //= require product_metrics

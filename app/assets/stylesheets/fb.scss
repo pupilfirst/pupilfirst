@@ -1,0 +1,169 @@
+.fb-landing__header {
+    background-color: white;
+}
+
+.fb-landing__header-logo-img {
+  height: 45px;
+  margin: 2rem 1rem 1rem;
+}
+
+.fb-landing__hero-container {
+  background-color: white;
+}
+
+.fb-landing__hero-screen {
+  position: relative;
+  height: 511px;
+  z-index: 0;
+
+  &:after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    box-shadow: 0 0 100px rgba(0, 50, 80, 0.8);
+    bottom: 50px;
+    left: 10%;
+    right: 10%;
+    width: 80%;
+    height: 10%;
+    border-radius: 100%;
+  }
+}
+
+.fb-landing__hero-message {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.fb-landing__hero-message-h1 {
+  color: white;
+  max-width: 33rem;
+  line-height: 1.2
+}
+
+.fb-landing__hero-clip-bg {
+  clip-path: url(#fb-landing__hero-clip-svg);
+  width: 100%;
+  transform: translateX(0);
+}
+
+.fb-landing__heading-h2 {
+  position: relative;
+
+  &:before {
+    position: absolute;
+    content: '';
+    width: 100px;
+    height: 4px;
+    background-color: $alert-background;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+.fb-landing__content-p {
+  font-size: 1rem;
+}
+
+.fb-landing__about-container {
+  background-color: white;
+}
+
+.fb-landing__school-of-vr {
+  height: 540px;
+  background: radial-gradient(circle at 20% 50%, #249FD8 0%, #2558A1 40%, #243C8F 70%);
+}
+
+.fb-landing__partners-container {
+  background-color: white;
+  border-bottom: 1px solid $gray-border;
+}
+
+.fb-landing__calander-container {
+  background: rgb(83,168,103);
+  background: linear-gradient(135deg, rgb(83,168,103) 0%,rgb(13,113,186) 100%);
+}
+
+.fb-landing__calander-card {
+  background-color: white;
+  @include border-radius(10px);
+  margin-bottom: 1.875rem;
+  position: relative;
+  box-shadow: 0 2px 10px 0px rgba(0, 0, 0, 0.2);
+
+  &:before, &:after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    width: 4px;
+    height: 25px;
+    background: #ffffff;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.6) 0%,rgba(255,255,255,1) 60%);
+    box-shadow: 0px -2px 2px rgba(0, 0, 0, 0.4);
+    z-index: 2;
+    border-radius: 2px;
+  }
+  &:before {
+    left: 2.125rem;
+  }
+  &:after {
+    right: 2.125rem;
+  }
+}
+
+.fb-landing__calander-card-month {
+  background-color: $alert-background;
+  padding: 0.5rem 1.25rem;
+  color: #ffffff;
+  position: relative;
+  letter-spacing: 0.02rem;
+  @include border-radius(10px 10px 0 0);
+
+  &:before, &:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    background: #111;
+    z-index: 1;
+    border-radius: 10px;
+    box-shadow: 0 1px 1px #fff;
+  }
+  &:before {
+    left: 2rem;
+  }
+  &:after {
+    right: 2rem;
+  }
+}
+
+.fb-landing__calander-card-event {
+  padding: 1.25rem;
+  font-size: 1rem;
+}
+
+.fb-landing__stakeholders-container {
+  background-color: #ffffff;
+  border-top: 1px solid $gray-border;
+}
+
+.fb-landing__stakeholders-column {
+  &:nth-child(2) {
+    border: 1px solid $gray-border;
+    border-width: 0 1px;
+  }
+}
+
+.fb-landing__stakeholders-icon {
+  width: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.fb-landing__register-form-container {
+  background: linear-gradient(45deg, rgba(36,159,216,1) 0%,rgba(36,60,143,1) 100%);
+  color: #ffffff;
+}

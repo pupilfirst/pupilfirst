@@ -25,7 +25,7 @@ module Startups
     end
 
     def undiscounted_fee(period:)
-      billing_founders_count * founder_fee * period
+      billing_founders_count * undiscounted_founder_fee * period
     end
 
     private
@@ -34,8 +34,8 @@ module Startups
       @billing_founders_count ||= @startup.billing_founders_count
     end
 
-    def founder_fee
-      @founder_fee ||= @startup.founder_fee || Founder::FEE
+    def undiscounted_founder_fee
+      @undiscounted_founder_fee ||= @startup.undiscounted_founder_fee || Founder::FEE
     end
 
     def bulk_payment_discount(period)

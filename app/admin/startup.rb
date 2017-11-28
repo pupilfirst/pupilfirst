@@ -366,6 +366,7 @@ ActiveAdmin.register Startup do
             end_date = payment.billing_end_at&.strftime('%b %d, %Y')
             "#{start_date} - #{end_date}"
           end
+          column('Payment Type', &:payment_type)
           column('Amount') { |payment| "&#8377;#{payment.amount}".html_safe }
           column('Payee') do |payment|
             payee = payment.founder

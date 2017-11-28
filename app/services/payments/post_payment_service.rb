@@ -1,4 +1,4 @@
-module Founders
+module Payments
   class PostPaymentService
     def initialize(payment)
       @payment = payment

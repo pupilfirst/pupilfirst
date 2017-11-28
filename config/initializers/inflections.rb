@@ -10,7 +10,7 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.uncountable %w[startup_feedback faculty platform_feedback]
   inflect.irregular 'is', 'are'
   inflect.irregular 'was', 'were'
-  inflect.irregular 'performance_criterion', 'performance_criteria'
+  inflect.irregular 'criterion', 'criteria'
 end
 
 # These inflection rules are supported but not enabled by default:

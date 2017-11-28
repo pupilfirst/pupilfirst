@@ -24,6 +24,11 @@ module EngineeringMetrics
       current_entry.tap(&:save!)
     end
 
+    def set(metric, value)
+      current_entry.metrics[metric.to_s] = value
+      current_entry.tap(&:save!)
+    end
+
     private
 
     def current_entry

@@ -10,7 +10,6 @@
 
   *  Ruby - Use [rbenv](https://github.com/rbenv/rbenv) to install version specified in `.ruby-version`.
   *  imagemagick - `brew install imagemagick`
-  *  ICU, cmake (dependencies for `github-linguist`) - `brew install icu4c cmake` .
   *  postgresql - Install [Postgres.app](http://postgresapp.com) and follow instructions.
   *  puma-dev - `brew install puma/puma/puma-dev`
   *  redis - `brew install redis`
@@ -21,7 +20,7 @@
   * Install dependencies:
 
 ```
-sudo apt-get install imagemagick cmake libicu-dev redis-server postgresql postgresql-contrib
+sudo apt-get install imagemagick redis-server postgresql postgresql-contrib
 ```
 
 #### Troubleshoot

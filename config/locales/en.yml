@@ -6,6 +6,7 @@
 # libs.MODULE.*.key = display_value
 # models.MODEL.COLUMN = { key: display_value, ... }
 # services.MODULE.SERVICE.*.key = display_value
+# presenters.MODULE.PRESENTER.*.key = display_value
 # CONTROLLER.ACTION.*.key = display_value
 #
 # CONTROLLER is always the plural version. For example: FoundersController#edit = founders.edit.*
@@ -123,6 +124,14 @@ en:
     english_quiz_questions:
       evaluate_submission:
         explanation_footer: '> If you would like to know more about this topic, please post your questions on <#C0B1QFD7T|english> and tag our Language Coach, <@U0A6X5MEY>.'
+
+  presenters:
+    startups:
+      billing:
+        subscription_notice:
+          expired: "Your SV.CO subscription expired on <span class='text-danger'>%{date}</span>!</br><a href='/founder/fee'>Renew your subscription now</a> to regain access."
+          expiring_soon: "Your SV.CO subscription will expire on <span class='alert-text'>%{date}</span>.</br><a href='/founder/fee'>Renew your subscription now</a> for uninterrupted access."
+          active: "Your SV.CO subscription expires on <span class='brand-primary'>%{date}</span>."
 
   about:
     index:

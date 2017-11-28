@@ -4,7 +4,8 @@ p.mb-2
   em Please note that you can come back and change these details anytime.
 
 = bootstrap_form_for(@form, url: startup_path, layout: :horizontal, label_col: 'col-sm-3', control_col: 'col-sm-9') do |f|
-  = f.error_summary
+  = f.alert_message 'Please fix the errors below.'
+
   .panel-group#startup-form role="tablist"
     .card
       .card-header.p-0 role="tab"
@@ -14,7 +15,7 @@ p.mb-2
       #basic-details.collapse.show role="tabpanel"
         .card-body
           .flex-columm
-            = f.text_field :product_name, label_class: 'col-form-label', label: 'Product Name', class: 'form-control', required: true
+            = f.text_field :product_name, label_class: 'col-form-label', label: 'Product Name', class: 'form-control'
             = f.text_area :product_description, label_class: 'col-form-label', label: 'Product One-liner', class: 'form-control',
               help: "Describe your product in less than #{Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS} characters.",
               placeholder: "Description in less than #{Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS} characters", maxlength: Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS

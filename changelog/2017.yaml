@@ -1,5 +1,40 @@
 ---
 changelog:
+- timestamp: '2017-11-27T07:30:04Z'
+  changes:
+  - timestamp: '2017-11-27T06:49:40Z'
+    title: Updated targets CSV in admin to include target-group and level columns.
+    trello: https://trello.com/c/MBpLPOhf
+    private: true
+  - timestamp: '2017-11-24T09:02:28Z'
+    title: Replaced github-linguist based LOC calculation with the cloc application.
+    trello: https://trello.com/c/P9E1P6Ll
+    private: true
+    description: This removes github-linguist and its dependencies. This will mean
+      the removal of the apt buildpack on Heroku since it is not required, and the
+      addition of the nodejs buildpack since cloc is installed using yarn. The LOC
+      calculation made by github-lingust wasn't even LOC. It was calculating total
+      size of code per language. All stored stats related to this value will need
+      to be removed from the production database.
+    category: bugfix
+  - timestamp: '2017-11-24T06:24:40Z'
+    title: We now have a billing page for our founders! The page displays their subscription
+      status and payment history.
+    trello: https://trello.com/c/bXjy3pZZ
+    private: false
+    description: The page can be accessed via the navbar drop-down for all Level 1+
+      founders. The startup admin page also now has a payment history table.
+    category: feature
+  - timestamp: '2017-11-22T07:24:02Z'
+    title: Improved styling / higlighting of errors on startup profile edit form.
+    trello: https://trello.com/c/QXZ9ri0x
+    private: false
+    category: ui
+  - timestamp: '2017-11-21T08:35:16Z'
+    title: Features can now be activated only for users with admin accounts.
+    trello: https://trello.com/c/UW9SSTo0
+    private: true
+    category: feature
 - timestamp: '2017-11-20T11:44:43Z'
   changes:
   - timestamp: '2017-11-20T07:37:34Z'

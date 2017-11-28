@@ -13,26 +13,47 @@
   meta property="og:description" content=t('about.index.meta_description')
   meta property="fb:app_id" content=Rails.application.secrets.facebook.dig(:app_id)
 
-ol.breadcrumb.m-t-2
-  li.breadcrumb-item = link_to 'Home', root_path
-  li.breadcrumb-item.active About
-
-h1.p-b-1 About Startup Village
+nav aria-label="breadcrumb" role="navigation"
+  ol.breadcrumb.my-4
+    li.breadcrumb-item = link_to 'Home', root_path
+    li.breadcrumb-item.active About
 
 .row
   .col-md-8
-    #about-main.about-text.font-light
-      p At SV.CO we are building an online University for student founders.
+    .content-box.mb-3
+      #about-main.about-text
+        h1.pb-2 About Startup Village
+        p.mb-2
+          | At SV.CO we are building an online University for student founders.
 
-      p We believe young founders today are special. Never before in history has it been possible for so few to build products for so many. We have a unique opportunity to teach <i>everyone</i> how to build great startups, right in school and college.
+        p.mb-2
+          ' We believe young founders today are special. Never before in history
+          ' has it been possible for so few to build products for so many. We have
+          ' a unique opportunity to teach <i>everyone</i> how to build great
+          | startups, right in school and college.
 
-      p Many who learn will go on to build long-lived, thriving companies that'll shape our future. Many more will pick up great skills, knowledge and enriching experiences that can help them become interesting and amazing people: the kind of people who will make a difference in our world.
+        p.mb-2
+          ' Many who learn will go on to build long-lived, thriving companies that'll
+          ' shape our future. Many more will pick up great skills, knowledge and
+          ' enriching experiences that can help them become interesting and amazing
+          | people: the kind of people who will make a difference in our world.
 
-      hr
+        hr
 
-      p We're best known for our inclusive public-private partnership incubator based in Kochi that has <a href="http://yourstory.com/2015/05/startup-village-national-award/">won numerous awards</a> and created stellar startups. The incubator was started in April 2012 as a joint partnership with the Government of India through the <a href="http://www.dst.gov.in">Department of Science and Technology</a>, <a href="http://www.technoparktbi.org">Technopark TBI</a> and our host-institute, <a href="http://mobme.in">MobME Wireless</a>.
+        p.mb-2
+          ' We're best known for our inclusive public-private partnership incubator
+          ' based in Kochi that has <a href="http://yourstory.com/2015/05/startup-village-national-award/" target="_blank">won numerous awards</a>
+          ' and created stellar startups. The incubator was started in April 2012
+          ' as a joint partnership with the Government of India through the
+          ' <a href="http://www.dst.gov.in" target="_blank">Department of Science and Technology</a>,
+          ' <a href="http://www.technoparktbi.org" target="_blank">Technopark TBI</a> and our
+          | host-institute, <a href="http://mobme.in" target="_blank">MobME Wireless</a>.
 
-      p Building on our knowledge acquired from mentoring startups, ​we're now ​an online-first learning platform for first-time founders. SV.CO is the first learning platform for entrepreneurship that verifies results & rewards founders with a real degree by partnering with ​​recognised Universities.
+        p.mb-2
+          ' Building on our knowledge acquired from mentoring startups, ​we're now
+          ' '​an online-first learning platform for first-time founders. SV.CO is
+          ' the first learning platform for entrepreneurship that verifies
+          | results &amp; rewards founders with a real degree by partnering with ​​recognised Universities.
 
   .col-md-4
     = render partial: 'about_links'

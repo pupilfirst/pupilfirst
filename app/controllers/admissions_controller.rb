@@ -1,11 +1,13 @@
 class AdmissionsController < ApplicationController
-  layout 'application_v2'
   before_action :skip_container, only: %i[join register founders founders_submit]
+
+  layout 'application_v2'
 
   # GET /join
   def join
     @form = Founders::RegistrationForm.new(Founder.new)
     @form.prepopulate(current_user) if current_user.present?
+    render layout: 'application'
   end
 
   # POST /join
@@ -30,7 +32,7 @@ class AdmissionsController < ApplicationController
       end
     end
 
-    render 'join'
+    render 'join', layout: 'application'
   end
 
   # GET /admissions/screening

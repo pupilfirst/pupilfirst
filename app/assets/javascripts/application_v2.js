@@ -58,16 +58,6 @@
 // Controller-specific
 // require startups
 // require timeline_events
-// require transparency
-//= require v2/home
-//= require v2/resources
-//= require v2/about
-//= require v2/tour
-//= require v2/talent
 //= require v2/founders
-//= require v2/faculty
-//= require v2/story
 //= require v2/six_ways
-//= require v2/users
-//= require v2/admissions
 //= require v2/intercom_settings

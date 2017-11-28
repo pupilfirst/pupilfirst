@@ -1,8 +1,6 @@
 class AboutController < ApplicationController
   rescue_from ActionView::MissingTemplate, with: -> { raise_not_found }
 
-  layout 'application_v2'
-
   # GET /about
   def index
     @sitewide_notice = params[:redirect_from] == 'startupvillage.in'

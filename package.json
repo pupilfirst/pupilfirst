@@ -1,5 +1,7 @@
 {
   "name": "sv-co",
   "private": true,
-  "dependencies": {}
+  "dependencies": {
+    "cloc": "^2.3.2"
+  }
 }

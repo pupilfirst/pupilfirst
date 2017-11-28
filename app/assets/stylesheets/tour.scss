@@ -1,0 +1,163 @@
+.tour-banner {
+  background: rgba(255, 255, 255, 1) asset-url("home/tour/tour-illustration.svg") no-repeat center top;
+  background-size: contain;
+  height: 320px;
+  border-bottom: 1px solid $gray-border;
+
+  @include media-breakpoint-down(sm) {
+    height: auto;
+    background-size: cover;
+  }
+}
+
+.tour-banner-head {
+  padding: 160px 0 0;
+  max-width: 600px;
+
+  @include media-breakpoint-down(sm) {
+    padding: 120px 0 0;
+  }
+
+  h1 {
+    font-size: $h2-font-size;
+    line-height: 1.3;
+    margin-bottom: 10px;
+
+    @include media-breakpoint-down(sm) {
+      font-size: $h3-font-size;
+    }
+  }
+
+  h4 {
+    line-height: 1.4;
+  }
+  strong {
+    font-weight: $font-semibold;
+  }
+}
+
+.tour-block {
+  padding: 40px 0;
+  border-bottom: 1px solid $gray-border;
+  min-height: 300px;
+
+  &:nth-of-type(even) {
+    background-color: #fff;
+  }
+  .tour-image {
+    width: 360px;
+    margin: auto;
+    min-height: 200px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+
+    @include media-breakpoint-down(sm) {
+      float: none;
+      width: 100%;
+      max-width: 360px;
+      margin: auto;
+    }
+  }
+  h2 {
+    margin-bottom: 15px;
+  }
+  p {
+    line-height: 1.8;
+    font-size: 1rem;
+    max-width: 460px;
+    @include media-breakpoint-down(md) {
+      max-width: 100%;
+    }
+  }
+  @include media-breakpoint-down(sm) {
+    text-align: center;
+  }
+}
+
+.back-to-top {
+  display: inline-block;
+  padding-top: 15px;
+  font-weight: $font-semibold;
+}
+
+.tour-videos {
+  position: relative;
+  background-color: white;
+  border-bottom: 1px solid $gray-border;
+
+  &:before {
+    background-color: $gray-border;
+    content: "";
+    display: block;
+    width: 1px;
+    height: 80%;
+    background-position: center center;
+    position: absolute;
+    top: 10%;
+    left: calc(50% - 1px);
+
+    @include media-breakpoint-down(sm) {
+      background-color: transparent;
+    }
+  }
+}
+
+.why-sv-video {
+  margin: auto;
+  padding: 40px 0;
+  @include border-radius(5px);
+  position: relative;
+  cursor: pointer;
+  transition: all .2s;
+
+  &:before, &:after {
+    position: absolute;
+    opacity: 0;
+    transition: all .2s;
+  }
+  &:before {
+    content: asset-url('shared/play-button.svg');
+    width: 50px;
+    height: 50px;
+    top: 40%;
+    left: 50%;
+    z-index: 1;
+    transform: translateX(-50%);
+
+    @include media-breakpoint-down(md) {
+      width: 30px;
+      height: 30px;
+    }
+  }
+  &:after {
+    content: "";
+    border-radius: 5px;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.15);
+  }
+  &:hover, &:focus {
+    background-color: white;
+    transform: scale(1.045, 1.045);
+
+    &:before, &:after {
+      opacity: 1;
+    }
+  }
+  h3 {
+    line-height: 1.3;
+  }
+  .tour-video-frame {
+    display: block;
+    margin: auto;
+    width: 200px;
+    overflow: hidden;
+    text-align: center;
+    position: relative;
+  }
+}

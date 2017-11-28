@@ -76,7 +76,7 @@ p {
   color: $dark-secondary;
 }
 
-.alert-background {
+.alert-text {
   color: $alert-background;
 }
 
@@ -225,6 +225,12 @@ p {
 .container-md-center {
   @extend .mx-auto;
   max-width: 45rem;
+  min-height: 100vh;
+}
+
+.container-sm-center {
+  @extend .mx-auto;
+  max-width: 32rem;
   min-height: 100vh;
 }
 

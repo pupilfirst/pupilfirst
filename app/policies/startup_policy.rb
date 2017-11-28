@@ -38,4 +38,8 @@ class StartupPolicy < ApplicationPolicy
 
     Startups::LevelUpEligibilityService.new(record, user.founder).eligible?
   end
+
+  def billing?
+    record.level.number.positive? # Only level 1+ startups need a billing page.
+  end
 end

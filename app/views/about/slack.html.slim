@@ -2,24 +2,29 @@
   title SV.CO Public Slack for Discussion
   meta name="description" content="Get your queries answered directly by SV.CO team members, and mingle with the Startup Village community on our Public Slack Forum."
 
-ol.breadcrumb.m-t-2
-  li.breadcrumb-item = link_to 'Home', root_path
-  li.breadcrumb-item = link_to 'About', about_path
-  li.breadcrumb-item.active Public Slack
-
-h1 Public Slack Forum
+nav aria-label="breadcrumb" role="navigation"
+  ol.breadcrumb.my-4
+    li.breadcrumb-item = link_to 'Home', root_path
+    li.breadcrumb-item = link_to 'About', about_path
+    li.breadcrumb-item.active Public Slack
 
 .row
   .col-md-8
-    #transparency-intiative.about-text.font-light
-      p SV.CO has a public slack forum for discussion by the community. Members from the SV.CO team are often online and you'll get quick answers to your queries. Almost all our communication with registered members of SV.CO is also through this channel, so you'll get a feel for how our community works.
+    .content-box.mb-3
+      #transparency-intiative.about-text
+        h1 Public Slack Forum
+        p.mb-2
+          ' SV.CO has a public slack forum for discussion by the community. Members
+          ' from the SV.CO team are often online and you'll get quick answers to your
+          ' queries. Almost all our communication with registered members of SV.CO
+          | is also through this channel, so you'll get a feel for how our community works.
 
-      p
-        ' To sign up, join below. By joining, you read and agree to the
-        a href='#' data-toggle="modal" data-target="#code-of-conduct" Community Code of Conduct.
+        p.mb-2
+          ' To sign up, join below. By joining, you read and agree to the
+          a href='#' data-toggle="modal" data-target="#code-of-conduct" Community Code of Conduct.
 
-      / Embed slackin app deployed to Heroku using https://github.com/SVdotCO/slackin
-      iframe.about-slack__iframe src="https://sv-co-public-slackin.herokuapp.com" scrolling="no" seamless="seamless" sandbox="allow-same-origin allow-scripts allow-forms"
+        / Embed slackin app deployed to Heroku using https://github.com/SVdotCO/slackin
+        iframe.about-slack__iframe src="https://sv-co-public-slackin.herokuapp.com" scrolling="no" seamless="seamless" sandbox="allow-same-origin allow-scripts allow-forms"
 
   .col-md-4
     = render partial: 'about_links'
@@ -28,11 +33,11 @@ h1 Public Slack Forum
   .modal-dialog
     .modal-content
       .modal-header
-        button.close data-dismiss="modal" type="button"  &times;
         h3.modal-title Code of Conduct
+        button.close data-dismiss="modal" type="button"  &times;
       .modal-body.code-of-conduct__modal-body
-        h4 Conduct
-        p.m-y-1 Contact: #{mail_to 'help@sv.co'}
+        h4.font-semibold Conduct
+        p.my-2 Contact: #{mail_to 'help@sv.co'}
 
         ol.code-of-conduct__ordered-list
           li
@@ -59,9 +64,9 @@ h1 Public Slack Forum
             | for you and we&rsquo;ve got your back.
           li Likewise any spamming, trolling, flaming, baiting or other attention-stealing behaviour is not welcome.
 
-        h4 Moderation
+        h4.font-semibold Moderation
 
-        p.m-y-1
+        p.my-2
           ' These are the policies for upholding our community&rsquo;s standards of conduct in our communication
           | channels, most notably in Slack and Github discussion channels.
 

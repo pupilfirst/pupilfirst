@@ -4,8 +4,6 @@ module Users
 
     before_action :skip_container, only: %i[new send_login_email]
 
-    layout 'application_v2'
-
     # GET /user/sign_in
     def new
       if current_user.present?

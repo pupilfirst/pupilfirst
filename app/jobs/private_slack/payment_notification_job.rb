@@ -12,27 +12,35 @@ module PrivateSlack
 
     private
 
+    def amount(founder)
+      founder.payments.last.amount.round
+    end
+
     def payment_information(founder)
       <<~PAYMENT_INFO
-        @gemo We've just received first payment from a new team - #{founder.startup.display_name}
+        <@U0299AQB5> We've just received first payment of *Rs. #{amount(founder)}* from a new team - *#{founder.startup.display_name}*
 
-        *Team members:*
+        ```
         #{team_members_list(founder)}
+        ```
 
         <https://www.sv.co/admin/startups/#{founder.startup.id}|View this startup's details in the admin interface.>
       PAYMENT_INFO
     end
 
     def team_members_list(founder)
-      counter = 0
+      Terminal::Table.new do |t|
+        t << ['Name', 'Email', 'Phone Number', 'Notes']
+        t << :separator
 
-      (founder.startup.founders.map do |f|
-        counter += 1
-        "#{counter}. `#{f.email}` #{f.name}#{founder.startup.team_lead == f ? ' (Team Lead)' : ''}"
-      end + founder.startup.invited_founders.map do |f|
-        counter += 1
-        "#{counter}. `#{f.email}` #{f.name} (Invited)"
-      end).join("\n")
+        founder.startup.founders.each do |f|
+          t << [f.name, f.email, f.phone, founder.startup.team_lead == f ? 'Team Lead' : nil]
+        end
+
+        founder.startup.invited_founders.each do |f|
+          t << [f.name, f.email, f.phone, 'Invitation Pending']
+        end
+      end.to_s
     end
   end
 end

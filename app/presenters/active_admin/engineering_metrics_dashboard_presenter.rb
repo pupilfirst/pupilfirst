@@ -19,6 +19,15 @@ module ActiveAdmin
       end
     end
 
+    def loc
+      last_loc = last_week_metrics.dig('loc')
+      return [] if last_loc.blank?
+
+      last_loc.to_a.map do |(language, stats)|
+        [language, stats['code']]
+      end
+    end
+
     def code_frequency
       trend = [
         { name: 'Addition', data: {} },
@@ -42,7 +51,7 @@ module ActiveAdmin
         {
           name: language,
           data: last_10_metrics.reverse.each_with_object({}) do |(metrics, week_start_at), result|
-            result[week_start_at] = metrics.dig('loc', language)
+            result[week_start_at] = metrics.dig('loc', language, 'code')
           end
         }
       end
@@ -52,6 +61,12 @@ module ActiveAdmin
       last_10_metrics.reverse.each_with_object({}) do |metric, trend|
         trend[metric[1]] = metric[0].dig(type.to_s) || 0
       end
+    end
+
+    def current_release
+      release_verison = EngineeringMetric.order('week_start_at DESC').first.metrics['release_version']
+      return release_verison if release_verison.present?
+      last_week_metrics['release_version']
     end
 
     private

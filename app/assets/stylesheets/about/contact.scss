@@ -1,0 +1,13 @@
+.contact-google-map {
+  width: 100%;
+  height: 200px;
+}
+
+.contact-location {
+  iframe {
+    pointer-events: none;
+  }
+  address {
+    font-size: 115%;
+  }
+}

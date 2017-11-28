@@ -1,0 +1,337 @@
+.faculty-profile-card {
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+  padding: 0;
+  overflow: hidden;
+
+  .faculty-profile-image {
+    border-bottom: 2px solid #7f975c;
+    width: 100%;
+  }
+  .faculty-profile-title {
+    margin: 12px 0;
+
+    h3 {
+      font-size: 20px;
+      color: $theme-dark-green;
+      margin: 0;
+      padding-bottom: 4px;
+    }
+    .faculty-designation {
+      color: $theme-dark-green;
+      font-size: 13px;
+      margin: 0;
+    }
+  }
+  .faculty-since {
+    background-color: #fafafa;
+    border: 1px dashed #dcdcdc;
+    border-width: 1px 0;
+    padding: 10px;
+    font-size: 14px;
+    color: #878787;
+  }
+  .faculty-profile-card-footer {
+    .faculty-card-links {
+      display: block;
+      padding: 15px 25px;
+      height: 53px;
+      font-size: 16px;
+      vertical-align: middle;
+      text-align: center;
+      border-right: 1px dashed #dcdcdc;
+      outline: 0;
+      transition: all .2s;
+
+      &:hover, &:focus {
+        background-color: #0077b5;
+        color: white;
+      }
+    }
+    .faculty-rating {
+      padding: 17px 10px 16px;
+
+      .faculty-rating__heading {
+        font-size: 12px;
+        color: #818181;
+        font-style: italic;
+        @include media-breakpoint-between(md, lg) {
+          display: block;
+        }
+      }
+      .rating-stars {
+        padding-left: 10px;
+        font-size: 12px;
+        vertical-align: middle;
+
+        i {
+          padding-right: 5px;
+          color: #8a92db;
+
+          @include media-breakpoint-between(md, lg) {
+            padding-right: 2px;
+          }
+        }
+        @include media-breakpoint-between(md, lg) {
+          padding-left: 5px;
+        }
+      }
+    }
+  }
+  // @include media-breakpoint-down(sm) {
+  //   width: 300px;
+  //   margin: auto;
+  // }
+}
+
+.faculty-profile-right {
+  .faculty-profile-details {
+    border-radius: 5px;
+    overflow: hidden;
+    display: flex;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+
+    h3 {
+      font-size: 14px;
+      letter-spacing: 0.02em;
+      margin: 0;
+      padding: 20px;
+      border-bottom: 1px solid #e6e6e6;
+    }
+
+    .faculty-summary {
+      background-color: white;
+      padding: 0;
+      border: 1px solid #e5e5e5;
+      border-width: 0 1px 0 0;
+
+      @include media-breakpoint-down(sm) {
+        border-width: 0 0 1px 0;
+      }
+    }
+
+    .faculty-summary-section {
+      padding: 20px 20px 10px;
+      letter-spacing: 0.02em;
+      border-bottom: 1px dashed #e5e5e5;
+
+      h4 {
+        font-size: 13px;
+        padding-left: 20px;
+        margin: 0 0 15px;
+        background-position: left center;
+        background-repeat: no-repeat;
+        background-size: 13px 14px;
+
+        &.about-icon {
+          background-image: asset-url("faculty/show/summary-icon-about.svg");
+        }
+        &.skills-icon {
+          background-image: asset-url("faculty/show/summary-icon-skills.svg");
+        }
+      }
+
+      p {
+        padding-left: 20px;
+        line-height: 22px;
+        white-space: pre-wrap;
+
+        @include media-breakpoint-down(sm) {
+          padding-left: 0;
+        }
+      }
+
+      .skill-box {
+        span {
+          display: inline-block;
+          margin-right: 10px;
+          margin-bottom: 8px;
+          padding: 2px 6px;
+          background-color: #f5f5f5;
+          border: 1px solid #eae7e7;
+          border-radius: 5px;
+        }
+      }
+      &:last-child {
+        border-bottom: 0;
+      }
+    }
+
+    .faculty-connect {
+      padding: 0;
+      background-color: #fbfbfb;
+
+      .online-signal {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-top: 3px;
+
+        &.online {
+          background-color: #10ab5c;
+        }
+        &.offline {
+          background-color: #bfcacd;
+        }
+      }
+
+      .faculty-connect-availability {
+        padding: 20px;
+        border-bottom: 1px solid #e6e6e6;
+
+        .time-commitment {
+          font-size: 12px;
+          color: #333;
+          letter-spacing: 0.02em;
+          line-height: 16px;
+
+          span {
+            font-size: 13px;
+            display: block;
+            color: #0077b5;
+          }
+        }
+      }
+      .faculty-connect-btn {
+        background-color: white;
+
+        &.disabled {
+          border-color: #ccc;
+          color: #ccc;
+        }
+        &:active {
+          box-shadow: none;
+        }
+      }
+      .faculty-flags {
+        clear: both;
+        padding-top: 15px;
+
+        span {
+          margin-right: 8px;
+          border-radius: 20px;
+          color: white;
+          letter-spacing: 0.02em;
+          display: inline-block;
+          font-size: 12px;
+          padding: 3px 8px;
+          cursor: default;
+
+          &.time-commitment-flag {
+            background-color: #a0c0da;
+          }
+          &.compensation-flag {
+            background-color: #a0d190;
+          }
+          + .tooltip > {
+            .tooltip-inner {
+              background-color: #faebcc;
+              border-radius: 5px;
+              color: #8a6d3b;
+              border: 1px solid #bc995b;
+              position: relative;
+
+              &:after, &:before {
+                top: 100%;
+                left: 50%;
+                border: solid transparent;
+                content: " ";
+                height: 0;
+                width: 0;
+                position: absolute;
+                pointer-events: none;
+              }
+              &:after {
+                border-color: rgba(250, 235, 204, 0);
+                border-top-color: #faebcc;
+                border-width: 5px;
+                margin-left: -5px;
+              }
+              &:before {
+                border-color: rgba(212, 176, 115, 0);
+                border-top-color: #d4b073;
+                border-width: 6px;
+                margin-left: -6px;
+              }
+            }
+          }
+          @include media-breakpoint-down(md) {
+            font-size: 11px;
+          }
+        }
+      }
+      .past-connect-sessions {
+        .connect-session-box {
+          height: 318px;
+          position: relative;
+          overflow: auto;
+
+          .connect-session {
+            border-bottom: 1px solid $gray-border;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all .2s;
+
+            .date-box {
+              width: 60px;
+              height: 60px;
+              border-radius: 5px;
+              background-color: white;
+              border: 1px solid #d9d9d9;
+              overflow: hidden;
+              position: relative;
+              padding: 5px 0;
+
+              span {
+                font-weight: 400;
+                display: block;
+                font-size: 11px;
+                line-height: 13px;
+
+                &.date {
+                  font-size: 20px;
+                  font-weight: 600;
+                  display: inline-block;
+                  padding: 0 7px 6px;
+                  margin-bottom: 2px;
+                  border-bottom: 1px solid #d9d9d9;
+                }
+              }
+            }
+            .company-name {
+              font-size: 14px;
+              letter-spacing: 0.02em;
+              display: inline-block;
+              padding: 0 10px 5px 0;
+              margin-bottom: 3px;
+              border-bottom: 1px solid #d9d9d9;
+            }
+            p {
+              font-size: 12px;
+              height: 35px;
+              margin: 0;
+              overflow: hidden;
+            }
+            &:hover, &:focus {
+              background-color: #f5f3f3;
+            }
+          }
+          @include media-breakpoint-down(sm) {
+            height: auto;
+          }
+        }
+        .past-connect-questions {
+          white-space: pre-wrap;
+          font-size: 1rem;
+        }
+      }
+    }
+    @include media-breakpoint-down(sm) {
+      display: block;
+    }
+  }
+  @include media-breakpoint-down(xs) {
+    margin-top: 30px;
+  }
+}

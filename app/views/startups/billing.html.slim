@@ -1,0 +1,26 @@
+- presenter = Startups::BillingPresenter.new(self, current_startup)
+
+- content_for :head
+  title SV.CO Billing for #{current_startup.product_name}
+  meta name="description" content="Up-to-date billing details for the logged-in SV.CO startup"
+
+.row.justify-content-md-center.mt-4
+  .col-md-8
+    .subscription-notice__text class=presenter.subscription_notice_danger_class
+      ' #{presenter.subscription_notice_text}
+    h1.mt-4 Payment History
+    .card.my-4
+      .card-header.d-none.d-md-block
+        .row
+          .col-sm-2 Date
+          .col-sm-5 Period
+          .col-sm-2 Amount
+          .col-sm-3 Payee
+      ul.list-group.list-group-flush
+        - presenter.payment_history.each do |payment|
+          li.list-group-item
+            .row
+              .col-sm-2 #{payment[:date]}
+              .col-sm-5 #{payment[:start]} - #{payment[:end]}
+              .col-sm-2 #{payment[:amount]}
+              .col-sm-3 #{payment[:payee]}

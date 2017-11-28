@@ -1,23 +1,33 @@
 #about-links
-  .list-group.m-b-2
-    a.list-group-item href="#{about_contact_path}" Contact
-  h4 Press & Media
-  .list-group.m-b-2
-    a.list-group-item href="#{about_media_kit_path}" Media Kit
-    a.list-group-item href="#{about_slack_path}" Slack
-    a.list-group-item href="mailto:help@sv.co" Email help@sv.co
-  h4 Startups
-  .list-group.m-b-2
-    a.list-group-item href="#{about_leaderboard_path}" Leaderboard
+  h6.font-semibold Press & Media
+  .list-group.mb-4
+    a.list-group-item href="#{about_media_kit_path}"
+      i.fa.fa-briefcase.mr-2
+      | Media Kit
+    a.list-group-item href="#{about_slack_path}"
+      i.fa.fa-slack.mr-2
+      | Slack
+    a.list-group-item href="mailto:help@sv.co"
+      i.fa.fa-envelope.mr-2
+      | Email help@sv.co
+  h6.font-semibold Startups
+  .list-group.mb-4
+    a.list-group-item href="#{about_leaderboard_path}"
+      i.fa.fa-shield.mr-2
+      | Leaderboard
 
-  h4 Social Media
-  .list-group.m-b-2
-    a.list-group-item href="https://www.youtube.com/c/svdotco"
+  h6.font-semibold Social Media
+  .list-group.mb-4
+    a.list-group-item href="https://www.youtube.com/c/svdotco" target="_blank"
+      i.fa.fa-youtube.mr-2
       | Youtube Channel
-      i.fa.fa-youtube.pull-xs-right
-    a.list-group-item href="https://twitter.com/svdotco"
+    a.list-group-item href="https://twitter.com/svdotco" target="_blank"
+      i.fa.fa-twitter.mr-2
       | Twitter Account
-      i.fa.fa-twitter.pull-xs-right
-    a.list-group-item href="https://www.facebook.com/svdotco"
+    a.list-group-item href="https://www.facebook.com/svdotco" target="_blank"
+      i.fa.fa-facebook.mr-2
       | Facebook Page
-      i.fa.fa-facebook.pull-xs-right
+  .list-group.mb-4
+    a.list-group-item href="#{about_contact_path}"
+      i.fa.fa-location-arrow.mr-2
+      | Contact

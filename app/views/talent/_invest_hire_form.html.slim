@@ -1,32 +1,32 @@
+- presenter = Talents::InvestHireFormPresenter.new(self)
+
 .modal.action-form.invest-hire-modal aria-hidden="true" aria-labelledby="Invest_Hire_Talents" role="dialog" tabindex="-1" data-show-on-load=(@show_form ? 'true' : nil) class="#{'fade' unless Rails.env.test?}"
   .modal-dialog
     .modal-content
-      .modal-header.text-center
+      .modal-header.text-center.mb-4.border-0
+        h3.font-semibold.mx-auto.mb-0
+          | Invest &amp; Hire
         button.close type="button" data-dismiss="modal" aria-label="Close"
           span aria-hidden="true"
             | &times;
-        .action-form-icon.modal-title.text-xs-center
-          h3.font-semibold
-            | Invest &amp; Hire
       .talent-form-popup
-        = simple_form_for @talent_form, url: talent_contact_url,
-          method: :post do |f|
-
+        = bootstrap_form_for(@talent_form, url: talent_contact_url, method: :post) do |f|
+          = f.error_summary
           .talent-action-checklist
-            h4.text-xs-center
+            h4.text-center
               | Tick all that you are interested in:
-            = f.input :query_type, label: 'Interested in:', collection: TalentForm::VALID_QUERY_TYPES, as: :check_boxes, input_html: { class: 'interest-check-box' }
+            = f.collection_check_boxes :query_type, presenter.query_type_collection, :input_value, :display_value, { hide_label: true }
           .investor-details.clearfix
-            = f.input :name, label: 'Name', input_html: { maxlength: 50 }
-            = f.input :email, type: 'email', label: 'Email address', input_html: { maxlength: 50 }
-            = f.input :mobile, label: 'Mobile number', input_html: { maxlength: 20 }
-            = f.input :organization, label: 'Organization', input_html: { maxlength: 50 }
-            = f.input :website, label: 'Website', input_html: { maxlength: 50 }
+            = f.text_field :name, label: 'Name', required: true, maxlength: 50
+            = f.email_field :email, label: 'Email address', type: 'email', required: true, maxlength: 50
+            = f.phone_field :mobile, label: 'Mobile number', required: true, maxlength: 20
+            = f.text_field :organization, label: 'Organization', required: true, maxlength: 50
+            = f.text_field :website, label: 'Website', required: true, maxlength: 50
             - unless Rails.env.test?
               = recaptcha_tags
 
             .form-group.m-t-1
               .row
                 .col-sm-9
-                  = button_tag type: :submit, class: 'btn btn-primary btn-md text-uppercase' do
-                    | &nbsp;Submit
+                  = button_tag type: :submit, class: 'btn btn-primary btn-md text-uppercase mt-3' do
+                    | Submit

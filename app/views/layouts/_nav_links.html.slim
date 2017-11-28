@@ -1,30 +1,30 @@
 #sv-navbar.collapse.navbar-collapse.justify-content-end.navbar-link__container
-  ul.navbar-nav.align-items-lg-center
+  ul.navbar-nav.align-items-lg-center itemscope="itemscope" itemtype="http://www.schema.org/SiteNavigationElement"
     - unless current_founder
-      li.nav-item.navbar-nav__nav-item role="presentation"
+      li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
         = link_to 'Join', join_path, class: 'nav-item__link', itemprop: 'url', id: 'sv-navbar__join-link'
     - if current_founder && !current_founder.exited && current_founder.startup.present?
       li.nav-item.navbar-nav__nav-item role="presentation"
         a#sv-navbar__dashboard-link.nav-item__link href="#{dashboard_founder_url}" Dashboard
     - if current_founder&.startup.present? && policy(current_founder.startup).show?
-      li.nav-item.navbar-nav__nav-item role="presentation"
+      li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
         a#sv-navbar__timeline-link.nav-item__link href="#{timeline_url(current_founder.startup.id, current_founder.startup.slug)}" Timeline
-    li.nav-item.navbar-nav__nav-item role="presentation"
+    li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
       = link_to 'Startups', startups_path, class: 'nav-item__link', id: 'sv-navbar__startups-link'
     - unless current_founder
-      li.nav-item.navbar-nav__nav-item role="presentation"
+      li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
         = link_to 'Invest & Hire', talent_path, class: 'nav-item__link', id: 'sv-navbar__talent-link'
-    li.nav-item.navbar-nav__nav-item role="presentation"
+    li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
       = link_to 'Faculty', faculty_index_path, class: 'nav-item__link', id: 'sv-navbar__faculty-link'
     - unless current_founder
-      li.nav-item.navbar-nav__nav-item role="presentation"
+      li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
         = link_to 'About', about_path, class: 'nav-item__link', id: 'sv-navbar__about-link'
     - if current_founder && !current_founder.exited && current_founder.startup.present?
-      li.nav-item.navbar-nav__nav-item role="presentation"
+      li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
         = link_to 'Library', resources_path, class: 'nav-item__link', id: 'sv-navbar__library-link'
-    li.nav-item.navbar-nav__nav-item role="presentation"
+    li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
       = link_to 'Stats', stats_path, class: 'nav-item__link'
-    li.nav-item.navbar-nav__nav-item role="presentation"
+    li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
       = link_to 'Help Center', 'https://help.sv.co', class: 'nav-item__link', id: 'sv-navbar__help-link'
 
     - if current_user
@@ -39,6 +39,11 @@
                 = link_to founder_profile_path(slug: current_founder.slug) do
                   i.fa.fa-list-ul
                   | Profile
+            - if current_startup && policy(current_startup).billing?
+              li role="presentation"
+                = link_to billing_startup_path do
+                  i.fa.fa-credit-card
+                  | Billing
             - if policy(PlatformFeedback).create?
               li role="presentation"
                 a href="#" data-toggle="modal" data-target="#platform-feedback-modal"
@@ -50,8 +55,8 @@
                 | Logout
       - else
         li.nav-item role="presentation"
-          = link_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'btn btn-sm btn-ghost-secondary'
+          = link_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'btn btn-sm btn-secondary btn-signin', id: 'sv-navbar__sign-out'
 
     - elsif @hide_sign_in.blank?
-      li.nav-item role="presentation"
-        = link_to 'Sign In', new_user_session_path, class: 'btn btn-sm btn-ghost-primary', rel: 'nofollow'
+      li.nav-item role="presentation" itemprop="name"
+        = link_to 'Sign In', new_user_session_path, class: 'btn btn-sm btn-primary btn-signin', rel: 'nofollow', itemprop: 'url', id: 'sv-navbar__sign-in'

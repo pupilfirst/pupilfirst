@@ -1,11 +1,18 @@
-.faculty-card.col-md-3
-  .faculty-card__box.content-box.p-a-0
+.faculty-card.col-lg-3.col-md-4
+  .faculty-card__box.content-box.p-0
+    - connect_slots = member.connect_slots.available_for_founder
     a.faculty-image href=faculty_url(member)
-      .btn.btn-default.btn-view-profile
+      .btn.btn-primary.btn-view-profile
         i.fa.fa-user
         | &nbsp;View Profile
+
       = image_tag member.image_url
-    .faculty-card-info
+      - if connect_slots.present?
+        .available-marker
+          i.fa.fa-check-circle
+          | &nbsp;Available for Connect
+
+    .faculty-card-info.d-flex.flex-column.align-items-center
       .faculty-card-info__content
         .faculty-card-info__name
           = link_to member.name, faculty_url(member)
@@ -23,13 +30,7 @@
               i.fa.fa-linkedin
 
       - if member.alumni?
-        = link_to 'Founder Profile', founder_profile_path(member.founder.slug), class: 'founder-profile-btn text-uppercase'
-
-      - connect_slots = member.connect_slots.available_for_founder
+        = link_to 'Founder Profile', founder_profile_path(member.founder.slug), class: 'founder-profile-btn text-uppercase mt-2'
 
       - if connect_slots.present?
-        .available-marker
-          i.fa.fa-check-circle
-          | &nbsp;Available for Connect
-
         == render 'connect_button', faculty: member

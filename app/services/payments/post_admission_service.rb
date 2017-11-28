@@ -1,6 +1,6 @@
-module Admissions
-  class PostPaymentService
-    def initialize(payment:, founder: nil)
+module Payments
+  class PostAdmissionService
+    def initialize(payment, founder: nil)
       @payment = payment
       @startup = payment&.startup || founder.startup
       @founder = payment&.founder || founder
@@ -12,7 +12,7 @@ module Admissions
       return if fee_target.status(@founder) == Targets::StatusService::STATUS_COMPLETE
 
       # ensure the subscription window starts from time of payment
-      Founders::PostPaymentService.new(@payment).execute
+      Payments::PostPaymentService.new(@payment).execute
 
       # Create a referral coupon for the startup.
       Coupons::CreateService.new.generate_referral(@startup) if @startup.referral_coupon.blank?

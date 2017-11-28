@@ -19,9 +19,9 @@ class InstamojoController < ApplicationController
     end
 
     if payment.startup.level_zero?
-      Admissions::PostPaymentService.new(payment: payment).execute
+      Payments::PostAdmissionService.new(payment).execute
     else
-      Founders::PostPaymentService.new(payment).execute
+      Payments::PostPaymentService.new(payment).execute
     end
 
     flash[:success] = 'Your payment has been recorded.'
@@ -46,9 +46,9 @@ class InstamojoController < ApplicationController
 
     if payment.paid?
       if payment.startup.level_zero?
-        Admissions::PostPaymentService.new(payment: payment).execute
+        Payments::PostAdmissionService.new(payment).execute
       else
-        Founders::PostPaymentService.new(payment).execute
+        Payments::PostPaymentService.new(payment).execute
       end
     end
 

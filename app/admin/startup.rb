@@ -346,7 +346,7 @@ ActiveAdmin.register Startup do
       row :courier_number
       row :payment_reference
       row :referral_reward_days
-      row :founder_fee
+      row :undiscounted_founder_fee
     end
 
     if startup.level&.number&.positive?

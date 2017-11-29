@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171122071238) do
+ActiveRecord::Schema.define(version: 20171128115349) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -387,6 +387,7 @@ ActiveRecord::Schema.define(version: 20171122071238) do
     t.datetime "billing_start_at"
     t.datetime "billing_end_at"
     t.integer "period", default: 1
+    t.string "payment_type"
     t.index ["founder_id"], name: "index_payments_on_founder_id"
     t.index ["original_startup_id"], name: "index_payments_on_original_startup_id"
     t.index ["startup_id"], name: "index_payments_on_startup_id"
@@ -458,27 +459,6 @@ ActiveRecord::Schema.define(version: 20171122071238) do
     t.string "timestamp"
     t.integer "reaction_to_id"
     t.index ["founder_id"], name: "index_public_slack_messages_on_founder_id"
-  end
-
-  create_table "quiz_attempts", id: :serial, force: :cascade do |t|
-    t.integer "course_module_id"
-    t.integer "mooc_student_id"
-    t.datetime "taken_at"
-    t.float "score"
-    t.integer "total_questions"
-    t.integer "attempted_questions"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["course_module_id"], name: "index_quiz_attempts_on_course_module_id"
-    t.index ["mooc_student_id"], name: "index_quiz_attempts_on_mooc_student_id"
-  end
-
-  create_table "quiz_questions", id: :serial, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "course_module_id"
-    t.text "question"
-    t.index ["course_module_id"], name: "index_quiz_questions_on_course_module_id"
   end
 
   create_table "resources", id: :serial, force: :cascade do |t|
@@ -594,7 +574,7 @@ ActiveRecord::Schema.define(version: 20171122071238) do
     t.datetime "admission_stage_updated_at"
     t.bigint "team_lead_id"
     t.integer "referral_reward_days", default: 0
-    t.integer "founder_fee"
+    t.integer "undiscounted_founder_fee"
     t.index ["level_id"], name: "index_startups_on_level_id"
     t.index ["maximum_level_id"], name: "index_startups_on_maximum_level_id"
     t.index ["slug"], name: "index_startups_on_slug", unique: true
@@ -698,18 +678,6 @@ ActiveRecord::Schema.define(version: 20171122071238) do
     t.index ["level_id"], name: "index_targets_on_level_id"
     t.index ["session_at"], name: "index_targets_on_session_at"
     t.index ["timeline_event_type_id"], name: "index_targets_on_timeline_event_type_id"
-  end
-
-  create_table "team_members", id: :serial, force: :cascade do |t|
-    t.string "name"
-    t.string "email"
-    t.string "roles"
-    t.string "avatar"
-    t.integer "startup_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "avatar_processing", default: false
-    t.index ["startup_id"], name: "index_team_members_on_startup_id"
   end
 
   create_table "timeline_event_files", id: :serial, force: :cascade do |t|
@@ -865,7 +833,6 @@ ActiveRecord::Schema.define(version: 20171122071238) do
   add_foreign_key "target_groups", "levels"
   add_foreign_key "target_performance_criteria", "performance_criteria"
   add_foreign_key "target_performance_criteria", "targets"
-  add_foreign_key "team_members", "startups"
   add_foreign_key "timeline_event_files", "timeline_events"
   add_foreign_key "timeline_events", "startups"
   add_foreign_key "user_activities", "users"

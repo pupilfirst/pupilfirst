@@ -1,7 +1,7 @@
-const TimelineBuilderTimelineEventGroup = React.createClass({
+const TimelineBuilderTimelineEventGroup = createReactClass({
   propTypes: {
-    role: React.PropTypes.string,
-    timelineEvents: React.PropTypes.object
+    role: PropTypes.string,
+    timelineEvents: PropTypes.object
   },
 
   render: function () {

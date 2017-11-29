@@ -75,5 +75,5 @@ class FounderDashboardTargetStatusBadge extends React.Component {
 }
 
 FounderDashboardTargetStatusBadge.propTypes = {
-  target: React.PropTypes.object
+  target: PropTypes.object
 };

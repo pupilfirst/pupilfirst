@@ -74,6 +74,6 @@ class TimelineBuilderDateForm extends React.Component {
 }
 
 TimelineBuilderDateForm.propTypes = {
-  selectedDate: React.PropTypes.string,
-  addAttachmentCB: React.PropTypes.func
+  selectedDate: PropTypes.string,
+  addAttachmentCB: PropTypes.func
 };

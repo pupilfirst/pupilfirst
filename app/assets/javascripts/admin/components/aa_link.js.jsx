@@ -1,8 +1,8 @@
-var AALink = React.createClass({
+var AALink = createReactClass({
   propTypes: {
-    title: React.PropTypes.string,
-    url: React.PropTypes.string,
-    private: React.PropTypes.bool
+    title: PropTypes.string,
+    url: PropTypes.string,
+    private: PropTypes.bool
   },
 
   deleteLink: function () {

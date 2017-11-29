@@ -58,14 +58,14 @@ class FounderDashboardTargets extends React.Component {
 }
 
 FounderDashboardTargets.propTypes = {
-  currentLevel: React.PropTypes.number,
-  levels: React.PropTypes.object,
-  openTimelineBuilderCB: React.PropTypes.func,
-  levelUpEligibility: React.PropTypes.string,
-  authenticityToken: React.PropTypes.string,
-  iconPaths: React.PropTypes.object,
-  founderDetails: React.PropTypes.array,
-  maxLevelNumber: React.PropTypes.number,
-  programLevels: React.PropTypes.object,
-  selectTargetCB: React.PropTypes.func
+  currentLevel: PropTypes.number,
+  levels: PropTypes.object,
+  openTimelineBuilderCB: PropTypes.func,
+  levelUpEligibility: PropTypes.string,
+  authenticityToken: PropTypes.string,
+  iconPaths: PropTypes.object,
+  founderDetails: PropTypes.array,
+  maxLevelNumber: PropTypes.number,
+  programLevels: PropTypes.object,
+  selectTargetCB: PropTypes.func
 };

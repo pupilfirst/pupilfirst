@@ -110,7 +110,7 @@ class ApplicantScreeningQuestionSection extends React.Component {
 }
 
 ApplicantScreeningQuestionSection.propTypes = {
-  type: React.PropTypes.string,
-  resultCB: React.PropTypes.func,
-  githubURLCB: React.PropTypes.func
+  type: PropTypes.string,
+  resultCB: PropTypes.func,
+  githubURLCB: PropTypes.func
 };

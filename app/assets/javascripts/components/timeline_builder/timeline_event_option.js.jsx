@@ -1,7 +1,7 @@
-const TimelineBuilderTimelineEventOption = React.createClass({
+const TimelineBuilderTimelineEventOption = createReactClass({
   propTypes: {
-    timelineEventId: React.PropTypes.string,
-    timelineEvent: React.PropTypes.object
+    timelineEventId: PropTypes.string,
+    timelineEvent: PropTypes.object
   },
 
   render: function () {

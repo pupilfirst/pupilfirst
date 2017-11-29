@@ -66,8 +66,8 @@ class FounderDashboardLevelUpNotification extends React.Component {
 }
 
 FounderDashboardLevelUpNotification.propTypes = {
-  authenticityToken: React.PropTypes.string,
-  levelUpEligibility: React.PropTypes.string,
-  currentLevel: React.PropTypes.number,
-  maxLevelNumber: React.PropTypes.number
+  authenticityToken: PropTypes.string,
+  levelUpEligibility: PropTypes.string,
+  currentLevel: PropTypes.number,
+  maxLevelNumber: PropTypes.number
 };

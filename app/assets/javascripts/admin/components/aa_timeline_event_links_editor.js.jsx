@@ -1,4 +1,4 @@
-var AATimelineEventLinksEditor = React.createClass({
+var AATimelineEventLinksEditor = createReactClass({
   getInitialState: function () {
     return {
       links: (this.props.linksJSON.length > 0 ? JSON.parse(this.props.linksJSON) : []),

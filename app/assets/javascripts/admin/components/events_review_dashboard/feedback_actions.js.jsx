@@ -97,8 +97,8 @@ class EventsReviewDashboardFeedbackActions extends React.Component {
 }
 
 EventsReviewDashboardFeedbackActions.propTypes = {
-  feedbackId: React.PropTypes.number,
-  founderId: React.PropTypes.number,
-  eventId: React.PropTypes.number,
-  levelZero: React.PropTypes.bool
+  feedbackId: PropTypes.number,
+  founderId: PropTypes.number,
+  eventId: PropTypes.number,
+  levelZero: PropTypes.bool
 };

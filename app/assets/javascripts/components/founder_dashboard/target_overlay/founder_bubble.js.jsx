@@ -50,7 +50,7 @@ class TargetOverlayFounderBubble extends React.Component {
 }
 
 TargetOverlayFounderBubble.propTypes = {
-  name: React.PropTypes.string,
-  avatar: React.PropTypes.string,
-  status: React.PropTypes.string
+  name: PropTypes.string,
+  avatar: PropTypes.string,
+  status: PropTypes.string
 };

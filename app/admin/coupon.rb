@@ -26,6 +26,8 @@ ActiveAdmin.register Coupon do
   end
 
   form do |f|
+    div id: 'admin-coupon__form'
+
     f.semantic_errors(*f.object.errors.keys)
 
     f.inputs 'Coupon Details' do
@@ -35,6 +37,12 @@ ActiveAdmin.register Coupon do
       f.input :expires_at, as: :datepicker, hint: 'The date at which the coupon will be disabled. Leave this as blank to create a coupon that never expires.'
       f.input :redeem_limit, hint: 'The number of times this coupon can be used. Set it to zero to allow infinite redeems.'
       f.input :instructions
+    end
+
+    if f.object.coupon_usages.any?
+      div class: 'admin-coupon__update-warning' do
+        para t('admin.coupon.form.update_warning')
+      end
     end
 
     f.actions

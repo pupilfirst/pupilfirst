@@ -12,16 +12,13 @@ class InstamojoController < ApplicationController
       raise "Unexpected payment request status #{payment.instamojo_payment_request_status} for redirected Payment ##{payment.id}"
     end
 
-    # Log payment time, if unrecorded.
-    if payment.paid_at.blank?
-      payment.paid_at = Time.zone.now
-      payment.save!
-    end
+    # Ensure paid_at and payment_type are set.
+    payment = Payments::ProcessPaymentService.new(payment).process
 
     if payment.startup.level_zero?
-      Admissions::PostPaymentService.new(payment: payment).execute
+      Payments::PostAdmissionService.new(payment).execute
     else
-      Founders::PostPaymentService.new(payment).execute
+      Payments::PostPaymentService.new(payment).execute
     end
 
     flash[:success] = 'Your payment has been recorded.'
@@ -39,16 +36,18 @@ class InstamojoController < ApplicationController
 
     if params[:status] == Instamojo::PAYMENT_STATUS_CREDITED
       payment.instamojo_payment_request_status = Instamojo::PAYMENT_REQUEST_STATUS_COMPLETED
-      payment.paid_at = Time.zone.now if payment.paid_at.blank?
+
+      # Ensure paid_at and payment_type are set.
+      payment = Payments::ProcessPaymentService.new(payment).process
     end
 
     payment.save!
 
     if payment.paid?
       if payment.startup.level_zero?
-        Admissions::PostPaymentService.new(payment: payment).execute
+        Payments::PostAdmissionService.new(payment).execute
       else
-        Founders::PostPaymentService.new(payment).execute
+        Payments::PostPaymentService.new(payment).execute
       end
     end
 

@@ -21,8 +21,8 @@ class EventsReviewDashboardEventEntry extends React.Component {
 }
 
 EventsReviewDashboardEventEntry.propTypes = {
-  rootState: React.PropTypes.object,
-  setRootState: React.PropTypes.func,
-  eventData: React.PropTypes.object,
-  eventId: React.PropTypes.number
+  rootState: PropTypes.object,
+  setRootState: PropTypes.func,
+  eventData: PropTypes.object,
+  eventId: PropTypes.number
 };

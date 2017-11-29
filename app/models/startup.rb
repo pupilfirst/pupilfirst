@@ -120,7 +120,6 @@ class Startup < ApplicationRecord
   has_many :startup_feedback, dependent: :destroy
   has_many :karma_points, dependent: :restrict_with_exception
   has_many :connect_requests, dependent: :destroy
-  has_many :team_members, dependent: :destroy
 
   belongs_to :level
   belongs_to :maximum_level, class_name: 'Level'

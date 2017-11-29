@@ -62,5 +62,5 @@ class EventsReviewDashboardEventDescriptionColumn extends React.Component {
 };
 
 EventsReviewDashboardEventDescriptionColumn.propTypes = {
-  eventData: React.PropTypes.object
+  eventData: PropTypes.object
 };

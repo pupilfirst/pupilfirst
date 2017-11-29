@@ -71,7 +71,7 @@ class ApplicantScreeningAnswerHint extends React.Component {
 }
 
 ApplicantScreeningAnswerHint.propTypes = {
-  type: React.PropTypes.string,
-  questionNumber: React.PropTypes.number,
-  correctAnswer: React.PropTypes.bool
+  type: PropTypes.string,
+  questionNumber: PropTypes.number,
+  correctAnswer: PropTypes.bool
 };

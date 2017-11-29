@@ -1,7 +1,7 @@
-const TimelineBuilderAttachment = React.createClass({
+const TimelineBuilderAttachment = createReactClass({
   propTypes: {
-    attachment: React.PropTypes.object,
-    removeAttachmentCB: React.PropTypes.func
+    attachment: PropTypes.object,
+    removeAttachmentCB: PropTypes.func
   },
 
   iconClasses: function () {

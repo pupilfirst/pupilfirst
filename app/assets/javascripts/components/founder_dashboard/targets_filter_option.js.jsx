@@ -45,8 +45,8 @@ class FounderDashboardTargetsFilterOption extends React.Component {
 }
 
 FounderDashboardTargetsFilterOption.propTypes = {
-  name: React.PropTypes.string,
-  level: React.PropTypes.number,
-  pickFilterCB: React.PropTypes.func,
-  currentLevel: React.PropTypes.number
+  name: PropTypes.string,
+  level: PropTypes.number,
+  pickFilterCB: PropTypes.func,
+  currentLevel: PropTypes.number
 };

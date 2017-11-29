@@ -166,7 +166,7 @@ class TargetOverlayContentBlock extends React.Component {
 }
 
 TargetOverlayContentBlock.propTypes = {
-  target: React.PropTypes.object,
-  iconPaths: React.PropTypes.object,
-  linkedResources: React.PropTypes.array
+  target: PropTypes.object,
+  iconPaths: PropTypes.object,
+  linkedResources: PropTypes.array
 };

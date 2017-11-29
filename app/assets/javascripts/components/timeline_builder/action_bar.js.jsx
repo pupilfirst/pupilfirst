@@ -1,21 +1,21 @@
-const TimelineBuilderActionBar = React.createClass({
+const TimelineBuilderActionBar = createReactClass({
   propTypes: {
-    formClickedCB: React.PropTypes.func,
-    currentForm: React.PropTypes.string,
-    submitCB: React.PropTypes.func,
-    timelineEventTypes: React.PropTypes.object,
-    coverImage: React.PropTypes.object,
-    addDataCB: React.PropTypes.func,
-    imageButtonKey: React.PropTypes.string,
-    selectedDate: React.PropTypes.string,
-    submissionProgress: React.PropTypes.number,
-    submissionError: React.PropTypes.string,
-    submissionSuccessful: React.PropTypes.bool,
-    attachmentAllowed: React.PropTypes.bool,
-    showDateError: React.PropTypes.bool,
-    showEventTypeError: React.PropTypes.bool,
-    resetErrorsCB: React.PropTypes.func,
-    timelineEventTypeId: React.PropTypes.string
+    formClickedCB: PropTypes.func,
+    currentForm: PropTypes.string,
+    submitCB: PropTypes.func,
+    timelineEventTypes: PropTypes.object,
+    coverImage: PropTypes.object,
+    addDataCB: PropTypes.func,
+    imageButtonKey: PropTypes.string,
+    selectedDate: PropTypes.string,
+    submissionProgress: PropTypes.number,
+    submissionError: PropTypes.string,
+    submissionSuccessful: PropTypes.bool,
+    attachmentAllowed: PropTypes.bool,
+    showDateError: PropTypes.bool,
+    showEventTypeError: PropTypes.bool,
+    resetErrorsCB: PropTypes.func,
+    timelineEventTypeId: PropTypes.string
   },
 
   componentDidUpdate: function () {

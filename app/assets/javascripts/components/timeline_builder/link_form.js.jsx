@@ -1,6 +1,6 @@
-const TimelineBuilderLinkForm = React.createClass({
+const TimelineBuilderLinkForm = createReactClass({
   propTypes: {
-    addAttachmentCB: React.PropTypes.func
+    addAttachmentCB: PropTypes.func
   },
 
   getInitialState: function () {

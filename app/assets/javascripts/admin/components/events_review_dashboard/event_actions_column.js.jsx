@@ -28,7 +28,7 @@ class EventsReviewDashboardEventActionsColumn extends React.Component {
 }
 
 EventsReviewDashboardEventActionsColumn.propTypes = {
-  rootState: React.PropTypes.object,
-  setRootState: React.PropTypes.func,
-  eventData: React.PropTypes.object
+  rootState: PropTypes.object,
+  setRootState: PropTypes.func,
+  eventData: PropTypes.object
 };

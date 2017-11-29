@@ -10,8 +10,8 @@ class FounderDashboardTarget extends React.Component {
 }
 
 FounderDashboardTarget.propTypes = {
-  target: React.PropTypes.object,
-  displayDate: React.PropTypes.bool,
-  iconPaths: React.PropTypes.object,
-  selectTargetCB: React.PropTypes.func
+  target: PropTypes.object,
+  displayDate: PropTypes.bool,
+  iconPaths: PropTypes.object,
+  selectTargetCB: PropTypes.func
 };

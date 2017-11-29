@@ -108,10 +108,10 @@ class FounderDashboardTargetHeader extends React.Component {
 }
 
 FounderDashboardTargetHeader.propTypes = {
-  onClickCB: React.PropTypes.func,
-  target: React.PropTypes.object,
-  displayDate: React.PropTypes.bool,
-  iconPaths: React.PropTypes.object
+  onClickCB: PropTypes.func,
+  target: PropTypes.object,
+  displayDate: PropTypes.bool,
+  iconPaths: PropTypes.object
 };
 
 FounderDashboardTargetHeader.defaultProps = {

@@ -126,9 +126,9 @@ class FounderDashboardTargetOverlay extends React.Component  {
 }
 
 FounderDashboardTargetOverlay.propTypes = {
-  target: React.PropTypes.object,
-  openTimelineBuilderCB: React.PropTypes.func,
-  founderDetails: React.PropTypes.array,
-  closeCB: React.PropTypes.func,
-  iconPaths: React.PropTypes.object
+  target: PropTypes.object,
+  openTimelineBuilderCB: PropTypes.func,
+  founderDetails: PropTypes.array,
+  closeCB: PropTypes.func,
+  iconPaths: PropTypes.object
 };

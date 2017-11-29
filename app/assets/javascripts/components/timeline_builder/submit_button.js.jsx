@@ -111,8 +111,8 @@ class TimelineBuilderSubmitButton extends React.Component {
 }
 
 TimelineBuilderSubmitButton.propTypes = {
-  submissionProgress: React.PropTypes.number,
-  submitCB: React.PropTypes.func,
-  submissionError: React.PropTypes.string,
-  submissionSuccessful: React.PropTypes.bool,
+  submissionProgress: PropTypes.number,
+  submitCB: PropTypes.func,
+  submissionError: PropTypes.string,
+  submissionSuccessful: PropTypes.bool,
 };

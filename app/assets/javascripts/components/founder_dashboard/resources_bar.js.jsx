@@ -50,5 +50,5 @@ class FounderDashboardResourcesBar extends React.Component {
 }
 
 FounderDashboardResourcesBar.propTypes = {
-  target: React.PropTypes.object
+  target: PropTypes.object
 };

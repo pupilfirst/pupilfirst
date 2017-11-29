@@ -40,9 +40,9 @@ class FounderDashboardToggleBar extends React.Component {
 }
 
 FounderDashboardToggleBar.propTypes = {
-  selected: React.PropTypes.string,
-  chooseTabCB: React.PropTypes.func,
-  openTimelineBuilderCB: React.PropTypes.func,
-  pendingSessions: React.PropTypes.number,
-  currentLevel: React.PropTypes.number
+  selected: PropTypes.string,
+  chooseTabCB: PropTypes.func,
+  openTimelineBuilderCB: PropTypes.func,
+  pendingSessions: PropTypes.number,
+  currentLevel: PropTypes.number
 };

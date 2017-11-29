@@ -86,6 +86,6 @@ class TargetOverlayTimelineEventPanel extends React.Component {
 }
 
 TargetOverlayTimelineEventPanel.propTypes = {
-  event: React.PropTypes.object,
-  feedback: React.PropTypes.object
+  event: PropTypes.object,
+  feedback: PropTypes.object
 }

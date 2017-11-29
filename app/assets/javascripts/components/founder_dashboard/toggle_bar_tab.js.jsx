@@ -38,8 +38,8 @@ class FounderDashboardToggleBarTab extends React.Component {
 }
 
 FounderDashboardToggleBarTab.propTypes = {
-  tabType: React.PropTypes.string,
-  pendingCount: React.PropTypes.number,
-  chooseTabCB: React.PropTypes.func,
-  chosen: React.PropTypes.bool
+  tabType: PropTypes.string,
+  pendingCount: PropTypes.number,
+  chooseTabCB: PropTypes.func,
+  chosen: PropTypes.bool
 };

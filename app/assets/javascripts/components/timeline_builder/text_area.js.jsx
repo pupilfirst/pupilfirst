@@ -61,10 +61,10 @@ class TimelineBuilderTextArea extends React.Component {
 }
 
 TimelineBuilderTextArea.propTypes = {
-  showError: React.PropTypes.bool,
-  resetErrorsCB: React.PropTypes.func,
-  placeholder: React.PropTypes.string,
-  textChangeCB: React.PropTypes.func
+  showError: PropTypes.bool,
+  resetErrorsCB: PropTypes.func,
+  placeholder: PropTypes.string,
+  textChangeCB: PropTypes.func
 };
 
 TimelineBuilderTextArea.defaultProps = {

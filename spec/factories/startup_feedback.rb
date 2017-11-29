@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :startup_feedback do
     feedback { Faker::Lorem.words(15).join(' ') }
     reference_url { Faker::Internet.url }

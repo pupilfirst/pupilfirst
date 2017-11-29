@@ -153,7 +153,7 @@ end
 
 group :test do
   gem 'rspec-retry', '~> 0.5' # Retry randomly failing rspec example. https://github.com/NoRedInk/rspec-retry
-  gem 'factory_girl_rails', '~> 4.8' # A library for setting up Ruby objects as test data.
+  gem 'factory_bot_rails', '~> 4.8' # A library for setting up Ruby objects as test data.
   gem 'faker', '~> 1.7' # A library for generating fake data such as names, addresses, and phone numbers.
   gem 'capybara', '~> 2.13' # For RSpec feature tests.
   gem 'capybara-email', '~> 2.5' # Test ActionMailer and Mailer messages with Capybara

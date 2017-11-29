@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :level_0_startup, class: Startup do
     product_name { ['Red Ramanujan', 'Blue Bell', 'Crimson Copernicus'].sample }
 

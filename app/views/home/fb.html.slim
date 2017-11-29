@@ -4,21 +4,25 @@
   .container
     .row.justify-content-center
       .fb-landing__header-logo-container
-        = image_tag 'shared/logo-color.svg', class: 'fb-landing__header-logo-img img-fluid', alt: 'Facebook Logo'
+        = image_tag 'shared/logo-color.svg', class: 'fb-landing__header-logo-img img-fluid', alt: 'SV.CO Logo'
         = image_tag 'home/index/sv-partner-facebook.svg', class: 'fb-landing__header-logo-img img-fluid', alt: 'Facebook Logo'
 
 .fb-landing__hero-container
   .container
     .fb-landing__hero-screen.mx-auto.d-flex.justify-content-center
-      img class="fb-landing__hero-clip-bg" src="assets/fb/fb-school-bg" alt="Facebook school of VR"
-      .fb-landing__hero-message.text-center
-        h1.fb-landing__hero-message-h1
+      = image_tag 'fb/fb-school-bg.jpg', class: 'fb-landing__hero-clip-bg img-fluid', alt: 'Facebook school of VR'
+      .fb-landing__hero-message.text-center.px-3
+        h1.fb-landing__hero-message-h1.mx-auto
           ' Welcome to
-          span.d-block.font-semibold
+          span.d-block.font-bold
             ' School of Innovation India
           | from Facebook at SV.CO
 
-        = link_to 'Register for Stakeholder Workshop', join_path, class: 'btn btn-primary btn-lg home-apply__button mt-2', id: 'fb-landing__call-to-action-button'
+        a class="typeform-share button btn btn-primary btn-lg home-apply__button mt-3" href="https://svlabs.typeform.com/to/oBGW4k" data-mode="popup" target="_blank"
+          span.d-none.d-md-block
+            | Register for Stakeholder Workshop
+          span.d-block.d-md-none
+            | Register for Workshop
 
       svg width="0" height="0"
         defs
@@ -30,7 +34,7 @@
     .row.justify-content-md-center
       .col-md-7
         h2.fb-landing__heading-h2.mt-5.mb-4.text-center
-          span.d-block.font-semibold
+          span.d-block.font-bold
             ' School of Innovation India
           | from Facebook at SV.CO
 
@@ -40,59 +44,72 @@
           ' technologies to India for ambitious students to work, learn how to build
           | products while in college and scale under the guidance of the Industry.
 
+        .fb-landing__about-partner-logo-container.d-flex.justify-content-center.align-items-center.pb-3.pb-md-0
+          .fb-landing__about-partner-logo-img
+            = image_tag 'fb/school-of-innovation-india-fb-logo.svg', class: 'img-fluid', alt: 'School of Innovation India from Facebook at SV.CO'
+          .fb-landing__pulse-icon.m-2.m-md-4.fb-landing__pulse-icon--animate
+            = image_tag 'fb/pulse-at-icon.svg', class: 'img-fluid'
+          .fb-landing__about-partner-logo-img
+            = image_tag 'shared/logo-color.svg', class: 'img-fluid', alt: 'SV.CO Logo'
+
 .fb-landing__school-of-vr.d-flex.align-items-center
   .container
     .row.py-5.align-items-center
-      .col-md-6
-      .col-md-6
-        h2.font-semibold.white-text School of VR
-        p.white-text
+      .col-md-7
+      .col-md-5
+        h2.fb-landing__school-of-vr-title.d-flex.align-items-center.white-text.mb-3.font-regular
+          = image_tag 'fb/vr-icon.svg', class: 'img-fluid', alt: 'School of VR icon'
+          span.ml-2
+            | Facebook School of
+            span.font-bold.ml-2
+              | VR
+        p.fb-landing__content-p.white-text
           ' The School of VR is the first pilot programme of the “School of Innovation India”
           ' and in the aim, we will select the top 10 student teams from across
           ' 4M engineering students in 3300 engineering colleges in India to build
           | a next generation product idea they have using VR.
 
-.fb-landing__partners-container.py-5
+.fb-landing__partners-container.pb-3.pb-md-5
   .container
     .row.justify-content-md-center
       .col-md-7
-        h2.fb-landing__heading-h2.mt-5.mb-4.text-center
-          span.d-block.font-semibold
+        h2.fb-landing__heading-h2.mt-5.mb-4.mb-md-5.text-center
+          span.d-block.font-black
             ' Partners
-    .row
-      .col-md-6
-        h3.font-semibold SV.CO
-        p
+    .row.pb-4
+      .col-md-6.pb-4
+        h3.font-bold SV.CO
+        p.fb-landing__content-p.mb-2
           ' Startup Village Collective (SV.CO) is a group of engineers,artists,
           ' designers, scientists, tech founders, organisations, governments
           ' (city, state, national and international) who have come together with
           ' a mission to build a world class learning environment on the Internet
           | for students to build products.
-        p
+        p.fb-landing__content-p
           ' Teams with commercial success join startup incubators, accelerators,
           ' angel funds and teams with engineering success get great jobs in
           | startups or go for higher studies.
-      .col-md-6
-        h3.font-semibold Facebook
-        p
+      .col-md-6.pb-4
+        h3.font-bold Facebook
+        p.fb-landing__content-p.mb-2
           ' Facebook is already involved with SV.CO as the Official Silicon Valley
           ' Host Partner along with City of Menlo Park and US Embassy in India and
           ' hosted the largest contingent of Indian students founders to visit
           | Silicon Valley in June 2017.
 
-        p
+        p.fb-landing__content-p
           ' Facebook with its interest to nurture future talent in India,
           ' is partnering with SV.CO to take the School of Innovation to the
           ' engineering students to understand the potential of cutting edge
           ' technologies, build products, demo to industry leaders and perhaps
           | also launch to customers.
 
-.fb-landing__why-school-of-vr-container.py-5
+.fb-landing__why-school-of-vr-container.py-3.py-md-5
   .container
     .row.justify-content-md-center
       .col-md-7
         h2.fb-landing__heading-h2.mt-5.mb-4.text-center
-          span.d-block.font-semibold
+          span.d-block.font-black
             ' Why School of VR?
 
         p.fb-landing__content-p.text-center.mb-4
@@ -103,117 +120,140 @@
           ' 18-22 in engineering college to be great adopters of this bleeding
           | edge new technology.
 
-.fb-landing__calander-container.py-5
+.fb-landing__calander-container.py-3.py-md-5
   .container
     .row.justify-content-md-center
       .col-md-7
-        h2.fb-landing__heading-h2.mt-5.mb-4.text-center
-          span.d-block.font-semibold.white-text
+        h2.fb-landing__heading-h2.mt-5.mb-4.mb-md-5.text-center
+          span.d-block.font-black.white-text
             ' What’s coming ahead?
-    .row
-      .col-md-3
+    .row.mb-md-4
+      .col-md-3.mb-4.mb-md-0
         .fb-landing__calander-card.text-center
-          .fb-landing__calander-card-month.text-uppercase
+          .fb-landing__calander-card-month
             p.font-semibold
-              | Jan 2018
+              | JAN 2018
           .fb-landing__calander-card-event
             p
               | Stakeholder Workshop
-      .col-md-3
+      .col-md-3.mb-4.mb-md-0
         .fb-landing__calander-card.text-center
-          .fb-landing__calander-card-month.text-uppercase
+          .fb-landing__calander-card-month
             p.font-semibold
-              | Jan 2018
+              | FEB 2018
           .fb-landing__calander-card-event
-            | Stakeholder Workshop
-      .col-md-3
+            | Finalize Universities to set-up VR Labs
+      .col-md-3.mb-4.mb-md-0
         .fb-landing__calander-card.text-center
-          .fb-landing__calander-card-month.text-uppercase
+          .fb-landing__calander-card-month
             p.font-semibold
-              | Jan 2018
+              | FEB, MAR 2018
           .fb-landing__calander-card-event
-            | Stakeholder Workshop
-      .col-md-3
+            | Knowledge Workshop (State Specific, University as venue)
+      .col-md-3.mb-4.mb-md-0
         .fb-landing__calander-card.text-center
-          .fb-landing__calander-card-month.text-uppercase
+          .fb-landing__calander-card-month
             p.font-semibold
-              | Jan 2018
+              | MAR 2018
           .fb-landing__calander-card-event
-            | Stakeholder Workshop
-      .col-md-3
+            | Onboard Mentors to the Program
+    .row.mb-md-4
+      .col-md-3.mb-4.mb-md-0
         .fb-landing__calander-card.text-center
-          .fb-landing__calander-card-month.text-uppercase
+          .fb-landing__calander-card-month
             p.font-semibold
-              | Jan 2018
+              | APR, MAY 2018
           .fb-landing__calander-card-event
-            | Stakeholder Workshop
-      .col-md-3
+            | Set-up of Labs in Universities
+      .col-md-3.mb-4.mb-md-0
         .fb-landing__calander-card.text-center
-          .fb-landing__calander-card-month.text-uppercase
+          .fb-landing__calander-card-month
             p.font-semibold
-              | Jan 2018
+              | JUN 2018
           .fb-landing__calander-card-event
-            | Stakeholder Workshop
-      .col-md-3
+            | Program Soft Launch (Student teams begin to apply)
+      .col-md-3.mb-4.mb-md-0
         .fb-landing__calander-card.text-center
-          .fb-landing__calander-card-month.text-uppercase
+          .fb-landing__calander-card-month
             p.font-semibold
-              | Jan 2018
+              | JUL 2018
           .fb-landing__calander-card-event
-            | Stakeholder Workshop
-      .col-md-3
+            | VR Hackathon
+      .col-md-3.mb-4.mb-md-0
         .fb-landing__calander-card.text-center
-          .fb-landing__calander-card-month.text-uppercase
+          .fb-landing__calander-card-month
             p.font-semibold
-              | Jan 2018
+              | JUL 2018
           .fb-landing__calander-card-event
-            | Stakeholder Workshop
+            | Onboard 10 Student Teams
+    .row.mb-md-4
+      .col-md-3.mb-4.mb-md-0
+        .fb-landing__calander-card.text-center
+          .fb-landing__calander-card-month
+            p.font-semibold
+              | AUG 2018
+          .fb-landing__calander-card-event
+            | Program Commence
+      .col-md-3.mb-4.mb-md-0
+        .fb-landing__calander-card.text-center
+          .fb-landing__calander-card-month
+            p.font-semibold
+              | OCT 2018
+          .fb-landing__calander-card-event
+            | Mid-program demo Day
+      .col-md-3.mb-4.mb-md-0
+        .fb-landing__calander-card.text-center
+          .fb-landing__calander-card-month
+            p.font-semibold
+              | Jan 2019
+          .fb-landing__calander-card-event
+            | Final Demo Day at Facebook India
 
-.fb-landing__commitment-container.py-5
+.fb-landing__commitment-container.py-3.py-md-5
   .container
     .row.justify-content-md-center
       .col-md-7
-        h2.fb-landing__heading-h2.mt-5.mb-4.text-center
-          span.d-block.font-semibold
+        h2.fb-landing__heading-h2.mt-5.mb-4.mb-md-5.text-center
+          span.d-block.font-black
             ' Our Commitment to Student Teams
 
-    .row.justify-content-md-center
-      .col-md-4
+    .row.justify-content-md-center.text-center.text-md-left
+      .col-md-4.mb-4.mb-md-0
         h4.font-semibold
           | Fairness in Selection
-        p
+        p.fb-landing__commitment-p
           ' A team of 3-4 students who are currently pursuing their Engineering
           ' can apply and they would be selected through a state specific campaign
           | as well as national campaign.
 
-      .col-md-4
+      .col-md-4.mb-4.mb-md-0
         h4.font-semibold
           | Knowledge, Skill and Learning
-        p
+        p.fb-landing__commitment-p
           ' Students would be on-boarded the SV.CO Online Learning Platform and
           | supported with Human Assisted Learning on a Action Learning (Learn by Doing) pedagogy.
 
-      .w-100
-      .col-md-4
+      .w-100.mb-0.mb-md-5
+      .col-md-4.mb-4.mb-md-0
         h4.font-semibold
           | Guidance and Assessment
-        p
+        p.fb-landing__commitment-p
           ' The select teams will be announced by Facebook India and will get an
           | opportunity to present their product demo results to the leadership panel identified.
 
-      .col-md-4
+      .col-md-4.mb-4.mb-md-0
         h4.font-semibold
           | Future Prospects
-        p
+        p.fb-landing__commitment-p
           ' Based on whether they have customer success, they can choose to build
           | a startup or use their engineering skills to get great jobs in other startups.
 
-.fb-landing__stakeholders-container.py-5
+.fb-landing__stakeholders-container.py-3.py-md-5
   .container
     .row.justify-content-md-center
       .col-md-7
         h2.fb-landing__heading-h2.mt-5.mb-4.text-center
-          span.d-block.font-semibold
+          span.d-block.font-black
             ' Stakeholders
 
         p.fb-landing__content-p.text-center.mb-4
@@ -229,7 +269,7 @@
           | Gain Knowledge
         p
           | Currently enrolled University/College Engineering Students
-        p.brand-secondary
+        p.dark-secondary.mt-2
           ' Individuals or teams who are already exploring to build VR products
           | or aspiring to build.
       .col-md-4.py-4.px-5.fb-landing__stakeholders-column
@@ -239,7 +279,7 @@
           | Provide Knowledge
         p
           | Startups, Established Tech Companies, Academic Institutes
-        p.brand-secondary
+        p.dark-secondary.mt-2
           | Already working in the VR space, who want to partner and contribute.
       .col-md-4.py-4.px-5.fb-landing__stakeholders-column
         .fb-landing__stakeholders-icon.mx-auto
@@ -248,18 +288,24 @@
           | Enable Reach
         p
           | Central and State Governments, Key Institutes/Incubators
-        p.brand-secondary
+        p.dark-secondary.mt-2
           | Help in taking this pioneering efforts to a large scale.
 
-.fb-landing__register-form-container.py-5
+.fb-landing__register-form-container.py-3.py-md-5
   .container
     .row.justify-content-md-center
       .col-md-7
         h2.fb-landing__heading-h2.mt-5.white-text.text-center
-          span.d-block.font-semibold
+          span.d-block.font-black
             ' Ready to be a part of School of VR?
         p.text-center Get started by filling the form below
 
         .text-center
-          a class="typeform-share button btn btn-primary btn-lg home-apply__button mt-2" href="https://svlabs.typeform.com/to/oBGW4k" data-mode="popup" target="_blank"
-            | Register Now
+          a class="typeform-share button btn btn-primary btn-lg home-apply__button mt-3" href="https://svlabs.typeform.com/to/oBGW4k" data-mode="popup" target="_blank"
+            span.d-none.d-md-block
+              | Register for Stakeholder Workshop
+            span.d-block.d-md-none
+              | Register for Workshop
+
+          javascript:
+            (function() { var qs,js,q,s,d=document, gi=d.getElementById, ce=d.createElement, gt=d.getElementsByTagName, id="typef_orm_share", b="https://embed.typeform.com/"; if(!gi.call(d,id)){ js=ce.call(d,"script"); js.id=id; js.src=b+"embed.js"; q=gt.call(d,"script")[0]; q.parentNode.insertBefore(js,q) } })()

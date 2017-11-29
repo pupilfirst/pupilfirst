@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171128105052) do
+ActiveRecord::Schema.define(version: 20171128115349) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -661,18 +661,6 @@ ActiveRecord::Schema.define(version: 20171128105052) do
     t.index ["timeline_event_type_id"], name: "index_targets_on_timeline_event_type_id"
   end
 
-  create_table "team_members", id: :serial, force: :cascade do |t|
-    t.string "name"
-    t.string "email"
-    t.string "roles"
-    t.string "avatar"
-    t.integer "startup_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "avatar_processing", default: false
-    t.index ["startup_id"], name: "index_team_members_on_startup_id"
-  end
-
   create_table "timeline_event_files", id: :serial, force: :cascade do |t|
     t.integer "timeline_event_id"
     t.string "file"
@@ -815,7 +803,6 @@ ActiveRecord::Schema.define(version: 20171128105052) do
   add_foreign_key "startups", "levels"
   add_foreign_key "startups", "levels", column: "maximum_level_id"
   add_foreign_key "target_groups", "levels"
-  add_foreign_key "team_members", "startups"
   add_foreign_key "timeline_event_files", "timeline_events"
   add_foreign_key "timeline_events", "startups"
   add_foreign_key "user_activities", "users"

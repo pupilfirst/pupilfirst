@@ -27,8 +27,6 @@ feature 'Manual User Sign Out' do
       visit user_token_url(token: user.login_token, referer: edit_startup_path)
 
       expect(page).to have_content('Edit your startup profile')
-      click_link('Add new team member')
-      expect(page).to have_content('List new team member')
     end
 
     # After 1 week, he should be signed out again if the boolean is still set.

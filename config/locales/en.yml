@@ -102,9 +102,6 @@ en:
         team: Team
         founder: All Founders
 
-    team_member:
-      role: *founder-role
-
     timeline_event:
       grade:
         good: 'Good'

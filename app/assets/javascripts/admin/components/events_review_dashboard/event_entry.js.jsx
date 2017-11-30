@@ -1,6 +1,18 @@
 class EventsReviewDashboardEventEntry extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.showRubric = this.showRubric.bind(this);
+  }
+
+  showRubric() {
+    let rubricVisible = this.props.rootState.reviewData[this.props.eventId]['rubricVisible'];
+    return _.isBoolean(rubricVisible) && rubricVisible
+  }
+
   render() {
     return (
+      <div>
       <table className="review-dashboard__event-entry-table index">
         <tbody>
         <tr>
@@ -14,8 +26,19 @@ class EventsReviewDashboardEventEntry extends React.Component {
               setRootState={this.props.setRootState} eventData={this.props.eventData}/>
           </td>
         </tr>
+        {
+
+          this.props.eventData['rubric'] && this.showRubric() &&
+            <tr>
+              <td colSpan={3}>
+              <EventsReviewDashboardEventTargetRubric rootState={this.props.rootState}
+                                                      setRootState={this.props.setRootState} rubric={this.props.eventData['rubric']}/>
+              </td>
+            </tr>
+        }
         </tbody>
       </table>
+      </div>
     )
   }
 }

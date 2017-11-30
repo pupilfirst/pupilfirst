@@ -12,11 +12,13 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
 
     this.statusChange = this.statusChange.bind(this);
     this.gradeChange = this.gradeChange.bind(this);
-    this.pointsChange = this.pointsChange.bind(this);
+    this.pointsChange = this.pointsChange.bind(this)
     this.saveReview = this.saveReview.bind(this);
     this.radioInputId = this.radioInputId.bind(this);
     this.radioInputName = this.radioInputName.bind(this);
     this.undoReview = this.undoReview.bind(this);
+    this.toggleRubric = this.toggleRubric.bind(this);
+    this.rubricPresent = this.rubricPresent.bind(this);
   }
 
   statusChange(event) {
@@ -148,6 +150,24 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
     return this.state.undoReviewInProgress ? 'Undoing...' : 'Undo'
   }
 
+  rubricPresent() {
+    return (this.props.rootState.reviewData[this.props.eventId].rubric !== null);
+  }
+
+  toggleRubric() {
+    const reviewDataClone = _.cloneDeep(this.props.rootState.reviewData);
+    const eventData = reviewDataClone[this.props.eventId];
+
+    if (_.isBoolean(eventData.rubricVisible)) {
+      eventData.rubricVisible = !eventData.rubricVisible;
+    } else {
+      eventData.rubricVisible = true;
+    }
+
+    this.props.setRootState({reviewData: reviewDataClone});
+
+  }
+
   render() {
     return (
       <div className="margin-bottom-10">
@@ -192,17 +212,23 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
               Good&nbsp;
             </label>
             <br/>
-            <span>OR</span><br/>
           </div>
           }
 
+          { !this.props.targetId &&
+            <div>
+              <strong>Points:</strong><br/>
+              <input style={{width: '50px'}} type='number' value={this.state.points} onChange={ this.pointsChange }/>
+            </div>
+          }
 
-          <strong>Points:</strong><br/>
-          <input style={{width: '50px'}} type='number' value={this.state.points} onChange={ this.pointsChange }/>
         </div>
         }
         <br/>
 
+        { this.rubricPresent() &&
+          <a className='button cursor-pointer margin-bottom-10' onClick={this.toggleRubric}>Show/Hide Rubric</a>
+        }
 
         {!this.alreadyReviewed() && <div>
           <a className='button cursor-pointer' onClick={this.saveReview}>Save Review</a>

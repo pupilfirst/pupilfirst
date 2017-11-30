@@ -3,7 +3,7 @@ module TimelineEvents
     include RoutesResolvable
 
     def data
-      TimelineEvent.pending.includes(:timeline_event_type, [founder: :user], [startup: :level], :target, :timeline_event_files, [improvement_of: :timeline_event_type]).order('timeline_events.created_at').each_with_object({}) do |event, hash|
+      TimelineEvent.pending.includes(:timeline_event_type, { founder: :user }, { startup: :level }, { target: { target_performance_criteria: :performance_criterion } }, { improvement_of: :timeline_event_type }, :timeline_event_files).order('timeline_events.created_at').each_with_object({}) do |event, hash|
         hash[event.id] = {
           event_id: event.id,
           title: event.title,
@@ -46,8 +46,22 @@ module TimelineEvents
         target_id: event.target_id,
         target_title: event.target&.title,
         improvement_of: event.improvement_of,
-        improvement_of_title: event.improvement_of&.title
+        improvement_of_title: event.improvement_of&.title,
+        rubric: rubric_details(event.target)
       )
+    end
+
+    def rubric_details(target)
+      if target&.target_performance_criteria.present?
+        target.target_performance_criteria.each_with_object({}) do |tpc, pc_hash|
+          pc_hash[tpc.performance_criterion_id] = {
+            description: tpc.performance_criterion.description,
+            rubric_good: tpc.rubric_good,
+            rubric_great: tpc.rubric_great,
+            rubric_wow: tpc.rubric_wow
+          }
+        end
+      end
     end
 
     def feedback_url(timeline_event)

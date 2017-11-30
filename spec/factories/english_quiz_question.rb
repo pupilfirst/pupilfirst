@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :english_quiz_question do
     question { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-thumbnail.png')) }
     explanation { Faker::Lorem.words(12).join ' ' }

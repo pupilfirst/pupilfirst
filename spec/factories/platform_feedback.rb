@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :platform_feedback do
     founder { create :founder }
     description { Faker::Lorem.sentence }

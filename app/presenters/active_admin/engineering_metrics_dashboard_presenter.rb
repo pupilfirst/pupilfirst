@@ -63,6 +63,12 @@ module ActiveAdmin
       end
     end
 
+    def current_release
+      release_verison = EngineeringMetric.order('week_start_at DESC').first.metrics['release_version']
+      return release_verison if release_verison.present?
+      last_week_metrics['release_version']
+    end
+
     private
 
     def last_week_metrics

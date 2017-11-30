@@ -226,11 +226,11 @@ class FoundersFormFounderDetails extends React.Component {
 }
 
 FoundersFormFounderDetails.propTypes = {
-  founder: React.PropTypes.object,
-  collegesUrl: React.PropTypes.string,
-  index: React.PropTypes.number,
-  collegeName: React.PropTypes.string,
-  deleteCB: React.PropTypes.func,
-  allowDelete: React.PropTypes.bool,
-  generatedKey: React.PropTypes.string
+  founder: PropTypes.object,
+  collegesUrl: PropTypes.string,
+  index: PropTypes.number,
+  collegeName: PropTypes.string,
+  deleteCB: PropTypes.func,
+  allowDelete: PropTypes.bool,
+  generatedKey: PropTypes.string
 };

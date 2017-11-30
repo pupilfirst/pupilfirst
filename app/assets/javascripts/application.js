@@ -57,7 +57,6 @@
 //= require about
 //= require startups
 //= require talent
-//= require team_members
 //= require admissions
 //= require faculty
 //= require story

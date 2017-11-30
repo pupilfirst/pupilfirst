@@ -1,6 +1,6 @@
-module Admissions
-  class PostPaymentService
-    def initialize(payment:, founder: nil)
+module Payments
+  class PostAdmissionService
+    def initialize(payment, founder: nil)
       @payment = payment
       @startup = payment&.startup || founder.startup
       @founder = payment&.founder || founder
@@ -12,7 +12,7 @@ module Admissions
       return if fee_target.status(@founder) == Targets::StatusService::STATUS_COMPLETE
 
       # ensure the subscription window starts from time of payment
-      Founders::PostPaymentService.new(@payment).execute
+      Payments::PostPaymentService.new(@payment).execute
 
       # Create a referral coupon for the startup.
       Coupons::CreateService.new.generate_referral(@startup) if @startup.referral_coupon.blank?
@@ -23,8 +23,8 @@ module Admissions
       # mark the payment target complete
       Admissions::CompleteTargetService.new(@founder, Target::KEY_ADMISSIONS_FEE_PAYMENT).execute
 
-      # Fix the current Founder::FEE as the perpetual founder_fee for this startup.
-      @startup.update!(founder_fee: Founder::FEE) if @startup.founder_fee.blank?
+      # Fix the current Founder::FEE as the perpetual undiscounted_founder_fee for this startup.
+      @startup.update!(undiscounted_founder_fee: Founder::FEE) if @startup.undiscounted_founder_fee.blank?
 
       # IntercomLastApplicantEventUpdateJob.perform_later(@founder, 'payment_complete') unless Rails.env.test?
       Intercom::LevelZeroStageUpdateJob.perform_later(@founder, 'Payment Completed')

@@ -1,6 +1,6 @@
-var AALinkList = React.createClass({
+var AALinkList = createReactClass({
   propTypes: {
-    links: React.PropTypes.arrayOf(React.PropTypes.object)
+    links: PropTypes.arrayOf(PropTypes.object)
   },
 
   getInitialState: function () {

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :connect_request do
     connect_slot
     startup

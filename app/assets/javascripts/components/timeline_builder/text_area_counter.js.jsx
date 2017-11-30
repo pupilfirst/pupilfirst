@@ -45,5 +45,5 @@ class TimelineBuilderTextAreaCounter extends React.Component {
 }
 
 TimelineBuilderTextAreaCounter.propTypes = {
-  description: React.PropTypes.string
+  description: PropTypes.string
 };

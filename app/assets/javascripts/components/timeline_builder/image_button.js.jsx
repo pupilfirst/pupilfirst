@@ -127,7 +127,7 @@ class TimelineBuilderImageButton extends React.Component {
 }
 
 TimelineBuilderImageButton.propTypes = {
-  coverImage: React.PropTypes.object,
-  addDataCB: React.PropTypes.func,
-  disabled: React.PropTypes.bool,
+  coverImage: PropTypes.object,
+  addDataCB: PropTypes.func,
+  disabled: PropTypes.bool,
 };

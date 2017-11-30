@@ -226,8 +226,8 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
 }
 
 EventsReviewDashboardEventStatusUpdate.propTypes = {
-  rootState: React.PropTypes.object,
-  setRootState: React.PropTypes.func,
-  eventId: React.PropTypes.string,
-  targetId: React.PropTypes.string,
+  rootState: PropTypes.object,
+  setRootState: PropTypes.func,
+  eventId: PropTypes.string,
+  targetId: PropTypes.string,
 };

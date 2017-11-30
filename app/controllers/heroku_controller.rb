@@ -3,7 +3,9 @@ class HerokuController < ApplicationController
 
   def deploy_webhook
     logger.info 'Heroku#deploy_webhook: Received a new deploy hook from Heroku'
-    EngineeringMetrics::MetricsStoreService.new.increment :deploys
+    service = EngineeringMetrics::MetricsStoreService.new
+    service.increment(:deploys)
+    service.set(:release_version, params[:release])
     head :ok
   end
 end

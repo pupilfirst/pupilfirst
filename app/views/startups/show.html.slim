@@ -135,7 +135,7 @@
                 img.d-flex.mr-3 alt="Team Size icon" src="#{image_url 'startups/show/data-icon-team-size.png'}"
                 .media-body
                   h6.my-0 Team Size
-                  p.data-content #{@startup.founders.count + @startup.team_members.count}
+                  p.data-content #{@startup.founders.count}
             - if @startup.timeline_events_for_display(current_founder).present?
               .col-sm-6.col-md-12
                 .media.mb-3.align-items-center
@@ -179,21 +179,6 @@
                           li
                             a href="#{founder.linkedin_url}" target='_blank'
                               i.fa.fa-linkedin-square
-
-        .row
-          - if @startup.team_members.present?
-            .col-md-12
-              h3 Team
-              hr
-              - @startup.team_members.order(:name).each do |team_member|
-                .data-founder
-                  .media.align-items-center
-                    .mr-3
-                      .founder-image
-                        == avatar(team_member.name, founder: team_member, background_shape: :square)
-                    .media-body
-                      h4.media-heading #{truncated_founder_name team_member.name}
-                      p.designation #{founder_roles(team_member.roles)}
 
     .col-lg-8.order-2.order-lg-1
       - if @timeline_event_for_og.present?

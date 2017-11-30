@@ -51,8 +51,8 @@ class ApplicantScreeningCover extends React.Component {
 }
 
 ApplicantScreeningCover.propTypes = {
-  type: React.PropTypes.string,
-  iconPath: React.PropTypes.string,
-  selectSectionCB: React.PropTypes.func,
-  selected: React.PropTypes.bool
+  type: PropTypes.string,
+  iconPath: PropTypes.string,
+  selectSectionCB: PropTypes.func,
+  selected: PropTypes.bool
 };

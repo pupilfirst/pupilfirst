@@ -144,9 +144,9 @@ class FoundersForm extends React.Component {
 }
 
 FoundersForm.propTypes = {
-  authenticityToken: React.PropTypes.string,
-  founders: React.PropTypes.array,
-  errors: React.PropTypes.object,
-  collegesUrl: React.PropTypes.string,
-  collegeNames: React.PropTypes.object
+  authenticityToken: PropTypes.string,
+  founders: PropTypes.array,
+  errors: PropTypes.object,
+  collegesUrl: PropTypes.string,
+  collegeNames: PropTypes.object
 };

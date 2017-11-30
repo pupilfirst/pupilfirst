@@ -1,6 +1,6 @@
-var AALinkForm = React.createClass({
+var AALinkForm = createReactClass({
   propTypes: {
-    link: React.PropTypes.object
+    link: PropTypes.object
   },
 
   getInitialState: function () {

@@ -111,7 +111,6 @@ ActiveAdmin.register Startup do
     column :wireframe_link
     column :prototype_link
     column(:founders) { |startup| startup.founders.pluck(:name).join ', ' }
-    column(:team_members) { |startup| startup.team_members.pluck(:name).join ', ' }
     column(:women_cofounders) { |startup| startup.founders.where(gender: Founder::GENDER_FEMALE).count }
     column :pitch
     column :website
@@ -315,18 +314,6 @@ ActiveAdmin.register Startup do
         end
       end
 
-      row :team_members do
-        if startup.team_members.present?
-          ul do
-            startup.team_members.each do |team_member|
-              li do
-                link_to team_member.name, admin_team_member_path(team_member)
-              end
-            end
-          end
-        end
-      end
-
       row :women_cofounders do
         startup.founders.where(gender: Founder::GENDER_FEMALE).count
       end
@@ -346,7 +333,7 @@ ActiveAdmin.register Startup do
       row :courier_number
       row :payment_reference
       row :referral_reward_days
-      row :founder_fee
+      row :undiscounted_founder_fee
     end
 
     if startup.level&.number&.positive?
@@ -366,6 +353,7 @@ ActiveAdmin.register Startup do
             end_date = payment.billing_end_at&.strftime('%b %d, %Y')
             "#{start_date} - #{end_date}"
           end
+          column('Payment Type', &:payment_type)
           column('Amount') { |payment| "&#8377;#{payment.amount}".html_safe }
           column('Payee') do |payment|
             payee = payment.founder

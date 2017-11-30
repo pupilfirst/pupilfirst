@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :timeline_event do
     startup
     founder { startup.team_lead }

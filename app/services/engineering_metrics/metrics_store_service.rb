@@ -24,6 +24,11 @@ module EngineeringMetrics
       current_entry.tap(&:save!)
     end
 
+    def set(metric, value)
+      current_entry.metrics[metric.to_s] = value
+      current_entry.tap(&:save!)
+    end
+
     private
 
     def current_entry
@@ -62,13 +67,11 @@ module EngineeringMetrics
         git config user.name "Vocalist"
         git config user.email "hosting@sv.co"
 
-        echo ".heroku/" >> .gitignore
-        echo ".apt/" >> .gitignore
-        echo ".profile.d/" >> .gitignore
-        echo "vendor/" >> .gitignore
-        echo "public/assets" >> .gitignore
+        git add app/ spec/ config/ lib/
+        git add db/schema.rb db/seeds
+        git add .overcommit.yml .rubocop.yml codecov.yml
+        git add Gemfile Rakefile package.json app.json
 
-        git add .
         git commit -m "Cloc commit"
       COMMANDS
 

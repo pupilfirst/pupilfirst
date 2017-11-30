@@ -63,10 +63,10 @@ class TimelineBuilderEventTypeSelect extends React.Component {
 }
 
 TimelineBuilderEventTypeSelect.propTypes = {
-  selectedDate: React.PropTypes.string,
-  resetErrorsCB: React.PropTypes.func,
-  timelineEventTypeId: React.PropTypes.string,
-  timelineEventTypes: React.PropTypes.object,
-  showEventTypeError: React.PropTypes.bool,
-  disabled: React.PropTypes.bool
+  selectedDate: PropTypes.string,
+  resetErrorsCB: PropTypes.func,
+  timelineEventTypeId: PropTypes.string,
+  timelineEventTypes: PropTypes.object,
+  showEventTypeError: PropTypes.bool,
+  disabled: PropTypes.bool
 };

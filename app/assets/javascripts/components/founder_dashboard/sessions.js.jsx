@@ -69,10 +69,10 @@ class FounderDashboardSessions extends React.Component {
 }
 
 FounderDashboardSessions.propTypes = {
-  currentLevel: React.PropTypes.number,
-  sessions: React.PropTypes.array,
-  sessionTags: React.PropTypes.array,
-  openTimelineBuilderCB: React.PropTypes.func,
-  iconPaths: React.PropTypes.object,
-  selectTargetCB: React.PropTypes.func
+  currentLevel: PropTypes.number,
+  sessions: PropTypes.array,
+  sessionTags: PropTypes.array,
+  openTimelineBuilderCB: PropTypes.func,
+  iconPaths: PropTypes.object,
+  selectTargetCB: PropTypes.func
 };

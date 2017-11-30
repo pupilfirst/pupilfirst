@@ -1,0 +1,7 @@
+---
+timestamp: '2017-11-28T11:19:06Z'
+title: Payments now have a payment_type field to store if it's an admission or renewal
+  payment.
+trello: https://trello.com/c/zX8Js89C
+private: true
+category: feature

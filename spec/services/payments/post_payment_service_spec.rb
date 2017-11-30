@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Founders::PostPaymentService do
+describe Payments::PostPaymentService do
   subject { described_class.new(payment) }
 
   let(:mock_invite_service) { instance_double Founders::InviteToSlackChannelsService, execute: nil }

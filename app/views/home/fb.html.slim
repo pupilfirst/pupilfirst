@@ -1,4 +1,7 @@
-#fb-landing
+== content_for :head do
+  == javascript_pack_tag 'home/fb'
+
+#home__fb
 
 .fb-landing__header
   .container
@@ -9,7 +12,7 @@
 
 .fb-landing__hero-container
   .container
-    .fb-landing__hero-screen.mx-auto.d-flex.justify-content-center
+    .fb-landing__hero-screen.mx-auto.d-flex.justify-content-center.js-tilt
       = image_tag 'fb/fb-school-bg.jpg', class: 'fb-landing__hero-clip-bg img-fluid', alt: 'Facebook school of VR'
       .fb-landing__hero-message.text-center.px-3
         h1.fb-landing__hero-message-h1.mx-auto
@@ -55,7 +58,8 @@
 .fb-landing__school-of-vr.d-flex.align-items-center
   .container
     .row.py-5.align-items-center
-      .col-md-7
+      .col-md-7.text-center.mb-4.mb-md-0
+        = image_tag 'fb/vr-blueprint.svg', class: 'fb-landing__vr-blueprint-img img-fluid', alt: 'School of VR blueprint'
       .col-md-5
         h2.fb-landing__school-of-vr-title.d-flex.align-items-center.white-text.mb-3.font-regular
           = image_tag 'fb/vr-icon.svg', class: 'img-fluid', alt: 'School of VR icon'

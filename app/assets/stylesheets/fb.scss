@@ -31,7 +31,9 @@
 .fb-landing__hero-screen {
   position: relative;
   height: 511px;
+  transform-style: preserve-3d;
   z-index: 0;
+  cursor: crosshair;
 
   @include media-breakpoint-down (lg) {
     height: 360px;
@@ -59,7 +61,7 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate3d(-50%,-50%, 50px);
 
   @include media-breakpoint-down (lg) {
     width: 100%;
@@ -70,6 +72,7 @@
   color: white;
   max-width: 33rem;
   line-height: 1.2;
+  text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
 
   @include media-breakpoint-down (md) {
     font-size: 1.5rem;
@@ -150,9 +153,14 @@
 }
 
 .fb-landing__school-of-vr {
-  height: 32rem;
-  background: radial-gradient(circle at 20% 50%, #249FD8 0%, #2558A1 40%, #243C8F 70%);
+  height: 36rem;
+  background: radial-gradient(circle at 45% 40%, #249FD8 0%, #2558A1 30%, #243C8F 70%);
   position: relative;
+
+  @include media-breakpoint-down (sm) {
+    height: auto;
+    background: radial-gradient(circle at 80% 20%, #249FD8 0%, #2558A1 40%, #243C8F 70%);
+  }
 
   &:before {
     content: '';
@@ -174,6 +182,14 @@
     bottom: -0.04rem;
     background-repeat: no-repeat;
     background-position: bottom center;
+  }
+}
+
+.fb-landing__vr-blueprint-img {
+  width: 530px;
+
+  @include media-breakpoint-down (md) {
+    width: 320px;
   }
 }
 

@@ -17,7 +17,6 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
     this.radioInputId = this.radioInputId.bind(this);
     this.radioInputName = this.radioInputName.bind(this);
     this.undoReview = this.undoReview.bind(this);
-    this.toggleRubric = this.toggleRubric.bind(this);
     this.rubricPresent = this.rubricPresent.bind(this);
   }
 
@@ -154,20 +153,6 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
     return (this.props.rootState.reviewData[this.props.eventId].rubric !== null);
   }
 
-  toggleRubric() {
-    const reviewDataClone = _.cloneDeep(this.props.rootState.reviewData);
-    const eventData = reviewDataClone[this.props.eventId];
-
-    if (_.isBoolean(eventData.rubricVisible)) {
-      eventData.rubricVisible = !eventData.rubricVisible;
-    } else {
-      eventData.rubricVisible = true;
-    }
-
-    this.props.setRootState({reviewData: reviewDataClone});
-
-  }
-
   render() {
     return (
       <div className="margin-bottom-10">
@@ -190,10 +175,10 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
         </label>
         <br/>
 
-        { this.state.status === 'verified' &&
+        { this.state.status === 'verified' && !this.rubricPresent() &&
         <div>
           <br/>
-          { this.props.targetId &&
+          { this.props.targetId !== 'null' &&
           <div>
             <strong>Grade:</strong>
             <br/>
@@ -215,7 +200,7 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
           </div>
           }
 
-          { !this.props.targetId &&
+          { this.props.targetId === 'null' &&
             <div>
               <strong>Points:</strong><br/>
               <input style={{width: '50px'}} type='number' value={this.state.points} onChange={ this.pointsChange }/>
@@ -226,25 +211,30 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
         }
         <br/>
 
-        { this.rubricPresent() &&
-          <a className='button cursor-pointer margin-bottom-10' onClick={this.toggleRubric}>Show/Hide Rubric</a>
-        }
+        { !this.rubricPresent() && <div>
+          {!this.alreadyReviewed() && <div>
+            <a className='button cursor-pointer' onClick={this.saveReview}>Save Review</a>
+            {this.state.statusMissing &&
+            <div style={{color: 'red'}}>Select a status first!</div>
+            }
+            {this.state.gradingMissing &&
+            <div style={{color: 'red'}}>Specify grade or point!</div>
+            }
+          </div>
+          }
 
-        {!this.alreadyReviewed() && <div>
-          <a className='button cursor-pointer' onClick={this.saveReview}>Save Review</a>
-          {this.state.statusMissing &&
-          <div style={{color: 'red'}}>Select a status first!</div>
-          }
-          {this.state.gradingMissing &&
-          <div style={{color: 'red'}}>Specify grade or point!</div>
-          }
+          {this.alreadyReviewed() && <div>
+            <a className="button disabled">Save Review</a>
+            <a className={ this.undoButtonClasses() } onClick={this.undoReview}>{ this.undoButtonText() }</a>
+          </div>
+        }
         </div>
         }
 
-        {this.alreadyReviewed() && <div>
-          <a className="button disabled">Save Review</a>
-          <a className={ this.undoButtonClasses() } onClick={this.undoReview}>{ this.undoButtonText() }</a>
-        </div>
+        { this.state.status === 'verified' && this.rubricPresent() &&
+        <EventsReviewDashboardEventGrading rootState={this.props.rootState} setRootState={this.props.setRootState}
+                                           eventId={this.props.eventId} targetId={this.props.targetId}
+                                           rubric={this.props.rootState.reviewData[this.props.eventId].rubric}/>
         }
       </div>
     )
@@ -255,5 +245,5 @@ EventsReviewDashboardEventStatusUpdate.propTypes = {
   rootState: PropTypes.object,
   setRootState: PropTypes.func,
   eventId: PropTypes.string,
-  targetId: PropTypes.string,
+  targetId: PropTypes.string
 };

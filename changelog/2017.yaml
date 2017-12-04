@@ -1,5 +1,37 @@
 ---
 changelog:
+- timestamp: '2017-12-04T09:32:26Z'
+  changes:
+  - timestamp: '2017-11-28T11:19:06Z'
+    title: Payments now have a payment_type field to store if it's an admission or
+      renewal payment.
+    trello: https://trello.com/c/zX8Js89C
+    private: true
+    category: feature
+  - timestamp: '2017-11-28T11:16:21Z'
+    title: Renamed `Startup.founder_fee` to `undiscounted_founder_fee`.
+    trello: https://trello.com/c/lYQmbedR
+    private: true
+  - timestamp: '2017-11-28T09:48:06Z'
+    title: Added conditional warnings to the AA edit page of coupons.
+    trello: https://trello.com/c/85IZlhBy
+    private: true
+    description: These warnings let the admin know that it isn't safe to edit rewards
+      for coupons that are already in use.
+    category: ui
+  - timestamp: '2017-11-28T07:54:31Z'
+    title: Current deploy number is now displayed on Engineering metrics page.
+    trello: https://trello.com/c/Pj5FYHge
+    private: true
+    description: This updates the heroku webhook endpoint to store the revision number
+      supplied by Heroku.
+    category: feature
+  - timestamp: '2017-11-27T09:14:01Z'
+    title: 'Updated notification sent to #memberships when a new team pays and joins
+      SV.CO to include all available info about the payment and founders.'
+    trello: https://trello.com/c/rl6EgZTu
+    private: true
+    category: feature
 - timestamp: '2017-11-27T07:30:04Z'
   changes:
   - timestamp: '2017-11-27T06:49:40Z'

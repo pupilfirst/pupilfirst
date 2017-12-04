@@ -1,8 +1,0 @@
----
-timestamp: '2017-11-28T07:54:31Z'
-title: Current deploy number is now displayed on Engineering metrics page.
-trello: https://trello.com/c/Pj5FYHge
-private: true
-description: This updates the heroku webhook endpoint to store the revision number
-  supplied by Heroku.
-category: feature

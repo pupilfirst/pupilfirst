@@ -6,13 +6,15 @@
 .fb-landing__header
   .container
     .row.justify-content-center
-      .fb-landing__header-logo-container
+      .fb-landing__header-logo-container.d-flex.justify-content-center.align-items-center.pt-3.pb-3.pt-md-4.pb-md-0
+        = image_tag 'fb/school-of-innovation-india-fb-logo.svg', class: 'fb-landing__header-logo-img img-fluid', alt: 'School of Innovation India from Facebook'
+        .fb-landing__pulse-icon.mx-2.mx-md-3.fb-landing__pulse-icon--animate
+          = image_tag 'fb/pulse-at-icon.svg', class: 'img-fluid'
         = image_tag 'shared/logo-color.svg', class: 'fb-landing__header-logo-img img-fluid', alt: 'SV.CO Logo'
-        = image_tag 'home/index/sv-partner-facebook.svg', class: 'fb-landing__header-logo-img img-fluid', alt: 'Facebook Logo'
 
 .fb-landing__hero-container
   .container
-    .fb-landing__hero-screen.mx-auto.d-flex.justify-content-center.js-tilt
+    .fb-landing__hero-screen.mx-auto.d-flex.justify-content-center.js-tilt data-tilt-max="16"
       = image_tag 'fb/fb-school-bg.jpg', class: 'fb-landing__hero-clip-bg img-fluid', alt: 'Facebook school of VR'
       .fb-landing__hero-message.text-center.px-3
         h1.fb-landing__hero-message-h1.mx-auto
@@ -22,10 +24,7 @@
           | from Facebook at SV.CO
 
         a class="typeform-share button btn btn-primary btn-lg home-apply__button mt-3" href="https://svlabs.typeform.com/to/oBGW4k" data-mode="popup" target="_blank"
-          span.d-none.d-md-block
-            | Register for Stakeholder Workshop
-          span.d-block.d-md-none
-            | Register for Workshop
+          | Apply Now
 
       svg width="0" height="0"
         defs
@@ -42,18 +41,11 @@
           | from Facebook at SV.CO
 
         p.fb-landing__content-p.text-center.mb-4
-          ' School of Innovation India from Facebook is an umbrella flagship program
-          ' done in collaboration with SV.CO. This school aims to bring cutting edge
-          ' technologies to India for ambitious students to work, learn how to build
-          | products while in college and scale under the guidance of the Industry.
-
-        .fb-landing__about-partner-logo-container.d-flex.justify-content-center.align-items-center.pb-3.pb-md-0
-          .fb-landing__about-partner-logo-img
-            = image_tag 'fb/school-of-innovation-india-fb-logo.svg', class: 'img-fluid', alt: 'School of Innovation India from Facebook at SV.CO'
-          .fb-landing__pulse-icon.m-2.m-md-4.fb-landing__pulse-icon--animate
-            = image_tag 'fb/pulse-at-icon.svg', class: 'img-fluid'
-          .fb-landing__about-partner-logo-img
-            = image_tag 'shared/logo-color.svg', class: 'img-fluid', alt: 'SV.CO Logo'
+          ' School of Innovation India aims to foster future talent in emerging
+          ' technologies and bring cutting edge technologies to India for
+          ' ambitious students. It will help students to work with new-age
+          ' technologies, learn how to build products while in college and scale
+          | under the guidance of the Industry.
 
 .fb-landing__school-of-vr.d-flex.align-items-center
   .container
@@ -68,10 +60,11 @@
             span.font-bold.ml-2
               | VR
         p.fb-landing__content-p.white-text
-          ' The School of VR is the first pilot programme of the “School of Innovation India”
-          ' and in the aim, we will select the top 10 student teams from across
-          ' 4M engineering students in 3300 engineering colleges in India to build
-          | a next generation product idea they have using VR.
+          ' The first cohort of School of Innovation is focused on VR as an emerging
+          ' technology and as a part of this program, top 10 student teams from
+          ' across 4M engineering students across 3300 engineering colleges in
+          | India, will be selected to build a next generation product idea they have using VR.
+
 
 .fb-landing__partners-container.pb-3.pb-md-5
   .container
@@ -80,10 +73,10 @@
         h2.fb-landing__heading-h2.mt-5.mb-4.mb-md-5.text-center
           span.d-block.font-black
             ' Partners
-    .row.pb-4
-      .col-md-6.pb-4
-        h3.font-bold SV.CO
-        p.fb-landing__content-p.mb-2
+    .row.pb-4.justify-content-md-center
+      .col-md-5.pb-4
+        = image_tag 'shared/logo-color.svg', class: 'fb-landing__partners-logo-img img-fluid', alt: 'SV.CO Logo'
+        p.fb-landing__content-p.my-2
           ' Startup Village Collective (SV.CO) is a group of engineers,artists,
           ' designers, scientists, tech founders, organisations, governments
           ' (city, state, national and international) who have come together with
@@ -93,9 +86,9 @@
           ' Teams with commercial success join startup incubators, accelerators,
           ' angel funds and teams with engineering success get great jobs in
           | startups or go for higher studies.
-      .col-md-6.pb-4
-        h3.font-bold Facebook
-        p.fb-landing__content-p.mb-2
+      .col-md-5.pb-4
+        = image_tag 'home/index/sv-partner-facebook.svg', class: 'fb-landing__partners-logo-img img-fluid', alt: 'Facebook Logo'
+        p.fb-landing__content-p.my-2
           ' Facebook is already involved with SV.CO as the Official Silicon Valley
           ' Host Partner along with City of Menlo Park and US Embassy in India and
           ' hosted the largest contingent of Indian students founders to visit
@@ -107,22 +100,18 @@
           ' engineering students to understand the potential of cutting edge
           ' technologies, build products, demo to industry leaders and perhaps
           | also launch to customers.
-
-.fb-landing__why-school-of-vr-container.py-3.py-md-5
-  .container
     .row.justify-content-md-center
       .col-md-7
-        h2.fb-landing__heading-h2.mt-5.mb-4.text-center
-          span.d-block.font-black
-            ' Why School of VR?
-
-        p.fb-landing__content-p.text-center.mb-4
-          ' Given that the Virtual Reality and its applications are poised to
-          ' disrupt a lot of industry areas, yet currently there aren't established
-          ' business models, products or markets. Thus offers ample scope to large
-          ' companies or growth stage startups, young technology enthusiasts between
-          ' 18-22 in engineering college to be great adopters of this bleeding
-          | edge new technology.
+        blockquote.fb-landing__partners-vr-quote.blockquote.text-center.p-4
+          p
+            ' Given that the
+            strong Virtual Reality
+            ' &nbsp;and its applications are poised to
+            ' disrupt a lot of industry areas, yet currently there aren't established
+            ' business models, products or markets. Thus offers ample scope to large
+            ' companies or growth stage startups, young technology enthusiasts
+            ' between 18-22 in engineering college to be great adopters of this
+            | bleeding edge new technology.
 
 .fb-landing__calander-container.py-3.py-md-5
   .container
@@ -146,7 +135,7 @@
             p.font-semibold
               | FEB 2018
           .fb-landing__calander-card-event
-            | Finalize Universities to set-up VR Labs
+            | Selection of Universities
       .col-md-3.mb-4.mb-md-0
         .fb-landing__calander-card.text-center
           .fb-landing__calander-card-month
@@ -158,17 +147,10 @@
         .fb-landing__calander-card.text-center
           .fb-landing__calander-card-month
             p.font-semibold
-              | MAR 2018
-          .fb-landing__calander-card-event
-            | Onboard Mentors to the Program
-    .row.mb-md-4
-      .col-md-3.mb-4.mb-md-0
-        .fb-landing__calander-card.text-center
-          .fb-landing__calander-card-month
-            p.font-semibold
               | APR, MAY 2018
           .fb-landing__calander-card-event
             | Set-up of Labs in Universities
+    .row.mb-md-4
       .col-md-3.mb-4.mb-md-0
         .fb-landing__calander-card.text-center
           .fb-landing__calander-card-month
@@ -190,7 +172,6 @@
               | JUL 2018
           .fb-landing__calander-card-event
             | Onboard 10 Student Teams
-    .row.mb-md-4
       .col-md-3.mb-4.mb-md-0
         .fb-landing__calander-card.text-center
           .fb-landing__calander-card-month
@@ -198,6 +179,7 @@
               | AUG 2018
           .fb-landing__calander-card-event
             | Program Commence
+    .row.mb-md-4
       .col-md-3.mb-4.mb-md-0
         .fb-landing__calander-card.text-center
           .fb-landing__calander-card-month
@@ -209,7 +191,7 @@
         .fb-landing__calander-card.text-center
           .fb-landing__calander-card-month
             p.font-semibold
-              | Jan 2019
+              | JAN 2019
           .fb-landing__calander-card-event
             | Final Demo Day at Facebook India
 
@@ -221,36 +203,45 @@
           span.d-block.font-black
             ' Our Commitment to Student Teams
 
-    .row.justify-content-md-center.text-center.text-md-left
-      .col-md-4.mb-4.mb-md-0
-        h4.font-semibold
-          | Fairness in Selection
-        p.fb-landing__commitment-p
-          ' A team of 3-4 students who are currently pursuing their Engineering
-          ' can apply and they would be selected through a state specific campaign
-          | as well as national campaign.
+    .row.justify-content-md-center
+      .col-md-4.d-flex.align-items-start.fb-landing__commitment-content.p-4
+        = image_tag 'fb/students-team-selection-icon.svg', class: 'fb-landing__commitment-icon img-fluid', alt: 'Fairness in Selection'
+        .ml-3
+          h4.font-semibold
+            | Fairness in Selection
+          p.fb-landing__commitment-p
+            ' A team of 3-4 students who are currently pursuing their Engineering
+            ' can apply and they would be selected through a state specific campaign
+            | as well as national campaign.
 
-      .col-md-4.mb-4.mb-md-0
-        h4.font-semibold
-          | Knowledge, Skill and Learning
-        p.fb-landing__commitment-p
-          ' Students would be on-boarded the SV.CO Online Learning Platform and
-          | supported with Human Assisted Learning on a Action Learning (Learn by Doing) pedagogy.
+      .col-md-4.d-flex.align-items-start.fb-landing__commitment-content.p-4
+        = image_tag 'fb/students-skills-icon.svg', class: 'fb-landing__commitment-icon img-fluid', alt: 'Knowledge, Skill and Learning'
+        .ml-3
+          h4.font-semibold
+            | Knowledge, Skill and Learning
+          p.fb-landing__commitment-p
+            ' Students would be on-boarded the SV.CO Online Learning Platform and
+            | supported with Human Assisted Learning on a Action Learning (Learn by Doing) pedagogy.
 
-      .w-100.mb-0.mb-md-5
-      .col-md-4.mb-4.mb-md-0
-        h4.font-semibold
-          | Guidance and Assessment
-        p.fb-landing__commitment-p
-          ' The select teams will be announced by Facebook India and will get an
-          | opportunity to present their product demo results to the leadership panel identified.
+      .w-100
 
-      .col-md-4.mb-4.mb-md-0
-        h4.font-semibold
-          | Future Prospects
-        p.fb-landing__commitment-p
-          ' Based on whether they have customer success, they can choose to build
-          | a startup or use their engineering skills to get great jobs in other startups.
+      .col-md-4.d-flex.align-items-start.fb-landing__commitment-content.p-4
+        = image_tag 'fb/students-guidance-icon.svg', class: 'fb-landing__commitment-icon img-fluid', alt: 'Guidance and Assessment'
+        .ml-3
+          h4.font-semibold
+            | Guidance and Assessment
+          p.fb-landing__commitment-p
+            ' The select teams will be announced by Facebook India and will get an
+            | opportunity to present their product demo results to the leadership panel identified.
+
+      .col-md-4.d-flex.align-items-start.fb-landing__commitment-content.p-4
+        = image_tag 'fb/students-future-icon.svg', class: 'fb-landing__commitment-icon img-fluid', alt: 'Future Prospects'
+        .ml-3
+          h4.font-semibold
+            | Future Prospects
+          p.fb-landing__commitment-p
+            ' Based on whether they have customer success, they can choose to build
+            | a startup or use their engineering skills to get great jobs in other startups.
 
 .fb-landing__stakeholders-container.py-3.py-md-5
   .container
@@ -261,9 +252,9 @@
             ' Stakeholders
 
         p.fb-landing__content-p.text-center.mb-4
-          ' This effort needs joining hands with multiple stakeholders. Each stakeholder
-          ' will find benefit in partnering as it will help in taking forward their
-          | own mission that they have laid out for their respective community.
+          ' This effort needs collaboration between multiple stakeholders. Each
+          ' stakeholder will find benefit in partnering as it will also help in
+          | taking forward their own community mission.
 
     .row.text-center.no-gutters
       .col-md-4.py-4.px-5.fb-landing__stakeholders-column
@@ -306,10 +297,7 @@
 
         .text-center
           a class="typeform-share button btn btn-primary btn-lg home-apply__button mt-3" href="https://svlabs.typeform.com/to/oBGW4k" data-mode="popup" target="_blank"
-            span.d-none.d-md-block
-              | Register for Stakeholder Workshop
-            span.d-block.d-md-none
-              | Register for Workshop
+            | Apply Now
 
           javascript:
             (function() { var qs,js,q,s,d=document, gi=d.getElementById, ce=d.createElement, gt=d.getElementsByTagName, id="typef_orm_share", b="https://embed.typeform.com/"; if(!gi.call(d,id)){ js=ce.call(d,"script"); js.id=id; js.src=b+"embed.js"; q=gt.call(d,"script")[0]; q.parentNode.insertBefore(js,q) } })()

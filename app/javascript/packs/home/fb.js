@@ -1,6 +1,8 @@
 import Tilt from 'vanilla-tilt'
 
 $(document).on('turbolinks:load', () => {
-  const element = document.querySelector(".js-tilt");
-  Tilt.init(element);
+  if($(window).width() >= 1024) {
+    const element = document.querySelector(".js-tilt");
+    Tilt.init(element);
+  }
 });

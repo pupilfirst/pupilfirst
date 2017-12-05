@@ -1,13 +1,13 @@
-const TimelineBuilder = React.createClass({
+const TimelineBuilder = createReactClass({
   propTypes: {
-    timelineEventTypes: React.PropTypes.object,
-    selectedTimelineEventTypeId: React.PropTypes.number,
-    targetId: React.PropTypes.number,
-    facebookShareEligibility: React.PropTypes.string,
-    authenticityToken: React.PropTypes.string,
-    closeTimelineBuilderCB: React.PropTypes.func,
-    targetSubmissionCB: React.PropTypes.func,
-    testMode: React.PropTypes.bool
+    timelineEventTypes: PropTypes.object,
+    selectedTimelineEventTypeId: PropTypes.number,
+    targetId: PropTypes.number,
+    facebookShareEligibility: PropTypes.string,
+    authenticityToken: PropTypes.string,
+    closeTimelineBuilderCB: PropTypes.func,
+    targetSubmissionCB: PropTypes.func,
+    testMode: PropTypes.bool
   },
 
   getInitialState: function () {

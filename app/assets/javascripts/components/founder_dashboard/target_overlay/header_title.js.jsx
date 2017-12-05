@@ -86,6 +86,6 @@ class TargetOverlayHeaderTitle extends React.Component {
   }
 }
 TargetOverlayHeaderTitle.propTypes = {
-  target: React.PropTypes.object,
-  iconPaths: React.PropTypes.object
+  target: PropTypes.object,
+  iconPaths: PropTypes.object
 };

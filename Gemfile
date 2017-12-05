@@ -19,10 +19,9 @@ gem 'carrierwave', '~> 1.1' # One uploader to rule them all.
 # Backgrounder for carrierwave.
 gem 'carrierwave_backgrounder', '= 0.4.2', github: 'harigopal/carrierwave_backgrounder', branch: 'rails-5-1'
 gem 'carrierwave-bombshelter', '~> 0.2' # Protects your carrierwave from image bombs (and such).
+gem 'fog-aws', '~> 1.2', require: 'fog/aws' # Required by Carrierwave to upload to S3.
 
-# Required by Carrierwave to upload to S3.
-gem 'fog-aws', '~> 1.2', require: 'fog/aws'
-
+gem 'webpacker', '~> 3.0' # Use Webpack to manage app-like JavaScript modules in Rails.
 gem 'coffee-rails', '~> 4.2.0' # Coffeescript on Rails.
 gem 'devise', '~> 4.2' # User auth library.
 gem 'devise_invitable', '~> 1.7' # Allow invites to be sent out.
@@ -37,7 +36,7 @@ gem 'uglifier', '~> 3.1' # JavaScript compressor.
 gem 'rest-client', '~> 2.0' # Used to contact Fast Alerts' API.
 gem 'cancancan', '~> 2.0' # Used to manage administrator types and roles in the ActiveAdmin interface.
 gem 'select2-rails', '~> 4.0' # Select2 javascript select box improvement library, using in ActiveAdmin interface.
-gem 'bootstrap', '~> 4.0.0.beta' # Official Sass port of Bootstrap.
+gem 'bootstrap', '= 4.0.0.beta' # Official Sass port of Bootstrap.
 gem 'autoprefixer-rails', '~> 7.1' # Autoprefixer for Ruby and Ruby on Rails.
 gem 'simple_form', '~> 3.4' # Simple-form with support for Bootstrap 3.
 gem 'simple_form_fancy_uploads', '~> 0.2' # simple_form custom inputs to get image/link previews with file uploads. https://github.com/apeacox/simple_form_fancy_uploads
@@ -105,9 +104,8 @@ gem 'file_validators', '~> 2.1' # Adds file validators to ActiveModel.
 gem 'diffy', '~> 3.2' # Easy Diffing in Ruby.
 gem 'rails_server_timings', '~> 1.0' # Server Timing headers for Rails apps. https://github.com/dpogue/rails_server_timings
 gem 'pundit', '~> 1.1' # Minimal authorization through OO design and pure Ruby classes.
-gem 'github-linguist', '~> 5.0', require: false # Language Savant. https://github.com/github/linguist
 gem 'rack-cors', '~> 1.0', require: 'rack/cors' # Rack Middleware for handling CORS, required to serve static assets such as fonts
-gem 'recaptcha', require: 'recaptcha/rails'
+gem 'recaptcha', '~> 4.6', require: 'recaptcha/rails'
 
 # Rails assets!
 source 'https://rails-assets.org' do
@@ -130,8 +128,8 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-moment', '~> 2.18' # Parse, validate, manipulate, and display dates in javascript. http://momentjs.com
   gem 'rails-assets-jquery', '~> 2.2' # TODO: Lock down jquery to v2 because v3 doesn't work well with AA.
   gem 'rails-assets-lodash', '~> 4.17' # A modern JavaScript utility library delivering modularity, performance, & extras.
-  gem 'rails-assets-typedjs' # A JavaScript Typing Animation Library.
-  gem 'rails-assets-jquery.counterup' # Lightweight jQuery plugin that counts up to a targeted number when the number becomes visible.
+  gem 'rails-assets-typedjs', '~> 2.0' # A JavaScript Typing Animation Library.
+  gem 'rails-assets-jquery.counterup', '~> 2.1' # Lightweight jQuery plugin that counts up to a targeted number when the number becomes visible.
 end
 
 group :development do
@@ -153,8 +151,8 @@ group :development do
 end
 
 group :test do
-  gem 'rspec-retry' # Retry randomly failing rspec example. https://github.com/NoRedInk/rspec-retry
-  gem 'factory_girl_rails', '~> 4.8' # A library for setting up Ruby objects as test data.
+  gem 'rspec-retry', '~> 0.5' # Retry randomly failing rspec example. https://github.com/NoRedInk/rspec-retry
+  gem 'factory_bot_rails', '~> 4.8' # A library for setting up Ruby objects as test data.
   gem 'faker', '~> 1.7' # A library for generating fake data such as names, addresses, and phone numbers.
   gem 'capybara', '~> 2.13' # For RSpec feature tests.
   gem 'capybara-email', '~> 2.5' # Test ActionMailer and Mailer messages with Capybara

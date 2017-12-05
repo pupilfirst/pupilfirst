@@ -57,11 +57,11 @@
 //= require about
 //= require startups
 //= require talent
-//= require team_members
 //= require admissions
 //= require faculty
 //= require founders
 //= require story
+//= require fb
 //= require resources
 //= require users
 //= require product_metrics

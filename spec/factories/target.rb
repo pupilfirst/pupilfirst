@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :target do
     initialize_with { key.present? ? Target.where(key: key).first_or_initialize(attributes) : Target.new(attributes) }
 

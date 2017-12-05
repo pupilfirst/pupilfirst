@@ -54,10 +54,10 @@ class ApplicantScreeningSection extends React.Component {
 }
 
 ApplicantScreeningSection.propTypes = {
-  side: React.PropTypes.string,
-  iconPath: React.PropTypes.string,
-  selectedSide: React.PropTypes.string,
-  selectSectionCB: React.PropTypes.func,
-  resetCB: React.PropTypes.func,
-  formAuthenticityToken: React.PropTypes.string
+  side: PropTypes.string,
+  iconPath: PropTypes.string,
+  selectedSide: PropTypes.string,
+  selectSectionCB: PropTypes.func,
+  resetCB: PropTypes.func,
+  formAuthenticityToken: PropTypes.string
 };

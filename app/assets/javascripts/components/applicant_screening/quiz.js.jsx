@@ -37,7 +37,7 @@ class ApplicantScreeningQuiz extends React.Component {
 }
 
 ApplicantScreeningQuiz.propTypes = {
-  type: React.PropTypes.string,
-  resetCB: React.PropTypes.func,
-  formAuthenticityToken: React.PropTypes.string
+  type: PropTypes.string,
+  resetCB: PropTypes.func,
+  formAuthenticityToken: PropTypes.string
 };

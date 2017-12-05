@@ -22,10 +22,12 @@ h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
   font-weight: $headings-font-weight;
   color: $dark-grey-text;
+  -webkit-font-smoothing: antialiased;
 }
 
 p {
   margin-bottom: 0;
+  -webkit-font-smoothing: antialiased;
 }
 
 .font-light {
@@ -76,7 +78,7 @@ p {
   color: $dark-secondary;
 }
 
-.alert-background {
+.alert-text {
   color: $alert-background;
 }
 
@@ -88,6 +90,10 @@ p {
   color: $light-grey-text;
 }
 
+.white-text {
+  color: #FFFFFF;
+}
+
 // ******** BUTTON Style ********
 .btn {
   border-radius: $border-radius-btn;
@@ -95,9 +101,10 @@ p {
   border: 0;
   color: white;
   cursor: pointer;
+  -webkit-font-smoothing: antialiased;
   font-weight: $font-semibold;
   font-size: $btn-text-size;
-  letter-spacing: 0.04rem;
+  letter-spacing: 0.02rem;
   white-space: normal;
   transition: all .2s;
 

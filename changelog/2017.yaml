@@ -1,5 +1,114 @@
 ---
 changelog:
+- timestamp: '2017-12-04T09:32:26Z'
+  changes:
+  - timestamp: '2017-11-28T11:19:06Z'
+    title: Payments now have a payment_type field to store if it's an admission or
+      renewal payment.
+    trello: https://trello.com/c/zX8Js89C
+    private: true
+    category: feature
+  - timestamp: '2017-11-28T11:16:21Z'
+    title: Renamed `Startup.founder_fee` to `undiscounted_founder_fee`.
+    trello: https://trello.com/c/lYQmbedR
+    private: true
+  - timestamp: '2017-11-28T09:48:06Z'
+    title: Added conditional warnings to the AA edit page of coupons.
+    trello: https://trello.com/c/85IZlhBy
+    private: true
+    description: These warnings let the admin know that it isn't safe to edit rewards
+      for coupons that are already in use.
+    category: ui
+  - timestamp: '2017-11-28T07:54:31Z'
+    title: Current deploy number is now displayed on Engineering metrics page.
+    trello: https://trello.com/c/Pj5FYHge
+    private: true
+    description: This updates the heroku webhook endpoint to store the revision number
+      supplied by Heroku.
+    category: feature
+  - timestamp: '2017-11-27T09:14:01Z'
+    title: 'Updated notification sent to #memberships when a new team pays and joins
+      SV.CO to include all available info about the payment and founders.'
+    trello: https://trello.com/c/rl6EgZTu
+    private: true
+    category: feature
+- timestamp: '2017-11-27T07:30:04Z'
+  changes:
+  - timestamp: '2017-11-27T06:49:40Z'
+    title: Updated targets CSV in admin to include target-group and level columns.
+    trello: https://trello.com/c/MBpLPOhf
+    private: true
+  - timestamp: '2017-11-24T09:02:28Z'
+    title: Replaced github-linguist based LOC calculation with the cloc application.
+    trello: https://trello.com/c/P9E1P6Ll
+    private: true
+    description: This removes github-linguist and its dependencies. This will mean
+      the removal of the apt buildpack on Heroku since it is not required, and the
+      addition of the nodejs buildpack since cloc is installed using yarn. The LOC
+      calculation made by github-lingust wasn't even LOC. It was calculating total
+      size of code per language. All stored stats related to this value will need
+      to be removed from the production database.
+    category: bugfix
+  - timestamp: '2017-11-24T06:24:40Z'
+    title: We now have a billing page for our founders! The page displays their subscription
+      status and payment history.
+    trello: https://trello.com/c/bXjy3pZZ
+    private: false
+    description: The page can be accessed via the navbar drop-down for all Level 1+
+      founders. The startup admin page also now has a payment history table.
+    category: feature
+  - timestamp: '2017-11-22T07:24:02Z'
+    title: Improved styling / higlighting of errors on startup profile edit form.
+    trello: https://trello.com/c/QXZ9ri0x
+    private: false
+    category: ui
+  - timestamp: '2017-11-21T08:35:16Z'
+    title: Features can now be activated only for users with admin accounts.
+    trello: https://trello.com/c/UW9SSTo0
+    private: true
+    category: feature
+- timestamp: '2017-11-20T11:44:43Z'
+  changes:
+  - timestamp: '2017-11-20T07:37:34Z'
+    title: A new metric - the 'Total Hours of Learning' on the SV.CO platform was
+      addded to the stats page.
+    trello: https://trello.com/c/g6w3LuqG
+    private: false
+    description: The value was obtained from Google Analytics (as the total hours
+      on page of the founder dashboard).
+    category: feature
+  - timestamp: '2017-11-20T07:35:55Z'
+    title: The TargetOverlay component on the founder dashboard and its children were
+      refactored to better adhere to BEM class-naming.
+    trello: https://trello.com/c/xX7Jx9zf
+    private: true
+  - timestamp: '2017-11-20T07:19:05Z'
+    title: The edit form on AA Resource#edit has been updated to search for linked
+      startup with Select2.
+    trello: https://trello.com/c/sQzNTUyL
+    private: true
+    description: Previous to this change, the page was preloading all startups into
+      the select list.
+    category: performance
+  - timestamp: '2017-11-20T06:33:18Z'
+    title: Fixed a bug that caused a `404` when founders clicked the _Connect to Slack_
+      button, if they'd connected to Slack sometime in the past.
+    private: false
+    category: bugfix
+  - timestamp: '2017-11-17T11:53:23Z'
+    title: Added option to link targets from the admin timeline events quick review
+      interface.
+    trello: https://trello.com/c/eQnpk1Bh
+    private: true
+    category: feature
+  - timestamp: '2017-11-16T09:44:57Z'
+    title: Reviewed timeline events can now have their reviewed status rolled back
+      via the admin interface.
+    trello: https://trello.com/c/55j4zRhT
+    private: true
+    description: This introduces `TimelineEvents::UndoVerificationService` which handles
+      the reversal of all changes introduced by verification of a timeline event.
+    category: feature
 - timestamp: '2017-11-13T11:32:41Z'
   changes:
   - timestamp: '2017-11-13T10:39:20Z'

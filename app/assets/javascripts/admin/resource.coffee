@@ -33,10 +33,7 @@ setupSelect2ForStartups = ->
 
   startupSelect.select2
     allowClear: true,
-    placeholder: {
-      id: "",
-      placeholder: "Leave blank to unlink startup."
-    },
+    placeholder: "Leave blank to share with all startups.",
     width: '80%',
     minimumInputLength: 3,
     ajax:

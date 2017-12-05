@@ -31,6 +31,6 @@ class ApplicantScreeningAnswerOption extends React.Component {
 }
 
 ApplicantScreeningAnswerOption.propTypes = {
-  text: React.PropTypes.string,
-  selectAnswerCB: React.PropTypes.func
+  text: PropTypes.string,
+  selectAnswerCB: PropTypes.func
 };

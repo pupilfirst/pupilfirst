@@ -1,9 +1,9 @@
-const TimelineBuilderFileForm = React.createClass({
+const TimelineBuilderFileForm = createReactClass({
   propTypes: {
-    addAttachmentCB: React.PropTypes.func,
-    showSelectedFileError: React.PropTypes.bool,
-    resetErrorsCB: React.PropTypes.func,
-    hideFileForm: React.PropTypes.func
+    addAttachmentCB: PropTypes.func,
+    showSelectedFileError: PropTypes.bool,
+    resetErrorsCB: PropTypes.func,
+    hideFileForm: PropTypes.func
   },
 
   getInitialState: function () {

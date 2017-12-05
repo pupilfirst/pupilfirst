@@ -79,7 +79,7 @@ $google-color: #dd4b39;
 }
 
 .login-container {
-  max-width: 50rem;
+  max-width: 55rem;
 }
 
 .login-notice {
@@ -119,7 +119,7 @@ $google-color: #dd4b39;
 
 .user-login {
   background-color: white;
-  padding: 60px 30px;
+  padding: 3.75rem;
 
   @include media-breakpoint-down(sm) {
     padding: 30px 15px;

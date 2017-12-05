@@ -24,6 +24,11 @@ module EngineeringMetrics
       current_entry.tap(&:save!)
     end
 
+    def set(metric, value)
+      current_entry.metrics[metric.to_s] = value
+      current_entry.tap(&:save!)
+    end
+
     private
 
     def current_entry
@@ -44,21 +49,17 @@ module EngineeringMetrics
 
     # Use linguist to store programming-language
     def record_language_split
-      require 'rugged'
-      require 'linguist'
-
-      prepare_repository
-      repo = Rugged::Repository.new(Rails.root.to_s)
-      project = Linguist::Repository.new(repo, repo.head.target_id)
-      current_entry.metrics[:loc] = project.languages
+      root_path = File.absolute_path(Rails.root)
+      prepare_repository(root_path)
+      stats = `cd #{root_path} && yarn run --silent cloc --vcs=git --exclude-list-file=cloc-exclude --exclude-lang=Markdown --yaml --quiet`
+      current_entry.metrics[:loc] = YAML.safe_load(stats).except('header', 'SUM')
       current_entry.save!
     end
 
-    # This method creates a new Git repository in the root of the app. This is requires for Rugged::Repository
-    # to work, which is in turn required by Linguist for
-    def prepare_repository
+    # This method creates a new Git repository in the root of the app. This is requires for cloc to work (quickly),
+    # since it can use the 'git ls-files' command to quickly get the list of files to scan.
+    def prepare_repository(root_path)
       return unless Rails.env.production?
-      root_path = Rails.root.to_s
 
       commands = <<~COMMANDS
         cd #{root_path}
@@ -66,13 +67,12 @@ module EngineeringMetrics
         git config user.name "Vocalist"
         git config user.email "hosting@sv.co"
 
-        echo ".apt/" >> .gitignore
-        echo ".profile.d/" >> .gitignore
-        echo "vendor/" >> .gitignore
-        echo "public/assets" >> .gitignore
+        git add app/ spec/ config/ lib/
+        git add db/schema.rb db/seeds
+        git add .overcommit.yml .rubocop.yml codecov.yml
+        git add Gemfile Rakefile package.json app.json
 
-        git add .
-        git commit -m "Rugged commit"
+        git commit -m "Cloc commit"
       COMMANDS
 
       system(commands)

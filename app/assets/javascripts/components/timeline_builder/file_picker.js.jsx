@@ -72,8 +72,8 @@ class TimelineBuilderFilePicker extends React.Component {
 }
 
 TimelineBuilderFilePicker.propTypes = {
-  clearErrorsCB: React.PropTypes.func,
-  fileMissingError: React.PropTypes.bool,
-  fileSizeError: React.PropTypes.bool,
-  showSelectedFileError: React.PropTypes.bool
+  clearErrorsCB: PropTypes.func,
+  fileMissingError: PropTypes.bool,
+  fileSizeError: PropTypes.bool,
+  showSelectedFileError: PropTypes.bool
 };

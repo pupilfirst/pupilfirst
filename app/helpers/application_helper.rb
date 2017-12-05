@@ -18,6 +18,7 @@ module ApplicationHelper
   end
 
   def show_pending_payment_notice
-    !current_page?(fee_founder_path) && !current_startup&.level_zero? && current_startup&.payments&.pending&.any?
+    page_exempted = current_page?(fee_founder_path) || current_page?(billing_startup_path)
+    !page_exempted && !current_startup&.level_zero? && current_startup&.payments&.pending&.any?
   end
 end

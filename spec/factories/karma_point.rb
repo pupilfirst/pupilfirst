@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :karma_point do
     founder { create :founder }
     points { [10, 20, 30, 40, 50].sample }

@@ -57,5 +57,5 @@ class TimelineBuilderFacebookShareToggleButton extends React.Component {
 }
 
 TimelineBuilderFacebookShareToggleButton.propTypes = {
-  facebookShareEligibility: React.PropTypes.string
+  facebookShareEligibility: PropTypes.string
 };

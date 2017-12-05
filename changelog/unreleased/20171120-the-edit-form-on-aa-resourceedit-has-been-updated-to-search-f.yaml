@@ -1,9 +1,0 @@
----
-timestamp: '2017-11-20T07:19:05Z'
-title: The edit form on AA Resource#edit has been updated to search for linked startup
-  with Select2.
-trello: https://trello.com/c/sQzNTUyL
-private: true
-description: Previous to this change, the page was preloading all startups into the
-  select list.
-category: performance

@@ -177,6 +177,61 @@ ActiveAdmin.register Target do
     end
   end
 
+  csv do
+    column :id
+    column :title
+
+    column :timeline_event_type do |target|
+      target&.timeline_event_type&.title
+    end
+
+    column :session do |target|
+      target.session? ? 'Yes' : 'No'
+    end
+
+    column :chore do |target|
+      target.chore? ? 'Yes' : 'No'
+    end
+
+    column :target_group do |target|
+      target&.target_group&.name
+    end
+
+    column :level do |target|
+      if target.target_group.present?
+        target.target_group.level.display_name
+      elsif target.level.present?
+        target.level.display_name
+      end
+    end
+
+    column :target_action_type
+    column :points_earnable
+    column :role
+
+    column :assigner do |target|
+      target&.assigner&.name
+    end
+
+    column :youtube_video_id
+    column :video_embed
+    column :slideshow_embed
+    column :resource_url
+    column :days_to_complete
+    column :submittability
+    column :archived do |target|
+      target.archived? ? 'Yes' : 'No'
+    end
+
+    column :tags do |target|
+      tags = ''
+      target.tags&.each do |tag|
+        tags += tag.name + ';'
+      end
+      tags
+    end
+  end
+
   member_action :archive_target, method: :put do
     target = Target.find params[:id]
     params = permitted_params[:target]

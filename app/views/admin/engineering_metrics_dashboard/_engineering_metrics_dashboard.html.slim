@@ -1,7 +1,7 @@
 #admin__engineering-metrics-dashboard
 
 .engineering-metrics-dashboard__graph-container
-  h2.margin-top-20 Deploys
+  h2.margin-top-20 Deploys - Current Release <strong>#{@presenter.current_release}</strong>
 
   #engineering-metrics-dashboard__deploys data-chart-data=@presenter.trend(:deploys).to_json
 
@@ -16,14 +16,19 @@
   #engineering-metrics-dashboard__commit-trend data-chart-data=@presenter.commit_trend.to_json
 
 .engineering-metrics-dashboard__graph-container
-  h2.margin-top-20 LOC change
+  h2.margin-top-20 Lines of code, split by languages
+
+  #engineering-metrics-dashboard__loc data-chart-data=@presenter.loc.to_json
+
+.engineering-metrics-dashboard__graph-container
+  h2.margin-top-20 Change in LOC (Lines of Code)
 
   #engineering-metrics-dashboard__additions-deletions data-chart-data=@presenter.code_frequency.to_json
 
 .engineering-metrics-dashboard__graph-container
-  h2.margin-top-20 LOC language split
+  h2.margin-top-20 Language use trend
 
-  #engineering-metrics-dashboard__loc data-chart-data=@presenter.language_trend.to_json
+  #engineering-metrics-dashboard__language-trend data-chart-data=@presenter.language_trend.to_json
 
 .engineering-metrics-dashboard__graph-container
   h2.margin-top-20

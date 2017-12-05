@@ -93,5 +93,5 @@ class TargetOverlayStatusBadgeBar extends React.Component {
 }
 
 TargetOverlayStatusBadgeBar.propTypes = {
-  target: React.PropTypes.object
+  target: PropTypes.object
 };

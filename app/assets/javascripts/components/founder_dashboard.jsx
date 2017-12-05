@@ -159,20 +159,20 @@ class FounderDashboard extends React.Component {
 }
 
 FounderDashboard.propTypes = {
-  currentLevel: React.PropTypes.number,
-  levels: React.PropTypes.object,
-  sessions: React.PropTypes.array,
-  sessionTags: React.PropTypes.array,
-  timelineEventTypes: React.PropTypes.object,
-  facebookShareEligibility: React.PropTypes.string,
-  authenticityToken: React.PropTypes.string,
-  levelUpEligibility: React.PropTypes.string,
-  iconPaths: React.PropTypes.object,
-  openTimelineBuilderCB: React.PropTypes.func,
-  founderDetails: React.PropTypes.array,
-  maxLevelNumber: React.PropTypes.number,
-  programLevels: React.PropTypes.object,
-  initialTargetId: React.PropTypes.number,
-  initialTargetType: React.PropTypes.string,
-  testMode: React.PropTypes.bool
+  currentLevel: PropTypes.number,
+  levels: PropTypes.object,
+  sessions: PropTypes.array,
+  sessionTags: PropTypes.array,
+  timelineEventTypes: PropTypes.object,
+  facebookShareEligibility: PropTypes.string,
+  authenticityToken: PropTypes.string,
+  levelUpEligibility: PropTypes.string,
+  iconPaths: PropTypes.object,
+  openTimelineBuilderCB: PropTypes.func,
+  founderDetails: PropTypes.array,
+  maxLevelNumber: PropTypes.number,
+  programLevels: PropTypes.object,
+  initialTargetId: PropTypes.number,
+  initialTargetType: PropTypes.string,
+  testMode: PropTypes.bool
 };

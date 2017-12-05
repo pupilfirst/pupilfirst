@@ -49,6 +49,7 @@
   border-radius: 10px;
   border: 1px solid $gray-border;
   box-shadow: $box-shadow;
+  overflow: hidden;
 
   .nav {
     background-color: $primary-background;

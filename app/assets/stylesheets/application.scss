@@ -30,9 +30,9 @@
 @import 'about';
 @import 'admissions';
 @import 'founders';
-@import 'team_members';
 @import 'talent';
 @import 'tour';
+@import 'fb';
 @import 'resources';
 @import 'faculty';
 @import 'story';
@@ -44,3 +44,6 @@
 // Select2
 @import "select2";
 @import "select2-bootstrap";
+
+// Customizations
+@import "customizations/bootstrap_form_for";

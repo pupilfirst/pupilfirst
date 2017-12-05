@@ -50,6 +50,6 @@ class ApplicantScreeningQuestion extends React.Component {
 
 ApplicantScreeningQuestion
   .propTypes = {
-  type: React.PropTypes.string,
-  questionNumber: React.PropTypes.number
+  type: PropTypes.string,
+  questionNumber: PropTypes.number
 };

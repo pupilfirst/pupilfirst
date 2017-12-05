@@ -34,7 +34,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :team_members, except: %i[index show]
   resources :timeline_events, only: %i[create destroy]
 
   scope 'founder/facebook', as: 'founder_facebook', controller: 'founders/facebook_connect' do
@@ -52,6 +51,7 @@ Rails.application.routes.draw do
   resource :startup, only: %i[edit update] do
     member do
       post 'level_up'
+      get 'billing'
     end
   end
 
@@ -152,6 +152,9 @@ Rails.application.routes.draw do
 
   # Application process tour of SV.CO
   get 'tour', to: 'home#tour'
+
+  # Facebook School of Innovation at SV.CO landing page
+  get 'fb', to: 'home#fb'
 
   root 'home#index'
 

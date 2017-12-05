@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :payment do
     startup
     founder { startup.founders.first }
@@ -25,6 +25,7 @@ FactoryGirl.define do
       paid_at 1.day.ago
       billing_start_at 1.day.ago
       billing_end_at 30.days.from_now
+      payment_type { Payment::TYPE_ADMISSION }
     end
   end
 end

@@ -76,9 +76,9 @@ class ApplicantScreeningQuizResult extends React.Component {
 }
 
 ApplicantScreeningQuizResult.propTypes = {
-  passed: React.PropTypes.bool,
-  resetCB: React.PropTypes.func,
-  type: React.PropTypes.string,
-  formAuthenticityToken: React.PropTypes.string,
-  githubURL: React.PropTypes.string
+  passed: PropTypes.bool,
+  resetCB: PropTypes.func,
+  type: PropTypes.string,
+  formAuthenticityToken: PropTypes.string,
+  githubURL: PropTypes.string
 };

@@ -15,7 +15,9 @@ class Feature < ApplicationRecord
   class << self
     attr_writer :skip_override
 
-    # {"email_regexes": ["\\S+@sv.co$"], "emails": ["someone@sv.co"]}
+    # {"admin": true}
+    #
+    # {"email_regexes": ["\\S+@example.com$"], "emails": ["someone@example.com"]}
     #     OR
     # {"active": true}
     def active?(key, user = nil)
@@ -45,13 +47,29 @@ class Feature < ApplicationRecord
 
   def active_for_user?(user, parsed_value)
     return false unless user
+    return true if active_for_admin?(user, parsed_value)
+    return true if active_for_regex?(user, parsed_value)
+    return true if active_for_email?(user, parsed_value)
+    false
+  end
 
-    if parsed_value.include? :email_regexes
-      parsed_value[:email_regexes].each do |email_regex|
-        return true if Regexp.new(email_regex).match?(user.email)
-      end
+  def active_for_admin?(user, parsed_value)
+    return false unless parsed_value.include?(:admin)
+    user.admin?
+  end
+
+  def active_for_regex?(user, parsed_value)
+    return false unless parsed_value.include? :email_regexes
+
+    parsed_value[:email_regexes].each do |email_regex|
+      return true if Regexp.new(email_regex).match?(user.email)
     end
 
-    true if parsed_value.include?(:emails) && parsed_value[:emails].include?(user.email)
+    false
+  end
+
+  def active_for_email?(user, parsed_value)
+    return false unless parsed_value.include?(:emails)
+    parsed_value[:emails].include?(user.email)
   end
 end

@@ -14,6 +14,6 @@ class TimelineBuilderSocialBar extends React.Component {
 }
 
 TimelineBuilderSocialBar.propTypes = {
-  description: React.PropTypes.string,
-  facebookShareEligibility: React.PropTypes.string
+  description: PropTypes.string,
+  facebookShareEligibility: PropTypes.string
 };

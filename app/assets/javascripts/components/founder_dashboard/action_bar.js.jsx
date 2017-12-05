@@ -88,9 +88,9 @@ class FounderDashboardActionBar extends React.Component {
 }
 
 FounderDashboardActionBar.propTypes = {
-  filter: React.PropTypes.string,
-  filterData: React.PropTypes.object,
-  pickFilterCB: React.PropTypes.func,
-  openTimelineBuilderCB: React.PropTypes.func,
-  currentLevel: React.PropTypes.number
+  filter: PropTypes.string,
+  filterData: PropTypes.object,
+  pickFilterCB: PropTypes.func,
+  openTimelineBuilderCB: PropTypes.func,
+  currentLevel: PropTypes.number
 };

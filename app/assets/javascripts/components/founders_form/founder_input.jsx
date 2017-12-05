@@ -92,19 +92,19 @@ class FoundersFormFounderInput extends React.Component {
 }
 
 FoundersFormFounderInput.PropTypes = {
-  autofocus: React.PropTypes.bool,
-  label: React.PropTypes.string,
-  index: React.PropTypes.number,
-  maxLength: React.PropTypes.number,
-  name: React.PropTypes.string,
-  type: React.PropTypes.string,
-  pattern: React.PropTypes.string,
-  error: React.PropTypes.string,
-  value: React.PropTypes.string,
-  disabled: React.PropTypes.bool,
-  replacementHint: React.PropTypes.string,
-  handleReplacementChoiceCB: React.PropTypes.func,
-  showEmailHint: React.PropTypes.bool
+  autofocus: PropTypes.bool,
+  label: PropTypes.string,
+  index: PropTypes.number,
+  maxLength: PropTypes.number,
+  name: PropTypes.string,
+  type: PropTypes.string,
+  pattern: PropTypes.string,
+  error: PropTypes.string,
+  value: PropTypes.string,
+  disabled: PropTypes.bool,
+  replacementHint: PropTypes.string,
+  handleReplacementChoiceCB: PropTypes.func,
+  showEmailHint: PropTypes.bool
 };
 
 FoundersFormFounderInput.defaultProps = {

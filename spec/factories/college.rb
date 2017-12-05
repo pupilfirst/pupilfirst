@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :college do
     name { Faker::Lorem.words(3).join(' ') }
     city { Faker::Address.city }

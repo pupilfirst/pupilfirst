@@ -12,7 +12,7 @@ ActiveAdmin.register EnglishQuizSubmission do
 
   index do
     column 'Question Posted On' do |submission|
-      date = submission.english_quiz_question.posted_on.strftime('%b %d, %Y')
+      date = submission.english_quiz_question.posted_on&.strftime('%b %d, %Y')
       link_to date, admin_english_quiz_question_path(submission.english_quiz_question)
     end
 

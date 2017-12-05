@@ -23,3 +23,7 @@ tags
 
 # Ignore dotenv files.
 .env*
+
+# Ignore public packs.
+/public/packs
+/public/packs-test

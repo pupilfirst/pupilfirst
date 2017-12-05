@@ -46,6 +46,6 @@ class TargetOverlayFounderStatusPanel extends React.Component {
 }
 
 TargetOverlayFounderStatusPanel.PropTypes = {
-  founderDetails: React.PropTypes.array,
-  targetId: React.PropTypes.number
+  founderDetails: PropTypes.array,
+  targetId: PropTypes.number
 };

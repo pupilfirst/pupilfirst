@@ -43,6 +43,6 @@ class TargetOverlaySubmitButton extends React.Component {
 }
 
 TargetOverlaySubmitButton.propTypes = {
-  target: React.PropTypes.object,
-  openTimelineBuilderCB: React.PropTypes.func
+  target: PropTypes.object,
+  openTimelineBuilderCB: PropTypes.func
 };

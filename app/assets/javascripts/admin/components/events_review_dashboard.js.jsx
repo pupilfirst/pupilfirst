@@ -98,6 +98,6 @@ class EventsReviewDashboard extends React.Component {
 }
 
 EventsReviewDashboard.propTypes = {
-  reviewData: React.PropTypes.object,
-  debug: React.PropTypes.bool
+  reviewData: PropTypes.object,
+  debug: PropTypes.bool
 };

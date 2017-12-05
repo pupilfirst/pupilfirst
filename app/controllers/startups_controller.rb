@@ -1,6 +1,6 @@
 class StartupsController < ApplicationController
   before_action :authenticate_founder!, except: %i[show index timeline_event_show paged_events]
-  before_action :require_active_subscription, except: %i[index show timeline_event_show paged_events]
+  before_action :require_active_subscription, except: %i[index show timeline_event_show paged_events billing]
 
   # GET /startups
   def index
@@ -86,6 +86,11 @@ class StartupsController < ApplicationController
 
     Startups::LevelUpService.new(current_startup).execute
     redirect_to(dashboard_founder_path(from: 'level_up', from_level: current_startup.level.number - 1))
+  end
+
+  # GET /startup/billing
+  def billing
+    authorize current_startup
   end
 
   private

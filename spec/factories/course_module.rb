@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :course_module do
     name { Faker::Lorem.words(3).join ' ' }
     publish_at { 7.days.ago }

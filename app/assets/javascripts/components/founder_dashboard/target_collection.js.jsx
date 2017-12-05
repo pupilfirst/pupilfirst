@@ -56,15 +56,15 @@ class FounderDashboardTargetCollection extends React.Component {
 }
 
 FounderDashboardTargetCollection.propTypes = {
-  name: React.PropTypes.string,
-  description: React.PropTypes.string,
-  targets: React.PropTypes.array,
-  displayDate: React.PropTypes.bool,
-  milestone: React.PropTypes.bool,
-  finalCollection: React.PropTypes.bool,
-  iconPaths: React.PropTypes.object,
-  founderDetails: React.PropTypes.array,
-  selectTargetCB: React.PropTypes.func
+  name: PropTypes.string,
+  description: PropTypes.string,
+  targets: PropTypes.array,
+  displayDate: PropTypes.bool,
+  milestone: PropTypes.bool,
+  finalCollection: PropTypes.bool,
+  iconPaths: PropTypes.object,
+  founderDetails: PropTypes.array,
+  selectTargetCB: PropTypes.func
 };
 
 FounderDashboardTargetCollection.defaultProps = {

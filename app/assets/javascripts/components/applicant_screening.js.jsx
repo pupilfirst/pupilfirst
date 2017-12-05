@@ -54,7 +54,7 @@ class ApplicantScreening extends React.Component {
 }
 
 ApplicantScreening.propTypes = {
-  coderIconPath: React.PropTypes.string,
-  nonCoderIconPath: React.PropTypes.string,
-  formAuthenticityToken: React.PropTypes.string
+  coderIconPath: PropTypes.string,
+  nonCoderIconPath: PropTypes.string,
+  formAuthenticityToken: PropTypes.string
 };

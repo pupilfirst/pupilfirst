@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :target_group do
     name { Faker::Lorem.word }
     sequence(:sort_index)

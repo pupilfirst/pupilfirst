@@ -40,6 +40,6 @@ class FounderDashboardSessionsTagSelect extends React.Component {
 }
 
 FounderDashboardSessionsTagSelect.propTypes = {
-  tags: React.PropTypes.array,
-  chooseTagsCB: React.PropTypes.func
+  tags: PropTypes.array,
+  chooseTagsCB: PropTypes.func
 };

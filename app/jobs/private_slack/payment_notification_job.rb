@@ -12,11 +12,21 @@ module PrivateSlack
 
     private
 
-    def payment_information(founder)
-      <<~PAYMENT_INFO
-        @gemo We've just received first payment from a new team - #{founder.startup.display_name}
+    def payment(founder)
+      @payment = Hash.new do |hash, key|
+        hash[key] = key.payments.last
+      end
 
-        *Team members:*
+      @payment[founder]
+    end
+
+    def payment_information(founder)
+      period = payment(founder).period
+      amount = payment(founder).amount.round
+
+      <<~PAYMENT_INFO
+        <@U0299AQB5> We've just received first payment of *Rs. #{amount}* from a new team - *#{founder.startup.display_name}* for a period of *#{ActionController::Base.helpers.pluralize(period, 'month')}*.
+
         #{team_members_list(founder)}
 
         <https://www.sv.co/admin/startups/#{founder.startup.id}|View this startup's details in the admin interface.>
@@ -24,15 +34,19 @@ module PrivateSlack
     end
 
     def team_members_list(founder)
-      counter = 0
+      team = founder.startup.founders.each_with_object([]) do |f, list|
+        list << "#{team_member_string(f, list.count + 1)}#{founder.startup.team_lead == f ? ' - *Team Lead*' : ''}"
+      end
 
-      (founder.startup.founders.map do |f|
-        counter += 1
-        "#{counter}. `#{f.email}` #{f.name}#{founder.startup.team_lead == f ? ' (Team Lead)' : ''}"
-      end + founder.startup.invited_founders.map do |f|
-        counter += 1
-        "#{counter}. `#{f.email}` #{f.name} (Invited)"
-      end).join("\n")
+      founder.startup.invited_founders.each do |f|
+        team << "#{team_member_string(f, team.count + 1)} - *Invitation Pending*"
+      end
+
+      team.join("\n")
+    end
+
+    def team_member_string(founder, count)
+      "#{count}. #{founder.name} :email: `#{founder.email}` :phone: #{founder.phone}"
     end
   end
 end

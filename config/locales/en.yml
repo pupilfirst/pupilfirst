@@ -122,6 +122,20 @@ en:
       evaluate_submission:
         explanation_footer: '> If you would like to know more about this topic, please post your questions on <#C0B1QFD7T|english> and tag our Language Coach, <@U0A6X5MEY>.'
 
+    targets:
+      create_or_update_calendar_event:
+        title: 'SV.CO Live session by %{name}, %{title}'
+        description: >
+          The live session will be hosted using Zoom (conferencing tool). You can download the Zoom at this link:
+
+          https://zoom.us/download
+
+          Once downloaded, please sign in (or sign up) for Zoom with your email account.
+
+          The link to the session will be shared in the Collective Slack channel 15 minutes prior to the session.
+
+          Here is the general format for the session: 20 minutes talk + 10 mins Q&A. Please use the Q&A option in Zoom to post your questions that will be answered at the end of the session by the speaker.
+
   presenters:
     startups:
       billing:

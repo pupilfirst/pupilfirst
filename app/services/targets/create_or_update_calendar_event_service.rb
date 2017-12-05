@@ -1,13 +1,14 @@
 module Targets
   # Create or update Google Calendar event.
   class CreateOrUpdateCalendarEventService
-    def initialize(target)
+    def initialize(target, mock: true)
       @target = target
-      @google_calendar = GoogleCalendarService.new if Rails.env.production?
+      @mock = Rails.env.production? ? false : mock
+      @google_calendar = GoogleCalendarService.new unless @mock
     end
 
     def execute
-      return unless Rails.env.production?
+      return if @mock
 
       event = @google_calendar.find_or_create_event_by_id(@target.google_calendar_event_id) do |e|
         add_event_details(e)
@@ -19,14 +20,14 @@ module Targets
 
     private
 
-    delegate :startup, :faculty, :questions, to: :@target
+    delegate :faculty, to: :@target
 
     def add_event_details(event)
-      event.title = calendar_event_title
+      event.title = I18n.t("services.targets.create_or_update_calendar_event.title", name: faculty.name, title: faculty.title)
       event.start_time = @target.session_at.iso8601
-      event.end_time = (@target.session_at + 1.hour).iso8601
+      event.end_time = (@target.session_at + 30.minutes).iso8601
       event.attendees = attendees
-      event.description = calendar_event_description
+      event.description = I18n.t("services.targets.create_or_update_calendar_event.description")
       event.guests_can_invite_others = false
       event.guests_can_see_other_guests = false
 
@@ -43,32 +44,14 @@ module Targets
       }
     end
 
-    def calendar_event_title
-      "#{startup.product_name} / #{faculty.name} (Faculty Connect)"
-    end
-
-    def calendar_event_description
-      <<~DESCRIPTION
-        Product: #{startup.display_name}
-        Timeline: #{Rails.application.routes.url_helpers.timeline_url(startup.id, startup.slug, host: 'https://www.sv.co')}
-        Team lead: #{startup.team_lead.fullname}
-
-        Questions Asked:
-
-        #{questions.delete("\r").to_json[1..-2]}
-      DESCRIPTION
-    end
-
     def attendees
-      list = [{ 'email' => faculty.email, 'displayName' => faculty.name, 'responseStatus' => 'needsAction' }]
-
-      list + (startup.founders.map do |founder|
+      Founder.subscribed.at_or_above_level(@target.level).distinct.map do |founder|
         {
           'email' => founder.email,
           'displayName' => founder.fullname,
           'responseStatus' => 'needsAction'
         }
-      end)
+      end
     end
   end
 end

@@ -22,4 +22,12 @@ class FacultyMailer < ApplicationMailer
     @startup = connect_request.startup
     mail(to: @faculty.email, subject: "Feedback for your recent faculty connect session with team members of #{@startup.display_name}")
   end
+
+  # Mail sent a little while after a session occurred.
+  #
+  # @param target [Target] Target (session) for which feedback is required.
+  def session_feedback(target)
+    @target = target
+    mail(to: @target.faculty.email, subject: "Feedback for your SV.CO session #{@target.title}")
+  end
 end

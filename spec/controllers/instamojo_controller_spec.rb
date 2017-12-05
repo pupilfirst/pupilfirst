@@ -72,7 +72,7 @@ describe InstamojoController do
     end
 
     context 'when a payment has already been marked paid' do
-      let(:paid_at) { 5.seconds.ago }
+      let(:paid_at) { 5.seconds.ago.round }
 
       before do
         payment.update!(paid_at: paid_at, payment_type: Payment::TYPE_ADMISSION)

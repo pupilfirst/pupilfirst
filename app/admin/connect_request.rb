@@ -23,20 +23,21 @@ ActiveAdmin.register ConnectRequest do
     def scoped_collection
       super.includes :connect_slot
     end
-
-    def update
-      super.tap do
-        resource.transaction do
-          if resource.saved_change_to_status? && resource.confirmed? && resource.confirmed_at.blank?
-            ConnectRequests::ConfirmationService.new(resource).execute
-          end
-        end
-      end
-    end
   end
 
   action_item :record_feedback, only: :show do
     link_to 'Record Feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: connect_request.startup.id })
+  end
+
+  action_item :confirm_request, only: :show, if: -> { connect_request.unconfirmed? } do
+    link_to 'Confirm Request', confirm_request_admin_connect_request_path(connect_request)
+  end
+
+  member_action :confirm_request, method: :patch do
+    connect_request = ConnectRequest.find(params[:id])
+    ConnectRequests::ConfirmationService.new(connect_request).execute
+    flash[:success] = 'The connect request has been confirmed and attendees notified!'
+    redirect_to action: :show
   end
 
   index do
@@ -68,6 +69,12 @@ ActiveAdmin.register ConnectRequest do
     actions do |connect_request|
       span do
         link_to 'Record Feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: connect_request.startup.id }), class: 'member_link'
+      end
+
+      if connect_request.unconfirmed?
+        span do
+          link_to 'Confirm Request', confirm_request_admin_connect_request_path(connect_request), class: 'member_link'
+        end
       end
     end
   end

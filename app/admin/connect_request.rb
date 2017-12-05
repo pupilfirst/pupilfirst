@@ -1,7 +1,7 @@
 ActiveAdmin.register ConnectRequest do
   include DisableIntercom
 
-  permit_params :connect_slot_id, :startup_id, :questions, :meeting_link, :status
+  permit_params :connect_slot_id, :startup_id, :questions
 
   menu parent: 'Faculty'
 
@@ -129,8 +129,6 @@ ActiveAdmin.register ConnectRequest do
         required: true
       f.input :startup, label: 'Product', collection: Startup.approved.order(:product_name), required: true
       f.input :questions
-      f.input :meeting_link
-      f.input :status, as: :select, collection: ConnectRequest.valid_statuses, include_blank: false
     end
 
     f.actions

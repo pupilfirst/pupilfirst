@@ -10,25 +10,34 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
       undoReviewInProgress: false
     };
 
-    this.statusChange = this.statusChange.bind(this);
-    this.gradeChange = this.gradeChange.bind(this);
-    this.pointsChange = this.pointsChange.bind(this)
+    this.changeStatus = this.changeStatus.bind(this);
+    this.changeGrade = this.changeGrade.bind(this);
+    this.changePoints = this.changePoints.bind(this)
     this.saveReview = this.saveReview.bind(this);
     this.radioInputId = this.radioInputId.bind(this);
     this.radioInputName = this.radioInputName.bind(this);
     this.undoReview = this.undoReview.bind(this);
     this.rubricPresent = this.rubricPresent.bind(this);
+    this.toggleRubric = this.toggleRubric.bind(this);
+    this.enableSaveReviewButton = this.enableSaveReviewButton.bind(this);
   }
 
-  statusChange(event) {
-    this.setState({status: event.target.value});
+  changeStatus(event) {
+    const updatedState = {status: event.target.value};
+
+    // Clear any grade present that might have been picked up during review.
+    if (updatedState.status !== 'verified') {
+      updatedState.grade = null;
+    }
+
+    this.setState(updatedState);
   }
 
-  gradeChange(event) {
+  changeGrade(event) {
     this.setState({grade: event.target.value});
   }
 
-  pointsChange(event) {
+  changePoints(event) {
     this.setState({points: event.target.value});
   }
 
@@ -153,27 +162,49 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
     return (this.props.rootState.reviewData[this.props.eventId].rubric !== null);
   }
 
+  toggleRubric() {
+    const reviewDataClone = _.cloneDeep(this.props.rootState.reviewData);
+    const eventData = reviewDataClone[this.props.eventId];
+
+    if (_.isBoolean(eventData.rubricVisible)) {
+      eventData.rubricVisible = !eventData.rubricVisible;
+    } else {
+      eventData.rubricVisible = true;
+    }
+
+    this.props.setRootState({reviewData: reviewDataClone});
+
+  }
+
+  enableSaveReviewButton() {
+    // enable 'Save Review' button only when the status is needs_improvement or not_accepted for any targets and also when
+    // verified for a target without PC.
+    return ((!this.rubricPresent() && this.state.status === 'verified' && (this.state.grade || this.state.points) )
+      || this.state.status === 'needs_improvement' || this.state.status === 'not_accepted')
+  }
+
   render() {
     return (
       <div className="margin-bottom-10">
         <strong>Status:</strong>
-        <br/>
-        <label htmlFor={ this.radioInputId('verified') }>
-          <input type='radio' id={ this.radioInputId('verified') } value='verified'
-                 name={ this.radioInputName('status') }
-                 onChange={ this.statusChange }/>&nbsp;Verified&nbsp;
-        </label>
-        <label htmlFor={ this.radioInputId('needs_improvement') }>
-          <input type='radio' id={ this.radioInputId('needs_improvement') } value='needs_improvement'
-                 name={ this.radioInputName('status') }
-                 onChange={ this.statusChange }/>&nbsp;Needs Improvement&nbsp;
-        </label>
-        <label htmlFor={ this.radioInputId('not_accepted') }>
-          <input type='radio' id={ this.radioInputId('not_accepted') } value='not_accepted'
-                 name={ this.radioInputName('status') }
-                 onChange={ this.statusChange }/>&nbsp;Not Accepted&nbsp;
-        </label>
-        <br/>
+
+        <div onChange={this.changeStatus}>
+          <label className='review-dashboard-event-status-update__label' htmlFor={this.radioInputId('verified')}>
+            <input className='review-dashboard-event-status-update__input' type='radio' id={this.radioInputId('verified')} value='verified'
+                   name={this.radioInputName('status')}/>
+            Verified
+          </label>
+          <label className='review-dashboard-event-status-update__label' htmlFor={this.radioInputId('needs_improvement')}>
+            <input className='review-dashboard-event-status-update__input' type='radio' id={this.radioInputId('needs_improvement')} value='needs_improvement'
+                   name={this.radioInputName('status')}/>
+            Needs Improvement
+          </label>
+          <label className='review-dashboard-event-status-update__label' htmlFor={this.radioInputId('not_accepted')}>
+            <input className='review-dashboard-event-status-update__input' type='radio' id={this.radioInputId('not_accepted')} value='not_accepted'
+                   name={this.radioInputName('status')}/>
+            Not Accepted
+          </label>
+        </div>
 
         { this.state.status === 'verified' && !this.rubricPresent() &&
         <div>
@@ -181,29 +212,27 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
           { this.props.targetId !== 'null' &&
           <div>
             <strong>Grade:</strong>
-            <br/>
-            <label htmlFor={ this.radioInputId('wow') }>
-              <input type='radio' id={this.radioInputId('wow') } value='wow' name={ this.radioInputName('grade') }
-                     onChange={ this.gradeChange }/>&nbsp;Wow&nbsp;
-            </label>
-            <label htmlFor={ this.radioInputId('great') }>
-              <input type='radio' id={ this.radioInputId('great') } value='great' name={ this.radioInputName('grade') }
-                     onChange={ this.gradeChange }/>&nbsp;
-              Great&nbsp;
-            </label>
-            <label htmlFor={ this.radioInputId('good') }>
-              <input type='radio' id={ this.radioInputId('good') } value='good' name={ this.radioInputName('grade') }
-                     onChange={ this.gradeChange }/>&nbsp;
-              Good&nbsp;
-            </label>
-            <br/>
+            <div onChange={this.changeGrade}>
+              <label className='review-dashboard-event-status-update__label' htmlFor={this.radioInputId('wow')}>
+                <input className='review-dashboard-event-status-update__input' type='radio' id={this.radioInputId('wow')} value='wow' name={this.radioInputName('grade')}/>
+                Wow
+              </label>
+              <label className='review-dashboard-event-status-update__label' htmlFor={this.radioInputId('great')}>
+                <input className='review-dashboard-event-status-update__input' type='radio' id={this.radioInputId('great')} value='great' name={this.radioInputName('grade')}/>
+                Great
+              </label>
+              <label className='review-dashboard-event-status-update__label' htmlFor={this.radioInputId('good')}>
+                <input className='review-dashboard-event-status-update__input' type='radio' id={this.radioInputId('good')} value='good' name={this.radioInputName('grade')}/>
+                Good
+              </label>
+            </div>
           </div>
           }
 
           { this.props.targetId === 'null' &&
             <div>
               <strong>Points:</strong><br/>
-              <input style={{width: '50px'}} type='number' value={this.state.points} onChange={ this.pointsChange }/>
+              <input style={{width: '50px'}} type='number' value={this.state.points} onChange={ this.changePoints }/>
             </div>
           }
 
@@ -211,9 +240,9 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
         }
         <br/>
 
-        { !this.rubricPresent() && <div>
+        { this.enableSaveReviewButton() &&  <div>
           {!this.alreadyReviewed() && <div>
-            <a className='button cursor-pointer' onClick={this.saveReview}>Save Review</a>
+            <a className='button cursor-pointer margin-bottom-10' onClick={this.saveReview}>Save Review</a>
             {this.state.statusMissing &&
             <div style={{color: 'red'}}>Select a status first!</div>
             }
@@ -232,9 +261,13 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
         }
 
         { this.state.status === 'verified' && this.rubricPresent() &&
-        <EventsReviewDashboardEventGrading rootState={this.props.rootState} setRootState={this.props.setRootState}
+        <EventsReviewDashboardEventPcGrading rootState={this.props.rootState} setRootState={this.props.setRootState}
                                            eventId={this.props.eventId} targetId={this.props.targetId}
                                            rubric={this.props.rootState.reviewData[this.props.eventId].rubric}/>
+        }
+
+        {
+          this.rubricPresent() && <a className='button cursor-pointer margin-bottom-10' onClick={this.toggleRubric}>Show/Hide Rubric</a>
         }
       </div>
     )

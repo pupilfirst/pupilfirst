@@ -138,7 +138,7 @@ table table table {
   width: 100%;
 }
 
-p.monospace {
+p.monospace, pre.monospace {
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 90%;
   display: inline-block;

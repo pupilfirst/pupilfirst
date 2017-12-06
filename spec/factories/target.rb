@@ -14,11 +14,6 @@ FactoryBot.define do
     key nil
     session_at nil
 
-    transient do
-      week_number nil
-      group_index nil
-    end
-
     trait :session do
       session_at 1.week.from_now
       days_to_complete nil

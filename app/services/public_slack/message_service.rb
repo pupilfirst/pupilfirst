@@ -115,6 +115,9 @@ module PublicSlack
       rescue PublicSlack::TransportFailureException
         @errors['HTTP Error'] = 'There seems to be a network issue. Please try after sometime'
         return false
+      rescue PublicSlack::OperationFailureException => e
+        @errors[founder.id] = e.message
+        return false
       end
 
       im_id_response['channel']['id']

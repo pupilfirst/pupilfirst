@@ -29,18 +29,26 @@ module Targets
 
       # Send messages to all founders notifying them that session starts in under 30 minutes.
       Founder.subscribed.at_or_above_level(session.level).distinct.each do |founder|
-        response = message_service.post(message: message(founder), founder: founder)
+        response = message_service.post(message: message(session), founder: founder)
         service_errors << response.errors if response.errors.any?
 
         # Sleep a short while between pings to avoid exceeding Slack's API burst limit.
         sleep 0.2
       end
 
-      log "All messages sent. Errors reported by message_service: #{message_service.errors}"
+      log "All messages sent. Errors reported by message_service: #{service_errors}"
     end
 
-    def message(_founder)
-      raise 'Not yet implemented!'
+    def message(session)
+      time_delta = "#{((session.session_at - Time.zone.now) / 60).round} minutes"
+      time_exact = session.session_at.strftime('%l:%M %p')
+
+      I18n.t(
+        'jobs.targets.send_session_reminders.message',
+        title: session.title,
+        time_delta: time_delta,
+        time_exact: time_exact
+      )
     end
   end
 end

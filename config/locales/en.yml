@@ -54,6 +54,10 @@ en:
             %{links_attached_notice}
           needs_improvement: *jobs-timeline_events-verification_notification-public-verified
 
+    targets:
+      send_session_reminders:
+        message: 'Reminder: "%{title}" will start in %{time_delta} (at %{time_exact}). Please check the Slack collective channel for the link to join session.'
+
   libs:
     lita:
       handlers:

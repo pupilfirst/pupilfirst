@@ -26,7 +26,7 @@ module PublicSlack
 
       if self.class.mock?
         log "Skipping post because of @mock flag. Message was: '#{message}'"
-        return
+        return OpenStruct.new(errors: @errors)
       end
 
       message = message

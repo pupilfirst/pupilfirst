@@ -17,6 +17,7 @@ module ConnectRequests
         e.guests_can_invite_others = false
         e.guests_can_see_other_guests = false
         e.location = @connect_request.meeting_link
+        e.send_notifications = true
 
         # Default visibility should be sufficient since it equals calendar's setting.
         # e.visibility = 'public'

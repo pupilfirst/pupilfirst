@@ -33,7 +33,7 @@ describe Targets::SendSessionRemindersJob do
   end
 
   describe '#perform' do
-    it 'does nothing' do
+    it 'sends slack messages for imminent sessions to the appropriate founders' do
       # Founders in session's level and above should get notifications.
       Founder.where(startup: [startup_l2, startup_l3]).each do |founder|
         expect(message_service).to receive(:post).with(message: expected_message, founder: founder)

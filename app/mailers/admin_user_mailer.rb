@@ -5,6 +5,12 @@ class AdminUserMailer < ApplicationMailer
     @recipient = recipient
     @admin_user = admin_user
     @errors = errors
+
+    if @errors.present?
+      filename = "errors-#{Time.zone.now.strftime('%Y%m%d%H%M%S')}.csv"
+      attachments[filename] = @errors
+    end
+
     mail(to: admin_user.email, subject: 'Vocalist ping job complete')
   end
 end

@@ -10,15 +10,15 @@
 = content_for :body do
   p We've just completed sending your message to some founders. The content of the message was:
 
-  p.monospace #{@message}
+  pre.monospace #{@message}
 
   p The message was sent to:
 
   pre.monospace #{@recipient.to_yaml}
 
   - if @errors.present?
-    p Some errors were encountered in the process of sending the message. Details follow:
-
-    pre.monospace #{@errors}
+    p
+      ' Some errors were encountered in the process of sending the message. Details have been attached as a CSV with
+      | this email.
   - else
     p No errors were encountered during processing. Cheers!

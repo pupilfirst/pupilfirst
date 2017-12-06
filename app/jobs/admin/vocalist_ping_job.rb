@@ -36,13 +36,19 @@ module Admin
     def errors_for_email(response)
       return if response.errors.blank?
 
-      response.errors.each_with_object({}) do |(key, value), formatted_errors|
-        if key.is_a?(Integer)
-          formatted_errors["#{Founder.find(key).name} (ID ##{key})"] = value
-        else
-          formatted_errors[key] = value
+      CSV.generate do |csv|
+        csv << ["Key", "Message", "Additional Info"]
+
+        response.errors.each do |(key, value)|
+          row = if key.is_a?(Integer)
+            [key, value, Founder.find(key).name]
+          else
+            [key, value]
+          end
+
+          csv << row
         end
-      end.to_yaml
+      end
     end
 
     def recipient_for_email

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171128115349) do
+ActiveRecord::Schema.define(version: 20171206084546) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -730,6 +730,7 @@ ActiveRecord::Schema.define(version: 20171128115349) do
     t.integer "target_id"
     t.boolean "share_on_facebook", default: false
     t.integer "iteration", default: 1, null: false
+    t.decimal "score", precision: 2, scale: 1
     t.index ["founder_id"], name: "index_timeline_events_on_founder_id"
     t.index ["iteration"], name: "index_timeline_events_on_iteration"
     t.index ["startup_id"], name: "index_timeline_events_on_startup_id"

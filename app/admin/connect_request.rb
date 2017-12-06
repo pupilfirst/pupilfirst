@@ -29,7 +29,7 @@ ActiveAdmin.register ConnectRequest do
     link_to 'Record Feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: connect_request.startup.id })
   end
 
-  action_item :confirm_request, only: :show, if: -> { connect_request.unconfirmed? } do
+  action_item :confirm_request, only: :show, if: -> { connect_request.requested? } do
     link_to 'Confirm Request', confirm_request_admin_connect_request_path(connect_request)
   end
 
@@ -71,7 +71,7 @@ ActiveAdmin.register ConnectRequest do
         link_to 'Record Feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: connect_request.startup.id }), class: 'member_link'
       end
 
-      if connect_request.unconfirmed?
+      if connect_request.requested?
         span do
           link_to 'Confirm Request', confirm_request_admin_connect_request_path(connect_request), class: 'member_link'
         end

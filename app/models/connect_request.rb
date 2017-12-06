@@ -40,10 +40,6 @@ class ConnectRequest < ApplicationRecord
     (connect_slot.slot_at + 40.minutes).past? ? true : false
   end
 
-  def unconfirmed?
-    !confirmed?
-  end
-
   def feedback_mails_sent?
     feedback_mails_sent_at.present?
   end

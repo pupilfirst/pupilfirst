@@ -2,16 +2,25 @@ module Zoom
   class ApiService
     # @param method [String] Zoom API method to call
     def get(method)
-      uri = URI(base_url + method)
-      net_http = Net::HTTP.new(uri.hostname, uri.port)
-      net_http.use_ssl = true
+      url = base_url + method
+      response = RestClient.get(url, authorization_header)
+      JSON.parse(response)
+    end
 
-      # add authorization header
-      request = Net::HTTP::Get.new(uri)
-      request['Authorization'] = "Bearer #{token}"
+    # @param method [String] Zoom API method to call
+    # @param payload [Hash] The payload to be sent in the request body as JSON.
+    def post(method, payload = {})
+      url = base_url + method
+      headers = authorization_header.merge(content_type: :json)
+      RestClient.post(url, payload.to_json, headers)
+    end
 
-      # TODO: Handle failures
-      JSON.parse(net_http.request(request).body)
+    # @param method [String] Zoom API method to call
+    # @param payload [Hash] The payload to be sent in the request body as JSON.
+    def patch(method, payload = {})
+      url = base_url + method
+      headers = authorization_header.merge(content_type: :json)
+      RestClient.patch(url, payload.to_json, headers)
     end
 
     private
@@ -25,6 +34,10 @@ module Zoom
       secret = Rails.application.secrets.zoom[:api_secret]
 
       JWT.encode(payload, secret, 'HS256')
+    end
+
+    def authorization_header
+      { Authorization: "Bearer #{token}" }
     end
 
     def base_url

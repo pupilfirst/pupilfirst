@@ -9,7 +9,7 @@ module ConnectRequests
       ConnectRequest.transaction do
         # Create a meeting at Zoom and get the meeting link.
         zoom_meeting = Zoom::CreateFacultyConnectService.new(@connect_request).create
-        meeting_link = zoom_meeting['join_url']
+        meeting_link = zoom_meeting&.dig('join_url')
 
         # Save the meeting link & set status and confirmed_at.
         @connect_request.update!(

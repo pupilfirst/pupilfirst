@@ -5,6 +5,8 @@ module Zoom
     end
 
     def create
+      return unless Rails.env.production?
+
       response = api_service.post(create_meeting_path, meeting_details)
       return JSON.parse(response.body) if response.code == 201
 

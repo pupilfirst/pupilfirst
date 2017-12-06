@@ -7,10 +7,11 @@ module TimelineEvents
     end
 
     # rubocop:disable Metrics/CyclomaticComplexity
-    def update_status(status, grade: nil, points: nil)
+    def update_status(status, grade: nil, pc_grades: nil, points: nil)
       raise UnexpectedGradeException unless grade.blank? || grade.in?(TimelineEvent.valid_grades)
 
       @grade = grade
+      @pc_grades = pc_grades
       @points = points
       @timeline_event.update!(grade: @grade)
       @new_status = status
@@ -30,7 +31,7 @@ module TimelineEvents
 
       TimelineEvents::VerificationNotificationJob.perform_later(@timeline_event) if @notify
 
-      [@timeline_event, applicable_points]
+      [@timeline_event, points_for_new_status]
     end
 
     # rubocop:enable Metrics/CyclomaticComplexity
@@ -40,6 +41,7 @@ module TimelineEvents
     def mark_verified
       TimelineEvent.transaction do
         @timeline_event.verify!
+        update_grade_and_score
         update_karma_points
         update_timeline_updated_on
         reset_startup_level if @timeline_event.timeline_event_type.end_iteration?
@@ -52,7 +54,6 @@ module TimelineEvents
     def mark_needs_improvement
       TimelineEvent.transaction do
         @timeline_event.update!(status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT, status_updated_at: Time.zone.now)
-        update_karma_points
         update_timeline_updated_on
         reset_startup_level if @timeline_event.timeline_event_type.end_iteration?
       end
@@ -76,21 +77,6 @@ module TimelineEvents
       add_karma_points
     end
 
-    def previous_points_for_target
-      return 0 if @target.blank?
-      founder = @timeline_event.founder
-      previous_target_timeline_events = @target.founder_role? ? @target.timeline_events.where(founder: founder) : @target.timeline_events.where(startup: founder.startup)
-      KarmaPoint.where(source: previous_target_timeline_events).sum(:points)
-    end
-
-    def points_for_new_status
-      if @points.present?
-        @points
-      else
-        applicable_points > previous_points_for_target ? applicable_points - previous_points_for_target : 0
-      end
-    end
-
     def add_karma_points
       points = points_for_new_status
       return if points.zero?
@@ -98,29 +84,33 @@ module TimelineEvents
       KarmaPoints::CreateService.new(@timeline_event, points).execute
     end
 
+    def points_for_new_status
+      if @points.present?
+        @points
+      else
+        points_for_target
+      end
+    end
+
     def founder
       @timeline_event.founder_event? ? @timeline_event.founder : nil
     end
 
-    def applicable_points
-      return 0 unless @new_status.in?([TimelineEvent::STATUS_VERIFIED, TimelineEvent::STATUS_NEEDS_IMPROVEMENT]) && points_for_target.present?
-
-      return points_for_target unless @grade.present? && @new_status == TimelineEvent::STATUS_VERIFIED
-
-      points_for_target * grade_multiplier
-    end
-
-    def grade_multiplier
+    def grade_multiplier(grade)
       {
         TimelineEvent::GRADE_GOOD => 1,
         TimelineEvent::GRADE_GREAT => 1.5,
         TimelineEvent::GRADE_WOW => 2
-      }.with_indifferent_access[@grade]
+      }.with_indifferent_access[grade]
     end
 
     def points_for_target
       @points_for_target ||= begin
-        @target&.points_earnable || 0
+        if @pc_grades.present?
+          total_karma_points
+        elsif @grade.present?
+          @target.points_earnable * grade_multiplier(@grade) || 0
+        end
       end
     end
 
@@ -173,6 +163,42 @@ module TimelineEvents
       else
         founder.update!(resume_url: resume_link['url'], resume_file: nil)
       end
+    end
+
+    def update_grade_and_score
+      if @pc_grades.present?
+        @timeline_event.update!(score: computed_score)
+        # The overall grade for the timeline event will be the one that corresponds to the lower rounded off score.
+        @timeline_event.update!(grade: grade_to_score.key(computed_score.floor))
+      elsif @grade.present?
+        @timeline_event.update!(grade: @grade, score: grade_to_score[@grade].to_f)
+      end
+    end
+
+    def computed_score
+      pc_count = @pc_grades.count.to_f
+      total_points = 0
+
+      @pc_grades.values.each do |grade|
+        total_points += grade_to_score[grade]
+      end
+
+      score = (total_points / pc_count)
+      # Round the score to the lower 0.5
+      (score * 2).floor / 2.0
+    end
+
+    def grade_to_score
+      { 'good' => 1, 'great' => 2, 'wow' => 3 }
+    end
+
+    def total_karma_points
+      target_performance_criteria = TargetPerformanceCriterion.where(target: @target)
+      total_karma_points = 0
+      @total_karma_points = @pc_grades.each do |pc_id, grade|
+        total_karma_points += target_performance_criteria.find_by(performance_criterion_id: pc_id.to_i).base_karma_points * grade_multiplier(grade)
+      end
+      total_karma_points.round
     end
   end
 end

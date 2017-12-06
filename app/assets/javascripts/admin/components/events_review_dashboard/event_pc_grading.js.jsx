@@ -36,50 +36,50 @@ class EventsReviewDashboardEventPcGrading extends React.Component {
   }
 
   saveReview(event) {
-    // https://facebook.github.io/react/docs/events.html#event-pooling
-    // event.persist();
-    //
-    // // clear all error messages
-    // this.setState({gradingMissing: false});
-    //
-    // if (!this.state.grades) {
-    //   this.setState({gradingMissing: true});
-    // }
-    // else {
-    //   console.log('Saving Review...');
-    //   this.setState({gradingMissing: false});
-    //   let eventId = this.props.eventId;
-    //   let status = this.state.status;
-    //   let grades = this.state.grades;
-    //   let postUrl = '/admin/timeline_events/' + eventId + '/quick_review';
-    //   const that = this;
-    //
-    //   $.post({
-    //     url: postUrl,
-    //     data: {status: status, grades: grades},
-    //     success: function () {
-    //       console.log('Event was successfully marked ' + status);
-    //       new PNotify({
-    //         title: 'Event Reviewed',
-    //         text: 'Event ' + eventId + ' marked ' + status
-    //       });
-    //
-    //       that.updateReviewedFlag(true);
-    //     },
-    //     beforeSend: function () {
-    //       event.target.innerHTML = 'Recording Review...'
-    //     },
-    //     error: function (response) {
-    //       let error = (response.responseJSON && response.responseJSON.error) ? response.responseJSON.error : 'Something went wrong at the server. Try again';
-    //       alert(error);
-    //       if (response.status === 422) {
-    //         location.reload();
-    //       } else {
-    //         event.target.innerHTML = 'Save Review'
-    //       }
-    //     }
-    //   });
-    // }
+    https://facebook.github.io/react/docs/events.html#event-pooling
+    event.persist();
+
+    // clear all error messages
+    this.setState({gradingMissing: false});
+
+    if (!this.state.grades) {
+      this.setState({gradingMissing: true});
+    }
+    else {
+      console.log('Saving Review...');
+      this.setState({gradingMissing: false});
+      let eventId = this.props.eventId;
+      let status = 'verified';
+      let grades = this.state.grades;
+      let postUrl = '/admin/timeline_events/' + eventId + '/quick_review';
+      const that = this;
+
+      $.post({
+        url: postUrl,
+        data: {status: status, pc_grades: grades},
+        success: function () {
+          console.log('Event was successfully marked ' + status);
+          new PNotify({
+            title: 'Event Reviewed',
+            text: 'Event ' + eventId + ' marked ' + status
+          });
+
+          that.updateReviewedFlag(true);
+        },
+        beforeSend: function () {
+          event.target.innerHTML = 'Recording Review...'
+        },
+        error: function (response) {
+          let error = (response.responseJSON && response.responseJSON.error) ? response.responseJSON.error : 'Something went wrong at the server. Try again';
+          alert(error);
+          if (response.status === 422) {
+            location.reload();
+          } else {
+            event.target.innerHTML = 'Save Review'
+          }
+        }
+      });
+    }
   }
 
   undoReview() {
@@ -195,7 +195,7 @@ class EventsReviewDashboardEventPcGrading extends React.Component {
           }
 
           {this.alreadyReviewed() && <div>
-            <a className="button disabled">Save Review</a>
+            <a className="button disabled margin-bottom-10">Save Review</a>
             <a className={ this.undoButtonClasses() } onClick={this.undoReview}>{ this.undoButtonText() }</a>
           </div>
           }

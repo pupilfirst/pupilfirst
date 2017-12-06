@@ -26,7 +26,7 @@ img {
 }
 
 table table table {
-    table-layout: auto;
+  table-layout: auto;
 }
 
 .mailer-table {
@@ -73,17 +73,17 @@ table table table {
 }
 
 .mailer-body__hero {
- padding: 25px 30px;
- color: white;
- text-align: center;
- background-color: #0F9D58;
- background: asset-url("mailer/emailer-hero-pattern.png"), linear-gradient(to right, #60b158 0%, #2182a2 100%);
- background-size: cover;
- width: 100%;
+  padding: 25px 30px;
+  color: white;
+  text-align: center;
+  background-color: #0F9D58;
+  background: asset-url("mailer/emailer-hero-pattern.png"), linear-gradient(to right, #60b158 0%, #2182a2 100%);
+  background-size: cover;
+  width: 100%;
 
- a {
-   color: white;
- }
+  a {
+    color: white;
+  }
 }
 
 .mailer-body__hero-title {
@@ -139,8 +139,16 @@ table table table {
 }
 
 p.monospace, pre.monospace {
+  @extend .monospace;
+  @extend .monospace-block;
+}
+
+.monospace {
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 90%;
+}
+
+.monospace-block {
   display: inline-block;
   line-height: 1.5;
   background-color: #fafafa;
@@ -148,11 +156,6 @@ p.monospace, pre.monospace {
   padding: 7px 10px;
   word-break: break-word;
   border-radius: 5px;
-}
-
-span.monospace {
-  font-family: "Lucida Console", Monaco, monospace;
-  font-size: 90%;
 }
 
 .mail-footer__table {
@@ -169,4 +172,8 @@ span.monospace {
   p {
     margin: 0 0 8px;
   }
+}
+
+.mb-15 {
+  margin-bottom: 15px;
 }

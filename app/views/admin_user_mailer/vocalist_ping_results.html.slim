@@ -10,7 +10,8 @@
 = content_for :body do
   p We've just completed sending your message to some founders. The content of the message was:
 
-  pre.monospace #{@message}
+  .monospace.monospace-block.mb-15
+    == simple_format @message
 
   p The message was sent to:
 

@@ -78,6 +78,7 @@ module PublicSlack
 
     def post_to_channel(channel, message)
       params = message_params(channel, message, @unfurl_links)
+
       begin
         api.get('chat.postMessage', params: params)
       rescue PublicSlack::TransportFailureException
@@ -93,7 +94,12 @@ module PublicSlack
     # Post to founder's im channel.
     def post_to_founder(founder, message)
       channel = fetch_im_id(founder)
-      post_to_channel(channel, message) if channel
+
+      begin
+        post_to_channel(channel, message) if channel
+      rescue PublicSlack::OperationFailureException => e
+        @errors[founder.id] = e.message
+      end
     end
 
     def fetch_im_id(founder)

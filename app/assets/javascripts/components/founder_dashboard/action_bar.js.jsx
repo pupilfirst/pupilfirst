@@ -47,10 +47,10 @@ class FounderDashboardActionBar extends React.Component {
             chooseTagsCB={this.props.pickFilterCB}/>
           }
 
-          <div className="pull-xs-right">
+          <div className="d-flex">
             <button onClick={this.openTimelineBuilder}
               className="btn btn-with-icon btn-md btn-secondary text-uppercase btn-timeline-builder js-founder-dashboard__trigger-builder d-none d-md-block mr-2 js-founder-dashboard__action-bar-add-event-button">
-              <i className="fa fa-plus" aria-hidden="true"/>
+              <i className="fa fa-plus-circle" aria-hidden="true"/>
               <span>Add Event</span>
             </button>
 

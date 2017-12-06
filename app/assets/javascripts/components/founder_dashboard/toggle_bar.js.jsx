@@ -15,9 +15,9 @@ class FounderDashboardToggleBar extends React.Component {
 
   render() {
     return (
-      <div className="founder-dashboard-togglebar__container d-flex justify-content-between">
+      <div className="d-flex justify-content-between justify-content-md-center founder-dashboard-togglebar__container">
         <div className="founder-dashboard-togglebar__toggle">
-          <div className="btn-group founder-dashboard-togglebar__toggle-group">
+          <div className="btn-group founder-dashboard-togglebar__toggle-group" role="group">
             <FounderDashboardToggleBarTab tabType='targets' pendingCount={0} chooseTabCB={this.props.chooseTabCB}
               chosen={this.isChosenTab('targets')}/>
             <FounderDashboardToggleBarTab tabType='sessions' pendingCount={this.props.pendingSessions}

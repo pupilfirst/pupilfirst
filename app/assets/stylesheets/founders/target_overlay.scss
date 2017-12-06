@@ -58,7 +58,7 @@
 .target-overlay__body {
   background-color: white;
   border: 1px solid $gray-border;
-  box-shadow: 0px 2px 10px 0px lighten($gray-light, 35%);
+  // box-shadow: 0px 2px 10px 0px lighten($gray-light, 35%);
   @include border-radius(10px);
   padding: 0;
   overflow: hidden;

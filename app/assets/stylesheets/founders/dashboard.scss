@@ -1,6 +1,5 @@
 .founder-dashboard-container {
   background-color: #F5F5F5;
-  // position: relative;
 }
 
 .founder-dashboard-togglebar__container {
@@ -110,7 +109,7 @@
   background-repeat: no-repeat;
   background-size: cover;
   border: 1px solid $gray-border;
-  // box-shadow: 0px 10px 30px 0px lighten($gray-light, 35%);
+  box-shadow: 0px 10px 30px 0px rgba(0,0,0,0.2);
   @include border-radius(20px);
   margin: 0 0 40px 0;
   list-style: none;
@@ -123,7 +122,7 @@
 }
 
 .btn-founder-dashboard-level-up {
-  box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.06);
 }
 
 .founder-dashboard-actionbar__container {
@@ -135,7 +134,7 @@
   background-color: white;
   border: 1px solid $gray-border;
   padding: 20px 30px;
-  // box-shadow: 0px 2px 10px 0px lighten($gray-light, 35%);
+  box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.06);
   @include border-radius(10px);
   margin-bottom: 0.5rem;
 
@@ -278,7 +277,7 @@
 .fixed-dashboard-header {
   background-color: white;
   border-bottom: 1px solid $gray-border;
-  // box-shadow: 0px 2px 10px 0px lighten($gray-light, 35%);
+  box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.6);
 }
 
 .performance-overview-link {
@@ -306,7 +305,8 @@
 
 .filter-targets-dropdown__button {
   background-color: white;
-  border: 1px solid $gray-border;
+  border: 1px solid darken($gray-border, 5%);
+  @include border-radius(5px);
   min-width: 200px;
   color: $brand-secondary;
 
@@ -317,7 +317,12 @@
   &:hover, &:focus {
     color: $brand-secondary;
     background-color: white;
-    // box-shadow: 0 0 10px 0 lighten($gray-light, 40%);
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.05);
+  }
+  &:active {
+    &:focus {
+      color: $light-secondary;
+    }
   }
   @include media-breakpoint-down(sm) {
     min-width: auto;
@@ -326,7 +331,7 @@
 }
 
 .filter-targets-dropdown {
-  &.open {
+  &.show {
     .filter-targets-dropdown__button {
       border-radius: 0;
     }
@@ -335,7 +340,7 @@
 
 .filter-targets-dropdown__menu {
   padding: 0;
-  // box-shadow: 0 2px 10px 0 lighten($gray-light, 40%);
+  box-shadow: 0 0 10px 0 rgba(0,0,0,0.05);
 
   @include media-breakpoint-down(xs) {
     width: auto;
@@ -346,7 +351,7 @@
   padding: 8px 20px 8px 24px;
   font-size: 0.875rem;
 
-  &:hover {
+  &:hover, &:focus, &:active {
     color: $brand-secondary;
   }
 }
@@ -372,7 +377,6 @@
 
   &:before {
     font-size: 1rem;
-    line-height: 0.5;
     @include fa-icon(angle-down);
   }
 }
@@ -493,7 +497,7 @@
 .founder-dashboard-target-group__box {
   background-color: white;
   border: 1px solid $gray-border;
-  // box-shadow: 0px 2px 10px 0px lighten($gray-light, 35%);
+  box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.06);
   @include border-radius(10px);
   margin: 0 0 40px 0;
   padding: 0;
@@ -657,9 +661,9 @@
 }
 
 .founder-dashboard-target-status-badge__container {
-  float: right;
   padding: 5px 15px;
   font-size: 0.75rem;
+  font-weight: $font-regular;
   letter-spacing: 0.02rem;
 
   .founder-dashboard-target-header__status-badge-icon {

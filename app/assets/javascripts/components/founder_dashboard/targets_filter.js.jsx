@@ -19,14 +19,14 @@ class FounderDashboardTargetsFilter extends React.Component {
 
   render() {
     return (
-      <div className="btn-group filter-targets-dropdown">
+      <div className="dropdown filter-targets-dropdown">
         <button aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" type="button"
-          className="btn btn-with-icon btn-ghost-primary btn-md text-xs-left filter-targets-dropdown__button dropdown-toggle">
-          <span className="p-r-1 filter-targets-dropdown__selection pull-xs-left">
+          className="d-flex btn btn-md px-3 filter-targets-dropdown__button dropdown-toggle">
+          <span className="pr-3 filter-targets-dropdown__selection">
             Level { this.props.chosenLevel }: { this.props.levels[this.props.chosenLevel] }
           </span>
 
-          <span className="pull-xs-right filter-targets-dropdown__arrow"/>
+          <span className="filter-targets-dropdown__arrow"/>
         </button>
 
         <div className="dropdown-menu filter-targets-dropdown__menu">

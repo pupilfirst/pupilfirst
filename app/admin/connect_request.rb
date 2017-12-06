@@ -8,6 +8,7 @@ ActiveAdmin.register ConnectRequest do
   scope :all, default: true
   scope :confirmed
   scope :requested
+  scope :cancelled
 
   filter :connect_slot_faculty_name, as: :string, label: 'Name of Faculty'
   filter :startup_product_name, as: :string
@@ -30,14 +31,29 @@ ActiveAdmin.register ConnectRequest do
   end
 
   action_item :confirm_request, only: :show, if: -> { connect_request.requested? } do
-    link_to 'Confirm Request', confirm_request_admin_connect_request_path(connect_request)
+    link_to 'Confirm Request', confirm_request_admin_connect_request_path(connect_request), method: :patch
+  end
+
+  action_item :cancel_request, only: :show, if: -> { connect_request.confirmed? } do
+    link_to(
+      'Cancel Request', cancel_request_admin_connect_request_path(connect_request),
+      method: :patch, data: { confirm: I18n.t('admin.connect_request.cancellation_warning') }
+    )
   end
 
   member_action :confirm_request, method: :patch do
     connect_request = ConnectRequest.find(params[:id])
     ConnectRequests::ConfirmationService.new(connect_request).execute
     flash[:success] = 'The connect request has been confirmed and attendees notified!'
-    redirect_to action: :show
+    redirect_back(fallback_location: admin_connect_requests_path)
+  end
+
+  member_action :cancel_request, method: :patch do
+    connect_request = ConnectRequest.find(params[:id])
+    connect_request.update!(status: ConnectRequest::STATUS_CANCELLED)
+    # TODO: Email the attendees about the cancellation.
+    flash[:success] = 'The connect request has been marked cancelled!'
+    redirect_back(fallback_location: admin_connect_requests_path)
   end
 
   index do
@@ -73,7 +89,16 @@ ActiveAdmin.register ConnectRequest do
 
       if connect_request.requested?
         span do
-          link_to 'Confirm Request', confirm_request_admin_connect_request_path(connect_request), class: 'member_link'
+          link_to 'Confirm Request', confirm_request_admin_connect_request_path(connect_request), class: 'member_link', method: :patch
+        end
+      end
+
+      if connect_request.confirmed?
+        span do
+          link_to(
+            'Cancel Request', cancel_request_admin_connect_request_path(connect_request),
+            method: :patch, data: { confirm: I18n.t('admin.connect_request.cancellation_warning') }
+          )
         end
       end
     end

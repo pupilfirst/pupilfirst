@@ -18,9 +18,10 @@ class ConnectRequest < ApplicationRecord
 
   STATUS_REQUESTED = 'requested'
   STATUS_CONFIRMED = 'confirmed'
+  STATUS_CANCELLED = 'cancelled'
 
   def self.valid_statuses
-    [STATUS_REQUESTED, STATUS_CONFIRMED]
+    [STATUS_REQUESTED, STATUS_CONFIRMED, STATUS_CANCELLED]
   end
 
   validates :connect_slot_id, presence: true, uniqueness: true
@@ -56,8 +57,13 @@ class ConnectRequest < ApplicationRecord
     status == STATUS_CONFIRMED
   end
 
+  def cancelled?
+    status == STATUS_CANCELLED
+  end
+
   scope :requested, -> { where(status: STATUS_REQUESTED) }
   scope :confirmed, -> { where(status: STATUS_CONFIRMED) }
+  scope :cancelled, -> { where(status: STATUS_CANCELLED) }
 
   def assign_karma_points(rating)
     rating = rating.to_i

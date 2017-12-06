@@ -16,12 +16,18 @@ setupSiliconValleyCarousel = ->
       }
     ]
 
+destroySlickSlider = ->
+  $(".silicon-valley-itinerary__slider").slick('unslick');
+
 stopVideosOnModalClose = ->
   $('.video-modal').on 'hide.bs.modal', (event) ->
     modalIframe = $(event.target).find('iframe')
     modalIframe.attr 'src', modalIframe.attr('src')
 
-
 $(document).on 'turbolinks:load', ->
   if $('#home__index')
     setupSiliconValleyCarousel()
+
+$(document).on 'turbolinks:before-cache', ->
+  if $('#home__index').length > 0
+    destroySlickSlider()

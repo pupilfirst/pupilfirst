@@ -153,6 +153,9 @@ Rails.application.routes.draw do
   # Application process tour of SV.CO
   get 'tour', to: 'home#tour'
 
+  # Facebook School of Innovation at SV.CO landing page
+  get 'fb', to: 'home#fb'
+
   root 'home#index'
 
   # /slack redirected to /about/slack

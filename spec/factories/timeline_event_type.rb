@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :timeline_event_type do
     sample_text { Faker::Lorem.words(10).join ' ' }
     proof_required { Faker::Lorem.words(10).join ' ' }

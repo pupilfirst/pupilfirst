@@ -13,7 +13,7 @@ class InstamojoController < ApplicationController
     end
 
     # Ensure paid_at and payment_type are set.
-    payment = Payments::ProcessPaymentService.new(payment).process
+    Payments::ProcessPaymentService.new(payment).execute
 
     if payment.startup.level_zero?
       Payments::PostAdmissionService.new(payment).execute
@@ -38,7 +38,8 @@ class InstamojoController < ApplicationController
       payment.instamojo_payment_request_status = Instamojo::PAYMENT_REQUEST_STATUS_COMPLETED
 
       # Ensure paid_at and payment_type are set.
-      payment = Payments::ProcessPaymentService.new(payment).process
+
+      Payments::ProcessPaymentService.new(payment).execute
     end
 
     payment.save!

@@ -1,0 +1,9 @@
+---
+timestamp: '2017-12-05T11:05:54Z'
+title: Fixed a crash that could occur if there is considerable delay between completing
+  a payment and redirecting back to SV.CO from payment gateway.
+trello: https://trello.com/c/xsSIMB4u
+private: false
+description: This occurred because of a bad return from a function on an edge-case
+  check.
+category: bugfix

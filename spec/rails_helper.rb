@@ -75,7 +75,7 @@ RSpec.configure do |config|
   config.include Capybara::Email::DSL, type: :service
 
   # Include Factory Girl's helpers.
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
 
   # Devise includes some test helpers for functional specs.
   config.include Devise::Test::ControllerHelpers, type: :controller

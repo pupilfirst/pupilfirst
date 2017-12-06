@@ -148,7 +148,7 @@ class ApplicationController < ActionController::Base
   end
 
   def typeform_csp
-    { frame: 'https://svlabs.typeform.com' }
+    { frame: 'https://svlabs.typeform.com', script: 'https://embed.typeform.com' }
   end
 
   def slideshare_csp
@@ -276,7 +276,8 @@ class ApplicationController < ActionController::Base
       'self' 'unsafe-eval' 'unsafe-inline' https://ajax.googleapis.com https://blog.sv.co https://www.youtube.com
       https://s.ytimg.com http://www.startatsv.com https://sv-assets.sv.co
       #{google_analytics_csp[:script]} #{inspectlet_csp[:script]} #{facebook_csp[:script]} #{intercom_csp[:script]}
-      #{gtm_csp[:script]} #{instamojo_csp[:script]} #{recaptcha_csp[:script]} #{cloudflare_csp[:script]};
+      #{gtm_csp[:script]} #{instamojo_csp[:script]} #{recaptcha_csp[:script]} #{cloudflare_csp[:script]}
+      #{typeform_csp[:script]};
     SCRIPT_SOURCES
   end
 

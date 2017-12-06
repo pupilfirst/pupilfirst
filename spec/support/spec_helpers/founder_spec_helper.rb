@@ -15,7 +15,7 @@ module FounderSpecHelper
 
   # This creates a verified timeline event for a target, attributed to supplied founder.
   def create_verified_timeline_event(founder, target)
-    FactoryGirl.create(
+    FactoryBot.create(
       :timeline_event,
       :verified,
       founder: founder,

@@ -10,6 +10,7 @@ describe ConnectRequests::ConfirmationService do
     let(:startup_mailer) { double StartupMailer }
     let(:mock_calendar_service) { instance_double ConnectRequests::CreateCalendarEventService, execute: nil }
     let(:mock_create_faculty_connect_service) { instance_double Zoom::CreateFacultyConnectService }
+    let(:meeting_url) { Faker::Internet.url }
 
     it 'sends mail for confirmed, saves confirmation time, sets up google calendar event and creates rating/reminder jobs' do
       expect(FacultyMailer).to receive(:connect_request_confirmed).with(connect_request).and_return(faculty_mailer)
@@ -19,7 +20,7 @@ describe ConnectRequests::ConfirmationService do
 
       expect(ConnectRequests::CreateCalendarEventService).to receive(:new).with(connect_request).and_return(mock_calendar_service)
       expect(Zoom::CreateFacultyConnectService).to receive(:new).with(connect_request).and_return(mock_create_faculty_connect_service)
-      expect(mock_create_faculty_connect_service).to receive(:create).and_return('join_url' => 'some_url')
+      expect(mock_create_faculty_connect_service).to receive(:create).and_return('join_url' => meeting_url)
 
       subject.execute
 
@@ -27,7 +28,7 @@ describe ConnectRequests::ConfirmationService do
       expect(FacultyConnectSessionReminderJob).to have_been_enqueued.with(connect_request.id).at(connect_request.connect_slot.slot_at - 30.minutes)
 
       expect(connect_request.reload.confirmed_at).to_not be_nil
-      expect(connect_request).to have_attributes(status: ConnectRequest::STATUS_CONFIRMED, meeting_link: 'some_url')
+      expect(connect_request).to have_attributes(status: ConnectRequest::STATUS_CONFIRMED, meeting_link: meeting_url)
     end
   end
 end

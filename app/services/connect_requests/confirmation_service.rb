@@ -2,7 +2,6 @@ module ConnectRequests
   class ConfirmationService
     def initialize(connect_request)
       @connect_request = connect_request
-      @connect_slot = @connect_request.connect_slot
     end
 
     def execute
@@ -26,9 +25,15 @@ module ConnectRequests
         StartupMailer.connect_request_confirmed(@connect_request).deliver_later
 
         # Schedule reminder and rating jobs.
-        FacultyConnectSessionReminderJob.set(wait_until: @connect_slot.slot_at - 30.minutes).perform_later(@connect_request.id)
-        FacultyConnectSessionRatingJob.set(wait_until: @connect_slot.slot_at + 45.minutes).perform_later(@connect_request.id)
+        FacultyConnectSessionReminderJob.set(wait_until: connect_slot.slot_at - 30.minutes).perform_later(@connect_request.id)
+        FacultyConnectSessionRatingJob.set(wait_until: connect_slot.slot_at + 45.minutes).perform_later(@connect_request.id)
       end
+    end
+
+    private
+
+    def connect_slot
+      @connect_slot ||= @connect_request.connect_slot
     end
   end
 end

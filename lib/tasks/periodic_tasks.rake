@@ -4,5 +4,5 @@ task period_tasks: :environment do
   Targets::SendSessionRemindersJob.perform_later
 
   # Ask for feedback about session from faculty and founders.
-  Targets::SendSessionFeedbackNotificationsJob.perform_later
+  Targets::SendSessionFeedbackNotificationJob.perform_later
 end

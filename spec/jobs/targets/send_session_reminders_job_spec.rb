@@ -46,5 +46,24 @@ describe Targets::SendSessionRemindersJob do
 
       subject.perform_now
     end
+
+    it 'sets slack_reminders_sent_at for processed sessions' do
+      expect { subject.perform_now }.to change { session_imminent.reload.slack_reminders_sent_at }.from(nil).to be_a(ActiveSupport::TimeWithZone)
+      expect(session_not_imminent.reload.slack_reminders_sent_at).to eq(nil)
+    end
+
+    context 'when slack_reminders_sent_at is already set' do
+      before do
+        session_imminent.update!(slack_reminders_sent_at: 1.minute.ago)
+      end
+
+      it 'does not send slack messages for imminent session' do
+        Founder.where(startup: [startup_l2, startup_l3]).each do |founder|
+          expect(message_service).not_to receive(:post).with(message: expected_message, founder: founder)
+        end
+
+        subject.perform_now
+      end
+    end
   end
 end

@@ -83,38 +83,38 @@ class EventsReviewDashboardEventPcGrading extends React.Component {
   }
 
   undoReview() {
-    // if (this.state.undoReviewInProgress) {
-    //   return
-    // }
-    //
-    // console.log("Undoing the review...");
-    //
-    // const eventId = this.props.eventId;
-    // const undoUrl = '/admin/timeline_events/' + eventId + '/undo_review';
-    // const that = this;
-    //
-    // this.setState({undoReviewInProgress: true}, function () {
-    //   $.post({
-    //     url: undoUrl,
-    //     success: function () {
-    //       console.log('Event was successfully undo-d');
-    //
-    //       new PNotify({
-    //         title: 'Undo complete',
-    //         text: 'Event ' + eventId + ' marked pending.'
-    //       });
-    //
-    //       that.updateReviewedFlag(false);
-    //     },
-    //     error: function (response) {
-    //       const error = (response.responseJSON && response.responseJSON.error) ? response.responseJSON.error : 'Something went wrong at the server. Try again.';
-    //
-    //       alert(error);
-    //     }
-    //   }).always(function () {
-    //     that.setState({undoReviewInProgress: false});
-    //   });
-    // });
+    if (this.state.undoReviewInProgress) {
+      return
+    }
+
+    console.log("Undoing the review...");
+
+    const eventId = this.props.eventId;
+    const undoUrl = '/admin/timeline_events/' + eventId + '/undo_review';
+    const that = this;
+
+    this.setState({undoReviewInProgress: true}, function () {
+      $.post({
+        url: undoUrl,
+        success: function () {
+          console.log('Event was successfully undo-d');
+
+          new PNotify({
+            title: 'Undo complete',
+            text: 'Event ' + eventId + ' marked pending.'
+          });
+
+          that.updateReviewedFlag(false);
+        },
+        error: function (response) {
+          const error = (response.responseJSON && response.responseJSON.error) ? response.responseJSON.error : 'Something went wrong at the server. Try again.';
+
+          alert(error);
+        }
+      }).always(function () {
+        that.setState({undoReviewInProgress: false});
+      });
+    });
   }
 
   alreadyReviewed() {

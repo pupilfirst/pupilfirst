@@ -11,6 +11,11 @@ describe TimelineEvents::VerificationService do
   let(:founder) { create :founder, startup: startup }
   let(:tet_founder_update) { create :timeline_event_type, :founder_update }
   let(:tet_team_update) { create :timeline_event_type, :team_update }
+  let(:target_with_pc) { create :target }
+  let!(:performance_criterion_1) { create :performance_criterion }
+  let!(:performance_criterion_2) { create :performance_criterion }
+  let!(:target_performance_criterion_1) { create :target_performance_criterion, target: target_with_pc, performance_criterion: performance_criterion_1, base_karma_points: 20 }
+  let!(:target_performance_criterion_2) { create :target_performance_criterion, target: target_with_pc, performance_criterion: performance_criterion_2, base_karma_points: 30 }
 
   before do
     # stub out vocalist notifications
@@ -40,7 +45,7 @@ describe TimelineEvents::VerificationService do
       end
     end
 
-    context 'when the timeline event is associated with a target' do
+    context 'when the timeline event is associated with a target without PC' do
       before do
         timeline_event.update!(target: target, founder: founder, startup: startup)
       end
@@ -51,17 +56,18 @@ describe TimelineEvents::VerificationService do
 
           timeline_event.reload
           expect(timeline_event.verified?).to eq(true)
+          expect(timeline_event.score).to eq(3.0)
           expect(timeline_event.karma_point.points).to eq(20)
         end
       end
 
       context 'when asked to mark event as needs improvement' do
-        it 'marks the event as needs improvement and add minimum karma point earnable for target' do
+        it 'marks the event as needs improvement without awarding karma points' do
           subject.update_status(TimelineEvent::STATUS_NEEDS_IMPROVEMENT)
 
           timeline_event.reload
           expect(timeline_event.needs_improvement?).to eq(true)
-          expect(timeline_event.karma_point.points).to eq(10)
+          expect(timeline_event.karma_point).to eq(nil)
         end
       end
 
@@ -70,38 +76,59 @@ describe TimelineEvents::VerificationService do
           timeline_event_2.update!(target: target, founder: founder, startup: startup)
           karma_point.update!(source: timeline_event_2)
         end
-        it 'marks the event as verified/wow and adds only the difference from previous awarded karma points' do
+        it 'marks the event as verified/wow awards karma points per the grade' do
           subject.update_status(TimelineEvent::STATUS_VERIFIED, grade: TimelineEvent::GRADE_WOW)
 
           timeline_event.reload
           expect(timeline_event.verified?).to eq(true)
-          expect(timeline_event.karma_point.points).to eq(10)
+          expect(timeline_event.karma_point.points).to eq(20)
         end
-        it 'marks the event as verified/good and no new karma point is created' do
-          subject.update_status(TimelineEvent::STATUS_VERIFIED, grade: TimelineEvent::GRADE_GOOD)
+      end
+
+      context 'when a founder timeline event is verified' do
+        it 'does not update the startups timeline_updated_on' do
+          timeline_event.update!(timeline_event_type: tet_founder_update)
+          subject.update_status(TimelineEvent::STATUS_VERIFIED, points: 10)
+
+          expect(timeline_event.startup.timeline_updated_on).to eq(nil)
+        end
+      end
+
+      context 'when a team timeline event is verified' do
+        it 'updates the startups timeline_updated_on' do
+          timeline_event.update!(timeline_event_type: tet_team_update)
+          subject.update_status(TimelineEvent::STATUS_VERIFIED, points: 10)
+
+          expect(timeline_event.startup.timeline_updated_on).to eq(timeline_event.event_on)
+        end
+      end
+    end
+
+    context 'when the timeline event is associated with a target with PC' do
+      before do
+        timeline_event.update!(target: target_with_pc, founder: founder, startup: startup)
+      end
+
+      context 'when asked to mark event as needs improvement' do
+        it 'marks the event as needs improvement without awarding karma points' do
+          subject.update_status(TimelineEvent::STATUS_NEEDS_IMPROVEMENT)
 
           timeline_event.reload
-          expect(timeline_event.verified?).to eq(true)
+          expect(timeline_event.needs_improvement?).to eq(true)
           expect(timeline_event.karma_point).to eq(nil)
         end
       end
-    end
 
-    context 'when a founder timeline event is verified' do
-      it 'does not update the startups timeline_updated_on' do
-        timeline_event.update!(timeline_event_type: tet_founder_update)
-        subject.update_status(TimelineEvent::STATUS_VERIFIED, points: 10)
+      context 'when asked to mark event as verified and graded as PC1 = wow and PC2 = great' do
+        it 'marks the event verified and adds appropriate karma points' do
+          subject.update_status(TimelineEvent::STATUS_VERIFIED, pc_grades: { performance_criterion_1.id.to_s => TimelineEvent::GRADE_WOW, performance_criterion_2.id.to_s => TimelineEvent::GRADE_GREAT })
 
-        expect(timeline_event.startup.timeline_updated_on).to eq(nil)
-      end
-    end
-
-    context 'when a team timeline event is verified' do
-      it 'updates the startups timeline_updated_on' do
-        timeline_event.update!(timeline_event_type: tet_team_update)
-        subject.update_status(TimelineEvent::STATUS_VERIFIED, points: 10)
-
-        expect(timeline_event.startup.timeline_updated_on).to eq(timeline_event.event_on)
+          timeline_event.reload
+          expect(timeline_event.verified?).to eq(true)
+          expect(timeline_event.grade).to eq(TimelineEvent::GRADE_GREAT)
+          expect(timeline_event.score).to eq(2.5)
+          expect(timeline_event.karma_point.points).to eq(85)
+        end
       end
     end
   end

@@ -139,7 +139,8 @@ en:
       form:
         update_warning: "WARNING: This coupon is in use by one or more startups. Please DO NOT make changes to reward details since this will affect all teams using this coupon."
     connect_request:
-      cancellation_warning: "Are you sure you want to cancel this 'confirmed' connect request? Note that you will have to manually delete the associated Zoom meeting and Google calendar event!"
+      cancel_request:
+        warning:  "Are you sure you want to cancel this 'confirmed' connect request? Note that you will have to manually delete the associated Zoom meeting and Google calendar event!"
 
   admissions:
     register:

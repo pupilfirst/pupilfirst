@@ -37,7 +37,7 @@ ActiveAdmin.register ConnectRequest do
   action_item :cancel_request, only: :show, if: -> { connect_request.confirmed? } do
     link_to(
       'Cancel Request', cancel_request_admin_connect_request_path(connect_request),
-      method: :patch, data: { confirm: I18n.t('admin.connect_request.cancellation_warning') }
+      method: :patch, data: { confirm: I18n.t('admin.connect_request.cancel_request.warning') }
     )
   end
 
@@ -97,7 +97,7 @@ ActiveAdmin.register ConnectRequest do
         span do
           link_to(
             'Cancel Request', cancel_request_admin_connect_request_path(connect_request),
-            method: :patch, data: { confirm: I18n.t('admin.connect_request.cancellation_warning') }
+            method: :patch, data: { confirm: I18n.t('admin.connect_request.cancel_request.warning') }
           )
         end
       end

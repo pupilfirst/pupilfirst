@@ -1,0 +1,9 @@
+---
+timestamp: '2017-12-06T10:50:24Z'
+title: Admin vocalist pings are now deferred to a worker job which sends report as email once job is complete.
+trello: https://trello.com/c/GB6Pn1OO
+private: true
+description: In addition to defering the action of sending messages using the Slack
+  API, this change also updates the messaging service to handle operation failure
+  exceptions as reported errors instead of having it crash and burn.
+category: bugfix

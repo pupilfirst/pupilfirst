@@ -4,11 +4,9 @@ module Payments
       @payment = payment
     end
 
-    def process
+    def execute
       return if @payment.paid_at.present?
-
       @payment.update!(paid_at: Time.zone.now, payment_type: inferred_payment_type)
-      @payment
     end
 
     private

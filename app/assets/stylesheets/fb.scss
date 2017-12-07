@@ -1,14 +1,12 @@
 .fb-landing__header {
-    background-color: white;
+  background-color: white;
 }
 
 .fb-landing__header-logo-img {
-  height: 45px;
-  margin: 3rem 1rem 0.5rem;
+  height: 55px;
 
   @include media-breakpoint-down (lg) {
     height: 35px;
-    margin: 2rem 1rem 1rem;
   }
 }
 
@@ -114,11 +112,8 @@
   background-color: white;
 }
 
-.fb-landing__about-partner-logo-img {
-  width: 200px;
-}
-
 .fb-landing__pulse-icon {
+  width: 70px;
   @include border-radius(50%);
   border: 2px solid lighten($gray-border, 8%);
   position: relative;
@@ -126,14 +121,18 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1;
+  z-index: 11;
+
+  @include media-breakpoint-down (md) {
+    width: 60px;
+  }
 }
 
 .fb-landing__pulse-icon--animate {
   &:before, &:after {
     content: '';
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     @include border-radius(50%);
     background-color: lighten($light-secondary, 10%);
     position: absolute;
@@ -146,6 +145,11 @@
     transform: scale(0.5);
     transform-origin: center center;
     animation: pulse-icon 3s linear infinite;
+
+    @include media-breakpoint-down (md) {
+      width: 30px;
+      height: 30px;
+    }
   }
   &:after {
     animation-delay: 2s;
@@ -202,6 +206,18 @@
 .fb-landing__partners-container {
   background-color: white;
   border-bottom: 1px solid $gray-border;
+}
+
+.fb-landing__partners-logo-img {
+  width: 130px;
+}
+
+.fb-landing__partners-vr-quote {
+  position: relative;
+  font-size: 1.125rem;
+  background: $primary-background;
+  box-shadow: 0 2px 10px 0px rgba(0, 0, 0, 0.15);
+  @include border-radius(10px);
 }
 
 .fb-landing__calander-container {
@@ -269,9 +285,16 @@
   font-size: 1rem;
 }
 
-.fb-landing__commitment-p {
-  @include media-breakpoint-up (md) {
-    max-width: 18.75rem;
+.fb-landing__commitment-icon {
+  width: 50px;
+}
+
+.fb-landing__commitment-content {
+  &:nth-child(3n-2) {
+    border-right: 1px solid $gray-border;
+  }
+  &:nth-child(-n+2) {
+    border-bottom: 1px solid $gray-border;
   }
 }
 

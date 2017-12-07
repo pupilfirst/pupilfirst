@@ -51,7 +51,6 @@ ActiveAdmin.register ConnectRequest do
   member_action :cancel_request, method: :patch do
     connect_request = ConnectRequest.find(params[:id])
     connect_request.update!(status: ConnectRequest::STATUS_CANCELLED)
-    # TODO: Email the attendees about the cancellation.
     flash[:success] = 'The connect request has been marked cancelled!'
     redirect_back(fallback_location: admin_connect_requests_path)
   end

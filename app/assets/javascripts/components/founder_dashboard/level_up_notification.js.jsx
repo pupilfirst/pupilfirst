@@ -25,13 +25,13 @@ class FounderDashboardLevelUpNotification extends React.Component {
 
   render() {
     return (
-      <div className="founder-dashboard-levelup-notification__container p-x-1 m-x-auto">
+      <div className="founder-dashboard-levelup-notification__container p-x-1 mx-auto">
         {this.props.levelUpEligibility === 'eligible' &&
         <div className="founder-dashboard-levelup-notification__box text-xs-center p-a-3">
           <h1>{'\uD83C\uDF89'}</h1>
           <h3 className="brand-primary font-regular">{this.eligibleNotificationTitle()}</h3>
 
-          <div className="founder-dashboard-levelup__description m-x-auto">
+          <div className="founder-dashboard-levelup__description mx-auto">
             {this.eligibleNotificationText()}
           </div>
 
@@ -54,7 +54,7 @@ class FounderDashboardLevelUpNotification extends React.Component {
         <div className="founder-dashboard-levelup-notification__box text-xs-center p-a-3">
           <h3 className="brand-primary font-regular">Almost ready to level up!</h3>
 
-          <p className="founder-dashboard-levelup__description m-x-auto">
+          <p className="founder-dashboard-levelup__description mx-auto">
             There are one or more milestone targets that your co-founders are yet to complete. Please contact them
             and ask them to sign in and complete these targets to be eligible to level up!
           </p>

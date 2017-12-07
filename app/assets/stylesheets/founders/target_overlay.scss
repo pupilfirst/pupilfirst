@@ -58,7 +58,7 @@
 .target-overlay__body {
   background-color: white;
   border: 1px solid $gray-border;
-  // box-shadow: 0px 2px 10px 0px lighten($gray-light, 35%);
+  box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.1);
   @include border-radius(10px);
   padding: 0;
   overflow: hidden;
@@ -211,7 +211,7 @@
 }
 
 .target-overlay-header__headline {
-  font-weight: $font-regular;
+  font-weight: $font-semibold;
   margin: 0;
   font-size: 1rem;
   line-height: 1.3;
@@ -308,7 +308,7 @@
 }
 
 .target-overlay-content-block__body--description {
-  font-size: 1rem;
+  font-size: 0.9375rem;
   line-height: 1.5;
   letter-spacing: 0.01rem;
 }
@@ -340,6 +340,7 @@
 
 .target-overlay__link-icon {
   padding: 5px 10px;
+  color: $brand-secondary;
   display: inline-block;
   background-color: lighten($light-secondary, 40%);
   border-right: 1px solid lighten($brand-secondary, 10%);
@@ -439,18 +440,13 @@
 .target-overlay-timeline-event-panel__content {
   word-wrap: break-word;
   white-space: pre-wrap;
-  padding-bottom: 1rem;
+  padding-bottom: 0.5rem;
 }
 
 .target-overlay-timeline-event-panel__box {
   background-color: white;
   border: 1px solid $gray-border;
   @include border-radius(5px);
-}
-
-.target-overlay-timeline-event-panel__header {
-  display: flex;
-  align-items: center;
 }
 
 .target-overlay-timeline-event-panel__header-date-box {
@@ -486,10 +482,9 @@
 }
 
 .target-overlay-timeline-event-panel__feedback {
-  padding: 1rem;
-  border-top: 1px solid $gray-border;
-  @include border-radius(0 0 5px 5px);
-  background-color: $dark-primary-background;
+  border: 1px solid $gray-border;
+  @include border-radius(5px);
+  background-color: white;
   position: relative;
 
   &:after, &:before {
@@ -519,7 +514,10 @@
 }
 
 .target-overlay-timeline-event-panel__commenter-box {
+  background-color: $dark-primary-background;
+  border-bottom: 1px solid $gray-border;
   padding-bottom: 1rem;
+  @include border-radius(5px 5px 0 0);
   display: flex;
   align-items: center;
 }

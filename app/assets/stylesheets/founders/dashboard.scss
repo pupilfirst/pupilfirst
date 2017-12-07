@@ -308,7 +308,7 @@
   border: 1px solid darken($gray-border, 5%);
   @include border-radius(5px);
   min-width: 200px;
-  color: $brand-secondary;
+  color: $dark-secondary;
 
   &:after {
     content: none;
@@ -603,7 +603,7 @@
 }
 
 .founder-dashboard-target-header__headline {
-  font-weight: $font-regular;
+  font-weight: $font-semibold;
   margin: 0;
   font-size: 1rem;
   letter-spacing: 0.02rem;

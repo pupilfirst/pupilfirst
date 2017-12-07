@@ -232,7 +232,7 @@ ActiveAdmin.register Target do
     end
   end
 
-  action_item :invite_on_google_calendar, only: :show do
+  action_item :invite_on_google_calendar, only: :show, if: proc { resource.session? } do
     link_to(
       'Invite on Google Calendar',
       invite_on_google_calendar_admin_target_url(id: params[:id]),
@@ -247,6 +247,8 @@ ActiveAdmin.register Target do
     # Notifications and emails sent before and after the session are managed using periodic tasks.
     # See `lib/period_tasks.rake`.
     Targets::CreateOrUpdateCalendarEventService.new(target).execute
+    flash[:success] = "Google Calendar invitation has been created / updated for founders in Level #{target.level.number} and above."
+    redirect_to admin_target_path(target)
   end
 
   member_action :archive_target, method: :put do

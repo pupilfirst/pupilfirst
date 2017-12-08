@@ -48,8 +48,7 @@ describe Targets::CreateOrUpdateCalendarEventService do
         'useDefault' => false,
         'overrides' => [
           { 'method' => 'popup', 'minutes' => 30 },
-          { 'method' => 'popup', 'minutes' => 10 },
-          { 'method' => 'sms', 'minutes' => (24 * 60) }
+          { 'method' => 'popup', 'minutes' => 10 }
         ]
       )
 

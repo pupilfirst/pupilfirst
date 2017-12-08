@@ -36,7 +36,7 @@ describe Targets::SendSessionFeedbackNotificationJob do
       subject.perform_now
     end
 
-    it 'sets slack_reminders_sent_at of session for which feedback was asked' do
+    it 'sets feedback_asked_at of session for which feedback was asked' do
       expect { subject.perform_now }.to change { session_recent.reload.feedback_asked_at }.from(nil).to be_a(ActiveSupport::TimeWithZone)
 
       # and does not touch the value of other sessions.

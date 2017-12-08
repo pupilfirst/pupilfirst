@@ -10,18 +10,17 @@ module Targets
       Target.sessions.where(session_at: (Time.now..35.minutes.from_now)).each do |session|
         next if session.slack_reminders_sent_at.present?
 
-        # Send reminders via Slack to all founders to whom session is applicable.
-        send_slack_reminders_to_founder(session)
+        # Update time at which reminders were sent, to avoid repeats.
+        session.update!(slack_reminders_sent_at: Time.zone.now)
 
-        # Update time at which reminders were sent.
-        session.slack_reminders_sent_at = Time.zone.now
-        session.save!
+        # Send reminders via Slack to all founders to whom session is applicable.
+        send_slack_reminder_to_founders(session)
       end
     end
 
     private
 
-    def send_slack_reminders_to_founder(session)
+    def send_slack_reminder_to_founders(session)
       log "Sending messages to founders for Session ##{session.id}, occurring at #{session.session_at.iso8601}"
 
       message_service = PublicSlack::MessageService.new

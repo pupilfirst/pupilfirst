@@ -170,6 +170,10 @@ class Target < ApplicationRecord
     target_type == :target
   end
 
+  def rubric?
+    performance_criteria.present? || rubric_url.present?
+  end
+
   # this is included in the target JSONs the DashboardDataService responds with
   alias has_rubric rubric?
 

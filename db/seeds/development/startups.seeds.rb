@@ -59,20 +59,20 @@ after 'development:levels', 'development:founders', 'development:timeline_event_
     product_name: 'SuperHeroes',
     product_description: 'Earths Mightiest Heroes joined forces to take on threats that were too big for any one hero to tackle.',
     agreement_signed_at: 2.years.ago,
-    website: 'https://www.avengers.co',
+    website: 'https://www.example.org',
     startup_categories: [StartupCategory.second, StartupCategory.last],
     program_started_on: 4.weeks.ago,
     iteration: 2
   )
 
   # Make ironman the team lead.
-  founder = Founder.find_by(email: 'ironman@avengers.co')
+  founder = Founder.find_by(email: 'ironman@example.org')
   avengers_startup.update!(team_lead: founder)
   avengers_startup.founders << founder
 
   # Add all the other avengers as founders.
-  avengers_startup.founders << Founder.find_by(email: 'widow@avengers.co')
-  avengers_startup.founders << Founder.find_by(email: 'hulk@avengers.co')
-  avengers_startup.founders << Founder.find_by(email: 'thor@avengers.co')
+  avengers_startup.founders << Founder.find_by(email: 'widow@example.org')
+  avengers_startup.founders << Founder.find_by(email: 'hulk@example.org')
+  avengers_startup.founders << Founder.find_by(email: 'thor@example.org')
   avengers_startup.save!
 end

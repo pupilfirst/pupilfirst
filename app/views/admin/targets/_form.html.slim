@@ -45,7 +45,7 @@
     = f.input :completion_instructions
     = f.input :link_to_complete
     = f.input :submittability, collection: Target.valid_submittability_values
-    = f.input :assigner, collection: Faculty.active.order(:name), include_blank: false
+    = f.input :assigner, label: 'Faculty', collection: Faculty.active.order(:name), include_blank: false
 
     = f.input :target_group,
       collection: TargetGroup.all.sorted_by_level.includes(:level)

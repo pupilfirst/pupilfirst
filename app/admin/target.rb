@@ -13,7 +13,7 @@ ActiveAdmin.register Target do
   filter :chore, label: 'Chore?'
   filter :target_group, collection: -> { TargetGroup.all.includes(:level).order('levels.number ASC') }
   filter :level
-  filter :assigner_name, as: :string
+  filter :assigner_name, label: 'Faculty Name', as: :string
   filter :role, as: :select, collection: -> { Target.valid_roles }
   filter :timeline_event_type_title, as: :string
 
@@ -114,7 +114,7 @@ ActiveAdmin.register Target do
         t("models.target.role.#{target.role}")
       end
 
-      row :assigner
+      row('Faculty', &:assigner)
 
       row :rubric do
         if target.rubric.present?
@@ -209,7 +209,7 @@ ActiveAdmin.register Target do
     column :points_earnable
     column :role
 
-    column :assigner do |target|
+    column :faculty do |target|
       target&.assigner&.name
     end
 
@@ -230,6 +230,25 @@ ActiveAdmin.register Target do
       end
       tags
     end
+  end
+
+  action_item :invite_on_google_calendar, only: :show, if: proc { resource.session? } do
+    link_to(
+      'Invite on Google Calendar',
+      invite_on_google_calendar_admin_target_url(id: params[:id]),
+      method: :post, data: { confirm: 'Are you sure?' }
+    )
+  end
+
+  member_action :invite_on_google_calendar, method: :post do
+    target = Target.find params[:id]
+
+    # Only the calender event needs to be created / updated manually.
+    # Notifications and emails sent before and after the session are managed using periodic tasks.
+    # See `lib/period_tasks.rake`.
+    Targets::CreateOrUpdateCalendarEventService.new(target).execute
+    flash[:success] = "Google Calendar invitation has been created / updated for founders in Level #{target.level.number} and above."
+    redirect_to admin_target_path(target)
   end
 
   member_action :archive_target, method: :put do

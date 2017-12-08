@@ -169,6 +169,9 @@ class Target < ApplicationRecord
   # this is included in the target JSONs the DashboardDataService responds with
   alias has_rubric rubric?
 
+  # TODO: Temporary aliasing. Rename assigner to faculty since it can have two meanings depending on whether 'this' is a 'target' or a 'session'.
+  alias faculty assigner
+
   def target_type_description
     role = founder_role? ? 'Founder ' : 'Team '
     type = if session?

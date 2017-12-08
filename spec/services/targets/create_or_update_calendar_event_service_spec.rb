@@ -43,6 +43,7 @@ describe Targets::CreateOrUpdateCalendarEventService do
       expect(calendar_event).to receive(:description=).with(I18n.t("services.targets.create_or_update_calendar_event.description"))
       expect(calendar_event).to receive(:guests_can_invite_others=).with(false)
       expect(calendar_event).to receive(:guests_can_see_other_guests=).with(false)
+      expect(calendar_event).to receive(:send_notifications=).with(true)
 
       expect(calendar_event).to receive(:reminders=).with(
         'useDefault' => false,

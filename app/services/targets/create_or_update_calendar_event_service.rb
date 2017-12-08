@@ -30,6 +30,7 @@ module Targets
       event.description = I18n.t("services.targets.create_or_update_calendar_event.description")
       event.guests_can_invite_others = false
       event.guests_can_see_other_guests = false
+      event.send_notifications = true
 
       # Default visibility should be sufficient since it equals calendar's setting.
       # event.visibility = 'public'

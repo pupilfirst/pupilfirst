@@ -47,7 +47,7 @@ module Targets
       Founder.subscribed.at_or_above_level(@target.level).distinct.map do |founder|
         {
           'email' => founder.email,
-          'displayName' => founder.fullname,
+          'displayName' => founder.name,
           'responseStatus' => 'needsAction'
         }
       end

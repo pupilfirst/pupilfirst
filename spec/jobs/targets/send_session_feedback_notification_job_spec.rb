@@ -17,7 +17,7 @@ describe Targets::SendSessionFeedbackNotificationJob do
 
       We hope that you found the session informative and worthwhile.
 
-      Those who missed watching it Live, we will have it up on the dashboard in a couple of days.
+      If you missed watching it live, we will have it up on the dashboard in a couple of days.
 
       Kindly help us improve our sessions with some quick feedback: https://svlabs.typeform.com/to/h7g9Om?faculty=#{URI.escape(faculty_name)}&session=#{URI.escape(session_recent.title)}&date=#{URI.escape(session_recent.session_at.strftime('%Y-%m-%d'))}
     EXPECTED_MESSAGE

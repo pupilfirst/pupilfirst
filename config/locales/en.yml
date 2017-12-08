@@ -63,7 +63,7 @@ en:
 
           We hope that you found the session informative and worthwhile.
 
-          Those who missed watching it Live, we will have it up on the dashboard in a couple of days.
+          If you missed watching it live, we will have it up on the dashboard in a couple of days.
 
           Kindly help us improve our sessions with some quick feedback: https://svlabs.typeform.com/to/h7g9Om?faculty=%{faculty_name_escaped}&session=%{session_title}&date=%{session_date}
 
@@ -138,8 +138,8 @@ en:
     targets:
       create_or_update_calendar_event:
         title: 'SV.CO Live session by %{name}, %{title}'
-        description: >
-          The live session will be hosted using Zoom (conferencing tool). You can download the Zoom at this link:
+        description: |
+          The live session will be hosted using Zoom (conferencing tool). You can download Zoom software at this link:
 
           https://zoom.us/download
 
@@ -147,7 +147,7 @@ en:
 
           The link to the session will be shared in the Collective Slack channel 15 minutes prior to the session.
 
-          Here is the general format for the session: 20 minutes talk + 10 mins Q&A. Please use the Q&A option in Zoom to post your questions that will be answered at the end of the session by the speaker.
+          Here is the general format for the session: 20 minutes talk + 10 mins Q&A. Please use the Q&A option in Zoom to post any questions you might have. They will be answered at the end of the session by the speaker.
 
   presenters:
     startups:

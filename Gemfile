@@ -106,6 +106,7 @@ gem 'rails_server_timings', '~> 1.0' # Server Timing headers for Rails apps. htt
 gem 'pundit', '~> 1.1' # Minimal authorization through OO design and pure Ruby classes.
 gem 'rack-cors', '~> 1.0', require: 'rack/cors' # Rack Middleware for handling CORS, required to serve static assets such as fonts
 gem 'recaptcha', '~> 4.6', require: 'recaptcha/rails'
+gem 'jwt', '< 2.1' # Ruby implementation of the RFC 7519 OAuth JSON Web Token (JWT), used by Zoom API
 
 # Rails assets!
 source 'https://rails-assets.org' do

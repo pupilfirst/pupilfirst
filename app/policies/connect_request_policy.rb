@@ -6,7 +6,7 @@ class ConnectRequestPolicy < ApplicationPolicy
   alias feedback_from_faculty? feedback_from_team?
 
   def join_session?(token)
-    return false if record.unconfirmed?
+    return false unless record.confirmed?
     if token.present?
       record.faculty.present? && Faculty.find_by(token: token) == record.faculty
     else

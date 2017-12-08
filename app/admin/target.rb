@@ -13,7 +13,7 @@ ActiveAdmin.register Target do
   filter :chore, label: 'Chore?'
   filter :target_group, collection: -> { TargetGroup.all.includes(:level).order('levels.number ASC') }
   filter :level
-  filter :assigner_name, as: :string
+  filter :assigner_name, label: 'Faculty Name', as: :string
   filter :role, as: :select, collection: -> { Target.valid_roles }
   filter :timeline_event_type_title, as: :string
 
@@ -114,7 +114,7 @@ ActiveAdmin.register Target do
         t("models.target.role.#{target.role}")
       end
 
-      row :assigner
+      row('Faculty', &:assigner)
 
       row :rubric do
         if target.rubric.present?
@@ -209,7 +209,7 @@ ActiveAdmin.register Target do
     column :points_earnable
     column :role
 
-    column :assigner do |target|
+    column :faculty do |target|
       target&.assigner&.name
     end
 

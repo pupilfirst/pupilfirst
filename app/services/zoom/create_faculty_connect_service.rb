@@ -1,11 +1,12 @@
 module Zoom
   class CreateFacultyConnectService
-    def initialize(connect_request)
+    def initialize(connect_request, mock: true)
       @connect_request = connect_request
+      @mock = Rails.env.production? ? false : mock
     end
 
     def create
-      return unless Rails.env.production?
+      return if @mock
 
       response = api_service.post(create_meeting_path, meeting_details)
       return JSON.parse(response.body) if response.code == 201

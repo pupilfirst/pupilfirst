@@ -24,7 +24,7 @@ module Admin
         when 'channel'
           ping_channel
         else
-          raise "Unexpected target_type encountered: #{@recipient_type}"
+          raise "Unexpected recipient_type encountered: #{@recipient_type}"
       end
 
       # Send email to admin with results.

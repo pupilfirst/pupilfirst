@@ -21,14 +21,14 @@ module Founders
       applicable_levels = startup.level.number.zero? ? 0 : (1..startup.maximum_level.number).to_a
 
       @sessions ||= begin
-        targets = Target.includes(:assigner, :level, :taggings)
+        targets = Target.includes(:faculty, :level, :taggings)
           .where.not(session_at: nil).where(archived: false)
           .where(levels: { number: applicable_levels }).order(session_at: :desc)
           .as_json(
             only: target_fields,
             methods: %i[has_rubric target_type target_type_description],
             include: {
-              assigner: assigner_fields,
+              faculty: faculty_fields,
               level: { only: [:number] },
               taggings: taggings_field
             }
@@ -45,7 +45,7 @@ module Founders
     private
 
     def target_groups(level)
-      groups = level.target_groups.includes(targets: :assigner)
+      groups = level.target_groups.includes(targets: :faculty)
         .order('target_groups.sort_index', 'targets.sort_index')
         .as_json(
           only: target_group_fields,
@@ -54,7 +54,7 @@ module Founders
               only: target_fields,
               methods: %i[has_rubric target_type target_type_description],
               include: {
-                assigner: assigner_fields
+                faculty: faculty_fields
               }
             }
           }
@@ -126,7 +126,7 @@ module Founders
       %i[id role title description completion_instructions resource_url slideshow_embed video_embed youtube_video_id days_to_complete points_earnable timeline_event_type_id session_at link_to_complete submittability archived]
     end
 
-    def assigner_fields
+    def faculty_fields
       {
         only: %i[id name],
         methods: :image_url

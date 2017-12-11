@@ -14,7 +14,7 @@ class Target < ApplicationRecord
   STATUS_UNAVAILABLE = :unavailable
   STATUS_NOT_ACCEPTED = :not_accepted
 
-  belongs_to :assigner, class_name: 'Faculty'
+  belongs_to :faculty
   belongs_to :timeline_event_type, optional: true
   has_many :timeline_events
   has_many :target_prerequisites
@@ -168,9 +168,6 @@ class Target < ApplicationRecord
 
   # this is included in the target JSONs the DashboardDataService responds with
   alias has_rubric rubric?
-
-  # TODO: Temporary aliasing. Rename assigner to faculty since it can have two meanings depending on whether 'this' is a 'target' or a 'session'.
-  alias faculty assigner
 
   def target_type_description
     role = founder_role? ? 'Founder ' : 'Team '

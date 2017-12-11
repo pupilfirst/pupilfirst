@@ -83,7 +83,7 @@ describe Founders::DashboardDataService do
       only: subject.send(:target_fields),
       methods: %i[has_rubric target_type target_type_description],
       include: {
-        assigner: {
+        faculty: {
           only: %i[id name],
           methods: :image_url
         }

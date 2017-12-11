@@ -408,14 +408,14 @@
   }
 }
 
-.target-overlay__assigner-box {
+.target-overlay__faculty-box {
   padding-bottom: 1rem;
   border-bottom: 1px solid $gray-border;
   display: flex;
   align-items: center;
 }
 
-.target-overlay__assigner-avatar {
+.target-overlay__faculty-avatar {
   width: 2.75rem;
   height: 2.75rem;
   @include border-radius(50%);
@@ -423,11 +423,11 @@
   overflow: hidden;
 }
 
-.target-overlay__assigner-name {
+.target-overlay__faculty-name {
   line-height: 1.3;
 }
 
-.target-overlay__assigner-name-headline {
+.target-overlay__faculty-name-headline {
   font-size: 0.75rem;
   display: block;
 }

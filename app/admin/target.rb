@@ -1,7 +1,7 @@
 ActiveAdmin.register Target do
   include DisableIntercom
 
-  permit_params :assigner_id, :role, :title, :description, :resource_url, :completion_instructions, :days_to_complete,
+  permit_params :faculty_id, :role, :title, :description, :resource_url, :completion_instructions, :days_to_complete,
     :slideshow_embed, :video_embed, :completed_at, :completion_comment, :rubric, :link_to_complete, :key,
     :submittability, :archived, :remote_rubric_url, :target_group_id, :target_action_type, :points_earnable,
     :timeline_event_type_id, :sort_index, :youtube_video_id, :session_at, :chore, :level_id,
@@ -13,7 +13,7 @@ ActiveAdmin.register Target do
   filter :chore, label: 'Chore?'
   filter :target_group, collection: -> { TargetGroup.all.includes(:level).order('levels.number ASC') }
   filter :level
-  filter :assigner_name, label: 'Faculty Name', as: :string
+  filter :faculty_name, as: :string
   filter :role, as: :select, collection: -> { Target.valid_roles }
   filter :timeline_event_type_title, as: :string
 
@@ -114,7 +114,7 @@ ActiveAdmin.register Target do
         t("models.target.role.#{target.role}")
       end
 
-      row('Faculty', &:assigner)
+      row :faculty
 
       row :rubric do
         if target.rubric.present?
@@ -210,7 +210,7 @@ ActiveAdmin.register Target do
     column :role
 
     column :faculty do |target|
-      target&.assigner&.name
+      target&.faculty&.name
     end
 
     column :youtube_video_id

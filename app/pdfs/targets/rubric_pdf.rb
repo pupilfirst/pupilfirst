@@ -8,9 +8,9 @@ module Targets
     def build
       image Rails.root.join('app', 'assets', 'images', 'shared', 'logo-png.png'), width: 100, at: bounds.top_left
 
-      move_down 75
+      move_down 55
 
-      text "RUBRIC FOR TARGET: #{@target.title.upcase}", align: :left, style: :bold, size: 10
+      text "RUBRIC FOR TARGET: #{@target.title}", align: :left, style: :bold, size: 10
 
       move_down 10
       table(data_header, column_widths: [35, 190, 190, 190, 190], cell_style: { size: 9, font_style: :bold, align: :center, border_width: 1.5 })

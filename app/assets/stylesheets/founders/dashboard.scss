@@ -34,7 +34,7 @@
   padding: 1rem 1.875rem;
   width: 120px;
 
-  @include media-breakpoint-down(xs) {
+  @include media-breakpoint-down(sm) {
     width: 75px;
     font-size: 0.75rem;
     padding: 1rem 0.5rem;
@@ -93,6 +93,7 @@
     width: 48px;
     height: 48px;
     padding: 0;
+    font-size: 1rem;
     @include border-radius(50%);
     border: 1px solid white;
   }
@@ -151,7 +152,6 @@
 .founder-dashboard-sessions__tag-select-container {
   display: inline-block;
   width: 320px;
-  @include border-radius(30px);
 
   @include media-breakpoint-down(sm) {
     width: 240px;
@@ -161,7 +161,6 @@
   .select2-selection--multiple {
     margin: 0;
     height: 42px;
-    @include border-radius(30px);
     border-color: $gray-border;
     background-color: $primary-background;
 
@@ -169,36 +168,25 @@
       margin-left: 4px;
       margin-right: 4px;
       font-size: 0.75rem;
-      padding: 2px 6px;
+      padding: 2px 10px;
       background-color: lighten($light-primary, 45%);
       border: 1px solid $light-primary;
       letter-spacing: 0.02rem;
-      @include border-radius(30px);
+
+      .select2-selection__choice__remove {
+        margin-right: 5px;
+      }
     }
 
     .select2-selection__rendered {
       display: block;
       position: relative;
       overflow: hidden;
+      width: 100%;
 
       > li {
         display: inline-block;
         float: none;
-      }
-    }
-  }
-
-  .select2-container--open {
-    &.select2-container--below {
-      .select2-selection--multiple {
-        @include border-radius(20px 20px 0 0);
-      }
-    }
-  }
-  .select2-container--open {
-    &.select2-container--above {
-      .select2-selection--multiple {
-        @include border-radius(0 0 20px 20px);
       }
     }
   }
@@ -342,7 +330,7 @@
   padding: 0;
   box-shadow: 0 0 10px 0 rgba(0,0,0,0.05);
 
-  @include media-breakpoint-down(xs) {
+  @include media-breakpoint-down(sm) {
     width: auto;
   }
 }
@@ -350,9 +338,12 @@
 .filter-targets-dropdown__menu-item {
   padding: 8px 20px 8px 24px;
   font-size: 0.875rem;
+  cursor: pointer;
 
   &:hover, &:focus, &:active {
     color: $brand-secondary;
+    background-color: $primary-background;
+    box-shadow: inset 0 0 10px 0 rgba(0,0,0,0.05);
   }
 }
 
@@ -382,7 +373,7 @@
 }
 
 .filter-targets-dropdown__selection {
-  @include media-breakpoint-down(xs) {
+  @include media-breakpoint-down(sm) {
     width: 170px;
     display: block;
     overflow: hidden;
@@ -670,7 +661,7 @@
     margin-right: 5px;
   }
 
-  @include media-breakpoint-down(xs) {
+  @include media-breakpoint-down(sm) {
     font-size: 0.675rem;
     padding: 4px 8px;
   }

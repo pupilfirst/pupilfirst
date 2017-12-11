@@ -128,6 +128,7 @@
     .timeline-builder__form-group {
       width: 100%;
       margin-right: 1rem;
+      margin-bottom: 0;
 
       input {
         width: 100%;
@@ -230,6 +231,7 @@
 
 .timeline-builder__upload-section, .timeline-builder__select-section {
   display: flex;
+  justify-content: space-between;
   width: 100%;
 }
 
@@ -268,7 +270,6 @@
 
 .timeline-builder__timeline-event-type-select-wrapper {
   width: 100%;
-  padding: 0 20px 0 10px;
   max-width: 240px;
 
   @include media-breakpoint-down(sm) {
@@ -304,8 +305,6 @@
 }
 
 .timeline-builder__attachment-datepicker-form {
-  display: block;
-
   .timeline-builder__date-input {
     width: 100%;
   }

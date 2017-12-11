@@ -75,7 +75,7 @@ const TimelineBuilderLinkForm = createReactClass({
 
   render: function () {
     return (
-      <form className="form-inline timeline-builder__attachment-form">
+      <form className="timeline-builder__attachment-form">
         <div className={ this.titleFormGroupClasses() }>
           <label className="sr-only" htmlFor="timeline-builder__link-title-input">Link Title</label>
           <input id="timeline-builder__link-title-input" className="form-control link-title js-link-title" type="text"

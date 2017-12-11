@@ -119,7 +119,7 @@ const TimelineBuilderFileForm = createReactClass({
 
   render: function () {
     return (
-      <form className="form-inline timeline-builder__attachment-form">
+      <form className="timeline-builder__attachment-form">
         <div className={this.titleFormGroupClasses()}>
           <label className="sr-only" htmlFor="timeline-builder__file-title-input">File Title</label>
           <input id="timeline-builder__file-title-input" className="form-control file-title js-file-title" type="text"

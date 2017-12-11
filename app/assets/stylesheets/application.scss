@@ -24,6 +24,10 @@
 @import "navbar";
 @import "footer";
 
+// Select2
+@import "select2";
+@import "select2-bootstrap";
+
 // Controller-specific
 @import 'home';
 @import 'startups';
@@ -41,9 +45,5 @@
 @import 'product_metrics';
 @import 'users';
 
-// Select2
-@import "select2";
-@import "select2-bootstrap";
-
 // Customizations
-@import "customizations/bootstrap_form_for";
+@import 'customizations';

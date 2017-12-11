@@ -70,10 +70,10 @@ feature 'Target Overlay' do
         expect(page).to have_link(resource_2.title.to_s, href: "/library/#{resource_2.slug}")
       end
 
-      # Within the assigner box:
-      within('.target-overlay__assigner-box') do
-        expect(page).to have_selector('.target-overlay__assigner-name > span', text: target.assigner.name)
-        expect(page).to have_selector(".target-overlay__assigner-avatar > img[src='#{target.assigner.image_url}'")
+      # Within the faculty box:
+      within('.target-overlay__faculty-box') do
+        expect(page).to have_selector('.target-overlay__faculty-name > span', text: target.faculty.name)
+        expect(page).to have_selector(".target-overlay__faculty-avatar > img[src='#{target.faculty.image_url}'")
       end
     end
   end

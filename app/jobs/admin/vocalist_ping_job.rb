@@ -62,7 +62,7 @@ module Admin
         when 'channel'
           { channel: @recipient }
         else
-          raise "Unexpected target_type encountered: #{@recipient_type}"
+          raise "Unexpected recipient_type encountered: #{@recipient_type}"
       end
     end
 

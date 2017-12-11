@@ -72,7 +72,7 @@ feature 'Target Overlay' do
 
       # Within the faculty box:
       within('.target-overlay__faculty-box') do
-        expect(page).to have_selector('.target-overlay__faculty-name > span', text: target.faculty.name)
+        expect(page).to have_text("Assigned by: #{target.faculty.name}")
         expect(page).to have_selector(".target-overlay__faculty-avatar > img[src='#{target.faculty.image_url}'")
       end
     end
@@ -126,6 +126,18 @@ feature 'Target Overlay' do
         expect(page).to have_selector('.target-overaly__status-title', text: 'Completion Status')
         expect(page).to have_selector('.founder-dashboard__avatar-wrapper', count: 2)
         # TODO: Also check if the right people have the right status. This is now blocked by the bug reported here: https://trello.com/c/P9RNQQ3N
+      end
+    end
+  end
+
+  context 'when the founder clicks on a session', js: true do
+    let!(:target) { create :target, :session, target_group: target_group_1, role: Target::ROLE_TEAM }
+
+    it 'displays the faculty as "session by", instead of as assigner' do
+      find('.founder-dashboard-target-header__headline', text: target.title).click
+
+      within('.target-overlay__faculty-box') do
+        expect(page).to have_text("Session by: #{target.faculty.name}")
       end
     end
   end

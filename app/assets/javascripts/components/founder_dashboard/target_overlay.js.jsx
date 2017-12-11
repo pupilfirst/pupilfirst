@@ -64,11 +64,18 @@ class FounderDashboardTargetOverlay extends React.Component {
   }
 
   faculty() {
+    let faculty_target_relation = "Assigned by:";
+
+    if (_.isString(this.props.target.session_at)) {
+      faculty_target_relation = "Session by:";
+    }
+
     return (
       <h5 className="target-overlay__faculty-name m-a-0">
         <span className="target-overlay__faculty-name-headline">
-          Assigned by:
+          {faculty_target_relation}
         </span>
+
         <span className="font-regular">{this.props.target.faculty.name}</span>
       </h5>
     );

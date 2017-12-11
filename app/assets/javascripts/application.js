@@ -34,6 +34,7 @@
 //= require jquery-stickit
 //= require ahoy
 //= require jspdf
+//= require lodash
 
 // Rails assets
 //= require intro.js/intro.js
@@ -60,7 +61,6 @@
 //= require admissions
 //= require faculty
 //= require story
-//= require fb
 //= require resources
 //= require users
 //= require product_metrics

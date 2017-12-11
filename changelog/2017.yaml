@@ -1,5 +1,47 @@
 ---
 changelog:
+- timestamp: '2017-12-11T11:07:02Z'
+  changes:
+  - timestamp: '2017-12-11T10:09:32Z'
+    title: Zoom meetings are now auto-created when a connect request is confirmed.
+    trello: https://trello.com/c/iGcxi2aV
+    private: true
+    description: When a connect request is confirmed, we now hit the Zoom API and
+      instantly create a scheduled meeting. This is saved as the meeting link for
+      the connect request right away. The Google calendar invite created also has
+      its location set to this meeting link.
+    category: feature
+  - timestamp: '2017-12-08T08:52:46Z'
+    title: Improved automation related to session scheduling, sending invitations
+      and reminders, and gathering feedback.
+    trello: https://trello.com/c/WY0XYCqc
+    private: false
+    description: This adds one new service, two new jobs, and a new periodic_tasks
+      rake taks which should run aforementioned jobs at 10 min intervals (Heroku scheduler).
+    category: feature
+  - timestamp: '2017-12-06T10:50:24Z'
+    title: Admin vocalist pings are now deferred to a worker job which sends report
+      as email once job is complete.
+    trello: https://trello.com/c/GB6Pn1OO
+    private: true
+    description: In addition to defering the action of sending messages using the
+      Slack API, this change also updates the messaging service to handle operation
+      failure exceptions as reported errors instead of having it crash and burn.
+    category: bugfix
+  - timestamp: '2017-12-06T07:27:47Z'
+    title: Added Webpacker to repo to enable use of tilt library on /fb page.
+    trello: https://trello.com/c/o2n940kq
+    private: true
+    description: The webpacker 'pack' is only used on the FB page for now. Additional
+      work will need to be done to integrate it into other parts of the application.
+  - timestamp: '2017-12-05T11:05:54Z'
+    title: Fixed a crash that could occur if there is considerable delay between completing
+      a payment and redirecting back to SV.CO from payment gateway.
+    trello: https://trello.com/c/xsSIMB4u
+    private: false
+    description: This occurred because of a bad return from a function on an edge-case
+      check.
+    category: bugfix
 - timestamp: '2017-12-04T09:32:26Z'
   changes:
   - timestamp: '2017-11-28T11:19:06Z'

@@ -1,9 +1,0 @@
----
-timestamp: '2017-12-08T08:52:46Z'
-title: Improved automation related to session scheduling, sending invitations and reminders, and gathering
-  feedback.
-trello: https://trello.com/c/WY0XYCqc
-private: false
-description: This adds one new service, two new jobs, and a new periodic_tasks rake
-  taks which should run aforementioned jobs at 10 min intervals (Heroku scheduler).
-category: feature

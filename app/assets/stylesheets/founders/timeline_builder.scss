@@ -52,6 +52,10 @@
   @include border-radius(1rem);
 }
 
+.timeline-builder-social-bar__textarea-counter--safe {
+  background-color: rgba(255, 0, 0, 0.5);
+}
+
 .timeline-builder-social-bar__textarea-counter--danger {
   background-color: rgba(255, 0, 0, 0.5);
 }
@@ -111,14 +115,21 @@
 .timeline-builder__attachment-private-indicator {
   padding: 6px 10px;
   box-shadow: inset -4px 0 4px -5px #999;
-  background: repeating-linear-gradient(-45deg, $gray-border, $gray-border 2px, $primary-background 2px, $primary-background 3px);
+  background: repeating-linear-gradient(
+    -45deg,
+    $gray-border,
+    $gray-border 2px,
+    $primary-background 2px,
+    $primary-background 3px
+  );
 }
 
 .timeline-builder__attachment-form-container {
   padding: 1.25rem;
   background-color: $dark-primary-background;
   border-top: 1px solid $gray-border;
-  box-shadow: inset 0 10px 10px -10px rgba(0, 0, 0, 0.1), inset 0 10px 10px -10px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 10px 10px -10px rgba(0, 0, 0, 0.1),
+    inset 0 10px 10px -10px rgba(0, 0, 0, 0.1);
 }
 
 @include media-breakpoint-up(sm) {
@@ -160,7 +171,7 @@
     margin-left: 0.5rem;
   }
 
-  @include media-breakpoint-down(xs) {
+  @include media-breakpoint-down(sm) {
     margin-top: 0.5rem;
   }
 }
@@ -229,7 +240,8 @@
   }
 }
 
-.timeline-builder__upload-section, .timeline-builder__select-section {
+.timeline-builder__upload-section,
+.timeline-builder__select-section {
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -241,14 +253,15 @@
   }
 }
 
-.timeline-builder__upload-section-tab, .timeline-builder__select-section-tab {
+.timeline-builder__upload-section-tab,
+.timeline-builder__select-section-tab {
   padding: 0 20px;
   display: flex;
   align-items: center;
   border-right: 1px solid $gray-border;
   background-color: white;
   color: darken($light-grey-text, 20%);
-  transition: all .2s;
+  transition: all 0.2s;
 
   @include media-breakpoint-down(sm) {
     display: block;
@@ -260,9 +273,10 @@
 
 .timeline-builder__upload-section-tab {
   cursor: pointer;
-  transition: all .2s;
+  transition: all 0.2s;
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     background-color: $dark-primary-background;
     color: $brand-secondary;
   }
@@ -293,6 +307,7 @@
 
   @include media-breakpoint-down(sm) {
     display: block;
+    white-space: nowrap;
   }
 }
 
@@ -323,9 +338,9 @@
   position: relative;
 
   &:before {
-    content: '';
+    content: "";
     border-top: 1px solid $dark-primary-background;
-    content: '';
+    content: "";
     position: absolute;
     top: -1px;
     left: 0;
@@ -344,7 +359,8 @@
   color: lighten($light-grey-text, 30%);
   cursor: not-allowed;
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     background-color: white;
     color: lighten($light-grey-text, 30%);
   }
@@ -371,7 +387,7 @@
   margin: 0;
   background-color: white;
   @include border-radius(30px);
-  box-shadow: inset 0 -1px white, inset 0 1px 1px rgba(black, .05);
+  box-shadow: inset 0 -1px white, inset 0 1px 1px rgba(black, 0.05);
   cursor: pointer;
 }
 
@@ -390,35 +406,37 @@
   text-transform: uppercase;
   background: darken($primary-background, 5%);
   border-radius: inherit;
-  box-shadow: inset 0 1px 2px rgba(black, .12), inset 0 0 2px rgba(black, .15);
-  transition: all .2s;
+  box-shadow: inset 0 1px 2px rgba(black, 0.12), inset 0 0 2px rgba(black, 0.15);
+  transition: all 0.2s;
 
-  &:before, &:after {
+  &:before,
+  &:after {
     position: absolute;
     top: 50%;
-    margin-top: -.5em;
+    margin-top: -0.5em;
     line-height: 1;
-    transition: all .2s;
+    transition: all 0.2s;
   }
 
   &:before {
     content: attr(data-off);
     right: 11px;
     color: #aaa;
-    text-shadow: 0 1px rgba(white, .5);
+    text-shadow: 0 1px rgba(white, 0.5);
   }
 
   &:after {
     content: attr(data-on);
     left: 11px;
     color: white;
-    text-shadow: 0 1px rgba(black, .2);
+    text-shadow: 0 1px rgba(black, 0.2);
     opacity: 0;
   }
 
   .timeline-builder__social-bar-toggle-switch-input:checked ~ & {
-    background: #39579A;
-    box-shadow: inset 0 1px 2px rgba(black, .15), inset 0 0 3px rgba(black, .2);
+    background: #39579a;
+    box-shadow: inset 0 1px 2px rgba(black, 0.15),
+      inset 0 0 3px rgba(black, 0.2);
 
     &:before {
       opacity: 0;
@@ -438,14 +456,14 @@
   left: 2px;
   width: 26px;
   height: 26px;
-  color: #39579A;
+  color: #39579a;
   background: white;
   @include border-radius(30px);
-  box-shadow: 1px 1px 5px rgba(black, .2);
-  transition: all .2s;
+  box-shadow: 1px 1px 5px rgba(black, 0.2);
+  transition: all 0.2s;
 
   .timeline-builder__social-bar-toggle-switch-input:checked ~ & {
     left: 52px;
-    box-shadow: -1px 1px 5px rgba(black, .2);
+    box-shadow: -1px 1px 5px rgba(black, 0.2);
   }
 }

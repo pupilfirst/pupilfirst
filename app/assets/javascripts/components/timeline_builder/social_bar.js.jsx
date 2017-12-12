@@ -4,10 +4,12 @@ class TimelineBuilderSocialBar extends React.Component {
   }
 
   render() {
-    return(
+    return (
       <div className="timeline-builder__social-bar clearfix">
-        <TimelineBuilderFacebookShareToggleButton facebookShareEligibility={ this.props.facebookShareEligibility }/>
-        <TimelineBuilderTextAreaCounter description={ this.props.description } />
+        <TimelineBuilderFacebookShareToggleButton
+          facebookShareEligibility={this.props.facebookShareEligibility}
+        />
+        <TimelineBuilderTextAreaCounter description={this.props.description} />
       </div>
     );
   }

@@ -11,17 +11,17 @@ after 'development:startups', 'development:target_groups', 'development:targets'
 
   # Add a one-liner verified entry for avengers
   events_list = [
-    [avengers_startup, 'one_liner', 'ironman@avengers.co', 'We came up with a new one-liner for avengers: Everyone creates the thing they fear.', status_verified]
+    [avengers_startup, 'one_liner', 'ironman@example.org', 'We came up with a new one-liner for avengers: Everyone creates the thing they fear.', status_verified]
   ]
 
   # Add a pending 'team-formed' pending entry for avengers
   events_list += [
-    [avengers_startup, 'team_formed', 'ironman@avengers.co', 'We formed our team to fight the evil!', status_pending]
+    [avengers_startup, 'team_formed', 'ironman@example.org', 'We formed our team to fight the evil!', status_pending]
   ]
 
   # Add a 'new_product_deck' for avengers which needs improvement
   events_list += [
-    [avengers_startup, 'new_product_deck', 'ironman@avengers.co', 'We have a new presentation about us!', status_needs_improvement]
+    [avengers_startup, 'new_product_deck', 'ironman@example.org', 'We have a new presentation about us!', status_needs_improvement]
   ]
 
   # create all events in the events_list

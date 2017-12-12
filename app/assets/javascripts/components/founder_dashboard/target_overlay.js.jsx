@@ -63,13 +63,20 @@ class FounderDashboardTargetOverlay extends React.Component {
     }
   }
 
-  assigner() {
+  faculty() {
+    let faculty_target_relation = "Assigned by:";
+
+    if (_.isString(this.props.target.session_at)) {
+      faculty_target_relation = "Session by:";
+    }
+
     return (
-      <h5 className="target-overlay__assigner-name m-0">
-        <span className="target-overlay__assigner-name-headline">
-          Assigned by:
+      <h5 className="target-overlay__faculty-name m-0">
+        <span className="target-overlay__faculty-name-headline">
+          {faculty_target_relation}
         </span>
-        <span className="font-regular">{this.props.target.assigner.name}</span>
+
+        <span className="font-regular">{this.props.target.faculty.name}</span>
       </h5>
     );
   }
@@ -125,14 +132,14 @@ class FounderDashboardTargetOverlay extends React.Component {
                 />
               </div>
               <div className="col-md-4 target-overlay__content-rightbar">
-                <div className="target-overlay__assigner-box">
-                  <span className="target-overlay__assigner-avatar mr-2">
+                <div className="target-overlay__faculty-box">
+                  <span className="target-overlay__faculty-avatar mr-2">
                     <img
                       className="img-fluid"
-                      src={this.props.target.assigner.image_url}
+                      src={this.props.target.faculty.image_url}
                     />
                   </span>
-                  {this.assigner()}
+                  {this.faculty()}
                 </div>
                 {this.state.latestEvent && (
                   <TargetOverlayTimelineEventPanel

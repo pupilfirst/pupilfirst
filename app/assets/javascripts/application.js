@@ -61,7 +61,6 @@
 //= require faculty
 //= require founders
 //= require story
-//= require fb
 //= require resources
 //= require users
 //= require product_metrics

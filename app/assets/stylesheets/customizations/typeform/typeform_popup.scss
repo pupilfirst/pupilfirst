@@ -1,0 +1,4 @@
+// Overriding style for typeform popup in /fb landing page (Fix for Safari browser).
+.typeform-popup-overlay, .typeform-modal {
+  transform: translate3d(0, 0, 100px);
+}

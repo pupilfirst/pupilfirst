@@ -8,6 +8,7 @@
     "vanilla-tilt": "^1.4.1"
   },
   "devDependencies": {
+    "prettier": "1.9.1",
     "webpack-dev-server": "^2.9.5"
   }
 }

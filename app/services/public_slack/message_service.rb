@@ -26,7 +26,7 @@ module PublicSlack
 
       if self.class.mock?
         log "Skipping post because of @mock flag. Message was: '#{message}'"
-        return
+        return OpenStruct.new(errors: @errors)
       end
 
       message = message
@@ -78,6 +78,7 @@ module PublicSlack
 
     def post_to_channel(channel, message)
       params = message_params(channel, message, @unfurl_links)
+
       begin
         api.get('chat.postMessage', params: params)
       rescue PublicSlack::TransportFailureException
@@ -93,7 +94,12 @@ module PublicSlack
     # Post to founder's im channel.
     def post_to_founder(founder, message)
       channel = fetch_im_id(founder)
-      post_to_channel(channel, message) if channel
+
+      begin
+        post_to_channel(channel, message) if channel
+      rescue PublicSlack::OperationFailureException => e
+        @errors[founder.id] = e.message
+      end
     end
 
     def fetch_im_id(founder)
@@ -108,6 +114,9 @@ module PublicSlack
         im_id_response = api.get('im.open', params: { user: founder.slack_user_id })
       rescue PublicSlack::TransportFailureException
         @errors['HTTP Error'] = 'There seems to be a network issue. Please try after sometime'
+        return false
+      rescue PublicSlack::OperationFailureException => e
+        @errors[founder.id] = e.message
         return false
       end
 

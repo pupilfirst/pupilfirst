@@ -9,14 +9,16 @@ FactoryBot.define do
     days_to_complete { session_at.present? ? nil : 1 + rand(60) }
     target_group
     timeline_event_type
-    assigner { create :faculty }
+    faculty
     sequence(:sort_index)
     key nil
     session_at nil
 
-    transient do
-      week_number nil
-      group_index nil
+    trait :session do
+      session_at 1.week.from_now
+      days_to_complete nil
+      level
+      target_group nil
     end
 
     trait :for_founders do

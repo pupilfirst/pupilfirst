@@ -26,8 +26,8 @@ module Targets
     end
 
     def data_rubric
-      @target.target_performance_criteria.each_with_object([]).with_index do |(tpc, data), index|
-        data << [index + 1, tpc.performance_criterion.description, tpc.rubric_good, tpc.rubric_great, tpc.rubric_wow]
+      @target.target_skills.each_with_object([]).with_index do |(target_skill, data), index|
+        data << [index + 1, target_skill.skill.description, target_skill.rubric_good, target_skill.rubric_great, target_skill.rubric_wow]
       end
     end
   end

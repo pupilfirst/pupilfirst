@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171211074803) do
+ActiveRecord::Schema.define(version: 20171212074538) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -393,12 +393,6 @@ ActiveRecord::Schema.define(version: 20171211074803) do
     t.index ["startup_id"], name: "index_payments_on_startup_id"
   end
 
-  create_table "performance_criteria", force: :cascade do |t|
-    t.string "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "platform_feedback", id: :serial, force: :cascade do |t|
     t.string "feedback_type"
     t.string "attachment"
@@ -494,6 +488,13 @@ ActiveRecord::Schema.define(version: 20171211074803) do
     t.index ["owner_id", "owner_type"], name: "index_shortened_urls_on_owner_id_and_owner_type"
     t.index ["unique_key"], name: "index_shortened_urls_on_unique_key", unique: true
     t.index ["url"], name: "index_shortened_urls_on_url"
+  end
+
+  create_table "skills", force: :cascade do |t|
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name"
   end
 
   create_table "startup_categories", id: :serial, force: :cascade do |t|
@@ -625,24 +626,24 @@ ActiveRecord::Schema.define(version: 20171211074803) do
     t.index ["sort_index"], name: "index_target_groups_on_sort_index"
   end
 
-  create_table "target_performance_criteria", force: :cascade do |t|
+  create_table "target_prerequisites", id: :serial, force: :cascade do |t|
+    t.integer "target_id"
+    t.integer "prerequisite_target_id"
+    t.index ["prerequisite_target_id"], name: "index_target_prerequisites_on_prerequisite_target_id"
+    t.index ["target_id"], name: "index_target_prerequisites_on_target_id"
+  end
+
+  create_table "target_skills", force: :cascade do |t|
     t.bigint "target_id"
-    t.bigint "performance_criterion_id"
+    t.bigint "skill_id"
     t.string "rubric_good"
     t.string "rubric_great"
     t.string "rubric_wow"
     t.integer "base_karma_points"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["performance_criterion_id"], name: "index_target_performance_criteria_on_performance_criterion_id"
-    t.index ["target_id"], name: "index_target_performance_criteria_on_target_id"
-  end
-
-  create_table "target_prerequisites", id: :serial, force: :cascade do |t|
-    t.integer "target_id"
-    t.integer "prerequisite_target_id"
-    t.index ["prerequisite_target_id"], name: "index_target_prerequisites_on_prerequisite_target_id"
-    t.index ["target_id"], name: "index_target_prerequisites_on_target_id"
+    t.index ["skill_id"], name: "index_target_skills_on_skill_id"
+    t.index ["target_id"], name: "index_target_skills_on_target_id"
   end
 
   create_table "targets", id: :serial, force: :cascade do |t|
@@ -696,10 +697,10 @@ ActiveRecord::Schema.define(version: 20171211074803) do
 
   create_table "timeline_event_grades", force: :cascade do |t|
     t.bigint "timeline_event_id"
-    t.bigint "performance_criterion_id"
+    t.bigint "skill_id"
     t.string "grade"
     t.integer "karma_points"
-    t.index ["performance_criterion_id"], name: "index_timeline_event_grades_on_performance_criterion_id"
+    t.index ["skill_id"], name: "index_timeline_event_grades_on_skill_id"
     t.index ["timeline_event_id"], name: "index_timeline_event_grades_on_timeline_event_id"
   end
 
@@ -836,8 +837,8 @@ ActiveRecord::Schema.define(version: 20171211074803) do
   add_foreign_key "startups", "levels"
   add_foreign_key "startups", "levels", column: "maximum_level_id"
   add_foreign_key "target_groups", "levels"
-  add_foreign_key "target_performance_criteria", "performance_criteria"
-  add_foreign_key "target_performance_criteria", "targets"
+  add_foreign_key "target_skills", "skills"
+  add_foreign_key "target_skills", "targets"
   add_foreign_key "timeline_event_files", "timeline_events"
   add_foreign_key "timeline_events", "startups"
   add_foreign_key "user_activities", "users"

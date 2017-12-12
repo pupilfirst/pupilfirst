@@ -7,11 +7,11 @@ module TimelineEvents
     end
 
     # rubocop:disable Metrics/CyclomaticComplexity
-    def update_status(status, grade: nil, pc_grades: nil, points: nil)
+    def update_status(status, grade: nil, skill_grades: nil, points: nil)
       raise UnexpectedGradeException unless grade.blank? || grade.in?(TimelineEvent.valid_grades)
 
       @grade = grade
-      @pc_grades = pc_grades
+      @skill_grades = skill_grades
       @points = points
       @timeline_event.update!(grade: @grade)
       @new_status = status
@@ -106,7 +106,7 @@ module TimelineEvents
 
     def points_for_target
       @points_for_target ||= begin
-        if @pc_grades.present?
+        if @skill_grades.present?
           total_karma_points
         elsif @grade.present?
           @target.points_earnable * grade_multiplier(@grade) || 0
@@ -166,7 +166,7 @@ module TimelineEvents
     end
 
     def update_grade_and_score
-      if @pc_grades.present?
+      if @skill_grades.present?
         @timeline_event.update!(score: computed_score)
         # The overall grade for the timeline event will be the one that corresponds to the lower rounded off score.
         @timeline_event.update!(grade: grade_to_score.key(computed_score.floor))
@@ -176,10 +176,10 @@ module TimelineEvents
     end
 
     def computed_score
-      pc_count = @pc_grades.count.to_f
+      pc_count = @skill_grades.count.to_f
       total_points = 0
 
-      @pc_grades.values.each do |grade|
+      @skill_grades.values.each do |grade|
         total_points += grade_to_score[grade]
       end
 
@@ -193,10 +193,10 @@ module TimelineEvents
     end
 
     def total_karma_points
-      target_performance_criteria = TargetPerformanceCriterion.where(target: @target)
+      target_skills = TargetSkill.where(target: @target)
       total_karma_points = 0
-      @total_karma_points = @pc_grades.each do |pc_id, grade|
-        total_karma_points += target_performance_criteria.find_by(performance_criterion_id: pc_id.to_i).base_karma_points * grade_multiplier(grade)
+      @total_karma_points = @skill_grades.each do |skill_id, grade|
+        total_karma_points += target_skills.find_by(skill_id: skill_id.to_i).base_karma_points * grade_multiplier(grade)
       end
       total_karma_points.round
     end

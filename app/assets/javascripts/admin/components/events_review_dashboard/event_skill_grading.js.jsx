@@ -1,4 +1,4 @@
-class EventsReviewDashboardEventPcGrading extends React.Component {
+class EventsReviewDashboardEventSkillGrading extends React.Component {
   constructor(props) {
     super(props);
 
@@ -20,18 +20,18 @@ class EventsReviewDashboardEventPcGrading extends React.Component {
     this.updateReviewedFlag = this.updateReviewedFlag.bind(this);
   }
 
-  radioInputId(name, pcId) {
-    return name + '-' + this.props.eventId + '-' + pcId;
+  radioInputId(name, skillId) {
+    return name + '-' + this.props.eventId + '-' + skillId;
   }
 
-  radioInputName(name, pcId) {
-    return 'event-' + this.props.eventId + '-' + pcId + '-' + name;
+  radioInputName(name, skillId) {
+    return 'event-' + this.props.eventId + '-' + skillId + '-' + name;
   }
 
   changeGrade(event) {
     let gradesClone = _.cloneDeep(this.state.grades);
-    const pcId = event.target.getAttribute('data-pcid');
-    gradesClone[pcId] = event.target.value;
+    const skillId = event.target.getAttribute('data-skillId');
+    gradesClone[skillId] = event.target.value;
     this.setState({grades: gradesClone});
   }
 
@@ -56,7 +56,7 @@ class EventsReviewDashboardEventPcGrading extends React.Component {
 
       $.post({
         url: postUrl,
-        data: {status: status, pc_grades: grades},
+        data: {status: status, skill_grades: grades},
         success: function () {
           console.log('Event was successfully marked ' + status);
           new PNotify({
@@ -136,7 +136,7 @@ class EventsReviewDashboardEventPcGrading extends React.Component {
   }
 
   enableSaveReviewButton() {
-    // enable 'Save Review' button only when all PCs are graded
+    // enable 'Save Review' button only when all skills are graded
     const savedGradesCount = Object.keys(this.state.grades).length;
     const rubricGradesCount = Object.keys(this.props.rubric).length;
 
@@ -151,13 +151,13 @@ class EventsReviewDashboardEventPcGrading extends React.Component {
 
   render(){
     return(<div>
-        <strong>Grade for each PC:</strong>
+        <strong>Grade for each skill:</strong>
         <br/>
         <table>
           <thead>
           <tr>
             <th>
-              Performance Criterion
+              Skill
             </th>
             <th>
               Good
@@ -171,14 +171,14 @@ class EventsReviewDashboardEventPcGrading extends React.Component {
           </tr>
           </thead>
           <tbody>
-          { Object.keys(this.props.rubric).map(function (pcId) {
-            return (<tr key={pcId}>
-              <td> { this.props.rubric[pcId]['description'] } </td>
-              <td> <input type='radio' id={this.radioInputId('good', pcId) } value='good' data-pcid={ pcId } name={ this.radioInputName('grade', pcId) }
+          { Object.keys(this.props.rubric).map(function (skillId) {
+            return (<tr key={skillId}>
+              <td> { this.props.rubric[skillId]['description'] } </td>
+              <td> <input type='radio' id={this.radioInputId('good', skillId) } value='good' data-skillId={ skillId } name={ this.radioInputName('grade', skillId) }
                           onChange={this.changeGrade}/> </td>
-              <td> <input type='radio' id={this.radioInputId('great', pcId) } value='great' data-pcid={ pcId } name={ this.radioInputName('grade', pcId) }
+              <td> <input type='radio' id={this.radioInputId('great', skillId) } value='great' data-skillId={ skillId } name={ this.radioInputName('grade', skillId) }
                           onChange={this.changeGrade}/> </td>
-              <td> <input type='radio' id={this.radioInputId('wow', pcId) } value='wow' data-pcid={ pcId } name={ this.radioInputName('grade', pcId) }
+              <td> <input type='radio' id={this.radioInputId('wow', skillId) } value='wow' data-skillId={ skillId } name={ this.radioInputName('grade', skillId) }
                           onChange={this.changeGrade}/> </td>
             </tr>)}, this
           )}
@@ -207,7 +207,7 @@ class EventsReviewDashboardEventPcGrading extends React.Component {
   }
 }
 
-EventsReviewDashboardEventPcGrading.propTypes = {
+EventsReviewDashboardEventSkillGrading.propTypes = {
   rootState: PropTypes.object,
   setRootState: PropTypes.func,
   eventId: PropTypes.string,

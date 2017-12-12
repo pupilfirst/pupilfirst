@@ -1,6 +1,6 @@
-class TargetPerformanceCriterion < ApplicationRecord
+class TargetSkill < ApplicationRecord
   belongs_to :target
-  belongs_to :performance_criterion
+  belongs_to :skill
 
   validates :rubric_good, presence: true
   validates :rubric_great, presence: true

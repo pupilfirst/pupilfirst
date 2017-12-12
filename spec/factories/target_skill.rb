@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :target_performance_criterion do
+  factory :target_skill do
     rubric_good { Faker::Lorem.sentence }
     rubric_great { Faker::Lorem.sentence }
     rubric_wow { Faker::Lorem.sentence }

@@ -22,10 +22,10 @@ class Target < ApplicationRecord
   belongs_to :target_group, optional: true
   belongs_to :level, optional: true
   has_many :resources
-  has_many :target_performance_criteria
-  has_many :performance_criteria, through: :target_performance_criteria
+  has_many :target_skills
+  has_many :skills, through: :target_skills
 
-  accepts_nested_attributes_for :target_performance_criteria, allow_destroy: true
+  accepts_nested_attributes_for :target_skills, allow_destroy: true
 
   acts_as_taggable
   mount_uploader :rubric, RubricUploader
@@ -171,7 +171,7 @@ class Target < ApplicationRecord
   end
 
   def rubric?
-    performance_criteria.present? || rubric_url.present?
+    skills.present? || rubric_url.present?
   end
 
   # this is included in the target JSONs the DashboardDataService responds with

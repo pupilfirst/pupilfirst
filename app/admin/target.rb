@@ -5,7 +5,7 @@ ActiveAdmin.register Target do
     :slideshow_embed, :video_embed, :completed_at, :completion_comment, :rubric, :link_to_complete, :key,
     :submittability, :archived, :remote_rubric_url, :target_group_id, :target_action_type, :points_earnable,
     :timeline_event_type_id, :sort_index, :youtube_video_id, :session_at, :chore, :level_id,
-    prerequisite_target_ids: [], tag_list: [], target_performance_criteria_attributes: %i[id performance_criterion_id rubric_good rubric_great rubric_wow base_karma_points _destroy]
+    prerequisite_target_ids: [], tag_list: [], target_skills_attributes: %i[id skill_id rubric_good rubric_great rubric_wow base_karma_points _destroy]
 
   filter :title
   filter :archived
@@ -175,14 +175,14 @@ ActiveAdmin.register Target do
       row :created_at
       row :updated_at
 
-      if target.target_performance_criteria.present?
+      if target.target_skills.present?
         div do
-          table_for target.target_performance_criteria.includes(:performance_criterion) do
-            caption 'Target Performance Criteria'
+          table_for target.target_skills.includes(:skill) do
+            caption 'Target Skills'
 
-            column 'Performance Criterion' do |tpc|
-              a href: admin_performance_criteria_path(tpc.performance_criterion) do
-                tpc.performance_criterion.display_name.to_s
+            column 'Skill' do |ts|
+              a href: admin_skill_path(ts.skill) do
+                ts.skill.display_name.to_s
               end
             end
 
@@ -321,7 +321,7 @@ ActiveAdmin.register Target do
       f.input :completion_instructions
       f.input :link_to_complete
       f.input :submittability, collection: Target.valid_submittability_values
-      f.input :assigner, collection: Faculty.active.order(:name), include_blank: false
+      f.input :faculty, collection: Faculty.active.order(:name), include_blank: false
       f.input :target_group, collection: TargetGroup.all.sorted_by_level.includes(:level)
       f.input :sort_index
       f.input :days_to_complete
@@ -329,13 +329,13 @@ ActiveAdmin.register Target do
       f.input :remote_rubric_url
     end
 
-    f.inputs 'Performance Criteria' do
-      f.has_many :target_performance_criteria, heading: false, allow_destroy: true, new_record: 'Add PC' do |tpc|
-        tpc.input :performance_criterion
-        tpc.input :rubric_good
-        tpc.input :rubric_great
-        tpc.input :rubric_wow
-        tpc.input :base_karma_points
+    f.inputs 'Skills' do
+      f.has_many :target_skills, heading: false, allow_destroy: true, new_record: 'Add Skill' do |ts|
+        ts.input :skill
+        ts.input :rubric_good
+        ts.input :rubric_great
+        ts.input :rubric_wow
+        ts.input :base_karma_points
       end
     end
     f.actions

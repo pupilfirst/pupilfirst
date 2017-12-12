@@ -80,7 +80,7 @@ ActiveAdmin.register TimelineEvent do
       points = params[:points].present? ? params[:points].to_i : nil
 
       begin
-        TimelineEvents::VerificationService.new(timeline_event).update_status(status, grade: params[:grade], pc_grades: params[:pc_grades].as_json, points: points)
+        TimelineEvents::VerificationService.new(timeline_event).update_status(status, grade: params[:grade], skill_grades: params[:skill_grades].as_json, points: points)
         head :ok
       rescue TimelineEvents::ReviewInterfaceException => e
         render json: { error: e.message }.to_json, status: 422

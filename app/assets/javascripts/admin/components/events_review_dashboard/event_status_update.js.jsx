@@ -178,7 +178,7 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
 
   enableSaveReviewButton() {
     // enable 'Save Review' button only when the status is needs_improvement or not_accepted for any targets and also when
-    // verified for a target without PC.
+    // verified for a target without skills.
     return ((!this.rubricPresent() && this.state.status === 'verified' && (this.state.grade || this.state.points) )
       || this.state.status === 'needs_improvement' || this.state.status === 'not_accepted')
   }
@@ -261,7 +261,7 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
         }
 
         { this.state.status === 'verified' && this.rubricPresent() &&
-        <EventsReviewDashboardEventPcGrading rootState={this.props.rootState} setRootState={this.props.setRootState}
+        <EventsReviewDashboardEventSkillGrading rootState={this.props.rootState} setRootState={this.props.setRootState}
                                            eventId={this.props.eventId} targetId={this.props.targetId}
                                            rubric={this.props.rootState.reviewData[this.props.eventId].rubric}/>
         }

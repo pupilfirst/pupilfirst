@@ -3,7 +3,7 @@ module TimelineEvents
     include RoutesResolvable
 
     def data
-      TimelineEvent.pending.includes(:timeline_event_type, { founder: :user }, { startup: :level }, { target: { target_performance_criteria: :performance_criterion } }, { improvement_of: :timeline_event_type }, :timeline_event_files).order('timeline_events.created_at').each_with_object({}) do |event, hash|
+      TimelineEvent.pending.includes(:timeline_event_type, { founder: :user }, { startup: :level }, { target: { target_skills: :skill } }, { improvement_of: :timeline_event_type }, :timeline_event_files).order('timeline_events.created_at').each_with_object({}) do |event, hash|
         hash[event.id] = {
           event_id: event.id,
           title: event.title,
@@ -52,13 +52,13 @@ module TimelineEvents
     end
 
     def rubric_details(target)
-      if target&.target_performance_criteria.present?
-        target.target_performance_criteria.each_with_object({}) do |tpc, pc_hash|
-          pc_hash[tpc.performance_criterion_id] = {
-            description: tpc.performance_criterion.description,
-            rubric_good: tpc.rubric_good,
-            rubric_great: tpc.rubric_great,
-            rubric_wow: tpc.rubric_wow
+      if target&.target_skills.present?
+        target.target_skills.each_with_object({}) do |ts, skill_hash|
+          skill_hash[ts.skill_id] = {
+            description: ts.skill.description,
+            rubric_good: ts.rubric_good,
+            rubric_great: ts.rubric_great,
+            rubric_wow: ts.rubric_wow
           }
         end
       end

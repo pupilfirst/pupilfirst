@@ -11,11 +11,11 @@ describe TimelineEvents::VerificationService do
   let(:founder) { create :founder, startup: startup }
   let(:tet_founder_update) { create :timeline_event_type, :founder_update }
   let(:tet_team_update) { create :timeline_event_type, :team_update }
-  let(:target_with_pc) { create :target }
-  let!(:performance_criterion_1) { create :performance_criterion }
-  let!(:performance_criterion_2) { create :performance_criterion }
-  let!(:target_performance_criterion_1) { create :target_performance_criterion, target: target_with_pc, performance_criterion: performance_criterion_1, base_karma_points: 20 }
-  let!(:target_performance_criterion_2) { create :target_performance_criterion, target: target_with_pc, performance_criterion: performance_criterion_2, base_karma_points: 30 }
+  let(:target_with_skills) { create :target }
+  let!(:skill_1) { create :skill }
+  let!(:skill_2) { create :skill }
+  let!(:target_skill_1) { create :target_skill, target: target_with_skills, skill: skill_1, base_karma_points: 20 }
+  let!(:target_skill_2) { create :target_skill, target: target_with_skills, skill: skill_2, base_karma_points: 30 }
 
   before do
     # stub out vocalist notifications
@@ -106,7 +106,7 @@ describe TimelineEvents::VerificationService do
 
     context 'when the timeline event is associated with a target with PC' do
       before do
-        timeline_event.update!(target: target_with_pc, founder: founder, startup: startup)
+        timeline_event.update!(target: target_with_skills, founder: founder, startup: startup)
       end
 
       context 'when asked to mark event as needs improvement' do
@@ -121,7 +121,7 @@ describe TimelineEvents::VerificationService do
 
       context 'when asked to mark event as verified and graded as PC1 = wow and PC2 = great' do
         it 'marks the event verified and adds appropriate karma points' do
-          subject.update_status(TimelineEvent::STATUS_VERIFIED, pc_grades: { performance_criterion_1.id.to_s => TimelineEvent::GRADE_WOW, performance_criterion_2.id.to_s => TimelineEvent::GRADE_GREAT })
+          subject.update_status(TimelineEvent::STATUS_VERIFIED, skill_grades: { skill_1.id.to_s => TimelineEvent::GRADE_WOW, skill_2.id.to_s => TimelineEvent::GRADE_GREAT })
 
           timeline_event.reload
           expect(timeline_event.verified?).to eq(true)

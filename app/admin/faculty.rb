@@ -33,6 +33,8 @@ ActiveAdmin.register Faculty do
   end
 
   form do |f|
+    div id: 'admin-faculty__form'
+
     f.semantic_errors(*f.object.errors.keys)
 
     f.inputs 'Faculty Details' do
@@ -51,7 +53,7 @@ ActiveAdmin.register Faculty do
       f.input :commitment, as: :select, collection: commitment_options, label_method: :first, value_method: :last
       f.input :current_commitment
       f.input :compensation, as: :select, collection: Faculty.valid_compensation_values
-      f.input :founder
+      f.input :founder, collection: f.object.founder.present? ? [f.object.founder] : []
       f.input :slack_username
     end
 

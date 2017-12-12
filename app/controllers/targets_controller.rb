@@ -5,12 +5,8 @@ class TargetsController < ApplicationController
     target = Target.find(params[:id])
 
     if target.performance_criteria.exists?
-      respond_to do |format|
-        format.pdf do
-          pdf = Targets::RubricPdf.new(target).build
-          send_data pdf.render, type: 'application/pdf', filename: 'target_rubric.pdf', disposition: 'inline'
-        end
-      end
+      pdf = Targets::RubricPdf.new(target).build
+      send_data pdf.render, type: 'application/pdf', filename: 'target_rubric.pdf', disposition: 'inline'
     else
       redirect_to target.rubric_url
     end

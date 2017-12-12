@@ -55,6 +55,7 @@ module TimelineEvents
       if target&.target_skills.present?
         target.target_skills.each_with_object({}) do |ts, skill_hash|
           skill_hash[ts.skill_id] = {
+            name: ts.skill.name,
             description: ts.skill.description,
             rubric_good: ts.rubric_good,
             rubric_great: ts.rubric_great,

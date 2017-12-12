@@ -173,7 +173,7 @@ class EventsReviewDashboardEventSkillGrading extends React.Component {
           <tbody>
           { Object.keys(this.props.rubric).map(function (skillId) {
             return (<tr key={skillId}>
-              <td> { this.props.rubric[skillId]['description'] } </td>
+              <td> { this.props.rubric[skillId]['name'] } </td>
               <td> <input type='radio' id={this.radioInputId('good', skillId) } value='good' data-skillId={ skillId } name={ this.radioInputName('grade', skillId) }
                           onChange={this.changeGrade}/> </td>
               <td> <input type='radio' id={this.radioInputId('great', skillId) } value='great' data-skillId={ skillId } name={ this.radioInputName('grade', skillId) }

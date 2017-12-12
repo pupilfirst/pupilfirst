@@ -12,6 +12,9 @@ class EventsReviewDashboardEventTargetRubric extends React.Component {
               Skill
             </th>
             <th>
+              Skill Description
+            </th>
+            <th>
               Good
             </th>
             <th>
@@ -25,6 +28,7 @@ class EventsReviewDashboardEventTargetRubric extends React.Component {
           <tbody>
             { Object.keys(this.props.rubric).map(function (skillId) {
               return (<tr key={skillId}>
+                <td> { this.props.rubric[skillId]['name'] } </td>
                 <td> { this.props.rubric[skillId]['description'] } </td>
                 <td> { this.props.rubric[skillId]['rubric_good'] } </td>
                 <td> { this.props.rubric[skillId]['rubric_great'] } </td>

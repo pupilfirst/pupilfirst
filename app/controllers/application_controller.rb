@@ -148,7 +148,7 @@ class ApplicationController < ActionController::Base
   end
 
   def typeform_csp
-    { frame: 'https://svlabs.typeform.com', script: 'https://embed.typeform.com' }
+    { frame: 'https://svlabs.typeform.com', script: 'https://embed.typeform.com https://admin.typeform.com' }
   end
 
   def slideshare_csp

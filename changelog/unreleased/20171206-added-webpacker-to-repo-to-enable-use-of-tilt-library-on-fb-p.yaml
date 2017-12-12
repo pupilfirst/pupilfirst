@@ -1,7 +1,0 @@
----
-timestamp: '2017-12-06T07:27:47Z'
-title: Added Webpacker to repo to enable use of tilt library on /fb page.
-trello: https://trello.com/c/o2n940kq
-private: true
-description: The webpacker 'pack' is only used on the FB page for now. Additional
-  work will need to be done to integrate it into other parts of the application.

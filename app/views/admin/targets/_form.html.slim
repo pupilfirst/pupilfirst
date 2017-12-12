@@ -1,0 +1,58 @@
+- presenter = Admin::Targets::FormPresenter.new(self, @target)
+
+#admin-target__edit
+= semantic_form_for [:admin, @target] do |f|
+  = f.semantic_errors *f.object.errors.keys
+  = f.inputs 'Target details' do
+    #target-founders-for-startup-url data-url=founders_for_target_admin_targets_url
+
+    = f.input :role,
+      as: :select,
+      collection: Target.valid_roles.map { |r| [t("models.target.role.#{r}"), r] },
+      include_blank: false
+
+    = f.input :title
+    = f.input :key
+    = f.input :chore
+    = f.input :session_at, as: :string, input_html: { class: 'date-time-picker', data: { format: 'Y-m-d H:i:s O' } }
+
+    = f.input :tag_list,
+      as: :select,
+      collection: Target.tag_counts_on(:tags).pluck(:name),
+      multiple: true
+
+    = f.input :level
+
+    = f.hidden_field :description
+
+    .label-replica
+      ' Description
+      abbr title="required" *
+
+    trix-editor.input-replica input="target_description" class="#{'error-replica' if @target.errors[:description].present?}"
+
+    - if @target.errors[:description].present?
+      p.inline-errors-replica #{@target.errors[:description][0]}
+
+    = f.input :target_action_type, collection: Target.valid_target_action_types
+    = f.input :timeline_event_type, include_blank: 'Select default timeline event type'
+    = f.input :points_earnable
+    = f.input :prerequisite_targets, collection: presenter.valid_prerequisites
+    = f.input :youtube_video_id, label: 'YouTube Video ID', placeholder: 'For eg. S0PEA3R-6TU'
+    = f.input :video_embed
+    = f.input :slideshow_embed
+    = f.input :resource_url
+    = f.input :completion_instructions
+    = f.input :link_to_complete
+    = f.input :submittability, collection: Target.valid_submittability_values
+    = f.input :faculty, collection: Faculty.active.order(:name), include_blank: false
+
+    = f.input :target_group,
+      collection: TargetGroup.all.sorted_by_level.includes(:level)
+
+    = f.input :sort_index
+    = f.input :days_to_complete
+    = f.input :rubric, as: :file
+    = f.input :remote_rubric_url
+
+  = f.submit

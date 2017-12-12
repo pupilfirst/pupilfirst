@@ -1,5 +1,5 @@
 class GoogleCalendarService
-  delegate :create_event, to: :@google_calendar
+  delegate :create_event, :find_or_create_event_by_id, to: :@google_calendar
 
   def initialize
     @google_calendar = Google::Calendar.new(

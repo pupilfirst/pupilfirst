@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171206084546) do
+ActiveRecord::Schema.define(version: 20171211074803) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -654,7 +654,7 @@ ActiveRecord::Schema.define(version: 20171206084546) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "slideshow_embed"
-    t.integer "assigner_id"
+    t.integer "faculty_id"
     t.string "rubric"
     t.integer "timeline_event_type_id"
     t.integer "days_to_complete"
@@ -672,8 +672,12 @@ ActiveRecord::Schema.define(version: 20171206084546) do
     t.string "submittability", default: "resubmittable", null: false
     t.boolean "archived", default: false
     t.string "youtube_video_id"
+    t.string "google_calendar_event_id"
+    t.datetime "feedback_asked_at"
+    t.datetime "slack_reminders_sent_at"
     t.index ["archived"], name: "index_targets_on_archived"
     t.index ["chore"], name: "index_targets_on_chore"
+    t.index ["faculty_id"], name: "index_targets_on_faculty_id"
     t.index ["key"], name: "index_targets_on_key"
     t.index ["level_id"], name: "index_targets_on_level_id"
     t.index ["session_at"], name: "index_targets_on_session_at"

@@ -70,10 +70,10 @@ feature 'Target Overlay' do
         expect(page).to have_link(resource_2.title.to_s, href: "/library/#{resource_2.slug}")
       end
 
-      # Within the assigner box:
-      within('.target-overlay__assigner-box') do
-        expect(page).to have_selector('.target-overlay__assigner-name > span', text: target.assigner.name)
-        expect(page).to have_selector(".target-overlay__assigner-avatar > img[src='#{target.assigner.image_url}'")
+      # Within the faculty box:
+      within('.target-overlay__faculty-box') do
+        expect(page).to have_text("Assigned by: #{target.faculty.name}")
+        expect(page).to have_selector(".target-overlay__faculty-avatar > img[src='#{target.faculty.image_url}'")
       end
     end
   end
@@ -126,6 +126,18 @@ feature 'Target Overlay' do
         expect(page).to have_selector('.target-overaly__status-title', text: 'Completion Status')
         expect(page).to have_selector('.founder-dashboard__avatar-wrapper', count: 2)
         # TODO: Also check if the right people have the right status. This is now blocked by the bug reported here: https://trello.com/c/P9RNQQ3N
+      end
+    end
+  end
+
+  context 'when the founder clicks on a session', js: true do
+    let!(:target) { create :target, :session, target_group: target_group_1, role: Target::ROLE_TEAM }
+
+    it 'displays the faculty as "session by", instead of as assigner' do
+      find('.founder-dashboard-target-header__headline', text: target.title).click
+
+      within('.target-overlay__faculty-box') do
+        expect(page).to have_text("Session by: #{target.faculty.name}")
       end
     end
   end

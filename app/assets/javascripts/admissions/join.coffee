@@ -83,11 +83,6 @@ setupTogglingCollegeField = ->
     toggleCollegeTextField()
     collegeInput.change toggleCollegeTextField
 
-helpIntercomPopup = ->
-  $(".help-intercom-link").click (e) ->
-    e.preventDefault()
-    Intercom('show')
-
 setupPasswordHintButtons = ->
   $('#application-form__password-hint-accept').on('click', replaceEmailWithHint)
   $('#application-form__password-hint-reject').on('click', acceptEmailInputfromUser)
@@ -125,7 +120,6 @@ setupJoinFormHandler = ->
 
 $(document).on 'page:change', setupTogglingCollegeField
 $(document).on 'page:change', setupTogglingReferenceField
-$(document).on 'page:change', helpIntercomPopup
 $(document).on 'page:change', expandFramework
 
 $(document).on 'turbolinks:load', ->

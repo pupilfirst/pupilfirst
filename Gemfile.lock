@@ -866,6 +866,7 @@ DEPENDENCIES
   jbuilder (~> 2.6)
   jquery-rails (~> 4.3)
   jspdf-rails (~> 1.0)
+  jwt (< 2.1)
   kaminari (~> 1.0)
   koala (~> 2.2)
   kramdown (~> 1.13)

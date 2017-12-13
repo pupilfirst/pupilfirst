@@ -170,6 +170,7 @@ module TimelineEvents
         @timeline_event.update!(score: computed_score)
         # The overall grade for the timeline event will be the one that corresponds to the lower rounded off score.
         @timeline_event.update!(grade: grade_to_score.key(computed_score.floor))
+        store_skill_grades
       elsif @grade.present?
         @timeline_event.update!(grade: @grade, score: grade_to_score[@grade].to_f)
       end
@@ -199,6 +200,13 @@ module TimelineEvents
         total_karma_points += target_skills.find_by(skill_id: skill_id.to_i).base_karma_points * grade_multiplier(grade)
       end
       total_karma_points.round
+    end
+
+    def store_skill_grades
+      @skill_grades.each do |skill_id, grade|
+        karma_points = TargetSkill.find_by(target: @target, skill_id: skill_id.to_i).base_karma_points.to_f * grade_multiplier(grade)
+        TimelineEventGrade.create!(timeline_event: @timeline_event, skill_id: skill_id, grade: grade, karma_points: karma_points.round)
+      end
     end
   end
 end

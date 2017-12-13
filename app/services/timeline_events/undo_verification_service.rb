@@ -11,6 +11,7 @@ module TimelineEvents
       TimelineEvent.transaction do
         unlink_startup_profile_submissions
         remove_karma_points
+        remove_timeline_event_grades
         recompute_timeline_updated_on
         reverse_end_of_iteration unless @timeline_event.not_accepted?
         unlink_founder_resume if @timeline_event.verified?
@@ -82,6 +83,10 @@ module TimelineEvents
 
     def founder
       @founder ||= @timeline_event.founder
+    end
+
+    def remove_timeline_event_grades
+      @timeline_event.timeline_event_grades.destroy_all if @timeline_event.timeline_event_grades.present?
     end
   end
 end

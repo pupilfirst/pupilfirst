@@ -19,27 +19,30 @@ class ApplicantScreeningQuestionSection extends React.Component {
   selectAnswerCB(answer) {
     let updatedAnswers = $.extend({}, this.state.selectedAnswers);
     updatedAnswers[this.state.questionNumber] = answer;
-    this.setState({selectedAnswers: updatedAnswers});
+    this.setState({ selectedAnswers: updatedAnswers });
   }
 
   answerOptionKey(answer) {
-    return this.props.type + "-question-" + this.state.questionNumber + "-" + answer;
+    return (
+      this.props.type + "-question-" + this.state.questionNumber + "-" + answer
+    );
   }
 
   handleNext() {
     // check Github URL validity, if applicable
-    let githubPresent = this.state.questionNumber === 4 && $('#github-url').val().length > 0;
-    if (githubPresent && !/github|bitbucket/.test($('#github-url').val())) {
-      this.setState({hasGithubError: true});
+    let githubPresent =
+      this.state.questionNumber === 4 && $("#github-url").val().length > 0;
+    if (githubPresent && !/github|bitbucket/.test($("#github-url").val())) {
+      this.setState({ hasGithubError: true });
     } else {
-      let questionsCount = this.props.type === 'coder' ? 4 : 3;
+      let questionsCount = this.props.type === "coder" ? 4 : 3;
 
       if (githubPresent) {
-        this.props.githubURLCB($('#github-url').val());
+        this.props.githubURLCB($("#github-url").val());
       }
 
       if (this.state.questionNumber < questionsCount) {
-        this.setState({questionNumber: this.state.questionNumber + 1})
+        this.setState({ questionNumber: this.state.questionNumber + 1 });
       } else {
         this.props.resultCB(this.hasPassed());
       }
@@ -47,7 +50,12 @@ class ApplicantScreeningQuestionSection extends React.Component {
   }
 
   hasPassed() {
-    return this.state.selectedAnswers[1] == 'Yes' || this.state.selectedAnswers[2] == 'Yes' || this.state.selectedAnswers[3] == 'Yes' || ($('#github-url').length > 0 && $('#github-url').val().length > 0);
+    return (
+      this.state.selectedAnswers[1] == "Yes" ||
+      this.state.selectedAnswers[2] == "Yes" ||
+      this.state.selectedAnswers[3] == "Yes" ||
+      ($("#github-url").length > 0 && $("#github-url").val().length > 0)
+    );
   }
 
   isHintVisible() {
@@ -55,55 +63,81 @@ class ApplicantScreeningQuestionSection extends React.Component {
   }
 
   isAnswerCorrect() {
-    return this.state.selectedAnswers[this.state.questionNumber] === 'Yes';
+    return this.state.selectedAnswers[this.state.questionNumber] === "Yes";
   }
 
   gitHubFormGroupClasses() {
-    return this.state.hasGithubError ? 'form-group has-danger' : 'form-group'
+    return this.state.hasGithubError ? "form-group has-danger" : "form-group";
   }
 
   render() {
     return (
       <div className="applicant-screening__question-section">
-        <div className="applicant-screening__question-number m-b-2 font-semibold">{ this.state.questionNumber }</div>
-        <ApplicantScreeningQuestion type={ this.props.type } questionNumber={ this.state.questionNumber }/>
+        <div className="applicant-screening__question-number mb-3 font-semibold">
+          {this.state.questionNumber}
+        </div>
+        <ApplicantScreeningQuestion
+          type={this.props.type}
+          questionNumber={this.state.questionNumber}
+        />
 
         {/*handle a special fourth question for Github link*/}
-        { this.state.questionNumber === 4 &&
-        <div className="applicant-screening__answer-options p-t-1 p-b-2">
-          <div className={ this.gitHubFormGroupClasses() }>
-            <input name="github-url" type="text" className="form-control form-control-danger" id="github-url" placeholder="https://github.com/your-profile"/>
-            { this.state.hasGithubError &&
-            <div className="form-control-feedback">Not a valid Github/Bitbucket URL</div>
-            }
-            <small className="form-text text-muted">Leave empty to skip.</small>
+        {this.state.questionNumber === 4 && (
+          <div className="applicant-screening__answer-options pt-2 pb-3">
+            <div className={this.gitHubFormGroupClasses()}>
+              <input
+                name="github-url"
+                type="text"
+                className="form-control form-control-danger"
+                id="github-url"
+                placeholder="https://github.com/your-profile"
+              />
+              {this.state.hasGithubError && (
+                <div className="form-control-feedback">
+                  Not a valid Github/Bitbucket URL
+                </div>
+              )}
+              <small className="form-text text-muted">
+                Leave empty to skip.
+              </small>
+            </div>
           </div>
-        </div>
-        }
+        )}
 
-        { this.state.questionNumber < 4 &&
-        <div className="applicant-screening__answer-options p-t-1 p-b-2">
-          <ApplicantScreeningAnswerOption key={ this.answerOptionKey('yes') } text="Yes"
-                                          selectAnswerCB={ this.selectAnswerCB }/>
-          <ApplicantScreeningAnswerOption key={ this.answerOptionKey('no') } text="No"
-                                          selectAnswerCB={ this.selectAnswerCB }/>
-        </div>
-        }
+        {this.state.questionNumber < 4 && (
+          <div className="applicant-screening__answer-options pt-2 pb-3">
+            <ApplicantScreeningAnswerOption
+              key={this.answerOptionKey("yes")}
+              text="Yes"
+              selectAnswerCB={this.selectAnswerCB}
+            />
+            <ApplicantScreeningAnswerOption
+              key={this.answerOptionKey("no")}
+              text="No"
+              selectAnswerCB={this.selectAnswerCB}
+            />
+          </div>
+        )}
 
-        { this.isHintVisible() &&
-        <div className="applicant-screening__answer-hint m-t-2">
+        {this.isHintVisible() && (
+          <div className="applicant-screening__answer-hint mt-3">
+            {/*Question 4 does not have a hint*/}
+            {this.state.questionNumber !== 4 && (
+              <ApplicantScreeningAnswerHint
+                correctAnswer={this.isAnswerCorrect()}
+                type={this.props.type}
+                questionNumber={this.state.questionNumber}
+              />
+            )}
 
-          {/*Question 4 does not have a hint*/}
-          { this.state.questionNumber !== 4 &&
-          <ApplicantScreeningAnswerHint correctAnswer={ this.isAnswerCorrect() } type={ this.props.type }
-                                        questionNumber={ this.state.questionNumber }/>
-          }
-
-          <button className="btn btn-with-icon btn-primary btn-md text-uppercase" onClick={ this.handleNext }>
-            <i className="fa fa-arrow-right"/> Next
-          </button>
-        </div>
-        }
+            <button
+              className="btn btn-with-icon btn-primary btn-md text-uppercase"
+              onClick={this.handleNext}
+            >
+              <i className="fa fa-arrow-right" /> Next
+            </button>
+          </div>
+        )}
       </div>
     );
   }

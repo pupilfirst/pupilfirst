@@ -38,6 +38,7 @@ class AdmissionsController < ApplicationController
   # GET /admissions/screening
   def screening
     authorize :admissions
+    render layout: 'application'
   end
 
   # POST /admissions/screening

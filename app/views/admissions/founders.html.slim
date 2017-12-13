@@ -4,58 +4,48 @@
 
 .secondary-banner
   .container
-    .application-stages-head.text-xs-center
+    .application-stages-head.text-center
       h1 Update Founder Details
 
 .container
-  .m-b-2
-    - if @fee_paid
-      .row
-        .m-t-2
-          .col-xl-6.offset-xl-3.col-lg-8.offset-lg-2.col-md-10.offset-md-1
-            .card
-              .card-block
-                h3.card-title <strong>You have already paid for your current team!</strong>
+  - if @fee_paid
+    .row.justify-content-md-center.mt-4
+      .col.col-md-7
+        .content-box.p-4.text-center
+          h3.text-center <strong>You have already paid for your current team!</strong>
 
-                p.card-text
-                  ' Your team has already completed first month&rsquo;s payment for
-                  | #{current_startup.billing_founders_count} founders.
-                p.card-text.m-t-1
-                  |  If you want to alter your team, please contact us as #{mail_to 'help@sv.co'}
-                hr
-                  = link_to dashboard_founder_path, class: 'btn btn-info text-uppercase', 'aria-hidden' => 'true' do
-                    i.fa.fa-chevron-left
-                    | &nbsp;&nbsp;Return to dashboard
-    - else
-      .row
-        .m-t-2
-          .col-xl-6.offset-xl-3.col-lg-8.offset-lg-2.col-md-10.offset-md-1
-            - team_lead = @form.model.team_lead
-
-            .card
-              .card-block
-                - if team_lead == current_founder
-                  h3.card-title <strong>You</strong> are the team lead.
-                - else
-                  h3.card-title Your team lead is <strong>#{team_lead.name}</strong>.
-
-                p.card-text The team lead acts as SV.CO's single point of contact during the admissions process, and beyond.
-
-                - if team_lead == current_founder
-                  p.card-text.m-t-1 Any other team member can assume the role of team lead. If you want some else to accept this role, instruct them to sign in and visit this page.
-                - else
-                  p.card-text.m-t-1 You can assume the role of team lead for this startup.
-                  = button_to 'Become the team lead', admissions_team_lead_path, class: 'btn btn-primary m-t-1 text-uppercase', data: { confirm: 'Are you sure?', disable_with: 'Assuming role...' }
-
-      .row
-        .col-xl-6.offset-xl-3.col-lg-8.offset-lg-2.col-md-10.offset-md-1
-          .text-xs-center.m-b-1.m-t-2
-            h3.m-b-2 Founders in your team
-
-          = react_component('FoundersForm', { authenticityToken: form_authenticity_token, founders: @form.founders_for_react, errors: @form.errors, collegesUrl: colleges_url, collegeNames: @form.college_names })
-
+          p
+            ' Your team has already completed first month&rsquo;s payment for
+            | #{current_startup.billing_founders_count} founders.
+          p
+            |  If you want to alter your team, please contact us as #{mail_to 'help@sv.co'}
           hr
+            = link_to dashboard_founder_path, class: 'mt-3 btn btn-md btn-secondary btn-with-icon', 'aria-hidden' => 'true' do
+              i.fa.fa-arrow-left
+              | Return to dashboard
+  - else
+    .row.justify-content-md-center.mt-4
+      .col.col-md-7
+        - team_lead = @form.model.team_lead
 
-          = link_to dashboard_founder_path, class: 'btn btn-info text-uppercase', 'aria-hidden' => 'true' do
-            i.fa.fa-chevron-left
-            | &nbsp;&nbsp;Return to dashboard
+        .content-box.p-4.text-center
+          - if team_lead == current_founder
+            h3.font-semibold.text-center You are the team lead.
+          - else
+            h3.font-semibold.text-center Your team lead is <strong>#{team_lead.name}</strong>.
+
+          p The team lead acts as SV.CO's single point of contact during the admissions process, and beyond.
+
+          - if team_lead == current_founder
+            p Any other team member can assume the role of team lead. If you want some else to accept this role, instruct them to sign in and visit this page.
+          - else
+            p You can assume the role of team lead for this startup.
+            = button_to 'Become the team lead', admissions_team_lead_path, class: 'btn btn-md btn-primary mt-3 text-uppercase', data: { confirm: 'Are you sure?', disable_with: 'Assuming role...' }
+
+    .row.justify-content-md-center
+      .col.col-md-7
+        .text-center.mb-3.mt-4
+          h4.font-semibold.mb-2 Founders in your team
+
+        = react_component('FoundersForm', { authenticityToken: form_authenticity_token, founders: @form.founders_for_react, errors: @form.errors, collegesUrl: colleges_url, collegeNames: @form.college_names })
+

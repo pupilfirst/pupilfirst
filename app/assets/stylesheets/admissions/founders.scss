@@ -1,5 +1,16 @@
 .founders-form__add-founder-button {
-  color: white !important;
+  display: block;
+  width: 100%;
+  background-color: white;
+  border: 1px solid $gray-border;
+  @include border-radius(5px);
+  color: $brand-secondary;
+
+  &:hover,
+  :focus {
+    color: $light-secondary;
+    box-shadow: 0 2px 10px 0px rgba(0, 0, 0, 0.05);
+  }
 }
 
 .founders-form__founder-content-box {

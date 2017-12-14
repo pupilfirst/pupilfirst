@@ -29,7 +29,7 @@ const TimelineBuilderLinkForm = createReactClass({
     let titleError = false;
     let urlError = false;
 
-    if ($(".js-link-title").val().length == 0) {
+    if ($(".js-link-title").val().length === 0) {
       titleError = true;
     }
 
@@ -84,9 +84,29 @@ const TimelineBuilderLinkForm = createReactClass({
     this.setState({ hasUrlError: false });
   },
 
+  titleInputClasses: function() {
+    const classes = "form-control link-title js-link-title";
+
+    if (this.state.hasTitleError) {
+      return classes + " is-invalid";
+    }
+
+    return classes;
+  },
+
+  urlInputClasses: function() {
+    const classes = "form-control link-url js-link-url";
+
+    if (this.state.hasUrlError) {
+      return classes + " is-invalid";
+    }
+
+    return classes;
+  },
+
   render: function() {
     return (
-      <form className="timeline-builder__attachment-form">
+      <form className="timeline-builder__attachment-form" noValidate={true}>
         <div className={this.titleFormGroupClasses()}>
           <label
             className="sr-only"
@@ -94,31 +114,31 @@ const TimelineBuilderLinkForm = createReactClass({
           >
             Link Title
           </label>
+
           <input
             id="timeline-builder__link-title-input"
-            className="form-control link-title js-link-title"
+            className={this.titleInputClasses()}
             type="text"
             placeholder="Title"
             onFocus={this.clearTitleError}
           />
-          {this.state.hasTitleError && (
-            <div className="form-control-feedback">Enter a valid title!</div>
-          )}
+
+          <div className="invalid-feedback">Enter a valid title!</div>
         </div>
         <div className={this.urlFormGroupClasses()}>
           <label className="sr-only" htmlFor="timeline-builder__link-url-input">
             URL
           </label>
+
           <input
             id="timeline-builder__link-url-input"
-            className="form-control link-url js-link-url"
+            className={this.urlInputClasses()}
             type="text"
             placeholder="URL"
             onFocus={this.clearUrlError}
           />
-          {this.state.hasUrlError && (
-            <div className="form-control-feedback">Enter a valid URL!</div>
-          )}
+
+          <div className="invalid-feedback">Enter a valid URL!</div>
           <small className="form-text text-muted">
             Please enter a full URL, starting with http(s).
           </small>

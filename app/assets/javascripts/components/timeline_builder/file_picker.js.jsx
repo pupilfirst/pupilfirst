@@ -56,12 +56,31 @@ class TimelineBuilderFilePicker extends React.Component {
     }
   }
 
+  fileInputClasses() {
+    const classes =
+      "form-control form-control-file timeline-builder__file-input js-hook";
+
+    if (this.props.fileMissingError || this.props.fileSizeError) {
+      return classes + " is-invalid";
+    }
+
+    return classes;
+  }
+
+  invalidFeedback() {
+    if (this.props.fileMissingError) {
+      return "Choose a valid file!";
+    } else {
+      return "Size cannot exceed 5MB!";
+    }
+  }
+
   render() {
     return (
       <div className={this.formGroupClassNames()}>
         <input
           type="file"
-          className="form-control-file timeline-builder__file-input js-hook"
+          className={this.fileInputClasses()}
           id="timeline-builder__file-input"
           onChange={this.handleChange}
         />
@@ -76,16 +95,8 @@ class TimelineBuilderFilePicker extends React.Component {
             </span>
           </div>
         </label>
-        {this.props.fileMissingError && (
-          <div className="form-control-feedback m-t-0">
-            Choose a valid file!
-          </div>
-        )}
-        {this.props.fileSizeError && (
-          <div className="form-control-feedback m-t-0">
-            Size cannot exceed 5MB!
-          </div>
-        )}
+
+        <div className="invalid-feedback">{this.invalidFeedback()}</div>
       </div>
     );
   }

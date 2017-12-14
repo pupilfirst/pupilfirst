@@ -124,6 +124,16 @@ const TimelineBuilderFileForm = createReactClass({
     this.setState({ titleError: false });
   },
 
+  titleInputClasses: function() {
+    const classes = "form-control file-title js-file-title";
+
+    if (this.state.titleError) {
+      return classes + " is-invalid";
+    }
+
+    return classes;
+  },
+
   render: function() {
     return (
       <form className="timeline-builder__attachment-form">
@@ -136,14 +146,13 @@ const TimelineBuilderFileForm = createReactClass({
           </label>
           <input
             id="timeline-builder__file-title-input"
-            className="form-control file-title js-file-title"
+            className={this.titleInputClasses()}
             type="text"
             placeholder="Title"
             onFocus={this.clearTitleError}
           />
-          {this.state.titleError && (
-            <div className="form-control-feedback">Enter a valid title!</div>
-          )}
+
+          <div className="invalid-feedback">Enter a valid title!</div>
         </div>
         <TimelineBuilderFilePicker
           key={this.state.identifier}

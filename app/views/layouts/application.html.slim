@@ -20,7 +20,7 @@ html lang='en'
 
     link rel="icon" href=image_url('layouts/shared/favicon.png')
 
-  body
+  body data-env=Rails.env
     - if Rails.env.production?
       noscript
         iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N2LS39W" height="0" width="0" style="display:none;visibility:hidden"

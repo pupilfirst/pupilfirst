@@ -44,6 +44,9 @@
 //= require typedjs
 //= require jquery.counterup
 
+// Environment specific
+//= require test
+
 // Shared
 //= require _shared
 //= require navbar

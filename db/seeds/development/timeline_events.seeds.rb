@@ -19,9 +19,10 @@ after 'development:startups', 'development:target_groups', 'development:targets'
     [avengers_startup, 'team_formed', 'ironman@example.org', 'We formed our team to fight the evil!', status_pending]
   ]
 
-  # Add a 'new_product_deck' for avengers which needs improvement
+  # Add a 'new_product_deck' for avengers which needs improvement, and a pending 'improved' event.
   events_list += [
-    [avengers_startup, 'new_product_deck', 'ironman@example.org', 'We have a new presentation about us!', status_needs_improvement]
+    [avengers_startup, 'new_product_deck', 'ironman@example.org', 'We have a presentation about us!', status_needs_improvement],
+    [avengers_startup, 'new_product_deck', 'ironman@example.org', 'We an improved presentation. This time as an attachment!', status_pending]
   ]
 
   # create all events in the events_list
@@ -36,6 +37,18 @@ after 'development:startups', 'development:target_groups', 'development:targets'
       status_updated_at: (status == status_verified ? Time.now : nil)
     )
   end
+
+  # Mark new product deck event as improvement of old one.
+  old_event = avengers_startup.timeline_events.find_by(
+    timeline_event_type: TimelineEventType.find_by(key: 'new_product_deck'),
+    status: status_needs_improvement
+  )
+
+  avengers_startup.timeline_events.find_by(
+    timeline_event_type: TimelineEventType.find_by(key: 'new_product_deck'),
+    status: status_pending
+  ).update!(improvement_of: old_event)
+
 
   # Complete all Level 1 and Level 2 targets for 'Avengers' startup on their first iteration.
   [1, 2].each do |level_number|

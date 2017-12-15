@@ -4,9 +4,11 @@ const TimelineBuilderTimelineEventOption = createReactClass({
     timelineEvent: PropTypes.object
   },
 
-  render: function () {
+  render: function() {
     return (
-      <option value={this.props.timelineEventId}>{this.props.timelineEvent.title}</option>
-    )
+      <option value={this.props.timelineEventId}>
+        {this.props.timelineEvent.title}
+      </option>
+    );
   }
 });

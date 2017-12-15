@@ -1,7 +1,7 @@
 .founder-dashboard-header__container
   .container
-    .founder-dashboard-header__startup-profile.clearfix
-      .m-x-auto.founder-dashboard-header__startup-logo-container.hidden-xs-down
+    .founder-dashboard-header__startup-profile
+      .mx-auto.founder-dashboard-header__startup-logo-container.d-none.d-md-block
         - if @startup.logo.present?
           = image_tag "#{@startup.logo_url}", class: 'founder-dashboard-header__startup-logo'
         - else
@@ -10,18 +10,18 @@
         h3.founder-dashboard-header__product-title.font-semibold
           | #{@startup.product_name}
         - if @startup.name.present?
-        .founder-dashboard__avatars.hidden-xs-down
-          .hidden-xs-down
+        .founder-dashboard__avatars.d-none.d-md-block
+          .d-none.d-md-block
             - @startup.founders.not_exited.each do |founder|
               - url = policy(founder).founder_profile? ? founder_profile_path(founder.slug) : '#'
               a.founder-dashboard__avatar-wrapper href=url
                 = avatar(founder.name, founder: founder)
-          .hidden-sm-up
+          .d-sm-none.d-block
             - if @startup.founders.count > 4
               - @startup.founders.order(:id).limit(3).each do |founder|
                 .founder-dashboard__avatar-wrapper
                   = avatar(founder.name, founder: founder, version: :thumb)
-              .founder-avatar-bubble.text-xs-center.remaining-founders
+              .founder-avatar-bubble.text-center.remaining-founders
                 span.remaining-founders-count
                   | +#{@startup.founders.count - 3}
             - else

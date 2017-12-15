@@ -11,7 +11,7 @@ class TargetOverlayHeaderTitle extends React.Component {
     } else {
       return (
         <div
-          className="target-overlay-header__info-subtext target-overlay-header__karma-points font-regular hidden-sm-down">
+          className="target-overlay-header__info-subtext target-overlay-header__karma-points font-regular d-none d-md-inline-block">
           Karma Points:
           <span className="target-overlay-header__info-value">
           { this.props.target.points_earnable }

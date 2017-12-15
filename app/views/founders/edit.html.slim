@@ -64,7 +64,7 @@ title SV.CO Edit Profile for #{@founder.fullname}
               .connected-account-profile
                 .connected-account-profile__link
                   = link_to @founder.fb_basic_info[:link] do
-                    = image_tag @founder.fb_basic_info[:picture_url], size: 35, class: 'img-circle connected-account-profile__avatar'
+                    = image_tag @founder.fb_basic_info[:picture_url], size: 35, class: 'rounded-circle connected-account-profile__avatar'
                     ' #{@founder.fb_basic_info[:name]}
                 = link_to 'Disconnect', founder_facebook_disconnect_path, method: :post, class: 'btn btn-primary btn-md connected-account-profile__disconnect-btn'
       - else

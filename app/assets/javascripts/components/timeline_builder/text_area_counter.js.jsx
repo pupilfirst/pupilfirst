@@ -4,7 +4,7 @@ class TimelineBuilderTextAreaCounter extends React.Component {
   }
 
   counterClasses() {
-    let classes = 'timeline-builder-social-bar__textarea-counter';
+    let classes = "timeline-builder-social-bar__textarea-counter";
 
     if (this.textCount() == 500) {
       classes += " timeline-builder-social-bar__textarea-counter--danger";
@@ -17,7 +17,7 @@ class TimelineBuilderTextAreaCounter extends React.Component {
 
   textCount() {
     let text = this.props.description.trim();
-    return (text ? this.byteCount(text) : 0);
+    return text ? this.byteCount(text) : 0;
   }
 
   byteCount(string) {
@@ -25,20 +25,16 @@ class TimelineBuilderTextAreaCounter extends React.Component {
   }
 
   counterText() {
-    if (this.textCount() == 0) {
-      return '';
-    } else {
-      let text = this.textCount() + "/500";
-      return text;
-    }
+    let text = this.textCount() + "/500";
+    return text;
   }
 
   render() {
-    return(
-      <div className="timeline-builder-social-bar__textarea-counter-container pull-xs-right">
-        { this.counterText() != '' &&
-        <div className={ this.counterClasses() }>{ this.counterText() }</div>
-        }
+    return (
+      <div className="timeline-builder-social-bar__textarea-counter-container pull-left">
+        {this.counterText() != "" && (
+          <div className={this.counterClasses()}>{this.counterText()}</div>
+        )}
       </div>
     );
   }

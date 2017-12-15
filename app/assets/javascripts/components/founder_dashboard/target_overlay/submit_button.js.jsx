@@ -22,7 +22,7 @@ class TargetOverlaySubmitButton extends React.Component {
 
   render() {
     return (
-      <div className="pull-xs-right">
+      <div className="pull-right">
         { this.props.target.link_to_complete &&
           <a href={ this.props.target.link_to_complete }
                   className="btn btn-with-icon btn-md btn-secondary text-uppercase btn-timeline-builder js-founder-dashboard__trigger-builder js-founder-dashboard__action-bar-add-event-button">

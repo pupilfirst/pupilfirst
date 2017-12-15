@@ -9,7 +9,6 @@
 
 // XDAN's datetimepicker
 @import "datetimepicker";
-
 @import "video-js";
 
 // Rails Assets.
@@ -19,31 +18,31 @@
 @import "slick-carousel/slick-theme.scss";
 @import "perfect-scrollbar";
 
-// Local.
+// Common
 @import "shared";
 @import "fonts";
 @import "navbar";
 @import "footer";
 
-// Controller-specific
-@import 'home';
-@import 'startups';
-@import 'about';
-@import 'admissions';
-@import 'founders';
-@import 'talent';
-@import 'tour';
-@import 'resources';
-@import 'faculty';
-@import 'story';
-@import 'changelog';
-@import 'tech_hunt';
-@import 'product_metrics';
-@import 'users';
-
 // Select2
 @import "select2";
 @import "select2-bootstrap";
+
+// Controller-specific
+@import "home";
+@import "startups";
+@import "about";
+@import "admissions";
+@import "founders";
+@import "talent";
+@import "tour";
+@import "resources";
+@import "faculty";
+@import "story";
+@import "changelog";
+@import "tech_hunt";
+@import "product_metrics";
+@import "users";
 
 // Customizations
 @import "customizations";

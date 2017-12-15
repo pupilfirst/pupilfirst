@@ -1,7 +1,7 @@
 class FounderDashboardRestartWarning extends React.Component {
   render() {
     return (
-      <div className="founder-dashboard_restart-warning-container p-x-1 m-x-auto">
+      <div className="founder-dashboard_restart-warning-container px-3 mx-auto">
         <div className="alert alert-warning">
           <span>
             <i className="fa fa-exclamation-triangle" aria-hidden="true"></i>

@@ -1,6 +1,6 @@
 class TargetOverlayStatusBadgeBar extends React.Component {
   containerClasses() {
-    let classes = "target-overlay-status-badge-bar__badge-container tag tag-pill";
+    let classes = "target-overlay-status-badge-bar__badge-container";
     let statusClass = this.props.target.status.replace('_', '-');
     classes += (' ' + statusClass);
     return classes;

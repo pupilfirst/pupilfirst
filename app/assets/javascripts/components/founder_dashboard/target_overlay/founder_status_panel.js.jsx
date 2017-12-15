@@ -31,7 +31,7 @@ class TargetOverlayFounderStatusPanel extends React.Component {
 
   render() {
     return (
-      <div className="founder-dashboard__avatars">
+      <div className="founder-dashboard__avatars ml-2">
         { this.state.founderStatuses.map(function(founderStatus){
           let id = Object.keys(founderStatus)[0];
           let status = founderStatus[id];

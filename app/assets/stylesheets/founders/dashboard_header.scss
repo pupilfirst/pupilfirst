@@ -1,0 +1,120 @@
+.founder-dashboard-header__container {
+  width: 100%;
+  min-height: 280px;
+  padding: 30px 0;
+  box-shadow: inset  0  10px 10px -10px rgba(0,0,0,0.3), inset  0 -10px 10px -10px rgba(0,0,0,0.3);
+  background: asset-url("founders/dashboard/header-background.svg"), linear-gradient(45deg, rgba(10, 165, 227, 1) 0%, rgba(15, 167, 212, 1) 40%, rgba(50, 180, 117, 1) 100%) repeat-x center bottom;
+  background-size: cover;
+
+  @include media-breakpoint-down(sm) {
+    min-height: auto;
+    padding: 30px 0 45px 0;
+  }
+}
+
+.founder-dashboard-header__startup-logo-container {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  @include border-radius(20%);
+  padding: 1rem;
+  box-shadow: 0px 1px 8px 0px lighten($gray-dark, 20%);
+
+  @include media-breakpoint-down(sm) {
+    // float: left;
+  }
+}
+
+.founder-dashboard-header__startup-logo {
+  width: 100%;
+}
+
+.founder-dashboard-header__product-details {
+  text-align: center;
+
+  @include media-breakpoint-down(sm) {
+    text-align: left;
+    margin-left: 20px;
+  }
+  @include media-breakpoint-down(xs) {
+    margin-left: 0;
+  }
+}
+
+.founder-dashboard-header__product-title {
+  padding-top: 12px;
+  margin-bottom: 5px;
+  color: white;
+  letter-spacing: 0.03rem;
+  text-shadow: 0px 1px 3px lighten($gray-dark, 10%);
+
+  @include media-breakpoint-down(sm) {
+    padding-top: 5px;
+    font-size: 1.25rem;
+    margin-bottom: 3px;
+    max-width: 160px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.startup-founders {
+  .founder-avatar-bubble {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    vertical-align: middle;
+    margin: 20px 6px 0 6px;
+    background-color: white;
+    border: 2px solid white;
+    box-shadow: 0 0 5px 0 lighten($gray-dark, 20%);
+    @include border-radius(50%);
+
+    img {
+      width: 38px;
+      flex-shrink: 0;
+    }
+    &:first-child {
+      margin: 20px 6px 0 0;
+    }
+    &:last-child {
+      margin: 20px 0 0 6px;
+    }
+    @include media-breakpoint-down(sm) {
+      margin: 10px -5px 0 -5px;
+
+      &:first-child, &:last-child {
+        margin: 10px 0 0 0;
+      }
+    }
+  }
+  .remaining-founders {
+    vertical-align: middle;
+    font-size: 1.125rem;
+    font-weight: $font-semibold;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .remaining-founders-count {
+    color: $brand-secondary;
+  }
+  .target-complete-check {
+    position: absolute;
+    top: -4px;
+    left: -6px;
+    background-color: white;
+    height: 18px;
+    width: 18px;
+    font-size: 17px;
+    line-height: 18px;
+    text-align: center;
+  }
+}

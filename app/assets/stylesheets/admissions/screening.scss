@@ -4,7 +4,8 @@
   margin-bottom: 10px;
   letter-spacing: 0.2rem;
 
-  &:before, &:after {
+  &:before,
+  &:after {
     content: "";
     position: absolute;
     background-color: $gray-border;
@@ -80,13 +81,13 @@
   width: 50%;
   display: inline-flex;
   position: relative;
-  transition: all .2s;
+  transition: all 0.2s;
 }
 
 .applicant-screening__cover {
   width: 100%;
   padding: 3rem;
-  transition: all .2s;
+  transition: all 0.2s;
   pointer-events: none;
   text-align: center;
   display: flex;
@@ -96,20 +97,21 @@
     padding: 1rem;
   }
 
-  &:hover, &:focus {
-    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.10);
+  &:hover,
+  &:focus {
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1);
 
     .applicant-screening-choice {
       color: $brand-secondary;
     }
     .applicant-screening__icon {
-      box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.10);
+      box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1);
     }
   }
 }
 
 .applicant-screening-choice {
-  transition: all .2s;
+  transition: all 0.2s;
   margin: auto;
   margin-bottom: 1rem;
 
@@ -141,6 +143,9 @@
 
     .applicant-screening-choice {
       color: white;
+    }
+    @include media-breakpoint-down(sm) {
+      box-shadow: inset 0px -10px 10px -10px $dark-secondary;
     }
   }
 
@@ -185,6 +190,9 @@
 
     .applicant-screening-choice {
       color: white;
+    }
+    @include media-breakpoint-down(sm) {
+      box-shadow: inset 0px -10px 10px -10px $dark-secondary;
     }
   }
 
@@ -262,10 +270,10 @@
   width: 140px;
   height: 140px;
   border: 1px dashed $light-secondary;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.10);
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
   overflow: hidden;
   position: relative;
-  transition: all .2s;
+  transition: all 0.2s;
   margin: auto;
   margin-bottom: 1rem;
 
@@ -276,13 +284,14 @@
 }
 
 .applicant-screening__icon-img {
-   width: 140px;
+  width: 140px;
 }
 .applicant-screening__quiz {
   padding: 1.875rem;
   display: none;
   width: 100%;
-  background: white asset-url('admissions/screening/quiz-background.svg') no-repeat bottom center;
+  background: white asset-url("admissions/screening/quiz-background.svg")
+    no-repeat bottom center;
 }
 
 .applicant-screening__question-section {
@@ -351,7 +360,8 @@
   display: inline-block;
 }
 
-.applicant-screening__answer-option-label + .applicant-screening__answer-option-label {
+.applicant-screening__answer-option-label
+  + .applicant-screening__answer-option-label {
   margin-left: 2rem;
 }
 
@@ -368,7 +378,6 @@
 }
 
 .applicant-screening__answer-option-input {
-
   &:checked {
     ~ .applicant-screening__answer-option-indicator {
       background-color: $brand-primary;

@@ -6,19 +6,19 @@ class TimelineBuilderTextArea extends React.Component {
 
   componentDidUpdate() {
     if (this.props.error !== null) {
-      let popover = $('.js-timeline-builder__textarea').popover({
+      let popover = $(".js-timeline-builder__textarea").popover({
         title: this.errorTitle(),
         content: this.errorDescription()
       });
 
-      popover.popover('show');
+      popover.popover("show");
     } else {
-      $('.js-timeline-builder__textarea').popover('hide');
+      $(".js-timeline-builder__textarea").popover("hide");
     }
   }
 
   componentWillUpdate() {
-    $('.js-timeline-builder__textarea').popover('dispose');
+    $(".js-timeline-builder__textarea").popover("dispose");
   }
 
   resetErrors() {
@@ -27,7 +27,7 @@ class TimelineBuilderTextArea extends React.Component {
 
   placeholder() {
     if (this.props.placeholder == null) {
-      return 'What’s been happening?';
+      return "What’s been happening?";
     } else {
       return this.props.placeholder;
     }
@@ -35,28 +35,36 @@ class TimelineBuilderTextArea extends React.Component {
 
   errorTitle() {
     switch (this.props.error) {
-      case 'description_missing':
-        return 'Description Missing!';
-      case 'description_too_long':
-        return 'Description is too long!';
+      case "description_missing":
+        return "Description Missing!";
+      case "description_too_long":
+        return "Description is too long!";
     }
   }
 
   errorDescription() {
     switch (this.props.error) {
-      case 'description_missing':
-        return 'Please add a summary describing the event.';
-      case 'description_too_long':
-        return 'Please restrict description to under 500 characters.';
+      case "description_missing":
+        return "Please add a summary describing the event.";
+      case "description_too_long":
+        return "Please restrict description to under 500 characters.";
     }
   }
 
   render() {
     return (
-      <textarea className="form-control js-timeline-builder__textarea timeline-builder__textarea" rows="4"
-        data-toggle="popover" placeholder={ this.placeholder() } data-placement="bottom" data-trigger="manual"
-        onFocus={ this.resetErrors } onChange={ this.props.textChangeCB } maxLength="500"/>
-    )
+      <textarea
+        className="form-control js-timeline-builder__textarea timeline-builder__textarea"
+        rows="4"
+        data-toggle="popover"
+        placeholder={this.placeholder()}
+        data-placement="bottom"
+        data-trigger="manual"
+        onFocus={this.resetErrors}
+        onChange={this.props.textChangeCB}
+        maxLength="500"
+      />
+    );
   }
 }
 

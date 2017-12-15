@@ -7,32 +7,35 @@ class TimelineBuilderSubmitButton extends React.Component {
 
   submitLabel() {
     switch (this.submissionState()) {
-      case 'pending':
-        return 'Submit';
-      case 'ongoing':
+      case "pending":
+        return "Submit";
+      case "ongoing":
         return this.props.submissionProgress + "%";
-      case 'processing':
-        return 'Wait';
-      case 'done':
-        return 'Done';
-      case 'error':
-        return 'Error';
+      case "processing":
+        return "Wait";
+      case "done":
+        return "Done";
+      case "error":
+        return "Error";
       default:
-        return '';
+        return "";
     }
   }
 
   submissionState() {
     if (this.props.submissionSuccessful) {
-      return 'done';
-    } else if (this.props.submissionError === '5XX' || this.props.submissionError === 'other') {
-      return 'error';
+      return "done";
+    } else if (
+      this.props.submissionError === "5XX" ||
+      this.props.submissionError === "other"
+    ) {
+      return "error";
     } else if (this.props.submissionProgress == 100) {
-      return 'processing';
+      return "processing";
     } else if (this.props.submissionProgress != null) {
-      return 'ongoing';
+      return "ongoing";
     } else {
-      return 'pending';
+      return "pending";
     }
   }
 
@@ -40,34 +43,38 @@ class TimelineBuilderSubmitButton extends React.Component {
     event.preventDefault();
 
     if (this.props.submissionProgress == null) {
-      this.props.submitCB()
+      this.props.submitCB();
     }
   }
 
   submitDisabled() {
-    return this.submissionState() != 'pending';
+    return this.submissionState() != "pending";
   }
 
   buttonClasses() {
-    let classes = "btn btn-with-icon text-uppercase js-timeline-builder__submit-button";
+    let classes =
+      "btn btn-with-icon text-uppercase js-timeline-builder__submit-button";
 
-    if (_.isString(this.props.submissionError) && this.props.submissionError !== 'offline') {
-      return classes + ' btn-danger';
+    if (
+      _.isString(this.props.submissionError) &&
+      this.props.submissionError !== "offline"
+    ) {
+      return classes + " btn-danger";
     } else {
-      return classes + ' btn-primary';
+      return classes + " btn-primary";
     }
   }
 
   iconClasses() {
     switch (this.submissionState()) {
-      case 'ongoing':
-        return 'fa fa-cog fa-spin';
-      case 'processing':
-        return 'fa fa-circle-o-notch fa-spin';
-      case 'done':
-        return 'fa fa-check';
-      case 'error':
-        return 'fa fa-exclamation-triangle';
+      case "ongoing":
+        return "fa fa-cog fa-spin";
+      case "processing":
+        return "fa fa-circle-o-notch fa-spin";
+      case "done":
+        return "fa fa-check";
+      case "error":
+        return "fa fa-exclamation-triangle";
       default:
         return null;
     }
@@ -75,18 +82,18 @@ class TimelineBuilderSubmitButton extends React.Component {
 
   errorContent() {
     switch (this.props.submissionError) {
-      case '5XX':
+      case "5XX":
         return "Oops! Something went wrong. The SV.CO team has been notified of this error. Please reload the page and try again, or contact us on Slack to speed us up!";
-      case 'offline':
+      case "offline":
         return "You are not connected to the internet. Please check your internet connection and try again.";
       default:
-        return "An unexpected error has occurred. Please refresh your page and try again. If this persists, please reach out to the SV.CO team for help."
+        return "An unexpected error has occurred. Please refresh your page and try again. If this persists, please reach out to the SV.CO team for help.";
     }
   }
 
   errorTitle() {
     switch (this.props.submissionError) {
-      case 'offline':
+      case "offline":
         return "You're Offline";
       default:
         return "Unexpected Error";
@@ -96,17 +103,21 @@ class TimelineBuilderSubmitButton extends React.Component {
   render() {
     return (
       <div className="timeline-builder__submit-container timeline-builder__select-section-tab">
-        <button type="submit" disabled={this.submitDisabled()} className={this.buttonClasses()}
-          onClick={this.handleSubmit} data-title={this.errorTitle()}
+        <button
+          type="submit"
+          disabled={this.submitDisabled()}
+          className={this.buttonClasses()}
+          onClick={this.handleSubmit}
+          data-title={this.errorTitle()}
           data-content={this.errorContent()}
-          data-placement="bottom" data-trigger="manual">
-          {this.iconClasses() &&
-          <i className={this.iconClasses()}/>
-          }
+          data-placement="bottom"
+          data-trigger="manual"
+        >
+          {this.iconClasses() && <i className={this.iconClasses()} />}
           {this.submitLabel()}
         </button>
       </div>
-    )
+    );
   }
 }
 
@@ -114,5 +125,5 @@ TimelineBuilderSubmitButton.propTypes = {
   submissionProgress: PropTypes.number,
   submitCB: PropTypes.func,
   submissionError: PropTypes.string,
-  submissionSuccessful: PropTypes.bool,
+  submissionSuccessful: PropTypes.bool
 };

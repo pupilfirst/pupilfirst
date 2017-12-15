@@ -1,8 +1,6 @@
 class AdmissionsController < ApplicationController
   before_action :skip_container, only: %i[join register founders founders_submit]
 
-  layout 'application_v2'
-
   # GET /join
   def join
     @form = Founders::RegistrationForm.new(Founder.new)
@@ -38,6 +36,7 @@ class AdmissionsController < ApplicationController
   # GET /admissions/screening
   def screening
     authorize :admissions
+    render layout: 'application'
   end
 
   # POST /admissions/screening

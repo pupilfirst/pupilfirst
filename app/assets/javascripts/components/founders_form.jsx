@@ -18,7 +18,7 @@ class FoundersForm extends React.Component {
   }
 
   generateKey(index) {
-    return '' + (new Date).getTime() + index;
+    return "" + new Date().getTime() + index;
   }
 
   addFounder() {
@@ -58,7 +58,10 @@ class FoundersForm extends React.Component {
     updatedFounders.splice(index, 1);
     updatedFounderKeys.splice(index, 1);
 
-    this.setState({founders: updatedFounders, founderKeys: updatedFounderKeys});
+    this.setState({
+      founders: updatedFounders,
+      founderKeys: updatedFounderKeys
+    });
   }
 
   allowDelete() {
@@ -70,7 +73,7 @@ class FoundersForm extends React.Component {
   }
 
   addFounderAllowed() {
-    return this.state.founders.length < 4
+    return this.state.founders.length < 4;
   }
 
   hasErrors() {
@@ -78,11 +81,11 @@ class FoundersForm extends React.Component {
   }
 
   hasBaseErrors() {
-    return this.baseErrorMessages().length > 0
+    return this.baseErrorMessages().length > 0;
   }
 
   baseErrorMessages() {
-    if (typeof(this.props.errors.base) === 'undefined') {
+    if (typeof this.props.errors.base === "undefined") {
       return [];
     } else {
       return this.props.errors.base;
@@ -92,54 +95,91 @@ class FoundersForm extends React.Component {
   render() {
     return (
       <div>
-        { this.hasErrors() &&
-        <div className="alert alert-warning alert-dismissable fade in" role='alert'>
-          <strong>There were problems with your submission. Please check all fields and try again.</strong>
+        {this.hasErrors() && (
+          <div
+            className="alert alert-warning alert-dismissable fade show"
+            role="alert"
+          >
+            <strong>
+              There were problems with your submission. Please check all fields
+              and try again.
+            </strong>
 
-          { this.hasBaseErrors() &&
-          <ul className="m-t-1">
-            {this.baseErrorMessages().map(function (baseErrorMessage,index) {
-              return <li key={"error-"+ index }>{ baseErrorMessage }</li>;
-            })}
-          </ul>
-          }
-        </div>
-        }
+            {this.hasBaseErrors() && (
+              <ul className="mt-2">
+                {this.baseErrorMessages().map(function(
+                  baseErrorMessage,
+                  index
+                ) {
+                  return <li key={"error-" + index}>{baseErrorMessage}</li>;
+                })}
+              </ul>
+            )}
+          </div>
+        )}
 
-        <form className="simple_form form-horizontal" acceptCharset="UTF-8" method="post">
-          <input name="utf8" type="hidden" value="✓"/>
-          <input type="hidden" name="authenticity_token" value={ this.props.authenticityToken }/>
+        <form
+          className="simple_form form-horizontal"
+          acceptCharset="UTF-8"
+          method="post"
+        >
+          <input name="utf8" type="hidden" value="✓" />
+          <input
+            type="hidden"
+            name="authenticity_token"
+            value={this.props.authenticityToken}
+          />
 
           <div className="founders-list">
-            {this.state.founders.map(function (founder, index) {
+            {this.state.founders.map(function(founder, index) {
               return (
-                <FoundersFormFounderDetails founder={ founder } key={ this.founderKey(index) } index={ index }
-                  generatedKey={ this.founderKey(index) } collegesUrl={ this.props.collegesUrl }
-                  collegeName={ this.collegeName(founder) } deleteCB={ this.deleteFounderCB }
-                  allowDelete={ this.allowDelete() }/>
+                <FoundersFormFounderDetails
+                  founder={founder}
+                  key={this.founderKey(index)}
+                  index={index}
+                  generatedKey={this.founderKey(index)}
+                  collegesUrl={this.props.collegesUrl}
+                  collegeName={this.collegeName(founder)}
+                  deleteCB={this.deleteFounderCB}
+                  allowDelete={this.allowDelete()}
+                />
               );
             }, this)}
           </div>
 
-          <div className="clearfix">
-            { this.addFounderAllowed() &&
-            <div className="pull-sm-left m-b-1">
-              <a className="btn btn-secondary btn-md founders-form__add-founder-button text-uppercase"
-                onClick={ this.addFounder }>
-                <i className="fa fa-plus" aria-hidden="true"/>&nbsp;&nbsp;Add founder
-              </a>
-            </div>
-            }
-
-            <div className="pull-sm-right m-b-1">
-              <button type="submit" className="btn btn-primary btn-md text-uppercase">
-                <i className="fa fa-floppy-o" aria-hidden="true"/>&nbsp;&nbsp;Save founders
-              </button>
-            </div>
+          <div>
+            {this.addFounderAllowed() && (
+              <div className="mb-2">
+                <button
+                  className="btn founders-form__add-founder-button text-uppercase p-3"
+                  onClick={this.addFounder}
+                >
+                  <i className="fa fa-plus" aria-hidden="true" />&nbsp;&nbsp;Add
+                  founder
+                </button>
+              </div>
+            )}
+          </div>
+          <div className="d-flex align-items-center justify-content-between my-3">
+            <a
+              className="btn-with-icon"
+              href="/founder/dashboard"
+              aria-hidden="true"
+            >
+              <i className="fa fa-arrow-left" aria-hidden="true" />Return to
+              dashboard
+            </a>
+            <button
+              type="submit"
+              className="btn btn-primary btn-md text-uppercase"
+            >
+              <i className="fa fa-floppy-o" aria-hidden="true" />&nbsp;&nbsp;Save
+              founders
+            </button>
           </div>
         </form>
       </div>
-    )
+    );
   }
 }
 

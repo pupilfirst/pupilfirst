@@ -5,7 +5,7 @@ class FounderDashboardTargetHeader extends React.Component {
   }
 
   targetType() {
-    return <span className="founder-dashboard-target-header__type-tag hidden-sm-down">
+    return <span className="founder-dashboard-target-header__type-tag">
       { this.props.target.target_type_description }:
       </span>;
   }
@@ -16,7 +16,7 @@ class FounderDashboardTargetHeader extends React.Component {
     } else {
       return (
         <div
-          className="founder-dashboard-target-header__info-subtext founder-dashboard-target-header__karma-points font-regular hidden-sm-down">
+          className="founder-dashboard-target-header__info-subtext founder-dashboard-target-header__karma-points font-regular d-none d-md-inline-block">
           Karma Points:
           <span className="founder-dashboard-target-header__info-value">
           { this.props.target.points_earnable }

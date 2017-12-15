@@ -26,7 +26,6 @@
 //= require select2-full
 //= require google_tag_manager
 //= require youtube
-//= require founders
 //= require limit_max_int
 //= require inspectlet
 //= require video
@@ -45,6 +44,9 @@
 //= require typedjs
 //= require jquery.counterup
 
+// Environment specific
+//= require test
+
 // Shared
 //= require _shared
 //= require navbar
@@ -60,6 +62,7 @@
 //= require talent
 //= require admissions
 //= require faculty
+//= require founders
 //= require story
 //= require resources
 //= require users

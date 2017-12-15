@@ -12,15 +12,15 @@ class ApplicantScreening extends React.Component {
   }
 
   generateKey() {
-    return '' + (new Date).getTime();
+    return "" + new Date().getTime();
   }
 
   containerClasses() {
-    let classes = "content-box applicant-screening m-b-3";
+    let classes = "content-box applicant-screening mb-4";
 
-    if (this.state.selectedSide == 'right') {
+    if (this.state.selectedSide == "right") {
       classes += " applicant-screening--mobile-column-reverse";
-    } else if (this.state.selectedSide == 'left') {
+    } else if (this.state.selectedSide == "left") {
       classes += " applicant-screening--mobile-column";
     }
 
@@ -28,26 +28,38 @@ class ApplicantScreening extends React.Component {
   }
 
   selectSectionCB(type) {
-    if (type === 'coder') {
-      this.setState({selectedSide: 'left'});
-    } else if (type === 'non-coder') {
-      this.setState({selectedSide: 'right'});
+    if (type === "coder") {
+      this.setState({ selectedSide: "left" });
+    } else if (type === "non-coder") {
+      this.setState({ selectedSide: "right" });
     }
   }
 
   resetCB() {
-    this.setState({selectedSide: null, baseKey: this.generateKey()});
+    this.setState({ selectedSide: null, baseKey: this.generateKey() });
   }
 
   render() {
     return (
-      <div className={ this.containerClasses() }>
-        <ApplicantScreeningSection key={ "section-left-" + this.state.baseKey } side="left"
-          selectSectionCB={ this.selectSectionCB } resetCB={ this.resetCB } selectedSide={ this.state.selectedSide }
-          iconPath={ this.props.coderIconPath } formAuthenticityToken={ this.props.formAuthenticityToken }/>
-        <ApplicantScreeningSection key={ "section-right-" + this.state.baseKey } side="right"
-          selectSectionCB={ this.selectSectionCB } resetCB={ this.resetCB } selectedSide={ this.state.selectedSide }
-          iconPath={ this.props.nonCoderIconPath } formAuthenticityToken={ this.props.formAuthenticityToken }/>
+      <div className={this.containerClasses()}>
+        <ApplicantScreeningSection
+          key={"section-left-" + this.state.baseKey}
+          side="left"
+          selectSectionCB={this.selectSectionCB}
+          resetCB={this.resetCB}
+          selectedSide={this.state.selectedSide}
+          iconPath={this.props.coderIconPath}
+          formAuthenticityToken={this.props.formAuthenticityToken}
+        />
+        <ApplicantScreeningSection
+          key={"section-right-" + this.state.baseKey}
+          side="right"
+          selectSectionCB={this.selectSectionCB}
+          resetCB={this.resetCB}
+          selectedSide={this.state.selectedSide}
+          iconPath={this.props.nonCoderIconPath}
+          formAuthenticityToken={this.props.formAuthenticityToken}
+        />
       </div>
     );
   }

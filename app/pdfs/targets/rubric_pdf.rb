@@ -23,7 +23,7 @@ module Targets
         (0..row_length - 1).each do |row_index|
           grade = cells[row_index, column_length - 1].content
           graded_column = { 'Good' => 1, 'Great' => 2, 'Wow' => 3 }[grade]
-          cells[row_index, graded_column].background_color = 'FFDDA2'
+          cells[row_index, graded_column].background_color = 'FFDDA2' if graded_column.present?
         end
       end
 

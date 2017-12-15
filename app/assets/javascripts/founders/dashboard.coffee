@@ -10,18 +10,6 @@ resetTimelineBuilderAndShow = ->
   # ...and show the modal.
   $('.timeline-builder').modal(backdrop: 'static')
 
-setPerformancePointer = ->
-  if $('.performance-pointer').length
-    value = $('.performance-pointer').data('value') - 5
-    $('.performance-pointer')[0].style.left = value + '%'
-    color = switch
-      when value == 5 then 'red'
-      when value == 25 then 'orange'
-      when value == 45 then 'goldenrod'
-      when value == 65 then 'yellowgreen'
-      else 'green'
-    $('.performance-pointer')[0].style.color = color
-
 takeTourOnClick = ->
   $('#filter-targets-dropdown__tour-button').on('click', startTour)
 
@@ -82,6 +70,5 @@ launcherVisible = ->
 $(document).on 'turbolinks:load', ->
   if $('#founder-dashboard').length
     giveATour()
-    setPerformancePointer()
     takeTourOnClick()
     setIntercomVisibility()

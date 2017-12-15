@@ -16,32 +16,6 @@ class StartupDecorator < Draper::Decorator
     ((completed_targets_count.to_f / targets_count) * 100).to_i
   end
 
-  def leaderboard_rank
-    performance_service.leaderboard_rank(model) || '?'
-  end
-
-  def last_week_karma
-    performance_service.last_week_karma(model)
-  end
-
-  def relative_performance
-    performance_service.relative_performance(model)
-  end
-
-  def performance_label
-    case relative_performance
-      when 10 then 'Below Average'
-      when 30 then 'Average'
-      when 50 then 'Good'
-      when 70 then 'Great'
-      when 90 then 'Wow'
-    end
-  end
-
-  def performance_service
-    @performance_service ||= Startups::PerformanceService.new
-  end
-
   def founders_profiles_complete?
     founders.all?(&:profile_complete?)
   end

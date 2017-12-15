@@ -272,19 +272,6 @@
   box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.6);
 }
 
-.performance-overview-link {
-  display: inline-block;
-  cursor: pointer;
-  letter-spacing: 0.04rem;
-  border: 1px solid $gray-border;
-
-  @include media-breakpoint-down(sm) {
-    width: auto;
-    font-size: 0.625rem;
-    padding: 12px;
-  }
-}
-
 .btn-timeline-builder {
   display: inline-block;
   box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);

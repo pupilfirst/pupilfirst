@@ -614,8 +614,6 @@ GEM
       rails_serve_static_assets
       rails_stdout_logging
     rails_serve_static_assets (0.0.5)
-    rails_server_timings (1.0.7)
-      railties (>= 3.0.0)
     rails_stdout_logging (0.0.5)
     railties (5.1.4)
       actionpack (= 5.1.4)
@@ -916,7 +914,6 @@ DEPENDENCIES
   rails-assets-typedjs (~> 2.0)!
   rails-assets-waypoints (~> 4.0)!
   rails_12factor (~> 0.0)
-  rails_server_timings (~> 1.0)
   react-rails (~> 2.2)
   recaptcha (~> 4.6)
   reform (~> 2.2)

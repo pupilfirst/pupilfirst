@@ -152,6 +152,10 @@ class Target < ApplicationRecord
     status(founder) == Targets::StatusService::STATUS_PENDING
   end
 
+  def verified?(founder)
+    status(founder) == Targets::StatusService::STATUS_COMPLETE
+  end
+
   def stats_service
     @stats_service ||= Targets::StatsService.new(self)
   end
@@ -204,5 +208,13 @@ class Target < ApplicationRecord
 
   def latest_feedback(founder)
     latest_linked_event(founder)&.startup_feedback&.order('created_at')&.last
+  end
+
+  def grades_for_skills(founder)
+    return unless verified?(founder)
+    return if latest_linked_event(founder).timeline_event_grades.blank?
+    latest_linked_event(founder).timeline_event_grades.each_with_object({}) do |te_grade, grades|
+      grades[te_grade.skill_id] = te_grade.grade
+    end
   end
 end

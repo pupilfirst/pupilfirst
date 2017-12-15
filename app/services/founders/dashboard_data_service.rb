@@ -21,7 +21,7 @@ module Founders
       applicable_levels = startup.level.number.zero? ? 0 : (1..startup.maximum_level.number).to_a
 
       @sessions ||= begin
-        targets = Target.includes(:faculty, :level, :taggings)
+        targets = Target.includes(:faculty, :level, :taggings, :skills)
           .where.not(session_at: nil).where(archived: false)
           .where(levels: { number: applicable_levels }).order(session_at: :desc)
           .as_json(

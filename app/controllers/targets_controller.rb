@@ -4,8 +4,9 @@ class TargetsController < ApplicationController
     authorize :target
     target = Target.find(params[:id])
 
-    if target.skills.exists?
-      pdf = Targets::RubricPdf.new(target).build
+    if target.skills.present?
+      grades = target.grades_for_skills(current_founder)
+      pdf = Targets::RubricPdf.new(target, grades: grades).build
       send_data pdf.render, type: 'application/pdf', filename: 'target_rubric.pdf', disposition: 'inline'
     else
       redirect_to target.rubric_url

@@ -102,7 +102,6 @@ gem 'koala', '~> 2.2' # Library for Facebook with support for OAuth authenticati
 gem 'pretender', '~> 0.2' # Log in as another user in Rails
 gem 'file_validators', '~> 2.1' # Adds file validators to ActiveModel.
 gem 'diffy', '~> 3.2' # Easy Diffing in Ruby.
-gem 'rails_server_timings', '~> 1.0' # Server Timing headers for Rails apps. https://github.com/dpogue/rails_server_timings
 gem 'pundit', '~> 1.1' # Minimal authorization through OO design and pure Ruby classes.
 gem 'rack-cors', '~> 1.0', require: 'rack/cors' # Rack Middleware for handling CORS, required to serve static assets such as fonts
 gem 'recaptcha', '~> 4.6', require: 'recaptcha/rails'

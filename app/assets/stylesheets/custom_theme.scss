@@ -102,7 +102,7 @@ p {
   color: white;
   cursor: pointer;
   -webkit-font-smoothing: antialiased;
-  font-weight: $font-semibold;
+  font-weight: $font-bold;
   font-size: $btn-text-size;
   letter-spacing: 0.02rem;
   white-space: normal;
@@ -323,7 +323,6 @@ form {
       font-size: 0.875rem;
       padding: 0.5rem 0.75rem;
       line-height: normal;
-      border-color: $gray-border;
 
       &:focus {
         border-color: lighten($light-secondary, 20%);

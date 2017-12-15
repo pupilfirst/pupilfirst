@@ -35,8 +35,8 @@ class FounderDashboardActionBar extends React.Component {
 
   render() {
     return (
-      <div className="founder-dashboard-actionbar__container p-x-1 m-x-auto">
-        <div className="founder-dashboard-actionbar__box clearfix">
+      <div className="founder-dashboard-actionbar__container px-2 mx-auto">
+        <div className="founder-dashboard-actionbar__box d-flex justify-content-between">
           {this.props.filter === 'targets' &&
           <FounderDashboardTargetsFilter levels={this.props.filterData.levels} pickFilterCB={this.props.pickFilterCB}
             chosenLevel={this.props.filterData.chosenLevel} currentLevel={this.props.currentLevel}/>
@@ -47,10 +47,10 @@ class FounderDashboardActionBar extends React.Component {
             chooseTagsCB={this.props.pickFilterCB}/>
           }
 
-          <div className="pull-xs-right">
+          <div className="d-flex">
             <button onClick={this.openTimelineBuilder}
-              className="btn btn-with-icon btn-md btn-secondary text-uppercase btn-timeline-builder js-founder-dashboard__trigger-builder hidden-sm-down m-r-1 js-founder-dashboard__action-bar-add-event-button">
-              <i className="fa fa-plus" aria-hidden="true"/>
+              className="btn btn-with-icon btn-md btn-secondary text-uppercase btn-timeline-builder js-founder-dashboard__trigger-builder d-none d-md-block mr-2 js-founder-dashboard__action-bar-add-event-button">
+              <i className="fa fa-plus-circle" aria-hidden="true"/>
               <span>Add Event</span>
             </button>
 

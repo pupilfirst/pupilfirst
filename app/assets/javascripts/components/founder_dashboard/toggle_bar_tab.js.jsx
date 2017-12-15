@@ -26,7 +26,7 @@ class FounderDashboardToggleBarTab extends React.Component {
     return (
       <label className={ this.labelClasses() } onClick={ this.handleClick }>
         { this.props.pendingCount > 0 &&
-        <span className="badge badge-pill badge-primary founder-dashboard-togglebar__toggle-btn-notify">
+        <span className="founder-dashboard-togglebar__toggle-btn-notify">
           { this.props.pendingCount }
         </span>
         }

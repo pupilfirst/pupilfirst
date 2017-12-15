@@ -14,26 +14,26 @@
           .stats-section
             svg viewbox=("0 0 32 32")
               circle.circle-primary cx="16" cy="16" r="16" style=("stroke-dasharray: #{@startup.week_percentage} #{100 - @startup.week_percentage};")
-            .status-chart-data.img-circle.text-xs-center
+            .status-chart-data.rounded-circle.text-center
               p
                 | Week
-              h5.brand-primary.font-regular.m-b-0
+              h5.brand-primary.font-regular.mb-0
                 |  #{@startup.present_week_number || '0'}
           .stats-section
             svg viewbox=("0 0 32 32")
               circle.circle-secondary cx="16" cy="16" r="16" style=("stroke-dasharray: #{@startup.completed_targets_percentage} #{100 - @startup.completed_targets_percentage};")
-            .status-chart-data.img-circle.text-xs-center
+            .status-chart-data.rounded-circle.text-center
               p
                 | Tasks
-              h5.brand-secondary.font-regular.m-b-0
+              h5.brand-secondary.font-regular.mb-0
                 | #{@startup.completed_targets_count}/#{Target.count}
-          .stats-section.leaderboard-rank-section.text-xs-center
+          .stats-section.leaderboard-rank-section.text-center
             | Leaderboard Rank
             .leaderboard-rank.font-semibold.alert-text
               | #{@startup.leaderboard_rank}
             p
               | Last Week Karma : #{@startup.last_week_karma}
-        .performance-meter.text-xs-center
+        .performance-meter.text-center
           .performance-bar
             .performance-pointer.text-uppercase.font-semibold data-value=@startup.relative_performance
               | #{@startup.performance_label}

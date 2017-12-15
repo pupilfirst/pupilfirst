@@ -71,7 +71,7 @@ class FounderDashboardTargetOverlay extends React.Component {
     }
 
     return (
-      <h5 className="target-overlay__faculty-name m-a-0">
+      <h5 className="target-overlay__faculty-name m-0">
         <span className="target-overlay__faculty-name-headline">
           {faculty_target_relation}
         </span>
@@ -92,11 +92,11 @@ class FounderDashboardTargetOverlay extends React.Component {
   render() {
     return (
       <div className="target-overlay__overlay">
-        <div className="target-overlay__container m-x-auto">
+        <div className="target-overlay__container mx-auto">
           <div className="target-overlay__body clearfix">
             <button
               type="button"
-              className="target-overlay__overlay-close hidden-sm-down"
+              className="target-overlay__overlay-close d-none d-md-flex"
               aria-label="Close"
               onClick={this.props.closeCB}
             >
@@ -111,7 +111,7 @@ class FounderDashboardTargetOverlay extends React.Component {
                 iconPaths={this.props.iconPaths}
                 target={this.props.target}
               />
-              <div className="hidden-sm-down">
+              <div className="d-none d-md-block">
                 {this.isSubmittable() && (
                   <TargetOverlaySubmitButton
                     target={this.props.target}
@@ -133,7 +133,7 @@ class FounderDashboardTargetOverlay extends React.Component {
               </div>
               <div className="col-md-4 target-overlay__content-rightbar">
                 <div className="target-overlay__faculty-box">
-                  <span className="target-overlay__faculty-avatar m-r-1">
+                  <span className="target-overlay__faculty-avatar mr-2">
                     <img
                       className="img-fluid"
                       src={this.props.target.faculty.image_url}
@@ -149,7 +149,7 @@ class FounderDashboardTargetOverlay extends React.Component {
                 )}
 
                 {this.props.target.role === "founder" && (
-                  <div className="m-t-1">
+                  <div className="mt-2">
                     <h5 className="target-overaly__status-title font-semibold">
                       Completion Status:
                     </h5>
@@ -163,10 +163,10 @@ class FounderDashboardTargetOverlay extends React.Component {
             </div>
           </div>
         </div>
-        <div className="target-overlay__mobile-fixed-navbar hidden-md-up clearfix">
+        <div className="target-overlay__mobile-fixed-navbar d-block d-md-none">
           <button
             type="button"
-            className="target-overlay__mobile-back-button pull-xs-left"
+            className="target-overlay__mobile-back-button pull-left"
             aria-label="Close"
             onClick={this.props.closeCB}
           >
@@ -178,7 +178,7 @@ class FounderDashboardTargetOverlay extends React.Component {
               Back
             </span>
           </button>
-          <div className="target-overlay__mobile-submit-button-container pull-xs-right p-r-1">
+          <div className="target-overlay__mobile-submit-button-container pull-right pr-3">
             {this.isSubmittable() && (
               <TargetOverlaySubmitButton
                 target={this.props.target}

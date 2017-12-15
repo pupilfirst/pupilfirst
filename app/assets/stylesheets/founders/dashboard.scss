@@ -1,6 +1,5 @@
 .founder-dashboard-container {
-  background-color: #F5F5F5;
-  // position: relative;
+  background-color: #f5f5f5;
 }
 
 .founder-dashboard-togglebar__container {
@@ -35,7 +34,7 @@
   padding: 1rem 1.875rem;
   width: 120px;
 
-  @include media-breakpoint-down(xs) {
+  @include media-breakpoint-down(sm) {
     width: 75px;
     font-size: 0.75rem;
     padding: 1rem 0.5rem;
@@ -94,6 +93,7 @@
     width: 48px;
     height: 48px;
     padding: 0;
+    font-size: 1rem;
     @include border-radius(50%);
     border: 1px solid white;
   }
@@ -110,7 +110,7 @@
   background-repeat: no-repeat;
   background-size: cover;
   border: 1px solid $gray-border;
-  box-shadow: 0px 10px 30px 0px lighten($gray-light, 35%);
+  box-shadow: 0px 10px 30px 0px rgba(0, 0, 0, 0.2);
   @include border-radius(20px);
   margin: 0 0 40px 0;
   list-style: none;
@@ -123,7 +123,7 @@
 }
 
 .btn-founder-dashboard-level-up {
-  box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.06);
 }
 
 .founder-dashboard-actionbar__container {
@@ -135,7 +135,7 @@
   background-color: white;
   border: 1px solid $gray-border;
   padding: 20px 30px;
-  box-shadow: 0px 2px 10px 0px lighten($gray-light, 35%);
+  box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.06);
   @include border-radius(10px);
   margin-bottom: 0.5rem;
 
@@ -152,7 +152,6 @@
 .founder-dashboard-sessions__tag-select-container {
   display: inline-block;
   width: 320px;
-  @include border-radius(30px);
 
   @include media-breakpoint-down(sm) {
     width: 240px;
@@ -162,7 +161,6 @@
   .select2-selection--multiple {
     margin: 0;
     height: 42px;
-    @include border-radius(30px);
     border-color: $gray-border;
     background-color: $primary-background;
 
@@ -170,36 +168,25 @@
       margin-left: 4px;
       margin-right: 4px;
       font-size: 0.75rem;
-      padding: 2px 6px;
+      padding: 2px 10px;
       background-color: lighten($light-primary, 45%);
       border: 1px solid $light-primary;
       letter-spacing: 0.02rem;
-      @include border-radius(30px);
+
+      .select2-selection__choice__remove {
+        margin-right: 5px;
+      }
     }
 
     .select2-selection__rendered {
       display: block;
       position: relative;
       overflow: hidden;
+      width: 100%;
 
       > li {
         display: inline-block;
         float: none;
-      }
-    }
-  }
-
-  .select2-container--open {
-    &.select2-container--below {
-      .select2-selection--multiple {
-        @include border-radius(20px 20px 0 0);
-      }
-    }
-  }
-  .select2-container--open {
-    &.select2-container--above {
-      .select2-selection--multiple {
-        @include border-radius(0 0 20px 20px);
       }
     }
   }
@@ -234,16 +221,19 @@
     content: none;
   }
 
-  &:active, &:focus, &:hover {
+  &:active,
+  &:focus,
+  &:hover {
     outline: 0;
 
     .founder-dashboard-actionbar__show-more-menu-dots {
       background-color: $brand-secondary;
-      transition: all .2s;
+      transition: all 0.2s;
 
-      &:before, &:after {
+      &:before,
+      &:after {
         background-color: $brand-secondary;
-        transition: all .2s;
+        transition: all 0.2s;
       }
     }
   }
@@ -257,10 +247,11 @@
   margin-left: 10px;
   padding: 3px;
 
-  &:before, &:after {
+  &:before,
+  &:after {
     position: absolute;
     top: 0;
-    content: '';
+    content: "";
     background-color: darken($gray-border, 5%);
     border-radius: 5px;
     border: 0;
@@ -278,7 +269,7 @@
 .fixed-dashboard-header {
   background-color: white;
   border-bottom: 1px solid $gray-border;
-  box-shadow: 0px 2px 10px 0px lighten($gray-light, 35%);
+  box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.6);
 }
 
 .performance-overview-link {
@@ -306,18 +297,26 @@
 
 .filter-targets-dropdown__button {
   background-color: white;
-  border: 1px solid $gray-border;
+  border: 1px solid darken($gray-border, 5%);
+  @include border-radius(5px);
   min-width: 200px;
-  color: $brand-secondary;
+  line-height: 1;
+  color: $dark-secondary;
 
   &:after {
     content: none;
   }
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     color: $brand-secondary;
     background-color: white;
-    box-shadow: 0 0 10px 0 lighten($gray-light, 40%);
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.05);
+  }
+  &:active {
+    &:focus {
+      color: $light-secondary;
+    }
   }
   @include media-breakpoint-down(sm) {
     min-width: auto;
@@ -326,7 +325,7 @@
 }
 
 .filter-targets-dropdown {
-  &.open {
+  &.show {
     .filter-targets-dropdown__button {
       border-radius: 0;
     }
@@ -335,9 +334,9 @@
 
 .filter-targets-dropdown__menu {
   padding: 0;
-  box-shadow: 0 2px 10px 0 lighten($gray-light, 40%);
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.05);
 
-  @include media-breakpoint-down(xs) {
+  @include media-breakpoint-down(sm) {
     width: auto;
   }
 }
@@ -345,9 +344,14 @@
 .filter-targets-dropdown__menu-item {
   padding: 8px 20px 8px 24px;
   font-size: 0.875rem;
+  cursor: pointer;
 
-  &:hover {
+  &:hover,
+  &:focus,
+  &:active {
     color: $brand-secondary;
+    background-color: $primary-background;
+    box-shadow: inset 0 0 10px 0 rgba(0, 0, 0, 0.05);
   }
 }
 
@@ -372,13 +376,12 @@
 
   &:before {
     font-size: 1rem;
-    line-height: 0.5;
     @include fa-icon(angle-down);
   }
 }
 
 .filter-targets-dropdown__selection {
-  @include media-breakpoint-down(xs) {
+  @include media-breakpoint-down(sm) {
     width: 170px;
     display: block;
     overflow: hidden;
@@ -471,7 +474,7 @@
   position: relative;
 
   &:not(:last-child):before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     bottom: -80px;
@@ -493,7 +496,7 @@
 .founder-dashboard-target-group__box {
   background-color: white;
   border: 1px solid $gray-border;
-  box-shadow: 0px 2px 10px 0px lighten($gray-light, 35%);
+  box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.06);
   @include border-radius(10px);
   margin: 0 0 40px 0;
   padding: 0;
@@ -503,17 +506,13 @@
 
 .founder-dashboard-target-group__milestone-label {
   position: relative;
-  top: -6px;
+  top: 0;
   display: inline-block;
   padding: 5px 15px;
   color: white;
   letter-spacing: 0.03rem;
   @include border-radius(0 0 10px 10px);
   background-color: $alert-background;
-}
-
-.founder-dashboard-target-group__header {
-  padding: 6px 30px 30px;
 }
 
 .founder-dashboard-target-group__header-info {
@@ -526,7 +525,7 @@
   position: relative;
   background-color: white;
   overflow: hidden;
-  transition: box-shadow .2s;
+  transition: box-shadow 0.2s;
 
   &:last-child {
     @include border-radius(0 0 10px 10px);
@@ -538,7 +537,7 @@
   position: relative;
   padding: 30px;
   cursor: pointer;
-  transition: all .2s;
+  transition: all 0.2s;
 
   &:before {
     width: 8px;
@@ -550,7 +549,7 @@
     content: "\f105";
     font-size: 1rem;
     top: 39%;
-    transition: all .2s;
+    transition: all 0.2s;
   }
 
   @include media-breakpoint-down(md) {
@@ -565,7 +564,8 @@
     box-shadow: inset 0px 0px 20px 5px rgba(0, 0, 0, 0.05);
   }
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     background-color: $primary-background;
 
     &:before {
@@ -599,11 +599,11 @@
 }
 
 .founder-dashboard-target-header__headline {
-  font-weight: $font-regular;
+  font-weight: $font-semibold;
   margin: 0;
   font-size: 1rem;
   letter-spacing: 0.02rem;
-  transition: color .2s;
+  transition: color 0.2s;
   max-width: 460px;
   white-space: nowrap;
   overflow: hidden;
@@ -657,16 +657,16 @@
 }
 
 .founder-dashboard-target-status-badge__container {
-  float: right;
   padding: 5px 15px;
   font-size: 0.75rem;
+  font-weight: $font-regular;
   letter-spacing: 0.02rem;
 
   .founder-dashboard-target-header__status-badge-icon {
     margin-right: 5px;
   }
 
-  @include media-breakpoint-down(xs) {
+  @include media-breakpoint-down(sm) {
     font-size: 0.675rem;
     padding: 4px 8px;
   }
@@ -733,7 +733,8 @@
   position: relative;
   display: inline-block;
 
-  img, svg {
+  img,
+  svg {
     vertical-align: middle;
     display: inline-block;
     margin-right: 0.75rem;

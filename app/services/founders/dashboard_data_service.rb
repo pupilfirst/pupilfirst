@@ -90,8 +90,9 @@ module Founders
         target_data['submitted_at'] = target_status_service.submitted_at(target_data['id'])
       end
 
-      # add grade if completed
+      # add grade and score if completed
       target_data['grade'] = target_grade_service.grade(target_data['id']) if target_data['status'] == Target::STATUS_COMPLETE
+      target_data['score'] = target_grade_service.score(target_data['id']) if target_data['status'] == Target::STATUS_COMPLETE
 
       # add array of prerequisites
       target_data['prerequisites'] = target_status_service.prerequisite_targets(target_data['id'])

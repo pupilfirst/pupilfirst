@@ -8,6 +8,10 @@ module Founders
       grades[target_id][:grade]
     end
 
+    def score(target_id)
+      grades[target_id][:score]
+    end
+
     private
 
     def grades
@@ -22,11 +26,16 @@ module Founders
 
         (founder_events + startup_events).each_with_object({}) do |event, result|
           result[event.target_id] = {
-            grade: event.grade,
-            event_id: event.id
+            grade: score_to_grade(event.score),
+            event_id: event.id,
+            score: event.score
           }
         end
       end
+    end
+
+    def score_to_grade(score)
+      { 1 => 'good', 2 => 'great', 3 => 'wow' }[score.floor]
     end
   end
 end

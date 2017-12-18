@@ -110,14 +110,6 @@ feature 'Founder Dashboard' do
     end
     find('.founder-dashboard-actionbar__box').click
 
-    # Open the performance window.
-    find('.founder-dashboard-actionbar__show-more-menu-dots').click
-    find('a[data-target="#performance-overview-modal"]').click
-    expect(page).to have_selector('.startup-stats')
-    within('.performance-overview.modal') do
-      find('.modal-close').click
-    end
-
     # Open the timeline builder modal.
     click_button 'Add Event'
     expect(page).to have_selector('.timeline-builder__popup-body', visible: true)

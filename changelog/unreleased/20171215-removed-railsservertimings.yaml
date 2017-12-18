@@ -1,8 +1,0 @@
----
-timestamp: '2017-12-15T08:47:56Z'
-title: Removed rails_server_timings
-trello: https://trello.com/c/MzRLZOBX
-private: true
-description: This gem was the culprit behind the frequent illegal state errors caused
-  in dev environment. This started bleeding into test env as well.
-category: bugfix

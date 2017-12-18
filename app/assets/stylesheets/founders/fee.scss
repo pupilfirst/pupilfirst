@@ -13,7 +13,7 @@
 .discount-coupon__box {
   @include border-radius(10px);
   border: 1px dashed $brand-secondary;
-  transition: all .2s;
+  transition: all 0.2s;
   background-color: lighten($light-secondary, 50%);
 
   span.help-block {
@@ -75,10 +75,10 @@
       @include border-radius(0 5px 5px 0);
     }
   }
-
   @include media-breakpoint-down(sm) {
     width: 100%;
     margin-bottom: 1rem;
+    min-height: auto;
   }
 }
 .fee-offer_period {
@@ -87,7 +87,7 @@
 
   &:before {
     position: absolute;
-    content: '';
+    content: "";
     display: block;
     width: 50px;
     background-color: $gray-border;

@@ -30,6 +30,7 @@ class FounderDashboardTargetStatusBadge extends React.Component {
 
   statusContents() {
     let grade = ['good', 'great', 'wow'].indexOf(this.props.target.grade) + 1;
+    let score = parseFloat(this.props.target.score);
 
     if (this.props.target.status != 'complete' || grade === 0) {
       return <span>
@@ -42,21 +43,30 @@ class FounderDashboardTargetStatusBadge extends React.Component {
         </span>
       </span>;
     } else {
-      let filledStars = _.times(grade).map(function (e, i) {
+      let stars = _.times(Math.floor(score)).map(function (e, i) {
         return <i key={ "filled-star-" + this.props.target.id + "-" + i }
           className='fa fa-star founder-dashboard-target-header__status-badge-star'/>;
       }, this);
 
-      let emptyStars = _.times(3 - grade).map(function (e, i) {
+      if (score % 1 === 0.5) {
+        const halfStar = <i key={ "half-star-" + this.props.target.id }
+           className='fa fa-star-half-o founder-dashboard-target-header__status-badge-star'/>
+        stars = stars.concat([halfStar])
+      }
+
+      const emptyStars = _.times(3 - Math.ceil(score));
+
+      const emptyStarArray = emptyStars.map(function (e, i) {
         return <i key={ "empty-star-" + this.props.target.id + "-" + i }
-          className='fa fa-star-o founder-dashboard-target-header__status-badge-star'/>;
+                  className='fa fa-star-o founder-dashboard-target-header__status-badge-star'/>;
       }, this);
+
+      stars =  stars.concat(emptyStarArray);
 
       let gradeString = this.props.target.grade.charAt(0).toUpperCase() + this.props.target.grade.slice(1);
 
       return <span>
-        { filledStars }
-        { emptyStars }
+        { stars }
 
         <span>
           &nbsp;{ gradeString }!

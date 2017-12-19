@@ -1,9 +1,0 @@
----
-timestamp: '2017-12-11T10:56:27Z'
-title: Session details on the founder dashboard now uniformly shows the name of the person conducting the session,
-  instead of the assigner, as is the case for regular targets.
-trello: https://trello.com/c/NLfhHKeG
-private: true
-description: Renamed `Target#assigner` to `faculty` to match its dual use as assigner for
-  targets and the person who holds a session, and differentiated between targets and sessions on the target overlay.
-category: ui

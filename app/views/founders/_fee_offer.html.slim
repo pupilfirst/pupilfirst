@@ -1,17 +1,17 @@
 - presenter = Founders::FeeOfferPresenter.new(self, current_startup, period)
-.col-sm-4.content-box.text-xs-center.fee-offer__box class=(period == 6 ? 'fee-offer__recommended' : '')
+.col-sm-4.content-box.text-center.fee-offer__box class=(period == 6 ? 'fee-offer__recommended' : '')
   - if period == 6
     .fee-offer__recommended-notice
       | Recommended!
 
-  h5.font-semibold.text-uppercase.fee-offer_period.p-b-1.m-b-2 #{presenter.period_string}
+  h5.font-semibold.text-uppercase.fee-offer_period.pb-2.mb-3 #{presenter.period_string}
 
-  .m-y-2
+  .my-4
     .fee-offer__amount-highlight
       - if presenter.discount_applicable?
-        h5.font-semibold.m-b-0
+        h5.font-semibold.mb-0
           ' <del>&#8377;#{presenter.undiscounted_fee}</del>
-      h2.font-semibold.m-b-0
+      h2.font-semibold.mb-0
         span.font-regular &#8377;
         ' #{presenter.fee_payable}
       p
@@ -31,19 +31,20 @@
           h6.fee-offer__discount-title FULL PRICE
 
   = form_with url: fee_founder_path, method: :post, class: 'js-founder-fee__form' do |form|
-    .p-x-1
+    .px-4
       = hidden_field_tag 'fee[period]', period
 
       .js-founder-fee__pay-button
         = form.button class: "btn btn-md text-uppercase btn-with-icon #{(period == 6 ? 'btn-primary' : 'btn-ghost-primary')}" do
           | Pay for #{presenter.period_string}
 
-  .js-founder-fee__disabled-pay-button.hidden-xs-up
-    button class="btn btn-md text-uppercase btn-with-icon btn-disabled"
-      i.fa.fa-spinner.fa-pulse
-      | Please wait...
+  .js-founder-fee__disabled-pay-button.d-none
+    .px-4
+      button class="btn btn-primary btn-md text-uppercase btn-with-icon disabled"
+        i.fa.fa-spinner.fa-pulse
+        | Please wait...
 
-  .fee-offer__error.brand-danger.m-t-1.hidden-xs-up
+  .fee-offer__error.brand-danger.mt-2.d-none
     i.fa.fa-warning
     .font-semibold
       ' Something went wrong!

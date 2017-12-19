@@ -1,7 +1,0 @@
----
-timestamp: '2017-12-15T09:29:29Z'
-title: The performance _modal_ on the founder dashboard has been removed. An alternative
-  solution for dislaying program completion and current standing is in the works.
-trello: https://trello.com/c/tTyFfTnz
-private: false
-description: This removes the performance overview tab and all related code.

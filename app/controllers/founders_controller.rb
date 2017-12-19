@@ -3,7 +3,7 @@ class FoundersController < ApplicationController
   before_action :skip_container, only: %i[founder_profile fee fee_submit]
   before_action :require_active_subscription, only: %i[edit update]
 
-  layout 'application_v2', only: %i[fee fee_submit]
+  # layout 'application_v2', only: %i[fee fee_submit]
 
   # GET /founders/:slug
   #

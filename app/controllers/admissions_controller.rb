@@ -3,7 +3,12 @@ class AdmissionsController < ApplicationController
 
   # GET /join
   def join
-    @form = Founders::RegistrationForm.new(Founder.new)
+    @form = if Feature.active?(:admissions, current_user)
+      Founders::RegistrationForm.new(Founder.new)
+    else
+      ProspectiveApplicants::RegistrationForm.new(Founder.new)
+    end
+
     @form.prepopulate(current_user) if current_user.present?
     render layout: 'application'
   end

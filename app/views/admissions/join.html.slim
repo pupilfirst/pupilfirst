@@ -1,3 +1,5 @@
+- presenter = Admissions::JoinPresenter.new(self)
+
 - content_for :head do
   title SV.CO Join Now
   meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
@@ -23,7 +25,7 @@ section.apply-hero__banner
 
       .pt-3
         a#admissions-join__hero-start-link.btn.btn-primary.btn-lg.apply-call-to-action__button href="#join-form"
-          | Start Now
+          | #{presenter.link_to_form_text}
 
 section.apply-partners__container.mx-auto
   .container.apply-partners__box.text-center
@@ -173,7 +175,7 @@ section.school-of-saas__container.py-5
 
     .pt-4.text-center
       a#admissions-join__school-start-now-link.btn.btn-primary.btn-lg.apply-call-to-action__button href="#join-form"
-        | Start Now
+        | #{presenter.link_to_form_text}
 
 section.application-fee__container.py-5
   .container
@@ -213,9 +215,12 @@ section.application-fee__container.py-5
         h3.apply-section__head-title.apply-section__head-title--white.text-center.font-black
           .font-light
             ' Entrepreneurship is all about doing.
-          | Start Now
+          | #{presenter.link_to_form_text}
     .apply-form__box.mx-auto
-      == render 'application_form'
+      - if presenter.admit?
+        == render 'application_form'
+      - else
+        == render 'prospective_applicant_form'
   - else
     .container
       .apply-section__head

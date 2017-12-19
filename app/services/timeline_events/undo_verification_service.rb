@@ -86,7 +86,7 @@ module TimelineEvents
     end
 
     def remove_timeline_event_grades
-      @timeline_event.timeline_event_grades.destroy_all if @timeline_event.timeline_event_grades.present?
+      @timeline_event.timeline_event_grades.destroy_all
     end
   end
 end

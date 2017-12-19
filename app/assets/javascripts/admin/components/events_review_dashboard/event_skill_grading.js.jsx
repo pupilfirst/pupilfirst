@@ -15,7 +15,7 @@ class EventsReviewDashboardEventSkillGrading extends React.Component {
     this.alreadyReviewed = this.alreadyReviewed.bind(this);
     this.undoButtonClasses = this.undoButtonClasses.bind(this);
     this.undoButtonText = this.undoButtonText.bind(this);
-    this.enableSaveReviewButton = this.enableSaveReviewButton.bind(this);
+    this.saveReviewButtonIsEnabled = this.saveReviewButtonIsEnabled.bind(this);
     this.changeGrade = this.changeGrade.bind(this);
     this.updateReviewedFlag = this.updateReviewedFlag.bind(this);
   }
@@ -39,13 +39,9 @@ class EventsReviewDashboardEventSkillGrading extends React.Component {
     // https://facebook.github.io/react/docs/events.html#event-pooling
     event.persist();
 
-    // clear all error messages
-    this.setState({ gradingMissing: false });
-
     if (!this.state.grades) {
       this.setState({ gradingMissing: true });
     } else {
-      console.log("Saving Review...");
       this.setState({ gradingMissing: false });
       let eventId = this.props.eventId;
       let status = "verified";
@@ -57,7 +53,6 @@ class EventsReviewDashboardEventSkillGrading extends React.Component {
         url: postUrl,
         data: { status: status, skill_grades: grades },
         success: function() {
-          console.log("Event was successfully marked " + status);
           new PNotify({
             title: "Event Reviewed",
             text: "Event " + eventId + " marked " + status
@@ -89,8 +84,6 @@ class EventsReviewDashboardEventSkillGrading extends React.Component {
       return;
     }
 
-    console.log("Undoing the review...");
-
     const eventId = this.props.eventId;
     const undoUrl = "/admin/timeline_events/" + eventId + "/undo_review";
     const that = this;
@@ -99,8 +92,6 @@ class EventsReviewDashboardEventSkillGrading extends React.Component {
       $.post({
         url: undoUrl,
         success: function() {
-          console.log("Event was successfully undo-d");
-
           new PNotify({
             title: "Undo complete",
             text: "Event " + eventId + " marked pending."
@@ -142,7 +133,7 @@ class EventsReviewDashboardEventSkillGrading extends React.Component {
     return this.state.undoReviewInProgress ? "Undoing..." : "Undo";
   }
 
-  enableSaveReviewButton() {
+  saveReviewButtonIsEnabled() {
     // enable 'Save Review' button only when all skills are graded
     const savedGradesCount = Object.keys(this.state.grades).length;
     const rubricGradesCount = Object.keys(this.props.rubric).length;
@@ -214,7 +205,7 @@ class EventsReviewDashboardEventSkillGrading extends React.Component {
           </tbody>
         </table>
 
-        {this.enableSaveReviewButton() && (
+        {this.saveReviewButtonIsEnabled() && (
           <div>
             {!this.alreadyReviewed() && (
               <div>

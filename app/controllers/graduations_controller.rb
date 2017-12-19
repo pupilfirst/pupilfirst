@@ -1,6 +1,4 @@
 class GraduationsController < ApplicationController
-  layout 'application_v2'
-
   # GET /graduations/preselection
   def preselection
     @startup = current_startup.decorate

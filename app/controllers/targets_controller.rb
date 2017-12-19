@@ -1,8 +1,8 @@
 class TargetsController < ApplicationController
   # GET /targets/:id/download_rubric
   def download_rubric
-    authorize :target
     target = Target.find(params[:id])
+    authorize target
 
     if target.skills.present?
       grades = target.grades_for_skills(current_founder)
@@ -21,8 +21,9 @@ class TargetsController < ApplicationController
 
   # GET /targets/:id/prerequisite_targets
   def prerequisite_targets
-    authorize :target
     target = Target.find(params[:id])
+    authorize target
+
     prerequisite_targets = target.prerequisite_targets.each_with_object({}) do |p_target, hash|
       status = Targets::StatusService.new(p_target, current_founder).status
       next if status.in? [Target::STATUS_COMPLETE, Target::STATUS_NEEDS_IMPROVEMENT]
@@ -33,8 +34,9 @@ class TargetsController < ApplicationController
 
   # GET /targets/:id/startup_feedback
   def startup_feedback
-    authorize :target
     target = Target.find(params[:id])
+    authorize target
+
     latest_feedback = Targets::FeedbackService.new(target, current_founder).feedback_for_latest_event
 
     startup_feedback = latest_feedback.each_with_object({}) do |feedback, hash|
@@ -46,17 +48,17 @@ class TargetsController < ApplicationController
 
   # GET /targets/:id/founder_statuses
   def founder_statuses
-    authorize :target
-
     target = Target.find(params[:id])
+    authorize target
+
     render json: Targets::OverlayDetailsService.new(target, current_founder).founder_statuses
   end
 
   # GET /targets/:id/details
   def details
-    authorize :target
-
     target = Target.find(params[:id])
+    authorize target
+
     render json: Targets::OverlayDetailsService.new(target, current_founder).all_details
   end
 end

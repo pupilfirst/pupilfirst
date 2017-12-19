@@ -8,7 +8,7 @@ module TimelineEvents
 
     # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
     def update_status(status, grade: nil, skill_grades: nil, points: nil)
-      if status == TimelineEvent::STATUS_VERIFIED
+      if status == TimelineEvent::STATUS_VERIFIED && @target&.key.blank?
         raise 'Only one of grade, skill_grades, points should be present' unless [grade, skill_grades, points].one?
         raise 'Not a valid grade' if grade.present? && !grade.in?(TimelineEvent.valid_grades)
       end

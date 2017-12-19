@@ -125,7 +125,6 @@ describe TimelineEvents::VerificationService do
 
           timeline_event.reload
           expect(timeline_event.verified?).to eq(true)
-          expect(timeline_event.grade).to eq(TimelineEvent::GRADE_GREAT)
           expect(timeline_event.score).to eq(2.5)
           expect(timeline_event.karma_point.points).to eq(85)
         end

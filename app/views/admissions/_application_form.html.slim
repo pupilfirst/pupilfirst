@@ -4,8 +4,7 @@
 - unless Rails.env.test?
   script src='https://www.google.com/recaptcha/api.js' async defer
 
-= bootstrap_form_for(@form, url: join_path, label_col: 'col-sm-3', control_col: 'col-sm-9', html: { 'data-test': Rails.env.test? }) do |f|
-
+= bootstrap_form_for(@form, url: join_path, label_col: 'col-sm-3', control_col: 'col-sm-9') do |f|
   .application-start-form.content-box.mb-2
     - if f.object.errors.present?
       .alert.alert-warning.alert-dismissable.fade.show role='alert'
@@ -38,5 +37,5 @@
 
 
       div
-        div class='g-recaptcha' data-sitekey=Rails.application.secrets.dig(:google, :recaptcha, :invisible, :site_key) data-callback='handleFounderJoinButton' data-size='invisible' data-badge='inline'
+        div class='g-recaptcha' data-sitekey=Rails.application.secrets.dig(:google, :recaptcha, :invisible, :site_key) data-callback='handleJoinFormSubmitButton' data-size='invisible' data-badge='inline'
         = f.submit 'Join Now', class: 'btn btn-primary btn-md apply-form__submit-button'

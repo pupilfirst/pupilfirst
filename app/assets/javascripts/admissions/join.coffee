@@ -99,19 +99,27 @@ acceptEmailInputfromUser = (event) ->
   $('#founders_registration_ignore_email_hint').val('true')
   dismissHint(event)
 
+getRegistrationForm = ->
+  form = $('#new_founders_registration')
+
+  if form.length == 0
+    form = $('#new_prospective_applicants_registration')
+
+  form
+
 # Callback function for invisible recaptcha present in the registration form. This callback is called when the recaptcha
 # verification is completed successfully - so a flag is set using a data attribute to indicate this.
-window.handleFounderJoinButton = ->
-  registrationForm = $('#new_founders_registration')
+window.handleJoinFormSubmitButton = ->
+  registrationForm = getRegistrationForm()
   registrationForm.data('recaptchaComplete', 'true')
   registrationForm.submit()
 
 # Sets up the registration form to prevent submission if recaptcha verfication is incomplete, and trigger it manually.
-setupJoinFormHandler = ->
-  $('#new_founders_registration').submit (event) ->
-    registrationForm = $('#new_founders_registration')
+setupRegistrationFormHandler = ->
+  registrationForm = getRegistrationForm()
 
-    return if registrationForm.data('test')
+  registrationForm.submit (event) ->
+    return if $('body').data('env') == 'test'
 
     unless registrationForm.data('recaptchaComplete')
       event.preventDefault()
@@ -126,7 +134,7 @@ $(document).on 'turbolinks:load', ->
   if $('#admissions__join').length
     setupSelect2Inputs()
     setupPasswordHintButtons()
-    setupJoinFormHandler()
+    setupRegistrationFormHandler()
 
 $(document).on 'turbolinks:before-cache', ->
   if $('.admission-process').length

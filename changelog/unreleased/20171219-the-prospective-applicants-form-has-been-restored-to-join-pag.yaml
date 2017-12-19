@@ -1,0 +1,8 @@
+---
+timestamp: '2017-12-19T07:53:27Z'
+title: The prospective applicants form has been restored to join page now that admissions
+  has closed till next month.
+trello: https://trello.com/c/2n38GkyN
+description: This reuses the prospective applicants form from the previous design of
+  the `/apply` page, modifying it to fit the design and layout of the current `/join` page.
+private: true

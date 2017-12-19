@@ -8,7 +8,7 @@ module Targets
 
     # rubocop:disable Metrics/AbcSize
     def build
-      image Rails.root.join('app', 'assets', 'images', 'shared', 'logo-png.png'), width: 100, at: bounds.top_left
+      image Rails.root.join('app', 'assets', 'images', 'shared', 'logo-color.png'), width: 100, at: bounds.top_left
       move_down 55
 
       text "RUBRIC FOR TARGET: #{@target.title}", align: :left, style: :bold, size: 10

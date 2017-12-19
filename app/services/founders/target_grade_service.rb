@@ -35,6 +35,7 @@ module Founders
     end
 
     def score_to_grade(score)
+      return if score.blank?
       { 1 => 'good', 2 => 'great', 3 => 'wow' }[score.floor]
     end
   end

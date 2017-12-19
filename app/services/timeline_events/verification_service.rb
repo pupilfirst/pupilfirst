@@ -6,14 +6,16 @@ module TimelineEvents
       @target = @timeline_event.target
     end
 
-    # rubocop:disable Metrics/CyclomaticComplexity
+    # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
     def update_status(status, grade: nil, skill_grades: nil, points: nil)
-      raise UnexpectedGradeException unless grade.blank? || grade.in?(TimelineEvent.valid_grades)
+      if status == TimelineEvent::STATUS_VERIFIED
+        raise 'Only one of grade, skill_grades, points should be present' unless [grade, skill_grades, points].one?
+        raise 'Not a valid grade' if grade.present? && !grade.in?(TimelineEvent.valid_grades)
+      end
 
       @grade = grade
       @skill_grades = skill_grades
       @points = points
-      @timeline_event.update!(grade: @grade)
       @new_status = status
 
       case @new_status
@@ -34,7 +36,7 @@ module TimelineEvents
       [@timeline_event, points_for_new_status]
     end
 
-    # rubocop:enable Metrics/CyclomaticComplexity
+    # rubocop:enable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
 
     private
 
@@ -108,8 +110,9 @@ module TimelineEvents
       @points_for_target ||= begin
         if @skill_grades.present?
           total_karma_points
-        elsif @grade.present?
-          @target.points_earnable * grade_multiplier(@grade) || 0
+        elsif @grade.present? && @target.points_earnable.present?
+          @target.points_earnable * grade_multiplier(@grade)
+        else 0
         end
       end
     end
@@ -168,20 +171,17 @@ module TimelineEvents
     def update_grade_and_score
       if @skill_grades.present?
         @timeline_event.update!(score: computed_score)
-        # The overall grade for the timeline event will be the one that corresponds to the lower rounded off score.
-        @timeline_event.update!(grade: grade_to_score.key(computed_score.floor))
         store_skill_grades
       elsif @grade.present?
-        @timeline_event.update!(grade: @grade, score: grade_to_score[@grade].to_f)
+        @timeline_event.update!(score: grade_to_score(@grade).to_f)
       end
     end
 
     def computed_score
       pc_count = @skill_grades.count.to_f
-      total_points = 0
 
-      @skill_grades.values.each do |grade|
-        total_points += grade_to_score[grade]
+      total_points = @skill_grades.values.sum do |grade|
+        grade_to_score(grade)
       end
 
       score = (total_points / pc_count)
@@ -189,17 +189,24 @@ module TimelineEvents
       (score * 2).floor / 2.0
     end
 
-    def grade_to_score
-      { 'good' => 1, 'great' => 2, 'wow' => 3 }
+    def grade_to_score(grade)
+      case grade
+        when TimelineEvent::GRADE_GOOD
+          1
+        when TimelineEvent::GRADE_GREAT
+          2
+        when TimelineEvent::GRADE_WOW
+          3
+        else
+          raise 'Not a valid grade'
+      end
     end
 
     def total_karma_points
-      target_skills = TargetSkill.where(target: @target)
-      total_karma_points = 0
-      @total_karma_points = @skill_grades.each do |skill_id, grade|
-        total_karma_points += target_skills.find_by(skill_id: skill_id.to_i).base_karma_points * grade_multiplier(grade)
-      end
-      total_karma_points.round
+      TargetSkill.where(target: @target, skill_id: @skill_grades.keys).sum do |target_skill|
+        grade = @skill_grades[target_skill.skill_id.to_s]
+        target_skill.base_karma_points * grade_multiplier(grade)
+      end.round
     end
 
     def store_skill_grades

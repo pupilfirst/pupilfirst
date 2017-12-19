@@ -18,7 +18,7 @@ describe Founders::TargetGradeService do
       startup: startup,
       target: founder_target,
       status: TimelineEvent::STATUS_VERIFIED,
-      grade: TimelineEvent::GRADE_WOW
+      score: 3.0
   end
 
   let!(:co_founder_event) do
@@ -36,7 +36,9 @@ describe Founders::TargetGradeService do
   describe '#grade' do
     it 'returns the grade of the specified target' do
       expect(subject.grade(founder_target.id)).to eq(TimelineEvent::GRADE_WOW)
+      expect(subject.score(founder_target.id)).to eq(3.0)
       expect(subject.grade(startup_target.id)).to eq(nil)
+      expect(subject.score(startup_target.id)).to eq(nil)
     end
   end
 end

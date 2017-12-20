@@ -41,9 +41,6 @@ class TimelineEvent < ApplicationRecord
     [GRADE_GOOD, GRADE_GREAT, GRADE_WOW]
   end
 
-  normalize_attribute :grade
-
-  validates :grade, inclusion: { in: valid_grades }, allow_nil: true
   validates :status, inclusion: { in: valid_statuses }
   validates :event_on, presence: true
   validates :description, presence: true

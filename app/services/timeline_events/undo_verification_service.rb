@@ -72,7 +72,6 @@ module TimelineEvents
     def reset_timeline_event_status
       @timeline_event.status = TimelineEvent::STATUS_PENDING
       @timeline_event.status_updated_at = Time.zone.now
-      @timeline_event.grade = nil
       @timeline_event.score = nil
       @timeline_event.save!
     end

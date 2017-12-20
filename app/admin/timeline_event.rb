@@ -10,7 +10,6 @@ ActiveAdmin.register TimelineEvent do
   filter :timeline_event_type_role_eq, as: :select, collection: -> { TimelineEventType.valid_roles }, label: 'Role'
   filter :founder_name, as: :string
   filter :status, as: :select, collection: -> { TimelineEvent.valid_statuses }
-  filter :grade, as: :select, collection: -> { TimelineEvent.valid_grades }
   filter :created_at
   filter :status_updated_at
 
@@ -337,14 +336,12 @@ ActiveAdmin.register TimelineEvent do
       end
 
       row :karma_point
-
-      row(:grade) do
-        if timeline_event.grade.present?
-          t("models.timeline_event.grade.#{timeline_event.grade}")
+      row :score
+      row('Grade') do
+        if timeline_event.score.present?
+          { 1 => 'Good', 2 => 'Great', 3 => 'Wow' }[timeline_event.score.floor]
         end
       end
-
-      row :score
       row :improved_timeline_event
       row :created_at
       row :updated_at

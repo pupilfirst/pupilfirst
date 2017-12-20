@@ -53,7 +53,7 @@ after 'development:startups', 'development:target_groups', 'development:targets'
   # Complete all Level 1 and Level 2 targets for 'Avengers' startup on their first iteration.
   [1, 2].each do |level_number|
     Target.joins(target_group: :level).where(levels: { number: level_number }).each do |target|
-      grade = [TimelineEvent::GRADE_GOOD, TimelineEvent::GRADE_GREAT, TimelineEvent::GRADE_WOW].sample
+      score = [1.0, 1.5, 2.0, 2.5, 3.0].sample
 
       TimelineEvent.create!(
         startup: avengers_startup,
@@ -64,7 +64,7 @@ after 'development:startups', 'development:target_groups', 'development:targets'
         description: Faker::Lorem.paragraph,
         status: status_verified,
         status_updated_at: Time.now,
-        grade: grade
+        score: score
       )
     end
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171212074538) do
+ActiveRecord::Schema.define(version: 20171220071913) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -729,7 +729,6 @@ ActiveRecord::Schema.define(version: 20171212074538) do
     t.datetime "status_updated_at"
     t.integer "timeline_event_type_id"
     t.string "status"
-    t.string "grade"
     t.integer "founder_id"
     t.integer "improved_timeline_event_id"
     t.integer "target_id"

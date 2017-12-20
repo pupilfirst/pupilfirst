@@ -63,17 +63,21 @@ ActiveAdmin.register StartupFeedback do
 
     column :slack_feedback do |startup_feedback|
       if startup_feedback.for_founder?
-        link_to(
-          'DM Founder Now',
-          slack_feedback_admin_startup_feedback_path(startup_feedback, founder_id: startup_feedback.timeline_event.founder_id),
-          method: :post, data: { confirm: 'Are you sure you want to DM this feedback to the founder on slack?' }
-        )
+        span do
+          button_to(
+            'DM Founder Now',
+            slack_feedback_admin_startup_feedback_path(startup_feedback, founder_id: startup_feedback.timeline_event.founder_id),
+            method: :post, data: { confirm: 'Are you sure you want to DM this feedback to the founder on slack?' }
+          )
+        end
       else
-        link_to(
-          'DM on Slack Now',
-          slack_feedback_admin_startup_feedback_path(startup_feedback),
-          method: :post, data: { confirm: 'Are you sure you want to DM this feedback to all founders on slack?' }
-        )
+        span do
+          button_to(
+            'DM on Slack Now',
+            slack_feedback_admin_startup_feedback_path(startup_feedback),
+            method: :post, data: { confirm: 'Are you sure you want to DM this feedback to all founders on slack?' }
+          )
+        end
       end
     end
 

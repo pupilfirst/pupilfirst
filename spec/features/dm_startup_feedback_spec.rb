@@ -30,6 +30,9 @@ feature 'DM Startup Feedback' do
   end
 
   before :each do
+    # Stub the request to intercom - we don't care about this right now.
+    stub_request(:any, /api\.intercom\.io/)
+
     # Sign in as admin
     sign_in_user(admin.user)
 
@@ -49,7 +52,7 @@ feature 'DM Startup Feedback' do
     scenario 'Admin sends DM to all founders from the index page' do
       visit admin_startup_feedback_index_path
       expect(page).to have_text(startup_feedback.feedback)
-      click_on 'DM on Slack Now'
+      click_button 'DM on Slack Now'
 
       expect(founder_1_request).to have_been_made.once
       expect(founder_2_request).to have_been_made.once

@@ -1,7 +1,8 @@
-.error.text-xs-center
-  = image_tag 'errors/400.png', class: 'img-fluid m-x-auto'
-  .title
+.error.text-center
+  = image_tag 'errors/400.png', class: 'img-fluid mx-auto'
+  h3.font-regular.title
     | HTTP 422 - Unprocessable Entity
   .description
-    ' If you reached this page by submitting one of our forms, please contact us on our
-    | #{link_to 'Public Slack Channel', about_slack_url}.
+    p
+      ' If you reached this page by submitting one of our forms, please contact us on our
+      | #{link_to 'Public Slack Channel', about_slack_url}.

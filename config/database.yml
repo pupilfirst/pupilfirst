@@ -11,7 +11,7 @@ development:
 
 test:
   <<: *common
-  database: <%= ENV['DB_NAME'] %>
+  database: <%= ENV['DB_NAME_TEST'] %>
 
 production:
   pool: <%= ENV["DB_POOL"] || ENV['MAX_THREADS'] || 5 %>

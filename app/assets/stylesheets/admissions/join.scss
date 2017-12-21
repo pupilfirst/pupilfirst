@@ -23,13 +23,13 @@
   letter-spacing: 0.02rem;
 }
 
-.apply-hero__message-text--small {
+.apply-hero__message-text-small {
   font-size: 1.4rem;
 }
 .apply-hero__message-subtitle {
-  font-size: 1.125rem;
+  font-size: 1rem;
   color: white;
-  letter-spacing: 0.02rem;
+  letter-spacing: 0.002rem;
 }
 
 .apply-partners__container {
@@ -95,7 +95,7 @@
     }
 
     &:before {
-      content: '';
+      content: "";
       width: 100px;
       display: inline-block;
       border-bottom: 3px solid $gray-border;
@@ -118,60 +118,10 @@
   font-size: 1rem;
 }
 
-.school-of-saas__section--text {
-  font-size: 1.125rem;
-  font-weight: $font-light;
-  margin-top: 10px;
-}
-
 .school-of-saas__container {
   overflow: hidden;
   border-top: 1px solid $gray-border;
   background-color: $primary-background;
-}
-
-.school-of-saas__feature-box {
-  max-width: 50rem;
-}
-
-.school-of-saas__feature-box--bottom-border {
-  border-bottom: 1px solid $gray-border;
-
-  @include media-breakpoint-down (sm) {
-    border: 0;
-  }
-}
-
-.school-of-saas__feature-card {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-  height: 180px;
-  border: 1px solid $gray-border;
-  border-width: 0 1px 0 0;
-
-  &:last-child {
-    border-right: 0;
-  }
-  @include media-breakpoint-down (sm) {
-    border-width: 0 0 1px 0;
-  }
-}
-
-.school-of-saas__feature-card-title {
-  font-size: 1.25rem;
-}
-
-.school-of-saas__feature-icon {
-  width: 62px;
-  height: 62px;
-}
-
-.school-of-saas__section--ul {
-  font-size: 1.125rem;
-  font-weight: $font-light;
-  margin-top: 10px;
 }
 
 .saas-program__box {
@@ -182,8 +132,12 @@
 }
 
 .saas-program__program-requirements {
-  background: rgb(83,168,103);
-  background: linear-gradient(135deg, rgb(83,168,103) 0%,rgb(13,113,186) 100%);
+  background: rgb(83, 168, 103);
+  background: linear-gradient(
+    135deg,
+    rgb(83, 168, 103) 0%,
+    rgb(13, 113, 186) 100%
+  );
   padding: 30px;
   @include border-radius(5px 0 0 5px);
 
@@ -287,7 +241,7 @@
 }
 
 .program-fee__container {
-  max-width: 36rem;
+  max-width: 22rem;
   text-align: center;
   position: relative;
   background-color: white;
@@ -295,26 +249,19 @@
   border: 1px solid $light-secondary;
   @include border-radius(5px);
 }
-
 .program-fee__box {
-  &:first-child {
-    border: 1px solid $light-secondary;
-    border-width: 0 1px 0 0;
-
-    @include media-breakpoint-down (sm) {
-      border-width: 0 0 1px 0;
-    }
-  }
+  width: 100%;
 }
 
 .program-fee__title {
   margin-bottom: 0;
+  font-size: 1rem;
   line-height: 1.5rem;
   position: relative;
 
   &:before {
     position: absolute;
-    content: '';
+    content: "";
     width: 50px;
     height: 2px;
     bottom: 0;
@@ -328,15 +275,24 @@
   }
 }
 
-.program-fee__title--large {
-  font-size: 1.5rem;
-  font-weight: $font-semibold;
+.program-fee__title-large {
+  font-size: 2.5rem;
+}
+
+.program-fee__scholorship {
+  border-top: 1px dotted $light-secondary;
+  @include border-radius(0 0 5px 5px);
+  background-color: lighten($light-secondary, 48%);
 }
 
 // Apply form
 .apply-form__container {
-  background: rgb(83,168,103);
-  background: linear-gradient(135deg, rgb(83,168,103) 0%,rgb(13,113,186) 100%);
+  background: rgb(83, 168, 103);
+  background: linear-gradient(
+    135deg,
+    rgb(83, 168, 103) 0%,
+    rgb(13, 113, 186) 100%
+  );
   padding: 30px;
 
   @include media-breakpoint-down (sm) {
@@ -350,8 +306,8 @@
 }
 
 .apply-form__submit-button {
-    width: 100%;
-    margin-top: 15px;
+  width: 100%;
+  margin-top: 15px;
 }
 
 .saas-program__program-promises-list-item {
@@ -395,7 +351,7 @@
 }
 
 .saas-program__graduation-support-year {
-  font-size: 4.5rem;
+  font-size: 4rem;
   line-height: 1;
 }
 
@@ -403,211 +359,6 @@
   font-size: 1.125rem;
   line-height: 1.4;
 }
-
-
-// Framework Section
-.program-framework__box {
-  max-width: 40rem;
-}
-
-.program-framework__timeline {
-  position: relative;
-  margin: 2em auto 0;
-  padding-left: 3em;
-  text-align: left;
-  padding-bottom: 3rem;
-  margin-left: 10em;
-  margin-right: 3em;
-
-  @include media-breakpoint-down (sm) {
-    margin: 3rem 1rem 0;
-  }
-
-  &:before {
-    content: '';
-    height: auto;
-    border-left: 0.25em solid $gray-border;
-    position: absolute;
-    left: 0;
-    top: 1rem;
-    bottom: 0;
-  }
-}
-
-.program-framework__timeline-content {
-  display: none;
-  font-size: 1rem;
-  background: white;
-  border: 1px solid $gray-border;
-  border-width: 0 1px 1px 1px;
-  font-size: 1rem;
-  padding: 1rem;
-  box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.05);
-
-  > li {
-    padding-bottom: 5px;
-  }
-}
-
-.program-framework__timeline-content-link {
-  font-size: 0.875rem;
-  text-decoration: underline;
-  margin-left: 12px;
-}
-
-.program-framework__timeline-level {
-  width: 100%;
-  vertical-align: middle;
-  position: relative;
-
-  &:before, &:after {
-    position: absolute;
-    display: block;
-    top: 1rem;
-  }
-  &:before {
-    left: -8rem;
-    color: black;
-    content: attr(data-level);
-    color: $light-grey-text;
-    letter-spacing: 0.04rem;
-    text-align: right;
-    top: 1rem;
-
-    @include media-breakpoint-down (sm) {
-      left: 0;
-      font-size: 0.875rem;
-      z-index: 1;
-      top: -1.5rem;
-    }
-  }
-  &:after {
-    border: 3px solid $light-primary;
-    left: -3.25rem;
-    top: 1rem;
-    background: white;
-    border-radius: 50%;
-    height: 1.5rem;
-    width: 1.5rem;
-    content: "";
-  }
-  &:first-of-type {
-    .program-framework__timeline-content {
-      display: block;
-    }
-  }
-}
-
-.program-framework__timeline-details {
-  padding: 0 0 2rem 0;
-  text-align: left;
-  position: relative;
-
-  @include media-breakpoint-down (sm) {
-    padding: 0 0 3rem 0;
-  }
-}
-
-.program-framework__timeline-title {
-  line-height: 1;
-  font-size: 1.125rem;
-  cursor: pointer;
-  margin-bottom: 0;
-  padding: 1rem;
-  border: 1px solid $gray-border;
-  background-color: white;
-  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.05);
-
-  &:before {
-    content: '\f106';
-    font-size: 1rem;
-    position: absolute;
-    font-family: 'FontAwesome';
-    right: 1rem;
-    top: 20px;
-    transform: rotate(180deg);
-    transition: all 0.2s;
-  }
-
-  &.active {
-    &:before {
-      transform: rotate(0deg);
-    }
-  }
-}
-
-// Startup ecosystem
-.startup-ecosystem__container {
-  overflow: hidden;
-  border-top: 1px solid $gray-border;
-  background-color: white;
-}
-
-.startup-ecosystem-video__box {
-  display: block;
-  background-color: white;
-  box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.1);
-  @include border-radius(5px);
-  overflow: hidden;
-  transition: all .2s;
-
-  &:hover {
-    box-shadow: 0 4px 30px 0 rgba(0, 0, 0, 0.2);
-
-    .startup-ecosystem-video__thumbnail {
-      &:before {
-        background: rgba(0,0,0,0.2);
-      }
-    }
-  }
-}
-
-.startup-ecosystem-video__thumbnail {
-  display: block;
-  position:relative;
-  @include border-radius(5px 5px 0px 0px) ;
-  overflow: hidden;
-
-  &:before {
-    position: absolute;
-    content:'';
-    width:100%;
-    height:100%;
-    top:0;
-    left:0;
-    z-index: 1;
-    background: rgba(0,0,0,0.3);
-    transition: all .2s;
-  }
-}
-
-.startup-ecosystem-video__thumbnail-image {
-  position: relative;
-}
-
-.startup-ecosystem-video__play-button {
-  display: block;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  z-index: 2;
-  transform: translate(-50%, -50%);
-  background-image: asset-url('shared/play-button.svg');
-  width: 40px;
-  height: 40px;
-  @include border-radius(50%);
-
-  &:hover {
-    box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.2);
-  }
-}
-
-.startup-ecosystem-video__detail {
-  padding: 1rem;
-  display: flex;
-  align-items: center;
-}
-
 
 // FAQ
 .apply-faq__container {
@@ -633,10 +384,10 @@
     padding: 1.25rem;
 
     &:before {
-      content: '\f106';
+      content: "\f106";
       font-size: 18px;
       position: absolute;
-      font-family: 'FontAwesome';
+      font-family: "FontAwesome";
       right: 1.25rem;
       top: 22px;
       transform: rotate(180deg);
@@ -704,11 +455,10 @@
     margin-top: -4.4em;
 
     @include media-breakpoint-down(sm) {
-      margin-top: -3.4em
+      margin-top: -3.4em;
     }
   }
 }
-
 
 .eq-height {
   display: flex;

@@ -17,9 +17,11 @@
 section.apply-hero__banner
   .apply-hero__message-container.text-center
     .container
-      h1.apply-hero__message-text.font-black
-        .apply-hero__message-text--small Welcome to
-        | Freshworks School of SaaS @ SV.CO
+      h1.apply-hero__message-text
+        .apply-hero__message-text-small Welcome to
+        ' Freshworks School of
+        .font-bold
+          | Internet Products @ SV.CO
       h2.font-regular.apply-hero__message-subtitle
         | Learn to build world class software products as a student
 
@@ -30,76 +32,21 @@ section.apply-hero__banner
 section.apply-partners__container.mx-auto
   .container.apply-partners__box.text-center
     .row.flex-column.flex-md-row
-      .col-md-3
-        p.apply-partners__text.text-uppercase Silicon Valley Host
-        = image_tag 'home/index/sv-partner-facebook.svg', class: 'img-fluid mx-auto apply-partners__logo--facebook d-block mb-2'
-
-      .col-md-3
+      .col-md-4
         p.apply-partners__text.text-uppercase Program Partner
         = image_tag 'home/index/sv-partner-freshworks.svg', class: 'img-fluid mx-auto apply-partners__logo--freshworks d-block mb-2'
 
-      .col-md-3
+      .col-md-4
         p.apply-partners__text.text-uppercase Scholarship Partner
         = image_tag 'home/index/sv-partner-paytm.svg', class: 'img-fluid mx-auto apply-partners__logo--paytm d-block mb-2'
 
-      .col-md-3
+      .col-md-4
         p.apply-partners__text.text-uppercase Knowledge Partner
         = image_tag 'home/index/sv-partner-tracxn.png', class: 'img-fluid mx-auto apply-partners__logo--tracxn d-block mb-2'
 
 section.school-of-saas__container.py-5
   .container
-    .apply-section__head.mb-2
-      h3.apply-section__head-title.text-center.font-black
-        | What is School of SaaS?
-      .apply-section__head-subtitle.mx-auto
-        p.text-center
-          ' It&rsquo;s a school built for the Internet Era. Just like you have multiple
-          | branches of engineering, we have schools on industry segments like SaaS &amp; Fintech.
-
-    .container.school-of-saas__feature-box.school-of-saas__feature-box--bottom-border.p-0.mt-3
-      .row
-        .col-md-4.school-of-saas__feature-card
-          = image_tag 'admissions/join/student-founders-icon.svg', class: 'school-of-saas__feature-icon'
-          h3.school-of-saas__feature-card-title.text-center.mt-2
-            ' Students are
-            .font-semibold
-              | Startup Founders
-        .col-md-4.school-of-saas__feature-card
-          = image_tag 'admissions/join/faculty-icon.svg', class: 'school-of-saas__feature-icon'
-          h3.school-of-saas__feature-card-title.text-center.mt-2
-            ' Faculty Members are
-            .font-semibold
-              | Entrepreneurs
-        .col-md-4.school-of-saas__feature-card
-          = image_tag 'admissions/join/targets-icon.svg', class: 'school-of-saas__feature-icon'
-          h3.school-of-saas__feature-card-title.text-center.mt-2
-            ' Exams are
-            .font-semibold
-              | Micro Targets
-
-    .container.school-of-saas__feature-box.p-0
-      .row
-        .col-md-4.school-of-saas__feature-card
-          = image_tag 'admissions/join/silicon-valley-trip-icon.svg', class: 'school-of-saas__feature-icon'
-          h3.school-of-saas__feature-card-title.text-center.mt-2
-            ' Internship is a
-            .font-semibold
-              | Silicon Valley trip
-        .col-md-4.school-of-saas__feature-card
-          = image_tag 'admissions/join/sixways-icon.svg', class: 'school-of-saas__feature-icon'
-          h3.school-of-saas__feature-card-title.text-center.mt-2
-            ' Placements are
-            .font-semibold
-              | 6 ways to graduate
-        .col-md-4.school-of-saas__feature-card
-          = image_tag 'admissions/join/online-icon.svg', class: 'school-of-saas__feature-icon'
-          h3.school-of-saas__feature-card-title.text-center.mt-2
-            ' Classrooms are
-            .font-semibold
-              | Completely Online
-
-  .container
-    .saas-program__box.mt-5
+    .saas-program__box
       .d-flex.flex-column.flex-md-row
         .col-md-5.saas-program__program-requirements
           h3.saas-program__program-requirements-head.mb-0
@@ -111,25 +58,23 @@ section.school-of-saas__container.py-5
             li.saas-program__program-requirements-list-item.mb-4
               .saas-program__program-requirements-content
                 h4.saas-program__program-requirements-title.font-semibold.mb-0
-                  | Ideal team
+                  | Team
                 p.saas-program__program-requirements-text
-                  ' Developer, Designer and
-                  | a person in the Product role.
+                  ' You can join as a team of 1-3 members.
                   br
-                  | Team size: 2 to 4 members.
+                  | All members should be developers.
 
             li.saas-program__program-requirements-list-item.mb-4
               .saas-program__program-requirements-content
                 h4.saas-program__program-requirements-title.font-semibold.mb-0
-                  | Time required
+                  | Program Duration
                 p.saas-program__program-requirements-text
-                  ' Learn at your pace.
-                  | Smarter teams do multiple iterations faster.
+                  ' 6 months
 
             li.saas-program__program-requirements-list-item
               .saas-program__program-requirements-content
                 h4.saas-program__program-requirements-title.font-semibold.mb-0
-                  | Startup Idea
+                  | Product Idea
                 p.saas-program__program-requirements-text
                   ' Choose from a pool of ideas
                   | if you don&rsquo;t have one.
@@ -145,33 +90,39 @@ section.school-of-saas__container.py-5
                 li.saas-program__program-promises-list-item.mb-4
                   .saas-program__program-promises-content
                     h4.saas-program__program-promises-title.font-semibold.mb-0
-                      ' Build your Startup
+                      ' Build an Internet Product
                       br
                       | while you are in College
 
                 li.saas-program__program-promises-list-item.mb-4
                   .saas-program__program-promises-content
                     h4.saas-program__program-promises-title.font-semibold.mb-0
-                      | Live Sessions with Entrepreneurs
+                      | Live Sessions with Industry Developers
 
                 li.saas-program__program-promises-list-item.mb-4
                   .saas-program__program-promises-content
                     h4.saas-program__program-promises-title.font-semibold.mb-0
-                      | One on One Mentorship
+                      | Build your profile as a developer
+
+                li.saas-program__program-promises-list-item.mb-4
+                  .saas-program__program-promises-content
+                    h4.saas-program__program-promises-title.font-semibold.mb-0
+                      | Access to internship opportunities at product companies.
 
                 li.saas-program__program-promises-list-item
                   .saas-program__program-promises-content
                     h4.saas-program__program-promises-title.font-semibold.mb-0
-                      | New Perks at every level
+                      | One on One Mentorship
 
             .col-md-5.p-0
               .saas-program__graduation-support
-                h4.font-semibold.saas-program__graduation-support-year.mb-0
-                  | 5
-                h5.saas-program__graduation-support-sub-text.mb-0
-                  | year long
-                  .font-semibold
-                    | Graduation Support
+                h4.font-bold.saas-program__graduation-support-year.mb-0
+                  | 100%
+                h5.saas-program__graduation-support-sub-text.font-bold.mb-0
+                  ' Job offer guarantee
+                  span.font-regular
+                    | or
+                  | &nbsp;your money back.
 
     .pt-4.text-center
       a#admissions-join__school-start-now-link.btn.btn-primary.btn-lg.apply-call-to-action__button href="#join-form"
@@ -181,40 +132,25 @@ section.application-fee__container.py-5
   .container
     .apply-section__head.mb-4
       h3.apply-section__head-title.text-center.font-black
-        | Membership Fee &amp; Scholarships
-      .apply-section__head-subtitle.mx-auto
-        p.text-center
-          ' SV.CO has a nominal fee for membership. But very few students advance through our stages and qualify for the
-          ' premium Silicon Valley program. Our students believe that the  program is immersive and is a life changing
-          | experience. This shared learning and experience makes you a part of the Startup Village Collective for life.
+        | Program Fee
 
     .current-batch-data__container.text-center
       .row.program-fee__container.mx-auto.text-center
-        .col-md-6.program-fee__box.p-4
-          h6.font-semibold.program-fee__title.text-uppercase.pb-2.mb-2
-            ' Monthly Fee:
-          .program-fee__title--large &#8377;4000
-          ' &nbsp;per founder.
+        .program-fee__box
+          h4.font-semibold.program-fee__title.text-uppercase.px-4.pt-3.pb-2.mb-2
+            ' One Time Fee:
+          h5.program-fee__title-large.px-4.mb-0.font-bold &#8377;1 Lakh
           p
-            ' Scholarships available for deserving students.
-
-        .col-md-6.program-fee__box.p-4
-          h6.font-semibold.program-fee__title.text-uppercase.pb-2.mb-2
-            ' Silicon Valley Program:
-          .program-fee__title--large
-            | &#8377;2,50,000
-          ' &nbsp;(Optional)
-          p
-            ' Scholarships available for top program performers.
-            | Separate qualification criteria apply.
+            ' per developer.
+          .program-fee__scholorship.mt-3
+            p.font-semibold.dark-secondary.p-3
+              ' Merit Scholarships available for deserving students.
 
 #join-form.apply-form__container.py-5
   - if current_founder&.startup.blank?
     .container
       .apply-section__head.mb-4
         h3.apply-section__head-title.apply-section__head-title--white.text-center.font-black
-          .font-light
-            ' Entrepreneurship is all about doing.
           | #{presenter.link_to_form_text}
     .apply-form__box.mx-auto
       - if presenter.admit?
@@ -230,251 +166,6 @@ section.application-fee__container.py-5
         .pt-3.text-center
           a.btn.btn-primary.btn-lg.apply-call-to-action__button href=dashboard_founder_path
             | Go to Dashboard
-
-section.program-framework__container.pt-5
-  .container
-    .apply-section__head.mb-3
-      h3.apply-section__head-title.text-center.font-black
-        | Programme Framework
-    .program-framework__box.mx-auto
-      ul.program-framework__timeline.list-unstyled
-        li.program-framework__timeline-level data-level=('LEVEL 0')
-          .program-framework__timeline-details
-            h3#admissions-join__framework-l0-heading.program-framework__timeline-title.dark-secondary.font-semibold.active
-              | Admission at SV.CO
-
-            ul.program-framework__timeline-content.list-unstyled
-              li
-                p &ndash; Understand the Mission of SV.CO
-              li
-                p &ndash; Team Formation &amp; Membership Fee
-              li
-                p.font-semibold &ndash; Join the Startup Village Collective
-              li
-                = link_to 'Learn More', 'https://help.sv.co', class: 'program-framework__timeline-content-link font-semibold', target: '_blank', id: 'admissions-join__framework-l0-learn-more-link'
-
-        li.program-framework__timeline-level data-level=('LEVEL 1')
-          .program-framework__timeline-details
-            h3#admissions-join__framework-l1-heading.program-framework__timeline-title.dark-secondary.font-semibold
-              | Idea Validation
-
-            ul.program-framework__timeline-content.list-unstyled
-              li
-                p &ndash; Select an idea
-              li
-                p &ndash; Develop basic engineering &amp; design skills
-              li
-                p &ndash; Live sessions by SV.CO &amp; Freshdesk
-              li
-                p &ndash; Office hours with faculty on idea validation
-              li
-                p.font-semibold &ndash; Make a Product Summary
-              li
-                = link_to 'Learn More', 'https://help.sv.co', class: 'program-framework__timeline-content-link font-semibold', target: '_blank', id: 'admissions-join__framework-l1-learn-more-link'
-
-        li.program-framework__timeline-level data-level=('LEVEL 2')
-          .program-framework__timeline-details
-            h3#admissions-join__framework-l2-heading.program-framework__timeline-title.dark-secondary.font-semibold
-              | Decide What to Build
-
-            ul.program-framework__timeline-content.list-unstyled
-              li
-                p &ndash; Reverse engineer a competitor
-              li
-                p &ndash; Developing product &amp; design skills
-              li
-                p &ndash; Choose your technology stack
-              li
-                p &ndash; Live Sessions on alpha prototyping
-              li
-                p.font-semibold &ndash; Finalising product features for alpha
-              li
-                = link_to 'Learn More', 'https://help.sv.co', class: 'program-framework__timeline-content-link font-semibold', target: '_blank', id: 'admissions-join__framework-l2-learn-more-link'
-
-        li.program-framework__timeline-level data-level=('LEVEL 3')
-          .program-framework__timeline-details
-            h3#admissions-join__framework-l3-heading.program-framework__timeline-title.dark-secondary.font-semibold
-              | Develop an Alpha Product
-
-            ul.program-framework__timeline-content.list-unstyled
-              li
-                p &ndash; Designing wireframes
-              li
-                p &ndash; Developing a product deck
-              li
-                p &ndash; Review engineering for product
-              li
-                p &ndash; Product video &amp; deck building skills
-              li
-                p.font-semibold &ndash; Alpha launch &amp; feedback at Freshworks HQ, Chennai
-              li
-                = link_to 'Learn More', 'https://help.sv.co', class: 'program-framework__timeline-content-link font-semibold', target: '_blank', id: 'admissions-join__framework-l3-learn-more-link'
-
-        li.program-framework__timeline-level data-level=('LEVEL 4')
-          .program-framework__timeline-details.pb-0
-            h3#admissions-join__framework-l4-heading.program-framework__timeline-title.dark-secondary.font-semibold
-              | Discover the First Customer
-
-            ul.program-framework__timeline-content.list-unstyled
-              li
-                p &ndash; Build journey deck
-              li
-                p &ndash; Reach out to prospective customers for feedback
-              li
-                p &ndash; Customer onboarding process
-              li
-                p.font-semibold &ndash; Live session on finding customers
-              li
-                = link_to 'Learn More', 'https://help.sv.co', class: 'program-framework__timeline-content-link font-semibold', target: '_blank', id: 'admissions-join__framework-l4-learn-more-link'
-
-section.startup-ecosystem__container.py-5
-  .container
-    .apply-section__head.mb-4
-      h3.apply-section__head-title.text-center.font-black
-        | Exposure to Startup Ecosystems
-      .apply-section__head-subtitle.mx-auto
-        p.text-center
-          | Students travel to key cities during the program for attending events
-
-    .container.startup-ecosystem-video__container
-      .row
-        .col-md-3
-          a#admissions-join__exposure-kochi-video.startup-ecosystem-video__box.my-2 href="#" data-toggle="modal" data-target="#admission-kochi-video"
-            .startup-ecosystem-video__thumbnail
-              .startup-ecosystem-video__play-button
-              = image_tag 'admissions/join/admissions-kochi-thumbnail.jpg', class: 'img-fluid startup-ecosystem-video__thumbnail-image'
-
-            .startup-ecosystem-video__detail
-              p
-                | Admissions at
-                span.font-semibold
-                  | &nbsp;Kochi
-
-        .col-md-3
-          a#admissions-join__exposure-chennai-video.startup-ecosystem-video__box.my-2 href="#" data-toggle="modal" data-target="#alpha-day-chennai-video"
-            .startup-ecosystem-video__thumbnail
-              .startup-ecosystem-video__play-button
-              = image_tag 'admissions/join/alpha-day-chennai-thumbnail.jpg', class: 'img-fluid startup-ecosystem-video__thumbnail-image'
-
-            .startup-ecosystem-video__detail
-              p
-                | Alpha Launch at
-                span.font-semibold
-                  | &nbsp;Chennai
-
-        .col-md-3
-          a#admissions-join__exposure-bangalore-video.startup-ecosystem-video__box.my-2 href="#" data-toggle="modal" data-target="#customer-insights-bangalore-video"
-            .startup-ecosystem-video__thumbnail
-              .startup-ecosystem-video__play-button
-              = image_tag 'admissions/join/customer-insigt-bangalore-thumbnail.jpg', class: 'img-fluid startup-ecosystem-video__thumbnail-image'
-
-            .startup-ecosystem-video__detail
-              p
-                | Customer Insights Day at
-                span.font-semibold
-                  | &nbsp;Bangalore
-
-        .col-md-3
-          a#admissions-join__exposure-sv-video.startup-ecosystem-video__box.my-2 href="#" data-toggle="modal" data-target="#silicon-valley-trip-video"
-            .startup-ecosystem-video__thumbnail
-              .startup-ecosystem-video__play-button
-              = image_tag 'admissions/join/silicon-valley-trip-thumbnail.jpg', class: 'img-fluid startup-ecosystem-video__thumbnail-image'
-
-            .startup-ecosystem-video__detail
-              p
-                | Trip to
-                span.font-semibold
-                  | &nbsp;Silicon Valley
-
-section.apply-faq__container.py-5
-  .container
-    .apply-section__head.mb-4
-      h3.apply-section__head-title.text-center.font-black
-        | Frequently asked Questions
-
-    #apply-faq-accordion.apply-faq__collapse.mx-auto role="tablist" aria-multiselectable="true"
-      .card.apply-faq__collapse-card.mb-3
-        .card-header.apply-faq__collapse-card-header.p-0
-          h4.font-regular.apply-faq__collapse-card-title.mb-0
-            a#admissions-join__faq-q1-heading data-parent="#apply-faq-accordion" data-toggle="collapse" href="#apply-faq__1"
-              | 1. Can I join even if I don&rsquo;t have an idea?
-        #apply-faq__1.collapse.show
-          .card-body.apply-faq__collapse-card-block
-            p
-              ' It takes a lot of industry experience to come up with a great idea
-              ' to start-up. As students, we know that you lack that experience.
-              ' To overcome this, we have a list of carefully chosen industry ideas which
-              ' students in colleges can build. Each idea costs &#8377;10,000 of research
-              | by business analysts. You can thus join, even if you don&rsquo;t have an idea.
-
-      .card.apply-faq__collapse-card.mb-3
-        .card-header.apply-faq__collapse-card-header.p-0
-          h4.font-regular.apply-faq__collapse-card-title.mb-0
-            a#admissions-join__faq-q2-heading data-parent="#apply-faq-accordion" data-toggle="collapse" href="#apply-faq__2"
-              | 2. Is SV.CO only for college students?
-        #apply-faq__2.collapse
-          .card-body.apply-faq__collapse-card-block
-            p
-              ' Yes. We however, encourage exceptional school students to join.
-
-      .card.apply-faq__collapse-card.mb-3
-        .card-header.apply-faq__collapse-card-header.p-0
-          h4.font-regular.apply-faq__collapse-card-title.mb-0
-            a#admissions-join__faq-q3-heading data-parent="#apply-faq-accordion" data-toggle="collapse" href="#apply-faq__3"
-              | 3. Who is SV.CO designed for?
-        #apply-faq__3.collapse
-          .card-body.apply-faq__collapse-card-block
-            p
-              ' Our program is only for college students: the only requirement is that you form a team, one (or more)
-              ' team members should know how to code and communicate in English well. We also encourage exceptional
-              ' school students to join. Because of the nature of our program, it&rsquo;s very unlikely that graduates
-              | or experienced founders will benefit.
-
-      .card.apply-faq__collapse-card.mb-3
-        .card-header.apply-faq__collapse-card-header.p-0
-          h4.font-regular.apply-faq__collapse-card-title.mb-0
-            a#admissions-join__faq-q4-heading data-parent="#apply-faq-accordion" data-toggle="collapse" href="#apply-faq__4"
-              | 4. What does an ideal team that can be part of SV.CO look like?
-        #apply-faq__4.collapse
-          .card-body.apply-faq__collapse-card-block
-            p
-              ' You need to have at least 2 members and maximum 4. Ideally, team members must have a mix of skills:
-              ' <em>engineering</em> (software programming), <em>design</em> (UI, UX and Visual Design) and
-              ' <em>product</em> (good knowledge of what makes a good software product). The SV.CO program does not
-              ' teach these skills and assumes that student founders are confident and capable enough to pick up these
-              | skills during the program.
-
-            p.mt-3
-              ' It&rsquo;s not necessary that team members be in the same college or course,
-              ' but ideally, they should all work together in the same place for the
-              | entire six month period of the course.
-
-      .card.apply-faq__collapse-card.mb-3
-        .card-header.apply-faq__collapse-card-header.p-0
-          h4.font-regular.apply-faq__collapse-card-title.mb-0
-            a#admissions-join__faq-q5-heading data-parent="#apply-faq-accordion" data-toggle="collapse" href="#apply-faq__5"
-              | 5. When can I start the program?
-        #apply-faq__5.collapse
-          .card-body.apply-faq__collapse-card-block
-            p
-              ' You can start the program today! Complete #{link_to 'the sign-up form', '#join-form'} and start your
-              ' startup journey.
-            p.mt-3
-              ' <strong>Note:</strong> To complete the first stage, you need to form a team. This is
-              ' because we strongly believe that a campus startup cannot be attempted by yourself; you require at least
-              | one co-founder with complimentary skills.
-
-      .card.apply-faq__collapse-card.mb-3
-        .card-header.apply-faq__collapse-card-header.p-0
-          h4.font-regular.apply-faq__collapse-card-title.mb-0
-            a#admissions-join__faq-q6-heading data-parent="#apply-faq-accordion" data-toggle="collapse" href="#apply-faq__6"
-              | 6. Will SV.CO fund startups?
-        #apply-faq__6.collapse
-          .card-body.apply-faq__collapse-card-block
-            ' We do not directly fund startups. Instead, we take them through a
-            ' guided learning program where they learn how to build a great startup.
-            | At the end of the program, getting funded is one of six graduation options.
-
 
 #admission-kochi-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"

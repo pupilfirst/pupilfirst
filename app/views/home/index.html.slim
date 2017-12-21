@@ -18,11 +18,17 @@ section.home-hero__container
   .home-hero__message-wrapper.text-center
     .container
       .home-hero__message-title
-        h1.home-hero__message-title-head
-          ' Immersive Learning Experience to Build
+        h1.home-hero__message-title-head.mb-0
+          ' Immersive Learning Experience to
           .font-semibold
-            | Campus Startups
-        .pt-2
+            | Build Internet Products
+        p.home-hero__message-title-subhead
+          ' Build the product of your dreams with a
+          span.font-semibold Job Guarantee
+          br
+          | or
+          span.font-semibold &nbsp;100% money back!
+        .pt-3
           - if current_founder.present?
             = link_to 'Go to Dashboard', dashboard_founder_path, class: 'btn btn-primary btn-lg home-apply__button'
           - else
@@ -55,113 +61,89 @@ section.six-ways-card__container.py-5
   .container
     .home-section__head.mb-4
       h2#benefits.home-section__head-title.text-center.font-black
-        | 6 Different ways to Establish your Career
+        | All of them built products at Startup Village
       .home-section__head-subtitle.mx-auto
         p.text-center
-          ' SV.CO Startup founders start early in college to gain professional
-          | startup skills and explore graduation options during their final year
+          | Listen to them narrate their stories
     .row
       .col-md-4
         a#home-index__six-ways-funded-video.six-ways-card__box.my-3 href="#" data-toggle="modal" data-target="#itraveller-story-video"
           .six-ways-card__thumbnail
             = image_tag 'home/index/six-ways-get-funded.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Get your startup funded'
+            .six-ways-card__video-time
+              | 3:41 mins
+            .six-ways-card__play-button-container.d-flex.flex-column.align-items-center.justify-content-center
+            .six-ways-card__thumbnail-content
+              h3.six-ways-card__thumbnail-head.font-semibold.mb-0
+                | Shiju built a travel product and got funded
+              p.six-ways-card__thumbnail-subhead
+                | Story of iTraveller
 
-            h3.six-ways-card__thumbnail-text.font-regular
-              span.six-ways-card__thumbnail-text--small
-                ' Get your startup
-              br
-              | Funded
-          .six-ways-card__story-detail
-            .six-ways-card__story-title
-              | Story of iTraveller
-            .six-ways-card__play-button-container
-              .six-ways-card__play-button
 
       .col-md-4
         a#home-index__six-ways-accelerator-video.six-ways-card__box.my-3 href="#" data-toggle="modal" data-target="#profoundis-story-video"
           .six-ways-card__thumbnail
             = image_tag 'home/index/six-ways-join-accelerator.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Join a startup accelerator'
-
-            h3.six-ways-card__thumbnail-text.font-regular
-              span.six-ways-card__thumbnail-text--small
-                ' Get into a
-              br
-              | Startup Accelerator
-
-          .six-ways-card__story-detail
-            .six-ways-card__story-title
-              | Story of Profoundis
-            .six-ways-card__play-button-container
-              .six-ways-card__play-button
+            .six-ways-card__video-time
+              | 4:02 mins
+            .six-ways-card__play-button-container.d-flex.flex-column.align-items-center.justify-content-center
+            .six-ways-card__thumbnail-content
+              h3.six-ways-card__thumbnail-head.font-semibold.mb-0
+                | Built a world class internet product, got acquired by an American Company
+              p.six-ways-card__thumbnail-subhead
+                | Story of Profoundis
 
       .col-md-4
         a#home-index__six-ways-acquihire-video.six-ways-card__box.my-3 href="#" data-toggle="modal" data-target="#z-pay-story-video"
           .six-ways-card__thumbnail
             = image_tag 'home/index/six-ways-get-acqui-hired.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Get acqui-hired'
-
-            h3.six-ways-card__thumbnail-text.font-regular
-              span.six-ways-card__thumbnail-text--small
-                ' Get Acqui-Hired
-              br
-              | as a Team
-
-          .six-ways-card__story-detail
-            .six-ways-card__story-title
-              | Z-pay Acquihired by Tally
-            .six-ways-card__play-button-container
-              .six-ways-card__play-button
+            .six-ways-card__video-time
+              | 1:16 mins
+            .six-ways-card__play-button-container.d-flex.flex-column.align-items-center.justify-content-center
+            .six-ways-card__thumbnail-content
+              h3.six-ways-card__thumbnail-head.font-semibold.mb-0
+                | Product they built in college helped them showcase their skills
+              p.six-ways-card__thumbnail-subhead
+                | Z-pay Acquihired by Tally
 
       .col-md-4
         a#home-index__six-ways-hired-video.six-ways-card__box.my-3 href="#" data-toggle="modal" data-target="#hiring-story-video"
           .six-ways-card__thumbnail
             = image_tag 'home/index/six-ways-get-hired.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Get hired by a startup'
-
-            h3.six-ways-card__thumbnail-text.font-regular
-              span.six-ways-card__thumbnail-text--small
-                ' Get Hired by a
-              br
-              | Startup
-
-          .six-ways-card__story-detail
-            .six-ways-card__story-title
-              | Hiring at SV.CO
-            .six-ways-card__play-button-container
-              .six-ways-card__play-button
+            .six-ways-card__video-time
+              | 1:42 mins
+            .six-ways-card__play-button-container.d-flex.flex-column.align-items-center.justify-content-center
+            .six-ways-card__thumbnail-content
+              h3.six-ways-card__thumbnail-head.font-semibold.mb-0
+                | Upskilled himself up learning to build an internet product with SV.CO
+              p.six-ways-card__thumbnail-subhead
+                | Hiring at SV.CO
 
       .col-md-4
         a#home-index__six-ways-sustainable-video.six-ways-card__box.my-3 href="#" data-toggle="modal" data-target="#wowmakers-story-video"
           .six-ways-card__thumbnail
             = image_tag 'home/index/six-ways-run-startup.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Run a startup of your own'
-
-            h3.six-ways-card__thumbnail-text.font-regular
-              span.six-ways-card__thumbnail-text--small
-                ' Run a
-              br
-              | Self Sustainable Startup
-
-          .six-ways-card__story-detail
-            .six-ways-card__story-title
-              | Story of Wowmakers
-            .six-ways-card__play-button-container
-              .six-ways-card__play-button
+            .six-ways-card__video-time
+              | 4:17 mins
+            .six-ways-card__play-button-container.d-flex.flex-column.align-items-center.justify-content-center
+            .six-ways-card__thumbnail-content
+              h3.six-ways-card__thumbnail-head.font-semibold.mb-0
+                | Building design oriented internet products while running a design studio
+              p.six-ways-card__thumbnail-subhead
+                | Story of Wowmakers
 
       .col-md-4
         a#home-index__six-ways-studies-video.six-ways-card__box.my-3 href="#" data-toggle="modal" data-target="#higher-studies-story-video"
           .six-ways-card__thumbnail
             = image_tag 'home/index/six-ways-higher-studies.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Get admissions to global universities with a stronger resume'
-
-            h3.six-ways-card__thumbnail-text.font-regular
-              span.six-ways-card__thumbnail-text--small
-                ' Go for Higher Studies
-              br
-              | with Stronger Resume
-
-          .six-ways-card__story-detail
-            .six-ways-card__story-title
-              | Access to Global Universities
-            .six-ways-card__play-button-container
-              .six-ways-card__play-button
-
+            .six-ways-card__video-time
+              | 1:28 mins
+            .six-ways-card__play-button-container.d-flex.flex-column.align-items-center.justify-content-center
+            .six-ways-card__thumbnail-content
+              h3.six-ways-card__thumbnail-head.font-semibold.mb-0
+                | Continue upskilling yourself to build better products
+              p.six-ways-card__thumbnail-subhead
+                | Access to Global Universities
 
       .mx-auto.mt-3
         = link_to 'Learn More', join_path, class: 'btn btn-primary btn-lg home-apply__button', id: 'home-index__six-ways-learn-more-link'
@@ -173,7 +155,7 @@ section.program-feature__container.py-5
         | Programme Designed Exclusively for YOU
       .home-section__head-subtitle.mx-auto
         p.text-center
-          ' The programme is exclusively for software startups which can be built while you
+          ' The programme is exclusively for internet products which can be built while you
           | are in college and the platform enables you to learn from wherever you are.
     .program-feature__box
       .col-md-7
@@ -192,7 +174,7 @@ section.program-feature__container.py-5
               = image_tag 'home/index/program-build-startup.jpg', class: 'img-fluid'
               .program-feature__card-title
                 h3.program-feature__card-title-text.font-regular
-                  ' Build a startup
+                  ' Build a world class product
                   br
                   | with your friends
 
@@ -234,12 +216,12 @@ section.silicon-valley-itinerary__container.py-5
   .container
     .home-section__head.mb-3
       h2.home-section__head-title.text-center.font-black
-        | Spend your summer in Silicon Valley, USA
+        | Glimpes from the recent Silicon Valley visit
       .home-section__head-subtitle.mx-auto
         p.text-center
-          ' We recently flew India’s largest delegation of startups to Silicon
-          ' Valley for one week. Our vision is to take a delegation of 250
-          | startups on a Flight of Dreams for a period of two weeks.
+          ' We recently flew India’s largest delegation of student entrepreneurs
+          | who were all building internet products in college
+
     .row
       .silicon-valley-itinerary__slider.mx-auto
         .silicon-valley-itinerary__slider-item.mx-auto
@@ -266,9 +248,9 @@ section.home-testimonial__container.py-5
         = image_tag 'home/index/testimonial-student-family.png', class: 'img-fluid mx-auto home-testimonial__image', alt: "A student's family"
       .col-md-8.home-testimonial__text.d-flex.justify-content-center.flex-column
         p
-          ' &ldquo;I was really worried when he said that he wanted to do a startup in his college.
+          ' &ldquo;I was really worried when he said that he wanted to build a product alongside his college.
           ' I thought college was all about grades and attendance but then I saw him
-          ' code all the day in his room. He spends money for his company and not for shopping.
+          ' code all the day in his room. He spends money on his product and not for shopping.
           ' It feels really great. He told me about his experience in Silicon Valley,
           | and he seems to have learnt a lot from that.&rdquo;
         p.font-semibold.pt-2

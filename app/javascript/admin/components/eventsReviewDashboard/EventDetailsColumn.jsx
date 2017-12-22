@@ -1,4 +1,7 @@
-class EventsReviewDashboardEventDetailsColumn extends React.Component {
+import React from "react";
+import PropTypes from "prop-types";
+
+export default class EventDetailsColumn extends React.Component {
   constructor(props) {
     super(props);
 
@@ -22,8 +25,6 @@ class EventsReviewDashboardEventDetailsColumn extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const eventData = nextProps.rootState.reviewData[nextProps.eventId];
-
-    // debugger;
 
     if (this.state.linkedTarget.id !== eventData.target_id) {
       this.setState({
@@ -272,7 +273,7 @@ class EventsReviewDashboardEventDetailsColumn extends React.Component {
   }
 }
 
-EventsReviewDashboardEventDetailsColumn.propTypes = {
+EventDetailsColumn.propTypes = {
   rootState: PropTypes.object,
   setRootState: PropTypes.func,
   eventId: PropTypes.number

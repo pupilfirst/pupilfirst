@@ -1,4 +1,7 @@
-class EventsReviewDashboardEventSkillGrading extends React.Component {
+import React from "react";
+import PropTypes from "prop-types";
+
+export default class EventSkillGrading extends React.Component {
   constructor(props) {
     super(props);
 
@@ -239,7 +242,7 @@ class EventsReviewDashboardEventSkillGrading extends React.Component {
   }
 }
 
-EventsReviewDashboardEventSkillGrading.propTypes = {
+EventSkillGrading.propTypes = {
   rootState: PropTypes.object,
   setRootState: PropTypes.func,
   eventId: PropTypes.string,

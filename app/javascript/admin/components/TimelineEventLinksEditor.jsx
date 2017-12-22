@@ -12,6 +12,12 @@ export default class TimelineEventLinksEditor extends React.Component {
         this.props.linksJSON.length > 0 ? JSON.parse(this.props.linksJSON) : [],
       showLinkForm: false
     };
+
+    this.addLinksClicked = this.addLinksClicked.bind(this);
+    this.deleteLink = this.deleteLink.bind(this);
+    this.editLinkClicked = this.editLinkClicked.bind(this);
+    this.addNewLink = this.addNewLink.bind(this);
+    this.editLink = this.editLink.bind(this);
   }
 
   addLinksClicked() {

@@ -277,7 +277,7 @@ ActiveAdmin.register TimelineEvent do
     end
 
     panel 'Attached Links', id: 'react-edit-attached-links' do
-      react_component 'admin/TimelineEventLinksEditor', linksJSON: f.object.serialized_links
+      react_component 'TimelineEventLinksEditor', linksJSON: f.object.serialized_links
     end
 
     f.actions

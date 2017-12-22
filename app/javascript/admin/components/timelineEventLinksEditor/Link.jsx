@@ -43,5 +43,7 @@ export default class Link extends React.Component {
 Link.propTypes = {
   title: PropTypes.string,
   url: PropTypes.string,
-  private: PropTypes.bool
+  private: PropTypes.bool,
+  editLinkClickedCB: PropTypes.func.isRequired,
+  deleteLinkCB: PropTypes.func.isRequired
 };

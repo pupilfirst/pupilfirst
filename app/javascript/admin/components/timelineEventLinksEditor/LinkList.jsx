@@ -3,26 +3,20 @@ import PropTypes from "prop-types";
 import Link from "./Link";
 
 export default class LinkList extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = { links: this.props.links };
-  }
-
   componentDidUpdate() {
-    //always copy latest links to the hidden field, trigger change to update the link tab's title
+    // Always copy latest links to the hidden field, trigger change to update the link tab's title.
     $("#timeline_event_serialized_links")
-      .val(JSON.stringify(this.state.links))
+      .val(JSON.stringify(this.props.links))
       .trigger("change");
   }
 
   render() {
-    if (this.state.links.length > 0) {
+    if (this.props.links.length > 0) {
       return (
         <div className="attributes_table">
           <table>
             <tbody>
-              {this.state.links.map(
+              {this.props.links.map(
                 function(link, i) {
                   return (
                     <Link
@@ -48,5 +42,7 @@ export default class LinkList extends React.Component {
 }
 
 LinkList.propTypes = {
-  links: PropTypes.arrayOf(PropTypes.object)
+  links: PropTypes.arrayOf(PropTypes.object),
+  editLinkClickedCB: PropTypes.func.isRequired,
+  deleteLinkCB: PropTypes.func.isRequired
 };

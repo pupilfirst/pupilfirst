@@ -7,7 +7,7 @@ export default class LinkForm extends React.Component {
 
     let initialLink = null;
 
-    if (props.link) {
+    if (!props.link) {
       //if no links received, initialize an empty object so that we can still call link.title etc
       initialLink = { title: "", url: "", private: false };
     } else {
@@ -82,16 +82,16 @@ export default class LinkForm extends React.Component {
 
   //upon focus, clear error markers, if any
   clearErrorMarkers(event) {
-    if (event.target.id == "link_title") {
+    if (event.target.id === "link_title") {
       this.setState({ titleError: false });
-    } else if (event.target.id == "link_url") {
+    } else if (event.target.id === "link_url") {
       this.setState({ urlError: false });
     }
   }
 
   linkProvided() {
     //link.index will be 'undefined' for 'Add Link'
-    return typeof this.state.link.index == "number";
+    return _.isNumber(this.state.link.index);
   }
 
   render() {
@@ -182,5 +182,7 @@ export default class LinkForm extends React.Component {
 }
 
 LinkForm.propTypes = {
-  link: PropTypes.object
+  link: PropTypes.object,
+  linkAddedCB: PropTypes.func.isRequired,
+  editLinkCB: PropTypes.func.isRequired
 };

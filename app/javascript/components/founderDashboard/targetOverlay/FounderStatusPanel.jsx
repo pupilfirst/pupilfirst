@@ -58,7 +58,7 @@ export default class FounderStatusPanel extends React.Component {
   }
 }
 
-FounderStatusPanel.PropTypes = {
+FounderStatusPanel.propTypes = {
   founderDetails: PropTypes.array,
   targetId: PropTypes.number
 };

@@ -4,6 +4,7 @@ import TextArea from "./timelineBuilder/TextArea";
 import SocialBar from "./timelineBuilder/SocialBar";
 import AttachmentForm from "./timelineBuilder/AttachmentForm";
 import ActionBar from "./timelineBuilder/ActionBar";
+import Attachments from "./timelineBuilder/Attachments";
 
 export default class TimelineBuilder extends React.Component {
   constructor(props) {
@@ -499,7 +500,7 @@ export default class TimelineBuilder extends React.Component {
               />
 
               {this.hasAttachments() && (
-                <TimelineBuilderAttachments
+                <Attachments
                   attachments={this.attachments()}
                   removeAttachmentCB={this.removeAttachment}
                 />

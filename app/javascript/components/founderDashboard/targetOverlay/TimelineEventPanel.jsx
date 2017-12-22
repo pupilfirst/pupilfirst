@@ -30,8 +30,9 @@ export default class TimelineEventPanel extends React.Component {
 
   attachmentLinks() {
     return this.props.event.attachments.map(function(attachment) {
-      faClasses =
+      const faClasses =
         attachment.type === "file" ? "fa fa-file-text-o" : "fa fa-link";
+
       return (
         <a
           className="target-overlay__link target-overlay__link--attachment"

@@ -5,8 +5,10 @@ import FileForm from "./FileForm";
 import DateForm from "./DateForm";
 
 export default class AttachmentForm extends React.Component {
-  getInitialState() {
-    return null;
+  constructor(props) {
+    super(props);
+
+    this.displayNewForm = this.displayNewForm.bind(this);
   }
 
   componentDidUpdate() {
@@ -29,7 +31,7 @@ export default class AttachmentForm extends React.Component {
   }
 
   formVisible(type) {
-    if (this.props.previousForm == type) {
+    if (this.props.previousForm === type) {
       return {};
     } else {
       return { display: "none" };

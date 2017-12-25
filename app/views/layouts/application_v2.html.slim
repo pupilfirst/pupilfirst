@@ -10,11 +10,11 @@ html lang='en'
     / title Title should be set in each view file.
 
     / Styles
-    = stylesheet_link_tag 'application_v2', media: 'all', 'data-turbolinks-track' => 'reload'
+    = stylesheet_link_tag 'application_v2', media: 'all', 'data-turbolinks-track': 'reload'
 
     / Scripts
-    = javascript_include_tag 'application_v2', 'data-turbolinks-track' => 'reload'
-    = javascript_pack_tag 'application'
+    = javascript_include_tag 'application_v2', 'data-turbolinks-track': 'reload'
+    = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
 
     = csrf_meta_tags
     = yield :head

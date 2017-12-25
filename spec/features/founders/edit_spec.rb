@@ -135,6 +135,8 @@ feature 'Founder Edit' do
     let(:startup) { create :startup }
 
     scenario 'founder visits the edit page' do
+      pending 'Fee payment disabled'
+
       sign_in_user(founder.user, referer: edit_founder_path)
 
       # Create a pending payment.

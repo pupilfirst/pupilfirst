@@ -27,6 +27,8 @@ feature 'Admission Fee Payment' do
     end
 
     scenario 'He has completed the cofounder addition prerequisite' do
+      pending 'Fee payment disabled'
+
       complete_target founder, screening_target
       complete_target founder, cofounder_addition_target
       create :payment, startup: startup
@@ -79,6 +81,8 @@ feature 'Admission Fee Payment' do
     end
 
     scenario 'He completes payment without applying any coupon' do
+      pending 'Fee payment disabled'
+
       sign_in_user founder.user, referer: fee_founder_path
 
       # He will be asked to pay the full amount.
@@ -113,6 +117,8 @@ feature 'Admission Fee Payment' do
     end
 
     scenario 'He completes payment applying a referral coupon' do
+      pending 'Fee payment disabled'
+
       sign_in_user founder.user, referer: fee_founder_path
 
       # Page should have coupon form.
@@ -175,6 +181,8 @@ feature 'Admission Fee Payment' do
       let!(:unconfirmed_founder) { create :founder, invited_startup: startup }
 
       scenario 'logged in founder needs to pay for both confirmed and unconfirmed founders' do
+        pending 'Fee payment disabled'
+
         sign_in_user founder.user, referer: fee_founder_path
 
         within('.fee-offer__box', text: '1 month') do
@@ -188,6 +196,8 @@ feature 'Admission Fee Payment' do
       let!(:coupon_usage) { create :coupon_usage, coupon: coupon, startup: startup }
 
       scenario 'founder tried to pay with expired coupon' do
+        pending 'Fee payment disabled'
+
         sign_in_user founder.user, referer: fee_founder_path
 
         expect(page).to have_content("Coupon with code #{coupon.code}applied!")
@@ -211,6 +221,8 @@ feature 'Admission Fee Payment' do
     end
 
     scenario 'Founder resubmits the payment form' do
+      pending 'Fee payment disabled'
+
       sign_in_user founder.user, referer: fee_founder_path
 
       expect(page).to have_content("It looks like you've attempted to pay at least once before, but didn't complete the process.")

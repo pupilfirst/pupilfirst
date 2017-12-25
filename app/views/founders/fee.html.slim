@@ -9,29 +9,28 @@ script src="https://js.instamojo.com/v1/checkout.js"
 .secondary-banner
   .container
     .application-stages-head.text-center
-      h1 Membership Fee
-      h4.mx-auto Payment pending
+      h1 Temporarily disabled
+      h4.mx-auto Fee payments have been temporarily disabled.
 
 .container
   .row.justify-content-center
     .col-md-8
       .content-box.mt-3.mb-3.apply-submitted
         h3.text-center.mb-2
-          span.brand-secondary.font-semibold Please pay the membership fee&nbsp;
-          | to continue.
+          ' You cannot make payments
+          span.brand-secondary.font-semibold at this time.
 
-        ul.admissions-fee__important-points.mb-3
-          li It covers your team of <strong>#{current_startup.billing_founders_count} founders</strong>.
-          li You can change your team at any time. Just reach us on #{mail_to 'help@sv.co'}.
+        ul.admissions-fee__important-points
+          li If you need any help please contact us on Slack or mail us at #{mail_to 'help@sv.co'}.
 
-        - if @payment.requested?
+        / - if @payment.requested?
           .alert.alert-warning.mt-2
             i.fa.fa-warning
             ' &nbsp;It looks like you've attempted to pay at least once before, but didn't complete the process. Note that it
             ' might take a few minutes for the payment status to update, if you experienced network issues after completing
             ' the payment. Please contact us at #{mail_to 'help@sv.co'} if you're experiencing any issue.
 
-        - if policy(:admissions).coupon_submit? || policy(:admissions).coupon_remove?
+        / - if policy(:admissions).coupon_submit? || policy(:admissions).coupon_remove?
           .row.justify-content-center
             .col-md-8
               .coupon-form-container.text-center.mx-auto
@@ -75,7 +74,7 @@ script src="https://js.instamojo.com/v1/checkout.js"
                         ' Hide
                       = f.submit 'Apply Code', class: 'btn btn-secondary btn-sm text-uppercase discount-coupon__box-btn'
 
-  .fee-offer__container.my-4
+  / .fee-offer__container.my-4
     == render 'fee_offer', period: 1
     == render 'fee_offer', period: 6
     == render 'fee_offer', period: 3

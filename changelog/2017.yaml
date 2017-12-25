@@ -20,10 +20,10 @@ changelog:
     trello: https://trello.com/c/toHk3lij/
     private: false
     description: Targets will now have associated skills with a good, great, wow rubric
-      and a base karma point. During the (updated) review process, a target will be graded for
-      each of these skills. The rubric based on target skills will be available for
-      download as a PDF in founder dashboard target overlay. Once verified the founder
-      will be able to see the awarded grades highlighted in the rubric PDF.
+      and a base karma point. During the (updated) review process, a target will be
+      graded for each of these skills. The rubric based on target skills will be available
+      for download as a PDF in founder dashboard target overlay. Once verified the
+      founder will be able to see the awarded grades highlighted in the rubric PDF.
     category: feature
   - timestamp: '2017-12-19T07:53:27Z'
     title: The prospective applicants form has been restored to join page now that
@@ -33,6 +33,18 @@ changelog:
       of the `/apply` page, modifying it to fit the design and layout of the current
       `/join` page.
     private: true
+  - timestamp: '2017-12-25T10:38:59Z'
+    title: Reworked the footer to include links to important pages.
+    trello: https://trello.com/c/5FiDdQdR
+    private: false
+    category: ui
+  - timestamp: '2017-12-25T10:42:31Z'
+    title: Completed migration of all pages `[1]` from old application layout to newest
+      one that uses Bootstrap 4 Beta 2.
+    trello: https://trello.com/c/u82nH6I0
+    private: true
+    description: "`[1]` _Except_ sixways, which is due to be deleted once the PDF format
+      of that content is merged into Level 0 of the program."
 - timestamp: '2017-12-18T10:55:13Z'
   changes:
   - timestamp: '2017-12-15T12:24:17Z'

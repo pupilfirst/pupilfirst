@@ -1,5 +1,38 @@
 ---
 changelog:
+- timestamp: '2017-12-25T10:27:12Z'
+  changes:
+  - timestamp: '2017-12-25T10:16:19Z'
+    title: Updated content of home page and `/join` page to reflect major changes
+      in SV.CO's program.
+    trello: https://trello.com/c/4WZhnw6p
+    private: false
+    category: content
+  - timestamp: '2017-12-25T10:12:09Z'
+    title: Moved the build process for all React components from Sprockets to Webpacker.
+    trello: https://trello.com/c/Lc3qWsqh
+    private: true
+  - timestamp: '2017-12-20T09:23:46Z'
+    title: Completed ground-work necessary to link founder targets to skills gained.
+      Targets created from now on can include a skill-mapped rubic which shows the
+      exact criteria for grading timeline events. Past targets will be slowly updated
+      to the new format.
+    trello: https://trello.com/c/toHk3lij/
+    private: false
+    description: Targets will now have associated skills with a good, great, wow rubric
+      and a base karma point. During the (updated) review process, a target will be graded for
+      each of these skills. The rubric based on target skills will be available for
+      download as a PDF in founder dashboard target overlay. Once verified the founder
+      will be able to see the awarded grades highlighted in the rubric PDF.
+    category: feature
+  - timestamp: '2017-12-19T07:53:27Z'
+    title: The prospective applicants form has been restored to join page now that
+      admissions has closed till next month.
+    trello: https://trello.com/c/2n38GkyN
+    description: This reuses the prospective applicants form from the previous design
+      of the `/apply` page, modifying it to fit the design and layout of the current
+      `/join` page.
+    private: true
 - timestamp: '2017-12-18T10:55:13Z'
   changes:
   - timestamp: '2017-12-15T12:24:17Z'

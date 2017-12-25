@@ -1,8 +1,0 @@
----
-timestamp: '2017-11-28T09:48:06Z'
-title: Added conditional warnings to the AA edit page of coupons.
-trello: https://trello.com/c/85IZlhBy
-private: true
-description: These warnings let the admin know that it isn't safe to edit rewards
-  for coupons that are already in use.
-category: ui

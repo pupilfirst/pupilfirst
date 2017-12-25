@@ -1,0 +1,5 @@
+---
+timestamp: '2017-12-25T10:12:09Z'
+title: Moved the build process for all React components from Sprockets to Webpacker.
+trello: https://trello.com/c/Lc3qWsqh
+private: true

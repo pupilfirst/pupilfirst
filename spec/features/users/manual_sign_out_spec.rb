@@ -19,7 +19,7 @@ feature 'Manual User Sign Out' do
       visit edit_startup_path
 
       # User should be signed out.
-      expect(page).to have_content('Immersive Learning Experience to Build Campus Startups')
+      expect(page).to have_content('Immersive Learning Experience to Build Internet Products')
 
       # Log the user in again.
       user.regenerate_login_token
@@ -34,7 +34,7 @@ feature 'Manual User Sign Out' do
       visit edit_startup_path
 
       # User should be signed out.
-      expect(page).to have_content('Immersive Learning Experience to Build Campus Startups')
+      expect(page).to have_content('Immersive Learning Experience to Build Internet Products')
     end
   end
 
@@ -52,7 +52,7 @@ feature 'Manual User Sign Out' do
         visit edit_startup_path
 
         # User should be signed out.
-        expect(page).to have_content('Immersive Learning Experience to Build Campus Startups')
+        expect(page).to have_content('Immersive Learning Experience to Build Internet Products')
       end
     end
   end

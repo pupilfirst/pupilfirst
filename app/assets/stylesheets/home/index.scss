@@ -4,9 +4,13 @@
     top: 0;
     width: 100%;
     z-index: 99;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%,rgba(0,0,0,0) 100%);
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.3) 0%,
+      rgba(0, 0, 0, 0) 100%
+    );
     box-shadow: none;
-    transition: linear .3s;
+    transition: linear 0.3s;
 
     &.toggle-bg {
       background-color: #000000;
@@ -37,7 +41,8 @@
         .nav-item__link {
           font-size: 1.125rem;
 
-          &:hover, &:focus {
+          &:hover,
+          &:focus {
             color: $dark-primary;
           }
         }
@@ -64,9 +69,9 @@
   position: relative;
   overflow: hidden;
   background-color: black;
-  background-image: asset-url('home/index/svtosv-hero-bg.jpg');
+  background-image: asset-url("home/index/svtosv-hero-bg.jpg");
   background-repeat: no-repeat;
-  background-size:cover;
+  background-size: cover;
 
   @include media-breakpoint-down (sm) {
     height: 420px;
@@ -101,11 +106,16 @@
   color: white;
   font-size: 3rem;
   line-height: 1.3;
-  letter-spacing: 0.04rem;
+  letter-spacing: 0.002rem;
 
   @include media-breakpoint-down (sm) {
     font-size: 2rem;
   }
+}
+
+.home-hero__message-title-subhead {
+  color: white;
+  font-size: 1rem;
 }
 
 .home-section__head-title {
@@ -164,14 +174,21 @@
   box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.1);
   @include border-radius(5px);
   overflow: hidden;
-  transition: all .2s;
+  transition: all 0.2s;
 
   &:hover {
     box-shadow: 0 4px 30px 0 rgba(0, 0, 0, 0.2);
 
     .six-ways-card__thumbnail {
       &:before {
-        background: rgba(0,0,0,0.2);
+        background: rgba(0, 0, 0, 0.2);
+      }
+    }
+    .six-ways-card__play-button-container {
+      &:before {
+        background-color: rgba(0, 0, 0, 0.5);
+        color: rgba(255, 255, 255, 1);
+        box-shadow: 0 4px 30px 0 rgba(0, 0, 0, 0.3);
       }
     }
   }
@@ -179,20 +196,20 @@
 
 .six-ways-card__thumbnail {
   display: block;
-  position:relative;
-  @include border-radius(5px 5px 0px 0px) ;
+  position: relative;
+  @include border-radius(5px 5px 0px 0px);
   overflow: hidden;
 
   &:before {
     position: absolute;
-    content:'';
-    width:100%;
-    height:100%;
-    top:0;
-    left:0;
+    content: "";
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
     z-index: 1;
-    background: rgba(0,0,0,0.5);
-    transition: all .2s;
+    background: rgba(0, 0, 0, 0.5);
+    transition: all 0.2s;
   }
 }
 
@@ -200,16 +217,24 @@
   position: relative;
 }
 
-.six-ways-card__thumbnail-text {
+.six-ways-card__thumbnail-content {
   position: absolute;
   z-index: 2;
   margin: 0 1rem 0.875rem;
   bottom: 0;
-  color: white;
 }
 
-.six-ways-card__thumbnail-text--small {
-  font-size: 1.125rem;
+.six-ways-card__thumbnail-head {
+  color: white;
+  font-size: 0.9375rem;
+  line-height: 1.3;
+  letter-spacing: 0.002rem;
+}
+
+.six-ways-card__thumbnail-subhead {
+  display: inline-block;
+  font-size: 0.8125rem;
+  color: $light-secondary;
 }
 
 .six-ways-card__story-detail {
@@ -225,12 +250,49 @@
 }
 
 .six-ways-card__play-button-container {
+  position: absolute;
   width: 20%;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  z-index: 10;
+  top: 45%;
+
+  &:before {
+    @include fa-icon(play);
+    @include border-radius(50%);
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    font-size: 1.25rem;
+    padding-left: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: rgba(255, 255, 255, 0.5);
+    text-shadow: 0px 0px 30px rgba(0, 0, 0, 0.5);
+    transition: all 0.2s;
+  }
+}
+
+.six-ways-card__video-time {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 11;
+  margin: 1rem;
+  display: inline-block;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 2px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 0.6875rem;
+  @include border-radius(5px);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .six-ways-card__play-button {
   display: block;
-  background-image: asset-url('shared/play-button.svg');
+  background-image: asset-url("shared/play-button.svg");
   width: 40px;
   height: 40px;
   @include border-radius(50%);
@@ -252,18 +314,18 @@
   overflow: hidden;
   margin: 15px 0;
   display: block;
-  transition: all .3s;
+  transition: all 0.3s;
 
   &:before {
     position: absolute;
-    content:'';
-    width:100%;
-    height:100%;
-    top:0;
-    left:0;
+    content: "";
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
     z-index: 1;
-    transition: all .3s;
-    background: rgba(0,0,0,0.5);
+    transition: all 0.3s;
+    background: rgba(0, 0, 0, 0.5);
   }
 
   &:hover {
@@ -271,7 +333,7 @@
     transform: translateY(-5px);
 
     &:before {
-      background: rgba(0,0,0,0.4);
+      background: rgba(0, 0, 0, 0.4);
     }
   }
 }
@@ -304,7 +366,7 @@
   color: white;
   margin: 0;
   font-size: 1.25rem;
-  letter-spacing: 0.04rem;
+  letter-spacing: 0.002rem;
   line-height: 1.2;
 }
 
@@ -336,7 +398,8 @@
     width: 100%;
   }
 
-  .slick-prev, .slick-next {
+  .slick-prev,
+  .slick-next {
     border: 1px solid $brand-secondary;
     @include border-radius(50%);
     background-color: white;
@@ -345,7 +408,7 @@
     width: 50px;
     margin: 0 2rem;
     z-index: 1;
-    transition: all .2s;
+    transition: all 0.2s;
 
     @include media-breakpoint-down(lg) {
       bottom: 0;
@@ -365,17 +428,19 @@
     }
 
     &:before {
-     font-size: 18px;
-     vertical-align: middle;
-     opacity: 1;
-     color: $brand-secondary;
+      font-size: 18px;
+      vertical-align: middle;
+      opacity: 1;
+      color: $brand-secondary;
     }
 
-    &:hover, &:focus, &:active {
+    &:hover,
+    &:focus,
+    &:active {
       box-shadow: $box-shadow-hover;
 
       &:before {
-       color: $light-secondary;
+        color: $light-secondary;
       }
     }
   }
@@ -463,11 +528,14 @@
 
 // .home-action-footer-container
 .home-call-to-action__container {
-  background: rgb(111,190,68);
-  background: linear-gradient(135deg, rgb(111,190,68) 0%,rgb(13,113,186) 100%);
+  background: rgb(111, 190, 68);
+  background: linear-gradient(
+    135deg,
+    rgb(111, 190, 68) 0%,
+    rgb(13, 113, 186) 100%
+  );
 }
 .home-call-to-action__box {
-
 }
 
 .home-call-to-action__head {
@@ -542,5 +610,3 @@
     justify-content: center;
   }
 }
-
-

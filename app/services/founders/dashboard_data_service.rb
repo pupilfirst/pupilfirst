@@ -25,7 +25,7 @@ module Founders
           .where.not(session_at: nil).where(archived: false)
           .where(levels: { number: applicable_levels }).order(session_at: :desc)
           .as_json(
-            only: target_fields,
+            only: session_fields,
             methods: %i[has_rubric target_type target_type_description],
             include: {
               faculty: faculty_fields,
@@ -125,6 +125,10 @@ module Founders
 
     def target_fields
       %i[id role title description completion_instructions resource_url slideshow_embed video_embed youtube_video_id days_to_complete points_earnable timeline_event_type_id session_at link_to_complete submittability archived]
+    end
+
+    def session_fields
+      target_fields + %i[session_by]
     end
 
     def faculty_fields

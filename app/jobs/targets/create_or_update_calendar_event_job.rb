@@ -26,9 +26,7 @@ module Targets
     end
 
     def add_event_details(event, target)
-      faculty = target.faculty
-
-      event.title = I18n.t("services.targets.create_or_update_calendar_event.title", name: faculty.name, title: faculty.title)
+      event.title = I18n.t("services.targets.create_or_update_calendar_event.title", title: target.title)
       event.start_time = target.session_at.iso8601
       event.end_time = (target.session_at + 30.minutes).iso8601
       event.attendees = attendees(target)

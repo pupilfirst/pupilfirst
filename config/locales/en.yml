@@ -137,7 +137,7 @@ en:
 
     targets:
       create_or_update_calendar_event:
-        title: 'SV.CO Live session by %{name}, %{title}'
+        title: 'SV.CO Live Session: %{title}'
         description: |
           The live session will be hosted using Zoom (conferencing tool). You can download Zoom software at this link:
 

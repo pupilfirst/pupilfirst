@@ -1,7 +1,15 @@
 require 'rails_helper'
 
-describe Targets::CreateOrUpdateCalendarEventService do
-  subject { described_class.new(target, mock: false) }
+describe Targets::CreateOrUpdateCalendarEventJob do
+  subject { described_class }
+
+  before(:all) do
+    described_class.active = true
+  end
+
+  after(:all) do
+    described_class.active = false
+  end
 
   def founder_details(founder)
     {
@@ -11,6 +19,7 @@ describe Targets::CreateOrUpdateCalendarEventService do
     }
   end
 
+  let(:admin_user) { create :admin_user }
   let(:level_one) { create :level, :one }
   let(:level_two) { create :level, :two }
   let(:level_three) { create :level, :three }
@@ -20,9 +29,10 @@ describe Targets::CreateOrUpdateCalendarEventService do
   let!(:startup_l3) { create :startup, :subscription_active, level: level_three }
   let!(:target) { create :target, session_at: 1.week.from_now, level: level_two, target_group: nil }
   let(:calendar_service) { instance_double(GoogleCalendarService) }
-  let(:null_calendar_event) { double('Google Calendar Event').as_null_object }
-  let(:calendar_event) { double 'Google Calendar Event', id: calendar_event_id }
+  let(:null_calendar_event) { double('Google Calendar Event', html_link: calendar_event_link).as_null_object }
+  let(:calendar_event) { double 'Google Calendar Event', id: calendar_event_id, html_link: calendar_event_link }
   let(:calendar_event_id) { rand(100_000).to_s }
+  let(:calendar_event_link) { Faker::Internet.url }
 
   let(:expected_attendees) do
     attendees = startup_l2.founders.map { |f| founder_details(f) }
@@ -53,13 +63,25 @@ describe Targets::CreateOrUpdateCalendarEventService do
         ]
       )
 
-      subject.execute
+      subject.perform_now(target, admin_user)
     end
 
     it 'stores the Google calendar event ID with target' do
       allow(calendar_service).to receive(:find_or_create_event_by_id).and_yield(null_calendar_event).and_return(calendar_event)
-      subject.execute
+
+      subject.perform_now(target, admin_user)
+
       expect(target.reload.google_calendar_event_id).to eq(calendar_event_id)
+    end
+
+    it 'sends an email to admin user informing him of completion' do
+      allow(calendar_service).to receive(:find_or_create_event_by_id).and_yield(null_calendar_event).and_return(calendar_event)
+
+      subject.perform_now(target, admin_user)
+
+      open_email(admin_user.email)
+
+      expect(current_email).to have_content('Google Calendar Invitations Sent')
     end
 
     context 'when an event with invitation already exists' do
@@ -67,7 +89,8 @@ describe Targets::CreateOrUpdateCalendarEventService do
 
       it 'updates the existing calendar event' do
         expect(calendar_service).to receive(:find_or_create_event_by_id).with(calendar_event_id).and_yield(null_calendar_event).and_return(null_calendar_event)
-        subject.execute
+
+        subject.perform_now(target, admin_user)
       end
     end
   end

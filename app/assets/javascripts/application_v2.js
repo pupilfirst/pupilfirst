@@ -6,8 +6,6 @@
 
 //= require turbolinks
 //= require turbolinks_compatibility
-//= require react
-//= require react_ujs
 
 // Require PNotify (rails asset), unobtrusive flash (rubygems), and flashes (local code) early so that notifications
 // render as quickly as possible.

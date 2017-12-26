@@ -265,8 +265,8 @@ ActiveAdmin.register Target do
     # Only the calender event needs to be created / updated manually.
     # Notifications and emails sent before and after the session are managed using periodic tasks.
     # See `lib/period_tasks.rake`.
-    Targets::CreateOrUpdateCalendarEventService.new(target).execute
-    flash[:success] = "Google Calendar invitation has been created / updated for founders in Level #{target.level.number} and above."
+    Targets::CreateOrUpdateCalendarEventJob.perform_later(target, current_admin_user)
+    flash[:success] = "Google Calendar invitation will be created / updated shortly. You should receive an email in a few minutes with results."
     redirect_to admin_target_path(target)
   end
 

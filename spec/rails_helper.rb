@@ -71,8 +71,9 @@ RSpec.configure do |config|
     metadata[:type] = :service
   end
 
-  # Include email helpers in service specs.
+  # Include email helpers in service and job specs.
   config.include Capybara::Email::DSL, type: :service
+  config.include Capybara::Email::DSL, type: :job
 
   # Include Factory Girl's helpers.
   config.include FactoryBot::Syntax::Methods

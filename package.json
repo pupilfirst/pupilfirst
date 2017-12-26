@@ -3,8 +3,13 @@
   "private": true,
   "dependencies": {
     "@rails/webpacker": "^3.2.0",
+    "babel-preset-react": "^6.24.1",
     "cloc": "^2.3.2",
     "coffeescript": "1.12.7",
+    "prop-types": "^15.6.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react_ujs": "^2.4.3",
     "vanilla-tilt": "^1.4.1"
   },
   "devDependencies": {

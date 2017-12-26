@@ -30,6 +30,8 @@ Rails/HasAndBelongsToMany:
 
 # Project styling
 
+Style/DoubleNegation:
+  Enabled: false
 Layout/AlignParameters:
   EnforcedStyle: with_fixed_indentation
 Layout/MultilineOperationIndentation:

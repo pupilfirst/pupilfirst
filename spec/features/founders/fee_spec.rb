@@ -36,6 +36,8 @@ feature 'Founder Monthly Fee Payment' do
     end
 
     scenario 'founder attempts payment' do
+      pending 'Fee payment disabled'
+
       sign_in_user founder.user, referer: fee_founder_path
       expect(page).to have_content('Please pay the membership fee to continue.')
       click_button 'Pay for 1 month'
@@ -43,6 +45,8 @@ feature 'Founder Monthly Fee Payment' do
     end
 
     scenario 'non-admin visits fee page' do
+      pending 'Fee payment disabled'
+
       non_admin_founder = startup.founders.where.not(id: startup.team_lead_id).first
       sign_in_user non_admin_founder.user, referer: fee_founder_path
       expect(page).to have_content('Please pay the membership fee to continue.')
@@ -53,6 +57,8 @@ feature 'Founder Monthly Fee Payment' do
     let!(:payment) { create :payment, :requested, startup: startup, amount: 8000 }
 
     scenario 'founder attempts payment again with different period' do
+      pending 'Fee payment disabled'
+
       # Stub the call to disable old payment request.
       stub_request(:post, "https://www.example.com/payment-requests/#{payment.instamojo_payment_request_id}/disable/")
         .to_return(body: { success: true }.to_json)
@@ -90,6 +96,8 @@ feature 'Founder Monthly Fee Payment' do
     end
 
     scenario 'founder attempts payment again with same period' do
+      pending 'Fee payment disabled'
+
       # Stub the call to validate existing payment reqeust.
       stub_request(:get, "https://www.example.com/payment-requests/#{payment.instamojo_payment_request_id}/")
         .to_return(body: {

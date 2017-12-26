@@ -3,10 +3,6 @@
 #= require turbolinks
 #= require turbolinks_compatibility
 
-# External libraries
-#= require react
-#= require react_ujs
-
 # Lodash goodness.
 #= require lodash
 

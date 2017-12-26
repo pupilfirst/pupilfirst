@@ -16,6 +16,9 @@ class FounderPolicy < ApplicationPolicy
   end
 
   def fee_submit?
-    fee?
+    # fee?
+
+    # Temporarily disable fee payments.
+    false
   end
 end

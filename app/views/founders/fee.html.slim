@@ -35,7 +35,7 @@ script src="https://js.instamojo.com/v1/checkout.js"
             ' might take a few minutes for the payment status to update, if you experienced network issues after completing
             ' the payment. Please contact us at #{mail_to 'help@sv.co'} if you're experiencing any issue.
 
-        / - if policy(:admissions).coupon_submit? || policy(:admissions).coupon_remove?
+        - if policy(:admissions).coupon_submit? || policy(:admissions).coupon_remove?
           .row.justify-content-center
             .col-md-8
               .coupon-form-container.text-center.mx-auto
@@ -75,7 +75,7 @@ script src="https://js.instamojo.com/v1/checkout.js"
                       method: :post do |f|
 
                       = f.input :code, label: false, autofocus: true, placeholder: 'Enter Code'
-                      #coupon-form-hide.coupon-form-hide.d-none.btn.btn-ghost-secondary.btn-sm.text-uppercase.mr-2.discount-coupon__box-btn
+                      #coupon-form-hide.d-none.btn.btn-ghost-secondary.btn-sm.text-uppercase.mr-2.discount-coupon__box-btn
                         ' Hide
                       = f.submit 'Apply Code', class: 'btn btn-secondary btn-sm text-uppercase discount-coupon__box-btn'
 

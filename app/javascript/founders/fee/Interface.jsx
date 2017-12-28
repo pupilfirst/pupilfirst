@@ -42,7 +42,7 @@ export default class Interface extends React.Component {
   }
 
   canRemoveCoupon() {
-    return false;
+    return true;
   }
 
   couponCode() {}
@@ -60,16 +60,28 @@ export default class Interface extends React.Component {
   render() {
     return (
       <div className="container">
-        <div className="row m-t-3 m-b-3">
+        <div className="row mt-3 mb-3">
           <div className="col-lg-7">
-            <div className="content-box apply-submitted">
-              <h3 className="text-xs-center m-b-1">
+            <div className="content-box mt-3 mb-3 apply-submitted">
+              <h3 className="text-center mb-2">
+                You cannot make payments{" "}
+                <span className="brand-secondary font-semibold">
+                  at this time.
+                </span>
+              </h3>
+              <ul className="admissions-fee__important-points">
+                <li>
+                  If you need any help please contact us on Slack or mail us at{" "}
+                  <a href="mailto:help@sv.co">help@sv.co</a>.
+                </li>
+              </ul>
+
+              <h3 className="text-center mb-2">
                 <span className="brand-secondary font-semibold">
                   Please pay the membership fee to continue.
                 </span>
               </h3>
-
-              <ul className="admissions-fee__important-points m-b-1">
+              <ul className="admissions-fee__important-points">
                 <li>
                   It covers your team of{" "}
                   <strong>{this.billingFoundersCount()} founders</strong>.
@@ -80,21 +92,29 @@ export default class Interface extends React.Component {
                 </li>
               </ul>
 
+              <ul className="admissions-fee__important-points">
+                <li>
+                  If you need any help please contact us on Slack or mail us at{" "}
+                  <a href="mailto:help@sv.co">help@sv.co</a>.
+                </li>
+              </ul>
+
               {this.paymentRequested() && (
-                <div className="alert alert-warning m-t-1">
+                <div className="alert alert-warning mt-2">
                   <i className="fa fa-warning" /> It looks like you've attempted
-                  to pay at least once before, but didn't complete the process.
-                  Note that it might take a few minutes for the payment status
-                  to update, if you experienced network issues after completing
-                  the payment. Please contact us at {this.mailTo("help@sv.co")}{" "}
-                  if you're experiencing any issue.
+                  to pay at least once before, but didn&rsquo;t complete the
+                  process. Note that it might take a few minutes for the payment
+                  status to update, if you experienced network issues after
+                  completing the payment. Please contact us at{" "}
+                  {this.mailTo("help@sv.co")} if you&rsquo;re experiencing any
+                  issue.
                 </div>
               )}
 
               {(this.canSubmitCoupon() || this.canRemoveCoupon) && (
-                <div className="row">
-                  <div className="offset-md-2 col-md-8">
-                    <div className="coupon-form-container text-xs-center m-x-auto">
+                <div className="row justify-content-center">
+                  <div className="col-md-8">
+                    <div className="coupon-form-container text-center mx-auto">
                       {this.canRemoveCoupon() && (
                         <CouponRemover
                           rootState={this.state}

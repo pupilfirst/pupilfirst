@@ -4,13 +4,13 @@ import PropTypes from "prop-types";
 export default class FeeOffer extends React.Component {
   render() {
     return (
-      <div className="col-sm-4 content-box text-xs-center fee-offer__box">
-        <h5 className="font-semibold text-uppercase fee-offer_period p-b-1 m-b-2">
+      <div className="col-sm-4 content-box text-center fee-offer__box">
+        <h5 className="font-semibold text-uppercase fee-offer_period pb-2 mb-3">
           1 month
         </h5>
-        <div className="m-y-2">
+        <div className="my-4">
           <div className="fee-offer__amount-highlight">
-            <h2 className="font-semibold m-b-0">
+            <h2 className="font-semibold mb-0">
               <span className="font-regular">₹</span>8000{" "}
             </h2>
             <p>for 2 founders</p>
@@ -26,7 +26,7 @@ export default class FeeOffer extends React.Component {
           data-remote="true"
           method="post"
         >
-          <div className="p-x-1">
+          <div className="px-4">
             <div className="js-founder-fee__pay-button">
               <button
                 name="button"
@@ -38,12 +38,14 @@ export default class FeeOffer extends React.Component {
             </div>
           </div>
         </form>
-        <div className="js-founder-fee__disabled-pay-button hidden-xs-up">
-          <button className="btn btn-md text-uppercase btn-with-icon btn-disabled">
-            <i className="fa fa-spinner fa-pulse" />Please wait...
-          </button>
+        <div className="js-founder-fee__disabled-pay-button d-none">
+          <div className="px-4">
+            <button className="btn btn-primary btn-md text-uppercase btn-with-icon disabled">
+              <i className="fa fa-spinner fa-pulse" />Please wait...
+            </button>
+          </div>
         </div>
-        <div className="fee-offer__error brand-danger m-t-1 hidden-xs-up">
+        <div className="fee-offer__error brand-danger mt-2 d-none">
           <i className="fa fa-warning" />
           <div className="font-semibold">Something went wrong! </div>Please
           refresh the page and try again

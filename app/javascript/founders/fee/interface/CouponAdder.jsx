@@ -6,27 +6,26 @@ export default class CouponAdder extends React.Component {
     return (
       <div>
         <div
+          className="discount-coupon__box discount-coupon__box--show brand-secondary font-semibold p-3"
           id="coupon-form-show"
-          className="discount-coupon__box discount-coupon__box--show brand-secondary font-semibold p-a-1"
         >
-          <h4 className="font-semibold dark-secondary m-a-0">
-            Do you have a coupon?
+          <h4 className="font-semibold dark-secondary m-0">
+            Do you have a coupon?{" "}
           </h4>
         </div>
-
         <div
+          className="discount-coupon__box discount-coupon__box--form simple-form-container p-3"
           id="coupon-form"
-          className="discount-coupon__box discount-coupon__box--form simple-form-container hidden-xs-up p-a-1"
         >
           <form
             className="simple_form new_admissions_coupon"
-            action="/admissions/coupon_submit"
-            acceptCharset="UTF-8"
+            id="new_admissions_coupon"
+            method="post"
           >
             <div className="form-group string required admissions_coupon_code">
               <input
                 className="form-control string required"
-                autoFocus="autofocus"
+                autoFocus={true}
                 required="required"
                 aria-required="true"
                 placeholder="Enter Code"
@@ -36,10 +35,10 @@ export default class CouponAdder extends React.Component {
               />
             </div>
             <div
-              className="coupon-form-hide btn btn-ghost-secondary btn-sm text-uppercase m-r-1 discount-coupon__box-btn"
+              className="btn btn-ghost-secondary btn-sm text-uppercase mr-2 discount-coupon__box-btn"
               id="coupon-form-hide"
             >
-              Hide
+              Hide{" "}
             </div>
             <input
               type="submit"

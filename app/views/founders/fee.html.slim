@@ -1,15 +1,17 @@
+- presenter = Founders::FeePresenter.new(self, current_startup, @payment)
+
 - content_for :head do
   title SV.CO Membership Fee
   meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
 
   == javascript_pack_tag 'founders/fee', 'data-turbolinks-track': 'reload'
 
-script src="https://js.instamojo.com/v1/checkout.js"
+script src='https://js.instamojo.com/v1/checkout.js'
 
 #founders__fee
 
-/ Root component for React interface.
-#founders-fee-interface__root data-props={debug: true}.to_json
+/ Root component for React-driven interface.
+#founders-fee-interface__root data-props=presenter.interface_props.to_json
 
 .secondary-banner
   .container

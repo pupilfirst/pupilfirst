@@ -1,9 +1,17 @@
 module Founders
-  class FeeOfferPresenter < ApplicationPresenter
-    def initialize(view_context, startup, period)
+  class FeePresenter < ApplicationPresenter
+    def initialize(view_context, startup, payment)
       @startup = startup
-      @period = period
+      @payment = payment
       super(view_context)
+    end
+
+    def interface_props
+      {
+        debug: true,
+        disabled: false,
+        paymentRequested: !!@payment&.requested?
+      }
     end
 
     def period_string

@@ -1,0 +1,8 @@
+---
+timestamp: '2017-12-28T10:43:02Z'
+title: Fixed a bug in the automatic faculty connect slots creator that caused it to
+  create slots and send mails to inactive faculty.
+trello: https://trello.com/c/KP6f3iHh
+private: true
+description: The job has also been spec-d.
+category: bugfix

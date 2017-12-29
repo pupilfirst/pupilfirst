@@ -50,7 +50,8 @@
         #acquihire-teams.tab-pane.fade.show.active role="tabpanel"
           .row
             .col-lg-7.col-md-12
-              iframe.talent-video-playlist src="https://www.youtube.com/embed/SWR95X-lmz4?list=PLrvZyo34miDJt-m4a0WKUPqMvnmJ-9hVO&enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
+              - unless Rails.env.test?
+                iframe.talent-video-playlist src="https://www.youtube.com/embed/SWR95X-lmz4?list=PLrvZyo34miDJt-m4a0WKUPqMvnmJ-9hVO&enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
             .col-lg-5.col-md-12
               h3.talent-tab-content__header.font-regular.mb-2
                 ' Companies like <strong>Tally</strong>
@@ -65,7 +66,8 @@
         #hire-founders.tab-pane.fade.show role="tabpanel"
           .row
             .col-lg-7.col-md-12
-              iframe.talent-video-playlist src="https://www.youtube.com/embed/cqyOZI4AopI?list=PLrvZyo34miDL8J63zyVLNonPjUK8Q-m6U&enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
+              - unless Rails.env.test?
+                iframe.talent-video-playlist src="https://www.youtube.com/embed/cqyOZI4AopI?list=PLrvZyo34miDL8J63zyVLNonPjUK8Q-m6U&enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
             .col-lg-5.col-md-12
               h3.talent-tab-content__header.font-regular.mb-2
                 ' Companies like <strong>Goqii, Ola &amp; Freecharge</strong>
@@ -82,7 +84,8 @@
         #invest-in-startups.tab-pane.fade.show role="tabpanel"
           .row
             .col-lg-7.col-md-12
-              iframe.talent-video-playlist src="https://www.youtube.com/embed/QmavQDI3SV4?list=PLrvZyo34miDIszuU6tptnX5coYUkWVcQi&enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
+              - unless Rails.env.test?
+                iframe.talent-video-playlist src="https://www.youtube.com/embed/QmavQDI3SV4?list=PLrvZyo34miDIszuU6tptnX5coYUkWVcQi&enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
             .col-lg-5.col-md-12
               h3.talent-tab-content__header.font-regular.mb-2
                 ' <strong>Fin, Reckone</strong> and <strong>iTraveller</strong>
@@ -95,7 +98,8 @@
         #build-startup-pipeline.tab-pane.fade.show role="tabpanel"
           .row
             .col-lg-7.col-md-12
-              iframe.talent-video-playlist src="https://www.youtube.com/embed/vjDdSdfitKY?enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
+              - unless Rails.env.test?
+                iframe.talent-video-playlist src="https://www.youtube.com/embed/vjDdSdfitKY?enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
             .col-lg-5.col-md-12
               h3.talent-tab-content__header.font-regular.mb-2
                 ' Startups like
@@ -231,7 +235,8 @@
               ' it's the need of the hour and I'm personally very excited to see what's going to
               | come out of all these young people.&#8221;
           .col-lg-7.col-md-12
-            iframe.testimonial-video src="https://www.youtube.com/embed/ut-J7cuQpzI?enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
+            - unless Rails.env.test?
+              iframe.testimonial-video src="https://www.youtube.com/embed/ut-J7cuQpzI?enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
 
       .testimonial-slide-item
         .d-flex.flex-column.flex-lg-row
@@ -245,7 +250,8 @@
               ' &#8220;Really impressed with the program that Startup Village is running, I would say
               | it's very admirable, because if you look ahead what is going to drive this country forward is innovation.&#8221;
           .col-lg-7.col-md-12
-            iframe.testimonial-video src="https://www.youtube.com/embed/qEZ1RamKt6k?enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
+            - unless Rails.env.test?
+              iframe.testimonial-video src="https://www.youtube.com/embed/qEZ1RamKt6k?enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
 
       .testimonial-slide-item
         .d-flex.flex-column.flex-lg-row
@@ -260,7 +266,8 @@
               | a great talent pool. A very exciting day for us!&#8221;
 
           .col-lg-7.col-md-12
-            iframe.testimonial-video src="https://www.youtube.com/embed/z2e5o5ftgRc?enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
+            - unless Rails.env.test?
+              iframe.testimonial-video src="https://www.youtube.com/embed/z2e5o5ftgRc?enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
 
       .testimonial-slide-item
         .d-flex.flex-column.flex-lg-row
@@ -275,7 +282,8 @@
               | of talent who are trying to solve real problems. I think what Startup Village is doing is really great.&#8221;
 
           .col-lg-7.col-md-12
-            iframe.testimonial-video src="https://www.youtube.com/embed/jiZs9BqC8vw?enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
+            - unless Rails.env.test?
+              iframe.testimonial-video src="https://www.youtube.com/embed/jiZs9BqC8vw?enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
 
 .footer-action
   .container

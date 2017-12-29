@@ -34,7 +34,8 @@ section.home-hero__container
           - else
             = link_to 'Join Now', join_path, class: 'btn btn-primary btn-lg home-apply__button', id: 'home-index__hero-join-link'
 
-  = video_tag 'https://public-assets.sv.co/videos/header_background_clip.mp4', preload: 'none', autoplay: true, loop: true, class: 'd-none d-md-block home-hero__video'
+  - unless Rails.env.test?
+    = video_tag 'https://public-assets.sv.co/videos/header_background_clip.mp4', preload: 'none', autoplay: true, loop: true, class: 'd-none d-md-block home-hero__video'
 
 section.home-partners__container.py-3.d-none.d-md-block
   .container.home-partners__box
@@ -276,7 +277,8 @@ section.home-call-to-action__container.py-5
         button.close aria-label="Close" data-dismiss="modal" type="button"
           span aria-hidden="true" &times;
       .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/KufIL6ZS1lk" frameborder="0" allowfullscreen="allowfullscreen"
+        - unless Rails.env.test?
+          iframe.video-frame src="https://www.youtube.com/embed/KufIL6ZS1lk" frameborder="0" allowfullscreen="allowfullscreen"
 
 #profoundis-story-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
@@ -285,7 +287,8 @@ section.home-call-to-action__container.py-5
         button.close aria-label="Close" data-dismiss="modal" type="button"
           span aria-hidden="true" &times;
       .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/vjDdSdfitKY" frameborder="0" allowfullscreen="allowfullscreen"
+        - unless Rails.env.test?
+          iframe.video-frame src="https://www.youtube.com/embed/vjDdSdfitKY" frameborder="0" allowfullscreen="allowfullscreen"
 
 #z-pay-story-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
@@ -294,7 +297,8 @@ section.home-call-to-action__container.py-5
         button.close aria-label="Close" data-dismiss="modal" type="button"
           span aria-hidden="true" &times;
       .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/pwmVitwaeL0" frameborder="0" allowfullscreen="allowfullscreen"
+        - unless Rails.env.test?
+          iframe.video-frame src="https://www.youtube.com/embed/pwmVitwaeL0" frameborder="0" allowfullscreen="allowfullscreen"
 
 #hiring-story-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
@@ -303,7 +307,8 @@ section.home-call-to-action__container.py-5
         button.close aria-label="Close" data-dismiss="modal" type="button"
           span aria-hidden="true" &times;
       .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/XBjkCUW1lFQ" frameborder="0" allowfullscreen="allowfullscreen"
+        - unless Rails.env.test?
+          iframe.video-frame src="https://www.youtube.com/embed/XBjkCUW1lFQ" frameborder="0" allowfullscreen="allowfullscreen"
 
 #wowmakers-story-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
@@ -312,7 +317,8 @@ section.home-call-to-action__container.py-5
         button.close aria-label="Close" data-dismiss="modal" type="button"
           span aria-hidden="true" &times;
       .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/R8LhGtoeaUc" frameborder="0" allowfullscreen="allowfullscreen"
+        - unless Rails.env.test?
+          iframe.video-frame src="https://www.youtube.com/embed/R8LhGtoeaUc" frameborder="0" allowfullscreen="allowfullscreen"
 
 #higher-studies-story-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
@@ -321,4 +327,5 @@ section.home-call-to-action__container.py-5
         button.close aria-label="Close" data-dismiss="modal" type="button"
           span aria-hidden="true" &times;
       .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/BxPH9XyQRsM" frameborder="0" allowfullscreen="allowfullscreen"
+        - unless Rails.env.test?
+          iframe.video-frame src="https://www.youtube.com/embed/BxPH9XyQRsM" frameborder="0" allowfullscreen="allowfullscreen"

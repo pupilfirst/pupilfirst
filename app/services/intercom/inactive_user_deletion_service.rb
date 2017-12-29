@@ -109,12 +109,12 @@ module Intercom
         # Split users to chunks of 83. As per intercom API documentation: "If you have a large number of operations to
         # perform you should break these into groups of 83 or less (assuming your rate limit is 500 per minute) and
         # send these groups every 10 seconds "
-        segment_users.each_slice(83).each do |segment_users_chunk|
+        segment_users.each_slice(83).each_with_index do |segment_users_chunk, index|
+          # Add a delay of 10s to meet the API requirement, for chunks after the first.
+          sleep(10) if index.positive?
+
           @intercom_client.users.submit_bulk_job(delete_items: segment_users_chunk)
           log "deleted #{segment_users_chunk.count} users from segment: #{segment}"
-
-          # Add a delay of 10s to meet the API requirement.
-          sleep(10)
         end
       end
     end

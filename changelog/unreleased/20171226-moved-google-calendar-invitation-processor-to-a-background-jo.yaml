@@ -1,8 +1,0 @@
----
-timestamp: '2017-12-26T09:55:27Z'
-title: Moved Google Calendar invitation processor to a background job.
-trello: https://trello.com/c/oyzGhpqy
-private: true
-description: This fixed the timeout that would happen when the admin clicked the invite
-  button.
-category: bugfix

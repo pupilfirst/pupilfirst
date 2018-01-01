@@ -14,7 +14,7 @@ module Founders
     property :college_identification, validates: { file_size: { less_than: 2.megabytes }, file_content_type: { allow: %w[image/jpeg image/png image/gif] }, raster_image: true }
     property :course
     property :semester, validates: { inclusion: MoocStudent.valid_semester_values, allow_blank: true }
-    property :year_of_graduation, validates: { inclusion: (1990..2020), allow_blank: true }
+    property :year_of_graduation, validates: { inclusion: (1990..2025), allow_blank: true }
     property :backlog, validates: { numericality: { greater_than_or_equal_to: 0, integer: true }, allow_blank: true }
     property :twitter_url, validates: { url: true, allow_blank: true }
     property :linkedin_url, validates: { url: true, allow_blank: true }

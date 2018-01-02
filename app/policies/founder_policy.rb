@@ -21,4 +21,8 @@ class FounderPolicy < ApplicationPolicy
     # Temporarily disable fee payments.
     false
   end
+
+  def screening_submit?
+    record&.startup.present? & record&.screening_data.blank?
+  end
 end

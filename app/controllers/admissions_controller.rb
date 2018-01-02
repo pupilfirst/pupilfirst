@@ -41,13 +41,13 @@ class AdmissionsController < ApplicationController
   # GET /admissions/screening
   def screening
     authorize :admissions
-    render layout: 'application'
+    screening_url = Rails.application.secrets.typeform[:screening_url] + "?user_id=#{current_user.id}"
+    redirect_to screening_url
   end
 
-  # POST /admissions/screening
+  # GET /admissions/screening_submit?user_id&score
   def screening_submit
     authorize :admissions
-
     Admissions::CompleteTargetService.new(current_founder, Target::KEY_ADMISSIONS_SCREENING).execute
 
     # Mark as screening completed on Intercom
@@ -55,6 +55,17 @@ class AdmissionsController < ApplicationController
 
     flash[:success] = 'Screening target has been marked as completed!'
     redirect_to dashboard_founder_path(from: 'screening_submit')
+  end
+
+  def screening_submit_webhook
+    founder = Founder.find_by user_id: params.dig(:form_response, :hidden, :user_id).to_i
+
+    Admissions::CompleteTargetService.new(founder, Target::KEY_ADMISSIONS_SCREENING).execute
+
+    # Mark as screening completed on Intercom
+    Intercom::LevelZeroStageUpdateJob.perform_later(current_founder, 'Screening Completed')
+
+    head :ok
   end
 
   # Handle submission of coupon code.

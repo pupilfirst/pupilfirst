@@ -4,7 +4,7 @@ class AdmissionsPolicy < ApplicationPolicy
   end
 
   def screening_submit?
-    screening?
+    level_zero? && FounderPolicy.new(user, user.founder).screening_submit?
   end
 
   def coupon_submit?

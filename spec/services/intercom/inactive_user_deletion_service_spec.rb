@@ -14,8 +14,8 @@ describe Intercom::InactiveUserDeletionService do
   describe '#execute' do
     subject { described_class.new }
 
-    let(:sendinblue_client) { double 'SendinBlue Client' }
-    let(:intercom_client) { double 'Intercom Client' }
+    let(:sendinblue_client) { instance_double Sendinblue::Mailin }
+    let(:intercom_client) { instance_double Intercom::Client }
 
     let(:location_data_1) { OpenStruct.new(city_name: Faker::Name.name, region_name: Faker::Name.name) }
     let(:location_data_2) { OpenStruct.new }

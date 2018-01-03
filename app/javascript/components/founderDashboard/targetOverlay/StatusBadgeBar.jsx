@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import starsForScore from "../shared/starsForScore";
 
 export default class StatusBadgeBar extends React.Component {
   containerClasses() {
@@ -48,8 +49,9 @@ export default class StatusBadgeBar extends React.Component {
 
   statusContents() {
     let grade = ["good", "great", "wow"].indexOf(this.props.target.grade) + 1;
+    const score = parseFloat(this.props.target.score);
 
-    if (this.props.target.status != "complete" || grade === 0) {
+    if (this.props.target.status !== "complete" || grade === 0) {
       return (
         <div className="target-overlay-status-badge-bar__badge-content">
           <span className="target-overlay-status-badge-bar__badge-icon">
@@ -60,23 +62,7 @@ export default class StatusBadgeBar extends React.Component {
         </div>
       );
     } else {
-      let filledStars = _.times(grade).map(function(e, i) {
-        return (
-          <i
-            key={"filled-star-" + this.props.target.id + "-" + i}
-            className="fa fa-star founder-dashboard-target-header__status-badge-star"
-          />
-        );
-      }, this);
-
-      let emptyStars = _.times(3 - grade).map(function(e, i) {
-        return (
-          <i
-            key={"empty-star-" + this.props.target.id + "-" + i}
-            className="fa fa-star-o founder-dashboard-target-header__status-badge-star"
-          />
-        );
-      }, this);
+      const stars = starsForScore(score, this.props.target.id);
 
       let gradeString =
         this.props.target.grade.charAt(0).toUpperCase() +
@@ -84,10 +70,7 @@ export default class StatusBadgeBar extends React.Component {
 
       return (
         <div className="target-overlay-status-badge-bar__badge-content">
-          {filledStars}
-          {emptyStars}
-
-          <span>&nbsp;{gradeString}!</span>
+          {stars} {gradeString}!
         </div>
       );
     }

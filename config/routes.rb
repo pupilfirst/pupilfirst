@@ -208,8 +208,8 @@ Rails.application.routes.draw do
 
   # Public change log
   scope 'changelog', as: 'changelog', controller: 'changelog' do
-    get '/', action: 'index'
     get 'archive'
+    get '(/:year)', action: 'index'
   end
 
   resource :impersonation, only: %i[destroy]

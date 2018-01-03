@@ -5,6 +5,8 @@ import BillingAddressForm from "./interface/BillingAddressForm";
 import CouponAdder from "./interface/CouponAdder";
 import CouponRemover from "./interface/CouponRemover";
 
+import "./Interface.css";
+
 export default class Interface extends React.Component {
   constructor(props) {
     super(props);
@@ -106,6 +108,8 @@ export default class Interface extends React.Component {
   render() {
     return (
       <div>
+        <div styleName="foo-mod">Text with red background?</div>
+
         <div className="secondary-banner">
           <div className="container">
             <div className="application-stages-head text-center">

@@ -47,23 +47,15 @@ class AdmissionsController < ApplicationController
 
   # GET /admissions/screening_submit?user_id&score
   def screening_submit
-    authorize :admissions
-    Admissions::CompleteTargetService.new(current_founder, Target::KEY_ADMISSIONS_SCREENING).execute
-
-    # Mark as screening completed on Intercom
-    Intercom::LevelZeroStageUpdateJob.perform_later(current_founder, 'Screening Completed')
-
-    flash[:success] = 'Screening target has been marked as completed!'
+    flash[:success] = 'Your submission has been recorded!'
     redirect_to dashboard_founder_path(from: 'screening_submit')
   end
 
   def screening_submit_webhook
     founder = Founder.find_by user_id: params.dig(:form_response, :hidden, :user_id).to_i
+    screening_response = params.dig(:form_response).permit!.to_h
 
-    Admissions::CompleteTargetService.new(founder, Target::KEY_ADMISSIONS_SCREENING).execute
-
-    # Mark as screening completed on Intercom
-    Intercom::LevelZeroStageUpdateJob.perform_later(current_founder, 'Screening Completed')
+    Admissions::ScreeningCompletionJob.perform_later(founder, screening_response)
 
     head :ok
   end

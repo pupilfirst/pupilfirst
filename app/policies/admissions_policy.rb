@@ -4,7 +4,7 @@ class AdmissionsPolicy < ApplicationPolicy
   end
 
   def screening_submit?
-    screening?
+    level_zero?
   end
 
   def coupon_submit?

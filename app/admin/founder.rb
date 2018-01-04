@@ -41,7 +41,7 @@ ActiveAdmin.register Founder do
   filter :roll_number
   filter :created_at, label: 'Registered on'
 
-  permit_params :name, :email, :hacker, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :born_on,
+  permit_params :name, :email, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :born_on,
     :communication_address, :identification_proof, :phone, :invitation_token, :college_id, :roll_number,
     :course, :semester, :year_of_graduation, :twitter_url, :linkedin_url, :personal_website_url, :blog_url,
     :angel_co_url, :github_url, :behance_url, :gender, :skype_id, :exited, :id_proof_number,
@@ -65,17 +65,6 @@ ActiveAdmin.register Founder do
     if params['scope'] == 'level_zero'
       column :email
       column :phone
-
-      column 'Skill' do |founder|
-        if founder.hacker.nil?
-          'Unknown'
-        elsif founder.hacker
-          founder.github_url.present? ? 'Hacker with Github' : 'Hacker'
-        else
-          'Hustler'
-        end
-      end
-
       column 'Admission Stage' do |founder|
         founder.startup.admission_stage
       end
@@ -123,16 +112,6 @@ ActiveAdmin.register Founder do
       column :name
       column :email
       column :phone
-
-      column 'Skill' do |founder|
-        if founder.hacker.nil?
-          'Unknown'
-        elsif founder.hacker
-          founder.github_url.present? ? 'Hacker with Github' : 'Hacker'
-        else
-          'Hustler'
-        end
-      end
 
       column :team_lead do |founder|
         founder.team_lead? ? 'Yes' : 'No'
@@ -247,13 +226,6 @@ ActiveAdmin.register Founder do
       row :slug
       row :email
       row :name
-      row 'Skill' do |founder|
-        if founder.hacker.nil?
-          'Unknown'
-        else
-          founder.hacker ? 'Hacker' : 'Hustler'
-        end
-      end
       row :reference
 
       row :tags do |founder|
@@ -337,6 +309,21 @@ ActiveAdmin.register Founder do
       row :resume do |founder|
         link_to 'Download Resume', founder.resume_link if founder.resume_link.present?
       end
+      row :screening_data do |founder|
+        if founder.screening_data.present?
+          div do
+            founder.screening_data['response'].each do |question, answer|
+              strong question.gsub(/<br>/, ' ').to_s
+              if answer.is_a?(Hash)
+                para answer['label'].present? ? answer['label'].to_s : answer['labels'].to_s
+              else
+                para answer
+              end
+            end
+          end
+        end
+      end
+
       active_admin_comments
     end
 

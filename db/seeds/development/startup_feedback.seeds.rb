@@ -8,7 +8,7 @@ after 'development:timeline_events', 'development:faculty' do
 
   StartupFeedback.create!(
     feedback: Faker::Lorem.paragraphs(2).join("\n\n"),
-    reference_url: "http://sv.dev/startups/#{event_needs_improvement.startup.slug}#event-#{event_needs_improvement.id}",
+    reference_url: "http://sv.localhost/startups/#{event_needs_improvement.startup.slug}#event-#{event_needs_improvement.id}",
     startup: event_needs_improvement.startup,
     faculty: mickey,
     activity_type: 'Feedback on presentation',

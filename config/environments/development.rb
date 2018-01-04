@@ -58,7 +58,7 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  config.action_mailer.default_url_options = { host: 'www.sv.dev' }
+  config.action_mailer.default_url_options = { host: 'www.sv.localhost' }
 
   # In development and test, let's have carrierwave store everything on local disk.
   config.carrier_wave_storage = :file
@@ -69,7 +69,7 @@ Rails.application.configure do
   Bullet.rails_logger = true
 
   # Roadie asset host.
-  config.roadie.url_options = { host: 'www.sv.dev', scheme: 'https' }
+  config.roadie.url_options = { host: 'www.sv.localhost', scheme: 'http' }
 
   # Oink::Middleware logs memory and activerecord usage by default.
   config.middleware.use Oink::Middleware

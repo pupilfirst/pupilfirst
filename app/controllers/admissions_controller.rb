@@ -41,29 +41,24 @@ class AdmissionsController < ApplicationController
   # GET /admissions/screening
   def screening
     authorize :admissions
-    render layout: 'application'
+    screening_url = Rails.application.secrets.typeform[:screening_url] + "?user_id=#{current_user.id}"
+    redirect_to screening_url
   end
 
-  # POST /admissions/screening
+  # GET /admissions/screening_submit?user_id&score
   def screening_submit
     authorize :admissions
-
-    Admissions::CompleteTargetService.new(current_founder, Target::KEY_ADMISSIONS_SCREENING).execute
-
-    # Mark founder skill - Hacker or Hustler?
-    current_founder.update!(hacker: params['founder_skill'] == 'coder', github_url: params['github_url'])
-    skill = if params['founder_skill'] == 'coder'
-      params['github_url'].present? ? 'Hacker with Github' : 'Hacker'
-    else
-      'Hustler'
-    end
-    Intercom::FounderSkillUpdateJob.perform_later(current_founder, skill)
-
-    # Mark as screening completed on Intercom
-    Intercom::LevelZeroStageUpdateJob.perform_later(current_founder, 'Screening Completed')
-
-    flash[:success] = 'Screening target has been marked as completed!'
+    flash[:success] = 'Your submission has been recorded!'
     redirect_to dashboard_founder_path(from: 'screening_submit')
+  end
+
+  def screening_submit_webhook
+    founder = Founder.find_by user_id: params.dig(:form_response, :hidden, :user_id).to_i
+    screening_response = params.dig(:form_response).permit!.to_h
+
+    Admissions::ScreeningCompletionJob.perform_later(founder, screening_response)
+
+    head :ok
   end
 
   # Handle submission of coupon code.

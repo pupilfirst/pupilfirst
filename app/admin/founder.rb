@@ -309,6 +309,21 @@ ActiveAdmin.register Founder do
       row :resume do |founder|
         link_to 'Download Resume', founder.resume_link if founder.resume_link.present?
       end
+      row :screening_data do |founder|
+        if founder.screening_data.present?
+          div do
+            founder.screening_data.sort.each do |question, answer|
+              strong question.gsub(/<br>/, ' ').to_s
+              if answer.is_a?(Hash)
+                para answer['label'].present? ? answer['label'].to_s : answer['labels'].to_s
+              else
+                para answer
+              end
+            end
+          end
+        end
+      end
+
       active_admin_comments
     end
 

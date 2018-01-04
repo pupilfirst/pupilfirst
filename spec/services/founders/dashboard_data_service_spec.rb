@@ -98,8 +98,11 @@ describe Founders::DashboardDataService do
 
   def session_details(session)
     result = target_details(session)
-    result['level'] = { 'number' => session.level.number }
-    result['taggings'] = []
-    result
+
+    result.merge(
+      'level' => { 'number' => session.level.number },
+      'taggings' => [],
+      'session_by' => session.session_by
+    )
   end
 end

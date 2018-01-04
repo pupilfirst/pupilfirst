@@ -14,7 +14,7 @@ class Target < ApplicationRecord
   STATUS_UNAVAILABLE = :unavailable
   STATUS_NOT_ACCEPTED = :not_accepted
 
-  belongs_to :faculty
+  belongs_to :faculty, optional: true
   belongs_to :timeline_event_type, optional: true
   has_many :timeline_events
   has_many :target_prerequisites
@@ -123,7 +123,35 @@ class Target < ApplicationRecord
     errors[:level] << 'should match level of target group'
   end
 
-  normalize_attribute :key, :slideshow_embed, :video_embed
+  validate :only_one_of_faculty_or_session_by
+
+  def only_one_of_faculty_or_session_by
+    if faculty.present? && session_by.present?
+      errors[:base] << 'Both faculty and session_by cannot be set.'
+      errors[:faculty_id] << 'or session_by can be set'
+      errors[:session_by] << 'or faculty can be set'
+    end
+  end
+
+  validate :session_by_only_for_session
+
+  def session_by_only_for_session
+    if session_at.blank? && session_by.present?
+      errors[:base] << 'This target is not a session, but has session_by set.'
+      errors[:session_by] << 'should not be set for a vanilla target'
+    end
+  end
+
+  validate :vanilla_target_requires_faculty
+
+  def vanilla_target_requires_faculty
+    return if session_at.present?
+    return if faculty.present?
+    errors[:base] << 'Vanilla targets require a linked faculty.'
+    errors[:faculty_id] << 'is required for a vanilla target'
+  end
+
+  normalize_attribute :key, :slideshow_embed, :video_embed, :session_by
 
   def display_name
     if level.present?

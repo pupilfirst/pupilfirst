@@ -51,7 +51,7 @@ GIT
 
 GIT
   remote: https://github.com/northworld/google_calendar.git
-  revision: 9c6add4e075a04979be78e06fbe402ec85c63903
+  revision: 24fad37724b8877fa6291b7aab0454ab58e20d07
   specs:
     google_calendar (0.6.2)
       TimezoneParser (~> 0.3.0)
@@ -315,7 +315,7 @@ GEM
       dry-equalizer (~> 0.2)
       dry-logic (~> 0.4, >= 0.4.0)
       dry-types (~> 0.12.0)
-    email_inquire (0.7.0)
+    email_inquire (0.8.0)
       damerau-levenshtein (~> 1.2)
     equalizer (0.0.11)
     errbase (0.0.3)
@@ -328,8 +328,8 @@ GEM
     factory_bot_rails (4.8.2)
       factory_bot (~> 4.8.2)
       railties (>= 3.0.0)
-    faker (1.8.5)
-      i18n (~> 0.9.1)
+    faker (1.8.7)
+      i18n (>= 0.7)
     faraday (0.12.2)
       multipart-post (>= 1.2, < 3)
     fastimage (2.1.1)
@@ -472,7 +472,7 @@ GEM
     multi_xml (0.6.0)
     multipart-post (2.0.0)
     netrc (0.11.0)
-    nio4r (2.1.0)
+    nio4r (2.2.0)
     nokogiri (1.8.1)
       mini_portile2 (~> 2.3.0)
     oauth2 (1.4.0)
@@ -484,7 +484,7 @@ GEM
     oink (0.10.1)
       activerecord
       hodel_3000_compliant_logger
-    omniauth (1.7.1)
+    omniauth (1.8.1)
       hashie (>= 3.4.6, < 3.6.0)
       rack (>= 1.6.2, < 3)
     omniauth-facebook (4.0.0)

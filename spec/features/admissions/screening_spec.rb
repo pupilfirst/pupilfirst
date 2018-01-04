@@ -12,13 +12,14 @@ feature 'Screening' do
   let!(:tet_team_update) { create :timeline_event_type, :team_update }
 
   scenario 'applicant goes through screening', js: true do
-    pending 'update to work with target overlay'
-
     sign_in_user(founder.user, referer: admissions_screening_path)
 
     expect(page).to have_text('Let’s find out if you are a right fit for our program.')
 
     page.find('.applicant-screening__cover.non-coder-cover').find('button').click
+
+    # TODO: This sleep is a work-around for hard-coded animation. Remove when possible.
+    sleep(0.3)
 
     expect(page).to have_content('Have you ever worked with a developer')
     page.find('label[for="answer-option-No"]').click
@@ -34,6 +35,9 @@ feature 'Screening' do
 
     click_button 'Restart'
     page.find('.applicant-screening__cover.coder-cover').find('button').click
+
+    # TODO: This sleep is a work-around for hard-coded animation. Remove when possible.
+    sleep(0.3)
 
     expect(page).to have_content('Have you contributed to Open Source?')
     page.find('label[for="answer-option-No"]').click
@@ -53,7 +57,6 @@ feature 'Screening' do
     click_button 'Continue'
 
     expect(page).to have_content('Screening target has been marked as completed!')
-    expect(page).to have_selector('.founder-dashboard-target-header__status-badge', text: 'Complete')
 
     # founder should be markes as a Hacker
     expect(founder.reload.hacker).to eq(true)

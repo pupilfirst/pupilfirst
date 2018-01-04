@@ -10,7 +10,8 @@ module Changelog
     }.freeze
 
     # @param show_private [TrueClass, FalseClass] Set to true to show private changelog entries.
-    def initialize(show_private)
+    def initialize(year, show_private)
+      @year = year
       @show_private = show_private
     end
 
@@ -33,7 +34,7 @@ module Changelog
     #   },
     # ]
     def releases
-      changelogs = YAML.safe_load(File.read(Rails.root.join('changelog', '2017.yaml')))['changelog']
+      changelogs = YAML.safe_load(File.read(Rails.root.join('changelog', "#{@year}.yaml")))['changelog']
 
       changelogs.map do |release|
         {

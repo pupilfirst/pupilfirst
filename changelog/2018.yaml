@@ -1,0 +1,45 @@
+---
+changelog:
+- timestamp: '2018-01-01T07:52:56Z'
+  changes:
+  - timestamp: '2018-01-01T09:10:28Z'
+    title: Changelog pages are now navigable by year. Happy new year, folks! :-)
+    trello: https://trello.com/c/TQ7qXQ3U
+    private: false
+    description: This adds navigation buttons to the bottom of all changelog pages,
+      with grouping by year.
+    category: ui
+  - timestamp: '2017-12-29T11:15:47Z'
+    title: Half-star ratings are now correctly displayed within the target overlay
+      on founder dashbord.
+    trello: https://trello.com/c/6I18Uec9
+    private: false
+    category: bugfix
+  - timestamp: '2017-12-28T10:43:02Z'
+    title: Fixed a bug in the automatic faculty connect slots creator that caused
+      it to create slots and send mails to inactive faculty.
+    trello: https://trello.com/c/KP6f3iHh
+    private: true
+    description: The job has also been spec-d.
+    category: bugfix
+  - timestamp: '2017-12-26T10:03:23Z'
+    title: Added `session_by` to `Target` to allow sessions to be created without
+      linking a `Faculty`.
+    trello: https://trello.com/c/6U6m0OFo
+    private: true
+    description: 'This makes the faculty linking of sessions optional (still mandatory
+      for vanilla targets), and instead allows the admin to enter the name of the
+      session taker in a new field. '
+    category: feature
+  - timestamp: '2017-12-26T09:55:27Z'
+    title: Fixed some issues around the automatic management of Google Calendar invitations
+      sent for live sessions.
+    trello: https://trello.com/c/oyzGhpqy
+    private: false
+    description: Moved Google Calendar invitation processor to a background job. This
+      fixed the timeout that would happen when the admin clicked the invite button.
+    category: bugfix
+  - timestamp: '2017-12-25T12:15:38Z'
+    title: Fee payments have been disabled.
+    trello: https://trello.com/c/fKh5uIpk
+    private: true

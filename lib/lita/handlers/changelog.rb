@@ -18,7 +18,7 @@ module Lita
       end
 
       def latest_release
-        @latest_release ||= Changelog::ChangesService.new(false).releases[0]
+        @latest_release ||= Changelog::ChangesService.new(Time.now.year, false).releases[0]
       end
 
       def latest_changes

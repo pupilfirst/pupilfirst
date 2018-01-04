@@ -4,7 +4,7 @@ ActiveAdmin.register Target do
   permit_params :faculty_id, :role, :title, :description, :resource_url, :completion_instructions, :days_to_complete,
     :slideshow_embed, :video_embed, :completed_at, :completion_comment, :rubric, :link_to_complete, :key,
     :submittability, :archived, :remote_rubric_url, :target_group_id, :target_action_type, :points_earnable,
-    :timeline_event_type_id, :sort_index, :youtube_video_id, :session_at, :chore, :level_id,
+    :timeline_event_type_id, :sort_index, :youtube_video_id, :session_at, :chore, :level_id, :session_by,
     prerequisite_target_ids: [], tag_list: [], target_skills_attributes: %i[id skill_id rubric_good rubric_great rubric_wow base_karma_points _destroy]
 
   filter :title
@@ -115,6 +115,7 @@ ActiveAdmin.register Target do
       end
 
       row :faculty
+      row :session_by
 
       row :rubric do
         if target.rubric.present?
@@ -232,6 +233,7 @@ ActiveAdmin.register Target do
       target&.faculty&.name
     end
 
+    column :session_by
     column :youtube_video_id
     column :video_embed
     column :slideshow_embed
@@ -321,7 +323,8 @@ ActiveAdmin.register Target do
       f.input :completion_instructions
       f.input :link_to_complete
       f.input :submittability, collection: Target.valid_submittability_values
-      f.input :faculty, collection: Faculty.active.order(:name), include_blank: false
+      f.input :faculty, collection: Faculty.active.order(:name), include_blank: 'No linked faculty'
+      f.input :session_by, placeholder: 'Name of session taker, IF faculty linking is not possible.'
       f.input :target_group, collection: TargetGroup.all.sorted_by_level.includes(:level)
       f.input :sort_index
       f.input :days_to_complete

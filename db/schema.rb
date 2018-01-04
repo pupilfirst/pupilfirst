@@ -675,6 +675,7 @@ ActiveRecord::Schema.define(version: 20171226093340) do
     t.string "google_calendar_event_id"
     t.datetime "feedback_asked_at"
     t.datetime "slack_reminders_sent_at"
+    t.string "session_by"
     t.index ["archived"], name: "index_targets_on_archived"
     t.index ["chore"], name: "index_targets_on_chore"
     t.index ["faculty_id"], name: "index_targets_on_faculty_id"

@@ -6,6 +6,7 @@ import HeaderTitle from './targetOverlay/HeaderTitle'
 import StatusBadgeBar from './targetOverlay/StatusBadgeBar'
 import SubmitButton from './targetOverlay/SubmitButton'
 import TimelineEventPanel from './targetOverlay/TimelineEventPanel'
+import FacultyBlock from "./targetOverlay/FacultyBlock";
 
 export default class TargetOverlay extends React.Component {
   constructor(props) {
@@ -72,24 +73,6 @@ export default class TargetOverlay extends React.Component {
     }
   }
 
-  faculty() {
-    let faculty_target_relation = "Assigned by:";
-
-    if (_.isString(this.props.target.session_at)) {
-      faculty_target_relation = "Session by:";
-    }
-
-    return (
-      <h5 className="target-overlay__faculty-name m-0">
-        <span className="target-overlay__faculty-name-headline">
-          {faculty_target_relation}
-        </span>
-
-        <span className="font-regular">{this.props.target.faculty.name}</span>
-      </h5>
-    );
-  }
-
   updateDetails(response) {
     this.setState({
       latestEvent: response.latestEvent,
@@ -141,15 +124,8 @@ export default class TargetOverlay extends React.Component {
                 />
               </div>
               <div className="col-md-4 target-overlay__content-rightbar">
-                <div className="target-overlay__faculty-box">
-                  <span className="target-overlay__faculty-avatar mr-2">
-                    <img
-                      className="img-fluid"
-                      src={this.props.target.faculty.image_url}
-                    />
-                  </span>
-                  {this.faculty()}
-                </div>
+                <FacultyBlock target={this.props.target}/>
+
                 {this.state.latestEvent && (
                   <TimelineEventPanel
                     event={this.state.latestEvent}

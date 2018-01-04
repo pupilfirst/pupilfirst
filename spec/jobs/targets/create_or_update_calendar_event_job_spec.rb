@@ -46,7 +46,7 @@ describe Targets::CreateOrUpdateCalendarEventJob do
   describe '#execute' do
     it 'creates invitation with relevant details for founders with access to session' do
       expect(calendar_service).to receive(:find_or_create_event_by_id).with(nil).and_yield(calendar_event).and_return(calendar_event)
-      expect(calendar_event).to receive(:title=).with("SV.CO Live session by #{target.faculty.name}, #{target.faculty.title}")
+      expect(calendar_event).to receive(:title=).with("SV.CO Live Session: #{target.title}")
       expect(calendar_event).to receive(:start_time=).with(target.session_at.iso8601)
       expect(calendar_event).to receive(:end_time=).with((target.session_at + 30.minutes).iso8601)
       expect(calendar_event).to receive(:attendees=).with(a_collection_containing_exactly(*expected_attendees))

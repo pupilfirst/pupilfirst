@@ -312,7 +312,7 @@ ActiveAdmin.register Founder do
       row :screening_data do |founder|
         if founder.screening_data.present?
           div do
-            founder.screening_data.sort.each do |question, answer|
+            founder.screening_data['response'].each do |question, answer|
               strong question.gsub(/<br>/, ' ').to_s
               if answer.is_a?(Hash)
                 para answer['label'].present? ? answer['label'].to_s : answer['labels'].to_s

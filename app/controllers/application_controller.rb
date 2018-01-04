@@ -240,6 +240,14 @@ class ApplicationController < ActionController::Base
     }
   end
 
+  def development_csp
+    return {} unless Rails.env.development?
+
+    {
+      connect: 'http://localhost:3035 ws://localhost:3035'
+    }
+  end
+
   def child_sources
     <<~CHILD_SOURCES.squish
       child-src https://www.youtube.com
@@ -284,7 +292,7 @@ class ApplicationController < ActionController::Base
   def connect_sources
     <<~CONNECT_SOURCES.squish
       connect-src 'self' #{inspectlet_csp[:connect]} #{intercom_csp[:connect]}
-      #{google_analytics_csp[:connect]};
+      #{google_analytics_csp[:connect]} #{development_csp[:connect]};
     CONNECT_SOURCES
   end
 

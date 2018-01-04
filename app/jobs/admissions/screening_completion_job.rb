@@ -8,7 +8,7 @@ module Admissions
 
       # Store screening response of the founder
       formatted_response = Typeform::AnswersExtractionService.new(screening_response)
-      founder.update!(screening_data: formatted_response)
+      founder.update!(screening_data: formatted_response) if founder.screening_data.blank?
 
       # Mark as screening completed on Intercom
       Intercom::LevelZeroStageUpdateJob.perform_now(founder, 'Screening Completed')

@@ -6,7 +6,7 @@
 // }
 
 .header-light {
-  font-weight: 200;
+  font-weight: 300;
 }
 
 .margin-top-0 {
@@ -21,8 +21,12 @@
   margin-top: 20px;
 }
 
-.margin-top-40 { margin-top: 40px; }
-.margin-top-60 { margin-top: 60px; }
+.margin-top-40 {
+  margin-top: 40px;
+}
+.margin-top-60 {
+  margin-top: 60px;
+}
 
 .margin-bottom-20 {
   margin-bottom: 20px;
@@ -38,10 +42,6 @@
 
 .margin-bottom-0 {
   margin-bottom: 0;
-}
-
-.font-weight-200 {
-  font-weight: 200;
 }
 
 .font-weight-300 {
@@ -70,9 +70,13 @@
   margin-left: 10px;
 }
 
-.margin-right-10 { margin-right: 10px; }
+.margin-right-10 {
+  margin-right: 10px;
+}
 
-.margin-right-5 { margin-right: 5px; }
+.margin-right-5 {
+  margin-right: 5px;
+}
 
 .flex-center {
   display: flex;
@@ -108,9 +112,13 @@
   display: none;
 }
 
-span.strike { text-decoration: line-through; }
+span.strike {
+  text-decoration: line-through;
+}
 
-.cursor-pointer { cursor: pointer; }
+.cursor-pointer {
+  cursor: pointer;
+}
 .platform-feedback-modal {
   textarea {
     resize: vertical;

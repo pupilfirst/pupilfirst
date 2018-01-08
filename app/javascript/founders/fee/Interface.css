@@ -1,9 +1,0 @@
-.foo {
-  background-color: red;
-  color: white;
-}
-
-.foo-mod {
-  composes: foo;
-  background-color: blue;
-}

@@ -8,7 +8,7 @@ const myCssLoaderOptions = {
 };
 
 const CSSLoader = environment.loaders
-  .get("css")
+  .get("sass")
   .use.find(el => el.loader === "css-loader");
 
 CSSLoader.options = merge(CSSLoader.options, myCssLoaderOptions);

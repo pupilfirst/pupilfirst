@@ -5,7 +5,7 @@ import BillingAddressForm from "./interface/BillingAddressForm";
 import CouponAdder from "./interface/CouponAdder";
 import CouponRemover from "./interface/CouponRemover";
 
-import "./Interface.css";
+import "./Interface.scss";
 
 export default class Interface extends React.Component {
   constructor(props) {
@@ -74,7 +74,7 @@ export default class Interface extends React.Component {
             You cannot make payments{" "}
             <span className="brand-secondary font-semibold">at this time.</span>
           </h3>
-          <ul className="admissions-fee__important-points">
+          <ul styleName="important-points">
             <li>
               If you need any help please contact us on Slack or mail us at{" "}
               {this.mailTo("help@sv.co")}.
@@ -90,7 +90,7 @@ export default class Interface extends React.Component {
               Please pay the membership fee to continue.
             </span>
           </h3>
-          <ul className="admissions-fee__important-points">
+          <ul styleName="important-points">
             <li>
               It covers your team of{" "}
               <strong>{this.billingFoundersCount()} founders</strong>.
@@ -108,8 +108,6 @@ export default class Interface extends React.Component {
   render() {
     return (
       <div>
-        <div styleName="foo-mod">Text with red background?</div>
-
         <div className="secondary-banner">
           <div className="container">
             <div className="application-stages-head text-center">
@@ -139,7 +137,10 @@ export default class Interface extends React.Component {
                 {(this.canSubmitCoupon() || this.canRemoveCoupon) && (
                   <div className="row justify-content-center">
                     <div className="col-md-8">
-                      <div className="coupon-form-container text-center mx-auto">
+                      <div
+                        className="text-center mx-auto"
+                        styleName="coupon-form-container"
+                      >
                         {this.canRemoveCoupon() && (
                           <CouponRemover
                             rootState={this.state}
@@ -167,7 +168,7 @@ export default class Interface extends React.Component {
             </div>
           </div>
 
-          <div className="fee-offer__container m-b-3">
+          <div className="mb-3" styleName="fee-offers">
             <FeeOffer
               key={1}
               period={1}
@@ -199,5 +200,5 @@ export default class Interface extends React.Component {
 Interface.propTypes = {
   debug: PropTypes.bool.isRequired,
   disabled: PropTypes.bool.isRequired,
-  payment_requested: PropTypes.bool.isRequired
+  paymentRequested: PropTypes.bool.isRequired
 };

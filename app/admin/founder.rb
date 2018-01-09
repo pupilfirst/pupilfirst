@@ -312,7 +312,10 @@ ActiveAdmin.register Founder do
       end
       row :screening_data do |founder|
         if founder.screening_data.present?
-          div do
+          button id: 'screening-data-toggle-button', class: 'margin-bottom-10' do
+            'Show/Hide'
+          end
+          div id: 'founder-admission-screening-data', class: 'hide' do
             founder.screening_data['response'].each do |question, answer|
               strong question.gsub(/<br>/, ' ').to_s
               if answer.is_a?(Hash)

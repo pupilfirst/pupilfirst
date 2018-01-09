@@ -62,13 +62,14 @@ class Founder < ApplicationRecord
   scope :not_exited, -> { where.not(exited: true) }
   scope :subscribed, -> { joins(startup: :payments).merge(Payment.paid).where('payments.billing_end_at > ?', Time.now) }
   scope :at_or_above_level, ->(minimum_level) { joins(startup: :level).where('levels.number >= ?', minimum_level.number) }
+  scope :screening_score_above, ->(minimum_score) { where("(screening_data ->> 'score')::int >= ?", minimum_score) }
 
   def self.with_email(email)
     where('lower(email) = ?', email.downcase).first # rubocop:disable Rails/FindBy
   end
 
   def self.ransackable_scopes(_auth)
-    %i[ransack_tagged_with]
+    %i[ransack_tagged_with screening_score_above]
   end
 
   def self.valid_gender_values

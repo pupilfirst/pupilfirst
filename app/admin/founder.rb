@@ -40,6 +40,7 @@ ActiveAdmin.register Founder do
   filter :college_name_contains
   filter :roll_number
   filter :created_at, label: 'Registered on'
+  filter :screening_score_above, as: :number
 
   permit_params :name, :email, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :born_on,
     :communication_address, :identification_proof, :phone, :invitation_token, :college_id, :roll_number,

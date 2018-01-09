@@ -48,10 +48,7 @@ export default class StatusBadgeBar extends React.Component {
   }
 
   lockedTargetHintString() {
-    if (
-      !this.props.target.prerequisites &&
-      this.props.target.submittability === "not_submittable"
-    ) {
+    if (this.props.target.submittability === "not_submittable") {
       return "The target is currently unavailable to complete!";
     } else {
       return "Complete prerequisites first!";

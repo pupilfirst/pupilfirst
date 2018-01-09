@@ -113,7 +113,7 @@ export default class Interface extends React.Component {
         </div>
 
         <div className="container">
-          <div className="row my-4">
+          <div className="row my-4 justify-content-center">
             <div className="col-lg-7">
               <div className="content-box mb-3">
                 {this.primaryMessages()}
@@ -134,7 +134,7 @@ export default class Interface extends React.Component {
                   <div className="row justify-content-center">
                     <div className="col-md-8">
                       <div
-                        className="text-center mx-auto"
+                        className="text-center mx-auto mt-3"
                         styleName="coupon-form-container"
                       >
                         {this.couponApplied() && (
@@ -157,37 +157,41 @@ export default class Interface extends React.Component {
               </div>
             </div>
 
-            <div className="col-lg-5">
-              <BillingAddressForm
+            {!this.props.disabled && (
+              <div className="col-lg-5">
+                <BillingAddressForm
+                  rootState={this.state}
+                  setRootState={this.setRootState}
+                />
+              </div>
+            )}
+          </div>
+
+          {!this.props.disabled && (
+            <div className="mb-4" styleName="fee-offers">
+              <FeeOffer
+                key={1}
+                period={1}
+                recommended={false}
+                rootState={this.state}
+                setRootState={this.setRootState}
+              />
+              <FeeOffer
+                key={6}
+                period={6}
+                recommended={true}
+                rootState={this.state}
+                setRootState={this.setRootState}
+              />
+              <FeeOffer
+                key={3}
+                period={3}
+                recommended={false}
                 rootState={this.state}
                 setRootState={this.setRootState}
               />
             </div>
-          </div>
-
-          <div className="mb-4" styleName="fee-offers">
-            <FeeOffer
-              key={1}
-              period={1}
-              recommended={false}
-              rootState={this.state}
-              setRootState={this.setRootState}
-            />
-            <FeeOffer
-              key={6}
-              period={6}
-              recommended={true}
-              rootState={this.state}
-              setRootState={this.setRootState}
-            />
-            <FeeOffer
-              key={3}
-              period={3}
-              recommended={false}
-              rootState={this.state}
-              setRootState={this.setRootState}
-            />
-          </div>
+          )}
         </div>
       </div>
     );

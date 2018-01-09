@@ -1,9 +1,3 @@
-.discount-coupon__box-btn {
-  @include media-breakpoint-down(sm) {
-    margin-bottom: 1rem;
-  }
-}
-
 .discount-coupon__box {
   @include border-radius(10px);
   border: 1px dashed $brand-secondary;
@@ -13,14 +7,6 @@
   span.help-block {
     display: inline-block;
     margin-top: 0.5rem;
-  }
-}
-
-.discount-coupon__box--show {
-  cursor: pointer;
-
-  &:hover {
-    background-color: lighten($light-secondary, 40%);
   }
 }
 

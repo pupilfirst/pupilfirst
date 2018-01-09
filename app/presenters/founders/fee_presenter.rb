@@ -10,7 +10,8 @@ module Founders
       {
         debug: true,
         disabled: false,
-        paymentRequested: !!@payment&.requested?
+        paymentRequested: !!@payment&.requested?,
+        coupon: coupon_props
       }
     end
 
@@ -46,6 +47,18 @@ module Founders
     end
 
     private
+
+    def coupon_props
+      coupon = @startup.applied_coupon
+
+      return if coupon.blank?
+
+      {
+        code: coupon.code,
+        discount: coupon.discount_percentage,
+        instructions: coupon.instructions
+      }
+    end
 
     def fee_service
       @fee_service ||= Startups::FeePayableService.new(@startup)

@@ -2,36 +2,25 @@ import React from "react";
 import PropTypes from "prop-types";
 
 export default class CouponRemover extends React.Component {
-  couponCode() {
-    return "APPLIEDCODE";
-  }
-
-  couponInstructions() {
-    return "These are some instructions that need to be followed when using this coupon.";
-  }
-
-  couponBenefit() {
-    return "30 days free";
-  }
-
   render() {
     return (
       <div className="discount-coupon__box discount-coupon-applied-box p-1">
         <div className="discount-coupon-applied-box__message font-semibold">
           Coupon with code{" "}
           <span className="discount-coupon-applied--code dark-secondary">
-            {this.couponCode()}
-          </span>
+            {this.props.coupon.code}
+          </span>{" "}
           applied!
-          <p className="mt-2">You have unlocked {this.couponBenefit()}.</p>
+          <p className="mt-2">
+            You have unlocked {this.props.coupon.discount}% discount.
+          </p>
         </div>
 
-        {_.isString(this.couponInstructions()) && (
+        {_.isString(this.props.coupon.instructions) && (
           <div className="coupon-instructions mt-2">
             <p>
               <span className="font-semibold">
-                Note:
-                {this.couponInstructions()}
+                Note: {this.props.coupon.instructions}
               </span>
             </p>
           </div>
@@ -47,5 +36,10 @@ export default class CouponRemover extends React.Component {
 
 CouponRemover.propTypes = {
   rootState: PropTypes.object.isRequired,
-  setRootState: PropTypes.func.isRequired
+  setRootState: PropTypes.func.isRequired,
+  coupon: PropTypes.shape({
+    code: PropTypes.string,
+    discount: PropTypes.number,
+    instructions: PropTypes.string
+  })
 };

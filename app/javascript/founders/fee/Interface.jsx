@@ -40,30 +40,28 @@ export default class Interface extends React.Component {
     return 2;
   }
 
-  canSubmitCoupon() {
-    return true;
-  }
-
-  canRemoveCoupon() {
-    return true;
+  couponApplied() {
+    return _.isObject(this.props.coupon);
   }
 
   bannerMessages() {
-    if (this.props.disabled) {
-      return [
-        <h1 key="disabled-heading">Temporarily disabled</h1>,
-        <h4 key="disabled-subheading" className="mx-auto">
-          Fee payments have been temporarily disabled.
-        </h4>
-      ];
-    } else {
-      return [
-        <h1 key="enabled-heading">Membership Fee</h1>,
-        <h4 key="enabled-subheading" className="mx-auto">
-          Payment pending
-        </h4>
-      ];
-    }
+    const [heading, subheading] = (disabled => {
+      if (disabled) {
+        return [
+          "Temporarily Disabled",
+          "Fee payments have been temporarily disabled."
+        ];
+      }
+
+      return ["Membership Fee", "Payment pending"];
+    })(this.props.disabled);
+
+    return [
+      <h1 key="heading">{heading}</h1>,
+      <h4 key="subheading" className="mx-auto">
+        {subheading}
+      </h4>
+    ];
   }
 
   primaryMessages() {
@@ -110,16 +108,14 @@ export default class Interface extends React.Component {
       <div>
         <div className="secondary-banner">
           <div className="container">
-            <div className="application-stages-head text-center">
-              {this.bannerMessages()}
-            </div>
+            <div className="text-center">{this.bannerMessages()}</div>
           </div>
         </div>
 
         <div className="container">
-          <div className="row mt-3 mb-3">
+          <div className="row my-4">
             <div className="col-lg-7">
-              <div className="content-box mt-3 mb-3 apply-submitted">
+              <div className="content-box mb-3">
                 {this.primaryMessages()}
 
                 {this.props.paymentRequested && (
@@ -134,20 +130,21 @@ export default class Interface extends React.Component {
                   </div>
                 )}
 
-                {(this.canSubmitCoupon() || this.canRemoveCoupon) && (
+                {!this.props.disabled && (
                   <div className="row justify-content-center">
                     <div className="col-md-8">
                       <div
                         className="text-center mx-auto"
                         styleName="coupon-form-container"
                       >
-                        {this.canRemoveCoupon() && (
+                        {this.couponApplied() && (
                           <CouponRemover
                             rootState={this.state}
                             setRootState={this.setRootState}
+                            coupon={this.props.coupon}
                           />
                         )}
-                        {this.canSubmitCoupon() && (
+                        {!this.couponApplied() && (
                           <CouponAdder
                             rootState={this.state}
                             setRootState={this.setRootState}
@@ -168,7 +165,7 @@ export default class Interface extends React.Component {
             </div>
           </div>
 
-          <div className="mb-3" styleName="fee-offers">
+          <div className="mb-4" styleName="fee-offers">
             <FeeOffer
               key={1}
               period={1}
@@ -200,5 +197,10 @@ export default class Interface extends React.Component {
 Interface.propTypes = {
   debug: PropTypes.bool.isRequired,
   disabled: PropTypes.bool.isRequired,
-  paymentRequested: PropTypes.bool.isRequired
+  paymentRequested: PropTypes.bool.isRequired,
+  coupon: PropTypes.shape({
+    code: PropTypes.string,
+    discount: PropTypes.number,
+    instructions: PropTypes.string
+  })
 };

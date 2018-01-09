@@ -9,15 +9,15 @@ html lang='en'
 
     / title SV.CO
 
+    // Local Styles
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
+
     // Scripts
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
     = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
 
     = csrf_meta_tags
     = yield :head
-
-    // Local Styles
-    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
 
     link rel="icon" href=image_url('layouts/shared/favicon.png')
 

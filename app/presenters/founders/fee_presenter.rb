@@ -15,10 +15,6 @@ module Founders
       }
     end
 
-    def period_string
-      view.pluralize(@period, 'month')
-    end
-
     def undiscounted_fee
       @undiscounted_fee ||= fee_service.undiscounted_fee(period: @period)
     end

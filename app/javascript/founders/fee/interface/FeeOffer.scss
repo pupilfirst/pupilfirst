@@ -1,0 +1,96 @@
+@import "../../../shared/variables";
+@import "../../../shared/bootstrapMixins";
+
+.box {
+  min-height: 23rem;
+  padding: 0 0 2rem;
+
+  @include media-breakpoint-up(sm) {
+    &:first-child {
+      border-right: 0;
+      @include border-radius(5px 0 0 5px);
+    }
+    &:last-child {
+      border-left: 0;
+      @include border-radius(0 5px 5px 0);
+    }
+  }
+  @include media-breakpoint-down(sm) {
+    width: 100%;
+    margin-bottom: 1rem;
+    min-height: auto;
+  }
+}
+
+.period {
+  position: relative;
+  padding-top: 2rem;
+
+  &:before {
+    position: absolute;
+    content: "";
+    display: block;
+    width: 50px;
+    background-color: $gray-border;
+    height: 3px;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+  }
+}
+
+.amount-highlight {
+  padding: 1rem 2.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: $dark-primary-background;
+  border: 1px solid $gray-border;
+  @include border-radius(10px);
+}
+
+.box-recommended {
+  composes: box;
+
+  position: relative;
+  z-index: 1;
+  border: 1px solid $light-secondary;
+  min-height: 26.75rem;
+  box-shadow: 0 0 20px 0 lighten($light-secondary, 30%);
+
+  @include media-breakpoint-down(sm) {
+    order: 1;
+  }
+}
+
+.recommended-notice {
+  background-color: $light-secondary;
+  height: 30px;
+  line-height: 1.6;
+  color: white;
+  padding: 4px 0px;
+}
+
+.discount-details {
+  border-top: 1px dashed $light-secondary;
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+}
+
+.discount-title {
+  color: $brand-primary;
+  font-weight: bold;
+}
+
+.discount {
+  height: 3.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.submit-button {
+  box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+}

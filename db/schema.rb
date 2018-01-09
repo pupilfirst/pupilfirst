@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171226093340) do
+ActiveRecord::Schema.define(version: 20180109065249) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -277,6 +277,7 @@ ActiveRecord::Schema.define(version: 20171226093340) do
     t.integer "resume_file_id"
     t.string "slack_access_token"
     t.jsonb "screening_data"
+    t.index "((screening_data -> 'score'::text))", name: "index_founders_on_screening_data_score", using: :gin
     t.index ["college_id"], name: "index_founders_on_college_id"
     t.index ["invitation_token"], name: "index_founders_on_invitation_token", unique: true
     t.index ["invited_by_id"], name: "index_founders_on_invited_by_id"

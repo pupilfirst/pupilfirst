@@ -119,6 +119,7 @@ module Founders
     end
 
     def unavailable_or_pending?(target)
+      return Target::STATUS_UNAVAILABLE if target.submittability == Target::SUBMITTABILITY_NOT_SUBMITTABLE
       prerequisites_completed?(target) ? Target::STATUS_PENDING : Target::STATUS_UNAVAILABLE
     end
 

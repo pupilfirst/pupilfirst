@@ -37,17 +37,17 @@ $theme-light-gray: #f7f7f7;
 $theme-dark-gray: #d2d2d2;
 
 // ********** Colors **********
-$brand-primary: #0F9D58;
-$brand-secondary: #008AC1;
-$dark-primary: #057F44;
-$light-primary: #32B475;
-$dark-secondary: #087CAA;
-$light-secondary: #0AA5E3;
-$primary-background: #F9F9F9;
-$secondary-background: #2E2F33;
-$dark-primary-background: #F5F5F5;
+$brand-primary: #0f9d58;
+$brand-secondary: #008ac1;
+$dark-primary: #057f44;
+$light-primary: #32b475;
+$dark-secondary: #087caa;
+$light-secondary: #0aa5e3;
+$primary-background: #f9f9f9;
+$secondary-background: #2e2f33;
+$dark-primary-background: #f5f5f5;
 $gray-border: #e5e5e5;
-$alert-background: #E3B462;
+$alert-background: #e3b462;
 $btn-secondary-color: #fff;
 $list-group-border-color: #e5e5e5;
 $gray-dark: #333333;
@@ -87,7 +87,7 @@ $box-shadow-hover: 0 0 10px 0 rgba(0, 0, 0, 0.09);
 $box-shadow-btn: inset 0 3px 3px 0 rgba(0, 0, 0, 0.5);
 
 // Tags
-$tag-pill-padding-x: .7em;
+$tag-pill-padding-x: 0.7em;
 $tag-default-bg: $primary-background;
 $tag-font-weight: $font-regular;
 
@@ -96,5 +96,3 @@ $tag-font-weight: $font-regular;
 $pagination-padding-x: 1rem;
 $pagination-active-bg: $brand-secondary;
 $pagination-active-border: $brand-secondary;
-
-

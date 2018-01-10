@@ -316,6 +316,10 @@ ActiveAdmin.register Founder do
             'Show/Hide'
           end
           div id: 'founder-admission-screening-data', class: 'hide' do
+            div class: 'margin-bottom-10' do
+              strong "Score: "
+              span founder.screening_data['score'].to_s
+            end
             founder.screening_data['response'].each do |question, answer|
               strong question.gsub(/<br>/, ' ').to_s
               if answer.is_a?(Hash)

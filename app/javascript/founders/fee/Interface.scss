@@ -8,16 +8,6 @@
   margin-bottom: 0;
 }
 
-.fee-offers {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  @include media-breakpoint-down(sm) {
-    flex-direction: column-reverse;
-  }
-}
-
 .coupon-form-container {
   @include media-breakpoint-up(sm) {
     width: 260px;

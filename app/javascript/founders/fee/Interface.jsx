@@ -168,29 +168,7 @@ export default class Interface extends React.Component {
           </div>
 
           {!this.props.disabled && (
-            <div className="mb-4" styleName="fee-offers">
-              <FeeOffer
-                key={1}
-                period={1}
-                recommended={false}
-                rootState={this.state}
-                setRootState={this.setRootState}
-              />
-              <FeeOffer
-                key={6}
-                period={6}
-                recommended={true}
-                rootState={this.state}
-                setRootState={this.setRootState}
-              />
-              <FeeOffer
-                key={3}
-                period={3}
-                recommended={false}
-                rootState={this.state}
-                setRootState={this.setRootState}
-              />
-            </div>
+            <FeeOffer rootState={this.state} setRootState={this.setRootState} />
           )}
         </div>
       </div>

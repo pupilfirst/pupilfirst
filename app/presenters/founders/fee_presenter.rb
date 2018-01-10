@@ -11,7 +11,8 @@ module Founders
         debug: true,
         disabled: false,
         paymentRequested: !!@payment&.requested?,
-        coupon: coupon_props
+        coupon: coupon_props,
+        fee: fee_props
       }
     end
 
@@ -43,6 +44,20 @@ module Founders
     end
 
     private
+
+    def fee_props
+      # TODO: Calculate these numbers.
+      {
+        # Full undiscounted fee, for all founders in team.
+        fullUndiscounted: 300_000,
+        # Full fee (owed), for all founders in team.
+        full: 300_000,
+        # Undiscounted EMI figure, for display.
+        emiUndiscounted: 50_000,
+        # Discounted, payable EMI now.
+        emi: 50_000
+      }
+    end
 
     def coupon_props
       coupon = @startup.applied_coupon

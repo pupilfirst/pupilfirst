@@ -12,8 +12,8 @@ export default class Interface extends React.Component {
     super(props);
 
     this.state = {
-      // TODO: Compute this at the beginning
-      couponFormState: "visible"
+      coupon: props.coupon,
+      fee: props.fee
     };
 
     this.setRootState = this.setRootState.bind(this);
@@ -41,7 +41,7 @@ export default class Interface extends React.Component {
   }
 
   couponApplied() {
-    return _.isObject(this.props.coupon);
+    return _.isObject(this.state.coupon);
   }
 
   bannerMessages() {
@@ -141,7 +141,6 @@ export default class Interface extends React.Component {
                           <CouponRemover
                             rootState={this.state}
                             setRootState={this.setRootState}
-                            coupon={this.props.coupon}
                           />
                         )}
                         {!this.couponApplied() && (
@@ -184,5 +183,11 @@ Interface.propTypes = {
     code: PropTypes.string,
     discount: PropTypes.number,
     instructions: PropTypes.string
+  }),
+  fee: PropTypes.shape({
+    fullUndiscounted: PropTypes.number,
+    full: PropTypes.number,
+    emiUndiscounted: PropTypes.number,
+    emi: PropTypes.number
   })
 };

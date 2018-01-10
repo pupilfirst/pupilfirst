@@ -21,42 +21,75 @@ export default class FeeOffer extends React.Component {
     }, 2000);
   }
 
-  containerClass() {
-    return this.props.recommended ? "box-recommended" : "box";
+  payableLabel() {
+    if (_.isObject(this.props.rootState.coupon)) {
+      return (
+        <span>
+          Your <strong>discounted</strong> fee is
+        </span>
+      );
+    }
+
+    return "You fee is";
+  }
+
+  isCouponApplied() {
+    return _.isObject(this.props.rootState.coupon);
+  }
+
+  couponDiscount() {
+    return this.props.rootState.coupon.discount;
+  }
+
+  couponSavings() {
+    const fee = this.props.rootState.fee;
+    return this.formatCurrency(fee.emiUndiscounted - fee.emi);
+  }
+
+  formatCurrency(fee) {
+    return Number(fee).toLocaleString("en-in");
   }
 
   render() {
+    const fee = this.props.rootState.fee;
+
     return (
       <div className="row justify-content-center mb-4">
-        <div
-          className="col-md-4 content-box text-center py-4"
-          styleName={this.containerClass()}
-        >
-          {this.props.recommended && (
-            <div styleName="recommended-notice">Recommended!</div>
-          )}
-
+        <div className="col-md-4 content-box text-center py-4" styleName="box">
           <div className="mb-4">
-            <div styleName="amount-highlight">
-              <h5 className="font-semibold mb-0">
-                <del>&#8377;16000</del>
-              </h5>
+            <p>
+              {this.payableLabel()} &#8377;{this.formatCurrency(fee.full)}.
+              <br />
+              You need to pay the following minimum EMI to proceed.
+            </p>
+
+            <div className="mt-3" styleName="amount-highlight">
+              {this.isCouponApplied() && (
+                <h5 className="font-semibold mb-0">
+                  <del>&#8377;{this.formatCurrency(fee.emiUndiscounted)}</del>
+                </h5>
+              )}
               <h2 className="font-semibold mb-0">
-                <span className="font-regular">₹</span>8000
+                <span className="font-regular">&#8377;</span>
+                {this.formatCurrency(fee.emi)}
               </h2>
               <p>for 2 founders</p>
               <div styleName="discount-details">
-                <h6 styleName="discount-title">
-                  DISCOUNT APPLIED
-                  <p>
-                    50% off (Discount Coupon)
-                    <br />
-                    <span className="dark-secondary">
-                      You save &#8377;8000!
-                    </span>
-                  </p>
-                </h6>
-                <h6 styleName="discount-title">FULL PRICE</h6>
+                {this.isCouponApplied() && (
+                  <h6 styleName="discount-title">
+                    DISCOUNT APPLIED
+                    <p>
+                      {this.couponDiscount()}% off (Discount Coupon)
+                      <br />
+                      <span className="dark-secondary">
+                        You save &#8377;{this.couponSavings()}!
+                      </span>
+                    </p>
+                  </h6>
+                )}
+                {!this.isCouponApplied() && (
+                  <h6 styleName="discount-title">FULL PRICE</h6>
+                )}
               </div>
             </div>
           </div>
@@ -94,8 +127,6 @@ export default class FeeOffer extends React.Component {
 }
 
 FeeOffer.propTypes = {
-  period: PropTypes.number.isRequired,
-  recommended: PropTypes.bool.isRequired,
   rootState: PropTypes.object.isRequired,
   setRootState: PropTypes.func.isRequired
 };

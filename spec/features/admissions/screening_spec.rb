@@ -12,9 +12,6 @@ feature 'Admission Screening' do
   let!(:fee_payment_target) { create :target, :admissions_fee_payment, target_group: level_0_targets }
   let!(:cofounder_addition_target) { create :target, :admissions_cofounder_addition, target_group: level_0_targets }
 
-  let(:typeform_url) { Faker::Internet.url }
-
-  # Ensure authorization is in place.
   context 'Founder attempts to complete screening target' do
     scenario 'He gets redirected to typeform screening survey' do
       typeform_url = "http://example.com/typeform?user_id=#{founder.user.id}"

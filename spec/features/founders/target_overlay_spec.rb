@@ -143,24 +143,44 @@ feature 'Target Overlay' do
   end
 
   context 'when the founder clicks a locked target', js: true do
-    before do
-      target.prerequisite_targets << prerequisite_target
-      visit dashboard_founder_path
-    end
-
-    it 'informs about the pending prerequisite' do
-      find('.founder-dashboard-target-header__headline', text: target.title).click
-
-      # The target must be marked locked.
-      within('.target-overlay__status-badge-block') do
-        expect(page).to have_selector('.target-overlay-status-badge-bar__badge-icon > i.fa-lock')
-        expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > span', text: 'Locked')
-        expect(page).to have_selector('.target-overlay-status-badge-bar__hint', text: 'Complete prerequisites first!')
+    context 'when the target has prerequisites' do
+      before do
+        target.prerequisite_targets << prerequisite_target
+        visit dashboard_founder_path
       end
 
-      within('.target-overlay-content-block') do
-        expect(page).to have_selector('.target-overlay-content-block__prerequisites > h6', text: 'Pending Prerequisites:')
-        expect(page).to have_selector(".target-overlay-content-block__prerequisites-list-item > a[href='/founder/dashboard/targets/#{prerequisite_target.id}']", text: prerequisite_target.title)
+      it 'informs about the pending prerequisite' do
+        find('.founder-dashboard-target-header__headline', text: target.title).click
+
+        # The target must be marked locked.
+        within('.target-overlay__status-badge-block') do
+          expect(page).to have_selector('.target-overlay-status-badge-bar__badge-icon > i.fa-lock')
+          expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > span', text: 'Locked')
+          expect(page).to have_selector('.target-overlay-status-badge-bar__hint', text: 'Complete prerequisites first!')
+        end
+
+        within('.target-overlay-content-block') do
+          expect(page).to have_selector('.target-overlay-content-block__prerequisites > h6', text: 'Pending Prerequisites:')
+          expect(page).to have_selector(".target-overlay-content-block__prerequisites-list-item > a[href='/founder/dashboard/targets/#{prerequisite_target.id}']", text: prerequisite_target.title)
+        end
+      end
+    end
+
+    context 'when the target has is not submittable' do
+      before do
+        target.update!(submittability: Target::SUBMITTABILITY_NOT_SUBMITTABLE)
+        visit dashboard_founder_path
+      end
+
+      it 'informs about the pending prerequisite' do
+        find('.founder-dashboard-target-header__headline', text: target.title).click
+
+        # The target must be marked locked.
+        within('.target-overlay__status-badge-block') do
+          expect(page).to have_selector('.target-overlay-status-badge-bar__badge-icon > i.fa-lock')
+          expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > span', text: 'Locked')
+          expect(page).to have_selector('.target-overlay-status-badge-bar__hint', text: 'The target is currently unavailable to complete!')
+        end
       end
     end
   end

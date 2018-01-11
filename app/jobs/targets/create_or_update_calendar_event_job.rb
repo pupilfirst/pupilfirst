@@ -22,6 +22,7 @@ module Targets
     private
 
     def activated?
+      return true if Rails.env.production?
       !!CreateOrUpdateCalendarEventJob.active
     end
 

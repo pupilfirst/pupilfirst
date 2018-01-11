@@ -40,6 +40,7 @@ ActiveAdmin.register Founder do
   filter :college_name_contains
   filter :roll_number
   filter :created_at, label: 'Registered on'
+  filter :screening_score_above, as: :number
 
   permit_params :name, :email, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :born_on,
     :communication_address, :identification_proof, :phone, :invitation_token, :college_id, :roll_number,
@@ -311,7 +312,14 @@ ActiveAdmin.register Founder do
       end
       row :screening_data do |founder|
         if founder.screening_data.present?
-          div do
+          button id: 'screening-data-toggle-button', class: 'margin-bottom-10' do
+            'Show/Hide'
+          end
+          div id: 'founder-admission-screening-data', class: 'hide' do
+            div class: 'margin-bottom-10' do
+              strong "Score: "
+              span founder.screening_data['score'].to_s
+            end
             founder.screening_data['response'].each do |question, answer|
               strong question.gsub(/<br>/, ' ').to_s
               if answer.is_a?(Hash)

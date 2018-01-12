@@ -58,9 +58,16 @@ export default class FeeOffer extends React.Component {
         <div className="col-md-4 content-box text-center py-4" styleName="box">
           <div className="mb-4">
             <p>
-              {this.payableLabel()} &#8377;{this.formatCurrency(fee.full)}.
+              {this.payableLabel()} &#8377;{this.formatCurrency(fee.payableFee)}.
               <br />
-              You need to pay the following minimum EMI to proceed.
+              {!this.isCouponApplied() && (
+                <span>
+                  You need to pay the following minimum EMI to proceed:
+                </span>
+              )}
+              {this.isCouponApplied() && (
+                <span>Your EMI after applying the coupon is:</span>
+              )}
             </p>
 
             <div className="mt-3" styleName="amount-highlight">

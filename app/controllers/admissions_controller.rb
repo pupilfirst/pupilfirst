@@ -61,6 +61,8 @@ class AdmissionsController < ApplicationController
     head :ok
   end
 
+  # POST /admissions/coupon_submit
+  #
   # Handle submission of coupon code.
   def coupon_submit
     authorize :admissions
@@ -69,12 +71,12 @@ class AdmissionsController < ApplicationController
 
     if coupon_form.validate(params[:admissions_coupon])
       coupon_form.apply_coupon
-      flash[:success] = 'Coupon applied successfully!'
-    else
-      flash[:error] = 'Coupon code is not valid!'
-    end
 
-    redirect_to fee_founder_path
+      # Send coupon details and updated fee details.
+      render json: Startups::FeeAndCouponDataService.new(current_startup).props
+    else
+      render nothing: true, status: :unprocessable_entity
+    end
   end
 
   # Remove an applied coupon.

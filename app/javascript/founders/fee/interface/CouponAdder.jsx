@@ -8,11 +8,14 @@ export default class CouponAdder extends React.Component {
     super(props);
 
     this.state = {
-      formVisible: false
+      formVisible: false,
+      couponCode: ""
     };
 
     this.showForm = this.showForm.bind(this);
     this.hideForm = this.hideForm.bind(this);
+    this.submit = this.submit.bind(this);
+    this.updateCouponCode = this.updateCouponCode.bind(this);
   }
 
   showForm() {
@@ -23,10 +26,28 @@ export default class CouponAdder extends React.Component {
     this.setState({ formVisible: false });
   }
 
+  submit(event) {
+    event.preventDefault();
+
+    $.ajax("/admissions/coupon_submit", {
+      data: { admissions_coupon: this.state.couponCode },
+      method: "POST"
+    })
+      .done(data => {
+        debugger;
+      })
+      .fail(() => {});
+  }
+
+  updateCouponCode(event) {
+    const code = event.target.value;
+    this.setState({ couponCode: code });
+  }
+
   form() {
     return (
       <div className="p-3" styleName="shared.coupon-box">
-        <form>
+        <form onSubmit={this.submit}>
           <div className="form-group string required">
             <input
               className="form-control string required"
@@ -34,6 +55,8 @@ export default class CouponAdder extends React.Component {
               required="required"
               placeholder="Enter Code"
               type="text"
+              value={this.state.couponCode}
+              onChange={this.updateCouponCode}
             />
           </div>
           <div

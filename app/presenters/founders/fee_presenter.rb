@@ -11,11 +11,9 @@ module Founders
         debug: true,
         disabled: false,
         paymentRequested: !!@payment&.requested?,
-        coupon: coupon_props,
-        fee: fee_props,
         startup: startup_props,
         states: State.order(name: :asc).as_json(only: %i[id name])
-      }
+      }.merge(Startups::FeeAndCouponDataService.new(@startup).props)
     end
 
     def undiscounted_fee
@@ -51,32 +49,6 @@ module Founders
       {
         billingAddress: @startup.billing_address,
         billingStateId: @startup.billing_state&.id
-      }
-    end
-
-    def fee_props
-      # TODO: Calculate these numbers.
-      {
-        # Full undiscounted fee, for all founders in team.
-        fullUndiscounted: 300_000,
-        # Full fee (owed), for all founders in team.
-        full: 300_000,
-        # Undiscounted EMI figure, for display.
-        emiUndiscounted: 50_000,
-        # Discounted, payable EMI now.
-        emi: 50_000
-      }
-    end
-
-    def coupon_props
-      coupon = @startup.applied_coupon
-
-      return if coupon.blank?
-
-      {
-        code: coupon.code,
-        discount: coupon.discount_percentage,
-        instructions: coupon.instructions
       }
     end
 

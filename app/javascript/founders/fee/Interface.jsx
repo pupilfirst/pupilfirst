@@ -187,8 +187,7 @@ Interface.propTypes = {
     instructions: PropTypes.string
   }),
   fee: PropTypes.shape({
-    fullUndiscounted: PropTypes.number,
-    full: PropTypes.number,
+    payableFee: PropTypes.number,
     emiUndiscounted: PropTypes.number,
     emi: PropTypes.number
   }),

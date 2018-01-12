@@ -8,11 +8,15 @@ class AdmissionsPolicy < ApplicationPolicy
   end
 
   def coupon_submit?
-    FounderPolicy.new(user, user.founder).fee? && user.founder.startup.applied_coupon.blank?
+    founder = user.founder
+    startup = founder.startup
+    FounderPolicy.new(user, founder).fee? && startup.level_zero? && startup.applied_coupon.blank?
   end
 
   def coupon_remove?
-    FounderPolicy.new(user, user.founder).fee? && user.founder.startup.applied_coupon.present?
+    founder = user.founder
+    startup = founder.startup
+    FounderPolicy.new(user, founder).fee? && startup.level_zero? && startup.applied_coupon.present?
   end
 
   def founders?

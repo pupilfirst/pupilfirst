@@ -2,7 +2,44 @@ import React from "react";
 import PropTypes from "prop-types";
 
 export default class BillingAddressForm extends React.Component {
-  stateOptions() {}
+  constructor(props) {
+    super(props);
+
+    this.updateAddress = this.updateAddress.bind(this);
+    this.updateState = this.updateState.bind(this);
+  }
+
+  stateOptions() {
+    return this.props.states.map(state => {
+      return (
+        <option key={state.id} value={state.id}>
+          {state.name}
+        </option>
+      );
+    });
+  }
+
+  billingAddress() {
+    const currentAddress = this.props.rootState.startup.billingAddress;
+    return _.isString(currentAddress) ? currentAddress : "";
+  }
+
+  selectedState() {
+    const billingStateId = this.props.rootState.startup.billingStateId;
+    return _.isNumber(billingStateId) ? "" + billingStateId : "";
+  }
+
+  updateAddress(event) {
+    const startupClone = _.cloneDeep(this.props.rootState.startup);
+    startupClone.billingAddress = event.target.value;
+    this.props.setRootState({ startup: startupClone });
+  }
+
+  updateState(event) {
+    const startupClone = _.cloneDeep(this.props.rootState.startup);
+    startupClone.billingStateId = parseInt(event.target.value);
+    this.props.setRootState({ startup: startupClone });
+  }
 
   render() {
     return (
@@ -10,7 +47,7 @@ export default class BillingAddressForm extends React.Component {
         <div className="form-group">
           <label
             className="form-control-label"
-            htmlFor="founders_billing_billing_address"
+            htmlFor="billing-address-form__address"
           >
             Billing address
           </label>
@@ -23,25 +60,26 @@ export default class BillingAddressForm extends React.Component {
                 "
             rows="4"
             className="form-control"
-            name="founders_billing[billing_address]"
-            id="founders_billing_billing_address"
+            id="billing-address-form__address"
+            value={this.billingAddress()}
+            onChange={this.updateAddress}
           />
         </div>
         <div className="form-group">
           <label
             className="col-form-label form-control-label"
-            htmlFor="founders_billing_billing_state_id"
+            htmlFor="billing-address-form__state"
           >
             Billing state
           </label>
           <select
             required="required"
             className="form-control"
-            name="founders_billing[billing_state_id]"
-            id="founders_billing_billing_state_id"
+            id="billing-address-form__state"
+            value={this.selectedState()}
+            onChange={this.updateState}
           >
             <option value="">Select your State</option>
-            <option value="1">Karnataka</option>
             {this.stateOptions()}
           </select>
         </div>
@@ -52,5 +90,11 @@ export default class BillingAddressForm extends React.Component {
 
 BillingAddressForm.propTypes = {
   rootState: PropTypes.object.isRequired,
-  setRootState: PropTypes.func.isRequired
+  setRootState: PropTypes.func.isRequired,
+  states: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string
+    })
+  )
 };

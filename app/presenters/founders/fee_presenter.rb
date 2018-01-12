@@ -12,7 +12,9 @@ module Founders
         disabled: false,
         paymentRequested: !!@payment&.requested?,
         coupon: coupon_props,
-        fee: fee_props
+        fee: fee_props,
+        startup: startup_props,
+        states: State.order(name: :asc).as_json(only: %i[id name])
       }
     end
 
@@ -44,6 +46,13 @@ module Founders
     end
 
     private
+
+    def startup_props
+      {
+        billingAddress: @startup.billing_address,
+        billingStateId: @startup.billing_state&.id
+      }
+    end
 
     def fee_props
       # TODO: Calculate these numbers.

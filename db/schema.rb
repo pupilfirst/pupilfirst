@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180109065249) do
+ActiveRecord::Schema.define(version: 20180111060236) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -576,6 +576,9 @@ ActiveRecord::Schema.define(version: 20180109065249) do
     t.bigint "team_lead_id"
     t.integer "referral_reward_days", default: 0
     t.integer "undiscounted_founder_fee"
+    t.text "billing_address"
+    t.bigint "billing_state_id"
+    t.index ["billing_state_id"], name: "index_startups_on_billing_state_id"
     t.index ["level_id"], name: "index_startups_on_level_id"
     t.index ["maximum_level_id"], name: "index_startups_on_maximum_level_id"
     t.index ["slug"], name: "index_startups_on_slug", unique: true
@@ -836,6 +839,7 @@ ActiveRecord::Schema.define(version: 20180109065249) do
   add_foreign_key "startups", "founders", column: "team_lead_id"
   add_foreign_key "startups", "levels"
   add_foreign_key "startups", "levels", column: "maximum_level_id"
+  add_foreign_key "startups", "states", column: "billing_state_id"
   add_foreign_key "target_groups", "levels"
   add_foreign_key "target_skills", "skills"
   add_foreign_key "target_skills", "targets"

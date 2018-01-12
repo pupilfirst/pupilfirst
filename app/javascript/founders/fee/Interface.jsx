@@ -13,7 +13,8 @@ export default class Interface extends React.Component {
 
     this.state = {
       coupon: props.coupon,
-      fee: props.fee
+      fee: props.fee,
+      startup: props.startup
     };
 
     this.setRootState = this.setRootState.bind(this);
@@ -161,6 +162,7 @@ export default class Interface extends React.Component {
                 <BillingAddressForm
                   rootState={this.state}
                   setRootState={this.setRootState}
+                  states={this.props.states}
                 />
               </div>
             )}
@@ -189,5 +191,15 @@ Interface.propTypes = {
     full: PropTypes.number,
     emiUndiscounted: PropTypes.number,
     emi: PropTypes.number
-  })
+  }),
+  startup: PropTypes.shape({
+    billingAddress: PropTypes.string,
+    billingStateId: PropTypes.number
+  }),
+  states: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string
+    })
+  )
 };

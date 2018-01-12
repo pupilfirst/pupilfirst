@@ -139,6 +139,11 @@ ActiveRecord::Schema.define(version: 20180109065249) do
     t.index ["slug"], name: "index_course_modules_on_slug"
   end
 
+  create_table "data_migrations", id: false, force: :cascade do |t|
+    t.string "version", null: false
+    t.index ["version"], name: "unique_data_migrations", unique: true
+  end
+
   create_table "delayed_jobs", id: :serial, force: :cascade do |t|
     t.integer "priority", default: 0, null: false
     t.integer "attempts", default: 0, null: false

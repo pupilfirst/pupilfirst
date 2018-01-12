@@ -30,7 +30,7 @@ export default class CouponAdder extends React.Component {
     event.preventDefault();
 
     $.ajax("/admissions/coupon_submit", {
-      data: { admissions_coupon: this.state.couponCode },
+      data: { admissions_coupon: { code: this.state.couponCode } },
       method: "POST"
     })
       .done(data => {

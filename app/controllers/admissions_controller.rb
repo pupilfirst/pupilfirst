@@ -82,7 +82,7 @@ class AdmissionsController < ApplicationController
       # Send coupon details and updated fee details.
       render json: Startups::FeeAndCouponDataService.new(current_startup).props
     else
-      render nothing: true, status: :unprocessable_entity
+      render json: { errors: coupon_form.errors.full_messages }, status: :unprocessable_entity
     end
   end
 

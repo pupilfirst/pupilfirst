@@ -18,4 +18,5 @@ after 'development:startups' do
   )
 
   Coupon.where(code: 'vanilla').first_or_create!(user_extension_days: 10)
+  Coupon.where(code: 'halfoff').first_or_create!(discount_percentage: 50, instructions: 'This is a test coupon, usable in the development environment.')
 end

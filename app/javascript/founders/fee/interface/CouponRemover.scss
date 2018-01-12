@@ -1,0 +1,15 @@
+@import "../../../shared/bootstrapMixins";
+@import "../../../shared/variables";
+
+.message {
+  line-height: 2;
+  font-size: 1rem;
+}
+
+.code {
+  @include border-radius(5px);
+  border: 1px dashed $brand-secondary;
+  padding: 5px;
+  margin-right: 6px;
+  background-color: lighten($light-secondary, 40%);
+}

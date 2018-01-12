@@ -1,15 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
+import shared from "./shared.scss";
+import styles from "./CouponRemover.scss";
 
 export default class CouponRemover extends React.Component {
   render() {
     const coupon = this.props.rootState.coupon;
 
     return (
-      <div className="discount-coupon__box discount-coupon-applied-box p-1">
-        <div className="discount-coupon-applied-box__message font-semibold">
+      <div className="p-1" styleName="shared.coupon-box">
+        <div className="font-semibold" styleName="styles.message">
           Coupon with code{" "}
-          <span className="discount-coupon-applied--code dark-secondary">
+          <span className="dark-secondary" styleName="styles.code">
             {coupon.code}
           </span>{" "}
           applied!
@@ -17,7 +19,7 @@ export default class CouponRemover extends React.Component {
         </div>
 
         {_.isString(coupon.instructions) && (
-          <div className="coupon-instructions mt-2">
+          <div className="mt-2">
             <p>
               <span className="font-semibold">Note: {coupon.instructions}</span>
             </p>

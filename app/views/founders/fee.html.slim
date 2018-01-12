@@ -43,7 +43,7 @@ script src='https://js.instamojo.com/v1/checkout.js'
             .col-md-8
               .coupon-form-container.text-center.mx-auto
                 - if policy(:admissions).coupon_remove?
-                  .discount-coupon__box.discount-coupon-applied-box.p-1
+                  .discount-coupon__box.p-1
                     p.discount-coupon-applied-box__message.font-semibold
                       ' Coupon with code
                       span.discount-coupon-applied--code.dark-secondary
@@ -61,7 +61,7 @@ script src='https://js.instamojo.com/v1/checkout.js'
                     p.mt-2 You have unlocked #{benefit.html_safe}.
 
                     - if @coupon.instructions.present?
-                      .coupon-instructions.mt-2
+                      .mt-2
                         p
                           span.font-semibold
                             ' Note:

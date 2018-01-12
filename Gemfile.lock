@@ -235,6 +235,8 @@ GEM
       addressable
     dalli (2.7.6)
     damerau-levenshtein (1.3.0)
+    data_migrate (3.3.0)
+      rails (>= 4.0)
     database_cleaner (1.6.2)
     declarative (0.0.10)
     declarative-builder (0.1.0)
@@ -835,6 +837,7 @@ DEPENDENCIES
   coffee-rails (~> 4.2.0)
   combine_pdf (~> 1.0)
   dalli (~> 2.7)
+  data_migrate
   database_cleaner (~> 1.5)
   delayed-web (~> 0.4)
   delayed_job_active_record (~> 4.1)
@@ -952,4 +955,4 @@ RUBY VERSION
    ruby 2.4.2p198
 
 BUNDLED WITH
-   1.16.0
+   1.16.1

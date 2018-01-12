@@ -41,7 +41,14 @@ class AdmissionsController < ApplicationController
   # GET /admissions/screening
   def screening
     authorize :admissions
-    screening_url = Rails.application.secrets.typeform[:screening_url] + "?user_id=#{current_user.id}"
+
+    screening_url = if Rails.env.development?
+      Admissions::CompleteTargetService.new(current_founder, Target::KEY_ADMISSIONS_SCREENING).execute
+      admissions_screening_submit_url
+    else
+      Rails.application.secrets.typeform[:screening_url] + "?user_id=#{current_user.id}"
+    end
+
     redirect_to screening_url
   end
 

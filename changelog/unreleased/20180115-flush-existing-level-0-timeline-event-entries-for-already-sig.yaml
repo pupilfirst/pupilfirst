@@ -1,10 +1,10 @@
 ---
 timestamp: '2018-01-15T07:00:15Z'
-title: Flushed existing Level 0 timeline event entries to allow already signed up users from
-  last admissions to perform the targets again
+title: Updated Level 0 timeline event entries from the previous admission process to allow redoing the admission
+  targets.
 trello: https://trello.com/c/NXKAtVgG
 private: true
 description: Installed data_migrate gem to execute such one-off tasks. The old screening target timeline_events are
-unlinked from its target now. The admission stage for associated startups is updated to 'Signed Up' to reflect the
-present stage of already existing users from previous admissions
+  unlinked from its target now. The admission stage for associated startups is updated to 'Signed Up' to reflect the
+  present stage of already existing users from previous admissions.
 category: operations

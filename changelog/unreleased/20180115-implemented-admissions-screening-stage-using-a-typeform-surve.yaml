@@ -1,7 +1,7 @@
 ---
 timestamp: '2018-01-15T07:13:27Z'
 title: Implemented admissions screening stage using a Typeform survey and created
-  a webhook to record responses
+  a webhook to record responses.
 trello: https://trello.com/c/Yx755CKD
 private: true
 description: The screening stage questionnaire is now created using a Typeform survey.

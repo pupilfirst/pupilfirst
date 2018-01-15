@@ -1,5 +1,58 @@
 ---
 changelog:
+- timestamp: '2018-01-15T09:33:02Z'
+  changes:
+  - timestamp: '2018-01-15T07:13:27Z'
+    title: Implemented admissions screening stage using a Typeform survey and created
+      a webhook to record responses.
+    trello: https://trello.com/c/Yx755CKD
+    private: true
+    description: The screening stage questionnaire is now created using a Typeform
+      survey. The response to the survey will be store in Founder#screening_data and
+      the target will be marked as complete on receiving the survey response using
+      Typeform webhook API.
+    category: feature
+  - timestamp: '2018-01-15T07:10:12Z'
+    title: Implemented a score filter in admin/founders to filter based on screening
+      score.
+    trello: https://trello.com/c/QrKCnhmj
+    private: true
+  - timestamp: '2018-01-15T07:09:36Z'
+    title: Show score value from screening response in founder admin page with screening
+      data.
+    trello: https://trello.com/c/NC8EaV8Q
+    private: true
+  - timestamp: '2018-01-15T07:06:25Z'
+    title: Implemented a button in founder admin page to hide or show screening data.
+      The data will be hidden by default.
+    trello: https://trello.com/c/gTvGaUem
+    private: true
+    category: feature
+  - timestamp: '2018-01-15T07:04:04Z'
+    title: Created specs for admissions screening stage to reflect the new flow using
+      Typeform API.
+    trello: https://trello.com/c/FnpBSyr3
+    private: true
+  - timestamp: '2018-01-15T07:02:54Z'
+    title: Changed 'Download Rubric' button text to 'Download Scoresheet' when a target
+      with rubric is verified.
+    trello: https://trello.com/c/YIO7PSM4
+    private: false
+    category: feature
+  - timestamp: '2018-01-15T07:02:21Z'
+    title: Created a spec for Typeform::AnswersExtractionService.
+    trello: https://trello.com/c/AAkIc2j9
+    private: true
+  - timestamp: '2018-01-15T07:00:15Z'
+    title: Updated Level 0 timeline event entries from the previous admission process
+      to allow redoing the admission targets.
+    trello: https://trello.com/c/NXKAtVgG
+    private: true
+    description: Installed data_migrate gem to execute such one-off tasks. The old
+      screening target timeline_events are unlinked from its target now. The admission
+      stage for associated startups is updated to 'Signed Up' to reflect the present
+      stage of already existing users from previous admissions.
+    category: operations
 - timestamp: '2018-01-01T07:52:56Z'
   changes:
   - timestamp: '2018-01-01T09:10:28Z'

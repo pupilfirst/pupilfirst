@@ -10,6 +10,6 @@
   @include border-radius(5px);
   border: 1px dashed $brand-secondary;
   padding: 5px;
-  margin-right: 6px;
+  margin: 0 2px;
   background-color: lighten($light-secondary, 40%);
 }

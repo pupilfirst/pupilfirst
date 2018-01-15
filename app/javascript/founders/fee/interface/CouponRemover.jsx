@@ -43,18 +43,17 @@ export default class CouponRemover extends React.Component {
     return (
       <div className="p-1" styleName="shared.coupon-box">
         <div className="font-semibold" styleName="styles.message">
-          Coupon with code{" "}
+          Code{" "}
           <span className="dark-secondary" styleName="styles.code">
             {coupon.code}
           </span>{" "}
           applied!
-          <p className="mt-2">You have unlocked {coupon.discount}% discount.</p>
         </div>
 
         {_.isString(coupon.instructions) && (
           <div className="mt-2">
             <p>
-              <span className="font-semibold">Note: {coupon.instructions}</span>
+              <span className="font-semibold">Note:</span> {coupon.instructions}
             </p>
           </div>
         )}

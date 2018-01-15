@@ -1,5 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+import CouponAdder from "./CouponAdder";
+import CouponRemover from "./CouponRemover";
 import "./FeeOffer.scss";
 
 export default class FeeOffer extends React.Component {
@@ -21,16 +23,20 @@ export default class FeeOffer extends React.Component {
     }, 2000);
   }
 
-  payableLabel() {
+  totalFee() {
+    const fee = this.props.rootState.fee;
+
     if (_.isObject(this.props.rootState.coupon)) {
       return (
         <span>
-          Your <strong>discounted</strong> fee is
+          <s>&#8377;{this.formatCurrency(fee.originalFee)}</s> &#8377;{this.formatCurrency(
+            fee.discountedFee
+          )}
         </span>
       );
     }
 
-    return "You fee is";
+    return <span>&#8377;{this.formatCurrency(fee.originalFee)}</span>;
   }
 
   isCouponApplied() {
@@ -41,11 +47,6 @@ export default class FeeOffer extends React.Component {
     return this.props.rootState.coupon.discount;
   }
 
-  couponSavings() {
-    const fee = this.props.rootState.fee;
-    return this.formatCurrency(fee.emiUndiscounted - fee.emi);
-  }
-
   formatCurrency(fee) {
     return Number(fee).toLocaleString("en-in");
   }
@@ -54,80 +55,92 @@ export default class FeeOffer extends React.Component {
     const fee = this.props.rootState.fee;
 
     return (
-      <div className="row justify-content-center mb-4">
-        <div className="col-md-4 content-box text-center py-4" styleName="box">
-          <div className="mb-4">
-            <p>
-              {this.payableLabel()} &#8377;{this.formatCurrency(fee.payableFee)}.
-              <br />
-              {!this.isCouponApplied() && (
-                <span>
-                  You need to pay the following minimum EMI to proceed:
-                </span>
-              )}
-              {this.isCouponApplied() && (
-                <span>Your EMI after applying the coupon is:</span>
-              )}
-            </p>
+      <div className="content-box text-center py-4" styleName="box">
+        <div className="mb-4">
+          <p>
+            Your fee is {this.totalFee()}.
+            <br />
+            {!this.isCouponApplied() && (
+              <span>You need to pay the following minimum EMI to proceed:</span>
+            )}
+            {this.isCouponApplied() && (
+              <span>Your EMI after applying the coupon is:</span>
+            )}
+          </p>
 
-            <div className="mt-3" styleName="amount-highlight">
+          <div className="mt-3" styleName="amount-highlight">
+            <h2 className="font-semibold mb-0">
+              <span className="font-regular">&#8377;</span>
+              {this.formatCurrency(fee.emi)}
+            </h2>
+            <p>for 2 founders</p>
+            <div styleName="discount-details">
               {this.isCouponApplied() && (
-                <h5 className="font-semibold mb-0">
-                  <del>&#8377;{this.formatCurrency(fee.emiUndiscounted)}</del>
-                </h5>
+                <h6 className="text-uppercase" styleName="discount-title">
+                  Coupon applied
+                  <p>
+                    {this.couponDiscount()}% off
+                    <br />
+                  </p>
+                </h6>
               )}
-              <h2 className="font-semibold mb-0">
-                <span className="font-regular">&#8377;</span>
-                {this.formatCurrency(fee.emi)}
-              </h2>
-              <p>for 2 founders</p>
-              <div styleName="discount-details">
+              {!this.isCouponApplied() && (
+                <h6 styleName="discount-title">FULL PRICE</h6>
+              )}
+
+              <div
+                className="text-center mx-auto mt-3"
+                styleName="coupon-form-container"
+              >
                 {this.isCouponApplied() && (
-                  <h6 styleName="discount-title">
-                    DISCOUNT APPLIED
-                    <p>
-                      {this.couponDiscount()}% off (Discount Coupon)
-                      <br />
-                      <span className="dark-secondary">
-                        You save &#8377;{this.couponSavings()}!
-                      </span>
-                    </p>
-                  </h6>
+                  <CouponRemover
+                    rootState={this.props.rootState}
+                    setRootState={this.props.setRootState}
+                  />
                 )}
                 {!this.isCouponApplied() && (
-                  <h6 styleName="discount-title">FULL PRICE</h6>
+                  <CouponAdder
+                    rootState={this.props.rootState}
+                    setRootState={this.props.setRootState}
+                  />
+                )}
+
+                {this.props.rootState.hasCouponError && (
+                  <div className="alert alert-warning mt-2" role="alert">
+                    Oops! Something went wrong.
+                  </div>
                 )}
               </div>
             </div>
           </div>
-
-          {this.state.formStatus === "pending" && (
-            <div className="px-4">
-              <button
-                className="btn btn-md text-uppercase btn-with-icon btn-ghost-primary"
-                onClick={this.initiatePayment}
-              >
-                Pay Now
-              </button>
-            </div>
-          )}
-
-          {this.state.formStatus === "inProgress" && (
-            <div className="px-4">
-              <button className="btn btn-primary btn-md text-uppercase btn-with-icon disabled">
-                <i className="fa fa-spinner fa-pulse" /> Please wait...
-              </button>
-            </div>
-          )}
-
-          {this.state.formStatus === "error" && (
-            <div className="brand-danger mt-2">
-              <i className="fa fa-warning" />
-              <div className="font-semibold">Something went wrong!</div>
-              Please refresh the page and try again.
-            </div>
-          )}
         </div>
+
+        {this.state.formStatus === "pending" && (
+          <div className="px-4">
+            <button
+              className="btn btn-md text-uppercase btn-with-icon btn-ghost-primary"
+              onClick={this.initiatePayment}
+            >
+              Pay Now
+            </button>
+          </div>
+        )}
+
+        {this.state.formStatus === "inProgress" && (
+          <div className="px-4">
+            <button className="btn btn-primary btn-md text-uppercase btn-with-icon disabled">
+              <i className="fa fa-spinner fa-pulse" /> Please wait...
+            </button>
+          </div>
+        )}
+
+        {this.state.formStatus === "error" && (
+          <div className="brand-danger mt-2">
+            <i className="fa fa-warning" />
+            <div className="font-semibold">Something went wrong!</div>
+            Please refresh the page and try again.
+          </div>
+        )}
       </div>
     );
   }

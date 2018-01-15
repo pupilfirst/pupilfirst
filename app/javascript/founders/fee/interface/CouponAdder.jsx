@@ -44,11 +44,11 @@ export default class CouponAdder extends React.Component {
         })
         .fail(jqXHR => {
           this.props.setRootState({ hasCouponError: true }, () => {
-            this.setState({ errorText: jqXHR.responseJSON.errors[0] });
+            this.setState({
+              adding: false,
+              errorText: jqXHR.responseJSON.errors[0]
+            });
           });
-        })
-        .always(() => {
-          this.setState({ adding: false });
         });
     });
   }

@@ -53,11 +53,7 @@ export default class BillingAddressForm extends React.Component {
           </label>
           <textarea
             required="required"
-            placeholder="House Number,
-                Street Name,
-                Locality,
-                City.
-                "
+            placeholder="House Number, Street Name, Locality, City."
             rows="4"
             className="form-control"
             id="billing-address-form__address"

@@ -2,8 +2,6 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import FeeOffer from "./interface/FeeOffer";
 import BillingAddressForm from "./interface/BillingAddressForm";
-import CouponAdder from "./interface/CouponAdder";
-import CouponRemover from "./interface/CouponRemover";
 
 import "./Interface.scss";
 
@@ -131,53 +129,32 @@ export default class Interface extends React.Component {
                     issue.
                   </div>
                 )}
-
-                {!this.props.disabled && (
-                  <div className="row justify-content-center">
-                    <div className="col-md-8">
-                      <div
-                        className="text-center mx-auto mt-3"
-                        styleName="coupon-form-container"
-                      >
-                        {this.couponApplied() && (
-                          <CouponRemover
-                            rootState={this.state}
-                            setRootState={this.setRootState}
-                          />
-                        )}
-                        {!this.couponApplied() && (
-                          <CouponAdder
-                            rootState={this.state}
-                            setRootState={this.setRootState}
-                          />
-                        )}
-
-                        {this.state.hasCouponError && (
-                          <div class="alert alert-warning mt-2" role="alert">
-                            Oops! Something went wrong.
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
 
             {!this.props.disabled && (
               <div className="col-lg-5">
-                <BillingAddressForm
-                  rootState={this.state}
-                  setRootState={this.setRootState}
-                  states={this.props.states}
-                />
+                <div className="row">
+                  <div className="col-12">
+                    <BillingAddressForm
+                      rootState={this.state}
+                      setRootState={this.setRootState}
+                      states={this.props.states}
+                    />
+                  </div>
+                </div>
+
+                <div className="row mt-3">
+                  <div className="col-12">
+                    <FeeOffer
+                      rootState={this.state}
+                      setRootState={this.setRootState}
+                    />
+                  </div>
+                </div>
               </div>
             )}
           </div>
-
-          {!this.props.disabled && (
-            <FeeOffer rootState={this.state} setRootState={this.setRootState} />
-          )}
         </div>
       </div>
     );
@@ -194,8 +171,9 @@ Interface.propTypes = {
     instructions: PropTypes.string
   }),
   fee: PropTypes.shape({
+    originalFee: PropTypes.number,
+    discountedFee: PropTypes.number,
     payableFee: PropTypes.number,
-    emiUndiscounted: PropTypes.number,
     emi: PropTypes.number
   }),
   startup: PropTypes.shape({

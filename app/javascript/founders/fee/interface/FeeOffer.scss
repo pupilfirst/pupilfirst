@@ -5,15 +5,9 @@
   padding: 0;
 
   @include media-breakpoint-up(sm) {
-    &:first-child {
-      border-right: 0;
-      @include border-radius(5px 0 0 5px);
-    }
-    &:last-child {
-      border-left: 0;
-      @include border-radius(0 5px 5px 0);
-    }
+    @include border-radius(5px);
   }
+
   @include media-breakpoint-down(sm) {
     width: 100%;
     margin-bottom: 1rem;
@@ -22,14 +16,13 @@
 }
 
 .amount-highlight {
-  padding: 1rem 2.25rem;
+  padding: 1rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   background-color: $dark-primary-background;
-  border: 1px solid $gray-border;
-  @include border-radius(10px);
+  width: 100%;
 }
 
 .box-recommended {
@@ -75,4 +68,10 @@
 
 .submit-button {
   box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+}
+
+.coupon-form-container {
+  @include media-breakpoint-up(sm) {
+    width: 260px;
+  }
 }

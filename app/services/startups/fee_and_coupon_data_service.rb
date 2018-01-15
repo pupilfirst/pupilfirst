@@ -18,26 +18,29 @@ module Startups
     private
 
     def fee_props
-      total_fee = @startup.billing_founders_count * BASE_FEE
+      # Undiscounted fee, for all founders in team.
+      original_fee = @startup.billing_founders_count * BASE_FEE
 
       # Discounted fee, for all founders in team.
-      payable_fee = coupon.blank? ? total_fee : (total_fee * (coupon.discount_percentage / 100.0)).to_i
+      discounted_fee = coupon.blank? ? original_fee : (original_fee * (coupon.discount_percentage / 100.0)).to_i
 
       paid_fee = @startup.payments.paid.sum(:amount)
-      remaining_payable = payable_fee - paid_fee
 
-      # Undiscounted EMI figure, for display.
-      emi_undiscounted = (total_fee / 6).round
-      calculated_emi = (payable_fee / 6).round
+      # Remaining fee, payable for team.
+      payable_fee = discounted_fee - paid_fee
+
+      # Calculated EMI, as per discounted fee.
+      calculated_emi = (discounted_fee / 6).round
 
       # Actual EMI is the lower of calculated EMI, or remaining payable amount. A small adjustment is made to the
       # remaining payable amount in the check, to ensure that even with rounding of previous payments, the last payment
       # occurs on the last month.
-      emi = calculated_emi <= (remaining_payable - 10) ? calculated_emi : remaining_payable
+      emi = calculated_emi <= (payable_fee - 10) ? calculated_emi : payable_fee
 
       {
+        originalFee: original_fee,
+        discountedFee: discounted_fee,
         payableFee: payable_fee,
-        emiUndiscounted: emi_undiscounted,
         emi: emi
       }
     end

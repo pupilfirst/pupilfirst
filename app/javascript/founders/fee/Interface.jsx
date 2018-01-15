@@ -13,7 +13,8 @@ export default class Interface extends React.Component {
       coupon: props.coupon,
       fee: props.fee,
       startup: props.startup,
-      hasCouponError: false
+      hasCouponError: false,
+      highlightBillingAddressErrors: false
     };
 
     this.setRootState = this.setRootState.bind(this);

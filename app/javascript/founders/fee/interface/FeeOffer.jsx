@@ -16,11 +16,26 @@ export default class FeeOffer extends React.Component {
   }
 
   initiatePayment() {
-    this.setState({ formStatus: "inProgress" });
-    const that = this;
-    setTimeout(() => {
-      that.setState({ formStatus: "error" });
-    }, 2000);
+    if (this.hasBillingAddress() && this.hasBillingState()) {
+      this.setState({ formStatus: "inProgress" }, () => {
+        const that = this;
+
+        setTimeout(() => {
+          that.setState({ formStatus: "error" });
+        }, 2000);
+      });
+    } else {
+      this.props.setRootState({ highlightBillingAddressErrors: true });
+    }
+  }
+
+  hasBillingAddress() {
+    const address = this.props.rootState.startup.billingAddress;
+    return _.isString(address) && address.length > 0;
+  }
+
+  hasBillingState() {
+    return _.isFinite(this.props.rootState.startup.billingStateId);
   }
 
   totalFee() {

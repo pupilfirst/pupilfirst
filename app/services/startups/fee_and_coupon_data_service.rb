@@ -24,7 +24,7 @@ module Startups
       # Discounted fee, for all founders in team.
       discounted_fee = coupon.blank? ? original_fee : (original_fee * (coupon.discount_percentage / 100.0)).to_i
 
-      paid_fee = @startup.payments.paid.sum(:amount)
+      paid_fee = @startup.payments.paid.sum(:amount).to_i
 
       # Remaining fee, payable for team.
       payable_fee = discounted_fee - paid_fee

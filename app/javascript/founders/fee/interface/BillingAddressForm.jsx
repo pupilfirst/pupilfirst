@@ -32,13 +32,29 @@ export default class BillingAddressForm extends React.Component {
   updateAddress(event) {
     const startupClone = _.cloneDeep(this.props.rootState.startup);
     startupClone.billingAddress = event.target.value;
-    this.props.setRootState({ startup: startupClone });
+    this.props.setRootState({
+      startup: startupClone,
+      highlightBillingAddressErrors: false
+    });
   }
 
   updateState(event) {
     const startupClone = _.cloneDeep(this.props.rootState.startup);
     startupClone.billingStateId = parseInt(event.target.value);
-    this.props.setRootState({ startup: startupClone });
+    this.props.setRootState({
+      startup: startupClone,
+      highlightBillingAddressErrors: false
+    });
+  }
+
+  inputClasses() {
+    const classes = "form-control";
+
+    if (this.props.rootState.highlightBillingAddressErrors) {
+      return classes + " is-invalid";
+    }
+
+    return classes;
   }
 
   render() {
@@ -55,11 +71,12 @@ export default class BillingAddressForm extends React.Component {
             required="required"
             placeholder="House Number, Street Name, Locality, City."
             rows="4"
-            className="form-control"
+            className={this.inputClasses()}
             id="billing-address-form__address"
             value={this.billingAddress()}
             onChange={this.updateAddress}
           />
+          <div className="invalid-feedback">should not be blank.</div>
         </div>
         <div className="form-group">
           <label
@@ -70,7 +87,7 @@ export default class BillingAddressForm extends React.Component {
           </label>
           <select
             required="required"
-            className="form-control"
+            className={this.inputClasses()}
             id="billing-address-form__state"
             value={this.selectedState()}
             onChange={this.updateState}
@@ -78,6 +95,7 @@ export default class BillingAddressForm extends React.Component {
             <option value="">Select your State</option>
             {this.stateOptions()}
           </select>
+          <div className="invalid-feedback">should not be blank.</div>
         </div>
       </div>
     );

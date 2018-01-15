@@ -14,7 +14,8 @@ export default class Interface extends React.Component {
     this.state = {
       coupon: props.coupon,
       fee: props.fee,
-      startup: props.startup
+      startup: props.startup,
+      hasCouponError: false
     };
 
     this.setRootState = this.setRootState.bind(this);
@@ -149,6 +150,12 @@ export default class Interface extends React.Component {
                             rootState={this.state}
                             setRootState={this.setRootState}
                           />
+                        )}
+
+                        {this.state.hasCouponError && (
+                          <div class="alert alert-warning mt-2" role="alert">
+                            Oops! Something went wrong.
+                          </div>
                         )}
                       </div>
                     </div>

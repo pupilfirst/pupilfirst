@@ -8,8 +8,10 @@ export default class CouponAdder extends React.Component {
     super(props);
 
     this.state = {
+      adding: false,
       formVisible: false,
-      couponCode: ""
+      couponCode: "",
+      errorText: null
     };
 
     this.showForm = this.showForm.bind(this);
@@ -23,25 +25,47 @@ export default class CouponAdder extends React.Component {
   }
 
   hideForm() {
-    this.setState({ formVisible: false });
+    this.setState({ formVisible: false }, () => {
+      this.props.setRootState({ hasCouponError: false });
+    });
   }
 
   submit(event) {
     event.preventDefault();
 
-    $.ajax("/admissions/coupon_submit", {
-      data: { admissions_coupon: { code: this.state.couponCode } },
-      method: "POST"
-    })
-      .done(data => {
-        debugger;
+    this.setState({ adding: true }, () => {
+      $.ajax("/admissions/coupon_submit", {
+        data: { admissions_coupon: { code: this.state.couponCode } },
+        method: "POST"
       })
-      .fail(() => {});
+        .done(data => {
+          const updatedState = _.merge(data, { hasCouponError: false });
+          this.props.setRootState(updatedState);
+        })
+        .fail(jqXHR => {
+          this.props.setRootState({ hasCouponError: true }, () => {
+            this.setState({ errorText: jqXHR.responseJSON.errors[0] });
+          });
+        })
+        .always(() => {
+          this.setState({ adding: false });
+        });
+    });
   }
 
   updateCouponCode(event) {
     const code = event.target.value;
     this.setState({ couponCode: code });
+  }
+
+  inputClasses() {
+    const classes = "form-control string required";
+
+    if (_.isString(this.state.errorText)) {
+      return classes + " is-invalid";
+    }
+
+    return classes;
   }
 
   form() {
@@ -50,7 +74,7 @@ export default class CouponAdder extends React.Component {
         <form onSubmit={this.submit}>
           <div className="form-group string required">
             <input
-              className="form-control string required"
+              className={this.inputClasses()}
               autoFocus={true}
               required="required"
               placeholder="Enter Code"
@@ -58,19 +82,32 @@ export default class CouponAdder extends React.Component {
               value={this.state.couponCode}
               onChange={this.updateCouponCode}
             />
+            <div className="invalid-feedback">{this.state.errorText}</div>
           </div>
-          <div
-            className="btn btn-ghost-secondary btn-sm text-uppercase mr-2 mb-3 mb-md-0"
-            onClick={this.hideForm}
-          >
-            Hide
-          </div>
-          <button
-            type="submit"
-            className="btn btn-secondary btn-sm text-uppercase mb-3 mb-md-0"
-          >
-            Apply Code
-          </button>
+
+          {!this.state.adding && (
+            <div
+              className="btn btn-ghost-secondary btn-sm text-uppercase mr-2 mb-3 mb-md-0"
+              onClick={this.hideForm}
+            >
+              Hide
+            </div>
+          )}
+
+          {!this.state.adding && (
+            <button
+              type="submit"
+              className="btn btn-secondary btn-sm text-uppercase mb-3 mb-md-0"
+            >
+              Apply Code
+            </button>
+          )}
+
+          {this.state.adding && (
+            <button className="btn btn-secondary btn-sm text-uppercase mb-3 mb-md-0 btn-with-icon disabled">
+              <i className="fa fa-spinner fa-pulse" /> Applying
+            </button>
+          )}
         </form>
       </div>
     );

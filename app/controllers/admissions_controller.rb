@@ -80,19 +80,20 @@ class AdmissionsController < ApplicationController
       coupon_form.apply_coupon
 
       # Send coupon details and updated fee details.
-      render json: Startups::FeeAndCouponDataService.new(current_startup).props
+      render json: Startups::FeeAndCouponDataService.new(current_startup.reload).props
     else
       render json: { errors: coupon_form.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
+  # PATCH /admissions/coupon_remove
+  #
   # Remove an applied coupon.
   def coupon_remove
     authorize :admissions
 
     remove_latest_coupon
-    flash[:success] = 'Coupon removed successfully!'
-    redirect_to fee_founder_path
+    render json: Startups::FeeAndCouponDataService.new(current_startup.reload).props
   end
 
   # GET /admissions/founders

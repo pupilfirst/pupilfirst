@@ -192,7 +192,7 @@ feature 'Admission Fee Payment' do
     end
 
     context 'when an applied coupon has expired' do
-      let(:coupon) { create :coupon, referrer_startup: referrer_startup, expires_at: 1.day.ago }
+      let(:coupon) { create :coupon, expires_at: 1.day.ago }
       let!(:coupon_usage) { create :coupon_usage, coupon: coupon, startup: startup }
 
       scenario 'founder tried to pay with expired coupon' do

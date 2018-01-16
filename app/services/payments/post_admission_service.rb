@@ -17,9 +17,6 @@ module Payments
       # Create a referral coupon for the startup.
       Coupons::CreateService.new.generate_referral(@startup) if @startup.referral_coupon.blank?
 
-      # handle coupon usage
-      CouponUsages::RedeemService.new(@startup.coupon_usage, @payment).execute if @startup.applied_coupon.present?
-
       # mark the payment target complete
       Admissions::CompleteTargetService.new(@founder, Target::KEY_ADMISSIONS_FEE_PAYMENT).execute
 

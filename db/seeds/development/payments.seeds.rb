@@ -7,7 +7,7 @@ after 'development:startups' do
   avengers_startup = Startup.find_by(legal_registered_name: 'The Avengers')
 
   # A live subscription for 'Super Startup' and 'The Avengers'
-  fee = Startups::FeePayableService.new(super_startup).undiscounted_fee(period: 3)
+  fee = Startups::FeeAndCouponDataService.new(super_startup).emi
   super_startup.payments.create!(
     founder: super_startup.team_lead,
     amount: fee,
@@ -17,7 +17,7 @@ after 'development:startups' do
     billing_end_at: 3.weeks.from_now
   )
 
-  fee = Startups::FeePayableService.new(avengers_startup).undiscounted_fee(period: 1)
+  fee = Startups::FeeAndCouponDataService.new(avengers_startup).emi
   avengers_startup.payments.create!(
     founder: avengers_startup.team_lead,
     amount: fee,

@@ -320,6 +320,7 @@ class Founder < ApplicationRecord
       'Facebook',
       'Twitter',
       'Microsoft Student Partner',
+      'SV.CO Team Member',
       'Other (Please Specify)'
     ].freeze
   end

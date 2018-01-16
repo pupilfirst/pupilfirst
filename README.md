@@ -22,32 +22,51 @@
 ```
 sudo apt-get install imagemagick redis-server postgresql postgresql-contrib
 ```
+#### Fetch Gems
 
-#### Troubleshoot
+You need to install `bundler` before you install the required gems.
 
-  * If installation of of `pg` gem crashes, asking for `libpq-fe.h`, install the gem with:
+     $ gem install bundler
 
-```
-gem install pg -- --with-pg-config=/Applications/Postgres.app/Contents/Versions/9.X/bin/pg_config
-```
+Install all Gems using bundler
 
-  * If _puma-dev_ crashes when starting the application with `bundle: not found` in the logs, create a `.powenv` file in the root of the repository and add commands to load the _rbenv_ environment.
+    $ bundle install
+
+If installation of of `pg` gem crashes, asking for `libpq-fe.h`, install the gem with:
+
+On OSX: `gem install pg -- --with-pg-config=/Applications/Postgres.app/Contents/Versions/9.X/bin/pg_config`
+
+On Ubuntu: `sudo apt-get install libpq-dev`
+
+#### Set a password for the default 'postgres' user
+
+    # Run psql command as postgres user.
+    sudo -u postgres psql postgres
+
+    # Set the password for this user.
+    \password postgres
+
+    # Quit.
+    \q
 
 ### Configure
 
-  *  Copy `example.env` to `.env` and set the variables as required.
-  *  Load environment key for Rollbar from Heroku with:
+Copy `example.env` to `.env`.
 
-    heroku config -s --app sv-co | grep ROLLBAR_ACCESS_TOKEN >> .env
+    $ cp example.env .env
 
-### Bundle
-
-    $ bundle install
+Now, edit `.env` and set values for Database username and password that you used in the previous step.
 
 ### Overcommit
 
     $ overcommit --install
     $ overcommit --sign
+
+### Setup Javascript Environment
+
+1. intsall NVM following instructions on the [offical repository.](https://github.com/creationix/nvm)
+2. Install Yarn following [offical instructions.](https://yarnpkg.com/en/docs/install)
+3. Intsall all node modules with `yarn` command.
 
 ### Database setup
 
@@ -58,6 +77,8 @@ the sign in page, and use the _development_ option to sign in as `admin@example.
 
 ### Use [puma-dev](https://github.com/puma/puma-dev) to run the application.
 
+When installing puma-dev, make sure that you set it up to listen on the `.localhost` domain, and not the default `.dev` domain.
+
 After installing puma-dev using its instructions:
 
     cd ~/.puma-dev
@@ -65,7 +86,7 @@ After installing puma-dev using its instructions:
 
 It's useful to have puma-dev's log file in easy reach:
 
-    ln -s ~/Library/Logs/puma-dev.log log/
+    OSX Specific: ln -s ~/Library/Logs/puma-dev.log log/
 
 To restart the server:
 
@@ -75,6 +96,32 @@ If it crashes, gets stuck, etc., kill the master process.
 
     ps -ef | grep puma
     kill -9 [PUMA_PROCESS_ID]
+
+#### puma-dev on Ubuntu
+
+Running puma-dev on Ubuntu will require that you download the `puma-dev` binary, and run it manually. There are other setup requirements detailed in the official docs (linked above.)
+
+Use the following command to run puma-dev with correct configuration for dev environment.
+
+    puma-dev -d localhost -http-port 80 -https-port 443
+
+You'll probably want to convert this to an _alias_ to make starting the server simple.
+
+#### Troubleshooting `puma-dev`
+
+If _puma-dev_ crashes when starting the application with `bundle: not found` in the logs, create a `.powenv` file in the root of the repository and add commands to load the _rbenv_ environment.
+
+### Optional extra
+
+#### Install Heroku CLI
+
+Follow [official instructions](https://devcenter.heroku.com/articles/heroku-cli) install the CLI.
+
+Login with your 'Heroku' credentials and follow the instrutions recived on the onbarding Email.
+
+Load environment key for Rollbar from Heroku with:
+
+    heroku config -s --app sv-co | grep ROLLBAR_ACCESS_TOKEN >> .env
 
 ## Testing
 

@@ -9,8 +9,8 @@ module Startups
     end
 
     # Actual EMI is the lower of calculated EMI, or remaining payable amount. A small adjustment is made to the
-    # remaining payable amount in the check, to ensure that even with rounding of previous payments, the last payment
-    # occurs on the last month.
+    # remaining payable amount in the check, to ensure that even with rounding down of previous payments, the last
+    # payment occurs on the last month.
     def emi
       @emi ||= calculated_emi <= (payable_fee - 10) ? calculated_emi : payable_fee
     end
@@ -66,7 +66,7 @@ module Startups
     end
 
     def coupon
-      @coupon ||= @startup.applied_coupon
+      @coupon ||= @startup.reload.applied_coupon
     end
   end
 end

@@ -1,7 +1,9 @@
 module AdmissionStats
   class StageSplitService
     def startups_split
-      stages = [Startup::ADMISSION_STAGE_SIGNED_UP, Startup::ADMISSION_STAGE_SCREENING_COMPLETED, Startup::ADMISSION_STAGE_COFOUNDERS_ADDED, Startup::ADMISSION_STAGE_PAYMENT_INITIATED, Startup::ADMISSION_STAGE_FEE_PAID, Startup::ADMISSION_STAGE_ADMITTED]
+      stages = [Startup::ADMISSION_STAGE_SIGNED_UP, Startup::ADMISSION_STAGE_SELF_EVALUATION_COMPLETED,
+                Startup::ADMISSION_STAGE_TEAM_MEMBERS_ADDED, Startup::ADMISSION_STAGE_CODING_TASK_PASSED,
+                Startup::ADMISSION_STAGE_INTERVIEW_PASSED, Startup::ADMISSION_STAGE_ADMITTED]
 
       stages.each_with_object({}) do |stage, hash|
         hash[stage] = if stage == Startup::ADMISSION_STAGE_ADMITTED
@@ -19,7 +21,7 @@ module AdmissionStats
     end
 
     def date_time_for_admissions
-      DateTime.new(2017, 5, 8)
+      DateTime.new(2018, 1, 9)
     end
   end
 end

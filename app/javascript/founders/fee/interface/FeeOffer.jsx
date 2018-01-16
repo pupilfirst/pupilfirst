@@ -41,6 +41,14 @@ export default class FeeOffer extends React.Component {
       });
     } else {
       this.props.setRootState({ highlightBillingAddressErrors: true });
+
+      // Scroll to the billing address section.
+      $("html, body").animate(
+        {
+          scrollTop: $("#billing-address-form__content-box").offset().top
+        },
+        500
+      );
     }
   }
 

@@ -59,7 +59,7 @@ export default class BillingAddressForm extends React.Component {
 
   render() {
     return (
-      <div className="content-box">
+      <div className="content-box" id="billing-address-form__content-box">
         <div className="form-group">
           <label
             className="form-control-label"

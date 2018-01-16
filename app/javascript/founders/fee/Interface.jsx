@@ -119,38 +119,43 @@ export default class Interface extends React.Component {
               <div className="content-box mb-3">
                 {this.primaryMessages()}
 
-                {this.props.paymentRequested && (
-                  <div className="alert alert-warning mt-2">
-                    <i className="fa fa-warning" /> It looks like you've
-                    attempted to pay at least once before, but didn&rsquo;t
-                    complete the process. Note that it might take a few minutes
-                    for the payment status to update, if you experienced network
-                    issues after completing the payment. Please contact us at{" "}
-                    {this.mailTo("help@sv.co")} if you&rsquo;re experiencing any
-                    issue.
-                  </div>
-                )}
+                {!this.props.disabled && (
+                  <div>
+                    {this.props.paymentRequested && (
+                      <div className="alert alert-warning mt-2">
+                        <i className="fa fa-warning" /> It looks like you've
+                        attempted to pay at least once before, but didn&rsquo;t
+                        complete the process. Note that it might take a few
+                        minutes for the payment status to update, if you
+                        experienced network issues after completing the payment.
+                        Please contact us at {this.mailTo("help@sv.co")} if
+                        you&rsquo;re experiencing any issue.
+                      </div>
+                    )}
 
-                <h3>Alternate payment methods</h3>
+                    <h3>Alternate payment methods</h3>
 
-                <p>
-                  Paying online is quicker, but you can also pay the fee by
-                  transferring the amount directly to our bank account. You can
-                  also pay a sum greater than the minimum EMI using this method.
-                </p>
+                    <p>
+                      Paying online is quicker, but you can also pay the fee by
+                      transferring the amount directly to our bank account. You
+                      can also pay a sum greater than the minimum EMI using this
+                      method.
+                    </p>
 
-                <p className="mt-2">
-                  Once you have completed the bank transfer, please email{" "}
-                  {this.mailTo("help@sv.co")} with payment details for
-                  processing. Our bank account details follow:
-                </p>
+                    <p className="mt-2">
+                      Once you have completed the bank transfer, please email{" "}
+                      {this.mailTo("help@sv.co")} with payment details for
+                      processing. Our bank account details follow:
+                    </p>
 
-                <pre className="mt-3">
-                  {`Account Number: XXXXXX
+                    <pre className="mt-3">
+                      {`Account Number: XXXXXX
 IFSC: XXXXXX
 Bank: XXXXXX
 Branch: XXXXXX`}
-                </pre>
+                    </pre>
+                  </div>
+                )}
               </div>
             </div>
 

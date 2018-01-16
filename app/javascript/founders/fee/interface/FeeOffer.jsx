@@ -18,11 +18,26 @@ export default class FeeOffer extends React.Component {
   initiatePayment() {
     if (this.hasBillingAddress() && this.hasBillingState()) {
       this.setState({ formStatus: "inProgress" }, () => {
-        const that = this;
+        const startup = this.props.rootState.startup;
 
-        setTimeout(() => {
-          that.setState({ formStatus: "error" });
-        }, 2000);
+        $.ajax("/founder/fee", {
+          data: {
+            fee: {
+              billing_address: startup.billingAddress,
+              billing_state_id: startup.billingStateId
+            }
+          },
+          method: "POST"
+        })
+          .done(data => {
+            Instamojo.open(data.long_url);
+            this.setState({ formStatus: "pending" });
+          })
+          .fail(_jqXHR => {
+            this.setState({
+              formStatus: "error"
+            });
+          });
       });
     } else {
       this.props.setRootState({ highlightBillingAddressErrors: true });

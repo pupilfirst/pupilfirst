@@ -81,7 +81,7 @@ class FoundersController < ApplicationController
   private
 
   def fee_params
-    params.require(:fee).permit(:period)
+    params.require(:fee).permit(:billing_address, :billing_state_id)
   end
 
   def skip_container

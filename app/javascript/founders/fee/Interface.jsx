@@ -130,6 +130,27 @@ export default class Interface extends React.Component {
                     issue.
                   </div>
                 )}
+
+                <h3>Alternate payment methods</h3>
+
+                <p>
+                  Paying online is quicker, but you can also pay the fee by
+                  transferring the amount directly to our bank account. You can
+                  also pay a sum greater than the minimum EMI using this method.
+                </p>
+
+                <p className="mt-2">
+                  Once you have completed the bank transfer, please email{" "}
+                  {this.mailTo("help@sv.co")} with payment details for
+                  processing. Our bank account details follow:
+                </p>
+
+                <pre className="mt-3">
+                  {`Account Number: XXXXXX
+IFSC: XXXXXX
+Bank: XXXXXX
+Branch: XXXXXX`}
+                </pre>
               </div>
             </div>
 

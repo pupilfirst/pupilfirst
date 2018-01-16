@@ -83,7 +83,7 @@ export default class BillingAddressForm extends React.Component {
             className="col-form-label form-control-label"
             htmlFor="billing-address-form__state"
           >
-            Billing state
+            State
           </label>
           <select
             required="required"

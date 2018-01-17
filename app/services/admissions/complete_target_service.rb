@@ -53,6 +53,8 @@ module Admissions
           Startup::ADMISSION_STAGE_SELF_EVALUATION_COMPLETED
         when Target::KEY_ADMISSIONS_COFOUNDER_ADDITION
           Startup::ADMISSION_STAGE_TEAM_MEMBERS_ADDED
+        when Target::KEY_ADMISSIONS_FEE_PAYMENT
+          Startup::ADMISSION_STAGE_FEE_PAID
       end
     end
   end

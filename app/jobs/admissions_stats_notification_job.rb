@@ -1,5 +1,5 @@
 # Sends membership stats for yesterday to Slack's #memberships channel.
-class MembershipStatsNotificationJob < ApplicationJob
+class AdmissionsStatsNotificationJob < ApplicationJob
   queue_as :default
 
   def perform
@@ -17,9 +17,9 @@ class MembershipStatsNotificationJob < ApplicationJob
       > Unique Visits: *#{unique_visits_yesterday}*
       #{funnel_stats}
 
-      *And the stats since May 8:*
+      *And the stats since Jan 9:*
 
-      > Unique Visits: *#{unique_visits_since_may_8}*
+      > Unique Visits: *#{unique_visits_since_jan_9}*
       #{complete_funnel_stats}
 
       <#{dashboard_url}|:bar_chart: View Dashboard>
@@ -49,8 +49,8 @@ class MembershipStatsNotificationJob < ApplicationJob
     new_user_visits + non_user_visits
   end
 
-  def unique_visits_since_may_8
-    Visit.where(started_at: Date.parse('2017-05-8').beginning_of_day..Date.today.end_of_day).count
+  def unique_visits_since_jan_9
+    Visit.where(started_at: Date.parse('2018-01-9').beginning_of_day..Date.today.end_of_day).count
   end
 
   def dashboard_url

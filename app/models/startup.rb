@@ -34,6 +34,7 @@ class Startup < ApplicationRecord
   ADMISSION_STAGE_TEAM_MEMBERS_ADDED = 'Added Team Members'
   ADMISSION_STAGE_CODING_TASK_PASSED = 'Passed Coding Task'
   ADMISSION_STAGE_INTERVIEW_PASSED = 'Passed Interview'
+  ADMISSION_STAGE_FEE_PAID = 'Fee Paid'
   ADMISSION_STAGE_ADMITTED = 'Admitted'
 
   # agreement duration in years

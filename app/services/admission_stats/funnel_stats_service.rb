@@ -13,7 +13,7 @@ module AdmissionStats
     def load
       {
         'Total Sign Ups' => signed_up,
-        'Screening Completed' => screening_completed,
+        'Self Evaluation Completed' => self_evaluation_completed,
         'Added Team Members' => team_members_added,
         'Passed Coding Task' => coding_task_passed,
         'Passed Interview' => interview_passed,
@@ -29,7 +29,7 @@ module AdmissionStats
       Startup.level_zero.where(created_at: @date_range).count
     end
 
-    def screening_completed
+    def self_evaluation_completed
       verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_SCREENING }).where(created_at: @date_range).count
     end
 
@@ -54,7 +54,7 @@ module AdmissionStats
     end
 
     def payment_initiated
-      Startup.joins(:payments).where(payments: { created_at: @date_range }).count
+      Startup.joins(:payments).where(payments: { created_at: @date_range }).where.not(payments: { instamojo_payment_request_id: nil }).count
     end
 
     def verified_timeline_events

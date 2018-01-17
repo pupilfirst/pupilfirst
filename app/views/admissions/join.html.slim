@@ -143,13 +143,13 @@ section.application-fee__container.py-5
           p
             ' per developer.
           .program-fee__scholorship.mt-3.p-3
-            p.font-semibold
-              ' Merit Scholarships Available - Upto 80% off!
-            p.font-semibold
+            p.program-fee__scholorship__text.font-bold
+              ' Scholarships Available - Upto 80% off!
+            p.program-fee__scholorship__text.font-bold.mb-2
               ' EMI options available.
-            a.p-2 href="https://help.sv.co/admissions-to-sv-co/fees-and-scholarships/scholarships-at-svco"
-              i.fa.fa-question-circle-o.mr-1
+            a.program-fee__scholorship__link.font-semibold.p-2 href="https://help.sv.co/admissions-to-sv-co/fees-and-scholarships/scholarships-at-svco" target="_blank"
               | Read More
+              i.fa.fa-arrow-circle-right.ml-2
 
 #join-form.apply-form__container.py-5
   - if current_founder&.startup.blank?

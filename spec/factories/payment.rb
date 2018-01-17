@@ -8,7 +8,6 @@ FactoryBot.define do
     end
 
     trait :requested do
-      period 1
       amount { Founder::FEE * startup.billing_founders_count }
       instamojo_payment_request_id { SecureRandom.hex }
       instamojo_payment_request_status 'Pending'

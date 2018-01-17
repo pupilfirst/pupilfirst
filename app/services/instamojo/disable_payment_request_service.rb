@@ -17,7 +17,6 @@ class Instamojo
       log "Instamojo payment request for Payment ##{@payment.id} has been disabled. Nil-ing all related columns..."
 
       # Remove all fields related to payment request.
-      @payment.period = nil
       @payment.amount = nil
       @payment.instamojo_payment_request_id = nil
       @payment.instamojo_payment_request_status = nil

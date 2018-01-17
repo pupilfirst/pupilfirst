@@ -36,14 +36,4 @@ class StartupMailerPreview < ActionMailer::Preview
     payment = Payment.new(billing_end_at: 5.days.from_now, startup: Startup.last)
     StartupMailer.payment_reminder(payment)
   end
-
-  def referral_reward
-    referrer_startup = Startup.find_by(product_name: 'Super Product')
-    referred_startup = Startup.find_by(product_name: 'Super Product')
-
-    coupon = Coupon.new(referrer_startup: referrer_startup, referrer_extension_days: 10)
-
-    # The final flag controls message related to reward_on_renewal.
-    StartupMailer.referral_reward(referrer_startup, referred_startup, coupon, false)
-  end
 end

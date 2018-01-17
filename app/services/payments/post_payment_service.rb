@@ -8,20 +8,11 @@ module Payments
       raise 'PostPaymentService was called for an unpaid payment!' unless @payment.paid?
 
       Payment.transaction do
-        # If payment was made outside active billing period, set start time to 'now'.
-        @payment.billing_start_at = Time.zone.now if @payment.billing_start_at.blank? || @payment.billing_start_at.past?
+        # If payment doesn't have a billing_start_at, set it to 'now'.
+        @payment.billing_start_at = Time.zone.now if @payment.billing_start_at.blank?
 
-        # Add payment period to billing start time to get billing end time.
-        @payment.billing_end_at = @payment.billing_start_at + @payment.period.months
-
-        # Add recorded referral reward, if any.
-        if startup.referral_reward_days.positive?
-          @payment.billing_end_at += startup.referral_reward_days.days
-
-          # Wipe the reward days once it has been assigned to a payment.
-          startup.referral_reward_days = 0
-          startup.save!
-        end
+        # Add 1 month to billing start time to get billing end time.
+        @payment.billing_end_at = @payment.billing_start_at + 1.month
 
         @payment.save!
       end

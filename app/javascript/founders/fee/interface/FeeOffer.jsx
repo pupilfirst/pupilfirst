@@ -65,20 +65,24 @@ export default class FeeOffer extends React.Component {
     const fee = this.props.rootState.fee;
 
     if (_.isObject(this.props.rootState.coupon)) {
-      return (
-        <span>
-          <s>&#8377;{this.formatCurrency(fee.originalFee)}</s> &#8377;{this.formatCurrency(
-            fee.discountedFee
-          )}
-        </span>
-      );
+      return [
+        <s>&#8377;{this.formatCurrency(fee.originalFee)}</s>,
+        <span> </span>,
+        <strong>&#8377;{this.formatCurrency(fee.discountedFee)}</strong>
+      ];
     }
 
-    return <span>&#8377;{this.formatCurrency(fee.originalFee)}</span>;
+    return <strong>&#8377;{this.formatCurrency(fee.originalFee)}</strong>;
   }
 
   isCouponApplied() {
     return _.isObject(this.props.rootState.coupon);
+  }
+
+  shouldShowCouponInfo() {
+    const fee = this.props.rootState.fee;
+
+    return fee.discountedFee === fee.payableFee;
   }
 
   couponDiscount() {
@@ -96,14 +100,30 @@ export default class FeeOffer extends React.Component {
       <div className="content-box text-center py-4" styleName="box">
         <div className="mb-4">
           <p>
-            Your fee is {this.totalFee()}.
+            Your total fee is {this.totalFee()}.
             <br />
-            {!this.isCouponApplied() && (
-              <span>You need to pay the following minimum EMI to proceed:</span>
+            {this.shouldShowCouponInfo() && (
+              <span>
+                {!this.isCouponApplied() && (
+                  <span>
+                    You need to pay the following minimum EMI to proceed:
+                  </span>
+                )}
+                {this.isCouponApplied() && (
+                  <span>Your EMI after applying the coupon is:</span>
+                )}
+              </span>
             )}
-            {this.isCouponApplied() && (
-              <span>Your EMI after applying the coupon is:</span>
-            )}
+            {!this.shouldShowCouponInfo() && [
+              <span>
+                The remaining payable amount is: &#8377;
+                <strong>
+                  {this.formatCurrency(this.props.rootState.fee.payableFee)}
+                </strong>.
+              </span>,
+              <br />,
+              <span>And your minimum payable EMI is:</span>
+            ]}
           </p>
 
           <div className="mt-3" styleName="amount-highlight">
@@ -112,44 +132,46 @@ export default class FeeOffer extends React.Component {
               {this.formatCurrency(fee.emi)}
             </h2>
             <p>for 2 founders</p>
-            <div styleName="discount-details">
-              {this.isCouponApplied() && (
-                <h6 className="text-uppercase" styleName="discount-title">
-                  Coupon applied
-                  <p>
-                    {this.couponDiscount()}% off
-                    <br />
-                  </p>
-                </h6>
-              )}
-              {!this.isCouponApplied() && (
-                <h6 styleName="discount-title">FULL PRICE</h6>
-              )}
-
-              <div
-                className="text-center mx-auto mt-3"
-                styleName="coupon-form-container"
-              >
+            {this.shouldShowCouponInfo() && (
+              <div styleName="discount-details">
                 {this.isCouponApplied() && (
-                  <CouponRemover
-                    rootState={this.props.rootState}
-                    setRootState={this.props.setRootState}
-                  />
+                  <h6 className="text-uppercase" styleName="discount-title">
+                    Coupon applied
+                    <p>
+                      {this.couponDiscount()}% off
+                      <br />
+                    </p>
+                  </h6>
                 )}
                 {!this.isCouponApplied() && (
-                  <CouponAdder
-                    rootState={this.props.rootState}
-                    setRootState={this.props.setRootState}
-                  />
+                  <h6 styleName="discount-title">FULL PRICE</h6>
                 )}
 
-                {this.props.rootState.hasCouponError && (
-                  <div className="alert alert-warning mt-2" role="alert">
-                    Oops! Something went wrong.
-                  </div>
-                )}
+                <div
+                  className="text-center mx-auto mt-3"
+                  styleName="coupon-form-container"
+                >
+                  {this.isCouponApplied() && (
+                    <CouponRemover
+                      rootState={this.props.rootState}
+                      setRootState={this.props.setRootState}
+                    />
+                  )}
+                  {!this.isCouponApplied() && (
+                    <CouponAdder
+                      rootState={this.props.rootState}
+                      setRootState={this.props.setRootState}
+                    />
+                  )}
+
+                  {this.props.rootState.hasCouponError && (
+                    <div className="alert alert-warning mt-2" role="alert">
+                      Oops! Something went wrong.
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 

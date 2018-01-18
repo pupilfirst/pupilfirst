@@ -50,11 +50,9 @@ module Admissions
     def admission_stage
       case @key
         when Target::KEY_ADMISSIONS_SCREENING
-          Startup::ADMISSION_STAGE_SCREENING_COMPLETED
-        when Target::KEY_ADMISSIONS_FEE_PAYMENT
-          Startup::ADMISSION_STAGE_FEE_PAID
+          Startup::ADMISSION_STAGE_SELF_EVALUATION_COMPLETED
         when Target::KEY_ADMISSIONS_COFOUNDER_ADDITION
-          Startup::ADMISSION_STAGE_COFOUNDERS_ADDED
+          Startup::ADMISSION_STAGE_TEAM_MEMBERS_ADDED
       end
     end
   end

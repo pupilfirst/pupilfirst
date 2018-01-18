@@ -142,9 +142,14 @@ section.application-fee__container.py-5
           h5.program-fee__title-large.px-4.mb-0.font-bold &#8377;1 Lakh
           p
             ' per developer.
-          .program-fee__scholorship.mt-3
-            p.font-semibold.dark-secondary.p-3
-              ' Merit Scholarships available for deserving students.
+          .program-fee__scholorship.mt-3.p-3
+            p.program-fee__scholorship__text.font-bold
+              ' Scholarships Available - Upto 80% off!
+            p.program-fee__scholorship__text.font-bold.mb-2
+              ' EMI options available.
+            a.program-fee__scholorship__link.font-semibold.p-2 href="https://help.sv.co/admissions-to-sv-co/fees-and-scholarships/scholarships-at-svco" target="_blank"
+              | Read More
+              i.fa.fa-arrow-circle-right.ml-2
 
 #join-form.apply-form__container.py-5
   - if current_founder&.startup.blank?

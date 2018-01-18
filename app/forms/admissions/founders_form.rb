@@ -141,7 +141,7 @@ module Admissions
         Payments::CreateService.new(current_founder).create
       end
 
-      Intercom::LevelZeroStageUpdateJob.perform_later(current_founder, Startup::ADMISSION_STAGE_COFOUNDERS_ADDED)
+      Intercom::LevelZeroStageUpdateJob.perform_later(current_founder, Startup::ADMISSION_STAGE_TEAM_MEMBERS_ADDED)
     end
 
     def invite_founder(founder)

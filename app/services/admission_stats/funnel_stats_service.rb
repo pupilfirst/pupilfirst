@@ -14,12 +14,11 @@ module AdmissionStats
       {
         'Total Sign Ups' => signed_up,
         'Screening Completed' => screening_completed,
-        'Added Cofounders' =>  cofounders_added,
+        'Added Team Members' => team_members_added,
+        'Passed Coding Task' => coding_task_passed,
+        'Passed Interview' => interview_passed,
         'Payment Initiated' => payment_initiated,
-        'Fee Paid Teams' => fee_paid_startups.count,
-        'Fee Paid Founders (Joined)' => fee_paid_joined_founders.count,
-        'Fee Paid Founders (Invited)' => fee_paid_invited_founders.count,
-        'Renewals' => renewals_count,
+        'Fee Paid Teams' => fee_paid_teams.count,
         'Revenue' => "₹#{revenue.to_i}"
       }
     end
@@ -34,23 +33,20 @@ module AdmissionStats
       verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_SCREENING }).where(created_at: @date_range).count
     end
 
-    def fee_paid_startups
+    def team_members_added
+      verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_COFOUNDER_ADDITION }).where(created_at: @date_range).count
+    end
+
+    def coding_task_passed
+      verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_CODING_TASK }).where(created_at: @date_range).count
+    end
+
+    def interview_passed
+      verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_ATTEND_INTERVIEW }).where(created_at: @date_range).count
+    end
+
+    def fee_paid_teams
       @fee_paid_startups ||= verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_FEE_PAYMENT }).where(created_at: @date_range).pluck(:startup_id)
-    end
-
-    def fee_paid_joined_founders
-      Founder.where(startup: fee_paid_startups)
-    end
-
-    def fee_paid_invited_founders
-      Founder.where(invited_startup: fee_paid_startups)
-    end
-
-    def renewals_count
-      Payment.joins(:startup)
-        .where(paid_at: @date_range)
-        .where.not(id: Payment.paid.select('distinct on (startup_id) id').order('startup_id, paid_at asc'))
-        .count
     end
 
     def revenue
@@ -59,10 +55,6 @@ module AdmissionStats
 
     def payment_initiated
       Startup.joins(:payments).where(payments: { created_at: @date_range }).count
-    end
-
-    def cofounders_added
-      verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_COFOUNDER_ADDITION }).where(created_at: @date_range).count
     end
 
     def verified_timeline_events

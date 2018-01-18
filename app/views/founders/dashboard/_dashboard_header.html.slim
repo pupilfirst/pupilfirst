@@ -1,7 +1,7 @@
 .founder-dashboard-header__container
   .container
     .founder-dashboard-header__startup-profile
-      .mx-auto.founder-dashboard-header__startup-logo-container.d-none.d-md-block
+      .mx-auto.founder-dashboard-header__startup-logo-container.d-none.d-md-flex
         - if @startup.logo.present?
           = image_tag "#{@startup.logo_url}", class: 'founder-dashboard-header__startup-logo'
         - else

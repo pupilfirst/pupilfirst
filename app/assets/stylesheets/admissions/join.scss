@@ -241,7 +241,7 @@
 }
 
 .program-fee__container {
-  max-width: 22rem;
+  max-width: 30rem;
   text-align: center;
   position: relative;
   background-color: white;
@@ -283,6 +283,14 @@
   border-top: 1px dotted $light-secondary;
   @include border-radius(0 0 5px 5px);
   background-color: lighten($light-secondary, 48%);
+}
+
+.program-fee__scholorship__text {
+  font-size: 1.25rem;
+}
+
+.program-fee__scholorship__link {
+  font-size: 1rem;
 }
 
 // Apply form

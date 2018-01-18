@@ -33,7 +33,7 @@ class MembershipStatsNotificationJob < ApplicationJob
   end
 
   def complete_funnel_stats
-    stats = AdmissionStats::FunnelStatsService.new('2017-05-08', Date.today.end_of_day).load
+    stats = AdmissionStats::FunnelStatsService.new('2018-01-09', Date.today.end_of_day).load
     format_for_slack(stats)
   end
 

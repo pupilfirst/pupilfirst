@@ -1,6 +1,6 @@
 class AdmissionsPolicy < ApplicationPolicy
   def screening?
-    level_zero? && target_incomplete?(Target::KEY_ADMISSIONS_SCREENING)
+    level_zero? && target_incomplete?(Target::KEY_SCREENING)
   end
 
   def screening_submit?
@@ -20,7 +20,7 @@ class AdmissionsPolicy < ApplicationPolicy
   end
 
   def founders?
-    level_zero? && target_complete?(Target::KEY_ADMISSIONS_SCREENING)
+    level_zero? && target_complete?(Target::KEY_SCREENING)
   end
 
   def founders_submit?

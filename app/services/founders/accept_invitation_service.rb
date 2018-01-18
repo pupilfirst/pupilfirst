@@ -95,7 +95,7 @@ module Founders
     end
 
     def cofounder_addition_target
-      @cofounder_addition_target ||= Target.find_by(key: Target::KEY_ADMISSIONS_COFOUNDER_ADDITION)
+      @cofounder_addition_target ||= Target.find_by(key: Target::KEY_COFOUNDER_ADDITION)
     end
   end
 end

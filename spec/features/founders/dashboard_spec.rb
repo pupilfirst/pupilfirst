@@ -30,7 +30,7 @@ feature 'Founder Dashboard' do
   let!(:not_accepted_target) { create :target, target_group: target_group_4, role: Target::ROLE_TEAM }
   let!(:needs_improvement_target) { create :target, target_group: target_group_4, role: Target::ROLE_TEAM }
   let!(:target_with_prerequisites) { create :target, target_group: target_group_4, prerequisite_targets: [pending_target], role: Target::ROLE_TEAM }
-  let!(:completed_fee_payment_target) { create :target, target_group: target_group_0, days_to_complete: 60, role: Target::ROLE_TEAM, key: Target::KEY_ADMISSIONS_FEE_PAYMENT }
+  let!(:completed_fee_payment_target) { create :target, target_group: target_group_0, days_to_complete: 60, role: Target::ROLE_TEAM, key: Target::KEY_FEE_PAYMENT }
 
   # Create chores for different target groups.
   let!(:chore_1) { create :target, chore: true, target_group: target_group_4 }

@@ -55,7 +55,7 @@ module Users
     end
 
     def fee_payment_complete?
-      Target.find_by(key: Target::KEY_ADMISSIONS_FEE_PAYMENT).status(@user.founder) == Targets::StatusService::STATUS_COMPLETE
+      Target.find_by(key: Target::KEY_FEE_PAYMENT).status(@user.founder) == Targets::StatusService::STATUS_COMPLETE
     end
 
     def payment_present?
@@ -63,7 +63,7 @@ module Users
     end
 
     def screening_complete?
-      Target.find_by(key: Target::KEY_ADMISSIONS_SCREENING).status(@user.founder) == Targets::StatusService::STATUS_COMPLETE
+      Target.find_by(key: Target::KEY_SCREENING).status(@user.founder) == Targets::StatusService::STATUS_COMPLETE
     end
   end
 end

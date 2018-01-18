@@ -34,25 +34,25 @@ FactoryBot.define do
     end
 
     trait(:admissions_cofounder_addition) do
-      key Target::KEY_ADMISSIONS_COFOUNDER_ADDITION
+      key Target::KEY_COFOUNDER_ADDITION
       role Target::ROLE_TEAM
       prerequisite_targets { [create(:target, :admissions_screening)] }
     end
 
     trait(:admissions_fee_payment) do
-      key Target::KEY_ADMISSIONS_FEE_PAYMENT
+      key Target::KEY_FEE_PAYMENT
       role Target::ROLE_TEAM
       prerequisite_targets { [create(:target, :admissions_cofounder_addition)] }
     end
 
     trait(:admissions_screening) do
-      key Target::KEY_ADMISSIONS_SCREENING
+      key Target::KEY_SCREENING
       role Target::ROLE_TEAM
     end
 
     trait(:admissions_attend_interview) do
       role Target::ROLE_TEAM
-      key Target::KEY_ADMISSIONS_ATTEND_INTERVIEW
+      key Target::KEY_ATTEND_INTERVIEW
       prerequisite_targets { [create(:target, :admissions_cofounder_addition)] }
     end
   end

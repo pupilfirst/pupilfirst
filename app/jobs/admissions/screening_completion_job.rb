@@ -4,7 +4,7 @@ module Admissions
 
     def perform(founder, screening_response)
       # Mark the screening target as complete
-      Admissions::CompleteTargetService.new(founder, Target::KEY_ADMISSIONS_SCREENING).execute
+      Admissions::CompleteTargetService.new(founder, Target::KEY_SCREENING).execute
 
       # Store screening response of the founder
       formatted_response = Typeform::AnswersExtractionService.new(screening_response).execute

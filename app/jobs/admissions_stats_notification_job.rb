@@ -12,7 +12,7 @@ class AdmissionsStatsNotificationJob < ApplicationJob
 
   def membership_stats
     <<~MESSAGE
-      *Here are the membership stats for yesterday:*
+      *Here are the admission stats for yesterday:*
 
       > Unique Visits: *#{unique_visits_yesterday}*
       #{funnel_stats}

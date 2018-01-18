@@ -135,13 +135,11 @@ module Admissions
       # If the cofounder addition target is not marked as completed...
       if cofounder_addition_target.status(current_founder) != Targets::StatusService::STATUS_COMPLETE
         # Complete it...
-        Admissions::CompleteTargetService.new(current_founder, Target::KEY_ADMISSIONS_COFOUNDER_ADDITION).execute
+        Admissions::CompleteTargetService.new(current_founder, Target::KEY_COFOUNDER_ADDITION).execute
 
         # ...and create a pending payment to allow the founder to pay the fee.
         Payments::CreateService.new(current_founder).create
       end
-
-      Intercom::LevelZeroStageUpdateJob.perform_later(current_founder, Startup::ADMISSION_STAGE_TEAM_MEMBERS_ADDED)
     end
 
     def invite_founder(founder)
@@ -192,7 +190,7 @@ module Admissions
     private
 
     def cofounder_addition_target
-      @cofounder_addition_target ||= Target.find_by(key: Target::KEY_ADMISSIONS_COFOUNDER_ADDITION)
+      @cofounder_addition_target ||= Target.find_by(key: Target::KEY_COFOUNDER_ADDITION)
     end
   end
 end

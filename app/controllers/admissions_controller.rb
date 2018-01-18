@@ -43,7 +43,7 @@ class AdmissionsController < ApplicationController
     authorize :admissions
 
     screening_url = if Rails.env.development?
-      Admissions::CompleteTargetService.new(current_founder, Target::KEY_ADMISSIONS_SCREENING).execute
+      Admissions::CompleteTargetService.new(current_founder, Target::KEY_SCREENING).execute
       admissions_screening_submit_url
     else
       Rails.application.secrets.typeform[:screening_url] + "?user_id=#{current_user.id}"
@@ -100,7 +100,7 @@ class AdmissionsController < ApplicationController
   def founders
     authorize :admissions
 
-    fee_payment_target = Target.find_by(key: Target::KEY_ADMISSIONS_FEE_PAYMENT)
+    fee_payment_target = Target.find_by(key: Target::KEY_FEE_PAYMENT)
     if fee_payment_target.status(current_founder) == Targets::StatusService::STATUS_COMPLETE
       @fee_paid = true
     else

@@ -2,11 +2,13 @@
 # frozen_string_literal: true
 
 class Target < ApplicationRecord
-  KEY_ADMISSIONS_SCREENING = 'admissions_screening'
-  KEY_ADMISSIONS_FEE_PAYMENT = 'admissions_fee_payment'
-  KEY_ADMISSIONS_COFOUNDER_ADDITION = 'admissions_cofounder_addition'
-  KEY_ADMISSIONS_CODING_TASK = 'admissions_coding_task'
-  KEY_ADMISSIONS_ATTEND_INTERVIEW = 'admissions_attend_interview'
+  KEY_SCREENING = 'screening'
+  KEY_COFOUNDER_ADDITION = 'cofounder_addition'
+  KEY_R1_TASK = 'r1_task'
+  KEY_R1_SHOW_PREVIOUS_WORK = 'r1_show_previous_work'
+  KEY_R2_TASK = 'r2_task'
+  KEY_ATTEND_INTERVIEW = 'attend_interview'
+  KEY_FEE_PAYMENT = 'initial_fee_payment'
 
   STATUS_COMPLETE = :complete
   STATUS_NEEDS_IMPROVEMENT = :needs_improvement

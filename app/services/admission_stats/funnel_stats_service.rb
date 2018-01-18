@@ -14,8 +14,8 @@ module AdmissionStats
       {
         'Total Sign Ups' => signed_up,
         'Self Evaluation Completed' => self_evaluation_completed,
-        'Added Team Members' => team_members_added,
-        'Passed Coding Task' => coding_task_passed,
+        'Round 1 Task Passed' => round_one_task_passed,
+        'Round 2 Task Passed' => round_two_task_passed,
         'Passed Interview' => interview_passed,
         'Payment Initiated' => payment_initiated,
         'Fee Paid Teams' => fee_paid_teams.count,
@@ -30,23 +30,23 @@ module AdmissionStats
     end
 
     def self_evaluation_completed
-      verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_SCREENING }).where(created_at: @date_range).count
+      verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_SCREENING }).where(created_at: @date_range).count
     end
 
-    def team_members_added
-      verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_COFOUNDER_ADDITION }).where(created_at: @date_range).count
+    def round_one_task_passed
+      verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_R1_TASK }).where(created_at: @date_range).count
     end
 
-    def coding_task_passed
-      verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_CODING_TASK }).where(created_at: @date_range).count
+    def round_two_task_passed
+      verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_R2_TASK }).where(created_at: @date_range).count
     end
 
     def interview_passed
-      verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_ATTEND_INTERVIEW }).where(created_at: @date_range).count
+      verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ATTEND_INTERVIEW }).where(created_at: @date_range).count
     end
 
     def fee_paid_teams
-      @fee_paid_startups ||= verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_ADMISSIONS_FEE_PAYMENT }).where(created_at: @date_range).pluck(:startup_id)
+      @fee_paid_startups ||= verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_FEE_PAYMENT }).where(created_at: @date_range).pluck(:startup_id)
     end
 
     def revenue

@@ -9,7 +9,7 @@ module Founders
     def interface_props
       {
         debug: true,
-        disabled: false,
+        disabled: true,
         paymentRequested: !!@payment&.requested?,
         startup: startup_props,
         states: State.order(name: :asc).as_json(only: %i[id name])

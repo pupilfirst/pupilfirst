@@ -293,7 +293,7 @@ ActiveAdmin.register Target do
     f.inputs name: 'Target Details' do
       f.input :role, as: :select, collection: Target.valid_roles.map { |r| [t("models.target.role.#{r}"), r] }, include_blank: false
       f.input :title
-      f.input :key
+      f.input :key, as: :select, collection: Target.valid_keys
       f.input :chore
       f.input :session_at, as: :string, input_html: { class: 'date-time-picker', data: { format: 'Y-m-d H:i:s O' } }
       f.input :tag_list, as: :select, collection: Target.tag_counts_on(:tags).pluck(:name), multiple: true

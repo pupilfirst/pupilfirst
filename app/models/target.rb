@@ -10,6 +10,10 @@ class Target < ApplicationRecord
   KEY_ATTEND_INTERVIEW = 'attend_interview'
   KEY_FEE_PAYMENT = 'initial_fee_payment'
 
+  def self.valid_keys
+    [KEY_SCREENING, KEY_COFOUNDER_ADDITION, KEY_R1_TASK, KEY_R1_SHOW_PREVIOUS_WORK, KEY_R2_TASK, KEY_ATTEND_INTERVIEW, KEY_FEE_PAYMENT].freeze
+  end
+
   STATUS_COMPLETE = :complete
   STATUS_NEEDS_IMPROVEMENT = :needs_improvement
   STATUS_SUBMITTED = :submitted
@@ -83,7 +87,7 @@ class Target < ApplicationRecord
   validates :role, presence: true, inclusion: { in: valid_roles }
   validates :title, presence: true
   validates :description, presence: true
-  validates :key, uniqueness: true, allow_nil: true
+  validates :key, uniqueness: true, inclusion: { in: valid_keys }, allow_nil: true
   validates :submittability, inclusion: { in: valid_submittability_values }
 
   validate :days_to_complete_or_session_at_should_be_present

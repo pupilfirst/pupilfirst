@@ -19,7 +19,7 @@ module Typeform
 
       # Extract answers and generate form response into the required format: [{ question: q1, answer: a1},]
       consolidated_response_data = {
-        responses: answers.map do |answer|
+        response: answers.map do |answer|
           question = question_hash[answer['field']['id']]
           { question: question, answer: answer[answer['type']] }
         end

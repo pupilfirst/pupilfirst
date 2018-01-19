@@ -24,7 +24,7 @@ module Payments
       @startup.update!(undiscounted_founder_fee: Founder::FEE) if @startup.undiscounted_founder_fee.blank?
 
       # IntercomLastApplicantEventUpdateJob.perform_later(@founder, 'payment_complete') unless Rails.env.test?
-      Intercom::LevelZeroStageUpdateJob.perform_later(@founder, 'Payment Completed')
+      Intercom::LevelZeroStageUpdateJob.perform_later(@founder, Startup::ADMISSION_STAGE_FEE_PAID)
 
       # Send a notification to #memberships channel on our private Slack.
       PrivateSlack::PaymentNotificationJob.perform_later(@founder)

@@ -11,7 +11,7 @@ module Admissions
       founder.update!(screening_data: formatted_response) if founder.screening_data.blank?
 
       # Mark as screening completed on Intercom
-      Intercom::LevelZeroStageUpdateJob.perform_now(founder, 'Screening Completed')
+      Intercom::LevelZeroStageUpdateJob.perform_now(founder, Startup::ADMISSION_STAGE_SELF_EVALUATION_COMPLETED)
     end
   end
 end

@@ -34,6 +34,7 @@ class Startup < ApplicationRecord
   ADMISSION_STAGE_R1_TASK_PASSED = 'Round 1 Task Passed'
   ADMISSION_STAGE_R2_TASK_PASSED = 'Round 2 Task Passed'
   ADMISSION_STAGE_INTERVIEW_PASSED = 'Interview Passed'
+  ADMISSION_STAGE_PAYMENT_INITIATED = 'Payment Initiated'
   ADMISSION_STAGE_FEE_PAID = 'Initial Payment Completed'
   ADMISSION_STAGE_ADMITTED = 'Admitted'
 

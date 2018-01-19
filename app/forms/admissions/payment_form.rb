@@ -24,7 +24,7 @@ module Admissions
         end
 
         Admissions::UpdateStageService.new(startup, Startup::ADMISSION_STAGE_PAYMENT_INITIATED).execute
-        Intercom::LevelZeroStageUpdateJob.perform_later(model, 'Payment Initiated')
+        Intercom::LevelZeroStageUpdateJob.perform_later(model, Startup::ADMISSION_STAGE_PAYMENT_INITIATED)
       end
 
       startup.reload.payments.requested.last

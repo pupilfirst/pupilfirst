@@ -4,7 +4,7 @@ after 'development:levels' do
   puts 'Seeding target_groups'
 
   group_data = {
-    0 => ['Admission Process'],
+    0 => ['Admission Process', 'Welcome to SV.CO'],
     1 => ['Level Up', 'Engineering & Design First Steps'],
     2 => ['Level Up', 'Put up a Coming Soon Page'],
     3 => ['Level Up', 'Get First Feedback'],

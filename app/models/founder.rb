@@ -42,6 +42,8 @@ class Founder < ApplicationRecord
   has_many :payments, dependent: :restrict_with_error
   belongs_to :resume_file, class_name: 'TimelineEventFile', optional: true
   has_many :english_quiz_submissions, foreign_key: 'quizee_id'
+  has_many :active_admin_comments, as: :resource
+  alias comments active_admin_comments
 
   scope :admitted, -> { joins(:startup).merge(Startup.admitted) }
   scope :level_zero, -> { joins(:startup).merge(Startup.level_zero) }

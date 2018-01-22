@@ -5,7 +5,7 @@ ActiveAdmin.register Founder do
 
   controller do
     def scoped_collection
-      super.includes :startup
+      super.includes :startup, college: :state
     end
 
     def find_resource
@@ -68,6 +68,10 @@ ActiveAdmin.register Founder do
       column :phone
       column 'Admission Stage' do |founder|
         founder.startup.admission_stage
+      end
+
+      column 'Screening Score' do |founder|
+        founder.screening_data.present? ? founder.screening_data['score'] : ''
       end
     else
       column :product_name, sortable: 'founders.startup_id' do |founder|
@@ -140,16 +144,16 @@ ActiveAdmin.register Founder do
         founder.startup.created_at.to_date
       end
 
-      column :tags do |founder|
-        tags = ''
-        founder.tags&.each do |tag|
-          tags += tag.name + ';'
-        end
-        tags
+      column 'Tags' do |founder|
+        founder.tags.map(&:name).join(';')
       end
 
       column :admission_stage do |founder|
         founder.startup.admission_stage
+      end
+
+      column 'Screening Score' do |founder|
+        founder.screening_data.present? ? founder.screening_data['score'] : ''
       end
     else
       column :id

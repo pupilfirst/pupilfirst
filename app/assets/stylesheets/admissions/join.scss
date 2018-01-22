@@ -347,8 +347,8 @@
 }
 
 .saas-program__graduation-support {
-  padding: 30px;
-  margin-top: 125px;
+  padding: 5px;
+  margin-top: 25px;
   border: 1px solid $alert-background;
   @include border-radius (10px);
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1);
@@ -359,8 +359,9 @@
 }
 
 .saas-program__graduation-support-year {
-  font-size: 4rem;
+  font-size: 2.5rem;
   line-height: 1;
+  text-align: center;
 }
 
 .saas-program__graduation-support-sub-text {

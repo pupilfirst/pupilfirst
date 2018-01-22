@@ -9,9 +9,9 @@
     - if current_founder&.startup.present? && policy(current_founder.startup).show?
       li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
         a#sv-navbar__timeline-link.nav-item__link href="#{timeline_url(current_founder.startup.id, current_founder.startup.slug)}" Timeline
-    li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
+    / li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
       = link_to 'Teams', startups_path, class: 'nav-item__link', id: 'sv-navbar__startups-link'
-    - unless current_founder
+    / - unless current_founder
       li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
         = link_to 'Invest/Hire', talent_path, class: 'nav-item__link', id: 'sv-navbar__talent-link'
     li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
@@ -22,10 +22,10 @@
     - if current_founder && !current_founder.exited && current_founder.startup.present?
       li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
         = link_to 'Library', resources_path, class: 'nav-item__link', id: 'sv-navbar__library-link'
+    / li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
+    /   = link_to 'Stats', stats_path, class: 'nav-item__link'
     li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
-      = link_to 'Stats', stats_path, class: 'nav-item__link'
-    li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
-      = link_to 'Help Center', 'https://help.sv.co', class: 'nav-item__link', id: 'sv-navbar__help-link'
+      = link_to 'SV.CO Wiki', 'https://help.sv.co', class: 'nav-item__link', id: 'sv-navbar__help-link'
 
     - if current_user
       - if current_founder

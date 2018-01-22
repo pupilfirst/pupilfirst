@@ -19,15 +19,15 @@ section.home-hero__container
     .container
       .home-hero__message-title
         h1.home-hero__message-title-head.mb-0
-          ' Immersive Learning Experience to
+          ' &lt; code_your_future /&gt;
           .font-semibold
-            | Build Internet Products
+            ' learn to build tech-products, the startup way
         p.home-hero__message-title-subhead
-          ' Build the product of your dreams with a
-          span.font-semibold Job Guarantee
+          '  with premium job guarantee
+          / span.font-semibold Job Guarantee
           br
-          | or
-          span.font-semibold &nbsp;100% money back!
+          / | or
+          / span.font-semibold &nbsp;100% money back!
         .pt-3
           - if current_founder.present?
             = link_to 'Go to Dashboard', dashboard_founder_path, class: 'btn btn-primary btn-lg home-apply__button'
@@ -40,47 +40,125 @@ section.home-hero__container
 section.home-partners__container.py-3.d-none.d-md-block
   .container.home-partners__box
     .row.align-items-center.text-center
+      .col-md-3
       .col-md-2
         = image_tag 'home/index/sv-partner-facebook.svg', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--facebook', alt: 'Facebook Logo'
 
-      .col-md-2
-        = image_tag 'home/index/sv-partner-us-embassy.png', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--us-embassy', alt: 'US Embassy Logo'
+      /.col-md-2
+        / = image_tag 'home/index/sv-partner-us-embassy.png', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--us-embassy', alt: 'US Embassy Logo'
 
       .col-md-2
         = image_tag 'home/index/sv-partner-freshworks.svg', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--freshworks', alt: 'Freshworks Logo'
 
-      .col-md-2
-        = image_tag 'home/index/sv-partner-ksum.png', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--ksum', alt: 'KSUM Logo'
+      /.col-md-2
+        / = image_tag 'home/index/sv-partner-ksum.png', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--ksum', alt: 'KSUM Logo'
 
       .col-md-2
         = image_tag 'home/index/sv-partner-paytm.svg', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--paytm', alt: 'Paytm Logo'
 
-      .col-md-2
-        = image_tag 'home/index/sv-partner-microsoft-ventures.png', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--ms-ventures', alt: 'Microsoft Ventures Logo'
+      .col-md-3
+        / = image_tag 'home/index/sv-partner-microsoft-ventures.png', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--ms-ventures', alt: 'Microsoft Ventures Logo'
+
+section.program-feature__container.py-5
+  .container
+    .home-section__head.mb-3
+      h2.home-section__head-title.text-center.font-black
+        | Exclusively for Student Developers
+      .home-section__head-subtitle.mx-auto
+        p.text-center
+          'Build on your own or with a team of friends
+    .program-feature__box
+      .col-md-7
+        .row
+          .col-md-6
+            = link_to 'https://help.sv.co/learning-at-sv-co/industry-coaching-at-sv-co/one-on-one-mentoring-with-industry-experts', target: '_blank'
+              .program-feature__card
+                = image_tag 'home/index/program-learn-from-experts.jpg', class: 'img-fluid'
+                .program-feature__card-title
+                  h3.program-feature__card-title-text.font-regular
+                    ' Learn from experts
+                    br
+                    | across the world
+
+          .col-md-6
+            = link_to 'https://help.sv.co/admissions-to-sv-co/joining-the-sv-co-program/admission-overview', target: '_blank'
+              .program-feature__card
+                = image_tag 'home/index/program-build-startup.jpg', class: 'img-fluid'
+                .program-feature__card-title
+                  h3.program-feature__card-title-text.font-regular
+                    ' Build a world class product
+                    br
+                    | with your friends
+
+          .col-md-6
+            = link_to 'https://www.youtube.com/watch?v=TfLMV-XkfGw', target: '_blank'
+              .program-feature__card
+                = image_tag 'home/index/program-events.jpg', class: 'img-fluid'
+                .program-feature__card-title
+                  h3.program-feature__card-title-text.font-regular
+                    ' Showcase your skills at
+                    br
+                    | SV.CO events
+
+          .col-md-6
+            = link_to 'https://help.sv.co/learning-at-sv-co/how-you-learn-at-sv-co/first-steps-in-building-a-product', target: '_blank'
+              .program-feature__card
+                = image_tag 'home/index/program-ideas.jpg', class: 'img-fluid'
+                .program-feature__card-title
+                  h3.program-feature__card-title-text.font-regular
+                    ' Scholarships upto Rs. 80,000/- up for grabs
+
+      .col-md-5
+        = link_to 'https://help.sv.co/learning-at-sv-co/how-you-learn-at-sv-co/build-your-first-product-while-still-in-college', target: '_blank'
+          .program-feature__card
+            = image_tag 'home/index/program-learn.jpg', class: 'program-feature__college-img'
+            .program-feature__card-title
+              h3.program-feature__card-title-text.program-feature__card-title-text--big.font-regular
+                span.program-feature__card-title-text--big-highlight.font-semibold
+                  ' Learn
+                br
+                ' wherever you are alongside your
+                br
+                | college degree
+
+  .container
+    .text-center.mt-3
+      = link_to 'Learn More', 'https://help.sv.co/', class: 'btn btn-primary btn-lg home-apply__button', id: 'home-index__programme-learn-more-link'
+
+
+section.home-testimonial__container.py-5
+  .container
+    .home-section__head.mb-4
+      h2#testimonial.home-section__head-title.text-center.font-black
+        | What happens in the program?
+      .home-section__head-subtitle.mx-auto
+        p.text-center
+          | A unique approach to help you become an industry-ready developer
+
+    .row.home-testimonial__box.mx-auto
+      .col-md-4.home-testimonial__image-container.p-0
+        = link_to 'https://help.sv.co/learning-at-sv-co/what-we-teach-at-sv-co/svco-program-content', target: '_blank' do
+          = image_tag 'home/index/framework-thumbnail.jpg', class: 'img-fluid mx-auto home-testimonial__image', alt: "Program Framework"
+      .col-md-8.home-testimonial__text.d-flex.justify-content-center.flex-column
+        p
+          ' The SV.CO six month program is split into <strong>two major tracks - Product Track and Developer Track.</strong>
+
+        p
+          ' <strong>Product Track</strong> is where you build your first internet product, starting from idea selection all
+          ' the way to product launch.
+        p
+          ' <strong>Developer Track</strong> is designed to upgrade you from a classroom coder to an ace developer.
+        = link_to 'Find out more about our program here.', 'https://help.sv.co/learning-at-sv-co/what-we-teach-at-sv-co/svco-program-content', class: 'mt-3'
 
 section.six-ways-card__container.py-5
   .container
     .home-section__head.mb-4
       h2#benefits.home-section__head-title.text-center.font-black
-        | All of them built products at Startup Village
+        | Alumni Talk!
       .home-section__head-subtitle.mx-auto
         p.text-center
-          | Listen to them narrate their stories
+          | Hear them narrate their stories
     .row
-      .col-md-4
-        a#home-index__six-ways-funded-video.six-ways-card__box.my-3 href="#" data-toggle="modal" data-target="#itraveller-story-video"
-          .six-ways-card__thumbnail
-            = image_tag 'home/index/six-ways-get-funded.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Get your startup funded'
-            .six-ways-card__video-time
-              | 3:41 mins
-            .six-ways-card__play-button-container.d-flex.flex-column.align-items-center.justify-content-center
-            .six-ways-card__thumbnail-content
-              h3.six-ways-card__thumbnail-head.font-semibold.mb-0
-                | Shiju built a travel product and got funded
-              p.six-ways-card__thumbnail-subhead
-                | Story of iTraveller
-
-
       .col-md-4
         a#home-index__six-ways-accelerator-video.six-ways-card__box.my-3 href="#" data-toggle="modal" data-target="#profoundis-story-video"
           .six-ways-card__thumbnail
@@ -103,7 +181,7 @@ section.six-ways-card__container.py-5
             .six-ways-card__play-button-container.d-flex.flex-column.align-items-center.justify-content-center
             .six-ways-card__thumbnail-content
               h3.six-ways-card__thumbnail-head.font-semibold.mb-0
-                | Product they built in college helped them showcase their skills
+                | Product they built in college helped them get a job
               p.six-ways-card__thumbnail-subhead
                 | Z-pay Acquihired by Tally
 
@@ -116,148 +194,37 @@ section.six-ways-card__container.py-5
             .six-ways-card__play-button-container.d-flex.flex-column.align-items-center.justify-content-center
             .six-ways-card__thumbnail-content
               h3.six-ways-card__thumbnail-head.font-semibold.mb-0
-                | Upskilled himself up learning to build an internet product with SV.CO
+                | Student Developer to Product Manager in a million dollar funded startup
               p.six-ways-card__thumbnail-subhead
                 | Hiring at SV.CO
 
-      .col-md-4
-        a#home-index__six-ways-sustainable-video.six-ways-card__box.my-3 href="#" data-toggle="modal" data-target="#wowmakers-story-video"
-          .six-ways-card__thumbnail
-            = image_tag 'home/index/six-ways-run-startup.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Run a startup of your own'
-            .six-ways-card__video-time
-              | 4:17 mins
-            .six-ways-card__play-button-container.d-flex.flex-column.align-items-center.justify-content-center
-            .six-ways-card__thumbnail-content
-              h3.six-ways-card__thumbnail-head.font-semibold.mb-0
-                | Building design oriented internet products while running a design studio
-              p.six-ways-card__thumbnail-subhead
-                | Story of Wowmakers
+      / .mx-auto.mt-3
+      /   = link_to 'Learn More', join_path, class: 'btn btn-primary btn-lg home-apply__button', id: 'home-index__six-ways-learn-more-link'
 
-      .col-md-4
-        a#home-index__six-ways-studies-video.six-ways-card__box.my-3 href="#" data-toggle="modal" data-target="#higher-studies-story-video"
-          .six-ways-card__thumbnail
-            = image_tag 'home/index/six-ways-higher-studies.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Get admissions to global universities with a stronger resume'
-            .six-ways-card__video-time
-              | 1:28 mins
-            .six-ways-card__play-button-container.d-flex.flex-column.align-items-center.justify-content-center
-            .six-ways-card__thumbnail-content
-              h3.six-ways-card__thumbnail-head.font-semibold.mb-0
-                | Continue upskilling yourself to build better products
-              p.six-ways-card__thumbnail-subhead
-                | Access to Global Universities
-
-      .mx-auto.mt-3
-        = link_to 'Learn More', join_path, class: 'btn btn-primary btn-lg home-apply__button', id: 'home-index__six-ways-learn-more-link'
-
-section.program-feature__container.py-5
-  .container
-    .home-section__head.mb-3
-      h2.home-section__head-title.text-center.font-black
-        | Programme Designed Exclusively for YOU
-      .home-section__head-subtitle.mx-auto
-        p.text-center
-          ' The programme is exclusively for internet products which can be built while you
-          | are in college and the platform enables you to learn from wherever you are.
-    .program-feature__box
-      .col-md-7
-        .row
-          .col-md-6
-            .program-feature__card
-              = image_tag 'home/index/program-learn-from-experts.jpg', class: 'img-fluid'
-              .program-feature__card-title
-                h3.program-feature__card-title-text.font-regular
-                  ' Learn from experts
-                  br
-                  | across the world
-
-          .col-md-6
-            .program-feature__card
-              = image_tag 'home/index/program-build-startup.jpg', class: 'img-fluid'
-              .program-feature__card-title
-                h3.program-feature__card-title-text.font-regular
-                  ' Build a world class product
-                  br
-                  | with your friends
-
-          .col-md-6
-            .program-feature__card
-              = image_tag 'home/index/program-events.jpg', class: 'img-fluid'
-              .program-feature__card-title
-                h3.program-feature__card-title-text.font-regular
-                  ' Showcase your skills at
-                  br
-                  | SV.CO events
-
-          .col-md-6
-            .program-feature__card
-              = image_tag 'home/index/program-ideas.jpg', class: 'img-fluid'
-              .program-feature__card-title
-                h3.program-feature__card-title-text.font-regular
-                  ' Choose from a pool of
-                  br
-                  | ideas if you don&rsquo;t have one
-
-      .col-md-5
-        .program-feature__card
-          = image_tag 'home/index/program-learn.jpg', class: 'program-feature__college-img'
-          .program-feature__card-title
-            h3.program-feature__card-title-text.program-feature__card-title-text--big.font-regular
-              span.program-feature__card-title-text--big-highlight.font-semibold
-                ' Learn
-              br
-              ' wherever you are alongside your
-              br
-              | college degree
-
-  .container
-    .text-center.mt-3
-      = link_to 'Learn More', join_path, class: 'btn btn-primary btn-lg home-apply__button', id: 'home-index__programme-learn-more-link'
-
-section.silicon-valley-itinerary__container.py-5
-  .container
-    .home-section__head.mb-3
-      h2.home-section__head-title.text-center.font-black
-        | Glimpes from the recent Silicon Valley visit
-      .home-section__head-subtitle.mx-auto
-        p.text-center
-          ' We recently flew India’s largest delegation of student entrepreneurs
-          | who were all building internet products in college
-
-    .row
-      .silicon-valley-itinerary__slider.mx-auto
-        .silicon-valley-itinerary__slider-item.mx-auto
-          = image_tag 'home/index/svtosv-day1.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 1 Exploring San Fransisco'
-        .silicon-valley-itinerary__slider-item.mx-auto
-          = image_tag 'home/index/svtosv-day2.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 2 at SV Bank, Intel and dinner hosted by Menlo Park City Council'
-        .silicon-valley-itinerary__slider-item.mx-auto
-          = image_tag 'home/index/svtosv-day3.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 3 at Facebook HQ'
-        .silicon-valley-itinerary__slider-item.mx-auto
-          = image_tag 'home/index/svtosv-day4.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 4 at Freshworks HQ and North Eastern University'
-        .silicon-valley-itinerary__slider-item.mx-auto
-          = image_tag 'home/index/svtosv-day5.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 5 at Google and Bootup Ventures'
-        .silicon-valley-itinerary__slider-item.mx-auto
-          = image_tag 'home/index/svtosv-day6.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 6 at Google Launchpad, Galvanize and Golden Gate Bridge'
-
-section.home-testimonial__container.py-5
-  .container
-    .home-section__head.mb-4
-      h2#testimonial.home-section__head-title.text-center.font-black
-        | Time to make your parents REALLY proud
-
-    .row.home-testimonial__box.mx-auto
-      .col-md-4.home-testimonial__image-container.p-0
-        = image_tag 'home/index/testimonial-student-family.png', class: 'img-fluid mx-auto home-testimonial__image', alt: "A student's family"
-      .col-md-8.home-testimonial__text.d-flex.justify-content-center.flex-column
-        p
-          ' &ldquo;I was really worried when he said that he wanted to build a product alongside his college.
-          ' I thought college was all about grades and attendance but then I saw him
-          ' code all the day in his room. He spends money on his product and not for shopping.
-          ' It feels really great. He told me about his experience in Silicon Valley,
-          | and he seems to have learnt a lot from that.&rdquo;
-        p.font-semibold.pt-2
-          ' &ndash; Subbalakshmi Rajan
-          .font-regular.home-testimonial__text--author-sub
-            | (Suraj Rajan&rsquo;s Mother)
+/ section.silicon-valley-itinerary__container.py-5
+/   .container
+/     .home-section__head.mb-3
+/       h2.home-section__head-title.text-center.font-black
+/         | Glimpes from the recent Silicon Valley visit
+/       .home-section__head-subtitle.mx-auto
+/         p.text-center
+/           ' We recently flew India’s largest delegation of student entrepreneurs
+/           | who were all building internet products in college
+/
+/     .row
+/       .silicon-valley-itinerary__slider.mx-auto
+/         .silicon-valley-itinerary__slider-item.mx-auto
+/           = image_tag 'home/index/svtosv-day1.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 1 Exploring San Fransisco'
+/         .silicon-valley-itinerary__slider-item.mx-auto
+/           = image_tag 'home/index/svtosv-day2.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 2 at SV Bank, Intel and dinner hosted by Menlo Park City Council'
+/         .silicon-valley-itinerary__slider-item.mx-auto
+/           = image_tag 'home/index/svtosv-day3.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 3 at Facebook HQ'
+/         .silicon-valley-itinerary__slider-item.mx-auto
+/           = image_tag 'home/index/svtosv-day4.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 4 at Freshworks HQ and North Eastern University'
+/         .silicon-valley-itinerary__slider-item.mx-auto
+/           = image_tag 'home/index/svtosv-day5.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 5 at Google and Bootup Ventures'
+/         .silicon-valley-itinerary__slider-item.mx-auto
+/           = image_tag 'home/index/svtosv-day6.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 6 at Google Launchpad, Galvanize and Golden Gate Bridge'
 
 section.home-call-to-action__container.py-5
   .container

@@ -130,7 +130,7 @@ section.home-testimonial__container.py-5
   .container
     .home-section__head.mb-4
       h2#testimonial.home-section__head-title.text-center.font-black
-        | What happens in the program?
+        | What happens in the program.
       .home-section__head-subtitle.mx-auto
         p.text-center
           | A unique approach to help you become an industry-ready developer
@@ -141,23 +141,25 @@ section.home-testimonial__container.py-5
           = image_tag 'home/index/framework-thumbnail.jpg', class: 'img-fluid mx-auto home-testimonial__image', alt: "Program Framework"
       .col-md-8.home-testimonial__text.d-flex.justify-content-center.flex-column
         p
-          ' The SV.CO six month program is split into <strong>two major tracks - Product Track and Developer Track.</strong>
+          ' The SV.CO six month program is designed to upgrade you from just another 'Classroom Coder' to an 'Ace Developer'. The program is split
+          | into <strong>two major tracks - Product Track and Developer Track.</strong>
+        br
 
         p
-          ' <strong>Product Track</strong> is where you build your first internet product, starting from idea selection all
-          ' the way to product launch.
+          ' <strong>Product Track</strong> is where you build your first internet product, starting from idea selection
+          | all the way to product development.
         p
-          ' <strong>Developer Track</strong> is designed to upgrade you from a classroom coder to an ace developer.
-        = link_to 'Find out more about our program here.', 'https://help.sv.co/learning-at-sv-co/what-we-teach-at-sv-co/svco-program-content', class: 'mt-3'
+          ' <strong>Developer Track</strong> is where you pick up the everyday skills and best practices for software development.
+        = link_to 'Find out more about our program here.', 'https://help.sv.co/learning-at-sv-co/what-we-teach-at-sv-co/svco-program-content', class: 'mt-3', target: '_blank'
 
 section.six-ways-card__container.py-5
   .container
     .home-section__head.mb-4
       h2#benefits.home-section__head-title.text-center.font-black
-        | Alumni Talk!
+        | What our alumni has to say.
       .home-section__head-subtitle.mx-auto
         p.text-center
-          | Hear them narrate their stories
+          | Hear them narrate their SV.CO experience
     .row
       .col-md-4
         a#home-index__six-ways-accelerator-video.six-ways-card__box.my-3 href="#" data-toggle="modal" data-target="#profoundis-story-video"

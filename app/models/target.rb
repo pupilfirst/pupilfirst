@@ -89,6 +89,7 @@ class Target < ApplicationRecord
   validates :description, presence: true
   validates :key, uniqueness: true, inclusion: { in: valid_keys }, allow_nil: true
   validates :submittability, inclusion: { in: valid_submittability_values }
+  validates :call_to_action, length: { maximum: 20 }
 
   validate :days_to_complete_or_session_at_should_be_present
 

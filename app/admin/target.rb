@@ -4,7 +4,7 @@ ActiveAdmin.register Target do
   permit_params :faculty_id, :role, :title, :description, :resource_url, :completion_instructions, :days_to_complete,
     :slideshow_embed, :video_embed, :completed_at, :completion_comment, :rubric, :link_to_complete, :key,
     :submittability, :archived, :remote_rubric_url, :target_group_id, :target_action_type, :points_earnable,
-    :timeline_event_type_id, :sort_index, :youtube_video_id, :session_at, :chore, :level_id, :session_by,
+    :timeline_event_type_id, :sort_index, :youtube_video_id, :session_at, :chore, :level_id, :session_by, :call_to_action,
     prerequisite_target_ids: [], tag_list: [], target_skills_attributes: %i[id skill_id rubric_good rubric_great rubric_wow base_karma_points _destroy]
 
   filter :title
@@ -145,6 +145,7 @@ ActiveAdmin.register Target do
       row :slideshow_embed
       row :resource_url
       row :completion_instructions
+      row :call_to_action
       row :days_to_complete
       row :completion_comment
       row :link_to_complete
@@ -321,6 +322,7 @@ ActiveAdmin.register Target do
       f.input :slideshow_embed
       f.input :resource_url
       f.input :completion_instructions
+      f.input :call_to_action
       f.input :link_to_complete
       f.input :submittability, collection: Target.valid_submittability_values
       f.input :faculty, collection: Faculty.active.order(:name), include_blank: 'No linked faculty'

@@ -15,7 +15,9 @@ export default class SubmitButton extends React.Component {
   }
 
   submitButtonText() {
-    if (!this.props.target.link_to_complete) {
+    if (this.props.target.call_to_action) {
+      return this.props.target.call_to_action;
+    } else if (!this.props.target.link_to_complete) {
       return this.isPending() ? "Submit" : "Re-Submit";
     } else {
       return this.isPending() ? "Complete" : "Update";

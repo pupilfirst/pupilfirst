@@ -153,14 +153,16 @@ export default class FounderDashboard extends React.Component {
 
   render() {
     return (
-      <div className="founder-dashboard-container p-b-2">
-        <ToggleBar
-          selected={this.state.activeTab}
-          chooseTabCB={this.chooseTab}
-          openTimelineBuilderCB={this.openTimelineBuilder}
-          pendingSessions={this.pendingSessionsCount("sessions")}
-          currentLevel={this.props.currentLevel}
-        />
+      <div className="founder-dashboard-container pb-5">
+        { this.props.currentLevel != 0 && (
+          <ToggleBar
+            selected={this.state.activeTab}
+            chooseTabCB={this.chooseTab}
+            openTimelineBuilderCB={this.openTimelineBuilder}
+            pendingSessions={this.pendingSessionsCount("sessions")}
+            currentLevel={this.props.currentLevel}
+          />
+        )}
 
         {this.props.requestedRestartLevel && <FounderDashboardRestartWarning />}
 

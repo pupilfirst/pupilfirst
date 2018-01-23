@@ -23,7 +23,7 @@ section.home-hero__container
           .font-semibold
             ' learn to build tech-products, the startup way
         p.home-hero__message-title-subhead
-          '  with premium job guarantee
+          ' with premium job guarantee
           / span.font-semibold Job Guarantee
           br
           / | or
@@ -39,25 +39,19 @@ section.home-hero__container
 
 section.home-partners__container.py-3.d-none.d-md-block
   .container.home-partners__box
-    .row.align-items-center.text-center
-      .col-md-3
+    .row.align-items-center.text-center.justify-content-center
       .col-md-2
         = image_tag 'home/index/sv-partner-facebook.svg', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--facebook', alt: 'Facebook Logo'
-
-      /.col-md-2
-        / = image_tag 'home/index/sv-partner-us-embassy.png', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--us-embassy', alt: 'US Embassy Logo'
-
       .col-md-2
         = image_tag 'home/index/sv-partner-freshworks.svg', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--freshworks', alt: 'Freshworks Logo'
-
-      /.col-md-2
-        / = image_tag 'home/index/sv-partner-ksum.png', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--ksum', alt: 'KSUM Logo'
-
       .col-md-2
         = image_tag 'home/index/sv-partner-paytm.svg', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--paytm', alt: 'Paytm Logo'
-
-      .col-md-3
-        / = image_tag 'home/index/sv-partner-microsoft-ventures.png', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--ms-ventures', alt: 'Microsoft Ventures Logo'
+      .col-md-2
+        = image_tag 'home/index/sv-partner-oyo.svg', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--oyo', alt: 'Oyo Logo'
+      .col-md-2
+        = image_tag 'home/index/sv-partner-ola.svg', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--ola', alt: 'Ola Logo'
+      .col-md-2
+        = image_tag 'home/index/sv-partner-zomato.svg', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--zomato', alt: 'Zomato Logo'
 
 section.program-feature__container.py-5
   .container
@@ -126,31 +120,32 @@ section.program-feature__container.py-5
       = link_to 'Learn More', 'https://help.sv.co/', class: 'btn btn-primary btn-lg home-apply__button', id: 'home-index__programme-learn-more-link'
 
 
-section.home-testimonial__container.py-5
+section.home-program-framework__container.py-5
   .container
     .home-section__head.mb-4
-      h2#testimonial.home-section__head-title.text-center.font-black
+      h2#program-framework.home-section__head-title.text-center.font-black
         | What happens in the program.
       .home-section__head-subtitle.mx-auto
         p.text-center
           | A unique approach to help you become an industry-ready developer
 
-    .row.home-testimonial__box.mx-auto
-      .col-md-4.home-testimonial__image-container.p-0
-        = link_to 'https://help.sv.co/learning-at-sv-co/what-we-teach-at-sv-co/svco-program-content', target: '_blank' do
-          = image_tag 'home/index/framework-thumbnail.jpg', class: 'img-fluid mx-auto home-testimonial__image', alt: "Program Framework"
-      .col-md-8.home-testimonial__text.d-flex.justify-content-center.flex-column
-        p
+    .row.home-program-framework__box.mx-auto
+      .col-md-4.home-program-framework__image-container.p-0
+        = link_to 'https://help.sv.co/learning-at-sv-co/what-we-teach-at-sv-co/svco-program-content', target: '_blank', class: 'home-program-framework__image-link' do
+          = image_tag 'home/index/framework-thumbnail.jpg', class: 'img-fluid mx-auto home-program-framework__image', alt: "Program Framework"
+      .col-md-8.home-program-framework__text.d-flex.justify-content-center.flex-column
+        p.mb-2
           ' The SV.CO six month program is designed to upgrade you from just another 'Classroom Coder' to an 'Ace Developer'. The program is split
           | into <strong>two major tracks - Product Track and Developer Track.</strong>
-        br
 
-        p
+        p.mb-2
           ' <strong>Product Track</strong> is where you build your first internet product, starting from idea selection
           | all the way to product development.
         p
           ' <strong>Developer Track</strong> is where you pick up the everyday skills and best practices for software development.
-        = link_to 'Find out more about our program here.', 'https://help.sv.co/learning-at-sv-co/what-we-teach-at-sv-co/svco-program-content', class: 'mt-3', target: '_blank'
+        = link_to 'https://help.sv.co/learning-at-sv-co/what-we-teach-at-sv-co/svco-program-content', target: '_blank', class: 'font-semibold mt-4' do
+          i.fa.fa-arrow-circle-right.mr-2
+          | Find out more about our program here
 
 section.six-ways-card__container.py-5
   .container
@@ -163,12 +158,12 @@ section.six-ways-card__container.py-5
     .row
       .col-md-4
         a#home-index__six-ways-accelerator-video.six-ways-card__box.my-3 href="#" data-toggle="modal" data-target="#profoundis-story-video"
-          .six-ways-card__thumbnail
+          span.six-ways-card__thumbnail
             = image_tag 'home/index/six-ways-join-accelerator.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Join a startup accelerator'
-            .six-ways-card__video-time
+            span.six-ways-card__video-time
               | 4:02 mins
-            .six-ways-card__play-button-container.d-flex.flex-column.align-items-center.justify-content-center
-            .six-ways-card__thumbnail-content
+            span.six-ways-card__play-button-container.d-flex.flex-column.align-items-center.justify-content-center
+            span.six-ways-card__thumbnail-content
               h3.six-ways-card__thumbnail-head.font-semibold.mb-0
                 | Built a world class internet product, got acquired by an American Company
               p.six-ways-card__thumbnail-subhead
@@ -176,12 +171,12 @@ section.six-ways-card__container.py-5
 
       .col-md-4
         a#home-index__six-ways-acquihire-video.six-ways-card__box.my-3 href="#" data-toggle="modal" data-target="#z-pay-story-video"
-          .six-ways-card__thumbnail
+          span.six-ways-card__thumbnail
             = image_tag 'home/index/six-ways-get-acqui-hired.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Get acqui-hired'
-            .six-ways-card__video-time
+            span.six-ways-card__video-time
               | 1:16 mins
-            .six-ways-card__play-button-container.d-flex.flex-column.align-items-center.justify-content-center
-            .six-ways-card__thumbnail-content
+            span.six-ways-card__play-button-container.d-flex.flex-column.align-items-center.justify-content-center
+            span.six-ways-card__thumbnail-content
               h3.six-ways-card__thumbnail-head.font-semibold.mb-0
                 | Product they built in college helped them get a job
               p.six-ways-card__thumbnail-subhead
@@ -189,44 +184,16 @@ section.six-ways-card__container.py-5
 
       .col-md-4
         a#home-index__six-ways-hired-video.six-ways-card__box.my-3 href="#" data-toggle="modal" data-target="#hiring-story-video"
-          .six-ways-card__thumbnail
+          span.six-ways-card__thumbnail
             = image_tag 'home/index/six-ways-get-hired.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Get hired by a startup'
-            .six-ways-card__video-time
+            span.six-ways-card__video-time
               | 1:42 mins
-            .six-ways-card__play-button-container.d-flex.flex-column.align-items-center.justify-content-center
-            .six-ways-card__thumbnail-content
+            span.six-ways-card__play-button-container.d-flex.flex-column.align-items-center.justify-content-center
+            span.six-ways-card__thumbnail-content
               h3.six-ways-card__thumbnail-head.font-semibold.mb-0
                 | Student Developer to Product Manager in a million dollar funded startup
               p.six-ways-card__thumbnail-subhead
                 | Hiring at SV.CO
-
-      / .mx-auto.mt-3
-      /   = link_to 'Learn More', join_path, class: 'btn btn-primary btn-lg home-apply__button', id: 'home-index__six-ways-learn-more-link'
-
-/ section.silicon-valley-itinerary__container.py-5
-/   .container
-/     .home-section__head.mb-3
-/       h2.home-section__head-title.text-center.font-black
-/         | Glimpes from the recent Silicon Valley visit
-/       .home-section__head-subtitle.mx-auto
-/         p.text-center
-/           ' We recently flew India’s largest delegation of student entrepreneurs
-/           | who were all building internet products in college
-/
-/     .row
-/       .silicon-valley-itinerary__slider.mx-auto
-/         .silicon-valley-itinerary__slider-item.mx-auto
-/           = image_tag 'home/index/svtosv-day1.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 1 Exploring San Fransisco'
-/         .silicon-valley-itinerary__slider-item.mx-auto
-/           = image_tag 'home/index/svtosv-day2.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 2 at SV Bank, Intel and dinner hosted by Menlo Park City Council'
-/         .silicon-valley-itinerary__slider-item.mx-auto
-/           = image_tag 'home/index/svtosv-day3.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 3 at Facebook HQ'
-/         .silicon-valley-itinerary__slider-item.mx-auto
-/           = image_tag 'home/index/svtosv-day4.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 4 at Freshworks HQ and North Eastern University'
-/         .silicon-valley-itinerary__slider-item.mx-auto
-/           = image_tag 'home/index/svtosv-day5.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 5 at Google and Bootup Ventures'
-/         .silicon-valley-itinerary__slider-item.mx-auto
-/           = image_tag 'home/index/svtosv-day6.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 6 at Google Launchpad, Galvanize and Golden Gate Bridge'
 
 section.home-call-to-action__container.py-5
   .container

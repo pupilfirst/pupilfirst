@@ -99,7 +99,7 @@
 }
 
 .home-hero__message-title {
-  margin-top: 6rem;
+  margin-top: 3rem;
 }
 
 .home-hero__message-title-head {
@@ -161,6 +161,18 @@
   height: 50px;
 }
 
+.home-partners__logo--ola {
+  height: 30px;
+}
+
+.home-partners__logo--zomato {
+  height: 55px;
+}
+
+.home-partners__logo--oyo {
+  height: 25px;
+}
+
 // six ways section
 .six-ways-card__container {
   overflow: hidden;
@@ -186,8 +198,9 @@
     }
     .six-ways-card__play-button-container {
       &:before {
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: rgba(0, 0, 0, 0.7);
         color: rgba(255, 255, 255, 1);
+        transform: translateX(3px);
         box-shadow: 0 4px 30px 0 rgba(0, 0, 0, 0.3);
       }
     }
@@ -219,6 +232,7 @@
 
 .six-ways-card__thumbnail-content {
   position: absolute;
+  display: block;
   z-index: 2;
   margin: 0 1rem 0.875rem;
   bottom: 0;
@@ -269,7 +283,8 @@
     font-size: 1.25rem;
     padding-left: 5px;
     background-color: rgba(0, 0, 0, 0.5);
-    color: rgba(255, 255, 255, 0.5);
+    border: 1px solid #ffffff;
+    color: rgba(255, 255, 255, 1);
     text-shadow: 0px 0px 30px rgba(0, 0, 0, 0.5);
     transition: all 0.2s;
   }
@@ -465,39 +480,49 @@
   }
 }
 
-// Testimonial
-.home-testimonial__container {
+// program framework
+.home-program-framework__container {
   border-top: 1px solid $gray-border;
   background-color: white;
 }
 
-.home-testimonial__box {
+.home-program-framework__box {
   width: 55rem;
   background-color: white;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1);
+  @include border-radius(10px);
+  overflow: hidden;
 
   @include media-breakpoint-down(md) {
     width: auto;
   }
 }
-.home-testimonial__image-container {
+.home-program-framework__image-container {
   @include media-breakpoint-down(sm) {
     text-align: center;
   }
 }
-.home-testimonial__image {
-  @include media-breakpoint-down(sm) {
-    @include border-radius(50%);
-    width: 200px;
-    height: 200px;
-    overflow: hidden;
-    margin: auto;
-    position: relative;
-    top: 1rem;
+.home-program-framework__image-link {
+  display: block;
+  position: relative;
+
+  &:before {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.06);
+    transition: all 0.3s;
+  }
+  &:hover,
+  &:focus {
+    &:before {
+      background-color: rgba(0, 0, 0, 0);
+    }
   }
 }
 
-.home-testimonial__text {
+.home-program-framework__text {
   height: 310px;
   padding: 30px 50px;
   font-size: 1rem;
@@ -520,7 +545,7 @@
   }
 }
 
-.home-testimonial__text--author-sub {
+.home-program-framework__text--author-sub {
   font-size: 0.875rem;
   line-height: 1.2;
   padding-left: 10px;

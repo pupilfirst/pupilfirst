@@ -6,17 +6,15 @@ module Targets
     end
 
     def auto_verify
-      timeline_event = @target.timeline_events.create!(
+      @target.timeline_events.create!(
         founder: @founder,
         startup: @founder.startup,
         description: description,
         timeline_event_type: team_update,
         event_on: Time.zone.now,
-        iteration: @founder.startup.iteration
+        iteration: @founder.startup.iteration,
+        status: TimelineEvent::STATUS_VERIFIED
       )
-
-      TimelineEvents::VerificationService.new(timeline_event, notify: false)
-        .update_status(TimelineEvent::STATUS_VERIFIED)
     end
 
     private

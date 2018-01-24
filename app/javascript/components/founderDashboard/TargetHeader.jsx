@@ -128,12 +128,12 @@ export default class TargetHeader extends React.Component {
             {this.props.target.title}
           </h6>
 
-          <div className="founder-dashboard-target-header__headline-info">
-            <div className="founder-dashboard-target-header__info-subtext font-regular">
-              {this.targetDateString()}
-              {this.pointsEarnable()}
-            </div>
-          </div>
+          {/*<div className="founder-dashboard-target-header__headline-info">*/}
+            {/*<div className="founder-dashboard-target-header__info-subtext font-regular">*/}
+              {/*{this.targetDateString()}*/}
+              {/*{this.pointsEarnable()}*/}
+            {/*</div>*/}
+          {/*</div>*/}
         </div>
         <div className="founder-dashboard-target-header__status-badge-block">
           <TargetStatusBadge target={this.props.target} />

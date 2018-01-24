@@ -102,12 +102,12 @@ export default class HeaderTitle extends React.Component {
             {this.props.target.title}
           </h6>
 
-          <div className="target-overlay-header__headline-info">
-            <div className="target-overlay-header__info-subtext font-regular">
-              {this.targetDateString()}
-              {this.pointsEarnable()}
-            </div>
-          </div>
+          {/*<div className="target-overlay-header__headline-info">*/}
+            {/*<div className="target-overlay-header__info-subtext font-regular">*/}
+              {/*{this.targetDateString()}*/}
+              {/*{this.pointsEarnable()}*/}
+            {/*</div>*/}
+          {/*</div>*/}
         </div>
       </div>
     );

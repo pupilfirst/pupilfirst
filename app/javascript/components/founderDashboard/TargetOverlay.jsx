@@ -98,7 +98,7 @@ export default class TargetOverlay extends React.Component {
               />
               <span className="target-overlay__overlay-close-text">Back</span>
             </button>
-            <div className="target-overlay__header clearfix">
+            <div className="target-overlay__header d-flex align-items-center justify-content-between">
               <HeaderTitle
                 iconPaths={this.props.iconPaths}
                 target={this.props.target}

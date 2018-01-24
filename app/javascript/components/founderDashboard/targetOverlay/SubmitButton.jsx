@@ -24,6 +24,16 @@ export default class SubmitButton extends React.Component {
     }
   }
 
+  submitButtonIconClass() {
+    if (this.props.target.call_to_action) {
+      return "fa fa-chevron-circle-right";
+    } else if (!this.props.target.link_to_complete) {
+      return "fa fa-upload";
+    } else {
+      return "fa fa-external-link-square";
+    }
+  }
+
   isPending() {
     return this.props.target.status === "pending";
   }
@@ -36,7 +46,7 @@ export default class SubmitButton extends React.Component {
             href={this.props.target.link_to_complete}
             className="btn btn-with-icon btn-md btn-secondary text-uppercase btn-timeline-builder js-founder-dashboard__trigger-builder js-founder-dashboard__action-bar-add-event-button"
           >
-            <i className="fa fa-upload" aria-hidden="true" />
+            <i className={this.submitButtonIconClass()} aria-hidden="true" />
             <span>{this.submitButtonText()}</span>
           </a>
         )}
@@ -45,7 +55,7 @@ export default class SubmitButton extends React.Component {
             onClick={this.openTimelineBuilder}
             className="btn btn-with-icon btn-md btn-secondary text-uppercase btn-timeline-builder js-founder-dashboard__trigger-builder js-founder-dashboard__action-bar-add-event-button"
           >
-            <i className="fa fa-upload" aria-hidden="true" />
+            <i className={this.submitButtonIconClass()} aria-hidden="true" />
             <span>{this.submitButtonText()}</span>
           </button>
         )}

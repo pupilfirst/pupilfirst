@@ -199,6 +199,7 @@ Rails.application.routes.draw do
       get 'founder_statuses'
       get 'startup_feedback'
       get 'details'
+      get 'auto_verify'
     end
   end
 

@@ -1,0 +1,7 @@
+---
+timestamp: '2018-01-29T06:10:08Z'
+title: Corrected the order of questions and answers from typeform screening data for
+  properly displaying them in founder show page
+trello: https://trello.com/c/1M76epOt
+private: true
+description: The results are now stored as an array in Founder#screening_data

@@ -129,7 +129,6 @@ p {
     }
   }
   &.disabled {
-    pointer-events: none;
     cursor: not-allowed;
     opacity: 0.5;
   }
@@ -225,10 +224,6 @@ p {
     background-color: $dark-primary;
     box-shadow: $box-shadow-btn;
   }
-  &:disabled,
-  &.disabled {
-    background-color: $brand-primary;
-  }
 }
 
 .btn-ghost-secondary {
@@ -249,10 +244,6 @@ p {
   &.active {
     background-color: $dark-secondary;
     box-shadow: $box-shadow-btn;
-  }
-  &:disabled,
-  &.disabled {
-    background-color: $brand-secondary;
   }
 }
 

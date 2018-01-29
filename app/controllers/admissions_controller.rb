@@ -63,7 +63,9 @@ class AdmissionsController < ApplicationController
     founder = Founder.find_by user_id: params.dig(:form_response, :hidden, :user_id).to_i
     screening_response = params.dig(:form_response).permit!.to_h
 
-    Admissions::ScreeningCompletionJob.perform_later(founder, screening_response)
+    if founder.present? && founder.screening_data.blank?
+      Admissions::ScreeningCompletionJob.perform_later(founder, screening_response)
+    end
 
     head :ok
   end

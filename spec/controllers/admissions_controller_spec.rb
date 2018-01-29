@@ -80,11 +80,13 @@ describe AdmissionsController do
 
     it 'verifies the screening target, updates founder screening_data and updates stage in intercom' do
       expected_founder_screening_data = {
-        'score' => 42,
-        'response' => {
-          '1. Short text' => 'Lorem ipsum dolor',
-          '2. Long text' => 'Lorem ipsum dolor'
-        }
+        "score" => 42,
+        "response" => [
+          { "answer" => "Lorem ipsum dolor",
+            "question" => "1. Short text" },
+          { "answer" => "Lorem ipsum dolor",
+            "question" => "2. Long text" }
+        ]
       }
       expect(Intercom::LevelZeroStageUpdateJob).to receive(:perform_now).with(founder, 'Self Evaluation Completed')
 

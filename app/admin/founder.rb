@@ -204,7 +204,7 @@ ActiveAdmin.register Founder do
       column :year_of_graduation
 
       column :slack_username
-      column(:skype_username) { |founder| founder.skype_id } # rubocop:disable Style/SymbolProc
+      column(:skype_username, &:skype_id)
 
       column :team_lead?
       column :slug
@@ -321,21 +321,33 @@ ActiveAdmin.register Founder do
           end
           div id: 'founder-admission-screening-data', class: 'hide' do
             div class: 'margin-bottom-10' do
-              strong "Score: "
-              span founder.screening_data['score'].to_s
+              h2 do
+                span "Score: "
+                span founder.screening_data['score'].to_s
+              end
             end
-            founder.screening_data['response'].each do |question, answer|
-              strong question.gsub(/<br>/, ' ').to_s
-              if answer.is_a?(Hash)
-                para answer['label'].present? ? answer['label'].to_s : answer['labels'].to_s
-              else
-                para answer
+
+            question_answer = founder.screening_data['response']
+
+            question_answer.each do |response|
+              div class: 'admin-founders__question-and-answer' do
+                question = response['question']
+                question.gsub!('<br><br>', '<br>')
+                strong simple_format(question, class: 'admin-founders__question')
+
+                answer = response['answer']
+                div class: 'margin-left-10' do
+                  if answer.is_a?(Hash)
+                    answer['label'].present? ? answer['label'].to_s : " \u2022 #{answer['labels'].shift.strip}"
+                  else
+                    answer
+                  end
+                end
               end
             end
           end
         end
       end
-
       active_admin_comments
     end
 

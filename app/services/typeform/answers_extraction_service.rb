@@ -15,17 +15,17 @@ module Typeform
       end
 
       # Collection of all form responses from a user
-      form_response_data = @response['answers']
+      answers = @response['answers']
 
-      consolidated_response_data = {}
+      # Extract answers and generate form response into the required format: [{ question: q1, answer: a1},]
+      consolidated_response_data = {
+        response: answers.map do |answer|
+          question = question_hash[answer['field']['id']]
+          { question: question, answer: answer[answer['type']] }
+        end
+      }
 
-      # Extract answers and generate form response into the required format: { question => answers }
-      consolidated_response_data['response'] = form_response_data.each_with_object({}) do |response_data, question_and_answers|
-        question = question_hash[response_data['field']['id']]
-        question_and_answers[question] = response_data[response_data['type']]
-      end
-
-      # Add score to response data if present
+      # Add score to response data if present.
       consolidated_response_data['score'] = @response['calculated']['score'] if @response['calculated'].present?
 
       consolidated_response_data

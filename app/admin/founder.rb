@@ -338,7 +338,15 @@ ActiveAdmin.register Founder do
                 answer = response['answer']
                 div class: 'margin-left-10' do
                   if answer.is_a?(Hash)
-                    answer['label'].present? ? answer['label'].to_s : " \u2022 #{answer['labels'].shift.strip}"
+                    if answer['label'].present?
+                      answer['label'].to_s
+                    else
+                      ul do
+                        answer['labels'].each do |choice|
+                          li(choice.strip)
+                        end
+                      end
+                    end
                   else
                     answer
                   end

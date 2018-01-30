@@ -5,7 +5,7 @@
   | Feedback from SV.CO
 
 = content_for :subtitle do
-  | #{@startup_feedback.faculty.name} has some feedback for your team.
+  | #{@startup_feedback.faculty.name} has some feedback for you.
 
 - unless startup.level_zero?
   = content_for :title_button_text do
@@ -24,8 +24,7 @@
 
   p
     ' Here is some feedback from
-    ' #{@startup_feedback.faculty.name} on your #{startup_update} <em>#{target_info}</em> that
-    | might help you:
+    ' #{@startup_feedback.faculty.name} on your #{startup_update} <strong>#{target_info}</strong>:
 
   blockquote = simple_format(@startup_feedback.feedback)
 

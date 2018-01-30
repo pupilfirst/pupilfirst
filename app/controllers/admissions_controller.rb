@@ -1,5 +1,5 @@
 class AdmissionsController < ApplicationController
-  before_action :skip_container, only: %i[join register founders founders_submit]
+  before_action :skip_container, only: %i[apply register founders founders_submit]
 
   # GET /apply
   def apply

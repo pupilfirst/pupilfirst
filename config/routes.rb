@@ -29,7 +29,7 @@ Rails.application.routes.draw do
       scope module: 'founders', controller: 'dashboard' do
         get 'dashboard'
         post 'startup_restart'
-        get 'dashboard/targets/:id(/:slug)', action: 'target_overlay'
+        get 'dashboard/targets/:id(/:slug)', action: 'target_overlay', as: 'dashboard_target'
       end
     end
   end

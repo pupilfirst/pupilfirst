@@ -1,5 +1,7 @@
 - startup = @startup_feedback.startup
-- timeline_url = timeline_url(startup.id, startup.slug, show_feedback: @startup_feedback.id)
+- timeline_event = @startup_feedback.timeline_event
+- target = @startup_feedback.timeline_event&.target
+- target_url = dashboard_target_founder_url(target) if target.present?
 
 = content_for :title do
   | Feedback from SV.CO
@@ -7,20 +9,20 @@
 = content_for :subtitle do
   | #{@startup_feedback.faculty.name} has some feedback for you.
 
-- unless startup.level_zero?
+- if target.present?
   = content_for :title_button_text do
-    | View Feedback on Timeline
+    | View Feedback on Dashboard
 
-  = content_for(:title_button_link, timeline_url)
+  = content_for(:title_button_link, target_url)
 
 = content_for :salutation do
   | Hello,
 
 = content_for :body do
-  - update_for = @startup_feedback.timeline_event.present? ? 'recent submission' : 'recent updates'
-  - update_link = @startup_feedback.timeline_event.present? ? @startup_feedback.timeline_event.share_url : @startup_feedback.reference_url
+  - update_for = timeline_event.present? ? 'recent submission' : 'recent updates'
+  - update_link = timeline_event.present? ? @startup_feedback.timeline_event.share_url : @startup_feedback.reference_url
   - startup_update = (startup.level_zero? || update_link.blank?) ? (update_for + ' for target ') : link_to(update_for, update_link)
-  - target_info = startup.level_zero? ? @startup_feedback.timeline_event.target.title : ''
+  - target_info = startup.level_zero? ? target&.title : ''
 
   p
     ' Here is some feedback from
@@ -28,9 +30,9 @@
 
   blockquote = simple_format(@startup_feedback.feedback)
 
-  - unless startup.level_zero?
+  - if target.present?
     p
-      ' You can view #{link_to 'the full feedback at SV&#x2024;CO'.html_safe, timeline_url}, including any files attached to the
+      ' You can view #{link_to 'the full feedback at SV&#x2024;CO'.html_safe, target_url}, including any files attached to the
       | feedback.
 
   p Feel free to reach out to us at #{mail_to 'help@sv.co'} in case of any queries.

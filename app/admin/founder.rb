@@ -356,7 +356,6 @@ ActiveAdmin.register Founder do
           end
         end
       end
-      active_admin_comments
     end
 
     panel 'Social links' do
@@ -410,6 +409,16 @@ ActiveAdmin.register Founder do
         end
       end
     end
+
+    panel 'Technical details' do
+      attributes_table_for founder do
+        row :id
+        row :created_at
+        row :updated_at
+      end
+    end
+
+    active_admin_comments
   end
 
   action_item :feedback, only: :show, if: proc { Founder.friendly.find(params[:id]).startup.present? } do

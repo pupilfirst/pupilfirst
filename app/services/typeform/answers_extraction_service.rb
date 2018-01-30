@@ -7,7 +7,7 @@ module Typeform
 
     def execute
       # Collection of all questions in the form
-      form_questions_data = @response['definition']['fields']
+      form_questions_data = @response['definition']['fields'] || []
 
       # Extract questions in the format: { question_id => question_title }
       question_hash = form_questions_data.each_with_object({}) do |question_data, hash|

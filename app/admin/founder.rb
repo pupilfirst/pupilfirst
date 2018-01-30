@@ -5,7 +5,11 @@ ActiveAdmin.register Founder do
 
   controller do
     def scoped_collection
-      super.includes :startup, college: :state
+      if request.format == 'text/csv'
+        super.includes(:startup, { college: :state }, :tag_taggings, :tags, :active_admin_comments)
+      else
+        super.includes :startup, college: :state
+      end
     end
 
     def find_resource
@@ -154,6 +158,10 @@ ActiveAdmin.register Founder do
 
       column 'Screening Score' do |founder|
         founder.screening_data.present? ? founder.screening_data['score'] : ''
+      end
+
+      column 'Comments' do |founder|
+        founder.active_admin_comments.map(&:body).join("\n\n")
       end
     else
       column :id

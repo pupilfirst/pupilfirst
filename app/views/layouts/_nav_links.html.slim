@@ -2,7 +2,7 @@
   ul.navbar-nav.align-items-lg-center itemscope="itemscope" itemtype="http://www.schema.org/SiteNavigationElement"
     - unless current_founder
       li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
-        = link_to 'Join', join_path, class: 'nav-item__link', itemprop: 'url', id: 'sv-navbar__join-link'
+        = link_to 'Apply', apply_path, class: 'nav-item__link', itemprop: 'url', id: 'sv-navbar__join-link'
     - if current_founder && !current_founder.exited && current_founder.startup.present?
       li.nav-item.navbar-nav__nav-item role="presentation"
         a#sv-navbar__dashboard-link.nav-item__link href="#{dashboard_founder_url}" Dashboard

@@ -13,7 +13,7 @@ feature 'Founder Registration' do
     let(:founder) { startup.team_lead }
 
     scenario 'User is blocked from registering again', js: true do
-      visit join_path
+      visit apply_path
 
       expect(page).to have_selector('#new_founders_registration')
 
@@ -24,13 +24,13 @@ feature 'Founder Registration' do
       select "My college isn't listed", from: 'founders_registration_college_id'
       fill_in 'founders_registration_college_text', with: founder.college.name
 
-      click_on 'Join Now'
+      click_button 'Apply'
 
       expect(page).to have_content('You have already completed this step. Please sign in instead.')
     end
 
     scenario 'Signed-in user visits the join page' do
-      sign_in_user founder.user, referer: join_path
+      sign_in_user founder.user, referer: apply_path
       expect(page).to have_text('You have already completed registration.')
       expect(page).to have_link('Go to Dashboard')
       expect(page).not_to have_selector('#new_founders_registration')
@@ -39,10 +39,10 @@ feature 'Founder Registration' do
 
   context 'User is a new visitor' do
     scenario 'User registers as a founder', js: true do
-      visit join_path
+      visit apply_path
 
       # Fill in the registration form.
-      expect(page).to have_button('Join Now')
+      expect(page).to have_button('Apply')
       fill_in 'founders_registration_name', with: 'Jack Sparrow'
       fill_in 'founders_registration_email', with: 'elcapitan@sv.co'
       # fill_in 'founders_registration_email_confirmation', with: 'elcapitan@sv.co'
@@ -50,7 +50,7 @@ feature 'Founder Registration' do
       select "My college isn't listed", from: 'founders_registration_college_id'
       fill_in 'founders_registration_college_text', with: 'Swash Bucklers Training Institute'
 
-      click_on 'Join Now'
+      click_button 'Apply'
 
       # Founder must have reached his new dashboard with the tour triggered.
       expect(page).to have_text("Team Target:#{screening_target.title}")
@@ -67,7 +67,7 @@ feature 'Founder Registration' do
 
   context 'User is a new visitor and makes a possible mistake in the email' do
     before do
-      visit join_path
+      visit apply_path
 
       # Fill in the registration form.
       fill_in 'founders_registration_name', with: 'Jack Sparrow'
@@ -76,13 +76,13 @@ feature 'Founder Registration' do
       select "My college isn't listed", from: 'founders_registration_college_id'
       fill_in 'founders_registration_college_text', with: 'Swash Bucklers Training Institute'
 
-      click_on 'Join Now'
+      click_button 'Apply'
     end
 
     scenario 'User accepts the email hint', js: true do
       expect(page).to have_text('Did you mean test@gmail.com?')
       click_on 'Yes'
-      click_on 'Join Now'
+      click_button 'Apply'
 
       expect(page).to have_text("Team Target:#{screening_target.title}")
 
@@ -93,7 +93,7 @@ feature 'Founder Registration' do
     scenario 'User rejects the email hint', js: true do
       expect(page).to have_text('Did you mean test@gmail.com?')
       click_on 'No'
-      click_on 'Join Now'
+      click_button 'Apply'
 
       expect(page).to have_text("Team Target:#{screening_target.title}")
 

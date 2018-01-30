@@ -1,8 +1,8 @@
 class AdmissionsController < ApplicationController
   before_action :skip_container, only: %i[join register founders founders_submit]
 
-  # GET /join
-  def join
+  # GET /apply
+  def apply
     @form = if Feature.active?(:admissions, current_user)
       Founders::RegistrationForm.new(Founder.new)
     else
@@ -13,7 +13,7 @@ class AdmissionsController < ApplicationController
     render layout: 'application'
   end
 
-  # POST /join
+  # POST /apply
   def register
     @form = Founders::RegistrationForm.new(Founder.new)
 
@@ -35,7 +35,7 @@ class AdmissionsController < ApplicationController
       end
     end
 
-    render 'join', layout: 'application'
+    render 'apply', layout: 'application'
   end
 
   # GET /admissions/screening

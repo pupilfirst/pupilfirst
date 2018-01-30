@@ -1,7 +1,7 @@
-- presenter = Admissions::JoinPresenter.new(self)
+- presenter = Admissions::ApplyPresenter.new(self)
 
 - content_for :head do
-  title SV.CO Join Now
+  title SV.CO Apply Now
   meta name="description" content="SV.CO, or Startup Village is India’s No. 1 Digital Incubator for Student developers. SV.CO Product school helps individuals or a team of student developers build an internet software product with industry guidance."
   meta property="og:title" content="Join SV.CO"
   meta property="og:type" content="website"
@@ -26,7 +26,7 @@ section.apply-hero__banner
         | Learn to build world class software products while in college
 
       .pt-3
-        a#admissions-join__hero-start-link.btn.btn-primary.btn-lg.apply-call-to-action__button href="#join-form"
+        a#admissions-join__hero-start-link.btn.btn-primary.btn-lg.apply-call-to-action__button href="#apply-form"
           | #{presenter.link_to_form_text}
 
 section.apply-partners__container.mx-auto
@@ -140,7 +140,7 @@ section.school-of-saas__container.py-5
                 /   / | &nbsp;your money back.
 
     / .pt-4.text-center
-    /   a#admissions-join__school-start-now-link.btn.btn-primary.btn-lg.apply-call-to-action__button href="#join-form"
+    /   a#admissions-join__school-start-now-link.btn.btn-primary.btn-lg.apply-call-to-action__button href="#apply-form"
     /     | #{presenter.link_to_form_text}
 
 / section.application-fee__container.py-5
@@ -166,7 +166,7 @@ section.school-of-saas__container.py-5
               | Read More
               i.fa.fa-arrow-circle-right.ml-2
 
-#join-form.apply-form__container.py-5
+#apply-form.apply-form__container.py-5
   - if current_founder&.startup.blank?
     .container
       .apply-section__head.mb-4

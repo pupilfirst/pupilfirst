@@ -19,7 +19,7 @@ feature 'Manual User Sign Out' do
       visit edit_startup_path
 
       # User should be signed out.
-      expect(page).to have_content('learn to build tech-products, the startup way')
+      expect(page).to have_content("Let's upgrade you to an Ace Developer")
 
       # Log the user in again.
       user.regenerate_login_token
@@ -34,7 +34,7 @@ feature 'Manual User Sign Out' do
       visit edit_startup_path
 
       # User should be signed out.
-      expect(page).to have_content('learn to build tech-products, the startup way')
+      expect(page).to have_content("Let's upgrade you to an Ace Developer")
     end
   end
 
@@ -52,7 +52,7 @@ feature 'Manual User Sign Out' do
         visit edit_startup_path
 
         # User should be signed out.
-        expect(page).to have_content('learn to build tech-products, the startup way')
+        expect(page).to have_content("Let's upgrade you to an Ace Developer")
       end
     end
   end

@@ -35,6 +35,8 @@
       .d-none
         = f.text_field :reference_text, hide_label: true, placeholder: 'How did you hear about us?', required: false
 
+      = f.check_box :coder, label: 'Are you a coder?'
+
 
       div
         div class='g-recaptcha' data-sitekey=Rails.application.secrets.dig(:google, :recaptcha, :invisible, :site_key) data-callback='handleJoinFormSubmitButton' data-size='invisible' data-badge='inline'

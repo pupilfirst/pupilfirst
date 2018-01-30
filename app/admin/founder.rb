@@ -45,13 +45,14 @@ ActiveAdmin.register Founder do
   filter :roll_number
   filter :created_at, label: 'Registered on'
   filter :screening_score_above, as: :number
+  filter :coder, as: :boolean
 
   permit_params :name, :email, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :born_on,
     :communication_address, :identification_proof, :phone, :invitation_token, :college_id, :roll_number,
     :course, :semester, :year_of_graduation, :twitter_url, :linkedin_url, :personal_website_url, :blog_url,
     :angel_co_url, :github_url, :behance_url, :gender, :skype_id, :exited, :id_proof_number,
     :id_proof_type, :parent_name, :permanent_address, :address_proof, :income_proof,
-    :letter_from_parent, roles: [], tag_list: []
+    :letter_from_parent, :coder, roles: [], tag_list: []
 
   batch_action :tag, form: proc { { tag: Founder.tag_counts_on(:tags).pluck(:name) } } do |ids, inputs|
     Founder.where(id: ids).each do |founder|
@@ -76,6 +77,14 @@ ActiveAdmin.register Founder do
 
       column 'Screening Score' do |founder|
         founder.screening_data.present? ? founder.screening_data['score'] : ''
+      end
+
+      column 'Coder' do |founder|
+        if !founder.coder.nil?
+          founder.coder? ? 'Yes' : 'No'
+        else
+          'No Data'
+        end
       end
     else
       column :product_name, sortable: 'founders.startup_id' do |founder|
@@ -162,6 +171,14 @@ ActiveAdmin.register Founder do
 
       column 'Comments' do |founder|
         founder.active_admin_comments.map(&:body).join("\n\n")
+      end
+
+      column :coder do |founder|
+        if !founder.coder.nil?
+          founder.coder? ? 'Yes' : 'No'
+        else
+          'No Data'
+        end
       end
     else
       column :id
@@ -321,6 +338,13 @@ ActiveAdmin.register Founder do
       row :exited
       row :resume do |founder|
         link_to 'Download Resume', founder.resume_link if founder.resume_link.present?
+      end
+      row :coder do
+        if !founder.coder.nil?
+          founder.coder? ? 'Yes' : 'No'
+        else
+          'No Data'
+        end
       end
       row :screening_data do |founder|
         if founder.screening_data.present?

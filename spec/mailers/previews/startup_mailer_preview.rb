@@ -11,15 +11,16 @@ class StartupMailerPreview < ActionMailer::Preview
       timeline_event: TimelineEvent.new(
         id: 2,
         timeline_event_type: TimelineEventType.new(title: 'Timeline Event Type Title'),
-        startup: Startup.new(id: 4, slug: 'test-startup')
-        # target: Target.new
+        startup: Startup.new(id: 4, slug: 'test-startup'),
+        target: Target.new(title: 'Super Cool Target')
       ),
       faculty: Faculty.new(
         name: 'C V Raman'
       ),
       startup: Startup.new(
         id: 3,
-        level: Level.new(number: 1)
+        # level: Level.new(number: 1)
+        level: Level.new(number: 0)
       )
     )
 

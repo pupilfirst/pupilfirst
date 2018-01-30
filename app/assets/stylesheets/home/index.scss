@@ -115,7 +115,11 @@
 
 .home-hero__message-title-subhead {
   color: white;
-  font-size: 1.5rem;
+  font-size: 2.5rem;
+
+  @include media-breakpoint-down (sm) {
+    font-size: 1.5rem;
+  }
 }
 
 .home-section__head-title {

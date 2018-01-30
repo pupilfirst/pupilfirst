@@ -18,21 +18,17 @@ section.home-hero__container
   .home-hero__message-wrapper.text-center
     .container
       .home-hero__message-title
-        h1.home-hero__message-title-head.mb-0
-          ' &lt; code_your_future /&gt;
+        h1.home-hero__message-title-head
+          ' Good at coding?
           .font-semibold
-            ' learn to build tech-products, the startup way
-        p.home-hero__message-title-subhead
-          ' with premium job guarantee
-          / span.font-semibold Job Guarantee
-          br
-          / | or
-          / span.font-semibold &nbsp;100% money back!
+            ' Let's upgrade you to an Ace Developer
+        h3.home-hero__message-title-subhead
+          ' and get you placed in a premium startup.
         .pt-3
           - if current_founder.present?
             = link_to 'Go to Dashboard', dashboard_founder_path, class: 'btn btn-primary btn-lg home-apply__button'
           - else
-            = link_to 'Join Now', join_path, class: 'btn btn-primary btn-lg home-apply__button', id: 'home-index__hero-join-link'
+            = link_to 'Learn More', join_path, class: 'btn btn-primary btn-lg home-apply__button', id: 'home-index__hero-join-link'
 
   - unless Rails.env.test?
     = video_tag 'https://public-assets.sv.co/videos/header_background_clip.mp4', preload: 'none', autoplay: true, loop: true, class: 'd-none d-md-block home-hero__video'

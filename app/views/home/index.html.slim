@@ -32,7 +32,7 @@ section.home-hero__container
           - if current_founder.present?
             = link_to 'Go to Dashboard', dashboard_founder_path, class: 'btn btn-primary btn-lg home-apply__button'
           - else
-            = link_to 'Join Now', join_path, class: 'btn btn-primary btn-lg home-apply__button', id: 'home-index__hero-join-link'
+            = link_to 'Learn More', apply_path, class: 'btn btn-primary btn-lg home-apply__button', id: 'home-index__hero-join-link'
 
   - unless Rails.env.test?
     = video_tag 'https://public-assets.sv.co/videos/header_background_clip.mp4', preload: 'none', autoplay: true, loop: true, class: 'd-none d-md-block home-hero__video'
@@ -202,7 +202,7 @@ section.home-call-to-action__container.py-5
       p.home-call-to-action__sub-head Get started by submitting an application today.
 
       .text-center.mt-3
-        = link_to 'Join Now', join_path, class: 'btn btn-primary btn-lg home-call-to-action__button', id: 'home-index__ready-join-now-link'
+        = link_to 'Apply Now', apply_path, class: 'btn btn-primary btn-lg home-call-to-action__button', id: 'home-index__ready-join-now-link'
 
 == render 'layouts/footer'
 

@@ -1,4 +1,5 @@
 import React from "react";
+import ReactDOM from 'react-dom';
 
 // Reference for this component: https://gist.github.com/cbilgili/89cab4196a6018daef26
 export default class TrixEditor extends React.Component {

@@ -1,9 +1,10 @@
 GIT
-  remote: https://github.com/desheikh/rails-bootstrap-forms.git
-  revision: b582ebffd99b9df5dd03d1b1a8d29d5426e1258b
+  remote: https://github.com/bootstrap-ruby/bootstrap_form.git
+  revision: 8a7188fbb2d55bbd6c64f9130e7882eea56bfee9
   branch: master
   specs:
-    bootstrap_form (2.5.2)
+    bootstrap_form (4.0.0.dev)
+      rails (>= 5.0)
 
 GIT
   remote: https://github.com/harigopal/carrierwave_backgrounder.git
@@ -821,7 +822,7 @@ DEPENDENCIES
   autoprefixer-rails (~> 7.1)
   bootstrap (= 4.0.0.beta)
   bootstrap4-kaminari-views (= 1.0.0)!
-  bootstrap_form (= 2.5.2)!
+  bootstrap_form (= 4.0.0.dev)!
   bullet (~> 5.5)
   bundler-audit (~> 0.5)
   cancancan (~> 2.0)

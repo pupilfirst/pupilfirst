@@ -35,8 +35,11 @@
       .d-none
         = f.text_field :reference_text, hide_label: true, placeholder: 'How did you hear about us?', required: false
 
-      = f.check_box :coder, label: 'Are you a coder?'
-
+      label Are you a coder?
+      br
+      = f.form_group :coder do
+        = f.radio_button :coder, 1, label: 'Yes', inline: true, class: 'apply-form__radio-button', required: true
+        = f.radio_button :coder, 0, label: 'No', inline: true, class: 'apply-form__radio-button', required: true
 
       div
         div class='g-recaptcha' data-sitekey=Rails.application.secrets.dig(:google, :recaptcha, :invisible, :site_key) data-callback='handleJoinFormSubmitButton' data-size='invisible' data-badge='inline'

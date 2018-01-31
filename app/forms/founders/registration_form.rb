@@ -14,7 +14,7 @@ module Founders
     property :ignore_email_hint, virtual: true
     property :college_id, validates: { presence: true }
     property :college_text, validates: { length: { maximum: 250 } }
-    property :coder
+    property :coder, validates: { presence: true }
 
     # Custom validations.
     validate :do_not_reapply

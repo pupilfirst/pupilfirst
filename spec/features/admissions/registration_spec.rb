@@ -23,6 +23,7 @@ feature 'Founder Registration' do
       fill_in 'founders_registration_phone', with: founder.phone
       select "My college isn't listed", from: 'founders_registration_college_id'
       fill_in 'founders_registration_college_text', with: founder.college.name
+      choose 'Yes'
 
       click_button 'Apply'
 
@@ -49,6 +50,7 @@ feature 'Founder Registration' do
       fill_in 'founders_registration_phone', with: '9876543210'
       select "My college isn't listed", from: 'founders_registration_college_id'
       fill_in 'founders_registration_college_text', with: 'Swash Bucklers Training Institute'
+      choose 'No'
 
       click_button 'Apply'
 
@@ -62,6 +64,7 @@ feature 'Founder Registration' do
       expect(last_founder.email).to eq('elcapitan@sv.co')
       expect(last_founder.phone).to eq('9876543210')
       expect(last_founder.college_text).to eq('Swash Bucklers Training Institute')
+      expect(last_founder.coder).to eq(false)
     end
   end
 
@@ -75,6 +78,7 @@ feature 'Founder Registration' do
       fill_in 'founders_registration_phone', with: '9876543210'
       select "My college isn't listed", from: 'founders_registration_college_id'
       fill_in 'founders_registration_college_text', with: 'Swash Bucklers Training Institute'
+      choose 'Yes'
 
       click_button 'Apply'
     end

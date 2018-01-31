@@ -1,30 +1,39 @@
 .founder-dashboard-header__container
   .container
     .founder-dashboard-header__startup-profile
-      .mx-auto.founder-dashboard-header__startup-logo-container.d-none.d-md-flex
-        - if @startup.logo.present?
-          = image_tag "#{@startup.logo_url}", class: 'founder-dashboard-header__startup-logo'
-        - else
-          = @startup.identicon_logo
-      .founder-dashboard-header__product-details
-        h3.founder-dashboard-header__product-title.font-semibold
-          | #{@startup.product_name}
-        - if @startup.name.present?
-        .founder-dashboard__avatars.d-none.d-md-block
-          .d-none.d-md-block
-            - @startup.founders.not_exited.each do |founder|
-              - url = policy(founder).founder_profile? ? founder_profile_path(founder.slug) : '#'
-              a.founder-dashboard__avatar-wrapper href=url
-                = avatar(founder.name, founder: founder)
-          .d-sm-none.d-block
-            - if @startup.founders.count > 4
-              - @startup.founders.order(:id).limit(3).each do |founder|
-                .founder-dashboard__avatar-wrapper
-                  = avatar(founder.name, founder: founder, version: :thumb)
-              .founder-avatar-bubble.text-center.remaining-founders
-                span.remaining-founders-count
-                  | +#{@startup.founders.count - 3}
-            - else
-              - @startup.founders.each do |founder|
-                .founder-dashboard__avatar-wrapper
-                  = avatar(founder.name, founder: founder, version: :thumb)
+      - if @startup.level_zero?
+        .founder-dashboard-header__product-details
+          h1.founder-dashboard-header__welcome-title.font-semibold
+            ' Welcome to SV.CO Admissions!
+          .founder-dashboard-header__welcome-subtext
+            ' You will be taken through a four-step selection process.
+            br
+            ' Complete the tasks below to proceed.
+      - else
+        .mx-auto.founder-dashboard-header__startup-logo-container.d-none.d-md-flex
+          - if @startup.logo.present?
+            = image_tag "#{@startup.logo_url}", class: 'founder-dashboard-header__startup-logo'
+          - else
+            = @startup.identicon_logo
+        .founder-dashboard-header__product-details
+          h3.founder-dashboard-header__product-title.font-semibold
+            | #{@startup.product_name}
+          - if @startup.name.present?
+          .founder-dashboard__avatars.d-none.d-md-block
+            .d-none.d-md-block
+              - @startup.founders.not_exited.each do |founder|
+                - url = policy(founder).founder_profile? ? founder_profile_path(founder.slug) : '#'
+                a.founder-dashboard__avatar-wrapper href=url
+                  = avatar(founder.name, founder: founder)
+            .d-sm-none.d-block
+              - if @startup.founders.count > 4
+                - @startup.founders.order(:id).limit(3).each do |founder|
+                  .founder-dashboard__avatar-wrapper
+                    = avatar(founder.name, founder: founder, version: :thumb)
+                .founder-avatar-bubble.text-center.remaining-founders
+                  span.remaining-founders-count
+                    | +#{@startup.founders.count - 3}
+              - else
+                - @startup.founders.each do |founder|
+                  .founder-dashboard__avatar-wrapper
+                    = avatar(founder.name, founder: founder, version: :thumb)

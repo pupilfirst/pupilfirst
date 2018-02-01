@@ -48,6 +48,7 @@ module TimelineEvents
         update_timeline_updated_on
         reset_startup_level if @timeline_event.timeline_event_type.end_iteration?
         update_founder_resume if @timeline_event.timeline_event_type.resume_submission?
+        update_admission_stage if @timeline_event.target.in?(targets_for_admissions)
       end
 
       post_on_facebook if @timeline_event.share_on_facebook
@@ -112,7 +113,8 @@ module TimelineEvents
           total_karma_points
         elsif @grade.present? && @target.points_earnable.present?
           @target.points_earnable * grade_multiplier(@grade)
-        else 0
+        else
+          0
         end
       end
     end
@@ -214,6 +216,20 @@ module TimelineEvents
         karma_points = TargetSkill.find_by(target: @target, skill_id: skill_id.to_i).base_karma_points.to_f * grade_multiplier(grade)
         TimelineEventGrade.create!(timeline_event: @timeline_event, skill_id: skill_id, grade: grade, karma_points: karma_points.round)
       end
+    end
+
+    def update_admission_stage
+      new_stage = { Target::KEY_R1_TASK => Startup::ADMISSION_STAGE_R1_TASK_PASSED,
+                    Target::KEY_R1_SHOW_PREVIOUS_WORK => Startup::ADMISSION_STAGE_R1_TASK_PASSED,
+                    Target::KEY_R2_TASK => Startup::ADMISSION_STAGE_R2_TASK_PASSED,
+                    Target::KEY_ATTEND_INTERVIEW => Startup::ADMISSION_STAGE_INTERVIEW_PASSED }[@timeline_event.target.key]
+
+      Admissions::UpdateStageService.new(@timeline_event.startup, new_stage).execute
+      Intercom::LevelZeroStageUpdateJob.perform_later(@timeline_event.startup.team_lead, new_stage)
+    end
+
+    def targets_for_admissions
+      Target.live.where(key: [Target::KEY_R1_TASK, Target::KEY_R1_SHOW_PREVIOUS_WORK, Target::KEY_R2_TASK, Target::KEY_ATTEND_INTERVIEW])
     end
   end
 end

@@ -83,7 +83,7 @@ ActiveAdmin.register Founder do
         if !founder.coder.nil?
           founder.coder? ? 'Yes' : 'No'
         else
-          'No Data'
+          'NA'
         end
       end
     else
@@ -177,7 +177,7 @@ ActiveAdmin.register Founder do
         if !founder.coder.nil?
           founder.coder? ? 'Yes' : 'No'
         else
-          'No Data'
+          'NA'
         end
       end
     else
@@ -343,7 +343,7 @@ ActiveAdmin.register Founder do
         if !founder.coder.nil?
           founder.coder? ? 'Yes' : 'No'
         else
-          'No Data'
+          'NA'
         end
       end
       row :screening_data do |founder|

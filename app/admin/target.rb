@@ -314,7 +314,7 @@ ActiveAdmin.register Target do
       end
 
       f.input :target_action_type, collection: Target.valid_target_action_types
-      f.input :timeline_event_type, include_blank: 'Select default timeline event type'
+      f.input :timeline_event_type, collection: TimelineEventType.live, include_blank: 'Select default timeline event type'
       f.input :points_earnable
       f.input :prerequisite_targets, collection: presenter.valid_prerequisites
       f.input :youtube_video_id, label: 'YouTube Video ID', placeholder: 'For eg. S0PEA3R-6TU'

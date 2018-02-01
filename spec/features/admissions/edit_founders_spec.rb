@@ -50,9 +50,9 @@ feature 'Edit founders' do
         fill_in 'Name of your college', with: college_name
       end
 
-      click_button 'Save founders'
+      click_button 'Save details'
 
-      expect(page).to have_content('Details of founders have been saved!')
+      expect(page).to have_content('Details of team members have been saved!')
 
       # The cofounder addition target should have been completed.
       expect(cofounder_addition_target.status(founder)).to eq(Targets::StatusService::STATUS_COMPLETE)
@@ -72,7 +72,7 @@ feature 'Edit founders' do
       # Invited founder should receive an email.
       open_email(email)
 
-      expect(current_email).to have_content('You have been invited to join a startup')
+      expect(current_email).to have_content('You have been invited to join a team')
     end
 
     scenario 'founder invites another who has already completed payment', js: true do
@@ -96,9 +96,9 @@ feature 'Edit founders' do
         fill_in 'Name of your college', with: Faker::Lorem.words(3).join(' ')
       end
 
-      click_button 'Save founders'
+      click_button 'Save details'
 
-      expect(page).to have_content('Details of founders have been saved!')
+      expect(page).to have_content('Details of team members have been saved!')
 
       # Invited startup should have changed.
       expect(another_founder.reload.invited_startup).to eq(startup)
@@ -107,12 +107,12 @@ feature 'Edit founders' do
       # Accept invitation.
       open_email(another_founder.email)
 
-      expect(current_email).to have_content('You have been invited to join a startup')
+      expect(current_email).to have_content('You have been invited to join a team')
 
       click_here_path = '/' + current_email.find_link('click here')[:href].split('/')[-2..-1].join('/')
       visit click_here_path
 
-      expect(page).to have_content "You have successfully joined #{founder.name}'s startup"
+      expect(page).to have_content "You have successfully joined #{founder.name}'s team"
 
       # Payment should get refunded.
       expect(payment.reload.refunded?).to eq(true)
@@ -176,10 +176,10 @@ feature 'Edit founders' do
         fill_in 'Name of your college', with: Faker::Lorem.words(3).join(' ')
       end
 
-      click_button 'Save founders'
+      click_button 'Save details'
 
-      expect(page).to have_content("It looks like you've attempted to invite founders who are at Level 1 or above.")
-      expect(page).to have_content('is already an admitted founder')
+      expect(page).to have_content("It looks like you've attempted to invite users who have already joined the SV.CO program.")
+      expect(page).to have_content('is already an admitted SV.CO user')
     end
 
     scenario 'founder makes a possible mistake in the email, gets an email hint and accepts it', js: true do
@@ -199,7 +199,7 @@ feature 'Edit founders' do
         fill_in 'Name of your college', with: college_name
       end
 
-      click_button 'Save founders'
+      click_button 'Save details'
 
       expect(page).to have_content("It looks like you've entered an invalid email address")
 
@@ -208,8 +208,8 @@ feature 'Edit founders' do
         find('#founder-form__password-hint-accept').click
       end
 
-      click_button 'Save founders'
-      expect(page).to have_content('Details of founders have been saved!')
+      click_button 'Save details'
+      expect(page).to have_content('Details of team members have been saved!')
 
       last_founder = Founder.last
       expect(last_founder.email).to eq('test@gmail.com')
@@ -232,7 +232,7 @@ feature 'Edit founders' do
         fill_in 'Name of your college', with: college_name
       end
 
-      click_button 'Save founders'
+      click_button 'Save details'
 
       expect(page).to have_content("It looks like you've entered an invalid email address")
 
@@ -241,8 +241,8 @@ feature 'Edit founders' do
         find('#founder-form__password-hint-reject').click
       end
 
-      click_button 'Save founders'
-      expect(page).to have_content('Details of founders have been saved!')
+      click_button 'Save details'
+      expect(page).to have_content('Details of team members have been saved!')
 
       last_founder = Founder.last
       expect(last_founder.email).to eq('test@gamil.com')

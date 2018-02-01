@@ -121,7 +121,7 @@ export default class FounderDetails extends React.Component {
     if (this.props.founder.fields.invited) {
       return "Delete invitation";
     } else {
-      return "Remove this founder";
+      return "Remove this team member";
     }
   }
 

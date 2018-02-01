@@ -119,7 +119,7 @@ class AdmissionsController < ApplicationController
 
     if @form.validate(params[:admissions_founders])
       @form.save
-      flash[:success] = 'Details of founders have been saved!'
+      flash[:success] = 'Details of team members have been saved!'
       redirect_to dashboard_founder_path(from: 'founder_submit')
     else
       render 'founders'
@@ -143,11 +143,11 @@ class AdmissionsController < ApplicationController
       flash[:error] = 'The token that was supplied is not valid.'
       redirect_to root_path
     elsif founder.startup&.level&.number&.positive?
-      flash[:error] = 'Your current startup has already begun the program.'
+      flash[:error] = 'Your current team has already begun the program.'
       redirect_to root_path
     else
       Founders::AcceptInvitationService.new(founder).execute
-      flash[:success] = "You have successfully joined #{founder.reload.startup.team_lead.name}'s startup"
+      flash[:success] = "You have successfully joined #{founder.reload.startup.team_lead.name}'s team"
       sign_in founder.user
       redirect_to dashboard_founder_path(from: 'accept_invitation')
     end

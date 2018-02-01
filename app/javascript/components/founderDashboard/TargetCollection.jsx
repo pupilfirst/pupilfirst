@@ -24,6 +24,7 @@ export default class TargetCollection extends React.Component {
             displayDate={this.props.displayDate}
             founderDetails={this.props.founderDetails}
             selectTargetCB={this.props.selectTargetCB}
+            currentLevel={this.props.currentLevel}
           />
         );
       }, this);
@@ -68,6 +69,7 @@ export default class TargetCollection extends React.Component {
 }
 
 TargetCollection.propTypes = {
+  currentLevel: PropTypes.number,
   name: PropTypes.string,
   description: PropTypes.string,
   targets: PropTypes.array,

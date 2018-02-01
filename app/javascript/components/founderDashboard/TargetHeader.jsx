@@ -9,11 +9,15 @@ export default class TargetHeader extends React.Component {
   }
 
   targetType() {
-    return (
-      <span className="founder-dashboard-target-header__type-tag">
+    if (this.props.currentLevel === 0) {
+      return null;
+    } else {
+      return (
+        <span className="founder-dashboard-target-header__type-tag">
         {this.props.target.target_type_description}:
-      </span>
-    );
+        </span>
+      );
+    }
   }
 
   pointsEarnable() {
@@ -144,6 +148,7 @@ export default class TargetHeader extends React.Component {
 }
 
 TargetHeader.propTypes = {
+  currentLevel: PropTypes.number,
   onClickCB: PropTypes.func,
   target: PropTypes.object,
   displayDate: PropTypes.bool,

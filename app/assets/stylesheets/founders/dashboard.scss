@@ -583,6 +583,7 @@
 
 .founder-dashboard-target-header__title {
   float: left;
+  margin-top: 5px;
 }
 
 .founder-dashboard-target-header__headline {
@@ -697,6 +698,7 @@
 
   @include media-breakpoint-down(sm) {
     float: left;
+    clear: left;
     left: 0;
     top: 0;
     margin-top: 6px;

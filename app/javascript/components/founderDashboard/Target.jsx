@@ -11,6 +11,7 @@ export default class Target extends React.Component {
           target={this.props.target}
           displayDate={this.props.displayDate}
           iconPaths={this.props.iconPaths}
+          currentLevel={this.props.currentLevel}
         />
       </div>
     );
@@ -18,6 +19,7 @@ export default class Target extends React.Component {
 }
 
 Target.propTypes = {
+  currentLevel: PropTypes.number,
   target: PropTypes.object,
   displayDate: PropTypes.bool,
   iconPaths: PropTypes.object,

@@ -55,7 +55,7 @@ feature 'Founder Registration' do
       click_button 'Apply'
 
       # Founder must have reached his new dashboard with the tour triggered.
-      expect(page).to have_text("Team Target:#{screening_target.title}")
+      expect(page).to have_text(screening_target.title)
 
       last_founder = Founder.last
 
@@ -88,7 +88,7 @@ feature 'Founder Registration' do
       click_on 'Yes'
       click_button 'Apply'
 
-      expect(page).to have_text("Team Target:#{screening_target.title}")
+      expect(page).to have_text(screening_target.title)
 
       last_founder = Founder.last
       expect(last_founder.email).to eq('test@gmail.com')
@@ -99,7 +99,7 @@ feature 'Founder Registration' do
       click_on 'No'
       click_button 'Apply'
 
-      expect(page).to have_text("Team Target:#{screening_target.title}")
+      expect(page).to have_text(screening_target.title)
 
       last_founder = Founder.last
       expect(last_founder.email).to eq('test@gamil.com')

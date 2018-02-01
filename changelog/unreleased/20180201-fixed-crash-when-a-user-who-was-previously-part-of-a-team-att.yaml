@@ -1,0 +1,7 @@
+---
+timestamp: '2018-02-01T05:34:06Z'
+title: Fixed crash when a user who was previously part of a team attempted to view
+  MOOC course contents.
+trello: "https://trello.com/c/alJtti7Y"
+private: false
+category: bugfix

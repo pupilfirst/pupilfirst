@@ -6,7 +6,7 @@
     - if current_founder && !current_founder.exited && current_founder.startup.present?
       li.nav-item role="presentation"
         a#navbar-dashboard-link.nav-link href="#{dashboard_founder_url}" Dashboard
-    - if current_founder&.startup.present? && policy(current_founder.startup).show?
+    - if current_startup.present? && policy(current_founder.startup).show?
       li.nav-item role="presentation"
         a#navbar-timeline-link.nav-link href="#{timeline_url(current_founder.startup.id, current_founder.startup.slug)}" Timeline
     / li.nav-item role="presentation" itemprop="name"
@@ -27,18 +27,18 @@
     li.nav-item role="presentation" itemprop="name"
       = link_to 'Wiki', 'https://wiki.sv.co', class: 'nav-link', target: '_blank', itemprop: 'url', id: 'navbar-help-center-link'
     - if current_user
-      - if current_founder
+      - if current_founder.present?
         li.nav-item role="presentation" class="dropdown"
           a#navbar-profile-dropdown.dropdown-toggle.logged-in-avatar-link data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
             .navbar__avatar-wrapper
               == avatar(current_founder.name, founder: current_founder)
           ul.dropdown-menu
-            - if current_startup && policy(current_founder).founder_profile?
+            - if policy(current_founder).founder_profile?
               li role="presentation"
                 = link_to founder_profile_path(slug: current_founder.slug) do
                   i.fa.fa-list-ul
                   | Profile
-            - if policy(current_startup).billing?
+            - if current_startup.present? && policy(current_startup).billing?
               li role="presentation"
                 = link_to billing_startup_path do
                   i.fa.fa-credit-card

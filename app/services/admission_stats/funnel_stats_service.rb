@@ -34,7 +34,7 @@ module AdmissionStats
     end
 
     def round_one_task_passed
-      verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_R1_TASK }).where(created_at: @date_range).count
+      verified_timeline_events.joins(:target).where(targets: { key: [Target::KEY_R1_TASK, Target::KEY_R1_SHOW_PREVIOUS_WORK] }).where(created_at: @date_range).count
     end
 
     def round_two_task_passed

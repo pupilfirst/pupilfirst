@@ -14,12 +14,12 @@
     / - unless current_founder
       li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
         = link_to 'Invest/Hire', talent_path, class: 'nav-item__link', id: 'sv-navbar__talent-link'
-    li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
+    / li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
       = link_to 'Faculty', faculty_index_path, class: 'nav-item__link', id: 'sv-navbar__faculty-link'
     - unless current_founder
       li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
         = link_to 'About', about_path, class: 'nav-item__link', id: 'sv-navbar__about-link'
-    - if current_founder && !current_founder.exited && current_founder.startup.present?
+    / - if current_founder && !current_founder.exited && current_founder.startup.present?
       li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
         = link_to 'Library', resources_path, class: 'nav-item__link', id: 'sv-navbar__library-link'
     / li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"

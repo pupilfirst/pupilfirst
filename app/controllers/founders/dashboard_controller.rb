@@ -13,8 +13,6 @@ module Founders
 
       load_react_data
 
-      @restart_form = Founders::StartupRestartForm.new(Reform::OpenForm.new) if @startup.restartable_levels.present?
-
       @tour = tour_dashboard?
     end
 
@@ -22,8 +20,6 @@ module Founders
     def startup_restart
       startup = current_founder.startup
       raise_not_found if startup.restartable_levels.blank?
-
-      @restart_form = Founders::StartupRestartForm.new(Reform::OpenForm.new)
 
       if @restart_form.validate(startup_restart_params)
         level = Level.find(startup_restart_params.fetch(:level_id))

@@ -17,6 +17,10 @@ html lang='en'
     = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
 
     = csrf_meta_tags
+
+    meta name="description" content=meta_description
+    meta property="og:description" content=meta_description
+
     = yield :head
 
     link rel="icon" href=image_url('layouts/shared/favicon.png')

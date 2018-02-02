@@ -11,6 +11,8 @@ class FoundersController < ApplicationController
   def founder_profile
     @founder = Founder.friendly.find(params[:slug])
     authorize @founder
+
+    @meta_description = "This is a detailed profile for #{@founder.fullname}, includes bio, resume, activity on Public Slack and Karma Points earned."
     @timeline = Founders::ActivityTimelineService.new(@founder, params[:to])
   end
 

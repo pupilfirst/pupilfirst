@@ -21,6 +21,7 @@ class StartupsController < ApplicationController
   def show
     @skip_container = true
     @startup = Startup.friendly.find(params[:id])
+    @meta_description = "#{@startup.display_name}: #{@startup.product_description}"
     authorize @startup, :show?
 
     if params[:show_feedback].present?
@@ -43,6 +44,7 @@ class StartupsController < ApplicationController
     show
 
     @timeline_event_for_og = @startup.timeline_events.find_by(id: params[:event_id])
+    @meta_description = @timeline_event_for_og.description
 
     unless StartupPolicy.new(current_user, @startup).timeline_event_show?(@timeline_event_for_og)
       raise_not_found

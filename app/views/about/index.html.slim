@@ -5,12 +5,10 @@
 
 - content_for :head
   title About SV.CO: A learning platform for first-time founders
-  meta name="description" content=t('about.index.meta_description')
   meta property="og:title" content="About SV.CO"
   meta property="og:type" content="website"
   meta property="og:url" content=about_url
   meta property="og:image" content=image_url('home/index/program-build-startup.jpg')
-  meta property="og:description" content=t('about.index.meta_description')
   meta property="fb:app_id" content=Rails.application.secrets.facebook.dig(:app_id)
 
 nav aria-label="breadcrumb" role="navigation"
@@ -47,8 +45,8 @@ nav aria-label="breadcrumb" role="navigation"
           ' and created stellar startups. The incubator was started in April 2012
           ' as a joint partnership with the Government of India through the
           ' <a href="http://www.dst.gov.in" target="_blank">Department of Science and Technology</a>,
-          ' <a href="http://www.technoparktbi.org" target="_blank">Technopark TBI</a> and our
-          | host-institute, <a href="http://mobme.in" target="_blank">MobME Wireless</a>.
+          ' <a href="http://www.technoparktbi.org" target="_blank">Technopark TBI</a> and its
+          | host-institute <a href="http://mobme.in" target="_blank">MobME Wireless</a>.
 
   .col-md-4
     = render partial: 'about_links'

@@ -1,4 +1,4 @@
-ruby '2.5.0'
+ruby '2.4.3'
 
 source 'https://rubygems.org'
 

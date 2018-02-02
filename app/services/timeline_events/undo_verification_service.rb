@@ -13,7 +13,6 @@ module TimelineEvents
         remove_karma_points
         remove_timeline_event_grades
         recompute_timeline_updated_on
-        reverse_end_of_iteration unless @timeline_event.not_accepted?
         unlink_founder_resume if @timeline_event.verified?
         reset_timeline_event_status
       end
@@ -45,18 +44,6 @@ module TimelineEvents
         startup.timeline_updated_on = other_latest_timeline_event.event_on
         startup.save!
       end
-    end
-
-    # Ff event was of iteration ending type, the startup would have been moved into a different level (restart), and its
-    # iteration count would be incremented.
-    #
-    # We do know which level he was at previously, so all we can do at this point is decrement the iteration count.
-    def reverse_end_of_iteration
-      return unless @timeline_event.end_iteration?
-      return unless startup.iteration > 1
-
-      startup.iteration = startup.iteration - 1
-      startup.save!
     end
 
     # Unlink / remove founder resume if it was a resume submission.

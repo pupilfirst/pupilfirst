@@ -4,7 +4,6 @@
 class TimelineEventType < ApplicationRecord
   has_many :timeline_events, dependent: :restrict_with_error
 
-  TYPE_END_ITERATION = 'end_iteration'
   TYPE_NEW_DECK = 'new_product_deck'
   TYPE_NEW_WIREFRAME = 'new_wireframe'
   TYPE_NEW_PROTOTYPE = 'new_prototype'
@@ -71,10 +70,6 @@ class TimelineEventType < ApplicationRecord
     placeholder_text
   end
 
-  def end_iteration?
-    key == TYPE_END_ITERATION
-  end
-
   def new_deck?
     key == TYPE_NEW_DECK
   end
@@ -101,10 +96,6 @@ class TimelineEventType < ApplicationRecord
 
   def stage_change?
     TimelineEventType.stage_keys.include?(key)
-  end
-
-  def self.end_iteration
-    find_by(key: TYPE_END_ITERATION)
   end
 
   def self.help_wanted

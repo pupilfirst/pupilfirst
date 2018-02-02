@@ -77,18 +77,6 @@ export default class ActionBar extends React.Component {
               </button>
 
               <div className="dropdown-menu filter-targets-dropdown__menu dropdown-menu-right">
-                {this.props.currentLevel !== 0 && (
-                  <span>
-                    <a
-                      className="dropdown-item filter-targets-dropdown__menu-item"
-                      data-toggle="modal"
-                      data-target="#startup-restart-form"
-                      role="button"
-                    >
-                      Pivot
-                    </a>
-                  </span>
-                )}
                 <a
                   id="filter-targets-dropdown__tour-button"
                   className="dropdown-item filter-targets-dropdown__menu-item"

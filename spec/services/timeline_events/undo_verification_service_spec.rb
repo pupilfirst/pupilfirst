@@ -95,31 +95,6 @@ describe TimelineEvents::UndoVerificationService do
         end
       end
 
-      context 'when the timeline event ended an iteration for the startup' do
-        let(:timeline_event_type) { create :timeline_event_type, key: TimelineEventType::TYPE_END_ITERATION }
-
-        before do
-          timeline_event.startup.update!(iteration: 2)
-        end
-
-        context 'if timeline event was not accepted' do
-          let(:timeline_event) { create :timeline_event, status: TimelineEvent::STATUS_NOT_ACCEPTED, timeline_event_type: timeline_event_type }
-
-          it 'does nothing' do
-            expect { subject.execute }.not_to(change { timeline_event.reload.startup.iteration })
-          end
-        end
-
-        context 'if the timeline event was accepted' do
-          let(:timeline_event) { create :timeline_event, status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT, timeline_event_type: timeline_event_type }
-
-          it 'reduces the iteration count by one' do
-            expect { subject.execute }.to change { timeline_event.reload.startup.iteration }
-              .from(2).to(1)
-          end
-        end
-      end
-
       context "when the timeline event verification updated founder's resume" do
         let(:timeline_event_type) { create :timeline_event_type, key: TimelineEventType::TYPE_RESUME_SUBMISSION }
 

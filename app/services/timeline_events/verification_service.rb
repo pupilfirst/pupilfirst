@@ -46,7 +46,6 @@ module TimelineEvents
         update_grade_and_score
         update_karma_points
         update_timeline_updated_on
-        reset_startup_level if @timeline_event.timeline_event_type.end_iteration?
         update_founder_resume if @timeline_event.timeline_event_type.resume_submission?
         update_admission_stage if @timeline_event.target.in?(targets_for_admissions)
       end
@@ -58,14 +57,12 @@ module TimelineEvents
       TimelineEvent.transaction do
         @timeline_event.update!(status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT, status_updated_at: Time.zone.now)
         update_timeline_updated_on
-        reset_startup_level if @timeline_event.timeline_event_type.end_iteration?
       end
     end
 
     def mark_not_accepted
       TimelineEvent.transaction do
         @timeline_event.update!(status: TimelineEvent::STATUS_NOT_ACCEPTED, status_updated_at: Time.zone.now)
-        cancel_reset_request if @timeline_event.timeline_event_type.end_iteration?
       end
     end
 
@@ -125,15 +122,6 @@ module TimelineEvents
 
     def startup
       @startup ||= @timeline_event.startup
-    end
-
-    def reset_startup_level
-      return if startup.requested_restart_level.blank?
-      Startups::RestartService.new(startup.team_lead).restart(startup.requested_restart_level)
-    end
-
-    def cancel_reset_request
-      Startups::RestartService.new(startup.team_lead).cancel
     end
 
     def update_timeline_updated_on

@@ -20,7 +20,7 @@ class TimelineEvent < ApplicationRecord
 
   serialize :links
 
-  delegate :end_iteration?, :founder_event?, :title, to: :timeline_event_type
+  delegate :founder_event?, :title, to: :timeline_event_type
 
   MAX_DESCRIPTION_CHARACTERS = 500
 
@@ -53,7 +53,6 @@ class TimelineEvent < ApplicationRecord
 
   accepts_nested_attributes_for :timeline_event_files, allow_destroy: true
 
-  scope :end_of_iteration_events, -> { where(timeline_event_type: TimelineEventType.end_iteration) }
   scope :from_admitted_startups, -> { joins(:startup).merge(Startup.admitted) }
   scope :from_level_0_startups, -> { joins(:startup).merge(Startup.level_zero) }
   scope :not_dropped_out, -> { joins(:startup).merge(Startup.not_dropped_out) }

@@ -47,9 +47,6 @@ feature 'Founder Dashboard' do
 
   let(:dashboard_toured) { true }
 
-  # Create timeline_event_type of type 'end_iteration' for startup restart
-  let!(:tet_end_iteration) { create :timeline_event_type, key: TimelineEventType::TYPE_END_ITERATION }
-
   before do
     # Timeline events to take targets to specific states.
     create(:timeline_event, startup: startup, target: completed_target_1, status: TimelineEvent::STATUS_VERIFIED)
@@ -158,29 +155,5 @@ feature 'Founder Dashboard' do
     within('.founder-dashboard-target-group__box', text: 'Past Sessions') do
       expect(page).to have_selector('.founder-dashboard-target__container', count: 4)
     end
-
-    ####
-    # Check the startup restart functionality
-    ####
-
-    find('.founder-dashboard-actionbar__show-more-menu-dots').click
-    find('a[data-target="#startup-restart-form"]').click
-    expect(page).to have_selector('#startup-restart-form')
-
-    within('#startup-restart-form') do
-      expect(page).to have_text('Pivot your startup journey!')
-      select level_2.name.to_s, from: 'founders_startup_restart_level_id'
-      fill_in 'founders_startup_restart_reason', with: Faker::Lorem.sentence
-      click_on 'Request For a Pivot'
-    end
-
-    visit dashboard_founder_path
-
-    # Check whether end_iteration timeline event is created
-    te = TimelineEvent.last
-    expect(te.timeline_event_type).to eq(tet_end_iteration)
-
-    # Check whether startup requested level for restart is set.
-    expect(startup.reload.requested_restart_level).to eq(level_2)
   end
 end

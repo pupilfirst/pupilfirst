@@ -1,5 +1,53 @@
 ---
 changelog:
+- timestamp: '2018-02-05T11:02:24Z'
+  changes:
+  - timestamp: '2018-02-05T11:01:25Z'
+    title: The Level 0 dashboard was heavily modified to serve admissions better.
+    trello: https://trello.com/c/GHZgYwKD
+    private: true
+    description: 'Changes made include: removing the ToggleBar component, allowing
+      customization of submit button text, Hiding the ''time required'' metric & Implementing
+      auto-verification of targets.'
+    category: feature
+  - timestamp: '2018-02-05T10:57:14Z'
+    title: Fixed the broken TrixEditor React component.
+    trello: https://trello.com/c/OPvgM47o
+    private: true
+    description: A missing import statement was included.
+    category: bugfix
+  - timestamp: '2018-02-05T07:25:31Z'
+    title: Implemented archival feature for TimelineEventType. This will help archiving
+      all types related to old startup model of the program.
+    trello: https://trello.com/c/PRh4w91N
+    private: true
+    description: Cleaned up all code related to startup iteration along with this
+      task.
+    category: feature
+  - timestamp: '2018-02-05T07:23:10Z'
+    title: Updated content in home and join page to aid admissions for product school
+    trello: https://trello.com/c/c6WMIVIR/
+    private: true
+    category: content
+  - timestamp: '2018-02-05T07:21:25Z'
+    title: Fixed wrong data in daily slack admission stats and in admissions dashboard
+    trello: https://trello.com/c/Q9luIde5
+    private: true
+    category: bugfix
+  - timestamp: '2018-02-01T05:34:06Z'
+    title: Fixed crash when a user who was previously part of a team attempted to
+      view MOOC course contents.
+    trello: https://trello.com/c/alJtti7Y
+    private: false
+    category: bugfix
+  - timestamp: '2018-01-31T11:35:49Z'
+    title: Renamed help.sv.co to wiki.sv.co.
+    trello: https://trello.com/c/9q3ONZCq
+    private: false
+  - timestamp: '2018-01-18T11:14:43Z'
+    title: Upgraded to Ruby 2.4.3.
+    trello: https://trello.com/c/FRMDZONH
+    private: true
 - timestamp: '2018-01-29T13:34:07Z'
   changes:
   - timestamp: '2018-01-29T06:22:38Z'

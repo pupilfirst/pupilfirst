@@ -1,9 +1,0 @@
----
-timestamp: '2018-02-05T11:01:25Z'
-title: The Level 0 dashboard was heavily modified to serve admissions better.
-trello: https://trello.com/c/GHZgYwKD
-private: true
-description: 'Changes made include: removing the ToggleBar component, allowing customization
-  of submit button text, Hiding the ''time required'' metric & Implementing auto-verification
-  of targets.'
-category: feature

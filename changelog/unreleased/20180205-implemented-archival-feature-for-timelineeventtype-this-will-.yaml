@@ -1,0 +1,8 @@
+---
+timestamp: '2018-02-05T07:25:31Z'
+title: Implemented archival feature for TimelineEventType. This will help archiving
+  all types related to old startup model of the program.
+trello: https://trello.com/c/PRh4w91N
+private: true
+description: Cleaned up all code related to startup iteration along with this task.
+category: feature

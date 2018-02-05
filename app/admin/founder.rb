@@ -372,12 +372,14 @@ ActiveAdmin.register Founder do
                   if answer.is_a?(Hash)
                     if answer['label'].present?
                       answer['label'].to_s
-                    else
+                    elsif answer['labels'].present?
                       ul do
                         answer['labels'].each do |choice|
                           li(choice.strip)
                         end
                       end
+                    else
+                      answer['other'].to_s
                     end
                   else
                     answer

@@ -55,7 +55,7 @@ class AdmissionsController < ApplicationController
   # GET /admissions/screening_submit?user_id&score
   def screening_submit
     authorize :admissions
-    flash[:success] = 'Your submission has been recorded!'
+    flash[:success] = 'You have successfully completed screening'
     redirect_to dashboard_founder_path(from: 'screening_submit')
   end
 

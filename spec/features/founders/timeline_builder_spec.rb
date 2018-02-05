@@ -53,12 +53,7 @@ feature 'Timeline Builder' do
     find('.timeline-builder__attachment-button').click
     expect(page).to_not have_selector('.timeline-builder__file-label') # ensure file section is closed
 
-    find('.timeline-builder__upload-section-tab.date-of-event').click
-    expect(page).to have_content('Date of event')
-
-    find('.timeline-builder__attachment-button').click
-    expect(page).to_not have_content('Date of event') # ensure date section is closed
-
+    # We are not testing the date picker right now
     select timeline_event_type.title, from: 'Timeline Event Type'
 
     click_button 'Submit'

@@ -10,7 +10,6 @@ export default class DateForm extends React.Component {
     this.state = { date: startDate };
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -18,34 +17,22 @@ export default class DateForm extends React.Component {
       startDate: this.state.date,
       scrollInput: false,
       scrollMonth: false,
+      inline: true,
       format: "Y-m-d",
       timepicker: false,
       onSelectDate: this.handleChange
     });
+
+    $("#date-form__date-modal").modal();
   }
 
   componentWillUnmount() {
+    $("#date-form__date-modal").modal("hide");
     $(".js-timeline-builder__date-input").datetimepicker("destroy");
   }
 
   today() {
     return moment().format("YYYY-MM-DD");
-  }
-
-  handleSubmit(event) {
-    event.preventDefault();
-
-    let submitDate = this.state.date;
-
-    if (submitDate == null) {
-      submitDate = this.today();
-      this.setState({ date: submitDate });
-    }
-
-    this.props.addAttachmentCB("date", {
-      value: submitDate,
-      hideDateForm: true
-    });
   }
 
   handleChange() {
@@ -57,37 +44,33 @@ export default class DateForm extends React.Component {
     } else {
       newDate = this.today();
     }
+    this.props.handleDate(newDate);
+  }
+  modalClasses() {
+    let classes = "timeline-builder modal";
 
-    this.setState({ date: newDate });
-    this.props.addAttachmentCB("date", { value: newDate });
+    if (!this.props.testMode) {
+      classes += " fade";
+    }
+
+    return classes;
   }
 
   render() {
     return (
-      <div className="d-sm-flex align-items-center timeline-builder__attachment-datepicker-form">
-        <label className="col-md-2 form-group col-form-label text-sm-right mb-0">
-          Date of event
-        </label>
-        <div className="col-md-9 form-group mb-sm-0">
-          <label className="sr-only" htmlFor="timeline-builder__date-input">
-            Date of Event
-          </label>
-          <input
-            id="timeline-builder__date-input"
-            type="text"
-            className="js-timeline-builder__date-input timeline-builder__date-input form-control"
-            placeholder={this.today()}
-            onChange={this.handleChange}
-          />
-        </div>
-        <div className="col-md-1 form-group timeline-builder__attachment-datepicker-form-btn mb-0">
-          <button
-            type="submit"
-            className="btn btn-secondary timeline-builder__attachment-button"
-            onClick={this.handleSubmit}
-          >
-            <i className="fa fa-check" />
-          </button>
+      <div id="date-form__date-modal" className={this.modalClasses()}>
+        <div className="modal-dialog timeline-builder__date-popup">
+          <div className="modal-content timeline-builder__date-popup-content">
+            <div className="timeline-builder__date-popup-body">
+              <input
+                id="timeline-builder__date-input"
+                type="text"
+                className="js-timeline-builder__date-input timeline-builder__date-input form-control"
+                placeholder={this.today()}
+                onClick={this.handleChange}
+              />
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -96,5 +79,6 @@ export default class DateForm extends React.Component {
 
 DateForm.propTypes = {
   selectedDate: PropTypes.string,
-  addAttachmentCB: PropTypes.func
+  addAttachmentCB: PropTypes.func,
+  handleDate: PropTypes.func
 };

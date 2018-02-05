@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import EventTypeSelect from "./EventTypeSelect";
 import SubmitButton from "./SubmitButton";
 import ImageButton from "./ImageButton";
+import DateForm from "./DateForm";
 
 export default class ActionBar extends React.Component {
   constructor(props) {
@@ -12,6 +13,10 @@ export default class ActionBar extends React.Component {
     this.showFileForm = this.showFileForm.bind(this);
     this.showDateForm = this.showDateForm.bind(this);
     this.disableTab = this.disableTab.bind(this);
+    this.handleDate = this.handleDate.bind(this);
+    this.state = {
+      dateFormVisible: false
+    };
   }
 
   componentDidUpdate() {
@@ -21,7 +26,6 @@ export default class ActionBar extends React.Component {
       $(".date-of-event").popover("hide");
     }
   }
-
   formLinkClasses(type) {
     let classes = "";
 
@@ -55,9 +59,16 @@ export default class ActionBar extends React.Component {
     }
   }
 
+  handleDate(date) {
+    this.setState({ dateFormVisible: false });
+    this.props.addAttachmentCB("date", {
+      value: date
+    });
+  }
+
   showDateForm() {
     this.props.resetErrorsCB();
-    this.props.formClickedCB("date");
+    this.setState({ dateFormVisible: true });
   }
 
   timelineEventTypes() {
@@ -104,6 +115,9 @@ export default class ActionBar extends React.Component {
             <i className="timeline-builder__upload-section-icon fa fa-file-text-o" />
             <span className="timeline-builder__tab-label">File</span>
           </div>
+          {this.state.dateFormVisible && (
+            <DateForm handleDate={this.handleDate} />
+          )}
           <div
             className={this.formLinkClasses("date")}
             onClick={this.showDateForm}
@@ -150,6 +164,7 @@ ActionBar.propTypes = {
   addDataCB: PropTypes.func,
   imageButtonKey: PropTypes.string,
   selectedDate: PropTypes.string,
+  addAttachmentCB: PropTypes.func,
   submissionProgress: PropTypes.number,
   submissionError: PropTypes.string,
   submissionSuccessful: PropTypes.bool,
@@ -157,5 +172,6 @@ ActionBar.propTypes = {
   showDateError: PropTypes.bool,
   showEventTypeError: PropTypes.bool,
   resetErrorsCB: PropTypes.func,
-  timelineEventTypeId: PropTypes.string
+  timelineEventTypeId: PropTypes.string,
+  handleDate: PropTypes.func
 };

@@ -26,6 +26,30 @@
     z-index: 1;
   }
 }
+.timeline-builder__date-popup {
+  max-width: 15rem;
+}
+
+.timeline-builder__date-popup-content {
+  border: 1px solid $gray-border;
+  @include border-radius(10px);
+  box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.timeline-builder__date-popup-body {
+  padding: 0;
+  position: relative;
+
+  .timeline-builder__date-modal-close {
+    position: absolute;
+    margin: 0.25rem;
+    padding: 1rem;
+    right: 0;
+    outline: none;
+    z-index: 1;
+  }
+}
 
 .timeline-builder__textarea {
   padding: 1.25rem 3rem 1.25rem 1.25rem;

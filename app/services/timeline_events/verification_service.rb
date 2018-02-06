@@ -213,6 +213,7 @@ module TimelineEvents
                     Target::KEY_ATTEND_INTERVIEW => Startup::ADMISSION_STAGE_INTERVIEW_PASSED }[@timeline_event.target.key]
 
       Admissions::UpdateStageService.new(@timeline_event.startup, new_stage).execute
+
       Intercom::LevelZeroStageUpdateJob.perform_later(@timeline_event.startup.team_lead, new_stage)
     end
 

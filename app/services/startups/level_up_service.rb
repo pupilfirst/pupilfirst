@@ -29,6 +29,7 @@ module Startups
       Startup.transaction do
         @startup.update!(level: next_level, program_started_on: Time.zone.now, maximum_level: next_level)
 
+        # Update the admission stage for the startup entry.
         Admissions::UpdateStageService.new(@startup, Startup::ADMISSION_STAGE_ADMITTED).execute
 
         @startup.timeline_events.create!(
@@ -46,6 +47,9 @@ module Startups
       @startup.founders.not_exited.each do |founder|
         Intercom::FounderTaggingJob.perform_later(founder, 'Moved to Level 1')
       end
+
+      # On Intercom, update the admission stage the team lead of startup.
+      Intercom::LevelZeroStageUpdateJob.perform_later(@startup.team_lead, Startup::ADMISSION_STAGE_ADMITTED)
     end
 
     def event_description

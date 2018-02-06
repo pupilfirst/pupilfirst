@@ -49,7 +49,7 @@ class TimelineEventType < ApplicationRecord
 
   scope :moved_to_stage, -> { where(key: stage_keys) }
   scope :suggested_for, ->(startup) { where('suggested_stage LIKE ?', "%#{startup.current_stage}%").where.not(id: startup.current_stage_event_types.map(&:id)) }
-  scope :live, -> { where(archived: [false, nil]) }
+  scope :live, -> { where(archived: false) }
 
   def founder_event?
     role == ROLE_FOUNDER

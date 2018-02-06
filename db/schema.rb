@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180201081328) do
+ActiveRecord::Schema.define(version: 20180205110911) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -726,7 +726,7 @@ ActiveRecord::Schema.define(version: 20180201081328) do
     t.string "proof_required"
     t.string "suggested_stage"
     t.boolean "major"
-    t.boolean "archived"
+    t.boolean "archived", default: false, null: false
     t.index ["role"], name: "index_timeline_event_types_on_role"
   end
 

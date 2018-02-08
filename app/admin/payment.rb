@@ -2,7 +2,7 @@ ActiveAdmin.register Payment do
   include DisableIntercom
 
   menu parent: 'Admissions'
-  actions :index, :show
+  actions :all, except: [:destroy]
 
   filter :founder_name, as: :string
   filter :amount
@@ -73,4 +73,22 @@ ActiveAdmin.register Payment do
     column :created_at
     column :notes
   end
+
+  form do |f|
+    div id: 'admin-payment__form'
+
+    f.semantic_errors(*f.object.errors.keys)
+
+    f.inputs 'Payment Details' do
+      f.input :amount
+      f.input :paid_at, as: :datepicker
+      f.input :notes
+      f.input :founder, label: 'Team Member', collection: f.object.founder.present? ? [f.object.founder] : []
+      f.input :payment_type, as: :select, collection: Payment.valid_payment_types
+    end
+
+    f.actions
+  end
+
+  permit_params :amount, :paid_at, :notes, :refunded, :founder_id, :startup_id, :payment_type
 end

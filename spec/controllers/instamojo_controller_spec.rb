@@ -75,7 +75,7 @@ describe InstamojoController do
       let(:paid_at) { 5.seconds.ago.round }
 
       before do
-        payment.update!(paid_at: paid_at, payment_type: Payment::TYPE_ADMISSION)
+        payment.update!(paid_at: paid_at, payment_type: Payment::TYPE_NORMAL)
       end
 
       it 'proceeds without updating paid_at' do

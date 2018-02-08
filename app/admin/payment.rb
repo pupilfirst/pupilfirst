@@ -7,7 +7,7 @@ ActiveAdmin.register Payment do
   filter :founder_name, as: :string
   filter :amount
   filter :fees
-  filter :refunded
+  filter :payment_type, as: :select, collection: Payment.valid_payment_types
   filter :created_at
 
   scope :all, default: true
@@ -33,23 +33,8 @@ ActiveAdmin.register Payment do
 
     column :amount
     column(:status) { |payment| t("models.payment.status.#{payment.status}") }
-    column :refunded
 
     actions
-  end
-
-  action_item :mark_refunded, only: :show do
-    unless payment.refunded?
-      link_to 'Mark as Refunded', mark_refunded_admin_payment_path(payment), method: :post, data: { confirm: 'Are you sure?' }
-    end
-  end
-
-  member_action :mark_refunded, method: :post do
-    payment = Payment.find(params[:id])
-    payment.refunded = true
-    payment.save!
-    flash[:success] = "Payment ##{payment.id} has been marked as refunded!"
-    redirect_to admin_payments_path
   end
 
   csv do
@@ -90,5 +75,5 @@ ActiveAdmin.register Payment do
     f.actions
   end
 
-  permit_params :amount, :paid_at, :notes, :refunded, :founder_id, :startup_id, :payment_type
+  permit_params :amount, :paid_at, :notes, :founder_id, :startup_id, :payment_type
 end

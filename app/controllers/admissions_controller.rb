@@ -1,5 +1,5 @@
 class AdmissionsController < ApplicationController
-  before_action :skip_container, only: %i[apply register founders founders_submit]
+  before_action :skip_container, only: %i[apply register team_members team_members_submit]
 
   # GET /apply
   def apply
@@ -98,8 +98,8 @@ class AdmissionsController < ApplicationController
     render json: Startups::FeeAndCouponDataService.new(current_startup.reload).props
   end
 
-  # GET /admissions/founders
-  def founders
+  # GET /admissions/team_members
+  def team_members
     authorize :admissions
 
     fee_payment_target = Target.find_by(key: Target::KEY_FEE_PAYMENT)
@@ -111,9 +111,9 @@ class AdmissionsController < ApplicationController
     end
   end
 
-  # POST /admissions/founders
-  def founders_submit
-    founders
+  # POST /admissions/team_members
+  def team_members_submit
+    team_members
 
     @form.current_founder = current_founder
 
@@ -122,7 +122,7 @@ class AdmissionsController < ApplicationController
       flash[:success] = 'Details of team members have been saved!'
       redirect_to dashboard_founder_path(from: 'founder_submit')
     else
-      render 'founders'
+      render 'team_members'
     end
   end
 
@@ -130,7 +130,7 @@ class AdmissionsController < ApplicationController
   def team_lead
     Founders::BecomeTeamLeadService.new(current_founder).execute
     flash[:success] = 'You are now the team lead!'
-    redirect_back(fallback_location: admissions_founders_path)
+    redirect_back(fallback_location: admissions_team_members_path)
   end
 
   # GET /admissions/accept_invitation?token=

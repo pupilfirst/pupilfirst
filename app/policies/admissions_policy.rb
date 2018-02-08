@@ -19,16 +19,16 @@ class AdmissionsPolicy < ApplicationPolicy
     FounderPolicy.new(user, founder).fee? && startup.level_zero? && startup.applied_coupon.present?
   end
 
-  def founders?
+  def team_members?
     level_zero? && target_complete?(Target::KEY_SCREENING)
   end
 
-  def founders_submit?
-    founders?
+  def team_members_submit?
+    team_members?
   end
 
   def team_lead?
-    founders? && !user.founder.team_lead?
+    team_members? && !user.founder.team_lead?
   end
 
   def accept_invitation?

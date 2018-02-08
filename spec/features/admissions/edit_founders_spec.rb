@@ -14,7 +14,7 @@ feature 'Edit founders' do
 
   context "when founder hasn't completed the screening prerequisites" do
     scenario 'founder is blocked from editing founders' do
-      sign_in_user(founder.user, referer: admissions_founders_path)
+      sign_in_user(founder.user, referer: admissions_team_members_path)
 
       expect(page).to have_content("The page you were looking for doesn't exist.")
     end
@@ -28,7 +28,7 @@ feature 'Edit founders' do
     end
 
     scenario 'founder adds a cofounder', js: true do
-      sign_in_user(founder.user, referer: admissions_founders_path)
+      sign_in_user(founder.user, referer: admissions_team_members_path)
 
       expect(page).to have_content('You are the team lead.')
       expect(page).to have_selector('.founders-form__founder-content-box', count: 1)
@@ -80,7 +80,7 @@ feature 'Edit founders' do
       payment = create :payment, :paid, startup: another_startup
       another_founder = another_startup.team_lead
 
-      sign_in_user(founder.user, referer: admissions_founders_path)
+      sign_in_user(founder.user, referer: admissions_team_members_path)
 
       expect(page).to have_content('You are the team lead.')
 
@@ -145,7 +145,7 @@ feature 'Edit founders' do
     scenario 'a founder assumes role of team lead', js: true do
       another_founder = create :founder, startup: startup
 
-      sign_in_user(another_founder.user, referer: admissions_founders_path)
+      sign_in_user(another_founder.user, referer: admissions_team_members_path)
 
       expect(page).to have_content("Your team lead is #{founder.name}.")
 
@@ -160,7 +160,7 @@ feature 'Edit founders' do
     scenario 'founder invites another from a higher level', js: true do
       admitted_lead = create(:startup).team_lead
 
-      sign_in_user(founder.user, referer: admissions_founders_path)
+      sign_in_user(founder.user, referer: admissions_team_members_path)
 
       expect(page).to have_content('You are the team lead.')
 
@@ -183,7 +183,7 @@ feature 'Edit founders' do
     end
 
     scenario 'founder makes a possible mistake in the email, gets an email hint and accepts it', js: true do
-      sign_in_user(founder.user, referer: admissions_founders_path)
+      sign_in_user(founder.user, referer: admissions_team_members_path)
 
       page.find('.founders-form__add-founder-button').click
 
@@ -216,7 +216,7 @@ feature 'Edit founders' do
     end
 
     scenario 'founder makes a possible mistake in the email, gets an email hint and rejects it', js: true do
-      sign_in_user(founder.user, referer: admissions_founders_path)
+      sign_in_user(founder.user, referer: admissions_team_members_path)
 
       page.find('.founders-form__add-founder-button').click
 
@@ -259,7 +259,7 @@ feature 'Edit founders' do
     end
 
     scenario 'founder is informed he cant edit the team anymore' do
-      sign_in_user(founder.user, referer: admissions_founders_path)
+      sign_in_user(founder.user, referer: admissions_team_members_path)
 
       expect(page).to have_content('You have already paid for your current team!')
     end

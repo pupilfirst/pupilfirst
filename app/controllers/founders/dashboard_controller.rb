@@ -16,24 +16,6 @@ module Founders
       @tour = tour_dashboard?
     end
 
-    # POST /founder/startup_restart
-    def startup_restart
-      startup = current_founder.startup
-      raise_not_found if startup.restartable_levels.blank?
-
-      if @restart_form.validate(startup_restart_params)
-        level = Level.find(startup_restart_params.fetch(:level_id))
-        reason = startup_restart_params.fetch(:reason)
-        Startups::RestartService.new(current_founder).request_restart(level, reason)
-
-        flash[:success] = 'Your request for a pivot has been submitted successfully!'
-      else
-        flash[:error] = 'Something went wrong. Please try again!'
-      end
-
-      redirect_to dashboard_founder_path(from: 'startup_restart')
-    end
-
     # GET /founder/dashboard/targets/:id(/:slug)
     def target_overlay
       # TODO: Add Pundit authorization

@@ -125,7 +125,6 @@ class Startup < ApplicationRecord
 
   belongs_to :level
   belongs_to :maximum_level, class_name: 'Level'
-  belongs_to :requested_restart_level, class_name: 'Level', optional: true
   has_many :payments, dependent: :restrict_with_error
   has_many :archived_payments, class_name: 'Payment', foreign_key: 'original_startup_id'
 
@@ -412,11 +411,6 @@ class Startup < ApplicationRecord
     label = product_name
     label += " (#{team_lead.name})" if team_lead.present?
     label
-  end
-
-  def restartable_levels
-    return Level.none if level.number < 2
-    Level.where(number: 1..(level.number - 1))
   end
 
   def billing_founders_count

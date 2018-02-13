@@ -14,9 +14,6 @@ module Payments
       # ensure the subscription window starts from time of payment
       Payments::PostPaymentService.new(@payment).execute
 
-      # Create a referral coupon for the startup.
-      Coupons::CreateService.new.generate_referral(@startup) if @startup.referral_coupon.blank?
-
       # mark the payment target complete
       Admissions::CompleteTargetService.new(@founder, Target::KEY_FEE_PAYMENT).execute
 

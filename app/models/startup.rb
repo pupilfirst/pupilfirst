@@ -63,7 +63,6 @@ class Startup < ApplicationRecord
   scope :agreement_live, -> { where('agreement_signed_at > ?', AGREEMENT_DURATION.years.ago) }
   scope :agreement_expired, -> { where('agreement_signed_at < ?', AGREEMENT_DURATION.years.ago) }
   scope :timeline_verified, -> { joins(:timeline_events).where(timeline_events: { status: TimelineEvent::STATUS_VERIFIED }).distinct }
-  scope :with_referrals, -> { joins(:referred_startups).distinct }
 
   # Custom scope to allow AA to filter by intersection of tags.
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
@@ -130,10 +129,6 @@ class Startup < ApplicationRecord
 
   has_one :coupon_usage
   has_one :applied_coupon, through: :coupon_usage, source: :coupon
-
-  has_one :referral_coupon, class_name: 'Coupon', foreign_key: 'referrer_startup_id'
-  has_many :referral_coupon_usages, through: :referral_coupon, source: 'coupon_usages'
-  has_many :referred_startups, through: :referral_coupon_usages, source: 'startup'
 
   has_many :weekly_karma_points
   has_many :resources

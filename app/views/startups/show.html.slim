@@ -49,13 +49,6 @@
   .row
     .col-lg-4.order-1.order-lg-2
       #data-points
-        - if @startup.founder?(current_founder) && @startup.referral_coupon.present?
-          - coupon = @startup.referral_coupon
-          .alert.alert-info
-            h4
-              ' Your Referral Code:
-              strong #{coupon.code}
-            p You will unlock <strong>#{coupon.referrer_extension_days} days of free SV.CO subscription</strong> for each successful referral!
         - if @startup.latest_help_wanted.present?
           .alert.alert-info
             strong Help Wanted:

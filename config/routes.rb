@@ -21,6 +21,7 @@ Rails.application.routes.draw do
 
   ActiveAdmin.routes(self)
 
+  # TODO: Remove these founder routes as we no longer have 'founders'. Always use the corresponding 'student' routes below.
   resource :founder, only: %i[edit update] do
     member do
       get 'fee'
@@ -32,6 +33,11 @@ Rails.application.routes.draw do
         get 'dashboard/targets/:id(/:slug)', action: 'target_overlay', as: 'dashboard_target'
       end
     end
+  end
+
+  scope 'student', controller: 'founders/dashboard', as: 'student' do
+    get 'dashboard'
+    get 'dashboard/targets/:id(/:slug)', action: 'target_overlay', as: 'dashboard_target'
   end
 
   resources :timeline_events, only: %i[create destroy]
@@ -162,7 +168,7 @@ Rails.application.routes.draw do
   # /slack redirected to /about/slack
   get '/slack', to: redirect('/about/slack')
 
-  get '/dashboard', to: redirect('/founder/dashboard')
+  get '/dashboard', to: redirect('/student/dashboard')
 
   # Also have /StartInCollege
   get 'StartInCollege', to: redirect('/startincollege')

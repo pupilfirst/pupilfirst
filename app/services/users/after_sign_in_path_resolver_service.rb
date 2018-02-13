@@ -23,7 +23,7 @@ module Users
 
     def founder_path
       return if @user.founder&.startup.blank?
-      url_helpers.dashboard_founder_path
+      url_helpers.student_dashboard_path
     end
 
     def player_path

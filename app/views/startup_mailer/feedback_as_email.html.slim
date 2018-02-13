@@ -1,7 +1,7 @@
 - startup = @startup_feedback.startup
 - timeline_event = @startup_feedback.timeline_event
 - target = @startup_feedback.timeline_event&.target
-- target_url = dashboard_target_founder_url(target) if target.present?
+- target_url = student_dashboard_target_url(target) if target.present?
 
 = content_for :title do
   | Feedback from SV.CO

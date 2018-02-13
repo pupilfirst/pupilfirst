@@ -4,7 +4,7 @@ module Founders
     before_action :skip_container
     before_action :require_active_subscription, if: :startup_is_admitted
 
-    # GET /founder/dashboard
+    # GET /founder/dashboard, GET /student/dashboard
     def dashboard
       @startup = current_founder.startup&.decorate
 
@@ -31,10 +31,10 @@ module Founders
         flash[:error] = 'Something went wrong. Please try again!'
       end
 
-      redirect_to dashboard_founder_path(from: 'startup_restart')
+      redirect_to student_dashboard_path(from: 'startup_restart')
     end
 
-    # GET /founder/dashboard/targets/:id(/:slug)
+    # GET /founder/dashboard/targets/:id(/:slug), GET /student/dashboard/targets/:id(/:slug)
     def target_overlay
       # TODO: Add Pundit authorization
 

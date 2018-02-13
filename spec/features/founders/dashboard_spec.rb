@@ -70,7 +70,7 @@ feature 'Founder Dashboard' do
 
     scenario 'founder sees tour of dashboard', js: true do
       # I expect to see the tour.
-      sign_in_user founder.user, referer: dashboard_founder_path
+      sign_in_user founder.user, referer: student_dashboard_path
       expect(page).to have_selector('.introjs-tooltipReferenceLayer', visible: false)
     end
   end
@@ -78,13 +78,13 @@ feature 'Founder Dashboard' do
   context 'when founder has exited the programme' do
     scenario 'ex-founder attempts to visit dashboard', js: true do
       founder.update!(exited: true)
-      sign_in_user founder.user, referer: dashboard_founder_path
+      sign_in_user founder.user, referer: student_dashboard_path
       expect(page).to have_text('not an active founder anymore')
     end
   end
 
   scenario 'founder visits dashboard', js: true do
-    sign_in_user founder.user, referer: dashboard_founder_path
+    sign_in_user founder.user, referer: student_dashboard_path
 
     # There should be no tour.
     expect(page).to_not have_selector('.introjs-tooltipReferenceLayer', visible: false)

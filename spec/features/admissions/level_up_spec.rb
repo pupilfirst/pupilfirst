@@ -15,7 +15,7 @@ feature 'Admission Level up' do
 
   context 'before completing targets' do
     scenario 'founder cannot level up', js: true do
-      sign_in_user founder.user, referer: dashboard_founder_path
+      sign_in_user founder.user, referer: student_dashboard_path
       expect(page).not_to have_content('You have successfully completed the first step in your journey with SV.CO')
     end
   end
@@ -44,7 +44,7 @@ feature 'Admission Level up' do
     end
 
     scenario 'founder can level up', js: true do
-      sign_in_user founder.user, referer: dashboard_founder_path
+      sign_in_user founder.user, referer: student_dashboard_path
 
       expect(page).to have_content('You have successfully completed the first step in your journey with SV.CO')
       click_button 'Level Up'

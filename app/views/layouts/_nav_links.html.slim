@@ -5,7 +5,7 @@
         = link_to 'Apply', apply_path, class: 'nav-item__link', itemprop: 'url', id: 'sv-navbar__join-link'
     - if current_founder && !current_founder.exited && current_founder.startup.present?
       li.nav-item.navbar-nav__nav-item role="presentation"
-        a#sv-navbar__dashboard-link.nav-item__link href="#{dashboard_founder_url}" Dashboard
+        a#sv-navbar__dashboard-link.nav-item__link href="#{student_dashboard_url}" Dashboard
     - if current_founder&.startup.present? && policy(current_founder.startup).show?
       li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
         a#sv-navbar__timeline-link.nav-item__link href="#{timeline_url(current_founder.startup.id, current_founder.startup.slug)}" Timeline

@@ -24,7 +24,7 @@ section.home-hero__container
           ' and get you placed in a premium startup.
         .pt-3
           - if current_founder.present?
-            = link_to 'Go to Dashboard', dashboard_founder_path, class: 'btn btn-primary btn-lg home-apply__button'
+            = link_to 'Go to Dashboard', student_dashboard_path, class: 'btn btn-primary btn-lg home-apply__button'
           - else
             = link_to 'Learn More', apply_path, class: 'btn btn-primary btn-lg home-apply__button', id: 'home-index__hero-join-link'
 

@@ -28,36 +28,39 @@ section.home-hero__container
           - else
             = link_to 'Learn More', apply_path, class: 'btn btn-primary btn-lg home-apply__button', id: 'home-index__hero-join-link'
 
-section.program-promise__container.py-5
+section.program-promise__container
   .container
     .row.text-center
       .col-md-4
         = image_tag 'home/index/program-promise-developer-icon.svg', class: 'img-fluid mx-auto program-promise__icon', alt: 'Upgrade your developer profile'
-        h4.program-promise__text.font-semibold.text-center.mx-auto.mt-3
+        h4.program-promise__text.font-semibold.text-center.mx-auto.mt-3.mb-5
           ' Step-by-step framework to
           ' upgrade your developer profile
           | in 6 months.
-      .col-md-4
+      .col-md-4.with-path
         = image_tag 'home/index/program-promise-coach-icon.svg', class: 'img-fluid mx-auto program-promise__icon', alt: 'Upgrade your developer profile'
-        h4.program-promise__text.font-semibold.text-center.mx-auto.mt-3
+        h4.program-promise__text.font-semibold.text-center.mx-auto.mt-3.mb-5
           ' 1-on-1 Coaching
           ' by expert developers
           | from the industry.
       .col-md-4
         = image_tag 'home/index/program-promise-job-icon.svg', class: 'img-fluid mx-auto program-promise__icon', alt: 'Upgrade your developer profile'
-        h4.program-promise__text.font-semibold.text-center.mx-auto.mt-3
+        h4.program-promise__text.font-semibold.text-center.mx-auto.mt-3.mb-5
           ' Job offers of 6+ l.p.a
           ' from premium startups,
           | guaranteed.
 
-section.program-summary__container.py-5
+section.program-summary__container.pt-5.pb-3
   .container
-    .row
-      .col-md-5
-        h2#benefits.home-section__head-title.font-semibold
-          | Lorem ipsum dolor sit amet, consectetur
-          ' adipiscing elit.
-      .col-md-7
+    .row.align-items-center
+      .col-md-6.text-right.pr-md-5
+        = image_tag 'home/index/program-overview-students.png', class: 'img-fluid', alt: 'SV.CO, a 6-month upskilling course for student developers'
+
+      .col-md-6
+        h2.home-section__head-title.font-semibold.mb-3
+          | SV.CO, a 6-month upskilling course
+          .font-black
+            | for student developers.
         p.program-summary__text.mb-3
          ' SV.CO is an online learning platform exclusively
          ' for student developers to upskill themselves for challenging
@@ -76,11 +79,17 @@ section.program-summary__container.py-5
           ' SV.CO helps our students land exciting jobs in premium Indian startups.
           | In fact, we have a 100% job offer guarantee for all our successful graduates!
 
-section.graduation-story__container.py-5
+section.graduation-story__container.py-0.py-md-5
   .container
-    .home-section__head.mb-4
-      h2#benefits.home-section__head-title.text-center.font-black
-        | What our alumni has to say.
+    .home-section__head.mt-4.mt-md-5.mb-4
+      h2.home-section__head-title.text-center.font-semibold.mb-0
+        ' What our
+        span.font-black
+          ' alumni
+        | has to say.
+      .home-section__head-subtitle.mx-auto
+        p.text-center
+          | Hear them narrate their SV.CO experience
 
     .d-flex.justify-content-md-center
       a#home-index__six-ways-hired-video.six-ways-card__box.mb-5 href="#" data-toggle="modal" data-target="#hiring-story-video"
@@ -95,7 +104,7 @@ section.graduation-story__container.py-5
             p.six-ways-card__thumbnail-subhead
               | Hiring at SV.CO
     .row.justify-content-md-center
-      .col-md-3
+      .col-md-3.mb-4
         .graduation-story__card
           .d-flex.align-items-center.justify-content-center.graduation-story__card-logo
             = image_tag 'home/index/sv-partner-tally.png', class: 'img-fluid graduation-story__card-logo-img', alt: 'Tally Logo'
@@ -116,7 +125,7 @@ section.graduation-story__container.py-5
               = image_tag 'home/index/sreeram-narayanan-tally.png', class: 'img-fluid', alt: ''
             .graduation-story__card-avatar.m-2
               = image_tag 'home/index/govind-tally.png', class: 'img-fluid', alt: ''
-      .col-md-3
+      .col-md-3.mb-4
         .graduation-story__card
           .d-flex.align-items-center.justify-content-center.graduation-story__card-logo
             = image_tag 'home/index/sv-partner-good-methods.png', class: 'img-fluid graduation-story__card-logo-img graduation-story__card-logo-img--gmg', alt: 'Goodmethods Logo'
@@ -135,8 +144,7 @@ section.graduation-story__container.py-5
               = image_tag 'home/index/vivek-gmg.png', class: 'img-fluid', alt: ''
             .graduation-story__card-avatar.m-2
               = image_tag 'home/index/aravind-m-gmg.png', class: 'img-fluid', alt: ''
-
-      .col-md-3
+      .col-md-3.mb-4
         .graduation-story__card
           .d-flex.align-items-center.justify-content-center.graduation-story__card-logo
             = image_tag 'home/index/sv-partner-citrus.png', class: 'img-fluid graduation-story__card-logo-img graduation-story__card-logo-img--citrus', alt: 'Citruspay Logo'
@@ -146,8 +154,8 @@ section.graduation-story__container.py-5
             .graduation-story__card-avatar.m-2
               = image_tag 'home/index/abid-ismail-citruspay.png', class: 'img-fluid', alt: ''
 
-    .row.justify-content-md-center.mt-4
-      .col-md-3
+    .row.justify-content-md-center
+      .col-md-3.mb-4
         .graduation-story__card
           .d-flex.align-items-center.justify-content-center.graduation-story__card-logo
             = image_tag 'home/index/sv-partner-freshworks.svg', class: 'img-fluid graduation-story__card-logo-img', alt: 'Freshworks Logo'
@@ -156,8 +164,7 @@ section.graduation-story__container.py-5
           .d-flex.flex-wrap.graduation-story__card-avatar-container.justify-content-center
             .graduation-story__card-avatar.m-2
               = image_tag 'home/index/robin-freshworks.png', class: 'img-fluid', alt: ''
-
-      .col-md-3
+      .col-md-3.mb-4
         .graduation-story__card
           .d-flex.align-items-center.justify-content-center.graduation-story__card-logo
             = image_tag 'home/index/sv-partner-freecharge.png', class: 'img-fluid graduation-story__card-logo-img', alt: 'Freecharge Logo'
@@ -165,10 +172,10 @@ section.graduation-story__container.py-5
             p 2 Hires
           .d-flex.flex-wrap.graduation-story__card-avatar-container.justify-content-center
             .graduation-story__card-avatar.m-2
-              = image_tag 'home/index/amal-krishna-freecharge.png', class: 'img-fluid', alt: ''
+              = image_tag 'home/index/joel-varghese-freecharge.png', class: 'img-fluid', alt: ''
             .graduation-story__card-avatar.m-2
               = image_tag 'home/index/amal-krishna-freecharge.png', class: 'img-fluid', alt: ''
-      .col-md-3
+      .col-md-3.mb-4
         .graduation-story__card
           .d-flex.align-items-center.justify-content-center.graduation-story__card-logo
             = image_tag 'home/index/sv-partner-ola.svg', class: 'img-fluid graduation-story__card-logo-img graduation-story__card-logo-img--ola', alt: 'Ola Logo'

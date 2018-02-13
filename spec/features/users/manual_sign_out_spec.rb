@@ -10,7 +10,7 @@ feature 'Manual User Sign Out' do
     # Log in the user.
     visit user_token_url(token: user.login_token, referer: edit_startup_path)
 
-    expect(page).to have_content('Edit your startup profile')
+    expect(page).to have_content('Edit your team profile')
 
     # Set the manual sign out field.
     user.update!(sign_out_at_next_request: true)
@@ -26,7 +26,7 @@ feature 'Manual User Sign Out' do
 
       visit user_token_url(token: user.login_token, referer: edit_startup_path)
 
-      expect(page).to have_content('Edit your startup profile')
+      expect(page).to have_content('Edit your team profile')
     end
 
     # After 1 week, he should be signed out again if the boolean is still set.
@@ -46,7 +46,7 @@ feature 'Manual User Sign Out' do
     scenario 'user signs in as usual' do
       visit user_token_url(token: user.login_token, referer: edit_startup_path)
 
-      expect(page).to have_content('Edit your startup profile')
+      expect(page).to have_content('Edit your team profile')
 
       travel_to 1.week.from_now do
         visit edit_startup_path

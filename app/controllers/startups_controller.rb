@@ -75,7 +75,7 @@ class StartupsController < ApplicationController
 
     if @form.validate(params[:startups_edit])
       @form.save!
-      flash[:success] = 'Startup details have been updated.'
+      flash[:success] = 'Team details have been updated.'
       redirect_to timeline_path(current_startup.id, current_startup.slug)
     else
       render 'startups/edit'

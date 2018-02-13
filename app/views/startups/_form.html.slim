@@ -26,7 +26,7 @@ p.mb-2
               help: 'The name of your registered legal entity. Partnership/Pvt. Ltd./LLP etc.'
             = f.file_field :logo, label_class: 'col-form-label', label: 'Logo', class: 'form-control', required: false
             = f.select :startup_category_ids, options_from_collection_for_select(StartupCategory.all, :id, :name, current_startup.startup_categories.pluck(:id)),
-              { label_class: 'col-form-label', label: 'Startup Categories', help: 'Industries that your startup is involved in. Max 3.' } , multiple: true
+              { label_class: 'col-form-label', label: 'Product Categories', help: 'Industries that your product is involved in. Max 3.' } , multiple: true
 
     .card
       .card-header.p-0 role="tab"
@@ -37,7 +37,7 @@ p.mb-2
         .card-body
           .flex-column
             = f.email_field :email, label_class: 'col-form-label', label: 'Contact Email', class: 'form-control', maxlength: 255
-            = f.text_field :website, label_class: 'col-form-label', label: 'Wesite', class: 'form-control', placeholder: "You startup's website URL, if any.", maxlength: 255
+            = f.text_field :website, label_class: 'col-form-label', label: 'Wesite', class: 'form-control', placeholder: "You team's website URL, if any.", maxlength: 255
             = f.text_field :twitter_link, placeholder: 'https://twitter.com/username', maxlength: 255
             = f.text_field :facebook_link, placeholder: 'https://facebook.com/username', maxlength: 255
 
@@ -80,5 +80,5 @@ p.mb-2
             = f.select :registration_type, registration_type_options(current_startup.registration_type), include_blank: 'Not Registered'
 
   .form-group.mt-3
-    = f.submit class: 'btn btn-md btn-primary', value: 'Update startup profile'
+    = f.submit class: 'btn btn-md btn-primary', value: 'Update team profile'
     = link_to 'Cancel', timeline_path(current_startup.id, current_startup.slug), class: 'btn btn-md btn-ghost-secondary mt-3 mt-sm-0 ml-sm-3'

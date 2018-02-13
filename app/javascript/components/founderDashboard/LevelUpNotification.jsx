@@ -14,13 +14,13 @@ export default class LevelUpNotification extends React.Component {
 
   eligibleNotificationText() {
     if (this.props.currentLevel === 0) {
-      return "You have successfully completed the first step in your startup journey. We are proud to have you join our collective. Hit Level Up to continue your journey and unlock a series of cool targets and sessions on the way.";
+      return "You have successfully completed the first step in your journey with SV.CO. We are proud to have you join our collective. Hit Level Up to continue your journey and unlock a series of cool targets and sessions on the way.";
     } else if (this.props.currentLevel === this.props.maxLevelNumber) {
       return (
         <div>
           <h4 className="font-regular light-grey-text">
             You've completed our Level Framework, but you know by now that this
-            is just the beginning of your startup journey.
+            is just the beginning of your journey.
           </h4>
           <p>
             {" "}

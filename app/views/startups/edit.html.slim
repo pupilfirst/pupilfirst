@@ -3,12 +3,12 @@
 
 .container-md-center
   .content-box.my-3
-    h2.mt-4 Edit your startup profile
+    h2.mt-4 Edit your team profile
 
     = render 'form'
 
-    h2.mt-4 Delete my Startup
+    h2.mt-4 Delete my team
 
     - if current_startup.approved? || current_startup.dropped_out?
       .alert.alert-danger
-        ' You are currently #{current_startup.approved? ? 'enrolled in' : 'a dropout from'} SV.CO! To delete your startup timeline, contact your SV.CO representative.
+        ' You are currently #{current_startup.approved? ? 'enrolled in' : 'a dropout from'} SV.CO! To delete your team timeline, contact your SV.CO representative.

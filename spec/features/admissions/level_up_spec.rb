@@ -16,7 +16,7 @@ feature 'Admission Level up' do
   context 'before completing targets' do
     scenario 'founder cannot level up', js: true do
       sign_in_user founder.user, referer: dashboard_founder_path
-      expect(page).not_to have_content('You have successfully completed the first step in your startup journey')
+      expect(page).not_to have_content('You have successfully completed the first step in your journey with SV.CO')
     end
   end
 
@@ -46,7 +46,7 @@ feature 'Admission Level up' do
     scenario 'founder can level up', js: true do
       sign_in_user founder.user, referer: dashboard_founder_path
 
-      expect(page).to have_content('You have successfully completed the first step in your startup journey')
+      expect(page).to have_content('You have successfully completed the first step in your journey with SV.CO')
       click_button 'Level Up'
 
       expect(page).to have_content(l1_target_group.name)

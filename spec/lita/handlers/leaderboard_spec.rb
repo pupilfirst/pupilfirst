@@ -67,9 +67,9 @@ describe Lita::Handlers::Leaderboard do
             *Level 2:*
             *01.* :rank_up:` +1` - <http://localhost:3000/startups/#{startup_4.id}/#{startup_4.slug}|#{startup_4.product_name}>
             *02.* :rank_nochange:`---` - <http://localhost:3000/startups/#{startup_5.id}/#{startup_5.slug}|#{startup_5.product_name}>
-            There is 1 startup in this level which was inactive during this period.
+            There is 1 team in this level which was inactive during this period.
 
-            All startups in *Level 3* were inactive during this period.
+            All teams in *Level 3* were inactive during this period.
           EXPECTED_RESPONSE
 
           expect(response).to receive(:reply).with(expected_response)

@@ -18,7 +18,7 @@
 .container
   - if @startup.dropped_out?
     .alert.alert-danger.margin-top-20
-      p Please note that this startup has dropped out and is no longer a part of SV.CO!
+      p Please note that this team has dropped out and is no longer a part of SV.CO!
 
   / Company Name Header
   .row.align-items-center
@@ -69,7 +69,7 @@
               .media.mb-3.align-items-center
                 img.d-flex.mr-3 alt="Stage icon" src="#{image_url 'startups/show/data-icon-stage.png'}"
                 .media-body
-                  h6.my-0 Startup Level
+                  h6.my-0 Team Level
                   p.data-content #{@startup.level.display_name}
             - if @startup.startup_categories.present?
               .col-sm-6.col-md-12

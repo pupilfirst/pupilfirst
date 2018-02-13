@@ -7,13 +7,11 @@ ActiveAdmin.register CouponUsage do
 
   scope :all
   scope :redeemed
-  scope :referrals
 
   filter :startup_product_name, as: :string
   filter :coupon_code, as: :string
   filter :redeemed_at_not_null, as: :boolean, label: 'Redeemed'
   filter :rewarded_at_not_null, as: :boolean, label: 'Rewarded'
-  filter :referrer_startup, collection: -> { Startup.with_referrals }
 
   controller do
     def scoped_collection
@@ -25,7 +23,6 @@ ActiveAdmin.register CouponUsage do
   index do
     column :coupon
     column :startup
-    column :referrer_startup
     column :redeemed_at do |coupon_usage|
       coupon_usage.redeemed_at || 'Not Redeemed'
     end

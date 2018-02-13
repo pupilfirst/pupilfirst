@@ -28,7 +28,6 @@ Rails.application.routes.draw do
 
       scope module: 'founders', controller: 'dashboard' do
         get 'dashboard'
-        post 'startup_restart'
         get 'dashboard/targets/:id(/:slug)', action: 'target_overlay', as: 'dashboard_target'
       end
     end
@@ -123,8 +122,8 @@ Rails.application.routes.draw do
     post 'screening_submit_webhook'
     post 'coupon_submit'
     patch 'coupon_remove'
-    get 'founders'
-    post 'founders', action: 'founders_submit'
+    get 'team_members'
+    post 'team_members', action: 'team_members_submit'
     post 'team_lead'
     get 'accept_invitation'
     patch 'update_founder'

@@ -12,7 +12,7 @@ after 'development:startups' do
     founder: super_startup.team_lead,
     amount: fee,
     paid_at: 1.week.ago,
-    payment_type: Payment::TYPE_ADMISSION,
+    payment_type: Payment::TYPE_NORMAL,
     billing_start_at: 1.week.ago,
     billing_end_at: 3.weeks.from_now
   )
@@ -22,7 +22,7 @@ after 'development:startups' do
     founder: avengers_startup.team_lead,
     amount: fee,
     paid_at: 28.days.ago,
-    payment_type: Payment::TYPE_ADMISSION,
+    payment_type: Payment::TYPE_NORMAL,
     billing_start_at: 28.days.ago,
     billing_end_at: 3.days.from_now
   )

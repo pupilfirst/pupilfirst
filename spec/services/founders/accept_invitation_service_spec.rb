@@ -93,36 +93,6 @@ describe Founders::AcceptInvitationService do
           end
         end
 
-        context 'when original startup had an associated credited payment' do
-          let!(:payment) { create :payment, :paid, startup: original_startup }
-
-          context 'when the payment was less than a week ago' do
-            let(:refund_service) { instance_double Payments::RefundService }
-
-            it 'attempts to refund the payment' do
-              expect(Payments::RefundService).to receive(:new).with(payment).and_return(refund_service)
-              expect(refund_service).to receive(:execute)
-              Founders::AcceptInvitationService.new(founder).execute
-            end
-          end
-
-          context 'when the payment was more than a week ago' do
-            before do
-              payment.update!(paid_at: 2.weeks.ago)
-            end
-
-            it 'informs admins about the failure to refund payment' do
-              expect(Payments::RefundService).to_not receive(:new)
-
-              Founders::AcceptInvitationService.new(founder).execute
-
-              open_email('hosting@sv.co')
-              expect(current_email.subject).to eq('SV.CO: Automatic Refund Failed')
-              expect(current_email.body).to include("<strong>Founder Name:</strong> #{payment.founder.name}")
-            end
-          end
-        end
-
         it 'deletes the original startup' do
           Founders::AcceptInvitationService.new(founder).execute
           expect(Startup.find_by(id: original_startup.id)).to be_nil

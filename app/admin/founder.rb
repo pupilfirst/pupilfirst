@@ -331,6 +331,10 @@ ActiveAdmin.register Founder do
         end
       end
 
+      row :avatar do
+        link_to 'Download Avatar', founder.avatar.url if founder.avatar.present?
+      end
+
       row :course
       row :semester
       row :year_of_graduation

@@ -63,7 +63,6 @@ class Startup < ApplicationRecord
   scope :agreement_live, -> { where('agreement_signed_at > ?', AGREEMENT_DURATION.years.ago) }
   scope :agreement_expired, -> { where('agreement_signed_at < ?', AGREEMENT_DURATION.years.ago) }
   scope :timeline_verified, -> { joins(:timeline_events).where(timeline_events: { status: TimelineEvent::STATUS_VERIFIED }).distinct }
-  scope :with_referrals, -> { joins(:referred_startups).distinct }
 
   # Custom scope to allow AA to filter by intersection of tags.
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
@@ -125,16 +124,11 @@ class Startup < ApplicationRecord
 
   belongs_to :level
   belongs_to :maximum_level, class_name: 'Level'
-  belongs_to :requested_restart_level, class_name: 'Level', optional: true
   has_many :payments, dependent: :restrict_with_error
   has_many :archived_payments, class_name: 'Payment', foreign_key: 'original_startup_id'
 
   has_one :coupon_usage
   has_one :applied_coupon, through: :coupon_usage, source: :coupon
-
-  has_one :referral_coupon, class_name: 'Coupon', foreign_key: 'referrer_startup_id'
-  has_many :referral_coupon_usages, through: :referral_coupon, source: 'coupon_usages'
-  has_many :referred_startups, through: :referral_coupon_usages, source: 'startup'
 
   has_many :weekly_karma_points
   has_many :resources
@@ -412,11 +406,6 @@ class Startup < ApplicationRecord
     label = product_name
     label += " (#{team_lead.name})" if team_lead.present?
     label
-  end
-
-  def restartable_levels
-    return Level.none if level.number < 2
-    Level.where(number: 1..(level.number - 1))
   end
 
   def billing_founders_count

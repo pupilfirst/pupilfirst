@@ -88,7 +88,8 @@ describe AdmissionsController do
             "question" => "2. Long text" }
         ]
       }
-      expect(Intercom::LevelZeroStageUpdateJob).to receive(:perform_now).with(founder, 'Self Evaluation Completed')
+
+      expect(Intercom::LevelZeroStageUpdateJob).to receive(:perform_now).with(founder, Startup::ADMISSION_STAGE_SELF_EVALUATION_COMPLETED)
 
       post :screening_submit_webhook, params: typeform_webhook_response, as: :json
 

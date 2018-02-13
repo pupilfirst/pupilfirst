@@ -71,27 +71,8 @@ module Founders
         end
       end
 
-      refund_and_unlink_payment(@original_startup.payments.last) if @original_startup.payments.any?
-
       # And delete the startup.
       @original_startup.reload.destroy!
-    end
-
-    # Refund credited payments, and unlink it from startup.
-    def refund_and_unlink_payment(payment)
-      if payment.credited?
-        if payment.refundable?
-          log "Attempting to refund payment from Founder ##{@founder.id} - #{@founder.name}..."
-          Payments::RefundService.new(payment).execute
-        else
-          log "Founder ##{@founder.id} - #{@founder.name} has a payment which cannot be refunded (more than a week old)."
-          AdmissionsMailer.automatic_refund_failed(payment).deliver_later
-        end
-      end
-
-      # Unlinking the payment from the startup allows the startup to be destroyed.
-      payment.startup = nil
-      payment.save!
     end
 
     def cofounder_addition_target

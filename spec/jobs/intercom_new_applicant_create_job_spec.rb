@@ -34,7 +34,7 @@ describe IntercomNewApplicantCreateJob do
       supplied_reference: founder.reference
     )
 
-    expect(Intercom::LevelZeroStageUpdateJob).to receive(:perform_later).with(founder, 'Signed Up')
+    expect(Intercom::LevelZeroStageUpdateJob).to receive(:perform_later).with(founder, Startup::ADMISSION_STAGE_SIGNED_UP)
 
     subject.perform_now(founder)
   end

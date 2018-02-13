@@ -332,7 +332,6 @@ ActiveAdmin.register Startup do
       row :courier_name
       row :courier_number
       row :payment_reference
-      row :referral_reward_days
       row :undiscounted_founder_fee
     end
 

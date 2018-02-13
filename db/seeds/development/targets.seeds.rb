@@ -23,7 +23,7 @@ after 'development:target_groups', 'development:timeline_event_types', 'developm
   screening_target = Target.create!(days_to_complete: 1, title: 'Go through Screening', role: Target::ROLE_TEAM, timeline_event_type: team_update, submittability: Target::SUBMITTABILITY_SUBMITTABLE_ONCE, link_to_complete: '/admissions/screening', key: Target::KEY_SCREENING, target_group: level_0_target_group, description: paragraph, faculty: faculty_1, target_action_type: Target::TYPE_TODO)
 
   # Cofounder addition target.
-  Target.create!(days_to_complete: 1, title: 'Add team members', role: Target::ROLE_TEAM, timeline_event_type: team_update, link_to_complete: '/admissions/founders', key: Target::KEY_COFOUNDER_ADDITION, target_group: level_0_target_group, description: paragraph, prerequisite_targets: [screening_target], faculty: faculty_1, target_action_type: Target::TYPE_TODO)
+  Target.create!(days_to_complete: 1, title: 'Add team members', role: Target::ROLE_TEAM, timeline_event_type: team_update, link_to_complete: '/admissions/team_members', key: Target::KEY_COFOUNDER_ADDITION, target_group: level_0_target_group, description: paragraph, prerequisite_targets: [screening_target], faculty: faculty_1, target_action_type: Target::TYPE_TODO)
 
   # Showcase previous work target.
   Target.create!(days_to_complete: 1, title: 'Showcase previous work', role: Target::ROLE_TEAM, timeline_event_type: team_update, key: Target::KEY_R1_SHOW_PREVIOUS_WORK, target_group: level_0_target_group, description: paragraph, prerequisite_targets: [screening_target], faculty: faculty_1, target_action_type: Target::TYPE_TODO)

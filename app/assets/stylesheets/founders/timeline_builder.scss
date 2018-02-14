@@ -10,7 +10,21 @@
   border: 1px solid $gray-border;
   @include border-radius(10px);
   box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.3);
-  overflow: hidden;
+}
+
+.timeline-builder__date-picker-popup {
+  max-width: 20rem;
+  max-height: 15rem;
+  position: absolute;
+  background-color: white;
+  right: 0;
+  top: 54px;
+  z-index: 9999;
+  @include border-radius(10px);
+
+  @include media-breakpoint-down(sm) {
+    top: 70px;
+  }
 }
 
 .timeline-builder__popup-body {
@@ -269,6 +283,7 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
+  position: relative;
 }
 
 .timeline-builder__upload-section {
@@ -283,7 +298,6 @@
   display: flex;
   align-items: center;
   border-right: 1px solid $gray-border;
-  background-color: white;
   color: darken($light-grey-text, 20%);
   transition: all 0.2s;
 

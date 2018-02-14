@@ -58,21 +58,13 @@ export default class DateForm extends React.Component {
 
   render() {
     return (
-      <div id="date-form__date-modal" className={this.modalClasses()}>
-        <div className="modal-dialog timeline-builder__date-popup">
-          <div className="modal-content timeline-builder__date-popup-content">
-            <div className="timeline-builder__date-popup-body">
-              <input
-                id="timeline-builder__date-input"
-                type="text"
-                className="js-timeline-builder__date-input timeline-builder__date-input form-control"
-                placeholder={this.today()}
-                onClick={this.handleChange}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+      <input
+        id="timeline-builder__date-input"
+        type="text"
+        className="js-timeline-builder__date-input timeline-builder__date-input form-control"
+        placeholder={this.today()}
+        onClick={this.handleChange}
+      />
     );
   }
 }

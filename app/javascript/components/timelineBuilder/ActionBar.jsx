@@ -115,9 +115,12 @@ export default class ActionBar extends React.Component {
             <i className="timeline-builder__upload-section-icon fa fa-file-text-o" />
             <span className="timeline-builder__tab-label">File</span>
           </div>
-          {this.state.dateFormVisible && (
-            <DateForm handleDate={this.handleDate} />
-          )}
+
+          <div class="timeline-builder__date-picker-popup">
+            {this.state.dateFormVisible && (
+              <DateForm handleDate={this.handleDate} />
+            )}
+          </div>
           <div
             className={this.formLinkClasses("date")}
             onClick={this.showDateForm}

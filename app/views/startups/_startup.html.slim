@@ -76,7 +76,7 @@
           .founder-avatar-list
             - startup.founders.not_exited.order(:name).each do |founder|
               .founder-avatar.founder-tooltip.tooltip-popup
-                a.founder-tooltip-item.founder-avatar__thumbnail href=founder_profile_url(slug: founder.slug)
+                a.founder-tooltip-item.founder-avatar__thumbnail href=student_profile_url(slug: founder.slug)
                   == avatar(founder.name, founder: founder, version: :thumb)
                 span.founder-tooltip-content
                   .founder-tooltip-thumbnail
@@ -87,7 +87,7 @@
                     - if founder.roles.present?
                       .founder-tooltip-role
                         = founder.roles.map { |role| t("models.founder.role.#{role}") }.join ', '
-                    a.founder-profile-view-link href=founder_profile_url(slug: founder.slug)
+                    a.founder-profile-view-link href=student_profile_url(slug: founder.slug)
                       span.founder-profile-view-link__icon.i.fa.fa-user-circle-o
                       | View Profile
 

@@ -148,7 +148,10 @@ Rails.application.routes.draw do
   end
 
   # Custom founder profile page.
+  # # TODO: Remove this founder route as we no longer have 'founders'. Always use the corresponding 'student' route below.
   get 'founders/:slug', to: 'founders#founder_profile', as: 'founder_profile'
+
+  get 'students/:slug', to: 'founders#founder_profile', as: 'student_profile'
 
   # Story of startup village, accessed via about pages.
   get 'story', as: 'story', to: 'home#story'

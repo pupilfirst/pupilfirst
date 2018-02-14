@@ -154,12 +154,12 @@
               - @startup.founders.not_exited.order(:name).each do |founder|
                 .data-founder
                   .media.align-items-center
-                    a.mr-3 href=founder_profile_url(slug: founder.slug)
+                    a.mr-3 href=student_profile_url(slug: founder.slug)
                       .founder-image
                         == avatar(founder.name, founder: founder, background_shape: :square)
                     .media-body
                       .media-heading
-                        = link_to truncated_founder_name(founder.fullname), founder_profile_url(slug: founder.slug)
+                        = link_to truncated_founder_name(founder.fullname), student_profile_url(slug: founder.slug)
                       p.designation #{founder_roles(founder.roles)}
                       ul.founder__social-links
                         - if founder.twitter_url?

@@ -129,6 +129,8 @@ ActiveAdmin.register ConnectRequest do
         end
       end
 
+      row :comment_for_faculty
+
       row :rating_for_team do |connect_request|
         if connect_request.rating_for_team.present?
           connect_request.rating_for_team.times do
@@ -136,7 +138,7 @@ ActiveAdmin.register ConnectRequest do
           end
         end
       end
-
+      row :comment_for_team
       row :confirmed_at
       row :feedback_mails_sent_at
       row :created_at

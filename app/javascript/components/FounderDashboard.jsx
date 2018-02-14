@@ -154,7 +154,7 @@ export default class FounderDashboard extends React.Component {
   render() {
     return (
       <div className="founder-dashboard-container pb-5">
-        { this.props.currentLevel != 0 && (
+        {this.props.currentLevel != 0 && (
           <ToggleBar
             selected={this.state.activeTab}
             chooseTabCB={this.chooseTab}
@@ -163,8 +163,6 @@ export default class FounderDashboard extends React.Component {
             currentLevel={this.props.currentLevel}
           />
         )}
-
-        {this.props.requestedRestartLevel && <FounderDashboardRestartWarning />}
 
         {this.state.activeTab === "targets" && (
           <Targets

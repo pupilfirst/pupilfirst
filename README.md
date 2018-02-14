@@ -20,7 +20,7 @@
   * Install dependencies:
 
 ```
-sudo apt-get install imagemagick redis-server postgresql postgresql-contrib
+sudo apt-get install imagemagick redis-server postgresql postgresql-contrib autoconf libtool
 ```
 #### Fetch Gems
 

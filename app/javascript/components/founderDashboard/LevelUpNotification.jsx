@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 export default class LevelUpNotification extends React.Component {
   eligibleNotificationTitle() {
     if (this.props.currentLevel === 0) {
-      return "Congratulations! You are now SV.CO Founders.";
+      return "Congratulations! You are now an enrolled student at SV.CO.";
     } else if (this.props.currentLevel === this.props.maxLevelNumber) {
       return "Congratulations! You are now part of our Alumni.";
     } else {

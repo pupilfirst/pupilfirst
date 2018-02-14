@@ -127,7 +127,7 @@ feature 'Founder Edit' do
     scenario 'founder visits the edit page', js: true do
       sign_in_user(founder.user, referer: edit_founder_path)
 
-      expect(page).to have_text('not an active founder anymore')
+      expect(page).to have_text('not an active student anymore')
     end
   end
 

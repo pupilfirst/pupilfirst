@@ -79,7 +79,7 @@ feature 'Founder Dashboard' do
     scenario 'ex-founder attempts to visit dashboard', js: true do
       founder.update!(exited: true)
       sign_in_user founder.user, referer: student_dashboard_path
-      expect(page).to have_text('not an active founder anymore')
+      expect(page).to have_text('not an active student anymore')
     end
   end
 

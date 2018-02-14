@@ -113,7 +113,7 @@ feature 'Admission Fee Payment' do
       expect(startup.reload.undiscounted_founder_fee).to eq(Founder::FEE)
 
       # The payment should also be marked as an admission payment.
-      expect(payment.reload.payment_type).to eq(Payment::TYPE_ADMISSION)
+      expect(payment.reload.payment_type).to eq(Payment::TYPE_NORMAL)
     end
 
     scenario 'He completes payment applying a referral coupon' do
@@ -192,7 +192,7 @@ feature 'Admission Fee Payment' do
     end
 
     context 'when an applied coupon has expired' do
-      let(:coupon) { create :coupon, referrer_startup: referrer_startup, expires_at: 1.day.ago }
+      let(:coupon) { create :coupon, expires_at: 1.day.ago }
       let!(:coupon_usage) { create :coupon_usage, coupon: coupon, startup: startup }
 
       scenario 'founder tried to pay with expired coupon' do

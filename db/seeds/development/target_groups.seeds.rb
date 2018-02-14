@@ -4,16 +4,16 @@ after 'development:levels' do
   puts 'Seeding target_groups'
 
   group_data = {
-    0 => ['Admission Process'],
-    1 => ['Level Up', 'Engineering & Design First Steps'],
-    2 => ['Level Up', 'Put up a Coming Soon Page'],
-    3 => ['Level Up', 'Get First Feedback'],
-    4 => ['Level Up', 'Reflect on your Progress']
+    0 => ['Welcome to SV.CO', 'Admission Process'],
+    1 => ['Engineering & Design First Steps', 'Level Up'],
+    2 => ['Put up a Coming Soon Page', 'Level Up'],
+    3 => ['Get First Feedback', 'Level Up'],
+    4 => ['Reflect on your Progress', 'Level Up']
   }
 
   Level.all.each do |level|
     group_data[level.number].each_with_index do |group_name, index|
-      milestone = index == 0 # First group from data is marked as the milestone group.
+      milestone = index == 1 # Second group from data is marked as the milestone group.
 
       level.target_groups.create!(
         name: group_name,

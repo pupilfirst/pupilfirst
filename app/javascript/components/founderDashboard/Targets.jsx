@@ -28,7 +28,7 @@ export default class Targets extends React.Component {
       return <TargetCollection key={targetGroup.id} name={targetGroup.name}
         description={targetGroup.description} targets={targetGroup.targets} milestone={targetGroup.milestone}
         finalCollection={finalCollection} iconPaths={this.props.iconPaths} founderDetails={this.props.founderDetails}
-        selectTargetCB={this.props.selectTargetCB}/>
+        selectTargetCB={this.props.selectTargetCB} currentLevel={this.props.currentLevel}/>
     }, this);
   }
 

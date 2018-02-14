@@ -4,7 +4,7 @@
 - unless Rails.env.test?
   script src='https://www.google.com/recaptcha/api.js' async defer
 
-= bootstrap_form_for(@form, url: join_path, label_col: 'col-sm-3', control_col: 'col-sm-9') do |f|
+= bootstrap_form_for(@form, url: apply_path, label_col: 'col-sm-3', control_col: 'col-sm-9') do |f|
   .application-start-form.content-box.mb-2
     - if f.object.errors.present?
       .alert.alert-warning.alert-dismissable.fade.show role='alert'
@@ -17,7 +17,7 @@
             = f.error_summary
     .simple-form-container
       = f.hidden_field :ignore_email_hint, value: false
-      = f.text_field :name, placeholder: 'Full Name of Founder', maxlength: 250, required: true
+      = f.text_field :name, placeholder: 'Your Full Name', maxlength: 250, required: true
 
       = f.email_field :email, placeholder: 'Email Address', maxlength: 255, data: { replacement_hint: @form.replacement_hint }, required: true,
         help: @form.replacement_hint.present? ? "Did you mean <strong>#{@form.replacement_hint}</strong>?<br/><a id='application-form__password-hint-accept' href='#' class='btn btn-sm btn-ghost-primary application-form__email-hint-button mr-2'>Yes</a><a id='application-form__password-hint-reject' href='#' class='btn btn-sm btn-ghost-secondary application-form__email-hint-button'>No</a>".html_safe : nil
@@ -35,7 +35,12 @@
       .d-none
         = f.text_field :reference_text, hide_label: true, placeholder: 'How did you hear about us?', required: false
 
+      label Are you a coder?
+      br
+      = f.form_group :coder do
+        = f.radio_button :coder, 1, label: 'Yes', inline: true, class: 'apply-form__radio-button', required: true
+        = f.radio_button :coder, 0, label: 'No', inline: true, class: 'apply-form__radio-button', required: true
 
       div
         div class='g-recaptcha' data-sitekey=Rails.application.secrets.dig(:google, :recaptcha, :invisible, :site_key) data-callback='handleJoinFormSubmitButton' data-size='invisible' data-badge='inline'
-        = f.submit 'Join Now', class: 'btn btn-primary btn-md apply-form__submit-button'
+        = f.submit 'Apply', class: 'btn btn-primary btn-md apply-form__submit-button'

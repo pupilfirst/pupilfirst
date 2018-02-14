@@ -1,10 +1,10 @@
 - invitation_url = admissions_accept_invitation_url(token: @founder.invitation_token)
 
 = content_for :title do
-  | Invitation to join a startup
+  | Invitation to join a team
 
 = content_for :subtitle do
-  | You have been invited to join a startup at SV&#x2024;CO.
+  | You have been invited to join a team at SV&#x2024;CO.
 
 = content_for :title_button_text do
   | Accept Invitation
@@ -15,19 +15,15 @@
   | Hello #{@founder.name},
 
 = content_for :body do
-  p You have been invited to join a startup at SV&#x2024;CO, whose team lead is #{@startup.team_lead.name}.
+  p You have been invited to join a team at SV&#x2024;CO, whose team lead is #{@startup.team_lead.name}.
 
   - if @founder.startup.present? && @founder.startup.founders.count > 1
     p
-      ' You are already a member of a startup led by #{@founder.startup.team_lead.name}. If you accept this invitation,
+      ' You are already a member of a team led by #{@founder.startup.team_lead.name}. If you accept this invitation,
       | you will be removed from it.
-  - elsif @founder.payments.any? && @founder.payments.last.refundable?
-    p
-      ' You are eligible for refund of the membership fee for your previous sign-up. We will attempt to process the
-      | refund if you accept this invitation.
 
   p
-    ' Please #{link_to 'click here', invitation_url} to accept the invitation and join the startup as a co-founder.
+    ' Please #{link_to 'click here', invitation_url} to accept the invitation and join the team.
 
   p
     ' If you&rsquo;re unable to click the link above, please copy and paste the following URL into your browser&rsquo;s

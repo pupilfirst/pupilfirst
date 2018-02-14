@@ -69,7 +69,7 @@ describe AdmissionsController do
 
     it 'redirects to founder dashboard and updates the founder of screening completion ' do
       get :screening_submit
-      expect(response).to redirect_to(dashboard_founder_path(from: 'screening_submit'))
+      expect(response).to redirect_to(student_dashboard_path(from: 'screening_submit'))
     end
   end
 
@@ -89,7 +89,7 @@ describe AdmissionsController do
         ]
       }
 
-      expect(Intercom::LevelZeroStageUpdateJob).to receive(:perform_now).with(founder, 'Screening Completed')
+      expect(Intercom::LevelZeroStageUpdateJob).to receive(:perform_now).with(founder, Startup::ADMISSION_STAGE_SELF_EVALUATION_COMPLETED)
 
       post :screening_submit_webhook, params: typeform_webhook_response, as: :json
 

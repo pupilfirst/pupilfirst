@@ -1,0 +1,10 @@
+@import "../../../shared/variables";
+@import "./shared";
+
+.cover-button {
+  cursor: pointer;
+
+  &:hover {
+    background-color: lighten($light-secondary, 40%);
+  }
+}

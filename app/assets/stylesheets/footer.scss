@@ -59,6 +59,10 @@
   color: $secondary-background;
   background-color: white;
 
+  @include media-breakpoint-only(md) {
+    margin-right: 0.5rem;
+  }
+
   &:last-child {
     margin: 0;
   }

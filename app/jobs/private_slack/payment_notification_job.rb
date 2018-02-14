@@ -21,15 +21,14 @@ module PrivateSlack
     end
 
     def payment_information(founder)
-      period = payment(founder).period
       amount = payment(founder).amount.round
 
       <<~PAYMENT_INFO
-        <@U0299AQB5> We've just received first payment of *Rs. #{amount}* from a new team - *#{founder.startup.display_name}* for a period of *#{ActionController::Base.helpers.pluralize(period, 'month')}*.
+        <@U0299AQB5> We've just received first payment of *Rs. #{amount}* from a new team - *#{founder.startup.display_name}*.
 
         #{team_members_list(founder)}
 
-        <https://www.sv.co/admin/startups/#{founder.startup.id}|View this startup's details in the admin interface.>
+        <https://www.sv.co/admin/startups/#{founder.startup.id}|View this team's details in the admin interface.>
       PAYMENT_INFO
     end
 

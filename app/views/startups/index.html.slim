@@ -1,11 +1,9 @@
 - content_for :head
-  title SV.CO Startups
-  meta name="description" content="This is an overview of all startups that are a part of SV.CO"
-  meta property="og:title" content="Startups at SV.CO"
+  title SV.CO Teams
+  meta property="og:title" content="Teams at SV.CO"
   meta property="og:type" content="website"
-  meta property="og:url" content=startups_url
+  meta property="og:url" content=products_url
   meta property="og:image" content=image_url('home/index/program-build-startup.jpg')
-  meta property="og:description" content="Startups at SV.CO build products that are laser-focused on real customers, and getting immediate feedback, for quicker iterations."
   meta property="fb:app_id" content=Rails.application.secrets.facebook.dig(:app_id)
 
 .startups-banner
@@ -23,6 +21,6 @@
         .row
           = render @startups, cached: true
       - else
-        p.alert.alert-warning No startups match the filter criteria provided!
+        p.alert.alert-warning No teams match the filter criteria provided!
     .d-flex.justify-content-center.my-4
       = paginate @startups, theme: 'twitter-bootstrap-4', window: 1

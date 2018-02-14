@@ -16,7 +16,6 @@ describe Instamojo::DisablePaymentRequestService do
         return_value = subject.disable
 
         # All related columns should have been cleared.
-        expect(payment.reload.period).to eq(nil)
         expect(payment.amount).to eq(nil)
         expect(payment.instamojo_payment_request_id).to eq(nil)
         expect(payment.instamojo_payment_request_status).to eq(nil)

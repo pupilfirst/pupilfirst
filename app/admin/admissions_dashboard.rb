@@ -9,7 +9,7 @@ ActiveAdmin.register_page 'Admissions Dashboard' do
       @applicants_by_location = AdmissionStats::ApplicantsByLocationService.new.load
       @applicants_by_reference = AdmissionStats::ApplicantsByReferenceService.new.load(params[:stage])
       @funnel_stats = AdmissionStats::FunnelStatsService.new(params[:from], params[:to]).load
-      @complete_funnel_stats = AdmissionStats::FunnelStatsService.new('2017-05-08', Date.today.end_of_day).load
+      @complete_funnel_stats = AdmissionStats::FunnelStatsService.new('2018-01-09', Date.today.end_of_day).load
     end
   end
 

@@ -34,12 +34,6 @@ FactoryBot.define do
       suggested_stage 'moved_to_idea_discovery'
     end
 
-    factory :tet_end_iteration do
-      key TimelineEventType::TYPE_END_ITERATION
-      role 'Product'
-      title 'End of Iteration'
-    end
-
     trait :founder_update do
       key TimelineEventType::TYPE_FOUNDER_UPDATE
       role TimelineEventType::ROLE_FOUNDER

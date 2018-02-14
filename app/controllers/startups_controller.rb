@@ -2,7 +2,7 @@ class StartupsController < ApplicationController
   before_action :authenticate_founder!, except: %i[show index timeline_event_show paged_events]
   before_action :require_active_subscription, except: %i[index show timeline_event_show paged_events billing]
 
-  # GET /startups
+  # GET /startups, GET /products
   def index
     @skip_container = true
     startups = Startup.includes(:level, :startup_categories).admitted.approved.order(timeline_updated_on: 'DESC')
@@ -21,6 +21,7 @@ class StartupsController < ApplicationController
   def show
     @skip_container = true
     @startup = Startup.friendly.find(params[:id])
+    @meta_description = "#{@startup.display_name}: #{@startup.product_description}"
     authorize @startup, :show?
 
     if params[:show_feedback].present?
@@ -37,12 +38,13 @@ class StartupsController < ApplicationController
     @has_more_events = more_events?(@events_for_display, 1)
   end
 
-  # GET /startups/:id/:event_title/:event_id
+  # GET /startups/:id/:event_title/:event_id, GET /products/:id/:event_title/:event_id
   def timeline_event_show
     # Reuse the startup action, because that's what this page also shows.
     show
 
     @timeline_event_for_og = @startup.timeline_events.find_by(id: params[:event_id])
+    @meta_description = @timeline_event_for_og.description
 
     unless StartupPolicy.new(current_user, @startup).timeline_event_show?(@timeline_event_for_og)
       raise_not_found
@@ -60,21 +62,22 @@ class StartupsController < ApplicationController
     render layout: false
   end
 
-  # GET /startup/edit
+  # GET /startup/edit, GET /product/edit
   def edit
     authorize current_startup
     @form = Startups::EditForm.new(current_startup)
   end
 
   # PATCH /startup
+  # TODO: When rendering back errors from product/edit, attempt to set path to /product
   def update
     authorize current_startup
     @form = Startups::EditForm.new(current_startup)
 
     if @form.validate(params[:startups_edit])
       @form.save!
-      flash[:success] = 'Startup details have been updated.'
-      redirect_to timeline_path(current_startup.id, current_startup.slug)
+      flash[:success] = 'Team details have been updated.'
+      redirect_to product_path(current_startup.id, current_startup.slug)
     else
       render 'startups/edit'
     end
@@ -85,7 +88,7 @@ class StartupsController < ApplicationController
     authorize current_startup
 
     Startups::LevelUpService.new(current_startup).execute
-    redirect_to(dashboard_founder_path(from: 'level_up', from_level: current_startup.level.number - 1))
+    redirect_to(student_dashboard_path(from: 'level_up', from_level: current_startup.level.number - 1))
   end
 
   # GET /startup/billing

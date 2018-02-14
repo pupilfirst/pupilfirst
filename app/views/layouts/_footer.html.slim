@@ -1,76 +1,124 @@
 footer
-  section.footer-sitemap
-    .container
-      .row
-        .col-md-8
-          .row
-            .col-md-3.footer-column
-              p.footer-column__head.font-bold SV.CO
-              div
-                = link_to 'About', about_path, id: 'footer-sitemap-about-link', class: 'footer-column__link'
-              div
-                a#footer-sitemap-blog-link.footer-column__link href="http://blog.sv.co" Blog
-              div
-                = link_to 'Media Kit', about_media_kit_path, id: 'footer-sitemap-mediakit-link', class: 'footer-column__link'
-              div
-                = link_to 'Library', resources_path, id: 'footer-sitemap-resource-link', class: 'footer-column__link'
-              / div
-              /   - if current_user
-              /     - if current_founder && policy(current_founder).founder_profile?
-              /       = link_to 'Profile', founder_profile_path(slug: current_founder.slug), id: 'footer-sitemap-profile-link', class: 'footer-column__link'
-              /     - else
-              /       = link_to 'Sign Out', destroy_user_session_path, method: :delete, id: 'footer-sitemap-sign-out-link', class: 'footer-column__link'
-              /   - else
-              /     = link_to 'Sign In', new_user_session_path, rel: 'nofollow', id: 'footer-sitemap-sign-in-link', class: 'footer-column__link'
+  - if current_founder&.admitted?
+    section.footer-sitemap
+      .container
+        .row
+          .col-md-8
+            .row
+              .col-md-3.footer-column
+                p.footer-column__head.font-bold SV.CO
+                div
+                  = link_to 'About', about_path, id: 'footer-sitemap-about-link', class: 'footer-column__link'
+                div
+                  a#footer-sitemap-blog-link.footer-column__link href="http://blog.sv.co" Blog
+                div
+                  = link_to 'Media Kit', about_media_kit_path, id: 'footer-sitemap-mediakit-link', class: 'footer-column__link'
+                div
+                  = link_to 'Library', resources_path, id: 'footer-sitemap-resource-link', class: 'footer-column__link'
+                / div
+                /   - if current_user
+                /     - if current_founder && policy(current_founder).founder_profile?
+                /       = link_to 'Profile', founder_profile_path(slug: current_founder.slug), id: 'footer-sitemap-profile-link', class: 'footer-column__link'
+                /     - else
+                /       = link_to 'Sign Out', destroy_user_session_path, method: :delete, id: 'footer-sitemap-sign-out-link', class: 'footer-column__link'
+                /   - else
+                /     = link_to 'Sign In', new_user_session_path, rel: 'nofollow', id: 'footer-sitemap-sign-in-link', class: 'footer-column__link'
 
-            .col-md-3.footer-column
-              p.footer-column__head.font-bold PROGRAM
-              div
-                = link_to 'Faculty', faculty_index_path, id: 'footer-sitemap-faculty-link', class: 'footer-column__link'
-              div
-                = link_to 'Statistics', stats_path, id: 'footer-sitemap-statistics-link', class: 'footer-column__link'
-              div
-                = link_to 'Changelog', changelog_path, id: 'footer-sitemap-changelog-link', class: 'footer-column__link'
+              .col-md-3.footer-column
+                p.footer-column__head.font-bold PROGRAM
+                div
+                  = link_to 'Faculty', faculty_index_path, id: 'footer-sitemap-faculty-link', class: 'footer-column__link'
+                div
+                  = link_to 'Statistics', stats_path, id: 'footer-sitemap-statistics-link', class: 'footer-column__link'
+                div
+                  = link_to 'Changelog', changelog_path, id: 'footer-sitemap-changelog-link', class: 'footer-column__link'
 
-            .col-md-3.footer-column
-              p.footer-column__head.font-bold DEVELOPERS
-              div
-                = link_to 'Join', join_path, id: 'footer-sitemap-join-link', class: 'footer-column__link'
-              div
-                = link_to 'Teams', startups_path, id: 'footer-sitemap-startups-link', class: 'footer-column__link'
-              div
-                = link_to 'Leaderboard', about_leaderboard_path, id: 'footer-sitemap-leaderboard-link', class: 'footer-column__link'
-              div
-                = link_to 'Invest/Hire', talent_path, id: 'footer-sitemap-talent-link', class: 'footer-column__link'
+              .col-md-3.footer-column
+                p.footer-column__head.font-bold DEVELOPERS
+                div
+                  = link_to 'Apply', apply_path, id: 'footer-sitemap-join-link', class: 'footer-column__link'
+                div
+                  = link_to 'Teams', products_path, id: 'footer-sitemap-startups-link', class: 'footer-column__link'
+                div
+                  = link_to 'Leaderboard', about_leaderboard_path, id: 'footer-sitemap-leaderboard-link', class: 'footer-column__link'
+                div
+                  = link_to 'Invest/Hire', talent_path, id: 'footer-sitemap-talent-link', class: 'footer-column__link'
 
-            .col-md-3.footer-column
-              p.footer-column__head.font-bold SUPPORT
-              div
-                a#footer-sitemap-helpcenter-link.footer-column__link href="https://help.sv.co/" Help Center
-              div
-                = link_to 'Slack Channel', slack_path, id: 'footer-sitemap-slack-link', class: 'footer-column__link'
-              div
-                = link_to 'Contact Us', about_contact_path, id: 'footer-sitemap-contact-link', class: 'footer-column__link'
-              .d-none.d-sm-block
-                a#footer-partner-dot-co-link href='http://www.go.co/' target='_blank'
-                  = image_tag 'layouts/footer_v2/partner-banner-dot-co.png', class: 'dot-co-banner'
+              .col-md-3.footer-column
+                p.footer-column__head.font-bold SUPPORT
+                div
+                  a#footer-sitemap-helpcenter-link.footer-column__link href="https://wiki.sv.co/" Wiki
+                div
+                  = link_to 'Slack Channel', slack_path, id: 'footer-sitemap-slack-link', class: 'footer-column__link'
+                div
+                  = link_to 'Contact Us', about_contact_path, id: 'footer-sitemap-contact-link', class: 'footer-column__link'
+                .d-none.d-sm-block
+                  a#footer-partner-dot-co-link href='http://www.go.co/' target='_blank'
+                    = image_tag 'layouts/footer_v2/partner-banner-dot-co.png', class: 'dot-co-banner'
 
-        .col-md-4.mt-3.mt-md-0
-          .row
-            .col.footer-column
+          .col-md-4.mt-3.mt-md-0
+            .row
+              .col.footer-column
+                p.footer-column__head.font-bold CONNECT
+                address.footer-column__address.mb-1
+                  p
+                    | SV.CO, 1<sup>st</sup> Floor, 777, JK Heritage, 80ft Road
+                    br
+                    | 4<sup>th</sup> Block, Koramangala, Bengaluru &mdash; 560034
+                .footer-social-icons
+                  a#footer-connect-facebook-link.footer-social-link href='https://www.facebook.com/svdotco' target='_blank'
+                    i.fa.fa-facebook
+                  a#footer-connect-twitter-link.footer-social-link href='https://twitter.com/svdotco' target='_blank'
+                    i.fa.fa-twitter
+                  a#footer-connect-youtube-link.footer-social-link href='https://www.youtube.com/c/svdotco' target='_blank'
+                    i.fa.fa-youtube
+                p
+                  | Reach us at <strong>#{link_to 'help@sv.co', 'mailto:help@sv.co', id: 'footer-connect-mail-link'}</strong>.
+
+              .d-md-none.banner-row
+                a href='http://www.go.co/' target='_blank'
+                  = image_tag 'layouts/footer_v2/partner-banner-dot-co.png', class: 'dot-co-banner img-fluid'
+  - else
+    section.footer-sitemap
+      .container
+        .row
+          .col-md-7.col-lg-8
+            .row
+              .col-md-3.footer-column
+                p.footer-column__head.font-bold SV.CO
+                div
+                  = link_to 'About', about_path, id: 'footer-sitemap-about-link', class: 'footer-column__link'
+                div
+                  = link_to 'Apply', apply_path, id: 'footer-sitemap-about-link', class: 'footer-column__link'
+
+              .col-md-4.footer-column
+                p.footer-column__head.font-bold SUPPORT
+                div
+                  a#footer-sitemap-helpcenter-link.footer-column__link href="https://wiki.sv.co/" Wiki
+                div
+                  = link_to 'Contact Us', about_contact_path, id: 'footer-sitemap-contact-link', class: 'footer-column__link'
+
+              .col-md-5.footer-column
+                .footer-social-icons.mt-md-0
+                  a#footer-connect-facebook-link.footer-social-link href='https://www.facebook.com/svdotco' target='_blank'
+                    i.fa.fa-facebook
+                  a#footer-connect-twitter-link.footer-social-link href='https://twitter.com/svdotco' target='_blank'
+                    i.fa.fa-twitter
+                  a#footer-connect-youtube-link.footer-social-link href='https://www.youtube.com/c/svdotco' target='_blank'
+                    i.fa.fa-youtube
+
+                .d-none.d-md-block
+                  a#footer-partner-dot-co-link href='http://www.go.co/' target='_blank'
+                    = image_tag 'layouts/footer_v2/partner-banner-dot-co.png', class: 'dot-co-banner'
+
+          .col-md-5.col-lg-4.mt-3.mt-md-0
+            .footer-column
               p.footer-column__head.font-bold CONNECT
               address.footer-column__address.mb-1
                 p
                   | SV.CO, 1<sup>st</sup> Floor, 777, JK Heritage, 80ft Road
                   br
                   | 4<sup>th</sup> Block, Koramangala, Bengaluru &mdash; 560034
-              .footer-social-icons
-                a#footer-connect-facebook-link.footer-social-link href='https://www.facebook.com/svdotco' target='_blank'
-                  i.fa.fa-facebook
-                a#footer-connect-twitter-link.footer-social-link href='https://twitter.com/svdotco' target='_blank'
-                  i.fa.fa-twitter
-                a#footer-connect-youtube-link.footer-social-link href='https://www.youtube.com/c/svdotco' target='_blank'
-                  i.fa.fa-youtube
               p
                 | Reach us at <strong>#{link_to 'help@sv.co', 'mailto:help@sv.co', id: 'footer-connect-mail-link'}</strong>.
 
@@ -82,7 +130,7 @@ footer
     .container
       .row.justify-content-between.align-items-center.footer-bootom__box
         .col
-          a href="#{dashboard_or_root_url}"
+          a href=root_url
             img.footer-bootom__logo src="#{image_url 'shared/logo-white.svg'}" alt='Logo of SV.CO'
         .col.text-right
           a#show-privacy-policy.footer-bootom__link.cursor-pointer.mr-3 Privacy Policy

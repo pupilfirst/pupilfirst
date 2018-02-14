@@ -1,4 +1,4 @@
-ruby '2.4.2'
+ruby '2.4.3'
 
 source 'https://rubygems.org'
 
@@ -40,7 +40,7 @@ gem 'bootstrap', '= 4.0.0.beta' # Official Sass port of Bootstrap.
 gem 'autoprefixer-rails', '~> 7.1' # Autoprefixer for Ruby and Ruby on Rails.
 gem 'simple_form', '~> 3.4' # Simple-form with support for Bootstrap 3.
 gem 'simple_form_fancy_uploads', '~> 0.2' # simple_form custom inputs to get image/link previews with file uploads. https://github.com/apeacox/simple_form_fancy_uploads
-gem 'bootstrap_form', '= 2.5.2', github: 'desheikh/rails-bootstrap-forms', branch: 'master' # TODO: Replace this with v4 branch of bootstrap-ruby/rails-bootstrap-forms See https://trello.com/c/7wUOmaeM
+gem 'bootstrap_form', '= 4.0.0.dev', github: 'bootstrap-ruby/bootstrap_form', branch: 'master' # a Rails form builder that makes it super easy to create beautiful-looking forms using Bootstrap 4
 
 # TODO: The zones list in the gem was outdated.
 # Have updated and submitted a PR (https://github.com/ralovets/valid_url/pull/10). Using a personal fork until it's merged.

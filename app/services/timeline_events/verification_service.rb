@@ -46,8 +46,8 @@ module TimelineEvents
         update_grade_and_score
         update_karma_points
         update_timeline_updated_on
-        reset_startup_level if @timeline_event.timeline_event_type.end_iteration?
         update_founder_resume if @timeline_event.timeline_event_type.resume_submission?
+        update_admission_stage if @timeline_event.target.in?(targets_for_admissions)
       end
 
       post_on_facebook if @timeline_event.share_on_facebook
@@ -57,14 +57,12 @@ module TimelineEvents
       TimelineEvent.transaction do
         @timeline_event.update!(status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT, status_updated_at: Time.zone.now)
         update_timeline_updated_on
-        reset_startup_level if @timeline_event.timeline_event_type.end_iteration?
       end
     end
 
     def mark_not_accepted
       TimelineEvent.transaction do
         @timeline_event.update!(status: TimelineEvent::STATUS_NOT_ACCEPTED, status_updated_at: Time.zone.now)
-        cancel_reset_request if @timeline_event.timeline_event_type.end_iteration?
       end
     end
 
@@ -112,7 +110,8 @@ module TimelineEvents
           total_karma_points
         elsif @grade.present? && @target.points_earnable.present?
           @target.points_earnable * grade_multiplier(@grade)
-        else 0
+        else
+          0
         end
       end
     end
@@ -123,15 +122,6 @@ module TimelineEvents
 
     def startup
       @startup ||= @timeline_event.startup
-    end
-
-    def reset_startup_level
-      return if startup.requested_restart_level.blank?
-      Startups::RestartService.new(startup.team_lead).restart(startup.requested_restart_level)
-    end
-
-    def cancel_reset_request
-      Startups::RestartService.new(startup.team_lead).cancel
     end
 
     def update_timeline_updated_on
@@ -214,6 +204,21 @@ module TimelineEvents
         karma_points = TargetSkill.find_by(target: @target, skill_id: skill_id.to_i).base_karma_points.to_f * grade_multiplier(grade)
         TimelineEventGrade.create!(timeline_event: @timeline_event, skill_id: skill_id, grade: grade, karma_points: karma_points.round)
       end
+    end
+
+    def update_admission_stage
+      new_stage = { Target::KEY_R1_TASK => Startup::ADMISSION_STAGE_R1_TASK_PASSED,
+                    Target::KEY_R1_SHOW_PREVIOUS_WORK => Startup::ADMISSION_STAGE_R1_TASK_PASSED,
+                    Target::KEY_R2_TASK => Startup::ADMISSION_STAGE_R2_TASK_PASSED,
+                    Target::KEY_ATTEND_INTERVIEW => Startup::ADMISSION_STAGE_INTERVIEW_PASSED }[@timeline_event.target.key]
+
+      Admissions::UpdateStageService.new(@timeline_event.startup, new_stage).execute
+
+      Intercom::LevelZeroStageUpdateJob.perform_later(@timeline_event.startup.team_lead, new_stage)
+    end
+
+    def targets_for_admissions
+      Target.live.where(key: [Target::KEY_R1_TASK, Target::KEY_R1_SHOW_PREVIOUS_WORK, Target::KEY_R2_TASK, Target::KEY_ATTEND_INTERVIEW])
     end
   end
 end

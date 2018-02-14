@@ -5,7 +5,11 @@ ActiveAdmin.register Founder do
 
   controller do
     def scoped_collection
-      super.includes :startup
+      if request.format == 'text/csv'
+        super.includes(:startup, { college: :state }, :tag_taggings, :tags, :active_admin_comments)
+      else
+        super.includes :startup, college: :state
+      end
     end
 
     def find_resource
@@ -41,13 +45,14 @@ ActiveAdmin.register Founder do
   filter :roll_number
   filter :created_at, label: 'Registered on'
   filter :screening_score_above, as: :number
+  filter :coder, as: :boolean
 
   permit_params :name, :email, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :born_on,
     :communication_address, :identification_proof, :phone, :invitation_token, :college_id, :roll_number,
     :course, :semester, :year_of_graduation, :twitter_url, :linkedin_url, :personal_website_url, :blog_url,
     :angel_co_url, :github_url, :behance_url, :gender, :skype_id, :exited, :id_proof_number,
     :id_proof_type, :parent_name, :permanent_address, :address_proof, :income_proof,
-    :letter_from_parent, roles: [], tag_list: []
+    :letter_from_parent, :coder, roles: [], tag_list: []
 
   batch_action :tag, form: proc { { tag: Founder.tag_counts_on(:tags).pluck(:name) } } do |ids, inputs|
     Founder.where(id: ids).each do |founder|
@@ -68,6 +73,18 @@ ActiveAdmin.register Founder do
       column :phone
       column 'Admission Stage' do |founder|
         founder.startup.admission_stage
+      end
+
+      column 'Screening Score' do |founder|
+        founder.screening_data.present? ? founder.screening_data['score'] : ''
+      end
+
+      column 'Coder' do |founder|
+        if !founder.coder.nil?
+          founder.coder? ? 'Yes' : 'No'
+        else
+          'NA'
+        end
       end
     else
       column :product_name, sortable: 'founders.startup_id' do |founder|
@@ -140,16 +157,28 @@ ActiveAdmin.register Founder do
         founder.startup.created_at.to_date
       end
 
-      column :tags do |founder|
-        tags = ''
-        founder.tags&.each do |tag|
-          tags += tag.name + ';'
-        end
-        tags
+      column 'Tags' do |founder|
+        founder.tags.map(&:name).join(';')
       end
 
       column :admission_stage do |founder|
         founder.startup.admission_stage
+      end
+
+      column 'Screening Score' do |founder|
+        founder.screening_data.present? ? founder.screening_data['score'] : ''
+      end
+
+      column 'Comments' do |founder|
+        founder.active_admin_comments.map(&:body).join("\n\n")
+      end
+
+      column :coder do |founder|
+        if !founder.coder.nil?
+          founder.coder? ? 'Yes' : 'No'
+        else
+          'NA'
+        end
       end
     else
       column :id
@@ -302,6 +331,10 @@ ActiveAdmin.register Founder do
         end
       end
 
+      row :avatar do
+        link_to 'Download Avatar', founder.avatar.url if founder.avatar.present?
+      end
+
       row :course
       row :semester
       row :year_of_graduation
@@ -309,6 +342,13 @@ ActiveAdmin.register Founder do
       row :exited
       row :resume do |founder|
         link_to 'Download Resume', founder.resume_link if founder.resume_link.present?
+      end
+      row :coder do
+        if !founder.coder.nil?
+          founder.coder? ? 'Yes' : 'No'
+        else
+          'NA'
+        end
       end
       row :screening_data do |founder|
         if founder.screening_data.present?
@@ -334,7 +374,17 @@ ActiveAdmin.register Founder do
                 answer = response['answer']
                 div class: 'margin-left-10' do
                   if answer.is_a?(Hash)
-                    answer['label'].present? ? answer['label'].to_s : " \u2022 #{answer['labels'].shift.strip}"
+                    if answer['label'].present?
+                      answer['label'].to_s
+                    elsif answer['labels'].present?
+                      ul do
+                        answer['labels'].each do |choice|
+                          li(choice.strip)
+                        end
+                      end
+                    else
+                      answer['other'].to_s
+                    end
                   else
                     answer
                   end
@@ -344,7 +394,6 @@ ActiveAdmin.register Founder do
           end
         end
       end
-      active_admin_comments
     end
 
     panel 'Social links' do
@@ -398,6 +447,16 @@ ActiveAdmin.register Founder do
         end
       end
     end
+
+    panel 'Technical details' do
+      attributes_table_for founder do
+        row :id
+        row :created_at
+        row :updated_at
+      end
+    end
+
+    active_admin_comments
   end
 
   action_item :feedback, only: :show, if: proc { Founder.friendly.find(params[:id]).startup.present? } do
@@ -406,7 +465,7 @@ ActiveAdmin.register Founder do
     link_to(
       'Record New Feedback',
       new_admin_startup_feedback_path(
-        startup_feedback: { startup_id: Founder.friendly.find(params[:id]).startup.id, reference_url: timeline_url(startup.id, startup.slug) }
+        startup_feedback: { startup_id: Founder.friendly.find(params[:id]).startup.id, reference_url: product_url(startup.id, startup.slug) }
       )
     )
   end

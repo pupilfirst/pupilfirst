@@ -15,26 +15,25 @@ module Admissions
       property :replacement_hint, virtual: true
     end
 
-    validate :minimum_two_founders_required
-    validate :maximum_six_founders_allowed
-    validate :do_not_repeat_founders
-    validate :founder_must_have_college_id_or_text
+    validate :maximum_three_team_members_allowed
+    validate :do_not_repeat_team_members
+    validate :team_member_must_have_college_id_or_text
     validate :team_lead_cannot_be_deleted
-    validate :current_founder_cannot_be_deleted
-    validate :cannot_invite_admitted_founders
+    validate :current_team_member_cannot_be_deleted
+    validate :cannot_invite_admitted_team_members
     validate :email_should_be_valid
 
-    def cannot_invite_admitted_founders
+    def cannot_invite_admitted_team_members
       has_error = false
 
       founders.each do |founder|
         if Founder.with_email(founder.email)&.admitted?
           has_error = true
-          founder.errors[:email] << 'is already an admitted founder'
+          founder.errors[:email] << 'is already an admitted SV.CO user'
         end
       end
 
-      errors[:base] << "It looks like you've attempted to invite founders who are at Level 1 or above." if has_error
+      errors[:base] << "It looks like you've attempted to invite users who have already joined the SV.CO program." if has_error
     end
 
     def team_lead_cannot_be_deleted
@@ -42,27 +41,18 @@ module Admissions
       errors[:base] << 'Team lead cannot be deleted.' if team_lead.delete == 'on'
     end
 
-    def current_founder_cannot_be_deleted
+    def current_team_member_cannot_be_deleted
       logged_in_founder = founders.find { |founder| founder.id.to_i == current_founder.id }
       errors[:base] << 'You cannot delete yourself.' if logged_in_founder.delete == 'on'
     end
 
-    def maximum_six_founders_allowed
-      if founders.count > 6
-        errors[:base] << 'You can have maximum six founders.'
+    def maximum_three_team_members_allowed
+      if founders.count > 3
+        errors[:base] << 'You can have maximum three team members (including yourself).'
       end
     end
 
-    def minimum_two_founders_required
-      unpersisted_founders = founders.reject { |founder| founder.model.persisted? }
-      persisted_founders = founders.select { |founder| founder.model.persisted? && founder.delete != 'on' }
-
-      return if (unpersisted_founders + persisted_founders).count >= 2
-
-      errors[:base] << 'You must have at least two founders.'
-    end
-
-    def do_not_repeat_founders
+    def do_not_repeat_team_members
       previous_emails = []
       has_error = false
 
@@ -75,10 +65,10 @@ module Admissions
         end
       end
 
-      errors[:base] << "It looks like you've repeated some founder email addresses." if has_error
+      errors[:base] << "It looks like you've repeated some team member email addresses." if has_error
     end
 
-    def founder_must_have_college_id_or_text
+    def team_member_must_have_college_id_or_text
       founders.each do |founder|
         next if founder.college_text.present?
         next if College.find_by(id: founder.college_id).present?
@@ -132,16 +122,14 @@ module Admissions
         end
       end
 
-      # If the cofounder addition target is not marked as completed...
-      if cofounder_addition_target.status(current_founder) != Targets::StatusService::STATUS_COMPLETE
-        # Complete it...
-        Admissions::CompleteTargetService.new(current_founder, Target::KEY_ADMISSIONS_COFOUNDER_ADDITION).execute
+      # If the cofounder addition target is not marked as completed, and the number of team members in the startup is
+      # greater than or equal to two, set the team member addition target as complete.
+      team_member_count = current_founder.startup.billing_founders_count
+      team_member_addition_incomplete = cofounder_addition_target.status(current_founder) != Targets::StatusService::STATUS_COMPLETE
 
-        # ...and create a pending payment to allow the founder to pay the fee.
-        Payments::CreateService.new(current_founder).create
+      if team_member_count >= 2 && team_member_addition_incomplete
+        Admissions::CompleteTargetService.new(current_founder, Target::KEY_COFOUNDER_ADDITION).execute
       end
-
-      Intercom::LevelZeroStageUpdateJob.perform_later(current_founder, Startup::ADMISSION_STAGE_COFOUNDERS_ADDED)
     end
 
     def invite_founder(founder)
@@ -192,7 +180,7 @@ module Admissions
     private
 
     def cofounder_addition_target
-      @cofounder_addition_target ||= Target.find_by(key: Target::KEY_ADMISSIONS_COFOUNDER_ADDITION)
+      @cofounder_addition_target ||= Target.find_by(key: Target::KEY_COFOUNDER_ADDITION)
     end
   end
 end

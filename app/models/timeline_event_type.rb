@@ -4,7 +4,6 @@
 class TimelineEventType < ApplicationRecord
   has_many :timeline_events, dependent: :restrict_with_error
 
-  TYPE_END_ITERATION = 'end_iteration'
   TYPE_NEW_DECK = 'new_product_deck'
   TYPE_NEW_WIREFRAME = 'new_wireframe'
   TYPE_NEW_PROTOTYPE = 'new_prototype'
@@ -50,6 +49,7 @@ class TimelineEventType < ApplicationRecord
 
   scope :moved_to_stage, -> { where(key: stage_keys) }
   scope :suggested_for, ->(startup) { where('suggested_stage LIKE ?', "%#{startup.current_stage}%").where.not(id: startup.current_stage_event_types.map(&:id)) }
+  scope :live, -> { where(archived: false) }
 
   def founder_event?
     role == ROLE_FOUNDER
@@ -68,10 +68,6 @@ class TimelineEventType < ApplicationRecord
     placeholder_text = sample_text.present? ? sample_text : "What's been happening?"
     placeholder_text += "\n\nProof Required: #{proof_required}" if proof_required.present?
     placeholder_text
-  end
-
-  def end_iteration?
-    key == TYPE_END_ITERATION
   end
 
   def new_deck?
@@ -100,10 +96,6 @@ class TimelineEventType < ApplicationRecord
 
   def stage_change?
     TimelineEventType.stage_keys.include?(key)
-  end
-
-  def self.end_iteration
-    find_by(key: TYPE_END_ITERATION)
   end
 
   def self.help_wanted

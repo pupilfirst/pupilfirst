@@ -1,10 +1,8 @@
 - content_for :head
-  meta name="description" content="SV.CO, or Startup Village is India's No. 1 Digital Incubator for Students"
   meta property="og:title" content="SV.CO"
   meta property="og:type" content="website"
   meta property="og:url" content=root_url
   meta property="og:image" content=image_url('home/index/program-build-startup.jpg')
-  meta property="og:description" content="SV.CO, or Startup Village is India's No. 1 Digital Incubator for Students. SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
   meta property="fb:app_id" content=Rails.application.secrets.facebook.dig(:app_id)
 
 - if startup_village_redirect?
@@ -18,246 +16,174 @@ section.home-hero__container
   .home-hero__message-wrapper.text-center
     .container
       .home-hero__message-title
-        h1.home-hero__message-title-head.mb-0
-          ' Immersive Learning Experience to
+        h1.home-hero__message-title-head
+          ' Good at coding?
           .font-semibold
-            | Build Internet Products
-        p.home-hero__message-title-subhead
-          ' Build the product of your dreams with a
-          span.font-semibold Job Guarantee
-          br
-          | or
-          span.font-semibold &nbsp;100% money back!
+            ' Let's upgrade you to an Ace Developer
+        h3.home-hero__message-title-subhead
+          ' and get you placed in a premium startup.
         .pt-3
           - if current_founder.present?
-            = link_to 'Go to Dashboard', dashboard_founder_path, class: 'btn btn-primary btn-lg home-apply__button'
+            = link_to 'Go to Dashboard', student_dashboard_path, class: 'btn btn-primary btn-lg home-apply__button'
           - else
-            = link_to 'Join Now', join_path, class: 'btn btn-primary btn-lg home-apply__button', id: 'home-index__hero-join-link'
+            = link_to 'Learn More', apply_path, class: 'btn btn-primary btn-lg home-apply__button', id: 'home-index__hero-join-link'
 
-  - unless Rails.env.test?
-    = video_tag 'https://public-assets.sv.co/videos/header_background_clip.mp4', preload: 'none', autoplay: true, loop: true, class: 'd-none d-md-block home-hero__video'
-
-section.home-partners__container.py-3.d-none.d-md-block
-  .container.home-partners__box
-    .row.align-items-center.text-center
-      .col-md-2
-        = image_tag 'home/index/sv-partner-facebook.svg', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--facebook', alt: 'Facebook Logo'
-
-      .col-md-2
-        = image_tag 'home/index/sv-partner-us-embassy.png', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--us-embassy', alt: 'US Embassy Logo'
-
-      .col-md-2
-        = image_tag 'home/index/sv-partner-freshworks.svg', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--freshworks', alt: 'Freshworks Logo'
-
-      .col-md-2
-        = image_tag 'home/index/sv-partner-ksum.png', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--ksum', alt: 'KSUM Logo'
-
-      .col-md-2
-        = image_tag 'home/index/sv-partner-paytm.svg', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--paytm', alt: 'Paytm Logo'
-
-      .col-md-2
-        = image_tag 'home/index/sv-partner-microsoft-ventures.png', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--ms-ventures', alt: 'Microsoft Ventures Logo'
-
-section.six-ways-card__container.py-5
+section.program-promise__container
   .container
-    .home-section__head.mb-4
-      h2#benefits.home-section__head-title.text-center.font-black
-        | All of them built products at Startup Village
+    .row.text-center
+      .col-md-4
+        = image_tag 'home/index/program-promise-developer-icon.svg', class: 'img-fluid mx-auto program-promise__icon', alt: 'Upgrade your developer profile'
+        h4.program-promise__text.font-semibold.text-center.mx-auto.mt-3.mb-5
+          ' Step-by-step framework to
+          ' upgrade your developer profile
+          | in 6 months.
+      .col-md-4.with-path
+        = image_tag 'home/index/program-promise-coach-icon.svg', class: 'img-fluid mx-auto program-promise__icon', alt: 'Upgrade your developer profile'
+        h4.program-promise__text.font-semibold.text-center.mx-auto.mt-3.mb-5
+          ' 1-on-1 Coaching
+          ' by expert developers
+          | from the industry.
+      .col-md-4
+        = image_tag 'home/index/program-promise-job-icon.svg', class: 'img-fluid mx-auto program-promise__icon', alt: 'Upgrade your developer profile'
+        h4.program-promise__text.font-semibold.text-center.mx-auto.mt-3.mb-5
+          ' Job offers of 6+ l.p.a
+          ' from premium startups,
+          | guaranteed.
+
+section.program-summary__container.pt-5.pb-3
+  .container
+    .row.align-items-center
+      .col-md-6.text-right.pr-md-5
+        = image_tag 'home/index/program-overview-students.png', class: 'img-fluid', alt: 'SV.CO, a 6-month upskilling course for student developers'
+
+      .col-md-6
+        h2.home-section__head-title.font-semibold.mb-3
+          | SV.CO, a 6-month upskilling course
+          .font-black
+            | for student developers.
+        p.program-summary__text.mb-3
+         ' SV.CO is an online learning platform exclusively
+         ' for student developers to upskill themselves for challenging
+         ' jobs in software development. To enable this, students are guided
+         ' step-by-step through a four-level intensive framework, along with
+         ' occasional physical events such as ‘demo days’. During the course
+         ' of this program, they primarily learn to build a software product
+         | from scratch - all the way from picking an idea to launching their app to users!
+
+        p.program-summary__text.mb-3
+          ' Each student developer is also provided with an experienced ‘Developer Coach’
+          ' from the industry to supervise and guide them while they code.
+          | This ensures they also pickup industry skills and best practices first-hand!
+
+        p.program-summary__text.mb-3
+          ' SV.CO helps our students land exciting jobs in premium Indian startups.
+          | In fact, we have a 100% job offer guarantee for all our successful graduates!
+
+section.graduation-story__container.py-0.py-md-5
+  .container
+    .home-section__head.mt-4.mt-md-5.mb-4
+      h2.home-section__head-title.text-center.font-semibold.mb-0
+        ' What our
+        span.font-black
+          ' alumni
+        | has to say.
       .home-section__head-subtitle.mx-auto
         p.text-center
-          | Listen to them narrate their stories
-    .row
-      .col-md-4
-        a#home-index__six-ways-funded-video.six-ways-card__box.my-3 href="#" data-toggle="modal" data-target="#itraveller-story-video"
-          .six-ways-card__thumbnail
-            = image_tag 'home/index/six-ways-get-funded.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Get your startup funded'
-            .six-ways-card__video-time
-              | 3:41 mins
-            .six-ways-card__play-button-container.d-flex.flex-column.align-items-center.justify-content-center
-            .six-ways-card__thumbnail-content
-              h3.six-ways-card__thumbnail-head.font-semibold.mb-0
-                | Shiju built a travel product and got funded
-              p.six-ways-card__thumbnail-subhead
-                | Story of iTraveller
+          | Hear them narrate their SV.CO experience
 
+    .d-flex.justify-content-md-center
+      a#home-index__six-ways-hired-video.six-ways-card__box.mb-5 href="#" data-toggle="modal" data-target="#hiring-story-video"
+        span.six-ways-card__thumbnail
+          = image_tag 'home/index/six-ways-get-hired.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Get hired by a startup'
+          span.six-ways-card__video-time
+            | 1:42 mins
+          span.six-ways-card__play-button-container.d-flex.flex-column.align-items-center.justify-content-center
+          span.six-ways-card__thumbnail-content
+            h3.six-ways-card__thumbnail-head.font-semibold.mb-0
+              | Student Developer to Product Manager in a million dollar funded startup
+            p.six-ways-card__thumbnail-subhead
+              | Hiring at SV.CO
+    .row.justify-content-md-center
+      .col-md-3.mb-4
+        .graduation-story__card
+          .d-flex.align-items-center.justify-content-center.graduation-story__card-logo
+            = image_tag 'home/index/sv-partner-tally.png', class: 'img-fluid graduation-story__card-logo-img', alt: 'Tally Logo'
+          .graduation-story__card-hires.text-center
+            p 7 Hires
+          .d-flex.flex-wrap.graduation-story__card-avatar-container.justify-content-center
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/varghese-george-tally.png', class: 'img-fluid', alt: ''
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/rakhul-prakash-tally.png', class: 'img-fluid', alt: ''
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/renjith-warrier-tally.png', class: 'img-fluid', alt: ''
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/siddharth-nair-tally.png', class: 'img-fluid', alt: ''
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/ajayson-vs-tally.png', class: 'img-fluid', alt: ''
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/sreeram-narayanan-tally.png', class: 'img-fluid', alt: ''
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/govind-tally.png', class: 'img-fluid', alt: ''
+      .col-md-3.mb-4
+        .graduation-story__card
+          .d-flex.align-items-center.justify-content-center.graduation-story__card-logo
+            = image_tag 'home/index/sv-partner-good-methods.png', class: 'img-fluid graduation-story__card-logo-img graduation-story__card-logo-img--gmg', alt: 'Goodmethods Logo'
+          .graduation-story__card-hires.text-center
+            p 6 Hires
+          .d-flex.flex-wrap.graduation-story__card-avatar-container.justify-content-center
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/sachu-gmg.png', class: 'img-fluid', alt: ''
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/sudhin-suresh-gmg.png', class: 'img-fluid', alt: ''
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/farize-gmg.png', class: 'img-fluid', alt: ''
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/sarah-gmg.png', class: 'img-fluid', alt: ''
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/vivek-gmg.png', class: 'img-fluid', alt: ''
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/aravind-m-gmg.png', class: 'img-fluid', alt: ''
+      .col-md-3.mb-4
+        .graduation-story__card
+          .d-flex.align-items-center.justify-content-center.graduation-story__card-logo
+            = image_tag 'home/index/sv-partner-citrus.png', class: 'img-fluid graduation-story__card-logo-img graduation-story__card-logo-img--citrus', alt: 'Citruspay Logo'
+          .graduation-story__card-hires.text-center
+            p 1 Hire
+          .d-flex.flex-wrap.graduation-story__card-avatar-container.justify-content-center
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/abid-ismail-citruspay.png', class: 'img-fluid', alt: ''
 
-      .col-md-4
-        a#home-index__six-ways-accelerator-video.six-ways-card__box.my-3 href="#" data-toggle="modal" data-target="#profoundis-story-video"
-          .six-ways-card__thumbnail
-            = image_tag 'home/index/six-ways-join-accelerator.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Join a startup accelerator'
-            .six-ways-card__video-time
-              | 4:02 mins
-            .six-ways-card__play-button-container.d-flex.flex-column.align-items-center.justify-content-center
-            .six-ways-card__thumbnail-content
-              h3.six-ways-card__thumbnail-head.font-semibold.mb-0
-                | Built a world class internet product, got acquired by an American Company
-              p.six-ways-card__thumbnail-subhead
-                | Story of Profoundis
-
-      .col-md-4
-        a#home-index__six-ways-acquihire-video.six-ways-card__box.my-3 href="#" data-toggle="modal" data-target="#z-pay-story-video"
-          .six-ways-card__thumbnail
-            = image_tag 'home/index/six-ways-get-acqui-hired.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Get acqui-hired'
-            .six-ways-card__video-time
-              | 1:16 mins
-            .six-ways-card__play-button-container.d-flex.flex-column.align-items-center.justify-content-center
-            .six-ways-card__thumbnail-content
-              h3.six-ways-card__thumbnail-head.font-semibold.mb-0
-                | Product they built in college helped them showcase their skills
-              p.six-ways-card__thumbnail-subhead
-                | Z-pay Acquihired by Tally
-
-      .col-md-4
-        a#home-index__six-ways-hired-video.six-ways-card__box.my-3 href="#" data-toggle="modal" data-target="#hiring-story-video"
-          .six-ways-card__thumbnail
-            = image_tag 'home/index/six-ways-get-hired.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Get hired by a startup'
-            .six-ways-card__video-time
-              | 1:42 mins
-            .six-ways-card__play-button-container.d-flex.flex-column.align-items-center.justify-content-center
-            .six-ways-card__thumbnail-content
-              h3.six-ways-card__thumbnail-head.font-semibold.mb-0
-                | Upskilled himself up learning to build an internet product with SV.CO
-              p.six-ways-card__thumbnail-subhead
-                | Hiring at SV.CO
-
-      .col-md-4
-        a#home-index__six-ways-sustainable-video.six-ways-card__box.my-3 href="#" data-toggle="modal" data-target="#wowmakers-story-video"
-          .six-ways-card__thumbnail
-            = image_tag 'home/index/six-ways-run-startup.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Run a startup of your own'
-            .six-ways-card__video-time
-              | 4:17 mins
-            .six-ways-card__play-button-container.d-flex.flex-column.align-items-center.justify-content-center
-            .six-ways-card__thumbnail-content
-              h3.six-ways-card__thumbnail-head.font-semibold.mb-0
-                | Building design oriented internet products while running a design studio
-              p.six-ways-card__thumbnail-subhead
-                | Story of Wowmakers
-
-      .col-md-4
-        a#home-index__six-ways-studies-video.six-ways-card__box.my-3 href="#" data-toggle="modal" data-target="#higher-studies-story-video"
-          .six-ways-card__thumbnail
-            = image_tag 'home/index/six-ways-higher-studies.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Get admissions to global universities with a stronger resume'
-            .six-ways-card__video-time
-              | 1:28 mins
-            .six-ways-card__play-button-container.d-flex.flex-column.align-items-center.justify-content-center
-            .six-ways-card__thumbnail-content
-              h3.six-ways-card__thumbnail-head.font-semibold.mb-0
-                | Continue upskilling yourself to build better products
-              p.six-ways-card__thumbnail-subhead
-                | Access to Global Universities
-
-      .mx-auto.mt-3
-        = link_to 'Learn More', join_path, class: 'btn btn-primary btn-lg home-apply__button', id: 'home-index__six-ways-learn-more-link'
-
-section.program-feature__container.py-5
-  .container
-    .home-section__head.mb-3
-      h2.home-section__head-title.text-center.font-black
-        | Programme Designed Exclusively for YOU
-      .home-section__head-subtitle.mx-auto
-        p.text-center
-          ' The programme is exclusively for internet products which can be built while you
-          | are in college and the platform enables you to learn from wherever you are.
-    .program-feature__box
-      .col-md-7
-        .row
-          .col-md-6
-            .program-feature__card
-              = image_tag 'home/index/program-learn-from-experts.jpg', class: 'img-fluid'
-              .program-feature__card-title
-                h3.program-feature__card-title-text.font-regular
-                  ' Learn from experts
-                  br
-                  | across the world
-
-          .col-md-6
-            .program-feature__card
-              = image_tag 'home/index/program-build-startup.jpg', class: 'img-fluid'
-              .program-feature__card-title
-                h3.program-feature__card-title-text.font-regular
-                  ' Build a world class product
-                  br
-                  | with your friends
-
-          .col-md-6
-            .program-feature__card
-              = image_tag 'home/index/program-events.jpg', class: 'img-fluid'
-              .program-feature__card-title
-                h3.program-feature__card-title-text.font-regular
-                  ' Showcase your skills at
-                  br
-                  | SV.CO events
-
-          .col-md-6
-            .program-feature__card
-              = image_tag 'home/index/program-ideas.jpg', class: 'img-fluid'
-              .program-feature__card-title
-                h3.program-feature__card-title-text.font-regular
-                  ' Choose from a pool of
-                  br
-                  | ideas if you don&rsquo;t have one
-
-      .col-md-5
-        .program-feature__card
-          = image_tag 'home/index/program-learn.jpg', class: 'program-feature__college-img'
-          .program-feature__card-title
-            h3.program-feature__card-title-text.program-feature__card-title-text--big.font-regular
-              span.program-feature__card-title-text--big-highlight.font-semibold
-                ' Learn
-              br
-              ' wherever you are alongside your
-              br
-              | college degree
-
-  .container
-    .text-center.mt-3
-      = link_to 'Learn More', join_path, class: 'btn btn-primary btn-lg home-apply__button', id: 'home-index__programme-learn-more-link'
-
-section.silicon-valley-itinerary__container.py-5
-  .container
-    .home-section__head.mb-3
-      h2.home-section__head-title.text-center.font-black
-        | Glimpes from the recent Silicon Valley visit
-      .home-section__head-subtitle.mx-auto
-        p.text-center
-          ' We recently flew India’s largest delegation of student entrepreneurs
-          | who were all building internet products in college
-
-    .row
-      .silicon-valley-itinerary__slider.mx-auto
-        .silicon-valley-itinerary__slider-item.mx-auto
-          = image_tag 'home/index/svtosv-day1.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 1 Exploring San Fransisco'
-        .silicon-valley-itinerary__slider-item.mx-auto
-          = image_tag 'home/index/svtosv-day2.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 2 at SV Bank, Intel and dinner hosted by Menlo Park City Council'
-        .silicon-valley-itinerary__slider-item.mx-auto
-          = image_tag 'home/index/svtosv-day3.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 3 at Facebook HQ'
-        .silicon-valley-itinerary__slider-item.mx-auto
-          = image_tag 'home/index/svtosv-day4.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 4 at Freshworks HQ and North Eastern University'
-        .silicon-valley-itinerary__slider-item.mx-auto
-          = image_tag 'home/index/svtosv-day5.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 5 at Google and Bootup Ventures'
-        .silicon-valley-itinerary__slider-item.mx-auto
-          = image_tag 'home/index/svtosv-day6.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 6 at Google Launchpad, Galvanize and Golden Gate Bridge'
-
-section.home-testimonial__container.py-5
-  .container
-    .home-section__head.mb-4
-      h2#testimonial.home-section__head-title.text-center.font-black
-        | Time to make your parents REALLY proud
-
-    .row.home-testimonial__box.mx-auto
-      .col-md-4.home-testimonial__image-container.p-0
-        = image_tag 'home/index/testimonial-student-family.png', class: 'img-fluid mx-auto home-testimonial__image', alt: "A student's family"
-      .col-md-8.home-testimonial__text.d-flex.justify-content-center.flex-column
-        p
-          ' &ldquo;I was really worried when he said that he wanted to build a product alongside his college.
-          ' I thought college was all about grades and attendance but then I saw him
-          ' code all the day in his room. He spends money on his product and not for shopping.
-          ' It feels really great. He told me about his experience in Silicon Valley,
-          | and he seems to have learnt a lot from that.&rdquo;
-        p.font-semibold.pt-2
-          ' &ndash; Subbalakshmi Rajan
-          .font-regular.home-testimonial__text--author-sub
-            | (Suraj Rajan&rsquo;s Mother)
+    .row.justify-content-md-center
+      .col-md-3.mb-4
+        .graduation-story__card
+          .d-flex.align-items-center.justify-content-center.graduation-story__card-logo
+            = image_tag 'home/index/sv-partner-freshworks.svg', class: 'img-fluid graduation-story__card-logo-img', alt: 'Freshworks Logo'
+          .graduation-story__card-hires.text-center
+            p 1 Hire
+          .d-flex.flex-wrap.graduation-story__card-avatar-container.justify-content-center
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/robin-freshworks.png', class: 'img-fluid', alt: ''
+      .col-md-3.mb-4
+        .graduation-story__card
+          .d-flex.align-items-center.justify-content-center.graduation-story__card-logo
+            = image_tag 'home/index/sv-partner-freecharge.png', class: 'img-fluid graduation-story__card-logo-img', alt: 'Freecharge Logo'
+          .graduation-story__card-hires.text-center
+            p 2 Hires
+          .d-flex.flex-wrap.graduation-story__card-avatar-container.justify-content-center
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/joel-varghese-freecharge.png', class: 'img-fluid', alt: ''
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/amal-krishna-freecharge.png', class: 'img-fluid', alt: ''
+      .col-md-3.mb-4
+        .graduation-story__card
+          .d-flex.align-items-center.justify-content-center.graduation-story__card-logo
+            = image_tag 'home/index/sv-partner-ola.svg', class: 'img-fluid graduation-story__card-logo-img graduation-story__card-logo-img--ola', alt: 'Ola Logo'
+          .graduation-story__card-hires.text-center
+            p 1 Hire
+          .d-flex.flex-wrap.graduation-story__card-avatar-container.justify-content-center
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/aravind-sai-ola.png', class: 'img-fluid', alt: ''
 
 section.home-call-to-action__container.py-5
   .container
@@ -266,39 +192,9 @@ section.home-call-to-action__container.py-5
       p.home-call-to-action__sub-head Get started by submitting an application today.
 
       .text-center.mt-3
-        = link_to 'Join Now', join_path, class: 'btn btn-primary btn-lg home-call-to-action__button', id: 'home-index__ready-join-now-link'
+        = link_to 'Apply Now', apply_path, class: 'btn btn-primary btn-lg home-call-to-action__button', id: 'home-index__ready-join-now-link'
 
 == render 'layouts/footer'
-
-#itraveller-story-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header.justify-content-end
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-      .modal-body
-        - unless Rails.env.test?
-          iframe.video-frame src="https://www.youtube.com/embed/KufIL6ZS1lk" frameborder="0" allowfullscreen="allowfullscreen"
-
-#profoundis-story-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header.justify-content-end
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-      .modal-body
-        - unless Rails.env.test?
-          iframe.video-frame src="https://www.youtube.com/embed/vjDdSdfitKY" frameborder="0" allowfullscreen="allowfullscreen"
-
-#z-pay-story-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header.justify-content-end
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-      .modal-body
-        - unless Rails.env.test?
-          iframe.video-frame src="https://www.youtube.com/embed/pwmVitwaeL0" frameborder="0" allowfullscreen="allowfullscreen"
 
 #hiring-story-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
@@ -309,23 +205,3 @@ section.home-call-to-action__container.py-5
       .modal-body
         - unless Rails.env.test?
           iframe.video-frame src="https://www.youtube.com/embed/XBjkCUW1lFQ" frameborder="0" allowfullscreen="allowfullscreen"
-
-#wowmakers-story-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header.justify-content-end
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-      .modal-body
-        - unless Rails.env.test?
-          iframe.video-frame src="https://www.youtube.com/embed/R8LhGtoeaUc" frameborder="0" allowfullscreen="allowfullscreen"
-
-#higher-studies-story-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header.justify-content-end
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-      .modal-body
-        - unless Rails.env.test?
-          iframe.video-frame src="https://www.youtube.com/embed/BxPH9XyQRsM" frameborder="0" allowfullscreen="allowfullscreen"

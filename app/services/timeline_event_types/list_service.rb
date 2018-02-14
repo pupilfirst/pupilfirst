@@ -19,7 +19,7 @@ module TimelineEventTypes
     private
 
     def suggested
-      @suggested ||= TimelineEventType.suggested_for(@startup)
+      @suggested ||= TimelineEventType.live.suggested_for(@startup)
     end
 
     def add_suggested
@@ -31,8 +31,8 @@ module TimelineEventTypes
     end
 
     def add_remaining
-      TimelineEventType.distinct(:role).pluck(:role).each do |role|
-        @list[role] = TimelineEventType.where(role: role).where.not(id: suggested.pluck(:id)).order(:title).each_with_object({}) do |remaining_type, list|
+      TimelineEventType.live.distinct(:role).pluck(:role).each do |role|
+        @list[role] = TimelineEventType.live.where(role: role).where.not(id: suggested.pluck(:id)).order(:title).each_with_object({}) do |remaining_type, list|
           list[remaining_type.id] = { title: remaining_type.title, sample: remaining_type.sample }
         end
       end

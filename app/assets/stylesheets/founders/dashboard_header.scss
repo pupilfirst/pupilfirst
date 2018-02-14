@@ -62,6 +62,34 @@
   }
 }
 
+.founder-dashboard-header__welcome-title {
+  padding-top: 12px;
+  margin-top: 25px;
+  margin-bottom: 5px;
+  color: white;
+  letter-spacing: 0.03rem;
+  text-shadow: 0px 1px 3px lighten($gray-dark, 10%);
+
+  @include media-breakpoint-down(sm) {
+    padding-top: 5px;
+    font-size: 1.25rem;
+    margin-top: 15px;
+    margin-bottom: 3px;
+  }
+}
+
+.founder-dashboard-header__welcome-subtext {
+  font-weight: 300;
+  color: black;
+  font-size: 1.5rem;
+  margin-top: 20px;
+
+  @include media-breakpoint-down(sm) {
+    margin-top: 10px;
+    font-size: 1rem;
+  }
+}
+
 .startup-founders {
   .founder-avatar-bubble {
     position: relative;

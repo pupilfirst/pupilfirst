@@ -1,8 +1,8 @@
 class AdmissionsController < ApplicationController
-  before_action :skip_container, only: %i[join register founders founders_submit]
+  before_action :skip_container, only: %i[apply register team_members team_members_submit]
 
-  # GET /join
-  def join
+  # GET /apply
+  def apply
     @form = if Feature.active?(:admissions, current_user)
       Founders::RegistrationForm.new(Founder.new)
     else
@@ -13,7 +13,7 @@ class AdmissionsController < ApplicationController
     render layout: 'application'
   end
 
-  # POST /join
+  # POST /apply
   def register
     @form = Founders::RegistrationForm.new(Founder.new)
 
@@ -27,7 +27,7 @@ class AdmissionsController < ApplicationController
           # Sign in user immediately to allow him to proceed to screening.
           sign_in founder.user
 
-          redirect_to dashboard_founder_path(from: 'register')
+          redirect_to student_dashboard_path(from: 'register')
           return
         end
       else
@@ -35,7 +35,7 @@ class AdmissionsController < ApplicationController
       end
     end
 
-    render 'join', layout: 'application'
+    render 'apply', layout: 'application'
   end
 
   # GET /admissions/screening
@@ -43,7 +43,7 @@ class AdmissionsController < ApplicationController
     authorize :admissions
 
     screening_url = if Rails.env.development?
-      Admissions::CompleteTargetService.new(current_founder, Target::KEY_ADMISSIONS_SCREENING).execute
+      Admissions::CompleteTargetService.new(current_founder, Target::KEY_SCREENING).execute
       admissions_screening_submit_url
     else
       Rails.application.secrets.typeform[:screening_url] + "?user_id=#{current_user.id}"
@@ -55,19 +55,23 @@ class AdmissionsController < ApplicationController
   # GET /admissions/screening_submit?user_id&score
   def screening_submit
     authorize :admissions
-    flash[:success] = 'Your submission has been recorded!'
-    redirect_to dashboard_founder_path(from: 'screening_submit')
+    flash[:success] = 'You have successfully completed screening'
+    redirect_to student_dashboard_path(from: 'screening_submit')
   end
 
   def screening_submit_webhook
     founder = Founder.find_by user_id: params.dig(:form_response, :hidden, :user_id).to_i
     screening_response = params.dig(:form_response).permit!.to_h
 
-    Admissions::ScreeningCompletionJob.perform_later(founder, screening_response)
+    if founder.present? && founder.screening_data.blank?
+      Admissions::ScreeningCompletionJob.perform_later(founder, screening_response)
+    end
 
     head :ok
   end
 
+  # POST /admissions/coupon_submit
+  #
   # Handle submission of coupon code.
   def coupon_submit
     authorize :admissions
@@ -76,28 +80,29 @@ class AdmissionsController < ApplicationController
 
     if coupon_form.validate(params[:admissions_coupon])
       coupon_form.apply_coupon
-      flash[:success] = 'Coupon applied successfully!'
-    else
-      flash[:error] = 'Coupon code is not valid!'
-    end
 
-    redirect_to fee_founder_path
+      # Send coupon details and updated fee details.
+      render json: Startups::FeeAndCouponDataService.new(current_startup.reload).props
+    else
+      render json: { errors: coupon_form.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 
+  # PATCH /admissions/coupon_remove
+  #
   # Remove an applied coupon.
   def coupon_remove
     authorize :admissions
 
     remove_latest_coupon
-    flash[:success] = 'Coupon removed successfully!'
-    redirect_to fee_founder_path
+    render json: Startups::FeeAndCouponDataService.new(current_startup.reload).props
   end
 
-  # GET /admissions/founders
-  def founders
+  # GET /admissions/team_members
+  def team_members
     authorize :admissions
 
-    fee_payment_target = Target.find_by(key: Target::KEY_ADMISSIONS_FEE_PAYMENT)
+    fee_payment_target = Target.find_by(key: Target::KEY_FEE_PAYMENT)
     if fee_payment_target.status(current_founder) == Targets::StatusService::STATUS_COMPLETE
       @fee_paid = true
     else
@@ -106,18 +111,18 @@ class AdmissionsController < ApplicationController
     end
   end
 
-  # POST /admissions/founders
-  def founders_submit
-    founders
+  # POST /admissions/team_members
+  def team_members_submit
+    team_members
 
     @form.current_founder = current_founder
 
     if @form.validate(params[:admissions_founders])
       @form.save
-      flash[:success] = 'Details of founders have been saved!'
-      redirect_to dashboard_founder_path(from: 'founder_submit')
+      flash[:success] = 'Details of team members have been saved!'
+      redirect_to student_dashboard_path(from: 'founder_submit')
     else
-      render 'founders'
+      render 'team_members'
     end
   end
 
@@ -125,7 +130,7 @@ class AdmissionsController < ApplicationController
   def team_lead
     Founders::BecomeTeamLeadService.new(current_founder).execute
     flash[:success] = 'You are now the team lead!'
-    redirect_back(fallback_location: admissions_founders_path)
+    redirect_back(fallback_location: admissions_team_members_path)
   end
 
   # GET /admissions/accept_invitation?token=
@@ -138,13 +143,13 @@ class AdmissionsController < ApplicationController
       flash[:error] = 'The token that was supplied is not valid.'
       redirect_to root_path
     elsif founder.startup&.level&.number&.positive?
-      flash[:error] = 'Your current startup has already begun the program.'
+      flash[:error] = 'Your current team has already begun the program.'
       redirect_to root_path
     else
       Founders::AcceptInvitationService.new(founder).execute
-      flash[:success] = "You have successfully joined #{founder.reload.startup.team_lead.name}'s startup"
+      flash[:success] = "You have successfully joined #{founder.reload.startup.team_lead.name}'s team"
       sign_in founder.user
-      redirect_to dashboard_founder_path(from: 'accept_invitation')
+      redirect_to student_dashboard_path(from: 'accept_invitation')
     end
   end
 

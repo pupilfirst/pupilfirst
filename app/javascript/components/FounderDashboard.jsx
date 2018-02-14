@@ -122,7 +122,7 @@ export default class FounderDashboard extends React.Component {
 
   targetOverlayCloseCB() {
     this.setState({ selectedTarget: null });
-    history.pushState({}, "", "/founder/dashboard");
+    history.pushState({}, "", "/student/dashboard");
   }
 
   targetDetails(targetId, targetType) {
@@ -147,22 +147,22 @@ export default class FounderDashboard extends React.Component {
     history.pushState(
       { targetId: targetId, targetType: targetType },
       "",
-      "/founder/dashboard/targets/" + targetId
+      "/student/dashboard/targets/" + targetId
     );
   }
 
   render() {
     return (
-      <div className="founder-dashboard-container p-b-2">
-        <ToggleBar
-          selected={this.state.activeTab}
-          chooseTabCB={this.chooseTab}
-          openTimelineBuilderCB={this.openTimelineBuilder}
-          pendingSessions={this.pendingSessionsCount("sessions")}
-          currentLevel={this.props.currentLevel}
-        />
-
-        {this.props.requestedRestartLevel && <FounderDashboardRestartWarning />}
+      <div className="founder-dashboard-container pb-5">
+        {this.props.currentLevel != 0 && (
+          <ToggleBar
+            selected={this.state.activeTab}
+            chooseTabCB={this.chooseTab}
+            openTimelineBuilderCB={this.openTimelineBuilder}
+            pendingSessions={this.pendingSessionsCount("sessions")}
+            currentLevel={this.props.currentLevel}
+          />
+        )}
 
         {this.state.activeTab === "targets" && (
           <Targets

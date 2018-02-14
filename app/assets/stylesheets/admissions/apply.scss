@@ -1,0 +1,522 @@
+.apply-hero__banner {
+  height: 370px;
+  position: relative;
+  background-color: #000;
+  background-image: asset-url("admissions/apply/apply-hero-banner.jpg");
+  background-size: cover;
+  background-position: center center;
+}
+
+.apply-hero__message-container {
+  display: flex;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  color: white;
+  width: 100%;
+  height: 370px;
+}
+
+.apply-hero__message-text {
+  color: white;
+  letter-spacing: 0.02rem;
+}
+
+.apply-hero__message-text-small {
+  font-size: 1.4rem;
+}
+.apply-hero__message-subtitle {
+  font-size: 1rem;
+  color: white;
+  letter-spacing: 0.002rem;
+}
+
+.apply-partners__container {
+  background-color: white;
+  padding: 2rem 0;
+
+  @include media-breakpoint-down (sm) {
+    padding-top: 0;
+  }
+}
+
+.apply-call-to-action__button {
+  font-size: 1rem;
+  padding: 0.875rem 3rem;
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.4);
+}
+
+.apply-partners__box {
+  max-width: 52rem;
+}
+
+.apply-partners__logo--facebook {
+  height: 30px;
+}
+
+.apply-partners__logo--freshworks {
+  height: 28px;
+}
+
+.apply-partners__logo--paytm {
+  height: 26px;
+}
+
+.apply-partners__logo--tracxn {
+  height: 24px;
+}
+
+.apply-partners__text {
+  font-size: 0.75rem;
+  display: inline-block;
+  color: $light-grey-text;
+  letter-spacing: 0.05rem;
+  border-bottom: 1px solid $gray-border;
+  padding-bottom: 5px;
+  margin-bottom: 1rem;
+
+  @include media-breakpoint-down (sm) {
+    margin-bottom: 10px;
+    margin-top: 20px;
+  }
+}
+
+.application-process {
+  position: relative;
+
+  h2 {
+    position: relative;
+    margin-bottom: 40px;
+    font-size: 1.875rem;
+
+    strong {
+      font-weight: $font-semibold;
+    }
+
+    &:before {
+      content: "";
+      width: 100px;
+      display: inline-block;
+      border-bottom: 3px solid $gray-border;
+      position: absolute;
+      bottom: -20px;
+    }
+  }
+}
+
+.apply-section__head-title {
+  font-size: 1.875rem;
+}
+
+.apply-section__head-title--white {
+  color: white;
+}
+
+.apply-section__head-subtitle {
+  max-width: 34rem;
+  font-size: 1rem;
+}
+
+.school-of-saas__container {
+  overflow: hidden;
+  border-top: 1px solid $gray-border;
+  background-color: $primary-background;
+}
+
+.saas-program__box {
+  @include border-radius(5px);
+  background-color: white;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.saas-program__program-requirements {
+  background: rgb(83, 168, 103);
+  background: linear-gradient(
+    135deg,
+    rgb(83, 168, 103) 0%,
+    rgb(13, 113, 186) 100%
+  );
+  padding: 30px;
+  @include border-radius(5px 0 0 5px);
+
+  @include media-breakpoint-down (sm) {
+    @include border-radius(5px 5px 0 0);
+  }
+}
+
+.saas-program__program-requirements-head {
+  font-size: 1.875rem;
+  color: white;
+  display: inline-block;
+  border-bottom: 4px solid white;
+  padding-bottom: 15px;
+}
+
+.saas-program__program-requirements-list-item {
+  color: white;
+  position: relative;
+
+  &:before {
+    display: inline-block;
+    position: absolute;
+    top: 2px;
+    @include fa-icon(check-circle);
+  }
+}
+
+.saas-program__program-requirements-content {
+  display: inline-block;
+  padding-left: 25px;
+}
+
+.saas-program__program-requirements-title {
+  color: white;
+  padding-bottom: 5px;
+}
+
+.saas-program__program-requirements-text {
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.school-of-saas__program-promises {
+  padding: 30px;
+}
+
+.saas-program__program-promises-head {
+  font-size: 1.875rem;
+  display: inline-block;
+  border-bottom: 4px solid $gray-border;
+  padding-bottom: 15px;
+}
+
+.application-fee__container {
+  overflow: hidden;
+  border-top: 1px solid $gray-border;
+  background-color: white;
+}
+
+.current-batch-data__box {
+  display: flex;
+  max-width: 52rem;
+  text-align: center;
+  align-content: flex-end;
+  margin: auto;
+
+  @include media-breakpoint-down (sm) {
+    flex-direction: column;
+  }
+}
+
+.current-batch-data_head {
+  border-bottom: 1px solid $gray-border;
+  display: inline-block;
+  padding-bottom: 10px;
+}
+
+.current-batch-data__coloumn {
+  width: 20%;
+  padding: 0 1rem;
+  border: 2px solid $gray-border;
+  border-width: 0 0 0 2px;
+
+  &:first-child {
+    border-width: 0 0 0 0;
+
+    @include media-breakpoint-down (sm) {
+      border-width: 0 0 1px 0;
+    }
+  }
+
+  @include media-breakpoint-down (sm) {
+    display: inline-block;
+    width: auto;
+    text-align: center;
+    border-width: 0 0 1px 0;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+  }
+}
+
+.program-fee__container {
+  max-width: 30rem;
+  text-align: center;
+  position: relative;
+  background-color: white;
+  box-shadow: 0 0 30px 0 rgba(10, 165, 227, 0.3);
+  border: 1px solid $light-secondary;
+  @include border-radius(5px);
+}
+.program-fee__box {
+  width: 100%;
+}
+
+.program-fee__title {
+  margin-bottom: 0;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  position: relative;
+
+  &:before {
+    position: absolute;
+    content: "";
+    width: 50px;
+    height: 2px;
+    bottom: 0;
+    background-color: $gray-border;
+    transform: translateX(-50%);
+    left: 50%;
+  }
+
+  @include media-breakpoint-down (sm) {
+    margin-bottom: 1rem;
+  }
+}
+
+.program-fee__title-large {
+  font-size: 2.5rem;
+}
+
+.program-fee__scholorship {
+  border-top: 1px dotted $light-secondary;
+  @include border-radius(0 0 5px 5px);
+  background-color: lighten($light-secondary, 48%);
+}
+
+.program-fee__scholorship__text {
+  font-size: 1.25rem;
+}
+
+.program-fee__scholorship__link {
+  font-size: 1rem;
+}
+
+// Apply form
+.apply-form__container {
+  background: rgb(83, 168, 103);
+  background: linear-gradient(
+    135deg,
+    rgb(83, 168, 103) 0%,
+    rgb(13, 113, 186) 100%
+  );
+  padding: 30px;
+
+  @include media-breakpoint-down (sm) {
+    padding: 0 1rem;
+  }
+}
+
+.apply-form__box {
+  max-width: 360px;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.3);
+}
+
+.apply-form__submit-button {
+  width: 100%;
+  margin-top: 15px;
+}
+
+.apply-form__radio-button {
+  margin-left: 0;
+}
+
+.saas-program__program-promises-list-item {
+  position: relative;
+
+  &:before {
+    color: $light-primary;
+    display: inline-block;
+    position: absolute;
+    top: 4px;
+    @include fa-icon(check-circle);
+  }
+}
+
+.saas-program__program-promises-content {
+  display: inline-block;
+  padding-left: 25px;
+}
+
+.saas-program__program-promises-title {
+  line-height: 1.3;
+}
+
+.saas-program__program-promises-more-link {
+  font-size: 1rem;
+  line-height: 1.3;
+  margin-left: 25px;
+  text-decoration: underline;
+}
+
+.saas-program__graduation-support {
+  padding: 5px;
+  margin-top: 25px;
+  border: 1px solid $alert-background;
+  @include border-radius (10px);
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1);
+
+  @include media-breakpoint-down (sm) {
+    margin-top: 0;
+  }
+}
+
+.saas-program__graduation-support-year {
+  font-size: 2.5rem;
+  line-height: 1;
+  text-align: center;
+}
+
+.saas-program__graduation-support-sub-text {
+  font-size: 1.125rem;
+  line-height: 1.4;
+}
+
+// FAQ
+.apply-faq__container {
+  overflow: hidden;
+  border-top: 1px solid $gray-border;
+  background-color: $primary-background;
+}
+
+.apply-faq__collapse {
+  max-width: 36rem;
+}
+
+.apply-faq__collapse-card {
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.apply-faq__collapse-card-header {
+  background-color: white;
+  margin-bottom: -1px;
+
+  a {
+    display: block;
+    padding: 1.25rem;
+
+    &:before {
+      content: "\f106";
+      font-size: 18px;
+      position: absolute;
+      font-family: "FontAwesome";
+      right: 1.25rem;
+      top: 22px;
+      transform: rotate(180deg);
+      transition: all 0.2s;
+    }
+  }
+  &.active {
+    a {
+      &:before {
+        transform: rotate(0deg);
+      }
+    }
+  }
+}
+
+.apply-faq__collapse-card-block {
+  font-size: 1rem;
+  line-height: 1.8;
+  overflow: hidden;
+}
+
+.application-start-form {
+  padding: 30px;
+  background-color: white;
+
+  h4 {
+    font-weight: $font-semibold;
+  }
+  .simple-form-container {
+    .form-group {
+      margin-bottom: 15px;
+
+      .select2-selection--single {
+        height: 40px;
+      }
+
+      .select2-selection__rendered {
+        line-height: 40px;
+      }
+      .select2-selection__arrow {
+        height: 40px;
+        right: 8px;
+      }
+    }
+  }
+}
+
+.sticky-application-button {
+  position: fixed;
+  right: 7em;
+  bottom: 2em;
+  z-index: 100;
+  transition: none;
+  box-shadow: $box-shadow;
+
+  @include media-breakpoint-down(md) {
+    width: auto;
+    right: 7em;
+    bottom: 2em;
+  }
+
+  &.stick-above-footer {
+    position: absolute;
+    bottom: initial;
+    margin-top: -4.4em;
+
+    @include media-breakpoint-down(sm) {
+      margin-top: -3.4em;
+    }
+  }
+}
+
+.eq-height {
+  display: flex;
+  @include media-breakpoint-down(sm) {
+    display: block;
+  }
+}
+
+.ready-to-apply {
+  background-color: white;
+  border: 0 solid $gray-border;
+  border-top-width: 1px;
+  padding-bottom: 50px;
+
+  .btn-secondary {
+    margin-left: 30px;
+
+    @include media-breakpoint-down(sm) {
+      margin: 10px 0 0 0;
+    }
+  }
+}
+
+.application-closed-icon {
+  max-width: 230px;
+}
+
+.application-open-text {
+  p {
+    font-size: 0.875rem;
+    font-weight: $font-regular;
+
+    .bigger-text {
+      font-size: 1rem;
+      font-weight: $font-semibold;
+    }
+  }
+}
+
+.application-form__email-hint-button {
+  display: inline-block;
+  padding: 2px 18px;
+  margin-top: 0.3rem;
+}
+
+.grecaptcha-badge {
+  display: none;
+}

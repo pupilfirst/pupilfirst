@@ -5,12 +5,14 @@ class FoundersController < ApplicationController
 
   # layout 'application_v2', only: %i[fee fee_submit]
 
-  # GET /founders/:slug
+  # GET /founders/:slug, GET /students/:slug
   #
   # TODO: FoundersController#founder_profile should probably be just #show.
   def founder_profile
     @founder = Founder.friendly.find(params[:slug])
     authorize @founder
+
+    @meta_description = "This is a detailed profile for #{@founder.fullname}, includes bio, resume, activity on Public Slack and Karma Points earned."
     @timeline = Founders::ActivityTimelineService.new(@founder, params[:to])
   end
 
@@ -32,7 +34,7 @@ class FoundersController < ApplicationController
     if @form.validate(params[:founders_edit])
       @form.save!
       flash[:success] = 'Your profile has been updated.'
-      redirect_to founder_profile_path(slug: @founder.slug)
+      redirect_to student_profile_path(slug: @founder.slug)
     else
       render 'edit'
     end
@@ -81,7 +83,7 @@ class FoundersController < ApplicationController
   private
 
   def fee_params
-    params.require(:fee).permit(:period)
+    params.require(:fee).permit(:billing_address, :billing_state_id)
   end
 
   def skip_container

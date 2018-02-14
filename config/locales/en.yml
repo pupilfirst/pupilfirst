@@ -2,6 +2,7 @@
 # Organization of en.yml
 # ----------------------
 #
+# application.*.key = display_value
 # jobs.[MODULE].JOB.*.key = display_value
 # libs.MODULE.*.key = display_value
 # models.MODEL.COLUMN = { key: display_value, ... }
@@ -21,9 +22,12 @@
 # forget what the strings were for.
 
 en:
+  application:
+    default:
+      meta_description: "SV.CO's 6-month product school for student developers helps them build modern tech-products with industry-guidance and get premium jobs."
   jobs:
     faculty_connect_session_reminder:
-      founder_reminder: ":exclamation: *Reminder:* Your startup (%{startup_name}) has an office hour with <%{faculty_url}|%{faculty_name}> starting in 30 minutes! You can <%{meeting_link}|click here> to join the meeting when it's time."
+      founder_reminder: ":exclamation: *Reminder:* Your team (%{startup_name}) has an office hour with <%{faculty_url}|%{faculty_name}> starting in 30 minutes! You can <%{meeting_link}|click here> to join the meeting when it's time."
       faculty_reminder: ":exclamation: *Reminder:* You have an office hour with the founders of <%{startup_url}|%{startup_name}> starting in 30 minutes!\nThe founders plan to discuss the following questions:\n %{questions}\nYou can <%{meeting_link}|click here> to join the meeting when it's time."
       ops_team_reminder: ":exclamation: *Reminder:* <%{startup_url}|%{startup_name}> has an office hour with <%{faculty_url}|%{faculty_name}> starting in 30 minutes. Follow up!"
 
@@ -44,9 +48,9 @@ en:
             founder_event: "Your new timeline entry (<%{event_url}|%{event_title}>) has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
             startup_event: "The new timeline entry (<%{event_url}|%{event_title}>) submitted by you for <%{startup_url}|%{startup_product_name}> has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
         team:
-          verified: "Your startup <%{startup_url}|%{startup_product_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>"
-          needs_improvement: "Your startup <%{startup_url}|%{startup_product_name}> has a new timeline entry: (<%{event_url}|%{event_title}>) and has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
-          not_accepted: "The new timeline entry (<%{event_url}|%{event_title}>) submitted by  your startup <%{startup_url}|%{startup_product_name}> has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
+          verified: "Your team <%{startup_url}|%{startup_product_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>"
+          needs_improvement: "Your team <%{startup_url}|%{startup_product_name}> has a new timeline entry: (<%{event_url}|%{event_title}>) and has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
+          not_accepted: "The new timeline entry (<%{event_url}|%{event_title}>) submitted by  your team <%{startup_url}|%{startup_product_name}> has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
         public:
           verified: &jobs-timeline_events-verification_notification-public-verified |
             <%{startup_url}|%{startup_product_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>
@@ -129,7 +133,7 @@ en:
     karma_points:
       create:
         founder_slack_notification: 'You have been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
-        startup_slack_notification: 'Your startup <%{startup_url}|%{startup_product_name}> has been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
+        startup_slack_notification: 'Your team <%{startup_url}|%{startup_product_name}> has been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
 
     english_quiz_questions:
       evaluate_submission:
@@ -158,13 +162,19 @@ en:
           active: "Your SV.CO subscription expires on <span class='brand-primary'>%{date}</span>."
 
   about:
-    index:
-      meta_description: "Startup Village is launching an online-first learning platform for first-time founders, supplying tools and resources needed to create a successful startup."
+    contact:
+      meta_description: "Contact the SV.CO team at help@sv.co, or via our in-site chat. You can also mingle with the community on our Public Slack Forum."
+    leaderboard:
+      meta_description: "SV.CO tracks developer progress using the Startup Village leaderboard, showing teams that have improved the most compared to the previous leaderboard."
+    media_kit:
+      meta_description: "Download a write-up of SV.CO, high quality logos, photographs of founders and team members."
+    slack:
+      meta_description: "Get your queries answered directly by SV.CO team members, and mingle with the Startup Village community on our Public Slack Forum."
 
   admin:
     coupon:
       form:
-        update_warning: "WARNING: This coupon is in use by one or more startups. Please DO NOT make changes to reward details since this will affect all teams using this coupon."
+        update_warning: "WARNING: This coupon is in use by one or more teams. Please DO NOT make changes to reward details since this will affect all teams using this coupon."
     connect_request:
       cancel_request:
         warning:  "Are you sure you want to cancel this 'confirmed' connect request? Note that you will have to manually delete the associated Zoom meeting and Google calendar event!"
@@ -173,24 +183,16 @@ en:
     register:
       email_error: "Our email delivery service refused to accept the supplied address. Please ensure that it is a valid email address. If you're still having issues, please contact us using live chat or at help@sv.co"
 
-  home:
-    index:
-      main_bleed_message_html: "SV.CO is for ambitious students who desire to learn how to build a <strong>real</strong> startup and experience <strong>Silicon Valley</strong> while still in college."
-      background_1_messages:
-        secondary_html: "Varghese, Sidharth, Rakhul and Renjith of Z-Pay built a prototype during SV.CO&apos;s six month startup course and got acqui-hired by Tally Solutions, Bangalore."
-      background_2_messages:
-        secondary_html: "Arun of handME built a prototype during SV.CO&apos;s six month startup course and got both a job offer from Goqii and selection to the prestigious Draper University in the US."
-      background_3_messages:
-        secondary_html: "Two amazing woman founders: Sarah of SYM and Arya of Walat. Both teams built complete prototypes during SV.CO&apos;s six-month startup program."
-      background_4_messages:
-        secondary_html: "Ajmal, Aswin, Balram and Kishan of Spenwise built a prototype during SV.CO&apos;s six month startup course and got selected at Zone Startups, Mumbai to continue their startup journey."
+  founder:
+    dashboard:
+      meta_description: "A guided set of targets on how to build a great product."
 
   dashboard:
     dashboard:
       tour:
-        intro: Welcome to your personal dashboard! Your startup's journey through this program will be showcased here.
+        intro: Welcome to your personal dashboard! Your team's journey through this program will be showcased here.
         toggle_bar: The program consists of targets and sessions. You complete these as you progress.
-        targets: This tab lists the targets that need to be completed based on the present stage of your startup. As you progress, you will be assigned with new targets that will guide you through the startup journey.
+        targets: This tab lists the targets that need to be completed based on the present stage of your team. As you progress, you will be assigned with new targets that will guide you through the journey.
         sessions: A number of live and recorded sessions guide you as you progress.
         target_group: Your target groups will have all the targets listed along with its completion status.
         target: The target pane will have the name of the target and its completion status. On clicking the target, you will get detailed information on the target, the status and the target submission button.
@@ -199,14 +201,10 @@ en:
         final_message: That&rsquo;s it for now. If you have any doubts, don&rsquo;t hesitate to contact the SV.CO team at help@sv.co.<br/><br/>Have fun!
       performance_descriptions:
         description_10_html: "Your team seems to be struggling. Make sure you have completed all targets before deadline, and get better grades in your submissions."
-        description_30_html: "Your team is performing okay, but it's slightly behind other startups in your level. If you have any Needs Improvement targets, put in the work to make them Verified with <em>Great</em> or <em>Wow</em> grades."
-        description_50_html: "Your team is performing adequately, pretty much the same as the other startups in your level. <br /> Attempt to get <em>Great</em> and <em>Wow</em> grades for important targets to advance."
-        description_70_html: "Your team is performing better than most startups in the same level. Attempt to get more <em>Wow</em> grades for important targets to advance."
+        description_30_html: "Your team is performing okay, but it's slightly behind other teams in your level. If you have any Needs Improvement targets, put in the work to make them Verified with <em>Great</em> or <em>Wow</em> grades."
+        description_50_html: "Your team is performing adequately, pretty much the same as the other teams in your level. <br /> Attempt to get <em>Great</em> and <em>Wow</em> grades for important targets to advance."
+        description_70_html: "Your team is performing better than most teams in the same level. Attempt to get more <em>Wow</em> grades for important targets to advance."
         description_90_html: "Your team is performing exceptionally. Great stuff, we have high hopes from you :)"
-
-  faculty:
-    index:
-      meta_description: "Startup Village has assembled some of the best entrepreneurs and domain experts to help you learn what it means to become a founder. Join SV.CO to gain access."
 
   founders:
     fee:
@@ -233,7 +231,7 @@ en:
           delta_verb: sessions
         resources:
           heading: "Library Resources"
-          description_html: "The <a href='/library' target='_blank'>Startup Library</a> is a one-stop-shop for all resources that SV.CO provides."
+          description_html: "The <a href='/library' target='_blank'>SV.CO Library</a> is a one-stop-shop for all resources that SV.CO provides."
           delta_verb: added
         resource_downloads:
           heading: "Resource Downloads"
@@ -245,7 +243,7 @@ en:
           delta_verb: on-boarded
         community_architects:
           heading: "Community Architects"
-          description_html: "Students startup-enthusiasts who are in the grand pursuit of changing the higher education landscape in India."
+          description_html: "Student-enthusiasts who are in the grand pursuit of changing the higher education landscape in India."
           delta_verb: added
         published_stories:
           heading: "Published Stories"
@@ -253,7 +251,7 @@ en:
           delta_verb: posted
         timeline_events:
           heading: "Timeline Events Verified"
-          description_html: "We verify all timeline updates by our admitted startups to showcase the startup journey"
+          description_html: "We verify all timeline updates by our admitted teams to showcase their journey"
           delta_verb: sumbitted
         hours_of_learning:
           heading: "Hours of Learning"
@@ -281,8 +279,11 @@ en:
 
   resources:
     index:
+      meta_description: "Get access to content produced by Startup Village faculty, including presentations, video and audio clips."
       zero_results: "We&rsquo;re sorry, but it looks like there are no resources %{tag_text} %{search_text}.  Try changing your filter conditions %{login_text}."
       results_caption: "Showing resources %{tag_text} %{search_text}:"
+    show:
+      meta_description: "Get access to content produced by Startup Village faculty, including presentations, video and audio clips."
 
   startups:
     show:
@@ -297,3 +298,13 @@ en:
             founder: Thank you for improving this event with a later event!
             public: This event was improved upon with a later submission!
           status_text: Improved Later
+
+  talent:
+    index:
+      meta_description: "Hire, acqui-hire, invest and build a pipeline from India's best student developer talent. Discover great product developers for your company."
+
+  tech_hunt:
+    index:
+      meta_description: "SV.CO Hunt for tech-geeks"
+    question:
+      meta_description: "SV.CO Hunt for tech-geeks"

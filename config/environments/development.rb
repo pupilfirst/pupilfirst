@@ -1,5 +1,6 @@
 Rails.application.configure do
   # Verifies that versions and hashed value of the package contents in the project's package.json
+
   # TODO: Turned off check yarn integrity because of crash-on-load in development with Yarn 1.3.2.
   config.webpacker.check_yarn_integrity = false
 

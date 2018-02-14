@@ -23,7 +23,7 @@ module Admissions
       TimelineEvents::VerificationService.new(timeline_event, notify: false)
         .update_status(TimelineEvent::STATUS_VERIFIED)
 
-      if @key.in?([Target::KEY_ADMISSIONS_SCREENING, Target::KEY_ADMISSIONS_FEE_PAYMENT, Target::KEY_ADMISSIONS_COFOUNDER_ADDITION])
+      if @key.in?([Target::KEY_SCREENING, Target::KEY_FEE_PAYMENT])
         Admissions::UpdateStageService.new(@founder.startup, admission_stage).execute
       end
     end
@@ -32,12 +32,12 @@ module Admissions
 
     def description
       case @key
-        when Target::KEY_ADMISSIONS_SCREENING
-          "#{@founder.name} has completed the screening target of SV.CO's Level 0."
-        when Target::KEY_ADMISSIONS_FEE_PAYMENT
+        when Target::KEY_SCREENING
+          "#{@founder.name} has completed the screening target of SV.CO's admissions process."
+        when Target::KEY_FEE_PAYMENT
           "#{@founder.name} just completed payment to join the SV.CO program."
-        when Target::KEY_ADMISSIONS_COFOUNDER_ADDITION
-          "#{@founder.name} has invited co-founders to join their startup."
+        when Target::KEY_COFOUNDER_ADDITION
+          "#{@founder.name} just invited team members during the admissions process."
         else
           raise "CompleteTargetService does not know how to generate description for #{@key}"
       end
@@ -49,12 +49,10 @@ module Admissions
 
     def admission_stage
       case @key
-        when Target::KEY_ADMISSIONS_SCREENING
-          Startup::ADMISSION_STAGE_SCREENING_COMPLETED
-        when Target::KEY_ADMISSIONS_FEE_PAYMENT
+        when Target::KEY_SCREENING
+          Startup::ADMISSION_STAGE_SELF_EVALUATION_COMPLETED
+        when Target::KEY_FEE_PAYMENT
           Startup::ADMISSION_STAGE_FEE_PAID
-        when Target::KEY_ADMISSIONS_COFOUNDER_ADDITION
-          Startup::ADMISSION_STAGE_COFOUNDERS_ADDED
       end
     end
   end

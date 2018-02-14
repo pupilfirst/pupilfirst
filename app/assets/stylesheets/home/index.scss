@@ -65,11 +65,11 @@
 }
 
 .home-hero__container {
-  height: 640px;
+  height: 600px;
   position: relative;
   overflow: hidden;
   background-color: black;
-  background-image: asset-url("home/index/svtosv-hero-bg.jpg");
+  background-image: asset-url("home/index/sv.co-hero.jpg");
   background-repeat: no-repeat;
   background-size: cover;
 
@@ -91,7 +91,7 @@
   align-items: center;
   z-index: 1;
   width: 100%;
-  height: 640px;
+  height: 600px;
 
   @include media-breakpoint-down (sm) {
     height: 420px;
@@ -115,16 +115,131 @@
 
 .home-hero__message-title-subhead {
   color: white;
-  font-size: 1rem;
+  font-size: 2.5rem;
+
+  @include media-breakpoint-down (sm) {
+    font-size: 1.5rem;
+  }
 }
 
 .home-section__head-title {
   font-size: 1.875rem;
+  line-height: 1.3;
 }
 
 .home-section__head-subtitle {
   max-width: 34rem;
   font-size: 1rem;
+}
+
+.program-promise__container {
+  background-color: white;
+  overflow: hidden;
+  padding: 5rem 0 3rem 0;
+
+  @include media-breakpoint-down (sm) {
+    padding: 3rem 0 1rem 0;
+  }
+}
+
+.program-promise__text {
+  max-width: 13rem;
+  line-height: 1.4;
+}
+
+.program-promise__icon {
+  height: 170px;
+}
+
+.program-summary__container {
+  position: relative;
+  border-top: 1px solid $gray-border;
+  background-color: #f6f9fc;
+  z-index: 1;
+
+  &:before,
+  &:after {
+    background-color: inherit;
+    content: "";
+    display: block;
+    height: 50%;
+    left: 0;
+    position: absolute;
+    right: 0;
+    z-index: -1;
+  }
+
+  &:before {
+    top: 0;
+    transform: skewY(1.5deg);
+    transform-origin: 100% 0;
+  }
+
+  &:after {
+    bottom: 0;
+    transform: skewY(-1.5deg);
+    transform-origin: 100%;
+  }
+}
+
+.program-summary__heading {
+  line-height: 1.2;
+}
+
+.program-summary__text {
+  font-size: 1rem;
+  font-weight: $font-light;
+}
+
+.graduation-story__container {
+  border-top: 1px solid $gray-border;
+  background-color: white;
+  overflow: hidden;
+}
+
+.graduation-story__card {
+  background-color: white;
+  height: 100%;
+  box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.1);
+  @include border-radius(5px);
+}
+
+.graduation-story__card-logo {
+  padding: 1.5rem;
+  height: 100px;
+}
+
+.graduation-story__card-logo-img {
+  width: 120px;
+}
+
+.graduation-story__card-logo-img--gmg {
+  width: 140px;
+}
+
+.graduation-story__card-logo-img--citrus {
+  width: 100px;
+}
+
+.graduation-story__card-logo-img--ola {
+  width: 100px;
+}
+
+.graduation-story__card-hires {
+  padding: 0.25rem;
+  background-color: #f6f9fc;
+  border: 1px dashed $gray-border;
+  border-width: 1px 0;
+}
+.graduation-story__card-avatar-container {
+  padding: 1rem 0.5rem;
+}
+.graduation-story__card-avatar {
+  width: 36px;
+  height: 36px;
+  @include border-radius(50%);
+  background-color: $primary-background;
+  overflow: hidden;
 }
 
 // Partner logos
@@ -161,6 +276,18 @@
   height: 50px;
 }
 
+.home-partners__logo--ola {
+  height: 30px;
+}
+
+.home-partners__logo--zomato {
+  height: 55px;
+}
+
+.home-partners__logo--oyo {
+  height: 25px;
+}
+
 // six ways section
 .six-ways-card__container {
   overflow: hidden;
@@ -186,8 +313,9 @@
     }
     .six-ways-card__play-button-container {
       &:before {
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: rgba(0, 0, 0, 0.7);
         color: rgba(255, 255, 255, 1);
+        transform: translateX(3px);
         box-shadow: 0 4px 30px 0 rgba(0, 0, 0, 0.3);
       }
     }
@@ -219,6 +347,7 @@
 
 .six-ways-card__thumbnail-content {
   position: absolute;
+  display: block;
   z-index: 2;
   margin: 0 1rem 0.875rem;
   bottom: 0;
@@ -226,9 +355,10 @@
 
 .six-ways-card__thumbnail-head {
   color: white;
-  font-size: 0.9375rem;
+  font-size: 1.125rem;
   line-height: 1.3;
   letter-spacing: 0.002rem;
+  max-width: 20rem;
 }
 
 .six-ways-card__thumbnail-subhead {
@@ -269,7 +399,8 @@
     font-size: 1.25rem;
     padding-left: 5px;
     background-color: rgba(0, 0, 0, 0.5);
-    color: rgba(255, 255, 255, 0.5);
+    border: 1px solid #ffffff;
+    color: rgba(255, 255, 255, 1);
     text-shadow: 0px 0px 30px rgba(0, 0, 0, 0.5);
     transition: all 0.2s;
   }
@@ -465,39 +596,49 @@
   }
 }
 
-// Testimonial
-.home-testimonial__container {
+// program framework
+.home-program-framework__container {
   border-top: 1px solid $gray-border;
   background-color: white;
 }
 
-.home-testimonial__box {
+.home-program-framework__box {
   width: 55rem;
   background-color: white;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1);
+  @include border-radius(10px);
+  overflow: hidden;
 
   @include media-breakpoint-down(md) {
     width: auto;
   }
 }
-.home-testimonial__image-container {
+.home-program-framework__image-container {
   @include media-breakpoint-down(sm) {
     text-align: center;
   }
 }
-.home-testimonial__image {
-  @include media-breakpoint-down(sm) {
-    @include border-radius(50%);
-    width: 200px;
-    height: 200px;
-    overflow: hidden;
-    margin: auto;
-    position: relative;
-    top: 1rem;
+.home-program-framework__image-link {
+  display: block;
+  position: relative;
+
+  &:before {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.06);
+    transition: all 0.3s;
+  }
+  &:hover,
+  &:focus {
+    &:before {
+      background-color: rgba(0, 0, 0, 0);
+    }
   }
 }
 
-.home-testimonial__text {
+.home-program-framework__text {
   height: 310px;
   padding: 30px 50px;
   font-size: 1rem;
@@ -520,7 +661,7 @@
   }
 }
 
-.home-testimonial__text--author-sub {
+.home-program-framework__text--author-sub {
   font-size: 0.875rem;
   line-height: 1.2;
   padding-left: 10px;

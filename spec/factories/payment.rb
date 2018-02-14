@@ -8,7 +8,6 @@ FactoryBot.define do
     end
 
     trait :requested do
-      period 1
       amount { Founder::FEE * startup.billing_founders_count }
       instamojo_payment_request_id { SecureRandom.hex }
       instamojo_payment_request_status 'Pending'
@@ -25,7 +24,7 @@ FactoryBot.define do
       paid_at 1.day.ago
       billing_start_at 1.day.ago
       billing_end_at 30.days.from_now
-      payment_type { Payment::TYPE_ADMISSION }
+      payment_type { Payment::TYPE_NORMAL }
     end
   end
 end

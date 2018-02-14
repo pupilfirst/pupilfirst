@@ -1,12 +1,10 @@
 - content_for :head
   title SV.CO Talent: Invest &amp Hire
-  meta name="description" content="Hire, acqui-hire, invest and build a pipeline from India's best startup talent."
   meta property="og:title" content="SV.CO Talent: Invest & Hire"
   meta property="og:type" content="website"
   meta property="og:url" content=talent_url
   meta property="og:image" content=image_url('home/index/program-ideas.jpg')
   meta property="og:video" content="https://www.youtube.com/v/SWR95X-lmz4"
-  meta property="og:description" content="Hire, acqui-hire, invest and build a pipeline from India's best startup talent. Discover great startups for your company, accelerator, or investment fund."
   meta property="fb:app_id" content=Rails.application.secrets.facebook.dig(:app_id)
 
 #talent__index
@@ -123,7 +121,7 @@
             = image_tag 'shared/partner_logos/tally.png'
           p
             ' India&rsquo;s leading business management software product company has acquihired
-            | the founding team of #{link_to 'Z-Pay', timeline_path('z-pay')}.
+            | the founding team of #{link_to 'Z-Pay', product_path('z-pay')}.
         .slide-item
           .company-logo
             = image_tag 'shared/partner_logos/freshdesk.png', class: 'img-responsive'

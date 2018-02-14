@@ -14,7 +14,7 @@ feature 'Edit founders' do
 
   context "when founder hasn't completed the screening prerequisites" do
     scenario 'founder is blocked from editing founders' do
-      sign_in_user(founder.user, referer: admissions_founders_path)
+      sign_in_user(founder.user, referer: admissions_team_members_path)
 
       expect(page).to have_content("The page you were looking for doesn't exist.")
     end
@@ -28,7 +28,7 @@ feature 'Edit founders' do
     end
 
     scenario 'founder adds a cofounder', js: true do
-      sign_in_user(founder.user, referer: admissions_founders_path)
+      sign_in_user(founder.user, referer: admissions_team_members_path)
 
       expect(page).to have_content('You are the team lead.')
       expect(page).to have_selector('.founders-form__founder-content-box', count: 1)
@@ -50,9 +50,9 @@ feature 'Edit founders' do
         fill_in 'Name of your college', with: college_name
       end
 
-      click_button 'Save founders'
+      click_button 'Save details'
 
-      expect(page).to have_content('Details of founders have been saved!')
+      expect(page).to have_content('Details of team members have been saved!')
 
       # The cofounder addition target should have been completed.
       expect(cofounder_addition_target.status(founder)).to eq(Targets::StatusService::STATUS_COMPLETE)
@@ -72,80 +72,13 @@ feature 'Edit founders' do
       # Invited founder should receive an email.
       open_email(email)
 
-      expect(current_email).to have_content('You have been invited to join a startup')
-    end
-
-    scenario 'founder invites another who has already completed payment', js: true do
-      another_startup = create :level_0_startup
-      payment = create :payment, :paid, startup: another_startup
-      another_founder = another_startup.team_lead
-
-      sign_in_user(founder.user, referer: admissions_founders_path)
-
-      expect(page).to have_content('You are the team lead.')
-
-      page.find('.founders-form__add-founder-button').click
-
-      expect(page).to have_selector('.founders-form__founder-content-box', count: 2)
-
-      within all('.founders-form__founder-content-box').last do
-        fill_in 'Name', with: another_founder.name
-        fill_in 'Email address', with: another_founder.email
-        fill_in 'Mobile phone number', with: another_founder.phone
-        select "My college isn't listed", from: 'College'
-        fill_in 'Name of your college', with: Faker::Lorem.words(3).join(' ')
-      end
-
-      click_button 'Save founders'
-
-      expect(page).to have_content('Details of founders have been saved!')
-
-      # Invited startup should have changed.
-      expect(another_founder.reload.invited_startup).to eq(startup)
-      expect(another_founder.startup).to eq(another_startup)
-
-      # Accept invitation.
-      open_email(another_founder.email)
-
-      expect(current_email).to have_content('You have been invited to join a startup')
-
-      click_here_path = '/' + current_email.find_link('click here')[:href].split('/')[-2..-1].join('/')
-      visit click_here_path
-
-      expect(page).to have_content "You have successfully joined #{founder.name}'s startup"
-
-      # Payment should get refunded.
-      expect(payment.reload.refunded?).to eq(true)
-      expect(payment.startup).to eq(nil)
-
-      # Founder should now be in the new startup.
-      expect(another_founder.reload.startup).to eq(startup)
-      expect(another_founder.invited_startup).to eq(nil)
-    end
-
-    scenario 'founder accepts invitation to another startup when already in a startup with other members' do
-      another_startup = create :level_0_startup
-      payment = create :payment, :paid, startup: another_startup
-      another_founder = another_startup.team_lead
-      another_founder.update!(invited_startup: startup, invitation_token: 'TEST_TOKEN')
-      yet_another_founder = create :founder, startup: another_startup
-
-      visit admissions_accept_invitation_path(token: 'TEST_TOKEN')
-
-      # Payment should still exist.
-      expect(payment.reload.refunded?).to eq(false)
-      expect(payment.founder).to eq(another_founder)
-      expect(payment.startup).to eq(another_startup)
-
-      # yet_another_founder should now be the team lead.
-      expect(another_startup.reload.team_lead).to eq(yet_another_founder)
-      expect(another_startup.founders.count).to eq(1)
+      expect(current_email).to have_content('You have been invited to join a team')
     end
 
     scenario 'a founder assumes role of team lead', js: true do
       another_founder = create :founder, startup: startup
 
-      sign_in_user(another_founder.user, referer: admissions_founders_path)
+      sign_in_user(another_founder.user, referer: admissions_team_members_path)
 
       expect(page).to have_content("Your team lead is #{founder.name}.")
 
@@ -160,7 +93,7 @@ feature 'Edit founders' do
     scenario 'founder invites another from a higher level', js: true do
       admitted_lead = create(:startup).team_lead
 
-      sign_in_user(founder.user, referer: admissions_founders_path)
+      sign_in_user(founder.user, referer: admissions_team_members_path)
 
       expect(page).to have_content('You are the team lead.')
 
@@ -176,14 +109,14 @@ feature 'Edit founders' do
         fill_in 'Name of your college', with: Faker::Lorem.words(3).join(' ')
       end
 
-      click_button 'Save founders'
+      click_button 'Save details'
 
-      expect(page).to have_content("It looks like you've attempted to invite founders who are at Level 1 or above.")
-      expect(page).to have_content('is already an admitted founder')
+      expect(page).to have_content("It looks like you've attempted to invite users who have already joined the SV.CO program.")
+      expect(page).to have_content('is already an admitted SV.CO user')
     end
 
     scenario 'founder makes a possible mistake in the email, gets an email hint and accepts it', js: true do
-      sign_in_user(founder.user, referer: admissions_founders_path)
+      sign_in_user(founder.user, referer: admissions_team_members_path)
 
       page.find('.founders-form__add-founder-button').click
 
@@ -199,7 +132,7 @@ feature 'Edit founders' do
         fill_in 'Name of your college', with: college_name
       end
 
-      click_button 'Save founders'
+      click_button 'Save details'
 
       expect(page).to have_content("It looks like you've entered an invalid email address")
 
@@ -208,15 +141,15 @@ feature 'Edit founders' do
         find('#founder-form__password-hint-accept').click
       end
 
-      click_button 'Save founders'
-      expect(page).to have_content('Details of founders have been saved!')
+      click_button 'Save details'
+      expect(page).to have_content('Details of team members have been saved!')
 
       last_founder = Founder.last
       expect(last_founder.email).to eq('test@gmail.com')
     end
 
     scenario 'founder makes a possible mistake in the email, gets an email hint and rejects it', js: true do
-      sign_in_user(founder.user, referer: admissions_founders_path)
+      sign_in_user(founder.user, referer: admissions_team_members_path)
 
       page.find('.founders-form__add-founder-button').click
 
@@ -232,7 +165,7 @@ feature 'Edit founders' do
         fill_in 'Name of your college', with: college_name
       end
 
-      click_button 'Save founders'
+      click_button 'Save details'
 
       expect(page).to have_content("It looks like you've entered an invalid email address")
 
@@ -241,8 +174,8 @@ feature 'Edit founders' do
         find('#founder-form__password-hint-reject').click
       end
 
-      click_button 'Save founders'
-      expect(page).to have_content('Details of founders have been saved!')
+      click_button 'Save details'
+      expect(page).to have_content('Details of team members have been saved!')
 
       last_founder = Founder.last
       expect(last_founder.email).to eq('test@gamil.com')
@@ -259,7 +192,7 @@ feature 'Edit founders' do
     end
 
     scenario 'founder is informed he cant edit the team anymore' do
-      sign_in_user(founder.user, referer: admissions_founders_path)
+      sign_in_user(founder.user, referer: admissions_team_members_path)
 
       expect(page).to have_content('You have already paid for your current team!')
     end

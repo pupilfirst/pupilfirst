@@ -11,7 +11,7 @@ feature 'Feedback Popup' do
 
   context 'User is not logged in' do
     scenario 'User visits the timeline page to see feedback' do
-      visit timeline_path(startup.id, startup.slug, show_feedback: feedback.id)
+      visit product_path(startup.id, startup.slug, show_feedback: feedback.id)
 
       # user must be redirected to sign in page
       expect(page).to have_text('Sign in to SV.CO')
@@ -27,7 +27,7 @@ feature 'Feedback Popup' do
 
   context 'User is logged in, but not a founder of the startup' do
     scenario 'User visits timeline page and sees no feedback' do
-      sign_in_user(founder.user, referer: timeline_path(startup.id, startup.slug, show_feedback: feedback.id))
+      sign_in_user(founder.user, referer: product_path(startup.id, startup.slug, show_feedback: feedback.id))
 
       expect(page).to have_text(startup.product_name)
 
@@ -44,7 +44,7 @@ feature 'Feedback Popup' do
     end
 
     scenario 'User is logged in as a founder of the startup', js: true do
-      sign_in_user(founder.user, referer: timeline_path(startup.id, startup.slug, show_feedback: feedback.id))
+      sign_in_user(founder.user, referer: product_path(startup.id, startup.slug, show_feedback: feedback.id))
 
       expect(page).to have_text(startup.product_name)
 

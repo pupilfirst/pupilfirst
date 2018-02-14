@@ -1,11 +1,10 @@
 require 'rails_helper'
 
 describe Instamojo::VerifyPaymentRequestService do
-  subject { described_class.new(payment, period) }
+  subject { described_class.new(payment) }
 
   let(:instamojo) { instance_double Instamojo }
   let(:payment) { create :payment }
-  let(:period) { [1, 3, 6].sample }
 
   before do
     allow(Instamojo).to receive(:new).and_return(instamojo)
@@ -32,7 +31,7 @@ describe Instamojo::VerifyPaymentRequestService do
       end
 
       it 'recreates the payment request and returns updated payment' do
-        expect(Instamojo::RequestPaymentService).to receive(:new).with(payment, period).and_return(request_payment_service)
+        expect(Instamojo::RequestPaymentService).to receive(:new).with(payment).and_return(request_payment_service)
         expect(request_payment_service).to receive(:request).and_return(updated_payment)
         expect(subject.verify).to eq(updated_payment)
       end

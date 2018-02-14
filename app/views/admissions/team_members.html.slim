@@ -1,0 +1,50 @@
+- content_for :head do
+  title SV.CO Apply Now
+
+.secondary-banner
+  .container
+    .text-center
+      h1 Update Team Details
+
+.container
+  - if @fee_paid
+    .row.justify-content-md-center.mt-4
+      .col.col-md-7
+        .content-box.p-4.text-center
+          h3.text-center <strong>You have already paid for your current team!</strong>
+
+          p
+            ' Your team has already completed first month&rsquo;s payment for
+            | #{current_startup.billing_founders_count} team members.
+          p
+            |  If you want to alter your team, please contact us as #{mail_to 'help@sv.co'}
+          hr
+            = link_to student_dashboard_path, class: 'mt-3 btn btn-md btn-secondary btn-with-icon', 'aria-hidden' => 'true' do
+              i.fa.fa-arrow-left
+              | Return to dashboard
+  - else
+    .row.justify-content-md-center.mt-4
+      .col.col-md-7
+        - team_lead = @form.model.team_lead
+
+        .content-box.p-4.text-center
+          - if team_lead == current_founder
+            h3.font-semibold.text-center You are the team lead.
+          - else
+            h3.font-semibold.text-center Your team lead is <strong>#{team_lead.name}</strong>.
+
+          p The team lead acts as SV.CO's single point of contact during the admissions process, and beyond.
+
+          - if team_lead == current_founder
+            p Any other team member can assume the role of team lead. If you want some else to accept this role, instruct them to sign in and visit this page.
+          - else
+            p You can assume the role of team lead for this team.
+            = button_to 'Become the team lead', admissions_team_lead_path, class: 'btn btn-md btn-primary mt-3 text-uppercase', data: { confirm: 'Are you sure?', disable_with: 'Assuming role...' }
+
+    .row.justify-content-md-center
+      .col.col-md-7
+        .text-center.mb-3.mt-4
+          h4.font-semibold.mb-2 Your team members
+
+        = react_component('FoundersForm', { authenticityToken: form_authenticity_token, founders: @form.founders_for_react, errors: @form.errors, collegesUrl: colleges_url, collegeNames: @form.college_names })
+

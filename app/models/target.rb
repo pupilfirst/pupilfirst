@@ -2,10 +2,17 @@
 # frozen_string_literal: true
 
 class Target < ApplicationRecord
-  KEY_ADMISSIONS_SCREENING = 'admissions_screening'
-  KEY_ADMISSIONS_FEE_PAYMENT = 'admissions_fee_payment'
-  KEY_ADMISSIONS_COFOUNDER_ADDITION = 'admissions_cofounder_addition'
-  KEY_ADMISSIONS_ATTEND_INTERVIEW = 'admissions_attend_interview'
+  KEY_SCREENING = 'screening'
+  KEY_COFOUNDER_ADDITION = 'cofounder_addition'
+  KEY_R1_TASK = 'r1_task'
+  KEY_R1_SHOW_PREVIOUS_WORK = 'r1_show_previous_work'
+  KEY_R2_TASK = 'r2_task'
+  KEY_ATTEND_INTERVIEW = 'attend_interview'
+  KEY_FEE_PAYMENT = 'initial_fee_payment'
+
+  def self.valid_keys
+    [KEY_SCREENING, KEY_COFOUNDER_ADDITION, KEY_R1_TASK, KEY_R1_SHOW_PREVIOUS_WORK, KEY_R2_TASK, KEY_ATTEND_INTERVIEW, KEY_FEE_PAYMENT].freeze
+  end
 
   STATUS_COMPLETE = :complete
   STATUS_NEEDS_IMPROVEMENT = :needs_improvement
@@ -80,8 +87,9 @@ class Target < ApplicationRecord
   validates :role, presence: true, inclusion: { in: valid_roles }
   validates :title, presence: true
   validates :description, presence: true
-  validates :key, uniqueness: true, allow_nil: true
+  validates :key, uniqueness: true, inclusion: { in: valid_keys }, allow_nil: true
   validates :submittability, inclusion: { in: valid_submittability_values }
+  validates :call_to_action, length: { maximum: 20 }
 
   validate :days_to_complete_or_session_at_should_be_present
 
@@ -210,7 +218,7 @@ class Target < ApplicationRecord
   alias has_rubric rubric?
 
   def target_type_description
-    role = founder_role? ? 'Founder ' : 'Team '
+    role = founder_role? ? 'Personal ' : 'Team '
     type = if session?
       'Session'
     elsif chore?

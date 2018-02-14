@@ -2,9 +2,6 @@
 - page_end = (20 * page) - 1
 
 - events[page_start..page_end].each do |event|
-  - if event.end_iteration?
-    == render 'timeline_event_end_iteration', event: event, startup: startup
-  - else
     == render 'timeline_event', event: event, startup: startup
 
 - if more

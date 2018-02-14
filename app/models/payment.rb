@@ -8,11 +8,12 @@ class Payment < ApplicationRecord
   STATUS_FAILED = -'failed'
   STATUS_NOT_REQUESTED = -'not_requested'
 
-  TYPE_ADMISSION = -'admission'
+  TYPE_NORMAL = -'normal'
   TYPE_RENEWAL = -'renewal'
+  TYPE_REFUND = -'refund'
 
   def self.valid_payment_types
-    [TYPE_ADMISSION, TYPE_RENEWAL]
+    [TYPE_NORMAL, TYPE_REFUND]
   end
 
   validates :payment_type, inclusion: valid_payment_types, allow_nil: true

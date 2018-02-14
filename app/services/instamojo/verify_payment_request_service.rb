@@ -3,9 +3,8 @@ class Instamojo
     include Loggable
 
     # @param payment [Payment] Requested payment that needs to be verified.
-    def initialize(payment, period)
+    def initialize(payment)
       @payment = payment
-      @period = period
     end
 
     # @return [Payment] Verified payment.
@@ -20,7 +19,7 @@ class Instamojo
 
       # If invalid, create another request.
       log "Payment ##{@payment.id} is invalid (#{request_details[:payment_request_status]}) - creating another request."
-      Instamojo::RequestPaymentService.new(@payment, @period).request
+      Instamojo::RequestPaymentService.new(@payment).request
     end
 
     private

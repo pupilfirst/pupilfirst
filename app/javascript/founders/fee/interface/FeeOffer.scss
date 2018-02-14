@@ -1,0 +1,77 @@
+@import "../../../shared/variables";
+@import "../../../shared/bootstrapMixins";
+
+.box {
+  padding: 0;
+
+  @include media-breakpoint-up(sm) {
+    @include border-radius(5px);
+  }
+
+  @include media-breakpoint-down(sm) {
+    width: 100%;
+    margin-bottom: 1rem;
+    min-height: auto;
+  }
+}
+
+.amount-highlight {
+  padding: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: $dark-primary-background;
+  width: 100%;
+}
+
+.box-recommended {
+  composes: box;
+
+  position: relative;
+  z-index: 1;
+  border: 1px solid $light-secondary;
+  min-height: 26.75rem;
+  box-shadow: 0 0 20px 0 lighten($light-secondary, 30%);
+
+  @include media-breakpoint-down(sm) {
+    order: 1;
+  }
+}
+
+.recommended-notice {
+  background-color: $light-secondary;
+  height: 30px;
+  line-height: 1.6;
+  color: white;
+  padding: 4px 0px;
+}
+
+.discount-details {
+  border-top: 1px dashed $light-secondary;
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+}
+
+.discount-title {
+  color: $brand-primary;
+  font-weight: bold;
+}
+
+.discount {
+  height: 3.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.submit-button {
+  box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+}
+
+.coupon-form-container {
+  @include media-breakpoint-up(sm) {
+    width: 260px;
+  }
+}

@@ -17,6 +17,10 @@ html lang='en'
     = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
 
     = csrf_meta_tags
+
+    meta name="description" content=meta_description
+    meta property="og:description" content=meta_description
+
     = yield :head
 
     link rel="icon" href=image_url('layouts/shared/favicon.png')
@@ -37,7 +41,7 @@ html lang='en'
 
       .container
         nav.navbar.navbar-expand-lg.navbar-light.navbar-container.home-navbar
-          a#logo.navbar-brand href="#{dashboard_or_root_url}"
+          a#logo.navbar-brand href=root_url
             img.site-logo src="#{image_url 'shared/logo-white.svg'}" alt='Logo of SV.CO'
 
           - unless @hide_nav_links

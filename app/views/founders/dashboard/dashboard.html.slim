@@ -1,6 +1,5 @@
 - content_for :head
-  title SV.CO Founder Dashboard
-  meta name="description" content="A guided set of targets on how to build a great startup."
+  title SV.CO Student Dashboard
 
 #dashboard-show-tour.hide [
   data-intro=t('dashboard.dashboard.tour.intro')
@@ -31,5 +30,3 @@
   == react_component('FounderDashboard', @react_data.merge(authenticityToken: form_authenticity_token, iconPaths: icon_paths, testMode: Rails.env.test?))
 
 == render 'view-embed'
-
-== render 'startup_restart_form'

@@ -1,80 +1,14 @@
+- presenter = Founders::FeePresenter.new(self, current_startup, @payment)
+
 - content_for :head do
   title SV.CO Membership Fee
-  meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
 
-script src="https://js.instamojo.com/v1/checkout.js"
+  == javascript_pack_tag 'founders/fee', 'data-turbolinks-track': 'reload'
+  == stylesheet_pack_tag 'founders/fee', 'data-turbolinks-track': 'reload'
 
-#founder__fee
+script src='https://js.instamojo.com/v1/checkout.js'
 
-.secondary-banner
-  .container
-    .application-stages-head.text-center
-      h1 Temporarily disabled
-      h4.mx-auto Fee payments have been temporarily disabled.
+#founders__fee
 
-.container
-  .row.justify-content-center
-    .col-md-8
-      .content-box.mt-3.mb-3.apply-submitted
-        h3.text-center.mb-2
-          ' You cannot make payments
-          span.brand-secondary.font-semibold at this time.
-
-        ul.admissions-fee__important-points
-          li If you need any help please contact us on Slack or mail us at #{mail_to 'help@sv.co'}.
-
-        / - if @payment.requested?
-          .alert.alert-warning.mt-2
-            i.fa.fa-warning
-            ' &nbsp;It looks like you've attempted to pay at least once before, but didn't complete the process. Note that it
-            ' might take a few minutes for the payment status to update, if you experienced network issues after completing
-            ' the payment. Please contact us at #{mail_to 'help@sv.co'} if you're experiencing any issue.
-
-        / - if policy(:admissions).coupon_submit? || policy(:admissions).coupon_remove?
-          .row.justify-content-center
-            .col-md-8
-              .coupon-form-container.text-center.mx-auto
-                - if policy(:admissions).coupon_remove?
-                  .discount-coupon__box.discount-coupon-applied-box.p-1
-                    p.discount-coupon-applied-box__message.font-semibold
-                      ' Coupon with code
-                      span.discount-coupon-applied--code.dark-secondary
-                        | #{@coupon.code}
-                      | applied!
-
-                    - discount = @coupon.discount_percentage
-                    - extension = @coupon.user_extension_days
-                    - if discount.present?
-                      - benefit = t('founders.fee.discount_benefit', percentage: discount)
-                      - if extension.present?
-                        - benefit += ' and ' + t('founders.fee.extension_benefit', extension: extension)
-                    - else
-                      - benefit = t('founders.fee.extension_benefit', extension: extension)
-                    p.mt-2 You have unlocked #{benefit.html_safe}.
-
-                    - if @coupon.instructions.present?
-                      .coupon-instructions.mt-2
-                        p
-                          span.font-semibold
-                            ' Note:
-                          | #{@coupon.instructions}
-
-                    = button_to 'Remove', admissions_coupon_remove_path, method: :patch, class: 'btn btn-ghost-secondary btn-sm text-uppercase mt-2'
-                - else
-                  #coupon-form-show.discount-coupon__box.discount-coupon__box--show.brand-secondary.font-semibold.p-3
-                    h4.font-semibold.dark-secondary.m-0
-                      ' Do you have a coupon?
-                  #coupon-form.discount-coupon__box.discount-coupon__box--form.simple-form-container.d-none.p-3
-                    = simple_form_for @coupon_form,
-                      url: admissions_coupon_submit_path,
-                      method: :post do |f|
-
-                      = f.input :code, label: false, autofocus: true, placeholder: 'Enter Code'
-                      #coupon-form-hide.coupon-form-hide.d-none.btn.btn-ghost-secondary.btn-sm.text-uppercase.mr-2.discount-coupon__box-btn
-                        ' Hide
-                      = f.submit 'Apply Code', class: 'btn btn-secondary btn-sm text-uppercase discount-coupon__box-btn'
-
-  / .fee-offer__container.my-4
-    == render 'fee_offer', period: 1
-    == render 'fee_offer', period: 6
-    == render 'fee_offer', period: 3
+/ Root component for React-driven interface.
+#founders-fee-interface__root data-props=presenter.interface_props.to_json

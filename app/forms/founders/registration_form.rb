@@ -14,6 +14,7 @@ module Founders
     property :ignore_email_hint, virtual: true
     property :college_id, validates: { presence: true }
     property :college_text, validates: { length: { maximum: 250 } }
+    property :coder, validates: { presence: true }
 
     # Custom validations.
     validate :do_not_reapply
@@ -56,7 +57,8 @@ module Founders
         name: name,
         email: email,
         phone: phone,
-        reference: supplied_reference
+        reference: supplied_reference,
+        coder: coder
       }.merge(college_details)
 
       Founders::RegistrationService.new(founder_params).register

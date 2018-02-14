@@ -1,11 +1,10 @@
 require 'rails_helper'
 
 describe Instamojo::RequestPaymentService do
-  subject { described_class.new(payment, period) }
+  subject { described_class.new(payment) }
 
   let(:instamojo) { instance_double Instamojo }
   let(:payment) { create :payment }
-  let(:period) { [1, 3, 6].sample }
   let(:startup) { payment.startup }
   let(:founder) { payment.founder }
   let(:short_url) { Faker::Internet.url }
@@ -17,7 +16,7 @@ describe Instamojo::RequestPaymentService do
 
   describe '#request' do
     it 'creates a new instamojo payment request and returns updated payment' do
-      amount = Startups::FeePayableService.new(startup).fee_payable(period: period)
+      amount = Startups::FeeAndCouponDataService.new(startup).emi
 
       expect(instamojo).to receive(:create_payment_request)
         .with(

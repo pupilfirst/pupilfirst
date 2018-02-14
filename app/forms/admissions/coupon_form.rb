@@ -12,7 +12,7 @@ module Admissions
     end
 
     def code_must_be_valid
-      errors[:code] << 'code is not valid' unless coupon.present? && coupon.still_valid?
+      errors[:code] << 'is not valid' unless coupon.present? && coupon.still_valid?
     end
 
     def apply_coupon

@@ -9,10 +9,6 @@ module ApplicationHelper
     end
   end
 
-  def dashboard_or_root_url
-    current_founder&.startup.present? ? dashboard_founder_url : root_url
-  end
-
   def short_url(full_url, expires_at: nil)
     ShortenedUrls::ShortenService.new(full_url, expires_at: expires_at).short_url
   end
@@ -20,5 +16,11 @@ module ApplicationHelper
   def show_pending_payment_notice
     page_exempted = current_page?(fee_founder_path) || current_page?(billing_startup_path)
     !page_exempted && !current_startup&.level_zero? && current_startup&.payments&.pending&.any?
+  end
+
+  def meta_description
+    return @meta_description if defined?(@meta_description)
+    description_key = "#{params[:controller]}.#{params[:action]}.meta_description"
+    I18n.exists?(description_key) ? t(description_key) : t('application.default.meta_description')
   end
 end

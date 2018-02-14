@@ -121,7 +121,7 @@ export default class FounderDetails extends React.Component {
     if (this.props.founder.fields.invited) {
       return "Delete invitation";
     } else {
-      return "Remove this founder";
+      return "Remove this team member";
     }
   }
 
@@ -159,8 +159,8 @@ export default class FounderDetails extends React.Component {
         {this.props.founder.fields.invited && (
           <div className="alert alert-warning" role="alert">
             <i className="fa fa-exclamation-triangle" />&nbsp;&nbsp;
-            <strong>Invitation pending:</strong> This founder hasn't yet
-            accepted the invitation to join your startup. Please let them know
+            <strong>Invitation pending:</strong> This student hasn't yet
+            accepted the invitation to join your team. Please let them know
             that an email has been sent to their mailbox with a link to accept
             your invitation.
           </div>

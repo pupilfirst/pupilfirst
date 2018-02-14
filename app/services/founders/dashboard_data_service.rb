@@ -124,7 +124,7 @@ module Founders
     end
 
     def target_fields
-      %i[id role title description completion_instructions resource_url slideshow_embed video_embed youtube_video_id days_to_complete points_earnable timeline_event_type_id session_at link_to_complete submittability archived]
+      %i[id role title description completion_instructions resource_url slideshow_embed video_embed youtube_video_id days_to_complete points_earnable timeline_event_type_id session_at link_to_complete submittability archived call_to_action]
     end
 
     def session_fields

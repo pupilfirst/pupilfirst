@@ -33,7 +33,7 @@
               ' #{startup.twitter_link}
 
     .startup-logo-block
-      a.startup-logo-image href=timeline_url(startup.id, startup.slug)
+      a.startup-logo-image href=product_url(startup.id, startup.slug)
         - if startup.logo.present?
           = image_tag startup.logo.url, class: 'img-fluid'
         - else
@@ -41,7 +41,7 @@
 
     .startup-details
       .startup-details__header
-        a.product-name.brand-secondary.font-semibold href=timeline_url(startup.id, startup.slug)
+        a.product-name.brand-secondary.font-semibold href=product_url(startup.id, startup.slug)
           ' #{startup.product_name}
 
         - if startup.startup_categories.present?
@@ -59,7 +59,7 @@
 
       .startups-attachments
         span.startup-attachments__link data-toggle="tooltip" data-placement="top" title=startup.level.display_name
-          img.startups-link__icon alt="Startup Level" src="#{image_url 'startups/index/attachments-icon-stage.svg'}"
+          img.startups-link__icon alt="Team Level" src="#{image_url 'startups/index/attachments-icon-stage.svg'}"
           ' #{startup.level.name}
 
         - if startup.presentation_link?
@@ -76,7 +76,7 @@
           .founder-avatar-list
             - startup.founders.not_exited.order(:name).each do |founder|
               .founder-avatar.founder-tooltip.tooltip-popup
-                a.founder-tooltip-item.founder-avatar__thumbnail href=founder_profile_url(slug: founder.slug)
+                a.founder-tooltip-item.founder-avatar__thumbnail href=student_profile_url(slug: founder.slug)
                   == avatar(founder.name, founder: founder, version: :thumb)
                 span.founder-tooltip-content
                   .founder-tooltip-thumbnail
@@ -87,10 +87,10 @@
                     - if founder.roles.present?
                       .founder-tooltip-role
                         = founder.roles.map { |role| t("models.founder.role.#{role}") }.join ', '
-                    a.founder-profile-view-link href=founder_profile_url(slug: founder.slug)
+                    a.founder-profile-view-link href=student_profile_url(slug: founder.slug)
                       span.founder-profile-view-link__icon.i.fa.fa-user-circle-o
                       | View Profile
 
           .view-timeline-btn
-            a.btn.btn-sm.btn-primary.text-uppercase href=timeline_url(startup.id, startup.slug)
+            a.btn.btn-sm.btn-primary.text-uppercase href=product_url(startup.id, startup.slug)
               ' Timeline

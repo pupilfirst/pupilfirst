@@ -3,16 +3,15 @@ class Instamojo
   class RequestPaymentService
     include Loggable
 
-    def initialize(payment, period)
+    def initialize(payment)
       @payment = payment
-      @period = period
     end
 
     # @return [Payment] Updated payment, with instamojo payment request details.
     def request
-      # Set the payment period and its amount (calculated using the payment period).
-      amount = Startups::FeePayableService.new(@payment.startup).fee_payable(period: @period)
-      @payment.update!(period: @period, amount: amount)
+      # Set the payment amount.
+      amount = Startups::FeeAndCouponDataService.new(@payment.startup).emi
+      @payment.update!(amount: amount)
 
       # Create a new Instamojo payment request.
       response = create_instamojo_payment_request

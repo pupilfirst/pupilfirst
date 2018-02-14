@@ -4,7 +4,7 @@ module Founders
     before_action :skip_container
     before_action :require_active_subscription, if: :startup_is_admitted
 
-    # GET /founder/dashboard
+    # GET /founder/dashboard, GET /student/dashboard
     def dashboard
       @startup = current_founder.startup&.decorate
 
@@ -13,32 +13,10 @@ module Founders
 
       load_react_data
 
-      @restart_form = Founders::StartupRestartForm.new(Reform::OpenForm.new) if @startup.restartable_levels.present?
-
       @tour = tour_dashboard?
     end
 
-    # POST /founder/startup_restart
-    def startup_restart
-      startup = current_founder.startup
-      raise_not_found if startup.restartable_levels.blank?
-
-      @restart_form = Founders::StartupRestartForm.new(Reform::OpenForm.new)
-
-      if @restart_form.validate(startup_restart_params)
-        level = Level.find(startup_restart_params.fetch(:level_id))
-        reason = startup_restart_params.fetch(:reason)
-        Startups::RestartService.new(current_founder).request_restart(level, reason)
-
-        flash[:success] = 'Your request for a pivot has been submitted successfully!'
-      else
-        flash[:error] = 'Something went wrong. Please try again!'
-      end
-
-      redirect_to dashboard_founder_path(from: 'startup_restart')
-    end
-
-    # GET /founder/dashboard/targets/:id(/:slug)
+    # GET /founder/dashboard/targets/:id(/:slug), GET /student/dashboard/targets/:id(/:slug)
     def target_overlay
       # TODO: Add Pundit authorization
 
@@ -67,10 +45,6 @@ module Founders
       (current_founder.tour_dashboard? || params[:tour].present?)
     end
 
-    def startup_restart_params
-      params.require(:founders_startup_restart).permit(:level_id, :reason)
-    end
-
     def founder_details
       @startup.founders.not_exited.each_with_object([]) do |founder, array|
         array << {
@@ -92,7 +66,6 @@ module Founders
     def load_react_data
       @react_data = {
         currentLevel: @startup.level.number,
-        requestedRestartLevel: @startup.requested_restart_level&.number,
         levels: dashboard_data_service.levels,
         sessions: dashboard_data_service.sessions,
         sessionTags: dashboard_data_service.session_tags,

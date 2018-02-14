@@ -21,7 +21,7 @@ describe InstamojoController do
     create :payment,
       startup: startup,
       founder: founder,
-      amount: Startups::FeePayableService.new(startup).undiscounted_fee(period: 1),
+      amount: Startups::FeeAndCouponDataService.new(startup).emi,
       instamojo_payment_request_id: instamojo_payment_request_id,
       instamojo_payment_request_status: 'Pending',
       short_url: short_url,
@@ -52,13 +52,13 @@ describe InstamojoController do
 
     it 'redirects to founder dashboard with the stage param set' do
       get :redirect, params: { payment_request_id: payment.instamojo_payment_request_id, payment_id: payment_id }
-      expect(response).to redirect_to(dashboard_founder_path(from: 'instamojo_redirect'))
+      expect(response).to redirect_to(student_dashboard_path(from: 'instamojo_redirect'))
     end
 
     it 'updates payment and associated entries' do
       get :redirect, params: { payment_request_id: payment.instamojo_payment_request_id, payment_id: payment_id }
 
-      expect(response).to redirect_to(dashboard_founder_path(from: 'instamojo_redirect'))
+      expect(response).to redirect_to(student_dashboard_path(from: 'instamojo_redirect'))
 
       expect(payment.reload.instamojo_payment_id).to eq(payment_id)
       expect(payment.instamojo_payment_request_status).to eq('Completed')
@@ -75,12 +75,12 @@ describe InstamojoController do
       let(:paid_at) { 5.seconds.ago.round }
 
       before do
-        payment.update!(paid_at: paid_at, payment_type: Payment::TYPE_ADMISSION)
+        payment.update!(paid_at: paid_at, payment_type: Payment::TYPE_NORMAL)
       end
 
       it 'proceeds without updating paid_at' do
         get :redirect, params: { payment_request_id: payment.instamojo_payment_request_id, payment_id: payment_id }
-        expect(response).to redirect_to(dashboard_founder_path(from: 'instamojo_redirect'))
+        expect(response).to redirect_to(student_dashboard_path(from: 'instamojo_redirect'))
         expect(payment.reload.paid_at).to eq(paid_at)
       end
     end

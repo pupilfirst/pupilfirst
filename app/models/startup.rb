@@ -30,10 +30,12 @@ class Startup < ApplicationRecord
   SV_STATS_LINK = 'bit.ly/svstats2'
 
   ADMISSION_STAGE_SIGNED_UP = 'Signed Up'
-  ADMISSION_STAGE_SCREENING_COMPLETED = 'Screening Completed'
-  ADMISSION_STAGE_COFOUNDERS_ADDED = 'Added Cofounders'
+  ADMISSION_STAGE_SELF_EVALUATION_COMPLETED = 'Self Evaluation Completed'
+  ADMISSION_STAGE_R1_TASK_PASSED = 'Round 1 Task Passed'
+  ADMISSION_STAGE_R2_TASK_PASSED = 'Round 2 Task Passed'
+  ADMISSION_STAGE_INTERVIEW_PASSED = 'Interview Passed'
   ADMISSION_STAGE_PAYMENT_INITIATED = 'Payment Initiated'
-  ADMISSION_STAGE_FEE_PAID = 'Fee Paid'
+  ADMISSION_STAGE_FEE_PAID = 'Initial Payment Completed'
   ADMISSION_STAGE_ADMITTED = 'Admitted'
 
   # agreement duration in years
@@ -61,7 +63,6 @@ class Startup < ApplicationRecord
   scope :agreement_live, -> { where('agreement_signed_at > ?', AGREEMENT_DURATION.years.ago) }
   scope :agreement_expired, -> { where('agreement_signed_at < ?', AGREEMENT_DURATION.years.ago) }
   scope :timeline_verified, -> { joins(:timeline_events).where(timeline_events: { status: TimelineEvent::STATUS_VERIFIED }).distinct }
-  scope :with_referrals, -> { joins(:referred_startups).distinct }
 
   # Custom scope to allow AA to filter by intersection of tags.
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
@@ -123,20 +124,16 @@ class Startup < ApplicationRecord
 
   belongs_to :level
   belongs_to :maximum_level, class_name: 'Level'
-  belongs_to :requested_restart_level, class_name: 'Level', optional: true
   has_many :payments, dependent: :restrict_with_error
   has_many :archived_payments, class_name: 'Payment', foreign_key: 'original_startup_id'
 
   has_one :coupon_usage
   has_one :applied_coupon, through: :coupon_usage, source: :coupon
 
-  has_one :referral_coupon, class_name: 'Coupon', foreign_key: 'referrer_startup_id'
-  has_many :referral_coupon_usages, through: :referral_coupon, source: 'coupon_usages'
-  has_many :referred_startups, through: :referral_coupon_usages, source: 'startup'
-
   has_many :weekly_karma_points
   has_many :resources
   belongs_to :team_lead, class_name: 'Founder', optional: true
+  belongs_to :billing_state, class_name: 'State', optional: true
 
   # use the old name attribute as an alias for legal_registered_name
   alias_attribute :name, :legal_registered_name
@@ -411,11 +408,6 @@ class Startup < ApplicationRecord
     label
   end
 
-  def restartable_levels
-    return Level.none if level.number < 2
-    Level.where(number: 1..(level.number - 1))
-  end
-
   def billing_founders_count
     @billing_founders_count ||= founders.not_exited.count + invited_founders.count
   end
@@ -452,7 +444,7 @@ class Startup < ApplicationRecord
   end
 
   def self.admission_stages
-    [ADMISSION_STAGE_SIGNED_UP, ADMISSION_STAGE_SCREENING_COMPLETED, ADMISSION_STAGE_COFOUNDERS_ADDED, ADMISSION_STAGE_PAYMENT_INITIATED, ADMISSION_STAGE_FEE_PAID, ADMISSION_STAGE_ADMITTED].freeze
+    [ADMISSION_STAGE_SIGNED_UP, ADMISSION_STAGE_SELF_EVALUATION_COMPLETED, ADMISSION_STAGE_R1_TASK_PASSED, ADMISSION_STAGE_R2_TASK_PASSED, ADMISSION_STAGE_INTERVIEW_PASSED, ADMISSION_STAGE_FEE_PAID, ADMISSION_STAGE_ADMITTED].freeze
   end
 
   def active_payment

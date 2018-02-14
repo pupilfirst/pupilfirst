@@ -4,19 +4,21 @@ html lang='en'
     meta charset="utf-8"
     meta http-equiv="X-UA-Compatible" content="IE=edge"
     meta name="viewport" content="width=device-width, initial-scale=1"
-    // The above 3 meta tags *must* come first in the head; any other head
-    // content must come *after* these tags.
 
-    / title SV.CO
+    / The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags.
 
-    // Local Styles
+    / Styles
     = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
 
-    // Scripts
+    / Scripts
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
     = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
 
     = csrf_meta_tags
+
+    meta name="description" content=meta_description
+    meta property="og:description" content=meta_description
+
     = yield :head
 
     link rel="icon" href=image_url('layouts/shared/favicon.png')
@@ -37,7 +39,7 @@ html lang='en'
       section#header.header
         .container
           nav.navbar.navbar-expand-lg.navbar-light.navbar-container
-            a.navbar-brand href="#{dashboard_or_root_url}"
+            a.navbar-brand href=root_url
               img.site-logo src="#{image_url 'shared/logo-color.svg'}" alt='Logo of SV.CO'
 
             - unless @hide_nav_links

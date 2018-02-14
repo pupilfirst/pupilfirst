@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180109065249) do
+ActiveRecord::Schema.define(version: 20180213092607) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,12 +20,12 @@ ActiveRecord::Schema.define(version: 20180109065249) do
   create_table "active_admin_comments", id: :serial, force: :cascade do |t|
     t.string "namespace"
     t.text "body"
-    t.string "resource_id", null: false
     t.string "resource_type", null: false
     t.integer "author_id"
     t.string "author_type"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer "resource_id", null: false
     t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id"
     t.index ["namespace"], name: "index_active_admin_comments_on_namespace"
     t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id"
@@ -124,9 +124,6 @@ ActiveRecord::Schema.define(version: 20180109065249) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "instructions"
-    t.integer "referrer_startup_id"
-    t.integer "user_extension_days"
-    t.integer "referrer_extension_days"
   end
 
   create_table "course_modules", id: :serial, force: :cascade do |t|
@@ -282,6 +279,7 @@ ActiveRecord::Schema.define(version: 20180109065249) do
     t.integer "resume_file_id"
     t.string "slack_access_token"
     t.jsonb "screening_data"
+    t.boolean "coder"
     t.index "((screening_data -> 'score'::text))", name: "index_founders_on_screening_data_score", using: :gin
     t.index ["college_id"], name: "index_founders_on_college_id"
     t.index ["invitation_token"], name: "index_founders_on_invitation_token", unique: true
@@ -385,13 +383,11 @@ ActiveRecord::Schema.define(version: 20180109065249) do
     t.datetime "webhook_received_at"
     t.datetime "paid_at"
     t.string "notes"
-    t.boolean "refunded"
     t.integer "founder_id"
     t.integer "startup_id"
     t.integer "original_startup_id"
     t.datetime "billing_start_at"
     t.datetime "billing_end_at"
-    t.integer "period", default: 1
     t.string "payment_type"
     t.index ["founder_id"], name: "index_payments_on_founder_id"
     t.index ["original_startup_id"], name: "index_payments_on_original_startup_id"
@@ -567,7 +563,6 @@ ActiveRecord::Schema.define(version: 20180109065249) do
     t.boolean "dropped_out", default: false
     t.integer "level_id"
     t.integer "iteration", default: 1
-    t.integer "requested_restart_level_id"
     t.date "program_started_on"
     t.boolean "agreements_verified"
     t.string "courier_name"
@@ -581,6 +576,9 @@ ActiveRecord::Schema.define(version: 20180109065249) do
     t.bigint "team_lead_id"
     t.integer "referral_reward_days", default: 0
     t.integer "undiscounted_founder_fee"
+    t.text "billing_address"
+    t.bigint "billing_state_id"
+    t.index ["billing_state_id"], name: "index_startups_on_billing_state_id"
     t.index ["level_id"], name: "index_startups_on_level_id"
     t.index ["maximum_level_id"], name: "index_startups_on_maximum_level_id"
     t.index ["slug"], name: "index_startups_on_slug", unique: true
@@ -682,6 +680,7 @@ ActiveRecord::Schema.define(version: 20180109065249) do
     t.datetime "feedback_asked_at"
     t.datetime "slack_reminders_sent_at"
     t.string "session_by"
+    t.string "call_to_action"
     t.index ["archived"], name: "index_targets_on_archived"
     t.index ["chore"], name: "index_targets_on_chore"
     t.index ["faculty_id"], name: "index_targets_on_faculty_id"
@@ -721,6 +720,7 @@ ActiveRecord::Schema.define(version: 20180109065249) do
     t.string "proof_required"
     t.string "suggested_stage"
     t.boolean "major"
+    t.boolean "archived", default: false, null: false
     t.index ["role"], name: "index_timeline_event_types_on_role"
   end
 
@@ -841,6 +841,7 @@ ActiveRecord::Schema.define(version: 20180109065249) do
   add_foreign_key "startups", "founders", column: "team_lead_id"
   add_foreign_key "startups", "levels"
   add_foreign_key "startups", "levels", column: "maximum_level_id"
+  add_foreign_key "startups", "states", column: "billing_state_id"
   add_foreign_key "target_groups", "levels"
   add_foreign_key "target_skills", "skills"
   add_foreign_key "target_skills", "targets"

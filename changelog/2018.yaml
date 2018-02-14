@@ -1,5 +1,101 @@
 ---
 changelog:
+- timestamp: '2018-02-05T11:02:24Z'
+  changes:
+  - timestamp: '2018-02-05T11:01:25Z'
+    title: The Level 0 dashboard was heavily modified to serve admissions better.
+    trello: https://trello.com/c/GHZgYwKD
+    private: true
+    description: 'Changes made include: removing the ToggleBar component, allowing
+      customization of submit button text, Hiding the ''time required'' metric & Implementing
+      auto-verification of targets.'
+    category: feature
+  - timestamp: '2018-02-05T10:57:14Z'
+    title: Fixed the broken TrixEditor React component.
+    trello: https://trello.com/c/OPvgM47o
+    private: true
+    description: A missing import statement was included.
+    category: bugfix
+  - timestamp: '2018-02-05T07:25:31Z'
+    title: Implemented archival feature for TimelineEventType. This will help archiving
+      all types related to old startup model of the program.
+    trello: https://trello.com/c/PRh4w91N
+    private: true
+    description: Cleaned up all code related to startup iteration along with this
+      task.
+    category: feature
+  - timestamp: '2018-02-05T07:23:10Z'
+    title: Updated content in home and join page to aid admissions for product school
+    trello: https://trello.com/c/c6WMIVIR/
+    private: true
+    category: content
+  - timestamp: '2018-02-05T07:21:25Z'
+    title: Fixed wrong data in daily slack admission stats and in admissions dashboard
+    trello: https://trello.com/c/Q9luIde5
+    private: true
+    category: bugfix
+  - timestamp: '2018-02-01T05:34:06Z'
+    title: Fixed crash when a user who was previously part of a team attempted to
+      view MOOC course contents.
+    trello: https://trello.com/c/alJtti7Y
+    private: false
+    category: bugfix
+  - timestamp: '2018-01-31T11:35:49Z'
+    title: Renamed help.sv.co to wiki.sv.co.
+    trello: https://trello.com/c/9q3ONZCq
+    private: false
+  - timestamp: '2018-01-18T11:14:43Z'
+    title: Upgraded to Ruby 2.4.3.
+    trello: https://trello.com/c/FRMDZONH
+    private: true
+- timestamp: '2018-01-29T13:34:07Z'
+  changes:
+  - timestamp: '2018-01-29T06:22:38Z'
+    title: Configured robots.txt to disallow crawling of redirect URLs.
+    trello: https://trello.com/c/Z8x0Js5U
+    private: true
+  - timestamp: '2018-01-29T06:10:08Z'
+    title: Corrected the order of questions and answers from typeform screening data
+      for properly displaying them in founder show page
+    trello: https://trello.com/c/1M76epOt
+    private: true
+    description: The results are now stored as an array in Founder#screening_data
+  - timestamp: '2018-01-25T07:02:26Z'
+    title: Removed unused application-stages-head CSS class
+    trello: https://trello.com/c/YhKlnZ8W
+    private: true
+  - timestamp: '2018-01-25T06:01:31Z'
+    title: Updated admission stages to those relavant to the new admission process
+      for the product school
+    trello: https://trello.com/c/tz26O12k
+    private: true
+    description: The new stages were updated in the admissions dashboard, intercom
+      stages and the daily stats for the slack admissions channel
+  - timestamp: '2018-01-25T05:59:03Z'
+    title: Added a link to SVCO Wiki article on scholarships, just below program fee
+      in join page
+    trello: https://trello.com/c/6p7ME8DO
+    private: true
+    category: content
+  - timestamp: '2018-01-18T09:39:39Z'
+    title: The fee payment interface now asks for billing address before procceding
+      to the payment gateway.
+    trello: https://trello.com/c/3hubdXO6
+    private: false
+    description: This is a pretty big change. First of all, the static fee interface
+      has been replaced with a React-powered one, adding Billing address fields which
+      are submitted along with the fee submit request. This also makes a lot of changes
+      to allow for the move to EMI model with a fixed maximum fee. Use of payment
+      'period' has been removed entirely, and new code has been added to account for
+      generation of EMI, the possibility of payments via NEFT that are sums above
+      the EMI, etc. There's more work to be done here. For the time being, the interface
+      will be deployed in the 'disabled' state, keeping fee payment locked down until
+      all related work is complete, and we're ready for the next batch of students.
+    category: feature
+  - timestamp: '2018-01-15T10:01:16Z'
+    title: Added team member option to join form's reference select.
+    trello: https://trello.com/c/iMMAmF9J
+    private: true
 - timestamp: '2018-01-15T09:33:02Z'
   changes:
   - timestamp: '2018-01-15T07:13:27Z'

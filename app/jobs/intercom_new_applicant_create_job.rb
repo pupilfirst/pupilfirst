@@ -24,7 +24,7 @@ class IntercomNewApplicantCreateJob < ApplicationJob
     )
 
     # IntercomLastApplicantEventUpdateJob.perform_later(founder, 'submitted_application')
-    Intercom::LevelZeroStageUpdateJob.perform_later(founder, 'Signed Up')
+    Intercom::LevelZeroStageUpdateJob.perform_later(founder, Startup::ADMISSION_STAGE_SIGNED_UP)
   end
 
   def founder_college_name(founder)

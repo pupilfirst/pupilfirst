@@ -1,0 +1,14 @@
+@import "../../../shared/variables";
+@import "../../../shared/bootstrapMixins";
+
+.coupon-box {
+  @include border-radius(10px);
+  border: 1px dashed $brand-secondary;
+  transition: all 0.2s;
+  background-color: lighten($light-secondary, 50%);
+
+  span.help-block {
+    display: inline-block;
+    margin-top: 0.5rem;
+  }
+}

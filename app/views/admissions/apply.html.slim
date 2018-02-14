@@ -1,0 +1,222 @@
+- presenter = Admissions::ApplyPresenter.new(self)
+
+- content_for :head do
+  title SV.CO Apply Now
+  meta property="og:title" content="Join SV.CO"
+  meta property="og:type" content="website"
+  meta property="og:url" content=join_url
+  meta property="og:image" content=image_url('home/index/program-events.jpg')
+  meta property="fb:app_id" content=Rails.application.secrets.facebook.dig(:app_id)
+
+  = javascript_include_tag 'https://www.youtube.com/iframe_api', async: true
+
+#admissions__join
+
+section.apply-hero__banner
+  .apply-hero__message-container.text-center
+    .container
+      h1.apply-hero__message-text
+        .apply-hero__message-text-small Welcome to
+        ' Freshworks School of
+        .font-bold
+          | Internet Products @ SV.CO
+      h2.font-regular.apply-hero__message-subtitle
+        | Learn to build world class software products while in college
+
+      .pt-3
+        a#admissions-join__hero-start-link.btn.btn-primary.btn-lg.apply-call-to-action__button href="#apply-form"
+          | #{presenter.link_to_form_text}
+
+section.apply-partners__container.mx-auto
+  .container.apply-partners__box.text-center
+    .row.flex-column.flex-md-row
+      .col-md-4
+        p.apply-partners__text.text-uppercase Program Partner
+        = image_tag 'home/index/sv-partner-freshworks.svg', class: 'img-fluid mx-auto apply-partners__logo--freshworks d-block mb-2'
+
+      .col-md-4
+        p.apply-partners__text.text-uppercase Scholarship Partner
+        = image_tag 'home/index/sv-partner-paytm.svg', class: 'img-fluid mx-auto apply-partners__logo--paytm d-block mb-2'
+
+      .col-md-4
+        p.apply-partners__text.text-uppercase Knowledge Partner
+        = image_tag 'home/index/sv-partner-tracxn.png', class: 'img-fluid mx-auto apply-partners__logo--tracxn d-block mb-2'
+
+section.school-of-saas__container.py-5
+  .container
+    .saas-program__box
+      .d-flex.flex-column.flex-md-row
+        .col-md-5.saas-program__program-requirements
+          h3.saas-program__program-requirements-head.mb-0
+            ' Program
+            .font-semibold
+              | Overview
+
+          ul.list-unstyled.mt-4
+            li.saas-program__program-requirements-list-item.mb-4
+              .saas-program__program-requirements-content
+                h4.saas-program__program-requirements-title.font-semibold.mb-0
+                  | Skills Required
+                p.saas-program__program-requirements-text
+                  ' Minimal fluency in coding - will be evaluated
+                  br
+                  | during the admission process.
+
+            li.saas-program__program-requirements-list-item.mb-4
+              .saas-program__program-requirements-content
+                h4.saas-program__program-requirements-title.font-semibold.mb-0
+                  | Program Duration
+                p.saas-program__program-requirements-text
+                  ' 6 months
+
+            li.saas-program__program-requirements-list-item.mb-4
+              .saas-program__program-requirements-content
+                h4.saas-program__program-requirements-title.font-semibold.mb-0
+                  | Team
+                p.saas-program__program-requirements-text
+                  ' You can join alone or as a team of maximum 3 developers.
+
+            li.saas-program__program-requirements-list-item
+              .saas-program__program-requirements-content
+                h4.saas-program__program-requirements-title.font-semibold.mb-0
+                  | Product Idea
+                p.saas-program__program-requirements-text
+                  ' Choose from a pool of ideas
+                  | if you don&rsquo;t have one.
+
+        .col-md-7
+          .row.school-of-saas__program-promises
+            .col-md-12.p-0.pr-2
+              h3.saas-program__program-promises-head.mb-0
+                .font-semibold
+                  | Our Promises to a Student Developer
+              ul.list-unstyled.mt-4
+                li.saas-program__program-promises-list-item.mb-4
+                  .saas-program__program-promises-content
+                    h4.saas-program__program-promises-title.font-semibold.mb-0
+                      | Ship an Internet Product in a software stack of your choice.
+
+                li.saas-program__program-promises-list-item.mb-4
+                  .saas-program__program-promises-content
+                    h4.saas-program__program-promises-title.font-semibold.mb-0
+                      | Pick up real-world industry skills while in college.
+
+                li.saas-program__program-promises-list-item.mb-4
+                  .saas-program__program-promises-content
+                    h4.saas-program__program-promises-title.font-semibold.mb-0
+                      | Get your code reviewed by industry experts.
+
+                li.saas-program__program-promises-list-item.mb-4
+                  .saas-program__program-promises-content
+                    h4.saas-program__program-promises-title.font-semibold.mb-0
+                      | Access to internship opportunities at premium product companies.
+
+                li.saas-program__program-promises-list-item.mb-4
+                  .saas-program__program-promises-content
+                    h4.saas-program__program-promises-title.font-semibold.mb-0
+                      | One-on-one Mentoring sessions with Industry Developers.
+
+                li.saas-program__program-promises-list-item.mb-4
+                  .saas-program__program-promises-content
+                    h4.saas-program__program-promises-title.font-semibold.mb-0
+                      | 100% Job Guarantee with premium startups or a full refund.
+              = link_to 'https://wiki.sv.co/', class: 'btn btn-lg btn-with-icon btn-secondary', target: '_blank' do
+                i.fa.fa-book
+                ' &nbsp;SV.CO WIKI
+
+            / .col-md-5.p-0
+              / .saas-program__graduation-support
+              = button_to '#', class: 'btn btn-lg btn-with-icon btn-secondary' do
+                i.fa.fa-book
+                ' &nbsp;SV.CO WIKI
+                / h5.font-bold.saas-program__graduation-support-year.mb-0
+                /   | SV.CO Wiki
+                / h4.saas-program__graduation-support-sub-text.font-bold.mb-0
+                /   ' More about
+                /   span.font-regular
+                /     | SV.CO Program
+                /   / | &nbsp;your money back.
+
+    / .pt-4.text-center
+    /   a#admissions-join__school-start-now-link.btn.btn-primary.btn-lg.apply-call-to-action__button href="#apply-form"
+    /     | #{presenter.link_to_form_text}
+
+/ section.application-fee__container.py-5
+  .container
+    .apply-section__head.mb-4
+      h3.apply-section__head-title.text-center.font-black
+        | Program Fee
+
+    .current-batch-data__container.text-center
+      .row.program-fee__container.mx-auto.text-center
+        .program-fee__box
+          h4.font-semibold.program-fee__title.text-uppercase.px-4.pt-3.pb-2.mb-2
+            ' One Time Fee:
+          h5.program-fee__title-large.px-4.mb-0.font-bold &#8377;1 Lakh
+          p
+            ' per developer.
+          .program-fee__scholorship.mt-3.p-3
+            p.program-fee__scholorship__text.font-bold
+              ' Scholarships Available - Upto 80% off!
+            p.program-fee__scholorship__text.font-bold.mb-2
+              ' EMI options available.
+            a.program-fee__scholorship__link.font-semibold.p-2 href="https://wiki.sv.co/admissions-to-sv-co/fees-and-scholarships/scholarships-at-svco" target="_blank"
+              | Read More
+              i.fa.fa-arrow-circle-right.ml-2
+
+#apply-form.apply-form__container.py-5
+  - if current_founder&.startup.blank?
+    .container
+      .apply-section__head.mb-4
+        h3.apply-section__head-title.apply-section__head-title--white.text-center.font-black
+          | #{presenter.link_to_form_text}
+    .apply-form__box.mx-auto
+      - if presenter.admit?
+        == render 'application_form'
+      - else
+        == render 'prospective_applicant_form'
+  - else
+    .container
+      .apply-section__head
+        h3.apply-section__head-title.apply-section__head-title--white.text-center.font-black
+          .font-light
+            ' You have already completed registration.
+        .pt-3.text-center
+          a.btn.btn-primary.btn-lg.apply-call-to-action__button href=student_dashboard_path
+            | Go to Dashboard
+
+#admission-kochi-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header.justify-content-end
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/P97g3GcFQLI" frameborder="0" allowfullscreen="allowfullscreen"
+
+#alpha-day-chennai-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header.justify-content-end
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/TfLMV-XkfGw" frameborder="0" allowfullscreen="allowfullscreen"
+
+#customer-insights-bangalore-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header.justify-content-end
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/dn0Q7DuCfsU" frameborder="0" allowfullscreen="allowfullscreen"
+
+#silicon-valley-trip-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header.justify-content-end
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/cENGQa2JgJE" frameborder="0" allowfullscreen="allowfullscreen"

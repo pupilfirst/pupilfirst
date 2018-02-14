@@ -27,6 +27,6 @@ handleFeeSubmit = ->
 
 
 $(document).on 'turbolinks:load', ->
-  if $('#founder__fee').length
+  if $('#founders__fee').length
     handleCouponFormVisibility()
     handleFeeSubmit()

@@ -29,9 +29,9 @@ describe Payments::BillingService do
         expect { subject.new.execute }.to change { Payment.count }.by(1).and change { ActionMailer::Base.deliveries.count }.by(2)
 
         open_email(startup_1.team_lead.email)
-        expect(current_email).to have_content('Your SV․CO subscription expires in 5 days. To continue having access to our services please pay the subscription fee.')
+        expect(current_email).to have_content('Your SV․CO subscription expires in 5 days. To continue having access to our services please pay the EMI for the program fee.')
         open_email(startup_2.team_lead.email)
-        expect(current_email).to have_content('Your SV․CO subscription expires in 3 days. To continue having access to our services please pay the subscription fee.')
+        expect(current_email).to have_content('Your SV․CO subscription expires in 3 days. To continue having access to our services please pay the EMI for the program fee.')
       end
     end
 

@@ -33,7 +33,7 @@
               ' #{startup.twitter_link}
 
     .startup-logo-block
-      a.startup-logo-image href=timeline_url(startup.id, startup.slug)
+      a.startup-logo-image href=product_url(startup.id, startup.slug)
         - if startup.logo.present?
           = image_tag startup.logo.url, class: 'img-fluid'
         - else
@@ -41,7 +41,7 @@
 
     .startup-details
       .startup-details__header
-        a.product-name.brand-secondary.font-semibold href=timeline_url(startup.id, startup.slug)
+        a.product-name.brand-secondary.font-semibold href=product_url(startup.id, startup.slug)
           ' #{startup.product_name}
 
         - if startup.startup_categories.present?
@@ -92,5 +92,5 @@
                       | View Profile
 
           .view-timeline-btn
-            a.btn.btn-sm.btn-primary.text-uppercase href=timeline_url(startup.id, startup.slug)
+            a.btn.btn-sm.btn-primary.text-uppercase href=product_url(startup.id, startup.slug)
               ' Timeline

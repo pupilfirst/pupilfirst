@@ -92,7 +92,7 @@ ActiveAdmin.register Startup do
           new_admin_startup_feedback_path(
             startup_feedback: {
               startup_id: startup.id,
-              reference_url: timeline_url(startup.id, startup.slug)
+              reference_url: product_url(startup.id, startup.slug)
             }
           ),
           class: 'member_link'
@@ -105,7 +105,7 @@ ActiveAdmin.register Startup do
     column :product_description
     column(:level) { |startup| startup.level.number }
     column(:maximum_level) { |startup| startup.maximum_level.number }
-    column(:timeline_link) { |startup| timeline_url(startup.id, startup.slug) }
+    column(:timeline_link) { |startup| product_url(startup.id, startup.slug) }
     column :presentation_link
     column :product_video_link
     column :wireframe_link
@@ -137,14 +137,14 @@ ActiveAdmin.register Startup do
       new_admin_startup_feedback_path(
         startup_feedback: {
           startup_id: Startup.friendly.find(params[:id]).id,
-          reference_url: timeline_url(startup.id, startup.slug)
+          reference_url: product_url(startup.id, startup.slug)
         }
       )
     )
   end
 
   action_item :view_timeline, only: :show do
-    link_to('View Timeline', timeline_url(startup.id, startup.slug), target: '_blank')
+    link_to('View Timeline', product_url(startup.id, startup.slug), target: '_blank')
   end
 
   # TODO: rewrite as its only used for dropping out startups now

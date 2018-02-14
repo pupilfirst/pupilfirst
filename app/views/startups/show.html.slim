@@ -30,7 +30,7 @@
             img.timeline-verified.margin-left-10 src='#{image_url 'startups/show/timeline-verified.gif'}'
         - if policy(@startup).edit?
           small.edit-startup-link
-            a href=edit_startup_path
+            a href=edit_product_path
               i.fa.fa-pencil
       .startup-name
         - if @startup.name.present?

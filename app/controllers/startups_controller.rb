@@ -2,7 +2,7 @@ class StartupsController < ApplicationController
   before_action :authenticate_founder!, except: %i[show index timeline_event_show paged_events]
   before_action :require_active_subscription, except: %i[index show timeline_event_show paged_events billing]
 
-  # GET /startups
+  # GET /startups, GET /products
   def index
     @skip_container = true
     startups = Startup.includes(:level, :startup_categories).admitted.approved.order(timeline_updated_on: 'DESC')
@@ -38,7 +38,7 @@ class StartupsController < ApplicationController
     @has_more_events = more_events?(@events_for_display, 1)
   end
 
-  # GET /startups/:id/:event_title/:event_id
+  # GET /startups/:id/:event_title/:event_id, GET /products/:id/:event_title/:event_id
   def timeline_event_show
     # Reuse the startup action, because that's what this page also shows.
     show
@@ -62,13 +62,14 @@ class StartupsController < ApplicationController
     render layout: false
   end
 
-  # GET /startup/edit
+  # GET /startup/edit, GET /product/edit
   def edit
     authorize current_startup
     @form = Startups::EditForm.new(current_startup)
   end
 
   # PATCH /startup
+  # TODO: When rendering back errors from product/edit, attempt to set path to /product
   def update
     authorize current_startup
     @form = Startups::EditForm.new(current_startup)
@@ -76,7 +77,7 @@ class StartupsController < ApplicationController
     if @form.validate(params[:startups_edit])
       @form.save!
       flash[:success] = 'Team details have been updated.'
-      redirect_to timeline_path(current_startup.id, current_startup.slug)
+      redirect_to product_path(current_startup.id, current_startup.slug)
     else
       render 'startups/edit'
     end

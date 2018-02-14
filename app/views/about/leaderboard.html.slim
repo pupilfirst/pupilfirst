@@ -56,7 +56,7 @@ nav aria-label="breadcrumb" role="navigation"
                           span.leaderboard__rank-change
                             i.fa class=change_in_rank_icon(change_in_rank)
                             span.leaderboard__rank-delta = change_in_rank
-                        td = link_to "#{startup.product_name} #{startup.name.present? ? "(#{startup.name})" : ''}", timeline_path(startup.id, startup.slug)
+                        td = link_to "#{startup.product_name} #{startup.name.present? ? "(#{startup.name})" : ''}", product_path(startup.id, startup.slug)
                         td = startup.team_lead.try(:fullname)
                 .leaderboard__inactive-startup-message
                   - inactive_startups_count = @leaderboards[level.number].count { |startup, rank, points, rank_change| points == 0 }

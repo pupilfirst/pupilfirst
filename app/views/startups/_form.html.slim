@@ -51,7 +51,7 @@ p.mb-2
           p
             ' The URL to your timeline is currently:
             code
-              = timeline_url(current_startup.id, current_startup.slug)
+              = product_url(current_startup.id, current_startup.slug)
           p.mb-2
             ' You can change the last part of the URL, the <em>slug</em>, to something you prefer (as long as it is unique).
 
@@ -81,4 +81,4 @@ p.mb-2
 
   .form-group.mt-3
     = f.submit class: 'btn btn-md btn-primary', value: 'Update team profile'
-    = link_to 'Cancel', timeline_path(current_startup.id, current_startup.slug), class: 'btn btn-md btn-ghost-secondary mt-3 mt-sm-0 ml-sm-3'
+    = link_to 'Cancel', product_path(current_startup.id, current_startup.slug), class: 'btn btn-md btn-ghost-secondary mt-3 mt-sm-0 ml-sm-3'

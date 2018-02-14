@@ -7,7 +7,7 @@
 = content_for :title_button_text do
   | View Startup Timeline
 
-= content_for(:title_button_link, timeline_url(@connect_request.startup.id, @connect_request.startup.slug))
+= content_for(:title_button_link, product_url(@connect_request.startup.id, @connect_request.startup.slug))
 
 = content_for :salutation do
   | Hello #{@connect_request.faculty.name},

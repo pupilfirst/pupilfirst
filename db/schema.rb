@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180212094032) do
+ActiveRecord::Schema.define(version: 20180213080954) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -629,8 +629,10 @@ ActiveRecord::Schema.define(version: 20180212094032) do
     t.integer "sort_index"
     t.boolean "milestone"
     t.integer "level_id"
+    t.bigint "track_id"
     t.index ["level_id"], name: "index_target_groups_on_level_id"
     t.index ["sort_index"], name: "index_target_groups_on_sort_index"
+    t.index ["track_id"], name: "index_target_groups_on_track_id"
   end
 
   create_table "target_prerequisites", id: :serial, force: :cascade do |t|
@@ -752,6 +754,12 @@ ActiveRecord::Schema.define(version: 20180212094032) do
     t.index ["timeline_event_type_id"], name: "index_timeline_events_on_timeline_event_type_id"
   end
 
+  create_table "tracks", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "universities", id: :serial, force: :cascade do |t|
     t.string "name"
     t.integer "state_id"
@@ -847,6 +855,7 @@ ActiveRecord::Schema.define(version: 20180212094032) do
   add_foreign_key "startups", "levels", column: "maximum_level_id"
   add_foreign_key "startups", "states", column: "billing_state_id"
   add_foreign_key "target_groups", "levels"
+  add_foreign_key "target_groups", "tracks"
   add_foreign_key "target_skills", "skills"
   add_foreign_key "target_skills", "targets"
   add_foreign_key "timeline_event_files", "timeline_events"

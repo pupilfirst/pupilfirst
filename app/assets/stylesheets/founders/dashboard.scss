@@ -32,7 +32,6 @@
   background-color: white;
   color: $light-grey-text;
   padding: 1rem 1.875rem;
-  width: 120px;
 
   @include media-breakpoint-down(sm) {
     width: 75px;

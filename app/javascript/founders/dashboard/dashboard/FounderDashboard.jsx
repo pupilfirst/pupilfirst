@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import TimelineBuilder from "./TimelineBuilder";
 import ToggleBar from "./founderDashboard/ToggleBar";
 import Targets from "./founderDashboard/Targets";
-import Sessions from "./founderDashboard/Sessions";
 import TargetOverlay from "./founderDashboard/TargetOverlay";
 
 export default class FounderDashboard extends React.Component {
@@ -11,20 +10,23 @@ export default class FounderDashboard extends React.Component {
     super(props);
 
     this.state = {
-      levels: this.props.levels,
-      sessions: this.props.sessions,
-      activeTab: "targets",
+      targets: props.targets,
+      chosenLevelId: props.currentLevel.id,
       timelineBuilderVisible: false,
       timelineBuilderParams: {
         targetId: null,
         selectedTimelineEventTypeId: null
       },
-      selectedTarget: this.targetDetails(
-        this.props.initialTargetId,
-        this.props.initialTargetType
-      )
+      selectedTarget: this.targetDetails(props.initialTargetId, true)
     };
 
+    // Memoize some values.
+    this.availableTrackIds = this.loadAvailableTrackIds();
+
+    // Store initial track ID now that all of them have been computed.
+    this.state.activeTrackId = this.availableTrackIds[0];
+
+    this.setRootState = this.setRootState.bind(this);
     this.chooseTab = this.chooseTab.bind(this);
     this.closeTimelineBuilder = this.closeTimelineBuilder.bind(this);
     this.openTimelineBuilder = this.openTimelineBuilder.bind(this);
@@ -34,6 +36,37 @@ export default class FounderDashboard extends React.Component {
     this.handlePopState = this.handlePopState.bind(this);
   }
 
+  setRootState(updater, callback) {
+    // newState can be object or function!
+    this.setState(updater, () => {
+      if (this.props.debug) {
+        console.log("setRootState", JSON.stringify(this.state));
+      }
+
+      if (callback) {
+        callback();
+      }
+    });
+  }
+
+  loadAvailableTrackIds() {
+    let that = this;
+
+    let targetGroupsInLevel = this.props.targetGroups.filter(targetGroup => {
+      return targetGroup.level.id === that.state.chosenLevelId;
+    });
+
+    let trackIds = targetGroupsInLevel.map(targetGroup => {
+      if (_.isObject(targetGroup.track)) {
+        return targetGroup.track.id;
+      } else {
+        return "default";
+      }
+    });
+
+    return _.uniq(trackIds);
+  }
+
   componentDidMount() {
     window.onpopstate = this.handlePopState;
   }
@@ -41,10 +74,7 @@ export default class FounderDashboard extends React.Component {
   handlePopState(event) {
     if (event.state.targetId) {
       this.setState({
-        selectedTarget: this.targetDetails(
-          event.state.targetId,
-          event.state.targetType
-        )
+        selectedTarget: this.targetDetails(event.state.targetId)
       });
     } else {
       this.setState({ selectedTarget: null });
@@ -71,31 +101,25 @@ export default class FounderDashboard extends React.Component {
     });
   }
 
-  pendingSessionsCount() {
-    return this.state.sessions.filter(function(target) {
-      return target.status === "pending";
-    }).length;
-  }
-
   handleTargetSubmission(targetId) {
-    let updatedLevels = $.extend(true, {}, this.state.levels);
-    let updateSubmissionStatus = this.updateSubmissionStatus;
+    let updatedTargets = _.cloneDeep(this.state.targets);
 
-    $.each(updatedLevels, function(index, level) {
-      $.each(level.target_groups, function(index, targetGroup) {
-        targetGroup.targets = updateSubmissionStatus(
-          targetGroup.targets.slice(),
-          targetId
-        );
-      });
-    });
+    let targetIndex = _.findIndex(updatedTargets, ["id", targetId]);
 
-    let updatedSessions = updateSubmissionStatus(
-      this.state.sessions.slice(),
-      targetId
-    );
+    if (targetIndex === -1) {
+      console.error(
+        "Could not find target with ID " +
+          targetId +
+          " in list of known targets."
+      );
 
-    let updatedSelectedTarget = this.state.selectedTarget;
+      return;
+    }
+
+    updatedTargets[targetIndex].status = "submitted";
+
+    let updatedSelectedTarget = _.cloneDeep(this.state.selectedTarget);
+
     if (
       this.state.selectedTarget &&
       targetId === this.state.selectedTarget.id
@@ -104,20 +128,9 @@ export default class FounderDashboard extends React.Component {
     }
 
     this.setState({
-      levels: updatedLevels,
-      sessions: updatedSessions,
+      targets: updatedTargets,
       selectedTarget: updatedSelectedTarget
     });
-  }
-
-  updateSubmissionStatus(targets, targetId) {
-    $.each(targets, function(index, target) {
-      if (target.id === targetId) {
-        target.status = "submitted";
-        return false;
-      }
-    });
-    return targets;
   }
 
   targetOverlayCloseCB() {
@@ -125,27 +138,18 @@ export default class FounderDashboard extends React.Component {
     history.pushState({}, "", "/founder/dashboard");
   }
 
-  targetDetails(targetId, targetType) {
-    // Chores should be picked from the list of targets.
-    if (targetType === "chore") {
-      targetType = "target";
+  targetDetails(targetId, loadFromProps = false) {
+    if (loadFromProps) {
+    } else {
+      return _.find(this.state.targets, ["id", targetId]);
     }
-
-    let collection = {
-      target: _.flatMap(
-        _.flatMap(this.props.levels, "target_groups"),
-        "targets"
-      ),
-      session: this.props.sessions
-    };
-
-    return _.find(collection[targetType], ["id", targetId]);
   }
 
-  selectTargetCB(targetId, targetType) {
-    this.setState({ selectedTarget: this.targetDetails(targetId, targetType) });
+  selectTargetCB(targetId) {
+    this.setState({ selectedTarget: this.targetDetails(targetId) });
+
     history.pushState(
-      { targetId: targetId, targetType: targetType },
+      { targetId: targetId },
       "",
       "/founder/dashboard/targets/" + targetId
     );
@@ -154,42 +158,19 @@ export default class FounderDashboard extends React.Component {
   render() {
     return (
       <div className="founder-dashboard-container pb-5">
-        {this.props.currentLevel != 0 && (
-          <ToggleBar
-            selected={this.state.activeTab}
-            chooseTabCB={this.chooseTab}
-            openTimelineBuilderCB={this.openTimelineBuilder}
-            pendingSessions={this.pendingSessionsCount("sessions")}
-            currentLevel={this.props.currentLevel}
-          />
-        )}
+        <ToggleBar
+          availableTrackIds={this.availableTrackIds}
+          rootProps={this.props}
+          rootState={this.state}
+          setRootState={this.setRootState}
+        />
 
-        {this.state.activeTab === "targets" && (
-          <Targets
-            currentLevel={this.props.currentLevel}
-            levels={this.state.levels}
-            openTimelineBuilderCB={this.openTimelineBuilder}
-            levelUpEligibility={this.props.levelUpEligibility}
-            authenticityToken={this.props.authenticityToken}
-            iconPaths={this.props.iconPaths}
-            founderDetails={this.props.founderDetails}
-            maxLevelNumber={this.props.maxLevelNumber}
-            programLevels={this.props.programLevels}
-            selectTargetCB={this.selectTargetCB}
-          />
-        )}
-
-        {this.state.activeTab === "sessions" && (
-          <Sessions
-            currentLevel={this.props.currentLevel}
-            sessions={this.state.sessions}
-            sessionTags={this.props.sessionTags}
-            openTimelineBuilderCB={this.openTimelineBuilder}
-            iconPaths={this.props.iconPaths}
-            founderDetails={this.props.founderDetails}
-            selectTargetCB={this.selectTargetCB}
-          />
-        )}
+        <Targets
+          rootProps={this.props}
+          rootState={this.state}
+          setRootState={this.setRootState}
+          selectTargetCB={this.selectTargetCB}
+        />
 
         {this.state.timelineBuilderVisible && (
           <TimelineBuilder
@@ -221,10 +202,12 @@ export default class FounderDashboard extends React.Component {
 }
 
 FounderDashboard.propTypes = {
-  currentLevel: PropTypes.number,
-  levels: PropTypes.object,
-  sessions: PropTypes.array,
-  sessionTags: PropTypes.array,
+  targets: PropTypes.array.isRequired,
+  levels: PropTypes.array.isRequired,
+  faculty: PropTypes.array.isRequired,
+  targetGroups: PropTypes.array.isRequired,
+  tracks: PropTypes.array.isRequired,
+  currentLevel: PropTypes.object.isRequired,
   timelineEventTypes: PropTypes.object,
   facebookShareEligibility: PropTypes.string,
   authenticityToken: PropTypes.string,
@@ -233,8 +216,6 @@ FounderDashboard.propTypes = {
   openTimelineBuilderCB: PropTypes.func,
   founderDetails: PropTypes.array,
   maxLevelNumber: PropTypes.number,
-  programLevels: PropTypes.object,
   initialTargetId: PropTypes.number,
-  initialTargetType: PropTypes.string,
   testMode: PropTypes.bool
 };

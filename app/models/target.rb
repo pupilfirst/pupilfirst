@@ -115,14 +115,6 @@ class Target < ApplicationRecord
     errors[:base] << "Target can be a chore, a session, or neither, but not both. Sessions are treated as chores anyway, since they don't need to be repeated."
   end
 
-  validate :session_must_have_level
-
-  def session_must_have_level
-    return unless session?
-    return if level.present?
-    errors[:level] << 'is required for a session' if level.blank?
-  end
-
   validate :avoid_level_mismatch_with_group
 
   def avoid_level_mismatch_with_group

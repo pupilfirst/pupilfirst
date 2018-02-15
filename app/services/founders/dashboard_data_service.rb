@@ -4,81 +4,71 @@ module Founders
       @founder = founder
     end
 
-    def levels
-      start_level = startup.level.number.zero? ? 0 : 1
-
-      @levels ||= (start_level..startup.level.number).each_with_object({}) do |level_number, levels|
-        level = Level.find_by(number: level_number)
-
-        levels[level_number] = {
-          name: level.name,
-          target_groups: target_groups(level)
-        }
-      end
-    end
-
-    def sessions
-      applicable_levels = startup.level.number.zero? ? 0 : (1..startup.maximum_level.number).to_a
-
-      @sessions ||= begin
-        targets = Target.includes(:faculty, :level, :taggings, :skills)
-          .where.not(session_at: nil).where(archived: false)
-          .where(levels: { number: applicable_levels }).order(session_at: :desc)
-          .as_json(
-            only: session_fields,
-            methods: %i[has_rubric target_type target_type_description],
-            include: {
-              faculty: faculty_fields,
-              level: { only: [:number] },
-              taggings: taggings_field
-            }
-          )
-
-        dashboard_decorate(targets)
-      end
-    end
-
-    def session_tags
-      @session_tags ||= Target.tag_counts_on(:tags).pluck(:name)
+    def props
+      {
+        targets: targets,
+        levels: levels,
+        faculty: faculty,
+        targetGroups: target_groups,
+        tracks: tracks
+      }
     end
 
     private
 
-    def target_groups(level)
-      groups = level.target_groups.includes(targets: :faculty)
-        .order('target_groups.sort_index', 'targets.sort_index')
+    def targets
+      # Targets at or below startup's level.
+      applicable_targets = Target.joins(target_group: :level)
+        .includes(:faculty)
+        .where('levels.number <= ?', startup.level.number)
+        .where('levels.number >= ?', minimum_level)
+
+      # Do not load archived targets.
+      applicable_targets = applicable_targets.where.not(archived: true)
+
+      # Load basic data about targets from database.
+      loaded_targets = applicable_targets.as_json(
+        only: target_fields,
+        include: {
+          target_group: { only: :id },
+          faculty: { only: :id }
+        }
+      )
+
+      # Add additional data that cannot be directly queried to each target.
+      loaded_targets.map do |target|
+        dashboard_decorated_data(target)
+      end
+    end
+
+    def levels
+      @levels ||= Level.where('number >= ?', minimum_level).as_json(only: %i[id name number])
+    end
+
+    def faculty
+      Faculty.team.all.as_json(
+        only: %i[id name],
+        methods: :image_url
+      )
+    end
+
+    def target_groups
+      TargetGroup.joins(:level)
+        .where('levels.number <= ?', startup.level.number)
+        .where('levels.number >= ?', minimum_level)
         .as_json(
-          only: target_group_fields,
-          include: {
-            targets: {
-              only: target_fields,
-              methods: %i[has_rubric target_type target_type_description],
-              include: {
-                faculty: faculty_fields
-              }
-            }
-          }
+          only: %i[id name description milestone sort_index],
+          include: { track: { only: :id }, level: { only: :id } }
         )
-
-      trim_archived_targets(groups)
-
-      dashboard_decorate_groups(groups)
     end
 
-    def dashboard_decorate(targets)
-      targets.map do |target_data|
-        dashboard_decorated_data(target_data)
-      end
+    def tracks
+      Track.all.as_json(only: %i[id name])
     end
 
-    def dashboard_decorate_groups(groups)
-      groups.map do |group|
-        group['targets'] = group['targets'].map do |target_data|
-          dashboard_decorated_data(target_data)
-        end
-
-        group
-      end
+    # Avoid loading data for level 0 if startup has crossed it.
+    def minimum_level
+      @minimum_level ||= startup.level.number.zero? ? 0 : 1
     end
 
     def dashboard_decorated_data(target_data)
@@ -100,13 +90,6 @@ module Founders
       target_data
     end
 
-    def trim_archived_targets(groups)
-      groups.map do |group|
-        group['targets'].reject! { |target| target['archived'] }
-        group
-      end
-    end
-
     def target_status_service
       @target_status_service ||= Founders::TargetStatusService.new(@founder)
     end
@@ -119,32 +102,8 @@ module Founders
       @startup ||= @founder.startup
     end
 
-    def target_group_fields
-      %i[id name description milestone]
-    end
-
     def target_fields
-      %i[id role title description completion_instructions resource_url slideshow_embed video_embed youtube_video_id days_to_complete points_earnable timeline_event_type_id session_at link_to_complete submittability archived call_to_action]
-    end
-
-    def session_fields
-      target_fields + %i[session_by]
-    end
-
-    def faculty_fields
-      {
-        only: %i[id name],
-        methods: :image_url
-      }
-    end
-
-    def taggings_field
-      {
-        only: [],
-        include: {
-          tag: { only: [:name] }
-        }
-      }
+      %i[id role title description completion_instructions resource_url slideshow_embed video_embed youtube_video_id days_to_complete points_earnable timeline_event_type_id session_at session_by link_to_complete submittability archived call_to_action sort_index]
     end
   end
 end

@@ -5,7 +5,17 @@ import TargetStatusBadge from "./TargetStatusBadge";
 export default class TargetHeader extends React.Component {
   constructor(props) {
     super(props);
+
+    // Memoize some values.
+    this.target = this.loadTarget();
+
     this.handleClick = this.handleClick.bind(this);
+  }
+
+  loadTarget() {
+    return _.find(this.props.rootState.targets, target => {
+      return target.id === this.props.targetId;
+    });
   }
 
   targetType() {
@@ -14,7 +24,7 @@ export default class TargetHeader extends React.Component {
     } else {
       return (
         <span className="founder-dashboard-target-header__type-tag">
-        {this.props.target.target_type_description}:
+          {this.target.target_type_description}:
         </span>
       );
     }
@@ -22,8 +32,8 @@ export default class TargetHeader extends React.Component {
 
   pointsEarnable() {
     if (
-      typeof this.props.target.points_earnable === "undefined" ||
-      this.props.target.points_earnable === null
+      typeof this.target.points_earnable === "undefined" ||
+      this.target.points_earnable === null
     ) {
       return null;
     } else {
@@ -31,7 +41,7 @@ export default class TargetHeader extends React.Component {
         <div className="founder-dashboard-target-header__info-subtext founder-dashboard-target-header__karma-points font-regular d-none d-md-inline-block">
           Karma Points:
           <span className="founder-dashboard-target-header__info-value">
-            {this.props.target.points_earnable}
+            {this.target.points_earnable}
           </span>
         </div>
       );
@@ -48,8 +58,8 @@ export default class TargetHeader extends React.Component {
 
   sessionAtString() {
     if (
-      typeof this.props.target.session_at === "undefined" ||
-      this.props.target.session_at === null
+      typeof this.target.session_at === "undefined" ||
+      this.target.session_at === null
     ) {
       return null;
     } else {
@@ -57,7 +67,7 @@ export default class TargetHeader extends React.Component {
         <span>
           Session at:
           <span className="founder-dashboard-target-header__info-value">
-            {moment(this.props.target.session_at).format("MMM D, h:mm A")}
+            {moment(this.target.session_at).format("MMM D, h:mm A")}
           </span>
         </span>
       );
@@ -66,14 +76,14 @@ export default class TargetHeader extends React.Component {
 
   daysToCompleteString() {
     if (
-      typeof this.props.target.days_to_complete === "undefined" ||
-      this.props.target.days_to_complete === null
+      typeof this.target.days_to_complete === "undefined" ||
+      this.target.days_to_complete === null
     ) {
       return null;
     } else {
-      let daysString = "" + this.props.target.days_to_complete;
+      let daysString = "" + this.target.days_to_complete;
 
-      if (this.props.target.days_to_complete === 1) {
+      if (this.target.days_to_complete === 1) {
         daysString += " day";
       } else {
         daysString += " days";
@@ -92,14 +102,14 @@ export default class TargetHeader extends React.Component {
 
   headerIcon() {
     if (
-      typeof this.props.target.session_at === "undefined" ||
-      this.props.target.session_at === null
+      typeof this.target.session_at === "undefined" ||
+      this.target.session_at === null
     ) {
-      return this.props.target.role === "founder"
-        ? this.props.iconPaths.personalTodo
-        : this.props.iconPaths.teamTodo;
+      return this.target.role === "founder"
+        ? this.props.rootProps.iconPaths.personalTodo
+        : this.props.rootProps.iconPaths.teamTodo;
     } else {
-      return this.props.iconPaths.attendSession;
+      return this.props.rootProps.iconPaths.attendSession;
     }
   }
 
@@ -108,11 +118,15 @@ export default class TargetHeader extends React.Component {
     $(".founder-dashboard-target-header__container").removeClass(
       "founder-dashboard-target-header__container--active"
     );
+
     event.target
       .closest(".founder-dashboard-target-header__container")
       .classList.add("founder-dashboard-target-header__container--active");
 
-    this.props.onClickCB(this.props.target.id, this.props.target.target_type);
+    // Open the overlay.
+    this.props.setRootState({});
+
+    this.props.selectTargetCB(this.target.id);
   }
 
   render() {
@@ -129,18 +143,11 @@ export default class TargetHeader extends React.Component {
         <div className="founder-dashboard-target-header__title">
           <h6 className="founder-dashboard-target-header__headline">
             {this.targetType()}
-            {this.props.target.title}
+            {this.target.title}
           </h6>
-
-          {/*<div className="founder-dashboard-target-header__headline-info">*/}
-            {/*<div className="founder-dashboard-target-header__info-subtext font-regular">*/}
-              {/*{this.targetDateString()}*/}
-              {/*{this.pointsEarnable()}*/}
-            {/*</div>*/}
-          {/*</div>*/}
         </div>
         <div className="founder-dashboard-target-header__status-badge-block">
-          <TargetStatusBadge target={this.props.target} />
+          <TargetStatusBadge target={this.target} />
         </div>
       </div>
     );
@@ -148,13 +155,9 @@ export default class TargetHeader extends React.Component {
 }
 
 TargetHeader.propTypes = {
-  currentLevel: PropTypes.number,
-  onClickCB: PropTypes.func,
-  target: PropTypes.object,
-  displayDate: PropTypes.bool,
-  iconPaths: PropTypes.object
-};
-
-TargetHeader.defaultProps = {
-  displayDate: false
+  targetId: PropTypes.number,
+  rootProps: PropTypes.object.isRequired,
+  rootState: PropTypes.object.isRequired,
+  setRootState: PropTypes.func.isRequired,
+  selectTargetCB: PropTypes.func.isRequired
 };

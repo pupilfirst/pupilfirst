@@ -1,5 +1,10 @@
+- presenter = Founders::Dashboard::DashboardPresenter.new(self, overlay_target: @target)
+
 - content_for :head
-  title SV.CO Founder Dashboard
+  title SV.CO Dashboard
+
+  == javascript_pack_tag 'founders/dashboard/dashboard', 'data-turbolinks-track': 'reload'
+  / == stylesheet_pack_tag 'founders/dashboard/dashboard', 'data-turbolinks-track': 'reload'
 
 #dashboard-show-tour.hide [
   data-intro=t('dashboard.dashboard.tour.intro')
@@ -11,22 +16,12 @@
   data-target-details=t('dashboard.dashboard.tour.target_details')
   data-target-status=t('dashboard.dashboard.tour.target_status')
   data-final-message=t('dashboard.dashboard.tour.final_message')
-  data-tour-flag=@tour.to_s
+  data-tour-flag=presenter.tour_dashboard?.to_s
   ]
 
 #founder-dashboard
-  == render 'dashboard_header'
+  == render 'header'
 
-  - icon_paths = { personalTodo: image_path('founders/dashboard/target-type-icon-personal-todo.svg'), noResults: image_path('founders/dashboard/target-list-icon-no-results.svg'),
-    teamTodo: image_path('founders/dashboard/target-type-icon-team-todo.svg'),
-    attendSession: image_path('founders/dashboard/target-type-icon-attend-session.svg'),
-    targetDescription: image_path('founders/dashboard/target-overlay-description-icon.svg'),
-    videoEmbed: image_path('founders/dashboard/target-overlay-video-icon.svg'),
-    slideshowEmbed: image_path('founders/dashboard/target-overlay-slide-icon.svg'),
-    resourceLinks: image_path('founders/dashboard/target-overlay-resources-icon.svg'),
-    completionInstruction: image_path('founders/dashboard/target-overlay-instruction-icon.svg'),
-    backButton: image_path('founders/dashboard/target-overlay-back-icon.svg') }
-
-  == react_component('FounderDashboard', @react_data.merge(authenticityToken: form_authenticity_token, iconPaths: icon_paths, testMode: Rails.env.test?))
+  #founder-dashboard__dashboard__root data-props=presenter.react_props.to_json
 
 == render 'view-embed'

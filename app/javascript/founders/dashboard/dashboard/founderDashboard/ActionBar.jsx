@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import TargetsFilter from "./TargetsFilter";
-import SessionsTagSelect from "./SessionsTagSelect";
 
 export default class ActionBar extends React.Component {
   constructor(props) {
@@ -14,11 +13,18 @@ export default class ActionBar extends React.Component {
     if (this.props.currentLevel == 0) {
       $(".js-founder-dashboard__action-bar-add-event-button").popover("show");
 
-      setTimeout(function() {
+      setTimeout(function () {
         $(".js-founder-dashboard__action-bar-add-event-button").popover("hide");
       }, 3000);
     } else {
-      this.props.openTimelineBuilderCB();
+      // Open up the timeline builder without any target or timeline event type preselected.
+      this.props.setRootState({
+        timelineBuilderVisible: true,
+        timelineBuilderParams: {
+          targetId: null,
+          selectedTimelineEventTypeId: null
+        }
+      });
     }
   }
 
@@ -26,7 +32,7 @@ export default class ActionBar extends React.Component {
     if (this.props.currentLevel == 0) {
       $(".js-founder-dashboard__action-bar-add-event-button").popover({
         title: "Feature Locked!",
-        content: "This feature is not available for level zero founders.",
+        content: "This feature is not available during admission.",
         html: true,
         placement: "bottom",
         trigger: "manual"
@@ -42,28 +48,18 @@ export default class ActionBar extends React.Component {
     return (
       <div className="founder-dashboard-actionbar__container px-2 mx-auto">
         <div className="founder-dashboard-actionbar__box d-flex justify-content-between">
-          {this.props.filter === "targets" && (
-            <TargetsFilter
-              levels={this.props.filterData.levels}
-              pickFilterCB={this.props.pickFilterCB}
-              chosenLevel={this.props.filterData.chosenLevel}
-              currentLevel={this.props.currentLevel}
-            />
-          )}
-
-          {this.props.filter === "sessions" && (
-            <SessionsTagSelect
-              tags={this.props.filterData.tags}
-              chooseTagsCB={this.props.pickFilterCB}
-            />
-          )}
+          <TargetsFilter
+            rootProps={this.props.rootProps}
+            rootState={this.props.rootState}
+            setRootState={this.props.setRootState}
+          />
 
           <div className="d-flex">
             <button
               onClick={this.openTimelineBuilder}
               className="btn btn-with-icon btn-md btn-secondary text-uppercase btn-timeline-builder js-founder-dashboard__trigger-builder d-none d-md-block mr-2 js-founder-dashboard__action-bar-add-event-button"
             >
-              <i className="fa fa-plus-circle" aria-hidden="true" />
+              <i className="fa fa-plus-circle" aria-hidden="true"/>
               <span>Add Event</span>
             </button>
 
@@ -73,7 +69,7 @@ export default class ActionBar extends React.Component {
                 data-toggle="dropdown"
                 type="button"
               >
-                <span className="founder-dashboard-actionbar__show-more-menu-dots" />
+                <span className="founder-dashboard-actionbar__show-more-menu-dots"/>
               </button>
 
               <div className="dropdown-menu filter-targets-dropdown__menu dropdown-menu-right">
@@ -94,9 +90,7 @@ export default class ActionBar extends React.Component {
 }
 
 ActionBar.propTypes = {
-  filter: PropTypes.string,
-  filterData: PropTypes.object,
-  pickFilterCB: PropTypes.func,
-  openTimelineBuilderCB: PropTypes.func,
-  currentLevel: PropTypes.number
+  rootProps: PropTypes.object.isRequired,
+  rootState: PropTypes.object.isRequired,
+  setRootState: PropTypes.func.isRequired
 };

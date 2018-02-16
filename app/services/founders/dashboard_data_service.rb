@@ -63,7 +63,7 @@ module Founders
     end
 
     def tracks
-      Track.all.as_json(only: %i[id name])
+      Track.all.as_json(only: %i[id name sort_index])
     end
 
     # Avoid loading data for level 0 if startup has crossed it.

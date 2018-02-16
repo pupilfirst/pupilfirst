@@ -42,7 +42,7 @@ describe Founders::DashboardDataService do
           levels: level_fields(level_0, level_1, level_2, level_3),
           targetGroups: expected_target_groups,
           targets: expected_targets,
-          tracks: [track_1.slice(:id, :name), track_2.slice(:id, :name)]
+          tracks: track_fields(track_1, track_2)
         )
       end
     end
@@ -70,7 +70,7 @@ describe Founders::DashboardDataService do
           levels: level_fields(level_1, level_2, level_3),
           targetGroups: expected_target_groups,
           targets: expected_targets,
-          tracks: [track_1.slice(:id, :name), track_2.slice(:id, :name)]
+          tracks: track_fields(track_1, track_2)
         )
       end
     end
@@ -78,7 +78,13 @@ describe Founders::DashboardDataService do
 
   def level_fields(*levels)
     levels.map do |level|
-      { 'id' => level.id, 'name' => level.name, 'number' => level.number }
+      level.slice(:id, :name, :number)
+    end
+  end
+
+  def track_fields(*tracks)
+    tracks.map do |track|
+      track.slice(:id, :name, :sort_index)
     end
   end
 

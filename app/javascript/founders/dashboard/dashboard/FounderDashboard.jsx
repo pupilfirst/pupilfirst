@@ -21,7 +21,7 @@ export default class FounderDashboard extends React.Component {
     };
 
     // Memoize some values.
-    this.availableTrackIds = this.loadAvailableTrackIds();
+    this.availableTrackIds = this.sortAvailableTrackIds();
 
     // Store initial track ID now that all of them have been computed.
     this.state.activeTrackId = this.availableTrackIds[0];
@@ -49,22 +49,38 @@ export default class FounderDashboard extends React.Component {
     });
   }
 
-  loadAvailableTrackIds() {
+  sortAvailableTrackIds() {
     let that = this;
 
     let targetGroupsInLevel = this.props.targetGroups.filter(targetGroup => {
       return targetGroup.level.id === that.state.chosenLevelId;
     });
 
-    let trackIds = targetGroupsInLevel.map(targetGroup => {
-      if (_.isObject(targetGroup.track)) {
-        return targetGroup.track.id;
-      } else {
-        return "default";
-      }
+    let availableTrackIds = _.uniq(
+      targetGroupsInLevel.map(targetGroup => {
+        if (_.isObject(targetGroup.track)) {
+          return targetGroup.track.id;
+        } else {
+          return "default";
+        }
+      })
+    );
+
+    let sortedTracks = _.sortBy(this.props.tracks, ["sort_index"]);
+
+    let filteredAndSortedTracks = _.filter(sortedTracks, track => {
+      return availableTrackIds.includes(track.id);
     });
 
-    return _.uniq(trackIds);
+    let sortedTrackIds = filteredAndSortedTracks.map(track => {
+      return track.id;
+    });
+
+    if (availableTrackIds.includes("default")) {
+      return ["default"].concat(sortedTrackIds);
+    }
+
+    return sortedTrackIds;
   }
 
   componentDidMount() {

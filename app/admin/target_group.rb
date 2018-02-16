@@ -2,7 +2,7 @@ ActiveAdmin.register TargetGroup do
   include DisableIntercom
   menu parent: 'Targets'
 
-  permit_params :name, :description, :sort_index, :level_id, :milestone
+  permit_params :name, :description, :sort_index, :level_id, :milestone, :track_id
 
   filter :level
   filter :name, as: :string

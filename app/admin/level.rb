@@ -1,7 +1,7 @@
 ActiveAdmin.register Level do
   include DisableIntercom
 
-  menu parent: 'Startups'
+  menu parent: 'Targets'
 
   permit_params :number, :name, :description, :unlock_on
 

@@ -3,19 +3,25 @@ import PropTypes from "prop-types";
 
 export default class LevelUpNotification extends React.Component {
   eligibleNotificationTitle() {
-    if (this.props.currentLevel === 0) {
+    if (this.currentLevelNumber() === 0) {
       return "Congratulations! You are now SV.CO Founders.";
-    } else if (this.props.currentLevel === this.props.maxLevelNumber) {
+    } else if (this.currentLevelNumber() === this.props.maxLevelNumber) {
       return "Congratulations! You are now part of our Alumni.";
     } else {
       return "Ready to Level Up!";
     }
   }
 
+  currentLevelNumber() {
+    return this.props.rootProps.currentLevel.number;
+  }
+
   eligibleNotificationText() {
-    if (this.props.currentLevel === 0) {
+    if (this.currentLevelNumber() === 0) {
       return "You have successfully completed the first step in your startup journey. We are proud to have you join our collective. Hit Level Up to continue your journey and unlock a series of cool targets and sessions on the way.";
-    } else if (this.props.currentLevel === this.props.maxLevelNumber) {
+    } else if (
+      this.currentLevelNumber() === this.props.rootProps.maxLevelNumber
+    ) {
       return (
         <div>
           <h4 className="font-regular light-grey-text">
@@ -39,7 +45,7 @@ export default class LevelUpNotification extends React.Component {
   render() {
     return (
       <div className="founder-dashboard-levelup-notification__container px-2 mx-auto">
-        {this.props.levelUpEligibility === "eligible" && (
+        {this.props.rootProps.levelUpEligibility === "eligible" && (
           <div className="founder-dashboard-levelup-notification__box text-center p-3">
             <h1>{"\uD83C\uDF89"}</h1>
             <h3 className="brand-primary font-regular">
@@ -50,7 +56,8 @@ export default class LevelUpNotification extends React.Component {
               {this.eligibleNotificationText()}
             </div>
 
-            {this.props.currentLevel != this.props.maxLevelNumber && (
+            {this.currentLevelNumber() !==
+              this.props.rootProps.maxLevelNumber && (
               <form
                 className="mt-3"
                 action="/startup/level_up"
@@ -61,7 +68,7 @@ export default class LevelUpNotification extends React.Component {
                 <input
                   type="hidden"
                   name="authenticity_token"
-                  value={this.props.authenticityToken}
+                  value={this.props.rootProps.authenticityToken}
                 />
 
                 <button
@@ -76,7 +83,7 @@ export default class LevelUpNotification extends React.Component {
           </div>
         )}
 
-        {this.props.levelUpEligibility === "cofounders_pending" && (
+        {this.props.rootProps.levelUpEligibility === "cofounders_pending" && (
           <div className="founder-dashboard-levelup-notification__box text-center p-3">
             <h3 className="brand-primary font-regular">
               Almost ready to level up!
@@ -95,8 +102,5 @@ export default class LevelUpNotification extends React.Component {
 }
 
 LevelUpNotification.propTypes = {
-  authenticityToken: PropTypes.string,
-  levelUpEligibility: PropTypes.string,
-  currentLevel: PropTypes.number,
-  maxLevelNumber: PropTypes.number
+  rootProps: PropTypes.object.isRequired
 };

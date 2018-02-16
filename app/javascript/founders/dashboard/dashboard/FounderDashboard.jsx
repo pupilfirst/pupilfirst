@@ -4,6 +4,8 @@ import TimelineBuilder from "./TimelineBuilder";
 import ToggleBar from "./founderDashboard/ToggleBar";
 import Targets from "./founderDashboard/Targets";
 import TargetOverlay from "./founderDashboard/TargetOverlay";
+import ActionBar from "./founderDashboard/ActionBar";
+import LevelUpNotification from "./founderDashboard/LevelUpNotification";
 
 export default class FounderDashboard extends React.Component {
   constructor(props) {
@@ -181,6 +183,18 @@ export default class FounderDashboard extends React.Component {
           setRootState={this.setRootState}
         />
 
+        {this.props.levelUpEligibility !== "not_eligible" && (
+          <LevelUpNotification rootProps={this.props} />
+        )}
+
+        {this.props.currentLevel !== 0 && (
+          <ActionBar
+            rootProps={this.props}
+            rootState={this.state}
+            setRootState={this.setRootState}
+          />
+        )}
+
         <Targets
           rootProps={this.props}
           rootState={this.state}
@@ -227,7 +241,7 @@ FounderDashboard.propTypes = {
   timelineEventTypes: PropTypes.object,
   facebookShareEligibility: PropTypes.string,
   authenticityToken: PropTypes.string,
-  levelUpEligibility: PropTypes.string,
+  levelUpEligibility: PropTypes.oneOf(['eligible', 'cofounders_pending', 'not_eligible']),
   iconPaths: PropTypes.object,
   openTimelineBuilderCB: PropTypes.func,
   founderDetails: PropTypes.array,

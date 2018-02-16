@@ -1,7 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import ActionBar from "./ActionBar";
-import LevelUpNotification from "./LevelUpNotification";
 import TargetCollection from "./TargetCollection";
 
 export default class Targets extends React.Component {
@@ -59,18 +57,6 @@ export default class Targets extends React.Component {
   render() {
     return (
       <div>
-        {this.props.levelUpEligibility !== "not_eligible" && (
-          <LevelUpNotification rootProps={this.props.rootProps} />
-        )}
-
-        {this.props.currentLevel !== 0 && (
-          <ActionBar
-            rootProps={this.props.rootProps}
-            rootState={this.props.rootState}
-            setRootState={this.props.setRootState}
-          />
-        )}
-
         {this.targetCollections()}
       </div>
     );

@@ -220,6 +220,7 @@ export default class FounderDashboard extends React.Component {
 
         {this.state.selectedTarget && (
           <TargetOverlay
+            rootProps={this.props}
             iconPaths={this.props.iconPaths}
             target={this.state.selectedTarget}
             founderDetails={this.props.founderDetails}

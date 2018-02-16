@@ -124,7 +124,7 @@ export default class TargetOverlay extends React.Component {
                 />
               </div>
               <div className="col-md-4 target-overlay__content-rightbar">
-                <FacultyBlock target={this.props.target}/>
+                <FacultyBlock rootProps={this.props.rootProps} target={this.props.target}/>
 
                 {this.state.latestEvent && (
                   <TimelineEventPanel
@@ -178,6 +178,7 @@ export default class TargetOverlay extends React.Component {
 }
 
 TargetOverlay.propTypes = {
+  rootProps: PropTypes.object.isRequired,
   target: PropTypes.object,
   openTimelineBuilderCB: PropTypes.func,
   founderDetails: PropTypes.array,

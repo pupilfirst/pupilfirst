@@ -10,16 +10,19 @@ export default class Targets extends React.Component {
       activeTrackId = this.props.rootState.activeTrackId;
     }
 
+    const chosenLevelId = this.props.rootState.chosenLevelId;
+
     // Return target groups that are in the selected track.
     return _.filter(this.props.rootProps.targetGroups, targetGroup => {
-      if (targetGroup.level.id !== this.props.rootState.chosenLevelId) {
+      if (targetGroup.level.id !== chosenLevelId) {
         return false;
       }
 
-      if (activeTrackId === null) {
-        return !_.isObject(targetGroup.track);
-      } else {
+      // If target group is in a track, check if track ID matches. If not in track, the activeTrackID must be null.
+      if (_.isObject(targetGroup.track)) {
         return targetGroup.track.id === activeTrackId;
+      } else {
+        return activeTrackId === null;
       }
     });
   }

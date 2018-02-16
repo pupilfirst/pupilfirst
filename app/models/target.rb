@@ -206,14 +206,7 @@ class Target < ApplicationRecord
   # Returns the latest event linked to this target from a founder. If a team target, it responds with the latest event from the team
   def latest_linked_event(founder)
     owner = founder_role? ? founder : founder.startup
-    linked_events = owner.timeline_events.where(target: self)
-
-    # Account for iteration if vanilla target.
-    if target? && target_group&.level == founder.startup.level
-      linked_events = linked_events.where(iteration: founder.startup.iteration)
-    end
-
-    linked_events.order('created_at').last
+    owner.timeline_events.where(target: self).order('created_at').last
   end
 
   def latest_feedback(founder)
@@ -223,6 +216,7 @@ class Target < ApplicationRecord
   def grades_for_skills(founder)
     return unless verified?(founder)
     return if latest_linked_event(founder).timeline_event_grades.blank?
+
     latest_linked_event(founder).timeline_event_grades.each_with_object({}) do |te_grade, grades|
       grades[te_grade.skill_id] = te_grade.grade
     end

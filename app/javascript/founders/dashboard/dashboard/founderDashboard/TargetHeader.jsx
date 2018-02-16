@@ -18,13 +18,17 @@ export default class TargetHeader extends React.Component {
     });
   }
 
+  role() {
+    return this.target.role === "founder" ? "Individual" : "Team";
+  }
+
   targetType() {
     if (this.props.currentLevel === 0) {
       return null;
     } else {
       return (
         <span className="founder-dashboard-target-header__type-tag">
-          {this.target.target_type_description}:
+          {this.role()}:
         </span>
       );
     }

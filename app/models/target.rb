@@ -188,18 +188,12 @@ class Target < ApplicationRecord
     @stats_service ||= Targets::StatsService.new(self)
   end
 
-  def target_type
-    return :chore if chore?
-    session_at.present? ? :session : :target
-  end
-
   def session?
-    target_type == :session
+    session_at.present?
   end
 
-  # A 'proper' target is neither a session, nor a chore. These are repeatable across iterations.
   def target?
-    target_type == :target
+    session_at.blank?
   end
 
   def rubric?
@@ -208,18 +202,6 @@ class Target < ApplicationRecord
 
   # this is included in the target JSONs the DashboardDataService responds with
   alias has_rubric rubric?
-
-  def target_type_description
-    role = founder_role? ? 'Founder ' : 'Team '
-    type = if session?
-      'Session'
-    elsif chore?
-      'Chore'
-    else
-      'Target'
-    end
-    role + type
-  end
 
   # Returns the latest event linked to this target from a founder. If a team target, it responds with the latest event from the team
   def latest_linked_event(founder)

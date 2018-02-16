@@ -5,20 +5,24 @@ export default class TargetsFilterOption extends React.Component {
   constructor(props) {
     super(props);
 
+    // Memoize some values.
+    this.level = this.loadLevel();
+
     this.handleClick = this.handleClick.bind(this);
   }
 
   handleClick() {
-    if (this.level().id !== this.props.rootState.chosenLevelId) {
-      this.props.setRootState({ chosenLevelId: this.level().id });
+    if (this.level.id !== this.props.rootState.chosenLevelId) {
+      const trackIdsForLevel = this.props.getAvailableTrackIds(this.level.id);
+      this.props.setRootState({ chosenLevelId: this.level.id, activeTrackId: trackIdsForLevel[0] });
     }
   }
 
   locked() {
-    return this.level().number > this.props.rootProps.currentLevel.number;
+    return this.level.number > this.props.rootProps.currentLevel.number;
   }
 
-  level() {
+  loadLevel() {
     let that = this;
 
     return _.find(this.props.rootProps.levels, level => {
@@ -52,7 +56,7 @@ export default class TargetsFilterOption extends React.Component {
         <span className="filter-targets-dropdown__menu-item-icon">
           <i className={this.iconClasses()} />
         </span>
-        Level {this.level().number}: {this.level().name}
+        Level {this.level.number}: {this.level.name}
       </a>
     );
   }
@@ -60,6 +64,7 @@ export default class TargetsFilterOption extends React.Component {
 
 TargetsFilterOption.propTypes = {
   levelId: PropTypes.number,
+  getAvailableTrackIds: PropTypes.func.isRequired,
   rootProps: PropTypes.object.isRequired,
   rootState: PropTypes.object.isRequired,
   setRootState: PropTypes.func.isRequired

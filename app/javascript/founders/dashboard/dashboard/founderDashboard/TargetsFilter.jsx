@@ -11,6 +11,7 @@ export default class TargetsFilter extends React.Component {
         <TargetsFilterOption
           key={level.id}
           levelId={level.id}
+          getAvailableTrackIds={this.props.getAvailableTrackIds}
           rootProps={this.props.rootProps}
           rootState={this.props.rootState}
           setRootState={this.props.setRootState}
@@ -52,6 +53,7 @@ export default class TargetsFilter extends React.Component {
 }
 
 TargetsFilter.propTypes = {
+  getAvailableTrackIds: PropTypes.func.isRequired,
   rootProps: PropTypes.object.isRequired,
   rootState: PropTypes.object.isRequired,
   setRootState: PropTypes.func.isRequired

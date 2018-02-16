@@ -22,11 +22,8 @@ export default class FounderDashboard extends React.Component {
       selectedTarget: this.targetDetails(props.initialTargetId, true)
     };
 
-    // Memoize some values.
-    this.availableTrackIds = this.sortAvailableTrackIds();
-
-    // Store initial track ID now that all of them have been computed.
-    this.state.activeTrackId = this.availableTrackIds[0];
+    // Pick initial track from list of computed track IDs.
+    this.state.activeTrackId = this.availableTrackIds()[0];
 
     this.setRootState = this.setRootState.bind(this);
     this.chooseTab = this.chooseTab.bind(this);
@@ -36,6 +33,7 @@ export default class FounderDashboard extends React.Component {
     this.targetOverlayCloseCB = this.targetOverlayCloseCB.bind(this);
     this.selectTargetCB = this.selectTargetCB.bind(this);
     this.handlePopState = this.handlePopState.bind(this);
+    this.availableTrackIds = this.availableTrackIds.bind(this);
   }
 
   setRootState(updater, callback) {
@@ -51,11 +49,13 @@ export default class FounderDashboard extends React.Component {
     });
   }
 
-  sortAvailableTrackIds() {
-    let that = this;
+  availableTrackIds(levelId = null) {
+    if (levelId === null) {
+      levelId = this.state.chosenLevelId;
+    }
 
     let targetGroupsInLevel = this.props.targetGroups.filter(targetGroup => {
-      return targetGroup.level.id === that.state.chosenLevelId;
+      return targetGroup.level.id === levelId;
     });
 
     let availableTrackIds = _.uniq(
@@ -177,7 +177,7 @@ export default class FounderDashboard extends React.Component {
     return (
       <div className="founder-dashboard-container pb-5">
         <ToggleBar
-          availableTrackIds={this.availableTrackIds}
+          availableTrackIds={this.availableTrackIds()}
           rootProps={this.props}
           rootState={this.state}
           setRootState={this.setRootState}
@@ -189,6 +189,7 @@ export default class FounderDashboard extends React.Component {
 
         {this.props.currentLevel !== 0 && (
           <ActionBar
+            getAvailableTrackIds={this.availableTrackIds}
             rootProps={this.props}
             rootState={this.state}
             setRootState={this.setRootState}
@@ -241,7 +242,11 @@ FounderDashboard.propTypes = {
   timelineEventTypes: PropTypes.object,
   facebookShareEligibility: PropTypes.string,
   authenticityToken: PropTypes.string,
-  levelUpEligibility: PropTypes.oneOf(['eligible', 'cofounders_pending', 'not_eligible']),
+  levelUpEligibility: PropTypes.oneOf([
+    "eligible",
+    "cofounders_pending",
+    "not_eligible"
+  ]),
   iconPaths: PropTypes.object,
   openTimelineBuilderCB: PropTypes.func,
   founderDetails: PropTypes.array,

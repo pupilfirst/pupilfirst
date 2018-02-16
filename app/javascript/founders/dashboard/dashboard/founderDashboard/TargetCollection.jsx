@@ -66,7 +66,7 @@ export default class TargetCollection extends React.Component {
               </div>
             )}
 
-            <h3 className="font-semibold mt-4 mb-0">{this.props.name}</h3>
+            <h3 className="font-semibold mt-4 mb-0">{targetGroup.name}</h3>
 
             {_.isString(targetGroup.description) && (
               <p className="founder-dashboard-target-group__header-info">

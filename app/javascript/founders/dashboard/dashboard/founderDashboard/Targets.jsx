@@ -3,16 +3,6 @@ import PropTypes from "prop-types";
 import TargetCollection from "./TargetCollection";
 
 export default class Targets extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      chosenLevel: props.rootProps.currentLevel
-    };
-
-    this.pickFilter = this.pickFilter.bind(this);
-  }
-
   targetGroups() {
     let activeTrackId = null;
 
@@ -22,6 +12,10 @@ export default class Targets extends React.Component {
 
     // Return target groups that are in the selected track.
     return _.filter(this.props.rootProps.targetGroups, targetGroup => {
+      if (targetGroup.level.id !== this.props.rootState.chosenLevelId) {
+        return false;
+      }
+
       if (activeTrackId === null) {
         return !_.isObject(targetGroup.track);
       } else {
@@ -50,16 +44,8 @@ export default class Targets extends React.Component {
     }, this);
   }
 
-  pickFilter(level) {
-    this.setState({ chosenLevel: level });
-  }
-
   render() {
-    return (
-      <div>
-        {this.targetCollections()}
-      </div>
-    );
+    return <div>{this.targetCollections()}</div>;
   }
 }
 

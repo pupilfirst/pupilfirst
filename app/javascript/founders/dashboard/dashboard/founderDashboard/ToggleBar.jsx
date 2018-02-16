@@ -10,7 +10,13 @@ export default class ToggleBar extends React.Component {
   }
 
   openTimelineBuilder() {
-    this.props.openTimelineBuilderCB();
+    this.props.setRootState({
+      timelineBuilderVisible: true,
+      timelineBuilderParams: {
+        targetId: null,
+        selectedTimelineEventTypeId: null
+      }
+    });
   }
 
   tabsForTracks() {

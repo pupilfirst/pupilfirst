@@ -26,7 +26,7 @@ export default class LevelUpNotification extends React.Component {
         <div>
           <h4 className="font-regular light-grey-text">
             You've completed our Level Framework, but you know by now that this
-            is just the beginning of your startup journey.
+            is just the beginning of your journey.
           </h4>
           <p>
             {" "}
@@ -90,9 +90,9 @@ export default class LevelUpNotification extends React.Component {
             </h3>
 
             <p className="founder-dashboard-levelup__description mx-auto">
-              There are one or more milestone targets that your co-founders are
+              There are one or more milestone targets that your teammates are
               yet to complete. Please contact them and ask them to sign in and
-              complete these targets to be eligible to level up!
+              complete these targets to unlock the next level.
             </p>
           </div>
         )}

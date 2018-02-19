@@ -41,7 +41,6 @@ class Target < ApplicationRecord
   scope :founder, -> { where(role: ROLE_FOUNDER) }
   scope :not_founder, -> { where.not(role: ROLE_FOUNDER) }
   scope :vanilla_targets, -> { where.not(target_group_id: nil) }
-  scope :chores, -> { where(chore: true) }
   scope :sessions, -> { where.not(session_at: nil) }
 
   # Custom scope to allow AA to filter by intersection of tags.
@@ -98,21 +97,6 @@ class Target < ApplicationRecord
     errors[:base] << 'One of days_to_complete, or session_at should be set.'
     errors[:days_to_complete] << 'if blank, session_at should be set'
     errors[:session_at] << 'if blank, days_to_complete should be set'
-  end
-
-  validate :vanilla_targets_must_be_in_a_group
-
-  def vanilla_targets_must_be_in_a_group
-    return if session?
-    return if target_group.present?
-    errors[:base] << 'Vanilla targets and chores must be in a target group.'
-  end
-
-  validate :can_be_one_of_chore_or_session
-
-  def can_be_one_of_chore_or_session
-    return if [session_at, chore].one? || [session_at, chore].none?
-    errors[:base] << "Target can be a chore, a session, or neither, but not both. Sessions are treated as chores anyway, since they don't need to be repeated."
   end
 
   validate :avoid_level_mismatch_with_group

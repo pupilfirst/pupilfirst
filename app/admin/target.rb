@@ -4,13 +4,12 @@ ActiveAdmin.register Target do
   permit_params :faculty_id, :role, :title, :description, :resource_url, :completion_instructions, :days_to_complete,
     :slideshow_embed, :video_embed, :completed_at, :completion_comment, :rubric, :link_to_complete, :key,
     :submittability, :archived, :remote_rubric_url, :target_group_id, :target_action_type, :points_earnable,
-    :timeline_event_type_id, :sort_index, :youtube_video_id, :session_at, :chore, :level_id, :session_by, :call_to_action,
+    :timeline_event_type_id, :sort_index, :youtube_video_id, :session_at, :level_id, :session_by, :call_to_action,
     prerequisite_target_ids: [], tag_list: [], target_skills_attributes: %i[id skill_id rubric_good rubric_great rubric_wow base_karma_points _destroy]
 
   filter :title
   filter :archived
   filter :session_at_not_null, as: :boolean, label: 'Session?'
-  filter :chore, label: 'Chore?'
   filter :target_group, collection: -> { TargetGroup.all.includes(:level).order('levels.number ASC') }
   filter :level
   filter :faculty_name, as: :string
@@ -25,7 +24,6 @@ ActiveAdmin.register Target do
 
   scope :all, default: true
   scope :vanilla_targets
-  scope :chores
   scope :sessions
 
   controller do
@@ -43,13 +41,7 @@ ActiveAdmin.register Target do
     end
 
     column :type do |target|
-      if target.chore?
-        'Chore'
-      elsif target.session?
-        'Session'
-      else
-        'Target'
-      end
+      target.session? ? 'Session' : 'Target'
     end
 
     column :target_group
@@ -90,7 +82,6 @@ ActiveAdmin.register Target do
         linked_tags(founder.tags)
       end
 
-      row :chore
       row :level
 
       row :prerequisite_targets do
@@ -210,10 +201,6 @@ ActiveAdmin.register Target do
       target.session? ? 'Yes' : 'No'
     end
 
-    column :chore do |target|
-      target.chore? ? 'Yes' : 'No'
-    end
-
     column :target_group do |target|
       target&.target_group&.name
     end
@@ -295,7 +282,6 @@ ActiveAdmin.register Target do
       f.input :role, as: :select, collection: Target.valid_roles.map { |r| [t("models.target.role.#{r}"), r] }, include_blank: false
       f.input :title
       f.input :key, as: :select, collection: Target.valid_keys
-      f.input :chore
       f.input :session_at, as: :string, input_html: { class: 'date-time-picker', data: { format: 'Y-m-d H:i:s O' } }
       f.input :tag_list, as: :select, collection: Target.tag_counts_on(:tags).pluck(:name), multiple: true
       f.input :level

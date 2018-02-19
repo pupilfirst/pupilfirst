@@ -32,12 +32,6 @@ feature 'Founder Dashboard' do
   let!(:target_with_prerequisites) { create :target, target_group: target_group_4, prerequisite_targets: [pending_target], role: Target::ROLE_TEAM }
   let!(:completed_fee_payment_target) { create :target, target_group: target_group_0, days_to_complete: 60, role: Target::ROLE_TEAM, key: Target::KEY_FEE_PAYMENT }
 
-  # Create chores for different target groups.
-  let!(:chore_1) { create :target, chore: true, target_group: target_group_4 }
-  let!(:chore_2) { create :target, chore: true, target_group: target_group_3 }
-  let!(:chore_3) { create :target, chore: true, target_group: target_group_2 }
-  let!(:chore_4) { create :target, chore: true, target_group: target_group_1 }
-
   # Create sessions for different levels.
   let!(:session_1) { create :target, target_group: nil, level: level_4, session_at: 2.hours.from_now }
   let!(:session_2) { create :target, target_group: nil, level: level_3, session_at: 3.days.ago }

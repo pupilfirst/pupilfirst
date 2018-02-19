@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Faculty, type: :model do
   describe '.valid_categories' do
     it 'returns valid categories' do
-      expect(Faculty.valid_categories - [Faculty::CATEGORY_TEAM, Faculty::CATEGORY_ADVISORY_BOARD, Faculty::CATEGORY_VISITING_COACHES, Faculty::CATEGORY_ALUMNI]).to be_empty
+      expect(Faculty.valid_categories - [Faculty::CATEGORY_TEAM, Faculty::CATEGORY_ADVISORY_BOARD, Faculty::CATEGORY_VISITING_COACHES, Faculty::CATEGORY_DEVELOPER_COACHES, Faculty::CATEGORY_ALUMNI]).to be_empty
     end
   end
 

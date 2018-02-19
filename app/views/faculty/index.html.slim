@@ -10,7 +10,7 @@
 
 #faculty
   .container
-    h1.page-header.header-light.text-center.mt-3 Faculty
+    h1.page-header.header-light.text-center.mt-3 Coaches
 
     p.introduction.text-xs-center.mx-auto
       ' We've assembled some of the best startup engineers and domain experts to help you learn all about building internet
@@ -20,28 +20,16 @@
       #tabbed-content
         ul#faculty-nav.nav.nav-tabs.faculty-nav__tab
           li.nav-item.faculty-nav__tab-item
-            a.nav-link.cursor-pointer.faculty-nav__tab-title class=active_tab('team') data-target="#team" data-toggle="tab" aria-controls="team" role="tab" Team
+            a.nav-link.cursor-pointer.faculty-nav__tab-title class=active_tab('developer-coaches') data-target="#developer-coaches" data-toggle="tab" aria-controls="advisory-board" role="tab" Developer Coaches
           li.nav-item.faculty-nav__tab-item
-            a.nav-link.cursor-pointer.faculty-nav__tab-title class=active_tab('visiting-faculty') data-target="#visiting-faculty" data-toggle="tab" aria-controls="visiting-faculty" role="tab" Visiting faculty
-          li.nav-item.faculty-nav__tab-item
-            a.nav-link.cursor-pointer.faculty-nav__tab-title class=active_tab('advisory-board') data-target="#advisory-board" data-toggle="tab" aria-controls="advisory-board" role="tab" Advisory board
-          li.nav-item.faculty-nav__tab-item
-            a.nav-link.cursor-pointer.faculty-nav__tab-title class=active_tab('alumni') data-target="#alumni" aria-controls="alumni" data-toggle="tab" role="tab" Alumni
+            a.nav-link.cursor-pointer.faculty-nav__tab-title class=active_tab('visiting-coaches') data-target="#visiting-coaches" data-toggle="tab" aria-controls="visiting-faculty" role="tab" Visiting Coaches
 
         .tab-content
-          .tab-pane#team role="tabpanel" class=active_tab('team')
+          .tab-pane#developer-coaches role="tabpanel" class=active_tab('developer-coaches')
             .row.faculty-cards-container
-              - Faculty.active.team.each do |member|
+              - Faculty.active.developer_coaches.each do |member|
                 = render 'faculty_card', member: member
-          .tab-pane#visiting-faculty role="tabpanel" class=active_tab('visiting-faculty')
+          .tab-pane#visiting-coaches role="tabpanel" class=active_tab('visiting-coaches')
             .row.faculty-cards-container
               - Faculty.active.visiting_coaches.each do |member|
-                = render 'faculty_card', member: member
-          .tab-pane#advisory-board role="tabpanel" class=active_tab('advisory-board')
-            .row.faculty-cards-container
-              - Faculty.active.advisory_board.each do |member|
-                = render 'faculty_card', member: member
-          .tab-pane#alumni role="tabpanel" class=active_tab('alumni')
-            .row.faculty-cards-container
-              - Faculty.active.alumni.includes(:founder).each do |member|
                 = render 'faculty_card', member: member

@@ -60,6 +60,7 @@ class Faculty < ApplicationRecord
   scope :active, -> { where.not(inactive: true) }
   scope :team, -> { where(category: CATEGORY_TEAM).order('sort_index ASC') }
   scope :visiting_coaches, -> { where(category: CATEGORY_VISITING_COACHES).order('sort_index ASC') }
+  scope :developer_coaches, -> { where(category: CATEGORY_DEVELOPER_COACHES).order('sort_index ASC') }
   scope :advisory_board, -> { where(category: CATEGORY_ADVISORY_BOARD).order('sort_index ASC') }
   scope :alumni, -> { where(category: CATEGORY_ALUMNI).order('sort_index ASC') }
   scope :available_for_connect, -> { where(category: [CATEGORY_TEAM, CATEGORY_VISITING_COACHES, CATEGORY_ALUMNI]) }

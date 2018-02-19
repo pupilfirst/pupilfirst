@@ -25,11 +25,18 @@ module Startups
 
         if all_targets_complete
           return ELIGIBILITY_COFOUNDERS_PENDING if @cofounders_pending
-          return ELIGIBILITY_DATE_LOCKED if next_level_date_locked?
+          return ELIGIBILITY_DATE_LOCKED if next_level_unlock_date&.future?
           return ELIGIBILITY_ELIGIBLE
         end
 
         ELIGIBILITY_NOT_ELIGIBLE
+      end
+    end
+
+    def next_level_unlock_date
+      @next_level_unlock_date ||= begin
+        next_level = Level.find_by(number: current_level.number + 1)
+        next_level&.unlock_on
       end
     end
 
@@ -57,11 +64,6 @@ module Startups
       else
         Targets::StatusService.new(target, @founder).status == Targets::StatusService::STATUS_COMPLETE
       end
-    end
-
-    def next_level_date_locked?
-      next_level = Level.find_by(number: current_level.number + 1)
-      next_level&.unlock_on&.future?
     end
 
     def current_level

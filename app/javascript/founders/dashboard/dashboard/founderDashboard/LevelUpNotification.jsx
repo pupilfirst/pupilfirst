@@ -96,6 +96,19 @@ export default class LevelUpNotification extends React.Component {
             </p>
           </div>
         )}
+
+        {this.props.rootProps.levelUpEligibility === "date_locked" && (
+          <div className="founder-dashboard-levelup-notification__box text-center p-3">
+            <h1>{"\uD83C\uDF89"}</h1>
+            <h3 className="brand-primary font-regular">
+              Level complete! Please wait for the next one.
+            </h3>
+
+            <p className="founder-dashboard-levelup__description mx-auto">
+              Congratulations on completing all milestone targets in this level. Your next level will be unlocked on <span>{ moment(this.props.rootProps.nextLevelUnlockDate).format("MMM D") }</span>. Please revisit your dashboard on this date to receive your next set of targets. Happy learning!
+            </p>
+          </div>
+        )}
       </div>
     );
   }

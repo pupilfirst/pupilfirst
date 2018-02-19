@@ -246,7 +246,8 @@ FounderDashboard.propTypes = {
   levelUpEligibility: PropTypes.oneOf([
     "eligible",
     "cofounders_pending",
-    "not_eligible"
+    "not_eligible",
+    "date_locked"
   ]),
   iconPaths: PropTypes.object,
   openTimelineBuilderCB: PropTypes.func,

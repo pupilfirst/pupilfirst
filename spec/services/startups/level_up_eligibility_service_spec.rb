@@ -98,4 +98,10 @@ describe Startups::LevelUpEligibilityService do
       end
     end
   end
+
+  describe '#next_level_unlock_date' do
+    it 'returns the next levels unlock date' do
+      expect(subject.next_level_unlock_date).to eq(5.days.ago.to_date)
+    end
+  end
 end

@@ -11,7 +11,8 @@ module Founders
           currentLevel: current_startup.level.slice(:id, :name, :number),
           timelineEventTypes: list_service.list,
           facebookShareEligibility: current_founder.facebook_share_eligibility,
-          levelUpEligibility: Startups::LevelUpEligibilityService.new(current_startup, current_founder).eligibility,
+          levelUpEligibility: level_up_eligibility_service.eligibility,
+          nextLevelUnlockDate: level_up_eligibility_service.next_level_unlock_date,
           maxLevelNumber: Level.maximum.number,
           founderDetails: founder_details,
           authenticityToken: view.form_authenticity_token,
@@ -67,6 +68,10 @@ module Founders
 
       def list_service
         @list_service ||= TimelineEventTypes::ListService.new(current_startup)
+      end
+
+      def level_up_eligibility_service
+        @level_up_eligibility_service ||= Startups::LevelUpEligibilityService.new(current_startup, current_founder)
       end
     end
   end

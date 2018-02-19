@@ -1,0 +1,19 @@
+#admin-payment__form
+= semantic_form_for form, html: { novalidate: false }, url: form.admin_path do |f|
+  - founder_options = form.founder_id.present? ? [[form.founder.name_and_team, form.founder_id]] : []
+
+  = f.semantic_errors *f.object.errors.keys
+  = f.inputs 'Payment details' do
+    = f.input :amount, input_html: { required: true }
+
+    li#admin_payment_founder_input.select.input.required
+      label.label for="admin_payment_founder"
+        | Student
+        abbr title="required" *
+      = f.select :founder_id, options_for_select(founder_options, form.founder_id)
+
+    = f.input :payment_type, collection: Payment.valid_payment_types, input_html: { required: true }
+    = f.input :paid_at, as: :string, input_html: { class: 'date-time-picker', required: true, data: { format: 'Y-m-d H:i:s O' } }
+    = f.input :notes
+
+  = f.submit

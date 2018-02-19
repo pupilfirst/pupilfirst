@@ -9,7 +9,7 @@ footer
               div
                 = link_to 'Join', join_path, id: 'footer-sitemap-join-link'
               div
-                = link_to 'Startups', startups_path, id: 'footer-sitemap-startups-link'
+                = link_to 'Teams', products_path, id: 'footer-sitemap-startups-link'
               div
                 = link_to 'Invest & Hire', talent_path, id: 'footer-sitemap-invest-hire-link'
               div
@@ -18,7 +18,7 @@ footer
               div
                 - if current_user
                   - if current_founder && policy(current_founder).founder_profile?
-                    = link_to 'Profile', founder_profile_path(slug: current_founder.slug), id: 'footer-sitemap-profile-link'
+                    = link_to 'Profile', student_profile_path(slug: current_founder.slug), id: 'footer-sitemap-profile-link'
                   - else
                     = link_to 'Sign Out', destroy_user_session_path, method: :delete, id: 'footer-sitemap-sign-out-link'
                 - else

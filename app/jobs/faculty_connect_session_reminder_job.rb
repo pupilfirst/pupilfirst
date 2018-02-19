@@ -38,7 +38,7 @@ class FacultyConnectSessionReminderJob < ApplicationJob
   end
 
   def startup_url
-    @startup_url ||= Rails.application.routes.url_helpers.timeline_url(connect_request.startup.id, connect_request.startup.slug)
+    @startup_url ||= Rails.application.routes.url_helpers.product_url(connect_request.startup.id, connect_request.startup.slug)
   end
 
   def faculty_name

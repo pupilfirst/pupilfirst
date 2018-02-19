@@ -19,7 +19,7 @@ export default class ContentBlock extends React.Component {
         >
           <a
             target="_blank"
-            href={"/founder/dashboard/targets/" + targetDetail[0]}
+            href={"/student/dashboard/targets/" + targetDetail[0]}
           >
             {targetDetail[1]}
           </a>

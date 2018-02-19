@@ -59,17 +59,17 @@ describe Lita::Handlers::Leaderboard do
             *<http://localhost:3000/about/leaderboard|Leaderboards> - April 10 to April 17:*
 
             *Level 1:*
-            *01.* :rank_up:` +1` - <http://localhost:3000/startups/#{startup_1.id}/#{startup_1.slug}|#{startup_1.product_name}>
-            *02.* :rank_nochange:`---` - <http://localhost:3000/startups/#{startup_2.id}/#{startup_2.slug}|#{startup_2.product_name}>
-            *02.* :rank_down:` -1` - <http://localhost:3000/startups/#{startup_3.id}/#{startup_3.slug}|#{startup_3.product_name}>
+            *01.* :rank_up:` +1` - <http://localhost:3000/products/#{startup_1.id}/#{startup_1.slug}|#{startup_1.product_name}>
+            *02.* :rank_nochange:`---` - <http://localhost:3000/products/#{startup_2.id}/#{startup_2.slug}|#{startup_2.product_name}>
+            *02.* :rank_down:` -1` - <http://localhost:3000/products/#{startup_3.id}/#{startup_3.slug}|#{startup_3.product_name}>
 
 
             *Level 2:*
-            *01.* :rank_up:` +1` - <http://localhost:3000/startups/#{startup_4.id}/#{startup_4.slug}|#{startup_4.product_name}>
-            *02.* :rank_nochange:`---` - <http://localhost:3000/startups/#{startup_5.id}/#{startup_5.slug}|#{startup_5.product_name}>
-            There is 1 startup in this level which was inactive during this period.
+            *01.* :rank_up:` +1` - <http://localhost:3000/products/#{startup_4.id}/#{startup_4.slug}|#{startup_4.product_name}>
+            *02.* :rank_nochange:`---` - <http://localhost:3000/products/#{startup_5.id}/#{startup_5.slug}|#{startup_5.product_name}>
+            There is 1 team in this level which was inactive during this period.
 
-            All startups in *Level 3* were inactive during this period.
+            All teams in *Level 3* were inactive during this period.
           EXPECTED_RESPONSE
 
           expect(response).to receive(:reply).with(expected_response)

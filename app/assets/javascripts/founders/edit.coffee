@@ -1,6 +1,6 @@
 setupSelect2Inputs = ->
   $('#founders_edit_roles').select2(
-    placeholder: 'Select roles at startup'
+    placeholder: 'Select your role(s) in the team'
   )
 
   collegeInput = $('#founders_edit_college_id')

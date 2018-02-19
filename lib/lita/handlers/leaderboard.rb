@@ -32,7 +32,7 @@ module Lita
           leaderboard = Startups::LeaderboardService.new(level).leaderboard_with_change_in_rank
 
           leaderboard_response += if leaderboard.none? { |_s, _r, points, _c| points.positive? }
-            "All startups in *Level #{level.number}* were inactive during this period.\n\n"
+            "All teams in *Level #{level.number}* were inactive during this period.\n\n"
           else
             "\n*Level #{level.number}:*\n" + leaderboard_message_for_active_level(leaderboard) + "\n"
           end
@@ -78,7 +78,7 @@ module Lita
           format('%+d', change_in_rank).rjust(3)
         end
 
-        "*#{format('%02d', rank)}.* #{indicator}`#{signed_change_in_rank}` - <#{Rails.application.routes.url_helpers.timeline_url(startup.id, startup.slug)}|#{startup.product_name}>\n"
+        "*#{format('%02d', rank)}.* #{indicator}`#{signed_change_in_rank}` - <#{Rails.application.routes.url_helpers.product_url(startup.id, startup.slug)}|#{startup.product_name}>\n"
       end
 
       def levels_for_leaderboard
@@ -98,7 +98,7 @@ module Lita
       end
 
       def inactive_startup_message(inactive_startups)
-        "There #{'is'.pluralize(inactive_startups)} #{inactive_startups} #{'startup'.pluralize(inactive_startups)} in this level which #{'was'.pluralize(inactive_startups)} inactive during this period.\n"
+        "There #{'is'.pluralize(inactive_startups)} #{inactive_startups} #{'team'.pluralize(inactive_startups)} in this level which #{'was'.pluralize(inactive_startups)} inactive during this period.\n"
       end
 
       def leaderboard_message_for_active_level(leaderboard)

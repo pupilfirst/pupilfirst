@@ -28,7 +28,7 @@ module PrivateSlack
 
         #{team_members_list(founder)}
 
-        <https://www.sv.co/admin/startups/#{founder.startup.id}|View this startup's details in the admin interface.>
+        <https://www.sv.co/admin/startups/#{founder.startup.id}|View this team's details in the admin interface.>
       PAYMENT_INFO
     end
 

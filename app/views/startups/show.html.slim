@@ -18,7 +18,7 @@
 .container
   - if @startup.dropped_out?
     .alert.alert-danger.margin-top-20
-      p Please note that this startup has dropped out and is no longer a part of SV.CO!
+      p Please note that this team has dropped out and is no longer a part of SV.CO!
 
   / Company Name Header
   .row.align-items-center
@@ -30,7 +30,7 @@
             img.timeline-verified.margin-left-10 src='#{image_url 'startups/show/timeline-verified.gif'}'
         - if policy(@startup).edit?
           small.edit-startup-link
-            a href=edit_startup_path
+            a href=edit_product_path
               i.fa.fa-pencil
       .startup-name
         - if @startup.name.present?
@@ -49,13 +49,6 @@
   .row
     .col-lg-4.order-1.order-lg-2
       #data-points
-        - if @startup.founder?(current_founder) && @startup.referral_coupon.present?
-          - coupon = @startup.referral_coupon
-          .alert.alert-info
-            h4
-              ' Your Referral Code:
-              strong #{coupon.code}
-            p You will unlock <strong>#{coupon.referrer_extension_days} days of free SV.CO subscription</strong> for each successful referral!
         - if @startup.latest_help_wanted.present?
           .alert.alert-info
             strong Help Wanted:
@@ -69,7 +62,7 @@
               .media.mb-3.align-items-center
                 img.d-flex.mr-3 alt="Stage icon" src="#{image_url 'startups/show/data-icon-stage.png'}"
                 .media-body
-                  h6.my-0 Startup Level
+                  h6.my-0 Team Level
                   p.data-content #{@startup.level.display_name}
             - if @startup.startup_categories.present?
               .col-sm-6.col-md-12
@@ -161,12 +154,12 @@
               - @startup.founders.not_exited.order(:name).each do |founder|
                 .data-founder
                   .media.align-items-center
-                    a.mr-3 href=founder_profile_url(slug: founder.slug)
+                    a.mr-3 href=student_profile_url(slug: founder.slug)
                       .founder-image
                         == avatar(founder.name, founder: founder, background_shape: :square)
                     .media-body
                       .media-heading
-                        = link_to truncated_founder_name(founder.fullname), founder_profile_url(slug: founder.slug)
+                        = link_to truncated_founder_name(founder.fullname), student_profile_url(slug: founder.slug)
                       p.designation #{founder_roles(founder.roles)}
                       ul.founder__social-links
                         - if founder.twitter_url?

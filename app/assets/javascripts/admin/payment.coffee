@@ -1,5 +1,5 @@
 setupSelect2ForFounder = ->
-  founderInput = $('#payment_founder_id')
+  founderInput = $('#admin_payment_founder_id')
 
   if founderInput.length > 0
     founderInput.select2

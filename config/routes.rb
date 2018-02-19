@@ -21,6 +21,7 @@ Rails.application.routes.draw do
 
   ActiveAdmin.routes(self)
 
+  # TODO: Remove these founder routes as we no longer have 'founders'. Always use the corresponding 'student' routes below.
   resource :founder, only: %i[edit update] do
     member do
       get 'fee'
@@ -31,6 +32,11 @@ Rails.application.routes.draw do
         get 'dashboard/targets/:id(/:slug)', action: 'target_overlay', as: 'dashboard_target'
       end
     end
+  end
+
+  scope 'student', controller: 'founders/dashboard', as: 'student' do
+    get 'dashboard'
+    get 'dashboard/targets/:id(/:slug)', action: 'target_overlay', as: 'dashboard_target'
   end
 
   resources :timeline_events, only: %i[create destroy]
@@ -47,6 +53,7 @@ Rails.application.routes.draw do
     post 'disconnect'
   end
 
+  # TODO: Remove these startup routes as we no longer have 'startups'. Always use the corresponding 'product' routes below.
   resource :startup, only: %i[edit update] do
     member do
       post 'level_up'
@@ -65,6 +72,14 @@ Rails.application.routes.draw do
 
   get 'startups/:id(/:slug)', to: 'startups#show', as: 'timeline'
   get 'startups/:id/:slug/e/:event_id/:event_title', to: 'startups#timeline_event_show', as: 'timeline_event_show'
+
+  get 'product/edit', to: 'startups#edit', as: 'edit_product'
+
+  scope 'products', controller: 'startups' do
+    get '/', action: 'index', as: 'products'
+    get '/:id(/:slug)', action: 'show', as: 'product'
+    get '/:id/:slug/e/:event_id/:event_title', action: 'timeline_event_show', as: 'product_timeline_event_show'
+  end
 
   resources :timeline_event_files, only: [] do
     member do
@@ -142,7 +157,10 @@ Rails.application.routes.draw do
   end
 
   # Custom founder profile page.
+  # # TODO: Remove this founder route as we no longer have 'founders'. Always use the corresponding 'student' route below.
   get 'founders/:slug', to: 'founders#founder_profile', as: 'founder_profile'
+
+  get 'students/:slug', to: 'founders#founder_profile', as: 'student_profile'
 
   # Story of startup village, accessed via about pages.
   get 'story', as: 'story', to: 'home#story'
@@ -161,7 +179,7 @@ Rails.application.routes.draw do
   # /slack redirected to /about/slack
   get '/slack', to: redirect('/about/slack')
 
-  get '/dashboard', to: redirect('/founder/dashboard')
+  get '/dashboard', to: redirect('/student/dashboard')
 
   # Also have /StartInCollege
   get 'StartInCollege', to: redirect('/startincollege')

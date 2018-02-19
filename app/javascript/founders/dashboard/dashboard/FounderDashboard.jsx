@@ -153,7 +153,7 @@ export default class FounderDashboard extends React.Component {
 
   targetOverlayCloseCB() {
     this.setState({ selectedTarget: null });
-    history.pushState({}, "", "/founder/dashboard");
+    history.pushState({}, "", "/student/dashboard");
   }
 
   targetDetails(targetId, loadFromProps = false) {
@@ -169,7 +169,7 @@ export default class FounderDashboard extends React.Component {
     history.pushState(
       { targetId: targetId },
       "",
-      "/founder/dashboard/targets/" + targetId
+      "/student/dashboard/targets/" + targetId
     );
   }
 

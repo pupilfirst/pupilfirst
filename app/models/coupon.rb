@@ -1,20 +1,8 @@
 class Coupon < ApplicationRecord
-  belongs_to :referrer_startup, class_name: 'Startup', optional: true
   has_many :coupon_usages
 
-  scope :referral, -> { where.not(referrer_startup_id: nil) }
-
   validates :code, uniqueness: true, presence: true, length: { in: 4..10 }
-  validates :referrer_startup_id, uniqueness: true, allow_nil: true
-  validates :user_extension_days, allow_nil: true, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 31 }
-  validates :referrer_extension_days, presence: true, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 31 }, if: proc { |coupon| coupon.referrer_startup_id.present? }
-  validates :discount_percentage, allow_nil: true, numericality: { only_integer: true, greater_than: 0, less_than: 100 }
-  validate :discount_or_extension_must_be_specified
-
-  def discount_or_extension_must_be_specified
-    return if discount_percentage.present? || user_extension_days.present?
-    errors.add(:base, 'at least one of discount percentage or user extension days must be set')
-  end
+  validates :discount_percentage, presence: true, numericality: { only_integer: true, greater_than: 0, less_than: 100 }
 
   def still_valid?
     (expires_at.blank? || expires_at.future?) && redeems_left?

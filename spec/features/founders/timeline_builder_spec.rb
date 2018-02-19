@@ -21,7 +21,7 @@ feature 'Timeline Builder' do
   end
 
   scenario 'Founder submits an event', js: true do
-    sign_in_user founder.user, referer: dashboard_founder_path
+    sign_in_user founder.user, referer: student_dashboard_path
 
     # Close the PNotify message to ensure no overlap with other elements under test
     find('.ui-pnotify').click
@@ -98,7 +98,7 @@ feature 'Timeline Builder' do
     end
 
     scenario 'Founder encounters errors when using timeline builder', js: true do
-      sign_in_user founder.user, referer: dashboard_founder_path
+      sign_in_user founder.user, referer: student_dashboard_path
 
       # Close the PNotify message to ensure no overlap with other elements under test
       find('.ui-pnotify').click
@@ -147,7 +147,7 @@ feature 'Timeline Builder' do
       # easy hack to mimic a Level 0 founder's Facebook share eligibility
       expect_any_instance_of(Founder).to receive(:facebook_share_eligibility).and_return('not_admitted')
 
-      sign_in_user founder.user, referer: dashboard_founder_path
+      sign_in_user founder.user, referer: student_dashboard_path
 
       # Close the PNotify message to ensure no overlap with other elements under test
       find('.ui-pnotify').click

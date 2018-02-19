@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 export default class LevelUpNotification extends React.Component {
   eligibleNotificationTitle() {
     if (this.currentLevelNumber() === 0) {
-      return "Congratulations! You are now SV.CO Founders.";
+      return "Congratulations! You are now an enrolled student at SV.CO.";
     } else if (this.currentLevelNumber() === this.props.maxLevelNumber) {
       return "Congratulations! You are now part of our Alumni.";
     } else {
@@ -18,10 +18,8 @@ export default class LevelUpNotification extends React.Component {
 
   eligibleNotificationText() {
     if (this.currentLevelNumber() === 0) {
-      return "You have successfully completed the first step in your startup journey. We are proud to have you join our collective. Hit Level Up to continue your journey and unlock a series of cool targets and sessions on the way.";
-    } else if (
-      this.currentLevelNumber() === this.props.rootProps.maxLevelNumber
-    ) {
+      return "You have successfully completed the first step in your journey with SV.CO. We are proud to have you join our collective. Hit Level Up to continue your journey and unlock a series of cool targets and sessions on the way.";
+    } else if (this.currentLevelNumber() === this.props.maxLevelNumber) {
       return (
         <div>
           <h4 className="font-regular light-grey-text">
@@ -105,7 +103,14 @@ export default class LevelUpNotification extends React.Component {
             </h3>
 
             <p className="founder-dashboard-levelup__description mx-auto">
-              Congratulations on completing all milestone targets in this level. Your next level will be unlocked on <span>{ moment(this.props.rootProps.nextLevelUnlockDate).format("MMM D") }</span>. Please revisit your dashboard on this date to receive your next set of targets. Happy learning!
+              Congratulations on completing all milestone targets in this level.
+              Your next level will be unlocked on{" "}
+              <span>
+                {moment(this.props.rootProps.nextLevelUnlockDate).format(
+                  "MMM D"
+                )}
+              </span>. Please revisit your dashboard on this date to receive
+              your next set of targets. Happy learning!
             </p>
           </div>
         )}

@@ -9,7 +9,6 @@ class Payment < ApplicationRecord
   STATUS_NOT_REQUESTED = -'not_requested'
 
   TYPE_NORMAL = -'normal'
-  TYPE_RENEWAL = -'renewal'
   TYPE_REFUND = -'refund'
 
   def self.valid_payment_types

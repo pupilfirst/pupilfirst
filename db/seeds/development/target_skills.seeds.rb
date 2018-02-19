@@ -3,7 +3,8 @@ require_relative 'helper'
 after 'development:targets', 'development:skills' do
   puts 'Seeding target rubric'
 
-  target = Target.last
+  target_group = TargetGroup.find_by(name: 'Put up a Coming Soon Page')
+  target = Target.where(target_group: target_group).last
   TargetSkill.create!(
     target: target,
     skill: Skill.first,

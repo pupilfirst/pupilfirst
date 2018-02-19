@@ -2,7 +2,7 @@
 
 - if policy(faculty).connect?
   - if current_founder.pending_connect_request_for?(faculty)
-    div data-toggle='tooltip' data-placement='top' title="You already have a pending connect request with this faculty member. Please write to help@sv.co if you would like to reschedule." class="disabled #{button_classes}"
+    div data-toggle='tooltip' data-placement='top' title="You already have a pending connect request with this coach. Please write to help@sv.co if you would like to reschedule." class="disabled #{button_classes}"
       | Connect
   - else
     == render 'connect_modal', faculty: faculty
@@ -13,7 +13,7 @@
   div data-toggle='tooltip' data-placement='top' title="Faculty Connect is only available to #{current_founder.startup.team_lead.fullname} (your team lead)" class="disabled #{button_classes}"
     | Connect
 - elsif current_founder&.startup.present? && !current_founder.level_zero?
-  div data-toggle='tooltip' data-placement='top' title="To gain access to this faculty member, you need to reach Level #{faculty.level.number}!" class="disabled #{button_classes}"
+  div data-toggle='tooltip' data-placement='top' title="To gain access to this coach, you need to reach Level #{faculty.level.number}!" class="disabled #{button_classes}"
     | Connect
 - else
   div data-toggle='tooltip' data-placement='top' title="Faculty Connect is only available once you are a selected founder" class="disabled #{button_classes}"

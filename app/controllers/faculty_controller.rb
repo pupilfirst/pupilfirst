@@ -30,7 +30,7 @@ class FacultyController < ApplicationController
       flash[:error] = 'Something went wrong while attempting to create connect request! :('
     end
 
-    redirect_to faculty_index_path
+    redirect_to coaches_index_path
   end
 
   # GET /faculty/weekly_slots/:token

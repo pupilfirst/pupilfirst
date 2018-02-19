@@ -44,7 +44,7 @@ after 'development:levels' do
     name: 'Jack Sparrow',
     title: 'El Capitan, The Black Pearl',
     key_skills: 'Looting, pillaging, etc.',
-    category: 'visiting_faculty',
+    category: 'visiting_coaches',
     image: Rails.root.join('spec/support/uploads/faculty/jack_sparrow.png').open
   )
 end

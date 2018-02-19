@@ -35,7 +35,7 @@
                 = render 'faculty_card', member: member
           .tab-pane#visiting-faculty role="tabpanel" class=active_tab('visiting-faculty')
             .row.faculty-cards-container
-              - Faculty.active.visiting_faculty.each do |member|
+              - Faculty.active.visiting_coaches.each do |member|
                 = render 'faculty_card', member: member
           .tab-pane#advisory-board role="tabpanel" class=active_tab('advisory-board')
             .row.faculty-cards-container

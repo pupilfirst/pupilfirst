@@ -21,7 +21,7 @@ class Faculty < ApplicationRecord
   has_many :english_quiz_submissions, foreign_key: 'quizee_id'
 
   CATEGORY_TEAM = 'team'
-  CATEGORY_VISITING_FACULTY = 'visiting_faculty'
+  CATEGORY_VISITING_COACHES = 'visiting_coaches'
   CATEGORY_ADVISORY_BOARD = 'advisory_board'
   CATEGORY_ALUMNI = 'alumni'
 
@@ -32,7 +32,7 @@ class Faculty < ApplicationRecord
   COMMITMENT_FULL_TIME = 'full_time'
 
   def self.valid_categories
-    [CATEGORY_TEAM, CATEGORY_VISITING_FACULTY, CATEGORY_ADVISORY_BOARD, CATEGORY_ALUMNI]
+    [CATEGORY_TEAM, CATEGORY_VISITING_COACHES, CATEGORY_ADVISORY_BOARD, CATEGORY_ALUMNI]
   end
 
   def self.valid_compensation_values
@@ -58,10 +58,10 @@ class Faculty < ApplicationRecord
 
   scope :active, -> { where.not(inactive: true) }
   scope :team, -> { where(category: CATEGORY_TEAM).order('sort_index ASC') }
-  scope :visiting_faculty, -> { where(category: CATEGORY_VISITING_FACULTY).order('sort_index ASC') }
+  scope :visiting_coaches, -> { where(category: CATEGORY_VISITING_COACHES).order('sort_index ASC') }
   scope :advisory_board, -> { where(category: CATEGORY_ADVISORY_BOARD).order('sort_index ASC') }
   scope :alumni, -> { where(category: CATEGORY_ALUMNI).order('sort_index ASC') }
-  scope :available_for_connect, -> { where(category: [CATEGORY_TEAM, CATEGORY_VISITING_FACULTY, CATEGORY_ALUMNI]) }
+  scope :available_for_connect, -> { where(category: [CATEGORY_TEAM, CATEGORY_VISITING_COACHES, CATEGORY_ALUMNI]) }
   # hard-wired ids of our ops_team, kireeti: 19, bharat: 20. A flag for this might be an overkill?
   scope :ops_team, -> { where(id: [19, 20]) }
 

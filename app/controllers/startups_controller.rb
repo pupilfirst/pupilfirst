@@ -43,12 +43,13 @@ class StartupsController < ApplicationController
     # Reuse the startup action, because that's what this page also shows.
     show
 
-    @timeline_event_for_og = @startup.timeline_events.find_by(id: params[:event_id])
+    @timeline_event_for_og = @startup.timeline_events.find(params[:event_id])
     @meta_description = @timeline_event_for_og.description
 
     unless StartupPolicy.new(current_user, @startup).timeline_event_show?(@timeline_event_for_og)
       raise_not_found
     end
+
     render 'show'
   end
 

@@ -1,0 +1,6 @@
+---
+timestamp: '2018-02-19T06:55:13Z'
+title: Fixed crash when attempting to view timeline entry with an invalid ID.
+trello: https://trello.com/c/wrQJNw7e
+private: false
+category: bugfix

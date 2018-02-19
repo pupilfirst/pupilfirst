@@ -61,12 +61,6 @@ class Payment < ApplicationRecord
     instamojo_payment_status == Instamojo::PAYMENT_STATUS_FAILED
   end
 
-  # A payment is refundable if it is younger than a week, and it was registered as paid by Instamojo.
-  def refundable?
-    return false unless paid?
-    credited? && paid_at >= 1.week.ago
-  end
-
   # A payment is credited (money received) only if Instamojo reports it as such.
   def credited?
     instamojo_payment_status == Instamojo::PAYMENT_STATUS_CREDITED

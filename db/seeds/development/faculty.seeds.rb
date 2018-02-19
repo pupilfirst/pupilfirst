@@ -35,7 +35,7 @@ after 'development:levels' do
     title: 'CFO',
     key_skills: Faker::Lorem.words(3).join(', '),
     linkedin_url: 'https://linkedin.com',
-    category: 'team',
+    category: 'developer_coaches',
     image: Rails.root.join('spec/support/uploads/faculty/donald_duck.jpg').open,
     sort_index: 3
   )

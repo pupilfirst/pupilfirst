@@ -22,6 +22,7 @@ class Faculty < ApplicationRecord
 
   CATEGORY_TEAM = 'team'
   CATEGORY_VISITING_COACHES = 'visiting_coaches'
+  CATEGORY_DEVELOPER_COACHES = 'developer_coaches'
   CATEGORY_ADVISORY_BOARD = 'advisory_board'
   CATEGORY_ALUMNI = 'alumni'
 
@@ -32,7 +33,7 @@ class Faculty < ApplicationRecord
   COMMITMENT_FULL_TIME = 'full_time'
 
   def self.valid_categories
-    [CATEGORY_TEAM, CATEGORY_VISITING_COACHES, CATEGORY_ADVISORY_BOARD, CATEGORY_ALUMNI]
+    [CATEGORY_TEAM, CATEGORY_VISITING_COACHES, CATEGORY_DEVELOPER_COACHES, CATEGORY_ADVISORY_BOARD, CATEGORY_ALUMNI]
   end
 
   def self.valid_compensation_values

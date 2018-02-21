@@ -23,8 +23,6 @@ describe Startups::LevelUpService do
 
       it "raises startup's level to 2" do
         expect { subject.execute }.to change { startup.reload.level }.from(level_1).to(level_2)
-
-        expect(startup.maximum_level).to eq(level_2)
       end
     end
 
@@ -41,7 +39,6 @@ describe Startups::LevelUpService do
 
         # startup must have moved to Level 1.
         expect(startup.level).to eq(level_1)
-        expect(startup.maximum_level).to eq(level_1)
 
         # program_started_on must have been set.
         expect(startup.program_started_on).to_not eq(nil)

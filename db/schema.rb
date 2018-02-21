@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180219104659) do
+ActiveRecord::Schema.define(version: 20180221054621) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -570,7 +570,6 @@ ActiveRecord::Schema.define(version: 20180219104659) do
     t.string "courier_number"
     t.string "partnership_deed"
     t.string "payment_reference"
-    t.integer "maximum_level_id"
     t.string "admission_stage"
     t.date "timeline_updated_on"
     t.datetime "admission_stage_updated_at"
@@ -581,7 +580,6 @@ ActiveRecord::Schema.define(version: 20180219104659) do
     t.bigint "billing_state_id"
     t.index ["billing_state_id"], name: "index_startups_on_billing_state_id"
     t.index ["level_id"], name: "index_startups_on_level_id"
-    t.index ["maximum_level_id"], name: "index_startups_on_maximum_level_id"
     t.index ["slug"], name: "index_startups_on_slug", unique: true
     t.index ["stage"], name: "index_startups_on_stage"
     t.index ["team_lead_id"], name: "index_startups_on_team_lead_id"
@@ -848,7 +846,6 @@ ActiveRecord::Schema.define(version: 20180219104659) do
   add_foreign_key "startup_feedback", "timeline_events"
   add_foreign_key "startups", "founders", column: "team_lead_id"
   add_foreign_key "startups", "levels"
-  add_foreign_key "startups", "levels", column: "maximum_level_id"
   add_foreign_key "startups", "states", column: "billing_state_id"
   add_foreign_key "target_groups", "levels"
   add_foreign_key "target_groups", "tracks"

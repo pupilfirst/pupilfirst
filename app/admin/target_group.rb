@@ -8,13 +8,10 @@ ActiveAdmin.register TargetGroup do
   filter :name, as: :string
   filter :description, as: :string
   filter :milestone
+  filter :track
 
   scope :all
   scope('No Track') { |scope| scope.where(track: nil) }
-
-  Track.all.each do |track|
-    scope(track.name) { |scope| scope.where track: track }
-  end
 
   controller do
     def scoped_collection

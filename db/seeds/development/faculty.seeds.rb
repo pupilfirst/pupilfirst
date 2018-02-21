@@ -7,7 +7,7 @@ after 'development:levels' do
   level_two = Level.find_by(number: 2)
 
   Faculty.create!(
-    name: 'Mickey Mouse',
+    name: 'Sanjay Vijayakumar',
     email: 'mickeymouse@example.com',
     title: 'CEO',
     key_skills: Faker::Lorem.words(3).join(', '),
@@ -19,7 +19,7 @@ after 'development:levels' do
   )
 
   Faculty.create!(
-    name: 'Minne Mouse',
+    name: 'Vishnu Gopal',
     email: 'minniemouse@example.com',
     title: 'CTO',
     key_skills: Faker::Lorem.words(3).join(', '),
@@ -31,8 +31,8 @@ after 'development:levels' do
   )
 
   Faculty.create!(
-    name: 'Donald Duck',
-    title: 'CFO',
+    name: 'Gautham',
+    title: 'COO',
     key_skills: Faker::Lorem.words(3).join(', '),
     linkedin_url: 'https://linkedin.com',
     category: 'team',
@@ -41,10 +41,10 @@ after 'development:levels' do
   )
 
   Faculty.create!(
-    name: 'Jack Sparrow',
-    title: 'El Capitan, The Black Pearl',
+    name: 'Hari Gopal',
+    title: 'Engineering Lead',
     key_skills: 'Looting, pillaging, etc.',
-    category: 'visiting_faculty',
+    category: 'team',
     image: Rails.root.join('spec/support/uploads/faculty/jack_sparrow.png').open
   )
 end

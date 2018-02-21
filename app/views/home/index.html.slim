@@ -24,170 +24,166 @@ section.home-hero__container
           ' and get you placed in a premium startup.
         .pt-3
           - if current_founder.present?
-            = link_to 'Go to Dashboard', dashboard_founder_path, class: 'btn btn-primary btn-lg home-apply__button'
+            = link_to 'Go to Dashboard', student_dashboard_path, class: 'btn btn-primary btn-lg home-apply__button'
           - else
             = link_to 'Learn More', apply_path, class: 'btn btn-primary btn-lg home-apply__button', id: 'home-index__hero-join-link'
 
-  - unless Rails.env.test?
-    = video_tag 'https://public-assets.sv.co/videos/header_background_clip.mp4', preload: 'none', autoplay: true, loop: true, class: 'd-none d-md-block home-hero__video'
-
-section.home-partners__container.py-3.d-none.d-md-block
-  .container.home-partners__box
-    .row.align-items-center.text-center.justify-content-center
-      .col-md-2
-        = image_tag 'home/index/sv-partner-facebook.svg', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--facebook', alt: 'Facebook Logo'
-      .col-md-2
-        = image_tag 'home/index/sv-partner-freshworks.svg', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--freshworks', alt: 'Freshworks Logo'
-      .col-md-2
-        = image_tag 'home/index/sv-partner-paytm.svg', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--paytm', alt: 'Paytm Logo'
-      .col-md-2
-        = image_tag 'home/index/sv-partner-oyo.svg', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--oyo', alt: 'Oyo Logo'
-      .col-md-2
-        = image_tag 'home/index/sv-partner-ola.svg', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--ola', alt: 'Ola Logo'
-      .col-md-2
-        = image_tag 'home/index/sv-partner-zomato.svg', class: 'img-fluid mx-auto home-partners__logo home-partners__logo--zomato', alt: 'Zomato Logo'
-
-section.program-feature__container.py-5
+section.program-promise__container
   .container
-    .home-section__head.mb-3
-      h2.home-section__head-title.text-center.font-black
-        | Exclusively for Student Developers
-      .home-section__head-subtitle.mx-auto
-        p.text-center
-          'Build on your own or with a team of friends
-    .program-feature__box
-      .col-md-7
-        .row
-          .col-md-6
-            = link_to 'https://wiki.sv.co/learning-at-sv-co/industry-coaching-at-sv-co/one-on-one-mentoring-with-industry-experts', target: '_blank'
-              .program-feature__card
-                = image_tag 'home/index/program-learn-from-experts.jpg', class: 'img-fluid'
-                .program-feature__card-title
-                  h3.program-feature__card-title-text.font-regular
-                    ' Learn from experts
-                    br
-                    | across the world
+    .row.text-center
+      .col-md-4
+        = image_tag 'home/index/program-promise-developer-icon.svg', class: 'img-fluid mx-auto program-promise__icon', alt: 'Upgrade your developer profile'
+        h4.program-promise__text.font-semibold.text-center.mx-auto.mt-3.mb-5
+          ' Step-by-step framework to
+          ' upgrade your developer profile
+          | in 6 months.
+      .col-md-4.with-path
+        = image_tag 'home/index/program-promise-coach-icon.svg', class: 'img-fluid mx-auto program-promise__icon', alt: 'Upgrade your developer profile'
+        h4.program-promise__text.font-semibold.text-center.mx-auto.mt-3.mb-5
+          ' 1-on-1 Coaching
+          ' by expert developers
+          | from the industry.
+      .col-md-4
+        = image_tag 'home/index/program-promise-job-icon.svg', class: 'img-fluid mx-auto program-promise__icon', alt: 'Upgrade your developer profile'
+        h4.program-promise__text.font-semibold.text-center.mx-auto.mt-3.mb-5
+          ' Job offers of 6+ l.p.a
+          ' from premium startups,
+          | guaranteed.
 
-          .col-md-6
-            = link_to 'https://wiki.sv.co/admissions-to-sv-co/joining-the-sv-co-program/admission-overview', target: '_blank'
-              .program-feature__card
-                = image_tag 'home/index/program-build-startup.jpg', class: 'img-fluid'
-                .program-feature__card-title
-                  h3.program-feature__card-title-text.font-regular
-                    ' Build a world class product
-                    br
-                    | on your own or with friends
-
-          .col-md-6
-            = link_to 'https://www.youtube.com/watch?v=TfLMV-XkfGw', target: '_blank'
-              .program-feature__card
-                = image_tag 'home/index/program-events.jpg', class: 'img-fluid'
-                .program-feature__card-title
-                  h3.program-feature__card-title-text.font-regular
-                    ' Showcase your skills at
-                    br
-                    | SV.CO events
-
-          .col-md-6
-            = link_to 'https://wiki.sv.co/admissions-to-sv-co/fees-and-scholarships/scholarships-at-svco', target: '_blank'
-              .program-feature__card
-                = image_tag 'home/index/program-ideas.jpg', class: 'img-fluid'
-                .program-feature__card-title
-                  h3.program-feature__card-title-text.font-regular
-                    ' Scholarships upto Rs. 80,000/- up for grabs
-
-      .col-md-5
-        = link_to 'https://wiki.sv.co/learning-at-sv-co/how-you-learn-at-sv-co/build-your-first-product-while-still-in-college', target: '_blank'
-          .program-feature__card
-            = image_tag 'home/index/program-learn.jpg', class: 'program-feature__college-img'
-            .program-feature__card-title
-              h3.program-feature__card-title-text.program-feature__card-title-text--big.font-regular
-                span.program-feature__card-title-text--big-highlight.font-semibold
-                  ' Learn
-                br
-                ' wherever you are alongside your
-                br
-                | college degree
-
+section.program-summary__container.pt-5.pb-3
   .container
-    .text-center.mt-3
-      = link_to 'Learn More', 'https://wiki.sv.co/', class: 'btn btn-primary btn-lg home-apply__button', id: 'home-index__programme-learn-more-link'
+    .row.align-items-center
+      .col-md-6.text-right.pr-md-5
+        = image_tag 'home/index/program-overview-students.png', class: 'img-fluid', alt: 'SV.CO, a 6-month upskilling course for student developers'
 
+      .col-md-6
+        h2.home-section__head-title.font-semibold.mb-3
+          | SV.CO, a 6-month upskilling program
+          .font-black
+            | for student developers.
+        p.program-summary__text.mb-3
+         ' SV.CO is an online learning platform exclusively
+         ' for student developers to upskill themselves for challenging
+         ' jobs in software development. To enable this, students are guided
+         ' step-by-step through a four-level intensive framework, along with
+         ' occasional physical events such as ‘demo days’. During the course
+         ' of this program, they primarily learn to build a software product
+         | from scratch - all the way from picking an idea to launching their app to users!
 
-section.home-program-framework__container.py-5
+        p.program-summary__text.mb-3
+          ' Each student developer is also provided with an experienced ‘Developer Coach’
+          ' from the industry to supervise and guide them while they code.
+          | This ensures they also pickup industry skills and best practices first-hand!
+
+        p.program-summary__text.mb-3
+          ' At SV.CO we help students land exciting jobs in premium Indian startups.
+          | In fact, we have a 100% job offer guarantee for all our successful graduates!
+
+section.graduation-story__container.py-0.py-md-5
   .container
-    .home-section__head.mb-4
-      h2#program-framework.home-section__head-title.text-center.font-black
-        | What happens in the program.
-      .home-section__head-subtitle.mx-auto
-        p.text-center
-          | A unique approach to help you become an industry-ready developer
-
-    .row.home-program-framework__box.mx-auto
-      .col-md-4.home-program-framework__image-container.p-0
-        = link_to 'https://wiki.sv.co/learning-at-sv-co/what-we-teach-at-sv-co/svco-program-content', target: '_blank', class: 'home-program-framework__image-link' do
-          = image_tag 'home/index/framework-thumbnail.jpg', class: 'img-fluid mx-auto home-program-framework__image', alt: "Program Framework"
-      .col-md-8.home-program-framework__text.d-flex.justify-content-center.flex-column
-        p.mb-2
-          ' The SV.CO six month program is designed to upgrade you from just another 'Classroom Coder' to an 'Ace Developer'. The program is split
-          | into <strong>two major tracks - Product Track and Developer Track.</strong>
-
-        p.mb-2
-          ' <strong>Product Track</strong> is where you build your first internet product, starting from idea selection
-          | all the way to product development.
-        p
-          ' <strong>Developer Track</strong> is where you pick up the everyday skills and best practices for software development.
-        = link_to 'https://wiki.sv.co/learning-at-sv-co/what-we-teach-at-sv-co/svco-program-content', target: '_blank', class: 'font-semibold mt-4' do
-          i.fa.fa-arrow-circle-right.mr-2
-          | Find out more about our program here
-
-section.six-ways-card__container.py-5
-  .container
-    .home-section__head.mb-4
-      h2#benefits.home-section__head-title.text-center.font-black
-        | What our alumni has to say.
+    .home-section__head.mt-4.mt-md-5.mb-4
+      h2.home-section__head-title.text-center.font-semibold.mb-0
+        ' What our
+        span.font-black
+          ' alumni
+        | has to say.
       .home-section__head-subtitle.mx-auto
         p.text-center
           | Hear them narrate their SV.CO experience
-    .row
-      .col-md-4
-        a#home-index__six-ways-accelerator-video.six-ways-card__box.my-3 href="#" data-toggle="modal" data-target="#profoundis-story-video"
-          span.six-ways-card__thumbnail
-            = image_tag 'home/index/six-ways-join-accelerator.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Join a startup accelerator'
-            span.six-ways-card__video-time
-              | 4:02 mins
-            span.six-ways-card__play-button-container.d-flex.flex-column.align-items-center.justify-content-center
-            span.six-ways-card__thumbnail-content
-              h3.six-ways-card__thumbnail-head.font-semibold.mb-0
-                | Built a world class internet product, got acquired by an American Company
-              p.six-ways-card__thumbnail-subhead
-                | Story of Profoundis
 
-      .col-md-4
-        a#home-index__six-ways-acquihire-video.six-ways-card__box.my-3 href="#" data-toggle="modal" data-target="#z-pay-story-video"
-          span.six-ways-card__thumbnail
-            = image_tag 'home/index/six-ways-get-acqui-hired.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Get acqui-hired'
-            span.six-ways-card__video-time
-              | 1:16 mins
-            span.six-ways-card__play-button-container.d-flex.flex-column.align-items-center.justify-content-center
-            span.six-ways-card__thumbnail-content
-              h3.six-ways-card__thumbnail-head.font-semibold.mb-0
-                | Product they built in college helped them get a job
-              p.six-ways-card__thumbnail-subhead
-                | Z-pay Acquihired by Tally
+    .d-flex.justify-content-md-center
+      a#home-index__six-ways-hired-video.six-ways-card__box.mb-5 href="#" data-toggle="modal" data-target="#hiring-story-video"
+        span.six-ways-card__thumbnail
+          = image_tag 'home/index/six-ways-get-hired.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Get hired by a startup'
+          span.six-ways-card__video-time
+            | 1:42 mins
+          span.six-ways-card__play-button-container.d-flex.flex-column.align-items-center.justify-content-center
+          span.six-ways-card__thumbnail-content
+            h3.six-ways-card__thumbnail-head.font-semibold.mb-0
+              | Student Developer to Product Manager in a million dollar funded startup
+            p.six-ways-card__thumbnail-subhead
+              | Hiring at SV.CO
+    .row.justify-content-md-center
+      .col-md-3.mb-4
+        .graduation-story__card
+          .d-flex.align-items-center.justify-content-center.graduation-story__card-logo
+            = image_tag 'home/index/sv-partner-tally.png', class: 'img-fluid graduation-story__card-logo-img', alt: 'Tally Logo'
+          .graduation-story__card-hires.text-center
+            p 7 Hires
+          .d-flex.flex-wrap.graduation-story__card-avatar-container.justify-content-center
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/varghese-george-tally.png', class: 'img-fluid', alt: ''
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/rakhul-prakash-tally.png', class: 'img-fluid', alt: ''
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/renjith-warrier-tally.png', class: 'img-fluid', alt: ''
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/siddharth-nair-tally.png', class: 'img-fluid', alt: ''
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/ajayson-vs-tally.png', class: 'img-fluid', alt: ''
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/sreeram-narayanan-tally.png', class: 'img-fluid', alt: ''
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/govind-tally.png', class: 'img-fluid', alt: ''
+      .col-md-3.mb-4
+        .graduation-story__card
+          .d-flex.align-items-center.justify-content-center.graduation-story__card-logo
+            = image_tag 'home/index/sv-partner-good-methods.png', class: 'img-fluid graduation-story__card-logo-img graduation-story__card-logo-img--gmg', alt: 'Goodmethods Logo'
+          .graduation-story__card-hires.text-center
+            p 6 Hires
+          .d-flex.flex-wrap.graduation-story__card-avatar-container.justify-content-center
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/sachu-gmg.png', class: 'img-fluid', alt: ''
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/sudhin-suresh-gmg.png', class: 'img-fluid', alt: ''
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/farize-gmg.png', class: 'img-fluid', alt: ''
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/sarah-gmg.png', class: 'img-fluid', alt: ''
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/vivek-gmg.png', class: 'img-fluid', alt: ''
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/aravind-m-gmg.png', class: 'img-fluid', alt: ''
+      .col-md-3.mb-4
+        .graduation-story__card
+          .d-flex.align-items-center.justify-content-center.graduation-story__card-logo
+            = image_tag 'home/index/sv-partner-citrus.png', class: 'img-fluid graduation-story__card-logo-img graduation-story__card-logo-img--citrus', alt: 'Citruspay Logo'
+          .graduation-story__card-hires.text-center
+            p 1 Hire
+          .d-flex.flex-wrap.graduation-story__card-avatar-container.justify-content-center
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/abid-ismail-citruspay.png', class: 'img-fluid', alt: ''
 
-      .col-md-4
-        a#home-index__six-ways-hired-video.six-ways-card__box.my-3 href="#" data-toggle="modal" data-target="#hiring-story-video"
-          span.six-ways-card__thumbnail
-            = image_tag 'home/index/six-ways-get-hired.jpg', class: 'img-fluid six-ways-card__thumbnail-image', alt: 'Get hired by a startup'
-            span.six-ways-card__video-time
-              | 1:42 mins
-            span.six-ways-card__play-button-container.d-flex.flex-column.align-items-center.justify-content-center
-            span.six-ways-card__thumbnail-content
-              h3.six-ways-card__thumbnail-head.font-semibold.mb-0
-                | Student Developer to Product Manager in a million dollar funded startup
-              p.six-ways-card__thumbnail-subhead
-                | Hiring at SV.CO
+    .row.justify-content-md-center
+      .col-md-3.mb-4
+        .graduation-story__card
+          .d-flex.align-items-center.justify-content-center.graduation-story__card-logo
+            = image_tag 'home/index/sv-partner-freshworks.svg', class: 'img-fluid graduation-story__card-logo-img', alt: 'Freshworks Logo'
+          .graduation-story__card-hires.text-center
+            p 1 Hire
+          .d-flex.flex-wrap.graduation-story__card-avatar-container.justify-content-center
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/robin-freshworks.png', class: 'img-fluid', alt: ''
+      .col-md-3.mb-4
+        .graduation-story__card
+          .d-flex.align-items-center.justify-content-center.graduation-story__card-logo
+            = image_tag 'home/index/sv-partner-freecharge.png', class: 'img-fluid graduation-story__card-logo-img', alt: 'Freecharge Logo'
+          .graduation-story__card-hires.text-center
+            p 2 Hires
+          .d-flex.flex-wrap.graduation-story__card-avatar-container.justify-content-center
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/joel-varghese-freecharge.png', class: 'img-fluid', alt: ''
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/amal-krishna-freecharge.png', class: 'img-fluid', alt: ''
+      .col-md-3.mb-4
+        .graduation-story__card
+          .d-flex.align-items-center.justify-content-center.graduation-story__card-logo
+            = image_tag 'home/index/sv-partner-ola.svg', class: 'img-fluid graduation-story__card-logo-img graduation-story__card-logo-img--ola', alt: 'Ola Logo'
+          .graduation-story__card-hires.text-center
+            p 1 Hire
+          .d-flex.flex-wrap.graduation-story__card-avatar-container.justify-content-center
+            .graduation-story__card-avatar.m-2
+              = image_tag 'home/index/aravind-sai-ola.png', class: 'img-fluid', alt: ''
 
 section.home-call-to-action__container.py-5
   .container
@@ -200,36 +196,6 @@ section.home-call-to-action__container.py-5
 
 == render 'layouts/footer'
 
-#itraveller-story-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header.justify-content-end
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-      .modal-body
-        - unless Rails.env.test?
-          iframe.video-frame src="https://www.youtube.com/embed/KufIL6ZS1lk" frameborder="0" allowfullscreen="allowfullscreen"
-
-#profoundis-story-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header.justify-content-end
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-      .modal-body
-        - unless Rails.env.test?
-          iframe.video-frame src="https://www.youtube.com/embed/vjDdSdfitKY" frameborder="0" allowfullscreen="allowfullscreen"
-
-#z-pay-story-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header.justify-content-end
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-      .modal-body
-        - unless Rails.env.test?
-          iframe.video-frame src="https://www.youtube.com/embed/pwmVitwaeL0" frameborder="0" allowfullscreen="allowfullscreen"
-
 #hiring-story-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
     .modal-content
@@ -239,23 +205,3 @@ section.home-call-to-action__container.py-5
       .modal-body
         - unless Rails.env.test?
           iframe.video-frame src="https://www.youtube.com/embed/XBjkCUW1lFQ" frameborder="0" allowfullscreen="allowfullscreen"
-
-#wowmakers-story-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header.justify-content-end
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-      .modal-body
-        - unless Rails.env.test?
-          iframe.video-frame src="https://www.youtube.com/embed/R8LhGtoeaUc" frameborder="0" allowfullscreen="allowfullscreen"
-
-#higher-studies-story-video.modal.video-modal aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header.justify-content-end
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-      .modal-body
-        - unless Rails.env.test?
-          iframe.video-frame src="https://www.youtube.com/embed/BxPH9XyQRsM" frameborder="0" allowfullscreen="allowfullscreen"

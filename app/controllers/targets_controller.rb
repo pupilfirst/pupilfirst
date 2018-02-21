@@ -67,6 +67,6 @@ class TargetsController < ApplicationController
     target = Target.find(params[:id])
     Targets::AutoVerificationService.new(target, current_founder).auto_verify
     flash[:success] = 'The target has been marked complete!'
-    redirect_to dashboard_founder_path(from: 'auto_verify')
+    redirect_to student_dashboard_path(from: 'auto_verify')
   end
 end

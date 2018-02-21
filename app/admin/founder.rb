@@ -465,7 +465,7 @@ ActiveAdmin.register Founder do
     link_to(
       'Record New Feedback',
       new_admin_startup_feedback_path(
-        startup_feedback: { startup_id: Founder.friendly.find(params[:id]).startup.id, reference_url: timeline_url(startup.id, startup.slug) }
+        startup_feedback: { startup_id: Founder.friendly.find(params[:id]).startup.id, reference_url: product_url(startup.id, startup.slug) }
       )
     )
   end

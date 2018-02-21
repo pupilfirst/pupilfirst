@@ -11,7 +11,7 @@ describe TimelineEvents::VerificationNotificationJob do
   let!(:timeline_event_type_startup) { create :timeline_event_type, role: TimelineEventType::ROLE_DESIGN }
   let!(:timeline_event_for_founder) { create :timeline_event, founder: founder, startup: startup, target: founder_target, timeline_event_type: timeline_event_type_founder, status: "Verified" }
   let!(:timeline_event_for_startup) { create :timeline_event_with_links, founder: founder, startup: startup, target: startup_target, timeline_event_type: timeline_event_type_startup, status: "Verified" }
-  let(:startup_url) { Rails.application.routes.url_helpers.timeline_url(startup.id, startup.slug) }
+  let(:startup_url) { Rails.application.routes.url_helpers.product_url(startup.id, startup.slug) }
 
   let(:links_attached_notice) do
     notice = "*Public Links attached:*\n"

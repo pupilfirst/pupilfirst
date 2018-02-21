@@ -19,7 +19,7 @@ class GraduationsController < ApplicationController
     if @form.validate(params[:admissions_preselection_stage_submission])
       @form.save(current_founder)
       flash[:success] = 'Startup agreements were successfully saved.'
-      redirect_to dashboard_founder_path(from: 'preselection_submit')
+      redirect_to student_dashboard_path(from: 'preselection_submit')
     else
       @form.save_partnership_deed
       flash[:error] = 'We were unable to save details because of errors. Please try again.'

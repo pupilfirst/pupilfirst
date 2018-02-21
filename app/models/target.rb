@@ -218,7 +218,7 @@ class Target < ApplicationRecord
   alias has_rubric rubric?
 
   def target_type_description
-    role = founder_role? ? 'Founder ' : 'Team '
+    role = founder_role? ? 'Personal ' : 'Team '
     type = if session?
       'Session'
     elsif chore?

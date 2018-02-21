@@ -27,7 +27,7 @@ class AdmissionsController < ApplicationController
           # Sign in user immediately to allow him to proceed to screening.
           sign_in founder.user
 
-          redirect_to dashboard_founder_path(from: 'register')
+          redirect_to student_dashboard_path(from: 'register')
           return
         end
       else
@@ -56,7 +56,7 @@ class AdmissionsController < ApplicationController
   def screening_submit
     authorize :admissions
     flash[:success] = 'You have successfully completed screening'
-    redirect_to dashboard_founder_path(from: 'screening_submit')
+    redirect_to student_dashboard_path(from: 'screening_submit')
   end
 
   def screening_submit_webhook
@@ -120,7 +120,7 @@ class AdmissionsController < ApplicationController
     if @form.validate(params[:admissions_founders])
       @form.save
       flash[:success] = 'Details of team members have been saved!'
-      redirect_to dashboard_founder_path(from: 'founder_submit')
+      redirect_to student_dashboard_path(from: 'founder_submit')
     else
       render 'team_members'
     end
@@ -149,7 +149,7 @@ class AdmissionsController < ApplicationController
       Founders::AcceptInvitationService.new(founder).execute
       flash[:success] = "You have successfully joined #{founder.reload.startup.team_lead.name}'s team"
       sign_in founder.user
-      redirect_to dashboard_founder_path(from: 'accept_invitation')
+      redirect_to student_dashboard_path(from: 'accept_invitation')
     end
   end
 

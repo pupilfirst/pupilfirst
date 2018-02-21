@@ -18,7 +18,7 @@ module Resources
     def message(resource)
       message = '*A new '
       message += resource.level_exclusive? ? "private resource for Level #{resource.level.number} " : 'public resource '
-      message += "has been uploaded to the SV.CO Startup Library*:\n\n"
+      message += "has been uploaded to the SV.CO Library*:\n\n"
       message += "> *Title:* #{resource.title}\n"
       message += "> *Description:* #{resource.description}\n"
       message + "> *URL:* #{Rails.application.routes.url_helpers.resource_url(id: resource.slug, host: 'https://www.sv.co')}"

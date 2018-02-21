@@ -101,7 +101,7 @@
                     span View Resume
         - if @founder.startup&.logo.present?
           .col-md-3.startup-logo-profile.d-flex.align-items-center.justify-content-center.mt-3.mt-md-0
-            a.startup-logo-box href=timeline_url(@founder.startup.id, @founder.startup.slug)
+            a.startup-logo-box href=product_url(@founder.startup.id, @founder.startup.slug)
               = image_tag @founder.startup.logo.url, alt: 'Startup logo', class: 'img-fluid'
 
 .profile-bg.py-3
@@ -177,7 +177,7 @@
                                   ' Updated timeline: #{data_entry[:timeline_event].title}.
                 - else
                   .inactive-month
-                    p Founder was inactive during this month.
+                    p Student was inactive during this month.
 
           .col-lg-4.all-activity-counts.d-lg-flex.flex-lg-column
             .slack-messages

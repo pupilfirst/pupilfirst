@@ -37,7 +37,7 @@ feature 'Leaderboard' do
         expect(page).to have_link(startup_1.display_name)
         expect(page).to have_link(startup_2.display_name)
         expect(page).to have_link(startup_3.display_name)
-        expect(page).to have_content('There are 2 startups in this level which were inactive from April 10 to April 17.')
+        expect(page).to have_content('There are 2 teams in this level which were inactive from April 10 to April 17.')
       end
     end
 
@@ -51,7 +51,7 @@ feature 'Leaderboard' do
 
       scenario 'user is shown that there are no active startups' do
         visit about_leaderboard_path
-        expect(page).to have_content('All startups at this level were inactive during this period.')
+        expect(page).to have_content('All teams at this level were inactive during this period.')
       end
     end
 

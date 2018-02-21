@@ -1,7 +1,7 @@
 .faculty-card.col-lg-3.col-md-4
   .faculty-card__box.content-box.p-0
     - connect_slots = member.connect_slots.available_for_founder
-    a.faculty-image href=faculty_url(member)
+    a.faculty-image href=coach_url(member)
       .btn.btn-primary.btn-view-profile
         i.fa.fa-user
         | &nbsp;View Profile
@@ -15,7 +15,7 @@
     .faculty-card-info.d-flex.flex-column.align-items-center
       .faculty-card-info__content
         .faculty-card-info__name
-          = link_to member.name, faculty_url(member)
+          = link_to member.name, coach_url(member)
 
         .faculty-card-info__title
           = member.title
@@ -30,7 +30,7 @@
               i.fa.fa-linkedin
 
       - if member.alumni?
-        = link_to 'Founder Profile', founder_profile_path(member.founder.slug), class: 'founder-profile-btn text-uppercase mt-2'
+        = link_to 'Student Profile', student_profile_path(member.founder.slug), class: 'founder-profile-btn text-uppercase mt-2'
 
       - if connect_slots.present?
         == render 'connect_button', faculty: member

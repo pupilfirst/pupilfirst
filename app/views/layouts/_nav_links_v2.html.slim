@@ -5,17 +5,17 @@
         = link_to 'Join', join_path, class: 'nav-link', itemprop: 'url', id: 'navbar-join-link'
     - if current_founder && !current_founder.exited && current_founder.startup.present?
       li.nav-item role="presentation"
-        a#navbar-dashboard-link.nav-link href="#{dashboard_founder_url}" Dashboard
+        a#navbar-dashboard-link.nav-link href="#{student_dashboard_url}" Dashboard
     - if current_startup.present? && policy(current_founder.startup).show?
       li.nav-item role="presentation"
-        a#navbar-timeline-link.nav-link href="#{timeline_url(current_founder.startup.id, current_founder.startup.slug)}" Timeline
+        a#navbar-timeline-link.nav-link href="#{product_url(current_founder.startup.id, current_founder.startup.slug)}" Timeline
     / li.nav-item role="presentation" itemprop="name"
       = link_to 'Startups', startups_path, class: 'nav-link', itemprop: 'url', id: 'navbar-startups-link'
     / - unless current_founder
       li.nav-item role="presentation" itemprop="name"
         = link_to 'Invest & Hire', talent_path, class: 'nav-link', itemprop: 'url', id: 'navbar-invest-hire-link'
     li.nav-item role="presentation" itemprop="name"
-      = link_to 'Faculty', faculty_index_path, class: 'nav-link', itemprop: 'url', id: 'navbar-faculty-link'
+      = link_to 'Coaches', coaches_index_path, class: 'nav-link', itemprop: 'url', id: 'navbar-faculty-link'
     - unless current_founder
       li.nav-item role="presentation" itemprop="name"
         = link_to 'About', about_path, class: 'nav-link', itemprop: 'url', id: 'navbar-about-link'
@@ -35,7 +35,7 @@
           ul.dropdown-menu
             - if policy(current_founder).founder_profile?
               li role="presentation"
-                = link_to founder_profile_path(slug: current_founder.slug) do
+                = link_to student_profile_path(slug: current_founder.slug) do
                   i.fa.fa-list-ul
                   | Profile
             - if current_startup.present? && policy(current_startup).billing?

@@ -18,7 +18,7 @@ feature 'Target Overlay' do
 
   before do
     founder.update!(dashboard_toured: true)
-    sign_in_user founder.user, referer: dashboard_founder_path
+    sign_in_user founder.user, referer: student_dashboard_path
   end
 
   context 'when the founder clicks on a pending target', js: true do
@@ -33,7 +33,7 @@ feature 'Target Overlay' do
       # The overlay should now be visible.
       expect(page).to have_selector('.target-overlay__overlay')
       # And the page path must have changed
-      expect(page).to have_current_path("/founder/dashboard/targets/#{target.id}")
+      expect(page).to have_current_path("/student/dashboard/targets/#{target.id}")
 
       ## Ensure different components of the overlay display the appropriate details.
 
@@ -116,7 +116,7 @@ feature 'Target Overlay' do
     before do
       target.update!(role: Target::ROLE_FOUNDER)
       timeline_event.update!(target: target)
-      visit dashboard_founder_path
+      visit student_dashboard_path
     end
 
     it 'displays the status for each founder' do
@@ -146,7 +146,7 @@ feature 'Target Overlay' do
     context 'when the target has prerequisites' do
       before do
         target.prerequisite_targets << prerequisite_target
-        visit dashboard_founder_path
+        visit student_dashboard_path
       end
 
       it 'informs about the pending prerequisite' do
@@ -161,7 +161,7 @@ feature 'Target Overlay' do
 
         within('.target-overlay-content-block') do
           expect(page).to have_selector('.target-overlay-content-block__prerequisites > h6', text: 'Pending Prerequisites:')
-          expect(page).to have_selector(".target-overlay-content-block__prerequisites-list-item > a[href='/founder/dashboard/targets/#{prerequisite_target.id}']", text: prerequisite_target.title)
+          expect(page).to have_selector(".target-overlay-content-block__prerequisites-list-item > a[href='/student/dashboard/targets/#{prerequisite_target.id}']", text: prerequisite_target.title)
         end
       end
     end
@@ -169,7 +169,7 @@ feature 'Target Overlay' do
     context 'when the target has is not submittable' do
       before do
         target.update!(submittability: Target::SUBMITTABILITY_NOT_SUBMITTABLE)
-        visit dashboard_founder_path
+        visit student_dashboard_path
       end
 
       it 'informs about the pending prerequisite' do
@@ -217,14 +217,14 @@ feature 'Target Overlay' do
     it 'takes him/her back to the dashboard' do
       find('.founder-dashboard-target-header__headline', text: target.title).click
       expect(page).to have_selector('.target-overlay__overlay')
-      expect(page).to have_current_path("/founder/dashboard/targets/#{target.id}")
+      expect(page).to have_current_path("/student/dashboard/targets/#{target.id}")
 
       find('.target-overlay__overlay-close-icon').click
 
       # Founder must now be on the dashboard.
       expect(page).to_not have_selector('.target-overlay__overlay')
       expect(page).to have_selector('.founder-dashboard-target-group__container')
-      expect(page).to have_current_path('/founder/dashboard')
+      expect(page).to have_current_path('/student/dashboard')
     end
   end
 end

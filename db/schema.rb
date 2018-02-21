@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180212094032) do
+ActiveRecord::Schema.define(version: 20180213092607) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -126,9 +126,6 @@ ActiveRecord::Schema.define(version: 20180212094032) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "instructions"
-    t.integer "referrer_startup_id"
-    t.integer "user_extension_days"
-    t.integer "referrer_extension_days"
   end
 
   create_table "course_modules", id: :serial, force: :cascade do |t|
@@ -393,7 +390,6 @@ ActiveRecord::Schema.define(version: 20180212094032) do
     t.integer "original_startup_id"
     t.datetime "billing_start_at"
     t.datetime "billing_end_at"
-    t.integer "period", default: 1
     t.string "payment_type"
     t.index ["founder_id"], name: "index_payments_on_founder_id"
     t.index ["original_startup_id"], name: "index_payments_on_original_startup_id"

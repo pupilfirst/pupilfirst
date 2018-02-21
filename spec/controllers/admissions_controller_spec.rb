@@ -69,7 +69,7 @@ describe AdmissionsController do
 
     it 'redirects to founder dashboard and updates the founder of screening completion ' do
       get :screening_submit
-      expect(response).to redirect_to(dashboard_founder_path(from: 'screening_submit'))
+      expect(response).to redirect_to(student_dashboard_path(from: 'screening_submit'))
     end
   end
 

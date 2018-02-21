@@ -1,5 +1,23 @@
 ---
 changelog:
+- timestamp: '2018-02-19T09:04:02Z'
+  changes:
+  - timestamp: '2018-02-19T08:35:19Z'
+    title: The home page has been updated to include more relevant information about
+      SV.CO's core offering.
+    trello: https://trello.com/c/mNF8qeo9
+    private: false
+    category: content
+  - timestamp: '2018-02-19T06:55:13Z'
+    title: Fixed crash when attempting to view timeline entry with an invalid ID.
+    trello: https://trello.com/c/wrQJNw7e
+    private: false
+    category: bugfix
+  - timestamp: '2018-02-06T12:15:13Z'
+    title: Team lead's stage on Intercom is now updated when a startup level up from
+      L0 to L1.
+    trello: https://trello.com/c/rIrSpqnW
+    private: true
 - timestamp: '2018-02-05T11:02:24Z'
   changes:
   - timestamp: '2018-02-05T11:01:25Z'

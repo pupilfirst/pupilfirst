@@ -35,7 +35,7 @@ after 'development:levels' do
     title: 'COO',
     key_skills: Faker::Lorem.words(3).join(', '),
     linkedin_url: 'https://linkedin.com',
-    category: 'team',
+    category: 'developer_coaches',
     image: Rails.root.join('spec/support/uploads/faculty/donald_duck.jpg').open,
     sort_index: 3
   )
@@ -44,7 +44,7 @@ after 'development:levels' do
     name: 'Hari Gopal',
     title: 'Engineering Lead',
     key_skills: 'Looting, pillaging, etc.',
-    category: 'team',
+    category: 'visiting_coaches',
     image: Rails.root.join('spec/support/uploads/faculty/jack_sparrow.png').open
   )
 end

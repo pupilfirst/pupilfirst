@@ -4,7 +4,7 @@ class FacultyController < ApplicationController
 
   # GET /faculty
   def index
-    @active_tab = params[:active_tab].present? ? params[:active_tab] : 'team'
+    @active_tab = params[:active_tab].present? ? params[:active_tab] : 'developer-coaches'
     @skip_container = true
   end
 
@@ -30,7 +30,7 @@ class FacultyController < ApplicationController
       flash[:error] = 'Something went wrong while attempting to create connect request! :('
     end
 
-    redirect_to faculty_index_path
+    redirect_to coaches_index_path
   end
 
   # GET /faculty/weekly_slots/:token

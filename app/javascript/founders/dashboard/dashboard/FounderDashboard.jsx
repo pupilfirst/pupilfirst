@@ -153,7 +153,7 @@ export default class FounderDashboard extends React.Component {
 
   targetOverlayCloseCB() {
     this.setState({ selectedTarget: null });
-    history.pushState({}, "", "/founder/dashboard");
+    history.pushState({}, "", "/student/dashboard");
   }
 
   targetDetails(targetId, loadFromProps = false) {
@@ -169,7 +169,7 @@ export default class FounderDashboard extends React.Component {
     history.pushState(
       { targetId: targetId },
       "",
-      "/founder/dashboard/targets/" + targetId
+      "/student/dashboard/targets/" + targetId
     );
   }
 
@@ -246,7 +246,8 @@ FounderDashboard.propTypes = {
   levelUpEligibility: PropTypes.oneOf([
     "eligible",
     "cofounders_pending",
-    "not_eligible"
+    "not_eligible",
+    "date_locked"
   ]),
   iconPaths: PropTypes.object,
   openTimelineBuilderCB: PropTypes.func,

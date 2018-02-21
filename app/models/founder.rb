@@ -164,6 +164,10 @@ class Founder < ApplicationRecord
     name + (email? ? ' (' + email + ')' : '')
   end
 
+  def name_and_team
+    name + ' (' + startup.product_name + ')'
+  end
+
   def to_s
     display_name
   end

@@ -5,7 +5,7 @@ class FoundersController < ApplicationController
 
   # layout 'application_v2', only: %i[fee fee_submit]
 
-  # GET /founders/:slug
+  # GET /founders/:slug, GET /students/:slug
   #
   # TODO: FoundersController#founder_profile should probably be just #show.
   def founder_profile
@@ -34,7 +34,7 @@ class FoundersController < ApplicationController
     if @form.validate(params[:founders_edit])
       @form.save!
       flash[:success] = 'Your profile has been updated.'
-      redirect_to founder_profile_path(slug: @founder.slug)
+      redirect_to student_profile_path(slug: @founder.slug)
     else
       render 'edit'
     end

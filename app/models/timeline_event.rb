@@ -223,7 +223,7 @@ class TimelineEvent < ApplicationRecord
   end
 
   def share_url
-    Rails.application.routes.url_helpers.timeline_event_show_url(
+    Rails.application.routes.url_helpers.product_timeline_event_show_url(
       id: startup.id,
       slug: startup.slug,
       event_id: id,

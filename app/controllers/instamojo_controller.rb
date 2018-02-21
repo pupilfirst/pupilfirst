@@ -22,7 +22,7 @@ class InstamojoController < ApplicationController
     end
 
     flash[:success] = 'Your payment has been recorded.'
-    redirect_to dashboard_founder_path(from: 'instamojo_redirect')
+    redirect_to student_dashboard_path(from: 'instamojo_redirect')
   end
 
   # POST /instamojo/webhook

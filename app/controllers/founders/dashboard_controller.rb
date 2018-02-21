@@ -4,7 +4,7 @@ module Founders
     before_action :skip_container
     before_action :require_active_subscription, if: :startup_is_admitted
 
-    # GET /founder/dashboard
+    # GET /founder/dashboard, GET /student/dashboard
     def dashboard
       # TODO: Add Pundit authorization.
 
@@ -12,7 +12,7 @@ module Founders
       raise_not_found if current_startup.blank?
     end
 
-    # GET /founder/dashboard/targets/:id(/:slug)
+    # GET /founder/dashboard/targets/:id(/:slug), GET /student/dashboard/targets/:id(/:slug)
     def target_overlay
       # TODO: Add Pundit authorization
 

@@ -1,5 +1,5 @@
 .filter-box__container.mt-4
-  = simple_form_for @form, url: startups_path, method: :get do |f|
+  = simple_form_for @form, url: products_path, method: :get do |f|
     .filter-box.row
       .col-md-3
         = f.input :level_id, collection: @levels, label_method: ->(level) { level.display_name }, include_blank: 'Any', label: 'Level', required: false, input_html: { class: 'filter-dropdown__select' }, selected: @form.level_id
@@ -10,6 +10,6 @@
       .col-md-3
         = submit_tag 'FILTER', class: 'btn btn-primary filter-form-btn'
         - if @form.level_id.present? || @form.startup_category_id.present? || @form.search.present?
-          = link_to startups_path, class: 'btn btn-ghost-primary btn-with-icon text-uppercase filter-form-btn filter-reset-btn' do
+          = link_to products_path, class: 'btn btn-ghost-primary btn-with-icon text-uppercase filter-form-btn filter-reset-btn' do
             i.fa.fa-refresh
             | Clear

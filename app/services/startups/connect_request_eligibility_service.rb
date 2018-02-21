@@ -6,8 +6,9 @@ module Startups
     end
 
     def eligible?
-      maximum_level = @startup.maximum_level.number
-      @faculty.level.present? && maximum_level >= @faculty.level.number
+      return true if @faculty.level.blank?
+      level = @startup.level.number
+      level >= @faculty.level.number
     end
   end
 end

@@ -10,7 +10,6 @@ after 'development:levels', 'development:founders', 'development:timeline_event_
   unfinished_swan = Startup.create!(
     product_name: 'Unfinished Swan',
     level: level_0,
-    maximum_level: level_0,
     team_lead: john_doe
   )
 
@@ -23,7 +22,6 @@ after 'development:levels', 'development:founders', 'development:timeline_event_
   # Startup with live agreement.
   super_startup = Startup.new(
     level: level_1,
-    maximum_level: level_1,
     product_name: 'Super Product',
     product_description: 'This really is a superb product! ;)',
     agreement_signed_at: 18.months.ago,
@@ -55,7 +53,6 @@ after 'development:levels', 'development:founders', 'development:timeline_event_
   avengers_startup = Startup.new(
     name: 'The Avengers',
     level: level_2,
-    maximum_level: level_3,
     product_name: 'SuperHeroes',
     product_description: 'Earths Mightiest Heroes joined forces to take on threats that were too big for any one hero to tackle.',
     agreement_signed_at: 2.years.ago,

@@ -12,13 +12,13 @@ module Targets
       image Rails.root.join('app', 'assets', 'images', 'shared', 'logo-color.png'), width: 100, at: bounds.top_left
       move_down 55
 
-      text "RUBRIC FOR TARGET: #{@target.title}", align: :left, style: :bold, size: 10
+      text document_title, align: :left, style: :bold, size: 10
       move_down 10
 
       table(data_header, column_widths: column_widths, cell_style: cell_style_for_header)
       move_down 1
 
-      table(table_data, column_widths: column_widths, row_colors: %w[FFFFFF E0F2F1], cell_style: cell_style_for_rubric_data) do
+      table(table_data, column_widths: column_widths, row_colors: row_colors, cell_style: cell_style_for_rubric_data) do
         # The block passed to table method cannot use methods or instance variables from class RubricPdf. These are outside
         # its scope and lead to a memory leak.
         (0..row_length - 1).each do |row_index|
@@ -86,6 +86,15 @@ module Targets
       @grades = @target.latest_linked_event(founder).timeline_event_grades.each_with_object({}) do |te_grade, grades|
         grades[te_grade.skill_id] = te_grade.grade
       end
+    end
+
+    def row_colors
+      @grades.present? ? %w[FFFFFF FFFFFF] : %w[FFFFFF E0F2F1]
+    end
+
+    def document_title
+      title_start = @grades.present? ? 'SCORESHEET' : 'RUBRIC'
+      "#{title_start} FOR TARGET: #{@target.title}"
     end
   end
 end

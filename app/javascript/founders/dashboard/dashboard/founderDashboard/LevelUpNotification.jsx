@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 export default class LevelUpNotification extends React.Component {
   eligibleNotificationTitle() {
     if (this.currentLevelNumber() === 0) {
-      return "Congratulations! You are now SV.CO Founders.";
+      return "Congratulations! You are now an enrolled student at SV.CO.";
     } else if (this.currentLevelNumber() === this.props.maxLevelNumber) {
       return "Congratulations! You are now part of our Alumni.";
     } else {
@@ -18,10 +18,8 @@ export default class LevelUpNotification extends React.Component {
 
   eligibleNotificationText() {
     if (this.currentLevelNumber() === 0) {
-      return "You have successfully completed the first step in your startup journey. We are proud to have you join our collective. Hit Level Up to continue your journey and unlock a series of cool targets and sessions on the way.";
-    } else if (
-      this.currentLevelNumber() === this.props.rootProps.maxLevelNumber
-    ) {
+      return "You have successfully completed the first step in your journey with SV.CO. We are proud to have you join our collective. Hit Level Up to continue your journey and unlock a series of cool targets and sessions on the way.";
+    } else if (this.currentLevelNumber() === this.props.maxLevelNumber) {
       return (
         <div>
           <h4 className="font-regular light-grey-text">
@@ -93,6 +91,26 @@ export default class LevelUpNotification extends React.Component {
               There are one or more milestone targets that your teammates are
               yet to complete. Please contact them and ask them to sign in and
               complete these targets to unlock the next level.
+            </p>
+          </div>
+        )}
+
+        {this.props.rootProps.levelUpEligibility === "date_locked" && (
+          <div className="founder-dashboard-levelup-notification__box text-center p-3">
+            <h1>{"\uD83C\uDF89"}</h1>
+            <h3 className="brand-primary font-regular">
+              Level complete! Please wait for the next one.
+            </h3>
+
+            <p className="founder-dashboard-levelup__description mx-auto">
+              Congratulations on completing all milestone targets in this level.
+              Your next level will be unlocked on{" "}
+              <span>
+                {moment(this.props.rootProps.nextLevelUnlockDate).format(
+                  "MMM D"
+                )}
+              </span>. Please revisit your dashboard on this date to receive
+              your next set of targets. Happy learning!
             </p>
           </div>
         )}

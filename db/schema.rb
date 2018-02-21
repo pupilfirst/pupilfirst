@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180216102921) do
+ActiveRecord::Schema.define(version: 20180221054621) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -124,9 +124,6 @@ ActiveRecord::Schema.define(version: 20180216102921) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "instructions"
-    t.integer "referrer_startup_id"
-    t.integer "user_extension_days"
-    t.integer "referrer_extension_days"
   end
 
   create_table "course_modules", id: :serial, force: :cascade do |t|
@@ -392,7 +389,6 @@ ActiveRecord::Schema.define(version: 20180216102921) do
     t.integer "original_startup_id"
     t.datetime "billing_start_at"
     t.datetime "billing_end_at"
-    t.integer "period", default: 1
     t.string "payment_type"
     t.index ["founder_id"], name: "index_payments_on_founder_id"
     t.index ["original_startup_id"], name: "index_payments_on_original_startup_id"
@@ -574,7 +570,6 @@ ActiveRecord::Schema.define(version: 20180216102921) do
     t.string "courier_number"
     t.string "partnership_deed"
     t.string "payment_reference"
-    t.integer "maximum_level_id"
     t.string "admission_stage"
     t.date "timeline_updated_on"
     t.datetime "admission_stage_updated_at"
@@ -585,7 +580,6 @@ ActiveRecord::Schema.define(version: 20180216102921) do
     t.bigint "billing_state_id"
     t.index ["billing_state_id"], name: "index_startups_on_billing_state_id"
     t.index ["level_id"], name: "index_startups_on_level_id"
-    t.index ["maximum_level_id"], name: "index_startups_on_maximum_level_id"
     t.index ["slug"], name: "index_startups_on_slug", unique: true
     t.index ["stage"], name: "index_startups_on_stage"
     t.index ["team_lead_id"], name: "index_startups_on_team_lead_id"
@@ -674,7 +668,6 @@ ActiveRecord::Schema.define(version: 20180216102921) do
     t.integer "points_earnable"
     t.integer "sort_index", default: 999
     t.datetime "session_at"
-    t.boolean "chore", default: false
     t.text "video_embed"
     t.datetime "last_session_at"
     t.integer "level_id"
@@ -689,7 +682,6 @@ ActiveRecord::Schema.define(version: 20180216102921) do
     t.string "session_by"
     t.string "call_to_action"
     t.index ["archived"], name: "index_targets_on_archived"
-    t.index ["chore"], name: "index_targets_on_chore"
     t.index ["faculty_id"], name: "index_targets_on_faculty_id"
     t.index ["key"], name: "index_targets_on_key"
     t.index ["level_id"], name: "index_targets_on_level_id"
@@ -854,7 +846,6 @@ ActiveRecord::Schema.define(version: 20180216102921) do
   add_foreign_key "startup_feedback", "timeline_events"
   add_foreign_key "startups", "founders", column: "team_lead_id"
   add_foreign_key "startups", "levels"
-  add_foreign_key "startups", "levels", column: "maximum_level_id"
   add_foreign_key "startups", "states", column: "billing_state_id"
   add_foreign_key "target_groups", "levels"
   add_foreign_key "target_groups", "tracks"

@@ -2,7 +2,8 @@ ActiveAdmin.register Payment do
   include DisableIntercom
 
   menu parent: 'Admissions'
-  actions :all, except: [:destroy]
+  config.clear_action_items!
+  actions :all, except: %i[destroy edit]
 
   filter :founder_name, as: :string
   filter :amount
@@ -59,20 +60,51 @@ ActiveAdmin.register Payment do
     column :notes
   end
 
-  form do |f|
-    div id: 'admin-payment__form'
-
-    f.semantic_errors(*f.object.errors.keys)
-
-    f.inputs 'Payment Details' do
-      f.input :amount
-      f.input :paid_at, as: :datepicker
-      f.input :notes
-      f.input :founder, label: 'Team Member', collection: f.object.founder.present? ? [f.object.founder] : []
-      f.input :payment_type, as: :select, collection: Payment.valid_payment_types
+  action_item :new_payment, only: :index do
+    if current_admin_user&.superadmin?
+      link_to 'New Payment', new_payment_admin_payments_path
     end
+  end
 
-    f.actions
+  action_item :edit_payment, only: :show do
+    if current_admin_user&.superadmin?
+      link_to 'Edit Payment', edit_payment_admin_payment_path(id: resource.id)
+    end
+  end
+
+  collection_action :new_payment do
+    form = Admin::PaymentForm.new(Payment.new)
+    render 'admin/payments/form', locals: { form: form }
+  end
+
+  member_action :edit_payment do
+    form = Admin::PaymentForm.new(Payment.find(params[:id]))
+    @founder = Founder.find(form.founder_id)
+    render 'admin/payments/form', locals: { form: form }
+  end
+
+  collection_action :create_payment, method: :post do
+    form = Admin::PaymentForm.new(Payment.new)
+
+    if form.validate(params[:admin_payment])
+      payment = form.save
+      flash[:success] = "Payment successfully created."
+      redirect_to admin_payment_path(payment)
+    else
+      render 'admin/payments/form', locals: { form: form }
+    end
+  end
+
+  member_action :update_payment, method: :patch do
+    form = Admin::PaymentForm.new(Payment.find(params[:id]))
+
+    if form.validate(params[:admin_payment])
+      form.save
+      flash[:success] = "Payment ##{params[:id]} has been updated successfully."
+      redirect_to admin_payment_path(id: params[:id])
+    else
+      render 'admin/payments/form', locals: { form: form }
+    end
   end
 
   permit_params :amount, :paid_at, :notes, :founder_id, :startup_id, :payment_type

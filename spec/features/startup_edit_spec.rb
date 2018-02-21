@@ -17,13 +17,13 @@ feature 'Startup Edit' do
 
   context 'Founder visits edit page of his startup' do
     scenario 'Founder updates all required fields' do
-      sign_in_user(founder.user, referer: edit_startup_path)
+      sign_in_user(founder.user, referer: edit_product_path)
 
       fill_in 'startups_edit_product_name', with: new_product_name
       fill_in 'startups_edit_product_description', with: new_product_description
       fill_in 'startups_edit_presentation_link', with: new_deck
 
-      click_on 'Update startup profile'
+      click_on 'Update team profile'
 
       # Wait for page to load before checking database.
       expect(page).to have_content(new_product_name)
@@ -36,18 +36,18 @@ feature 'Startup Edit' do
     end
 
     scenario 'Founder clears all required fields' do
-      sign_in_user(founder.user, referer: edit_startup_path)
+      sign_in_user(founder.user, referer: edit_product_path)
 
       fill_in 'startups_edit_product_name', with: ''
-      click_on 'Update startup profile'
+      click_on 'Update team profile'
 
       expect(page).to have_text("Product name can't be blank")
     end
 
     scenario 'Founder looks to delete his approved startup as team lead' do
-      sign_in_user(founder.user, referer: edit_startup_path)
+      sign_in_user(founder.user, referer: edit_product_path)
 
-      expect(page).to have_text('To delete your startup timeline, contact your SV.CO representative.')
+      expect(page).to have_text('To delete your team timeline, contact your SV.CO representative.')
     end
   end
 
@@ -59,7 +59,7 @@ feature 'Startup Edit' do
       stub_request(:get, 'https://slack.com/api/auth.test?token=SLACK_ACCESS_TOKEN')
         .to_return(body: { ok: true }.to_json)
 
-      sign_in_user(founder.user, referer: edit_startup_path)
+      sign_in_user(founder.user, referer: edit_product_path)
 
       # Stub the calls to update profile name on Slack for all founders.
       startup.founders.each do |startup_founder|
@@ -73,7 +73,7 @@ feature 'Startup Edit' do
       end
 
       fill_in 'startups_edit_product_name', with: new_product_name
-      click_on 'Update startup profile'
+      click_on 'Update team profile'
 
       expect(page).to have_content(new_product_name)
       expect(startup.reload.product_name).to eq(new_product_name)

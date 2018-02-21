@@ -5,7 +5,7 @@ class FacultyMailer < ApplicationMailer
   # @param connect_request [ConnectRequest] Request that was just confirmed
   def connect_request_confirmed(connect_request)
     @connect_request = connect_request
-    mail(to: connect_request.faculty.email, subject: 'Connect Request confirmed.')
+    mail(to: connect_request.faculty.email, subject: 'Office hour confirmed.')
   end
 
   def request_next_week_slots(faculty)
@@ -20,6 +20,6 @@ class FacultyMailer < ApplicationMailer
     @connect_request = connect_request
     @faculty = connect_request.faculty
     @startup = connect_request.startup
-    mail(to: @faculty.email, subject: "Feedback for your recent faculty connect session with team members of #{@startup.display_name}")
+    mail(to: @faculty.email, subject: "Feedback for your recent office hour with team members of #{@startup.display_name}")
   end
 end

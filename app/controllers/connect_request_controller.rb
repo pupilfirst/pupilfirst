@@ -9,7 +9,7 @@ class ConnectRequestController < ApplicationController
     authorize connect_request
 
     if connect_request.update(rating_for_faculty: params[:rating])
-      flash[:success] = 'Thank you! Your rating of the connect session has been saved.'
+      flash[:success] = 'Thank you! Your rating for the office hour has been saved.'
     else
       flash[:error] = "We're sorry, but something went wrong when we tried to save that rating."
     end

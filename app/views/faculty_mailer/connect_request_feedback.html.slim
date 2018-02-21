@@ -1,15 +1,15 @@
 = content_for :title do
-  | Feedback for Faculty Connect Session
+  | Feedback for Office Hour
 
 = content_for :subtitle do
-  | Please supply feedback for your recent faculty connect session with team members of #{@startup.display_name}.
+  | Please supply feedback for your recent office hour with team members of #{@startup.display_name}.
 
 = content_for :salutation do
   | Hello #{@faculty.name},
 
 = content_for :body do
   p
-    ' Our records indicate that a faculty connect session that was scheduled between you and team members of
+    ' Our records indicate that an office hour that was scheduled between you and team members of
     ' #{@startup.display_name}, should have ended recently. It would be a great help if you could supply some simple
     | feedback on your experience.
 
@@ -21,6 +21,6 @@
   p #{link_to '4 - Great', connect_request_feedback_from_faculty_url(id: @connect_request.id, token: @faculty.token, rating: 4), target: '_blank'}
   p #{link_to '5 - Wow!', connect_request_feedback_from_faculty_url(id: @connect_request.id, token: @faculty.token, rating: 5), target: '_blank'}
 
-  p On the other hand, if the faculty connect session did not occur, please ignore this e-mail.
+  p On the other hand, if the office hour did not occur, please ignore this e-mail.
 
   p Thank you for your time!

@@ -99,7 +99,7 @@ describe KarmaPoints::CreateService do
       expect(last_karma_point.startup).to eq(startup)
     end
 
-    it 'creates karma points for faculty connect request and sends slack notification to all founders' do
+    it 'creates karma points for office hour and sends slack notification to all founders' do
       expect(VocalistPingJob).to receive(:perform_later).with(team_message_for_connect_request, founders: startup.founders.pluck(:id))
       expect { subject.new(connect_request, 50).execute }.to change { KarmaPoint.count }.by(1)
       last_karma_point = KarmaPoint.last

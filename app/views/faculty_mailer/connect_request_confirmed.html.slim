@@ -1,8 +1,8 @@
 = content_for :title do
-  | Faculty Connect on #{@connect_request.connect_slot}
+  | Office Hour on #{@connect_request.connect_slot}
 
 = content_for :subtitle do
-  | The faculty connect request with team #{@connect_request.startup.product_name} has been confirmed.
+  | The office hour request with team #{@connect_request.startup.product_name} has been confirmed.
 
 = content_for :title_button_text do
   | View Startup Timeline
@@ -14,7 +14,7 @@
 
 = content_for :body do
   p
-    ' The Faculty Connect Request created by #{@connect_request.startup.team_lead.fullname} of
+    ' The office hour request created by #{@connect_request.startup.team_lead.fullname} of
     ' #{link_to @connect_request.startup.display_name, @connect_request.startup} has just been confirmed for
     strong #{@connect_request.connect_slot} IST.
 

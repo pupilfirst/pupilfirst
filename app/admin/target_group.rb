@@ -9,9 +9,16 @@ ActiveAdmin.register TargetGroup do
   filter :description, as: :string
   filter :milestone
 
+  scope :all
+  scope('No Track') { |scope| scope.where(track: nil) }
+
+  Track.all.each do |track|
+    scope(track.name) { |scope| scope.where track: track }
+  end
+
   controller do
     def scoped_collection
-      super.includes :level
+      super.includes :level, :track
     end
   end
 
@@ -19,10 +26,10 @@ ActiveAdmin.register TargetGroup do
     selectable_column
 
     column :level
+    column :track
     column :milestone
     column :sort_index
     column :name
-    column :description
 
     actions
   end

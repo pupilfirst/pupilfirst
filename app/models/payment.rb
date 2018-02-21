@@ -9,7 +9,6 @@ class Payment < ApplicationRecord
   STATUS_NOT_REQUESTED = -'not_requested'
 
   TYPE_NORMAL = -'normal'
-  TYPE_RENEWAL = -'renewal'
   TYPE_REFUND = -'refund'
 
   def self.valid_payment_types
@@ -59,12 +58,6 @@ class Payment < ApplicationRecord
   # A payment has failed when instamojo payment status is failed.
   def failed?
     instamojo_payment_status == Instamojo::PAYMENT_STATUS_FAILED
-  end
-
-  # A payment is refundable if it is younger than a week, and it was registered as paid by Instamojo.
-  def refundable?
-    return false unless paid?
-    credited? && paid_at >= 1.week.ago
   end
 
   # A payment is credited (money received) only if Instamojo reports it as such.

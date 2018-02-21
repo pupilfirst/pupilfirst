@@ -23,7 +23,7 @@ describe FacultyModule::WeeklySlotsPromptJob do
 
       open_email(faculty_self_service.email)
 
-      expect(current_email).to have_content('Please review your faculty connect slots for the next week.')
+      expect(current_email).to have_content('Please review your office hour slots for the next week.')
     end
   end
 end

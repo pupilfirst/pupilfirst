@@ -4,7 +4,7 @@ class FacultyController < ApplicationController
 
   # GET /faculty
   def index
-    @active_tab = params[:active_tab].present? ? params[:active_tab] : 'team'
+    @active_tab = params[:active_tab].present? ? params[:active_tab] : 'developer-coaches'
     @skip_container = true
   end
 
@@ -24,13 +24,13 @@ class FacultyController < ApplicationController
     connect_request = connect_slot.build_connect_request(startup: current_founder.startup, questions: questions)
 
     if connect_request.save
-      flash[:success] = "Connect Request has been submitted. You will receive an email once it's confirmed."
+      flash[:success] = "An office hour request has been submitted. You will receive an email once it's confirmed."
       Users::ActivityService.new(current_founder.user).create(UserActivity::ACTIVITY_TYPE_FACULTY_CONNECT_REQUEST, 'connect_request_id' => connect_request.id)
     else
-      flash[:error] = 'Something went wrong while attempting to create connect request! :('
+      flash[:error] = 'Something went wrong while attempting to request an office hour! :('
     end
 
-    redirect_to faculty_index_path
+    redirect_to coaches_index_path
   end
 
   # GET /faculty/weekly_slots/:token

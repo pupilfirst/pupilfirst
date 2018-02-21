@@ -11,9 +11,9 @@ feature 'DM Startup Feedback' do
   let!(:slack_message) do
     salutation = "Hey! You have some feedback from #{startup_feedback.faculty.name} on your <#{startup_feedback.reference_url}|recent update>.\n"
     feedback_url = Rails.application.routes.url_helpers.product_url(startup_feedback.startup.id, startup_feedback.startup.slug, show_feedback: startup_feedback.id)
-    faculty_url = 'slack://user?team=XYZ1234&id=ABCDEFG'
+    coach_url = 'slack://user?team=XYZ1234&id=ABCDEFG'
     feedback_text = "<#{feedback_url}|Click here> to view the feedback.\n"
-    ping_faculty = "<#{faculty_url}|Discuss with Faculty> about this feedback."
+    ping_faculty = "<#{coach_url}|Discuss with Coach> about this feedback."
     { text: salutation + feedback_text + ping_faculty }.to_query
   end
 

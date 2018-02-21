@@ -1,5 +1,5 @@
 - content_for :head
-  title SV.CO Faculty: The Best Startup Talent in India
+  title SV.CO Coaches: The Best Product Talent in India
 
 #faculty-weekly-slots
   h2.faculty-slotes__header.pb-2.mt-4 Slots for #{@faculty.name}
@@ -44,7 +44,7 @@
         h6.weekly_slots_unavailable-notice-header.font-semibold.p-4.m-0 #{next_week_start} - #{next_week_end}
 
         .card-block.p-4
-          ' Busy week ahead? Mark yourself unavailable for the coming week and you will receive no connect requests.
+          ' Busy week ahead? Mark yourself unavailable for the coming week and you will receive no office hour requests.
 
         .card-footer
           = button_to mark_unavailable_faculty_index_path(params[:token]), class: 'btn btn-md btn-danger pull-xs-right', method: :delete do

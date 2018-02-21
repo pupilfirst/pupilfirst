@@ -6,7 +6,7 @@ class FounderMailer < ApplicationMailer
     @connect_request = connect_request
     @faculty = connect_request.faculty
     @founder = connect_request.startup.team_lead
-    mail(to: @founder.email, subject: "Feedback for your recent faculty connect session with faculty member #{@faculty.name}")
+    mail(to: @founder.email, subject: "Feedback for your recent office hour with faculty member #{@faculty.name}")
   end
 
   # Invite an applicant founder to join a startup.

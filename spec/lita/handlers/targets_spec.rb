@@ -73,7 +73,7 @@ describe Lita::Handlers::Targets do
               *#{pending_founder_target.title}*
               *Status:* Pending
               *Role:* All Founders
-              *Faculty:* #{pending_founder_target.faculty.name}
+              *Coach:* #{pending_founder_target.faculty.name}
               *Description:* #{pending_founder_target.description}
             EXPECTED_REPLY
 
@@ -97,7 +97,7 @@ describe Lita::Handlers::Targets do
                 *#{pending_founder_target.title}*
                 *Status:* Pending
                 *Role:* All Founders
-                *Faculty:* #{pending_founder_target.faculty.name}
+                *Coach:* #{pending_founder_target.faculty.name}
                 *Description:* #{pending_founder_target.description}
                 *Completion Instructions:* #{pending_founder_target.completion_instructions}
                 *Linked Resource:* <#{url_with_host}|#{url_with_host}>

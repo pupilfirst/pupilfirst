@@ -2,13 +2,13 @@ class FacultyController < ApplicationController
   before_action :validate_faculty, except: %i[index connect show]
   before_action :require_active_subscription, only: %i[connect]
 
-  # GET /faculty
+  # GET /faculty, GET /coaches
   def index
     @active_tab = params[:active_tab].present? ? params[:active_tab] : 'developer-coaches'
     @skip_container = true
   end
 
-  # GET /faculty/:slug
+  # GET /faculty/:slug, GET /coaches/:slug
   def show
     @faculty = Faculty.friendly.find(params[:id])
     @skip_container = true

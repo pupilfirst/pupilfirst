@@ -113,6 +113,7 @@ Rails.application.routes.draw do
   scope 'coaches', controller: 'faculty' do
     get '/', action: 'index', as: 'coaches_index'
     get '/:id', action: 'show', as: 'coach'
+    get '/filter/:active_tab', action: 'index'
   end
 
   scope 'library', controller: 'resources' do

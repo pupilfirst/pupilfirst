@@ -25,7 +25,7 @@ feature 'Resources' do
 
   scenario 'user visits restricted resource page' do
     visit resource_path(level_0_resource)
-    expect(page).to have_text('Approved teams get access to exclusive content produced by Faculty')
+    expect(page).to have_text('Approved teams get access to exclusive content produced by our coaches')
   end
 
   scenario 'user can download public resource' do

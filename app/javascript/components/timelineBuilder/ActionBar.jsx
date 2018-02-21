@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import EventTypeSelect from "./EventTypeSelect";
 import SubmitButton from "./SubmitButton";
 import ImageButton from "./ImageButton";
-import DateForm from "./DateForm";
+import DatePicker from "./DatePicker";
 
 export default class ActionBar extends React.Component {
   constructor(props) {
@@ -67,8 +67,12 @@ export default class ActionBar extends React.Component {
   }
 
   showDateForm() {
-    this.props.resetErrorsCB();
-    this.setState({ dateFormVisible: true });
+    if (this.state.dateFormVisible) {
+      this.setState({ dateFormVisible: false });
+    } else {
+      this.props.resetErrorsCB();
+      this.setState({ dateFormVisible: true });
+    }
   }
 
   timelineEventTypes() {
@@ -118,7 +122,7 @@ export default class ActionBar extends React.Component {
 
           <div class="timeline-builder__date-picker-popup">
             {this.state.dateFormVisible && (
-              <DateForm handleDate={this.handleDate} />
+              <DatePicker handleDate={this.handleDate} />
             )}
           </div>
           <div
@@ -175,6 +179,5 @@ ActionBar.propTypes = {
   showDateError: PropTypes.bool,
   showEventTypeError: PropTypes.bool,
   resetErrorsCB: PropTypes.func,
-  timelineEventTypeId: PropTypes.string,
-  handleDate: PropTypes.func
+  timelineEventTypeId: PropTypes.string
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export default class DateForm extends React.Component {
+export default class DatePicker extends React.Component {
   constructor(props) {
     super(props);
 
@@ -69,8 +69,7 @@ export default class DateForm extends React.Component {
   }
 }
 
-DateForm.propTypes = {
+DatePicker.propTypes = {
   selectedDate: PropTypes.string,
-  addAttachmentCB: PropTypes.func,
   handleDate: PropTypes.func
 };

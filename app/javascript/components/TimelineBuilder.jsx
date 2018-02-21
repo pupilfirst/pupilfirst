@@ -95,7 +95,6 @@ export default class TimelineBuilder extends React.Component {
       this.setState({
         showLinkForm: newState,
         showFileForm: false,
-        showDateForm: false,
         previousForm: previousForm
       });
     } else {
@@ -103,7 +102,6 @@ export default class TimelineBuilder extends React.Component {
       this.setState({
         showLinkForm: false,
         showFileForm: newState,
-        showDateForm: false,
         previousForm: previousForm
       });
     }

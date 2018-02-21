@@ -1,5 +1,5 @@
 - content_for :head
-  title SV.CO Faculty: #{@faculty.name}
+  title SV.CO Coach: #{@faculty.name}
 
 #faculty__show
 
@@ -15,7 +15,7 @@
           h5.faculty-designation.text-center.font-weight-400
             = @faculty.title
         .faculty-since.text-center
-          | Faculty at SV.CO since&nbsp;
+          | Coach at SV.CO since&nbsp;
           = @faculty.created_at.strftime('%B %Y')
         .faculty-profile-card-footer.d-flex.align-items-center
           - if @faculty.linkedin_url.present?
@@ -29,13 +29,13 @@
             - if @faculty.linkedin_url.present?
               .faculty-rating
                 span.faculty-rating__heading
-                  | Faculty Rating:
+                  | Coach Rating:
                 span.rating-stars
                   = faculty_rating_stars(@faculty.average_rating)
             - else
               .faculty-rating.text-center
                 span.faculty-rating__heading
-                  | Faculty Rating:
+                  | Coach Rating:
                 span.rating-stars
                   = faculty_rating_stars(@faculty.average_rating)
     .col-lg-9.col-md-7
@@ -81,10 +81,10 @@
                     .d-flex
                       .faculty-flags
                         - if @faculty.commitment.present?
-                          span.time-commitment-flag data-toggle='tooltip' data-placement='top' title="This Faculty #{tooltip_for_commitment == 'part_time' ? "contributes to SV.CO #{t("models.faculty.commitment.#{tooltip_for_commitment}")}" : "works at SV.CO #{t("models.faculty.commitment.#{tooltip_for_commitment}")}"}."
-                            | #{t("models.faculty.commitment.#{@faculty.commitment}")} Faculty
+                          span.time-commitment-flag data-toggle='tooltip' data-placement='top' title="This Coach #{tooltip_for_commitment == 'part_time' ? "contributes to SV.CO #{t("models.faculty.commitment.#{tooltip_for_commitment}")}" : "works at SV.CO #{t("models.faculty.commitment.#{tooltip_for_commitment}")}"}."
+                            | #{t("models.faculty.commitment.#{@faculty.commitment}")} Coach
                         - if @faculty.compensation.present?
-                          span.compensation-flag data-toggle='tooltip' data-placement='top' title="This Faculty #{tooltip_for_compensation == 'volunteer' ? "#{tooltip_for_compensation}s pro-bono" : "is #{tooltip_for_compensation} for his work"} at SV.CO"
+                          span.compensation-flag data-toggle='tooltip' data-placement='top' title="This Coach #{tooltip_for_compensation == 'volunteer' ? "#{tooltip_for_compensation}s pro-bono" : "is #{tooltip_for_compensation} for his work"} at SV.CO"
                             = @faculty.compensation.capitalize
 
               - if past_connect_requests.present?

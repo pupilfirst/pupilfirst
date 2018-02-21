@@ -27,9 +27,9 @@ en:
       meta_description: "SV.CO's 6-month product school for student developers helps them build modern tech-products with industry-guidance and get premium jobs."
   jobs:
     faculty_connect_session_reminder:
-      founder_reminder: ":exclamation: *Reminder:* Your team (%{startup_name}) has an office hour with <%{faculty_url}|%{faculty_name}> starting in 30 minutes! You can <%{meeting_link}|click here> to join the meeting when it's time."
+      founder_reminder: ":exclamation: *Reminder:* Your team (%{startup_name}) has an office hour with <%{coach_url}|%{faculty_name}> starting in 30 minutes! You can <%{meeting_link}|click here> to join the meeting when it's time."
       faculty_reminder: ":exclamation: *Reminder:* You have an office hour with the founders of <%{startup_url}|%{startup_name}> starting in 30 minutes!\nThe founders plan to discuss the following questions:\n %{questions}\nYou can <%{meeting_link}|click here> to join the meeting when it's time."
-      ops_team_reminder: ":exclamation: *Reminder:* <%{startup_url}|%{startup_name}> has an office hour with <%{faculty_url}|%{faculty_name}> starting in 30 minutes. Follow up!"
+      ops_team_reminder: ":exclamation: *Reminder:* <%{startup_url}|%{startup_name}> has an office hour with <%{coach_url}|%{faculty_name}> starting in 30 minutes. Follow up!"
 
     timeline_events:
       description_update_notification:
@@ -205,11 +205,6 @@ en:
         description_50_html: "Your team is performing adequately, pretty much the same as the other teams in your level. <br /> Attempt to get <em>Great</em> and <em>Wow</em> grades for important targets to advance."
         description_70_html: "Your team is performing better than most teams in the same level. Attempt to get more <em>Wow</em> grades for important targets to advance."
         description_90_html: "Your team is performing exceptionally. Great stuff, we have high hopes from you :)"
-
-  founders:
-    fee:
-      discount_benefit: <strong>%{percentage}% discount</strong> on the program fee
-      extension_benefit: <strong>%{extension} extra days</strong> of subscription
 
   product_metrics:
     index:

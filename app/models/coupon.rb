@@ -2,13 +2,7 @@ class Coupon < ApplicationRecord
   has_many :coupon_usages
 
   validates :code, uniqueness: true, presence: true, length: { in: 4..10 }
-  validates :discount_percentage, allow_nil: true, numericality: { only_integer: true, greater_than: 0, less_than: 100 }
-  validate :discount_must_be_specified
-
-  def discount_must_be_specified
-    return if discount_percentage.present?
-    errors.add(:base, 'at least one of discount percentage or user extension days must be set')
-  end
+  validates :discount_percentage, presence: true, numericality: { only_integer: true, greater_than: 0, less_than: 100 }
 
   def still_valid?
     (expires_at.blank? || expires_at.future?) && redeems_left?

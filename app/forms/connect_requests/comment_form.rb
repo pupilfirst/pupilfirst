@@ -5,13 +5,13 @@ module ConnectRequests
     property :comment, virtual: true, validates: { presence: true, length: { maximum: 500 } }
 
     def save
-      comment_save = if from == :team
+      comment_received = if from == :team
         { comment_for_faculty: comment }
       else
         { comment_for_team: comment }
       end
 
-      model.update(comment_save)
+      model.update(comment_received)
     end
   end
 end

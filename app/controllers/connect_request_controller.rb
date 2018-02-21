@@ -24,7 +24,7 @@ class ConnectRequestController < ApplicationController
 
   # PATCH /connect_request/:id/feedback/comment/:token
   def comment_submit
-    if params[:from] == 'facutly'
+    if params[:from] == 'faculty'
       load_comment_form_for_faculty
     else
       load_comment_form_for_team
@@ -32,10 +32,10 @@ class ConnectRequestController < ApplicationController
     if @comment_form.validate(params[:connect_requests_comment])
       @comment_form.save
       flash[:success] = 'Thank you! Your comment about the connect session has been saved.'
+      redirect_to root_url
     else
       render 'comment_form'
     end
-    redirect_to root_url
   end
 
   # GET /connect_request/:id/join_session(/:token)
@@ -65,7 +65,7 @@ class ConnectRequestController < ApplicationController
     authorize connect_request
 
     @comment_form = ConnectRequests::CommentForm.new(@connect_request)
-    @comment_form.from = :facutly
+    @comment_form.from = :faculty
   end
 
   def faculty_feedback_params

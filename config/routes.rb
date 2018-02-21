@@ -108,6 +108,13 @@ Rails.application.routes.draw do
     end
   end
 
+  # TODO: Remove these faculty routes as we no longer have 'faculty'. Always use the corresponding 'coaches' routes below.
+
+  scope 'coaches', controller: 'faculty' do
+    get '/', action: 'index', as: 'coaches_index'
+    get '/:id', action: 'show', as: 'coach'
+  end
+
   scope 'library', controller: 'resources' do
     get '/', action: 'index', as: 'resources'
     get '/:id', action: 'show', as: 'resource'

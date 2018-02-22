@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Faculty Connect' do
+feature 'Office Hour' do
   include UserSpecHelper
 
   let(:level_one) { create :level, :one }
@@ -29,7 +29,7 @@ feature 'Faculty Connect' do
 
     # Two of these cards should have disabled connect buttons.
     expect(page.find('.faculty-card', text: faculty_1.name)).to have_selector('.available-marker')
-    expect(page).to have_selector(".disabled.connect-link[title='Faculty Connect is only available once you are a selected founder']", count: 2)
+    expect(page).to have_selector(".disabled.connect-link[title='Office hours are only available once you are a selected founder']", count: 2)
   end
 
   context 'User is founder of approved startup' do
@@ -42,7 +42,7 @@ feature 'Faculty Connect' do
       # Two of the three cards should have a disabled connect button with a special message for non-admins.
       expect(page.find('.faculty-card', text: faculty_1.name)).to have_selector('.available-marker')
       expect(page.find('.faculty-card', text: faculty_2.name)).to have_selector('.available-marker')
-      expect(page).to have_selector(".disabled.connect-link[title='Faculty Connect is only available to #{startup.team_lead.fullname} (your team lead)']", count: 1)
+      expect(page).to have_selector(".disabled.connect-link[title='Office hours can be requested only by #{startup.team_lead.fullname} (your team lead)']", count: 1)
       expect(page).to have_selector(".disabled.connect-link[title='To gain access to this coach, you need to reach Level 2!']", count: 1)
     end
 
@@ -68,7 +68,7 @@ feature 'Faculty Connect' do
 
           # Two cards should have disabled connect buttons with a special message.
           expect(page).to have_selector('.available-marker', count: 2)
-          expect(page).to have_selector(".disabled.connect-link[title='You already have a pending connect request " \
+          expect(page).to have_selector(".disabled.connect-link[title='You already have a pending office hour request " \
             "with this coach. Please write to help@sv.co if you would like to reschedule.']", count: 1)
         end
       end
@@ -95,7 +95,7 @@ feature 'Faculty Connect' do
         # The connect button should now be disabled.
         #
         # data-original-title is used here instead of the title prop because Bootstrap tooltip modifies the element.
-        expect(page).to have_selector(".disabled.connect-link[data-original-title='You already have a pending connect request with this coach. Please write to help@sv.co if you would like to reschedule.']", count: 1)
+        expect(page).to have_selector(".disabled.connect-link[data-original-title='You already have a pending office hour request with this coach. Please write to help@sv.co if you would like to reschedule.']", count: 1)
 
         # Verify data.
         connect_request = startup.connect_requests.last

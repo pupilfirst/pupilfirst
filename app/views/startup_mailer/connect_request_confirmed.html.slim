@@ -1,15 +1,15 @@
 = content_for :title do
-  | Faculty Connect at #{@connect_request.connect_slot}
+  | Office Hour at #{@connect_request.connect_slot}
 
 = content_for :subtitle do
-  | A faculty connect session with #{@connect_request.faculty.name} has been confirmed.
+  | A office hour session with #{@connect_request.faculty.name} has been confirmed.
 
 = content_for :salutation do
   | Hello,
 
 = content_for :body do
   p
-    ' The connect request created by #{@connect_request.startup.team_lead.fullname} (team lead), with our coach
+    ' The office hour request created by #{@connect_request.startup.team_lead.fullname} (team lead), with our coach
     ' #{@connect_request.faculty.name}, has just been confirmed for
     strong #{@connect_request.connect_slot} IST.
 

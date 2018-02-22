@@ -5,8 +5,6 @@ class SixWaysController < ApplicationController
 
   helper_method :quiz_score
 
-  layout 'application_v2'
-
   # GET /sixways
   #
   # Landing page for sixways

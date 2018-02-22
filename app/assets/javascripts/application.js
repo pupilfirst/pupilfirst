@@ -65,3 +65,4 @@
 //= require resources
 //= require users
 //= require product_metrics
+//= require intercom_settings

@@ -37,7 +37,7 @@ module ConnectRequests
     delegate :startup, :faculty, :questions, to: :@connect_request
 
     def calendar_event_title
-      "#{startup.product_name} / #{faculty.name} (Faculty Connect)"
+      "#{startup.product_name} / #{faculty.name} (Office Hour)"
     end
 
     def calendar_event_description

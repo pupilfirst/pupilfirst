@@ -91,7 +91,7 @@
                 #faculty-show-xs-test.visible-sm-block.visible-xs-block
                 .past-connect-sessions
                   h3.text-uppercase.font-semibold.brand-secondary
-                    | Past connect sessions
+                    | Past office hours
                   .connect-session-box
                     - @faculty.past_connect_requests.each do |request|
                       .connect-session data-toggle="modal" data-target="#faculty-pastconnect-modal-#{request.id}"
@@ -114,7 +114,7 @@
                         .modal-dialog
                           .modal-content
                             .modal-header
-                              h5.font-semibold.modal-title Past Connect Session with #{@faculty.name}
+                              h5.font-semibold.modal-title Past office hours with #{@faculty.name}
                               button.close data-dismiss="modal" type="button"  &times;
                             .modal-body
                               .past-connect-questions

@@ -50,7 +50,7 @@ module Lita
             *#{chosen_target.title}*
             *Status:* #{target_status_message(chosen_target)}
             *Role:* #{I18n.t("models.target.role.#{chosen_target.role}")}
-            *Faculty:* #{chosen_target.faculty.name}
+            *Coach:* #{chosen_target.faculty.name}
             *Description:* #{ActionView::Base.full_sanitizer.sanitize chosen_target.description}
           REPLY
 

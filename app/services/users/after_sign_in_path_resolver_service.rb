@@ -33,7 +33,7 @@ module Users
 
     def mooc_student_path
       return if @user.mooc_student.blank?
-      url_helpers.six_ways_start_path
+      url_helpers.six_ways_path
     end
 
     def root_path

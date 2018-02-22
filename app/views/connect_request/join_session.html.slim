@@ -6,15 +6,15 @@
         h2.mb-0.message-emoticon
           | &#x1f450;
         h3
-          | Your Connect Session is ready!
+          | Your Office Hour is ready!
         p
-          ' #{link_to 'Click here', @connect_request.meeting_link} to join the conference for your connect session with #{second_party}
+          ' #{link_to 'Click here', @connect_request.meeting_link} to join the conference for your office hour with #{second_party}
       - else
         h2.mb-0.message-emoticon
           | &#x23F3;
         h3
           | Your are too early!
         p
-          ' Your connect session with #{second_party} will start only at <strong>#{@connect_request.slot_at.strftime('%b %e, %l:%M %p')}</strong>.
+          ' Your office hour with #{second_party} will start only at <strong>#{@connect_request.slot_at.strftime('%b %e, %l:%M %p')}</strong>.
         p
           ' Check back 10 minutes before start time to join the session.

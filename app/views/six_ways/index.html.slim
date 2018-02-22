@@ -1,33 +1,31 @@
 - content_for :head
   title SV.CO Start in College
 
-.row
-  .col-lg-4.push-lg-8#mooc-sidebar.m-b-2
-    .mooc-sidebar.content-box.m-t-2
+.row.flex-sm-row-reverse
+  .col-lg-4#mooc-sidebar.mb-2
+    .mooc-sidebar.content-box.mt-4
       h4.font-regular
         ' Six Ways: An Introduction to
         | Student Startups
-      h5.font-regular.m-t-1.m-b-1
+      h5.font-regular.mt-1.mb-1
         | FREE &amp; self-paced online course
       ul
-
         li Build a Startup while in College
         li No prior skills needed
         li Learn real-world Engineering, Product and Design Skills
         li Get support from the student startup community
       - unless current_mooc_student.present?
-        h4.font-semibold.m-b-2
+        h4.font-semibold.mb-2
           | Start Learning Now!
-      = link_to start_or_continue_button_text, start_or_continue_path, class: 'btn btn-primary btn-md text-uppercase'
+      = link_to 'Download the SixWays Book', 'https://www.sv.co/r/sixways', class: 'btn btn-primary btn-md text-uppercase my-2', target: '_blank'
 
-  .col-lg-8.pull-lg-4
-    .video-container.content-box.m-t-2
+  .col-lg-8
+    .video-container.content-box.mt-4
       a.startincollege-video-frame href="#" data-toggle="modal" data-target="#startincollegeVideo"
         = image_tag 'six_ways/startincollege-video-thumbnail.png', class: 'img-fluid'
 
-
-    .mooc-left.content-box.m-t-2.m-b-2
-      h3.font-regular.m-b-1
+    .mooc-left.content-box.mt-4.mb-2
+      h3.font-regular.mb-2
         ' <strong>#StartInCollege Six Ways</strong> is SV.CO&rsquo;s <strong>free online course</strong> that tells you why &amp; how to build startups even while
         | you are in college.
       p
@@ -36,10 +34,10 @@
         ' a startup journey: from deciding to start up, to forming a team,
         | validating a good idea, building a prototype and finding passionate customers.
 
-      .course-authors.m-t-2
-        h3.font-regular.m-b-2
+      .course-authors.mt-4
+        h3.font-regular.mb-4
           | Course Authors
-        .media
+        .media.flex-column.flex-md-row
           .media-left
             .media-object
               = image_tag 'six_ways/vishnugopal.png', class: 'img-fluid'
@@ -52,7 +50,7 @@
               ' working in the startup industry, most prominently with India’s first
               | product startup: SlideShare.
 
-        .media
+        .media.flex-column.flex-md-row
           .media-left
             .media-object
               = image_tag 'six_ways/sanjay.png', class: 'img-fluid'
@@ -65,7 +63,7 @@
               ' figure in India’s startup space. He’s instrumental in bringing about
               | a student startup revolution in India.
 
-        .media
+        .media.flex-column.flex-md-row
           .media-left
             .media-object
               = image_tag 'six_ways/gautham.png', class: 'img-fluid'
@@ -77,8 +75,8 @@
               ' Gautham is part of the founding team at Startup Village and is in
               | hard pursuit of the grand vision of changing the higher education landscape in India.
 
-      .course-outline.m-t-2
-        h3.font-regular.m-b-2
+      .course-outline.mt-4
+        h3.font-regular.mb-2
           | Course Outline
         h4
           | 1. Why should you start up in college?
@@ -118,24 +116,21 @@
           li
             | The Engineering Role
 
-      .join-course-box.text-xs-center
+      .join-course-box.text-center
         h3
-          - if current_mooc_student.present?
-            | Welcome Back, #{current_mooc_student.name}!
-          - else
-            | Start Learning Now!
-        = link_to start_or_continue_button_text, start_or_continue_path, class: 'btn btn-primary btn-md text-uppercase'
+          | Start Learning Now!
+        = link_to 'Download the SixWays Book', 'https://www.sv.co/r/sixways', class: 'btn btn-primary btn-md text-uppercase my-2', target: '_blank'
 
-      .paid-program-box.text-xs-center
+      .paid-program-box.text-center
         p
           ' At SV.CO, we also offer a paid intensive program
           br
-          ' for capable student founders &ndash; #{link_to 'join now.', join_path, class: 'font-semibold'}
+          ' for capable student developers &ndash; #{link_to 'apply now.', apply_path, class: 'font-semibold'}
 
   #startincollegeVideo.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
     .modal-dialog.modal-lg role="document"
       .modal-content
-        .modal-header
+        .modal-header.justify-content-end
           button.close aria-label="Close" data-dismiss="modal" type="button"
             span aria-hidden="true" &times;
         .modal-body

@@ -24,7 +24,7 @@ tabTitleManager = ->
     # Change URL for tab change.
     $('.nav-tabs a').on 'shown.bs.tab', (e) ->
       tabName = $(e.target).data('target').split('#')[1]
-      updatedURL = "/faculty/filter/#{tabName}"
+      updatedURL = "/coaches/filter/#{tabName}"
       history.replaceState({turbolinks: true, url: updatedURL}, document.title, updatedURL)
 
 destroySelect2Inputs = ->

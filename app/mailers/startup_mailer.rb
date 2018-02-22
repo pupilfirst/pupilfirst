@@ -18,7 +18,7 @@ class StartupMailer < ApplicationMailer
   def connect_request_confirmed(connect_request)
     @connect_request = connect_request
     send_to = connect_request.startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
-    mail(to: send_to, subject: 'Connect Request confirmed.')
+    mail(to: send_to, subject: 'Office hour confirmed.')
   end
 
   def payment_reminder(payment)

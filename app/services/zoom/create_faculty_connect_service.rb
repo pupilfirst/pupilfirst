@@ -38,7 +38,7 @@ module Zoom
     def topic
       startup = @connect_request.startup.product_name
       faculty = @connect_request.faculty.name
-      "#{startup} / #{faculty} (Faculty Connect)"
+      "#{startup} / #{faculty} (Office Hour)"
     end
   end
 end

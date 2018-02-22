@@ -203,17 +203,6 @@ Rails.application.routes.draw do
   scope 'sixways', as: 'six_ways', controller: 'six_ways' do
     get '/', action: 'index'
     get 'gtu', action: 'gtu_index'
-    get 'start'
-    get 'student_details'
-    post 'create_student'
-    # TODO: why is a patch request send after a few rounds of errors ?
-    post 'save_student_details'
-    patch 'save_student_details'
-    get 'quiz/:module_name', action: 'quiz', as: 'quiz'
-    get ':module_name/:chapter_name', action: 'module', as: 'module'
-    post 'quiz_submission'
-    get 'course_end'
-    get 'completion_certificate'
   end
 
   resources :targets, only: [] do

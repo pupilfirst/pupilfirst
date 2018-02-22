@@ -1,11 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
-import ContentBlock from './targetOverlay/ContentBlock'
-import FounderStatusPanel from './targetOverlay/FounderStatusPanel'
-import HeaderTitle from './targetOverlay/HeaderTitle'
-import StatusBadgeBar from './targetOverlay/StatusBadgeBar'
-import SubmitButton from './targetOverlay/SubmitButton'
-import TimelineEventPanel from './targetOverlay/TimelineEventPanel'
+import ContentBlock from "./targetOverlay/ContentBlock";
+import FounderStatusPanel from "./targetOverlay/FounderStatusPanel";
+import HeaderTitle from "./targetOverlay/HeaderTitle";
+import StatusBadgeBar from "./targetOverlay/StatusBadgeBar";
+import SubmitButton from "./targetOverlay/SubmitButton";
+import TimelineEventPanel from "./targetOverlay/TimelineEventPanel";
 import FacultyBlock from "./targetOverlay/FacultyBlock";
 
 export default class TargetOverlay extends React.Component {
@@ -13,7 +13,12 @@ export default class TargetOverlay extends React.Component {
     super(props);
     this.state = _.merge(
       { ...props.target },
-      { latestEvent: null, latestFeedback: null, linkedResources: null }
+      {
+        latestEvent: null,
+        latestFeedback: null,
+        linkedResources: null,
+        founderStatuses: null
+      }
     );
 
     this.updateDetails = this.updateDetails.bind(this);
@@ -77,7 +82,8 @@ export default class TargetOverlay extends React.Component {
     this.setState({
       latestEvent: response.latestEvent,
       latestFeedback: response.latestFeedback,
-      linkedResources: response.linkedResources
+      linkedResources: response.linkedResources,
+      founderStatuses: response.founderStatuses
     });
   }
 
@@ -124,7 +130,10 @@ export default class TargetOverlay extends React.Component {
                 />
               </div>
               <div className="col-md-4 target-overlay__content-rightbar">
-                <FacultyBlock rootProps={this.props.rootProps} target={this.props.target}/>
+                <FacultyBlock
+                  rootProps={this.props.rootProps}
+                  target={this.props.target}
+                />
 
                 {this.state.latestEvent && (
                   <TimelineEventPanel
@@ -140,6 +149,7 @@ export default class TargetOverlay extends React.Component {
                     </h5>
                     <FounderStatusPanel
                       founderDetails={this.props.founderDetails}
+                      founderStatuses={this.state.founderStatuses}
                       targetId={this.props.target.id}
                     />
                   </div>

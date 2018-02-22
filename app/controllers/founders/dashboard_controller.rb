@@ -34,18 +34,5 @@ module Founders
     def skip_container
       @skip_container = true
     end
-
-    # def append_founder_statuses
-    #   return unless @target.founder_role?
-    #
-    #   founders = current_founder.startup.founders.not_exited
-    #   @react_data[:initialTargetFounderStatuses] = founders.each_with_object([]) do |founder, statuses|
-    #     statuses << { founder.id => Targets::StatusService.new(@target, founder).status }
-    #   end
-    # end
-    #
-    # def append_startup_feedback
-    #   @react_data[:initialTargetLatestFeedback] = Targets::FeedbackService.new(@target, current_founder).latest_feedback_details
-    # end
   end
 end

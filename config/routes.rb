@@ -217,10 +217,10 @@ Rails.application.routes.draw do
 
   resources :targets, only: [] do
     get 'select2_search', on: :collection
+
     member do
       get 'download_rubric'
       get 'prerequisite_targets'
-      get 'founder_statuses'
       get 'startup_feedback'
       get 'details'
       get 'auto_verify'

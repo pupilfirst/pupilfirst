@@ -71,22 +71,6 @@ describe TargetsController do
     end
   end
 
-  describe 'GET founder_statuses' do
-    it 'raises not found error when a founder is not signed in' do
-      expect do
-        get :founder_statuses, params: { id: target.id }
-      end.to raise_error(ActionController::RoutingError)
-    end
-
-    it 'responds with the founder statuses when a founder is signed in' do
-      sign_in startup.team_lead.user
-      cofounder = startup.founders.where.not(id: startup.team_lead.id).first
-      statuses = [{ startup.team_lead.id.to_s => Target::STATUS_COMPLETE.to_s }, { cofounder.id.to_s => Target::STATUS_PENDING.to_s }]
-      get :founder_statuses, params: { id: founder_target.id }
-      expect(JSON.parse(response.body)).to match_array(statuses)
-    end
-  end
-
   # TODO: Probably remove this as we now use the 'details' action whose response includes the latest feedback
   describe 'GET startup_feedback', broken: true do
     before do

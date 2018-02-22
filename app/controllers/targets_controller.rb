@@ -45,14 +45,6 @@ class TargetsController < ApplicationController
     render json: startup_feedback
   end
 
-  # GET /targets/:id/founder_statuses
-  def founder_statuses
-    target = Target.find(params[:id])
-    authorize target
-
-    render json: Targets::OverlayDetailsService.new(target, current_founder).founder_statuses
-  end
-
   # GET /targets/:id/details
   def details
     target = Target.find(params[:id])

@@ -3,46 +3,31 @@ import PropTypes from "prop-types";
 import FounderBubble from "./FounderBubble";
 
 export default class FounderStatusPanel extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { founderStatuses: this.setInitialStatuses() };
-    this.updateStatus = this.updateStatus.bind(this);
+  founderStatuses() {
+    if (_.isObject(this.props.founderStatuses)) {
+      return this.props.founderStatuses;
+    } else {
+      return this.initialStatuses();
+    }
   }
 
-  componentDidMount() {
-    let that = this;
-    $.ajax({
-      url: "/targets/" + that.props.targetId + "/founder_statuses",
-      success: that.updateStatus
+  initialStatuses() {
+    return this.props.founderDetails.map(function(founderDetail) {
+      return {
+        id: founderDetail.founderId,
+        status: "loading"
+      };
     });
-  }
-
-  updateStatus(response) {
-    this.setState({ founderStatuses: response });
-  }
-
-  setInitialStatuses() {
-    let initialStatuses = [];
-
-    this.props.founderDetails.map(function(founderDetail) {
-      let entry = {};
-      entry[founderDetail.founderId] = "loading";
-      initialStatuses.push(entry);
-    });
-
-    return initialStatuses;
   }
 
   render() {
     return (
       <div className="founder-dashboard__avatars ml-2">
-        {this.state.founderStatuses.map(function(founderStatus) {
-          let id = Object.keys(founderStatus)[0];
-          let status = founderStatus[id];
-          let founder = $.grep(this.props.founderDetails, function(e) {
-            return e.founderId == id;
-          })[0];
-          let avatar = founder.avatar;
+        {this.founderStatuses().map(founderStatus => {
+          const id = founderStatus.id;
+          const status = founderStatus.status;
+          const founder = _.find(this.props.founderDetails, ["founderId", id]);
+          const avatar = founder.avatar;
 
           return (
             <FounderBubble
@@ -60,5 +45,6 @@ export default class FounderStatusPanel extends React.Component {
 
 FounderStatusPanel.propTypes = {
   founderDetails: PropTypes.array,
-  targetId: PropTypes.number
+  targetId: PropTypes.number,
+  founderStatuses: PropTypes.array
 };

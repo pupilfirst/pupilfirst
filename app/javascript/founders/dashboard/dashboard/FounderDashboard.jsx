@@ -158,10 +158,8 @@ export default class FounderDashboard extends React.Component {
   }
 
   targetDetails(targetId, loadFromProps = false) {
-    if (loadFromProps) {
-    } else {
-      return _.find(this.state.targets, ["id", targetId]);
-    }
+    const targets = loadFromProps ? this.props.targets : this.state.targets;
+    return _.find(targets, ["id", targetId]);
   }
 
   selectTargetCB(targetId) {

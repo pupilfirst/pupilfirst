@@ -55,7 +55,7 @@ export default class ToggleBarTab extends React.Component {
 }
 
 ToggleBarTab.propTypes = {
-  trackId: PropTypes.oneOf(PropTypes.number, PropTypes.string),
+  trackId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   rootProps: PropTypes.object.isRequired,
   rootState: PropTypes.object.isRequired,
   setRootState: PropTypes.func.isRequired

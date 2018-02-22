@@ -19,7 +19,8 @@ export default class FounderDashboard extends React.Component {
         targetId: null,
         selectedTimelineEventTypeId: null
       },
-      selectedTarget: this.targetDetails(props.initialTargetId, true)
+      selectedTarget: this.targetDetails(props.initialTargetId, true),
+      tourDashboard: props.tourDashboard
     };
 
     // Pick initial track from list of computed track IDs.
@@ -254,5 +255,6 @@ FounderDashboard.propTypes = {
   founderDetails: PropTypes.array,
   maxLevelNumber: PropTypes.number,
   initialTargetId: PropTypes.number,
-  testMode: PropTypes.bool
+  testMode: PropTypes.bool,
+  tourDashboard: PropTypes.bool
 };

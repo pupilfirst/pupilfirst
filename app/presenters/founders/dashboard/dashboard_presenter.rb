@@ -18,7 +18,8 @@ module Founders
           authenticityToken: view.form_authenticity_token,
           iconPaths: icon_paths,
           testMode: Rails.env.test?,
-          initialTargetId: @overlay_target&.id
+          initialTargetId: @overlay_target&.id,
+          tourDashboard: tour_dashboard?
         )
       end
 

@@ -23,7 +23,10 @@ export default class TargetHeader extends React.Component {
   }
 
   targetType() {
-    if (this.props.currentLevel === 0) {
+    if (
+      this.props.currentLevel === 0 ||
+      this.props.rootProps.founderDetails.length < 2
+    ) {
       return null;
     } else {
       return (

@@ -16,8 +16,7 @@ module Admissions
         startup: @founder.startup,
         description: description,
         timeline_event_type: team_update,
-        event_on: Time.zone.now,
-        iteration: @founder.startup.iteration
+        event_on: Time.zone.now
       )
 
       TimelineEvents::VerificationService.new(timeline_event, notify: false)

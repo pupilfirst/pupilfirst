@@ -127,7 +127,7 @@ feature 'Founder Dashboard' do
     # Select another level and check if the correct data is displayed.
     find('.filter-targets-dropdown__menu-item', text: "Level 2: #{level_2.name}").click
     expect(page).to have_selector('.founder-dashboard-target-group__box', count: 1)
-    expect(page).to have_selector('.founder-dashboard-target-header__container', count: 2)
+    expect(page).to have_selector('.founder-dashboard-target-header__container', count: 1)
 
     ####
     # Check whether the data in Sessions tab is correct.

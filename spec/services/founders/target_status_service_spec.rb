@@ -97,8 +97,8 @@ describe Founders::TargetStatusService do
       end
     end
 
-    context 'when the startup is at a higher iteration' do
-      let!(:startup) { create :startup, level: level_two, iteration: 2 }
+    context 'when the startup is at a higher level' do
+      let!(:startup) { create :startup, level: level_two }
       let!(:level_zero_target_group) { create :target_group, level: level_zero }
       let!(:level_one_target_group) { create :target_group, level: level_one }
       let!(:level_two_target_group) { create :target_group, level: level_two }
@@ -106,27 +106,6 @@ describe Founders::TargetStatusService do
       let!(:level_one_target) { create :target, :for_founders, target_group: level_one_target_group }
       let!(:level_two_target) { create :target, :for_founders, target_group: level_two_target_group }
       let!(:founder_session) { create :target, target_group: level_one_target_group, level: level_one, session_at: 1.month.ago }
-
-      context 'when vanilla target event (from same level) iteration is different' do
-        it 'ignores previous submission and returns :pending' do
-          founder_event.update!(target: level_two_target, status: TimelineEvent::STATUS_VERIFIED)
-          expect(subject.status(level_two_target.id)).to eq(Target::STATUS_PENDING)
-        end
-      end
-
-      context 'when vanilla target event (from previous level) iteration is different' do
-        it 'returns status from previous iteration' do
-          founder_event.update!(target: level_one_target, status: TimelineEvent::STATUS_VERIFIED)
-          expect(subject.status(level_one_target.id)).to eq(Target::STATUS_COMPLETE)
-        end
-      end
-
-      context 'when session event (from same level) iteration is different' do
-        it 'returns status from previous iteration' do
-          founder_event.update!(target: founder_session, status: TimelineEvent::STATUS_VERIFIED)
-          expect(subject.status(founder_session.id)).to eq(Target::STATUS_COMPLETE)
-        end
-      end
 
       # This ensures that a edge-case situation does not result in a crash: https://trello.com/c/F7oRFaPf
       context 'when there is an incomplete prerequisite in level 0 for a completed target' do

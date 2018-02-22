@@ -49,7 +49,7 @@ after 'development:levels', 'development:founders', 'development:timeline_event_
   super_startup.founders << Founder.find_by(email: 'thirdgal@sv.co')
   super_startup.save!
 
-  # A second 'Avengers' startup going through its second iteration.
+  # A second 'Avengers' startup.
   avengers_startup = Startup.new(
     name: 'The Avengers',
     level: level_2,
@@ -58,8 +58,7 @@ after 'development:levels', 'development:founders', 'development:timeline_event_
     agreement_signed_at: 2.years.ago,
     website: 'https://www.example.org',
     startup_categories: [StartupCategory.second, StartupCategory.last],
-    program_started_on: 4.weeks.ago,
-    iteration: 2
+    program_started_on: 4.weeks.ago
   )
 
   # Make ironman the team lead.

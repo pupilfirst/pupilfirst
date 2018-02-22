@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180221054621) do
+ActiveRecord::Schema.define(version: 20180221070603) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -563,7 +563,6 @@ ActiveRecord::Schema.define(version: 20180221054621) do
     t.string "product_video_link"
     t.boolean "dropped_out", default: false
     t.integer "level_id"
-    t.integer "iteration", default: 1
     t.date "program_started_on"
     t.boolean "agreements_verified"
     t.string "courier_name"
@@ -738,10 +737,8 @@ ActiveRecord::Schema.define(version: 20180221054621) do
     t.integer "improved_timeline_event_id"
     t.integer "target_id"
     t.boolean "share_on_facebook", default: false
-    t.integer "iteration", default: 1, null: false
     t.decimal "score", precision: 2, scale: 1
     t.index ["founder_id"], name: "index_timeline_events_on_founder_id"
-    t.index ["iteration"], name: "index_timeline_events_on_iteration"
     t.index ["startup_id"], name: "index_timeline_events_on_startup_id"
     t.index ["status"], name: "index_timeline_events_on_status"
     t.index ["timeline_event_type_id"], name: "index_timeline_events_on_timeline_event_type_id"

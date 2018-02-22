@@ -127,13 +127,6 @@
                 .media-body
                   h6.my-0 Team Size
                   p.data-content #{@startup.founders.count}
-            - if @startup.timeline_events_for_display(current_founder).present?
-              .col-sm-6.col-md-12
-                .media.mb-3.align-items-center
-                  img.d-flex.mr-3 alt="Iteration icon" src="#{image_url 'startups/show/data-icon-iteration.png'}"
-                  .media-body
-                    h6.my-0 Product Iteration
-                    p.data-content #{@startup.iteration.ordinalize}
             - if @startup.earliest_team_event_date.present?
               .col-sm-6.col-md-12
                 .media.mb-3.align-items-center

@@ -44,7 +44,6 @@ class TimelineEvent < ApplicationRecord
   validates :status, inclusion: { in: valid_statuses }
   validates :event_on, presence: true
   validates :description, presence: true
-  validates :iteration, presence: true
 
   before_validation do
     self.status_updated_at = Time.zone.now if status_changed?

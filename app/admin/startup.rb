@@ -220,7 +220,7 @@ ActiveAdmin.register Startup do
       end
 
       row :level
-      row :iteration
+      row :maximum_level
       row :timeline_updated_on
 
       row :tags do

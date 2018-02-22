@@ -76,10 +76,6 @@ module Founders
       end
     end
 
-    def affected_by_iteration?(target)
-      target&.target? && target.target_group.level.number >= @founder.startup.level.number
-    end
-
     def unsubmitted_target_statuses
       @unsubmitted_target_statuses ||= begin
         applicable_targets.each_with_object({}) do |target, result|

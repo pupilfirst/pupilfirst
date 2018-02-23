@@ -31,5 +31,3 @@ feature 'Connect Request Comment' do
     expect(connect_request.reload.comment_for_faculty).to eq(comment)
   end
 end
-
-# address { Faker::Lorem.words(6).join(' ') }

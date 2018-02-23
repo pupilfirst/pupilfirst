@@ -94,6 +94,8 @@ ActiveRecord::Schema.define(version: 20180213092607) do
     t.datetime "feedback_mails_sent_at"
     t.integer "rating_for_faculty"
     t.integer "rating_for_team"
+    t.text "comment_for_faculty"
+    t.text "comment_for_team"
     t.index ["connect_slot_id"], name: "index_connect_requests_on_connect_slot_id"
     t.index ["startup_id"], name: "index_connect_requests_on_startup_id"
   end

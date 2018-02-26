@@ -9,6 +9,10 @@ after 'development:target_groups', 'development:timeline_event_types', 'developm
     Faker::Lorem.paragraphs.join("\n\n")
   end
 
+  def session_taker_name
+    Faker::Name.name
+  end
+
   team_update = TimelineEventType.find_by(key: 'team_update')
   faculty_1 = Faculty.first
   faculty_2 = Faculty.second
@@ -52,13 +56,7 @@ after 'development:target_groups', 'development:timeline_event_types', 'developm
       end
 
       # Session.
-      target_group.targets.create!(title: Faker::Lorem.sentence, role: Target.valid_roles.sample, timeline_event_type: TimelineEventType.all.sample, session_at: 1.month.ago, level: level, description: paragraph, faculty: faculty_2, video_embed: video_embed, target_action_type: Target::TYPE_ATTEND)
+      target_group.targets.create!(title: Faker::Lorem.sentence, role: Target.valid_roles.sample, timeline_event_type: TimelineEventType.all.sample, session_at: 1.month.ago, level: level, description: paragraph, session_by: session_taker_name, video_embed: video_embed, target_action_type: Target::TYPE_ATTEND)
     end
-
-    # One upcoming session per level.
-    Target.create!(title: Faker::Lorem.sentence, role: Target.valid_roles.sample, timeline_event_type: TimelineEventType.all.sample, session_at: (rand(4) + 1).weeks.from_now, level: level, description: paragraph, faculty: faculty_1, video_embed: video_embed, target_action_type: Target::TYPE_ATTEND)
-
-    # One past session per level.
-    Target.create!(title: Faker::Lorem.sentence, role: Target.valid_roles.sample, timeline_event_type: TimelineEventType.all.sample, session_at: (rand(4) + 1).weeks.ago, level: level, description: paragraph, faculty: faculty_2, video_embed: video_embed, target_action_type: Target::TYPE_ATTEND)
   end
 end

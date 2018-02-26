@@ -42,6 +42,7 @@ export default class Targets extends React.Component {
           rootState={this.props.rootState}
           setRootState={this.props.setRootState}
           selectTargetCB={this.props.selectTargetCB}
+          hasSingleFounder={this.props.hasSingleFounder}
         />
       );
     }, this);
@@ -56,5 +57,6 @@ Targets.propTypes = {
   rootProps: PropTypes.object.isRequired,
   rootState: PropTypes.object.isRequired,
   setRootState: PropTypes.func.isRequired,
-  selectTargetCB: PropTypes.func.isRequired
+  selectTargetCB: PropTypes.func.isRequired,
+  hasSingleFounder: PropTypes.bool
 };

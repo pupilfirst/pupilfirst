@@ -35,6 +35,7 @@ export default class FounderDashboard extends React.Component {
     this.selectTargetCB = this.selectTargetCB.bind(this);
     this.handlePopState = this.handlePopState.bind(this);
     this.availableTrackIds = this.availableTrackIds.bind(this);
+    this.hasSingleFounder = this.hasSingleFounder.bind(this);
   }
 
   setRootState(updater, callback) {
@@ -172,6 +173,10 @@ export default class FounderDashboard extends React.Component {
     );
   }
 
+  hasSingleFounder() {
+    return this.props.founderDetails.length < 2;
+  }
+
   render() {
     return (
       <div className="founder-dashboard-container pb-5">
@@ -200,6 +205,7 @@ export default class FounderDashboard extends React.Component {
           rootState={this.state}
           setRootState={this.setRootState}
           selectTargetCB={this.selectTargetCB}
+          hasSingleFounder={this.hasSingleFounder()}
         />
 
         {this.state.timelineBuilderVisible && (
@@ -225,6 +231,7 @@ export default class FounderDashboard extends React.Component {
             founderDetails={this.props.founderDetails}
             closeCB={this.targetOverlayCloseCB}
             openTimelineBuilderCB={this.openTimelineBuilder}
+            hasSingleFounder={this.hasSingleFounder()}
           />
         )}
       </div>

@@ -108,6 +108,7 @@ export default class TargetOverlay extends React.Component {
               <HeaderTitle
                 iconPaths={this.props.iconPaths}
                 target={this.props.target}
+                hasSingleFounder={this.props.hasSingleFounder}
               />
               <div className="d-none d-md-block">
                 {this.isSubmittable() && (
@@ -142,18 +143,19 @@ export default class TargetOverlay extends React.Component {
                   />
                 )}
 
-                {this.props.target.role === "founder" && (
-                  <div className="mt-2">
-                    <h5 className="target-overaly__status-title font-semibold">
-                      Completion Status:
-                    </h5>
-                    <FounderStatusPanel
-                      founderDetails={this.props.founderDetails}
-                      founderStatuses={this.state.founderStatuses}
-                      targetId={this.props.target.id}
-                    />
-                  </div>
-                )}
+                {this.props.target.role === "founder" &&
+                  !this.props.hasSingleFounder && (
+                    <div className="mt-2">
+                      <h5 className="target-overaly__status-title font-semibold">
+                        Completion Status:
+                      </h5>
+                      <FounderStatusPanel
+                        founderDetails={this.props.founderDetails}
+                        founderStatuses={this.state.founderStatuses}
+                        targetId={this.props.target.id}
+                      />
+                    </div>
+                  )}
               </div>
             </div>
           </div>
@@ -193,5 +195,6 @@ TargetOverlay.propTypes = {
   openTimelineBuilderCB: PropTypes.func,
   founderDetails: PropTypes.array,
   closeCB: PropTypes.func,
-  iconPaths: PropTypes.object
+  iconPaths: PropTypes.object,
+  hasSingleFounder: PropTypes.bool
 };

@@ -25,7 +25,7 @@ export default class TargetHeader extends React.Component {
   targetType() {
     if (
       this.props.currentLevel === 0 ||
-      this.props.rootProps.founderDetails.length < 2
+      this.props.hasSingleFounder
     ) {
       return null;
     } else {
@@ -166,5 +166,6 @@ TargetHeader.propTypes = {
   rootProps: PropTypes.object.isRequired,
   rootState: PropTypes.object.isRequired,
   setRootState: PropTypes.func.isRequired,
-  selectTargetCB: PropTypes.func.isRequired
+  selectTargetCB: PropTypes.func.isRequired,
+  hasSingleFounder: PropTypes.bool
 };

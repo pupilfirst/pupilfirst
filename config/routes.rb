@@ -128,6 +128,7 @@ Rails.application.routes.draw do
     get ':id/feedback/from_team/:token', action: 'feedback_from_team', as: 'feedback_from_team'
     get ':id/feedback/from_faculty/:token', action: 'feedback_from_faculty', as: 'feedback_from_faculty'
     get ':id/join_session(/:token)', action: 'join_session', as: 'join_session'
+    patch ':id/feedback/comment/:token', action: 'comment_submit', as: 'comment_submit'
   end
 
   scope 'talent', as: 'talent', controller: 'talent' do

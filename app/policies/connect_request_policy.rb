@@ -4,6 +4,7 @@ class ConnectRequestPolicy < ApplicationPolicy
   end
 
   alias feedback_from_faculty? feedback_from_team?
+  alias comment_submit? feedback_from_team?
 
   def join_session?(token)
     return false unless record.confirmed?

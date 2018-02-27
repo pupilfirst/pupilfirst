@@ -27,24 +27,29 @@ describe Founders::DashboardDataService do
   describe '#props' do
     context 'when startup is in level 0' do
       it 'restricts data to level 0' do
-        expected_target_groups = [
-          target_group_l0_1.slice(target_group_fields).merge(level: { id: level_0.id }),
-          target_group_l0_2.slice(target_group_fields).merge(level: { id: level_0.id })
-        ]
+        expected_target_groups = a_collection_containing_exactly(
+          hash_including(target_group_l0_1.slice(target_group_fields).merge(level: { id: level_0.id })),
+          hash_including(target_group_l0_2.slice(target_group_fields).merge(level: { id: level_0.id }))
+        )
 
-        expected_targets = [
-          level_0_target.slice(target_fields).merge(additional_target_fields(level_0_target, target_group_l0_1)),
-          level_0_session.slice(target_fields).merge(additional_target_fields(level_0_session, target_group_l0_2))
-        ]
+        expected_targets = a_collection_containing_exactly(
+          hash_including(level_0_target.slice(target_fields).merge(additional_target_fields(level_0_target, target_group_l0_1))),
+          hash_including(level_0_session.slice(target_fields).merge(additional_target_fields(level_0_session, target_group_l0_2)))
+        )
 
-        props = subject.props
+        team_members = Faculty.team.all.as_json(only: %i[id name], methods: %i[image_url]).map do |faculty_fields|
+          hash_including(faculty_fields)
+        end
 
-        expect(props.keys).to contain_exactly(:faculty, :levels, :targetGroups, :targets, :tracks)
-        expect(props[:faculty]).to match_array(Faculty.team.all.as_json(only: %i[id name], methods: %i[image_url]))
-        expect(props[:levels]).to match_array(level_fields(level_0, level_1, level_2, level_3))
-        expect(props[:targetGroups]).to match_array(expected_target_groups)
-        expect(props[:targets]).to match_array(expected_targets)
-        expect(props[:tracks]).to match_array(track_fields(track_1, track_2))
+        expected_faculty = a_collection_containing_exactly(*team_members)
+
+        expect(subject.props).to include(
+          faculty: expected_faculty,
+          levels: a_collection_containing_exactly(*level_fields(level_0, level_1, level_2, level_3)),
+          targetGroups: expected_target_groups,
+          targets: expected_targets,
+          tracks: a_collection_containing_exactly(*track_fields(track_1, track_2))
+        )
       end
     end
 
@@ -52,41 +57,46 @@ describe Founders::DashboardDataService do
       let(:startup) { create :startup, level: level_2 }
 
       it 'leaves out data from level 0, and includes up to level N' do
-        expected_target_groups = [
+        expected_target_groups = a_collection_containing_exactly(
           target_group_l1_1.slice(target_group_fields).merge(track: { id: track_1.id }, level: { id: level_1.id }),
           target_group_l1_2.slice(target_group_fields).merge(track: { id: track_2.id }, level: { id: level_1.id }),
           target_group_l2_1.slice(target_group_fields).merge(track: { id: track_1.id }, level: { id: level_2.id }),
           target_group_l2_2.slice(target_group_fields).merge(track: { id: track_2.id }, level: { id: level_2.id })
-        ]
+        )
 
-        expected_targets = [
+        expected_targets = a_collection_containing_exactly(
           level_1_target.slice(target_fields).merge(additional_target_fields(level_1_target, target_group_l1_1)),
           level_1_session.slice(target_fields).merge(additional_target_fields(level_1_session, target_group_l1_2)),
           level_2_target.slice(target_fields).merge(additional_target_fields(level_2_target, target_group_l2_1)),
           level_2_session.slice(target_fields).merge(additional_target_fields(level_2_session, target_group_l2_2))
-        ]
+        )
 
-        props = subject.props
+        team_members = Faculty.team.all.as_json(only: %i[id name], methods: %i[image_url]).map do |faculty_fields|
+          hash_including(faculty_fields)
+        end
 
-        expect(props.keys).to contain_exactly(:faculty, :levels, :targetGroups, :targets, :tracks)
-        expect(props[:faculty]).to match_array(Faculty.team.all.as_json(only: %i[id name], methods: %i[image_url]))
-        expect(props[:levels]).to match_array(level_fields(level_1, level_2, level_3))
-        expect(props[:targetGroups]).to match_array(expected_target_groups)
-        expect(props[:targets]).to match_array(expected_targets)
-        expect(props[:tracks]).to match_array(track_fields(track_1, track_2))
+        expected_faculty = a_collection_containing_exactly(*team_members)
+
+        expect(subject.props).to include(
+          faculty: expected_faculty,
+          levels: a_collection_containing_exactly(*level_fields(level_1, level_2, level_3)),
+          targetGroups: expected_target_groups,
+          targets: expected_targets,
+          tracks: a_collection_containing_exactly(*track_fields(track_1, track_2))
+        )
       end
     end
   end
 
   def level_fields(*levels)
     levels.map do |level|
-      level.slice(:id, :name, :number)
+      hash_including(level.slice(:id, :name, :number))
     end
   end
 
   def track_fields(*tracks)
     tracks.map do |track|
-      track.slice(:id, :name, :sort_index)
+      hash_including(track.slice(:id, :name, :sort_index))
     end
   end
 

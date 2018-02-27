@@ -81,7 +81,7 @@ export default class FounderDashboard extends React.Component {
     });
 
     if (availableTrackIds.includes("default")) {
-      return ["default"].concat(sortedTrackIds);
+      return sortedTrackIds.concat(["default"]);
     }
 
     return sortedTrackIds;

@@ -74,7 +74,7 @@ feature 'Founder Dashboard' do
   end
 
   context 'when founder has exited the programme' do
-    scenario 'ex-founder attempts to visit dashboard', js: true do
+    scenario 'ex-founder attempts to visit dashboard' do
       founder.update!(exited: true)
       sign_in_user founder.user, referer: student_dashboard_path
       expect(page).to have_text('not an active student anymore')

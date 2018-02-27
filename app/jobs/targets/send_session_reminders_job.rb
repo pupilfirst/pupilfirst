@@ -26,8 +26,17 @@ module Targets
       message_service = PublicSlack::MessageService.new
       service_errors = []
 
+      notifiable_founders = Founder.subscribed
+      session_level = session.target_group&.level
+
+      # If session has a level through target group (and it should, for all new sessions), notify only founder at or
+      # above that level.
+      if session_level.present?
+        notifiable_founders = notifiable_founders.at_or_above_level(session_level)
+      end
+
       # Send messages to all founders notifying them that session starts in under 30 minutes.
-      Founder.subscribed.at_or_above_level(session.level).distinct.each do |founder|
+      notifiable_founders.distinct.each do |founder|
         response = message_service.post(message: message(session), founder: founder)
         service_errors << response.errors if response.errors.any?
 

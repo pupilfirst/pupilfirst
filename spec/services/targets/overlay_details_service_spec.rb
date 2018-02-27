@@ -13,7 +13,7 @@ describe Targets::OverlayDetailsService do
 
   describe '#all_details' do
     it 'returns the founder statuses, latest event and latest feedback' do
-      founder_statuses = [{ founder_1.id => :complete }, { founder_2.id => :pending }]
+      founder_statuses = [{ id: founder_1.id, status: :complete }, { id: founder_2.id, status: :pending }]
 
       event = {
         description: timeline_event.description,

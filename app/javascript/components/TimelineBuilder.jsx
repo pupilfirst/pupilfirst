@@ -17,7 +17,6 @@ export default class TimelineBuilder extends React.Component {
       coverImage: null,
       showLinkForm: false,
       showFileForm: false,
-      showDateForm: false,
       previousForm: null,
       imageButtonKey: this.generateKey(),
       submissionProgress: null,
@@ -112,8 +111,6 @@ export default class TimelineBuilder extends React.Component {
       return "link";
     } else if (this.state.showFileForm) {
       return "file";
-    } else if (this.state.showDateForm) {
-      return "date";
     } else {
       return null;
     }

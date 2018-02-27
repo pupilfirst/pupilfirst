@@ -58,17 +58,17 @@ describe Founders::DashboardDataService do
 
       it 'leaves out data from level 0, and includes up to level N' do
         expected_target_groups = a_collection_containing_exactly(
-          target_group_l1_1.slice(target_group_fields).merge(track: { id: track_1.id }, level: { id: level_1.id }),
-          target_group_l1_2.slice(target_group_fields).merge(track: { id: track_2.id }, level: { id: level_1.id }),
-          target_group_l2_1.slice(target_group_fields).merge(track: { id: track_1.id }, level: { id: level_2.id }),
-          target_group_l2_2.slice(target_group_fields).merge(track: { id: track_2.id }, level: { id: level_2.id })
+          hash_including(target_group_l1_1.slice(target_group_fields).merge(track: { id: track_1.id }, level: { id: level_1.id })),
+          hash_including(target_group_l1_2.slice(target_group_fields).merge(track: { id: track_2.id }, level: { id: level_1.id })),
+          hash_including(target_group_l2_1.slice(target_group_fields).merge(track: { id: track_1.id }, level: { id: level_2.id })),
+          hash_including(target_group_l2_2.slice(target_group_fields).merge(track: { id: track_2.id }, level: { id: level_2.id }))
         )
 
         expected_targets = a_collection_containing_exactly(
-          level_1_target.slice(target_fields).merge(additional_target_fields(level_1_target, target_group_l1_1)),
-          level_1_session.slice(target_fields).merge(additional_target_fields(level_1_session, target_group_l1_2)),
-          level_2_target.slice(target_fields).merge(additional_target_fields(level_2_target, target_group_l2_1)),
-          level_2_session.slice(target_fields).merge(additional_target_fields(level_2_session, target_group_l2_2))
+          hash_including(level_1_target.slice(target_fields).merge(additional_target_fields(level_1_target, target_group_l1_1))),
+          hash_including(level_1_session.slice(target_fields).merge(additional_target_fields(level_1_session, target_group_l1_2))),
+          hash_including(level_2_target.slice(target_fields).merge(additional_target_fields(level_2_target, target_group_l2_1))),
+          hash_including(level_2_session.slice(target_fields).merge(additional_target_fields(level_2_session, target_group_l2_2)))
         )
 
         team_members = Faculty.team.all.as_json(only: %i[id name], methods: %i[image_url]).map do |faculty_fields|

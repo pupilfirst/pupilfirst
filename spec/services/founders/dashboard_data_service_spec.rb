@@ -37,13 +37,14 @@ describe Founders::DashboardDataService do
           level_0_session.slice(target_fields).merge(additional_target_fields(level_0_session, target_group_l0_2))
         ]
 
-        expect(subject.props).to include(
-          faculty: Faculty.team.all.as_json(only: %i[id name], methods: %i[image_url]),
-          levels: level_fields(level_0, level_1, level_2, level_3),
-          targetGroups: expected_target_groups,
-          targets: expected_targets,
-          tracks: track_fields(track_1, track_2)
-        )
+        props = subject.props
+
+        expect(props.keys).to contain_exactly(:faculty, :levels, :targetGroups, :targets, :tracks)
+        expect(props[:faculty]).to match_array(Faculty.team.all.as_json(only: %i[id name], methods: %i[image_url]))
+        expect(props[:levels]).to match_array(level_fields(level_0, level_1, level_2, level_3))
+        expect(props[:targetGroups]).to match_array(expected_target_groups)
+        expect(props[:targets]).to match_array(expected_targets)
+        expect(props[:tracks]).to match_array(track_fields(track_1, track_2))
       end
     end
 
@@ -65,13 +66,14 @@ describe Founders::DashboardDataService do
           level_2_session.slice(target_fields).merge(additional_target_fields(level_2_session, target_group_l2_2))
         ]
 
-        expect(subject.props).to include(
-          faculty: Faculty.team.all.as_json(only: %i[id name], methods: %i[image_url]),
-          levels: level_fields(level_1, level_2, level_3),
-          targetGroups: expected_target_groups,
-          targets: expected_targets,
-          tracks: track_fields(track_1, track_2)
-        )
+        props = subject.props
+
+        expect(props.keys).to contain_exactly(:faculty, :levels, :targetGroups, :targets, :tracks)
+        expect(props[:faculty]).to match_array(Faculty.team.all.as_json(only: %i[id name], methods: %i[image_url]))
+        expect(props[:levels]).to match_array(level_fields(level_1, level_2, level_3))
+        expect(props[:targetGroups]).to match_array(expected_target_groups)
+        expect(props[:targets]).to match_array(expected_targets)
+        expect(props[:tracks]).to match_array(track_fields(track_1, track_2))
       end
     end
   end

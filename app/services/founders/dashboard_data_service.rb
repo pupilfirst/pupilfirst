@@ -56,6 +56,7 @@ module Founders
       TargetGroup.joins(:level)
         .where('levels.number <= ?', startup.level.number)
         .where('levels.number >= ?', minimum_level)
+        .order(id: :ASC)
         .as_json(
           only: %i[id name description milestone sort_index],
           include: { track: { only: :id }, level: { only: :id } }

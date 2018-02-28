@@ -3,8 +3,10 @@ import PropTypes from "prop-types";
 
 export default class HeaderTitle extends React.Component {
   targetType() {
-    return ( !this.props.hasSingleFounder &&
-      <span className="target-overlay-header__type-tag">{this.role()}:</span>
+    return (
+      !this.props.hasSingleFounder && (
+        <span className="target-overlay-header__type-tag">{this.role()}:</span>
+      )
     );
   }
 
@@ -119,5 +121,5 @@ export default class HeaderTitle extends React.Component {
 HeaderTitle.propTypes = {
   target: PropTypes.object,
   iconPaths: PropTypes.object,
-  hasSingleFounder: PropTypes.object
+  hasSingleFounder: PropTypes.bool
 };

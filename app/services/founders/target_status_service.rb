@@ -22,9 +22,8 @@ module Founders
 
     def prerequisite_targets(target_id)
       target_ids = all_target_prerequisites[target_id]
-      return nil if target_ids.blank?
-
-      applicable_targets.select { |target| target.id.in?(target_ids) }.pluck(:id, :title)
+      return [] if target_ids.blank?
+      applicable_targets.where(id: target_ids).as_json(only: [:id])
     end
 
     private

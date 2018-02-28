@@ -11,17 +11,21 @@ export default class ContentBlock extends React.Component {
   }
 
   prerequisiteLinks() {
-    return this.props.target.prerequisites.map(function(targetDetail) {
+    const that = this;
+
+    return this.props.target.prerequisites.map(function(prerequisiteTarget) {
+      const target = _.find(that.props.rootProps.targets, [
+        "id",
+        prerequisiteTarget.id
+      ]);
+
       return (
         <li
           className="target-overlay-content-block__prerequisites-list-item"
-          key={targetDetail[0]}
+          key={target.id}
         >
-          <a
-            target="_blank"
-            href={"/student/dashboard/targets/" + targetDetail[0]}
-          >
-            {targetDetail[1]}
+          <a target="_blank" href={"/student/dashboard/targets/" + target.id}>
+            {target.title}
           </a>
         </li>
       );
@@ -51,7 +55,7 @@ export default class ContentBlock extends React.Component {
   hasPendingPrerequisites() {
     return (
       this.props.target.status === "unavailable" &&
-      !!this.props.target.prerequisites
+      this.props.target.prerequisites.length > 0
     );
   }
 
@@ -246,6 +250,7 @@ export default class ContentBlock extends React.Component {
 }
 
 ContentBlock.propTypes = {
+  rootProps: PropTypes.object.isRequired,
   target: PropTypes.object,
   iconPaths: PropTypes.object,
   linkedResources: PropTypes.array

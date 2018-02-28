@@ -125,6 +125,7 @@ export default class TargetOverlay extends React.Component {
             <div className="target-overlay__content-wrapper clearfix">
               <div className="col-md-8 target-overlay__content-leftbar">
                 <ContentBlock
+                  rootProps={this.props.rootProps}
                   iconPaths={this.props.iconPaths}
                   target={this.props.target}
                   linkedResources={this.state.linkedResources}

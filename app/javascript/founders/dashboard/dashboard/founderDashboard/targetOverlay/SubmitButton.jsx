@@ -26,8 +26,6 @@ export default class SubmitButton extends React.Component {
   }
 
   submitButtonIconClass() {
-    console.log(this.props.target.link_to_complete);
-    console.log(this.props.target.submittability);
     if (this.props.target.call_to_action) {
       return "fa fa-chevron-circle-right";
     } else if (!this.props.target.link_to_complete) {
@@ -40,16 +38,6 @@ export default class SubmitButton extends React.Component {
   isPending() {
     return this.props.target.status === "pending";
   }
-  AutoVerificationCheck() {
-    if (this.props.target.submittability == "auto_verify") {
-      return (
-        "/targets/" +
-        this.props.target.id +
-        "/" +
-        this.props.target.submittability
-      );
-    } else return this.props.target.link_to_complete;
-  }
 
   successCallback() {
     debugger;
@@ -61,37 +49,37 @@ export default class SubmitButton extends React.Component {
 
   test() {
     let target = this.props.target.id;
-    let sub = this.props.target.submittability;
-    let url_test = "/targets/" + target + "/" + sub;
+    let url_test = "/targets/" + target + "/auto_verify";
 
-    console.log(url_test);
+    console.log("POST-ing to URL with fetch: " + url_test);
 
     fetch(url_test, {
       method: "POST",
       credentials: "include",
-      body: JSON.stringify(this.props.rootProps.authenticityToken),
+      body: JSON.stringify({
+        authenticity_token: this.props.rootProps.authenticityToken
+      }),
       headers: {
         "content-type": "application/json"
       }
-    }).then(response => {
+    }).then(() => {
       debugger;
     });
-    debugger;
   }
 
   render() {
     return (
       <div className="pull-right">
-        {!this.props.target.link_to_complete && (
+        {this.props.target.link_to_complete && (
           <a
-            href={this.AutoVerificationCheck()}
+            href={this.props.target.link_to_complete}
             className="btn btn-with-icon btn-md btn-secondary text-uppercase btn-timeline-builder js-founder-dashboard__trigger-builder js-founder-dashboard__action-bar-add-event-button"
           >
             <i className={this.submitButtonIconClass()} aria-hidden="true" />
             <span>{this.submitButtonText()}</span>
           </a>
         )}
-        {this.props.target.link_to_complete && (
+        {this.props.target.submittability === "auto_verify" && (
           <button
             onClick={this.test}
             className="btn btn-with-icon btn-md btn-secondary text-uppercase btn-timeline-builder js-founder-dashboard__trigger-builder js-founder-dashboard__action-bar-add-event-button"
@@ -100,6 +88,16 @@ export default class SubmitButton extends React.Component {
             <span>{this.submitButtonText()}</span>
           </button>
         )}
+        {!this.props.target.link_to_complete &&
+          this.props.target.submittability !== "auto_verify" && (
+            <button
+              onClick={this.openTimelineBuilder}
+              className="btn btn-with-icon btn-md btn-secondary text-uppercase btn-timeline-builder js-founder-dashboard__trigger-builder js-founder-dashboard__action-bar-add-event-button"
+            >
+              <i className={this.submitButtonIconClass()} aria-hidden="true" />
+              <span>{this.submitButtonText()}</span>
+            </button>
+          )}
       </div>
     );
   }

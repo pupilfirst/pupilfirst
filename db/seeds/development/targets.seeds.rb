@@ -33,7 +33,7 @@ after 'development:target_groups', 'development:timeline_event_types', 'developm
   Target.create!(days_to_complete: 1, title: 'Showcase previous work', role: Target::ROLE_TEAM, timeline_event_type: team_update, key: Target::KEY_R1_SHOW_PREVIOUS_WORK, target_group: level_0_target_group, description: paragraph, prerequisite_targets: [screening_target], faculty: faculty_1, target_action_type: Target::TYPE_TODO)
 
   # Round 1 coding task.
-  Target.create!(days_to_complete: 1, title: 'Round 1 Coding Task', role: Target::ROLE_TEAM, timeline_event_type: team_update, key: Target::KEY_R1_TASK, target_group: level_0_target_group, description: paragraph, prerequisite_targets: [screening_target], faculty: faculty_1, target_action_type: Target::TYPE_TODO)
+  Target.create!(days_to_complete: 1, title: 'Round 1 Coding Task', role: Target::ROLE_TEAM, timeline_event_type: team_update, key: Target::KEY_R1_TASK, target_group: level_0_target_group, description: paragraph, prerequisite_targets: [screening_target], faculty: faculty_1, target_action_type: Target::TYPE_TODO, submittability: Target::SUBMITTABILITY_AUTO_VERIFY)
 
   # Round 2 coding task.
   round_two_coding_task = Target.create!(days_to_complete: 1, title: 'Round 2 Coding Task', role: Target::ROLE_TEAM, timeline_event_type: team_update, key: Target::KEY_R2_TASK, target_group: level_0_milestone_group, description: paragraph, prerequisite_targets: [screening_target], faculty: faculty_1, target_action_type: Target::TYPE_TODO)

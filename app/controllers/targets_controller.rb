@@ -58,8 +58,7 @@ class TargetsController < ApplicationController
   # GET /targets/:id/auto_verify
   # TODO: Convert this to a POST.
   def auto_verify
-   # head :ok
-   # binding.pry
+    # head :ok
     target = Target.find(params[:id])
     Targets::AutoVerificationService.new(target, current_founder).auto_verify
     flash[:success] = 'The target has been marked complete!'

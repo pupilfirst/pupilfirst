@@ -59,7 +59,7 @@ export default class TargetOverlay extends React.Component {
   }
 
   submissionBlocked() {
-    return ["unavailable", "submitted"].indexOf(this.props.target.status) != -1;
+    return ["unavailable", "submitted"].includes(this.props.target.status);
   }
 
   isPending() {
@@ -113,6 +113,7 @@ export default class TargetOverlay extends React.Component {
               <div className="d-none d-md-block">
                 {this.isSubmittable() && (
                   <SubmitButton
+                    rootProps={this.props.rootProps}
                     target={this.props.target}
                     openTimelineBuilderCB={this.props.openTimelineBuilderCB}
                   />

@@ -1,4 +1,6 @@
 class TargetsController < ApplicationController
+  before_action :authenticate_founder!
+
   # GET /targets/:id/download_rubric
   def download_rubric
     target = Target.find(params[:id])
@@ -56,9 +58,12 @@ class TargetsController < ApplicationController
   # GET /targets/:id/auto_verify
   # TODO: Convert this to a POST.
   def auto_verify
+   # head :ok
+   # binding.pry
     target = Target.find(params[:id])
     Targets::AutoVerificationService.new(target, current_founder).auto_verify
     flash[:success] = 'The target has been marked complete!'
     redirect_to student_dashboard_path(from: 'auto_verify')
+    head :ok
   end
 end

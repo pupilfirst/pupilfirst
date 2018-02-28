@@ -179,6 +179,7 @@ export default class TargetOverlay extends React.Component {
           <div className="target-overlay__mobile-submit-button-container pull-right pr-3">
             {this.isSubmittable() && (
               <SubmitButton
+                rootProps={this.props.rootProps}
                 target={this.props.target}
                 openTimelineBuilderCB={this.props.openTimelineBuilderCB}
               />

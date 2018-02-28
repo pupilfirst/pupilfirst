@@ -214,7 +214,7 @@ Rails.application.routes.draw do
       get 'prerequisite_targets'
       get 'startup_feedback'
       get 'details'
-      get 'auto_verify'
+      post 'auto_verify'
     end
   end
 

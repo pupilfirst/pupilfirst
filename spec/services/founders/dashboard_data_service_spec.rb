@@ -38,11 +38,6 @@ describe Founders::DashboardDataService do
           hash_including(level_0_session.slice(target_fields).merge(additional_target_fields(level_0_session, target_group_l0_2)))
         ]
 
-        expected_targets_reduced = [
-          hash_including(level_0_target.slice(reduced_target_fields).merge(additional_target_fields(level_0_target, target_group_l0_1))),
-          hash_including(level_0_session.slice(reduced_target_fields).merge(additional_target_fields(level_0_session, target_group_l0_2)))
-        ]
-
         team_members = Faculty.team.all.as_json(only: %i[id name], methods: %i[image_url]).map do |faculty_fields|
           hash_including(faculty_fields)
         end
@@ -53,7 +48,6 @@ describe Founders::DashboardDataService do
         expect(props[:faculty]).to contain_exactly(*team_members)
         expect(props[:levels]).to contain_exactly(*level_fields(level_0, level_1, level_2, level_3))
         expect(props[:targetGroups]).to contain_exactly(*expected_target_groups)
-        expect(props[:targets]).to contain_exactly(*expected_targets_reduced)
         expect(props[:targets]).to contain_exactly(*expected_targets)
         expect(props[:tracks]).to contain_exactly(*track_fields(track_1, track_2))
       end
@@ -115,14 +109,19 @@ describe Founders::DashboardDataService do
   end
 
   def additional_target_fields(target, target_group)
-    { target_group: { id: target_group.id }, faculty: { id: target.faculty.id }, status: :pending, prerequisites: [] }
+    fields = {
+      target_group: { id: target_group.id },
+      faculty: { id: target.faculty.id },
+      status: :pending,
+      prerequisites: []
+    }
+
+    return fields if target.session_at.blank?
+
+    fields.merge(session_at: a_value_within(1.second).of(target.session_at))
   end
 
   def target_fields
-    %i[id role title description completion_instructions resource_url slideshow_embed timeline_event_type_id days_to_complete points_earnable sort_index session_at video_embed link_to_complete submittability archived youtube_video_id session_by call_to_action]
-  end
-
-  def reduced_target_fields
     %i[id role title description completion_instructions resource_url slideshow_embed timeline_event_type_id days_to_complete points_earnable sort_index video_embed link_to_complete submittability archived youtube_video_id session_by call_to_action]
   end
 end

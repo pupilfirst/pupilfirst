@@ -6,7 +6,6 @@
   position: relative;
   top: -24px;
   height: 48px;
-  margin-bottom: 30px;
 
   @include media-breakpoint-up(md) {
     display: flex;
@@ -34,7 +33,6 @@
   padding: 1rem 1.875rem;
 
   @include media-breakpoint-down(sm) {
-    width: 75px;
     font-size: 0.75rem;
     padding: 1rem 0.5rem;
   }
@@ -111,7 +109,7 @@
   border: 1px solid $gray-border;
   box-shadow: 0px 10px 30px 0px rgba(0, 0, 0, 0.2);
   @include border-radius(20px);
-  margin: 0 0 40px 0;
+  margin: 0;
   list-style: none;
   position: relative;
 }
@@ -136,7 +134,6 @@
   padding: 20px 30px;
   box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.06);
   @include border-radius(10px);
-  margin-bottom: 0.5rem;
 
   @include media-breakpoint-down(sm) {
     padding: 20px 1rem;

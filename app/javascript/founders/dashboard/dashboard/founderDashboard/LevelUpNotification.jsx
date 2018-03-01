@@ -42,7 +42,7 @@ export default class LevelUpNotification extends React.Component {
 
   render() {
     return (
-      <div className="founder-dashboard-levelup-notification__container px-2 mx-auto">
+      <div className="founder-dashboard-levelup-notification__container px-2 mx-auto mt-3">
         {this.props.rootProps.levelUpEligibility === "eligible" && (
           <div className="founder-dashboard-levelup-notification__box text-center p-3">
             <h1>{"\uD83C\uDF89"}</h1>

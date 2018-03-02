@@ -26,9 +26,8 @@ describe TargetsController do
 
   describe 'GET download_rubric' do
     it 'raises not found error when a founder is not signed in' do
-      expect do
-        get :download_rubric, params: { id: target.id }
-      end.to raise_error(ActionController::RoutingError)
+      get :download_rubric, params: { id: target.id }
+      expect(response).to redirect_to(new_user_session_path)
     end
 
     it 'redirects to the rubric URL when a founder is signed in' do
@@ -41,9 +40,8 @@ describe TargetsController do
   describe 'GET prerequisite_targets' do
     context 'founder is not signed in' do
       it 'raises not found error' do
-        expect do
-          get :prerequisite_targets, params: { id: target.id }
-        end.to raise_error(ActionController::RoutingError)
+        get :prerequisite_targets, params: { id: target.id }
+        expect(response).to redirect_to(new_user_session_path)
       end
     end
 

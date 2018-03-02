@@ -5,28 +5,19 @@ import TargetStatusBadge from "./TargetStatusBadge";
 export default class TargetHeader extends React.Component {
   constructor(props) {
     super(props);
-
-    // Memoize some values.
-    this.target = this.loadTarget();
-
     this.handleClick = this.handleClick.bind(this);
   }
 
-  loadTarget() {
-    return _.find(this.props.rootState.targets, target => {
-      return target.id === this.props.targetId;
-    });
+  target() {
+    return _.find(this.props.rootState.targets, ["id", this.props.targetId]);
   }
 
   role() {
-    return this.target.role === "founder" ? "Individual" : "Team";
+    return this.target().role === "founder" ? "Individual" : "Team";
   }
 
   targetType() {
-    if (
-      this.props.currentLevel === 0 ||
-      this.props.hasSingleFounder
-    ) {
+    if (this.props.currentLevel === 0 || this.props.hasSingleFounder) {
       return null;
     } else {
       return (
@@ -39,8 +30,8 @@ export default class TargetHeader extends React.Component {
 
   pointsEarnable() {
     if (
-      typeof this.target.points_earnable === "undefined" ||
-      this.target.points_earnable === null
+      typeof this.target().points_earnable === "undefined" ||
+      this.target().points_earnable === null
     ) {
       return null;
     } else {
@@ -48,7 +39,7 @@ export default class TargetHeader extends React.Component {
         <div className="founder-dashboard-target-header__info-subtext founder-dashboard-target-header__karma-points font-regular d-none d-md-inline-block">
           Karma Points:
           <span className="founder-dashboard-target-header__info-value">
-            {this.target.points_earnable}
+            {this.target().points_earnable}
           </span>
         </div>
       );
@@ -65,8 +56,8 @@ export default class TargetHeader extends React.Component {
 
   sessionAtString() {
     if (
-      typeof this.target.session_at === "undefined" ||
-      this.target.session_at === null
+      typeof this.target().session_at === "undefined" ||
+      this.target().session_at === null
     ) {
       return null;
     } else {
@@ -74,7 +65,7 @@ export default class TargetHeader extends React.Component {
         <span>
           Session at:
           <span className="founder-dashboard-target-header__info-value">
-            {moment(this.target.session_at).format("MMM D, h:mm A")}
+            {moment(this.target().session_at).format("MMM D, h:mm A")}
           </span>
         </span>
       );
@@ -83,14 +74,14 @@ export default class TargetHeader extends React.Component {
 
   daysToCompleteString() {
     if (
-      typeof this.target.days_to_complete === "undefined" ||
-      this.target.days_to_complete === null
+      typeof this.target().days_to_complete === "undefined" ||
+      this.target().days_to_complete === null
     ) {
       return null;
     } else {
-      let daysString = "" + this.target.days_to_complete;
+      let daysString = "" + this.target().days_to_complete;
 
-      if (this.target.days_to_complete === 1) {
+      if (this.target().days_to_complete === 1) {
         daysString += " day";
       } else {
         daysString += " days";
@@ -109,10 +100,10 @@ export default class TargetHeader extends React.Component {
 
   headerIcon() {
     if (
-      typeof this.target.session_at === "undefined" ||
-      this.target.session_at === null
+      typeof this.target().session_at === "undefined" ||
+      this.target().session_at === null
     ) {
-      return this.target.role === "founder"
+      return this.target().role === "founder"
         ? this.props.rootProps.iconPaths.personalTodo
         : this.props.rootProps.iconPaths.teamTodo;
     } else {
@@ -133,7 +124,7 @@ export default class TargetHeader extends React.Component {
     // Open the overlay.
     this.props.setRootState({});
 
-    this.props.selectTargetCB(this.target.id);
+    this.props.selectTargetCB(this.props.targetId);
   }
 
   render() {
@@ -150,11 +141,11 @@ export default class TargetHeader extends React.Component {
         <div className="founder-dashboard-target-header__title">
           <h6 className="founder-dashboard-target-header__headline">
             {this.targetType()}
-            {this.target.title}
+            {this.target().title}
           </h6>
         </div>
         <div className="founder-dashboard-target-header__status-badge-block">
-          <TargetStatusBadge target={this.target} />
+          <TargetStatusBadge target={this.target()} />
         </div>
       </div>
     );

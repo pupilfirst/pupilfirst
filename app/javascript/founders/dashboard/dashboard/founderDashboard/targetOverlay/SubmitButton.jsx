@@ -5,7 +5,8 @@ export default class SubmitButton extends React.Component {
   constructor(props) {
     super(props);
     this.openTimelineBuilder = this.openTimelineBuilder.bind(this);
-    this.test = this.test.bind(this);
+    this.autoVerify = this.autoVerify.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   openTimelineBuilder() {
@@ -18,6 +19,8 @@ export default class SubmitButton extends React.Component {
   submitButtonText() {
     if (this.props.target.call_to_action) {
       return this.props.target.call_to_action;
+    } else if (this.canBeVerifiedAutomatically) {
+      return "Mark COMPLETE";
     } else if (!this.props.target.link_to_complete) {
       return this.isPending() ? "Submit" : "Re-Submit";
     } else {
@@ -39,21 +42,13 @@ export default class SubmitButton extends React.Component {
     return this.props.target.status === "pending";
   }
 
-  successCallback() {
-    debugger;
-  }
+  autoVerify() {
+    const autoVerifyEndpoint =
+      "/targets/" + this.props.target.id + "/auto_verify";
 
-  errorCallback() {
-    debugger;
-  }
+    console.log("POST-ing to URL with fetch: " + autoVerifyEndpoint);
 
-  test() {
-    let target = this.props.target.id;
-    let url_test = "/targets/" + target + "/auto_verify";
-
-    console.log("POST-ing to URL with fetch: " + url_test);
-
-    fetch(url_test, {
+    fetch(autoVerifyEndpoint, {
       method: "POST",
       credentials: "include",
       body: JSON.stringify({
@@ -63,41 +58,63 @@ export default class SubmitButton extends React.Component {
         "content-type": "application/json"
       }
     }).then(() => {
-      debugger;
+      new PNotify({
+        title: "Done!",
+        text: "This target has been marked as complete.",
+        type: "success"
+      });
+      this.props.completeTargetCB();
     });
+  }
+
+  handleClick() {
+    if (this.canBeVerifiedAutomatically()) {
+      this.autoVerify();
+    } else {
+      this.openTimelineBuilder();
+    }
+  }
+
+  hasLinkToComplete() {
+    const linkToComplete = this.props.target.link_to_complete;
+    return _.isString(linkToComplete) && linkToComplete.length > 0;
+  }
+
+  canBeVerifiedAutomatically() {
+    return this.props.target.submittability === "auto_verify";
+  }
+
+  submitButtonContents() {
+    return [
+      <i className={this.submitButtonIconClass()} aria-hidden="true" />,
+      <span>{this.submitButtonText()}</span>
+    ];
+  }
+
+  submitButtonClasses() {
+    return "btn btn-with-icon btn-md btn-secondary text-uppercase btn-timeline-builder js-founder-dashboard__trigger-builder js-founder-dashboard__action-bar-add-event-button";
   }
 
   render() {
     return (
       <div className="pull-right">
-        {this.props.target.link_to_complete && (
-          <a
-            href={this.props.target.link_to_complete}
-            className="btn btn-with-icon btn-md btn-secondary text-uppercase btn-timeline-builder js-founder-dashboard__trigger-builder js-founder-dashboard__action-bar-add-event-button"
-          >
-            <i className={this.submitButtonIconClass()} aria-hidden="true" />
-            <span>{this.submitButtonText()}</span>
-          </a>
-        )}
-        {this.props.target.submittability === "auto_verify" && (
+        {this.hasLinkToComplete() &&
+          !this.canBeVerifiedAutomatically() && (
+            <a
+              href={this.props.target.link_to_complete}
+              className={this.submitButtonClasses()}
+            >
+              {this.submitButtonContents()}
+            </a>
+          )}
+        {(!this.hasLinkToComplete() || this.canBeVerifiedAutomatically()) && (
           <button
-            onClick={this.test}
-            className="btn btn-with-icon btn-md btn-secondary text-uppercase btn-timeline-builder js-founder-dashboard__trigger-builder js-founder-dashboard__action-bar-add-event-button"
+            onClick={this.handleClick}
+            className={this.submitButtonClasses()}
           >
-            <i className={this.submitButtonIconClass()} aria-hidden="true" />
-            <span>{this.submitButtonText()}</span>
+            {this.submitButtonContents()}
           </button>
         )}
-        {!this.props.target.link_to_complete &&
-          this.props.target.submittability !== "auto_verify" && (
-            <button
-              onClick={this.openTimelineBuilder}
-              className="btn btn-with-icon btn-md btn-secondary text-uppercase btn-timeline-builder js-founder-dashboard__trigger-builder js-founder-dashboard__action-bar-add-event-button"
-            >
-              <i className={this.submitButtonIconClass()} aria-hidden="true" />
-              <span>{this.submitButtonText()}</span>
-            </button>
-          )}
       </div>
     );
   }
@@ -105,6 +122,7 @@ export default class SubmitButton extends React.Component {
 
 SubmitButton.propTypes = {
   rootProps: PropTypes.object.isRequired,
+  completeTargetCB: PropTypes.func.isRequired,
   target: PropTypes.object,
   openTimelineBuilderCB: PropTypes.func
 };

@@ -19,7 +19,7 @@ export default class FounderDashboard extends React.Component {
         targetId: null,
         selectedTimelineEventTypeId: null
       },
-      selectedTarget: this.targetDetails(props.initialTargetId, true),
+      selectedTargetId: props.initialTargetId,
       tourDashboard: props.tourDashboard
     };
 
@@ -94,10 +94,10 @@ export default class FounderDashboard extends React.Component {
   handlePopState(event) {
     if (event.state.targetId) {
       this.setState({
-        selectedTarget: this.targetDetails(event.state.targetId)
+        selectedTargetId: event.state.targetId
       });
     } else {
-      this.setState({ selectedTarget: null });
+      this.setState({ selectedTargetId: null });
     }
   }
 
@@ -138,33 +138,18 @@ export default class FounderDashboard extends React.Component {
 
     updatedTargets[targetIndex].status = "submitted";
 
-    let updatedSelectedTarget = _.cloneDeep(this.state.selectedTarget);
-
-    if (
-      this.state.selectedTarget &&
-      targetId === this.state.selectedTarget.id
-    ) {
-      updatedSelectedTarget.status = "submitted";
-    }
-
     this.setState({
-      targets: updatedTargets,
-      selectedTarget: updatedSelectedTarget
+      targets: updatedTargets
     });
   }
 
   targetOverlayCloseCB() {
-    this.setState({ selectedTarget: null });
+    this.setState({ selectedTargetId: null });
     history.pushState({}, "", "/student/dashboard");
   }
 
-  targetDetails(targetId, loadFromProps = false) {
-    const targets = loadFromProps ? this.props.targets : this.state.targets;
-    return _.find(targets, ["id", targetId]);
-  }
-
   selectTargetCB(targetId) {
-    this.setState({ selectedTarget: this.targetDetails(targetId) });
+    this.setState({ selectedTargetId: targetId });
 
     history.pushState(
       { targetId: targetId },
@@ -223,11 +208,13 @@ export default class FounderDashboard extends React.Component {
           />
         )}
 
-        {this.state.selectedTarget && (
+        {_.isNumber(this.state.selectedTargetId) && (
           <TargetOverlay
             rootProps={this.props}
+            rootState={this.state}
+            setRootState={this.setRootState}
             iconPaths={this.props.iconPaths}
-            target={this.state.selectedTarget}
+            targetId={this.state.selectedTargetId}
             founderDetails={this.props.founderDetails}
             closeCB={this.targetOverlayCloseCB}
             openTimelineBuilderCB={this.openTimelineBuilder}

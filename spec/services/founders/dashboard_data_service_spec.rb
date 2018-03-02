@@ -109,10 +109,19 @@ describe Founders::DashboardDataService do
   end
 
   def additional_target_fields(target, target_group)
-    { target_group: { id: target_group.id }, faculty: { id: target.faculty.id }, status: :pending, prerequisites: [] }
+    fields = {
+      target_group: { id: target_group.id },
+      faculty: { id: target.faculty.id },
+      status: :pending,
+      prerequisites: []
+    }
+
+    return fields if target.session_at.blank?
+
+    fields.merge(session_at: a_value_within(1.second).of(target.session_at))
   end
 
   def target_fields
-    %i[id role title description completion_instructions resource_url slideshow_embed timeline_event_type_id days_to_complete points_earnable sort_index session_at video_embed link_to_complete submittability archived youtube_video_id session_by call_to_action]
+    %i[id role title description completion_instructions resource_url slideshow_embed timeline_event_type_id days_to_complete points_earnable sort_index video_embed link_to_complete submittability archived youtube_video_id session_by call_to_action]
   end
 end

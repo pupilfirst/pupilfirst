@@ -47,9 +47,9 @@ export default class ToggleBarTab extends React.Component {
 
   render() {
     return (
-      <label className={this.labelClasses()} onClick={this.handleClick}>
+      <div className={this.labelClasses()} onClick={this.handleClick}>
         {this.track.name.toUpperCase()}
-      </label>
+      </div>
     );
   }
 }

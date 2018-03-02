@@ -2,8 +2,16 @@
   width: 100%;
   min-height: 280px;
   padding: 30px 0;
-  box-shadow: inset  0  10px 10px -10px rgba(0,0,0,0.3), inset  0 -10px 10px -10px rgba(0,0,0,0.3);
-  background: asset-url("founders/dashboard/header-background.svg"), linear-gradient(45deg, rgba(10, 165, 227, 1) 0%, rgba(15, 167, 212, 1) 40%, rgba(50, 180, 117, 1) 100%) repeat-x center bottom;
+  box-shadow: inset 0 10px 10px -10px rgba(0, 0, 0, 0.3),
+    inset 0 -10px 10px -10px rgba(0, 0, 0, 0.3);
+  background: asset-url("founders/dashboard/header-background.svg"),
+    linear-gradient(
+        45deg,
+        rgba(10, 165, 227, 1) 0%,
+        rgba(15, 167, 212, 1) 40%,
+        rgba(50, 180, 117, 1) 100%
+      )
+      repeat-x center bottom;
   background-size: cover;
 
   @include media-breakpoint-down(sm) {
@@ -80,9 +88,9 @@
 
 .founder-dashboard-header__welcome-subtext {
   font-weight: 300;
-  color: black;
-  font-size: 1.5rem;
-  margin-top: 20px;
+  color: white;
+  font-size: 1.3rem;
+  margin-top: 1rem;
 
   @include media-breakpoint-down(sm) {
     margin-top: 10px;
@@ -118,7 +126,8 @@
     @include media-breakpoint-down(sm) {
       margin: 10px -5px 0 -5px;
 
-      &:first-child, &:last-child {
+      &:first-child,
+      &:last-child {
         margin: 10px 0 0 0;
       }
     }

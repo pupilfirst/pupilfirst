@@ -89,7 +89,7 @@ export default class ActionBar extends React.Component {
 
   render() {
     return (
-      <div className="founder-dashboard-actionbar__container px-2 mx-auto">
+      <div className="founder-dashboard-actionbar__container px-2 mx-auto pt-4 pt-md-5">
         <div className="founder-dashboard-actionbar__box d-flex justify-content-between">
           <TargetsFilter
             getAvailableTrackIds={this.props.getAvailableTrackIds}

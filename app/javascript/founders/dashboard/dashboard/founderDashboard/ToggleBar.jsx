@@ -34,6 +34,10 @@ export default class ToggleBar extends React.Component {
   }
 
   render() {
+    if (this.props.availableTrackIds.length < 2) {
+      return null;
+    }
+
     return (
       <div className="d-flex justify-content-between justify-content-md-center founder-dashboard-togglebar__container">
         <div className="founder-dashboard-togglebar__toggle">

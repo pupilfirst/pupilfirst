@@ -133,8 +133,8 @@ feature 'Founder Dashboard' do
     expect(page).to have_selector('.founder-dashboard-target-group__box', count: 1)
     expect(page).to have_selector('.founder-dashboard-target-header__container', count: 1)
 
-    # There should be only one track in Level 2.
-    expect(page).to have_selector('.founder-dashboard-togglebar__toggle-btn', count: 1)
+    # There is only one track in level 2, so the selector should be hidden.
+    expect(page).not_to have_selector('.founder-dashboard-togglebar__toggle-btn')
 
     # Switch back to level 4...
     find('.filter-targets-dropdown__button').click

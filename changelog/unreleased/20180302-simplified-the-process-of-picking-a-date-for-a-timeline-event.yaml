@@ -1,0 +1,7 @@
+---
+timestamp: '2018-03-02T08:50:12Z'
+title: Simplified the process of picking a date for a timeline event.
+trello: https://trello.com/c/rlcLcMgz
+private: false
+description: This moves date picker out of the drawer and renders it as a popup instead.
+category: ui

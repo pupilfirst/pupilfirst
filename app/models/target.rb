@@ -37,7 +37,7 @@ class Target < ApplicationRecord
   acts_as_taggable
   mount_uploader :rubric, RubricUploader
 
-  scope :live, -> { where(archived: [false, nil]) }
+  scope :live, -> { joins(:target_group).where(archived: [false, nil]) }
   scope :founder, -> { where(role: ROLE_FOUNDER) }
   scope :not_founder, -> { where.not(role: ROLE_FOUNDER) }
   scope :vanilla_targets, -> { where.not(target_group_id: nil) }

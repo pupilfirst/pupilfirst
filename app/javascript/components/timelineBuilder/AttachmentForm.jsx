@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import LinkForm from "./LinkForm";
 import FileForm from "./FileForm";
-import DateForm from "./DateForm";
 
 export default class AttachmentForm extends React.Component {
   constructor(props) {
@@ -57,16 +56,6 @@ export default class AttachmentForm extends React.Component {
             resetErrorsCB={this.props.resetErrorsCB}
             showSelectedFileError={this.props.showSelectedFileError}
             hideFileForm={this.props.hideFileForm}
-          />
-        </div>
-
-        <div
-          className="timeline-builder__attachment-form-container js-date-form"
-          style={this.formVisible("date")}
-        >
-          <DateForm
-            addAttachmentCB={this.props.addAttachmentCB}
-            selectedDate={this.props.selectedDate}
           />
         </div>
       </div>

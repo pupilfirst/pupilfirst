@@ -17,7 +17,6 @@ export default class TimelineBuilder extends React.Component {
       coverImage: null,
       showLinkForm: false,
       showFileForm: false,
-      showDateForm: false,
       previousForm: null,
       imageButtonKey: this.generateKey(),
       submissionProgress: null,
@@ -95,23 +94,13 @@ export default class TimelineBuilder extends React.Component {
       this.setState({
         showLinkForm: newState,
         showFileForm: false,
-        showDateForm: false,
         previousForm: previousForm
       });
-    } else if (type == "file") {
+    } else {
       let newState = !this.state.showFileForm;
       this.setState({
         showLinkForm: false,
         showFileForm: newState,
-        showDateForm: false,
-        previousForm: previousForm
-      });
-    } else {
-      let newState = !this.state.showDateForm;
-      this.setState({
-        showLinkForm: false,
-        showFileForm: false,
-        showDateForm: newState,
         previousForm: previousForm
       });
     }
@@ -122,8 +111,6 @@ export default class TimelineBuilder extends React.Component {
       return "link";
     } else if (this.state.showFileForm) {
       return "file";
-    } else if (this.state.showDateForm) {
-      return "date";
     } else {
       return null;
     }
@@ -198,10 +185,6 @@ export default class TimelineBuilder extends React.Component {
       });
     } else if (type == "date") {
       this.setState({ date: properties.value });
-
-      if (properties.hideDateForm) {
-        this.toggleForm("date");
-      }
     } else if (type == "timeline_event_type") {
       this.setState({ timelineEventTypeId: properties.id });
     } else {
@@ -517,6 +500,7 @@ export default class TimelineBuilder extends React.Component {
               />
 
               <ActionBar
+                addAttachmentCB={this.addData}
                 formClickedCB={this.toggleForm}
                 currentForm={this.currentForm()}
                 submitCB={this.submit}

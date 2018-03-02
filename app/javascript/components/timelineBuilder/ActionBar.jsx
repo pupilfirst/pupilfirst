@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import EventTypeSelect from "./EventTypeSelect";
 import SubmitButton from "./SubmitButton";
 import ImageButton from "./ImageButton";
+import DatePicker from "./DatePicker";
 
 export default class ActionBar extends React.Component {
   constructor(props) {
@@ -12,6 +13,10 @@ export default class ActionBar extends React.Component {
     this.showFileForm = this.showFileForm.bind(this);
     this.showDateForm = this.showDateForm.bind(this);
     this.disableTab = this.disableTab.bind(this);
+    this.handleDate = this.handleDate.bind(this);
+    this.state = {
+      dateFormVisible: false
+    };
   }
 
   componentDidUpdate() {
@@ -21,7 +26,6 @@ export default class ActionBar extends React.Component {
       $(".date-of-event").popover("hide");
     }
   }
-
   formLinkClasses(type) {
     let classes = "";
 
@@ -55,9 +59,20 @@ export default class ActionBar extends React.Component {
     }
   }
 
+  handleDate(date) {
+    this.setState({ dateFormVisible: false });
+    this.props.addAttachmentCB("date", {
+      value: date
+    });
+  }
+
   showDateForm() {
-    this.props.resetErrorsCB();
-    this.props.formClickedCB("date");
+    if (this.state.dateFormVisible) {
+      this.setState({ dateFormVisible: false });
+    } else {
+      this.props.resetErrorsCB();
+      this.setState({ dateFormVisible: true });
+    }
   }
 
   timelineEventTypes() {
@@ -103,6 +118,12 @@ export default class ActionBar extends React.Component {
           >
             <i className="timeline-builder__upload-section-icon fa fa-file-text-o" />
             <span className="timeline-builder__tab-label">File</span>
+          </div>
+
+          <div class="timeline-builder__date-picker-popup">
+            {this.state.dateFormVisible && (
+              <DatePicker handleDate={this.handleDate} />
+            )}
           </div>
           <div
             className={this.formLinkClasses("date")}
@@ -150,6 +171,7 @@ ActionBar.propTypes = {
   addDataCB: PropTypes.func,
   imageButtonKey: PropTypes.string,
   selectedDate: PropTypes.string,
+  addAttachmentCB: PropTypes.func,
   submissionProgress: PropTypes.number,
   submissionError: PropTypes.string,
   submissionSuccessful: PropTypes.bool,

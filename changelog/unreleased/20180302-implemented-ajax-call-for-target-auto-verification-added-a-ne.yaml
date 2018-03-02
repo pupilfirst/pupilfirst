@@ -1,0 +1,6 @@
+---
+timestamp: '2018-03-02T08:38:46Z'
+title: Implemented AJAX call for target auto-verification, added a new value for submitablity
+  - auto_verify, and replaced the existing GET method for target auto-verification.
+trello: https://trello.com/c/ax5TJEoH
+private: true

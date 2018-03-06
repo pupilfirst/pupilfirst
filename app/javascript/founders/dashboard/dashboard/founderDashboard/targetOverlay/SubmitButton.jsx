@@ -46,8 +46,6 @@ export default class SubmitButton extends React.Component {
     const autoVerifyEndpoint =
       "/targets/" + this.props.target.id + "/auto_verify";
 
-    console.log("POST-ing to URL with fetch: " + autoVerifyEndpoint);
-
     fetch(autoVerifyEndpoint, {
       method: "POST",
       credentials: "include",

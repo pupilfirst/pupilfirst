@@ -302,7 +302,6 @@ ActiveAdmin.register TimelineEvent do
       end
 
       row('Founder') { timeline_event.founder }
-      row :iteration
       row :timeline_event_type
       row :description do
         simple_format(timeline_event.description)

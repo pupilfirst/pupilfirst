@@ -11,6 +11,7 @@ module Startups
     ELIGIBILITY_ELIGIBLE = -'eligible'
     ELIGIBILITY_NOT_ELIGIBLE = -'not_eligible'
     ELIGIBILITY_COFOUNDERS_PENDING = -'cofounders_pending'
+    ELIGIBILITY_DATE_LOCKED = -'date_locked'
 
     def eligible?
       eligibility == ELIGIBILITY_ELIGIBLE
@@ -24,6 +25,7 @@ module Startups
 
         if all_targets_complete
           return ELIGIBILITY_COFOUNDERS_PENDING if @cofounders_pending
+          return ELIGIBILITY_DATE_LOCKED if next_level_unlock_date&.future?
           return ELIGIBILITY_ELIGIBLE
         end
 
@@ -31,10 +33,17 @@ module Startups
       end
     end
 
+    def next_level_unlock_date
+      @next_level_unlock_date ||= begin
+        next_level = Level.find_by(number: current_level.number + 1)
+        next_level&.unlock_on
+      end
+    end
+
     private
 
     def milestone_targets
-      @startup.level.target_groups.find_by(milestone: true).targets.where(archived: false)
+      current_level.target_groups.find_by(milestone: true).targets.where(archived: false)
     end
 
     def target_completed?(target)
@@ -55,6 +64,10 @@ module Startups
       else
         Targets::StatusService.new(target, @founder).status == Targets::StatusService::STATUS_COMPLETE
       end
+    end
+
+    def current_level
+      @current_level ||= @startup.level
     end
   end
 end

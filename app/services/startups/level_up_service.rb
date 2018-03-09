@@ -16,9 +16,7 @@ module Startups
     private
 
     def level_up
-      update = { level: next_level }
-      update[:maximum_level] = next_level if next_level.number > @startup.maximum_level.number
-      @startup.update!(update)
+      @startup.update!(level: next_level)
     end
 
     def next_level
@@ -27,7 +25,7 @@ module Startups
 
     def enroll_for_level_one
       Startup.transaction do
-        @startup.update!(level: next_level, program_started_on: Time.zone.now, maximum_level: next_level)
+        @startup.update!(level: next_level, program_started_on: Time.zone.now)
 
         # Update the admission stage for the startup entry.
         Admissions::UpdateStageService.new(@startup, Startup::ADMISSION_STAGE_ADMITTED).execute
@@ -36,7 +34,6 @@ module Startups
           founder: @startup.team_lead,
           timeline_event_type: TimelineEventType.find_by(key: TimelineEventType::TYPE_JOINED_SV_CO),
           event_on: Time.zone.now,
-          iteration: @startup.iteration,
           description: event_description,
           status_updated_at: Time.zone.now,
           status: TimelineEvent::STATUS_VERIFIED

@@ -52,7 +52,6 @@ describe Founders::RegistrationService do
 
         expect(new_startup.product_name).to_not be_blank
         expect(new_startup.level).to eq(level_zero)
-        expect(new_startup.maximum_level).to eq(level_zero)
       end
     end
 

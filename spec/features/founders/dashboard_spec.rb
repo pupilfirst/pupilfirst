@@ -15,12 +15,16 @@ feature 'Founder Dashboard' do
   let!(:level_4) { create :level, :four }
   let!(:level_5) { create :level, :five }
 
+  # Tracks.
+  let(:product_track) { create :track, name: 'Product', sort_index: 0 }
+  let(:developer_track) { create :track, name: 'Developer', sort_index: 1 }
+
   # Target group we're interested in. Create milestone
-  let!(:target_group_0) { create :target_group, level: level_0, milestone: true }
-  let!(:target_group_1) { create :target_group, level: level_1, milestone: true }
-  let!(:target_group_2) { create :target_group, level: level_2, milestone: true }
-  let!(:target_group_3) { create :target_group, level: level_3, milestone: true }
-  let!(:target_group_4) { create :target_group, level: level_4, milestone: true }
+  let!(:target_group_0) { create :target_group, level: level_0, milestone: true, track: product_track }
+  let!(:target_group_1) { create :target_group, level: level_1, milestone: true, track: product_track }
+  let!(:target_group_2) { create :target_group, level: level_2, milestone: true, track: product_track }
+  let!(:target_group_3) { create :target_group, level: level_3, milestone: true, track: product_track }
+  let!(:target_group_4) { create :target_group, level: level_4, milestone: true, track: product_track }
 
   # Individual targets of different types.
   let!(:pending_target) { create :target, target_group: target_group_4, days_to_complete: 60, role: Target::ROLE_TEAM }
@@ -32,12 +36,6 @@ feature 'Founder Dashboard' do
   let!(:target_with_prerequisites) { create :target, target_group: target_group_4, prerequisite_targets: [pending_target], role: Target::ROLE_TEAM }
   let!(:completed_fee_payment_target) { create :target, target_group: target_group_0, days_to_complete: 60, role: Target::ROLE_TEAM, key: Target::KEY_FEE_PAYMENT }
 
-  # Create chores for different target groups.
-  let!(:chore_1) { create :target, chore: true, target_group: target_group_4 }
-  let!(:chore_2) { create :target, chore: true, target_group: target_group_3 }
-  let!(:chore_3) { create :target, chore: true, target_group: target_group_2 }
-  let!(:chore_4) { create :target, chore: true, target_group: target_group_1 }
-
   # Create sessions for different levels.
   let!(:session_1) { create :target, target_group: nil, level: level_4, session_at: 2.hours.from_now }
   let!(:session_2) { create :target, target_group: nil, level: level_3, session_at: 3.days.ago }
@@ -48,6 +46,11 @@ feature 'Founder Dashboard' do
   let(:dashboard_toured) { true }
 
   before do
+    # Extra target groups in tested level, in different tracks, and without track.
+    create :target_group, level: level_4, track: product_track
+    create :target_group, level: level_4, track: developer_track
+    create :target_group, level: level_4
+
     # Timeline events to take targets to specific states.
     create(:timeline_event, startup: startup, target: completed_target_1, status: TimelineEvent::STATUS_VERIFIED)
     create(:timeline_event, startup: startup, target: completed_target_2, status: TimelineEvent::STATUS_VERIFIED)
@@ -55,11 +58,6 @@ feature 'Founder Dashboard' do
     create(:timeline_event, startup: startup, target: not_accepted_target, status: TimelineEvent::STATUS_NOT_ACCEPTED)
     create(:timeline_event, startup: startup, target: needs_improvement_target, status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT)
     create(:timeline_event, startup: startup, target: completed_fee_payment_target, status: TimelineEvent::STATUS_VERIFIED)
-
-    # Extra target groups in tested level.
-    3.times do
-      create :target_group, level: level_4
-    end
 
     # Sign in with Founder - set dashboard toured to true to avoid the tour.
     founder.update!(dashboard_toured: dashboard_toured)
@@ -76,7 +74,7 @@ feature 'Founder Dashboard' do
   end
 
   context 'when founder has exited the programme' do
-    scenario 'ex-founder attempts to visit dashboard', js: true do
+    scenario 'ex-founder attempts to visit dashboard' do
       founder.update!(exited: true)
       sign_in_user founder.user, referer: student_dashboard_path
       expect(page).to have_text('not an active student anymore')
@@ -101,16 +99,26 @@ feature 'Founder Dashboard' do
     # Founder can manually start a dashboard tour.
     find('.founder-dashboard-actionbar__show-more-menu-dots').click
     find('a[id=filter-targets-dropdown__tour-button]').click
+
     expect(page).to have_selector('.introjs-tooltipReferenceLayer', visible: false)
+
+    # End the tour. We're not interested in its contents.
     within('.introjs-tooltip') do
       find('.introjs-skipbutton').click
     end
+
     find('.founder-dashboard-actionbar__box').click
 
     # Open the timeline builder modal.
     click_button 'Add Event'
     expect(page).to have_selector('.timeline-builder__popup-body', visible: true)
     find('.timeline-builder__modal-close').click
+
+    # Check whether there's correct number of target groups in the page.
+    expect(page).to have_selector('.founder-dashboard-target-group__box', count: 2)
+
+    # Check whether there's one Milestone Target Group
+    expect(page).to have_selector('.founder-dashboard-target-group__milestone-label', count: 1)
 
     # Check the level filters in the action bar.
     find('.filter-targets-dropdown__button').click
@@ -120,40 +128,29 @@ feature 'Founder Dashboard' do
       expect(page).to have_selector('.fa-unlock', count: 4)
     end
 
-    ####
-    # Check whether the data in the targets tab is correct.
-    ####
-
-    # Check whether there's correct number of target groups in the page.
-    expect(page).to have_selector('.founder-dashboard-target-group__box', count: 4)
-
-    # Check whether there's one Milestone Target Group
-    expect(page).to have_selector('.founder-dashboard-target-group__milestone-label', count: 1)
-
     # Select another level and check if the correct data is displayed.
     find('.filter-targets-dropdown__menu-item', text: "Level 2: #{level_2.name}").click
     expect(page).to have_selector('.founder-dashboard-target-group__box', count: 1)
-    expect(page).to have_selector('.founder-dashboard-target-header__container', count: 2)
+    expect(page).to have_selector('.founder-dashboard-target-header__container', count: 1)
 
-    ####
-    # Check whether the data in Sessions tab is correct.
-    ####
+    # There is only one track in level 2, so the selector should be hidden.
+    expect(page).not_to have_selector('.founder-dashboard-togglebar__toggle-btn')
 
-    find('.founder-dashboard-togglebar__toggle-btn', text: 'SESSIONS').click
-    within('.founder-dashboard-togglebar__toggle-btn', text: 'SESSIONS') do
-      expect(page).to have_selector('.founder-dashboard-togglebar__toggle-btn-notify', text: 5)
-    end
-    expect(page).to have_selector('.founder-dashboard-sessions__tag-select-container')
+    # Switch back to level 4...
+    find('.filter-targets-dropdown__button').click
+    find('.filter-targets-dropdown__menu-item', text: "Level 4: #{level_4.name}").click
 
-    # Check upcoming sessions and past sessions.
-    expect(page).to have_selector('.founder-dashboard-target-group__box', count: 2)
+    # There should be three tracks in Level 4.
+    expect(page).to have_selector('.founder-dashboard-togglebar__toggle-btn', count: 3)
 
-    within('.founder-dashboard-target-group__box', text: 'Upcoming Sessions') do
-      expect(page).to have_selector('.founder-dashboard-target__container', count: 1)
-    end
+    find('.founder-dashboard-togglebar__toggle-btn', text: developer_track.name.upcase).click
 
-    within('.founder-dashboard-target-group__box', text: 'Past Sessions') do
-      expect(page).to have_selector('.founder-dashboard-target__container', count: 4)
-    end
+    # Check whether there's correct number of target groups in the developer track.
+    expect(page).to have_selector('.founder-dashboard-target-group__box', count: 1)
+
+    find('.founder-dashboard-togglebar__toggle-btn', text: level_4.name.upcase).click
+
+    # Check whether there's correct number of target groups in the special 'default' track.
+    expect(page).to have_selector('.founder-dashboard-target-group__box', count: 1)
   end
 end

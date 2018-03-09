@@ -9,6 +9,10 @@ after 'development:target_groups', 'development:timeline_event_types', 'developm
     Faker::Lorem.paragraphs.join("\n\n")
   end
 
+  def session_taker_name
+    Faker::Name.name
+  end
+
   team_update = TimelineEventType.find_by(key: 'team_update')
   faculty_1 = Faculty.first
   faculty_2 = Faculty.second
@@ -29,7 +33,7 @@ after 'development:target_groups', 'development:timeline_event_types', 'developm
   Target.create!(days_to_complete: 1, title: 'Showcase previous work', role: Target::ROLE_TEAM, timeline_event_type: team_update, key: Target::KEY_R1_SHOW_PREVIOUS_WORK, target_group: level_0_target_group, description: paragraph, prerequisite_targets: [screening_target], faculty: faculty_1, target_action_type: Target::TYPE_TODO)
 
   # Round 1 coding task.
-  Target.create!(days_to_complete: 1, title: 'Round 1 Coding Task', role: Target::ROLE_TEAM, timeline_event_type: team_update, key: Target::KEY_R1_TASK, target_group: level_0_target_group, description: paragraph, prerequisite_targets: [screening_target], faculty: faculty_1, target_action_type: Target::TYPE_TODO)
+  Target.create!(days_to_complete: 1, title: 'Round 1 Coding Task', role: Target::ROLE_TEAM, timeline_event_type: team_update, key: Target::KEY_R1_TASK, target_group: level_0_target_group, description: paragraph, prerequisite_targets: [screening_target], faculty: faculty_1, target_action_type: Target::TYPE_TODO, submittability: Target::SUBMITTABILITY_AUTO_VERIFY)
 
   # Round 2 coding task.
   round_two_coding_task = Target.create!(days_to_complete: 1, title: 'Round 2 Coding Task', role: Target::ROLE_TEAM, timeline_event_type: team_update, key: Target::KEY_R2_TASK, target_group: level_0_milestone_group, description: paragraph, prerequisite_targets: [screening_target], faculty: faculty_1, target_action_type: Target::TYPE_TODO)
@@ -40,28 +44,19 @@ after 'development:target_groups', 'development:timeline_event_types', 'developm
   # Fee payment target.
   Target.create!(days_to_complete: 1, title: 'Pay Admission Fee', role: Target::ROLE_TEAM, timeline_event_type: team_update, submittability: Target::SUBMITTABILITY_SUBMITTABLE_ONCE, link_to_complete: '/founder/fee', key: Target::KEY_FEE_PAYMENT, target_group: level_0_milestone_group, description: paragraph, prerequisite_targets: [screening_target, interview_target], faculty: faculty_2, target_action_type: Target::TYPE_TODO)
 
-  # Random targets, session and chores for every level
+  # Random targets and sessions for every level.
   (1..4).each do |level_number|
     level = Level.find_by(number: level_number)
 
-    # Two vanilla targets, one chore, and one session per target_group.
+    # Two vanilla targets and one session per target_group.
     level.target_groups.each do |target_group|
       # Targets.
       2.times do
         target_group.targets.create!(days_to_complete: [7, 10, 14].sample, title: Faker::Lorem.sentence, role: Target.valid_roles.sample, timeline_event_type: TimelineEventType.all.sample, target_group: target_group, description: paragraph, faculty: faculty_1, target_action_type: Target::TYPE_TODO)
       end
 
-      # Chore.
-      target_group.targets.create!(days_to_complete: [7, 10, 14].sample, title: Faker::Lorem.sentence, role: Target.valid_roles.sample, timeline_event_type: TimelineEventType.all.sample, chore: true, description: paragraph, faculty: faculty_2, target_action_type: Target::TYPE_TODO)
-
       # Session.
-      target_group.targets.create!(title: Faker::Lorem.sentence, role: Target.valid_roles.sample, timeline_event_type: TimelineEventType.all.sample, session_at: 1.month.ago, level: level, description: paragraph, faculty: faculty_2, video_embed: video_embed, target_action_type: Target::TYPE_ATTEND)
+      target_group.targets.create!(title: Faker::Lorem.sentence, role: Target.valid_roles.sample, timeline_event_type: TimelineEventType.all.sample, session_at: 1.month.ago, level: level, description: paragraph, session_by: session_taker_name, video_embed: video_embed, target_action_type: Target::TYPE_ATTEND)
     end
-
-    # One upcoming session per level.
-    Target.create!(title: Faker::Lorem.sentence, role: Target.valid_roles.sample, timeline_event_type: TimelineEventType.all.sample, session_at: (rand(4) + 1).weeks.from_now, level: level, description: paragraph, faculty: faculty_1, video_embed: video_embed, target_action_type: Target::TYPE_ATTEND)
-
-    # One past session per level.
-    Target.create!(title: Faker::Lorem.sentence, role: Target.valid_roles.sample, timeline_event_type: TimelineEventType.all.sample, session_at: (rand(4) + 1).weeks.ago, level: level, description: paragraph, faculty: faculty_2, video_embed: video_embed, target_action_type: Target::TYPE_ATTEND)
   end
 end

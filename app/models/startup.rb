@@ -123,7 +123,6 @@ class Startup < ApplicationRecord
   has_many :connect_requests, dependent: :destroy
 
   belongs_to :level
-  belongs_to :maximum_level, class_name: 'Level'
   has_many :payments, dependent: :restrict_with_error
   has_many :archived_payments, class_name: 'Payment', foreign_key: 'original_startup_id'
 

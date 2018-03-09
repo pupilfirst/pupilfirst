@@ -20,8 +20,10 @@ describe Targets::SendSessionRemindersJob do
   let!(:startup_l2_inactive) { create :startup, level: level_2 }
   let!(:startup_l3) { create :startup, :subscription_active, level: level_3 }
 
-  let!(:session_imminent) { create :target, :session, session_at: 30.minutes.from_now, level: level_2 }
-  let!(:session_not_imminent) { create :target, :session, session_at: 1.hour.from_now }
+  let(:l2_target_group) { create :target_group, level: level_2 }
+
+  let!(:session_imminent) { create :target, :session, session_at: 30.minutes.from_now, target_group: l2_target_group }
+  let!(:session_not_imminent) { create :target, :session, session_at: 1.hour.from_now, target_group: l2_target_group }
 
   let(:service_response) { double('Message Service Response', errors: {}) }
   let(:message_service) { instance_double(PublicSlack::MessageService, post: service_response) }

@@ -4,28 +4,27 @@ import TargetsFilterOption from "./TargetsFilterOption";
 
 export default class TargetsFilter extends React.Component {
   levelOptions() {
-    let maxLevel = Math.max.apply(null, Object.keys(this.props.levels));
-    let startLevel = 1;
+    let sortedLevels = _.sortBy(this.props.rootProps.levels, ["number"]);
 
-    if (this.props.currentLevel == 0) {
-      startLevel = 0;
-    }
-
-    let options = [];
-
-    for (let level = startLevel; level <= maxLevel; level++) {
-      options.push(
+    return _.map(sortedLevels, level => {
+      return (
         <TargetsFilterOption
-          key={"target-filter-level-" + level}
-          level={level}
-          name={this.props.levels[level]}
-          pickFilterCB={this.props.pickFilterCB}
-          currentLevel={this.props.currentLevel}
+          key={level.id}
+          levelId={level.id}
+          getAvailableTrackIds={this.props.getAvailableTrackIds}
+          rootProps={this.props.rootProps}
+          rootState={this.props.rootState}
+          setRootState={this.props.setRootState}
         />
       );
-    }
+    });
+  }
 
-    return options;
+  chosenLevel() {
+    return _.find(this.props.rootProps.levels, [
+      "id",
+      this.props.rootState.chosenLevelId
+    ]);
   }
 
   render() {
@@ -39,8 +38,7 @@ export default class TargetsFilter extends React.Component {
           className="d-flex btn btn-md px-3 filter-targets-dropdown__button align-items-center justify-content-between dropdown-toggle"
         >
           <span className="pr-3 filter-targets-dropdown__selection">
-            Level {this.props.chosenLevel}:{" "}
-            {this.props.levels[this.props.chosenLevel]}
+            Level {this.chosenLevel().number}: {this.chosenLevel().name}
           </span>
 
           <span className="filter-targets-dropdown__arrow" />
@@ -55,8 +53,8 @@ export default class TargetsFilter extends React.Component {
 }
 
 TargetsFilter.propTypes = {
-  levels: PropTypes.object,
-  chosenLevel: PropTypes.number,
-  pickFilterCB: PropTypes.func,
-  currentLevel: PropTypes.number
+  getAvailableTrackIds: PropTypes.func.isRequired,
+  rootProps: PropTypes.object.isRequired,
+  rootState: PropTypes.object.isRequired,
+  setRootState: PropTypes.func.isRequired
 };

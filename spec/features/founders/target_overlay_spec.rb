@@ -9,7 +9,7 @@ feature 'Target Overlay' do
   let!(:target_group_1) { create :target_group, level: level_1, milestone: true }
   let!(:target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM }
   let!(:prerequisite_target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM }
-  let!(:timeline_event) { create :timeline_event, startup: startup, founder: founder, iteration: startup.iteration, status: TimelineEvent::STATUS_VERIFIED, links: [{ 'title' => 'Some Link', 'url' => 'https://www.example.com', 'private' => false }] }
+  let!(:timeline_event) { create :timeline_event, startup: startup, founder: founder, status: TimelineEvent::STATUS_VERIFIED, links: [{ 'title' => 'Some Link', 'url' => 'https://www.example.com', 'private' => false }] }
   let!(:timeline_event_file) { create :timeline_event_file, timeline_event: timeline_event }
   let(:faculty) { create :faculty, slack_username: 'abcd' }
   let!(:feedback) { create :startup_feedback, timeline_event: timeline_event, startup: startup, faculty: faculty }
@@ -42,8 +42,7 @@ feature 'Target Overlay' do
 
       # Within the header:
       within('.target-overlay__header') do
-        expect(page).to have_selector('.target-overlay-header__headline', text: "Team Target:#{target.title}")
-        # expect(page).to have_selector('.target-overlay-header__info-subtext', text: 'Time required:60 days')
+        expect(page).to have_selector('.target-overlay-header__headline', text: "Team:#{target.title}")
       end
 
       # Within the status badge bar:

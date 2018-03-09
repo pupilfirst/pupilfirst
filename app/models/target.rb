@@ -37,11 +37,10 @@ class Target < ApplicationRecord
   acts_as_taggable
   mount_uploader :rubric, RubricUploader
 
-  scope :live, -> { where(archived: [false, nil]) }
+  scope :live, -> { joins(:target_group).where(archived: [false, nil]) }
   scope :founder, -> { where(role: ROLE_FOUNDER) }
   scope :not_founder, -> { where.not(role: ROLE_FOUNDER) }
   scope :vanilla_targets, -> { where.not(target_group_id: nil) }
-  scope :chores, -> { where(chore: true) }
   scope :sessions, -> { where.not(session_at: nil) }
 
   # Custom scope to allow AA to filter by intersection of tags.
@@ -75,9 +74,10 @@ class Target < ApplicationRecord
   SUBMITTABILITY_RESUBMITTABLE = 'resubmittable'
   SUBMITTABILITY_SUBMITTABLE_ONCE = 'submittable_once'
   SUBMITTABILITY_NOT_SUBMITTABLE = 'not_submittable'
+  SUBMITTABILITY_AUTO_VERIFY = 'auto_verify'
 
   def self.valid_submittability_values
-    [SUBMITTABILITY_RESUBMITTABLE, SUBMITTABILITY_SUBMITTABLE_ONCE, SUBMITTABILITY_NOT_SUBMITTABLE].freeze
+    [SUBMITTABILITY_RESUBMITTABLE, SUBMITTABILITY_SUBMITTABLE_ONCE, SUBMITTABILITY_NOT_SUBMITTABLE, SUBMITTABILITY_AUTO_VERIFY].freeze
   end
 
   # Need to allow these two to be read for AA form.
@@ -98,29 +98,6 @@ class Target < ApplicationRecord
     errors[:base] << 'One of days_to_complete, or session_at should be set.'
     errors[:days_to_complete] << 'if blank, session_at should be set'
     errors[:session_at] << 'if blank, days_to_complete should be set'
-  end
-
-  validate :vanilla_targets_must_be_in_a_group
-
-  def vanilla_targets_must_be_in_a_group
-    return if session?
-    return if target_group.present?
-    errors[:base] << 'Vanilla targets and chores must be in a target group.'
-  end
-
-  validate :can_be_one_of_chore_or_session
-
-  def can_be_one_of_chore_or_session
-    return if [session_at, chore].one? || [session_at, chore].none?
-    errors[:base] << "Target can be a chore, a session, or neither, but not both. Sessions are treated as chores anyway, since they don't need to be repeated."
-  end
-
-  validate :session_must_have_level
-
-  def session_must_have_level
-    return unless session?
-    return if level.present?
-    errors[:level] << 'is required for a session' if level.blank?
   end
 
   validate :avoid_level_mismatch_with_group
@@ -196,18 +173,12 @@ class Target < ApplicationRecord
     @stats_service ||= Targets::StatsService.new(self)
   end
 
-  def target_type
-    return :chore if chore?
-    session_at.present? ? :session : :target
-  end
-
   def session?
-    target_type == :session
+    session_at.present?
   end
 
-  # A 'proper' target is neither a session, nor a chore. These are repeatable across iterations.
   def target?
-    target_type == :target
+    session_at.blank?
   end
 
   def rubric?
@@ -217,29 +188,10 @@ class Target < ApplicationRecord
   # this is included in the target JSONs the DashboardDataService responds with
   alias has_rubric rubric?
 
-  def target_type_description
-    role = founder_role? ? 'Personal ' : 'Team '
-    type = if session?
-      'Session'
-    elsif chore?
-      'Chore'
-    else
-      'Target'
-    end
-    role + type
-  end
-
   # Returns the latest event linked to this target from a founder. If a team target, it responds with the latest event from the team
   def latest_linked_event(founder)
     owner = founder_role? ? founder : founder.startup
-    linked_events = owner.timeline_events.where(target: self)
-
-    # Account for iteration if vanilla target.
-    if target? && target_group&.level == founder.startup.level
-      linked_events = linked_events.where(iteration: founder.startup.iteration)
-    end
-
-    linked_events.order('created_at').last
+    owner.timeline_events.where(target: self).order('created_at').last
   end
 
   def latest_feedback(founder)
@@ -249,6 +201,7 @@ class Target < ApplicationRecord
   def grades_for_skills(founder)
     return unless verified?(founder)
     return if latest_linked_event(founder).timeline_event_grades.blank?
+
     latest_linked_event(founder).timeline_event_grades.each_with_object({}) do |te_grade, grades|
       grades[te_grade.skill_id] = te_grade.grade
     end

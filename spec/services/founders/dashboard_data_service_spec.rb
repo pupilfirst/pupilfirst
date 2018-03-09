@@ -9,100 +9,119 @@ describe Founders::DashboardDataService do
   let!(:level_3) { create :level, :three }
   let!(:startup) { create :startup, level: level_0 }
   let!(:founder) { create :founder, startup: startup }
-  let!(:target_group_0) { create :target_group, level: level_0, milestone: true }
-  let!(:target_group_1) { create :target_group, level: level_1, milestone: true }
-  let!(:target_group_2) { create :target_group, level: level_2, milestone: true }
-  let!(:level_0_vanilla_targets) { create_list :target, 2, target_group: target_group_0 }
-  let!(:level_1_vanilla_targets) { create_list :target, 2, target_group: target_group_1 }
-  let!(:level_2_vanilla_targets) { create_list :target, 2, target_group: target_group_2 }
-  let!(:level_0_chores) { create_list :target, 2, chore: true, target_group: target_group_0 }
-  let!(:level_1_chores) { create_list :target, 2, chore: true, target_group: target_group_1 }
-  let!(:level_2_chores) { create_list :target, 2, chore: true, target_group: target_group_2 }
-  let!(:level_0_sessions) { create_list :target, 2, session_at: Time.now, target_group: nil, level: level_0 }
-  let!(:level_1_sessions) { create_list :target, 2, session_at: Time.now, target_group: nil, level: level_1 }
-  let!(:level_2_sessions) { create_list :target, 2, session_at: Time.now, target_group: nil, level: level_2 }
-  let!(:level_3_sessions) { create_list :target, 2, session_at: Time.now, target_group: nil, level: level_3 }
+  let!(:track_1) { create :track }
+  let!(:track_2) { create :track }
+  let!(:target_group_l0_1) { create :target_group, level: level_0, milestone: true }
+  let!(:target_group_l0_2) { create :target_group, level: level_0 }
+  let!(:target_group_l1_1) { create :target_group, level: level_1, milestone: true, track: track_1 }
+  let!(:target_group_l1_2) { create :target_group, level: level_1, track: track_2 }
+  let!(:target_group_l2_1) { create :target_group, level: level_2, milestone: true, track: track_1 }
+  let!(:target_group_l2_2) { create :target_group, level: level_2, track: track_2 }
+  let!(:level_0_target) { create :target, target_group: target_group_l0_1 }
+  let!(:level_0_session) { create :target, session_at: 1.day.ago, target_group: target_group_l0_2 }
+  let!(:level_1_target) { create :target, target_group: target_group_l1_1 }
+  let!(:level_1_session) { create :target, session_at: 1.day.ago, target_group: target_group_l1_2 }
+  let!(:level_2_target) { create :target, target_group: target_group_l2_2 }
+  let!(:level_2_session) { create :target, session_at: 1.day.ago, target_group: target_group_l2_2 }
+  let!(:level_2_target_with_prerequisites) { create :target, target_group: target_group_l2_1, prerequisite_targets: [level_2_target, level_2_session] }
 
-  describe '#levels' do
-    context 'when the startup is in level 0' do
-      it 'responds with all targets in level 0' do
-        expect(subject.levels).to eq(level_details(level_0))
+  describe '#props' do
+    context 'when startup is in level 0' do
+      it 'restricts data to level 0' do
+        expected_target_groups = [
+          hash_including(target_group_l0_1.slice(target_group_fields).merge(level: { id: level_0.id })),
+          hash_including(target_group_l0_2.slice(target_group_fields).merge(level: { id: level_0.id }))
+        ]
+
+        expected_targets = [
+          hash_including(level_0_target.slice(target_fields).merge(additional_target_fields(level_0_target, target_group_l0_1))),
+          hash_including(level_0_session.slice(target_fields).merge(additional_target_fields(level_0_session, target_group_l0_2)))
+        ]
+
+        team_members = Faculty.team.all.as_json(only: %i[id name], methods: %i[image_url]).map do |faculty_fields|
+          hash_including(faculty_fields)
+        end
+
+        props = subject.props
+
+        expect(props.keys).to contain_exactly(:faculty, :levels, :targetGroups, :targets, :tracks)
+        expect(props[:faculty]).to contain_exactly(*team_members)
+        expect(props[:levels]).to contain_exactly(*level_fields(level_0, level_1, level_2, level_3))
+        expect(props[:targetGroups]).to contain_exactly(*expected_target_groups)
+        expect(props[:targets]).to contain_exactly(*expected_targets)
+        expect(props[:tracks]).to contain_exactly(*track_fields(track_1, track_2))
       end
     end
 
-    context 'when the startup is in a level n > 1' do
-      it 'responds with all targets in level 1 to n' do
-        startup.update!(level: level_2)
-        expect(subject.levels).to eq(level_details(level_1).merge(level_details(level_2)))
+    context 'when startup is in level N > 1' do
+      let(:startup) { create :startup, level: level_2 }
+
+      it 'leaves out data from level 0, and includes up to level N' do
+        expected_target_groups = [
+          hash_including(target_group_l1_1.slice(target_group_fields).merge(track: { id: track_1.id }, level: { id: level_1.id })),
+          hash_including(target_group_l1_2.slice(target_group_fields).merge(track: { id: track_2.id }, level: { id: level_1.id })),
+          hash_including(target_group_l2_1.slice(target_group_fields).merge(track: { id: track_1.id }, level: { id: level_2.id })),
+          hash_including(target_group_l2_2.slice(target_group_fields).merge(track: { id: track_2.id }, level: { id: level_2.id }))
+        ]
+
+        expected_targets = [
+          hash_including(level_1_target.slice(target_fields).merge(additional_target_fields(level_1_target, target_group_l1_1))),
+          hash_including(level_1_session.slice(target_fields).merge(additional_target_fields(level_1_session, target_group_l1_2))),
+          hash_including(level_2_target.slice(target_fields).merge(additional_target_fields(level_2_target, target_group_l2_2))),
+          hash_including(level_2_session.slice(target_fields).merge(additional_target_fields(level_2_session, target_group_l2_2))),
+          hash_including(level_2_target_with_prerequisites.slice(target_fields).merge(additional_target_fields(level_2_target_with_prerequisites, target_group_l2_1)).merge(prerequisite_fields(level_2_target_with_prerequisites)))
+        ]
+
+        team_members = Faculty.team.all.as_json(only: %i[id name], methods: %i[image_url]).map do |faculty_fields|
+          hash_including(faculty_fields)
+        end
+
+        props = subject.props
+
+        expect(props.keys).to contain_exactly(:faculty, :levels, :targetGroups, :targets, :tracks)
+        expect(props[:faculty]).to contain_exactly(*team_members)
+        expect(props[:levels]).to contain_exactly(*level_fields(level_1, level_2, level_3))
+        expect(props[:targetGroups]).to contain_exactly(*expected_target_groups)
+        expect(props[:targets]).to contain_exactly(*expected_targets)
+        expect(props[:tracks]).to contain_exactly(*track_fields(track_1, track_2))
       end
     end
   end
 
-  describe '#sessions' do
-    context 'when the startup is in level 0' do
-      it 'responds with all sessions in level 0' do
-        expected_session_details = level_0_sessions.map { |session| session_details(session.reload) }
-        expected_session_details = expected_session_details.sort_by { |e| e['id'] }
-        actual_sessions = subject.sessions.sort_by { |s| s['id'] }
-        expect(actual_sessions).to eq(expected_session_details)
-      end
-    end
-
-    context 'when the startup is in a level n > 1' do
-      it "responds with all sessions in level 1 to startup's maximum level" do
-        startup.update!(level: level_1, maximum_level: level_2)
-        expected_session_details = (level_1_sessions + level_2_sessions).map { |session| session_details(session.reload) }
-        expected_session_details = expected_session_details.sort_by { |e| e['id'] }
-        actual_sessions = subject.sessions.sort_by { |s| s['id'] }
-        expect(actual_sessions).to eq(expected_session_details)
-      end
+  def level_fields(*levels)
+    levels.map do |level|
+      hash_including(level.slice(:id, :name, :number))
     end
   end
 
-  def level_details(level)
-    {
-      level.number => {
-        name: level.name,
-        target_groups: level.target_groups.map { |target_group| target_group_details(target_group) }
-      }
+  def track_fields(*tracks)
+    tracks.map do |track|
+      hash_including(track.slice(:id, :name, :sort_index))
+    end
+  end
+
+  def prerequisite_fields(target)
+    { status: :unavailable, prerequisites: target.prerequisite_targets.map { |t| { id: t.id } } }
+  end
+
+  def target_group_fields
+    %i[id name description sort_index milestone]
+  end
+
+  def additional_target_fields(target, target_group)
+    fields = {
+      target_group: { id: target_group.id },
+      faculty: { id: target.faculty.id },
+      status: :pending,
+      prerequisites: []
     }
+
+    return fields if target.session_at.blank?
+
+    fields.merge(session_at: a_value_within(1.second).of(target.session_at))
   end
 
-  def target_group_details(target_group)
-    {
-      'id' => target_group.id,
-      'name' => target_group.name,
-      'description' => target_group.description,
-      'milestone' => target_group.milestone,
-      'targets' => target_group.targets.where.not(target_group_id: nil).order(:sort_index).map { |target| target_details(target) }
-    }
-  end
-
-  def target_details(target)
-    result = target.as_json(
-      only: subject.send(:target_fields),
-      methods: %i[has_rubric target_type target_type_description],
-      include: {
-        faculty: {
-          only: %i[id name],
-          methods: :image_url
-        }
-      }
-    )
-
-    # append more details
-    result['status'] = :pending
-    result['prerequisites'] = nil
-    result
-  end
-
-  def session_details(session)
-    result = target_details(session)
-
-    result.merge(
-      'level' => { 'number' => session.level.number },
-      'taggings' => [],
-      'session_by' => session.session_by
-    )
+  def target_fields
+    %i[id role title description completion_instructions resource_url slideshow_embed timeline_event_type_id days_to_complete points_earnable sort_index video_embed link_to_complete submittability archived youtube_video_id session_by call_to_action]
   end
 end

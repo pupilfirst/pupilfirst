@@ -1,4 +1,6 @@
 class TargetsController < ApplicationController
+  before_action :authenticate_founder!
+
   # GET /targets/:id/download_rubric
   def download_rubric
     target = Target.find(params[:id])
@@ -45,14 +47,6 @@ class TargetsController < ApplicationController
     render json: startup_feedback
   end
 
-  # GET /targets/:id/founder_statuses
-  def founder_statuses
-    target = Target.find(params[:id])
-    authorize target
-
-    render json: Targets::OverlayDetailsService.new(target, current_founder).founder_statuses
-  end
-
   # GET /targets/:id/details
   def details
     target = Target.find(params[:id])
@@ -61,12 +55,10 @@ class TargetsController < ApplicationController
     render json: Targets::OverlayDetailsService.new(target, current_founder).all_details
   end
 
-  # GET /targets/:id/auto_verify
-  # TODO: Convert this to a POST.
+  # POST /targets/:id/auto_verify
   def auto_verify
     target = Target.find(params[:id])
     Targets::AutoVerificationService.new(target, current_founder).auto_verify
-    flash[:success] = 'The target has been marked complete!'
-    redirect_to student_dashboard_path(from: 'auto_verify')
+    head :ok
   end
 end

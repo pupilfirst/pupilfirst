@@ -14,15 +14,18 @@ module Targets
       }
     end
 
+    private
+
     def founder_statuses
       return nil unless @target.founder_role?
 
-      @founder.startup.founders.not_exited.each_with_object([]) do |founder, statuses|
-        statuses << { founder.id => Targets::StatusService.new(@target, founder).status }
+      @founder.startup.founders.not_exited.map do |founder|
+        {
+          id: founder.id,
+          status: Targets::StatusService.new(@target, founder).status
+        }
       end
     end
-
-    private
 
     def latest_event_details
       return nil if latest_event.blank?

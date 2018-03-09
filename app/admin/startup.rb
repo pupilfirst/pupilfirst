@@ -104,7 +104,6 @@ ActiveAdmin.register Startup do
     column :product_name
     column :product_description
     column(:level) { |startup| startup.level.number }
-    column(:maximum_level) { |startup| startup.maximum_level.number }
     column(:timeline_link) { |startup| product_url(startup.id, startup.slug) }
     column :presentation_link
     column :product_video_link
@@ -222,7 +221,6 @@ ActiveAdmin.register Startup do
 
       row :level
       row :maximum_level
-      row :iteration
       row :timeline_updated_on
 
       row :tags do

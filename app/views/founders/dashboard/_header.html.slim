@@ -1,7 +1,9 @@
+- presenter = Founders::Dashboard::HeaderPresenter.new(self)
+
 .founder-dashboard-header__container
   .container
     .founder-dashboard-header__startup-profile
-      - if @startup.level_zero?
+      - if current_startup.level_zero?
         .founder-dashboard-header__product-details
           h1.founder-dashboard-header__welcome-title.font-semibold
             ' Welcome to SV.CO Admissions!
@@ -11,29 +13,29 @@
             ' Complete the tasks below to proceed.
       - else
         .mx-auto.founder-dashboard-header__startup-logo-container.d-none.d-md-flex
-          - if @startup.logo.present?
-            = image_tag "#{@startup.logo_url}", class: 'founder-dashboard-header__startup-logo'
+          - if current_startup.logo.present?
+            = image_tag "#{current_startup.logo_url}", class: 'founder-dashboard-header__startup-logo'
           - else
-            = @startup.identicon_logo
+            = presenter.identicon_logo
         .founder-dashboard-header__product-details
           h3.founder-dashboard-header__product-title.font-semibold
-            | #{@startup.product_name}
-          - if @startup.name.present?
+            | #{current_startup.product_name}
+          - if current_startup.name.present?
           .founder-dashboard__avatars.d-none.d-md-block
             .d-none.d-md-block
-              - @startup.founders.not_exited.each do |founder|
+              - current_startup.founders.not_exited.each do |founder|
                 - url = policy(founder).founder_profile? ? student_profile_path(founder.slug) : '#'
                 a.founder-dashboard__avatar-wrapper href=url
                   = avatar(founder.name, founder: founder)
             .d-sm-none.d-block
-              - if @startup.founders.count > 4
-                - @startup.founders.order(:id).limit(3).each do |founder|
+              - if current_startup.founders.count > 4
+                - current_startup.founders.order(:id).limit(3).each do |founder|
                   .founder-dashboard__avatar-wrapper
                     = avatar(founder.name, founder: founder, version: :thumb)
                 .founder-avatar-bubble.text-center.remaining-founders
                   span.remaining-founders-count
-                    | +#{@startup.founders.count - 3}
+                    | +#{current_startup.founders.count - 3}
               - else
-                - @startup.founders.each do |founder|
+                - current_startup.founders.each do |founder|
                   .founder-dashboard__avatar-wrapper
                     = avatar(founder.name, founder: founder, version: :thumb)

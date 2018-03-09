@@ -12,7 +12,6 @@ module Targets
         description: description,
         timeline_event_type: team_update,
         event_on: Time.zone.now,
-        iteration: @founder.startup.iteration,
         status: TimelineEvent::STATUS_VERIFIED
       )
     end

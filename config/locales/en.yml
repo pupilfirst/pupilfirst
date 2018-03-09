@@ -191,12 +191,9 @@ en:
     dashboard:
       tour:
         intro: Welcome to your personal dashboard! Your team's journey through this program will be showcased here.
-        toggle_bar: The program consists of targets and sessions. You complete these as you progress.
-        targets: This tab lists the targets that need to be completed based on the present stage of your team. As you progress, you will be assigned with new targets that will guide you through the journey.
-        sessions: A number of live and recorded sessions guide you as you progress.
+        toggle_bar: The program consists of multiple tracks. You complete these simultaneously as you progress. Use the tabs to switch between tracks.
         target_group: Your target groups will have all the targets listed along with its completion status.
         target: The target pane will have the name of the target and its completion status. On clicking the target, you will get detailed information on the target, the status and the target submission button.
-        target_details: Detailed information on the target and its completion status.
         target_status: This indicates the present status of the target.
         final_message: That&rsquo;s it for now. If you have any doubts, don&rsquo;t hesitate to contact the SV.CO team at help@sv.co.<br/><br/>Have fun!
       performance_descriptions:

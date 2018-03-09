@@ -5,17 +5,36 @@ export default class TargetsFilterOption extends React.Component {
   constructor(props) {
     super(props);
 
+    // Memoize some values.
+    this.level = this.loadLevel();
+
     this.handleClick = this.handleClick.bind(this);
   }
 
   handleClick() {
-    if (this.props.level <= this.props.currentLevel) {
-      this.props.pickFilterCB(this.props.level);
+    if (this.locked()) {
+      return;
+    }
+
+    if (this.level.id !== this.props.rootState.chosenLevelId) {
+      const trackIdsForLevel = this.props.getAvailableTrackIds(this.level.id);
+      this.props.setRootState({
+        chosenLevelId: this.level.id,
+        activeTrackId: trackIdsForLevel[0]
+      });
     }
   }
 
   locked() {
-    return this.props.level > this.props.currentLevel;
+    return this.level.number > this.props.rootProps.currentLevel.number;
+  }
+
+  loadLevel() {
+    let that = this;
+
+    return _.find(this.props.rootProps.levels, level => {
+      return level.id === that.props.levelId;
+    });
   }
 
   iconClasses() {
@@ -44,15 +63,16 @@ export default class TargetsFilterOption extends React.Component {
         <span className="filter-targets-dropdown__menu-item-icon">
           <i className={this.iconClasses()} />
         </span>
-        Level {this.props.level}: {this.props.name}
+        Level {this.level.number}: {this.level.name}
       </a>
     );
   }
 }
 
 TargetsFilterOption.propTypes = {
-  name: PropTypes.string,
-  level: PropTypes.number,
-  pickFilterCB: PropTypes.func,
-  currentLevel: PropTypes.number
+  levelId: PropTypes.number,
+  getAvailableTrackIds: PropTypes.func.isRequired,
+  rootProps: PropTypes.object.isRequired,
+  rootState: PropTypes.object.isRequired,
+  setRootState: PropTypes.func.isRequired
 };

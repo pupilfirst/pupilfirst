@@ -26,9 +26,8 @@ describe TargetsController do
 
   describe 'GET download_rubric' do
     it 'raises not found error when a founder is not signed in' do
-      expect do
-        get :download_rubric, params: { id: target.id }
-      end.to raise_error(ActionController::RoutingError)
+      get :download_rubric, params: { id: target.id }
+      expect(response).to redirect_to(new_user_session_path)
     end
 
     it 'redirects to the rubric URL when a founder is signed in' do
@@ -41,9 +40,8 @@ describe TargetsController do
   describe 'GET prerequisite_targets' do
     context 'founder is not signed in' do
       it 'raises not found error' do
-        expect do
-          get :prerequisite_targets, params: { id: target.id }
-        end.to raise_error(ActionController::RoutingError)
+        get :prerequisite_targets, params: { id: target.id }
+        expect(response).to redirect_to(new_user_session_path)
       end
     end
 
@@ -68,22 +66,6 @@ describe TargetsController do
           expect(JSON.parse(response.body)).to eq(pending_prerequisite_target.id.to_s => pending_prerequisite_target.title)
         end
       end
-    end
-  end
-
-  describe 'GET founder_statuses' do
-    it 'raises not found error when a founder is not signed in' do
-      expect do
-        get :founder_statuses, params: { id: target.id }
-      end.to raise_error(ActionController::RoutingError)
-    end
-
-    it 'responds with the founder statuses when a founder is signed in' do
-      sign_in startup.team_lead.user
-      cofounder = startup.founders.where.not(id: startup.team_lead.id).first
-      statuses = [{ startup.team_lead.id.to_s => Target::STATUS_COMPLETE.to_s }, { cofounder.id.to_s => Target::STATUS_PENDING.to_s }]
-      get :founder_statuses, params: { id: founder_target.id }
-      expect(JSON.parse(response.body)).to match_array(statuses)
     end
   end
 

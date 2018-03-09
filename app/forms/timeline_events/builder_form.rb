@@ -59,8 +59,7 @@ module TimelineEvents
           event_on: Time.zone.parse(event_on),
           links: parsed_links,
           image: image,
-          share_on_facebook: share_on_facebook,
-          iteration: founder.startup.iteration
+          share_on_facebook: share_on_facebook
         )
 
         create_files(timeline_event)

@@ -50,7 +50,7 @@ after 'development:startups', 'development:target_groups', 'development:targets'
   ).update!(improvement_of: old_event)
 
 
-  # Complete all Level 1 and Level 2 targets for 'Avengers' startup on their first iteration.
+  # Complete all Level 1 and Level 2 targets for 'Avengers' startup.
   [1, 2].each do |level_number|
     Target.joins(target_group: :level).where(levels: { number: level_number }).each do |target|
       score = [1.0, 1.5, 2.0, 2.5, 3.0].sample

@@ -36,7 +36,7 @@ feature 'Office Hour' do
     let(:startup) { create :startup, :subscription_active }
     let(:founder) { startup.founders.where.not(id: startup.team_lead.id).first }
 
-    scenario 'Non-admin founder visits faculty page' do
+    scenario 'Non-team-lead visits faculty page' do
       sign_in_user(founder.user, referer: coaches_index_path)
 
       # Two of the three cards should have a disabled connect button with a special message for non-admins.
@@ -46,11 +46,11 @@ feature 'Office Hour' do
       expect(page).to have_selector(".disabled.connect-link[title='To gain access to this coach, you need to reach Level 2!']", count: 1)
     end
 
-    context 'Founder is admin of startup' do
+    context 'Founder is team lead of startup' do
       let(:founder) { startup.team_lead }
 
-      context "Startup's level maxed out at two" do
-        let(:startup) { create :startup, :subscription_active, maximum_level: level_two }
+      context "Startup's level is two" do
+        let(:startup) { create :startup, :subscription_active, level: level_two }
 
         scenario 'Founder visits faculty page' do
           sign_in_user(founder.user, referer: coaches_index_path)

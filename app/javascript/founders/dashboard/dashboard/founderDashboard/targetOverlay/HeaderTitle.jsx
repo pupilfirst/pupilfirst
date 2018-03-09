@@ -4,10 +4,14 @@ import PropTypes from "prop-types";
 export default class HeaderTitle extends React.Component {
   targetType() {
     return (
-      <span className="target-overlay-header__type-tag">
-        {this.props.target.target_type_description}:
-      </span>
+      !this.props.hasSingleFounder && (
+        <span className="target-overlay-header__type-tag">{this.role()}:</span>
+      )
     );
+  }
+
+  role() {
+    return this.props.target.role === "founder" ? "Individual" : "Team";
   }
 
   pointsEarnable() {
@@ -103,10 +107,10 @@ export default class HeaderTitle extends React.Component {
           </h6>
 
           {/*<div className="target-overlay-header__headline-info">*/}
-            {/*<div className="target-overlay-header__info-subtext font-regular">*/}
-              {/*{this.targetDateString()}*/}
-              {/*{this.pointsEarnable()}*/}
-            {/*</div>*/}
+          {/*<div className="target-overlay-header__info-subtext font-regular">*/}
+          {/*{this.targetDateString()}*/}
+          {/*{this.pointsEarnable()}*/}
+          {/*</div>*/}
           {/*</div>*/}
         </div>
       </div>
@@ -116,5 +120,6 @@ export default class HeaderTitle extends React.Component {
 
 HeaderTitle.propTypes = {
   target: PropTypes.object,
-  iconPaths: PropTypes.object
+  iconPaths: PropTypes.object,
+  hasSingleFounder: PropTypes.bool
 };

@@ -11,15 +11,9 @@ describe Targets::OverlayDetailsService do
   let(:faculty) { create :faculty }
   let(:faculty_feedback) { create :startup_feedback, timeline_event: timeline_event, faculty: faculty, startup: startup }
 
-  describe '#founder_statuses' do
-    it 'returns status for each founder for a founder target' do
-      expect(subject.founder_statuses).to match_array([{ founder_1.id => :complete }, { founder_2.id => :pending }])
-    end
-  end
-
   describe '#all_details' do
     it 'returns the founder statuses, latest event and latest feedback' do
-      founder_statuses = [{ founder_1.id => :complete }, { founder_2.id => :pending }]
+      founder_statuses = [{ id: founder_1.id, status: :complete }, { id: founder_2.id, status: :pending }]
 
       event = {
         description: timeline_event.description,

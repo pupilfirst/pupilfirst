@@ -1,13 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 import TargetsFilter from "./TargetsFilter";
-import SessionsTagSelect from "./SessionsTagSelect";
 
 export default class ActionBar extends React.Component {
   constructor(props) {
     super(props);
 
     this.openTimelineBuilder = this.openTimelineBuilder.bind(this);
+    this.startTour = this.startTour.bind(this);
   }
 
   openTimelineBuilder() {
@@ -18,7 +18,14 @@ export default class ActionBar extends React.Component {
         $(".js-founder-dashboard__action-bar-add-event-button").popover("hide");
       }, 3000);
     } else {
-      this.props.openTimelineBuilderCB();
+      // Open up the timeline builder without any target or timeline event type preselected.
+      this.props.setRootState({
+        timelineBuilderVisible: true,
+        timelineBuilderParams: {
+          targetId: null,
+          selectedTimelineEventTypeId: null
+        }
+      });
     }
   }
 
@@ -26,10 +33,16 @@ export default class ActionBar extends React.Component {
     if (this.props.currentLevel == 0) {
       $(".js-founder-dashboard__action-bar-add-event-button").popover({
         title: "Feature Locked!",
-        content: "This feature is not available for level zero founders.",
+        content: "This feature is not available during admission.",
         html: true,
         placement: "bottom",
         trigger: "manual"
+      });
+    }
+
+    if (this.props.rootState.tourDashboard) {
+      this.props.setRootState({ tourDashboard: false }, () => {
+        this.startTour();
       });
     }
   }
@@ -38,25 +51,52 @@ export default class ActionBar extends React.Component {
     $(".js-founder-dashboard__action-bar-add-event-button").popover("dispose");
   }
 
+  startTour() {
+    const startupShowTour = $("#dashboard-show-tour");
+    let tour = introJs();
+
+    tour.setOptions({
+      skipLabel: "Close",
+      steps: [
+        {
+          element: $(".founder-dashboard-header__container")[0],
+          intro: startupShowTour.data("intro")
+        },
+        {
+          element: $(".founder-dashboard-togglebar__toggle-group")[0],
+          intro: startupShowTour.data("toggleBar")
+        },
+        {
+          element: $(".founder-dashboard-target-group__box")[0],
+          intro: startupShowTour.data("targetGroup")
+        },
+        {
+          element: $(".founder-dashboard-target-header__container")[0],
+          intro: startupShowTour.data("target")
+        },
+        {
+          element: $(".founder-dashboard-target-status-badge__container")[0],
+          intro: startupShowTour.data("targetStatus")
+        },
+        {
+          intro: startupShowTour.data("finalMessage")
+        }
+      ]
+    });
+
+    tour.start();
+  }
+
   render() {
     return (
-      <div className="founder-dashboard-actionbar__container px-2 mx-auto">
+      <div className="founder-dashboard-actionbar__container px-2 mx-auto pt-4 pt-md-5">
         <div className="founder-dashboard-actionbar__box d-flex justify-content-between">
-          {this.props.filter === "targets" && (
-            <TargetsFilter
-              levels={this.props.filterData.levels}
-              pickFilterCB={this.props.pickFilterCB}
-              chosenLevel={this.props.filterData.chosenLevel}
-              currentLevel={this.props.currentLevel}
-            />
-          )}
-
-          {this.props.filter === "sessions" && (
-            <SessionsTagSelect
-              tags={this.props.filterData.tags}
-              chooseTagsCB={this.props.pickFilterCB}
-            />
-          )}
+          <TargetsFilter
+            getAvailableTrackIds={this.props.getAvailableTrackIds}
+            rootProps={this.props.rootProps}
+            rootState={this.props.rootState}
+            setRootState={this.props.setRootState}
+          />
 
           <div className="d-flex">
             <button
@@ -78,6 +118,7 @@ export default class ActionBar extends React.Component {
 
               <div className="dropdown-menu filter-targets-dropdown__menu dropdown-menu-right">
                 <a
+                  onClick={this.startTour}
                   id="filter-targets-dropdown__tour-button"
                   className="dropdown-item filter-targets-dropdown__menu-item"
                   role="button"
@@ -94,9 +135,8 @@ export default class ActionBar extends React.Component {
 }
 
 ActionBar.propTypes = {
-  filter: PropTypes.string,
-  filterData: PropTypes.object,
-  pickFilterCB: PropTypes.func,
-  openTimelineBuilderCB: PropTypes.func,
-  currentLevel: PropTypes.number
+  getAvailableTrackIds: PropTypes.func.isRequired,
+  rootProps: PropTypes.object.isRequired,
+  rootState: PropTypes.object.isRequired,
+  setRootState: PropTypes.func.isRequired
 };

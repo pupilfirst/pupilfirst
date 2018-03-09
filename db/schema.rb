@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180213092607) do
+ActiveRecord::Schema.define(version: 20180221070603) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -320,6 +320,7 @@ ActiveRecord::Schema.define(version: 20180213092607) do
     t.integer "number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "unlock_on"
     t.index ["number"], name: "index_levels_on_number"
   end
 
@@ -564,14 +565,12 @@ ActiveRecord::Schema.define(version: 20180213092607) do
     t.string "product_video_link"
     t.boolean "dropped_out", default: false
     t.integer "level_id"
-    t.integer "iteration", default: 1
     t.date "program_started_on"
     t.boolean "agreements_verified"
     t.string "courier_name"
     t.string "courier_number"
     t.string "partnership_deed"
     t.string "payment_reference"
-    t.integer "maximum_level_id"
     t.string "admission_stage"
     t.date "timeline_updated_on"
     t.datetime "admission_stage_updated_at"
@@ -582,7 +581,6 @@ ActiveRecord::Schema.define(version: 20180213092607) do
     t.bigint "billing_state_id"
     t.index ["billing_state_id"], name: "index_startups_on_billing_state_id"
     t.index ["level_id"], name: "index_startups_on_level_id"
-    t.index ["maximum_level_id"], name: "index_startups_on_maximum_level_id"
     t.index ["slug"], name: "index_startups_on_slug", unique: true
     t.index ["stage"], name: "index_startups_on_stage"
     t.index ["team_lead_id"], name: "index_startups_on_team_lead_id"
@@ -627,8 +625,10 @@ ActiveRecord::Schema.define(version: 20180213092607) do
     t.integer "sort_index"
     t.boolean "milestone"
     t.integer "level_id"
+    t.bigint "track_id"
     t.index ["level_id"], name: "index_target_groups_on_level_id"
     t.index ["sort_index"], name: "index_target_groups_on_sort_index"
+    t.index ["track_id"], name: "index_target_groups_on_track_id"
   end
 
   create_table "target_prerequisites", id: :serial, force: :cascade do |t|
@@ -669,7 +669,6 @@ ActiveRecord::Schema.define(version: 20180213092607) do
     t.integer "points_earnable"
     t.integer "sort_index", default: 999
     t.datetime "session_at"
-    t.boolean "chore", default: false
     t.text "video_embed"
     t.datetime "last_session_at"
     t.integer "level_id"
@@ -684,7 +683,6 @@ ActiveRecord::Schema.define(version: 20180213092607) do
     t.string "session_by"
     t.string "call_to_action"
     t.index ["archived"], name: "index_targets_on_archived"
-    t.index ["chore"], name: "index_targets_on_chore"
     t.index ["faculty_id"], name: "index_targets_on_faculty_id"
     t.index ["key"], name: "index_targets_on_key"
     t.index ["level_id"], name: "index_targets_on_level_id"
@@ -741,13 +739,18 @@ ActiveRecord::Schema.define(version: 20180213092607) do
     t.integer "improved_timeline_event_id"
     t.integer "target_id"
     t.boolean "share_on_facebook", default: false
-    t.integer "iteration", default: 1, null: false
     t.decimal "score", precision: 2, scale: 1
     t.index ["founder_id"], name: "index_timeline_events_on_founder_id"
-    t.index ["iteration"], name: "index_timeline_events_on_iteration"
     t.index ["startup_id"], name: "index_timeline_events_on_startup_id"
     t.index ["status"], name: "index_timeline_events_on_status"
     t.index ["timeline_event_type_id"], name: "index_timeline_events_on_timeline_event_type_id"
+  end
+
+  create_table "tracks", force: :cascade do |t|
+    t.string "name"
+    t.integer "sort_index", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "universities", id: :serial, force: :cascade do |t|
@@ -842,9 +845,9 @@ ActiveRecord::Schema.define(version: 20180213092607) do
   add_foreign_key "startup_feedback", "timeline_events"
   add_foreign_key "startups", "founders", column: "team_lead_id"
   add_foreign_key "startups", "levels"
-  add_foreign_key "startups", "levels", column: "maximum_level_id"
   add_foreign_key "startups", "states", column: "billing_state_id"
   add_foreign_key "target_groups", "levels"
+  add_foreign_key "target_groups", "tracks"
   add_foreign_key "target_skills", "skills"
   add_foreign_key "target_skills", "targets"
   add_foreign_key "timeline_event_files", "timeline_events"

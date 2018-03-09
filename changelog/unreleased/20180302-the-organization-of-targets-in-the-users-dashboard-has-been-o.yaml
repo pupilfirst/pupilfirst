@@ -1,0 +1,13 @@
+---
+timestamp: '2018-03-02T08:18:38Z'
+title: The organization of targets in the user's dashboard has been overhauled. The tabs
+  at the top of the page used to switch between targets (tasks), and sessions
+  (one-to-many video conference events). These tabs now switch between _tracks_ - a brand
+  new grouping of targets **and** sessions that are intended to serve a particular
+  purpose. We'll be working on grouping program content into tracks over the next couple
+  of months.
+trello: https://trello.com/c/oRryvfej
+private: false
+description: This is a major change. Many systems related to how targets are organized
+  have been rewritten to allow for _tracks_ of targets. See Trello card for more details.
+category: feature

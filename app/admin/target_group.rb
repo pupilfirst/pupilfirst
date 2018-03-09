@@ -2,16 +2,20 @@ ActiveAdmin.register TargetGroup do
   include DisableIntercom
   menu parent: 'Targets'
 
-  permit_params :name, :description, :sort_index, :level_id, :milestone
+  permit_params :name, :description, :sort_index, :level_id, :milestone, :track_id
 
   filter :level
   filter :name, as: :string
   filter :description, as: :string
   filter :milestone
+  filter :track
+
+  scope :all
+  scope('No Track') { |scope| scope.where(track: nil) }
 
   controller do
     def scoped_collection
-      super.includes :level
+      super.includes :level, :track
     end
   end
 
@@ -19,10 +23,10 @@ ActiveAdmin.register TargetGroup do
     selectable_column
 
     column :level
+    column :track
     column :milestone
     column :sort_index
     column :name
-    column :description
 
     actions
   end

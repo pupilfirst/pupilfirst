@@ -30,6 +30,9 @@ html lang='en'
       noscript
         iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N2LS39W" height="0" width="0" style="display:none;visibility:hidden"
 
+    - flash.each do |name, message|
+      = content_tag :div, message, class: 'd-none'
+
     section#header.header.home-header
       - if @pretender
         == render 'layouts/pretender'

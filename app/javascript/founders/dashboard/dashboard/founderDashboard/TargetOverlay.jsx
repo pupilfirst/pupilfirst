@@ -1,11 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
-import ContentBlock from './targetOverlay/ContentBlock'
-import FounderStatusPanel from './targetOverlay/FounderStatusPanel'
-import HeaderTitle from './targetOverlay/HeaderTitle'
-import StatusBadgeBar from './targetOverlay/StatusBadgeBar'
-import SubmitButton from './targetOverlay/SubmitButton'
-import TimelineEventPanel from './targetOverlay/TimelineEventPanel'
+import ContentBlock from "./targetOverlay/ContentBlock";
+import FounderStatusPanel from "./targetOverlay/FounderStatusPanel";
+import HeaderTitle from "./targetOverlay/HeaderTitle";
+import StatusBadgeBar from "./targetOverlay/StatusBadgeBar";
+import SubmitButton from "./targetOverlay/SubmitButton";
+import TimelineEventPanel from "./targetOverlay/TimelineEventPanel";
 import FacultyBlock from "./targetOverlay/FacultyBlock";
 
 export default class TargetOverlay extends React.Component {
@@ -13,21 +13,35 @@ export default class TargetOverlay extends React.Component {
     super(props);
     this.state = _.merge(
       { ...props.target },
-      { latestEvent: null, latestFeedback: null, linkedResources: null }
+      {
+        latestEvent: null,
+        latestFeedback: null,
+        linkedResources: null,
+        founderStatuses: null
+      }
     );
 
     this.updateDetails = this.updateDetails.bind(this);
     this.openTimelineBuilder = this.openTimelineBuilder.bind(this);
+    this.completeTarget = this.completeTarget.bind(this);
   }
 
   componentDidMount() {
+    this.reloadDetails();
+    document.body.classList.add("scroll-lock");
+  }
+
+  target() {
+    return _.find(this.props.rootState.targets, ["id", this.props.targetId]);
+  }
+
+  reloadDetails() {
     let that = this;
+
     $.ajax({
-      url: "/targets/" + that.props.target.id + "/details",
+      url: "/targets/" + that.props.targetId + "/details",
       success: that.updateDetails
     });
-
-    document.body.classList.add("scroll-lock");
   }
 
   componentWillUnmount() {
@@ -43,22 +57,23 @@ export default class TargetOverlay extends React.Component {
   }
 
   isNotSubmittable() {
-    return this.props.target.submittability === "not_submittable";
+    return this.target().submittability === "not_submittable";
   }
 
   singleSubmissionComplete() {
     return (
-      this.props.target.submittability === "submittable_once" &&
-      !this.isPending()
+      ["submittable_once", "auto_verify"].includes(
+        this.target().submittability
+      ) && !this.isPending()
     );
   }
 
   submissionBlocked() {
-    return ["unavailable", "submitted"].indexOf(this.props.target.status) != -1;
+    return ["unavailable", "submitted"].includes(this.target().status);
   }
 
   isPending() {
-    return this.props.target.status === "pending";
+    return this.target().status === "pending";
   }
 
   openTimelineBuilder() {
@@ -73,11 +88,27 @@ export default class TargetOverlay extends React.Component {
     }
   }
 
+  completeTarget() {
+    const updatedTargets = _.cloneDeep(this.props.rootState.targets);
+
+    const targetIndex = _.findIndex(updatedTargets, [
+      "id",
+      this.props.targetId
+    ]);
+
+    updatedTargets[targetIndex].status = "complete";
+    const that = this;
+    this.props.setRootState({ targets: updatedTargets }, () => {
+      that.reloadDetails();
+    });
+  }
+
   updateDetails(response) {
     this.setState({
       latestEvent: response.latestEvent,
       latestFeedback: response.latestFeedback,
-      linkedResources: response.linkedResources
+      linkedResources: response.linkedResources,
+      founderStatuses: response.founderStatuses
     });
   }
 
@@ -101,30 +132,37 @@ export default class TargetOverlay extends React.Component {
             <div className="target-overlay__header d-flex align-items-center justify-content-between">
               <HeaderTitle
                 iconPaths={this.props.iconPaths}
-                target={this.props.target}
+                target={this.target()}
+                hasSingleFounder={this.props.hasSingleFounder}
               />
               <div className="d-none d-md-block">
                 {this.isSubmittable() && (
                   <SubmitButton
-                    target={this.props.target}
+                    rootProps={this.props.rootProps}
+                    completeTargetCB={this.completeTarget}
+                    target={this.target()}
                     openTimelineBuilderCB={this.props.openTimelineBuilderCB}
                   />
                 )}
               </div>
             </div>
             <div className="target-overlay__status-badge-block">
-              <StatusBadgeBar target={this.props.target} />
+              <StatusBadgeBar target={this.target()} />
             </div>
             <div className="target-overlay__content-wrapper clearfix">
               <div className="col-md-8 target-overlay__content-leftbar">
                 <ContentBlock
+                  rootProps={this.props.rootProps}
                   iconPaths={this.props.iconPaths}
-                  target={this.props.target}
+                  target={this.target()}
                   linkedResources={this.state.linkedResources}
                 />
               </div>
               <div className="col-md-4 target-overlay__content-rightbar">
-                <FacultyBlock target={this.props.target}/>
+                <FacultyBlock
+                  rootProps={this.props.rootProps}
+                  target={this.target()}
+                />
 
                 {this.state.latestEvent && (
                   <TimelineEventPanel
@@ -133,17 +171,19 @@ export default class TargetOverlay extends React.Component {
                   />
                 )}
 
-                {this.props.target.role === "founder" && (
-                  <div className="mt-2">
-                    <h5 className="target-overaly__status-title font-semibold">
-                      Completion Status:
-                    </h5>
-                    <FounderStatusPanel
-                      founderDetails={this.props.founderDetails}
-                      targetId={this.props.target.id}
-                    />
-                  </div>
-                )}
+                {this.target().role === "founder" &&
+                  !this.props.hasSingleFounder && (
+                    <div className="mt-2">
+                      <h5 className="target-overaly__status-title font-semibold">
+                        Completion Status:
+                      </h5>
+                      <FounderStatusPanel
+                        founderDetails={this.props.founderDetails}
+                        founderStatuses={this.state.founderStatuses}
+                        targetId={this.targetId}
+                      />
+                    </div>
+                  )}
               </div>
             </div>
           </div>
@@ -166,7 +206,9 @@ export default class TargetOverlay extends React.Component {
           <div className="target-overlay__mobile-submit-button-container pull-right pr-3">
             {this.isSubmittable() && (
               <SubmitButton
-                target={this.props.target}
+                rootProps={this.props.rootProps}
+                completeTargetCB={this.completeTarget}
+                target={this.target()}
                 openTimelineBuilderCB={this.props.openTimelineBuilderCB}
               />
             )}
@@ -178,9 +220,13 @@ export default class TargetOverlay extends React.Component {
 }
 
 TargetOverlay.propTypes = {
+  rootProps: PropTypes.object.isRequired,
+  rootState: PropTypes.object.isRequired,
+  setRootState: PropTypes.func.isRequired,
   target: PropTypes.object,
   openTimelineBuilderCB: PropTypes.func,
   founderDetails: PropTypes.array,
   closeCB: PropTypes.func,
-  iconPaths: PropTypes.object
+  iconPaths: PropTypes.object,
+  hasSingleFounder: PropTypes.bool
 };

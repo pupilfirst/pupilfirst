@@ -8,7 +8,6 @@ FactoryBot.define do
     end
 
     level { create :level, :zero }
-    maximum_level { level }
   end
 
   factory :startup do
@@ -18,9 +17,7 @@ FactoryBot.define do
     address { Faker::Lorem.words(6).join(' ') }
     website { Faker::Internet.domain_name }
     email { Faker::Internet.email }
-    iteration 1
     level { create :level, :one }
-    maximum_level { level }
     program_started_on { rand(8.weeks).seconds.ago }
 
     after(:build) do |startup|

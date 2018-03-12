@@ -58,7 +58,7 @@ ActiveAdmin.register Target do
     if target.submittability != Target::SUBMITTABILITY_AUTO_VERIFY && target.timeline_events.present?
       div do
         table_for target.timeline_events.includes(:timeline_event_type).where(timeline_events: { created_at: 3.months.ago..Time.now }) do
-          caption 'Linked Timeline Events'
+          caption 'Linked Timeline Events (up to 3 months ago)'
 
           column 'Timeline Event' do |timeline_event|
             a href: admin_timeline_event_path(timeline_event) do

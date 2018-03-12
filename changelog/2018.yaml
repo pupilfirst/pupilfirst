@@ -1,5 +1,65 @@
 ---
 changelog:
+- timestamp: '2018-03-12T06:22:25Z'
+  changes:
+  - timestamp: '2018-03-12T06:22:19Z'
+    title: Removed display of linked timeline events on admin target show page, for
+      auto-verified targets.
+    trello: https://trello.com/c/ZnPQ8b5U
+    private: true
+    description: This also restricts the results to max 3 months ago to limit numbers.
+    category: ui
+  - timestamp: '2018-03-08T07:03:31Z'
+    title: Updated bootstrap to stable v4.0 release.
+    trello: https://trello.com/c/sDJ7tyhB
+    private: true
+  - timestamp: '2018-03-02T08:50:12Z'
+    title: Simplified the process of picking the date for a timeline event.
+    trello: https://trello.com/c/rlcLcMgz
+    private: false
+    description: This moves date picker out of the drawer and renders it as a popup
+      instead.
+    category: ui
+  - timestamp: '2018-03-02T08:38:46Z'
+    title: Implemented AJAX call for target auto-verification, added a new value for
+      submitablity - auto_verify, and replaced the existing GET method for target
+      auto-verification.
+    trello: https://trello.com/c/ax5TJEoH
+    private: true
+  - timestamp: '2018-03-02T08:18:38Z'
+    title: The organization of targets in the user's dashboard has been overhauled.
+      The tabs at the top of the page used to switch between targets (tasks), and
+      sessions (one-to-many video conference events). These tabs now switch between
+      _tracks_ - a brand new grouping of targets **and** sessions that are intended
+      to serve a particular purpose. We'll be working on grouping program content
+      into tracks over the next couple of months.
+    trello: https://trello.com/c/oRryvfej
+    private: false
+    description: This is a major change. Many systems related to how targets are organized
+      have been rewritten to allow for _tracks_ of targets. See Trello card for more
+      details.
+    category: feature
+  - timestamp: '2018-02-27T09:59:12Z'
+    title: We now have _coaches_, not _faculty_. The _faculty_ page has been replaced
+      with a _coaches_ page.
+    trello: https://trello.com/c/d34ppV3q
+    private: true
+    description: The coaches page has two tabs - developer coaches and visiting coaches.
+      The alumni list will be displayed on a dedicated alumni page later. The team
+      and advisory board members will be moved to our about page
+    category: feature
+  - timestamp: '2018-02-20T07:21:37Z'
+    title: Content on the home-page has been tweaked - still focused on the developer
+      program.
+    trello: https://trello.com/c/Z0Ke7icd
+    private: true
+    category: content
+  - timestamp: '2018-02-20T06:45:33Z'
+    title: The content of the scoresheet (PDF) displayed after a target has been reviewed
+      has been tweaked to improve readability.
+    trello: https://trello.com/c/Oh5ASEoQ
+    private: false
+    category: ui
 - timestamp: '2018-02-19T09:04:02Z'
   changes:
   - timestamp: '2018-02-19T08:35:19Z'

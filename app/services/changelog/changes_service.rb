@@ -54,7 +54,7 @@ module Changelog
       changes = release['changes'].each_with_object(template) do |change, hash|
         next if change['private'] && !@show_private
 
-        entry = { title: change['title'] }
+        entry = { title: change['title'], private: change['private'] }
 
         if @show_private
           entry[:description] = change['description'] if change['description'].present?

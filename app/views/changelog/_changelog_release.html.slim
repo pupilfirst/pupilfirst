@@ -6,6 +6,9 @@ h3 = release[:week_title]
   ul
     - changes.each do |change|
       li
+        - if change[:private]
+          span.badge.badge-warning PRIVATE
+
         span == Kramdown::Document.new(change[:title]).to_html
 
         - if change[:description].present?

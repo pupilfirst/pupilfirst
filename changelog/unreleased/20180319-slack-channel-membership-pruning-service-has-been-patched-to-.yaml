@@ -1,7 +1,0 @@
----
-timestamp: '2018-03-19T07:40:04Z'
-title: Slack channel membership pruning service has been patched to avoid going over
-  Slack's API limits.
-trello: "https://trello.com/c/NN6IzcHt"
-private: true
-category: bugfix

@@ -48,7 +48,13 @@ module PublicSlack
     end
 
     def remove_expired_founders(group_id)
-      expired_founders.each { |founder| remove_from_group(group_id, founder) }
+      expired_founders.each do |founder|
+        remove_from_group(group_id, founder)
+
+        # Sleep for half a second to avoid overloading Slack's API limits.
+        sleep 0.5 unless Rails.env.test?
+      end
+
       notify_removal_on_slack(group_id)
     end
 

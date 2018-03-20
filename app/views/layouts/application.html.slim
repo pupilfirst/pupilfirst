@@ -31,14 +31,14 @@ html lang='en'
     - flash.each do |name, message|
       = content_tag :div, message, class: 'd-none'
 
-    - unless @hide_layout_header
-      - if @sitewide_notice
-        .sitewide-notice
-          .container
-            p == yield :sitewide_notice
+    - if @sitewide_notice
+      .sitewide-notice
+        .container
+          p == yield :sitewide_notice
       == render 'layouts/pretender' if @pretender
       == render 'layouts/pending_payment' if show_pending_payment_notice
 
+    - unless @hide_layout_header
       section#header.header
         .container
           nav.navbar.navbar-expand-lg.navbar-light.navbar-container

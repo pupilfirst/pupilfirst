@@ -1,0 +1,7 @@
+---
+timestamp: '2018-03-20T11:06:24Z'
+title: Redirected home and apply page to /fb and hide links to other pages.
+trello: https://trello.com/c/TKTWJ1cJ
+private: true
+description: This also adds a header message to the FB page after redirection.
+category: content

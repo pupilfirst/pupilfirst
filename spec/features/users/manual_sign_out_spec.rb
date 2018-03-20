@@ -7,6 +7,8 @@ feature 'Manual User Sign Out' do
   let(:user) { startup.team_lead.user }
 
   scenario 'active user session is interrupted by the setting of the flag' do
+    pending 'Apply page is redirected to /fb'
+
     # Log in the user.
     visit user_token_url(token: user.login_token, referer: edit_product_path)
 
@@ -44,6 +46,8 @@ feature 'Manual User Sign Out' do
     end
 
     scenario 'user signs in as usual' do
+      pending 'Apply page is redirected to /fb'
+
       visit user_token_url(token: user.login_token, referer: edit_product_path)
 
       expect(page).to have_content('Edit your team profile')

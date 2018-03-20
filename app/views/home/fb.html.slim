@@ -1,6 +1,10 @@
 == content_for :head do
   == javascript_pack_tag 'home/fb', 'data-turbolinks-track': 'reload'
 
+- content_for :sitewide_notice do
+  ' We have indefinitely suspended the commencement of the batch of SV.CO School of Internet Products.
+  == link_to 'Read more here', 'https://blog.sv.co/update-on-sv-co-school-of-internet-products-64744c812868', class: 'btn btn-sm', target: '_blank'
+
 #home__fb
 
 .fb-landing__header
@@ -74,16 +78,20 @@
     .row.pb-4.justify-content-md-center
       .col-md-5.pb-4
         = image_tag 'shared/logo-color.svg', class: 'fb-landing__partners-logo-img img-fluid', alt: 'SV.CO Logo'
-        p.fb-landing__content-p.my-2
+        p.fb-landing__content-p.mt-2
           ' Startup Village Collective (SV.CO) is a group of engineers,artists,
           ' designers, scientists, technology founders, organisations, governments
           ' (city, state, national and international) who have come together with
           ' a mission to build a world class learning environment on the Internet
           | for students to build products.
-        p.fb-landing__content-p
+        p.fb-landing__content-p.mt-2
           ' Teams with commercial success join startup incubators, accelerators,
           ' angel funds and teams with engineering success get great jobs in
           | startups or go for higher studies.
+        p.fb-landing__content-p.mt-3
+          a.btn.btn-secondary href=about_path target="_blank"
+            i.fa.fa-external-link
+            | &nbsp;Learn more about SV.CO
       .col-md-5.pb-4
         = image_tag 'home/index/sv-partner-facebook.svg', class: 'fb-landing__partners-logo-img img-fluid', alt: 'Facebook Logo'
         p.fb-landing__content-p.my-2

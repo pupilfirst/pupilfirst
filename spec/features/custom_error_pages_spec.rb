@@ -9,9 +9,9 @@ feature 'Custom Error Pages' do
   end
 
   scenario 'User visits page which raises an error' do
-    allow_any_instance_of(HomeController).to receive(:index).and_raise(ArgumentError)
+    allow_any_instance_of(AboutController).to receive(:index).and_raise(ArgumentError)
 
-    visit root_path
+    visit about_path
 
     expect(page).to have_text("We're sorry, but something went wrong.")
     expect(page).to have_text('This could be because SV.CO is under active development!')

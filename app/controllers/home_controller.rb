@@ -17,6 +17,7 @@ class HomeController < ApplicationController
   def fb
     @skip_container = true
     @hide_layout_header = true
+    @sitewide_notice = true if params[:redirect_from].in?(%w[home apply])
     render layout: 'application'
   end
 

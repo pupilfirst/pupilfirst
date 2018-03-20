@@ -136,9 +136,11 @@ Rails.application.routes.draw do
     post 'contact'
   end
 
-  get 'join', to: redirect('/apply')
-  get 'apply', to: 'admissions#apply'
-  post 'apply', to: 'admissions#register'
+  # get 'join', to: redirect('/apply')
+  # get 'apply', to: 'admissions#apply'
+  # post 'apply', to: 'admissions#register'
+  get 'join', to: redirect('/fb?redirect_from=apply')
+  get 'apply', to: redirect('/fb?redirect_from=apply')
 
   scope 'admissions', as: 'admissions', controller: 'admissions' do
     get 'screening'
@@ -183,7 +185,8 @@ Rails.application.routes.draw do
   # Facebook School of Innovation at SV.CO landing page
   get 'fb', to: 'home#fb'
 
-  root 'home#index'
+  # root 'home#index'
+  root to: redirect('/fb?redirect_from=home')
 
   # /slack redirected to /about/slack
   get '/slack', to: redirect('/about/slack')

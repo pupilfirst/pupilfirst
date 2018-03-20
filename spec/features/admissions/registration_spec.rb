@@ -13,6 +13,8 @@ feature 'Founder Registration' do
     let(:founder) { startup.team_lead }
 
     scenario 'User is blocked from registering again', js: true do
+      pending 'Apply page is redirected to /fb'
+
       visit apply_path
 
       expect(page).to have_selector('#new_founders_registration')
@@ -31,6 +33,8 @@ feature 'Founder Registration' do
     end
 
     scenario 'Signed-in user visits the join page' do
+      pending 'Apply page is redirected to /fb'
+
       sign_in_user founder.user, referer: apply_path
       expect(page).to have_text('You have already completed registration.')
       expect(page).to have_link('Go to Dashboard')
@@ -40,6 +44,8 @@ feature 'Founder Registration' do
 
   context 'User is a new visitor' do
     scenario 'User registers as a founder', js: true do
+      pending 'Apply page is redirected to /fb'
+
       visit apply_path
 
       # Fill in the registration form.
@@ -70,6 +76,8 @@ feature 'Founder Registration' do
 
   context 'User is a new visitor and makes a possible mistake in the email' do
     before do
+      pending 'Apply page is redirected to /fb'
+
       visit apply_path
 
       # Fill in the registration form.
@@ -95,6 +103,8 @@ feature 'Founder Registration' do
     end
 
     scenario 'User rejects the email hint', js: true do
+      pending 'Apply page is redirected to /fb'
+
       expect(page).to have_text('Did you mean test@gmail.com?')
       click_on 'No'
       click_button 'Apply'

@@ -1,7 +1,7 @@
 #sv-navbar.collapse.navbar-collapse.justify-content-end.navbar-link__container
   ul.navbar-nav.align-items-lg-center itemscope="itemscope" itemtype="http://www.schema.org/SiteNavigationElement"
     - unless current_founder
-      li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
+      / li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
         = link_to 'Apply', apply_path, class: 'nav-item__link', itemprop: 'url', id: 'sv-navbar__join-link'
     - if current_founder && !current_founder.exited && current_founder.startup.present?
       li.nav-item.navbar-nav__nav-item role="presentation"
@@ -24,7 +24,7 @@
         = link_to 'Library', resources_path, class: 'nav-item__link', id: 'sv-navbar__library-link'
     / li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
     /   = link_to 'Stats', stats_path, class: 'nav-item__link'
-    li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
+    / li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
       = link_to 'Wiki', 'https://wiki.sv.co', class: 'nav-item__link', id: 'sv-navbar__help-link'
 
     - if current_user

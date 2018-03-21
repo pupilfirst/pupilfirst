@@ -28,7 +28,7 @@ ActiveAdmin.register Target do
 
   controller do
     def scoped_collection
-      super.includes :level, target_group: :level
+      super.includes :level
     end
   end
 
@@ -36,9 +36,7 @@ ActiveAdmin.register Target do
     selectable_column
     column :title
 
-    column :level do |target|
-      target.level.present? ? target.level : target.target_group&.level
-    end
+    column :level
 
     column :type do |target|
       target.session? ? 'Session' : 'Target'
@@ -92,8 +90,6 @@ ActiveAdmin.register Target do
         linked_tags(founder.tags)
       end
 
-      row :level
-
       row :prerequisite_targets do
         if target.prerequisite_targets.present?
           ul do
@@ -106,6 +102,9 @@ ActiveAdmin.register Target do
         end
       end
 
+      row :level do
+        target&.level
+      end
       row :target_group
       row :sort_index
       row :target_action_type
@@ -216,11 +215,7 @@ ActiveAdmin.register Target do
     end
 
     column :level do |target|
-      if target.target_group.present?
-        target.target_group.level.display_name
-      elsif target.level.present?
-        target.level.display_name
-      end
+      target.level&.display_name
     end
 
     column :target_action_type
@@ -294,7 +289,6 @@ ActiveAdmin.register Target do
       f.input :key, as: :select, collection: Target.valid_keys
       f.input :session_at, as: :string, input_html: { class: 'date-time-picker', data: { format: 'Y-m-d H:i:s O' } }
       f.input :tag_list, as: :select, collection: Target.tag_counts_on(:tags).pluck(:name), multiple: true
-      f.input :level
 
       f.input :description, as: :hidden
 

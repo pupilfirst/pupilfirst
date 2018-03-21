@@ -30,8 +30,7 @@ class Target < ApplicationRecord
   has_many :resources
   has_many :target_skills
   has_many :skills, through: :target_skills
-
-  delegate :level, to: :target_group
+  has_one :level, through: :target_group
 
   accepts_nested_attributes_for :target_skills, allow_destroy: true
 

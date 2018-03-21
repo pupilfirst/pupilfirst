@@ -13,7 +13,7 @@ describe Founders::TargetStatusService do
   let!(:target_group) { create :target_group, level: level_zero }
   let!(:founder_target) { create :target, :for_founders, target_group: target_group }
   let!(:startup_target) { create :target, :for_startup, target_group: target_group }
-  let!(:founder_session) { create :target, target_group: target_group, level: level_zero, session_at: 1.month.ago }
+  let!(:founder_session) { create :target, target_group: target_group, session_at: 1.month.ago }
 
   let!(:founder_event) { create :timeline_event, founder: founder, startup: startup }
   let!(:founder_event_2) { create :timeline_event, founder: founder, startup: startup }
@@ -105,7 +105,7 @@ describe Founders::TargetStatusService do
       let!(:level_zero_target) { create :target, :for_founders, target_group: level_zero_target_group }
       let!(:level_one_target) { create :target, :for_founders, target_group: level_one_target_group }
       let!(:level_two_target) { create :target, :for_founders, target_group: level_two_target_group }
-      let!(:founder_session) { create :target, target_group: level_one_target_group, level: level_one, session_at: 1.month.ago }
+      let!(:founder_session) { create :target, target_group: level_one_target_group, session_at: 1.month.ago }
 
       # This ensures that a edge-case situation does not result in a crash: https://trello.com/c/F7oRFaPf
       context 'when there is an incomplete prerequisite in level 0 for a completed target' do

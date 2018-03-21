@@ -27,7 +27,8 @@ describe Targets::CreateOrUpdateCalendarEventJob do
   let!(:startup_inactive_l2) { create :startup, level: level_two }
   let!(:startup_l2) { create :startup, :subscription_active, level: level_two }
   let!(:startup_l3) { create :startup, :subscription_active, level: level_three }
-  let!(:target) { create :target, session_at: 1.week.from_now, level: level_two, target_group: nil }
+  let!(:target_group) { create :target_group, level: level_two, milestone: true }
+  let!(:target) { create :target, session_at: 1.week.from_now, target_group: target_group }
   let(:calendar_service) { instance_double(GoogleCalendarService) }
   let(:null_calendar_event) { double('Google Calendar Event', html_link: calendar_event_link).as_null_object }
   let(:calendar_event) { double 'Google Calendar Event', id: calendar_event_id, html_link: calendar_event_link }
@@ -85,7 +86,7 @@ describe Targets::CreateOrUpdateCalendarEventJob do
     end
 
     context 'when an event with invitation already exists' do
-      let!(:target) { create :target, session_at: 1.week.from_now, level: level_two, target_group: nil, google_calendar_event_id: calendar_event_id }
+      let!(:target) { create :target, session_at: 1.week.from_now, target_group: target_group, google_calendar_event_id: calendar_event_id }
 
       it 'updates the existing calendar event' do
         expect(calendar_service).to receive(:find_or_create_event_by_id).with(calendar_event_id).and_yield(null_calendar_event).and_return(null_calendar_event)

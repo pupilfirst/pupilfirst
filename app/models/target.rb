@@ -27,10 +27,11 @@ class Target < ApplicationRecord
   has_many :target_prerequisites
   has_many :prerequisite_targets, through: :target_prerequisites
   belongs_to :target_group, optional: true
-  belongs_to :level, optional: true
   has_many :resources
   has_many :target_skills
   has_many :skills, through: :target_skills
+
+  delegate :level, to: :target_group
 
   accepts_nested_attributes_for :target_skills, allow_destroy: true
 

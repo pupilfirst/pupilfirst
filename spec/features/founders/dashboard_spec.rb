@@ -37,11 +37,11 @@ feature 'Founder Dashboard' do
   let!(:completed_fee_payment_target) { create :target, target_group: target_group_0, days_to_complete: 60, role: Target::ROLE_TEAM, key: Target::KEY_FEE_PAYMENT }
 
   # Create sessions for different levels.
-  let!(:session_1) { create :target, target_group: nil, level: level_4, session_at: 2.hours.from_now }
-  let!(:session_2) { create :target, target_group: nil, level: level_3, session_at: 3.days.ago }
-  let!(:session_3) { create :target, target_group: nil, level: level_2, session_at: 2.days.ago }
-  let!(:session_4) { create :target, target_group: nil, level: level_1, session_at: 1.day.ago }
-  let!(:session_5) { create :target, target_group: nil, level: level_1, session_at: 1.day.ago }
+  let!(:session_1) { create :target, target_group: target_group_4, session_at: 2.hours.from_now }
+  let!(:session_2) { create :target, target_group: target_group_3, session_at: 3.days.ago }
+  let!(:session_3) { create :target, target_group: target_group_2, session_at: 2.days.ago }
+  let!(:session_4) { create :target, target_group: target_group_1, session_at: 1.day.ago }
+  let!(:session_5) { create :target, target_group: target_group_1, session_at: 1.day.ago }
 
   let(:dashboard_toured) { true }
 
@@ -131,7 +131,7 @@ feature 'Founder Dashboard' do
     # Select another level and check if the correct data is displayed.
     find('.filter-targets-dropdown__menu-item', text: "Level 2: #{level_2.name}").click
     expect(page).to have_selector('.founder-dashboard-target-group__box', count: 1)
-    expect(page).to have_selector('.founder-dashboard-target-header__container', count: 1)
+    expect(page).to have_selector('.founder-dashboard-target-header__container', count: 2)
 
     # There is only one track in level 2, so the selector should be hidden.
     expect(page).not_to have_selector('.founder-dashboard-togglebar__toggle-btn')

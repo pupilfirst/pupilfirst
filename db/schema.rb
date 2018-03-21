@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180221070603) do
+ActiveRecord::Schema.define(version: 20180316070448) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -671,7 +671,6 @@ ActiveRecord::Schema.define(version: 20180221070603) do
     t.datetime "session_at"
     t.text "video_embed"
     t.datetime "last_session_at"
-    t.integer "level_id"
     t.string "key"
     t.string "link_to_complete"
     t.string "submittability", default: "resubmittable", null: false
@@ -685,7 +684,6 @@ ActiveRecord::Schema.define(version: 20180221070603) do
     t.index ["archived"], name: "index_targets_on_archived"
     t.index ["faculty_id"], name: "index_targets_on_faculty_id"
     t.index ["key"], name: "index_targets_on_key"
-    t.index ["level_id"], name: "index_targets_on_level_id"
     t.index ["session_at"], name: "index_targets_on_session_at"
     t.index ["timeline_event_type_id"], name: "index_targets_on_timeline_event_type_id"
   end

@@ -29,10 +29,6 @@ class AboutController < ApplicationController
 
   private
 
-  def contact_form_params
-    params.require(:contact).permit(:name, :email, :mobile, :company, :query_type, :query)
-  end
-
   def leaderboards_for(levels)
     return nil if levels.blank?
 

@@ -453,7 +453,7 @@ GEM
       ruby_dep (~> 1.2)
     lita-default-handlers (0.1.0)
     logchange (1.0.1)
-    loofah (2.2.0)
+    loofah (2.2.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.0)

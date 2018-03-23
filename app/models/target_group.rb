@@ -2,6 +2,7 @@ class TargetGroup < ApplicationRecord
   has_many :targets
   belongs_to :level
   belongs_to :track, optional: true
+  has_one :school, through: :level
 
   validates :name, presence: true
   validates :sort_index, presence: true

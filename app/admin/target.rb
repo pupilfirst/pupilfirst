@@ -15,6 +15,7 @@ ActiveAdmin.register Target do
   filter :faculty_name, as: :string
   filter :role, as: :select, collection: -> { Target.valid_roles }
   filter :timeline_event_type_title, as: :string
+  filter :school, as: :select
 
   filter :ransack_tagged_with,
     as: :select,

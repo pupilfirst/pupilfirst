@@ -1,5 +1,5 @@
 class Level < ApplicationRecord
-  validates :number, uniqueness: true, presence: true
+  validates :number, uniqueness: { scope: :school }, presence: true
   validates :name, presence: true
 
   has_many :target_groups
@@ -7,6 +7,7 @@ class Level < ApplicationRecord
   has_many :targets, through: :target_groups
   has_many :weekly_karma_points
   has_many :resources
+  belongs_to :school
 
   def display_name
     "Level #{number}: #{name}"

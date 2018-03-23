@@ -9,6 +9,7 @@ ActiveAdmin.register TargetGroup do
   filter :description, as: :string
   filter :milestone
   filter :track
+  filter :school, as: :select
 
   scope :all
   scope('No Track') { |scope| scope.where(track: nil) }

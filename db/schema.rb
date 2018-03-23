@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180316070448) do
+ActiveRecord::Schema.define(version: 20180322073926) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -321,7 +321,9 @@ ActiveRecord::Schema.define(version: 20180316070448) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "unlock_on"
+    t.bigint "school_id"
     t.index ["number"], name: "index_levels_on_number"
+    t.index ["school_id"], name: "index_levels_on_school_id"
   end
 
   create_table "module_chapters", id: :serial, force: :cascade do |t|
@@ -478,6 +480,12 @@ ActiveRecord::Schema.define(version: 20180316070448) do
     t.index ["slug"], name: "index_resources_on_slug"
     t.index ["startup_id"], name: "index_resources_on_startup_id"
     t.index ["target_id"], name: "index_resources_on_target_id"
+  end
+
+  create_table "schools", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "shortened_urls", id: :serial, force: :cascade do |t|
@@ -834,6 +842,7 @@ ActiveRecord::Schema.define(version: 20180316070448) do
   add_foreign_key "faculty", "levels"
   add_foreign_key "founders", "colleges"
   add_foreign_key "founders", "users"
+  add_foreign_key "levels", "schools"
   add_foreign_key "payments", "founders"
   add_foreign_key "payments", "startups"
   add_foreign_key "players", "colleges"

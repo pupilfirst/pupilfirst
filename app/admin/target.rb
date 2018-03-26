@@ -4,7 +4,7 @@ ActiveAdmin.register Target do
   permit_params :faculty_id, :role, :title, :description, :resource_url, :completion_instructions, :days_to_complete,
     :slideshow_embed, :video_embed, :completed_at, :completion_comment, :rubric, :link_to_complete, :key,
     :submittability, :archived, :remote_rubric_url, :target_group_id, :target_action_type, :points_earnable,
-    :timeline_event_type_id, :sort_index, :youtube_video_id, :session_at, :level_id, :session_by, :call_to_action,
+    :timeline_event_type_id, :sort_index, :youtube_video_id, :session_at, :session_by, :call_to_action,
     prerequisite_target_ids: [], tag_list: [], target_skills_attributes: %i[id skill_id rubric_good rubric_great rubric_wow base_karma_points _destroy]
 
   filter :title
@@ -102,9 +102,7 @@ ActiveAdmin.register Target do
         end
       end
 
-      row :level do
-        target&.level
-      end
+      row :level
       row :target_group
       row :sort_index
       row :target_action_type

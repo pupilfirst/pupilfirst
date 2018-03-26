@@ -19,7 +19,7 @@ describe Founders::RegistrationService do
     let(:name_generator) { OpenStruct.new(fun_name: Faker::Name.name) }
 
     # Ensure a level zero exists for successfully creating a blank startup
-    let!(:level_zero) { Level.create!(name: Faker::Name.name, number: 0) }
+    let!(:level_zero) { create :level, :zero }
 
     before do
       allow(Startups::ProductNameGeneratorService).to receive(:new).and_return(name_generator)

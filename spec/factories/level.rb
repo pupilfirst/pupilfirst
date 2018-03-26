@@ -6,6 +6,7 @@ FactoryBot.define do
     sequence(:name) { |n| "#{Faker::Lorem.word} #{n}" }
     description { Faker::Lorem.sentence }
     number 1
+    school
 
     trait(:zero) { number 0 }
     trait(:one) { number 1 }

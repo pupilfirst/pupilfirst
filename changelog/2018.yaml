@@ -1,5 +1,33 @@
 ---
 changelog:
+- timestamp: '2018-03-27T06:21:27Z'
+  changes:
+  - timestamp: '2018-03-27T06:18:00Z'
+    title: Created school such that levels belong to a school, to allow different
+      programs to run in the platform simultaneously
+    trello: https://trello.com/c/u6PMYzqy
+    private: true
+    category: feature
+  - timestamp: '2018-03-26T07:27:12Z'
+    title: Removed notification instructing expired founders to pay membership fee
+    trello: https://trello.com/c/1tmoGBHx
+    private: false
+  - timestamp: '2018-03-21T08:39:06Z'
+    title: Removed level from targets and will now be associated to level only through
+      target groups
+    trello: https://trello.com/c/fVlDKXMe
+    private: true
+  - timestamp: '2018-03-21T08:37:42Z'
+    title: Updated few content in the Facebook VR page
+    trello: https://trello.com/c/fiXTlYm1
+    private: true
+    category: content
+  - timestamp: '2018-03-20T11:06:24Z'
+    title: Redirected home and apply page to /fb and hide links to other pages.
+    trello: https://trello.com/c/TKTWJ1cJ
+    private: true
+    description: This also adds a header message to the FB page after redirection.
+    category: content
 - timestamp: '2018-03-19T10:26:27Z'
   changes:
   - timestamp: '2018-03-19T07:40:04Z'

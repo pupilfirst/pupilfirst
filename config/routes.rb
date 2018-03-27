@@ -93,7 +93,6 @@ Rails.application.routes.draw do
     get 'media-kit'
     get 'leaderboard'
     get 'contact'
-    post 'contact', action: 'send_contact_email'
   end
 
   resources :faculty, only: %i[index show] do

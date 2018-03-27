@@ -13,11 +13,6 @@ module ApplicationHelper
     ShortenedUrls::ShortenService.new(full_url, expires_at: expires_at).short_url
   end
 
-  def show_pending_payment_notice
-    page_exempted = current_page?(fee_founder_path) || current_page?(billing_startup_path)
-    !page_exempted && !current_startup&.level_zero? && current_startup&.payments&.pending&.any?
-  end
-
   def meta_description
     return @meta_description if defined?(@meta_description)
     description_key = "#{params[:controller]}.#{params[:action]}.meta_description"

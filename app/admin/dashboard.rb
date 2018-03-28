@@ -1,6 +1,6 @@
 ActiveAdmin.register_page 'Dashboard' do
   controller do
-    skip_after_action :intercom_rails_auto_include
+    include DisableIntercom
 
     def index
       @presenter = ActiveAdmin::DashboardPresenter.new

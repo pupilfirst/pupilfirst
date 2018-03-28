@@ -2,7 +2,7 @@ ActiveAdmin.register_page 'Admissions Dashboard' do
   menu parent: 'Admissions', label: 'Dashboard', priority: 0
 
   controller do
-    skip_after_action :intercom_rails_auto_include
+    include DisableIntercom
 
     def index
       @startups_stage_split = AdmissionStats::StageSplitService.new.startups_split

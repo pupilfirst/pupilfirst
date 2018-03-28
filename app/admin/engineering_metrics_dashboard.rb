@@ -2,7 +2,7 @@ ActiveAdmin.register_page 'Engineering Metrics Dashboard' do
   menu parent: 'Dashboard', label: 'Engineering Metrics'
 
   controller do
-    skip_after_action :intercom_rails_auto_include
+    include DisableIntercom
 
     def index
       @presenter = ActiveAdmin::EngineeringMetricsDashboardPresenter.new

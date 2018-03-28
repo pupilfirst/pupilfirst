@@ -1,6 +1,6 @@
 ActiveAdmin.register_page 'Short URLs' do
   controller do
-    skip_after_action :intercom_rails_auto_include
+    include DisableIntercom
   end
 
   menu parent: 'Dashboard'

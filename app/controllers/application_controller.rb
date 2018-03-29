@@ -191,29 +191,6 @@ class ApplicationController < ActionController::Base
     }
   end
 
-  def intercom_csp
-    {
-      script: 'https://widget.intercom.io https://js.intercomcdn.com https://app.intercom.io',
-      connect: [
-        'https://api.intercom.io',
-        'https://api-iam.intercom.io',
-        'https://api-ping.intercom.io',
-        'https://nexus-websocket-a.intercom.io',
-        'https://nexus-websocket-b.intercom.io',
-        'https://nexus-long-poller-a.intercom.io',
-        'https://nexus-long-poller-b.intercom.io',
-        'wss://nexus-websocket-a.intercom.io',
-        'wss://nexus-websocket-b.intercom.io',
-        'https://uploads.intercomcdn.com',
-        'https://uploads.intercomusercontent.com'
-      ].join(' '),
-      font: 'https://js.intercomcdn.com',
-      image: 'https://js.intercomcdn.com https://static.intercomassets.com https://uploads.intercomcdn.com https://uploads.intercomusercontent.com https://gifs.intercomcdn.com',
-      media: 'https://js.intercomcdn.com',
-      child: 'https://share.intercom.io https://player.vimeo.com https://fast.wistia.net'
-    }
-  end
-
   def gtm_csp
     {
       script: 'https://www.googletagmanager.com https://tagmanager.google.com/debug https://tagmanager.google.com/debug/',
@@ -250,8 +227,7 @@ class ApplicationController < ActionController::Base
 
   def child_sources
     <<~CHILD_SOURCES.squish
-      child-src https://www.youtube.com
-      #{intercom_csp[:child]};
+      child-src https://www.youtube.com;
     CHILD_SOURCES
   end
 
@@ -283,7 +259,7 @@ class ApplicationController < ActionController::Base
       script-src
       'self' 'unsafe-eval' 'unsafe-inline' https://ajax.googleapis.com https://blog.sv.co https://www.youtube.com
       https://s.ytimg.com http://www.startatsv.com https://sv-assets.sv.co
-      #{google_analytics_csp[:script]} #{inspectlet_csp[:script]} #{facebook_csp[:script]} #{intercom_csp[:script]}
+      #{google_analytics_csp[:script]} #{inspectlet_csp[:script]} #{facebook_csp[:script]}
       #{gtm_csp[:script]} #{instamojo_csp[:script]} #{recaptcha_csp[:script]} #{cloudflare_csp[:script]}
       #{typeform_csp[:script]};
     SCRIPT_SOURCES
@@ -291,20 +267,20 @@ class ApplicationController < ActionController::Base
 
   def connect_sources
     <<~CONNECT_SOURCES.squish
-      connect-src 'self' #{inspectlet_csp[:connect]} #{intercom_csp[:connect]}
+      connect-src 'self' #{inspectlet_csp[:connect]}
       #{google_analytics_csp[:connect]} #{development_csp[:connect]};
     CONNECT_SOURCES
   end
 
   def font_sources
     <<~FONT_SOURCES.squish
-      font-src 'self' fonts.gstatic.com https://sv-assets.sv.co #{intercom_csp[:font]};
+      font-src 'self' fonts.gstatic.com https://sv-assets.sv.co;
     FONT_SOURCES
   end
 
   def media_sources
     <<~MEDIA_SOURCES.squish
-      media-src 'self' #{resource_csp[:media]} #{intercom_csp[:media]};
+      media-src 'self' #{resource_csp[:media]};
     MEDIA_SOURCES
   end
 

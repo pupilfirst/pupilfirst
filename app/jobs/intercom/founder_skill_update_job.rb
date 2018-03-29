@@ -11,6 +11,8 @@ module Intercom
     end
 
     def perform(founder, skill)
+      return true
+      # rubocop: disable Lint/UnreachableCode
       return if self.class.mock?
 
       intercom = IntercomClient.new

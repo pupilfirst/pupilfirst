@@ -3,6 +3,8 @@ module Intercom
     queue_as :default
 
     def perform(email)
+      return true
+      # rubocop: disable Lint/UnreachableCode
       intercom = IntercomClient.new
       user = intercom.find_or_create_user(email: email)
       user.unsubscribed_from_emails = true

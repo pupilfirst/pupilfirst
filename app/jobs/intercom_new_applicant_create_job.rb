@@ -10,6 +10,8 @@ class IntercomNewApplicantCreateJob < ApplicationJob
   end
 
   def perform(founder)
+    return true
+    # rubocop: disable Lint/UnreachableCode
     return if self.class.mock?
 
     intercom = IntercomClient.new

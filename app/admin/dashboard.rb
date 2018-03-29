@@ -15,8 +15,8 @@ ActiveAdmin.register_page 'Dashboard' do
   end
 
   # route to respond to ajax request for intercom conversations
-  page_action :intercom_conversations do
-    @conversations = IntercomClient.new.latest_conversation_array(5)
-    render 'intercom_conversations', layout: false
-  end
+  # page_action :intercom_conversations do
+  #   @conversations = IntercomClient.new.latest_conversation_array(5)
+  #   render 'intercom_conversations', layout: false
+  # end
 end

@@ -2,6 +2,8 @@ class IntercomLastApplicantEventUpdateJob < ApplicationJob
   queue_as :low_priority
 
   def perform(founder, event)
+    return true
+    # rubocop: disable Lint/UnreachableCode
     intercom = IntercomClient.new
     user = intercom.find_or_create_user(email: founder.email, name: founder.name)
 

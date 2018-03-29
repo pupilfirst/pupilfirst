@@ -21,6 +21,7 @@ describe IntercomNewApplicantCreateJob do
   end
 
   it 'creates and updates user' do
+    pending 'Intercom subscription is suspended'
     expect(intercom_client).to receive(:find_or_create_user).with(
       email: founder.email,
       name: founder.name

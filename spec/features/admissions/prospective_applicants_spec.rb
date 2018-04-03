@@ -14,8 +14,6 @@ feature 'Prospective Applicants' do
 
   context 'when no batch is open for applications' do
     scenario 'user can register for notification', js: true do
-      pending 'Apply page is redirected to /fb'
-
       visit apply_path
       expect(page).to have_content('Admissions are closed')
 

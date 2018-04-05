@@ -36,7 +36,7 @@
 
 8. **Governing law**
 
-    Any claim relating to SV.CO's web site shall be governed by the laws of the State of Kerala without regard to its conflict of law provisions.
+    Any claim relating to SV.CO's web site shall be governed by the laws of the State of Karnataka without regard to its conflict of law provisions.
 
 9. **Third Party Applications**
 

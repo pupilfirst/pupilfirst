@@ -6,7 +6,7 @@ source 'https://rubygems.org'
 git_source(:github) { |repository_path| "https://github.com/#{repository_path}.git" }
 
 # Ruby on Rails. http://rubyonrails.org
-gem 'rails', '~> 5.1.4'
+gem 'rails', '~> 5.1.6'
 
 gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 
@@ -63,7 +63,7 @@ gem 'lita', '= 5.0.0', github: 'svdotco/lita', require: false # Lita without rac
 gem 'lita-slack', '= 1.8.0', github: 'litaio/lita-slack', require: false # Lita adapter for Slack. TODO: removing github repo tracking when gem is updated
 gem 'kramdown', '~> 1.13' # kramdown is a fast, pure Ruby Markdown superset converter, using a strict syntax definition and supporting several common extensions. http://kramdown.gettalong.org
 gem 'gaffe', '~> 1.2' # Custom error pages. https://github.com/mirego/gaffe
-gem 'google_calendar', '= 0.6.2', github: 'northworld/google_calendar' # Thin wrapper over Google Calendar API.
+gem 'google_calendar', '= 0.6.4', github: 'northworld/google_calendar' # Thin wrapper over Google Calendar API.
 gem 'groupdate', '~> 3.2' # The simplest way to group temporal data. https://github.com/ankane/groupdate
 gem 'videojs_rails', '~> 4.12' # Video JS for Rails 3.1+ Asset Pipeline. https://github.com/seanbehan/videojs_rails
 gem 'react-rails', '~> 2.2' # For automatically transforming JSX and using React in Rails.
@@ -123,7 +123,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-readmore', '~> 2.2' # A lightweight jQuery plugin for collapsing and expanding long blocks of text with "Read more" and "Close" links.
   gem 'rails-assets-waypoints', '~> 4.0' # Waypoints is a library that makes it easy to execute a function whenever you scroll to an element.
   gem 'rails-assets-Chart-js', '~> 2.5' # Simple yet flexible JavaScript charting for designers & developers.
-  gem 'rails-assets-chartkick', '~> 2.2' # Create beautiful charts with one line of JavaScript.
+  gem 'rails-assets-chartkick', '2.3.3' # Create beautiful charts with one line of JavaScript.
   gem 'rails-assets-gemini-scrollbar', '~> 1.5' # Custom overlay-scrollbars with native scrolling mechanism for web applications
   gem 'rails-assets-datetimepicker', '~> 2.5' # jQuery Plugin Date and Time Picker
   gem 'rails-assets-moment', '~> 2.18' # Parse, validate, manipulate, and display dates in javascript. http://momentjs.com

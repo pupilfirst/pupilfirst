@@ -107,6 +107,7 @@ gem 'pundit', '~> 1.1' # Minimal authorization through OO design and pure Ruby c
 gem 'rack-cors', '~> 1.0', require: 'rack/cors' # Rack Middleware for handling CORS, required to serve static assets such as fonts
 gem 'recaptcha', '~> 4.6', require: 'recaptcha/rails'
 gem 'jwt', '< 2.1' # Ruby implementation of the RFC 7519 OAuth JSON Web Token (JWT), used by Zoom API
+gem 'chartkick', '~> 2.3.4' # Create beautiful charts with one line of JavaScript.
 
 # Rails assets!
 source 'https://rails-assets.org' do
@@ -122,8 +123,6 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-tether', '~> 1.4' # A positioning engine to make overlays, tooltips and dropdowns better
   gem 'rails-assets-readmore', '~> 2.2' # A lightweight jQuery plugin for collapsing and expanding long blocks of text with "Read more" and "Close" links.
   gem 'rails-assets-waypoints', '~> 4.0' # Waypoints is a library that makes it easy to execute a function whenever you scroll to an element.
-  gem 'rails-assets-Chart-js', '~> 2.5' # Simple yet flexible JavaScript charting for designers & developers.
-  gem 'rails-assets-chartkick', '2.3.3' # Create beautiful charts with one line of JavaScript.
   gem 'rails-assets-gemini-scrollbar', '~> 1.5' # Custom overlay-scrollbars with native scrolling mechanism for web applications
   gem 'rails-assets-datetimepicker', '~> 2.5' # jQuery Plugin Date and Time Picker
   gem 'rails-assets-moment', '~> 2.18' # Parse, validate, manipulate, and display dates in javascript. http://momentjs.com

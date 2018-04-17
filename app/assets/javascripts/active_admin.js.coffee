@@ -28,5 +28,5 @@
 
 # Chartkick
 #= require moment
-#= require Chart-js
+#= require Chart.bundle
 #= require chartkick

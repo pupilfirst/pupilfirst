@@ -6,11 +6,11 @@ source 'https://rubygems.org'
 git_source(:github) { |repository_path| "https://github.com/#{repository_path}.git" }
 
 # Ruby on Rails. http://rubyonrails.org
-gem 'rails', '~> 5.1.6'
+gem 'rails', '~> 5.2.0'
 
 gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 
-gem 'activeadmin', '~> 1.1' # The administration framework for Ruby on Rails applications. https://activeadmin.info
+gem 'activeadmin', github: 'activeadmin/activeadmin', branch: 'master' # The administration framework for Ruby on Rails applications. https://activeadmin.info TODO:
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
 gem 'carrierwave', '~> 1.1' # One uploader to rule them all.
 
@@ -38,8 +38,7 @@ gem 'cancancan', '~> 2.0' # Used to manage administrator types and roles in the 
 gem 'select2-rails', '~> 4.0' # Select2 javascript select box improvement library, using in ActiveAdmin interface.
 gem 'bootstrap', '= 4.0.0' # Official Sass port of Bootstrap.
 gem 'autoprefixer-rails', '~> 7.1' # Autoprefixer for Ruby and Ruby on Rails.
-gem 'simple_form', '~> 3.4' # Simple-form with support for Bootstrap 3.
-gem 'simple_form_fancy_uploads', '~> 0.2' # simple_form custom inputs to get image/link previews with file uploads. https://github.com/apeacox/simple_form_fancy_uploads
+gem 'simple_form', '~> 4.0' # Simple-form with support for Bootstrap 3.
 gem 'bootstrap_form', '= 4.0.0.dev', github: 'bootstrap-ruby/bootstrap_form', branch: 'master' # a Rails form builder that makes it super easy to create beautiful-looking forms using Bootstrap 4
 
 # TODO: The zones list in the gem was outdated.

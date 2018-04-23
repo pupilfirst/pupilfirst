@@ -1,5 +1,25 @@
 ---
 changelog:
+- timestamp: '2018-04-23T07:00:35Z'
+  changes:
+  - timestamp: '2018-04-13T09:04:14Z'
+    title: Upgrade to Ruby 2.5.1
+    trello: https://trello.com/c/1haZuMgh
+    private: true
+  - timestamp: '2018-04-03T10:59:03Z'
+    title: We've moved to a new office! Our listed address has been updated.
+    trello: https://trello.com/c/PAZYlg1R
+    private: false
+  - timestamp: '2018-04-03T10:30:06Z'
+    title: More information about our new program, in partnership with Facebook, has been added.
+    trello: https://trello.com/c/yF2T1czw
+    private: false
+    description: Re-enabled the home page and apply page. The apply page should render the prospective applicant form.
+    category: content
+  - timestamp: '2018-04-03T10:30:06Z'
+    title: Empty release weeks are no longer displayed in the changelog.
+    private: true
+    description: This was caused for public viewers when all log entries in a release were marked private.
 - timestamp: '2018-03-27T06:21:27Z'
   changes:
   - timestamp: '2018-03-27T06:18:00Z'

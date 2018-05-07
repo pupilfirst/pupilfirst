@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # Set the default text field size when input is a string. Default is nil.
 # Formtastic::FormBuilder.default_text_field_size = 50
 

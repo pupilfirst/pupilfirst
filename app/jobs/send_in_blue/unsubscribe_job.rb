@@ -3,7 +3,7 @@ module SendInBlue
     queue_as :default
 
     def perform(email)
-      url = "https://api.sendinblue.com/v3/contacts/#{URI.escape(email)}"
+      url = "https://api.sendinblue.com/v3/contacts/#{CGI.escape(email)}"
 
       RestClient.put(
         url,

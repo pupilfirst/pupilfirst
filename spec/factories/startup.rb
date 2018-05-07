@@ -11,9 +11,9 @@ FactoryBot.define do
   end
 
   factory :startup do
-    sequence(:product_name) { |n| Faker::Lorem.words(rand(3) + 1).push(n).join(' ') }
+    sequence(:product_name) { |n| Faker::Lorem.words(rand(1..3)).push(n).join(' ') }
     product_description { Faker::Lorem.words(12).join(' ').truncate(Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS) }
-    name { Faker::Lorem.words(rand(3) + 1).join ' ' }
+    name { Faker::Lorem.words(rand(1..3)).join ' ' }
     address { Faker::Lorem.words(6).join(' ') }
     website { Faker::Internet.domain_name }
     email { Faker::Internet.email }

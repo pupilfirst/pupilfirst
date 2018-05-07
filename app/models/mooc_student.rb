@@ -2,7 +2,7 @@ class MoocStudent < ApplicationRecord
   belongs_to :college, optional: true
   belongs_to :user
 
-  has_many :mooc_quiz_attempts
+  has_many :mooc_quiz_attempts, dependent: :destroy
   has_many :course_modules, through: :mooc_quiz_attempts
 
   serialize :completed_chapters, Array

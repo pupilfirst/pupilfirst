@@ -121,7 +121,7 @@ Rails.application.routes.draw do
     get '/:id/download', action: 'download', as: 'download_resource'
   end
 
-  get 'resources/:id', to: redirect('/library/%{id}') # rubocop:disable Style/FormatStringToken
+  get 'resources/:id', to: redirect('/library/%{id}')
 
   scope 'connect_request', controller: 'connect_request', as: 'connect_request' do
     get ':id/feedback/from_team/:token', action: 'feedback_from_team', as: 'feedback_from_team'

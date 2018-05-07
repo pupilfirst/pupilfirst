@@ -6,7 +6,7 @@ FactoryBot.define do
     role { Target.valid_roles.sample }
     description { Faker::Lorem.words(200).join ' ' }
     target_action_type { Target.valid_target_action_types.sample }
-    days_to_complete { session_at.present? ? nil : 1 + rand(60) }
+    days_to_complete { session_at.present? ? nil : rand(1..60) }
     target_group
     timeline_event_type
     faculty { create :faculty, category: Faculty::CATEGORY_TEAM }

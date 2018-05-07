@@ -65,7 +65,7 @@ module Founders
     end
 
     def supplied_reference
-      reference_text.present? ? reference_text : reference
+      reference_text.presence || reference
     end
 
     def college_collection

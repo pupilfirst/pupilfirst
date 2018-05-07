@@ -32,9 +32,9 @@ module Targets
       I18n.t(
         "jobs.targets.send_session_feedback_notification.message",
         faculty_name: faculty_name,
-        faculty_name_escaped: URI.escape(faculty_name),
-        session_title: URI.escape(session.title),
-        session_date: URI.escape(session.session_at.strftime('%Y-%m-%d'))
+        faculty_name_escaped: CGI.escape(faculty_name),
+        session_title: CGI.escape(session.title),
+        session_date: CGI.escape(session.session_at.strftime('%Y-%m-%d'))
       )
     end
   end

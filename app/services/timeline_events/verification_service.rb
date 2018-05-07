@@ -85,11 +85,7 @@ module TimelineEvents
     end
 
     def points_for_new_status
-      if @points.present?
-        @points
-      else
-        points_for_target
-      end
+      @points.presence || points_for_target
     end
 
     def founder

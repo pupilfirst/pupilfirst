@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class LogoUploader < CarrierWave::Uploader::Base
   include CarrierWave::Backgrounder::Delay
   include CarrierWave::MiniMagick

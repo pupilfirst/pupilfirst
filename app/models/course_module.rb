@@ -6,12 +6,12 @@ class CourseModule < ApplicationRecord
     name_changed? || saved_change_to_name? || super
   end
 
-  has_many :mooc_quiz_questions
+  has_many :mooc_quiz_questions, dependent: :restrict_with_exception
 
-  has_many :mooc_quiz_attempts
-  has_many :mooc_students, through: :mooc_quiz_attempts
+  has_many :mooc_quiz_attempts, dependent: :restrict_with_exception
+  has_many :mooc_students, through: :mooc_quiz_attempts, dependent: :restrict_with_exception
 
-  has_many :module_chapters
+  has_many :module_chapters, dependent: :restrict_with_exception
   accepts_nested_attributes_for :module_chapters, allow_destroy: true
 
   validates :name, presence: true, uniqueness: true

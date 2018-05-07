@@ -1,5 +1,5 @@
 class TargetGroup < ApplicationRecord
-  has_many :targets
+  has_many :targets, dependent: :restrict_with_error
   belongs_to :level
   belongs_to :track, optional: true
   has_one :school, through: :level

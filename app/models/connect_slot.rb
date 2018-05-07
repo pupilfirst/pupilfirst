@@ -1,11 +1,9 @@
 class ConnectSlot < ApplicationRecord
   belongs_to :faculty
-  has_one :connect_request
+  has_one :connect_request, dependent: :restrict_with_error
 
   scope :next_week, -> { where('slot_at > ? AND slot_at < ?', next_week_start, next_week_end) }
   scope :upcoming, -> { where('slot_at > ?', Time.now) }
-
-  before_destroy :check_for_connect_request
 
   validates :faculty_id, presence: true
   validates :slot_at, presence: true, uniqueness: { scope: [:faculty_id] }
@@ -51,14 +49,5 @@ class ConnectSlot < ApplicationRecord
 
   def self.next_week_end
     7.days.from_now.end_of_week.in_time_zone('Asia/Calcutta')
-  end
-
-  private
-
-  # Allow deletion only if there is no associated connect request.
-  def check_for_connect_request
-    return if connect_request.blank?
-    errors[:base] << 'Cannot delete connect slot that has a request associated with it'
-    false
   end
 end

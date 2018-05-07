@@ -1,5 +1,5 @@
 class PaytmController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: :paytm_callback
+  skip_before_action :verify_authenticity_token, only: :callback
 
   # GET /paytm/pay
   def pay

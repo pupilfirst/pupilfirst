@@ -1,18 +1,18 @@
 require 'rails_helper'
 
-include UserSpecHelper
-
 feature 'Founder Edit' do
+  include UserSpecHelper
+
   let(:startup) { create :startup, :subscription_active }
   let(:founder) { create :founder, college: nil, college_text: 'Anon College of Engineering', born_on: 18.years.ago }
   let(:founder_name) { Faker::Name.name }
-  let(:phone) { 9_876_543_210 + rand(10_000) }
+  let(:phone) { rand(9_876_543_210..9_876_553_209) }
   let(:communication_address) { Faker::Address.full_address }
   let(:username) { Faker::Internet.user_name(founder_name, %w[-]) }
   let(:backlogs) { rand(10) }
   let(:semester) { %w[I II III IV V VI VII VIII].sample }
   let(:course) { "#{%w[B-tech PG-diploma M-tech Bachelors].sample} in #{Faker::Lorem.word.capitalize}" }
-  let(:roll_number) { "UNI00#{10_000 + rand(9_999)}" }
+  let(:roll_number) { "UNI00#{rand(10_000..19_998)}" }
   let(:roles) { %w[Product Design Engineering].sample(2) }
   let(:one_liner) { Faker::Lorem.sentence }
 

@@ -57,7 +57,7 @@ class HomeController < ApplicationController
 
   def background_image_number
     @background_image_number ||= begin
-      session[:background_image_number] ||= rand(4) + 1
+      session[:background_image_number] ||= rand(1..4)
       session[:background_image_number] += 1
       session[:background_image_number] = 1 if session[:background_image_number] > 4
       session[:background_image_number]

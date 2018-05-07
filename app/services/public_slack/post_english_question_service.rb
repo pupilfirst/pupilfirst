@@ -8,7 +8,7 @@ module PublicSlack
       # TODO: Fallback to posting individual questions if so.
       return if question_for_the_day.blank?
 
-      channels = target.present? ? target : target_audience # The target argument is temporary - for testing.
+      channels = target.presence || target_audience # The target argument is temporary - for testing.
 
       # Spin up a job for each channel to be pinged.
       channels.each do |channel|
@@ -84,7 +84,7 @@ module PublicSlack
       response = api_service.get('chat.postMessage', params: params)
       log "Successfully posted English Question of the day to #{channel}" if response['ok']
     rescue PublicSlack::OperationFailureException
-      return # ignore Slack exceptions for now.
+      nil # ignore Slack exceptions for now.
     end
 
     def api_service

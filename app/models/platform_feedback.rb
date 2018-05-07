@@ -1,6 +1,6 @@
 class PlatformFeedback < ApplicationRecord
   belongs_to :founder
-  has_one :karma_point, as: :source
+  has_one :karma_point, as: :source, inverse_of: :source, dependent: :restrict_with_error
 
   scope :scored, -> { where.not(promoter_score: nil) }
 

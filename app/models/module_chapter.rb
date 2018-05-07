@@ -22,7 +22,7 @@ class ModuleChapter < ApplicationRecord
     # ensure its a valid json
     begin
       json = JSON.parse(@serialized_links)
-    rescue
+    rescue StandardError
       errors[:serialized_links] << 'is not a valid JSON'
       return false
     end

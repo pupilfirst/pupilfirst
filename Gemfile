@@ -37,7 +37,7 @@ gem 'rest-client', '~> 2.0' # Used to contact Fast Alerts' API.
 gem 'cancancan', '~> 2.0' # Used to manage administrator types and roles in the ActiveAdmin interface.
 gem 'select2-rails', '~> 4.0' # Select2 javascript select box improvement library, using in ActiveAdmin interface.
 gem 'bootstrap', '= 4.0.0' # Official Sass port of Bootstrap.
-gem 'autoprefixer-rails', '~> 7.1' # Autoprefixer for Ruby and Ruby on Rails.
+gem 'autoprefixer-rails', '~> 8.4' # Autoprefixer for Ruby and Ruby on Rails.
 gem 'simple_form', '~> 3.4' # Simple-form with support for Bootstrap 3.
 gem 'simple_form_fancy_uploads', '~> 0.2' # simple_form custom inputs to get image/link previews with file uploads. https://github.com/apeacox/simple_form_fancy_uploads
 gem 'bootstrap_form', '= 4.0.0.dev', github: 'bootstrap-ruby/bootstrap_form', branch: 'master' # a Rails form builder that makes it super easy to create beautiful-looking forms using Bootstrap 4
@@ -157,8 +157,8 @@ group :test do
   gem 'rspec-retry', '~> 0.5' # Retry randomly failing rspec example. https://github.com/NoRedInk/rspec-retry
   gem 'factory_bot_rails', '~> 4.8' # A library for setting up Ruby objects as test data.
   gem 'faker', '~> 1.7' # A library for generating fake data such as names, addresses, and phone numbers.
-  gem 'capybara', '~> 2.13' # For RSpec feature tests.
-  gem 'capybara-email', '~> 2.5' # Test ActionMailer and Mailer messages with Capybara
+  gem 'capybara', '~> 3.0' # For RSpec feature tests.
+  gem 'capybara-email', '~> 3.0' # Test ActionMailer and Mailer messages with Capybara
   gem 'selenium-webdriver', '~> 3.3'
   gem 'capybara-screenshot', '~> 1.0' # Save screenshots on failure!
   gem 'database_cleaner', '~> 1.5' # Database cleaner can handle complex DB cleanup strategies for test (feature vs regular tests).

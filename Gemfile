@@ -19,7 +19,7 @@ gem 'carrierwave', '~> 1.1' # One uploader to rule them all.
 # Backgrounder for carrierwave.
 gem 'carrierwave_backgrounder', '= 0.4.2', github: 'harigopal/carrierwave_backgrounder', branch: 'rails-5-1'
 gem 'carrierwave-bombshelter', '~> 0.2' # Protects your carrierwave from image bombs (and such).
-gem 'fog-aws', '~> 1.2', require: 'fog/aws' # Required by Carrierwave to upload to S3.
+gem 'fog-aws', '~> 3.0', require: 'fog/aws' # Required by Carrierwave to upload to S3.
 
 gem 'webpacker', '~> 3.0' # Use Webpack to manage app-like JavaScript modules in Rails.
 gem 'coffee-rails', '~> 4.2.0' # Coffeescript on Rails.

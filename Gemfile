@@ -67,7 +67,10 @@ gem 'google_calendar', '= 0.6.4', github: 'northworld/google_calendar' # Thin wr
 gem 'groupdate', '~> 3.2' # The simplest way to group temporal data. https://github.com/ankane/groupdate
 gem 'videojs_rails', '~> 4.12' # Video JS for Rails 3.1+ Asset Pipeline. https://github.com/seanbehan/videojs_rails
 gem 'react-rails', '~> 2.2' # For automatically transforming JSX and using React in Rails.
-gem 'ahoy_matey', '~> 1.5' # Analytics for Rails
+
+gem 'ahoy_matey', '~> 2.0' # Analytics for Rails.
+gem 'uuidtools', '~>2.1' # Required by ahoy_matey for ActiveRecord stores.
+
 gem 'acts-as-taggable-on', '~> 5.0' # Tag a single model on several contexts.
 gem 'sendinblue', '~> 2.4' # This is SendinBlue provided API V2 Ruby GEM
 gem 'email_inquire', '~> 0.6' # Validate email for format, common typos and one-time email providers

@@ -539,7 +539,7 @@ GEM
     rack-contrib (2.0.1)
       rack (~> 2.0)
     rack-cors (1.0.2)
-    rack-mini-profiler (0.10.7)
+    rack-mini-profiler (1.0.0)
       rack (>= 1.2.0)
     rack-proxy (0.6.4)
       rack
@@ -653,7 +653,6 @@ GEM
       uber (< 0.2.0)
     request_store (1.4.1)
       rack (>= 1.4)
-    require_all (1.5.0)
     responders (2.4.0)
       actionpack (>= 4.2.0, < 5.3)
       railties (>= 4.2.0, < 5.3)
@@ -764,7 +763,7 @@ GEM
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
     uber (0.1.0)
-    uglifier (3.2.0)
+    uglifier (4.1.8)
       execjs (>= 0.3.0, < 3)
     unf (0.1.4)
       unf_ext
@@ -886,7 +885,7 @@ DEPENDENCIES
   puma (~> 3.9)
   pundit (~> 1.1)
   rack-cors (~> 1.0)
-  rack-mini-profiler (~> 0.10)
+  rack-mini-profiler (~> 1.0)
   rack-timeout (~> 0.4)
   rails (~> 5.1.6)
   rails-assets-bootstrap-tabcollapse (~> 0.2)!
@@ -913,7 +912,6 @@ DEPENDENCIES
   recaptcha (~> 4.6)
   reform (~> 2.2)
   reform-rails (~> 0.1)
-  require_all (~> 1.4)
   responders (~> 2.3)
   rest-client (~> 2.0)
   roadie-rails (~> 1.1)
@@ -934,7 +932,7 @@ DEPENDENCIES
   stackprof (~> 0.2)
   titleize (~> 1.4)
   turbolinks (~> 5.0)
-  uglifier (~> 3.1)
+  uglifier (~> 4.1)
   unobtrusive_flash (= 3.1.0)!
   uuidtools (~> 2.1)
   valid_url (= 0.0.4)!

@@ -32,7 +32,7 @@ gem 'pg', '~> 0.20' # PostgreSQL support.
 gem 'sass-rails', '~> 5.0'
 gem 'slim', '~> 3.0' # Slim templating.
 gem 'turbolinks', '~> 5.0' # Quicker page navigation. https://github.com/turbolinks/turbolinks
-gem 'uglifier', '~> 3.1' # JavaScript compressor.
+gem 'uglifier', '~> 4.1' # JavaScript compressor.
 gem 'rest-client', '~> 2.0' # Used to contact Fast Alerts' API.
 gem 'cancancan', '~> 2.0' # Used to manage administrator types and roles in the ActiveAdmin interface.
 gem 'select2-rails', '~> 4.0' # Select2 javascript select box improvement library, using in ActiveAdmin interface.
@@ -58,7 +58,6 @@ gem 'font-awesome-rails', '~> 4.7' # Icons from font-awesome!
 gem 'unobtrusive_flash', '= 3.1.0', github: 'mobmewireless/unobtrusive_flash', branch: 'master'
 
 gem 'friendly_id', '~> 5.2' # Slugs for links. http://norman.github.io/friendly_id
-gem 'require_all', '~> 1.4' # Easier folder require-s.
 gem 'lita', '= 5.0.0', github: 'svdotco/lita', require: false # Lita without rack version limitation. TODO: Replace with official version when it drops rack < v2 limitation.
 gem 'lita-slack', '= 1.8.0', github: 'litaio/lita-slack', require: false # Lita adapter for Slack. TODO: removing github repo tracking when gem is updated
 gem 'kramdown', '~> 1.13' # kramdown is a fast, pure Ruby Markdown superset converter, using a strict syntax definition and supporting several common extensions. http://kramdown.gettalong.org
@@ -142,7 +141,7 @@ group :development do
   # gem 'binding_of_caller' # For advanced better_errors features - REPL, local/instance variable inspection etc.
   gem 'web-console', '~> 3.4' # TODO: Restored until better_errors speeds up again.
   gem 'listen', '>= 3.0.5', '< 3.2' # The Listen gem listens to file modifications and notifies you about the changes.
-  gem 'rack-mini-profiler', '~> 0.10' # Middleware that displays speed badge for every html page.
+  gem 'rack-mini-profiler', '~> 1.0' # Middleware that displays speed badge for every html page.
 
   # Go faster, off the Rails - Benchmarks for your whole Rails app
   gem 'derailed_benchmarks', '~> 1.3'

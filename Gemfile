@@ -38,8 +38,6 @@ gem 'cancancan', '~> 2.0' # Used to manage administrator types and roles in the 
 gem 'select2-rails', '~> 4.0' # Select2 javascript select box improvement library, using in ActiveAdmin interface.
 gem 'bootstrap', '= 4.0.0' # Official Sass port of Bootstrap.
 gem 'autoprefixer-rails', '~> 8.4' # Autoprefixer for Ruby and Ruby on Rails.
-gem 'simple_form', '~> 3.4' # Simple-form with support for Bootstrap 3.
-gem 'simple_form_fancy_uploads', '~> 0.2' # simple_form custom inputs to get image/link previews with file uploads. https://github.com/apeacox/simple_form_fancy_uploads
 gem 'bootstrap_form', '= 4.0.0.dev', github: 'bootstrap-ruby/bootstrap_form', branch: 'master' # a Rails form builder that makes it super easy to create beautiful-looking forms using Bootstrap 4
 
 # TODO: The zones list in the gem was outdated.

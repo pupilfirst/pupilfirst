@@ -10,7 +10,7 @@ class PlatformFeedback < ApplicationRecord
     %w[Feature Suggestion Bug Other]
   end
 
-  validates :feedback_type, inclusion: types_of_feedback
+  validates :feedback_type, presence: true, inclusion: types_of_feedback
   validates :founder_id, presence: true
 
   def attachment_filename

@@ -28,7 +28,7 @@ gem 'devise_invitable', '~> 1.7' # Allow invites to be sent out.
 gem 'jbuilder', '~> 2.6' # Standard part of Rails, but unused, since we don't have an API.
 gem 'jquery-rails', '~> 4.3' # JQuery on Rails.
 gem 'mini_magick', '~> 4.6' # Image processing.
-gem 'pg', '~> 0.20' # PostgreSQL support.
+gem 'pg', '~> 1.0' # PostgreSQL support.
 gem 'sass-rails', '~> 5.0'
 gem 'slim', '~> 3.0' # Slim templating.
 gem 'turbolinks', '~> 5.0' # Quicker page navigation. https://github.com/turbolinks/turbolinks
@@ -61,7 +61,7 @@ gem 'lita-slack', '= 1.8.0', github: 'litaio/lita-slack', require: false # Lita 
 gem 'kramdown', '~> 1.13' # kramdown is a fast, pure Ruby Markdown superset converter, using a strict syntax definition and supporting several common extensions. http://kramdown.gettalong.org
 gem 'gaffe', '~> 1.2' # Custom error pages. https://github.com/mirego/gaffe
 gem 'google_calendar', '= 0.6.4', github: 'northworld/google_calendar' # Thin wrapper over Google Calendar API.
-gem 'groupdate', '~> 3.2' # The simplest way to group temporal data. https://github.com/ankane/groupdate
+gem 'groupdate', '~> 4.0' # The simplest way to group temporal data. https://github.com/ankane/groupdate
 gem 'videojs_rails', '~> 4.12' # Video JS for Rails 3.1+ Asset Pipeline. https://github.com/seanbehan/videojs_rails
 gem 'react-rails', '~> 2.2' # For automatically transforming JSX and using React in Rails.
 
@@ -96,7 +96,7 @@ gem 'data_migrate', '~> 4.0' # Run data migrations alongside schema migrations.
 
 # Omniauth providers
 gem 'omniauth-google-oauth2', '~> 0.4' # Oauth2 strategy for Google
-gem 'omniauth-facebook', '~> 4.0' # Facebook OAuth2 Strategy for OmniAuth http://mkdynamic.github.com/omniauth-facebook
+gem 'omniauth-facebook', '~> 5.0' # Facebook OAuth2 Strategy for OmniAuth http://mkdynamic.github.com/omniauth-facebook
 gem 'omniauth-github', '~> 1.2' # GitHub strategy for OmniAuth
 
 gem 'koala', '~> 2.2' # Library for Facebook with support for OAuth authentication, the Graph and REST APIs

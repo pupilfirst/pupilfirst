@@ -31,7 +31,7 @@ ActiveAdmin.register MoocStudent do
     selectable_column
 
     column :name_or_email do |student|
-      student.name.present? ? student.name : student.email
+      student.name.presence || student.email
     end
 
     column :college do |mooc_student|

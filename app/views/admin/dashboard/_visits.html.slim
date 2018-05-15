@@ -1,22 +1,26 @@
 .dashboard-item
-  - founder_visits = Visit.includes(user: { founder: :startup }).joins(logged_in_user: { founder: :startup }).where(started_at: (3.weeks.ago..Time.now))
+  - user_visits = Visit.user_visits.where(started_at: (3.weeks.ago..Time.now))
 
-  .heading Recent visits (Only logged-in founders)
+  .heading Recent visits (Only logged-in users)
 
   .content
-    - founder_visits.order('visits.started_at DESC').limit(10).each do |visit|
+    - user_visits.order('visits.started_at DESC').limit(10).each do |visit|
       .recent-visit
-        ' &nbsp;#{visit.started_at.strftime('%b %e, %H:%M')}:
-        = link_to visit.user.founder.fullname, admin_founder_path(visit.user.founder)
-        ' &nbsp;&dash;
-        = link_to visit.user.founder.startup.product_name, admin_startup_path(visit.user.founder.startup)
+        - if visit.user.founder.present?
+          ' &nbsp;#{visit.started_at.strftime('%b %e, %H:%M')}:
+          = link_to visit.user.founder.fullname, admin_founder_path(visit.user.founder)
+          ' &nbsp;&dash;
+          = link_to visit.user.founder.startup.product_name, admin_startup_path(visit.user.founder.startup)
+        - elsif visit.user.admin_user.present?
+          ' &nbsp;#{visit.started_at.strftime('%b %e, %H:%M')}:
+          = link_to visit.user.admin_user.fullname, admin_admin_user_path(visit.user.admin_user)
 
   .footer-spacer
 
-  - trend = founder_visits.group_by_week('visits.started_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
+  - trend = user_visits.group_by_week('visits.started_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
 
   .left-of-button title="Trend: #{trend.join(', ')}"
     span.sparkline-tag #{trend.join(', ')}
 
-  a.button.view-all href=admin_visits_path(scope: 'founder_visits', q: { started_at_gteq: 3.weeks.ago.strftime('%Y-%m-%d') })
-    | View All (#{founder_visits.where(started_at: (3.weeks.ago..Time.now)).count})
+  a.button.view-all href=admin_visits_path(scope: 'user_visits', q: { started_at_gteq: 3.weeks.ago.strftime('%Y-%m-%d') })
+    | View All (#{user_visits.where(started_at: (3.weeks.ago..Time.now)).count})

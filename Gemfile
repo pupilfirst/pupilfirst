@@ -19,7 +19,7 @@ gem 'carrierwave', '~> 1.1' # One uploader to rule them all.
 # Backgrounder for carrierwave.
 gem 'carrierwave_backgrounder', '= 0.4.2', github: 'harigopal/carrierwave_backgrounder', branch: 'rails-5-1'
 gem 'carrierwave-bombshelter', '~> 0.2' # Protects your carrierwave from image bombs (and such).
-gem 'fog-aws', '~> 1.2', require: 'fog/aws' # Required by Carrierwave to upload to S3.
+gem 'fog-aws', '~> 3.0', require: 'fog/aws' # Required by Carrierwave to upload to S3.
 
 gem 'webpacker', '~> 3.0' # Use Webpack to manage app-like JavaScript modules in Rails.
 gem 'coffee-rails', '~> 4.2.0' # Coffeescript on Rails.
@@ -28,18 +28,16 @@ gem 'devise_invitable', '~> 1.7' # Allow invites to be sent out.
 gem 'jbuilder', '~> 2.6' # Standard part of Rails, but unused, since we don't have an API.
 gem 'jquery-rails', '~> 4.3' # JQuery on Rails.
 gem 'mini_magick', '~> 4.6' # Image processing.
-gem 'pg', '~> 0.20' # PostgreSQL support.
+gem 'pg', '~> 1.0' # PostgreSQL support.
 gem 'sass-rails', '~> 5.0'
 gem 'slim', '~> 3.0' # Slim templating.
 gem 'turbolinks', '~> 5.0' # Quicker page navigation. https://github.com/turbolinks/turbolinks
-gem 'uglifier', '~> 3.1' # JavaScript compressor.
+gem 'uglifier', '~> 4.1' # JavaScript compressor.
 gem 'rest-client', '~> 2.0' # Used to contact Fast Alerts' API.
 gem 'cancancan', '~> 2.0' # Used to manage administrator types and roles in the ActiveAdmin interface.
 gem 'select2-rails', '~> 4.0' # Select2 javascript select box improvement library, using in ActiveAdmin interface.
 gem 'bootstrap', '= 4.0.0' # Official Sass port of Bootstrap.
-gem 'autoprefixer-rails', '~> 7.1' # Autoprefixer for Ruby and Ruby on Rails.
-gem 'simple_form', '~> 3.4' # Simple-form with support for Bootstrap 3.
-gem 'simple_form_fancy_uploads', '~> 0.2' # simple_form custom inputs to get image/link previews with file uploads. https://github.com/apeacox/simple_form_fancy_uploads
+gem 'autoprefixer-rails', '~> 8.4' # Autoprefixer for Ruby and Ruby on Rails.
 gem 'bootstrap_form', '= 4.0.0.dev', github: 'bootstrap-ruby/bootstrap_form', branch: 'master' # a Rails form builder that makes it super easy to create beautiful-looking forms using Bootstrap 4
 
 # TODO: The zones list in the gem was outdated.
@@ -58,16 +56,18 @@ gem 'font-awesome-rails', '~> 4.7' # Icons from font-awesome!
 gem 'unobtrusive_flash', '= 3.1.0', github: 'mobmewireless/unobtrusive_flash', branch: 'master'
 
 gem 'friendly_id', '~> 5.2' # Slugs for links. http://norman.github.io/friendly_id
-gem 'require_all', '~> 1.4' # Easier folder require-s.
 gem 'lita', '= 5.0.0', github: 'svdotco/lita', require: false # Lita without rack version limitation. TODO: Replace with official version when it drops rack < v2 limitation.
 gem 'lita-slack', '= 1.8.0', github: 'litaio/lita-slack', require: false # Lita adapter for Slack. TODO: removing github repo tracking when gem is updated
 gem 'kramdown', '~> 1.13' # kramdown is a fast, pure Ruby Markdown superset converter, using a strict syntax definition and supporting several common extensions. http://kramdown.gettalong.org
 gem 'gaffe', '~> 1.2' # Custom error pages. https://github.com/mirego/gaffe
 gem 'google_calendar', '= 0.6.4', github: 'northworld/google_calendar' # Thin wrapper over Google Calendar API.
-gem 'groupdate', '~> 3.2' # The simplest way to group temporal data. https://github.com/ankane/groupdate
+gem 'groupdate', '~> 4.0' # The simplest way to group temporal data. https://github.com/ankane/groupdate
 gem 'videojs_rails', '~> 4.12' # Video JS for Rails 3.1+ Asset Pipeline. https://github.com/seanbehan/videojs_rails
 gem 'react-rails', '~> 2.2' # For automatically transforming JSX and using React in Rails.
-gem 'ahoy_matey', '~> 1.5' # Analytics for Rails
+
+gem 'ahoy_matey', '~> 2.0' # Analytics for Rails.
+gem 'uuidtools', '~>2.1' # Required by ahoy_matey for ActiveRecord stores.
+
 gem 'acts-as-taggable-on', '~> 5.0' # Tag a single model on several contexts.
 gem 'sendinblue', '~> 2.4' # This is SendinBlue provided API V2 Ruby GEM
 gem 'email_inquire', '~> 0.6' # Validate email for format, common typos and one-time email providers
@@ -92,11 +92,11 @@ gem 'scarf', '~> 0.2' # A Ruby library for generating initial avatars and identi
 gem 'descriptive_statistics', '~> 2.5', require: 'descriptive_statistics/safe' # Used to calculate basic stat measures such as std. deviation (eg: To calculate relative performance of startups)
 gem 'kaminari', '~> 1.0' # Scope & Engine based, clean, powerful, customizable and sophisticated paginator.
 gem 'bootstrap4-kaminari-views', '= 1.0.0', github: 'mahesh-krishnakumar/bootstrap4-kaminari-views' # Bootstrap 4 styling for Kaminari gem
-gem 'data_migrate' # Run data migrations alongside schema migrations.
+gem 'data_migrate', '~> 4.0' # Run data migrations alongside schema migrations.
 
 # Omniauth providers
 gem 'omniauth-google-oauth2', '~> 0.4' # Oauth2 strategy for Google
-gem 'omniauth-facebook', '~> 4.0' # Facebook OAuth2 Strategy for OmniAuth http://mkdynamic.github.com/omniauth-facebook
+gem 'omniauth-facebook', '~> 5.0' # Facebook OAuth2 Strategy for OmniAuth http://mkdynamic.github.com/omniauth-facebook
 gem 'omniauth-github', '~> 1.2' # GitHub strategy for OmniAuth
 
 gem 'koala', '~> 2.2' # Library for Facebook with support for OAuth authentication, the Graph and REST APIs
@@ -139,7 +139,7 @@ group :development do
   # gem 'binding_of_caller' # For advanced better_errors features - REPL, local/instance variable inspection etc.
   gem 'web-console', '~> 3.4' # TODO: Restored until better_errors speeds up again.
   gem 'listen', '>= 3.0.5', '< 3.2' # The Listen gem listens to file modifications and notifies you about the changes.
-  gem 'rack-mini-profiler', '~> 0.10' # Middleware that displays speed badge for every html page.
+  gem 'rack-mini-profiler', '~> 1.0' # Middleware that displays speed badge for every html page.
 
   # Go faster, off the Rails - Benchmarks for your whole Rails app
   gem 'derailed_benchmarks', '~> 1.3'
@@ -154,8 +154,8 @@ group :test do
   gem 'rspec-retry', '~> 0.5' # Retry randomly failing rspec example. https://github.com/NoRedInk/rspec-retry
   gem 'factory_bot_rails', '~> 4.8' # A library for setting up Ruby objects as test data.
   gem 'faker', '~> 1.7' # A library for generating fake data such as names, addresses, and phone numbers.
-  gem 'capybara', '~> 2.13' # For RSpec feature tests.
-  gem 'capybara-email', '~> 2.5' # Test ActionMailer and Mailer messages with Capybara
+  gem 'capybara', '~> 3.0' # For RSpec feature tests.
+  gem 'capybara-email', '~> 3.0' # Test ActionMailer and Mailer messages with Capybara
   gem 'selenium-webdriver', '~> 3.3'
   gem 'capybara-screenshot', '~> 1.0' # Save screenshots on failure!
   gem 'database_cleaner', '~> 1.5' # Database cleaner can handle complex DB cleanup strategies for test (feature vs regular tests).
@@ -166,7 +166,7 @@ group :development, :test do
   gem 'coderay', '~> 1.1' # Pretty syntax highlighting on rspec failure snippets.
   gem 'pry-rails', '~> 0.3.5' # Pry debugger.
   gem 'webmock', '~> 3.0' # Mocking web requests.
-  gem 'rubocop', '~> 0.49.1', require: false # Ruby Style Guide.
+  gem 'rubocop', '~> 0.55.0', require: false # Ruby Style Guide.
   gem 'bundler-audit', '~> 0.5', require: false # Audit gems in gemfile.lock for reported vulnerabilities
   gem 'overcommit', '~> 0.38', require: false # A fully configurable and extendable Git hook manager
   gem 'fuubar', '~> 2.2' # The instafailing RSpec progress bar formatter.

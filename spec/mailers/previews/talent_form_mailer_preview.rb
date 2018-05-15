@@ -6,7 +6,7 @@ class TalentFormMailerPreview < ActionMailer::Preview
       mobile: '9876543210',
       organization: 'Doe Enterprises',
       website: 'https://www.example.com',
-      query_type: TalentForm::VALID_QUERY_TYPES.sample(rand(3) + 1)
+      query_type: TalentForm::VALID_QUERY_TYPES.sample(rand(1..3))
     }
 
     TalentFormMailer.contact(mail_params)

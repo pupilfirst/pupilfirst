@@ -11,7 +11,7 @@ class IntercomNewApplicantCreateJob < ApplicationJob
 
   def perform(founder)
     return true
-    # rubocop: disable Lint/UnreachableCode
+    # rubocop:disable Lint/UnreachableCode
     return if self.class.mock?
 
     intercom = IntercomClient.new
@@ -27,6 +27,7 @@ class IntercomNewApplicantCreateJob < ApplicationJob
 
     # IntercomLastApplicantEventUpdateJob.perform_later(founder, 'submitted_application')
     Intercom::LevelZeroStageUpdateJob.perform_later(founder, Startup::ADMISSION_STAGE_SIGNED_UP)
+    # rubocop:enable Lint/UnreachableCode
   end
 
   def founder_college_name(founder)

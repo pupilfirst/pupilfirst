@@ -123,7 +123,7 @@ export default class FoundersForm extends React.Component {
         )}
 
         <form
-          className="simple_form form-horizontal"
+          className="form-horizontal"
           acceptCharset="UTF-8"
           method="post"
         >

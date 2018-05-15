@@ -22,7 +22,7 @@ module Admin
       end
 
       def all_live_targets
-        @live_targets ||= Target.live
+        Target.live
       end
     end
   end

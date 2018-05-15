@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 class Faculty < ApplicationRecord
@@ -18,8 +17,8 @@ class Faculty < ApplicationRecord
   has_many :connect_requests, through: :connect_slots
   belongs_to :founder, optional: true # link alumni faculty to their founder profile
   belongs_to :level, optional: true
-  has_many :english_quiz_submissions, foreign_key: 'quizee_id'
-  has_many :startups
+  has_many :english_quiz_submissions, foreign_key: 'quizee_id', inverse_of: :quizee, dependent: :restrict_with_error
+  has_many :startups, dependent: :restrict_with_error
 
   CATEGORY_TEAM = 'team'
   CATEGORY_VISITING_COACHES = 'visiting_coaches'

@@ -30,6 +30,10 @@ Rails/HasAndBelongsToMany:
 
 # Project styling
 
+Style/IfUnlessModifier:
+  Enabled: false
+Style/FormatStringToken:
+  Enabled: false
 Style/DoubleNegation:
   Enabled: false
 Layout/AlignParameters:
@@ -41,9 +45,9 @@ Layout/MultilineMethodCallIndentation:
 Layout/CaseIndentation:
   EnforcedStyle: end
   IndentOneStep: true
-Lint/EndAlignment:
+Layout/EndAlignment:
   EnforcedStyleAlignWith: variable
-Style/VariableNumber:
+Naming/VariableNumber:
   Enabled: false
 Metrics/BlockLength:
   Exclude:

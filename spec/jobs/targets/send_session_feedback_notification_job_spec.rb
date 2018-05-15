@@ -19,7 +19,7 @@ describe Targets::SendSessionFeedbackNotificationJob do
 
       If you missed watching it live, we will have it up on the dashboard in a couple of days.
 
-      Kindly help us improve our sessions with some quick feedback: https://svlabs.typeform.com/to/h7g9Om?faculty=#{URI.escape(faculty_name)}&session=#{URI.escape(session_recent.title)}&date=#{URI.escape(session_recent.session_at.strftime('%Y-%m-%d'))}
+      Kindly help us improve our sessions with some quick feedback: https://svlabs.typeform.com/to/h7g9Om?faculty=#{CGI.escape(faculty_name)}&session=#{CGI.escape(session_recent.title)}&date=#{CGI.escape(session_recent.session_at.strftime('%Y-%m-%d'))}
     EXPECTED_MESSAGE
   end
 

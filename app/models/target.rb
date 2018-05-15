@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 class Target < ApplicationRecord
@@ -23,12 +22,12 @@ class Target < ApplicationRecord
 
   belongs_to :faculty, optional: true
   belongs_to :timeline_event_type, optional: true
-  has_many :timeline_events
-  has_many :target_prerequisites
+  has_many :timeline_events, dependent: :nullify
+  has_many :target_prerequisites, dependent: :destroy
   has_many :prerequisite_targets, through: :target_prerequisites
   belongs_to :target_group, optional: true
-  has_many :resources
-  has_many :target_skills
+  has_many :resources, dependent: :nullify
+  has_many :target_skills, dependent: :destroy
   has_many :skills, through: :target_skills
   has_one :level, through: :target_group
   has_one :school, through: :target_group

@@ -21,9 +21,7 @@ module Lita
 
       # construct the consolidated leaderboard response for all levels
       def leaderboard_response
-        if Startups::LeaderboardService.pending?
-          return 'The leaderboard for last week is being generated. Please try again after a minute.'
-        end
+        return 'The leaderboard for last week is being generated. Please try again after a minute.' if Startups::LeaderboardService.pending?
 
         response_title = "*<#{leaderboard_url}|Leaderboards> - #{start_date} to #{end_date}:*\n"
         leaderboard_response = ''
@@ -106,9 +104,7 @@ module Lita
         inactive_startups, response = join_leaderboard_rows(leaderboard)
 
         # Add number of inactive startups, if any.
-        if inactive_startups.positive?
-          response += inactive_startup_message(inactive_startups)
-        end
+        response += inactive_startup_message(inactive_startups) if inactive_startups.positive?
         response
       end
     end

@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 class TimelineEventType < ApplicationRecord
@@ -65,7 +64,7 @@ class TimelineEventType < ApplicationRecord
   end
 
   def sample
-    placeholder_text = sample_text.present? ? sample_text : "What's been happening?"
+    placeholder_text = sample_text.presence || "What's been happening?"
     placeholder_text += "\n\nProof Required: #{proof_required}" if proof_required.present?
     placeholder_text
   end

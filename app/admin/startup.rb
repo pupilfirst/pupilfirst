@@ -149,7 +149,7 @@ ActiveAdmin.register Startup do
   # TODO: rewrite as its only used for dropping out startups now
   member_action :custom_update, method: :put do
     startup = Startup.friendly.find params[:id]
-    startup.update_attributes!(permitted_params[:startup])
+    startup.update!(permitted_params[:startup])
 
     case params[:email_to_send].to_sym
       when :dropped_out

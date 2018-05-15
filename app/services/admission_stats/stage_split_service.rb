@@ -8,7 +8,7 @@ module AdmissionStats
 
       stages.each_with_object({}) do |stage, hash|
         hash[stage] = if stage == Startup::ADMISSION_STAGE_ADMITTED
-          Startup.where(admission_stage: stage).where('created_at > ?', date_time_for_admissions).count
+          Startup.where(admission_stage: stage).where('created_at > ?', date_for_admissions).count
         else
           Startup.where(admission_stage: stage).count
         end
@@ -21,8 +21,8 @@ module AdmissionStats
       @fee_payment_target ||= Target.find_by(key: Target::KEY_FEE_PAYMENT)
     end
 
-    def date_time_for_admissions
-      DateTime.new(2018, 1, 9)
+    def date_for_admissions
+      Date.new(2018, 1, 9)
     end
   end
 end

@@ -37,7 +37,7 @@ module EnglishQuizQuestions
     def quizee
       @quizee ||= begin
         founder = Founder.find_by(slack_user_id: @payload['user']['id'])
-        founder.present? ? founder : Faculty.find_by(slack_user_id: @payload['user']['id'])
+        founder.presence || Faculty.find_by(slack_user_id: @payload['user']['id'])
       end
     end
 

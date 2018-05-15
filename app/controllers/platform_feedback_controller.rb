@@ -1,6 +1,4 @@
 class PlatformFeedbackController < ApplicationController
-  before_action :require_active_subscription
-
   def create
     @platform_feedback = PlatformFeedback.new platform_feedback_params
     authorize @platform_feedback

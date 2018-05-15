@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 class Startup < ApplicationRecord
@@ -108,8 +107,8 @@ class Startup < ApplicationRecord
     joins(:startup_categories).where(startup_categories: { id: category.id })
   end
 
-  has_many :founders
-  has_many :invited_founders, class_name: 'Founder', foreign_key: 'invited_startup_id'
+  has_many :founders, dependent: :nullify
+  has_many :invited_founders, class_name: 'Founder', foreign_key: 'invited_startup_id', inverse_of: :invited_startup, dependent: :restrict_with_error
 
   has_and_belongs_to_many :startup_categories do
     def <<(_category)
@@ -124,13 +123,13 @@ class Startup < ApplicationRecord
 
   belongs_to :level
   has_many :payments, dependent: :restrict_with_error
-  has_many :archived_payments, class_name: 'Payment', foreign_key: 'original_startup_id'
+  has_many :archived_payments, class_name: 'Payment', foreign_key: 'original_startup_id', dependent: :nullify, inverse_of: :original_startup
 
-  has_one :coupon_usage
+  has_one :coupon_usage, dependent: :destroy
   has_one :applied_coupon, through: :coupon_usage, source: :coupon
 
-  has_many :weekly_karma_points
-  has_many :resources
+  has_many :weekly_karma_points, dependent: :destroy
+  has_many :resources, dependent: :destroy
   belongs_to :team_lead, class_name: 'Founder', optional: true
   belongs_to :billing_state, class_name: 'State', optional: true
   belongs_to :faculty, optional: true

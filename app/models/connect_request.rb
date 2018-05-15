@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 class ConnectRequest < ApplicationRecord
@@ -8,7 +7,7 @@ class ConnectRequest < ApplicationRecord
   belongs_to :connect_slot
   belongs_to :startup
 
-  has_one :karma_point, as: :source
+  has_one :karma_point, as: :source, dependent: :restrict_with_exception, inverse_of: :source
 
   scope :upcoming, -> { joins(:connect_slot).where('connect_slots.slot_at > ?', Time.now) }
   scope :completed, -> { joins(:connect_slot).where(status: STATUS_CONFIRMED).where('connect_slots.slot_at < ?', (Time.now - 20.minutes)) }

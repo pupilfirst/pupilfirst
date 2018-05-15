@@ -1,12 +1,12 @@
 .filter-box__container.mt-4
-  = simple_form_for @form, url: products_path, method: :get do |f|
+  = bootstrap_form_for @form, url: products_path, method: :get do |f|
     .filter-box.row
       .col-md-3
-        = f.input :level_id, collection: @levels, label_method: ->(level) { level.display_name }, include_blank: 'Any', label: 'Level', required: false, input_html: { class: 'filter-dropdown__select' }, selected: @form.level_id
+        = f.collection_select :level_id, @levels, :id, :display_name, {include_blank: 'Any', label: 'Level'}, {required: false, class: 'filter-dropdown__select' }
       .col-md-3
-        = f.input :startup_category_id, collection: @categories, include_blank: 'Any', label: 'Category', required: false, input_html: { class: 'filter-dropdown__select' }, selected: @form.startup_category_id
+        = f.collection_select :startup_category_id, @categories, :id, :name, {include_blank: 'Any', label: 'Category'}, {required: false, class: 'filter-dropdown__select' }
       .col-md-3
-        = f.input :search, placeholder: 'Product Name contains', required: false
+        = f.text_field :search, placeholder: 'Product Name contains', required: false
       .col-md-3
         = submit_tag 'FILTER', class: 'btn btn-primary filter-form-btn'
         - if @form.level_id.present? || @form.startup_category_id.present? || @form.search.present?

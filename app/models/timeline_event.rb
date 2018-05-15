@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 class TimelineEvent < ApplicationRecord
@@ -7,13 +6,13 @@ class TimelineEvent < ApplicationRecord
   belongs_to :timeline_event_type
   belongs_to :target, optional: true
 
-  has_one :karma_point, as: :source
-  has_many :startup_feedback
+  has_one :karma_point, as: :source, dependent: :destroy, inverse_of: :source
+  has_many :startup_feedback, dependent: :destroy
   has_many :timeline_event_files, dependent: :destroy
 
   belongs_to :improved_timeline_event, class_name: 'TimelineEvent', optional: true
-  has_one :improvement_of, class_name: 'TimelineEvent', foreign_key: 'improved_timeline_event_id'
-  has_many :timeline_event_grades
+  has_one :improvement_of, class_name: 'TimelineEvent', foreign_key: 'improved_timeline_event_id', dependent: :nullify, inverse_of: :improved_timeline_event
+  has_many :timeline_event_grades, dependent: :destroy
 
   mount_uploader :image, TimelineImageUploader
   process_in_background :image

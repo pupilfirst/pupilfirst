@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180322073926) do
+ActiveRecord::Schema.define(version: 20180419094028) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -587,7 +587,9 @@ ActiveRecord::Schema.define(version: 20180322073926) do
     t.integer "undiscounted_founder_fee"
     t.text "billing_address"
     t.bigint "billing_state_id"
+    t.bigint "faculty_id"
     t.index ["billing_state_id"], name: "index_startups_on_billing_state_id"
+    t.index ["faculty_id"], name: "index_startups_on_faculty_id"
     t.index ["level_id"], name: "index_startups_on_level_id"
     t.index ["slug"], name: "index_startups_on_slug", unique: true
     t.index ["stage"], name: "index_startups_on_stage"

@@ -10,7 +10,8 @@
           ' &nbsp;#{visit.started_at.strftime('%b %e, %H:%M')}:
           = link_to visit.user.founder.fullname, admin_founder_path(visit.user.founder)
           ' &nbsp;&dash;
-          = link_to visit.user.founder.startup.product_name, admin_startup_path(visit.user.founder.startup)
+          - if visit.user.founder.startup.present?
+            = link_to visit.user.founder.startup.product_name, admin_startup_path(visit.user.founder.startup)
         - elsif visit.user.admin_user.present?
           ' &nbsp;#{visit.started_at.strftime('%b %e, %H:%M')}:
           = link_to visit.user.admin_user.fullname, admin_admin_user_path(visit.user.admin_user)

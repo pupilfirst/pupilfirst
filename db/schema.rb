@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180322073926) do
+ActiveRecord::Schema.define(version: 20180531070731) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -293,13 +293,6 @@ ActiveRecord::Schema.define(version: 20180322073926) do
     t.index ["user_id"], name: "index_founders_on_user_id"
   end
 
-  create_table "hunt_answers", force: :cascade do |t|
-    t.integer "stage"
-    t.string "answer"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "karma_points", id: :serial, force: :cascade do |t|
     t.integer "founder_id"
     t.integer "points"
@@ -409,21 +402,6 @@ ActiveRecord::Schema.define(version: 20180322073926) do
     t.datetime "updated_at"
     t.text "notes"
     t.index ["founder_id"], name: "index_platform_feedback_on_founder_id"
-  end
-
-  create_table "players", force: :cascade do |t|
-    t.string "name"
-    t.string "phone"
-    t.bigint "college_id"
-    t.string "college_text"
-    t.integer "stage", default: 0
-    t.bigint "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "showcase_link"
-    t.integer "attempts", default: 0
-    t.index ["college_id"], name: "index_players_on_college_id"
-    t.index ["user_id"], name: "index_players_on_user_id"
   end
 
   create_table "product_metrics", force: :cascade do |t|
@@ -845,8 +823,6 @@ ActiveRecord::Schema.define(version: 20180322073926) do
   add_foreign_key "levels", "schools"
   add_foreign_key "payments", "founders"
   add_foreign_key "payments", "startups"
-  add_foreign_key "players", "colleges"
-  add_foreign_key "players", "users"
   add_foreign_key "resources", "levels"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"

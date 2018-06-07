@@ -97,7 +97,7 @@ Rails.application.routes.draw do
 
   resources :faculty, only: %i[index show] do
     post 'connect', on: :member
-
+    # get 'dashboard', to: 'faculty/dashboard#index'
     collection do
       get 'filter/:active_tab', to: 'faculty#index'
       get 'weekly_slots/:token', to: 'faculty#weekly_slots', as: 'weekly_slots'
@@ -105,9 +105,17 @@ Rails.application.routes.draw do
       delete 'weekly_slots/:token', to: 'faculty#mark_unavailable', as: 'mark_unavailable'
       get 'slots_saved/:token', to: 'faculty#slots_saved', as: 'slots_saved'
     end
+
+    # scope module: 'faculty', controller: 'dashboard' do
+    #   get '/', action: 'index'
+    # end
   end
 
   # TODO: Remove these faculty routes as we no longer have 'faculty'. Always use the corresponding 'coaches' routes below.
+
+  scope 'coaches', module: 'coaches', controller: 'dashboard' do
+    get 'dashboard', action: 'index'
+  end
 
   scope 'coaches', controller: 'faculty' do
     get '/', action: 'index', as: 'coaches_index'

@@ -259,17 +259,6 @@ Rails.application.routes.draw do
   # Handle redirects of short URLs.
   get 'r/:unique_key', to: 'shortened_urls#redirect', as: 'short_redirect'
 
-  # Temporary POST end-point for the tech-hunt
-  post 'unicorn', to: 'tech_hunt#unicorn'
-
-  scope 'hunt', as: 'tech_hunt', controller: 'tech_hunt' do
-    get '/', action: 'index'
-    post 'register'
-    get 'q', action: 'question', as: 'question'
-    post 'answer_submit'
-    # post 'sign_up'
-  end
-
   scope 'stats', controller: 'product_metrics' do
     get '/', action: 'index', as: 'stats'
   end

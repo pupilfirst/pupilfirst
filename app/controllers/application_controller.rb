@@ -64,10 +64,6 @@ class ApplicationController < ActionController::Base
     @current_startup ||= current_founder&.startup
   end
 
-  def current_player
-    @current_player ||= current_user&.player
-  end
-
   # sets a permanent signed cookie. Additional options such as :tld_length can be passed via the options_hash
   # eg: set_cookie(:token, 'abcd', { 'tld_length' => 1 })
   def set_cookie(key, value, options_hash = {})

@@ -30,7 +30,6 @@ tags
 yarn-debug.log*
 .yarn-integrity
 
-
 # Ignore these associated with reason-react and bsb
 .merlin
 /node_modules/

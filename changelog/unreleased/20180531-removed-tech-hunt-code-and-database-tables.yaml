@@ -1,0 +1,7 @@
+---
+timestamp: '2018-05-31T07:14:32Z'
+title: Removed Tech Hunt code and database tables.
+trello: https://trello.com/c/yqGlCuRg
+private: true
+description: A database backup has been taken and is stored on `sv-glacier` as `20180531-b1211.dump`.
+category: operations

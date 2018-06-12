@@ -23,6 +23,8 @@
             a.nav-link.cursor-pointer.faculty-nav__tab-title class=active_tab('developer-coaches') data-target="#developer-coaches" data-toggle="tab" aria-controls="advisory-board" role="tab" Developer Coaches
           li.nav-item.faculty-nav__tab-item
             a.nav-link.cursor-pointer.faculty-nav__tab-title class=active_tab('visiting-coaches') data-target="#visiting-coaches" data-toggle="tab" aria-controls="visiting-faculty" role="tab" Visiting Coaches
+          li.nav-item.faculty-nav__tab-item
+            a.nav-link.cursor-pointer.faculty-nav__tab-title class=active_tab('alumni') data-target="#alumni" data-toggle="tab" aria-controls="alumni" role="tab" Alumni
 
         .tab-content
           .tab-pane#developer-coaches role="tabpanel" class=active_tab('developer-coaches')
@@ -32,4 +34,8 @@
           .tab-pane#visiting-coaches role="tabpanel" class=active_tab('visiting-coaches')
             .row.faculty-cards-container
               - Faculty.active.visiting_coaches.each do |member|
+                = render 'faculty_card', member: member
+          .tab-pane#alumni role="tabpanel" class=active_tab('alumni')
+            .row.faculty-cards-container
+              - Faculty.active.alumni.includes(:founder).each do |member|
                 = render 'faculty_card', member: member

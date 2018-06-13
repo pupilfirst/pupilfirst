@@ -11,10 +11,15 @@ module Users
     end
 
     def after_sign_in_path
-      admin_path || founder_path || mooc_student_path || root_path
+      faculty_path || admin_path || founder_path || mooc_student_path || root_path
     end
 
     private
+
+    def faculty_path
+      return if @user.faculty.blank? || @user.faculty.startups.blank?
+      url_helpers.coaches_dashboard_path
+    end
 
     def admin_path
       return if @user.admin_user.blank?

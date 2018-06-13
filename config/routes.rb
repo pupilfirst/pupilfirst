@@ -113,7 +113,7 @@ Rails.application.routes.draw do
 
   # TODO: Remove these faculty routes as we no longer have 'faculty'. Always use the corresponding 'coaches' routes below.
 
-  scope 'coaches', module: 'coaches', controller: 'dashboard' do
+  scope 'coaches', module: 'coaches', as: 'coaches', controller: 'dashboard' do
     get 'dashboard', action: 'index'
   end
 

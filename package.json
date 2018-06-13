@@ -17,11 +17,11 @@
     "webpack-merge": "^4.1.1"
   },
   "devDependencies": {
+    "bs-platform": "^3.1.5",
     "node-sass": "^4.7.2",
     "prettier": "1.9.1",
+    "reason-react": ">=0.3.4",
     "sass-loader": "^7.0.1",
-    "webpack-dev-server": "2.11.2",
-    "bs-platform": "^3.0.0",
-    "reason-react": ">=0.3.4"
+    "webpack-dev-server": "2.11.2"
   }
 }

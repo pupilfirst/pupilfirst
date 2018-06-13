@@ -148,4 +148,12 @@ class Faculty < ApplicationRecord
     return unless slack_username_changed?
     self.slack_user_id = slack_username.present? ? @new_slack_user_id : nil
   end
+
+  before_save :find_or_create_user
+
+  def find_or_create_user
+    return if email.blank?
+    user = User.with_email(email) || User.create!(email: email)
+    self.user = user
+  end
 end

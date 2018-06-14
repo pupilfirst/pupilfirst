@@ -189,6 +189,7 @@ Rails.application.routes.draw do
 
   # Facebook School of Innovation at SV.CO landing page
   get 'fb', to: 'home#fb'
+  get 'fb/apply', to: redirect('fb?apply=now')
 
   root 'home#index'
 

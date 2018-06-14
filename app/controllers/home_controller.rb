@@ -17,6 +17,7 @@ class HomeController < ApplicationController
   def fb
     @skip_container = true
     @hide_layout_header = true
+    @auto_open = params[:apply].present?.to_s
     render layout: 'application'
   end
 

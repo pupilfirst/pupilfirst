@@ -1,11 +1,9 @@
 ActiveAdmin.register_page 'Leaderboards' do
-  controller do
-    include DisableIntercom
-  end
-
   menu parent: 'Startups'
 
   controller do
+    include DisableIntercom
+
     def index
       @level = Level.find_by(number: level_number) || Level.find_by(number: 1)
       @week_start_date = start_date.present? ? Time.zone.parse(start_date) : DatesService.last_week_start_date

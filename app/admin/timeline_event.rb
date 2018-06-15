@@ -1,6 +1,4 @@
 ActiveAdmin.register TimelineEvent do
-  include DisableIntercom
-
   permit_params :description, :timeline_event_type_id, :image, :event_on, :startup_id, :founder_id, :serialized_links,
     :improved_timeline_event_id, timeline_event_files_attributes: %i[id title file private _destroy]
 
@@ -21,6 +19,8 @@ ActiveAdmin.register TimelineEvent do
   config.sort_order = 'updated_at_desc'
 
   controller do
+    include DisableIntercom
+
     def scoped_collection
       super.includes :startup, :timeline_event_type
     end

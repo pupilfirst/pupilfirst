@@ -1,6 +1,4 @@
 ActiveAdmin.register Target do
-  include DisableIntercom
-
   permit_params :faculty_id, :role, :title, :description, :resource_url, :completion_instructions, :days_to_complete,
     :slideshow_embed, :video_embed, :completed_at, :completion_comment, :rubric, :link_to_complete, :key,
     :submittability, :archived, :remote_rubric_url, :target_group_id, :target_action_type, :points_earnable,
@@ -28,6 +26,8 @@ ActiveAdmin.register Target do
   scope :sessions
 
   controller do
+    include DisableIntercom
+
     def scoped_collection
       super.includes :level
     end

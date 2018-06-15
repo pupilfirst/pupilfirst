@@ -1,6 +1,4 @@
 ActiveAdmin.register ConnectRequest do
-  include DisableIntercom
-
   permit_params :connect_slot_id, :startup_id, :questions
 
   menu parent: 'Faculty'
@@ -21,6 +19,8 @@ ActiveAdmin.register ConnectRequest do
   filter :rating_for_team
 
   controller do
+    include DisableIntercom
+
     def scoped_collection
       super.includes :connect_slot
     end

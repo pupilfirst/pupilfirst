@@ -5,6 +5,8 @@ ActiveAdmin.register EnglishQuizSubmission do
   filter :english_quiz_question_posted_on, as: :date_range, label: 'Question Posted On'
 
   controller do
+    include DisableIntercom
+
     def scoped_collection
       super.includes :quizee, :english_quiz_question, :answer_option
     end

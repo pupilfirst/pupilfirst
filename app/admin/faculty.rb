@@ -1,10 +1,10 @@
 ActiveAdmin.register Faculty do
-  include DisableIntercom
-
   permit_params :name, :email, :title, :key_skills, :linkedin_url, :category, :image, :sort_index, :self_service,
     :current_commitment, :founder_id, :inactive, :about, :commitment, :compensation, :slack_username, :level_id
 
   controller do
+    include DisableIntercom
+
     def find_resource
       scoped_collection.friendly.find(params[:id])
     end

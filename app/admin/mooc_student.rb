@@ -1,6 +1,4 @@
 ActiveAdmin.register MoocStudent do
-  include DisableIntercom
-
   menu parent: 'SixWays'
 
   permit_params :name, :college_id, :semester, :state, :gender, :user_id, :phone
@@ -22,6 +20,8 @@ ActiveAdmin.register MoocStudent do
   end
 
   controller do
+    include DisableIntercom
+
     def scoped_collection
       super.includes :college
     end

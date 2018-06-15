@@ -1,6 +1,4 @@
 ActiveAdmin.register Startup do
-  include DisableIntercom
-
   permit_params :product_name, :product_description, :legal_registered_name, :website, :email, :logo, :facebook_link,
     :twitter_link, :created_at, :updated_at, :dropped_out, :registration_type, :agreement_signed_at,
     :presentation_link, :product_video_link, :wireframe_link, :prototype_link, :slug, :level_id,
@@ -30,6 +28,8 @@ ActiveAdmin.register Startup do
   scope :all
 
   controller do
+    include DisableIntercom
+
     def find_resource
       scoped_collection.friendly.find(params[:id])
     end

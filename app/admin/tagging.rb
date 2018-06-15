@@ -1,5 +1,7 @@
 ActiveAdmin.register ActsAsTaggableOn::Tagging, as: 'Tagging' do
-  include DisableIntercom
+  controller do
+    include DisableIntercom
+  end
 
   actions :index, :destroy
 

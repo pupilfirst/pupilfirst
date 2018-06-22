@@ -15,6 +15,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_mooc_student
   helper_method :current_founder
   helper_method :current_startup
+  helper_method :current_coach
 
   # When in production, respond to requests that ask for unhandled formats with 406.
   rescue_from ActionView::MissingTemplate do |exception|
@@ -54,6 +55,10 @@ class ApplicationController < ActionController::Base
 
   def current_mooc_student
     @current_mooc_student ||= MoocStudent.find_by(user: current_user) if current_user.present?
+  end
+
+  def current_coach
+    @current_coach ||= current_user&.faculty
   end
 
   def current_founder

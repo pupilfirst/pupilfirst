@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { make, jsComponent } from "../../../coaches/dashboard/CoachDashboard.bs";
+import { make, jsComponent } from "../../../coaches/dashboard/components/CoachDashboard.bs";
 
 $(document).on("turbolinks:load", () => {
   const root = document.getElementById("coaches-dashboard");

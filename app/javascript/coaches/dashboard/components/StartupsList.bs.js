@@ -13,7 +13,7 @@ function str(prim) {
 
 var component = ReasonReact.statelessComponent("StartupsList");
 
-function make(startups, selectStartupCB, clearStartupCB, _) {
+function make(startups, selectedStartupId, selectStartupCB, clearStartupCB, _) {
   return /* record */[
           /* debugName */component[/* debugName */0],
           /* reactClassInternal */component[/* reactClassInternal */1],
@@ -26,16 +26,25 @@ function make(startups, selectStartupCB, clearStartupCB, _) {
           /* shouldUpdate */component[/* shouldUpdate */8],
           /* render */(function () {
               return React.createElement("div", undefined, React.createElement("div", undefined, "Your startups:"), $$Array.of_list(List.map((function (startup) {
+                                    var buttonClasses;
+                                    if (selectedStartupId) {
+                                      var match = selectedStartupId[0] === startup.id;
+                                      buttonClasses = match ? "btn btn-primary" : "btn btn-secondary";
+                                    } else {
+                                      buttonClasses = "btn btn-secondary";
+                                    }
                                     return React.createElement("button", {
+                                                key: startup.name,
+                                                className: buttonClasses,
                                                 onClick: (function () {
                                                     return Curry._1(selectStartupCB, startup.id);
                                                   })
                                               }, "Startup Name: " + startup.name);
-                                  }), startups)), React.createElement("button", {
-                              onClick: (function () {
-                                  return Curry._1(clearStartupCB, /* () */0);
-                                })
-                            }, "Clear Filter"));
+                                  }), startups)), selectedStartupId ? React.createElement("button", {
+                                onClick: (function () {
+                                    return Curry._1(clearStartupCB, /* () */0);
+                                  })
+                              }, "Clear Filter") : null);
             }),
           /* initialState */component[/* initialState */10],
           /* retainedProps */component[/* retainedProps */11],

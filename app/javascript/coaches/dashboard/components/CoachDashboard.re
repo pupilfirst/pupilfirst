@@ -38,6 +38,7 @@ let make = (~coach, ~startups, ~timelineEvents, _children) => {
       (ReasonReact.string("Welcome Coach " ++ (coach |> Coach.name)))
       <StartupsList
         startups=(startups |> Array.to_list)
+        selectedStartupId=state.selectedStartupId
         selectStartupCB
         clearStartupCB
       />

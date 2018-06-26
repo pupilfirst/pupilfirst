@@ -32,7 +32,7 @@ function make(coach, startups, timelineEvents, _) {
               var clearStartupCB = function () {
                 return Curry._1(send, /* ClearStartup */0);
               };
-              return React.createElement("div", undefined, "Welcome Coach " + coach.name, ReasonReact.element(/* None */0, /* None */0, StartupsList$ReactTemplate.make($$Array.to_list(startups), selectStartupCB, clearStartupCB, /* array */[])), ReasonReact.element(/* None */0, /* None */0, TimelineEventsPanel$ReactTemplate.make(state[/* timelineEvents */1], state[/* selectedStartupId */0], /* array */[])));
+              return React.createElement("div", undefined, "Welcome Coach " + coach.name, ReasonReact.element(/* None */0, /* None */0, StartupsList$ReactTemplate.make($$Array.to_list(startups), state[/* selectedStartupId */0], selectStartupCB, clearStartupCB, /* array */[])), ReasonReact.element(/* None */0, /* None */0, TimelineEventsPanel$ReactTemplate.make(state[/* timelineEvents */1], state[/* selectedStartupId */0], /* array */[])));
             }),
           /* initialState */(function () {
               return /* record */[

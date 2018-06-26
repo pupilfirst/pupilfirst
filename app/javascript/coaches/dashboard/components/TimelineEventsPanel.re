@@ -28,7 +28,7 @@ let make = (~timelineEvents, ~selectedStartupId, _children) => {
              "Title: " ++ (timelineEvent |> TimelineEvent.title) |> str
            )
         |> Array.of_list
-        |> ReasonReact.arrayToElement
+        |> ReasonReact.array
       )
     </div>,
 };

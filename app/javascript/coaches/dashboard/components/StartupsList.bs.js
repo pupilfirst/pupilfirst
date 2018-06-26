@@ -3,6 +3,7 @@
 
 var List = require("bs-platform/lib/js/list.js");
 var $$Array = require("bs-platform/lib/js/array.js");
+var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 
@@ -12,7 +13,7 @@ function str(prim) {
 
 var component = ReasonReact.statelessComponent("StartupsList");
 
-function make(startups, _, _$1) {
+function make(startups, selectStartupCB, clearStartupCB, _) {
   return /* record */[
           /* debugName */component[/* debugName */0],
           /* reactClassInternal */component[/* reactClassInternal */1],
@@ -25,8 +26,16 @@ function make(startups, _, _$1) {
           /* shouldUpdate */component[/* shouldUpdate */8],
           /* render */(function () {
               return React.createElement("div", undefined, React.createElement("div", undefined, "Your startups:"), $$Array.of_list(List.map((function (startup) {
-                                    return "Startup Name: " + startup.name;
-                                  }), startups)));
+                                    return React.createElement("button", {
+                                                onClick: (function () {
+                                                    return Curry._1(selectStartupCB, startup.id);
+                                                  })
+                                              }, "Startup Name: " + startup.name);
+                                  }), startups)), React.createElement("button", {
+                              onClick: (function () {
+                                  return Curry._1(clearStartupCB, /* () */0);
+                                })
+                            }, "Clear Filter"));
             }),
           /* initialState */component[/* initialState */10],
           /* retainedProps */component[/* retainedProps */11],

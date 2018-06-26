@@ -12,7 +12,15 @@ let make = (~timelineEvents, ~selectedStartupId, _children) => {
   ...component,
   render: _self =>
     <div>
-      <div> (ReasonReact.string("Timeline Events:")) </div>
+      <div>
+        (
+          switch (selectedStartupId) {
+          | None => "All TimelineEvents:" |> str
+          | Some(id) =>
+            "TimelineEvents for Startup " ++ string_of_int(id) ++ ": " |> str
+          }
+        )
+      </div>
       (
         timelineEvents
         |> filter(selectedStartupId)

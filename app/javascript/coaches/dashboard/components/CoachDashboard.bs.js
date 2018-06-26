@@ -3,6 +3,7 @@
 
 var $$Array = require("bs-platform/lib/js/array.js");
 var Block = require("bs-platform/lib/js/block.js");
+var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 var StartupsList$ReactTemplate = require("./StartupsList.bs.js");
@@ -23,8 +24,15 @@ function make(coach, startups, timelineEvents, _) {
           /* willUpdate */component[/* willUpdate */7],
           /* shouldUpdate */component[/* shouldUpdate */8],
           /* render */(function (param) {
+              var send = param[/* send */3];
               var state = param[/* state */1];
-              return React.createElement("div", undefined, "Welcome Coach " + coach.name, ReasonReact.element(/* None */0, /* None */0, StartupsList$ReactTemplate.make($$Array.to_list(startups), param[/* send */3], /* array */[])), ReasonReact.element(/* None */0, /* None */0, TimelineEventsPanel$ReactTemplate.make(state[/* timelineEvents */1], state[/* selectedStartupId */0], /* array */[])));
+              var selectStartupCB = function (id) {
+                return Curry._1(send, /* SelectStartup */[id]);
+              };
+              var clearStartupCB = function () {
+                return Curry._1(send, /* ClearStartup */0);
+              };
+              return React.createElement("div", undefined, "Welcome Coach " + coach.name, ReasonReact.element(/* None */0, /* None */0, StartupsList$ReactTemplate.make($$Array.to_list(startups), selectStartupCB, clearStartupCB, /* array */[])), ReasonReact.element(/* None */0, /* None */0, TimelineEventsPanel$ReactTemplate.make(state[/* timelineEvents */1], state[/* selectedStartupId */0], /* array */[])));
             }),
           /* initialState */(function () {
               return /* record */[
@@ -34,10 +42,17 @@ function make(coach, startups, timelineEvents, _) {
             }),
           /* retainedProps */component[/* retainedProps */11],
           /* reducer */(function (action, state) {
-              return /* Update */Block.__(0, [/* record */[
-                          /* selectedStartupId : Some */[action[0]],
-                          /* timelineEvents */state[/* timelineEvents */1]
-                        ]]);
+              if (action) {
+                return /* Update */Block.__(0, [/* record */[
+                            /* selectedStartupId : Some */[action[0]],
+                            /* timelineEvents */state[/* timelineEvents */1]
+                          ]]);
+              } else {
+                return /* Update */Block.__(0, [/* record */[
+                            /* selectedStartupId : None */0,
+                            /* timelineEvents */state[/* timelineEvents */1]
+                          ]]);
+              }
             }),
           /* subscriptions */component[/* subscriptions */13],
           /* jsElementWrapped */component[/* jsElementWrapped */14]

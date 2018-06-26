@@ -36,7 +36,7 @@ function make(timelineEvents, selectedStartupId, _) {
           /* willUpdate */component[/* willUpdate */7],
           /* shouldUpdate */component[/* shouldUpdate */8],
           /* render */(function () {
-              return React.createElement("div", undefined, React.createElement("div", undefined, "Timeline Events:"), $$Array.of_list(List.map((function (timelineEvent) {
+              return React.createElement("div", undefined, React.createElement("div", undefined, selectedStartupId ? "TimelineEvents for Startup " + (String(selectedStartupId[0]) + ": ") : "All TimelineEvents:"), $$Array.of_list(List.map((function (timelineEvent) {
                                     return "Title: " + TimelineEvent$ReactTemplate.title(timelineEvent);
                                   }), filter(selectedStartupId, timelineEvents))));
             }),

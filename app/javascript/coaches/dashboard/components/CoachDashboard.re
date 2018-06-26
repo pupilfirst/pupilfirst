@@ -11,7 +11,8 @@ type state = {
 };
 
 type action =
-  | SelectStartup(int);
+  | SelectStartup(int)
+  | ClearStartup;
 
 let component = ReasonReact.reducerComponent("CoachDashboard");
 
@@ -28,16 +29,24 @@ let make = (~coach, ~startups, ~timelineEvents, _children) => {
     switch (action) {
     | SelectStartup(id) =>
       ReasonReact.Update({...state, selectedStartupId: Some(id)})
+    | ClearStartup => ReasonReact.Update({...state, selectedStartupId: None})
     },
-  render: ({state, send}) =>
+  render: ({state, send}) => {
+    let selectStartupCB = id => send(SelectStartup(id));
+    let clearStartupCB = () => send(ClearStartup);
     <div>
       (ReasonReact.string("Welcome Coach " ++ (coach |> Coach.name)))
-      <StartupsList startups=(startups |> Array.to_list) appSend=send />
+      <StartupsList
+        startups=(startups |> Array.to_list)
+        selectStartupCB
+        clearStartupCB
+      />
       <TimelineEventsPanel
         timelineEvents=state.timelineEvents
         selectedStartupId=state.selectedStartupId
       />
-    </div>,
+    </div>;
+  },
 };
 
 let jsComponent =

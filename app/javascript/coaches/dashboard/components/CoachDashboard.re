@@ -1,3 +1,5 @@
+[%bs.raw {|require("./CoachDashboard.scss")|}];
+
 [@bs.deriving abstract]
 type jsProps = {
   coach: Coach.t,
@@ -34,19 +36,38 @@ let make = (~coach, ~startups, ~timelineEvents, _children) => {
   render: ({state, send}) => {
     let selectStartupCB = id => send(SelectStartup(id));
     let clearStartupCB = () => send(ClearStartup);
-    <div>
-      (ReasonReact.string("Welcome Coach " ++ (coach |> Coach.name)))
-      <StartupsList
-        startups=(startups |> Array.to_list)
-        selectedStartupId=state.selectedStartupId
-        selectStartupCB
-        clearStartupCB
-      />
-      <TimelineEventsPanel
-        timelineEvents=state.timelineEvents
-        selectedStartupId=state.selectedStartupId
-      />
+    <div className="coach-dashboard__container">
+      <div className="row">
+        <div className="col-md-3">
+          <SidePanel
+            coach
+            startups=(startups |> Array.to_list)
+            selectedStartupId=state.selectedStartupId
+            selectStartupCB
+            clearStartupCB
+          />
+        </div>
+        <div className="col">
+          <TimelineEventsPanel
+            timelineEvents=state.timelineEvents
+            selectedStartupId=state.selectedStartupId
+          />
+        </div>
+      </div>
     </div>;
+    /* <div>
+         (ReasonReact.string("Welcome Coach " ++ (coach |> Coach.name)))
+         <StartupsList
+           startups=(startups |> Array.to_list)
+           selectedStartupId=state.selectedStartupId
+           selectStartupCB
+           clearStartupCB
+         />
+         <TimelineEventsPanel
+           timelineEvents=state.timelineEvents
+           selectedStartupId=state.selectedStartupId
+         />
+       </div>; */
   },
 };
 

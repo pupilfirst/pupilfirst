@@ -1,5 +1,7 @@
 module Coaches
   class DashboardController < ApplicationController
-    def index; end
+    def index
+      @skip_container = true
+    end
   end
 end

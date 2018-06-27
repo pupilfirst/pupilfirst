@@ -7,6 +7,8 @@ var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 
+((require("./StartupsList.scss")));
+
 function str(prim) {
   return prim;
 }
@@ -25,13 +27,15 @@ function make(startups, selectedStartupId, selectStartupCB, clearStartupCB, _) {
           /* willUpdate */component[/* willUpdate */7],
           /* shouldUpdate */component[/* shouldUpdate */8],
           /* render */(function () {
-              return React.createElement("div", undefined, React.createElement("div", undefined, "Your startups:"), $$Array.of_list(List.map((function (startup) {
+              return React.createElement("div", {
+                          className: "startups-list__container"
+                        }, $$Array.of_list(List.map((function (startup) {
                                     var buttonClasses;
                                     if (selectedStartupId) {
                                       var match = selectedStartupId[0] === startup.id;
-                                      buttonClasses = match ? "btn btn-primary" : "btn btn-secondary";
+                                      buttonClasses = match ? "startups-list__item startups-list__item--selected" : "startups-list__item";
                                     } else {
-                                      buttonClasses = "btn btn-secondary";
+                                      buttonClasses = "startups-list__item";
                                     }
                                     return React.createElement("button", {
                                                 key: startup.name,
@@ -39,12 +43,13 @@ function make(startups, selectedStartupId, selectStartupCB, clearStartupCB, _) {
                                                 onClick: (function () {
                                                     return Curry._1(selectStartupCB, startup.id);
                                                   })
-                                              }, "Startup Name: " + startup.name);
+                                              }, startup.name);
                                   }), startups)), selectedStartupId ? React.createElement("button", {
+                                className: "startups-list__clear-filter-btn",
                                 onClick: (function () {
                                     return Curry._1(clearStartupCB, /* () */0);
                                   })
-                              }, "Clear Filter") : null);
+                              }, "Show All") : null);
             }),
           /* initialState */component[/* initialState */10],
           /* retainedProps */component[/* retainedProps */11],
@@ -57,4 +62,4 @@ function make(startups, selectedStartupId, selectStartupCB, clearStartupCB, _) {
 exports.str = str;
 exports.component = component;
 exports.make = make;
-/* component Not a pure module */
+/*  Not a pure module */

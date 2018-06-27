@@ -1,0 +1,12 @@
+@import "../../../shared/variables";
+
+.side-panel__container {
+  background-color: $brand-primary;
+  color: white;
+  min-height: 100vh;
+}
+
+.side-panel__coach-greeting {
+  color: white;
+  text-align: center;
+}

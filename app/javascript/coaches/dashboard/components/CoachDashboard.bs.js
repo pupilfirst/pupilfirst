@@ -6,9 +6,11 @@ var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
-var StartupsList$ReactTemplate = require("./StartupsList.bs.js");
+var SidePanel$ReactTemplate = require("./SidePanel.bs.js");
 var TimelineEvent$ReactTemplate = require("../types/TimelineEvent.bs.js");
 var TimelineEventsPanel$ReactTemplate = require("./TimelineEventsPanel.bs.js");
+
+((require("./CoachDashboard.scss")));
 
 var component = ReasonReact.reducerComponent("CoachDashboard");
 
@@ -32,7 +34,15 @@ function make(coach, startups, timelineEvents, _) {
               var clearStartupCB = function () {
                 return Curry._1(send, /* ClearStartup */0);
               };
-              return React.createElement("div", undefined, "Welcome Coach " + coach.name, ReasonReact.element(/* None */0, /* None */0, StartupsList$ReactTemplate.make($$Array.to_list(startups), state[/* selectedStartupId */0], selectStartupCB, clearStartupCB, /* array */[])), ReasonReact.element(/* None */0, /* None */0, TimelineEventsPanel$ReactTemplate.make(state[/* timelineEvents */1], state[/* selectedStartupId */0], /* array */[])));
+              return React.createElement("div", {
+                          className: "coach-dashboard__container"
+                        }, React.createElement("div", {
+                              className: "row"
+                            }, React.createElement("div", {
+                                  className: "col-md-3"
+                                }, ReasonReact.element(/* None */0, /* None */0, SidePanel$ReactTemplate.make(coach, $$Array.to_list(startups), state[/* selectedStartupId */0], selectStartupCB, clearStartupCB, /* array */[]))), React.createElement("div", {
+                                  className: "col"
+                                }, ReasonReact.element(/* None */0, /* None */0, TimelineEventsPanel$ReactTemplate.make(state[/* timelineEvents */1], state[/* selectedStartupId */0], /* array */[])))));
             }),
           /* initialState */(function () {
               return /* record */[
@@ -66,4 +76,4 @@ var jsComponent = ReasonReact.wrapReasonForJs(component, (function (jsProps) {
 exports.component = component;
 exports.make = make;
 exports.jsComponent = jsComponent;
-/* component Not a pure module */
+/*  Not a pure module */

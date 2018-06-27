@@ -3,17 +3,22 @@
 
 var List = require("bs-platform/lib/js/list.js");
 var $$Array = require("bs-platform/lib/js/array.js");
+var Block = require("bs-platform/lib/js/block.js");
+var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
+var Caml_obj = require("bs-platform/lib/js/caml_obj.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 var TimelineEvent$ReactTemplate = require("../types/TimelineEvent.bs.js");
+
+((require("./TimelineEventsPanel.scss")));
 
 function str(prim) {
   return prim;
 }
 
-var component = ReasonReact.statelessComponent("TimelineEventsPanel");
+var component = ReasonReact.reducerComponent("TimelineEventsPanel");
 
-function filter(selectedStartupId, tes) {
+function startupfilter(selectedStartupId, tes) {
   if (selectedStartupId) {
     var id = selectedStartupId[0];
     return List.filter((function (te) {
@@ -22,6 +27,13 @@ function filter(selectedStartupId, tes) {
   } else {
     return tes;
   }
+}
+
+function tabClass(component, activeTab) {
+  var match = Caml_obj.caml_equal(activeTab, component);
+  return "timeline-events-panel__tab-bar-item" + (
+          match ? " timeline-events-panel__tab-bar-item--active" : ""
+        );
 }
 
 function make(timelineEvents, selectedStartupId, _) {
@@ -35,14 +47,34 @@ function make(timelineEvents, selectedStartupId, _) {
           /* willUnmount */component[/* willUnmount */6],
           /* willUpdate */component[/* willUpdate */7],
           /* shouldUpdate */component[/* shouldUpdate */8],
-          /* render */(function () {
-              return React.createElement("div", undefined, React.createElement("div", undefined, selectedStartupId ? "TimelineEvents for Startup " + (String(selectedStartupId[0]) + ": ") : "All TimelineEvents:"), $$Array.of_list(List.map((function (timelineEvent) {
-                                    return "Title: " + TimelineEvent$ReactTemplate.title(timelineEvent);
-                                  }), filter(selectedStartupId, timelineEvents))));
+          /* render */(function (param) {
+              var send = param[/* send */3];
+              var state = param[/* state */1];
+              return React.createElement("div", undefined, React.createElement("div", {
+                              className: "timeline-events-panel__tab-bar d-flex justify-content-center"
+                            }, React.createElement("button", {
+                                  className: tabClass(/* Pending */0, state[/* activeTab */0]),
+                                  onClick: (function () {
+                                      return Curry._1(send, /* SwitchTab */[/* Pending */0]);
+                                    })
+                                }, "Pending"), React.createElement("button", {
+                                  className: tabClass(/* Completed */1, state[/* activeTab */0]),
+                                  onClick: (function () {
+                                      return Curry._1(send, /* SwitchTab */[/* Completed */1]);
+                                    })
+                                }, "Completed")), React.createElement("div", {
+                              className: "timeline-events-panel__list-container mx-1"
+                            }, React.createElement("div", undefined, selectedStartupId ? "TimelineEvents for Startup " + (String(selectedStartupId[0]) + ": ") : "All TimelineEvents:", $$Array.of_list(List.map((function (timelineEvent) {
+                                            return "Title: " + TimelineEvent$ReactTemplate.title(timelineEvent);
+                                          }), startupfilter(selectedStartupId, timelineEvents))))));
             }),
-          /* initialState */component[/* initialState */10],
+          /* initialState */(function () {
+              return /* record */[/* activeTab : Pending */0];
+            }),
           /* retainedProps */component[/* retainedProps */11],
-          /* reducer */component[/* reducer */12],
+          /* reducer */(function (action, _) {
+              return /* Update */Block.__(0, [/* record */[/* activeTab */action[0]]]);
+            }),
           /* subscriptions */component[/* subscriptions */13],
           /* jsElementWrapped */component[/* jsElementWrapped */14]
         ];
@@ -50,6 +82,7 @@ function make(timelineEvents, selectedStartupId, _) {
 
 exports.str = str;
 exports.component = component;
-exports.filter = filter;
+exports.startupfilter = startupfilter;
+exports.tabClass = tabClass;
 exports.make = make;
-/* component Not a pure module */
+/*  Not a pure module */

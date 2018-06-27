@@ -1,0 +1,31 @@
+@import "../../../shared/variables";
+
+.startups-list__container {
+  margin-top: 4rem;
+}
+
+.startups-list__item {
+  display: block;
+  width: 100%;
+  color: white;
+  line-height: 4rem;
+  background-color: $light-secondary;
+  border: 0;
+  border-bottom: 1px solid white;
+  &:focus {
+    outline: none;
+  }
+}
+
+.startups-list__item--selected {
+  background-color: $dark-secondary;
+}
+
+.startups-list__clear-filter-btn {
+  display: block;
+  width: 100%;
+  color: black;
+  line-height: 2rem;
+  background-color: $alert-background;
+  border: 0;
+}

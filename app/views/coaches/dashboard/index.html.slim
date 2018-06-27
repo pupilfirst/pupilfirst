@@ -1,5 +1,6 @@
 == content_for :head do
   == javascript_pack_tag 'coaches/dashboard/index', 'data-turbolinks-track': 'reload'
+  == stylesheet_pack_tag 'coaches/dashboard/index', 'data-turbolinks-track': 'reload'
 - presenter = Coaches::DashboardPresenter.new(self)
 #coaches-dashboard data-props=presenter.react_props.to_json
 

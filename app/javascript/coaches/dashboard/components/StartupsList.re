@@ -1,3 +1,5 @@
+[%bs.raw {|require("./StartupsList.scss")|}];
+
 let str = ReasonReact.string;
 
 let component = ReasonReact.statelessComponent("StartupsList");
@@ -12,23 +14,23 @@ let make =
     ) => {
   ...component,
   render: _self =>
-    <div>
-      <div> ("Your startups:" |> str) </div>
+    <div className="startups-list__container">
       (
         startups
         |> List.map(startup => {
              let buttonClasses =
                switch (selectedStartupId) {
-               | None => "btn btn-secondary"
+               | None => "startups-list__item"
                | Some(id) =>
                  id == (startup |> Startup.id) ?
-                   "btn btn-primary" : "btn btn-secondary"
+                   "startups-list__item startups-list__item--selected" :
+                   "startups-list__item"
                };
              <button
                className=buttonClasses
                key=(startup |> Startup.name)
                onClick=(_event => selectStartupCB(startup |> Startup.id))>
-               ("Startup Name: " ++ (startup |> Startup.name) |> str)
+               (startup |> Startup.name |> str)
              </button>;
            })
         |> Array.of_list
@@ -38,8 +40,10 @@ let make =
         switch (selectedStartupId) {
         | None => ReasonReact.null
         | Some(_id) =>
-          <button onClick=(_event => clearStartupCB())>
-            ("Clear Filter" |> str)
+          <button
+            className="startups-list__clear-filter-btn"
+            onClick=(_event => clearStartupCB())>
+            ("Show All" |> str)
           </button>
         }
       )

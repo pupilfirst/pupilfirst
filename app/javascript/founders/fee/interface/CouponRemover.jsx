@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import shared from "./shared.scss";
-import styles from "./CouponRemover.scss";
+import shared from "./shared.module.scss";
+import styles from "./CouponRemover.module.scss";
 
 export default class CouponRemover extends React.Component {
   constructor(props) {

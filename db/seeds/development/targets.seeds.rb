@@ -45,8 +45,8 @@ after 'development:target_groups', 'development:timeline_event_types', 'developm
   Target.create!(days_to_complete: 1, title: 'Pay Admission Fee', role: Target::ROLE_TEAM, timeline_event_type: team_update, submittability: Target::SUBMITTABILITY_SUBMITTABLE_ONCE, link_to_complete: '/founder/fee', key: Target::KEY_FEE_PAYMENT, target_group: level_0_milestone_group, description: paragraph, prerequisite_targets: [screening_target, interview_target], faculty: faculty_2, target_action_type: Target::TYPE_TODO)
 
   # Random targets and sessions for every level.
-  (1..4).each do |level_number|
-    level = Level.find_by(number: level_number)
+  (2..13).each do |level_id|
+    level = Level.find_by(id: level_id)
 
     # Two vanilla targets and one session per target_group.
     level.target_groups.each do |target_group|

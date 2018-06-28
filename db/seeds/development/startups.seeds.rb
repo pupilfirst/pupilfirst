@@ -15,13 +15,14 @@ after 'development:levels', 'development:founders', 'development:timeline_event_
 
   john_doe.update!(startup: unfinished_swan)
 
-  level_1 = Level.find_by(number: 1)
-  level_2 = Level.find_by(number: 2)
-  level_3 = Level.find_by(number: 3)
+  startup_school_level_1 = Level.find_by(name: 'Admissions')
+  startup_school_level_2 = Level.find_by(name: 'Research')
+  developer_school_level_1 = Level.find_by(name: 'Planning')
+  vr_school_level_1 = Level.find_by(name: 'New Realities')
 
   # Startup with live agreement.
   super_startup = Startup.new(
-    level: level_1,
+    level: startup_school_level_1,
     product_name: 'Super Product',
     product_description: 'This really is a superb product! ;)',
     agreement_signed_at: 18.months.ago,
@@ -52,7 +53,7 @@ after 'development:levels', 'development:founders', 'development:timeline_event_
   # A second 'Avengers' startup.
   avengers_startup = Startup.new(
     name: 'The Avengers',
-    level: level_2,
+    level: startup_school_level_2,
     product_name: 'SuperHeroes',
     product_description: 'Earths Mightiest Heroes joined forces to take on threats that were too big for any one hero to tackle.',
     agreement_signed_at: 2.years.ago,
@@ -71,4 +72,43 @@ after 'development:levels', 'development:founders', 'development:timeline_event_
   avengers_startup.founders << Founder.find_by(email: 'hulk@example.org')
   avengers_startup.founders << Founder.find_by(email: 'thor@example.org')
   avengers_startup.save!
+
+  # Third startup 'Justice League' for developer school
+  justiceLeague_startup = Startup.new(
+    name: 'Justice League',
+    level: developer_school_level_1,
+    product_name: 'Batmobile',
+    product_description: 'The flying car',
+    agreement_signed_at: 2.years.ago,
+    website: 'https://www.example.org',
+    startup_categories: [StartupCategory.first, StartupCategory.last],
+    program_started_on: 2.weeks.ago
+  )
+  # Make Batman the team lead.
+  founder = Founder.find_by(email: 'batman@example.org')
+  justiceLeague_startup.update!(team_lead: founder)
+  justiceLeague_startup.founders << founder
+
+  # Add Superman as a founder in 'Justice League'.
+  justiceLeague_startup.founders << Founder.find_by(email: 'superman@example.org')
+
+  # Fourth startup 'Guardians of the Galaxy' for VR school
+  gurdiansOfTheGalaxy_startup = Startup.new(
+    name: 'Guardians of the Galaxy',
+    level: vr_school_level_1,
+    product_name: 'Quad Blasters',
+    product_description: 'The Quad Blasters are Star-Lords primary weapons in combat.',
+    agreement_signed_at: 1.years.ago,
+    website: 'https://www.example.org',
+    startup_categories: [StartupCategory.first, StartupCategory.last],
+    program_started_on: 1.weeks.ago
+  )
+  # Make Rocket the team lead.
+  founder = Founder.find_by(email: 'rocket@example.org')
+  gurdiansOfTheGalaxy_startup.update!(team_lead: founder)
+  gurdiansOfTheGalaxy_startup.founders << founder
+
+  # Add Groot as a founder in 'Guardians of the Galaxy'.
+  gurdiansOfTheGalaxy_startup.founders << Founder.find_by(email: 'groot@example.org')
+
 end

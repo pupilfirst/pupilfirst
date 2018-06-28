@@ -20,7 +20,8 @@ module Startups
     end
 
     def next_level
-      @next_level ||= Level.find_by(number: @startup.level.number + 1)
+      school = School.find_by(id: @startup.level.school_id)
+      @next_level ||= school.levels.find_by(number: @startup.level.number + 1)
     end
 
     def enroll_for_level_one

@@ -2,6 +2,7 @@
 'use strict';
 
 var React = require("react");
+var DateFns = require("date-fns");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 var TimelineEvent$ReactTemplate = require("../types/TimelineEvent.bs.js");
 
@@ -28,8 +29,10 @@ function make(timelineEvent, _) {
               return React.createElement("div", {
                           className: "timeline-event-card__container card"
                         }, React.createElement("div", {
-                              className: "card-header"
-                            }, TimelineEvent$ReactTemplate.title(timelineEvent)), React.createElement("div", {
+                              className: "card-header d-flex"
+                            }, TimelineEvent$ReactTemplate.title(timelineEvent), React.createElement("div", {
+                                  className: "ml-auto"
+                                }, DateFns.format(TimelineEvent$ReactTemplate.eventOn(timelineEvent), "Do MMM YYYY"))), React.createElement("div", {
                               className: "card-body"
                             }, TimelineEvent$ReactTemplate.description(timelineEvent)));
             }),

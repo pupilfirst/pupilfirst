@@ -54,3 +54,5 @@ let verificationComplete = tes =>
 let title = t => t.title;
 
 let description = t => t.description;
+
+let eventOn = t => t.eventOn;

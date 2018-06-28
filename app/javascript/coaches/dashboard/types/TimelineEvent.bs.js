@@ -58,6 +58,10 @@ function description(t) {
   return t[/* description */2];
 }
 
+function eventOn(t) {
+  return t[/* eventOn */4];
+}
+
 exports.JsDecode = JsDecode;
 exports.create = create;
 exports.forStartupId = forStartupId;
@@ -65,4 +69,5 @@ exports.verificationPending = verificationPending;
 exports.verificationComplete = verificationComplete;
 exports.title = title;
 exports.description = description;
+exports.eventOn = eventOn;
 /* No side effect */

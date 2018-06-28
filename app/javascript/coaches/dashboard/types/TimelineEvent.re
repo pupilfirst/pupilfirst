@@ -42,6 +42,15 @@ let create = js_t => {
   startupId: js_t |> JsDecode.startupId,
 };
 
+let forStartupId = (startupId, tes) =>
+  tes |> List.filter(te => te.startupId == startupId);
+
+let verificationPending = tes =>
+  tes |> List.filter(te => te.status == Pending);
+
+let verificationComplete = tes =>
+  tes |> List.filter(te => te.status != Pending);
+
 let title = t => t.title;
 
-let startupId = t => t.startupId;
+let description = t => t.description;

@@ -2,74 +2,35 @@
 
 let str = ReasonReact.string;
 
-type activeTab =
-  | Pending
-  | Completed;
+let component = ReasonReact.statelessComponent("TimelineEventsPanel");
 
-type state = {activeTab};
-
-type action =
-  | SwitchTab(activeTab);
-
-let component = ReasonReact.reducerComponent("TimelineEventsPanel");
-
-let startupfilter = (selectedStartupId, tes) =>
-  switch (selectedStartupId) {
+let startupFilter = (startupId, tes) =>
+  switch (startupId) {
   | None => tes
-  | Some(id) => tes |> List.filter(te => te |> TimelineEvent.startupId == id)
+  | Some(id) => tes |> TimelineEvent.forStartupId(id)
   };
-
-let tabClass = (component, activeTab) =>
-  "timeline-events-panel__tab-bar-item"
-  ++ (
-    activeTab == component ?
-      " timeline-events-panel__tab-bar-item--active" : ""
-  );
 
 let make = (~timelineEvents, ~selectedStartupId, _children) => {
   ...component,
-  initialState: () => {activeTab: Pending},
-  reducer: (action, state) =>
-    switch (action) {
-    | SwitchTab(tab) => ReasonReact.Update({activeTab: tab})
-    },
-  render: ({state, send}) =>
-    <div>
-      <div
-        className="timeline-events-panel__tab-bar d-flex justify-content-center">
-        <button
-          className=(tabClass(Pending, state.activeTab))
-          onClick=(_event => send(SwitchTab(Pending)))>
-          ("Pending" |> str)
-        </button>
-        <button
-          className=(tabClass(Completed, state.activeTab))
-          onClick=(_event => send(SwitchTab(Completed)))>
-          ("Completed" |> str)
-        </button>
-      </div>
-      <div className="timeline-events-panel__list-container mx-1">
-        <div>
-          (
-            switch (selectedStartupId) {
-            | None => "All TimelineEvents:" |> str
-            | Some(id) =>
-              "TimelineEvents for Startup "
-              ++ string_of_int(id)
-              ++ ": "
-              |> str
-            }
-          )
-          (
-            timelineEvents
-            |> startupfilter(selectedStartupId)
-            |> List.map(timelineEvent =>
-                 "Title: " ++ (timelineEvent |> TimelineEvent.title) |> str
-               )
-            |> Array.of_list
-            |> ReasonReact.array
-          )
-        </div>
-      </div>
+  render: _self =>
+    <div className="timeline-events-panel__container">
+      <h3> ("Pending" |> str) </h3>
+      <hr />
+      <TimelineEventsList
+        timelineEvents=(
+          timelineEvents
+          |> startupFilter(selectedStartupId)
+          |> TimelineEvent.verificationPending
+        )
+      />
+      <h3> ("Complete" |> str) </h3>
+      <hr />
+      <TimelineEventsList
+        timelineEvents=(
+          timelineEvents
+          |> startupFilter(selectedStartupId)
+          |> TimelineEvent.verificationComplete
+        )
+      />
     </div>,
 };

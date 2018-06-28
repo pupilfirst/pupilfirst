@@ -4,25 +4,16 @@
 var React = require("react");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 var TimelineEvent$ReactTemplate = require("../types/TimelineEvent.bs.js");
-var TimelineEventsList$ReactTemplate = require("./TimelineEventsList.bs.js");
 
-((require("./TimelineEventsPanel.scss")));
+((require("./TimelineEventCard.scss")));
 
 function str(prim) {
   return prim;
 }
 
-var component = ReasonReact.statelessComponent("TimelineEventsPanel");
+var component = ReasonReact.statelessComponent("TimelineEventCard");
 
-function startupFilter(startupId, tes) {
-  if (startupId) {
-    return TimelineEvent$ReactTemplate.forStartupId(startupId[0], tes);
-  } else {
-    return tes;
-  }
-}
-
-function make(timelineEvents, selectedStartupId, _) {
+function make(timelineEvent, _) {
   return /* record */[
           /* debugName */component[/* debugName */0],
           /* reactClassInternal */component[/* reactClassInternal */1],
@@ -35,8 +26,12 @@ function make(timelineEvents, selectedStartupId, _) {
           /* shouldUpdate */component[/* shouldUpdate */8],
           /* render */(function () {
               return React.createElement("div", {
-                          className: "timeline-events-panel__container"
-                        }, React.createElement("h3", undefined, "Pending"), React.createElement("hr", undefined), ReasonReact.element(/* None */0, /* None */0, TimelineEventsList$ReactTemplate.make(TimelineEvent$ReactTemplate.verificationPending(startupFilter(selectedStartupId, timelineEvents)), /* array */[])), React.createElement("h3", undefined, "Complete"), React.createElement("hr", undefined), ReasonReact.element(/* None */0, /* None */0, TimelineEventsList$ReactTemplate.make(TimelineEvent$ReactTemplate.verificationComplete(startupFilter(selectedStartupId, timelineEvents)), /* array */[])));
+                          className: "timeline-event-card__container card"
+                        }, React.createElement("div", {
+                              className: "card-header"
+                            }, TimelineEvent$ReactTemplate.title(timelineEvent)), React.createElement("div", {
+                              className: "card-body"
+                            }, TimelineEvent$ReactTemplate.description(timelineEvent)));
             }),
           /* initialState */component[/* initialState */10],
           /* retainedProps */component[/* retainedProps */11],
@@ -48,6 +43,5 @@ function make(timelineEvents, selectedStartupId, _) {
 
 exports.str = str;
 exports.component = component;
-exports.startupFilter = startupFilter;
 exports.make = make;
 /*  Not a pure module */

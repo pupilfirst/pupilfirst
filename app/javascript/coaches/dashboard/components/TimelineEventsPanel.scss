@@ -1,28 +1,5 @@
 @import "../../../shared/variables";
 
-.timeline-events-panel__tab-bar {
-  margin-top: 2rem;
-}
-
-.timeline-events-panel__tab-bar-item {
-  line-height: 2rem;
-  width: 150px;
-  background-color: $light-secondary;
-  border: 0;
-  color: white;
-  &:focus {
-    outline: none;
-  }
-}
-
-.timeline-events-panel__tab-bar-item--active {
-  background-color: $dark-secondary;
-}
-
-.timeline-events-panel__list-container {
-  min-height: 500px;
-  background-color: white;
-  border: 1px solid $gray-border;
-  border-radius: 3px;
-  padding: 2rem;
+.timeline-events-panel__container {
+  padding-top: 1rem;
 }

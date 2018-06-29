@@ -7,11 +7,11 @@ feature 'Leaderboard' do
     let(:test_time) { Time.parse '2017-04-19 12:00:00 +0530' }
     let(:leaderboard_service) { instance_double Startups::LeaderboardService }
     let(:level_one) { create :level, :one }
-    let(:startup_1) { build :startup }
-    let(:startup_2) { build :startup }
-    let(:startup_3) { build :startup }
-    let(:startup_4) { build :startup }
-    let(:startup_5) { build :startup }
+    let(:startup_1) { build :startup, level: level_one }
+    let(:startup_2) { build :startup, level: level_one }
+    let(:startup_3) { build :startup, level: level_one }
+    let(:startup_4) { build :startup, level: level_one }
+    let(:startup_5) { build :startup, level: level_one }
 
     let(:leaderboard) do
       [

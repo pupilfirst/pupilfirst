@@ -13,7 +13,7 @@ module Founders
           facebookShareEligibility: current_founder.facebook_share_eligibility,
           levelUpEligibility: level_up_eligibility_service.eligibility,
           nextLevelUnlockDate: level_up_eligibility_service.next_level_unlock_date,
-          maxLevelNumber: current_school.levels.count,
+          maxLevelNumber: current_school.levels.maximum(:number),
           founderDetails: founder_details,
           authenticityToken: view.form_authenticity_token,
           iconPaths: icon_paths,
@@ -31,7 +31,7 @@ module Founders
       private
 
       def current_school
-        School.find_by(id: view.current_startup.level.school_id)
+        view.current_startup.level.school
       end
 
       def current_startup

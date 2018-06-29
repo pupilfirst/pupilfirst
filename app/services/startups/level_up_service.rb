@@ -19,8 +19,11 @@ module Startups
       @startup.update!(level: next_level)
     end
 
+    def school
+      @school ||= @startup.level.school
+    end
+
     def next_level
-      school = School.find_by(id: @startup.level.school_id)
       @next_level ||= school.levels.find_by(number: @startup.level.number + 1)
     end
 

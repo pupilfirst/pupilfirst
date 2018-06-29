@@ -1,3 +1,14 @@
+@import "../../../shared/variables";
+
 .timeline-event-card__container {
   margin-bottom: 1rem;
+}
+
+.timeline-event-card__header-subtext {
+  color: $light-grey-text;
+  font-size: small;
+}
+
+.timeline-event-card__field-header {
+  margin-top: 0.75rem;
 }

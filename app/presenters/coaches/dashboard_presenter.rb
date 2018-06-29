@@ -21,14 +21,18 @@ module Coaches
     end
 
     def timeline_events
-      TimelineEvent.where(startup: current_coach.startups).map do |timeline_event|
+      TimelineEvent.where(startup: current_coach.startups).includes(:founder, :startup).map do |timeline_event|
         {
           id: timeline_event.id,
           title: timeline_event.title,
           description: timeline_event.description,
           eventOn: timeline_event.event_on,
           status: timeline_event.status,
-          startupId: timeline_event.startup_id
+          startupId: timeline_event.startup_id,
+          startupName: timeline_event.startup.product_name,
+          founderId: timeline_event.founder_id,
+          founderName: timeline_event.founder.name,
+          submittedAt: timeline_event.created_at
         }
       end
     end

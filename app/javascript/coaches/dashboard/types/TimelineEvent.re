@@ -9,8 +9,12 @@ type t = {
   title: string,
   description: string,
   status,
-  eventOn: string,
+  eventOn: DateTime.t,
   startupId: int,
+  startupName: string,
+  founderId: int,
+  founderName: string,
+  submittedAt: DateTime.t,
 };
 
 module JsDecode = {
@@ -22,6 +26,10 @@ module JsDecode = {
     status: string,
     eventOn: string,
     startupId: int,
+    startupName: string,
+    founderId: int,
+    founderName: string,
+    submittedAt: string,
   };
   let parseStatus = status =>
     switch (status) {
@@ -38,8 +46,12 @@ let create = js_t => {
   title: js_t |> JsDecode.title,
   description: js_t |> JsDecode.description,
   status: js_t |> JsDecode.status |> JsDecode.parseStatus,
-  eventOn: js_t |> JsDecode.eventOn,
+  eventOn: js_t |> JsDecode.eventOn |> DateTime.parse,
   startupId: js_t |> JsDecode.startupId,
+  startupName: js_t |> JsDecode.startupName,
+  founderId: js_t |> JsDecode.founderId,
+  founderName: js_t |> JsDecode.founderName,
+  submittedAt: js_t |> JsDecode.submittedAt |> DateTime.parse,
 };
 
 let forStartupId = (startupId, tes) =>
@@ -56,3 +68,13 @@ let title = t => t.title;
 let description = t => t.description;
 
 let eventOn = t => t.eventOn;
+
+let founderId = t => t.founderId;
+
+let founderName = t => t.founderName;
+
+let startupId = t => t.startupId;
+
+let startupName = t => t.startupName;
+
+let submittedAt = t => t.submittedAt;

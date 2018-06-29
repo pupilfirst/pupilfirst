@@ -3,6 +3,7 @@
 
 var List = require("bs-platform/lib/js/list.js");
 var Pervasives = require("bs-platform/lib/js/pervasives.js");
+var DateTime$ReactTemplate = require("./DateTime.bs.js");
 
 function parseStatus(status) {
   switch (status) {
@@ -27,8 +28,12 @@ function create(js_t) {
           /* title */js_t.title,
           /* description */js_t.description,
           /* status */parseStatus(js_t.status),
-          /* eventOn */js_t.eventOn,
-          /* startupId */js_t.startupId
+          /* eventOn */DateTime$ReactTemplate.parse(js_t.eventOn),
+          /* startupId */js_t.startupId,
+          /* startupName */js_t.startupName,
+          /* founderId */js_t.founderId,
+          /* founderName */js_t.founderName,
+          /* submittedAt */DateTime$ReactTemplate.parse(js_t.submittedAt)
         ];
 }
 
@@ -62,6 +67,26 @@ function eventOn(t) {
   return t[/* eventOn */4];
 }
 
+function founderId(t) {
+  return t[/* founderId */7];
+}
+
+function founderName(t) {
+  return t[/* founderName */8];
+}
+
+function startupId(t) {
+  return t[/* startupId */5];
+}
+
+function startupName(t) {
+  return t[/* startupName */6];
+}
+
+function submittedAt(t) {
+  return t[/* submittedAt */9];
+}
+
 exports.JsDecode = JsDecode;
 exports.create = create;
 exports.forStartupId = forStartupId;
@@ -70,4 +95,9 @@ exports.verificationComplete = verificationComplete;
 exports.title = title;
 exports.description = description;
 exports.eventOn = eventOn;
-/* No side effect */
+exports.founderId = founderId;
+exports.founderName = founderName;
+exports.startupId = startupId;
+exports.startupName = startupName;
+exports.submittedAt = submittedAt;
+/* DateTime-ReactTemplate Not a pure module */

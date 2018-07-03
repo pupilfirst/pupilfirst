@@ -33,14 +33,40 @@ class TimelineEventsController < ApplicationController
   def review
     timeline_event = TimelineEvent.find(params[:id])
     authorize timeline_event
-    # TODO: Handle review
+
+    if timeline_event.pending?
+      status = {
+        needs_improvement: TimelineEvent::STATUS_NEEDS_IMPROVEMENT,
+        not_accepted: TimelineEvent::STATUS_NOT_ACCEPTED,
+        verified: TimelineEvent::STATUS_VERIFIED
+      }.fetch(params[:status].to_sym)
+
+      points = params[:points].present? ? params[:points].to_i : nil
+
+      begin
+        TimelineEvents::VerificationService.new(timeline_event).update_status(status, grade: params[:grade], skill_grades: params[:skill_grades].as_json, points: points)
+        head :ok
+      rescue TimelineEvents::ReviewInterfaceException => e
+        render json: { error: e.message }.to_json, status: :unprocessable_entity
+      end
+    else
+      # someone else already reviewed this event! Ask javascript to reload page.
+      render json: { error: 'Event no longer pending review! Refreshing your dashboard.' }.to_json, status: :unprocessable_entity
+    end
   end
 
   # POST /timeline_events/:id/undo_review
   def undo_review
     timeline_event = TimelineEvent.find(params[:id])
     authorize timeline_event
-    # TODO: Handle undo_review
+
+    unless timeline_event.reviewed?
+      render json: { error: 'Event is pending review! Cannot undo.' }.to_json, status: :unprocessable_entity
+      return
+    end
+
+    TimelineEvents::UndoVerificationService.new(timeline_event).execute
+    head :ok
   end
 
   private

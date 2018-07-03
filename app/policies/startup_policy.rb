@@ -40,6 +40,6 @@ class StartupPolicy < ApplicationPolicy
   end
 
   def billing?
-    record.level.number.positive? # Only level 1+ startups need a billing page.
+    !record.level.school.sponsored? # Only startups in schools that are not sponsored needs a billing page.
   end
 end

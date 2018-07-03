@@ -439,7 +439,7 @@ class Startup < ApplicationRecord
   end
 
   def subscription_active?
-    payments.where('billing_end_at > ?', Time.now).paid.exists?
+    level.school.sponsored || payments.where('billing_end_at > ?', Time.now).paid.exists?
   end
 
   def self.admission_stages

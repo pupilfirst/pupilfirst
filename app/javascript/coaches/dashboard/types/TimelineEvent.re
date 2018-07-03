@@ -15,44 +15,32 @@ type t = {
   founderId: int,
   founderName: string,
   submittedAt: DateTime.t,
+  links: list(Link.t),
 };
 
-module JsDecode = {
-  [@bs.deriving abstract]
-  type t = {
-    id: int,
-    title: string,
-    description: string,
-    status: string,
-    eventOn: string,
-    startupId: int,
-    startupName: string,
-    founderId: int,
-    founderName: string,
-    submittedAt: string,
+let parseStatus = status =>
+  switch (status) {
+  | "Pending" => Pending
+  | "Verified" => Verified
+  | "Not Accepted" => NotAccepted
+  | "Needs Improvement" => NeedsImprovement
+  | _ => failwith("Invalid Status")
   };
-  let parseStatus = status =>
-    switch (status) {
-    | "Pending" => Pending
-    | "Verified" => Verified
-    | "Not Accepted" => NotAccepted
-    | "Needs Improvement" => NeedsImprovement
-    | _ => failwith("Invalid Status")
-    };
-};
 
-let create = js_t => {
-  id: js_t |> JsDecode.id,
-  title: js_t |> JsDecode.title,
-  description: js_t |> JsDecode.description,
-  status: js_t |> JsDecode.status |> JsDecode.parseStatus,
-  eventOn: js_t |> JsDecode.eventOn |> DateTime.parse,
-  startupId: js_t |> JsDecode.startupId,
-  startupName: js_t |> JsDecode.startupName,
-  founderId: js_t |> JsDecode.founderId,
-  founderName: js_t |> JsDecode.founderName,
-  submittedAt: js_t |> JsDecode.submittedAt |> DateTime.parse,
-};
+let decode = json =>
+  Json.Decode.{
+    id: json |> field("id", int),
+    title: json |> field("title", string),
+    description: json |> field("description", string),
+    status: json |> field("status", string) |> parseStatus,
+    eventOn: json |> field("eventOn", string) |> DateTime.parse,
+    startupId: json |> field("startupId", int),
+    startupName: json |> field("startupName", string),
+    founderId: json |> field("founderId", int),
+    founderName: json |> field("founderName", string),
+    submittedAt: json |> field("submittedAt", string) |> DateTime.parse,
+    links: json |> field("links", list(Link.decode)),
+  };
 
 let forStartupId = (startupId, tes) =>
   tes |> List.filter(te => te.startupId == startupId);
@@ -62,6 +50,8 @@ let verificationPending = tes =>
 
 let verificationComplete = tes =>
   tes |> List.filter(te => te.status != Pending);
+
+let id = t => t.id;
 
 let title = t => t.title;
 
@@ -78,3 +68,5 @@ let startupId = t => t.startupId;
 let startupName = t => t.startupName;
 
 let submittedAt = t => t.submittedAt;
+
+let links = t => t.links;

@@ -5,15 +5,10 @@ var Json_decode = require("@glennsl/bs-json/src/Json_decode.bs.js");
 
 function decode(json) {
   return /* record */[
-          /* name */Json_decode.field("name", Json_decode.string, json),
-          /* id */Json_decode.field("id", Json_decode.$$int, json)
+          /* title */Json_decode.field("title", Json_decode.string, json),
+          /* url */Json_decode.field("url", Json_decode.string, json)
         ];
 }
 
-function name(t) {
-  return t[/* name */0];
-}
-
 exports.decode = decode;
-exports.name = name;
 /* No side effect */

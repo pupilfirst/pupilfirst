@@ -6,6 +6,7 @@ var $$Array = require("bs-platform/lib/js/array.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
+var Startup$ReactTemplate = require("../types/Startup.bs.js");
 
 ((require("./StartupsList.scss")));
 
@@ -32,18 +33,18 @@ function make(startups, selectedStartupId, selectStartupCB, clearStartupCB, _) {
                         }, $$Array.of_list(List.map((function (startup) {
                                     var buttonClasses;
                                     if (selectedStartupId) {
-                                      var match = selectedStartupId[0] === startup.id;
+                                      var match = selectedStartupId[0] === Startup$ReactTemplate.id(startup);
                                       buttonClasses = match ? "startups-list__item startups-list__item--selected" : "startups-list__item";
                                     } else {
                                       buttonClasses = "startups-list__item";
                                     }
                                     return React.createElement("button", {
-                                                key: startup.name,
+                                                key: Startup$ReactTemplate.name(startup),
                                                 className: buttonClasses,
                                                 onClick: (function () {
-                                                    return Curry._1(selectStartupCB, startup.id);
+                                                    return Curry._1(selectStartupCB, Startup$ReactTemplate.id(startup));
                                                   })
-                                              }, startup.name);
+                                              }, Startup$ReactTemplate.name(startup));
                                   }), startups)), selectedStartupId ? React.createElement("button", {
                                 className: "startups-list__clear-filter-btn",
                                 onClick: (function () {

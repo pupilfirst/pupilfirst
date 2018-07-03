@@ -1,10 +1,9 @@
 [%bs.raw {|require("./CoachDashboard.scss")|}];
 
-[@bs.deriving abstract]
-type jsProps = {
+type props = {
   coach: Coach.t,
-  startups: array(Startup.t),
-  timelineEvents: array(TimelineEvent.JsDecode.t),
+  startups: list(Startup.t),
+  timelineEvents: list(TimelineEvent.t),
 };
 
 type state = {
@@ -20,13 +19,7 @@ let component = ReasonReact.reducerComponent("CoachDashboard");
 
 let make = (~coach, ~startups, ~timelineEvents, _children) => {
   ...component,
-  initialState: () => {
-    selectedStartupId: None,
-    timelineEvents:
-      timelineEvents
-      |> Array.map(te => TimelineEvent.create(te))
-      |> Array.to_list,
-  },
+  initialState: () => {selectedStartupId: None, timelineEvents},
   reducer: (action, state) =>
     switch (action) {
     | SelectStartup(id) =>
@@ -41,7 +34,7 @@ let make = (~coach, ~startups, ~timelineEvents, _children) => {
         <div className="col-md-3">
           <SidePanel
             coach
-            startups=(startups |> Array.to_list)
+            startups
             selectedStartupId=state.selectedStartupId
             selectStartupCB
             clearStartupCB
@@ -55,28 +48,27 @@ let make = (~coach, ~startups, ~timelineEvents, _children) => {
         </div>
       </div>
     </div>;
-    /* <div>
-         (ReasonReact.string("Welcome Coach " ++ (coach |> Coach.name)))
-         <StartupsList
-           startups=(startups |> Array.to_list)
-           selectedStartupId=state.selectedStartupId
-           selectStartupCB
-           clearStartupCB
-         />
-         <TimelineEventsPanel
-           timelineEvents=state.timelineEvents
-           selectedStartupId=state.selectedStartupId
-         />
-       </div>; */
   },
 };
 
+let decode = json =>
+  Json.Decode.{
+    coach: json |> field("coach", Coach.decode),
+    startups: json |> field("startups", list(Startup.decode)),
+    timelineEvents:
+      json |> field("timelineEvents", list(TimelineEvent.decode)),
+  };
+
 let jsComponent =
-  ReasonReact.wrapReasonForJs(~component, jsProps =>
-    make(
-      ~coach=jsProps |. coach,
-      ~startups=jsProps |. startups,
-      ~timelineEvents=jsProps |. timelineEvents,
-      [||],
-    )
+  ReasonReact.wrapReasonForJs(
+    ~component,
+    jsProps => {
+      let props = jsProps |> decode;
+      make(
+        ~coach=props.coach,
+        ~startups=props.startups,
+        ~timelineEvents=props.timelineEvents,
+        [||],
+      );
+    },
   );

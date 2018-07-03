@@ -8,7 +8,12 @@ let make = (~timelineEvents, _children) => {
     <div className="timeline-events-list__container">
       (
         timelineEvents
-        |> List.map(te => <TimelineEventCard timelineEvent=te />)
+        |> List.map(te =>
+             <TimelineEventCard
+               key=(te |> TimelineEvent.id |> string_of_int)
+               timelineEvent=te
+             />
+           )
         |> Array.of_list
         |> ReasonReact.array
       )

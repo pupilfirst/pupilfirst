@@ -3,6 +3,8 @@
 
 var List = require("bs-platform/lib/js/list.js");
 var Pervasives = require("bs-platform/lib/js/pervasives.js");
+var Json_decode = require("@glennsl/bs-json/src/Json_decode.bs.js");
+var Link$ReactTemplate = require("./Link.bs.js");
 var DateTime$ReactTemplate = require("./DateTime.bs.js");
 
 function parseStatus(status) {
@@ -20,20 +22,21 @@ function parseStatus(status) {
   }
 }
 
-var JsDecode = /* module */[/* parseStatus */parseStatus];
-
-function create(js_t) {
+function decode(json) {
   return /* record */[
-          /* id */js_t.id,
-          /* title */js_t.title,
-          /* description */js_t.description,
-          /* status */parseStatus(js_t.status),
-          /* eventOn */DateTime$ReactTemplate.parse(js_t.eventOn),
-          /* startupId */js_t.startupId,
-          /* startupName */js_t.startupName,
-          /* founderId */js_t.founderId,
-          /* founderName */js_t.founderName,
-          /* submittedAt */DateTime$ReactTemplate.parse(js_t.submittedAt)
+          /* id */Json_decode.field("id", Json_decode.$$int, json),
+          /* title */Json_decode.field("title", Json_decode.string, json),
+          /* description */Json_decode.field("description", Json_decode.string, json),
+          /* status */parseStatus(Json_decode.field("status", Json_decode.string, json)),
+          /* eventOn */DateTime$ReactTemplate.parse(Json_decode.field("eventOn", Json_decode.string, json)),
+          /* startupId */Json_decode.field("startupId", Json_decode.$$int, json),
+          /* startupName */Json_decode.field("startupName", Json_decode.string, json),
+          /* founderId */Json_decode.field("founderId", Json_decode.$$int, json),
+          /* founderName */Json_decode.field("founderName", Json_decode.string, json),
+          /* submittedAt */DateTime$ReactTemplate.parse(Json_decode.field("submittedAt", Json_decode.string, json)),
+          /* links */Json_decode.field("links", (function (param) {
+                  return Json_decode.list(Link$ReactTemplate.decode, param);
+                }), json)
         ];
 }
 
@@ -55,6 +58,10 @@ function verificationComplete(tes) {
                 }))(tes);
 }
 
+function id(t) {
+  return t[/* id */0];
+}
+
 function title(t) {
   return t[/* title */1];
 }
@@ -63,20 +70,8 @@ function description(t) {
   return t[/* description */2];
 }
 
-function eventOn(t) {
-  return t[/* eventOn */4];
-}
-
-function founderId(t) {
-  return t[/* founderId */7];
-}
-
 function founderName(t) {
   return t[/* founderName */8];
-}
-
-function startupId(t) {
-  return t[/* startupId */5];
 }
 
 function startupName(t) {
@@ -87,17 +82,14 @@ function submittedAt(t) {
   return t[/* submittedAt */9];
 }
 
-exports.JsDecode = JsDecode;
-exports.create = create;
+exports.title = title;
+exports.submittedAt = submittedAt;
+exports.description = description;
+exports.founderName = founderName;
+exports.startupName = startupName;
+exports.id = id;
 exports.forStartupId = forStartupId;
 exports.verificationPending = verificationPending;
 exports.verificationComplete = verificationComplete;
-exports.title = title;
-exports.description = description;
-exports.eventOn = eventOn;
-exports.founderId = founderId;
-exports.founderName = founderName;
-exports.startupId = startupId;
-exports.startupName = startupName;
-exports.submittedAt = submittedAt;
+exports.decode = decode;
 /* DateTime-ReactTemplate Not a pure module */

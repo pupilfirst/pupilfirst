@@ -3,6 +3,7 @@
 
 var React = require("react");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
+var Coach$ReactTemplate = require("../types/Coach.bs.js");
 var StartupsList$ReactTemplate = require("./StartupsList.bs.js");
 
 ((require("./SidePanel.scss")));
@@ -29,7 +30,7 @@ function make(coach, startups, selectedStartupId, selectStartupCB, clearStartupC
                           className: "side-panel__container d-flex flex-column"
                         }, React.createElement("h3", {
                               className: "side-panel__coach-greeting py-3"
-                            }, "Welcome " + coach.name), ReasonReact.element(/* None */0, /* None */0, StartupsList$ReactTemplate.make(startups, selectedStartupId, selectStartupCB, clearStartupCB, /* array */[])));
+                            }, "Welcome " + Coach$ReactTemplate.name(coach)), ReasonReact.element(/* None */0, /* None */0, StartupsList$ReactTemplate.make(startups, selectedStartupId, selectStartupCB, clearStartupCB, /* array */[])));
             }),
           /* initialState */component[/* initialState */10],
           /* retainedProps */component[/* retainedProps */11],

@@ -48,7 +48,7 @@ let make = (~timelineEvent, _children) => {
             |> str
           )
           <h5 className="timeline-event-card__field-header">
-            ("Attachments:" |> str)
+            ("Links:" |> str)
           </h5>
         </div>
         <div className="col-md-3"> ("Preview as founder" |> str) </div>

@@ -44,7 +44,7 @@ function make(timelineEvent, _) {
                                       className: "timeline-event-card__field-header"
                                     }, "Submitted by:"), TimelineEvent$ReactTemplate.founderName(timelineEvent) + (" (" + (TimelineEvent$ReactTemplate.startupName(timelineEvent) + ")")), React.createElement("h5", {
                                       className: "timeline-event-card__field-header"
-                                    }, "Attachments:")), React.createElement("div", {
+                                    }, "Links:")), React.createElement("div", {
                                   className: "col-md-3"
                                 }, "Preview as founder")));
             }),

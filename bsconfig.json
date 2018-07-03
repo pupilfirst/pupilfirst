@@ -4,17 +4,20 @@
     "react-jsx": 2
   },
   "sources": {
-    "dir" : "app/javascript",
-    "subdirs" : true
+    "dir": "app/javascript",
+    "subdirs": true
   },
-  "package-specs": [{
-    "module": "commonjs",
-    "in-source": true
-  }],
+  "package-specs": [
+    {
+      "module": "commonjs",
+      "in-source": true
+    }
+  ],
   "suffix": ".bs.js",
   "namespace": true,
   "bs-dependencies": [
-    "reason-react"
+    "reason-react",
+    "@glennsl/bs-json"
   ],
   "refmt": 3
 }

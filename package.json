@@ -2,6 +2,7 @@
   "name": "sv-co",
   "private": true,
   "dependencies": {
+    "@glennsl/bs-json": "^2.0.0",
     "@rails/webpacker": "3.5",
     "babel-plugin-react-css-modules": "^3.3.2",
     "babel-preset-react": "^6.24.1",

@@ -32,7 +32,8 @@ module Coaches
           startupName: timeline_event.startup.product_name,
           founderId: timeline_event.founder_id,
           founderName: timeline_event.founder.name,
-          submittedAt: timeline_event.created_at
+          submittedAt: timeline_event.created_at,
+          links: timeline_event.links
         }
       end
     end

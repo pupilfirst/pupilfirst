@@ -5,6 +5,7 @@ var List = require("bs-platform/lib/js/list.js");
 var $$Array = require("bs-platform/lib/js/array.js");
 var React = require("react");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
+var TimelineEvent$ReactTemplate = require("../types/TimelineEvent.bs.js");
 var TimelineEventCard$ReactTemplate = require("./TimelineEventCard.bs.js");
 
 function str(prim) {
@@ -28,7 +29,7 @@ function make(timelineEvents, _) {
               return React.createElement("div", {
                           className: "timeline-events-list__container"
                         }, $$Array.of_list(List.map((function (te) {
-                                    return ReasonReact.element(/* None */0, /* None */0, TimelineEventCard$ReactTemplate.make(te, /* array */[]));
+                                    return ReasonReact.element(/* Some */[String(TimelineEvent$ReactTemplate.id(te))], /* None */0, TimelineEventCard$ReactTemplate.make(te, /* array */[]));
                                   }), timelineEvents)));
             }),
           /* initialState */component[/* initialState */10],

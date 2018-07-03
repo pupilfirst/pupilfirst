@@ -1,6 +1,8 @@
 class TimelineEventsController < ApplicationController
-  before_action :authenticate_founder!
-  before_action :require_active_subscription, except: %i[create]
+  before_action :authenticate_user!
+  before_action :authenticate_founder!, except: %i[review undo_review]
+  before_action :require_active_subscription, except: %i[create review undo_review]
+  # TODO: Move the above 'authorization' checks to policies.
 
   # POST /timeline_events
   def create
@@ -25,6 +27,20 @@ class TimelineEventsController < ApplicationController
     timeline_event.destroy!
     flash[:success] = 'Timeline event deleted!'
     redirect_to current_founder.startup
+  end
+
+  # POST /timeline_events/:id/review
+  def review
+    timeline_event = TimelineEvent.find(params[:id])
+    authorize timeline_event
+    # TODO: Handle review
+  end
+
+  # POST /timeline_events/:id/undo_review
+  def undo_review
+    timeline_event = TimelineEvent.find(params[:id])
+    authorize timeline_event
+    # TODO: Handle undo_review
   end
 
   private

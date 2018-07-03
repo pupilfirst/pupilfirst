@@ -16,4 +16,13 @@ class TimelineEventPolicy < ApplicationPolicy
 
     true
   end
+
+  def review?
+    coach = user.faculty
+    coach.present? && record.startup.in?(coach.startups)
+  end
+
+  def undo_review?
+    review?
+  end
 end

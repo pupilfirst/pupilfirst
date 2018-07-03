@@ -39,7 +39,12 @@ Rails.application.routes.draw do
     get 'dashboard/targets/:id(/:slug)', action: 'target_overlay', as: 'dashboard_target'
   end
 
-  resources :timeline_events, only: %i[create destroy]
+  resources :timeline_events, only: %i[create destroy] do
+    member do
+      post 'review'
+      post 'undo_review'
+    end
+  end
 
   scope 'founder/facebook', as: 'founder_facebook', controller: 'founders/facebook_connect' do
     post 'connect'

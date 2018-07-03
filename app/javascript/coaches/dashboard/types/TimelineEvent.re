@@ -16,6 +16,7 @@ type t = {
   founderName: string,
   submittedAt: DateTime.t,
   links: list(Link.t),
+  files: list(File.t),
 };
 
 let parseStatus = status =>
@@ -40,6 +41,7 @@ let decode = json =>
     founderName: json |> field("founderName", string),
     submittedAt: json |> field("submittedAt", string) |> DateTime.parse,
     links: json |> field("links", list(Link.decode)),
+    files: json |> field("files", list(File.decode)),
   };
 
 let forStartupId = (startupId, tes) =>
@@ -70,3 +72,5 @@ let startupName = t => t.startupName;
 let submittedAt = t => t.submittedAt;
 
 let links = t => t.links;
+
+let files = t => t.files;

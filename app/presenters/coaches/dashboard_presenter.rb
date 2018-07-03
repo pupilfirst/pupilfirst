@@ -21,7 +21,7 @@ module Coaches
     end
 
     def timeline_events
-      TimelineEvent.where(startup: current_coach.startups).includes(:founder, :startup).map do |timeline_event|
+      TimelineEvent.where(startup: current_coach.startups).includes(:founder, :startup, :timeline_event_files).map do |timeline_event|
         {
           id: timeline_event.id,
           title: timeline_event.title,
@@ -33,7 +33,8 @@ module Coaches
           founderId: timeline_event.founder_id,
           founderName: timeline_event.founder.name,
           submittedAt: timeline_event.created_at,
-          links: timeline_event.links
+          links: timeline_event.links,
+          files: timeline_event.timeline_event_files.map { |file| { title: file.title, id: file.id } }
         }
       end
     end

@@ -4,6 +4,7 @@
 var List = require("bs-platform/lib/js/list.js");
 var Pervasives = require("bs-platform/lib/js/pervasives.js");
 var Json_decode = require("@glennsl/bs-json/src/Json_decode.bs.js");
+var File$ReactTemplate = require("./File.bs.js");
 var Link$ReactTemplate = require("./Link.bs.js");
 var DateTime$ReactTemplate = require("./DateTime.bs.js");
 
@@ -36,6 +37,9 @@ function decode(json) {
           /* submittedAt */DateTime$ReactTemplate.parse(Json_decode.field("submittedAt", Json_decode.string, json)),
           /* links */Json_decode.field("links", (function (param) {
                   return Json_decode.list(Link$ReactTemplate.decode, param);
+                }), json),
+          /* files */Json_decode.field("files", (function (param) {
+                  return Json_decode.list(File$ReactTemplate.decode, param);
                 }), json)
         ];
 }
@@ -82,12 +86,22 @@ function submittedAt(t) {
   return t[/* submittedAt */9];
 }
 
+function links(t) {
+  return t[/* links */10];
+}
+
+function files(t) {
+  return t[/* files */11];
+}
+
 exports.title = title;
 exports.submittedAt = submittedAt;
 exports.description = description;
 exports.founderName = founderName;
 exports.startupName = startupName;
 exports.id = id;
+exports.links = links;
+exports.files = files;
 exports.forStartupId = forStartupId;
 exports.verificationPending = verificationPending;
 exports.verificationComplete = verificationComplete;

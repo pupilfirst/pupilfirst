@@ -47,9 +47,66 @@ let make = (~timelineEvent, _children) => {
             ++ ")"
             |> str
           )
-          <h5 className="timeline-event-card__field-header">
-            ("Links:" |> str)
-          </h5>
+          {
+            let links = timelineEvent |> TimelineEvent.links;
+            if (links |> List.length == 0) {
+              ReasonReact.null;
+            } else {
+              <div>
+                <h5 className="timeline-event-card__field-header">
+                  ("Links:" |> str)
+                </h5>
+                (
+                  links
+                  |> List.map(link =>
+                       <a
+                         href=(link |> Link.url)
+                         target="_blank"
+                         className="btn btn-secondary mr-1"
+                         key=(link |> Link.url)>
+                         (
+                           link |> Link.private ?
+                             <i className="fa fa-lock mr-1" /> :
+                             <i className="fa fa-globe mr-1" />
+                         )
+                         (link |> Link.title |> str)
+                       </a>
+                     )
+                  |> Array.of_list
+                  |> ReasonReact.array
+                )
+              </div>;
+            };
+          }
+          {
+            let files = timelineEvent |> TimelineEvent.files;
+            if (files |> List.length == 0) {
+              ReasonReact.null;
+            } else {
+              <div>
+                <h5 className="timeline-event-card__field-header">
+                  ("Attachments:" |> str)
+                </h5>
+                (
+                  files
+                  |> List.map(file => {
+                       let id = file |> File.id |> string_of_int;
+                       let url = "/timeline_event_files/" ++ id ++ "/download";
+                       <a
+                         href=url
+                         target="_blank"
+                         className="btn btn-secondary mr-1"
+                         key=id>
+                         <i className="fa fa-file mr-1" />
+                         (file |> File.title |> str)
+                       </a>;
+                     })
+                  |> Array.of_list
+                  |> ReasonReact.array
+                )
+              </div>;
+            };
+          }
         </div>
         <div className="col-md-3"> ("Preview as founder" |> str) </div>
       </div>

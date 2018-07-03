@@ -12,6 +12,10 @@ let startupName: t => string;
 
 let id: t => int;
 
+let links: t => list(Link.t);
+
+let files: t => list(File.t);
+
 let forStartupId: (int, list(t)) => list(t);
 
 let verificationPending: list(t) => list(t);

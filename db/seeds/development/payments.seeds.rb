@@ -48,15 +48,4 @@ after 'development:startups' do
     billing_end_at: 20.days.from_now
   )
 
-  # A live subscription for 'Guardians Of The Galaxy'
-  fee = Startups::FeeAndCouponDataService.new(guardians_of_the_galaxy).emi
-  guardians_of_the_galaxy.payments.create!(
-    founder: guardians_of_the_galaxy.team_lead,
-    amount: fee,
-    paid_at: 20.days.ago,
-    payment_type: Payment::TYPE_NORMAL,
-    billing_start_at: 20.days.ago,
-    billing_end_at: 10.days.from_now
-  )
-
 end

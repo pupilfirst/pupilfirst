@@ -5,10 +5,8 @@ after 'development:startups' do
 
   super_startup = Startup.find_by(legal_registered_name: 'SuperTech Ltd')
   avengers_startup = Startup.find_by(legal_registered_name: 'The Avengers')
-  justiceLeague_startup = Startup.find_by(legal_registered_name: 'Justice League')
-  guardiansOfTheGalaxy_startup = Startup.find_by(legal_registered_name: 'Guardians of the Galaxy')
-
-
+  justice_league = Startup.find_by(legal_registered_name: 'Justice League')
+  guardians_of_the_galaxy = Startup.find_by(legal_registered_name: 'Guardians of the Galaxy')
 
   # A live subscription for 'Super Startup' and 'The Avengers'
   fee = Startups::FeeAndCouponDataService.new(super_startup).emi
@@ -40,9 +38,9 @@ after 'development:startups' do
   )
 
   # A live subscription for 'Justice League'
-  fee = Startups::FeeAndCouponDataService.new(justiceLeague_startup).emi
-  justiceLeague_startup.payments.create!(
-    founder: justiceLeague_startup.team_lead,
+  fee = Startups::FeeAndCouponDataService.new(justice_league).emi
+  justice_league.payments.create!(
+    founder: justice_league.team_lead,
     amount: fee,
     paid_at: 10.days.ago,
     payment_type: Payment::TYPE_NORMAL,
@@ -51,9 +49,9 @@ after 'development:startups' do
   )
 
   # A live subscription for 'Guardians Of The Galaxy'
-  fee = Startups::FeeAndCouponDataService.new(guardiansOfTheGalaxy_startup).emi
-  guardiansOfTheGalaxy_startup.payments.create!(
-    founder: guardiansOfTheGalaxy_startup.team_lead,
+  fee = Startups::FeeAndCouponDataService.new(guardians_of_the_galaxy).emi
+  guardians_of_the_galaxy.payments.create!(
+    founder: guardians_of_the_galaxy.team_lead,
     amount: fee,
     paid_at: 20.days.ago,
     payment_type: Payment::TYPE_NORMAL,

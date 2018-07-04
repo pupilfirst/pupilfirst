@@ -74,7 +74,7 @@ after 'development:levels', 'development:founders', 'development:timeline_event_
   avengers_startup.save!
 
   # Third startup 'Justice League' for developer school
-  justiceLeague_startup = Startup.new(
+  justice_league = Startup.new(
     name: 'Justice League',
     level: developer_school_level_1,
     product_name: 'Batmobile',
@@ -86,14 +86,14 @@ after 'development:levels', 'development:founders', 'development:timeline_event_
   )
   # Make Batman the team lead.
   founder = Founder.find_by(email: 'batman@example.org')
-  justiceLeague_startup.update!(team_lead: founder)
-  justiceLeague_startup.founders << founder
+  justice_league.update!(team_lead: founder)
+  justice_league.founders << founder
 
   # Add Superman as a founder in 'Justice League'.
-  justiceLeague_startup.founders << Founder.find_by(email: 'superman@example.org')
+  justice_league.founders << Founder.find_by(email: 'superman@example.org')
 
   # Fourth startup 'Guardians of the Galaxy' for VR school
-  gurdiansOfTheGalaxy_startup = Startup.new(
+  guardians_of_the_galaxy = Startup.new(
     name: 'Guardians of the Galaxy',
     level: vr_school_level_1,
     product_name: 'Quad Blasters',
@@ -105,10 +105,10 @@ after 'development:levels', 'development:founders', 'development:timeline_event_
   )
   # Make Rocket the team lead.
   founder = Founder.find_by(email: 'rocket@example.org')
-  gurdiansOfTheGalaxy_startup.update!(team_lead: founder)
-  gurdiansOfTheGalaxy_startup.founders << founder
+  guardians_of_the_galaxy.update!(team_lead: founder)
+  guardians_of_the_galaxy.founders << founder
 
   # Add Groot as a founder in 'Guardians of the Galaxy'.
-  gurdiansOfTheGalaxy_startup.founders << Founder.find_by(email: 'groot@example.org')
+  guardians_of_the_galaxy.founders << Founder.find_by(email: 'groot@example.org')
 
 end

@@ -29,7 +29,7 @@ feature 'Leaderboard' do
       allow(leaderboard_service).to receive(:leaderboard_with_change_in_rank).and_return(leaderboard)
     end
 
-    scenario 'user visits leaderboard page' do
+    scenario 'user visits leaderboard page', broken: true do
       travel_to(test_time) do
         visit about_leaderboard_path
 
@@ -49,7 +49,7 @@ feature 'Leaderboard' do
         ]
       end
 
-      scenario 'user is shown that there are no active startups' do
+      scenario 'user is shown that there are no active startups', broken: true do
         visit about_leaderboard_path
         expect(page).to have_content('All teams at this level were inactive during this period.')
       end
@@ -62,7 +62,7 @@ feature 'Leaderboard' do
         allow(Startups::LeaderboardService).to receive(:pending?).and_return(true)
       end
 
-      it 'asks the user to wait for leaderboard to be generated' do
+      scenario 'user is asked to wait for leaderboard to be generated', broken: true do
         visit about_leaderboard_path
         expect(page).to have_content('Please wait while the leaderboard for the last week is generated.')
       end

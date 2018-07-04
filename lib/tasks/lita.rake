@@ -8,9 +8,11 @@ namespace :lita do
     # Require all handlers.
     require_relative '../lita/handlers/backup'
     require_relative '../lita/handlers/changelog'
-    require_relative '../lita/handlers/leaderboard'
     require_relative '../lita/handlers/targets'
     require_relative '../lita/handlers/thanks'
+
+    # The leaderboard feature is disabled, for the time being.
+    # require_relative '../lita/handlers/leaderboard'
 
     lita_config_path = File.expand_path(Rails.root.join('config', 'lita_config.rb'))
     Lita.run(lita_config_path)

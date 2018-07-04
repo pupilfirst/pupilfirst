@@ -451,6 +451,6 @@ class Startup < ApplicationRecord
   end
 
   def subscription_end_date
-    active_payment.billing_end_at
+    active_payment&.billing_end_at
   end
 end

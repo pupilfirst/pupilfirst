@@ -34,7 +34,8 @@ module Coaches
           founderName: timeline_event.founder.name,
           submittedAt: timeline_event.created_at,
           links: timeline_event.links,
-          files: timeline_event.timeline_event_files.map { |file| { title: file.title, id: file.id } }
+          files: timeline_event.timeline_event_files.map { |file| { title: file.title, id: file.id } },
+          grade: timeline_event.timeline_event_grades&.first&.grade
         }
       end
     end

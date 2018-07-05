@@ -1,5 +1,10 @@
+type grade =
+  | Good
+  | Great
+  | Wow;
+
 type status =
-  | Verified
+  | Verified(grade)
   | NotAccepted
   | Pending
   | NeedsImprovement;
@@ -19,21 +24,53 @@ type t = {
   files: list(File.t),
 };
 
-let parseStatus = status =>
+let parseStatus = (grade, status) =>
   switch (status) {
   | "Pending" => Pending
-  | "Verified" => Verified
+  | "Verified" => Verified(grade |> Belt.Option.getExn)
   | "Not Accepted" => NotAccepted
   | "Needs Improvement" => NeedsImprovement
-  | _ => failwith("Invalid Status")
+  | _ => failwith("Invalid Status " ++ status ++ " received!")
   };
 
-let decode = json =>
+let parseGrade = grade =>
+  switch (grade) {
+  | None => None
+  | Some(grade) =>
+    switch (grade) {
+    | "good" => Some(Good)
+    | "great" => Some(Great)
+    | "wow" => Some(Wow)
+    | _ => failwith("Invalid Grade " ++ grade ++ " received!")
+    }
+  };
+
+let statusString = status =>
+  switch (status) {
+  | Pending => "Pending"
+  | Verified(_) => "Verified"
+  | NotAccepted => "Not Accepted"
+  | NeedsImprovement => "Needs Improvement"
+  };
+
+let gradeString = grade =>
+  switch (grade) {
+  | Good => "good"
+  | Great => "great"
+  | Wow => "wow"
+  };
+
+let decode = json => {
+  let grade =
+    json
+    |> Json.Decode.(field("grade", string) |> nullable)
+    |> Js.Null.toOption
+    |> parseGrade;
   Json.Decode.{
     id: json |> field("id", int),
     title: json |> field("title", string),
     description: json |> field("description", string),
-    status: json |> field("status", string) |> parseStatus,
+    status: json |> field("status", string) |> parseStatus(grade),
     eventOn: json |> field("eventOn", string) |> DateTime.parse,
     startupId: json |> field("startupId", int),
     startupName: json |> field("startupName", string),
@@ -43,6 +80,7 @@ let decode = json =>
     links: json |> field("links", list(Link.decode)),
     files: json |> field("files", list(File.decode)),
   };
+};
 
 let forStartupId = (startupId, tes) =>
   tes |> List.filter(te => te.startupId == startupId);
@@ -61,11 +99,7 @@ let description = t => t.description;
 
 let eventOn = t => t.eventOn;
 
-let founderId = t => t.founderId;
-
 let founderName = t => t.founderName;
-
-let startupId = t => t.startupId;
 
 let startupName = t => t.startupName;
 
@@ -74,3 +108,15 @@ let submittedAt = t => t.submittedAt;
 let links = t => t.links;
 
 let files = t => t.files;
+
+let status = t => t.status;
+
+let updateStatus = (status, t) => {...t, status};
+
+let isVerified = t =>
+  switch (t.status) {
+  | Verified(_grade) => true
+  | Pending
+  | NotAccepted
+  | NeedsImprovement => false
+  };

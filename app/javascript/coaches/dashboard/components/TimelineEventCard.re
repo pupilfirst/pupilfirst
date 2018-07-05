@@ -23,7 +23,7 @@ let make = (~timelineEvent, _children) => {
         </div>
       </div>
       <div className="card-body row">
-        <div className="col-md-9">
+        <div className="col-md-7">
           <h5 className="timeline-event-card__field-header mt-0">
             ("Description:" |> str)
           </h5>
@@ -33,7 +33,7 @@ let make = (~timelineEvent, _children) => {
           </h5>
           (
             timelineEvent
-            |> TimelineEvent.submittedAt
+            |> TimelineEvent.eventOn
             |> DateTime.format(DateTime.OnlyDate)
             |> str
           )
@@ -108,7 +108,7 @@ let make = (~timelineEvent, _children) => {
             };
           }
         </div>
-        <div className="col-md-3"> ("Preview as founder" |> str) </div>
+        <div className="col-md-5"> <ReviewForm timelineEvent /> </div>
       </div>
     </div>,
 };

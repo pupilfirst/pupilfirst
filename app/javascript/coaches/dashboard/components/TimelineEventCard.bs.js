@@ -8,6 +8,7 @@ var ReasonReact = require("reason-react/src/ReasonReact.js");
 var File$ReactTemplate = require("../types/File.bs.js");
 var Link$ReactTemplate = require("../types/Link.bs.js");
 var DateTime$ReactTemplate = require("../types/DateTime.bs.js");
+var ReviewForm$ReactTemplate = require("./ReviewForm.bs.js");
 var TimelineEvent$ReactTemplate = require("../types/TimelineEvent.bs.js");
 
 ((require("./TimelineEventCard.scss")));
@@ -41,12 +42,12 @@ function make(timelineEvent, _) {
                                 }, "Submitted at: " + DateTime$ReactTemplate.format(/* DateAndTime */1, TimelineEvent$ReactTemplate.submittedAt(timelineEvent)))), React.createElement("div", {
                               className: "card-body row"
                             }, React.createElement("div", {
-                                  className: "col-md-9"
+                                  className: "col-md-7"
                                 }, React.createElement("h5", {
                                       className: "timeline-event-card__field-header mt-0"
                                     }, "Description:"), TimelineEvent$ReactTemplate.description(timelineEvent), React.createElement("h5", {
                                       className: "timeline-event-card__field-header"
-                                    }, "Event Date:"), DateTime$ReactTemplate.format(/* OnlyDate */0, TimelineEvent$ReactTemplate.submittedAt(timelineEvent)), React.createElement("h5", {
+                                    }, "Event Date:"), DateTime$ReactTemplate.format(/* OnlyDate */0, TimelineEvent$ReactTemplate.eventOn(timelineEvent)), React.createElement("h5", {
                                       className: "timeline-event-card__field-header"
                                     }, "Submitted by:"), TimelineEvent$ReactTemplate.founderName(timelineEvent) + (" (" + (TimelineEvent$ReactTemplate.startupName(timelineEvent) + ")")), List.length(links) === 0 ? null : React.createElement("div", undefined, React.createElement("h5", {
                                             className: "timeline-event-card__field-header"
@@ -76,8 +77,8 @@ function make(timelineEvent, _) {
                                                                   className: "fa fa-file mr-1"
                                                                 }), File$ReactTemplate.title(file));
                                                 }), files)))), React.createElement("div", {
-                                  className: "col-md-3"
-                                }, "Preview as founder")));
+                                  className: "col-md-5"
+                                }, ReasonReact.element(/* None */0, /* None */0, ReviewForm$ReactTemplate.make(timelineEvent, /* array */[])))));
             }),
           /* initialState */component[/* initialState */10],
           /* retainedProps */component[/* retainedProps */11],

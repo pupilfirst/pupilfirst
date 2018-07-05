@@ -11,23 +11,26 @@ describe Targets::CreateOrUpdateCalendarEventJob do
     described_class.active = false
   end
 
-  def founder_details(founder)
-    {
-      'email' => founder.email,
-      'displayName' => founder.fullname,
-      'responseStatus' => 'needsAction'
-    }
-  end
+  let(:school_1) { create :school }
+  let(:school_2) { create :school, sponsored: true }
+
+  let(:level_1) { create :level, :one, school: school_1 }
+  let(:level_2) { create :level, :two, school: school_1 }
+  let(:level_3) { create :level, :three, school: school_1 }
+  let(:level_1_s2) { create :level, :one, school: school_2 }
+  let(:level_2_s2) { create :level, :two, school: school_2 }
+  let(:level_3_s2) { create :level, :three, school: school_2 }
 
   let(:admin_user) { create :admin_user }
-  let(:level_one) { create :level, :one }
-  let(:level_two) { create :level, :two }
-  let(:level_three) { create :level, :three }
-  let!(:startup_l1) { create :startup, :subscription_active, level: level_one }
-  let!(:startup_inactive_l2) { create :startup, level: level_two }
-  let!(:startup_l2) { create :startup, :subscription_active, level: level_two }
-  let!(:startup_l3) { create :startup, :subscription_active, level: level_three }
-  let!(:target_group) { create :target_group, level: level_two, milestone: true }
+  let!(:startup_l1) { create :startup, :subscription_active, level: level_1 }
+  let!(:startup_inactive_l2) { create :startup, level: level_2 }
+  let!(:startup_l2) { create :startup, :subscription_active, level: level_2 }
+  let!(:startup_l3) { create :startup, :subscription_active, level: level_3 }
+  let!(:startup_s2_l1) { create :startup, level: level_1_s2 }
+  let!(:startup_s2_l2) { create :startup, level: level_2_s2 }
+  let!(:startup_s2_l3) { create :startup, level: level_3_s2 }
+
+  let!(:target_group) { create :target_group, level: level_2, milestone: true }
   let!(:target) { create :target, session_at: 1.week.from_now, target_group: target_group }
   let(:calendar_service) { instance_double(GoogleCalendarService) }
   let(:null_calendar_event) { double('Google Calendar Event', html_link: calendar_event_link).as_null_object }
@@ -35,9 +38,14 @@ describe Targets::CreateOrUpdateCalendarEventJob do
   let(:calendar_event_id) { rand(100_000).to_s }
   let(:calendar_event_link) { Faker::Internet.url }
 
-  let(:expected_attendees) do
-    attendees = startup_l2.founders.map { |f| founder_details(f) }
-    attendees + startup_l3.founders.map { |f| founder_details(f) }
+  def expected_attendees
+    Founder.where(startup: [startup_l2, startup_l3]).distinct.map do |founder|
+      {
+        'email' => founder.email,
+        'displayName' => founder.fullname,
+        'responseStatus' => 'needsAction'
+      }
+    end
   end
 
   before do
@@ -55,7 +63,6 @@ describe Targets::CreateOrUpdateCalendarEventJob do
       expect(calendar_event).to receive(:guests_can_invite_others=).with(false)
       expect(calendar_event).to receive(:guests_can_see_other_guests=).with(false)
       expect(calendar_event).to receive(:send_notifications=).with(true)
-
       expect(calendar_event).to receive(:reminders=).with(
         'useDefault' => false,
         'overrides' => [

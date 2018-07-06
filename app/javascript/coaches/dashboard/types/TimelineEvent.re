@@ -62,10 +62,7 @@ let gradeString = grade =>
 
 let decode = json => {
   let grade =
-    json
-    |> Json.Decode.(field("grade", string) |> nullable)
-    |> Js.Null.toOption
-    |> parseGrade;
+    json |> Json.Decode.(optional(field("grade", string))) |> parseGrade;
   Json.Decode.{
     id: json |> field("id", int),
     title: json |> field("title", string),

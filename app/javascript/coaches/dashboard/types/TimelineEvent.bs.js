@@ -5,7 +5,6 @@ var List = require("bs-platform/lib/js/list.js");
 var Pervasives = require("bs-platform/lib/js/pervasives.js");
 var Belt_Option = require("bs-platform/lib/js/belt_Option.js");
 var Json_decode = require("@glennsl/bs-json/src/Json_decode.bs.js");
-var Js_primitive = require("bs-platform/lib/js/js_primitive.js");
 var File$ReactTemplate = require("./File.bs.js");
 var Link$ReactTemplate = require("./Link.bs.js");
 var DateTime$ReactTemplate = require("./DateTime.bs.js");
@@ -72,9 +71,9 @@ function gradeString(grade) {
 }
 
 function decode(json) {
-  var grade = parseGrade(Js_primitive.null_to_opt(Json_decode.nullable((function (param) {
-                  return Json_decode.field("grade", Json_decode.string, param);
-                }), json)));
+  var grade = parseGrade(Json_decode.optional((function (param) {
+              return Json_decode.field("grade", Json_decode.string, param);
+            }), json));
   return /* record */[
           /* id */Json_decode.field("id", Json_decode.$$int, json),
           /* title */Json_decode.field("title", Json_decode.string, json),

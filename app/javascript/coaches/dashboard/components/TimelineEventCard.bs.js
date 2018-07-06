@@ -78,7 +78,7 @@ function make(timelineEvent, _) {
                                                                 }), File$ReactTemplate.title(file));
                                                 }), files)))), React.createElement("div", {
                                   className: "col-md-5"
-                                }, ReasonReact.element(/* None */0, /* None */0, ReviewForm$ReactTemplate.make(timelineEvent, /* array */[])))));
+                                }, ReasonReact.element(/* Some */[String(TimelineEvent$ReactTemplate.id(timelineEvent))], /* None */0, ReviewForm$ReactTemplate.make(timelineEvent, /* array */[])))));
             }),
           /* initialState */component[/* initialState */10],
           /* retainedProps */component[/* retainedProps */11],

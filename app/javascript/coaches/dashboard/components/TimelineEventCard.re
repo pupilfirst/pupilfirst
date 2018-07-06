@@ -108,7 +108,12 @@ let make = (~timelineEvent, _children) => {
             };
           }
         </div>
-        <div className="col-md-5"> <ReviewForm timelineEvent /> </div>
+        <div className="col-md-5">
+          <ReviewForm
+            key=(timelineEvent |> TimelineEvent.id |> string_of_int)
+            timelineEvent
+          />
+        </div>
       </div>
     </div>,
 };

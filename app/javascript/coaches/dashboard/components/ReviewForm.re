@@ -19,12 +19,15 @@ let idPostfix = status =>
 
 let statusRadioInput = (status, timelineEventId, send) => {
   let inputId =
-    "te-" ++ timelineEventId ++ "-statusRadio-" ++ (status |> idPostfix);
+    "review-form__status-input-"
+    ++ (status |> idPostfix)
+    ++ "-"
+    ++ timelineEventId;
   <div className="form-check form-check-inline">
     <input
       className="form-check-input"
       type_="radio"
-      name="statusRadioOptions"
+      name=("review-form__status-radio-" ++ timelineEventId)
       id=inputId
       onClick=(saveStatus(status, send))
     />
@@ -36,15 +39,15 @@ let statusRadioInput = (status, timelineEventId, send) => {
 
 let gradeRadioInput = (grade, timelineEventId, send, state) => {
   let inputId =
-    "te-"
-    ++ timelineEventId
-    ++ "-gradeRadio-"
-    ++ (grade |> TimelineEvent.gradeString);
+    "review-form__grade-input-"
+    ++ (grade |> TimelineEvent.gradeString)
+    ++ "-"
+    ++ timelineEventId;
   <div className="form-check form-check-inline">
     <input
       className="form-check-input"
       type_="radio"
-      name="gradeRadioOptions"
+      name=("review-form__grade-radio-" ++ timelineEventId)
       id=inputId
       onChange=(saveStatus(TimelineEvent.Verified(grade), send))
       checked=(

@@ -36,13 +36,13 @@ function idPostfix(status) {
 }
 
 function statusRadioInput(status, timelineEventId, send) {
-  var inputId = "te-" + (timelineEventId + ("-statusRadio-" + idPostfix(status)));
+  var inputId = "review-form__status-input-" + (idPostfix(status) + ("-" + timelineEventId));
   return React.createElement("div", {
               className: "form-check form-check-inline"
             }, React.createElement("input", {
                   className: "form-check-input",
                   id: inputId,
-                  name: "statusRadioOptions",
+                  name: "review-form__status-radio-" + timelineEventId,
                   type: "radio",
                   onClick: (function () {
                       return Curry._1(send, /* ChangeStatus */[status]);
@@ -54,7 +54,7 @@ function statusRadioInput(status, timelineEventId, send) {
 }
 
 function gradeRadioInput(grade, timelineEventId, send, state) {
-  var inputId = "te-" + (timelineEventId + ("-gradeRadio-" + TimelineEvent$ReactTemplate.gradeString(grade)));
+  var inputId = "review-form__grade-input-" + (TimelineEvent$ReactTemplate.gradeString(grade) + ("-" + timelineEventId));
   var partial_arg = /* Verified */[grade];
   return React.createElement("div", {
               className: "form-check form-check-inline"
@@ -62,7 +62,7 @@ function gradeRadioInput(grade, timelineEventId, send, state) {
                   className: "form-check-input",
                   id: inputId,
                   checked: Caml_obj.caml_equal(TimelineEvent$ReactTemplate.status(state[/* te */0]), /* Verified */[grade]),
-                  name: "gradeRadioOptions",
+                  name: "review-form__grade-radio-" + timelineEventId,
                   type: "radio",
                   onChange: (function () {
                       return Curry._1(send, /* ChangeStatus */[partial_arg]);

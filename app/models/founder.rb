@@ -60,8 +60,6 @@ class Founder < ApplicationRecord
     admitted.where(exited: false).where.not(id: active_on_slack(Time.now.beginning_of_week, Time.now)).where.not(id: active_on_web(Time.now.beginning_of_week, Time.now))
   }
   scope :not_exited, -> { where.not(exited: true) }
-  scope :subscribed, -> { joins(startup: :payments).merge(Payment.paid).where('payments.billing_end_at > ?', Time.now) }
-  scope :at_or_above_level, ->(minimum_level) { joins(startup: :level).where('levels.number >= ?', minimum_level.number) }
   scope :screening_score_above, ->(minimum_score) { where("(screening_data ->> 'score')::int >= ?", minimum_score) }
 
   def self.with_email(email)

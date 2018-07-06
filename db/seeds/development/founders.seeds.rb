@@ -30,6 +30,19 @@ after 'development:colleges' do
     ['thor@example.org', 'Thor Odinson', 30.years.ago, Founder::GENDER_MALE, 9555555555]
   ]
 
+  # 2 founders for 'Justice League'
+  founders_list += [
+    ['superman@example.org', 'Superman', 25.years.ago, Founder::GENDER_FEMALE, 9666666666],
+    ['batman@example.org', 'Batman', 26.years.ago, Founder::GENDER_MALE, 9777777777]
+  ]
+
+  # 2 founders for 'Guardians of the Galaxy'
+  founders_list += [
+    ['groot@example.org', 'Groot', 25.years.ago, Founder::GENDER_FEMALE, 9888888888],
+    ['rocket@example.org', 'Rocket Raccoon', 24.years.ago, Founder::GENDER_MALE, 9999999999]
+  ]
+
+
   image_path = File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'users', 'college_id.jpg'))
 
   founders_list.each do |email, name, born_on, gender, phone|

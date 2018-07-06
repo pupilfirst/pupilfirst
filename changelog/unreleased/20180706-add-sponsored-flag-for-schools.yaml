@@ -3,6 +3,6 @@ timestamp: '2018-07-06T07:58:34Z'
 title: Add sponsored flag for schools
 trello: https://trello.com/c/WaVi8oiM
 private: true
-description: Add sponsored flag to schools making making Payments and subscription
-  an optional feature for selected schools.
+description: Add sponsored flag to schools making Payments and subscription
+  an optional feature for selected schools. Add seeds for schools and update broken spec.
 category: feature

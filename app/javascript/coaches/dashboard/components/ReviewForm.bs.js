@@ -5,6 +5,7 @@ var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
 var $$String = require("bs-platform/lib/js/string.js");
+var Caml_obj = require("bs-platform/lib/js/caml_obj.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 var TimelineEvent$ReactTemplate = require("../types/TimelineEvent.bs.js");
 
@@ -52,7 +53,7 @@ function statusRadioInput(status, timelineEventId, send) {
                 }, TimelineEvent$ReactTemplate.statusString(status)));
 }
 
-function gradeRadioInput(grade, timelineEventId, send) {
+function gradeRadioInput(grade, timelineEventId, send, state) {
   var inputId = "te-" + (timelineEventId + ("-gradeRadio-" + TimelineEvent$ReactTemplate.gradeString(grade)));
   var partial_arg = /* Verified */[grade];
   return React.createElement("div", {
@@ -60,9 +61,10 @@ function gradeRadioInput(grade, timelineEventId, send) {
             }, React.createElement("input", {
                   className: "form-check-input",
                   id: inputId,
+                  checked: Caml_obj.caml_equal(TimelineEvent$ReactTemplate.status(state[/* te */0]), /* Verified */[grade]),
                   name: "gradeRadioOptions",
                   type: "radio",
-                  onClick: (function () {
+                  onChange: (function () {
                       return Curry._1(send, /* ChangeStatus */[partial_arg]);
                     })
                 }), React.createElement("label", {
@@ -93,7 +95,9 @@ function make(timelineEvent, _) {
                               className: "timeline-event-card__field-header mt-0"
                             }, "Update Status:"), React.createElement("div", undefined, statusRadioInput(/* Verified */[/* Good */0], timelineEventId, send), statusRadioInput(/* NeedsImprovement */2, timelineEventId, send), statusRadioInput(/* NotAccepted */0, timelineEventId, send)), TimelineEvent$ReactTemplate.isVerified(state[/* te */0]) ? React.createElement("div", undefined, React.createElement("h5", {
                                     className: "timeline-event-card__field-header"
-                                  }, "Grade:"), React.createElement("div", undefined, gradeRadioInput(/* Good */0, timelineEventId, send), gradeRadioInput(/* Great */1, timelineEventId, send), gradeRadioInput(/* Wow */2, timelineEventId, send))) : null);
+                                  }, "Grade:"), React.createElement("div", undefined, gradeRadioInput(/* Good */0, timelineEventId, send, state), gradeRadioInput(/* Great */1, timelineEventId, send, state), gradeRadioInput(/* Wow */2, timelineEventId, send, state))) : null, TimelineEvent$ReactTemplate.status(state[/* te */0]) !== /* Pending */1 ? React.createElement("button", {
+                                className: "btn btn-primary mt-1"
+                              }, "Save Review") : null);
             }),
           /* initialState */(function () {
               return /* record */[/* te */timelineEvent];

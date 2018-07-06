@@ -34,7 +34,7 @@ let statusRadioInput = (status, timelineEventId, send) => {
   </div>;
 };
 
-let gradeRadioInput = (grade, timelineEventId, send) => {
+let gradeRadioInput = (grade, timelineEventId, send, state) => {
   let inputId =
     "te-"
     ++ timelineEventId
@@ -46,7 +46,10 @@ let gradeRadioInput = (grade, timelineEventId, send) => {
       type_="radio"
       name="gradeRadioOptions"
       id=inputId
-      onClick=(saveStatus(TimelineEvent.Verified(grade), send))
+      onChange=(saveStatus(TimelineEvent.Verified(grade), send))
+      checked=(
+        state.te |> TimelineEvent.status == TimelineEvent.Verified(grade)
+      )
     />
     <label className="form-check-label" htmlFor=inputId>
       (grade |> TimelineEvent.gradeString |> String.capitalize |> str)
@@ -101,11 +104,41 @@ let make = (~timelineEvent, _children) => {
               ("Grade:" |> str)
             </h5>
             <div>
-              (gradeRadioInput(TimelineEvent.Good, timelineEventId, send))
-              (gradeRadioInput(TimelineEvent.Great, timelineEventId, send))
-              (gradeRadioInput(TimelineEvent.Wow, timelineEventId, send))
+              (
+                gradeRadioInput(
+                  TimelineEvent.Good,
+                  timelineEventId,
+                  send,
+                  state,
+                )
+              )
+              (
+                gradeRadioInput(
+                  TimelineEvent.Great,
+                  timelineEventId,
+                  send,
+                  state,
+                )
+              )
+              (
+                gradeRadioInput(
+                  TimelineEvent.Wow,
+                  timelineEventId,
+                  send,
+                  state,
+                )
+              )
             </div>
           </div>;
+        } else {
+          ReasonReact.null;
+        }
+      )
+      (
+        if (state.te |> TimelineEvent.status != TimelineEvent.Pending) {
+          <button className="btn btn-primary mt-1">
+            ("Save Review" |> str)
+          </button>;
         } else {
           ReasonReact.null;
         }

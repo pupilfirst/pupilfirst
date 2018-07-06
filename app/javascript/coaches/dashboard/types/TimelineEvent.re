@@ -45,6 +45,13 @@ let parseGrade = grade =>
     }
   };
 
+let gradeString = grade =>
+  switch (grade) {
+  | Good => "good"
+  | Great => "great"
+  | Wow => "wow"
+  };
+
 let statusString = status =>
   switch (status) {
   | Pending => "Pending"
@@ -53,16 +60,12 @@ let statusString = status =>
   | NeedsImprovement => "Needs Improvement"
   };
 
-let gradeString = grade =>
-  switch (grade) {
-  | Good => "good"
-  | Great => "great"
-  | Wow => "wow"
-  };
-
 let decode = json => {
   let grade =
-    json |> Json.Decode.(optional(field("grade", string))) |> parseGrade;
+    json
+    |> Json.Decode.(field("grade", nullable(string)))
+    |> Js.Null.toOption
+    |> parseGrade;
   Json.Decode.{
     id: json |> field("id", int),
     title: json |> field("title", string),

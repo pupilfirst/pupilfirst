@@ -333,7 +333,7 @@ ActiveAdmin.register Startup do
       row :undiscounted_founder_fee
     end
 
-    if startup.level&.number&.positive? && !record.level.school.sponsored?
+    if startup.level&.number&.positive? && !startup.level.school.sponsored?
       panel 'Payment History' do
         attributes_table_for startup do
           row 'Subscription End Date' do

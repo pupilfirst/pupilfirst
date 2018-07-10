@@ -244,6 +244,11 @@ class TimelineEvent < ApplicationRecord
     (event_on - start_date).to_i + 1
   end
 
+  def overall_grade_from_score
+    return if score.blank?
+    { 1 => 'good', 2 => 'great', 3 => 'wow' }[score.floor]
+  end
+
   private
 
   def privileged_founder?(founder)

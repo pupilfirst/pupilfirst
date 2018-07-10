@@ -5,11 +5,14 @@ type grade =
   | Great
   | Wow;
 
-type status =
+type reviewedStatus =
   | Verified(grade)
   | NotAccepted
-  | Pending
   | NeedsImprovement;
+
+type status =
+  | Reviewed(reviewedStatus)
+  | NotReviewed;
 
 let title: t => string;
 

@@ -337,9 +337,7 @@ ActiveAdmin.register TimelineEvent do
       row :karma_point
       row :score
       row('Grade') do
-        if timeline_event.score.present?
-          { 1 => 'Good', 2 => 'Great', 3 => 'Wow' }[timeline_event.score.floor]
-        end
+        timeline_event.overall_grade_from_score if timeline_event.score.present?
       end
       row :improved_timeline_event
       row :created_at

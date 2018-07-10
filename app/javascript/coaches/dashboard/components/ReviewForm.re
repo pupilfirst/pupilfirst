@@ -9,12 +9,58 @@ let component = ReasonReact.reducerComponent("ReviewForm");
 
 let saveStatus = (status, send, _event) => send(ChangeStatus(status));
 
+let sendReview = (id, reviewedStatus, authenticityToken, _event) => {
+  Js.log("Submitting Review");
+  let payload = Js.Dict.empty();
+  Js.Dict.set(
+    payload,
+    "authenticity_token",
+    authenticityToken |> Js.Json.string,
+  );
+  let statusKey =
+    switch (reviewedStatus) {
+    | TimelineEvent.NotAccepted => "not_accepted"
+    | NeedsImprovement => "needs_improvement"
+    | Verified(_grade) => "verified"
+    };
+  Js.Dict.set(payload, "status", statusKey |> Js.Json.string);
+  switch (reviewedStatus) {
+  | TimelineEvent.Verified(grade) =>
+    Js.Dict.set(
+      payload,
+      "grade",
+      grade |> TimelineEvent.gradeString |> Js.Json.string,
+    )
+  | NeedsImprovement
+  | NotAccepted => ()
+  };
+  Js.Promise.(
+    Fetch.fetchWithInit(
+      "/timeline_events/" ++ id ++ "/review",
+      Fetch.RequestInit.make(
+        ~method_=Post,
+        ~body=
+          Fetch.BodyInit.make(Js.Json.stringify(Js.Json.object_(payload))),
+        ~headers=Fetch.HeadersInit.make({"Content-Type": "application/json"}),
+        ~credentials=Fetch.SameOrigin,
+        (),
+      ),
+    )
+    |> then_(Fetch.Response.json)
+    |> Js.log
+  );
+  ();
+};
+
 let idPostfix = status =>
   switch (status) {
-  | TimelineEvent.Verified(_) => "verified"
-  | TimelineEvent.NeedsImprovement => "needs-improvement"
-  | TimelineEvent.NotAccepted => "not-accepted"
-  | TimelineEvent.Pending => "pending"
+  | TimelineEvent.NotReviewed => "pending"
+  | Reviewed(reviewedStatus) =>
+    switch (reviewedStatus) {
+    | TimelineEvent.Verified(_) => "verified"
+    | TimelineEvent.NeedsImprovement => "needs-improvement"
+    | TimelineEvent.NotAccepted => "not-accepted"
+    }
   };
 
 let statusRadioInput = (status, timelineEventId, send) => {
@@ -49,9 +95,10 @@ let gradeRadioInput = (grade, timelineEventId, send, state) => {
       type_="radio"
       name=("review-form__grade-radio-" ++ timelineEventId)
       id=inputId
-      onChange=(saveStatus(TimelineEvent.Verified(grade), send))
+      onChange=(saveStatus(TimelineEvent.Reviewed(Verified(grade)), send))
       checked=(
-        state.te |> TimelineEvent.status == TimelineEvent.Verified(grade)
+        state.te
+        |> TimelineEvent.status == TimelineEvent.Reviewed(Verified(grade))
       )
     />
     <label className="form-check-label" htmlFor=inputId>
@@ -60,7 +107,7 @@ let gradeRadioInput = (grade, timelineEventId, send, state) => {
   </div>;
 };
 
-let make = (~timelineEvent, _children) => {
+let make = (~timelineEvent, ~authenticityToken, _children) => {
   ...component,
   initialState: () => {te: timelineEvent},
   reducer: (action, _state) =>
@@ -86,19 +133,25 @@ let make = (~timelineEvent, _children) => {
       <div>
         (
           statusRadioInput(
-            TimelineEvent.Verified(TimelineEvent.Good),
+            TimelineEvent.Reviewed(Verified(TimelineEvent.Good)),
             timelineEventId,
             send,
           )
         )
         (
           statusRadioInput(
-            TimelineEvent.NeedsImprovement,
+            TimelineEvent.Reviewed(NeedsImprovement),
             timelineEventId,
             send,
           )
         )
-        (statusRadioInput(TimelineEvent.NotAccepted, timelineEventId, send))
+        (
+          statusRadioInput(
+            TimelineEvent.Reviewed(NotAccepted),
+            timelineEventId,
+            send,
+          )
+        )
       </div>
       (
         if (state.te |> TimelineEvent.isVerified) {
@@ -138,12 +191,20 @@ let make = (~timelineEvent, _children) => {
         }
       )
       (
-        if (state.te |> TimelineEvent.status != TimelineEvent.Pending) {
-          <button className="btn btn-primary mt-1">
+        switch (state.te |> TimelineEvent.status) {
+        | TimelineEvent.NotReviewed => ReasonReact.null
+        | Reviewed(reviewedStatus) =>
+          <button
+            onClick=(
+              sendReview(
+                state.te |> TimelineEvent.id |> string_of_int,
+                reviewedStatus,
+                authenticityToken,
+              )
+            )
+            className="btn btn-primary mt-1">
             ("Save Review" |> str)
-          </button>;
-        } else {
-          ReasonReact.null;
+          </button>
         }
       )
     </div>;

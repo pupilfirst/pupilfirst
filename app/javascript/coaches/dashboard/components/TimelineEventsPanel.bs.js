@@ -22,7 +22,7 @@ function startupFilter(startupId, tes) {
   }
 }
 
-function make(timelineEvents, selectedStartupId, _) {
+function make(timelineEvents, selectedStartupId, authenticityToken, _) {
   return /* record */[
           /* debugName */component[/* debugName */0],
           /* reactClassInternal */component[/* reactClassInternal */1],
@@ -36,7 +36,7 @@ function make(timelineEvents, selectedStartupId, _) {
           /* render */(function () {
               return React.createElement("div", {
                           className: "timeline-events-panel__container"
-                        }, React.createElement("h3", undefined, "Pending"), React.createElement("hr", undefined), ReasonReact.element(/* None */0, /* None */0, TimelineEventsList$ReactTemplate.make(TimelineEvent$ReactTemplate.verificationPending(startupFilter(selectedStartupId, timelineEvents)), /* array */[])), React.createElement("h3", undefined, "Complete"), React.createElement("hr", undefined), ReasonReact.element(/* None */0, /* None */0, TimelineEventsList$ReactTemplate.make(TimelineEvent$ReactTemplate.verificationComplete(startupFilter(selectedStartupId, timelineEvents)), /* array */[])));
+                        }, React.createElement("h3", undefined, "Pending"), React.createElement("hr", undefined), ReasonReact.element(/* None */0, /* None */0, TimelineEventsList$ReactTemplate.make(TimelineEvent$ReactTemplate.verificationPending(startupFilter(selectedStartupId, timelineEvents)), authenticityToken, /* array */[])), React.createElement("h3", undefined, "Complete"), React.createElement("hr", undefined), ReasonReact.element(/* None */0, /* None */0, TimelineEventsList$ReactTemplate.make(TimelineEvent$ReactTemplate.verificationComplete(startupFilter(selectedStartupId, timelineEvents)), authenticityToken, /* array */[])));
             }),
           /* initialState */component[/* initialState */10],
           /* retainedProps */component[/* retainedProps */11],

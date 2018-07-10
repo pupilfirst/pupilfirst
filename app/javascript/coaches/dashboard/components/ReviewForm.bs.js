@@ -3,6 +3,7 @@
 
 var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
+var Fetch = require("bs-fetch/src/Fetch.js");
 var React = require("react");
 var $$String = require("bs-platform/lib/js/string.js");
 var Caml_obj = require("bs-platform/lib/js/caml_obj.js");
@@ -19,19 +20,39 @@ function saveStatus(status, send, _) {
   return Curry._1(send, /* ChangeStatus */[status]);
 }
 
+function sendReview(id, reviewedStatus, authenticityToken, _) {
+  console.log("Submitting Review");
+  var payload = { };
+  payload["authenticity_token"] = authenticityToken;
+  var statusKey = typeof reviewedStatus === "number" ? (
+      reviewedStatus !== 0 ? "needs_improvement" : "not_accepted"
+    ) : "verified";
+  payload["status"] = statusKey;
+  if (typeof reviewedStatus !== "number") {
+    payload["grade"] = TimelineEvent$ReactTemplate.gradeString(reviewedStatus[0]);
+  }
+  console.log(fetch("/timeline_events/" + (id + "/review"), Fetch.RequestInit[/* make */0](/* Some */[/* Post */2], /* Some */[{
+                      "Content-Type": "application/json"
+                    }], /* Some */[JSON.stringify(payload)], /* None */0, /* None */0, /* None */0, /* Some */[/* SameOrigin */1], /* None */0, /* None */0, /* None */0, /* None */0)(/* () */0)).then((function (prim) {
+              return prim.json();
+            })));
+  return /* () */0;
+}
+
 function idPostfix(status) {
-  if (typeof status === "number") {
-    switch (status) {
-      case 0 : 
-          return "not-accepted";
-      case 1 : 
-          return "pending";
-      case 2 : 
-          return "needs-improvement";
-      
+  if (status) {
+    var reviewedStatus = status[0];
+    if (typeof reviewedStatus === "number") {
+      if (reviewedStatus !== 0) {
+        return "needs-improvement";
+      } else {
+        return "not-accepted";
+      }
+    } else {
+      return "verified";
     }
   } else {
-    return "verified";
+    return "pending";
   }
 }
 
@@ -55,13 +76,13 @@ function statusRadioInput(status, timelineEventId, send) {
 
 function gradeRadioInput(grade, timelineEventId, send, state) {
   var inputId = "review-form__grade-input-" + (TimelineEvent$ReactTemplate.gradeString(grade) + ("-" + timelineEventId));
-  var partial_arg = /* Verified */[grade];
+  var partial_arg = /* Reviewed */[/* Verified */[grade]];
   return React.createElement("div", {
               className: "form-check form-check-inline"
             }, React.createElement("input", {
                   className: "form-check-input",
                   id: inputId,
-                  checked: Caml_obj.caml_equal(TimelineEvent$ReactTemplate.status(state[/* te */0]), /* Verified */[grade]),
+                  checked: Caml_obj.caml_equal(TimelineEvent$ReactTemplate.status(state[/* te */0]), /* Reviewed */[/* Verified */[grade]]),
                   name: "review-form__grade-radio-" + timelineEventId,
                   type: "radio",
                   onChange: (function () {
@@ -73,7 +94,7 @@ function gradeRadioInput(grade, timelineEventId, send, state) {
                 }, $$String.capitalize(TimelineEvent$ReactTemplate.gradeString(grade))));
 }
 
-function make(timelineEvent, _) {
+function make(timelineEvent, authenticityToken, _) {
   return /* record */[
           /* debugName */component[/* debugName */0],
           /* reactClassInternal */component[/* reactClassInternal */1],
@@ -91,13 +112,25 @@ function make(timelineEvent, _) {
               var send = param[/* send */3];
               var state = param[/* state */1];
               var timelineEventId = String(TimelineEvent$ReactTemplate.id(state[/* te */0]));
+              var match = TimelineEvent$ReactTemplate.status(state[/* te */0]);
+              var tmp;
+              if (match) {
+                var reviewedStatus = match[0];
+                var partial_arg = String(TimelineEvent$ReactTemplate.id(state[/* te */0]));
+                tmp = React.createElement("button", {
+                      className: "btn btn-primary mt-1",
+                      onClick: (function (param) {
+                          return sendReview(partial_arg, reviewedStatus, authenticityToken, param);
+                        })
+                    }, "Save Review");
+              } else {
+                tmp = null;
+              }
               return React.createElement("div", undefined, React.createElement("h5", {
                               className: "timeline-event-card__field-header mt-0"
-                            }, "Update Status:"), React.createElement("div", undefined, statusRadioInput(/* Verified */[/* Good */0], timelineEventId, send), statusRadioInput(/* NeedsImprovement */2, timelineEventId, send), statusRadioInput(/* NotAccepted */0, timelineEventId, send)), TimelineEvent$ReactTemplate.isVerified(state[/* te */0]) ? React.createElement("div", undefined, React.createElement("h5", {
+                            }, "Update Status:"), React.createElement("div", undefined, statusRadioInput(/* Reviewed */[/* Verified */[/* Good */0]], timelineEventId, send), statusRadioInput(/* Reviewed */[/* NeedsImprovement */1], timelineEventId, send), statusRadioInput(/* Reviewed */[/* NotAccepted */0], timelineEventId, send)), TimelineEvent$ReactTemplate.isVerified(state[/* te */0]) ? React.createElement("div", undefined, React.createElement("h5", {
                                     className: "timeline-event-card__field-header"
-                                  }, "Grade:"), React.createElement("div", undefined, gradeRadioInput(/* Good */0, timelineEventId, send, state), gradeRadioInput(/* Great */1, timelineEventId, send, state), gradeRadioInput(/* Wow */2, timelineEventId, send, state))) : null, TimelineEvent$ReactTemplate.status(state[/* te */0]) !== /* Pending */1 ? React.createElement("button", {
-                                className: "btn btn-primary mt-1"
-                              }, "Save Review") : null);
+                                  }, "Grade:"), React.createElement("div", undefined, gradeRadioInput(/* Good */0, timelineEventId, send, state), gradeRadioInput(/* Great */1, timelineEventId, send, state), gradeRadioInput(/* Wow */2, timelineEventId, send, state))) : null, tmp);
             }),
           /* initialState */(function () {
               return /* record */[/* te */timelineEvent];
@@ -114,6 +147,7 @@ function make(timelineEvent, _) {
 exports.str = str;
 exports.component = component;
 exports.saveStatus = saveStatus;
+exports.sendReview = sendReview;
 exports.idPostfix = idPostfix;
 exports.statusRadioInput = statusRadioInput;
 exports.gradeRadioInput = gradeRadioInput;

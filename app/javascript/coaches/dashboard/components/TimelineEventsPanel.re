@@ -10,7 +10,8 @@ let startupFilter = (startupId, tes) =>
   | Some(id) => tes |> TimelineEvent.forStartupId(id)
   };
 
-let make = (~timelineEvents, ~selectedStartupId, _children) => {
+let make =
+    (~timelineEvents, ~selectedStartupId, ~authenticityToken, _children) => {
   ...component,
   render: _self =>
     <div className="timeline-events-panel__container">
@@ -22,6 +23,7 @@ let make = (~timelineEvents, ~selectedStartupId, _children) => {
           |> startupFilter(selectedStartupId)
           |> TimelineEvent.verificationPending
         )
+        authenticityToken
       />
       <h3> ("Complete" |> str) </h3>
       <hr />
@@ -31,6 +33,7 @@ let make = (~timelineEvents, ~selectedStartupId, _children) => {
           |> startupFilter(selectedStartupId)
           |> TimelineEvent.verificationComplete
         )
+        authenticityToken
       />
     </div>,
 };

@@ -4,7 +4,8 @@ module Coaches
       {
         coach: { name: current_coach.name, id: current_coach.id },
         startups: startups,
-        timelineEvents: timeline_events
+        timelineEvents: timeline_events,
+        authenticityToken: view.form_authenticity_token
       }
     end
 
@@ -21,7 +22,7 @@ module Coaches
     end
 
     def timeline_events
-      TimelineEvent.where(startup: current_coach.startups).includes(:founder, :startup, :timeline_event_files).map do |timeline_event|
+      TimelineEvent.where(startup: current_coach.startups).includes(:founder, :startup, :timeline_event_files, :timeline_event_type).map do |timeline_event|
         {
           id: timeline_event.id,
           title: timeline_event.title,
@@ -35,7 +36,7 @@ module Coaches
           submittedAt: timeline_event.created_at,
           links: timeline_event.links,
           files: timeline_event.timeline_event_files.map { |file| { title: file.title, id: file.id } },
-          grade: timeline_event.timeline_event_grades&.first&.grade
+          grade: timeline_event.overall_grade_from_score
         }
       end
     end

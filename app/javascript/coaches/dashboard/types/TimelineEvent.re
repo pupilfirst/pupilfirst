@@ -3,11 +3,14 @@ type grade =
   | Great
   | Wow;
 
-type status =
+type reviewedStatus =
   | Verified(grade)
   | NotAccepted
-  | Pending
   | NeedsImprovement;
+
+type status =
+  | Reviewed(reviewedStatus)
+  | NotReviewed;
 
 type t = {
   id: int,
@@ -26,10 +29,10 @@ type t = {
 
 let parseStatus = (grade, status) =>
   switch (status) {
-  | "Pending" => Pending
-  | "Verified" => Verified(grade |> Belt.Option.getExn)
-  | "Not Accepted" => NotAccepted
-  | "Needs Improvement" => NeedsImprovement
+  | "Pending" => NotReviewed
+  | "Verified" => Reviewed(Verified(grade |> Belt.Option.getExn))
+  | "Not Accepted" => Reviewed(NotAccepted)
+  | "Needs Improvement" => Reviewed(NeedsImprovement)
   | _ => failwith("Invalid Status " ++ status ++ " received!")
   };
 
@@ -54,10 +57,13 @@ let gradeString = grade =>
 
 let statusString = status =>
   switch (status) {
-  | Pending => "Pending"
-  | Verified(_) => "Verified"
-  | NotAccepted => "Not Accepted"
-  | NeedsImprovement => "Needs Improvement"
+  | NotReviewed => "Pending"
+  | Reviewed(reviewedStatus) =>
+    switch (reviewedStatus) {
+    | Verified(grade) => "Verified"
+    | NotAccepted => "Not Accepted"
+    | NeedsImprovement => "Needs Improvement"
+    }
   };
 
 let decode = json => {
@@ -86,10 +92,10 @@ let forStartupId = (startupId, tes) =>
   tes |> List.filter(te => te.startupId == startupId);
 
 let verificationPending = tes =>
-  tes |> List.filter(te => te.status == Pending);
+  tes |> List.filter(te => te.status == NotReviewed);
 
 let verificationComplete = tes =>
-  tes |> List.filter(te => te.status != Pending);
+  tes |> List.filter(te => te.status != NotReviewed);
 
 let id = t => t.id;
 
@@ -115,8 +121,11 @@ let updateStatus = (status, t) => {...t, status};
 
 let isVerified = t =>
   switch (t.status) {
-  | Verified(_grade) => true
-  | Pending
-  | NotAccepted
-  | NeedsImprovement => false
+  | NotReviewed => false
+  | Reviewed(reviewedStatus) =>
+    switch (reviewedStatus) {
+    | Verified(_grade) => true
+    | NotAccepted
+    | NeedsImprovement => false
+    }
   };

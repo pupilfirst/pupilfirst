@@ -16,7 +16,7 @@ var TimelineEventsPanel$ReactTemplate = require("./TimelineEventsPanel.bs.js");
 
 var component = ReasonReact.reducerComponent("CoachDashboard");
 
-function make(coach, startups, timelineEvents, _) {
+function make(coach, startups, timelineEvents, authenticityToken, _) {
   return /* record */[
           /* debugName */component[/* debugName */0],
           /* reactClassInternal */component[/* reactClassInternal */1],
@@ -44,7 +44,7 @@ function make(coach, startups, timelineEvents, _) {
                                   className: "col-md-3"
                                 }, ReasonReact.element(/* None */0, /* None */0, SidePanel$ReactTemplate.make(coach, startups, state[/* selectedStartupId */0], selectStartupCB, clearStartupCB, /* array */[]))), React.createElement("div", {
                                   className: "col"
-                                }, ReasonReact.element(/* None */0, /* None */0, TimelineEventsPanel$ReactTemplate.make(state[/* timelineEvents */1], state[/* selectedStartupId */0], /* array */[])))));
+                                }, ReasonReact.element(/* None */0, /* None */0, TimelineEventsPanel$ReactTemplate.make(state[/* timelineEvents */1], state[/* selectedStartupId */0], authenticityToken, /* array */[])))));
             }),
           /* initialState */(function () {
               return /* record */[
@@ -79,13 +79,14 @@ function decode(json) {
                 }), json),
           /* timelineEvents */Json_decode.field("timelineEvents", (function (param) {
                   return Json_decode.list(TimelineEvent$ReactTemplate.decode, param);
-                }), json)
+                }), json),
+          /* authenticityToken */Json_decode.field("authenticityToken", Json_decode.string, json)
         ];
 }
 
 var jsComponent = ReasonReact.wrapReasonForJs(component, (function (jsProps) {
         var props = decode(jsProps);
-        return make(props[/* coach */0], props[/* startups */1], props[/* timelineEvents */2], /* array */[]);
+        return make(props[/* coach */0], props[/* startups */1], props[/* timelineEvents */2], props[/* authenticityToken */3], /* array */[]);
       }));
 
 exports.component = component;

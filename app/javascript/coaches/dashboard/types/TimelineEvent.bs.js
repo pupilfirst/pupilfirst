@@ -13,13 +13,13 @@ var DateTime$ReactTemplate = require("./DateTime.bs.js");
 function parseStatus(grade, status) {
   switch (status) {
     case "Needs Improvement" : 
-        return /* NeedsImprovement */2;
+        return /* Reviewed */[/* NeedsImprovement */1];
     case "Not Accepted" : 
-        return /* NotAccepted */0;
+        return /* Reviewed */[/* NotAccepted */0];
     case "Pending" : 
-        return /* Pending */1;
+        return /* NotReviewed */0;
     case "Verified" : 
-        return /* Verified */[Belt_Option.getExn(grade)];
+        return /* Reviewed */[/* Verified */[Belt_Option.getExn(grade)]];
     default:
       return Pervasives.failwith("Invalid Status " + (status + " received!"));
   }
@@ -56,18 +56,19 @@ function gradeString(grade) {
 }
 
 function statusString(status) {
-  if (typeof status === "number") {
-    switch (status) {
-      case 0 : 
-          return "Not Accepted";
-      case 1 : 
-          return "Pending";
-      case 2 : 
-          return "Needs Improvement";
-      
+  if (status) {
+    var reviewedStatus = status[0];
+    if (typeof reviewedStatus === "number") {
+      if (reviewedStatus !== 0) {
+        return "Needs Improvement";
+      } else {
+        return "Not Accepted";
+      }
+    } else {
+      return "Verified";
     }
   } else {
-    return "Verified";
+    return "Pending";
   }
 }
 
@@ -103,13 +104,13 @@ function forStartupId(startupId, tes) {
 
 function verificationPending(tes) {
   return List.filter((function (te) {
-                  return te[/* status */3] === /* Pending */1;
+                  return te[/* status */3] === /* NotReviewed */0;
                 }))(tes);
 }
 
 function verificationComplete(tes) {
   return List.filter((function (te) {
-                  return te[/* status */3] !== /* Pending */1;
+                  return te[/* status */3] !== /* NotReviewed */0;
                 }))(tes);
 }
 
@@ -172,10 +173,10 @@ function updateStatus(status, t) {
 
 function isVerified(t) {
   var match = t[/* status */3];
-  if (typeof match === "number") {
-    return false;
-  } else {
+  if (match && typeof match[0] !== "number") {
     return true;
+  } else {
+    return false;
   }
 }
 

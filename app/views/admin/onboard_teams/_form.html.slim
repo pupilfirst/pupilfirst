@@ -5,23 +5,23 @@
     = f.input :team_name, input_html: { required: true }
     span class='team-member-info'
       .team-member-info__name
-        = f.input :members, label: 'Member 1', placeholder: 'Name', input_html: { name:'members[1][name]', required: true }
+        = f.input :member_1_name, label: 'Member 1', placeholder: 'Name', input_html: { required: true }
       .team-member-info__email
-        = f.input :members, label: '', as: :email, placeholder: 'Email', input_html: { name:'members[1][email]', required: true }
+        = f.input :member_1_email, label: '', as: :email, placeholder: 'Email', input_html: { required: true }
     span class='team-member-info'
       .team-member-info__name
-        = f.input :members, label: 'Member 2', placeholder: 'Name', input_html: { name: 'members[2][name]' }
+        = f.input :member_2_name, label: 'Member 2', placeholder: 'Name'
       .team-member-info__email
-        = f.input :members, label: '', as: :email, placeholder: 'Email', input_html: { name: 'members[2][email]' }
+        = f.input :member_2_email, label: '', as: :email, placeholder: 'Email'
     span class='team-member-info'
       .team-member-info__name
-        = f.input :members, label: 'Member 3', placeholder: 'Name', input_html: { name: 'members[3][name]' }
+        = f.input :member_3_name, label: 'Member 3', placeholder: 'Name'
       .team-member-info__email
-        = f.input :members, label: '', as: :email, placeholder: 'Email', input_html: { name: 'members[3][email]' }
+        = f.input :member_3_email, label: '', as: :email, placeholder: 'Email'
     span class='team-member-info'
       .team-member-info__name
-        = f.input :members, label: 'Member 4', placeholder: 'Name', input_html: { name: 'members[4][name]' }
+        = f.input :member_4_name, label: 'Member 4', placeholder: 'Name'
       .team-member-info__email
-        = f.input :members, label: '', as: :email, placeholder: 'Email', input_html: { name: 'members[4][email]' }
-    = f.input :school_id, as: :select, collection: School.where("lower(name) LIKE ?", "vr")
+        = f.input :member_4_email, label: '', as: :email, placeholder: 'Email'
+    = f.input :school_id, as: :select, collection: School.all
   = f.submit 'Onboard'

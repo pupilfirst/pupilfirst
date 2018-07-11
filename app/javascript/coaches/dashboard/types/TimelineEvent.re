@@ -60,7 +60,7 @@ let statusString = status =>
   | NotReviewed => "Pending"
   | Reviewed(reviewedStatus) =>
     switch (reviewedStatus) {
-    | Verified(grade) => "Verified"
+    | Verified(_grade) => "Verified"
     | NotAccepted => "Not Accepted"
     | NeedsImprovement => "Needs Improvement"
     }

@@ -8,7 +8,18 @@ var React = require("react");
 var $$String = require("bs-platform/lib/js/string.js");
 var Caml_obj = require("bs-platform/lib/js/caml_obj.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
+var Caml_exceptions = require("bs-platform/lib/js/caml_exceptions.js");
 var TimelineEvent$ReactTemplate = require("../types/TimelineEvent.bs.js");
+
+var UnexpectedResponse = Caml_exceptions.create("ReviewForm-ReactTemplate.UnexpectedResponse");
+
+function handleApiError(match) {
+  if (Caml_exceptions.isCamlExceptionOrOpenVariant(match) && match[0] === UnexpectedResponse) {
+    return /* Some */[match[1]];
+  } else {
+    return /* None */0;
+  }
+}
 
 function str(prim) {
   return prim;
@@ -31,11 +42,23 @@ function sendReview(id, reviewedStatus, authenticityToken, _) {
   if (typeof reviewedStatus !== "number") {
     payload["grade"] = TimelineEvent$ReactTemplate.gradeString(reviewedStatus[0]);
   }
-  console.log(fetch("/timeline_events/" + (id + "/review"), Fetch.RequestInit[/* make */0](/* Some */[/* Post */2], /* Some */[{
+  fetch("/timeline_events/" + (id + "/review"), Fetch.RequestInit[/* make */0](/* Some */[/* Post */2], /* Some */[{
                       "Content-Type": "application/json"
-                    }], /* Some */[JSON.stringify(payload)], /* None */0, /* None */0, /* None */0, /* Some */[/* SameOrigin */1], /* None */0, /* None */0, /* None */0, /* None */0)(/* () */0)).then((function (prim) {
-              return prim.json();
-            })));
+                    }], /* Some */[JSON.stringify(payload)], /* None */0, /* None */0, /* None */0, /* Some */[/* SameOrigin */1], /* None */0, /* None */0, /* None */0, /* None */0)(/* () */0)).then((function (response) {
+              if (response.ok || response.status === 422) {
+                return response.json();
+              } else {
+                return Promise.reject([
+                            UnexpectedResponse,
+                            response.status
+                          ]);
+              }
+            })).then((function (json) {
+            return Promise.resolve((console.log(json), /* () */0));
+          })).catch((function (error) {
+          var match = handleApiError(error);
+          return Promise.resolve(match ? (console.log("Error code: " + String(match[0])), /* () */0) : (console.log("Unknown error occured"), /* () */0));
+        }));
   return /* () */0;
 }
 
@@ -144,6 +167,8 @@ function make(timelineEvent, authenticityToken, _) {
         ];
 }
 
+exports.UnexpectedResponse = UnexpectedResponse;
+exports.handleApiError = handleApiError;
 exports.str = str;
 exports.component = component;
 exports.saveStatus = saveStatus;

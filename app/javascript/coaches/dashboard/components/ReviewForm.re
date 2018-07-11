@@ -1,3 +1,12 @@
+exception UnexpectedResponse(int);
+
+let handleApiError =
+  [@bs.open]
+  (
+    fun
+    | UnexpectedResponse(code) => code
+  );
+
 let str = ReasonReact.string;
 
 type state = {te: TimelineEvent.t};
@@ -46,10 +55,28 @@ let sendReview = (id, reviewedStatus, authenticityToken, _event) => {
         (),
       ),
     )
-    |> then_(Fetch.Response.json)
-    |> Js.log
+    |> then_(response =>
+         if (Fetch.Response.ok(response)
+             || Fetch.Response.status(response) == 422) {
+           response |> Fetch.Response.json;
+         } else {
+           Js.Promise.reject(
+             UnexpectedResponse(response |> Fetch.Response.status),
+           );
+         }
+       )
+    |> then_(json => Js.log(json) |> resolve)
+    |> catch(error =>
+         (
+           switch (error |> handleApiError) {
+           | Some(code) => Js.log("Error code: " ++ (code |> string_of_int))
+           | None => Js.log("Unknown error occured")
+           }
+         )
+         |> resolve
+       )
+    |> ignore
   );
-  ();
 };
 
 let idPostfix = status =>

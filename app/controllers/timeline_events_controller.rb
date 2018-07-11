@@ -41,17 +41,15 @@ class TimelineEventsController < ApplicationController
         verified: TimelineEvent::STATUS_VERIFIED
       }.fetch(params[:status].to_sym)
 
-      points = params[:points].present? ? params[:points].to_i : nil
-
       begin
-        TimelineEvents::VerificationService.new(timeline_event).update_status(status, grade: params[:grade], skill_grades: params[:skill_grades].as_json, points: points)
-        head :ok
+        timeline_event, _points = TimelineEvents::VerificationService.new(timeline_event).update_status(status, grade: params[:grade])
+        render json: { timelineEvent: coach_dashboard_response(timeline_event), error: nil }, status: :ok
       rescue TimelineEvents::ReviewInterfaceException => e
-        render json: { error: e.message }.to_json, status: :unprocessable_entity
+        render json: { error: e.message, timelineEvent: nil }.to_json, status: :unprocessable_entity
       end
     else
       # someone else already reviewed this event! Ask javascript to reload page.
-      render json: { error: 'Event no longer pending review! Refreshing your dashboard.' }.to_json, status: :unprocessable_entity
+      render json: { error: 'Event no longer pending review! Refreshing your dashboard.', timelineEvent: nil }.to_json, status: :unprocessable_entity
     end
   end
 
@@ -76,5 +74,13 @@ class TimelineEventsController < ApplicationController
       :target_id, :timeline_event_type_id, :event_on, :description, :image, :links, :files_metadata, :share_on_facebook,
       files: (params[:timeline_event][:files]&.keys || [])
     )
+  end
+
+  def coach_dashboard_response(timeline_event)
+    {
+      id: timeline_event.id,
+      status: timeline_event.status,
+      grade: timeline_event.overall_grade_from_score
+    }
   end
 end

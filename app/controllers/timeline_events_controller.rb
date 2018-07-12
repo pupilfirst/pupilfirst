@@ -42,8 +42,8 @@ class TimelineEventsController < ApplicationController
       }.fetch(params[:status].to_sym)
 
       begin
-        timeline_event, _points = TimelineEvents::VerificationService.new(timeline_event).update_status(status, grade: params[:grade])
-        render json: { timelineEvent: coach_dashboard_response(timeline_event), error: nil }, status: :ok
+        TimelineEvents::VerificationService.new(timeline_event).update_status(status, grade: params[:grade])
+        render json: { error: nil }, status: :ok
       rescue TimelineEvents::ReviewInterfaceException => e
         render json: { error: e.message, timelineEvent: nil }.to_json, status: :unprocessable_entity
       end
@@ -74,13 +74,5 @@ class TimelineEventsController < ApplicationController
       :target_id, :timeline_event_type_id, :event_on, :description, :image, :links, :files_metadata, :share_on_facebook,
       files: (params[:timeline_event][:files]&.keys || [])
     )
-  end
-
-  def coach_dashboard_response(timeline_event)
-    {
-      id: timeline_event.id,
-      status: timeline_event.status,
-      grade: timeline_event.overall_grade_from_score
-    }
   end
 end

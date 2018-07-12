@@ -19,7 +19,7 @@ function str(prim) {
 
 var component = ReasonReact.statelessComponent("TimelineEventCard");
 
-function make(timelineEvent, authenticityToken, _) {
+function make(timelineEvent, markReviewedCB, authenticityToken, _) {
   return /* record */[
           /* debugName */component[/* debugName */0],
           /* reactClassInternal */component[/* reactClassInternal */1],
@@ -78,7 +78,7 @@ function make(timelineEvent, authenticityToken, _) {
                                                                 }), File$ReactTemplate.title(file));
                                                 }), files)))), React.createElement("div", {
                                   className: "col-md-5"
-                                }, ReasonReact.element(/* Some */[String(TimelineEvent$ReactTemplate.id(timelineEvent))], /* None */0, ReviewForm$ReactTemplate.make(timelineEvent, authenticityToken, /* array */[])))));
+                                }, ReasonReact.element(/* Some */[String(TimelineEvent$ReactTemplate.id(timelineEvent))], /* None */0, ReviewForm$ReactTemplate.make(timelineEvent, markReviewedCB, authenticityToken, /* array */[])))));
             }),
           /* initialState */component[/* initialState */10],
           /* retainedProps */component[/* retainedProps */11],

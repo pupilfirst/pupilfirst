@@ -7,6 +7,7 @@ var Fetch = require("bs-fetch/src/Fetch.js");
 var React = require("react");
 var $$String = require("bs-platform/lib/js/string.js");
 var Caml_obj = require("bs-platform/lib/js/caml_obj.js");
+var Json_decode = require("@glennsl/bs-json/src/Json_decode.bs.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 var Caml_exceptions = require("bs-platform/lib/js/caml_exceptions.js");
 var TimelineEvent$ReactTemplate = require("../types/TimelineEvent.bs.js");
@@ -31,7 +32,19 @@ function saveStatus(status, send, _) {
   return Curry._1(send, /* ChangeStatus */[status]);
 }
 
-function sendReview(id, reviewedStatus, authenticityToken, _) {
+function handleResponseJSON(te, markReviewedCB, json) {
+  var match = Json_decode.field("error", (function (param) {
+          return Json_decode.nullable(Json_decode.string, param);
+        }), json);
+  if (match !== null) {
+    console.log(match);
+    return /* () */0;
+  } else {
+    return Curry._1(markReviewedCB, te);
+  }
+}
+
+function sendReview(te, reviewedStatus, markReviewedCB, authenticityToken, _) {
   console.log("Submitting Review");
   var payload = { };
   payload["authenticity_token"] = authenticityToken;
@@ -42,10 +55,12 @@ function sendReview(id, reviewedStatus, authenticityToken, _) {
   if (typeof reviewedStatus !== "number") {
     payload["grade"] = TimelineEvent$ReactTemplate.gradeString(reviewedStatus[0]);
   }
+  var id = String(TimelineEvent$ReactTemplate.id(te));
   fetch("/timeline_events/" + (id + "/review"), Fetch.RequestInit[/* make */0](/* Some */[/* Post */2], /* Some */[{
                       "Content-Type": "application/json"
                     }], /* Some */[JSON.stringify(payload)], /* None */0, /* None */0, /* None */0, /* Some */[/* SameOrigin */1], /* None */0, /* None */0, /* None */0, /* None */0)(/* () */0)).then((function (response) {
               if (response.ok || response.status === 422) {
+                console.log("Handled");
                 return response.json();
               } else {
                 return Promise.reject([
@@ -54,7 +69,7 @@ function sendReview(id, reviewedStatus, authenticityToken, _) {
                           ]);
               }
             })).then((function (json) {
-            return Promise.resolve((console.log(json), /* () */0));
+            return Promise.resolve(handleResponseJSON(te, markReviewedCB, json));
           })).catch((function (error) {
           var match = handleApiError(error);
           return Promise.resolve(match ? (console.log("Error code: " + String(match[0])), /* () */0) : (console.log("Unknown error occured"), /* () */0));
@@ -117,7 +132,7 @@ function gradeRadioInput(grade, timelineEventId, send, state) {
                 }, $$String.capitalize(TimelineEvent$ReactTemplate.gradeString(grade))));
 }
 
-function make(timelineEvent, authenticityToken, _) {
+function make(timelineEvent, markReviewedCB, authenticityToken, _) {
   return /* record */[
           /* debugName */component[/* debugName */0],
           /* reactClassInternal */component[/* reactClassInternal */1],
@@ -139,11 +154,11 @@ function make(timelineEvent, authenticityToken, _) {
               var tmp;
               if (match) {
                 var reviewedStatus = match[0];
-                var partial_arg = String(TimelineEvent$ReactTemplate.id(state[/* te */0]));
+                var partial_arg = state[/* te */0];
                 tmp = React.createElement("button", {
                       className: "btn btn-primary mt-1",
                       onClick: (function (param) {
-                          return sendReview(partial_arg, reviewedStatus, authenticityToken, param);
+                          return sendReview(partial_arg, reviewedStatus, markReviewedCB, authenticityToken, param);
                         })
                     }, "Save Review");
               } else {
@@ -172,6 +187,7 @@ exports.handleApiError = handleApiError;
 exports.str = str;
 exports.component = component;
 exports.saveStatus = saveStatus;
+exports.handleResponseJSON = handleResponseJSON;
 exports.sendReview = sendReview;
 exports.idPostfix = idPostfix;
 exports.statusRadioInput = statusRadioInput;

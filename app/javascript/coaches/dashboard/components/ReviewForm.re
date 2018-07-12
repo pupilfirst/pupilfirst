@@ -18,7 +18,18 @@ let component = ReasonReact.reducerComponent("ReviewForm");
 
 let saveStatus = (status, send, _event) => send(ChangeStatus(status));
 
-let sendReview = (id, reviewedStatus, authenticityToken, _event) => {
+let handleResponseJSON = (te, markReviewedCB, json) =>
+  switch (
+    json
+    |> Json.Decode.(field("error", nullable(string)))
+    |> Js.Null.toOption
+  ) {
+  | Some(error) => Js.log(error)
+  | None => te |> markReviewedCB
+  };
+
+let sendReview =
+    (te, reviewedStatus, markReviewedCB, authenticityToken, _event) => {
   Js.log("Submitting Review");
   let payload = Js.Dict.empty();
   Js.Dict.set(
@@ -43,6 +54,7 @@ let sendReview = (id, reviewedStatus, authenticityToken, _event) => {
   | NeedsImprovement
   | NotAccepted => ()
   };
+  let id = te |> TimelineEvent.id |> string_of_int;
   Js.Promise.(
     Fetch.fetchWithInit(
       "/timeline_events/" ++ id ++ "/review",
@@ -58,6 +70,7 @@ let sendReview = (id, reviewedStatus, authenticityToken, _event) => {
     |> then_(response =>
          if (Fetch.Response.ok(response)
              || Fetch.Response.status(response) == 422) {
+           Js.log("Handled");
            response |> Fetch.Response.json;
          } else {
            Js.Promise.reject(
@@ -65,7 +78,9 @@ let sendReview = (id, reviewedStatus, authenticityToken, _event) => {
            );
          }
        )
-    |> then_(json => Js.log(json) |> resolve)
+    |> then_(json =>
+         json |> handleResponseJSON(te, markReviewedCB) |> resolve
+       )
     |> catch(error =>
          (
            switch (error |> handleApiError) {
@@ -134,7 +149,7 @@ let gradeRadioInput = (grade, timelineEventId, send, state) => {
   </div>;
 };
 
-let make = (~timelineEvent, ~authenticityToken, _children) => {
+let make = (~timelineEvent, ~markReviewedCB, ~authenticityToken, _children) => {
   ...component,
   initialState: () => {te: timelineEvent},
   reducer: (action, _state) =>
@@ -224,8 +239,9 @@ let make = (~timelineEvent, ~authenticityToken, _children) => {
           <button
             onClick=(
               sendReview(
-                state.te |> TimelineEvent.id |> string_of_int,
+                state.te,
                 reviewedStatus,
+                markReviewedCB,
                 authenticityToken,
               )
             )

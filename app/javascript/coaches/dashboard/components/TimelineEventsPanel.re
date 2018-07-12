@@ -11,7 +11,13 @@ let startupFilter = (startupId, tes) =>
   };
 
 let make =
-    (~timelineEvents, ~selectedStartupId, ~authenticityToken, _children) => {
+    (
+      ~timelineEvents,
+      ~selectedStartupId,
+      ~markReviewedCB,
+      ~authenticityToken,
+      _children,
+    ) => {
   ...component,
   render: _self =>
     <div className="timeline-events-panel__container">
@@ -23,6 +29,7 @@ let make =
           |> startupFilter(selectedStartupId)
           |> TimelineEvent.verificationPending
         )
+        markReviewedCB
         authenticityToken
       />
       <h3> ("Complete" |> str) </h3>
@@ -33,6 +40,7 @@ let make =
           |> startupFilter(selectedStartupId)
           |> TimelineEvent.verificationComplete
         )
+        markReviewedCB
         authenticityToken
       />
     </div>,

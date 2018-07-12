@@ -4,7 +4,7 @@ let str = ReasonReact.string;
 
 let component = ReasonReact.statelessComponent("TimelineEventCard");
 
-let make = (~timelineEvent, ~authenticityToken, _children) => {
+let make = (~timelineEvent, ~markReviewedCB, ~authenticityToken, _children) => {
   ...component,
   render: _self =>
     <div className="timeline-event-card__container card">
@@ -112,6 +112,7 @@ let make = (~timelineEvent, ~authenticityToken, _children) => {
           <ReviewForm
             key=(timelineEvent |> TimelineEvent.id |> string_of_int)
             timelineEvent
+            markReviewedCB
             authenticityToken
           />
         </div>

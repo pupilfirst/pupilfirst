@@ -33,6 +33,7 @@ function make(timelineEvent, markReviewedCB, authenticityToken, _) {
           /* render */(function () {
               var links = TimelineEvent$ReactTemplate.links(timelineEvent);
               var files = TimelineEvent$ReactTemplate.files(timelineEvent);
+              var match = TimelineEvent$ReactTemplate.status(timelineEvent);
               return React.createElement("div", {
                           className: "timeline-event-card__container card"
                         }, React.createElement("div", {
@@ -78,7 +79,7 @@ function make(timelineEvent, markReviewedCB, authenticityToken, _) {
                                                                 }), File$ReactTemplate.title(file));
                                                 }), files)))), React.createElement("div", {
                                   className: "col-md-5"
-                                }, ReasonReact.element(/* Some */[String(TimelineEvent$ReactTemplate.id(timelineEvent))], /* None */0, ReviewForm$ReactTemplate.make(timelineEvent, markReviewedCB, authenticityToken, /* array */[])))));
+                                }, match ? null : ReasonReact.element(/* Some */[String(TimelineEvent$ReactTemplate.id(timelineEvent))], /* None */0, ReviewForm$ReactTemplate.make(timelineEvent, markReviewedCB, authenticityToken, /* array */[])))));
             }),
           /* initialState */component[/* initialState */10],
           /* retainedProps */component[/* retainedProps */11],

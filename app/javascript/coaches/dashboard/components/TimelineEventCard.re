@@ -109,12 +109,18 @@ let make = (~timelineEvent, ~markReviewedCB, ~authenticityToken, _children) => {
           }
         </div>
         <div className="col-md-5">
-          <ReviewForm
-            key=(timelineEvent |> TimelineEvent.id |> string_of_int)
-            timelineEvent
-            markReviewedCB
-            authenticityToken
-          />
+          (
+            switch (timelineEvent |> TimelineEvent.status) {
+            | TimelineEvent.NotReviewed =>
+              <ReviewForm
+                key=(timelineEvent |> TimelineEvent.id |> string_of_int)
+                timelineEvent
+                markReviewedCB
+                authenticityToken
+              />
+            | Reviewed(_reviewedStatus) => ReasonReact.null
+            }
+          )
         </div>
       </div>
     </div>,

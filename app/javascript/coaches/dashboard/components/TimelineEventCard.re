@@ -12,13 +12,17 @@ let make = (~timelineEvent, ~markReviewedCB, ~authenticityToken, _children) => {
         (timelineEvent |> TimelineEvent.title |> str)
         <div className="timeline-event-card__header-subtext ml-auto">
           (
-            "Submitted at: "
-            ++ (
-              timelineEvent
-              |> TimelineEvent.submittedAt
-              |> DateTime.format(DateTime.DateAndTime)
-            )
-            |> str
+            switch (timelineEvent |> TimelineEvent.status) {
+            | TimelineEvent.NotReviewed =>
+              "Submitted at: "
+              ++ (
+                timelineEvent
+                |> TimelineEvent.submittedAt
+                |> DateTime.format(DateTime.DateAndTime)
+              )
+              |> str
+            | Reviewed(reviewedStatus) => <ReviewStatusBadge reviewedStatus />
+            }
           )
         </div>
       </div>

@@ -1,0 +1,15 @@
+.review-status-badge__container {
+  font-weight: bolder;
+}
+
+.review-status-badge__container--verified {
+  color: green;
+}
+
+.review-status-badge__container--not-accepted {
+  color: red;
+}
+
+.review-status-badge__container--needs-improvement {
+  color: goldenrod;
+}

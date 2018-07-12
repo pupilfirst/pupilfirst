@@ -10,6 +10,7 @@ var Link$ReactTemplate = require("../types/Link.bs.js");
 var DateTime$ReactTemplate = require("../types/DateTime.bs.js");
 var ReviewForm$ReactTemplate = require("./ReviewForm.bs.js");
 var TimelineEvent$ReactTemplate = require("../types/TimelineEvent.bs.js");
+var ReviewStatusBadge$ReactTemplate = require("./ReviewStatusBadge.bs.js");
 
 ((require("./TimelineEventCard.scss")));
 
@@ -31,16 +32,17 @@ function make(timelineEvent, markReviewedCB, authenticityToken, _) {
           /* willUpdate */component[/* willUpdate */7],
           /* shouldUpdate */component[/* shouldUpdate */8],
           /* render */(function () {
+              var match = TimelineEvent$ReactTemplate.status(timelineEvent);
               var links = TimelineEvent$ReactTemplate.links(timelineEvent);
               var files = TimelineEvent$ReactTemplate.files(timelineEvent);
-              var match = TimelineEvent$ReactTemplate.status(timelineEvent);
+              var match$1 = TimelineEvent$ReactTemplate.status(timelineEvent);
               return React.createElement("div", {
                           className: "timeline-event-card__container card"
                         }, React.createElement("div", {
                               className: "card-header d-flex"
                             }, TimelineEvent$ReactTemplate.title(timelineEvent), React.createElement("div", {
                                   className: "timeline-event-card__header-subtext ml-auto"
-                                }, "Submitted at: " + DateTime$ReactTemplate.format(/* DateAndTime */1, TimelineEvent$ReactTemplate.submittedAt(timelineEvent)))), React.createElement("div", {
+                                }, match ? ReasonReact.element(/* None */0, /* None */0, ReviewStatusBadge$ReactTemplate.make(match[0], /* array */[])) : "Submitted at: " + DateTime$ReactTemplate.format(/* DateAndTime */1, TimelineEvent$ReactTemplate.submittedAt(timelineEvent)))), React.createElement("div", {
                               className: "card-body row"
                             }, React.createElement("div", {
                                   className: "col-md-7"
@@ -79,7 +81,7 @@ function make(timelineEvent, markReviewedCB, authenticityToken, _) {
                                                                 }), File$ReactTemplate.title(file));
                                                 }), files)))), React.createElement("div", {
                                   className: "col-md-5"
-                                }, match ? null : ReasonReact.element(/* Some */[String(TimelineEvent$ReactTemplate.id(timelineEvent))], /* None */0, ReviewForm$ReactTemplate.make(timelineEvent, markReviewedCB, authenticityToken, /* array */[])))));
+                                }, match$1 ? null : ReasonReact.element(/* Some */[String(TimelineEvent$ReactTemplate.id(timelineEvent))], /* None */0, ReviewForm$ReactTemplate.make(timelineEvent, markReviewedCB, authenticityToken, /* array */[])))));
             }),
           /* initialState */component[/* initialState */10],
           /* retainedProps */component[/* retainedProps */11],

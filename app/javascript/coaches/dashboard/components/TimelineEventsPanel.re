@@ -14,7 +14,7 @@ let make =
     (
       ~timelineEvents,
       ~selectedStartupId,
-      ~markReviewedCB,
+      ~replaceTE_CB,
       ~authenticityToken,
       _children,
     ) => {
@@ -29,7 +29,7 @@ let make =
           |> startupFilter(selectedStartupId)
           |> TimelineEvent.verificationPending
         )
-        markReviewedCB
+        replaceTE_CB
         authenticityToken
       />
       <h3> ("Complete" |> str) </h3>
@@ -40,7 +40,7 @@ let make =
           |> startupFilter(selectedStartupId)
           |> TimelineEvent.verificationComplete
         )
-        markReviewedCB
+        replaceTE_CB
         authenticityToken
       />
     </div>,

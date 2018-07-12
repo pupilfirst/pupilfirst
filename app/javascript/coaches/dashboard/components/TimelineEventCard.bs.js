@@ -10,6 +10,7 @@ var Link$ReactTemplate = require("../types/Link.bs.js");
 var DateTime$ReactTemplate = require("../types/DateTime.bs.js");
 var ReviewForm$ReactTemplate = require("./ReviewForm.bs.js");
 var TimelineEvent$ReactTemplate = require("../types/TimelineEvent.bs.js");
+var UndoReviewButton$ReactTemplate = require("./UndoReviewButton.bs.js");
 var ReviewStatusBadge$ReactTemplate = require("./ReviewStatusBadge.bs.js");
 
 ((require("./TimelineEventCard.scss")));
@@ -20,7 +21,7 @@ function str(prim) {
 
 var component = ReasonReact.statelessComponent("TimelineEventCard");
 
-function make(timelineEvent, markReviewedCB, authenticityToken, _) {
+function make(timelineEvent, replaceTE_CB, authenticityToken, _) {
   return /* record */[
           /* debugName */component[/* debugName */0],
           /* reactClassInternal */component[/* reactClassInternal */1],
@@ -81,7 +82,7 @@ function make(timelineEvent, markReviewedCB, authenticityToken, _) {
                                                                 }), File$ReactTemplate.title(file));
                                                 }), files)))), React.createElement("div", {
                                   className: "col-md-5"
-                                }, match$1 ? null : ReasonReact.element(/* Some */[String(TimelineEvent$ReactTemplate.id(timelineEvent))], /* None */0, ReviewForm$ReactTemplate.make(timelineEvent, markReviewedCB, authenticityToken, /* array */[])))));
+                                }, match$1 ? ReasonReact.element(/* None */0, /* None */0, UndoReviewButton$ReactTemplate.make(timelineEvent, replaceTE_CB, /* array */[])) : ReasonReact.element(/* Some */[String(TimelineEvent$ReactTemplate.id(timelineEvent))], /* None */0, ReviewForm$ReactTemplate.make(timelineEvent, replaceTE_CB, authenticityToken, /* array */[])))));
             }),
           /* initialState */component[/* initialState */10],
           /* retainedProps */component[/* retainedProps */11],

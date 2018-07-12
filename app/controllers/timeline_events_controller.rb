@@ -64,7 +64,7 @@ class TimelineEventsController < ApplicationController
     end
 
     TimelineEvents::UndoVerificationService.new(timeline_event).execute
-    head :ok
+    render json: { error: nil }, status: :ok
   end
 
   private

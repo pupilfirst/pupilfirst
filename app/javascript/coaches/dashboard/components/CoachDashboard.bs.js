@@ -37,8 +37,8 @@ function make(coach, startups, timelineEvents, authenticityToken, _) {
               var clearStartupCB = function () {
                 return Curry._1(send, /* ClearStartup */0);
               };
-              var markReviewedCB = function (te) {
-                return Curry._1(send, /* MarkReviewed */Block.__(1, [te]));
+              var replaceTE_CB = function (te) {
+                return Curry._1(send, /* ReplaceTE */Block.__(1, [te]));
               };
               return React.createElement("div", {
                           className: "coach-dashboard__container"
@@ -48,7 +48,7 @@ function make(coach, startups, timelineEvents, authenticityToken, _) {
                                   className: "col-md-3"
                                 }, ReasonReact.element(/* None */0, /* None */0, SidePanel$ReactTemplate.make(coach, startups, state[/* selectedStartupId */0], selectStartupCB, clearStartupCB, /* array */[]))), React.createElement("div", {
                                   className: "col"
-                                }, ReasonReact.element(/* None */0, /* None */0, TimelineEventsPanel$ReactTemplate.make(state[/* timelineEvents */1], state[/* selectedStartupId */0], markReviewedCB, authenticityToken, /* array */[])))));
+                                }, ReasonReact.element(/* None */0, /* None */0, TimelineEventsPanel$ReactTemplate.make(state[/* timelineEvents */1], state[/* selectedStartupId */0], replaceTE_CB, authenticityToken, /* array */[])))));
             }),
           /* initialState */(function () {
               return /* record */[

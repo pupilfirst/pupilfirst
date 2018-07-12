@@ -70,7 +70,6 @@ let sendReview =
     |> then_(response =>
          if (Fetch.Response.ok(response)
              || Fetch.Response.status(response) == 422) {
-           Js.log("Handled");
            response |> Fetch.Response.json;
          } else {
            Js.Promise.reject(
@@ -149,7 +148,7 @@ let gradeRadioInput = (grade, timelineEventId, send, state) => {
   </div>;
 };
 
-let make = (~timelineEvent, ~markReviewedCB, ~authenticityToken, _children) => {
+let make = (~timelineEvent, ~replaceTE_CB, ~authenticityToken, _children) => {
   ...component,
   initialState: () => {te: timelineEvent},
   reducer: (action, _state) =>
@@ -241,7 +240,7 @@ let make = (~timelineEvent, ~markReviewedCB, ~authenticityToken, _children) => {
               sendReview(
                 state.te,
                 reviewedStatus,
-                markReviewedCB,
+                replaceTE_CB,
                 authenticityToken,
               )
             )

@@ -2,7 +2,7 @@ let str = ReasonReact.string;
 
 let component = ReasonReact.statelessComponent("TimelineEventsList");
 
-let make = (~timelineEvents, ~markReviewedCB, ~authenticityToken, _children) => {
+let make = (~timelineEvents, ~replaceTE_CB, ~authenticityToken, _children) => {
   ...component,
   render: _self =>
     <div className="timeline-events-list__container">
@@ -12,7 +12,7 @@ let make = (~timelineEvents, ~markReviewedCB, ~authenticityToken, _children) => 
              <TimelineEventCard
                key=(te |> TimelineEvent.id |> string_of_int)
                timelineEvent=te
-               markReviewedCB
+               replaceTE_CB
                authenticityToken
              />
            )

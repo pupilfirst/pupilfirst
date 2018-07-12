@@ -14,7 +14,7 @@ function str(prim) {
 
 var component = ReasonReact.statelessComponent("TimelineEventsList");
 
-function make(timelineEvents, markReviewedCB, authenticityToken, _) {
+function make(timelineEvents, replaceTE_CB, authenticityToken, _) {
   return /* record */[
           /* debugName */component[/* debugName */0],
           /* reactClassInternal */component[/* reactClassInternal */1],
@@ -29,7 +29,7 @@ function make(timelineEvents, markReviewedCB, authenticityToken, _) {
               return React.createElement("div", {
                           className: "timeline-events-list__container"
                         }, $$Array.of_list(List.map((function (te) {
-                                    return ReasonReact.element(/* Some */[String(TimelineEvent$ReactTemplate.id(te))], /* None */0, TimelineEventCard$ReactTemplate.make(te, markReviewedCB, authenticityToken, /* array */[]));
+                                    return ReasonReact.element(/* Some */[String(TimelineEvent$ReactTemplate.id(te))], /* None */0, TimelineEventCard$ReactTemplate.make(te, replaceTE_CB, authenticityToken, /* array */[]));
                                   }), timelineEvents)));
             }),
           /* initialState */component[/* initialState */10],

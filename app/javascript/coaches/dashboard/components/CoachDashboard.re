@@ -15,7 +15,7 @@ type state = {
 type action =
   | SelectStartup(int)
   | ClearStartup
-  | MarkReviewed(TimelineEvent.t);
+  | ReplaceTE(TimelineEvent.t);
 
 let component = ReasonReact.reducerComponent("CoachDashboard");
 
@@ -27,7 +27,7 @@ let make = (~coach, ~startups, ~timelineEvents, ~authenticityToken, _children) =
     | SelectStartup(id) =>
       ReasonReact.Update({...state, selectedStartupId: Some(id)})
     | ClearStartup => ReasonReact.Update({...state, selectedStartupId: None})
-    | MarkReviewed(newTE) =>
+    | ReplaceTE(newTE) =>
       ReasonReact.Update({
         ...state,
         timelineEvents:
@@ -41,7 +41,7 @@ let make = (~coach, ~startups, ~timelineEvents, ~authenticityToken, _children) =
   render: ({state, send}) => {
     let selectStartupCB = id => send(SelectStartup(id));
     let clearStartupCB = () => send(ClearStartup);
-    let markReviewedCB = te => send(MarkReviewed(te));
+    let replaceTE_CB = te => send(ReplaceTE(te));
     <div className="coach-dashboard__container">
       <div className="row">
         <div className="col-md-3">
@@ -57,7 +57,7 @@ let make = (~coach, ~startups, ~timelineEvents, ~authenticityToken, _children) =
           <TimelineEventsPanel
             timelineEvents=state.timelineEvents
             selectedStartupId=state.selectedStartupId
-            markReviewedCB
+            replaceTE_CB
             authenticityToken
           />
         </div>

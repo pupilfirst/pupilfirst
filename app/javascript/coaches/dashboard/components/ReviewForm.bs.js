@@ -60,7 +60,6 @@ function sendReview(te, reviewedStatus, markReviewedCB, authenticityToken, _) {
                       "Content-Type": "application/json"
                     }], /* Some */[JSON.stringify(payload)], /* None */0, /* None */0, /* None */0, /* Some */[/* SameOrigin */1], /* None */0, /* None */0, /* None */0, /* None */0)(/* () */0)).then((function (response) {
               if (response.ok || response.status === 422) {
-                console.log("Handled");
                 return response.json();
               } else {
                 return Promise.reject([
@@ -132,7 +131,7 @@ function gradeRadioInput(grade, timelineEventId, send, state) {
                 }, $$String.capitalize(TimelineEvent$ReactTemplate.gradeString(grade))));
 }
 
-function make(timelineEvent, markReviewedCB, authenticityToken, _) {
+function make(timelineEvent, replaceTE_CB, authenticityToken, _) {
   return /* record */[
           /* debugName */component[/* debugName */0],
           /* reactClassInternal */component[/* reactClassInternal */1],
@@ -158,7 +157,7 @@ function make(timelineEvent, markReviewedCB, authenticityToken, _) {
                 tmp = React.createElement("button", {
                       className: "btn btn-primary mt-1",
                       onClick: (function (param) {
-                          return sendReview(partial_arg, reviewedStatus, markReviewedCB, authenticityToken, param);
+                          return sendReview(partial_arg, reviewedStatus, replaceTE_CB, authenticityToken, param);
                         })
                     }, "Save Review");
               } else {

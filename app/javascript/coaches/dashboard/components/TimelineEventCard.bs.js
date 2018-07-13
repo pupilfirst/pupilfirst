@@ -41,48 +41,52 @@ function make(timelineEvent, replaceTE_CB, authenticityToken, _) {
                           className: "timeline-event-card__container card"
                         }, React.createElement("div", {
                               className: "card-header d-flex"
-                            }, TimelineEvent$ReactTemplate.title(timelineEvent), React.createElement("div", {
-                                  className: "timeline-event-card__header-subtext ml-auto"
-                                }, match ? ReasonReact.element(/* None */0, /* None */0, ReviewStatusBadge$ReactTemplate.make(match[0], /* array */[])) : "Submitted at: " + DateTime$ReactTemplate.format(/* DateAndTime */1, TimelineEvent$ReactTemplate.submittedAt(timelineEvent)))), React.createElement("div", {
+                            }, React.createElement("div", undefined, TimelineEvent$ReactTemplate.title(timelineEvent), React.createElement("div", {
+                                      className: "timeline-event-card__header-subtext"
+                                    }, TimelineEvent$ReactTemplate.founderName(timelineEvent) + (" (" + (TimelineEvent$ReactTemplate.startupName(timelineEvent) + ")")))), React.createElement("div", {
+                                  className: "ml-auto"
+                                }, React.createElement("div", {
+                                      className: "timeline-event-card__header-date-field"
+                                    }, React.createElement("i", {
+                                          className: "fa fa-calendar mr-1"
+                                        }), DateTime$ReactTemplate.format(/* OnlyDate */0, TimelineEvent$ReactTemplate.eventOn(timelineEvent))))), React.createElement("div", {
                               className: "card-body row"
                             }, React.createElement("div", {
                                   className: "col-md-7"
                                 }, React.createElement("h5", {
                                       className: "timeline-event-card__field-header mt-0"
-                                    }, "Description:"), TimelineEvent$ReactTemplate.description(timelineEvent), React.createElement("h5", {
-                                      className: "timeline-event-card__field-header"
-                                    }, "Event Date:"), DateTime$ReactTemplate.format(/* OnlyDate */0, TimelineEvent$ReactTemplate.eventOn(timelineEvent)), React.createElement("h5", {
-                                      className: "timeline-event-card__field-header"
-                                    }, "Submitted by:"), TimelineEvent$ReactTemplate.founderName(timelineEvent) + (" (" + (TimelineEvent$ReactTemplate.startupName(timelineEvent) + ")")), List.length(links) === 0 ? null : React.createElement("div", undefined, React.createElement("h5", {
-                                            className: "timeline-event-card__field-header"
-                                          }, "Links:"), $$Array.of_list(List.map((function (link) {
-                                                  var match = Link$ReactTemplate.private_(link);
-                                                  return React.createElement("a", {
-                                                              key: Link$ReactTemplate.url(link),
-                                                              className: "btn btn-secondary mr-1",
-                                                              href: Link$ReactTemplate.url(link),
-                                                              target: "_blank"
-                                                            }, match ? React.createElement("i", {
-                                                                    className: "fa fa-lock mr-1"
-                                                                  }) : React.createElement("i", {
-                                                                    className: "fa fa-globe mr-1"
-                                                                  }), Link$ReactTemplate.title(link));
-                                                }), links))), List.length(files) === 0 ? null : React.createElement("div", undefined, React.createElement("h5", {
-                                            className: "timeline-event-card__field-header"
-                                          }, "Attachments:"), $$Array.of_list(List.map((function (file) {
-                                                  var id = String(File$ReactTemplate.id(file));
-                                                  var url = "/timeline_event_files/" + (id + "/download");
-                                                  return React.createElement("a", {
-                                                              key: id,
-                                                              className: "btn btn-secondary mr-1",
-                                                              href: url,
-                                                              target: "_blank"
-                                                            }, React.createElement("i", {
-                                                                  className: "fa fa-file mr-1"
-                                                                }), File$ReactTemplate.title(file));
-                                                }), files)))), React.createElement("div", {
+                                    }, "Description:"), TimelineEvent$ReactTemplate.description(timelineEvent)), React.createElement("div", {
                                   className: "col-md-5"
-                                }, match$1 ? ReasonReact.element(/* None */0, /* None */0, UndoReviewButton$ReactTemplate.make(timelineEvent, replaceTE_CB, /* array */[])) : ReasonReact.element(/* Some */[String(TimelineEvent$ReactTemplate.id(timelineEvent))], /* None */0, ReviewForm$ReactTemplate.make(timelineEvent, replaceTE_CB, authenticityToken, /* array */[])))));
+                                }, match ? ReasonReact.element(/* None */0, /* None */0, UndoReviewButton$ReactTemplate.make(timelineEvent, replaceTE_CB, /* array */[])) : ReasonReact.element(/* Some */[String(TimelineEvent$ReactTemplate.id(timelineEvent))], /* None */0, ReviewForm$ReactTemplate.make(timelineEvent, replaceTE_CB, authenticityToken, /* array */[])))), React.createElement("div", {
+                              className: "card-footer d-flex"
+                            }, List.length(links) === 0 ? null : React.createElement("div", undefined, $$Array.of_list(List.map((function (link) {
+                                              var match = Link$ReactTemplate.private_(link);
+                                              return React.createElement("a", {
+                                                          key: Link$ReactTemplate.url(link),
+                                                          className: "btn btn-secondary mr-1",
+                                                          href: Link$ReactTemplate.url(link),
+                                                          target: "_blank"
+                                                        }, match ? React.createElement("i", {
+                                                                className: "fa fa-lock mr-1"
+                                                              }) : React.createElement("i", {
+                                                                className: "fa fa-globe mr-1"
+                                                              }), Link$ReactTemplate.title(link));
+                                            }), links))), List.length(files) === 0 ? null : React.createElement("div", undefined, $$Array.of_list(List.map((function (file) {
+                                              var id = String(File$ReactTemplate.id(file));
+                                              var url = "/timeline_event_files/" + (id + "/download");
+                                              return React.createElement("a", {
+                                                          key: id,
+                                                          className: "btn btn-secondary mr-1",
+                                                          href: url,
+                                                          target: "_blank"
+                                                        }, React.createElement("i", {
+                                                              className: "fa fa-file mr-1"
+                                                            }), File$ReactTemplate.title(file));
+                                            }), files))), React.createElement("div", {
+                                  className: "ml-auto"
+                                }, match$1 ? ReasonReact.element(/* None */0, /* None */0, ReviewStatusBadge$ReactTemplate.make(match$1[0], /* array */[])) : React.createElement("div", {
+                                        className: "timeline-event-card__footer-subtext"
+                                      }, "Submitted at: " + DateTime$ReactTemplate.format(/* DateAndTime */1, TimelineEvent$ReactTemplate.submittedAt(timelineEvent))))));
             }),
           /* initialState */component[/* initialState */10],
           /* retainedProps */component[/* retainedProps */11],

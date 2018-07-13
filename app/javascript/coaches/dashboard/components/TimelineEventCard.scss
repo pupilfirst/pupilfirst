@@ -4,10 +4,12 @@
   margin-bottom: 1rem;
 }
 
-.timeline-event-card__header-subtext {
+.timeline-event-card__header-subtext, .timeline-event-card__footer-subtext {
   color: $light-grey-text;
   font-size: small;
 }
+
+
 
 .timeline-event-card__field-header {
   margin-top: 0.75rem;

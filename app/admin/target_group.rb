@@ -17,7 +17,7 @@ ActiveAdmin.register TargetGroup do
     include DisableIntercom
 
     def scoped_collection
-      super.includes :level, :track
+      super.includes({ level: :school }, :track)
     end
   end
 

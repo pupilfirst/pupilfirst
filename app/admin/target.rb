@@ -8,8 +8,8 @@ ActiveAdmin.register Target do
   filter :title
   filter :archived
   filter :session_at_not_null, as: :boolean, label: 'Session?'
-  filter :target_group, collection: -> { TargetGroup.all.includes(:level).order('levels.number ASC') }
-  filter :level
+  filter :target_group, collection: -> { TargetGroup.all.includes(:school, :level).order('schools.name ASC, levels.number ASC') }
+  filter :level, collection: -> { Level.all.includes(:school).order('schools.name ASC, levels.number ASC') }
   filter :faculty_name, as: :string
   filter :role, as: :select, collection: -> { Target.valid_roles }
   filter :timeline_event_type_title, as: :string
@@ -29,7 +29,7 @@ ActiveAdmin.register Target do
     include DisableIntercom
 
     def scoped_collection
-      super.includes :level
+      super.includes(:school, :level, :target_group)
     end
   end
 
@@ -37,13 +37,14 @@ ActiveAdmin.register Target do
     selectable_column
     column :title
 
-    column :level
+    column 'Target Group' do |target|
+      "<code>[#{target.school.short_name.rjust(3)}##{target.level.number}]</code> #{target.target_group.name}".html_safe
+    end
 
     column :type do |target|
       target.session? ? 'Session' : 'Target'
     end
 
-    column :target_group
     column :sort_index
 
     column :role do |target|
@@ -316,7 +317,7 @@ ActiveAdmin.register Target do
       f.input :submittability, collection: Target.valid_submittability_values
       f.input :faculty, collection: Faculty.active.order(:name), include_blank: 'No linked faculty'
       f.input :session_by, placeholder: 'Name of session taker, IF faculty linking is not possible.'
-      f.input :target_group, collection: TargetGroup.all.sorted_by_level.includes(:level)
+      f.input :target_group, collection: TargetGroup.all.includes(:school, :level).order('schools.name ASC, levels.number ASC')
       f.input :sort_index
       f.input :days_to_complete
       f.input :rubric, as: :file

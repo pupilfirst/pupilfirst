@@ -7,9 +7,7 @@ class TargetGroup < ApplicationRecord
   validates :name, presence: true
   validates :sort_index, presence: true
 
-  scope :sorted_by_level, -> { joins(:level).order('levels.number ASC') }
-
   def display_name
-    "L#{level.number}: #{name}"
+    "#{school.short_name}##{level.number}: #{name}"
   end
 end

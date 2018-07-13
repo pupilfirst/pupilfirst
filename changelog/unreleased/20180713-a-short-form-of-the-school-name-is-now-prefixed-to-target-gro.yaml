@@ -1,0 +1,10 @@
+---
+timestamp: '2018-07-13T07:39:39Z'
+title: A short form of the school name is now prefixed to target, group and level
+  when displayed in admin interface.
+trello: https://trello.com/c/u3wFkvlT
+private: true
+description: This introduces `School#short_name` and changes display_name used in
+  admin interface to make data compatible with the introduction of schools. This also
+  fixes a couple of N+1 query issues .
+category: ui

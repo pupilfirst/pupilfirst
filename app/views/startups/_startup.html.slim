@@ -74,7 +74,7 @@
       .startupcard-footer
         - if startup.founders.not_exited.present?
           .founder-avatar-list
-            - startup.founders.not_exited.order(:name).each do |founder|
+            - startup.founders.not_exited.order(:name).limit(6).each do |founder|
               .founder-avatar.founder-tooltip.tooltip-popup
                 a.founder-tooltip-item.founder-avatar__thumbnail href=student_profile_url(slug: founder.slug)
                   == avatar(founder.name, founder: founder, version: :thumb)

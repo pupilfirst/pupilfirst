@@ -1,0 +1,8 @@
+---
+timestamp: '2018-07-13T08:08:59Z'
+title: Hide SV.CO startup entry from startups / products index.
+trello: https://trello.com/c/aLAV60KL
+private: true
+description: It doesn't make much sense for SV.CO to be listed alongside student startups
+  / products. The entry is also bugged right now because of the large number of founders
+  who have been added to it. This is the pragmatic choice.

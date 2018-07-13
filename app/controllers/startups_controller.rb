@@ -5,7 +5,14 @@ class StartupsController < ApplicationController
   # GET /startups, GET /products
   def index
     @skip_container = true
-    startups = Startup.includes(:level, :startup_categories).admitted.approved.order(timeline_updated_on: 'DESC')
+
+    startups = Startup.includes(:level, :startup_categories)
+      .admitted
+      .approved
+      .where.not(slug: 'svdotco')
+      .includes(:startups_startup_categories)
+      .order(timeline_updated_on: 'DESC')
+
     @form = Startups::FilterForm.new(Reform::OpenForm.new)
 
     filtered_startups, page = if @form.validate(filter_params)
@@ -106,7 +113,7 @@ class StartupsController < ApplicationController
 
   def load_filter_options
     @categories = StartupCategory.order(:name)
-    @levels = Level.where('number > ?', 0).order(:number)
+    @levels = Level.where('number > ?', 0).includes(:school).order(:number)
   end
 
   def startup_registration_params

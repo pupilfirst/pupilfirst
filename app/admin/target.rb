@@ -38,7 +38,14 @@ ActiveAdmin.register Target do
     column :title
 
     column 'Target Group' do |target|
-      "<code>[#{target.school.short_name.rjust(3)}##{target.level.number}]</code> #{target.target_group.name}".html_safe
+      if target.school.present?
+        span do
+          code "[#{target.school.short_name.rjust(3)}##{target.level.number}]"
+          span target.target_group.name
+        end
+      else
+        em "Not part of a school"
+      end
     end
 
     column :type do |target|

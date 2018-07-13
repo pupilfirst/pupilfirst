@@ -61,9 +61,9 @@ class Resource < ApplicationRecord
     end
   end
 
-  after_create do
-    Resources::AfterCreateNotificationJob.perform_later(self)
-  end
+  # after_create do
+  #   Resources::AfterCreateNotificationJob.perform_later(self)
+  # end
 
   before_save do
     # Ensure titles are capitalized.

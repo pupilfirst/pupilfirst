@@ -8,7 +8,7 @@ module Admin
       def valid_prerequisites
         return all_live_targets if !@target.persisted? || level.blank?
 
-        all_live_targets.where.not(id: @target.id).joins(target_group: :level).where(target_groups: { level: level })
+        all_live_targets.where.not(id: @target.id).where(target_groups: { level: level })
       end
 
       def error_class

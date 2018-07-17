@@ -1,0 +1,8 @@
+---
+timestamp: '2018-07-17T09:36:32Z'
+title: Created an admin interface to onboard teams to a school
+trello: https://trello.com/c/S31kb08L
+private: true
+description: Added a page under Admissions to onboard team (size 1-4) given by inputting
+  the name and email of each member.
+category: feature

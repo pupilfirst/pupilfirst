@@ -32,6 +32,7 @@
 //= require ahoy
 //= require jspdf
 //= require lodash
+//= require trix
 
 // Rails assets
 //= require intro.js/intro.js

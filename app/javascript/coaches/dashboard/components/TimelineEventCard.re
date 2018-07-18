@@ -39,6 +39,7 @@ let make = (~timelineEvent, ~replaceTE_CB, ~authenticityToken, _children) => {
             ("Description:" |> str)
           </h5>
           (timelineEvent |> TimelineEvent.description |> str)
+          <FeedbackForm />
         </div>
         <div className="col-md-5">
           (

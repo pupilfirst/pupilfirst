@@ -47,11 +47,11 @@ export default class EventFeedback extends React.Component {
       $.post({
         url: postUrl,
         data: { feedback: feedback },
-        beforeSend: function() {
+        beforeSend: function () {
           event.target.innerHTML = "Saving Feedback...";
         }
       })
-        .done(function(response) {
+        .done(function (response) {
           new PNotify({
             title: "Feedback Saved!",
             text:
@@ -61,7 +61,7 @@ export default class EventFeedback extends React.Component {
           markFeedbackRecorded(response.feedback_id, response.founder_id);
           toggleFeedbackForm();
         })
-        .fail(function() {
+        .fail(function () {
           alert("Failed to save your feedback. Try again.");
         });
     }
@@ -96,7 +96,7 @@ export default class EventFeedback extends React.Component {
         )}
 
         {this.state.showFeedbackForm && (
-          <div>
+          <div className="admin__trix-editor">
             <TrixEditor
               onChange={this.feedbackChange}
               value={this.state.feedback}

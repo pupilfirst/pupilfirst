@@ -68,7 +68,7 @@ gem 'react-rails', '~> 2.2' # For automatically transforming JSX and using React
 gem 'ahoy_matey', '~> 2.0' # Analytics for Rails.
 gem 'uuidtools', '~>2.1' # Required by ahoy_matey for ActiveRecord stores.
 
-gem 'acts-as-taggable-on', '~> 5.0' # Tag a single model on several contexts.
+gem 'acts-as-taggable-on', '~> 6.0' # Tag a single model on several contexts.
 gem 'sendinblue', '~> 2.4' # This is SendinBlue provided API V2 Ruby GEM
 gem 'email_inquire', '~> 0.6' # Validate email for format, common typos and one-time email providers
 gem 'titleize', '~> 1.4' # better titleizing, modifies Inflector.titleize from default rails

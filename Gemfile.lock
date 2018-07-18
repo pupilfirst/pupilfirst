@@ -136,8 +136,8 @@ GEM
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
-    acts-as-taggable-on (5.0.0)
-      activerecord (>= 4.2.8)
+    acts-as-taggable-on (6.0.0)
+      activerecord (~> 5.0)
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
     ahoy_matey (2.1.0)
@@ -803,7 +803,7 @@ PLATFORMS
 
 DEPENDENCIES
   activeadmin (~> 1.1)
-  acts-as-taggable-on (~> 5.0)
+  acts-as-taggable-on (~> 6.0)
   addressable (~> 2.5)
   ahoy_matey (~> 2.0)
   attribute_normalizer (~> 1.2.0.b)

@@ -56,7 +56,7 @@ function make(timelineEvent, replaceTE_CB, authenticityToken, _) {
                                   className: "col-md-7"
                                 }, React.createElement("h5", {
                                       className: "timeline-event-card__field-header mt-0"
-                                    }, "Description:"), TimelineEvent$ReactTemplate.description(timelineEvent), ReasonReact.element(/* None */0, /* None */0, FeedbackForm$ReactTemplate.make(/* array */[]))), React.createElement("div", {
+                                    }, "Description:"), TimelineEvent$ReactTemplate.description(timelineEvent), ReasonReact.element(/* None */0, /* None */0, FeedbackForm$ReactTemplate.make(timelineEvent, authenticityToken, /* array */[]))), React.createElement("div", {
                                   className: "col-md-5"
                                 }, match ? ReasonReact.element(/* None */0, /* None */0, UndoReviewButton$ReactTemplate.make(timelineEvent, replaceTE_CB, /* array */[])) : ReasonReact.element(/* Some */[String(TimelineEvent$ReactTemplate.id(timelineEvent))], /* None */0, ReviewForm$ReactTemplate.make(timelineEvent, replaceTE_CB, authenticityToken, /* array */[])))), React.createElement("div", {
                               className: "card-footer d-flex"

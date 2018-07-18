@@ -43,6 +43,7 @@ Rails.application.routes.draw do
     member do
       post 'review'
       post 'undo_review'
+      post 'send_feedback'
     end
   end
 

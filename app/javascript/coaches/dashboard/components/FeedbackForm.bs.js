@@ -3,9 +3,23 @@
 
 var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
+var Fetch = require("bs-fetch/src/Fetch.js");
 var React = require("react");
+var Json_decode = require("@glennsl/bs-json/src/Json_decode.bs.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
+var Caml_exceptions = require("bs-platform/lib/js/caml_exceptions.js");
+var TimelineEvent$ReactTemplate = require("../types/TimelineEvent.bs.js");
 var TrixEditor = require("../../../admin/components/eventsReviewDashboard/TrixEditor");
+
+var UnexpectedResponse = Caml_exceptions.create("FeedbackForm-ReactTemplate.UnexpectedResponse");
+
+function handleApiError(match) {
+  if (Caml_exceptions.isCamlExceptionOrOpenVariant(match) && match[0] === UnexpectedResponse) {
+    return /* Some */[match[1]];
+  } else {
+    return /* None */0;
+  }
+}
 
 function make(onChange, children) {
   return ReasonReact.wrapJsForReason(TrixEditor.default, {
@@ -27,21 +41,54 @@ function updateFeedback(send, html) {
   return Curry._1(send, /* UpdateFeedback */[html]);
 }
 
-function cancelFeedback(send, _) {
+function clearFeedback(send, _) {
   Curry._1(send, /* UpdateFeedback */[""]);
   return Curry._1(send, /* ToggleForm */0);
 }
 
-function sendFeedback(state, send, _) {
+function handleResponseJSON(send, json) {
+  var match = Json_decode.field("error", (function (param) {
+          return Json_decode.nullable(Json_decode.string, param);
+        }), json);
+  if (match !== null) {
+    console.log(match);
+    return /* () */0;
+  } else {
+    Curry._1(send, /* UpdateFeedback */[""]);
+    return Curry._1(send, /* ToggleForm */0);
+  }
+}
+
+function sendFeedback(state, send, te, authenticityToken, _) {
   console.log("Sending feedback for emailing");
   console.log("Feedback to be sent:" + state[/* feedbackHTML */1]);
-  Curry._1(send, /* UpdateFeedback */[""]);
-  return Curry._1(send, /* ToggleForm */0);
+  var payload = { };
+  payload["authenticity_token"] = authenticityToken;
+  payload["feedback"] = state[/* feedbackHTML */1];
+  var id = String(TimelineEvent$ReactTemplate.id(te));
+  fetch("/timeline_events/" + (id + "/send_feedback"), Fetch.RequestInit[/* make */0](/* Some */[/* Post */2], /* Some */[{
+                      "Content-Type": "application/json"
+                    }], /* Some */[JSON.stringify(payload)], /* None */0, /* None */0, /* None */0, /* Some */[/* SameOrigin */1], /* None */0, /* None */0, /* None */0, /* None */0)(/* () */0)).then((function (response) {
+              if (response.ok || response.status === 422) {
+                return response.json();
+              } else {
+                return Promise.reject([
+                            UnexpectedResponse,
+                            response.status
+                          ]);
+              }
+            })).then((function (json) {
+            return Promise.resolve(handleResponseJSON(send, json));
+          })).catch((function (error) {
+          var match = handleApiError(error);
+          return Promise.resolve(match ? (console.log("Error code: " + String(match[0])), /* () */0) : (console.log("Unknown error occured"), /* () */0));
+        }));
+  return /* () */0;
 }
 
 var component = ReasonReact.reducerComponent("FeedbackForm");
 
-function make$1() {
+function make$1(timelineEvent, authenticityToken, _) {
   return /* record */[
           /* debugName */component[/* debugName */0],
           /* reactClassInternal */component[/* reactClassInternal */1],
@@ -68,7 +115,7 @@ function make$1() {
                               }, ReasonReact.element(/* None */0, /* None */0, make(updateFeedbackCB, /* array */[])), React.createElement("button", {
                                     className: "btn btn-primary mt-1 mr-1",
                                     onClick: (function (param) {
-                                        return sendFeedback(state, send, param);
+                                        return sendFeedback(state, send, timelineEvent, authenticityToken, param);
                                       })
                                   }, React.createElement("i", {
                                         className: "fa fa-envelope mr-1"
@@ -112,11 +159,14 @@ function make$1() {
         ];
 }
 
+exports.UnexpectedResponse = UnexpectedResponse;
+exports.handleApiError = handleApiError;
 exports.TrixEditor = TrixEditor$1;
 exports.str = str;
 exports.toggleForm = toggleForm;
 exports.updateFeedback = updateFeedback;
-exports.cancelFeedback = cancelFeedback;
+exports.clearFeedback = clearFeedback;
+exports.handleResponseJSON = handleResponseJSON;
 exports.sendFeedback = sendFeedback;
 exports.component = component;
 exports.make = make$1;

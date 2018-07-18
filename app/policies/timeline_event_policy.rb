@@ -25,4 +25,8 @@ class TimelineEventPolicy < ApplicationPolicy
   def undo_review?
     review?
   end
+
+  def send_feedback?
+    review?
+  end
 end

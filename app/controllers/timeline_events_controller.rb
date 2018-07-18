@@ -1,7 +1,7 @@
 class TimelineEventsController < ApplicationController
   before_action :authenticate_user!
-  before_action :authenticate_founder!, except: %i[review undo_review]
-  before_action :require_active_subscription, except: %i[create review undo_review]
+  before_action :authenticate_founder!, except: %i[review undo_review send_feedback]
+  before_action :require_active_subscription, except: %i[create review undo_review send_feedback]
   # TODO: Move the above 'authorization' checks to policies.
 
   # POST /timeline_events
@@ -64,6 +64,22 @@ class TimelineEventsController < ApplicationController
     end
 
     TimelineEvents::UndoVerificationService.new(timeline_event).execute
+    render json: { error: nil }, status: :ok
+  end
+
+  # POST /timeline_events/:id/send_feedback
+  def send_feedback
+    timeline_event = TimelineEvent.find(params[:id])
+    authorize timeline_event
+
+    # TODO: Clean up startup-feedback related services and move the following there
+    startup_feedback = StartupFeedback.create!(
+      feedback: params[:feedback],
+      startup: timeline_event.startup,
+      faculty: current_coach,
+      timeline_event: timeline_event
+    )
+    StartupFeedbackModule::EmailService.new(startup_feedback, founder: timeline_event.founder).send
     render json: { error: nil }, status: :ok
   end
 

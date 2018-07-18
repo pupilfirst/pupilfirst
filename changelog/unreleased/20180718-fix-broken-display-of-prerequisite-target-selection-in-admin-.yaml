@@ -1,6 +1,6 @@
 ---
 timestamp: '2018-07-18T08:10:58Z'
-title: Fix broken display of prerequisite target selection in admin target edit page
+title: Fixed broken display of prerequisite target selection in admin target edit page
   for targets without 'peers'.
 trello: https://trello.com/c/MDeZjudU
 private: true

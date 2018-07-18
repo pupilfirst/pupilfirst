@@ -21,6 +21,12 @@ class HomeController < ApplicationController
     render layout: 'application'
   end
 
+  def ios
+    @skip_container = true
+    @hide_layout_header = true
+    render layout: 'application'
+  end
+
   # GET /tour
   def tour
     @skip_container = true

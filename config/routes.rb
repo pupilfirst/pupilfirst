@@ -191,6 +191,9 @@ Rails.application.routes.draw do
   get 'fb', to: 'home#fb'
   get 'fb/apply', to: redirect('fb?apply=now')
 
+  # Apple iOS course at Manipal University landing page
+  get 'ios', to: 'home#ios'
+
   root 'home#index'
 
   # /slack redirected to /about/slack

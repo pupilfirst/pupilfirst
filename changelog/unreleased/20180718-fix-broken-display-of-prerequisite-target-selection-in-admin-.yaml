@@ -1,0 +1,9 @@
+---
+timestamp: '2018-07-18T08:10:58Z'
+title: Fix broken display of prerequisite target selection in admin target edit page
+  for targets without 'peers'.
+trello: https://trello.com/c/MDeZjudU
+private: true
+description: This hides the prerequisite target select dropdown if the target in question
+  doesn't have any possible prerequisite targets.
+category: ui

@@ -29,7 +29,7 @@ module Resources
       if resource.startup.present?
         resource.startup.founders
       elsif resource.level.present?
-        Founder.where(startup: Startup.joins(:level).where('levels.number >= ?', resource.level.number))
+        Founder.where(startup: Startup.joins(:level).where('levels.school_id = ?', resource.level.school_id).where('levels.number >= ?', resource.level.number))
       else
         Founder.where(startup: Startup.approved)
       end

@@ -21,6 +21,18 @@ class HomeController < ApplicationController
     render layout: 'application'
   end
 
+  def ios
+    @skip_container = true
+    @hide_layout_header = true
+    if current_user.present?
+      flash[:alert] = 'You are already signed in.'
+      redirect_to root_url
+    else
+      @form = UserSignInForm.new(Reform::OpenForm.new)
+    end
+    render layout: 'application'
+  end
+
   # GET /tour
   def tour
     @skip_container = true

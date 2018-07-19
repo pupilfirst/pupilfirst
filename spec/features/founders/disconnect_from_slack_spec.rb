@@ -11,6 +11,8 @@ feature 'Disconnect from Slack' do
   end
 
   scenario 'Founder disconnects Slack account' do
+    pending 'Slack connect feature is hidden'
+
     # Stub the call to check token.
     stub_request(:get, 'https://slack.com/api/auth.test?token=SLACK_ACCESS_TOKEN')
       .to_return(body: { ok: true }.to_json)

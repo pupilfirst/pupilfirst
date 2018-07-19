@@ -89,7 +89,7 @@ title SV.CO Edit Profile for #{@founder.fullname}
                 .connected-account-profile__link
                   ' Your username on Slack is <code>#{@founder.slack_username}</code>.
                 = link_to 'Disconnect', founder_slack_disconnect_path, method: :post, class: 'btn btn-primary connected-account-profile__disconnect-btn', data: { confirm: 'Are you sure? You will need to manually update your Slack name to keep it in sync with your product name.' }
-      - else
+      / - else
         .row.mt-4
           .connected-account__label.col-sm-2.text-sm-right
             | Slack:

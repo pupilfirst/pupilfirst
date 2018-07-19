@@ -261,6 +261,7 @@ class Founder < ApplicationRecord
 
   def facebook_share_eligibility
     return 'not_admitted' if startup.level_zero?
+    return 'disabled_for_school' if startup.level.school.facebook_share_disabled?
     facebook_token_available? ? 'eligible' : 'token_unavailable'
   end
 

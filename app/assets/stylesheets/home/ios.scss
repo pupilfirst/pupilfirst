@@ -1,7 +1,6 @@
 .ios-landing__container {
   background-color: white;
   position: relative;
-  padding: 4rem;
   background-color: $primary-background;
 }
 
@@ -12,7 +11,7 @@
   overflow: hidden;
 }
 
-.ios-couse-programmer-illustration {
+.ios-landing__programmer-illustration {
   background: #e4e4ef asset-url("ios/iOS-Course-illustration.png");
   background-repeat: no-repeat;
   width: 100%;
@@ -25,6 +24,12 @@
   }
 }
 
-.manipal-sv-logo {
+.ios-landing__manipal-sv-logo {
   border-bottom: 1px solid $gray-border;
+}
+
+.ios-landing__sign-in-btn {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.01rem;
 }

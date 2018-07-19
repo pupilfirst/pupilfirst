@@ -6,66 +6,41 @@
   script src='https://www.google.com/recaptcha/api.js' async defer
 
 
-.ios-landing__container
+.ios-landing__container.p-3.p-lg-5
   .container
    .row.ios-landing__sign-in-container
-      .col-md-6.ios-couse-programmer-illustration
+      .col-md-6.ios-landing__programmer-illustration
 
       .col-md-6
-        .manipal-sv-logo
-          = image_tag 'ios/manipal-sv.co-iOS-course-logo.svg', class: 'img-fluid my-4 mx-2'
+        .ios-landing__manipal-sv-logo
+          = image_tag 'ios/manipal-sv.co-iOS-course-logo.svg', class: 'img-fluid m-3 m-lg-5'
 
-        .user-login.py-4.px-6.text-center
-          #sign-in-with-federated class=hidden_sign_in_class('federated')
-            h3.text-center.mb-4
-              ' Sign in to the Apple iOS course at
-              br
-              | Manipal University
+        .user-login.p-3.p-lg-5.text-center
+          h3.text-center.mb-4
+            ' Sign in to the Apple iOS course at
+            br
+            | Manipal University
 
-            - if Rails.env.development?
-              a.oauth-login.login-as-developer href=user_developer_omniauth_authorize_path(origin: params[:referer])
-                i.fa.fa-code.oauth-icon
-                | Continue as Developer
-            a.oauth-login.login-with-google href=user_google_oauth2_omniauth_authorize_path(origin: params[:referer])
-              i.fa.fa-google.oauth-icon
-              | Continue with Google
-            a.oauth-login.login-with-facebook href=user_facebook_omniauth_authorize_path(origin: params[:referer])
-              i.fa.fa-facebook.oauth-icon
-              | Continue with Facebook
-            a.oauth-login.login-with-github href=user_github_omniauth_authorize_path(origin: params[:referer])
-              i.fa.fa-github.oauth-icon
-              | Continue with Github
+          = form_for @form, url: user_send_login_email_path, html: { 'data-test': Rails.env.test? } do |f|
+            - if f.object.errors.present? && f.object.errors[:base].present?
+              .alert.alert-warning.alert-dismissable.fade.show role='alert'
+                ul.mb-0
+                  - f.object.errors[:base].each do |error_message|
+                    li #{error_message}
 
-          #sign-in-with-email.mb-3 class=hidden_sign_in_class('email')
-            h3.text-center.mb-3 Sign in with your SV.CO ID
+            = f.hidden_field :referer
 
-            /= form_for @form, url: user_send_login_email_path, html: { 'data-test': Rails.env.test? } do |f|
-            /  - if f.object.errors.present? && f.object.errors[:base].present?
-            /    .alert.alert-warning.alert-dismissable.fade.show role='alert'
-            /      ul.mb-0
-            /        - f.object.errors[:base].each do |error_message|
-            /          li #{error_message}
+            .wrapped-input
+              = image_tag 'users/sessions/new/email.svg'
+              = f.text_field :email, required: true, placeholder: 'Email', maxlength: 250, type: 'email'
+              - if f.object.errors[:email].present?
+                p.error-under-input = f.object.errors[:email].join(', ')
 
-            /  = f.hidden_field :referer
+            .remember-forgot.mt-1.mb-2
+              .login-option.text-center
+                = f.check_box :shared_device, class: 'css-checkbox'
+                = f.label :shared_device, 'Are you using a shared device?', class: 'css-label'
 
-            /  .wrapped-input
-            /    = image_tag 'users/sessions/new/email.svg'
-            /    = f.text_field :email, required: true, placeholder: 'SV.CO ID (email)', maxlength: 250, type: 'email'
-            /    - if f.object.errors[:email].present?
-            /      p.error-under-input = f.object.errors[:email].join(', ')
-
-              .remember-forgot.mt-1.mb-2
-                .login-option.text-center
-                  = f.check_box :shared_device, class: 'css-checkbox'
-                  = f.label :shared_device, 'Are you using a shared device?', class: 'css-label'
-
-              .text-center
-                div class='g-recaptcha' data-sitekey=Rails.application.secrets.dig(:google, :recaptcha, :invisible, :site_key) data-callback='handleSignInWithEmailButton' data-size='invisible' data-badge='inline'
-                = f.submit 'Email me a link to sign in', class: 'btn btn-primary btn-md text-uppercase sign-in-btn'
-
-          .switch-sign-in-method-links.text-center
-            a.switch-to-email.brand-secondary class=hidden_sign_in_class('email', link: true)
-              | Sign in with email
-            a.switch-to-federated.brand-secondary class=hidden_sign_in_class('federated', link: true)
-              | Sign in with Google, Facebook, or Github
-
+            .text-center
+              div class='g-recaptcha' data-sitekey=Rails.application.secrets.dig(:google, :recaptcha, :invisible, :site_key) data-callback='handleSignInWithEmailButton' data-size='invisible' data-badge='inline'
+              = f.submit 'Email Me a Link to Sign In', class: 'btn btn-primary btn-lg d-inline-block font-semibold ios-landing__sign-in-btn'

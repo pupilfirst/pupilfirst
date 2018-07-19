@@ -8,6 +8,7 @@ var React = require("react");
 var Json_decode = require("@glennsl/bs-json/src/Json_decode.bs.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 var Caml_exceptions = require("bs-platform/lib/js/caml_exceptions.js");
+var Notification$ReactTemplate = require("../types/Notification.bs.js");
 var TimelineEvent$ReactTemplate = require("../types/TimelineEvent.bs.js");
 var TrixEditor = require("../../../admin/components/eventsReviewDashboard/TrixEditor");
 
@@ -51,9 +52,9 @@ function handleResponseJSON(send, json) {
           return Json_decode.nullable(Json_decode.string, param);
         }), json);
   if (match !== null) {
-    console.log(match);
-    return /* () */0;
+    return Notification$ReactTemplate.error("Something went wrong!", match);
   } else {
+    Notification$ReactTemplate.success("Feedback Sent", "Your feedback has been recorded and emailed to the student(s)");
     Curry._1(send, /* UpdateFeedback */[""]);
     return Curry._1(send, /* ToggleForm */0);
   }
@@ -81,7 +82,7 @@ function sendFeedback(state, send, te, authenticityToken, _) {
             return Promise.resolve(handleResponseJSON(send, json));
           })).catch((function (error) {
           var match = handleApiError(error);
-          return Promise.resolve(match ? (console.log("Error code: " + String(match[0])), /* () */0) : (console.log("Unknown error occured"), /* () */0));
+          return Promise.resolve(match ? Notification$ReactTemplate.error(String(match[0]), "Please try again") : Notification$ReactTemplate.error("Something went wrong!", "Please try again"));
         }));
   return /* () */0;
 }

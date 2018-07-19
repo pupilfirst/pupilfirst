@@ -46,8 +46,13 @@ let handleResponseJSON = (send, json) =>
     |> Json.Decode.(field("error", nullable(string)))
     |> Js.Null.toOption
   ) {
-  | Some(error) => Js.log(error)
-  | None => clearFeedback(send, ())
+  | Some(error) => Notification.error("Something went wrong!", error)
+  | None =>
+    Notification.success(
+      "Feedback Sent",
+      "Your feedback has been recorded and emailed to the student(s)",
+    );
+    clearFeedback(send, ());
   };
 
 let sendFeedback = (state, send, te, authenticityToken, _event) => {
@@ -87,8 +92,10 @@ let sendFeedback = (state, send, te, authenticityToken, _event) => {
     |> catch(error =>
          (
            switch (error |> handleApiError) {
-           | Some(code) => Js.log("Error code: " ++ (code |> string_of_int))
-           | None => Js.log("Unknown error occured")
+           | Some(code) =>
+             Notification.error(code |> string_of_int, "Please try again")
+           | None =>
+             Notification.error("Something went wrong!", "Please try again")
            }
          )
          |> resolve

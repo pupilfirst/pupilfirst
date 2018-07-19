@@ -21,9 +21,13 @@ let handleResponseJSON = (te, replaceTE_CB, json) =>
   ) {
   | Some(error) => Js.log(error)
   | None =>
+    Notification.success(
+      "Review Reverted",
+      "Review cleared and moved to pending",
+    );
     te
     |> TimelineEvent.updateStatus(TimelineEvent.NotReviewed)
-    |> replaceTE_CB
+    |> replaceTE_CB;
   };
 
 let undoReview = (te, replaceTE_CB, _event) => {
@@ -51,8 +55,10 @@ let undoReview = (te, replaceTE_CB, _event) => {
     |> catch(error =>
          (
            switch (error |> handleApiError) {
-           | Some(code) => Js.log("Error code: " ++ (code |> string_of_int))
-           | None => Js.log("Unknown error occured")
+           | Some(code) =>
+             Notification.error(code |> string_of_int, "Please try again")
+           | None =>
+             Notification.error("Something went wrong!", "Please try again")
            }
          )
          |> resolve

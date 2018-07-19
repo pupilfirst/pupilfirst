@@ -24,8 +24,13 @@ let handleResponseJSON = (te, markReviewedCB, json) =>
     |> Json.Decode.(field("error", nullable(string)))
     |> Js.Null.toOption
   ) {
-  | Some(error) => Js.log(error)
-  | None => te |> markReviewedCB
+  | Some(error) => Notification.error("Something went wrong!", error)
+  | None =>
+    Notification.success(
+      "Review Successful",
+      "Event reviewed and moved to completed",
+    );
+    te |> markReviewedCB;
   };
 
 let sendReview =
@@ -83,8 +88,10 @@ let sendReview =
     |> catch(error =>
          (
            switch (error |> handleApiError) {
-           | Some(code) => Js.log("Error code: " ++ (code |> string_of_int))
-           | None => Js.log("Unknown error occured")
+           | Some(code) =>
+             Notification.error(code |> string_of_int, "Please try again")
+           | None =>
+             Notification.error("Something went wrong!", "Please try again")
            }
          )
          |> resolve

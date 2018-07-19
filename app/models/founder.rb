@@ -209,14 +209,14 @@ class Founder < ApplicationRecord
   # Returns the percentage of profile completion as an integer
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def profile_completion_percentage
-    score = 20 # a default score given for required fields during registration
-    score += 15 if slack_user_id.present? # has a valid slack account associated
-    score += 10 if skype_id.present?
-    score += 15 if social_url_present? # has atleast 1 social media links
-    score += 5 if communication_address.present?
-    score += 10 if about.present?
-    score += 10 if identification_proof.present?
-    score += 15 if resume_link.present? # has uploaded resume
+    score = 30 # a default score given for required fields during registration
+    # score += 15 if slack_user_id.present? # has a valid slack account associated
+    # score += 10 if skype_id.present?
+    score += 25 if social_url_present? # has atleast 1 social media links
+    score += 15 if communication_address.present?
+    score += 15 if about.present?
+    score += 15 if identification_proof.present?
+    # score += 15 if resume_link.present? # has uploaded resume
     score
   end
 

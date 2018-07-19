@@ -139,10 +139,8 @@ class Target < ApplicationRecord
   normalize_attribute :key, :slideshow_embed, :video_embed, :session_by
 
   def display_name
-    if level.present?
-      "L#{level.number}: #{title}"
-    elsif target_group.present?
-      "L#{target_group.level.number}: #{title}"
+    if target_group.present?
+      "#{school.short_name}##{level.number}: #{title}"
     else
       title
     end

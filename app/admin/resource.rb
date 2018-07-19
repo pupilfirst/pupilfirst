@@ -1,9 +1,9 @@
 ActiveAdmin.register Resource do
-  include DisableIntercom
-
   permit_params :title, :description, :file, :thumbnail, :level_id, :startup_id, :target_id, :video_embed, :link, tag_list: []
 
   controller do
+    include DisableIntercom
+
     def find_resource
       scoped_collection.friendly.find(params[:id])
     end

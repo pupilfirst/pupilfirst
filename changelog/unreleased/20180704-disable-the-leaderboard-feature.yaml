@@ -1,0 +1,7 @@
+---
+timestamp: '2018-07-04T11:39:44Z'
+title: The leaderboard feature has been disabled.
+trello: https://trello.com/c/rbyR2RQQ
+private: true
+description: The rake task that ran weekly on Heroku has been disabled, and access
+  to the about/ page and Vocalist command disabled.

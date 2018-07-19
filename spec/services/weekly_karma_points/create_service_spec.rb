@@ -4,11 +4,10 @@ describe WeeklyKarmaPoints::CreateService do
   include ActiveSupport::Testing::TimeHelpers
 
   subject { described_class }
-
-  let(:l1_startup_1) { create :startup }
-  let(:l1_startup_2) { create :startup }
   let(:level_one) { create :level, :one }
   let(:level_two) { create :level, :two }
+  let(:l1_startup_1) { create :startup, level: level_one }
+  let(:l1_startup_2) { create :startup, level: level_one }
   let(:l2_startup_1) { create :startup, level: level_two }
   let(:l2_startup_2) { create :startup, level: level_two }
   let(:test_time) { Time.parse('2017-04-24 18:01:00 +0530') }

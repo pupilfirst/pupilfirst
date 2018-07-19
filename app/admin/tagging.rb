@@ -1,15 +1,13 @@
 ActiveAdmin.register ActsAsTaggableOn::Tagging, as: 'Tagging' do
-  include DisableIntercom
+  controller do
+    include DisableIntercom
+  end
 
   actions :index, :destroy
 
   menu false
 
   filter :taggable_type
-
-  filter :taggable,
-    if: proc { params.dig(:q, :taggable_type_eq).present? },
-    collection: -> { Object.const_get(params.dig(:q, :taggable_type_eq)).joins(:taggings).distinct }
 
   filter :tag, multiple: true, collection: proc {
     taggable_type = params.dig(:q, :taggable_type_eq)

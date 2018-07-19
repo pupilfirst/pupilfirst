@@ -42,7 +42,7 @@ module Founders
     end
 
     def levels
-      @levels ||= Level.where('number >= ?', minimum_level).as_json(only: %i[id name number])
+      @levels ||= Level.where('number >= ?', minimum_level).as_json(only: %i[id name number school_id])
     end
 
     def faculty

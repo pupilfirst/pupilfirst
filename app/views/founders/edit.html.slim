@@ -13,7 +13,7 @@ title SV.CO Edit Profile for #{@founder.fullname}
         = f.telephone_field :phone, label_class: 'col-form-label', label: 'Phone Number', required: true, maxlength: 17, pattern: MobileNumberValidator::FORM_EXPRESSION
         = f.file_field :avatar, label_class: 'col-form-label', label: 'Avatar', class: 'form-control', required: false, help: @founder.avatar_hint
         = f.text_field :about, label_class: 'col-form-label', label: 'One-Liner', placeholder: 'One-liner about yourself', maxlength: 255, required: false
-        - if @founder.startup.present?
+        / - if @founder.startup.present?
           = f.select :roles, options_for_select((Founder.valid_roles.map { |r| [t("models.founder.role.#{r}"), r] }), @founder.roles),
             { label_class: 'col-form-label' }, { required: true, multiple: true }
         = f.text_field :skype_id, label_class: 'col-form-label', label: 'Skype ID', required: false
@@ -37,7 +37,7 @@ title SV.CO Edit Profile for #{@founder.fullname}
         = f.text_field :course, label_class: 'col-form-label', placeholder: 'B-tech in Computer Science', required: false
         = f.select :semester, options_for_select(MoocStudent.valid_semester_values), include_blank: 'Pick your semester', label_class: 'col-form-label'
         = f.select :year_of_graduation, options_for_select(2010..2025), include_blank: 'Pick the year when you graduate from college', label_class: 'col-form-label'
-        = f.number_field :backlog, placeholder: 'Zero, hopefully. :-)', label_class: 'col-form-label',
+        / = f.number_field :backlog, placeholder: 'Zero, hopefully. :-)', label_class: 'col-form-label',
           help: "The number of failed subjects or papers that you haven't yet cleared in your college course.", required: false
         = f.text_field :twitter_url, label_class: 'col-form-label', label: 'Twitter Profile URL', maxlength: 255, required: false
         = f.text_field :linkedin_url, label_class: 'col-form-label', label: 'LinkedIn Profile URL', maxlength: 255, required: false
@@ -89,7 +89,7 @@ title SV.CO Edit Profile for #{@founder.fullname}
                 .connected-account-profile__link
                   ' Your username on Slack is <code>#{@founder.slack_username}</code>.
                 = link_to 'Disconnect', founder_slack_disconnect_path, method: :post, class: 'btn btn-primary connected-account-profile__disconnect-btn', data: { confirm: 'Are you sure? You will need to manually update your Slack name to keep it in sync with your product name.' }
-      - else
+      / - else
         .row.mt-4
           .connected-account__label.col-sm-2.text-sm-right
             | Slack:

@@ -60,8 +60,6 @@ class Founder < ApplicationRecord
     admitted.where(exited: false).where.not(id: active_on_slack(Time.now.beginning_of_week, Time.now)).where.not(id: active_on_web(Time.now.beginning_of_week, Time.now))
   }
   scope :not_exited, -> { where.not(exited: true) }
-  scope :subscribed, -> { joins(startup: :payments).merge(Payment.paid).where('payments.billing_end_at > ?', Time.now) }
-  scope :at_or_above_level, ->(minimum_level) { joins(startup: :level).where('levels.number >= ?', minimum_level.number) }
   scope :screening_score_above, ->(minimum_score) { where("(screening_data ->> 'score')::int >= ?", minimum_score) }
 
   def self.with_email(email)
@@ -211,14 +209,14 @@ class Founder < ApplicationRecord
   # Returns the percentage of profile completion as an integer
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def profile_completion_percentage
-    score = 20 # a default score given for required fields during registration
-    score += 15 if slack_user_id.present? # has a valid slack account associated
-    score += 10 if skype_id.present?
-    score += 15 if social_url_present? # has atleast 1 social media links
-    score += 5 if communication_address.present?
-    score += 10 if about.present?
-    score += 10 if identification_proof.present?
-    score += 15 if resume_link.present? # has uploaded resume
+    score = 30 # a default score given for required fields during registration
+    # score += 15 if slack_user_id.present? # has a valid slack account associated
+    # score += 10 if skype_id.present?
+    score += 25 if social_url_present? # has atleast 1 social media links
+    score += 15 if communication_address.present?
+    score += 15 if about.present?
+    score += 15 if identification_proof.present?
+    # score += 15 if resume_link.present? # has uploaded resume
     score
   end
 
@@ -263,6 +261,7 @@ class Founder < ApplicationRecord
 
   def facebook_share_eligibility
     return 'not_admitted' if startup.level_zero?
+    return 'disabled_for_school' if startup.level.school.facebook_share_disabled?
     facebook_token_available? ? 'eligible' : 'token_unavailable'
   end
 

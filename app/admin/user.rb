@@ -1,6 +1,4 @@
 ActiveAdmin.register User do
-  include DisableIntercom
-
   menu parent: 'Dashboard'
   actions :index, :show
 
@@ -9,6 +7,8 @@ ActiveAdmin.register User do
   filter :mooc_student_id_not_null, label: 'Is MOOC Student', as: :boolean
 
   controller do
+    include DisableIntercom
+
     def scoped_collection
       super.includes :mooc_student, :founder
     end

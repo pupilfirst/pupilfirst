@@ -1,5 +1,7 @@
 ActiveAdmin.register ConnectSlot do
-  include DisableIntercom
+  controller do
+    include DisableIntercom
+  end
 
   permit_params :faculty_id, :slot_at
 

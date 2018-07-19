@@ -1,5 +1,7 @@
 ActiveAdmin.register TimelineEventType do
-  include DisableIntercom
+  controller do
+    include DisableIntercom
+  end
 
   menu parent: 'Timeline Events'
 

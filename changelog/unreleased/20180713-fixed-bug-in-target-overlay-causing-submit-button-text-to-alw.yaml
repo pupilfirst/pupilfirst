@@ -1,0 +1,9 @@
+---
+timestamp: '2018-07-13T10:20:41Z'
+title: Fixed bug in target overlay causing submit button text to always read "Mark
+  Complete".
+trello: https://trello.com/c/eA9PCXgY
+private: false
+description: The check was made against a function instead of the return from the
+  function.
+category: bugfix

@@ -5,7 +5,7 @@ export default class LevelUpNotification extends React.Component {
   eligibleNotificationTitle() {
     if (this.currentLevelNumber() === 0) {
       return "Congratulations! You are now an enrolled student at SV.CO.";
-    } else if (this.currentLevelNumber() === this.props.maxLevelNumber) {
+    } else if (this.currentLevelNumber() === this.props.rootProps.maxLevelNumber) {
       return "Congratulations! You are now part of our Alumni.";
     } else {
       return "Ready to Level Up!";
@@ -19,7 +19,7 @@ export default class LevelUpNotification extends React.Component {
   eligibleNotificationText() {
     if (this.currentLevelNumber() === 0) {
       return "You have successfully completed the first step in your journey with SV.CO. We are proud to have you join our collective. Hit Level Up to continue your journey and unlock a series of cool targets and sessions on the way.";
-    } else if (this.currentLevelNumber() === this.props.maxLevelNumber) {
+    } else if (this.currentLevelNumber() === this.props.rootProps.maxLevelNumber) {
       return (
         <div>
           <h4 className="font-regular light-grey-text">
@@ -56,28 +56,28 @@ export default class LevelUpNotification extends React.Component {
 
             {this.currentLevelNumber() !==
               this.props.rootProps.maxLevelNumber && (
-              <form
-                className="mt-3"
-                action="/startup/level_up"
-                acceptCharset="UTF-8"
-                method="post"
-              >
-                <input name="utf8" type="hidden" value="✓" />
-                <input
-                  type="hidden"
-                  name="authenticity_token"
-                  value={this.props.rootProps.authenticityToken}
-                />
-
-                <button
-                  className="btn btn-with-icon btn-md btn-primary btn-founder-dashboard-level-up text-uppercase"
-                  type="submit"
+                <form
+                  className="mt-3"
+                  action="/startup/level_up"
+                  acceptCharset="UTF-8"
+                  method="post"
                 >
-                  <i className="fa fa-arrow-right" />
-                  Level Up
+                  <input name="utf8" type="hidden" value="✓" />
+                  <input
+                    type="hidden"
+                    name="authenticity_token"
+                    value={this.props.rootProps.authenticityToken}
+                  />
+
+                  <button
+                    className="btn btn-with-icon btn-md btn-primary btn-founder-dashboard-level-up text-uppercase"
+                    type="submit"
+                  >
+                    <i className="fa fa-arrow-right" />
+                    Level Up
                 </button>
-              </form>
-            )}
+                </form>
+              )}
           </div>
         )}
 

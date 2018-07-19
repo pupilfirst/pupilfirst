@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :faculty do
     name { Faker::Name.name }
-    title { Faker::Name.title }
+    title { Faker::Job.title }
     category Faculty::CATEGORY_DEVELOPER_COACHES
     image { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'support', 'uploads', 'faculty', 'donald_duck.jpg')) }
 

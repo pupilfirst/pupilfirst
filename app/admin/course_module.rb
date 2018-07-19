@@ -1,8 +1,8 @@
 ActiveAdmin.register CourseModule do
-  include DisableIntercom
-
   # accounting for use of friendly_id without finders
   controller do
+    include DisableIntercom
+
     def find_resource
       scoped_collection.friendly.find(params[:id])
     rescue ActiveRecord::RecordNotFound

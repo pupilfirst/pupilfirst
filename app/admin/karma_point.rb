@@ -1,6 +1,4 @@
 ActiveAdmin.register KarmaPoint do
-  include DisableIntercom
-
   menu parent: 'Founders'
 
   permit_params :startup_id, :founder_id, :points, :activity_type, :created_at
@@ -11,6 +9,8 @@ ActiveAdmin.register KarmaPoint do
   filter :created_at
 
   controller do
+    include DisableIntercom
+
     def scoped_collection
       super.includes :founder
     end

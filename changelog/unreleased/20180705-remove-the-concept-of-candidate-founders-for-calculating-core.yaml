@@ -1,0 +1,11 @@
+---
+timestamp: '2018-07-05T08:38:45Z'
+title: Remove the concept of candidate founders for calculating core stats on admin
+  dashboard.
+trello: https://trello.com/c/nbYyI6X4
+private: true
+description: This removes filters on calculation of counts and percentages of active
+  users on platforms, that are shown on the dashboard. This makes it simpler to perform
+  the calculations, but displays much lower quality data. We're doing this to allow
+  compatibility with the new "schools" feature - this sort of specific calculation
+  can be reintroduced later if required.

@@ -218,6 +218,19 @@ class ApplicationController < ActionController::Base
     }
   end
 
+  # rubocop:disable Metrics/LineLength
+  def intercom_csp
+    {
+      connect: 'https://api.intercom.io https://api-iam.intercom.io https://api-ping.intercom.io https://nexus-websocket-a.intercom.io https://nexus-websocket-b.intercom.io https://nexus-long-poller-a.intercom.io https://nexus-long-poller-b.intercom.io wss://nexus-websocket-a.intercom.io wss://nexus-websocket-b.intercom.io https://uploads.intercomcdn.com https://uploads.intercomusercontent.com https://app.getsentry.com',
+      child: 'https://share.intercom.io https://intercom-sheets.com https://www.youtube.com https://player.vimeo.com https://fast.wistia.net',
+      font: 'https://js.intercomcdn.com',
+      media: 'https://js.intercomcdn.com',
+      img: 'https://js.intercomcdn.com https://static.intercomassets.com https://downloads.intercomcdn.com https://uploads.intercomusercontent.com https://gifs.intercomcdn.com',
+      script: 'https://app.intercom.io https://widget.intercom.io https://js.intercomcdn.com'
+    }
+  end
+  # rubocop:enable Metrics/LineLength
+
   def development_csp
     return {} unless Rails.env.development?
 
@@ -228,7 +241,7 @@ class ApplicationController < ActionController::Base
 
   def child_sources
     <<~CHILD_SOURCES.squish
-      child-src https://www.youtube.com;
+      child-src https://www.youtube.com #{intercom_csp[:child]};
     CHILD_SOURCES
   end
 
@@ -251,7 +264,7 @@ class ApplicationController < ActionController::Base
 
   def image_sources
     <<~IMAGE_SOURCES.squish
-      img-src * data: blob:;
+      img-src * data: blob: #{intercom_csp[:img]};
     IMAGE_SOURCES
   end
 
@@ -262,26 +275,26 @@ class ApplicationController < ActionController::Base
       https://s.ytimg.com http://www.startatsv.com https://sv-assets.sv.co
       #{google_analytics_csp[:script]} #{inspectlet_csp[:script]} #{facebook_csp[:script]}
       #{gtm_csp[:script]} #{instamojo_csp[:script]} #{recaptcha_csp[:script]} #{cloudflare_csp[:script]}
-      #{typeform_csp[:script]};
+      #{typeform_csp[:script]} #{intercom_csp[:script]};
     SCRIPT_SOURCES
   end
 
   def connect_sources
     <<~CONNECT_SOURCES.squish
-      connect-src 'self' #{inspectlet_csp[:connect]}
-      #{google_analytics_csp[:connect]} #{development_csp[:connect]};
+      connect-src 'self' #{inspectlet_csp[:connect]} #{intercom_csp[:connect]}
+      #{google_analytics_csp[:connect]} #{intercom_csp[:connect]} #{development_csp[:connect]};
     CONNECT_SOURCES
   end
 
   def font_sources
     <<~FONT_SOURCES.squish
-      font-src 'self' fonts.gstatic.com https://sv-assets.sv.co;
+      font-src 'self' fonts.gstatic.com https://sv-assets.sv.co #{intercom_csp[:font]};
     FONT_SOURCES
   end
 
   def media_sources
     <<~MEDIA_SOURCES.squish
-      media-src 'self' #{resource_csp[:media]};
+      media-src 'self' #{resource_csp[:media]} #{intercom_csp[:media]};
     MEDIA_SOURCES
   end
 

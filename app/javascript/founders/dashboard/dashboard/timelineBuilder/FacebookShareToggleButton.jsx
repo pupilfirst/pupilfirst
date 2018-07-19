@@ -40,7 +40,11 @@ export default class FacebookShareToggleButton extends React.Component {
   notEligibleMessage() {
     if (this.props.facebookShareEligibility == "not_admitted") {
       return "Facebook share is only available for founders above Level 0!";
-    } else {
+    }
+    else if (this.props.facebookShareEligibility == "disabled_for_school") {
+      return "Facebook share is not available for your school";
+    }
+    else {
       return 'Please <a href="/founder/edit">connect your profile to Facebook</a> first to use this feature.';
     }
   }

@@ -17,6 +17,19 @@ class HomeController < ApplicationController
   def fb
     @skip_container = true
     @hide_layout_header = true
+    @auto_open = params[:apply].present?.to_s
+    render layout: 'application'
+  end
+
+  def ios
+    @skip_container = true
+    @hide_layout_header = true
+    if current_user.present?
+      flash[:alert] = 'You are already signed in.'
+      redirect_to root_url
+    else
+      @form = UserSignInForm.new(Reform::OpenForm.new)
+    end
     render layout: 'application'
   end
 

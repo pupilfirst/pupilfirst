@@ -1,7 +1,7 @@
 setupSelect2Inputs = ->
-  $('#founders_edit_roles').select2(
-    placeholder: 'Select your role(s) in the team'
-  )
+#  $('#founders_edit_roles').select2(
+#    placeholder: 'Select your role(s) in the team'
+#  )
 
   collegeInput = $('#founders_edit_college_id')
 
@@ -24,7 +24,7 @@ setupSelect2Inputs = ->
         cache: true
 
 destroySelect2Inputs = ->
-  $('#founders_edit_roles').select2('destroy');
+#  $('#founders_edit_roles').select2('destroy');
   $('#founders_edit_college_id').select2('destroy');
 
 $(document).on 'turbolinks:load', ->

@@ -10,7 +10,7 @@ class Level < ApplicationRecord
   belongs_to :school
 
   def display_name
-    "#{school.name} School | Level #{number}: #{name}"
+    "#{school.short_name}##{number}: #{name}"
   end
 
   def self.zero

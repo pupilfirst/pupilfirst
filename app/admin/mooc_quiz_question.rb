@@ -1,5 +1,7 @@
 ActiveAdmin.register MoocQuizQuestion do
-  include DisableIntercom
+  controller do
+    include DisableIntercom
+  end
 
   menu parent: 'SixWays'
   permit_params :course_module_id, :question, answer_options_attributes: %i[id value correct_answer hint_text _destroy]

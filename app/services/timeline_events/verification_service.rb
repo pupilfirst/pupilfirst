@@ -31,7 +31,8 @@ module TimelineEvents
           raise UnexpectedStatusException
       end
 
-      TimelineEvents::VerificationNotificationJob.perform_later(@timeline_event) if @notify
+      # NOTE: Notification in public slack is disabled as Apple and Facebook VR are closed sponsored schools.
+      # TimelineEvents::VerificationNotificationJob.perform_later(@timeline_event) if @notify
 
       [@timeline_event, points_for_new_status]
     end

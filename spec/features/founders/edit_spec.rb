@@ -53,9 +53,9 @@ feature 'Founder Edit' do
       fill_in 'founders_edit_about', with: one_liner
 
       # Choose two roles.
-      roles.each do |role|
-        select role, from: 'founders_edit_roles'
-      end
+      # roles.each do |role|
+      #   select role, from: 'founders_edit_roles'
+      # end
 
       fill_in 'founders_edit_skype_id', with: username
       fill_in 'founders_edit_communication_address', with: communication_address
@@ -66,7 +66,7 @@ feature 'Founder Edit' do
       fill_in 'founders_edit_course', with: course
       select semester, from: 'founders_edit_semester'
       select (Time.zone.now.year + rand(4)).to_s, from: 'founders_edit_year_of_graduation'
-      fill_in 'founders_edit_backlog', with: backlogs
+      # fill_in 'founders_edit_backlog', with: backlogs
       fill_in 'founders_edit_twitter_url', with: "https://twitter.com/#{username}"
       fill_in 'founders_edit_linkedin_url', with: "https://linkedin.com/#{username}"
       fill_in 'founders_edit_personal_website_url', with: "https://#{username}.com"
@@ -78,7 +78,7 @@ feature 'Founder Edit' do
       click_button 'Save Changes'
 
       expect(page).to have_text(founder_name)
-      expect(page).to have_link('Complete Your Profile')
+      # expect(page).to have_link('Complete Your Profile')
       expect(page).to have_selector('div.activity-section')
 
       # Confirm that founder has, indeed, been updated.
@@ -92,7 +92,7 @@ feature 'Founder Edit' do
         roll_number: roll_number,
         course: course,
         semester: semester,
-        backlog: backlogs,
+        # backlog: backlogs,
         twitter_url: "https://twitter.com/#{username}",
         linkedin_url: "https://linkedin.com/#{username}",
         personal_website_url: "https://#{username}.com",
@@ -103,12 +103,14 @@ feature 'Founder Edit' do
       )
 
       expect(founder.avatar.file.filename).to eq('donald_duck.jpg')
-      expect(founder.roles).to match_array(roles.map(&:downcase))
+      # expect(founder.roles).to match_array(roles.map(&:downcase))
       expect(founder.identification_proof.file.filename).to eq('pdf-thumbnail.png')
       expect(founder.college_identification.file.filename).to eq('college_id.jpg')
     end
 
     scenario 'Founder tries to submit invalid values' do
+      pending 'Backlog input is hidden'
+
       sign_in_user(founder.user, referer: edit_founder_path)
       expect(page).to have_text('Editing').and have_text('profile')
 

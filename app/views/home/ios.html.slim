@@ -1,0 +1,46 @@
+- content_for :head do
+  title Apple iOS course at Manipal University
+
+/ Load the Recaptcha API manually, because we're programmatically invoking the Invisible Recaptcha library.
+- unless Rails.env.test?
+  script src='https://www.google.com/recaptcha/api.js' async defer
+
+
+.ios-landing__container.p-3.p-lg-5
+  .container
+   .row.ios-landing__sign-in-container
+      .col-md-6.ios-landing__programmer-illustration
+
+      .col-md-6
+        .ios-landing__manipal-sv-logo
+          = image_tag 'ios/manipal-sv.co-iOS-course-logo.svg', class: 'img-fluid m-3 m-lg-5'
+
+        .user-login.p-3.p-lg-5.text-center
+          h3.text-center.mb-4
+            ' Sign in to the Apple iOS course at
+            br
+            | Manipal University
+
+          = form_for @form, url: user_send_login_email_path, html: { 'data-test': Rails.env.test? } do |f|
+            - if f.object.errors.present? && f.object.errors[:base].present?
+              .alert.alert-warning.alert-dismissable.fade.show role='alert'
+                ul.mb-0
+                  - f.object.errors[:base].each do |error_message|
+                    li #{error_message}
+
+            = f.hidden_field :referer
+
+            .wrapped-input
+              = image_tag 'users/sessions/new/email.svg'
+              = f.text_field :email, required: true, placeholder: 'Email', maxlength: 250, type: 'email'
+              - if f.object.errors[:email].present?
+                p.error-under-input = f.object.errors[:email].join(', ')
+
+            .remember-forgot.mt-1.mb-2
+              .login-option.text-center
+                = f.check_box :shared_device, class: 'css-checkbox'
+                = f.label :shared_device, 'Are you using a shared device?', class: 'css-label'
+
+            .text-center
+              div class='g-recaptcha' data-sitekey=Rails.application.secrets.dig(:google, :recaptcha, :invisible, :site_key) data-callback='handleSignInWithEmailButton' data-size='invisible' data-badge='inline'
+              = f.submit 'Email Me a Link to Sign In', class: 'btn btn-primary btn-lg d-inline-block font-semibold ios-landing__sign-in-btn'

@@ -4,16 +4,17 @@ feature 'Founder Dashboard' do
   include UserSpecHelper
 
   # The basics.
+  let(:school) { create :school }
   let!(:startup) { create :startup, :subscription_active, level: level_4 }
   let!(:founder) { create :founder, startup: startup }
 
   # Levels.
-  let!(:level_0) { create :level, :zero }
-  let!(:level_1) { create :level, :one }
-  let!(:level_2) { create :level, :two }
-  let!(:level_3) { create :level, :three }
-  let!(:level_4) { create :level, :four }
-  let!(:level_5) { create :level, :five }
+  let!(:level_0) { create :level, :zero, school: school }
+  let!(:level_1) { create :level, :one, school: school }
+  let!(:level_2) { create :level, :two, school: school }
+  let!(:level_3) { create :level, :three, school: school }
+  let!(:level_4) { create :level, :four, school: school }
+  let!(:level_5) { create :level, :five, school: school }
 
   # Tracks.
   let(:product_track) { create :track, name: 'Product', sort_index: 0 }

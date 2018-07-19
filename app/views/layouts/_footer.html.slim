@@ -5,7 +5,7 @@ footer
         .row
           .col-md-8
             .row
-              .col-md-3.footer-column
+              .col-md-4.footer-column
                 p.footer-column__head.font-bold SV.CO
                 div
                   = link_to 'About', about_path, id: 'footer-sitemap-about-link', class: 'footer-column__link'
@@ -24,16 +24,16 @@ footer
                 /   - else
                 /     = link_to 'Sign In', new_user_session_path, rel: 'nofollow', id: 'footer-sitemap-sign-in-link', class: 'footer-column__link'
 
-              .col-md-3.footer-column
+              .col-md-4.footer-column
                 p.footer-column__head.font-bold PROGRAM
                 div
                   = link_to 'Coaches', coaches_index_path, id: 'footer-sitemap-faculty-link', class: 'footer-column__link'
-                div
+                /div
                   = link_to 'Statistics', stats_path, id: 'footer-sitemap-statistics-link', class: 'footer-column__link'
                 div
                   = link_to 'Changelog', changelog_path, id: 'footer-sitemap-changelog-link', class: 'footer-column__link'
 
-              .col-md-3.footer-column
+              / .col-md-3.footer-column
                 p.footer-column__head.font-bold DEVELOPERS
                 div
                   = link_to 'Apply', apply_path, id: 'footer-sitemap-join-link', class: 'footer-column__link'
@@ -44,7 +44,7 @@ footer
                 div
                   = link_to 'Invest/Hire', talent_path, id: 'footer-sitemap-talent-link', class: 'footer-column__link'
 
-              .col-md-3.footer-column
+              .col-md-4.footer-column
                 p.footer-column__head.font-bold SUPPORT
                 div
                   a#footer-sitemap-helpcenter-link.footer-column__link href="https://wiki.sv.co/" Wiki

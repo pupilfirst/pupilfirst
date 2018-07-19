@@ -1,0 +1,7 @@
+---
+timestamp: '2018-07-18T10:36:18Z'
+title: Fixed a crash in admin when picking the "taggings" option for one of the taggable
+  resources.
+trello: https://trello.com/c/6wb3DjhJ
+private: true
+category: bugfix

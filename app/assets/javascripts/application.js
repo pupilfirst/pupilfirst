@@ -48,6 +48,7 @@
 
 // Shared
 //= require _shared
+//= require sign_in
 //= require navbar
 //= require footer
 

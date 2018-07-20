@@ -6,6 +6,9 @@
     / - unless current_founder
       li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
         = link_to 'Apply', apply_path, class: 'nav-item__link', itemprop: 'url', id: 'sv-navbar__join-link'
+    - if current_user && current_user&.faculty&.startups.present?
+      li.nav-item.navbar-nav__nav-item role="presentation"
+        a#sv-navbar__dashboard-link.nav-item__link href="#{coaches_dashboard_url}" Review Dashboard
     - if current_founder && !current_founder.exited && current_founder.startup.present?
       li.nav-item.navbar-nav__nav-item role="presentation"
         a#sv-navbar__dashboard-link.nav-item__link href="#{student_dashboard_url}" Dashboard

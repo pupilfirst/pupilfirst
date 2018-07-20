@@ -27,5 +27,8 @@
     "reason-react": ">=0.3.4",
     "sass-loader": "^7.0.1",
     "webpack-dev-server": "2.11.2"
+  },
+  "scripts": {
+    "heroku-postbuild": "bsb -make-world"
   }
 }

@@ -23,26 +23,6 @@ switchSignIn = (method) ->
   else
     console.error("Unknown method of login requested: #{method}")
 
-# Callback function for invisible recaptcha present in the registration form. This callback is called when the recaptcha
-# verification is completed successfully - so a flag is set using a data attribute to indicate this.
-window.handleSignInWithEmailButton = ->
-  signInForm = $('#new_user_sign_in')
-  signInForm.data('recaptchaComplete', 'true')
-  signInForm.submit()
-
-# Sets up the registration form to prevent submission if recaptcha verfication is incomplete, and trigger it manually.
-setupSignInFormWithEmailHandler = ->
-  $('#new_user_sign_in').submit (event) ->
-    signInForm = $('#new_user_sign_in')
-
-    return if signInForm.data('test')
-
-    unless signInForm.data('recaptchaComplete')
-      event.preventDefault()
-      grecaptcha.reset()
-      grecaptcha.execute()
-
 $(document).on 'turbolinks:load', ->
   if $('#sign-in-with-email').length
     setupSwitchSignIn()
-    setupSignInFormWithEmailHandler()

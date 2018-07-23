@@ -39,3 +39,4 @@ yarn-debug.log*
 npm-debug.log
 .DS_Store
 .bsb.lock
+*.bs.js

@@ -75,9 +75,10 @@ let statusStringWithGrade = status =>
       ++ " (Grade: "
       ++ (grade |> gradeString |> String.capitalize)
       ++ ")"
-    | _ => statusString(status)
+    | NeedsImprovement
+    | NotAccepted => statusString(status)
     }
-  | _ => statusString(status)
+  | NotReviewed => statusString(status)
   };
 
 let decode = json => {

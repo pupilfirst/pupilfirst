@@ -46,6 +46,8 @@ let updateStatus: (status, t) => t;
 
 let statusString: status => string;
 
+let statusStringWithGrade: status => string;
+
 let isVerified: t => bool;
 
 let gradeString: grade => string;

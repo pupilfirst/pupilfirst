@@ -45,7 +45,7 @@ function make(reviewedStatus, _) {
                           className: containerClass(reviewedStatus)
                         }, React.createElement("i", {
                               className: faIcon(reviewedStatus)
-                            }), TimelineEvent$ReactTemplate.statusString(/* Reviewed */[reviewedStatus]));
+                            }), TimelineEvent$ReactTemplate.statusStringWithGrade(/* Reviewed */[reviewedStatus]));
             }),
           /* initialState */component[/* initialState */10],
           /* retainedProps */component[/* retainedProps */11],

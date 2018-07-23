@@ -31,7 +31,7 @@ let make = (~reviewedStatus, _children) => {
       <i className=(faIcon(reviewedStatus)) />
       (
         TimelineEvent.Reviewed(reviewedStatus)
-        |> TimelineEvent.statusString
+        |> TimelineEvent.statusStringWithGrade
         |> str
       )
     </div>,

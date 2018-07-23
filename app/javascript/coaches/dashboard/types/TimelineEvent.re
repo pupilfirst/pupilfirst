@@ -66,6 +66,20 @@ let statusString = status =>
     }
   };
 
+let statusStringWithGrade = status =>
+  switch (status) {
+  | Reviewed(reviewedStatus) =>
+    switch (reviewedStatus) {
+    | Verified(grade) =>
+      "Verified"
+      ++ " (Grade: "
+      ++ (grade |> gradeString |> String.capitalize)
+      ++ ")"
+    | _ => statusString(status)
+    }
+  | _ => statusString(status)
+  };
+
 let decode = json => {
   let grade =
     json

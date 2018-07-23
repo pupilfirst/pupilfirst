@@ -2,6 +2,7 @@
 'use strict';
 
 var List = require("bs-platform/lib/js/list.js");
+var $$String = require("bs-platform/lib/js/string.js");
 var Pervasives = require("bs-platform/lib/js/pervasives.js");
 var Belt_Option = require("bs-platform/lib/js/belt_Option.js");
 var Json_decode = require("@glennsl/bs-json/src/Json_decode.bs.js");
@@ -69,6 +70,19 @@ function statusString(status) {
     }
   } else {
     return "Pending";
+  }
+}
+
+function statusStringWithGrade(status) {
+  if (status) {
+    var reviewedStatus = status[0];
+    if (typeof reviewedStatus === "number") {
+      return statusString(status);
+    } else {
+      return "Verified (Grade: " + ($$String.capitalize(gradeString(reviewedStatus[0])) + ")");
+    }
+  } else {
+    return statusString(status);
   }
 }
 
@@ -196,6 +210,7 @@ exports.verificationComplete = verificationComplete;
 exports.decode = decode;
 exports.updateStatus = updateStatus;
 exports.statusString = statusString;
+exports.statusStringWithGrade = statusStringWithGrade;
 exports.isVerified = isVerified;
 exports.gradeString = gradeString;
 /* DateTime-ReactTemplate Not a pure module */

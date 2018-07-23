@@ -25,7 +25,7 @@ module Coaches
       TimelineEvent.not_auto_verified.where(startup: current_coach.startups).includes(:founder, :startup, :timeline_event_files, :timeline_event_type).map do |timeline_event|
         {
           id: timeline_event.id,
-          title: timeline_event.title,
+          title: timeline_event.target&.title || timeline_event.title,
           description: timeline_event.description,
           eventOn: timeline_event.event_on,
           status: timeline_event.status,

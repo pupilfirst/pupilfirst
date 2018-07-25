@@ -20,9 +20,8 @@ let make =
     ) => {
   ...component,
   render: _self =>
-    <div className="timeline-events-panel__container">
-      <h3> ("Pending" |> str) </h3>
-      <hr />
+    <div className="timeline-events-panel__container pt-4">
+      <h4 className="font-semibold pb-2"> ("Review Pending" |> str) </h4>
       <TimelineEventsList
         timelineEvents=(
           timelineEvents
@@ -32,8 +31,7 @@ let make =
         replaceTE_CB
         authenticityToken
       />
-      <h3> ("Complete" |> str) </h3>
-      <hr />
+      <h4 className="font-semibold mt-5 pb-2"> ("Complete" |> str) </h4>
       <TimelineEventsList
         timelineEvents=(
           timelineEvents

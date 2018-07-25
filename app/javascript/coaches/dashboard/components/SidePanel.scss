@@ -1,12 +1,26 @@
 @import "../../../shared/variables";
 
 .side-panel__container {
-  background-color: $brand-primary;
-  color: white;
-  min-height: 100vh;
+  background-color: white;
+  height: 100%;
+  box-shadow: 2px 0px 10px 0px #e5e5e5;
+  border: 1px solid $gray-border;
+  border-width: 0 1px 0 1px;
+}
+.side-panel__coach-profile-dp {
+  width: 3.75rem;
+  height: 3.75rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 2px solid #4A90E2;
+  box-shadow: 2px 0px 10px 0px #e5e5e5;
+  background-color: $primary-background;
+}
+.side-panel__coach-name {
+  font-size: 1rem;
 }
 
-.side-panel__coach-greeting {
-  color: white;
-  text-align: center;
+.side-panel__coach-description {
+  font-size: 0.875rem;
+  color: #8c8c8c;
 }

@@ -174,37 +174,43 @@ let make = (~timelineEvent, ~replaceTE_CB, ~authenticityToken, _children) => {
     ),
   render: ({state, send}) => {
     let timelineEventId = state.te |> TimelineEvent.id |> string_of_int;
-    <div>
-      <h5 className="timeline-event-card__field-header mt-0">
+    <div className="d-flex flex-column">
+      <h5 className="timeline-event-card__field-header font-semibold mt-0">
         ("Update Status:" |> str)
       </h5>
-      <div>
-        (
-          statusRadioInput(
-            TimelineEvent.Reviewed(Verified(TimelineEvent.Good)),
-            timelineEventId,
-            send,
+      <div className="d-flex flex-column">
+        <div className="pb-1">
+          (
+            statusRadioInput(
+              TimelineEvent.Reviewed(Verified(TimelineEvent.Good)),
+              timelineEventId,
+              send,
+            )
           )
-        )
-        (
-          statusRadioInput(
-            TimelineEvent.Reviewed(NeedsImprovement),
-            timelineEventId,
-            send,
+        </div>
+        <div className="pb-1">
+          (
+            statusRadioInput(
+              TimelineEvent.Reviewed(NeedsImprovement),
+              timelineEventId,
+              send,
+            )
           )
-        )
-        (
-          statusRadioInput(
-            TimelineEvent.Reviewed(NotAccepted),
-            timelineEventId,
-            send,
+        </div>
+        <div className="pb-1">
+          (
+            statusRadioInput(
+              TimelineEvent.Reviewed(NotAccepted),
+              timelineEventId,
+              send,
+            )
           )
-        )
+        </div>
       </div>
       (
         if (state.te |> TimelineEvent.isVerified) {
-          <div>
-            <h5 className="timeline-event-card__field-header">
+          <div className="pt-3">
+            <h5 className="timeline-event-card__field-header font-semibold">
               ("Grade:" |> str)
             </h5>
             <div>
@@ -251,7 +257,7 @@ let make = (~timelineEvent, ~replaceTE_CB, ~authenticityToken, _children) => {
                 authenticityToken,
               )
             )
-            className="btn btn-primary mt-1">
+            className="btn btn-ghost-primary mt-2">
             ("Save Review" |> str)
           </button>
         }

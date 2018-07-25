@@ -1,3 +1,7 @@
 .undo-review-btn {
-  background-color: lightcoral;
+  color: indianred;
+  &:hover, &:focus {
+    color: white;
+    background-color: indianred;
+  }
 }

@@ -2,6 +2,18 @@
 
 .timeline-event-card__container {
   margin-bottom: 1rem;
+  border-radius: 10px;
+  background-color: white;
+  border: 1px solid $gray-border;
+  box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.05);
+}
+
+.timeline-event-card__header {
+  border-bottom: 1px solid $gray-border;
+}
+
+.timeline-event-card__header-title {
+  font-size: 0.875rem;
 }
 
 .timeline-event-card__header-subtext, .timeline-event-card__footer-subtext {
@@ -9,8 +21,28 @@
   font-size: small;
 }
 
-
+.timeline-event-card__field-box {
+  background-color: $dark-primary-background;
+  border-left: 3px solid $light-primary;
+}
 
 .timeline-event-card__field-header {
-  margin-top: 0.75rem;
+  font-size: 0.875rem;
+}
+
+.timeline-event-card__field-attachments-title {
+  font-size: 0.75rem;
+  color: $light-grey-text;
+}
+
+.feedback-form__trix-container {
+  trix-toolbar {
+    .trix-button-row {
+      flex-wrap: wrap;
+    }
+  }
+}
+
+.timeline-event-card__review-box {
+  border-left: 1px solid $gray-border;
 }

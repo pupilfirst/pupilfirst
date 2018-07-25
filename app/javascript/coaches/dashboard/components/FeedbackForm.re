@@ -120,10 +120,10 @@ let make = (~timelineEvent, ~authenticityToken, _children) => {
     <div className="feedback-form__container mt-2">
       (
         if (state.showForm) {
-          <div className="feedback-form__trix-container">
+          <div className="feedback-form__trix-container py-3">
             <TrixEditor onChange=updateFeedbackCB />
             <button
-              className="btn btn-primary mt-1 mr-1"
+              className="btn btn-secondary mt-2 mr-2"
               onClick=(
                 sendFeedback(state, send, timelineEvent, authenticityToken)
               )>
@@ -131,12 +131,12 @@ let make = (~timelineEvent, ~authenticityToken, _children) => {
               ("Send" |> str)
             </button>
             <button
-              className="btn btn-primary mt-1" onClick=(clearFeedback(send))>
+              className="btn btn-ghost-secondary mt-2" onClick=(clearFeedback(send))>
               ("Cancel" |> str)
             </button>
           </div>;
         } else {
-          <button className="btn btn-primary mt-1" onClick=(toggleForm(send))>
+          <button className="btn btn-ghost-secondary mt-2" onClick=(toggleForm(send))>
             <i className="fa fa-envelope mr-1" />
             ("Email Feedback" |> str)
           </button>;

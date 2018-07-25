@@ -71,7 +71,7 @@ let make = (~timelineEvent, ~replaceTE_CB, _children) => {
   ...component,
   render: _self =>
     <button
-      className="btn btn-primary undo-review-btn mt-1"
+      className="btn btn-ghost-primary border-danger undo-review-btn mt-1"
       onClick=(undoReview(timelineEvent, replaceTE_CB))>
       <i className="fa fa-undo mr-1" />
       ("Undo Review" |> str)

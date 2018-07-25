@@ -42,9 +42,9 @@ let make = (~coach, ~startups, ~timelineEvents, ~authenticityToken, _children) =
     let selectStartupCB = id => send(SelectStartup(id));
     let clearStartupCB = () => send(ClearStartup);
     let replaceTE_CB = te => send(ReplaceTE(te));
-    <div className="coach-dashboard__container">
+    <div className="coach-dashboard__container container">
       <div className="row">
-        <div className="col-md-3">
+        <div className="col-md-4">
           <SidePanel
             coach
             startups
@@ -53,7 +53,7 @@ let make = (~coach, ~startups, ~timelineEvents, ~authenticityToken, _children) =
             clearStartupCB
           />
         </div>
-        <div className="col">
+        <div className="col-md-8">
           <TimelineEventsPanel
             timelineEvents=state.timelineEvents
             selectedStartupId=state.selectedStartupId

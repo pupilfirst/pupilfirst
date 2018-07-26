@@ -2,7 +2,7 @@ module Coaches
   class DashboardPresenter < ApplicationPresenter
     def react_props
       {
-        coach: { name: current_coach.name, id: current_coach.id },
+        coach: { name: current_coach.name, id: current_coach.id, imageUrl: current_coach.image_url },
         startups: startups,
         timelineEvents: timeline_events,
         authenticityToken: view.form_authenticity_token

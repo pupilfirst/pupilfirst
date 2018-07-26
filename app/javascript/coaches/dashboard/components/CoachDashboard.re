@@ -54,13 +54,20 @@ let make =
     <div className="coach-dashboard__container container">
       <div className="row">
         <div className="col-md-4">
-          <SidePanel
-            coach
-            startups
-            selectedStartupId=state.selectedStartupId
-            selectStartupCB
-            clearStartupCB
-          />
+          {
+            let pendingCount =
+              state.timelineEvents
+              |> TimelineEvent.verificationPending
+              |> List.length;
+            <SidePanel
+              coach
+              startups
+              selectedStartupId=state.selectedStartupId
+              selectStartupCB
+              clearStartupCB
+              pendingCount
+            />;
+          }
         </div>
         <div className="col-md-8">
           <TimelineEventsPanel

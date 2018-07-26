@@ -11,6 +11,7 @@ let make =
       ~selectedStartupId,
       ~selectStartupCB,
       ~clearStartupCB,
+      ~pendingCount,
       _children,
     ) => {
   ...component,
@@ -27,7 +28,7 @@ let make =
             (coach |> Coach.name |> str)
           </h3>
           <p className="px-3 side-panel__coach-description">
-            ("Laborum dolores dignissimos" |> str)
+            ("Pending reviews: " ++ (pendingCount |> string_of_int) |> str)
           </p>
         </div>
       </div>

@@ -5,7 +5,8 @@ module Coaches
         coach: { name: current_coach.name, id: current_coach.id, imageUrl: current_coach.image_url },
         startups: startups,
         timelineEvents: timeline_events,
-        authenticityToken: view.form_authenticity_token
+        authenticityToken: view.form_authenticity_token,
+        emptyIconUrl: view.image_url('coaches/dashboard/empty_icon.svg')
       }
     end
 

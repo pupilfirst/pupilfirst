@@ -5,6 +5,7 @@ type props = {
   startups: list(Startup.t),
   timelineEvents: list(TimelineEvent.t),
   authenticityToken: string,
+  emptyIconUrl: string,
 };
 
 type state = {
@@ -19,7 +20,15 @@ type action =
 
 let component = ReasonReact.reducerComponent("CoachDashboard");
 
-let make = (~coach, ~startups, ~timelineEvents, ~authenticityToken, _children) => {
+let make =
+    (
+      ~coach,
+      ~startups,
+      ~timelineEvents,
+      ~authenticityToken,
+      ~emptyIconUrl,
+      _children,
+    ) => {
   ...component,
   initialState: () => {selectedStartupId: None, timelineEvents},
   reducer: (action, state) =>
@@ -59,6 +68,7 @@ let make = (~coach, ~startups, ~timelineEvents, ~authenticityToken, _children) =
             selectedStartupId=state.selectedStartupId
             replaceTE_CB
             authenticityToken
+            emptyIconUrl
           />
         </div>
       </div>
@@ -73,6 +83,7 @@ let decode = json =>
     timelineEvents:
       json |> field("timelineEvents", list(TimelineEvent.decode)),
     authenticityToken: json |> field("authenticityToken", string),
+    emptyIconUrl: json |> field("emptyIconUrl", string),
   };
 
 let jsComponent =
@@ -85,6 +96,7 @@ let jsComponent =
         ~startups=props.startups,
         ~timelineEvents=props.timelineEvents,
         ~authenticityToken=props.authenticityToken,
+        ~emptyIconUrl=props.emptyIconUrl,
         [||],
       );
     },

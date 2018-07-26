@@ -2,3 +2,14 @@
 
 .timeline-events-panel__container {
 }
+
+.timeline-events-panel__empty-notice {
+  height: 100px;
+  text-align: center;
+  color: darkgrey;
+}
+
+.timeline-events-panel__empty-icon {
+  max-height: 80%;
+  margin-bottom: 1rem;
+}

@@ -31,8 +31,22 @@ let make = (~reviewedStatus, _children) => {
       <i className=(faIcon(reviewedStatus)) />
       (
         TimelineEvent.Reviewed(reviewedStatus)
-        |> TimelineEvent.statusStringWithGrade
+        |> TimelineEvent.statusString
         |> str
+      )
+      (
+        switch (reviewedStatus) {
+        | Verified(grade) =>
+          <div className="review-status-badge__subtext">
+            (
+              "Grade: "
+              ++ (grade |> TimelineEvent.gradeString |> String.capitalize)
+              |> str
+            )
+          </div>
+        | NotAccepted
+        | NeedsImprovement => ReasonReact.null
+        }
       )
     </div>,
 };

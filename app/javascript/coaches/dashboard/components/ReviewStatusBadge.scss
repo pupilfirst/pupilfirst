@@ -1,5 +1,7 @@
 .review-status-badge__container {
   font-weight: bolder;
+  font-size: larger;
+  text-align: center;
 }
 
 .review-status-badge__container--verified {
@@ -12,4 +14,10 @@
 
 .review-status-badge__container--needs-improvement {
   color: goldenrod;
+}
+
+.review-status-badge__subtext {
+  color: gray;
+  font-size: x-small;
+  font-weight: normal;
 }

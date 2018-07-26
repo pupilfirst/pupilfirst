@@ -131,29 +131,11 @@ let make = (~timelineEvent, ~replaceTE_CB, ~authenticityToken, _children) => {
                 replaceTE_CB
                 authenticityToken
               />
-            | Reviewed(_reviewedStatus) =>
-              <UndoReviewButton timelineEvent replaceTE_CB />
-            }
-          )
-        </div>
-      </div>
-      <div className="card-footer d-flex">
-        <div className="ml-auto">
-          (
-            switch (timelineEvent |> TimelineEvent.status) {
-            | TimelineEvent.NotReviewed =>
-              <div className="timeline-event-card__footer-subtext">
-                (
-                  "Submitted at: "
-                  ++ (
-                    timelineEvent
-                    |> TimelineEvent.submittedAt
-                    |> DateTime.format(DateTime.DateAndTime)
-                  )
-                  |> str
-                )
+            | Reviewed(reviewedStatus) =>
+              <div>
+                <ReviewStatusBadge reviewedStatus />
+                <UndoReviewButton timelineEvent replaceTE_CB />
               </div>
-            | Reviewed(reviewedStatus) => <ReviewStatusBadge reviewedStatus />
             }
           )
         </div>

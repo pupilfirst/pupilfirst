@@ -22,7 +22,6 @@ type t = {
   startupName: string,
   founderId: int,
   founderName: string,
-  submittedAt: DateTime.t,
   links: list(Link.t),
   files: list(File.t),
 };
@@ -97,7 +96,6 @@ let decode = json => {
     startupName: json |> field("startupName", string),
     founderId: json |> field("founderId", int),
     founderName: json |> field("founderName", string),
-    submittedAt: json |> field("submittedAt", string) |> DateTime.parse,
     links: json |> field("links", list(Link.decode)),
     files: json |> field("files", list(File.decode)),
   };
@@ -123,8 +121,6 @@ let eventOn = t => t.eventOn;
 let founderName = t => t.founderName;
 
 let startupName = t => t.startupName;
-
-let submittedAt = t => t.submittedAt;
 
 let links = t => t.links;
 

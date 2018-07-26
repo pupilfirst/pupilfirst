@@ -16,8 +16,6 @@ type status =
 
 let title: t => string;
 
-let submittedAt: t => DateTime.t;
-
 let eventOn: t => DateTime.t;
 
 let description: t => string;

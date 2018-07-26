@@ -49,7 +49,7 @@ let make =
                className=buttonClasses
                key=(startup |> Startup.name)
                onClick=(_event => selectStartupCB(startup |> Startup.id))>
-               <span className="startups-list__item-dp">
+               <span className="startups-list__item-dp d-flex align-items-center p-1">
                  <img src=(startup |> Startup.logoUrl) className="img-fluid" />
                </span>
                <span

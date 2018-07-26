@@ -28,7 +28,9 @@ let make = (~reviewedStatus, _children) => {
   ...component,
   render: _self =>
     <div className=(containerClass(reviewedStatus))>
-      <i className=(faIcon(reviewedStatus)) />
+      <div>
+        <i className=(faIcon(reviewedStatus)) />
+      </div>
       (
         TimelineEvent.Reviewed(reviewedStatus)
         |> TimelineEvent.statusString

@@ -29,10 +29,10 @@ let make =
           |> startupFilter(selectedStartupId)
           |> TimelineEvent.verificationPending;
         if (pendingTEs |> List.length == 0) {
-          <div className="timeline-events-panel__empty-notice">
+          <div className="timeline-events-panel__empty-notice p-4">
             <img
               src=emptyIconUrl
-              className="timeline-events-panel__empty-icon"
+              className="timeline-events-panel__empty-icon mx-auto"
             />
             ("Nothing pending here!" |> str)
           </div>;
@@ -51,10 +51,10 @@ let make =
           |> startupFilter(selectedStartupId)
           |> TimelineEvent.verificationComplete;
         if (completeTEs |> List.length == 0) {
-          <div className="timeline-events-panel__empty-notice">
+          <div className="timeline-events-panel__empty-notice p-4">
             <img
               src=emptyIconUrl
-              className="timeline-events-panel__empty-icon"
+              className="timeline-events-panel__empty-icon mx-auto"
             />
             ("Nothing to show!" |> str)
           </div>;

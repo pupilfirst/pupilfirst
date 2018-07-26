@@ -34,7 +34,7 @@
   width: 2.75rem;
   height: 2.75rem;
   flex-shrink: 0;
-  border-radius: 50%;
+  border-radius: 15%;
   border: 2px solid $gray-border;
   box-shadow: 2px 0px 10px 0px #e5e5e5;
   background-color: $primary-background;
@@ -54,7 +54,14 @@
 .startups-list__clear-filter-btn {
   display: block;
   width: 100%;
+  background-color: white;
   color: #138AFF;
   line-height: 2rem;
   border: 0;
+  cursor: pointer;
+
+  &:hover, &:focus {
+    color: blue;
+    outline: 0;
+  }
 }

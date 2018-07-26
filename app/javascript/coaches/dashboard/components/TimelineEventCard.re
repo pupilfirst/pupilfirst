@@ -26,18 +26,16 @@ let make = (~timelineEvent, ~replaceTE_CB, ~authenticityToken, _children) => {
                   ++ ")"
                   |> str
                 )
+                <span className="timeline-event-card__header-date-field pl-2 ml-2">
+                  <i className="fa fa-calendar mr-1" />
+                    (
+                      timelineEvent
+                      |> TimelineEvent.eventOn
+                      |> DateTime.format(DateTime.OnlyDate)
+                      |> str
+                    )
+                </span>
               </h6>
-            </div>
-            <div className="ml-auto">
-              <div className="timeline-event-card__header-date-field">
-                <i className="fa fa-calendar mr-1" />
-                (
-                  timelineEvent
-                  |> TimelineEvent.eventOn
-                  |> DateTime.format(DateTime.OnlyDate)
-                  |> str
-                )
-              </div>
             </div>
           </div>
           <div className="timeline-event-card__field-box p-3">
@@ -132,7 +130,7 @@ let make = (~timelineEvent, ~replaceTE_CB, ~authenticityToken, _children) => {
                 authenticityToken
               />
             | Reviewed(reviewedStatus) =>
-              <div>
+              <div className="mx-auto text-center">
                 <ReviewStatusBadge reviewedStatus />
                 <UndoReviewButton timelineEvent replaceTE_CB />
               </div>

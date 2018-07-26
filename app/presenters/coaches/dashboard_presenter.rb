@@ -17,7 +17,15 @@ module Coaches
 
     def startups
       @startups ||= begin
-        current_coach.startups.map { |startup| { name: startup.product_name, id: startup.id } }
+        current_coach.startups.includes(:level).map do |startup|
+          {
+            name: startup.product_name,
+            id: startup.id,
+            levelNumber: startup.level.number,
+            levelName: startup.level.name,
+            logoUrl: logo_url(startup)
+          }
+        end
       end
     end
 
@@ -39,6 +47,15 @@ module Coaches
           grade: timeline_event.overall_grade_from_score
         }
       end
+    end
+
+    def logo_url(startup)
+      startup.logo_url || identicon_logo(startup)
+    end
+
+    def identicon_logo(startup)
+      base64_logo = Startups::IdenticonLogoService.new(startup).base64_svg
+      "data:image/svg+xml;base64,#{base64_logo}"
     end
   end
 end

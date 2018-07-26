@@ -15,7 +15,8 @@ let make =
   ...component,
   render: _self =>
     <div className="startups-list__container">
-      <div className="startups-list__header d-flex p-4 align-items-center justify-content-between">
+      <div
+        className="startups-list__header d-flex p-4 align-items-center justify-content-between">
         <h4 className="startups-list__header-title m-0 font-regular">
           ("Your Teams" |> str)
         </h4>
@@ -45,18 +46,27 @@ let make =
                    "startups-list__item d-flex align-items-center"
                };
              <a
-              className=buttonClasses
-              key=(startup |> Startup.name)
-              onClick=(_event => selectStartupCB(startup |> Startup.id))>
-              <span className="startups-list__item-dp"></span>
-                <span className="startups-list__item-details d-flex flex-column px-3">
-                  <span className="startups-list__item-name">
-                    (startup |> Startup.name |> str)
-                  </span>
-                  <span className="startups-list__item-level">
-                    ("Level: 1 Wireframing" |> str)
-                  </span>
-                </span>
+               className=buttonClasses
+               key=(startup |> Startup.name)
+               onClick=(_event => selectStartupCB(startup |> Startup.id))>
+               <span className="startups-list__item-dp">
+                 <img src=(startup |> Startup.logoUrl) className="img-fluid" />
+               </span>
+               <span
+                 className="startups-list__item-details d-flex flex-column px-3">
+                 <span className="startups-list__item-name">
+                   (startup |> Startup.name |> str)
+                 </span>
+                 <span className="startups-list__item-level">
+                   (
+                     "Level "
+                     ++ (startup |> Startup.levelNumber |> string_of_int)
+                     ++ ": "
+                     ++ (startup |> Startup.levelName)
+                     |> str
+                   )
+                 </span>
+               </span>
              </a>;
            })
         |> Array.of_list

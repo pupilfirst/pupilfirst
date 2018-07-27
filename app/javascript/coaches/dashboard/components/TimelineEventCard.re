@@ -129,7 +129,10 @@ let make =
           <FeedbackForm timelineEvent authenticityToken />
         </div>
         <div
-          className="col-md-4 d-flex align-items-center timeline-event-card__review-box">
+          className=(
+            "col-md-4 d-flex align-items-center timeline-event-card__review-box js-timeline-event-card__review-box-"
+            ++ (timelineEvent |> TimelineEvent.id |> string_of_int)
+          )>
           (
             switch (timelineEvent |> TimelineEvent.status) {
             | TimelineEvent.NotReviewed =>

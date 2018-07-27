@@ -105,7 +105,7 @@ module TimelineEvents
       @points_for_target ||= begin
         if @skill_grades.present?
           total_karma_points
-        elsif @grade.present? && @target.points_earnable.present?
+        elsif @grade.present? && @target&.points_earnable.present?
           @target.points_earnable * grade_multiplier(@grade)
         else
           0

@@ -213,7 +213,7 @@ let make = (~timelineEvent, ~replaceTE_CB, ~authenticityToken, _children) => {
             <h5 className="timeline-event-card__field-header font-semibold">
               ("Grade:" |> str)
             </h5>
-            <div>
+            <div className="js-review-form__grade-radios">
               (
                 gradeRadioInput(
                   TimelineEvent.Good,

@@ -17,6 +17,9 @@ let make =
       ~replaceTE_CB,
       ~authenticityToken,
       ~emptyIconUrl,
+      ~needsImprovementIconUrl,
+      ~notAcceptedIconUrl,
+      ~verifiedIconUrl,
       _children,
     ) => {
   ...component,
@@ -29,7 +32,7 @@ let make =
           |> startupFilter(selectedStartupId)
           |> TimelineEvent.verificationPending;
         if (pendingTEs |> List.length == 0) {
-          <div className="timeline-events-panel__empty-notice p-4">
+          <div className="timeline-events-panel__empty-notice p-4 mb-3">
             <img
               src=emptyIconUrl
               className="timeline-events-panel__empty-icon mx-auto"
@@ -41,6 +44,9 @@ let make =
             timelineEvents=pendingTEs
             replaceTE_CB
             authenticityToken
+            needsImprovementIconUrl
+            notAcceptedIconUrl
+            verifiedIconUrl
           />;
         };
       }
@@ -51,7 +57,7 @@ let make =
           |> startupFilter(selectedStartupId)
           |> TimelineEvent.verificationComplete;
         if (completeTEs |> List.length == 0) {
-          <div className="timeline-events-panel__empty-notice p-4">
+          <div className="timeline-events-panel__empty-notice p-4 mb-3">
             <img
               src=emptyIconUrl
               className="timeline-events-panel__empty-icon mx-auto"
@@ -63,6 +69,9 @@ let make =
             timelineEvents=completeTEs
             replaceTE_CB
             authenticityToken
+            needsImprovementIconUrl
+            notAcceptedIconUrl
+            verifiedIconUrl
           />;
         };
       }

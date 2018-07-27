@@ -2,7 +2,16 @@ let str = ReasonReact.string;
 
 let component = ReasonReact.statelessComponent("TimelineEventsList");
 
-let make = (~timelineEvents, ~replaceTE_CB, ~authenticityToken, _children) => {
+let make =
+    (
+      ~timelineEvents,
+      ~replaceTE_CB,
+      ~authenticityToken,
+      ~needsImprovementIconUrl,
+      ~notAcceptedIconUrl,
+      ~verifiedIconUrl,
+      _children,
+    ) => {
   ...component,
   render: _self =>
     <div className="timeline-events-list__container">
@@ -14,6 +23,9 @@ let make = (~timelineEvents, ~replaceTE_CB, ~authenticityToken, _children) => {
                timelineEvent=te
                replaceTE_CB
                authenticityToken
+               needsImprovementIconUrl
+               notAcceptedIconUrl
+               verifiedIconUrl
              />
            )
         |> Array.of_list

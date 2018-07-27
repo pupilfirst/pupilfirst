@@ -9,11 +9,15 @@
 }
 
 .review-status-badge__container--not-accepted {
-  color: red;
+  color: indianred;
 }
 
 .review-status-badge__container--needs-improvement {
   color: goldenrod;
+}
+
+.review-status-badge__icon-container {
+  width: 30px;
 }
 
 .review-status-badge__subtext {

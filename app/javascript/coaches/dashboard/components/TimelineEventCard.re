@@ -4,7 +4,16 @@ let str = ReasonReact.string;
 
 let component = ReasonReact.statelessComponent("TimelineEventCard");
 
-let make = (~timelineEvent, ~replaceTE_CB, ~authenticityToken, _children) => {
+let make =
+    (
+      ~timelineEvent,
+      ~replaceTE_CB,
+      ~authenticityToken,
+      ~needsImprovementIconUrl,
+      ~notAcceptedIconUrl,
+      ~verifiedIconUrl,
+      _children,
+    ) => {
   ...component,
   render: _self =>
     <div className="timeline-event-card__container">
@@ -26,14 +35,15 @@ let make = (~timelineEvent, ~replaceTE_CB, ~authenticityToken, _children) => {
                   ++ ")"
                   |> str
                 )
-                <span className="timeline-event-card__header-date-field pl-2 ml-2">
+                <span
+                  className="timeline-event-card__header-date-field pl-2 ml-2">
                   <i className="fa fa-calendar mr-1" />
-                    (
-                      timelineEvent
-                      |> TimelineEvent.eventOn
-                      |> DateTime.format(DateTime.OnlyDate)
-                      |> str
-                    )
+                  (
+                    timelineEvent
+                    |> TimelineEvent.eventOn
+                    |> DateTime.format(DateTime.OnlyDate)
+                    |> str
+                  )
                 </span>
               </h6>
             </div>
@@ -131,7 +141,12 @@ let make = (~timelineEvent, ~replaceTE_CB, ~authenticityToken, _children) => {
               />
             | Reviewed(reviewedStatus) =>
               <div className="mx-auto text-center">
-                <ReviewStatusBadge reviewedStatus />
+                <ReviewStatusBadge
+                  reviewedStatus
+                  needsImprovementIconUrl
+                  notAcceptedIconUrl
+                  verifiedIconUrl
+                />
                 <UndoReviewButton timelineEvent replaceTE_CB />
               </div>
             }

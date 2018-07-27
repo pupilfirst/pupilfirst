@@ -6,6 +6,9 @@ type props = {
   timelineEvents: list(TimelineEvent.t),
   authenticityToken: string,
   emptyIconUrl: string,
+  needsImprovementIconUrl: string,
+  notAcceptedIconUrl: string,
+  verifiedIconUrl: string,
 };
 
 type state = {
@@ -27,6 +30,9 @@ let make =
       ~timelineEvents,
       ~authenticityToken,
       ~emptyIconUrl,
+      ~needsImprovementIconUrl,
+      ~notAcceptedIconUrl,
+      ~verifiedIconUrl,
       _children,
     ) => {
   ...component,
@@ -76,6 +82,9 @@ let make =
             replaceTE_CB
             authenticityToken
             emptyIconUrl
+            needsImprovementIconUrl
+            notAcceptedIconUrl
+            verifiedIconUrl
           />
         </div>
       </div>
@@ -91,6 +100,9 @@ let decode = json =>
       json |> field("timelineEvents", list(TimelineEvent.decode)),
     authenticityToken: json |> field("authenticityToken", string),
     emptyIconUrl: json |> field("emptyIconUrl", string),
+    needsImprovementIconUrl: json |> field("needsImprovementIconUrl", string),
+    notAcceptedIconUrl: json |> field("notAcceptedIconUrl", string),
+    verifiedIconUrl: json |> field("verifiedIconUrl", string),
   };
 
 let jsComponent =
@@ -104,6 +116,9 @@ let jsComponent =
         ~timelineEvents=props.timelineEvents,
         ~authenticityToken=props.authenticityToken,
         ~emptyIconUrl=props.emptyIconUrl,
+        ~needsImprovementIconUrl=props.needsImprovementIconUrl,
+        ~notAcceptedIconUrl=props.notAcceptedIconUrl,
+        ~verifiedIconUrl=props.verifiedIconUrl,
         [||],
       );
     },

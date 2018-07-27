@@ -24,13 +24,28 @@ let faIcon = reviewedStatus =>
   )
   ++ " fa mr-1";
 
-let make = (~reviewedStatus, _children) => {
+let make =
+    (
+      ~reviewedStatus,
+      ~needsImprovementIconUrl,
+      ~notAcceptedIconUrl,
+      ~verifiedIconUrl,
+      _children,
+    ) => {
   ...component,
   render: _self =>
     <div className=(containerClass(reviewedStatus))>
-      <div>
-        <i className=(faIcon(reviewedStatus)) />
-      </div>
+      {
+        let iconUrl =
+          switch (reviewedStatus) {
+          | TimelineEvent.NeedsImprovement => needsImprovementIconUrl
+          | NotAccepted => notAcceptedIconUrl
+          | Verified(_grade) => verifiedIconUrl
+          };
+        <div className="review-status-badge__icon-container mx-auto mb-1">
+          <img src=iconUrl />
+        </div>;
+      }
       (
         TimelineEvent.Reviewed(reviewedStatus)
         |> TimelineEvent.statusString

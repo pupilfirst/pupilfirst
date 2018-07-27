@@ -6,7 +6,10 @@ module Coaches
         startups: startups,
         timelineEvents: timeline_events,
         authenticityToken: view.form_authenticity_token,
-        emptyIconUrl: view.image_url('coaches/dashboard/empty_icon.svg')
+        emptyIconUrl: view.image_url('coaches/dashboard/empty_icon.svg'),
+        needsImprovementIconUrl: view.image_url('coaches/dashboard/needs-improvement-icon.svg'),
+        notAcceptedIconUrl: view.image_url('coaches/dashboard/not-accepted-icon.svg'),
+        verifiedIconUrl: view.image_url('coaches/dashboard/verified-icon.svg')
       }
     end
 

@@ -114,7 +114,7 @@ class StartupsController < ApplicationController
 
   def load_filter_options
     @categories = StartupCategory.order(:name)
-    @levels = Level.where('number > ?', 0).where.not(school_id: sponsored_school_ids).includes(:school).order(:number)
+    @levels = Level.where('number > ?', 0).where.not(school_id: sponsored_school_ids).includes(:school).order(:school_id, :number)
   end
 
   def startup_registration_params
@@ -127,6 +127,6 @@ class StartupsController < ApplicationController
   end
 
   def sponsored_school_ids
-    School.where(sponsored: true).pluck(:id)
+    School.where(sponsored: true).select(:id)
   end
 end

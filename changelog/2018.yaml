@@ -1,5 +1,123 @@
 ---
 changelog:
+- timestamp: '2018-07-30T18:02:01Z'
+  changes:
+  - timestamp: '2018-07-30T18:00:47Z'
+    title: Linked route fb/vr-101 to VR-101 application form
+    trello: https://trello.com/c/9JQ7j5Tf
+    private: true
+    category: feature
+  - timestamp: '2018-07-30T17:59:07Z'
+    title: Created a sv.co/ios page for Apple iOS program at Manipal University
+    trello: https://trello.com/c/0g5dIIeZ
+    private: false
+    category: feature
+  - timestamp: '2018-07-30T17:57:07Z'
+    title: Disabled slack notifications and Facebook share feature for timeline events
+    trello: https://trello.com/c/wSy9HLPe
+    private: true
+    description: The feature is disabled as only sponsored schools exists in the platform
+  - timestamp: '2018-07-30T17:55:42Z'
+    title: Added PNotify notifications for all AJAX responses in coach dashboard
+    trello: https://trello.com/c/EM1IiIcc
+    private: true
+    category: feature
+  - timestamp: '2018-07-30T17:54:41Z'
+    title: Added a feedback form with trix-editor in coach dashboard for each timeline
+      entry
+    trello: https://trello.com/c/T9VBCcBD
+    private: true
+    category: feature
+  - timestamp: '2018-07-19T07:41:10Z'
+    title: Hid or disabled a number of links and features to prep for beginning of
+      VR and Apple schools.
+    trello: https://trello.com/c/r1YlzY1U
+    private: true
+    category: ui
+  - timestamp: '2018-07-18T10:36:18Z'
+    title: Fixed a crash in admin when picking the "taggings" option for one of the
+      taggable resources.
+    trello: https://trello.com/c/6wb3DjhJ
+    private: true
+    category: bugfix
+  - timestamp: '2018-07-18T08:10:58Z'
+    title: Fixed broken display of prerequisite target selection in admin target edit
+      page for targets without 'peers'.
+    trello: https://trello.com/c/MDeZjudU
+    private: true
+    description: This hides the prerequisite target select dropdown if the target
+      in question doesn't have any possible prerequisite targets.
+    category: ui
+  - timestamp: '2018-07-17T09:36:32Z'
+    title: Created an admin interface to onboard teams to a school
+    trello: https://trello.com/c/S31kb08L
+    private: true
+    description: Added a page under Admissions to onboard team (size 1-4) given by
+      inputting the name and email of each member.
+    category: feature
+  - timestamp: '2018-07-13T10:20:41Z'
+    title: Fixed bug in target overlay causing submit button text to always read "Mark
+      Complete".
+    trello: https://trello.com/c/eA9PCXgY
+    private: false
+    description: The check was made against a function instead of the return from
+      the function.
+    category: bugfix
+  - timestamp: '2018-07-13T08:08:59Z'
+    title: Hide SV.CO startup entry from startups / products index.
+    trello: https://trello.com/c/aLAV60KL
+    private: true
+    description: It doesn't make much sense for SV.CO to be listed alongside student
+      startups / products. The entry is also bugged right now because of the large
+      number of founders who have been added to it. This is the pragmatic choice.
+  - timestamp: '2018-07-13T07:39:39Z'
+    title: A short form of the school name is now prefixed to target, group and level
+      when displayed in admin interface.
+    trello: https://trello.com/c/u3wFkvlT
+    private: true
+    description: This introduces `School#short_name` and changes display_name used
+      in admin interface to make data compatible with the introduction of schools.
+      This also fixes a couple of N+1 query issues .
+    category: ui
+  - timestamp: '2018-07-06T07:58:34Z'
+    title: Add sponsored flag for schools
+    trello: https://trello.com/c/WaVi8oiM
+    private: true
+    description: Add sponsored flag to schools making Payments and subscription an
+      optional feature for selected schools. Add seeds for schools and update broken
+      spec.
+    category: feature
+  - timestamp: '2018-07-06T07:49:51Z'
+    title: Update CreateOrUpdateCalendarEventJob to account for schools
+    trello: https://trello.com/c/nbYyI6X4
+    private: true
+  - timestamp: '2018-07-05T08:38:45Z'
+    title: Remove the concept of candidate founders for calculating core stats on
+      admin dashboard.
+    trello: https://trello.com/c/nbYyI6X4
+    private: true
+    description: This removes filters on calculation of counts and percentages of
+      active users on platforms, that are shown on the dashboard. This makes it simpler
+      to perform the calculations, but displays much lower quality data. We're doing
+      this to allow compatibility with the new "schools" feature - this sort of specific
+      calculation can be reintroduced later if required.
+  - timestamp: '2018-07-05T08:22:50Z'
+    title: Update SendSessionReminderJob to account for introduction of schools.
+    trello: https://trello.com/c/nbYyI6X4
+    private: true
+  - timestamp: '2018-07-04T11:39:44Z'
+    title: The leaderboard feature has been disabled.
+    trello: https://trello.com/c/rbyR2RQQ
+    private: true
+    description: The rake task that ran weekly on Heroku has been disabled, and access
+      to the about/ page and Vocalist command disabled.
+  - timestamp: '2018-05-31T07:14:32Z'
+    title: Removed Tech Hunt code and database tables.
+    trello: https://trello.com/c/yqGlCuRg
+    private: true
+    description: A database backup has been taken and is stored on `sv-glacier` as
+      `20180531-b1211.dump`.
+    category: operations
 - timestamp: '2018-04-23T07:00:35Z'
   changes:
   - timestamp: '2018-04-13T09:04:14Z'
@@ -11,15 +129,18 @@ changelog:
     trello: https://trello.com/c/PAZYlg1R
     private: false
   - timestamp: '2018-04-03T10:30:06Z'
-    title: More information about our new program, in partnership with Facebook, has been added.
+    title: More information about our new program, in partnership with Facebook, has
+      been added.
     trello: https://trello.com/c/yF2T1czw
     private: false
-    description: Re-enabled the home page and apply page. The apply page should render the prospective applicant form.
+    description: Re-enabled the home page and apply page. The apply page should render
+      the prospective applicant form.
     category: content
   - timestamp: '2018-04-03T10:30:06Z'
     title: Empty release weeks are no longer displayed in the changelog.
     private: true
-    description: This was caused for public viewers when all log entries in a release were marked private.
+    description: This was caused for public viewers when all log entries in a release
+      were marked private.
 - timestamp: '2018-03-27T06:21:27Z'
   changes:
   - timestamp: '2018-03-27T06:18:00Z'

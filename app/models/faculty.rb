@@ -26,6 +26,7 @@ class Faculty < ApplicationRecord
   CATEGORY_DEVELOPER_COACHES = 'developer_coaches'
   CATEGORY_ADVISORY_BOARD = 'advisory_board'
   CATEGORY_ALUMNI = 'alumni'
+  CATEGORY_VR_COACHES = 'vr_coaches'
 
   COMPENSATION_VOLUNTEER = 'volunteer'
   COMPENSATION_PAID = 'paid'
@@ -34,7 +35,7 @@ class Faculty < ApplicationRecord
   COMMITMENT_FULL_TIME = 'full_time'
 
   def self.valid_categories
-    [CATEGORY_TEAM, CATEGORY_VISITING_COACHES, CATEGORY_DEVELOPER_COACHES, CATEGORY_ADVISORY_BOARD, CATEGORY_ALUMNI]
+    [CATEGORY_TEAM, CATEGORY_VISITING_COACHES, CATEGORY_DEVELOPER_COACHES, CATEGORY_ADVISORY_BOARD, CATEGORY_ALUMNI, CATEGORY_VR_COACHES]
   end
 
   def self.valid_compensation_values
@@ -62,6 +63,7 @@ class Faculty < ApplicationRecord
   scope :team, -> { where(category: CATEGORY_TEAM).order('sort_index ASC') }
   scope :visiting_coaches, -> { where(category: CATEGORY_VISITING_COACHES).order('sort_index ASC') }
   scope :developer_coaches, -> { where(category: CATEGORY_DEVELOPER_COACHES).order('sort_index ASC') }
+  scope :vr_coaches, -> { where(category: CATEGORY_VR_COACHES).order('sort_index ASC') }
   scope :advisory_board, -> { where(category: CATEGORY_ADVISORY_BOARD).order('sort_index ASC') }
   scope :alumni, -> { where(category: CATEGORY_ALUMNI).order('sort_index ASC') }
   scope :available_for_connect, -> { where(category: [CATEGORY_TEAM, CATEGORY_VISITING_COACHES, CATEGORY_ALUMNI]) }

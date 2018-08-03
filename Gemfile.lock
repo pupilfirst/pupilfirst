@@ -78,7 +78,7 @@ GIT
 
 GEM
   remote: https://rubygems.org/
-  remote: https://rails-assets.org/
+  remote: http://insecure.rails-assets.org/
   specs:
     TimezoneParser (0.3.2)
       insensitive_hash

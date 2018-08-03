@@ -77,7 +77,7 @@ GIT
       thor (>= 0.18.1)
 
 GEM
-  remote: https://rubygems.org/
+  remote: http://rubygems.org/
   remote: https://rails-assets.org/
   specs:
     TimezoneParser (0.3.2)

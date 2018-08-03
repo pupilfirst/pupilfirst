@@ -34,11 +34,13 @@ export default class TargetCollection extends React.Component {
   }
 
   targetsForGroup() {
-    let targetGroupId = this.props.targetGroupId;
+    const targetGroupId = this.props.targetGroupId;
 
-    return _.filter(this.props.rootState.targets, target => {
+    const filteredTargets =  _.filter(this.props.rootState.targets, target => {
       return target.target_group.id === targetGroupId;
     });
+
+    return _.sortBy(filteredTargets, ["sort_index"]);
   }
 
   containerClasses() {

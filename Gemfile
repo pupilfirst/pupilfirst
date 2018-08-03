@@ -1,6 +1,6 @@
 ruby '2.5.1'
 
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
 # Required to suppress warnings about insecure :github source.
 git_source(:github) { |repository_path| "https://github.com/#{repository_path}.git" }

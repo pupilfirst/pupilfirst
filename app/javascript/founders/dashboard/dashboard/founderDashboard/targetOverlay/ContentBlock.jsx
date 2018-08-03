@@ -179,7 +179,7 @@ export default class ContentBlock extends React.Component {
                   height="360"
                   src={this.generatedEmbedSrc()}
                   frameborder="0"
-                  allowfullscreen
+                  allowfullscreen="allowfullscreen"
                 />
               </div>
             </div>

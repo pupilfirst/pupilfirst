@@ -15,7 +15,7 @@ module Admin
       Founder.transaction do
         team = Startup.create!(product_name: team_name, level: level)
         team_lead = Founder.where(email: team_lead_details.values.first).first_or_create!(user: user(team_lead_details.values.first))
-        team.founders << team_lead
+        team_lead.update!(name: team_lead_details.keys.first, startup: team)
         team.update!(team_lead: team_lead)
         member_details.each do |name, email|
           next if name.blank? || email.blank?

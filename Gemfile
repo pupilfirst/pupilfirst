@@ -110,7 +110,7 @@ gem 'jwt', '< 2.1' # Ruby implementation of the RFC 7519 OAuth JSON Web Token (J
 gem 'chartkick', '~> 2.3.4' # Create beautiful charts with one line of JavaScript.
 
 # Rails assets!
-source 'http://insecure.rails-assets.org' do
+source 'https://rails-assets.org' do
   gem 'rails-assets-pnotify', '~> 3.0' # Superb notifications library. http://sciactive.github.io/pnotify/
   gem 'rails-assets-trix', '~> 0.10' # rich text editor from basecamp ( used for eg in the description for targets)
   gem 'rails-assets-bootstrap-tabcollapse', '~> 0.2' # Bootstrap plugin that switches bootstrap tabs component to collapse component for small screens.

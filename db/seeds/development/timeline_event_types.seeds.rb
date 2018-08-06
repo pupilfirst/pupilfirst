@@ -13,7 +13,8 @@ timeline_event_types = [
   ['team_formed', 'Product', 'Team Formed', 'We are a bunch of [Technology/Music/...] enthusiasts from [College/City] and we are excited to start! Our team has Name (Role), Name 2 (Role 2), ...', 'Not Needed', 'team_formation'],
   ['new_product_deck', 'Product', 'New Product Deck', 'We just updated our Product Deck, do take a look!', 'Link to new deck', 'idea'],
   ['one_liner', 'Product', 'Set New One-Liner', 'We have set a new one-line mission for our product! We want to [organize the worlds information/...]. We think this mission is great because [...].', 'Not Needed', 'mission'],
-  ['joined_svco', 'Product', 'Joined SV.CO', 'We just registered our startup on SV.CO. Looking forward to an amazing learning experience', 'Proof: Not Needed', 'team_formation']
+  ['joined_svco', 'Product', 'Joined SV.CO', 'We just registered our startup on SV.CO. Looking forward to an amazing learning experience', 'Proof: Not Needed', 'team_formation'],
+  ['general_submission', 'Engineering', 'General Submission', nil, nil, nil]
 ]
 
 default_image = 'default'

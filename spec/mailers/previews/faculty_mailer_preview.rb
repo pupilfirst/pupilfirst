@@ -12,4 +12,10 @@ class FacultyMailerPreview < ActionMailer::Preview
   def connect_request_feedback
     FacultyMailer.connect_request_feedback(ConnectRequest.first)
   end
+
+  def student_submission_notification
+    founder = Founder.with_email('ios@example.org')
+    timeline_event = founder.timeline_events.first
+    FacultyMailer.student_submission_notification(timeline_event)
+  end
 end

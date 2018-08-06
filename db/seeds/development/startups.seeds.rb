@@ -19,6 +19,7 @@ after 'development:levels', 'development:founders', 'development:timeline_event_
   startup_school_level_2 = Level.find_by(name: 'Research')
   developer_school_level_1 = Level.find_by(name: 'Planning')
   vr_school_level_1 = Level.find_by(name: 'New Realities')
+  ios_school_level_1 = Level.find_by(name: 'iOS First Level')
 
   # Startup with live agreement.
   super_startup = Startup.new(
@@ -111,4 +112,17 @@ after 'development:levels', 'development:founders', 'development:timeline_event_
   # Add Groot as a founder in 'Guardians of the Galaxy'.
   guardians_of_the_galaxy.founders << Founder.find_by(email: 'groot@example.org')
 
+  # Add a startup in iOS school.
+  founder = Founder.find_by(email: 'ios@example.org')
+
+  ios_startup = Startup.create!(
+    name: 'iOS Startup',
+    level: ios_school_level_1,
+    product_name: 'iOS Startup',
+    product_description: 'This is an example iOS Startup.',
+    team_lead: founder,
+    faculty: Faculty.find_by(email: 'ioscoach@example.com')
+  )
+
+  ios_startup.founders << founder
 end

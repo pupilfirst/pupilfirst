@@ -10,7 +10,7 @@ module TimelineEvents
     private
 
     def notify_coach_about(timeline_event)
-      FacultyMailer.student_submission_notification(timeline_event).deliver_later
+      FacultyMailer.student_submission_notification(timeline_event).deliver_now
     end
   end
 end

@@ -14,5 +14,7 @@ FactoryBot.define do
     trait(:three) { number 3 }
     trait(:four) { number 4 }
     trait(:five) { number 5 }
+
+    trait(:sponsored) { school { create :school, sponsored: true } }
   end
 end

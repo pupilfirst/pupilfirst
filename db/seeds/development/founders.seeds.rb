@@ -42,6 +42,8 @@ after 'development:colleges' do
     ['rocket@example.org', 'Rocket Raccoon', 24.years.ago, Founder::GENDER_MALE, 9999999999]
   ]
 
+  # One founder for iOS school.
+  founders_list += [['ios@example.org', 'iOS Guy', 25.years.ago, Founder::GENDER_MALE, 9876543200],]
 
   image_path = File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'users', 'college_id.jpg'))
 

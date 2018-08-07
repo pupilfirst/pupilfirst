@@ -1,6 +1,6 @@
 require_relative 'helper'
 
-after 'development:startups', 'development:target_groups', 'development:targets' do
+after 'development:startups', 'development:target_groups', 'development:targets', 'development:timeline_event_types' do
   puts 'Seeding timeline_events'
 
   avengers_startup = Startup.find_by(product_name: 'SuperHeroes')
@@ -68,4 +68,17 @@ after 'development:startups', 'development:target_groups', 'development:targets'
       )
     end
   end
+
+  # Create a pending timeline event in iOS startup.
+  ios_founder = Founder.with_email('ios@example.org')
+  ios_startup = ios_founder.startup
+
+  TimelineEvent.create!(
+    startup: ios_startup,
+    timeline_event_type: TimelineEventType.find_by(key: 'general_submission'),
+    founder: ios_founder,
+    event_on: Time.now,
+    description: 'This is a seeded pending submission for the iOS startup',
+    status: status_pending
+  )
 end

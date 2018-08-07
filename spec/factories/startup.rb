@@ -35,5 +35,7 @@ FactoryBot.define do
         create :payment, :paid, startup: startup
       end
     end
+
+    trait(:sponsored) { level { create :level, :one, :sponsored } }
   end
 end

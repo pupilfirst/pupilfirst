@@ -6,6 +6,7 @@ after 'development:schools' do
   startup_school = School.find_by(name: 'Startup')
   developer_school = School.find_by(name: 'Developer')
   vr_school = School.find_by(name: 'VR')
+  ios_school = School.find_by(name: 'iOS')
 
   Level.create!(number: 0, name: 'Admissions', school: startup_school)
   Level.create!(number: 1, name: 'Research', school: startup_school)
@@ -20,4 +21,5 @@ after 'development:schools' do
   Level.create!(number: 2, name: 'Keep it Virtual', school: vr_school)
   Level.create!(number: 3, name: 'Materials and Meshes', school: vr_school)
   Level.create!(number: 4, name: 'VR-Design', school: vr_school)
+  Level.create!(number: 1, name: 'iOS First Level', school: ios_school)
 end

@@ -55,7 +55,8 @@ let make =
         let completeTEs =
           timelineEvents
           |> startupFilter(selectedStartupId)
-          |> TimelineEvent.verificationComplete;
+          |> TimelineEvent.verificationComplete
+          |> List.rev;
         if (completeTEs |> List.length == 0) {
           <div className="timeline-events-panel__empty-notice p-4 mb-3">
             <img

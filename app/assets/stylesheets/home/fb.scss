@@ -116,6 +116,57 @@
   background-color: white;
 }
 
+.fb-landing__top-ten-teams {
+  background-color: white;
+  padding: 5rem 0;
+  border-bottom: 1px solid $gray-border;
+
+  @include media-breakpoint-down(md) {
+    padding: 3rem 0;
+  }
+}
+
+.fb-landing__top-ten-teams-box {
+  background: rgb(13, 113, 186);
+  background: linear-gradient(
+    145deg,
+    rgb(13, 113, 186) 20%,
+    rgb(83, 168, 103) 100%
+  );
+  border-radius: 2rem;
+  color: white;
+  box-shadow: 0 5px 80px 0px rgba(0, 0, 0, 0.3);
+}
+
+.fb-landing__top-ten-teams-box-left {
+  border-right: 1px solid #24CAF1;
+  position: relative;
+}
+.fb-landing__top-ten-teams-box-left-title {
+  position: absolute;
+  font-size: 4rem;
+  white-space: nowrap;
+  text-shadow: -4px 10px 20px #116594;
+  color: #20B2E1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-90deg) ;
+}
+
+.fb-landing__top-ten-teams-title {
+  color: white;
+  border-bottom: 1px solid #24CAF1;
+}
+
+.fb-landing__top-ten-teams-details {
+  line-height: 1.3;
+}
+
+.fb-landing__top-ten-team-name {
+  color: white;
+}
+
+
 .fb-landing__pulse-icon {
   width: 70px;
   @include border-radius(50%);
@@ -214,7 +265,6 @@
 }
 
 .fb-landing__partners-container {
-  background-color: white;
   border-bottom: 1px solid $gray-border;
 }
 

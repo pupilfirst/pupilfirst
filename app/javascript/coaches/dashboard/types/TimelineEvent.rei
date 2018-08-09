@@ -49,3 +49,7 @@ let statusStringWithGrade: status => string;
 let isVerified: t => bool;
 
 let gradeString: grade => string;
+
+let latestFeedback: t => option(string);
+
+let updateFeedback: (string, t) => t;

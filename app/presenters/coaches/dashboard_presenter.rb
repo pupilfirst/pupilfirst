@@ -34,7 +34,7 @@ module Coaches
     end
 
     def timeline_events
-      TimelineEvent.not_auto_verified.where(startup: current_coach.startups).includes(:founder, :startup, :timeline_event_files, :timeline_event_type).map do |timeline_event|
+      TimelineEvent.not_auto_verified.where(startup: current_coach.startups).includes(:founder, :startup, :timeline_event_files, :timeline_event_type, :startup_feedback).map do |timeline_event|
         {
           id: timeline_event.id,
           title: timeline_event.target&.title || timeline_event.title,
@@ -47,7 +47,8 @@ module Coaches
           founderName: timeline_event.founder.name,
           links: timeline_event.links,
           files: timeline_event.timeline_event_files.map { |file| { title: file.title, id: file.id } },
-          grade: timeline_event.overall_grade_from_score
+          grade: timeline_event.overall_grade_from_score,
+          latestFeedback: timeline_event.startup_feedback&.last&.feedback
         }
       end
     end

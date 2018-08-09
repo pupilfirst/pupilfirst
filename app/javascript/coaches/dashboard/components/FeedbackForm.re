@@ -20,6 +20,8 @@ module TrixEditor = {
     );
 };
 
+[%bs.raw {|require("./TimelineEventCard.scss")|}];
+
 let str = ReasonReact.string;
 
 type state = {
@@ -40,7 +42,7 @@ let clearFeedback = (send, _event) => {
   send(ToggleForm);
 };
 
-let handleResponseJSON = (send, json) =>
+let handleResponseJSON = (state, send, te, replaceTE_CB, json) =>
   switch (
     json
     |> Json.Decode.(field("error", nullable(string)))
@@ -52,10 +54,11 @@ let handleResponseJSON = (send, json) =>
       "Feedback Sent",
       "Your feedback has been recorded and emailed to the student(s)",
     );
+    te |> TimelineEvent.updateFeedback(state.feedbackHTML) |> replaceTE_CB;
     clearFeedback(send, ());
   };
 
-let sendFeedback = (state, send, te, authenticityToken, _event) => {
+let sendFeedback = (state, send, te, replaceTE_CB, authenticityToken, _event) => {
   Js.log("Sending feedback for emailing");
   Js.log("Feedback to be sent:" ++ state.feedbackHTML);
   let payload = Js.Dict.empty();
@@ -88,7 +91,9 @@ let sendFeedback = (state, send, te, authenticityToken, _event) => {
            );
          }
        )
-    |> then_(json => json |> handleResponseJSON(send) |> resolve)
+    |> then_(json =>
+         json |> handleResponseJSON(state, send, te, replaceTE_CB) |> resolve
+       )
     |> catch(error =>
          (
            switch (error |> handleApiError) {
@@ -106,7 +111,7 @@ let sendFeedback = (state, send, te, authenticityToken, _event) => {
 
 let component = ReasonReact.reducerComponent("FeedbackForm");
 
-let make = (~timelineEvent, ~authenticityToken, _children) => {
+let make = (~timelineEvent, ~replaceTE_CB, ~authenticityToken, _children) => {
   ...component,
   initialState: () => {showForm: false, feedbackHTML: ""},
   reducer: (action, state) =>
@@ -117,7 +122,21 @@ let make = (~timelineEvent, ~authenticityToken, _children) => {
     },
   render: ({state, send}) => {
     let updateFeedbackCB = updateFeedback(send);
+    let latestFeedback = timelineEvent |> TimelineEvent.latestFeedback;
     <div className="feedback-form__container mt-2">
+      (
+        switch (latestFeedback) {
+        | None => ReasonReact.null
+        | Some(feedback) =>
+          <div className="timeline-event-card__field-box p-3">
+            <h5
+              className="timeline-event-card__field-header font-semibold mt-0">
+              ("Latest Feedback Sent:" |> str)
+            </h5>
+            <div dangerouslySetInnerHTML={"__html": feedback} />
+          </div>
+        }
+      )
       (
         if (state.showForm) {
           <div className="feedback-form__trix-container py-3">
@@ -125,20 +144,34 @@ let make = (~timelineEvent, ~authenticityToken, _children) => {
             <button
               className="btn btn-secondary mt-2 mr-2"
               onClick=(
-                sendFeedback(state, send, timelineEvent, authenticityToken)
+                sendFeedback(
+                  state,
+                  send,
+                  timelineEvent,
+                  replaceTE_CB,
+                  authenticityToken,
+                )
               )>
               <i className="fa fa-envelope mr-1" />
               ("Send" |> str)
             </button>
             <button
-              className="btn btn-ghost-secondary mt-2" onClick=(clearFeedback(send))>
+              className="btn btn-ghost-secondary mt-2"
+              onClick=(clearFeedback(send))>
               ("Cancel" |> str)
             </button>
           </div>;
         } else {
-          <button className="btn btn-ghost-secondary mt-2" onClick=(toggleForm(send))>
+          <button
+            className="btn btn-ghost-secondary mt-2"
+            onClick=(toggleForm(send))>
             <i className="fa fa-envelope mr-1" />
-            ("Email Feedback" |> str)
+            (
+              switch (latestFeedback) {
+              | None => "Email Feedback" |> str
+              | Some(_feedback) => "Email New Feedback" |> str
+              }
+            )
           </button>;
         }
       )

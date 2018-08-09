@@ -126,7 +126,7 @@ let make =
               };
             }
           </div>
-          <FeedbackForm timelineEvent authenticityToken />
+          <FeedbackForm timelineEvent replaceTE_CB authenticityToken />
         </div>
         <div
           className=(

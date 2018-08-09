@@ -24,6 +24,7 @@ type t = {
   founderName: string,
   links: list(Link.t),
   files: list(File.t),
+  latestFeedback: option(string),
 };
 
 let parseStatus = (grade, status) =>
@@ -98,6 +99,8 @@ let decode = json => {
     founderName: json |> field("founderName", string),
     links: json |> field("links", list(Link.decode)),
     files: json |> field("files", list(File.decode)),
+    latestFeedback:
+      json |> field("latestFeedback", nullable(string)) |> Js.Null.toOption,
   };
 };
 
@@ -128,6 +131,8 @@ let files = t => t.files;
 
 let status = t => t.status;
 
+let latestFeedback = t => t.latestFeedback;
+
 let updateStatus = (status, t) => {...t, status};
 
 let isVerified = t =>
@@ -140,3 +145,8 @@ let isVerified = t =>
     | NeedsImprovement => false
     }
   };
+
+let updateFeedback = (latestFeedback, t) => {
+  ...t,
+  latestFeedback: Some(latestFeedback),
+};

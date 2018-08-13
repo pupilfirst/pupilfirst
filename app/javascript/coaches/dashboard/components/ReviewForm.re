@@ -155,7 +155,8 @@ let gradeRadioInput = (grade, timelineEventId, send, state) => {
   </div>;
 };
 
-let make = (~timelineEvent, ~replaceTE_CB, ~authenticityToken, _children) => {
+let make =
+    (~timelineEvent, ~replaceTimelineEvent, ~authenticityToken, _children) => {
   ...component,
   initialState: () => {te: timelineEvent},
   reducer: (action, _state) =>
@@ -253,7 +254,7 @@ let make = (~timelineEvent, ~replaceTE_CB, ~authenticityToken, _children) => {
               sendReview(
                 state.te,
                 reviewedStatus,
-                replaceTE_CB,
+                replaceTimelineEvent,
                 authenticityToken,
               )
             )

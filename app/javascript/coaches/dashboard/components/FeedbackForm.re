@@ -42,7 +42,7 @@ let clearFeedback = (send, _event) => {
   send(ToggleForm);
 };
 
-let handleResponseJSON = (state, send, te, replaceTE_CB, json) =>
+let handleResponseJSON = (state, send, te, replaceTimelineEvent, json) =>
   switch (
     json
     |> Json.Decode.(field("error", nullable(string)))
@@ -54,11 +54,14 @@ let handleResponseJSON = (state, send, te, replaceTE_CB, json) =>
       "Feedback Sent",
       "Your feedback has been recorded and emailed to the student(s)",
     );
-    te |> TimelineEvent.updateFeedback(state.feedbackHTML) |> replaceTE_CB;
+    te
+    |> TimelineEvent.updateFeedback(state.feedbackHTML)
+    |> replaceTimelineEvent;
     clearFeedback(send, ());
   };
 
-let sendFeedback = (state, send, te, replaceTE_CB, authenticityToken, _event) => {
+let sendFeedback =
+    (state, send, te, replaceTimelineEvent, authenticityToken, _event) => {
   Js.log("Sending feedback for emailing");
   Js.log("Feedback to be sent:" ++ state.feedbackHTML);
   let payload = Js.Dict.empty();
@@ -92,7 +95,9 @@ let sendFeedback = (state, send, te, replaceTE_CB, authenticityToken, _event) =>
          }
        )
     |> then_(json =>
-         json |> handleResponseJSON(state, send, te, replaceTE_CB) |> resolve
+         json
+         |> handleResponseJSON(state, send, te, replaceTimelineEvent)
+         |> resolve
        )
     |> catch(error =>
          (
@@ -111,7 +116,8 @@ let sendFeedback = (state, send, te, replaceTE_CB, authenticityToken, _event) =>
 
 let component = ReasonReact.reducerComponent("FeedbackForm");
 
-let make = (~timelineEvent, ~replaceTE_CB, ~authenticityToken, _children) => {
+let make =
+    (~timelineEvent, ~replaceTimelineEvent, ~authenticityToken, _children) => {
   ...component,
   initialState: () => {showForm: false, feedbackHTML: ""},
   reducer: (action, state) =>
@@ -148,7 +154,7 @@ let make = (~timelineEvent, ~replaceTE_CB, ~authenticityToken, _children) => {
                   state,
                   send,
                   timelineEvent,
-                  replaceTE_CB,
+                  replaceTimelineEvent,
                   authenticityToken,
                 )
               )>

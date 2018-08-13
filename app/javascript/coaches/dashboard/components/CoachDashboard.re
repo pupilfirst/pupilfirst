@@ -56,7 +56,7 @@ let make =
   render: ({state, send}) => {
     let selectStartupCB = id => send(SelectStartup(id));
     let clearStartupCB = () => send(ClearStartup);
-    let replaceTE_CB = te => send(ReplaceTE(te));
+    let replaceTimelineEvent = te => send(ReplaceTE(te));
     <div className="coach-dashboard__container container">
       <div className="row">
         <div className="col-md-4">
@@ -79,7 +79,7 @@ let make =
           <TimelineEventsPanel
             timelineEvents=state.timelineEvents
             selectedStartupId=state.selectedStartupId
-            replaceTE_CB
+            replaceTimelineEvent
             authenticityToken
             emptyIconUrl
             needsImprovementIconUrl

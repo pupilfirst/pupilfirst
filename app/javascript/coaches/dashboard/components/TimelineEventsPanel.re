@@ -14,7 +14,7 @@ let make =
     (
       ~timelineEvents,
       ~selectedStartupId,
-      ~replaceTE_CB,
+      ~replaceTimelineEvent,
       ~authenticityToken,
       ~emptyIconUrl,
       ~needsImprovementIconUrl,
@@ -42,7 +42,7 @@ let make =
         } else {
           <TimelineEventsList
             timelineEvents=pendingTEs
-            replaceTE_CB
+            replaceTimelineEvent
             authenticityToken
             needsImprovementIconUrl
             notAcceptedIconUrl
@@ -68,7 +68,7 @@ let make =
         } else {
           <TimelineEventsList
             timelineEvents=completeTEs
-            replaceTE_CB
+            replaceTimelineEvent
             authenticityToken
             needsImprovementIconUrl
             notAcceptedIconUrl

@@ -5,7 +5,7 @@ let component = ReasonReact.statelessComponent("TimelineEventsList");
 let make =
     (
       ~timelineEvents,
-      ~replaceTE_CB,
+      ~replaceTimelineEvent,
       ~authenticityToken,
       ~needsImprovementIconUrl,
       ~notAcceptedIconUrl,
@@ -21,7 +21,7 @@ let make =
              <TimelineEventCard
                key=(te |> TimelineEvent.id |> string_of_int)
                timelineEvent=te
-               replaceTE_CB
+               replaceTimelineEvent
                authenticityToken
                needsImprovementIconUrl
                notAcceptedIconUrl

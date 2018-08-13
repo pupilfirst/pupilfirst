@@ -13,7 +13,7 @@ let str = ReasonReact.string;
 
 let component = ReasonReact.statelessComponent("UndoReviewButton");
 
-let handleResponseJSON = (te, replaceTE_CB, json) =>
+let handleResponseJSON = (te, replaceTimelineEvent, json) =>
   switch (
     json
     |> Json.Decode.(field("error", nullable(string)))
@@ -27,10 +27,10 @@ let handleResponseJSON = (te, replaceTE_CB, json) =>
     );
     te
     |> TimelineEvent.updateStatus(TimelineEvent.NotReviewed)
-    |> replaceTE_CB;
+    |> replaceTimelineEvent;
   };
 
-let undoReview = (te, replaceTE_CB, _event) => {
+let undoReview = (te, replaceTimelineEvent, _event) => {
   let id = te |> TimelineEvent.id |> string_of_int;
   Js.Promise.(
     Fetch.fetchWithInit(
@@ -51,7 +51,9 @@ let undoReview = (te, replaceTE_CB, _event) => {
            );
          }
        )
-    |> then_(json => json |> handleResponseJSON(te, replaceTE_CB) |> resolve)
+    |> then_(json =>
+         json |> handleResponseJSON(te, replaceTimelineEvent) |> resolve
+       )
     |> catch(error =>
          (
            switch (error |> handleApiError) {
@@ -67,12 +69,12 @@ let undoReview = (te, replaceTE_CB, _event) => {
   );
 };
 
-let make = (~timelineEvent, ~replaceTE_CB, _children) => {
+let make = (~timelineEvent, ~replaceTimelineEvent, _children) => {
   ...component,
   render: _self =>
     <button
       className="btn btn-ghost-primary border-danger undo-review-btn mt-3"
-      onClick=(undoReview(timelineEvent, replaceTE_CB))>
+      onClick=(undoReview(timelineEvent, replaceTimelineEvent))>
       <i className="fa fa-undo mr-1" />
       ("Undo Review" |> str)
     </button>,

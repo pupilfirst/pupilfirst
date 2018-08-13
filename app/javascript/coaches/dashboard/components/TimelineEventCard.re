@@ -7,7 +7,7 @@ let component = ReasonReact.statelessComponent("TimelineEventCard");
 let make =
     (
       ~timelineEvent,
-      ~replaceTE_CB,
+      ~replaceTimelineEvent,
       ~authenticityToken,
       ~needsImprovementIconUrl,
       ~notAcceptedIconUrl,
@@ -126,7 +126,7 @@ let make =
               };
             }
           </div>
-          <FeedbackForm timelineEvent replaceTE_CB authenticityToken />
+          <FeedbackForm timelineEvent replaceTimelineEvent authenticityToken />
         </div>
         <div
           className=(
@@ -139,7 +139,7 @@ let make =
               <ReviewForm
                 key=(timelineEvent |> TimelineEvent.id |> string_of_int)
                 timelineEvent
-                replaceTE_CB
+                replaceTimelineEvent
                 authenticityToken
               />
             | Reviewed(reviewedStatus) =>
@@ -150,7 +150,7 @@ let make =
                   notAcceptedIconUrl
                   verifiedIconUrl
                 />
-                <UndoReviewButton timelineEvent replaceTE_CB />
+                <UndoReviewButton timelineEvent replaceTimelineEvent />
               </div>
             }
           )

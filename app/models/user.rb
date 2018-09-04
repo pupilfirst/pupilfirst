@@ -3,6 +3,7 @@ class User < ApplicationRecord
   has_one :founder, dependent: :restrict_with_error
   has_one :admin_user, dependent: :restrict_with_error
   has_one :faculty, dependent: :restrict_with_error
+  has_many :coached_startups, through: :faculty, source: :startups
   has_many :user_activities, dependent: :destroy
   has_many :visits, as: :user, dependent: :destroy, inverse_of: :user
 

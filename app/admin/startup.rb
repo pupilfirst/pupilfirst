@@ -5,6 +5,7 @@ ActiveAdmin.register Startup do
     :partnership_deed, :payment_reference, :agreements_verified, :team_lead_id, startup_category_ids: [], founder_ids: [], tag_list: []
 
   filter :product_name, as: :string
+  filter :level_school_id, as: :select, label: 'School', collection: -> { School.all }
   filter :level, collection: -> { Level.all.order(number: :asc) }
   filter :stage, as: :select, collection: -> { stages_collection }
 

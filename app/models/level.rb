@@ -20,4 +20,8 @@ class Level < ApplicationRecord
   def self.maximum
     order(:number).last
   end
+
+  def short_name
+    'Level ' + number.to_s
+  end
 end

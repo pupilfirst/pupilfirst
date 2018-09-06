@@ -37,7 +37,7 @@ module Coaches
       TimelineEvent.not_auto_verified.where(startup: current_coach.startups).includes(:founder, :startup, :timeline_event_files, :timeline_event_type, :startup_feedback).map do |timeline_event|
         {
           id: timeline_event.id,
-          title: timeline_event.target&.title || timeline_event.title,
+          title: title(timeline_event),
           description: timeline_event.description,
           eventOn: timeline_event.event_on,
           status: timeline_event.status,
@@ -60,6 +60,10 @@ module Coaches
     def identicon_logo(startup)
       base64_logo = Startups::IdenticonLogoService.new(startup).base64_svg
       "data:image/svg+xml;base64,#{base64_logo}"
+    end
+
+    def title(timeline_event)
+      timeline_event.target.present? ? timeline_event.target.level.short_name + ' | ' + timeline_event.target.title : timeline_event.title
     end
   end
 end

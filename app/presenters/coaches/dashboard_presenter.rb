@@ -47,6 +47,7 @@ module Coaches
           founderName: timeline_event.founder.name,
           links: timeline_event.links,
           files: timeline_event.timeline_event_files.map { |file| { title: file.title, id: file.id } },
+          image: timeline_event.image? ? timeline_event.image.url : nil,
           grade: timeline_event.overall_grade_from_score,
           latestFeedback: timeline_event.startup_feedback&.last&.feedback
         }

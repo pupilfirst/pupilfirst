@@ -30,6 +30,8 @@ let links: t => list(Link.t);
 
 let files: t => list(File.t);
 
+let image: t => option(string);
+
 let status: t => status;
 
 let forStartupId: (int, list(t)) => list(t);

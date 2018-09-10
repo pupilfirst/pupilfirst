@@ -24,6 +24,7 @@ type t = {
   founderName: string,
   links: list(Link.t),
   files: list(File.t),
+  image: option(string),
   latestFeedback: option(string),
 };
 
@@ -99,6 +100,7 @@ let decode = json => {
     founderName: json |> field("founderName", string),
     links: json |> field("links", list(Link.decode)),
     files: json |> field("files", list(File.decode)),
+    image: json |> field("image",nullable(string)) |> Js.Null.toOption,
     latestFeedback:
       json |> field("latestFeedback", nullable(string)) |> Js.Null.toOption,
   };
@@ -128,6 +130,8 @@ let startupName = t => t.startupName;
 let links = t => t.links;
 
 let files = t => t.files;
+
+let image = t => t.image;
 
 let status = t => t.status;
 

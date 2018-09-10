@@ -5,15 +5,15 @@ FactoryBot.define do
 
     sequence(:name) { |n| "#{Faker::Lorem.word} #{n}" }
     description { Faker::Lorem.sentence }
-    number 1
+    number { 1 }
     school
 
-    trait(:zero) { number 0 }
-    trait(:one) { number 1 }
-    trait(:two) { number 2 }
-    trait(:three) { number 3 }
-    trait(:four) { number 4 }
-    trait(:five) { number 5 }
+    trait(:zero) { number { 0 } }
+    trait(:one) { number { 1 } }
+    trait(:two) { number { 2 } }
+    trait(:three) { number { 3 } }
+    trait(:four) { number { 4 } }
+    trait(:five) { number { 5 } }
 
     trait(:sponsored) { school { create :school, sponsored: true } }
   end

@@ -11,16 +11,16 @@ FactoryBot.define do
     timeline_event_type
     faculty { create :faculty, category: Faculty::CATEGORY_TEAM }
     sequence(:sort_index)
-    key nil
-    session_at nil
+    key { nil }
+    session_at { nil }
 
     trait :session do
-      session_at 1.week.from_now
-      days_to_complete nil
+      session_at { 1.week.from_now }
+      days_to_complete { nil }
     end
 
     trait :for_founders do
-      role Target::ROLE_FOUNDER
+      role { Target::ROLE_FOUNDER }
     end
 
     trait :for_startup do
@@ -32,25 +32,25 @@ FactoryBot.define do
     end
 
     trait(:admissions_cofounder_addition) do
-      key Target::KEY_COFOUNDER_ADDITION
-      role Target::ROLE_TEAM
+      key { Target::KEY_COFOUNDER_ADDITION }
+      role { Target::ROLE_TEAM }
       prerequisite_targets { [create(:target, :admissions_screening)] }
     end
 
     trait(:admissions_fee_payment) do
-      key Target::KEY_FEE_PAYMENT
-      role Target::ROLE_TEAM
+      key { Target::KEY_FEE_PAYMENT }
+      role { Target::ROLE_TEAM }
       prerequisite_targets { [create(:target, :admissions_cofounder_addition)] }
     end
 
     trait(:admissions_screening) do
-      key Target::KEY_SCREENING
-      role Target::ROLE_TEAM
+      key { Target::KEY_SCREENING }
+      role { Target::ROLE_TEAM }
     end
 
     trait(:admissions_attend_interview) do
-      role Target::ROLE_TEAM
-      key Target::KEY_ATTEND_INTERVIEW
+      role { Target::ROLE_TEAM }
+      key { Target::KEY_ATTEND_INTERVIEW }
       prerequisite_targets { [create(:target, :admissions_cofounder_addition)] }
     end
   end

@@ -8,9 +8,9 @@ FactoryBot.define do
     reference { Founder.valid_references.sample }
 
     trait(:connected_to_slack) do
-      slack_user_id 'SLACK_USER_ID'
-      slack_username 'SLACK_USERNAME'
-      slack_access_token 'SLACK_ACCESS_TOKEN'
+      slack_user_id { 'SLACK_USER_ID' }
+      slack_username { 'SLACK_USERNAME' }
+      slack_access_token { 'SLACK_ACCESS_TOKEN' }
     end
   end
 end

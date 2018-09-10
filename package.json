@@ -29,6 +29,7 @@
     "webpack-dev-server": "2.11.2"
   },
   "scripts": {
-    "heroku-postbuild": "bsb -make-world"
+    "heroku-postbuild": "bsb -make-world",
+    "postinstall": "bsb -make-world"
   }
 }

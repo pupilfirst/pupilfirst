@@ -166,6 +166,66 @@
   color: white;
 }
 
+.fb-landing__program-mentors {
+  padding: 2rem 0;
+  border-bottom: 1px solid $gray-border;
+
+  @include media-breakpoint-down(md) {
+    padding: 3rem 0;
+  }
+}
+
+
+.fb-landing__program-mentor-card {
+  background-color: white;
+  @include border-radius(10px);
+  height: 100%;
+  position: relative;
+  box-shadow: 0 10px 40px 0px rgba(0, 0, 0, 0.1);
+
+  @include media-breakpoint-down(md) {
+    box-shadow: 0 2px 10px 0px rgba(0, 0, 0, 0.1);
+  }
+}
+.fb-landing__program-mentor-avatar {
+  width: 70px;
+  height: 70px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.15);
+  background-color: white;
+  border: 2px solid white;
+  overflow: hidden;
+  position: relative;
+  top: -35px;
+  @include border-radius(50%);
+}
+
+.fb-landing__program-mentor-avtar-img {
+  width: 100%;
+}
+
+.fb-landing__program-mentor-name {
+  position: relative;
+  font-size: 1rem;
+
+  &:before {
+    position: absolute;
+    content: "";
+    width: 50px;
+    height: 2px;
+    background-color: $gray-border;
+    bottom: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+.fb-landing__program-mentor-designation {
+  color: darken($light-grey-text, $amount: 10);
+}
+
+.fb-landing__program-mentor-details {
+  bottom: 1rem;
+}
 
 .fb-landing__pulse-icon {
   width: 70px;
@@ -265,6 +325,7 @@
 }
 
 .fb-landing__partners-container {
+  background-color: white;
   border-bottom: 1px solid $gray-border;
 }
 
@@ -278,81 +339,6 @@
   background: $primary-background;
   box-shadow: 0 2px 10px 0px rgba(0, 0, 0, 0.15);
   @include border-radius(10px);
-}
-
-.fb-landing__calander-container {
-  background: rgb(83, 168, 103);
-  background: linear-gradient(
-    135deg,
-    rgb(83, 168, 103) 0%,
-    rgb(13, 113, 186) 100%
-  );
-}
-
-.fb-landing__calander-card {
-  background-color: white;
-  @include border-radius(10px);
-  height: 100%;
-  position: relative;
-  box-shadow: 0 2px 10px 0px rgba(0, 0, 0, 0.2);
-
-  &:before,
-  &:after {
-    content: "";
-    position: absolute;
-    top: -5px;
-    width: 4px;
-    height: 25px;
-    background: #ffffff;
-    background: linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0.6) 0%,
-      rgba(255, 255, 255, 1) 60%
-    );
-    box-shadow: 0px -2px 2px rgba(0, 0, 0, 0.4);
-    z-index: 2;
-    border-radius: 2px;
-  }
-  &:before {
-    left: 2.125rem;
-  }
-  &:after {
-    right: 2.125rem;
-  }
-}
-
-.fb-landing__calander-card-month {
-  background-color: $alert-background;
-  padding: 0.5rem 1.25rem;
-  color: #ffffff;
-  position: relative;
-  letter-spacing: 0.02rem;
-  @include border-radius(10px 10px 0 0);
-
-  &:before,
-  &:after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 8px;
-    height: 8px;
-    background: $secondary-background;
-    z-index: 1;
-    border-radius: 10px;
-    box-shadow: 0 1px 1px #fff;
-  }
-  &:before {
-    left: 2rem;
-  }
-  &:after {
-    right: 2rem;
-  }
-}
-
-.fb-landing__calander-card-event {
-  padding: 1.25rem;
-  font-size: 1rem;
 }
 
 .fb-landing__commitment-icon {

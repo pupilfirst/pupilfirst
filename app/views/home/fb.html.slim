@@ -185,7 +185,7 @@
       .col-md-3.mb-5
         .fb-landing__program-mentor-card.text-center.px-3
           .fb-landing__program-mentor-avatar.m-auto
-            = image_tag 'fb/program-mentors/shubham-agarwal.jpg', class: 'img-fluid', alt: 'Program Mentor: Pratham Sehgal'
+            = image_tag 'fb/program-mentors/shubham-agarwal.jpg', class: 'img-fluid', alt: 'Program Mentor: Shubham Agarwal'
           .fb-landing__program-mentor-details.position-relative.pb-1
             h4.fb-landing__program-mentor-name.font-bold.pb-1.mb-3
               | Shubham Agarwal
@@ -194,7 +194,7 @@
       .col-md-3.mb-5
         .fb-landing__program-mentor-card.text-center.px-3
           .fb-landing__program-mentor-avatar.m-auto
-            = image_tag 'fb/program-mentors/sharatchandra-aithal.jpg', class: 'img-fluid', alt: 'Program Mentor: Pratham Sehgal'
+            = image_tag 'fb/program-mentors/sharatchandra-aithal.jpg', class: 'img-fluid', alt: 'Program Mentor: Sharatchandra Aithal'
           .fb-landing__program-mentor-details.position-relative.pb-1
             h4.fb-landing__program-mentor-name.font-bold.pb-1.mb-3
               | Sharatchandra Aithal
@@ -203,7 +203,7 @@
       .col-md-3.mb-5
         .fb-landing__program-mentor-card.text-center.px-3
           .fb-landing__program-mentor-avatar.m-auto
-            = image_tag 'fb/program-mentors/pradeep-rs.jpg', class: 'img-fluid', alt: 'Program Mentor: Pratham Sehgal'
+            = image_tag 'fb/program-mentors/pradeep-rs.jpg', class: 'img-fluid', alt: 'Program Mentor: Pradeep RS'
           .fb-landing__program-mentor-details.position-relative.pb-1
             h4.fb-landing__program-mentor-name.font-bold.pb-1.mb-3
               | Pradeep RS
@@ -213,7 +213,7 @@
       .col-md-3.mb-5
         .fb-landing__program-mentor-card.text-center.px-3
           .fb-landing__program-mentor-avatar.m-auto
-            = image_tag 'fb/program-mentors/sanket-thakur.jpg', class: 'img-fluid', alt: 'Program Mentor: Pratham Sehgal'
+            = image_tag 'fb/program-mentors/sanket-thakur.jpg', class: 'img-fluid', alt: 'Program Mentor: Sanket Thakur'
           .fb-landing__program-mentor-details.position-relative.pb-1
             h4.fb-landing__program-mentor-name.font-bold.pb-1.mb-3
               | Sanket Thakur
@@ -222,7 +222,7 @@
       .col-md-3.mb-5
         .fb-landing__program-mentor-card.text-center.px-3
           .fb-landing__program-mentor-avatar.m-auto
-            = image_tag 'fb/program-mentors/sai-krishna.jpg', class: 'img-fluid', alt: 'Program Mentor: Pratham Sehgal'
+            = image_tag 'fb/program-mentors/sai-krishna.jpg', class: 'img-fluid', alt: 'Program Mentor: Sai Krishna'
           .fb-landing__program-mentor-details.position-relative.pb-1
             h4.fb-landing__program-mentor-name.font-bold.pb-1.mb-3
               | Sai Krishna
@@ -231,14 +231,14 @@
       .col-md-3.mb-5
         .fb-landing__program-mentor-card.text-center.px-3
           .fb-landing__program-mentor-avatar.m-auto
-            = image_tag 'fb/program-mentors/ajay-pv.jpg', class: 'img-fluid', alt: 'Program Mentor: Pratham Sehgal'
+            = image_tag 'fb/program-mentors/ajay-pv.jpg', class: 'img-fluid', alt: 'Program Mentor: Ajay PV'
           .fb-landing__program-mentor-details.position-relative.pb-1
             h4.fb-landing__program-mentor-name.font-bold.pb-1.mb-3
               | Ajay PV
             p.fb-landing__program-mentor-designation.font-semibold
               | Co-founder of Scapic
 
-.fb-landing__partners-container.pb-3.pb-md-5
+.fb-landing__partners-container.py-3.pt-md-4.pb-md-5
   .container
     .row.justify-content-md-center
       .col-md-7
@@ -259,8 +259,8 @@
           ' angel funds and teams with engineering success get great jobs in
           | startups or go for higher studies.
         p.fb-landing__content-p.mt-3
-          a.btn.btn-secondary href=about_path target="_blank"
-            i.fa.fa-external-link
+          a.font-semibold href=about_path target="_blank"
+            i.fa.fa-external-link.mr-2
             | &nbsp;Learn more about SV.CO
       .col-md-5.pb-4
         = image_tag 'home/index/sv-partner-facebook.svg', class: 'fb-landing__partners-logo-img img-fluid', alt: 'Facebook Logo'
@@ -276,18 +276,26 @@
           ' students to understand the potential of cutting edge
           ' technologies, build products, demo to industry leaders and perhaps
           | also launch to customers.
-    .row.justify-content-md-center
-      .col-md-7
-        blockquote.fb-landing__partners-vr-quote.blockquote.text-center.p-4
-          p
-            strong Virtual Reality
-            ' &nbsp;and its applications are poised to disrupt a lot of industry areas,
-            ' but currently there aren't any established business models, products
-            ' or markets. This offers ample scope to large companies, growth-stage
-            ' startups, and young technology enthusiasts between 18-22 in
-            | colleges across India to be early adopters of this fascinating new technology.
+    .fb-landing__supporting-partners.mx-auto
+      h6.fb-landing__supporting-partners-heading.font-semibold.text-center.mb-3
+        | Supported by
+      .row.mx-auto.align-items-center
+        .col
+          = image_tag 'fb/unity-logo.png', class: 'img-fluid', alt: 'Unity'
+        .col
+          = image_tag 'fb/scapic-logo.png', class: 'img-fluid', alt: 'Scapic'
+    / .row.justify-content-md-center
+    /   .col-md-7
+    /     blockquote.fb-landing__partners-vr-quote.blockquote.text-center.p-4
+    /       p
+    /         strong Virtual Reality
+    /         ' &nbsp;and its applications are poised to disrupt a lot of industry areas,
+    /         ' but currently there aren't any established business models, products
+    /         ' or markets. This offers ample scope to large companies, growth-stage
+    /         ' startups, and young technology enthusiasts between 18-22 in
+    /         | colleges across India to be early adopters of this fascinating new technology.
 
-.fb-landing__commitment-container.py-3.py-md-5
+.fb-landing__commitment-container.py-3.pt-md-4.pb-md-5
   .container
     .row.justify-content-md-center
       .col-md-7
@@ -335,7 +343,7 @@
             ' Based on whether they have customer success, they can choose to build
             | a startup or use their skills to get great jobs in other startups.
 
-.fb-landing__stakeholders-container.py-3.py-md-5
+.fb-landing__stakeholders-container.py-3.pt-md-4.pb-md-5
   .container
     .row.justify-content-md-center
       .col-md-7

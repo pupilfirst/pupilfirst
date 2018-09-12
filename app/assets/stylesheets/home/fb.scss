@@ -341,6 +341,30 @@
   @include border-radius(10px);
 }
 
+.fb-landing__supporting-partners {
+  max-width: 300px;
+}
+
+.fb-landing__supporting-partners-heading {
+  position: relative;
+  color: $light-grey-text;
+
+  &:before, &:after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 2px;
+    top: 9px;
+    background-color: $gray-border;
+  }
+  &:before {
+    right: 200px;
+  }
+  &:after {
+    left: 200px;
+  }
+}
+
 .fb-landing__commitment-icon {
   width: 50px;
 }

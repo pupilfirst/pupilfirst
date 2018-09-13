@@ -128,18 +128,18 @@
 .program-stats__container {
   position: relative;
 
-  &:before {
-    content:'';
-    position: absolute;
-    height: 100%;
-    width: 50%;
-    left: 0;
-    background-color: white;
+  // &:before {
+  //   content:'';
+  //   position: absolute;
+  //   height: 100%;
+  //   width: 50%;
+  //   left: 0;
+  //   background-color: white;
 
-    @include media-breakpoint-down(sm) {
-      width: 100%;
-    }
-  }
+  //   @include media-breakpoint-down(sm) {
+  //     width: 100%;
+  //   }
+  // }
 }
 
 .program-stats__student-journey-header, .program-stats__other-facts-header {
@@ -277,10 +277,6 @@
 
 .program-stats__other-facts {
   background-color: $primary-background;
-
-  @include media-breakpoint-up(sm) {
-    padding-left: 1.875rem;
-  }
 }
 
 .program-stats__other-facts-icon {

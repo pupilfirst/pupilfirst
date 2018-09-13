@@ -61,16 +61,16 @@ section.general-stats__container.py-4.py-md-5
 section.program-stats__container
   .container.px-0.px-md-3
     .row.m-0
-      .col-md-6.program-stats__student-journey.pl-md-0.pr-md-4
-        h4.program-stats__student-journey-header.text-center.font-regular.my-4.my-md-5
-          | SV.CO Member Journey
-        ul.list-unstyled.student-journey__timeline.text-center.text-lg-left
-          - presenter.member_journey_points.each do |journey_point|
-            == render 'student_journey_item', journey_point: journey_point
+      / .col-md-6.program-stats__student-journey.pl-md-0.pr-md-4
+      /   h4.program-stats__student-journey-header.text-center.font-regular.my-4.my-md-5
+      /     | SV.CO Member Journey
+      /   ul.list-unstyled.student-journey__timeline.text-center.text-lg-left
+      /     - presenter.member_journey_points.each do |journey_point|
+      /       == render 'student_journey_item', journey_point: journey_point
 
-      .col-md-6.program-stats__other-facts.pr-md-0
-        h4.program-stats__other-facts-header.text-center.font-regular.my-5 SV.CO Program Metrics
-        .row.flex-lg-row
+      .program-stats__other-facts
+        h3.program-stats__other-facts-header.text-center.font-semibold.my-5 SV.CO Program Metrics
+        .row.justify-content-center.m-0
           - presenter.program_metrics.each do |metric|
             == render 'program_metric', metric: metric
 

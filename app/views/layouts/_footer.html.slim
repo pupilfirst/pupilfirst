@@ -82,23 +82,28 @@ footer
     section.footer-sitemap
       .container
         .row
-          .col-md-7.col-lg-8
+          .col-lg-8
             .row
-              .col-md-3.footer-column
+              .col-md.footer-column
                 p.footer-column__head.font-bold SV.CO
                 div
                   = link_to 'About', about_path, id: 'footer-sitemap-about-link', class: 'footer-column__link'
                 / div
                   = link_to 'Apply', apply_path, id: 'footer-sitemap-about-link', class: 'footer-column__link'
 
-              .col-md-4.footer-column
+              .col-md.footer-column
                 p.footer-column__head.font-bold SUPPORT
                 / div
                   a#footer-sitemap-helpcenter-link.footer-column__link href="https://wiki.sv.co/" Wiki
                 div
                   = link_to 'Contact Us', about_contact_path, id: 'footer-sitemap-contact-link', class: 'footer-column__link'
 
-              .col-md-5.footer-column
+              .col-md.footer-column
+                p.footer-column__head.font-bold DEVELOPERS
+                div
+                  = link_to 'Invest/Hire', talent_path, id: 'footer-sitemap-talent-link', class: 'footer-column__link'
+
+              .col-md-4.footer-column
                 .footer-social-icons.mt-md-0
                   a#footer-connect-facebook-link.footer-social-link href='https://www.facebook.com/svdotco' target='_blank'
                     i.fa.fa-facebook
@@ -111,7 +116,7 @@ footer
                   a#footer-partner-dot-co-link href='http://www.go.co/' target='_blank'
                     = image_tag 'layouts/shared/partner-banner-dot-co.png', class: 'dot-co-banner'
 
-          .col-md-5.col-lg-4.mt-3.mt-md-0
+          .col-lg-4.mt-3.mt-md-0
             .footer-column
               p.footer-column__head.font-bold CONNECT
               address.footer-column__address.mb-1

@@ -19,7 +19,7 @@ feature 'Manual User Sign Out' do
       visit edit_product_path
 
       # User should be signed out.
-      expect(page).to have_content("Let's upgrade you to an Ace Developer")
+      expect(page).to have_selector('#home__index')
 
       # Log the user in again.
       user.regenerate_login_token
@@ -34,7 +34,7 @@ feature 'Manual User Sign Out' do
       visit edit_product_path
 
       # User should be signed out.
-      expect(page).to have_content("Let's upgrade you to an Ace Developer")
+      expect(page).to have_selector('#home__index')
     end
   end
 
@@ -52,7 +52,7 @@ feature 'Manual User Sign Out' do
         visit edit_product_path
 
         # User should be signed out.
-        expect(page).to have_content("Let's upgrade you to an Ace Developer")
+        expect(page).to have_selector('#home__index')
       end
     end
   end

@@ -17,21 +17,25 @@ section.home-hero__container
     .container
       .home-hero__message-title
         h1.home-hero__message-title-head
-          ' Good at coding?
+          ' Learn Industry Courses from
           .font-semibold
-            ' Let's upgrade you to an Ace Developer
-        h3.home-hero__message-title-subhead
-          ' and get you placed in a premium startup.
+            ' Apple and Facebook
+          ' at your University.
+        /   ' Good at coding?
+        /   .font-semibold
+        /     ' Let's upgrade you to an Ace Developer
+        / h3.home-hero__message-title-subhead
+        /   ' and get you placed in a premium startup.
         .pt-3
           - if current_founder.present? && !current_founder.exited
             = link_to 'Go to Dashboard', student_dashboard_path, class: 'btn btn-primary btn-lg home-apply__button'
-          - else
+          / - else
             = link_to 'Learn More', apply_path, class: 'btn btn-primary btn-lg home-apply__button', id: 'home-index__hero-join-link'
 
 section.program-promise__container
   .container
     .row.text-center
-      .col-md-4
+      .col-md-4.offset-md-2
         = image_tag 'home/index/program-promise-developer-icon.svg', class: 'img-fluid mx-auto program-promise__icon', alt: 'Upgrade your developer profile'
         h4.program-promise__text.font-semibold.text-center.mx-auto.mt-3.mb-5
           ' Step-by-step framework to
@@ -43,7 +47,7 @@ section.program-promise__container
           ' 1-on-1 Coaching
           ' by expert developers
           | from the industry.
-      .col-md-4
+      / .col-md-4
         = image_tag 'home/index/program-promise-job-icon.svg', class: 'img-fluid mx-auto program-promise__icon', alt: 'Upgrade your developer profile'
         h4.program-promise__text.font-semibold.text-center.mx-auto.mt-3.mb-5
           ' Job offers of 6+ l.p.a
@@ -58,7 +62,7 @@ section.program-summary__container.pt-5.pb-3
 
       .col-md-6
         h2.home-section__head-title.font-semibold.mb-3
-          | SV.CO, a 6-month upskilling program
+          | SV.CO, an upskilling program
           .font-black
             | for student developers.
         p.program-summary__text.mb-3
@@ -75,7 +79,7 @@ section.program-summary__container.pt-5.pb-3
           ' from the industry to supervise and guide them while they code.
           | This ensures they also pickup industry skills and best practices first-hand!
 
-        p.program-summary__text.mb-3
+        / p.program-summary__text.mb-3
           ' At SV.CO we help students land exciting jobs in premium Indian startups.
           | In fact, we have a 100% job offer guarantee for all our successful graduates!
 

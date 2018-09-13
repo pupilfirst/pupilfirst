@@ -11,7 +11,7 @@ section.stats-hero__banner.secondary-banner.py-3
       .row.align-items-center
         .col-md-7.text-center.text-md-left
           .stats-hero__message-text
-            p.stats-hero__message-text--small.font-light While you are reading this,
+            p.stats-hero__message-text--gradient.stats-hero__message-text--small.font-light While you are reading this,
 
             #stats-hero__typed-strings
               p
@@ -21,8 +21,8 @@ section.stats-hero__banner.secondary-banner.py-3
                 = @metrics['Startups']['value']
                 | &nbsp;Campus Startups
 
-            span#stats-hero__typed.font-semibold
-            p.stats-hero__message-text--medium.font-light are building their products
+            span#stats-hero__typed.font-semibold.stats-hero__message-text--gradient
+            p.stats-hero__message-text--gradient.stats-hero__message-text--medium.font-light are building their products
 
           - if @metrics['Founders']['delta_value'] > 0 && feature_active?(:stats_delta)
             p.stats-hero__message-delta-text.mt-1.mt-md-2

@@ -60,7 +60,7 @@ showTalentFormOnError = ->
     talentFormModal.modal('show')
 
 clearAllFormInterests = ->
-  interestChoices = ['joining_svco_as_faculty', 'accelerating_startups', 'investing_in_startups', 'hiring_founders',
+  interestChoices = ['joining_svco_as_faculty', 'accelerating_startups', 'investing_in_startups', 'hiring_developers',
     'acquihiring_teams']
 
   $.each interestChoices, (index, selection) ->

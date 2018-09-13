@@ -1,6 +1,6 @@
 # Accepts talent queries and mails it to help@sv.co
 class TalentForm < Reform::Form
-  VALID_QUERY_TYPES = ['Hiring Founders', 'Investing in Startups', 'Acquihiring Teams', 'Accelerating Startups', 'Joining SV.CO as Faculty'].freeze
+  VALID_QUERY_TYPES = ['Hiring Developers', 'Acquihiring Teams', 'Investing in Startups', 'Accelerating Startups', 'Joining SV.CO as Faculty'].freeze
 
   property :name, validates: { presence: true, length: { maximum: 250 } }
   property :email, validates: { presence: true, length: { maximum: 250 }, format: { with: /\S+@\S+/, message: "doesn't look like an email" } }

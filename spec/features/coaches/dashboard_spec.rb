@@ -152,7 +152,6 @@ feature 'Coach Dashboard' do
   end
 
   scenario 'coach add a feedback', js: true do
-    pending 'need to be fixed'
     within find(".timeline-event-card__container", match: :first) do
       # feedback form should be hidden by default
       expect(page).to_not have_selector('.feedback-form__trix-container')
@@ -164,13 +163,12 @@ feature 'Coach Dashboard' do
       expect(page).to_not have_selector('.feedback-form__trix-container')
       # Let's add a feedback
       click_on 'Email Feedback'
-      # hidden_field = find :xpath, "//input[type='hidden']"
-      # hidden_field.set 'Some <strong>important</strong> feedback'
+      find('trix-editor').click.set 'Some important feedback'
       click_on 'Send'
       # form should now be hidden
       expect(page).to_not have_selector('.feedback-form__trix-container')
       # and a feedback created for the event
-      expect(StartupFeedback.last.feedback).to eq('Some <strong>important</strong> feedback')
+      expect(StartupFeedback.last.feedback).to eq('<div>Some important feedback</div>')
     end
   end
 end

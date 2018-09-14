@@ -34,14 +34,21 @@ section.home-hero__container
 
 section.program-promise__container
   .container
-    .row.text-center
-      .col-md-4.offset-md-2
+    .row.text-center.justify-content-center.position-relative
+      .col-md-6.program-promise__icon-container
         = image_tag 'home/index/program-promise-developer-icon.svg', class: 'img-fluid mx-auto program-promise__icon', alt: 'Upgrade your developer profile'
         h4.program-promise__text.font-semibold.text-center.mx-auto.mt-3.mb-5
           ' Step-by-step framework to
           ' upgrade your developer profile
           | in 6 months.
-      .col-md-4.with-path
+      .program-promise__link-animation.position-absolute.d-none.d-lg-block
+        svg width="200" height="200" viewBox="0 0 300 200"
+          line.program-promise__svg-line.program-promise__svg-line-to-left x1="10" x2="260" y1="100" y2="100"
+        .program-promise__sv-logo.d-flex.align-items-center
+          = image_tag 'shared/SV.CO-vertical-logo.png', class: 'img-fluid program-promise__sv-logo-img mx-auto', alt: 'SV.CO'
+        svg width="200" height="200" viewBox="0 0 300 200"
+          line.program-promise__svg-line.program-promise__svg-line-to-right x1="10" x2="260" y1="100" y2="100"
+      .col-md-6.program-promise__icon-container
         = image_tag 'home/index/program-promise-coach-icon.svg', class: 'img-fluid mx-auto program-promise__icon', alt: 'Upgrade your developer profile'
         h4.program-promise__text.font-semibold.text-center.mx-auto.mt-3.mb-5
           ' 1-on-1 Coaching

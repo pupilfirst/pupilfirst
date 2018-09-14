@@ -142,18 +142,90 @@
   }
 }
 
+.program-promise__icon-container {
+  z-index: 1;
+}
+
 .program-promise__text {
-  max-width: 13rem;
+  max-width: 20rem;
   line-height: 1.4;
 }
 
 .program-promise__icon {
-  height: 170px;
+  height: 230px;
+}
+.program-promise__link-animation {
+  top: 7%;
+}
+.program-promise__sv-logo {
+  width: 75px;
+  height: 75px;
+  box-shadow: 0 0 30px 0 rgba(1, 144, 196, 0.3);
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  border-radius: 50%;
+  left: 50%;
+  background-color: white;
+  z-index: 1;
+
+  &:before {
+    content: '';
+    width: 75px;
+    height: 75px;
+    left: 0;
+    border: 1px solid rgba(1, 144, 196, 0.5);
+    border-radius: 50%;
+    position: absolute;
+    animation: logoPulse 2s infinite;
+  }
+}
+
+.program-promise__sv-logo-img {
+  width: 2rem;
+}
+
+@keyframes logoPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(1, 144, 196, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 20px rgba(1, 144, 196, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(1, 144, 196, 0);
+  }
+}
+.program-promise__svg-line {
+  stroke: rgb(1, 144, 196);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 1 10;
+  z-index: 0;
+}
+
+.program-promise__svg-line-to-right {
+  animation: svglineAnimateRight 400ms linear infinite;
+}
+
+.program-promise__svg-line-to-left {
+  animation: svglineAnimateLeft 400ms linear infinite;
+}
+
+@keyframes svglineAnimateRight {
+  from {
+    stroke-dashoffset: 10;
+  }
+}
+
+@keyframes svglineAnimateLeft {
+  to {
+    stroke-dashoffset: 10;
+  }
 }
 
 .program-summary__container {
   position: relative;
-  border-top: 1px solid $gray-border;
   background-color: #f6f9fc;
   z-index: 1;
 
@@ -171,12 +243,14 @@
 
   &:before {
     top: 0;
+    border-top: 1px solid $gray-border;
     transform: skewY(1.5deg);
     transform-origin: 100% 0;
   }
 
   &:after {
     bottom: 0;
+    border-bottom: 1px solid $gray-border;
     transform: skewY(-1.5deg);
     transform-origin: 100%;
   }

@@ -120,9 +120,9 @@ after 'development:levels', 'development:founders', 'development:timeline_event_
     level: ios_school_level_1,
     product_name: 'iOS Startup',
     product_description: 'This is an example iOS Startup.',
-    team_lead: founder,
-    faculty: Faculty.find_by(email: 'ioscoach@example.com')
+    team_lead: founder
   )
 
+  ios_startup.faculty << Faculty.find_by(email: 'ioscoach@example.com')
   ios_startup.founders << founder
 end

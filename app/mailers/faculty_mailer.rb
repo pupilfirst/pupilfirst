@@ -26,10 +26,10 @@ class FacultyMailer < ApplicationMailer
   # Mail sent after a student submits a timeline event.
   #
   # @param timeline_event [TimelineEvent] Timeline event that was created just now.
-  def student_submission_notification(timeline_event)
+  def student_submission_notification(timeline_event, faculty)
     @founder = timeline_event.founder
     @startup = timeline_event.startup
-    @faculty = @startup.faculty
+    @faculty = faculty
     @target = timeline_event.target
     mail(to: @faculty.email, subject: "There is a new submission from #{@startup.product_name}")
   end

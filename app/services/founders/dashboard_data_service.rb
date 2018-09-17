@@ -8,6 +8,7 @@ module Founders
       {
         targets: targets,
         levels: levels,
+        sessions: sessions,
         faculty: faculty,
         targetGroups: target_groups,
         tracks: tracks
@@ -43,6 +44,10 @@ module Founders
 
     def levels
       @levels ||= Level.where('number >= ?', minimum_level).as_json(only: %i[id name number school_id])
+    end
+
+    def sessions
+      @sessions ||= startup.school.targets.where.not(session_at: nil)
     end
 
     def faculty

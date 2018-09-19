@@ -132,7 +132,7 @@ class Startup < ApplicationRecord
   has_many :resources, dependent: :destroy
   belongs_to :team_lead, class_name: 'Founder', optional: true
   belongs_to :billing_state, class_name: 'State', optional: true
-  belongs_to :faculty, optional: true
+  has_and_belongs_to_many :faculty
 
   # use the old name attribute as an alias for legal_registered_name
   alias_attribute :name, :legal_registered_name

@@ -163,6 +163,26 @@
                           li
                             a href="#{founder.linkedin_url}" target='_blank'
                               i.fa.fa-linkedin-square
+        .row
+          -if @startup.faculty.present?
+            .col-md-12.mt-4
+              h3 Mentors
+              hr
+              - @startup.faculty.order(:name).each do |faculty|
+                .data-faculty
+                  .media.align-items-center
+                    a.mr-3 href=faculty_url(faculty.slug)
+                      .faculty-image
+                        == avatar(faculty.name, faculty: faculty, background_shape: :square)
+                    .media-body
+                      .media-heading
+                        = link_to faculty.name, faculty_url(faculty.slug)
+                      p.designation #{faculty.title}
+                      - if faculty.linkedin_url?
+                        ul.faculty__social-links
+                          li
+                            a href="#{faculty.linkedin_url}" target='_blank'
+                              i.fa.fa-linkedin-square
 
     .col-lg-8.order-2.order-lg-1
       - if @timeline_event_for_og.present?

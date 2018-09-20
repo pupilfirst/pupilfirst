@@ -306,7 +306,11 @@ class ApplicationController < ActionController::Base
     @pretender = true if current_user != true_user
   end
 
-  def avatar(name, founder: nil, version: :mid, background_shape: :circle)
+  def avatar(name, founder: nil, faculty: nil, version: :mid, background_shape: :circle)
+    if faculty.present? && faculty.image?
+      return helpers.image_tag(faculty.image).html_safe
+    end
+
     if founder.present? && founder.avatar? && !founder.avatar_processing?
       return helpers.image_tag(founder.avatar.public_send(version).url).html_safe
     end

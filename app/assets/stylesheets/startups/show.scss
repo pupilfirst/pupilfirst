@@ -61,12 +61,12 @@ h1.product-name {
   .data-faculty {
     background-color: $dark-primary-background;
     margin: 1rem 0;
+    overflow: hidden;
     box-shadow: 0px 0px 5px $grey-border;
 
     .founder-image,
     .faculty-image {
       width: 100px;
-      height: 100px;
       background-size: cover;
 
       img,

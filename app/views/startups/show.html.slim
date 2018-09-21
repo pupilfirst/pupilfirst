@@ -168,7 +168,7 @@
             .col-md-12.mt-4
               h3 Mentors
               hr
-              - @startup.faculty.order(:name).each do |faculty|
+              - @startup.faculty.where.not(inactive: true).order(:name).each do |faculty|
                 .data-faculty
                   .media.align-items-center
                     a.mr-3 href=faculty_url(faculty.slug)

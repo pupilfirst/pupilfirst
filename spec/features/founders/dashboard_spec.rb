@@ -149,9 +149,11 @@ feature 'Founder Dashboard' do
     # Check whether there's correct number of target groups in the developer track.
     expect(page).to have_selector('.founder-dashboard-target-group__box', count: 1)
 
-    find('.founder-dashboard-togglebar__toggle-btn', text: level_4.name.upcase).click
+    find('.founder-dashboard-togglebar__toggle-btn', text: 'TARGETS').click
 
     # Check whether there's correct number of target groups in the special 'default' track.
     expect(page).to have_selector('.founder-dashboard-target-group__box', count: 1)
+
+    # TODO: Test the new Sessions Tab
   end
 end

@@ -8,7 +8,6 @@ module Founders
       {
         targets: targets,
         levels: levels,
-        sessions: sessions,
         faculty: faculty,
         targetGroups: target_groups,
         tracks: tracks
@@ -18,14 +17,17 @@ module Founders
     private
 
     def targets
-      # Targets at or below startup's level.
+      # Targets at or below startup's level, excluding sessions
       applicable_targets = Target.joins(target_group: :level)
         .includes(:faculty)
         .where('levels.number <= ?', startup.level.number)
         .where('levels.number >= ?', minimum_level)
+        .where(session_at: nil)
+        .where.not(archived: true)
 
-      # Do not load archived targets.
-      applicable_targets = applicable_targets.where.not(archived: true)
+      # Include all sessions for the school
+      sessions = startup.school.targets.where.not(session_at: nil)
+      applicable_targets += sessions
 
       # Load basic data about targets from database.
       loaded_targets = applicable_targets.as_json(
@@ -44,10 +46,6 @@ module Founders
 
     def levels
       @levels ||= Level.where('number >= ?', minimum_level).as_json(only: %i[id name number school_id])
-    end
-
-    def sessions
-      @sessions ||= startup.school.targets.where.not(session_at: nil)
     end
 
     def faculty

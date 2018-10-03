@@ -33,8 +33,9 @@ module Coaches
       end
     end
 
+    # rubocop:disable Metrics/AbcSize
     def timeline_events
-      TimelineEvent.not_auto_verified.where(startup: current_coach.startups).includes(:founder, :startup, :timeline_event_files, :timeline_event_type, :startup_feedback).map do |timeline_event|
+      TimelineEvent.not_auto_verified.where(startup: current_coach.startups).includes(:founder, :startup, :timeline_event_files, :timeline_event_type, :startup_feedback).order(:created_at).map do |timeline_event|
         {
           id: timeline_event.id,
           title: title(timeline_event),
@@ -53,6 +54,7 @@ module Coaches
         }
       end
     end
+    # rubocop:enable Metrics/AbcSize
 
     def logo_url(startup)
       startup.logo_url || identicon_logo(startup)

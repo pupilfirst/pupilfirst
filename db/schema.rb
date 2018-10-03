@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180703070821) do
+ActiveRecord::Schema.define(version: 20180917065747) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -209,6 +209,13 @@ ActiveRecord::Schema.define(version: 20180703070821) do
     t.index ["level_id"], name: "index_faculty_on_level_id"
     t.index ["slug"], name: "index_faculty_on_slug", unique: true
     t.index ["user_id"], name: "index_faculty_on_user_id"
+  end
+
+  create_table "faculty_startups", id: false, force: :cascade do |t|
+    t.bigint "faculty_id"
+    t.bigint "startup_id"
+    t.index ["faculty_id"], name: "index_faculty_startups_on_faculty_id"
+    t.index ["startup_id"], name: "index_faculty_startups_on_startup_id"
   end
 
   create_table "features", id: :serial, force: :cascade do |t|

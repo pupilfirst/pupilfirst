@@ -7,8 +7,8 @@ feature 'Coach Dashboard' do
   let(:school) { create :school }
   let(:level_0) { create :level, :zero, school: school }
   let(:coach) { create :faculty }
-  let!(:startup_1) { create :startup, level: level_0, faculty: coach }
-  let!(:startup_2) { create :startup, level: level_0, faculty: coach }
+  let!(:startup_1) { create :startup, level: level_0 }
+  let!(:startup_2) { create :startup, level: level_0 }
   let(:track) { create :track, name: 'Some track' }
   let(:target_group) { create :target_group, level: level_0, track: track }
   let!(:target) { create :target, target_group: target_group, submittability: Target::SUBMITTABILITY_AUTO_VERIFY }
@@ -21,6 +21,8 @@ feature 'Coach Dashboard' do
   let!(:auto_verified_event) { create(:timeline_event, startup: startup_1, target: target) }
 
   before :each do
+    startup_1.faculty << coach
+    startup_2.faculty << coach
     sign_in_user coach.user, referer: coaches_dashboard_path
   end
 

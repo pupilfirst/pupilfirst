@@ -176,7 +176,7 @@ export default class FounderDashboard extends React.Component {
           <LevelUpNotification rootProps={this.props} />
         )}
 
-        {this.props.currentLevel !== 0 && (
+        {this.state.activeTrackId !== 'sessions' && this.props.currentLevel !== 0 && (
           <ActionBar
             getAvailableTrackIds={this.availableTrackIds}
             rootProps={this.props}

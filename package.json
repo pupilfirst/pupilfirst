@@ -6,7 +6,7 @@
     "@rails/webpacker": "3.5",
     "babel-plugin-react-css-modules": "^3.3.2",
     "babel-preset-react": "^6.24.1",
-    "bootstrap": "4.0.0",
+    "bootstrap": "4.1.2",
     "bs-fetch": "^0.3.0",
     "cloc": "^2.3.2",
     "coffeescript": "1.12.7",

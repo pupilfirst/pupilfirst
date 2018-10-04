@@ -23,7 +23,7 @@ module Founders
     def prerequisite_targets(target_id)
       target_ids = all_target_prerequisites[target_id]
       return [] if target_ids.blank?
-      applicable_targets.select { |t| t.id.in? target_ids }.as_json(only: [:id])
+      applicable_targets.where(id: target_ids).as_json(only: [:id])
     end
 
     private
@@ -94,15 +94,9 @@ module Founders
       @applicable_targets ||= begin
         minimum_level = startup.level.number.zero? ? 0 : 1
 
-        targets = Target.joins(target_group: :level)
+        Target.joins(target_group: :level)
           .where('levels.number <= ?', startup.level.number)
           .where('levels.number >= ?', minimum_level)
-          .where(session_at: nil)
-          .where.not(archived: true)
-
-        # Include all sessions for the school
-        sessions = startup.school.targets.where.not(session_at: nil)
-        targets + sessions
       end
     end
 

@@ -17,17 +17,12 @@ module Founders
     private
 
     def targets
-      # Targets at or below startup's level, excluding sessions
+      # Targets at or below startup's level
       applicable_targets = Target.joins(target_group: :level)
         .includes(:faculty)
         .where('levels.number <= ?', startup.level.number)
         .where('levels.number >= ?', minimum_level)
-        .where(session_at: nil)
         .where.not(archived: true)
-
-      # Include all sessions for the school
-      sessions = startup.school.targets.where.not(session_at: nil)
-      applicable_targets += sessions
 
       # Load basic data about targets from database.
       loaded_targets = applicable_targets.as_json(

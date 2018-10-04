@@ -3,11 +3,10 @@ require 'rails_helper'
 describe Founders::DashboardDataService do
   subject { described_class.new(founder) }
 
-  let!(:school) { create :school }
-  let!(:level_0) { create :level, :zero, school: school }
-  let!(:level_1) { create :level, :one, school: school }
-  let!(:level_2) { create :level, :two, school: school }
-  let!(:level_3) { create :level, :three, school: school }
+  let!(:level_0) { create :level, :zero }
+  let!(:level_1) { create :level, :one }
+  let!(:level_2) { create :level, :two }
+  let!(:level_3) { create :level, :three }
   let!(:startup) { create :startup, level: level_0 }
   let!(:founder) { create :founder, startup: startup }
   let!(:track_1) { create :track }
@@ -36,9 +35,7 @@ describe Founders::DashboardDataService do
 
         expected_targets = [
           hash_including(level_0_target.slice(target_fields).merge(additional_target_fields(level_0_target, target_group_l0_1))),
-          hash_including(level_0_session.slice(target_fields).merge(additional_target_fields(level_0_session, target_group_l0_2))),
-          hash_including(level_1_session.slice(target_fields).merge(additional_target_fields(level_1_session, target_group_l1_2))),
-          hash_including(level_2_session.slice(target_fields).merge(additional_target_fields(level_2_session, target_group_l2_2)))
+          hash_including(level_0_session.slice(target_fields).merge(additional_target_fields(level_0_session, target_group_l0_2)))
         ]
 
         team_members = Faculty.team.all.as_json(only: %i[id name], methods: %i[image_url]).map do |faculty_fields|
@@ -72,8 +69,7 @@ describe Founders::DashboardDataService do
           hash_including(level_1_session.slice(target_fields).merge(additional_target_fields(level_1_session, target_group_l1_2))),
           hash_including(level_2_target.slice(target_fields).merge(additional_target_fields(level_2_target, target_group_l2_2))),
           hash_including(level_2_session.slice(target_fields).merge(additional_target_fields(level_2_session, target_group_l2_2))),
-          hash_including(level_2_target_with_prerequisites.slice(target_fields).merge(additional_target_fields(level_2_target_with_prerequisites, target_group_l2_1)).merge(prerequisite_fields(level_2_target_with_prerequisites))),
-          hash_including(level_0_session.slice(target_fields).merge(additional_target_fields(level_0_session, target_group_l0_2)))
+          hash_including(level_2_target_with_prerequisites.slice(target_fields).merge(additional_target_fields(level_2_target_with_prerequisites, target_group_l2_1)).merge(prerequisite_fields(level_2_target_with_prerequisites)))
         ]
 
         team_members = Faculty.team.all.as_json(only: %i[id name], methods: %i[image_url]).map do |faculty_fields|

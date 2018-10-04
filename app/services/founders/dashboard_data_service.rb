@@ -17,14 +17,12 @@ module Founders
     private
 
     def targets
-      # Targets at or below startup's level.
+      # Targets at or below startup's level
       applicable_targets = Target.joins(target_group: :level)
         .includes(:faculty)
         .where('levels.number <= ?', startup.level.number)
         .where('levels.number >= ?', minimum_level)
-
-      # Do not load archived targets.
-      applicable_targets = applicable_targets.where.not(archived: true)
+        .where.not(archived: true)
 
       # Load basic data about targets from database.
       loaded_targets = applicable_targets.as_json(

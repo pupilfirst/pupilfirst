@@ -8,6 +8,7 @@ feature 'Resources' do
   let(:level_0) { create :level, :zero, school: school_1 }
   let(:level_1) { create :level, :one, school: school_1 }
   let(:level_2) { create :level, :two, school: school_1 }
+  let(:level_1_s2) { create :level, :one, school: school_2 }
   let(:level_2_s2) { create :level, :two, school: school_2 }
 
   let(:founder) { create :founder }
@@ -17,6 +18,7 @@ feature 'Resources' do
   let!(:level_0_resource) { create :resource, level: level_0 }
   let!(:level_1_resource) { create :resource, level: level_1 }
   let!(:level_2_resource) { create :resource, level: level_2 }
+  let!(:l1_s2_resource) { create :resource, level: level_1_s2 }
   let!(:l2_s2_resource) { create :resource, level: level_2_s2 }
 
   scenario 'user visits resources page' do
@@ -119,11 +121,12 @@ feature 'Resources' do
           expect(page).to have_text('Please do not share these resources outside your founding team')
 
           # Public resources + resources in school 2 should be shown. Resources from school 1 should not be visible.
-          expect(page).to have_selector('.resource-box', count: 2)
+          expect(page).to have_selector('.resource-box', count: 3)
           expect(page).to have_text(public_resource.title[0..10])
           expect(page).not_to have_text(level_0_resource.title[0..10])
           expect(page).not_to have_text(level_1_resource.title[0..10])
           expect(page).not_to have_text(level_2_resource.title[0..10])
+          expect(page).to have_text(l1_s2_resource.title[0..10])
           expect(page).to have_text(l2_s2_resource.title[0..10])
 
           # Should not have access to resource in school 1.

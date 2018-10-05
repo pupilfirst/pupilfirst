@@ -51,7 +51,8 @@ module Founders
     end
 
     def target_groups
-      TargetGroup.joins(:level)
+      TargetGroup.joins(level: :school)
+        .where(levels: { school_id: startup.school.id })
         .where('levels.number <= ?', startup.level.number)
         .where('levels.number >= ?', minimum_level)
         .as_json(

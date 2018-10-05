@@ -12,7 +12,6 @@ class ApplicationController < ActionController::Base
   before_action :sign_out_if_required
   before_action :pretender
 
-  helper_method :current_mooc_student
   helper_method :current_founder
   helper_method :current_startup
   helper_method :current_coach
@@ -51,10 +50,6 @@ class ApplicationController < ActionController::Base
     return unless current_founder
 
     @platform_feedback_for_form = PlatformFeedback.new(founder_id: current_founder.id)
-  end
-
-  def current_mooc_student
-    @current_mooc_student ||= MoocStudent.find_by(user: current_user) if current_user.present?
   end
 
   def current_coach

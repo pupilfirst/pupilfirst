@@ -11,7 +11,7 @@ module Users
     end
 
     def after_sign_in_path
-      faculty_path || admin_path || founder_path || mooc_student_path || root_path
+      faculty_path || admin_path || founder_path || root_path
     end
 
     private
@@ -29,11 +29,6 @@ module Users
     def founder_path
       return if @user.founder&.startup.blank?
       url_helpers.student_dashboard_path
-    end
-
-    def mooc_student_path
-      return if @user.mooc_student.blank?
-      url_helpers.six_ways_path
     end
 
     def root_path

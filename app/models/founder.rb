@@ -328,4 +328,8 @@ class Founder < ApplicationRecord
       'Other (Please Specify)'
     ].freeze
   end
+
+  def self.valid_semester_values
+    %w[I II III IV V VI VII VIII Graduated Other]
+  end
 end

@@ -4,13 +4,12 @@ ActiveAdmin.register User do
 
   filter :email
   filter :founder_id_not_null, label: 'Is Founder', as: :boolean
-  filter :mooc_student_id_not_null, label: 'Is MOOC Student', as: :boolean
 
   controller do
     include DisableIntercom
 
     def scoped_collection
-      super.includes :mooc_student, :founder
+      super.includes :founder
     end
   end
 
@@ -18,7 +17,6 @@ ActiveAdmin.register User do
     selectable_column
 
     column :email
-    column :mooc_student
     column :founder
 
     actions
@@ -27,7 +25,6 @@ ActiveAdmin.register User do
   show do
     attributes_table do
       row :email
-      row :mooc_student
       row :founder
 
       row :sign_out_at_next_request do |user|

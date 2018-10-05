@@ -207,20 +207,9 @@ Rails.application.routes.draw do
 
   get '/dashboard', to: redirect('/student/dashboard')
 
-  # Also have /StartInCollege
-  get 'StartInCollege', to: redirect('/startincollege')
-
-  # redirect /startincollege to /sixways
-  get 'startincollege', to: redirect('/sixways')
-
   scope 'policies', as: 'policies', controller: 'home' do
     get 'privacy'
     get 'terms'
-  end
-
-  scope 'sixways', as: 'six_ways', controller: 'six_ways' do
-    get '/', action: 'index'
-    get 'gtu', action: 'gtu_index'
   end
 
   resources :targets, only: [] do

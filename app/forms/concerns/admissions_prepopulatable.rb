@@ -6,7 +6,6 @@ module AdmissionsPrepopulatable
   extend ActiveSupport::Concern
 
   def prepopulate(user)
-    prepopulate_from(user.mooc_student)
     prepopulate_from(user.founder)
   end
 

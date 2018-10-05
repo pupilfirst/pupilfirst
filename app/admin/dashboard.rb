@@ -3,7 +3,6 @@ ActiveAdmin.register_page 'Dashboard' do
     include DisableIntercom
 
     def index
-      @presenter = ActiveAdmin::DashboardPresenter.new
       @core_stats = Admin::CoreStatsService.new.stats
     end
   end

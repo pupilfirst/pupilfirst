@@ -28,9 +28,14 @@ class ResourcePolicy < ApplicationPolicy
       # ... plus resources for the startup.
       resources = resources.or(scope.where(startup: startup))
 
-      # ... plus resources based on the startup's level.
-      level = startup&.level
-      resources.or(scope.where('levels.number <= ?', level.number)) if level.present?
+      # ... plus resources based on the startup's level & school.
+      startup_level = startup&.level
+
+      if startup_level.present?
+        resources.or(scope.where('levels.number <= ? AND levels.school_id = ?', startup_level.number, startup.school.id))
+      else
+        resources
+      end
     end
   end
 end

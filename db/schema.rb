@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180917065747) do
+ActiveRecord::Schema.define(version: 20181005105447) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -124,16 +124,6 @@ ActiveRecord::Schema.define(version: 20180917065747) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "instructions"
-  end
-
-  create_table "course_modules", id: :serial, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "name"
-    t.integer "module_number"
-    t.string "slug"
-    t.datetime "publish_at"
-    t.index ["slug"], name: "index_course_modules_on_slug"
   end
 
   create_table "data_migrations", id: false, force: :cascade do |t|
@@ -324,54 +314,6 @@ ActiveRecord::Schema.define(version: 20180917065747) do
     t.bigint "school_id"
     t.index ["number"], name: "index_levels_on_number"
     t.index ["school_id"], name: "index_levels_on_school_id"
-  end
-
-  create_table "module_chapters", id: :serial, force: :cascade do |t|
-    t.integer "course_module_id"
-    t.string "name"
-    t.integer "chapter_number"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.text "links"
-    t.string "slug"
-    t.index ["course_module_id"], name: "index_module_chapters_on_course_module_id"
-    t.index ["slug"], name: "index_module_chapters_on_slug"
-  end
-
-  create_table "mooc_quiz_attempts", id: :serial, force: :cascade do |t|
-    t.integer "course_module_id"
-    t.integer "mooc_student_id"
-    t.datetime "taken_at"
-    t.float "score"
-    t.integer "total_questions"
-    t.integer "attempted_questions"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["course_module_id"], name: "index_mooc_quiz_attempts_on_course_module_id"
-    t.index ["mooc_student_id"], name: "index_mooc_quiz_attempts_on_mooc_student_id"
-  end
-
-  create_table "mooc_quiz_questions", id: :serial, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "course_module_id"
-    t.text "question"
-    t.index ["course_module_id"], name: "index_mooc_quiz_questions_on_course_module_id"
-  end
-
-  create_table "mooc_students", id: :serial, force: :cascade do |t|
-    t.string "email"
-    t.string "name"
-    t.string "college_text"
-    t.string "semester"
-    t.string "gender"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "user_id"
-    t.string "phone"
-    t.text "completed_chapters"
-    t.integer "college_id"
-    t.index ["college_id"], name: "index_mooc_students_on_college_id"
   end
 
   create_table "payments", id: :serial, force: :cascade do |t|

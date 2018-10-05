@@ -3,11 +3,13 @@ require 'rails_helper'
 describe ResourcePolicy do
   subject { described_class }
 
-  let(:level_0) { create :level, :zero }
-  let(:level_1) { create :level, :one }
-  let(:level_2) { create :level, :two }
+  let!(:school) { create :school }
 
-  let(:startup) { create :startup, :subscription_active }
+  let(:level_0) { create :level, :zero, school: school }
+  let(:level_1) { create :level, :one, school: school }
+  let(:level_2) { create :level, :two, school: school }
+
+  let(:startup) { create :startup, :subscription_active, level: level_1 }
   let(:founder) { startup.founders.where.not(id: startup.team_lead_id).first }
 
   let!(:public_resource) { create :resource }

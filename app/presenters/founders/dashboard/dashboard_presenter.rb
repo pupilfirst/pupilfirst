@@ -19,7 +19,8 @@ module Founders
           iconPaths: icon_paths,
           testMode: Rails.env.test?,
           initialTargetId: @overlay_target&.id,
-          tourDashboard: tour_dashboard?
+          tourDashboard: tour_dashboard?,
+          sponsoredSchool: current_startup.level.school.sponsored
         )
       end
 

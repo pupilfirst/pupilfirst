@@ -6,7 +6,12 @@ export default class LevelUpNotification extends React.Component {
     if (this.currentLevelNumber() === 0) {
       return "Congratulations! You are now an enrolled student at SV.CO.";
     } else if (this.currentLevelNumber() === this.props.rootProps.maxLevelNumber) {
-      return "Congratulations! You are now part of our Alumni.";
+      if (this.props.rootProps.sponsoredSchool) {
+        return "Congratulations! You have completed all milestone targets in this course.";
+      }
+      else {
+        return "Congratulations! You are now part of our Alumni.";
+      }
     } else {
       return "Ready to Level Up!";
     }
@@ -14,6 +19,30 @@ export default class LevelUpNotification extends React.Component {
 
   currentLevelNumber() {
     return this.props.rootProps.currentLevel.number;
+  }
+
+  eligibleNotificationSubText() {
+    if (this.props.rootProps.sponsoredSchool) {
+      return (
+        <p>
+          {" "}
+          Feel free to complete targets that you might have left out, read up
+          on attached links and resources, and work on the breadth and depth
+          of your skills.
+        </p>
+      )
+    }
+    else {
+      return (
+        <p>
+          {" "}
+          Thanks for sharing your life experiences with SV.CO. Hope this has
+          been an awesome experience. For graduation options & access to the
+          Alumni network, write to{" "}
+          <a href="mailto:graduation@sv.co">graduation@sv.co</a>
+        </p>
+      )
+    }
   }
 
   eligibleNotificationText() {
@@ -26,13 +55,7 @@ export default class LevelUpNotification extends React.Component {
             You've completed our Level Framework, but you know by now that this
             is just the beginning of your journey.
           </h4>
-          <p>
-            {" "}
-            Thanks for sharing your life experiences with SV.CO. Hope this has
-            been an awesome experience. For graduation options & access to the
-            Alumni network, write to{" "}
-            <a href="mailto:graduation@sv.co">graduation@sv.co</a>
-          </p>
+          {this.eligibleNotificationSubText()}
         </div>
       );
     } else {

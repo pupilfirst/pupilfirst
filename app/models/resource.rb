@@ -41,6 +41,8 @@ class Resource < ApplicationRecord
   # Custom scope to allow AA to filter by intersection of tags.
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
 
+  scope :live, -> { where(archived: [false, nil]) }
+
   def self.ransackable_scopes(_auth)
     %i[ransack_tagged_with]
   end

@@ -1,0 +1,7 @@
+---
+timestamp: '2018-10-08T07:23:32Z'
+title: 'Added an archived flag to resources '
+trello: https://trello.com/c/Y7segsIW
+private: true
+description: This will allow resources that are no longer relevant, to be archived
+  from the backend.

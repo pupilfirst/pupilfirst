@@ -18,8 +18,9 @@ module Founders
 
     def targets
       # Targets at or below startup's level
-      applicable_targets = Target.joins(target_group: :level)
+      applicable_targets = Target.joins(target_group: { level: :school })
         .includes(:faculty)
+        .where(levels: { school_id: startup.school.id })
         .where('levels.number <= ?', startup.level.number)
         .where('levels.number >= ?', minimum_level)
         .where.not(archived: true)
@@ -40,7 +41,7 @@ module Founders
     end
 
     def levels
-      @levels ||= Level.where('number >= ?', minimum_level).as_json(only: %i[id name number school_id])
+      @levels ||= startup.school.levels.where('number >= ?', minimum_level).as_json(only: %i[id name number school_id])
     end
 
     def faculty

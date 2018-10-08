@@ -3,10 +3,13 @@ require 'rails_helper'
 describe Founders::DashboardDataService do
   subject { described_class.new(founder) }
 
-  let!(:level_0) { create :level, :zero }
-  let!(:level_1) { create :level, :one }
-  let!(:level_2) { create :level, :two }
-  let!(:level_3) { create :level, :three }
+  let(:school_1) { create :school }
+  let(:school_2) { create :school }
+  let!(:level_0) { create :level, :zero, school: school_1 }
+  let!(:level_1) { create :level, :one, school: school_1 }
+  let!(:level_2) { create :level, :two, school: school_1 }
+  let!(:level_3) { create :level, :three, school: school_1 }
+  let(:school_2_level) { create :level, :one, school: school_2 }
   let!(:startup) { create :startup, level: level_0 }
   let!(:founder) { create :founder, startup: startup }
   let!(:track_1) { create :track }
@@ -17,6 +20,8 @@ describe Founders::DashboardDataService do
   let!(:target_group_l1_2) { create :target_group, level: level_1, track: track_2 }
   let!(:target_group_l2_1) { create :target_group, level: level_2, milestone: true, track: track_1 }
   let!(:target_group_l2_2) { create :target_group, level: level_2, track: track_2 }
+  let(:school_2_target_group) { create :target_group, level: school_2_level }
+  let!(:school_2_target) { create :target, target_group: school_2_target_group }
   let!(:level_0_target) { create :target, target_group: target_group_l0_1 }
   let!(:level_0_session) { create :target, session_at: 1.day.ago, target_group: target_group_l0_2 }
   let!(:level_1_target) { create :target, target_group: target_group_l1_1 }
@@ -58,6 +63,8 @@ describe Founders::DashboardDataService do
 
       it 'leaves out data from level 0, and includes up to level N' do
         expected_target_groups = [
+          hash_including(target_group_l1_1.slice(target_group_fields).merge(track: { id: track_1.id }, level: { id: level_1.id })),
+          hash_including(target_group_l1_2.slice(target_group_fields).merge(track: { id: track_2.id }, level: { id: level_1.id })),
           hash_including(target_group_l2_1.slice(target_group_fields).merge(track: { id: track_1.id }, level: { id: level_2.id })),
           hash_including(target_group_l2_2.slice(target_group_fields).merge(track: { id: track_2.id }, level: { id: level_2.id }))
         ]

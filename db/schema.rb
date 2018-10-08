@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181005105447) do
+ActiveRecord::Schema.define(version: 20181008060636) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -403,6 +403,8 @@ ActiveRecord::Schema.define(version: 20181005105447) do
     t.integer "target_id"
     t.string "link"
     t.string "file_content_type"
+    t.boolean "archived", default: false
+    t.index ["archived"], name: "index_resources_on_archived"
     t.index ["level_id"], name: "index_resources_on_level_id"
     t.index ["slug"], name: "index_resources_on_slug"
     t.index ["startup_id"], name: "index_resources_on_startup_id"

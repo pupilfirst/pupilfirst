@@ -1,5 +1,5 @@
 ActiveAdmin.register Resource do
-  permit_params :title, :description, :file, :thumbnail, :level_id, :startup_id, :target_id, :video_embed, :link, tag_list: []
+  permit_params :title, :description, :file, :thumbnail, :level_id, :startup_id, :target_id, :video_embed, :link, :archived, tag_list: []
 
   controller do
     include DisableIntercom
@@ -20,6 +20,7 @@ ActiveAdmin.register Resource do
   filter :level, collection: -> { Level.all.order(number: :asc) }
   filter :title
   filter :description
+  filter :archived
 
   batch_action :tag, form: proc { { tag: Resource.tag_counts_on(:tags).pluck(:name) } } do |ids, inputs|
     Resource.where(id: ids).each do |resource|
@@ -93,6 +94,7 @@ ActiveAdmin.register Resource do
       row :created_at
       row :updated_at
       row :target
+      row :archived
     end
   end
 
@@ -116,6 +118,7 @@ ActiveAdmin.register Resource do
         collection: Resource.tag_counts_on(:tags).pluck(:name),
         multiple: true
       f.input :target_id, as: :select, collection: []
+      f.input :archived
     end
 
     f.actions

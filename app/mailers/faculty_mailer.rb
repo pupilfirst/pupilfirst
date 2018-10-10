@@ -22,4 +22,15 @@ class FacultyMailer < ApplicationMailer
     @startup = connect_request.startup
     mail(to: @faculty.email, subject: "Feedback for your recent office hour with team members of #{@startup.display_name}")
   end
+
+  # Mail sent after a student submits a timeline event.
+  #
+  # @param timeline_event [TimelineEvent] Timeline event that was created just now.
+  def student_submission_notification(timeline_event, faculty)
+    @founder = timeline_event.founder
+    @startup = timeline_event.startup
+    @faculty = faculty
+    @target = timeline_event.target
+    mail(to: @faculty.email, subject: "There is a new submission from #{@startup.product_name}")
+  end
 end

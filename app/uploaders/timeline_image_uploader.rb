@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class TimelineImageUploader < CarrierWave::Uploader::Base
   include CarrierWave::Backgrounder::Delay
   include CarrierWave::MiniMagick

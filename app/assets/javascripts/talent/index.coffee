@@ -23,9 +23,7 @@ setupCompanyCarousel = ->
     infinite: true
 
 setupTestimonialCarousel = ->
-  testimonialCarousel = $(".testimonial-carousel")
-
-  testimonialCarousel.slick
+  $(".testimonial-carousel").slick
     dots: true
     arrows: true
     infinite: true
@@ -38,10 +36,10 @@ setupTestimonialCarousel = ->
       }
     ]
 
-  testimonialCarousel.on 'beforeChange', (event, slick, currentSlide, nextSlide) ->
-    previousSlide = $(".testimonial-slide-item[data-slick-index='#{currentSlide}']")
-    videoContent = previousSlide.find('iframe')[0].contentWindow
-    videoContent.postMessage('{"event":"command","func":"stopVideo","args":""}', '*');
+  # $(".testimonial-carousel").on 'beforeChange', (event, slick, currentSlide, nextSlide) ->
+  #   previousSlide = $(".testimonial-slide-item [data-slick-index='#{currentSlide}']")
+  #   videoContent = previousSlide.find('iframe')[0].contentWindow
+  #   videoContent.postMessage('{"event":"command","func":"stopVideo","args":""}', '*');
 
 animateHeroHeadline = ->
   typed = new Typed(
@@ -62,7 +60,7 @@ showTalentFormOnError = ->
     talentFormModal.modal('show')
 
 clearAllFormInterests = ->
-  interestChoices = ['joining_svco_as_faculty', 'accelerating_startups', 'investing_in_startups', 'hiring_founders',
+  interestChoices = ['joining_svco_as_faculty', 'accelerating_startups', 'investing_in_startups', 'hiring_developers',
     'acquihiring_teams']
 
   $.each interestChoices, (index, selection) ->

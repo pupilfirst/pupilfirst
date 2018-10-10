@@ -47,4 +47,12 @@ after 'development:levels' do
     category: 'visiting_coaches',
     image: Rails.root.join('spec/support/uploads/faculty/jack_sparrow.png').open
   )
+
+  Faculty.create!(
+    name: 'iOS Coach',
+    title: 'Coaching Expert',
+    email: 'ioscoach@example.com',
+    category: 'developer_coaches',
+    image: Rails.root.join('spec/support/uploads/faculty/mickey_mouse.jpg').open
+  )
 end

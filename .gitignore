@@ -27,3 +27,16 @@ tags
 # Ignore public packs.
 /public/packs
 /public/packs-test
+yarn-debug.log*
+.yarn-integrity
+
+# Ignore these associated with reason-react and bsb
+.merlin
+/node_modules/
+/lib/*
+!/lib/js/*
+/bundledOutputs/
+npm-debug.log
+.DS_Store
+.bsb.lock
+*.bs.js

@@ -1,0 +1,18 @@
+@import "../../../shared/variables";
+
+.timeline-events-panel__container {
+}
+
+.timeline-events-panel__empty-notice {
+  text-align: center;
+  background-color: white;
+  box-shadow: 2px 0px 10px 0px #e5e5e5;
+  color: darkgrey;
+  border-radius: 10px;
+}
+
+.timeline-events-panel__empty-icon {
+  width: 60px;
+  display: block;
+  margin-bottom: 1rem;
+}

@@ -8,3 +8,4 @@ PreCommit:
     exclude:
       - '**/vendor/**/*'
       - '**/*.svg'
+      - 'app/javascript/**/*.bs.js'

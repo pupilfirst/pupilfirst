@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import styles from "./CouponAdder.scss";
-import shared from "./shared.scss";
+import styles from "./CouponAdder.module.scss";
+import shared from "./shared.module.scss";
 
 export default class CouponAdder extends React.Component {
   constructor(props) {

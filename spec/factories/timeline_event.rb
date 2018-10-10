@@ -5,7 +5,7 @@ FactoryBot.define do
     description { Faker::Lorem.words(10).join ' ' }
     event_on { 1.month.from_now }
     timeline_event_type
-    status TimelineEvent::STATUS_PENDING
+    status { TimelineEvent::STATUS_PENDING }
     status_updated_at { Time.zone.now }
 
     factory :timeline_event_with_image do
@@ -22,7 +22,7 @@ FactoryBot.define do
     end
 
     trait :verified do
-      status TimelineEvent::STATUS_VERIFIED
+      status { TimelineEvent::STATUS_VERIFIED }
     end
   end
 end

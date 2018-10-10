@@ -1,9 +1,9 @@
 ActiveAdmin.register Founder do
-  include DisableIntercom
-
   actions :all, except: [:destroy]
 
   controller do
+    include DisableIntercom
+
     def scoped_collection
       if request.format == 'text/csv'
         super.includes(:startup, { college: :state }, :tag_taggings, :tags, :active_admin_comments)

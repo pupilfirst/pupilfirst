@@ -1,4 +1,3 @@
-
 h1.product-name {
   font-weight: 200;
   font-size: 50px;
@@ -58,19 +57,22 @@ h1.product-name {
     }
   }
 
-  .data-founder {
+  .data-founder,
+  .data-faculty {
     background-color: $dark-primary-background;
     margin: 1rem 0;
+    overflow: hidden;
     box-shadow: 0px 0px 5px $grey-border;
 
-    .founder-image {
+    .founder-image,
+    .faculty-image {
       width: 100px;
       height: 100px;
       background-size: cover;
 
-      img, svg {
+      img,
+      svg {
         width: 100px;
-        height: 100px;
       }
     }
 
@@ -85,7 +87,9 @@ h1.product-name {
       padding-right: 10px;
     }
 
-    .dash { margin-top: -10px; }
+    .dash {
+      margin-top: -10px;
+    }
 
     ul {
       padding: 0;
@@ -96,7 +100,9 @@ h1.product-name {
         margin-right: 5px;
       }
 
-      li:last-of-type { margin-right: 0; }
+      li:last-of-type {
+        margin-right: 0;
+      }
     }
   }
 }
@@ -107,13 +113,14 @@ h1.product-name {
 }
 
 // Make the two button_to uses inline blocks.
-.timeline-body .button_to, .tl-iteration .button_to {
+.timeline-body .button_to,
+.tl-iteration .button_to {
   display: inline-block;
   margin-right: 5px;
 }
 
 #timeline_event_event_on {
-  font-family: 'Source Sans Pro', FontAwesome, sans-serif;
+  font-family: "Source Sans Pro", FontAwesome, sans-serif;
   display: inline-block;
   vertical-align: bottom;
   width: 100px;
@@ -128,9 +135,13 @@ h1.product-name {
 }
 
 // Datepicker customizations
-.dtpicker-buttonCont .dtpicker-button { background: $theme-light-green; }
+.dtpicker-buttonCont .dtpicker-button {
+  background: $theme-light-green;
+}
 
-.dtpicker-content { max-width: 360px; }
+.dtpicker-content {
+  max-width: 360px;
+}
 
 .dtpicker-header {
   .dtpicker-value {
@@ -142,7 +153,8 @@ h1.product-name {
   }
 }
 
-.founder__social-links {
+.founder__social-links,
+.faculty__social-links {
   margin: 0;
   bottom: 5px;
   font-size: 1.5rem;
@@ -152,8 +164,10 @@ h1.product-name {
   padding: 0;
   margin-top: 10px;
 
-  .learn-more-btn, .download-rubric-btn, .review-test-btn {
-    margin-right:10px;
+  .learn-more-btn,
+  .download-rubric-btn,
+  .review-test-btn {
+    margin-right: 10px;
     margin-top: 10px;
     border-radius: 5px;
     background-color: white;
@@ -228,7 +242,9 @@ h1.product-name {
   text-align: center;
   padding: 20px;
 
-  a { text-decoration: none; }
+  a {
+    text-decoration: none;
+  }
 
   p {
     width: 90%;
@@ -268,7 +284,7 @@ h1.product-name {
     top: 0;
     bottom: 0;
     position: absolute;
-    content: ' ';
+    content: " ";
     width: 2px;
     background-color: $gray-border;
     left: 50%;
@@ -279,8 +295,9 @@ h1.product-name {
     margin-bottom: 20px;
     position: relative;
 
-    &:before, &:after {
-      content: ' ';
+    &:before,
+    &:after {
+      content: " ";
       display: table;
     }
 
@@ -328,20 +345,48 @@ h1.product-name {
 }
 
 .timeline-badge {
-  &.color1 { background-color: #6A71E6 !important; }
-  &.color2 { background-color: #3498db !important; }
-  &.color3 { background-color: #FF5534 !important; }
-  &.color4 { background-color: #FE4A65 !important; }
-  &.color5 { background-color: #f5ab35 !important; }
-  &.color6 { background-color: #2DBAE7 !important; }
-  &.color7 { background-color: #9babd4 !important; }
-  &.color8 { background-color: #61D2FE !important; }
-  &.color9 { background-color: #48DC6C !important; }
-  &.color10 { background-color: #8BBF53 !important; }
-  &.color11 { background-color: #8BBF53 !important; }
-  &.color12 { background-color: #424953 !important; }
-  &.color13 { background-color: #FA6D52 !important; }
-  &.color14 { background-color: #8BBF53 !important; }
+  &.color1 {
+    background-color: #6a71e6 !important;
+  }
+  &.color2 {
+    background-color: #3498db !important;
+  }
+  &.color3 {
+    background-color: #ff5534 !important;
+  }
+  &.color4 {
+    background-color: #fe4a65 !important;
+  }
+  &.color5 {
+    background-color: #f5ab35 !important;
+  }
+  &.color6 {
+    background-color: #2dbae7 !important;
+  }
+  &.color7 {
+    background-color: #9babd4 !important;
+  }
+  &.color8 {
+    background-color: #61d2fe !important;
+  }
+  &.color9 {
+    background-color: #48dc6c !important;
+  }
+  &.color10 {
+    background-color: #8bbf53 !important;
+  }
+  &.color11 {
+    background-color: #8bbf53 !important;
+  }
+  &.color12 {
+    background-color: #424953 !important;
+  }
+  &.color13 {
+    background-color: #fa6d52 !important;
+  }
+  &.color14 {
+    background-color: #8bbf53 !important;
+  }
 }
 
 .timeline-title-panel {
@@ -364,7 +409,7 @@ h1.product-name {
       display: inline;
     }
   }
-  .fa-comment{
+  .fa-comment {
     color: $timeline-blue-text;
   }
 }
@@ -374,18 +419,21 @@ h1.product-name {
   font-weight: 600;
   font-size: 14px;
   color: $timeline-blue-text;
-  margin-top: -5px; }
+  margin-top: -5px;
+}
 
 .tl-body {
   font-size: 14px;
   line-height: 25px;
   color: $dark-grey-text;
   padding-bottom: 5px;
-  word-wrap: break-word; }
+  word-wrap: break-word;
+}
 
 .timeline-footer {
   margin-top: 12px;
-  clear: both; }
+  clear: both;
+}
 
 .tl-footer {
   padding-top: 15px;
@@ -406,14 +454,15 @@ h1.product-name {
       background: $theme-dark-green;
       color: white;
       z-index: 1000;
-      box-shadow: rgba(0, 0, 0, .3) 0 16px 16px 0;
+      box-shadow: rgba(0, 0, 0, 0.3) 0 16px 16px 0;
     }
   }
 }
 
 .tl-link-button {
   display: inline-block !important;
-  margin-bottom: 10px !important; }
+  margin-bottom: 10px !important;
+}
 
 .timeline-body > p,
 .timeline-body > ul {
@@ -453,7 +502,8 @@ h1.product-name {
   margin-left: -20px;
 }
 
-.founder, .founder-avatar > img {
+.founder,
+.founder-avatar > img {
   height: 130px;
 }
 
@@ -498,7 +548,8 @@ h1.product-name {
   vertical-align: middle;
   display: inline-block;
   background-size: 22px;
-  background: #1db1ed asset-url("startups/show/tour-icon.svg") no-repeat center center;
+  background: #1db1ed asset-url("startups/show/tour-icon.svg") no-repeat center
+    center;
   box-shadow: 0 0 2px 2px #ddd;
   outline: none;
   overflow: hidden;

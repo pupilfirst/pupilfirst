@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import CouponAdder from "./CouponAdder";
 import CouponRemover from "./CouponRemover";
-import "./FeeOffer.scss";
+import "./FeeOffer.module.scss";
 
 export default class FeeOffer extends React.Component {
   constructor(props) {

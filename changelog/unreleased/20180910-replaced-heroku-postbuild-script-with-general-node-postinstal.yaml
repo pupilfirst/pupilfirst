@@ -1,0 +1,11 @@
+---
+timestamp: '2018-09-10T06:16:13Z'
+title: Replaced heroku-postbuild script with general node postinstall script to generate
+  JS from Reason code after packages are installed.
+trello: https://trello.com/c/pWm7bYY9
+private: true
+description: This fixes deployment issues on Heroku, which were broken because changes
+  applied in the nodejs buildpack were not persisting to the ruby buildpack, blocking
+  precompilation of assets. The nodejs buildpack has been removed since precompilation
+  now does a yarn install first before getting started with its own thing.
+category: bugfix

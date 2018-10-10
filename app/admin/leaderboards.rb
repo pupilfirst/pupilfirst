@@ -1,14 +1,12 @@
 ActiveAdmin.register_page 'Leaderboards' do
-  controller do
-    include DisableIntercom
-  end
-
   menu parent: 'Startups'
 
   controller do
+    include DisableIntercom
+
     def index
       @level = Level.find_by(number: level_number) || Level.find_by(number: 1)
-      @week_start_date = start_date.present? ? DateTime.parse(start_date) : DatesService.last_week_start_date
+      @week_start_date = start_date.present? ? Time.zone.parse(start_date) : DatesService.last_week_start_date
 
       if params[:karma_points_filter].present?
         @leaderboard = Startups::LeaderboardService.new(@level).leaderboard(start_date: @week_start_date)

@@ -2,13 +2,8 @@ require 'rails_helper'
 
 feature 'Talent Form' do
   context 'User visits talent page' do
-    before :each do
-      visit(talent_path)
-    end
-
     scenario 'User submits form for acquiring teams', js: true do
-      # ensure user is on talent page without the talent form
-      expect(page).to have_text('Discover Great Startups')
+      visit(talent_path)
 
       click_button 'Acquihire Teams'
       expect(page.find('#talent_query_type_acquihiring_teams')).to be_checked

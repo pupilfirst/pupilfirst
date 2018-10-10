@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 class Founder < ApplicationRecord
@@ -28,21 +27,21 @@ class Founder < ApplicationRecord
 
   serialize :roles
 
-  has_many :public_slack_messages
+  has_many :public_slack_messages, dependent: :nullify
   belongs_to :startup, optional: true
   belongs_to :invited_startup, class_name: 'Startup', optional: true
   has_many :karma_points, dependent: :destroy
-  has_many :timeline_events
-  has_many :visits, as: :user
-  has_many :ahoy_events, class_name: 'Ahoy::Event', as: :user
-  has_many :platform_feedback
+  has_many :timeline_events, dependent: :nullify
+  has_many :visits, as: :user, dependent: :nullify, inverse_of: :user
+  has_many :ahoy_events, class_name: 'Ahoy::Event', as: :user, dependent: :nullify, inverse_of: :user
+  has_many :platform_feedback, dependent: :nullify
   belongs_to :user
   belongs_to :college, optional: true
   has_one :university, through: :college
   has_many :payments, dependent: :restrict_with_error
   belongs_to :resume_file, class_name: 'TimelineEventFile', optional: true
-  has_many :english_quiz_submissions, foreign_key: 'quizee_id'
-  has_many :active_admin_comments, as: :resource, class_name: 'ActiveAdmin::Comment'
+  has_many :english_quiz_submissions, foreign_key: 'quizee_id', dependent: :destroy, inverse_of: :quizee
+  has_many :active_admin_comments, as: :resource, class_name: 'ActiveAdmin::Comment', dependent: :destroy, inverse_of: :resource
 
   scope :admitted, -> { joins(:startup).merge(Startup.admitted) }
   scope :level_zero, -> { joins(:startup).merge(Startup.level_zero) }
@@ -61,8 +60,6 @@ class Founder < ApplicationRecord
     admitted.where(exited: false).where.not(id: active_on_slack(Time.now.beginning_of_week, Time.now)).where.not(id: active_on_web(Time.now.beginning_of_week, Time.now))
   }
   scope :not_exited, -> { where.not(exited: true) }
-  scope :subscribed, -> { joins(startup: :payments).merge(Payment.paid).where('payments.billing_end_at > ?', Time.now) }
-  scope :at_or_above_level, ->(minimum_level) { joins(startup: :level).where('levels.number >= ?', minimum_level.number) }
   scope :screening_score_above, ->(minimum_score) { where("(screening_data ->> 'score')::int >= ?", minimum_score) }
 
   def self.with_email(email)
@@ -157,7 +154,7 @@ class Founder < ApplicationRecord
   has_secure_token :invitation_token
 
   def display_name
-    name.blank? ? email : name
+    name.presence || email
   end
 
   def name_and_email
@@ -212,14 +209,14 @@ class Founder < ApplicationRecord
   # Returns the percentage of profile completion as an integer
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def profile_completion_percentage
-    score = 20 # a default score given for required fields during registration
-    score += 15 if slack_user_id.present? # has a valid slack account associated
-    score += 10 if skype_id.present?
-    score += 15 if social_url_present? # has atleast 1 social media links
-    score += 5 if communication_address.present?
-    score += 10 if about.present?
-    score += 10 if identification_proof.present?
-    score += 15 if resume_link.present? # has uploaded resume
+    score = 30 # a default score given for required fields during registration
+    # score += 15 if slack_user_id.present? # has a valid slack account associated
+    # score += 10 if skype_id.present?
+    score += 25 if social_url_present? # has atleast 1 social media links
+    score += 15 if communication_address.present?
+    score += 15 if about.present?
+    score += 15 if identification_proof.present?
+    # score += 15 if resume_link.present? # has uploaded resume
     score
   end
 
@@ -233,6 +230,7 @@ class Founder < ApplicationRecord
     return 'Upload your legal ID proof!' if identification_proof.blank?
     return 'Submit a resume to your timeline to complete your profile!' if resume_link.blank?
   end
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   # Should we give the founder a tour of the founder dashboard? If so, we shouldn't give it again.
   def tour_dashboard?
@@ -263,6 +261,7 @@ class Founder < ApplicationRecord
 
   def facebook_share_eligibility
     return 'not_admitted' if startup.level_zero?
+    return 'disabled_for_school' if startup.level.school.facebook_share_disabled?
     facebook_token_available? ? 'eligible' : 'token_unavailable'
   end
 
@@ -295,7 +294,7 @@ class Founder < ApplicationRecord
   delegate level_zero?: :startup
 
   def subscription_active?
-    startup && startup.subscription_active?
+    startup&.subscription_active?
   end
 
   def invited
@@ -328,5 +327,9 @@ class Founder < ApplicationRecord
       'SV.CO Team Member',
       'Other (Please Specify)'
     ].freeze
+  end
+
+  def self.valid_semester_values
+    %w[I II III IV V VI VII VIII Graduated Other]
   end
 end

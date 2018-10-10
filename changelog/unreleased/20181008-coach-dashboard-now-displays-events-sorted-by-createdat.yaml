@@ -1,0 +1,6 @@
+---
+timestamp: '2018-10-08T10:01:19Z'
+title: Coach dashboard now displays events sorted by created_at.
+trello: https://trello.com/c/quCzrXVV
+private: true
+category: bugfix

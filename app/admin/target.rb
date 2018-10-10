@@ -1,6 +1,4 @@
 ActiveAdmin.register Target do
-  include DisableIntercom
-
   permit_params :faculty_id, :role, :title, :description, :resource_url, :completion_instructions, :days_to_complete,
     :slideshow_embed, :video_embed, :completed_at, :completion_comment, :rubric, :link_to_complete, :key,
     :submittability, :archived, :remote_rubric_url, :target_group_id, :target_action_type, :points_earnable,
@@ -10,8 +8,8 @@ ActiveAdmin.register Target do
   filter :title
   filter :archived
   filter :session_at_not_null, as: :boolean, label: 'Session?'
-  filter :target_group, collection: -> { TargetGroup.all.includes(:level).order('levels.number ASC') }
-  filter :level
+  filter :target_group, collection: -> { TargetGroup.all.includes(:school, :level).order('schools.name ASC, levels.number ASC') }
+  filter :level, collection: -> { Level.all.includes(:school).order('schools.name ASC, levels.number ASC') }
   filter :faculty_name, as: :string
   filter :role, as: :select, collection: -> { Target.valid_roles }
   filter :timeline_event_type_title, as: :string
@@ -28,8 +26,10 @@ ActiveAdmin.register Target do
   scope :sessions
 
   controller do
+    include DisableIntercom
+
     def scoped_collection
-      super.includes :level
+      super.includes(:school, :level, :target_group)
     end
   end
 
@@ -37,13 +37,21 @@ ActiveAdmin.register Target do
     selectable_column
     column :title
 
-    column :level
+    column 'Target Group' do |target|
+      if target.school.present?
+        span do
+          code "[#{target.school.short_name.rjust(3)}##{target.level.number}]"
+          span target.target_group.name
+        end
+      else
+        em "Not part of a school"
+      end
+    end
 
     column :type do |target|
       target.session? ? 'Session' : 'Target'
     end
 
-    column :target_group
     column :sort_index
 
     column :role do |target|
@@ -305,7 +313,11 @@ ActiveAdmin.register Target do
       f.input :target_action_type, collection: Target.valid_target_action_types
       f.input :timeline_event_type, collection: TimelineEventType.live, include_blank: 'Select default timeline event type'
       f.input :points_earnable
-      f.input :prerequisite_targets, collection: presenter.valid_prerequisites
+
+      if presenter.valid_prerequisites.exists?
+        f.input :prerequisite_targets, collection: presenter.valid_prerequisites
+      end
+
       f.input :youtube_video_id, label: 'YouTube Video ID', placeholder: 'For eg. S0PEA3R-6TU'
       f.input :video_embed
       f.input :slideshow_embed
@@ -316,7 +328,7 @@ ActiveAdmin.register Target do
       f.input :submittability, collection: Target.valid_submittability_values
       f.input :faculty, collection: Faculty.active.order(:name), include_blank: 'No linked faculty'
       f.input :session_by, placeholder: 'Name of session taker, IF faculty linking is not possible.'
-      f.input :target_group, collection: TargetGroup.all.sorted_by_level.includes(:level)
+      f.input :target_group, collection: TargetGroup.all.includes(:school, :level).order('schools.name ASC, levels.number ASC')
       f.input :sort_index
       f.input :days_to_complete
       f.input :rubric, as: :file

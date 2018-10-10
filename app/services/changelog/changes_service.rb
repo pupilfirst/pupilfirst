@@ -36,15 +36,21 @@ module Changelog
     def releases
       changelogs = YAML.safe_load(File.read(Rails.root.join('changelog', "#{@year}.yaml")))['changelog']
 
-      changelogs.map do |release|
+      all_releases = changelogs.map do |release|
         {
           week_title: Time.parse(release['timestamp']).strftime('%b %d, %Y'),
           categories: categorized_entries(release)
         }
       end
+
+      remove_empty_releases(all_releases)
     end
 
     private
+
+    def remove_empty_releases(releases)
+      releases.reject { |release| release[:categories].empty? }
+    end
 
     def hash_category(recorded_category)
       CATEGORY_MAP[recorded_category] || 'Miscellaneous'

@@ -1,6 +1,4 @@
 ActiveAdmin.register CouponUsage do
-  include DisableIntercom
-
   menu parent: 'Admissions'
 
   actions :all, except: %i[destroy new]
@@ -14,6 +12,8 @@ ActiveAdmin.register CouponUsage do
   filter :rewarded_at_not_null, as: :boolean, label: 'Rewarded'
 
   controller do
+    include DisableIntercom
+
     def scoped_collection
       # TODO: More N+1 queries to avoid here
       super.includes(:coupon, :startup)

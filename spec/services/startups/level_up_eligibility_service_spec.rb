@@ -5,8 +5,11 @@ describe Startups::LevelUpEligibilityService do
 
   subject { described_class.new(startup, startup.team_lead) }
 
-  let!(:level_1) { create :level, :one }
-  let!(:level_2) { create :level, :two, unlock_on: 5.days.ago }
+  let!(:school_1) { create :school }
+  let!(:school_2) { create :school }
+  let!(:level_1) { create :level, :one, school: school_1 }
+  let!(:level_2) { create :level, :two, unlock_on: 5.days.ago, school: school_1 }
+  let!(:level_2_s2) { create :level, :two, unlock_on: 2.days.from_now, school: school_2 }
   let(:startup) { create :startup, level: level_1 }
   let!(:milestone_targets) { create :target_group, level: level_1, milestone: true }
   let!(:founder_target) { create :target, :for_founders, target_group: milestone_targets }

@@ -7,7 +7,7 @@ module Targets
     def perform
       log 'Checking for reminders to be sent for imminent sessions.'
 
-      Target.sessions.where(session_at: (Time.now..35.minutes.from_now)).each do |session|
+      Target.sessions.live.where(session_at: (Time.now..35.minutes.from_now)).each do |session|
         next if session.slack_reminders_sent_at.present?
 
         # Update time at which reminders were sent, to avoid repeats.
@@ -26,22 +26,23 @@ module Targets
       message_service = PublicSlack::MessageService.new
       service_errors = []
 
-      notifiable_founders = Founder.subscribed
-      session_level = session.target_group&.level
+      # The startups to which reminders for this session should be sent are the ones belonging to the session's school
+      # and those at or above the session's minimum level.
+      session_level = session.target_group.level
+      school = session_level.school
+      eligible_levels = school.levels.where('levels.number >= ?', session_level.number)
+      applicable_startups = Startup.where(level: eligible_levels)
 
-      # If session has a level through target group (and it should, for all new sessions), notify only founder at or
-      # above that level.
-      if session_level.present?
-        notifiable_founders = notifiable_founders.at_or_above_level(session_level)
-      end
+      applicable_startups.distinct.each do |startup|
+        next unless startup.subscription_active?
 
-      # Send messages to all founders notifying them that session starts in under 30 minutes.
-      notifiable_founders.distinct.each do |founder|
-        response = message_service.post(message: message(session), founder: founder)
-        service_errors << response.errors if response.errors.any?
+        startup.founders.each do |founder|
+          response = message_service.post(message: message(session), founder: founder)
+          service_errors << response.errors if response.errors.any?
 
-        # Sleep a short while between pings to avoid exceeding Slack's API burst limit.
-        sleep 0.2
+          # Sleep a short while between pings to avoid exceeding Slack's API burst limit.
+          sleep 0.2 unless Rails.env.test?
+        end
       end
 
       log "All messages sent. Errors reported by message_service: #{service_errors}"

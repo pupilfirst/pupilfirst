@@ -19,7 +19,7 @@ class IntercomClient
   def find_user(email)
     rescued_call { intercom_client.users.find(email: email) }
   rescue Intercom::ResourceNotFound
-    return nil
+    nil
   end
 
   # create user with given arguments and user_id as nil
@@ -36,7 +36,7 @@ class IntercomClient
   # find user by email in args or create one with the given args
   def find_or_create_user(args)
     user = args[:email].present? ? find_user(args[:email]) : nil
-    user.present? ? user : create_user(args)
+    user.presence || create_user(args)
   end
 
   def save_user(user)
@@ -105,7 +105,7 @@ class IntercomClient
 
   # user counts grouped by segments
   def user_count_by_segment
-    @user_count ||= rescued_call { intercom_client.counts.for_type(type: 'user', count: 'segment').user['segment'] }
+    @user_count_by_segment ||= rescued_call { intercom_client.counts.for_type(type: 'user', count: 'segment').user['segment'] }
   end
 
   # total number of new users
@@ -123,19 +123,19 @@ class IntercomClient
   end
 
   # fetch the latest n open conversations
-  def fetch_open_conversations(n)
-    @open_conversations ||= rescued_call { intercom_client.conversations.find(open: true, display_as: 'plaintext').conversations[0..n] }
+  def open_conversations(count)
+    @open_conversations ||= rescued_call { intercom_client.conversations.find(open: true, display_as: 'plaintext').conversations[0..count] }
   end
 
   # array of n latest conversations including their id, user's name and body
-  def latest_conversation_array(n)
+  def latest_conversation_array(count)
     @conversations_to_display = []
-    conversations = fetch_open_conversations(n)
+    conversations = open_conversations(count)
 
     conversations.each do |conversation|
       id = conversation['id']
       user = rescued_call { intercom_client.users.find(id: conversation['user']['id']) }
-      user_name = user.name || (user.email.present? ? user.email : user.pseudonym)
+      user_name = user.name || (user.email.presence || user.pseudonym)
       body = conversation['conversation_message']['body']
       @conversations_to_display << { id: id, name: user_name, body: body }
     end

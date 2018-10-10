@@ -1,0 +1,7 @@
+---
+timestamp: '2018-08-06T08:14:08Z'
+title: Updated LevelUpEligibilityService to only consider levels in given startup's
+  school.
+trello: https://trello.com/c/OSlnGJsP
+private: true
+category: bugfix

@@ -2,7 +2,7 @@ module Users
   class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     include Devise::Controllers::Rememberable
 
-    skip_before_action :verify_authenticity_token, only: [:developer]
+    skip_before_action :verify_authenticity_token, only: [:developer] # rubocop:disable Rails/LexicallyScopedActionFilter
 
     # GET /users/auth/:action/callback
     def oauth_callback

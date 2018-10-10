@@ -17,33 +17,44 @@ section.home-hero__container
     .container
       .home-hero__message-title
         h1.home-hero__message-title-head
-          ' Good at coding?
+          ' Learn Industry Courses from
           .font-semibold
-            ' Let's upgrade you to an Ace Developer
-        h3.home-hero__message-title-subhead
-          ' and get you placed in a premium startup.
+            ' Apple and Facebook
+          ' at your University.
+        /   ' Good at coding?
+        /   .font-semibold
+        /     ' Let's upgrade you to an Ace Developer
+        / h3.home-hero__message-title-subhead
+        /   ' and get you placed in a premium startup.
         .pt-3
           - if current_founder.present? && !current_founder.exited
             = link_to 'Go to Dashboard', student_dashboard_path, class: 'btn btn-primary btn-lg home-apply__button'
-          - else
+          / - else
             = link_to 'Learn More', apply_path, class: 'btn btn-primary btn-lg home-apply__button', id: 'home-index__hero-join-link'
 
 section.program-promise__container
   .container
-    .row.text-center
-      .col-md-4
+    .row.text-center.justify-content-center.position-relative
+      .col-md-6.program-promise__icon-container
         = image_tag 'home/index/program-promise-developer-icon.svg', class: 'img-fluid mx-auto program-promise__icon', alt: 'Upgrade your developer profile'
         h4.program-promise__text.font-semibold.text-center.mx-auto.mt-3.mb-5
           ' Step-by-step framework to
           ' upgrade your developer profile
           | in 6 months.
-      .col-md-4.with-path
+      .program-promise__link-animation.position-absolute.d-none.d-lg-block
+        svg width="200" height="200" viewBox="0 0 300 200"
+          line.program-promise__svg-line.program-promise__svg-line-to-left x1="10" x2="260" y1="100" y2="100"
+        .program-promise__sv-logo.d-flex.align-items-center
+          = image_tag 'shared/SV.CO-vertical-logo.png', class: 'img-fluid program-promise__sv-logo-img mx-auto', alt: 'SV.CO'
+        svg width="200" height="200" viewBox="0 0 300 200"
+          line.program-promise__svg-line.program-promise__svg-line-to-right x1="10" x2="260" y1="100" y2="100"
+      .col-md-6.program-promise__icon-container
         = image_tag 'home/index/program-promise-coach-icon.svg', class: 'img-fluid mx-auto program-promise__icon', alt: 'Upgrade your developer profile'
         h4.program-promise__text.font-semibold.text-center.mx-auto.mt-3.mb-5
           ' 1-on-1 Coaching
           ' by expert developers
           | from the industry.
-      .col-md-4
+      / .col-md-4
         = image_tag 'home/index/program-promise-job-icon.svg', class: 'img-fluid mx-auto program-promise__icon', alt: 'Upgrade your developer profile'
         h4.program-promise__text.font-semibold.text-center.mx-auto.mt-3.mb-5
           ' Job offers of 6+ l.p.a
@@ -58,7 +69,7 @@ section.program-summary__container.pt-5.pb-3
 
       .col-md-6
         h2.home-section__head-title.font-semibold.mb-3
-          | SV.CO, a 6-month upskilling program
+          | SV.CO, an upskilling program
           .font-black
             | for student developers.
         p.program-summary__text.mb-3
@@ -75,7 +86,7 @@ section.program-summary__container.pt-5.pb-3
           ' from the industry to supervise and guide them while they code.
           | This ensures they also pickup industry skills and best practices first-hand!
 
-        p.program-summary__text.mb-3
+        / p.program-summary__text.mb-3
           ' At SV.CO we help students land exciting jobs in premium Indian startups.
           | In fact, we have a 100% job offer guarantee for all our successful graduates!
 
@@ -184,6 +195,31 @@ section.graduation-story__container.py-0.py-md-5
           .d-flex.flex-wrap.graduation-story__card-avatar-container.justify-content-center
             .graduation-story__card-avatar.m-2
               = image_tag 'home/index/aravind-sai-ola.png', class: 'img-fluid', alt: ''
+
+section.silicon-valley-itinerary__container.py-5
+  .container
+    .home-section__head.mb-3
+      h2.home-section__head-title.text-center.font-black
+        | Spend your summer in Silicon Valley, USA
+      .home-section__head-subtitle.mx-auto
+        p.text-center
+          ' We recently flew India’s largest delegation of startups to Silicon
+          ' Valley for one week. Our vision is to take a delegation of 250
+          | startups on a Flight of Dreams for a period of two weeks.
+    .row
+      .silicon-valley-itinerary__slider.mx-auto
+        .silicon-valley-itinerary__slider-item.mx-auto
+          = image_tag 'home/index/svtosv-day1.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 1 Exploring San Fransisco'
+        .silicon-valley-itinerary__slider-item.mx-auto
+          = image_tag 'home/index/svtosv-day2.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 2 at SV Bank, Intel and dinner hosted by Menlo Park City Council'
+        .silicon-valley-itinerary__slider-item.mx-auto
+          = image_tag 'home/index/svtosv-day3.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 3 at Facebook HQ'
+        .silicon-valley-itinerary__slider-item.mx-auto
+          = image_tag 'home/index/svtosv-day4.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 4 at Freshworks HQ and North Eastern University'
+        .silicon-valley-itinerary__slider-item.mx-auto
+          = image_tag 'home/index/svtosv-day5.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 5 at Google and Bootup Ventures'
+        .silicon-valley-itinerary__slider-item.mx-auto
+          = image_tag 'home/index/svtosv-day6.png', class: 'mx-auto silicon-valley-itinerary__image img-fluid', alt: 'Day 6 at Google Launchpad, Galvanize and Golden Gate Bridge'
 
 section.home-call-to-action__container.py-5
   .container

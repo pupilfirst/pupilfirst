@@ -1,5 +1,7 @@
 ActiveAdmin.register Payment do
-  include DisableIntercom
+  controller do
+    include DisableIntercom
+  end
 
   menu parent: 'Admissions'
   config.clear_action_items!

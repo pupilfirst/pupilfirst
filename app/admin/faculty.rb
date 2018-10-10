@@ -1,10 +1,10 @@
 ActiveAdmin.register Faculty do
-  include DisableIntercom
-
   permit_params :name, :email, :title, :key_skills, :linkedin_url, :category, :image, :sort_index, :self_service,
     :current_commitment, :founder_id, :inactive, :about, :commitment, :compensation, :slack_username, :level_id
 
   controller do
+    include DisableIntercom
+
     def find_resource
       scoped_collection.friendly.find(params[:id])
     end
@@ -30,6 +30,37 @@ ActiveAdmin.register Faculty do
     column :level
     column :sort_index
     actions
+  end
+
+  show do |faculty|
+    attributes_table do
+      row :name
+      row :title
+      row :email
+      row :linkedin_url
+      row :about
+      row :key_skills
+      row :category
+      row :level
+      row :image
+      row :sort_index
+      row :self_service
+      row :inactive
+      row :slack_username
+      row :startups do
+        div do
+          faculty.startups.each do |startup|
+            div do
+              span do
+                link_to startup.product_name, [:admin, startup]
+              end
+            end
+          end
+        end
+      end
+      row :founder
+      row :user
+    end
   end
 
   form do |f|

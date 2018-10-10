@@ -1,0 +1,11 @@
+---
+timestamp: '2018-10-05T09:55:47Z'
+title: Resources locked to levels are now only displayed to students from that particular
+  school.
+trello: https://trello.com/c/8EPMBSZy
+private: true
+description: This fixes a bug affecting the resource index and show pages that would
+  allow students from any school to access level-restricted content as long as their
+  level number matched or exceeded the resource's level number. This fix introduces
+  pchecks to make sure that only students from school can access such resources.
+category: bugfix

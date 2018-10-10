@@ -17,14 +17,13 @@ module Founders
     private
 
     def targets
-      # Targets at or below startup's level.
-      applicable_targets = Target.joins(target_group: :level)
+      # Targets at or below startup's level
+      applicable_targets = Target.joins(target_group: { level: :school })
         .includes(:faculty)
+        .where(levels: { school_id: startup.school.id })
         .where('levels.number <= ?', startup.level.number)
         .where('levels.number >= ?', minimum_level)
-
-      # Do not load archived targets.
-      applicable_targets = applicable_targets.where.not(archived: true)
+        .where.not(archived: true)
 
       # Load basic data about targets from database.
       loaded_targets = applicable_targets.as_json(
@@ -42,7 +41,7 @@ module Founders
     end
 
     def levels
-      @levels ||= Level.where('number >= ?', minimum_level).as_json(only: %i[id name number])
+      @levels ||= startup.school.levels.where('number >= ?', minimum_level).as_json(only: %i[id name number school_id])
     end
 
     def faculty
@@ -53,7 +52,8 @@ module Founders
     end
 
     def target_groups
-      TargetGroup.joins(:level)
+      TargetGroup.joins(level: :school)
+        .where(levels: { school_id: startup.school.id })
         .where('levels.number <= ?', startup.level.number)
         .where('levels.number >= ?', minimum_level)
         .as_json(

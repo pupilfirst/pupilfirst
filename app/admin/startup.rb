@@ -1,12 +1,11 @@
 ActiveAdmin.register Startup do
-  include DisableIntercom
-
   permit_params :product_name, :product_description, :legal_registered_name, :website, :email, :logo, :facebook_link,
     :twitter_link, :created_at, :updated_at, :dropped_out, :registration_type, :agreement_signed_at,
     :presentation_link, :product_video_link, :wireframe_link, :prototype_link, :slug, :level_id,
-    :partnership_deed, :payment_reference, :agreements_verified, :team_lead_id, startup_category_ids: [], founder_ids: [], tag_list: []
+    :partnership_deed, :payment_reference, :agreements_verified, :team_lead_id, startup_category_ids: [], founder_ids: [], faculty_ids: [], tag_list: []
 
   filter :product_name, as: :string
+  filter :level_school_id, as: :select, label: 'School', collection: -> { School.all }
   filter :level, collection: -> { Level.all.order(number: :asc) }
   filter :stage, as: :select, collection: -> { stages_collection }
 
@@ -30,6 +29,8 @@ ActiveAdmin.register Startup do
   scope :all
 
   controller do
+    include DisableIntercom
+
     def find_resource
       scoped_collection.friendly.find(params[:id])
     end
@@ -149,7 +150,7 @@ ActiveAdmin.register Startup do
   # TODO: rewrite as its only used for dropping out startups now
   member_action :custom_update, method: :put do
     startup = Startup.friendly.find params[:id]
-    startup.update_attributes!(permitted_params[:startup])
+    startup.update!(permitted_params[:startup])
 
     case params[:email_to_send].to_sym
       when :dropped_out
@@ -222,6 +223,17 @@ ActiveAdmin.register Startup do
       row :level
       row :maximum_level
       row :timeline_updated_on
+      row :faculty do
+        div do
+          if startup.faculty.present?
+            startup.faculty.each do |faculty|
+              span do
+                link_to faculty.name, [:admin, faculty]
+              end
+            end
+          end
+        end
+      end
 
       row :tags do
         linked_tags(startup.tags)
@@ -333,7 +345,7 @@ ActiveAdmin.register Startup do
       row :undiscounted_founder_fee
     end
 
-    if startup.level&.number&.positive?
+    if startup.level&.number&.positive? && !startup.level.school.sponsored?
       panel 'Payment History' do
         attributes_table_for startup do
           row 'Subscription End Date' do

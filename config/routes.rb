@@ -39,7 +39,13 @@ Rails.application.routes.draw do
     get 'dashboard/targets/:id(/:slug)', action: 'target_overlay', as: 'dashboard_target'
   end
 
-  resources :timeline_events, only: %i[create destroy]
+  resources :timeline_events, only: %i[create destroy] do
+    member do
+      post 'review'
+      post 'undo_review'
+      post 'send_feedback'
+    end
+  end
 
   scope 'founder/facebook', as: 'founder_facebook', controller: 'founders/facebook_connect' do
     post 'connect'
@@ -97,7 +103,7 @@ Rails.application.routes.draw do
 
   resources :faculty, only: %i[index show] do
     post 'connect', on: :member
-
+    # get 'dashboard', to: 'faculty/dashboard#index'
     collection do
       get 'filter/:active_tab', to: 'faculty#index'
       get 'weekly_slots/:token', to: 'faculty#weekly_slots', as: 'weekly_slots'
@@ -105,9 +111,17 @@ Rails.application.routes.draw do
       delete 'weekly_slots/:token', to: 'faculty#mark_unavailable', as: 'mark_unavailable'
       get 'slots_saved/:token', to: 'faculty#slots_saved', as: 'slots_saved'
     end
+
+    # scope module: 'faculty', controller: 'dashboard' do
+    #   get '/', action: 'index'
+    # end
   end
 
   # TODO: Remove these faculty routes as we no longer have 'faculty'. Always use the corresponding 'coaches' routes below.
+
+  scope 'coaches', module: 'coaches', as: 'coaches', controller: 'dashboard' do
+    get 'dashboard', action: 'index'
+  end
 
   scope 'coaches', controller: 'faculty' do
     get '/', action: 'index', as: 'coaches_index'
@@ -121,7 +135,7 @@ Rails.application.routes.draw do
     get '/:id/download', action: 'download', as: 'download_resource'
   end
 
-  get 'resources/:id', to: redirect('/library/%{id}') # rubocop:disable Style/FormatStringToken
+  get 'resources/:id', to: redirect('/library/%{id}')
 
   scope 'connect_request', controller: 'connect_request', as: 'connect_request' do
     get ':id/feedback/from_team/:token', action: 'feedback_from_team', as: 'feedback_from_team'
@@ -181,6 +195,10 @@ Rails.application.routes.draw do
 
   # Facebook School of Innovation at SV.CO landing page
   get 'fb', to: 'home#fb'
+  get 'fb/vr-101', to: redirect('fb?apply=now')
+
+  # Apple iOS course at Manipal University landing page
+  get 'ios', to: 'home#ios'
 
   root 'home#index'
 
@@ -189,20 +207,9 @@ Rails.application.routes.draw do
 
   get '/dashboard', to: redirect('/student/dashboard')
 
-  # Also have /StartInCollege
-  get 'StartInCollege', to: redirect('/startincollege')
-
-  # redirect /startincollege to /sixways
-  get 'startincollege', to: redirect('/sixways')
-
   scope 'policies', as: 'policies', controller: 'home' do
     get 'privacy'
     get 'terms'
-  end
-
-  scope 'sixways', as: 'six_ways', controller: 'six_ways' do
-    get '/', action: 'index'
-    get 'gtu', action: 'gtu_index'
   end
 
   resources :targets, only: [] do
@@ -250,17 +257,6 @@ Rails.application.routes.draw do
 
   # Handle redirects of short URLs.
   get 'r/:unique_key', to: 'shortened_urls#redirect', as: 'short_redirect'
-
-  # Temporary POST end-point for the tech-hunt
-  post 'unicorn', to: 'tech_hunt#unicorn'
-
-  scope 'hunt', as: 'tech_hunt', controller: 'tech_hunt' do
-    get '/', action: 'index'
-    post 'register'
-    get 'q', action: 'question', as: 'question'
-    post 'answer_submit'
-    # post 'sign_up'
-  end
 
   scope 'stats', controller: 'product_metrics' do
     get '/', action: 'index', as: 'stats'

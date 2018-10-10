@@ -4,6 +4,10 @@ import TargetCollection from "./TargetCollection";
 
 export default class Targets extends React.Component {
   targetGroups() {
+    if (this.props.rootState.activeTrackId === "sessions") {
+      return _.filter(this.props.rootProps.targetGroups, ['name','Sessions'])
+    }
+
     let activeTrackId = null;
 
     if (this.props.rootState.activeTrackId !== "default") {
@@ -13,7 +17,12 @@ export default class Targets extends React.Component {
     const chosenLevelId = this.props.rootState.chosenLevelId;
 
     // Return target groups that are in the selected track.
-    return _.filter(this.props.rootProps.targetGroups, targetGroup => {
+    const filteredTargetGroups = _.filter(this.props.rootProps.targetGroups, targetGroup => {
+      // Exclude the sessions group
+      if (targetGroup.name === 'Sessions') {
+        return false;
+      }
+
       if (targetGroup.level.id !== chosenLevelId) {
         return false;
       }
@@ -25,6 +34,8 @@ export default class Targets extends React.Component {
         return activeTrackId === null;
       }
     });
+
+    return _.sortBy(filteredTargetGroups, ["sort_index"]);
   }
 
   targetCollections() {

@@ -29,7 +29,7 @@ module Users
     private
 
     def name
-      @user.founder&.name || @user.mooc_student&.name
+      @user.founder&.name
     end
 
     def startup

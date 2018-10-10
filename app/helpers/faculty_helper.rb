@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module FacultyHelper
   def faculty_image_path(type, image)
     # Images are stored in a subfolder in faculty/

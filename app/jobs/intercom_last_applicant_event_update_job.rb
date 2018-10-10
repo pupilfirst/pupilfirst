@@ -3,13 +3,14 @@ class IntercomLastApplicantEventUpdateJob < ApplicationJob
 
   def perform(founder, event)
     return true
-    # rubocop: disable Lint/UnreachableCode
+    # rubocop:disable Lint/UnreachableCode
     intercom = IntercomClient.new
     user = intercom.find_or_create_user(email: founder.email, name: founder.name)
 
     intercom.add_tag_to_user(user, tags[event.to_sym])
     intercom.add_note_to_user(user, "Auto-tagged as <em>#{tags[event.to_sym]}</em>")
     intercom.update_user(user, last_applicant_event: event_description[event.to_sym])
+    # rubocop:enable Lint/UnreachableCode
   end
 
   def tags

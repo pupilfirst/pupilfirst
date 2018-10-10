@@ -3,11 +3,11 @@ require 'rails_helper'
 feature 'Admission Level up' do
   include UserSpecHelper
   include FounderSpecHelper
-
-  let(:startup) { create :level_0_startup }
+  let(:school) { create :school }
+  let(:level_0) { create :level, :zero, school: school }
+  let(:startup) { create :startup, level: level_0 }
   let(:founder) { startup.team_lead }
 
-  let(:level_0) { create :level, :zero }
   let(:l0_target_group) { create :target_group, level: level_0, milestone: true }
   let!(:screening_target) { create :target, :admissions_screening, target_group: l0_target_group }
   let!(:cofounder_target) { create :target, :admissions_cofounder_addition, target_group: l0_target_group }
@@ -21,7 +21,7 @@ feature 'Admission Level up' do
   end
 
   context 'after completing targets' do
-    let(:level_1) { create :level, :one }
+    let(:level_1) { create :level, :one, school: school }
     let(:l1_target_group) { create :target_group, level: level_1, milestone: true }
 
     before do

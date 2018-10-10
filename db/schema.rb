@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180322073926) do
+ActiveRecord::Schema.define(version: 20181008060636) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,10 +39,8 @@ ActiveRecord::Schema.define(version: 20180322073926) do
     t.string "avatar"
     t.string "fullname"
     t.string "admin_type"
-    t.integer "faculty_id"
     t.integer "user_id"
     t.index ["email"], name: "index_admin_users_on_email", unique: true
-    t.index ["faculty_id"], name: "index_admin_users_on_faculty_id"
     t.index ["user_id"], name: "index_admin_users_on_user_id"
   end
 
@@ -128,16 +126,6 @@ ActiveRecord::Schema.define(version: 20180322073926) do
     t.text "instructions"
   end
 
-  create_table "course_modules", id: :serial, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "name"
-    t.integer "module_number"
-    t.string "slug"
-    t.datetime "publish_at"
-    t.index ["slug"], name: "index_course_modules_on_slug"
-  end
-
   create_table "data_migrations", id: false, force: :cascade do |t|
     t.string "version", null: false
     t.index ["version"], name: "unique_data_migrations", unique: true
@@ -206,9 +194,18 @@ ActiveRecord::Schema.define(version: 20180322073926) do
     t.string "slack_username"
     t.string "slack_user_id"
     t.integer "level_id"
+    t.bigint "user_id"
     t.index ["category"], name: "index_faculty_on_category"
     t.index ["level_id"], name: "index_faculty_on_level_id"
     t.index ["slug"], name: "index_faculty_on_slug", unique: true
+    t.index ["user_id"], name: "index_faculty_on_user_id"
+  end
+
+  create_table "faculty_startups", id: false, force: :cascade do |t|
+    t.bigint "faculty_id"
+    t.bigint "startup_id"
+    t.index ["faculty_id"], name: "index_faculty_startups_on_faculty_id"
+    t.index ["startup_id"], name: "index_faculty_startups_on_startup_id"
   end
 
   create_table "features", id: :serial, force: :cascade do |t|
@@ -293,13 +290,6 @@ ActiveRecord::Schema.define(version: 20180322073926) do
     t.index ["user_id"], name: "index_founders_on_user_id"
   end
 
-  create_table "hunt_answers", force: :cascade do |t|
-    t.integer "stage"
-    t.string "answer"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "karma_points", id: :serial, force: :cascade do |t|
     t.integer "founder_id"
     t.integer "points"
@@ -324,54 +314,6 @@ ActiveRecord::Schema.define(version: 20180322073926) do
     t.bigint "school_id"
     t.index ["number"], name: "index_levels_on_number"
     t.index ["school_id"], name: "index_levels_on_school_id"
-  end
-
-  create_table "module_chapters", id: :serial, force: :cascade do |t|
-    t.integer "course_module_id"
-    t.string "name"
-    t.integer "chapter_number"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.text "links"
-    t.string "slug"
-    t.index ["course_module_id"], name: "index_module_chapters_on_course_module_id"
-    t.index ["slug"], name: "index_module_chapters_on_slug"
-  end
-
-  create_table "mooc_quiz_attempts", id: :serial, force: :cascade do |t|
-    t.integer "course_module_id"
-    t.integer "mooc_student_id"
-    t.datetime "taken_at"
-    t.float "score"
-    t.integer "total_questions"
-    t.integer "attempted_questions"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["course_module_id"], name: "index_mooc_quiz_attempts_on_course_module_id"
-    t.index ["mooc_student_id"], name: "index_mooc_quiz_attempts_on_mooc_student_id"
-  end
-
-  create_table "mooc_quiz_questions", id: :serial, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "course_module_id"
-    t.text "question"
-    t.index ["course_module_id"], name: "index_mooc_quiz_questions_on_course_module_id"
-  end
-
-  create_table "mooc_students", id: :serial, force: :cascade do |t|
-    t.string "email"
-    t.string "name"
-    t.string "college_text"
-    t.string "semester"
-    t.string "gender"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "user_id"
-    t.string "phone"
-    t.text "completed_chapters"
-    t.integer "college_id"
-    t.index ["college_id"], name: "index_mooc_students_on_college_id"
   end
 
   create_table "payments", id: :serial, force: :cascade do |t|
@@ -409,21 +351,6 @@ ActiveRecord::Schema.define(version: 20180322073926) do
     t.datetime "updated_at"
     t.text "notes"
     t.index ["founder_id"], name: "index_platform_feedback_on_founder_id"
-  end
-
-  create_table "players", force: :cascade do |t|
-    t.string "name"
-    t.string "phone"
-    t.bigint "college_id"
-    t.string "college_text"
-    t.integer "stage", default: 0
-    t.bigint "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "showcase_link"
-    t.integer "attempts", default: 0
-    t.index ["college_id"], name: "index_players_on_college_id"
-    t.index ["user_id"], name: "index_players_on_user_id"
   end
 
   create_table "product_metrics", force: :cascade do |t|
@@ -476,6 +403,8 @@ ActiveRecord::Schema.define(version: 20180322073926) do
     t.integer "target_id"
     t.string "link"
     t.string "file_content_type"
+    t.boolean "archived", default: false
+    t.index ["archived"], name: "index_resources_on_archived"
     t.index ["level_id"], name: "index_resources_on_level_id"
     t.index ["slug"], name: "index_resources_on_slug"
     t.index ["startup_id"], name: "index_resources_on_startup_id"
@@ -486,6 +415,7 @@ ActiveRecord::Schema.define(version: 20180322073926) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "sponsored", default: false
   end
 
   create_table "shortened_urls", id: :serial, force: :cascade do |t|
@@ -587,7 +517,9 @@ ActiveRecord::Schema.define(version: 20180322073926) do
     t.integer "undiscounted_founder_fee"
     t.text "billing_address"
     t.bigint "billing_state_id"
+    t.bigint "faculty_id"
     t.index ["billing_state_id"], name: "index_startups_on_billing_state_id"
+    t.index ["faculty_id"], name: "index_startups_on_faculty_id"
     t.index ["level_id"], name: "index_startups_on_level_id"
     t.index ["slug"], name: "index_startups_on_slug", unique: true
     t.index ["stage"], name: "index_startups_on_stage"
@@ -845,8 +777,6 @@ ActiveRecord::Schema.define(version: 20180322073926) do
   add_foreign_key "levels", "schools"
   add_foreign_key "payments", "founders"
   add_foreign_key "payments", "startups"
-  add_foreign_key "players", "colleges"
-  add_foreign_key "players", "users"
   add_foreign_key "resources", "levels"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"

@@ -71,8 +71,8 @@ feature 'Target Overlay' do
 
       # Within the faculty box:
       within('.target-overlay__faculty-box') do
-        expect(page).to have_text("Assigned by: #{target.faculty.name}")
-        expect(page).to have_selector(".target-overlay__faculty-avatar > img[src='#{target.faculty.image_url}'")
+        expect(page).to have_text("Assigned by:\n#{target.faculty.name}")
+        expect(page).to have_selector(".target-overlay__faculty-avatar > img[src='#{target.faculty.image_url}']")
       end
     end
   end
@@ -102,7 +102,7 @@ feature 'Target Overlay' do
 
         # Latest Feedback.
         expect(page).to have_selector('.target-overlay-timeline-event-panel__feedback > p', text: feedback.feedback)
-        expect(page).to have_selector(".target-overlay-timeline-event-panel__feedback > div > span > img[src='#{faculty.image_url}'")
+        expect(page).to have_selector(".target-overlay-timeline-event-panel__feedback > div > span > img[src='#{faculty.image_url}']")
         expect(page).to have_selector('.target-overlay-timeline-event-panel__feedback > div > h6 > span', text: faculty.name)
 
         # Slack connect button.
@@ -136,7 +136,7 @@ feature 'Target Overlay' do
       find('.founder-dashboard-target-header__headline', text: target.title).click
 
       within('.target-overlay__faculty-box') do
-        expect(page).to have_text("Session by: #{target.faculty.name}")
+        expect(page).to have_text("Session by:\n#{target.faculty.name}")
       end
     end
   end

@@ -4,16 +4,17 @@ feature 'Founder Dashboard' do
   include UserSpecHelper
 
   # The basics.
+  let(:school) { create :school }
   let!(:startup) { create :startup, :subscription_active, level: level_4 }
   let!(:founder) { create :founder, startup: startup }
 
   # Levels.
-  let!(:level_0) { create :level, :zero }
-  let!(:level_1) { create :level, :one }
-  let!(:level_2) { create :level, :two }
-  let!(:level_3) { create :level, :three }
-  let!(:level_4) { create :level, :four }
-  let!(:level_5) { create :level, :five }
+  let!(:level_0) { create :level, :zero, school: school }
+  let!(:level_1) { create :level, :one, school: school }
+  let!(:level_2) { create :level, :two, school: school }
+  let!(:level_3) { create :level, :three, school: school }
+  let!(:level_4) { create :level, :four, school: school }
+  let!(:level_5) { create :level, :five, school: school }
 
   # Tracks.
   let(:product_track) { create :track, name: 'Product', sort_index: 0 }
@@ -25,6 +26,7 @@ feature 'Founder Dashboard' do
   let!(:target_group_2) { create :target_group, level: level_2, milestone: true, track: product_track }
   let!(:target_group_3) { create :target_group, level: level_3, milestone: true, track: product_track }
   let!(:target_group_4) { create :target_group, level: level_4, milestone: true, track: product_track }
+  let!(:sessions_target_group) { create :target_group, name: 'Sessions' }
 
   # Individual targets of different types.
   let!(:pending_target) { create :target, target_group: target_group_4, days_to_complete: 60, role: Target::ROLE_TEAM }
@@ -36,12 +38,10 @@ feature 'Founder Dashboard' do
   let!(:target_with_prerequisites) { create :target, target_group: target_group_4, prerequisite_targets: [pending_target], role: Target::ROLE_TEAM }
   let!(:completed_fee_payment_target) { create :target, target_group: target_group_0, days_to_complete: 60, role: Target::ROLE_TEAM, key: Target::KEY_FEE_PAYMENT }
 
-  # Create sessions for different levels.
-  let!(:session_1) { create :target, target_group: target_group_4, session_at: 2.hours.from_now }
-  let!(:session_2) { create :target, target_group: target_group_3, session_at: 3.days.ago }
-  let!(:session_3) { create :target, target_group: target_group_2, session_at: 2.days.ago }
-  let!(:session_4) { create :target, target_group: target_group_1, session_at: 1.day.ago }
-  let!(:session_5) { create :target, target_group: target_group_1, session_at: 1.day.ago }
+  # Create sessions for the 'Sessions' target group.
+  let!(:session_1) { create :target, target_group: sessions_target_group, session_at: 2.hours.from_now }
+  let!(:session_2) { create :target, target_group: sessions_target_group, session_at: 3.days.ago }
+  let!(:session_3) { create :target, target_group: sessions_target_group, session_at: 2.days.ago }
 
   let(:dashboard_toured) { true }
 
@@ -131,7 +131,7 @@ feature 'Founder Dashboard' do
     # Select another level and check if the correct data is displayed.
     find('.filter-targets-dropdown__menu-item', text: "Level 2: #{level_2.name}").click
     expect(page).to have_selector('.founder-dashboard-target-group__box', count: 1)
-    expect(page).to have_selector('.founder-dashboard-target-header__container', count: 2)
+    expect(page).to have_selector('.founder-dashboard-target-header__container', count: 1)
 
     # There is only one track in level 2, so the selector should be hidden.
     expect(page).not_to have_selector('.founder-dashboard-togglebar__toggle-btn')
@@ -148,9 +148,33 @@ feature 'Founder Dashboard' do
     # Check whether there's correct number of target groups in the developer track.
     expect(page).to have_selector('.founder-dashboard-target-group__box', count: 1)
 
-    find('.founder-dashboard-togglebar__toggle-btn', text: level_4.name.upcase).click
+    find('.founder-dashboard-togglebar__toggle-btn', text: 'TARGETS').click
 
     # Check whether there's correct number of target groups in the special 'default' track.
     expect(page).to have_selector('.founder-dashboard-target-group__box', count: 1)
+
+    # Ensure there is no Sessions Tab displayed
+    expect(page).not_to have_selector('.founder-dashboard-togglebar__toggle-btn', text: 'SESSIONS')
+  end
+
+  context "when the founders's school has a 'Sessions' target-group in it" do
+    before do
+      # Include the 'Sessions' target group in Level 1 and add all sessions to it.
+      sessions_target_group.update!(level: level_1)
+      sessions_target_group.targets << [session_1, session_2, session_3]
+    end
+
+    scenario 'founder visits the dashboard', js: true do
+      sign_in_user founder.user, referer: student_dashboard_path
+
+      # Ensure the Sessions Tab is visible
+      expect(page).to have_selector('.founder-dashboard-togglebar__toggle-btn', text: 'SESSIONS')
+
+      # Go to the sessions Tab
+      find('.founder-dashboard-togglebar__toggle-btn', text: 'SESSIONS').click
+
+      # Ensure all 3 sessions are displayed
+      expect(page).to have_selector('.founder-dashboard-target-header__container', count: 3)
+    end
   end
 end

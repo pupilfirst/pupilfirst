@@ -32,6 +32,7 @@
 //= require ahoy
 //= require jspdf
 //= require lodash
+//= require trix
 
 // Rails assets
 //= require intro.js/intro.js
@@ -47,6 +48,7 @@
 
 // Shared
 //= require _shared
+//= require sign_in
 //= require navbar
 //= require footer
 

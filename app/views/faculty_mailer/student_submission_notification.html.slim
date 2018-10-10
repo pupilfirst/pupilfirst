@@ -1,0 +1,24 @@
+= content_for :title do
+  | New Submission from Student
+
+= content_for :subtitle do
+  | There is new submission from #{@startup.product_name}.
+
+= content_for :title_button_text do
+  | Visit Dashboard
+
+= content_for(:title_button_link, coaches_dashboard_url)
+
+= content_for :salutation do
+  | Hello #{@faculty.name},
+
+= content_for :body do
+  p
+    ' We have received a new submission from #{@founder.name}.
+
+  - if @target.present?
+    p The submission is for the target titled &ldquo;#{@target.title}&rdqo;
+
+  p Please visit your dashboard to review this submission.
+
+  p Thank you!

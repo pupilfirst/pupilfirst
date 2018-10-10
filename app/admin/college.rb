@@ -1,5 +1,7 @@
 ActiveAdmin.register College do
-  include DisableIntercom
+  controller do
+    include DisableIntercom
+  end
 
   menu parent: 'Admissions'
 

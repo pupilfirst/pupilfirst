@@ -21,6 +21,6 @@ class StartupFeedback < ApplicationRecord
   end
 
   def for_founder?
-    timeline_event.present? && timeline_event&.founder_event?
+    timeline_event.present? ? timeline_event.founder_event? : false
   end
 end

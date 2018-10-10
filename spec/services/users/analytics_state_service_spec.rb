@@ -5,18 +5,6 @@ describe Users::AnalyticsStateService do
 
   subject { described_class.new(user) }
 
-  context 'when user is a mooc student' do
-    let(:mooc_student) { create :mooc_student, name: Faker::Name.name }
-    let(:user) { mooc_student.user }
-
-    it 'returns email and name' do
-      expect(subject.state).to eq(
-        email: mooc_student.email,
-        name: mooc_student.name
-      )
-    end
-  end
-
   context 'when user is a founder' do
     let!(:screening_target) { create :target, :admissions_screening }
     let!(:cofounder_addition_target) { create :target, :admissions_cofounder_addition }

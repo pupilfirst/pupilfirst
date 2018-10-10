@@ -1,6 +1,4 @@
 ActiveAdmin.register TimelineEvent do
-  include DisableIntercom
-
   permit_params :description, :timeline_event_type_id, :image, :event_on, :startup_id, :founder_id, :serialized_links,
     :improved_timeline_event_id, timeline_event_files_attributes: %i[id title file private _destroy]
 
@@ -21,6 +19,8 @@ ActiveAdmin.register TimelineEvent do
   config.sort_order = 'updated_at_desc'
 
   controller do
+    include DisableIntercom
+
     def scoped_collection
       super.includes :startup, :timeline_event_type
     end
@@ -82,11 +82,11 @@ ActiveAdmin.register TimelineEvent do
         TimelineEvents::VerificationService.new(timeline_event).update_status(status, grade: params[:grade], skill_grades: params[:skill_grades].as_json, points: points)
         head :ok
       rescue TimelineEvents::ReviewInterfaceException => e
-        render json: { error: e.message }.to_json, status: 422
+        render json: { error: e.message }.to_json, status: :unprocessable_entity
       end
     else
       # someone else already reviewed this event! Ask javascript to reload page.
-      render json: { error: 'Event no longer pending review! Refreshing your dashboard.' }.to_json, status: 422
+      render json: { error: 'Event no longer pending review! Refreshing your dashboard.' }.to_json, status: :unprocessable_entity
     end
   end
 
@@ -98,7 +98,7 @@ ActiveAdmin.register TimelineEvent do
         flash[:success] = 'Event has not been reviewed. Undo is not possible.'
         redirect_to admin_timeline_event_path(timeline_event)
       else
-        render json: { error: 'Event is pending review! Cannot undo.' }.to_json, status: 422
+        render json: { error: 'Event is pending review! Cannot undo.' }.to_json, status: :unprocessable_entity
       end
 
       return
@@ -287,7 +287,7 @@ ActiveAdmin.register TimelineEvent do
     div(class: 'admin-timeline_events__show')
 
     attributes_table do
-      row :product do |startup|
+      row :product do
         startup = timeline_event.startup
 
         a href: admin_startup_path(startup) do
@@ -337,9 +337,7 @@ ActiveAdmin.register TimelineEvent do
       row :karma_point
       row :score
       row('Grade') do
-        if timeline_event.score.present?
-          { 1 => 'Good', 2 => 'Great', 3 => 'Wow' }[timeline_event.score.floor]
-        end
+        timeline_event.overall_grade_from_score if timeline_event.score.present?
       end
       row :improved_timeline_event
       row :created_at

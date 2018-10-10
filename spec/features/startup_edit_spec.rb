@@ -6,7 +6,7 @@ feature 'Startup Edit' do
   let!(:startup) { create :startup, :subscription_active }
   let(:founder) { create :founder }
 
-  let(:new_product_name) { Faker::Lorem.words(rand(3) + 1).join ' ' }
+  let(:new_product_name) { Faker::Lorem.words(rand(1..3)).join ' ' }
   let(:new_product_description) { Faker::Lorem.words(12).join(' ').truncate(Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS) }
   let(:new_deck) { Faker::Internet.url }
 

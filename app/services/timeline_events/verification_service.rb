@@ -31,7 +31,8 @@ module TimelineEvents
           raise UnexpectedStatusException
       end
 
-      TimelineEvents::VerificationNotificationJob.perform_later(@timeline_event) if @notify
+      # NOTE: Notification in public slack is disabled as Apple and Facebook VR are closed sponsored schools.
+      # TimelineEvents::VerificationNotificationJob.perform_later(@timeline_event) if @notify
 
       [@timeline_event, points_for_new_status]
     end
@@ -85,11 +86,7 @@ module TimelineEvents
     end
 
     def points_for_new_status
-      if @points.present?
-        @points
-      else
-        points_for_target
-      end
+      @points.presence || points_for_target
     end
 
     def founder
@@ -108,7 +105,7 @@ module TimelineEvents
       @points_for_target ||= begin
         if @skill_grades.present?
           total_karma_points
-        elsif @grade.present? && @target.points_earnable.present?
+        elsif @grade.present? && @target&.points_earnable.present?
           @target.points_earnable * grade_multiplier(@grade)
         else
           0

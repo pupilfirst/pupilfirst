@@ -33,7 +33,7 @@ feature 'Prospective Applicants' do
 
       click_on 'Notify Me'
 
-      expect(page).to have_content("Thank you for your interest! We'll send you an email when admissions open")
+      expect(page).to have_content("Thank you for your interest!\nWe'll send you an email when admissions open")
 
       expect(ProspectiveApplicant.count).to eq(1)
       last_applicant = ProspectiveApplicant.last

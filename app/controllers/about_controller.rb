@@ -13,6 +13,7 @@ class AboutController < ApplicationController
 
   # GET /about/leaderboard
   def leaderboard
+    authorize :about
     @levels = Level.where.not(number: 0).order(number: :desc) # All levels except admissions
     @leaderboards = leaderboards_for(@levels)
   end

@@ -3,17 +3,23 @@ require 'rails_helper'
 # WARNING: The following tests run with Webmock disabled - i.e., URL calls are let through. Make sure you mock possible
 # requests unless you want to let them through. This is required for JS tests to work.
 feature 'Resources' do
-  let(:level_0) { create :level, :zero }
-  let(:level_1) { create :level, :one }
-  let(:level_2) { create :level, :two }
+  let(:school_1) { create :school }
+  let(:school_2) { create :school }
+  let(:level_0) { create :level, :zero, school: school_1 }
+  let(:level_1) { create :level, :one, school: school_1 }
+  let(:level_2) { create :level, :two, school: school_1 }
+  let(:level_1_s2) { create :level, :one, school: school_2 }
+  let(:level_2_s2) { create :level, :two, school: school_2 }
 
   let(:founder) { create :founder }
-  let(:startup) { create :startup, :subscription_active }
+  let(:startup) { create :startup, :subscription_active, level: level_1 }
 
   let!(:public_resource) { create :resource }
   let!(:level_0_resource) { create :resource, level: level_0 }
   let!(:level_1_resource) { create :resource, level: level_1 }
   let!(:level_2_resource) { create :resource, level: level_2 }
+  let!(:l1_s2_resource) { create :resource, level: level_1_s2 }
+  let!(:l2_s2_resource) { create :resource, level: level_2_s2 }
 
   scenario 'user visits resources page' do
     visit resources_path
@@ -90,6 +96,8 @@ feature 'Resources' do
 
     context "Founder's startup is approved" do
       scenario 'Founder visits resources page' do
+        visit resources_path
+
         expect(page).to have_text('Please do not share these resources outside your founding team')
 
         # public resources + resources upto his level should be shown
@@ -97,6 +105,35 @@ feature 'Resources' do
         expect(page).to have_text(public_resource.title[0..10])
         expect(page).to have_text(level_0_resource.title[0..10])
         expect(page).to have_text(level_1_resource.title[0..10])
+
+        # Should not have access to resource in school 2.
+        visit resource_path(l2_s2_resource)
+        # should be redirected to the index page
+        expect(page).to have_text('Please do not share these resources outside your founding team')
+      end
+
+      context "founder is in second school" do
+        let(:startup) { create :startup, :subscription_active, level: level_2_s2 }
+
+        scenario 'Founder visits resources page' do
+          visit resources_path
+
+          expect(page).to have_text('Please do not share these resources outside your founding team')
+
+          # Public resources + resources in school 2 should be shown. Resources from school 1 should not be visible.
+          expect(page).to have_selector('.resource-box', count: 3)
+          expect(page).to have_text(public_resource.title[0..10])
+          expect(page).not_to have_text(level_0_resource.title[0..10])
+          expect(page).not_to have_text(level_1_resource.title[0..10])
+          expect(page).not_to have_text(level_2_resource.title[0..10])
+          expect(page).to have_text(l1_s2_resource.title[0..10])
+          expect(page).to have_text(l2_s2_resource.title[0..10])
+
+          # Should not have access to resource in school 1.
+          visit resource_path(level_2_resource)
+          # should be redirected to the index page
+          expect(page).to have_text('Please do not share these resources outside your founding team')
+        end
       end
     end
   end

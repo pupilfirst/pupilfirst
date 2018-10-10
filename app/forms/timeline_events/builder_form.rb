@@ -40,7 +40,7 @@ module TimelineEvents
     end
 
     def parsed_files_metadata
-      @parsed_metadata ||= JSON.parse(files_metadata)
+      @parsed_files_metadata ||= JSON.parse(files_metadata)
     end
 
     def parsed_links

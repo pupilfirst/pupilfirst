@@ -1,0 +1,27 @@
+.review-status-badge__container {
+  font-weight: bolder;
+  font-size: larger;
+  text-align: center;
+}
+
+.review-status-badge__container--verified {
+  color: green;
+}
+
+.review-status-badge__container--not-accepted {
+  color: indianred;
+}
+
+.review-status-badge__container--needs-improvement {
+  color: goldenrod;
+}
+
+.review-status-badge__icon-container {
+  width: 30px;
+}
+
+.review-status-badge__subtext {
+  color: gray;
+  font-size: x-small;
+  font-weight: normal;
+}

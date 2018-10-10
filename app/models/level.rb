@@ -2,15 +2,15 @@ class Level < ApplicationRecord
   validates :number, uniqueness: { scope: :school }, presence: true
   validates :name, presence: true
 
-  has_many :target_groups
-  has_many :startups
+  has_many :target_groups, dependent: :restrict_with_error
+  has_many :startups, dependent: :restrict_with_error
   has_many :targets, through: :target_groups
-  has_many :weekly_karma_points
-  has_many :resources
+  has_many :weekly_karma_points, dependent: :restrict_with_error
+  has_many :resources, dependent: :restrict_with_error
   belongs_to :school
 
   def display_name
-    "#{school.name} School | Level #{number}: #{name}"
+    "#{school.short_name}##{number}: #{name}"
   end
 
   def self.zero
@@ -19,5 +19,9 @@ class Level < ApplicationRecord
 
   def self.maximum
     order(:number).last
+  end
+
+  def short_name
+    'Level ' + number.to_s
   end
 end

@@ -1,5 +1,5 @@
 class TargetGroup < ApplicationRecord
-  has_many :targets
+  has_many :targets, dependent: :restrict_with_error
   belongs_to :level
   belongs_to :track, optional: true
   has_one :school, through: :level
@@ -7,9 +7,7 @@ class TargetGroup < ApplicationRecord
   validates :name, presence: true
   validates :sort_index, presence: true
 
-  scope :sorted_by_level, -> { joins(:level).order('levels.number ASC') }
-
   def display_name
-    "L#{level.number}: #{name}"
+    "#{school.short_name}##{level.number}: #{name}"
   end
 end

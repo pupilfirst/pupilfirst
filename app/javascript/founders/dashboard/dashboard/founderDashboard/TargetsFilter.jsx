@@ -4,8 +4,11 @@ import TargetsFilterOption from "./TargetsFilterOption";
 
 export default class TargetsFilter extends React.Component {
   levelOptions() {
-    let sortedLevels = _.sortBy(this.props.rootProps.levels, ["number"]);
+    let levelsInSchool = this.props.rootProps.levels.filter(level => {
+      return level.school_id === this.chosenLevel().school_id;
+    });
 
+    let sortedLevels = _.sortBy(levelsInSchool, ["number"]);
     return _.map(sortedLevels, level => {
       return (
         <TargetsFilterOption
@@ -26,6 +29,7 @@ export default class TargetsFilter extends React.Component {
       this.props.rootState.chosenLevelId
     ]);
   }
+
 
   render() {
     return (

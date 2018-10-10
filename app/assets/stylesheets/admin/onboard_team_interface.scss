@@ -1,0 +1,34 @@
+.team-member-info {
+  display: flex;
+  padding: 10px;
+}
+
+.team-member-info__name {
+  width: 50%;
+  label {
+    width: 40%;
+    display: inline-block;
+    font-weight: bold;
+    color: #5E6469;
+  }
+
+  input {
+    width: 54% !important;
+  }
+}
+
+.team-member-info__email {
+  width: 50%;
+  li {
+    display: flex;
+  }
+  label {
+    display: none;
+  }
+
+  input {
+    width: 100% !important;
+  }
+}
+
+

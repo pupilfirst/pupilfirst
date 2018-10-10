@@ -13,6 +13,9 @@
     h1.page-header.header-light.text-center.mt-3 Coaches
 
     p.introduction.text-xs-center.mx-auto
+      ' We've assembled some of the best engineers from the industry as coaches to provide 1-on-1 guidance to students.
+
+    / p.introduction.text-xs-center.mx-auto
       ' We've assembled some of the best engineers from the industry as 'Developer Coaches' to provide 1-on-1 guidance
       ' to students. We also have domain-experts as 'Visiting Coaches' students can reach out to.
 
@@ -20,16 +23,28 @@
       #tabbed-content
         ul#faculty-nav.nav.nav-tabs.faculty-nav__tab
           li.nav-item.faculty-nav__tab-item
-            a.nav-link.cursor-pointer.faculty-nav__tab-title class=active_tab('developer-coaches') data-target="#developer-coaches" data-toggle="tab" aria-controls="advisory-board" role="tab" Developer Coaches
-          li.nav-item.faculty-nav__tab-item
+            a.nav-link.cursor-pointer.faculty-nav__tab-title class=active_tab('vr-coaches') data-target="#vr-coaches" data-toggle="tab" aria-controls="vr-coaches" role="tab" VR Coaches
+          / li.nav-item.faculty-nav__tab-item
+            a.nav-link.cursor-pointer.faculty-nav__tab-title class=active_tab('developer-coaches') data-target="#developer-coaches" data-toggle="tab" aria-controls="developer-coaches" role="tab" Developer Coaches
+          / li.nav-item.faculty-nav__tab-item
             a.nav-link.cursor-pointer.faculty-nav__tab-title class=active_tab('visiting-coaches') data-target="#visiting-coaches" data-toggle="tab" aria-controls="visiting-faculty" role="tab" Visiting Coaches
+          / li.nav-item.faculty-nav__tab-item
+            a.nav-link.cursor-pointer.faculty-nav__tab-title class=active_tab('alumni') data-target="#alumni" data-toggle="tab" aria-controls="alumni" role="tab" Alumni
 
         .tab-content
-          .tab-pane#developer-coaches role="tabpanel" class=active_tab('developer-coaches')
+          .tab-pane#vr-coaches role="tabpanel" class=active_tab('vr-coaches')
+            .row.faculty-cards-container
+              - Faculty.active.vr_coaches.each do |member|
+                = render 'faculty_card', member: member
+          / .tab-pane#developer-coaches role="tabpanel" class=active_tab('developer-coaches')
             .row.faculty-cards-container
               - Faculty.active.developer_coaches.each do |member|
                 = render 'faculty_card', member: member
-          .tab-pane#visiting-coaches role="tabpanel" class=active_tab('visiting-coaches')
+          / .tab-pane#visiting-coaches role="tabpanel" class=active_tab('visiting-coaches')
             .row.faculty-cards-container
               - Faculty.active.visiting_coaches.each do |member|
+                = render 'faculty_card', member: member
+          / .tab-pane#alumni role="tabpanel" class=active_tab('alumni')
+            .row.faculty-cards-container
+              - Faculty.active.alumni.includes(:founder).each do |member|
                 = render 'faculty_card', member: member

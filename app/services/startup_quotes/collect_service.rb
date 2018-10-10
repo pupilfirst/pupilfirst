@@ -10,18 +10,18 @@ module StartupQuotes
 
       log "Loading RSS URL: #{feed_url}"
 
-      open(feed_url) do |rss|
-        feed = ::RSS::Parser.parse(rss)
+      uri = URI(RSS_URL)
+      rss = Net::HTTP.get(uri)
+      feed = ::RSS::Parser.parse(rss)
 
-        feed.items.each do |item|
-          guid = item.guid.content
+      feed.items.each do |item|
+        guid = item.guid.content
 
-          # Stop writing feed items we've encountered on we've stored before.
-          break if StartupQuote.find_by(guid: guid).present?
+        # Stop writing feed items we've encountered on we've stored before.
+        break if StartupQuote.find_by(guid: guid).present?
 
-          # Add to stored quotes.
-          StartupQuote.create!(guid: guid, link: item.link)
-        end
+        # Add to stored quotes.
+        StartupQuote.create!(guid: guid, link: item.link)
       end
     end
 

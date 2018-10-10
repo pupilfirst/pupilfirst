@@ -1,6 +1,4 @@
 ActiveAdmin.register PublicSlackMessage do
-  include DisableIntercom
-
   menu parent: 'Founders'
   actions :index
 
@@ -10,6 +8,8 @@ ActiveAdmin.register PublicSlackMessage do
   filter :created_at
 
   controller do
+    include DisableIntercom
+
     def index
       index! do |format|
         format.txt do

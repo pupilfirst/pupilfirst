@@ -48,14 +48,23 @@ module Targets
       }
     end
 
+    # The startups to which calender events should be sent are the ones belonging to the target's school
+    # and those at or above the session's minimum level.
     def attendees(target)
-      Founder.subscribed.at_or_above_level(target.level).distinct.map do |founder|
-        {
-          'email' => founder.email,
-          'displayName' => founder.name,
-          'responseStatus' => 'needsAction'
-        }
-      end
+      school = target.school
+      eligible_levels = school.levels.where('levels.number >= ?', target.level.number)
+      applicable_startups = Startup.where(level: eligible_levels)
+
+      (applicable_startups.distinct.map do |startup|
+        next unless startup.subscription_active?
+        startup.founders.map do |founder|
+          {
+            'email' => founder.email,
+            'displayName' => founder.name,
+            'responseStatus' => 'needsAction'
+          }
+        end
+      end - [nil]).flatten
     end
   end
 end

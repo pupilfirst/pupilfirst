@@ -7,6 +7,7 @@ export default class ToggleBar extends React.Component {
     super(props);
 
     this.openTimelineBuilder = this.openTimelineBuilder.bind(this);
+    this.hasSessions = this.hasSessions.bind(this);
   }
 
   openTimelineBuilder() {
@@ -33,8 +34,12 @@ export default class ToggleBar extends React.Component {
     }, this);
   }
 
+  hasSessions() {
+    return _.some(this.props.rootProps.targetGroups, ['name', 'Sessions'])
+  }
+
   render() {
-    if (this.props.availableTrackIds.length < 2) {
+    if (this.props.availableTrackIds.length < 2 && !this.hasSessions()) {
       return null;
     }
 
@@ -46,6 +51,15 @@ export default class ToggleBar extends React.Component {
             role="group"
           >
             {this.tabsForTracks()}
+            { this.hasSessions() &&
+              <ToggleBarTab
+                key={'sessions-tab'}
+                trackId='sessions'
+                rootProps={this.props.rootProps}
+                rootState={this.props.rootState}
+                setRootState={this.props.setRootState}
+              />
+            }
           </div>
         </div>
 

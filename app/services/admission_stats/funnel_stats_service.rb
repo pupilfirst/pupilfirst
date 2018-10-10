@@ -46,7 +46,7 @@ module AdmissionStats
     end
 
     def fee_paid_teams
-      @fee_paid_startups ||= verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_FEE_PAYMENT }).where(created_at: @date_range).pluck(:startup_id)
+      @fee_paid_teams ||= verified_timeline_events.joins(:target).where(targets: { key: Target::KEY_FEE_PAYMENT }).where(created_at: @date_range).pluck(:startup_id)
     end
 
     def revenue

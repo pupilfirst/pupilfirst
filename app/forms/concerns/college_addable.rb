@@ -1,7 +1,6 @@
 # This module is included in:
 #   Founders::RegistrationForm
 #   ProspectiveApplicants::RegistrationForm,
-#   MoocStudentSignupForm
 #
 module CollegeAddable
   extend ActiveSupport::Concern

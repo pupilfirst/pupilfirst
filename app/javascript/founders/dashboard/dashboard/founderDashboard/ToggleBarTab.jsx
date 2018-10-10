@@ -20,14 +20,16 @@ export default class ToggleBarTab extends React.Component {
   loadTrack() {
     let that = this;
 
-    if (this.props.trackId === "default") {
-      let chosenLevel = _.find(this.props.rootProps.levels, level => {
-        return level.id === that.props.rootState.chosenLevelId;
-      });
-
+    if (this.props.trackId === "sessions") {
+      return {
+        id: "sessions",
+        name: "Sessions"
+      };
+    }
+    else if (this.props.trackId === "default") {
       return {
         id: "default",
-        name: chosenLevel.name
+        name: "Targets"
       };
     }
 

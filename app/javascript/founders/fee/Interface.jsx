@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import FeeOffer from "./interface/FeeOffer";
 import BillingAddressForm from "./interface/BillingAddressForm";
 
-import "./Interface.scss";
+import "./Interface.module.scss";
 
 export default class Interface extends React.Component {
   constructor(props) {

@@ -1,17 +1,19 @@
 .stats-hero__message-text {
+  margin: 0;
+}
+
+.stats-hero__message-text--gradient {
   font-size: 3.5rem;
   line-height: 1.3;
   color: $brand-secondary;
-  -webkit-text-fill-color: transparent;
   text-shadow: 0 0 0 rgba(255,255,255,0.01);
-  display: inline-block;
   background: linear-gradient(45deg, rgba(22,123,181,1) 0%,rgba(17,149,207,1) 50%,rgba(50,180,117,1) 100%);
   -webkit-background-clip: text;
   -moz-background-clip: text;
   background-clip: text;
-  margin: 0;
+  -webkit-text-fill-color: transparent;
 
-  @include media-breakpoint-down(sm) {
+   @include media-breakpoint-down(sm) {
     font-size: 1.5rem;
   }
 }
@@ -48,7 +50,7 @@
 }
 
 .typed-cursor {
-  @extend .stats-hero__message-text;
+  @extend .stats-hero__message-text--gradient;
   opacity: 1;
   animation: typedjsBlink 0.7s infinite;
 }
@@ -126,18 +128,18 @@
 .program-stats__container {
   position: relative;
 
-  &:before {
-    content:'';
-    position: absolute;
-    height: 100%;
-    width: 50%;
-    left: 0;
-    background-color: white;
+  // &:before {
+  //   content:'';
+  //   position: absolute;
+  //   height: 100%;
+  //   width: 50%;
+  //   left: 0;
+  //   background-color: white;
 
-    @include media-breakpoint-down(sm) {
-      width: 100%;
-    }
-  }
+  //   @include media-breakpoint-down(sm) {
+  //     width: 100%;
+  //   }
+  // }
 }
 
 .program-stats__student-journey-header, .program-stats__other-facts-header {
@@ -275,10 +277,6 @@
 
 .program-stats__other-facts {
   background-color: $primary-background;
-
-  @include media-breakpoint-up(sm) {
-    padding-left: 1.875rem;
-  }
 }
 
 .program-stats__other-facts-icon {

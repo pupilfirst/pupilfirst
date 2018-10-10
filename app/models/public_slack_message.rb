@@ -1,8 +1,8 @@
 class PublicSlackMessage < ApplicationRecord
   belongs_to :founder, optional: true
-  has_one :karma_point, as: :source
+  has_one :karma_point, as: :source, inverse_of: :source, dependent: :restrict_with_error
 
-  has_many :reactions, class_name: 'PublicSlackMessage', foreign_key: 'reaction_to_id'
+  has_many :reactions, class_name: 'PublicSlackMessage', foreign_key: 'reaction_to_id', inverse_of: :reaction_to, dependent: :destroy
   belongs_to :reaction_to, class_name: 'PublicSlackMessage', optional: true
 
   scope :last_week, -> { where('created_at > ?', 1.week.ago.beginning_of_day) }

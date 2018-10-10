@@ -1,5 +1,5 @@
 class Coupon < ApplicationRecord
-  has_many :coupon_usages
+  has_many :coupon_usages, dependent: :restrict_with_exception
 
   validates :code, uniqueness: true, presence: true, length: { in: 4..10 }
   validates :discount_percentage, presence: true, numericality: { only_integer: true, greater_than: 0, less_than: 100 }

@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 class Faculty < ApplicationRecord
@@ -12,19 +11,22 @@ class Faculty < ApplicationRecord
 
   has_secure_token
 
+  belongs_to :user, optional: true # TODO: Temporarily optional. Remove once ready.
   has_many :startup_feedback, dependent: :restrict_with_error
   has_many :targets, dependent: :restrict_with_error
   has_many :connect_slots, dependent: :destroy
   has_many :connect_requests, through: :connect_slots
   belongs_to :founder, optional: true # link alumni faculty to their founder profile
   belongs_to :level, optional: true
-  has_many :english_quiz_submissions, foreign_key: 'quizee_id'
+  has_many :english_quiz_submissions, foreign_key: 'quizee_id', inverse_of: :quizee, dependent: :restrict_with_error
+  has_and_belongs_to_many :startups, dependent: :restrict_with_error
 
   CATEGORY_TEAM = 'team'
   CATEGORY_VISITING_COACHES = 'visiting_coaches'
   CATEGORY_DEVELOPER_COACHES = 'developer_coaches'
   CATEGORY_ADVISORY_BOARD = 'advisory_board'
   CATEGORY_ALUMNI = 'alumni'
+  CATEGORY_VR_COACHES = 'vr_coaches'
 
   COMPENSATION_VOLUNTEER = 'volunteer'
   COMPENSATION_PAID = 'paid'
@@ -33,7 +35,7 @@ class Faculty < ApplicationRecord
   COMMITMENT_FULL_TIME = 'full_time'
 
   def self.valid_categories
-    [CATEGORY_TEAM, CATEGORY_VISITING_COACHES, CATEGORY_DEVELOPER_COACHES, CATEGORY_ADVISORY_BOARD, CATEGORY_ALUMNI]
+    [CATEGORY_TEAM, CATEGORY_VISITING_COACHES, CATEGORY_DEVELOPER_COACHES, CATEGORY_ADVISORY_BOARD, CATEGORY_ALUMNI, CATEGORY_VR_COACHES]
   end
 
   def self.valid_compensation_values
@@ -61,9 +63,10 @@ class Faculty < ApplicationRecord
   scope :team, -> { where(category: CATEGORY_TEAM).order('sort_index ASC') }
   scope :visiting_coaches, -> { where(category: CATEGORY_VISITING_COACHES).order('sort_index ASC') }
   scope :developer_coaches, -> { where(category: CATEGORY_DEVELOPER_COACHES).order('sort_index ASC') }
+  scope :vr_coaches, -> { where(category: CATEGORY_VR_COACHES).order('sort_index ASC') }
   scope :advisory_board, -> { where(category: CATEGORY_ADVISORY_BOARD).order('sort_index ASC') }
   scope :alumni, -> { where(category: CATEGORY_ALUMNI).order('sort_index ASC') }
-  scope :available_for_connect, -> { where(category: [CATEGORY_TEAM, CATEGORY_VISITING_COACHES, CATEGORY_ALUMNI]) }
+  scope :available_for_connect, -> { where(category: [CATEGORY_TEAM, CATEGORY_VISITING_COACHES, CATEGORY_ALUMNI, CATEGORY_VR_COACHES]) }
   # hard-wired ids of our ops_team, kireeti: 19, bharat: 20. A flag for this might be an overkill?
   scope :ops_team, -> { where(id: [19, 20]) }
 
@@ -146,5 +149,13 @@ class Faculty < ApplicationRecord
   def fetch_slack_user_id
     return unless slack_username_changed?
     self.slack_user_id = slack_username.present? ? @new_slack_user_id : nil
+  end
+
+  before_save :find_or_create_user
+
+  def find_or_create_user
+    return if email.blank?
+    user = User.with_email(email) || User.create!(email: email)
+    self.user = user
   end
 end

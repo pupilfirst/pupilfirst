@@ -1,5 +1,7 @@
 ActiveAdmin.register ActsAsTaggableOn::Tag, as: 'Tag' do
-  include DisableIntercom
+  controller do
+    include DisableIntercom
+  end
 
   actions :all, except: %i[new create]
 

@@ -2,11 +2,12 @@ require 'rails_helper'
 
 feature 'Timeline Builder' do
   include UserSpecHelper
+  let(:level_one) { create :level, :one }
 
-  let(:startup) { create :startup, :subscription_active }
+  let(:startup) { create :startup, :subscription_active, level: level_one }
   let(:founder) { create :founder, startup: startup, fb_access_token: Faker::Lorem.word, fb_token_expires_at: 2.days.from_now }
 
-  let(:target_group) { create :target_group, milestone: true }
+  let(:target_group) { create :target_group, milestone: true, level: level_one }
   let(:timeline_event_type) { create :timeline_event_type }
 
   let!(:pending_target) do

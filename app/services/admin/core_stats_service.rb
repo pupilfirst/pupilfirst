@@ -4,7 +4,7 @@ module Admin
   # The calculated stats include the Net Promoter Score collected via platform feedback
   # as well as count and percentages of daily, weekly and monthly active users.
   class CoreStatsService
-    SUBSCRIPTION_MODEL_START_DATE = Date.parse('2017-05-8').beginning_of_day.freeze
+    # SUBSCRIPTION_MODEL_START_DATE = Date.parse('2017-05-8').beginning_of_day.freeze
 
     def stats
       {
@@ -55,7 +55,7 @@ module Admin
 
     # Percentage of admitted founders active on a specified platform for a specified duration.
     def active_user_percentage(platform, duration)
-      founder_count = candidate_founders.count
+      founder_count = Founder.count
       value = active_user_count(platform, duration)
       founder_count.zero? ? 0 : (value.to_f / founder_count) * 100
     end
@@ -82,12 +82,12 @@ module Admin
 
     # Admitted founders active on Public Slack in a specified window.
     def active_user_on_slack(start_time, end_time = 1.day.ago.end_of_day)
-      candidate_founders.active_on_slack(start_time, end_time)
+      Founder.active_on_slack(start_time, end_time)
     end
 
     # Admitted founders active on web in a specified window.
     def active_user_on_web(start_time, end_time = 1.day.ago.end_of_day)
-      candidate_founders.active_on_web(start_time, end_time)
+      Founder.active_on_web(start_time, end_time)
     end
 
     # Weekly Active User trend for the last 7 weeks for a specified platform.
@@ -95,11 +95,6 @@ module Admin
       8.downto(1).map do |x|
         send("#{platform}_active_user_count", (8 * x).days.ago.beginning_of_day, (8 * x - 7).days.ago.end_of_day)
       end
-    end
-
-    # Founders to be considered for calculating the metrics - includes only 'admitted' founders under the subscription model
-    def candidate_founders
-      Founder.subscribed.admitted.not_dropped_out.not_exited.where('founders.created_at > ?', SUBSCRIPTION_MODEL_START_DATE)
     end
   end
 end

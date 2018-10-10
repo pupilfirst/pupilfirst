@@ -6,6 +6,8 @@ ActiveAdmin.register EnglishQuizQuestion do
   filter :posted_on
 
   controller do
+    include DisableIntercom
+
     def scoped_collection
       super.includes :correct_answer
     end

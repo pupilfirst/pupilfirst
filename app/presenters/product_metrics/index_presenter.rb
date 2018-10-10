@@ -9,9 +9,9 @@ module ProductMetrics
       'Faculty Office Hours' => :office_hours,
       'Library Resources' => :resources,
       'Library Resource Downloads' => :resource_downloads,
-      'Graduation Partners' => :graduation_partners,
-      'Community Architects' => :community_architects,
-      'Blog Stories Published' => :published_stories
+      'Graduation Partners' => :graduation_partners
+      # 'Community Architects' => :community_architects,
+      # 'Blog Stories Published' => :published_stories
     }.freeze
 
     MEMBER_JOURNEY = {

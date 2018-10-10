@@ -5,8 +5,13 @@ export default class LevelUpNotification extends React.Component {
   eligibleNotificationTitle() {
     if (this.currentLevelNumber() === 0) {
       return "Congratulations! You are now an enrolled student at SV.CO.";
-    } else if (this.currentLevelNumber() === this.props.maxLevelNumber) {
-      return "Congratulations! You are now part of our Alumni.";
+    } else if (this.currentLevelNumber() === this.props.rootProps.maxLevelNumber) {
+      if (this.props.rootProps.sponsoredSchool) {
+        return "Congratulations! You have completed all milestone targets in this course.";
+      }
+      else {
+        return "Congratulations! You are now part of our Alumni.";
+      }
     } else {
       return "Ready to Level Up!";
     }
@@ -16,23 +21,41 @@ export default class LevelUpNotification extends React.Component {
     return this.props.rootProps.currentLevel.number;
   }
 
+  eligibleNotificationSubText() {
+    if (this.props.rootProps.sponsoredSchool) {
+      return (
+        <p>
+          {" "}
+          Feel free to complete targets that you might have left out, read up
+          on attached links and resources, and work on the breadth and depth
+          of your skills.
+        </p>
+      )
+    }
+    else {
+      return (
+        <p>
+          {" "}
+          Thanks for sharing your life experiences with SV.CO. Hope this has
+          been an awesome experience. For graduation options & access to the
+          Alumni network, write to{" "}
+          <a href="mailto:graduation@sv.co">graduation@sv.co</a>
+        </p>
+      )
+    }
+  }
+
   eligibleNotificationText() {
     if (this.currentLevelNumber() === 0) {
       return "You have successfully completed the first step in your journey with SV.CO. We are proud to have you join our collective. Hit Level Up to continue your journey and unlock a series of cool targets and sessions on the way.";
-    } else if (this.currentLevelNumber() === this.props.maxLevelNumber) {
+    } else if (this.currentLevelNumber() === this.props.rootProps.maxLevelNumber) {
       return (
         <div>
           <h4 className="font-regular light-grey-text">
             You've completed our Level Framework, but you know by now that this
             is just the beginning of your journey.
           </h4>
-          <p>
-            {" "}
-            Thanks for sharing your life experiences with SV.CO. Hope this has
-            been an awesome experience. For graduation options & access to the
-            Alumni network, write to{" "}
-            <a href="mailto:graduation@sv.co">graduation@sv.co</a>
-          </p>
+          {this.eligibleNotificationSubText()}
         </div>
       );
     } else {
@@ -56,28 +79,28 @@ export default class LevelUpNotification extends React.Component {
 
             {this.currentLevelNumber() !==
               this.props.rootProps.maxLevelNumber && (
-              <form
-                className="mt-3"
-                action="/startup/level_up"
-                acceptCharset="UTF-8"
-                method="post"
-              >
-                <input name="utf8" type="hidden" value="✓" />
-                <input
-                  type="hidden"
-                  name="authenticity_token"
-                  value={this.props.rootProps.authenticityToken}
-                />
-
-                <button
-                  className="btn btn-with-icon btn-md btn-primary btn-founder-dashboard-level-up text-uppercase"
-                  type="submit"
+                <form
+                  className="mt-3"
+                  action="/startup/level_up"
+                  acceptCharset="UTF-8"
+                  method="post"
                 >
-                  <i className="fa fa-arrow-right" />
-                  Level Up
+                  <input name="utf8" type="hidden" value="✓" />
+                  <input
+                    type="hidden"
+                    name="authenticity_token"
+                    value={this.props.rootProps.authenticityToken}
+                  />
+
+                  <button
+                    className="btn btn-with-icon btn-md btn-primary btn-founder-dashboard-level-up text-uppercase"
+                    type="submit"
+                  >
+                    <i className="fa fa-arrow-right" />
+                    Level Up
                 </button>
-              </form>
-            )}
+                </form>
+              )}
           </div>
         )}
 

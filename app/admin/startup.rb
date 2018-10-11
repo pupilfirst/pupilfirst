@@ -312,7 +312,7 @@ ActiveAdmin.register Startup do
 
       row :invited_founders do
         div do
-          if startup.invited_founders.present?
+          if startup.invited_founders.exists?
             startup.invited_founders.each do |founder|
               div do
                 span do

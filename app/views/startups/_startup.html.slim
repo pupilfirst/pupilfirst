@@ -44,7 +44,7 @@
         a.product-name.brand-secondary.font-semibold href=product_url(startup.id, startup.slug)
           ' #{startup.product_name}
 
-        - if startup.startup_categories.present?
+        - if startup.startup_categories.exists?
           .startup-industry
             span.startup-industry-icon
               i.fa.fa-address-card-o
@@ -72,7 +72,7 @@
             ' Product Video
 
       .startupcard-footer
-        - if startup.founders.not_exited.present?
+        - if startup.founders.not_exited.exists?
           .founder-avatar-list
             - startup.founders.not_exited.order(:name).limit(6).each do |founder|
               .founder-avatar.founder-tooltip.tooltip-popup

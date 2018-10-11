@@ -242,10 +242,6 @@ class Founder < ApplicationRecord
     end
   end
 
-  def any_targets?
-    targets.present? || startup&.targets.present?
-  end
-
   def facebook_token_available?
     fb_access_token.present? && fb_token_expires_at > Time.now
   end

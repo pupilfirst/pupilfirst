@@ -7,7 +7,7 @@
         | &nbsp;View Profile
 
       = image_tag member.image_url
-      - if connect_slots.present?
+      - if connect_slots.exists?
         .available-marker
           i.fa.fa-check-circle
           | &nbsp;Available for Connect

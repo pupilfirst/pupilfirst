@@ -62,7 +62,7 @@ ActiveAdmin.register Target do
   end
 
   show do |target|
-    if target.submittability != Target::SUBMITTABILITY_AUTO_VERIFY && target.timeline_events.present?
+    if target.submittability != Target::SUBMITTABILITY_AUTO_VERIFY && target.timeline_events.exists?
       div do
         table_for target.timeline_events.includes(:timeline_event_type, :founder, :startup).where(timeline_events: { created_at: 3.months.ago..Time.now }) do
           caption 'Linked Timeline Events (up to 3 months ago)'
@@ -100,7 +100,7 @@ ActiveAdmin.register Target do
       end
 
       row :prerequisite_targets do
-        if target.prerequisite_targets.present?
+        if target.prerequisite_targets.exists?
           ul do
             target.prerequisite_targets.each do |prerequisite_target|
               li do
@@ -184,7 +184,7 @@ ActiveAdmin.register Target do
       row :created_at
       row :updated_at
 
-      if target.target_skills.present?
+      if target.target_skills.exists?
         div do
           table_for target.target_skills.includes(:skill) do
             caption 'Target Skills'

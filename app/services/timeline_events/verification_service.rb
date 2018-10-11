@@ -128,7 +128,7 @@ module TimelineEvents
     end
 
     def update_founder_resume
-      if @timeline_event.timeline_event_files.present?
+      if @timeline_event.timeline_event_files.exists?
         update_resume_file
       elsif @timeline_event.links.present?
         update_resume_link

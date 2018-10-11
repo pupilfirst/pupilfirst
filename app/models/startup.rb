@@ -367,7 +367,7 @@ class Startup < ApplicationRecord
   end
 
   def timeline_verified?
-    approved? && timeline_events.verified.present?
+    approved? && timeline_events.verified.exists?
   end
 
   def timeline_events_for_display(viewer)

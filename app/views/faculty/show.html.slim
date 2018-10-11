@@ -60,7 +60,7 @@
             .col-lg-5.col-md-12.faculty-connect
               - connect_slots = @faculty.connect_slots.available_for_founder
 
-              - if connect_slots.present?
+              - if connect_slots.exists?
                 h3.text-uppercase.font-semibold.brand-secondary.d-flex
                   | Connect
                   - if current_founder&.can_connect?
@@ -87,7 +87,7 @@
                           span.compensation-flag data-toggle='tooltip' data-placement='top' title="This Coach #{tooltip_for_compensation == 'volunteer' ? "#{tooltip_for_compensation}s pro-bono" : "is #{tooltip_for_compensation} for his work"} at SV.CO"
                             = @faculty.compensation.capitalize
 
-              - if past_connect_requests.present?
+              - if past_connect_requests.exists?
                 #faculty-show-xs-test.visible-sm-block.visible-xs-block
                 .past-connect-sessions
                   h3.text-uppercase.font-semibold.brand-secondary

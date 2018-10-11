@@ -64,7 +64,7 @@
                 .media-body
                   h6.my-0 Team Level
                   p.data-content #{@startup.level.display_name}
-            - if @startup.startup_categories.present?
+            - if @startup.startup_categories.exists?
               .col-sm-6.col-md-12
                 .media.mb-3.align-items-center
                   img.d-flex.mr-3 alt="Industry icon" src="#{image_url 'startups/show/data-icon-industry.png'}"
@@ -140,7 +140,7 @@
                         - @no_of_days = (Date.today - @startup.latest_team_event_date).to_i
                         ' #{@no_of_days} #{'day'.pluralize(@no_of_days)} ago)
         .row
-          - if @startup.founders.not_exited.present?
+          - if @startup.founders.not_exited.exists?
             .col-md-12
               h3 Founders
               hr
@@ -164,7 +164,7 @@
                             a href="#{founder.linkedin_url}" target='_blank'
                               i.fa.fa-linkedin-square
         .row
-          -if @startup.faculty.present?
+          -if @startup.faculty.exists?
             .col-md-12.mt-4
               h3 Mentors
               hr

@@ -180,7 +180,7 @@ class Target < ApplicationRecord
   end
 
   def rubric?
-    target_skills.present? || rubric_url.present?
+    target_skills.exists? || rubric_url.present?
   end
 
   # this is included in the target JSONs the DashboardDataService responds with

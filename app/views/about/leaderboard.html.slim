@@ -13,7 +13,7 @@ nav aria-label="breadcrumb" role="navigation"
       .about-text
         h1
           | Leaderboard
-          - if @levels.present?
+          - if @levels.exists?
             span.h4.leaderboard__date-range.font-semibold.light-grey-text &nbsp;#{DatesService.last_week_start_date.strftime('%B %-d')} to #{DatesService.last_week_end_date.strftime('%B %-d')}
 
         p.mb-2

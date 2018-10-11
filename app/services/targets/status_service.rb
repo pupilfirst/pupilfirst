@@ -13,7 +13,7 @@ module Targets
     end
 
     def status
-      return STATUS_UNAVAILABLE if pending_prerequisites.present?
+      return STATUS_UNAVAILABLE if pending_prerequisites.exists?
       return status_from_event if linked_event.present?
       STATUS_PENDING
     end

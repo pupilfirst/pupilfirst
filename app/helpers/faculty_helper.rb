@@ -50,7 +50,7 @@ module FacultyHelper
   end
 
   def sidebar_present?(faculty)
-    @sidebar_present ||= faculty.connect_slots.available_for_founder.present? || past_connect_requests.present?
+    @sidebar_present ||= faculty.connect_slots.available_for_founder.exists? || past_connect_requests.exists?
   end
 
   def commitment_this_week

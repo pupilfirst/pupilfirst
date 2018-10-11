@@ -6,7 +6,7 @@ source 'https://rubygems.org'
 git_source(:github) { |repository_path| "https://github.com/#{repository_path}.git" }
 
 # Ruby on Rails. http://rubyonrails.org
-gem 'rails', '~> 5.2.0'
+gem 'rails', '~> 5.2.1'
 
 gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 
@@ -45,7 +45,7 @@ gem 'bootstrap_form', '= 4.0.0.alpha1', github: 'bootstrap-ruby/bootstrap_form',
 # Have updated and submitted a PR (https://github.com/ralovets/valid_url/pull/10). Using a personal fork until it's merged.
 gem 'valid_url', '= 0.0.4', github: 'mahesh-krishnakumar/valid_url', branch: 'patch-1' # New url validataion gem
 gem 'roadie-rails', '~> 1.1' # CSS management for e-mails.
-gem 'puma', '~> 3.9' # The Puma ruby web server.
+gem 'puma', '~> 3.11' # The Puma ruby web server.
 gem 'rack-timeout', '~> 0.4' # Abort requests that are taking too long - recommended by Heroku to use with Puma
 gem 'delayed_job_active_record', '~> 4.1' # Delayed Job for deferring tasks.
 gem 'delayed-web', '~> 0.4' # A rails engine that provides a simple web interface for exposing the Delayed::Job queue.

@@ -126,7 +126,7 @@ class ApplicationController < ActionController::Base
 
   def avatar(name, founder: nil, faculty: nil, version: :mid, background_shape: :circle)
     if faculty.present? && faculty.image?
-      return helpers.image_tag(faculty.image).html_safe
+      return helpers.image_tag(faculty.image_url).html_safe
     end
 
     if founder.present? && founder.avatar? && !founder.avatar_processing?

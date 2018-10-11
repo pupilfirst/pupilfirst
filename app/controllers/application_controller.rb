@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   # Activate pretender.
   impersonates :user
 
-  before_action :prepare_platform_feedback, :set_content_security_policy
+  before_action :prepare_platform_feedback
   after_action :prepare_unobtrusive_flash
   before_action :sign_out_if_required
   before_action :pretender
@@ -82,11 +82,6 @@ class ApplicationController < ActionController::Base
 
   helper_method :feature_active?
 
-  # Set headers for CSP. Be careful when changing this.
-  def set_content_security_policy
-    response.headers['Content-Security-Policy'] = ("default-src 'none'; " + csp_directives.join(' '))
-  end
-
   # Makes redirects observable from integration tests.
   def observable_redirect_to(url)
     if Rails.env.test?
@@ -123,178 +118,6 @@ class ApplicationController < ActionController::Base
 
     flash[:error] = 'You are not an active student anymore!' if founder&.exited?
     redirect_to root_path
-  end
-
-  def csp_directives
-    [
-      image_sources,
-      script_sources,
-      style_sources,
-      connect_sources,
-      font_sources,
-      child_sources,
-      frame_sources,
-      media_sources,
-      object_sources
-    ]
-  end
-
-  def resource_csp
-    { media: 'https://s3.amazonaws.com/private-assets-sv-co/ https://public-assets.sv.co/' }
-  end
-
-  def typeform_csp
-    { frame: 'https://svlabs.typeform.com', script: 'https://embed.typeform.com https://admin.typeform.com' }
-  end
-
-  def slideshare_csp
-    { frame: 'slideshare.net *.slideshare.net' }
-  end
-
-  def speakerdeck_csp
-    { frame: 'speakerdeck.com *.speakerdeck.com' }
-  end
-
-  def google_form_csp
-    { frame: 'google.com *.google.com' }
-  end
-
-  def youtube_csp
-    { frame: 'https://www.youtube.com' }
-  end
-
-  def google_analytics_csp
-    {
-      image: 'https://www.google-analytics.com https://stats.g.doubleclick.net https://www.google.com/pagead/ga-audiences',
-      script: 'https://www.google-analytics.com',
-      connect: 'https://www.google-analytics.com'
-    }
-  end
-
-  def inspectlet_csp
-    {
-      connect: 'https://hn.inspectlet.com wss://ws.inspectlet.com',
-      script: 'https://cdn.inspectlet.com',
-      image: 'https://hn.inspectlet.com'
-    }
-  end
-
-  def facebook_csp
-    {
-      image: 'https://www.facebook.com/tr/ https://scontent.xx.fbcdn.net',
-      script: 'https://connect.facebook.net',
-      frame: 'https://www.facebook.com'
-    }
-  end
-
-  def gtm_csp
-    {
-      script: 'https://www.googletagmanager.com https://tagmanager.google.com/debug https://tagmanager.google.com/debug/',
-      style: 'https://tagmanager.google.com/debug/'
-    }
-  end
-
-  def instamojo_csp
-    {
-      script: 'https://js.instamojo.com/v1/checkout.js',
-      frame: 'https://test.instamojo.com/ https://www.instamojo.com/'
-    }
-  end
-
-  def recaptcha_csp
-    {
-      script: 'https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/'
-    }
-  end
-
-  def cloudflare_csp
-    {
-      script: 'https://ajax.cloudflare.com/'
-    }
-  end
-
-  # rubocop:disable Metrics/LineLength
-  def intercom_csp
-    {
-      connect: 'https://api.intercom.io https://api-iam.intercom.io https://api-ping.intercom.io https://nexus-websocket-a.intercom.io https://nexus-websocket-b.intercom.io https://nexus-long-poller-a.intercom.io https://nexus-long-poller-b.intercom.io wss://nexus-websocket-a.intercom.io wss://nexus-websocket-b.intercom.io https://uploads.intercomcdn.com https://uploads.intercomusercontent.com https://app.getsentry.com',
-      child: 'https://share.intercom.io https://intercom-sheets.com https://www.youtube.com https://player.vimeo.com https://fast.wistia.net',
-      font: 'https://js.intercomcdn.com',
-      media: 'https://js.intercomcdn.com',
-      img: 'https://js.intercomcdn.com https://static.intercomassets.com https://downloads.intercomcdn.com https://uploads.intercomusercontent.com https://gifs.intercomcdn.com',
-      script: 'https://app.intercom.io https://widget.intercom.io https://js.intercomcdn.com'
-    }
-  end
-  # rubocop:enable Metrics/LineLength
-
-  def development_csp
-    return {} unless Rails.env.development?
-
-    {
-      connect: 'http://localhost:3035 ws://localhost:3035'
-    }
-  end
-
-  def child_sources
-    <<~CHILD_SOURCES.squish
-      child-src https://www.youtube.com #{intercom_csp[:child]};
-    CHILD_SOURCES
-  end
-
-  def style_sources
-    <<~STYLE_SOURCES.squish
-      style-src 'self' 'unsafe-inline' fonts.googleapis.com https://sv-assets.sv.co
-      #{gtm_csp[:style]};
-    STYLE_SOURCES
-  end
-
-  def frame_sources
-    <<~FRAME_SOURCES.squish
-      frame-src
-      data:
-      https://sv-co-public-slackin.herokuapp.com https://www.google.com
-      #{typeform_csp[:frame]} #{youtube_csp[:frame]} #{slideshare_csp[:frame]} #{speakerdeck_csp[:frame]}
-      #{google_form_csp[:frame]} #{facebook_csp[:frame]} #{instamojo_csp[:frame]};
-    FRAME_SOURCES
-  end
-
-  def image_sources
-    <<~IMAGE_SOURCES.squish
-      img-src * data: blob: #{intercom_csp[:img]};
-    IMAGE_SOURCES
-  end
-
-  def script_sources
-    <<~SCRIPT_SOURCES.squish
-      script-src
-      'self' 'unsafe-eval' 'unsafe-inline' https://ajax.googleapis.com https://blog.sv.co https://www.youtube.com
-      https://s.ytimg.com http://www.startatsv.com https://sv-assets.sv.co
-      #{google_analytics_csp[:script]} #{inspectlet_csp[:script]} #{facebook_csp[:script]}
-      #{gtm_csp[:script]} #{instamojo_csp[:script]} #{recaptcha_csp[:script]} #{cloudflare_csp[:script]}
-      #{typeform_csp[:script]} #{intercom_csp[:script]};
-    SCRIPT_SOURCES
-  end
-
-  def connect_sources
-    <<~CONNECT_SOURCES.squish
-      connect-src 'self' #{inspectlet_csp[:connect]} #{intercom_csp[:connect]}
-      #{google_analytics_csp[:connect]} #{intercom_csp[:connect]} #{development_csp[:connect]};
-    CONNECT_SOURCES
-  end
-
-  def font_sources
-    <<~FONT_SOURCES.squish
-      font-src 'self' fonts.gstatic.com https://sv-assets.sv.co #{intercom_csp[:font]};
-    FONT_SOURCES
-  end
-
-  def media_sources
-    <<~MEDIA_SOURCES.squish
-      media-src 'self' #{resource_csp[:media]} #{intercom_csp[:media]};
-    MEDIA_SOURCES
-  end
-
-  def object_sources
-    "object-src 'self';"
   end
 
   def pretender

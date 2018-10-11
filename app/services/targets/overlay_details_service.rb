@@ -55,7 +55,7 @@ module Targets
       end
 
       latest_event.links.each_with_object(attachments) do |link, array|
-        array << { type: 'link', title: link['title'], url: link['url'] }
+        array << { type: 'link', title: link[:title], url: link[:url] }
       end
     end
 

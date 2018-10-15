@@ -31,7 +31,11 @@ module Zoom
         type: '2',
         start_time: @connect_request.slot_at.strftime('%Y-%m-%dT%H:%M:%S'),
         timezone: 'Asia/Calcutta',
-        duration: '30'
+        duration: '30',
+        settings: {
+          join_before_host: true,
+          participant_video: true
+        }
       }
     end
 

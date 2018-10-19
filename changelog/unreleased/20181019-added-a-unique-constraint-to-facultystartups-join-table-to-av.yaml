@@ -1,0 +1,8 @@
+---
+timestamp: '2018-10-19T07:55:24Z'
+title: Added a unique constraint to faculty_startups join table to avoid dupe entries.
+trello: https://trello.com/c/yuSHzSnT
+private: true
+description: The join table was created with loose constraints, which allowed rows
+  for the same relationship to be entered twice. This introduces proper unique constraints.
+category: bugfix

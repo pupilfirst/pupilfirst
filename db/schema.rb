@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181008060636) do
+ActiveRecord::Schema.define(version: 2018_10_19_070939) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
+  enable_extension "plpgsql"
 
   create_table "active_admin_comments", id: :serial, force: :cascade do |t|
     t.string "namespace"
@@ -204,7 +204,7 @@ ActiveRecord::Schema.define(version: 20181008060636) do
   create_table "faculty_startups", id: false, force: :cascade do |t|
     t.bigint "faculty_id"
     t.bigint "startup_id"
-    t.index ["faculty_id"], name: "index_faculty_startups_on_faculty_id"
+    t.index ["faculty_id", "startup_id"], name: "index_faculty_startups_on_faculty_id_and_startup_id", unique: true
     t.index ["startup_id"], name: "index_faculty_startups_on_startup_id"
   end
 

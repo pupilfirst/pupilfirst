@@ -34,9 +34,14 @@ Install all Gems using bundler
 
 If installation of of `pg` gem crashes, asking for `libpq-fe.h`, install the gem with:
 
-On OSX: `gem install pg -- --with-pg-config=/Applications/Postgres.app/Contents/Versions/9.X/bin/pg_config`
+**On OSX:**
 
-On Ubuntu: `sudo apt-get install libpq-dev`
+    find /Applications -name pg_config
+    gem install pg -- --with-pg-config=/path/to/pg_config
+
+**On Ubuntu:**
+
+    sudo apt-get install libpq-dev
 
 #### Set a password for the default 'postgres' user
 

@@ -1,7 +1,0 @@
----
-timestamp: '2018-10-08T07:23:17Z'
-title: Target-groups on the founder dashboard are now ordered by their sort-index.
-trello: https://trello.com/c/5zRoLA5l
-private: true
-description: The sort-index parameter for target-groups were not used for ordering
-  yet. This was fixed.

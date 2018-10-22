@@ -1,7 +1,0 @@
----
-timestamp: '2018-09-04T06:37:56Z'
-title: Fixed a crash that could occur when users try to access previous uploaded files
-  attached to timeline events.
-trello: https://trello.com/c/cxkrkwxK
-private: false
-category: bugfix

@@ -1,5 +1,114 @@
 ---
 changelog:
+- timestamp: '2018-10-22T06:52:23Z'
+  changes:
+  - timestamp: '2018-10-22T06:52:09Z'
+    title: We are now on Rails 5.2!
+    trello: https://trello.com/c/1haZuMgh
+    private: false
+  - timestamp: '2018-10-22T06:30:08Z'
+    title: Our robots.txt was updated to include a couple more disallowed paths.
+    trello: https://trello.com/c/Unsk1Vho
+    private: true
+  - timestamp: '2018-10-22T06:27:27Z'
+    title: Usages of 'present?' in our codebase has been replaced with the more performant
+      'exists?' wherever applicable.
+    trello: https://trello.com/c/rvxfRDEp
+    private: true
+    description: When querying the db for the existence of a record, 'exists?' results
+      in a much more optimized check.
+    category: performance
+  - timestamp: '2018-10-19T07:55:24Z'
+    title: Added a unique constraint to faculty_startups join table to avoid dupe
+      entries.
+    trello: https://trello.com/c/yuSHzSnT
+    private: true
+    description: The join table was created with loose constraints, which allowed
+      rows for the same relationship to be entered twice. This introduces proper unique
+      constraints.
+    category: bugfix
+  - timestamp: '2018-10-08T10:01:19Z'
+    title: Coach dashboard now displays events sorted by created_at.
+    trello: https://trello.com/c/quCzrXVV
+    private: true
+    category: bugfix
+  - timestamp: '2018-10-08T09:56:04Z'
+    title: The sessions tab has been revived! Founders will now see all sessions listed
+      in one place.
+    trello: https://trello.com/c/uydxAE4X
+    private: false
+    description: All sessions are now included in a special 'Sessions' target-group
+      which is displayed in it's dedicated tab on the dashboard.
+    category: feature
+  - timestamp: '2018-10-08T07:23:32Z'
+    title: 'Added an archived flag to resources '
+    trello: https://trello.com/c/Y7segsIW
+    private: true
+    description: This will allow resources that are no longer relevant, to be archived
+      from the backend.
+  - timestamp: '2018-10-08T07:23:17Z'
+    title: Target-groups on the founder dashboard are now ordered by their sort-index.
+    trello: https://trello.com/c/5zRoLA5l
+    private: true
+    description: The sort-index parameter for target-groups were not used for ordering
+      yet. This was fixed.
+  - timestamp: '2018-10-08T07:12:59Z'
+    title: The sixways MOOC course has been removed.
+    trello: https://trello.com/c/O51slKPf
+    private: false
+    description: All related pages and code were flushed out.
+  - timestamp: '2018-10-08T06:49:44Z'
+    title: Updated program completion notice for sponsored schools
+    trello: https://trello.com/c/yOr6vhrV
+    private: true
+    description: The framework completion message for startup school will remain the
+      same.
+    category: content
+  - timestamp: '2018-10-05T09:55:47Z'
+    title: Resources locked to levels are now only displayed to students from that
+      particular school.
+    trello: https://trello.com/c/8EPMBSZy
+    private: true
+    description: This fixes a bug affecting the resource index and show pages that
+      would allow students from any school to access level-restricted content as long
+      as their level number matched or exceeded the resource's level number. This
+      fix introduces pchecks to make sure that only students from school can access
+      such resources.
+    category: bugfix
+  - timestamp: '2018-09-10T06:16:13Z'
+    title: Replaced heroku-postbuild script with general node postinstall script to
+      generate JS from Reason code after packages are installed.
+    trello: https://trello.com/c/pWm7bYY9
+    private: true
+    description: This fixes deployment issues on Heroku, which were broken because
+      changes applied in the nodejs buildpack were not persisting to the ruby buildpack,
+      blocking precompilation of assets. The nodejs buildpack has been removed since
+      precompilation now does a yarn install first before getting started with its
+      own thing.
+    category: bugfix
+  - timestamp: '2018-09-04T07:14:23Z'
+    title: Disabled Intercom (again).
+    trello: https://trello.com/c/qUACB9ly
+    private: true
+    category: operations
+  - timestamp: '2018-09-04T06:37:56Z'
+    title: Fixed a crash that could occur when users try to access previous uploaded
+      files attached to timeline events.
+    trello: https://trello.com/c/cxkrkwxK
+    private: false
+    category: bugfix
+  - timestamp: '2018-08-07T08:36:21Z'
+    title: Coaches are now notified via email when their students submit a new timeline
+      event.
+    trello: https://trello.com/c/hVBK53l9
+    private: false
+    category: feature
+  - timestamp: '2018-08-06T08:14:08Z'
+    title: Updated LevelUpEligibilityService to only consider levels in given startup's
+      school.
+    trello: https://trello.com/c/OSlnGJsP
+    private: true
+    category: bugfix
 - timestamp: '2018-07-30T18:02:01Z'
   changes:
   - timestamp: '2018-07-30T18:00:47Z'

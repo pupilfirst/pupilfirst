@@ -43,7 +43,10 @@ module Founders
     end
 
     def levels
-      @levels ||= startup.school.levels.where('number >= ?', minimum_level).as_json(only: %i[id name number school_id])
+      @levels ||= startup.school.levels.where('number >= ?', minimum_level).as_json(
+        only: %i[id name number school_id],
+        methods: :unlocked
+      )
     end
 
     def faculty

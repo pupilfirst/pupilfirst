@@ -24,4 +24,8 @@ class Level < ApplicationRecord
   def short_name
     'Level ' + number.to_s
   end
+
+  def unlocked
+    !unlock_on&.future?
+  end
 end

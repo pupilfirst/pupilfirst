@@ -7,7 +7,7 @@ module Founders
     def props
       {
         targets: targets,
-        levels: levels,
+        levels: levels_as_json,
         faculty: faculty,
         targetGroups: target_groups,
         tracks: tracks
@@ -35,15 +35,16 @@ module Founders
       end
     end
 
-    def open_levels
-      @open_levels ||= begin
-        levels = startup.school.levels.where('levels.number >= ?', minimum_level)
-        levels.where(unlock_on: nil).or(levels.where('unlock_on <= ?', Date.today))
-      end
+    def visible_levels
+      @visible_levels ||= startup.level_zero? ? startup.school.levels.where(number: 0) : startup.school.levels.where('levels.number >= ?', 1)
     end
 
-    def levels
-      @levels ||= startup.school.levels.where('number >= ?', minimum_level).as_json(
+    def open_levels
+      @open_levels ||= visible_levels.where(unlock_on: nil).or(visible_levels.where('unlock_on <= ?', Date.today))
+    end
+
+    def levels_as_json
+      visible_levels.as_json(
         only: %i[id name number],
         methods: :unlocked
       )
@@ -66,11 +67,6 @@ module Founders
 
     def tracks
       Track.all.as_json(only: %i[id name sort_index])
-    end
-
-    # Avoid loading data for level 0 if startup has crossed it.
-    def minimum_level
-      @minimum_level ||= startup.level.number.zero? ? 0 : 1
     end
 
     def dashboard_decorated_data(target_data)

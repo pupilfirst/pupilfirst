@@ -95,7 +95,12 @@ module Founders
     end
 
     def unavailable_or_pending?(target)
+      # Non-submittables are no-brainers.
       return Target::STATUS_UNAVAILABLE if target.submittability == Target::SUBMITTABILITY_NOT_SUBMITTABLE
+
+      # So are targets in higher levels
+      return Target::STATUS_UNAVAILABLE if target.level.number > @level_number
+
       prerequisites_completed?(target) ? Target::STATUS_PENDING : Target::STATUS_UNAVAILABLE
     end
 

@@ -18,12 +18,7 @@ module Founders
 
     def targets
       # Targets at or below startup's level
-      applicable_targets = Target.joins(target_group: { level: :school })
-        .includes(:faculty)
-        .where(levels: { school_id: startup.school.id })
-        .where('levels.number <= ?', startup.level.number)
-        .where('levels.number >= ?', minimum_level)
-        .where.not(archived: true)
+      applicable_targets = Target.live.joins(target_group: :level).where(target_groups: { level: open_levels }).includes(:faculty)
 
       # Load basic data about targets from database.
       loaded_targets = applicable_targets.as_json(
@@ -40,6 +35,13 @@ module Founders
       end
     end
 
+    def open_levels
+      @open_levels ||= begin
+        levels = startup.school.levels.where('levels.number >= ?', minimum_level)
+        levels.where(unlock_on: nil).or(levels.where('unlock_on <= ?', Date.today))
+      end
+    end
+
     def levels
       @levels ||= startup.school.levels.where('number >= ?', minimum_level).as_json(only: %i[id name number school_id])
     end
@@ -52,10 +54,7 @@ module Founders
     end
 
     def target_groups
-      TargetGroup.joins(level: :school)
-        .where(levels: { school_id: startup.school.id })
-        .where('levels.number <= ?', startup.level.number)
-        .where('levels.number >= ?', minimum_level)
+      TargetGroup.joins(:level).where(level: open_levels)
         .as_json(
           only: %i[id name description milestone sort_index],
           include: { track: { only: :id }, level: { only: :id } }

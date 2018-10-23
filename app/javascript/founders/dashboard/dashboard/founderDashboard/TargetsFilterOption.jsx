@@ -26,7 +26,8 @@ export default class TargetsFilterOption extends React.Component {
   }
 
   locked() {
-    return this.level.number > this.props.rootProps.currentLevel.number;
+    // return this.level.number > this.props.rootProps.currentLevel.number;
+    return false;
   }
 
   loadLevel() {
@@ -38,10 +39,12 @@ export default class TargetsFilterOption extends React.Component {
   }
 
   iconClasses() {
-    if (this.locked()) {
-      return "fa fa-lock";
+    if (this.level.number > this.props.rootProps.currentLevel.number) {
+      return "fa fa-eye";
+    } else if (this.level.number < this.props.rootProps.currentLevel.number) {
+      return "fa fa-check";
     } else {
-      return "fa fa-unlock";
+      return "fa fa-map-marker";
     }
   }
 

@@ -91,13 +91,7 @@ module Founders
 
     # all applicable targets for the founder
     def applicable_targets
-      @applicable_targets ||= begin
-        minimum_level = startup.level.number.zero? ? 0 : 1
-
-        Target.joins(target_group: :level)
-          .where('levels.number <= ?', startup.level.number)
-          .where('levels.number >= ?', minimum_level)
-      end
+      @applicable_targets ||= Target.live.joins(target_group: :level).where(target_groups: { level: open_levels })
     end
 
     def unavailable_or_pending?(target)
@@ -141,6 +135,14 @@ module Founders
       end
 
       statuses
+    end
+
+    def open_levels
+      @open_levels ||= begin
+        minimum_level_number = startup.level.number.zero? ? 0 : 1
+        levels = startup.school.levels.where('levels.number >= ?', minimum_level_number)
+        levels.where(unlock_on: nil).or(levels.where('unlock_on <= ?', Date.today))
+      end
     end
   end
 end

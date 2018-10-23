@@ -124,8 +124,9 @@ feature 'Founder Dashboard' do
     find('.filter-targets-dropdown__button').click
     within('.filter-targets-dropdown__menu') do
       expect(page).to have_selector('.filter-targets-dropdown__menu-item', count: 5)
-      expect(page).to have_selector('.fa-lock', count: 1)
-      expect(page).to have_selector('.fa-unlock', count: 4)
+      expect(page).to have_selector('.fa-check', count: 3)
+      expect(page).to have_selector('.fa-map-marker', count: 1)
+      expect(page).to have_selector('.fa-eye', count: 1)
     end
 
     # Select another level and check if the correct data is displayed.

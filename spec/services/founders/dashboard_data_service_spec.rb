@@ -51,7 +51,7 @@ describe Founders::DashboardDataService do
 
         expect(props.keys).to contain_exactly(:faculty, :levels, :targetGroups, :targets, :tracks)
         expect(props[:faculty]).to contain_exactly(*team_members)
-        expect(props[:levels]).to contain_exactly(*level_fields(level_0, level_1, level_2, level_3))
+        expect(props[:levels]).to contain_exactly(*level_fields(level_0))
         expect(props[:targetGroups]).to contain_exactly(*expected_target_groups)
         expect(props[:targets]).to contain_exactly(*expected_targets)
         expect(props[:tracks]).to contain_exactly(*track_fields(track_1, track_2))

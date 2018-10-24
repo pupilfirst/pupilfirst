@@ -15,7 +15,7 @@ class ResourcesController < ApplicationController
     @skip_container = true
   end
 
-  # GET /library/resource
+  # GET /library/:id
   def show
     @resource = Resource.find(params[:id])
     authorize @resource
@@ -36,7 +36,7 @@ class ResourcesController < ApplicationController
     redirect_to resources_path, alert: alert_message
   end
 
-  # GET /library/resource/download
+  # GET /library/:id/download
   def download
     resource = Resource.find(params[:id])
     authorize resource

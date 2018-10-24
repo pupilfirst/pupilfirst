@@ -63,7 +63,15 @@ module Targets
       return if @target.resources.blank?
 
       @target.resources.map do |resource|
-        { id: resource.id, title: resource.title, slug: resource.slug }
+        {
+          id: resource.id,
+          title: resource.title,
+          slug: resource.slug,
+          shouldStream: @resource.video_embed.present?,
+          hasLink: resource.link.present?,
+          hasFile: resource.file.present?,
+          thumbnailUrl: (@resource.thumbnail.url if @resource.thumbnail.present?)
+        }
       end
     end
   end

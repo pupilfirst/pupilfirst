@@ -12,8 +12,10 @@ describe Founders::TargetStatusService do
   let(:co_founder) { create :founder }
 
   let!(:target_group) { create :target_group, level: level_zero }
+  let!(:level_2_target_group) { create :target_group, level: level_two }
   let!(:founder_target) { create :target, :for_founders, target_group: target_group }
   let!(:startup_target) { create :target, :for_startup, target_group: target_group }
+  let!(:level_2_target) { create :target, :for_startup, target_group: level_2_target_group }
   let!(:founder_session) { create :target, target_group: target_group, session_at: 1.month.ago }
 
   let!(:founder_event) { create :timeline_event, founder: founder, startup: startup }
@@ -95,6 +97,12 @@ describe Founders::TargetStatusService do
         founder_target.prerequisite_targets << startup_target
         co_founder_event.update!(target: startup_target, status: TimelineEvent::STATUS_VERIFIED)
         expect(subject.status(founder_target.id)).to eq(Target::STATUS_PENDING)
+      end
+    end
+
+    context 'when the target is from a higher level than the startup' do
+      it 'returns :unavailable' do
+        expect(subject.status(level_2_target.id)).to eq(Target::STATUS_UNAVAILABLE)
       end
     end
 

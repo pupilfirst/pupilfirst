@@ -15,6 +15,7 @@ feature 'Founder Dashboard' do
   let!(:level_3) { create :level, :three, school: school }
   let!(:level_4) { create :level, :four, school: school }
   let!(:level_5) { create :level, :five, school: school }
+  let!(:locked_level_6) { create :level, :six, school: school, unlock_on: 1.month.from_now }
 
   # Tracks.
   let(:product_track) { create :track, name: 'Product', sort_index: 0 }
@@ -26,6 +27,7 @@ feature 'Founder Dashboard' do
   let!(:target_group_2) { create :target_group, level: level_2, milestone: true, track: product_track }
   let!(:target_group_3) { create :target_group, level: level_3, milestone: true, track: product_track }
   let!(:target_group_4) { create :target_group, level: level_4, milestone: true, track: product_track }
+  let!(:target_group_5) { create :target_group, level: level_5, milestone: true, track: product_track }
   let!(:sessions_target_group) { create :target_group, name: 'Sessions' }
 
   # Individual targets of different types.
@@ -37,6 +39,7 @@ feature 'Founder Dashboard' do
   let!(:needs_improvement_target) { create :target, target_group: target_group_4, role: Target::ROLE_TEAM }
   let!(:target_with_prerequisites) { create :target, target_group: target_group_4, prerequisite_targets: [pending_target], role: Target::ROLE_TEAM }
   let!(:completed_fee_payment_target) { create :target, target_group: target_group_0, days_to_complete: 60, role: Target::ROLE_TEAM, key: Target::KEY_FEE_PAYMENT }
+  let!(:level_5_target) { create :target, target_group: target_group_5, role: Target::ROLE_TEAM }
 
   # Create sessions for the 'Sessions' target group.
   let!(:session_1) { create :target, target_group: sessions_target_group, session_at: 2.hours.from_now }
@@ -123,10 +126,11 @@ feature 'Founder Dashboard' do
     # Check the level filters in the action bar.
     find('.filter-targets-dropdown__button').click
     within('.filter-targets-dropdown__menu') do
-      expect(page).to have_selector('.filter-targets-dropdown__menu-item', count: 5)
+      expect(page).to have_selector('.filter-targets-dropdown__menu-item', count: 6)
       expect(page).to have_selector('.fa-check', count: 3)
       expect(page).to have_selector('.fa-map-marker', count: 1)
       expect(page).to have_selector('.fa-eye', count: 1)
+      expect(page).to have_selector('.fa-lock', count: 1)
     end
 
     # Select another level and check if the correct data is displayed.
@@ -156,6 +160,17 @@ feature 'Founder Dashboard' do
 
     # Ensure there is no Sessions Tab displayed
     expect(page).not_to have_selector('.founder-dashboard-togglebar__toggle-btn', text: 'SESSIONS')
+
+    # Visit the read-only level 5
+    find('.filter-targets-dropdown__button').click
+    find('.filter-targets-dropdown__menu-item', text: "Level 5: #{level_5.name}").click
+    expect(page).to have_selector('.founder-dashboard-target-group__box', count: 1)
+    expect(page).to have_selector('.founder-dashboard-target-header__container', count: 1)
+    expect(page).to have_selector('.founder-dashboard-target-header__status-badge-block', text: 'Locked', count: 1)
+
+    # Ensure level 6 is displayed locked
+    find('.filter-targets-dropdown__button').click
+    expect(page).to have_selector('.filter-targets-dropdown__menu-item--disabled', text: "Level 6: #{locked_level_6.name}")
   end
 
   context "when the founders's school has a 'Sessions' target-group in it" do

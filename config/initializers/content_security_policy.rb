@@ -123,8 +123,8 @@ Rails.application.config.content_security_policy do |policy|
 
   policy.default_src :none
   policy.img_src     '*', :data, :blob
-  policy.script_src  :self, *script_sources
-  policy.style_src   :self, *style_sources
+  policy.script_src  :self, :unsafe_eval, *script_sources
+  policy.style_src   :self, :unsafe_inline, *style_sources
   policy.connect_src :self, *connect_sources
   policy.font_src    :self, *font_sources
   policy.child_src(*child_sources)

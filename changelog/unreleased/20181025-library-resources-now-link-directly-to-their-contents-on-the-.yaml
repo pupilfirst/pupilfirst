@@ -1,0 +1,8 @@
+---
+timestamp: '2018-10-25T11:55:39Z'
+title: Library resources now link directly to their contents on the target overlay.
+trello: https://trello.com/c/RAXwRpHr
+private: false
+description: This updates the resource links on the target overlay to point directly
+  to the underlying content, instead of sending the user to the Resource#show page.
+category: ui

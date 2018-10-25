@@ -544,8 +544,6 @@ GEM
     rack-contrib (2.1.0)
       rack (~> 2.0)
     rack-cors (1.0.2)
-    rack-mini-profiler (1.0.0)
-      rack (>= 1.2.0)
     rack-proxy (0.6.5)
       rack
     rack-test (1.1.0)
@@ -883,7 +881,6 @@ DEPENDENCIES
   puma (~> 3.11)
   pundit (~> 1.1)
   rack-cors (~> 1.0)
-  rack-mini-profiler (~> 1.0)
   rack-timeout (~> 0.4)
   rails (~> 5.2.1)
   rails-assets-bootstrap-tabcollapse (~> 0.2)!

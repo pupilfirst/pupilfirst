@@ -3,7 +3,7 @@
 - content_for :head do
   title SV.CO Membership Fee
 
-  == javascript_pack_tag 'founders/fee', 'data-turbolinks-track': 'reload'
+  == javascript_pack_tag 'founders/fee', 'data-turbolinks-track': 'reload', nonce: true
   == stylesheet_pack_tag 'founders/fee', 'data-turbolinks-track': 'reload'
 
 script src='https://js.instamojo.com/v1/checkout.js'

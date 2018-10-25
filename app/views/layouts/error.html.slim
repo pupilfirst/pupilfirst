@@ -17,7 +17,7 @@ html lang='en'
     link type='text/css' rel='stylesheet' href='//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,400italic,300italic'
 
     // Scripts
-    = javascript_include_tag 'application'
+    = javascript_include_tag 'application', nonce: true
 
     = csrf_meta_tags
     = yield :head

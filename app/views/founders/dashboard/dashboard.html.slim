@@ -3,7 +3,7 @@
 - content_for :head
   title SV.CO Dashboard
 
-  == javascript_pack_tag 'founders/dashboard/dashboard', 'data-turbolinks-track': 'reload'
+  == javascript_pack_tag 'founders/dashboard/dashboard', 'data-turbolinks-track': 'reload', nonce: true
   / == stylesheet_pack_tag 'founders/dashboard/dashboard', 'data-turbolinks-track': 'reload'
 
 #dashboard-show-tour.hide [

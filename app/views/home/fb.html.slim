@@ -1,5 +1,5 @@
 == content_for :head do
-  == javascript_pack_tag 'home/fb', 'data-turbolinks-track': 'reload'
+  == javascript_pack_tag 'home/fb', 'data-turbolinks-track': 'reload', nonce: true
   == stylesheet_pack_tag 'home/fb', 'data-turbolinks-track': 'reload'
 
 #home__fb
@@ -403,5 +403,5 @@
           a class="btn btn-secondary btn-lg mt-3 ml-sm-2 home-apply__button" href="https://wiki.sv.co/faqs" target="_blank"
             | FAQ
 
-          javascript:
-           (function() { var qs,js,q,s,d=document, gi=d.getElementById, ce=d.createElement, gt=d.getElementsByTagName, id="typef_orm_share", b="https://embed.typeform.com/"; if(!gi.call(d,id)){ js=ce.call(d,"script"); js.id=id; js.src=b+"embed.js"; q=gt.call(d,"script")[0]; q.parentNode.insertBefore(js,q) } })()
+          / javascript:
+          // (function() { var qs,js,q,s,d=document, gi=d.getElementById, ce=d.createElement, gt=d.getElementsByTagName, id="typef_orm_share", b="https://embed.typeform.com/"; if(!gi.call(d,id)){ js=ce.call(d,"script"); js.id=id; js.src=b+"embed.js"; q=gt.call(d,"script")[0]; q.parentNode.insertBefore(js,q) } })()

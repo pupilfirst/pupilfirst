@@ -42,7 +42,7 @@ feature 'Resources' do
   end
 
   context 'With a video resource' do
-    let!(:public_resource_2) { create :video_resource }
+    let!(:public_resource_2) { create :resource_video_file }
 
     scenario 'user can stream resource' do
       visit resources_path
@@ -54,8 +54,7 @@ feature 'Resources' do
   end
 
   context 'With a video embed resource' do
-    let!(:video_embed_code) { '<iframe src="https://www.youtube.com/sample"></iframe>' }
-    let!(:public_video_embed_resource) { create :resource, file: nil, video_embed: video_embed_code }
+    let!(:public_video_embed_resource) { create :resource_video_embed }
 
     scenario 'user can stream video embed' do
       visit resources_path

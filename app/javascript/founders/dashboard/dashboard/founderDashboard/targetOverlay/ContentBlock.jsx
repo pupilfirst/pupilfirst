@@ -33,14 +33,14 @@ export default class ContentBlock extends React.Component {
   }
 
   resourceLinkAndIcon(resource) {
-    if (resource.hasVideo) {
-      return ['?watch=true', 'fa-play']
+    if (resource.canStream) {
+      return ["?watch=true", "fa-play"];
     } else if (resource.hasLink) {
-      return ['/download', 'fa-link']
+      return ["/download", "fa-link"];
     } else {
-      return ['/download', 'fa-file']
+      return ["/download", "fa-file"];
     }
-  };
+  }
 
   resourceLinks() {
     return this.props.linkedResources.map(function(resource) {
@@ -48,21 +48,17 @@ export default class ContentBlock extends React.Component {
       const [urlSegment, icon] = this.resourceLinkAndIcon(resource);
 
       return (
-        <span>
-          <a
-            className="target-overlay__link mr-2 mb-3"
-            key={resource.id}
-            target="_blank"
-            href={"/library/" + resource.slug + urlSegment}
-          >
+        <a
+          className="target-overlay__link mr-2 mb-3"
+          key={resource.id}
+          target="_blank"
+          href={"/library/" + resource.slug + urlSegment}
+        >
           <span className="target-overlay__link-icon">
-            <i className={"fa " + icon}/>
+            <i className={"fa " + icon} />
           </span>
-            <span className="target-overlay__link-text">
-            {resource.title}
-          </span>
-          </a>
-        </span>
+          <span className="target-overlay__link-text">{resource.title}</span>
+        </a>
       );
     }, this);
   }

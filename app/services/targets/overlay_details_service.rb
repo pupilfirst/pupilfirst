@@ -67,7 +67,7 @@ module Targets
           id: resource.id,
           title: resource.title,
           slug: resource.slug,
-          hasVideo: resource.video_embed.present?,
+          canStream: resource.stream?,
           hasLink: resource.link.present?,
           hasFile: resource.file.present?,
           thumbnailUrl: (resource.thumbnail.url if resource.thumbnail.present?)

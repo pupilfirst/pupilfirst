@@ -28,7 +28,8 @@ after 'development:targets' do
     file: Rails.root.join(video_path).open,
     thumbnail: Rails.root.join(video_thumbnail_path).open,
     title: 'Public MP4 File',
-    description: 'This is an MP4 video, which we should be able to stream.'
+    description: 'This is an MP4 video, which we should be able to stream.',
+    target: target
   )
 
   Resource.create!(

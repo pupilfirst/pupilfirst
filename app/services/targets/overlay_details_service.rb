@@ -67,10 +67,10 @@ module Targets
           id: resource.id,
           title: resource.title,
           slug: resource.slug,
-          shouldStream: @resource.video_embed.present?,
+          hasVideo: resource.video_embed.present?,
           hasLink: resource.link.present?,
           hasFile: resource.file.present?,
-          thumbnailUrl: (@resource.thumbnail.url if @resource.thumbnail.present?)
+          thumbnailUrl: (resource.thumbnail.url if resource.thumbnail.present?)
         }
       end
     end

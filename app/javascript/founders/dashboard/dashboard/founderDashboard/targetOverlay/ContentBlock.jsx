@@ -32,24 +32,39 @@ export default class ContentBlock extends React.Component {
     });
   }
 
+  resourceLinkAndIcon(resource) {
+    if (resource.hasVideo) {
+      return ['?watch=true', 'fa-play']
+    } else if (resource.hasLink) {
+      return ['/download', 'fa-link']
+    } else {
+      return ['/download', 'fa-file']
+    }
+  };
+
   resourceLinks() {
-    return this.props.linkedResources.map(function(resourceDetail) {
+    return this.props.linkedResources.map(function(resource) {
+      // As per the model, resource must have one of video embed, a link, or a file. All three cases must be handled.
+      const [urlSegment, icon] = this.resourceLinkAndIcon(resource);
+
       return (
-        <a
-          className="target-overlay__link mr-2 mb-3"
-          key={resourceDetail.id}
-          target="_blank"
-          href={"/library/" + resourceDetail.slug}
-        >
+        <span>
+          <a
+            className="target-overlay__link mr-2 mb-3"
+            key={resource.id}
+            target="_blank"
+            href={"/library/" + resource.slug + urlSegment}
+          >
           <span className="target-overlay__link-icon">
-            <i className="fa fa-external-link" />
+            <i className={"fa " + icon}/>
           </span>
-          <span className="target-overlay__link-text">
-            {resourceDetail.title}
+            <span className="target-overlay__link-text">
+            {resource.title}
           </span>
-        </a>
+          </a>
+        </span>
       );
-    });
+    }, this);
   }
 
   hasPendingPrerequisites() {

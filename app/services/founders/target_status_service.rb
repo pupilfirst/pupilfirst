@@ -100,11 +100,11 @@ module Founders
       return Target::STATUS_UNAVAILABLE if target.submittability == Target::SUBMITTABILITY_NOT_SUBMITTABLE
 
       # So are targets in higher levels
-      return Target::STATUS_UNAVAILABLE if target.level.number > @level_number
+      return Target::STATUS_LEVEL_lOCKED if target.level.number > @level_number
 
       # For milestone targets, ensure last levels milestones where completed
       if target.target_group.milestone? && target.level.number == @level_number
-        return Target::STATUS_UNAVAILABLE unless previous_milestones_completed?
+        return Target::STATUS_PENDING_MILESTONE unless previous_milestones_completed?
       end
 
       prerequisites_completed?(target) ? Target::STATUS_PENDING : Target::STATUS_UNAVAILABLE

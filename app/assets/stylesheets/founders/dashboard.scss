@@ -664,7 +664,9 @@
     border: 1px solid $alert-background;
     color: darken($alert-background, 25%);
   }
-  &.unavailable {
+  &.unavailable,
+  &.level-locked,
+  &.pending-milestone {
     background-color: rgba(153, 153, 153, 0.2);
     border: 1px solid rgba(153, 153, 153, 0.7);
     color: $dark-grey-text;

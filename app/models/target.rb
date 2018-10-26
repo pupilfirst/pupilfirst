@@ -19,6 +19,8 @@ class Target < ApplicationRecord
   STATUS_PENDING = :pending
   STATUS_UNAVAILABLE = :unavailable
   STATUS_NOT_ACCEPTED = :not_accepted
+  STATUS_LEVEL_LOCKED = :level_locked
+  STATUS_PENDING_MILESTONE = :pending_milestone
 
   belongs_to :faculty, optional: true
   belongs_to :timeline_event_type, optional: true

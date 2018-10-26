@@ -7,7 +7,7 @@
   overflow: auto;
   z-index: 1001;
   background-color: $dark-primary-background;
- }
+}
 
 .target-overlay__overlay-close {
   position: absolute;
@@ -119,7 +119,9 @@
     background-color: rgba(227, 180, 98, 0.15);
     color: darken($alert-background, 25%);
   }
-  &.unavailable {
+  &.unavailable,
+  &.level-locked,
+  &.pending-milestone {
     background-color: rgba(153, 153, 153, 0.2);
     color: $dark-grey-text;
   }
@@ -136,7 +138,7 @@
 .ripple-effect {
   position: relative;
   overflow: hidden;
-  transform: translate3d(0,0,0);
+  transform: translate3d(0, 0, 0);
 
   &:after {
     content: "";
@@ -147,16 +149,16 @@
     top: 0;
     left: 0;
     pointer-events: none;
-    background-image: radial-gradient(circle,#000 10%,transparent 10.01%);
+    background-image: radial-gradient(circle, #000 10%, transparent 10.01%);
     background-repeat: no-repeat;
     background-position: 50%;
-    transform: scale(10,10);
+    transform: scale(10, 10);
     opacity: 0;
-    transition: transform .3s, opacity 0.3s;
+    transition: transform 0.3s, opacity 0.3s;
   }
   &:active:after {
-    transform: scale(0,0);
-    opacity: .2;
+    transform: scale(0, 0);
+    opacity: 0.2;
     transition: 0s;
   }
 }
@@ -165,7 +167,7 @@
   display: inline-block;
   padding-left: 10px;
   margin: 0 0 0 10px;
-  border-left: 1px solid rgba(0,0,0,0.2);
+  border-left: 1px solid rgba(0, 0, 0, 0.2);
 
   @include media-breakpoint-down(xs) {
     border-left: 0;
@@ -186,13 +188,13 @@
 
 @keyframes statusBadgeAnimate {
   0% {
-		opacity: 0;
+    opacity: 0;
     transform: scaleY(0);
-	}
-	100% {
-		opacity: 1;
+  }
+  100% {
+    opacity: 1;
     transform: scaleY(1);
-	}
+  }
 }
 
 .founder-dashboard-target-header__content {
@@ -367,7 +369,7 @@
   text-overflow: ellipsis;
 }
 
- .target-overlay-content-block__body--embed-block {
+.target-overlay-content-block__body--embed-block {
   iframe {
     width: 100%;
 
@@ -487,7 +489,8 @@
   background-color: white;
   position: relative;
 
-  &:after, &:before {
+  &:after,
+  &:before {
     bottom: 100%;
     left: 11%;
     border: solid transparent;
@@ -541,9 +544,9 @@
 }
 
 .discuss-on-slack__button {
- background-color: white;
- border: 1px solid rgba(0, 0, 0, 0.6);
- color: $gray-dark;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  color: $gray-dark;
 }
 
 .target-overlay__mobile-fixed-navbar {
@@ -568,7 +571,8 @@
   color: $light-grey-text;
   transition: all 0.2s;
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     box-shadow: inset -3px 0px 10px -4px rgba(0, 0, 0, 0.2);
   }
 }

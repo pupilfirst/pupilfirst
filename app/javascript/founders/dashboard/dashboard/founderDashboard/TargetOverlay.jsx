@@ -69,7 +69,12 @@ export default class TargetOverlay extends React.Component {
   }
 
   submissionBlocked() {
-    return ["unavailable", "submitted"].includes(this.target().status);
+    return [
+      "unavailable",
+      "level_locked",
+      "pending_milestone",
+      "submitted"
+    ].includes(this.target().status);
   }
 
   isPending() {

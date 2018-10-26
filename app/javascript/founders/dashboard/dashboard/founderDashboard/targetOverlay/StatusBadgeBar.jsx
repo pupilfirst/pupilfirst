@@ -17,7 +17,9 @@ export default class StatusBadgeBar extends React.Component {
       submitted: "fa fa-hourglass-half",
       pending: "fa fa-clock-o",
       unavailable: "fa fa-lock",
-      not_accepted: "fa fa-thumbs-o-down"
+      not_accepted: "fa fa-thumbs-o-down",
+      level_locked: "fa fa-eye",
+      pending_milestone: "fa fa-lock"
     }[this.props.target.status];
   }
 
@@ -28,7 +30,9 @@ export default class StatusBadgeBar extends React.Component {
       submitted: "Submitted",
       pending: "Pending",
       unavailable: "Locked",
-      not_accepted: "Not Accepted"
+      not_accepted: "Not Accepted",
+      level_locked: "Preview",
+      pending_milestone: "Locked"
     }[this.props.target.status];
   }
 
@@ -39,7 +43,9 @@ export default class StatusBadgeBar extends React.Component {
       submitted: "Submitted on " + this.submissionDate(),
       pending: "Follow completion instructions and submit!",
       unavailable: this.lockedTargetHintString(),
-      not_accepted: "Re-submit based on feedback!"
+      not_accepted: "Re-submit based on feedback!",
+      level_locked: "Complete previous levels to work on this target!",
+      pending_milestone: "Complete milestone targets in previous level!"
     }[this.props.target.status];
   }
 

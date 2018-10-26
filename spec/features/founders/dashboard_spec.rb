@@ -166,7 +166,7 @@ feature 'Founder Dashboard' do
     find('.filter-targets-dropdown__menu-item', text: "Level 5: #{level_5.name}").click
     expect(page).to have_selector('.founder-dashboard-target-group__box', count: 1)
     expect(page).to have_selector('.founder-dashboard-target-header__container', count: 1)
-    expect(page).to have_selector('.founder-dashboard-target-header__status-badge-block', text: 'Locked', count: 1)
+    expect(page).to have_selector('.founder-dashboard-target-header__status-badge-block', text: 'Preview', count: 1)
 
     # Ensure level 6 is displayed locked
     find('.filter-targets-dropdown__button').click

@@ -101,8 +101,8 @@ describe Founders::TargetStatusService do
     end
 
     context 'when the target is from a higher level than the startup' do
-      it 'returns :unavailable' do
-        expect(subject.status(level_2_target.id)).to eq(Target::STATUS_UNAVAILABLE)
+      it 'returns :level_locked' do
+        expect(subject.status(level_2_target.id)).to eq(Target::STATUS_LEVEL_LOCKED)
       end
     end
 
@@ -131,8 +131,8 @@ describe Founders::TargetStatusService do
       end
 
       context 'when there is an incomplete milestone in the previous level' do
-        it 'returns :unavailable for milestones in the current level' do
-          expect(subject.status(level_two_target.id)).to eq(Target::STATUS_UNAVAILABLE)
+        it 'returns :pending_milestone for milestones in the current level' do
+          expect(subject.status(level_two_target.id)).to eq(Target::STATUS_PENDING_MILESTONE)
         end
       end
 

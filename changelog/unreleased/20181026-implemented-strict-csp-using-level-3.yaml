@@ -1,0 +1,7 @@
+---
+timestamp: '2018-10-26T06:53:19Z'
+title: Implemented strict CSP using Level 3
+trello: https://trello.com/c/klmTXfEt
+private: true
+description: 'Loose CSP was put in place to allow Google Tag Manager to work, which
+  we don''t use anymore. '

@@ -109,8 +109,8 @@ describe Founders::TargetStatusService do
     context 'when the startup is at a higher level' do
       let!(:startup) { create :startup, level: level_two }
       let!(:level_zero_target_group) { create :target_group, level: level_zero }
-      let!(:level_one_target_group) { create :target_group, level: level_one }
-      let!(:level_two_target_group) { create :target_group, level: level_two }
+      let!(:level_one_target_group) { create :target_group, level: level_one, milestone: true }
+      let!(:level_two_target_group) { create :target_group, level: level_two, milestone: true }
       let!(:level_zero_target) { create :target, :for_founders, target_group: level_zero_target_group }
       let!(:level_one_target) { create :target, :for_founders, target_group: level_one_target_group }
       let!(:level_two_target) { create :target, :for_founders, target_group: level_two_target_group }
@@ -127,6 +127,20 @@ describe Founders::TargetStatusService do
           founder_event.update!(target: level_zero_target, status: TimelineEvent::STATUS_VERIFIED)
 
           expect(subject.status(level_one_target.id)).to eq(:pending)
+        end
+      end
+
+      context 'when there is an incomplete milestone in the previous level' do
+        it 'returns :unavailable for milestones in the current level' do
+          expect(subject.status(level_two_target.id)).to eq(Target::STATUS_UNAVAILABLE)
+        end
+      end
+
+      context 'when all mielstone targets in the previous level is complete' do
+        it 'returns :pending for the milestones in the current level' do
+          founder_event.update!(target: level_one_target, status: TimelineEvent::STATUS_VERIFIED)
+          founder_event_2.update!(target: founder_session, status: TimelineEvent::STATUS_VERIFIED)
+          expect(subject.status(level_two_target.id)).to eq(Target::STATUS_PENDING)
         end
       end
     end

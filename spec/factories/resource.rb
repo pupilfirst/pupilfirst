@@ -5,9 +5,19 @@ FactoryBot.define do
     title { Faker::Lorem.words(6).join ' ' }
     description { Faker::Lorem.words(12).join ' ' }
 
-    factory :video_resource do
+    factory :resource_video_file do
       file { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'support', 'uploads', 'resources', 'video-sample.mp4')) }
       thumbnail { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'support', 'uploads', 'resources', 'video-thumbnail.png')) }
+    end
+
+    factory :resource_video_embed do
+      file { nil }
+      video_embed { '<iframe width="560" height="315" src="https://www.youtube.com/embed/nkzqJ-9u4Aw" frameborder="0" allowfullscreen></iframe>' }
+    end
+
+    factory :resource_link do
+      file { nil }
+      link { 'https://www.google.com' }
     end
   end
 end

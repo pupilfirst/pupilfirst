@@ -13,8 +13,10 @@ feature 'Target Overlay' do
   let!(:timeline_event_file) { create :timeline_event_file, timeline_event: timeline_event }
   let(:faculty) { create :faculty, slack_username: 'abcd' }
   let!(:feedback) { create :startup_feedback, timeline_event: timeline_event, startup: startup, faculty: faculty }
-  let!(:resource_1) { create :resource, target: target }
-  let!(:resource_2) { create :resource, target: target }
+  let!(:resource_file) { create :resource, target: target }
+  let!(:resource_video_file) { create :resource_video_file, target: target }
+  let!(:resource_video_embed) { create :resource_video_embed, target: target }
+  let!(:resource_link) { create :resource_link, target: target }
 
   before do
     founder.update!(dashboard_toured: true)
@@ -65,8 +67,10 @@ feature 'Target Overlay' do
 
         # Check resource links
         expect(page).to have_content('Library Links')
-        expect(page).to have_link(resource_1.title.to_s, href: "/library/#{resource_1.slug}")
-        expect(page).to have_link(resource_2.title.to_s, href: "/library/#{resource_2.slug}")
+        expect(page).to have_link(resource_file.title.to_s, href: "/library/#{resource_file.slug}/download")
+        expect(page).to have_link(resource_video_file.title.to_s, href: "/library/#{resource_video_file.slug}?watch=true")
+        expect(page).to have_link(resource_video_embed.title.to_s, href: "/library/#{resource_video_embed.slug}?watch=true")
+        expect(page).to have_link(resource_link.title.to_s, href: "/library/#{resource_link.slug}/download")
       end
 
       # Within the faculty box:

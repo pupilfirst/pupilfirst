@@ -63,7 +63,14 @@ module Targets
       return if @target.resources.blank?
 
       @target.resources.map do |resource|
-        { id: resource.id, title: resource.title, slug: resource.slug }
+        {
+          id: resource.id,
+          title: resource.title,
+          slug: resource.slug,
+          canStream: resource.stream?,
+          hasLink: resource.link.present?,
+          hasFile: resource.file.present?
+        }
       end
     end
   end

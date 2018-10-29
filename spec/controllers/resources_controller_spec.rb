@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe ResourcesController do
   let!(:binary_resource) { create :resource }
-  let!(:video_resource) { create :video_resource }
+  let!(:video_resource) { create :resource_video_file }
 
   describe 'GET download' do
     it 'increments downloads of resource by 1' do

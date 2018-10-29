@@ -17,10 +17,16 @@ class Target < ApplicationRecord
   STATUS_NEEDS_IMPROVEMENT = :needs_improvement
   STATUS_SUBMITTED = :submitted
   STATUS_PENDING = :pending
-  STATUS_UNAVAILABLE = :unavailable
+  STATUS_UNAVAILABLE = :unavailable # This handles two cases: targets that are not submittable, and ones with prerequisites pending.
   STATUS_NOT_ACCEPTED = :not_accepted
-  STATUS_LEVEL_LOCKED = :level_locked
-  STATUS_PENDING_MILESTONE = :pending_milestone
+  STATUS_LEVEL_LOCKED = :level_locked # Target is of a higer level
+  STATUS_PENDING_MILESTONE = :pending_milestone # Milestone targets of the previous level are incomplete
+
+  UNSUBMITTABLE_STATUSES = [
+    STATUS_UNAVAILABLE,
+    STATUS_LEVEL_LOCKED,
+    STATUS_PENDING_MILESTONE
+  ].freeze
 
   belongs_to :faculty, optional: true
   belongs_to :timeline_event_type, optional: true

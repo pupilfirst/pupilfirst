@@ -15,6 +15,7 @@ module TimelineEvents
 
     validate :timeline_event_type_should_exist
     validate :files_should_have_metadata
+    validate :target_status_submittable
 
     def timeline_event_type_should_exist
       return if timeline_event_type.present?
@@ -46,6 +47,14 @@ module TimelineEvents
     def parsed_links
       # Symbolize the keys in each hash to maintain compatibility with old code.
       JSON.parse(links).map(&:symbolize_keys)
+    end
+
+    def target_status_submittable
+      return if target.blank?
+
+      if target.status(founder).in?([Target::UNSUBMITTABLE_STATUSES])
+        errors[:target_id] << 'is not submittable'
+      end
     end
 
     def save(founder)

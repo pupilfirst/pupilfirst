@@ -80,8 +80,8 @@ describe Founders::DashboardDataService do
           hash_including(level_1_session.slice(target_fields).merge(additional_target_fields(level_1_session, target_group_l1_2))),
           hash_including(level_2_target.slice(target_fields).merge(additional_target_fields(level_2_target, target_group_l2_2))),
           hash_including(level_2_session.slice(target_fields).merge(additional_target_fields(level_2_session, target_group_l2_2))),
-          hash_including(level_2_target_with_prerequisites.slice(target_fields).merge(additional_target_fields(level_2_target_with_prerequisites, target_group_l2_1)).merge(prerequisite_fields(level_2_target_with_prerequisites))),
-          hash_including(level_3_target.slice(target_fields).merge(additional_target_fields(level_3_target, target_group_l3_1, :unavailable)))
+          hash_including(level_2_target_with_prerequisites.slice(target_fields).merge(additional_target_fields(level_2_target_with_prerequisites, target_group_l2_1, :pending_milestone)).merge(prerequisite_fields(level_2_target_with_prerequisites))),
+          hash_including(level_3_target.slice(target_fields).merge(additional_target_fields(level_3_target, target_group_l3_1, :level_locked)))
         ]
 
         team_members = Faculty.team.all.as_json(only: %i[id name], methods: %i[image_url]).map do |faculty_fields|
@@ -113,7 +113,7 @@ describe Founders::DashboardDataService do
   end
 
   def prerequisite_fields(target)
-    { status: :unavailable, prerequisites: target.prerequisite_targets.map { |t| { id: t.id } } }
+    { prerequisites: target.prerequisite_targets.map { |t| { id: t.id } } }
   end
 
   def target_group_fields

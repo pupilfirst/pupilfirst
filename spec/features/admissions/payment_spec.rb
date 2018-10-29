@@ -104,7 +104,7 @@ feature 'Admission Fee Payment' do
 
       # Payment target should now be marked complete.
       fee_payment_status = Targets::StatusService.new(fee_payment_target, founder).status
-      expect(fee_payment_status).to eq(Targets::STATUS_COMPLETE)
+      expect(fee_payment_status).to eq(Target::STATUS_COMPLETE)
 
       # He should now also have a referral coupon.
       expect(startup.referral_coupon).to_not eq(nil)

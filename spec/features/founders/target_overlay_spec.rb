@@ -187,7 +187,6 @@ feature 'Target Overlay' do
   context 'when the founder submits a new timeline event', js: true do
     it 'changes the status to submitted right away' do
       find('.founder-dashboard-target-header__headline', text: target.title).click
-
       # The target must be pending.
       within('.target-overlay__status-badge-block') do
         expect(page).to have_selector('.target-overlay-status-badge-bar__badge-icon > i.fa-clock-o')

@@ -41,13 +41,13 @@ class AdmissionsPolicy < ApplicationPolicy
   # User should not have completed the related target.
   def target_incomplete?(key)
     target = Target.find_by(key: key)
-    target.status(user.founder) != Targets::STATUS_COMPLETE
+    target.status(user.founder) != Target::STATUS_COMPLETE
   end
 
   # User should have completed the prerequisite target.
   def target_complete?(key)
     target = Target.find_by(key: key)
-    target.status(user.founder) == Targets::STATUS_COMPLETE
+    target.status(user.founder) == Target::STATUS_COMPLETE
   end
 
   def target_pending?(key)

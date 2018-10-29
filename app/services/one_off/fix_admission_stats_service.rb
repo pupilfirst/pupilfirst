@@ -49,7 +49,7 @@ module OneOff
       startups_with_unpaid_payment = Startup.joins(:payments).merge(Payment.pending).where('startups.created_at > ?', time)
 
       startups_with_unpaid_payment.each do |startup|
-        unless cofounder_target.status(startup.admin) == Targets::STATUS_COMPLETE
+        unless cofounder_target.status(startup.admin) == Target::STATUS_COMPLETE
           raise if startup.payments.count > 1 || startup.payments.first.paid?
           startup.payments.first.destroy
         end

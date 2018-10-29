@@ -14,6 +14,7 @@ Rails.application.config.assets.paths << Rails.root.join('node_modules')
 Rails.application.config.assets.precompile += %w[
   active_admin.css
   active_admin.js
+  active_admin_custom.js
   mailer.css
   video-js.swf vjs.eot vjs.svg vjs.ttf vjs.woff
 ]

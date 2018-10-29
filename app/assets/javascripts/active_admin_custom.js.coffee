@@ -1,3 +1,7 @@
+#
+# This custom file is required to allow us to set nonce: true in _custom_active_admin_head.html.slim
+#
+
 #= require active_admin/base
 
 #= require turbolinks

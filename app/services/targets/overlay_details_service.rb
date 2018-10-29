@@ -69,8 +69,7 @@ module Targets
           slug: resource.slug,
           canStream: resource.stream?,
           hasLink: resource.link.present?,
-          hasFile: resource.file.present?,
-          thumbnailUrl: (resource.thumbnail.url if resource.thumbnail.present?)
+          hasFile: resource.file.present?
         }
       end
     end

@@ -9,7 +9,7 @@ module Payments
     def execute
       # skip if the fee target is already completed
       fee_target = Target.find_by(key: Target::KEY_FEE_PAYMENT)
-      return if fee_target.status(@founder) == Targets::StatusService::STATUS_COMPLETE
+      return if fee_target.status(@founder) == Targets::STATUS_COMPLETE
 
       # ensure the subscription window starts from time of payment
       Payments::PostPaymentService.new(@payment).execute

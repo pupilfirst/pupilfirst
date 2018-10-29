@@ -68,7 +68,7 @@ describe InstamojoController do
       # payment target should now be marked complete
       founder = payment.founder
       fee_payment_status = Targets::StatusService.new(fee_payment_target, founder).status
-      expect(fee_payment_status).to eq(Targets::StatusService::STATUS_COMPLETE)
+      expect(fee_payment_status).to eq(Targets::STATUS_COMPLETE)
     end
 
     context 'when a payment has already been marked paid' do
@@ -110,7 +110,7 @@ describe InstamojoController do
       # payment target should now be marked complete
       founder = payment.founder
       fee_payment_status = Targets::StatusService.new(fee_payment_target, founder).status
-      expect(fee_payment_status).to eq(Targets::StatusService::STATUS_COMPLETE)
+      expect(fee_payment_status).to eq(Targets::STATUS_COMPLETE)
     end
 
     context 'when mac is incorrect or missing' do
@@ -150,7 +150,7 @@ describe InstamojoController do
         # payment target should now be marked complete
         founder = payment.founder
         fee_payment_status = Targets::StatusService.new(fee_payment_target, founder).status
-        expect(fee_payment_status).to eq(Targets::StatusService::STATUS_PENDING)
+        expect(fee_payment_status).to eq(Targets::STATUS_PENDING)
       end
     end
   end

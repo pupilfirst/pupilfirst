@@ -9,7 +9,7 @@ module Admissions
       target = Target.find_by(key: @key)
 
       # Do not complete an admissions target twice.
-      return if target.status(@founder) == Targets::StatusService::STATUS_COMPLETE
+      return if target.status(@founder) == Targets::STATUS_COMPLETE
 
       timeline_event = target.timeline_events.create!(
         founder: @founder,

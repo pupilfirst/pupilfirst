@@ -43,11 +43,11 @@ module OneOff
     end
 
     def complete?(target, team_lead)
-      target.status(team_lead).in? [Targets::StatusService::STATUS_COMPLETE, Targets::StatusService::STATUS_NEEDS_IMPROVEMENT]
+      target.status(team_lead).in? [Targets::STATUS_COMPLETE, Targets::STATUS_NEEDS_IMPROVEMENT]
     end
 
     def pending?(target, team_lead)
-      target.status(team_lead) == [Targets::StatusService::STATUS_PENDING]
+      target.status(team_lead) == [Targets::STATUS_PENDING]
     end
 
     def level_0

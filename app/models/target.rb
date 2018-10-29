@@ -168,11 +168,11 @@ class Target < ApplicationRecord
   end
 
   def pending?(founder)
-    status(founder) == Targets::StatusService::STATUS_PENDING
+    status(founder) == STATUS_PENDING
   end
 
   def verified?(founder)
-    status(founder) == Targets::StatusService::STATUS_COMPLETE
+    status(founder) == STATUS_COMPLETE
   end
 
   def stats_service

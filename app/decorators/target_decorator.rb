@@ -12,36 +12,36 @@ class TargetDecorator < Draper::Decorator
   # rubocop:disable Metrics/CyclomaticComplexity
   def status_fa_icon(founder)
     case status(founder)
-      when Targets::StatusService::STATUS_COMPLETE
+      when Targets::STATUS_COMPLETE
         'fa-thumbs-o-up'
-      when Targets::StatusService::STATUS_NEEDS_IMPROVEMENT
+      when Targets::STATUS_NEEDS_IMPROVEMENT
         'fa-line-chart'
-      when Targets::StatusService::STATUS_NOT_ACCEPTED
+      when Targets::STATUS_NOT_ACCEPTED
         'fa-thumbs-o-down'
-      when Targets::StatusService::STATUS_UNAVAILABLE
+      when Targets::STATUS_UNAVAILABLE
         'fa-lock'
-      when Targets::StatusService::STATUS_SUBMITTED
+      when Targets::STATUS_SUBMITTED
         'fa-hourglass-half'
-      when Targets::StatusService::STATUS_PENDING
+      when Targets::STATUS_PENDING
         'fa-clock-o'
     end
   end
   # rubocop:enable Metrics/CyclomaticComplexity
 
   def completed_by?(founder)
-    status(founder).in? [Targets::StatusService::STATUS_COMPLETE, Targets::StatusService::STATUS_NEEDS_IMPROVEMENT]
+    status(founder).in? [Targets::STATUS_COMPLETE, Targets::STATUS_NEEDS_IMPROVEMENT]
   end
 
   def pending_for?(founder)
-    status(founder) == Targets::StatusService::STATUS_PENDING
+    status(founder) == Targets::STATUS_PENDING
   end
 
   def submittable?(founder)
-    status(founder).in? [Targets::StatusService::STATUS_PENDING, Targets::StatusService::STATUS_NEEDS_IMPROVEMENT, Targets::StatusService::STATUS_NOT_ACCEPTED, Targets::StatusService::STATUS_COMPLETE]
+    status(founder).in? [Targets::STATUS_PENDING, Targets::STATUS_NEEDS_IMPROVEMENT, Targets::STATUS_NOT_ACCEPTED, Targets::STATUS_COMPLETE]
   end
 
   def re_submittable?(founder)
-    status(founder).in? [Targets::StatusService::STATUS_NEEDS_IMPROVEMENT, Targets::StatusService::STATUS_NOT_ACCEPTED, Targets::StatusService::STATUS_COMPLETE]
+    status(founder).in? [Targets::STATUS_NEEDS_IMPROVEMENT, Targets::STATUS_NOT_ACCEPTED, Targets::STATUS_COMPLETE]
   end
 
   def submit_button_fa_icon(founder)

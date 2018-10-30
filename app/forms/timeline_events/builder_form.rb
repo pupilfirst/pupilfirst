@@ -12,6 +12,7 @@ module TimelineEvents
     property :files_metadata, virtual: true
     property :image
     property :share_on_facebook
+    property :founder_id
 
     validate :timeline_event_type_should_exist
     validate :files_should_have_metadata
@@ -40,6 +41,10 @@ module TimelineEvents
       @target ||= Target.find_by(id: target_id)
     end
 
+    def founder
+      @founder ||= Founder.find_by(id: founder_id)
+    end
+
     def parsed_files_metadata
       @parsed_files_metadata ||= JSON.parse(files_metadata)
     end
@@ -57,7 +62,7 @@ module TimelineEvents
       end
     end
 
-    def save(founder)
+    def save
       TimelineEvent.transaction do
         timeline_event = TimelineEvent.create!(
           target: target,

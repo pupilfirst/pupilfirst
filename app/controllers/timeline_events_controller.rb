@@ -10,8 +10,8 @@ class TimelineEventsController < ApplicationController
     authorize timeline_event
     builder_form = TimelineEvents::BuilderForm.new(timeline_event)
 
-    if builder_form.validate(timeline_builder_params)
-      builder_form.save(current_founder)
+    if builder_form.validate(timeline_builder_params.merge(founder_id: current_founder.id))
+      builder_form.save
       flash.now[:success] = current_founder.level_zero? ? 'Your submission will be reviewed soon.' : 'Your timeline event will be reviewed soon!'
       head :ok
     else

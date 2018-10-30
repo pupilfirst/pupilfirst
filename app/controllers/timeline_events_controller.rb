@@ -9,6 +9,7 @@ class TimelineEventsController < ApplicationController
     timeline_event = TimelineEvent.new
     authorize timeline_event
     builder_form = TimelineEvents::BuilderForm.new(timeline_event)
+    builder_form.founder = current_founder
 
     if builder_form.validate(timeline_builder_params.merge(founder_id: current_founder.id))
       builder_form.save

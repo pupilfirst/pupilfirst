@@ -3,6 +3,8 @@ module TimelineEvents
     # Add some slack to the max limit to allow for different length calculation at the front-end.
     MAX_DESCRIPTION_CHARACTERS = (TimelineEvent::MAX_DESCRIPTION_CHARACTERS * 1.1).to_i
 
+    attr_accessor :founder
+
     property :target_id
     property :description, validates: { presence: true, length: { maximum: MAX_DESCRIPTION_CHARACTERS } }
     property :timeline_event_type_id, validates: { presence: true }
@@ -12,7 +14,6 @@ module TimelineEvents
     property :files_metadata, virtual: true
     property :image
     property :share_on_facebook
-    property :founder_id
 
     validate :timeline_event_type_should_exist
     validate :files_should_have_metadata
@@ -39,10 +40,6 @@ module TimelineEvents
 
     def target
       @target ||= Target.find_by(id: target_id)
-    end
-
-    def founder
-      @founder ||= Founder.find_by(id: founder_id)
     end
 
     def parsed_files_metadata

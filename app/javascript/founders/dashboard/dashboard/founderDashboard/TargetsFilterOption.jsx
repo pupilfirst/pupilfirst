@@ -12,21 +12,13 @@ export default class TargetsFilterOption extends React.Component {
   }
 
   handleClick() {
-    if (this.locked()) {
-      return;
-    }
-
-    if (this.level.id !== this.props.rootState.chosenLevelId) {
+    if (this.level.unlocked && this.level.id !== this.props.rootState.chosenLevelId) {
       const trackIdsForLevel = this.props.getAvailableTrackIds(this.level.id);
       this.props.setRootState({
         chosenLevelId: this.level.id,
         activeTrackId: trackIdsForLevel[0]
       });
     }
-  }
-
-  locked() {
-    return this.level.number > this.props.rootProps.currentLevel.number;
   }
 
   loadLevel() {
@@ -38,16 +30,20 @@ export default class TargetsFilterOption extends React.Component {
   }
 
   iconClasses() {
-    if (this.locked()) {
+    if (!this.level.unlocked) {
       return "fa fa-lock";
+    } else if (this.level.number > this.props.rootProps.currentLevel.number) {
+      return "fa fa-eye";
+    } else if (this.level.number < this.props.rootProps.currentLevel.number) {
+      return "fa fa-check dark-primary";
     } else {
-      return "fa fa-unlock";
+      return "fa fa-map-marker dark-secondary";
     }
   }
 
   styleClasses() {
     let classes = "dropdown-item filter-targets-dropdown__menu-item";
-    if (this.locked()) {
+    if (!this.level.unlocked) {
       classes += " filter-targets-dropdown__menu-item--disabled";
     }
     return classes;

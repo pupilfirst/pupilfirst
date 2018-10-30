@@ -32,11 +32,11 @@ module Targets
     end
 
     def pending_assignees
-      assignees.select { |assignee| status_for(assignee) == Targets::StatusService::STATUS_PENDING }
+      assignees.select { |assignee| status_for(assignee) == Target::STATUS_PENDING }
     end
 
     def unavailable_assignees
-      assignees.select { |assignee| status_for(assignee) == Targets::StatusService::STATUS_UNAVAILABLE }
+      assignees.select { |assignee| status_for(assignee) == Target::STATUS_UNAVAILABLE }
     end
 
     private

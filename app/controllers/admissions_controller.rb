@@ -103,7 +103,7 @@ class AdmissionsController < ApplicationController
     authorize :admissions
 
     fee_payment_target = Target.find_by(key: Target::KEY_FEE_PAYMENT)
-    if fee_payment_target.status(current_founder) == Targets::StatusService::STATUS_COMPLETE
+    if fee_payment_target.status(current_founder) == Target::STATUS_COMPLETE
       @fee_paid = true
     else
       @form = Admissions::FoundersForm.new(current_founder.startup)

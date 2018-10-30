@@ -18,7 +18,9 @@ export default class TargetStatusBadge extends React.Component {
       submitted: "fa fa-hourglass-half",
       pending: "fa fa-clock-o",
       unavailable: "fa fa-lock",
-      not_accepted: "fa fa-thumbs-o-down"
+      not_accepted: "fa fa-thumbs-o-down",
+      level_locked: "fa fa-eye",
+      pending_milestone: "fa fa-lock"
     }[this.props.target.status];
   }
 
@@ -29,7 +31,9 @@ export default class TargetStatusBadge extends React.Component {
       submitted: "Submitted",
       pending: "Pending",
       unavailable: "Locked",
-      not_accepted: "Not Accepted"
+      not_accepted: "Not Accepted",
+      level_locked: "Preview",
+      pending_milestone: "Locked"
     }[this.props.target.status];
   }
 

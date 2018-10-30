@@ -91,25 +91,45 @@ module Founders
 
     # all applicable targets for the founder
     def applicable_targets
-      @applicable_targets ||= begin
-        minimum_level = startup.level.number.zero? ? 0 : 1
+      @applicable_targets ||= Target.live.joins(target_group: :level).where(target_groups: { level: open_levels })
+    end
 
-        Target.joins(target_group: :level)
-          .where('levels.number <= ?', startup.level.number)
-          .where('levels.number >= ?', minimum_level)
+    # rubocop:disable Metrics/CyclomaticComplexity
+    def unavailable_or_pending?(target)
+      # Non-submittables are no-brainers.
+      return Target::STATUS_UNAVAILABLE if target.submittability == Target::SUBMITTABILITY_NOT_SUBMITTABLE
+
+      # So are targets in higher levels
+      return Target::STATUS_LEVEL_LOCKED if target.level.number > @level_number
+
+      # For milestone targets, ensure last levels milestones where completed
+      if target.target_group.milestone? && target.level.number == @level_number
+        return Target::STATUS_PENDING_MILESTONE unless previous_milestones_completed?
+      end
+
+      prerequisites_completed?(target) ? Target::STATUS_PENDING : Target::STATUS_UNAVAILABLE
+    end
+    # rubocop:enable Metrics/CyclomaticComplexity
+
+    def previous_milestones_completed?
+      @previous_milestones_completed ||= begin
+        return true unless @level_number > 1
+        previous_level = startup.school.levels.find_by(number: @level_number - 1)
+        target_groups = previous_level.target_groups.where(milestone: true)
+        Target.where(target_group: target_groups).all? { |target| marked_completed?(target.id) }
       end
     end
 
-    def unavailable_or_pending?(target)
-      return Target::STATUS_UNAVAILABLE if target.submittability == Target::SUBMITTABILITY_NOT_SUBMITTABLE
-      prerequisites_completed?(target) ? Target::STATUS_PENDING : Target::STATUS_UNAVAILABLE
+    def marked_completed?(target_id)
+      status_entry = submitted_target_statuses[target_id]
+      status_entry.present? && status_entry[:status].in?([Target::STATUS_COMPLETE, Target::STATUS_NEEDS_IMPROVEMENT])
     end
 
     def prerequisites_completed?(target)
       prerequisites = all_target_prerequisites[target.id]
       return true if prerequisites.blank?
 
-      prerequisites.all? { |id| submitted_target_statuses[id].present? } && prerequisites.all? { |id| submitted_target_statuses[id][:status].in? [Target::STATUS_COMPLETE, Target::STATUS_NEEDS_IMPROVEMENT] }
+      prerequisites.all? { |target_id| marked_completed?(target_id) }
     end
 
     # all target-prerequisite mappings
@@ -135,12 +155,20 @@ module Founders
         next if prerequisites.blank?
 
         # Targets without any pending prerequisites also do not need correction
-        next if prerequisites.all? { |id| statuses[id][:status].in? [Target::STATUS_COMPLETE, Target::STATUS_NEEDS_IMPROVEMENT] }
+        next if prerequisites.all? { |id| marked_completed?(id) }
 
         statuses[target_id] = { status: Target::STATUS_UNAVAILABLE, submitted_at: nil }
       end
 
       statuses
+    end
+
+    def open_levels
+      @open_levels ||= begin
+        minimum_level_number = startup.level.number.zero? ? 0 : 1
+        levels = startup.school.levels.where('levels.number >= ?', minimum_level_number)
+        levels.where(unlock_on: nil).or(levels.where('unlock_on <= ?', Date.today))
+      end
     end
   end
 end

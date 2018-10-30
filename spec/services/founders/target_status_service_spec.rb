@@ -3,16 +3,19 @@ require 'rails_helper'
 describe Founders::TargetStatusService do
   subject { described_class.new(founder) }
 
-  let(:level_zero) { create :level, :zero }
-  let(:level_one) { create :level, :one }
-  let(:level_two) { create :level, :two }
+  let(:school) { create :school }
+  let(:level_zero) { create :level, :zero, school: school }
+  let(:level_one) { create :level, :one, school: school }
+  let(:level_two) { create :level, :two, school: school }
   let!(:startup) { create :startup, level: level_zero }
   let(:founder) { create :founder }
   let(:co_founder) { create :founder }
 
   let!(:target_group) { create :target_group, level: level_zero }
+  let!(:level_2_target_group) { create :target_group, level: level_two }
   let!(:founder_target) { create :target, :for_founders, target_group: target_group }
   let!(:startup_target) { create :target, :for_startup, target_group: target_group }
+  let!(:level_2_target) { create :target, :for_startup, target_group: level_2_target_group }
   let!(:founder_session) { create :target, target_group: target_group, session_at: 1.month.ago }
 
   let!(:founder_event) { create :timeline_event, founder: founder, startup: startup }
@@ -97,11 +100,17 @@ describe Founders::TargetStatusService do
       end
     end
 
+    context 'when the target is from a higher level than the startup' do
+      it 'returns :level_locked' do
+        expect(subject.status(level_2_target.id)).to eq(Target::STATUS_LEVEL_LOCKED)
+      end
+    end
+
     context 'when the startup is at a higher level' do
       let!(:startup) { create :startup, level: level_two }
       let!(:level_zero_target_group) { create :target_group, level: level_zero }
-      let!(:level_one_target_group) { create :target_group, level: level_one }
-      let!(:level_two_target_group) { create :target_group, level: level_two }
+      let!(:level_one_target_group) { create :target_group, level: level_one, milestone: true }
+      let!(:level_two_target_group) { create :target_group, level: level_two, milestone: true }
       let!(:level_zero_target) { create :target, :for_founders, target_group: level_zero_target_group }
       let!(:level_one_target) { create :target, :for_founders, target_group: level_one_target_group }
       let!(:level_two_target) { create :target, :for_founders, target_group: level_two_target_group }
@@ -118,6 +127,20 @@ describe Founders::TargetStatusService do
           founder_event.update!(target: level_zero_target, status: TimelineEvent::STATUS_VERIFIED)
 
           expect(subject.status(level_one_target.id)).to eq(:pending)
+        end
+      end
+
+      context 'when there is an incomplete milestone in the previous level' do
+        it 'returns :pending_milestone for milestones in the current level' do
+          expect(subject.status(level_two_target.id)).to eq(Target::STATUS_PENDING_MILESTONE)
+        end
+      end
+
+      context 'when all mielstone targets in the previous level is complete' do
+        it 'returns :pending for the milestones in the current level' do
+          founder_event.update!(target: level_one_target, status: TimelineEvent::STATUS_VERIFIED)
+          founder_event_2.update!(target: founder_session, status: TimelineEvent::STATUS_VERIFIED)
+          expect(subject.status(level_two_target.id)).to eq(Target::STATUS_PENDING)
         end
       end
     end

@@ -7,7 +7,7 @@ module Founders
     def props
       {
         targets: targets,
-        levels: levels,
+        levels: levels_as_json,
         faculty: faculty,
         targetGroups: target_groups,
         tracks: tracks
@@ -18,12 +18,7 @@ module Founders
 
     def targets
       # Targets at or below startup's level
-      applicable_targets = Target.joins(target_group: { level: :school })
-        .includes(:faculty)
-        .where(levels: { school_id: startup.school.id })
-        .where('levels.number <= ?', startup.level.number)
-        .where('levels.number >= ?', minimum_level)
-        .where.not(archived: true)
+      applicable_targets = Target.live.joins(target_group: :level).where(target_groups: { level: open_levels }).includes(:faculty)
 
       # Load basic data about targets from database.
       loaded_targets = applicable_targets.as_json(
@@ -40,8 +35,19 @@ module Founders
       end
     end
 
-    def levels
-      @levels ||= startup.school.levels.where('number >= ?', minimum_level).as_json(only: %i[id name number school_id])
+    def visible_levels
+      @visible_levels ||= startup.level_zero? ? startup.school.levels.where(number: 0) : startup.school.levels.where('levels.number >= ?', 1)
+    end
+
+    def open_levels
+      @open_levels ||= visible_levels.where(unlock_on: nil).or(visible_levels.where('unlock_on <= ?', Date.today))
+    end
+
+    def levels_as_json
+      visible_levels.as_json(
+        only: %i[id name number],
+        methods: :unlocked
+      )
     end
 
     def faculty
@@ -52,10 +58,7 @@ module Founders
     end
 
     def target_groups
-      TargetGroup.joins(level: :school)
-        .where(levels: { school_id: startup.school.id })
-        .where('levels.number <= ?', startup.level.number)
-        .where('levels.number >= ?', minimum_level)
+      TargetGroup.joins(:level).where(level: open_levels)
         .as_json(
           only: %i[id name description milestone sort_index],
           include: { track: { only: :id }, level: { only: :id } }
@@ -64,11 +67,6 @@ module Founders
 
     def tracks
       Track.all.as_json(only: %i[id name sort_index])
-    end
-
-    # Avoid loading data for level 0 if startup has crossed it.
-    def minimum_level
-      @minimum_level ||= startup.level.number.zero? ? 0 : 1
     end
 
     def dashboard_decorated_data(target_data)

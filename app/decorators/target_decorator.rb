@@ -12,36 +12,36 @@ class TargetDecorator < Draper::Decorator
   # rubocop:disable Metrics/CyclomaticComplexity
   def status_fa_icon(founder)
     case status(founder)
-      when Targets::StatusService::STATUS_COMPLETE
+      when Target::STATUS_COMPLETE
         'fa-thumbs-o-up'
-      when Targets::StatusService::STATUS_NEEDS_IMPROVEMENT
+      when Target::STATUS_NEEDS_IMPROVEMENT
         'fa-line-chart'
-      when Targets::StatusService::STATUS_NOT_ACCEPTED
+      when Target::STATUS_NOT_ACCEPTED
         'fa-thumbs-o-down'
-      when Targets::StatusService::STATUS_UNAVAILABLE
+      when Target::STATUS_UNAVAILABLE
         'fa-lock'
-      when Targets::StatusService::STATUS_SUBMITTED
+      when Target::STATUS_SUBMITTED
         'fa-hourglass-half'
-      when Targets::StatusService::STATUS_PENDING
+      when Target::STATUS_PENDING
         'fa-clock-o'
     end
   end
   # rubocop:enable Metrics/CyclomaticComplexity
 
   def completed_by?(founder)
-    status(founder).in? [Targets::StatusService::STATUS_COMPLETE, Targets::StatusService::STATUS_NEEDS_IMPROVEMENT]
+    status(founder).in? [Target::STATUS_COMPLETE, Target::STATUS_NEEDS_IMPROVEMENT]
   end
 
   def pending_for?(founder)
-    status(founder) == Targets::StatusService::STATUS_PENDING
+    status(founder) == Target::STATUS_PENDING
   end
 
   def submittable?(founder)
-    status(founder).in? [Targets::StatusService::STATUS_PENDING, Targets::StatusService::STATUS_NEEDS_IMPROVEMENT, Targets::StatusService::STATUS_NOT_ACCEPTED, Targets::StatusService::STATUS_COMPLETE]
+    status(founder).in? [Target::STATUS_PENDING, Target::STATUS_NEEDS_IMPROVEMENT, Target::STATUS_NOT_ACCEPTED, Target::STATUS_COMPLETE]
   end
 
   def re_submittable?(founder)
-    status(founder).in? [Targets::StatusService::STATUS_NEEDS_IMPROVEMENT, Targets::StatusService::STATUS_NOT_ACCEPTED, Targets::StatusService::STATUS_COMPLETE]
+    status(founder).in? [Target::STATUS_NEEDS_IMPROVEMENT, Target::STATUS_NOT_ACCEPTED, Target::STATUS_COMPLETE]
   end
 
   def submit_button_fa_icon(founder)

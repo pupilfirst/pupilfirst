@@ -3,6 +3,8 @@ module TimelineEvents
     # Add some slack to the max limit to allow for different length calculation at the front-end.
     MAX_DESCRIPTION_CHARACTERS = (TimelineEvent::MAX_DESCRIPTION_CHARACTERS * 1.1).to_i
 
+    attr_accessor :founder
+
     property :target_id
     property :description, validates: { presence: true, length: { maximum: MAX_DESCRIPTION_CHARACTERS } }
     property :timeline_event_type_id, validates: { presence: true }
@@ -15,6 +17,7 @@ module TimelineEvents
 
     validate :timeline_event_type_should_exist
     validate :files_should_have_metadata
+    validate :target_status_submittable
 
     def timeline_event_type_should_exist
       return if timeline_event_type.present?
@@ -48,7 +51,15 @@ module TimelineEvents
       JSON.parse(links).map(&:symbolize_keys)
     end
 
-    def save(founder)
+    def target_status_submittable
+      return if target.blank?
+
+      if target.status(founder).in?([Target::UNSUBMITTABLE_STATUSES])
+        errors[:target_id] << 'is not submittable'
+      end
+    end
+
+    def save
       TimelineEvent.transaction do
         timeline_event = TimelineEvent.create!(
           target: target,

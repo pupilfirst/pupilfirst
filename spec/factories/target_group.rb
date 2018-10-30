@@ -4,5 +4,6 @@ FactoryBot.define do
     sequence(:sort_index)
     description { Faker::Lorem.sentence }
     level
+    milestone { false }
   end
 end

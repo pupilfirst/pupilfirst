@@ -12,6 +12,11 @@ module Startups
     ELIGIBILITY_NOT_ELIGIBLE = -'not_eligible'
     ELIGIBILITY_COFOUNDERS_PENDING = -'cofounders_pending'
     ELIGIBILITY_DATE_LOCKED = -'date_locked'
+    ELIGIBLE_STATUSES = [
+      Target::STATUS_COMPLETE,
+      Target::STATUS_SUBMITTED,
+      Target::STATUS_NEEDS_IMPROVEMENT
+    ].freeze
 
     def eligible?
       eligibility == ELIGIBILITY_ELIGIBLE
@@ -19,11 +24,11 @@ module Startups
 
     def eligibility
       @eligibility ||= begin
-        all_targets_complete = milestone_targets.all? do |target|
-          target_completed?(target)
+        all_targets_attempted = milestone_targets.all? do |target|
+          target_attempted?(target)
         end
 
-        if all_targets_complete
+        if all_targets_attempted
           return ELIGIBILITY_COFOUNDERS_PENDING if @cofounders_pending
           return ELIGIBILITY_DATE_LOCKED if next_level_unlock_date&.future?
           return ELIGIBILITY_ELIGIBLE
@@ -46,10 +51,10 @@ module Startups
       current_level.target_groups.find_by(milestone: true).targets.where(archived: false)
     end
 
-    def target_completed?(target)
+    def target_attempted?(target)
       if target.founder_role?
         completed_founders = @startup.founders.all.select do |startup_founder|
-          target.status(startup_founder) == Targets::StatusService::STATUS_COMPLETE
+          target.status(startup_founder).in? ELIGIBLE_STATUSES
         end
 
         if @founder.in?(completed_founders)
@@ -62,7 +67,7 @@ module Startups
           false
         end
       else
-        Targets::StatusService.new(target, @founder).status == Targets::StatusService::STATUS_COMPLETE
+        Targets::StatusService.new(target, @founder).status.in? ELIGIBLE_STATUSES
       end
     end
 

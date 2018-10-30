@@ -125,7 +125,7 @@ module Admissions
       # If the cofounder addition target is not marked as completed, and the number of team members in the startup is
       # greater than or equal to two, set the team member addition target as complete.
       team_member_count = current_founder.startup.billing_founders_count
-      team_member_addition_incomplete = cofounder_addition_target.status(current_founder) != Targets::StatusService::STATUS_COMPLETE
+      team_member_addition_incomplete = cofounder_addition_target.status(current_founder) != Target::STATUS_COMPLETE
 
       if team_member_count >= 2 && team_member_addition_incomplete
         Admissions::CompleteTargetService.new(current_founder, Target::KEY_COFOUNDER_ADDITION).execute

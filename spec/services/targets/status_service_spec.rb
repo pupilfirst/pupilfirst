@@ -22,7 +22,7 @@ describe Targets::StatusService do
       context 'when prerequisites are not complete' do
         it 'returns unavailable' do
           event_for_prerequisite_target.update!(status: TimelineEvent::STATUS_PENDING)
-          expect(subject.status).to eq(Targets::StatusService::STATUS_UNAVAILABLE)
+          expect(subject.status).to eq(Target::STATUS_UNAVAILABLE)
         end
       end
 
@@ -33,7 +33,7 @@ describe Targets::StatusService do
 
         it 'returns pending if the due date is not over' do
           target.update!(days_to_complete: 60)
-          expect(subject.status).to eq(Targets::StatusService::STATUS_PENDING)
+          expect(subject.status).to eq(Target::STATUS_PENDING)
         end
       end
     end
@@ -52,22 +52,22 @@ describe Targets::StatusService do
 
       it 'returns submitted if the event is pending verification' do
         event_for_target.update!(status: TimelineEvent::STATUS_PENDING)
-        expect(subject.status).to eq(Targets::StatusService::STATUS_SUBMITTED)
+        expect(subject.status).to eq(Target::STATUS_SUBMITTED)
       end
 
       it 'returns complete if the event is verified' do
         event_for_target.update!(status: TimelineEvent::STATUS_VERIFIED)
-        expect(subject.status).to eq(Targets::StatusService::STATUS_COMPLETE)
+        expect(subject.status).to eq(Target::STATUS_COMPLETE)
       end
 
       it 'returns needs_improvement if the event is marked needs_improvement' do
         event_for_target.update!(status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT)
-        expect(subject.status).to eq(Targets::StatusService::STATUS_NEEDS_IMPROVEMENT)
+        expect(subject.status).to eq(Target::STATUS_NEEDS_IMPROVEMENT)
       end
 
       it 'returns not_accepted if the event is marked not_accepted' do
         event_for_target.update!(status: TimelineEvent::STATUS_NOT_ACCEPTED)
-        expect(subject.status).to eq(Targets::StatusService::STATUS_NOT_ACCEPTED)
+        expect(subject.status).to eq(Target::STATUS_NOT_ACCEPTED)
       end
     end
   end

@@ -6,7 +6,8 @@ module Resources
 
     def perform(resource)
       if resource.level_exclusive?
-        PublicSlack::MessageService.new.post message: message(resource), founders: founders_to_notify(resource)
+        founders = founders_to_notify(resource)
+        PublicSlack::MessageService.new.post(message: message(resource), founders: founders) if founders.present?
       else
         PublicSlack::MessageService.new.post message: message(resource), channel: '#resources'
       end

@@ -30,7 +30,7 @@ gem 'jquery-rails', '~> 4.3' # JQuery on Rails.
 gem 'mini_magick', '~> 4.6' # Image processing.
 gem 'pg', '~> 1.0' # PostgreSQL support.
 gem 'sass-rails', '~> 5.0'
-gem 'slim', '~> 3.0' # Slim templating.
+gem 'slim', '~> 4.0' # Slim templating.
 gem 'turbolinks', '~> 5.0' # Quicker page navigation. https://github.com/turbolinks/turbolinks
 gem 'uglifier', '~> 4.1' # JavaScript compressor.
 gem 'rest-client', '~> 2.0' # Used to contact Fast Alerts' API.
@@ -93,7 +93,7 @@ gem 'scarf', '~> 0.2' # A Ruby library for generating initial avatars and identi
 gem 'descriptive_statistics', '~> 2.5', require: 'descriptive_statistics/safe' # Used to calculate basic stat measures such as std. deviation (eg: To calculate relative performance of startups)
 gem 'kaminari', '~> 1.0' # Scope & Engine based, clean, powerful, customizable and sophisticated paginator.
 gem 'bootstrap4-kaminari-views', '= 1.0.0', github: 'mahesh-krishnakumar/bootstrap4-kaminari-views' # Bootstrap 4 styling for Kaminari gem
-gem 'data_migrate', '~> 4.0' # Run data migrations alongside schema migrations.
+gem 'data_migrate', '~> 5.1' # Run data migrations alongside schema migrations.
 
 # Omniauth providers
 gem 'omniauth-google-oauth2', '~> 0.4' # Oauth2 strategy for Google
@@ -107,8 +107,8 @@ gem 'diffy', '~> 3.2' # Easy Diffing in Ruby.
 gem 'pundit', '~> 1.1' # Minimal authorization through OO design and pure Ruby classes.
 gem 'rack-cors', '~> 1.0', require: 'rack/cors' # Rack Middleware for handling CORS, required to serve static assets such as fonts
 gem 'recaptcha', '~> 4.6', require: 'recaptcha/rails'
-gem 'jwt', '< 2.1' # Ruby implementation of the RFC 7519 OAuth JSON Web Token (JWT), used by Zoom API
-gem 'chartkick', '~> 2.3.4' # Create beautiful charts with one line of JavaScript.
+gem 'jwt', '~> 1.5' # Ruby implementation of the RFC 7519 OAuth JSON Web Token (JWT), used by Zoom API
+gem 'chartkick', '~> 3.0' # Create beautiful charts with one line of JavaScript.
 
 # Rails assets!
 source 'https://rails-assets.org' do
@@ -145,7 +145,6 @@ group :development do
   gem 'derailed_benchmarks', '~> 1.3'
   gem 'stackprof', '~> 0.2' # Required by derailed_benchmarks.
   gem 'oink', '~> 0.10' # Log parser to identify actions which significantly increase VM heap size
-  gem 'chromedriver-helper', '~> 1.1' # Easy installation and use of chromedriver, the Chromium project's selenium webdriver adapter.
   gem 'logchange', '~> 1.0' # An alternative approach to managing a changelog.
   gem 'meta_request', '~> 0.4' # Chrome extension for Rails development. https://github.com/dejan/rails_panel
 end
@@ -157,6 +156,7 @@ group :test do
   gem 'capybara', '~> 3.0' # For RSpec feature tests.
   gem 'capybara-email', '~> 3.0' # Test ActionMailer and Mailer messages with Capybara
   gem 'selenium-webdriver', '~> 3.3'
+  gem 'chromedriver-helper', '~> 2.1' # Easy installation and use of chromedriver, the Chromium project's selenium webdriver adapter.
   gem 'capybara-screenshot', '~> 1.0' # Save screenshots on failure!
   gem 'database_cleaner', '~> 1.5' # Database cleaner can handle complex DB cleanup strategies for test (feature vs regular tests).
 end

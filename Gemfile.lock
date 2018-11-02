@@ -1,12 +1,4 @@
 GIT
-  remote: https://github.com/bootstrap-ruby/bootstrap_form.git
-  revision: 67f35a89286daffab36cc77374767610c6354c70
-  branch: master
-  specs:
-    bootstrap_form (4.0.0.alpha1)
-      rails (>= 5.0)
-
-GIT
   remote: https://github.com/harigopal/carrierwave_backgrounder.git
   revision: d726a81cded6ed403d5be55ab8fe3124f1054d26
   branch: rails-5-1
@@ -178,6 +170,8 @@ GEM
       autoprefixer-rails (>= 6.0.3)
       popper_js (>= 1.12.9, < 2)
       sass (>= 3.5.2)
+    bootstrap_form (4.0.0)
+      rails (>= 5.0)
     browser (2.5.3)
     builder (3.2.3)
     bullet (5.7.6)
@@ -400,7 +394,7 @@ GEM
     httparty (0.16.2)
       multi_xml (>= 0.5.2)
     humanize (1.8.1)
-    i18n (1.1.0)
+    i18n (1.1.1)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
     inherited_resources (1.9.0)
@@ -455,10 +449,10 @@ GEM
       ruby_dep (~> 1.2)
     lita-default-handlers (0.1.0)
     logchange (1.0.1)
-    loofah (2.2.2)
+    loofah (2.2.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
-    mail (2.7.0)
+    mail (2.7.1)
       mini_mime (>= 0.1.1)
     marcel (0.3.3)
       mimemagic (~> 0.3.2)
@@ -810,7 +804,7 @@ DEPENDENCIES
   autoprefixer-rails (~> 8.4)
   bootstrap (~> 4.1.3)
   bootstrap4-kaminari-views (= 1.0.0)!
-  bootstrap_form (= 4.0.0.alpha1)!
+  bootstrap_form (~> 4.0)
   bullet (~> 5.5)
   bundler-audit (~> 0.5)
   cancancan (~> 2.0)

@@ -39,7 +39,7 @@ gem 'select2-rails', '~> 4.0' # Select2 javascript select box improvement librar
 
 gem 'bootstrap', '~> 4.1.3' # Official Sass port of Bootstrap.
 gem 'autoprefixer-rails', '~> 8.4' # Autoprefixer for Ruby and Ruby on Rails.
-gem 'bootstrap_form', '= 4.0.0.alpha1', github: 'bootstrap-ruby/bootstrap_form', branch: 'master' # a Rails form builder that makes it super easy to create beautiful-looking forms using Bootstrap 4
+gem 'bootstrap_form', '~> 4.0' # a Rails form builder that makes it super easy to create beautiful-looking forms using Bootstrap 4
 
 # TODO: The zones list in the gem was outdated.
 # Have updated and submitted a PR (https://github.com/ralovets/valid_url/pull/10). Using a personal fork until it's merged.

@@ -40,8 +40,8 @@ class Instamojo
     def parse(raw_response)
       response = begin
         JSON.parse(raw_response.body).with_indifferent_access
-      rescue JSON::ParserError
-        raise Instamojo::CouldNotParseResponseException, "Failed to parse the response from Instamojo API as JSON: #{raw_response.body}"
+                 rescue JSON::ParserError
+                   raise Instamojo::CouldNotParseResponseException, "Failed to parse the response from Instamojo API as JSON: #{raw_response.body}"
       end
 
       unless response[:success]

@@ -6,6 +6,7 @@ module Payments
 
     def execute
       return if @payment.paid_at.present?
+
       @payment.update!(paid_at: Time.zone.now, payment_type: Payment::TYPE_NORMAL)
     end
   end

@@ -11,6 +11,7 @@ class TimelineEventFile < ApplicationRecord
     file.sanitized_file.original_filename
   rescue Errno::ENOENT => e
     raise e unless Rails.env.development?
+
     'missing_in_development'
   end
 end

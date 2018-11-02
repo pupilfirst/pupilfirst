@@ -20,6 +20,7 @@ module EngineeringMetrics
 
     def decrement(metric)
       return current_entry if (current_entry.metrics[metric.to_s].to_i - 1).negative?
+
       current_entry.metrics[metric.to_s] = current_entry.metrics[metric.to_s].to_i - 1
       current_entry.tap(&:save!)
     end

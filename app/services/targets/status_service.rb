@@ -8,6 +8,7 @@ module Targets
 
     def status
       return status_from_event if linked_event.present?
+
       unavailable_or_pending?
     end
 
@@ -33,6 +34,7 @@ module Targets
     def previous_milestones_completed?
       @previous_milestones_completed ||= begin
         return true unless @level_number > 1
+
         previous_level = @founder.startup.school.levels.find_by(number: @level_number - 1)
         target_groups = previous_level.target_groups.where(milestone: true)
         milestone_targets = Target.where(target_group: target_groups)
@@ -58,6 +60,7 @@ module Targets
     def status_from_event
       return  Target::STATUS_COMPLETE if linked_event.verified?
       return  Target::STATUS_NOT_ACCEPTED if linked_event.not_accepted?
+
       linked_event.needs_improvement? ? Target::STATUS_NEEDS_IMPROVEMENT : Target::STATUS_SUBMITTED
     end
 

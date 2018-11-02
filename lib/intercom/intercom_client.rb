@@ -111,6 +111,7 @@ class IntercomClient
   # total number of new users
   def new_users_count
     return 0 if user_count_by_segment.blank?
+
     new_segment = user_count_by_segment.find { |h| h.key? 'New' }
     new_segment.present? ? new_segment['New'] : 0
   end
@@ -118,6 +119,7 @@ class IntercomClient
   # total number of active users
   def active_users_count
     return 0 if user_count_by_segment.blank?
+
     active_segment = user_count_by_segment.find { |h| h.key? 'Active' }
     active_segment.present? ? active_segment['Active'] : 0
   end
@@ -210,6 +212,7 @@ class IntercomClient
 
     rescued_call { intercom_client.segments.all }.each do |segment|
       next unless segment.name == segment_name
+
       segment_id = segment.id
     end
 

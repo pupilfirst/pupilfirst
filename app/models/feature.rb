@@ -29,8 +29,8 @@ class Feature < ApplicationRecord
 
       parsed_value = begin
         JSON.parse(feature.value).with_indifferent_access
-      rescue JSON::ParserError
-        return false
+                     rescue JSON::ParserError
+                       return false
       end
 
       return true if parsed_value[:active].present?
@@ -41,6 +41,7 @@ class Feature < ApplicationRecord
 
     def overridden?
       return false if @skip_override
+
       Rails.env.development? || Rails.env.test?
     end
   end
@@ -50,11 +51,13 @@ class Feature < ApplicationRecord
     return true if active_for_admin?(user, parsed_value)
     return true if active_for_regex?(user, parsed_value)
     return true if active_for_email?(user, parsed_value)
+
     false
   end
 
   def active_for_admin?(user, parsed_value)
     return false unless parsed_value.include?(:admin)
+
     user.admin?
   end
 
@@ -70,6 +73,7 @@ class Feature < ApplicationRecord
 
   def active_for_email?(user, parsed_value)
     return false unless parsed_value.include?(:emails)
+
     parsed_value[:emails].include?(user.email)
   end
 end

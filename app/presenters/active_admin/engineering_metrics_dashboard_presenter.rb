@@ -3,6 +3,7 @@ module ActiveAdmin
     def codecov_badge_url
       token = Rails.application.secrets.codecov_graphing_token
       return if token.blank?
+
       'https://codecov.io/gh/SVdotCO/sv.co/branch/master/graphs/badge.svg?token=' + token
     end
 
@@ -66,6 +67,7 @@ module ActiveAdmin
     def current_release
       release_verison = EngineeringMetric.order('week_start_at DESC').first.metrics['release_version']
       return release_verison if release_verison.present?
+
       last_week_metrics['release_version']
     end
 

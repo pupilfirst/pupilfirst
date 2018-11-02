@@ -23,6 +23,7 @@ module Founders
     def prerequisite_targets(target_id)
       target_ids = all_target_prerequisites[target_id]
       return [] if target_ids.blank?
+
       applicable_targets.where(id: target_ids).as_json(only: [:id])
     end
 
@@ -114,6 +115,7 @@ module Founders
     def previous_milestones_completed?
       @previous_milestones_completed ||= begin
         return true unless @level_number > 1
+
         previous_level = startup.school.levels.find_by(number: @level_number - 1)
         target_groups = previous_level.target_groups.where(milestone: true)
         Target.where(target_group: target_groups).all? { |target| marked_completed?(target.id) }

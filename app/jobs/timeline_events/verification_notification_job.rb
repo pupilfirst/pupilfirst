@@ -98,6 +98,7 @@ module TimelineEvents
 
       @timeline_event.links.each.with_index(1) do |link, index|
         next if link[:private]
+
         shortened_url = ShortenedUrls::ShortenService.new(link[:url]).shortened_url
         notice += "#{index}. <https://sv.co/r/#{shortened_url.unique_key}|#{link[:title]}>\n"
       end

@@ -87,9 +87,11 @@ module Admissions
       has_error = false
       founders.each do |founder|
         next if founder.id.present?
+
         email_validation = EmailInquire.validate(founder.email)
         next if email_validation.valid?
         next if founder.ignore_email_hint == 'true'
+
         has_error = true
 
         if email_validation.hint?
@@ -169,6 +171,7 @@ module Admissions
     def college_names
       founders.each_with_object({}) do |founder, names|
         next if founder.college_id.nil?
+
         names[founder.college_id] = College.find(founder.college_id).name
       end
     end

@@ -7,6 +7,7 @@ module Startups
 
     def eligible?
       return true if @faculty.level.blank?
+
       level = @startup.level.number
       level >= @faculty.level.number
     end

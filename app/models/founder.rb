@@ -180,6 +180,7 @@ class Founder < ApplicationRecord
   # A simple flag, which returns true if the founder signed in less than 15 seconds ago.
   def just_signed_in
     return false if user.current_sign_in_at.blank?
+
     user.current_sign_in_at > 15.seconds.ago
   end
 
@@ -252,12 +253,14 @@ class Founder < ApplicationRecord
 
   def connected_to_slack?
     return false if slack_access_token.blank?
+
     Founders::SlackConnectService.new(self).token_valid?(slack_access_token)
   end
 
   def facebook_share_eligibility
     return 'not_admitted' if startup.level_zero?
     return 'disabled_for_school' if startup.level.school.facebook_share_disabled?
+
     facebook_token_available? ? 'eligible' : 'token_unavailable'
   end
 

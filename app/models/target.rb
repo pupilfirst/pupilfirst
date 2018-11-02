@@ -103,6 +103,7 @@ class Target < ApplicationRecord
 
   def days_to_complete_or_session_at_should_be_present
     return if [days_to_complete, session_at].one?
+
     errors[:base] << 'One of days_to_complete, or session_at should be set.'
     errors[:days_to_complete] << 'if blank, session_at should be set'
     errors[:session_at] << 'if blank, days_to_complete should be set'
@@ -113,6 +114,7 @@ class Target < ApplicationRecord
   def avoid_level_mismatch_with_group
     return if target_group.blank? || level.blank?
     return if level == target_group.level
+
     errors[:level] << 'should match level of target group'
   end
 
@@ -140,6 +142,7 @@ class Target < ApplicationRecord
   def vanilla_target_requires_faculty
     return if session_at.present?
     return if faculty.present?
+
     errors[:base] << 'Vanilla targets require a linked faculty.'
     errors[:faculty_id] << 'is required for a vanilla target'
   end

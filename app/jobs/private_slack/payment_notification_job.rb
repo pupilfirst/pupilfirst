@@ -5,6 +5,7 @@ module PrivateSlack
 
     def perform(founder)
       return if Rails.env.test?
+
       slack_webhook_url = Rails.application.secrets.slack_memberships_webhook_url
       json_payload = { text: payment_information(founder) }.to_json
       RestClient.post(slack_webhook_url, json_payload)

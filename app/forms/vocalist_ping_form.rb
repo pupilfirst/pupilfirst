@@ -22,6 +22,7 @@ class VocalistPingForm < Reform::Form
   def one_and_only_one_recipient_must_be_present
     clean_up_recipients
     return if [channel.present?, startups.present?, founders.present?, levels.present?].one?
+
     errors[:base] << 'Please select a channel, some levels, some startups, or some founders. Only one option is allowed.'
   end
 

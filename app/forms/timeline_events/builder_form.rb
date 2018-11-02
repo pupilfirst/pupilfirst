@@ -21,6 +21,7 @@ module TimelineEvents
 
     def timeline_event_type_should_exist
       return if timeline_event_type.present?
+
       errors[:timeline_event_type_id] << 'is invalid'
     end
 

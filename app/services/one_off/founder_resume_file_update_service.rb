@@ -2,7 +2,7 @@ module OneOff
   class FounderResumeFileUpdateService
     include Loggable
 
-    REGEX_RESUME_URL = %r{timeline_event_files/(?<timeline_event_file_id>[\d]+)/download}
+    REGEX_RESUME_URL = %r{timeline_event_files/(?<timeline_event_file_id>[\d]+)/download}.freeze
 
     def update
       admitted_founders = Founder.admitted.not_exited

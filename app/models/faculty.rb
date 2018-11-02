@@ -148,6 +148,7 @@ class Faculty < ApplicationRecord
 
   def fetch_slack_user_id
     return unless slack_username_changed?
+
     self.slack_user_id = slack_username.present? ? @new_slack_user_id : nil
   end
 
@@ -155,6 +156,7 @@ class Faculty < ApplicationRecord
 
   def find_or_create_user
     return if email.blank?
+
     user = User.with_email(email) || User.create!(email: email)
     self.user = user
   end

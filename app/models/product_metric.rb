@@ -37,6 +37,7 @@ class ProductMetric < ApplicationRecord
 
   def manual_assignment_requires_faculty
     return if assignment_mode == ASSIGNMENT_MODE_AUTOMATIC || faculty.present?
+
     errors[:faculty] << 'is required for manual assignment'
   end
 

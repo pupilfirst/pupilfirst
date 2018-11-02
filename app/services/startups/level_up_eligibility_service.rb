@@ -31,6 +31,7 @@ module Startups
         if all_targets_attempted
           return ELIGIBILITY_COFOUNDERS_PENDING if @cofounders_pending
           return ELIGIBILITY_DATE_LOCKED if next_level_unlock_date&.future?
+
           return ELIGIBILITY_ELIGIBLE
         end
 

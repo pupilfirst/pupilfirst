@@ -18,16 +18,19 @@ module Users
 
     def faculty_path
       return if @user.faculty.blank? || @user.faculty.startups.blank?
+
       url_helpers.coaches_dashboard_path
     end
 
     def admin_path
       return if @user.admin_user.blank?
+
       url_helpers.admin_dashboard_path
     end
 
     def founder_path
       return if @user.founder&.startup.blank?
+
       url_helpers.student_dashboard_path
     end
 

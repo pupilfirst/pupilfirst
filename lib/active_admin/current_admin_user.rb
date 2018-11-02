@@ -13,6 +13,7 @@ module ActiveAdmin
     def authenticate_admin_user!
       authenticate_user!
       return if current_admin_user.present?
+
       flash[:notice] = 'You are not an administrator!'
       redirect_to root_url
     end

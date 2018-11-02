@@ -103,6 +103,7 @@ module Intercom
     def delete_from_intercom(segment)
       segment_users = intercom_segment_users(segment)
       return if segment_users.blank?
+
       if @mock
         log "@intercom_client.users.submit_bulk_job(delete_items: [#{segment_users.count} users])"
       else

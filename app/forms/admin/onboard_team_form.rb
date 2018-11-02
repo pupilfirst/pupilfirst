@@ -19,6 +19,7 @@ module Admin
         team.update!(team_lead: team_lead)
         member_details.each do |name, email|
           next if name.blank? || email.blank?
+
           founder = Founder.where(email: email).first_or_create!(user: user(email))
           founder.update!(name: name, startup: team)
         end

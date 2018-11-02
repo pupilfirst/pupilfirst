@@ -7,11 +7,13 @@ module Changelog
 
     def forward_link
       return nil if @year == Time.now.year
+
       nav_link(@year + 1)
     end
 
     def reverse_link
       return nav_link('archive', text: 'View Changelog Archive', link: view.changelog_archive_path) if @year == 2017
+
       nav_link(@year - 1)
     end
 

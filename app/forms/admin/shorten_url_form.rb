@@ -9,8 +9,10 @@ module Admin
 
     def no_other_url_for_key
       return if unique_key.blank?
+
       shortened_url = ShortenedUrl.find_by(unique_key: unique_key)
       return if shortened_url.blank? || shortened_url.url == url
+
       errors[:unique_key] << 'is already in use for another URL'
     end
   end

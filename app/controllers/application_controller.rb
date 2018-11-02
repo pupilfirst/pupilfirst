@@ -99,6 +99,7 @@ class ApplicationController < ActionController::Base
 
   def require_active_subscription
     return if current_founder.subscription_active?
+
     flash[:error] = 'You do not have an active subscription. Please renew your subscription and try again.'
     redirect_to fee_founder_url
   end

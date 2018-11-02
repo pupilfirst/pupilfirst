@@ -51,6 +51,7 @@ module Users
 
     def token_valid?
       return false if @token.blank?
+
       @user = User.find_by(login_token: @token)
     end
 

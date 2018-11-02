@@ -11,11 +11,13 @@ class FounderDecorator < Draper::Decorator
 
   def college_identification_hint
     return if college_identification.blank?
+
     "Choose another file if you wish to replace <code>#{filename(:college_identification)}</code><br/>".html_safe
   end
 
   def avatar_hint
     return if avatar.blank?
+
     'Choose another file if you wish to replace your current avatar.'
   end
 
@@ -27,6 +29,7 @@ class FounderDecorator < Draper::Decorator
 
   def age
     return nil if born_on.blank?
+
     Date.today.year - born_on.year
   end
 

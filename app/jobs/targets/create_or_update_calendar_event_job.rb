@@ -23,6 +23,7 @@ module Targets
 
     def activated?
       return true if Rails.env.production?
+
       !!CreateOrUpdateCalendarEventJob.active
     end
 
@@ -57,6 +58,7 @@ module Targets
 
       (applicable_startups.distinct.map do |startup|
         next unless startup.subscription_active?
+
         startup.founders.map do |founder|
           {
             'email' => founder.email,

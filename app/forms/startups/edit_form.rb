@@ -21,10 +21,12 @@ module Startups
 
     def startup_categories_must_be_valid
       return if startup_category_ids.blank?
+
       self.startup_category_ids -= ['']
 
       startup_category_ids.each do |startup_category_id|
         next if StartupCategory.find(startup_category_id).present?
+
         errors.add(:startup_category_ids, 'contained unrecognized value')
       end
     end

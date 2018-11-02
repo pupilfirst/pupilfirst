@@ -39,7 +39,7 @@ module Users
     # supplied to the omniauth provider login path. This method detects and removes that default.
     def origin
       supplied_origin = request.env['omniauth.origin']
-      supplied_origin =~ %r{users/sign_in} ? nil : supplied_origin
+      %r{users/sign_in}.match?(supplied_origin) ? nil : supplied_origin
     end
 
     # Omniauth returns authentication details in the 'omniauth.auth' request environment variable after the provider
@@ -52,6 +52,7 @@ module Users
     # letting issues get buried (we used to show a useless 404).
     def email_from_auth_hash
       raise "Auth hash is blank: #{auth_hash.inspect}" if auth_hash.blank?
+
       auth_hash.dig(:info, :email)
     end
 

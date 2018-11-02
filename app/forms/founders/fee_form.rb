@@ -7,6 +7,7 @@ module Founders
 
     def billing_state_must_exist
       return if billing_state.present?
+
       errors[:billing_state_id] << 'is invalid'
     end
 

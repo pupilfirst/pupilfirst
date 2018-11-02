@@ -17,6 +17,7 @@ class SlackController < ApplicationController
   # Verify the request is indeed from our Slack app.
   def verify_slack_token
     return if payload['token'] == ENV.fetch('SLACK_APP_VERIFICATION_TOKEN')
+
     head :unauthorized
   end
 

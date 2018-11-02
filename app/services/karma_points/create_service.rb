@@ -74,6 +74,7 @@ module KarmaPoints
 
     def recipients
       return { founders: startup.founders.pluck(:id) } if founder.blank?
+
       { founder: founder }
     end
   end

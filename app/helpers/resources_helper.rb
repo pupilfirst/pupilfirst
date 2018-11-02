@@ -11,12 +11,14 @@ module ResourcesHelper
 
   def tag_text
     return if params[:resources_filter].blank?
+
     tags = params[:resources_filter][:tags] - ['']
     tags.present? ? "tagged with \'#{tags.join(', ')}\'" : ''
   end
 
   def search_text
     return if params[:resources_filter].blank?
+
     params[:resources_filter][:search].present? ? "whose title contains \'#{params[:resources_filter][:search].downcase}\'" : ''
   end
 

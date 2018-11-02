@@ -43,6 +43,7 @@ class Payment < ApplicationRecord
   # A payment is considered requested when instamojo payment status is requested.
   def requested?
     return false if paid?
+
     instamojo_payment_request_status.in? Payment.payment_requested_statuses
   end
 
@@ -94,6 +95,7 @@ class Payment < ApplicationRecord
 
   def days_to_expiry
     return if billing_end_at.blank?
+
     ((billing_end_at - Time.now) / 1.day.to_f).ceil
   end
 end

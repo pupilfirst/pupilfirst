@@ -13,6 +13,7 @@ module SendInBlue
     rescue RestClient::NotFound => e
       response = JSON.parse(e.response)
       return if response['code'] == 'document_not_found' # Ignore if the contact was not found on SendInBlue.
+
       raise
     end
   end

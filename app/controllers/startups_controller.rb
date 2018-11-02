@@ -109,6 +109,7 @@ class StartupsController < ApplicationController
 
   def more_events?(events, page)
     return false if events.count <= 20
+
     events.count > page * 20
   end
 

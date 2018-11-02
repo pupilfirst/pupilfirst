@@ -29,6 +29,7 @@ module ShortenedUrls
     def update_shortened_url(shortened_url)
       shortened_url.update!(expires_at: @expires_at) if @expires_at.present?
       return shortened_url if @unique_key.nil? || shortened_url.unique_key == @unique_key
+
       ensure_uniqueness_of_key
       shortened_url.update!(unique_key: @unique_key)
       shortened_url
@@ -43,6 +44,7 @@ module ShortenedUrls
         ShortenedUrl.create!(url: @url, expires_at: @expires_at, unique_key: unique_key)
       rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid
         raise 'Too many retries to generate unique_key for short URL.' if retries == 5
+
         retries += 1
         retry
       end

@@ -16,12 +16,14 @@ module Resources
       self.tags -= ['']
 
       return if (tags - resource_tags).empty?
+
       errors[:base] << 'Invalid tag supplied.'
     end
 
     def page_number_should_be_valid
       return if page.blank?
       return if page.to_i.to_s == page
+
       errors[:base] << 'Not a valid page number.'
     end
 

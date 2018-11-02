@@ -26,6 +26,7 @@ module Founders
 
       def tour_dashboard?
         return false if current_startup.level_zero?
+
         (current_founder.tour_dashboard? || view.params[:tour].present?)
       end
 

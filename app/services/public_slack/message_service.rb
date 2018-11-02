@@ -39,6 +39,7 @@ module PublicSlack
 
       if channel.present?
         raise 'could not validate channel specified' unless channel_valid?(channel)
+
         post_to_channel(channel, message)
       else
         founders.present? ? post_to_founders(founders, message) : post_to_founder(founder, message)

@@ -14,6 +14,7 @@ class ConnectSlot < ApplicationRecord
   def faculty_must_be_valid
     return if faculty.blank?
     return if faculty.email.present? && faculty.level.present?
+
     errors[:faculty] << 'must have email address and level'
   end
 

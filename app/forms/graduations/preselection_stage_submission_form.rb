@@ -6,7 +6,8 @@ module Graduations
     property :payment_reference, validates: { presence: true }
 
     def save_partnership_deed
-      return if errors.keys.include? :partnership_deed
+      return if errors.key?(:partnership_deed)
+
       model.update(partnership_deed: partnership_deed)
     end
 

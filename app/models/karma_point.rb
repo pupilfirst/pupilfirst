@@ -20,6 +20,7 @@ class KarmaPoint < ApplicationRecord
 
   def assign_startup_for_founder
     return if startup.present? || founder.blank?
+
     self.startup_id = founder.startup_id
   end
 

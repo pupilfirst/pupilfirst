@@ -9,6 +9,7 @@ module Users
 
     def execute
       return if @user.confirmed?
+
       log "Confirming user with email #{@user.email}"
 
       # Save confirmed_at.

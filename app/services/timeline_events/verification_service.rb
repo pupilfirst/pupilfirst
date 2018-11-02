@@ -75,6 +75,7 @@ module TimelineEvents
 
     def update_karma_points
       return unless @points.present? || points_for_target.present?
+
       add_karma_points
     end
 

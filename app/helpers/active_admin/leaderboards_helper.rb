@@ -9,16 +9,13 @@ module ActiveAdmin
     end
 
     def week_start_dates_for_filter
-      last_week_start_date = DatesService.last_week_start_date.to_datetime
-      # Filter array stored in the format ["option", value] as required by select
-      week_start_dates = [[last_week_start_date.to_date, last_week_start_date]]
+      last_week_start_date = DatesService.last_week_start_date
 
-      # Create another 9 week start dates that will be used to filter leaderboards by week in AA
-      9.times do
-        last_week_start_date -= 1.week
-        week_start_dates << [last_week_start_date.to_date, last_week_start_date]
+      # Create week start dates that will be used to filter leaderboards by week in AA.
+      (0..9).map do |n|
+        week_start_date = last_week_start_date - n.weeks
+        [week_start_date.to_date, week_start_date]
       end
-      week_start_dates
     end
 
     def levels_for_filter

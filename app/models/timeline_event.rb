@@ -191,6 +191,7 @@ class TimelineEvent < ApplicationRecord
   def hidden_from?(viewer)
     return false unless timeline_event_type.founder_event?
     return true if viewer.blank?
+
     founder != viewer
   end
 
@@ -200,11 +201,13 @@ class TimelineEvent < ApplicationRecord
 
     timeline_event_files.each do |file|
       next if file.private? && !privileged
+
       attachments << { file: file, title: file.title, private: file.private? }
     end
 
     links.each do |link|
       next if link[:private] && !privileged
+
       attachments << link
     end
 
@@ -233,6 +236,7 @@ class TimelineEvent < ApplicationRecord
 
   def image_filename
     return if image.blank?
+
     image&.sanitized_file&.original_filename
   end
 
@@ -243,11 +247,13 @@ class TimelineEvent < ApplicationRecord
   def days_elapsed
     start_date = startup.earliest_team_event_date
     return nil if start_date.blank?
+
     (event_on - start_date).to_i + 1
   end
 
   def overall_grade_from_score
     return if score.blank?
+
     { 1 => 'good', 2 => 'great', 3 => 'wow' }[score.floor]
   end
 
@@ -260,30 +266,35 @@ class TimelineEvent < ApplicationRecord
   def add_link_for_new_deck!
     return unless timeline_event_type.new_deck?
     return if first_attachment_url.blank?
+
     startup.update!(presentation_link: first_attachment_url)
   end
 
   def add_link_for_new_wireframe!
     return unless timeline_event_type.new_wireframe?
     return if first_attachment_url.blank?
+
     startup.update!(wireframe_link: first_attachment_url)
   end
 
   def add_link_for_new_prototype!
     return unless timeline_event_type.new_prototype?
     return if first_attachment_url.blank?
+
     startup.update!(prototype_link: first_attachment_url)
   end
 
   def add_link_for_new_video!
     return unless timeline_event_type.new_video?
     return if first_attachment_url.blank?
+
     startup.update!(product_video_link: first_attachment_url)
   end
 
   def first_file_url
     first_file = timeline_event_files.first
     return if first_file.blank?
+
     Rails.application.routes.url_helpers.download_timeline_event_file_url(first_file)
   end
 

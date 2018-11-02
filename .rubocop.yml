@@ -1,18 +1,10 @@
 AllCops:
-  TargetRubyVersion: 2.3
-  Include:
-    - '**/Gemfile'
-    - '**/Rakefile'
-    - '**/config.ru'
-    - '**/*.rake'
+  TargetRubyVersion: 2.5
   Exclude:
     - 'db/**/*'
     - "tmp/**/*"
     - "vendor/**/*"
     - "log/**/*"
-    - 'app/models/mentor_meeting.rb'
-    - 'app/models/mentor.rb'
-    - 'app/controllers/mentoring_controller.rb'
     - 'node_modules/**/*'
 
 # Rails specific

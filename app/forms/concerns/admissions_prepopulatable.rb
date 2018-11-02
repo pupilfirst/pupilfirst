@@ -11,6 +11,7 @@ module AdmissionsPrepopulatable
 
   def prepopulate_from(entry)
     return if entry.blank?
+
     self.name = entry.name
     self.email = entry.email
     self.phone = entry.phone

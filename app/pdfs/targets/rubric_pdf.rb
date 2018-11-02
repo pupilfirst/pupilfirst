@@ -83,6 +83,7 @@ module Targets
     def grades_for_skills(founder)
       return unless @target.verified?(founder)
       return if @target.latest_linked_event(founder).timeline_event_grades.blank?
+
       @grades = @target.latest_linked_event(founder).timeline_event_grades.each_with_object({}) do |te_grade, grades|
         grades[te_grade.skill_id] = te_grade.grade
       end

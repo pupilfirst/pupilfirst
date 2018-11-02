@@ -7,6 +7,7 @@ module ProductMetrics
 
     def key
       return ProductMetrics::IndexPresenter::MEMBER_JOURNEY[@journey_point] if ProductMetrics::IndexPresenter::MEMBER_JOURNEY.key?(@journey_point)
+
       raise "Cannot resolve icon for journey point '#{@journey_point}'"
     end
   end

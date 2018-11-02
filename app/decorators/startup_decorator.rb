@@ -13,6 +13,7 @@ class StartupDecorator < Draper::Decorator
   def completed_targets_percentage
     targets_count = Target.count
     return 0 unless targets_count.positive?
+
     ((completed_targets_count.to_f / targets_count) * 100).to_i
   end
 

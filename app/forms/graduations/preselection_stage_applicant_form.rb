@@ -32,12 +32,14 @@ module Graduations
     def ensure_applicant_is_adult
       return if born_on.blank? # handled by property validator
       return if Time.parse(born_on) <= 18.years.ago
+
       errors[:born_on] << 'should be more than 18 years ago'
     end
 
     def current_address_is_available
       return if communication_address.present?
       return if permanent_address_is_communication_address == '1'
+
       errors[:current_address] << 'is required'
     end
 

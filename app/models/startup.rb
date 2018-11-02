@@ -250,6 +250,7 @@ class Startup < ApplicationRecord
 
   def category_count
     return unless @category_count_exceeded || startup_categories.count > MAX_CATEGORY_COUNT
+
     errors.add(:startup_categories, "Can't have more than 3 categories")
   end
 
@@ -286,6 +287,7 @@ class Startup < ApplicationRecord
 
   def founder?(founder)
     return false unless founder
+
     founder.startup_id == id
   end
 

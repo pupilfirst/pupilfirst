@@ -4,7 +4,7 @@ class SlackChannelNameValidator < ActiveModel::EachValidator
       record.errors[attribute] << 'channel name should be 1-21 characters'
     end
 
-    unless value =~ /\A#[^A-Z\s.;!?]+\z/
+    unless /\A#[^A-Z\s.;!?]+\z/.match?(value)
       record.errors[attribute] << 'must start with a # and not contain uppercase, spaces or periods'
     end
   end

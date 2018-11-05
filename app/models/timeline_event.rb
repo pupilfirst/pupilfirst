@@ -36,10 +36,6 @@ class TimelineEvent < ApplicationRecord
   GRADE_GREAT = 'great'
   GRADE_WOW = 'wow'
 
-  def self.valid_grades
-    [GRADE_GOOD, GRADE_GREAT, GRADE_WOW]
-  end
-
   validates :status, inclusion: { in: valid_statuses }
   validates :event_on, presence: true
   validates :description, presence: true

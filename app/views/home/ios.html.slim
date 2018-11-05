@@ -3,12 +3,12 @@
 
 / Load the Recaptcha API manually, because we're programmatically invoking the Invisible Recaptcha library.
 - unless Rails.env.test?
-  script src='https://www.google.com/recaptcha/api.js' async defer
+  = javascript_include_tag 'https://www.google.com/recaptcha/api.js', nonce: true, async: true, defer: true
 
 
 .ios-landing__container.p-3.p-lg-5
   .container
-   .row.ios-landing__sign-in-container
+    .row.ios-landing__sign-in-container
       .col-md-6.ios-landing__programmer-illustration
 
       .col-md-6

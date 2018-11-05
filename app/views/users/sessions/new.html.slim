@@ -3,7 +3,7 @@
 
 / Load the Recaptcha API manually, because we're programmatically invoking the Invisible Recaptcha library.
 - unless Rails.env.test?
-  = javascript_include_tag 'https://www.google.com/recaptcha/api.js', 'data-turbolinks-track': 'reload', nonce: true, async: true, defer: true
+  = javascript_include_tag 'https://www.google.com/recaptcha/api.js', nonce: true, async: true, defer: true
 
 .container.login-container.my-4.text-center
   / .row.flex-column-reverse.flex-md-row

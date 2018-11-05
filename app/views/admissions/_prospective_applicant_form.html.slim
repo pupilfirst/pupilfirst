@@ -2,7 +2,7 @@
 - presenter = Admissions::ProspectiveApplicantFormPresenter.new(self)
 
 - unless Rails.env.test?
-  script src='https://www.google.com/recaptcha/api.js' async defer
+  = javascript_include_tag 'https://www.google.com/recaptcha/api.js', nonce: true, async: true, defer: true
 
 = bootstrap_form_for(@form, url: prospective_applicants_path, label_col: 'col-sm-3', control_col: 'col-sm-9') do |f|
   .application-start-form.content-box.mb-2

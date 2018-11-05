@@ -8,7 +8,7 @@
   meta property="og:image" content=image_url('home/index/program-events.jpg')
   meta property="fb:app_id" content=Rails.application.secrets.facebook.dig(:app_id)
 
-  = javascript_include_tag 'https://www.youtube.com/iframe_api', async: true
+  = javascript_include_tag 'https://www.youtube.com/iframe_api', async: true, nonce: true
 
 #admissions__join
 

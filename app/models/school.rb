@@ -15,4 +15,9 @@ class School < ApplicationRecord
   def facebook_share_disabled?
     name.include? 'Apple'
   end
+
+  # Hack to enable editing grade_labels as an activeadmin text field
+  def grade_labels=(labels)
+    labels.is_a?(String) ? super(JSON.parse(labels)) : super(labels)
+  end
 end

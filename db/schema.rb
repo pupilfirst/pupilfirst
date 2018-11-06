@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_06_071644) do
+ActiveRecord::Schema.define(version: 2018_11_06_080858) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -418,6 +418,7 @@ ActiveRecord::Schema.define(version: 2018_11_06_071644) do
     t.boolean "sponsored", default: false
     t.integer "max_grade"
     t.integer "pass_grade"
+    t.json "grade_labels"
   end
 
   create_table "shortened_urls", id: :serial, force: :cascade do |t|

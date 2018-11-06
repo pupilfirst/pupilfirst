@@ -3,7 +3,7 @@ ActiveAdmin.register Target do
     :slideshow_embed, :video_embed, :completed_at, :completion_comment, :rubric, :link_to_complete, :key,
     :submittability, :archived, :remote_rubric_url, :target_group_id, :target_action_type, :points_earnable,
     :timeline_event_type_id, :sort_index, :youtube_video_id, :session_at, :session_by, :call_to_action,
-    prerequisite_target_ids: [], tag_list: [], target_skills_attributes: %i[id skill_id rubric_good rubric_great rubric_wow base_karma_points _destroy]
+    prerequisite_target_ids: [], tag_list: [], target_skills_attributes: %i[id skill_id rubric base_karma_points _destroy]
 
   filter :title
   filter :archived
@@ -195,9 +195,7 @@ ActiveAdmin.register Target do
               end
             end
 
-            column :rubric_good
-            column :rubric_great
-            column :rubric_wow
+            column :rubric
             column :base_karma_points
           end
         end
@@ -338,9 +336,7 @@ ActiveAdmin.register Target do
     f.inputs 'Skills' do
       f.has_many :target_skills, heading: false, allow_destroy: true, new_record: 'Add Skill' do |ts|
         ts.input :skill
-        ts.input :rubric_good
-        ts.input :rubric_great
-        ts.input :rubric_wow
+        ts.input :rubric, as: :text
         ts.input :base_karma_points
       end
     end

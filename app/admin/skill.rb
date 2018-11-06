@@ -5,7 +5,7 @@ ActiveAdmin.register Skill do
 
   menu parent: 'Targets'
 
-  permit_params :name, :description
+  permit_params :name, :description, :school_id
 
   filter :name
   filter :description
@@ -16,6 +16,7 @@ ActiveAdmin.register Skill do
     column :id
     column :name
     column :description
+    column :school
 
     actions
   end
@@ -25,6 +26,7 @@ ActiveAdmin.register Skill do
     f.inputs 'Skill Details' do
       f.input :name
       f.input :description
+      f.input :school
     end
 
     f.actions

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_05_114048) do
+ActiveRecord::Schema.define(version: 2018_11_06_071644) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -437,6 +437,8 @@ ActiveRecord::Schema.define(version: 2018_11_05_114048) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
+    t.bigint "school_id"
+    t.index ["school_id"], name: "index_skills_on_school_id"
   end
 
   create_table "startup_categories", id: :serial, force: :cascade do |t|

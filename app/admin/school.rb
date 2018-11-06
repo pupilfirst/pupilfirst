@@ -7,5 +7,5 @@ ActiveAdmin.register School do
 
   filter :name
 
-  permit_params :name, :sponsored
+  permit_params :name, :sponsored, :max_grade, :pass_grade
 end

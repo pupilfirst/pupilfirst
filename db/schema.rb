@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_06_080858) do
+ActiveRecord::Schema.define(version: 2018_11_06_110535) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -683,6 +683,7 @@ ActiveRecord::Schema.define(version: 2018_11_06_080858) do
     t.integer "target_id"
     t.boolean "share_on_facebook", default: false
     t.decimal "score", precision: 2, scale: 1
+    t.boolean "evaluated", default: false
     t.index ["founder_id"], name: "index_timeline_events_on_founder_id"
     t.index ["startup_id"], name: "index_timeline_events_on_startup_id"
     t.index ["status"], name: "index_timeline_events_on_status"

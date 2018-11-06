@@ -8,6 +8,7 @@ ActiveAdmin.register TimelineEvent do
   filter :timeline_event_type_role_eq, as: :select, collection: -> { TimelineEventType.valid_roles }, label: 'Role'
   filter :founder_name, as: :string
   filter :status, as: :select, collection: -> { TimelineEvent.valid_statuses }
+  filter :evaluated
   filter :created_at
   filter :status_updated_at
 
@@ -63,6 +64,8 @@ ActiveAdmin.register TimelineEvent do
         timeline_event.status
       end
     end
+
+    column :evaluated
 
     actions
   end
@@ -319,6 +322,7 @@ ActiveAdmin.register TimelineEvent do
       row :share_on_facebook
 
       row :status
+      row :evaluated
 
       row :status_updated_at
 

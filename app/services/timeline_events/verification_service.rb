@@ -189,16 +189,16 @@ module TimelineEvents
     end
 
     def total_karma_points
-      TargetSkill.where(target: @target, skill_id: @skill_grades.keys).sum do |target_skill|
-        grade = @skill_grades[target_skill.skill_id.to_s]
-        target_skill.base_karma_points * grade_multiplier(grade)
+      TargetEvaluationCriterion.where(target: @target, evaluation_criterion_id: @skill_grades.keys).sum do |criterion|
+        grade = @skill_grades[criterion.evaluation_criterion_id.to_s]
+        criterion.base_karma_points * grade_multiplier(grade)
       end.round
     end
 
-    def store_skill_grades
-      @skill_grades.each do |skill_id, grade|
-        karma_points = TargetSkill.find_by(target: @target, skill_id: skill_id.to_i).base_karma_points.to_f * grade_multiplier(grade)
-        TimelineEventGrade.create!(timeline_event: @timeline_event, skill_id: skill_id, grade: grade, karma_points: karma_points.round)
+    def store_evaluation_criterion_grades
+      @skill_grades.each do |evaluation_criterion_id, grade|
+        karma_points = TargetEvaluationCriterion.find_by(target: @target, evaluation_criterion_id: evaluation_criterion_id.to_i).base_karma_points.to_f * grade_multiplier(grade)
+        TimelineEventGrade.create!(timeline_event: @timeline_event, evaluation_criterion_id: evaluation_criterion_id, grade: grade, karma_points: karma_points.round)
       end
     end
 

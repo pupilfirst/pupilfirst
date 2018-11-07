@@ -6,7 +6,7 @@ class TargetsController < ApplicationController
     target = Target.find(params[:id])
     authorize target
 
-    if target.skills.exists?
+    if target.evaluation_criteria.exists?
       pdf = Targets::RubricPdf.new(target, current_founder).build
       send_data pdf.render, type: 'application/pdf', filename: 'target_rubric.pdf', disposition: 'inline'
     else

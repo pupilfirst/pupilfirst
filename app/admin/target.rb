@@ -3,7 +3,7 @@ ActiveAdmin.register Target do
     :slideshow_embed, :video_embed, :completed_at, :completion_comment, :rubric, :link_to_complete, :key,
     :submittability, :archived, :remote_rubric_url, :target_group_id, :target_action_type, :points_earnable,
     :timeline_event_type_id, :sort_index, :youtube_video_id, :session_at, :session_by, :call_to_action,
-    prerequisite_target_ids: [], tag_list: [], target_skills_attributes: %i[id skill_id rubric base_karma_points _destroy]
+    prerequisite_target_ids: [], tag_list: [], target_evaluation_criteria_attributes: %i[id evaluation_criterion_id rubric base_karma_points _destroy]
 
   filter :title
   filter :archived
@@ -184,14 +184,14 @@ ActiveAdmin.register Target do
       row :created_at
       row :updated_at
 
-      if target.target_skills.exists?
+      if target.target_evaluation_criteria.exists?
         div do
-          table_for target.target_skills.includes(:skill) do
-            caption 'Target Skills'
+          table_for target.target_evaluation_criteria.includes(:evaluation_criterion) do
+            caption 'Target Evaluation Criteria'
 
-            column 'Skill' do |ts|
-              a href: admin_skill_path(ts.skill) do
-                ts.skill.display_name.to_s
+            column 'Criteria' do |ts|
+              a href: admin_evaluation_criterion_path(ts.evaluation_criterion) do
+                ts.evaluation_criterion.display_name.to_s
               end
             end
 
@@ -333,9 +333,9 @@ ActiveAdmin.register Target do
       f.input :remote_rubric_url
     end
 
-    f.inputs 'Skills' do
-      f.has_many :target_skills, heading: false, allow_destroy: true, new_record: 'Add Skill' do |ts|
-        ts.input :skill
+    f.inputs 'Evaluation Criteria' do
+      f.has_many :target_evaluation_criteria, heading: false, allow_destroy: true, new_record: 'Add Criterion' do |ts|
+        ts.input :evaluation_criterion
         ts.input :rubric, as: :text
         ts.input :base_karma_points
       end

@@ -35,12 +35,12 @@ class Target < ApplicationRecord
   has_many :prerequisite_targets, through: :target_prerequisites
   belongs_to :target_group, optional: true
   has_many :resources, dependent: :nullify
-  has_many :target_skills, dependent: :destroy
-  has_many :skills, through: :target_skills
+  has_many :target_evaluation_criteria, dependent: :destroy
+  has_many :evaluation_criteria, through: :target_evaluation_criteria
   has_one :level, through: :target_group
   has_one :school, through: :target_group
 
-  accepts_nested_attributes_for :target_skills, allow_destroy: true
+  accepts_nested_attributes_for :target_evaluation_criteria, allow_destroy: true
 
   acts_as_taggable
   mount_uploader :rubric, RubricUploader
@@ -191,7 +191,7 @@ class Target < ApplicationRecord
   end
 
   def rubric?
-    target_skills.exists? || rubric_url.present?
+    target_evaluation_criteria.exists? || rubric_url.present?
   end
 
   # this is included in the target JSONs the DashboardDataService responds with
@@ -212,7 +212,7 @@ class Target < ApplicationRecord
     return if latest_linked_event(founder).timeline_event_grades.blank?
 
     latest_linked_event(founder).timeline_event_grades.each_with_object({}) do |te_grade, grades|
-      grades[te_grade.skill_id] = te_grade.grade
+      grades[te_grade.evaluation_criterion_id] = te_grade.grade
     end
   end
 end

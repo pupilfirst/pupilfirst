@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_06_110535) do
+ActiveRecord::Schema.define(version: 2018_11_07_071152) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -169,6 +169,15 @@ ActiveRecord::Schema.define(version: 2018_11_06_110535) do
     t.index ["answer_option_id"], name: "index_english_quiz_submissions_on_answer_option_id"
     t.index ["english_quiz_question_id"], name: "index_english_quiz_submissions_on_english_quiz_question_id"
     t.index ["quizee_id"], name: "index_english_quiz_submissions_on_quizee_id"
+  end
+
+  create_table "evaluation_criteria", force: :cascade do |t|
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name"
+    t.bigint "school_id"
+    t.index ["school_id"], name: "index_evaluation_criteria_on_school_id"
   end
 
   create_table "faculty", id: :serial, force: :cascade do |t|
@@ -435,15 +444,6 @@ ActiveRecord::Schema.define(version: 2018_11_06_110535) do
     t.index ["url"], name: "index_shortened_urls_on_url"
   end
 
-  create_table "skills", force: :cascade do |t|
-    t.string "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "name"
-    t.bigint "school_id"
-    t.index ["school_id"], name: "index_skills_on_school_id"
-  end
-
   create_table "startup_categories", id: :serial, force: :cascade do |t|
     t.string "name"
     t.datetime "created_at"
@@ -562,6 +562,17 @@ ActiveRecord::Schema.define(version: 2018_11_06_110535) do
     t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
+  create_table "target_evaluation_criteria", force: :cascade do |t|
+    t.bigint "target_id"
+    t.bigint "evaluation_criterion_id"
+    t.integer "base_karma_points"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.json "rubric"
+    t.index ["evaluation_criterion_id"], name: "index_target_evaluation_criteria_on_evaluation_criterion_id"
+    t.index ["target_id"], name: "index_target_evaluation_criteria_on_target_id"
+  end
+
   create_table "target_groups", id: :serial, force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -581,17 +592,6 @@ ActiveRecord::Schema.define(version: 2018_11_06_110535) do
     t.integer "prerequisite_target_id"
     t.index ["prerequisite_target_id"], name: "index_target_prerequisites_on_prerequisite_target_id"
     t.index ["target_id"], name: "index_target_prerequisites_on_target_id"
-  end
-
-  create_table "target_skills", force: :cascade do |t|
-    t.bigint "target_id"
-    t.bigint "skill_id"
-    t.integer "base_karma_points"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.json "rubric"
-    t.index ["skill_id"], name: "index_target_skills_on_skill_id"
-    t.index ["target_id"], name: "index_target_skills_on_target_id"
   end
 
   create_table "targets", id: :serial, force: :cascade do |t|
@@ -643,10 +643,10 @@ ActiveRecord::Schema.define(version: 2018_11_06_110535) do
 
   create_table "timeline_event_grades", force: :cascade do |t|
     t.bigint "timeline_event_id"
-    t.bigint "skill_id"
+    t.bigint "evaluation_criterion_id"
     t.integer "grade"
     t.integer "karma_points"
-    t.index ["skill_id"], name: "index_timeline_event_grades_on_skill_id"
+    t.index ["evaluation_criterion_id"], name: "index_timeline_event_grades_on_evaluation_criterion_id"
     t.index ["timeline_event_id"], name: "index_timeline_event_grades_on_timeline_event_id"
   end
 
@@ -787,10 +787,10 @@ ActiveRecord::Schema.define(version: 2018_11_06_110535) do
   add_foreign_key "startups", "founders", column: "team_lead_id"
   add_foreign_key "startups", "levels"
   add_foreign_key "startups", "states", column: "billing_state_id"
+  add_foreign_key "target_evaluation_criteria", "evaluation_criteria"
+  add_foreign_key "target_evaluation_criteria", "targets"
   add_foreign_key "target_groups", "levels"
   add_foreign_key "target_groups", "tracks"
-  add_foreign_key "target_skills", "skills"
-  add_foreign_key "target_skills", "targets"
   add_foreign_key "timeline_event_files", "timeline_events"
   add_foreign_key "timeline_events", "startups"
   add_foreign_key "user_activities", "users"

@@ -1,4 +1,4 @@
-ActiveAdmin.register Skill do
+ActiveAdmin.register EvaluationCriterion do
   controller do
     include DisableIntercom
   end
@@ -23,7 +23,7 @@ ActiveAdmin.register Skill do
 
   form do |f|
     div id: 'admin-skill__edit'
-    f.inputs 'Skill Details' do
+    f.inputs 'EvaluationCriterion Details' do
       f.input :name
       f.input :description
       f.input :school

@@ -1,7 +1,8 @@
 class School < ApplicationRecord
   validates :name, presence: true
-  validates :max_grade,  numericality: { greater_than: 0 }
-  validates :pass_grade, numericality: { greater_than: 0, less_than_or_equal_to: :max_grade }
+  validates :max_grade,  presence: true, numericality: { greater_than: 0 }
+  validates :pass_grade, presence: true, numericality: { greater_than: 0, less_than_or_equal_to: :max_grade }
+  validates :grade_labels, presence: true
   validate :grade_labels_must_match_grades
 
   has_many :levels, dependent: :restrict_with_error

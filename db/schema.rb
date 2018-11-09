@@ -682,7 +682,8 @@ ActiveRecord::Schema.define(version: 2018_11_09_101423) do
     t.integer "target_id"
     t.boolean "share_on_facebook", default: false
     t.decimal "score", precision: 2, scale: 1
-    t.boolean "evaluated", default: false
+    t.integer "evaluator_id"
+    t.datetime "evaluated_at"
     t.index ["founder_id"], name: "index_timeline_events_on_founder_id"
     t.index ["startup_id"], name: "index_timeline_events_on_startup_id"
     t.index ["status"], name: "index_timeline_events_on_status"
@@ -793,6 +794,7 @@ ActiveRecord::Schema.define(version: 2018_11_09_101423) do
   add_foreign_key "target_groups", "levels"
   add_foreign_key "target_groups", "tracks"
   add_foreign_key "timeline_event_files", "timeline_events"
+  add_foreign_key "timeline_events", "faculty", column: "evaluator_id"
   add_foreign_key "timeline_events", "startups"
   add_foreign_key "user_activities", "users"
   add_foreign_key "weekly_karma_points", "levels"

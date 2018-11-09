@@ -8,6 +8,5 @@ after 'development:targets', 'development:evaluation_criteria' do
   TargetEvaluationCriterion.create!(
     target: target,
     evaluation_criterion: target.school.evaluation_criteria.first,
-    base_karma_points: 20
   )
 end

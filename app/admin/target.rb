@@ -194,9 +194,6 @@ ActiveAdmin.register Target do
                 ts.evaluation_criterion.display_name.to_s
               end
             end
-
-            column :rubric
-            column :base_karma_points
           end
         end
       end

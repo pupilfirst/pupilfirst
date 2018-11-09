@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_09_101423) do
+ActiveRecord::Schema.define(version: 2018_11_09_110642) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -565,10 +565,8 @@ ActiveRecord::Schema.define(version: 2018_11_09_101423) do
   create_table "target_evaluation_criteria", force: :cascade do |t|
     t.bigint "target_id"
     t.bigint "evaluation_criterion_id"
-    t.integer "base_karma_points"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.json "rubric"
     t.index ["evaluation_criterion_id"], name: "index_target_evaluation_criteria_on_evaluation_criterion_id"
     t.index ["target_id"], name: "index_target_evaluation_criteria_on_target_id"
   end

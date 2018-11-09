@@ -3,7 +3,7 @@ ActiveAdmin.register Target do
     :slideshow_embed, :video_embed, :completed_at, :completion_comment, :rubric, :link_to_complete, :key,
     :submittability, :archived, :remote_rubric_url, :target_group_id, :target_action_type, :points_earnable,
     :timeline_event_type_id, :sort_index, :youtube_video_id, :session_at, :session_by, :call_to_action,
-    prerequisite_target_ids: [], tag_list: [], target_evaluation_criteria_attributes: %i[id evaluation_criterion_id rubric base_karma_points _destroy]
+    prerequisite_target_ids: [], tag_list: [], target_evaluation_criteria_attributes: %i[id evaluation_criterion_id _destroy]
 
   filter :title
   filter :archived
@@ -336,8 +336,6 @@ ActiveAdmin.register Target do
     f.inputs 'Evaluation Criteria' do
       f.has_many :target_evaluation_criteria, heading: false, allow_destroy: true, new_record: 'Add Criterion' do |ts|
         ts.input :evaluation_criterion
-        ts.input :rubric, as: :text
-        ts.input :base_karma_points
       end
     end
     f.actions

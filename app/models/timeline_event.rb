@@ -13,6 +13,7 @@ class TimelineEvent < ApplicationRecord
   belongs_to :improved_timeline_event, class_name: 'TimelineEvent', optional: true
   has_one :improvement_of, class_name: 'TimelineEvent', foreign_key: 'improved_timeline_event_id', dependent: :nullify, inverse_of: :improved_timeline_event
   has_many :timeline_event_grades, dependent: :destroy
+  belongs_to :evaluator, class_name: 'Faculty', optional: true
 
   mount_uploader :image, TimelineImageUploader
   process_in_background :image

@@ -147,6 +147,16 @@ class Target < ApplicationRecord
     errors[:faculty_id] << 'is required for a vanilla target'
   end
 
+  validate :vanilla_target_must_have_evaluation_criteria
+
+  def vanilla_target_must_have_evaluation_criteria
+    return if session_at.present?
+    return if submittability.in? [SUBMITTABILITY_AUTO_VERIFY, SUBMITTABILITY_NOT_SUBMITTABLE].freeze
+    return if evaluation_criteria.present?
+
+    errors[:base] << 'Vanilla targets require at least one evaluation criterion.'
+  end
+
   normalize_attribute :key, :slideshow_embed, :video_embed, :session_by
 
   def display_name

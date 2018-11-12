@@ -6,49 +6,15 @@ export default class ActionBar extends React.Component {
   constructor(props) {
     super(props);
 
-    this.openTimelineBuilder = this.openTimelineBuilder.bind(this);
     this.startTour = this.startTour.bind(this);
   }
 
-  openTimelineBuilder() {
-    if (this.props.currentLevel == 0) {
-      $(".js-founder-dashboard__action-bar-add-event-button").popover("show");
-
-      setTimeout(function() {
-        $(".js-founder-dashboard__action-bar-add-event-button").popover("hide");
-      }, 3000);
-    } else {
-      // Open up the timeline builder without any target or timeline event type preselected.
-      this.props.setRootState({
-        timelineBuilderVisible: true,
-        timelineBuilderParams: {
-          targetId: null,
-          selectedTimelineEventTypeId: null
-        }
-      });
-    }
-  }
-
   componentDidMount() {
-    if (this.props.currentLevel == 0) {
-      $(".js-founder-dashboard__action-bar-add-event-button").popover({
-        title: "Feature Locked!",
-        content: "This feature is not available during admission.",
-        html: true,
-        placement: "bottom",
-        trigger: "manual"
-      });
-    }
-
     if (this.props.rootState.tourDashboard) {
       this.props.setRootState({ tourDashboard: false }, () => {
         this.startTour();
       });
     }
-  }
-
-  componentWillUnmount() {
-    $(".js-founder-dashboard__action-bar-add-event-button").popover("dispose");
   }
 
   startTour() {
@@ -99,14 +65,6 @@ export default class ActionBar extends React.Component {
           />
 
           <div className="d-flex">
-            <button
-              onClick={this.openTimelineBuilder}
-              className="btn btn-with-icon btn-md btn-secondary text-uppercase btn-timeline-builder js-founder-dashboard__trigger-builder d-none d-md-block mr-2 js-founder-dashboard__action-bar-add-event-button"
-            >
-              <i className="fa fa-plus-circle" aria-hidden="true" />
-              <span>Add Event</span>
-            </button>
-
             <div className="btn-group">
               <button
                 className="btn btn-link founder-dashboard-actionbar__show-more-menu dropdown-toggle"

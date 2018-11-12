@@ -19,7 +19,6 @@ describe Startups::LevelUpService do
   let!(:level_4_school_2) { create :level, :four, school: school_2 }
   let!(:level_5_school_2) { create :level, :five, school: school_2 }
 
-  let!(:joined_svco_tet) { create :tet_joined }
   describe '#execute' do
     context 'when the startup is at maximum level' do
       let(:startup) { create :startup, level: level_5 }
@@ -61,11 +60,6 @@ describe Startups::LevelUpService do
         # program_started_on must have been set.
         expect(startup.program_started_on).to_not eq(nil)
         expect(startup.admission_stage).to eq(Startup::ADMISSION_STAGE_ADMITTED)
-
-        # A verified Joined SV event must have been created.
-        event = startup.timeline_events.last
-        expect(event.timeline_event_type).to eq(joined_svco_tet)
-        expect(event.status).to eq(TimelineEvent::STATUS_VERIFIED)
       end
     end
   end

@@ -33,15 +33,6 @@ module Startups
 
         # Update the admission stage for the startup entry.
         Admissions::UpdateStageService.new(@startup, Startup::ADMISSION_STAGE_ADMITTED).execute
-
-        @startup.timeline_events.create!(
-          founder: @startup.team_lead,
-          timeline_event_type: TimelineEventType.find_by(key: TimelineEventType::TYPE_JOINED_SV_CO),
-          event_on: Time.zone.now,
-          description: event_description,
-          status_updated_at: Time.zone.now,
-          status: TimelineEvent::STATUS_VERIFIED
-        )
       end
 
       # Tag all founders on Intercom as 'Moved to Level 1'.

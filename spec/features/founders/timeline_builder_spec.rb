@@ -21,7 +21,7 @@ feature 'Timeline Builder' do
     founder.update!(dashboard_toured: dashboard_toured)
   end
 
-  scenario 'Founder submits an event', js: true do
+  scenario 'Founder submits an event', js: true, broken: true do
     sign_in_user founder.user, referer: student_dashboard_path
 
     # Close the PNotify message to ensure no overlap with other elements under test

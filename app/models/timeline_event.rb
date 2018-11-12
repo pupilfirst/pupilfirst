@@ -19,7 +19,8 @@ class TimelineEvent < ApplicationRecord
 
   serialize :links
 
-  delegate :founder_event?, :title, to: :timeline_event_type
+  delegate :founder_event?, to: :timeline_event_type
+  delegate :title, to: :target
 
   MAX_DESCRIPTION_CHARACTERS = 500
 

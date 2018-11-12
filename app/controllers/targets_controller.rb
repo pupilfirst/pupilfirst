@@ -5,13 +5,7 @@ class TargetsController < ApplicationController
   def download_rubric
     target = Target.find(params[:id])
     authorize target
-
-    if target.evaluation_criteria.exists?
-      pdf = Targets::RubricPdf.new(target, current_founder).build
-      send_data pdf.render, type: 'application/pdf', filename: 'target_rubric.pdf', disposition: 'inline'
-    else
-      redirect_to target.rubric_url
-    end
+    redirect_to target.rubric_url
   end
 
   # GET /targets/select2_search

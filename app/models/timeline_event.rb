@@ -5,6 +5,7 @@ class TimelineEvent < ApplicationRecord
   belongs_to :founder
   belongs_to :timeline_event_type
   belongs_to :target, optional: true
+  has_many :target_evaluation_criteria, through: :target
 
   has_one :karma_point, as: :source, dependent: :destroy, inverse_of: :source
   has_many :startup_feedback, dependent: :destroy

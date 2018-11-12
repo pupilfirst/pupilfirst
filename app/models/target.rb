@@ -40,8 +40,6 @@ class Target < ApplicationRecord
   has_one :level, through: :target_group
   has_one :school, through: :target_group
 
-  accepts_nested_attributes_for :target_evaluation_criteria, allow_destroy: true
-
   acts_as_taggable
   mount_uploader :rubric, RubricUploader
 
@@ -86,6 +84,10 @@ class Target < ApplicationRecord
 
   def self.valid_submittability_values
     [SUBMITTABILITY_RESUBMITTABLE, SUBMITTABILITY_SUBMITTABLE_ONCE, SUBMITTABILITY_NOT_SUBMITTABLE, SUBMITTABILITY_AUTO_VERIFY].freeze
+  end
+
+  def self.non_gradable_submittability_values
+    [SUBMITTABILITY_AUTO_VERIFY, SUBMITTABILITY_NOT_SUBMITTABLE].freeze
   end
 
   # Need to allow these two to be read for AA form.
@@ -147,12 +149,11 @@ class Target < ApplicationRecord
     errors[:faculty_id] << 'is required for a vanilla target'
   end
 
-  validate :vanilla_target_must_have_evaluation_criteria
+  validate :target_must_have_evaluation_criteria
 
-  def vanilla_target_must_have_evaluation_criteria
-    return if session_at.present?
-    return if submittability.in? [SUBMITTABILITY_AUTO_VERIFY, SUBMITTABILITY_NOT_SUBMITTABLE].freeze
-    return if evaluation_criteria.present?
+  def target_must_have_evaluation_criteria
+    return if submittability.in?(Target.non_gradable_submittability_values)
+    return if evaluation_criteria.exists?
 
     errors[:base] << 'Vanilla targets require at least one evaluation criterion.'
   end

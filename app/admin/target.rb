@@ -3,7 +3,7 @@ ActiveAdmin.register Target do
     :slideshow_embed, :video_embed, :completed_at, :completion_comment, :rubric, :link_to_complete, :key,
     :submittability, :archived, :remote_rubric_url, :target_group_id, :target_action_type, :points_earnable,
     :timeline_event_type_id, :sort_index, :youtube_video_id, :session_at, :session_by, :call_to_action,
-    prerequisite_target_ids: [], tag_list: [], target_evaluation_criteria_attributes: %i[id evaluation_criterion_id _destroy]
+    prerequisite_target_ids: [], tag_list: [], evaluation_criterion_ids: []
 
   filter :title
   filter :archived
@@ -328,13 +328,9 @@ ActiveAdmin.register Target do
       f.input :days_to_complete
       f.input :rubric, as: :file
       f.input :remote_rubric_url
+      f.input :evaluation_criteria, as: :select, collection: EvaluationCriterion.all.map { |ec| [ec.display_name.to_s, ec.id] }
     end
 
-    f.inputs 'Evaluation Criteria' do
-      f.has_many :target_evaluation_criteria, heading: false, allow_destroy: true, new_record: 'Add Criterion' do |ts|
-        ts.input :evaluation_criterion
-      end
-    end
     f.actions
   end
 end

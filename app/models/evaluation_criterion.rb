@@ -8,6 +8,6 @@ class EvaluationCriterion < ApplicationRecord
   validates :school, presence: true
 
   def display_name
-    name
+    name + ' | ' + school.name
   end
 end

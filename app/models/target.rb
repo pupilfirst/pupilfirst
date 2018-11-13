@@ -158,6 +158,18 @@ class Target < ApplicationRecord
     errors[:base] << 'Vanilla targets require at least one evaluation criterion.'
   end
 
+  validate :same_school_for_target_and_evaluation_criteria
+
+  def same_school_for_target_and_evaluation_criteria
+    return if evaluation_criteria.blank?
+
+    evaluation_criteria.each do |ec|
+      next if ec.school_id == school.id
+
+      errors[:base] << 'Target and evaluation criterion must belong to same school'
+    end
+  end
+
   normalize_attribute :key, :slideshow_embed, :video_embed, :session_by
 
   def display_name

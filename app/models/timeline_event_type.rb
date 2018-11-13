@@ -7,8 +7,6 @@ class TimelineEventType < ApplicationRecord
   TYPE_NEW_WIREFRAME = 'new_wireframe'
   TYPE_NEW_PROTOTYPE = 'new_prototype'
   TYPE_NEW_VIDEO = 'new_video'
-  TYPE_HELP_WANTED = 'help_wanted'
-  TYPE_RESUME_SUBMISSION = 'resume_submission'
   TYPE_TEAM_UPDATE = 'team_update'
   TYPE_FOUNDER_UPDATE = 'founder_update'
 
@@ -85,20 +83,12 @@ class TimelineEventType < ApplicationRecord
     key == TYPE_NEW_VIDEO
   end
 
-  def resume_submission?
-    key == TYPE_RESUME_SUBMISSION
-  end
-
   def self.stage_keys
     [TYPE_STAGE_IDEA, TYPE_STAGE_PROTOTYPE, TYPE_STAGE_CUSTOMER, TYPE_STAGE_EFFICIENCY, TYPE_STAGE_SCALE]
   end
 
   def stage_change?
     TimelineEventType.stage_keys.include?(key)
-  end
-
-  def self.help_wanted
-    find_by(key: TYPE_HELP_WANTED)
   end
 
   def self.team_update

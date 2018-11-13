@@ -394,10 +394,6 @@ class Startup < ApplicationRecord
     update_column(:stage, current_stage) # rubocop:disable Rails/SkipsModelValidations
   end
 
-  def latest_help_wanted
-    timeline_events.verified.help_wanted.order(created_at: 'desc').first
-  end
-
   def display_name
     label = product_name
     label += " (#{name})" if name.present?

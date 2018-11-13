@@ -6,6 +6,7 @@ class TimelineEvent < ApplicationRecord
   belongs_to :timeline_event_type
   belongs_to :target, optional: true
   has_many :target_evaluation_criteria, through: :target
+  has_many :evaluation_criteria, through: :target_evaluation_criteria
 
   has_one :karma_point, as: :source, dependent: :destroy, inverse_of: :source
   has_many :startup_feedback, dependent: :destroy

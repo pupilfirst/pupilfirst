@@ -94,37 +94,6 @@ describe TimelineEvents::UndoVerificationService do
             .from(timeline_event.event_on).to(old_event_on)
         end
       end
-
-      context "when the timeline event verification updated founder's resume" do
-        let(:timeline_event_type) { create :timeline_event_type, key: TimelineEventType::TYPE_RESUME_SUBMISSION }
-
-        before do
-          timeline_event.founder.update!(
-            resume_file: create(:timeline_event_file),
-            resume_url: 'http://www.example.com/resume'
-          )
-        end
-
-        context 'if the timeline event was not verified' do
-          let(:timeline_event) { create :timeline_event, status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT, timeline_event_type: timeline_event_type }
-
-          it 'does nothing' do
-            subject.execute
-            founder = timeline_event.reload.founder
-            expect(founder.resume_file).not_to eq(nil)
-            expect(founder.resume_url).to eq('http://www.example.com/resume')
-          end
-        end
-
-        context 'if the timeline event was verified' do
-          it 'removes link to resume from founder profile' do
-            subject.execute
-            founder = timeline_event.reload.founder
-            expect(founder.resume_file).to eq(nil)
-            expect(founder.resume_url).to eq(nil)
-          end
-        end
-      end
     end
   end
 end

@@ -60,16 +60,6 @@ RSpec.describe TimelineEvent, type: :model do
           expect(subject.startup.product_video_link).to eq('https://sv.co/private')
         end
       end
-
-      context 'when timeline event is for new resume' do
-        let(:timeline_event_type) { create :timeline_event_type, key: TimelineEventType::TYPE_RESUME_SUBMISSION }
-
-        it 'saves resume link' do
-          expect(subject.founder.resume_url).to eq(
-            Rails.application.routes.url_helpers.download_timeline_event_file_url(timeline_event_file)
-          )
-        end
-      end
     end
   end
 end

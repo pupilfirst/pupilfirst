@@ -15,7 +15,6 @@ module Admissions
         founder: @founder,
         startup: @founder.startup,
         description: description,
-        timeline_event_type: team_update,
         event_on: Time.zone.now
       )
 
@@ -40,10 +39,6 @@ module Admissions
         else
           raise "CompleteTargetService does not know how to generate description for #{@key}"
       end
-    end
-
-    def team_update
-      TimelineEventType.find_by(key: TimelineEventType::TYPE_TEAM_UPDATE)
     end
 
     def admission_stage

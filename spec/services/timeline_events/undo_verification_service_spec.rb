@@ -43,42 +43,6 @@ describe TimelineEvents::UndoVerificationService do
             product_video_link: 'http://example.com/video'
           )
         end
-
-        context 'when the timeline event updated presentation link' do
-          let(:timeline_event_type) { create :timeline_event_type, key: TimelineEventType::TYPE_NEW_DECK }
-
-          it 'removes the presentation link from startup profile' do
-            expect { subject.execute }.to change { timeline_event.reload.startup.presentation_link }
-              .from('http://example.com/presentation').to(nil)
-          end
-        end
-
-        context 'when the timeline event updated wireframe link' do
-          let(:timeline_event_type) { create :timeline_event_type, key: TimelineEventType::TYPE_NEW_WIREFRAME }
-
-          it 'removes the link from startup profile' do
-            expect { subject.execute }.to change { timeline_event.reload.startup.wireframe_link }
-              .from('http://example.com/wireframe').to(nil)
-          end
-        end
-
-        context 'when the timeline event updated prototype link' do
-          let(:timeline_event_type) { create :timeline_event_type, key: TimelineEventType::TYPE_NEW_PROTOTYPE }
-
-          it 'removes the link from startup profile' do
-            expect { subject.execute }.to change { timeline_event.reload.startup.prototype_link }
-              .from('http://example.com/prototype').to(nil)
-          end
-        end
-
-        context 'when the timeline event updated product video link' do
-          let(:timeline_event_type) { create :timeline_event_type, key: TimelineEventType::TYPE_NEW_VIDEO }
-
-          it 'removes the link from startup profile' do
-            expect { subject.execute }.to change { timeline_event.reload.startup.product_video_link }
-              .from('http://example.com/video').to(nil)
-          end
-        end
       end
 
       context "when the startup's timeline_updated_on was changed" do

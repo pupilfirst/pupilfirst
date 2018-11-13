@@ -3,13 +3,6 @@
 class TimelineEventType < ApplicationRecord
   has_many :timeline_events, dependent: :restrict_with_error
 
-  TYPE_NEW_DECK = 'new_product_deck'
-  TYPE_NEW_WIREFRAME = 'new_wireframe'
-  TYPE_NEW_PROTOTYPE = 'new_prototype'
-  TYPE_NEW_VIDEO = 'new_video'
-  TYPE_TEAM_UPDATE = 'team_update'
-  TYPE_FOUNDER_UPDATE = 'founder_update'
-
   TYPE_STAGE_IDEA = 'moved_to_idea_discovery'
   TYPE_STAGE_PROTOTYPE = 'moved_to_prototyping'
   TYPE_STAGE_CUSTOMER = 'moved_to_customer_validation'
@@ -67,31 +60,11 @@ class TimelineEventType < ApplicationRecord
     placeholder_text
   end
 
-  def new_deck?
-    key == TYPE_NEW_DECK
-  end
-
-  def new_wireframe?
-    key == TYPE_NEW_WIREFRAME
-  end
-
-  def new_prototype?
-    key == TYPE_NEW_PROTOTYPE
-  end
-
-  def new_video?
-    key == TYPE_NEW_VIDEO
-  end
-
   def self.stage_keys
     [TYPE_STAGE_IDEA, TYPE_STAGE_PROTOTYPE, TYPE_STAGE_CUSTOMER, TYPE_STAGE_EFFICIENCY, TYPE_STAGE_SCALE]
   end
 
   def stage_change?
     TimelineEventType.stage_keys.include?(key)
-  end
-
-  def self.team_update
-    find_by(key: TYPE_TEAM_UPDATE)
   end
 end

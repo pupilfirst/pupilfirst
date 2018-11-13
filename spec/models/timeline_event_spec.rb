@@ -20,46 +20,6 @@ RSpec.describe TimelineEvent, type: :model do
       before do
         subject.verify!
       end
-
-      context 'when timeline event is for new deck' do
-        let(:timeline_event_type) { create :tet_new_product_deck }
-
-        it 'saves presentation link' do
-          expect(subject.startup.presentation_link).to eq(
-            Rails.application.routes.url_helpers.download_timeline_event_file_url(timeline_event_file)
-          )
-        end
-      end
-
-      context 'when timeline event is for new wireframe' do
-        let(:timeline_event_type) { create :timeline_event_type, key: TimelineEventType::TYPE_NEW_WIREFRAME }
-
-        it 'saves wireframe link' do
-          expect(subject.startup.wireframe_link).to eq(
-            Rails.application.routes.url_helpers.download_timeline_event_file_url(timeline_event_file)
-          )
-        end
-      end
-
-      context 'when timeline event is for new prototype' do
-        let(:timeline_event_type) { create :timeline_event_type, key: TimelineEventType::TYPE_NEW_PROTOTYPE }
-
-        it 'saves prototype link' do
-          expect(subject.startup.prototype_link).to eq(
-            Rails.application.routes.url_helpers.download_timeline_event_file_url(timeline_event_file)
-          )
-        end
-      end
-
-      context 'when timeline event is for new video' do
-        # Check whether regular links work as well.
-        subject { create :timeline_event_with_links, timeline_event_type: timeline_event_type }
-        let(:timeline_event_type) { create :timeline_event_type, key: TimelineEventType::TYPE_NEW_VIDEO }
-
-        it 'saves link to product video' do
-          expect(subject.startup.product_video_link).to eq('https://sv.co/private')
-        end
-      end
     end
   end
 end

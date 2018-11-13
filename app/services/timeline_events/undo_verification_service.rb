@@ -9,7 +9,6 @@ module TimelineEvents
       raise "TimelineEvent ##{@timeline_event.id} is pending, and cannot be processed" if @timeline_event.pending?
 
       TimelineEvent.transaction do
-        unlink_startup_profile_submissions
         remove_karma_points
         remove_timeline_event_grades
         recompute_timeline_updated_on
@@ -18,14 +17,6 @@ module TimelineEvents
     end
 
     private
-
-    # This removes the links to deck, wireframe, prototype, and video, if timeline event updated those.
-    def unlink_startup_profile_submissions
-      startup.update!(presentation_link: nil) if @timeline_event.timeline_event_type.new_deck?
-      startup.update!(wireframe_link: nil) if @timeline_event.timeline_event_type.new_wireframe?
-      startup.update!(prototype_link: nil) if @timeline_event.timeline_event_type.new_prototype?
-      startup.update!(product_video_link: nil) if @timeline_event.timeline_event_type.new_video?
-    end
 
     # Timeline event could have been awarded karma points. Remove those.
     def remove_karma_points

@@ -138,11 +138,6 @@ class TimelineEvent < ApplicationRecord
 
   def verify!
     update!(status: STATUS_VERIFIED, status_updated_at: Time.zone.now)
-
-    add_link_for_new_deck!
-    add_link_for_new_wireframe!
-    add_link_for_new_prototype!
-    add_link_for_new_video!
   end
 
   def verified?
@@ -260,34 +255,6 @@ class TimelineEvent < ApplicationRecord
 
   def privileged_founder?(founder)
     founder.present? && startup.founders.include?(founder)
-  end
-
-  def add_link_for_new_deck!
-    return unless timeline_event_type.new_deck?
-    return if first_attachment_url.blank?
-
-    startup.update!(presentation_link: first_attachment_url)
-  end
-
-  def add_link_for_new_wireframe!
-    return unless timeline_event_type.new_wireframe?
-    return if first_attachment_url.blank?
-
-    startup.update!(wireframe_link: first_attachment_url)
-  end
-
-  def add_link_for_new_prototype!
-    return unless timeline_event_type.new_prototype?
-    return if first_attachment_url.blank?
-
-    startup.update!(prototype_link: first_attachment_url)
-  end
-
-  def add_link_for_new_video!
-    return unless timeline_event_type.new_video?
-    return if first_attachment_url.blank?
-
-    startup.update!(product_video_link: first_attachment_url)
   end
 
   def first_file_url

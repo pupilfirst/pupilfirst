@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_12_081358) do
+ActiveRecord::Schema.define(version: 2018_11_13_083137) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -645,6 +645,7 @@ ActiveRecord::Schema.define(version: 2018_11_12_081358) do
     t.bigint "evaluation_criterion_id"
     t.integer "grade"
     t.index ["evaluation_criterion_id"], name: "index_timeline_event_grades_on_evaluation_criterion_id"
+    t.index ["timeline_event_id", "evaluation_criterion_id"], name: "by_timeline_event_criterion", unique: true
     t.index ["timeline_event_id"], name: "index_timeline_event_grades_on_timeline_event_id"
   end
 

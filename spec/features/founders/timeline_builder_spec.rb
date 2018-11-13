@@ -27,7 +27,10 @@ feature 'Timeline Builder' do
     # Close the PNotify message to ensure no overlap with other elements under test
     find('.ui-pnotify').click
 
-    click_button 'Add Event'
+    first('.founder-dashboard-target__container').click
+
+    click_button 'Submit'
+
     find('.timeline-builder__textarea').set(description)
 
     # Mark to be shared on facebook
@@ -56,14 +59,11 @@ feature 'Timeline Builder' do
 
     select timeline_event_type.title, from: 'Timeline Event Type'
 
-    click_button 'Submit'
+    first('.js-timeline-builder__submit-button').click
 
     expect(page).to have_content('Your timeline event will be reviewed soon')
 
     te = TimelineEvent.last
-
-    # It should not be linked to any target.
-    expect(te.target).to eq(nil)
 
     expect(te.description).to eq(description)
     expect(te.image).to be_present
@@ -98,7 +98,9 @@ feature 'Timeline Builder' do
       # Close the PNotify message to ensure no overlap with other elements under test
       find('.ui-pnotify').click
 
-      click_button 'Add Event'
+      first('.founder-dashboard-target__container').click
+
+      click_button 'Submit'
 
       # File fields empty.
       find('.timeline-builder__upload-section-tab.file-upload').click
@@ -124,33 +126,14 @@ feature 'Timeline Builder' do
 
       # Description just a bunch of spaces.
       find('.timeline-builder__textarea').set('   ')
-      click_button('Submit')
+      first('.js-timeline-builder__submit-button').click
       expect(page).to have_content('Please add a summary describing the event.')
 
       find('.timeline-builder__textarea').set('description text')
 
-      # Timeline event type missing.
-      click_button('Submit')
-      expect(page).to have_content('Please select an appropriate timeline event type.')
-
       # Facebook connect missing
       find('.timeline-builder__social-bar-toggle-switch-handle').click
       expect(page).to have_content('Feature Unavailable!')
-    end
-
-    scenario 'Level 0 founder tries to toggle Facebook connect' do
-      # easy hack to mimic a Level 0 founder's Facebook share eligibility
-      expect_any_instance_of(Founder).to receive(:facebook_share_eligibility).and_return('not_admitted')
-
-      sign_in_user founder.user, referer: student_dashboard_path
-
-      # Close the PNotify message to ensure no overlap with other elements under test
-      find('.ui-pnotify').click
-
-      click_button 'Add Event'
-      find('.timeline-builder__social-bar-toggle-switch-handle').click
-      expect(page).to have_content('Feature Unavailable!')
-      expect(page).to have_content('Facebook share is only available for founders above Level 0!')
     end
   end
 end

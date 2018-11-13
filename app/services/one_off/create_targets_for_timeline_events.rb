@@ -17,7 +17,10 @@ module OneOff
           archived: true
         )
 
-        timeline_event_collection = TimelineEvent.where(target_id: nil).where(timeline_event_type: timeline_event_type)
+        timeline_event_collection = TimelineEvent.includes(:target)
+          .where(targets: { id: nil })
+          .joins(:timeline_event_type)
+          .where(timeline_event_type: timeline_event_type)
 
         # rubocop:disable Rails/SkipsModelValidations
         timeline_event_collection.update_all(target_id: target.id)
@@ -28,7 +31,7 @@ module OneOff
     private
 
     def timeline_event_type_collection
-      TimelineEvent.joins(:timeline_event_type).where(target_id: nil).distinct(:key).pluck(:key)
+      TimelineEvent.includes(:target).where(targets: { id: nil }).joins(:timeline_event_type).distinct.pluck("timeline_event_types.key")
     end
 
     def level_one_target_group

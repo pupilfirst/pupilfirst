@@ -2,14 +2,10 @@ class TimelineEventDecorator < Draper::Decorator
   delegate_all
 
   def detailed_description
-    target.present? ? description_with_target_prefix : description
+    "After #{target_prefix} <em>#{target.title}:</em>\n #{description}"
   end
 
   private
-
-  def description_with_target_prefix
-    "After #{target_prefix} <em>#{target.title}:</em>\n #{description}"
-  end
 
   def target_prefix
     case target.target_action_type

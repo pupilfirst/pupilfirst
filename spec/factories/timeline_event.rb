@@ -7,6 +7,7 @@ FactoryBot.define do
     timeline_event_type
     status { TimelineEvent::STATUS_PENDING }
     status_updated_at { Time.zone.now }
+    target
 
     factory :timeline_event_with_image do
       image { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-thumbnail.png')) }

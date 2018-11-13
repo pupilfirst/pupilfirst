@@ -21,12 +21,6 @@ Rails.application.config.content_security_policy do |policy|
     { frame: 'https://www.facebook.com' }
   end
 
-  def gtm_csp
-    {
-      style: 'https://tagmanager.google.com/debug/'
-    }
-  end
-
   def instamojo_csp
     {
       frame: %w[https://test.instamojo.com/ https://www.instamojo.com/]
@@ -69,7 +63,7 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   def style_sources
-    ['fonts.googleapis.com', 'https://sv-assets.sv.co', gtm_csp[:style]]
+    ['fonts.googleapis.com', 'https://sv-assets.sv.co']
   end
 
   def connect_sources

@@ -4,7 +4,7 @@ class TimelineEvent < ApplicationRecord
   belongs_to :startup
   belongs_to :founder
   belongs_to :timeline_event_type
-  belongs_to :target, optional: true
+  belongs_to :target
 
   has_one :karma_point, as: :source, dependent: :destroy, inverse_of: :source
   has_many :startup_feedback, dependent: :destroy
@@ -19,7 +19,8 @@ class TimelineEvent < ApplicationRecord
 
   serialize :links
 
-  delegate :founder_event?, :title, to: :timeline_event_type
+  delegate :founder_event?, to: :timeline_event_type
+  delegate :title, to: :target
 
   MAX_DESCRIPTION_CHARACTERS = 500
 

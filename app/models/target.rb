@@ -191,6 +191,10 @@ class Target < ApplicationRecord
     session_at.blank?
   end
 
+  def founder_event?
+    role == ROLE_FOUNDER
+  end
+
   def rubric?
     target_skills.exists? || rubric_url.present?
   end

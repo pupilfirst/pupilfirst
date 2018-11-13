@@ -1,6 +1,5 @@
 setupSelect2 = ->
   $('#target_prerequisite_target_ids').select2({placeholder: 'Select prerequisite targets'})
-  $('#target_timeline_event_type_id').select2()
   $('#target_target_group_id').select2()
 
   $('#target_tag_list').select2(
@@ -12,7 +11,6 @@ setupSelect2 = ->
 destroySelect2 = ->
   $('#target_tag_list').select2('destroy')
   $('#target_target_group_id').select2('destroy')
-  $('#target_timeline_event_type_id').select2('destroy')
   $('#target_prerequisite_target_ids').select2('destroy')
 
 $(document).on 'turbolinks:load', ->

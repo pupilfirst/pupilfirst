@@ -1,0 +1,9 @@
+---
+timestamp: '2018-11-14T11:51:40Z'
+title: Startups are now mandatorily required for founders.
+trello: https://trello.com/c/7Vb4tVvA
+private: true
+description: This turns off the optional flag in founder to startup relationship,
+  and alters a basic behavior in the application. Specs and some services have been
+  updated, but this is a potentially fragile change.
+category: operations

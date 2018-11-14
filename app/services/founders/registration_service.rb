@@ -7,8 +7,8 @@ module Founders
 
     def register
       Founder.transaction do
-        founder = create_founder
-        create_blank_startup(founder)
+        startup = create_blank_startup
+        founder = create_founder(startup)
         create_intercom_applicant(founder)
         send_login_email(founder)
         founder
@@ -17,31 +17,31 @@ module Founders
 
     private
 
-    def create_founder
-      founder = Founder.where(email: @founder_params[:email]).first_or_create!(user: user)
-
-      founder.update!(
+    def create_founder(startup)
+      founder = Founder.where(email: @founder_params[:email]).first_or_create!(
+        user: user,
         name: @founder_params[:name],
         email: @founder_params[:email],
         phone: @founder_params[:phone],
         reference: @founder_params[:reference],
         college_id: @founder_params[:college_id],
         college_text: @founder_params[:college_text],
-        coder: @founder_params[:coder]
+        coder: @founder_params[:coder],
+        startup: startup
       )
+
+      startup.update!(team_lead: founder)
 
       founder
     end
 
-    def create_blank_startup(founder)
+    def create_blank_startup
       name = Startups::ProductNameGeneratorService.new.fun_name
       startup = Startup.create!(product_name: name, level: Level.zero)
 
       Admissions::UpdateStageService.new(startup, Startup::ADMISSION_STAGE_SIGNED_UP).execute
 
-      # Update startup info of founder
-      founder.update!(startup: startup)
-      startup.update!(team_lead: founder)
+      startup
     end
 
     def user

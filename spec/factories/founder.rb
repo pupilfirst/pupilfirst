@@ -6,6 +6,7 @@ FactoryBot.define do
     sequence(:phone) { |n| (9_876_543_210 + n).to_s }
     college
     reference { Founder.valid_references.sample }
+    startup
 
     trait(:connected_to_slack) do
       slack_user_id { 'SLACK_USER_ID' }

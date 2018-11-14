@@ -107,7 +107,7 @@ class Startup < ApplicationRecord
     joins(:startup_categories).where(startup_categories: { id: category.id })
   end
 
-  has_many :founders, dependent: :nullify
+  has_many :founders, dependent: :restrict_with_error
   has_many :invited_founders, class_name: 'Founder', foreign_key: 'invited_startup_id', inverse_of: :invited_startup, dependent: :restrict_with_error
 
   has_and_belongs_to_many :startup_categories do

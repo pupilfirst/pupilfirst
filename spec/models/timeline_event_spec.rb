@@ -12,10 +12,9 @@ RSpec.describe TimelineEvent, type: :model do
     end
 
     context 'when timeline event has an attachment' do
-      let(:timeline_event_type) { create :timeline_event }
       let(:timeline_event_file) { create :timeline_event_file }
 
-      subject { create :timeline_event, timeline_event_type: timeline_event_type, timeline_event_files: [timeline_event_file] }
+      subject { create :timeline_event, timeline_event_files: [timeline_event_file] }
 
       before do
         subject.verify!

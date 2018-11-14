@@ -26,7 +26,6 @@ export default class TimelineBuilder extends React.Component {
       showDateError: false,
       showEventTypeError: false,
       showSelectedFileError: false,
-      timelineEventTypeId: this.props.selectedTimelineEventTypeId,
       description: ""
     };
 
@@ -185,8 +184,6 @@ export default class TimelineBuilder extends React.Component {
       });
     } else if (type == "date") {
       this.setState({ date: properties.value });
-    } else if (type == "timeline_event_type") {
-      this.setState({ timelineEventTypeId: properties.id });
     } else {
       console.warn("Unhandled attachment type: ", type);
     }
@@ -272,10 +269,6 @@ export default class TimelineBuilder extends React.Component {
         "timeline_event[files_metadata]",
         JSON.stringify(this.state.files)
       );
-      formData.append(
-        "timeline_event[timeline_event_type_id]",
-        this.state.timelineEventTypeId
-      );
       formData.append("timeline_event[share_on_facebook]", share_on_facebook);
 
       // Submit form data using AJAX and set a progress handler function.
@@ -341,11 +334,6 @@ export default class TimelineBuilder extends React.Component {
       return false;
     }
 
-    if (this.state.timelineEventTypeId == null) {
-      this.setState({ showEventTypeError: true });
-      return false;
-    }
-
     return true;
   }
 
@@ -394,31 +382,11 @@ export default class TimelineBuilder extends React.Component {
     $(".timeline-builder").modal("hide");
   }
 
+  //ToDO: Investigate usage and add Sample Text
   sampleText() {
-    if (this.state.timelineEventTypeId == null) {
       return null;
-    } else {
-      let timelineEventTypeId = this.state.timelineEventTypeId.toString();
-
-      for (let role in this.props.timelineEventTypes) {
-        let role_types = this.props.timelineEventTypes[role];
-
-        if (timelineEventTypeId in role_types) {
-          return role_types[timelineEventTypeId]["sample"];
-        }
-      }
-
-      return null;
-    }
   }
 
-  timelineEventTypeIdForSelect() {
-    if (this.state.timelineEventTypeId == null) {
-      return "";
-    } else {
-      return this.state.timelineEventTypeId.toString();
-    }
-  }
 
   updateDescription() {
     let description = $(".js-timeline-builder__textarea")
@@ -504,7 +472,6 @@ export default class TimelineBuilder extends React.Component {
                 formClickedCB={this.toggleForm}
                 currentForm={this.currentForm()}
                 submitCB={this.submit}
-                timelineEventTypes={this.props.timelineEventTypes}
                 addDataCB={this.addData}
                 coverImage={this.state.coverImage}
                 imageButtonKey={this.state.imageButtonKey}
@@ -514,7 +481,6 @@ export default class TimelineBuilder extends React.Component {
                 showDateError={this.state.showDateError}
                 resetErrorsCB={this.resetErrors}
                 showEventTypeError={this.state.showEventTypeError}
-                timelineEventTypeId={this.timelineEventTypeIdForSelect()}
                 submissionError={this.state.submissionError}
                 submissionSuccessful={this.state.submissionSuccessful}
               />
@@ -527,8 +493,6 @@ export default class TimelineBuilder extends React.Component {
 }
 
 TimelineBuilder.propTypes = {
-  timelineEventTypes: PropTypes.object,
-  selectedTimelineEventTypeId: PropTypes.number,
   targetId: PropTypes.number,
   facebookShareEligibility: PropTypes.string,
   authenticityToken: PropTypes.string,

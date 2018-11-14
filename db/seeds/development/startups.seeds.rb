@@ -1,6 +1,6 @@
 require_relative 'helper'
 
-after 'development:levels', 'development:founders', 'development:timeline_event_types', 'development:categories' do
+after 'development:levels', 'development:founders', 'development:categories' do
   puts 'Seeding startups'
 
   # Level 0 startup.

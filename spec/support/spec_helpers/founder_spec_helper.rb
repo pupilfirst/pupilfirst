@@ -26,8 +26,7 @@ module FounderSpecHelper
       *traits,
       founder: founder,
       target: target,
-      startup: founder.startup,
-      timeline_event_type: target.timeline_event_type
+      startup: founder.startup
     )
   end
 end

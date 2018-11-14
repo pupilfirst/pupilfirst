@@ -4,7 +4,6 @@ FactoryBot.define do
     founder { startup.team_lead }
     description { Faker::Lorem.words(10).join ' ' }
     event_on { 1.month.from_now }
-    timeline_event_type
     status { TimelineEvent::STATUS_PENDING }
     status_updated_at { Time.zone.now }
     target

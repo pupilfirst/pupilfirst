@@ -1,6 +1,6 @@
 require_relative 'helper'
 
-after 'development:startups', 'development:target_groups', 'development:targets', 'development:timeline_event_types' do
+after 'development:startups', 'development:target_groups', 'development:targets' do
   puts 'Seeding timeline_events'
 
   avengers_startup = Startup.find_by(product_name: 'SuperHeroes')
@@ -9,27 +9,26 @@ after 'development:startups', 'development:target_groups', 'development:targets'
   status_pending = TimelineEvent::STATUS_PENDING
   status_needs_improvement = TimelineEvent::STATUS_NEEDS_IMPROVEMENT
 
-  # Add a one-liner verified entry for avengers
+  # Add a verified timeline event for avengers
   events_list = [
-    [avengers_startup, 'one_liner', 'ironman@example.org', 'We came up with a new one-liner for avengers: Everyone creates the thing they fear.', status_verified]
+    [avengers_startup, 'ironman@example.org', 'We came up with a new one-liner for avengers: Everyone creates the thing they fear.', status_verified]
   ]
 
-  # Add a pending 'team-formed' pending entry for avengers
+  # Add a pending timeline event pending entry for avengers
   events_list += [
-    [avengers_startup, 'team_formed', 'ironman@example.org', 'We formed our team to fight the evil!', status_pending]
+    [avengers_startup, 'ironman@example.org', 'We formed our team to fight the evil!', status_pending]
   ]
 
-  # Add a 'new_product_deck' for avengers which needs improvement, and a pending 'improved' event.
+  # Add a timeline event for avengers which needs improvement, and a pending 'improved' event.
   events_list += [
-    [avengers_startup, 'new_product_deck', 'ironman@example.org', 'We have a presentation about us!', status_needs_improvement],
-    [avengers_startup, 'new_product_deck', 'ironman@example.org', 'We an improved presentation. This time as an attachment!', status_pending]
+    [avengers_startup, 'ironman@example.org', 'We have a presentation about us!', status_needs_improvement],
+    [avengers_startup, 'ironman@example.org', 'We an improved presentation. This time as an attachment!', status_pending]
   ]
 
   # create all events in the events_list
-  events_list.each do |startup, type_key, founder_email, description, status|
+  events_list.each do |startup, founder_email, description, status|
     TimelineEvent.create!(
       startup: startup,
-      timeline_event_type: TimelineEventType.find_by(key: type_key),
       founder: Founder.find_by(email: founder_email),
       event_on: Time.now,
       description: description,
@@ -40,12 +39,12 @@ after 'development:startups', 'development:target_groups', 'development:targets'
 
   # Mark new product deck event as improvement of old one.
   old_event = avengers_startup.timeline_events.find_by(
-    timeline_event_type: TimelineEventType.find_by(key: 'new_product_deck'),
+    description: 'We have a presentation about us!',
     status: status_needs_improvement
   )
 
   avengers_startup.timeline_events.find_by(
-    timeline_event_type: TimelineEventType.find_by(key: 'new_product_deck'),
+    description: 'We an improved presentation. This time as an attachment!',
     status: status_pending
   ).update!(improvement_of: old_event)
 
@@ -58,7 +57,6 @@ after 'development:startups', 'development:target_groups', 'development:targets'
       TimelineEvent.create!(
         startup: avengers_startup,
         target: target,
-        timeline_event_type: target.timeline_event_type,
         founder: avengers_startup.team_lead,
         event_on: Time.now,
         description: Faker::Lorem.paragraph,
@@ -75,7 +73,6 @@ after 'development:startups', 'development:target_groups', 'development:targets'
 
   TimelineEvent.create!(
     startup: ios_startup,
-    timeline_event_type: TimelineEventType.find_by(key: 'general_submission'),
     founder: ios_founder,
     event_on: Time.now,
     description: 'This is a seeded pending submission for the iOS startup',

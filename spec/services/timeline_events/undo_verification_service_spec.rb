@@ -13,8 +13,7 @@ describe TimelineEvents::UndoVerificationService do
     end
 
     context 'when the timeline event has status other than pending' do
-      let(:timeline_event_type) { create :timeline_event_type }
-      let(:timeline_event) { create :timeline_event, :verified, timeline_event_type: timeline_event_type }
+      let(:timeline_event) { create :timeline_event, :verified }
 
       it 'resets the status to pending' do
         expect { subject.execute }.to change { timeline_event.reload.status }
@@ -33,7 +32,7 @@ describe TimelineEvents::UndoVerificationService do
       end
 
       context 'when timeline event updated startup profile' do
-        let(:timeline_event) { create :timeline_event, status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT, timeline_event_type: timeline_event_type }
+        let(:timeline_event) { create :timeline_event, status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT }
 
         before do
           timeline_event.startup.update!(

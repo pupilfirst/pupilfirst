@@ -1,78 +1,73 @@
 module Targets
   class StatusService
+    STATUS_PASSED = :passed
+    STATUS_FAILED = :failed
+    STATUS_SUBMITTED = :submitted
+    STATUS_PENDING = :pending
+    STATUS_LEVEL_LOCKED = :level_locked
+    STATUS_PREREQUISITE_LOCKED = :prerequisite_locked
+    STATUS_MILESTONE_LOCKED = :milestone_locked
+
     def initialize(target, founder)
       @target = target
       @founder = founder
-      @level_number = founder.startup.level.number
     end
 
     def status
       return status_from_event if linked_event.present?
 
-      unavailable_or_pending?
-    end
-
-    # rubocop:disable Metrics/CyclomaticComplexity
-    def unavailable_or_pending?
-      # Non-submittables are no-brainers.
-      return Target::STATUS_UNAVAILABLE if @target.submittability == Target::SUBMITTABILITY_NOT_SUBMITTABLE
-
-      # So are targets in higher levels
-      return Target::STATUS_LEVEL_LOCKED if @target.level.number > @level_number
-
-      # For milestone targets, ensure last levels milestones where completed
-      if @target.target_group.milestone? && @target.level.number == @level_number
-        return Target::STATUS_PENDING_MILESTONE unless previous_milestones_completed?
-      end
-
-      return Target::STATUS_UNAVAILABLE if pending_prerequisites.exists?
-
-      Target::STATUS_PENDING
-    end
-    # rubocop:enable Metrics/CyclomaticComplexity
-
-    def previous_milestones_completed?
-      @previous_milestones_completed ||= begin
-        return true unless @level_number > 1
-
-        previous_level = @founder.startup.school.levels.find_by(number: @level_number - 1)
-        target_groups = previous_level.target_groups.where(milestone: true)
-        milestone_targets = Target.where(target_group: target_groups)
-        completed_target_ids = TimelineEvent.verified_or_needs_improvement.where(target: milestone_targets).pluck('target_id').uniq
-        @target.id.in?(completed_target_ids)
-      end
-    end
-
-    def completed_prerequisites
-      Target.where(id: completed_prerequisites_ids)
-    end
-
-    def pending_prerequisites
-      @target.prerequisite_targets.where.not(id: completed_prerequisites_ids)
+      reason_to_lock || STATUS_PENDING
     end
 
     private
 
     def linked_event
-      @target.latest_linked_event(@founder)
+      @linked_event ||= @target.latest_linked_event(@founder)
     end
 
     def status_from_event
-      return  Target::STATUS_COMPLETE if linked_event.verified?
-      return  Target::STATUS_NOT_ACCEPTED if linked_event.not_accepted?
+      # TODO: Replace 'evaluated_at' with `passed_at` and write one-off to fix existing data.
+      return STATUS_PASSED if linked_event.passed_at?
 
-      linked_event.needs_improvement? ? Target::STATUS_NEEDS_IMPROVEMENT : Target::STATUS_SUBMITTED
+      linked_event.evaluator_id? ? STATUS_FAILED : STATUS_SUBMITTED
     end
 
-    def owner
-      @owner ||= @target.founder_role? ? @founder : @founder.startup
-    end
+    def reason_to_lock
+      @reason_to_lock ||= begin
+        return STATUS_LEVEL_LOCKED if target_level_number > founder_level_number
 
-    def completed_prerequisites_ids
-      @completed_prerequisites_ids ||= begin
-        events = @founder.startup.timeline_events.verified_or_needs_improvement
-        events.where(target: @target.prerequisite_targets.pluck(:id)).select(:target_id).distinct
+        return STATUS_MILESTONE_LOCKED if current_level_milestone? && previous_milestones_incomplete?
+
+        prerequisites_incomplete? ? STATUS_PREREQUISITE_LOCKED : nil
       end
+    end
+
+    def founder_level_number
+      @founder_level_number ||= @founder.level.number
+    end
+
+    def target_level_number
+      @target_level_number ||= @target.level.number
+    end
+
+    def current_level_milestone?
+      @target.target_group.milestone? && target_level_number == founder_level_number
+    end
+
+    def previous_milestones_incomplete?
+      return false if founder_level_number == 1
+
+      previous_level = @target.school.levels.where(number: founder_level_number - 1)
+      milestone_targets = Target.where(target_group: TargetGroup.where(level: previous_level, milestone: true))
+      # TODO: Optimize this using a 'latest_submissions' join table.
+      milestone_targets.any? { |target| target.latest_linked_event(@founder).passed_at.nil? }
+    end
+
+    def prerequisites_incomplete?
+      @target.prerequisite_targets.any? { |target| target.latest_linked_event(@founder).passed_at.nil? }
+
+      # TODO: Optimize this using a 'latest_submissions' join table.
+      # @target.prerequisite_targets.joins(latest_submissions: :timeline_event).where(latest_submissions: { founder_id: @founder.id }).where(timeline_events: { passed_at: nil }).exists?
     end
   end
 end

@@ -20,29 +20,6 @@ describe Founders::AcceptInvitationService do
       end
     end
 
-    context 'when founder does not belongs to a startup' do
-      let(:original_startup) { nil }
-
-      it 'accepts the invitation' do
-        Founders::AcceptInvitationService.new(founder).execute
-        expect(founder.reload.startup).to eq(invited_startup)
-      end
-
-      it 'confirms the user' do
-        Founders::AcceptInvitationService.new(founder).execute
-        expect(founder.reload.user.confirmed_at).to be_present
-      end
-
-      context 'when the invited startup is now beyond level 0' do
-        let(:invited_startup) { create :startup }
-
-        it 'accepts the invitation' do
-          Founders::AcceptInvitationService.new(founder).execute
-          expect(founder.reload.startup).to eq(invited_startup)
-        end
-      end
-    end
-
     context 'when founder belongs to a startup at level 0' do
       let(:original_startup) { create :level_0_startup }
 

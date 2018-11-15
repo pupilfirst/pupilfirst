@@ -112,11 +112,6 @@ feature 'Founder Dashboard' do
 
     find('.founder-dashboard-actionbar__box').click
 
-    # Open the timeline builder modal.
-    click_button 'Add Event'
-    expect(page).to have_selector('.timeline-builder__popup-body', visible: true)
-    find('.timeline-builder__modal-close').click
-
     # Check whether there's correct number of target groups in the page.
     expect(page).to have_selector('.founder-dashboard-target-group__box', count: 2)
 

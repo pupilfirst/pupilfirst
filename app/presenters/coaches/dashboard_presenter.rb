@@ -66,7 +66,7 @@ module Coaches
     end
 
     def title(timeline_event)
-      timeline_event.target.present? ? timeline_event.target.level.short_name + ' | ' + timeline_event.target.title : timeline_event.title
+      timeline_event.target.level.short_name + ' | ' + timeline_event.target.title
     end
   end
 end

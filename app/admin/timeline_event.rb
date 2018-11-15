@@ -48,10 +48,8 @@ ActiveAdmin.register TimelineEvent do
     column 'Founder', :founder
 
     column('Linked Target') do |timeline_event|
-      if timeline_event.target.present?
-        a href: admin_target_url(timeline_event.target) do
-          timeline_event.target.title
-        end
+      a href: admin_target_url(timeline_event.target) do
+        timeline_event.target.title
       end
     end
 
@@ -212,38 +210,6 @@ ActiveAdmin.register TimelineEvent do
     )
   end
 
-  member_action :unlink_target, method: :post do
-    timeline_event = TimelineEvent.find params[:id]
-    timeline_event.update! target: nil
-    flash[:success] = 'Target unlinked.'
-    redirect_to action: :show
-  end
-
-  member_action :link_target, method: :post do
-    timeline_event = TimelineEvent.find params[:id]
-
-    # If a target has been picked, complete it.
-    if params[:target_id].present?
-      target = Target.find(params[:target_id])
-
-      # Link the target to event.
-      timeline_event.update(target: target)
-
-      # Assign as improved_timeline_event, if applicable
-      TimelineEvents::MarkAsImprovedTargetService.new(timeline_event).execute
-
-      flash[:success] = 'Target has been linked.' if params[:ajax] != 'true'
-    elsif params[:ajax] != 'true'
-      flash[:error] = 'A target must be picked for linking.'
-    end
-
-    if params[:ajax] == 'true'
-      head :ok
-    else
-      redirect_to action: :show
-    end
-  end
-
   collection_action :founders_for_startup do
     @startup = Startup.find params[:startup_id]
     render 'founders_for_startup.json.erb'
@@ -327,14 +293,8 @@ ActiveAdmin.register TimelineEvent do
       row :status_updated_at
 
       row('Linked Target') do
-        if timeline_event.target.present?
-          a href: admin_target_url(timeline_event.target) do
-            timeline_event.target.title
-          end
-
-          span class: 'wrap-with-paranthesis' do
-            link_to 'Unlink', unlink_target_admin_timeline_event_path, method: :post, data: { confirm: 'Are you sure?' }
-          end
+        a href: admin_target_url(timeline_event.target) do
+          timeline_event.target.title
         end
       end
 

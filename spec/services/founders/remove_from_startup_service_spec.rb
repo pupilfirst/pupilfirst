@@ -12,14 +12,14 @@ describe Founders::RemoveFromStartupService do
       it 'removes the founder from the startup after re-assigning team lead' do
         subject.execute
         expect(startup.reload.team_lead).to eq(founder_2)
-        expect(founder.reload.startup).to eq(nil)
+        expect(founder.reload.exited).to eq(true)
       end
     end
 
     context 'when the startup only has a single founder' do
       before do
         # Remove the second founder from the startup
-        founder_2.update!(startup: nil)
+        founder_2.destroy
       end
 
       it 'raises exception' do

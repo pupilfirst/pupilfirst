@@ -100,10 +100,11 @@ feature 'Resources' do
         expect(page).to have_text('Please do not share these resources outside your founding team')
 
         # public resources + resources upto his level should be shown
-        expect(page).to have_selector('.resource-box', count: 3)
+        expect(page).to have_selector('.resource-box', count: 4)
         expect(page).to have_text(public_resource.title[0..10])
         expect(page).to have_text(level_0_resource.title[0..10])
         expect(page).to have_text(level_1_resource.title[0..10])
+        expect(page).to have_text(level_2_resource.title[0..10])
 
         # Should not have access to resource in school 2.
         visit resource_path(l2_s2_resource)

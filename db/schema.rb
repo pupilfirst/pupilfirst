@@ -174,6 +174,8 @@ ActiveRecord::Schema.define(version: 2018_11_15_090718) do
   create_table "enrollments", force: :cascade do |t|
     t.bigint "founder_id"
     t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["founder_id", "user_id"], name: "index_enrollments_on_founder_id_and_user_id", unique: true
     t.index ["user_id"], name: "index_enrollments_on_user_id"
   end

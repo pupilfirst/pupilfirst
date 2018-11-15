@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_19_070939) do
+ActiveRecord::Schema.define(version: 2018_11_15_071555) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -302,6 +302,18 @@ ActiveRecord::Schema.define(version: 2018_10_19_070939) do
     t.index ["founder_id"], name: "index_karma_points_on_founder_id"
     t.index ["source_id"], name: "index_karma_points_on_source_id"
     t.index ["startup_id"], name: "index_karma_points_on_startup_id"
+  end
+
+  create_table "latest_submission_records", force: :cascade do |t|
+    t.bigint "founder_id"
+    t.bigint "target_id"
+    t.bigint "timeline_event_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["founder_id", "target_id"], name: "index_latest_submission_records_on_founder_id_and_target_id", unique: true
+    t.index ["founder_id"], name: "index_latest_submission_records_on_founder_id"
+    t.index ["target_id"], name: "index_latest_submission_records_on_target_id"
+    t.index ["timeline_event_id"], name: "index_latest_submission_records_on_timeline_event_id"
   end
 
   create_table "levels", id: :serial, force: :cascade do |t|
@@ -774,6 +786,9 @@ ActiveRecord::Schema.define(version: 2018_10_19_070939) do
   add_foreign_key "faculty", "levels"
   add_foreign_key "founders", "colleges"
   add_foreign_key "founders", "users"
+  add_foreign_key "latest_submission_records", "founders"
+  add_foreign_key "latest_submission_records", "targets"
+  add_foreign_key "latest_submission_records", "timeline_events"
   add_foreign_key "levels", "schools"
   add_foreign_key "payments", "founders"
   add_foreign_key "payments", "startups"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_15_080149) do
+ActiveRecord::Schema.define(version: 2018_11_15_085253) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -635,6 +635,7 @@ ActiveRecord::Schema.define(version: 2018_11_15_080149) do
     t.string "session_by"
     t.string "call_to_action"
     t.text "rubric_description"
+    t.boolean "resubmittable", default: true
     t.index ["archived"], name: "index_targets_on_archived"
     t.index ["faculty_id"], name: "index_targets_on_faculty_id"
     t.index ["key"], name: "index_targets_on_key"

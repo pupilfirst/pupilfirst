@@ -1,9 +1,9 @@
 module Founders
   class RemoveFromStartupService
     NoOtherFoundersInStartupException = Class.new(StandardError)
+
     def initialize(founder)
       @founder = founder
-      @startup = founder.startup
     end
 
     def execute
@@ -13,17 +13,21 @@ module Founders
 
     private
 
+    def startup
+      @startup ||= @founder.startup
+    end
+
     def assign_new_team_lead
-      team_lead_candidate = @startup.founders.where.not(id: @founder.id).first
+      team_lead_candidate = startup.founders.where.not(id: @founder.id).first
       raise NoOtherFoundersInStartupException if team_lead_candidate.blank?
 
-      @startup.update!(team_lead: team_lead_candidate)
+      startup.update!(team_lead: team_lead_candidate)
     end
 
     def remove_from_startup
-      raise NoOtherFoundersInStartupException if @startup.founders.count == 1
+      raise NoOtherFoundersInStartupException if startup.founders.count == 1
 
-      @founder.update!(startup_id: nil)
+      @founder.update!(exited: true)
     end
   end
 end

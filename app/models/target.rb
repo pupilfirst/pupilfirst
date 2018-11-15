@@ -149,15 +149,6 @@ class Target < ApplicationRecord
     errors[:faculty_id] << 'is required for a vanilla target'
   end
 
-  validate :target_must_have_evaluation_criteria
-
-  def target_must_have_evaluation_criteria
-    return if submittability.in?(Target.non_gradable_submittability_values)
-    return if evaluation_criteria.exists?
-
-    errors[:base] << 'Vanilla targets require at least one evaluation criterion.'
-  end
-
   validate :same_school_for_target_and_evaluation_criteria
 
   def same_school_for_target_and_evaluation_criteria

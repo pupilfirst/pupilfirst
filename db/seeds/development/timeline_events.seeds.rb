@@ -5,58 +5,31 @@ after 'development:founders', 'development:targets', 'development:timeline_event
 
   avengers = Startup.find_by(product_name: 'The Avengers')
 
-  status_verified = TimelineEvent::STATUS_VERIFIED
-  status_pending = TimelineEvent::STATUS_PENDING
-  status_needs_improvement = TimelineEvent::STATUS_NEEDS_IMPROVEMENT
-
-  # Add a submission for 'The Avengers' which needs improvement, and a pending 'improved' event.
-  avenger_events = [
-    ['new_product_deck', 'ironman@example.org', 'We have a presentation about us!', status_needs_improvement],
-    ['new_product_deck', 'ironman@example.org', 'We an improved presentation.', status_pending]
-  ]
-
-  avenger_target = avengers.school.targets.live.first
-
-  # Create all events for 'The Avenger'
-  avenger_events.each do |type_key, founder_email, description, status|
-    TimelineEvent.create!(
-      startup: avengers,
-      timeline_event_type: TimelineEventType.find_by(key: type_key),
-      founder: Founder.find_by(email: founder_email),
+  def complete_target(target, startup)
+    te = TimelineEvent.create!(
+      startup: startup,
+      target: target,
+      timeline_event_type: target.timeline_event_type,
+      founder: startup.team_lead,
       event_on: Time.now,
-      description: description,
-      status: status,
-      target: avenger_target
+      description: Faker::Lorem.paragraph,
+      status_updated_at: Time.now
     )
+
+    # Create timeline_event_grades
+
+    pass_grade = rand(target.school.pass_grade..target.school.max_grade)
+
+    te.evaluation_criteria.each do |ec|
+      te.timeline_event_grades.create!(evaluation_criterion: ec, grade: pass_grade)
+    end
   end
-
-  # Mark new product deck event as improvement of old one.
-  old_event = avengers.timeline_events.find_by(
-    target: avenger_target,
-    status: status_needs_improvement
-  )
-
-  avengers.timeline_events.find_by(
-    target: avenger_target,
-    status: status_pending
-  ).update!(improvement_of: old_event)
 
   # Complete all Level 1 and Level 2 targets for 'The Avengers'.
   [1, 2].each do |level_number|
     Target.joins(target_group: :level).where(levels: { number: level_number, school_id: avengers.school.id }).each do |target|
-      score = [1.0, 1.5, 2.0, 2.5, 3.0].sample
 
-      TimelineEvent.create!(
-        startup: avengers,
-        target: target,
-        timeline_event_type: target.timeline_event_type,
-        founder: avengers.team_lead,
-        event_on: Time.now,
-        description: Faker::Lorem.paragraph,
-        status: status_verified,
-        status_updated_at: Time.now,
-        score: score
-      )
+      complete_target(target, avengers)
     end
   end
 
@@ -70,7 +43,7 @@ after 'development:founders', 'development:targets', 'development:timeline_event
     founder: ios_founder,
     event_on: Time.now,
     description: 'This is a seeded pending submission for the iOS startup',
-    status: status_pending,
     target: ios_startup.school.targets.live.first
   )
+
 end

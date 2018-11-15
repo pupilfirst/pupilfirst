@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_15_071555) do
+ActiveRecord::Schema.define(version: 2018_11_15_090718) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -169,6 +169,13 @@ ActiveRecord::Schema.define(version: 2018_11_15_071555) do
     t.index ["answer_option_id"], name: "index_english_quiz_submissions_on_answer_option_id"
     t.index ["english_quiz_question_id"], name: "index_english_quiz_submissions_on_english_quiz_question_id"
     t.index ["quizee_id"], name: "index_english_quiz_submissions_on_quizee_id"
+  end
+
+  create_table "enrollments", force: :cascade do |t|
+    t.bigint "founder_id"
+    t.bigint "user_id"
+    t.index ["founder_id", "user_id"], name: "index_enrollments_on_founder_id_and_user_id", unique: true
+    t.index ["user_id"], name: "index_enrollments_on_user_id"
   end
 
   create_table "faculty", id: :serial, force: :cascade do |t|
@@ -783,6 +790,8 @@ ActiveRecord::Schema.define(version: 2018_11_15_071555) do
   add_foreign_key "connect_slots", "faculty"
   add_foreign_key "english_quiz_submissions", "answer_options"
   add_foreign_key "english_quiz_submissions", "english_quiz_questions"
+  add_foreign_key "enrollments", "founders"
+  add_foreign_key "enrollments", "users"
   add_foreign_key "faculty", "levels"
   add_foreign_key "founders", "colleges"
   add_foreign_key "founders", "users"

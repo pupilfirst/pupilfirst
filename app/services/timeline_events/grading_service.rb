@@ -19,7 +19,7 @@ module TimelineEvents
         end
 
         @timeline_event.update!(
-          evaluated_at: Time.now,
+          passed_at: (failed?(grades) ? nil : Time.now),
           evaluator: faculty
         )
       end
@@ -47,6 +47,14 @@ module TimelineEvents
 
     def max_grade
       @max_grade ||= @timeline_event.founder.school.max_grade
+    end
+
+    def pass_grade
+      @pass_grade ||= @timeline_event.founder.school.pass_grade
+    end
+
+    def failed?(grades)
+      grades.values.any? { |grade| grade < pass_grade }
     end
   end
 end

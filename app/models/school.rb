@@ -26,7 +26,7 @@ class School < ApplicationRecord
   private
 
   def grade_labels_must_match_grades
-    return if grade_labels.keys.map(&:to_i) == [*1..max_grade]
+    return if grade_labels.is_a?(Hash) && grade_labels.keys.map(&:to_i) == [*1..max_grade]
 
     errors[:grade_labels] << 'do not match available grades'
   end

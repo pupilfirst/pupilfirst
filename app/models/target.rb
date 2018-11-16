@@ -19,7 +19,7 @@ class Target < ApplicationRecord
   STATUS_PENDING = :pending
   STATUS_UNAVAILABLE = :unavailable # This handles two cases: targets that are not submittable, and ones with prerequisites pending.
   STATUS_NOT_ACCEPTED = :not_accepted
-  STATUS_LEVEL_LOCKED = :level_locked # Target is of a higer level
+  STATUS_LEVEL_LOCKED = :level_locked # Target is of a higher level
   STATUS_PENDING_MILESTONE = :pending_milestone # Milestone targets of the previous level are incomplete
 
   UNSUBMITTABLE_STATUSES = [

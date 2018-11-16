@@ -27,38 +27,18 @@ class TimelineEvent < ApplicationRecord
 
   MAX_DESCRIPTION_CHARACTERS = 500
 
-  STATUS_PENDING = 'Pending'
-  STATUS_NEEDS_IMPROVEMENT = 'Needs Improvement'
-  STATUS_VERIFIED = 'Verified'
-  STATUS_NOT_ACCEPTED = 'Not Accepted'
-
-  def self.valid_statuses
-    [STATUS_VERIFIED, STATUS_PENDING, STATUS_NEEDS_IMPROVEMENT, STATUS_NOT_ACCEPTED]
-  end
-
   GRADE_GOOD = 'good'
   GRADE_GREAT = 'great'
   GRADE_WOW = 'wow'
 
-  validates :status, inclusion: { in: valid_statuses }
   validates :event_on, presence: true
   validates :description, presence: true
-
-  before_validation do
-    self.status_updated_at = Time.zone.now if status_changed?
-    self.status ||= STATUS_PENDING
-  end
 
   accepts_nested_attributes_for :timeline_event_files, allow_destroy: true
 
   scope :from_admitted_startups, -> { joins(:startup).merge(Startup.admitted) }
   scope :from_level_0_startups, -> { joins(:startup).merge(Startup.level_zero) }
   scope :not_dropped_out, -> { joins(:startup).merge(Startup.not_dropped_out) }
-  scope :verified, -> { where(status: STATUS_VERIFIED) }
-  scope :pending, -> { where(status: STATUS_PENDING) }
-  scope :needs_improvement, -> { where(status: STATUS_NEEDS_IMPROVEMENT) }
-  scope :not_accepted, -> { where(status: STATUS_NOT_ACCEPTED) }
-  scope :verified_or_needs_improvement, -> { where(status: [STATUS_VERIFIED, STATUS_NEEDS_IMPROVEMENT]) }
   scope :has_image, -> { where.not(image: nil) }
   scope :from_approved_startups, -> { joins(:startup).merge(Startup.approved) }
   scope :showcase, -> { includes(:timeline_event_type, :startup).verified.from_approved_startups.not_private.order('timeline_events.event_on DESC') }
@@ -138,36 +118,14 @@ class TimelineEvent < ApplicationRecord
   end
 
   def verify!
-    update!(status: STATUS_VERIFIED, status_updated_at: Time.zone.now)
-
     add_link_for_new_deck!
     add_link_for_new_wireframe!
     add_link_for_new_prototype!
     add_link_for_new_video!
   end
 
-  def verified?
-    status == STATUS_VERIFIED
-  end
-
-  def pending?
-    status == STATUS_PENDING
-  end
-
-  def needs_improvement?
-    status == STATUS_NEEDS_IMPROVEMENT
-  end
-
-  def not_accepted?
-    status == STATUS_NOT_ACCEPTED
-  end
-
   def reviewed?
-    status.in?([STATUS_VERIFIED, STATUS_NEEDS_IMPROVEMENT, STATUS_NOT_ACCEPTED])
-  end
-
-  def verified_or_needs_improvement?
-    verified? || needs_improvement?
+    timeline_event_grades.present?
   end
 
   def public_link?

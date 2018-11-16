@@ -61,7 +61,6 @@ class Startup < ApplicationRecord
   scope :agreement_signed, -> { where 'agreement_signed_at IS NOT NULL' }
   scope :agreement_live, -> { where('agreement_signed_at > ?', AGREEMENT_DURATION.years.ago) }
   scope :agreement_expired, -> { where('agreement_signed_at < ?', AGREEMENT_DURATION.years.ago) }
-  scope :timeline_verified, -> { joins(:timeline_events).where(timeline_events: { status: TimelineEvent::STATUS_VERIFIED }).distinct }
 
   # Custom scope to allow AA to filter by intersection of tags.
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
@@ -369,7 +368,7 @@ class Startup < ApplicationRecord
   end
 
   def timeline_verified?
-    approved? && timeline_events.verified.exists?
+    approved? && timeline_events.joins(:timeline_event_grades).exists?
   end
 
   def timeline_events_for_display(viewer)
@@ -387,7 +386,7 @@ class Startup < ApplicationRecord
   end
 
   # Update stage whenever startup is updated. Note that this is also triggered from TimelineEvent after_commit.
-  after_save :update_stage!
+  # after_save :update_stage!
 
   # Update stage stored in database. Do not trigger callbacks, to avoid callback loop.
   def update_stage!

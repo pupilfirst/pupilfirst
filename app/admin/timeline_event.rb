@@ -7,14 +7,11 @@ ActiveAdmin.register TimelineEvent do
   filter :timeline_event_type_title, as: :string
   filter :timeline_event_type_role_eq, as: :select, collection: -> { TimelineEventType.valid_roles }, label: 'Role'
   filter :founder_name, as: :string
-  filter :status, as: :select, collection: -> { TimelineEvent.valid_statuses }
   filter :evaluated
   filter :created_at
-  filter :status_updated_at
 
   scope :from_admitted_startups, default: true
   scope :from_level_0_startups
-  scope('Not Improved') { |scope| scope.needs_improvement.not_improved }
   scope :all
 
   config.sort_order = 'updated_at_desc'
@@ -53,66 +50,9 @@ ActiveAdmin.register TimelineEvent do
       end
     end
 
-    column :status do |timeline_event|
-      if timeline_event.verified?
-        "Verified on #{timeline_event.status_updated_at.strftime('%d/%m/%y')}"
-      elsif timeline_event.needs_improvement?
-        "Marked needs improvement on #{timeline_event.status_updated_at.strftime('%d/%m/%y')}"
-      else
-        timeline_event.status
-      end
-    end
-
     column :evaluated
 
     actions
-  end
-
-  member_action :quick_review, method: :post do
-    timeline_event = TimelineEvent.find(params[:id])
-    if timeline_event.pending?
-      status = {
-        needs_improvement: TimelineEvent::STATUS_NEEDS_IMPROVEMENT,
-        not_accepted: TimelineEvent::STATUS_NOT_ACCEPTED,
-        verified: TimelineEvent::STATUS_VERIFIED
-      }.fetch(params[:status].to_sym)
-
-      points = params[:points].present? ? params[:points].to_i : nil
-
-      begin
-        TimelineEvents::VerificationService.new(timeline_event).update_status(status, grade: params[:grade], skill_grades: params[:skill_grades].as_json, points: points)
-        head :ok
-      rescue TimelineEvents::ReviewInterfaceException => e
-        render json: { error: e.message }.to_json, status: :unprocessable_entity
-      end
-    else
-      # someone else already reviewed this event! Ask javascript to reload page.
-      render json: { error: 'Event no longer pending review! Refreshing your dashboard.' }.to_json, status: :unprocessable_entity
-    end
-  end
-
-  member_action :undo_review, method: :post do
-    timeline_event = TimelineEvent.find(params[:id])
-
-    unless timeline_event.reviewed?
-      if params[:redirect] == 'true'
-        flash[:success] = 'Event has not been reviewed. Undo is not possible.'
-        redirect_to admin_timeline_event_path(timeline_event)
-      else
-        render json: { error: 'Event is pending review! Cannot undo.' }.to_json, status: :unprocessable_entity
-      end
-
-      return
-    end
-
-    TimelineEvents::UndoVerificationService.new(timeline_event).execute
-
-    if params[:redirect] == 'true'
-      flash[:success] = 'Event has been restored to pending state.'
-      redirect_to admin_timeline_event_path(timeline_event)
-    else
-      head :ok
-    end
   end
 
   member_action :update_description, method: :post do
@@ -174,11 +114,11 @@ ActiveAdmin.register TimelineEvent do
     head :ok
   end
 
-  action_item :review, only: :index do
-    if current_admin_user&.superadmin?
-      link_to 'Review Timeline Events', review_timeline_events_admin_timeline_events_path
-    end
-  end
+  # action_item :review, only: :index do
+  #   if current_admin_user&.superadmin?
+  #     link_to 'Review Timeline Events', review_timeline_events_admin_timeline_events_path
+  #   end
+  # end
 
   collection_action :review_timeline_events do
     if can? :quick_review, TimelineEvent
@@ -286,11 +226,7 @@ ActiveAdmin.register TimelineEvent do
 
       row :event_on
       row :share_on_facebook
-
-      row :status
       row :evaluated
-
-      row :status_updated_at
 
       row('Linked Target') do
         a href: admin_target_url(timeline_event.target) do

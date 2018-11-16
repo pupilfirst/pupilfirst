@@ -35,15 +35,9 @@ class TimelineEventsController < ApplicationController
     timeline_event = TimelineEvent.find(params[:id])
     authorize timeline_event
 
-    if timeline_event.pending?
-      status = {
-        needs_improvement: TimelineEvent::STATUS_NEEDS_IMPROVEMENT,
-        not_accepted: TimelineEvent::STATUS_NOT_ACCEPTED,
-        verified: TimelineEvent::STATUS_VERIFIED
-      }.fetch(params[:status].to_sym)
-
+    if !timeline_event.reviewed?
       begin
-        TimelineEvents::VerificationService.new(timeline_event).update_status(status, grade: params[:grade])
+        TimelineEvents::VerificationService.new(timeline_event).update_status(grade: params[:grade])
         render json: { error: nil }, status: :ok
       rescue TimelineEvents::ReviewInterfaceException => e
         render json: { error: e.message, timelineEvent: nil }.to_json, status: :unprocessable_entity

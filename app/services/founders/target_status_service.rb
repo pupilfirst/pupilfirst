@@ -55,7 +55,7 @@ module Founders
 
         (founder_events + startup_events).each_with_object({}) do |event, result|
           result[event.target_id] = {
-            status: target_status(event),
+            status: target_status(event.target),
             submitted_at: event.created_at.iso8601
           }
         end
@@ -63,17 +63,8 @@ module Founders
     end
 
     # Mapping from the latest event's verification status to the associated targets completion status.
-    def target_status(event)
-      case event.status
-        when TimelineEvent::STATUS_VERIFIED then
-          Target::STATUS_COMPLETE
-        when TimelineEvent::STATUS_NOT_ACCEPTED then
-          Target::STATUS_NOT_ACCEPTED
-        when TimelineEvent::STATUS_NEEDS_IMPROVEMENT then
-          Target::STATUS_NEEDS_IMPROVEMENT
-        else
-          Target::STATUS_SUBMITTED
-      end
+    def target_status(target)
+      Targets::StatusService.new(target, @founder).status
     end
 
     def unsubmitted_target_statuses

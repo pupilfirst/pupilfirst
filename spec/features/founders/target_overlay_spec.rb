@@ -82,9 +82,7 @@ feature 'Target Overlay' do
   end
 
   context 'when the founder clicks on a completed target', js: true do
-    before do
-      timeline_event.update!(target: target)
-    end
+    let!(:timeline_event) { create :timeline_event, startup: startup, target: target, founder: founder, status: TimelineEvent::STATUS_VERIFIED, links: [{ title: 'Some Link', url: 'https://www.example.com', private: false }] }
 
     it 'displays the latest submission and feedback for it' do
       find('.founder-dashboard-target-header__headline', text: target.title).click
@@ -116,9 +114,10 @@ feature 'Target Overlay' do
   end
 
   context 'when the founder clicks a founder target', js: true do
+    let!(:target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_FOUNDER }
+    let!(:timeline_event) { create :timeline_event, startup: startup, target: target, founder: founder, status: TimelineEvent::STATUS_VERIFIED, links: [{ title: 'Some Link', url: 'https://www.example.com', private: false }] }
+
     before do
-      target.update!(role: Target::ROLE_FOUNDER)
-      timeline_event.update!(target: target)
       visit student_dashboard_path
     end
 

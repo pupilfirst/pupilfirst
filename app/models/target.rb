@@ -198,9 +198,10 @@ class Target < ApplicationRecord
   alias has_rubric rubric?
 
   # Returns the latest event linked to this target from a founder. If a team target, it responds with the latest event from the team
-  def latest_linked_event(founder)
+  def latest_linked_event(founder, exclude = nil)
     owner = founder_role? ? founder : founder.startup
-    owner.timeline_events.where(target: self).order('created_at').last
+
+    owner.timeline_events.where.not(id: exclude).where(target: self).order('created_at').last
   end
 
   def latest_feedback(founder)

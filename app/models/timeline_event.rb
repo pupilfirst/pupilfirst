@@ -47,7 +47,7 @@ class TimelineEvent < ApplicationRecord
   validate :founder_and_target_must_not_change
 
   def founder_and_target_must_not_change
-    return unless persisted? || founder_id_changed? || target_id_changed?
+    return unless persisted? && (founder_id_changed? || target_id_changed?)
 
     errors[:base] << 'You cannot edit the founder or target of an existing timeline event'
   end
@@ -125,11 +125,15 @@ class TimelineEvent < ApplicationRecord
   end
 
   after_save :update_timeline_event_files
-  after_create :record_latest_submission
-  after_destroy :record_latest_submission
+  after_commit :create_latest_submission_record
+  before_destroy :update_latest_submission_record
 
-  def record_latest_submission
+  def create_latest_submission_record
     Founders::RecordLatestSubmissionService.new(target, founder).execute
+  end
+
+  def update_latest_submission_record
+    Founders::RecordLatestSubmissionService.new(target, founder).execute(delete_candidate: self)
   end
 
   def update_timeline_event_files

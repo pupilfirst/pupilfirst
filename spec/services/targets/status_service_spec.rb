@@ -1,103 +1,158 @@
 require 'rails_helper'
 
 describe Targets::StatusService do
-  subject { described_class.new(target, startup.team_lead) }
+  subject { described_class.new(founder_target_1, founder_1) }
 
-  let(:startup) { create :startup }
-  let(:target) { create :target, role: Target::ROLE_FOUNDER, days_to_complete: 60 }
-  let(:prerequisite_target) { create :target, role: Target::ROLE_FOUNDER }
-
-  let!(:event_for_prerequisite_target) do
-    create :timeline_event,
-      target: prerequisite_target,
-      startup: startup
-  end
-
-  before do
-    target.prerequisite_targets << prerequisite_target
-  end
+  let(:school) { create :school }
+  let(:level_1) { create :level, :one, school: school }
+  let(:level_2) { create :level, :two, school: school }
+  let(:startup) { create :startup, level: level_2 }
+  let(:founder_1) { startup.founders.first }
+  let(:founder_2) { startup.founders.second }
+  let(:target_group) { create :target_group, level: level_2 }
+  let(:founder_target_1) { create :target, target_group: target_group, role: Target::ROLE_FOUNDER }
 
   describe '#status' do
-    context 'when the target has no associated timeline event' do
-      context 'when prerequisites are not complete' do
-        it 'returns unavailable' do
-          event_for_prerequisite_target.update!(status: TimelineEvent::STATUS_PENDING)
-          expect(subject.status).to eq(Target::STATUS_UNAVAILABLE)
+    context 'when the target has no submissions' do
+      context 'when the target is not locked for any reason' do
+        it 'returns :pending' do
+          expect(subject.status).to eq(Targets::StatusService::STATUS_PENDING)
         end
       end
 
-      context 'when prerequisites are complete' do
+      context 'when the target is from a higher level than the startup' do
+        let(:startup) { create :startup, level: level_1 }
+
+        it 'returns :level_locked' do
+          expect(subject.status).to eq(Targets::StatusService::STATUS_LEVEL_LOCKED)
+        end
+      end
+
+      context 'when the target has other prerequisite targets' do
+        let(:team_target_1) { create :target, target_group: target_group, role: Target::ROLE_TEAM }
+        let(:founder_target_2) { create :target, target_group: target_group, role: Target::ROLE_FOUNDER }
+
         before do
-          event_for_prerequisite_target.update!(status: TimelineEvent::STATUS_VERIFIED)
+          founder_target_1.prerequisite_targets << [team_target_1, founder_target_2]
         end
 
-        it 'returns pending if the due date is not over' do
-          target.update!(days_to_complete: 60)
-          expect(subject.status).to eq(Target::STATUS_PENDING)
+        context 'when any prerequisites is incomplete' do
+          it 'returns :prerequisite_locked' do
+            expect(subject.status).to eq(Targets::StatusService::STATUS_PREREQUISITE_LOCKED)
+          end
+        end
+
+        context 'when all prerequisites are complete' do
+          let(:submission_1) do
+            create :timeline_event, founder: founder_2, target: team_target_1, passed_at: 1.day.ago
+          end
+
+          let(:submission_2) do
+            create :timeline_event, founder: founder_1, target: founder_target_2, passed_at: 1.day.ago
+          end
+
+          # TODO: Remove the before block once we have the TimelineEvent after_create hook merged in.
+          before do
+            LatestSubmissionRecord.create!(
+              target: team_target_1,
+              founder: founder_1,
+              timeline_event: submission_1
+            )
+            LatestSubmissionRecord.create!(
+              target: founder_target_2,
+              founder: founder_1,
+              timeline_event: submission_2
+            )
+          end
+
+          it 'returns :pending' do
+            expect(subject.status).to eq(Targets::StatusService::STATUS_PENDING)
+          end
+        end
+      end
+
+      context 'when the target is a milestone target' do
+        let(:level_2_milestone_target_group) do
+          create :target_group, level: level_2, milestone: true
+        end
+        let(:founder_target_1) do
+          create :target, target_group: level_2_milestone_target_group, role: Target::ROLE_FOUNDER
+        end
+        let(:level_1_milestone_target_group) do
+          create :target_group, level: level_1, milestone: true
+        end
+        let!(:level_1_team_target) do
+          create :target, target_group: level_1_milestone_target_group, role: Target::ROLE_TEAM
+        end
+        let!(:leve1__1_founder_target) do
+          create :target, target_group: level_1_milestone_target_group, role: Target::ROLE_FOUNDER
+        end
+
+        context 'when there are pending milestones in the previous level' do
+          it 'returns :milestone_locked' do
+            expect(subject.status).to eq(Targets::StatusService::STATUS_MILESTONE_LOCKED)
+          end
+        end
+
+        context 'when all previous level milestones are completed' do
+          let(:submission_1) do
+            create :timeline_event, founder: founder_2, target: level_1_team_target, passed_at: 1.day.ago
+          end
+
+          let(:submission_2) do
+            create :timeline_event, founder: founder_1, target: leve1__1_founder_target, passed_at: 1.day.ago
+          end
+
+          # TODO: Remove the before block once we have the TimelineEvent after_create hook merged in.
+          before do
+            LatestSubmissionRecord.create!(
+              target: level_1_team_target,
+              founder: founder_1,
+              timeline_event: submission_1
+            )
+            LatestSubmissionRecord.create!(
+              target: leve1__1_founder_target,
+              founder: founder_1,
+              timeline_event: submission_2
+            )
+          end
+
+          it 'returns :pending' do
+            expect(subject.status).to eq(Targets::StatusService::STATUS_PENDING)
+          end
         end
       end
     end
 
-    context 'when the target has an associated timeline event' do
-      let!(:event_for_target) do
-        create :timeline_event,
-          target: target,
-          startup: startup
-      end
+    context 'when the target has a submission' do
+      let(:submission) { create :timeline_event, founder: founder_1, target: founder_target_1 }
 
+      # TODO: Remove the before block once we have the TimelineEvent after_create hook merged in.
       before do
-        # mark prerequisite target complete
-        event_for_prerequisite_target.update!(status: TimelineEvent::STATUS_VERIFIED)
+        LatestSubmissionRecord.create!(target: founder_target_1, founder: founder_1, timeline_event: submission)
       end
 
-      it 'returns submitted if the event is pending verification' do
-        event_for_target.update!(status: TimelineEvent::STATUS_PENDING)
-        expect(subject.status).to eq(Target::STATUS_SUBMITTED)
+      context 'when the submission is not evaluated yet' do
+        it 'returns :submitted' do
+          expect(subject.status).to eq(Targets::StatusService::STATUS_SUBMITTED)
+        end
       end
 
-      it 'returns complete if the event is verified' do
-        event_for_target.update!(status: TimelineEvent::STATUS_VERIFIED)
-        expect(subject.status).to eq(Target::STATUS_COMPLETE)
+      context 'when the submission has passed_at set' do
+        let(:submission) { create :timeline_event, founder: founder_1, target: founder_target_1, passed_at: 1.day.ago }
+
+        it 'returns :passed' do
+          expect(subject.status).to eq(Targets::StatusService::STATUS_PASSED)
+        end
       end
 
-      it 'returns needs_improvement if the event is marked needs_improvement' do
-        event_for_target.update!(status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT)
-        expect(subject.status).to eq(Target::STATUS_NEEDS_IMPROVEMENT)
-      end
+      context 'when the submission was evaluated but passed_at not set' do
+        let(:faculty) { create :faculty }
+        let(:submission) { create :timeline_event, founder: founder_1, target: founder_target_1, evaluator: faculty }
 
-      it 'returns not_accepted if the event is marked not_accepted' do
-        event_for_target.update!(status: TimelineEvent::STATUS_NOT_ACCEPTED)
-        expect(subject.status).to eq(Target::STATUS_NOT_ACCEPTED)
-      end
-    end
-  end
-
-  describe '#pending_prerequisites' do
-    context 'when the prerequisite is not completed' do
-      it 'returns an array containing the prerequisite' do
-        expect(subject.pending_prerequisites).to eq([prerequisite_target])
-      end
-    end
-
-    context 'when the prerequisite is completed' do
-      it 'returns an empty array' do
-        event_for_prerequisite_target.verify!
-        expect(subject.pending_prerequisites).to eq([])
-      end
-    end
-  end
-
-  describe '#completed_prerequisites' do
-    context 'when the prerequisite is not completed' do
-      it 'returns an empty array' do
-        expect(subject.completed_prerequisites).to eq([])
-      end
-    end
-
-    context 'when the prerequisite is completed' do
-      it 'returns an array containing the prerequisite' do
-        event_for_prerequisite_target.verify!
-        expect(subject.completed_prerequisites).to eq([prerequisite_target])
+        it 'returns :failed' do
+          expect(subject.status).to eq(Targets::StatusService::STATUS_FAILED)
+        end
       end
     end
   end

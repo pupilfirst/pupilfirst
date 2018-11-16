@@ -22,11 +22,10 @@ module Targets
     private
 
     def linked_event
-      @linked_event ||= @target.latest_linked_event(@founder)
+      @linked_event ||= @founder.latest_submissions.find_by(target: @target)
     end
 
     def status_from_event
-      # TODO: Replace 'evaluated_at' with `passed_at` and write one-off to fix existing data.
       return STATUS_PASSED if linked_event.passed_at?
 
       linked_event.evaluator_id? ? STATUS_FAILED : STATUS_SUBMITTED
@@ -58,16 +57,42 @@ module Targets
       return false if founder_level_number == 1
 
       previous_level = @target.school.levels.where(number: founder_level_number - 1)
-      milestone_targets = Target.where(target_group: TargetGroup.where(level: previous_level, milestone: true))
-      # TODO: Optimize this using a 'latest_submissions' join table.
-      milestone_targets.any? { |target| target.latest_linked_event(@founder).passed_at.nil? }
+
+      previous_level_milestones = Target.joins(:target_group).where(
+        target_groups: {
+          level: previous_level,
+          milestone: true
+        }
+      )
+
+      previous_level_passed_milestones = previous_level_milestones.joins(latest_submission_records: :timeline_event).where(
+        latest_submission_records: {
+          founder: @founder
+        }
+      ).where.not(
+        latest_submission_records: {
+          timeline_events: {
+            passed_at: nil
+          }
+        }
+      )
+
+      previous_level_milestones.count != previous_level_passed_milestones.count
     end
 
     def prerequisites_incomplete?
-      @target.prerequisite_targets.any? { |target| target.latest_linked_event(@founder).passed_at.nil? }
-
-      # TODO: Optimize this using a 'latest_submissions' join table.
-      # @target.prerequisite_targets.joins(latest_submissions: :timeline_event).where(latest_submissions: { founder_id: @founder.id }).where(timeline_events: { passed_at: nil }).exists?
+      passed_prerequisites = @target.prerequisite_targets.joins(latest_submission_records: :timeline_event).where(
+        latest_submission_records: {
+          founder: @founder
+        }
+      ).where.not(
+        latest_submission_records: {
+          timeline_events: {
+            passed_at: nil
+          }
+        }
+      )
+      passed_prerequisites.count != @target.prerequisite_targets.count
     end
   end
 end

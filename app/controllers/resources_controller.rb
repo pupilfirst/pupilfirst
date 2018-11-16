@@ -17,8 +17,7 @@ class ResourcesController < ApplicationController
 
   # GET /library/:id
   def show
-    @resource = Resource.find(params[:id])
-    authorize @resource
+    @resource = authorize(Resource.find(params[:id]))
 
     return unless params[:watch].present? && @resource.stream?
 
@@ -38,8 +37,7 @@ class ResourcesController < ApplicationController
 
   # GET /library/:id/download
   def download
-    resource = Resource.find(params[:id])
-    authorize resource
+    resource = authorize(Resource.find(params[:id]))
     resource.increment_downloads(current_user)
     redirect_to(resource.link.presence || resource.file.url)
   end

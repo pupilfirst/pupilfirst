@@ -12,7 +12,7 @@ class ConnectRequestPolicy < ApplicationPolicy
     if token.present?
       record.faculty.present? && Faculty.find_by(token: token) == record.faculty
     else
-      record.startup.present? && user&.founder&.startup == record.startup
+      record.startup.present? && current_founder&.startup == record.startup
     end
   end
 end

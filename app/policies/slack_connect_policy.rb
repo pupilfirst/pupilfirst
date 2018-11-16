@@ -1,6 +1,6 @@
 class SlackConnectPolicy < ApplicationPolicy
   def connect?
-    user&.founder&.subscription_active?
+    current_founder&.subscription_active?
   end
 
   def callback?
@@ -8,6 +8,6 @@ class SlackConnectPolicy < ApplicationPolicy
   end
 
   def disconnect?
-    user&.founder&.subscription_active? && user.founder.slack_access_token.present?
+    current_founder&.subscription_active? && current_founder.slack_access_token.present?
   end
 end

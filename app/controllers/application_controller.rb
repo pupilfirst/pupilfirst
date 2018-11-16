@@ -12,6 +12,7 @@ class ApplicationController < ActionController::Base
   before_action :sign_out_if_required
   before_action :pretender
 
+  helper_method :current_user
   helper_method :current_founder
   helper_method :current_startup
   helper_method :current_coach
@@ -52,12 +53,31 @@ class ApplicationController < ActionController::Base
     @platform_feedback_for_form = PlatformFeedback.new(founder_id: current_founder.id)
   end
 
+  # Cache the current_founder inside current_user for use in policies.
+  def current_user
+    @current_user ||= begin
+      user = super
+      user&.current_founder = current_founder
+      user
+    end
+  end
+
   def current_coach
     @current_coach ||= current_user&.faculty
   end
 
   def current_founder
-    @current_founder ||= current_user&.founder
+    @current_founder ||= begin
+      if current_user.present?
+        founder_id = read_cookie(:founder_id)
+
+        # Try to select founder from value stored in cookie.
+        founder = founder_id.present? ? current_user.founders.find_by(id: founder_id) : nil
+
+        # Return selected founder, if any, or return the first founder (if any).
+        founder.presence || current_user.founders.first
+      end
+    end
   end
 
   def current_startup
@@ -114,10 +134,8 @@ class ApplicationController < ActionController::Base
     # User must be logged in.
     authenticate_user!
 
-    founder = current_user.founder
-    return if founder.present? && !founder.exited?
+    return if current_founder.present? && !current_founder.exited?
 
-    flash[:error] = 'You are not an active student anymore!' if founder&.exited?
     redirect_to root_path
   end
 

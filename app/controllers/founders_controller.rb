@@ -17,7 +17,6 @@ class FoundersController < ApplicationController
   # GET /founder/edit
   def edit
     authorize current_founder
-
     @founder = current_founder.decorate
     @form = Founders::EditForm.new(current_founder)
   end

@@ -129,7 +129,7 @@ feature 'Founder Edit' do
     scenario 'founder visits the edit page', js: true do
       sign_in_user(founder.user, referer: edit_founder_path)
 
-      expect(page).to have_text('not an active student anymore')
+      expect(page).to have_selector('#home__index', visible: false)
     end
   end
 

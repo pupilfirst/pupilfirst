@@ -1,7 +1,6 @@
 class PlatformFeedbackController < ApplicationController
   def create
-    @platform_feedback = PlatformFeedback.new platform_feedback_params
-    authorize @platform_feedback
+    @platform_feedback = authorize(PlatformFeedback.new(platform_feedback_params))
 
     if @platform_feedback.save!
       # Mail help@sv.co about the submission.

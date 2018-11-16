@@ -14,7 +14,6 @@ class ConnectRequestController < ApplicationController
   # GET /connect_request/:id/feedback/from_faculty/:token
   def feedback_from_faculty
     load_comment_form_for_faculty
-    authorize @connect_request
 
     @rating_recorded = true if @connect_request.update(rating_for_team: params[:rating])
     @karma_points_added = true if @connect_request.assign_karma_points(params[:rating])
@@ -51,8 +50,7 @@ class ConnectRequestController < ApplicationController
 
   def load_comment_form_for_team
     founder = Founder.find_by(auth_token: params[:token])
-    @connect_request = founder&.startup&.connect_requests&.find(params[:id])
-    authorize @connect_request
+    @connect_request = authorize(founder&.startup&.connect_requests&.find(params[:id]))
 
     @comment_form = ConnectRequests::CommentForm.new(@connect_request)
     @comment_form.from = :team
@@ -60,9 +58,7 @@ class ConnectRequestController < ApplicationController
 
   def load_comment_form_for_faculty
     faculty = Faculty.find_by(token: params[:token])
-    @connect_request = faculty&.connect_requests&.find(params[:id])
-    connect_request = @connect_request
-    authorize connect_request
+    @connect_request = authorize(faculty&.connect_requests&.find(params[:id]))
 
     @comment_form = ConnectRequests::CommentForm.new(@connect_request)
     @comment_form.from = :faculty

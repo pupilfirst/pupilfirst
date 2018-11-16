@@ -13,5 +13,9 @@ FactoryBot.define do
       slack_username { 'SLACK_USERNAME' }
       slack_access_token { 'SLACK_ACCESS_TOKEN' }
     end
+
+    # after(:create) do |founder|
+    #   user.founders <<
+    # end
   end
 end

@@ -8,15 +8,13 @@ class AdmissionsPolicy < ApplicationPolicy
   end
 
   def coupon_submit?
-    founder = user.founder
-    startup = founder.startup
-    FounderPolicy.new(user, founder).fee? && startup.level_zero? && startup.applied_coupon.blank?
+    startup = current_founder.startup
+    FounderPolicy.new(user, current_founder).fee? && startup.level_zero? && startup.applied_coupon.blank?
   end
 
   def coupon_remove?
-    founder = user.founder
-    startup = founder.startup
-    FounderPolicy.new(user, founder).fee? && startup.level_zero? && startup.applied_coupon.present?
+    startup = current_founder.startup
+    FounderPolicy.new(user, current_founder).fee? && startup.level_zero? && startup.applied_coupon.present?
   end
 
   def team_members?
@@ -28,7 +26,7 @@ class AdmissionsPolicy < ApplicationPolicy
   end
 
   def team_lead?
-    team_members? && !user.founder.team_lead?
+    team_members? && !current_founder.team_lead?
   end
 
   def accept_invitation?
@@ -41,22 +39,22 @@ class AdmissionsPolicy < ApplicationPolicy
   # User should not have completed the related target.
   def target_incomplete?(key)
     target = Target.find_by(key: key)
-    target.status(user.founder) != Target::STATUS_COMPLETE
+    target.status(current_founder) != Target::STATUS_COMPLETE
   end
 
   # User should have completed the prerequisite target.
   def target_complete?(key)
     target = Target.find_by(key: key)
-    target.status(user.founder) == Target::STATUS_COMPLETE
+    target.status(current_founder) == Target::STATUS_COMPLETE
   end
 
   def target_pending?(key)
     target = Target.find_by(key: key)
-    target.pending?(user.founder)
+    target.pending?(current_founder)
   end
 
   def level
-    @level ||= user&.founder&.startup&.level
+    @level ||= current_founder&.startup&.level
   end
 
   def level_zero?

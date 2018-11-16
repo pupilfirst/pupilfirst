@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  has_one :founder, dependent: :restrict_with_error
+  has_many :founders, dependent: :restrict_with_error
   has_one :admin_user, dependent: :restrict_with_error
   has_one :faculty, dependent: :restrict_with_error
   has_many :coached_startups, through: :faculty, source: :startups

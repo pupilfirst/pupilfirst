@@ -49,22 +49,14 @@ export default class TargetOverlay extends React.Component {
   }
 
   isSubmittable() {
-    return !(
-      this.isNotSubmittable() ||
-      this.singleSubmissionComplete() ||
-      this.submissionBlocked()
-    );
-  }
-
-  isNotSubmittable() {
-    return this.target().submittability === "not_submittable";
+    return !(this.singleSubmissionComplete() || this.submissionBlocked());
   }
 
   singleSubmissionComplete() {
     return (
-      ["submittable_once", "auto_verify"].includes(
-        this.target().submittability
-      ) && !this.isPending()
+      !this.isPending() &&
+      (!this.target().resubmittable ||
+        !this.target().evaluation_criteria.length)
     );
   }
 

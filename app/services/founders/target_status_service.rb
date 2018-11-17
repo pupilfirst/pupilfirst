@@ -27,6 +27,10 @@ module Founders
       applicable_targets.where(id: target_ids).as_json(only: [:id])
     end
 
+    def evaluation_criteria(target_id)
+      all_target_evaluation_criteria[target_id]
+    end
+
     private
 
     def startup
@@ -86,10 +90,9 @@ module Founders
       @applicable_targets ||= Target.live.joins(target_group: :level).where(target_groups: { level: open_levels })
     end
 
-    # rubocop:disable Metrics/CyclomaticComplexity
     def unavailable_or_pending?(target)
       # Non-submittables are no-brainers.
-      return Target::STATUS_UNAVAILABLE if target.submittability == Target::SUBMITTABILITY_NOT_SUBMITTABLE
+      # return Target::STATUS_UNAVAILABLE if target.submittability == Target::SUBMITTABILITY_NOT_SUBMITTABLE
 
       # So are targets in higher levels
       return Target::STATUS_LEVEL_LOCKED if target.level.number > @level_number
@@ -101,7 +104,6 @@ module Founders
 
       prerequisites_completed?(target) ? Target::STATUS_PENDING : Target::STATUS_UNAVAILABLE
     end
-    # rubocop:enable Metrics/CyclomaticComplexity
 
     def previous_milestones_completed?
       @previous_milestones_completed ||= begin
@@ -133,6 +135,13 @@ module Founders
 
         mapping[target_prerequisite.target_id] ||= []
         mapping[target_prerequisite.target_id] << target_prerequisite.prerequisite_target_id
+      end
+    end
+
+    # all target-evaluation_criteria mappings
+    def all_target_evaluation_criteria
+      @all_target_evaluation_criteria ||= Target.joins(:evaluation_criteria).includes(target_evaluation_criteria: :evaluation_criterion).each_with_object({}) do |target, mapping|
+        mapping[target.id] = target.evaluation_criteria.pluck(:id)
       end
     end
 

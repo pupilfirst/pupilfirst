@@ -345,7 +345,7 @@ class Startup < ApplicationRecord
 
   # returns the latest 'moved_to_x_stage' timeline entry
   def latest_change_of_stage
-    timeline_events.verified.where(timeline_event_type: TimelineEventType.moved_to_stage).order(event_on: :desc).includes(:timeline_event_type).first
+    timeline_events.where(timeline_event_type: TimelineEventType.moved_to_stage).order(event_on: :desc).includes(:timeline_event_type).first
   end
 
   # returns all timeline entries posted in the current stage i.e after the last 'moved_to_x_stage' timeline entry

@@ -45,8 +45,8 @@ class TimelineEvent < ApplicationRecord
   scope :help_wanted, -> { where(timeline_event_type: TimelineEventType.help_wanted) }
   scope :not_private, -> { where(timeline_event_type: TimelineEventType.where.not(role: TimelineEventType::ROLE_FOUNDER)) }
   scope :not_improved, -> { joins(:target).where(improved_timeline_event_id: nil) }
-  scope :auto_verified, -> { joins(:target).where(targets: { submittability: Target::SUBMITTABILITY_AUTO_VERIFY }) }
-  scope :not_auto_verified, -> { where.not(id: auto_verified) }
+  scope :not_auto_verified, -> { joins(:evaluation_criteria) }
+  scope :auto_verified, -> { where.not(id: not_auto_verified) }
 
   after_initialize :make_links_an_array
 

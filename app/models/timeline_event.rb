@@ -61,7 +61,7 @@ class TimelineEvent < ApplicationRecord
   scope :verified_or_needs_improvement, -> { where(status: [STATUS_VERIFIED, STATUS_NEEDS_IMPROVEMENT]) }
   scope :has_image, -> { where.not(image: nil) }
   scope :from_approved_startups, -> { joins(:startup).merge(Startup.approved) }
-  scope :not_private, -> { where(target: Target.where.not(role: Target::ROLE_FOUNDER)) }
+  scope :not_private, -> { joins(:target).where.not(targets: { role: Target::ROLE_FOUNDER }) }
   scope :not_improved, -> { joins(:target).where(improved_timeline_event_id: nil) }
   scope :auto_verified, -> { joins(:target).where(targets: { submittability: Target::SUBMITTABILITY_AUTO_VERIFY }) }
   scope :not_auto_verified, -> { where.not(id: auto_verified) }

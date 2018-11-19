@@ -6,7 +6,7 @@ describe TimelineEvents::VerificationNotificationJob do
   let!(:startup) { create :startup }
   let!(:founder) { create :founder, startup: startup }
   let!(:founder_target) { create :target, role: Target::ROLE_FOUNDER }
-  let!(:startup_target) { create :target, role: "product" }
+  let!(:startup_target) { create :target, role: Target::ROLE_TEAM }
   let!(:timeline_event_for_founder) { create :timeline_event, founder: founder, startup: startup, target: founder_target, status: "Verified" }
   let!(:timeline_event_for_startup) { create :timeline_event_with_links, founder: founder, startup: startup, target: startup_target, status: "Verified" }
   let(:startup_url) { Rails.application.routes.url_helpers.product_url(startup.id, startup.slug) }

@@ -82,6 +82,28 @@ describe TimelineEvents::VerificationService do
           expect(timeline_event.karma_point.points).to eq(20)
         end
       end
+
+      context 'when a founder timeline event is verified' do
+        let(:target) { create :target, role: Target::ROLE_FOUNDER }
+        let(:timeline_event) { create :timeline_event, target: target }
+
+        it 'does not update the startups timeline_updated_on' do
+          subject.update_status(TimelineEvent::STATUS_VERIFIED, points: 10)
+
+          expect(timeline_event.startup.timeline_updated_on).to eq(nil)
+        end
+      end
+
+      context 'when a team timeline event is verified' do
+        let(:target) { create :target, role: Target::ROLE_TEAM }
+        let(:timeline_event) { create :timeline_event, target: target }
+
+        it 'updates the startups timeline_updated_on' do
+          subject.update_status(TimelineEvent::STATUS_VERIFIED, points: 10)
+
+          expect(timeline_event.startup.timeline_updated_on).to eq(timeline_event.event_on)
+        end
+      end
     end
 
     context 'when the timeline event is associated with a target with PC' do

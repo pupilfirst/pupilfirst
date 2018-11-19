@@ -263,7 +263,7 @@ class Founder < ApplicationRecord
   end
 
   def resume_link
-    return Rails.application.routes.url_helpers.download_timeline_event_file_url(resume_file) if resume_file.present?
+    resume_file.present? ? Rails.application.routes.url_helpers.download_timeline_event_file_url(resume_file) : resume_url
   end
 
   def profile_complete?

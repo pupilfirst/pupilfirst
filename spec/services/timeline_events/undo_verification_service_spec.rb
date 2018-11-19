@@ -31,19 +31,6 @@ describe TimelineEvents::UndoVerificationService do
         end
       end
 
-      context 'when timeline event updated startup profile' do
-        let(:timeline_event) { create :timeline_event, status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT }
-
-        before do
-          timeline_event.startup.update!(
-            presentation_link: 'http://example.com/presentation',
-            wireframe_link: 'http://example.com/wireframe',
-            prototype_link: 'http://example.com/prototype',
-            product_video_link: 'http://example.com/video'
-          )
-        end
-      end
-
       context "when the startup's timeline_updated_on was changed" do
         let(:old_event_on) { 1.month.ago.to_date }
 

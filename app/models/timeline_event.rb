@@ -125,15 +125,15 @@ class TimelineEvent < ApplicationRecord
   end
 
   after_save :update_timeline_event_files
-  after_commit :create_latest_submission_record
-  before_destroy :update_latest_submission_record
-
-  def create_latest_submission_record
-    Founders::RecordLatestSubmissionService.new(target, founder).execute
-  end
+  # after_create :update_latest_submission_record
+  # before_destroy :delete_latest_submission_record
 
   def update_latest_submission_record
-    Founders::RecordLatestSubmissionService.new(target, founder).execute(delete_candidate: self)
+    TimelineEvents::UpdateLatestSubmissionRecordService.new(self).execute
+  end
+
+  def delete_latest_submission_record
+    TimelineEvents::DeleteLatestSubmissionRecordService.new(self).execute
   end
 
   def update_timeline_event_files

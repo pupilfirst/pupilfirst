@@ -79,7 +79,7 @@ export default class SubmitButton extends React.Component {
   }
 
   canBeVerifiedAutomatically() {
-    return this.props.target.submittability === "auto_verify";
+    return !this.props.target.evaluation_criteria.length;
   }
 
   submitButtonContents() {

@@ -42,7 +42,7 @@ export default class StatusBadgeBar extends React.Component {
       needs_improvement: "Consider feedback and try re-submitting!",
       submitted: "Submitted on " + this.submissionDate(),
       pending: "Follow completion instructions and submit!",
-      unavailable: this.lockedTargetHintString(),
+      unavailable: "Complete prerequisites first!",
       not_accepted: "Re-submit based on feedback!",
       level_locked: "Complete previous levels to work on this target!",
       pending_milestone: "Complete milestone targets in previous level!"
@@ -51,14 +51,6 @@ export default class StatusBadgeBar extends React.Component {
 
   submissionDate() {
     return moment(this.props.target.submitted_at).format("MMM D");
-  }
-
-  lockedTargetHintString() {
-    if (this.props.target.submittability === "not_submittable") {
-      return "The target is currently unavailable to complete!";
-    } else {
-      return "Complete prerequisites first!";
-    }
   }
 
   statusContents() {

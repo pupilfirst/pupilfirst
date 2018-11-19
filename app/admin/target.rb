@@ -1,8 +1,8 @@
 ActiveAdmin.register Target do
   permit_params :faculty_id, :role, :title, :description, :resource_url, :completion_instructions, :days_to_complete,
-    :slideshow_embed, :video_embed, :completed_at, :completion_comment, :rubric, :link_to_complete, :key,
-    :submittability, :archived, :remote_rubric_url, :target_group_id, :target_action_type, :points_earnable,
-    :timeline_event_type_id, :sort_index, :youtube_video_id, :session_at, :session_by, :call_to_action,
+    :slideshow_embed, :video_embed, :completed_at, :completion_comment, :rubric, :link_to_complete, :key, :archived,
+    :remote_rubric_url, :target_group_id, :target_action_type, :points_earnable, :timeline_event_type_id,
+    :sort_index, :youtube_video_id, :session_at, :session_by, :call_to_action,
     prerequisite_target_ids: [], tag_list: [], evaluation_criterion_ids: []
 
   filter :title
@@ -62,7 +62,7 @@ ActiveAdmin.register Target do
   end
 
   show do |target|
-    if target.submittability != Target::SUBMITTABILITY_AUTO_VERIFY && target.timeline_events.exists?
+    if target.evaluation_criteria.present? && target.timeline_events.exists?
       div do
         table_for target.timeline_events.includes(:timeline_event_type, :founder, :startup).where(timeline_events: { created_at: 3.months.ago..Time.now }) do
           caption 'Linked Timeline Events (up to 3 months ago)'
@@ -156,7 +156,7 @@ ActiveAdmin.register Target do
       row :days_to_complete
       row :completion_comment
       row :link_to_complete
-      row :submittability
+      row :resubmittable
       row :archived do
         div class: 'target-show__archival-status' do
           target.archived ? 'Yes' : 'No'
@@ -234,7 +234,7 @@ ActiveAdmin.register Target do
     column :slideshow_embed
     column :resource_url
     column :days_to_complete
-    column :submittability
+    column :resubmittable
     column :archived do |target|
       target.archived? ? 'Yes' : 'No'
     end
@@ -320,7 +320,6 @@ ActiveAdmin.register Target do
       f.input :completion_instructions
       f.input :call_to_action
       f.input :link_to_complete
-      f.input :submittability, collection: Target.valid_submittability_values
       f.input :faculty, collection: Faculty.active.order(:name), include_blank: 'No linked faculty'
       f.input :session_by, placeholder: 'Name of session taker, IF faculty linking is not possible.'
       f.input :target_group, collection: TargetGroup.all.includes(:school, :level).order('schools.name ASC, levels.number ASC')
@@ -328,6 +327,7 @@ ActiveAdmin.register Target do
       f.input :days_to_complete
       f.input :rubric, as: :file
       f.input :remote_rubric_url
+      f.input :resubmittable
       f.input :evaluation_criteria, as: :select, collection: EvaluationCriterion.all.map { |ec| [ec.display_name.to_s, ec.id] }
     end
 

@@ -27,6 +27,10 @@ module Founders
       applicable_targets.where(id: target_ids).as_json(only: [:id])
     end
 
+    def evaluation_criteria(target_id)
+      all_target_evaluation_criteria[target_id]
+    end
+
     private
 
     def startup
@@ -55,7 +59,7 @@ module Founders
 
         (founder_events + startup_events).each_with_object({}) do |event, result|
           result[event.target_id] = {
-            status: target_status(event),
+            status: target_status(event.target),
             submitted_at: event.created_at.iso8601
           }
         end
@@ -63,17 +67,8 @@ module Founders
     end
 
     # Mapping from the latest event's verification status to the associated targets completion status.
-    def target_status(event)
-      case event.status
-        when TimelineEvent::STATUS_VERIFIED then
-          Target::STATUS_COMPLETE
-        when TimelineEvent::STATUS_NOT_ACCEPTED then
-          Target::STATUS_NOT_ACCEPTED
-        when TimelineEvent::STATUS_NEEDS_IMPROVEMENT then
-          Target::STATUS_NEEDS_IMPROVEMENT
-        else
-          Target::STATUS_SUBMITTED
-      end
+    def target_status(target)
+      Targets::StatusService.new(target, @founder).status
     end
 
     def unsubmitted_target_statuses
@@ -95,10 +90,9 @@ module Founders
       @applicable_targets ||= Target.live.joins(target_group: :level).where(target_groups: { level: open_levels })
     end
 
-    # rubocop:disable Metrics/CyclomaticComplexity
     def unavailable_or_pending?(target)
       # Non-submittables are no-brainers.
-      return Target::STATUS_UNAVAILABLE if target.submittability == Target::SUBMITTABILITY_NOT_SUBMITTABLE
+      # return Target::STATUS_UNAVAILABLE if target.submittability == Target::SUBMITTABILITY_NOT_SUBMITTABLE
 
       # So are targets in higher levels
       return Target::STATUS_LEVEL_LOCKED if target.level.number > @level_number
@@ -110,7 +104,6 @@ module Founders
 
       prerequisites_completed?(target) ? Target::STATUS_PENDING : Target::STATUS_UNAVAILABLE
     end
-    # rubocop:enable Metrics/CyclomaticComplexity
 
     def previous_milestones_completed?
       @previous_milestones_completed ||= begin
@@ -142,6 +135,13 @@ module Founders
 
         mapping[target_prerequisite.target_id] ||= []
         mapping[target_prerequisite.target_id] << target_prerequisite.prerequisite_target_id
+      end
+    end
+
+    # all target-evaluation_criteria mappings
+    def all_target_evaluation_criteria
+      @all_target_evaluation_criteria ||= Target.joins(:evaluation_criteria).includes(target_evaluation_criteria: :evaluation_criterion).each_with_object({}) do |target, mapping|
+        mapping[target.id] = target.evaluation_criteria.pluck(:id)
       end
     end
 

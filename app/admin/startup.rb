@@ -58,25 +58,6 @@ ActiveAdmin.register Startup do
 
     column :level
 
-    column :timeline_events do |startup|
-      ol do
-        startup.timeline_events.includes(:timeline_event_type).order('updated_at DESC').limit(5).each do |event|
-          fa_icon = if event.verified?
-            'fa-thumbs-o-up'
-          elsif event.needs_improvement?
-            'fa-star-half-empty'
-          elsif event.not_accepted?
-            'fa-ban'
-          else
-            'fa-clock-o'
-          end
-          li do
-            link_to " #{event.title}", [:admin, event], class: "fa #{fa_icon} no-text-decoration"
-          end
-        end
-      end
-    end
-
     actions do |startup|
       span do
         link_to 'View Timeline', startup, target: '_blank', class: 'member_link'

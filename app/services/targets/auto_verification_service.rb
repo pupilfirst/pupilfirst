@@ -12,7 +12,7 @@ module Targets
         description: description,
         timeline_event_type: team_update,
         event_on: Time.zone.now,
-        status: TimelineEvent::STATUS_VERIFIED
+        passed_at: Time.zone.now
       )
     end
 

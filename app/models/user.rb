@@ -1,6 +1,5 @@
 class User < ApplicationRecord
-  # This accessor allows calls to ApplicationController#current_user to set a current_founder as well - useful when
-  # authorizing with Pundit.
+  # The value for current_founder is set by the controller in a before_action - useful when authorizing with Pundit.
   attr_accessor :current_founder
 
   has_many :founders, dependent: :restrict_with_error

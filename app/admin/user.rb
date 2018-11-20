@@ -3,13 +3,15 @@ ActiveAdmin.register User do
   actions :index, :show
 
   filter :email
-  filter :founder_id_not_null, label: 'Is Founder', as: :boolean
+  filter :founders_id_not_null, label: 'Is a founder', as: :boolean
+  filter :faculty_id_not_null, label: 'Is a faculty', as: :boolean
+  filter :admin_user_id_not_null, label: 'Is an admin', as: :boolean
 
   controller do
     include DisableIntercom
 
     def scoped_collection
-      super.includes :founder
+      super.includes({ founders: { startup: :school } }, :faculty, :admin_user)
     end
   end
 
@@ -17,7 +19,13 @@ ActiveAdmin.register User do
     selectable_column
 
     column :email
-    column :founder
+
+    column :founder do |user|
+      render('founders', user: user) if user.founders.exists?
+    end
+
+    column :faculty
+    column :admin_user
 
     actions
   end
@@ -25,7 +33,13 @@ ActiveAdmin.register User do
   show do
     attributes_table do
       row :email
-      row :founder
+
+      row :founders do |user|
+        render('founders', user: user) if user.founders.exists?
+      end
+
+      row :admin_user
+      row :faculty
 
       row :sign_out_at_next_request do |user|
         if user.sign_out_at_next_request?

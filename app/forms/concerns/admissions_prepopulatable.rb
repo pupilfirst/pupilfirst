@@ -6,7 +6,7 @@ module AdmissionsPrepopulatable
   extend ActiveSupport::Concern
 
   def prepopulate(user)
-    prepopulate_from(user.founder)
+    prepopulate_from(user.founders.first)
   end
 
   def prepopulate_from(entry)

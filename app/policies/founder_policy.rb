@@ -18,4 +18,8 @@ class FounderPolicy < ApplicationPolicy
   def fee_submit?
     fee?
   end
+
+  def select?
+    record.present? && user.founders.count > 1
+  end
 end

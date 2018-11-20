@@ -29,11 +29,11 @@ module Users
     private
 
     def name
-      @user.founder&.name
+      @user.current_founder&.name
     end
 
     def startup
-      @startup ||= @user.founder&.startup
+      @startup ||= @user.current_founder&.startup
     end
 
     def admissions_stage # rubocop:disable Metrics/PerceivedComplexity
@@ -55,7 +55,7 @@ module Users
     end
 
     def fee_payment_complete?
-      Target.find_by(key: Target::KEY_FEE_PAYMENT).status(@user.founder) == Target::STATUS_COMPLETE
+      Target.find_by(key: Target::KEY_FEE_PAYMENT).status(@user.current_founder) == Target::STATUS_COMPLETE
     end
 
     def payment_present?
@@ -63,7 +63,7 @@ module Users
     end
 
     def screening_complete?
-      Target.find_by(key: Target::KEY_SCREENING).status(@user.founder) == Target::STATUS_COMPLETE
+      Target.find_by(key: Target::KEY_SCREENING).status(@user.current_founder) == Target::STATUS_COMPLETE
     end
   end
 end

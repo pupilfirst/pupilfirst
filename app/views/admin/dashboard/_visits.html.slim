@@ -6,12 +6,10 @@
   .content
     - user_visits.order('visits.started_at DESC').limit(10).each do |visit|
       .recent-visit
-        - if visit.user.founder.present?
+        - if visit.user.founders.exists?
+          - founder = visit.user.founders.first
           ' &nbsp;#{visit.started_at.strftime('%b %e, %H:%M')}:
-          = link_to visit.user.founder.fullname, admin_founder_path(visit.user.founder)
-          ' &nbsp;&dash;
-          - if visit.user.founder.startup.present?
-            = link_to visit.user.founder.startup.product_name, admin_startup_path(visit.user.founder.startup)
+          = link_to "#{founder.fullname}", admin_founder_path(founder)
         - elsif visit.user.admin_user.present?
           ' &nbsp;#{visit.started_at.strftime('%b %e, %H:%M')}:
           = link_to visit.user.admin_user.fullname, admin_admin_user_path(visit.user.admin_user)

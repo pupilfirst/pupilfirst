@@ -28,9 +28,8 @@ class StartupsController < ApplicationController
 
   def show
     @skip_container = true
-    @startup = Startup.friendly.find(params[:id])
+    @startup = authorize(Startup.friendly.find(params[:id]), :show?)
     @meta_description = "#{@startup.display_name}: #{@startup.product_description}"
-    authorize @startup, :show?
 
     if params[:show_feedback].present?
       if current_founder.present?

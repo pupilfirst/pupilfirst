@@ -34,6 +34,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :founders, only: %i[] do
+    member do
+      post 'select'
+    end
+  end
+
   scope 'student', controller: 'founders/dashboard', as: 'student' do
     get 'dashboard'
     get 'dashboard/targets/:id(/:slug)', action: 'target_overlay', as: 'dashboard_target'

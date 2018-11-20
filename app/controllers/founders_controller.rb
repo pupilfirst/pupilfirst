@@ -17,7 +17,6 @@ class FoundersController < ApplicationController
   # GET /founder/edit
   def edit
     authorize current_founder
-
     @founder = current_founder.decorate
     @form = Founders::EditForm.new(current_founder)
   end
@@ -76,6 +75,13 @@ class FoundersController < ApplicationController
     else
       render nothing: true, status: :unprocessable_entity
     end
+  end
+
+  # POST /founders/:slug/select
+  def select
+    founder = authorize(Founder.friendly.find(params[:id]))
+    set_cookie(:founder_id, founder.id)
+    redirect_to student_dashboard_url
   end
 
   private

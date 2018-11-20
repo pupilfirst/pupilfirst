@@ -45,7 +45,7 @@
                 = link_to student_profile_path(slug: current_founder.slug) do
                   i.fa.fa-list-ul
                   | Profile
-            - if current_startup && policy(current_startup).billing?
+            - if policy(current_startup).billing?
               li role="presentation"
                 = link_to billing_startup_path do
                   i.fa.fa-credit-card
@@ -55,6 +55,12 @@
                 a href="#" data-toggle="modal" data-target="#platform-feedback-modal"
                   i.fa.fa-comment-o
                   | Submit Feedback
+            - if policy(current_founder).select?
+              - current_user.founders.where.not(id: current_founder.id).each do |other_founder|
+                li role="presentation"
+                  = link_to(select_founder_path(other_founder), method: :post) do
+                    i.fa.fa-university
+                    = "#{other_founder.startup.school.name} School"
             li role="presentation"
               = link_to destroy_user_session_path, method: :delete do
                 i.fa.fa-sign-out

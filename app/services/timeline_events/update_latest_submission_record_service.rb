@@ -6,7 +6,7 @@ module TimelineEvents
     end
 
     def execute
-      owners(@timeline_event).each do |owner|
+      owners.each do |owner|
         record = LatestSubmissionRecord.where(
           founder: owner,
           target: @timeline_event.target
@@ -20,8 +20,8 @@ module TimelineEvents
 
     private
 
-    def owners(timeline_event)
-      @timeline_event.target.founder_role? ? [timeline_event.founder] : timeline_event.startup.founders
+    def owners
+      @timeline_event.target.founder_role? ? [@timeline_event.founder] : @timeline_event.startup.founders
     end
   end
 end

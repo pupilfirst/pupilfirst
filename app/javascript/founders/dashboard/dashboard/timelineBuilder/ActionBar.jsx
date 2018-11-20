@@ -132,8 +132,7 @@ export default class ActionBar extends React.Component {
             </span>
           </div>
         </div>
-
-        <div className="timeline-builder__select-section">
+        <div className="d-flex timeline-builder__select-section">
           <SubmitButton
             submissionProgress={this.props.submissionProgress}
             submitCB={this.props.submitCB}

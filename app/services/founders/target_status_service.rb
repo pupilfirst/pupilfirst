@@ -1,11 +1,25 @@
 module Founders
   class TargetStatusService
+    STATUSES = {
+      passed: Targets::StatusService::STATUS_PASSED,
+      failed: Targets::StatusService::STATUS_FAILED,
+      submitted: Targets::StatusService::STATUS_SUBMITTED,
+      pending: Targets::StatusService::STATUS_PENDING,
+      level_locked: Targets::StatusService::STATUS_LEVEL_LOCKED,
+      milestone_locked: Targets::StatusService::STATUS_MILESTONE_LOCKED,
+      prerequisite_locked: Targets::StatusService::STATUS_PREREQUISITE_LOCKED
+    }.freeze
+
     def initialize(founder)
       @founder = founder
     end
 
     def status(target_id)
       status_entries[target_id][:status]
+    end
+
+    def submitted_at(target_id)
+      status_entries[target_id][:submitted_at]
     end
 
     def prerequisite_targets(target_id)
@@ -21,12 +35,16 @@ module Founders
 
     private
 
-    # TODO: Examine if there is a cleaner implementation
-    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def status_entries
       @status_entries ||= begin
         # Populate with all sumbitted targets first
-        entries = submitted_target_entries
+        entries = @founder.latest_submissions.each_with_object({}) do |submission, result|
+          result[submission.target_id] = {
+            status: status_from_submission(submission),
+            submitted_at: submission.created_at.iso8601
+          }
+        end
 
         # followed by level-locked targets...
         level_locked_targets = applicable_targets.where.not(id: entries.keys)
@@ -41,8 +59,9 @@ module Founders
         end
 
         # followed by prerequisite-locked targets...
+        target_ids_with_blocking_prerequisites = TargetPrerequisite.where(prerequisite_target: blocking_prerequisite_ids(entries)).distinct.select(:target_id)
         prerequisite_locked_targets = applicable_targets.where.not(id: entries.keys)
-          .where(id: TargetPrerequisite.where(prerequisite_target: blocking_prerequisite_ids(entries)).distinct.pluck(:target_id))
+          .where(id: target_ids_with_blocking_prerequisites)
         entries.merge!(status_fields(prerequisite_locked_targets, :prerequisite_locked))
 
         # and finally all remaining pending targets.
@@ -50,29 +69,18 @@ module Founders
         entries.merge!(status_fields(pending_targets, :pending))
       end
     end
-    # rubocop:enable Metrics/AbcSize
-
-    def submitted_target_entries
-      @submitted_target_entries ||= begin
-        @founder.latest_submissions.each_with_object({}) do |submission, result|
-          result[submission.target_id] = {
-            status: status_from_submission(submission),
-            submitted_at: submission.created_at.iso8601
-          }
-        end
-      end
-    end
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
     def status_from_submission(submission)
-      return statuses[:passed] if submission.passed_at?
+      return STATUSES[:passed] if submission.passed_at?
 
-      submission.evaluator_id? ? statuses[:failed] : statuses[:submitted]
+      submission.evaluator_id? ? STATUSES[:failed] : STATUSES[:submitted]
     end
 
     def status_fields(targets, status_key)
       targets.each_with_object({}) do |target, result|
         result[target.id] = {
-          status: statuses[status_key],
+          status: STATUSES[status_key],
           submitted_at: nil
         }
       end
@@ -95,13 +103,15 @@ module Founders
     def blocking_prerequisite_ids(entries)
       all_applicable_prerequisite_ids = TargetPrerequisite.where(target: applicable_targets).distinct.pluck(:prerequisite_target_id)
 
-      passed_prerequisites = all_applicable_prerequisite_ids.select do |target_id|
+      passed_prerequisite_ids = all_applicable_prerequisite_ids.select do |target_id|
         entries.dig(target_id, :status) == Targets::StatusService::STATUS_PASSED
       end
 
-      archived_prerequisites = Target.where(id: all_applicable_prerequisite_ids, archived: true)
-      orphaned_prerequisites = Target.where(id: all_applicable_prerequisite_ids, target_group_id: nil)
-      all_applicable_prerequisite_ids - passed_prerequisites - archived_prerequisites - orphaned_prerequisites
+      archived_prerequisite_ids = Target.where(id: all_applicable_prerequisite_ids, archived: true).pluck(:id)
+      orphaned_prerequisite_ids = Target.where(id: all_applicable_prerequisite_ids, target_group_id: nil).pluck(:id)
+      non_blocking_prerequisite_ids = passed_prerequisite_ids + archived_prerequisite_ids + orphaned_prerequisite_ids
+
+      all_applicable_prerequisite_ids - non_blocking_prerequisite_ids
     end
 
     def applicable_targets
@@ -143,18 +153,6 @@ module Founders
       @all_target_evaluation_criteria ||= Target.joins(:evaluation_criteria).includes(target_evaluation_criteria: :evaluation_criterion).each_with_object({}) do |target, mapping|
         mapping[target.id] = target.evaluation_criteria.pluck(:id)
       end
-    end
-
-    def statuses
-      {
-        passed: Targets::StatusService::STATUS_PASSED,
-        failed: Targets::StatusService::STATUS_FAILED,
-        submitted: Targets::StatusService::STATUS_SUBMITTED,
-        pending: Targets::StatusService::STATUS_PENDING,
-        level_locked: Targets::StatusService::STATUS_LEVEL_LOCKED,
-        milestone_locked: Targets::StatusService::STATUS_MILESTONE_LOCKED,
-        prerequisite_locked: Targets::StatusService::STATUS_PREREQUISITE_LOCKED
-      }
     end
   end
 end

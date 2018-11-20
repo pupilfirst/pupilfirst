@@ -8,7 +8,6 @@ describe InstamojoController do
   let!(:screening_target) { create :target, :admissions_screening, target_group: level_0_targets }
   let!(:cofounder_addition_target) { create :target, :admissions_cofounder_addition, target_group: level_0_targets }
   let!(:fee_payment_target) { create :target, :admissions_fee_payment, target_group: level_0_targets }
-  let!(:tet_team_update) { create :timeline_event_type, :team_update }
 
   let(:founder) { create :founder }
   let(:startup) { create :startup, level: level_0 }

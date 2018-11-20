@@ -25,9 +25,6 @@ feature 'Admission Level up' do
     let(:l1_target_group) { create :target_group, level: level_1, milestone: true }
 
     before do
-      # Joined timeline event type is required to be able to create a timeline event to mark occasion.
-      create :tet_joined
-
       # At least one target should be present in level 1.
       create :target, target_group: l1_target_group
 

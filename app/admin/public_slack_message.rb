@@ -10,17 +10,6 @@ ActiveAdmin.register PublicSlackMessage do
   controller do
     include DisableIntercom
 
-    def index
-      index! do |format|
-        format.txt do
-          messages = collection.limit(100_000).pluck(:created_at, :channel, :slack_username, :body).each_with_object([]) do |message, messages_array|
-            messages_array << "#{message[0].in_time_zone('Asia/Calcutta')} ##{message[1]} @#{message[2]}: #{message[3]}"
-          end.reverse.join "\n"
-          render plain: messages
-        end
-      end
-    end
-
     def scoped_collection
       super.includes :founder
     end
@@ -73,9 +62,7 @@ ActiveAdmin.register PublicSlackMessage do
     }
   end
 
-  index download_links: %i[txt json xml] do
-    # selectable_column
-
+  index do
     column :author do |message|
       if message.founder.present?
         link_to message.founder.fullname, admin_founder_path(message.founder)

@@ -15,7 +15,6 @@ export default class ToggleBar extends React.Component {
       timelineBuilderVisible: true,
       timelineBuilderParams: {
         targetId: null,
-        selectedTimelineEventTypeId: null
       }
     });
   }

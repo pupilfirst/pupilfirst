@@ -134,6 +134,6 @@ describe Founders::DashboardDataService do
   end
 
   def target_fields
-    %i[id role title description completion_instructions resource_url slideshow_embed timeline_event_type_id days_to_complete points_earnable sort_index video_embed link_to_complete submittability archived youtube_video_id session_by call_to_action]
+    %i[id role title description completion_instructions resource_url slideshow_embed days_to_complete points_earnable sort_index video_embed link_to_complete submittability archived youtube_video_id session_by call_to_action]
   end
 end

@@ -3,7 +3,7 @@ require_relative 'helper'
 after 'development:timeline_events' do
   puts 'Seeding timeline_event_files'
 
-  timeline_event = TimelineEvent.find_by(timeline_event_type: TimelineEventType.find_by(key: 'new_product_deck'))
+  timeline_event = TimelineEvent.find_by(startup: Startup.find_by(name: 'iOS Startup'))
 
   presentation_path = File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf'))
 

@@ -1,11 +1,9 @@
 ActiveAdmin.register TimelineEvent do
-  permit_params :description, :timeline_event_type_id, :image, :event_on, :startup_id, :founder_id, :serialized_links,
+  permit_params :description, :image, :event_on, :startup_id, :founder_id, :serialized_links,
     :improved_timeline_event_id, timeline_event_files_attributes: %i[id title file private _destroy]
 
   filter :startup_product_name, as: :string, label: 'Product Name'
   filter :startup_name, as: :string, label: 'Startup Name'
-  filter :timeline_event_type_title, as: :string
-  filter :timeline_event_type_role_eq, as: :select, collection: -> { TimelineEventType.valid_roles }, label: 'Role'
   filter :founder_name, as: :string
   filter :evaluated
   filter :created_at
@@ -20,13 +18,12 @@ ActiveAdmin.register TimelineEvent do
     include DisableIntercom
 
     def scoped_collection
-      super.includes :startup, :timeline_event_type
+      super.includes :startup
     end
   end
 
   index do
     selectable_column
-    column :timeline_event_type
 
     column :product do |timeline_event|
       startup = timeline_event.startup
@@ -165,7 +162,6 @@ ActiveAdmin.register TimelineEvent do
         label: 'Product'
 
       f.input :founder, label: 'Founder', as: :select, collection: f.object.persisted? ? f.object.startup.founders : [], include_blank: false
-      f.input :timeline_event_type, include_blank: false
       f.input :description
       f.input :image
       f.input :event_on, as: :datepicker
@@ -211,7 +207,6 @@ ActiveAdmin.register TimelineEvent do
       end
 
       row('Founder') { timeline_event.founder }
-      row :timeline_event_type
       row :description do
         simple_format(timeline_event.description)
       end

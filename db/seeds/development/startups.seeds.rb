@@ -1,6 +1,6 @@
 require_relative 'helper'
 
-after 'development:levels', 'development:timeline_event_types', 'development:categories' do
+after 'development:levels', 'development:categories' do
   puts 'Seeding startups'
 
   # Load levels.

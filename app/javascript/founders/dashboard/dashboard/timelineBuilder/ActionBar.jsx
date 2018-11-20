@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import EventTypeSelect from "./EventTypeSelect";
 import SubmitButton from "./SubmitButton";
 import ImageButton from "./ImageButton";
 import DatePicker from "./DatePicker";
@@ -75,13 +74,6 @@ export default class ActionBar extends React.Component {
     }
   }
 
-  timelineEventTypes() {
-    Object.keys(this.props.timelineEventTypes).forEach(function(
-      role,
-      _index
-    ) {});
-  }
-
   dateLabel() {
     if (this.props.selectedDate != null) {
       let date = moment(this.props.selectedDate, "YYYY-MM-DD");
@@ -142,14 +134,6 @@ export default class ActionBar extends React.Component {
         </div>
 
         <div className="timeline-builder__select-section">
-          <EventTypeSelect
-            resetErrorsCB={this.props.resetErrorsCB}
-            disabled={this.disableTab()}
-            addDataCB={this.props.addDataCB}
-            timelineEventTypes={this.props.timelineEventTypes}
-            timelineEventTypeId={this.props.timelineEventTypeId}
-            showEventTypeError={this.props.showEventTypeError}
-          />
           <SubmitButton
             submissionProgress={this.props.submissionProgress}
             submitCB={this.props.submitCB}
@@ -166,7 +150,6 @@ ActionBar.propTypes = {
   formClickedCB: PropTypes.func,
   currentForm: PropTypes.string,
   submitCB: PropTypes.func,
-  timelineEventTypes: PropTypes.object,
   coverImage: PropTypes.object,
   addDataCB: PropTypes.func,
   imageButtonKey: PropTypes.string,
@@ -179,5 +162,4 @@ ActionBar.propTypes = {
   showDateError: PropTypes.bool,
   showEventTypeError: PropTypes.bool,
   resetErrorsCB: PropTypes.func,
-  timelineEventTypeId: PropTypes.string
 };

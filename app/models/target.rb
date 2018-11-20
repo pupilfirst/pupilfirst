@@ -29,7 +29,6 @@ class Target < ApplicationRecord
   ].freeze
 
   belongs_to :faculty, optional: true
-  belongs_to :timeline_event_type, optional: true
   has_many :timeline_events, dependent: :restrict_with_error
   has_many :target_prerequisites, dependent: :destroy
   has_many :prerequisite_targets, through: :target_prerequisites
@@ -191,6 +190,10 @@ class Target < ApplicationRecord
     session_at.blank?
   end
 
+  def founder_event?
+    role == ROLE_FOUNDER
+  end
+
   def rubric?
     target_evaluation_criteria.exists? || rubric_url.present?
   end
@@ -199,9 +202,10 @@ class Target < ApplicationRecord
   alias has_rubric rubric?
 
   # Returns the latest event linked to this target from a founder. If a team target, it responds with the latest event from the team
-  def latest_linked_event(founder)
+  def latest_linked_event(founder, exclude = nil)
     owner = founder_role? ? founder : founder.startup
-    owner.timeline_events.where(target: self).order('created_at').last
+
+    owner.timeline_events.where.not(id: exclude).where(target: self).order('created_at').last
   end
 
   def latest_feedback(founder)

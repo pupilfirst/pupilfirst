@@ -4,7 +4,7 @@ describe TimelineEvents::VerificationService do
   subject { described_class.new(timeline_event) }
 
   let(:timeline_event) { create :timeline_event }
-  let(:timeline_event_2) { create :timeline_event, status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT }
+
   let(:karma_point) { create :karma_point, points: 10 }
   let(:target) { create :target, points_earnable: 10 }
   let(:startup) { create :startup }
@@ -46,9 +46,7 @@ describe TimelineEvents::VerificationService do
     end
 
     context 'when the timeline event is associated with a target without PC' do
-      before do
-        timeline_event.update!(target: target, founder: founder, startup: startup)
-      end
+      let(:timeline_event) { create :timeline_event, target: target, founder: founder, startup: startup }
 
       context 'when asked to mark event as verified and graded as wow' do
         it 'marks the event verified and adds appropriate karma points' do
@@ -72,8 +70,9 @@ describe TimelineEvents::VerificationService do
       end
 
       context 'when asked to mark event as verified and the target had an earlier needs-improvement event' do
+        let(:timeline_event_2) { create :timeline_event, target: target, founder: founder, startup: startup, status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT }
+
         before do
-          timeline_event_2.update!(target: target, founder: founder, startup: startup)
           karma_point.update!(source: timeline_event_2)
         end
         it 'marks the event as verified/wow awards karma points per the grade' do
@@ -86,8 +85,10 @@ describe TimelineEvents::VerificationService do
       end
 
       context 'when a founder timeline event is verified' do
+        let(:target) { create :target, role: Target::ROLE_FOUNDER }
+        let(:timeline_event) { create :timeline_event, target: target }
+
         it 'does not update the startups timeline_updated_on' do
-          timeline_event.update!(timeline_event_type: tet_founder_update)
           subject.update_status(TimelineEvent::STATUS_VERIFIED, points: 10)
 
           expect(timeline_event.startup.timeline_updated_on).to eq(nil)
@@ -95,8 +96,10 @@ describe TimelineEvents::VerificationService do
       end
 
       context 'when a team timeline event is verified' do
+        let(:target) { create :target, role: Target::ROLE_TEAM }
+        let(:timeline_event) { create :timeline_event, target: target }
+
         it 'updates the startups timeline_updated_on' do
-          timeline_event.update!(timeline_event_type: tet_team_update)
           subject.update_status(TimelineEvent::STATUS_VERIFIED, points: 10)
 
           expect(timeline_event.startup.timeline_updated_on).to eq(timeline_event.event_on)

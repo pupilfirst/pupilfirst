@@ -11,7 +11,6 @@ feature 'Admission Fee Payment' do
   let!(:screening_target) { create :target, :admissions_screening, target_group: level_0_targets }
   let!(:cofounder_addition_target) { create :target, :admissions_cofounder_addition, target_group: level_0_targets }
   let!(:fee_payment_target) { create :target, :admissions_fee_payment, target_group: level_0_targets }
-  let!(:tet_team_update) { create :timeline_event_type, :team_update }
   let(:referrer_startup) { create :startup }
   let(:referrer_payment) { create :payment, :paid, startup: referrer_startup }
   let(:coupon) { create :coupon, referrer_startup: referrer_startup, discount_percentage: 25 }

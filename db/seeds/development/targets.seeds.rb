@@ -1,6 +1,6 @@
 require_relative 'helper'
 
-after 'development:target_groups', 'development:timeline_event_types', 'development:faculty' do
+after 'development:target_groups', 'development:faculty' do
   puts 'Seeding targets'
 
   startup_school = School.find_by(name: 'Startup')
@@ -27,11 +27,11 @@ after 'development:target_groups', 'development:timeline_event_types', 'developm
     level.target_groups.each do |target_group|
       # Targets.
       2.times do
-        target_group.targets.create!(days_to_complete: [7, 10, 14].sample, title: Faker::Lorem.sentence, role: Target.valid_roles.sample, timeline_event_type: TimelineEventType.all.sample, target_group: target_group, description: paragraph, faculty: faculty, target_action_type: Target::TYPE_TODO, resubmittable: true)
+        target_group.targets.create!(days_to_complete: [7, 10, 14].sample, title: Faker::Lorem.sentence, role: Target.valid_roles.sample, target_group: target_group, description: paragraph, faculty: faculty, target_action_type: Target::TYPE_TODO, resubmittable: true)
       end
 
       # Session.
-      target_group.targets.create!(title: Faker::Lorem.sentence, role: Target.valid_roles.sample, timeline_event_type: TimelineEventType.all.sample, session_at: 1.month.ago, description: paragraph, session_by: session_taker_name, video_embed: video_embed, target_action_type: Target::TYPE_ATTEND, resubmittable: false)
+      target_group.targets.create!(title: Faker::Lorem.sentence, role: Target.valid_roles.sample, session_at: 1.month.ago, description: paragraph, session_by: session_taker_name, video_embed: video_embed, target_action_type: Target::TYPE_ATTEND, resubmittable: false)
     end
   end
 

@@ -3,7 +3,7 @@ module TimelineEvents
     include RoutesResolvable
 
     def data
-      TimelineEvent.pending.includes(:timeline_event_type, { founder: :user }, { startup: :level }, { target: { target_evaluation_criteria: :evaluation_criterion } }, { improvement_of: :timeline_event_type }, :timeline_event_files).order('timeline_events.created_at').each_with_object({}) do |event, hash|
+      TimelineEvent.pending.includes({ founder: :user }, { startup: :level }, { target: { target_evaluation_criteria: :evaluation_criterion } }, :timeline_event_files).order('timeline_events.created_at').each_with_object({}) do |event, hash|
         hash[event.id] = {
           event_id: event.id,
           title: event.title,

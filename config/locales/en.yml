@@ -115,7 +115,6 @@ en:
 
     target:
       role:
-        <<: *founder-role
         team: Team
         founder: All Founders
 

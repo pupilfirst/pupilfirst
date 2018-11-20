@@ -1,7 +1,7 @@
 ActiveAdmin.register Target do
   permit_params :faculty_id, :role, :title, :description, :resource_url, :completion_instructions, :days_to_complete,
     :slideshow_embed, :video_embed, :completed_at, :completion_comment, :rubric, :link_to_complete, :key, :archived,
-    :remote_rubric_url, :target_group_id, :target_action_type, :points_earnable, :timeline_event_type_id,
+    :remote_rubric_url, :target_group_id, :target_action_type, :points_earnable,
     :sort_index, :youtube_video_id, :session_at, :session_by, :call_to_action,
     prerequisite_target_ids: [], tag_list: [], evaluation_criterion_ids: []
 

@@ -11,7 +11,6 @@ after 'development:founders', 'development:targets' do
     te = TimelineEvent.create!(
       startup: startup,
       target: target,
-      timeline_event_type: target.timeline_event_type,
       founder: startup.team_lead,
       event_on: Time.now,
       description: Faker::Lorem.paragraph,

@@ -43,6 +43,13 @@ class TimelineEvent < ApplicationRecord
   validates :status, inclusion: { in: valid_statuses }
   validates :event_on, presence: true
   validates :description, presence: true
+  validate :founder_and_target_must_not_change
+
+  def founder_and_target_must_not_change
+    return unless persisted? && (founder_id_changed? || target_id_changed?)
+
+    errors[:base] << 'You cannot edit the founder or target of an existing timeline event'
+  end
 
   before_validation do
     self.status_updated_at = Time.zone.now if status_changed?
@@ -111,6 +118,16 @@ class TimelineEvent < ApplicationRecord
   end
 
   after_save :update_timeline_event_files
+  # after_create :update_latest_submission_record
+  # before_destroy :delete_latest_submission_record
+
+  def update_latest_submission_record
+    TimelineEvents::UpdateLatestSubmissionRecordService.new(self).execute
+  end
+
+  def delete_latest_submission_record
+    TimelineEvents::DeleteLatestSubmissionRecordService.new(self).execute
+  end
 
   def update_timeline_event_files
     # Go through files metadata, and perform create / delete.

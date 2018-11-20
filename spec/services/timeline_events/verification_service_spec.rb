@@ -4,7 +4,7 @@ describe TimelineEvents::VerificationService do
   subject { described_class.new(timeline_event) }
 
   let(:timeline_event) { create :timeline_event }
-  let(:timeline_event_2) { create :timeline_event, status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT }
+
   let(:karma_point) { create :karma_point, points: 10 }
   let(:target) { create :target, points_earnable: 10 }
   let(:startup) { create :startup }
@@ -44,9 +44,7 @@ describe TimelineEvents::VerificationService do
     end
 
     context 'when the timeline event is associated with a target without PC' do
-      before do
-        timeline_event.update!(target: target, founder: founder, startup: startup)
-      end
+      let(:timeline_event) { create :timeline_event, target: target, founder: founder, startup: startup }
 
       context 'when asked to mark event as verified and graded as wow' do
         it 'marks the event verified and adds appropriate karma points' do
@@ -70,8 +68,9 @@ describe TimelineEvents::VerificationService do
       end
 
       context 'when asked to mark event as verified and the target had an earlier needs-improvement event' do
+        let(:timeline_event_2) { create :timeline_event, target: target, founder: founder, startup: startup, status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT }
+
         before do
-          timeline_event_2.update!(target: target, founder: founder, startup: startup)
           karma_point.update!(source: timeline_event_2)
         end
         it 'marks the event as verified/wow awards karma points per the grade' do
@@ -107,9 +106,7 @@ describe TimelineEvents::VerificationService do
     end
 
     context 'when the timeline event is associated with a target with PC' do
-      before do
-        timeline_event.update!(target: target_with_skills, founder: founder, startup: startup)
-      end
+      let(:timeline_event) { create :timeline_event, target: target_with_skills, founder: founder, startup: startup }
 
       context 'when asked to mark event as needs improvement' do
         it 'marks the event as needs improvement without awarding karma points' do

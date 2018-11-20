@@ -11,8 +11,8 @@ class ApplicationController < ActionController::Base
   after_action :prepare_unobtrusive_flash
   before_action :sign_out_if_required
   before_action :pretender
+  before_action :cache_current_founder_in_current_user
 
-  helper_method :current_user
   helper_method :current_founder
   helper_method :current_startup
   helper_method :current_coach
@@ -51,15 +51,6 @@ class ApplicationController < ActionController::Base
     return unless current_founder
 
     @platform_feedback_for_form = PlatformFeedback.new(founder_id: current_founder.id)
-  end
-
-  # Cache the current_founder inside current_user for use in policies.
-  def current_user
-    @current_user ||= begin
-      user = super
-      user&.current_founder = current_founder
-      user
-    end
   end
 
   def current_coach
@@ -128,6 +119,10 @@ class ApplicationController < ActionController::Base
     service = ::Users::ManualSignOutService.new(self, current_user)
     service.sign_out_if_required
     redirect_to root_url if service.signed_out?
+  end
+
+  def cache_current_founder_in_current_user
+    current_user&.current_founder = current_founder
   end
 
   def authenticate_founder!

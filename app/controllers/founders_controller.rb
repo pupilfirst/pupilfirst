@@ -77,6 +77,13 @@ class FoundersController < ApplicationController
     end
   end
 
+  # POST /founders/:slug/select
+  def select
+    founder = authorize(Founder.friendly.find(params[:id]))
+    set_cookie(:founder_id, founder.id)
+    redirect_to student_dashboard_url
+  end
+
   private
 
   def fee_params

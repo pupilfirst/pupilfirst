@@ -81,7 +81,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_startup
-    @current_startup ||= current_founder&.startup
+    @current_startup ||= current_founder.startup
   end
 
   # sets a permanent signed cookie. Additional options such as :tld_length can be passed via the options_hash

@@ -3,22 +3,29 @@ require_relative 'helper'
 after 'development:colleges', 'development:startups' do
   puts 'Seeding founders'
 
-  unfinished_swan = Startup.find_by(product_name: 'Unfinished Swan')
-
   # Seed an applicant.
   john_doe = User.create(email: 'johndoe@example.com')
 
-  founder_john_doe = Founder.create!(
+  john_doe_attributes = {
     name: 'John Doe',
     email: 'johndoe@example.com',
     phone: '9876543210',
     reference: Founder.reference_sources.sample,
     college: College.first,
     user: john_doe,
-    startup: unfinished_swan
-  )
+  }
 
-  unfinished_swan.update!(team_lead: founder_john_doe)
+  # Add John Doe to teams in all three schools.
+  ['Unfinished Swan', 'Guardians of the Galaxy', 'iOS Startup'].each do |team_name|
+    startup = Startup.find_by(product_name: team_name)
+
+    founder_john_doe = Founder.create!(john_doe_attributes.merge(
+      startup: startup
+    ))
+
+    # ...and make him the team lead of 'Unfinished Swan'.
+    startup.update!(team_lead: founder_john_doe) if startup.product_name == 'Unfinished Swan'
+  end
 
   teams = {
     'Super Product' => [
@@ -48,10 +55,10 @@ after 'development:colleges', 'development:startups' do
   image_path = File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'users', 'college_id.jpg'))
 
   teams.each do |team_name, founders|
+    startup = Startup.find_by(product_name: team_name)
+
     founders.each do |team_lead, email, name, born_on, gender, phone|
       user = User.where(email: email).first_or_create!
-
-      startup = Startup.find_by(product_name: team_name)
 
       founder = Founder.create!(
         email: email,

@@ -1,6 +1,6 @@
 require_relative 'helper'
 
-after 'development:target_groups', 'development:timeline_event_types', 'development:faculty' do
+after 'development:target_groups', 'development:faculty' do
   puts 'Seeding targets'
 
   startup_school = School.find_by(name: 'Startup')

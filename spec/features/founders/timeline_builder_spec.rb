@@ -8,10 +8,9 @@ feature 'Timeline Builder' do
   let(:founder) { create :founder, startup: startup, fb_access_token: Faker::Lorem.word, fb_token_expires_at: 2.days.from_now }
 
   let(:target_group) { create :target_group, milestone: true, level: level_one }
-  let(:timeline_event_type) { create :timeline_event_type }
 
   let!(:pending_target) do
-    create :target, target_group: target_group, days_to_complete: 60, timeline_event_type: timeline_event_type
+    create :target, target_group: target_group, days_to_complete: 60
   end
 
   let(:description) { Faker::Lorem.sentence }
@@ -56,8 +55,6 @@ feature 'Timeline Builder' do
     attach_file 'timeline-builder__file-input', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf')), visible: false
     find('.timeline-builder__attachment-button').click
     expect(page).to_not have_selector('.timeline-builder__file-label') # ensure file section is closed
-
-    select timeline_event_type.title, from: 'Timeline Event Type'
 
     first('.js-timeline-builder__submit-button').click
 

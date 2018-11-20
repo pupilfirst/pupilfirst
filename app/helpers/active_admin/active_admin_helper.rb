@@ -8,12 +8,6 @@ module ActiveAdmin
       end
     end
 
-    def stages_collection
-      TimelineEventType::STAGES.each_with_object({}) do |stage, hash|
-        hash[TimelineEventType::STAGE_NAMES[stage]] = stage
-      end
-    end
-
     def founders_by_karma(level:, week_starting_at:)
       week_end_date = week_starting_at + 1.week
       Founder.joins(:startup, :karma_points)

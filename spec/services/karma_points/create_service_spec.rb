@@ -6,10 +6,12 @@ describe KarmaPoints::CreateService do
   describe '#execute' do
     let!(:startup) { create :startup }
     let!(:founder) { create :founder, startup: startup }
-    let!(:timeline_event_type_founder) { create :timeline_event_type, role: TimelineEventType::ROLE_FOUNDER }
-    let!(:timeline_event_type_startup) { create :timeline_event_type, role: TimelineEventType::ROLE_DESIGN }
-    let!(:timeline_event_for_founder_target) { create :timeline_event, founder: founder, startup: startup, timeline_event_type: timeline_event_type_founder }
-    let!(:timeline_event_for_startup_target) { create :timeline_event, startup: startup, timeline_event_type: timeline_event_type_startup }
+    let!(:level) { create :level }
+    let!(:target_group) { create :target_group, level: level }
+    let!(:founder_target) { create :target, target_group: target_group, role: Target::ROLE_FOUNDER }
+    let!(:startup_target) { create :target, target_group: target_group, role: Target::ROLE_TEAM }
+    let!(:timeline_event_for_founder_target) { create :timeline_event, target: founder_target, founder: founder, startup: startup }
+    let!(:timeline_event_for_startup_target) { create :timeline_event, target: startup_target, startup: startup }
     let(:connect_request) { create :connect_request, startup: startup }
     let(:platform_feedback) { create :platform_feedback, founder: founder }
     let(:public_slack_message) { create :public_slack_message, founder: founder }

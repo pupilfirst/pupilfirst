@@ -12,7 +12,6 @@ ActiveAdmin.register Target do
   filter :level, collection: -> { Level.all.includes(:school).order('schools.name ASC, levels.number ASC') }
   filter :faculty_name, as: :string
   filter :role, as: :select, collection: -> { Target.valid_roles }
-  filter :timeline_event_type_title, as: :string
   filter :school, as: :select
 
   filter :ransack_tagged_with,
@@ -64,7 +63,7 @@ ActiveAdmin.register Target do
   show do |target|
     if target.evaluation_criteria.present? && target.timeline_events.exists?
       div do
-        table_for target.timeline_events.includes(:timeline_event_type, :founder, :startup).where(timeline_events: { created_at: 3.months.ago..Time.now }) do
+        table_for target.timeline_events.includes(:founder, :startup).where(timeline_events: { created_at: 3.months.ago..Time.now }) do
           caption 'Linked Timeline Events (up to 3 months ago)'
 
           column 'Timeline Event' do |timeline_event|
@@ -92,7 +91,6 @@ ActiveAdmin.register Target do
     attributes_table do
       row :title
       row :key
-      row :timeline_event_type
       row :session_at
 
       row :tags do |founder|
@@ -204,10 +202,6 @@ ActiveAdmin.register Target do
     column :id
     column :title
 
-    column :timeline_event_type do |target|
-      target&.timeline_event_type&.title
-    end
-
     column :session do |target|
       target.session? ? 'Yes' : 'No'
     end
@@ -306,7 +300,6 @@ ActiveAdmin.register Target do
       end
 
       f.input :target_action_type, collection: Target.valid_target_action_types
-      f.input :timeline_event_type, collection: TimelineEventType.live, include_blank: 'Select default timeline event type'
       f.input :points_earnable
 
       if presenter.valid_prerequisites.exists?

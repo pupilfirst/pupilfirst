@@ -49,13 +49,6 @@
   .row
     .col-lg-4.order-1.order-lg-2
       #data-points
-        - if @startup.latest_help_wanted.present?
-          .alert.alert-info
-            strong Help Wanted:
-            ' &nbsp;#{@startup.latest_help_wanted.description}
-            - if @startup.email?
-              | Please reach out to us at #{mail_to @startup.email}
-
         .data-icons
           .row
             .col-sm-6.col-md-12

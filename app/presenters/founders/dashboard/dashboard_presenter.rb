@@ -9,7 +9,6 @@ module Founders
       def react_props
         dashboard_data_service.props.merge(
           currentLevel: current_startup.level.slice(:id, :name, :number),
-          timelineEventTypes: list_service.list,
           facebookShareEligibility: current_founder.facebook_share_eligibility,
           levelUpEligibility: level_up_eligibility_service.eligibility,
           nextLevelUnlockDate: level_up_eligibility_service.next_level_unlock_date,
@@ -71,10 +70,6 @@ module Founders
 
       def dashboard_data_service
         @dashboard_data_service ||= Founders::DashboardDataService.new(current_founder)
-      end
-
-      def list_service
-        @list_service ||= TimelineEventTypes::ListService.new(current_startup)
       end
 
       def level_up_eligibility_service

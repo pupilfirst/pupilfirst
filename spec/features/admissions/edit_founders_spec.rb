@@ -21,8 +21,6 @@ feature 'Edit founders' do
   end
 
   context 'when founder has completed the screening prerequisite' do
-    let!(:tet_team_update) { create :timeline_event_type, :team_update }
-
     before do
       complete_target founder, screening_target
     end
@@ -183,8 +181,6 @@ feature 'Edit founders' do
   end
 
   context 'when the startup has already completed the initial payment' do
-    let!(:tet_team_update) { create :timeline_event_type, :team_update }
-
     before do
       complete_target founder, screening_target
       complete_target founder, cofounder_addition_target

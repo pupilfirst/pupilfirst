@@ -1,6 +1,8 @@
 require_relative 'helper'
 
-after 'development:founders', 'development:targets', 'development:timeline_event_types' do
+
+after 'development:founders', 'development:targets' do
+
   puts 'Seeding timeline_events'
 
   avengers = Startup.find_by(product_name: 'The Avengers')
@@ -28,7 +30,6 @@ after 'development:founders', 'development:targets', 'development:timeline_event
   # Complete all Level 1 and Level 2 targets for 'The Avengers'.
   [1, 2].each do |level_number|
     Target.joins(target_group: :level).where(levels: { number: level_number, school_id: avengers.school.id }).each do |target|
-
       complete_target(target, avengers)
     end
   end
@@ -39,7 +40,6 @@ after 'development:founders', 'development:targets', 'development:timeline_event
 
   TimelineEvent.create!(
     startup: ios_startup,
-    timeline_event_type: TimelineEventType.find_by(key: 'general_submission'),
     founder: ios_founder,
     event_on: Time.now,
     description: 'This is a seeded pending submission for the iOS startup',

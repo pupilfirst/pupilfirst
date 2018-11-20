@@ -5,8 +5,8 @@ describe Founders::TargetGradeService do
 
   let(:level_zero) { create :level, :zero }
   let!(:startup) { create :startup, level: level_zero }
-  let(:founder) { create :founder }
-  let(:co_founder) { create :founder }
+  let(:founder) { create :founder, startup: startup }
+  let(:co_founder) { create :founder, startup: startup }
 
   let!(:target_group) { create :target_group, level: level_zero }
   let!(:founder_target) { create :target, :for_founders, target_group: target_group }
@@ -27,10 +27,6 @@ describe Founders::TargetGradeService do
       startup: startup,
       target: startup_target,
       status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT
-  end
-
-  before do
-    startup.founders << [founder, co_founder]
   end
 
   describe '#grade' do

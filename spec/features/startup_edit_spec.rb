@@ -8,7 +8,6 @@ feature 'Startup Edit' do
 
   let(:new_product_name) { Faker::Lorem.words(rand(1..3)).join ' ' }
   let(:new_product_description) { Faker::Lorem.words(12).join(' ').truncate(Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS) }
-  let(:new_deck) { Faker::Internet.url }
 
   before do
     startup.founders << founder
@@ -21,7 +20,6 @@ feature 'Startup Edit' do
 
       fill_in 'startups_edit_product_name', with: new_product_name
       fill_in 'startups_edit_product_description', with: new_product_description
-      fill_in 'startups_edit_presentation_link', with: new_deck
 
       click_on 'Update team profile'
 
@@ -32,7 +30,6 @@ feature 'Startup Edit' do
 
       expect(startup.product_name).to eq(new_product_name)
       expect(startup.product_description).to eq(new_product_description)
-      expect(startup.presentation_link).to eq(new_deck)
     end
 
     scenario 'Founder clears all required fields' do

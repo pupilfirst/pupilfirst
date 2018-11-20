@@ -212,7 +212,7 @@ class Founder < ApplicationRecord
   end
 
   # Returns the percentage of profile completion as an integer
-  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  # rubocop:disable Metrics/CyclomaticComplexity
   def profile_completion_percentage
     score = 30 # a default score given for required fields during registration
     # score += 15 if slack_user_id.present? # has a valid slack account associated
@@ -221,7 +221,6 @@ class Founder < ApplicationRecord
     score += 15 if communication_address.present?
     score += 15 if about.present?
     score += 15 if identification_proof.present?
-    # score += 15 if resume_link.present? # has uploaded resume
     score
   end
 
@@ -233,9 +232,8 @@ class Founder < ApplicationRecord
     return 'Update your communication address!' if communication_address.blank?
     return 'Write a one-liner about yourself!' if about.blank?
     return 'Upload your legal ID proof!' if identification_proof.blank?
-    return 'Submit a resume to your timeline to complete your profile!' if resume_link.blank?
   end
-  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   # Should we give the founder a tour of the founder dashboard? If so, we shouldn't give it again.
   def tour_dashboard?
@@ -270,22 +268,6 @@ class Founder < ApplicationRecord
 
   def resume_link
     resume_file.present? ? Rails.application.routes.url_helpers.download_timeline_event_file_url(resume_file) : resume_url
-  end
-
-  # Override the default method to compute the URL if stored value is blank?
-  def resume_url
-    @resume_url ||= begin
-      if super.present?
-        super
-      else
-        resume_event = timeline_events.verified
-          .joins(:timeline_event_type)
-          .where(timeline_event_types: { key: TimelineEventType::TYPE_RESUME_SUBMISSION })
-          .last
-
-        resume_event&.first_attachment_url
-      end
-    end
   end
 
   def profile_complete?

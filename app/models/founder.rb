@@ -80,7 +80,6 @@ class Founder < ApplicationRecord
 
   validates :born_on, presence: true, allow_nil: true
   validates :gender, inclusion: { in: valid_gender_values }, allow_nil: true
-  validates :email, uniqueness: true, allow_nil: true
   validates :id_proof_type, inclusion: { in: ID_PROOF_TYPES }, allow_nil: true
 
   validate :age_more_than_18

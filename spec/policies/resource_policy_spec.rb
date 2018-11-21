@@ -14,6 +14,11 @@ describe ResourcePolicy do
   let(:startup) { create :startup, :subscription_active, level: level_1 }
   let(:founder) { startup.founders.where.not(id: startup.team_lead_id).first }
 
+  let(:user) do
+    # This policy relies on being supplied a `current_user`, which would have `current_founder` set.
+    founder.user.tap { |user| user.current_founder = startup.team_lead }
+  end
+
   let!(:public_resource) { create :resource }
   let!(:level_0_resource) { create :resource, level: level_0 }
   let!(:level_1_resource) { create :resource, level: level_1 }
@@ -23,14 +28,14 @@ describe ResourcePolicy do
   permissions :show? do
     context 'when founder belongs to level 1 approved startup' do
       it 'allows access to public resource' do
-        expect(subject).to permit(founder.user, public_resource)
+        expect(subject).to permit(user, public_resource)
       end
 
       it 'allows access to resources upto level 1' do
-        expect(subject).to permit(founder.user, level_0_resource)
-        expect(subject).to permit(founder.user, level_1_resource)
-        expect(subject).to permit(founder.user, level_2_resource)
-        expect(subject).to_not permit(founder.user, level_1_s1_resource)
+        expect(subject).to permit(user, level_0_resource)
+        expect(subject).to permit(user, level_1_resource)
+        expect(subject).to permit(user, level_2_resource)
+        expect(subject).to_not permit(user, level_1_s1_resource)
       end
     end
 
@@ -40,13 +45,13 @@ describe ResourcePolicy do
       end
 
       it 'allows access to public resource' do
-        expect(subject).to permit(founder.user, public_resource)
+        expect(subject).to permit(user, public_resource)
       end
 
       it 'denies access to all approved resources' do
-        expect(subject).to_not permit(founder.user, level_0_resource)
-        expect(subject).to_not permit(founder.user, level_1_resource)
-        expect(subject).to_not permit(founder.user, level_2_resource)
+        expect(subject).to_not permit(user, level_0_resource)
+        expect(subject).to_not permit(user, level_1_resource)
+        expect(subject).to_not permit(user, level_2_resource)
       end
     end
 
@@ -54,13 +59,13 @@ describe ResourcePolicy do
       let(:startup) { create :startup }
 
       it 'allows access to public resource' do
-        expect(subject).to permit(founder.user, public_resource)
+        expect(subject).to permit(user, public_resource)
       end
 
       it 'denies access to all approved resources' do
-        expect(subject).to_not permit(founder.user, level_0_resource)
-        expect(subject).to_not permit(founder.user, level_1_resource)
-        expect(subject).to_not permit(founder.user, level_2_resource)
+        expect(subject).to_not permit(user, level_0_resource)
+        expect(subject).to_not permit(user, level_1_resource)
+        expect(subject).to_not permit(user, level_2_resource)
       end
     end
   end

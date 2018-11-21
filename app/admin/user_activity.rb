@@ -22,11 +22,6 @@ ActiveAdmin.register UserActivity do
     selectable_column
 
     column :user
-
-    column('Founder') do |user_activity|
-      user_activity.user.founder
-    end
-
     column :activity_type
     column :created_at
 
@@ -49,8 +44,19 @@ ActiveAdmin.register UserActivity do
       row :id
       row :user
 
-      row('Founder') do |user_activity|
-        user_activity.user.founder
+      row('Founder'.pluralize(user_activity.user.founders.count)) do |user_activity|
+        if user_activity.user.founders.exists?
+          if user_activity.user.founders.count > 1
+            ul do
+              user_activity.user.founders.each do |founder|
+                li link_to(founder.name, admin_founder_path(founder))
+              end
+            end
+          else
+            founder = user_activity.user.founders.first
+            link_to(founder.name, admin_founder_path(founder))
+          end
+        end
       end
 
       row :activity_type

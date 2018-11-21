@@ -6,8 +6,7 @@ class TimelineEventsController < ApplicationController
 
   # POST /timeline_events
   def create
-    timeline_event = TimelineEvent.new
-    authorize timeline_event
+    timeline_event = authorize(TimelineEvent.new)
     builder_form = TimelineEvents::BuilderForm.new(timeline_event)
     builder_form.founder = current_founder
 

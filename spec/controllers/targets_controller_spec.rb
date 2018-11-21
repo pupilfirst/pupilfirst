@@ -7,13 +7,16 @@ describe TargetsController do
   let!(:target) { create :target, :with_rubric }
   let!(:pending_prerequisite_target) { create :target }
   let!(:completed_prerequisite_target) { create :target }
+
   let!(:completion_event) do
     create :timeline_event,
       startup: startup, founder: startup.team_lead,
       target: completed_prerequisite_target,
       status: TimelineEvent::STATUS_VERIFIED
   end
+
   let!(:founder_target) { create :target, role: Target::ROLE_FOUNDER }
+
   let!(:completion_event_2) do
     create :timeline_event,
       startup: startup, founder: startup.team_lead,

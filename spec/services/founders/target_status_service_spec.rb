@@ -23,15 +23,17 @@ describe Founders::TargetStatusService do
 
   # founder has passed l_1_target_1
   let!(:l_1_target_1) { create :target, target_group: l_1_target_group_1 }
-  let!(:te_1) { create :timeline_event, founder: founder, target: l_1_target_1, passed_at: 10.days.ago }
+  let!(:te_1) do
+    create :timeline_event, startup: startup, founder: founder, target: l_1_target_1, passed_at: 10.days.ago, evaluator: faculty
+  end
 
   # founder has failed l_1_target_2
   let!(:l_1_target_2) { create :target, target_group: l_1_target_group_1 }
-  let!(:te_2) { create :timeline_event, founder: founder, target: l_1_target_2, evaluator: faculty }
+  let!(:te_2) { create :timeline_event, startup: startup, founder: founder, target: l_1_target_2, evaluator: faculty }
 
   # founder has submitted milestone l_1_target_3
   let!(:l_1_target_3) { create :target, target_group: l_1_target_group_2 }
-  let!(:te_3) { create :timeline_event, founder: founder, target: l_1_target_3 }
+  let!(:te_3) { create :timeline_event, startup: startup, founder: founder, target: l_1_target_3 }
 
   # founder has a pending l_2_target_1 with a passed prerequisite (l_1_target_1) and an archived_prerequisite
   let!(:l_2_target_1) { create :target, target_group: l_2_target_group_1 }
@@ -86,9 +88,9 @@ describe Founders::TargetStatusService do
 
   describe '#prerequisite_targets' do
     it 'returns all active prerequisite ids for all targets with prerequisites' do
-      expect(subject.prerequisite_targets(l_2_target_1.id)).to eq([{ 'id' => l_1_target_1.id }])
-      expect(subject.prerequisite_targets(l_2_target_2.id)).to eq([{ 'id' => l_2_target_1.id }])
-      expect(subject.prerequisite_targets(l_2_target_3.id)).to eq([{ 'id' => l_2_target_1.id }])
+      expect(subject.prerequisite_targets(l_2_target_1.id)).to eq([l_1_target_1])
+      expect(subject.prerequisite_targets(l_2_target_2.id)).to eq([l_2_target_1])
+      expect(subject.prerequisite_targets(l_2_target_3.id)).to eq([l_2_target_1])
     end
 
     it 'returns [] for all targets without prerequisites' do
@@ -99,9 +101,26 @@ describe Founders::TargetStatusService do
     end
   end
 
-  describe '#evaluation_criteria' do
-    it 'returns the evaluation critera assigned to each target' do
-      pending 'add evaluation criteria and test'
+  describe '#grades' do
+    let(:criterion_1) { create :evaluation_criterion, school: school }
+    let(:criterion_2) { create :evaluation_criterion, school: school }
+
+    before do
+      TimelineEventGrade.create!(timeline_event: te_1, evaluation_criterion: criterion_1, grade: 3)
+      TimelineEventGrade.create!(timeline_event: te_2, evaluation_criterion: criterion_1, grade: 2)
+      TimelineEventGrade.create!(timeline_event: te_2, evaluation_criterion: criterion_2, grade: 1)
+    end
+
+    it 'returns the grades for evaluated targets' do
+      expect(subject.grades(l_1_target_1.id)).to eq(criterion_1.id => 3)
+      expect(subject.grades(l_1_target_2.id)).to eq(criterion_1.id => 2, criterion_2.id => 1)
+    end
+
+    it 'returns nil for all unevaluated targets' do
+      unevaluated_targets = Target.where.not(id: [l_1_target_1.id, l_1_target_2.id, archived_prerequisite.id])
+      unevaluated_targets.each do |target|
+        expect(subject.grades(target.id)).to be_nil
+      end
     end
   end
 end

@@ -1,8 +1,9 @@
 FactoryBot.define do
   factory :level do
-    # TODO: This seems to be creating an unnecessary Level & School even when called with an school specified. Investigate.
     # This causes factory girl to retrieve a level with given number instead of attempting to create another.
-    initialize_with { Level.where(number: number, school: school).first_or_create }
+    initialize_with do
+      Level.where(number: number, school: school).first_or_create
+    end
 
     sequence(:name) { |n| "#{Faker::Lorem.word} #{n}" }
     description { Faker::Lorem.sentence }

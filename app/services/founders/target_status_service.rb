@@ -24,13 +24,11 @@ module Founders
 
     def prerequisite_targets(target_id)
       target_ids = all_target_prerequisites[target_id]
-      return [] if target_ids.blank?
-
-      applicable_targets.where(id: target_ids).as_json(only: [:id])
+      applicable_targets.where(id: target_ids)
     end
 
-    def evaluation_criteria(target_id)
-      all_target_evaluation_criteria[target_id]
+    def grades(target_id)
+      status_entries[target_id][:grades]
     end
 
     private
@@ -42,7 +40,8 @@ module Founders
         entries = @founder.latest_submissions.each_with_object({}) do |submission, result|
           result[submission.target_id] = {
             status: status_from_submission(submission),
-            submitted_at: submission.created_at.iso8601
+            submitted_at: submission.created_at.iso8601,
+            grades: grades_for_submission(submission)
           }
         end
 
@@ -77,11 +76,22 @@ module Founders
       submission.evaluator_id? ? STATUSES[:failed] : STATUSES[:submitted]
     end
 
+    def grades_for_submission(submission)
+      return unless submission.evaluator_id?
+
+      grades = timeline_event_grades.select { |grade| grade[:submission_id] == submission.id }
+
+      grades.each_with_object({}) do |grade, result|
+        result[grade[:criterion_id]] = grade[:grade]
+      end
+    end
+
     def status_fields(targets, status_key)
       targets.each_with_object({}) do |target, result|
         result[target.id] = {
           status: STATUSES[status_key],
-          submitted_at: nil
+          submitted_at: nil,
+          grades: nil
         }
       end
     end
@@ -152,6 +162,16 @@ module Founders
     def all_target_evaluation_criteria
       @all_target_evaluation_criteria ||= Target.joins(:evaluation_criteria).includes(target_evaluation_criteria: :evaluation_criterion).each_with_object({}) do |target, mapping|
         mapping[target.id] = target.evaluation_criteria.pluck(:id)
+      end
+    end
+
+    def timeline_event_grades
+      @timeline_event_grades ||= TimelineEventGrade.where(timeline_event: @founder.latest_submissions).map do |grade|
+        {
+          submission_id: grade.timeline_event_id,
+          criterion_id: grade.evaluation_criterion_id,
+          grade: grade.grade
+        }
       end
     end
   end

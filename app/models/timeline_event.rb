@@ -97,8 +97,8 @@ class TimelineEvent < ApplicationRecord
   end
 
   after_save :update_timeline_event_files
-  # after_create :update_latest_submission_record
-  # before_destroy :delete_latest_submission_record
+  after_create :update_latest_submission_record
+  before_destroy :delete_latest_submission_record
 
   def update_latest_submission_record
     TimelineEvents::UpdateLatestSubmissionRecordService.new(self).execute

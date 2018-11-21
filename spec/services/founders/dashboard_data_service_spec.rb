@@ -28,6 +28,7 @@ describe Founders::DashboardDataService do
   let!(:level_0_target) { create :target, target_group: target_group_l0_1 }
   let!(:level_0_session) { create :target, session_at: 1.day.ago, target_group: target_group_l0_2 }
   let!(:level_1_target) { create :target, target_group: target_group_l1_1 }
+  let!(:level_1_target_with_prerequisites) { create :target, target_group: target_group_l1_1, prerequisite_targets: [level_1_session] }
   let!(:level_1_session) { create :target, session_at: 1.day.ago, target_group: target_group_l1_2 }
   let!(:level_2_target) { create :target, target_group: target_group_l2_2 }
   let!(:level_2_session) { create :target, session_at: 1.day.ago, target_group: target_group_l2_2 }
@@ -54,7 +55,7 @@ describe Founders::DashboardDataService do
 
         props = subject.props
 
-        expect(props.keys).to contain_exactly(:faculty, :levels, :targetGroups, :targets, :tracks)
+        expect(props.keys).to contain_exactly(:faculty, :levels, :targetGroups, :targets, :tracks, :evalationCriteria)
         expect(props[:faculty]).to contain_exactly(*team_members)
         expect(props[:levels]).to contain_exactly(*level_fields(level_0))
         expect(props[:targetGroups]).to contain_exactly(*expected_target_groups)
@@ -78,9 +79,10 @@ describe Founders::DashboardDataService do
         expected_targets = [
           hash_including(level_1_target.slice(target_fields).merge(additional_target_fields(level_1_target, target_group_l1_1))),
           hash_including(level_1_session.slice(target_fields).merge(additional_target_fields(level_1_session, target_group_l1_2))),
+          hash_including(level_1_target_with_prerequisites.slice(target_fields).merge(additional_target_fields(level_1_target_with_prerequisites, target_group_l1_1, :prerequisite_locked))),
           hash_including(level_2_target.slice(target_fields).merge(additional_target_fields(level_2_target, target_group_l2_2))),
           hash_including(level_2_session.slice(target_fields).merge(additional_target_fields(level_2_session, target_group_l2_2))),
-          hash_including(level_2_target_with_prerequisites.slice(target_fields).merge(additional_target_fields(level_2_target_with_prerequisites, target_group_l2_1, :pending_milestone)).merge(prerequisite_fields(level_2_target_with_prerequisites))),
+          hash_including(level_2_target_with_prerequisites.slice(target_fields).merge(additional_target_fields(level_2_target_with_prerequisites, target_group_l2_1, :milestone_locked))),
           hash_including(level_3_target.slice(target_fields).merge(additional_target_fields(level_3_target, target_group_l3_1, :level_locked)))
         ]
 
@@ -90,7 +92,7 @@ describe Founders::DashboardDataService do
 
         props = subject.props
 
-        expect(props.keys).to contain_exactly(:faculty, :levels, :targetGroups, :targets, :tracks)
+        expect(props.keys).to contain_exactly(:faculty, :levels, :targetGroups, :targets, :tracks, :evalationCriteria)
         expect(props[:faculty]).to contain_exactly(*team_members)
         expect(props[:levels]).to contain_exactly(*level_fields(level_1, level_2, unlocked_level_3, locked_level_4))
         expect(props[:targetGroups]).to contain_exactly(*expected_target_groups)
@@ -112,8 +114,8 @@ describe Founders::DashboardDataService do
     end
   end
 
-  def prerequisite_fields(target)
-    { prerequisites: target.prerequisite_targets.map { |t| { id: t.id } } }
+  def target_status_service
+    @target_status_service ||= Founders::TargetStatusService.new(founder)
   end
 
   def target_group_fields
@@ -125,7 +127,9 @@ describe Founders::DashboardDataService do
       target_group: { id: target_group.id },
       faculty: { id: target.faculty.id },
       status: status,
-      prerequisites: []
+      submitted_at: target_status_service.submitted_at(target.id),
+      grades: target_status_service.grades(target.id),
+      prerequisites: target_status_service.prerequisite_targets(target.id).as_json(only: [:id])
     }
 
     return fields if target.session_at.blank?
@@ -134,6 +138,6 @@ describe Founders::DashboardDataService do
   end
 
   def target_fields
-    %i[id role title description completion_instructions resource_url slideshow_embed days_to_complete points_earnable sort_index video_embed link_to_complete submittability archived youtube_video_id session_by call_to_action]
+    %i[id role title description completion_instructions resource_url slideshow_embed video_embed youtube_video_id days_to_complete points_earnable resubmittable session_at session_by link_to_complete archived call_to_action sort_index]
   end
 end

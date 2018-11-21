@@ -10,14 +10,14 @@ module Founders
         levels: levels_as_json,
         faculty: faculty,
         targetGroups: target_groups,
-        tracks: tracks
+        tracks: tracks,
+        evalationCriteria: evaluation_criteria
       }
     end
 
     private
 
     def targets
-      # Targets at or below startup's level
       applicable_targets = Target.live.joins(target_group: :level).where(target_groups: { level: open_levels }).includes(:faculty)
 
       # Load basic data about targets from database.
@@ -36,7 +36,7 @@ module Founders
     end
 
     def visible_levels
-      @visible_levels ||= startup.level_zero? ? startup.school.levels.where(number: 0) : startup.school.levels.where('levels.number >= ?', 1)
+      @visible_levels ||= startup.level_zero? ? school.levels.where(number: 0) : school.levels.where('levels.number >= ?', 1)
     end
 
     def open_levels
@@ -69,26 +69,16 @@ module Founders
       Track.all.as_json(only: %i[id name sort_index])
     end
 
+    def evaluation_criteria
+      school.evaluation_criteria.as_json(only: %i[id name])
+    end
+
     def dashboard_decorated_data(target_data)
-      # Add status of target to compiled data.
-      target_data['status'] = target_status_service.status(target_data['id'])
-
-      # Add evaluation criteria of target.
-
-      target_data['evaluation_criteria'] = target_status_service.evaluation_criteria(target_data['id'])
-
-      # Add time of submission of last event, necessary for submitted and completed state.
-      if target_data['status'].in?([Target::STATUS_SUBMITTED, Target::STATUS_COMPLETE])
-        target_data['submitted_at'] = target_status_service.submitted_at(target_data['id'])
-      end
-
-      # add grade and score if completed
-      target_data['grade'] = target_grade_service.grade(target_data['id']) if target_data['status'] == Target::STATUS_COMPLETE
-      target_data['score'] = target_grade_service.score(target_data['id']) if target_data['status'] == Target::STATUS_COMPLETE
-
-      # add array of prerequisites
-      target_data['prerequisites'] = target_status_service.prerequisite_targets(target_data['id'])
-
+      target_id = target_data['id']
+      target_data['status'] = target_status_service.status(target_id)
+      target_data['submitted_at'] = target_status_service.submitted_at(target_id)
+      target_data['grades'] = target_status_service.grades(target_id)
+      target_data['prerequisites'] = target_status_service.prerequisite_targets(target_id).as_json(only: [:id])
       target_data
     end
 
@@ -96,12 +86,12 @@ module Founders
       @target_status_service ||= Founders::TargetStatusService.new(@founder)
     end
 
-    def target_grade_service
-      @target_grade_service ||= Founders::TargetGradeService.new(@founder)
-    end
-
     def startup
       @startup ||= @founder.startup
+    end
+
+    def school
+      @school ||= startup.school
     end
 
     def target_fields

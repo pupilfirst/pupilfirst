@@ -126,6 +126,13 @@ ActiveRecord::Schema.define(version: 2018_11_22_104730) do
     t.text "instructions"
   end
 
+  create_table "courses", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "sponsored", default: false
+  end
+
   create_table "data_migrations", id: false, force: :cascade do |t|
     t.string "version", null: false
     t.index ["version"], name: "unique_data_migrations", unique: true
@@ -323,9 +330,9 @@ ActiveRecord::Schema.define(version: 2018_11_22_104730) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "unlock_on"
-    t.bigint "school_id"
+    t.bigint "course_id"
+    t.index ["course_id"], name: "index_levels_on_course_id"
     t.index ["number"], name: "index_levels_on_number"
-    t.index ["school_id"], name: "index_levels_on_school_id"
   end
 
   create_table "payments", id: :serial, force: :cascade do |t|
@@ -421,13 +428,6 @@ ActiveRecord::Schema.define(version: 2018_11_22_104730) do
     t.index ["slug"], name: "index_resources_on_slug"
     t.index ["startup_id"], name: "index_resources_on_startup_id"
     t.index ["target_id"], name: "index_resources_on_target_id"
-  end
-
-  create_table "schools", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "sponsored", default: false
   end
 
   create_table "shortened_urls", id: :serial, force: :cascade do |t|
@@ -770,7 +770,7 @@ ActiveRecord::Schema.define(version: 2018_11_22_104730) do
   add_foreign_key "latest_submission_records", "founders"
   add_foreign_key "latest_submission_records", "targets"
   add_foreign_key "latest_submission_records", "timeline_events"
-  add_foreign_key "levels", "schools"
+  add_foreign_key "levels", "courses"
   add_foreign_key "payments", "founders"
   add_foreign_key "payments", "startups"
   add_foreign_key "resources", "levels"

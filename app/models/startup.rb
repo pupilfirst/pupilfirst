@@ -315,12 +315,12 @@ class Startup < ApplicationRecord
 
   # returns the date of the earliest verified timeline entry
   def earliest_team_event_date
-    timeline_events.verified_or_needs_improvement.not_private.order(:event_on).first.try(:event_on)
+    timeline_events.where.not(passed_at: nil).not_private.order(:event_on).first.try(:event_on)
   end
 
   # returns the date of the latest verified timeline entry
   def latest_team_event_date
-    timeline_events.verified_or_needs_improvement.not_private.order(:event_on).last.try(:event_on)
+    timeline_events.where.not(passed_at: nil).not_private.order(:event_on).last.try(:event_on)
   end
 
   def timeline_verified?
@@ -332,7 +332,7 @@ class Startup < ApplicationRecord
 
     # Only display verified of needs-improvement events if 'viewer' is not a member of this startup.
     if viewer&.startup != self
-      events_for_display = events_for_display.verified_or_needs_improvement
+      events_for_display = events_for_display.where.not(passed_at: nil)
     end
 
     decorated_events = events_for_display.includes(:target, :timeline_event_files).order(:event_on, :updated_at).reverse_order.decorate

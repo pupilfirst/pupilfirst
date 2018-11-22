@@ -8,8 +8,8 @@ class TimelineEventPolicy < ApplicationPolicy
     # User who cannot create, cannot destroy.
     return false unless create?
 
-    # Do not allow destruction of verified / needs improvement timeline events, or one.
-    return false if record.verified_or_needs_improvement?
+    # Do not allow destruction of passed timeline events, or one.
+    return false if record.passed_at?
 
     # Do not allow destruction of timeline events with startup feedback.
     return false if record.startup_feedback.present?

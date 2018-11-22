@@ -3,7 +3,6 @@
 class TimelineEvent < ApplicationRecord
   belongs_to :startup
   belongs_to :founder
-  belongs_to :timeline_event_type
   belongs_to :target
 
   has_one :karma_point, as: :source, dependent: :destroy, inverse_of: :source
@@ -19,7 +18,7 @@ class TimelineEvent < ApplicationRecord
 
   serialize :links
 
-  delegate :founder_event?, to: :timeline_event_type
+  delegate :founder_event?, to: :target
   delegate :title, to: :target
 
   MAX_DESCRIPTION_CHARACTERS = 500
@@ -69,9 +68,7 @@ class TimelineEvent < ApplicationRecord
   scope :verified_or_needs_improvement, -> { where(status: [STATUS_VERIFIED, STATUS_NEEDS_IMPROVEMENT]) }
   scope :has_image, -> { where.not(image: nil) }
   scope :from_approved_startups, -> { joins(:startup).merge(Startup.approved) }
-  scope :showcase, -> { includes(:timeline_event_type, :startup).verified.from_approved_startups.not_private.order('timeline_events.event_on DESC') }
-  scope :help_wanted, -> { where(timeline_event_type: TimelineEventType.help_wanted) }
-  scope :not_private, -> { where(timeline_event_type: TimelineEventType.where.not(role: TimelineEventType::ROLE_FOUNDER)) }
+  scope :not_private, -> { joins(:target).where.not(targets: { role: Target::ROLE_FOUNDER }) }
   scope :not_improved, -> { joins(:target).where(improved_timeline_event_id: nil) }
   scope :auto_verified, -> { joins(:target).where(targets: { submittability: Target::SUBMITTABILITY_AUTO_VERIFY }) }
   scope :not_auto_verified, -> { where.not(id: auto_verified) }
@@ -86,10 +83,6 @@ class TimelineEvent < ApplicationRecord
 
   def ensure_links_is_an_array
     self.links = [] if links.nil?
-  end
-
-  after_commit do
-    startup.update_stage! if timeline_event_type.stage_change?
   end
 
   # Accessors used by timeline builder form to create TimelineEventFile entries.
@@ -157,11 +150,6 @@ class TimelineEvent < ApplicationRecord
 
   def verify!
     update!(status: STATUS_VERIFIED, status_updated_at: Time.zone.now)
-
-    add_link_for_new_deck!
-    add_link_for_new_wireframe!
-    add_link_for_new_prototype!
-    add_link_for_new_video!
   end
 
   def verified?
@@ -207,7 +195,7 @@ class TimelineEvent < ApplicationRecord
 
   # A hidden timeline event is not displayed to user if user isn't logged in, or isn't the founder linked to event.
   def hidden_from?(viewer)
-    return false unless timeline_event_type.founder_event?
+    return false unless target.founder_event?
     return true if viewer.blank?
 
     founder != viewer
@@ -238,7 +226,6 @@ class TimelineEvent < ApplicationRecord
 
   def improved_event_candidates
     founder_or_startup.timeline_events
-      .where(timeline_event_type: timeline_event_type)
       .where('created_at > ?', created_at)
       .where.not(id: id).order('event_on DESC')
   end
@@ -279,34 +266,6 @@ class TimelineEvent < ApplicationRecord
 
   def privileged_founder?(founder)
     founder.present? && startup.founders.include?(founder)
-  end
-
-  def add_link_for_new_deck!
-    return unless timeline_event_type.new_deck?
-    return if first_attachment_url.blank?
-
-    startup.update!(presentation_link: first_attachment_url)
-  end
-
-  def add_link_for_new_wireframe!
-    return unless timeline_event_type.new_wireframe?
-    return if first_attachment_url.blank?
-
-    startup.update!(wireframe_link: first_attachment_url)
-  end
-
-  def add_link_for_new_prototype!
-    return unless timeline_event_type.new_prototype?
-    return if first_attachment_url.blank?
-
-    startup.update!(prototype_link: first_attachment_url)
-  end
-
-  def add_link_for_new_video!
-    return unless timeline_event_type.new_video?
-    return if first_attachment_url.blank?
-
-    startup.update!(product_video_link: first_attachment_url)
   end
 
   def first_file_url

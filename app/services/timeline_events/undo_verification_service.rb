@@ -9,24 +9,14 @@ module TimelineEvents
       raise "TimelineEvent ##{@timeline_event.id} is pending, and cannot be processed" if @timeline_event.pending?
 
       TimelineEvent.transaction do
-        unlink_startup_profile_submissions
         remove_karma_points
         remove_timeline_event_grades
         recompute_timeline_updated_on
-        unlink_founder_resume if @timeline_event.verified?
         reset_timeline_event_status
       end
     end
 
     private
-
-    # This removes the links to deck, wireframe, prototype, and video, if timeline event updated those.
-    def unlink_startup_profile_submissions
-      startup.update!(presentation_link: nil) if @timeline_event.timeline_event_type.new_deck?
-      startup.update!(wireframe_link: nil) if @timeline_event.timeline_event_type.new_wireframe?
-      startup.update!(prototype_link: nil) if @timeline_event.timeline_event_type.new_prototype?
-      startup.update!(product_video_link: nil) if @timeline_event.timeline_event_type.new_video?
-    end
 
     # Timeline event could have been awarded karma points. Remove those.
     def remove_karma_points
@@ -44,15 +34,6 @@ module TimelineEvents
         startup.timeline_updated_on = other_latest_timeline_event.event_on
         startup.save!
       end
-    end
-
-    # Unlink / remove founder resume if it was a resume submission.
-    def unlink_founder_resume
-      return unless @timeline_event.timeline_event_type.resume_submission?
-
-      founder.resume_file = nil
-      founder.resume_url = nil
-      founder.save!
     end
 
     # Reset the status of timeline event to pending.

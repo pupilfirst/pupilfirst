@@ -1,6 +1,8 @@
 require_relative 'helper'
 
-after 'development:founders', 'development:targets', 'development:timeline_event_types' do
+
+after 'development:founders', 'development:targets' do
+
   puts 'Seeding timeline_events'
 
   avengers = Startup.find_by(product_name: 'The Avengers')
@@ -11,17 +13,16 @@ after 'development:founders', 'development:targets', 'development:timeline_event
 
   # Add a submission for 'The Avengers' which needs improvement, and a pending 'improved' event.
   avenger_events = [
-    ['new_product_deck', 'ironman@example.org', 'We have a presentation about us!', status_needs_improvement],
-    ['new_product_deck', 'ironman@example.org', 'We an improved presentation.', status_pending]
+    ['ironman@example.org', 'We have a presentation about us!', status_needs_improvement],
+    ['ironman@example.org', 'We an improved presentation.', status_pending]
   ]
 
   avenger_target = avengers.school.targets.live.first
 
   # Create all events for 'The Avenger'
-  avenger_events.each do |type_key, founder_email, description, status|
+  avenger_events.each do |founder_email, description, status|
     TimelineEvent.create!(
       startup: avengers,
-      timeline_event_type: TimelineEventType.find_by(key: type_key),
       founder: Founder.find_by(email: founder_email),
       event_on: Time.now,
       description: description,
@@ -49,7 +50,6 @@ after 'development:founders', 'development:targets', 'development:timeline_event
       TimelineEvent.create!(
         startup: avengers,
         target: target,
-        timeline_event_type: target.timeline_event_type,
         founder: avengers.team_lead,
         event_on: Time.now,
         description: Faker::Lorem.paragraph,
@@ -66,7 +66,6 @@ after 'development:founders', 'development:targets', 'development:timeline_event
 
   TimelineEvent.create!(
     startup: ios_startup,
-    timeline_event_type: TimelineEventType.find_by(key: 'general_submission'),
     founder: ios_founder,
     event_on: Time.now,
     description: 'This is a seeded pending submission for the iOS startup',

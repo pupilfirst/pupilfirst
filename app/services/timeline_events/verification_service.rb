@@ -47,7 +47,6 @@ module TimelineEvents
         update_grade_and_score
         update_karma_points
         update_timeline_updated_on
-        update_founder_resume if @timeline_event.timeline_event_type.resume_submission?
         update_admission_stage if @timeline_event.target.in?(targets_for_admissions)
       end
 
@@ -126,34 +125,6 @@ module TimelineEvents
       return if @timeline_event.founder_event?
 
       startup.update!(timeline_updated_on: @timeline_event.event_on)
-    end
-
-    def update_founder_resume
-      if @timeline_event.timeline_event_files.exists?
-        update_resume_file
-      elsif @timeline_event.links.present?
-        update_resume_link
-      else
-        raise AttachmentMissingException
-      end
-    end
-
-    def update_resume_file
-      resume_file = @timeline_event.timeline_event_files.first
-      if resume_file.private?
-        raise AttachmentPrivacyException
-      else
-        founder.update!(resume_file: resume_file, resume_url: nil)
-      end
-    end
-
-    def update_resume_link
-      resume_link = @timeline_event.links.first
-      if resume_link['private']
-        raise AttachmentPrivacyException
-      else
-        founder.update!(resume_url: resume_link['url'], resume_file: nil)
-      end
     end
 
     def update_grade_and_score

@@ -1,6 +1,5 @@
 betterFormControls = ->
   $('#timeline_event_startup_id').select2(width: '400px')
-  $('#timeline_event_timeline_event_type_id').select2()
 
 loadFoundersForStartup = ->
   $('#timeline_event_startup_id').change (e) ->

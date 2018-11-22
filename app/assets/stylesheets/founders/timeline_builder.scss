@@ -73,6 +73,11 @@
   border: 0;
   font-size: 1.125rem;
   font-weight: $font-light;
+
+  &:focus, &:active {
+    border-color: transparent;
+    box-shadow: 0 0 rgba(0, 0, 0, 0);
+  }
 }
 
 .timeline-builder-social-bar__textarea-counter-container {
@@ -278,10 +283,19 @@
   }
 }
 
-.timeline-builder__upload-section,
-.timeline-builder__select-section {
+.timeline-builder__submit-button {
+  width: 100%;
+  border-radius: 0 0 10px 0;
+
+  @include media-breakpoint-down(sm) {
+    height: 50px;
+    border-radius: 0 0 10px 10px;
+  }
+}
+
+.timeline-builder__upload-section {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   width: 100%;
   position: relative;
 }
@@ -296,6 +310,8 @@
 .timeline-builder__select-section-tab {
   padding: 0 20px;
   display: flex;
+  flex-grow: 1;
+  justify-content: center;
   align-items: center;
   border-right: 1px solid $gray-border;
   color: darken($light-grey-text, 20%);
@@ -312,6 +328,10 @@
 .timeline-builder__upload-section-tab {
   cursor: pointer;
   transition: all 0.2s;
+
+  &:first-child {
+    border-radius: 0 0 0 10px;
+  }
 
   &:hover,
   &:focus {
@@ -334,10 +354,9 @@
 }
 
 .timeline-builder__select-section-tab {
-  @include media-breakpoint-down(sm) {
-    padding: 5px 20px;
-    margin: 10px 0;
-  }
+  align-items: stretch;
+  padding: 0;
+  width: 140px;
 }
 
 .timeline-builder__tab-label {

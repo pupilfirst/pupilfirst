@@ -11,8 +11,7 @@ export default class SubmitButton extends React.Component {
 
   openTimelineBuilder() {
     this.props.openTimelineBuilderCB(
-      this.props.target.id,
-      this.props.target.timeline_event_type_id
+      this.props.target.id
     );
   }
 

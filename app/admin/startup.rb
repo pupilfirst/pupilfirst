@@ -7,7 +7,6 @@ ActiveAdmin.register Startup do
   filter :product_name, as: :string
   filter :level_school_id, as: :select, label: 'School', collection: -> { School.all }
   filter :level, collection: -> { Level.all.order(number: :asc) }
-  filter :stage, as: :select, collection: -> { stages_collection }
 
   filter :ransack_tagged_with,
     as: :select,
@@ -60,7 +59,7 @@ ActiveAdmin.register Startup do
 
     column :timeline_events do |startup|
       ol do
-        startup.timeline_events.includes(:timeline_event_type).order('updated_at DESC').limit(5).each do |event|
+        startup.timeline_events.order('updated_at DESC').limit(5).each do |event|
           fa_icon = if event.verified?
             'fa-thumbs-o-up'
           elsif event.needs_improvement?

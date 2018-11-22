@@ -29,7 +29,6 @@ class Target < ApplicationRecord
   ].freeze
 
   belongs_to :faculty, optional: true
-  belongs_to :timeline_event_type, optional: true
   has_many :timeline_events, dependent: :nullify
   has_many :target_prerequisites, dependent: :destroy
   has_many :prerequisite_targets, through: :target_prerequisites
@@ -61,13 +60,9 @@ class Target < ApplicationRecord
   ROLE_FOUNDER = 'founder'
   ROLE_TEAM = 'team'
 
-  def self.target_roles
-    [ROLE_FOUNDER, ROLE_TEAM].freeze
-  end
-
   # See en.yml's target.role
   def self.valid_roles
-    target_roles + Founder.valid_roles
+    [ROLE_FOUNDER, ROLE_TEAM].freeze
   end
 
   TYPE_TODO = 'Todo'
@@ -188,6 +183,10 @@ class Target < ApplicationRecord
 
   def target?
     session_at.blank?
+  end
+
+  def founder_event?
+    role == ROLE_FOUNDER
   end
 
   def rubric?

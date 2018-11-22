@@ -87,7 +87,7 @@ class TimelineEventsController < ApplicationController
 
   def timeline_builder_params
     params.require(:timeline_event).permit(
-      :target_id, :timeline_event_type_id, :event_on, :description, :image, :links, :files_metadata, :share_on_facebook,
+      :target_id, :event_on, :description, :image, :links, :files_metadata, :share_on_facebook,
       files: (params[:timeline_event][:files]&.keys || [])
     )
   end

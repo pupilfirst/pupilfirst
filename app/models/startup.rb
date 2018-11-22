@@ -19,15 +19,6 @@ class Startup < ApplicationRecord
   MAX_PRODUCT_DESCRIPTION_CHARACTERS = 150
   MAX_CATEGORY_COUNT = 3
 
-  PRODUCT_PROGRESS_IDEA = 'idea'
-  PRODUCT_PROGRESS_MOCKUP = 'mockup'
-  PRODUCT_PROGRESS_PROTOTYPE = 'prototype'
-  PRODUCT_PROGRESS_PRIVATE_BETA = 'private_beta'
-  PRODUCT_PROGRESS_PUBLIC_BETA = 'public_beta'
-  PRODUCT_PROGRESS_LAUNCHED = 'launched'
-
-  SV_STATS_LINK = 'bit.ly/svstats2'
-
   ADMISSION_STAGE_SIGNED_UP = 'Signed Up'
   ADMISSION_STAGE_SELF_EVALUATION_COMPLETED = 'Self Evaluation Completed'
   ADMISSION_STAGE_R1_TASK_PASSED = 'Round 1 Task Passed'
@@ -41,13 +32,6 @@ class Startup < ApplicationRecord
   AGREEMENT_DURATION = 5
 
   COURSE_FEE = 50_000
-
-  def self.valid_product_progress_values
-    [
-      PRODUCT_PROGRESS_IDEA, PRODUCT_PROGRESS_MOCKUP, PRODUCT_PROGRESS_PROTOTYPE, PRODUCT_PROGRESS_PRIVATE_BETA,
-      PRODUCT_PROGRESS_PUBLIC_BETA, PRODUCT_PROGRESS_LAUNCHED
-    ]
-  end
 
   def self.valid_registration_types
     [REGISTRATION_TYPE_PRIVATE_LIMITED, REGISTRATION_TYPE_PARTNERSHIP, REGISTRATION_TYPE_LLP]
@@ -150,9 +134,6 @@ class Startup < ApplicationRecord
   # TODO: probably stale
   validates :registration_type, presence: true, if: ->(startup) { startup.validate_registration_type }
   validates :registration_type, inclusion: { in: valid_registration_types }, allow_nil: true
-
-  # Product Progress should be one of acceptable list.
-  validates :product_progress, inclusion: { in: valid_product_progress_values }, allow_nil: true
 
   # PIN Code is always 6 digits
   validates :pin, numericality: { greater_than_or_equal_to: 100_000, less_than_or_equal_to: 999_999 }, allow_nil: true
@@ -316,7 +297,6 @@ class Startup < ApplicationRecord
   # increasing order of specificity.
   def slug_candidates
     name = product_name.parameterize
-
     [
       name,
       [name, :id]
@@ -344,30 +324,6 @@ class Startup < ApplicationRecord
     timeline_events.verified_or_needs_improvement.not_private.order(:event_on).last.try(:event_on)
   end
 
-  # returns the latest 'moved_to_x_stage' timeline entry
-  def latest_change_of_stage
-    timeline_events.verified.where(timeline_event_type: TimelineEventType.moved_to_stage).order(event_on: :desc).includes(:timeline_event_type).first
-  end
-
-  # returns all timeline entries posted in the current stage i.e after the last 'moved_to_x_stage' timeline entry
-  def current_stage_events
-    if latest_change_of_stage.present?
-      timeline_events.where('event_on > ?', latest_change_of_stage.event_on)
-    else
-      timeline_events
-    end
-  end
-
-  # returns a distinct array of timeline_event_types of all timeline entries posted in the current stage
-  def current_stage_event_types
-    TimelineEventType.find(current_stage_events.pluck(:timeline_event_type_id).uniq)
-  end
-
-  def current_stage
-    changed_stage_event = latest_change_of_stage
-    changed_stage_event ? changed_stage_event.timeline_event_type.key : TimelineEventType::TYPE_STAGE_IDEA
-  end
-
   def timeline_verified?
     approved? && timeline_events.verified.exists?
   end
@@ -380,22 +336,10 @@ class Startup < ApplicationRecord
       events_for_display = events_for_display.verified_or_needs_improvement
     end
 
-    decorated_events = events_for_display.includes(:timeline_event_type, :target, :timeline_event_files).order(:event_on, :updated_at).reverse_order.decorate
+    decorated_events = events_for_display.includes(:target, :timeline_event_files).order(:event_on, :updated_at).reverse_order.decorate
 
     # Hide founder events from everyone other than author of event.
     decorated_events.reject { |event| event.hidden_from?(viewer) }
-  end
-
-  # Update stage whenever startup is updated. Note that this is also triggered from TimelineEvent after_commit.
-  after_save :update_stage!
-
-  # Update stage stored in database. Do not trigger callbacks, to avoid callback loop.
-  def update_stage!
-    update_column(:stage, current_stage) # rubocop:disable Rails/SkipsModelValidations
-  end
-
-  def latest_help_wanted
-    timeline_events.verified.help_wanted.order(created_at: 'desc').first
   end
 
   def display_name

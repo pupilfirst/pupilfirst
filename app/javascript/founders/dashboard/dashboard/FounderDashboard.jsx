@@ -17,7 +17,6 @@ export default class FounderDashboard extends React.Component {
       timelineBuilderVisible: false,
       timelineBuilderParams: {
         targetId: null,
-        selectedTimelineEventTypeId: null
       },
       selectedTargetId: props.initialTargetId,
       tourDashboard: props.tourDashboard
@@ -109,10 +108,9 @@ export default class FounderDashboard extends React.Component {
     this.setState({ timelineBuilderVisible: false });
   }
 
-  openTimelineBuilder(targetId, selectedTimelineEventTypeId) {
+  openTimelineBuilder(targetId) {
     let builderParams = {
-      targetId: targetId || null,
-      selectedTimelineEventTypeId: selectedTimelineEventTypeId || null
+      targetId: targetId || null
     };
 
     this.setState({
@@ -195,16 +193,12 @@ export default class FounderDashboard extends React.Component {
 
         {this.state.timelineBuilderVisible && (
           <TimelineBuilder
-            timelineEventTypes={this.props.timelineEventTypes}
             facebookShareEligibility={this.props.facebookShareEligibility}
             testMode={this.props.testMode}
             authenticityToken={this.props.authenticityToken}
             targetSubmissionCB={this.handleTargetSubmission}
             closeTimelineBuilderCB={this.closeTimelineBuilder}
             targetId={this.state.timelineBuilderParams.targetId}
-            selectedTimelineEventTypeId={
-              this.state.timelineBuilderParams.selectedTimelineEventTypeId
-            }
           />
         )}
 
@@ -233,7 +227,6 @@ FounderDashboard.propTypes = {
   targetGroups: PropTypes.array.isRequired,
   tracks: PropTypes.array.isRequired,
   currentLevel: PropTypes.object.isRequired,
-  timelineEventTypes: PropTypes.object,
   facebookShareEligibility: PropTypes.string,
   authenticityToken: PropTypes.string,
   levelUpEligibility: PropTypes.oneOf([

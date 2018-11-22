@@ -26,7 +26,6 @@ module Graduations
         founder: current_founder,
         startup: model,
         description: 'Pre-selection information has been submitted to the SV.CO team',
-        timeline_event_type: TimelineEventType.team_update,
         event_on: Time.zone.now,
         iteration: model.iteration
       )

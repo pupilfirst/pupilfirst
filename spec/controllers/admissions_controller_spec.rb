@@ -4,7 +4,6 @@ describe AdmissionsController do
   let(:level_0) { create :level, :zero }
   let(:level_0_targets) { create :target_group, level: level_0 }
   let!(:screening_target) { create :target, :admissions_screening, target_group: level_0_targets }
-  let!(:tet_team_update) { create :timeline_event_type, :team_update }
 
   let(:founder) { create :founder }
   let(:startup) { create :startup, level: level_0 }

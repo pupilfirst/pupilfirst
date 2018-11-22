@@ -9,8 +9,6 @@ describe TimelineEvents::VerificationService do
   let(:target) { create :target, points_earnable: 10 }
   let(:startup) { create :startup }
   let(:founder) { create :founder, startup: startup }
-  let(:tet_founder_update) { create :timeline_event_type, :founder_update }
-  let(:tet_team_update) { create :timeline_event_type, :team_update }
   let(:target_with_skills) { create :target }
   let!(:skill_1) { create :skill }
   let!(:skill_2) { create :skill }
@@ -85,8 +83,10 @@ describe TimelineEvents::VerificationService do
       end
 
       context 'when a founder timeline event is verified' do
+        let(:target) { create :target, role: Target::ROLE_FOUNDER }
+        let(:timeline_event) { create :timeline_event, target: target }
+
         it 'does not update the startups timeline_updated_on' do
-          timeline_event.update!(timeline_event_type: tet_founder_update)
           subject.update_status(TimelineEvent::STATUS_VERIFIED, points: 10)
 
           expect(timeline_event.startup.timeline_updated_on).to eq(nil)
@@ -94,8 +94,10 @@ describe TimelineEvents::VerificationService do
       end
 
       context 'when a team timeline event is verified' do
+        let(:target) { create :target, role: Target::ROLE_TEAM }
+        let(:timeline_event) { create :timeline_event, target: target }
+
         it 'updates the startups timeline_updated_on' do
-          timeline_event.update!(timeline_event_type: tet_team_update)
           subject.update_status(TimelineEvent::STATUS_VERIFIED, points: 10)
 
           expect(timeline_event.startup.timeline_updated_on).to eq(timeline_event.event_on)

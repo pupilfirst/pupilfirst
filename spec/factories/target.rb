@@ -8,7 +8,6 @@ FactoryBot.define do
     target_action_type { Target.valid_target_action_types.sample }
     days_to_complete { session_at.present? ? nil : rand(1..60) }
     target_group
-    timeline_event_type
     faculty { create :faculty, category: Faculty::CATEGORY_TEAM }
     sequence(:sort_index)
     key { nil }
@@ -24,7 +23,7 @@ FactoryBot.define do
     end
 
     trait :for_startup do
-      role { Founder.valid_roles.sample }
+      role { Target::ROLE_TEAM }
     end
 
     trait :with_rubric do

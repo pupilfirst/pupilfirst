@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :school do
+  factory :course do
     name { Faker::Lorem.word }
   end
 end

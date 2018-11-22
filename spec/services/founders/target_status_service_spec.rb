@@ -3,10 +3,10 @@ require 'rails_helper'
 describe Founders::TargetStatusService do
   subject { described_class.new(founder) }
 
-  let(:school) { create :school }
-  let(:level_zero) { create :level, :zero, school: school }
-  let(:level_one) { create :level, :one, school: school }
-  let(:level_two) { create :level, :two, school: school }
+  let(:course) { create :course }
+  let(:level_zero) { create :level, :zero, course: course }
+  let(:level_one) { create :level, :one, course: course }
+  let(:level_two) { create :level, :two, course: course }
   let!(:startup) { create :startup, level: level_zero }
   let(:founder) { create :founder }
   let(:co_founder) { create :founder }

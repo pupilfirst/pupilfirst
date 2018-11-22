@@ -17,7 +17,7 @@ after 'development:founders', 'development:targets' do
     ['ironman@example.org', 'We an improved presentation.', status_pending]
   ]
 
-  avenger_target = avengers.school.targets.live.first
+  avenger_target = avengers.course.targets.live.first
 
   # Create all events for 'The Avenger'
   avenger_events.each do |founder_email, description, status|
@@ -44,7 +44,7 @@ after 'development:founders', 'development:targets' do
 
   # Complete all Level 1 and Level 2 targets for 'The Avengers'.
   [1, 2].each do |level_number|
-    Target.joins(target_group: :level).where(levels: { number: level_number, school_id: avengers.school.id }).each do |target|
+    Target.joins(target_group: :level).where(levels: { number: level_number, course_id: avengers.course.id }).each do |target|
       score = [1.0, 1.5, 2.0, 2.5, 3.0].sample
 
       TimelineEvent.create!(
@@ -68,8 +68,8 @@ after 'development:founders', 'development:targets' do
     startup: ios_startup,
     founder: ios_founder,
     event_on: Time.now,
-    description: 'This is a seeded pending submission for the iOS startup',
+    description: "This is a seeded pending submission for the iOS startup\n\n...plus a second paragraph for the submission.",
     status: status_pending,
-    target: ios_startup.school.targets.live.first
+    target: ios_startup.course.targets.live.first
   )
 end

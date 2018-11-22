@@ -6,7 +6,7 @@ export default class LevelUpNotification extends React.Component {
     if (this.currentLevelNumber() === 0) {
       return "Congratulations! You are now an enrolled student at SV.CO.";
     } else if (this.currentLevelNumber() === this.props.rootProps.maxLevelNumber) {
-      if (this.props.rootProps.sponsoredSchool) {
+      if (this.props.rootProps.sponsoredCourse) {
         return "Congratulations! You have completed all milestone targets in this course.";
       }
       else {
@@ -22,7 +22,7 @@ export default class LevelUpNotification extends React.Component {
   }
 
   eligibleNotificationSubText() {
-    if (this.props.rootProps.sponsoredSchool) {
+    if (this.props.rootProps.sponsoredCourse) {
       return (
         <p>
           {" "}

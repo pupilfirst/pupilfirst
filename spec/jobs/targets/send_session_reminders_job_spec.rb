@@ -15,15 +15,15 @@ describe Targets::SendSessionRemindersJob do
     "Reminder: \"#{session_imminent.title}\" will start in #{time_delta(session_imminent)} (at #{time_exact(session_imminent)}). Please check the Slack collective channel for the link to join session."
   end
 
-  let(:school_1) { create :school }
-  let(:school_2) { create :school, sponsored: true }
+  let(:course_1) { create :course }
+  let(:course_2) { create :course, sponsored: true }
 
-  let(:level_1) { create :level, :one, school: school_1 }
-  let(:level_2) { create :level, :two, school: school_1 }
-  let(:level_3) { create :level, :three, school: school_1 }
-  let(:level_1_s2) { create :level, :one, school: school_2 }
-  let(:level_2_s2) { create :level, :two, school: school_2 }
-  let(:level_3_s2) { create :level, :three, school: school_2 }
+  let(:level_1) { create :level, :one, course: course_1 }
+  let(:level_2) { create :level, :two, course: course_1 }
+  let(:level_3) { create :level, :three, course: course_1 }
+  let(:level_1_s2) { create :level, :one, course: course_2 }
+  let(:level_2_s2) { create :level, :two, course: course_2 }
+  let(:level_3_s2) { create :level, :three, course: course_2 }
 
   let!(:startup_l1) { create :startup, :subscription_active, level: level_1 }
   let!(:startup_l2) { create :startup, :subscription_active, level: level_2 }
@@ -48,7 +48,7 @@ describe Targets::SendSessionRemindersJob do
   describe '#perform' do
     let(:expected_message) { build_expected_message(session_imminent) }
 
-    context 'when a session is imminenet for startups of unsponsored schools' do
+    context 'when a session is imminenet for startups of unsponsored courses' do
       let!(:session_imminent) { create :target, :session, session_at: 30.minutes.from_now, target_group: l2_target_group }
 
       it 'sends slack messages for imminent sessions to the appropriate founders' do
@@ -62,7 +62,7 @@ describe Targets::SendSessionRemindersJob do
           expect(message_service).not_to receive(:post).with(message: expected_message, founder: founder)
         end
 
-        # Founders in other schools should not receive notifications.
+        # Founders in other courses should not receive notifications.
         Founder.where(startup: [startup_s2_l1, startup_s2_l2, startup_s2_l3]).each do |founder|
           expect(message_service).not_to receive(:post).with(message: expected_message, founder: founder)
         end
@@ -88,21 +88,21 @@ describe Targets::SendSessionRemindersJob do
       end
     end
 
-    context 'when session is in a school that is sponsored' do
+    context 'when session is in a course that is sponsored' do
       let!(:session_imminent) { create :target, :session, session_at: 30.minutes.from_now, target_group: s2_l2_target_group }
 
       it 'sends slack messages to founders in all startups at or above session level' do
-        # All founders in subscribed school in a startup at or above session level should get noticiations.
+        # All founders in subscribed course in a startup at or above session level should get noticiations.
         Founder.where(startup: [startup_s2_l2, startup_s2_l3]).each do |founder|
           expect(message_service).to receive(:post).with(message: expected_message, founder: founder)
         end
 
-        # Founders in subscribed school below session level should not get notifications.
+        # Founders in subscribed course below session level should not get notifications.
         Founder.where(startup: [startup_s2_l1]).each do |founder|
           expect(message_service).not_to receive(:post).with(message: expected_message, founder: founder)
         end
 
-        # Founders in other schools should not receive notifications.
+        # Founders in other courses should not receive notifications.
         Founder.where(startup: [startup_l1, startup_l2, startup_l2_inactive, startup_l3]).each do |founder|
           expect(message_service).not_to receive(:post).with(message: expected_message, founder: founder)
         end

@@ -26,11 +26,11 @@ module Targets
       message_service = PublicSlack::MessageService.new
       service_errors = []
 
-      # The startups to which reminders for this session should be sent are the ones belonging to the session's school
+      # The startups to which reminders for this session should be sent are the ones belonging to the session's course
       # and those at or above the session's minimum level.
       session_level = session.target_group.level
-      school = session_level.school
-      eligible_levels = school.levels.where('levels.number >= ?', session_level.number)
+      course = session_level.course
+      eligible_levels = course.levels.where('levels.number >= ?', session_level.number)
       applicable_startups = Startup.where(level: eligible_levels)
 
       applicable_startups.distinct.each do |startup|

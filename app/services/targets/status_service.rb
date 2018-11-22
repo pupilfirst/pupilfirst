@@ -35,7 +35,7 @@ module Targets
       @previous_milestones_completed ||= begin
         return true unless @level_number > 1
 
-        previous_level = @founder.startup.school.levels.find_by(number: @level_number - 1)
+        previous_level = @founder.startup.course.levels.find_by(number: @level_number - 1)
         target_groups = previous_level.target_groups.where(milestone: true)
         milestone_targets = Target.where(target_group: target_groups)
         completed_target_ids = TimelineEvent.verified_or_needs_improvement.where(target: milestone_targets).pluck('target_id').uniq

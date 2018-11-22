@@ -19,12 +19,12 @@ module Startups
       @startup.update!(level: next_level)
     end
 
-    def school
-      @school ||= @startup.level.school
+    def course
+      @course ||= @startup.level.course
     end
 
     def next_level
-      @next_level ||= school.levels.find_by(number: @startup.level.number + 1)
+      @next_level ||= course.levels.find_by(number: @startup.level.number + 1)
     end
 
     def enroll_for_level_one

@@ -49,11 +49,11 @@ module Targets
       }
     end
 
-    # The startups to which calender events should be sent are the ones belonging to the target's school
+    # The startups to which calender events should be sent are the ones belonging to the target's course
     # and those at or above the session's minimum level.
     def attendees(target)
-      school = target.school
-      eligible_levels = school.levels.where('levels.number >= ?', target.level.number)
+      course = target.course
+      eligible_levels = course.levels.where('levels.number >= ?', target.level.number)
       applicable_startups = Startup.where(level: eligible_levels)
 
       (applicable_startups.distinct.map do |startup|

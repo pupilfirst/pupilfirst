@@ -106,7 +106,7 @@ class Startup < ApplicationRecord
   has_many :connect_requests, dependent: :destroy
 
   belongs_to :level
-  has_one :school, through: :level
+  has_one :course, through: :level
   has_many :payments, dependent: :restrict_with_error
   has_many :archived_payments, class_name: 'Payment', foreign_key: 'original_startup_id', dependent: :nullify, inverse_of: :original_startup
 
@@ -386,7 +386,7 @@ class Startup < ApplicationRecord
   end
 
   def subscription_active?
-    level.school.sponsored || payments.where('billing_end_at > ?', Time.now).paid.exists?
+    level.course.sponsored || payments.where('billing_end_at > ?', Time.now).paid.exists?
   end
 
   def self.admission_stages

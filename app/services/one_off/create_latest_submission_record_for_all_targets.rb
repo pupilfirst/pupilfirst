@@ -3,8 +3,8 @@ module OneOff
   class CreateLatestSubmissionRecordForAllTargets
     def execute
       Founder.all.each do |founder|
-        school = founder.startup.school
-        school.targets.each do |target|
+        course = founder.startup.course
+        course.targets.each do |target|
           latest_timeline_event = target.latest_linked_event(founder)
           TimelineEvents::UpdateLatestSubmissionRecordService.new(latest_timeline_event).execute
         end

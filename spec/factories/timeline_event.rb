@@ -19,9 +19,5 @@ FactoryBot.define do
         ]
       end
     end
-
-    trait :verified do
-      status { TimelineEvent::STATUS_VERIFIED }
-    end
   end
 end

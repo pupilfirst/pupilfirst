@@ -52,11 +52,6 @@ describe Founders::TargetStatusService do
     l_2_target_1.prerequisite_targets << [l_1_target_1, archived_prerequisite]
     l_2_target_2.prerequisite_targets << l_2_target_1
     l_2_target_3.prerequisite_targets << l_2_target_1
-
-    # TODO: Remove explicit creation of submission records once we have the TimelineEvent#after_create hook merge in.
-    TimelineEvent.all.each do |timeline_event|
-      LatestSubmissionRecord.create!(timeline_event: timeline_event, founder: founder, target: timeline_event.target)
-    end
   end
 
   describe '#status' do

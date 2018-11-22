@@ -43,26 +43,12 @@ describe Targets::StatusService do
         end
 
         context 'when all prerequisites are complete' do
-          let(:submission_1) do
-            create :timeline_event, founder: founder_2, target: team_target_1, passed_at: 1.day.ago
+          let!(:submission_1) do
+            create :timeline_event, startup: startup, founder: founder_2, target: team_target_1, passed_at: 1.day.ago
           end
 
-          let(:submission_2) do
-            create :timeline_event, founder: founder_1, target: founder_target_2, passed_at: 1.day.ago
-          end
-
-          # TODO: Remove the before block once we have the TimelineEvent after_create hook merged in.
-          before do
-            LatestSubmissionRecord.create!(
-              target: team_target_1,
-              founder: founder_1,
-              timeline_event: submission_1
-            )
-            LatestSubmissionRecord.create!(
-              target: founder_target_2,
-              founder: founder_1,
-              timeline_event: submission_2
-            )
+          let!(:submission_2) do
+            create :timeline_event, startup: startup, founder: founder_1, target: founder_target_2, passed_at: 1.day.ago
           end
 
           it 'returns :pending' do
@@ -95,26 +81,12 @@ describe Targets::StatusService do
         end
 
         context 'when all previous level milestones are completed' do
-          let(:submission_1) do
-            create :timeline_event, founder: founder_2, target: level_1_team_target, passed_at: 1.day.ago
+          let!(:submission_1) do
+            create :timeline_event, startup: startup, founder: founder_2, target: level_1_team_target, passed_at: 1.day.ago
           end
 
-          let(:submission_2) do
-            create :timeline_event, founder: founder_1, target: leve1__1_founder_target, passed_at: 1.day.ago
-          end
-
-          # TODO: Remove the before block once we have the TimelineEvent after_create hook merged in.
-          before do
-            LatestSubmissionRecord.create!(
-              target: level_1_team_target,
-              founder: founder_1,
-              timeline_event: submission_1
-            )
-            LatestSubmissionRecord.create!(
-              target: leve1__1_founder_target,
-              founder: founder_1,
-              timeline_event: submission_2
-            )
+          let!(:submission_2) do
+            create :timeline_event, startup: startup, founder: founder_1, target: leve1__1_founder_target, passed_at: 1.day.ago
           end
 
           it 'returns :pending' do
@@ -125,12 +97,7 @@ describe Targets::StatusService do
     end
 
     context 'when the target has a submission' do
-      let(:submission) { create :timeline_event, founder: founder_1, target: founder_target_1 }
-
-      # TODO: Remove the before block once we have the TimelineEvent after_create hook merged in.
-      before do
-        LatestSubmissionRecord.create!(target: founder_target_1, founder: founder_1, timeline_event: submission)
-      end
+      let!(:submission) { create :timeline_event, startup: startup, founder: founder_1, target: founder_target_1 }
 
       context 'when the submission is not evaluated yet' do
         it 'returns :submitted' do
@@ -139,7 +106,7 @@ describe Targets::StatusService do
       end
 
       context 'when the submission has passed_at set' do
-        let(:submission) { create :timeline_event, founder: founder_1, target: founder_target_1, passed_at: 1.day.ago }
+        let!(:submission) { create :timeline_event, startup: startup, founder: founder_1, target: founder_target_1, passed_at: 1.day.ago }
 
         it 'returns :passed' do
           expect(subject.status).to eq(Targets::StatusService::STATUS_PASSED)
@@ -148,7 +115,9 @@ describe Targets::StatusService do
 
       context 'when the submission was evaluated but passed_at not set' do
         let(:faculty) { create :faculty }
-        let(:submission) { create :timeline_event, founder: founder_1, target: founder_target_1, evaluator: faculty }
+        let!(:submission) do
+          create :timeline_event, startup: startup, founder: founder_1, target: founder_target_1, evaluator: faculty
+        end
 
         it 'returns :failed' do
           expect(subject.status).to eq(Targets::StatusService::STATUS_FAILED)

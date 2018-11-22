@@ -79,6 +79,7 @@ module Founders
       target_data['submitted_at'] = target_status_service.submitted_at(target_id)
       target_data['grades'] = target_status_service.grades(target_id)
       target_data['prerequisites'] = target_status_service.prerequisite_targets(target_id).as_json(only: [:id])
+      target_data['auto_verified'] = !target_id.in?(targets_with_criteria)
       target_data
     end
 
@@ -96,6 +97,10 @@ module Founders
 
     def target_fields
       %i[id role title description completion_instructions resource_url slideshow_embed video_embed youtube_video_id days_to_complete points_earnable resubmittable session_at session_by link_to_complete archived call_to_action sort_index]
+    end
+
+    def targets_with_criteria
+      @targets_with_criteria ||= Target.joins(:target_evaluation_criteria).pluck(:id)
     end
   end
 end

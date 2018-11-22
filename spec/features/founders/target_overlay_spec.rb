@@ -1,15 +1,18 @@
 require 'rails_helper'
 
 feature 'Target Overlay' do
+  # TODO: Rewrite a cleaner version
   include UserSpecHelper
 
-  let!(:level_1) { create :level, :one }
+  let(:school) { create :school }
+  let(:criterion) { create :evaluation_criterion, school: school }
+  let!(:level_1) { create :level, :one, school: school }
   let!(:startup) { create :startup, :subscription_active, level: level_1 }
   let!(:founder) { startup.team_lead }
   let!(:target_group_1) { create :target_group, level: level_1, milestone: true }
   let!(:target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM }
   let!(:prerequisite_target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM }
-  let!(:timeline_event) { create :timeline_event, startup: startup, founder: founder, status: TimelineEvent::STATUS_VERIFIED, links: [{ title: 'Some Link', url: 'https://www.example.com', private: false }] }
+  let!(:timeline_event) { create :timeline_event, startup: startup, founder: founder, passed_at: 2.days.ago, links: [{ title: 'Some Link', url: 'https://www.example.com', private: false }] }
   let!(:timeline_event_file) { create :timeline_event_file, timeline_event: timeline_event }
   let(:faculty) { create :faculty, slack_username: 'abcd' }
   let!(:feedback) { create :startup_feedback, timeline_event: timeline_event, startup: startup, faculty: faculty }
@@ -19,6 +22,7 @@ feature 'Target Overlay' do
   let!(:resource_link) { create :resource_link, target: target }
 
   before do
+    target.evaluation_criteria << criterion
     founder.update!(dashboard_toured: true)
     sign_in_user founder.user, referer: student_dashboard_path
   end
@@ -82,7 +86,7 @@ feature 'Target Overlay' do
   end
 
   context 'when the founder clicks on a completed target', js: true do
-    let!(:timeline_event) { create :timeline_event, startup: startup, target: target, founder: founder, status: TimelineEvent::STATUS_VERIFIED, links: [{ title: 'Some Link', url: 'https://www.example.com', private: false }] }
+    let!(:timeline_event) { create :timeline_event, startup: startup, target: target, founder: founder, passed_at: 2.days.ago, links: [{ title: 'Some Link', url: 'https://www.example.com', private: false }] }
 
     it 'displays the latest submission and feedback for it' do
       find('.founder-dashboard-target-header__headline', text: target.title).click
@@ -115,7 +119,7 @@ feature 'Target Overlay' do
 
   context 'when the founder clicks a founder target', js: true do
     let!(:target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_FOUNDER }
-    let!(:timeline_event) { create :timeline_event, startup: startup, target: target, founder: founder, status: TimelineEvent::STATUS_VERIFIED, links: [{ title: 'Some Link', url: 'https://www.example.com', private: false }] }
+    let!(:timeline_event) { create :timeline_event, startup: startup, target: target, founder: founder, passed_at: 2.days.ago, links: [{ title: 'Some Link', url: 'https://www.example.com', private: false }] }
 
     before do
       visit student_dashboard_path
@@ -158,30 +162,12 @@ feature 'Target Overlay' do
         within('.target-overlay__status-badge-block') do
           expect(page).to have_selector('.target-overlay-status-badge-bar__badge-icon > i.fa-lock')
           expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > span', text: 'Locked')
-          expect(page).to have_selector('.target-overlay-status-badge-bar__hint', text: 'Complete prerequisites first!')
+          expect(page).to have_selector('.target-overlay-status-badge-bar__hint', text: 'Complete the prerequisites first')
         end
 
         within('.target-overlay-content-block') do
           expect(page).to have_selector('.target-overlay-content-block__prerequisites > h6', text: 'Pending Prerequisites:')
           expect(page).to have_selector(".target-overlay-content-block__prerequisites-list-item > a[href='/student/dashboard/targets/#{prerequisite_target.id}']", text: prerequisite_target.title)
-        end
-      end
-    end
-
-    context 'when the target has is not submittable' do
-      before do
-        target.update!(submittability: Target::SUBMITTABILITY_NOT_SUBMITTABLE)
-        visit student_dashboard_path
-      end
-
-      it 'informs about the pending prerequisite' do
-        find('.founder-dashboard-target-header__headline', text: target.title).click
-
-        # The target must be marked locked.
-        within('.target-overlay__status-badge-block') do
-          expect(page).to have_selector('.target-overlay-status-badge-bar__badge-icon > i.fa-lock')
-          expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > span', text: 'Locked')
-          expect(page).to have_selector('.target-overlay-status-badge-bar__hint', text: 'The target is currently unavailable to complete!')
         end
       end
     end

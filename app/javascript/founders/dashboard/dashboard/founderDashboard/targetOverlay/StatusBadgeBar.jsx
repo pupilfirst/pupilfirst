@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import starsForScore from "../shared/starsForScore";
 
 export default class StatusBadgeBar extends React.Component {
   containerClasses() {
@@ -12,40 +11,37 @@ export default class StatusBadgeBar extends React.Component {
 
   statusIconClasses() {
     return {
-      complete: "fa fa-thumbs-o-up",
-      needs_improvement: "fa fa-line-chart",
+      passed: "fa fa-thumbs-o-up",
+      failed: "fa fa-thumbs-o-down",
       submitted: "fa fa-hourglass-half",
       pending: "fa fa-clock-o",
-      unavailable: "fa fa-lock",
-      not_accepted: "fa fa-thumbs-o-down",
-      level_locked: "fa fa-eye",
-      pending_milestone: "fa fa-lock"
+      prerequisite_locked: "fa fa-lock",
+      milestone_locked: "fa fa-lock",
+      level_locked: "fa fa-eye"
     }[this.props.target.status];
   }
 
   statusString() {
     return {
-      complete: "Completed",
-      needs_improvement: "Needs Improvement",
+      passed: "Passed",
+      failed: "Failed",
       submitted: "Submitted",
       pending: "Pending",
-      unavailable: "Locked",
-      not_accepted: "Not Accepted",
       level_locked: "Preview",
-      pending_milestone: "Locked"
+      milestone_locked: "Locked",
+      prerequisite_locked: "Locked"
     }[this.props.target.status];
   }
 
   statusHintString() {
     return {
-      complete: "Completed on " + this.submissionDate(),
-      needs_improvement: "Consider feedback and try re-submitting!",
+      passed: "Passed on " + this.submissionDate(),
+      failed: "Consider feedback and try re-submitting!",
       submitted: "Submitted on " + this.submissionDate(),
       pending: "Follow completion instructions and submit!",
-      unavailable: "Complete prerequisites first!",
-      not_accepted: "Re-submit based on feedback!",
-      level_locked: "Complete previous levels to work on this target!",
-      pending_milestone: "Complete milestone targets in previous level!"
+      level_locked: "You are yet to reach this level",
+      milestone_locked: "Complete milestones in previous level first",
+      prerequisite_locked: "Complete the prerequisites first"
     }[this.props.target.status];
   }
 
@@ -54,32 +50,15 @@ export default class StatusBadgeBar extends React.Component {
   }
 
   statusContents() {
-    let grade = ["good", "great", "wow"].indexOf(this.props.target.grade) + 1;
-    const score = parseFloat(this.props.target.score);
+    return (
+      <div className="target-overlay-status-badge-bar__badge-content">
+        <span className="target-overlay-status-badge-bar__badge-icon">
+          <i className={this.statusIconClasses()} />
+        </span>
 
-    if (this.props.target.status !== "complete" || grade === 0) {
-      return (
-        <div className="target-overlay-status-badge-bar__badge-content">
-          <span className="target-overlay-status-badge-bar__badge-icon">
-            <i className={this.statusIconClasses()} />
-          </span>
-
-          <span>{this.statusString()}</span>
-        </div>
-      );
-    } else {
-      const stars = starsForScore(score, this.props.target.id);
-
-      let gradeString =
-        this.props.target.grade.charAt(0).toUpperCase() +
-        this.props.target.grade.slice(1);
-
-      return (
-        <div className="target-overlay-status-badge-bar__badge-content">
-          {stars} {gradeString}!
-        </div>
-      );
-    }
+        <span>{this.statusString()}</span>
+      </div>
+    );
   }
 
   render() {

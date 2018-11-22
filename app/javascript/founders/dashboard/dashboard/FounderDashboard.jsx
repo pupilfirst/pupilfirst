@@ -135,6 +135,7 @@ export default class FounderDashboard extends React.Component {
     }
 
     updatedTargets[targetIndex].status = "submitted";
+    updatedTargets[targetIndex].submitted_at = new moment();
 
     this.setState({
       targets: updatedTargets

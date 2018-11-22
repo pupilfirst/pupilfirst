@@ -9,7 +9,7 @@ class TargetPolicy < ApplicationPolicy
 
   def auto_verify?
     download_rubric? &&
-      record.submittability == Target::SUBMITTABILITY_AUTO_VERIFY &&
+      record.evaluation_criteria.blank? &&
       current_founder.startup.level.school == record.school
   end
 end

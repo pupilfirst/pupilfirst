@@ -107,10 +107,6 @@
     padding: 1rem;
     text-align: center;
   }
-  &.needs-improvement {
-    background-color: rgba(10, 165, 227, 0.15);
-    color: $dark-secondary;
-  }
   &.submitted {
     background-color: rgba(0, 138, 193, 0.15);
     color: $dark-secondary;
@@ -119,17 +115,17 @@
     background-color: rgba(227, 180, 98, 0.15);
     color: darken($alert-background, 25%);
   }
-  &.unavailable,
+  &.prerequisite-locked,
   &.level-locked,
-  &.pending-milestone {
+  &.milestone-locked {
     background-color: rgba(153, 153, 153, 0.2);
     color: $dark-grey-text;
   }
-  &.complete {
+  &.passed {
     background-color: rgba(50, 180, 117, 0.15);
     color: $dark-primary;
   }
-  &.not-accepted {
+  &.failed {
     background-color: rgba(217, 83, 80, 0.15);
     color: rgba(217, 83, 80, 1);
   }

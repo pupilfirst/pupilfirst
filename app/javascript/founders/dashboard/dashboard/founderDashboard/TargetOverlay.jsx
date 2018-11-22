@@ -49,24 +49,15 @@ export default class TargetOverlay extends React.Component {
   }
 
   isSubmittable() {
-    return !(this.singleSubmissionComplete() || this.submissionBlocked());
+    return (this.isPending() || this.isReSubmittable());
   }
 
-  singleSubmissionComplete() {
-    return (
-      !this.isPending() &&
-      (!this.target().resubmittable ||
-        !this.target().evaluation_criteria.length)
-    );
+  isReSubmittable() {
+    return (this.target().resubmittable && this.resubmissionAllowed());
   }
 
-  submissionBlocked() {
-    return [
-      "unavailable",
-      "level_locked",
-      "pending_milestone",
-      "submitted"
-    ].includes(this.target().status);
+  resubmissionAllowed() {
+    return ["passed", "failed"].includes(this.target().status);
   }
 
   isPending() {
@@ -93,7 +84,8 @@ export default class TargetOverlay extends React.Component {
       this.props.targetId
     ]);
 
-    updatedTargets[targetIndex].status = "complete";
+    updatedTargets[targetIndex].status = "passed";
+    updatedTargets[targetIndex].submitted_at = new moment();
     const that = this;
     this.props.setRootState({ targets: updatedTargets }, () => {
       that.reloadDetails();

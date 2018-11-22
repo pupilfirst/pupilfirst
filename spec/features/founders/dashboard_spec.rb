@@ -7,6 +7,7 @@ feature 'Founder Dashboard' do
   let(:school) { create :school }
   let!(:startup) { create :startup, :subscription_active, level: level_4 }
   let!(:founder) { create :founder, startup: startup }
+  let(:faculty) { create :faculty }
 
   # Levels.
   let!(:level_0) { create :level, :zero, school: school }
@@ -55,12 +56,12 @@ feature 'Founder Dashboard' do
     create :target_group, level: level_4
 
     # Timeline events to take targets to specific states.
-    create(:timeline_event, startup: startup, target: completed_target_1, status: TimelineEvent::STATUS_VERIFIED)
-    create(:timeline_event, startup: startup, target: completed_target_2, status: TimelineEvent::STATUS_VERIFIED)
-    create(:timeline_event, startup: startup, target: completed_target_3, status: TimelineEvent::STATUS_VERIFIED)
-    create(:timeline_event, startup: startup, target: not_accepted_target, status: TimelineEvent::STATUS_NOT_ACCEPTED)
-    create(:timeline_event, startup: startup, target: needs_improvement_target, status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT)
-    create(:timeline_event, startup: startup, target: completed_fee_payment_target, status: TimelineEvent::STATUS_VERIFIED)
+    create(:timeline_event, startup: startup, target: completed_target_1, passed_at: 1.day.ago)
+    create(:timeline_event, startup: startup, target: completed_target_2, passed_at: 1.day.ago)
+    create(:timeline_event, startup: startup, target: completed_target_3, passed_at: 1.day.ago)
+    create(:timeline_event, startup: startup, target: not_accepted_target, evaluator: faculty)
+    create(:timeline_event, startup: startup, target: needs_improvement_target, passed_at: 1.day.ago)
+    create(:timeline_event, startup: startup, target: completed_fee_payment_target, passed_at: 1.day.ago)
 
     # Sign in with Founder - set dashboard toured to true to avoid the tour.
     founder.update!(dashboard_toured: dashboard_toured)

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Admission Fee Payment' do
+feature 'Admission Fee Payment', broken: true do
   include UserSpecHelper
   include FounderSpecHelper
 

@@ -10,7 +10,7 @@ after 'development:schools' do
 
   Level.create!(number: 0, name: 'Admissions', school: startup_school)
   Level.create!(number: 1, name: 'Research', school: startup_school)
-  Level.create!(number: 2, name: 'Wireframe', unlock_on: 1.month.from_now, school: startup_school)
+  Level.create!(number: 2, name: 'Wireframe', unlock_on: 1.month.ago, school: startup_school)
   Level.create!(number: 3, name: 'Prototype', unlock_on: 2.month.from_now, school: startup_school)
   Level.create!(number: 4, name: 'Launch', unlock_on: 3.month.from_now, school: startup_school)
   Level.create!(number: 1, name: 'Planning', school: developer_school)

@@ -1,12 +1,12 @@
 require_relative 'helper'
 
-after 'development:levels', 'development:categories' do
+after 'development:levels', 'development:categories' , 'development:faculty'do
   puts 'Seeding startups'
 
   # Load levels.
   level_0 = Level.zero
   startup_school_level_1 = Level.find_by(name: 'Admissions')
-  startup_school_level_2 = Level.find_by(name: 'Research')
+  startup_school_level_2 = Level.find_by(name: 'Wireframe')
   developer_school_level_1 = Level.find_by(name: 'Planning')
   vr_school_level_1 = Level.find_by(name: 'New Realities')
   ios_school_level_1 = Level.find_by(name: 'iOS First Level')
@@ -34,7 +34,7 @@ after 'development:levels', 'development:categories' do
     product_video_link: 'https://www.youtube.com/ourvideo',
     prototype_link: 'https://www.github.com/superstartup',
     wireframe_link: 'https://drive.google.com/superstartup/wireframe',
-    program_started_on: 8.weeks.ago
+    program_started_on: 8.weeks.ago,
   )
 
   # A second 'Avengers' startup.
@@ -83,4 +83,7 @@ after 'development:levels', 'development:categories' do
 
   # Add a faculty to iOS School.
   ios_startup.faculty << Faculty.find_by(email: 'ioscoach@example.com')
+
+  # Add a faculty to Avengers Startup
+  Startup.find_by(product_name: 'The Avengers').faculty << Faculty.find_by(name: 'Vishnu Gopal')
 end

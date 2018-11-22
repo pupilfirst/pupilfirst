@@ -59,13 +59,9 @@ class Target < ApplicationRecord
   ROLE_FOUNDER = 'founder'
   ROLE_TEAM = 'team'
 
-  def self.target_roles
-    [ROLE_FOUNDER, ROLE_TEAM].freeze
-  end
-
   # See en.yml's target.role
   def self.valid_roles
-    target_roles + Founder.valid_roles
+    [ROLE_FOUNDER, ROLE_TEAM].freeze
   end
 
   TYPE_TODO = 'Todo'

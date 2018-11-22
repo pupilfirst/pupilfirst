@@ -23,7 +23,7 @@ FactoryBot.define do
     end
 
     trait :for_startup do
-      role { Founder.valid_roles.sample }
+      role { Target::ROLE_TEAM }
     end
 
     trait :with_rubric do

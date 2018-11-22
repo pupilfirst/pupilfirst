@@ -30,6 +30,10 @@
   font-size: 0.875rem;
 }
 
+.timeline-event-card__description {
+  white-space: pre-wrap;
+}
+
 .timeline-event-card__field-attachments-title {
   font-size: 0.75rem;
   color: $light-grey-text;

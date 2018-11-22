@@ -56,7 +56,7 @@ export default class SubmitButton extends React.Component {
 
   buttonClasses() {
     let classes =
-      "btn btn-with-icon text-uppercase js-timeline-builder__submit-button";
+      "btn btn-with-icon text-uppercase timeline-builder__submit-button js-timeline-builder__submit-button";
 
     if (
       _.isString(this.props.submissionError) &&

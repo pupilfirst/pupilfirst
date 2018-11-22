@@ -109,7 +109,7 @@ module Founders
       previous_level_milestones.any? { |target| entries.dig(target.id, :status) != Targets::StatusService::STATUS_PASSED }
     end
 
-    # All prerequiste_ids which are not passed, archived or orphaned (i.e not assigned to a target group)
+    # All prerequiste_ids which are not passed or are archived
     def blocking_prerequisite_ids(entries)
       all_applicable_prerequisite_ids = TargetPrerequisite.where(target: applicable_targets).distinct.pluck(:prerequisite_target_id)
 
@@ -118,8 +118,7 @@ module Founders
       end
 
       archived_prerequisite_ids = Target.where(id: all_applicable_prerequisite_ids, archived: true).pluck(:id)
-      orphaned_prerequisite_ids = Target.where(id: all_applicable_prerequisite_ids, target_group_id: nil).pluck(:id)
-      non_blocking_prerequisite_ids = passed_prerequisite_ids + archived_prerequisite_ids + orphaned_prerequisite_ids
+      non_blocking_prerequisite_ids = passed_prerequisite_ids + archived_prerequisite_ids
 
       all_applicable_prerequisite_ids - non_blocking_prerequisite_ids
     end

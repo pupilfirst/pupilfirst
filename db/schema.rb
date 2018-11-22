@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_15_071555) do
+ActiveRecord::Schema.define(version: 2018_11_22_104730) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -614,7 +614,6 @@ ActiveRecord::Schema.define(version: 2018_11_15_071555) do
     t.text "slideshow_embed"
     t.integer "faculty_id"
     t.string "rubric"
-    t.integer "timeline_event_type_id"
     t.integer "days_to_complete"
     t.string "target_action_type"
     t.integer "target_group_id"
@@ -637,7 +636,6 @@ ActiveRecord::Schema.define(version: 2018_11_15_071555) do
     t.index ["faculty_id"], name: "index_targets_on_faculty_id"
     t.index ["key"], name: "index_targets_on_key"
     t.index ["session_at"], name: "index_targets_on_session_at"
-    t.index ["timeline_event_type_id"], name: "index_targets_on_timeline_event_type_id"
   end
 
   create_table "timeline_event_files", id: :serial, force: :cascade do |t|
@@ -659,21 +657,6 @@ ActiveRecord::Schema.define(version: 2018_11_15_071555) do
     t.index ["timeline_event_id"], name: "index_timeline_event_grades_on_timeline_event_id"
   end
 
-  create_table "timeline_event_types", id: :serial, force: :cascade do |t|
-    t.string "key"
-    t.string "title"
-    t.text "sample_text"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "badge"
-    t.string "role"
-    t.string "proof_required"
-    t.string "suggested_stage"
-    t.boolean "major"
-    t.boolean "archived", default: false, null: false
-    t.index ["role"], name: "index_timeline_event_types_on_role"
-  end
-
   create_table "timeline_events", id: :serial, force: :cascade do |t|
     t.text "description"
     t.string "image"
@@ -683,7 +666,6 @@ ActiveRecord::Schema.define(version: 2018_11_15_071555) do
     t.datetime "updated_at", null: false
     t.date "event_on"
     t.datetime "status_updated_at"
-    t.integer "timeline_event_type_id"
     t.string "status"
     t.integer "founder_id"
     t.integer "improved_timeline_event_id"
@@ -693,7 +675,6 @@ ActiveRecord::Schema.define(version: 2018_11_15_071555) do
     t.index ["founder_id"], name: "index_timeline_events_on_founder_id"
     t.index ["startup_id"], name: "index_timeline_events_on_startup_id"
     t.index ["status"], name: "index_timeline_events_on_status"
-    t.index ["timeline_event_type_id"], name: "index_timeline_events_on_timeline_event_type_id"
   end
 
   create_table "tracks", force: :cascade do |t|

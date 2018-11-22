@@ -68,7 +68,7 @@ after 'development:founders', 'development:targets' do
     startup: ios_startup,
     founder: ios_founder,
     event_on: Time.now,
-    description: 'This is a seeded pending submission for the iOS startup',
+    description: "This is a seeded pending submission for the iOS startup\n\n...plus a second paragraph for the submission.",
     status: status_pending,
     target: ios_startup.school.targets.live.first
   )

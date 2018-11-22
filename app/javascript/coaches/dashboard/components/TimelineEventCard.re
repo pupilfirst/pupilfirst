@@ -142,7 +142,9 @@ let make =
               className="timeline-event-card__field-header font-semibold mt-0">
               {"Description:" |> str}
             </h5>
-            {timelineEvent |> TimelineEvent.description |> str}
+            <div className="timeline-event-card__description">
+              {timelineEvent |> TimelineEvent.description |> str}
+            </div>
             {timelineEvent |> attachmentsSection}
           </div>
           <FeedbackForm timelineEvent replaceTimelineEvent authenticityToken />

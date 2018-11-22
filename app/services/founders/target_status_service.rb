@@ -116,7 +116,7 @@ module Founders
       @previous_milestones_completed ||= begin
         return true unless @level_number > 1
 
-        previous_level = startup.school.levels.find_by(number: @level_number - 1)
+        previous_level = startup.course.levels.find_by(number: @level_number - 1)
         target_groups = previous_level.target_groups.where(milestone: true)
         Target.where(target_group: target_groups).all? { |target| marked_completed?(target.id) }
       end
@@ -168,7 +168,7 @@ module Founders
     def open_levels
       @open_levels ||= begin
         minimum_level_number = startup.level.number.zero? ? 0 : 1
-        levels = startup.school.levels.where('levels.number >= ?', minimum_level_number)
+        levels = startup.course.levels.where('levels.number >= ?', minimum_level_number)
         levels.where(unlock_on: nil).or(levels.where('unlock_on <= ?', Date.today))
       end
     end

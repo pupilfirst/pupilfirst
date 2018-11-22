@@ -5,7 +5,7 @@ ActiveAdmin.register Startup do
     :partnership_deed, :payment_reference, :agreements_verified, :team_lead_id, startup_category_ids: [], founder_ids: [], faculty_ids: [], tag_list: []
 
   filter :product_name, as: :string
-  filter :level_school_id, as: :select, label: 'School', collection: -> { School.all }
+  filter :level_course_id, as: :select, label: 'Course', collection: -> { Course.all }
   filter :level, collection: -> { Level.all.order(number: :asc) }
 
   filter :ransack_tagged_with,
@@ -344,7 +344,7 @@ ActiveAdmin.register Startup do
       row :undiscounted_founder_fee
     end
 
-    if startup.level&.number&.positive? && !startup.level.school.sponsored?
+    if startup.level&.number&.positive? && !startup.level.course.sponsored?
       panel 'Payment History' do
         attributes_table_for startup do
           row 'Subscription End Date' do

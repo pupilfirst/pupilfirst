@@ -10,6 +10,6 @@ class TargetPolicy < ApplicationPolicy
   def auto_verify?
     download_rubric? &&
       record.submittability == Target::SUBMITTABILITY_AUTO_VERIFY &&
-      current_founder.startup.level.school == record.school
+      current_founder.startup.level.course == record.course
   end
 end

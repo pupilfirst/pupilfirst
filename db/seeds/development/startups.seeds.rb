@@ -5,11 +5,11 @@ after 'development:levels', 'development:categories' do
 
   # Load levels.
   level_0 = Level.zero
-  startup_school_level_1 = Level.find_by(name: 'Admissions')
-  startup_school_level_2 = Level.find_by(name: 'Research')
-  developer_school_level_1 = Level.find_by(name: 'Planning')
-  vr_school_level_1 = Level.find_by(name: 'New Realities')
-  ios_school_level_1 = Level.find_by(name: 'iOS First Level')
+  startup_course_level_1 = Level.find_by(name: 'Admissions')
+  startup_course_level_2 = Level.find_by(name: 'Research')
+  developer_course_level_1 = Level.find_by(name: 'Planning')
+  vr_course_level_1 = Level.find_by(name: 'New Realities')
+  ios_course_level_1 = Level.find_by(name: 'iOS First Level')
 
   # Level 0 startup.
   Startup.create!(
@@ -19,7 +19,7 @@ after 'development:levels', 'development:categories' do
 
   # Startup with live agreement.
   Startup.create!(
-    level: startup_school_level_1,
+    level: startup_course_level_1,
     product_name: 'Super Product',
     product_description: 'This really is a superb product! ;)',
     agreement_signed_at: 18.months.ago,
@@ -40,7 +40,7 @@ after 'development:levels', 'development:categories' do
   # A second 'Avengers' startup.
   Startup.create!(
     name: 'The Avengers',
-    level: startup_school_level_2,
+    level: startup_course_level_2,
     product_name: 'The Avengers',
     product_description: 'Earths Mightiest Heroes joined forces to take on threats that were too big for any one hero to tackle.',
     agreement_signed_at: 2.years.ago,
@@ -49,10 +49,10 @@ after 'development:levels', 'development:categories' do
     program_started_on: 4.weeks.ago
   )
 
-  # Third startup 'Justice League' for developer school
+  # Third startup 'Justice League' for developer course
   Startup.create!(
     name: 'Justice League',
-    level: developer_school_level_1,
+    level: developer_course_level_1,
     product_name: 'Justice League',
     product_description: 'The flying car',
     agreement_signed_at: 2.years.ago,
@@ -61,10 +61,10 @@ after 'development:levels', 'development:categories' do
     program_started_on: 2.weeks.ago
   )
 
-  # Fourth startup 'Guardians of the Galaxy' for VR school
+  # Fourth startup 'Guardians of the Galaxy' for VR course
   Startup.create!(
     name: 'Guardians of the Galaxy',
-    level: vr_school_level_1,
+    level: vr_course_level_1,
     product_name: 'Guardians of the Galaxy',
     product_description: 'The Quad Blasters are Star-Lords primary weapons in combat.',
     agreement_signed_at: 1.years.ago,
@@ -73,14 +73,14 @@ after 'development:levels', 'development:categories' do
     program_started_on: 1.weeks.ago
   )
 
-  # Add a startup in iOS school.
+  # Add a startup in iOS course.
   ios_startup = Startup.create!(
     name: 'iOS Startup',
-    level: ios_school_level_1,
+    level: ios_course_level_1,
     product_name: 'iOS Startup',
     product_description: 'This is an example iOS Startup.',
   )
 
-  # Add a faculty to iOS School.
+  # Add a faculty to iOS Course.
   ios_startup.faculty << Faculty.find_by(email: 'ioscoach@example.com')
 end

@@ -5,10 +5,11 @@ ActiveAdmin.register Level do
 
   menu parent: 'Targets'
 
-  permit_params :number, :name, :description, :unlock_on, :school_id
+  permit_params :number, :name, :description, :unlock_on, :course_id
+
   filter :name, as: :string
   filter :number
-  filter :school, as: :select
+  filter :course, as: :select
   filter :unlock_on, label: 'Unlock Date'
 
   index do
@@ -17,7 +18,7 @@ ActiveAdmin.register Level do
     column :number
     column :name
     column :unlock_on
-    column :school
+    column :course
     actions
   end
 
@@ -29,7 +30,7 @@ ActiveAdmin.register Level do
       f.input :name
       f.input :description
       f.input :unlock_on, as: :datepicker
-      f.input :school, as: :select
+      f.input :course, as: :select
     end
 
     f.actions

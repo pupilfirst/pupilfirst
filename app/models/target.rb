@@ -37,7 +37,7 @@ class Target < ApplicationRecord
   has_many :target_skills, dependent: :destroy
   has_many :skills, through: :target_skills
   has_one :level, through: :target_group
-  has_one :school, through: :target_group
+  has_one :course, through: :target_group
 
   accepts_nested_attributes_for :target_skills, allow_destroy: true
 
@@ -146,7 +146,7 @@ class Target < ApplicationRecord
 
   def display_name
     if target_group.present?
-      "#{school.short_name}##{level.number}: #{title}"
+      "#{course.short_name}##{level.number}: #{title}"
     else
       title
     end

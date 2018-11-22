@@ -4,8 +4,8 @@ feature 'Coach Dashboard' do
   include UserSpecHelper
 
   # Setup a coach and 2 startups for him...
-  let(:school) { create :school }
-  let(:level_0) { create :level, :zero, school: school }
+  let(:course) { create :course }
+  let(:level_0) { create :level, :zero, course: course }
   let(:coach) { create :faculty }
   let!(:startup_1) { create :startup, level: level_0 }
   let!(:startup_2) { create :startup, level: level_0 }

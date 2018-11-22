@@ -1,7 +1,7 @@
 class FacultyPolicy < ApplicationPolicy
   def connect?
-    return false unless user&.founder&.team_lead? && user&.founder&.subscription_active?
+    return false unless current_founder&.team_lead? && current_founder&.subscription_active?
 
-    user.founder&.startup&.eligible_to_connect?(record)
+    current_founder&.startup&.eligible_to_connect?(record)
   end
 end

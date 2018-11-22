@@ -5,6 +5,11 @@ describe Users::AnalyticsStateService do
 
   subject { described_class.new(user) }
 
+  let(:user) do
+    # This service relies on being supplied a `current_user`, which would have `current_founder` set.
+    startup.team_lead.user.tap { |user| user.current_founder = startup.team_lead }
+  end
+
   context 'when user is a founder' do
     let!(:screening_target) { create :target, :admissions_screening }
     let!(:cofounder_addition_target) { create :target, :admissions_cofounder_addition }
@@ -12,7 +17,6 @@ describe Users::AnalyticsStateService do
 
     context 'when founder signed up' do
       let(:startup) { create :level_0_startup }
-      let(:user) { startup.team_lead.user }
 
       it 'returns email, name and basic startup details' do
         expect(subject.state).to eq(
@@ -100,7 +104,6 @@ describe Users::AnalyticsStateService do
 
     context 'when founder is part of an admitted startup' do
       let(:startup) { create :startup }
-      let(:user) { startup.team_lead.user }
 
       it 'returns admission stage as admitted' do
         expect(subject.state).to eq(

@@ -1,7 +1,7 @@
 class TimelineEventPolicy < ApplicationPolicy
   def create?
-    # User must be a founder with a startup.
-    user&.founder&.startup.present?
+    # User must be a founder with active subscription.
+    current_founder&.subscription_active?
   end
 
   def destroy?

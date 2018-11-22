@@ -1,5 +1,8 @@
 class User < ApplicationRecord
-  has_one :founder, dependent: :restrict_with_error
+  # The value for current_founder is set by the controller in a before_action - useful when authorizing with Pundit.
+  attr_accessor :current_founder
+
+  has_many :founders, dependent: :restrict_with_error
   has_one :admin_user, dependent: :restrict_with_error
   has_one :faculty, dependent: :restrict_with_error
   has_many :coached_startups, through: :faculty, source: :startups

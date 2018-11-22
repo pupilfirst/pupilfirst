@@ -104,7 +104,7 @@ gem 'koala', '~> 2.2' # Library for Facebook with support for OAuth authenticati
 gem 'pretender', '~> 0.2' # Log in as another user in Rails
 gem 'file_validators', '~> 2.1' # Adds file validators to ActiveModel.
 gem 'diffy', '~> 3.2' # Easy Diffing in Ruby.
-gem 'pundit', '~> 1.1' # Minimal authorization through OO design and pure Ruby classes.
+gem 'pundit', '~> 2.0' # Minimal authorization through OO design and pure Ruby classes.
 gem 'rack-cors', '~> 1.0', require: 'rack/cors' # Rack Middleware for handling CORS, required to serve static assets such as fonts
 gem 'recaptcha', '~> 4.6', require: 'recaptcha/rails'
 gem 'jwt', '~> 1.5' # Ruby implementation of the RFC 7519 OAuth JSON Web Token (JWT), used by Zoom API

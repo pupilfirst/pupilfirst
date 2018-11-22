@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
   after_action :prepare_unobtrusive_flash
   before_action :sign_out_if_required
   before_action :pretender
+  before_action :cache_current_founder_in_current_user
 
   helper_method :current_founder
   helper_method :current_startup
@@ -57,11 +58,21 @@ class ApplicationController < ActionController::Base
   end
 
   def current_founder
-    @current_founder ||= current_user&.founder
+    @current_founder ||= begin
+      if current_user.present?
+        founder_id = read_cookie(:founder_id)
+
+        # Try to select founder from value stored in cookie.
+        founder = founder_id.present? ? current_user.founders.find_by(id: founder_id) : nil
+
+        # Return selected founder, if any, or return the first founder (if any).
+        founder.presence || current_user.founders.first
+      end
+    end
   end
 
   def current_startup
-    @current_startup ||= current_founder&.startup
+    @current_startup ||= current_founder.startup
   end
 
   # sets a permanent signed cookie. Additional options such as :tld_length can be passed via the options_hash
@@ -110,14 +121,16 @@ class ApplicationController < ActionController::Base
     redirect_to root_url if service.signed_out?
   end
 
+  def cache_current_founder_in_current_user
+    current_user&.current_founder = current_founder
+  end
+
   def authenticate_founder!
     # User must be logged in.
     authenticate_user!
 
-    founder = current_user.founder
-    return if founder.present? && !founder.exited?
+    return if current_founder.present? && !current_founder.exited?
 
-    flash[:error] = 'You are not an active student anymore!' if founder&.exited?
     redirect_to root_path
   end
 

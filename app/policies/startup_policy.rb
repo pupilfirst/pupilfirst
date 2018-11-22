@@ -8,12 +8,12 @@ class StartupPolicy < ApplicationPolicy
 
     if timeline_event.founder_event?
       # Show founder events only to the founder who posted it.
-      timeline_event.founder.present? && timeline_event.founder == user&.founder
+      timeline_event.founder.present? && timeline_event.founder == current_founder
     else
       # Show verified events to everyone, and non-verified events to startup founders.
       return true if timeline_event.verified_or_needs_improvement?
 
-      timeline_event.startup.present? && timeline_event.startup == user&.founder&.startup
+      timeline_event.startup.present? && timeline_event.startup == current_founder&.startup
     end
   end
 
@@ -22,10 +22,10 @@ class StartupPolicy < ApplicationPolicy
     return false unless show?
 
     # User's startup must be 'this' one.
-    return false unless user&.founder&.startup == record
+    return false unless user&.current_founder&.startup == record
 
     # Founder's subscription must be active, and he must not have existed.
-    user.founder.subscription_active? && !user.founder.exited?
+    current_founder.subscription_active? && !current_founder.exited?
   end
 
   def edit?
@@ -38,7 +38,7 @@ class StartupPolicy < ApplicationPolicy
       return false unless update?
     end
 
-    Startups::LevelUpEligibilityService.new(record, user.founder).eligible?
+    Startups::LevelUpEligibilityService.new(record, current_founder).eligible?
   end
 
   def billing?

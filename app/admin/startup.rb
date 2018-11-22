@@ -7,7 +7,6 @@ ActiveAdmin.register Startup do
   filter :product_name, as: :string
   filter :level_school_id, as: :select, label: 'School', collection: -> { School.all }
   filter :level, collection: -> { Level.all.order(number: :asc) }
-  filter :stage, as: :select, collection: -> { stages_collection }
 
   filter :ransack_tagged_with,
     as: :select,

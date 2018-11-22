@@ -12,7 +12,7 @@ describe TargetsController do
     create :timeline_event,
       startup: startup, founder: startup.team_lead,
       target: completed_prerequisite_target,
-      status: TimelineEvent::STATUS_VERIFIED
+      passed_at: 1.day.ago
   end
 
   let!(:founder_target) { create :target, role: Target::ROLE_FOUNDER }
@@ -21,7 +21,7 @@ describe TargetsController do
     create :timeline_event,
       startup: startup, founder: startup.team_lead,
       target: founder_target,
-      status: TimelineEvent::STATUS_VERIFIED
+      passed_at: 1.day.ago
   end
 
   let!(:faculty) { create :faculty }

@@ -2,6 +2,8 @@ require 'rails_helper'
 
 feature 'Timeline Builder' do
   include UserSpecHelper
+  let(:school) { create :school }
+  let(:criterion) { create :evaluation_criterion, school: school }
   let(:level_one) { create :level, :one }
 
   let(:startup) { create :startup, :subscription_active, level: level_one }
@@ -17,6 +19,7 @@ feature 'Timeline Builder' do
   let(:dashboard_toured) { true }
 
   before do
+    pending_target.evaluation_criteria << criterion
     founder.update!(dashboard_toured: dashboard_toured)
   end
 

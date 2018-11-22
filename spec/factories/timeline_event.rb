@@ -19,5 +19,9 @@ FactoryBot.define do
         ]
       end
     end
+
+    trait :passed do
+      passed_at { 1.day.ago }
+    end
   end
 end

@@ -1,9 +1,9 @@
 require_relative 'helper'
 
-after 'development:schools' do
+after 'development:courses' do
   puts 'Seeding Evaluation Criteria'
 
-  School.all.each do |school|
-    EvaluationCriterion.create!(name: 'Quality', description:'The default evaluation criteria', school: school)
+  Course.all.each do |course|
+    EvaluationCriterion.create!(name: 'Quality', description:'The default evaluation criteria', course: course)
   end
 end

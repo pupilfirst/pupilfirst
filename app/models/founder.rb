@@ -30,7 +30,6 @@ class Founder < ApplicationRecord
   has_many :public_slack_messages, dependent: :nullify
   belongs_to :startup
   has_one :level, through: :startup
-  has_one :course, through: :startup
   belongs_to :invited_startup, class_name: 'Startup', optional: true
   has_many :karma_points, dependent: :destroy
   has_many :timeline_events, dependent: :nullify

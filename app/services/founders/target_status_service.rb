@@ -99,7 +99,7 @@ module Founders
     def previous_milestones_incomplete?(entries)
       return false if founder_level.number == 1
 
-      previous_level = @founder.course.levels.where(number: founder_level.number - 1)
+      previous_level = @founder.startup.course.levels.where(number: founder_level.number - 1)
       previous_level_milestones = applicable_targets.where(
         target_groups: {
           level: previous_level,

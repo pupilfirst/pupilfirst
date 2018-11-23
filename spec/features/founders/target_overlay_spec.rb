@@ -4,9 +4,9 @@ feature 'Target Overlay' do
   # TODO: Rewrite a cleaner version
   include UserSpecHelper
 
-  let(:school) { create :school }
-  let(:criterion) { create :evaluation_criterion, school: school }
-  let!(:level_1) { create :level, :one, school: school }
+  let(:course) { create :course }
+  let(:criterion) { create :evaluation_criterion, course: course }
+  let!(:level_1) { create :level, :one, course: course }
   let!(:startup) { create :startup, :subscription_active, level: level_1 }
   let!(:founder) { startup.team_lead }
   let!(:target_group_1) { create :target_group, level: level_1, milestone: true }

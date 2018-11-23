@@ -8,7 +8,7 @@ ActiveAdmin.register TargetGroup do
   filter :description, as: :string
   filter :milestone
   filter :track
-  filter :school, as: :select
+  filter :course, as: :select
 
   scope :all
   scope('No Track') { |scope| scope.where(track: nil) }
@@ -17,7 +17,7 @@ ActiveAdmin.register TargetGroup do
     include DisableIntercom
 
     def scoped_collection
-      super.includes({ level: :school }, :track)
+      super.includes({ level: :course }, :track)
     end
   end
 

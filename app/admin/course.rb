@@ -1,4 +1,4 @@
-ActiveAdmin.register School do
+ActiveAdmin.register Course do
   controller do
     include DisableIntercom
   end

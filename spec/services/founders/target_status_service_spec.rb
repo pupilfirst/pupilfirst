@@ -3,11 +3,11 @@ require 'rails_helper'
 describe Founders::TargetStatusService do
   subject { described_class.new(startup.team_lead) }
 
-  # Let's create an school with 3 levels...
-  let(:school) { create :school }
-  let(:level_1) { create :level, :one, school: school }
-  let(:level_2) { create :level, :two, school: school }
-  let(:level_3) { create :level, :three, school: school }
+  # Let's create an course with 3 levels...
+  let(:course) { create :course }
+  let(:level_1) { create :level, :one, course: course }
+  let(:level_2) { create :level, :two, course: course }
+  let(:level_3) { create :level, :three, course: course }
 
   # ... and have a few target groups in each level, including milestone ones.
   let(:l_1_target_group_1) { create :target_group, level: level_1 }
@@ -97,8 +97,8 @@ describe Founders::TargetStatusService do
   end
 
   describe '#grades' do
-    let(:criterion_1) { create :evaluation_criterion, school: school }
-    let(:criterion_2) { create :evaluation_criterion, school: school }
+    let(:criterion_1) { create :evaluation_criterion, course: course }
+    let(:criterion_2) { create :evaluation_criterion, course: course }
 
     before do
       TimelineEventGrade.create!(timeline_event: te_1, evaluation_criterion: criterion_1, grade: 3)

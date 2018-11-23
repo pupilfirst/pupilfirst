@@ -1,4 +1,4 @@
-class School < ApplicationRecord
+class Course < ApplicationRecord
   validates :name, presence: true
   validates :max_grade,  presence: true, numericality: { greater_than: 0 }
   validates :pass_grade, presence: true, numericality: { greater_than: 0, less_than_or_equal_to: :max_grade }

@@ -3,14 +3,14 @@ require 'rails_helper'
 describe Founders::DashboardDataService do
   subject { described_class.new(founder) }
 
-  let(:school_1) { create :school }
-  let(:school_2) { create :school }
-  let!(:level_0) { create :level, :zero, school: school_1 }
-  let!(:level_1) { create :level, :one, school: school_1 }
-  let!(:level_2) { create :level, :two, school: school_1 }
-  let!(:unlocked_level_3) { create :level, :three, school: school_1, unlock_on: 1.month.ago }
-  let!(:locked_level_4) { create :level, :four, school: school_1, unlock_on: 1.month.from_now }
-  let(:school_2_level) { create :level, :one, school: school_2 }
+  let(:course_1) { create :course }
+  let(:course_2) { create :course }
+  let!(:level_0) { create :level, :zero, course: course_1 }
+  let!(:level_1) { create :level, :one, course: course_1 }
+  let!(:level_2) { create :level, :two, course: course_1 }
+  let!(:unlocked_level_3) { create :level, :three, course: course_1, unlock_on: 1.month.ago }
+  let!(:locked_level_4) { create :level, :four, course: course_1, unlock_on: 1.month.from_now }
+  let(:course_2_level) { create :level, :one, course: course_2 }
   let!(:startup) { create :startup, level: level_0 }
   let!(:founder) { create :founder, startup: startup }
   let!(:track_1) { create :track }
@@ -23,8 +23,8 @@ describe Founders::DashboardDataService do
   let!(:target_group_l2_2) { create :target_group, level: level_2, track: track_2 }
   let!(:target_group_l3_1) { create :target_group, level: unlocked_level_3, track: track_1 }
   let!(:target_group_l4_1) { create :target_group, level: locked_level_4, track: track_1 }
-  let(:school_2_target_group) { create :target_group, level: school_2_level }
-  let!(:school_2_target) { create :target, target_group: school_2_target_group }
+  let(:course_2_target_group) { create :target_group, level: course_2_level }
+  let!(:course_2_target) { create :target, target_group: course_2_target_group }
   let!(:level_0_target) { create :target, target_group: target_group_l0_1 }
   let!(:level_0_session) { create :target, session_at: 1.day.ago, target_group: target_group_l0_2 }
   let!(:level_1_target) { create :target, target_group: target_group_l1_1 }

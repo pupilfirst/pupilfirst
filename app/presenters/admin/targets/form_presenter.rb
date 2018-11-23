@@ -22,7 +22,7 @@ module Admin
       end
 
       def all_live_targets
-        Target.live.includes(:level, :school)
+        Target.live.includes(:level, :course)
       end
     end
   end

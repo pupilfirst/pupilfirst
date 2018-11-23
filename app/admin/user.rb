@@ -11,7 +11,7 @@ ActiveAdmin.register User do
     include DisableIntercom
 
     def scoped_collection
-      super.includes({ founders: { startup: :school } }, :faculty, :admin_user)
+      super.includes({ founders: { startup: :course } }, :faculty, :admin_user)
     end
   end
 

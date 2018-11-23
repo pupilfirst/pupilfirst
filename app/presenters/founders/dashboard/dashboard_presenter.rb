@@ -12,14 +12,14 @@ module Founders
           facebookShareEligibility: current_founder.facebook_share_eligibility,
           levelUpEligibility: level_up_eligibility_service.eligibility,
           nextLevelUnlockDate: level_up_eligibility_service.next_level_unlock_date,
-          maxLevelNumber: current_school.levels.maximum(:number),
+          maxLevelNumber: current_course.levels.maximum(:number),
           founderDetails: founder_details,
           authenticityToken: view.form_authenticity_token,
           iconPaths: icon_paths,
           testMode: Rails.env.test?,
           initialTargetId: @overlay_target&.id,
           tourDashboard: tour_dashboard?,
-          sponsoredSchool: current_startup.level.school.sponsored
+          sponsoredCourse: current_startup.level.course.sponsored
         )
       end
 
@@ -31,8 +31,8 @@ module Founders
 
       private
 
-      def current_school
-        view.current_startup.level.school
+      def current_course
+        view.current_startup.level.course
       end
 
       def current_startup

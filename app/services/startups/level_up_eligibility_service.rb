@@ -40,7 +40,7 @@ module Startups
 
     def next_level_unlock_date
       @next_level_unlock_date ||= begin
-        next_level = current_level.school.levels.find_by(number: current_level.number + 1)
+        next_level = current_level.course.levels.find_by(number: current_level.number + 1)
         next_level&.unlock_on
       end
     end

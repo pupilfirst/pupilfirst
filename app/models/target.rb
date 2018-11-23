@@ -37,7 +37,7 @@ class Target < ApplicationRecord
   has_many :target_evaluation_criteria, dependent: :destroy
   has_many :evaluation_criteria, through: :target_evaluation_criteria
   has_one :level, through: :target_group
-  has_one :school, through: :target_group
+  has_one :course, through: :target_group
   has_many :latest_submission_records, dependent: :restrict_with_error
 
   acts_as_taggable
@@ -131,15 +131,15 @@ class Target < ApplicationRecord
     errors[:faculty_id] << 'is required for a vanilla target'
   end
 
-  validate :same_school_for_target_and_evaluation_criteria
+  validate :same_course_for_target_and_evaluation_criteria
 
-  def same_school_for_target_and_evaluation_criteria
+  def same_course_for_target_and_evaluation_criteria
     return if evaluation_criteria.blank?
 
     evaluation_criteria.each do |ec|
-      next if ec.school_id == school.id
+      next if ec.course_id == course.id
 
-      errors[:base] << 'Target and evaluation criterion must belong to same school'
+      errors[:base] << 'Target and evaluation criterion must belong to same course'
     end
   end
 
@@ -147,7 +147,7 @@ class Target < ApplicationRecord
 
   def display_name
     if target_group.present?
-      "#{school.short_name}##{level.number}: #{title}"
+      "#{course.short_name}##{level.number}: #{title}"
     else
       title
     end

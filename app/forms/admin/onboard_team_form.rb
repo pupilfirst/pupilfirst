@@ -9,7 +9,7 @@ module Admin
     property :member_4_name
     property :member_4_email
     property :team_name, validates: { presence: true }
-    property :school_id, validates: { presence: true }
+    property :course_id, validates: { presence: true }
 
     def save
       Founder.transaction do
@@ -30,7 +30,7 @@ module Admin
     private
 
     def level
-      School.find(school_id).levels.find_by(number: 1)
+      Course.find(course_id).levels.find_by(number: 1)
     end
 
     def user(email)

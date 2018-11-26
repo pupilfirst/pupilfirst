@@ -17,13 +17,17 @@ after 'development:founders', 'development:targets' do
       status_updated_at: Time.now
     )
 
-    # Create timeline_event_grades
-    grades_for_criteria = te.evaluation_criteria.each_with_object({}) do |ec, grades|
-      grades[ec.id] = rand(target.school.pass_grade..target.school.max_grade)
-    end
+    if target.evaluation_criteria.present?
+      # Create timeline_event_grades
+      grades_for_criteria = te.evaluation_criteria.each_with_object({}) do |ec, grades|
+        grades[ec.id] = rand(target.school.pass_grade..target.school.max_grade)
+      end
 
-    # Grade the timeline event
-    TimelineEvents::GradingService.new(te).grade(startup.faculty.first, grades_for_criteria )
+      # Grade the timeline event
+      TimelineEvents::GradingService.new(te).grade(startup.faculty.first, grades_for_criteria )
+    else
+      te.update!(passed_at: Time.now)
+    end
   end
 
   # Complete all Level 1 and Level 2 targets for 'The Avengers'.

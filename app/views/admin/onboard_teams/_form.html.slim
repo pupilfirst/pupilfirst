@@ -23,5 +23,5 @@
         = f.input :member_4_name, label: 'Member 4', placeholder: 'Name'
       .team-member-info__email
         = f.input :member_4_email, label: '', as: :email, placeholder: 'Email'
-    = f.input :school_id, as: :select, collection: School.all
+    = f.input :course_id, as: :select, collection: Course.all
   = f.submit 'Onboard'

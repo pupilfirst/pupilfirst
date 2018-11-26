@@ -20,7 +20,7 @@ after 'development:founders', 'development:targets' do
     if target.evaluation_criteria.present?
       # Create timeline_event_grades
       grades_for_criteria = te.evaluation_criteria.each_with_object({}) do |ec, grades|
-        grades[ec.id] = rand(target.school.pass_grade..target.school.max_grade)
+        grades[ec.id] = rand(target.course.pass_grade..target.course.max_grade)
       end
 
       # Grade the timeline event
@@ -32,7 +32,7 @@ after 'development:founders', 'development:targets' do
 
   # Complete all Level 1 and Level 2 targets for 'The Avengers'.
   [1, 2].each do |level_number|
-    Target.joins(target_group: :level).where(levels: { number: level_number, school_id: avengers.school.id }).each do |target|
+    Target.joins(target_group: :level).where(levels: { number: level_number, course_id: avengers.course.id }).each do |target|
       complete_target(target, avengers)
     end
   end
@@ -46,7 +46,6 @@ after 'development:founders', 'development:targets' do
     founder: ios_founder,
     event_on: Time.now,
     description: 'This is a seeded pending submission for the iOS startup',
-    target: ios_startup.school.targets.live.first
+    target: ios_startup.course.targets.live.first
   )
-
 end

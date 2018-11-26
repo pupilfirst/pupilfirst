@@ -56,7 +56,7 @@ module Targets
     def previous_milestones_incomplete?
       return false if founder_level_number == 1
 
-      previous_level = @target.school.levels.where(number: founder_level_number - 1)
+      previous_level = @target.course.levels.where(number: founder_level_number - 1)
 
       previous_level_milestones = Target.joins(:target_group).where(
         target_groups: {

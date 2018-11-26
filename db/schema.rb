@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_15_085253) do
+ActiveRecord::Schema.define(version: 2018_11_23_062200) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -126,6 +126,17 @@ ActiveRecord::Schema.define(version: 2018_11_15_085253) do
     t.text "instructions"
   end
 
+  create_table "courses", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "sponsored", default: false
+    t.integer "max_grade"
+    t.integer "pass_grade"
+    t.json "grade_labels"
+    t.datetime "ends_at"
+  end
+
   create_table "data_migrations", id: false, force: :cascade do |t|
     t.string "version", null: false
     t.index ["version"], name: "unique_data_migrations", unique: true
@@ -176,8 +187,8 @@ ActiveRecord::Schema.define(version: 2018_11_15_085253) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
-    t.bigint "school_id"
-    t.index ["school_id"], name: "index_evaluation_criteria_on_school_id"
+    t.bigint "course_id"
+    t.index ["course_id"], name: "index_evaluation_criteria_on_course_id"
   end
 
   create_table "faculty", id: :serial, force: :cascade do |t|
@@ -332,9 +343,9 @@ ActiveRecord::Schema.define(version: 2018_11_15_085253) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "unlock_on"
-    t.bigint "school_id"
+    t.bigint "course_id"
+    t.index ["course_id"], name: "index_levels_on_course_id"
     t.index ["number"], name: "index_levels_on_number"
-    t.index ["school_id"], name: "index_levels_on_school_id"
   end
 
   create_table "payments", id: :serial, force: :cascade do |t|
@@ -430,16 +441,6 @@ ActiveRecord::Schema.define(version: 2018_11_15_085253) do
     t.index ["slug"], name: "index_resources_on_slug"
     t.index ["startup_id"], name: "index_resources_on_startup_id"
     t.index ["target_id"], name: "index_resources_on_target_id"
-  end
-
-  create_table "schools", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "sponsored", default: false
-    t.integer "max_grade"
-    t.integer "pass_grade"
-    t.json "grade_labels"
   end
 
   create_table "shortened_urls", id: :serial, force: :cascade do |t|
@@ -615,7 +616,6 @@ ActiveRecord::Schema.define(version: 2018_11_15_085253) do
     t.text "slideshow_embed"
     t.integer "faculty_id"
     t.string "rubric"
-    t.integer "timeline_event_type_id"
     t.integer "days_to_complete"
     t.string "target_action_type"
     t.integer "target_group_id"
@@ -640,7 +640,6 @@ ActiveRecord::Schema.define(version: 2018_11_15_085253) do
     t.index ["faculty_id"], name: "index_targets_on_faculty_id"
     t.index ["key"], name: "index_targets_on_key"
     t.index ["session_at"], name: "index_targets_on_session_at"
-    t.index ["timeline_event_type_id"], name: "index_targets_on_timeline_event_type_id"
   end
 
   create_table "timeline_event_files", id: :serial, force: :cascade do |t|
@@ -662,21 +661,6 @@ ActiveRecord::Schema.define(version: 2018_11_15_085253) do
     t.index ["timeline_event_id"], name: "index_timeline_event_grades_on_timeline_event_id"
   end
 
-  create_table "timeline_event_types", id: :serial, force: :cascade do |t|
-    t.string "key"
-    t.string "title"
-    t.text "sample_text"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "badge"
-    t.string "role"
-    t.string "proof_required"
-    t.string "suggested_stage"
-    t.boolean "major"
-    t.boolean "archived", default: false, null: false
-    t.index ["role"], name: "index_timeline_event_types_on_role"
-  end
-
   create_table "timeline_events", id: :serial, force: :cascade do |t|
     t.text "description"
     t.string "image"
@@ -686,7 +670,6 @@ ActiveRecord::Schema.define(version: 2018_11_15_085253) do
     t.datetime "updated_at", null: false
     t.date "event_on"
     t.datetime "status_updated_at"
-    t.integer "timeline_event_type_id"
     t.string "status"
     t.integer "founder_id"
     t.integer "improved_timeline_event_id"
@@ -698,7 +681,6 @@ ActiveRecord::Schema.define(version: 2018_11_15_085253) do
     t.index ["founder_id"], name: "index_timeline_events_on_founder_id"
     t.index ["startup_id"], name: "index_timeline_events_on_startup_id"
     t.index ["status"], name: "index_timeline_events_on_status"
-    t.index ["timeline_event_type_id"], name: "index_timeline_events_on_timeline_event_type_id"
   end
 
   create_table "tracks", force: :cascade do |t|
@@ -794,7 +776,7 @@ ActiveRecord::Schema.define(version: 2018_11_15_085253) do
   add_foreign_key "latest_submission_records", "founders"
   add_foreign_key "latest_submission_records", "targets"
   add_foreign_key "latest_submission_records", "timeline_events"
-  add_foreign_key "levels", "schools"
+  add_foreign_key "levels", "courses"
   add_foreign_key "payments", "founders"
   add_foreign_key "payments", "startups"
   add_foreign_key "resources", "levels"

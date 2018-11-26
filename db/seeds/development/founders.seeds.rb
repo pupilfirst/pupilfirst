@@ -15,7 +15,7 @@ after 'development:colleges', 'development:startups' do
     user: john_doe,
   }
 
-  # Add John Doe to teams in all three schools.
+  # Add John Doe to teams in all three courses.
   ['Unfinished Swan', 'Guardians of the Galaxy', 'iOS Startup'].each do |team_name|
     startup = Startup.find_by(product_name: team_name)
 

@@ -7,6 +7,6 @@ after 'development:targets', 'development:evaluation_criteria' do
   target = Target.where(target_group: target_group).last
   TargetEvaluationCriterion.create!(
     target: target,
-    evaluation_criterion: target.school.evaluation_criteria.first,
+    evaluation_criterion: target.course.evaluation_criteria.first,
   )
 end

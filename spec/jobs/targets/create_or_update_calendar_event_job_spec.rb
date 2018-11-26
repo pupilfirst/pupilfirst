@@ -11,15 +11,15 @@ describe Targets::CreateOrUpdateCalendarEventJob do
     described_class.active = false
   end
 
-  let(:school_1) { create :school }
-  let(:school_2) { create :school, sponsored: true }
+  let(:course_1) { create :course }
+  let(:course_2) { create :course, sponsored: true }
 
-  let(:level_1) { create :level, :one, school: school_1 }
-  let(:level_2) { create :level, :two, school: school_1 }
-  let(:level_3) { create :level, :three, school: school_1 }
-  let(:level_1_s2) { create :level, :one, school: school_2 }
-  let(:level_2_s2) { create :level, :two, school: school_2 }
-  let(:level_3_s2) { create :level, :three, school: school_2 }
+  let(:level_1) { create :level, :one, course: course_1 }
+  let(:level_2) { create :level, :two, course: course_1 }
+  let(:level_3) { create :level, :three, course: course_1 }
+  let(:level_1_s2) { create :level, :one, course: course_2 }
+  let(:level_2_s2) { create :level, :two, course: course_2 }
+  let(:level_3_s2) { create :level, :three, course: course_2 }
 
   let(:admin_user) { create :admin_user }
   let!(:startup_l1) { create :startup, :subscription_active, level: level_1 }

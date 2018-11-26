@@ -47,11 +47,11 @@ module TimelineEvents
     end
 
     def max_grade
-      @max_grade ||= @timeline_event.founder.school.max_grade
+      @max_grade ||= @timeline_event.founder.startup.course.max_grade
     end
 
     def pass_grade
-      @pass_grade ||= @timeline_event.founder.school.pass_grade
+      @pass_grade ||= @timeline_event.founder.startup.course.pass_grade
     end
 
     def failed?(grades)

@@ -7,11 +7,11 @@ describe TimelineEvents::UndoGradingService do
   let(:startup) { create :startup }
   let(:founder) { create :founder, startup: startup }
   let(:faculty) { create :faculty }
-  let(:school) { create :school }
+  let(:course) { create :course }
   let(:timeline_event) { create :timeline_event, target: target, startup: startup, founder: founder }
   let(:target_with_evaluation_criteria) { create :target }
-  let!(:evaluation_criterion_1) { create :evaluation_criterion, school: school }
-  let!(:evaluation_criterion_2) { create :evaluation_criterion, school: school }
+  let!(:evaluation_criterion_1) { create :evaluation_criterion, course: course }
+  let!(:evaluation_criterion_2) { create :evaluation_criterion, course: course }
 
   before do
     target.evaluation_criteria << [evaluation_criterion_1, evaluation_criterion_2]

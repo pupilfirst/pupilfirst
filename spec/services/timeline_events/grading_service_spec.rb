@@ -7,11 +7,11 @@ describe TimelineEvents::GradingService do
   let(:startup) { create :startup }
   let(:founder) { create :founder, startup: startup }
   let(:faculty) { create :faculty }
-  let(:school) { create :school }
+  let(:course) { create :course }
   let(:timeline_event) { create :timeline_event, target: target, startup: startup, founder: founder }
   let(:target_with_evaluation_criteria) { create :target }
-  let!(:evaluation_criterion_1) { create :evaluation_criterion, school: school }
-  let!(:evaluation_criterion_2) { create :evaluation_criterion, school: school }
+  let!(:evaluation_criterion_1) { create :evaluation_criterion, course: course }
+  let!(:evaluation_criterion_2) { create :evaluation_criterion, course: course }
 
   before do
     timeline_event.update!(target: target, startup: startup, founder: founder)
@@ -48,7 +48,7 @@ describe TimelineEvents::GradingService do
       end
     end
 
-    context 'when awarded grade is not within the allowed grades in a school' do
+    context 'when awarded grade is not within the allowed grades in a course' do
       let(:grades) { { evaluation_criterion_1.id => 2, evaluation_criterion_1.id => 5 } }
       it 'it raises an invalid grade exception' do
         expect { subject.grade(faculty, grades) }.to raise_error(TimelineEvents::GradingService::InvalidGradesException)

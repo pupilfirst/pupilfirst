@@ -37,7 +37,7 @@ module Founders
     end
 
     def visible_levels
-      @visible_levels ||= startup.level_zero? ? school.levels.where(number: 0) : school.levels.where('levels.number >= ?', 1)
+      @visible_levels ||= startup.level_zero? ? course.levels.where(number: 0) : course.levels.where('levels.number >= ?', 1)
     end
 
     def open_levels
@@ -71,7 +71,7 @@ module Founders
     end
 
     def criteria_names
-      school.evaluation_criteria.each_with_object({}) do |criterion, result|
+      course.evaluation_criteria.each_with_object({}) do |criterion, result|
         result[criterion.id] = criterion.name
       end
     end
@@ -94,8 +94,8 @@ module Founders
       @startup ||= @founder.startup
     end
 
-    def school
-      @school ||= startup.school
+    def course
+      @course ||= startup.course
     end
 
     def target_fields

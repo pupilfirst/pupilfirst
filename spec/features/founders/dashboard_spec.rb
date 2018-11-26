@@ -4,19 +4,19 @@ feature 'Founder Dashboard' do
   include UserSpecHelper
 
   # The basics.
-  let(:school) { create :school }
+  let(:course) { create :course }
   let!(:startup) { create :startup, :subscription_active, level: level_4 }
   let!(:founder) { create :founder, startup: startup }
   let(:faculty) { create :faculty }
 
   # Levels.
-  let!(:level_0) { create :level, :zero, school: school }
-  let!(:level_1) { create :level, :one, school: school }
-  let!(:level_2) { create :level, :two, school: school }
-  let!(:level_3) { create :level, :three, school: school }
-  let!(:level_4) { create :level, :four, school: school }
-  let!(:level_5) { create :level, :five, school: school }
-  let!(:locked_level_6) { create :level, :six, school: school, unlock_on: 1.month.from_now }
+  let!(:level_0) { create :level, :zero, course: course }
+  let!(:level_1) { create :level, :one, course: course }
+  let!(:level_2) { create :level, :two, course: course }
+  let!(:level_3) { create :level, :three, course: course }
+  let!(:level_4) { create :level, :four, course: course }
+  let!(:level_5) { create :level, :five, course: course }
+  let!(:locked_level_6) { create :level, :six, course: course, unlock_on: 1.month.from_now }
 
   # Tracks.
   let(:product_track) { create :track, name: 'Product', sort_index: 0 }
@@ -169,7 +169,7 @@ feature 'Founder Dashboard' do
     expect(page).to have_selector('.filter-targets-dropdown__menu-item--disabled', text: "Level 6: #{locked_level_6.name}")
   end
 
-  context "when the founders's school has a 'Sessions' target-group in it" do
+  context "when the founders's course has a 'Sessions' target-group in it" do
     before do
       # Include the 'Sessions' target group in Level 1 and add all sessions to it.
       sessions_target_group.update!(level: level_1)

@@ -2,8 +2,8 @@ require 'rails_helper'
 
 feature 'Timeline Builder' do
   include UserSpecHelper
-  let(:school) { create :school }
-  let(:criterion) { create :evaluation_criterion, school: school }
+  let(:course) { create :course }
+  let(:criterion) { create :evaluation_criterion, course: course }
   let(:level_one) { create :level, :one }
 
   let(:startup) { create :startup, :subscription_active, level: level_one }

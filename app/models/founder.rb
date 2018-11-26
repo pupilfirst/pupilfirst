@@ -30,7 +30,6 @@ class Founder < ApplicationRecord
   has_many :public_slack_messages, dependent: :nullify
   belongs_to :startup
   has_one :level, through: :startup
-  has_one :school, through: :startup
   belongs_to :invited_startup, class_name: 'Startup', optional: true
   has_many :karma_points, dependent: :destroy
   has_many :timeline_events, dependent: :nullify
@@ -260,7 +259,7 @@ class Founder < ApplicationRecord
 
   def facebook_share_eligibility
     return 'not_admitted' if startup.level_zero?
-    return 'disabled_for_school' if startup.level.school.facebook_share_disabled?
+    return 'disabled_for_course' if startup.level.course.facebook_share_disabled?
 
     facebook_token_available? ? 'eligible' : 'token_unavailable'
   end

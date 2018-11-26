@@ -3,10 +3,10 @@ require_relative 'helper'
 after 'development:target_groups', 'development:faculty' do
   puts 'Seeding targets'
 
-  startup_school = School.find_by(name: 'Startup')
-  developer_school = School.find_by(name: 'Developer')
-  vr_school = School.find_by(name: 'VR')
-  ios_school = School.find_by(name: 'iOS')
+  startup_course = Course.find_by(name: 'Startup')
+  developer_course = Course.find_by(name: 'Developer')
+  vr_course = Course.find_by(name: 'VR')
+  ios_course = Course.find_by(name: 'iOS')
 
   video_embed = '<iframe width="560" height="315" src="https://www.youtube.com/embed/58CPRi5kRe8" frameborder="0" allowfullscreen></iframe>'
 
@@ -35,21 +35,21 @@ after 'development:target_groups', 'development:faculty' do
     end
   end
 
-  # Assign evaluation criteria for few targets in different schools
+  # Assign evaluation criteria for few targets in different courses
 
-  Target.joins(:level).where(levels: { number: 1, school_id: startup_school.id }).each do |target|
-    target.target_evaluation_criteria.create!(evaluation_criterion: startup_school.evaluation_criteria.first)
+  Target.joins(:level).where(levels: { number: 1, course_id: startup_course.id }).each do |target|
+    target.target_evaluation_criteria.create!(evaluation_criterion: startup_course.evaluation_criteria.first)
   end
 
-  Target.joins(:level).where(levels: { number: 2, school_id: developer_school.id }).each do |target|
-    target.target_evaluation_criteria.create!(evaluation_criterion: developer_school.evaluation_criteria.first)
+  Target.joins(:level).where(levels: { number: 2, course_id: developer_course.id }).each do |target|
+    target.target_evaluation_criteria.create!(evaluation_criterion: developer_course.evaluation_criteria.first)
   end
 
-  Target.joins(:level).where(levels: { number: 3, school_id: vr_school.id }).each do |target|
-    target.target_evaluation_criteria.create!(evaluation_criterion: vr_school.evaluation_criteria.first)
+  Target.joins(:level).where(levels: { number: 3, course_id: vr_course.id }).each do |target|
+    target.target_evaluation_criteria.create!(evaluation_criterion: vr_course.evaluation_criteria.first)
   end
 
-  Target.joins(:level).where(levels: { number: 1, school_id: ios_school.id }).each do |target|
-    target.target_evaluation_criteria.create!(evaluation_criterion: ios_school.evaluation_criteria.first)
+  Target.joins(:level).where(levels: { number: 1, course_id: ios_course.id }).each do |target|
+    target.target_evaluation_criteria.create!(evaluation_criterion: ios_course.evaluation_criteria.first)
   end
 end

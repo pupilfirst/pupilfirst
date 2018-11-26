@@ -3,9 +3,9 @@ require 'rails_helper'
 describe Targets::StatusService do
   subject { described_class.new(founder_target_1, founder_1) }
 
-  let(:school) { create :school }
-  let(:level_1) { create :level, :one, school: school }
-  let(:level_2) { create :level, :two, school: school }
+  let(:course) { create :course }
+  let(:level_1) { create :level, :one, course: course }
+  let(:level_2) { create :level, :two, course: course }
   let(:startup) { create :startup, level: level_2 }
   let(:founder_1) { startup.founders.first }
   let(:founder_2) { startup.founders.second }

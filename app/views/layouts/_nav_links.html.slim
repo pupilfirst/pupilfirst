@@ -60,7 +60,7 @@
                 li role="presentation"
                   = link_to(select_founder_path(other_founder), method: :post) do
                     i.fa.fa-university
-                    = "#{other_founder.startup.school.name} School"
+                    = "#{other_founder.startup.course.name} Course"
             li role="presentation"
               = link_to destroy_user_session_path, method: :delete do
                 i.fa.fa-sign-out

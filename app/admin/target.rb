@@ -8,11 +8,11 @@ ActiveAdmin.register Target do
   filter :title
   filter :archived
   filter :session_at_not_null, as: :boolean, label: 'Session?'
-  filter :target_group, collection: -> { TargetGroup.all.includes(:school, :level).order('schools.name ASC, levels.number ASC') }
-  filter :level, collection: -> { Level.all.includes(:school).order('schools.name ASC, levels.number ASC') }
+  filter :target_group, collection: -> { TargetGroup.all.includes(:course, :level).order('courses.name ASC, levels.number ASC') }
+  filter :level, collection: -> { Level.all.includes(:course).order('courses.name ASC, levels.number ASC') }
   filter :faculty_name, as: :string
   filter :role, as: :select, collection: -> { Target.valid_roles }
-  filter :school, as: :select
+  filter :course, as: :select
 
   filter :ransack_tagged_with,
     as: :select,
@@ -28,7 +28,7 @@ ActiveAdmin.register Target do
     include DisableIntercom
 
     def scoped_collection
-      super.includes(:school, :level, :target_group)
+      super.includes(:course, :level, :target_group)
     end
   end
 
@@ -37,13 +37,13 @@ ActiveAdmin.register Target do
     column :title
 
     column 'Target Group' do |target|
-      if target.school.present?
+      if target.course.present?
         span do
-          code "[#{target.school.short_name.rjust(3)}##{target.level.number}]"
+          code "[#{target.course.short_name.rjust(3)}##{target.level.number}]"
           span target.target_group.name
         end
       else
-        em "Not part of a school"
+        em "Not part of a course"
       end
     end
 
@@ -315,7 +315,7 @@ ActiveAdmin.register Target do
       f.input :link_to_complete
       f.input :faculty, collection: Faculty.active.order(:name), include_blank: 'No linked faculty'
       f.input :session_by, placeholder: 'Name of session taker, IF faculty linking is not possible.'
-      f.input :target_group, collection: TargetGroup.all.includes(:school, :level).order('schools.name ASC, levels.number ASC')
+      f.input :target_group, collection: TargetGroup.all.includes(:course, :level).order('courses.name ASC, levels.number ASC')
       f.input :sort_index
       f.input :days_to_complete
       f.input :rubric, as: :file

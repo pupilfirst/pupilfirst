@@ -10,7 +10,7 @@ class StartupsController < ApplicationController
       .admitted
       .approved
       .where.not(slug: 'svdotco')
-      .where.not(levels: { school_id: sponsored_school_ids })
+      .where.not(levels: { course_id: sponsored_course_ids })
       .includes(:startups_startup_categories)
       .order(timeline_updated_on: 'DESC')
 
@@ -114,7 +114,7 @@ class StartupsController < ApplicationController
 
   def load_filter_options
     @categories = StartupCategory.order(:name)
-    @levels = Level.where('number > ?', 0).where.not(school_id: sponsored_school_ids).includes(:school).order(:school_id, :number)
+    @levels = Level.where('number > ?', 0).where.not(course_id: sponsored_course_ids).includes(:course).order(:course_id, :number)
   end
 
   def startup_registration_params
@@ -126,7 +126,7 @@ class StartupsController < ApplicationController
     input_filter.merge(page: params[:page])
   end
 
-  def sponsored_school_ids
-    School.where(sponsored: true).select(:id)
+  def sponsored_course_ids
+    Course.where(sponsored: true).select(:id)
   end
 end

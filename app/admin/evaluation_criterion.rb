@@ -5,7 +5,7 @@ ActiveAdmin.register EvaluationCriterion do
 
   menu parent: 'Targets'
 
-  permit_params :name, :description, :school_id
+  permit_params :name, :description, :course_id
 
   filter :name
   filter :description
@@ -16,7 +16,7 @@ ActiveAdmin.register EvaluationCriterion do
     column :id
     column :name
     column :description
-    column :school
+    column :course
 
     actions
   end
@@ -26,7 +26,7 @@ ActiveAdmin.register EvaluationCriterion do
     f.inputs 'EvaluationCriterion Details' do
       f.input :name
       f.input :description
-      f.input :school
+      f.input :course
     end
 
     f.actions

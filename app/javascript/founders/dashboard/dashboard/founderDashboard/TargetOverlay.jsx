@@ -17,7 +17,8 @@ export default class TargetOverlay extends React.Component {
         latestEvent: null,
         latestFeedback: null,
         linkedResources: null,
-        founderStatuses: null
+        founderStatuses: null,
+        grades: null
       }
     );
 
@@ -97,7 +98,8 @@ export default class TargetOverlay extends React.Component {
       latestEvent: response.latestEvent,
       latestFeedback: response.latestFeedback,
       linkedResources: response.linkedResources,
-      founderStatuses: response.founderStatuses
+      founderStatuses: response.founderStatuses,
+      grades: response.grades
     });
   }
 
@@ -136,7 +138,11 @@ export default class TargetOverlay extends React.Component {
               </div>
             </div>
             <div className="target-overlay__status-badge-block">
-              <StatusBadgeBar target={this.target()} />
+              <StatusBadgeBar
+                target={this.target()}
+                criteriaNames={this.props.rootProps.criteriaNames}
+                gradeLabels={this.props.rootProps.gradeLabels}
+              />
             </div>
             <div className="target-overlay__content-wrapper clearfix">
               <div className="col-md-8 target-overlay__content-leftbar">

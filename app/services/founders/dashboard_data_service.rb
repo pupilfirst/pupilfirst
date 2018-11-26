@@ -11,7 +11,8 @@ module Founders
         faculty: faculty,
         targetGroups: target_groups,
         tracks: tracks,
-        evalationCriteria: evaluation_criteria
+        criteriaNames: criteria_names,
+        gradeLabels: school.grade_labels
       }
     end
 
@@ -69,8 +70,10 @@ module Founders
       Track.all.as_json(only: %i[id name sort_index])
     end
 
-    def evaluation_criteria
-      school.evaluation_criteria.as_json(only: %i[id name])
+    def criteria_names
+      school.evaluation_criteria.each_with_object({}) do |criterion, result|
+        result[criterion.id] = criterion.name
+      end
     end
 
     def dashboard_decorated_data(target_data)

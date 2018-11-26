@@ -61,6 +61,28 @@ export default class StatusBadgeBar extends React.Component {
     );
   }
 
+  gradesList() {
+    let grades = this.props.target.grades;
+    let criteriaNames = this.props.criteriaNames;
+    let gradeLabels = this.props.gradeLabels;
+    return (
+      <div>
+        <div className="target-overlay-status-badge-bar__grades-header">Grades received:</div>
+        <ul className="target-overlay-status-badge-bar__grades-list">
+          {
+            Object.keys(grades).map(criterionId => {
+              return (
+                <li key={criterionId}>
+                  {criteriaNames[criterionId]}: {gradeLabels[grades[criterionId]]}
+                </li>
+              )
+            })
+          }
+        </ul>
+      </div>
+    )
+  }
+
   render() {
     return (
       <div className={this.containerClasses()}>
@@ -70,11 +92,14 @@ export default class StatusBadgeBar extends React.Component {
             {this.statusHintString()}
           </p>
         </div>
+        {this.props.target.grades && this.gradesList()}
       </div>
     );
   }
 }
 
 StatusBadgeBar.propTypes = {
-  target: PropTypes.object
+  target: PropTypes.object,
+  criteriaNames: PropTypes.object,
+  gradeLabels: PropTypes.object
 };

@@ -1,6 +1,6 @@
 class Course < ApplicationRecord
   validates :name, presence: true
-  validates :max_grade,  presence: true, numericality: { greater_than: 0 }
+  validates :max_grade, presence: true, numericality: { greater_than: 0 }
   validates :pass_grade, presence: true, numericality: { greater_than: 0, less_than_or_equal_to: :max_grade }
   validates :grade_labels, presence: true
   validate :grade_labels_must_match_grades
@@ -21,6 +21,10 @@ class Course < ApplicationRecord
   # Hack to enable editing grade_labels as an activeadmin text field
   def grade_labels=(labels)
     labels.is_a?(String) ? super(JSON.parse(labels)) : super(labels)
+  end
+
+  def locked?
+    ends_at.present? ? ends_at < Time.now : false
   end
 
   private

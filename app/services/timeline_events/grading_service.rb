@@ -7,6 +7,7 @@ module TimelineEvents
     # @param faculty [Faculty] Faculty who is evaluating the timeline event.
     # @param grades [Hash] Grades in this format: {evaluation_criterion_id: grade_integer, ...}
     def grade(faculty, grades)
+      raise TimelineEvents::GradingService::NotGradableException if evaluation_criteria.blank?
       raise TimelineEvents::GradingService::InvalidGradesException unless valid_grading?(grades)
 
       TimelineEvent.transaction do

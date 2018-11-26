@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_22_104730) do
+ActiveRecord::Schema.define(version: 2018_11_26_103931) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -54,17 +54,6 @@ ActiveRecord::Schema.define(version: 2018_11_22_104730) do
     t.index ["time"], name: "index_ahoy_events_on_time"
     t.index ["user_id", "user_type"], name: "index_ahoy_events_on_user_id_and_user_type"
     t.index ["visit_id"], name: "index_ahoy_events_on_visit_id"
-  end
-
-  create_table "answer_options", id: :serial, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "quiz_question_id"
-    t.boolean "correct_answer", default: false
-    t.string "value"
-    t.text "hint_text"
-    t.string "quiz_question_type"
-    t.index ["quiz_question_id"], name: "index_answer_options_on_quiz_question_id"
   end
 
   create_table "colleges", id: :serial, force: :cascade do |t|
@@ -156,26 +145,6 @@ ActiveRecord::Schema.define(version: 2018_11_22_104730) do
   create_table "engineering_metrics", id: :serial, force: :cascade do |t|
     t.json "metrics", default: {}, null: false
     t.datetime "week_start_at"
-  end
-
-  create_table "english_quiz_questions", force: :cascade do |t|
-    t.string "question"
-    t.text "explanation"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.date "posted_on"
-  end
-
-  create_table "english_quiz_submissions", force: :cascade do |t|
-    t.bigint "english_quiz_question_id"
-    t.bigint "quizee_id"
-    t.bigint "answer_option_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "quizee_type"
-    t.index ["answer_option_id"], name: "index_english_quiz_submissions_on_answer_option_id"
-    t.index ["english_quiz_question_id"], name: "index_english_quiz_submissions_on_english_quiz_question_id"
-    t.index ["quizee_id"], name: "index_english_quiz_submissions_on_quizee_id"
   end
 
   create_table "faculty", id: :serial, force: :cascade do |t|
@@ -762,8 +731,6 @@ ActiveRecord::Schema.define(version: 2018_11_22_104730) do
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"
   add_foreign_key "connect_slots", "faculty"
-  add_foreign_key "english_quiz_submissions", "answer_options"
-  add_foreign_key "english_quiz_submissions", "english_quiz_questions"
   add_foreign_key "faculty", "levels"
   add_foreign_key "founders", "colleges"
   add_foreign_key "founders", "users"

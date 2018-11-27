@@ -67,9 +67,9 @@ export default class DashboardNotification extends React.Component {
 
   render() {
     return (
-      <div className="founder-dashboard-levelup-notification__container px-2 mx-auto mt-3">
+      <div className="founder-dashboard-notification__container px-2 mx-auto mt-3">
         {this.props.rootProps.courseEnded && (
-          <div className="founder-dashboard-levelup-notification__box text-center p-3">
+          <div className="founder-dashboard-notification__box text-center p-3">
             <span className="founder-dashboard-notification__lock">
               <i className="fa fa-2x fa-lock" />
             </span>
@@ -85,7 +85,7 @@ export default class DashboardNotification extends React.Component {
         {!this.props.rootProps.courseEnded && (
           <div>
             {this.props.rootProps.levelUpEligibility === "eligible" && (
-              <div className="founder-dashboard-levelup-notification__box text-center p-3">
+              <div className="founder-dashboard-notification__box text-center p-3">
                 <h1>{"\uD83C\uDF89"}</h1>
                 <h3 className="brand-primary font-regular">
                   {this.eligibleNotificationTitle()}
@@ -124,7 +124,7 @@ export default class DashboardNotification extends React.Component {
 
             {this.props.rootProps.levelUpEligibility ===
               "cofounders_pending" && (
-              <div className="founder-dashboard-levelup-notification__box text-center p-3">
+              <div className="founder-dashboard-notification__box text-center p-3">
                 <h3 className="brand-primary font-regular">
                   Almost ready to level up!
                 </h3>
@@ -138,7 +138,7 @@ export default class DashboardNotification extends React.Component {
             )}
 
             {this.props.rootProps.levelUpEligibility === "date_locked" && (
-              <div className="founder-dashboard-levelup-notification__box text-center p-3">
+              <div className="founder-dashboard-notification__box text-center p-3">
                 <h1>{"\uD83C\uDF89"}</h1>
                 <h3 className="brand-primary font-regular">
                   Level complete! Please wait for the next one.

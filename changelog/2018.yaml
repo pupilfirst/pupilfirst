@@ -1,5 +1,63 @@
 ---
 changelog:
+- timestamp: '2018-11-26T10:13:59Z'
+  changes:
+  - timestamp: '2018-11-26T10:12:12Z'
+    title: Creating a new submission no longer requires the selection of a _submission
+      type_.
+    trello: https://trello.com/c/ampsYf75
+    private: false
+    description: All submissions are now linked to targets displayed on the student
+      dashboard. The concept of _timeline event type_ has been completely removed,
+      and some the concepts that it handled have been shifted to _targets_ instead,
+      now that all submissions are guaranteed to have a linked target.
+    category: ui
+  - timestamp: '2018-11-22T11:14:42Z'
+    title: School has been renamed to Course.
+    trello: https://trello.com/c/JWrgPvvw
+    private: true
+  - timestamp: '2018-11-22T08:49:51Z'
+    title: Preserve formatting of student submissions in coach's review dashboard.
+    trello: https://trello.com/c/75ugV8Dg
+    private: false
+    category: ui
+  - timestamp: '2018-11-20T11:18:47Z'
+    title: Students can now by part of multiple courses at the same time.
+    trello: https://trello.com/c/7Vb4tVvA
+    private: false
+    category: feature
+  - timestamp: '2018-11-14T11:51:40Z'
+    title: Startups are now mandatorily required for founders.
+    trello: https://trello.com/c/7Vb4tVvA
+    private: true
+    description: This turns off the optional flag in founder to startup relationship,
+      and alters a basic behavior in the application. Specs and some services have
+      been updated, but this is a potentially fragile change.
+    category: operations
+  - timestamp: '2018-10-31T08:25:34Z'
+    title: Give read-only access to all the levels in a school
+    trello: https://trello.com/c/Y2G4f3Uc
+    private: true
+    description: All the levels in a school are now open for preview. The user can't
+      submit higher level targets until they reach that level. They can now move on
+      to the next level as soon as they’ve submitted all the milestone targets on
+      a level. This system would still prevent further leveling up unless all the
+      milestone targets in their previous level have been completed
+    category: feature
+  - timestamp: '2018-10-26T06:53:19Z'
+    title: Implemented strict CSP using Level 3
+    trello: https://trello.com/c/klmTXfEt
+    private: true
+    description: 'Loose CSP was put in place to allow Google Tag Manager to work,
+      which we don''t use anymore. '
+  - timestamp: '2018-10-25T11:55:39Z'
+    title: Library resources now link directly to their contents on the target overlay.
+    trello: https://trello.com/c/RAXwRpHr
+    private: false
+    description: This updates the resource links on the target overlay to point directly
+      to the underlying content, instead of sending the user to the Resource#show
+      page.
+    category: ui
 - timestamp: '2018-10-22T06:52:23Z'
   changes:
   - timestamp: '2018-10-22T06:52:09Z'

@@ -16,6 +16,17 @@ module TimelineEvents
 
     validate :files_should_have_metadata
     validate :target_status_submittable
+    validate :links_should_have_correct_shape
+
+    def links_should_have_correct_shape
+      return if parsed_links.blank?
+
+      invalid_link = parsed_links.find do |link|
+        link[:title].blank? || link[:url].blank? || !link[:url].starts_with?('http')
+      end
+
+      errors[:links] << 'contains invalid links' if invalid_link.present?
+    end
 
     def files_should_have_metadata
       return if files.blank?

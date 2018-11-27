@@ -10,7 +10,7 @@ module TimelineEvents
     private
 
     def notify_coach_about(timeline_event)
-      timeline_event.startup.faculty.each do |faculty|
+      timeline_event.startup.faculty.active.each do |faculty|
         FacultyMailer.student_submission_notification(timeline_event, faculty).deliver_now
       end
     end

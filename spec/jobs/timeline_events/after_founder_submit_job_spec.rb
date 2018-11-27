@@ -4,6 +4,7 @@ describe TimelineEvents::AfterFounderSubmitJob do
   subject { described_class }
 
   let(:faculty) { create :faculty, :with_email }
+  let(:inactive_faculty) { create :faculty, :with_email, inactive: true }
   let(:startup) { create :startup, :subscription_active }
   let(:timeline_event) { create :timeline_event, startup: startup }
   let(:mock_service) { instance_double(TimelineEvents::MarkAsImprovedTargetService, execute: nil) }
@@ -19,11 +20,17 @@ describe TimelineEvents::AfterFounderSubmitJob do
     end
 
     context 'when the startup has a coach' do
-      let(:startup) { create :startup, :sponsored, faculty: [faculty] }
+      let(:startup) { create :startup, :sponsored, faculty: [faculty, inactive_faculty] }
 
       it 'sends a notification email to the coach' do
         subject.perform_now(timeline_event)
 
+        # It should not sent any emails to inactive faculty.
+        open_email(inactive_faculty.email)
+
+        expect(current_email).to be_nil
+
+        # It should send an email to active faculty.
         open_email(faculty.email)
 
         expect(current_email.subject).to eq("There is a new submission from #{startup.product_name}")

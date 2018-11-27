@@ -1,9 +1,11 @@
 class QuizQuestion < ApplicationRecord
+  belongs_to :quiz
   has_many :answer_options, dependent: :restrict_with_error
   accepts_nested_attributes_for :answer_options, allow_destroy: true
 
   validates :question, presence: true
   validate :must_have_exactly_one_correct_answer
+  validates :quizzes_id, presence: true
 
   def must_have_exactly_one_correct_answer
     errors.add :base, 'Must have exactly one correct answer' unless exactly_one_correct_answer?

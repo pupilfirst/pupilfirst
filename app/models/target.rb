@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 class Target < ApplicationRecord
+  # Use to allow archival of a target. See Targets::ArchivalService.
+  attr_accessor :safe_to_archive
+
+  # Need to allow these two to be read for AA form.
+  attr_reader :startup_id, :founder_id
+
   KEY_SCREENING = 'screening'
   KEY_COFOUNDER_ADDITION = 'cofounder_addition'
   KEY_R1_TASK = 'r1_task'
@@ -82,9 +88,6 @@ class Target < ApplicationRecord
     [SUBMITTABILITY_RESUBMITTABLE, SUBMITTABILITY_SUBMITTABLE_ONCE, SUBMITTABILITY_NOT_SUBMITTABLE, SUBMITTABILITY_AUTO_VERIFY].freeze
   end
 
-  # Need to allow these two to be read for AA form.
-  attr_reader :startup_id, :founder_id
-
   validates :target_action_type, inclusion: { in: valid_target_action_types }, allow_nil: true
   validates :role, presence: true, inclusion: { in: valid_roles }
   validates :title, presence: true
@@ -110,6 +113,15 @@ class Target < ApplicationRecord
     return if level == target_group.level
 
     errors[:level] << 'should match level of target group'
+  end
+
+  validate :must_be_safe_to_archive
+
+  def must_be_safe_to_archive
+    return unless archived_changed? && archived?
+    return if safe_to_archive
+
+    errors[:archived] << 'cannot be set unsafely'
   end
 
   normalize_attribute :key, :slideshow_embed, :video_embed

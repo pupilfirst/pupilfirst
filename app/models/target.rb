@@ -113,25 +113,6 @@ class Target < ApplicationRecord
     errors[:level] << 'should match level of target group'
   end
 
-  validate :only_one_of_faculty_or_session_by
-
-  def only_one_of_faculty_or_session_by
-    if faculty.present? && session_by.present?
-      errors[:base] << 'Both faculty and session_by cannot be set.'
-      errors[:faculty_id] << 'or session_by can be set'
-      errors[:session_by] << 'or faculty can be set'
-    end
-  end
-
-  validate :session_by_only_for_session
-
-  def session_by_only_for_session
-    if session_at.blank? && session_by.present?
-      errors[:base] << 'This target is not a session, but has session_by set.'
-      errors[:session_by] << 'should not be set for a vanilla target'
-    end
-  end
-
   validate :vanilla_target_requires_faculty
 
   def vanilla_target_requires_faculty
@@ -142,7 +123,7 @@ class Target < ApplicationRecord
     errors[:faculty_id] << 'is required for a vanilla target'
   end
 
-  normalize_attribute :key, :slideshow_embed, :video_embed, :session_by
+  normalize_attribute :key, :slideshow_embed, :video_embed
 
   def display_name
     if target_group.present?

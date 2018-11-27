@@ -132,18 +132,6 @@ feature 'Target Overlay' do
     end
   end
 
-  context 'when the founder clicks on a session', js: true do
-    let!(:target) { create :target, :session, target_group: target_group_1, role: Target::ROLE_TEAM }
-
-    it 'displays the faculty as "session by", instead of as assigner' do
-      find('.founder-dashboard-target-header__headline', text: target.title).click
-
-      within('.target-overlay__faculty-box') do
-        expect(page).to have_text("Session by:\n#{target.faculty.name}")
-      end
-    end
-  end
-
   context 'when the founder clicks a locked target', js: true do
     context 'when the target has prerequisites' do
       before do

@@ -54,7 +54,7 @@ after 'development:target_groups', 'development:faculty' do
       end
 
       # Session.
-      target_group.targets.create!(title: Faker::Lorem.sentence, role: Target.valid_roles.sample, session_at: 1.month.ago, description: paragraph, session_by: session_taker_name, video_embed: video_embed, target_action_type: Target::TYPE_ATTEND)
+      target_group.targets.create!(title: Faker::Lorem.sentence, role: Target.valid_roles.sample, session_at: 1.month.ago, description: paragraph, video_embed: video_embed, target_action_type: Target::TYPE_ATTEND)
     end
   end
 end

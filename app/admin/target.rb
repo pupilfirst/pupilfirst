@@ -2,7 +2,7 @@ ActiveAdmin.register Target do
   permit_params :faculty_id, :role, :title, :description, :resource_url, :completion_instructions, :days_to_complete,
     :slideshow_embed, :video_embed, :completed_at, :completion_comment, :rubric, :link_to_complete, :key,
     :submittability, :archived, :remote_rubric_url, :target_group_id, :target_action_type, :points_earnable,
-    :sort_index, :youtube_video_id, :session_at, :session_by, :call_to_action,
+    :sort_index, :youtube_video_id, :session_at, :call_to_action,
     prerequisite_target_ids: [], tag_list: [], target_skills_attributes: %i[id skill_id rubric_good rubric_great rubric_wow base_karma_points _destroy]
 
   filter :title
@@ -119,8 +119,11 @@ ActiveAdmin.register Target do
         t("models.target.role.#{target.role}")
       end
 
-      row :faculty
-      row :session_by
+      row 'Assigned by' do
+        if target.faculty.present?
+          link_to target.faculty.name, admin_faculty_path(target.faculty)
+        end
+      end
 
       row :rubric do
         if target.rubric.present?
@@ -227,7 +230,6 @@ ActiveAdmin.register Target do
       target&.faculty&.name
     end
 
-    column :session_by
     column :youtube_video_id
     column :video_embed
     column :slideshow_embed
@@ -319,8 +321,7 @@ ActiveAdmin.register Target do
       f.input :call_to_action
       f.input :link_to_complete
       f.input :submittability, collection: Target.valid_submittability_values
-      f.input :faculty, collection: Faculty.active.order(:name), include_blank: 'No linked faculty'
-      f.input :session_by, placeholder: 'Name of session taker, IF faculty linking is not possible.'
+      f.input :faculty, collection: Faculty.active.order(:name), include_blank: 'No linked faculty', label: 'Assigned by'
       f.input :target_group, collection: TargetGroup.all.includes(:course, :level).order('courses.name ASC, levels.number ASC')
       f.input :sort_index
       f.input :days_to_complete

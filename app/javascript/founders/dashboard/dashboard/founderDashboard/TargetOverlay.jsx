@@ -11,19 +11,18 @@ import FacultyBlock from "./targetOverlay/FacultyBlock";
 export default class TargetOverlay extends React.Component {
   constructor(props) {
     super(props);
-    this.state = _.merge(
-      { ...props.target },
-      {
-        latestEvent: null,
-        latestFeedback: null,
-        linkedResources: null,
-        founderStatuses: null
-      }
-    );
+    this.state = _.merge({
+      latestEvent: null,
+      latestFeedback: null,
+      linkedResources: null,
+      founderStatuses: null
+    });
 
     this.updateDetails = this.updateDetails.bind(this);
     this.openTimelineBuilder = this.openTimelineBuilder.bind(this);
     this.completeTarget = this.completeTarget.bind(this);
+    this.getFaculty = this.getFaculty.bind(this);
+    this.getTarget = this.getTarget.bind(this);
   }
 
   componentDidMount() {
@@ -31,7 +30,7 @@ export default class TargetOverlay extends React.Component {
     document.body.classList.add("scroll-lock");
   }
 
-  target() {
+  getTarget() {
     return _.find(this.props.rootState.targets, ["id", this.props.targetId]);
   }
 
@@ -48,37 +47,36 @@ export default class TargetOverlay extends React.Component {
     document.body.classList.remove("scroll-lock");
   }
 
-  isSubmittable() {
+  isSubmittable(target) {
     return !(
-      this.isNotSubmittable() ||
-      this.singleSubmissionComplete() ||
-      this.submissionBlocked()
+      this.isNotSubmittable(target) ||
+      this.singleSubmissionComplete(target) ||
+      this.submissionBlocked(target)
     );
   }
 
-  isNotSubmittable() {
-    return this.target().submittability === "not_submittable";
+  isNotSubmittable(target) {
+    return target.submittability === "not_submittable";
   }
 
-  singleSubmissionComplete() {
+  singleSubmissionComplete(target) {
     return (
-      ["submittable_once", "auto_verify"].includes(
-        this.target().submittability
-      ) && !this.isPending()
+      ["submittable_once", "auto_verify"].includes(target.submittability) &&
+      !this.isPending()
     );
   }
 
-  submissionBlocked() {
+  submissionBlocked(target) {
     return [
       "unavailable",
       "level_locked",
       "pending_milestone",
       "submitted"
-    ].includes(this.target().status);
+    ].includes(target.status);
   }
 
-  isPending() {
-    return this.target().status === "pending";
+  isPending(target) {
+    return target.status === "pending";
   }
 
   openTimelineBuilder() {
@@ -117,7 +115,20 @@ export default class TargetOverlay extends React.Component {
     });
   }
 
+  getFaculty(target) {
+    const targetFaculty = target.faculty;
+
+    if (_.isObject(targetFaculty)) {
+      return _.find(this.props.rootProps.faculty, faculty => {
+        return faculty.id === targetFaculty.id;
+      });
+    }
+  }
+
   render() {
+    const target = this.getTarget();
+    const faculty = this.getFaculty(target);
+
     return (
       <div className="target-overlay__overlay">
         <div className="target-overlay__container mx-auto">
@@ -137,37 +148,34 @@ export default class TargetOverlay extends React.Component {
             <div className="target-overlay__header d-flex align-items-center justify-content-between">
               <HeaderTitle
                 iconPaths={this.props.iconPaths}
-                target={this.target()}
+                target={target}
                 hasSingleFounder={this.props.hasSingleFounder}
               />
               <div className="d-none d-md-block">
-                {this.isSubmittable() && (
+                {this.isSubmittable(target) && (
                   <SubmitButton
                     rootProps={this.props.rootProps}
                     completeTargetCB={this.completeTarget}
-                    target={this.target()}
+                    target={target}
                     openTimelineBuilderCB={this.props.openTimelineBuilderCB}
                   />
                 )}
               </div>
             </div>
             <div className="target-overlay__status-badge-block">
-              <StatusBadgeBar target={this.target()} />
+              <StatusBadgeBar target={target} />
             </div>
             <div className="target-overlay__content-wrapper clearfix">
               <div className="col-md-8 target-overlay__content-leftbar">
                 <ContentBlock
                   rootProps={this.props.rootProps}
                   iconPaths={this.props.iconPaths}
-                  target={this.target()}
+                  target={target}
                   linkedResources={this.state.linkedResources}
                 />
               </div>
               <div className="col-md-4 target-overlay__content-rightbar">
-                <FacultyBlock
-                  rootProps={this.props.rootProps}
-                  target={this.target()}
-                />
+                {_.isObject(faculty) && <FacultyBlock faculty={faculty} />}
 
                 {this.state.latestEvent && (
                   <TimelineEventPanel
@@ -176,7 +184,7 @@ export default class TargetOverlay extends React.Component {
                   />
                 )}
 
-                {this.target().role === "founder" &&
+                {target.role === "founder" &&
                   !this.props.hasSingleFounder && (
                     <div className="mt-2">
                       <h5 className="target-overaly__status-title font-semibold">
@@ -209,11 +217,11 @@ export default class TargetOverlay extends React.Component {
             </span>
           </button>
           <div className="target-overlay__mobile-submit-button-container pull-right pr-3">
-            {this.isSubmittable() && (
+            {this.isSubmittable(target) && (
               <SubmitButton
                 rootProps={this.props.rootProps}
                 completeTargetCB={this.completeTarget}
-                target={this.target()}
+                target={target}
                 openTimelineBuilderCB={this.props.openTimelineBuilderCB}
               />
             )}
@@ -228,7 +236,7 @@ TargetOverlay.propTypes = {
   rootProps: PropTypes.object.isRequired,
   rootState: PropTypes.object.isRequired,
   setRootState: PropTypes.func.isRequired,
-  target: PropTypes.object,
+  targetId: PropTypes.number.isRequired,
   openTimelineBuilderCB: PropTypes.func,
   founderDetails: PropTypes.array,
   closeCB: PropTypes.func,

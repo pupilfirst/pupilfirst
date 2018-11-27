@@ -20,7 +20,7 @@ module Founders
           initialTargetId: @overlay_target&.id,
           tourDashboard: tour_dashboard?,
           sponsoredCourse: current_startup.level.course.sponsored,
-          courseLocked: current_course.locked?
+          courseEnded: current_course.ended?
         )
       end
 

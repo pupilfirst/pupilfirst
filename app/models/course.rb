@@ -23,7 +23,7 @@ class Course < ApplicationRecord
     labels.is_a?(String) ? super(JSON.parse(labels)) : super(labels)
   end
 
-  def locked?
+  def ended?
     ends_at.present? ? ends_at < Time.now : false
   end
 

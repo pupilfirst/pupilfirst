@@ -68,7 +68,7 @@ export default class DashboardNotification extends React.Component {
   render() {
     return (
       <div className="founder-dashboard-levelup-notification__container px-2 mx-auto mt-3">
-        {this.props.rootProps.courseLocked && (
+        {this.props.rootProps.courseEnded && (
           <div className="founder-dashboard-levelup-notification__box text-center p-3">
             <span className="founder-dashboard-notification__lock">
               <i className="fa fa-2x fa-lock" />
@@ -82,7 +82,7 @@ export default class DashboardNotification extends React.Component {
             </div>
           </div>
         )}
-        {!this.props.rootProps.courseLocked && (
+        {!this.props.rootProps.courseEnded && (
           <div>
             {this.props.rootProps.levelUpEligibility === "eligible" && (
               <div className="founder-dashboard-levelup-notification__box text-center p-3">

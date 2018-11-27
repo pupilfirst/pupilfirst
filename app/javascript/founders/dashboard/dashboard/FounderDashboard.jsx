@@ -171,7 +171,7 @@ export default class FounderDashboard extends React.Component {
           setRootState={this.setRootState}
         />
 
-        {(this.props.courseLocked ||
+        {(this.props.courseEnded ||
           this.props.levelUpEligibility !== "not_eligible") && (
           <DashboardNotification rootProps={this.props} />
         )}
@@ -216,7 +216,7 @@ export default class FounderDashboard extends React.Component {
             closeCB={this.targetOverlayCloseCB}
             openTimelineBuilderCB={this.openTimelineBuilder}
             hasSingleFounder={this.hasSingleFounder()}
-            courseLocked={this.props.courseLocked}
+            courseEnded={this.props.courseEnded}
           />
         )}
       </div>
@@ -246,5 +246,5 @@ FounderDashboard.propTypes = {
   initialTargetId: PropTypes.number,
   testMode: PropTypes.bool,
   tourDashboard: PropTypes.bool,
-  courseLocked: PropTypes.bool
+  courseEnded: PropTypes.bool
 };

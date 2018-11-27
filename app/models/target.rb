@@ -113,16 +113,6 @@ class Target < ApplicationRecord
     errors[:level] << 'should match level of target group'
   end
 
-  validate :vanilla_target_requires_faculty
-
-  def vanilla_target_requires_faculty
-    return if session_at.present?
-    return if faculty.present?
-
-    errors[:base] << 'Vanilla targets require a linked faculty.'
-    errors[:faculty_id] << 'is required for a vanilla target'
-  end
-
   normalize_attribute :key, :slideshow_embed, :video_embed
 
   def display_name

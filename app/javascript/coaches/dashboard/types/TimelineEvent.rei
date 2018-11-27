@@ -1,18 +1,8 @@
 type t;
 
-type grade =
-  | Good
-  | Great
-  | Wow;
-
-type reviewedStatus =
-  | Verified(grade)
-  | NotAccepted
-  | NeedsImprovement;
-
-type status =
-  | Reviewed(reviewedStatus)
-  | NotReviewed;
+type reviewResult =
+  | Passed
+  | Failed;
 
 let title: t => string;
 
@@ -32,26 +22,22 @@ let files: t => list(File.t);
 
 let image: t => option(string);
 
-let status: t => status;
-
 let forStartupId: (int, list(t)) => list(t);
 
-let verificationPending: list(t) => list(t);
+let reviewPending: list(t) => list(t);
 
-let verificationComplete: list(t) => list(t);
+let graded: list(t) => list(t);
 
 let decode: Js.Json.t => t;
-
-let updateStatus: (status, t) => t;
-
-let statusString: status => string;
-
-let statusStringWithGrade: status => string;
-
-let isVerified: t => bool;
-
-let gradeString: grade => string;
 
 let latestFeedback: t => option(string);
 
 let updateFeedback: (string, t) => t;
+
+let updateGrades: (list(Grade.t), t) => t;
+
+let grades: t => list(Grade.t);
+
+let getReviewResult: (int, t) => reviewResult;
+
+let resultAsString: reviewResult => string;

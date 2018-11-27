@@ -49,12 +49,18 @@ module Coaches
           links: timeline_event.links,
           files: timeline_event.timeline_event_files.map { |file| { title: file.title, id: file.id } },
           image: timeline_event.image? ? timeline_event.image.url : nil,
-          grade: timeline_event.overall_grade_from_score,
+          grades: grades_for_submission(timeline_event),
           latestFeedback: timeline_event.startup_feedback&.last&.feedback
         }
       end
     end
     # rubocop:enable Metrics/AbcSize
+
+    def grades_for_submission(submission)
+      submission.timeline_event_grades.map do |grade|
+        { criterionId: grade.evaluation_criterion_id, grade: grade.grade }
+      end
+    end
 
     def logo_url(startup)
       startup.logo_url || identicon_logo(startup)

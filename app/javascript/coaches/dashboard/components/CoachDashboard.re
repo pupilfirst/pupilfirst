@@ -63,7 +63,7 @@ let make =
           {
             let pendingCount =
               state.timelineEvents
-              |> TimelineEvent.verificationPending
+              |> TimelineEvent.reviewPending
               |> List.length;
             <SidePanel
               coach

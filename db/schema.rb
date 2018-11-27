@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_26_103931) do
+ActiveRecord::Schema.define(version: 2018_11_27_085534) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -599,7 +599,6 @@ ActiveRecord::Schema.define(version: 2018_11_26_103931) do
     t.string "google_calendar_event_id"
     t.datetime "feedback_asked_at"
     t.datetime "slack_reminders_sent_at"
-    t.string "session_by"
     t.string "call_to_action"
     t.index ["archived"], name: "index_targets_on_archived"
     t.index ["faculty_id"], name: "index_targets_on_faculty_id"

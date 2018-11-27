@@ -21,7 +21,6 @@ ActiveAdmin.register Target do
     collection: -> { Target.tag_counts_on(:tags).pluck(:name).sort }
 
   scope :all, default: true
-  scope :vanilla_targets
   scope :sessions
 
   controller do

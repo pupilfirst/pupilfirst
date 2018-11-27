@@ -46,7 +46,7 @@ after 'development:target_groups', 'development:faculty' do
   # Random targets and sessions for every level.
   Level.where.not(number: 0).each do |level|
 
-    # Two vanilla targets and one session per target_group.
+    # Two targets and one session per target_group.
     level.target_groups.each do |target_group|
       # Targets.
       2.times do

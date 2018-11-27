@@ -47,7 +47,6 @@ class Target < ApplicationRecord
   scope :live, -> { joins(:target_group).where(archived: [false, nil]) }
   scope :founder, -> { where(role: ROLE_FOUNDER) }
   scope :not_founder, -> { where.not(role: ROLE_FOUNDER) }
-  scope :vanilla_targets, -> { where.not(target_group_id: nil) }
   scope :sessions, -> { where.not(session_at: nil) }
 
   # Custom scope to allow AA to filter by intersection of tags.

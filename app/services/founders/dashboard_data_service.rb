@@ -12,7 +12,7 @@ module Founders
         targetGroups: target_groups,
         tracks: tracks,
         criteriaNames: criteria_names,
-        gradeLabels: school.grade_labels
+        gradeLabels: course.grade_labels
       }
     end
 

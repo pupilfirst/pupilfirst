@@ -26,7 +26,7 @@ feature 'Resources' do
 
     # user only sees the public resource
     expect(page).to have_selector('.resource-box', count: 1)
-    expect(page).to have_text(public_resource.title[0..10])
+    expect(page).to have_text(public_resource.title[0..25])
   end
 
   scenario 'user visits restricted resource page' do
@@ -83,7 +83,7 @@ feature 'Resources' do
         visit resources_path
         # only public resource is visible
         expect(page).to have_selector('.resource-box', count: 1)
-        expect(page).to have_text(public_resource.title[0..10])
+        expect(page).to have_text(public_resource.title[0..25])
       end
 
       scenario 'Founder visits level 0 resource page' do
@@ -101,10 +101,10 @@ feature 'Resources' do
 
         # public resources + resources upto his level should be shown
         expect(page).to have_selector('.resource-box', count: 4)
-        expect(page).to have_text(public_resource.title[0..10])
-        expect(page).to have_text(level_0_resource.title[0..10])
-        expect(page).to have_text(level_1_resource.title[0..10])
-        expect(page).to have_text(level_2_resource.title[0..10])
+        expect(page).to have_text(public_resource.title[0..25])
+        expect(page).to have_text(level_0_resource.title[0..25])
+        expect(page).to have_text(level_1_resource.title[0..25])
+        expect(page).to have_text(level_2_resource.title[0..25])
 
         # Should not have access to resource in course 2.
         visit resource_path(l2_s2_resource)
@@ -122,12 +122,12 @@ feature 'Resources' do
 
           # Public resources + resources in course 2 should be shown. Resources from course 1 should not be visible.
           expect(page).to have_selector('.resource-box', count: 3)
-          expect(page).to have_text(public_resource.title[0..10])
-          expect(page).not_to have_text(level_0_resource.title[0..10])
-          expect(page).not_to have_text(level_1_resource.title[0..10])
-          expect(page).not_to have_text(level_2_resource.title[0..10])
-          expect(page).to have_text(l1_s2_resource.title[0..10])
-          expect(page).to have_text(l2_s2_resource.title[0..10])
+          expect(page).to have_text(public_resource.title[0..25])
+          expect(page).not_to have_text(level_0_resource.title[0..25])
+          expect(page).not_to have_text(level_1_resource.title[0..25])
+          expect(page).not_to have_text(level_2_resource.title[0..25])
+          expect(page).to have_text(l1_s2_resource.title[0..25])
+          expect(page).to have_text(l2_s2_resource.title[0..25])
 
           # Should not have access to resource in course 1.
           visit resource_path(level_2_resource)

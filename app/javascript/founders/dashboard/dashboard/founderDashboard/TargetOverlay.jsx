@@ -17,7 +17,8 @@ export default class TargetOverlay extends React.Component {
         latestEvent: null,
         latestFeedback: null,
         linkedResources: null,
-        founderStatuses: null
+        founderStatuses: null,
+        quizDetails: null
       }
     );
 
@@ -113,7 +114,8 @@ export default class TargetOverlay extends React.Component {
       latestEvent: response.latestEvent,
       latestFeedback: response.latestFeedback,
       linkedResources: response.linkedResources,
-      founderStatuses: response.founderStatuses
+      founderStatuses: response.founderStatuses,
+      quizDetails: response.quizDetails
     });
   }
 

@@ -10,7 +10,8 @@ module Targets
         founderStatuses: founder_statuses,
         latestEvent: latest_event_details,
         latestFeedback: latest_feedback,
-        linkedResources: linked_resources
+        linkedResources: linked_resources,
+        quizDetails: quiz_details
       }
     end
 
@@ -70,6 +71,28 @@ module Targets
           canStream: resource.stream?,
           hasLink: resource.link.present?,
           hasFile: resource.file.present?
+        }
+      end
+    end
+
+    def quiz_details
+      return if @target.quiz.blank?
+
+      @target.quiz.quiz_questions.map do |question|
+        {
+          question: question.question,
+          description: question.description,
+          answer_options: answer_options(question)
+        }
+      end
+    end
+
+    def answer_options(question)
+      question.answer_options.map do |answer|
+        {
+          value: answer.value,
+          correctAnswer: answer.correct_answer,
+          hint: answer.hint
         }
       end
     end

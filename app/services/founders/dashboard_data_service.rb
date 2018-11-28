@@ -84,8 +84,13 @@ module Founders
 
       # add array of prerequisites
       target_data['prerequisites'] = target_status_service.prerequisite_targets(target_data['id'])
+      target_data['has_quiz'] = Target.find_by(id: target_data['id']).quiz?
 
       target_data
+    end
+
+    def target_has_quiz(id)
+      Target.find_by(id: id).quiz?
     end
 
     def target_status_service

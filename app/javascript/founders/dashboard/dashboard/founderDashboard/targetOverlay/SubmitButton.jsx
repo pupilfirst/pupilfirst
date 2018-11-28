@@ -16,7 +16,9 @@ export default class SubmitButton extends React.Component {
   }
 
   submitButtonText() {
-    if (this.props.target.call_to_action) {
+    if(this.props.target.has_quiz) {
+      return "Take QUIZ";
+    } else if (this.props.target.call_to_action) {
       return this.props.target.call_to_action;
     } else if (this.canBeVerifiedAutomatically()) {
       return "Mark COMPLETE";
@@ -28,7 +30,9 @@ export default class SubmitButton extends React.Component {
   }
 
   submitButtonIconClass() {
-    if (this.props.target.call_to_action) {
+    if (this.props.target.has_quiz) {
+      return "fa fa-pencil";
+    } else if (this.props.target.call_to_action) {
       return "fa fa-chevron-circle-right";
     } else if (!this.props.target.link_to_complete) {
       return "fa fa-upload";

@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import SubmitButton from "./SubmitButton"
 
 export default class StatusBadgeBar extends React.Component {
   containerClasses() {
@@ -63,8 +64,8 @@ export default class StatusBadgeBar extends React.Component {
 
   gradesList() {
     let grades = this.props.target.grades;
-    let criteriaNames = this.props.criteriaNames;
-    let gradeLabels = this.props.gradeLabels;
+    let criteriaNames = this.props.rootProps.criteriaNames;
+    let gradeLabels = this.props.rootProps.gradeLabels;
     return (
       <div>
         <div className="target-overlay-status-badge-bar__grades-header">Grades received:</div>
@@ -92,6 +93,16 @@ export default class StatusBadgeBar extends React.Component {
             {this.statusHintString()}
           </p>
         </div>
+        <div className="d-none d-md-block">
+          {this.props.isSubmittable && (
+            <SubmitButton
+              rootProps={this.props.rootProps}
+              completeTargetCB={this.props.completeTargetCB}
+              target={this.props.target}
+              openTimelineBuilderCB={this.props.openTimelineBuilderCB}
+            />
+          )}
+        </div>
         {this.props.target.grades && this.gradesList()}
       </div>
     );
@@ -100,6 +111,8 @@ export default class StatusBadgeBar extends React.Component {
 
 StatusBadgeBar.propTypes = {
   target: PropTypes.object,
-  criteriaNames: PropTypes.object,
-  gradeLabels: PropTypes.object
+  rootProps: PropTypes.object,
+  completeTargetCB: PropTypes.func,
+  openTimlineBuilderCB: PropTypes.func,
+  isSubmittable: PropTypes.bool
 };

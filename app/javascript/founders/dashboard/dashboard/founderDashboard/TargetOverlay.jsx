@@ -126,23 +126,6 @@ export default class TargetOverlay extends React.Component {
                 target={this.target()}
                 hasSingleFounder={this.props.hasSingleFounder}
               />
-              <div className="d-none d-md-block">
-                {this.isSubmittable() && (
-                  <SubmitButton
-                    rootProps={this.props.rootProps}
-                    completeTargetCB={this.completeTarget}
-                    target={this.target()}
-                    openTimelineBuilderCB={this.props.openTimelineBuilderCB}
-                  />
-                )}
-              </div>
-            </div>
-            <div className="target-overlay__status-badge-block">
-              <StatusBadgeBar
-                target={this.target()}
-                criteriaNames={this.props.rootProps.criteriaNames}
-                gradeLabels={this.props.rootProps.gradeLabels}
-              />
             </div>
             <div className="target-overlay__content-wrapper clearfix">
               <div className="col-md-8 target-overlay__content-leftbar">
@@ -154,6 +137,15 @@ export default class TargetOverlay extends React.Component {
                 />
               </div>
               <div className="col-md-4 target-overlay__content-rightbar">
+                <div className="target-overlay__status-badge-block">
+                  <StatusBadgeBar
+                    target={this.target()}
+                    rootProps={this.props.rootProps}
+                    completeTargetCB={this.completeTarget}
+                    openTimelineBuilderCB={this.props.openTimelineBuilderCB}
+                    isSubmittable={this.isSubmittable()}
+                  />
+                </div>
                 <FacultyBlock
                   rootProps={this.props.rootProps}
                   target={this.target()}

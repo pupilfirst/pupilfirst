@@ -80,6 +80,7 @@ module Founders
       return unless submission.evaluator_id?
 
       grades = timeline_event_grades.select { |grade| grade[:submission_id] == submission.id }
+      return if grades.blank?
 
       grades.each_with_object({}) do |grade, result|
         result[grade[:criterion_id]] = grade[:grade]

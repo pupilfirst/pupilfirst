@@ -20,6 +20,7 @@ let make =
       ~needsImprovementIconUrl,
       ~notAcceptedIconUrl,
       ~verifiedIconUrl,
+      ~gradeLabels,
       _children,
     ) => {
   ...component,
@@ -47,6 +48,7 @@ let make =
             needsImprovementIconUrl
             notAcceptedIconUrl
             verifiedIconUrl
+            gradeLabels
           />;
         };
       }
@@ -73,6 +75,7 @@ let make =
             needsImprovementIconUrl
             notAcceptedIconUrl
             verifiedIconUrl
+            gradeLabels
           />;
         };
       }

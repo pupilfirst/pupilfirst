@@ -10,6 +10,7 @@ let make =
       ~needsImprovementIconUrl,
       ~notAcceptedIconUrl,
       ~verifiedIconUrl,
+      ~gradeLabels,
       _children,
     ) => {
   ...component,
@@ -26,6 +27,7 @@ let make =
                needsImprovementIconUrl
                notAcceptedIconUrl
                verifiedIconUrl
+               gradeLabels
              />
            )
         |> Array.of_list

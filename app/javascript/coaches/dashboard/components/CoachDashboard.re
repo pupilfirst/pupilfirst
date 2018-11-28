@@ -9,6 +9,8 @@ type props = {
   needsImprovementIconUrl: string,
   notAcceptedIconUrl: string,
   verifiedIconUrl: string,
+  gradeLabels: list(GradeLabel.t),
+  passGrade: int,
 };
 
 type state = {
@@ -33,6 +35,8 @@ let make =
       ~needsImprovementIconUrl,
       ~notAcceptedIconUrl,
       ~verifiedIconUrl,
+      ~gradeLabels,
+      ~passGrade,
       _children,
     ) => {
   ...component,
@@ -85,6 +89,7 @@ let make =
             needsImprovementIconUrl
             notAcceptedIconUrl
             verifiedIconUrl
+            gradeLabels
           />
         </div>
       </div>
@@ -103,6 +108,8 @@ let decode = json =>
     needsImprovementIconUrl: json |> field("needsImprovementIconUrl", string),
     notAcceptedIconUrl: json |> field("notAcceptedIconUrl", string),
     verifiedIconUrl: json |> field("verifiedIconUrl", string),
+    gradeLabels: json |> field("gradeLabels", list(GradeLabel.decode)),
+    passGrade: json |> field("passGrade", int),
   };
 
 let jsComponent =
@@ -119,6 +126,8 @@ let jsComponent =
         ~needsImprovementIconUrl=props.needsImprovementIconUrl,
         ~notAcceptedIconUrl=props.notAcceptedIconUrl,
         ~verifiedIconUrl=props.verifiedIconUrl,
+        ~gradeLabels=props.gradeLabels,
+        ~passGrade=props.passGrade,
         [||],
       );
     },

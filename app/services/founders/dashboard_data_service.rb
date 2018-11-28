@@ -58,7 +58,7 @@ module Founders
     end
 
     def target_groups
-      TargetGroup.joins(:level).where(level: open_levels)
+      TargetGroup.joins(:level).where(level: open_levels, archived: false)
         .as_json(
           only: %i[id name description milestone sort_index],
           include: { track: { only: :id }, level: { only: :id } }

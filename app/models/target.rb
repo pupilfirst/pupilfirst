@@ -38,7 +38,7 @@ class Target < ApplicationRecord
   has_many :timeline_events, dependent: :nullify
   has_many :target_prerequisites, dependent: :destroy
   has_many :prerequisite_targets, through: :target_prerequisites
-  belongs_to :target_group, optional: true
+  belongs_to :target_group
   has_many :resources, dependent: :nullify
   has_many :target_skills, dependent: :destroy
   has_many :skills, through: :target_skills

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_27_085534) do
+ActiveRecord::Schema.define(version: 2018_11_28_100847) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -547,6 +547,7 @@ ActiveRecord::Schema.define(version: 2018_11_27_085534) do
     t.boolean "milestone"
     t.integer "level_id"
     t.bigint "track_id"
+    t.boolean "archived", default: false
     t.index ["level_id"], name: "index_target_groups_on_level_id"
     t.index ["sort_index"], name: "index_target_groups_on_sort_index"
     t.index ["track_id"], name: "index_target_groups_on_track_id"

@@ -188,4 +188,14 @@ feature 'Founder Dashboard' do
       expect(page).to have_selector('.founder-dashboard-target-header__container', count: 3)
     end
   end
+
+  context "when a founder's course has an archived target group in it" do
+    let!(:target_group_4_archived) { create :target_group, level: level_4, milestone: true, track: product_track, description: Faker::Lorem.sentence, archived: true }
+
+    scenario 'archived target groups are not displayed', js: true do
+      sign_in_user founder.user, referer: student_dashboard_path
+
+      expect(page).not_to have_content(target_group_4_archived.description)
+    end
+  end
 end

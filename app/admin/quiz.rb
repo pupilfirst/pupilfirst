@@ -3,7 +3,7 @@ ActiveAdmin.register Quiz do
 
   menu parent: 'Targets'
 
-  permit_params :title, :target_id, quiz_questions_attributes: %i[question description _destroy], answer_options_attributes: %i[id value correct_answer hint _destroy]
+  permit_params :title, :target_id, quiz_questions_attributes: %i[question]
 
   form do |f|
     f.semantic_errors(*f.object.errors.keys)
@@ -18,7 +18,7 @@ ActiveAdmin.register Quiz do
   index do
     selectable_column
     column :title
-
+    column :target
     actions
   end
 
@@ -26,6 +26,13 @@ ActiveAdmin.register Quiz do
     attributes_table do
       row :title
       row :target
+      row :quiz_questions do |o|
+        ul do
+          o.quiz_questions.pluck(:question).each do |question|
+            li question
+          end
+        end
+      end
     end
   end
 end

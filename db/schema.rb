@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_27_084346) do
+ActiveRecord::Schema.define(version: 2018_11_28_064512) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -391,8 +391,8 @@ ActiveRecord::Schema.define(version: 2018_11_27_084346) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "quizzes_id"
-    t.index ["quizzes_id"], name: "index_quiz_questions_on_quizzes_id"
+    t.bigint "quiz_id"
+    t.index ["quiz_id"], name: "index_quiz_questions_on_quiz_id"
   end
 
   create_table "quizzes", force: :cascade do |t|
@@ -768,7 +768,7 @@ ActiveRecord::Schema.define(version: 2018_11_27_084346) do
   add_foreign_key "levels", "courses"
   add_foreign_key "payments", "founders"
   add_foreign_key "payments", "startups"
-  add_foreign_key "quiz_questions", "quizzes", column: "quizzes_id"
+  add_foreign_key "quiz_questions", "quizzes"
   add_foreign_key "quizzes", "targets"
   add_foreign_key "resources", "levels"
   add_foreign_key "startup_feedback", "faculty"

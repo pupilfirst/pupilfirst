@@ -1,14 +1,14 @@
 ActiveAdmin.register QuizQuestion do
   include DisableIntercom
 
-  permit_params :question, :description, :quizzes_id, answer_options_attributes: %i[id value correct_answer hint _destroy]
+  permit_params :question, :description, :quiz_id, answer_options_attributes: %i[id value correct_answer hint _destroy]
 
   menu parent: 'Targets'
 
   index do
     selectable_column
     column :question
-    column :quizzes_id
+    column :quiz
     column :correct_answer do |question|
       question.correct_answer.value if question.correct_answer.present?
     end
@@ -22,7 +22,7 @@ ActiveAdmin.register QuizQuestion do
     f.inputs 'Question Details' do
       f.input :question
       f.input :description
-      f.input :quizzes_id
+      f.input :quiz
     end
 
     f.inputs 'Answer Options' do
@@ -38,7 +38,7 @@ ActiveAdmin.register QuizQuestion do
   show do
     attributes_table do
       row :question
-      row :quizzes_id
+      row :quiz
       row :correct_answer do |question|
         question.correct_answer.value if question.correct_answer.present?
       end

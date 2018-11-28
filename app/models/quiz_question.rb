@@ -5,7 +5,7 @@ class QuizQuestion < ApplicationRecord
 
   validates :question, presence: true
   validate :must_have_exactly_one_correct_answer
-  validates :quizzes_id, presence: true
+  validates :quiz_id, presence: true
 
   def must_have_exactly_one_correct_answer
     errors.add :base, 'Must have exactly one correct answer' unless exactly_one_correct_answer?

@@ -79,6 +79,20 @@ feature 'Target Overlay' do
         expect(page).to have_selector(".target-overlay__faculty-avatar > img[src='#{target.faculty.image_url}']")
       end
     end
+
+    context 'when the target is auto verified' do
+      before do
+        target.update!(submittability: Target::SUBMITTABILITY_AUTO_VERIFY)
+        visit student_dashboard_path
+      end
+
+      it 'displays submit button with correct label' do
+        find('.founder-dashboard-target-header__headline', text: target.title).click
+
+        # The submit button has 'Mark Complete' label
+        expect(page).to have_selector('button.btn-timeline-builder > span', text: 'MARK COMPLETE')
+      end
+    end
   end
 
   context 'when the founder clicks on a completed target', js: true do

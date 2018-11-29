@@ -62,7 +62,7 @@ export default class TargetOverlay extends React.Component {
   singleSubmissionComplete(target) {
     return (
       ["submittable_once", "auto_verify"].includes(target.submittability) &&
-      !this.isPending()
+      !this.isPending(target)
     );
   }
 

@@ -1,7 +1,9 @@
 class TimelineEventPolicy < ApplicationPolicy
   def create?
-    # User must be a founder with active subscription.
-    current_founder&.subscription_active?
+    # Current course must not have ended.
+    return false if current_founder.startup.course.ended?
+
+    true
   end
 
   def destroy?

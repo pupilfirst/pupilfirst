@@ -9,7 +9,9 @@ module Coaches
         emptyIconUrl: view.image_url('coaches/dashboard/empty_icon.svg'),
         needsImprovementIconUrl: view.image_url('coaches/dashboard/needs-improvement-icon.svg'),
         notAcceptedIconUrl: view.image_url('coaches/dashboard/not-accepted-icon.svg'),
-        verifiedIconUrl: view.image_url('coaches/dashboard/verified-icon.svg')
+        verifiedIconUrl: view.image_url('coaches/dashboard/verified-icon.svg'),
+        gradeLabels: grade_labels,
+        passGrade: course.pass_grade
       }
     end
 
@@ -50,11 +52,28 @@ module Coaches
           files: timeline_event.timeline_event_files.map { |file| { title: file.title, id: file.id } },
           image: timeline_event.image? ? timeline_event.image.url : nil,
           grades: grades_for_submission(timeline_event),
-          latestFeedback: timeline_event.startup_feedback&.last&.feedback
+          latestFeedback: timeline_event.startup_feedback&.last&.feedback,
+          evaluationCriteria: evaluation_criteria(timeline_event)
         }
       end
     end
     # rubocop:enable Metrics/AbcSize
+
+    def course
+      # TODO: Assuming a founder is assinged to one course for now. Rewrite to account for multiple course.
+      current_coach.startups.first.course
+    end
+
+    def grade_labels
+      grade_labels = course.grade_labels
+      grade_labels.keys.map { |grade| { grade: grade, label: grade_labels[grade] } }
+    end
+
+    def evaluation_criteria(timeline_event)
+      timeline_event.evaluation_criteria.map do |criterion|
+        { id: criterion.id, name: criterion.name }
+      end
+    end
 
     def grades_for_submission(submission)
       submission.timeline_event_grades.map do |grade|

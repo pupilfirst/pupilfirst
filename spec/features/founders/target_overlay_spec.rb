@@ -214,4 +214,15 @@ feature 'Target Overlay' do
       expect(page).to have_current_path('/student/dashboard')
     end
   end
+
+  context 'when the course, the founder belongs has ended', js: true do
+    before do
+      course.update!(ends_at: 2.days.ago)
+      visit student_dashboard_path
+    end
+    it 'shows appropriate notice that the course has ended' do
+      find('.founder-dashboard-target-header__headline', text: target.title).click
+      expect(page).to_not have_selector('.btn-timeline-builder')
+    end
+  end
 end

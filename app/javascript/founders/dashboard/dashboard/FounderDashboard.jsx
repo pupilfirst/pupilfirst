@@ -5,7 +5,7 @@ import ToggleBar from "./founderDashboard/ToggleBar";
 import Targets from "./founderDashboard/Targets";
 import TargetOverlay from "./founderDashboard/TargetOverlay";
 import ActionBar from "./founderDashboard/ActionBar";
-import LevelUpNotification from "./founderDashboard/LevelUpNotification";
+import DashboardNotification from "./founderDashboard/DashboardNotification";
 
 export default class FounderDashboard extends React.Component {
   constructor(props) {
@@ -16,7 +16,7 @@ export default class FounderDashboard extends React.Component {
       chosenLevelId: props.currentLevel.id,
       timelineBuilderVisible: false,
       timelineBuilderParams: {
-        targetId: null,
+        targetId: null
       },
       selectedTargetId: props.initialTargetId,
       tourDashboard: props.tourDashboard
@@ -171,18 +171,20 @@ export default class FounderDashboard extends React.Component {
           setRootState={this.setRootState}
         />
 
-        {this.props.levelUpEligibility !== "not_eligible" && (
-          <LevelUpNotification rootProps={this.props} />
+        {(this.props.courseEnded ||
+          this.props.levelUpEligibility !== "not_eligible") && (
+          <DashboardNotification rootProps={this.props} />
         )}
 
-        {this.state.activeTrackId !== 'sessions' && this.props.currentLevel !== 0 && (
-          <ActionBar
-            getAvailableTrackIds={this.availableTrackIds}
-            rootProps={this.props}
-            rootState={this.state}
-            setRootState={this.setRootState}
-          />
-        )}
+        {this.state.activeTrackId !== "sessions" &&
+          this.props.currentLevel !== 0 && (
+            <ActionBar
+              getAvailableTrackIds={this.availableTrackIds}
+              rootProps={this.props}
+              rootState={this.state}
+              setRootState={this.setRootState}
+            />
+          )}
 
         <Targets
           rootProps={this.props}
@@ -214,6 +216,7 @@ export default class FounderDashboard extends React.Component {
             closeCB={this.targetOverlayCloseCB}
             openTimelineBuilderCB={this.openTimelineBuilder}
             hasSingleFounder={this.hasSingleFounder()}
+            courseEnded={this.props.courseEnded}
           />
         )}
       </div>
@@ -242,5 +245,6 @@ FounderDashboard.propTypes = {
   maxLevelNumber: PropTypes.number,
   initialTargetId: PropTypes.number,
   testMode: PropTypes.bool,
-  tourDashboard: PropTypes.bool
+  tourDashboard: PropTypes.bool,
+  courseEnded: PropTypes.bool
 };

@@ -3,9 +3,9 @@
 class TimelineEvent < ApplicationRecord
   belongs_to :startup
   belongs_to :founder
+  belongs_to :target
   has_many :target_evaluation_criteria, through: :target
   has_many :evaluation_criteria, through: :target_evaluation_criteria
-  belongs_to :target
 
   has_one :karma_point, as: :source, dependent: :destroy, inverse_of: :source
   has_many :startup_feedback, dependent: :destroy

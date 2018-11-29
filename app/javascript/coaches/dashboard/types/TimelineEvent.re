@@ -12,6 +12,7 @@ type t = {
   image: option(string),
   latestFeedback: option(string),
   grades: list(Grade.t),
+  evaluationCriteria: list(EvaluationCriterion.t),
 };
 
 type reviewResult =
@@ -34,6 +35,8 @@ let decode = json =>
     latestFeedback:
       json |> field("latestFeedback", nullable(string)) |> Js.Null.toOption,
     grades: json |> field("grades", list(Grade.decode)),
+    evaluationCriteria:
+      json |> field("evaluationCriteria", list(EvaluationCriterion.decode)),
   };
 
 let forStartupId = (startupId, tes) =>
@@ -58,6 +61,8 @@ let files = t => t.files;
 let image = t => t.image;
 
 let grades = t => t.grades;
+
+let evaluationCriteria = t => t.evaluationCriteria;
 
 let latestFeedback = t => t.latestFeedback;
 

@@ -38,6 +38,8 @@ let updateGrades: (list(Grade.t), t) => t;
 
 let grades: t => list(Grade.t);
 
+let evaluationCriteria: t => list(EvaluationCriterion.t);
+
 let getReviewResult: (int, t) => reviewResult;
 
 let resultAsString: reviewResult => string;

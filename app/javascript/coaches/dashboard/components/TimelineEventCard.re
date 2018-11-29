@@ -100,6 +100,7 @@ let make =
       ~needsImprovementIconUrl,
       ~notAcceptedIconUrl,
       ~verifiedIconUrl,
+      ~gradeLabels,
       _children,
     ) => {
   ...component,
@@ -155,7 +156,13 @@ let make =
           )>
           (
             switch (timelineEvent |> TimelineEvent.grades) {
-            | [] => ReasonReact.null
+            | [] =>
+              <ReviewForm
+                gradeLabels
+                evaluationCriteria=(
+                  timelineEvent |> TimelineEvent.evaluationCriteria
+                )
+              />
             | grades =>
               <div className="mx-auto text-center">
                 <ReviewStatusBadge

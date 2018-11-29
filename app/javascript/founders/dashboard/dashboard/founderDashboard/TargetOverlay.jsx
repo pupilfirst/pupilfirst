@@ -7,6 +7,7 @@ import StatusBadgeBar from "./targetOverlay/StatusBadgeBar";
 import SubmitButton from "./targetOverlay/SubmitButton";
 import TimelineEventPanel from "./targetOverlay/TimelineEventPanel";
 import FacultyBlock from "./targetOverlay/FacultyBlock";
+import { jsComponent as QuizComponent } from "../../components/Quiz_Root.bs";
 
 export default class TargetOverlay extends React.Component {
   constructor(props) {
@@ -120,6 +121,7 @@ export default class TargetOverlay extends React.Component {
   }
 
   render() {
+    console.log(this.state.quizDetails);
     return (
       <div className="target-overlay__overlay">
         <div className="target-overlay__container mx-auto">
@@ -153,6 +155,11 @@ export default class TargetOverlay extends React.Component {
                 )}
               </div>
             </div>
+            {this.state.quizDetails == null ? (
+              <div />
+            ) : (
+              <QuizComponent quizDetails={this.state.quizDetails} />
+            )}
             <div className="target-overlay__status-badge-block">
               <StatusBadgeBar target={this.target()} />
             </div>

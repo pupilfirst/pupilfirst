@@ -41,7 +41,7 @@ export default class FacultyBlock extends React.Component {
 
   render() {
     return (
-      <div className="target-overlay__faculty-box">
+      <div className="target-overlay__faculty-box mt-3 mx-2 mx-md-4">
         {this.hasFaculty() && (
           <span className="target-overlay__faculty-avatar mr-2">
             <img className="img-fluid" src={this.faculty.image_url} />

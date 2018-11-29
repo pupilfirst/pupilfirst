@@ -136,7 +136,7 @@ export default class TargetOverlay extends React.Component {
                   linkedResources={this.state.linkedResources}
                 />
               </div>
-              <div className="col-md-4 target-overlay__content-rightbar">
+              <div className="col-md-4 target-overlay__content-rightbar px-0">
                 <div className="target-overlay__status-badge-block">
                   <StatusBadgeBar
                     target={this.target()}
@@ -160,8 +160,8 @@ export default class TargetOverlay extends React.Component {
 
                 {this.target().role === "founder" &&
                   !this.props.hasSingleFounder && (
-                    <div className="mt-2">
-                      <h5 className="target-overaly__status-title font-semibold">
+                    <div className="mt-2 mb-4 mx-2 mx-md-4">
+                      <h5 className="target-overaly__status-title font-semibold mb-3">
                         Completion Status:
                       </h5>
                       <FounderStatusPanel

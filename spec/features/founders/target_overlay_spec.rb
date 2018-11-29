@@ -81,10 +81,7 @@ feature 'Target Overlay' do
     end
 
     context 'when the target is auto verified' do
-      before do
-        target.update!(submittability: Target::SUBMITTABILITY_AUTO_VERIFY)
-        visit student_dashboard_path
-      end
+      let!(:target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM, submittability: Target::SUBMITTABILITY_AUTO_VERIFY }
 
       it 'displays submit button with correct label' do
         find('.founder-dashboard-target-header__headline', text: target.title).click

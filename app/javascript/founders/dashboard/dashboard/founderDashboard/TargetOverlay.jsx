@@ -50,11 +50,13 @@ export default class TargetOverlay extends React.Component {
   }
 
   isSubmittable() {
-    return (this.isPending() || this.isReSubmittable());
+    return (
+      !this.props.courseEnded && (this.isPending() || this.isReSubmittable())
+    );
   }
 
   isReSubmittable() {
-    return (this.target().resubmittable && this.resubmissionAllowed());
+    return this.target().resubmittable && this.resubmissionAllowed();
   }
 
   resubmissionAllowed() {
@@ -107,6 +109,11 @@ export default class TargetOverlay extends React.Component {
     return (
       <div className="target-overlay__overlay">
         <div className="target-overlay__container mx-auto">
+          {this.props.courseEnded && (
+            <div className="target-overlay__course-locked-notice">
+              The course has ended and submissions are disabled for all targets!
+            </div>
+          )}
           <div className="target-overlay__body clearfix">
             <button
               type="button"
@@ -215,5 +222,6 @@ TargetOverlay.propTypes = {
   founderDetails: PropTypes.array,
   closeCB: PropTypes.func,
   iconPaths: PropTypes.object,
-  hasSingleFounder: PropTypes.bool
+  hasSingleFounder: PropTypes.bool,
+  courseEnded: PropTypes.bool
 };

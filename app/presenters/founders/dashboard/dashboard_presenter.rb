@@ -19,7 +19,8 @@ module Founders
           testMode: Rails.env.test?,
           initialTargetId: @overlay_target&.id,
           tourDashboard: tour_dashboard?,
-          sponsoredCourse: current_startup.level.course.sponsored
+          sponsoredCourse: current_startup.level.course.sponsored,
+          courseEnded: current_course.ended?
         )
       end
 

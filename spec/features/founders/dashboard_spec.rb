@@ -85,6 +85,19 @@ feature 'Founder Dashboard' do
     end
   end
 
+  context 'when the course the founder belongs has ended' do
+    before do
+      course.update!(ends_at: 2.days.ago)
+    end
+    scenario 'founder visits the dashboard', js: true do
+      sign_in_user founder.user, referer: student_dashboard_path
+      expect(page).to have_selector('.founder-dashboard-notification__box')
+      within('.founder-dashboard-notification__box') do
+        expect(page).to have_text('The course has ended')
+      end
+    end
+  end
+
   scenario 'founder visits dashboard', js: true do
     sign_in_user founder.user, referer: student_dashboard_path
 

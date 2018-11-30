@@ -31,6 +31,9 @@ let hintOfSelectedAnswer = selectedAnswer =>
   | None => str("")
   };
 
+let key = (questionId, answerId) =>
+  string_of_int(questionId) ++ string_of_int(answerId);
+
 let descriptionOfSelectedQuestion = selectedAnswer =>
   switch (selectedAnswer |> Quiz_Question.description) {
   | Some(description) => str(description)
@@ -71,13 +74,22 @@ let make = (~questions, ~submitTarget, _children) => {
                 currentQuestion
                 |> Quiz_Question.answer_options
                 |> List.map(answers =>
-                     <span className="quiz-root__answer-option">
+                     <span
+                       className="quiz-root__answer-option"
+                       key={
+                         key(
+                           state.currentQuestionId,
+                           answers |> Quiz_Answer.id,
+                         )
+                       }>
                        <label>
                          <input
                            type_="radio"
                            id={
-                             string_of_int(state.currentQuestionId)
-                             ++ string_of_int(answers |> Quiz_Answer.id)
+                             key(
+                               state.currentQuestionId,
+                               answers |> Quiz_Answer.id,
+                             )
                            }
                            name={
                              "Quiz_Root__answer-radio-"

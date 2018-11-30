@@ -50,11 +50,13 @@ export default class TargetOverlay extends React.Component {
   }
 
   isSubmittable() {
-    return (this.isPending() || this.isReSubmittable());
+    return (
+      !this.props.courseEnded && (this.isPending() || this.isReSubmittable())
+    );
   }
 
   isReSubmittable() {
-    return (this.target().resubmittable && this.resubmissionAllowed());
+    return this.target().resubmittable && this.resubmissionAllowed();
   }
 
   resubmissionAllowed() {
@@ -107,6 +109,11 @@ export default class TargetOverlay extends React.Component {
     return (
       <div className="target-overlay__overlay">
         <div className="target-overlay__container mx-auto">
+          {this.props.courseEnded && (
+            <div className="target-overlay__course-locked-notice">
+              The course has ended and submissions are disabled for all targets!
+            </div>
+          )}
           <div className="target-overlay__body clearfix">
             <button
               type="button"
@@ -136,7 +143,7 @@ export default class TargetOverlay extends React.Component {
                   linkedResources={this.state.linkedResources}
                 />
               </div>
-              <div className="col-md-4 target-overlay__content-rightbar">
+              <div className="col-md-4 target-overlay__content-rightbar px-0">
                 <div className="target-overlay__status-badge-block">
                   <StatusBadgeBar
                     target={this.target()}
@@ -160,8 +167,8 @@ export default class TargetOverlay extends React.Component {
 
                 {this.target().role === "founder" &&
                   !this.props.hasSingleFounder && (
-                    <div className="mt-2">
-                      <h5 className="target-overaly__status-title font-semibold">
+                    <div className="mt-2 mb-4 mx-2 mx-md-4">
+                      <h5 className="target-overaly__status-title font-semibold mb-3">
                         Completion Status:
                       </h5>
                       <FounderStatusPanel
@@ -215,5 +222,6 @@ TargetOverlay.propTypes = {
   founderDetails: PropTypes.array,
   closeCB: PropTypes.func,
   iconPaths: PropTypes.object,
-  hasSingleFounder: PropTypes.bool
+  hasSingleFounder: PropTypes.bool,
+  courseEnded: PropTypes.bool
 };

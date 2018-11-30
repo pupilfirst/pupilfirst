@@ -3,11 +3,8 @@ import PropTypes from "prop-types";
 import SubmitButton from "./SubmitButton"
 
 export default class StatusBadgeBar extends React.Component {
-  containerClasses() {
-    let classes = "target-overlay-status-badge-bar__badge-container";
-    let statusClass = this.props.target.status.replace("_", "-");
-    classes += " " + statusClass;
-    return classes;
+  statusClass() {
+    return this.props.target.status.replace('_', '-');
   }
 
   statusIconClasses() {
@@ -52,12 +49,24 @@ export default class StatusBadgeBar extends React.Component {
 
   statusContents() {
     return (
-      <div className="target-overlay-status-badge-bar__badge-content">
-        <span className="target-overlay-status-badge-bar__badge-icon">
-          <i className={this.statusIconClasses()} />
-        </span>
+      <div className={"target-overlay-status-badge-bar__badge-content d-flex justify-content-between align-items-center p-4 " + this.statusClass()}>
+        <div className="target-overlay-status-badge-bar__badge-status">
+          <span className="target-overlay-status-badge-bar__badge-icon">
+            <i className={this.statusIconClasses()} />
+          </span>
+          <span>{this.statusString()}</span>
+        </div>
 
-        <span>{this.statusString()}</span>
+        <div className="d-none d-md-block">
+          {this.props.isSubmittable && (
+            <SubmitButton
+              rootProps={this.props.rootProps}
+              completeTargetCB={this.props.completeTargetCB}
+              target={this.props.target}
+              openTimelineBuilderCB={this.props.openTimelineBuilderCB}
+            />
+          )}
+        </div>
       </div>
     );
   }
@@ -67,14 +76,28 @@ export default class StatusBadgeBar extends React.Component {
     let criteriaNames = this.props.rootProps.criteriaNames;
     let gradeLabels = this.props.rootProps.gradeLabels;
     return (
-      <div>
+      <div className="target-overlay-status-badge-bar__grades-container p-4">
         <div className="target-overlay-status-badge-bar__grades-header">Grades received:</div>
-        <ul className="target-overlay-status-badge-bar__grades-list">
+        <ul className="target-overlay-status-badge-bar__grades-list list-unstyled">
           {
             Object.keys(grades).map(criterionId => {
               return (
                 <li key={criterionId}>
                   {criteriaNames[criterionId]}: {gradeLabels[grades[criterionId]]}
+                  <div className="btn-group btn-group-toggle d-flex" data-toggle="buttons">
+                    <label className="btn btn-secondary disabled">
+                      <input type="radio" name="options" id="option1" autocomplete="off" checked />
+                      1
+                    </label>
+                    <label className="btn btn-secondary disabled">
+                      <input type="radio" name="options" id="option2" autocomplete="off" />
+                      2
+                    </label>
+                    <label className="btn btn-secondary disabled">
+                      <input type="radio" name="options" id="option3" autocomplete="off" />
+                      3
+                    </label>
+                  </div>
                 </li>
               )
             })
@@ -86,22 +109,13 @@ export default class StatusBadgeBar extends React.Component {
 
   render() {
     return (
-      <div className={this.containerClasses()}>
+      <div className='target-overlay-status-badge-bar__badge-container'
+>
         {this.statusContents()}
         <div className="target-overlay-status-badge-bar__info-block">
           <p className="target-overlay-status-badge-bar__hint font-regular">
             {this.statusHintString()}
           </p>
-        </div>
-        <div className="d-none d-md-block">
-          {this.props.isSubmittable && (
-            <SubmitButton
-              rootProps={this.props.rootProps}
-              completeTargetCB={this.props.completeTargetCB}
-              target={this.props.target}
-              openTimelineBuilderCB={this.props.openTimelineBuilderCB}
-            />
-          )}
         </div>
         {this.props.target.grades && this.gradesList()}
       </div>

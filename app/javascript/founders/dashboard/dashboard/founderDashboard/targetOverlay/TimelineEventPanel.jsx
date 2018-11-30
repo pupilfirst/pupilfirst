@@ -53,7 +53,7 @@ export default class TimelineEventPanel extends React.Component {
 
   render() {
     return (
-      <div className="target-overlay-timeline-event-panel__container pb-3 mt-3">
+      <div className="target-overlay-timeline-event-panel__container pb-3 mt-3 mx-2 mx-md-4">
         <h6 className="target-overlay-timeline-event-panel__title font-semibold pl-1">
           Latest Timeline Submission:
         </h6>

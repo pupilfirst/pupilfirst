@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_28_100847) do
+ActiveRecord::Schema.define(version: 2018_11_30_074457) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -560,6 +560,13 @@ ActiveRecord::Schema.define(version: 2018_11_28_100847) do
     t.index ["target_id"], name: "index_target_prerequisites_on_target_id"
   end
 
+  create_table "target_resources", force: :cascade do |t|
+    t.bigint "target_id", null: false
+    t.bigint "resource_id", null: false
+    t.index ["resource_id"], name: "index_target_resources_on_resource_id"
+    t.index ["target_id", "resource_id"], name: "index_target_resources_on_target_id_and_resource_id", unique: true
+  end
+
   create_table "target_skills", force: :cascade do |t|
     t.bigint "target_id"
     t.bigint "skill_id"
@@ -748,6 +755,8 @@ ActiveRecord::Schema.define(version: 2018_11_28_100847) do
   add_foreign_key "startups", "states", column: "billing_state_id"
   add_foreign_key "target_groups", "levels"
   add_foreign_key "target_groups", "tracks"
+  add_foreign_key "target_resources", "resources"
+  add_foreign_key "target_resources", "targets"
   add_foreign_key "target_skills", "skills"
   add_foreign_key "target_skills", "targets"
   add_foreign_key "timeline_event_files", "timeline_events"

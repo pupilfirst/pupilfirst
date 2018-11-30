@@ -39,5 +39,21 @@ module ActiveAdmin
         'Full Time' => Faculty::COMMITMENT_FULL_TIME
       }
     end
+
+    def none_one_or_many(view, resources)
+      return unless resources.exists?
+
+      if resources.count > 1
+        view.ul do
+          resources.each do |resource|
+            view.li do
+              yield(resource)
+            end
+          end
+        end
+      else
+        yield(resources.first)
+      end
+    end
   end
 end

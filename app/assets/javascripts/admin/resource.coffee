@@ -8,25 +8,21 @@ $(document).on 'page:change', ->
       tags: true
 
 setupSelect2ForTargets = ->
-  targetInput = $('#resource_target_id')
-
-  if targetInput.length
-
-    targetInput.select2
-      width: '80%',
-      minimumInputLength: 3,
-      ajax:
-        url: '/targets/select2_search',
-        dataType: 'json',
-        delay: 500,
-        data: (params) ->
-          return {
-            q: params.term
-          }
-        ,
-        processResults: (data, params) ->
-          return { results: data }
-        cache: true
+  $('#resource_target_ids').select2
+    width: '80%',
+    minimumInputLength: 3,
+    ajax:
+      url: '/targets/select2_search',
+      dataType: 'json',
+      delay: 500,
+      data: (params) ->
+        return {
+          q: params.term
+        }
+      ,
+      processResults: (data, params) ->
+        return { results: data }
+      cache: true
 
 setupSelect2ForStartups = ->
   startupSelect = $('#resource_startup_id')

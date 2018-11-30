@@ -89,8 +89,9 @@ module Targets
     end
 
     def answer_options(question)
-      question.answer_options.map do |answer|
+      question.answer_options.each_with_index.map do |answer, index|
         {
+          id: index,
           value: answer.value,
           correctAnswer: answer.correct_answer,
           hint: answer.hint

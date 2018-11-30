@@ -78,8 +78,9 @@ module Targets
     def quiz_details
       return if @target.quiz.blank?
 
-      @target.quiz.quiz_questions.map do |question|
+      @target.quiz.quiz_questions.each_with_index.map do |question, index|
         {
+          id: index,
           question: question.question,
           description: question.description,
           answer_options: answer_options(question)

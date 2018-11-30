@@ -5,18 +5,15 @@ export default class SubmitButton extends React.Component {
   constructor(props) {
     super(props);
     this.openTimelineBuilder = this.openTimelineBuilder.bind(this);
-    this.autoVerify = this.autoVerify.bind(this);
     this.handleClick = this.handleClick.bind(this);
   }
 
   openTimelineBuilder() {
-    this.props.openTimelineBuilderCB(
-      this.props.target.id
-    );
+    this.props.openTimelineBuilderCB(this.props.target.id);
   }
 
   submitButtonText() {
-    if(this.props.target.has_quiz) {
+    if (this.props.target.has_quiz) {
       return "Take QUIZ";
     } else if (this.props.target.call_to_action) {
       return this.props.target.call_to_action;
@@ -45,32 +42,9 @@ export default class SubmitButton extends React.Component {
     return this.props.target.status === "pending";
   }
 
-  autoVerify() {
-    const autoVerifyEndpoint =
-      "/targets/" + this.props.target.id + "/auto_verify";
-
-    fetch(autoVerifyEndpoint, {
-      method: "POST",
-      credentials: "include",
-      body: JSON.stringify({
-        authenticity_token: this.props.rootProps.authenticityToken
-      }),
-      headers: {
-        "content-type": "application/json"
-      }
-    }).then(() => {
-      new PNotify({
-        title: "Done!",
-        text: "This target has been marked as complete.",
-        type: "success"
-      });
-      this.props.completeTargetCB();
-    });
-  }
-
   handleClick() {
     if (this.canBeVerifiedAutomatically()) {
-      this.autoVerify();
+      this.props.autoVerify();
     } else {
       this.openTimelineBuilder();
     }
@@ -125,5 +99,6 @@ SubmitButton.propTypes = {
   rootProps: PropTypes.object.isRequired,
   completeTargetCB: PropTypes.func.isRequired,
   target: PropTypes.object,
-  openTimelineBuilderCB: PropTypes.func
+  openTimelineBuilderCB: PropTypes.func,
+  autoVerifyCB: PropTypes.func.isRequired
 };

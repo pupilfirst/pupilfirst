@@ -26,6 +26,7 @@ export default class TargetOverlay extends React.Component {
     this.updateDetails = this.updateDetails.bind(this);
     this.openTimelineBuilder = this.openTimelineBuilder.bind(this);
     this.completeTarget = this.completeTarget.bind(this);
+    this.autoVerify = this.autoVerify.bind(this);
   }
 
   componentDidMount() {
@@ -110,6 +111,29 @@ export default class TargetOverlay extends React.Component {
     });
   }
 
+  autoVerify() {
+    const autoVerifyEndpoint =
+      "/targets/" + this.props.targetId + "/auto_verify";
+
+    fetch(autoVerifyEndpoint, {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify({
+        authenticity_token: this.props.rootProps.authenticityToken
+      }),
+      headers: {
+        "content-type": "application/json"
+      }
+    }).then(() => {
+      new PNotify({
+        title: "Done!",
+        text: "This target has been marked as complete.",
+        type: "success"
+      });
+      this.completeTarget();
+    });
+  }
+
   updateDetails(response) {
     this.setState({
       latestEvent: response.latestEvent,
@@ -121,7 +145,6 @@ export default class TargetOverlay extends React.Component {
   }
 
   render() {
-    console.log(this.state.quizDetails);
     return (
       <div className="target-overlay__overlay">
         <div className="target-overlay__container mx-auto">
@@ -151,14 +174,16 @@ export default class TargetOverlay extends React.Component {
                     completeTargetCB={this.completeTarget}
                     target={this.target()}
                     openTimelineBuilderCB={this.props.openTimelineBuilderCB}
+                    autoVerifyCB={this.autoVerify}
                   />
                 )}
               </div>
             </div>
-            {this.state.quizDetails == null ? (
-              <div />
-            ) : (
-              <QuizComponent quizDetails={this.state.quizDetails} />
+            {this.state.quizDetails && (
+              <QuizComponent
+                quizDetails={this.state.quizDetails}
+                submitTarget={this.autoVerify}
+              />
             )}
             <div className="target-overlay__status-badge-block">
               <StatusBadgeBar target={this.target()} />
@@ -224,6 +249,7 @@ export default class TargetOverlay extends React.Component {
                 completeTargetCB={this.completeTarget}
                 target={this.target()}
                 openTimelineBuilderCB={this.props.openTimelineBuilderCB}
+                autoVerifyCB={this.autoVerify}
               />
             )}
           </div>

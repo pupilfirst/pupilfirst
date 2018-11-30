@@ -1,7 +1,7 @@
 type t = {
   id: int,
   value: string,
-  hint: string,
+  hint: option(string),
   correctAnswer: bool,
 };
 
@@ -9,7 +9,7 @@ let decode = json =>
   Json.Decode.{
     id: json |> field("id", int),
     value: json |> field("value", string),
-    hint: json |> field("hint", string),
+    hint: json |> field("hint", nullable(string)) |> Js.Null.toOption,
     correctAnswer: json |> field("correctAnswer", bool),
   };
 

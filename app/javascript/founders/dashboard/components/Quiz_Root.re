@@ -26,7 +26,16 @@ let questionDetails = (id, questions) =>
   questions |> List.find(question => question |> Quiz_Question.id == id);
 
 let hintOfSelectedAnswer = selectedAnswer =>
-  selectedAnswer |> Quiz_Answer.hint |> str;
+  switch (selectedAnswer |> Quiz_Answer.hint) {
+  | Some(hint) => str(hint)
+  | None => str("")
+  };
+
+let descriptionOfSelectedQuestion = selectedAnswer =>
+  switch (selectedAnswer |> Quiz_Question.description) {
+  | Some(description) => str(description)
+  | None => str("")
+  };
 
 let make = (~questions, ~submitTarget, _children) => {
   ...component,
@@ -43,6 +52,7 @@ let make = (~questions, ~submitTarget, _children) => {
     },
   render: ({state, send}) => {
     let totalNumberOfQuestions = questions |> List.length;
+    let currentQuestion = questionDetails(state.currentQuestionId, questions);
     <div className="quiz-root">
       <div className="col-md-12 quiz-root__header-text">
         <h2> {str("Complete the QUIZ")} </h2>
@@ -51,26 +61,14 @@ let make = (~questions, ~submitTarget, _children) => {
         <div className="col-md-7 quiz-root__question-questions">
           <div className="quiz-root__question-body">
             <div className="quiz-root__question-heading">
-              <h3>
-                {
-                  questionDetails(state.currentQuestionId, questions)
-                  |> Quiz_Question.question
-                  |> str
-                }
-              </h3>
+              <h3> {currentQuestion |> Quiz_Question.question |> str} </h3>
             </div>
             <div className=".quiz-root__question-description">
-              <h5>
-                {
-                  questionDetails(state.currentQuestionId, questions)
-                  |> Quiz_Question.description
-                  |> str
-                }
-              </h5>
+              <h5> {descriptionOfSelectedQuestion(currentQuestion)} </h5>
             </div>
             <div className="answer_options">
               {
-                questionDetails(state.currentQuestionId, questions)
+                currentQuestion
                 |> Quiz_Question.answer_options
                 |> List.map(answers =>
                      <span className="quiz-root__answer-option">

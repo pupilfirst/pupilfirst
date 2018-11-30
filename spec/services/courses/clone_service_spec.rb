@@ -15,9 +15,12 @@ describe Courses::CloneService do
   let(:target_l1_1_2) { create :target, :for_startup, target_group: target_group_l1_1 }
   let(:target_l1_2) { create :target, :for_startup, target_group: target_group_l1_2 }
   let(:target_l2_1) { create :target, :for_founders, target_group: target_group_l2 }
-  let(:target_l2_2) { create :target, :for_founders, target_group: target_group_l2 }
+  let!(:target_l2_2) { create :target, :for_founders, target_group: target_group_l2 }
   let(:startup_l1) { create :startup, level: level_one }
   let(:startup_l2) { create :startup, level: level_two }
+  let!(:resource_1) { create :resource_link, targets: [target_l1_1_1] }
+  let!(:resource_2) { create :resource_video_embed, targets: [target_l1_1_2] }
+  let!(:resource_3) { create :resource_video_file, targets: [target_l2_1] }
 
   let(:new_name) { Faker::Lorem.words(2).join(' ') }
 
@@ -48,7 +51,9 @@ describe Courses::CloneService do
       expect(new_course.target_groups.pluck(:name)).to match_array(original_group_names)
       expect(new_course.targets.pluck(:title, :description)).to match_array(original_targets)
 
-      # TODO: Check resources.
+      # Resources should have been linked to new targets.
+      expect(Resource.count).to eq(3)
+      expect(new_course.targets.joins(:resources).count).to eq(3)
 
       # There should be no cloning of startups, founders, or timeline events.
       expect(Startup.count).to eq(original_startup_count)

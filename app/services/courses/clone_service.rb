@@ -13,7 +13,8 @@ module Courses
         Course.create!(name: new_name).tap do |new_course|
           levels = create_levels(new_course)
           target_groups = create_target_groups(levels)
-          create_targets(target_groups)
+          targets = create_targets(target_groups)
+          link_resources(targets)
         end
       end
     end
@@ -47,19 +48,30 @@ module Courses
     end
 
     def create_targets(target_groups)
-      target_groups.each do |old_target_group, new_target_group|
-        old_target_group.targets.live.each do |target|
-          Target.create!(
-            target.attributes
-              .slice(
-                'role', 'title', 'description', 'completion_instructions', 'resource_url', 'slideshow_embed',
-                'faculty_id', 'rubric', 'days_to_complete', 'target_action_type', 'sort_index', 'session_at',
-                'video_embed', 'last_session_at', 'link_to_complete', 'submittability', 'youtube_video_id',
-                'call_to_action'
-              )
-              .merge(target_group: new_target_group)
-          )
+      target_groups.flat_map do |old_target_group, new_target_group|
+        old_target_group.targets.live.map do |target|
+          [
+            target,
+            Target.create!(
+              target.attributes
+                .slice(
+                  'role', 'title', 'description', 'completion_instructions', 'resource_url', 'slideshow_embed',
+                  'faculty_id', 'rubric', 'days_to_complete', 'target_action_type', 'sort_index', 'session_at',
+                  'video_embed', 'last_session_at', 'link_to_complete', 'submittability', 'youtube_video_id',
+                  'call_to_action'
+                )
+                .merge(target_group: new_target_group)
+            )
+          ]
         end
+      end
+    end
+
+    def link_resources(targets)
+      targets.each do |old_target, new_target|
+        next if old_target.resources.blank?
+
+        new_target.update!(resources: old_target.resources)
       end
     end
   end

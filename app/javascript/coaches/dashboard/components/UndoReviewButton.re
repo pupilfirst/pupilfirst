@@ -25,7 +25,11 @@ let handleResponseJSON = (te, replaceTimelineEvent, json) =>
       "Review Reverted",
       "Review cleared and moved to pending",
     );
-    te |> TimelineEvent.updateGrades([]) |> replaceTimelineEvent;
+    te
+    |> TimelineEvent.updateEvaluation(
+         te |> TimelineEvent.evaluation |> Grading.clearedEvaluation,
+       )
+    |> replaceTimelineEvent;
   };
 
 let undoReview = (te, replaceTimelineEvent, _event) => {

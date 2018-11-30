@@ -1,4 +1,13 @@
 .gradebar-button {
   flex-shrink: 1 !important;
   overflow: hidden;
+  background-color: lightgrey;
+}
+
+.gradebar-button__passed {
+  background-color: green;
+}
+
+.gradebar-button__failed {
+  background-color: red;
 }

@@ -51,9 +51,8 @@ module Coaches
           links: timeline_event.links,
           files: timeline_event.timeline_event_files.map { |file| { title: file.title, id: file.id } },
           image: timeline_event.image? ? timeline_event.image.url : nil,
-          grades: grades_for_submission(timeline_event),
           latestFeedback: timeline_event.startup_feedback&.last&.feedback,
-          evaluationCriteria: evaluation_criteria(timeline_event)
+          evaluation: evaluation(timeline_event)
         }
       end
     end
@@ -69,15 +68,13 @@ module Coaches
       grade_labels.keys.map { |grade| { grade: grade, label: grade_labels[grade] } }
     end
 
-    def evaluation_criteria(timeline_event)
-      timeline_event.evaluation_criteria.map do |criterion|
-        { id: criterion.id, name: criterion.name }
-      end
-    end
-
-    def grades_for_submission(submission)
-      submission.timeline_event_grades.map do |grade|
-        { criterionId: grade.evaluation_criterion_id, grade: grade.grade }
+    def evaluation(submission)
+      submission.evaluation_criteria.map do |criterion|
+        {
+          criterionId: criterion.id,
+          criterionName: criterion.name,
+          grade: submission.timeline_event_grades&.find_by(evaluation_criterion: criterion)&.grade
+        }
       end
     end
 

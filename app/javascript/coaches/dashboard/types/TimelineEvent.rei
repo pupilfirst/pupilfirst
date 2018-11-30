@@ -26,7 +26,7 @@ let forStartupId: (int, list(t)) => list(t);
 
 let reviewPending: list(t) => list(t);
 
-let graded: list(t) => list(t);
+let reviewComplete: list(t) => list(t);
 
 let decode: Js.Json.t => t;
 
@@ -34,12 +34,10 @@ let latestFeedback: t => option(string);
 
 let updateFeedback: (string, t) => t;
 
-let updateGrades: (list(Grade.t), t) => t;
-
-let grades: t => list(Grade.t);
-
-let evaluationCriteria: t => list(EvaluationCriterion.t);
+let updateEvaluation: (list(Grading.t), t) => t;
 
 let getReviewResult: (int, t) => reviewResult;
 
 let resultAsString: reviewResult => string;
+
+let evaluation: t => list(Grading.t);

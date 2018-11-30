@@ -11,8 +11,7 @@ type t = {
   files: list(File.t),
   image: option(string),
   latestFeedback: option(string),
-  grades: list(Grade.t),
-  evaluationCriteria: list(EvaluationCriterion.t),
+  evaluation: list(Grading.t),
 };
 
 type reviewResult =
@@ -34,9 +33,7 @@ let decode = json =>
     image: json |> field("image", nullable(string)) |> Js.Null.toOption,
     latestFeedback:
       json |> field("latestFeedback", nullable(string)) |> Js.Null.toOption,
-    grades: json |> field("grades", list(Grade.decode)),
-    evaluationCriteria:
-      json |> field("evaluationCriteria", list(EvaluationCriterion.decode)),
+    evaluation: json |> field("evaluation", list(Grading.decode)),
   };
 
 let forStartupId = (startupId, tes) =>
@@ -60,29 +57,28 @@ let files = t => t.files;
 
 let image = t => t.image;
 
-let grades = t => t.grades;
-
-let evaluationCriteria = t => t.evaluationCriteria;
-
 let latestFeedback = t => t.latestFeedback;
 
-let updateGrades = (grades, t) => {...t, grades};
+let updateEvaluation = (evaluation, t) => {...t, evaluation};
 
 let updateFeedback = (latestFeedback, t) => {
   ...t,
   latestFeedback: Some(latestFeedback),
 };
 
-let reviewPending = tes => tes |> List.filter(te => te.grades == []);
+let reviewPending = tes =>
+  tes |> List.filter(te => te.evaluation |> Grading.pending);
 
-let graded = tes => tes |> List.filter(te => te.grades != []);
+let reviewComplete = tes =>
+  tes |> List.filter(te => ! (te.evaluation |> Grading.pending));
 
 let getReviewResult = (passGrade, t) =>
-  t.grades |> List.exists(grade => grade |> Grade.grade < passGrade) ?
-    Failed : Passed;
+  t.evaluation |> Grading.anyFail(passGrade) ? Failed : Passed;
 
 let resultAsString = reviewResult =>
   switch (reviewResult) {
   | Passed => "Passed"
   | Failed => "Failed"
   };
+
+let evaluation = t => t.evaluation;

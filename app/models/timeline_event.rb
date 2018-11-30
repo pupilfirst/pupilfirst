@@ -49,7 +49,7 @@ class TimelineEvent < ApplicationRecord
   scope :from_approved_startups, -> { joins(:startup).merge(Startup.approved) }
   scope :not_private, -> { joins(:target).where.not(targets: { role: Target::ROLE_FOUNDER }) }
   scope :not_improved, -> { joins(:target).where(improved_timeline_event_id: nil) }
-  scope :not_auto_verified, -> { joins(:evaluation_criteria) }
+  scope :not_auto_verified, -> { joins(:evaluation_criteria).distinct }
   scope :auto_verified, -> { where.not(id: not_auto_verified) }
 
   after_initialize :make_links_an_array

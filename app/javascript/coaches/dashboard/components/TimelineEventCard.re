@@ -155,15 +155,11 @@ let make =
             ++ (timelineEvent |> TimelineEvent.id |> string_of_int)
           )>
           (
-            switch (timelineEvent |> TimelineEvent.grades) {
-            | [] =>
-              <ReviewForm
+            timelineEvent |> TimelineEvent.evaluation |> Grading.pending ?
+              <EvaluationForm
+                evaluation=(timelineEvent |> TimelineEvent.evaluation)
                 gradeLabels
-                evaluationCriteria=(
-                  timelineEvent |> TimelineEvent.evaluationCriteria
-                )
-              />
-            | grades =>
+              /> :
               <div className="mx-auto text-center">
                 <ReviewStatusBadge
                   reviewResult=(
@@ -172,9 +168,21 @@ let make =
                   notAcceptedIconUrl
                   verifiedIconUrl
                 />
+                {
+                  let evaluation = timelineEvent |> TimelineEvent.evaluation;
+                  evaluation
+                  |> List.map(grading =>
+                       <GradeBar
+                         key=(grading |> Grading.criterionId |> string_of_int)
+                         grading
+                         gradeLabels
+                       />
+                     )
+                  |> Array.of_list
+                  |> ReasonReact.array;
+                }
                 <UndoReviewButton timelineEvent replaceTimelineEvent />
               </div>
-            }
           )
         </div>
       </div>

@@ -41,10 +41,11 @@ describe Courses::CloneService do
       original_founder_count = Founder.count
       original_submission_count = TimelineEvent.count
 
-      new_course = subject.clone(new_name)
+      new_course = subject.clone(new_name, true)
 
       # New course should have same name as the old one.
       expect(new_course.name).to eq(new_name)
+      expect(new_course.sponsored).to eq(true)
 
       # Levels, target groups, targets, and resources should have been cloned.
       expect(new_course.levels.pluck(:name)).to match_array(original_level_names)

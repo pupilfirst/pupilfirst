@@ -14,21 +14,32 @@ let gradeDescription = (gradeLabels, grading) =>
   );
 
 let maxGrade = gradeLabels =>
-    gradeLabels |> GradeLabel.maxGrade |> string_of_int
+  gradeLabels |> GradeLabel.maxGrade |> string_of_int;
 
 let buttonClasses = (gradeReceived, passGrade, buttonGrade, callBack) => {
-  let failed = switch(gradeReceived) {
-  | None => false
-  | Some(grade) => grade < passGrade
-  };
-  let beyondGradeReceived = switch(gradeReceived) {
-  | None => true
-  | Some(grade) => buttonGrade > grade
-  };
-  "btn gradebar-button " ++ switch(callBack) {
-  | None => (beyondGradeReceived ? "" : (failed ? "gradebar-button__failed" : "gradebar-button__passed"))
-  | Some(_CB) => ""
-  };
+  let failed =
+    switch (gradeReceived) {
+    | None => false
+    | Some(grade) => grade < passGrade
+    };
+  let beyondGradeReceived =
+    switch (gradeReceived) {
+    | None => true
+    | Some(grade) => buttonGrade > grade
+    };
+  "btn gradebar-button "
+  ++ (
+    switch (callBack) {
+    | None =>
+      beyondGradeReceived ?
+        "" : failed ? "gradebar-button__failed" : "gradebar-button__passed"
+    | Some(_CB) =>
+      switch (gradeReceived) {
+      | None => ""
+      | Some(grade) => grade == buttonGrade ? "gradebar-button__selected" : ""
+      }
+    }
+  );
 };
 
 let make = (~grading, ~gradeLabels, ~gradeSelectCB=?, _children) => {
@@ -41,12 +52,16 @@ let make = (~grading, ~gradeLabels, ~gradeSelectCB=?, _children) => {
         <div className="gradebar-criterion_name">
           (grading |> gradeDescription(gradeLabels) |> str)
         </div>
-        ( switch(grading |> Grading.grade) {
-        | None => ReasonReact.null
-        | Some(grade) => (
-        <div> (((grade |> string_of_int) ++ "/" ++ maxGrade(gradeLabels)) |> str) </div>)
-        }
-
+        (
+          switch (grading |> Grading.grade) {
+          | None => ReasonReact.null
+          | Some(grade) =>
+            <div>
+              (
+                (grade |> string_of_int) ++ "/" ++ maxGrade(gradeLabels) |> str
+              )
+            </div>
+          }
         )
       </div>
       <div className="btn-group d-flex" role="group">
@@ -56,11 +71,19 @@ let make = (~grading, ~gradeLabels, ~gradeSelectCB=?, _children) => {
                <button
                  key=(gradeLabel |> GradeLabel.grade |> string_of_int)
                  type_="button"
-                 className=(buttonClasses(grading |> Grading.grade, 3, gradeLabel |> GradeLabel.grade, gradeSelectCB))>
+                 className=(
+                   buttonClasses(
+                     grading |> Grading.grade,
+                     3,
+                     gradeLabel |> GradeLabel.grade,
+                     gradeSelectCB,
+                   )
+                 )>
                  (
                    switch (gradeSelectCB) {
                    | None => ReasonReact.null
-                   | Some(_CB) => (gradeLabel |> GradeLabel.grade |> string_of_int |> str)
+                   | Some(_CB) =>
+                     gradeLabel |> GradeLabel.grade |> string_of_int |> str
                    }
                  )
                </button>

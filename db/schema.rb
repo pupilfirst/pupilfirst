@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_28_100847) do
+ActiveRecord::Schema.define(version: 2018_11_30_064753) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -162,7 +162,6 @@ ActiveRecord::Schema.define(version: 2018_11_28_100847) do
     t.boolean "self_service"
     t.string "current_commitment"
     t.string "slug"
-    t.integer "founder_id"
     t.boolean "inactive", default: false
     t.text "about"
     t.string "commitment"

@@ -1,4 +1,5 @@
 type t = {
+  id: int,
   value: string,
   hint: string,
   correctAnswer: bool,
@@ -6,10 +7,13 @@ type t = {
 
 let decode = json =>
   Json.Decode.{
+    id: json |> field("id", int),
     value: json |> field("value", string),
     hint: json |> field("hint", string),
     correctAnswer: json |> field("correctAnswer", bool),
   };
+
+let id = t => t.id;
 
 let value = t => t.value;
 

@@ -68,7 +68,7 @@ let make =
             <SidePanel
               coach
               startups
-              selectedStartupId=state.selectedStartupId
+              selectedStartupId={state.selectedStartupId}
               selectStartupCB
               clearStartupCB
               pendingCount
@@ -77,8 +77,8 @@ let make =
         </div>
         <div className="col-md-8">
           <TimelineEventsPanel
-            timelineEvents=state.timelineEvents
-            selectedStartupId=state.selectedStartupId
+            timelineEvents={state.timelineEvents}
+            selectedStartupId={state.selectedStartupId}
             replaceTimelineEvent
             authenticityToken
             emptyIconUrl

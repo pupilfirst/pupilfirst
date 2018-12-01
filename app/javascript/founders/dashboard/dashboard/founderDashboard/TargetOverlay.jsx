@@ -19,7 +19,8 @@ export default class TargetOverlay extends React.Component {
         latestFeedback: null,
         linkedResources: null,
         founderStatuses: null,
-        quizDetails: null
+        quizDetails: null,
+        showQuiz: false
       }
     );
 
@@ -27,6 +28,7 @@ export default class TargetOverlay extends React.Component {
     this.openTimelineBuilder = this.openTimelineBuilder.bind(this);
     this.completeTarget = this.completeTarget.bind(this);
     this.autoVerify = this.autoVerify.bind(this);
+    this.invertShowQuiz = this.invertShowQuiz.bind(this);
   }
 
   componentDidMount() {
@@ -55,7 +57,8 @@ export default class TargetOverlay extends React.Component {
     return !(
       this.isNotSubmittable() ||
       this.singleSubmissionComplete() ||
-      this.submissionBlocked()
+      this.submissionBlocked() ||
+      this.state.showQuiz
     );
   }
 
@@ -131,7 +134,14 @@ export default class TargetOverlay extends React.Component {
         type: "success"
       });
       this.completeTarget();
+      this.state.showQuiz && this.invertShowQuiz();
     });
+  }
+
+  invertShowQuiz() {
+    this.setState(prevState => ({
+      showQuiz: !prevState.showQuiz
+    }));
   }
 
   updateDetails(response) {
@@ -175,16 +185,18 @@ export default class TargetOverlay extends React.Component {
                     target={this.target()}
                     openTimelineBuilderCB={this.props.openTimelineBuilderCB}
                     autoVerifyCB={this.autoVerify}
+                    invertShowQuizCB={this.invertShowQuiz}
                   />
                 )}
               </div>
             </div>
-            {this.state.quizDetails && (
-              <QuizComponent
-                quizDetails={this.state.quizDetails}
-                submitTarget={this.autoVerify}
-              />
-            )}
+            {this.state.showQuizComponent &&
+              this.state.quizDetails && (
+                <QuizComponent
+                  quizDetails={this.state.quizDetails}
+                  submitTarget={this.autoVerify}
+                />
+              )}
             <div className="target-overlay__status-badge-block">
               <StatusBadgeBar target={this.target()} />
             </div>
@@ -250,6 +262,7 @@ export default class TargetOverlay extends React.Component {
                 target={this.target()}
                 openTimelineBuilderCB={this.props.openTimelineBuilderCB}
                 autoVerifyCB={this.autoVerify}
+                invertShowQuizCB={this.invertShowQuiz}
               />
             )}
           </div>

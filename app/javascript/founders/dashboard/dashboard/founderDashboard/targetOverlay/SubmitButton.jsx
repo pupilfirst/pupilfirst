@@ -43,8 +43,10 @@ export default class SubmitButton extends React.Component {
   }
 
   handleClick() {
-    if (this.canBeVerifiedAutomatically()) {
-      this.props.autoVerify();
+    if (this.props.target.has_quiz) {
+      this.props.invertShowQuizCB();
+    } else if (this.canBeVerifiedAutomatically()) {
+      this.props.autoVerifyCB();
     } else {
       this.openTimelineBuilder();
     }
@@ -100,5 +102,6 @@ SubmitButton.propTypes = {
   completeTargetCB: PropTypes.func.isRequired,
   target: PropTypes.object,
   openTimelineBuilderCB: PropTypes.func,
-  autoVerifyCB: PropTypes.func.isRequired
+  autoVerifyCB: PropTypes.func.isRequired,
+  invertShowQuizCB: PropTypes.func.isRequired
 };

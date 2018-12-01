@@ -190,7 +190,7 @@ export default class TargetOverlay extends React.Component {
                 )}
               </div>
             </div>
-            {this.state.showQuizComponent &&
+            {this.state.showQuiz &&
               this.state.quizDetails && (
                 <QuizComponent
                   quizDetails={this.state.quizDetails}

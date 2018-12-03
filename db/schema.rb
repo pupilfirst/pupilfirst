@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_28_064512) do
+ActiveRecord::Schema.define(version: 2018_11_27_070025) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -59,7 +59,6 @@ ActiveRecord::Schema.define(version: 2018_11_28_064512) do
   create_table "answer_options", force: :cascade do |t|
     t.bigint "quiz_question_id"
     t.string "value"
-    t.boolean "correct_answer", default: false
     t.text "hint"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -392,6 +391,8 @@ ActiveRecord::Schema.define(version: 2018_11_28_064512) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "quiz_id"
+    t.bigint "correct_answer_id"
+    t.index ["correct_answer_id"], name: "index_quiz_questions_on_correct_answer_id"
     t.index ["quiz_id"], name: "index_quiz_questions_on_quiz_id"
   end
 
@@ -768,6 +769,7 @@ ActiveRecord::Schema.define(version: 2018_11_28_064512) do
   add_foreign_key "levels", "courses"
   add_foreign_key "payments", "founders"
   add_foreign_key "payments", "startups"
+  add_foreign_key "quiz_questions", "answer_options", column: "correct_answer_id"
   add_foreign_key "quiz_questions", "quizzes"
   add_foreign_key "quizzes", "targets"
   add_foreign_key "resources", "levels"

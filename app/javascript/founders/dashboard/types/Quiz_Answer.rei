@@ -7,5 +7,3 @@ let id: t => int;
 let value: t => string;
 
 let hint: t => option(string);
-
-let correctAnswer: t => bool;

@@ -56,6 +56,7 @@ let make = (~questions, ~submitTarget, _children) => {
   render: ({state, send}) => {
     let totalNumberOfQuestions = questions |> List.length;
     let currentQuestion = questionDetails(state.currentQuestionId, questions);
+    let correctAnswer = currentQuestion |> Quiz_Question.correctAnswerId;
     <div className="quiz-root">
       <div className="col-md-12 quiz-root__header-text">
         <h2> {str("Complete the QUIZ")} </h2>
@@ -112,7 +113,7 @@ let make = (~questions, ~submitTarget, _children) => {
             <div className="quiz-root__answer-result">
               {
                 switch (state.selectedAnswer) {
-                | Some(answer) when answer |> Quiz_Answer.correctAnswer =>
+                | Some(answer) when answer |> Quiz_Answer.id == correctAnswer =>
                   <span className="correct-answer">
                     {str("Correct Answer")}
                   </span>
@@ -139,7 +140,7 @@ let make = (~questions, ~submitTarget, _children) => {
                 | (Some(answer), questionId)
                     when
                       answer
-                      |> Quiz_Answer.correctAnswer
+                      |> Quiz_Answer.id == correctAnswer
                       && questionId >= totalNumberOfQuestions
                       - 1 =>
                   <button
@@ -148,7 +149,7 @@ let make = (~questions, ~submitTarget, _children) => {
                     {str("Submit QUIZ")}
                   </button>
                 | (Some(_otherAnswer), _)
-                    when _otherAnswer |> Quiz_Answer.correctAnswer =>
+                    when _otherAnswer |> Quiz_Answer.id == correctAnswer =>
                   <button
                     className="btn btn-md btn-ghost-primary"
                     onClick=(_event => send(NextQuestion))>

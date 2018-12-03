@@ -38,7 +38,7 @@ describe Targets::OverlayDetailsService do
       }
 
       quiz_questions = [{
-        id: quiz_question.id,
+        id: 0,
         question: quiz_question.question,
         description: quiz_question.description,
         correct_answer_id: answer_2.id,

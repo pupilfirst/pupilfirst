@@ -52,11 +52,11 @@ module Targets
       return nil if latest_event.blank?
 
       attachments = latest_event.timeline_event_files.each_with_object([]) do |file, array|
-        array << { type: 'file', title: file.title, url: file.file_url }
+        array << { type: "file", title: file.title, url: file.file_url }
       end
 
       latest_event.links.each_with_object(attachments) do |link, array|
-        array << { type: 'link', title: link[:title], url: link[:url] }
+        array << { type: "link", title: link[:title], url: link[:url] }
       end
     end
 
@@ -78,9 +78,9 @@ module Targets
     def quiz_questions
       return if @target.quiz.blank?
 
-      @target.quiz.quiz_questions.map do |question|
+      @target.quiz.quiz_questions.each_with_index.map do |question, index|
         {
-          id: question.id,
+          id: index,
           question: question.question,
           description: question.description,
           correct_answer_id: question.correct_answer_id,

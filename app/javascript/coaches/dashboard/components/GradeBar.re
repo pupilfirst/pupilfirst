@@ -16,31 +16,25 @@ let gradeDescription = (gradeLabels, grading) =>
 let maxGrade = gradeLabels =>
   gradeLabels |> GradeLabel.maxGrade |> string_of_int;
 
-let buttonClasses = (gradeReceived, passGrade, buttonGrade, callBack) => {
-  let failed =
+let gradePillClasses = (gradeReceived, passGrade, pillGrade, callBack) => {
+  let defaultClasses = "btn grade-bar__grade-pill";
+  let resultModifier =
     switch (gradeReceived) {
-    | None => false
-    | Some(grade) => grade < passGrade
+    | None => ""
+    | Some(grade) when pillGrade > grade => ""
+    | Some(grade) =>
+      grade < passGrade ?
+        " grade-bar__grade-pill--failed" : " grade-bar__grade-pill--passed"
     };
-  let beyondGradeReceived =
-    switch (gradeReceived) {
-    | None => true
-    | Some(grade) => buttonGrade > grade
-    };
-  "btn grade-bar__track--select "
-  ++ (
+  let selectableModifier =
     switch (callBack) {
-    | None when beyondGradeReceived => ""
-    | None =>
-      failed ? "grade-bar__button--failed" : "grade-bar__button--passed"
-    | Some(_cb) =>
-      switch (gradeReceived) {
-      | None => ""
-      | Some(grade) when grade == buttonGrade => "grade-bar__button--selected"
-      | Some(_otherGrade) => ""
-      }
-    }
-  );
+    | None => ""
+    | Some(_callBack) =>
+      pillGrade < passGrade ?
+        " grade-bar__grade-pill--selectable-fail" :
+        " grade-bar__grade-pill--selectable-pass"
+    };
+  defaultClasses ++ resultModifier ++ selectableModifier;
 };
 
 let gradeBarHeader = (grading, gradeLabels) =>
@@ -59,12 +53,12 @@ let gradeBarHeader = (grading, gradeLabels) =>
     )
   </div>;
 
-let gradeBarButton = (gradeLabel, grading, gradeSelectCB) =>
+let gradeBarPill = (gradeLabel, grading, gradeSelectCB) =>
   <div
     key=(gradeLabel |> GradeLabel.grade |> string_of_int)
     role="button"
     className=(
-      buttonClasses(
+      gradePillClasses(
         grading |> Grading.grade,
         3,
         gradeLabel |> GradeLabel.grade,
@@ -84,7 +78,7 @@ let gradeBarPanel = (grading, gradeLabels, gradeSelectCB) =>
     (
       gradeLabels
       |> List.map(gradeLabel =>
-           gradeBarButton(gradeLabel, grading, gradeSelectCB)
+           gradeBarPill(gradeLabel, grading, gradeSelectCB)
          )
       |> Array.of_list
       |> ReasonReact.array

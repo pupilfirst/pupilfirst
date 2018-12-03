@@ -5,7 +5,7 @@
   box-shadow: 2px 0px 10px 0px rgba(0, 0, 0, 0.04);
 }
 
-.grade-bar__track--select {
+.grade-bar__grade-pill {
   position: relative;
   width: 100%;
   overflow: hidden;
@@ -27,16 +27,26 @@
       width: 0;
     }
   }
+}
+
+.grade-bar__grade-pill--passed {
+  background-color: #0F9D58;
+}
+
+.grade-bar__grade-pill--failed {
+  background-color: #F55151;
+}
+
+.grade-bar__grade-pill--selectable-pass {
   &:hover, &:focus {
     color: white;
     background-color: #0F9D58;
   }
 }
 
-.grade-bar__button--passed {
-  background-color: #0F9D58;
-}
-
-.grade-bar__button--failed {
+.grade-bar__grade-pill--selectable-fail {
+  &:hover, &:focus {
+    color: white;
   background-color: #F55151;
+  }
 }

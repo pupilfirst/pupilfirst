@@ -19,7 +19,7 @@ export default class TargetOverlay extends React.Component {
         latestFeedback: null,
         linkedResources: null,
         founderStatuses: null,
-        quizDetails: null,
+        quizQuestions: null,
         showQuiz: false
       }
     );
@@ -150,7 +150,7 @@ export default class TargetOverlay extends React.Component {
       latestFeedback: response.latestFeedback,
       linkedResources: response.linkedResources,
       founderStatuses: response.founderStatuses,
-      quizDetails: response.quizDetails
+      quizQuestions: response.quizQuestions
     });
   }
 
@@ -191,9 +191,9 @@ export default class TargetOverlay extends React.Component {
               </div>
             </div>
             {this.state.showQuiz &&
-              this.state.quizDetails && (
+              this.state.quizQuestions && (
                 <QuizComponent
-                  quizDetails={this.state.quizDetails}
+                  quizQuestions={this.state.quizQuestions}
                   submitTarget={this.autoVerify}
                 />
               )}

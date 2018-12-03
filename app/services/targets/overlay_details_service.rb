@@ -11,7 +11,7 @@ module Targets
         latestEvent: latest_event_details,
         latestFeedback: latest_feedback,
         linkedResources: linked_resources,
-        quizDetails: quiz_details
+        quizQuestions: quiz_questions
       }
     end
 
@@ -75,7 +75,7 @@ module Targets
       end
     end
 
-    def quiz_details
+    def quiz_questions
       return if @target.quiz.blank?
 
       @target.quiz.quiz_questions.each_with_index.map do |question, index|

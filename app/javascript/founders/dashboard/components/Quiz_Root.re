@@ -175,7 +175,7 @@ let asSubmitTargetFunction = json =>
 
 let decode = json =>
   Json.Decode.{
-    questions: json |> field("quizDetails", list(Quiz_Question.decode)),
+    questions: json |> field("quizQuestions", list(Quiz_Question.decode)),
     submitTarget: json |> field("submitTarget", asSubmitTargetFunction),
   };
 

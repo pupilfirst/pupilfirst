@@ -1,11 +1,11 @@
-.gradebar-track {
+.grade-bar__track {
   background-color: rgba(244, 244, 244, 0.5);
   border: 1px solid #D8D8D8;
   border-radius: 3rem;
   box-shadow: 2px 0px 10px 0px rgba(0, 0, 0, 0.04);
 }
 
-.gradebar-track__select {
+.grade-bar__track--select {
   position: relative;
   width: 100%;
   overflow: hidden;
@@ -33,10 +33,10 @@
   }
 }
 
-.gradebar-button__passed {
+.grade-bar__button--passed {
   background-color: #0F9D58;
 }
 
-.gradebar-button__failed {
+.grade-bar__button--failed {
   background-color: #F55151;
 }

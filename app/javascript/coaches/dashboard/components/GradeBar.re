@@ -27,7 +27,7 @@ let buttonClasses = (gradeReceived, passGrade, buttonGrade, callBack) => {
     | None => true
     | Some(grade) => buttonGrade > grade
     };
-  "btn gradebar-track__select "
+  "btn grade-bar__track--select "
   ++ (
     switch (callBack) {
     | None when beyondGradeReceived => ""
@@ -44,8 +44,8 @@ let buttonClasses = (gradeReceived, passGrade, buttonGrade, callBack) => {
 };
 
 let gradeBarHeader = (grading, gradeLabels) =>
-  <div className="gradebar=header d-flex justify-content-between">
-    <div className="gradebar-criterion_name">
+  <div className="grade-bar__header d-flex justify-content-between">
+    <div className="grade-bar__criterion_name">
       (grading |> gradeDescription(gradeLabels) |> str)
     </div>
     (
@@ -80,7 +80,7 @@ let gradeBarButton = (gradeLabel, grading, gradeSelectCB) =>
   </div>;
 
 let gradeBarPanel = (grading, gradeLabels, gradeSelectCB) =>
-  <div className="btn-group gradebar-track d-flex" role="group">
+  <div className="btn-group grade-bar__track d-flex" role="group">
     (
       gradeLabels
       |> List.map(gradeLabel =>
@@ -95,7 +95,7 @@ let make = (~grading, ~gradeLabels, ~gradeSelectCB=?, _children) => {
   ...component,
   render: _self =>
     <div
-      className="btn-toolbar gradebar-container flex-column mb-4"
+      className="btn-toolbar grade-bar__container flex-column mb-4"
       role="toolbar">
       (gradeBarHeader(grading, gradeLabels))
       (gradeBarPanel(grading, gradeLabels, gradeSelectCB))

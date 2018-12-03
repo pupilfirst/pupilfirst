@@ -10,9 +10,16 @@ describe Targets::OverlayDetailsService do
   let!(:timeline_event) { create :timeline_event_with_links, target: target, founder: founder_1, status: TimelineEvent::STATUS_VERIFIED }
   let(:faculty) { create :faculty }
   let(:faculty_feedback) { create :startup_feedback, timeline_event: timeline_event, faculty: faculty, startup: startup }
+  let(:quiz) { create :quiz, target: target }
+  let(:quiz_question) { create :quiz_question, quiz: quiz }
+  let(:answer_1) { create :answer_option, quiz_question: quiz_question }
+  let(:answer_2) { create :answer_option, quiz_question: quiz_question }
 
   describe '#all_details' do
-    it 'returns the founder statuses, latest event and latest feedback' do
+    before do
+      quiz_question.update!(correct_answer: answer_2)
+    end
+    it 'returns the founder statuses, latest event, latest feedback and quiz' do
       founder_statuses = [{ id: founder_1.id, status: :complete }, { id: founder_2.id, status: :pending }]
 
       event = {
@@ -30,12 +37,24 @@ describe Targets::OverlayDetailsService do
         facultyImageUrl: faculty.image_url
       }
 
+      quiz_questions = [{
+        id: quiz_question.id,
+        question: quiz_question.question,
+        description: quiz_question.description,
+        correct_answer_id: answer_2.id,
+        answer_options: [
+          { id: answer_2.id, value: answer_2.value, hint: answer_2.hint },
+          { id: answer_1.id, value: answer_1.value, hint: answer_1.hint }
+        ]
+      }]
+
       all_details = subject.all_details
 
-      expect(all_details).to include(:founderStatuses, :latestEvent, :latestFeedback)
+      expect(all_details).to include(:founderStatuses, :latestEvent, :latestFeedback, :quizQuestions)
       expect(all_details[:founderStatuses]).to match_array(founder_statuses)
       expect(all_details[:latestEvent]).to eq(event)
       expect(all_details[:latestFeedback]).to eq(feedback)
+      expect(all_details[:quizQuestions]).to eq(quiz_questions)
     end
   end
 end

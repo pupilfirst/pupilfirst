@@ -78,22 +78,22 @@ module Targets
     def quiz_questions
       return if @target.quiz.blank?
 
-      @target.quiz.quiz_questions.each_with_index.map do |question, index|
+      @target.quiz.quiz_questions.map do |question|
         {
-          id: index,
+          id: question.id,
           question: question.question,
           description: question.description,
+          correct_answer_id: question.correct_answer_id,
           answer_options: answer_options(question)
         }
       end
     end
 
     def answer_options(question)
-      question.answer_options.each_with_index.map do |answer, index|
+      question.answer_options.map do |answer|
         {
-          id: index,
+          id: answer.id,
           value: answer.value,
-          correctAnswer: answer.correct_answer,
           hint: answer.hint
         }
       end

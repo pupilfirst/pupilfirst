@@ -26,7 +26,7 @@ after 'development:targets' do
     description: Faker::Lorem.sentence,
     quiz: quiz
   )
-  question.save(validate: false)
+  question.save
 
   question.answer_options.create!(
     value: 'Yes. They raised funding!',
@@ -40,28 +40,28 @@ after 'development:targets' do
 
   question.answer_options.create!(value: 'No. They havent generated profits for shareholders.')
 
-  question.answer_options.create!(
+  correct_answer = question.answer_options.create!(
     value: 'Cant Say. They still have a long way to go.',
-    correct_answer: true,
     hint: 'Thats right, they still have a long way to go.'
   )
+
+  question.update!(correct_answer: correct_answer)
 
   question = QuizQuestion.new(
     question: 'Fin Robotics went through four failed products before building Fin. Was that a good thing?',
     quiz: quiz
   )
 
-  question.save(validate: false)
+  question.save
 
   question.answer_options.create!(
     value: 'No. Failure is never good.',
     hint: 'Failure is at times a learning experience. Most good startups fail before they succeed.'
   )
 
-  question.answer_options.create!(
+  correct_answer = question.answer_options.create!(
     value: 'B) Yes. Each failure taught Rohildev lots of valuable skills.',
     hint: 'This is correct. Failure by itself is not a thing to look forward to. But each unsuccessful try teaches founders lots of valuable lessons. This could be information about their market segment, or their customers. Or how to build a different product from the information they learnt.',
-    correct_answer: true
   )
 
   question.answer_options.create!(
@@ -73,4 +73,6 @@ after 'development:targets' do
     value: 'D) Both B and C.',
     hint: 'Half correct! Failure by itself is not cool in any way. Of a thousand startups, maybe 1 or 2 succeed and we hear about their success stories in newspapers and on TV. We never hear about failures and the difficult times founders go through. The only thing good about failures is when you use that opportunity to learn from failure.'
   )
+
+  question.update!(correct_answer: correct_answer)
 end

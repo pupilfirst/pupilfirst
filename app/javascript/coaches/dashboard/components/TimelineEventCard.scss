@@ -7,7 +7,10 @@
   border: 1px solid $gray-border;
   box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.05);
 }
-
+.timeline-event-card__body {
+  flex: 1 1 auto;
+  padding: 0 15px;
+}
 .timeline-event-card__header {
   border-bottom: 1px solid $gray-border;
 }
@@ -19,6 +22,10 @@
 .timeline-event-card__header-subtext, .timeline-event-card__footer-subtext {
   color: $light-grey-text;
   font-size: small;
+}
+
+.timeline-event-card__field-container {
+  background-color: $dark-primary-background;
 }
 
 .timeline-event-card__field-box {

@@ -16,7 +16,7 @@ let make = (~evaluation, ~gradeLabels, _children) => {
       ReasonReact.Update({...state, evaluation})
     },
   render: _self =>
-    <div className="d-flex flex-column">
+    <div className="d-flex flex-column w-100">
       <h5 className="timeline-event-card__field-header font-semibold mt-0">
         ("Grading Sheet:" |> str)
       </h5>

@@ -27,7 +27,7 @@ let buttonClasses = (gradeReceived, passGrade, buttonGrade, callBack) => {
     | None => true
     | Some(grade) => buttonGrade > grade
     };
-  "btn grade-bar__button "
+  "btn gradebar-track__select "
   ++ (
     switch (callBack) {
     | None when beyondGradeReceived => ""
@@ -60,9 +60,9 @@ let gradeBarHeader = (grading, gradeLabels) =>
   </div>;
 
 let gradeBarButton = (gradeLabel, grading, gradeSelectCB) =>
-  <button
+  <div
     key=(gradeLabel |> GradeLabel.grade |> string_of_int)
-    type_="button"
+    role="button"
     className=(
       buttonClasses(
         grading |> Grading.grade,
@@ -77,10 +77,10 @@ let gradeBarButton = (gradeLabel, grading, gradeSelectCB) =>
       | Some(_CB) => gradeLabel |> GradeLabel.grade |> string_of_int |> str
       }
     )
-  </button>;
+  </div>;
 
 let gradeBarPanel = (grading, gradeLabels, gradeSelectCB) =>
-  <div className="btn-group d-flex" role="group">
+  <div className="btn-group gradebar-track d-flex" role="group">
     (
       gradeLabels
       |> List.map(gradeLabel =>
@@ -95,7 +95,7 @@ let make = (~grading, ~gradeLabels, ~gradeSelectCB=?, _children) => {
   ...component,
   render: _self =>
     <div
-      className="btn-toolbar gradebar-container m-1 flex-column"
+      className="btn-toolbar gradebar-container flex-column mb-4"
       role="toolbar">
       (gradeBarHeader(grading, gradeLabels))
       (gradeBarPanel(grading, gradeLabels, gradeSelectCB))

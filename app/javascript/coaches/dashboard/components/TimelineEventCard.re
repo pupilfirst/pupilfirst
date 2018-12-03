@@ -106,42 +106,41 @@ let make =
   ...component,
   render: _self =>
     <div className="timeline-event-card__container">
-      <div className="card-body row">
-        <div className="col-md-8">
-          <div
-            className="timeline-event-card__header d-flex align-items-center pt-2 pb-2 mb-3">
-            <div>
-              <h5
-                className="timeline-event-card__header-title font-semibold mb-1">
-                (timelineEvent |> TimelineEvent.title |> str)
-              </h5>
-              <h6
-                className="timeline-event-card__header-subtext font-regular mb-0">
+      <div className="timeline-event-card__body row">
+        <div className="timeline-event-card__header d-flex align-items-center w-100 p-3">
+          <div>
+            <h5
+              className="timeline-event-card__header-title font-semibold mb-1">
+              (timelineEvent |> TimelineEvent.title |> str)
+            </h5>
+            <h6
+              className="timeline-event-card__header-subtext font-regular mb-0">
+              (
+                (timelineEvent |> TimelineEvent.founderName)
+                ++ " ("
+                ++ (timelineEvent |> TimelineEvent.startupName)
+                ++ ")"
+                |> str
+              )
+              <span
+                className="timeline-event-card__header-date-field pl-2 ml-2">
+                <i className="fa fa-calendar mr-1" />
                 (
-                  (timelineEvent |> TimelineEvent.founderName)
-                  ++ " ("
-                  ++ (timelineEvent |> TimelineEvent.startupName)
-                  ++ ")"
+                  timelineEvent
+                  |> TimelineEvent.eventOn
+                  |> DateTime.format(DateTime.OnlyDate)
                   |> str
                 )
-                <span
-                  className="timeline-event-card__header-date-field pl-2 ml-2">
-                  <i className="fa fa-calendar mr-1" />
-                  (
-                    timelineEvent
-                    |> TimelineEvent.eventOn
-                    |> DateTime.format(DateTime.OnlyDate)
-                    |> str
-                  )
-                </span>
-              </h6>
-            </div>
+              </span>
+            </h6>
           </div>
-          <div className="timeline-event-card__field-box p-3">
-            <h5
-              className="timeline-event-card__field-header font-semibold mt-0">
-              ("Description:" |> str)
-            </h5>
+        </div>
+        <div className="col-md-6 timeline-event-card__field-container py-3">
+          <h5
+            className="timeline-event-card__field-header font-semibold mt-0 mb-3">
+            ("Description:" |> str)
+          </h5>
+          <div className="timeline-event-card__field-box pl-3">
             <div className="timeline-event-card__description">
               (timelineEvent |> TimelineEvent.description |> str)
             </div>
@@ -151,7 +150,7 @@ let make =
         </div>
         <div
           className=(
-            "col-md-4 d-flex align-items-center timeline-event-card__review-box js-timeline-event-card__review-box-"
+            "col-md-6 d-flex align-items-center timeline-event-card__review-box js-timeline-event-card__review-box-"
             ++ (timelineEvent |> TimelineEvent.id |> string_of_int)
           )>
           (

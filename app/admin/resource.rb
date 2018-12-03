@@ -1,5 +1,5 @@
 ActiveAdmin.register Resource do
-  permit_params :title, :description, :file, :thumbnail, :level_id, :startup_id, :target_id, :video_embed, :link, :archived, tag_list: []
+  permit_params :title, :description, :file, :thumbnail, :level_id, :startup_id, :video_embed, :link, :archived, tag_list: [], target_ids: []
 
   controller do
     include DisableIntercom
@@ -93,7 +93,13 @@ ActiveAdmin.register Resource do
       row :file_content_type
       row :created_at
       row :updated_at
-      row :target
+
+      row :targets do |resource|
+        none_one_or_many(self, resource.targets) do |target|
+          link_to target.title, admin_target_path(target)
+        end
+      end
+
       row :archived
     end
   end
@@ -117,7 +123,8 @@ ActiveAdmin.register Resource do
         as: :select,
         collection: Resource.tag_counts_on(:tags).pluck(:name),
         multiple: true
-      f.input :target_id, as: :select, collection: []
+
+      f.input :targets, collection: f.object.targets
       f.input :archived
     end
 

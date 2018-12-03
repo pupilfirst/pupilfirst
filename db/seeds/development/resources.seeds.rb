@@ -14,14 +14,14 @@ after 'development:targets' do
     thumbnail: Rails.root.join(pdf_thumbnail_path).open,
     title: 'Public PDF File',
     description: 'This is a public PDF file, meant to be accessible by everyone!',
-    target: target
+    targets: [target]
   )
 
   Resource.create!(
     title: 'Public Link',
     description: 'This is a library entry with a link to an external resource',
     link: 'https://www.google.com',
-    target: target
+    targets: [target]
   )
 
   Resource.create!(
@@ -29,7 +29,7 @@ after 'development:targets' do
     thumbnail: Rails.root.join(video_thumbnail_path).open,
     title: 'Public MP4 File',
     description: 'This is an MP4 video, which we should be able to stream.',
-    target: target
+    targets: [target]
   )
 
   Resource.create!(
@@ -37,7 +37,7 @@ after 'development:targets' do
     thumbnail: Rails.root.join(video_thumbnail_path).open,
     title: 'Public Embedded Video',
     description: 'This is a YouTube embed. It should be playable from the page.',
-    target: target
+    targets: [target]
   )
 
   Resource.create!(

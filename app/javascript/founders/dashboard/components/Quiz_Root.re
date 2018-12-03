@@ -133,7 +133,7 @@ let make = (~questions, ~submitTarget, _children) => {
                 }
               }
             </div>
-            <div className="quiz-root__question-next-button">
+            <div className="quiz-root__question-next-button my-4">
               {
                 switch (state.selectedAnswer, state.currentQuestionId) {
                 | (Some(answer), questionId)

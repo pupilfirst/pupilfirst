@@ -27,7 +27,7 @@ let buttonClasses = (gradeReceived, passGrade, buttonGrade, callBack) => {
     | None => true
     | Some(grade) => buttonGrade > grade
     };
-  "btn gradebar-button "
+  "btn gradebar-track__select "
   ++ (
     switch (callBack) {
     | None =>
@@ -46,9 +46,9 @@ let make = (~grading, ~gradeLabels, ~gradeSelectCB=?, _children) => {
   ...component,
   render: _self =>
     <div
-      className="btn-toolbar gradebar-container m-1 flex-column"
+      className="btn-toolbar gradebar-container flex-column mb-4"
       role="toolbar">
-      <div className="gradebar=header d-flex justify-content-between">
+      <div className="gradebar-header d-flex justify-content-between">
         <div className="gradebar-criterion_name">
           (grading |> gradeDescription(gradeLabels) |> str)
         </div>
@@ -64,13 +64,13 @@ let make = (~grading, ~gradeLabels, ~gradeSelectCB=?, _children) => {
           }
         )
       </div>
-      <div className="btn-group d-flex" role="group">
+      <div className="btn-group gradebar-track d-flex" role="group">
         (
           gradeLabels
           |> List.map(gradeLabel =>
-               <button
+               <div
                  key=(gradeLabel |> GradeLabel.grade |> string_of_int)
-                 type_="button"
+                 role="button"
                  className=(
                    buttonClasses(
                      grading |> Grading.grade,
@@ -86,7 +86,7 @@ let make = (~grading, ~gradeLabels, ~gradeSelectCB=?, _children) => {
                      gradeLabel |> GradeLabel.grade |> string_of_int |> str
                    }
                  )
-               </button>
+               </div>
              )
           |> Array.of_list
           |> ReasonReact.array

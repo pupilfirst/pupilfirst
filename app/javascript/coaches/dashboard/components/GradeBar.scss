@@ -1,13 +1,42 @@
-.gradebar-button {
-  flex-shrink: 1 !important;
+.gradebar-track {
+  background-color: rgba(244, 244, 244, 0.5);
+  border: 1px solid #D8D8D8;
+  border-radius: 3rem;
+  box-shadow: 2px 0px 10px 0px rgba(0, 0, 0, 0.04);
+}
+
+.gradebar-track__select {
+  position: relative;
+  width: 100%;
   overflow: hidden;
-  background-color: lightgrey;
+  color: #999999;
+  background-color: #fafafa;
+
+  &:before {
+    position: absolute;
+    content: '';
+    right: 0;
+    top: 0;
+    z-index: 2;
+    width: 1px;
+    height: 100%;
+    background-color:#D8D8D8;
+  }
+  &:last-child {
+    &::before {
+      width: 0;
+    }
+  }
+  &:hover, &:focus {
+    color: white;
+    background-color: #0F9D58;
+  }
 }
 
 .gradebar-button__passed {
-  background-color: green;
+  background-color: #0F9D58;
 }
 
 .gradebar-button__failed {
-  background-color: red;
+  background-color: #F55151;
 }

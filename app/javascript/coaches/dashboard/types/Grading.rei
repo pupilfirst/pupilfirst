@@ -15,3 +15,5 @@ let clearedEvaluation: list(t) => list(t);
 let criterionId: t => int;
 
 let criterionName: t => string;
+
+let updateGrade: (int, t) => t;

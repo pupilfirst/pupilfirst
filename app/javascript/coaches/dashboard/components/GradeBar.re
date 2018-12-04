@@ -53,25 +53,29 @@ let gradeBarHeader = (grading, gradeLabels) =>
     )
   </div>;
 
-let gradeBarPill = (gradeLabel, grading, gradeSelectCB) =>
+let handleClick = (gradeSelectCB, grading, newGrade) =>
+  switch (gradeSelectCB) {
+  | None => ()
+  | Some(callBack) => callBack(grading |> Grading.updateGrade(newGrade))
+  };
+
+let gradeBarPill = (gradeLabel, grading, gradeSelectCB) => {
+  let myGrade = gradeLabel |> GradeLabel.grade;
   <div
-    key=(gradeLabel |> GradeLabel.grade |> string_of_int)
+    key=(myGrade |> string_of_int)
     role="button"
+    onClick=(_event => handleClick(gradeSelectCB, grading, myGrade))
     className=(
-      gradePillClasses(
-        grading |> Grading.grade,
-        3,
-        gradeLabel |> GradeLabel.grade,
-        gradeSelectCB,
-      )
+      gradePillClasses(grading |> Grading.grade, 2, myGrade, gradeSelectCB)
     )>
     (
       switch (gradeSelectCB) {
       | None => ReasonReact.null
-      | Some(_CB) => gradeLabel |> GradeLabel.grade |> string_of_int |> str
+      | Some(_CB) => myGrade |> string_of_int |> str
       }
     )
   </div>;
+};
 
 let gradeBarPanel = (grading, gradeLabels, gradeSelectCB) =>
   <div className="btn-group grade-bar__track d-flex" role="group">

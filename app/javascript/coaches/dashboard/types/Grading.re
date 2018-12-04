@@ -38,3 +38,9 @@ let clearedEvaluation = evaluation =>
 let criterionId = t => t.criterionId;
 
 let criterionName = t => t.criterionName;
+
+let updateGrade = (newGrade, t) => {
+  criterionId: t.criterionId,
+  criterionName: t.criterionName,
+  grade: Some(newGrade),
+};

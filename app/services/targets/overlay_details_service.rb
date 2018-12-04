@@ -80,7 +80,7 @@ module Targets
 
       @target.quiz.quiz_questions.each_with_index.map do |question, index|
         {
-          id: index,
+          index: index,
           question: question.question,
           description: question.description,
           correct_answer_id: question.correct_answer_id,

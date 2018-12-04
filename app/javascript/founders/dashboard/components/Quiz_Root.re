@@ -10,7 +10,7 @@ type props = {
 };
 
 type state = {
-  currentQuestionId: int,
+  currentQuestionIndex: int,
   selectedAnswer: option(Quiz_Answer.t),
 };
 
@@ -22,8 +22,8 @@ let component = ReasonReact.reducerComponent("Quiz");
 
 let str = ReasonReact.string;
 
-let questionDetails = (id, questions) =>
-  questions |> List.find(question => question |> Quiz_Question.id == id);
+let questionDetails = (index, questions) =>
+  questions |> List.find(question => question |> Quiz_Question.index == index);
 
 let hintOfSelectedAnswer = selectedAnswer =>
   switch (selectedAnswer |> Quiz_Answer.hint) {
@@ -42,12 +42,12 @@ let descriptionOfSelectedQuestion = selectedAnswer =>
 
 let make = (~questions, ~submitTarget, _children) => {
   ...component,
-  initialState: () => {currentQuestionId: 0, selectedAnswer: None},
+  initialState: () => {currentQuestionIndex: 0, selectedAnswer: None},
   reducer: (action, state) =>
     switch (action) {
     | NextQuestion =>
       ReasonReact.Update({
-        currentQuestionId: state.currentQuestionId + 1,
+        currentQuestionIndex: state.currentQuestionIndex + 1,
         selectedAnswer: None,
       })
     | SelectAnswer(answer) =>
@@ -55,7 +55,8 @@ let make = (~questions, ~submitTarget, _children) => {
     },
   render: ({state, send}) => {
     let totalNumberOfQuestions = questions |> List.length;
-    let currentQuestion = questionDetails(state.currentQuestionId, questions);
+    let currentQuestion =
+      questionDetails(state.currentQuestionIndex, questions);
     let correctAnswer = currentQuestion |> Quiz_Question.correctAnswerId;
     <div className="quiz-root">
       <div className="col-md-12 quiz-root__header-text">
@@ -79,7 +80,7 @@ let make = (~questions, ~submitTarget, _children) => {
                        className="quiz-root__answer-option"
                        key={
                          key(
-                           state.currentQuestionId,
+                           state.currentQuestionIndex,
                            answers |> Quiz_Answer.id,
                          )
                        }>
@@ -88,13 +89,13 @@ let make = (~questions, ~submitTarget, _children) => {
                            type_="radio"
                            id={
                              key(
-                               state.currentQuestionId,
+                               state.currentQuestionIndex,
                                answers |> Quiz_Answer.id,
                              )
                            }
                            name={
                              "Quiz_Root__answer-radio-"
-                             ++ string_of_int(state.currentQuestionId)
+                             ++ string_of_int(state.currentQuestionIndex)
                            }
                            onClick={_event => send(SelectAnswer(answers))}
                          />
@@ -136,7 +137,7 @@ let make = (~questions, ~submitTarget, _children) => {
             </div>
             <div className="quiz-root__question-next-button my-4">
               {
-                switch (state.selectedAnswer, state.currentQuestionId) {
+                switch (state.selectedAnswer, state.currentQuestionIndex) {
                 | (Some(answer), questionId)
                     when
                       answer
@@ -146,16 +147,16 @@ let make = (~questions, ~submitTarget, _children) => {
                   <button
                     className="btn btn-md btn-ghost-primary"
                     onClick=(_event => submitTarget())>
-                    {str("Submit QUIZ")}
+                    {str("Submit Quiz")}
                   </button>
                 | (Some(_otherAnswer), _)
                     when _otherAnswer |> Quiz_Answer.id == correctAnswer =>
                   <button
                     className="btn btn-md btn-ghost-primary"
                     onClick=(_event => send(NextQuestion))>
-                    {str("NEXT")}
+                    {str("Next")}
                   </button>
-                | (Some(_other), _) => str("TRY AGAIN")
+                | (Some(_other), _) => str("Try Again")
                 | (None, _) => str("")
                 }
               }

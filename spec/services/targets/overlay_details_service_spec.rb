@@ -15,10 +15,11 @@ describe Targets::OverlayDetailsService do
   let(:answer_1) { create :answer_option, quiz_question: quiz_question }
   let(:answer_2) { create :answer_option, quiz_question: quiz_question }
 
+  before do
+    quiz_question.update!(correct_answer: answer_2)
+  end
+
   describe '#all_details' do
-    before do
-      quiz_question.update!(correct_answer: answer_2)
-    end
     it 'returns the founder statuses, latest event, latest feedback and quiz' do
       founder_statuses = [{ id: founder_1.id, status: :complete }, { id: founder_2.id, status: :pending }]
 
@@ -38,13 +39,14 @@ describe Targets::OverlayDetailsService do
       }
 
       quiz_questions = [{
-        id: 0,
+        index: 0,
         question: quiz_question.question,
         description: quiz_question.description,
         correct_answer_id: answer_2.id,
         answer_options: [
-          { id: answer_2.id, value: answer_2.value, hint: answer_2.hint },
-          { id: answer_1.id, value: answer_1.value, hint: answer_1.hint }
+
+          { id: answer_1.id, value: answer_1.value, hint: answer_1.hint },
+          { id: answer_2.id, value: answer_2.value, hint: answer_2.hint }
         ]
       }]
 

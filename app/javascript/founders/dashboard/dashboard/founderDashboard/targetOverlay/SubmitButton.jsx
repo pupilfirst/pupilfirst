@@ -14,7 +14,7 @@ export default class SubmitButton extends React.Component {
 
   submitButtonText() {
     if (this.props.target.has_quiz) {
-      return "Take QUIZ";
+      return "Take Quiz";
     } else if (this.props.target.call_to_action) {
       return this.props.target.call_to_action;
     } else if (this.canBeVerifiedAutomatically()) {

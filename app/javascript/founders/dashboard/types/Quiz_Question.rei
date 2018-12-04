@@ -2,7 +2,7 @@ type t;
 
 let decode: Js.Json.t => t;
 
-let id: t => int;
+let index: t => int;
 
 let question: t => string;
 

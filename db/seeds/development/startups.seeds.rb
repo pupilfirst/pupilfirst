@@ -28,7 +28,6 @@ after 'development:levels', 'development:categories' do
     presentation_link: 'https://slideshare.net/superstartupdeck',
     legal_registered_name: 'SuperTech Ltd',
     startup_categories: [StartupCategory.first, StartupCategory.second],
-    email: 'help@superstartup.in',
     twitter_link: 'https://twitter.com/superstartup',
     facebook_link: 'https://facebook.com/superstartup',
     product_video_link: 'https://www.youtube.com/ourvideo',

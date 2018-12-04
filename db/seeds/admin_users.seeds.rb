@@ -6,6 +6,5 @@ user = User.where(email: 'admin@example.com').first_or_create!
 
 AdminUser.where(user: user).first_or_create!(
   fullname: 'Development Admin',
-  email: user.email,
   admin_type: 'superadmin'
 )

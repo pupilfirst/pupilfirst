@@ -229,6 +229,7 @@ class Founder < ApplicationRecord
     return 'Write a one-liner about yourself!' if about.blank?
     return 'Upload your legal ID proof!' if identification_proof.blank?
   end
+
   # rubocop:enable Metrics/CyclomaticComplexity
 
   # Should we give the founder a tour of the founder dashboard? If so, we shouldn't give it again.
@@ -272,7 +273,8 @@ class Founder < ApplicationRecord
     required_fields.all? { |field| self[field].present? }
   end
 
-  delegate level_zero?: :startup
+  delegate :level_zero?, to: :startup
+  delegate :email, to: :user
 
   def subscription_active?
     startup&.subscription_active?

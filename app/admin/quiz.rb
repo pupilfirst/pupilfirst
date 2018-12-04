@@ -10,7 +10,7 @@ ActiveAdmin.register Quiz do
 
     f.inputs do
       f.input :title
-      f.input :target, as: :select
+      f.input :target, as: :select, collection: Target.where(submittability: Target::SUBMITTABILITY_AUTO_VERIFY).map { |u| [u.title.to_s, u.id] }
     end
     f.actions
   end

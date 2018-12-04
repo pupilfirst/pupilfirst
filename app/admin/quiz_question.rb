@@ -1,7 +1,7 @@
 ActiveAdmin.register QuizQuestion do
   include DisableIntercom
 
-  permit_params :question, :description, :quiz_id, answer_options_attributes: %i[id value correct_answer hint _destroy]
+  permit_params :question, :description, :correct_answer_id, :quiz_id, answer_options_attributes: %i[id value hint _destroy]
 
   menu parent: 'Targets'
 
@@ -9,9 +9,7 @@ ActiveAdmin.register QuizQuestion do
     selectable_column
     column :question
     column :quiz
-    column :correct_answer do |question|
-      question.correct_answer.value if question.correct_answer.present?
-    end
+    column :correct_answer
     actions
   end
 
@@ -23,12 +21,12 @@ ActiveAdmin.register QuizQuestion do
       f.input :question
       f.input :description
       f.input :quiz
+      f.input :correct_answer, as: :select, collection: AnswerOption.where(quiz_question: f.object).map { |u| [u.value.to_s, u.id] }
     end
 
     f.inputs 'Answer Options' do
       f.has_many :answer_options, heading: false, allow_destroy: true, new_record: 'Add Option' do |o|
         o.input :value
-        o.input :correct_answer
         o.input :hint
       end
     end
@@ -39,9 +37,7 @@ ActiveAdmin.register QuizQuestion do
     attributes_table do
       row :question
       row :quiz
-      row :correct_answer do |question|
-        question.correct_answer.value if question.correct_answer.present?
-      end
+      row :correct_answer
       row :answer_options do |question|
         ul do
           question.answer_options.pluck(:value).each do |answer|

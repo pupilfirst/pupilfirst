@@ -36,7 +36,11 @@ class TimelineEventsController < ApplicationController
 
     if !timeline_event.reviewed?
       begin
-        TimelineEvents::VerificationService.new(timeline_event).update_status(grade: params[:grade])
+        # TODO: Probably replace this with a better encoder on the front-end.
+        grades = params[:evaluation].each_with_object({}) do |entry, result|
+          result[entry['criterionId'].to_i] = entry['grade'].to_i
+        end
+        TimelineEvents::GradingService.new(timeline_event).grade(current_coach, grades)
         render json: { error: nil }, status: :ok
       rescue TimelineEvents::ReviewInterfaceException => e
         render json: { error: e.message, timelineEvent: nil }.to_json, status: :unprocessable_entity

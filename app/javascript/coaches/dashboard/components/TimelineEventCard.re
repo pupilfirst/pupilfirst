@@ -107,7 +107,8 @@ let make =
   render: _self =>
     <div className="timeline-event-card__container">
       <div className="timeline-event-card__body row">
-        <div className="timeline-event-card__header d-flex align-items-center w-100 p-3">
+        <div
+          className="timeline-event-card__header d-flex align-items-center w-100 p-3">
           <div>
             <h5
               className="timeline-event-card__header-title font-semibold mb-1">
@@ -146,18 +147,19 @@ let make =
             </div>
             (timelineEvent |> attachmentsSection)
           </div>
-          <FeedbackForm timelineEvent replaceTimelineEvent authenticityToken />
         </div>
         <div
           className=(
-            "col-md-6 d-flex align-items-center timeline-event-card__review-box js-timeline-event-card__review-box-"
+            "col-md-6 d-flex flex-column align-items-center timeline-event-card__review-box js-timeline-event-card__review-box-"
             ++ (timelineEvent |> TimelineEvent.id |> string_of_int)
           )>
           (
             timelineEvent |> TimelineEvent.evaluation |> Grading.pending ?
               <EvaluationForm
-                evaluation=(timelineEvent |> TimelineEvent.evaluation)
+                timelineEvent
                 gradeLabels
+                replaceTimelineEvent
+                authenticityToken
               /> :
               <div className="mx-auto text-center">
                 <ReviewStatusBadge
@@ -183,6 +185,7 @@ let make =
                 <UndoReviewButton timelineEvent replaceTimelineEvent />
               </div>
           )
+          <FeedbackForm timelineEvent replaceTimelineEvent authenticityToken />
         </div>
       </div>
     </div>,

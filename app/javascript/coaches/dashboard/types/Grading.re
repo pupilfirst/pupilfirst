@@ -44,3 +44,17 @@ let updateGrade = (newGrade, t) => {
   criterionName: t.criterionName,
   grade: Some(newGrade),
 };
+
+let gradingEncoder = grading =>
+  Json.Encode.(
+    object_([
+      ("criterionId", grading.criterionId |> int),
+      (
+        "grade",
+        switch (grading.grade) {
+        | Some(grade) => grade |> int
+        | None => null
+        },
+      ),
+    ])
+  );

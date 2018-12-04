@@ -17,3 +17,5 @@ let criterionId: t => int;
 let criterionName: t => string;
 
 let updateGrade: (int, t) => t;
+
+let gradingEncoder: t => Js.Json.t;

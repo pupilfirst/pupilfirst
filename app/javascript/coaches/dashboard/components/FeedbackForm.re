@@ -129,7 +129,7 @@ let make =
   render: ({state, send}) => {
     let updateFeedbackCB = updateFeedback(send);
     let latestFeedback = timelineEvent |> TimelineEvent.latestFeedback;
-    <div className="feedback-form__container mt-2">
+    <div className="feedback-form__container my-2 w-100">
       (
         switch (latestFeedback) {
         | None => ReasonReact.null

@@ -56,7 +56,7 @@ describe Targets::OverlayDetailsService do
       expect(all_details[:founderStatuses]).to match_array(founder_statuses)
       expect(all_details[:latestEvent]).to eq(event)
       expect(all_details[:latestFeedback]).to eq(feedback)
-      expect(all_details[:quizQuestions]).to eq(quiz_questions)
+      expect(all_details[:quizQuestions]).to match_array(quiz_questions)
     end
   end
 end

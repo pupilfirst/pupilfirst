@@ -190,7 +190,7 @@ feature 'Founder Dashboard' do
   end
 
   context "when a founder's course has an archived target group in it" do
-    let!(:target_group_4_archived) { create :target_group, level: level_4, milestone: true, track: product_track, description: Faker::Lorem.sentence, archived: true }
+    let!(:target_group_4_archived) { create :target_group, :archived, level: level_4, milestone: true, track: product_track, description: Faker::Lorem.sentence }
 
     scenario 'archived target groups are not displayed', js: true do
       sign_in_user founder.user, referer: student_dashboard_path

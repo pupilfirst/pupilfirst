@@ -59,14 +59,19 @@ let handleClick = (gradeSelectCB, grading, newGrade) =>
   | Some(callBack) => callBack(grading |> Grading.updateGrade(newGrade))
   };
 
-let gradeBarPill = (gradeLabel, grading, gradeSelectCB) => {
+let gradeBarPill = (gradeLabel, grading, gradeSelectCB, passGrade) => {
   let myGrade = gradeLabel |> GradeLabel.grade;
   <div
     key=(myGrade |> string_of_int)
     role="button"
     onClick=(_event => handleClick(gradeSelectCB, grading, myGrade))
     className=(
-      gradePillClasses(grading |> Grading.grade, 2, myGrade, gradeSelectCB)
+      gradePillClasses(
+        grading |> Grading.grade,
+        passGrade,
+        myGrade,
+        gradeSelectCB,
+      )
     )>
     (
       switch (gradeSelectCB) {
@@ -77,25 +82,25 @@ let gradeBarPill = (gradeLabel, grading, gradeSelectCB) => {
   </div>;
 };
 
-let gradeBarPanel = (grading, gradeLabels, gradeSelectCB) =>
+let gradeBarPanel = (grading, gradeLabels, gradeSelectCB, passGrade) =>
   <div className="btn-group grade-bar__track d-flex" role="group">
     (
       gradeLabels
       |> List.map(gradeLabel =>
-           gradeBarPill(gradeLabel, grading, gradeSelectCB)
+           gradeBarPill(gradeLabel, grading, gradeSelectCB, passGrade)
          )
       |> Array.of_list
       |> ReasonReact.array
     )
   </div>;
 
-let make = (~grading, ~gradeLabels, ~gradeSelectCB=?, _children) => {
+let make = (~grading, ~gradeLabels, ~gradeSelectCB=?, ~passGrade, _children) => {
   ...component,
   render: _self =>
     <div
       className="btn-toolbar grade-bar__container flex-column mb-4"
       role="toolbar">
       (gradeBarHeader(grading, gradeLabels))
-      (gradeBarPanel(grading, gradeLabels, gradeSelectCB))
+      (gradeBarPanel(grading, gradeLabels, gradeSelectCB, passGrade))
     </div>,
 };

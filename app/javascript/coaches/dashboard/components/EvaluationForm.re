@@ -102,6 +102,7 @@ let make =
       ~gradeLabels,
       ~replaceTimelineEvent,
       ~authenticityToken,
+      ~passGrade,
       _children,
     ) => {
   ...component,
@@ -131,6 +132,7 @@ let make =
                grading
                gradeLabels
                gradeSelectCB=(newGrading => send(UpdateGrading(newGrading)))
+               passGrade
              />
            )
         |> Array.of_list

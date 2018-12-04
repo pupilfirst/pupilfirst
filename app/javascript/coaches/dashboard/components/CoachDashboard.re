@@ -90,6 +90,7 @@ let make =
             notAcceptedIconUrl
             verifiedIconUrl
             gradeLabels
+            passGrade
           />
         </div>
       </div>

@@ -101,6 +101,7 @@ let make =
       ~notAcceptedIconUrl,
       ~verifiedIconUrl,
       ~gradeLabels,
+      ~passGrade,
       _children,
     ) => {
   ...component,
@@ -160,6 +161,7 @@ let make =
                 gradeLabels
                 replaceTimelineEvent
                 authenticityToken
+                passGrade
               /> :
               <div className="mx-auto text-center">
                 <ReviewStatusBadge
@@ -177,6 +179,7 @@ let make =
                          key=(grading |> Grading.criterionId |> string_of_int)
                          grading
                          gradeLabels
+                         passGrade
                        />
                      )
                   |> Array.of_list

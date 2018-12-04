@@ -11,6 +11,7 @@ let make =
       ~notAcceptedIconUrl,
       ~verifiedIconUrl,
       ~gradeLabels,
+      ~passGrade,
       _children,
     ) => {
   ...component,
@@ -28,6 +29,7 @@ let make =
                notAcceptedIconUrl
                verifiedIconUrl
                gradeLabels
+               passGrade
              />
            )
         |> Array.of_list

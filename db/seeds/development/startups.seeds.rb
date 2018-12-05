@@ -81,5 +81,5 @@ after 'development:levels', 'development:categories' do
   )
 
   # Add a faculty to iOS Course.
-  ios_startup.faculty << Faculty.find_by(email: 'ioscoach@example.com')
+  ios_startup.faculty << Faculty.find_by(name: 'iOS Coach')
 end

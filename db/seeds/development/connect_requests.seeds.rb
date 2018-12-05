@@ -3,7 +3,7 @@ require_relative 'helper'
 after 'development:connect_slots', 'development:startups' do
   puts 'Seeding connect_requests'
 
-  mickey = Faculty.find_by(email: 'mickeymouse@example.com')
+  mickey = Faculty.find_by(name: 'Sanjay Vijayakumar')
   super_startup = Startup.find_by(product_name: 'Super Product')
 
   past_slots = mickey.connect_slots.where('slot_at < ?', Time.now)

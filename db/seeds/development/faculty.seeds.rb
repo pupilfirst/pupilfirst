@@ -20,7 +20,6 @@ after 'development:levels' do
 
   Faculty.create!(
     name: 'Vishnu Gopal',
-    email: 'minniemouse@example.com',
     title: 'CTO',
     key_skills: Faker::Lorem.words(3).join(', '),
     linkedin_url: 'https://linkedin.com',
@@ -54,9 +53,8 @@ after 'development:levels' do
   Faculty.create!(
     name: 'iOS Coach',
     title: 'Coaching Expert',
-    email: 'ioscoach@example.com',
     category: 'developer_coaches',
     image: Rails.root.join('spec/support/uploads/faculty/mickey_mouse.jpg').open,
-    user: User.create(email: 'figo@example.com')
+    user: User.create(email: 'ioscoach@example.com')
   )
 end

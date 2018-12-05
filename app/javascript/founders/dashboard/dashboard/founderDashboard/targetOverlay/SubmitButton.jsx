@@ -62,10 +62,10 @@ export default class SubmitButton extends React.Component {
   }
 
   submitButtonContents() {
-    return [
-      <i className={this.submitButtonIconClass()} aria-hidden="true" />,
+    return (
+      <i className={this.submitButtonIconClass()} aria-hidden="true" /> ,
       <span>{this.submitButtonText()}</span>
-    ];
+    );
   }
 
   submitButtonClasses() {

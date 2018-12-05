@@ -83,20 +83,22 @@ module Targets
           index: index,
           question: question.question,
           description: question.description,
-          correct_answer_id: question.correct_answer_id,
-          answer_options: answer_options(question)
+          correctAnswer: answer_fields(question.correct_answer),
+          incorrectOptions: incorrect_options(question).map { |answer| answer_fields(answer) }
         }
       end
     end
 
-    def answer_options(question)
-      question.answer_options.map do |answer|
-        {
-          id: answer.id,
-          value: answer.value,
-          hint: answer.hint
-        }
-      end
+    def incorrect_options(question)
+      question.answer_options.where.not(id: question.correct_answer.id)
+    end
+
+    def answer_fields(answer)
+      {
+        id: answer.id,
+        value: answer.value,
+        hint: answer.hint
+      }
     end
   end
 end

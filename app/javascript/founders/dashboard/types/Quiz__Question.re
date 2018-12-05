@@ -2,8 +2,8 @@ type t = {
   index: int,
   question: string,
   description: option(string),
-  correctAnswerId: int,
-  answer_options: list(Quiz__Answer.t),
+  correctAnswer: Quiz__Answer.t,
+  incorrectOptions: list(Quiz__Answer.t),
 };
 
 let decode = json =>
@@ -12,9 +12,9 @@ let decode = json =>
     question: json |> field("question", string),
     description:
       json |> field("description", nullable(string)) |> Js.Null.toOption,
-    correctAnswerId: json |> field("correct_answer_id", int),
-    answer_options:
-      json |> field("answer_options", list(Quiz__Answer.decode)),
+    correctAnswer: json |> field("correctAnswer", Quiz__Answer.decode),
+    incorrectOptions:
+      json |> field("incorrectOptions", list(Quiz__Answer.decode)),
   };
 
 let index = t => t.index;
@@ -23,6 +23,19 @@ let question = t => t.question;
 
 let description = t => t.description;
 
-let correctAnswerId = t => t.correctAnswerId;
+let correctAnswer = t => t.correctAnswer;
 
-let answer_options = t => t.answer_options;
+let answerOptions = t => [t.correctAnswer, ...t.incorrectOptions];
+
+let lastQuestion = questions => {
+  let maxIndex =
+    questions
+    |> List.sort((q1, q2) => q1.index - q2.index)
+    |> List.rev
+    |> List.hd
+    |> index;
+  questions |> List.find(q => q.index == maxIndex);
+};
+
+let nextQuestion = (question, questions) =>
+  questions |> List.find(q => q.index == question.index + 1);

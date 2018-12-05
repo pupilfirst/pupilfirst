@@ -6,29 +6,26 @@ type submitTargetFunction = unit => unit;
 
 type props = {
   questions: list(Quiz__Question.t),
-  submitTarget: submitTargetFunction,
+  submitTargetCB: submitTargetFunction,
 };
 
 type state = {
-  currentQuestionIndex: int,
+  selectedQuestion: Quiz__Question.t,
   selectedAnswer: option(Quiz__Answer.t),
 };
 
 type action =
-  | NextQuestion
+  | SelectQuestion(Quiz__Question.t)
   | SelectAnswer(Quiz__Answer.t);
 
 let component = ReasonReact.reducerComponent("Quiz");
 
 let str = ReasonReact.string;
 
-let questionDetails = (index, questions) =>
-  questions |> List.find(question => question |> Quiz__Question.index == index);
-
 let hintOfSelectedAnswer = selectedAnswer =>
   switch (selectedAnswer |> Quiz__Answer.hint) {
-  | Some(hint) => str(hint)
-  | None => str("")
+  | Some(hint) => hint |> str
+  | None => ReasonReact.null
   };
 
 let key = (questionId, answerId) =>
@@ -40,24 +37,23 @@ let descriptionOfSelectedQuestion = selectedAnswer =>
   | None => str("")
   };
 
-let make = (~questions, ~submitTarget, _children) => {
+let make = (~questions, ~submitTargetCB, _children) => {
   ...component,
-  initialState: () => {currentQuestionIndex: 0, selectedAnswer: None},
+  initialState: () => {
+    selectedQuestion: questions |> List.hd,
+    selectedAnswer: None,
+  },
   reducer: (action, state) =>
     switch (action) {
-    | NextQuestion =>
-      ReasonReact.Update({
-        currentQuestionIndex: state.currentQuestionIndex + 1,
-        selectedAnswer: None,
-      })
-    | SelectAnswer(answer) =>
-      ReasonReact.Update({...state, selectedAnswer: Some(answer)})
+    | SelectQuestion(selectedQuestion) =>
+      ReasonReact.Update({selectedQuestion, selectedAnswer: None})
+    | SelectAnswer(selectedAnswer) =>
+      ReasonReact.Update({...state, selectedAnswer: Some(selectedAnswer)})
     },
   render: ({state, send}) => {
     let totalNumberOfQuestions = questions |> List.length;
-    let currentQuestion =
-      questionDetails(state.currentQuestionIndex, questions);
-    let correctAnswer = currentQuestion |> Quiz__Question.correctAnswerId;
+    let currentQuestion = state.selectedQuestion;
+    let correctAnswer = currentQuestion |> Quiz__Question.correctAnswer;
     <div className="quiz-root">
       <div className="col-md-12 quiz-root__header-text">
         <h2> (str("Complete the QUIZ")) </h2>
@@ -74,32 +70,22 @@ let make = (~questions, ~submitTarget, _children) => {
             <div className="answer_options">
               (
                 currentQuestion
-                |> Quiz__Question.answer_options
-                |> List.map(answers =>
+                |> Quiz__Question.answerOptions
+                |> List.map(answerOption =>
                      <span
                        className="quiz-root__answer-option"
-                       key=(
-                         key(
-                           state.currentQuestionIndex,
-                           answers |> Quiz__Answer.id,
-                         )
-                       )>
+                       key=(answerOption |> Quiz__Answer.id |> string_of_int)>
                        <label>
                          <input
                            type_="radio"
                            id=(
-                             key(
-                               state.currentQuestionIndex,
-                               answers |> Quiz__Answer.id,
-                             )
+                             answerOption |> Quiz__Answer.id |> string_of_int
                            )
-                           name=(
-                             "Quiz_Root__answer-radio-"
-                             ++ string_of_int(state.currentQuestionIndex)
+                           onClick=(
+                             _event => send(SelectAnswer(answerOption))
                            )
-                           onClick=(_event => send(SelectAnswer(answers)))
                          />
-                         (answers |> Quiz__Answer.value |> str)
+                         (answerOption |> Quiz__Answer.value |> str)
                        </label>
                      </span>
                    )
@@ -114,7 +100,7 @@ let make = (~questions, ~submitTarget, _children) => {
             <div className="quiz-root__answer-result">
               (
                 switch (state.selectedAnswer) {
-                | Some(answer) when answer |> Quiz__Answer.id == correctAnswer =>
+                | Some(answer) when answer == correctAnswer =>
                   <span className="correct-answer">
                     (str("Correct Answer"))
                   </span>
@@ -136,23 +122,30 @@ let make = (~questions, ~submitTarget, _children) => {
             </div>
             <div className="quiz-root__question-next-button my-4">
               (
-                switch (state.selectedAnswer, state.currentQuestionIndex) {
-                | (Some(answer), questionId)
+                switch (state.selectedAnswer, state.selectedQuestion) {
+                | (Some(answer), question)
                     when
-                      answer
-                      |> Quiz__Answer.id == correctAnswer
-                      && questionId >= totalNumberOfQuestions
-                      - 1 =>
+                      answer == correctAnswer
+                      && question == (questions |> Quiz__Question.lastQuestion) =>
                   <button
                     className="btn btn-md btn-ghost-primary"
-                    onClick=(_event => submitTarget())>
+                    onClick=(_event => submitTargetCB())>
                     (str("Submit Quiz"))
                   </button>
-                | (Some(_otherAnswer), _)
-                    when _otherAnswer |> Quiz__Answer.id == correctAnswer =>
+                | (Some(_otherAnswer), _) when _otherAnswer == correctAnswer =>
                   <button
                     className="btn btn-md btn-ghost-primary"
-                    onClick=(_event => send(NextQuestion))>
+                    onClick=(
+                      _event =>
+                        send(
+                          SelectQuestion(
+                            questions
+                            |> Quiz__Question.nextQuestion(
+                                 state.selectedQuestion,
+                               ),
+                          ),
+                        )
+                    )>
                     (str("Next"))
                   </button>
                 | (Some(_other), _) => str("Try Again")
@@ -177,7 +170,7 @@ let asSubmitTargetFunction = json =>
 let decode = json =>
   Json.Decode.{
     questions: json |> field("quizQuestions", list(Quiz__Question.decode)),
-    submitTarget: json |> field("submitTarget", asSubmitTargetFunction),
+    submitTargetCB: json |> field("submitTargetCB", asSubmitTargetFunction),
   };
 
 let jsComponent =
@@ -187,7 +180,7 @@ let jsComponent =
       let props = jsProps |> decode;
       make(
         ~questions=props.questions,
-        ~submitTarget=props.submitTarget,
+        ~submitTargetCB=props.submitTargetCB,
         [||],
       );
     },

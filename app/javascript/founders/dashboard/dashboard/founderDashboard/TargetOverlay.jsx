@@ -91,7 +91,7 @@ export default class TargetOverlay extends React.Component {
     if (this.props.currentLevel == 0) {
       $(".js-founder-dashboard__action-bar-add-event-button").popover("show");
 
-      setTimeout(function() {
+      setTimeout(function () {
         $(".js-founder-dashboard__action-bar-add-event-button").popover("hide");
       }, 3000);
     } else {
@@ -194,7 +194,7 @@ export default class TargetOverlay extends React.Component {
               this.state.quizQuestions && (
                 <QuizComponent
                   quizQuestions={this.state.quizQuestions}
-                  submitTarget={this.autoVerify}
+                  submitTargetCB={this.autoVerify}
                 />
               )}
             <div className="target-overlay__status-badge-block">

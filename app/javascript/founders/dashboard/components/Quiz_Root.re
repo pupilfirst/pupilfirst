@@ -5,28 +5,28 @@ exception DecodeError(string);
 type submitTargetFunction = unit => unit;
 
 type props = {
-  questions: list(Quiz_Question.t),
+  questions: list(Quiz__Question.t),
   submitTarget: submitTargetFunction,
 };
 
 type state = {
   currentQuestionIndex: int,
-  selectedAnswer: option(Quiz_Answer.t),
+  selectedAnswer: option(Quiz__Answer.t),
 };
 
 type action =
   | NextQuestion
-  | SelectAnswer(Quiz_Answer.t);
+  | SelectAnswer(Quiz__Answer.t);
 
 let component = ReasonReact.reducerComponent("Quiz");
 
 let str = ReasonReact.string;
 
 let questionDetails = (index, questions) =>
-  questions |> List.find(question => question |> Quiz_Question.index == index);
+  questions |> List.find(question => question |> Quiz__Question.index == index);
 
 let hintOfSelectedAnswer = selectedAnswer =>
-  switch (selectedAnswer |> Quiz_Answer.hint) {
+  switch (selectedAnswer |> Quiz__Answer.hint) {
   | Some(hint) => str(hint)
   | None => str("")
   };
@@ -35,7 +35,7 @@ let key = (questionId, answerId) =>
   string_of_int(questionId) ++ string_of_int(answerId);
 
 let descriptionOfSelectedQuestion = selectedAnswer =>
-  switch (selectedAnswer |> Quiz_Question.description) {
+  switch (selectedAnswer |> Quiz__Question.description) {
   | Some(description) => str(description)
   | None => str("")
   };
@@ -57,109 +57,108 @@ let make = (~questions, ~submitTarget, _children) => {
     let totalNumberOfQuestions = questions |> List.length;
     let currentQuestion =
       questionDetails(state.currentQuestionIndex, questions);
-    let correctAnswer = currentQuestion |> Quiz_Question.correctAnswerId;
+    let correctAnswer = currentQuestion |> Quiz__Question.correctAnswerId;
     <div className="quiz-root">
       <div className="col-md-12 quiz-root__header-text">
-        <h2> {str("Complete the QUIZ")} </h2>
+        <h2> (str("Complete the QUIZ")) </h2>
       </div>
       <div className="quiz-root__body">
         <div className="col-md-7 quiz-root__question-questions">
           <div className="quiz-root__question-body">
             <div className="quiz-root__question-heading">
-              <h3> {currentQuestion |> Quiz_Question.question |> str} </h3>
+              <h3> (currentQuestion |> Quiz__Question.question |> str) </h3>
             </div>
             <div className=".quiz-root__question-description">
-              <h5> {descriptionOfSelectedQuestion(currentQuestion)} </h5>
+              <h5> (descriptionOfSelectedQuestion(currentQuestion)) </h5>
             </div>
             <div className="answer_options">
-              {
+              (
                 currentQuestion
-                |> Quiz_Question.answer_options
+                |> Quiz__Question.answer_options
                 |> List.map(answers =>
                      <span
                        className="quiz-root__answer-option"
-                       key={
+                       key=(
                          key(
                            state.currentQuestionIndex,
-                           answers |> Quiz_Answer.id,
+                           answers |> Quiz__Answer.id,
                          )
-                       }>
+                       )>
                        <label>
                          <input
                            type_="radio"
-                           id={
+                           id=(
                              key(
                                state.currentQuestionIndex,
-                               answers |> Quiz_Answer.id,
+                               answers |> Quiz__Answer.id,
                              )
-                           }
-                           name={
+                           )
+                           name=(
                              "Quiz_Root__answer-radio-"
                              ++ string_of_int(state.currentQuestionIndex)
-                           }
-                           onClick={_event => send(SelectAnswer(answers))}
+                           )
+                           onClick=(_event => send(SelectAnswer(answers)))
                          />
-                         {answers |> Quiz_Answer.value |> str}
+                         (answers |> Quiz__Answer.value |> str)
                        </label>
                      </span>
                    )
                 |> Array.of_list
                 |> ReasonReact.array
-              }
+              )
             </div>
           </div>
         </div>
         <div className="col-md-5 quiz-root__result-section">
           <div className="quiz-root__question-section">
             <div className="quiz-root__answer-result">
-              {
+              (
                 switch (state.selectedAnswer) {
-                | Some(answer) when answer |> Quiz_Answer.id == correctAnswer =>
+                | Some(answer) when answer |> Quiz__Answer.id == correctAnswer =>
                   <span className="correct-answer">
-                    {str("Correct Answer")}
+                    (str("Correct Answer"))
                   </span>
-
                 | Some(_other) =>
                   <span className="wrong-answer">
-                    {str("Wrong Answer")}
+                    (str("Wrong Answer"))
                   </span>
                 | None => str("")
                 }
-              }
+              )
             </div>
             <div className="quiz-root__answer-hint">
-              {
+              (
                 switch (state.selectedAnswer) {
                 | Some(answer) => hintOfSelectedAnswer(answer)
                 | None => str("")
                 }
-              }
+              )
             </div>
             <div className="quiz-root__question-next-button my-4">
-              {
+              (
                 switch (state.selectedAnswer, state.currentQuestionIndex) {
                 | (Some(answer), questionId)
                     when
                       answer
-                      |> Quiz_Answer.id == correctAnswer
+                      |> Quiz__Answer.id == correctAnswer
                       && questionId >= totalNumberOfQuestions
                       - 1 =>
                   <button
                     className="btn btn-md btn-ghost-primary"
                     onClick=(_event => submitTarget())>
-                    {str("Submit Quiz")}
+                    (str("Submit Quiz"))
                   </button>
                 | (Some(_otherAnswer), _)
-                    when _otherAnswer |> Quiz_Answer.id == correctAnswer =>
+                    when _otherAnswer |> Quiz__Answer.id == correctAnswer =>
                   <button
                     className="btn btn-md btn-ghost-primary"
                     onClick=(_event => send(NextQuestion))>
-                    {str("Next")}
+                    (str("Next"))
                   </button>
                 | (Some(_other), _) => str("Try Again")
                 | (None, _) => str("")
                 }
-              }
+              )
             </div>
           </div>
         </div>
@@ -177,7 +176,7 @@ let asSubmitTargetFunction = json =>
 
 let decode = json =>
   Json.Decode.{
-    questions: json |> field("quizQuestions", list(Quiz_Question.decode)),
+    questions: json |> field("quizQuestions", list(Quiz__Question.decode)),
     submitTarget: json |> field("submitTarget", asSubmitTargetFunction),
   };
 

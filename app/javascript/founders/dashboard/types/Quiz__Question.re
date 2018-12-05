@@ -3,7 +3,7 @@ type t = {
   question: string,
   description: option(string),
   correctAnswerId: int,
-  answer_options: list(Quiz_Answer.t),
+  answer_options: list(Quiz__Answer.t),
 };
 
 let decode = json =>
@@ -14,7 +14,7 @@ let decode = json =>
       json |> field("description", nullable(string)) |> Js.Null.toOption,
     correctAnswerId: json |> field("correct_answer_id", int),
     answer_options:
-      json |> field("answer_options", list(Quiz_Answer.decode)),
+      json |> field("answer_options", list(Quiz__Answer.decode)),
   };
 
 let index = t => t.index;

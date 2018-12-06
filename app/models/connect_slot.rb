@@ -13,7 +13,7 @@ class ConnectSlot < ApplicationRecord
   # Faculty must have an email address and a marked level
   def faculty_must_be_valid
     return if faculty.blank?
-    return if faculty.email.present? && faculty.level.present?
+    return if faculty.email.present?
 
     errors[:faculty] << 'must have email address and level'
   end

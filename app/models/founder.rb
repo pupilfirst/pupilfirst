@@ -2,7 +2,6 @@
 
 class Founder < ApplicationRecord
   extend FriendlyId
-  extend Forwardable
 
   include PrivateFilenameRetrievable
 
@@ -64,7 +63,7 @@ class Founder < ApplicationRecord
   scope :screening_score_above, ->(minimum_score) { where("(screening_data ->> 'score')::int >= ?", minimum_score) }
 
   def self.with_email(email)
-    where('lower(email) = ?', email.downcase).first # rubocop:disable Rails/FindBy
+    User.find_by(email: email).founders.first
   end
 
   def self.ransackable_scopes(_auth)
@@ -158,7 +157,7 @@ class Founder < ApplicationRecord
   end
 
   def name_and_email
-    name + (email? ? ' (' + email + ')' : '')
+    name + (email.present? ? ' (' + email + ')' : '')
   end
 
   def name_and_team
@@ -286,7 +285,7 @@ class Founder < ApplicationRecord
 
   def self.reference_sources
     [
-      'Friend', 'Seniors', '#StartinCollege Event', 'Newspaper/Magazine', 'TV', 'SV.CO Blog', 'Instagram', 'Facebook',
+      'Friend', 'Senriors', '#StartinCollege Event', 'Newspaper/Magazine', 'TV', 'SV.CO Blog', 'Instagram', 'Facebook',
       'Twitter', 'Microsoft Student Partner', 'Other (Please Specify)'
     ]
   end

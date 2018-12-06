@@ -25,7 +25,7 @@ module Founders
     def do_not_reapply
       return if email.blank?
 
-      founder = Founder.with_email(email)
+      founder = Founder.joins(:user).where(users: { email: email }).first
 
       return if founder&.startup.blank?
 

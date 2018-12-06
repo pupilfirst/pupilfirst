@@ -6,10 +6,9 @@ class AdmissionsController < ApplicationController
     @form = if Feature.active?(:admissions, current_user)
       Founders::RegistrationForm.new(Founder.new)
     else
-      ProspectiveApplicants::RegistrationForm.new(Founder.new)
+      ProspectiveApplicants::RegistrationForm.new(ProspectiveApplicant.new)
     end
 
-    @form.prepopulate(current_user) if current_user.present?
     render layout: 'application'
   end
 

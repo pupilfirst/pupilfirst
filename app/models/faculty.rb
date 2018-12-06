@@ -145,13 +145,4 @@ class Faculty < ApplicationRecord
   end
 
   delegate :email, to: :user
-
-  # before_save :find_or_create_user
-  #
-  # def find_or_create_user
-  #   return if email.blank?
-  #
-  #   user = User.with_email(email) || User.create!(email: email)
-  #   self.user = user
-  # end
 end

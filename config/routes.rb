@@ -206,6 +206,9 @@ Rails.application.routes.draw do
   # Apple iOS course at Manipal University landing page
   get 'ios', to: 'home#ios'
 
+  # VR course at Sastra University landing page
+  get 'sastra', to: 'home#sastra'
+
   root 'home#index'
 
   # /slack redirected to /about/slack

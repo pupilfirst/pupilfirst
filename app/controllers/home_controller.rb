@@ -34,6 +34,12 @@ class HomeController < ApplicationController
     end
   end
 
+  def sastra
+    @skip_container = true
+    @hide_layout_header = true
+    render layout: 'application'
+  end
+
   # GET /tour
   def tour
     @skip_container = true

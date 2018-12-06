@@ -37,5 +37,8 @@ let lastQuestion = questions => {
   questions |> List.find(q => q.index == maxIndex);
 };
 
-let nextQuestion = (question, questions) =>
+let nextQuestion = (questions, question) =>
   questions |> List.find(q => q.index == question.index + 1);
+
+let isLastQuestion = (questions, question) =>
+  questions |> lastQuestion == question;

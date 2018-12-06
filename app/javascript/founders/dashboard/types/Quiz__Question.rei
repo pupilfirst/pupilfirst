@@ -12,6 +12,6 @@ let correctAnswer: t => Quiz__Answer.t;
 
 let answerOptions: t => list(Quiz__Answer.t);
 
-let lastQuestion: list(t) => t;
+let nextQuestion: (list(t), t) => t;
 
-let nextQuestion: (t, list(t)) => t;
+let isLastQuestion: (list(t), t) => bool;

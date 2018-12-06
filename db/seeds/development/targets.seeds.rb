@@ -23,7 +23,7 @@ after 'development:target_groups', 'development:faculty' do
   # Random targets and sessions for every level.
   Level.where.not(number: 0).each do |level|
 
-    # Two vanilla targets and one session per target_group.
+    # Two targets and one session per target_group.
     level.target_groups.each do |target_group|
       # Targets.
       2.times do
@@ -31,7 +31,7 @@ after 'development:target_groups', 'development:faculty' do
       end
 
       # Session.
-      target_group.targets.create!(title: Faker::Lorem.sentence, role: Target.valid_roles.sample, session_at: 1.month.ago, description: paragraph, session_by: session_taker_name, video_embed: video_embed, target_action_type: Target::TYPE_ATTEND, resubmittable: false)
+      target_group.targets.create!(title: Faker::Lorem.sentence, role: Target.valid_roles.sample, session_at: 1.month.ago, description: paragraph, video_embed: video_embed, target_action_type: Target::TYPE_ATTEND, resubmittable: false)
     end
   end
 

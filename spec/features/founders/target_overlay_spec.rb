@@ -16,10 +16,10 @@ feature 'Target Overlay' do
   let!(:timeline_event_file) { create :timeline_event_file, timeline_event: timeline_event }
   let(:faculty) { create :faculty, slack_username: 'abcd' }
   let!(:feedback) { create :startup_feedback, timeline_event: timeline_event, startup: startup, faculty: faculty }
-  let!(:resource_file) { create :resource, target: target }
-  let!(:resource_video_file) { create :resource_video_file, target: target }
-  let!(:resource_video_embed) { create :resource_video_embed, target: target }
-  let!(:resource_link) { create :resource_link, target: target }
+  let!(:resource_file) { create :resource, targets: [target] }
+  let!(:resource_video_file) { create :resource_video_file, targets: [target] }
+  let!(:resource_video_embed) { create :resource_video_embed, targets: [target] }
+  let!(:resource_link) { create :resource_link, targets: [target] }
 
   before do
     target.evaluation_criteria << criterion
@@ -83,6 +83,17 @@ feature 'Target Overlay' do
         expect(page).to have_selector(".target-overlay__faculty-avatar > img[src='#{target.faculty.image_url}']")
       end
     end
+
+    context 'when the target is auto verified' do
+      let!(:target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM, submittability: Target::SUBMITTABILITY_AUTO_VERIFY }
+
+      it 'displays submit button with correct label' do
+        find('.founder-dashboard-target-header__headline', text: target.title).click
+
+        # The submit button has 'Mark Complete' label
+        expect(page).to have_selector('button.btn-timeline-builder > span', text: 'MARK COMPLETE')
+      end
+    end
   end
 
   context 'when the founder clicks on a completed target', js: true do
@@ -132,18 +143,6 @@ feature 'Target Overlay' do
         expect(page).to have_selector('.target-overaly__status-title', text: 'Completion Status')
         expect(page).to have_selector('.founder-dashboard__avatar-wrapper', count: 2)
         # TODO: Also check if the right people have the right status. This is now blocked by the bug reported here: https://trello.com/c/P9RNQQ3N
-      end
-    end
-  end
-
-  context 'when the founder clicks on a session', js: true do
-    let!(:target) { create :target, :session, target_group: target_group_1, role: Target::ROLE_TEAM }
-
-    it 'displays the faculty as "session by", instead of as assigner' do
-      find('.founder-dashboard-target-header__headline', text: target.title).click
-
-      within('.target-overlay__faculty-box') do
-        expect(page).to have_text("Session by:\n#{target.faculty.name}")
       end
     end
   end

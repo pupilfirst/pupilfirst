@@ -251,9 +251,6 @@ Rails.application.routes.draw do
     post 'unsubscribe', action: 'email_unsubscribe_webhook'
   end
 
-  # Handle incoming interaction requests from Slack
-  post '/slack/interaction_webhook', to: 'slack#interaction_webhook'
-
   match '/trello/bug_webhook', to: 'trello#bug_webhook', via: :all
 
   post '/heroku/deploy_webhook', to: 'heroku#deploy_webhook'

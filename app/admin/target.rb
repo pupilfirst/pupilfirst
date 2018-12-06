@@ -21,7 +21,6 @@ ActiveAdmin.register Target do
     collection: -> { Target.tag_counts_on(:tags).pluck(:name).sort }
 
   scope :all, default: true
-  scope :vanilla_targets
   scope :sessions
 
   controller do
@@ -119,8 +118,11 @@ ActiveAdmin.register Target do
         t("models.target.role.#{target.role}")
       end
 
-      row :faculty
-      row :session_by
+      row 'Assigned by' do
+        if target.faculty.present?
+          link_to target.faculty.name, admin_faculty_path(target.faculty)
+        end
+      end
 
       row :rubric do
         if target.rubric.present?
@@ -222,7 +224,6 @@ ActiveAdmin.register Target do
       target&.faculty&.name
     end
 
-    column :session_by
     column :youtube_video_id
     column :video_embed
     column :slideshow_embed
@@ -314,7 +315,6 @@ ActiveAdmin.register Target do
       f.input :call_to_action
       f.input :link_to_complete
       f.input :faculty, collection: Faculty.active.order(:name), include_blank: 'No linked faculty'
-      f.input :session_by, placeholder: 'Name of session taker, IF faculty linking is not possible.'
       f.input :target_group, collection: TargetGroup.all.includes(:course, :level).order('courses.name ASC, levels.number ASC')
       f.input :sort_index
       f.input :days_to_complete

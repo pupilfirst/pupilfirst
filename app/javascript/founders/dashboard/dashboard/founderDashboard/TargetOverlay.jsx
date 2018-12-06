@@ -25,6 +25,8 @@ export default class TargetOverlay extends React.Component {
     this.updateDetails = this.updateDetails.bind(this);
     this.openTimelineBuilder = this.openTimelineBuilder.bind(this);
     this.completeTarget = this.completeTarget.bind(this);
+    this.getFaculty = this.getFaculty.bind(this);
+    this.getTarget = this.getTarget.bind(this);
   }
 
   componentDidMount() {
@@ -32,7 +34,7 @@ export default class TargetOverlay extends React.Component {
     document.body.classList.add("scroll-lock");
   }
 
-  target() {
+  getTarget() {
     return _.find(this.props.rootState.targets, ["id", this.props.targetId]);
   }
 
@@ -63,15 +65,15 @@ export default class TargetOverlay extends React.Component {
     return ["passed", "failed"].includes(this.target().status);
   }
 
-  isPending() {
-    return this.target().status === "pending";
+  isPending(target) {
+    return target.status === "pending";
   }
 
   openTimelineBuilder() {
     if (this.props.currentLevel == 0) {
       $(".js-founder-dashboard__action-bar-add-event-button").popover("show");
 
-      setTimeout(function() {
+      setTimeout(function () {
         $(".js-founder-dashboard__action-bar-add-event-button").popover("hide");
       }, 3000);
     } else {
@@ -105,7 +107,20 @@ export default class TargetOverlay extends React.Component {
     });
   }
 
+  getFaculty(target) {
+    const targetFaculty = target.faculty;
+
+    if (_.isObject(targetFaculty)) {
+      return _.find(this.props.rootProps.faculty, faculty => {
+        return faculty.id === targetFaculty.id;
+      });
+    }
+  }
+
   render() {
+    const target = this.getTarget();
+    const faculty = this.getFaculty(target);
+
     return (
       <div className="target-overlay__overlay">
         <div className="target-overlay__container mx-auto">
@@ -130,7 +145,7 @@ export default class TargetOverlay extends React.Component {
             <div className="target-overlay__header d-flex align-items-center justify-content-between">
               <HeaderTitle
                 iconPaths={this.props.iconPaths}
-                target={this.target()}
+                target={target}
                 hasSingleFounder={this.props.hasSingleFounder}
               />
             </div>
@@ -139,7 +154,7 @@ export default class TargetOverlay extends React.Component {
                 <ContentBlock
                   rootProps={this.props.rootProps}
                   iconPaths={this.props.iconPaths}
-                  target={this.target()}
+                  target={target}
                   linkedResources={this.state.linkedResources}
                 />
               </div>
@@ -153,11 +168,7 @@ export default class TargetOverlay extends React.Component {
                     isSubmittable={this.isSubmittable()}
                   />
                 </div>
-                <FacultyBlock
-                  rootProps={this.props.rootProps}
-                  target={this.target()}
-                />
-
+                {_.isObject(faculty) && <FacultyBlock faculty={faculty} />}
                 {this.state.latestEvent && (
                   <TimelineEventPanel
                     event={this.state.latestEvent}
@@ -165,7 +176,7 @@ export default class TargetOverlay extends React.Component {
                   />
                 )}
 
-                {this.target().role === "founder" &&
+                {target.role === "founder" &&
                   !this.props.hasSingleFounder && (
                     <div className="mt-2 mb-4 mx-2 mx-md-4">
                       <h5 className="target-overaly__status-title font-semibold mb-3">
@@ -198,11 +209,11 @@ export default class TargetOverlay extends React.Component {
             </span>
           </button>
           <div className="target-overlay__mobile-submit-button-container pull-right pr-3">
-            {this.isSubmittable() && (
+            {this.isSubmittable(target) && (
               <SubmitButton
                 rootProps={this.props.rootProps}
                 completeTargetCB={this.completeTarget}
-                target={this.target()}
+                target={target}
                 openTimelineBuilderCB={this.props.openTimelineBuilderCB}
               />
             )}
@@ -217,7 +228,7 @@ TargetOverlay.propTypes = {
   rootProps: PropTypes.object.isRequired,
   rootState: PropTypes.object.isRequired,
   setRootState: PropTypes.func.isRequired,
-  target: PropTypes.object,
+  targetId: PropTypes.number.isRequired,
   openTimelineBuilderCB: PropTypes.func,
   founderDetails: PropTypes.array,
   closeCB: PropTypes.func,

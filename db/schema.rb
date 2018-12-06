@@ -56,6 +56,15 @@ ActiveRecord::Schema.define(version: 2018_12_03_082005) do
     t.index ["visit_id"], name: "index_ahoy_events_on_visit_id"
   end
 
+  create_table "answer_options", force: :cascade do |t|
+    t.bigint "quiz_question_id"
+    t.string "value"
+    t.text "hint"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["quiz_question_id"], name: "index_answer_options_on_quiz_question_id"
+  end
+
   create_table "colleges", id: :serial, force: :cascade do |t|
     t.string "name"
     t.string "also_known_as"
@@ -386,6 +395,25 @@ ActiveRecord::Schema.define(version: 2018_12_03_082005) do
     t.string "timestamp"
     t.integer "reaction_to_id"
     t.index ["founder_id"], name: "index_public_slack_messages_on_founder_id"
+  end
+
+  create_table "quiz_questions", force: :cascade do |t|
+    t.string "question"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "quiz_id"
+    t.bigint "correct_answer_id"
+    t.index ["correct_answer_id"], name: "index_quiz_questions_on_correct_answer_id"
+    t.index ["quiz_id"], name: "index_quiz_questions_on_quiz_id"
+  end
+
+  create_table "quizzes", force: :cascade do |t|
+    t.string "title"
+    t.bigint "target_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["target_id"], name: "index_quizzes_on_target_id"
   end
 
   create_table "resources", id: :serial, force: :cascade do |t|
@@ -738,6 +766,7 @@ ActiveRecord::Schema.define(version: 2018_12_03_082005) do
   end
 
   add_foreign_key "admin_users", "users"
+  add_foreign_key "answer_options", "quiz_questions"
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"
   add_foreign_key "connect_slots", "faculty"
@@ -750,6 +779,9 @@ ActiveRecord::Schema.define(version: 2018_12_03_082005) do
   add_foreign_key "levels", "courses"
   add_foreign_key "payments", "founders"
   add_foreign_key "payments", "startups"
+  add_foreign_key "quiz_questions", "answer_options", column: "correct_answer_id"
+  add_foreign_key "quiz_questions", "quizzes"
+  add_foreign_key "quizzes", "targets"
   add_foreign_key "resources", "levels"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"

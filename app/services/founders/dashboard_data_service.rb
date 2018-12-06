@@ -83,7 +83,12 @@ module Founders
       target_data['grades'] = target_status_service.grades(target_id)
       target_data['prerequisites'] = target_status_service.prerequisite_targets(target_id).as_json(only: [:id])
       target_data['auto_verified'] = !target_id.in?(targets_with_criteria)
+      target_data['has_quiz'] = Target.find_by(id: target_data['id']).quiz?
       target_data
+    end
+
+    def target_has_quiz(id)
+      Target.find_by(id: id).quiz?
     end
 
     def target_status_service

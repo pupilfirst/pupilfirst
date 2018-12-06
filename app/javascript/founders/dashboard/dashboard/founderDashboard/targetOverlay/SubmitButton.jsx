@@ -5,18 +5,17 @@ export default class SubmitButton extends React.Component {
   constructor(props) {
     super(props);
     this.openTimelineBuilder = this.openTimelineBuilder.bind(this);
-    this.autoVerify = this.autoVerify.bind(this);
     this.handleClick = this.handleClick.bind(this);
   }
 
   openTimelineBuilder() {
-    this.props.openTimelineBuilderCB(
-      this.props.target.id
-    );
+    this.props.openTimelineBuilderCB(this.props.target.id);
   }
 
   submitButtonText() {
-    if (this.props.target.call_to_action) {
+    if (this.props.target.has_quiz) {
+      return "Take Quiz";
+    } else if (this.props.target.call_to_action) {
       return this.props.target.call_to_action;
     } else if (this.canBeVerifiedAutomatically()) {
       return "Mark COMPLETE";
@@ -28,7 +27,9 @@ export default class SubmitButton extends React.Component {
   }
 
   submitButtonIconClass() {
-    if (this.props.target.call_to_action) {
+    if (this.props.target.has_quiz) {
+      return "fa fa-pencil";
+    } else if (this.props.target.call_to_action) {
       return "fa fa-chevron-circle-right";
     } else if (!this.props.target.link_to_complete) {
       return "fa fa-upload";
@@ -41,32 +42,11 @@ export default class SubmitButton extends React.Component {
     return this.props.target.status === "pending";
   }
 
-  autoVerify() {
-    const autoVerifyEndpoint =
-      "/targets/" + this.props.target.id + "/auto_verify";
-
-    fetch(autoVerifyEndpoint, {
-      method: "POST",
-      credentials: "include",
-      body: JSON.stringify({
-        authenticity_token: this.props.rootProps.authenticityToken
-      }),
-      headers: {
-        "content-type": "application/json"
-      }
-    }).then(() => {
-      new PNotify({
-        title: "Done!",
-        text: "This target has been marked as complete.",
-        type: "success"
-      });
-      this.props.completeTargetCB();
-    });
-  }
-
   handleClick() {
-    if (this.canBeVerifiedAutomatically()) {
-      this.autoVerify();
+    if (this.props.target.has_quiz) {
+      this.props.invertShowQuizCB();
+    } else if (this.canBeVerifiedAutomatically()) {
+      this.props.autoVerifyCB();
     } else {
       this.openTimelineBuilder();
     }
@@ -83,7 +63,7 @@ export default class SubmitButton extends React.Component {
 
   submitButtonContents() {
     return (
-      <i className={this.submitButtonIconClass()} aria-hidden="true" />,
+      <i className={this.submitButtonIconClass()} aria-hidden="true" /> ,
       <span>{this.submitButtonText()}</span>
     );
   }
@@ -121,5 +101,7 @@ SubmitButton.propTypes = {
   rootProps: PropTypes.object.isRequired,
   completeTargetCB: PropTypes.func.isRequired,
   target: PropTypes.object,
-  openTimelineBuilderCB: PropTypes.func
+  openTimelineBuilderCB: PropTypes.func,
+  autoVerifyCB: PropTypes.func.isRequired,
+  invertShowQuizCB: PropTypes.func.isRequired
 };

@@ -46,6 +46,7 @@ class Target < ApplicationRecord
   has_one :level, through: :target_group
   has_one :course, through: :target_group
   has_many :latest_submission_records, dependent: :restrict_with_error
+  has_one :quiz, dependent: :restrict_with_error
 
   acts_as_taggable
   mount_uploader :rubric, RubricUploader
@@ -175,6 +176,10 @@ class Target < ApplicationRecord
 
   def rubric?
     target_evaluation_criteria.exists? || rubric_url.present?
+  end
+
+  def quiz?
+    quiz.present?
   end
 
   # this is included in the target JSONs the DashboardDataService responds with

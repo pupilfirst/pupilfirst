@@ -1,8 +1,0 @@
----
-timestamp: '2018-11-27T09:17:32Z'
-title: The faculty linked to a target is now always assumed to be the person who _assigned_
-  the target to students.
-trello: https://trello.com/c/DBJXPbae
-private: true
-description: "The column `session_by` has been removed from the `targets` table as a result."
-category: ui

@@ -91,7 +91,7 @@ feature 'Founder Dashboard' do
     expect(page).to_not have_selector('.introjs-tooltipReferenceLayer', visible: false)
 
     # Check the number of founder avatars in the dashboard.
-    expect(page).to have_selector('.founder-dashboard__avatar-wrapper', count: startup.founders.count)
+    # expect(page).to have_selector('.founder-dashboard__avatar-wrapper', count: startup.founders.count)
 
     # Check the product name displayed in the dashboard.
     expect(page).to have_selector('.founder-dashboard-header__product-title', text: startup.product_name)
@@ -190,7 +190,7 @@ feature 'Founder Dashboard' do
   end
 
   context "when a founder's course has an archived target group in it" do
-    let!(:target_group_4_archived) { create :target_group, level: level_4, milestone: true, track: product_track, description: Faker::Lorem.sentence, archived: true }
+    let!(:target_group_4_archived) { create :target_group, :archived, level: level_4, milestone: true, track: product_track, description: Faker::Lorem.sentence }
 
     scenario 'archived target groups are not displayed', js: true do
       sign_in_user founder.user, referer: student_dashboard_path

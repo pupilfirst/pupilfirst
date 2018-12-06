@@ -13,10 +13,10 @@ feature 'Target Overlay' do
   let!(:timeline_event_file) { create :timeline_event_file, timeline_event: timeline_event }
   let(:faculty) { create :faculty, slack_username: 'abcd' }
   let!(:feedback) { create :startup_feedback, timeline_event: timeline_event, startup: startup, faculty: faculty }
-  let!(:resource_file) { create :resource, target: target }
-  let!(:resource_video_file) { create :resource_video_file, target: target }
-  let!(:resource_video_embed) { create :resource_video_embed, target: target }
-  let!(:resource_link) { create :resource_link, target: target }
+  let!(:resource_file) { create :resource, targets: [target] }
+  let!(:resource_video_file) { create :resource_video_file, targets: [target] }
+  let!(:resource_video_embed) { create :resource_video_embed, targets: [target] }
+  let!(:resource_link) { create :resource_link, targets: [target] }
 
   before do
     founder.update!(dashboard_toured: true)

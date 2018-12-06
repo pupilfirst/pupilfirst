@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_30_104843) do
+ActiveRecord::Schema.define(version: 2018_12_03_082005) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -383,7 +383,6 @@ ActiveRecord::Schema.define(version: 2018_11_30_104843) do
     t.integer "startup_id"
     t.text "video_embed"
     t.integer "level_id"
-    t.integer "target_id"
     t.string "link"
     t.string "file_content_type"
     t.boolean "archived", default: false
@@ -391,7 +390,6 @@ ActiveRecord::Schema.define(version: 2018_11_30_104843) do
     t.index ["level_id"], name: "index_resources_on_level_id"
     t.index ["slug"], name: "index_resources_on_slug"
     t.index ["startup_id"], name: "index_resources_on_startup_id"
-    t.index ["target_id"], name: "index_resources_on_target_id"
   end
 
   create_table "shortened_urls", id: :serial, force: :cascade do |t|
@@ -552,6 +550,13 @@ ActiveRecord::Schema.define(version: 2018_11_30_104843) do
     t.integer "prerequisite_target_id"
     t.index ["prerequisite_target_id"], name: "index_target_prerequisites_on_prerequisite_target_id"
     t.index ["target_id"], name: "index_target_prerequisites_on_target_id"
+  end
+
+  create_table "target_resources", force: :cascade do |t|
+    t.bigint "target_id", null: false
+    t.bigint "resource_id", null: false
+    t.index ["resource_id"], name: "index_target_resources_on_resource_id"
+    t.index ["target_id", "resource_id"], name: "index_target_resources_on_target_id_and_resource_id", unique: true
   end
 
   create_table "target_skills", force: :cascade do |t|
@@ -742,6 +747,8 @@ ActiveRecord::Schema.define(version: 2018_11_30_104843) do
   add_foreign_key "startups", "states", column: "billing_state_id"
   add_foreign_key "target_groups", "levels"
   add_foreign_key "target_groups", "tracks"
+  add_foreign_key "target_resources", "resources"
+  add_foreign_key "target_resources", "targets"
   add_foreign_key "target_skills", "skills"
   add_foreign_key "target_skills", "targets"
   add_foreign_key "timeline_event_files", "timeline_events"

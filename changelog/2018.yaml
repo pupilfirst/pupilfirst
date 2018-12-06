@@ -1,5 +1,20 @@
 ---
 changelog:
+- timestamp: '2018-12-03T11:45:05Z'
+  changes:
+  - timestamp: '2018-11-27T09:17:32Z'
+    title: The faculty linked to a target is now always assumed to be the person who
+      _assigned_ the target to students.
+    trello: https://trello.com/c/DBJXPbae
+    private: true
+    description: The column `session_by` has been removed from the `targets` table
+      as a result.
+    category: ui
+  - timestamp: '2018-11-26T12:42:50Z'
+    title: Remove english quiz
+    trello: https://trello.com/c/DMfxr4Z3
+    private: true
+    category: feature
 - timestamp: '2018-11-26T10:13:59Z'
   changes:
   - timestamp: '2018-11-26T10:12:12Z'

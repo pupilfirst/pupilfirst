@@ -91,7 +91,7 @@ feature 'Founder Dashboard' do
     expect(page).to_not have_selector('.introjs-tooltipReferenceLayer', visible: false)
 
     # Check the number of founder avatars in the dashboard.
-    expect(page).to have_selector('.founder-dashboard__avatar-wrapper', count: startup.founders.count)
+    # expect(page).to have_selector('.founder-dashboard__avatar-wrapper', count: startup.founders.count)
 
     # Check the product name displayed in the dashboard.
     expect(page).to have_selector('.founder-dashboard-header__product-title', text: startup.product_name)

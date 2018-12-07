@@ -285,7 +285,7 @@ class Founder < ApplicationRecord
 
   def self.reference_sources
     [
-      'Friend', 'Senriors', '#StartinCollege Event', 'Newspaper/Magazine', 'TV', 'SV.CO Blog', 'Instagram', 'Facebook',
+      'Friend', 'Seniors', '#StartinCollege Event', 'Newspaper/Magazine', 'TV', 'SV.CO Blog', 'Instagram', 'Facebook',
       'Twitter', 'Microsoft Student Partner', 'Other (Please Specify)'
     ]
   end

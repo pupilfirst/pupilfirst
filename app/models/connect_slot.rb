@@ -8,16 +8,6 @@ class ConnectSlot < ApplicationRecord
   validates :faculty_id, presence: true
   validates :slot_at, presence: true, uniqueness: { scope: [:faculty_id] }
 
-  validate :faculty_must_be_valid
-
-  # Faculty must have a user
-  def faculty_must_be_valid
-    return if faculty.blank?
-    return if faculty.user.present?
-
-    errors[:faculty] << 'must have a user'
-  end
-
   # Used by AA to form label.
   def display_name
     "#{faculty.name} (#{self})"

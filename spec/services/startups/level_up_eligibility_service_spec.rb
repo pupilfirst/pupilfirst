@@ -5,21 +5,21 @@ describe Startups::LevelUpEligibilityService do
 
   subject { described_class.new(startup, startup.team_lead) }
 
-  let!(:course_1) { create :course }
+  let(:course_1) { create :course }
   let!(:course_2) { create :course }
-  let!(:level_1) { create :level, :one, course: course_1 }
+  let(:level_1) { create :level, :one, course: course_1 }
   let!(:level_2) { create :level, :two, unlock_on: 5.days.ago, course: course_1 }
-  let!(:level_2_s2) { create :level, :two, unlock_on: 2.days.from_now, course: course_2 }
+  let!(:level_2_c2) { create :level, :two, unlock_on: 2.days.from_now, course: course_2 }
   let(:startup) { create :startup, level: level_1 }
   let!(:milestone_targets) { create :target_group, level: level_1, milestone: true }
   let!(:founder_target) { create :target, :for_founders, target_group: milestone_targets }
   let!(:startup_target) { create :target, :for_startup, target_group: milestone_targets }
-  let(:non_milestone_targets) { create :target_group, level: level_1 }
-  let(:non_milestone_founder_target) { create :target, :for_founders, target_group: non_milestone_targets }
-  let(:non_milestone_startup_target) { create :target, :for_startup, target_group: non_milestone_targets }
+  let!(:non_milestone_targets) { create :target_group, level: level_1 }
+  let!(:non_milestone_founder_target) { create :target, :for_founders, target_group: non_milestone_targets }
+  let!(:non_milestone_startup_target) { create :target, :for_startup, target_group: non_milestone_targets }
 
   # Presence of an archived milestone target should not alter results.
-  let!(:archived_startup_target) { create :target, :for_startup, target_group: milestone_targets, archived: true }
+  let!(:archived_startup_target) { create :target, :for_startup, :archived, target_group: milestone_targets }
 
   describe '#eligibility' do
     context 'when startup has submitted all milestone targets' do

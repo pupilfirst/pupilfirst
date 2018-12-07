@@ -41,7 +41,6 @@ class Founder < ApplicationRecord
   has_one :university, through: :college
   has_many :payments, dependent: :restrict_with_error
   belongs_to :resume_file, class_name: 'TimelineEventFile', optional: true
-  has_many :english_quiz_submissions, foreign_key: 'quizee_id', dependent: :destroy, inverse_of: :quizee
   has_many :active_admin_comments, as: :resource, class_name: 'ActiveAdmin::Comment', dependent: :destroy, inverse_of: :resource
   has_many :latest_submission_records, dependent: :restrict_with_error
   has_many :latest_submissions, through: :latest_submission_records, source: :timeline_event

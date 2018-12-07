@@ -1,5 +1,5 @@
 class AnswerOption < ApplicationRecord
-  belongs_to :quiz_question, polymorphic: true, inverse_of: :answer_options
+  belongs_to :quiz_question
 
   validates :value, presence: true
 end

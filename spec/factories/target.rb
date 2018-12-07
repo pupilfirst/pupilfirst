@@ -13,6 +13,11 @@ FactoryBot.define do
     key { nil }
     session_at { nil }
 
+    trait :archived do
+      safe_to_archive { true }
+      archived { true }
+    end
+
     trait :session do
       session_at { 1.week.from_now }
       days_to_complete { nil }
@@ -51,6 +56,10 @@ FactoryBot.define do
       role { Target::ROLE_TEAM }
       key { Target::KEY_ATTEND_INTERVIEW }
       prerequisite_targets { [create(:target, :admissions_cofounder_addition)] }
+    end
+
+    trait :auto_verify do
+      submittability { Target::SUBMITTABILITY_AUTO_VERIFY }
     end
   end
 end

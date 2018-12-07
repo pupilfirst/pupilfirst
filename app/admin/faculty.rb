@@ -1,6 +1,6 @@
 ActiveAdmin.register Faculty do
   permit_params :name, :email, :title, :key_skills, :linkedin_url, :category, :image, :sort_index, :self_service,
-    :current_commitment, :founder_id, :inactive, :about, :commitment, :compensation, :slack_username, :level_id
+    :current_commitment, :inactive, :about, :commitment, :compensation, :slack_username, :level_id
 
   controller do
     include DisableIntercom
@@ -58,7 +58,6 @@ ActiveAdmin.register Faculty do
           end
         end
       end
-      row :founder
       row :user
     end
   end
@@ -84,7 +83,6 @@ ActiveAdmin.register Faculty do
       f.input :commitment, as: :select, collection: commitment_options, label_method: :first, value_method: :last
       f.input :current_commitment
       f.input :compensation, as: :select, collection: Faculty.valid_compensation_values
-      f.input :founder, collection: f.object.founder.present? ? [f.object.founder] : []
       f.input :slack_username
     end
 

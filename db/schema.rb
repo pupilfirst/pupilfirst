@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_23_084641) do
+ActiveRecord::Schema.define(version: 2018_12_03_082005) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -56,14 +56,12 @@ ActiveRecord::Schema.define(version: 2018_11_23_084641) do
     t.index ["visit_id"], name: "index_ahoy_events_on_visit_id"
   end
 
-  create_table "answer_options", id: :serial, force: :cascade do |t|
+  create_table "answer_options", force: :cascade do |t|
+    t.bigint "quiz_question_id"
+    t.string "value"
+    t.text "hint"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "quiz_question_id"
-    t.boolean "correct_answer", default: false
-    t.string "value"
-    t.text "hint_text"
-    t.string "quiz_question_type"
     t.index ["quiz_question_id"], name: "index_answer_options_on_quiz_question_id"
   end
 
@@ -162,26 +160,6 @@ ActiveRecord::Schema.define(version: 2018_11_23_084641) do
     t.datetime "week_start_at"
   end
 
-  create_table "english_quiz_questions", force: :cascade do |t|
-    t.string "question"
-    t.text "explanation"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.date "posted_on"
-  end
-
-  create_table "english_quiz_submissions", force: :cascade do |t|
-    t.bigint "english_quiz_question_id"
-    t.bigint "quizee_id"
-    t.bigint "answer_option_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "quizee_type"
-    t.index ["answer_option_id"], name: "index_english_quiz_submissions_on_answer_option_id"
-    t.index ["english_quiz_question_id"], name: "index_english_quiz_submissions_on_english_quiz_question_id"
-    t.index ["quizee_id"], name: "index_english_quiz_submissions_on_quizee_id"
-  end
-
   create_table "evaluation_criteria", force: :cascade do |t|
     t.string "description"
     t.datetime "created_at", null: false
@@ -206,7 +184,6 @@ ActiveRecord::Schema.define(version: 2018_11_23_084641) do
     t.boolean "self_service"
     t.string "current_commitment"
     t.string "slug"
-    t.integer "founder_id"
     t.boolean "inactive", default: false
     t.text "about"
     t.string "commitment"
@@ -420,6 +397,25 @@ ActiveRecord::Schema.define(version: 2018_11_23_084641) do
     t.index ["founder_id"], name: "index_public_slack_messages_on_founder_id"
   end
 
+  create_table "quiz_questions", force: :cascade do |t|
+    t.string "question"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "quiz_id"
+    t.bigint "correct_answer_id"
+    t.index ["correct_answer_id"], name: "index_quiz_questions_on_correct_answer_id"
+    t.index ["quiz_id"], name: "index_quiz_questions_on_quiz_id"
+  end
+
+  create_table "quizzes", force: :cascade do |t|
+    t.string "title"
+    t.bigint "target_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["target_id"], name: "index_quizzes_on_target_id"
+  end
+
   create_table "resources", id: :serial, force: :cascade do |t|
     t.string "file"
     t.string "thumbnail"
@@ -432,7 +428,6 @@ ActiveRecord::Schema.define(version: 2018_11_23_084641) do
     t.integer "startup_id"
     t.text "video_embed"
     t.integer "level_id"
-    t.integer "target_id"
     t.string "link"
     t.string "file_content_type"
     t.boolean "archived", default: false
@@ -440,7 +435,6 @@ ActiveRecord::Schema.define(version: 2018_11_23_084641) do
     t.index ["level_id"], name: "index_resources_on_level_id"
     t.index ["slug"], name: "index_resources_on_slug"
     t.index ["startup_id"], name: "index_resources_on_startup_id"
-    t.index ["target_id"], name: "index_resources_on_target_id"
   end
 
   create_table "shortened_urls", id: :serial, force: :cascade do |t|
@@ -593,6 +587,7 @@ ActiveRecord::Schema.define(version: 2018_11_23_084641) do
     t.boolean "milestone"
     t.integer "level_id"
     t.bigint "track_id"
+    t.boolean "archived", default: false
     t.index ["level_id"], name: "index_target_groups_on_level_id"
     t.index ["sort_index"], name: "index_target_groups_on_sort_index"
     t.index ["track_id"], name: "index_target_groups_on_track_id"
@@ -603,6 +598,13 @@ ActiveRecord::Schema.define(version: 2018_11_23_084641) do
     t.integer "prerequisite_target_id"
     t.index ["prerequisite_target_id"], name: "index_target_prerequisites_on_prerequisite_target_id"
     t.index ["target_id"], name: "index_target_prerequisites_on_target_id"
+  end
+
+  create_table "target_resources", force: :cascade do |t|
+    t.bigint "target_id", null: false
+    t.bigint "resource_id", null: false
+    t.index ["resource_id"], name: "index_target_resources_on_resource_id"
+    t.index ["target_id", "resource_id"], name: "index_target_resources_on_target_id_and_resource_id", unique: true
   end
 
   create_table "targets", id: :serial, force: :cascade do |t|
@@ -632,7 +634,6 @@ ActiveRecord::Schema.define(version: 2018_11_23_084641) do
     t.string "google_calendar_event_id"
     t.datetime "feedback_asked_at"
     t.datetime "slack_reminders_sent_at"
-    t.string "session_by"
     t.string "call_to_action"
     t.text "rubric_description"
     t.boolean "resubmittable", default: true
@@ -765,11 +766,10 @@ ActiveRecord::Schema.define(version: 2018_11_23_084641) do
   end
 
   add_foreign_key "admin_users", "users"
+  add_foreign_key "answer_options", "quiz_questions"
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"
   add_foreign_key "connect_slots", "faculty"
-  add_foreign_key "english_quiz_submissions", "answer_options"
-  add_foreign_key "english_quiz_submissions", "english_quiz_questions"
   add_foreign_key "faculty", "levels"
   add_foreign_key "founders", "colleges"
   add_foreign_key "founders", "users"
@@ -779,6 +779,9 @@ ActiveRecord::Schema.define(version: 2018_11_23_084641) do
   add_foreign_key "levels", "courses"
   add_foreign_key "payments", "founders"
   add_foreign_key "payments", "startups"
+  add_foreign_key "quiz_questions", "answer_options", column: "correct_answer_id"
+  add_foreign_key "quiz_questions", "quizzes"
+  add_foreign_key "quizzes", "targets"
   add_foreign_key "resources", "levels"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"
@@ -789,6 +792,8 @@ ActiveRecord::Schema.define(version: 2018_11_23_084641) do
   add_foreign_key "target_evaluation_criteria", "targets"
   add_foreign_key "target_groups", "levels"
   add_foreign_key "target_groups", "tracks"
+  add_foreign_key "target_resources", "resources"
+  add_foreign_key "target_resources", "targets"
   add_foreign_key "timeline_event_files", "timeline_events"
   add_foreign_key "timeline_events", "faculty", column: "evaluator_id"
   add_foreign_key "timeline_events", "startups"

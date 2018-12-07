@@ -129,7 +129,8 @@ describe Founders::DashboardDataService do
       status: status,
       submitted_at: target_status_service.submitted_at(target.id),
       grades: target_status_service.grades(target.id),
-      prerequisites: target_status_service.prerequisite_targets(target.id).as_json(only: [:id])
+      prerequisites: target_status_service.prerequisite_targets(target.id).as_json(only: [:id]),
+      has_quiz: target.quiz?
     }
 
     return fields if target.session_at.blank?
@@ -138,6 +139,6 @@ describe Founders::DashboardDataService do
   end
 
   def target_fields
-    %i[id role title description completion_instructions resource_url slideshow_embed video_embed youtube_video_id days_to_complete points_earnable resubmittable session_at session_by link_to_complete archived call_to_action sort_index]
+    %i[id role title description completion_instructions resource_url slideshow_embed days_to_complete points_earnable sort_index video_embed link_to_complete youtube_video_id call_to_action]
   end
 end

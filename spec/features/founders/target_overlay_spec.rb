@@ -16,13 +16,31 @@ feature 'Target Overlay' do
   let!(:timeline_event_file) { create :timeline_event_file, timeline_event: timeline_event }
   let(:faculty) { create :faculty, slack_username: 'abcd' }
   let!(:feedback) { create :startup_feedback, timeline_event: timeline_event, startup: startup, faculty: faculty }
-  let!(:resource_file) { create :resource, target: target }
-  let!(:resource_video_file) { create :resource_video_file, target: target }
-  let!(:resource_video_embed) { create :resource_video_embed, target: target }
-  let!(:resource_link) { create :resource_link, target: target }
+  let!(:resource_file) { create :resource, targets: [target] }
+  let!(:resource_video_file) { create :resource_video_file, targets: [target] }
+  let!(:resource_video_embed) { create :resource_video_embed, targets: [target] }
+  let!(:resource_link) { create :resource_link, targets: [target] }
+
+  # Quiz target
+  let!(:quiz_target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM, submittability: Target::SUBMITTABILITY_AUTO_VERIFY }
+  let!(:quiz) { create :quiz, target: quiz_target }
+  let!(:quiz_question_1) { create :quiz_question, quiz: quiz }
+  let!(:q1_answer_1) { create :answer_option, quiz_question: quiz_question_1 }
+  let!(:q1_answer_2) { create :answer_option, quiz_question: quiz_question_1 }
+  let!(:quiz_question_2) { create :quiz_question, quiz: quiz }
+  let!(:q2_answer_1) { create :answer_option, quiz_question: quiz_question_2 }
+  let!(:q2_answer_2) { create :answer_option, quiz_question: quiz_question_2 }
+  let!(:q2_answer_3) { create :answer_option, quiz_question: quiz_question_2 }
+  let!(:q2_answer_4) { create :answer_option, quiz_question: quiz_question_2 }
+  let!(:quiz_question_3) { create :quiz_question, quiz: quiz }
+  let!(:q3_answer_1) { create :answer_option, quiz_question: quiz_question_3 }
+  let!(:q3_answer_2) { create :answer_option, quiz_question: quiz_question_3 }
 
   before do
     target.evaluation_criteria << criterion
+    quiz_question_1.update!(correct_answer: q1_answer_2)
+    quiz_question_2.update!(correct_answer: q2_answer_4)
+    quiz_question_3.update!(correct_answer: q3_answer_1)
     founder.update!(dashboard_toured: true)
     sign_in_user founder.user, referer: student_dashboard_path
   end
@@ -83,6 +101,17 @@ feature 'Target Overlay' do
         expect(page).to have_selector(".target-overlay__faculty-avatar > img[src='#{target.faculty.image_url}']")
       end
     end
+
+    context 'when the target is auto verified' do
+      let!(:target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM, submittability: Target::SUBMITTABILITY_AUTO_VERIFY }
+
+      it 'displays submit button with correct label' do
+        find('.founder-dashboard-target-header__headline', text: target.title).click
+
+        # The submit button has 'Mark Complete' label
+        expect(page).to have_selector('button.btn-timeline-builder > span', text: 'MARK COMPLETE')
+      end
+    end
   end
 
   context 'when the founder clicks on a completed target', js: true do
@@ -136,18 +165,6 @@ feature 'Target Overlay' do
     end
   end
 
-  context 'when the founder clicks on a session', js: true do
-    let!(:target) { create :target, :session, target_group: target_group_1, role: Target::ROLE_TEAM }
-
-    it 'displays the faculty as "session by", instead of as assigner' do
-      find('.founder-dashboard-target-header__headline', text: target.title).click
-
-      within('.target-overlay__faculty-box') do
-        expect(page).to have_text("Session by:\n#{target.faculty.name}")
-      end
-    end
-  end
-
   context 'when the founder clicks a locked target', js: true do
     context 'when the target has prerequisites' do
       before do
@@ -197,6 +214,46 @@ feature 'Target Overlay' do
         expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > span', text: 'Submitted')
         expect(page).to have_selector('.target-overlay-status-badge-bar__hint', text: "Submitted on #{Date.today.strftime('%b %-e')}")
       end
+    end
+  end
+
+  context 'when the founder submits a quiz target', js: true do
+    it 'changes the status to completed right away' do
+      find('.founder-dashboard-target-header__headline', text: quiz_target.title).click
+
+      # The target must be pending.
+      expect(page).to have_content('Pending')
+      expect(page).to have_content('Follow completion instructions and submit!')
+
+      # Close pnotify first.
+      find('.ui-pnotify').click
+
+      click_button('Take Quiz')
+
+      # Question one
+      choose(q1_answer_1.value)
+      expect(page).to have_content('Wrong Answer')
+      choose(q1_answer_2.value)
+      expect(page).to have_content('Correct Answer')
+      click_button('Next')
+
+      # Question two
+      choose(q2_answer_3.value)
+      expect(page).to have_content('Wrong Answer')
+      choose(q2_answer_4.value)
+      expect(page).to have_content('Correct Answer')
+      click_button('Next')
+
+      # Question three
+      choose(q3_answer_2.value)
+      expect(page).to have_content('Wrong Answer')
+      choose(q3_answer_1.value)
+      expect(page).to have_content('Correct Answer')
+
+      # Submit Quiz
+      click_button('Submit Quiz')
+
+      expect(page).to have_content("Completed on #{Date.today.strftime('%b %-e')}")
     end
   end
 

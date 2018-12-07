@@ -59,7 +59,7 @@ module Founders
     end
 
     def target_groups
-      TargetGroup.joins(:level).where(level: open_levels)
+      TargetGroup.joins(:level).where(level: open_levels, archived: false)
         .as_json(
           only: %i[id name description milestone sort_index],
           include: { track: { only: :id }, level: { only: :id } }
@@ -83,7 +83,12 @@ module Founders
       target_data['grades'] = target_status_service.grades(target_id)
       target_data['prerequisites'] = target_status_service.prerequisite_targets(target_id).as_json(only: [:id])
       target_data['auto_verified'] = !target_id.in?(targets_with_criteria)
+      target_data['has_quiz'] = Target.find_by(id: target_data['id']).quiz?
       target_data
+    end
+
+    def target_has_quiz(id)
+      Target.find_by(id: id).quiz?
     end
 
     def target_status_service
@@ -99,7 +104,7 @@ module Founders
     end
 
     def target_fields
-      %i[id role title description completion_instructions resource_url slideshow_embed video_embed youtube_video_id days_to_complete points_earnable resubmittable session_at session_by link_to_complete archived call_to_action sort_index]
+      %i[id role title description completion_instructions resource_url slideshow_embed video_embed youtube_video_id days_to_complete points_earnable resubmittable session_at link_to_complete call_to_action sort_index]
     end
 
     def targets_with_criteria

@@ -5,7 +5,7 @@ module TimelineEvents
 
     attr_accessor :founder
 
-    property :target_id
+    property :target_id, validates: { presence: true }
     property :description, validates: { presence: true, length: { maximum: MAX_DESCRIPTION_CHARACTERS } }
     property :event_on, validates: { presence: true }
     property :links
@@ -16,6 +16,17 @@ module TimelineEvents
 
     validate :files_should_have_metadata
     validate :target_status_submittable
+    validate :links_should_have_correct_shape
+
+    def links_should_have_correct_shape
+      return if parsed_links.blank?
+
+      invalid_link = parsed_links.find do |link|
+        link[:title].blank? || link[:url].blank? || !link[:url].starts_with?('http')
+      end
+
+      errors[:links] << 'contains invalid links' if invalid_link.present?
+    end
 
     def files_should_have_metadata
       return if files.blank?
@@ -41,8 +52,6 @@ module TimelineEvents
     end
 
     def target_status_submittable
-      return if target.blank?
-
       if target.status(founder).in?([Target::UNSUBMITTABLE_STATUSES])
         errors[:target_id] << 'is not submittable'
       end

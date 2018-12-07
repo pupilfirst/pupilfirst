@@ -157,7 +157,7 @@ class Founder < ApplicationRecord
   end
 
   def name_and_email
-    name + (email.present? ? ' (' + email + ')' : '')
+    name + ' (' + email + ')'
   end
 
   def name_and_team

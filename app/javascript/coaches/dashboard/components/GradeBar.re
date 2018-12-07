@@ -5,13 +5,21 @@ let str = ReasonReact.string;
 let component = ReasonReact.statelessComponent("GradeBar");
 
 let gradeDescription = (gradeLabels, grading) =>
-  (grading |> Grading.criterionName)
-  ++ (
-    switch (grading |> Grading.grade) {
-    | Some(grade) => ": " ++ (grade |> GradeLabel.labelFor(gradeLabels))
-    | None => ""
-    }
-  );
+  <div className="grade-bar__criterion-name">
+    (grading |> Grading.criterionName |> str)
+    (
+      switch (grading |> Grading.grade) {
+      | Some(grade) =>
+        <span>
+          (": " |> str)
+          <span className="grade-bar__grade-label">
+            (grade |> GradeLabel.labelFor(gradeLabels) |> str)
+          </span>
+        </span>
+      | None => ReasonReact.null
+      }
+    )
+  </div>;
 
 let maxGrade = gradeLabels =>
   gradeLabels |> GradeLabel.maxGrade |> string_of_int;
@@ -39,9 +47,7 @@ let gradePillClasses = (gradeReceived, passGrade, pillGrade, callBack) => {
 
 let gradeBarHeader = (grading, gradeLabels) =>
   <div className="grade-bar__header d-flex justify-content-between">
-    <div className="grade-bar__criterion_name">
-      (grading |> gradeDescription(gradeLabels) |> str)
-    </div>
+    (grading |> gradeDescription(gradeLabels))
     (
       switch (grading |> Grading.grade) {
       | None => ReasonReact.null

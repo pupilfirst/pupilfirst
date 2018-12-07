@@ -121,9 +121,11 @@ let make =
     },
   render: ({state, send}) =>
     <div className="d-flex flex-column w-100">
-      <h5 className="timeline-event-card__field-header font-semibold mt-0">
-        ("Grading Sheet:" |> str)
-      </h5>
+      <div className="timeline-event-card__review-box-header py-3 mb-3">
+        <h5 className="timeline-event-card__field-header font-bold my-0">
+          ("Grading Sheet:" |> str)
+        </h5>
+      </div>
       (
         state.evaluation
         |> List.map(grading =>

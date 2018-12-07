@@ -112,7 +112,7 @@ let make =
           className="timeline-event-card__header d-flex align-items-center w-100 p-3">
           <div>
             <h5
-              className="timeline-event-card__header-title font-semibold mb-1">
+              className="timeline-event-card__header-title font-bold mb-1">
               (timelineEvent |> TimelineEvent.title |> str)
             </h5>
             <h6
@@ -137,9 +137,9 @@ let make =
             </h6>
           </div>
         </div>
-        <div className="col-md-6 timeline-event-card__field-container py-3">
+        <div className="col-md-7 timeline-event-card__field-container py-3">
           <h5
-            className="timeline-event-card__field-header font-semibold mt-0 mb-3">
+            className="timeline-event-card__field-header font-bold mt-0 mb-3">
             ("Description:" |> str)
           </h5>
           <div className="timeline-event-card__field-box pl-3">
@@ -151,7 +151,7 @@ let make =
         </div>
         <div
           className=(
-            "col-md-6 d-flex flex-column align-items-center timeline-event-card__review-box js-timeline-event-card__review-box-"
+            "col-md-5 d-flex flex-column align-items-center timeline-event-card__review-box js-timeline-event-card__review-box-"
             ++ (timelineEvent |> TimelineEvent.id |> string_of_int)
           )>
           (
@@ -163,7 +163,7 @@ let make =
                 authenticityToken
                 passGrade
               /> :
-              <div className="mx-auto text-center">
+              <div className="w-100">
                 <ReviewStatusBadge
                   reviewResult=(
                     timelineEvent |> TimelineEvent.getReviewResult(4)

@@ -16,7 +16,7 @@
 }
 
 .timeline-event-card__header-title {
-  font-size: 0.875rem;
+  font-size: 1rem;
 }
 
 .timeline-event-card__header-subtext, .timeline-event-card__footer-subtext {
@@ -60,4 +60,18 @@
 
 .timeline-event-card__review-box {
   border-left: 1px solid $gray-border;
+}
+
+.timeline-event-card__review-box-header {
+  position: relative;
+
+  &::before {
+    position: absolute;
+    content: '';
+    left: -1rem;
+    right: -1rem;
+    bottom: 0;
+    height: 1px;
+    background-color: #e5e5e5;
+  }
 }

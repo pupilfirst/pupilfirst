@@ -2,7 +2,7 @@
   background-color: rgba(244, 244, 244, 0.5);
   border: 1px solid #D8D8D8;
   border-radius: 3rem;
-  box-shadow: 2px 0px 10px 0px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 10px 0px rgba(0, 0, 0, 0.07);
 }
 
 .grade-bar__grade-pill {
@@ -31,11 +31,13 @@
 
 .grade-bar__grade-pill--passed {
   color: white;
+  cursor: default !important;
   background-color: #0F9D58;
 }
 
 .grade-bar__grade-pill--failed {
   color: white;
+  cursor: default !important;
   background-color: #F55151;
 }
 
@@ -51,4 +53,13 @@
     color: white;
   background-color: #F55151;
   }
+}
+
+.grade-bar__criterion_name {
+  font-size: 0.75rem;
+}
+
+.grade-bar__grade {
+  font-size: 0.75rem;
+  color: #999999;
 }

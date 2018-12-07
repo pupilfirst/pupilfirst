@@ -38,7 +38,7 @@ let gradePillClasses = (gradeReceived, passGrade, pillGrade, callBack) => {
 };
 
 let gradeBarHeader = (grading, gradeLabels) =>
-  <div className="grade-bar__header d-flex justify-content-between">
+  <div className="grade-bar__header d-flex justify-content-between pb-2">
     <div className="grade-bar__criterion_name">
       (grading |> gradeDescription(gradeLabels) |> str)
     </div>
@@ -46,7 +46,7 @@ let gradeBarHeader = (grading, gradeLabels) =>
       switch (grading |> Grading.grade) {
       | None => ReasonReact.null
       | Some(grade) =>
-        <div>
+        <div className="grade-bar__grade font-semibold">
           ((grade |> string_of_int) ++ "/" ++ maxGrade(gradeLabels) |> str)
         </div>
       }

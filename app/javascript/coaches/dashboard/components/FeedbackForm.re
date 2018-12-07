@@ -136,7 +136,7 @@ let make =
         | Some(feedback) =>
           <div className="timeline-event-card__field-box p-3">
             <h5
-              className="timeline-event-card__field-header font-semibold mt-0">
+              className="timeline-event-card__field-header font-bold mt-0">
               ("Latest Feedback Sent:" |> str)
             </h5>
             <div dangerouslySetInnerHTML={"__html": feedback} />

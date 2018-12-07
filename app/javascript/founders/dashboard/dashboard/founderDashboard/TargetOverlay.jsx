@@ -7,19 +7,19 @@ import StatusBadgeBar from "./targetOverlay/StatusBadgeBar";
 import SubmitButton from "./targetOverlay/SubmitButton";
 import TimelineEventPanel from "./targetOverlay/TimelineEventPanel";
 import FacultyBlock from "./targetOverlay/FacultyBlock";
-import { jsComponent as QuizComponent } from "../../components/Quiz_Root.bs";
+import { jsComponent as QuizComponent } from "../../components/Quiz__Root.bs";
 
 export default class TargetOverlay extends React.Component {
   constructor(props) {
     super(props);
     this.state = _.merge(
-      { ...props.target },
+      {...props.target},
       {
         latestEvent: null,
         latestFeedback: null,
         linkedResources: null,
         founderStatuses: null,
-        grades: null
+        grades: null,
         quizQuestions: null,
         showQuiz: false
       }
@@ -63,15 +63,15 @@ export default class TargetOverlay extends React.Component {
   }
 
   isReSubmittable() {
-    return this.target().resubmittable && this.resubmissionAllowed();
+    return this.getTarget().resubmittable && this.resubmissionAllowed();
   }
 
   resubmissionAllowed() {
-    return ["passed", "failed"].includes(this.target().status);
+    return ["passed", "failed"].includes(this.getTarget().status);
   }
 
-  isPending(target) {
-    return target.status === "pending";
+  isPending() {
+    return this.getTarget().status === "pending";
   }
 
   openTimelineBuilder() {
@@ -97,7 +97,7 @@ export default class TargetOverlay extends React.Component {
     updatedTargets[targetIndex].status = "passed";
     updatedTargets[targetIndex].submitted_at = new moment();
     const that = this;
-    this.props.setRootState({ targets: updatedTargets }, () => {
+    this.props.setRootState({targets: updatedTargets}, () => {
       that.reloadDetails();
     });
   }
@@ -186,46 +186,47 @@ export default class TargetOverlay extends React.Component {
               />
             </div>
             {this.state.showQuiz &&
-              this.state.quizQuestions && (
-                <QuizComponent
-                  quizQuestions={this.state.quizQuestions}
-                  submitTargetCB={this.autoVerify}
-                />
-              )}
-          </div>
-          <div className="target-overlay__content-wrapper clearfix">
-            <div className="col-md-8 target-overlay__content-leftbar">
-              <ContentBlock
-                rootProps={this.props.rootProps}
-                iconPaths={this.props.iconPaths}
-                target={target}
-                linkedResources={this.state.linkedResources}
+            this.state.quizQuestions && (
+              <QuizComponent
+                quizQuestions={this.state.quizQuestions}
+                submitTargetCB={this.autoVerify}
               />
-            </div>
-            <div className="col-md-4 target-overlay__content-rightbar px-0">
-              <div className="target-overlay__status-badge-block">
-                <StatusBadgeBar
-                  target={this.target()}
+            )}
+            <div className="target-overlay__content-wrapper clearfix">
+              <div className="col-md-8 target-overlay__content-leftbar">
+                <ContentBlock
                   rootProps={this.props.rootProps}
-                  completeTargetCB={this.completeTarget}
-                  openTimelineBuilderCB={this.props.openTimelineBuilderCB}
-                  isSubmittable={this.isSubmittable()}
+                  iconPaths={this.props.iconPaths}
+                  target={target}
+                  linkedResources={this.state.linkedResources}
                 />
               </div>
-              {_.isObject(faculty) && <FacultyBlock faculty={faculty} />}
-              {this.state.latestEvent && (
-                <TimelineEventPanel
-                  event={this.state.latestEvent}
-                  feedback={this.state.latestFeedback}
-                />
-              )}
+              <div className="col-md-4 target-overlay__content-rightbar px-0">
+                <div className="target-overlay__status-badge-block">
+                  <StatusBadgeBar
+                    target={target}
+                    rootProps={this.props.rootProps}
+                    completeTargetCB={this.completeTarget}
+                    openTimelineBuilderCB={this.props.openTimelineBuilderCB}
+                    isSubmittable={this.isSubmittable()}
+                    autoVerifyCB={this.autoVerify}
+                    invertShowQuizCB={this.invertShowQuiz}
+                  />
+                </div>
+                {_.isObject(faculty) && <FacultyBlock faculty={faculty}/>}
+                {this.state.latestEvent && (
+                  <TimelineEventPanel
+                    event={this.state.latestEvent}
+                    feedback={this.state.latestFeedback}
+                  />
+                )}
 
-              {target.role === "founder" &&
+                {target.role === "founder" &&
                 !this.props.hasSingleFounder && (
                   <div className="mt-2 mb-4 mx-2 mx-md-4">
                     <h5 className="target-overaly__status-title font-semibold mb-3">
                       Completion Status:
-                      </h5>
+                    </h5>
                     <FounderStatusPanel
                       founderDetails={this.props.founderDetails}
                       founderStatuses={this.state.founderStatuses}
@@ -233,39 +234,39 @@ export default class TargetOverlay extends React.Component {
                     />
                   </div>
                 )}
+              </div>
+              <div className="target-overlay__mobile-fixed-navbar d-block d-md-none">
+                <button
+                  type="button"
+                  className="target-overlay__mobile-back-button pull-left"
+                  aria-label="Close"
+                  onClick={this.props.closeCB}
+                >
+                  <img
+                    className="target-overlay__mobile-back-button-icon"
+                    src={this.props.iconPaths.backButton}
+                  />
+                  <span className="target-overlay__mobile-back-button-text">
+                    Back
+                  </span>
+                </button>
+                <div className="target-overlay__mobile-submit-button-container pull-right pr-3">
+                  {this.isSubmittable() && (
+                    <SubmitButton
+                      rootProps={this.props.rootProps}
+                      completeTargetCB={this.completeTarget}
+                      target={target}
+                      openTimelineBuilderCB={this.props.openTimelineBuilderCB}
+                      autoVerifyCB={this.autoVerify}
+                      invertShowQuizCB={this.invertShowQuiz}
+                    />
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div className="target-overlay__mobile-fixed-navbar d-block d-md-none">
-        <button
-          type="button"
-          className="target-overlay__mobile-back-button pull-left"
-          aria-label="Close"
-          onClick={this.props.closeCB}
-        >
-          <img
-            className="target-overlay__mobile-back-button-icon"
-            src={this.props.iconPaths.backButton}
-          />
-          <span className="target-overlay__mobile-back-button-text">
-            Back
-            </span>
-        </button>
-        <div className="target-overlay__mobile-submit-button-container pull-right pr-3">
-          {this.isSubmittable(target) && (
-            <SubmitButton
-              rootProps={this.props.rootProps}
-              completeTargetCB={this.completeTarget}
-              target={target}
-              openTimelineBuilderCB={this.props.openTimelineBuilderCB}
-              autoVerifyCB={this.autoVerify}
-              invertShowQuizCB={this.invertShowQuiz}
-            />
-          )}
-        </div>
-      </div>
-      </div >
     );
   }
 }
@@ -281,4 +282,5 @@ TargetOverlay.propTypes = {
   iconPaths: PropTypes.object,
   hasSingleFounder: PropTypes.bool,
   courseEnded: PropTypes.bool
-};
+}
+

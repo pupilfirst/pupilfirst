@@ -64,6 +64,8 @@ export default class StatusBadgeBar extends React.Component {
               completeTargetCB={this.props.completeTargetCB}
               target={this.props.target}
               openTimelineBuilderCB={this.props.openTimelineBuilderCB}
+              autoVerifyCB={this.props.autoVerifyCB}
+              invertShowQuizCB={this.props.invertShowQuizCB}
             />
           )}
         </div>
@@ -128,5 +130,7 @@ StatusBadgeBar.propTypes = {
   rootProps: PropTypes.object,
   completeTargetCB: PropTypes.func,
   openTimlineBuilderCB: PropTypes.func,
-  isSubmittable: PropTypes.bool
+  isSubmittable: PropTypes.bool,
+  autoVerifyCB: PropTypes.func.isRequired,
+  invertShowQuizCB: PropTypes.func.isRequired
 };

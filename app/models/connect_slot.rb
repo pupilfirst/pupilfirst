@@ -10,12 +10,12 @@ class ConnectSlot < ApplicationRecord
 
   validate :faculty_must_be_valid
 
-  # Faculty must have an email address and a marked level
+  # Faculty must have a user
   def faculty_must_be_valid
     return if faculty.blank?
-    return if faculty.email.present?
+    return if faculty.user.present?
 
-    errors[:faculty] << 'must have email address and level'
+    errors[:faculty] << 'must have a user'
   end
 
   # Used by AA to form label.

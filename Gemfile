@@ -113,7 +113,7 @@ gem 'chartkick', '~> 3.0' # Create beautiful charts with one line of JavaScript.
 # Rails assets!
 source 'https://rails-assets.org' do
   gem 'rails-assets-pnotify', '~> 3.0' # Superb notifications library. http://sciactive.github.io/pnotify/
-  gem 'rails-assets-trix', '~> 0.10' # rich text editor from basecamp ( used for eg in the description for targets)
+  gem 'rails-assets-trix', '~> 1.0' # rich text editor from basecamp ( used for eg in the description for targets)
   gem 'rails-assets-bootstrap-tabcollapse', '~> 0.2' # Bootstrap plugin that switches bootstrap tabs component to collapse component for small screens.
   gem 'rails-assets-masonry', '~> 4.1' # Masonry works by placing elements in optimal position based on available vertical space.
   gem 'rails-assets-jquery-stickit', '~> 0.2' # A jQuery plugin provides a sticky header, sidebar or else when scrolling.

@@ -38,7 +38,7 @@ gem 'cancancan', '~> 2.0' # Used to manage administrator types and roles in the 
 gem 'select2-rails', '~> 4.0' # Select2 javascript select box improvement library, using in ActiveAdmin interface.
 
 gem 'bootstrap', '~> 4.1.3' # Official Sass port of Bootstrap.
-gem 'autoprefixer-rails', '~> 8.4' # Autoprefixer for Ruby and Ruby on Rails.
+gem 'autoprefixer-rails', '~> 9.4' # Autoprefixer for Ruby and Ruby on Rails.
 gem 'bootstrap_form', '~> 4.0' # a Rails form builder that makes it super easy to create beautiful-looking forms using Bootstrap 4
 
 # TODO: The zones list in the gem was outdated.

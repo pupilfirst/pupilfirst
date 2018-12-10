@@ -37,7 +37,14 @@ class HomeController < ApplicationController
   def sastra
     @skip_container = true
     @hide_layout_header = true
-    render layout: 'application'
+
+    if current_user.present?
+      flash[:alert] = 'You are already signed in.'
+      redirect_to root_url
+    else
+      @form = UserSignInForm.new(Reform::OpenForm.new)
+      render layout: 'application'
+    end
   end
 
   # GET /tour

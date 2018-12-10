@@ -46,7 +46,7 @@ let gradePillClasses = (gradeReceived, passGrade, pillGrade, callBack) => {
 };
 
 let gradeBarHeader = (grading, gradeLabels) =>
-  <div className="grade-bar__header d-flex justify-content-between pb-2">
+  <div className="grade-bar__header d-flex justify-content-between pb-1">
     (grading |> gradeDescription(gradeLabels))
     (
       switch (grading |> Grading.grade) {
@@ -104,7 +104,7 @@ let make = (~grading, ~gradeLabels, ~gradeSelectCB=?, ~passGrade, _children) => 
   ...component,
   render: _self =>
     <div
-      className="btn-toolbar grade-bar__container flex-column mb-4"
+      className="btn-toolbar grade-bar__container flex-column mb-3"
       role="toolbar">
       (gradeBarHeader(grading, gradeLabels))
       (gradeBarPanel(grading, gradeLabels, gradeSelectCB, passGrade))

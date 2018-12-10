@@ -151,7 +151,7 @@ let make =
         </div>
         <div
           className=(
-            "col-md-5 d-flex flex-column align-items-center timeline-event-card__review-box js-timeline-event-card__review-box-"
+            "col-md-5 d-flex flex-column align-items-center timeline-event-card__review-box p-0 js-timeline-event-card__review-box-"
             ++ (timelineEvent |> TimelineEvent.id |> string_of_int)
           )>
           (

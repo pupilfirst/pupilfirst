@@ -129,7 +129,7 @@ let make =
   render: ({state, send}) => {
     let updateFeedbackCB = updateFeedback(send);
     let latestFeedback = timelineEvent |> TimelineEvent.latestFeedback;
-    <div className="feedback-form__container my-2 w-100">
+    <div className="feedback-form__container mt-3 w-100">
       (
         switch (latestFeedback) {
         | None => ReasonReact.null
@@ -169,7 +169,7 @@ let make =
           </div>;
         } else {
           <button
-            className="btn btn-ghost-secondary mt-2"
+            className="btn btn-link font-semibold feedback-form__button w-100 p-3"
             onClick=(toggleForm(send))>
             <i className="fa fa-envelope mr-1" />
             (

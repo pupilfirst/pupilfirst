@@ -1,8 +1,12 @@
+.grade-bar__container {
+  padding: 0 15px;
+}
+
 .grade-bar__track {
   background-color: rgba(244, 244, 244, 0.5);
   border: 1px solid #D8D8D8;
   border-radius: 3rem;
-  box-shadow: 0 2px 10px 0px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 2px 4px 0px rgba(0, 0, 0, .05);
 }
 
 .grade-bar__grade-label {
@@ -12,6 +16,7 @@
 .grade-bar__grade-pill {
   position: relative;
   width: 100%;
+  padding: 3px;
   overflow: hidden;
   color: #999999;
   background-color: #fafafa;
@@ -35,13 +40,11 @@
 
 .grade-bar__grade-pill--passed {
   color: white;
-  cursor: default !important;
   background-color: #0F9D58;
 }
 
 .grade-bar__grade-pill--failed {
   color: white;
-  cursor: default !important;
   background-color: #F55151;
 }
 
@@ -59,11 +62,15 @@
   }
 }
 
-.grade-bar__criterion_name {
+.grade-bar__criterion-name {
   font-size: 0.75rem;
 }
 
 .grade-bar__grade {
   font-size: 0.75rem;
   color: #999999;
+}
+
+.grade-bar__save-container {
+  padding: 0 15px;
 }

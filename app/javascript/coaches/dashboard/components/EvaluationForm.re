@@ -140,7 +140,7 @@ let make =
         |> Array.of_list
         |> ReasonReact.array
       )
-      <div className="d-flex justify-content-between">
+      <div className="grade-bar__save-container d-flex justify-content-end">
         <button
           className=(saveButtonClasses(state.evaluation))
           onClick=(

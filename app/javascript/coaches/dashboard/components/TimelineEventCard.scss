@@ -47,9 +47,17 @@
 }
 
 .feedback-form__trix-container {
+  padding: 0 15px;
+
   trix-toolbar {
     .trix-button-row {
       flex-wrap: wrap;
+    }
+    .trix-button-group {
+      border-color: #e5e5e5;
+    }
+    .trix-button {
+      border-bottom: 0;
     }
   }
 }
@@ -64,14 +72,18 @@
 
 .timeline-event-card__review-box-header {
   position: relative;
+  padding: 0 15px;
+  border-bottom: 1px solid #e5e5e5;
+}
 
-  &::before {
-    position: absolute;
-    content: '';
-    left: -1rem;
-    right: -1rem;
-    bottom: 0;
-    height: 1px;
-    background-color: #e5e5e5;
+.feedback-form__container {
+  position: relative;
+  border-radius: 0 0 10px 0;
+  border-top: 1px solid #e5e5e5;
+}
+.feedback-form__button {
+  &:hover, &:focus, &:active {
+    background-color: #fafafa;
+    color: #0052CC;
   }
 }

@@ -11,7 +11,7 @@ let containerClass = reviewResult =>
     | Failed => "review-status-badge__container--not-accepted"
     }
   )
-  ++ " review-status-badge__container";
+  ++ " review-status-badge__container p-3";
 
 let make = (~reviewResult, ~notAcceptedIconUrl, ~verifiedIconUrl, _children) => {
   ...component,

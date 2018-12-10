@@ -62,7 +62,7 @@ feature 'Coach Dashboard', broken: true do
     expect(page).to have_selector('.startups-list__clear-filter-btn')
 
     # clearing the filter should display all events again
-    click_on 'Show All'
+    click_on 'Clear Filter'
     expect(page).to have_selector('.timeline-event-card__container', count: 4)
   end
 

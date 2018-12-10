@@ -10,7 +10,7 @@ gem 'rails', '~> 5.2.2'
 
 gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 
-gem 'activeadmin', '~> 1.3.1' # The administration framework for Ruby on Rails applications. https://activeadmin.info
+gem 'activeadmin', '~> 1.4' # The administration framework for Ruby on Rails applications. https://activeadmin.info
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
 gem 'carrierwave', '~> 1.1' # One uploader to rule them all.
 
@@ -127,7 +127,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-gemini-scrollbar', '~> 1.5' # Custom overlay-scrollbars with native scrolling mechanism for web applications
   gem 'rails-assets-datetimepicker', '~> 2.5' # jQuery Plugin Date and Time Picker
   gem 'rails-assets-moment', '~> 2.18' # Parse, validate, manipulate, and display dates in javascript. http://momentjs.com
-  gem 'rails-assets-jquery', '~> 2.2' # TODO: Lock down jquery to v2 because v3 doesn't work well with AA.
+  gem 'rails-assets-jquery', '~> 3.3' # TODO: Lock down jquery to v2 because v3 doesn't work well with AA.
   gem 'rails-assets-lodash', '~> 4.17' # A modern JavaScript utility library delivering modularity, performance, & extras.
   gem 'rails-assets-typedjs', '~> 2.0' # A JavaScript Typing Animation Library.
   gem 'rails-assets-jquery.counterup', '~> 2.1' # Lightweight jQuery plugin that counts up to a targeted number when the number becomes visible.

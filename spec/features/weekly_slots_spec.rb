@@ -1,19 +1,11 @@
 require 'rails_helper'
 
 feature 'Faculty Weekly Slots' do
-  let!(:faculty) { create :faculty, :connectable, current_commitment: '20 mins per week for the first 6 months this year' }
+  let!(:faculty) { create :faculty, current_commitment: '20 mins per week for the first 6 months this year' }
 
   context 'User hits weekly slots page url' do
     scenario 'User uses a random token identifier' do
       visit weekly_slots_faculty_index_path(SecureRandom.base58(24))
-
-      expect(page).to have_text("The page you were looking for doesn't exist.")
-      expect(page).to have_text('You may have mistyped the address, or the page may have moved.')
-    end
-
-    scenario 'User uses the token of a faculty without email' do
-      faculty.update(email: nil)
-      visit weekly_slots_faculty_index_path(faculty.token)
 
       expect(page).to have_text("The page you were looking for doesn't exist.")
       expect(page).to have_text('You may have mistyped the address, or the page may have moved.')

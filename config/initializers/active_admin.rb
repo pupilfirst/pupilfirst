@@ -148,7 +148,7 @@ ActiveAdmin.setup do |config|
   # You can add before, after and around filters to all of your
   # Active Admin resources and pages from here.
   #
-  # config.before_filter :do_something_awesome
+  # config.before_action :do_something_awesome
 
   # == Localize Date/Time Format
   #
@@ -181,6 +181,28 @@ ActiveAdmin.setup do |config|
   # resources or you can disable them globally from here.
   #
   # config.breadcrumb = false
+
+  # == Create Another Checkbox
+  #
+  # Create another checkbox is disabled by default. You can customize it for individual
+  # resources or you can enable them globally from here.
+  #
+  # config.create_another = true
+
+  # == Register Stylesheets & Javascripts
+  #
+  # We recommend using the built in Active Admin layout and loading
+  # up your own stylesheets / javascripts to customize the look
+  # and feel.
+  #
+  # To load a stylesheet:
+  #   config.register_stylesheet 'my_stylesheet.css'
+  #
+  # You can provide an options hash for more control, which is passed along to stylesheet_link_tag():
+  #   config.register_stylesheet 'my_print_stylesheet.css', media: :print
+  #
+  # To load a javascript file:
+  #   config.register_javascript 'my_javascript.js'
 
   # == CSV options
   #
@@ -284,6 +306,17 @@ ActiveAdmin.setup do |config|
   #
   # config.include_default_association_filters = true
 
-  # Disable streaming of CSV export in development.
-  config.disable_streaming_in = %w[development staging]
+  # == Footer
+  #
+  # By default, the footer shows the current Active Admin version. You can
+  # override the content of the footer here.
+  #
+  # config.footer = 'my custom footer text'
+
+  # == Sorting
+  #
+  # By default ActiveAdmin::OrderClause is used for sorting logic
+  # You can inherit it with own class and inject it for all resources
+  #
+  # config.order_clause = MyOrderClause
 end

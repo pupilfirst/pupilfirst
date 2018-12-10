@@ -8,7 +8,6 @@ after 'development:colleges', 'development:startups' do
 
   john_doe_attributes = {
     name: 'John Doe',
-    email: 'johndoe@example.com',
     phone: '9876543210',
     reference: Founder.reference_sources.sample,
     college: College.first,
@@ -61,7 +60,6 @@ after 'development:colleges', 'development:startups' do
       user = User.where(email: email).first_or_create!
 
       founder = Founder.create!(
-        email: email,
         user: user,
         name: name,
         born_on: born_on,

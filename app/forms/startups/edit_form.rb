@@ -6,7 +6,6 @@ module Startups
     property :legal_registered_name
     property :logo, validates: { file_size: { less_than: 2.megabytes }, file_content_type: { allow: %w[image/jpeg image/png image/gif] }, raster_image: true }
     property :startup_category_ids
-    property :email, validates: { length: { maximum: 250 }, email: true }
     property :website, validates: { url: true, allow_blank: true }
     property :twitter_link, validates: { url: true, allow_blank: true }
     property :facebook_link, validates: { url: true, allow_blank: true }

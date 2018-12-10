@@ -6,11 +6,11 @@ source 'https://rubygems.org'
 git_source(:github) { |repository_path| "https://github.com/#{repository_path}.git" }
 
 # Ruby on Rails. http://rubyonrails.org
-gem 'rails', '~> 5.2.1'
+gem 'rails', '~> 5.2.2'
 
 gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 
-gem 'activeadmin', '~> 1.3.1' # The administration framework for Ruby on Rails applications. https://activeadmin.info
+gem 'activeadmin', '~> 1.4' # The administration framework for Ruby on Rails applications. https://activeadmin.info
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
 gem 'carrierwave', '~> 1.1' # One uploader to rule them all.
 
@@ -38,7 +38,7 @@ gem 'cancancan', '~> 2.0' # Used to manage administrator types and roles in the 
 gem 'select2-rails', '~> 4.0' # Select2 javascript select box improvement library, using in ActiveAdmin interface.
 
 gem 'bootstrap', '~> 4.1.3' # Official Sass port of Bootstrap.
-gem 'autoprefixer-rails', '~> 8.4' # Autoprefixer for Ruby and Ruby on Rails.
+gem 'autoprefixer-rails', '~> 9.4' # Autoprefixer for Ruby and Ruby on Rails.
 gem 'bootstrap_form', '~> 4.0' # a Rails form builder that makes it super easy to create beautiful-looking forms using Bootstrap 4
 
 # TODO: The zones list in the gem was outdated.
@@ -107,13 +107,13 @@ gem 'diffy', '~> 3.2' # Easy Diffing in Ruby.
 gem 'pundit', '~> 2.0' # Minimal authorization through OO design and pure Ruby classes.
 gem 'rack-cors', '~> 1.0', require: 'rack/cors' # Rack Middleware for handling CORS, required to serve static assets such as fonts
 gem 'recaptcha', '~> 4.6', require: 'recaptcha/rails'
-gem 'jwt', '~> 1.5' # Ruby implementation of the RFC 7519 OAuth JSON Web Token (JWT), used by Zoom API
+gem 'jwt', '~> 2.1' # Ruby implementation of the RFC 7519 OAuth JSON Web Token (JWT), used by Zoom API
 gem 'chartkick', '~> 3.0' # Create beautiful charts with one line of JavaScript.
 
 # Rails assets!
 source 'https://rails-assets.org' do
   gem 'rails-assets-pnotify', '~> 3.0' # Superb notifications library. http://sciactive.github.io/pnotify/
-  gem 'rails-assets-trix', '~> 0.10' # rich text editor from basecamp ( used for eg in the description for targets)
+  gem 'rails-assets-trix', '~> 1.0' # rich text editor from basecamp ( used for eg in the description for targets)
   gem 'rails-assets-bootstrap-tabcollapse', '~> 0.2' # Bootstrap plugin that switches bootstrap tabs component to collapse component for small screens.
   gem 'rails-assets-masonry', '~> 4.1' # Masonry works by placing elements in optimal position based on available vertical space.
   gem 'rails-assets-jquery-stickit', '~> 0.2' # A jQuery plugin provides a sticky header, sidebar or else when scrolling.
@@ -127,7 +127,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-gemini-scrollbar', '~> 1.5' # Custom overlay-scrollbars with native scrolling mechanism for web applications
   gem 'rails-assets-datetimepicker', '~> 2.5' # jQuery Plugin Date and Time Picker
   gem 'rails-assets-moment', '~> 2.18' # Parse, validate, manipulate, and display dates in javascript. http://momentjs.com
-  gem 'rails-assets-jquery', '~> 2.2' # TODO: Lock down jquery to v2 because v3 doesn't work well with AA.
+  gem 'rails-assets-jquery', '~> 3.3' # TODO: Lock down jquery to v2 because v3 doesn't work well with AA.
   gem 'rails-assets-lodash', '~> 4.17' # A modern JavaScript utility library delivering modularity, performance, & extras.
   gem 'rails-assets-typedjs', '~> 2.0' # A JavaScript Typing Animation Library.
   gem 'rails-assets-jquery.counterup', '~> 2.1' # Lightweight jQuery plugin that counts up to a targeted number when the number becomes visible.

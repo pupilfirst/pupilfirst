@@ -23,7 +23,7 @@ after 'development:founders', 'development:targets' do
   avenger_events.each do |founder_email, description, status|
     TimelineEvent.create!(
       startup: avengers,
-      founder: Founder.find_by(email: founder_email),
+      founder: User.find_by(email: founder_email).founders.first,
       event_on: Time.now,
       description: description,
       status: status,
@@ -61,7 +61,7 @@ after 'development:founders', 'development:targets' do
   end
 
   # Create a pending timeline event in iOS startup.
-  ios_founder = Founder.with_email('ios@example.org')
+  ios_founder = User.with_email('ios@example.org').founders.first
   ios_startup = ios_founder.startup
 
   TimelineEvent.create!(

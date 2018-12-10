@@ -8,6 +8,6 @@ ActiveAdmin::Views::Pages::Base.class_eval do
 
   def build_active_admin_head(*args, &block)
     original_build_active_admin_head(*args, &block)
-    within(@head) { render '/custom_active_admin_head' }
+    within(head) { render '/custom_active_admin_head' }
   end
 end

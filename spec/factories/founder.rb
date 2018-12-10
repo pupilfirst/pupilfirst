@@ -1,8 +1,7 @@
 FactoryBot.define do
   factory :founder do
-    user { create :user, email: email }
+    user { create :user, email: Faker::Internet.email(name) }
     name { Faker::Name.name }
-    email { Faker::Internet.email(name) }
     sequence(:phone) { |n| (9_876_543_210 + n).to_s }
     college
     reference { Founder.valid_references.sample }

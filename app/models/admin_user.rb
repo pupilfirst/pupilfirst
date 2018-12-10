@@ -16,7 +16,6 @@ class AdminUser < ApplicationRecord
     [TYPE_SUPERADMIN, TYPE_FACULTY]
   end
 
-  validates :email, presence: true, email: true
   validates :fullname, presence: true
   validates :admin_type, inclusion: { in: admin_user_types }, allow_nil: true
 
@@ -31,6 +30,8 @@ class AdminUser < ApplicationRecord
   def display_name
     email
   end
+
+  delegate :email, to: :user
 
   def superadmin?
     admin_type == TYPE_SUPERADMIN

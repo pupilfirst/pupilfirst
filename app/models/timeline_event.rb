@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class TimelineEvent < ApplicationRecord
-  belongs_to :startup
-  belongs_to :founder
   belongs_to :target
   has_many :target_evaluation_criteria, through: :target
   has_many :evaluation_criteria, through: :target_evaluation_criteria

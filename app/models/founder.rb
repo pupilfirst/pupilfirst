@@ -32,7 +32,6 @@ class Founder < ApplicationRecord
   has_one :level, through: :startup
   belongs_to :invited_startup, class_name: 'Startup', optional: true
   has_many :karma_points, dependent: :destroy
-  has_many :timeline_events, dependent: :nullify
   has_many :visits, as: :user, dependent: :nullify, inverse_of: :user
   has_many :ahoy_events, class_name: 'Ahoy::Event', as: :user, dependent: :nullify, inverse_of: :user
   has_many :platform_feedback, dependent: :nullify
@@ -44,6 +43,8 @@ class Founder < ApplicationRecord
   has_many :active_admin_comments, as: :resource, class_name: 'ActiveAdmin::Comment', dependent: :destroy, inverse_of: :resource
   has_many :latest_submission_records, dependent: :restrict_with_error
   has_many :latest_submissions, through: :latest_submission_records, source: :timeline_event
+  has_many :timeline_event_owners, dependent: :destroy
+  has_many :timeline_events, through: :timeline_event_owners
 
   scope :admitted, -> { joins(:startup).merge(Startup.admitted) }
   scope :level_zero, -> { joins(:startup).merge(Startup.level_zero) }
@@ -230,6 +231,7 @@ class Founder < ApplicationRecord
     return 'Write a one-liner about yourself!' if about.blank?
     return 'Upload your legal ID proof!' if identification_proof.blank?
   end
+
   # rubocop:enable Metrics/CyclomaticComplexity
 
   # Should we give the founder a tour of the founder dashboard? If so, we shouldn't give it again.

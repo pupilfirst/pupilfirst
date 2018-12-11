@@ -99,7 +99,6 @@ class Startup < ApplicationRecord
     end
   end
 
-  has_many :timeline_events, dependent: :destroy
   has_many :startup_feedback, dependent: :destroy
   has_many :karma_points, dependent: :restrict_with_exception
   has_many :connect_requests, dependent: :destroy
@@ -398,5 +397,9 @@ class Startup < ApplicationRecord
 
   def subscription_end_date
     active_payment&.billing_end_at
+  end
+
+  def timeline_events
+    TimelineEvent.joins(:timeline_event_owners).where(timeline_event_owners: { founder_id: founders.pluck(:id) })
   end
 end

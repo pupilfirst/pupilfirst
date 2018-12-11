@@ -246,23 +246,23 @@ feature 'Target Overlay' do
       click_button('Take Quiz')
 
       # Question one
-      choose(q1_answer_1.value)
+      find('.quiz-root__answer-option', text: q1_answer_1.value).click
       expect(page).to have_content('Wrong Answer')
-      choose(q1_answer_2.value)
+      find('.quiz-root__answer-option', text: q1_answer_2.value).click
       expect(page).to have_content('Correct Answer')
       click_button('Next')
 
       # Question two
-      choose(q2_answer_3.value)
+      find('.quiz-root__answer-option', text: q2_answer_3.value).click
       expect(page).to have_content('Wrong Answer')
-      choose(q2_answer_4.value)
+      find('.quiz-root__answer-option', text: q2_answer_4.value).click
       expect(page).to have_content('Correct Answer')
       click_button('Next')
 
       # Question three
-      choose(q3_answer_2.value)
+      find('.quiz-root__answer-option', text: q3_answer_2.value).click
       expect(page).to have_content('Wrong Answer')
-      choose(q3_answer_1.value)
+      find('.quiz-root__answer-option', text: q3_answer_1.value).click
       expect(page).to have_content('Correct Answer')
 
       # Submit Quiz

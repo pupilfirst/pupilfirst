@@ -14,6 +14,7 @@ describe Targets::OverlayDetailsService do
   let(:quiz_question) { create :quiz_question, quiz: quiz }
   let(:answer_1) { create :answer_option, quiz_question: quiz_question }
   let(:answer_2) { create :answer_option, quiz_question: quiz_question }
+  let(:answer_3) { create :answer_option, quiz_question: quiz_question }
 
   before do
     quiz_question.update!(correct_answer: answer_2)
@@ -42,11 +43,11 @@ describe Targets::OverlayDetailsService do
         index: 0,
         question: quiz_question.question,
         description: quiz_question.description,
-        correct_answer_id: answer_2.id,
-        answer_options: array_including(
+        correctAnswer: { id: answer_2.id, value: answer_2.value, hint: answer_2.hint },
+        incorrectOptions: array_including(
           [
             { id: answer_1.id, value: answer_1.value, hint: answer_1.hint },
-            { id: answer_2.id, value: answer_2.value, hint: answer_2.hint }
+            { id: answer_3.id, value: answer_3.value, hint: answer_3.hint }
           ]
         )
       }]

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_03_082005) do
+ActiveRecord::Schema.define(version: 2018_12_10_112144) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -660,6 +660,15 @@ ActiveRecord::Schema.define(version: 2018_12_03_082005) do
     t.index ["evaluation_criterion_id"], name: "index_timeline_event_grades_on_evaluation_criterion_id"
     t.index ["timeline_event_id", "evaluation_criterion_id"], name: "by_timeline_event_criterion", unique: true
     t.index ["timeline_event_id"], name: "index_timeline_event_grades_on_timeline_event_id"
+  end
+
+  create_table "timeline_event_owners", force: :cascade do |t|
+    t.bigint "timeline_event_id"
+    t.bigint "founder_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["founder_id"], name: "index_timeline_event_owners_on_founder_id"
+    t.index ["timeline_event_id"], name: "index_timeline_event_owners_on_timeline_event_id"
   end
 
   create_table "timeline_events", id: :serial, force: :cascade do |t|

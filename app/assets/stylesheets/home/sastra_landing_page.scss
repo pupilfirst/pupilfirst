@@ -25,6 +25,7 @@
 .sastra__selection-process-step {
     width: 3.2rem;
     height: 3.2rem;
+    flex-shrink: 0;
     border: 2px solid white;
     @include border-radius(50px);
 }

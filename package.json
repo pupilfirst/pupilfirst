@@ -28,6 +28,7 @@
     "prettier": "1.9.1",
     "reason-react": ">=0.3.4",
     "sass-loader": "^7.0.1",
+    "tailwindcss": "^0.7.2",
     "webpack-dev-server": "3.1.10"
   },
   "scripts": {

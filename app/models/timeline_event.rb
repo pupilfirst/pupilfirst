@@ -97,16 +97,6 @@ class TimelineEvent < ApplicationRecord
   end
 
   after_save :update_timeline_event_files
-  after_create :update_latest_submission_record
-  before_destroy :delete_latest_submission_record
-
-  def update_latest_submission_record
-    TimelineEvents::UpdateLatestSubmissionRecordService.new(self).execute
-  end
-
-  def delete_latest_submission_record
-    TimelineEvents::DeleteLatestSubmissionRecordService.new(self).execute
-  end
 
   def update_timeline_event_files
     # Go through files metadata, and perform create / delete.
@@ -232,5 +222,9 @@ class TimelineEvent < ApplicationRecord
 
   def first_link_url
     links.first.try(:[], :url)
+  end
+
+  def startup
+    founders.first.startup
   end
 end

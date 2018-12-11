@@ -400,6 +400,6 @@ class Startup < ApplicationRecord
   end
 
   def timeline_events
-    TimelineEvent.joins(:timeline_event_owners).where(timeline_event_owners: { founder_id: founders.pluck(:id) })
+    TimelineEvent.joins(:timeline_event_owners).where(timeline_event_owners: { founder: founders })
   end
 end

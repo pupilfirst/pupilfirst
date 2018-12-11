@@ -182,6 +182,10 @@ class Target < ApplicationRecord
     quiz.present?
   end
 
+  def team_target?
+    role == ROLE_TEAM
+  end
+
   # this is included in the target JSONs the DashboardDataService responds with
   alias has_rubric rubric?
 

@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import shared from "./shared.module.scss";
-import styles from "./CouponRemover.module.scss";
+
+import "./CouponRemover.scss";
 
 export default class CouponRemover extends React.Component {
   constructor(props) {
@@ -41,10 +41,10 @@ export default class CouponRemover extends React.Component {
     const coupon = this.props.rootState.coupon;
 
     return (
-      <div className="p-1" styleName="shared.coupon-box">
-        <div className="font-semibold" styleName="styles.message">
+      <div className="p-1 fee-interface__coupon-box">
+        <div className="font-semibold coupon-remover__message">
           Code{" "}
-          <span className="dark-secondary" styleName="styles.code">
+          <span className="dark-secondary coupon-remover__code">
             {coupon.code}
           </span>{" "}
           applied!

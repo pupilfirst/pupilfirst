@@ -2,9 +2,11 @@
   "name": "sv-co",
   "private": true,
   "dependencies": {
+    "@babel/preset-react": "^7.0.0",
     "@glennsl/bs-json": "^2.0.0",
-    "@rails/webpacker": "3.5",
+    "@rails/webpacker": "https://github.com/rails/webpacker.git",
     "babel-plugin-react-css-modules": "^3.3.2",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.21",
     "babel-preset-react": "^6.24.1",
     "bootstrap": "4.1.2",
     "bs-fetch": "^0.3.0",
@@ -13,9 +15,9 @@
     "date-fns": "^1.29.0",
     "pnotify": "^4.0.0-alpha.4",
     "postcss-scss": "^1.0.3",
-    "prop-types": "^15.6.0",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
+    "prop-types": "^15.6.2",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
     "react_ujs": "^2.4.3",
     "vanilla-tilt": "^1.4.1",
     "webpack-merge": "^4.1.1"
@@ -26,7 +28,7 @@
     "prettier": "1.9.1",
     "reason-react": ">=0.3.4",
     "sass-loader": "^7.0.1",
-    "webpack-dev-server": "2.11.2"
+    "webpack-dev-server": "3.1.10"
   },
   "scripts": {
     "postinstall": "bsb -make-world"

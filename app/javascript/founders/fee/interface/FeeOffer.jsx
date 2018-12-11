@@ -2,7 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import CouponAdder from "./CouponAdder";
 import CouponRemover from "./CouponRemover";
-import "./FeeOffer.module.scss";
+
+import "./FeeOffer.scss";
 
 export default class FeeOffer extends React.Component {
   constructor(props) {
@@ -97,7 +98,7 @@ export default class FeeOffer extends React.Component {
     const fee = this.props.rootState.fee;
 
     return (
-      <div className="content-box text-center py-4" styleName="box">
+      <div className="content-box text-center py-4 fee-offer__box">
         <div className="mb-4">
           <p>
             Your total fee is {this.totalFee()}.
@@ -126,16 +127,16 @@ export default class FeeOffer extends React.Component {
             ]}
           </p>
 
-          <div className="mt-3" styleName="amount-highlight">
+          <div className="mt-3 fee-offer__amount-highlight">
             <h2 className="font-semibold mb-0">
               <span className="font-regular">&#8377;</span>
               {this.formatCurrency(fee.emi)}
             </h2>
             <p>for 2 founders</p>
             {this.shouldShowCouponInfo() && (
-              <div styleName="discount-details">
+              <div className="fee-offer__discount-details">
                 {this.isCouponApplied() && (
-                  <h6 className="text-uppercase" styleName="discount-title">
+                  <h6 className="text-uppercase fee-offer__discount-title">
                     Coupon applied
                     <p>
                       {this.couponDiscount()}% off
@@ -144,12 +145,12 @@ export default class FeeOffer extends React.Component {
                   </h6>
                 )}
                 {!this.isCouponApplied() && (
-                  <h6 styleName="discount-title">FULL PRICE</h6>
+                  <h6 className="fee-offer__discount-title">FULL PRICE</h6>
                 )}
 
                 <div
                   className="text-center mx-auto mt-3"
-                  styleName="coupon-form-container"
+                  className="fee-offer__coupon-form-container"
                 >
                   {this.isCouponApplied() && (
                     <CouponRemover

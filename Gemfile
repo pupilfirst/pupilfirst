@@ -21,7 +21,9 @@ gem 'carrierwave_backgrounder', '= 0.4.2', github: 'harigopal/carrierwave_backgr
 gem 'carrierwave-bombshelter', '~> 0.2' # Protects your carrierwave from image bombs (and such).
 gem 'fog-aws', '~> 3.0', require: 'fog/aws' # Required by Carrierwave to upload to S3.
 
-gem 'webpacker', '~> 3.0' # Use Webpack to manage app-like JavaScript modules in Rails.
+# Use Webpack to manage app-like JavaScript modules in Rails.
+gem 'webpacker', '= 4.0.0.pre.3', github: 'rails/webpacker' # TODO: Switch to release v4 when available.
+
 gem 'coffee-rails', '~> 4.2.0' # Coffeescript on Rails.
 gem 'devise', '~> 4.2' # User auth library.
 gem 'devise_invitable', '~> 1.7' # Allow invites to be sent out.

@@ -1,0 +1,43 @@
+@import "../../../shared/variables";
+@import "../../../shared/bootstrapMixins";
+
+.fee-offer__box {
+  padding: 0;
+
+  @include media-breakpoint-up(sm) {
+    @include border-radius(5px);
+  }
+
+  @include media-breakpoint-down(sm) {
+    width: 100%;
+    margin-bottom: 1rem;
+    min-height: auto;
+  }
+}
+
+.fee-offer__amount-highlight {
+  padding: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: $dark-primary-background;
+  width: 100%;
+}
+
+.fee-offer__discount-details {
+  border-top: 1px dashed $light-secondary;
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+}
+
+.fee-offer__discount-title {
+  color: $brand-primary;
+  font-weight: bold;
+}
+
+.fee-offer__coupon-form-container {
+  @include media-breakpoint-up(sm) {
+    width: 260px;
+  }
+}

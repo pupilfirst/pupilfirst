@@ -2,22 +2,7 @@
 
 .quiz-root__header-text {
   color: $light-grey-text;
-}
-
-.quiz-root__question-text {
-  margin-top: 5px;
-
-  h4 {
-    max-width: 40rem;
-    line-height: 1.5;
-  }
-}
-
-.quiz-root__question-description {
-  h5 {
-    max-width: 40rem;
-    line-height: 1;
-  }
+  font-size: 0.75rem;
 }
 
 .quiz-root__result-panel {
@@ -38,9 +23,29 @@
   align-items: center;
   transition: all 0.2s;
 
+  &:before {
+    position: relative;
+    color: lighten($light-grey-text, 30%);
+    content: "\f10c";
+    font-weight: $font-light;
+    font-size: 18px;
+    margin-right: 10px;
+    font-family: "FontAwesome";
+  }
+
   &:hover {
     background-color: $primary-background;
-    box-shadow: 0px 2px 9px rgba(0,0,0, 0.08)
+    box-shadow: 0px 2px 9px rgba(0, 0, 0, 0.08);
+  }
+}
+.quiz-root__answer-option--correct-answer,
+.quiz-root__answer-option--wrong-answer {
+  &:before {
+    position: relative;
+    color: white;
+    font-size: 18px;
+    margin-right: 10px;
+    font-family: "FontAwesome";
   }
 }
 
@@ -48,47 +53,60 @@
   background-color: $light-primary;
   color: white;
 
+  &:before {
+    content: "\f058";
+  }
+
   &:hover {
     background-color: $light-primary;
     color: white;
   }
 }
 .quiz-root__result-box--correct-answer {
-  color: $light-primary;
+  &:before {
+    position: relative;
+    display: block;
+    margin: auto;
+    margin-bottom: 15px;
+    content: "";
+    background-image: url("./images/quiz-right-answer-icon.svg");
+    background-size: 74px 74px;
+    height: 74px;
+    width: 74px;
+  }
 }
 
 .quiz-root__answer-option--wrong-answer {
-  background-color: #F55151;
+  background-color: #f55151;
   color: white;
 
+  &:before {
+    content: "\f057";
+  }
+
   &:hover {
-    background-color: #F55151;;
+    background-color: #f55151;
     color: white;
   }
 }
 
 .quiz-root__result-box--wrong-answer {
-  color: #F55151;
+  &:before {
+    position: relative;
+    display: block;
+    margin: auto;
+    margin-bottom: 15px;
+    content: "";
+    background-image: url("./images/quiz-wrong-answer-icon.svg");
+    background-size: 74px 74px;
+    height: 74px;
+    width: 74px;
+  }
 }
 
 .quiz-root__answer-hint {
   max-width: 40rem;
-  font-size: 1.125rem;
-  font-weight: $font-light;
-  line-height: 1.5;
-}
-
-.quiz-root__result-box {
-  border: 1px solid $gray-border;
-  box-shadow: $box-shadow;
-  padding: 20px;
-  font-size: 1.875rem;
-  display: flex;
-  align-items: center;
-  i {
-    font-size: 2.125rem;
-    margin-right: 10px;
-  }
+  font-size: 1rem;
 }
 
 .quiz-root__question-next-button {

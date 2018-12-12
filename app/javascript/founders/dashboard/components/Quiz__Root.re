@@ -1,6 +1,7 @@
 exception DecodeError(string);
 
 [%bs.raw {|require("./Quiz__Root.scss")|}];
+[%bs.raw {|require("./images/quiz-right-answer-icon.svg")|}];
 
 type submitTargetFunction = unit => unit;
 
@@ -25,15 +26,15 @@ let str = ReasonReact.string;
 let resultsSection = (correctAnswer, currentAnswer) => {
   let (classes, text) =
     currentAnswer == correctAnswer ?
-      ("quiz-root__result-box--correct-answer", "Correct Answer") :
-      ("quiz-root__result-box--wrong-answer", "Wrong Answer");
-  <div className="quiz-root__result">
-    <span className=classes> {text |> str} </span>
+      ("quiz-root__result-box--correct-answer mb-1 font-semibold", "Correct Answer") :
+      ("quiz-root__result-box--wrong-answer mb-1 font-semibold", "Wrong Answer");
+  <div className="quiz-root__result text-center mt-4">
+    <h3 className=classes> {text |> str} </h3>
     {
       switch (currentAnswer |> Quiz__Answer.hint) {
       | None => ReasonReact.null
       | Some(hint) =>
-        <div className="quiz-root__answer-hint"> {hint |> str} </div>
+        <p className="quiz-root__answer-hint"> {hint |> str} </p>
       }
     }
   </div>;
@@ -64,13 +65,11 @@ let make = (~questions, ~submitTargetCB, _children) => {
     let currentQuestion = state.selectedQuestion;
     let currentAnswer = state.selectedAnswer;
     let correctAnswer = currentQuestion |> Quiz__Question.correctAnswer;
-    <div className="d-flex quiz-root__component">
+    <div className="d-flex quiz-root__component flex-column flex-md-row">
       <div className="col-md-7 quiz-root__question-panel p-4">
-        <div className="quiz-root__header-text">
-          <h5> {"Qestion #1" |> str} </h5>
-        </div>
-        <div className="quiz-root__question-text">
-          <h4 className="font-semibold"> {currentQuestion |> Quiz__Question.question |> str} </h4>
+        <h6 className="font-semibold text-uppercase quiz-root__header-text mb-1"> {"Question #1" |> str} </h6>
+        <div className="quiz-root__question-text mb-1">
+          <h4 className="font-semibold mb-0"> {currentQuestion |> Quiz__Question.question |> str} </h4>
         </div>
         {
           switch (currentQuestion |> Quiz__Question.description) {
@@ -104,7 +103,7 @@ let make = (~questions, ~submitTargetCB, _children) => {
           }
         </div>
       </div>
-      <div className="col-md-5 quiz-root__result-panel p-4">
+      <div className="col-md-5 quiz-root__result-panel p-4 text-center">
         {
           switch (currentAnswer) {
           | None => ReasonReact.null
@@ -128,9 +127,9 @@ let make = (~questions, ~submitTargetCB, _children) => {
                       currentQuestion
                       |> Quiz__Question.nextQuestion(questions);
                     <button
-                      className="btn btn-md btn-ghost-primary"
+                      className="btn btn-md btn-ghost-secondary"
                       onClick=(_event => send(SelectQuestion(nextQuestion)))>
-                      {str("Next")}
+                      {str("Next Question")}
                     </button>;
                   }
               }

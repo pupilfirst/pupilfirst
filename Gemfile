@@ -102,7 +102,6 @@ gem 'omniauth-google-oauth2', '~> 0.4' # Oauth2 strategy for Google
 gem 'omniauth-facebook', '~> 5.0' # Facebook OAuth2 Strategy for OmniAuth http://mkdynamic.github.com/omniauth-facebook
 gem 'omniauth-github', '~> 1.2' # GitHub strategy for OmniAuth
 
-gem 'koala', '~> 2.2' # Library for Facebook with support for OAuth authentication, the Graph and REST APIs
 gem 'pretender', '~> 0.2' # Log in as another user in Rails
 gem 'file_validators', '~> 2.1' # Adds file validators to ActiveModel.
 gem 'diffy', '~> 3.2' # Easy Diffing in Ruby.

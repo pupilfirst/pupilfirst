@@ -8,13 +8,12 @@ describe TimelineEvents::GradingService do
   let(:founder) { create :founder, startup: startup }
   let(:faculty) { create :faculty }
   let(:course) { create :course }
-  let(:timeline_event) { create :timeline_event, target: target, startup: startup, founder: founder }
+  let(:timeline_event) { create :timeline_event, target: target, founders: [founder], latest: true }
   let(:target_with_evaluation_criteria) { create :target }
   let!(:evaluation_criterion_1) { create :evaluation_criterion, course: course }
   let!(:evaluation_criterion_2) { create :evaluation_criterion, course: course }
 
   before do
-    timeline_event.update!(target: target, startup: startup, founder: founder)
     target.evaluation_criteria << [evaluation_criterion_1, evaluation_criterion_2]
   end
 
@@ -24,7 +23,7 @@ describe TimelineEvents::GradingService do
       it 'awards grades to timeline event for each of the evaluation criteria' do
         subject.grade(faculty, grades)
         expect(timeline_event.timeline_event_grades.count).to eq(2)
-        expect(timeline_event.timeline_event_grades.pluck(:evaluation_criterion_id)).to eq([evaluation_criterion_1.id, evaluation_criterion_2.id])
+        expect(timeline_event.timeline_event_grades.pluck(:evaluation_criterion_id)).to match_array([evaluation_criterion_1.id, evaluation_criterion_2.id])
         expect(timeline_event.passed_at).not_to eq(nil)
         expect(timeline_event.evaluator_id).to eq(faculty.id)
       end
@@ -35,7 +34,7 @@ describe TimelineEvents::GradingService do
       it 'awards grades to timeline event for each of the evaluation criteria' do
         subject.grade(faculty, grades)
         expect(timeline_event.timeline_event_grades.count).to eq(2)
-        expect(timeline_event.timeline_event_grades.pluck(:evaluation_criterion_id)).to eq([evaluation_criterion_1.id, evaluation_criterion_2.id])
+        expect(timeline_event.timeline_event_grades.pluck(:evaluation_criterion_id)).to match_array([evaluation_criterion_1.id, evaluation_criterion_2.id])
         expect(timeline_event.passed_at).to eq(nil)
         expect(timeline_event.evaluator_id).to eq(faculty.id)
       end

@@ -12,7 +12,7 @@ feature 'Target Overlay' do
   let!(:target_group_1) { create :target_group, level: level_1, milestone: true }
   let!(:target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM }
   let!(:prerequisite_target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM }
-  let!(:timeline_event) { create :timeline_event, startup: startup, founder: founder, passed_at: 2.days.ago, links: [{ title: 'Some Link', url: 'https://www.example.com', private: false }] }
+  let!(:timeline_event) { create :timeline_event, founders: startup.founders, passed_at: 2.days.ago, links: [{ title: 'Some Link', url: 'https://www.example.com', private: false }], latest: true }
   let!(:timeline_event_file) { create :timeline_event_file, timeline_event: timeline_event }
   let(:faculty) { create :faculty, slack_username: 'abcd' }
   let!(:feedback) { create :startup_feedback, timeline_event: timeline_event, startup: startup, faculty: faculty }
@@ -22,7 +22,7 @@ feature 'Target Overlay' do
   let!(:resource_link) { create :resource_link, targets: [target] }
 
   # Quiz target
-  let!(:quiz_target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM, submittability: Target::SUBMITTABILITY_AUTO_VERIFY }
+  let!(:quiz_target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM }
   let!(:quiz) { create :quiz, target: quiz_target }
   let!(:quiz_question_1) { create :quiz_question, quiz: quiz }
   let!(:q1_answer_1) { create :answer_option, quiz_question: quiz_question_1 }
@@ -103,7 +103,7 @@ feature 'Target Overlay' do
     end
 
     context 'when the target is auto verified' do
-      let!(:target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM, submittability: Target::SUBMITTABILITY_AUTO_VERIFY }
+      let!(:target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM }
 
       it 'displays submit button with correct label' do
         find('.founder-dashboard-target-header__headline', text: target.title).click
@@ -115,7 +115,7 @@ feature 'Target Overlay' do
   end
 
   context 'when the founder clicks on a completed target', js: true do
-    let!(:timeline_event) { create :timeline_event, startup: startup, target: target, founder: founder, passed_at: 2.days.ago, links: [{ title: 'Some Link', url: 'https://www.example.com', private: false }] }
+    let!(:timeline_event) { create :timeline_event, target: target, founders: startup.founders, passed_at: 2.days.ago, links: [{ title: 'Some Link', url: 'https://www.example.com', private: false }], latest: true }
 
     it 'displays the latest submission and feedback for it' do
       find('.founder-dashboard-target-header__headline', text: target.title).click
@@ -148,9 +148,10 @@ feature 'Target Overlay' do
 
   context 'when the founder clicks a founder target', js: true do
     let!(:target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_FOUNDER }
-    let!(:timeline_event) { create :timeline_event, startup: startup, target: target, founder: founder, passed_at: 2.days.ago, links: [{ title: 'Some Link', url: 'https://www.example.com', private: false }] }
+    let!(:timeline_event) { create :timeline_event, target: target, founders: [founder], passed_at: 2.days.ago, links: [{ title: 'Some Link', url: 'https://www.example.com', private: false }], latest: true }
 
     before do
+      timeline_event.founders << founder
       visit student_dashboard_path
     end
 

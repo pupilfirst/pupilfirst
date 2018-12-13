@@ -1,7 +1,5 @@
 FactoryBot.define do
   factory :timeline_event do
-    startup
-    founder { startup.team_lead }
     description { Faker::Lorem.words(10).join ' ' }
     event_on { 1.month.from_now }
     status_updated_at { Time.zone.now }

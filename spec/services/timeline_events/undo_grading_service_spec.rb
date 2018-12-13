@@ -8,7 +8,7 @@ describe TimelineEvents::UndoGradingService do
   let(:founder) { create :founder, startup: startup }
   let(:faculty) { create :faculty }
   let(:course) { create :course }
-  let(:timeline_event) { create :timeline_event, target: target, startup: startup, founder: founder }
+  let(:timeline_event) { create :timeline_event, target: target, founders: [founder], latest: true }
   let(:target_with_evaluation_criteria) { create :target }
   let!(:evaluation_criterion_1) { create :evaluation_criterion, course: course }
   let!(:evaluation_criterion_2) { create :evaluation_criterion, course: course }

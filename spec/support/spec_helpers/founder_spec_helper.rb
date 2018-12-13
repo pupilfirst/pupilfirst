@@ -24,9 +24,9 @@ module FounderSpecHelper
 
     FactoryBot.create(
       *traits,
-      founder: founder,
+      founders: [founder],
       target: target,
-      startup: founder.startup
+      latest: true
     )
   end
 end

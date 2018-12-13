@@ -65,31 +65,27 @@ module Targets
         }
       )
 
-      previous_level_passed_milestones = previous_level_milestones.joins(latest_submission_records: :timeline_event).where(
-        latest_submission_records: {
-          founder: @founder
+      previous_level_passed_milestones = previous_level_milestones.joins(timeline_events: :timeline_event_owners).where(
+        timeline_event_owners: {
+          founder_id: @founder.id
         }
-      ).where.not(
-        latest_submission_records: {
-          timeline_events: {
-            passed_at: nil
-          }
-        }
-      )
+      ).where(timeline_events: { latest: true }).where.not(timeline_events: { passed_at: nil })
 
       previous_level_milestones.count != previous_level_passed_milestones.count
     end
 
     def prerequisites_incomplete?
-      passed_prerequisites = @target.prerequisite_targets.joins(latest_submission_records: :timeline_event).where(
-        latest_submission_records: {
-          founder: @founder
+      passed_prerequisites = @target.prerequisite_targets.joins(timeline_events: :timeline_event_owners).where(
+        timeline_event_owners: {
+          founder_id: @founder.id
+        }
+      ).where(
+        timeline_events: {
+          latest: true
         }
       ).where.not(
-        latest_submission_records: {
-          timeline_events: {
-            passed_at: nil
-          }
+        timeline_events: {
+          passed_at: nil
         }
       )
       passed_prerequisites.count != @target.prerequisite_targets.count

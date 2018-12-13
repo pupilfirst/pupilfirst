@@ -44,11 +44,11 @@ describe Targets::StatusService do
 
         context 'when all prerequisites are complete' do
           let!(:submission_1) do
-            create :timeline_event, startup: startup, founder: founder_2, target: team_target_1, passed_at: 1.day.ago
+            create :timeline_event, founders: [founder_1, founder_2], target: team_target_1, passed_at: 1.day.ago, latest: true
           end
 
           let!(:submission_2) do
-            create :timeline_event, startup: startup, founder: founder_1, target: founder_target_2, passed_at: 1.day.ago
+            create :timeline_event, founders: [founder_1], target: founder_target_2, passed_at: 1.day.ago, latest: true
           end
 
           it 'returns :pending' do
@@ -70,7 +70,7 @@ describe Targets::StatusService do
         let!(:level_1_team_target) do
           create :target, target_group: level_1_milestone_target_group, role: Target::ROLE_TEAM
         end
-        let!(:leve1__1_founder_target) do
+        let!(:leve1_1_founder_target) do
           create :target, target_group: level_1_milestone_target_group, role: Target::ROLE_FOUNDER
         end
 
@@ -82,11 +82,11 @@ describe Targets::StatusService do
 
         context 'when all previous level milestones are completed' do
           let!(:submission_1) do
-            create :timeline_event, startup: startup, founder: founder_2, target: level_1_team_target, passed_at: 1.day.ago
+            create :timeline_event, founders: [founder_2, founder_1], target: level_1_team_target, passed_at: 1.day.ago, latest: true
           end
 
           let!(:submission_2) do
-            create :timeline_event, startup: startup, founder: founder_1, target: leve1__1_founder_target, passed_at: 1.day.ago
+            create :timeline_event, founders: [founder_1], target: leve1_1_founder_target, passed_at: 1.day.ago, latest: true
           end
 
           it 'returns :pending' do
@@ -97,7 +97,7 @@ describe Targets::StatusService do
     end
 
     context 'when the target has a submission' do
-      let!(:submission) { create :timeline_event, startup: startup, founder: founder_1, target: founder_target_1 }
+      let!(:submission) { create :timeline_event, founders: [founder_1], target: founder_target_1, latest: true }
 
       context 'when the submission is not evaluated yet' do
         it 'returns :submitted' do
@@ -106,7 +106,7 @@ describe Targets::StatusService do
       end
 
       context 'when the submission has passed_at set' do
-        let!(:submission) { create :timeline_event, startup: startup, founder: founder_1, target: founder_target_1, passed_at: 1.day.ago }
+        let!(:submission) { create :timeline_event, founders: [founder_1], target: founder_target_1, passed_at: 1.day.ago, latest: true }
 
         it 'returns :passed' do
           expect(subject.status).to eq(Targets::StatusService::STATUS_PASSED)
@@ -116,7 +116,7 @@ describe Targets::StatusService do
       context 'when the submission was evaluated but passed_at not set' do
         let(:faculty) { create :faculty }
         let!(:submission) do
-          create :timeline_event, startup: startup, founder: founder_1, target: founder_target_1, evaluator: faculty
+          create :timeline_event, founders: [founder_1], target: founder_target_1, evaluator: faculty, latest: true
         end
 
         it 'returns :failed' do

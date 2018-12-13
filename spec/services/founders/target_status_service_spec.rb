@@ -24,20 +24,20 @@ describe Founders::TargetStatusService do
   # founder has passed l_1_target_1
   let!(:l_1_target_1) { create :target, target_group: l_1_target_group_1 }
   let!(:te_1) do
-    create :timeline_event, startup: startup, founder: founder, target: l_1_target_1, passed_at: 10.days.ago, evaluator: faculty
+    create :timeline_event, founders: [founder], target: l_1_target_1, passed_at: 10.days.ago, evaluator: faculty, latest: true
   end
 
   # founder has failed l_1_target_2
   let!(:l_1_target_2) { create :target, target_group: l_1_target_group_1 }
-  let!(:te_2) { create :timeline_event, startup: startup, founder: founder, target: l_1_target_2, evaluator: faculty }
+  let!(:te_2) { create :timeline_event, founders: [founder], target: l_1_target_2, evaluator: faculty, latest: true }
 
   # founder has submitted milestone l_1_target_3
   let!(:l_1_target_3) { create :target, target_group: l_1_target_group_2 }
-  let!(:te_3) { create :timeline_event, startup: startup, founder: founder, target: l_1_target_3 }
+  let!(:te_3) { create :timeline_event, founders: [founder], target: l_1_target_3, latest: true }
 
   # founder has a pending l_2_target_1 with a passed prerequisite (l_1_target_1) and an archived_prerequisite
   let!(:l_2_target_1) { create :target, target_group: l_2_target_group_1 }
-  let!(:archived_prerequisite) { create :target, target_group: l_2_target_group_1, archived: true }
+  let!(:archived_prerequisite) { create :target, target_group: l_2_target_group_1, archived: true, safe_to_archive: true }
 
   # founder has a l_2_target_2 which is pre-requisite locked by l_2_target_1
   let!(:l_2_target_2) { create :target, target_group: l_2_target_group_1 }

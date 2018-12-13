@@ -41,8 +41,6 @@ class Founder < ApplicationRecord
   has_many :payments, dependent: :restrict_with_error
   belongs_to :resume_file, class_name: 'TimelineEventFile', optional: true
   has_many :active_admin_comments, as: :resource, class_name: 'ActiveAdmin::Comment', dependent: :destroy, inverse_of: :resource
-  has_many :latest_submission_records, dependent: :restrict_with_error
-  has_many :latest_submissions, through: :latest_submission_records, source: :timeline_event
   has_many :timeline_event_owners, dependent: :destroy
   has_many :timeline_events, through: :timeline_event_owners
 
@@ -242,6 +240,10 @@ class Founder < ApplicationRecord
       update!(dashboard_toured: true)
       true
     end
+  end
+
+  def latest_submissions
+    timeline_events.where(latest: true)
   end
 
   def facebook_token_available?

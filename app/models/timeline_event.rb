@@ -207,6 +207,14 @@ class TimelineEvent < ApplicationRecord
     { 1 => 'good', 2 => 'great', 3 => 'wow' }[score.floor]
   end
 
+  def startup
+    founders.first.startup
+  end
+
+  def founder
+    founders.first
+  end
+
   private
 
   def privileged_founder?(founder)
@@ -222,9 +230,5 @@ class TimelineEvent < ApplicationRecord
 
   def first_link_url
     links.first.try(:[], :url)
-  end
-
-  def startup
-    founders.first.startup
   end
 end

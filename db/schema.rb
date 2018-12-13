@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_03_082005) do
+ActiveRecord::Schema.define(version: 2018_12_13_120548) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -232,8 +232,6 @@ ActiveRecord::Schema.define(version: 2018_12_03_082005) do
     t.integer "college_id"
     t.string "name"
     t.boolean "dashboard_toured"
-    t.string "fb_access_token"
-    t.datetime "fb_token_expires_at"
     t.integer "backlog"
     t.string "reference"
     t.string "college_text"

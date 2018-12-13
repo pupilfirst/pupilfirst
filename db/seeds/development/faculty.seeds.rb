@@ -1,13 +1,12 @@
 require_relative 'helper'
 
-after 'development:levels', 'development:schools' do
+after 'development:levels' do
   puts 'Seeding faculty'
 
-  sv = School.find_by(name: 'SV.CO')
   level_one = Level.find_by(number: 1)
   level_two = Level.find_by(number: 2)
 
-  sv.faculty.create!(
+  Faculty.create!(
     name: 'Sanjay Vijayakumar',
     title: 'CEO',
     key_skills: Faker::Lorem.words(3).join(', '),
@@ -19,7 +18,7 @@ after 'development:levels', 'development:schools' do
     user: User.create(email: 'mickeymouse@example.com')
   )
 
-  sv.faculty.create!(
+  Faculty.create!(
     name: 'Vishnu Gopal',
     title: 'CTO',
     key_skills: Faker::Lorem.words(3).join(', '),
@@ -31,7 +30,7 @@ after 'development:levels', 'development:schools' do
     user: User.create(email: 'minniemouse@example.com')
   )
 
-  sv.faculty.create!(
+  Faculty.create!(
     name: 'Gautham',
     title: 'COO',
     key_skills: Faker::Lorem.words(3).join(', '),
@@ -42,7 +41,7 @@ after 'development:levels', 'development:schools' do
     user: User.create(email: 'donaldduck@example.com')
   )
 
-  sv.faculty.create!(
+  Faculty.create!(
     name: 'Hari Gopal',
     title: 'Engineering Lead',
     key_skills: 'Looting, pillaging, etc.',
@@ -51,7 +50,7 @@ after 'development:levels', 'development:schools' do
     user: User.create(email: 'goofy@example.com')
   )
 
-  sv.faculty.create!(
+  Faculty.create!(
     name: 'iOS Coach',
     title: 'Coaching Expert',
     category: 'developer_coaches',

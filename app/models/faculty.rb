@@ -11,7 +11,6 @@ class Faculty < ApplicationRecord
 
   has_secure_token
 
-  belongs_to :school
   belongs_to :user
   has_many :startup_feedback, dependent: :restrict_with_error
   has_many :targets, dependent: :restrict_with_error

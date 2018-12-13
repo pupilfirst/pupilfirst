@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Edit founders' do
+feature 'Edit founders', broken: true do
   include UserSpecHelper
   include FounderSpecHelper
 
@@ -26,7 +26,6 @@ feature 'Edit founders' do
     end
 
     scenario 'founder adds a cofounder', js: true do
-      pending 'Feature not used anymore'
       sign_in_user(founder.user, referer: admissions_team_members_path)
 
       expect(page).to have_content('You are the team lead.')
@@ -90,7 +89,6 @@ feature 'Edit founders' do
     end
 
     scenario 'founder invites another from a higher level', js: true do
-      pending 'Feature not used anymore'
       admitted_lead = create(:startup).team_lead
 
       sign_in_user(founder.user, referer: admissions_team_members_path)
@@ -116,7 +114,6 @@ feature 'Edit founders' do
     end
 
     scenario 'founder makes a possible mistake in the email, gets an email hint and accepts it', js: true do
-      pending 'Feature not used anymore'
       sign_in_user(founder.user, referer: admissions_team_members_path)
 
       page.find('.founders-form__add-founder-button').click
@@ -150,7 +147,6 @@ feature 'Edit founders' do
     end
 
     scenario 'founder makes a possible mistake in the email, gets an email hint and rejects it', js: true do
-      pending 'Feature not used anymore'
       sign_in_user(founder.user, referer: admissions_team_members_path)
 
       page.find('.founders-form__add-founder-button').click

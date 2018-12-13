@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Admission Level up' do
+feature 'Admission Level up', broken: true do
   include UserSpecHelper
   include FounderSpecHelper
   let(:course) { create :course }

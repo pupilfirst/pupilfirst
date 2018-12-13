@@ -5,7 +5,7 @@ feature 'Timeline Builder' do
   let(:level_one) { create :level, :one }
 
   let(:startup) { create :startup, :subscription_active, level: level_one }
-  let(:founder) { create :founder, startup: startup, fb_access_token: Faker::Lorem.word, fb_token_expires_at: 2.days.from_now }
+  let(:founder) { create :founder, startup: startup }
 
   let(:target_group) { create :target_group, milestone: true, level: level_one }
 

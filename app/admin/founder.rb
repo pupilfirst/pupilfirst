@@ -398,7 +398,6 @@ ActiveAdmin.register Founder do
 
     panel 'Social links' do
       attributes_table_for founder do
-        row :fb_token_expires_at
         row :twitter_url
         row :linkedin_url
         row :personal_website_url

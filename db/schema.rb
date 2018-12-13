@@ -169,8 +169,10 @@ ActiveRecord::Schema.define(version: 2018_12_12_104842) do
     t.string "slack_user_id"
     t.integer "level_id"
     t.bigint "user_id"
+    t.bigint "school_id"
     t.index ["category"], name: "index_faculty_on_category"
     t.index ["level_id"], name: "index_faculty_on_level_id"
+    t.index ["school_id"], name: "index_faculty_on_school_id"
     t.index ["slug"], name: "index_faculty_on_slug", unique: true
     t.index ["user_id"], name: "index_faculty_on_user_id"
   end
@@ -740,6 +742,7 @@ ActiveRecord::Schema.define(version: 2018_12_12_104842) do
   add_foreign_key "connect_slots", "faculty"
   add_foreign_key "courses", "schools"
   add_foreign_key "faculty", "levels"
+  add_foreign_key "faculty", "schools"
   add_foreign_key "founders", "colleges"
   add_foreign_key "founders", "users"
   add_foreign_key "latest_submission_records", "founders"

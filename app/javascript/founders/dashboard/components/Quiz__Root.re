@@ -28,8 +28,14 @@ let str = ReasonReact.string;
 let resultsSection = (correctAnswer, currentAnswer) => {
   let (classes, text) =
     currentAnswer == correctAnswer ?
-      ("quiz-root__result-box--correct-answer mb-1 font-semibold", "Correct Answer") :
-      ("quiz-root__result-box--wrong-answer mb-1 font-semibold", "Wrong Answer");
+      (
+        "quiz-root__result-box--correct-answer mb-1 font-semibold",
+        "Correct Answer",
+      ) :
+      (
+        "quiz-root__result-box--wrong-answer mb-1 font-semibold",
+        "Wrong Answer",
+      );
   <div className="quiz-root__result text-center pt-4">
     <h3 className=classes> {text |> str} </h3>
     {
@@ -41,6 +47,12 @@ let resultsSection = (correctAnswer, currentAnswer) => {
     }
   </div>;
 };
+
+let resultsSectionClasses = currentAnswer =>
+  switch (currentAnswer) {
+  | Some(_answer) => "col-md-5 quiz-root__result-panel p-4 text-center"
+  | None => "col-md-5 quiz-root__result-panel p-4 text-center quiz-root__result-panel-placeholder"
+  };
 
 let answerOptionClasses = (answerOption, correctAnswer, currentAnswer) =>
   switch (currentAnswer) {
@@ -69,9 +81,14 @@ let make = (~questions, ~submitTargetCB, _children) => {
     let correctAnswer = currentQuestion |> Quiz__Question.correctAnswer;
     <div className="d-flex quiz-root__component flex-column flex-md-row">
       <div className="col-md-7 quiz-root__question-panel p-4">
-        <h6 className="font-semibold text-uppercase quiz-root__header-text mb-1"> {"Question #1" |> str} </h6>
+        <h6
+          className="font-semibold text-uppercase quiz-root__header-text mb-1">
+          {"Question #1" |> str}
+        </h6>
         <div className="quiz-root__question-text mb-1">
-          <h4 className="font-semibold mb-0"> {currentQuestion |> Quiz__Question.question |> str} </h4>
+          <h4 className="font-semibold mb-0">
+            {currentQuestion |> Quiz__Question.question |> str}
+          </h4>
         </div>
         {
           switch (currentQuestion |> Quiz__Question.description) {
@@ -105,7 +122,7 @@ let make = (~questions, ~submitTargetCB, _children) => {
           }
         </div>
       </div>
-      <div className="col-md-5 quiz-root__result-panel quiz-root__result-panel-placeholder p-4 text-center">
+      <div className={resultsSectionClasses(currentAnswer)}>
         {
           switch (currentAnswer) {
           | None => ReasonReact.null

@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import TextArea from "./timelineBuilder/TextArea";
-import SocialBar from "./timelineBuilder/SocialBar";
 import AttachmentForm from "./timelineBuilder/AttachmentForm";
 import ActionBar from "./timelineBuilder/ActionBar";
 import Attachments from "./timelineBuilder/Attachments";
+import TextAreaCounter from "./timelineBuilder/TextAreaCounter";
 
 export default class TimelineBuilder extends React.Component {
   constructor(props) {
@@ -76,7 +76,6 @@ export default class TimelineBuilder extends React.Component {
     );
     $(".js-timeline-builder__submit-button").popover("dispose");
     $(".image-upload").popover("dispose");
-    $(".timeline-builder__social-bar-toggle-switch").popover("dispose");
   }
 
   generateKey() {
@@ -250,13 +249,6 @@ export default class TimelineBuilder extends React.Component {
     } else if (this.validate()) {
       let form = $(".timeline-builder-hidden-form");
       let formData = new FormData(form[0]);
-      let share_on_facebook = false;
-
-      if (this.props.facebookShareEligibility == "eligible") {
-        share_on_facebook = $(
-          ".timeline-builder__social-bar-toggle-switch-input"
-        ).prop("checked");
-      }
 
       formData.append("timeline_event[target_id]", this.props.targetId);
       formData.append("timeline_event[description]", this.state.description);
@@ -269,7 +261,6 @@ export default class TimelineBuilder extends React.Component {
         "timeline_event[files_metadata]",
         JSON.stringify(this.state.files)
       );
-      formData.append("timeline_event[share_on_facebook]", share_on_facebook);
 
       // Submit form data using AJAX and set a progress handler function.
       $.ajax({
@@ -384,9 +375,8 @@ export default class TimelineBuilder extends React.Component {
 
   //ToDO: Investigate usage and add Sample Text
   sampleText() {
-      return null;
+    return null;
   }
-
 
   updateDescription() {
     let description = $(".js-timeline-builder__textarea")
@@ -438,17 +428,15 @@ export default class TimelineBuilder extends React.Component {
                 />
               </form>
 
-              <TextArea
-                error={this.state.descriptionError}
-                resetErrorsCB={this.resetErrors}
-                placeholder={this.sampleText()}
-                textChangeCB={this.updateDescription}
-              />
-
-              <SocialBar
-                description={this.state.description}
-                facebookShareEligibility={this.props.facebookShareEligibility}
-              />
+              <div class="position-relative py-4">
+                <TextArea
+                  error={this.state.descriptionError}
+                  resetErrorsCB={this.resetErrors}
+                  placeholder={this.sampleText()}
+                  textChangeCB={this.updateDescription}
+                />
+                <TextAreaCounter description={this.state.description} />
+              </div>
 
               {this.hasAttachments() && (
                 <Attachments
@@ -494,7 +482,6 @@ export default class TimelineBuilder extends React.Component {
 
 TimelineBuilder.propTypes = {
   targetId: PropTypes.number,
-  facebookShareEligibility: PropTypes.string,
   authenticityToken: PropTypes.string,
   closeTimelineBuilderCB: PropTypes.func,
   targetSubmissionCB: PropTypes.func,

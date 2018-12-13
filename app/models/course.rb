@@ -8,8 +8,4 @@ class Course < ApplicationRecord
   def short_name
     name[0..2].upcase.strip
   end
-
-  def facebook_share_disabled?
-    name.include? 'Apple'
-  end
 end

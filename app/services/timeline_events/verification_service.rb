@@ -49,8 +49,6 @@ module TimelineEvents
         update_timeline_updated_on
         update_admission_stage if @timeline_event.target.in?(targets_for_admissions)
       end
-
-      post_on_facebook if @timeline_event.share_on_facebook
     end
 
     def mark_needs_improvement
@@ -111,10 +109,6 @@ module TimelineEvents
           0
         end
       end
-    end
-
-    def post_on_facebook
-      TimelineEvents::FacebookPostJob.perform_later(@timeline_event)
     end
 
     def startup

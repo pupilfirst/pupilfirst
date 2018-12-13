@@ -55,30 +55,6 @@ title SV.CO Edit Profile for #{@founder.fullname}
     .mt-4
       h4 Connected Accounts
       hr
-      - if @founder.facebook_token_valid?
-        .mb-3
-          .col-xs-9
-            .connected-account__container
-              span.connected-account_icon
-                i.fa.fa-facebook-square.fa-2x
-              .connected-account-profile
-                .connected-account-profile__link
-                  = link_to @founder.fb_basic_info[:link] do
-                    = image_tag @founder.fb_basic_info[:picture_url], size: 35, class: 'rounded-circle connected-account-profile__avatar'
-                    ' #{@founder.fb_basic_info[:name]}
-                = link_to 'Disconnect', founder_facebook_disconnect_path, method: :post, class: 'btn btn-primary btn-md connected-account-profile__disconnect-btn'
-      - else
-        .row
-          .connected-account__label.col-sm-2.text-sm-right
-            | Facebook:
-          .col-sm-10
-            = button_to founder_facebook_connect_path, class: 'btn btn-with-icon btn-sm btn-ghost-secondary' do
-              span.connected-account__account-icon
-                i.fa.fa-facebook-square.fa-2x
-              span.connected-account__button-label
-                | Connect
-            .mt-2 Once connected, you can choose to post your personal and team events onto your Facebook wall.
-
       - if @founder.connected_to_slack?
         .row.mb-3
           .col-sm-9

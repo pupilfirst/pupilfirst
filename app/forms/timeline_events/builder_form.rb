@@ -12,7 +12,6 @@ module TimelineEvents
     property :files, virtual: true
     property :files_metadata, virtual: true
     property :image
-    property :share_on_facebook
 
     validate :files_should_have_metadata
     validate :target_status_submittable
@@ -66,8 +65,7 @@ module TimelineEvents
           description: description,
           event_on: Time.zone.parse(event_on),
           links: parsed_links,
-          image: image,
-          share_on_facebook: share_on_facebook
+          image: image
         )
 
         create_files(timeline_event)

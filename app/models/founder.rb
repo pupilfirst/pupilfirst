@@ -241,25 +241,10 @@ class Founder < ApplicationRecord
     end
   end
 
-  def facebook_token_available?
-    fb_access_token.present? && fb_token_expires_at > Time.now
-  end
-
-  def facebook_token_valid?
-    facebook_token_available? && Founders::FacebookService.new(self).token_valid?(fb_access_token)
-  end
-
   def connected_to_slack?
     return false if slack_access_token.blank?
 
     Founders::SlackConnectService.new(self).token_valid?(slack_access_token)
-  end
-
-  def facebook_share_eligibility
-    return 'not_admitted' if startup.level_zero?
-    return 'disabled_for_course' if startup.level.course.facebook_share_disabled?
-
-    facebook_token_available? ? 'eligible' : 'token_unavailable'
   end
 
   def resume_link

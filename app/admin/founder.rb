@@ -398,17 +398,6 @@ ActiveAdmin.register Founder do
 
     panel 'Social links' do
       attributes_table_for founder do
-        row 'Facebook Connected' do |founder|
-          if founder.fb_access_token.present?
-            status_tag('Connected', class: 'ok')
-
-            span style: 'display:inline-block' do
-              button_to 'Disconnect', disconnect_from_facebook_admin_founder_path(founder), method: :patch
-            end
-          else
-            status_tag('Not Connected', class: 'no')
-          end
-        end
         row :fb_token_expires_at
         row :twitter_url
         row :linkedin_url
@@ -476,12 +465,6 @@ ActiveAdmin.register Founder do
 
   action_item :public_slack_messages, only: :show, if: proc { Founder.friendly.find(params[:id]).slack_username.present? } do
     link_to 'Public Slack Messages', admin_public_slack_messages_path(q: { founder_id_eq: params[:id] })
-  end
-
-  member_action :disconnect_from_facebook, method: :patch do
-    founder = Founder.friendly.find(params[:id])
-    Founders::FacebookService.new(founder).disconnect!
-    redirect_to admin_founder_path(founder), alert: 'Founder profile disconnected from Facebook!'
   end
 
   form partial: 'admin/founders/form'

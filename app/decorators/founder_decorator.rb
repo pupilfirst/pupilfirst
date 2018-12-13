@@ -21,12 +21,6 @@ class FounderDecorator < Draper::Decorator
     'Choose another file if you wish to replace your current avatar.'
   end
 
-  def fb_basic_info
-    return nil unless facebook_token_valid?
-
-    @fb_basic_info ||= fb_service.basic_info
-  end
-
   def age
     return nil if born_on.blank?
 
@@ -51,11 +45,5 @@ class FounderDecorator < Draper::Decorator
     else
       'Mr/Ms'
     end
-  end
-
-  private
-
-  def fb_service
-    @fb_service ||= Founders::FacebookService.new(model)
   end
 end

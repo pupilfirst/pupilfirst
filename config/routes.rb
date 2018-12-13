@@ -53,12 +53,6 @@ Rails.application.routes.draw do
     end
   end
 
-  scope 'founder/facebook', as: 'founder_facebook', controller: 'founders/facebook_connect' do
-    post 'connect'
-    get 'connect_callback'
-    post 'disconnect'
-  end
-
   scope 'founder/slack', as: 'founder_slack', controller: 'founders/slack_connect' do
     get 'connect'
     get 'callback'

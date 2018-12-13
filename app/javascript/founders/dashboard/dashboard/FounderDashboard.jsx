@@ -16,7 +16,7 @@ export default class FounderDashboard extends React.Component {
       chosenLevelId: props.currentLevel.id,
       timelineBuilderVisible: false,
       timelineBuilderParams: {
-        targetId: null,
+        targetId: null
       },
       selectedTargetId: props.initialTargetId,
       tourDashboard: props.tourDashboard
@@ -174,14 +174,15 @@ export default class FounderDashboard extends React.Component {
           <LevelUpNotification rootProps={this.props} />
         )}
 
-        {this.state.activeTrackId !== 'sessions' && this.props.currentLevel !== 0 && (
-          <ActionBar
-            getAvailableTrackIds={this.availableTrackIds}
-            rootProps={this.props}
-            rootState={this.state}
-            setRootState={this.setRootState}
-          />
-        )}
+        {this.state.activeTrackId !== "sessions" &&
+          this.props.currentLevel !== 0 && (
+            <ActionBar
+              getAvailableTrackIds={this.availableTrackIds}
+              rootProps={this.props}
+              rootState={this.state}
+              setRootState={this.setRootState}
+            />
+          )}
 
         <Targets
           rootProps={this.props}
@@ -193,7 +194,6 @@ export default class FounderDashboard extends React.Component {
 
         {this.state.timelineBuilderVisible && (
           <TimelineBuilder
-            facebookShareEligibility={this.props.facebookShareEligibility}
             testMode={this.props.testMode}
             authenticityToken={this.props.authenticityToken}
             targetSubmissionCB={this.handleTargetSubmission}
@@ -227,7 +227,6 @@ FounderDashboard.propTypes = {
   targetGroups: PropTypes.array.isRequired,
   tracks: PropTypes.array.isRequired,
   currentLevel: PropTypes.object.isRequired,
-  facebookShareEligibility: PropTypes.string,
   authenticityToken: PropTypes.string,
   levelUpEligibility: PropTypes.oneOf([
     "eligible",

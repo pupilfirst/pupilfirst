@@ -277,10 +277,7 @@ ActiveAdmin.register TimelineEvent do
       end
 
       row :event_on
-      row :share_on_facebook
-
       row :status
-
       row :status_updated_at
 
       row('Linked Target') do

@@ -8,9 +8,9 @@ module Courses
       @course = course
     end
 
-    def clone(new_name, sponsored)
+    def clone(new_name, sponsored: true)
       Course.transaction do
-        Course.create!(name: new_name, sponsored: sponsored).tap do |new_course|
+        Course.create!(name: new_name, sponsored: sponsored, school: @course.school).tap do |new_course|
           levels = create_levels(new_course)
           target_groups = create_target_groups(levels)
           targets = create_targets(target_groups)

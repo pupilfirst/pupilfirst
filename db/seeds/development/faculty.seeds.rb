@@ -27,7 +27,7 @@ after 'development:levels', 'development:schools' do
     category: 'team',
     image: Rails.root.join('spec/support/uploads/faculty/minnie_mouse.jpg').open,
     sort_index: 2,
-    level: level_two,w
+    level: level_two,
     user: User.create(email: 'minniemouse@example.com')
   )
 

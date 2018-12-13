@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_03_082005) do
+ActiveRecord::Schema.define(version: 2018_12_12_104842) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -118,6 +118,8 @@ ActiveRecord::Schema.define(version: 2018_12_03_082005) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "sponsored", default: false
+    t.bigint "school_id"
+    t.index ["school_id"], name: "index_courses_on_school_id"
   end
 
   create_table "data_migrations", id: false, force: :cascade do |t|
@@ -167,8 +169,10 @@ ActiveRecord::Schema.define(version: 2018_12_03_082005) do
     t.string "slack_user_id"
     t.integer "level_id"
     t.bigint "user_id"
+    t.bigint "school_id"
     t.index ["category"], name: "index_faculty_on_category"
     t.index ["level_id"], name: "index_faculty_on_level_id"
+    t.index ["school_id"], name: "index_faculty_on_school_id"
     t.index ["slug"], name: "index_faculty_on_slug", unique: true
     t.index ["user_id"], name: "index_faculty_on_user_id"
   end
@@ -390,6 +394,12 @@ ActiveRecord::Schema.define(version: 2018_12_03_082005) do
     t.index ["level_id"], name: "index_resources_on_level_id"
     t.index ["slug"], name: "index_resources_on_slug"
     t.index ["startup_id"], name: "index_resources_on_startup_id"
+  end
+
+  create_table "schools", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "shortened_urls", id: :serial, force: :cascade do |t|
@@ -730,7 +740,9 @@ ActiveRecord::Schema.define(version: 2018_12_03_082005) do
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"
   add_foreign_key "connect_slots", "faculty"
+  add_foreign_key "courses", "schools"
   add_foreign_key "faculty", "levels"
+  add_foreign_key "faculty", "schools"
   add_foreign_key "founders", "colleges"
   add_foreign_key "founders", "users"
   add_foreign_key "latest_submission_records", "founders"

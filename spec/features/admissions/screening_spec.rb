@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Admission Screening' do
+feature 'Admission Screening', broken: true do
   include UserSpecHelper
   include FounderSpecHelper
 

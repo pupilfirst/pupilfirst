@@ -62,8 +62,9 @@ class Founder < ApplicationRecord
   scope :not_exited, -> { where.not(exited: true) }
   scope :screening_score_above, ->(minimum_score) { where("(screening_data ->> 'score')::int >= ?", minimum_score) }
 
+  # TODO: Remove all usages of method Founder.with_email and then delete it.
   def self.with_email(email)
-    User.find_by(email: email).founders.first
+    User.find_by(email: email)&.founders&.first
   end
 
   def self.ransackable_scopes(_auth)

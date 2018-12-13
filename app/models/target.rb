@@ -35,7 +35,7 @@ class Target < ApplicationRecord
   ].freeze
 
   belongs_to :faculty, optional: true
-  has_many :timeline_events, dependent: :nullify
+  has_many :timeline_events, dependent: :restrict_with_error
   has_many :target_prerequisites, dependent: :destroy
   has_many :prerequisite_targets, through: :target_prerequisites
   belongs_to :target_group

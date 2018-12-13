@@ -233,32 +233,6 @@ ActiveAdmin.setup do |config|
   #     end
   #   end
 
-  # Adding menu item called 'Tagging' to the 'Resource' and 'Startup' menu to show taggings applicable to them resp.
-  config.namespace :admin do |admin|
-    admin.build_menu :default do |menu|
-      menu.add label: 'Tagging', url: proc { admin_taggings_path('q[taggable_type_eq]' => 'Resource', commit: 'Filter') }, parent: 'Resources'
-      menu.add label: 'Tagging', url: proc { admin_taggings_path('q[taggable_type_eq]' => 'Startup', commit: 'Filter') }, parent: 'Startups'
-      menu.add label: 'Tagging', url: proc { admin_taggings_path('q[taggable_type_eq]' => 'Founder', commit: 'Filter') }, parent: 'Founders'
-    end
-  end
-
-  # Add 'Targets' under 'Founder' and 'Startup' menus
-  config.namespace :admin do |admin|
-    admin.build_menu :default do |menu|
-      menu.add label: 'Targets', url: proc { admin_targets_path('q[assignee_type_eq]' => 'Founder', commit: 'Filter') }, parent: 'Founders'
-      menu.add label: 'Targets', url: proc { admin_targets_path('q[assignee_type_eq]' => 'Startup', commit: 'Filter') }, parent: 'Startups'
-    end
-  end
-
-  # Add 'Review Timeline Events' under 'Timeline Events' menu
-
-  config.namespace :admin do |admin|
-    admin.build_menu :default do |menu|
-      menu.add label: 'Review Timeline Events', url: proc { review_timeline_events_admin_timeline_events_path }, parent: 'Timeline Events',
-               if: proc { current_admin_user&.superadmin? }
-    end
-  end
-
   # == Download Links
   #
   # You can disable download links on resource listing pages,

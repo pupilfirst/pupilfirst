@@ -268,6 +268,8 @@ Rails.application.routes.draw do
     get '/', action: 'index', as: 'stats'
   end
 
+  get '/school_admin', to: 'school_admins#dashboard'
+
   # Handle shortener-gem form URLs for a while (backward compatibility).
   get '/:unique_key', to: 'shortened_urls#redirect', constraints: { unique_key: /[0-9a-z]{5}/ }
 end

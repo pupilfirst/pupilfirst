@@ -120,22 +120,6 @@ section.school-of-saas__container.py-5
                   .saas-program__program-promises-content
                     h4.saas-program__program-promises-title.font-semibold.mb-0
                       | 100% Job Guarantee with premium startups or a full refund.
-              = link_to 'https://wiki.sv.co/', class: 'btn btn-lg btn-with-icon btn-secondary', target: '_blank' do
-                i.fa.fa-book
-                ' &nbsp;SV.CO WIKI
-
-            / .col-md-5.p-0
-              / .saas-program__graduation-support
-              = button_to '#', class: 'btn btn-lg btn-with-icon btn-secondary' do
-                i.fa.fa-book
-                ' &nbsp;SV.CO WIKI
-                / h5.font-bold.saas-program__graduation-support-year.mb-0
-                /   | SV.CO Wiki
-                / h4.saas-program__graduation-support-sub-text.font-bold.mb-0
-                /   ' More about
-                /   span.font-regular
-                /     | SV.CO Program
-                /   / | &nbsp;your money back.
 
     / .pt-4.text-center
     /   a#admissions-join__school-start-now-link.btn.btn-primary.btn-lg.apply-call-to-action__button href="#apply-form"
@@ -160,9 +144,6 @@ section.school-of-saas__container.py-5
               ' Scholarships Available - Upto 80% off!
             p.program-fee__scholorship__text.font-bold.mb-2
               ' EMI options available.
-            a.program-fee__scholorship__link.font-semibold.p-2 href="https://wiki.sv.co/admissions-to-sv-co/fees-and-scholarships/scholarships-at-svco" target="_blank"
-              | Read More
-              i.fa.fa-arrow-circle-right.ml-2
 
 #apply-form.apply-form__container.py-5
   - if current_founder&.startup.blank?

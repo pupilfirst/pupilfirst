@@ -1,7 +1,9 @@
 exception DecodeError(string);
 
 [%bs.raw {|require("./Quiz__Root.scss")|}];
+[%bs.raw {|require("./images/quiz-placeholder.svg")|}];
 [%bs.raw {|require("./images/quiz-right-answer-icon.svg")|}];
+[%bs.raw {|require("./images/quiz-wrong-answer-icon.svg")|}];
 
 type submitTargetFunction = unit => unit;
 
@@ -28,7 +30,7 @@ let resultsSection = (correctAnswer, currentAnswer) => {
     currentAnswer == correctAnswer ?
       ("quiz-root__result-box--correct-answer mb-1 font-semibold", "Correct Answer") :
       ("quiz-root__result-box--wrong-answer mb-1 font-semibold", "Wrong Answer");
-  <div className="quiz-root__result text-center mt-4">
+  <div className="quiz-root__result text-center pt-4">
     <h3 className=classes> {text |> str} </h3>
     {
       switch (currentAnswer |> Quiz__Answer.hint) {
@@ -103,7 +105,7 @@ let make = (~questions, ~submitTargetCB, _children) => {
           }
         </div>
       </div>
-      <div className="col-md-5 quiz-root__result-panel p-4 text-center">
+      <div className="col-md-5 quiz-root__result-panel quiz-root__result-panel-placeholder p-4 text-center">
         {
           switch (currentAnswer) {
           | None => ReasonReact.null
@@ -114,7 +116,7 @@ let make = (~questions, ~submitTargetCB, _children) => {
           switch (currentAnswer) {
           | None => ReasonReact.null
           | Some(answer) when answer == correctAnswer =>
-            <div className="quiz-root__next-question-button my-4">
+            <div className="quiz-root__next-question-button py-4">
               {
                 currentQuestion |> Quiz__Question.isLastQuestion(questions) ?
                   <button

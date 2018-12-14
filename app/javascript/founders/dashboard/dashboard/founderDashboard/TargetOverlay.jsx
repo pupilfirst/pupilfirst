@@ -184,6 +184,7 @@ export default class TargetOverlay extends React.Component {
                     openTimelineBuilderCB={this.props.openTimelineBuilderCB}
                     autoVerifyCB={this.autoVerify}
                     invertShowQuizCB={this.invertShowQuiz}
+                    overlayLoaded={this.state.quizQuestions !== null}
                   />
                 )}
               </div>
@@ -261,6 +262,7 @@ export default class TargetOverlay extends React.Component {
                 openTimelineBuilderCB={this.props.openTimelineBuilderCB}
                 autoVerifyCB={this.autoVerify}
                 invertShowQuizCB={this.invertShowQuiz}
+                overlayLoaded={this.state.quizQuestions !== null}
               />
             )}
           </div>

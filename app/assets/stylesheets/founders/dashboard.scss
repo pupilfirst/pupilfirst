@@ -745,3 +745,7 @@
 .scroll-lock {
   overflow-y: hidden;
 }
+
+.founder-dashboard__action-bar-add-event-button--disabled {
+  cursor: not-allowed;
+}

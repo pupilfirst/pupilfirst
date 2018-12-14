@@ -383,10 +383,6 @@ class Startup < ApplicationRecord
     level.number.zero?
   end
 
-  def eligible_to_connect?(faculty)
-    Startups::ConnectRequestEligibilityService.new(self, faculty).eligible?
-  end
-
   def subscription_active?
     level.course.sponsored || payments.where('billing_end_at > ?', Time.now).paid.exists?
   end

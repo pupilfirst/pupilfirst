@@ -1,6 +1,6 @@
 ActiveAdmin.register Faculty do
   permit_params :name, :title, :key_skills, :linkedin_url, :category, :image, :sort_index, :self_service,
-    :current_commitment, :inactive, :about, :commitment, :compensation, :slack_username, :level_id
+    :current_commitment, :inactive, :about, :commitment, :compensation, :slack_username
 
   controller do
     include DisableIntercom
@@ -27,7 +27,6 @@ ActiveAdmin.register Faculty do
     column :category
     column :name
     column :email
-    column :level
     column :sort_index
     actions
   end
@@ -41,12 +40,12 @@ ActiveAdmin.register Faculty do
       row :about
       row :key_skills
       row :category
-      row :level
       row :image
       row :sort_index
       row :self_service
       row :inactive
       row :slack_username
+
       row :startups do
         div do
           faculty.startups.each do |startup|
@@ -58,6 +57,7 @@ ActiveAdmin.register Faculty do
           end
         end
       end
+
       row :user
     end
   end
@@ -70,7 +70,6 @@ ActiveAdmin.register Faculty do
     f.inputs 'Faculty Details' do
       f.input :category, as: :select, collection: Faculty.valid_categories
       f.input :name
-      f.input :level, collection: Level.where.not(number: 0)
       f.input :title
       f.input :about
       f.input :image, as: :file

@@ -16,7 +16,6 @@ class Faculty < ApplicationRecord
   has_many :targets, dependent: :restrict_with_error
   has_many :connect_slots, dependent: :destroy
   has_many :connect_requests, through: :connect_slots
-  belongs_to :level, optional: true
 
   # Startups whose timeline events this faculty can review.
   has_and_belongs_to_many :startups, dependent: :restrict_with_error

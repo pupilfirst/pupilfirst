@@ -9,9 +9,8 @@ after 'development:founders', 'development:targets' do
 
   def complete_target(target, startup)
     te = TimelineEvent.create!(
-      startup: startup,
       target: target,
-      founder: startup.team_lead,
+      founders: [startup.team_lead],
       event_on: Time.now,
       description: Faker::Lorem.paragraph,
       status_updated_at: Time.now
@@ -42,8 +41,7 @@ after 'development:founders', 'development:targets' do
   ios_startup = ios_founder.startup
 
   TimelineEvent.create!(
-    startup: ios_startup,
-    founder: ios_founder,
+    founders: [ios_founder],
     event_on: Time.now,
     description: 'This is a seeded pending submission for the iOS startup',
     target: ios_startup.course.targets.live.first

@@ -5,7 +5,7 @@ after 'development:timeline_events', 'development:faculty' do
 
   avengers = Startup.find_by(product_name: 'The Avengers')
 
-  graded_event = TimelineEvent.joins(:timeline_event_grades).where(startup: avengers).last
+  graded_event = TimelineEvent.joins(:timeline_event_grades).joins(:founders).where(founders: { id: avengers.founders.pluck(:id) }).last
   mickey = Faculty.find_by(email: 'mickeymouse@example.com')
 
   StartupFeedback.create!(

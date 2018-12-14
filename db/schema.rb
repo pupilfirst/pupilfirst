@@ -388,9 +388,9 @@ ActiveRecord::Schema.define(version: 2018_11_27_070025) do
   create_table "quiz_questions", force: :cascade do |t|
     t.string "question"
     t.text "description"
+    t.bigint "quiz_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "quiz_id"
     t.bigint "correct_answer_id"
     t.index ["correct_answer_id"], name: "index_quiz_questions_on_correct_answer_id"
     t.index ["quiz_id"], name: "index_quiz_questions_on_quiz_id"

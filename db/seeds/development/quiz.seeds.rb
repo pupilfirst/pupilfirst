@@ -20,12 +20,11 @@ after "development:targets" do
     target: target,
   )
 
-  question = QuizQuestion.new(
+  question = QuizQuestion.create!(
     question: "Is Fin Robotics a successful business?",
     description: Faker::Lorem.sentence,
     quiz: quiz,
   )
-  question.save
 
   question.answer_options.create!(
     value: "Yes. They raised funding!",
@@ -46,12 +45,10 @@ after "development:targets" do
 
   question.update!(correct_answer: correct_answer)
 
-  question = QuizQuestion.new(
+  question = QuizQuestion.create!(
     question: "Fin Robotics went through four failed products before building Fin. Was that a good thing?",
     quiz: quiz,
   )
-
-  question.save
 
   question.answer_options.create!(
     value: "No. Failure is never good.",

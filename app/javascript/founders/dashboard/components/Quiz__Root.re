@@ -78,12 +78,16 @@ let make = (~questions, ~submitTargetCB, _children) => {
   render: ({state, send}) => {
     let currentQuestion = state.selectedQuestion;
     let currentAnswer = state.selectedAnswer;
-    let correctAnswer = currentQuestion |> Quiz__Question.correctAnswer;
+    let correctAnswer = state.selectedQuestion |> Quiz__Question.correctAnswer;
+
     <div className="d-flex quiz-root__component flex-column flex-md-row">
       <div className="col-md-7 quiz-root__question-panel p-4">
         <h6
           className="font-semibold text-uppercase quiz-root__header-text mb-1">
-          {"Question #1" |> str}
+          {"Question #" |> str}
+          {
+            string_of_int((currentQuestion |> Quiz__Question.index) + 1) |> str
+          }
         </h6>
         <div className="quiz-root__question-text mb-1">
           <h4 className="font-semibold mb-0">

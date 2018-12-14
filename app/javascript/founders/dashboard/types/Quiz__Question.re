@@ -2,8 +2,8 @@ type t = {
   index: int,
   question: string,
   description: option(string),
-  correctAnswer: Quiz__Answer.t,
-  incorrectOptions: list(Quiz__Answer.t),
+  correctAnswerId: int,
+  answerOptions: list(Quiz__Answer.t),
 };
 
 let decode = json =>
@@ -12,9 +12,8 @@ let decode = json =>
     question: json |> field("question", string),
     description:
       json |> field("description", nullable(string)) |> Js.Null.toOption,
-    correctAnswer: json |> field("correctAnswer", Quiz__Answer.decode),
-    incorrectOptions:
-      json |> field("incorrectOptions", list(Quiz__Answer.decode)),
+    correctAnswerId: json |> field("correctAnswerId", int),
+    answerOptions: json |> field("answerOptions", list(Quiz__Answer.decode)),
   };
 
 let index = t => t.index;
@@ -23,9 +22,10 @@ let question = t => t.question;
 
 let description = t => t.description;
 
-let correctAnswer = t => t.correctAnswer;
+let answerOptions = t => t.answerOptions;
 
-let answerOptions = t => [t.correctAnswer, ...t.incorrectOptions];
+let correctAnswer = t =>
+  t.answerOptions |> List.find(q => q |> Quiz__Answer.id == t.correctAnswerId);
 
 let lastQuestion = questions => {
   let maxIndex =

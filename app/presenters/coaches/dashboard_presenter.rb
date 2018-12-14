@@ -37,17 +37,16 @@ module Coaches
 
     # rubocop:disable Metrics/AbcSize
     def timeline_events
-      TimelineEvent.not_auto_verified.where(startup: current_coach.startups).includes(:founder, :startup, :timeline_event_files, :startup_feedback).order(:created_at).map do |timeline_event|
+      TimelineEvent.not_auto_verified.joins(:founders).where(founders: { id: Founder.where(startup: current_coach.startups).pluck(:id) }).includes(:timeline_event_owners, :timeline_event_files, :startup_feedback).order(:created_at).map do |timeline_event|
         {
           id: timeline_event.id,
           title: title(timeline_event),
           description: timeline_event.description,
           eventOn: timeline_event.event_on,
           status: timeline_event.status,
-          startupId: timeline_event.startup_id,
+          startupId: timeline_event.founders.first&.startup_id,
           startupName: timeline_event.startup.product_name,
-          founderId: timeline_event.founder_id,
-          founderName: timeline_event.founder.name,
+          founders: timeline_event.founders.map { |founder| { id: founder.id, name: founder.name } },
           links: timeline_event.links,
           files: timeline_event.timeline_event_files.map { |file| { title: file.title, id: file.id } },
           image: timeline_event.image? ? timeline_event.image.url : nil,
@@ -56,6 +55,7 @@ module Coaches
         }
       end
     end
+
     # rubocop:enable Metrics/AbcSize
 
     def course

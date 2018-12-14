@@ -5,8 +5,7 @@ type t = {
   eventOn: DateTime.t,
   startupId: int,
   startupName: string,
-  founderId: int,
-  founderName: string,
+  founders: list(Founder.t),
   links: list(Link.t),
   files: list(File.t),
   image: option(string),
@@ -26,8 +25,7 @@ let decode = json =>
     eventOn: json |> field("eventOn", string) |> DateTime.parse,
     startupId: json |> field("startupId", int),
     startupName: json |> field("startupName", string),
-    founderId: json |> field("founderId", int),
-    founderName: json |> field("founderName", string),
+    founders: json |> field("founders", list(Founder.decode)),
     links: json |> field("links", list(Link.decode)),
     files: json |> field("files", list(File.decode)),
     image: json |> field("image", nullable(string)) |> Js.Null.toOption,
@@ -47,7 +45,7 @@ let description = t => t.description;
 
 let eventOn = t => t.eventOn;
 
-let founderName = t => t.founderName;
+let founders = t => t.founders;
 
 let startupName = t => t.startupName;
 

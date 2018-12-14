@@ -10,8 +10,6 @@ let eventOn: t => DateTime.t;
 
 let description: t => string;
 
-let founderName: t => string;
-
 let startupName: t => string;
 
 let id: t => int;
@@ -41,3 +39,5 @@ let getReviewResult: (int, t) => reviewResult;
 let resultAsString: reviewResult => string;
 
 let evaluation: t => list(Grading.t);
+
+let founders: t => list(Founder.t);

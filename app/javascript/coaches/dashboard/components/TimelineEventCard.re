@@ -111,14 +111,18 @@ let make =
         <div
           className="timeline-event-card__header d-flex align-items-center w-100 p-3">
           <div>
-            <h5
-              className="timeline-event-card__header-title font-bold mb-1">
+            <h5 className="timeline-event-card__header-title font-bold mb-1">
               (timelineEvent |> TimelineEvent.title |> str)
             </h5>
             <h6
               className="timeline-event-card__header-subtext font-regular mb-0">
               (
-                (timelineEvent |> TimelineEvent.founderName)
+                (
+                  timelineEvent
+                  |> TimelineEvent.founders
+                  |> List.hd
+                  |> Founder.name
+                )
                 ++ " ("
                 ++ (timelineEvent |> TimelineEvent.startupName)
                 ++ ")"

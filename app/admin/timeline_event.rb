@@ -1,5 +1,5 @@
 ActiveAdmin.register TimelineEvent do
-  permit_params :description, :image, :event_on, :startup_id, :founder_id, :serialized_links,
+  permit_params :description, :image, :event_on, :serialized_links,
     :improved_timeline_event_id, timeline_event_files_attributes: %i[id title file private _destroy]
 
   filter :startup_product_name, as: :string, label: 'Product Name'
@@ -16,28 +16,24 @@ ActiveAdmin.register TimelineEvent do
 
   controller do
     include DisableIntercom
-
-    def scoped_collection
-      super.includes :startup
-    end
   end
 
   index do
     selectable_column
 
-    column :product do |timeline_event|
-      startup = timeline_event.startup
-
-      a href: admin_startup_path(startup) do
-        span startup.product_name
-
-        if startup.name.present?
-          span class: 'wrap-with-paranthesis' do
-            startup.name
-          end
-        end
-      end
-    end
+    # column :product do |timeline_event|
+    #   startup = timeline_event.startup
+    #
+    #   a href: admin_startup_path(startup) do
+    #     span startup.product_name
+    #
+    #     if startup.name.present?
+    #       span class: 'wrap-with-paranthesis' do
+    #         startup.name
+    #       end
+    #     end
+    #   end
+    # end
 
     column 'Founder', :founder
 

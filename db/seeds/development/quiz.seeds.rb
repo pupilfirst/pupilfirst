@@ -66,7 +66,7 @@ after "development:targets" do
   )
 
   question.answer_options.create!(
-    value: "All of the above",
+    value: "I don't know the answer",
     hint: "Half correct! Failure by itself is not cool in any way. Of a thousand startups, maybe 1 or 2 succeed and we hear about their success stories in newspapers and on TV. We never hear about failures and the difficult times founders go through. The only thing good about failures is when you use that opportunity to learn from failure.",
   )
 

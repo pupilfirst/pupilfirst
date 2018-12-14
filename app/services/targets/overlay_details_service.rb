@@ -84,7 +84,7 @@ module Targets
           question: question.question,
           description: question.description,
           correctAnswerId: question.correct_answer_id,
-          answerOptions: answer_options(question)
+          answerOptions: answer_options(question).shuffle
         }
       end
     end

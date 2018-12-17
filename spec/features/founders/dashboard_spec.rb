@@ -56,12 +56,12 @@ feature 'Founder Dashboard' do
     create :target_group, level: level_4
 
     # Timeline events to take targets to specific states.
-    create(:timeline_event, startup: startup, target: completed_target_1, passed_at: 1.day.ago)
-    create(:timeline_event, startup: startup, target: completed_target_2, passed_at: 1.day.ago)
-    create(:timeline_event, startup: startup, target: completed_target_3, passed_at: 1.day.ago)
-    create(:timeline_event, startup: startup, target: not_accepted_target, evaluator: faculty)
-    create(:timeline_event, startup: startup, target: needs_improvement_target, passed_at: 1.day.ago)
-    create(:timeline_event, startup: startup, target: completed_fee_payment_target, passed_at: 1.day.ago)
+    create(:timeline_event, founders: startup.founders, target: completed_target_1, passed_at: 1.day.ago)
+    create(:timeline_event, founders: startup.founders, target: completed_target_2, passed_at: 1.day.ago)
+    create(:timeline_event, founders: startup.founders, target: completed_target_3, passed_at: 1.day.ago)
+    create(:timeline_event, founders: startup.founders, target: not_accepted_target, evaluator: faculty)
+    create(:timeline_event, founders: startup.founders, target: needs_improvement_target, passed_at: 1.day.ago)
+    create(:timeline_event, founders: startup.founders, target: completed_fee_payment_target, passed_at: 1.day.ago)
 
     # Sign in with Founder - set dashboard toured to true to avoid the tour.
     founder.update!(dashboard_toured: dashboard_toured)

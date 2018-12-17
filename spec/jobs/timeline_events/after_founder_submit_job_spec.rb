@@ -6,7 +6,7 @@ describe TimelineEvents::AfterFounderSubmitJob do
   let(:faculty) { create :faculty, :with_email }
   let(:inactive_faculty) { create :faculty, :with_email, inactive: true }
   let(:startup) { create :startup, :subscription_active }
-  let(:timeline_event) { create :timeline_event, startup: startup }
+  let(:timeline_event) { create :timeline_event, founders: startup.founders }
   let(:mock_service) { instance_double(TimelineEvents::MarkAsImprovedTargetService, execute: nil) }
 
   describe '#perform' do

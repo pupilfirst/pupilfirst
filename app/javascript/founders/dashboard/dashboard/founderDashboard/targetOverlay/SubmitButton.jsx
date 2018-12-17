@@ -63,8 +63,12 @@ export default class SubmitButton extends React.Component {
 
   submitButtonContents() {
     return [
-      <i className={this.submitButtonIconClass()} aria-hidden="true" />,
-      <span>{this.submitButtonText()}</span>
+      <i
+        key="submit-button-icon"
+        className={this.submitButtonIconClass()}
+        aria-hidden="true"
+      />,
+      <span key="submit-button-text">{this.submitButtonText()}</span>
     ];
   }
 
@@ -92,7 +96,13 @@ export default class SubmitButton extends React.Component {
       );
     } else if (this.props.target.has_quiz && !this.props.overlayLoaded) {
       return (
-        <button disabled className={this.submitButtonClasses() + " founder-dashboard__action-bar-add-event-button--disabled"}>
+        <button
+          disabled
+          className={
+            this.submitButtonClasses() +
+            " founder-dashboard__action-bar-add-event-button--disabled"
+          }
+        >
           <i className="fa fa-refresh fa-spin" /> Take Quiz
         </button>
       );

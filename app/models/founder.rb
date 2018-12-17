@@ -2,7 +2,6 @@
 
 class Founder < ApplicationRecord
   extend FriendlyId
-  extend Forwardable
 
   include PrivateFilenameRetrievable
 
@@ -63,8 +62,9 @@ class Founder < ApplicationRecord
   scope :not_exited, -> { where.not(exited: true) }
   scope :screening_score_above, ->(minimum_score) { where("(screening_data ->> 'score')::int >= ?", minimum_score) }
 
+  # TODO: Remove all usages of method Founder.with_email and then delete it.
   def self.with_email(email)
-    where('lower(email) = ?', email.downcase).first # rubocop:disable Rails/FindBy
+    User.find_by(email: email)&.founders&.first
   end
 
   def self.ransackable_scopes(_auth)
@@ -158,7 +158,7 @@ class Founder < ApplicationRecord
   end
 
   def name_and_email
-    name + (email? ? ' (' + email + ')' : '')
+    name + ' (' + email + ')'
   end
 
   def name_and_team
@@ -229,6 +229,7 @@ class Founder < ApplicationRecord
     return 'Write a one-liner about yourself!' if about.blank?
     return 'Upload your legal ID proof!' if identification_proof.blank?
   end
+
   # rubocop:enable Metrics/CyclomaticComplexity
 
   # Should we give the founder a tour of the founder dashboard? If so, we shouldn't give it again.
@@ -272,7 +273,8 @@ class Founder < ApplicationRecord
     required_fields.all? { |field| self[field].present? }
   end
 
-  delegate level_zero?: :startup
+  delegate :level_zero?, to: :startup
+  delegate :email, to: :user
 
   def subscription_active?
     startup&.subscription_active?

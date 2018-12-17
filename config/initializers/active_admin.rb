@@ -148,7 +148,7 @@ ActiveAdmin.setup do |config|
   # You can add before, after and around filters to all of your
   # Active Admin resources and pages from here.
   #
-  # config.before_filter :do_something_awesome
+  # config.before_action :do_something_awesome
 
   # == Localize Date/Time Format
   #
@@ -182,6 +182,28 @@ ActiveAdmin.setup do |config|
   #
   # config.breadcrumb = false
 
+  # == Create Another Checkbox
+  #
+  # Create another checkbox is disabled by default. You can customize it for individual
+  # resources or you can enable them globally from here.
+  #
+  # config.create_another = true
+
+  # == Register Stylesheets & Javascripts
+  #
+  # We recommend using the built in Active Admin layout and loading
+  # up your own stylesheets / javascripts to customize the look
+  # and feel.
+  #
+  # To load a stylesheet:
+  #   config.register_stylesheet 'my_stylesheet.css'
+  #
+  # You can provide an options hash for more control, which is passed along to stylesheet_link_tag():
+  #   config.register_stylesheet 'my_print_stylesheet.css', media: :print
+  #
+  # To load a javascript file:
+  #   config.register_javascript 'my_javascript.js'
+
   # == CSV options
   #
   # Set the CSV builder separator
@@ -210,32 +232,6 @@ ActiveAdmin.setup do |config|
   #       menu.add label: "My Great Website", url: "http://www.mygreatwebsite.com", html_options: { target: :blank }
   #     end
   #   end
-
-  # Adding menu item called 'Tagging' to the 'Resource' and 'Startup' menu to show taggings applicable to them resp.
-  config.namespace :admin do |admin|
-    admin.build_menu :default do |menu|
-      menu.add label: 'Tagging', url: proc { admin_taggings_path('q[taggable_type_eq]' => 'Resource', commit: 'Filter') }, parent: 'Resources'
-      menu.add label: 'Tagging', url: proc { admin_taggings_path('q[taggable_type_eq]' => 'Startup', commit: 'Filter') }, parent: 'Startups'
-      menu.add label: 'Tagging', url: proc { admin_taggings_path('q[taggable_type_eq]' => 'Founder', commit: 'Filter') }, parent: 'Founders'
-    end
-  end
-
-  # Add 'Targets' under 'Founder' and 'Startup' menus
-  config.namespace :admin do |admin|
-    admin.build_menu :default do |menu|
-      menu.add label: 'Targets', url: proc { admin_targets_path('q[assignee_type_eq]' => 'Founder', commit: 'Filter') }, parent: 'Founders'
-      menu.add label: 'Targets', url: proc { admin_targets_path('q[assignee_type_eq]' => 'Startup', commit: 'Filter') }, parent: 'Startups'
-    end
-  end
-
-  # Add 'Review Timeline Events' under 'Timeline Events' menu
-
-  config.namespace :admin do |admin|
-    admin.build_menu :default do |menu|
-      menu.add label: 'Review Timeline Events', url: proc { review_timeline_events_admin_timeline_events_path }, parent: 'Timeline Events',
-               if: proc { current_admin_user&.superadmin? }
-    end
-  end
 
   # == Download Links
   #
@@ -284,6 +280,17 @@ ActiveAdmin.setup do |config|
   #
   # config.include_default_association_filters = true
 
-  # Disable streaming of CSV export in development.
-  config.disable_streaming_in = %w[development staging]
+  # == Footer
+  #
+  # By default, the footer shows the current Active Admin version. You can
+  # override the content of the footer here.
+  #
+  # config.footer = 'my custom footer text'
+
+  # == Sorting
+  #
+  # By default ActiveAdmin::OrderClause is used for sorting logic
+  # You can inherit it with own class and inject it for all resources
+  #
+  # config.order_clause = MyOrderClause
 end

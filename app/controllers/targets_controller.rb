@@ -1,5 +1,6 @@
 class TargetsController < ApplicationController
-  before_action :authenticate_founder!
+  before_action :authenticate_founder!, except: :select2_search
+  before_action :authenticate_user!, only: :select2_search
 
   # GET /targets/:id/download_rubric
   def download_rubric

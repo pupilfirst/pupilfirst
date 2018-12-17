@@ -7,7 +7,8 @@ class Resource < ApplicationRecord
 
   belongs_to :startup, optional: true
   belongs_to :level, optional: true
-  belongs_to :target, optional: true
+  has_many :target_resources, dependent: :destroy
+  has_many :targets, through: :target_resources
 
   def slug_candidates
     [

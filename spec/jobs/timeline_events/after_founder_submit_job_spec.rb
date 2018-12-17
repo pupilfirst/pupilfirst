@@ -3,8 +3,8 @@ require 'rails_helper'
 describe TimelineEvents::AfterFounderSubmitJob do
   subject { described_class }
 
-  let(:faculty) { create :faculty, :with_email }
-  let(:inactive_faculty) { create :faculty, :with_email, inactive: true }
+  let(:faculty) { create :faculty }
+  let(:inactive_faculty) { create :faculty, inactive: true }
   let(:startup) { create :startup, :subscription_active }
   let(:timeline_event) { create :timeline_event, startup: startup }
   let(:mock_service) { instance_double(TimelineEvents::MarkAsImprovedTargetService, execute: nil) }

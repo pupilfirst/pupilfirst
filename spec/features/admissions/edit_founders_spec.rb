@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Edit founders' do
+feature 'Edit founders', broken: true do
   include UserSpecHelper
   include FounderSpecHelper
 

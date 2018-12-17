@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_27_070025) do
+ActiveRecord::Schema.define(version: 2018_12_12_104842) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -32,7 +32,6 @@ ActiveRecord::Schema.define(version: 2018_11_27_070025) do
   end
 
   create_table "admin_users", id: :serial, force: :cascade do |t|
-    t.string "email", default: "", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string "username"
@@ -40,7 +39,6 @@ ActiveRecord::Schema.define(version: 2018_11_27_070025) do
     t.string "fullname"
     t.string "admin_type"
     t.integer "user_id"
-    t.index ["email"], name: "index_admin_users_on_email", unique: true
     t.index ["user_id"], name: "index_admin_users_on_user_id"
   end
 
@@ -129,6 +127,8 @@ ActiveRecord::Schema.define(version: 2018_11_27_070025) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "sponsored", default: false
+    t.bigint "school_id"
+    t.index ["school_id"], name: "index_courses_on_school_id"
   end
 
   create_table "data_migrations", id: false, force: :cascade do |t|
@@ -166,12 +166,10 @@ ActiveRecord::Schema.define(version: 2018_11_27_070025) do
     t.integer "sort_index"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "email"
     t.string "token"
     t.boolean "self_service"
     t.string "current_commitment"
     t.string "slug"
-    t.integer "founder_id"
     t.boolean "inactive", default: false
     t.text "about"
     t.string "commitment"
@@ -180,8 +178,10 @@ ActiveRecord::Schema.define(version: 2018_11_27_070025) do
     t.string "slack_user_id"
     t.integer "level_id"
     t.bigint "user_id"
+    t.bigint "school_id"
     t.index ["category"], name: "index_faculty_on_category"
     t.index ["level_id"], name: "index_faculty_on_level_id"
+    t.index ["school_id"], name: "index_faculty_on_school_id"
     t.index ["slug"], name: "index_faculty_on_slug", unique: true
     t.index ["user_id"], name: "index_faculty_on_user_id"
   end
@@ -201,7 +201,6 @@ ActiveRecord::Schema.define(version: 2018_11_27_070025) do
   end
 
   create_table "founders", id: :serial, force: :cascade do |t|
-    t.string "email"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string "avatar"
@@ -416,7 +415,6 @@ ActiveRecord::Schema.define(version: 2018_11_27_070025) do
     t.integer "startup_id"
     t.text "video_embed"
     t.integer "level_id"
-    t.integer "target_id"
     t.string "link"
     t.string "file_content_type"
     t.boolean "archived", default: false
@@ -424,7 +422,12 @@ ActiveRecord::Schema.define(version: 2018_11_27_070025) do
     t.index ["level_id"], name: "index_resources_on_level_id"
     t.index ["slug"], name: "index_resources_on_slug"
     t.index ["startup_id"], name: "index_resources_on_startup_id"
-    t.index ["target_id"], name: "index_resources_on_target_id"
+  end
+
+  create_table "schools", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "shortened_urls", id: :serial, force: :cascade do |t|
@@ -488,7 +491,6 @@ ActiveRecord::Schema.define(version: 2018_11_27_070025) do
     t.string "logo"
     t.string "pitch"
     t.string "website"
-    t.string "email"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string "facebook_link"
@@ -575,6 +577,7 @@ ActiveRecord::Schema.define(version: 2018_11_27_070025) do
     t.boolean "milestone"
     t.integer "level_id"
     t.bigint "track_id"
+    t.boolean "archived", default: false
     t.index ["level_id"], name: "index_target_groups_on_level_id"
     t.index ["sort_index"], name: "index_target_groups_on_sort_index"
     t.index ["track_id"], name: "index_target_groups_on_track_id"
@@ -585,6 +588,13 @@ ActiveRecord::Schema.define(version: 2018_11_27_070025) do
     t.integer "prerequisite_target_id"
     t.index ["prerequisite_target_id"], name: "index_target_prerequisites_on_prerequisite_target_id"
     t.index ["target_id"], name: "index_target_prerequisites_on_target_id"
+  end
+
+  create_table "target_resources", force: :cascade do |t|
+    t.bigint "target_id", null: false
+    t.bigint "resource_id", null: false
+    t.index ["resource_id"], name: "index_target_resources_on_resource_id"
+    t.index ["target_id", "resource_id"], name: "index_target_resources_on_target_id_and_resource_id", unique: true
   end
 
   create_table "target_skills", force: :cascade do |t|
@@ -627,7 +637,6 @@ ActiveRecord::Schema.define(version: 2018_11_27_070025) do
     t.string "google_calendar_event_id"
     t.datetime "feedback_asked_at"
     t.datetime "slack_reminders_sent_at"
-    t.string "session_by"
     t.string "call_to_action"
     t.index ["archived"], name: "index_targets_on_archived"
     t.index ["faculty_id"], name: "index_targets_on_faculty_id"
@@ -760,7 +769,9 @@ ActiveRecord::Schema.define(version: 2018_11_27_070025) do
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"
   add_foreign_key "connect_slots", "faculty"
+  add_foreign_key "courses", "schools"
   add_foreign_key "faculty", "levels"
+  add_foreign_key "faculty", "schools"
   add_foreign_key "founders", "colleges"
   add_foreign_key "founders", "users"
   add_foreign_key "latest_submission_records", "founders"
@@ -780,6 +791,8 @@ ActiveRecord::Schema.define(version: 2018_11_27_070025) do
   add_foreign_key "startups", "states", column: "billing_state_id"
   add_foreign_key "target_groups", "levels"
   add_foreign_key "target_groups", "tracks"
+  add_foreign_key "target_resources", "resources"
+  add_foreign_key "target_resources", "targets"
   add_foreign_key "target_skills", "skills"
   add_foreign_key "target_skills", "targets"
   add_foreign_key "timeline_event_files", "timeline_events"

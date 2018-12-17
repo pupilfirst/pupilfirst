@@ -206,6 +206,9 @@ Rails.application.routes.draw do
   # Apple iOS course at Manipal University landing page
   get 'ios', to: 'home#ios'
 
+  # VR course at Sastra University landing page
+  get 'sastra', to: 'home#sastra'
+
   root 'home#index'
 
   # /slack redirected to /about/slack
@@ -264,6 +267,8 @@ Rails.application.routes.draw do
   scope 'stats', controller: 'product_metrics' do
     get '/', action: 'index', as: 'stats'
   end
+
+  get '/school_admin', to: 'school_admins#dashboard'
 
   # Handle shortener-gem form URLs for a while (backward compatibility).
   get '/:unique_key', to: 'shortened_urls#redirect', constraints: { unique_key: /[0-9a-z]{5}/ }

@@ -1,0 +1,117 @@
+- content_for :head do
+  title VR Elective course at Sastra University
+  == javascript_pack_tag 'home/sastra', 'data-turbolinks-track': 'reload', nonce: true
+
+/ Load the Recaptcha API manually, because we're programmatically invoking the Invisible Recaptcha library.
+- unless Rails.env.test?
+  = javascript_include_tag 'https://www.google.com/recaptcha/api.js', nonce: true, async: true, defer: true
+
+.landing__container.p-3.p-lg-5
+  .container
+    .row.landing__sign-in-container
+      .col-md-6.p-0
+        .landing__sign-in-left.h-100
+          .p-3.pt-3.pt-lg-5.px-lg-5
+            .d-flex.flex-column.flex-md-row.align-items-center
+              h1.sastra__header.font-bold.mb-3.mb-md-0.mr-md-4.pr-md-3
+                | Industry elective &ndash; VR
+              = image_tag 'fb/school-of-innovation-india-fb-logo.svg', class: 'sastra__soi-logo img-fluid', alt: 'School of Innovation India from Facebook'
+            p.mt-3
+              ' Online program to learn basics and advanced concepts of Unity game
+              ' engine with a framework of a building a high-quality
+              | Virtual Reality project.
+            .sastra__key-dates.mt-4
+              .d-flex.mb-3
+                .sastra__key-dates-date.px-2.py-1.flex-shrink-0.align-self-start
+                  h5.m-0.font-semibold
+                    | 18 December
+                .sastra__key-dates-event.ml-3.mt-1
+                  h5.font-semibold VR awareness event.
+                  p
+                    ' (All the interested students are invited for the
+                    ' event where they get to hear from experts and experience VR)
+              .d-flex.mb-3
+                .sastra__key-dates-date.px-2.py-1.flex-shrink-0.align-self-start
+                  h5.m-0.font-semibold
+                    | 21 December
+                .sastra__key-dates-event.ml-3.mt-1
+                  h5.font-semibold Admission day.
+          .sastra__selection-process-container.p-4.px-lg-5
+            h5.font-semibold.white-text
+              | Interested students will go through a two-step selection process.
+            .d-flex.mt-4.flex-column.flex-md-row
+              .d-flex.sastra__selection-process.mb-3.mb-md-0.mr-md-5.align-items-center
+                .sastra__selection-process-step.text-center
+                  h2.font-bold.mb-0.white-text 1
+
+                .ml-2
+                  .sastra__selection-process-title
+                    h5.white-text.font-semibold.mb-0 Quiz
+                  .sastra__selection-process-duration
+                     p.white-text
+                      | (45 minutes)
+
+              .d-flex.sastra__selection-process.align-items-center
+                .sastra__selection-process-step.text-center
+                  h2.font-bold.mb-0.white-text 2
+
+                .ml-2
+                  .sastra__selection-process-title
+                    h5.white-text.font-semibold.mb-0 Practicals
+                  .sastra__selection-process-duration
+                     p.white-text
+                      | (1 hour)
+          .p-3.px-lg-5
+            p.mt-3
+              ' Reference materials required to prepare for the admission day will
+              | be shared at the end of the awareness event on 17th.
+            .sastra__key-dates.mt-4
+                .d-flex.mb-3
+                  .sastra__key-dates-date.px-2.py-1.flex-shrink-0.align-self-start
+                    h5.m-0.font-semibold
+                      | 22 December
+                  .sastra__key-dates-event.ml-3.mt-1
+                    h5.font-semibold Results announcement.
+
+                .d-flex.mb-3
+                  .sastra__key-dates-date.px-2.py-1.flex-shrink-0.align-self-start
+                    h5.m-0.font-semibold
+                      | 26 December
+                  .sastra__key-dates-event.ml-3.mt-1
+                    h5.font-semibold The Program starts.
+
+      .col-md-6
+        .landing__partner-sv-logo
+          = image_tag 'landing_page/sastra-sv.co-VR-course-logo.png', class: 'img-fluid p-3 pt-lg-5'
+
+        .user-login.p-3.p-lg-5.text-center
+          h3.font-regular.text-center.mb-4
+            ' VR Elective course at
+            br
+            | Sastra University
+          a class="typeform-share button btn btn-primary btn-lg home-apply__button mt-3 d-none" href="https://svlabs.typeform.com/to/SEx7bb" data-mode="popup" target="_blank" data-auto-open=@auto_open
+            | Take Quiz Now
+
+          / = form_for @form, url: user_send_login_email_path, html: { 'data-test': Rails.env.test? } do |f|
+          /   - if f.object.errors.present? && f.object.errors[:base].present?
+          /     .alert.alert-warning.alert-dismissable.fade.show role='alert'
+          /       ul.mb-0
+          /         - f.object.errors[:base].each do |error_message|
+          /           li #{error_message}
+
+          /   = f.hidden_field :referer
+
+          /   .wrapped-input
+          /     = image_tag 'users/sessions/new/email.svg'
+          /     = f.text_field :email, required: true, placeholder: 'Email', maxlength: 250, type: 'email'
+          /     - if f.object.errors[:email].present?
+          /       p.error-under-input = f.object.errors[:email].join(', ')
+
+          /   .remember-forgot.mt-1.mb-2
+          /     .login-option.text-center
+          /       = f.check_box :shared_device, class: 'css-checkbox'
+          /       = f.label :shared_device, 'Are you using a shared device?', class: 'css-label'
+
+          /   .text-center
+          /     div class='g-recaptcha' data-sitekey=Rails.application.secrets.dig(:google, :recaptcha, :invisible, :site_key) data-callback='handleSignInWithEmailButton' data-size='invisible' data-badge='inline'
+          /     = f.submit 'Email Me a Link to Sign In', class: 'btn btn-primary btn-lg d-inline-block font-semibold ios-landing__sign-in-btn'

@@ -11,13 +11,15 @@ class Faculty < ApplicationRecord
 
   has_secure_token
 
-  belongs_to :user, optional: true # TODO: Temporarily optional. Remove once ready.
+  belongs_to :school
+  belongs_to :user
   has_many :startup_feedback, dependent: :restrict_with_error
   has_many :targets, dependent: :restrict_with_error
   has_many :connect_slots, dependent: :destroy
   has_many :connect_requests, through: :connect_slots
-  belongs_to :founder, optional: true # link alumni faculty to their founder profile
   belongs_to :level, optional: true
+
+  # Startups whose timeline events this faculty can review.
   has_and_belongs_to_many :startups, dependent: :restrict_with_error
 
   CATEGORY_TEAM = 'team'
@@ -45,10 +47,6 @@ class Faculty < ApplicationRecord
     [COMMITMENT_PART_TIME, COMMITMENT_FULL_TIME]
   end
 
-  def alumni?
-    category == CATEGORY_ALUMNI
-  end
-
   validates :name, presence: true
   validates :title, presence: true
   validates :category, inclusion: { in: valid_categories }, presence: true
@@ -56,7 +54,6 @@ class Faculty < ApplicationRecord
   validates :compensation, inclusion: { in: valid_compensation_values }, allow_blank: true
   validates :commitment, inclusion: { in: valid_commitment_values }, allow_blank: true
   validates :slug, format: { with: /\A[a-z0-9\-_]+\z/i }, allow_nil: true
-  validates :founder, presence: { message: 'Must link alumni to their faculty profile' }, if: :alumni?
 
   scope :active, -> { where.not(inactive: true) }
   scope :team, -> { where(category: CATEGORY_TEAM).order('sort_index ASC') }
@@ -64,7 +61,6 @@ class Faculty < ApplicationRecord
   scope :developer_coaches, -> { where(category: CATEGORY_DEVELOPER_COACHES).order('sort_index ASC') }
   scope :vr_coaches, -> { where(category: CATEGORY_VR_COACHES).order('sort_index ASC') }
   scope :advisory_board, -> { where(category: CATEGORY_ADVISORY_BOARD).order('sort_index ASC') }
-  scope :alumni, -> { where(category: CATEGORY_ALUMNI).order('sort_index ASC') }
   scope :available_for_connect, -> { where(category: [CATEGORY_TEAM, CATEGORY_VISITING_COACHES, CATEGORY_ALUMNI, CATEGORY_VR_COACHES]) }
   # hard-wired ids of our ops_team, kireeti: 19, bharat: 20. A flag for this might be an overkill?
   scope :ops_team, -> { where(id: [19, 20]) }
@@ -151,12 +147,5 @@ class Faculty < ApplicationRecord
     self.slack_user_id = slack_username.present? ? @new_slack_user_id : nil
   end
 
-  before_save :find_or_create_user
-
-  def find_or_create_user
-    return if email.blank?
-
-    user = User.with_email(email) || User.create!(email: email)
-    self.user = user
-  end
+  delegate :email, to: :user
 end

@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 class Target < ApplicationRecord
+  # Use to allow archival of a target. See Targets::ArchivalService.
+  attr_accessor :safe_to_archive
+
+  # Need to allow these two to be read for AA form.
+  attr_reader :startup_id, :founder_id
+
   KEY_SCREENING = 'screening'
   KEY_COFOUNDER_ADDITION = 'cofounder_addition'
   KEY_R1_TASK = 'r1_task'
@@ -29,11 +35,12 @@ class Target < ApplicationRecord
   ].freeze
 
   belongs_to :faculty, optional: true
-  has_many :timeline_events, dependent: :nullify
+  has_many :timeline_events, dependent: :restrict_with_error
   has_many :target_prerequisites, dependent: :destroy
   has_many :prerequisite_targets, through: :target_prerequisites
-  belongs_to :target_group, optional: true
-  has_many :resources, dependent: :nullify
+  belongs_to :target_group
+  has_many :target_resources, dependent: :destroy
+  has_many :resources, through: :target_resources
   has_many :target_skills, dependent: :destroy
   has_many :skills, through: :target_skills
   has_one :level, through: :target_group
@@ -48,7 +55,6 @@ class Target < ApplicationRecord
   scope :live, -> { joins(:target_group).where(archived: [false, nil]) }
   scope :founder, -> { where(role: ROLE_FOUNDER) }
   scope :not_founder, -> { where.not(role: ROLE_FOUNDER) }
-  scope :vanilla_targets, -> { where.not(target_group_id: nil) }
   scope :sessions, -> { where.not(session_at: nil) }
   scope :auto_verifiable, -> { where(submittability: SUBMITTABILITY_AUTO_VERIFY) }
 
@@ -85,9 +91,6 @@ class Target < ApplicationRecord
     [SUBMITTABILITY_RESUBMITTABLE, SUBMITTABILITY_SUBMITTABLE_ONCE, SUBMITTABILITY_NOT_SUBMITTABLE, SUBMITTABILITY_AUTO_VERIFY].freeze
   end
 
-  # Need to allow these two to be read for AA form.
-  attr_reader :startup_id, :founder_id
-
   validates :target_action_type, inclusion: { in: valid_target_action_types }, allow_nil: true
   validates :role, presence: true, inclusion: { in: valid_roles }
   validates :title, presence: true
@@ -115,36 +118,16 @@ class Target < ApplicationRecord
     errors[:level] << 'should match level of target group'
   end
 
-  validate :only_one_of_faculty_or_session_by
+  validate :must_be_safe_to_archive
 
-  def only_one_of_faculty_or_session_by
-    if faculty.present? && session_by.present?
-      errors[:base] << 'Both faculty and session_by cannot be set.'
-      errors[:faculty_id] << 'or session_by can be set'
-      errors[:session_by] << 'or faculty can be set'
-    end
+  def must_be_safe_to_archive
+    return unless archived_changed? && archived?
+    return if safe_to_archive
+
+    errors[:archived] << 'cannot be set unsafely'
   end
 
-  validate :session_by_only_for_session
-
-  def session_by_only_for_session
-    if session_at.blank? && session_by.present?
-      errors[:base] << 'This target is not a session, but has session_by set.'
-      errors[:session_by] << 'should not be set for a vanilla target'
-    end
-  end
-
-  validate :vanilla_target_requires_faculty
-
-  def vanilla_target_requires_faculty
-    return if session_at.present?
-    return if faculty.present?
-
-    errors[:base] << 'Vanilla targets require a linked faculty.'
-    errors[:faculty_id] << 'is required for a vanilla target'
-  end
-
-  normalize_attribute :key, :slideshow_embed, :video_embed, :session_by
+  normalize_attribute :key, :slideshow_embed, :video_embed
 
   def display_name
     if target_group.present?

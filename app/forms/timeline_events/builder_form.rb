@@ -5,7 +5,7 @@ module TimelineEvents
 
     attr_accessor :founder
 
-    property :target_id
+    property :target_id, validates: { presence: true }
     property :description, validates: { presence: true, length: { maximum: MAX_DESCRIPTION_CHARACTERS } }
     property :event_on, validates: { presence: true }
     property :links
@@ -52,8 +52,6 @@ module TimelineEvents
     end
 
     def target_status_submittable
-      return if target.blank?
-
       if target.status(founder).in?([Target::UNSUBMITTABLE_STATUSES])
         errors[:target_id] << 'is not submittable'
       end

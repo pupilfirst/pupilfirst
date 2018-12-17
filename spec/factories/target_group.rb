@@ -5,5 +5,10 @@ FactoryBot.define do
     description { Faker::Lorem.sentence }
     level
     milestone { false }
+
+    trait :archived do
+      safe_to_archive { true }
+      archived { true }
+    end
   end
 end

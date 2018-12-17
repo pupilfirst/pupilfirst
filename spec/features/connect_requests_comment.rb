@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'Connect Request Comment' do
   include UserSpecHelper
 
-  let(:faculty) { create :faculty, :connectable }
+  let(:faculty) { create :faculty }
   let(:startup) { create :startup, :subscription_active }
   let(:founder) { startup.team_lead }
   let(:connect_slot) { create :connect_slot, faculty: faculty }

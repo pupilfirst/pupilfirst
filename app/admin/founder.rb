@@ -28,7 +28,7 @@ ActiveAdmin.register Founder do
   scope :level_zero
   scope :all
 
-  filter :email
+  filter :user_email, as: :string
   filter :name
 
   filter :ransack_tagged_with,
@@ -47,7 +47,7 @@ ActiveAdmin.register Founder do
   filter :screening_score_above, as: :number
   filter :coder, as: :boolean
 
-  permit_params :name, :email, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :born_on,
+  permit_params :name, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :born_on,
     :communication_address, :identification_proof, :phone, :invitation_token, :college_id, :roll_number,
     :course, :semester, :year_of_graduation, :twitter_url, :linkedin_url, :personal_website_url, :blog_url,
     :angel_co_url, :github_url, :behance_url, :gender, :skype_id, :exited, :id_proof_number,

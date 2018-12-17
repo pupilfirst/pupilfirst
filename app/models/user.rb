@@ -33,4 +33,8 @@ class User < ApplicationRecord
   def admin?
     admin_user.present?
   end
+
+  def display_name
+    email
+  end
 end

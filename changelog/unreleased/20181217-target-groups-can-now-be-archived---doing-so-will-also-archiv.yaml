@@ -1,0 +1,9 @@
+---
+timestamp: '2018-12-17T06:11:14Z'
+title: Target groups can now be archived - doing so will also archive all targets
+  in the group.
+trello: https://trello.com/c/YGAmv4gw
+private: true
+description: Creates a `TargetsGroups::ArchivalService` and a lot of specs for uncovered
+  code.
+category: feature

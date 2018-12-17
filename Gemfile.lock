@@ -52,15 +52,6 @@ GIT
       signet (~> 0.7)
 
 GIT
-  remote: https://github.com/rails/webpacker.git
-  revision: 99c0dd9a1e5fa9ca9ad840d7e308c12c4e8eb9ec
-  specs:
-    webpacker (4.0.0.pre.3)
-      activesupport (>= 4.2)
-      rack-proxy (>= 0.6.1)
-      railties (>= 4.2)
-
-GIT
   remote: https://github.com/svdotco/lita.git
   revision: 94861d1270de373b1147c5e9162976becdfaac1c
   specs:
@@ -235,7 +226,7 @@ GEM
     coffee-script-source (1.12.2)
     combine_pdf (1.0.15)
       ruby-rc4 (>= 0.1.5)
-    concurrent-ruby (1.1.3)
+    concurrent-ruby (1.1.4)
     connection_pool (2.2.2)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
@@ -405,7 +396,7 @@ GEM
       mime-types (~> 3.0)
       multi_xml (>= 0.5.2)
     humanize (1.8.1)
-    i18n (1.1.1)
+    i18n (1.2.0)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
     inherited_resources (1.9.0)
@@ -797,6 +788,10 @@ GEM
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff
+    webpacker (4.0.0.rc.2)
+      activesupport (>= 4.2)
+      rack-proxy (>= 0.6.1)
+      railties (>= 4.2)
     websocket-driver (0.7.0)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.3)
@@ -938,7 +933,7 @@ DEPENDENCIES
   virtus (~> 1.0)
   web-console (~> 3.4)
   webmock (~> 3.0)
-  webpacker (= 4.0.0.pre.3)!
+  webpacker (= 4.0.0.rc.2)
 
 RUBY VERSION
    ruby 2.5.3p105

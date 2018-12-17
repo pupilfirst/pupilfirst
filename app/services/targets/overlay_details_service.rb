@@ -10,7 +10,8 @@ module Targets
         founderStatuses: founder_statuses,
         latestEvent: latest_event_details,
         latestFeedback: latest_feedback,
-        linkedResources: linked_resources
+        linkedResources: linked_resources,
+        quizQuestions: quiz_questions
       }
     end
 
@@ -51,11 +52,11 @@ module Targets
       return nil if latest_event.blank?
 
       attachments = latest_event.timeline_event_files.each_with_object([]) do |file, array|
-        array << { type: 'file', title: file.title, url: file.file_url }
+        array << { type: "file", title: file.title, url: file.file_url }
       end
 
       latest_event.links.each_with_object(attachments) do |link, array|
-        array << { type: 'link', title: link[:title], url: link[:url] }
+        array << { type: "link", title: link[:title], url: link[:url] }
       end
     end
 
@@ -70,6 +71,30 @@ module Targets
           canStream: resource.stream?,
           hasLink: resource.link.present?,
           hasFile: resource.file.present?
+        }
+      end
+    end
+
+    def quiz_questions
+      return [] if @target.quiz.blank?
+
+      @target.quiz.quiz_questions.each_with_index.map do |question, index|
+        {
+          index: index,
+          question: question.question,
+          description: question.description,
+          correctAnswerId: question.correct_answer_id,
+          answerOptions: answer_options(question).shuffle
+        }
+      end
+    end
+
+    def answer_options(question)
+      question.answer_options.map do |answer|
+        {
+          id: answer.id,
+          value: answer.value,
+          hint: answer.hint
         }
       end
     end

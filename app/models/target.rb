@@ -35,7 +35,7 @@ class Target < ApplicationRecord
   ].freeze
 
   belongs_to :faculty, optional: true
-  has_many :timeline_events, dependent: :nullify
+  has_many :timeline_events, dependent: :restrict_with_error
   has_many :target_prerequisites, dependent: :destroy
   has_many :prerequisite_targets, through: :target_prerequisites
   belongs_to :target_group
@@ -45,6 +45,7 @@ class Target < ApplicationRecord
   has_many :skills, through: :target_skills
   has_one :level, through: :target_group
   has_one :course, through: :target_group
+  has_one :quiz, dependent: :restrict_with_error
 
   accepts_nested_attributes_for :target_skills, allow_destroy: true
 
@@ -55,6 +56,7 @@ class Target < ApplicationRecord
   scope :founder, -> { where(role: ROLE_FOUNDER) }
   scope :not_founder, -> { where.not(role: ROLE_FOUNDER) }
   scope :sessions, -> { where.not(session_at: nil) }
+  scope :auto_verifiable, -> { where(submittability: SUBMITTABILITY_AUTO_VERIFY) }
 
   # Custom scope to allow AA to filter by intersection of tags.
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
@@ -174,6 +176,10 @@ class Target < ApplicationRecord
 
   def rubric?
     target_skills.exists? || rubric_url.present?
+  end
+
+  def quiz?
+    quiz.present?
   end
 
   # this is included in the target JSONs the DashboardDataService responds with

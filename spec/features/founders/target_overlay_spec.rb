@@ -18,7 +18,25 @@ feature 'Target Overlay' do
   let!(:resource_video_embed) { create :resource_video_embed, targets: [target] }
   let!(:resource_link) { create :resource_link, targets: [target] }
 
+  # Quiz target
+  let!(:quiz_target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM, submittability: Target::SUBMITTABILITY_AUTO_VERIFY }
+  let!(:quiz) { create :quiz, target: quiz_target }
+  let!(:quiz_question_1) { create :quiz_question, quiz: quiz }
+  let!(:q1_answer_1) { create :answer_option, quiz_question: quiz_question_1 }
+  let!(:q1_answer_2) { create :answer_option, quiz_question: quiz_question_1 }
+  let!(:quiz_question_2) { create :quiz_question, quiz: quiz }
+  let!(:q2_answer_1) { create :answer_option, quiz_question: quiz_question_2 }
+  let!(:q2_answer_2) { create :answer_option, quiz_question: quiz_question_2 }
+  let!(:q2_answer_3) { create :answer_option, quiz_question: quiz_question_2 }
+  let!(:q2_answer_4) { create :answer_option, quiz_question: quiz_question_2 }
+  let!(:quiz_question_3) { create :quiz_question, quiz: quiz }
+  let!(:q3_answer_1) { create :answer_option, quiz_question: quiz_question_3 }
+  let!(:q3_answer_2) { create :answer_option, quiz_question: quiz_question_3 }
+
   before do
+    quiz_question_1.update!(correct_answer: q1_answer_2)
+    quiz_question_2.update!(correct_answer: q2_answer_4)
+    quiz_question_3.update!(correct_answer: q3_answer_1)
     founder.update!(dashboard_toured: true)
     sign_in_user founder.user, referer: student_dashboard_path
   end
@@ -210,6 +228,46 @@ feature 'Target Overlay' do
         expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > span', text: 'Submitted')
         expect(page).to have_selector('.target-overlay-status-badge-bar__hint', text: "Submitted on #{Date.today.strftime('%b %-e')}")
       end
+    end
+  end
+
+  context 'when the founder submits a quiz target', js: true do
+    it 'changes the status to completed right away' do
+      find('.founder-dashboard-target-header__headline', text: quiz_target.title).click
+
+      # The target must be pending.
+      expect(page).to have_content('Pending')
+      expect(page).to have_content('Follow completion instructions and submit!')
+
+      # Close pnotify first.
+      find('.ui-pnotify').click
+
+      click_button('Take Quiz')
+
+      # Question one
+      find('.quiz-root__answer-option', text: q1_answer_1.value).click
+      expect(page).to have_content('Wrong Answer')
+      find('.quiz-root__answer-option', text: q1_answer_2.value).click
+      expect(page).to have_content('Correct Answer')
+      click_button('Next')
+
+      # Question two
+      find('.quiz-root__answer-option', text: q2_answer_3.value).click
+      expect(page).to have_content('Wrong Answer')
+      find('.quiz-root__answer-option', text: q2_answer_4.value).click
+      expect(page).to have_content('Correct Answer')
+      click_button('Next')
+
+      # Question three
+      find('.quiz-root__answer-option', text: q3_answer_2.value).click
+      expect(page).to have_content('Wrong Answer')
+      find('.quiz-root__answer-option', text: q3_answer_1.value).click
+      expect(page).to have_content('Correct Answer')
+
+      # Submit Quiz
+      click_button('Submit Quiz')
+
+      expect(page).to have_content("Completed on #{Date.today.strftime('%b %-e')}")
     end
   end
 

@@ -54,6 +54,15 @@ ActiveRecord::Schema.define(version: 2018_12_13_120548) do
     t.index ["visit_id"], name: "index_ahoy_events_on_visit_id"
   end
 
+  create_table "answer_options", force: :cascade do |t|
+    t.bigint "quiz_question_id"
+    t.string "value"
+    t.text "hint"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["quiz_question_id"], name: "index_answer_options_on_quiz_question_id"
+  end
+
   create_table "colleges", id: :serial, force: :cascade do |t|
     t.string "name"
     t.string "also_known_as"
@@ -118,6 +127,8 @@ ActiveRecord::Schema.define(version: 2018_12_13_120548) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "sponsored", default: false
+    t.bigint "school_id"
+    t.index ["school_id"], name: "index_courses_on_school_id"
   end
 
   create_table "data_migrations", id: false, force: :cascade do |t|
@@ -167,8 +178,10 @@ ActiveRecord::Schema.define(version: 2018_12_13_120548) do
     t.string "slack_user_id"
     t.integer "level_id"
     t.bigint "user_id"
+    t.bigint "school_id"
     t.index ["category"], name: "index_faculty_on_category"
     t.index ["level_id"], name: "index_faculty_on_level_id"
+    t.index ["school_id"], name: "index_faculty_on_school_id"
     t.index ["slug"], name: "index_faculty_on_slug", unique: true
     t.index ["user_id"], name: "index_faculty_on_user_id"
   end
@@ -369,6 +382,25 @@ ActiveRecord::Schema.define(version: 2018_12_13_120548) do
     t.index ["founder_id"], name: "index_public_slack_messages_on_founder_id"
   end
 
+  create_table "quiz_questions", force: :cascade do |t|
+    t.string "question"
+    t.text "description"
+    t.bigint "quiz_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "correct_answer_id"
+    t.index ["correct_answer_id"], name: "index_quiz_questions_on_correct_answer_id"
+    t.index ["quiz_id"], name: "index_quiz_questions_on_quiz_id"
+  end
+
+  create_table "quizzes", force: :cascade do |t|
+    t.string "title"
+    t.bigint "target_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["target_id"], name: "index_quizzes_on_target_id"
+  end
+
   create_table "resources", id: :serial, force: :cascade do |t|
     t.string "file"
     t.string "thumbnail"
@@ -388,6 +420,12 @@ ActiveRecord::Schema.define(version: 2018_12_13_120548) do
     t.index ["level_id"], name: "index_resources_on_level_id"
     t.index ["slug"], name: "index_resources_on_slug"
     t.index ["startup_id"], name: "index_resources_on_startup_id"
+  end
+
+  create_table "schools", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "shortened_urls", id: :serial, force: :cascade do |t|
@@ -724,10 +762,13 @@ ActiveRecord::Schema.define(version: 2018_12_13_120548) do
   end
 
   add_foreign_key "admin_users", "users"
+  add_foreign_key "answer_options", "quiz_questions"
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"
   add_foreign_key "connect_slots", "faculty"
+  add_foreign_key "courses", "schools"
   add_foreign_key "faculty", "levels"
+  add_foreign_key "faculty", "schools"
   add_foreign_key "founders", "colleges"
   add_foreign_key "founders", "users"
   add_foreign_key "latest_submission_records", "founders"
@@ -736,6 +777,9 @@ ActiveRecord::Schema.define(version: 2018_12_13_120548) do
   add_foreign_key "levels", "courses"
   add_foreign_key "payments", "founders"
   add_foreign_key "payments", "startups"
+  add_foreign_key "quiz_questions", "answer_options", column: "correct_answer_id"
+  add_foreign_key "quiz_questions", "quizzes"
+  add_foreign_key "quizzes", "targets"
   add_foreign_key "resources", "levels"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"

@@ -14,7 +14,7 @@ module Users
         Rails.logger.info("User with email address '#{@email}' created: ##{user.id}.")
 
         # Create the founder in the startup.
-        founder = Founder.create!(user: user, email: @email, name: @name, startup: @startup)
+        founder = Founder.create!(user: user, name: @name, startup: @startup)
 
         Rails.logger.info("Founder for user created: ##{founder.id}, and added to Startup##{@startup.id}.")
 

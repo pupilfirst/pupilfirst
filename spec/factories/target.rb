@@ -57,5 +57,9 @@ FactoryBot.define do
       key { Target::KEY_ATTEND_INTERVIEW }
       prerequisite_targets { [create(:target, :admissions_cofounder_addition)] }
     end
+
+    trait :auto_verify do
+      submittability { Target::SUBMITTABILITY_AUTO_VERIFY }
+    end
   end
 end

@@ -1,0 +1,31 @@
+.sastra__header {
+    font-size: 2.25rem;
+    line-height: 1;
+    border-right: 1px solid $gray-border;
+
+    @include media-breakpoint-down (lg) {
+        font-size: 1.5rem;
+    }
+}
+.sastra__soi-logo {
+    width: 12.75rem;
+}
+
+.sastra__key-dates-date {
+    background-color: white;
+    border: 1px solid #F5A623;
+    @include border-radius(5px);
+}
+
+.sastra__selection-process-container {
+    background-color: #0093E9;
+    background-image: linear-gradient(160deg, #0093E9 0%, #36C269 100%);
+}
+
+.sastra__selection-process-step {
+    width: 3.2rem;
+    height: 3.2rem;
+    flex-shrink: 0;
+    border: 2px solid white;
+    @include border-radius(50px);
+}

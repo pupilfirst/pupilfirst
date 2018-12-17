@@ -125,7 +125,8 @@ describe Founders::DashboardDataService do
       target_group: { id: target_group.id },
       faculty: { id: target.faculty.id },
       status: status,
-      prerequisites: []
+      prerequisites: [],
+      has_quiz: target.quiz?
     }
 
     return fields if target.session_at.blank?

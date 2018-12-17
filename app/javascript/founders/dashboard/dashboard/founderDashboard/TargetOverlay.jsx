@@ -7,20 +7,28 @@ import StatusBadgeBar from "./targetOverlay/StatusBadgeBar";
 import SubmitButton from "./targetOverlay/SubmitButton";
 import TimelineEventPanel from "./targetOverlay/TimelineEventPanel";
 import FacultyBlock from "./targetOverlay/FacultyBlock";
+import { jsComponent as QuizComponent } from "../../components/Quiz__Root.bs";
 
 export default class TargetOverlay extends React.Component {
   constructor(props) {
     super(props);
-    this.state = _.merge({
-      latestEvent: null,
-      latestFeedback: null,
-      linkedResources: null,
-      founderStatuses: null
-    });
+    this.state = _.merge(
+      { ...props.target },
+      {
+        latestEvent: null,
+        latestFeedback: null,
+        linkedResources: null,
+        founderStatuses: null,
+        quizQuestions: null,
+        showQuiz: false
+      }
+    );
 
     this.updateDetails = this.updateDetails.bind(this);
     this.openTimelineBuilder = this.openTimelineBuilder.bind(this);
     this.completeTarget = this.completeTarget.bind(this);
+    this.autoVerify = this.autoVerify.bind(this);
+    this.invertShowQuiz = this.invertShowQuiz.bind(this);
     this.getFaculty = this.getFaculty.bind(this);
     this.getTarget = this.getTarget.bind(this);
   }
@@ -51,7 +59,8 @@ export default class TargetOverlay extends React.Component {
     return !(
       this.isNotSubmittable(target) ||
       this.singleSubmissionComplete(target) ||
-      this.submissionBlocked(target)
+      this.submissionBlocked(target) ||
+      this.state.showQuiz
     );
   }
 
@@ -106,12 +115,41 @@ export default class TargetOverlay extends React.Component {
     });
   }
 
+  autoVerify() {
+    const autoVerifyEndpoint =
+      "/targets/" + this.props.targetId + "/auto_verify";
+
+    fetch(autoVerifyEndpoint, {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify({
+        authenticity_token: this.props.rootProps.authenticityToken
+      }),
+      headers: {
+        "content-type": "application/json"
+      }
+    }).then(() => {
+      new PNotify({
+        title: "Done!",
+        text: "This target has been marked as complete.",
+        type: "success"
+      });
+      this.completeTarget();
+      this.state.showQuiz && this.invertShowQuiz();
+    });
+  }
+
+  invertShowQuiz() {
+    this.setState(prevState => ({ showQuiz: !prevState.showQuiz }));
+  }
+
   updateDetails(response) {
     this.setState({
       latestEvent: response.latestEvent,
       latestFeedback: response.latestFeedback,
       linkedResources: response.linkedResources,
-      founderStatuses: response.founderStatuses
+      founderStatuses: response.founderStatuses,
+      quizQuestions: response.quizQuestions
     });
   }
 
@@ -158,6 +196,9 @@ export default class TargetOverlay extends React.Component {
                     completeTargetCB={this.completeTarget}
                     target={target}
                     openTimelineBuilderCB={this.props.openTimelineBuilderCB}
+                    autoVerifyCB={this.autoVerify}
+                    invertShowQuizCB={this.invertShowQuiz}
+                    overlayLoaded={this.state.quizQuestions !== null}
                   />
                 )}
               </div>
@@ -165,40 +206,47 @@ export default class TargetOverlay extends React.Component {
             <div className="target-overlay__status-badge-block">
               <StatusBadgeBar target={target} />
             </div>
-            <div className="target-overlay__content-wrapper clearfix">
-              <div className="col-md-8 target-overlay__content-leftbar">
-                <ContentBlock
-                  rootProps={this.props.rootProps}
-                  iconPaths={this.props.iconPaths}
-                  target={target}
-                  linkedResources={this.state.linkedResources}
-                />
-              </div>
-              <div className="col-md-4 target-overlay__content-rightbar">
-                {_.isObject(faculty) && <FacultyBlock faculty={faculty} />}
 
-                {this.state.latestEvent && (
-                  <TimelineEventPanel
-                    event={this.state.latestEvent}
-                    feedback={this.state.latestFeedback}
+            {this.state.showQuiz ? (
+              <QuizComponent
+                quizQuestions={this.state.quizQuestions}
+                submitTargetCB={this.autoVerify}
+              />
+            ) : (
+              <div className="target-overlay__content-wrapper clearfix">
+                <div className="col-md-8 target-overlay__content-leftbar">
+                  <ContentBlock
+                    rootProps={this.props.rootProps}
+                    iconPaths={this.props.iconPaths}
+                    target={target}
+                    linkedResources={this.state.linkedResources}
                   />
-                )}
+                </div>
+                <div className="col-md-4 target-overlay__content-rightbar">
+                  {_.isObject(faculty) && <FacultyBlock faculty={faculty} />}
 
-                {target.role === "founder" &&
-                  !this.props.hasSingleFounder && (
-                    <div className="mt-2">
-                      <h5 className="target-overaly__status-title font-semibold">
-                        Completion Status:
-                      </h5>
-                      <FounderStatusPanel
-                        founderDetails={this.props.founderDetails}
-                        founderStatuses={this.state.founderStatuses}
-                        targetId={this.targetId}
-                      />
-                    </div>
+                  {this.state.latestEvent && (
+                    <TimelineEventPanel
+                      event={this.state.latestEvent}
+                      feedback={this.state.latestFeedback}
+                    />
                   )}
+                  {target.role === "founder" &&
+                    !this.props.hasSingleFounder && (
+                      <div className="mt-2">
+                        <h5 className="target-overaly__status-title font-semibold">
+                          Completion Status:
+                        </h5>
+                        <FounderStatusPanel
+                          founderDetails={this.props.founderDetails}
+                          founderStatuses={this.state.founderStatuses}
+                          targetId={this.targetId}
+                        />
+                      </div>
+                    )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
         <div className="target-overlay__mobile-fixed-navbar d-block d-md-none">
@@ -223,6 +271,9 @@ export default class TargetOverlay extends React.Component {
                 completeTargetCB={this.completeTarget}
                 target={target}
                 openTimelineBuilderCB={this.props.openTimelineBuilderCB}
+                autoVerifyCB={this.autoVerify}
+                invertShowQuizCB={this.invertShowQuiz}
+                overlayLoaded={this.state.quizQuestions !== null}
               />
             )}
           </div>

@@ -1,0 +1,7 @@
+---
+timestamp: '2018-12-17T06:08:31Z'
+title: The field `email` has been removed from all tables except `users`.
+trello: https://trello.com/c/Gs4KsK3q
+private: true
+description: Delegation has been set up in some tables to avoid having to write _pass-through_
+  code.

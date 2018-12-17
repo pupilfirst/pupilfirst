@@ -636,7 +636,6 @@ ActiveRecord::Schema.define(version: 2018_12_13_120548) do
     t.integer "founder_id"
     t.integer "improved_timeline_event_id"
     t.integer "target_id"
-    t.boolean "share_on_facebook", default: false
     t.decimal "score", precision: 2, scale: 1
     t.index ["founder_id"], name: "index_timeline_events_on_founder_id"
     t.index ["startup_id"], name: "index_timeline_events_on_startup_id"

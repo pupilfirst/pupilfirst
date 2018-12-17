@@ -4,7 +4,7 @@
   "dependencies": {
     "@babel/preset-react": "^7.0.0",
     "@glennsl/bs-json": "^2.0.0",
-    "@rails/webpacker": "https://github.com/rails/webpacker.git",
+    "@rails/webpacker": "https://github.com/rails/webpacker",
     "babel-plugin-react-css-modules": "^3.3.2",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.21",
     "babel-preset-react": "^6.24.1",
@@ -29,7 +29,7 @@
     "reason-react": ">=0.3.4",
     "sass-loader": "^7.0.1",
     "tailwindcss": "^0.7.2",
-    "webpack-dev-server": "3.1.10"
+    "webpack-dev-server": "^3.1.10"
   },
   "scripts": {
     "postinstall": "bsb -make-world"

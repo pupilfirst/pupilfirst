@@ -51,34 +51,33 @@ title SV.CO Edit Profile for #{@founder.fullname}
           .col-md-9.ml-auto
             = f.button :submit, class: 'btn btn-md btn-primary text-uppercase'
               | Save Changes
-
-    .mt-4
-      h4 Connected Accounts
-      hr
-      - if @founder.connected_to_slack?
-        .row.mb-3
-          .col-sm-9
-            .connected-account__container
-              span.connected-account_icon
-                i.fa.fa-slack.fa-2x
-              .connected-account-profile
-                .connected-account-profile__link
-                  ' Your username on Slack is <code>#{@founder.slack_username}</code>.
-                = link_to 'Disconnect', founder_slack_disconnect_path, method: :post, class: 'btn btn-primary connected-account-profile__disconnect-btn', data: { confirm: 'Are you sure? You will need to manually update your Slack name to keep it in sync with your product name.' }
-      / - else
-        .row.mt-4
-          .connected-account__label.col-sm-2.text-sm-right
-            | Slack:
-          .col-sm-10
-            = link_to founder_slack_connect_path, class: 'btn btn-ghost-primary btn-with-icon btn-sm' do
-              span.connected-account__account-icon
-                i.fa.fa-slack.fa-2x
-              span.connected-account__button-label
-                | Connect
-            .mt-2
-              ' Once connected, we will automatically:
-              ul
-                li
-                  ' Add you to all channels on our Public Slack, including those reserved for members of the Startup Village
-                  | Collective.
-                li Keep your profile name on Slack up-to-date, in the required format.
+    - if @founder.connected_to_slack?
+      .mt-4
+        h4 Connected Accounts
+        hr
+          .row.mb-3
+            .col-sm-9
+              .connected-account__container
+                span.connected-account_icon
+                  i.fa.fa-slack.fa-2x
+                .connected-account-profile
+                  .connected-account-profile__link
+                    ' Your username on Slack is <code>#{@founder.slack_username}</code>.
+                  = link_to 'Disconnect', founder_slack_disconnect_path, method: :post, class: 'btn btn-primary connected-account-profile__disconnect-btn', data: { confirm: 'Are you sure? You will need to manually update your Slack name to keep it in sync with your product name.' }
+        / - else
+          .row.mt-4
+            .connected-account__label.col-sm-2.text-sm-right
+              | Slack:
+            .col-sm-10
+              = link_to founder_slack_connect_path, class: 'btn btn-ghost-primary btn-with-icon btn-sm' do
+                span.connected-account__account-icon
+                  i.fa.fa-slack.fa-2x
+                span.connected-account__button-label
+                  | Connect
+              .mt-2
+                ' Once connected, we will automatically:
+                ul
+                  li
+                    ' Add you to all channels on our Public Slack, including those reserved for members of the Startup Village
+                    | Collective.
+                  li Keep your profile name on Slack up-to-date, in the required format.

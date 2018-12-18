@@ -15,6 +15,8 @@ describe Founders::DashboardDataService do
   let!(:founder) { create :founder, startup: startup }
   let!(:track_1) { create :track }
   let!(:track_2) { create :track }
+  let!(:evaluation_criterion_course_1) { create :evaluation_criterion, course: course_1 }
+  let!(:evaluation_criterion_course_2) { create :evaluation_criterion, course: course_2 }
   let!(:target_group_l0_1) { create :target_group, level: level_0, milestone: true }
   let!(:target_group_l0_2) { create :target_group, level: level_0 }
   let!(:target_group_l1_1) { create :target_group, level: level_1, milestone: true, track: track_1 }
@@ -30,10 +32,10 @@ describe Founders::DashboardDataService do
   let!(:level_1_target) { create :target, target_group: target_group_l1_1 }
   let!(:level_1_target_with_prerequisites) { create :target, target_group: target_group_l1_1, prerequisite_targets: [level_1_session] }
   let!(:level_1_session) { create :target, session_at: 1.day.ago, target_group: target_group_l1_2 }
-  let!(:level_2_target) { create :target, target_group: target_group_l2_2 }
+  let!(:level_2_target) { create :target, evaluation_criteria: [evaluation_criterion_course_1], target_group: target_group_l2_2 }
   let!(:level_2_session) { create :target, session_at: 1.day.ago, target_group: target_group_l2_2 }
   let!(:level_2_target_with_prerequisites) { create :target, target_group: target_group_l2_1, prerequisite_targets: [level_2_target, level_2_session] }
-  let!(:level_3_target) { create :target, target_group: target_group_l3_1 }
+  let!(:level_3_target) { create :target, evaluation_criteria: [evaluation_criterion_course_1], target_group: target_group_l3_1 }
   let!(:level_4_target) { create :target, target_group: target_group_l4_1 }
 
   describe '#props' do
@@ -55,12 +57,12 @@ describe Founders::DashboardDataService do
 
         props = subject.props
 
-        expect(props.keys).to contain_exactly(:faculty, :levels, :targetGroups, :targets, :tracks, :evalationCriteria)
-        expect(props[:faculty]).to contain_exactly(*team_members)
-        expect(props[:levels]).to contain_exactly(*level_fields(level_0))
-        expect(props[:targetGroups]).to contain_exactly(*expected_target_groups)
-        expect(props[:targets]).to contain_exactly(*expected_targets)
-        expect(props[:tracks]).to contain_exactly(*track_fields(track_1, track_2))
+        expect(props.keys).to match_array(%i[faculty levels targetGroups targets tracks criteriaNames gradeLabels])
+        expect(props[:faculty]).to match_array(team_members)
+        expect(props[:levels]).to match_array(level_fields(level_0))
+        expect(props[:targetGroups]).to match_array(expected_target_groups)
+        expect(props[:targets]).to match_array(expected_targets)
+        expect(props[:tracks]).to match_array(track_fields(track_1, track_2))
       end
     end
 
@@ -92,12 +94,14 @@ describe Founders::DashboardDataService do
 
         props = subject.props
 
-        expect(props.keys).to contain_exactly(:faculty, :levels, :targetGroups, :targets, :tracks, :evalationCriteria)
-        expect(props[:faculty]).to contain_exactly(*team_members)
-        expect(props[:levels]).to contain_exactly(*level_fields(level_1, level_2, unlocked_level_3, locked_level_4))
-        expect(props[:targetGroups]).to contain_exactly(*expected_target_groups)
-        expect(props[:targets]).to contain_exactly(*expected_targets)
-        expect(props[:tracks]).to contain_exactly(*track_fields(track_1, track_2))
+        expect(props.keys).to match_array(%i[faculty levels targetGroups targets tracks criteriaNames gradeLabels])
+        expect(props[:faculty]).to match_array(team_members)
+        expect(props[:levels]).to match_array(level_fields(level_1, level_2, unlocked_level_3, locked_level_4))
+        expect(props[:targetGroups]).to match_array(expected_target_groups)
+        expect(props[:targets]).to match_array(expected_targets)
+        expect(props[:tracks]).to match_array(track_fields(track_1, track_2))
+        expect(props[:criteriaNames]).to eq(evaluation_criterion_course_1.id => evaluation_criterion_course_1.name)
+        expect(props[:gradeLabels]).to eq(course_1.grade_labels)
       end
     end
   end

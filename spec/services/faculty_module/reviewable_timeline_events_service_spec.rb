@@ -34,10 +34,10 @@ describe FacultyModule::ReviewableTimelineEventsService do
 
   before do
     # Faculty reviews course that Startup 1 is in.
-    faculty.courses << startup_1.level.course
+    create :faculty_course_enrollment, faculty: faculty, course: startup_1.level.course
 
     # Faculty directly reviews Startup 2.
-    faculty.startups << startup_2
+    create :faculty_startup_enrollment, faculty: faculty, startup: startup_2
   end
 
   describe '#timeline_events' do

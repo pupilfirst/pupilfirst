@@ -19,7 +19,10 @@ class TimelineEventPolicy < ApplicationPolicy
 
   def review?
     coach = user.faculty
-    coach.present? && record.startup.in?(coach.startups)
+
+    return false if coach.blank?
+
+    coach.startups.where(id: record.startup).exists? || coach.courses.where(id: record.startup.level.course).exists?
   end
 
   def undo_review?

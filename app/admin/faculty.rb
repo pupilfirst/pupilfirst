@@ -47,14 +47,14 @@ ActiveAdmin.register Faculty do
       row :slack_username
 
       row :startups do
-        div do
-          faculty.startups.each do |startup|
-            div do
-              span do
-                link_to startup.product_name, [:admin, startup]
-              end
-            end
-          end
+        none_one_or_many(self, faculty.startups) do |startup|
+          link_to startup.product_name, [:admin, startup]
+        end
+      end
+
+      row :courses do
+        none_one_or_many(self, faculty.courses) do |course|
+          link_to course.name, [:admin, course]
         end
       end
 

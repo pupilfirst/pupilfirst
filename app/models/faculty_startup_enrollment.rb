@@ -1,8 +1,8 @@
-class FacultyCourseEnrollment < ApplicationRecord
+class FacultyStartupEnrollment < ApplicationRecord
   attr_accessor :safe_to_create
 
   belongs_to :faculty
-  belongs_to :course
+  belongs_to :startup
 
   validate :must_be_safe_to_create
 

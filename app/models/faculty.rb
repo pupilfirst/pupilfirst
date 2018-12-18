@@ -20,7 +20,11 @@ class Faculty < ApplicationRecord
   has_many :courses, through: :faculty_course_enrollments
 
   # Startups whose timeline events this faculty can review.
-  has_and_belongs_to_many :startups, dependent: :restrict_with_error
+  has_many :faculty_startup_enrollments, dependent: :destroy
+  has_many :startups, through: :faculty_startup_enrollments
+
+  # TODO: Delete Faculty.habtm_startups
+  has_and_belongs_to_many :habtm_startups, dependent: :restrict_with_error, class_name: 'Startup', join_table: 'faculty_startups'
 
   CATEGORY_TEAM = 'team'
   CATEGORY_VISITING_COACHES = 'visiting_coaches'

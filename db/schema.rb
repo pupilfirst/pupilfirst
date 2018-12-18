@@ -182,6 +182,15 @@ ActiveRecord::Schema.define(version: 2018_12_17_082409) do
     t.index ["faculty_id"], name: "index_faculty_course_enrollments_on_faculty_id"
   end
 
+  create_table "faculty_startup_enrollments", force: :cascade do |t|
+    t.bigint "faculty_id"
+    t.bigint "startup_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["faculty_id"], name: "index_faculty_startup_enrollments_on_faculty_id"
+    t.index ["startup_id", "faculty_id"], name: "index_faculty_startup_enrollments_on_startup_id_and_faculty_id", unique: true
+  end
+
   create_table "faculty_startups", id: false, force: :cascade do |t|
     t.bigint "faculty_id"
     t.bigint "startup_id"
@@ -748,6 +757,8 @@ ActiveRecord::Schema.define(version: 2018_12_17_082409) do
   add_foreign_key "courses", "schools"
   add_foreign_key "faculty_course_enrollments", "courses"
   add_foreign_key "faculty_course_enrollments", "faculty"
+  add_foreign_key "faculty_startup_enrollments", "faculty"
+  add_foreign_key "faculty_startup_enrollments", "startups"
   add_foreign_key "founders", "colleges"
   add_foreign_key "founders", "users"
   add_foreign_key "latest_submission_records", "founders"

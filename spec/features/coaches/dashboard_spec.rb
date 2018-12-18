@@ -20,13 +20,13 @@ feature 'Coach Dashboard' do
   let!(:timeline_event_4) { create(:timeline_event, startup: startup_2) }
   let!(:auto_verified_event) { create(:timeline_event, startup: startup_1, target: target) }
 
-  before :each do
-    startup_1.faculty << coach
-    startup_2.faculty << coach
-    sign_in_user coach.user, referer: coaches_dashboard_path
+  before do
+    create :faculty_course_enrollment, faculty: coach, course: course
   end
 
   scenario 'coach visits dashboard', js: true do
+    sign_in_user coach.user, referer: coaches_dashboard_path
+
     # ensure coach is on his dashboard
     expect(page).to have_selector('.side-panel__coach-name', text: coach.name)
     expect(page).to have_selector('.side-panel__coach-description', text: 'Pending reviews: 4')
@@ -48,6 +48,8 @@ feature 'Coach Dashboard' do
   end
 
   scenario 'coach uses the sidebar filter', js: true do
+    sign_in_user coach.user, referer: coaches_dashboard_path
+
     # no filter applied by default
     expect(page).to_not have_selector('.startups-list__clear-filter-btn')
     find('.startups-list__item-name', text: startup_1.product_name).click
@@ -67,6 +69,8 @@ feature 'Coach Dashboard' do
   end
 
   scenario 'coach reviews all timeline events', js: true do
+    sign_in_user coach.user, referer: coaches_dashboard_path
+
     # mark the first event as not accepted
     within(".js-timeline-event-card__review-box-#{timeline_event_1.id}") do
       find("#review-form__status-input-not-accepted-#{timeline_event_1.id}").click
@@ -154,6 +158,8 @@ feature 'Coach Dashboard' do
   end
 
   scenario 'coach add a feedback', js: true do
+    sign_in_user coach.user, referer: coaches_dashboard_path
+
     within find(".timeline-event-card__container", match: :first) do
       # feedback form should be hidden by default
       expect(page).to_not have_selector('.feedback-form__trix-container')

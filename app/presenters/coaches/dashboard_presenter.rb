@@ -21,7 +21,10 @@ module Coaches
 
     def startups
       @startups ||= begin
-        current_coach.startups.includes(:level).map do |startup|
+        direct_startup_ids = current_coach.startups.select(:id)
+        course_startup_ids = Startup.joins(level: :course).where(courses: { id: current_coach.courses.select(:id) }).select(:id)
+
+        Startup.where(id: direct_startup_ids).or(Startup.where(id: course_startup_ids)).map do |startup|
           {
             name: startup.product_name,
             id: startup.id,

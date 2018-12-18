@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_13_120548) do
+ActiveRecord::Schema.define(version: 2018_12_17_082409) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -176,14 +176,28 @@ ActiveRecord::Schema.define(version: 2018_12_13_120548) do
     t.string "compensation"
     t.string "slack_username"
     t.string "slack_user_id"
-    t.integer "level_id"
     t.bigint "user_id"
-    t.bigint "school_id"
     t.index ["category"], name: "index_faculty_on_category"
-    t.index ["level_id"], name: "index_faculty_on_level_id"
-    t.index ["school_id"], name: "index_faculty_on_school_id"
     t.index ["slug"], name: "index_faculty_on_slug", unique: true
     t.index ["user_id"], name: "index_faculty_on_user_id"
+  end
+
+  create_table "faculty_course_enrollments", force: :cascade do |t|
+    t.bigint "faculty_id"
+    t.bigint "course_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id", "faculty_id"], name: "index_faculty_course_enrollments_on_course_id_and_faculty_id", unique: true
+    t.index ["faculty_id"], name: "index_faculty_course_enrollments_on_faculty_id"
+  end
+
+  create_table "faculty_startup_enrollments", force: :cascade do |t|
+    t.bigint "faculty_id"
+    t.bigint "startup_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["faculty_id"], name: "index_faculty_startup_enrollments_on_faculty_id"
+    t.index ["startup_id", "faculty_id"], name: "index_faculty_startup_enrollments_on_startup_id_and_faculty_id", unique: true
   end
 
   create_table "faculty_startups", id: false, force: :cascade do |t|
@@ -767,8 +781,10 @@ ActiveRecord::Schema.define(version: 2018_12_13_120548) do
   add_foreign_key "connect_requests", "startups"
   add_foreign_key "connect_slots", "faculty"
   add_foreign_key "courses", "schools"
-  add_foreign_key "faculty", "levels"
-  add_foreign_key "faculty", "schools"
+  add_foreign_key "faculty_course_enrollments", "courses"
+  add_foreign_key "faculty_course_enrollments", "faculty"
+  add_foreign_key "faculty_startup_enrollments", "faculty"
+  add_foreign_key "faculty_startup_enrollments", "startups"
   add_foreign_key "founders", "colleges"
   add_foreign_key "founders", "users"
   add_foreign_key "latest_submission_records", "founders"

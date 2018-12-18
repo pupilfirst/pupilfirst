@@ -11,12 +11,15 @@ class Faculty < ApplicationRecord
 
   has_secure_token
 
-  belongs_to :user, optional: true # TODO: Temporarily optional. Remove once ready.
+  belongs_to :school
+  belongs_to :user
   has_many :startup_feedback, dependent: :restrict_with_error
   has_many :targets, dependent: :restrict_with_error
   has_many :connect_slots, dependent: :destroy
   has_many :connect_requests, through: :connect_slots
   belongs_to :level, optional: true
+
+  # Startups whose timeline events this faculty can review.
   has_and_belongs_to_many :startups, dependent: :restrict_with_error
 
   CATEGORY_TEAM = 'team'
@@ -144,12 +147,5 @@ class Faculty < ApplicationRecord
     self.slack_user_id = slack_username.present? ? @new_slack_user_id : nil
   end
 
-  before_save :find_or_create_user
-
-  def find_or_create_user
-    return if email.blank?
-
-    user = User.with_email(email) || User.create!(email: email)
-    self.user = user
-  end
+  delegate :email, to: :user
 end

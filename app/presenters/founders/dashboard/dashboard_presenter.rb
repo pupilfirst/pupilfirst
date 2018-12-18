@@ -9,7 +9,6 @@ module Founders
       def react_props
         dashboard_data_service.props.merge(
           currentLevel: current_startup.level.slice(:id, :name, :number),
-          facebookShareEligibility: current_founder.facebook_share_eligibility,
           levelUpEligibility: level_up_eligibility_service.eligibility,
           nextLevelUnlockDate: level_up_eligibility_service.next_level_unlock_date,
           maxLevelNumber: current_course.levels.maximum(:number),

@@ -6,8 +6,8 @@ feature 'Office Hour' do
   let(:level_one) { create :level, :one }
   let(:level_two) { create :level, :two }
 
-  let!(:faculty_1) { create :faculty, :connectable, level: level_one }
-  let!(:faculty_2) { create :faculty, :connectable, level: level_two }
+  let!(:faculty_1) { create :faculty, level: level_one }
+  let!(:faculty_2) { create :faculty, level: level_two }
   let!(:faculty_3) { create :faculty }
 
   # Three valid connect slots for faculty 1.

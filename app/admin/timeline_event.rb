@@ -216,7 +216,6 @@ ActiveAdmin.register TimelineEvent do
       end
 
       row :event_on
-      row :share_on_facebook
       row :evaluated
 
       row('Linked Target') do

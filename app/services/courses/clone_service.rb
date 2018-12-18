@@ -8,7 +8,7 @@ module Courses
       @course = course
     end
 
-    def clone(new_name, sponsored)
+    def clone(new_name, sponsored: true)
       Course.transaction do
         Course.create!(name: new_name,
                        sponsored: sponsored,

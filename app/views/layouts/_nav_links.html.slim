@@ -30,8 +30,6 @@
         = link_to 'Library', resources_path, class: 'nav-item__link', id: 'sv-navbar__library-link'
     / li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
     /   = link_to 'Stats', stats_path, class: 'nav-item__link'
-    / li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
-      = link_to 'Wiki', 'https://wiki.sv.co', class: 'nav-item__link', id: 'sv-navbar__help-link'
 
     - if current_user
       - if current_founder

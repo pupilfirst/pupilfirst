@@ -10,6 +10,7 @@ class QuizQuestion < ApplicationRecord
   validate :correct_answer_must_be_one_of_possible_answers
 
   def correct_answer_must_be_one_of_possible_answers
+    return unless persisted?
     return if answer_options.blank?
     return if answer_options.where(id: correct_answer&.id).present?
 

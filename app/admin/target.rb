@@ -1,4 +1,6 @@
 ActiveAdmin.register Target do
+  actions :all, except: [:destroy]
+
   permit_params :faculty_id, :role, :title, :description, :resource_url, :completion_instructions, :days_to_complete,
     :slideshow_embed, :video_embed, :completed_at, :completion_comment, :rubric, :link_to_complete, :key, :archived,
     :remote_rubric_url, :target_group_id, :target_action_type, :points_earnable,

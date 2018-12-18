@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import styles from "./CouponAdder.module.scss";
-import shared from "./shared.module.scss";
+
+import "./CouponAdder.scss";
 
 export default class CouponAdder extends React.Component {
   constructor(props) {
@@ -70,7 +70,7 @@ export default class CouponAdder extends React.Component {
 
   form() {
     return (
-      <div className="p-3" styleName="shared.coupon-box">
+      <div className="p-3 fee-interface__coupon-box">
         <form onSubmit={this.submit}>
           <div className="form-group string required">
             <input
@@ -116,8 +116,7 @@ export default class CouponAdder extends React.Component {
   coverButton() {
     return (
       <div
-        className="brand-secondary font-semibold p-3"
-        styleName="shared.coupon-box styles.cover-button"
+        className="brand-secondary font-semibold p-3 fee-interface__coupon-box coupon-adder__cover-button"
         onClick={this.showForm}
       >
         <h4 className="font-semibold dark-secondary m-0">

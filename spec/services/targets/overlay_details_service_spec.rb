@@ -42,8 +42,13 @@ describe Targets::OverlayDetailsService do
         index: 0,
         question: quiz_question.question,
         description: quiz_question.description,
-        correctAnswer: { id: answer_2.id, value: answer_2.value, hint: answer_2.hint },
-        incorrectOptions: [{ id: answer_1.id, value: answer_1.value, hint: answer_1.hint }]
+        correctAnswerId: answer_2.id,
+        answerOptions: array_including(
+          [
+            { id: answer_2.id, value: answer_2.value, hint: answer_2.hint },
+            { id: answer_1.id, value: answer_1.value, hint: answer_1.hint }
+          ]
+        )
       }]
 
       all_details = subject.all_details

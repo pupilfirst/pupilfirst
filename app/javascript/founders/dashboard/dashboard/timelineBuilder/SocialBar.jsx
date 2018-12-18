@@ -1,15 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
-import FacebookShareToggleButton from "./FacebookShareToggleButton";
 import TextAreaCounter from "./TextAreaCounter";
 
+// TODO: Move TextAreaCounter to TimelineBuilder and remove Social Bar
 export default class SocialBar extends React.Component {
   render() {
     return (
       <div className="timeline-builder__social-bar clearfix">
-        <FacebookShareToggleButton
-          facebookShareEligibility={this.props.facebookShareEligibility}
-        />
         <TextAreaCounter description={this.props.description} />
       </div>
     );
@@ -17,6 +14,5 @@ export default class SocialBar extends React.Component {
 }
 
 SocialBar.propTypes = {
-  description: PropTypes.string,
-  facebookShareEligibility: PropTypes.string
+  description: PropTypes.string
 };

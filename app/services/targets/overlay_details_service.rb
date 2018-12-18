@@ -76,29 +76,27 @@ module Targets
     end
 
     def quiz_questions
-      return if @target.quiz.blank?
+      return [] if @target.quiz.blank?
 
       @target.quiz.quiz_questions.each_with_index.map do |question, index|
         {
           index: index,
           question: question.question,
           description: question.description,
-          correctAnswer: answer_fields(question.correct_answer),
-          incorrectOptions: incorrect_options(question).map { |answer| answer_fields(answer) }
+          correctAnswerId: question.correct_answer_id,
+          answerOptions: answer_options(question).shuffle
         }
       end
     end
 
-    def incorrect_options(question)
-      question.answer_options.where.not(id: question.correct_answer.id)
-    end
-
-    def answer_fields(answer)
-      {
-        id: answer.id,
-        value: answer.value,
-        hint: answer.hint
-      }
+    def answer_options(question)
+      question.answer_options.map do |answer|
+        {
+          id: answer.id,
+          value: answer.value,
+          hint: answer.hint
+        }
+      end
     end
   end
 end

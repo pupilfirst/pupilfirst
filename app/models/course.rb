@@ -5,6 +5,7 @@ class Course < ApplicationRecord
   validates :grade_labels, presence: true
   validate :grade_labels_must_match_grades
 
+  belongs_to :school
   has_many :levels, dependent: :restrict_with_error
   has_many :target_groups, through: :levels
   has_many :targets, through: :target_groups

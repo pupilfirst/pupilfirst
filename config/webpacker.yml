@@ -5,6 +5,8 @@ default: &default
   source_entry_path: packs
   public_output_path: packs
   cache_path: tmp/cache/webpacker
+  check_yarn_integrity: false
+  webpack_compile_output: false
 
   # Additional paths webpack should lookup modules
   # ['app/assets', 'engine/foo/app/assets']
@@ -13,13 +15,27 @@ default: &default
   # Reload manifest.json on all requests so we reload latest compiled packs
   cache_manifest: false
 
+  # Extract and emit a css file in all environments by default.
+  extract_css: true
+
+  static_assets_extensions:
+    - .jpg
+    - .jpeg
+    - .png
+    - .gif
+    - .tiff
+    - .ico
+    - .svg
+    - .eot
+    - .otf
+    - .ttf
+    - .woff
+    - .woff2
+
   extensions:
-    - .coffee
-    - .erb
+    - .mjs
     - .js
     - .jsx
-    - .ts
-    - .vue
     - .sass
     - .scss
     - .css
@@ -35,6 +51,9 @@ default: &default
 development:
   <<: *default
   compile: true
+
+  # Verifies that versions and hashed value of the package contents in the project's package.json
+  check_yarn_integrity: true
 
   # Reference: https://webpack.js.org/configuration/dev-server/
   dev_server:

@@ -28,7 +28,6 @@ after 'development:levels', 'development:categories' , 'development:faculty'do
     presentation_link: 'https://slideshare.net/superstartupdeck',
     legal_registered_name: 'SuperTech Ltd',
     startup_categories: [StartupCategory.first, StartupCategory.second],
-    email: 'help@superstartup.in',
     twitter_link: 'https://twitter.com/superstartup',
     facebook_link: 'https://facebook.com/superstartup',
     product_video_link: 'https://www.youtube.com/ourvideo',
@@ -82,7 +81,7 @@ after 'development:levels', 'development:categories' , 'development:faculty'do
   )
 
   # Add a faculty to iOS Course.
-  ios_startup.faculty << Faculty.find_by(email: 'ioscoach@example.com')
+  ios_startup.faculty << Faculty.find_by(name: 'iOS Coach')
 
   # Add a faculty to Avengers Startup
   Startup.find_by(product_name: 'The Avengers').faculty << Faculty.find_by(name: 'Vishnu Gopal')

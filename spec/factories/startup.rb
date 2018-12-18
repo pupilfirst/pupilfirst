@@ -16,7 +16,6 @@ FactoryBot.define do
     name { Faker::Lorem.words(rand(1..3)).join ' ' }
     address { Faker::Lorem.words(6).join(' ') }
     website { Faker::Internet.domain_name }
-    email { Faker::Internet.email }
     level { create :level, :one }
     program_started_on { rand(8.weeks).seconds.ago }
 

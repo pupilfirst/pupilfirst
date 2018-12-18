@@ -32,10 +32,7 @@ yarn-debug.log*
 
 # Ignore these associated with reason-react and bsb
 .merlin
-/node_modules/
-/lib/*
-!/lib/js/*
-/bundledOutputs/
+lib/bs/
 npm-debug.log
 .DS_Store
 .bsb.lock

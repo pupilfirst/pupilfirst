@@ -196,7 +196,6 @@ export default class FounderDashboard extends React.Component {
 
         {this.state.timelineBuilderVisible && (
           <TimelineBuilder
-            facebookShareEligibility={this.props.facebookShareEligibility}
             testMode={this.props.testMode}
             authenticityToken={this.props.authenticityToken}
             targetSubmissionCB={this.handleTargetSubmission}
@@ -231,7 +230,6 @@ FounderDashboard.propTypes = {
   targetGroups: PropTypes.array.isRequired,
   tracks: PropTypes.array.isRequired,
   currentLevel: PropTypes.object.isRequired,
-  facebookShareEligibility: PropTypes.string,
   authenticityToken: PropTypes.string,
   levelUpEligibility: PropTypes.oneOf([
     "eligible",

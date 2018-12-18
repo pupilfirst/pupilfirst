@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import FeeOffer from "./interface/FeeOffer";
 import BillingAddressForm from "./interface/BillingAddressForm";
 
-import "./Interface.module.scss";
+import "./Interface.scss";
 
 export default class Interface extends React.Component {
   constructor(props) {
@@ -73,7 +73,7 @@ export default class Interface extends React.Component {
             You cannot make payments{" "}
             <span className="brand-secondary font-semibold">at this time.</span>
           </h3>
-          <ul styleName="important-points">
+          <ul className="fee-interface__important-points">
             <li>
               If you need any help please contact us on Slack or mail us at{" "}
               {this.mailTo("help@sv.co")}.
@@ -89,7 +89,7 @@ export default class Interface extends React.Component {
               Please pay the membership fee to continue.
             </span>
           </h3>
-          <ul styleName="important-points">
+          <ul className="fee-interface__important-points">
             <li>
               It covers your team of{" "}
               <strong>{this.billingFoundersCount()} founders</strong>.

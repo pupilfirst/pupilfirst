@@ -36,7 +36,6 @@ p.mb-2
       #contactinfo.collapse role="tabpanel"
         .card-body
           .flex-column
-            = f.email_field :email, label_class: 'col-form-label', label: 'Contact Email', class: 'form-control', maxlength: 255
             = f.text_field :website, label_class: 'col-form-label', label: 'Wesite', class: 'form-control', placeholder: "You team's website URL, if any.", maxlength: 255
             = f.text_field :twitter_link, placeholder: 'https://twitter.com/username', maxlength: 255
             = f.text_field :facebook_link, placeholder: 'https://facebook.com/username', maxlength: 255

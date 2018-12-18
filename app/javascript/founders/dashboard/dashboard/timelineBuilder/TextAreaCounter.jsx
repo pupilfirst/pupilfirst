@@ -3,12 +3,12 @@ import PropTypes from "prop-types";
 
 export default class TextAreaCounter extends React.Component {
   counterClasses() {
-    let classes = "timeline-builder-social-bar__textarea-counter";
+    let classes = "timeline-builder__textarea-counter";
 
     if (this.textCount() === 500) {
-      classes += " timeline-builder-social-bar__textarea-counter--danger";
+      classes += " timeline-builder__textarea-counter--danger";
     } else if (this.textCount() > 400) {
-      classes += " timeline-builder-social-bar__textarea-counter--warning";
+      classes += " timeline-builder__textarea-counter--warning";
     }
 
     return classes;
@@ -29,7 +29,7 @@ export default class TextAreaCounter extends React.Component {
 
   render() {
     return (
-      <div className="timeline-builder-social-bar__textarea-counter-container pull-left">
+      <div className="timeline-builder__textarea-counter-container m-3 position-absolute">
         {this.counterText() !== "" && (
           <div className={this.counterClasses()}>{this.counterText()}</div>
         )}

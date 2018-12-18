@@ -7,7 +7,7 @@ module Founders
     attr_reader :replacement_hint
 
     property :name, validates: { presence: true, length: { maximum: 250 } }
-    property :email, validates: { presence: true, length: { maximum: 250 }, email: true }
+    property :email, validates: { presence: true, length: { maximum: 250 }, email: true }, virtual: true
     property :phone, validates: { presence: true, mobile_number: true }
     property :reference
     property :reference_text, virtual: true
@@ -25,7 +25,7 @@ module Founders
     def do_not_reapply
       return if email.blank?
 
-      founder = Founder.with_email(email)
+      founder = Founder.joins(:user).where(users: { email: email }).first
 
       return if founder&.startup.blank?
 

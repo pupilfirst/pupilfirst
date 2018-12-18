@@ -37,7 +37,7 @@ after 'development:founders', 'development:targets' do
   end
 
   # Create a pending timeline event in iOS startup.
-  ios_founder = Founder.with_email('ios@example.org')
+  ios_founder = User.with_email('ios@example.org').founders.first
   ios_startup = ios_founder.startup
 
   TimelineEvent.create!(

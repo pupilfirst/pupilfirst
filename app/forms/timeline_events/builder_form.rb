@@ -12,7 +12,6 @@ module TimelineEvents
     property :files, virtual: true
     property :files_metadata, virtual: true
     property :image
-    property :share_on_facebook
 
     validate :files_should_have_metadata
     validate :target_status_submittable

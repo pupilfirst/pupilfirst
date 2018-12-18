@@ -1,5 +1,5 @@
 ActiveAdmin.register Faculty do
-  permit_params :name, :email, :title, :key_skills, :linkedin_url, :category, :image, :sort_index, :self_service,
+  permit_params :name, :title, :key_skills, :linkedin_url, :category, :image, :sort_index, :self_service,
     :current_commitment, :inactive, :about, :commitment, :compensation, :slack_username, :level_id
 
   controller do
@@ -14,7 +14,7 @@ ActiveAdmin.register Faculty do
 
   filter :category, as: :select, collection: -> { Faculty.valid_categories }
   filter :name
-  filter :email
+  filter :user_email, as: :string
   filter :title
   filter :key_skills
   filter :linkedin_url
@@ -70,7 +70,6 @@ ActiveAdmin.register Faculty do
     f.inputs 'Faculty Details' do
       f.input :category, as: :select, collection: Faculty.valid_categories
       f.input :name
-      f.input :email
       f.input :level, collection: Level.where.not(number: 0)
       f.input :title
       f.input :about

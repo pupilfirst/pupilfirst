@@ -4,5 +4,6 @@ FactoryBot.define do
     max_grade { 3 }
     pass_grade { 2 }
     grade_labels { { 1 => 'Bad', 2 => 'Good', 3 => 'Great' } }
+    school { School.find_by(name: 'default') || create(:school, name: 'default') }
   end
 end

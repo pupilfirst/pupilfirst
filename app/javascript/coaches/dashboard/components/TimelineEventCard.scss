@@ -19,7 +19,8 @@
   font-size: 1rem;
 }
 
-.timeline-event-card__header-subtext, .timeline-event-card__footer-subtext {
+.timeline-event-card__header-subtext,
+.timeline-event-card__footer-subtext {
   color: $light-grey-text;
   font-size: small;
 }
@@ -82,8 +83,10 @@
   border-top: 1px solid #e5e5e5;
 }
 .feedback-form__button {
-  &:hover, &:focus, &:active {
+  &:hover,
+  &:focus,
+  &:active {
     background-color: #fafafa;
-    color: #0052CC;
+    color: #0052cc;
   }
 }

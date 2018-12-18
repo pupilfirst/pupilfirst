@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Faculty, type: :model do
   describe '#copy_weekly_slots!' do
-    let!(:faculty) { create :faculty, :connectable }
+    let!(:faculty) { create :faculty }
 
     context 'when no previous connect slots are available' do
       it 'does not create slots if no previous connect slots available' do

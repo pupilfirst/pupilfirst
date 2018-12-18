@@ -18,10 +18,8 @@ module Founders
     private
 
     def create_founder(startup)
-      founder = Founder.where(email: @founder_params[:email]).first_or_create!(
-        user: user,
+      founder = Founder.where(user: user).first_or_create!(
         name: @founder_params[:name],
-        email: @founder_params[:email],
         phone: @founder_params[:phone],
         reference: @founder_params[:reference],
         college_id: @founder_params[:college_id],

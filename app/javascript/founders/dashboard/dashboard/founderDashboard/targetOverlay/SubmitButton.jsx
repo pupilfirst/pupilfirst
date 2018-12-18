@@ -62,38 +62,57 @@ export default class SubmitButton extends React.Component {
   }
 
   submitButtonContents() {
-    return (
-      <i className={this.submitButtonIconClass()} aria-hidden="true" /> ,
-      <span>{this.submitButtonText()}</span>
-    );
+    return [
+      <i
+        key="submit-button-icon"
+        className={this.submitButtonIconClass()}
+        aria-hidden="true"
+      />,
+      <span key="submit-button-text">{this.submitButtonText()}</span>
+    ];
   }
 
   submitButtonClasses() {
     return "btn btn-with-icon btn-md btn-secondary text-uppercase btn-timeline-builder js-founder-dashboard__trigger-builder js-founder-dashboard__action-bar-add-event-button";
   }
 
-  render() {
+  submitButton() {
     return (
-      <div className="pull-right">
-        {this.hasLinkToComplete() &&
-          !this.canBeVerifiedAutomatically() && (
-            <a
-              href={this.props.target.link_to_complete}
-              className={this.submitButtonClasses()}
-            >
-              {this.submitButtonContents()}
-            </a>
-          )}
-        {(!this.hasLinkToComplete() || this.canBeVerifiedAutomatically()) && (
-          <button
-            onClick={this.handleClick}
-            className={this.submitButtonClasses()}
-          >
-            {this.submitButtonContents()}
-          </button>
-        )}
-      </div>
+      <button onClick={this.handleClick} className={this.submitButtonClasses()}>
+        {this.submitButtonContents()}
+      </button>
     );
+  }
+
+  submitLinkOrButton() {
+    if (this.hasLinkToComplete()) {
+      return (
+        <a
+          href={this.props.target.link_to_complete}
+          className={this.submitButtonClasses()}
+        >
+          {this.submitButtonContents()}
+        </a>
+      );
+    } else if (this.props.target.has_quiz && !this.props.overlayLoaded) {
+      return (
+        <button
+          disabled
+          className={
+            this.submitButtonClasses() +
+            " founder-dashboard__action-bar-add-event-button--disabled"
+          }
+        >
+          <i className="fa fa-refresh fa-spin" /> Take Quiz
+        </button>
+      );
+    } else {
+      return this.submitButton();
+    }
+  }
+
+  render() {
+    return <div className="pull-right"> {this.submitLinkOrButton()} </div>;
   }
 }
 
@@ -103,5 +122,6 @@ SubmitButton.propTypes = {
   target: PropTypes.object,
   openTimelineBuilderCB: PropTypes.func,
   autoVerifyCB: PropTypes.func.isRequired,
-  invertShowQuizCB: PropTypes.func.isRequired
+  invertShowQuizCB: PropTypes.func.isRequired,
+  overlayLoaded: PropTypes.bool.isRequired
 };

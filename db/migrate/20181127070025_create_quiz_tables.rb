@@ -9,6 +9,7 @@ class CreateQuizTables < ActiveRecord::Migration[5.2]
     create_table :quiz_questions do |t|
       t.string :question
       t.text :description
+      t.references :quiz, foreign_key: true
 
       t.timestamps
     end
@@ -21,7 +22,6 @@ class CreateQuizTables < ActiveRecord::Migration[5.2]
       t.timestamps
     end
 
-    add_reference :quiz_questions,:quiz, foreign_key: true
     add_reference(:quiz_questions, :correct_answer, foreign_key: {to_table: :answer_options})
   end
 end

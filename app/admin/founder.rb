@@ -28,7 +28,7 @@ ActiveAdmin.register Founder do
   scope :level_zero
   scope :all
 
-  filter :email
+  filter :user_email, as: :string
   filter :name
 
   filter :ransack_tagged_with,
@@ -47,7 +47,7 @@ ActiveAdmin.register Founder do
   filter :screening_score_above, as: :number
   filter :coder, as: :boolean
 
-  permit_params :name, :email, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :born_on,
+  permit_params :name, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :born_on,
     :communication_address, :identification_proof, :phone, :invitation_token, :college_id, :roll_number,
     :course, :semester, :year_of_graduation, :twitter_url, :linkedin_url, :personal_website_url, :blog_url,
     :angel_co_url, :github_url, :behance_url, :gender, :skype_id, :exited, :id_proof_number,
@@ -398,18 +398,6 @@ ActiveAdmin.register Founder do
 
     panel 'Social links' do
       attributes_table_for founder do
-        row 'Facebook Connected' do |founder|
-          if founder.fb_access_token.present?
-            status_tag('Connected', class: 'ok')
-
-            span style: 'display:inline-block' do
-              button_to 'Disconnect', disconnect_from_facebook_admin_founder_path(founder), method: :patch
-            end
-          else
-            status_tag('Not Connected', class: 'no')
-          end
-        end
-        row :fb_token_expires_at
         row :twitter_url
         row :linkedin_url
         row :personal_website_url
@@ -476,12 +464,6 @@ ActiveAdmin.register Founder do
 
   action_item :public_slack_messages, only: :show, if: proc { Founder.friendly.find(params[:id]).slack_username.present? } do
     link_to 'Public Slack Messages', admin_public_slack_messages_path(q: { founder_id_eq: params[:id] })
-  end
-
-  member_action :disconnect_from_facebook, method: :patch do
-    founder = Founder.friendly.find(params[:id])
-    Founders::FacebookService.new(founder).disconnect!
-    redirect_to admin_founder_path(founder), alert: 'Founder profile disconnected from Facebook!'
   end
 
   form partial: 'admin/founders/form'

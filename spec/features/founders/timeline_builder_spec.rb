@@ -7,7 +7,7 @@ feature 'Timeline Builder' do
   let(:level_one) { create :level, :one }
 
   let(:startup) { create :startup, :subscription_active, level: level_one }
-  let(:founder) { create :founder, startup: startup, fb_access_token: Faker::Lorem.word, fb_token_expires_at: 2.days.from_now }
+  let(:founder) { create :founder, startup: startup }
 
   let(:target_group) { create :target_group, milestone: true, level: level_one }
 
@@ -34,9 +34,6 @@ feature 'Timeline Builder' do
     click_button 'Submit'
 
     find('.timeline-builder__textarea').set(description)
-
-    # Mark to be shared on facebook
-    find('.timeline-builder__social-bar-toggle-switch-handle').click
 
     # Pick a cover image.
     attach_file 'Cover Image', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'users', 'college_id.jpg')), visible: false
@@ -83,15 +80,9 @@ feature 'Timeline Builder' do
     expect(file.private).to eq(false)
 
     expect(te.event_on).to eq(Date.today)
-    expect(te.share_on_facebook).to eq(true)
   end
 
   context 'Founder unsuccessful in submitting event', js: true do
-    before do
-      # Reset the facebook token, to create error while trying to enable facebook share
-      founder.update!(fb_access_token: nil, fb_token_expires_at: nil)
-    end
-
     scenario 'Founder encounters errors when using timeline builder', js: true do
       sign_in_user founder.user, referer: student_dashboard_path
 
@@ -130,10 +121,6 @@ feature 'Timeline Builder' do
       expect(page).to have_content('Please add a summary describing the event.')
 
       find('.timeline-builder__textarea').set('description text')
-
-      # Facebook connect missing
-      find('.timeline-builder__social-bar-toggle-switch-handle').click
-      expect(page).to have_content('Feature Unavailable!')
     end
   end
 end

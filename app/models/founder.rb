@@ -2,7 +2,6 @@
 
 class Founder < ApplicationRecord
   extend FriendlyId
-  extend Forwardable
 
   include PrivateFilenameRetrievable
 
@@ -63,8 +62,9 @@ class Founder < ApplicationRecord
   scope :not_exited, -> { where.not(exited: true) }
   scope :screening_score_above, ->(minimum_score) { where("(screening_data ->> 'score')::int >= ?", minimum_score) }
 
+  # TODO: Remove all usages of method Founder.with_email and then delete it.
   def self.with_email(email)
-    where('lower(email) = ?', email.downcase).first # rubocop:disable Rails/FindBy
+    User.find_by(email: email)&.founders&.first
   end
 
   def self.ransackable_scopes(_auth)
@@ -158,7 +158,7 @@ class Founder < ApplicationRecord
   end
 
   def name_and_email
-    name + (email? ? ' (' + email + ')' : '')
+    name + ' (' + email + ')'
   end
 
   def name_and_team
@@ -246,25 +246,10 @@ class Founder < ApplicationRecord
     timeline_events.where(latest: true)
   end
 
-  def facebook_token_available?
-    fb_access_token.present? && fb_token_expires_at > Time.now
-  end
-
-  def facebook_token_valid?
-    facebook_token_available? && Founders::FacebookService.new(self).token_valid?(fb_access_token)
-  end
-
   def connected_to_slack?
     return false if slack_access_token.blank?
 
     Founders::SlackConnectService.new(self).token_valid?(slack_access_token)
-  end
-
-  def facebook_share_eligibility
-    return 'not_admitted' if startup.level_zero?
-    return 'disabled_for_course' if startup.level.course.facebook_share_disabled?
-
-    facebook_token_available? ? 'eligible' : 'token_unavailable'
   end
 
   def resume_link
@@ -277,7 +262,8 @@ class Founder < ApplicationRecord
     required_fields.all? { |field| self[field].present? }
   end
 
-  delegate level_zero?: :startup
+  delegate :level_zero?, to: :startup
+  delegate :email, to: :user
 
   def subscription_active?
     startup&.subscription_active?

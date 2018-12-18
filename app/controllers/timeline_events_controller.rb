@@ -26,7 +26,8 @@ class TimelineEventsController < ApplicationController
 
     timeline_event.destroy!
     flash[:success] = 'Timeline event deleted!'
-    redirect_to current_founder.startup
+
+    redirect_back(fallback_location: product_path(current_startup.id, current_startup.slug))
   end
 
   # POST /timeline_events/:id/review
@@ -85,7 +86,7 @@ class TimelineEventsController < ApplicationController
 
   def timeline_builder_params
     params.require(:timeline_event).permit(
-      :target_id, :event_on, :description, :image, :links, :files_metadata, :share_on_facebook,
+      :target_id, :event_on, :description, :image, :links, :files_metadata,
       files: (params[:timeline_event][:files]&.keys || [])
     )
   end

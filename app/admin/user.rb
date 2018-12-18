@@ -1,6 +1,8 @@
 ActiveAdmin.register User do
   menu parent: 'Dashboard'
-  actions :index, :show
+  actions :index, :show, :new, :create
+
+  permit_params :email
 
   filter :email
   filter :founders_id_not_null, label: 'Is a founder', as: :boolean
@@ -58,6 +60,16 @@ ActiveAdmin.register User do
         row :email_bounce_type
       end
     end
+  end
+
+  form do |f|
+    f.semantic_errors(*f.object.errors.keys)
+
+    f.inputs 'User Details' do
+      f.input :email
+    end
+
+    f.actions
   end
 
   member_action :toggle_sign_out_at_next_request, method: :patch do

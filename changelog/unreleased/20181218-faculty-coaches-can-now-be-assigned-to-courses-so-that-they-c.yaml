@@ -1,0 +1,11 @@
+---
+timestamp: '2018-12-18T10:12:54Z'
+title: Faculty (coaches) can now be assigned to courses, so that they can review submissions
+  from all students enrolled in the course.
+trello: https://trello.com/c/JW5pkanx
+private: false
+description: While there aren't very many visible effects here, there are a lot of
+  changes under the hood. Faculty still needs to be manually assigned to a course,
+  since the reviewer assignment feature is now hidden (until the school admin dashboard
+  goes live).
+category: feature

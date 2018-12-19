@@ -170,7 +170,7 @@ let make =
               <div className="w-100">
                 <ReviewStatusBadge
                   reviewResult=(
-                    timelineEvent |> TimelineEvent.getReviewResult(4)
+                    timelineEvent |> TimelineEvent.getReviewResult(passGrade)
                   )
                   notAcceptedIconUrl
                   verifiedIconUrl

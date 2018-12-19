@@ -16,10 +16,11 @@ module FacultyModule
       # startups that belong to the courses which zhe directly administer.
       startup_ids = course_startups.pluck(:id) + faculty_startups.pluck(:id)
       unique_startup_ids = startup_ids.uniq
+      founder_ids = Founder.where(startup: unique_startup_ids)
 
-      TimelineEvent.not_auto_verified.joins(:startup)
-        .where(startups: { id: unique_startup_ids })
-        .includes(:founder, :startup, :timeline_event_files, :startup_feedback)
+      TimelineEvent.not_auto_verified.joins(:timeline_event_owners)
+        .where(timeline_event_owners: { founder_id: founder_ids })
+        .includes(:timeline_event_files, :startup_feedback)
         .order(created_at: :DESC).limit(50).map { |timeline_event| timeline_event_fields(timeline_event) }
     end
 
@@ -30,7 +31,7 @@ module FacultyModule
         description: timeline_event.description,
         eventOn: timeline_event.event_on,
         status: timeline_event.status,
-        startupId: timeline_event.startup_id,
+        startupId: timeline_event.founders.first&.startup_id,
         startupName: timeline_event.startup.product_name,
         founders: timeline_event.founders.map { |founder| { id: founder.id, name: founder.name } },
         links: timeline_event.links,

@@ -73,14 +73,10 @@ after 'development:levels', 'development:categories' do
   )
 
   # Add a startup in iOS course.
-  ios_startup = Startup.create!(
+  Startup.create!(
     name: 'iOS Startup',
     level: ios_course_level_1,
     product_name: 'iOS Startup',
     product_description: 'This is an example iOS Startup.',
   )
-
-  # Add a faculty to iOS Course.
-  ios_coach = Faculty.find_by(name: 'iOS Coach')
-  FacultyStartupEnrollment.create!(faculty: ios_coach, startup: ios_startup, safe_to_create: true)
 end

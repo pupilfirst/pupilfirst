@@ -16,9 +16,12 @@ describe FacultyModule::ReviewableTimelineEventsService do
   let(:target_group_s1) { create :target_group, milestone: true, level: level_s1 }
   let(:target_group_s2) { create :target_group, milestone: true, level: level_s2 }
 
-  let(:target_s1_manual) { create :target, :for_startup, target_group: target_group_s1 }
+  let(:evaluation_criterion_c1) { create :evaluation_criterion, course: level_s1.course }
+  let(:evaluation_criterion_c2) { create :evaluation_criterion, course: level_s2.course }
+
+  let(:target_s1_manual) { create :target, :for_startup, target_group: target_group_s1, evaluation_criteria: [evaluation_criterion_c1] }
   let(:target_s1_auto) { create :target, :for_startup, target_group: target_group_s1 }
-  let(:target_s2) { create :target, :for_startup, target_group: target_group_s2 }
+  let(:target_s2) { create :target, :for_startup, target_group: target_group_s2, evaluation_criteria: [evaluation_criterion_c2] }
 
   # Submission from Startup 1, reviewed by faculty through course enrollment.
   let!(:reviewable_submission_1) { submit_target(startup_1.team_lead, target_s1_manual) }

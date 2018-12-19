@@ -186,7 +186,7 @@ en:
     dashboard:
       tour:
         intro: Welcome to your personal dashboard! Your team's journey through this program will be showcased here.
-        toggle_bar: The program consists of multiple tracks. You complete these simultaneously as you progress. Use the tabs to switch between tracks.
+        level_select: The program is split into multiple levels, containing targets. New levels are unlocked when you complete <em>milestone</em> targets in each level.<br/><br/>You can go back to complete optional targets in previous levels, and you can also check out targets in future levels, but you can't submit work for those until they are unlocked.
         target_group: Your target groups will have all the targets listed along with its completion status.
         target: The target pane will have the name of the target and its completion status. On clicking the target, you will get detailed information on the target, the status and the target submission button.
         target_status: This indicates the present status of the target.

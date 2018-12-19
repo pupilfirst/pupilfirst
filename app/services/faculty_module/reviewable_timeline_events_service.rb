@@ -16,7 +16,7 @@ module FacultyModule
       # startups that belong to the courses which zhe directly administer.
       startup_ids = course_startups.pluck(:id) + faculty_startups.pluck(:id)
       unique_startup_ids = startup_ids.uniq
-      founder_ids = Founder.where(startup: unique_startup_ids)
+      founder_ids = Founder.where(startup: unique_startup_ids).pluck(:id)
 
       TimelineEvent.not_auto_verified.joins(:timeline_event_owners)
         .where(timeline_event_owners: { founder_id: founder_ids })

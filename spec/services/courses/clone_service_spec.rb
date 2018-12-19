@@ -5,7 +5,8 @@ describe Courses::CloneService do
 
   subject { described_class.new(course) }
 
-  let(:course) { create :course, sponsored: true }
+  let(:school) { create :school }
+  let(:course) { create :course, sponsored: true, school: school }
   let(:level_one) { create :level, :one, course: course }
   let(:level_two) { create :level, :two, course: course }
   let(:target_group_l1_1) { create :target_group, level: level_one, milestone: true }

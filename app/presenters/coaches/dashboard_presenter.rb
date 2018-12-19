@@ -7,7 +7,6 @@ module Coaches
         timelineEvents: FacultyModule::ReviewableTimelineEventsService.new(current_coach).timeline_events(view.current_school),
         authenticityToken: view.form_authenticity_token,
         emptyIconUrl: view.image_url('coaches/dashboard/empty_icon.svg'),
-        needsImprovementIconUrl: view.image_url('coaches/dashboard/needs-improvement-icon.svg'),
         notAcceptedIconUrl: view.image_url('coaches/dashboard/not-accepted-icon.svg'),
         verifiedIconUrl: view.image_url('coaches/dashboard/verified-icon.svg'),
         gradeLabels: grade_labels,

@@ -117,7 +117,7 @@ let make =
              let newGradingId = newGrading |> Grading.criterionId;
              oldGradingId == newGradingId ? newGrading : oldGrading;
            });
-      ReasonReact.Update({...state, evaluation});
+      ReasonReact.Update({evaluation: evaluation});
     },
   render: ({state, send}) =>
     <div className="d-flex flex-column w-100">

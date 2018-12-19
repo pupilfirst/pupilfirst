@@ -17,7 +17,6 @@ let make =
       ~replaceTimelineEvent,
       ~authenticityToken,
       ~emptyIconUrl,
-      ~needsImprovementIconUrl,
       ~notAcceptedIconUrl,
       ~verifiedIconUrl,
       ~gradeLabels,
@@ -46,7 +45,6 @@ let make =
             timelineEvents=pendingTEs
             replaceTimelineEvent
             authenticityToken
-            needsImprovementIconUrl
             notAcceptedIconUrl
             verifiedIconUrl
             gradeLabels
@@ -74,7 +72,6 @@ let make =
             timelineEvents=completeTEs
             replaceTimelineEvent
             authenticityToken
-            needsImprovementIconUrl
             notAcceptedIconUrl
             verifiedIconUrl
             gradeLabels

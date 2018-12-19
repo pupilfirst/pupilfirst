@@ -6,7 +6,6 @@ type props = {
   timelineEvents: list(TimelineEvent.t),
   authenticityToken: string,
   emptyIconUrl: string,
-  needsImprovementIconUrl: string,
   notAcceptedIconUrl: string,
   verifiedIconUrl: string,
   gradeLabels: list(GradeLabel.t),
@@ -32,7 +31,6 @@ let make =
       ~timelineEvents,
       ~authenticityToken,
       ~emptyIconUrl,
-      ~needsImprovementIconUrl,
       ~notAcceptedIconUrl,
       ~verifiedIconUrl,
       ~gradeLabels,
@@ -72,7 +70,7 @@ let make =
             <SidePanel
               coach
               startups
-              selectedStartupId={state.selectedStartupId}
+              selectedStartupId=state.selectedStartupId
               selectStartupCB
               clearStartupCB
               pendingCount
@@ -81,12 +79,11 @@ let make =
         </div>
         <div className="col-md-8">
           <TimelineEventsPanel
-            timelineEvents={state.timelineEvents}
-            selectedStartupId={state.selectedStartupId}
+            timelineEvents=state.timelineEvents
+            selectedStartupId=state.selectedStartupId
             replaceTimelineEvent
             authenticityToken
             emptyIconUrl
-            needsImprovementIconUrl
             notAcceptedIconUrl
             verifiedIconUrl
             gradeLabels
@@ -106,7 +103,6 @@ let decode = json =>
       json |> field("timelineEvents", list(TimelineEvent.decode)),
     authenticityToken: json |> field("authenticityToken", string),
     emptyIconUrl: json |> field("emptyIconUrl", string),
-    needsImprovementIconUrl: json |> field("needsImprovementIconUrl", string),
     notAcceptedIconUrl: json |> field("notAcceptedIconUrl", string),
     verifiedIconUrl: json |> field("verifiedIconUrl", string),
     gradeLabels: json |> field("gradeLabels", list(GradeLabel.decode)),
@@ -124,7 +120,6 @@ let jsComponent =
         ~timelineEvents=props.timelineEvents,
         ~authenticityToken=props.authenticityToken,
         ~emptyIconUrl=props.emptyIconUrl,
-        ~needsImprovementIconUrl=props.needsImprovementIconUrl,
         ~notAcceptedIconUrl=props.notAcceptedIconUrl,
         ~verifiedIconUrl=props.verifiedIconUrl,
         ~gradeLabels=props.gradeLabels,

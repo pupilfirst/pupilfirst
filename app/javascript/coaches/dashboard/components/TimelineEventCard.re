@@ -97,7 +97,6 @@ let make =
       ~timelineEvent,
       ~replaceTimelineEvent,
       ~authenticityToken,
-      ~needsImprovementIconUrl,
       ~notAcceptedIconUrl,
       ~verifiedIconUrl,
       ~gradeLabels,

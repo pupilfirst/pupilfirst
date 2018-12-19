@@ -4,12 +4,10 @@
       .col-md-3
         = f.collection_select :level_id, @levels, :id, :display_name, {include_blank: 'Any', label: 'Level'}, {required: false, class: 'filter-dropdown__select' }
       .col-md-3
-        = f.collection_select :startup_category_id, @categories, :id, :name, {include_blank: 'Any', label: 'Category'}, {required: false, class: 'filter-dropdown__select' }
-      .col-md-3
         = f.text_field :search, placeholder: 'Product Name contains', required: false
       .col-md-3
         = submit_tag 'FILTER', class: 'btn btn-primary filter-form-btn'
-        - if @form.level_id.present? || @form.startup_category_id.present? || @form.search.present?
+        - if @form.level_id.present? || @form.search.present?
           = link_to products_path, class: 'btn btn-ghost-primary btn-with-icon text-uppercase filter-form-btn filter-reset-btn' do
             i.fa.fa-refresh
             | Clear

@@ -1,6 +1,6 @@
 require_relative 'helper'
 
-after 'development:levels', 'development:categories' do
+after 'development:levels' do
   puts 'Seeding startups'
 
   # Load levels.
@@ -27,7 +27,6 @@ after 'development:levels', 'development:categories' do
     logo: File.open(File.join(Rails.root, 'app/assets/images/mailer/logo-mailer.png')),
     presentation_link: 'https://slideshare.net/superstartupdeck',
     legal_registered_name: 'SuperTech Ltd',
-    startup_categories: [StartupCategory.first, StartupCategory.second],
     twitter_link: 'https://twitter.com/superstartup',
     facebook_link: 'https://facebook.com/superstartup',
     product_video_link: 'https://www.youtube.com/ourvideo',
@@ -44,7 +43,6 @@ after 'development:levels', 'development:categories' do
     product_description: 'Earths Mightiest Heroes joined forces to take on threats that were too big for any one hero to tackle.',
     agreement_signed_at: 2.years.ago,
     website: 'https://www.example.org',
-    startup_categories: [StartupCategory.second, StartupCategory.last],
     program_started_on: 4.weeks.ago
   )
 
@@ -56,7 +54,6 @@ after 'development:levels', 'development:categories' do
     product_description: 'The flying car',
     agreement_signed_at: 2.years.ago,
     website: 'https://www.example.org',
-    startup_categories: [StartupCategory.first, StartupCategory.last],
     program_started_on: 2.weeks.ago
   )
 
@@ -68,7 +65,6 @@ after 'development:levels', 'development:categories' do
     product_description: 'The Quad Blasters are Star-Lords primary weapons in combat.',
     agreement_signed_at: 1.years.ago,
     website: 'https://www.example.org',
-    startup_categories: [StartupCategory.first, StartupCategory.last],
     program_started_on: 1.weeks.ago
   )
 

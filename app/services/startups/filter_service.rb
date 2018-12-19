@@ -7,15 +7,10 @@ module Startups
 
     def startups
       startups = @form.level_id.present? ? @startups.where(id: Level.find_by(id: @form.level_id).startups) : @startups
-      startups = filter_by_category(startups) if @form.startup_category_id.present?
       @form.search.present? ? filter_by_search(startups) : startups
     end
 
     private
-
-    def filter_by_category(startups)
-      startups.where(id: StartupCategory.find_by(id: @form.startup_category_id).startups)
-    end
 
     def filter_by_search(startups)
       search_term = "%#{@form.search.downcase}%"

@@ -71,6 +71,11 @@
   border-left: 1px solid $gray-border;
 }
 
+.timeline-event-card__link {
+  cursor: pointer;
+  color: $brand-secondary;
+}
+
 .timeline-event-card__review-box-header {
   position: relative;
   padding: 0 15px;

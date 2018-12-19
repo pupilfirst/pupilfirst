@@ -35,7 +35,7 @@ after 'development:target_groups', 'development:faculty' do
     end
   end
 
-  # Assign evaluation criteria for few targets in different courses
+  # Assign evaluation criteria and rubric descriptions for few targets in different courses
 
   Target.joins(:level).where(levels: { number: 1, course_id: startup_course.id }).each do |target|
     target.target_evaluation_criteria.create!(evaluation_criterion: startup_course.evaluation_criteria.first)
@@ -51,5 +51,6 @@ after 'development:target_groups', 'development:faculty' do
 
   Target.joins(:level).where(levels: { number: 1, course_id: ios_course.id }).each do |target|
     target.target_evaluation_criteria.create!(evaluation_criterion: ios_course.evaluation_criteria.first)
+    target.update!(rubric_description: Faker::Lorem::paragraph)
   end
 end

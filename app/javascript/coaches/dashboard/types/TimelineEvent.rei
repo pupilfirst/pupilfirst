@@ -41,3 +41,5 @@ let resultAsString: reviewResult => string;
 let evaluation: t => list(Grading.t);
 
 let founders: t => list(Founder.t);
+
+let rubric: t => option(string);

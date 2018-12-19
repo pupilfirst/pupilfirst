@@ -20,7 +20,7 @@ module FacultyModule
 
       TimelineEvent.not_auto_verified.joins(:timeline_event_owners)
         .where(timeline_event_owners: { founder_id: founder_ids })
-        .includes(:timeline_event_files, :startup_feedback)
+        .includes(:timeline_event_files, :startup_feedback, :target)
         .order(created_at: :DESC).limit(50).map { |timeline_event| timeline_event_fields(timeline_event) }
     end
 
@@ -38,7 +38,8 @@ module FacultyModule
         files: timeline_event.timeline_event_files.map { |file| { title: file.title, id: file.id } },
         image: timeline_event.image? ? timeline_event.image.url : nil,
         latestFeedback: timeline_event.startup_feedback&.last&.feedback,
-        evaluation: evaluation(timeline_event)
+        evaluation: evaluation(timeline_event),
+        rubric: rubric(timeline_event)
       }
     end
 
@@ -54,6 +55,10 @@ module FacultyModule
           grade: timeline_event.timeline_event_grades&.find_by(evaluation_criterion: criterion)&.grade
         }
       end
+    end
+
+    def rubric(timeline_event)
+      timeline_event.target.rubric_description
     end
   end
 end

@@ -9,10 +9,18 @@ let handleApiError =
 
 let str = ReasonReact.string;
 
-type state = {evaluation: list(Grading.t)};
+type displayMode =
+  | Form
+  | Rubric;
+
+type state = {
+  evaluation: list(Grading.t),
+  displayMode,
+};
 
 type action =
-  | UpdateGrading(Grading.t);
+  | UpdateGrading(Grading.t)
+  | ChangeView(displayMode);
 
 let component = ReasonReact.reducerComponent("EvaluationForm");
 
@@ -106,7 +114,10 @@ let make =
       _children,
     ) => {
   ...component,
-  initialState: () => {evaluation: timelineEvent |> TimelineEvent.evaluation},
+  initialState: () => {
+    evaluation: timelineEvent |> TimelineEvent.evaluation,
+    displayMode: Form,
+  },
   reducer: (action, state) =>
     switch (action) {
     | UpdateGrading(newGrading) =>
@@ -117,43 +128,84 @@ let make =
              let newGradingId = newGrading |> Grading.criterionId;
              oldGradingId == newGradingId ? newGrading : oldGrading;
            });
-      ReasonReact.Update({evaluation: evaluation});
+      ReasonReact.Update({...state, evaluation});
+    | ChangeView(displayMode) => ReasonReact.Update({...state, displayMode})
     },
   render: ({state, send}) =>
-    <div className="d-flex flex-column w-100">
-      <div className="timeline-event-card__review-box-header py-3 mb-3">
-        <h5 className="timeline-event-card__field-header font-bold my-0">
-          ("Grading Sheet:" |> str)
-        </h5>
+    switch (state.displayMode) {
+    | Form =>
+      <div className="d-flex flex-column w-100">
+        <div
+          className="timeline-event-card__review-box-header py-3 mb-3 d-flex justify-content-between">
+          <h5 className="timeline-event-card__field-header font-bold my-0">
+            ("Grading Sheet:" |> str)
+          </h5>
+          (
+            switch (timelineEvent |> TimelineEvent.rubric) {
+            | Some(_rubric) =>
+              <div
+                className="timeline-event-card__link"
+                onClick=(_event => send(ChangeView(Rubric)))>
+                ("View Rubric" |> str)
+              </div>
+            | None => ReasonReact.null
+            }
+          )
+        </div>
+        (
+          state.evaluation
+          |> List.map(grading =>
+               <GradeBar
+                 key=(grading |> Grading.criterionId |> string_of_int)
+                 grading
+                 gradeLabels
+                 gradeSelectCB=(
+                   newGrading => send(UpdateGrading(newGrading))
+                 )
+                 passGrade
+               />
+             )
+          |> Array.of_list
+          |> ReasonReact.array
+        )
+        <div className="grade-bar__save-container d-flex justify-content-end">
+          <button
+            className=(saveButtonClasses(state.evaluation))
+            onClick=(
+              _event =>
+                handleClick(
+                  state,
+                  timelineEvent,
+                  replaceTimelineEvent,
+                  authenticityToken,
+                )
+            )>
+            ("Save Grading" |> str)
+          </button>
+        </div>
       </div>
-      (
-        state.evaluation
-        |> List.map(grading =>
-             <GradeBar
-               key=(grading |> Grading.criterionId |> string_of_int)
-               grading
-               gradeLabels
-               gradeSelectCB=(newGrading => send(UpdateGrading(newGrading)))
-               passGrade
-             />
-           )
-        |> Array.of_list
-        |> ReasonReact.array
-      )
-      <div className="grade-bar__save-container d-flex justify-content-end">
-        <button
-          className=(saveButtonClasses(state.evaluation))
-          onClick=(
-            _event =>
-              handleClick(
-                state,
-                timelineEvent,
-                replaceTimelineEvent,
-                authenticityToken,
-              )
-          )>
-          ("Save Grading" |> str)
-        </button>
+    | Rubric =>
+      <div className="d-flex flex-column w-100">
+        <div
+          className="timeline-event-card__review-box-header py-3 mb-3 d-flex justify-content-between">
+          <h5 className="timeline-event-card__field-header font-bold my-0">
+            ("Rubric:" |> str)
+          </h5>
+        </div>
+        <div className="timeline-event-card__rubric-box py-3 pl-3">
+          (
+            switch (timelineEvent |> TimelineEvent.rubric) {
+            | Some(rubric) => rubric |> str
+            | None => ReasonReact.null
+            }
+          )
+        </div>
+        <div
+          className="timeline-event-card__link pl-3"
+          onClick=(_event => send(ChangeView(Form)))>
+          <i className="fa fa-chevron-left mr-2" />
+          ("Back to Grading Sheet" |> str)
+        </div>
       </div>
-    </div>,
+    },
 };

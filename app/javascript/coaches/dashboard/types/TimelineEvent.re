@@ -11,6 +11,7 @@ type t = {
   image: option(string),
   latestFeedback: option(string),
   evaluation: list(Grading.t),
+  rubric: option(string),
 };
 
 type reviewResult =
@@ -32,6 +33,7 @@ let decode = json =>
     latestFeedback:
       json |> field("latestFeedback", nullable(string)) |> Js.Null.toOption,
     evaluation: json |> field("evaluation", list(Grading.decode)),
+    rubric: json |> field("rubric", nullable(string)) |> Js.Null.toOption,
   };
 
 let forStartupId = (startupId, tes) =>
@@ -80,3 +82,5 @@ let resultAsString = reviewResult =>
   };
 
 let evaluation = t => t.evaluation;
+
+let rubric = t => t.rubric;

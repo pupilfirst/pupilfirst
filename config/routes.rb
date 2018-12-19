@@ -76,6 +76,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :founders, only: %i[index] do
+    member do
+      get 'events/:page', action: 'paged_events', as: 'paged_events'
+    end
+  end
+
   get 'startups/:id(/:slug)', to: 'startups#show', as: 'timeline'
   get 'startups/:id/:slug/e/:event_id/:event_title', to: 'startups#timeline_event_show', as: 'timeline_event_show'
 

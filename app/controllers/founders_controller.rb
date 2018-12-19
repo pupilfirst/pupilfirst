@@ -4,14 +4,41 @@ class FoundersController < ApplicationController
   before_action :require_active_subscription, only: %i[edit update]
 
   # GET /founders/:slug, GET /students/:slug
-  #
   # TODO: FoundersController#founder_profile should probably be just #show.
+
+  # rubocop:disable Metrics/AbcSize
   def founder_profile
     @founder = Founder.friendly.find(params[:slug])
     authorize @founder
+    @meta_description = "#{@founder.fullname}: #{@founder.startup.name}"
 
-    @meta_description = "This is a detailed profile for #{@founder.fullname}, includes bio, resume, activity on Public Slack and Karma Points earned."
-    @timeline = Founders::ActivityTimelineService.new(@founder, params[:to])
+    if params[:show_feedback].present?
+      if current_founder.present?
+        @feedback_to_show = @founder.startup.startup_feedback.where(id: params[:show_feedback]).first if @founder.startup.founder?(current_founder)
+      else
+        session[:referer] = request.original_url
+        redirect_to new_user_session_path, alert: 'Please sign in to continue!'
+        return
+      end
+    end
+
+    # @timeline = Founders::ActivityTimelineService.new(@founder, params[:to])
+    @events_for_display = @founder.timeline_events_for_display(current_founder)
+    @has_more_events = more_events?(@events_for_display, 1)
+    # @meta_description = "This is a detailed profile for #{@founder.fullname}, includes bio, resume, activity on Public Slack and Karma Points earned."
+    render 'founder_profile'
+  end
+
+  # rubocop:enable Metrics/AbcSize
+
+  # GET /founders/:id/events/:page
+  def paged_events
+    # Reuse the startup action, because that's what this page also shows.
+    show
+    @page = params[:page].to_i
+    @has_more_events = more_events?(@events_for_display, @page)
+
+    render layout: false
   end
 
   # GET /founder/edit
@@ -92,5 +119,11 @@ class FoundersController < ApplicationController
 
   def skip_container
     @skip_container = true
+  end
+
+  def more_events?(events, page)
+    return false if events.count <= 20
+
+    events.count > page * 20
   end
 end

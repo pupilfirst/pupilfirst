@@ -20,7 +20,7 @@ module StartupsHelper
   end
 
   def needs_improvement_tooltip_text(event)
-    if current_founder && @startup.founder?(current_founder)
+    if current_founder
       needs_improvement_tooltip_for_founder(event)
     else
       needs_improvement_tooltip_for_public(event)

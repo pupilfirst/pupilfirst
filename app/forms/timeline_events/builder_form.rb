@@ -63,8 +63,7 @@ module TimelineEvents
           description: description,
           event_on: Time.zone.parse(event_on),
           links: parsed_links,
-          image: image,
-          share_on_facebook: share_on_facebook
+          image: image
         }
 
         timeline_event = TimelineEvents::CreateService.new(params, founder).execute

@@ -11,16 +11,17 @@ class Faculty < ApplicationRecord
 
   has_secure_token
 
-  belongs_to :school
   belongs_to :user
   has_many :startup_feedback, dependent: :restrict_with_error
   has_many :targets, dependent: :restrict_with_error
   has_many :connect_slots, dependent: :destroy
   has_many :connect_requests, through: :connect_slots
-  belongs_to :level, optional: true
+  has_many :faculty_course_enrollments, dependent: :destroy
+  has_many :courses, through: :faculty_course_enrollments
 
   # Startups whose timeline events this faculty can review.
-  has_and_belongs_to_many :startups, dependent: :restrict_with_error
+  has_many :faculty_startup_enrollments, dependent: :destroy
+  has_many :startups, through: :faculty_startup_enrollments
 
   CATEGORY_TEAM = 'team'
   CATEGORY_VISITING_COACHES = 'visiting_coaches'

@@ -13,6 +13,7 @@ class ApplicationController < ActionController::Base
   before_action :pretender
   before_action :cache_current_founder_in_current_user
 
+  helper_method :current_school
   helper_method :current_founder
   helper_method :current_startup
   helper_method :current_coach
@@ -51,6 +52,11 @@ class ApplicationController < ActionController::Base
     return unless current_founder
 
     @platform_feedback_for_form = PlatformFeedback.new(founder_id: current_founder.id)
+  end
+
+  # TODO: Replace ApplicationController#current_school with a proper implementation to enable white-labeling.
+  def current_school
+    School.first
   end
 
   def current_coach

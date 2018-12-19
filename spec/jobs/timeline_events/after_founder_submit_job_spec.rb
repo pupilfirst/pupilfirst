@@ -20,7 +20,10 @@ describe TimelineEvents::AfterFounderSubmitJob do
     end
 
     context 'when the startup has a coach' do
-      let(:startup) { create :startup, :sponsored, faculty: [faculty, inactive_faculty] }
+      before do
+        create :faculty_startup_enrollment, startup: startup, faculty: faculty
+        create :faculty_startup_enrollment, startup: startup, faculty: inactive_faculty
+      end
 
       it 'sends a notification email to the coach' do
         subject.perform_now(timeline_event)

@@ -81,8 +81,6 @@ after 'development:levels', 'development:categories' , 'development:faculty'do
   )
 
   # Add a faculty to iOS Course.
-  ios_startup.faculty << Faculty.find_by(name: 'iOS Coach')
-
-  # Add a faculty to Avengers Startup
-  Startup.find_by(product_name: 'The Avengers').faculty << Faculty.find_by(name: 'Vishnu Gopal')
+  ios_coach = Faculty.find_by(name: 'iOS Coach')
+  FacultyStartupEnrollment.create!(faculty: ios_coach, startup: ios_startup, safe_to_create: true)
 end

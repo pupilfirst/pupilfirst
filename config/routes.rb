@@ -76,11 +76,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :founders, only: %i[index] do
-    member do
-      get 'events/:page', action: 'paged_events', as: 'paged_events'
-    end
-  end
+  # resources :founders, only: %i[index] do
+  #   member do
+  #     get 'events/:page', action: 'paged_events', as: 'paged_events'
+  #   end
+  # end
 
   get 'startups/:id(/:slug)', to: 'startups#show', as: 'timeline'
   get 'startups/:id/:slug/e/:event_id/:event_title', to: 'startups#timeline_event_show', as: 'timeline_event_show'
@@ -189,6 +189,10 @@ Rails.application.routes.draw do
   get 'founders/:slug', to: 'founders#founder_profile', as: 'founder_profile'
 
   get 'students/:slug', to: 'founders#founder_profile', as: 'student_profile'
+
+  # get 'founders/:slug/events/:page', to: 'founders#paged_events', as: 'paged_events'
+
+  get 'students/:slug/events/:page', to: 'founders#paged_events', as: 'paged_events'
 
   # Story of startup village, accessed via about pages.
   get 'story', as: 'story', to: 'home#story'

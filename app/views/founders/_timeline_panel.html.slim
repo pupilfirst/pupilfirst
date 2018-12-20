@@ -23,7 +23,7 @@
         ' #{event.title}
         i.fa.fa-link
       / display info icon if founder
-      - if current_founder && startup.founder?(current_founder)
+      - if current_founder && (current_founder == @founder)
         - latest_feedback = StartupFeedback.for_timeline_event(event).first
         - if latest_feedback.present?
           - feedback = latest_feedback.feedback
@@ -36,7 +36,7 @@
       small
         i.fa.fa-calendar
         ' &nbsp;#{event.event_on.strftime("%B %e, %Y")}
-        - if startup.earliest_team_event_date.present? && !event.founder_event? && event.verified_or_needs_improvement?
+        - if @founder.startup.earliest_team_event_date.present? && !event.founder_event? && event.verified_or_needs_improvement?
           ' (#{event.days_elapsed.ordinalize} day)
   .timeline-body
     .tl-body
@@ -60,7 +60,7 @@
                 | &nbsp;
               | #{attachment[:title]}
 
-    - if current_founder && !current_founder.exited && startup.founder?(current_founder)
+    - if current_founder && !current_founder.exited && (current_founder == @founder)
       - if policy(event).destroy?
         = button_to timeline_event_url(event),
           method: :delete, class: 'btn btn-danger btn-sm btn-flat btn-with-default-padding',

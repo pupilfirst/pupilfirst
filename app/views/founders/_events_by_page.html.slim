@@ -7,5 +7,5 @@
 - if more
   /.startup-show__load-events-button style="text-align: center;"
   .text-center.margin-top-10
-    a.js-startup-show__load-events-link.btn.btn-primary href="#" data-load-url=paged_events_startup_url(startup, page: page + 1)
+    a.js-startup-show__load-events-link.btn.btn-primary href="#" data-load-url=paged_events_url(@founder.slug, page: page + 1)
       | Load more events

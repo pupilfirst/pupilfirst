@@ -152,7 +152,7 @@
 }
 
 .target-overlay-status-badge-bar__info-block {
-  padding: 1rem 1.5rem;
+  padding: 1.5rem;
   background-color: white;
 
   @include media-breakpoint-down(xs) {
@@ -160,31 +160,66 @@
 }
 
 .target-overlay-status-badge-bar__badge-content {
+  position: relative;
   display: inline-block;
   font-size: 1rem;
   padding: 1rem 1.5rem;
 
+  &:after {
+    top: 100%;
+    left: 2rem;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(255, 255, 255, 0);
+    border-width: 12px;
+    margin-left: -12px;
+  }
+
   &.submitted {
     background-color: rgba(0, 138, 193, 0.15);
     color: $dark-secondary;
+
+    &:after {
+      border-top-color:rgba(0, 138, 193, 0.15);
+    }
   }
   &.pending {
     background-color: rgba(227, 180, 98, 0.15);
     color: darken($alert-background, 25%);
+
+    &:after {
+      border-top-color:rgba(227, 180, 98, 0.15);
+    }
   }
   &.prerequisite-locked,
   &.level-locked,
   &.milestone-locked {
     background-color: rgba(153, 153, 153, 0.2);
     color: $dark-grey-text;
+
+    &:after {
+      border-top-color:rgba(153, 153, 153, 0.2);
+    }
   }
   &.passed {
     background-color: rgba(50, 180, 117, 0.15);
     color: $dark-primary;
+
+    &:after {
+      border-top-color:rgba(50, 180, 117, 0.15);
+    }
   }
   &.failed {
     background-color: rgba(217, 83, 80, 0.15);
     color: rgba(217, 83, 80, 1);
+
+    &:after {
+      border-top-color:rgba(217, 83, 80, 0.15);
+    }
   }
 }
 

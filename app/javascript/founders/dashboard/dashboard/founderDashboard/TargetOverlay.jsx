@@ -186,22 +186,6 @@ export default class TargetOverlay extends React.Component {
                 target={target}
                 hasSingleFounder={this.props.hasSingleFounder}
               />
-              <div className="d-none d-md-block">
-                {this.isSubmittable(target) && (
-                  <SubmitButton
-                    rootProps={this.props.rootProps}
-                    completeTargetCB={this.completeTarget}
-                    target={target}
-                    openTimelineBuilderCB={this.props.openTimelineBuilderCB}
-                    autoVerifyCB={this.autoVerify}
-                    invertShowQuizCB={this.invertShowQuiz}
-                    overlayLoaded={this.state.quizQuestions !== null}
-                  />
-                )}
-              </div>
-            </div>
-            <div className="target-overlay__status-badge-block">
-              <StatusBadgeBar target={target} />
             </div>
 
             {this.state.showQuiz ? (
@@ -220,6 +204,19 @@ export default class TargetOverlay extends React.Component {
                   />
                 </div>
                 <div className="col-md-4 target-overlay__content-rightbar">
+                  <div className="target-overlay__status-badge-block">
+                    <StatusBadgeBar
+                      rootProps={this.props.rootProps}
+                      completeTargetCB={this.completeTarget}
+                      target={target}
+                      openTimelineBuilderCB={this.props.openTimelineBuilderCB}
+                      autoVerifyCB={this.autoVerify}
+                      invertShowQuizCB={this.invertShowQuiz}
+                      isSubmittable={this.isSubmittable()}
+                      overlayLoaded={this.state.quizQuestions !== null}
+                    />
+                  </div>
+
                   {_.isObject(faculty) && <FacultyBlock faculty={faculty} />}
 
                   {this.state.latestEvent && (

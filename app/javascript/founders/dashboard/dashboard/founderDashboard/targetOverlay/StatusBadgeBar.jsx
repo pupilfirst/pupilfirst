@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import SubmitButton from "./SubmitButton"
+import SubmitButton from "./SubmitButton";
 
 export default class StatusBadgeBar extends React.Component {
   statusClass() {
-    return this.props.target.status.replace('_', '-');
+    return this.props.target.status.replace("_", "-");
   }
 
   statusIconClasses() {
@@ -49,7 +49,12 @@ export default class StatusBadgeBar extends React.Component {
 
   statusContents() {
     return (
-      <div className={"target-overlay-status-badge-bar__badge-content d-flex justify-content-between align-items-center p-4 " + this.statusClass()}>
+      <div
+        className={
+          "target-overlay-status-badge-bar__badge-content d-flex justify-content-between align-items-center p-4 " +
+          this.statusClass()
+        }
+      >
         <div className="target-overlay-status-badge-bar__badge-status">
           <span className="target-overlay-status-badge-bar__badge-icon">
             <i className={this.statusIconClasses()} />
@@ -66,6 +71,7 @@ export default class StatusBadgeBar extends React.Component {
               openTimelineBuilderCB={this.props.openTimelineBuilderCB}
               autoVerifyCB={this.props.autoVerifyCB}
               invertShowQuizCB={this.props.invertShowQuizCB}
+              overlayLoaded={this.props.overlayLoaded}
             />
           )}
         </div>
@@ -79,40 +85,58 @@ export default class StatusBadgeBar extends React.Component {
     let gradeLabels = this.props.rootProps.gradeLabels;
     return (
       <div className="target-overlay-status-badge-bar__grades-container p-4">
-        <div className="target-overlay-status-badge-bar__grades-header">Grades received:</div>
+        <div className="target-overlay-status-badge-bar__grades-header">
+          Grades received:
+        </div>
         <ul className="target-overlay-status-badge-bar__grades-list list-unstyled">
-          {
-            Object.keys(grades).map(criterionId => {
-              return (
-                <li key={criterionId}>
-                  {criteriaNames[criterionId]}: {gradeLabels[grades[criterionId]]}
-                  <div className="btn-group btn-group-toggle d-flex" data-toggle="buttons">
-                    <label className="btn btn-secondary disabled">
-                      <input type="radio" name="options" id="option1" autocomplete="off" checked />
-                      1
-                    </label>
-                    <label className="btn btn-secondary disabled">
-                      <input type="radio" name="options" id="option2" autocomplete="off" />
-                      2
-                    </label>
-                    <label className="btn btn-secondary disabled">
-                      <input type="radio" name="options" id="option3" autocomplete="off" />
-                      3
-                    </label>
-                  </div>
-                </li>
-              )
-            })
-          }
+          {Object.keys(grades).map(criterionId => {
+            return (
+              <li key={criterionId}>
+                {criteriaNames[criterionId]}: {gradeLabels[grades[criterionId]]}
+                <div
+                  className="btn-group btn-group-toggle d-flex"
+                  data-toggle="buttons"
+                >
+                  <label className="btn btn-secondary disabled">
+                    <input
+                      type="radio"
+                      name="options"
+                      id="option1"
+                      autocomplete="off"
+                      checked
+                    />
+                    1
+                  </label>
+                  <label className="btn btn-secondary disabled">
+                    <input
+                      type="radio"
+                      name="options"
+                      id="option2"
+                      autocomplete="off"
+                    />
+                    2
+                  </label>
+                  <label className="btn btn-secondary disabled">
+                    <input
+                      type="radio"
+                      name="options"
+                      id="option3"
+                      autocomplete="off"
+                    />
+                    3
+                  </label>
+                </div>
+              </li>
+            );
+          })}
         </ul>
       </div>
-    )
+    );
   }
 
   render() {
     return (
-      <div className='target-overlay-status-badge-bar__badge-container'
->
+      <div className="target-overlay-status-badge-bar__badge-container">
         {this.statusContents()}
         <div className="target-overlay-status-badge-bar__info-block">
           <p className="target-overlay-status-badge-bar__hint font-regular">

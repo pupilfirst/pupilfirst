@@ -102,7 +102,7 @@ export default class StatusBadgeBar extends React.Component {
                       type="radio"
                       name="options"
                       id="option1"
-                      autocomplete="off"
+                      autocomplete="off" grade-bar__criterion-namegrade-bar__criterion-name
                       checked
                     />
                     1

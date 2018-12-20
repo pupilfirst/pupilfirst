@@ -99,8 +99,7 @@
 }
 
 .target-overlay__status-badge-block {
-  border: 1px solid $gray-border;
-  @include border-radius(5px);
+  border-bottom: 1px solid $gray-border;
 }
 
 .target-overlay-status-badge-bar__badge-container {

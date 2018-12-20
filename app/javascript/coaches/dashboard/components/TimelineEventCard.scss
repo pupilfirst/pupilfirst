@@ -54,8 +54,16 @@
     .trix-button-row {
       flex-wrap: wrap;
     }
+    .trix-button--icon {
+      width: 1.875em;
+      height: 1.625em;
+    }
     .trix-button-group {
       border-color: #e5e5e5;
+
+      &:not(:first-child) {
+        margin-left: 0px;
+      }
     }
     .trix-button {
       border-bottom: 0;

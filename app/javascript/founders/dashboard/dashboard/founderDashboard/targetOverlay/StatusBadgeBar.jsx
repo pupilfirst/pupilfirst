@@ -51,7 +51,7 @@ export default class StatusBadgeBar extends React.Component {
     return (
       <div
         className={
-          "target-overlay-status-badge-bar__badge-content d-flex justify-content-between align-items-center p-4 " +
+          "target-overlay-status-badge-bar__badge-content d-flex justify-content-between align-items-center " +
           this.statusClass()
         }
       >

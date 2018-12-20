@@ -82,7 +82,7 @@ export default class TargetOverlay extends React.Component {
     if (this.props.currentLevel == 0) {
       $(".js-founder-dashboard__action-bar-add-event-button").popover("show");
 
-      setTimeout(function() {
+      setTimeout(function () {
         $(".js-founder-dashboard__action-bar-add-event-button").popover("hide");
       }, 3000);
     } else {
@@ -194,53 +194,53 @@ export default class TargetOverlay extends React.Component {
                 submitTargetCB={this.autoVerify}
               />
             ) : (
-              <div className="target-overlay__content-wrapper clearfix">
-                <div className="col-md-8 target-overlay__content-leftbar">
-                  <ContentBlock
-                    rootProps={this.props.rootProps}
-                    iconPaths={this.props.iconPaths}
-                    target={target}
-                    linkedResources={this.state.linkedResources}
-                  />
-                </div>
-                <div className="col-md-4 target-overlay__content-rightbar">
-                  <div className="target-overlay__status-badge-block">
-                    <StatusBadgeBar
+                <div className="target-overlay__content-wrapper clearfix">
+                  <div className="col-md-8 target-overlay__content-leftbar">
+                    <ContentBlock
                       rootProps={this.props.rootProps}
-                      completeTargetCB={this.completeTarget}
+                      iconPaths={this.props.iconPaths}
                       target={target}
-                      openTimelineBuilderCB={this.props.openTimelineBuilderCB}
-                      autoVerifyCB={this.autoVerify}
-                      invertShowQuizCB={this.invertShowQuiz}
-                      isSubmittable={this.isSubmittable()}
-                      overlayLoaded={this.state.quizQuestions !== null}
+                      linkedResources={this.state.linkedResources}
                     />
                   </div>
+                  <div className="col-md-4 target-overlay__content-rightbar py-3">
+                    <div className="target-overlay__status-badge-block">
+                      <StatusBadgeBar
+                        rootProps={this.props.rootProps}
+                        completeTargetCB={this.completeTarget}
+                        target={target}
+                        openTimelineBuilderCB={this.props.openTimelineBuilderCB}
+                        autoVerifyCB={this.autoVerify}
+                        invertShowQuizCB={this.invertShowQuiz}
+                        isSubmittable={this.isSubmittable()}
+                        overlayLoaded={this.state.quizQuestions !== null}
+                      />
+                    </div>
 
-                  {_.isObject(faculty) && <FacultyBlock faculty={faculty} />}
+                    {_.isObject(faculty) && <FacultyBlock faculty={faculty} />}
 
-                  {this.state.latestEvent && (
-                    <TimelineEventPanel
-                      event={this.state.latestEvent}
-                      feedback={this.state.latestFeedback}
-                    />
-                  )}
-                  {target.role === "founder" &&
-                    !this.props.hasSingleFounder && (
-                      <div className="mt-2">
-                        <h5 className="target-overaly__status-title font-semibold">
-                          Completion Status:
-                        </h5>
-                        <FounderStatusPanel
-                          founderDetails={this.props.founderDetails}
-                          founderStatuses={this.state.founderStatuses}
-                          targetId={this.targetId}
-                        />
-                      </div>
+                    {this.state.latestEvent && (
+                      <TimelineEventPanel
+                        event={this.state.latestEvent}
+                        feedback={this.state.latestFeedback}
+                      />
                     )}
+                    {target.role === "founder" &&
+                      !this.props.hasSingleFounder && (
+                        <div className="mt-2">
+                          <h5 className="target-overaly__status-title font-semibold">
+                            Completion Status:
+                        </h5>
+                          <FounderStatusPanel
+                            founderDetails={this.props.founderDetails}
+                            founderStatuses={this.state.founderStatuses}
+                            targetId={this.targetId}
+                          />
+                        </div>
+                      )}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
         </div>
         <div className="target-overlay__mobile-fixed-navbar d-block d-md-none">

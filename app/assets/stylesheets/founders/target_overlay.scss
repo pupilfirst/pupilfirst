@@ -100,7 +100,7 @@
 
 .target-overlay__status-badge-block {
   border: 1px solid $gray-border;
-  border-width: 0 0 1px 0;
+  @include border-radius(5px);
 }
 
 .target-overlay-status-badge-bar__badge-container {
@@ -108,7 +108,6 @@
   font-size: 0.875rem;
   letter-spacing: 0.02rem;
   white-space: normal;
-  @include border-radius(0px);
   text-align: left;
 
   .target-overlay-status-badge-bar__badge-icon {
@@ -164,7 +163,7 @@
 .target-overlay-status-badge-bar__badge-content {
   display: inline-block;
   font-size: 1rem;
-
+  padding: 1rem 1.5rem;
 
   &.submitted {
     background-color: rgba(0, 138, 193, 0.15);

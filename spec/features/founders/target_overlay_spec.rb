@@ -72,13 +72,13 @@ feature 'Target Overlay' do
       # Within the status badge bar:
       within('.target-overlay__status-badge-block') do
         expect(page).to have_selector('.target-overlay-status-badge-bar__badge-icon > i.fa-clock-o')
-        expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > span', text: 'Pending')
+        expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > div > span', text: 'Pending')
         expect(page).to have_selector('.target-overlay-status-badge-bar__hint', text: 'Follow completion instructions and submit!')
       end
 
       # Test the submit button.
       expect(page).to_not have_selector('.timeline-builder__popup-body')
-      find('.target-overlay__header').find('button.btn-timeline-builder').click
+      find('.target-overlay__status-badge-block').find('button.btn-timeline-builder').click
       expect(page).to have_selector('.timeline-builder__popup-body')
       find('.timeline-builder__modal-close').click # close the timeline builder.
 
@@ -104,6 +104,11 @@ feature 'Target Overlay' do
 
     context 'when the target is auto verified' do
       let!(:target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM }
+
+      before do
+        target.target_evaluation_criteria.delete_all
+        visit student_dashboard_path
+      end
 
       it 'displays submit button with correct label' do
         find('.founder-dashboard-target-header__headline', text: target.title).click
@@ -179,7 +184,7 @@ feature 'Target Overlay' do
         # The target must be marked locked.
         within('.target-overlay__status-badge-block') do
           expect(page).to have_selector('.target-overlay-status-badge-bar__badge-icon > i.fa-lock')
-          expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > span', text: 'Locked')
+          expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > div > span', text: 'Locked')
           expect(page).to have_selector('.target-overlay-status-badge-bar__hint', text: 'Complete the prerequisites first')
         end
 
@@ -197,14 +202,14 @@ feature 'Target Overlay' do
       # The target must be pending.
       within('.target-overlay__status-badge-block') do
         expect(page).to have_selector('.target-overlay-status-badge-bar__badge-icon > i.fa-clock-o')
-        expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > span', text: 'Pending')
+        expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > div > span', text: 'Pending')
         expect(page).to have_selector('.target-overlay-status-badge-bar__hint', text: 'Follow completion instructions and submit!')
       end
 
       # Close pnotify first.
       find('.ui-pnotify').click
 
-      find('.target-overlay__header').find('button.btn-timeline-builder').click
+      find('.target-overlay__status-badge-block').find('button.btn-timeline-builder').click
       expect(page).to have_selector('.timeline-builder__popup-body')
       find('.timeline-builder__textarea').set('Some description')
       find('.js-timeline-builder__submit-button').click
@@ -212,7 +217,7 @@ feature 'Target Overlay' do
       # The target status badge must now say submitted.
       within('.target-overlay__status-badge-block') do
         expect(page).to have_selector('.target-overlay-status-badge-bar__badge-icon > i.fa-hourglass-half')
-        expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > span', text: 'Submitted')
+        expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > div > span', text: 'Submitted')
         expect(page).to have_selector('.target-overlay-status-badge-bar__hint', text: "Submitted on #{Date.today.strftime('%b %-e')}")
       end
     end
@@ -254,7 +259,7 @@ feature 'Target Overlay' do
       # Submit Quiz
       click_button('Submit Quiz')
 
-      expect(page).to have_content("Completed on #{Date.today.strftime('%b %-e')}")
+      expect(page).to have_content("Passed on #{Date.today.strftime('%b %-e')}")
     end
   end
 

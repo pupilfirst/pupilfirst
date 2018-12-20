@@ -18,7 +18,7 @@ export default class SubmitButton extends React.Component {
     } else if (this.props.target.call_to_action) {
       return this.props.target.call_to_action;
     } else if (this.canBeVerifiedAutomatically()) {
-      return "Mark COMPLETE";
+      return "Mark Complete";
     } else if (!this.props.target.link_to_complete) {
       return this.isPending() ? "Submit" : "Re-Submit";
     } else {

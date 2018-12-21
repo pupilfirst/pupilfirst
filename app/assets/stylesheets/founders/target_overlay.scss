@@ -619,3 +619,62 @@
 .target-overlay__mobile-submit-button-container {
   padding-top: 0.8125rem;
 }
+
+.target-overlay-grade-bar__container {
+  padding: 0 15px;
+}
+
+.target-overlay-grade-bar__track {
+  background-color: rgba(244, 244, 244, 0.5);
+  border: 1px solid #d8d8d8;
+  border-radius: 3rem;
+  box-shadow: 0 2px 4px 0px rgba(0, 0, 0, 0.05);
+}
+
+.target-overlay-grade-bar__grade-label {
+  font-weight: bold;
+}
+
+.target-overlay-grade-bar__grade-pill {
+  position: relative;
+  width: 100%;
+  padding: 3px;
+  overflow: hidden;
+  color: #999999;
+  background-color: #fafafa;
+
+  &:before {
+    position: absolute;
+    content: "";
+    right: 0;
+    top: 0;
+    z-index: 2;
+    width: 1px;
+    height: 100%;
+    background-color: #d8d8d8;
+  }
+  &:last-child {
+    &::before {
+      width: 0;
+    }
+  }
+}
+
+.target-overlay-grade-bar__grade-pill--passed {
+  color: white;
+  background-color: #0f9d58;
+}
+
+.target-overlay-grade-bar__grade-pill--failed {
+  color: white;
+  background-color: #f55151;
+}
+
+.target-overlay-grade-bar__criterion-name {
+  font-size: 0.75rem;
+}
+
+.target-overlay-grade-bar__grade {
+  font-size: 0.75rem;
+  color: #999999;
+}

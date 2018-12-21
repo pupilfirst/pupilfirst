@@ -43,6 +43,14 @@ export default class StatusBadgeBar extends React.Component {
     }[this.props.target.status];
   }
 
+  gradePillModifierClass(criterionId) {
+    let modifierClass =
+      this.props.target.grades[criterionId] < this.props.rootProps.passGrade
+        ? "target-overlay-grade-bar__grade-pill--failed"
+        : "target-overlay-grade-bar__grade-pill--passed";
+    return modifierClass;
+  }
+
   submissionDate() {
     return moment(this.props.target.submitted_at).format("MMM D");
   }
@@ -83,53 +91,52 @@ export default class StatusBadgeBar extends React.Component {
     let grades = this.props.target.grades;
     let criteriaNames = this.props.rootProps.criteriaNames;
     let gradeLabels = this.props.rootProps.gradeLabels;
+    let maxGrade = this.props.rootProps.maxGrade;
     return (
-      <div className="target-overlay-status-badge-bar__grades-container p-4">
+      <div className="btn-toolbar target-overlay-grade-bar__container flex-column mb-3">
         <div className="target-overlay-status-badge-bar__grades-header">
           Grades received:
         </div>
-        <ul className="target-overlay-status-badge-bar__grades-list list-unstyled">
-          {Object.keys(grades).map(criterionId => {
-            return (
-              <li key={criterionId}>
-                {criteriaNames[criterionId]}: {gradeLabels[grades[criterionId]]}
-                <div
-                  className="btn-group btn-group-toggle d-flex"
-                  data-toggle="buttons"
-                >
-                  <label className="btn btn-secondary disabled">
-                    <input
-                      type="radio"
-                      name="options"
-                      id="option1"
-                      autocomplete="off" grade-bar__criterion-namegrade-bar__criterion-name
-                      checked
-                    />
-                    1
-                  </label>
-                  <label className="btn btn-secondary disabled">
-                    <input
-                      type="radio"
-                      name="options"
-                      id="option2"
-                      autocomplete="off"
-                    />
-                    2
-                  </label>
-                  <label className="btn btn-secondary disabled">
-                    <input
-                      type="radio"
-                      name="options"
-                      id="option3"
-                      autocomplete="off"
-                    />
-                    3
-                  </label>
+        {Object.keys(grades).map(criterionId => {
+          return (
+            <div>
+              <div className="target-overlay-grade-bar__header d-flex justify-content-between pb-1">
+                <div className="target-overlay-grade-bar__criterion-name">
+                  {criteriaNames[criterionId]}
+                  <span>
+                    :
+                    <span className="target-overlay-grade-bar__grade-label">
+                      {gradeLabels[grades[criterionId]]}
+                    </span>
+                  </span>
                 </div>
-              </li>
-            );
-          })}
-        </ul>
+                <div className="target-overlay-grade-bar__grade font-semibold">
+                  {grades[criterionId] + "/" + maxGrade}
+                </div>
+              </div>
+              <div
+                className="btn-group target-overlay-grade-bar__track d-flex"
+                role="group"
+              >
+                {Object.keys(gradeLabels).map((grade, index) => {
+                  let modifierClass =
+                    grades[criterionId] >= index + 1
+                      ? this.gradePillModifierClass(criterionId)
+                      : "";
+                  return (
+                    <div
+                      key={index}
+                      className={
+                        "target-overlay-grade-bar__grade-pill " + modifierClass
+                      }
+                      role="button"
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
       </div>
     );
   }

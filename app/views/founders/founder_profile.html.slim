@@ -107,6 +107,25 @@
 .profile-bg.py-3
   .container
     .row
+      - if @founder.course.faculty.exists?
+        .col-md-12.mt-4
+          h3 Mentors
+          hr
+          - @startup.faculty.where.not(inactive: true).order(:name).each do |faculty|
+            .data-faculty
+              .media.align-items-center
+                a.mr-3 href=faculty_url(faculty.slug)
+                  .faculty-image
+                    == avatar(faculty.name, faculty: faculty, background_shape: :square)
+                .media-body
+                  .media-heading
+                    = link_to faculty.name, faculty_url(faculty.slug)
+                  p.designation #{faculty.title}
+                  - if faculty.linkedin_url?
+                    ul.faculty__social-links
+                      li
+                        a href="#{faculty.linkedin_url}" target='_blank'
+                          i.fa.fa-linkedin-square
       .col-lg-9.tab-content.ml-4.order-2.order-lg-1
         - if @events_for_display.present?
           .main-timeline

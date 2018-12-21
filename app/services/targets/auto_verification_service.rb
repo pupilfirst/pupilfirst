@@ -7,11 +7,11 @@ module Targets
 
     def auto_verify
       @target.timeline_events.create!(
-        founder: @founder,
-        startup: @founder.startup,
+        founders: [@founder],
         description: description,
         event_on: Time.zone.now,
-        passed_at: Time.zone.now
+        passed_at: Time.zone.now,
+        latest: true
       )
     end
 

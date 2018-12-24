@@ -1,29 +1,45 @@
 <!DOCTYPE html>
 <html lang='en'>
-  <head>
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+<head>
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags. -->
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags. -->
 
-    <!-- Styles -->
-    <%= stylesheet_pack_tag 'tailwind', media: 'all', 'data-turbolinks-track': 'reload'%>
+  <!-- Styles -->
+  <%= stylesheet_pack_tag 'tailwind', media: 'all', 'data-turbolinks-track': 'reload' %>
 
-    <!-- Scripts -->
-    <%= javascript_pack_tag 'tailwind', 'data-turbolinks-track': 'reload', nonce: true %>
+  <!-- Scripts -->
+  <%= javascript_pack_tag 'tailwind', 'data-turbolinks-track': 'reload', nonce: true %>
 
-    <%= csrf_meta_tags %>
+  <%= csrf_meta_tags %>
 
-    <meta name="description" content="<%= meta_description %>"/>
-    <meta property="og:description" content="<%= meta_description %>"/>
+  <meta name="description" content="<%= meta_description %>"/>
+  <meta property="og:description" content="<%= meta_description %>"/>
 
-    <%= yield :head %>
+  <%= yield :head %>
 
-    <link rel="icon" href="<%= image_url('layouts/shared/favicon.png') %>"/>
-  </head>
+  <link rel="icon" href="<%= image_url('layouts/shared/favicon.png') %>"/>
+</head>
 
-  <body data-env="<%= Rails.env %>">
+<body data-env="<%= Rails.env %>">
+<div class="flex">
+  <div class="w-1/6">
+    <ul class="border-b-2 mb-2 pb-2">
+      <li><%= link_to('Overview', school_path) %></li>
+      <li><%= link_to('Courses', school_courses_path) %></li>
+      <li><%= link_to('Students', school_students_path) %></li>
+      <li><%= link_to('Coaches', school_coaches_path) %></li>
+    </ul>
+    <ul>
+      <li><%= link_to('Curriculum Editor', school_curriculum_path) %></li>
+    </ul>
+  </div>
+
+  <div class="w-5/6">
     <%= yield %>
-  </body>
+  </div>
+</div>
+</body>
 </html>

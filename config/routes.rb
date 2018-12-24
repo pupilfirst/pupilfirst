@@ -34,7 +34,14 @@ Rails.application.routes.draw do
     end
   end
 
-  resource :school
+  resource :school, only: %i[show update]
+
+  namespace :school, module: 'schools' do
+    resources :courses
+    resources :founders, as: 'students', path: 'students'
+    resources :faculty, as: 'coaches', path: 'coaches'
+    get 'curriculum'
+  end
 
   resources :founders, only: %i[] do
     member do

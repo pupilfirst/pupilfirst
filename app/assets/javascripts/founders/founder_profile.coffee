@@ -2,11 +2,6 @@
 
 $(document).on 'turbolinks:load', ->
 
-setupCalendarTabCollapse = ->
-  $('#activityTab').tabCollapse
-    tabsClass: 'd-lg-block',
-    accordionClass: 'd-lg-none'
-
 setupCompleteProfileTooltip = ->
   $('#complete-profile-tooltip').tooltip()
 
@@ -14,7 +9,6 @@ setupCourseTooltip = ->
   $('.course-tooltip').tooltip
     placement: 'bottom'
     trigger: 'hover'
-
 
 
 registerTooltips = ->
@@ -115,6 +109,5 @@ $(document).on 'turbolinks:load', ->
     showDefaultFeedback()
     resetOnHideFeedbackModal()
     moveToFocusedEvent()
-    setupCalendarTabCollapse()
     setupCompleteProfileTooltip()
     setupCourseTooltip()

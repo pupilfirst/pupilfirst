@@ -286,6 +286,10 @@
   }
 }
 
+.profile-bg {
+  background-color: white;
+}
+
 .timeline {
   list-style: none;
   padding: 20px 0;
@@ -549,31 +553,6 @@
   }
 }
 
-.tour-button {
-  color: #3a9343;
-  border: 1px solid #1db1ed;
-  border-radius: 50%;
-  width: 35px;
-  height: 35px;
-  margin: 0 0 0 10px;
-  vertical-align: middle;
-  display: inline-block;
-  background-size: 22px;
-  background: #1db1ed asset-url("startups/show/tour-icon.svg") no-repeat center
-  center;
-  box-shadow: 0 0 2px 2px #ddd;
-  outline: none;
-  overflow: hidden;
-  position: relative;
-  transition: all 0.2s;
-
-  &[disabled] {
-    cursor: default;
-    background-color: grey;
-    border-color: grey;
-  }
-}
-
 #improvement-modal {
   .feedback-text > pre > div {
     white-space: pre-wrap;
@@ -582,4 +561,82 @@
     overflow-x: hidden;
   }
 }
+
+
+#data-points {
+  .data-content {
+    font-size: 18px;
+    font-weight: 300;
+
+    a {
+      text-decoration: none;
+      color: black;
+
+      &:hover {
+        color: cornflowerblue;
+      }
+
+      .fa-external-link {
+        font-size: 13px;
+        color: $theme-dark-green;
+      }
+    }
+
+    .data-subcontent {
+      color: grey;
+      font-size: 12px;
+      font-style: italic;
+    }
+  }
+
+  .data-founder,
+  .data-faculty {
+    background-color: $dark-primary-background;
+    margin: 1rem 0;
+    overflow: hidden;
+    box-shadow: 0px 0px 5px $grey-border;
+
+    .founder-image,
+    .faculty-image {
+      width: 100px;
+      height: 100px;
+      background-size: cover;
+
+      img,
+      svg {
+        width: 100px;
+      }
+    }
+
+    .media-heading {
+      font-size: 110%;
+      font-weight: $font-semibold;
+    }
+
+    .designation {
+      font-size: 90%;
+      font-style: italic;
+      padding-right: 10px;
+    }
+
+    .dash {
+      margin-top: -10px;
+    }
+
+    ul {
+      padding: 0;
+
+      li {
+        display: inline-block;
+        list-style-type: none;
+        margin-right: 5px;
+      }
+
+      li:last-of-type {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
 

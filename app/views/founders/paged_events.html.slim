@@ -1,1 +1,3 @@
-= render 'events_by_page', events: @events_for_display, page: @page, startup: @startup, more: @has_more_events
+- @presenter = Founders::ProfilePresenter.new(@founder)
+= render 'events_by_page', events: @presenter.timeline_events_for_display(@timeline_events, current_founder), page: @page
+

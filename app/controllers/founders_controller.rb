@@ -14,10 +14,8 @@ class FoundersController < ApplicationController
   # GET /founders/:id/events/:page
   def paged_events
     # Reuse the startup action, because that's what this page also shows.
-    show
     @page = params[:page].to_i
-    @has_more_events = more_events?(@events_for_display, @page)
-
+    show
     render layout: false
   end
 
@@ -101,26 +99,9 @@ class FoundersController < ApplicationController
     @skip_container = true
   end
 
-  def more_events?(events, page)
-    return false if events.count <= 20
-
-    events.count > page * 20
-  end
-
   def show
     @founder = Founder.friendly.find(params[:slug])
     @meta_description = "#{@founder.name}: #{@founder.startup.name}"
-
-    if params[:show_feedback].present?
-      if current_founder.present?
-        @feedback_to_show = @founder.startup.startup_feedback.where(id: params[:show_feedback]).first if @founder.startup.founder?(current_founder)
-      else
-        session[:referer] = request.original_url
-        redirect_to new_user_session_path, alert: 'Please sign in to continue!'
-        return
-      end
-    end
-    @events_for_display = @founder.timeline_events_for_display(current_founder)
-    @has_more_events = more_events?(@events_for_display, 1)
+    @timeline_events = @founder.timeline_events.page(params[:page]).per(20)
   end
 end

@@ -34,6 +34,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resource :school
+
   resources :founders, only: %i[] do
     member do
       post 'select'

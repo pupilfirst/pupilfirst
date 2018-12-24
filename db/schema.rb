@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_19_095759) do
+ActiveRecord::Schema.define(version: 2018_12_24_101758) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -429,10 +429,22 @@ ActiveRecord::Schema.define(version: 2018_12_19_095759) do
     t.index ["startup_id"], name: "index_resources_on_startup_id"
   end
 
+  create_table "school_admins", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "school_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["school_id"], name: "index_school_admins_on_school_id"
+    t.index ["user_id", "school_id"], name: "index_school_admins_on_user_id_and_school_id", unique: true
+    t.index ["user_id"], name: "index_school_admins_on_user_id"
+  end
+
   create_table "schools", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "subdomain"
+    t.string "domain"
   end
 
   create_table "shortened_urls", id: :serial, force: :cascade do |t|
@@ -779,6 +791,8 @@ ActiveRecord::Schema.define(version: 2018_12_19_095759) do
   add_foreign_key "quiz_questions", "quizzes"
   add_foreign_key "quizzes", "targets"
   add_foreign_key "resources", "levels"
+  add_foreign_key "school_admins", "schools"
+  add_foreign_key "school_admins", "users"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"
   add_foreign_key "startups", "founders", column: "team_lead_id"

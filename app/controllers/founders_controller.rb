@@ -1,17 +1,15 @@
 class FoundersController < ApplicationController
-  before_action :authenticate_founder!, except: %i[show founder_profile paged_events]
-  before_action :skip_container, only: %i[show founder_profile fee fee_submit paged_events]
+  before_action :authenticate_founder!, except: %i[show founder_profile paged_events timeline_event_show]
+  before_action :skip_container, only: %i[show founder_profile fee fee_submit paged_events timeline_event_show]
   before_action :require_active_subscription, only: %i[edit update]
 
   # GET /founders/:slug, GET /students/:slug
-  # TODO: FoundersController#founder_profile should probably be just #show.
-
   def founder_profile
     show
     render 'founder_profile'
   end
 
-  # GET /founders/:id/events/:page
+  # GET /students/:id/events/:page
   def paged_events
     # Reuse the startup action, because that's what this page also shows.
     @page = params[:page].to_i
@@ -82,6 +80,20 @@ class FoundersController < ApplicationController
     end
   end
 
+  # GET /students/:id/:event_title/:event_id
+  def timeline_event_show
+    # Reuse the startup action, because that's what this page also shows.
+    show
+    @timeline_event_for_og = @founder.timeline_events.find(params[:event_id])
+    @meta_description = @timeline_event_for_og.description
+
+    unless FounderPolicy.new(current_user, @founder.startup).timeline_event_show?(@timeline_event_for_og)
+      raise_not_found
+    end
+
+    render 'founder_profile'
+  end
+
   # POST /founders/:slug/select
   def select
     founder = authorize(Founder.friendly.find(params[:id]))
@@ -102,6 +114,28 @@ class FoundersController < ApplicationController
   def show
     @founder = Founder.friendly.find(params[:slug])
     @meta_description = "#{@founder.name}: #{@founder.startup.name}"
-    @timeline_events = @founder.timeline_events.page(params[:page]).per(20)
+
+    handle_feedback if params[:show_feedback].present?
+    # Hide founder events from everyone other than author of event.
+    @timeline_events = events_for_display.reject { |event| event.hidden_from?(current_founder) }
+    @timeline_events = Kaminari.paginate_array(@timeline_events).page(params[:page]).per(20)
+  end
+
+  def handle_feedback
+    if current_founder.present?
+      @feedback_to_show = @founder.startup.startup_feedback.where(id: params[:show_feedback]).first if @founder == current_founder
+    else
+      session[:referer] = request.original_url
+      redirect_to new_user_session_path, alert: 'Please sign in to continue!'
+    end
+  end
+
+  def events_for_display
+    # Only display verified of needs-improvement events if 'current_founder' is not the founder
+    if current_founder != @founder
+      @founder.timeline_events.verified_or_needs_improvement.includes(:target, :timeline_event_files).order(:event_on, :updated_at).reverse_order
+    else
+      @founder.timeline_events.includes(:target, :timeline_event_files).order(:event_on, :updated_at).reverse_order
+    end
   end
 end

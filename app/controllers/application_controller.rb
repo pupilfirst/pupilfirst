@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
   after_action :prepare_unobtrusive_flash
   before_action :sign_out_if_required
   before_action :pretender
-  before_action :cache_current_founder_in_current_user
+  before_action :cache_in_current_user
 
   helper_method :current_school
   helper_method :current_founder
@@ -127,8 +127,11 @@ class ApplicationController < ActionController::Base
     redirect_to root_url if service.signed_out?
   end
 
-  def cache_current_founder_in_current_user
-    current_user&.current_founder = current_founder
+  def cache_in_current_user
+    return if current_user.blank?
+
+    current_user.current_founder = current_founder
+    current_user.current_school = current_school
   end
 
   def authenticate_founder!

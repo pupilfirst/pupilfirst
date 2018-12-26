@@ -26,20 +26,22 @@
 <body data-env="<%= Rails.env %>">
 <div class="flex">
   <div class="w-1/6">
-    <ul class="border-b-2 mb-2 pb-2">
-      <li><%= link_to('Overview', school_path) %></li>
-      <li><%= link_to('Courses', school_courses_path) %></li>
-      <li><%= link_to('Students', school_students_path) %></li>
-      <li><%= link_to('Coaches', school_coaches_path) %></li>
-    </ul>
-    <ul>
-      <li><%= link_to('Curriculum Editor', school_curriculum_path) %></li>
-    </ul>
+    <%= yield :nav %>
   </div>
 
   <div class="w-5/6">
-    <%= yield %>
+    <% if content_for?(:subnav) %>
+      <div class="flex">
+        <div class="w-1/6">
+          <%= yield :subnav %>
+        </div>
+        <div class="w-5/6">
+          <%= yield %>
+        </div>
+    <% else %>
+      <%= yield %>
+    <% end %>
+    </div>
   </div>
-</div>
 </body>
 </html>

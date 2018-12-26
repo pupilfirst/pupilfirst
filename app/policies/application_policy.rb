@@ -1,10 +1,11 @@
 class ApplicationPolicy
-  attr_reader :user, :current_founder, :record
+  attr_reader :user, :record, :current_founder, :current_school
 
   def initialize(user, record)
     @user = user
-    @current_founder = user&.current_founder
     @record = record
+    @current_founder = user&.current_founder
+    @current_school = user&.current_school
   end
 
   def index?
@@ -40,11 +41,13 @@ class ApplicationPolicy
   end
 
   class Scope
-    attr_reader :user, :scope
+    attr_reader :user, :scope, :current_founder, :current_school
 
     def initialize(user, scope)
       @user = user
       @scope = scope
+      @current_founder = user&.current_founder
+      @current_school = user&.current_school
     end
 
     def resolve

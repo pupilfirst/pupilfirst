@@ -1,6 +1,8 @@
 class User < ApplicationRecord
-  # The value for current_founder is set by the controller in a before_action - useful when authorizing with Pundit.
+  # The value for current_founder and current_school is set by the controller in a before_action - this is useful when
+  # authorizing with Pundit. See ApplicationController#cache_in_current_user.
   attr_accessor :current_founder
+  attr_accessor :current_school
 
   has_many :founders, dependent: :restrict_with_error
   has_one :admin_user, dependent: :restrict_with_error

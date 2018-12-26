@@ -4,8 +4,4 @@ class SchoolPolicy < ApplicationPolicy
 
     user.school_admins.where(school: record).present?
   end
-
-  def curriculum?
-    show?
-  end
 end

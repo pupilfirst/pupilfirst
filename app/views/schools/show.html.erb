@@ -1,1 +1,4 @@
-Current school is <%= current_school.name %>
+<% @presenter = Schools::ShowPresenter.new(self) %>
+
+<p>Current school is <%= current_school.name %></p>
+<p>It has <%= @presenter.student_count %> students in it.</p>

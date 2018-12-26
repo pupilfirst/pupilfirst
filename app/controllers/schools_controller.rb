@@ -1,11 +1,15 @@
 class SchoolsController < ApplicationController
-  layout 'tailwind'
+  layout 'school'
+
+  before_action :courses
 
   def show
     authorize current_school
   end
 
-  def curriculum
-    authorize current_school
+  private
+
+  def courses
+    @courses ||= policy_scope(Course, policy_scope_class: Schools::CoursePolicy::Scope)
   end
 end

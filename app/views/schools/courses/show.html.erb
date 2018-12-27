@@ -1,1 +1,6 @@
+<%= form_with(model: @course, url: school_course_path(@course)) do |f| %>
+  <%= f.text_field :name %>
+  <%= f.submit 'Update', class: 'underline cursor-pointer' %>
+<% end %>
+
 Overview about the course '<%= @course.name %>' should be shown here.

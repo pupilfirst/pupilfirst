@@ -37,12 +37,14 @@ Rails.application.routes.draw do
   resource :school, only: %i[show update]
 
   namespace :school, module: 'schools' do
-    resources :courses, only: %i[show] do
+    resources :courses, only: %i[show update] do
       # TODO: Use shallow routes here, where possible.
       resource :curriculum, only: %i[show]
-      resources :founders, as: 'students', path: 'students'
+      resources :founders, as: 'students', path: 'students', only: %i[index create]
       resources :faculty, as: 'coaches', path: 'coaches'
     end
+
+    resources :founders, as: 'students', path: 'students', except: %i[index]
   end
 
   resources :founders, only: %i[] do

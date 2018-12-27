@@ -3,7 +3,7 @@ module Schools
     layout 'course'
 
     def show
-      @course = courses.find(params[:course_id])
+      @course = authorize(courses.find(params[:course_id]), policy_class: Schools::CurriculaPolicy)
     end
   end
 end

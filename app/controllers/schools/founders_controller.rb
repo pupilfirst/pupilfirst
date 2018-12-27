@@ -3,7 +3,7 @@ module Schools
     layout 'course'
 
     def index
-      @course = courses.find(params[:course_id])
+      @course = authorize(courses.find(params[:course_id]), policy_class: Schools::FoundersPolicy)
     end
   end
 end

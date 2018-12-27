@@ -41,7 +41,7 @@ Rails.application.routes.draw do
       # TODO: Use shallow routes here, where possible.
       resource :curriculum, only: %i[show]
       resources :founders, as: 'students', path: 'students', only: %i[index create]
-      resources :faculty, as: 'coaches', path: 'coaches'
+      resources :faculty, as: 'coaches', path: 'coaches', only: %i[index create]
     end
 
     resources :founders, as: 'students', path: 'students', except: %i[index]

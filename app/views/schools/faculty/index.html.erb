@@ -1,1 +1,38 @@
-Coaches who can review teams in course '<%= @course.name %>' should be listed here.
+<% @presenter = Schools::FacultyModule::IndexPresenter.new(self, @course) %>
+
+<table class="mb-4">
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Teams</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @presenter.faculty.includes(:user).each do |faculty| %>
+    <tr>
+      <td class="p-2"><%= faculty.name %></td>
+      <td class="p-2"><code><%= faculty.email %></code></td>
+      <td class="p-2"><%= @presenter.teams(faculty) %></td>
+      <td class="p-2"><%= link_to 'Delete', '#' %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<p>Add a coach for all teams</p>
+
+<%= form_with(model: @form, url: school_course_coaches_path(@course), class: 'mt-2') do |f| %>
+  <div>
+    <%= f.label :email %>
+    <%= f.text_field :email, required: true, class: 'border' %>
+  </div>
+
+  <div>
+    <%= f.label :name %>
+    <%= f.text_field :name, required: true, class: 'border' %>
+  </div>
+
+  <%= f.submit 'Add Coach', class: 'border mt-2' %>
+<% end %>

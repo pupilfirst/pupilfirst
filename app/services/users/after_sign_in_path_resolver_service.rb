@@ -17,7 +17,8 @@ module Users
     private
 
     def faculty_path
-      return if @user.faculty.blank? || @user.faculty.startups.blank?
+      return if @user.faculty.blank?
+      return if @user.faculty.courses.blank? && @user.faculty.startups.blank?
 
       url_helpers.coaches_dashboard_path
     end

@@ -29,8 +29,8 @@ export default class ActionBar extends React.Component {
           intro: startupShowTour.data("intro")
         },
         {
-          element: $(".founder-dashboard-togglebar__toggle-group")[0],
-          intro: startupShowTour.data("toggleBar")
+          element: $(".filter-targets-dropdown")[0],
+          intro: startupShowTour.data("levelSelect")
         },
         {
           element: $(".founder-dashboard-target-group__box")[0],

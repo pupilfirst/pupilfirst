@@ -15,17 +15,6 @@ describe Startup do
     end
   end
 
-  it "can't have more than 3 categories" do
-    startup = build(:startup)
-    category_2 = create(:startup_category)
-    category_1 = create(:startup_category)
-    category_3 = create(:startup_category)
-    category_4 = create(:startup_category)
-    startup.startup_categories = "#{category_1.id},#{category_2.id},#{category_3.id},#{category_4.id}"
-
-    expect { startup.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  end
-
   it "validates the size of pitch" do
     startup = build(:startup, pitch: Faker::Lorem.words(200).join(' '))
     expect { startup.save! }.to raise_error(ActiveRecord::RecordInvalid)

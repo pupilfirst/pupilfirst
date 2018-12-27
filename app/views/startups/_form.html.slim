@@ -25,8 +25,6 @@ p.mb-2
             = f.text_field :legal_registered_name, label_class: 'col-form-label', label: 'Legal Registered Name', class: 'form-control',
               help: 'The name of your registered legal entity. Partnership/Pvt. Ltd./LLP etc.'
             = f.file_field :logo, label_class: 'col-form-label', label: 'Logo', class: 'form-control', required: false
-            = f.select :startup_category_ids, options_from_collection_for_select(StartupCategory.all, :id, :name, current_startup.startup_categories.pluck(:id)),
-              { label_class: 'col-form-label', label: 'Product Categories', help: 'Industries that your product is involved in. Max 3.' } , multiple: true
 
     .card
       .card-header.p-0 role="tab"

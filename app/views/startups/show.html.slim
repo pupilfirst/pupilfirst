@@ -57,13 +57,6 @@
                 .media-body
                   h6.my-0 Team Level
                   p.data-content #{@startup.level.display_name}
-            - if @startup.startup_categories.exists?
-              .col-sm-6.col-md-12
-                .media.mb-3.align-items-center
-                  img.d-flex.mr-3 alt="Industry icon" src="#{image_url 'startups/show/data-icon-industry.png'}"
-                  .media-body
-                    h6.my-0 Industry
-                    p.data-content #{@startup.startup_categories.pluck(:name).join(', ')}
             - if @startup.website?
               .col-sm-6.col-md-12
                 .media.mb-3.align-items-center

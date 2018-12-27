@@ -12,7 +12,3 @@ updateProductDescription = ->
 
 $(document).on 'page:change', ->
   $("#startups_edit_product_description").click(updateProductDescription).on('input', updateProductDescription)
-
-  # TODO: v4 of Select2 will replace maximumSelectionSize with maximumSelectionLength, so specifying both for the moment.
-  # Remove maximumSelectionSize after confirming upgrade to Select2 > v4.
-  $('#startups_edit_startup_category_ids').select2({ placeholder : 'Select Industries', maximumSelectionLength: 3, maximumSelectionSize: 3 })

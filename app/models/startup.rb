@@ -17,7 +17,6 @@ class Startup < ApplicationRecord
 
   MAX_PITCH_CHARACTERS = 140 unless defined?(MAX_PITCH_CHARACTERS)
   MAX_PRODUCT_DESCRIPTION_CHARACTERS = 150
-  MAX_CATEGORY_COUNT = 3
 
   ADMISSION_STAGE_SIGNED_UP = 'Signed Up'
   ADMISSION_STAGE_SELF_EVALUATION_COMPLETED = 'Self Evaluation Completed'
@@ -85,20 +84,9 @@ class Startup < ApplicationRecord
     approved.admitted.not_dropped_out.where.not(id: startups_with_karma_ids)
   end
 
-  # Find all by specific category.
-  def self.startup_category(category)
-    joins(:startup_categories).where(startup_categories: { id: category.id })
-  end
-
   has_many :founders, dependent: :restrict_with_error
   has_many :invited_founders, class_name: 'Founder', foreign_key: 'invited_startup_id', inverse_of: :invited_startup, dependent: :restrict_with_error
-
-  has_and_belongs_to_many :startup_categories do
-    def <<(_category)
-      raise 'Use startup_categories= to enforce startup category limit'
-    end
-  end
-
+  has_many :timeline_events, dependent: :destroy
   has_many :startup_feedback, dependent: :destroy
   has_many :karma_points, dependent: :restrict_with_exception
   has_many :connect_requests, dependent: :destroy
@@ -226,34 +214,6 @@ class Startup < ApplicationRecord
   def founder_ids=(list_of_ids)
     founders_list = Founder.find(list_of_ids.map(&:to_i).select { |e| e.is_a?(Integer) && e.positive? })
     founders_list.each { |u| founders << u }
-  end
-
-  validate :category_count
-
-  def category_count
-    return unless @category_count_exceeded || startup_categories.count > MAX_CATEGORY_COUNT
-
-    errors.add(:startup_categories, "Can't have more than 3 categories")
-  end
-
-  # Custom setter for startup categories.
-  #
-  # @param [String, Array] category_entries Array of Categories or comma-separated Category ID-s.
-  def startup_categories=(category_entries)
-    parsed_categories = if category_entries.is_a? String
-      category_entries.split(',').map do |category_id|
-        StartupCategory.find(category_id)
-      end
-    else
-      category_entries
-    end
-
-    # Enforce maximum count for categories.
-    if parsed_categories.count > MAX_CATEGORY_COUNT
-      @category_count_exceeded = true
-    else
-      super parsed_categories
-    end
   end
 
   def self.current_startups_split

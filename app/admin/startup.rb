@@ -2,7 +2,7 @@ ActiveAdmin.register Startup do
   permit_params :product_name, :product_description, :legal_registered_name, :website, :logo, :facebook_link,
     :twitter_link, :created_at, :updated_at, :dropped_out, :registration_type, :agreement_signed_at,
     :presentation_link, :product_video_link, :wireframe_link, :prototype_link, :slug, :level_id,
-    :partnership_deed, :payment_reference, :agreements_verified, :team_lead_id, startup_category_ids: [], founder_ids: [], tag_list: []
+    :partnership_deed, :payment_reference, :agreements_verified, :team_lead_id, founder_ids: [], tag_list: []
 
   filter :product_name, as: :string
   filter :level_course_id, as: :select, label: 'Course', collection: -> { Course.all }
@@ -17,7 +17,6 @@ ActiveAdmin.register Startup do
   filter :legal_registered_name
   filter :website
   filter :registration_type, as: :select, collection: -> { Startup.valid_registration_types }
-  filter :startup_categories
   filter :dropped_out
   filter :created_at
 
@@ -241,10 +240,6 @@ ActiveAdmin.register Startup do
 
       row :prototype_link do
         link_to startup.prototype_link, startup.prototype_link if startup.prototype_link.present?
-      end
-
-      row :startup_categories do
-        startup.startup_categories.map(&:name).join(', ')
       end
 
       row :phone do

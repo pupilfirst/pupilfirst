@@ -27,6 +27,10 @@ describe FacultyPolicy do
     context 'when startup has an active subscription' do
       let(:startup) { create :startup, :subscription_active }
 
+      before do
+        create :founder, startup: startup
+      end
+
       it 'grants access to team-lead from active startup' do
         expect(subject).to permit(current_user(startup.team_lead), faculty)
       end

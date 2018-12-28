@@ -25,6 +25,11 @@ describe ResourcePolicy do
   let!(:level_2_resource) { create :resource, level: level_2 }
   let!(:level_1_s1_resource) { create :resource, level: level_1_s1 }
 
+  before do
+    # Create another founder in startup.
+    create :founder, startup: startup
+  end
+
   permissions :show? do
     context 'when founder belongs to level 1 approved startup' do
       it 'allows access to public resource' do

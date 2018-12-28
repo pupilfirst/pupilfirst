@@ -5,8 +5,8 @@ describe Targets::OverlayDetailsService do
 
   let(:target) { create :target, :for_founders }
   let(:startup) { create :startup }
-  let(:founder_1) { startup.founders.first }
-  let(:founder_2) { startup.founders.second }
+  let(:founder_1) { startup.team_lead }
+  let(:founder_2) { create :founder, startup: startup }
   let!(:timeline_event) { create :timeline_event_with_links, target: target, founder: founder_1, status: TimelineEvent::STATUS_VERIFIED }
   let(:faculty) { create :faculty }
   let(:faculty_feedback) { create :startup_feedback, timeline_event: timeline_event, faculty: faculty, startup: startup }

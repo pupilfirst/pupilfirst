@@ -28,6 +28,11 @@ feature 'Office Hour' do
     let(:startup) { create :startup, :subscription_active }
     let(:founder) { startup.founders.where.not(id: startup.team_lead.id).first }
 
+    before do
+      # Create another founder in startup.
+      create :founder, startup: startup
+    end
+
     context 'Team has a pending request with faculty' do
       let!(:connect_request) { create :connect_request, connect_slot: connect_slot_1, startup: startup }
 

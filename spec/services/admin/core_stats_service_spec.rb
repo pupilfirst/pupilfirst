@@ -8,6 +8,11 @@ describe Admin::Dashboard::CoreStatsService do
 
   # Setup the required data:
   before do
+    # Create additional founder in all startups
+    admitted_startups.each do |startup|
+      create :founder, startup: startup
+    end
+
     # Add a few platform feedback to check NPS.
     founder = admitted_startups.first.founders.first
     create :platform_feedback, founder: founder, created_at: 1.day.ago, promoter_score: 9

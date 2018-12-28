@@ -21,6 +21,11 @@ describe Startups::LevelUpEligibilityService do
   # Presence of an archived milestone target should not alter results.
   let!(:archived_startup_target) { create :target, :for_startup, :archived, target_group: milestone_targets }
 
+  before do
+    # Create another founder in startup.
+    create :founder, startup: startup
+  end
+
   describe '#eligibility' do
     context 'when startup has submitted all milestone targets' do
       before do

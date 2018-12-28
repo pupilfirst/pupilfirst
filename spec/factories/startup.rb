@@ -22,9 +22,6 @@ FactoryBot.define do
     after(:build) do |startup|
       # Add a team lead.
       startup.team_lead = create(:founder, startup: startup)
-
-      # Add another founder.
-      create(:founder, startup: startup)
     end
 
     trait(:subscription_active) do

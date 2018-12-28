@@ -34,6 +34,9 @@ feature 'Target Overlay' do
   let!(:q3_answer_2) { create :answer_option, quiz_question: quiz_question_3 }
 
   before do
+    # Create another founder in team.
+    create :founder, startup: startup
+
     quiz_question_1.update!(correct_answer: q1_answer_2)
     quiz_question_2.update!(correct_answer: q2_answer_4)
     quiz_question_3.update!(correct_answer: q3_answer_1)

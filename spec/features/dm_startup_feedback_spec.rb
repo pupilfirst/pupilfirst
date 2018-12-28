@@ -30,6 +30,9 @@ feature 'DM Startup Feedback' do
   end
 
   before :each do
+    # Create another founder in team.
+    create :founder, startup: startup
+
     # Stub the request to intercom - we don't care about this right now.
     stub_request(:any, /api\.intercom\.io/)
 

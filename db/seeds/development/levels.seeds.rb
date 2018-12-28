@@ -22,4 +22,5 @@ after 'development:courses' do
   Level.create!(number: 3, name: 'Materials and Meshes', course: vr_course)
   Level.create!(number: 4, name: 'VR-Design', course: vr_course)
   Level.create!(number: 1, name: 'iOS First Level', course: ios_course)
+  Level.create!(number: 2, name: 'iOS Second Level', course: ios_course)
 end

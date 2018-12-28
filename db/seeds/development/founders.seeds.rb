@@ -48,7 +48,16 @@ after 'development:colleges', 'development:startups' do
     ],
     'iOS Startup' => [
       [true, 'ios@example.org', 'iOS Guy', 25.years.ago, Founder::GENDER_MALE, 9876543200]
-    ]
+    ],
+    'iOS Guy 2' => [
+      [true, 'ios2@example.org', 'iOS Guy 2', 25.years.ago, Founder::GENDER_MALE, 9876543201]
+    ],
+    'iOS Guy 3' => [
+      [true, 'ios3@example.org', 'iOS Guy 3', 25.years.ago, Founder::GENDER_MALE, 9876543202]
+    ],
+    'iOS Guy 4' => [
+      [true, 'ios4@example.org', 'iOS Guy 4', 25.years.ago, Founder::GENDER_MALE, 9876543203]
+    ],
   }
 
   image_path = File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'users', 'college_id.jpg'))

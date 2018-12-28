@@ -1,1 +1,25 @@
-Students in course '<%= @course.name %>' should be listed here.
+<% @presenter = Schools::Founders::IndexPresenter.new(self, @course) %>
+
+<% @presenter.startups.each do |startup| %>
+  <div class="uppercase font-bold text-xs mt-3">
+    Level <%= startup.level.number %>
+    <%= @presenter.team?(startup) ? "- #{startup.product_name}" : '' %>
+  </div>
+
+  <div class="border mt-<%= @presenter.team?(startup) ? '1' : '2' %>">
+    <% startup.founders.each do |founder| %>
+      <div class="p-2 cursor-pointer hover:bg-grey-lightest">
+        <span class="text-xs uppercase font-bold">ID#<%= founder.id %></span>
+        <%= founder.name %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<p class="mt-4">Team up students, or move students out:</p>
+<p class="mt-1 text-xs">Select multiple students to team them up, or just one student to move them out of current team into new one.</p>
+<%= form_tag team_up_school_students_path, class: 'mt-1' do %>
+  <%= text_field_tag :team_name, nil, placeholder: 'Team name', class: 'border p-2' %>
+  <%= text_field_tag :founder_ids, nil, placeholder: 'JSON: [ID1, ID2, ...]', class: 'border p-2' %>
+  <%= submit_tag 'Team Up / Move Out', class: 'border p-2' %>
+<% end %>

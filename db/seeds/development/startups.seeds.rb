@@ -10,6 +10,7 @@ after 'development:levels' do
   developer_course_level_1 = Level.find_by(name: 'Planning')
   vr_course_level_1 = Level.find_by(name: 'New Realities')
   ios_course_level_1 = Level.find_by(name: 'iOS First Level')
+  ios_course_level_2 = Level.find_by(name: 'iOS Second Level')
 
   # Level 0 startup.
   Startup.create!(
@@ -68,11 +69,19 @@ after 'development:levels' do
     program_started_on: 1.weeks.ago
   )
 
-  # Add a startup in iOS course.
+  # Add startups in iOS course in level 1.
+  ['iOS Startup', 'iOS Guy 2', 'iOS Guy 3'].each do |startup_name|
+    Startup.create!(
+      name: startup_name,
+      product_name: startup_name,
+      level: ios_course_level_1
+    )
+  end
+
+  # Add one startup in iOS course in level 2.
   Startup.create!(
-    name: 'iOS Startup',
-    level: ios_course_level_1,
-    product_name: 'iOS Startup',
-    product_description: 'This is an example iOS Startup.',
+    name: 'iOS Guy 4',
+    product_name: 'iOS Guy 4',
+    level: ios_course_level_2
   )
 end

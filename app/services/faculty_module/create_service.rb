@@ -1,4 +1,5 @@
 module FacultyModule
+  # TODO: Spec FacultyModule::CreateService
   class CreateService
     def initialize(email, name)
       @email = email
@@ -16,7 +17,8 @@ module FacultyModule
           name: @name,
           category: Faculty::CATEGORY_VISITING_COACHES,
           title: 'Coach',
-          image: Rails.root.join('spec', 'support', 'uploads', 'faculty', 'mickey_mouse.jpg').open
+          image: Rails.root.join('spec', 'support', 'uploads', 'faculty', 'mickey_mouse.jpg').open,
+          inactive: true
         )
       end
     end

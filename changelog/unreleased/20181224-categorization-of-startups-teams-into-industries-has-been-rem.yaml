@@ -1,8 +1,0 @@
----
-timestamp: '2018-12-24T08:52:20Z'
-title: Categorization of startups (teams) into industries has been removed, since
-  this is no longer relevant.
-trello: https://trello.com/c/BF1F34Ih
-private: true
-description: This removes the final `has_and_belongs_to_many` join table from the
-  database.

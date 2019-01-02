@@ -55,7 +55,8 @@ class Target < ApplicationRecord
   scope :founder, -> { where(role: ROLE_FOUNDER) }
   scope :not_founder, -> { where.not(role: ROLE_FOUNDER) }
   scope :sessions, -> { where.not(session_at: nil) }
-  scope :auto_verifiable, -> { where(submittability: SUBMITTABILITY_AUTO_VERIFY) }
+  scope :not_auto_verifiable, -> { joins(:target_evaluation_criteria).distinct }
+  scope :auto_verifiable, -> { where.not(id: not_auto_verifiable) }
 
   # Custom scope to allow AA to filter by intersection of tags.
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }

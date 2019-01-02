@@ -13,7 +13,8 @@ after 'development:founders', 'development:targets' do
       founders: [startup.team_lead],
       event_on: Time.now,
       description: Faker::Lorem.paragraph,
-      status_updated_at: Time.now
+      status_updated_at: Time.now,
+      latest: true
     )
 
     if target.evaluation_criteria.present?
@@ -44,6 +45,7 @@ after 'development:founders', 'development:targets' do
     founders: [ios_founder],
     event_on: Time.now,
     description: 'This is a seeded pending submission for the iOS startup',
-    target: ios_startup.course.targets.live.first
+    target: ios_startup.course.targets.live.first,
+    latest: true
   )
 end

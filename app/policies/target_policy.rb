@@ -11,6 +11,6 @@ class TargetPolicy < ApplicationPolicy
     download_rubric? &&
       record.evaluation_criteria.blank? &&
       current_founder.startup.level.course == record.course &&
-      current_founder.timeline_events.where(target: record).blank?
+      current_founder.timeline_events.where(target: record).empty?
   end
 end

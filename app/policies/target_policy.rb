@@ -10,6 +10,7 @@ class TargetPolicy < ApplicationPolicy
   def auto_verify?
     download_rubric? &&
       record.evaluation_criteria.blank? &&
-      current_founder.startup.level.course == record.course
+      current_founder.startup.level.course == record.course &&
+      current_founder.timeline_events.where(target: record).blank?
   end
 end

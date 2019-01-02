@@ -32,9 +32,6 @@ export default class TargetOverlay extends React.Component {
     this.getTarget = this.getTarget.bind(this);
     this.autoVerify = this.autoVerify.bind(this);
     this.invertShowQuiz = this.invertShowQuiz.bind(this);
-    this.autoVerify = this.autoVerify.bind(this);
-    this.invertShowQuiz = this.invertShowQuiz.bind(this);
-    this.getFaculty = this.getFaculty.bind(this);
   }
 
   componentDidMount() {
@@ -71,7 +68,8 @@ export default class TargetOverlay extends React.Component {
   }
 
   resubmissionAllowed() {
-    return ["passed", "failed"].includes(this.getTarget().status);
+    let target = this.getTarget();
+    return !target.auto_verified && ["passed", "failed"].includes(target.status);
   }
 
   isPending() {
@@ -119,14 +117,22 @@ export default class TargetOverlay extends React.Component {
       headers: {
         "content-type": "application/json"
       }
-    }).then(() => {
-      new PNotify({
-        title: "Done!",
-        text: "This target has been marked as complete.",
-        type: "success"
-      });
-      this.completeTarget();
-      this.state.showQuiz && this.invertShowQuiz();
+    }).then((response) => {
+      if (response.ok) {
+        new PNotify({
+          title: "Done!",
+          text: "This target has been marked as complete.",
+          type: "success"
+        });
+        this.completeTarget();
+        this.state.showQuiz && this.invertShowQuiz();
+      } else {
+        new PNotify({
+          title: "Something went wrong!",
+          text: "Please try again.",
+          type: "error"
+        });
+      }
     });
   }
 

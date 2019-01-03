@@ -86,7 +86,6 @@ class Target < ApplicationRecord
   validates :role, presence: true, inclusion: { in: valid_roles }
   validates :title, presence: true
   validates :description, presence: true
-  validates :key, uniqueness: true, inclusion: { in: valid_keys }, allow_nil: true
   validates :call_to_action, length: { maximum: 20 }
 
   validate :days_to_complete_or_session_at_should_be_present

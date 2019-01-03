@@ -39,7 +39,7 @@ module Coaches
 
     def course
       # TODO: Assuming a founder is assinged to one course for now. Rewrite to account for multiple course.
-      current_coach.startups.first.course
+      current_coach.courses&.first || current_coach.startups.first.course
     end
 
     def grade_labels

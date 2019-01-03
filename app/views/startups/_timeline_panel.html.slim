@@ -6,6 +6,7 @@
     .img-responsive.tl-event-image
       = image_tag event.image_url
   .timeline-heading
+    / TODO: Update to use the new statuses
     - if event.pending?
       .verified-status-notice href="#" data-toggle="tooltip" title="We will verify this event very soon! If you haven't heard from us in 24 hours, do ping us on Slack!"
         i.fa.fa-exclamation-circle

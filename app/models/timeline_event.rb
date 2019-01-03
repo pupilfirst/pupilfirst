@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class TimelineEvent < ApplicationRecord
-  belongs_to :startup
-  belongs_to :founder
   belongs_to :target
+  has_many :target_evaluation_criteria, through: :target
+  has_many :evaluation_criteria, through: :target_evaluation_criteria
 
   has_one :karma_point, as: :source, dependent: :destroy, inverse_of: :source
   has_many :startup_feedback, dependent: :destroy
@@ -12,6 +12,9 @@ class TimelineEvent < ApplicationRecord
   belongs_to :improved_timeline_event, class_name: 'TimelineEvent', optional: true
   has_one :improvement_of, class_name: 'TimelineEvent', foreign_key: 'improved_timeline_event_id', dependent: :nullify, inverse_of: :improved_timeline_event
   has_many :timeline_event_grades, dependent: :destroy
+  belongs_to :evaluator, class_name: 'Faculty', optional: true
+  has_many :timeline_event_owners, dependent: :destroy
+  has_many :founders, through: :timeline_event_owners
 
   mount_uploader :image, TimelineImageUploader
   process_in_background :image
@@ -23,24 +26,10 @@ class TimelineEvent < ApplicationRecord
 
   MAX_DESCRIPTION_CHARACTERS = 500
 
-  STATUS_PENDING = 'Pending'
-  STATUS_NEEDS_IMPROVEMENT = 'Needs Improvement'
-  STATUS_VERIFIED = 'Verified'
-  STATUS_NOT_ACCEPTED = 'Not Accepted'
-
-  def self.valid_statuses
-    [STATUS_VERIFIED, STATUS_PENDING, STATUS_NEEDS_IMPROVEMENT, STATUS_NOT_ACCEPTED]
-  end
-
   GRADE_GOOD = 'good'
   GRADE_GREAT = 'great'
   GRADE_WOW = 'wow'
 
-  def self.valid_grades
-    [GRADE_GOOD, GRADE_GREAT, GRADE_WOW]
-  end
-
-  validates :status, inclusion: { in: valid_statuses }
   validates :event_on, presence: true
   validates :description, presence: true
   validate :founder_and_target_must_not_change
@@ -51,27 +40,17 @@ class TimelineEvent < ApplicationRecord
     errors[:base] << 'You cannot edit the founder or target of an existing timeline event'
   end
 
-  before_validation do
-    self.status_updated_at = Time.zone.now if status_changed?
-    self.status ||= STATUS_PENDING
-  end
-
   accepts_nested_attributes_for :timeline_event_files, allow_destroy: true
 
   scope :from_admitted_startups, -> { joins(:startup).merge(Startup.admitted) }
   scope :from_level_0_startups, -> { joins(:startup).merge(Startup.level_zero) }
   scope :not_dropped_out, -> { joins(:startup).merge(Startup.not_dropped_out) }
-  scope :verified, -> { where(status: STATUS_VERIFIED) }
-  scope :pending, -> { where(status: STATUS_PENDING) }
-  scope :needs_improvement, -> { where(status: STATUS_NEEDS_IMPROVEMENT) }
-  scope :not_accepted, -> { where(status: STATUS_NOT_ACCEPTED) }
-  scope :verified_or_needs_improvement, -> { where(status: [STATUS_VERIFIED, STATUS_NEEDS_IMPROVEMENT]) }
   scope :has_image, -> { where.not(image: nil) }
   scope :from_approved_startups, -> { joins(:startup).merge(Startup.approved) }
   scope :not_private, -> { joins(:target).where.not(targets: { role: Target::ROLE_FOUNDER }) }
   scope :not_improved, -> { joins(:target).where(improved_timeline_event_id: nil) }
-  scope :auto_verified, -> { joins(:target).where(targets: { submittability: Target::SUBMITTABILITY_AUTO_VERIFY }) }
-  scope :not_auto_verified, -> { where.not(id: auto_verified) }
+  scope :not_auto_verified, -> { joins(:evaluation_criteria).distinct }
+  scope :auto_verified, -> { where.not(id: not_auto_verified) }
 
   after_initialize :make_links_an_array
 
@@ -118,16 +97,6 @@ class TimelineEvent < ApplicationRecord
   end
 
   after_save :update_timeline_event_files
-  # after_create :update_latest_submission_record
-  # before_destroy :delete_latest_submission_record
-
-  def update_latest_submission_record
-    TimelineEvents::UpdateLatestSubmissionRecordService.new(self).execute
-  end
-
-  def delete_latest_submission_record
-    TimelineEvents::DeleteLatestSubmissionRecordService.new(self).execute
-  end
 
   def update_timeline_event_files
     # Go through files metadata, and perform create / delete.
@@ -148,32 +117,8 @@ class TimelineEvent < ApplicationRecord
     end
   end
 
-  def verify!
-    update!(status: STATUS_VERIFIED, status_updated_at: Time.zone.now)
-  end
-
-  def verified?
-    status == STATUS_VERIFIED
-  end
-
-  def pending?
-    status == STATUS_PENDING
-  end
-
-  def needs_improvement?
-    status == STATUS_NEEDS_IMPROVEMENT
-  end
-
-  def not_accepted?
-    status == STATUS_NOT_ACCEPTED
-  end
-
   def reviewed?
-    status.in?([STATUS_VERIFIED, STATUS_NEEDS_IMPROVEMENT, STATUS_NOT_ACCEPTED])
-  end
-
-  def verified_or_needs_improvement?
-    verified? || needs_improvement?
+    timeline_event_grades.present?
   end
 
   def public_link?
@@ -260,6 +205,14 @@ class TimelineEvent < ApplicationRecord
     return if score.blank?
 
     { 1 => 'good', 2 => 'great', 3 => 'wow' }[score.floor]
+  end
+
+  def startup
+    founders.first.startup
+  end
+
+  def founder
+    founders.first
   end
 
   private

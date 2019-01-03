@@ -2,31 +2,31 @@
 module FounderSpecHelper
   # This 'completes' a target for a founder - both startup and founder role targets.
   def complete_target(founder, target)
-    submit_target(founder, target, verified: true)
+    submit_target(founder, target, passed: true)
   end
 
-  def submit_target(founder, target, verified: false)
+  def submit_target(founder, target, passed: false)
     startup = founder.startup
 
     if target.founder_role?
       startup.founders.each do |startup_founder|
-        create_timeline_event(startup_founder, target, verified: verified)
+        create_timeline_event(startup_founder, target, passed: passed)
       end
     else
-      create_timeline_event(founder, target, verified: verified)
+      create_timeline_event(founder, target, passed: passed)
     end
   end
 
   # This creates a timeline event for a target, attributed to supplied founder.
-  def create_timeline_event(founder, target, verified: false)
+  def create_timeline_event(founder, target, passed: false)
     traits = %i[timeline_event]
-    traits += %i[verified] if verified
+    traits += %i[passed] if passed
 
     FactoryBot.create(
       *traits,
-      founder: founder,
+      founders: [founder],
       target: target,
-      startup: founder.startup
+      latest: true
     )
   end
 end

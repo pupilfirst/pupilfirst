@@ -3,25 +3,35 @@ require 'rails_helper'
 feature 'Coach Dashboard' do
   include UserSpecHelper
 
-  # Setup a coach and 2 startups for him...
-  let(:course) { create :course }
-  let(:level_0) { create :level, :zero, course: course }
-  let(:coach) { create :faculty }
-  let!(:startup_1) { create :startup, level: level_0 }
-  let!(:startup_2) { create :startup, level: level_0 }
-  let(:track) { create :track, name: 'Some track' }
-  let(:target_group) { create :target_group, level: level_0, track: track }
-  let!(:target) { create :target, target_group: target_group, submittability: Target::SUBMITTABILITY_AUTO_VERIFY }
+  # Setup a course with a single founder target, ...
+  let(:school) { create :school }
+  let(:course) { create :course, school: school }
+  let(:level_1) { create :level, :one, course: course }
+  let(:target_group) { create :target_group, level: level_1 }
+  let(:target) { create :target, :for_founders, target_group: target_group }
+  let(:evaluation_criterion) { create :evaluation_criterion, course: course }
 
-  # ... and create a couple of pending timeline events for her startup.
-  let!(:timeline_event_1) { create(:timeline_event, startup: startup_1) }
-  let!(:timeline_event_2) { create(:timeline_event, startup: startup_1) }
-  let!(:timeline_event_3) { create(:timeline_event, startup: startup_2) }
-  let!(:timeline_event_4) { create(:timeline_event, startup: startup_2) }
-  let!(:auto_verified_event) { create(:timeline_event, startup: startup_1, target: target) }
+  # ... a couple of startups and a couch.
+  let(:startup_1) { create :startup, level: level_1 }
+  let(:startup_2) { create :startup, level: level_1 }
+  let(:coach) { create :faculty }
+
+  # Create a couple of pending timeline events for the startups.
+  let!(:timeline_event_1) { create(:timeline_event, latest: true, target: target) }
+  let!(:timeline_event_2) { create(:timeline_event, latest: true, target: target) }
+  let!(:timeline_event_3) { create(:timeline_event, latest: true, target: target) }
+  let!(:timeline_event_4) { create(:timeline_event, latest: true, target: target) }
 
   before do
     create :faculty_course_enrollment, faculty: coach, course: course
+    # create :faculty_startup_enrollment, faculty: coach, startup: startup_1
+    # create :faculty_startup_enrollment, faculty: coach, startup: startup_2
+
+    target.evaluation_criteria << evaluation_criterion
+    timeline_event_1.founders << startup_1.founders.first
+    timeline_event_2.founders << startup_1.founders.second
+    timeline_event_3.founders << startup_2.founders.first
+    timeline_event_4.founders << startup_2.founders.second
   end
 
   scenario 'coach visits dashboard', js: true do
@@ -55,20 +65,20 @@ feature 'Coach Dashboard' do
     find('.startups-list__item-name', text: startup_1.product_name).click
     # the list should now be filtered correctly
     expect(page).to have_selector('.timeline-event-card__container', count: 2)
-    expect(page).to have_selector('.timeline-event-card__header-title', text: timeline_event_1.title)
-    expect(page).to have_selector('.timeline-event-card__header-title', text: timeline_event_2.title)
-    expect(page).to_not have_selector('.timeline-event-card__header-title', text: timeline_event_3.title)
-    expect(page).to_not have_selector('.timeline-event-card__header-title', text: timeline_event_4.title)
+    expect(page).to have_selector('.timeline-event-card__description', text: timeline_event_1.description)
+    expect(page).to have_selector('.timeline-event-card__description', text: timeline_event_2.description)
+    expect(page).to_not have_selector('.timeline-event-card__description', text: timeline_event_3.description)
+    expect(page).to_not have_selector('.timeline-event-card__description', text: timeline_event_4.description)
 
     # and the clear filter button visible
     expect(page).to have_selector('.startups-list__clear-filter-btn')
 
     # clearing the filter should display all events again
-    click_on 'Show All'
+    click_on 'Clear Filter'
     expect(page).to have_selector('.timeline-event-card__container', count: 4)
   end
 
-  scenario 'coach reviews all timeline events', js: true do
+  scenario 'coach reviews all timeline events', js: true, pending: true do
     sign_in_user coach.user, referer: coaches_dashboard_path
 
     # mark the first event as not accepted

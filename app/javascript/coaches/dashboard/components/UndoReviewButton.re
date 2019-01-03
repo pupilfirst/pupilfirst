@@ -26,7 +26,9 @@ let handleResponseJSON = (te, replaceTimelineEvent, json) =>
       "Review cleared and moved to pending",
     );
     te
-    |> TimelineEvent.updateStatus(TimelineEvent.NotReviewed)
+    |> TimelineEvent.updateEvaluation(
+         te |> TimelineEvent.evaluation |> Grading.clearedEvaluation,
+       )
     |> replaceTimelineEvent;
   };
 
@@ -72,10 +74,12 @@ let undoReview = (te, replaceTimelineEvent, _event) => {
 let make = (~timelineEvent, ~replaceTimelineEvent, _children) => {
   ...component,
   render: _self =>
-    <button
-      className="btn btn-ghost-primary border-danger undo-review-btn mt-3"
-      onClick=(undoReview(timelineEvent, replaceTimelineEvent))>
-      <i className="fa fa-undo mr-1" />
-      ("Undo Review" |> str)
-    </button>,
+    <div className="d-flex justify-content-end">
+      <button
+        className="btn btn-sm btn-default undo-review-btn"
+        onClick=(undoReview(timelineEvent, replaceTimelineEvent))>
+        <i className="fa fa-undo mr-1" />
+        ("Undo Review" |> str)
+      </button>
+    </div>,
 };

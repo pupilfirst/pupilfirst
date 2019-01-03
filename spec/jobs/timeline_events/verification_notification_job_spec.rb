@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe TimelineEvents::VerificationNotificationJob do
+describe TimelineEvents::VerificationNotificationJob, broken: true do
   subject { described_class }
 
   let!(:startup) { create :startup }

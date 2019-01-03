@@ -65,7 +65,11 @@ class Resource < ApplicationRecord
     end
   end
 
-  after_create do
+  after_create :notify_on_slack
+
+  def notify_on_slack
+    return unless Rails.env.production?
+
     Resources::AfterCreateNotificationJob.perform_later(self)
   end
 

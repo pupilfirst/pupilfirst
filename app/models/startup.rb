@@ -44,7 +44,6 @@ class Startup < ApplicationRecord
   scope :agreement_signed, -> { where 'agreement_signed_at IS NOT NULL' }
   scope :agreement_live, -> { where('agreement_signed_at > ?', AGREEMENT_DURATION.years.ago) }
   scope :agreement_expired, -> { where('agreement_signed_at < ?', AGREEMENT_DURATION.years.ago) }
-  scope :timeline_verified, -> { joins(:timeline_events).where(timeline_events: { status: TimelineEvent::STATUS_VERIFIED }).distinct }
 
   # Custom scope to allow AA to filter by intersection of tags.
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
@@ -87,7 +86,6 @@ class Startup < ApplicationRecord
 
   has_many :founders, dependent: :restrict_with_error
   has_many :invited_founders, class_name: 'Founder', foreign_key: 'invited_startup_id', inverse_of: :invited_startup, dependent: :restrict_with_error
-
   has_many :timeline_events, dependent: :destroy
   has_many :startup_feedback, dependent: :destroy
   has_many :karma_points, dependent: :restrict_with_exception
@@ -279,16 +277,16 @@ class Startup < ApplicationRecord
 
   # returns the date of the earliest verified timeline entry
   def earliest_team_event_date
-    timeline_events.verified_or_needs_improvement.not_private.order(:event_on).first.try(:event_on)
+    timeline_events.where.not(passed_at: nil).not_private.order(:event_on).first.try(:event_on)
   end
 
   # returns the date of the latest verified timeline entry
   def latest_team_event_date
-    timeline_events.verified_or_needs_improvement.not_private.order(:event_on).last.try(:event_on)
+    timeline_events.where.not(passed_at: nil).not_private.order(:event_on).last.try(:event_on)
   end
 
   def timeline_verified?
-    approved? && timeline_events.verified.exists?
+    approved? && timeline_events.joins(:timeline_event_grades).exists?
   end
 
   def timeline_events_for_display(viewer)
@@ -296,7 +294,7 @@ class Startup < ApplicationRecord
 
     # Only display verified of needs-improvement events if 'viewer' is not a member of this startup.
     if viewer&.startup != self
-      events_for_display = events_for_display.verified_or_needs_improvement
+      events_for_display = events_for_display.where.not(passed_at: nil)
     end
 
     decorated_events = events_for_display.includes(:target, :timeline_event_files).order(:event_on, :updated_at).reverse_order.decorate
@@ -358,5 +356,9 @@ class Startup < ApplicationRecord
 
   def subscription_end_date
     active_payment&.billing_end_at
+  end
+
+  def timeline_events
+    TimelineEvent.joins(:timeline_event_owners).where(timeline_event_owners: { founder: founders })
   end
 end

@@ -1,175 +1,177 @@
 module Founders
   class TargetStatusService
+    STATUSES = {
+      passed: Targets::StatusService::STATUS_PASSED,
+      failed: Targets::StatusService::STATUS_FAILED,
+      submitted: Targets::StatusService::STATUS_SUBMITTED,
+      pending: Targets::StatusService::STATUS_PENDING,
+      level_locked: Targets::StatusService::STATUS_LEVEL_LOCKED,
+      milestone_locked: Targets::StatusService::STATUS_MILESTONE_LOCKED,
+      prerequisite_locked: Targets::StatusService::STATUS_PREREQUISITE_LOCKED
+    }.freeze
+
     def initialize(founder)
       @founder = founder
-      @level_number = founder.startup.level.number
     end
 
-    # returns the status for a given target_id
     def status(target_id)
-      statuses[target_id][:status]
+      status_entries[target_id][:status]
     end
 
-    # returns submitted_at for a given target_id, if applicable
     def submitted_at(target_id)
-      statuses[target_id][:submitted_at]
-    end
-
-    # return number of completed targets
-    def completed_targets_count
-      statuses.values.select { |t| t[:status] == :complete }.count
+      status_entries[target_id][:submitted_at]
     end
 
     def prerequisite_targets(target_id)
       target_ids = all_target_prerequisites[target_id]
-      return [] if target_ids.blank?
+      applicable_targets.where(id: target_ids)
+    end
 
-      applicable_targets.where(id: target_ids).as_json(only: [:id])
+    def grades(target_id)
+      status_entries[target_id][:grades]
     end
 
     private
 
-    def startup
-      @startup ||= @founder.startup
-    end
-
-    # returns status and submission date for all applicable targets
-    def statuses
-      @statuses ||= begin
-        statuses = submitted_target_statuses.merge(unsubmitted_target_statuses)
-        reconfirm_prerequisites(statuses)
-      end
-    end
-
-    def submitted_target_statuses
-      @submitted_target_statuses ||= begin
-        # Founder events for applicable targets
-        founder_events = @founder.timeline_events.where.not(target_id: nil)
-          .where(target: Target.founder).where(target: applicable_targets)
-          .select('DISTINCT ON(target_id) *').order('target_id, created_at DESC')
-
-        # Startup events for applicable targets
-        startup_events = @founder.startup.timeline_events.where.not(target_id: nil)
-          .where(target: Target.not_founder).where(target: applicable_targets)
-          .select('DISTINCT ON(target_id) *').order('target_id, created_at DESC')
-
-        (founder_events + startup_events).each_with_object({}) do |event, result|
-          result[event.target_id] = {
-            status: target_status(event),
-            submitted_at: event.created_at.iso8601
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    def status_entries
+      @status_entries ||= begin
+        # Populate with all sumbitted targets first
+        entries = @founder.latest_submissions.each_with_object({}) do |submission, result|
+          result[submission.target_id] = {
+            status: status_from_submission(submission),
+            submitted_at: submission.created_at.iso8601,
+            grades: grades_for_submission(submission)
           }
         end
-      end
-    end
 
-    # Mapping from the latest event's verification status to the associated targets completion status.
-    def target_status(event)
-      case event.status
-        when TimelineEvent::STATUS_VERIFIED then
-          Target::STATUS_COMPLETE
-        when TimelineEvent::STATUS_NOT_ACCEPTED then
-          Target::STATUS_NOT_ACCEPTED
-        when TimelineEvent::STATUS_NEEDS_IMPROVEMENT then
-          Target::STATUS_NEEDS_IMPROVEMENT
-        else
-          Target::STATUS_SUBMITTED
-      end
-    end
+        # followed by level-locked targets...
+        level_locked_targets = applicable_targets.where.not(id: entries.keys)
+          .where('levels.number > ?', founder_level.number)
+        entries.merge!(status_fields(level_locked_targets, :level_locked))
 
-    def unsubmitted_target_statuses
-      @unsubmitted_target_statuses ||= begin
-        applicable_targets.each_with_object({}) do |target, result|
-          # skip if submitted target
-          next if submitted_target_statuses[target.id].present?
-
-          result[target.id] = {
-            status: unavailable_or_pending?(target),
-            submitted_at: nil
-          }
+        # followed by milestone-locked targets, if applicable...
+        if previous_milestones_incomplete?(entries)
+          milestone_locked_targets = applicable_targets.where.not(id: entries.keys)
+            .where(target_groups: { milestone: true, level: founder_level })
+          entries.merge!(status_fields(milestone_locked_targets, :milestone_locked))
         end
+
+        # followed by prerequisite-locked targets...
+        target_ids_with_blocking_prerequisites = TargetPrerequisite.where(prerequisite_target: blocking_prerequisite_ids(entries)).distinct.select(:target_id)
+        prerequisite_locked_targets = applicable_targets.where.not(id: entries.keys)
+          .where(id: target_ids_with_blocking_prerequisites)
+        entries.merge!(status_fields(prerequisite_locked_targets, :prerequisite_locked))
+
+        # and finally all remaining pending targets.
+        pending_targets = applicable_targets.where.not(id: entries.keys)
+        entries.merge!(status_fields(pending_targets, :pending))
+      end
+    end
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+
+    def status_from_submission(submission)
+      return STATUSES[:passed] if submission.passed_at?
+
+      submission.evaluator_id? ? STATUSES[:failed] : STATUSES[:submitted]
+    end
+
+    def grades_for_submission(submission)
+      return unless submission.evaluator_id?
+
+      grades = timeline_event_grades.select { |grade| grade[:submission_id] == submission.id }
+      return if grades.blank?
+
+      grades.each_with_object({}) do |grade, result|
+        result[grade[:criterion_id]] = grade[:grade]
       end
     end
 
-    # all applicable targets for the founder
+    def status_fields(targets, status_key)
+      targets.each_with_object({}) do |target, result|
+        result[target.id] = {
+          status: STATUSES[status_key],
+          submitted_at: nil,
+          grades: nil
+        }
+      end
+    end
+
+    def previous_milestones_incomplete?(entries)
+      return false if founder_level.number == 1
+
+      previous_level = @founder.startup.course.levels.where(number: founder_level.number - 1)
+      previous_level_milestones = applicable_targets.where(
+        target_groups: {
+          level: previous_level,
+          milestone: true
+        }
+      )
+      previous_level_milestones.any? { |target| entries.dig(target.id, :status) != Targets::StatusService::STATUS_PASSED }
+    end
+
+    # All prerequiste_ids which are not passed or are archived
+    def blocking_prerequisite_ids(entries)
+      all_applicable_prerequisite_ids = TargetPrerequisite.where(target: applicable_targets).distinct.pluck(:prerequisite_target_id)
+
+      passed_prerequisite_ids = all_applicable_prerequisite_ids.select do |target_id|
+        entries.dig(target_id, :status) == Targets::StatusService::STATUS_PASSED
+      end
+
+      archived_prerequisite_ids = Target.where(id: all_applicable_prerequisite_ids, archived: true).pluck(:id)
+      non_blocking_prerequisite_ids = passed_prerequisite_ids + archived_prerequisite_ids
+
+      all_applicable_prerequisite_ids - non_blocking_prerequisite_ids
+    end
+
     def applicable_targets
-      @applicable_targets ||= Target.live.joins(target_group: :level).where(target_groups: { level: open_levels })
-    end
-
-    # rubocop:disable Metrics/CyclomaticComplexity
-    def unavailable_or_pending?(target)
-      # Non-submittables are no-brainers.
-      return Target::STATUS_UNAVAILABLE if target.submittability == Target::SUBMITTABILITY_NOT_SUBMITTABLE
-
-      # So are targets in higher levels
-      return Target::STATUS_LEVEL_LOCKED if target.level.number > @level_number
-
-      # For milestone targets, ensure last levels milestones where completed
-      if target.target_group.milestone? && target.level.number == @level_number
-        return Target::STATUS_PENDING_MILESTONE unless previous_milestones_completed?
-      end
-
-      prerequisites_completed?(target) ? Target::STATUS_PENDING : Target::STATUS_UNAVAILABLE
-    end
-    # rubocop:enable Metrics/CyclomaticComplexity
-
-    def previous_milestones_completed?
-      @previous_milestones_completed ||= begin
-        return true unless @level_number > 1
-
-        previous_level = startup.course.levels.find_by(number: @level_number - 1)
-        target_groups = previous_level.target_groups.where(milestone: true)
-        Target.where(target_group: target_groups).all? { |target| marked_completed?(target.id) }
-      end
-    end
-
-    def marked_completed?(target_id)
-      status_entry = submitted_target_statuses[target_id]
-      status_entry.present? && status_entry[:status].in?([Target::STATUS_COMPLETE, Target::STATUS_NEEDS_IMPROVEMENT])
-    end
-
-    def prerequisites_completed?(target)
-      prerequisites = all_target_prerequisites[target.id]
-      return true if prerequisites.blank?
-
-      prerequisites.all? { |target_id| marked_completed?(target_id) }
-    end
-
-    # all target-prerequisite mappings
-    def all_target_prerequisites
-      @all_target_prerequisites ||= TargetPrerequisite.joins(:target, prerequisite_target: :target_group).includes(prerequisite_target: :target_group).each_with_object({}) do |target_prerequisite, mapping|
-        next if target_prerequisite.prerequisite_target.archived?
-        next if target_prerequisite.prerequisite_target.target_group.blank?
-
-        mapping[target_prerequisite.target_id] ||= []
-        mapping[target_prerequisite.target_id] << target_prerequisite.prerequisite_target_id
-      end
-    end
-
-    # Patch to account for the edge case of submitted targets having pending pre-requisites.
-    # The status in such cases is reverted to unavailable, irrespective of the available submission.
-    def reconfirm_prerequisites(statuses)
-      statuses.each do |target_id, _status_details|
-        # Unsubmitted targets do no need correction
-        next if target_id.in? unsubmitted_target_statuses.keys
-
-        # Targets without any prerequisites at all also do not need correction
-        prerequisites = all_target_prerequisites[target_id]
-        next if prerequisites.blank?
-
-        # Targets without any pending prerequisites also do not need correction
-        next if prerequisites.all? { |id| marked_completed?(id) }
-
-        statuses[target_id] = { status: Target::STATUS_UNAVAILABLE, submitted_at: nil }
-      end
-
-      statuses
+      Target.live.joins(target_group: :level).where(target_groups: { level: open_levels })
     end
 
     def open_levels
       @open_levels ||= begin
         minimum_level_number = startup.level.number.zero? ? 0 : 1
         levels = startup.course.levels.where('levels.number >= ?', minimum_level_number)
-        levels.where(unlock_on: nil).or(levels.where('unlock_on <= ?', Date.today))
+        levels.where(unlock_on: nil).or(levels.where('unlock_on <= ?', Date.today)).to_a
+      end
+    end
+
+    def startup
+      @startup ||= @founder.startup
+    end
+
+    def founder_level
+      @founder_level ||= @founder.level
+    end
+
+    # TODO: Confirm usage and verify implementation
+    def all_target_prerequisites
+      @all_target_prerequisites ||= begin
+        target_prerequisites = TargetPrerequisite.joins(:target, prerequisite_target: :target_group).includes(prerequisite_target: :target_group)
+
+        target_prerequisites.each_with_object({}) do |target_prerequisite, mapping|
+          next if target_prerequisite.prerequisite_target.archived?
+          next if target_prerequisite.prerequisite_target.target_group.blank?
+
+          mapping[target_prerequisite.target_id] ||= []
+          mapping[target_prerequisite.target_id] << target_prerequisite.prerequisite_target_id
+        end
+      end
+    end
+
+    def all_target_evaluation_criteria
+      @all_target_evaluation_criteria ||= Target.joins(:evaluation_criteria).includes(target_evaluation_criteria: :evaluation_criterion).each_with_object({}) do |target, mapping|
+        mapping[target.id] = target.evaluation_criteria.pluck(:id)
+      end
+    end
+
+    def timeline_event_grades
+      @timeline_event_grades ||= TimelineEventGrade.where(timeline_event: @founder.latest_submissions).map do |grade|
+        {
+          submission_id: grade.timeline_event_id,
+          criterion_id: grade.evaluation_criterion_id,
+          grade: grade.grade
+        }
       end
     end
   end

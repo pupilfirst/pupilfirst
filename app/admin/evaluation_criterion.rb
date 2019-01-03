@@ -1,11 +1,11 @@
-ActiveAdmin.register Skill do
+ActiveAdmin.register EvaluationCriterion do
   controller do
     include DisableIntercom
   end
 
   menu parent: 'Targets'
 
-  permit_params :name, :description
+  permit_params :name, :description, :course_id
 
   filter :name
   filter :description
@@ -16,15 +16,17 @@ ActiveAdmin.register Skill do
     column :id
     column :name
     column :description
+    column :course
 
     actions
   end
 
   form do |f|
     div id: 'admin-skill__edit'
-    f.inputs 'Skill Details' do
+    f.inputs 'EvaluationCriterion Details' do
       f.input :name
       f.input :description
+      f.input :course
     end
 
     f.actions

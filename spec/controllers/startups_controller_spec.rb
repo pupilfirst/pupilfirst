@@ -7,11 +7,8 @@ describe StartupsController do
     end
   end
 
-  describe 'GET /:id/:event_title/:event_id' do
-    let!(:target) { create :target, role: Target::ROLE_TEAM }
-    let!(:founder) { create :founder, startup: startup }
-    let!(:startup) { create :startup }
-    let!(:timeline_event) { create :timeline_event, :verified, target: target, founder: founder }
+  describe 'GET /:id/:event_title/:event_id', broken: true do
+    let(:timeline_event) { create :timeline_event, :passed }
 
     render_views
 

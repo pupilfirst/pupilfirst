@@ -1,6 +1,8 @@
 class TimelineEventGrade < ApplicationRecord
   belongs_to :timeline_event
-  belongs_to :skill
+  belongs_to :evaluation_criterion
 
-  validates :grade, presence: true, inclusion: { in: TimelineEvent.valid_grades }
+  validates :timeline_event_id, uniqueness: { scope: :evaluation_criterion_id }
+  validates :evaluation_criterion_id, uniqueness: { scope: :timeline_event_id }
+  validates :grade, presence: true
 end

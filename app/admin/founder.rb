@@ -340,9 +340,9 @@ ActiveAdmin.register Founder do
       row :year_of_graduation
       row :backlog
       row :exited
-      row :resume do |founder|
-        link_to 'Download Resume', founder.resume_link if founder.resume_link.present?
-      end
+      # row :resume do |founder|
+      #   link_to 'Download Resume', founder.resume_link if founder.resume_link.present?
+      # end
       row :coder do
         if !founder.coder.nil?
           founder.coder? ? 'Yes' : 'No'

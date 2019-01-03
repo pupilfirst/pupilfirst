@@ -35,15 +35,13 @@ class TimelineEventsController < ApplicationController
     timeline_event = TimelineEvent.find(params[:id])
     authorize timeline_event
 
-    if timeline_event.pending?
-      status = {
-        needs_improvement: TimelineEvent::STATUS_NEEDS_IMPROVEMENT,
-        not_accepted: TimelineEvent::STATUS_NOT_ACCEPTED,
-        verified: TimelineEvent::STATUS_VERIFIED
-      }.fetch(params[:status].to_sym)
-
+    if !timeline_event.reviewed?
       begin
-        TimelineEvents::VerificationService.new(timeline_event).update_status(status, grade: params[:grade])
+        # TODO: Probably replace this with a better encoder on the front-end.
+        grades = params[:evaluation].each_with_object({}) do |entry, result|
+          result[entry['criterionId'].to_i] = entry['grade'].to_i
+        end
+        TimelineEvents::GradingService.new(timeline_event).grade(current_coach, grades)
         render json: { error: nil }, status: :ok
       rescue TimelineEvents::ReviewInterfaceException => e
         render json: { error: e.message, timelineEvent: nil }.to_json, status: :unprocessable_entity
@@ -59,12 +57,12 @@ class TimelineEventsController < ApplicationController
     timeline_event = TimelineEvent.find(params[:id])
     authorize timeline_event
 
-    unless timeline_event.reviewed?
+    if timeline_event.evaluator_id.blank?
       render json: { error: 'Event is pending review! Cannot undo.' }.to_json, status: :unprocessable_entity
       return
     end
 
-    TimelineEvents::UndoVerificationService.new(timeline_event).execute
+    TimelineEvents::UndoGradingService.new(timeline_event).execute
     render json: { error: nil }, status: :ok
   end
 

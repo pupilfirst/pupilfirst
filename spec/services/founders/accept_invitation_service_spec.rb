@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Founders::AcceptInvitationService do
+describe Founders::AcceptInvitationService, broken: true do
   include FounderSpecHelper
 
   subject { described_class.new(founder) }

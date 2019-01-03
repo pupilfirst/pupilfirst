@@ -5,7 +5,7 @@ import ToggleBar from "./founderDashboard/ToggleBar";
 import Targets from "./founderDashboard/Targets";
 import TargetOverlay from "./founderDashboard/TargetOverlay";
 import ActionBar from "./founderDashboard/ActionBar";
-import LevelUpNotification from "./founderDashboard/LevelUpNotification";
+import DashboardNotification from "./founderDashboard/DashboardNotification";
 
 export default class FounderDashboard extends React.Component {
   constructor(props) {
@@ -135,6 +135,7 @@ export default class FounderDashboard extends React.Component {
     }
 
     updatedTargets[targetIndex].status = "submitted";
+    updatedTargets[targetIndex].submitted_at = new moment();
 
     this.setState({
       targets: updatedTargets
@@ -170,8 +171,9 @@ export default class FounderDashboard extends React.Component {
           setRootState={this.setRootState}
         />
 
-        {this.props.levelUpEligibility !== "not_eligible" && (
-          <LevelUpNotification rootProps={this.props} />
+        {(this.props.courseEnded ||
+          this.props.levelUpEligibility !== "not_eligible") && (
+          <DashboardNotification rootProps={this.props} />
         )}
 
         {this.state.activeTrackId !== "sessions" &&
@@ -213,6 +215,7 @@ export default class FounderDashboard extends React.Component {
             closeCB={this.targetOverlayCloseCB}
             openTimelineBuilderCB={this.openTimelineBuilder}
             hasSingleFounder={this.hasSingleFounder()}
+            courseEnded={this.props.courseEnded}
           />
         )}
       </div>
@@ -240,5 +243,6 @@ FounderDashboard.propTypes = {
   maxLevelNumber: PropTypes.number,
   initialTargetId: PropTypes.number,
   testMode: PropTypes.bool,
-  tourDashboard: PropTypes.bool
+  tourDashboard: PropTypes.bool,
+  courseEnded: PropTypes.bool
 };

@@ -28,9 +28,23 @@
   }
 }
 
+.target-overlay__course-locked-notice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.375rem;
+  @include border-radius(10px);
+  background-color: rgba(153, 153, 153, 0.2);
+  color: $dark-grey-text;
+}
+
 .target-overlay__overlay-close-text {
   display: flex;
   align-self: center;
+}
+
+.founder-dashboard-notification__lock {
+  color: grey;
 }
 
 .target-overlay__overlay-close-icon {
@@ -40,7 +54,7 @@
 }
 
 .target-overlay__container {
-  max-width: 62rem;
+  max-width: 64rem;
   position: relative;
   width: 100%;
   padding: 3rem 1rem;
@@ -85,54 +99,28 @@
 }
 
 .target-overlay__status-badge-block {
-  border: 1px solid $gray-border;
-  border-width: 0 0 1px 0;
+  border-bottom: 1px solid $gray-border;
 }
 
 .target-overlay-status-badge-bar__badge-container {
-  padding: 1rem 1.5rem 1rem 4rem;
   display: block;
   font-size: 0.875rem;
   letter-spacing: 0.02rem;
   white-space: normal;
-  @include border-radius(0px);
   text-align: left;
-  animation: statusBadgeAnimate 0.5s;
 
   .target-overlay-status-badge-bar__badge-icon {
     margin-right: 5px;
   }
+}
 
-  @include media-breakpoint-down(sm) {
-    padding: 1rem;
-    text-align: center;
-  }
-  &.needs-improvement {
-    background-color: rgba(10, 165, 227, 0.15);
-    color: $dark-secondary;
-  }
-  &.submitted {
-    background-color: rgba(0, 138, 193, 0.15);
-    color: $dark-secondary;
-  }
-  &.pending {
-    background-color: rgba(227, 180, 98, 0.15);
-    color: darken($alert-background, 25%);
-  }
-  &.unavailable,
-  &.level-locked,
-  &.pending-milestone {
-    background-color: rgba(153, 153, 153, 0.2);
-    color: $dark-grey-text;
-  }
-  &.complete {
-    background-color: rgba(50, 180, 117, 0.15);
-    color: $dark-primary;
-  }
-  &.not-accepted {
-    background-color: rgba(217, 83, 80, 0.15);
-    color: rgba(217, 83, 80, 1);
-  }
+.target-overlay-status-badge-bar__grades-container {
+  background-color: white;
+  box-shadow: 0px 5px 8px 0px rgba(0, 0, 0, 0.03);
+}
+
+.target-overlay-status-badge-bar__grades-header {
+  margin-top: 1rem;
 }
 
 .ripple-effect {
@@ -164,37 +152,79 @@
 }
 
 .target-overlay-status-badge-bar__info-block {
-  display: inline-block;
-  padding-left: 10px;
-  margin: 0 0 0 10px;
-  border-left: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 1.5rem;
+  background-color: white;
 
   @include media-breakpoint-down(xs) {
-    border-left: 0;
-    display: block;
-    margin: 10px 0 0 0;
-    padding: 0;
   }
 }
 
 .target-overlay-status-badge-bar__badge-content {
+  position: relative;
   display: inline-block;
   font-size: 1rem;
+  padding: 1rem 1.5rem;
+
+  &:after {
+    top: 100%;
+    left: 2rem;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(255, 255, 255, 0);
+    border-width: 12px;
+    margin-left: -12px;
+  }
+
+  &.submitted {
+    background-color: rgba(0, 138, 193, 0.15);
+    color: $dark-secondary;
+
+    &:after {
+      border-top-color:rgba(0, 138, 193, 0.15);
+    }
+  }
+  &.pending {
+    background-color: rgba(227, 180, 98, 0.15);
+    color: darken($alert-background, 25%);
+
+    &:after {
+      border-top-color:rgba(227, 180, 98, 0.15);
+    }
+  }
+  &.prerequisite-locked,
+  &.level-locked,
+  &.milestone-locked {
+    background-color: rgba(153, 153, 153, 0.2);
+    color: $dark-grey-text;
+
+    &:after {
+      border-top-color:rgba(153, 153, 153, 0.2);
+    }
+  }
+  &.passed {
+    background-color: rgba(50, 180, 117, 0.15);
+    color: $dark-primary;
+
+    &:after {
+      border-top-color:rgba(50, 180, 117, 0.15);
+    }
+  }
+  &.failed {
+    background-color: rgba(217, 83, 80, 0.15);
+    color: rgba(217, 83, 80, 1);
+
+    &:after {
+      border-top-color:rgba(217, 83, 80, 0.15);
+    }
+  }
 }
 
 .target-overlay-status-badge-bar__hint {
   word-break: break-word;
-}
-
-@keyframes statusBadgeAnimate {
-  0% {
-    opacity: 0;
-    transform: scaleY(0);
-  }
-  100% {
-    opacity: 1;
-    transform: scaleY(1);
-  }
 }
 
 .founder-dashboard-target-header__content {
@@ -397,13 +427,11 @@
 
 .target-overlay__content-rightbar {
   background-color: $primary-background;
-  padding: 1.5rem;
   border: 1px solid $gray-border;
   border-width: 0 0 0 1px;
 
   @include media-breakpoint-down (sm) {
     border-width: 1px 0 0 0;
-    padding: 1.25rem;
   }
 
   &:last-child {
@@ -590,4 +618,63 @@
 
 .target-overlay__mobile-submit-button-container {
   padding-top: 0.8125rem;
+}
+
+.target-overlay-grade-bar__container {
+  padding: 0 15px;
+}
+
+.target-overlay-grade-bar__track {
+  background-color: rgba(244, 244, 244, 0.5);
+  border: 1px solid #d8d8d8;
+  border-radius: 3rem;
+  box-shadow: 0 2px 4px 0px rgba(0, 0, 0, 0.05);
+}
+
+.target-overlay-grade-bar__grade-label {
+  font-weight: bold;
+}
+
+.target-overlay-grade-bar__grade-pill {
+  position: relative;
+  width: 100%;
+  padding: 3px;
+  overflow: hidden;
+  color: #999999;
+  background-color: #fafafa;
+
+  &:before {
+    position: absolute;
+    content: "";
+    right: 0;
+    top: 0;
+    z-index: 2;
+    width: 1px;
+    height: 100%;
+    background-color: #d8d8d8;
+  }
+  &:last-child {
+    &::before {
+      width: 0;
+    }
+  }
+}
+
+.target-overlay-grade-bar__grade-pill--passed {
+  color: white;
+  background-color: #0f9d58;
+}
+
+.target-overlay-grade-bar__grade-pill--failed {
+  color: white;
+  background-color: #f55151;
+}
+
+.target-overlay-grade-bar__criterion-name {
+  font-size: 0.75rem;
+}
+
+.target-overlay-grade-bar__grade {
+  font-size: 0.75rem;
+  color: #999999;
 }

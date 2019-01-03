@@ -302,6 +302,7 @@ class Founder < ApplicationRecord
   end
 
   def faculty
-    startup&.course&.faculty
+    faculty = startup&.course&.faculty
+    faculty + startup&.faculty
   end
 end

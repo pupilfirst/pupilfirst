@@ -124,25 +124,26 @@ title SV.CO Profile for #{@founder.fullname}
                     h6.my-0 Level
                     p.data-content #{@founder.startup.level.display_name}
           .row
-            - if @founder.faculty.exists?
+            - if @founder.faculty.any?
               .col-md-12.mt-4
                 h3 Mentors
                 hr
-                - @founder.faculty.where.not(inactive: true).order(:name).each do |faculty|
-                  .data-faculty
-                    .media.align-items-center
-                      a.mr-3 href=faculty_url(faculty.slug)
-                        .faculty-image
-                          == avatar(faculty.name, faculty: faculty, background_shape: :square)
-                      .media-body
-                        .media-heading
-                          = link_to faculty.name, faculty_url(faculty.slug)
-                        p.designation #{faculty.title}
-                        - if faculty.linkedin_url?
-                          ul.faculty__social-links
-                            li
-                              a href="#{faculty.linkedin_url}" target='_blank'
-                                i.fa.fa-linkedin-square
+                - @founder.faculty.each do |faculty|
+                  - if !faculty.inactive
+                    .data-faculty
+                      .media.align-items-center
+                        a.mr-3 href=faculty_url(faculty.slug)
+                          .faculty-image
+                            == avatar(faculty.name, faculty: faculty, background_shape: :square)
+                        .media-body
+                          .media-heading
+                            = link_to faculty.name, faculty_url(faculty.slug)
+                          p.designation #{faculty.title}
+                          - if faculty.linkedin_url?
+                            ul.faculty__social-links
+                              li
+                                a href="#{faculty.linkedin_url}" target='_blank'
+                                  i.fa.fa-linkedin-square
 
       .col-lg-9.order-2.order-lg-1
         - if @timeline_event_for_og.present?

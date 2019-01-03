@@ -1,3 +1,4 @@
+- presenter = Founders::ProfilePresenter.new(event)
 .timeline-panel
   - if event.founder_event?
     .hidden-marker href="#" data-toggle="tooltip" title="This event is not visible on the team's public timeline."
@@ -11,9 +12,9 @@
         i.fa.fa-exclamation-circle
         | &nbsp;Pending verification
     - elsif event.needs_improvement?
-      .verified-status-notice href="#" data-toggle="tooltip" title="#{needs_improvement_tooltip_text(event)}"
+      .verified-status-notice href="#" data-toggle="tooltip" title="#{presenter.needs_improvement_tooltip_text(current_founder, @founder)}"
         i.fa.fa-exclamation-circle
-        | &nbsp;#{needs_improvement_status_text(event)}
+        | &nbsp;#{presenter.needs_improvement_status_text}
     - elsif event.not_accepted?
       .verified-status-notice href="#" data-toggle="tooltip" title="We are sorry, but this event is not acceptable. Please create a new event based on feedback and resubmit for approval."
         i.fa.fa-exclamation-circle
@@ -40,7 +41,7 @@
           ' (#{event.days_elapsed.ordinalize} day)
   .timeline-body
     .tl-body
-      p #{simple_format(Founders::ProfilePresenter.new(event).detailed_description)}
+      p #{simple_format(presenter.detailed_description)}
 
     - attachments = event.attachments_for_founder(current_founder)
 

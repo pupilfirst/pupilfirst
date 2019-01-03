@@ -11,8 +11,7 @@ class FoundersController < ApplicationController
 
   # GET /students/:id/events/:page
   def paged_events
-    # Reuse the startup action, because that's what this page also shows.
-    @page = params[:page].to_i
+    # Reuse the founder_profile action, because that's what this page also shows.
     show
     render layout: false
   end

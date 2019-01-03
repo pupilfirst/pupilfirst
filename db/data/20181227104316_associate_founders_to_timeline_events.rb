@@ -10,7 +10,7 @@ class AssociateFoundersToTimelineEvents < ActiveRecord::Migration[5.2]
     startup_events = TimelineEvent.where(target_id: startup_target_ids)
     startup_events.each do |event|
       Startup.find(event.startup_id).founders.each do |founder|
-        TimelineEventOwner.create!(timeline_event: event, founder: event.founder)
+        TimelineEventOwner.create!(timeline_event: event, founder: founder)
       end
     end
   end

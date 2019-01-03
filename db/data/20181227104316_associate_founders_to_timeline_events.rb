@@ -1,13 +1,17 @@
 class AssociateFoundersToTimelineEvents < ActiveRecord::Migration[5.2]
   def up
-    TimelineEvent.all.each do |event|
-      founders = if event.founder_event?
-        Founder.where(id: event.founder_id)
-      else
-        Founder.where(startup_id: event.startup_id)
-      end
+    founder_target_ids = Target.where(role: Target::ROLE_FOUNDER).pluck(:id)
+    founder_events = TimelineEvent.where(target_id: founder_target_ids)
+    founder_events.each do |event|
+      TimelineEventOwner.create!(timeline_event: event, founder_id: event.founder_id)
+    end
 
-      event.update!(founders: founders)
+    startup_target_ids = Target.where.not(id: founder_target_ids)
+    startup_events = TimelineEvent.where(target_id: startup_target_ids)
+    startup_events.each do |event|
+      Startup.find(event.startup_id).founders.each do |founder|
+        TimelineEventOwner.create!(timeline_event: event, founder: event.founder)
+      end
     end
   end
 

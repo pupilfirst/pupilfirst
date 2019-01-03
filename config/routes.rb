@@ -203,6 +203,9 @@ Rails.application.routes.draw do
   # VR course at Sastra University landing page
   get 'sastra', to: 'home#sastra'
 
+  # PupilFirst landing page
+  get 'pupilfirst', to: 'home#pupilfirst'
+
   root 'home#index'
 
   # /slack redirected to /about/slack

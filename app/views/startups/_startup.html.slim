@@ -44,11 +44,6 @@
         a.product-name.brand-secondary.font-semibold href=product_url(startup.id, startup.slug)
           ' #{startup.product_name}
 
-        - if startup.startup_categories.exists?
-          .startup-industry
-            span.startup-industry-icon
-              i.fa.fa-address-card-o
-            | #{startup.startup_categories.pluck(:name).join(', ')}
       - if startup.product_description?
         p.startup-details__description.font-light
           = startup.product_description

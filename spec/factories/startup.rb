@@ -25,8 +25,6 @@ FactoryBot.define do
 
       # Add another founder.
       create(:founder, startup: startup)
-
-      startup.startup_categories = [create(:startup_category)]
     end
 
     trait(:subscription_active) do

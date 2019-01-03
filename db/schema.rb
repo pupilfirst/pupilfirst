@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_17_082409) do
+ActiveRecord::Schema.define(version: 2018_12_19_095759) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -198,13 +198,6 @@ ActiveRecord::Schema.define(version: 2018_12_17_082409) do
     t.datetime "updated_at", null: false
     t.index ["faculty_id"], name: "index_faculty_startup_enrollments_on_faculty_id"
     t.index ["startup_id", "faculty_id"], name: "index_faculty_startup_enrollments_on_startup_id_and_faculty_id", unique: true
-  end
-
-  create_table "faculty_startups", id: false, force: :cascade do |t|
-    t.bigint "faculty_id"
-    t.bigint "startup_id"
-    t.index ["faculty_id", "startup_id"], name: "index_faculty_startups_on_faculty_id_and_startup_id", unique: true
-    t.index ["startup_id"], name: "index_faculty_startups_on_startup_id"
   end
 
   create_table "features", id: :serial, force: :cascade do |t|
@@ -461,17 +454,6 @@ ActiveRecord::Schema.define(version: 2018_12_17_082409) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
-  end
-
-  create_table "startup_categories", id: :serial, force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "startup_categories_startups", id: false, force: :cascade do |t|
-    t.integer "startup_id"
-    t.integer "startup_category_id"
   end
 
   create_table "startup_feedback", id: :serial, force: :cascade do |t|

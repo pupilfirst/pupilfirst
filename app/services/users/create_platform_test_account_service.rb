@@ -1,5 +1,5 @@
 module Users
-  class CreatePlatformTestAccount
+  class CreatePlatformTestAccountService
     def initialize(email, name, startup)
       @email = email
       @name = name
@@ -28,7 +28,7 @@ module Users
           user: user
         )
 
-        @startup.faculty << faculty
+        Startups::AssignReviewerService.new(@startup).assign(faculty)
 
         Rails.logger.info("Faculty for user created: ##{faculty.id}), and added as coach for Startup##{@startup.id}.")
       end

@@ -6,12 +6,11 @@ class StartupsController < ApplicationController
   def index
     @skip_container = true
 
-    startups = Startup.includes(:level, :startup_categories)
+    startups = Startup.includes(:level)
       .admitted
       .approved
       .where.not(slug: 'svdotco')
       .where.not(levels: { course_id: sponsored_course_ids })
-      .includes(:startups_startup_categories)
       .order(timeline_updated_on: 'DESC')
 
     @form = Startups::FilterForm.new(Reform::OpenForm.new)
@@ -113,7 +112,6 @@ class StartupsController < ApplicationController
   end
 
   def load_filter_options
-    @categories = StartupCategory.order(:name)
     @levels = Level.where('number > ?', 0).where.not(course_id: sponsored_course_ids).includes(:course).order(:course_id, :number)
   end
 
@@ -122,7 +120,7 @@ class StartupsController < ApplicationController
   end
 
   def filter_params
-    input_filter = params.include?(:startups_filter) ? params.require(:startups_filter).permit(:level_id, :search, :startup_category_id) : {}
+    input_filter = params.include?(:startups_filter) ? params.require(:startups_filter).permit(:level_id, :search) : {}
     input_filter.merge(page: params[:page])
   end
 

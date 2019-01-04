@@ -69,6 +69,7 @@ let gradeBarPill = (gradeLabel, grading, gradeSelectCB, passGrade) => {
   let myGrade = gradeLabel |> GradeLabel.grade;
   <div
     key=(myGrade |> string_of_int)
+    title=(gradeLabel |> GradeLabel.label)
     role="button"
     onClick=(_event => handleClick(gradeSelectCB, grading, myGrade))
     className=(

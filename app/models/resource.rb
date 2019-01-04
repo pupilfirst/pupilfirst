@@ -28,6 +28,7 @@ class Resource < ApplicationRecord
 
   def exactly_one_source_must_be_present
     return if [file, video_embed, link].one?(&:present?)
+    return if persisted?
 
     errors[:base] << 'One and only one of a video embed, file or link must be present.'
   end

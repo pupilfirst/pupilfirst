@@ -8,27 +8,27 @@
           span.dots-menu
         .dropdown-menu.dropdown-menu-right.external-links__dropdown
           - if startup.wireframe_link?
-            a.dropdown-item.external-links__dropdown--item.brand-secondary href="#{short_url(startup.wireframe_link)}" target="_blank"
+            a.dropdown-item.external-links__dropdown--item.brand-secondary href="#{short_url(startup.wireframe_link)}" target="_blank" rel='noopener'
               i.external-links__dropdown--icon.fa.fa-object-group
               ' #{startup.product_name} design
 
           - if startup.website?
-            a.dropdown-item.external-links__dropdown--item.brand-secondary href="#{startup.website}" target="_blank"
+            a.dropdown-item.external-links__dropdown--item.brand-secondary href="#{startup.website}" target="_blank" rel='noopener'
               i.external-links__dropdown--icon.fa.fa-globe
               ' #{startup.website}
 
           - if startup.prototype_link?
-            a.dropdown-item.external-links__dropdown--item.brand-secondary href="#{short_url(startup.prototype_link)}" target="_blank"
+            a.dropdown-item.external-links__dropdown--item.brand-secondary href="#{short_url(startup.prototype_link)}" target="_blank" rel='noopener'
               i.external-links__dropdown--icon.fa.fa-cube
               ' Prototype Link
 
           - if startup.facebook_link?
-            a.dropdown-item.external-links__dropdown--item.brand-secondary href="#{startup.facebook_link}" target="_blank"
+            a.dropdown-item.external-links__dropdown--item.brand-secondary href="#{startup.facebook_link}" target="_blank" rel='noopener'
               i.external-links__dropdown--icon.fa.fa-facebook-square
               ' #{startup.facebook_link}
 
           - if startup.twitter_link?
-            a.dropdown-item.external-links__dropdown--item.brand-secondary href="#{startup.twitter_link}" target="_blank"
+            a.dropdown-item.external-links__dropdown--item.brand-secondary href="#{startup.twitter_link}" target="_blank" rel='noopener'
               i.external-links__dropdown--icon.fa.fa-twitter-square
               ' #{startup.twitter_link}
 
@@ -58,11 +58,11 @@
           ' #{startup.level.name}
 
         - if startup.presentation_link?
-          a.startup-attachments__link href="#{short_url(startup.presentation_link)}" target="_blank" title="Product Deck"
+          a.startup-attachments__link href="#{short_url(startup.presentation_link)}" target="_blank" title="Product Deck" rel='noopener'
             img.startups-link__icon alt="Product Deck" src="#{image_url 'startups/index/attachments-icon-deck.svg'}"
             ' Product Deck
         - if startup.product_video_link?
-          a.startup-attachments__link href="#{short_url(startup.product_video_link)}" target="_blank" title="Product Video"
+          a.startup-attachments__link href="#{short_url(startup.product_video_link)}" target="_blank" title="Product Video" rel='noopener'
             img.startups-link__icon alt="Product Video" src="#{image_url 'startups/index/attachments-icon-video.svg'}"
             ' Product Video
 

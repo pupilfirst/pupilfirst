@@ -11,7 +11,7 @@ class FounderPolicy < ApplicationPolicy
       timeline_event.founder.present? && timeline_event.founder == current_founder
     else
       # Show verified events to everyone, and non-verified events to startup founders.
-      return true if timeline_event.verified_or_needs_improvement?
+      return true if timeline_event.passed_at.present?
 
       timeline_event.founder == current_founder
     end

@@ -179,16 +179,11 @@ Rails.application.routes.draw do
   end
 
   # Custom founder profile page.
-  # # TODO: Remove this founder route as we no longer have 'founders'. Always use the corresponding 'student' route below.
-  get 'founders/:slug', to: 'founders#founder_profile', as: 'founder_profile'
-
-  get 'students/:slug', to: 'founders#founder_profile', as: 'student_profile'
-
-  # get 'founders/:slug/events/:page', to: 'founders#paged_events', as: 'paged_events'
-
-  get 'students/:slug/events/:page', to: 'founders#paged_events', as: 'paged_events'
-
-  get 'students/:slug/e/:event_id/:event_title', to: 'founders#timeline_event_show', as: 'student_timeline_event_show'
+  scope 'students', controller: 'founders' do
+    get '/:slug', action: 'founder_profile', as: 'student_profile'
+    get '/:slug/events/:page', action: 'paged_events', as: 'paged_events'
+    get '/:slug/e/:event_id/:event_title', action: 'timeline_event_show', as: 'student_timeline_event_show'
+  end
 
   # Story of startup village, accessed via about pages.
   get 'story', as: 'story', to: 'home#story'

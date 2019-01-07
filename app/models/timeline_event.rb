@@ -51,7 +51,7 @@ class TimelineEvent < ApplicationRecord
   scope :not_improved, -> { joins(:target).where(improved_timeline_event_id: nil) }
   scope :not_auto_verified, -> { joins(:evaluation_criteria).distinct }
   scope :auto_verified, -> { where.not(id: not_auto_verified) }
-  scope :verified, -> { where.not(passed_at: nil) }
+  scope :passed, -> { where.not(passed_at: nil) }
 
   after_initialize :make_links_an_array
 

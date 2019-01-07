@@ -124,7 +124,7 @@ ActiveAdmin.register TimelineEvent do
   end
 
   action_item :view, only: :show do
-    link_to('View Timeline Entry', timeline_event.share_url, target: '_blank')
+    link_to('View Timeline Entry', timeline_event.share_url, target: '_blank', rel: 'noopener')
   end
 
   action_item :view, only: :show, if: proc { timeline_event.reviewed? } do
@@ -239,7 +239,7 @@ ActiveAdmin.register TimelineEvent do
         column :title
 
         column :file do |timeline_event_file|
-          link_to timeline_event_file.filename, timeline_event_file.file.url, target: '_blank'
+          link_to timeline_event_file.filename, timeline_event_file.file.url, target: '_blank', rel: 'noopener'
         end
 
         column :private
@@ -247,11 +247,11 @@ ActiveAdmin.register TimelineEvent do
 
       table_for timeline_event.links do
         column :title do |link|
-          link_to link[:title], link[:url], target: '_blank'
+          link_to link[:title], link[:url], target: '_blank', rel: 'noopener'
         end
 
         column :url do |link|
-          link_to link[:url], link[:url], target: '_blank'
+          link_to link[:url], link[:url], target: '_blank', rel: 'noopener'
         end
 
         column :private do |link|

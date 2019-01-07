@@ -49,13 +49,13 @@
       .timeline-footer.tl-footer
         - attachments.each do |attachment|
           - if attachment[:url].present?
-            a.tl-link-button href="#{short_url(attachment[:url])}" target="_blank"
+            a.tl-link-button href="#{short_url(attachment[:url])}" target="_blank" rel='noopener'
               - if attachment[:private]
                 i.fa.fa-user-secret
                 | &nbsp;
               | #{attachment[:title]}
           - else # it is a file
-            a.tl-link-button href="#{short_url(download_timeline_event_file_url(attachment[:file]))}" target="_blank"
+            a.tl-link-button href="#{short_url(download_timeline_event_file_url(attachment[:file]))}" target="_blank" rel='noopener'
               - if attachment[:private]
                 i.fa.fa-user-secret
                 | &nbsp;

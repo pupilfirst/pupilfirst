@@ -89,7 +89,7 @@
             ' VR Elective course at
             br
             | Sastra University
-          a class="typeform-share button btn btn-primary btn-lg home-apply__button mt-3 d-none" href="https://svlabs.typeform.com/to/SEx7bb" data-mode="popup" target="_blank" data-auto-open=@auto_open
+          a class="typeform-share button btn btn-primary btn-lg home-apply__button mt-3 d-none" href="https://svlabs.typeform.com/to/SEx7bb" data-mode="popup" target="_blank" rel='noopener' data-auto-open=@auto_open
             | Take Quiz Now
 
           / = form_for @form, url: user_send_login_email_path, html: { 'data-test': Rails.env.test? } do |f|

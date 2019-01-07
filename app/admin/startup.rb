@@ -58,7 +58,7 @@ ActiveAdmin.register Startup do
 
     actions do |startup|
       span do
-        link_to 'View Timeline', startup, target: '_blank', class: 'member_link'
+        link_to 'View Timeline', startup, target: '_blank', class: 'member_link', rel: 'noopener'
       end
 
       span do
@@ -122,7 +122,7 @@ ActiveAdmin.register Startup do
   end
 
   action_item :view_timeline, only: :show do
-    link_to('View Timeline', product_url(startup.id, startup.slug), target: '_blank')
+    link_to('View Timeline', product_url(startup.id, startup.slug), target: '_blank', rel: 'noopener')
   end
 
   # TODO: rewrite as its only used for dropping out startups now
@@ -309,7 +309,7 @@ ActiveAdmin.register Startup do
 
       row :partnership_deed do
         if startup.partnership_deed.present?
-          link_to 'Click here to open in new window', startup.partnership_deed.url, target: '_blank'
+          link_to 'Click here to open in new window', startup.partnership_deed.url, target: '_blank', rel: 'noopener'
         end
       end
 

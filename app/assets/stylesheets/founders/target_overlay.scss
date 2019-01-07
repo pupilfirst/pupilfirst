@@ -154,6 +154,7 @@
 .target-overlay-status-badge-bar__info-block {
   padding: 1.5rem;
   background-color: white;
+  border-left: 1px solid #e5e5e5;
 
   @include media-breakpoint-down(xs) {
   }

@@ -93,8 +93,8 @@ export default class StatusBadgeBar extends React.Component {
     let gradeLabels = this.props.rootProps.gradeLabels;
     let maxGrade = this.props.rootProps.maxGrade;
     return (
-      <div className="btn-toolbar target-overlay-grade-bar__container flex-column mb-3">
-        <div className="target-overlay-status-badge-bar__grades-header">
+      <div className="btn-toolbar target-overlay-grade-bar__container flex-column pb-4">
+        <div className="target-overlay-status-badge-bar__grades-header pb-1 mb-2">
           Grades received:
         </div>
         {Object.keys(grades).map(criterionId => {

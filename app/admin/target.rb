@@ -64,7 +64,7 @@ ActiveAdmin.register Target do
   show do |target|
     if target.evaluation_criteria.present? && target.timeline_events.exists?
       div do
-        table_for target.timeline_events.includes(:founder, :startup).where(timeline_events: { created_at: 3.months.ago..Time.now }) do
+        table_for target.timeline_events.where(timeline_events: { created_at: 3.months.ago..Time.now }) do
           caption 'Linked Timeline Events (up to 3 months ago)'
 
           column 'Timeline Event' do |timeline_event|

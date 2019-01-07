@@ -1,4 +1,4 @@
-ruby '2.5.3'
+ruby '2.6.0'
 
 source 'https://rubygems.org'
 
@@ -166,7 +166,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.5' # Duh.
   gem 'coderay', '~> 1.1' # Pretty syntax highlighting on rspec failure snippets.
   gem 'pry-rails', '~> 0.3.5' # Pry debugger.
-  gem 'webmock', '~> 3.0' # Mocking web requests.
+  gem 'webmock', '~> 3.5' # Mocking web requests.
   gem 'rubocop', '~> 0.60', require: false # Ruby Style Guide.
   gem 'bundler-audit', '~> 0.5', require: false # Audit gems in gemfile.lock for reported vulnerabilities
   gem 'overcommit', '~> 0.38', require: false # A fully configurable and extendable Git hook manager

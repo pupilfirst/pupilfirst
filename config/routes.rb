@@ -233,6 +233,10 @@ Rails.application.routes.draw do
     get '(/:year)', action: 'index'
   end
 
+  resources :courses, only: [] do
+    resource :coach_dashboard, controller: 'coach_dashboard', only: %i[show]
+  end
+
   resource :impersonation, only: %i[destroy]
 
   scope 'intercom', as: 'intercom', controller: 'intercom' do

@@ -7,15 +7,11 @@
     .img-responsive.tl-event-image
       = image_tag event.image_url
   .timeline-heading
-    - if event.pending?
+    - if event.evaluator_id.blank? && event.passed_at.blank?
       .verified-status-notice href="#" data-toggle="tooltip" title="We will verify this event very soon! If you haven't heard from us in 24 hours, do ping us on Slack!"
         i.fa.fa-exclamation-circle
         | &nbsp;Pending verification
-    - elsif event.needs_improvement?
-      .verified-status-notice href="#" data-toggle="tooltip" title="#{presenter.needs_improvement_tooltip_text(current_founder, @founder)}"
-        i.fa.fa-exclamation-circle
-        | &nbsp;#{presenter.needs_improvement_status_text}
-    - elsif event.not_accepted?
+    - elsif event.evaluator_id.present? && event.passed_at.blank?
       .verified-status-notice href="#" data-toggle="tooltip" title="We are sorry, but this event is not acceptable. Please create a new event based on feedback and resubmit for approval."
         i.fa.fa-exclamation-circle
         | &nbsp;Not Accepted
@@ -37,7 +33,7 @@
       small
         i.fa.fa-calendar
         ' &nbsp;#{event.event_on.strftime("%B %e, %Y")}
-        - if @founder.startup.earliest_team_event_date.present? && !event.founder_event? && event.verified_or_needs_improvement?
+        - if @founder.startup.earliest_team_event_date.present? && !event.founder_event? && event.passed_at.present?
           ' (#{event.days_elapsed.ordinalize} day)
   .timeline-body
     .tl-body

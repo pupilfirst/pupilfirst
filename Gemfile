@@ -98,7 +98,7 @@ gem 'bootstrap4-kaminari-views', '= 1.0.0', github: 'mahesh-krishnakumar/bootstr
 gem 'data_migrate', '~> 5.1' # Run data migrations alongside schema migrations.
 
 # Omniauth providers
-gem 'omniauth-google-oauth2', '~> 0.4' # Oauth2 strategy for Google
+gem 'omniauth-google-oauth2', '~> 0.6' # Oauth2 strategy for Google
 gem 'omniauth-facebook', '~> 5.0' # Facebook OAuth2 Strategy for OmniAuth http://mkdynamic.github.com/omniauth-facebook
 gem 'omniauth-github', '~> 1.2' # GitHub strategy for OmniAuth
 

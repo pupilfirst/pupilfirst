@@ -112,7 +112,7 @@ export default class ActionBar extends React.Component {
             <span className="timeline-builder__tab-label">File</span>
           </div>
 
-          <div class="timeline-builder__date-picker-popup">
+          <div className="timeline-builder__date-picker-popup">
             {this.state.dateFormVisible && (
               <DatePicker handleDate={this.handleDate} />
             )}

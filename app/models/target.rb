@@ -25,7 +25,7 @@ class Target < ApplicationRecord
   STATUS_PENDING = :pending
   STATUS_UNAVAILABLE = :unavailable # This handles two cases: targets that are not submittable, and ones with prerequisites pending.
   STATUS_NOT_ACCEPTED = :not_accepted
-  STATUS_LEVEL_LOCKED = :level_locked # Target is of a higer level
+  STATUS_LEVEL_LOCKED = :level_locked # Target is of a higher level
   STATUS_PENDING_MILESTONE = :pending_milestone # Milestone targets of the previous level are incomplete
 
   UNSUBMITTABLE_STATUSES = [
@@ -41,13 +41,12 @@ class Target < ApplicationRecord
   belongs_to :target_group
   has_many :target_resources, dependent: :destroy
   has_many :resources, through: :target_resources
-  has_many :target_skills, dependent: :destroy
-  has_many :skills, through: :target_skills
+  has_many :target_evaluation_criteria, dependent: :destroy
+  has_many :evaluation_criteria, through: :target_evaluation_criteria
   has_one :level, through: :target_group
   has_one :course, through: :target_group
+  has_many :latest_submission_records, dependent: :restrict_with_error
   has_one :quiz, dependent: :restrict_with_error
-
-  accepts_nested_attributes_for :target_skills, allow_destroy: true
 
   acts_as_taggable
   mount_uploader :rubric, RubricUploader
@@ -56,7 +55,8 @@ class Target < ApplicationRecord
   scope :founder, -> { where(role: ROLE_FOUNDER) }
   scope :not_founder, -> { where.not(role: ROLE_FOUNDER) }
   scope :sessions, -> { where.not(session_at: nil) }
-  scope :auto_verifiable, -> { where(submittability: SUBMITTABILITY_AUTO_VERIFY) }
+  scope :not_auto_verifiable, -> { joins(:target_evaluation_criteria).distinct }
+  scope :auto_verifiable, -> { where.not(id: not_auto_verifiable) }
 
   # Custom scope to allow AA to filter by intersection of tags.
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
@@ -82,21 +82,10 @@ class Target < ApplicationRecord
     [TYPE_TODO, TYPE_ATTEND, TYPE_READ, TYPE_LEARN].freeze
   end
 
-  SUBMITTABILITY_RESUBMITTABLE = 'resubmittable'
-  SUBMITTABILITY_SUBMITTABLE_ONCE = 'submittable_once'
-  SUBMITTABILITY_NOT_SUBMITTABLE = 'not_submittable'
-  SUBMITTABILITY_AUTO_VERIFY = 'auto_verify'
-
-  def self.valid_submittability_values
-    [SUBMITTABILITY_RESUBMITTABLE, SUBMITTABILITY_SUBMITTABLE_ONCE, SUBMITTABILITY_NOT_SUBMITTABLE, SUBMITTABILITY_AUTO_VERIFY].freeze
-  end
-
   validates :target_action_type, inclusion: { in: valid_target_action_types }, allow_nil: true
   validates :role, presence: true, inclusion: { in: valid_roles }
   validates :title, presence: true
   validates :description, presence: true
-  validates :key, uniqueness: true, inclusion: { in: valid_keys }, allow_nil: true
-  validates :submittability, inclusion: { in: valid_submittability_values }
   validates :call_to_action, length: { maximum: 20 }
 
   validate :days_to_complete_or_session_at_should_be_present
@@ -125,6 +114,18 @@ class Target < ApplicationRecord
     return if safe_to_archive
 
     errors[:archived] << 'cannot be set unsafely'
+  end
+
+  validate :same_course_for_target_and_evaluation_criteria
+
+  def same_course_for_target_and_evaluation_criteria
+    return if evaluation_criteria.blank?
+
+    evaluation_criteria.each do |ec|
+      next if ec.course_id == course.id
+
+      errors[:base] << 'Target and evaluation criterion must belong to same course'
+    end
   end
 
   normalize_attribute :key, :slideshow_embed, :video_embed
@@ -175,11 +176,15 @@ class Target < ApplicationRecord
   end
 
   def rubric?
-    target_skills.exists? || rubric_url.present?
+    target_evaluation_criteria.exists? || rubric_url.present?
   end
 
   def quiz?
     quiz.present?
+  end
+
+  def team_target?
+    role == ROLE_TEAM
   end
 
   # this is included in the target JSONs the DashboardDataService responds with
@@ -201,7 +206,7 @@ class Target < ApplicationRecord
     return if latest_linked_event(founder).timeline_event_grades.blank?
 
     latest_linked_event(founder).timeline_event_grades.each_with_object({}) do |te_grade, grades|
-      grades[te_grade.skill_id] = te_grade.grade
+      grades[te_grade.evaluation_criterion_id] = te_grade.grade
     end
   end
 end

@@ -29,7 +29,7 @@ export default class TimelineEventPanel extends React.Component {
   }
 
   attachmentLinks() {
-    return this.props.event.attachments.map(function(attachment) {
+    return this.props.event.attachments.map(function (attachment) {
       const faClasses =
         attachment.type === "file" ? "fa fa-file-text-o" : "fa fa-link";
 
@@ -53,7 +53,7 @@ export default class TimelineEventPanel extends React.Component {
 
   render() {
     return (
-      <div className="target-overlay-timeline-event-panel__container pb-3 mt-3">
+      <div className="target-overlay-timeline-event-panel__container px-4 pb-3 mt-3">
         <h6 className="target-overlay-timeline-event-panel__title font-semibold pl-1">
           Latest Timeline Submission:
         </h6>

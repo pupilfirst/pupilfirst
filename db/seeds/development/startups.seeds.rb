@@ -6,7 +6,7 @@ after 'development:levels' do
   # Load levels.
   level_0 = Level.zero
   startup_course_level_1 = Level.find_by(name: 'Admissions')
-  startup_course_level_2 = Level.find_by(name: 'Research')
+  startup_course_level_2 = Level.find_by(name: 'Wireframe')
   developer_course_level_1 = Level.find_by(name: 'Planning')
   vr_course_level_1 = Level.find_by(name: 'New Realities')
   ios_course_level_1 = Level.find_by(name: 'iOS First Level')
@@ -32,7 +32,7 @@ after 'development:levels' do
     product_video_link: 'https://www.youtube.com/ourvideo',
     prototype_link: 'https://www.github.com/superstartup',
     wireframe_link: 'https://drive.google.com/superstartup/wireframe',
-    program_started_on: 8.weeks.ago
+    program_started_on: 8.weeks.ago,
   )
 
   # A second 'Avengers' startup.

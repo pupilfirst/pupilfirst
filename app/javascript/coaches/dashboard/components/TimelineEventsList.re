@@ -7,9 +7,10 @@ let make =
       ~timelineEvents,
       ~replaceTimelineEvent,
       ~authenticityToken,
-      ~needsImprovementIconUrl,
       ~notAcceptedIconUrl,
       ~verifiedIconUrl,
+      ~gradeLabels,
+      ~passGrade,
       _children,
     ) => {
   ...component,
@@ -23,9 +24,10 @@ let make =
                timelineEvent=te
                replaceTimelineEvent
                authenticityToken
-               needsImprovementIconUrl
                notAcceptedIconUrl
                verifiedIconUrl
+               gradeLabels
+               passGrade
              />
            )
         |> Array.of_list

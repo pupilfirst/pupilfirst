@@ -1,15 +1,18 @@
 require 'rails_helper'
 
 feature 'Target Overlay' do
+  # TODO: Rewrite a cleaner version
   include UserSpecHelper
 
-  let!(:level_1) { create :level, :one }
+  let(:course) { create :course }
+  let(:criterion) { create :evaluation_criterion, course: course }
+  let!(:level_1) { create :level, :one, course: course }
   let!(:startup) { create :startup, :subscription_active, level: level_1 }
   let!(:founder) { startup.team_lead }
   let!(:target_group_1) { create :target_group, level: level_1, milestone: true }
   let!(:target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM }
   let!(:prerequisite_target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM }
-  let!(:timeline_event) { create :timeline_event, startup: startup, founder: founder, status: TimelineEvent::STATUS_VERIFIED, links: [{ title: 'Some Link', url: 'https://www.example.com', private: false }] }
+  let!(:timeline_event) { create :timeline_event, founders: startup.founders, passed_at: 2.days.ago, links: [{ title: 'Some Link', url: 'https://www.example.com', private: false }], latest: true }
   let!(:timeline_event_file) { create :timeline_event_file, timeline_event: timeline_event }
   let(:faculty) { create :faculty, slack_username: 'abcd' }
   let!(:feedback) { create :startup_feedback, timeline_event: timeline_event, startup: startup, faculty: faculty }
@@ -19,7 +22,7 @@ feature 'Target Overlay' do
   let!(:resource_link) { create :resource_link, targets: [target] }
 
   # Quiz target
-  let!(:quiz_target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM, submittability: Target::SUBMITTABILITY_AUTO_VERIFY }
+  let!(:quiz_target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM }
   let!(:quiz) { create :quiz, target: quiz_target }
   let!(:quiz_question_1) { create :quiz_question, quiz: quiz }
   let!(:q1_answer_1) { create :answer_option, quiz_question: quiz_question_1 }
@@ -34,6 +37,7 @@ feature 'Target Overlay' do
   let!(:q3_answer_2) { create :answer_option, quiz_question: quiz_question_3 }
 
   before do
+    target.evaluation_criteria << criterion
     quiz_question_1.update!(correct_answer: q1_answer_2)
     quiz_question_2.update!(correct_answer: q2_answer_4)
     quiz_question_3.update!(correct_answer: q3_answer_1)
@@ -68,13 +72,13 @@ feature 'Target Overlay' do
       # Within the status badge bar:
       within('.target-overlay__status-badge-block') do
         expect(page).to have_selector('.target-overlay-status-badge-bar__badge-icon > i.fa-clock-o')
-        expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > span', text: 'Pending')
+        expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > div > span', text: 'Pending')
         expect(page).to have_selector('.target-overlay-status-badge-bar__hint', text: 'Follow completion instructions and submit!')
       end
 
       # Test the submit button.
       expect(page).to_not have_selector('.timeline-builder__popup-body')
-      find('.target-overlay__header').find('button.btn-timeline-builder').click
+      find('.target-overlay__status-badge-block').find('button.btn-timeline-builder').click
       expect(page).to have_selector('.timeline-builder__popup-body')
       find('.timeline-builder__modal-close').click # close the timeline builder.
 
@@ -99,7 +103,12 @@ feature 'Target Overlay' do
     end
 
     context 'when the target is auto verified' do
-      let!(:target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM, submittability: Target::SUBMITTABILITY_AUTO_VERIFY }
+      let!(:target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM }
+
+      before do
+        target.target_evaluation_criteria.delete_all
+        visit student_dashboard_path
+      end
 
       it 'displays submit button with correct label' do
         find('.founder-dashboard-target-header__headline', text: target.title).click
@@ -111,7 +120,7 @@ feature 'Target Overlay' do
   end
 
   context 'when the founder clicks on a completed target', js: true do
-    let!(:timeline_event) { create :timeline_event, startup: startup, target: target, founder: founder, status: TimelineEvent::STATUS_VERIFIED, links: [{ title: 'Some Link', url: 'https://www.example.com', private: false }] }
+    let!(:timeline_event) { create :timeline_event, target: target, founders: startup.founders, passed_at: 2.days.ago, links: [{ title: 'Some Link', url: 'https://www.example.com', private: false }], latest: true }
 
     it 'displays the latest submission and feedback for it' do
       find('.founder-dashboard-target-header__headline', text: target.title).click
@@ -144,9 +153,10 @@ feature 'Target Overlay' do
 
   context 'when the founder clicks a founder target', js: true do
     let!(:target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_FOUNDER }
-    let!(:timeline_event) { create :timeline_event, startup: startup, target: target, founder: founder, status: TimelineEvent::STATUS_VERIFIED, links: [{ title: 'Some Link', url: 'https://www.example.com', private: false }] }
+    let!(:timeline_event) { create :timeline_event, target: target, founders: [founder], passed_at: 2.days.ago, links: [{ title: 'Some Link', url: 'https://www.example.com', private: false }], latest: true }
 
     before do
+      timeline_event.founders << founder
       visit student_dashboard_path
     end
 
@@ -174,31 +184,13 @@ feature 'Target Overlay' do
         # The target must be marked locked.
         within('.target-overlay__status-badge-block') do
           expect(page).to have_selector('.target-overlay-status-badge-bar__badge-icon > i.fa-lock')
-          expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > span', text: 'Locked')
-          expect(page).to have_selector('.target-overlay-status-badge-bar__hint', text: 'Complete prerequisites first!')
+          expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > div > span', text: 'Locked')
+          expect(page).to have_selector('.target-overlay-status-badge-bar__hint', text: 'Complete the prerequisites first')
         end
 
         within('.target-overlay-content-block') do
           expect(page).to have_selector('.target-overlay-content-block__prerequisites > h6', text: 'Pending Prerequisites:')
           expect(page).to have_selector(".target-overlay-content-block__prerequisites-list-item > a[href='/student/dashboard/targets/#{prerequisite_target.id}']", text: prerequisite_target.title)
-        end
-      end
-    end
-
-    context 'when the target has is not submittable' do
-      before do
-        target.update!(submittability: Target::SUBMITTABILITY_NOT_SUBMITTABLE)
-        visit student_dashboard_path
-      end
-
-      it 'informs about the pending prerequisite' do
-        find('.founder-dashboard-target-header__headline', text: target.title).click
-
-        # The target must be marked locked.
-        within('.target-overlay__status-badge-block') do
-          expect(page).to have_selector('.target-overlay-status-badge-bar__badge-icon > i.fa-lock')
-          expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > span', text: 'Locked')
-          expect(page).to have_selector('.target-overlay-status-badge-bar__hint', text: 'The target is currently unavailable to complete!')
         end
       end
     end
@@ -210,14 +202,14 @@ feature 'Target Overlay' do
       # The target must be pending.
       within('.target-overlay__status-badge-block') do
         expect(page).to have_selector('.target-overlay-status-badge-bar__badge-icon > i.fa-clock-o')
-        expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > span', text: 'Pending')
+        expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > div > span', text: 'Pending')
         expect(page).to have_selector('.target-overlay-status-badge-bar__hint', text: 'Follow completion instructions and submit!')
       end
 
       # Close pnotify first.
       find('.ui-pnotify').click
 
-      find('.target-overlay__header').find('button.btn-timeline-builder').click
+      find('.target-overlay__status-badge-block').find('button.btn-timeline-builder').click
       expect(page).to have_selector('.timeline-builder__popup-body')
       find('.timeline-builder__textarea').set('Some description')
       find('.js-timeline-builder__submit-button').click
@@ -225,7 +217,7 @@ feature 'Target Overlay' do
       # The target status badge must now say submitted.
       within('.target-overlay__status-badge-block') do
         expect(page).to have_selector('.target-overlay-status-badge-bar__badge-icon > i.fa-hourglass-half')
-        expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > span', text: 'Submitted')
+        expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > div > span', text: 'Submitted')
         expect(page).to have_selector('.target-overlay-status-badge-bar__hint', text: "Submitted on #{Date.today.strftime('%b %-e')}")
       end
     end
@@ -267,7 +259,7 @@ feature 'Target Overlay' do
       # Submit Quiz
       click_button('Submit Quiz')
 
-      expect(page).to have_content("Completed on #{Date.today.strftime('%b %-e')}")
+      expect(page).to have_content("Passed on #{Date.today.strftime('%b %-e')}")
     end
   end
 
@@ -283,6 +275,17 @@ feature 'Target Overlay' do
       expect(page).to_not have_selector('.target-overlay__overlay')
       expect(page).to have_selector('.founder-dashboard-target-group__container')
       expect(page).to have_current_path('/student/dashboard')
+    end
+  end
+
+  context 'when the course, the founder belongs has ended', js: true do
+    before do
+      course.update!(ends_at: 2.days.ago)
+      visit student_dashboard_path
+    end
+    it 'shows appropriate notice that the course has ended' do
+      find('.founder-dashboard-target-header__headline', text: target.title).click
+      expect(page).to_not have_selector('.btn-timeline-builder')
     end
   end
 end

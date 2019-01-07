@@ -7,9 +7,10 @@ module Coaches
         timelineEvents: FacultyModule::ReviewableTimelineEventsService.new(current_coach).timeline_events(view.current_school),
         authenticityToken: view.form_authenticity_token,
         emptyIconUrl: view.image_url('coaches/dashboard/empty_icon.svg'),
-        needsImprovementIconUrl: view.image_url('coaches/dashboard/needs-improvement-icon.svg'),
         notAcceptedIconUrl: view.image_url('coaches/dashboard/not-accepted-icon.svg'),
-        verifiedIconUrl: view.image_url('coaches/dashboard/verified-icon.svg')
+        verifiedIconUrl: view.image_url('coaches/dashboard/verified-icon.svg'),
+        gradeLabels: grade_labels,
+        passGrade: course.pass_grade
       }
     end
 
@@ -34,6 +35,16 @@ module Coaches
           }
         end
       end
+    end
+
+    def course
+      # TODO: Assuming a founder is assinged to one course for now. Rewrite to account for multiple course.
+      current_coach.courses&.first || current_coach.startups.first.course
+    end
+
+    def grade_labels
+      grade_labels = course.grade_labels
+      grade_labels.keys.map { |grade| { grade: grade, label: grade_labels[grade] } }
     end
 
     def logo_url(startup)

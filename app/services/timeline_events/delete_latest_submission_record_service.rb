@@ -8,7 +8,7 @@ module TimelineEvents
 
     def execute
       LatestSubmissionRecord.where(timeline_event: @timeline_event).destroy_all
-      linked_timeline_event = @timeline_event.target.latest_linked_event(@timeline_event.founder, exclude: @timeline_event)
+      linked_timeline_event = @timeline_event.target.latest_linked_event(@timeline_event.founder, @timeline_event)
 
       if linked_timeline_event.present?
         TimelineEvents::UpdateLatestSubmissionRecordService.new(linked_timeline_event).execute

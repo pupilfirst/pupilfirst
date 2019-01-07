@@ -10,18 +10,20 @@ describe TargetsController do
 
   let!(:completion_event) do
     create :timeline_event,
-      startup: startup, founder: startup.team_lead,
       target: completed_prerequisite_target,
-      status: TimelineEvent::STATUS_VERIFIED
+      passed_at: 1.day.ago,
+      founders: [startup.team_lead],
+      latest: true
   end
 
   let!(:founder_target) { create :target, role: Target::ROLE_FOUNDER }
 
   let!(:completion_event_2) do
     create :timeline_event,
-      startup: startup, founder: startup.team_lead,
       target: founder_target,
-      status: TimelineEvent::STATUS_VERIFIED
+      passed_at: 1.day.ago,
+      founders: [startup.team_lead],
+      latest: true
   end
 
   let!(:faculty) { create :faculty }

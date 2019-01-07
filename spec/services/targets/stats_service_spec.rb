@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Targets::StatsService do
+describe Targets::StatsService, broken: true do
   subject { described_class.new(target) }
 
   let(:target) { Target.first }

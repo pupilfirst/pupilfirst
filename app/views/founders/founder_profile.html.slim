@@ -76,12 +76,12 @@ title SV.CO Profile for #{@founder.fullname}
                 p.founder-about.pb-2
                   = @founder.about
                 .education-details
-                  - if @founder.course.present?
+                  - if @founder.startup.course.present?
                     span.course-name
                       i.fa.fa-book
                       | Course:
-                      strong.course-tooltip data-title=@founder.course
-                        = @founder.course
+                      strong.course-tooltip data-title=@founder.startup.course
+                        = @founder.startup.course
                   - if @founder.semester.present?
                     span.semester-name
                       i.fa.fa-flag

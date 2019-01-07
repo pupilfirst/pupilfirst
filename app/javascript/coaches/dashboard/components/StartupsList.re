@@ -28,7 +28,7 @@ let make =
               <button
                 className="startups-list__clear-filter-btn p-0"
                 onClick=(_event => clearStartupCB())>
-                ("Show All" |> str)
+                ("Clear Filter" |> str)
               </button>
             }
           )

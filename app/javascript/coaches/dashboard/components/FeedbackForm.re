@@ -129,14 +129,14 @@ let make =
   render: ({state, send}) => {
     let updateFeedbackCB = updateFeedback(send);
     let latestFeedback = timelineEvent |> TimelineEvent.latestFeedback;
-    <div className="feedback-form__container mt-2">
+    <div className="feedback-form__container mt-3 w-100">
       (
         switch (latestFeedback) {
         | None => ReasonReact.null
         | Some(feedback) =>
           <div className="timeline-event-card__field-box p-3">
             <h5
-              className="timeline-event-card__field-header font-semibold mt-0">
+              className="timeline-event-card__field-header font-bold mt-0">
               ("Latest Feedback Sent:" |> str)
             </h5>
             <div dangerouslySetInnerHTML={"__html": feedback} />
@@ -169,7 +169,7 @@ let make =
           </div>;
         } else {
           <button
-            className="btn btn-ghost-secondary mt-2"
+            className="btn btn-link font-semibold feedback-form__button w-100 p-3"
             onClick=(toggleForm(send))>
             <i className="fa fa-envelope mr-1" />
             (

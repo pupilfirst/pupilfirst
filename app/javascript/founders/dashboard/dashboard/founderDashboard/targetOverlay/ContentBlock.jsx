@@ -65,7 +65,7 @@ export default class ContentBlock extends React.Component {
 
   hasPendingPrerequisites() {
     return (
-      this.props.target.status === "unavailable" &&
+      this.props.target.status === "prerequisite_locked" &&
       this.props.target.prerequisites.length > 0
     );
   }

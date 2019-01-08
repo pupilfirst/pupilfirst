@@ -62,7 +62,7 @@ module Courses
                 .slice(
                   'role', 'title', 'description', 'completion_instructions', 'resource_url', 'slideshow_embed',
                   'faculty_id', 'rubric', 'days_to_complete', 'target_action_type', 'sort_index', 'session_at',
-                  'video_embed', 'last_session_at', 'link_to_complete', 'submittability', 'youtube_video_id',
+                  'video_embed', 'last_session_at', 'link_to_complete', 'youtube_video_id',
                   'call_to_action'
                 )
                 .merge(target_group: new_target_group)

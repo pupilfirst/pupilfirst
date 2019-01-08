@@ -1,4 +1,5 @@
 ActiveAdmin.register TimelineEvent do
+  actions :all, except: [:edit]
   permit_params :description, :image, :event_on, :serialized_links,
     :improved_timeline_event_id, timeline_event_files_attributes: %i[id title file private _destroy]
 

@@ -32,13 +32,6 @@ class TimelineEvent < ApplicationRecord
 
   validates :event_on, presence: true
   validates :description, presence: true
-  validate :founder_and_target_must_not_change
-
-  def founder_and_target_must_not_change
-    return unless persisted? && (founder_id_changed? || target_id_changed?)
-
-    errors[:base] << 'You cannot edit the founder or target of an existing timeline event'
-  end
 
   accepts_nested_attributes_for :timeline_event_files, allow_destroy: true
 

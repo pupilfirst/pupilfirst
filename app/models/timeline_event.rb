@@ -42,11 +42,11 @@ class TimelineEvent < ApplicationRecord
 
   accepts_nested_attributes_for :timeline_event_files, allow_destroy: true
 
-  scope :from_admitted_startups, -> { joins(:startup).merge(Startup.admitted) }
-  scope :from_level_0_startups, -> { joins(:startup).merge(Startup.level_zero) }
-  scope :not_dropped_out, -> { joins(:startup).merge(Startup.not_dropped_out) }
+  scope :from_admitted_startups, -> { joins(:founders).where(founders: { startup: Startup.admitted }) }
+  scope :from_level_0_startups, -> { joins(:founders).where(founders: { startup: Startup.level_zero }) }
+  scope :not_dropped_out, -> { joins(:founders).where(founders: { startup: Startup.not_dropped_out }) }
   scope :has_image, -> { where.not(image: nil) }
-  scope :from_approved_startups, -> { joins(:startup).merge(Startup.approved) }
+  scope :from_approved_startups, -> { joins(:founders).where(founders: { startup: Startup.approved }) }
   scope :not_private, -> { joins(:target).where.not(targets: { role: Target::ROLE_FOUNDER }) }
   scope :not_improved, -> { joins(:target).where(improved_timeline_event_id: nil) }
   scope :not_auto_verified, -> { joins(:evaluation_criteria).distinct }

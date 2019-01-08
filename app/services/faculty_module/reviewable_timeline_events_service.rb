@@ -6,13 +6,12 @@ module FacultyModule
     end
 
     def timeline_events(course)
-      course_startups = Startup.joins(level: :course).where(levels: { courses: { id: course.id } })
-      founder_ids = Founder.where(startup: course_startups).pluck(:id)
+      founder_ids = Founder.where(startup: @faculty.reviewable_startups(course)).select(:id)
 
       TimelineEvent.not_auto_verified.joins(:timeline_event_owners)
+        .includes(:founders, :evaluation_criteria, :timeline_event_files, :startup_feedback, target: :level)
         .where(timeline_event_owners: { founder_id: founder_ids })
-        .includes(:timeline_event_files, :startup_feedback, :target)
-        .order(created_at: :DESC).limit(100).map { |timeline_event| timeline_event_fields(timeline_event) }
+        .order(created_at: :DESC).limit(1).map { |timeline_event| timeline_event_fields(timeline_event) }
     end
 
     def timeline_event_fields(timeline_event)

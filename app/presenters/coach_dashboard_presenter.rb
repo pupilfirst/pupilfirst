@@ -25,18 +25,14 @@ class CoachDashboardPresenter < ApplicationPresenter
   end
 
   def startups
-    @startups ||= begin
-      course_startups = Startup.joins(level: :course).where(courses: { id: @course.id })
-
-      course_startups.map do |startup|
-        {
-          name: startup.product_name,
-          id: startup.id,
-          levelNumber: startup.level.number,
-          levelName: startup.level.name,
-          logoUrl: logo_url(startup)
-        }
-      end
+    current_coach.reviewable_startups(@course).includes(:level).map do |startup|
+      {
+        name: startup.product_name,
+        id: startup.id,
+        levelNumber: startup.level.number,
+        levelName: startup.level.name,
+        logoUrl: logo_url(startup)
+      }
     end
   end
 

@@ -149,4 +149,8 @@ class Faculty < ApplicationRecord
   end
 
   delegate :email, to: :user
+
+  def reviewable_startups(course)
+    course.in?(courses) ? course.startups : course.startups.merge(startups)
+  end
 end

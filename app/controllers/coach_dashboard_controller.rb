@@ -2,8 +2,7 @@ class CoachDashboardController < ApplicationController
   before_action :authenticate_user!
 
   def show
-    # authorize %i[coaches dashboard]
-    @course = Course.find(params[:course_id])
+    @course = authorize(Course.find(params[:course_id]), policy_class: CoachDashboardPolicy)
     @skip_container = true
   end
 end

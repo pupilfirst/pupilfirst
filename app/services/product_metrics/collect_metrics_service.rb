@@ -97,7 +97,7 @@ module ProductMetrics
     end
 
     def count_timeline_events
-      TimelineEvent.verified.joins(:startup).merge(Startup.admitted).count
+      TimelineEvent.evaluated_by_faculty.joins(:founders).where(founders: { startup: Startup.admitted })
     end
   end
 end

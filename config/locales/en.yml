@@ -237,8 +237,8 @@ en:
           description_html: "SV.CO regularly publishes stories showcasing the incredible work done by students."
           delta_verb: posted
         timeline_events:
-          heading: "Timeline Events Verified"
-          description_html: "We verify all timeline updates by our admitted teams to showcase their journey"
+          heading: "Submissions Evaluated"
+          description_html: "We evaluate all submissions by our admitted teams to guide them in their learning"
           delta_verb: sumbitted
         hours_of_learning:
           heading: "Hours of Learning"

@@ -1,7 +1,9 @@
 module Founders
-  class ProfilePresenter < ApplicationPresenter
-    def initialize(event)
+  class TimelinePanelPresenter < ApplicationPresenter
+    def initialize(event, founder, current_founder)
       @event = event
+      @founder = founder
+      @current_founder = current_founder
     end
 
     def detailed_description
@@ -22,6 +24,30 @@ module Founders
       else
         I18n.t('startups.show.timeline_cards.needs_improvement.status_text')
       end
+    end
+
+    def review_pending?
+      @event.evaluator_id.blank? && @event.passed_at.blank?
+    end
+
+    def not_accepted?
+      @event.evaluator_id.present? && @event.passed_at.blank?
+    end
+
+    def improved_event?
+      @founder.startup.earliest_team_event_date.present? && !@event.founder_event? && @event.passed_at.present?
+    end
+
+    def founder?
+      @current_founder && (@current_founder == @founder)
+    end
+
+    def founder_not_exited?
+      @current_founder && !@current_founder.exited && (@current_founder == @founder)
+    end
+
+    def attachments
+      @event.attachments_for_founder(@current_founder)
     end
 
     private

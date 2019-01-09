@@ -19,6 +19,20 @@ class TimelineEventPolicy < ApplicationPolicy
     true
   end
 
+  def show?(timeline_event)
+    return false if timeline_event.blank?
+
+    if timeline_event.founder_event?
+      # Show founder events only to the founder who posted it.
+      timeline_event.founders.present? && timeline_event.founders.first == current_founder
+    else
+      # Show verified events to everyone, and non-verified events to startup founders.
+      return true if timeline_event.passed_at.present?
+
+      timeline_event.founders.in?(current_founder)
+    end
+  end
+
   def review?
     coach = user.faculty
 

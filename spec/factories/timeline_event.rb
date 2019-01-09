@@ -2,7 +2,6 @@ FactoryBot.define do
   factory :timeline_event do
     description { Faker::Lorem.words(10).join ' ' }
     event_on { 1.month.from_now }
-    status_updated_at { Time.zone.now }
     target
 
     factory :timeline_event_with_image do

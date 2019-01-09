@@ -1,4 +1,4 @@
-ruby '2.5.3'
+ruby '2.6.0'
 
 source 'https://rubygems.org'
 
@@ -98,7 +98,7 @@ gem 'bootstrap4-kaminari-views', '= 1.0.0', github: 'mahesh-krishnakumar/bootstr
 gem 'data_migrate', '~> 5.1' # Run data migrations alongside schema migrations.
 
 # Omniauth providers
-gem 'omniauth-google-oauth2', '~> 0.4' # Oauth2 strategy for Google
+gem 'omniauth-google-oauth2', '~> 0.6' # Oauth2 strategy for Google
 gem 'omniauth-facebook', '~> 5.0' # Facebook OAuth2 Strategy for OmniAuth http://mkdynamic.github.com/omniauth-facebook
 gem 'omniauth-github', '~> 1.2' # GitHub strategy for OmniAuth
 
@@ -166,8 +166,8 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.5' # Duh.
   gem 'coderay', '~> 1.1' # Pretty syntax highlighting on rspec failure snippets.
   gem 'pry-rails', '~> 0.3.5' # Pry debugger.
-  gem 'webmock', '~> 3.0' # Mocking web requests.
-  gem 'rubocop', '~> 0.60', require: false # Ruby Style Guide.
+  gem 'webmock', '~> 3.5' # Mocking web requests.
+  gem 'rubocop', '~> 0.62', require: false # Ruby Style Guide.
   gem 'bundler-audit', '~> 0.5', require: false # Audit gems in gemfile.lock for reported vulnerabilities
   gem 'overcommit', '~> 0.38', require: false # A fully configurable and extendable Git hook manager
   gem 'fuubar', '~> 2.2' # The instafailing RSpec progress bar formatter.

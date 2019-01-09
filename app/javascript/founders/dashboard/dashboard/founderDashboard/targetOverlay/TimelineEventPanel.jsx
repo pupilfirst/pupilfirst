@@ -18,6 +18,7 @@ export default class TimelineEventPanel extends React.Component {
             this.props.feedback.facultySlackUsername
           }
           target="_blank"
+          rel="noopener"
         >
           <i className="fa fa-slack" aria-hidden="true" />
           <span>Discuss On Slack</span>
@@ -29,7 +30,7 @@ export default class TimelineEventPanel extends React.Component {
   }
 
   attachmentLinks() {
-    return this.props.event.attachments.map(function (attachment) {
+    return this.props.event.attachments.map(function(attachment) {
       const faClasses =
         attachment.type === "file" ? "fa fa-file-text-o" : "fa fa-link";
 
@@ -37,6 +38,7 @@ export default class TimelineEventPanel extends React.Component {
         <a
           className="target-overlay__link target-overlay__link--attachment"
           target="_blank"
+          rel="noopener"
           href={attachment.url}
           key={attachment.url}
         >

@@ -30,7 +30,6 @@ module FacultyModule
         title: title(timeline_event),
         description: timeline_event.description,
         eventOn: timeline_event.event_on,
-        status: timeline_event.status,
         startupId: timeline_event.founders.first&.startup_id,
         startupName: timeline_event.startup.product_name,
         founders: timeline_event.founders.map { |founder| { id: founder.id, name: founder.name } },

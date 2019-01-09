@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_28_111529) do
+ActiveRecord::Schema.define(version: 2019_01_08_114740) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -304,18 +304,6 @@ ActiveRecord::Schema.define(version: 2018_12_28_111529) do
     t.index ["founder_id"], name: "index_karma_points_on_founder_id"
     t.index ["source_id"], name: "index_karma_points_on_source_id"
     t.index ["startup_id"], name: "index_karma_points_on_startup_id"
-  end
-
-  create_table "latest_submission_records", force: :cascade do |t|
-    t.bigint "founder_id"
-    t.bigint "target_id"
-    t.bigint "timeline_event_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["founder_id", "target_id"], name: "index_latest_submission_records_on_founder_id_and_target_id", unique: true
-    t.index ["founder_id"], name: "index_latest_submission_records_on_founder_id"
-    t.index ["target_id"], name: "index_latest_submission_records_on_target_id"
-    t.index ["timeline_event_id"], name: "index_latest_submission_records_on_timeline_event_id"
   end
 
   create_table "levels", id: :serial, force: :cascade do |t|
@@ -627,7 +615,6 @@ ActiveRecord::Schema.define(version: 2018_12_28_111529) do
     t.datetime "last_session_at"
     t.string "key"
     t.string "link_to_complete"
-    t.string "submittability", default: "resubmittable", null: false
     t.boolean "archived", default: false
     t.string "youtube_video_id"
     t.string "google_calendar_event_id"
@@ -673,23 +660,16 @@ ActiveRecord::Schema.define(version: 2018_12_28_111529) do
   create_table "timeline_events", id: :serial, force: :cascade do |t|
     t.text "description"
     t.string "image"
-    t.integer "startup_id"
     t.text "links"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "event_on"
-    t.datetime "status_updated_at"
-    t.string "status"
-    t.integer "founder_id"
     t.integer "improved_timeline_event_id"
     t.integer "target_id"
     t.decimal "score", precision: 2, scale: 1
     t.integer "evaluator_id"
     t.datetime "passed_at"
     t.boolean "latest"
-    t.index ["founder_id"], name: "index_timeline_events_on_founder_id"
-    t.index ["startup_id"], name: "index_timeline_events_on_startup_id"
-    t.index ["status"], name: "index_timeline_events_on_status"
   end
 
   create_table "tracks", force: :cascade do |t|
@@ -785,9 +765,6 @@ ActiveRecord::Schema.define(version: 2018_12_28_111529) do
   add_foreign_key "faculty_startup_enrollments", "startups"
   add_foreign_key "founders", "colleges"
   add_foreign_key "founders", "users"
-  add_foreign_key "latest_submission_records", "founders"
-  add_foreign_key "latest_submission_records", "targets"
-  add_foreign_key "latest_submission_records", "timeline_events"
   add_foreign_key "levels", "courses"
   add_foreign_key "payments", "founders"
   add_foreign_key "payments", "startups"
@@ -808,7 +785,6 @@ ActiveRecord::Schema.define(version: 2018_12_28_111529) do
   add_foreign_key "target_resources", "targets"
   add_foreign_key "timeline_event_files", "timeline_events"
   add_foreign_key "timeline_events", "faculty", column: "evaluator_id"
-  add_foreign_key "timeline_events", "startups"
   add_foreign_key "user_activities", "users"
   add_foreign_key "weekly_karma_points", "levels"
   add_foreign_key "weekly_karma_points", "startups"

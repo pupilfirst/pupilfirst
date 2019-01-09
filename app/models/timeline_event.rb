@@ -32,26 +32,20 @@ class TimelineEvent < ApplicationRecord
 
   validates :event_on, presence: true
   validates :description, presence: true
-  validate :founder_and_target_must_not_change
-
-  def founder_and_target_must_not_change
-    return unless persisted? && (founder_id_changed? || target_id_changed?)
-
-    errors[:base] << 'You cannot edit the founder or target of an existing timeline event'
-  end
 
   accepts_nested_attributes_for :timeline_event_files, allow_destroy: true
 
-  scope :from_admitted_startups, -> { joins(:startup).merge(Startup.admitted) }
-  scope :from_level_0_startups, -> { joins(:startup).merge(Startup.level_zero) }
-  scope :not_dropped_out, -> { joins(:startup).merge(Startup.not_dropped_out) }
+  scope :from_admitted_startups, -> { joins(:founders).where(founders: { startup: Startup.admitted }) }
+  scope :from_level_0_startups, -> { joins(:founders).where(founders: { startup: Startup.level_zero }) }
+  scope :not_dropped_out, -> { joins(:founders).where(founders: { startup: Startup.not_dropped_out }) }
   scope :has_image, -> { where.not(image: nil) }
-  scope :from_approved_startups, -> { joins(:startup).merge(Startup.approved) }
+  scope :from_approved_startups, -> { joins(:founders).where(founders: { startup: Startup.approved }) }
   scope :not_private, -> { joins(:target).where.not(targets: { role: Target::ROLE_FOUNDER }) }
   scope :not_improved, -> { joins(:target).where(improved_timeline_event_id: nil) }
   scope :not_auto_verified, -> { joins(:evaluation_criteria).distinct }
   scope :auto_verified, -> { where.not(id: not_auto_verified) }
   scope :passed, -> { where.not(passed_at: nil) }
+  scope :evaluated_by_faculty, -> { where.not(evaluator_id: nil) }
 
   after_initialize :make_links_an_array
 

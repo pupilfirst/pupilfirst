@@ -36,12 +36,9 @@ class ResourcePolicy < ApplicationPolicy
     end
 
     def target_resource_ids(course)
-      allowed_target_ids = course.levels.map do |level|
-        level.target_groups.map do |target_group|
-          target_group.targets.pluck(:id)
-        end
-      end
-      TargetResource.where(target_id: allowed_target_ids.flatten).pluck(:resource_id)
+      allowed_target_ids = course.targets.pluck(:id)
+
+      TargetResource.where(target_id: allowed_target_ids).pluck(:resource_id)
     end
   end
 end

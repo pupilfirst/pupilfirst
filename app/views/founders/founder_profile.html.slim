@@ -1,5 +1,5 @@
-- content_for :head
-title SV.CO Profile for #{@founder.fullname}
+- content_for(:head) do
+  title SV.CO Profile for #{@founder.fullname}
 
 #founder__founder-profile
 
@@ -47,28 +47,28 @@ title SV.CO Profile for #{@founder.fullname}
               - if @founder.social_url_present?
                 .col-lg-6.social-connect.px-0.mt-3.mt-lg-0.text-center.text-md-left.text-lg-right
                   - if @founder.personal_website_url.present?
-                    a href=@founder.personal_website_url target='_blank'
+                    a href=@founder.personal_website_url target='_blank' rel='noopener'
                       i.fa.fa-globe
                   - if @founder.linkedin_url.present?
-                    a href=@founder.linkedin_url target='_blank'
+                    a href=@founder.linkedin_url target='_blank' rel='noopener'
                       i.fa.fa-linkedin
                   - if @founder.facebook_url.present?
-                    a href=@founder.facebook_url target='_blank'
+                    a href=@founder.facebook_url target='_blank' rel='noopener'
                       i.fa.fa-facebook
                   - if @founder.twitter_url.present?
-                    a href=@founder.twitter_url target='_blank'
+                    a href=@founder.twitter_url target='_blank' rel='noopener'
                       i.fa.fa-twitter
                   - if @founder.behance_url.present?
-                    a href=@founder.behance_url target='_blank'
+                    a href=@founder.behance_url target='_blank' rel='noopener'
                       i.fa.fa-behance
                   - if @founder.github_url.present?
-                    a href=@founder.github_url target='_blank'
+                    a href=@founder.github_url target='_blank' rel='noopener'
                       i.fa.fa-github
                   - if @founder.angel_co_url.present?
-                    a href=@founder.angel_co_url target='_blank'
+                    a href=@founder.angel_co_url target='_blank' rel='noopener'
                       i.fa.fa-angellist
                   - if @founder.blog_url.present?
-                    a href=@founder.blog_url target='_blank'
+                    a href=@founder.blog_url target='_blank' rel='noopener'
                       i.fa.fa-rss
 
             .profile-detail.d-md-flex.pt-3
@@ -96,7 +96,7 @@ title SV.CO Profile for #{@founder.fullname}
                         = @founder.year_of_graduation
               .col-md-3.d-flex.resume-link-section.px-sm-0.mt-3.mt-md-0.justify-content-center.align-items-center
                 - if @founder.resume_link.present?
-                  a.btn.btn-ghost-secondary.btn-with-icon.btn-xs target="_blank" href=short_url(@founder.resume_link)
+                  a.btn.btn-ghost-secondary.btn-with-icon.btn-xs target="_blank" href=short_url(@founder.resume_link) rel='noopener'
                     i.fa.fa-file-text-o
                     span View Resume
         - if @founder.startup&.logo.present?

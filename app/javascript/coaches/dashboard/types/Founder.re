@@ -12,3 +12,6 @@ let decode = json =>
     name: json |> field("name", string),
     id: json |> field("id", int),
   };
+
+let founderNames = (founders: list(t)) =>
+  founders |> List.map(founder => founder.name) |> String.concat(", ");

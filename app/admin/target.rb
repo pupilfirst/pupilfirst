@@ -64,7 +64,7 @@ ActiveAdmin.register Target do
   show do |target|
     if target.evaluation_criteria.present? && target.timeline_events.exists?
       div do
-        table_for target.timeline_events.includes(:founder, :startup).where(timeline_events: { created_at: 3.months.ago..Time.now }) do
+        table_for target.timeline_events.where(timeline_events: { created_at: 3.months.ago..Time.now }) do
           caption 'Linked Timeline Events (up to 3 months ago)'
 
           column 'Timeline Event' do |timeline_event|
@@ -323,7 +323,7 @@ ActiveAdmin.register Target do
       f.input :rubric, as: :file
       f.input :remote_rubric_url
       f.input :resubmittable
-      f.input :evaluation_criteria, as: :select, collection: EvaluationCriterion.all.map { |ec| [ec.display_name.to_s, ec.id] }
+      f.input :evaluation_criteria, as: :select, collection: EvaluationCriterion.all.map { |ec| [ec.display_name.to_s, ec.id] }, include_blank: 'No evaluation criteria'
     end
 
     f.actions

@@ -30,7 +30,7 @@ changelog:
       admin dashboard goes live).
     category: feature
   - timestamp: '2018-12-17T09:40:36Z'
-    title: Remove facebook share feature
+    title: The facebook share feature has been removed from the timeline event builder.
     trello: https://trello.com/c/hCt66WwK
     private: false
     description: The Facebook share feature was designed for sharing major timeline

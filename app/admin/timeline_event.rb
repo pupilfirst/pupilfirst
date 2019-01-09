@@ -1,10 +1,9 @@
 ActiveAdmin.register TimelineEvent do
+  actions :all, except: [:edit]
   permit_params :description, :image, :event_on, :serialized_links,
     :improved_timeline_event_id, timeline_event_files_attributes: %i[id title file private _destroy]
 
-  filter :startup_product_name, as: :string, label: 'Product Name'
-  filter :startup_name, as: :string, label: 'Startup Name'
-  filter :founder_name, as: :string
+  filter :founders_name, as: :string
   filter :evaluated
   filter :created_at
 
@@ -21,19 +20,19 @@ ActiveAdmin.register TimelineEvent do
   index do
     selectable_column
 
-    # column :product do |timeline_event|
-    #   startup = timeline_event.startup
-    #
-    #   a href: admin_startup_path(startup) do
-    #     span startup.product_name
-    #
-    #     if startup.name.present?
-    #       span class: 'wrap-with-paranthesis' do
-    #         startup.name
-    #       end
-    #     end
-    #   end
-    # end
+    column :product do |timeline_event|
+      startup = timeline_event.startup
+
+      a href: admin_startup_path(startup) do
+        span startup.product_name
+
+        if startup.name.present?
+          span class: 'wrap-with-paranthesis' do
+            startup.name
+          end
+        end
+      end
+    end
 
     column 'Founder', :founder
 
@@ -124,11 +123,7 @@ ActiveAdmin.register TimelineEvent do
   end
 
   action_item :view, only: :show do
-    link_to('View Timeline Entry', timeline_event.share_url, target: '_blank')
-  end
-
-  action_item :view, only: :show, if: proc { timeline_event.reviewed? } do
-    link_to('Undo Review', undo_review_admin_timeline_event_path(timeline_event, redirect: true), method: 'POST', data: { confirm: 'Are you sure? This will rollback all (possible) changes that were a result of the verification.' })
+    link_to('View Timeline Entry', timeline_event.share_url, target: '_blank', rel: 'noopener')
   end
 
   action_item :feedback, only: :show do
@@ -239,7 +234,7 @@ ActiveAdmin.register TimelineEvent do
         column :title
 
         column :file do |timeline_event_file|
-          link_to timeline_event_file.filename, timeline_event_file.file.url, target: '_blank'
+          link_to timeline_event_file.filename, timeline_event_file.file.url, target: '_blank', rel: 'noopener'
         end
 
         column :private
@@ -247,11 +242,11 @@ ActiveAdmin.register TimelineEvent do
 
       table_for timeline_event.links do
         column :title do |link|
-          link_to link[:title], link[:url], target: '_blank'
+          link_to link[:title], link[:url], target: '_blank', rel: 'noopener'
         end
 
         column :url do |link|
-          link_to link[:url], link[:url], target: '_blank'
+          link_to link[:url], link[:url], target: '_blank', rel: 'noopener'
         end
 
         column :private do |link|

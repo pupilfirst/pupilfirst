@@ -44,7 +44,7 @@ ActiveAdmin.register PlatformFeedback do
 
       row :attachment do
         if feedback.attachment.present?
-          link_to feedback.attachment_filename, feedback.attachment.url, target: '_blank'
+          link_to feedback.attachment_filename, feedback.attachment.url, target: '_blank', rel: 'noopener'
         end
       end
 

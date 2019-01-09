@@ -43,7 +43,7 @@ class ApplicationController < ActionController::Base
     elsif resource.is_a?(AdminUser)
       super
     else
-      Users::AfterSignInPathResolverService.new(resource).after_sign_in_path
+      Users::AfterSignInPathResolverService.new(resource).after_sign_in_path(current_school)
     end
   end
 

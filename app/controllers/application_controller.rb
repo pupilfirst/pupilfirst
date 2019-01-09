@@ -81,6 +81,10 @@ class ApplicationController < ActionController::Base
     @current_startup ||= current_founder.startup
   end
 
+  def current_school_admin
+    @current_school_admin ||= current_user.school_admins.find_by(school: current_school)
+  end
+
   # sets a permanent signed cookie. Additional options such as :tld_length can be passed via the options_hash
   # eg: set_cookie(:token, 'abcd', { 'tld_length' => 1 })
   def set_cookie(key, value, options_hash = {})
@@ -140,6 +144,14 @@ class ApplicationController < ActionController::Base
 
     return if current_founder.present? && !current_founder.exited?
 
+    redirect_to root_path
+  end
+
+  def authenticate_school_admin!
+    authenticate_user!
+    return if current_school_admin.present?
+
+    flash[:error] = 'You are not an admin of this school.'
     redirect_to root_path
   end
 

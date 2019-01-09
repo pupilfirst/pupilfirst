@@ -27,7 +27,7 @@ class TimelineEventsController < ApplicationController
     timeline_event.destroy!
     flash[:success] = 'Timeline event deleted!'
 
-    redirect_back(fallback_location: product_path(current_startup.id, current_startup.slug))
+    redirect_back(fallback_location: student_path(current_founder.slug))
   end
 
   # POST /timeline_events/:id/review

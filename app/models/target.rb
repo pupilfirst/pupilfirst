@@ -45,7 +45,6 @@ class Target < ApplicationRecord
   has_many :evaluation_criteria, through: :target_evaluation_criteria
   has_one :level, through: :target_group
   has_one :course, through: :target_group
-  has_many :latest_submission_records, dependent: :restrict_with_error
   has_one :quiz, dependent: :restrict_with_error
 
   acts_as_taggable

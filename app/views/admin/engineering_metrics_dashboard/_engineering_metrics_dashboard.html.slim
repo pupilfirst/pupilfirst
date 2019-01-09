@@ -36,7 +36,7 @@
     - if @presenter.codecov_badge_url.present?
       span
         ' &nbsp;
-        a href='https://codecov.io/gh/SVdotCO/sv.co' target='_blank'
+        a href='https://codecov.io/gh/SVdotCO/sv.co' target='_blank' rel='noopener'
           = image_tag @presenter.codecov_badge_url
 
   #engineering-metrics-dashboard__coverage data-chart-data=@presenter.trend(:coverage).to_json

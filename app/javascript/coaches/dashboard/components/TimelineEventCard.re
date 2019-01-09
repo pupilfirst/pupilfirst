@@ -12,6 +12,7 @@ let teImage = timelineEvent =>
       <a
         href=url
         target="_blank"
+        rel="noopener"
         className="badge badge-secondary font-regular mr-2">
         <i className="fa fa-file-image-o mr-1" />
         ("Cover Image" |> str)
@@ -30,6 +31,7 @@ let teLinks = timelineEvent =>
              <a
                href=(link |> Link.url)
                target="_blank"
+               rel="noopener"
                className="badge badge-secondary font-regular mr-2"
                key=(link |> Link.url)>
                (
@@ -59,6 +61,7 @@ let teFiles = timelineEvent =>
              <a
                href=url
                target="_blank"
+               rel="noopener"
                className="badge badge-secondary font-regular mr-2"
                key=id>
                <i className="fa fa-file mr-1" />
@@ -119,8 +122,7 @@ let make =
                 (
                   timelineEvent
                   |> TimelineEvent.founders
-                  |> List.hd
-                  |> Founder.name
+                  |> Founder.founderNames
                 )
                 ++ " ("
                 ++ (timelineEvent |> TimelineEvent.startupName)

@@ -120,7 +120,9 @@
 }
 
 .target-overlay-status-badge-bar__grades-header {
-  margin-top: 1rem;
+  border-bottom: 1px solid $gray-border;
+  color: $light-grey-text;
+  font-size: 0.8125rem;
 }
 
 .ripple-effect {
@@ -428,15 +430,28 @@
 
 .target-overlay__content-rightbar {
   background-color: $primary-background;
-  border: 1px solid $gray-border;
-  border-width: 0 0 0 1px;
-
-  @include media-breakpoint-down (sm) {
-    border-width: 1px 0 0 0;
-  }
+  position: relative;
 
   &:last-child {
     border-bottom: 0;
+  }
+
+  &:before {
+    position: absolute;
+    content: '';
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    border-left: 1px solid $gray-border;
+  }
+
+  @include media-breakpoint-down (sm) {
+    border-width: 1px 0 0 0;
+
+    &:before {
+      border: 0;
+    }
   }
 }
 
@@ -622,13 +637,15 @@
 }
 
 .target-overlay-grade-bar__container {
-  padding: 0 15px;
+  padding: 0 1.5rem;
+  background-color: white;
 }
 
 .target-overlay-grade-bar__track {
   background-color: rgba(244, 244, 244, 0.5);
   border: 1px solid #d8d8d8;
   border-radius: 3rem;
+  overflow: hidden;
   box-shadow: 0 2px 4px 0px rgba(0, 0, 0, 0.05);
 }
 

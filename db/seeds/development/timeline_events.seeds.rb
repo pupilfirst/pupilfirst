@@ -13,7 +13,6 @@ after 'development:founders', 'development:targets' do
       founders: [startup.team_lead],
       event_on: Time.now,
       description: Faker::Lorem.paragraph,
-      status_updated_at: Time.now,
       latest: true
     )
 

@@ -412,7 +412,7 @@ ActiveAdmin.register Founder do
       attributes_table_for founder do
         row :identification_proof do
           if founder.identification_proof.present?
-            link_to 'Click here to open in new window', founder.identification_proof.url, target: '_blank'
+            link_to 'Click here to open in new window', founder.identification_proof.url, target: '_blank', rel: 'noopener'
           end
         end
         row :id_proof_type
@@ -420,17 +420,17 @@ ActiveAdmin.register Founder do
         row :permanent_address
         row :address_proof do
           if founder.address_proof.present?
-            link_to 'Click here to open in new window', founder.address_proof.url, target: '_blank'
+            link_to 'Click here to open in new window', founder.address_proof.url, target: '_blank', rel: 'noopener'
           end
         end
         row :income_proof do
           if founder.income_proof.present?
-            link_to 'Click here to open in new window', founder.income_proof.url, target: '_blank'
+            link_to 'Click here to open in new window', founder.income_proof.url, target: '_blank', rel: 'noopener'
           end
         end
         row :letter_from_parent do
           if founder.letter_from_parent.present?
-            link_to 'Click here to open in new window', founder.letter_from_parent.url, target: '_blank'
+            link_to 'Click here to open in new window', founder.letter_from_parent.url, target: '_blank', rel: 'noopener'
           end
         end
       end

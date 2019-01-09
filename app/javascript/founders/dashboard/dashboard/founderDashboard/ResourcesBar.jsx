@@ -48,6 +48,7 @@ export default class ResourcesBar extends React.Component {
           <a
             className="btn btn-with-icon btn-sm btn-ghost-secondary text-uppercase mr-2 mb-2"
             target="_blank"
+            rel="noopener"
             href={this.props.target.resource_url}
           >
             <i className="fa fa-book" />

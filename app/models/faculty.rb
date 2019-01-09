@@ -153,4 +153,10 @@ class Faculty < ApplicationRecord
   def reviewable_startups(course)
     course.in?(courses) ? course.startups.admitted : course.startups.admitted.merge(startups)
   end
+
+  def courses_with_dashboard
+    startup_levels = Level.where(id: startups.select(:level_id))
+    startup_courses = Course.where(id: startup_levels.select(:course_id))
+    (courses + startup_courses).uniq
+  end
 end

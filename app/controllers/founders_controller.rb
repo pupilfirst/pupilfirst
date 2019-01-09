@@ -1,12 +1,17 @@
 class FoundersController < ApplicationController
-  before_action :authenticate_founder!, except: %i[show founder_profile paged_events timeline_event_show]
-  before_action :skip_container, only: %i[show founder_profile fee fee_submit paged_events timeline_event_show]
+  before_action :authenticate_founder!, except: %i[show paged_events timeline_event_show]
+  before_action :skip_container, only: %i[show fee fee_submit paged_events timeline_event_show]
   before_action :require_active_subscription, only: %i[edit update]
 
   # GET /students/:slug
-  def founder_profile
-    show
-    render 'founder_profile'
+  def show
+    @founder = Founder.friendly.find(params[:slug])
+    @meta_description = "#{@founder.name}: #{@founder.startup.name}"
+
+    handle_feedback if params[:show_feedback].present?
+    # Hide founder events from everyone other than author of event.
+    @timeline_events = events_for_display.reject { |event| event.hidden_from?(current_founder) }
+    @timeline_events = Kaminari.paginate_array(@timeline_events).page(params[:page]).per(20)
   end
 
   # GET /students/:id/events/:page
@@ -90,7 +95,7 @@ class FoundersController < ApplicationController
       raise_not_found
     end
 
-    render 'founder_profile'
+    render 'show'
   end
 
   # POST /founders/:slug/select
@@ -108,16 +113,6 @@ class FoundersController < ApplicationController
 
   def skip_container
     @skip_container = true
-  end
-
-  def show
-    @founder = Founder.friendly.find(params[:slug])
-    @meta_description = "#{@founder.name}: #{@founder.startup.name}"
-
-    handle_feedback if params[:show_feedback].present?
-    # Hide founder events from everyone other than author of event.
-    @timeline_events = events_for_display.reject { |event| event.hidden_from?(current_founder) }
-    @timeline_events = Kaminari.paginate_array(@timeline_events).page(params[:page]).per(20)
   end
 
   def handle_feedback

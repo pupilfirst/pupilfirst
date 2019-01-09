@@ -180,7 +180,7 @@ Rails.application.routes.draw do
 
   # Custom founder profile page.
   scope 'students', controller: 'founders' do
-    get '/:slug', action: 'founder_profile', as: 'student_profile'
+    get '/:slug', action: 'show', as: 'student_profile'
     get '/:slug/events/:page', action: 'paged_events', as: 'paged_events'
     get '/:slug/e/:event_id/:event_title', action: 'timeline_event_show', as: 'student_timeline_event_show'
   end

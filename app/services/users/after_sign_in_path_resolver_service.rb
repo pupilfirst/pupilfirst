@@ -17,10 +17,10 @@ module Users
     private
 
     def faculty_path
-      return if @user.faculty.blank?
-      return if @user.faculty.courses.blank? && @user.faculty.startups.blank?
+      courses_with_review_dashboard = @user.faculty&.courses_with_dashboard
+      return if courses_with_review_dashboard.blank?
 
-      url_helpers.coaches_dashboard_path
+      url_helpers.course_coach_dashboard_path(courses_with_review_dashboard.first)
     end
 
     def admin_path

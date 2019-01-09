@@ -13,9 +13,8 @@ module Startups
     ELIGIBILITY_COFOUNDERS_PENDING = -'cofounders_pending'
     ELIGIBILITY_DATE_LOCKED = -'date_locked'
     ELIGIBLE_STATUSES = [
-      Target::STATUS_COMPLETE,
-      Target::STATUS_SUBMITTED,
-      Target::STATUS_NEEDS_IMPROVEMENT
+      Targets::StatusService::STATUS_SUBMITTED,
+      Targets::StatusService::STATUS_PASSED
     ].freeze
 
     def eligible?

@@ -29,7 +29,7 @@ export default class Link extends React.Component {
           &nbsp;{this.props.title}
         </th>
         <td>
-          <a href={this.props.url} target="_blank">
+          <a href={this.props.url} target="_blank" rel="noopener">
             {this.props.url}
           </a>
           &nbsp;(<a onClick={this.editLinkClicked}>Edit</a> /{" "}

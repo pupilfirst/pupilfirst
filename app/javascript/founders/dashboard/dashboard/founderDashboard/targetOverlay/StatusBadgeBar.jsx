@@ -1,109 +1,167 @@
 import React from "react";
 import PropTypes from "prop-types";
-import starsForScore from "../shared/starsForScore";
+import SubmitButton from "./SubmitButton";
 
 export default class StatusBadgeBar extends React.Component {
-  containerClasses() {
-    let classes = "target-overlay-status-badge-bar__badge-container";
-    let statusClass = this.props.target.status.replace("_", "-");
-    classes += " " + statusClass;
-    return classes;
+  statusClass() {
+    return this.props.target.status.replace("_", "-");
   }
 
   statusIconClasses() {
     return {
-      complete: "fa fa-thumbs-o-up",
-      needs_improvement: "fa fa-line-chart",
+      passed: "fa fa-thumbs-o-up",
+      failed: "fa fa-thumbs-o-down",
       submitted: "fa fa-hourglass-half",
       pending: "fa fa-clock-o",
-      unavailable: "fa fa-lock",
-      not_accepted: "fa fa-thumbs-o-down",
-      level_locked: "fa fa-eye",
-      pending_milestone: "fa fa-lock"
+      prerequisite_locked: "fa fa-lock",
+      milestone_locked: "fa fa-lock",
+      level_locked: "fa fa-eye"
     }[this.props.target.status];
   }
 
   statusString() {
     return {
-      complete: "Completed",
-      needs_improvement: "Needs Improvement",
+      passed: "Passed",
+      failed: "Failed",
       submitted: "Submitted",
       pending: "Pending",
-      unavailable: "Locked",
-      not_accepted: "Not Accepted",
       level_locked: "Preview",
-      pending_milestone: "Locked"
+      milestone_locked: "Locked",
+      prerequisite_locked: "Locked"
     }[this.props.target.status];
   }
 
   statusHintString() {
     return {
-      complete: "Completed on " + this.submissionDate(),
-      needs_improvement: "Consider feedback and try re-submitting!",
+      passed: "Passed on " + this.submissionDate(),
+      failed: "Consider feedback and try re-submitting!",
       submitted: "Submitted on " + this.submissionDate(),
       pending: "Follow completion instructions and submit!",
-      unavailable: this.lockedTargetHintString(),
-      not_accepted: "Re-submit based on feedback!",
-      level_locked: "Complete previous levels to work on this target!",
-      pending_milestone: "Complete milestone targets in previous level!"
+      level_locked: "You are yet to reach this level",
+      milestone_locked: "Complete milestones in previous level first",
+      prerequisite_locked: "Complete the prerequisites first"
     }[this.props.target.status];
+  }
+
+  gradePillModifierClass(criterionId) {
+    let modifierClass =
+      this.props.target.grades[criterionId] < this.props.rootProps.passGrade
+        ? "target-overlay-grade-bar__grade-pill--failed"
+        : "target-overlay-grade-bar__grade-pill--passed";
+    return modifierClass;
   }
 
   submissionDate() {
     return moment(this.props.target.submitted_at).format("MMM D");
   }
 
-  lockedTargetHintString() {
-    if (this.props.target.submittability === "not_submittable") {
-      return "The target is currently unavailable to complete!";
-    } else {
-      return "Complete prerequisites first!";
-    }
-  }
-
   statusContents() {
-    let grade = ["good", "great", "wow"].indexOf(this.props.target.grade) + 1;
-    const score = parseFloat(this.props.target.score);
-
-    if (this.props.target.status !== "complete" || grade === 0) {
-      return (
-        <div className="target-overlay-status-badge-bar__badge-content">
+    return (
+      <div
+        className={
+          "target-overlay-status-badge-bar__badge-content d-flex justify-content-between align-items-center " +
+          this.statusClass()
+        }
+      >
+        <div className="target-overlay-status-badge-bar__badge-status">
           <span className="target-overlay-status-badge-bar__badge-icon">
             <i className={this.statusIconClasses()} />
           </span>
-
           <span>{this.statusString()}</span>
         </div>
-      );
-    } else {
-      const stars = starsForScore(score, this.props.target.id);
 
-      let gradeString =
-        this.props.target.grade.charAt(0).toUpperCase() +
-        this.props.target.grade.slice(1);
-
-      return (
-        <div className="target-overlay-status-badge-bar__badge-content">
-          {stars} {gradeString}!
+        <div className="d-none d-md-block">
+          {this.props.isSubmittable && (
+            <SubmitButton
+              rootProps={this.props.rootProps}
+              completeTargetCB={this.props.completeTargetCB}
+              target={this.props.target}
+              openTimelineBuilderCB={this.props.openTimelineBuilderCB}
+              autoVerifyCB={this.props.autoVerifyCB}
+              invertShowQuizCB={this.props.invertShowQuizCB}
+              overlayLoaded={this.props.overlayLoaded}
+            />
+          )}
         </div>
-      );
-    }
+      </div>
+    );
+  }
+
+  gradesList() {
+    let grades = this.props.target.grades;
+    let criteriaNames = this.props.rootProps.criteriaNames;
+    let gradeLabels = this.props.rootProps.gradeLabels;
+    let maxGrade = this.props.rootProps.maxGrade;
+    return (
+      <div className="btn-toolbar target-overlay-grade-bar__container flex-column pb-4">
+        <div className="target-overlay-status-badge-bar__grades-header pb-1 mb-2">
+          Grades received:
+        </div>
+        {Object.keys(grades).map(criterionId => {
+          return (
+            <div>
+              <div className="target-overlay-grade-bar__header d-flex justify-content-between pb-1">
+                <div className="target-overlay-grade-bar__criterion-name">
+                  {criteriaNames[criterionId]}
+                  <span>
+                    :
+                    <span className="target-overlay-grade-bar__grade-label">
+                      {gradeLabels[grades[criterionId]]}
+                    </span>
+                  </span>
+                </div>
+                <div className="target-overlay-grade-bar__grade font-semibold">
+                  {grades[criterionId] + "/" + maxGrade}
+                </div>
+              </div>
+              <div
+                className="btn-group target-overlay-grade-bar__track d-flex"
+                role="group"
+              >
+                {Object.keys(gradeLabels).map((grade, index) => {
+                  let modifierClass =
+                    grades[criterionId] >= index + 1
+                      ? this.gradePillModifierClass(criterionId)
+                      : "";
+                  return (
+                    <div
+                      key={index}
+                      className={
+                        "target-overlay-grade-bar__grade-pill " + modifierClass
+                      }
+                      role="button"
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
   }
 
   render() {
     return (
-      <div className={this.containerClasses()}>
+      <div className="target-overlay-status-badge-bar__badge-container">
         {this.statusContents()}
         <div className="target-overlay-status-badge-bar__info-block">
           <p className="target-overlay-status-badge-bar__hint font-regular">
             {this.statusHintString()}
           </p>
         </div>
+        {this.props.target.grades && this.gradesList()}
       </div>
     );
   }
 }
 
 StatusBadgeBar.propTypes = {
-  target: PropTypes.object
+  target: PropTypes.object,
+  rootProps: PropTypes.object,
+  completeTargetCB: PropTypes.func,
+  openTimlineBuilderCB: PropTypes.func,
+  isSubmittable: PropTypes.bool,
+  autoVerifyCB: PropTypes.func.isRequired,
+  invertShowQuizCB: PropTypes.func.isRequired
 };

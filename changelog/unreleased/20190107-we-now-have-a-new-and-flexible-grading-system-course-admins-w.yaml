@@ -1,0 +1,11 @@
+---
+timestamp: '2019-01-07T06:18:47Z'
+title: We now have a new and flexible grading system! Course admins will now be able
+  to configure how they want to review student submissions. A sleek grade bar will now be
+  visible on both the student and coach dashboards.
+trello: https://trello.com/c/uUGoqtzF
+private: false
+description: Every course will now have a grading system of 1 to max_grade with a
+  configurable pass_grade. Each grade will have it's own label too. For example, 2/5
+  in our existing courses is a 'Needs Improvement'.
+category: feature

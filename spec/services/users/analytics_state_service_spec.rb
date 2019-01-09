@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Users::AnalyticsStateService do
+describe Users::AnalyticsStateService, broken: true do
   include FounderSpecHelper
 
   subject { described_class.new(user) }

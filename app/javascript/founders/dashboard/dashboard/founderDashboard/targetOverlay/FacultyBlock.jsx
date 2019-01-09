@@ -8,7 +8,7 @@ export default class FacultyBlock extends React.Component {
 
   render() {
     return (
-      <div className="target-overlay__faculty-box">
+      <div className="target-overlay__faculty-box px-4 mt-3">
         <span className="target-overlay__faculty-avatar mr-2">
           <img className="img-fluid" src={this.props.faculty.image_url} />
         </span>

@@ -65,7 +65,7 @@ export default class ContentBlock extends React.Component {
 
   hasPendingPrerequisites() {
     return (
-      this.props.target.status === "unavailable" &&
+      this.props.target.status === "prerequisite_locked" &&
       this.props.target.prerequisites.length > 0
     );
   }
@@ -161,6 +161,7 @@ export default class ContentBlock extends React.Component {
               <a
                 className="target-overlay__link mr-2 mb-3"
                 target="_blank"
+                rel="noopener"
                 href={this.props.target.resource_url}
               >
                 <span className="target-overlay__link-icon">

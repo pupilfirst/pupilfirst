@@ -1,27 +1,20 @@
 ActiveAdmin.register TimelineEvent do
-  permit_params :description, :image, :event_on, :startup_id, :founder_id, :serialized_links,
+  actions :all, except: [:edit]
+  permit_params :description, :image, :event_on, :serialized_links,
     :improved_timeline_event_id, timeline_event_files_attributes: %i[id title file private _destroy]
 
-  filter :startup_product_name, as: :string, label: 'Product Name'
-  filter :startup_name, as: :string, label: 'Startup Name'
-  filter :founder_name, as: :string
-  filter :status, as: :select, collection: -> { TimelineEvent.valid_statuses }
+  filter :founders_name, as: :string
+  filter :evaluated
   filter :created_at
-  filter :status_updated_at
 
   scope :from_admitted_startups, default: true
   scope :from_level_0_startups
-  scope('Not Improved') { |scope| scope.needs_improvement.not_improved }
   scope :all
 
   config.sort_order = 'updated_at_desc'
 
   controller do
     include DisableIntercom
-
-    def scoped_collection
-      super.includes :startup
-    end
   end
 
   index do
@@ -49,64 +42,9 @@ ActiveAdmin.register TimelineEvent do
       end
     end
 
-    column :status do |timeline_event|
-      if timeline_event.verified?
-        "Verified on #{timeline_event.status_updated_at.strftime('%d/%m/%y')}"
-      elsif timeline_event.needs_improvement?
-        "Marked needs improvement on #{timeline_event.status_updated_at.strftime('%d/%m/%y')}"
-      else
-        timeline_event.status
-      end
-    end
+    column :evaluated
 
     actions
-  end
-
-  member_action :quick_review, method: :post do
-    timeline_event = TimelineEvent.find(params[:id])
-    if timeline_event.pending?
-      status = {
-        needs_improvement: TimelineEvent::STATUS_NEEDS_IMPROVEMENT,
-        not_accepted: TimelineEvent::STATUS_NOT_ACCEPTED,
-        verified: TimelineEvent::STATUS_VERIFIED
-      }.fetch(params[:status].to_sym)
-
-      points = params[:points].present? ? params[:points].to_i : nil
-
-      begin
-        TimelineEvents::VerificationService.new(timeline_event).update_status(status, grade: params[:grade], skill_grades: params[:skill_grades].as_json, points: points)
-        head :ok
-      rescue TimelineEvents::ReviewInterfaceException => e
-        render json: { error: e.message }.to_json, status: :unprocessable_entity
-      end
-    else
-      # someone else already reviewed this event! Ask javascript to reload page.
-      render json: { error: 'Event no longer pending review! Refreshing your dashboard.' }.to_json, status: :unprocessable_entity
-    end
-  end
-
-  member_action :undo_review, method: :post do
-    timeline_event = TimelineEvent.find(params[:id])
-
-    unless timeline_event.reviewed?
-      if params[:redirect] == 'true'
-        flash[:success] = 'Event has not been reviewed. Undo is not possible.'
-        redirect_to admin_timeline_event_path(timeline_event)
-      else
-        render json: { error: 'Event is pending review! Cannot undo.' }.to_json, status: :unprocessable_entity
-      end
-
-      return
-    end
-
-    TimelineEvents::UndoVerificationService.new(timeline_event).execute
-
-    if params[:redirect] == 'true'
-      flash[:success] = 'Event has been restored to pending state.'
-      redirect_to admin_timeline_event_path(timeline_event)
-    else
-      head :ok
-    end
   end
 
   member_action :update_description, method: :post do
@@ -168,11 +106,11 @@ ActiveAdmin.register TimelineEvent do
     head :ok
   end
 
-  action_item :review, only: :index do
-    if current_admin_user&.superadmin?
-      link_to 'Review Timeline Events', review_timeline_events_admin_timeline_events_path
-    end
-  end
+  # action_item :review, only: :index do
+  #   if current_admin_user&.superadmin?
+  #     link_to 'Review Timeline Events', review_timeline_events_admin_timeline_events_path
+  #   end
+  # end
 
   collection_action :review_timeline_events do
     if can? :quick_review, TimelineEvent
@@ -185,11 +123,7 @@ ActiveAdmin.register TimelineEvent do
   end
 
   action_item :view, only: :show do
-    link_to('View Timeline Entry', timeline_event.share_url, target: '_blank')
-  end
-
-  action_item :view, only: :show, if: proc { timeline_event.reviewed? } do
-    link_to('Undo Review', undo_review_admin_timeline_event_path(timeline_event, redirect: true), method: 'POST', data: { confirm: 'Are you sure? This will rollback all (possible) changes that were a result of the verification.' })
+    link_to('View Timeline Entry', timeline_event.share_url, target: '_blank', rel: 'noopener')
   end
 
   action_item :feedback, only: :show do
@@ -277,8 +211,7 @@ ActiveAdmin.register TimelineEvent do
       end
 
       row :event_on
-      row :status
-      row :status_updated_at
+      row :evaluated
 
       row('Linked Target') do
         a href: admin_target_url(timeline_event.target) do
@@ -301,7 +234,7 @@ ActiveAdmin.register TimelineEvent do
         column :title
 
         column :file do |timeline_event_file|
-          link_to timeline_event_file.filename, timeline_event_file.file.url, target: '_blank'
+          link_to timeline_event_file.filename, timeline_event_file.file.url, target: '_blank', rel: 'noopener'
         end
 
         column :private
@@ -309,11 +242,11 @@ ActiveAdmin.register TimelineEvent do
 
       table_for timeline_event.links do
         column :title do |link|
-          link_to link[:title], link[:url], target: '_blank'
+          link_to link[:title], link[:url], target: '_blank', rel: 'noopener'
         end
 
         column :url do |link|
-          link_to link[:url], link[:url], target: '_blank'
+          link_to link[:url], link[:url], target: '_blank', rel: 'noopener'
         end
 
         column :private do |link|

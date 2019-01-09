@@ -10,7 +10,12 @@ module Courses
 
     def clone(new_name, sponsored: true)
       Course.transaction do
-        Course.create!(name: new_name, sponsored: sponsored, school: @course.school).tap do |new_course|
+        Course.create!(name: new_name,
+                       sponsored: sponsored,
+                       grade_labels: @course.grade_labels,
+                       max_grade: @course.max_grade,
+                       pass_grade: @course.pass_grade,
+                       school: @course.school).tap do |new_course|
           levels = create_levels(new_course)
           target_groups = create_target_groups(levels)
           targets = create_targets(target_groups)
@@ -57,7 +62,7 @@ module Courses
                 .slice(
                   'role', 'title', 'description', 'completion_instructions', 'resource_url', 'slideshow_embed',
                   'faculty_id', 'rubric', 'days_to_complete', 'target_action_type', 'sort_index', 'session_at',
-                  'video_embed', 'last_session_at', 'link_to_complete', 'submittability', 'youtube_video_id',
+                  'video_embed', 'last_session_at', 'link_to_complete', 'youtube_video_id',
                   'call_to_action'
                 )
                 .merge(target_group: new_target_group)

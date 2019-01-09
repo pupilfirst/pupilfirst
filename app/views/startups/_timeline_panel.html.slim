@@ -6,6 +6,7 @@
     .img-responsive.tl-event-image
       = image_tag event.image_url
   .timeline-heading
+    / TODO: Update to use the new statuses
     - if event.pending?
       .verified-status-notice href="#" data-toggle="tooltip" title="We will verify this event very soon! If you haven't heard from us in 24 hours, do ping us on Slack!"
         i.fa.fa-exclamation-circle
@@ -48,13 +49,13 @@
       .timeline-footer.tl-footer
         - attachments.each do |attachment|
           - if attachment[:url].present?
-            a.tl-link-button href="#{short_url(attachment[:url])}" target="_blank"
+            a.tl-link-button href="#{short_url(attachment[:url])}" target="_blank" rel='noopener'
               - if attachment[:private]
                 i.fa.fa-user-secret
                 | &nbsp;
               | #{attachment[:title]}
           - else # it is a file
-            a.tl-link-button href="#{short_url(download_timeline_event_file_url(attachment[:file]))}" target="_blank"
+            a.tl-link-button href="#{short_url(download_timeline_event_file_url(attachment[:file]))}" target="_blank" rel='noopener'
               - if attachment[:private]
                 i.fa.fa-user-secret
                 | &nbsp;

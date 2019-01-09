@@ -4,6 +4,9 @@ class StartupsController < ApplicationController
 
   # GET /startups, GET /products
   def index
+    raise_not_found
+
+    # TODO: Stale page to be handled.
     @skip_container = true
 
     startups = Startup.includes(:level)
@@ -26,6 +29,9 @@ class StartupsController < ApplicationController
   end
 
   def show
+    raise_not_found
+
+    # TODO: Stale page to be handled.
     @skip_container = true
     @startup = authorize(Startup.friendly.find(params[:id]), :show?)
     @meta_description = "#{@startup.display_name}: #{@startup.product_description}"

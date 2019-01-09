@@ -58,15 +58,15 @@ module TimelineEvents
 
     def save
       TimelineEvent.transaction do
-        timeline_event = TimelineEvent.create!(
+        params = {
           target: target,
-          founder: founder,
-          startup: founder.startup,
           description: description,
           event_on: Time.zone.parse(event_on),
           links: parsed_links,
           image: image
-        )
+        }
+
+        timeline_event = TimelineEvents::CreateService.new(params, founder).execute
 
         create_files(timeline_event)
 

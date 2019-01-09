@@ -13,8 +13,8 @@ after "development:targets" do
                                         target_group: target_group,
                                         description: paragraph,
                                         faculty: Faculty.first,
-                                        target_action_type: Target::TYPE_TODO,
-                                        submittability: Target::SUBMITTABILITY_AUTO_VERIFY)
+                                        target_action_type: Target::TYPE_TODO
+  )
   quiz = Quiz.create!(
     title: Faker::Lorem.sentence,
     target: target,

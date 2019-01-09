@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Feedback Popup' do
+feature 'Feedback Popup', broken: true do
   include UserSpecHelper
 
   let(:founder) { create :founder }

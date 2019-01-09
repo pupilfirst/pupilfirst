@@ -64,7 +64,7 @@ describe Startups::LevelUpEligibilityService do
         submit_target startup.team_lead, startup_target
 
         # Only the admin has submitted the founder target.
-        create_timeline_event startup.team_lead, founder_target, verified: true
+        create_timeline_event startup.team_lead, founder_target, passed: true
 
         expect(subject.eligibility).to eq('cofounders_pending')
       end
@@ -100,7 +100,7 @@ describe Startups::LevelUpEligibilityService do
         submit_target startup.team_lead, startup_target
 
         # Only the admin has completed the founder target.
-        create_timeline_event startup.team_lead, founder_target, verified: true
+        create_timeline_event startup.team_lead, founder_target, passed: true
 
         expect(subject.eligible?).to be false
       end

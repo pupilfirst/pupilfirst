@@ -2,10 +2,10 @@ ActiveAdmin.register Target do
   actions :all, except: [:destroy]
 
   permit_params :faculty_id, :role, :title, :description, :resource_url, :completion_instructions, :days_to_complete,
-    :slideshow_embed, :video_embed, :completed_at, :completion_comment, :rubric, :link_to_complete, :key,
-    :submittability, :archived, :remote_rubric_url, :target_group_id, :target_action_type, :points_earnable,
-    :sort_index, :youtube_video_id, :session_at, :call_to_action,
-    prerequisite_target_ids: [], tag_list: [], target_skills_attributes: %i[id skill_id rubric_good rubric_great rubric_wow base_karma_points _destroy]
+    :slideshow_embed, :video_embed, :completed_at, :completion_comment, :rubric, :link_to_complete, :key, :archived,
+    :remote_rubric_url, :target_group_id, :target_action_type, :points_earnable,
+    :sort_index, :youtube_video_id, :session_at, :session_by, :call_to_action,
+    prerequisite_target_ids: [], tag_list: [], evaluation_criterion_ids: []
 
   filter :title
   filter :archived
@@ -62,9 +62,9 @@ ActiveAdmin.register Target do
   end
 
   show do |target|
-    if target.submittability != Target::SUBMITTABILITY_AUTO_VERIFY && target.timeline_events.exists?
+    if target.evaluation_criteria.present? && target.timeline_events.exists?
       div do
-        table_for target.timeline_events.includes(:founder, :startup).where(timeline_events: { created_at: 3.months.ago..Time.now }) do
+        table_for target.timeline_events.where(timeline_events: { created_at: 3.months.ago..Time.now }) do
           caption 'Linked Timeline Events (up to 3 months ago)'
 
           column 'Timeline Event' do |timeline_event|
@@ -158,7 +158,7 @@ ActiveAdmin.register Target do
       row :days_to_complete
       row :completion_comment
       row :link_to_complete
-      row :submittability
+      row :resubmittable
       row :archived do
         div class: 'target-show__archival-status' do
           target.archived ? 'Yes' : 'No'
@@ -186,21 +186,16 @@ ActiveAdmin.register Target do
       row :created_at
       row :updated_at
 
-      if target.target_skills.exists?
+      if target.target_evaluation_criteria.exists?
         div do
-          table_for target.target_skills.includes(:skill) do
-            caption 'Target Skills'
+          table_for target.target_evaluation_criteria.includes(:evaluation_criterion) do
+            caption 'Target Evaluation Criteria'
 
-            column 'Skill' do |ts|
-              a href: admin_skill_path(ts.skill) do
-                ts.skill.display_name.to_s
+            column 'Criteria' do |ts|
+              a href: admin_evaluation_criterion_path(ts.evaluation_criterion) do
+                ts.evaluation_criterion.display_name.to_s
               end
             end
-
-            column :rubric_good
-            column :rubric_great
-            column :rubric_wow
-            column :base_karma_points
           end
         end
       end
@@ -236,7 +231,7 @@ ActiveAdmin.register Target do
     column :slideshow_embed
     column :resource_url
     column :days_to_complete
-    column :submittability
+    column :resubmittable
     column :archived do |target|
       target.archived? ? 'Yes' : 'No'
     end
@@ -321,24 +316,16 @@ ActiveAdmin.register Target do
       f.input :completion_instructions
       f.input :call_to_action
       f.input :link_to_complete
-      f.input :submittability, collection: Target.valid_submittability_values
-      f.input :faculty, collection: Faculty.active.order(:name), include_blank: 'No linked faculty', label: 'Assigned by'
+      f.input :faculty, collection: Faculty.active.order(:name), include_blank: 'No linked faculty'
       f.input :target_group, collection: TargetGroup.all.includes(:course, :level).order('courses.name ASC, levels.number ASC')
       f.input :sort_index
       f.input :days_to_complete
       f.input :rubric, as: :file
       f.input :remote_rubric_url
+      f.input :resubmittable
+      f.input :evaluation_criteria, as: :select, collection: EvaluationCriterion.all.map { |ec| [ec.display_name.to_s, ec.id] }, include_blank: 'No evaluation criteria'
     end
 
-    f.inputs 'Skills' do
-      f.has_many :target_skills, heading: false, allow_destroy: true, new_record: 'Add Skill' do |ts|
-        ts.input :skill
-        ts.input :rubric_good
-        ts.input :rubric_great
-        ts.input :rubric_wow
-        ts.input :base_karma_points
-      end
-    end
     f.actions
   end
 end

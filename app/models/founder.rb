@@ -306,7 +306,9 @@ class Founder < ApplicationRecord
   end
 
   def faculty
-    faculty = startup&.course&.faculty
-    faculty + startup&.faculty
+    return Faculty.none if startup.blank?
+
+    scope = Faculty.left_joins(:startups, :courses)
+    scope.where(startups: { id: startup }).or(scope.where(courses: { id: startup.level.course })).distinct
   end
 end

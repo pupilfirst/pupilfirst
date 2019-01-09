@@ -3,7 +3,7 @@ class FoundersController < ApplicationController
   before_action :skip_container, only: %i[show founder_profile fee fee_submit paged_events timeline_event_show]
   before_action :require_active_subscription, only: %i[edit update]
 
-  # GET /founders/:slug, GET /students/:slug
+  # GET /students/:slug
   def founder_profile
     show
     render 'founder_profile'

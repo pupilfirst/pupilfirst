@@ -1,3 +1,7 @@
+<% content_for(:head) do %>
+  <%= stylesheet_pack_tag 'home/pupilfirst', media: 'all', 'data-turbolinks-track': 'reload' %>
+<% end %>
+
 <header class="home-header">
   <div class="container mx-auto px-4">
     <nav class="flex py-3">
@@ -7,10 +11,10 @@
 </header>
 
 <main>
-  <section class="home-hero border-b flex">
+  <section class="hero border-b flex">
     <div class="container max-w-2xl mx-auto px-4 flex items-center flex-wrap">
-      <div class="w-full lg:w-1/2"><h1 class="hero-heading-text font-semibold">Focus on your
-        <span class="block hero-heading-text__xl font-extrabold">students.</span></h1>
+      <div class="w-full lg:w-1/2"><h1 class="hero__heading-text font-semibold">Focus on your
+        <span class="block hero__heading-text-xl font-extrabold">students.</span></h1>
 
         <p class="text-lg font-semibold leading-normal mt-5">Teaching is difficult. Teaching online even more so.
           PupilFirst gives you a proven method to keep your students engaged while keeping you, the teacher, always in
@@ -19,7 +23,7 @@
         <form class="w-full max-w-sm">
           <div class="flex py-4">
             <input aria-label="Email" class="flex-1 appearance-none block border w-full bg-grey-lighter text-grey-darkest rounded-tl-lg rounded-bl-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey" placeholder="Enter your email address" type="email"/>
-            <button class="flex-none bg-primary uppercase hover:bg-primary-dark focus:outline-none focus:bg-primary-darker text-sm text-white font-extrabold py-3 px-4 rounded-tr-lg rounded-br-lg tracking-normal" type="button">Register
+            <button class="flex-none bg-primary uppercase hover:bg-primary-dark focus:outline-none focus:bg-primary-darker text-sm text-white font-extrabold py-3 px-4 rounded-tr-lg rounded-br-lg tracking-normal" type="submit">Register
               Now
             </button>
           </div>
@@ -30,7 +34,7 @@
     </div>
   </section>
 
-  <section class="home-content flex">
+  <section class="content flex">
     <div class="container max-w-2xl mx-auto px-4 py-20 flex flex-wrap">
       <div class="w-full lg:w-1/2">
         <p class="text-lg leading-normal mb-8">Teachers can have decades of experience dealing with students and their
@@ -45,7 +49,7 @@
           the past three years on a range of topics. We're sharing techniques that we've developed over that time, so
           that you too can give your students the best.</p></div>
       <div class="w-full lg:w-1/2">
-        <div class="home-content--register flex items-center text-center shadow-lg p-4 lg:p-10 lg:ml-20">
+        <div class="content__register bg-white flex items-center text-center shadow-lg p-4 lg:p-10 lg:ml-20">
           <div>
             <div class="rounded-full bg-indigo-lighter h-24 w-24 mx-auto mt-4 mb-5"></div>
             <h2 class="text-2xl font-bold leading-tight">Want to see everything you can do on PupilFirst?</h2>

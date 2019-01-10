@@ -110,20 +110,20 @@
             .row
               .col-sm-6.col-md-12
                 .media.mb-3.align-items-center
-                  img.d-flex.mr-3 alt="Course icon" src="#{image_url 'founders/show/data-icon-stage.png'}"
+                  img.d-flex.mr-3 alt="Course icon" src="#{image_url 'founders/show/course-icon.png'}"
                   .media-body
                     h6.my-0 Course Name
                     p.data-content #{@founder.startup.course.name}
               .col-sm-6.col-md-12
                 .media.mb-3.align-items-center
-                  img.d-flex.mr-3 alt="Level icon" src="#{image_url 'founders/show/data-icon-industry.png'}"
+                  img.d-flex.mr-3 alt="Level icon" src="#{image_url 'founders/show/level-icon.png'}"
                   .media-body
                     h6.my-0 Level
                     p.data-content #{@founder.startup.level.display_name}
               - if @founder.personal_website_url.present?
                 .col-sm-6.col-md-12
                   .media.mb-3.align-items-center
-                    img.d-flex.mr-3 alt="Website icon" src="#{image_url 'startups/show/data-icon-website.png'}"
+                    img.d-flex.mr-3 alt="Website icon" src="#{image_url 'founders/show/website-icon.png'}"
                     .media-body
                       h6.my-0 Website
                       p.data-content

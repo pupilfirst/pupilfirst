@@ -46,9 +46,6 @@
                     = @founder.startup.product_name
               - if @founder.social_url_present?
                 .col-lg-6.social-connect.px-0.mt-3.mt-lg-0.text-center.text-md-left.text-lg-right
-                  - if @founder.personal_website_url.present?
-                    a href=@founder.personal_website_url target='_blank' rel='noopener'
-                      i.fa.fa-globe
                   - if @founder.linkedin_url.present?
                     a href=@founder.linkedin_url target='_blank' rel='noopener'
                       i.fa.fa-linkedin
@@ -113,16 +110,26 @@
             .row
               .col-sm-6.col-md-12
                 .media.mb-3.align-items-center
-                  img.d-flex.mr-3 alt="Course icon" src="#{image_url 'startups/show/data-icon-stage.png'}"
+                  img.d-flex.mr-3 alt="Course icon" src="#{image_url 'founders/show/data-icon-stage.png'}"
                   .media-body
                     h6.my-0 Course Name
                     p.data-content #{@founder.startup.course.name}
               .col-sm-6.col-md-12
                 .media.mb-3.align-items-center
-                  img.d-flex.mr-3 alt="Level icon" src="#{image_url 'startups/show/data-icon-industry.png'}"
+                  img.d-flex.mr-3 alt="Level icon" src="#{image_url 'founders/show/data-icon-industry.png'}"
                   .media-body
                     h6.my-0 Level
                     p.data-content #{@founder.startup.level.display_name}
+              - if @founder.personal_website_url.present?
+                .col-sm-6.col-md-12
+                  .media.mb-3.align-items-center
+                    img.d-flex.mr-3 alt="Website icon" src="#{image_url 'startups/show/data-icon-website.png'}"
+                    .media-body
+                      h6.my-0 Website
+                      p.data-content
+                        a href="#{@founder.personal_website_url}" target="_blank" rel="noopener"
+                          ' #{@founder.personal_website_url}
+                          i.fa.fa-external-link
           .row
             - if @founder.faculty.any?
               .col-md-12.mt-4
@@ -151,7 +158,7 @@
             .tl-iteration
               p#focused-event
                 | Focused Event
-              = image_tag 'startups/show/dash.png'
+              = image_tag 'founders/show/dash.png'
             ul.pa-0
               == render 'timeline_event', event: @timeline_event_for_og
         - if @timeline_events.present?
@@ -159,7 +166,7 @@
             .tl-iteration
               p
                 | Timeline
-              = image_tag 'startups/show/dash.png'
+              = image_tag 'founders/show/dash.png'
             ul#timeline-list.pl-0
               = render 'events_by_page', events: @timeline_events, page: 1
         - else
@@ -167,5 +174,5 @@
             .tl-iteration
               p
                 | No timeline events to show!
-              = image_tag 'startups/show/dash.png'
+              = image_tag 'founders/show/dash.png'
 

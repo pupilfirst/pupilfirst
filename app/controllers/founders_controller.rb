@@ -8,7 +8,6 @@ class FoundersController < ApplicationController
     @founder = Founder.friendly.find(params[:slug])
     @meta_description = "#{@founder.name}: #{@founder.startup.name}"
 
-    handle_feedback if params[:show_feedback].present?
     # Hide founder events from everyone other than author of event.
     @timeline_events = events_for_display.reject { |event| event.hidden_from?(current_founder) }
     @timeline_events = Kaminari.paginate_array(@timeline_events).page(params[:page]).per(20)
@@ -113,15 +112,6 @@ class FoundersController < ApplicationController
 
   def skip_container
     @skip_container = true
-  end
-
-  def handle_feedback
-    if current_founder.present?
-      @feedback_to_show = @founder.startup.startup_feedback.where(id: params[:show_feedback]).first if @founder == current_founder
-    else
-      session[:referer] = request.original_url
-      redirect_to new_user_session_path, alert: 'Please sign in to continue!'
-    end
   end
 
   def events_for_display

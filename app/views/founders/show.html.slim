@@ -169,30 +169,3 @@
                 | No timeline events to show!
               = image_tag 'startups/show/dash.png'
 
-- if @founder == current_founder
-  #improvement-modal.modal.fade [role="dialog"
-    data-feedback="#{@feedback_to_show&.feedback}"
-    data-faculty="#{@feedback_to_show&.faculty&.name}"
-    data-attachment-url="#{@feedback_to_show&.attachment&.url}"
-    data-attachment-name="#{@feedback_to_show&.attachment_file_name}"]
-
-    .modal-dialog
-      .modal-content
-        .modal-header
-          button.close data-dismiss="modal" type="button"  &times;
-          h4.modal-title
-        .modal-body style="overflow:auto;"
-          .feedback-text
-
-          .attachment.hidden
-            i.fa.fa-paperclip
-            | &nbsp;
-            span.attachment-name.grey-text
-
-            a.attachment-download-btn.grey-text.margin-left-10.btn.btn-default.btn-xs target="_blank"
-              i.fa.fa-download
-              | &nbsp;&nbsp;
-              | Download
-        .modal-footer
-          button.btn.btn-default data-dismiss="modal" type="button"  Close
-

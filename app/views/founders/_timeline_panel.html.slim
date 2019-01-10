@@ -19,16 +19,6 @@
       a.timeline-title href=event.share_url
         ' #{event.title}
         i.fa.fa-link
-      / display info icon if founder
-      - if presenter.founder?
-        - latest_feedback = StartupFeedback.for_timeline_event(event).first
-        - if latest_feedback.present?
-          - feedback = latest_feedback.feedback
-          - faculty = "#{latest_feedback.faculty.name} of Team SV"
-          a.fa.fa-comment.pull-right.pointer-cursor.show-feedback-button [data-feedback="#{latest_feedback.feedback}"
-            data-faculty="#{faculty}" data-attachment-url="#{latest_feedback&.attachment&.url}"
-            data-attachment-name="#{latest_feedback&.attachment_file_name}"]
-
     p.tl-date
       small
         i.fa.fa-calendar

@@ -26,11 +26,18 @@ body {
   border-radius: 1.25rem;
 }
 
+.footer__social-list {
+  line-height: 0;
+}
+
+.footer__social-list__icon:hover {
+  @apply opacity-100;
+}
+
 @screen lg {
   .hero__heading-text {
     font-size: 3.875rem;
   }
-
   .hero__heading-text-xl {
     font-size: 6.75rem;
   }

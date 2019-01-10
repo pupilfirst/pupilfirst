@@ -8,7 +8,7 @@ export default class FounderBubble extends React.Component {
   }
 
   statusIcon() {
-    if (this.props.status === "complete") {
+    if (this.props.status === "passed") {
       return "fa fa-check-circle brand-primary";
     } else if (this.props.status === "loading") {
       return "fa fa-refresh fa-spin brand-primary";
@@ -22,10 +22,10 @@ export default class FounderBubble extends React.Component {
     let status = this.props.status;
     if (status === "loading") {
       return "Fetching target status for " + name + ".";
-    } else if (status === "complete") {
-      return name + " has completed this target.";
+    } else if (status === "passed") {
+      return name + " has passed this target.";
     } else {
-      return name + " is yet to complete this target!";
+      return name + " is yet to pass this target!";
     }
   }
 

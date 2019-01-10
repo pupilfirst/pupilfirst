@@ -1,10 +1,19 @@
 after 'development:schools' do
   puts 'Seeding courses (idempotent)'
 
+  grade_labels = {
+    1 => 'Not Accepted',
+    2 => 'Needs Improvement',
+    3 => 'Good',
+    4 => 'Great',
+    5 => 'Wow'
+  }
+
   sv = School.find_by(name: 'SV.CO')
 
-  sv.courses.where(name: 'Startup').first_or_create!
-  sv.courses.where(name: 'Developer').first_or_create!
-  sv.courses.where(name: 'VR').first_or_create!(sponsored: true)
-  sv.courses.where(name: 'iOS').first_or_create!(sponsored: true)
+
+  Course.create!(name: 'Startup', max_grade: 5, pass_grade: 2, grade_labels: grade_labels, school: sv)
+  Course.create!(name: 'Developer', max_grade: 5, pass_grade: 2, grade_labels: grade_labels, school: sv)
+  Course.create!(name: 'VR', sponsored: true, max_grade: 5, pass_grade: 2, grade_labels: grade_labels, school: sv)
+  Course.create!(name: 'iOS', sponsored: true, max_grade: 5, pass_grade: 3, grade_labels: grade_labels, school: sv)
 end

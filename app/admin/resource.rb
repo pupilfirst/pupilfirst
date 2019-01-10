@@ -132,6 +132,6 @@ ActiveAdmin.register Resource do
   end
 
   action_item :view_resource, only: :show do
-    link_to('View Resource', "/resources/#{resource.slug}", target: '_blank')
+    link_to('View Resource', "/resources/#{resource.slug}", target: '_blank', rel: 'noopener')
   end
 end

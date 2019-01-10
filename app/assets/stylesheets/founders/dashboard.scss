@@ -96,12 +96,12 @@
   }
 }
 
-.founder-dashboard-levelup-notification__container {
+.founder-dashboard-notification__container {
   max-width: 52rem;
   position: relative;
 }
 
-.founder-dashboard-levelup-notification__box {
+.founder-dashboard-notification__box {
   background-color: white;
   background-image: asset-url("founders/dashboard/level-up-background.svg");
   background-repeat: no-repeat;
@@ -649,11 +649,6 @@
     font-size: 0.675rem;
     padding: 4px 8px;
   }
-  &.needs-improvement {
-    background-color: rgba(10, 165, 227, 0.1);
-    border: 1px solid $brand-secondary;
-    color: $dark-secondary;
-  }
   &.submitted {
     background-color: rgba(0, 138, 193, 0.1);
     border: 1px solid rgba(0, 138, 193, 0.9);
@@ -664,19 +659,19 @@
     border: 1px solid $alert-background;
     color: darken($alert-background, 25%);
   }
-  &.unavailable,
+  &.prerequisite-locked,
   &.level-locked,
-  &.pending-milestone {
+  &.milestone-locked {
     background-color: rgba(153, 153, 153, 0.2);
     border: 1px solid rgba(153, 153, 153, 0.7);
     color: $dark-grey-text;
   }
-  &.complete {
+  &.passed {
     background-color: rgba(50, 180, 117, 0.1);
     border: 1px solid $brand-primary;
     color: $dark-primary;
   }
-  &.not-accepted {
+  &.failed {
     background-color: rgba(217, 83, 80, 0.1);
     border: 1px solid rgba(217, 83, 80, 0.7);
     color: rgba(217, 83, 80, 1);
@@ -733,7 +728,7 @@
   border-radius: 50%;
   position: absolute;
   top: -4px;
-  left: -6px;
+  left: 0;
   background-color: white;
   height: 18px;
   width: 18px;

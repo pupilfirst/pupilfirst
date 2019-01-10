@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Startup Edit' do
+feature 'Startup Edit', broken: true do
   include UserSpecHelper
 
   let!(:startup) { create :startup, :subscription_active }

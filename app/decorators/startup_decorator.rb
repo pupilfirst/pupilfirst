@@ -7,7 +7,7 @@ class StartupDecorator < Draper::Decorator
   end
 
   def completed_targets_count
-    timeline_events.verified_or_needs_improvement.where.not(target_id: nil).distinct.count(:target_id)
+    timeline_events.where.not(passed_at: nil).where.not(target_id: nil).distinct.count(:target_id)
   end
 
   def completed_targets_percentage

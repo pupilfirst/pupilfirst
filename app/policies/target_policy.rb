@@ -9,7 +9,8 @@ class TargetPolicy < ApplicationPolicy
 
   def auto_verify?
     download_rubric? &&
-      record.submittability == Target::SUBMITTABILITY_AUTO_VERIFY &&
-      current_founder.startup.level.course == record.course
+      record.evaluation_criteria.blank? &&
+      current_founder.startup.level.course == record.course &&
+      current_founder.timeline_events.where(target: record).empty?
   end
 end

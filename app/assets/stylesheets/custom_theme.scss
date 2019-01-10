@@ -125,12 +125,14 @@ p {
     &:focus,
     &.focus {
       outline: none;
-      color: white;
     }
   }
   &.disabled {
     cursor: not-allowed;
-    opacity: 0.5;
+
+    &:hover, &:focus, &:active {
+      color: rgb(165, 173, 186);
+    }
   }
 
   @include media-breakpoint-down(sm) {
@@ -159,6 +161,32 @@ p {
   padding: 0.1rem 0 0 0;
 }
 
+.btn-default {
+  background-color: $primary-background;
+  border: 1px solid $gray-border;
+  color: lighten($gray-dark, 20%);
+
+  &:hover {
+    background-color: $dark-primary-background;
+  }
+  &:focus,
+  &.focus {
+    background-color: $dark-primary-background;
+    box-shadow: none;
+  }
+  &:active,
+  &.active {
+    background-color: $dark-primary-background;
+    box-shadow: $box-shadow-btn;
+  }
+  &:disabled,
+  &.disabled {
+    color: rgb(165, 173, 186);
+    background-color: rgba(9, 30, 66, 0.07);
+    box-shadow: none;
+  }
+}
+
 .btn-primary {
   background-color: $light-primary;
 
@@ -178,7 +206,9 @@ p {
   }
   &:disabled,
   &.disabled {
-    background-color: $brand-primary;
+    color: rgb(165, 173, 186);
+    background-color: rgba(9, 30, 66, 0.07);
+    box-shadow: none;
   }
 }
 
@@ -201,7 +231,9 @@ p {
   }
   &:disabled,
   &.disabled {
-    background-color: $brand-secondary;
+    color: rgb(165, 173, 186);
+    background-color: rgba(9, 30, 66, 0.07);
+    box-shadow: none;
   }
 }
 
@@ -250,6 +282,21 @@ p {
 .btn-with-icon {
   i {
     margin-right: 5px;
+  }
+}
+.btn-link {
+  color: $brand-secondary;
+
+  &:hover {
+    color: $light-secondary;
+  }
+  &:focus,
+  &.focus {
+    color: $dark-secondary;
+  }
+  &:active,
+  &.active {
+    color: $dark-secondary;
   }
 }
 // Default container style with border

@@ -1,163 +1,120 @@
 require 'rails_helper'
 
 describe Founders::TargetStatusService do
-  subject { described_class.new(founder) }
+  subject { described_class.new(startup.team_lead) }
 
+  # Let's create an course with 3 levels...
   let(:course) { create :course }
-  let(:level_zero) { create :level, :zero, course: course }
-  let(:level_one) { create :level, :one, course: course }
-  let(:level_two) { create :level, :two, course: course }
-  let!(:startup) { create :startup, level: level_zero }
-  let(:founder) { create :founder }
-  let(:co_founder) { create :founder }
+  let(:level_1) { create :level, :one, course: course }
+  let(:level_2) { create :level, :two, course: course }
+  let(:level_3) { create :level, :three, course: course }
 
-  let!(:target_group) { create :target_group, level: level_zero }
-  let!(:level_2_target_group) { create :target_group, level: level_two }
-  let!(:founder_target) { create :target, :for_founders, target_group: target_group }
-  let!(:startup_target) { create :target, :for_startup, target_group: target_group }
-  let!(:level_2_target) { create :target, :for_startup, target_group: level_2_target_group }
-  let!(:founder_session) { create :target, target_group: target_group, session_at: 1.month.ago }
+  # ... and have a few target groups in each level, including milestone ones.
+  let(:l_1_target_group_1) { create :target_group, level: level_1 }
+  let(:l_1_target_group_2) { create :target_group, level: level_1, milestone: true }
+  let(:l_2_target_group_1) { create :target_group, level: level_2 }
+  let(:l_2_target_group_2) { create :target_group, level: level_2, milestone: true }
+  let(:l_3_target_group) { create :target_group, level: level_3, milestone: true }
+
+  # Let's have a faculty and a startup in Level 2
+  let(:faculty) { create :faculty }
+  let(:startup) { create :startup, level: level_2 }
+  let(:founder) { startup.team_lead }
+
+  # founder has passed l_1_target_1
+  let!(:l_1_target_1) { create :target, target_group: l_1_target_group_1 }
+  let!(:te_1) do
+    create :timeline_event, founders: [founder], target: l_1_target_1, passed_at: 10.days.ago, evaluator: faculty, latest: true
+  end
+
+  # founder has failed l_1_target_2
+  let!(:l_1_target_2) { create :target, target_group: l_1_target_group_1 }
+  let!(:te_2) { create :timeline_event, founders: [founder], target: l_1_target_2, evaluator: faculty, latest: true }
+
+  # founder has submitted milestone l_1_target_3
+  let!(:l_1_target_3) { create :target, target_group: l_1_target_group_2 }
+  let!(:te_3) { create :timeline_event, founders: [founder], target: l_1_target_3, latest: true }
+
+  # founder has a pending l_2_target_1 with a passed prerequisite (l_1_target_1) and an archived_prerequisite
+  let!(:l_2_target_1) { create :target, target_group: l_2_target_group_1 }
+  let!(:archived_prerequisite) { create :target, target_group: l_2_target_group_1, archived: true, safe_to_archive: true }
+
+  # founder has a l_2_target_2 which is pre-requisite locked by l_2_target_1
+  let!(:l_2_target_2) { create :target, target_group: l_2_target_group_1 }
+
+  # founder has a milestone l_2_target_3 which is milestone-locked by l_1_target_3 and prerequisite-locked by l_1_target_1(milestone-lock takes priority over prerequisite-lock)
+  let!(:l_2_target_3) { create :target, target_group: l_2_target_group_2 }
+
+  # founder has a level-locked milestone l_3_target (level-lock takes priority over milestone-lock)
+  let!(:l_3_target) { create :target, target_group: l_3_target_group }
 
   before do
-    startup.founders << [founder, co_founder]
+    l_2_target_1.prerequisite_targets << [l_1_target_1, archived_prerequisite]
+    l_2_target_2.prerequisite_targets << l_2_target_1
+    l_2_target_3.prerequisite_targets << l_2_target_1
   end
 
   describe '#status' do
-    context 'when there is no event submission for the target' do
-      it 'returns :pending' do
-        expect(subject.status(founder_target.id)).to eq(Target::STATUS_PENDING)
-        expect(subject.status(startup_target.id)).to eq(Target::STATUS_PENDING)
-      end
+    it 'returns the right status for all timeline events' do
+      expect(subject.status(l_1_target_1.id)).to eq(Targets::StatusService::STATUS_PASSED)
+      expect(subject.status(l_1_target_2.id)).to eq(Targets::StatusService::STATUS_FAILED)
+      expect(subject.status(l_1_target_3.id)).to eq(Targets::StatusService::STATUS_SUBMITTED)
+      expect(subject.status(l_2_target_1.id)).to eq(Targets::StatusService::STATUS_PENDING)
+      expect(subject.status(l_2_target_2.id)).to eq(Targets::StatusService::STATUS_PREREQUISITE_LOCKED)
+      expect(subject.status(l_2_target_3.id)).to eq(Targets::StatusService::STATUS_MILESTONE_LOCKED)
+      expect(subject.status(l_3_target.id)).to eq(Targets::StatusService::STATUS_LEVEL_LOCKED)
+    end
+  end
+
+  describe '#submitted_at' do
+    it 'returns the event submission datetime for submitted, passed & failed targets' do
+      expect(subject.submitted_at(l_1_target_1.id)).to eq(te_1.created_at.iso8601)
+      expect(subject.submitted_at(l_1_target_2.id)).to eq(te_2.created_at.iso8601)
+      expect(subject.submitted_at(l_1_target_3.id)).to eq(te_3.created_at.iso8601)
     end
 
-    context 'when the founder target has a event pending verification' do
-      let!(:founder_event) { create :timeline_event, target: founder_target, founder: founder, startup: startup }
+    it 'returns nil for all unsubmitted targets' do
+      expect(subject.submitted_at(l_2_target_1.id)).to be_nil
+      expect(subject.submitted_at(l_2_target_2.id)).to be_nil
+      expect(subject.submitted_at(l_2_target_3.id)).to be_nil
+      expect(subject.submitted_at(l_3_target.id)).to be_nil
+    end
+  end
 
-      it 'returns :submitted' do
-        expect(subject.status(founder_target.id)).to eq(Target::STATUS_SUBMITTED)
-      end
+  describe '#prerequisite_targets' do
+    it 'returns all active prerequisite ids for all targets with prerequisites' do
+      expect(subject.prerequisite_targets(l_2_target_1.id)).to eq([l_1_target_1])
+      expect(subject.prerequisite_targets(l_2_target_2.id)).to eq([l_2_target_1])
+      expect(subject.prerequisite_targets(l_2_target_3.id)).to eq([l_2_target_1])
     end
 
-    context 'when the founder target has a verified submission' do
-      let(:founder_event) { create :timeline_event, target: founder_target, founder: founder, startup: startup }
+    it 'returns [] for all targets without prerequisites' do
+      expect(subject.prerequisite_targets(l_1_target_1.id)).to eq([])
+      expect(subject.prerequisite_targets(l_1_target_2.id)).to eq([])
+      expect(subject.prerequisite_targets(l_1_target_3.id)).to eq([])
+      expect(subject.prerequisite_targets(l_3_target.id)).to eq([])
+    end
+  end
 
-      it 'returns :complete' do
-        founder_event.update!(status: TimelineEvent::STATUS_VERIFIED)
-        expect(subject.status(founder_target.id)).to eq(Target::STATUS_COMPLETE)
-      end
+  describe '#grades' do
+    let(:criterion_1) { create :evaluation_criterion, course: course }
+    let(:criterion_2) { create :evaluation_criterion, course: course }
+
+    before do
+      TimelineEventGrade.create!(timeline_event: te_1, evaluation_criterion: criterion_1, grade: 3)
+      TimelineEventGrade.create!(timeline_event: te_2, evaluation_criterion: criterion_1, grade: 2)
+      TimelineEventGrade.create!(timeline_event: te_2, evaluation_criterion: criterion_2, grade: 1)
     end
 
-    context 'when the founder target has a needs_improvement submission' do
-      let(:founder_event) { create :timeline_event, target: founder_target, founder: founder, startup: startup }
-
-      it 'returns :needs_improvement' do
-        founder_event.update!(status: TimelineEvent::STATUS_NEEDS_IMPROVEMENT)
-        expect(subject.status(founder_target.id)).to eq(Target::STATUS_NEEDS_IMPROVEMENT)
-      end
+    it 'returns the grades for evaluated targets' do
+      expect(subject.grades(l_1_target_1.id)).to eq(criterion_1.id => 3)
+      expect(subject.grades(l_1_target_2.id)).to eq(criterion_1.id => 2, criterion_2.id => 1)
     end
 
-    context 'when the founder target has a not_accepted submission' do
-      let(:founder_event) { create :timeline_event, target: founder_target, founder: founder, startup: startup }
-
-      it 'returns :not_accepted' do
-        founder_event.update!(status: TimelineEvent::STATUS_NOT_ACCEPTED)
-        expect(subject.status(founder_target.id)).to eq(Target::STATUS_NOT_ACCEPTED)
-      end
-    end
-
-    context 'when the founder has multiple submissions for target' do
-      let(:founder_event) { create :timeline_event, target: founder_target, founder: founder, startup: startup }
-      let(:founder_event_2) { create :timeline_event, target: founder_target, founder: founder, startup: startup }
-
-      it 'returns status based on the latest submission' do
-        founder_event.update!(status: TimelineEvent::STATUS_NOT_ACCEPTED, created_at: 2.days.ago)
-        founder_event_2.update!(status: TimelineEvent::STATUS_VERIFIED, created_at: 1.day.ago)
-        expect(subject.status(founder_target.id)).to eq(Target::STATUS_COMPLETE)
-      end
-    end
-
-    context 'when the co-founder has completed a startup target' do
-      let(:co_founder_event) { create :timeline_event, target: startup_target, founder: co_founder, startup: startup }
-
-      it 'returns :complete' do
-        co_founder_event.update!(status: TimelineEvent::STATUS_VERIFIED)
-        expect(subject.status(startup_target.id)).to eq(Target::STATUS_COMPLETE)
-      end
-    end
-
-    context 'when the target has a pending prerequisite' do
-      it 'returns :unavailable' do
-        founder_target.prerequisite_targets << startup_target
-        expect(subject.status(founder_target.id)).to eq(Target::STATUS_UNAVAILABLE)
-      end
-
-      context 'when the target has been completed with a timeline event' do
-        let(:founder_event) { create :timeline_event, target: founder_target, founder: founder, startup: startup }
-
-        it 'returns :unavailable' do
-          founder_event.update!(status: TimelineEvent::STATUS_VERIFIED)
-          founder_target.prerequisite_targets << startup_target
-          expect(subject.status(founder_target.id)).to eq(Target::STATUS_UNAVAILABLE)
-        end
-      end
-    end
-
-    context 'when the target has a completed prerequisite' do
-      let(:founder_event) { create :timeline_event, target: founder_target, founder: founder, startup: startup }
-      let(:co_founder_event) { create :timeline_event, target: startup_target, founder: co_founder, startup: startup }
-
-      it 'returns :pending' do
-        founder_target.prerequisite_targets << startup_target
-        co_founder_event.update!(status: TimelineEvent::STATUS_VERIFIED)
-        expect(subject.status(founder_target.id)).to eq(Target::STATUS_PENDING)
-      end
-    end
-
-    context 'when the target is from a higher level than the startup' do
-      it 'returns :level_locked' do
-        expect(subject.status(level_2_target.id)).to eq(Target::STATUS_LEVEL_LOCKED)
-      end
-    end
-
-    context 'when the startup is at a higher level' do
-      let!(:startup) { create :startup, level: level_two }
-      let!(:level_zero_target_group) { create :target_group, level: level_zero }
-      let!(:level_one_target_group) { create :target_group, level: level_one, milestone: true }
-      let!(:level_two_target_group) { create :target_group, level: level_two, milestone: true }
-      let!(:level_zero_target) { create :target, :for_founders, target_group: level_zero_target_group }
-      let!(:level_one_target) { create :target, :for_founders, target_group: level_one_target_group }
-      let!(:level_two_target) { create :target, :for_founders, target_group: level_two_target_group }
-      let!(:founder_session) { create :target, target_group: level_one_target_group, session_at: 1.month.ago }
-
-      # This ensures that a edge-case situation does not result in a crash: https://trello.com/c/F7oRFaPf
-      context 'when there is an incomplete prerequisite in level 0 for a completed target' do
-        let!(:founder_event) { create :timeline_event, target: level_zero_target, founder: founder, startup: startup }
-        before do
-          level_zero_target.prerequisite_targets << create(:target, :for_founders, target_group: level_zero_target_group)
-          level_zero_target.save!
-        end
-
-        it 'should return the status for a level 1 target' do
-          founder_event.update!(status: TimelineEvent::STATUS_VERIFIED)
-
-          expect(subject.status(level_one_target.id)).to eq(:pending)
-        end
-      end
-
-      context 'when there is an incomplete milestone in the previous level' do
-        it 'returns :pending_milestone for milestones in the current level' do
-          expect(subject.status(level_two_target.id)).to eq(Target::STATUS_PENDING_MILESTONE)
-        end
-      end
-
-      context 'when all mielstone targets in the previous level is complete' do
-        let!(:founder_event) { create :timeline_event, target: level_one_target, founder: founder, startup: startup }
-        let!(:founder_event_2) { create :timeline_event, target: founder_session, founder: founder, startup: startup }
-        it 'returns :pending for the milestones in the current level' do
-          founder_event.update!(status: TimelineEvent::STATUS_VERIFIED)
-          founder_event_2.update!(status: TimelineEvent::STATUS_VERIFIED)
-          expect(subject.status(level_two_target.id)).to eq(Target::STATUS_PENDING)
-        end
+    it 'returns nil for all unevaluated targets' do
+      unevaluated_targets = Target.where.not(id: [l_1_target_1.id, l_1_target_2.id, archived_prerequisite.id])
+      unevaluated_targets.each do |target|
+        expect(subject.grades(target.id)).to be_nil
       end
     end
   end

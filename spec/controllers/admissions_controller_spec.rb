@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe AdmissionsController do
+describe AdmissionsController, broken: true do
   let(:level_0) { create :level, :zero }
   let(:level_0_targets) { create :target_group, level: level_0 }
   let!(:screening_target) { create :target, :admissions_screening, target_group: level_0_targets }

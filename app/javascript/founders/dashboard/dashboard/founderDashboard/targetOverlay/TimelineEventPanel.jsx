@@ -18,6 +18,7 @@ export default class TimelineEventPanel extends React.Component {
             this.props.feedback.facultySlackUsername
           }
           target="_blank"
+          rel="noopener"
         >
           <i className="fa fa-slack" aria-hidden="true" />
           <span>Discuss On Slack</span>
@@ -37,6 +38,7 @@ export default class TimelineEventPanel extends React.Component {
         <a
           className="target-overlay__link target-overlay__link--attachment"
           target="_blank"
+          rel="noopener"
           href={attachment.url}
           key={attachment.url}
         >
@@ -53,7 +55,7 @@ export default class TimelineEventPanel extends React.Component {
 
   render() {
     return (
-      <div className="target-overlay-timeline-event-panel__container pb-3 mt-3">
+      <div className="target-overlay-timeline-event-panel__container px-4 pb-3 mt-3">
         <h6 className="target-overlay-timeline-event-panel__title font-semibold pl-1">
           Latest Timeline Submission:
         </h6>

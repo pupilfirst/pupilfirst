@@ -56,28 +56,9 @@ ActiveAdmin.register Startup do
 
     column :level
 
-    column :timeline_events do |startup|
-      ol do
-        startup.timeline_events.order('updated_at DESC').limit(5).each do |event|
-          fa_icon = if event.verified?
-            'fa-thumbs-o-up'
-          elsif event.needs_improvement?
-            'fa-star-half-empty'
-          elsif event.not_accepted?
-            'fa-ban'
-          else
-            'fa-clock-o'
-          end
-          li do
-            link_to " #{event.title}", [:admin, event], class: "fa #{fa_icon} no-text-decoration"
-          end
-        end
-      end
-    end
-
     actions do |startup|
       span do
-        link_to 'View Timeline', startup, target: '_blank', class: 'member_link'
+        link_to 'View Timeline', startup, target: '_blank', class: 'member_link', rel: 'noopener'
       end
 
       span do
@@ -141,7 +122,7 @@ ActiveAdmin.register Startup do
   end
 
   action_item :view_timeline, only: :show do
-    link_to('View Timeline', product_url(startup.id, startup.slug), target: '_blank')
+    link_to('View Timeline', product_url(startup.id, startup.slug), target: '_blank', rel: 'noopener')
   end
 
   # TODO: rewrite as its only used for dropping out startups now
@@ -328,7 +309,7 @@ ActiveAdmin.register Startup do
 
       row :partnership_deed do
         if startup.partnership_deed.present?
-          link_to 'Click here to open in new window', startup.partnership_deed.url, target: '_blank'
+          link_to 'Click here to open in new window', startup.partnership_deed.url, target: '_blank', rel: 'noopener'
         end
       end
 

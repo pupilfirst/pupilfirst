@@ -64,7 +64,7 @@
                   .media-body
                     h6.my-0 Website
                     p.data-content
-                      a href="#{@startup.website}" target="_blank"
+                      a href="#{@startup.website}" target="_blank" rel="noopener"
                         ' #{@startup.website}
                         i.fa.fa-external-link
             - if @startup.presentation_link?
@@ -74,7 +74,7 @@
                   .media-body
                     h6.my-0 Product Deck
                     p.data-content
-                      a href="#{short_url(@startup.presentation_link)}" target="_blank"
+                      a href="#{short_url(@startup.presentation_link)}" target="_blank" rel="noopener"
                         ' #{@startup.product_name} deck
                         i.fa.fa-external-link
             - if @startup.product_video_link?
@@ -84,7 +84,7 @@
                   .media-body
                     h6.my-0 Product Video
                     p.data-content
-                      a href="#{short_url(@startup.product_video_link)}" target="_blank"
+                      a href="#{short_url(@startup.product_video_link)}" target="_blank" rel="noopener"
                         ' #{@startup.product_name} video
                         i.fa.fa-external-link
             - if @startup.wireframe_link?
@@ -94,7 +94,7 @@
                   .media-body
                     h6.my-0 Design Wireframe
                     p.data-content
-                      a href="#{short_url(@startup.wireframe_link)}" target="_blank"
+                      a href="#{short_url(@startup.wireframe_link)}" target="_blank" rel="noopener"
                         ' #{@startup.product_name} design
                         i.fa.fa-external-link
             - if @startup.prototype_link?
@@ -104,7 +104,7 @@
                   .media-body
                     h6.my-0 Product Prototype
                     p.data-content
-                      a href="#{short_url(@startup.prototype_link)}" target="_blank"
+                      a href="#{short_url(@startup.prototype_link)}" target="_blank" rel="noopener"
                         ' #{@startup.product_name} prototype
                         i.fa.fa-external-link
             .col-sm-6.col-md-12
@@ -143,11 +143,11 @@
                       ul.founder__social-links
                         - if founder.twitter_url?
                           li
-                            a href="#{founder.twitter_url}" target='_blank'
+                            a href="#{founder.twitter_url}" target='_blank' rel="noopener"
                               i.fa.fa-twitter-square
                         - if founder.linkedin_url?
                           li
-                            a href="#{founder.linkedin_url}" target='_blank'
+                            a href="#{founder.linkedin_url}" target='_blank' rel="noopener"
                               i.fa.fa-linkedin-square
         .row
           -if @startup.faculty.exists?
@@ -167,7 +167,7 @@
                       - if faculty.linkedin_url?
                         ul.faculty__social-links
                           li
-                            a href="#{faculty.linkedin_url}" target='_blank'
+                            a href="#{faculty.linkedin_url}" target='_blank' rel="noopener"
                               i.fa.fa-linkedin-square
 
     .col-lg-8.order-2.order-lg-1
@@ -215,7 +215,7 @@
             | &nbsp;
             span.attachment-name.grey-text
 
-            a.attachment-download-btn.grey-text.margin-left-10.btn.btn-default.btn-xs target="_blank"
+            a.attachment-download-btn.grey-text.margin-left-10.btn.btn-default.btn-xs target="_blank" rel="noopener"
               i.fa.fa-download
               | &nbsp;&nbsp;
               | Download

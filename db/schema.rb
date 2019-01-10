@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_19_095759) do
+ActiveRecord::Schema.define(version: 2019_01_08_114740) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -128,6 +128,10 @@ ActiveRecord::Schema.define(version: 2018_12_19_095759) do
     t.datetime "updated_at", null: false
     t.boolean "sponsored", default: false
     t.bigint "school_id"
+    t.integer "max_grade"
+    t.integer "pass_grade"
+    t.json "grade_labels"
+    t.datetime "ends_at"
     t.index ["school_id"], name: "index_courses_on_school_id"
   end
 
@@ -154,6 +158,15 @@ ActiveRecord::Schema.define(version: 2018_12_19_095759) do
   create_table "engineering_metrics", id: :serial, force: :cascade do |t|
     t.json "metrics", default: {}, null: false
     t.datetime "week_start_at"
+  end
+
+  create_table "evaluation_criteria", force: :cascade do |t|
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name"
+    t.bigint "course_id"
+    t.index ["course_id"], name: "index_evaluation_criteria_on_course_id"
   end
 
   create_table "faculty", id: :serial, force: :cascade do |t|
@@ -291,18 +304,6 @@ ActiveRecord::Schema.define(version: 2018_12_19_095759) do
     t.index ["founder_id"], name: "index_karma_points_on_founder_id"
     t.index ["source_id"], name: "index_karma_points_on_source_id"
     t.index ["startup_id"], name: "index_karma_points_on_startup_id"
-  end
-
-  create_table "latest_submission_records", force: :cascade do |t|
-    t.bigint "founder_id"
-    t.bigint "target_id"
-    t.bigint "timeline_event_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["founder_id", "target_id"], name: "index_latest_submission_records_on_founder_id_and_target_id", unique: true
-    t.index ["founder_id"], name: "index_latest_submission_records_on_founder_id"
-    t.index ["target_id"], name: "index_latest_submission_records_on_target_id"
-    t.index ["timeline_event_id"], name: "index_latest_submission_records_on_timeline_event_id"
   end
 
   create_table "levels", id: :serial, force: :cascade do |t|
@@ -449,13 +450,6 @@ ActiveRecord::Schema.define(version: 2018_12_19_095759) do
     t.index ["url"], name: "index_shortened_urls_on_url"
   end
 
-  create_table "skills", force: :cascade do |t|
-    t.string "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "name"
-  end
-
   create_table "startup_feedback", id: :serial, force: :cascade do |t|
     t.text "feedback"
     t.string "reference_url"
@@ -562,6 +556,15 @@ ActiveRecord::Schema.define(version: 2018_12_19_095759) do
     t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
+  create_table "target_evaluation_criteria", force: :cascade do |t|
+    t.bigint "target_id"
+    t.bigint "evaluation_criterion_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["evaluation_criterion_id"], name: "index_target_evaluation_criteria_on_evaluation_criterion_id"
+    t.index ["target_id"], name: "index_target_evaluation_criteria_on_target_id"
+  end
+
   create_table "target_groups", id: :serial, force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -591,19 +594,6 @@ ActiveRecord::Schema.define(version: 2018_12_19_095759) do
     t.index ["target_id", "resource_id"], name: "index_target_resources_on_target_id_and_resource_id", unique: true
   end
 
-  create_table "target_skills", force: :cascade do |t|
-    t.bigint "target_id"
-    t.bigint "skill_id"
-    t.string "rubric_good"
-    t.string "rubric_great"
-    t.string "rubric_wow"
-    t.integer "base_karma_points"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["skill_id"], name: "index_target_skills_on_skill_id"
-    t.index ["target_id"], name: "index_target_skills_on_target_id"
-  end
-
   create_table "targets", id: :serial, force: :cascade do |t|
     t.string "role"
     t.string "title"
@@ -625,13 +615,14 @@ ActiveRecord::Schema.define(version: 2018_12_19_095759) do
     t.datetime "last_session_at"
     t.string "key"
     t.string "link_to_complete"
-    t.string "submittability", default: "resubmittable", null: false
     t.boolean "archived", default: false
     t.string "youtube_video_id"
     t.string "google_calendar_event_id"
     t.datetime "feedback_asked_at"
     t.datetime "slack_reminders_sent_at"
     t.string "call_to_action"
+    t.text "rubric_description"
+    t.boolean "resubmittable", default: true
     t.index ["archived"], name: "index_targets_on_archived"
     t.index ["faculty_id"], name: "index_targets_on_faculty_id"
     t.index ["key"], name: "index_targets_on_key"
@@ -650,30 +641,35 @@ ActiveRecord::Schema.define(version: 2018_12_19_095759) do
 
   create_table "timeline_event_grades", force: :cascade do |t|
     t.bigint "timeline_event_id"
-    t.bigint "skill_id"
-    t.string "grade"
-    t.integer "karma_points"
-    t.index ["skill_id"], name: "index_timeline_event_grades_on_skill_id"
+    t.bigint "evaluation_criterion_id"
+    t.integer "grade"
+    t.index ["evaluation_criterion_id"], name: "index_timeline_event_grades_on_evaluation_criterion_id"
+    t.index ["timeline_event_id", "evaluation_criterion_id"], name: "by_timeline_event_criterion", unique: true
     t.index ["timeline_event_id"], name: "index_timeline_event_grades_on_timeline_event_id"
+  end
+
+  create_table "timeline_event_owners", force: :cascade do |t|
+    t.bigint "timeline_event_id"
+    t.bigint "founder_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["founder_id"], name: "index_timeline_event_owners_on_founder_id"
+    t.index ["timeline_event_id"], name: "index_timeline_event_owners_on_timeline_event_id"
   end
 
   create_table "timeline_events", id: :serial, force: :cascade do |t|
     t.text "description"
     t.string "image"
-    t.integer "startup_id"
     t.text "links"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "event_on"
-    t.datetime "status_updated_at"
-    t.string "status"
-    t.integer "founder_id"
     t.integer "improved_timeline_event_id"
     t.integer "target_id"
     t.decimal "score", precision: 2, scale: 1
-    t.index ["founder_id"], name: "index_timeline_events_on_founder_id"
-    t.index ["startup_id"], name: "index_timeline_events_on_startup_id"
-    t.index ["status"], name: "index_timeline_events_on_status"
+    t.integer "evaluator_id"
+    t.datetime "passed_at"
+    t.boolean "latest"
   end
 
   create_table "tracks", force: :cascade do |t|
@@ -769,9 +765,6 @@ ActiveRecord::Schema.define(version: 2018_12_19_095759) do
   add_foreign_key "faculty_startup_enrollments", "startups"
   add_foreign_key "founders", "colleges"
   add_foreign_key "founders", "users"
-  add_foreign_key "latest_submission_records", "founders"
-  add_foreign_key "latest_submission_records", "targets"
-  add_foreign_key "latest_submission_records", "timeline_events"
   add_foreign_key "levels", "courses"
   add_foreign_key "payments", "founders"
   add_foreign_key "payments", "startups"
@@ -784,14 +777,14 @@ ActiveRecord::Schema.define(version: 2018_12_19_095759) do
   add_foreign_key "startups", "founders", column: "team_lead_id"
   add_foreign_key "startups", "levels"
   add_foreign_key "startups", "states", column: "billing_state_id"
+  add_foreign_key "target_evaluation_criteria", "evaluation_criteria"
+  add_foreign_key "target_evaluation_criteria", "targets"
   add_foreign_key "target_groups", "levels"
   add_foreign_key "target_groups", "tracks"
   add_foreign_key "target_resources", "resources"
   add_foreign_key "target_resources", "targets"
-  add_foreign_key "target_skills", "skills"
-  add_foreign_key "target_skills", "targets"
   add_foreign_key "timeline_event_files", "timeline_events"
-  add_foreign_key "timeline_events", "startups"
+  add_foreign_key "timeline_events", "faculty", column: "evaluator_id"
   add_foreign_key "user_activities", "users"
   add_foreign_key "weekly_karma_points", "levels"
   add_foreign_key "weekly_karma_points", "startups"

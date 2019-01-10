@@ -227,6 +227,7 @@ export default class EventDetailsColumn extends React.Component {
                 <i className="fa fa-link" />&nbsp;<a
                   href={link.url}
                   target="_blank"
+                  rel="noopener"
                 >
                   {link.title}
                 </a>

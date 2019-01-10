@@ -22,13 +22,13 @@ describe Founders::ActivityTimelineService do
         # Events we expect should be counted in the timeline.
         5.times { create :public_slack_message, founder: founder, created_at: 1.month.ago }
         kp_3_weeks_ago = create :karma_point, founder: founder, created_at: 3.weeks.ago
-        te_2_weeks_ago = create :timeline_event, startup: startup, created_at: 2.weeks.ago
-        te_1_week_ago = create :timeline_event, startup: startup, created_at: 1.week.ago
+        te_2_weeks_ago = create :timeline_event, founders: startup.founders, created_at: 2.weeks.ago
+        te_1_week_ago = create :timeline_event, founders: startup.founders, created_at: 1.week.ago
         10.times { create :public_slack_message, founder: founder, created_at: 30.minutes.ago }
         kp_now = create :karma_point, founder: founder, created_at: Time.now
 
         # We won't expect the following events to be counted, since it's outside activity timeline.
-        create :timeline_event, startup: startup, created_at: 1.year.ago
+        create :timeline_event, founders: startup.founders, created_at: 1.year.ago
         create :public_slack_message, founder: founder, created_at: 2.months.from_now
 
         # The expected response.

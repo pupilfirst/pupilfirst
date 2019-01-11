@@ -127,6 +127,11 @@ Rails.application.configure do
       origins %w[https://www.sv.co https://sv.co]
       resource '*'
     end
+
+    allow do
+      origins '*'
+      resource '/assets/**/*', headers: :any, methods: :get
+    end
   end
 end
 

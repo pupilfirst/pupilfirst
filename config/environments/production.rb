@@ -130,7 +130,12 @@ Rails.application.configure do
 
     allow do
       origins '*'
-      resource '/assets/**/*', headers: :any, methods: :get
+      resource '/assets/*', methods: :get, headers: :any
+    end
+
+    allow do
+      origins '*'
+      resource '/assets/**/*', methods: :get, headers: :any
     end
   end
 end

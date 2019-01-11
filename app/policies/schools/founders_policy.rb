@@ -9,5 +9,10 @@ module Schools
       # All school admins can team up founders.
       true
     end
+
+    def create?
+      # All school admins can add founders.
+      true
+    end
   end
 end

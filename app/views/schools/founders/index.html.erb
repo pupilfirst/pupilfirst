@@ -28,4 +28,19 @@
   <%= submit_tag 'Team Up / Move Out', class: 'border p-2' %>
 <% end %>
 
+<p class="mt-4">Add new students, individually or as a team:</p>
+<p class="mt-1 text-xs">Provide a list of student names and emails + an optional team name</p>
+<%= form_tag school_course_students_path, class: 'mt-1' do %>
+  <%= text_field_tag :team_name, nil, placeholder: 'Team name', class: 'border p-2' %>
+  <div class="mt-1">
+  <%= text_field_tag "students[]name", nil, placeholder: 'Name 1', class: 'border p-2' %>
+  <%= text_field_tag "students[]email", nil, placeholder: 'Email 1', class: 'border p-2' %>
+  </div>
+  <div class="my-1">
+  <%= text_field_tag "students[]name", nil, placeholder: 'Name 2', class: 'border p-2' %>
+  <%= text_field_tag "students[]email", nil, placeholder: 'Email 2', class: 'border p-2' %>
+  </div>
+  <%= submit_tag 'Add', class: 'border p-2 mb-4' %>
+<% end %>
+
 <div id="student-addition-panel" data-props='{"courseId":1}'></div>

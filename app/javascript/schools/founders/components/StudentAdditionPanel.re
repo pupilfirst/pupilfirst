@@ -6,7 +6,7 @@ let make = (~courseId, _children) => {
   ...component,
   render: _self =>
     <div className="student-addition-panel__container">
-      ("Student Addition Panel for course " ++ (courseId |> string_of_int) |> str)
+      ("<Root div to hook StudentAdditionPanel for course " ++ (courseId |> string_of_int) ++ " on to>" |> str)
     </div>,
 };
 

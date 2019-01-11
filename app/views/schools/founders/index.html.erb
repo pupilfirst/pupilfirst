@@ -1,3 +1,7 @@
+<% content_for(:head) do %>
+  <%= javascript_pack_tag 'schools/founders/index', 'data-turbolinks-track': 'reload', nonce: true %>
+<% end %>
+
 <% @presenter = Schools::Founders::IndexPresenter.new(self, @course) %>
 
 <% @presenter.startups.each do |startup| %>
@@ -23,3 +27,5 @@
   <%= text_field_tag :founder_ids, nil, placeholder: 'JSON: [ID1, ID2, ...]', class: 'border p-2' %>
   <%= submit_tag 'Team Up / Move Out', class: 'border p-2' %>
 <% end %>
+
+<div id="student-addition-panel" data-props='{"courseId":1}'></div>

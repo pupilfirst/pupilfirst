@@ -19,6 +19,7 @@
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react_ujs": "^2.4.3",
+    "turbolinks": "^5.2.0",
     "vanilla-tilt": "^1.4.1",
     "webpack-merge": "^4.1.1"
   },

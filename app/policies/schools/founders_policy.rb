@@ -6,13 +6,10 @@ module Schools
     end
 
     def team_up?
-      # All school admins can team up founders.
-      true
+      # All school admins can team up founders as the course hasn't ended.
+      !record.ended?
     end
 
-    def create?
-      # All school admins can add founders.
-      true
-    end
+    alias create? team_up?
   end
 end

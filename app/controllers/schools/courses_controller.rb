@@ -2,7 +2,7 @@ module Schools
   class CoursesController < SchoolsController
     layout 'course'
 
-    before_action :load_course
+    before_action :load_course, except: :close
 
     def show; end
 
@@ -16,6 +16,16 @@ module Schools
       else
         render 'show'
       end
+    end
+
+    # POST /school/courses/:course_id/close
+    def close
+      @course = authorize(courses.find(params[:course_id]), policy_class: Schools::CoursePolicy)
+
+      ::Courses::CloseService.new(@course).close
+
+      flash.now[:success] = "#{@course.name} closed successfully."
+      redirect_back(fallback_location: school_course_path(@course))
     end
 
     private

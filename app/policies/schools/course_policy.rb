@@ -5,7 +5,12 @@ module Schools
       true
     end
 
-    alias update? show?
+    def update?
+      # Closed courses shouldn't be updated
+      !record.ended?
+    end
+
+    alias close? update?
 
     class Scope < Scope
       def resolve

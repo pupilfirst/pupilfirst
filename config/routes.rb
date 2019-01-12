@@ -38,6 +38,7 @@ Rails.application.routes.draw do
 
   namespace :school, module: 'schools' do
     resources :courses, only: %i[show update] do
+      post 'close'
       # TODO: Use shallow routes here, where possible.
       resource :curriculum, only: %i[show]
       resources :founders, as: 'students', path: 'students', only: %i[index create]

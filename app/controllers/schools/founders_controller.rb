@@ -21,6 +21,7 @@ module Schools
       end
     end
 
+    # POST /school/courses/:course_id/students?team_name=&students[]=
     def create
       @course = authorize(courses.find(params[:course_id]), policy_class: Schools::FoundersPolicy)
 

@@ -5,11 +5,11 @@ module Schools
       true
     end
 
-    alias create? index?
-
-    def destroy?
-      # All school admins can delete faculty (coaches) from a course.
-      true
+    def create?
+      # All school admins can add faculty as long as the course hasn't ended.
+      !record.ended?
     end
+
+    alias destroy? create?
   end
 end

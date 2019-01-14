@@ -522,6 +522,12 @@
   height: 130px;
 }
 
+.founder_profile__avatar {
+  img {
+    width: 100%;
+  }
+}
+
 .timeline-event-upload-progress-section {
   display: none;
   background-color: #f9f9f9;

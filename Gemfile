@@ -159,7 +159,6 @@ group :test do
   gem 'selenium-webdriver', '~> 3.3'
   gem 'chromedriver-helper', '~> 2.1' # Easy installation and use of chromedriver, the Chromium project's selenium webdriver adapter.
   gem 'capybara-screenshot', '~> 1.0' # Save screenshots on failure!
-  gem 'database_cleaner', '~> 1.5' # Database cleaner can handle complex DB cleanup strategies for test (feature vs regular tests).
 end
 
 group :development, :test do

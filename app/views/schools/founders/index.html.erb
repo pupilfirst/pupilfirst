@@ -4,25 +4,35 @@
 
 <% @presenter = Schools::Founders::IndexPresenter.new(self, @course) %>
 
-<% @presenter.startups.each do |startup| %>
-  <div class="uppercase font-bold text-xs mt-3">
-    Level <%= startup.level.number %>
-    <%= @presenter.team?(startup) ? "- #{startup.product_name}" : '' %>
-  </div>
-
-  <div class="border mt-<%= @presenter.team?(startup) ? '1' : '2' %>">
-    <% startup.founders.each do |founder| %>
-      <div class="p-2 cursor-pointer hover:bg-grey-lightest">
-        <span class="text-xs uppercase font-bold">ID#<%= founder.id %></span>
-        <%= founder.name %>
-      </div>
+<% @presenter.teams.each do |team| %>
+  <div class="border m-2 p-2">
+    <div class="uppercase font-bold text-xs mt-3">
+      Level <%= team.level.number %>
+      <%= @presenter.team?(team) ? "- #{team.product_name}" : '' %>
+    </div>
+    <% if @presenter.team?(team) %>
       <div>
-        <%= form_for founder, url: school_student_path(founder.id), class: 'mt-1' do |f| %>
-          <%= f.text_field :name, class: 'border p-2 ml-1' %>
-          <%= f.submit 'Update', class: 'border p-2 mb-4' %>
+        <%= form_for team, url: school_team_path(team.id), class: 'mt-1' do |f| %>
+          <%= f.text_field :product_name, class: 'border p-2' %>
+          <%= f.submit 'Update Team', class: 'border p-2 mb-4' %>
         <% end %>
       </div>
     <% end %>
+
+    <div class="mt-<%= @presenter.team?(team) ? '1' : '2' %>">
+      <% team.founders.each do |student| %>
+        <div class="p-2 cursor-pointer hover:bg-grey-lightest">
+          <span class="text-xs uppercase font-bold">ID#<%= student.id %></span>
+          <%= student.name %>
+        </div>
+        <div>
+          <%= form_for student, url: school_student_path(student.id), class: 'mt-1' do |f| %>
+            <%= f.text_field :name, class: 'border p-2 ml-1' %>
+            <%= f.submit 'Update Student', class: 'border p-2 mb-4' %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
   </div>
 <% end %>
 

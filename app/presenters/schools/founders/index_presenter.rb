@@ -7,8 +7,8 @@ module Schools
         @course = course
       end
 
-      def startups
-        Startup.joins(:course).where(courses: { id: @course })
+      def teams
+        @course.startups
       end
 
       def team?(startup)

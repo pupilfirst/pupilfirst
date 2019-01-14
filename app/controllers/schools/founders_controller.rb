@@ -35,7 +35,7 @@ module Schools
       end
     end
 
-    # PATCH /school/students/:id?name=
+    # PATCH /school/students/:id
     def update
       student = authorize(students.find(params[:id]), policy_class: Schools::FounderPolicy)
 
@@ -43,6 +43,19 @@ module Schools
       if form.validate(params[:founder])
         form.save
         redirect_back(fallback_location: school_course_students_path(student.course))
+      else
+        raise form.errors.full_messages.join(', ')
+      end
+    end
+
+    # PATCH /school/teams/:id
+    def team_update
+      team = authorize(teams.find(params[:id]), policy_class: Schools::StartupPolicy)
+
+      form = Schools::Founders::TeamEditForm.new(team)
+      if form.validate(params[:startup])
+        form.save
+        redirect_back(fallback_location: school_course_students_path(team.course))
       else
         raise form.errors.full_messages.join(', ')
       end

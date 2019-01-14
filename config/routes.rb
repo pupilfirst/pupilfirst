@@ -52,6 +52,10 @@ Rails.application.routes.draw do
     end
 
     resources :founders, as: 'students', path: 'students', except: %i[index]
+
+    resources :startups, as: 'teams', path: 'teams', controller: 'founders', only: [] do
+      patch '/', on: :member, action: 'team_update'
+    end
   end
 
   resources :founders, only: %i[] do

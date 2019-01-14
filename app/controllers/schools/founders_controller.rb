@@ -4,12 +4,12 @@ module Schools
 
     # GET /school/courses/:course_id/students
     def index
-      @course = authorize(courses.find(params[:course_id]), policy_class: Schools::FoundersPolicy)
+      @course = authorize(courses.find(params[:course_id]), policy_class: Schools::FounderPolicy)
     end
 
     # POST /school/students/team_up?founder_ids=&team_name=
     def team_up
-      authorize(nil, policy_class: Schools::FoundersPolicy)
+      authorize(nil, policy_class: Schools::FounderPolicy)
 
       form = Schools::Founders::TeamUpForm.new(OpenStruct.new)
 
@@ -23,13 +23,26 @@ module Schools
 
     # POST /school/courses/:course_id/students?team_name=&students[]=
     def create
-      @course = authorize(courses.find(params[:course_id]), policy_class: Schools::FoundersPolicy)
+      @course = authorize(courses.find(params[:course_id]), policy_class: Schools::FounderPolicy)
 
       form = Schools::Founders::CreateForm.new(Reform::OpenForm.new)
 
       if form.validate(create_params)
         form.save
         redirect_back(fallback_location: school_course_students_path(@course))
+      else
+        raise form.errors.full_messages.join(', ')
+      end
+    end
+
+    # PATCH /school/students/:id?name=
+    def update
+      student = authorize(students.find(params[:id]), policy_class: Schools::FounderPolicy)
+
+      form = Schools::Founders::EditForm.new(student)
+      if form.validate(params[:founder])
+        form.save
+        redirect_back(fallback_location: school_course_students_path(student.course))
       else
         raise form.errors.full_messages.join(', ')
       end

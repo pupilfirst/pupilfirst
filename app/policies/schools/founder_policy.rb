@@ -1,5 +1,5 @@
 module Schools
-  class FoundersPolicy < ApplicationPolicy
+  class FounderPolicy < ApplicationPolicy
     def index?
       # All school admins can list founders in a course.
       true
@@ -11,5 +11,16 @@ module Schools
     end
 
     alias create? team_up?
+
+    def update?
+      # School admins can edit details of students in their open courses.
+      !record.course.ended?
+    end
+
+    class Scope < Scope
+      def resolve
+        current_school.founders
+      end
+    end
   end
 end

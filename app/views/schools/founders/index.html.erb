@@ -16,6 +16,12 @@
         <span class="text-xs uppercase font-bold">ID#<%= founder.id %></span>
         <%= founder.name %>
       </div>
+      <div>
+        <%= form_for founder, url: school_student_path(founder.id), class: 'mt-1' do |f| %>
+          <%= f.text_field :name, class: 'border p-2 ml-1' %>
+          <%= f.submit 'Update', class: 'border p-2 mb-4' %>
+        <% end %>
+      </div>
     <% end %>
   </div>
 <% end %>

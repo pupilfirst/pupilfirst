@@ -8,12 +8,12 @@ module Schools
       end
 
       def teams
-        @course.startups
+        @course.startups.includes(:level, :founders, :faculty)
       end
 
       def team?(startup)
         @team ||= Hash.new do |hash, s|
-          hash[s] = s.founders.count > 1
+          hash[s] = s.founders.length > 1
         end
 
         @team[startup]

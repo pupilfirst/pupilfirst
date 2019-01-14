@@ -27,15 +27,15 @@ module Founders
     end
 
     def review_pending?
-      @event.evaluator_id.blank? && @event.passed_at.blank?
+      @event.evaluator_id.blank? && !@event.passed?
     end
 
     def not_accepted?
-      @event.evaluator_id.present? && @event.passed_at.blank?
+      @event.evaluator_id.present? && !@event.passed?
     end
 
     def improved_event?
-      @founder.startup.earliest_team_event_date.present? && !@event.founder_event? && @event.passed_at.present?
+      @founder.startup.earliest_team_event_date.present? && !@event.founder_event? && @event.passed?
     end
 
     def founder?

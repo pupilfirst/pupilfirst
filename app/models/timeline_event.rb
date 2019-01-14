@@ -209,6 +209,14 @@ class TimelineEvent < ApplicationRecord
     founders.first
   end
 
+  def passed?
+    passed_at.present?
+  end
+
+  def team_event?
+    target.team_target?
+  end
+
   private
 
   def privileged_founder?(founder)

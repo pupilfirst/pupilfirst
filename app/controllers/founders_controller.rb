@@ -90,7 +90,7 @@ class FoundersController < ApplicationController
     @timeline_event_for_og = @founder.timeline_events.find(params[:event_id])
     @meta_description = @timeline_event_for_og.description
 
-    unless TimelineEventPolicy.new(current_user, @founder.startup).show?(@timeline_event_for_og)
+    unless TimelineEventPolicy.new(current_user, @timeline_event_for_og).show?
       raise_not_found
     end
 

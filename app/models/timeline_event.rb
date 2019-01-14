@@ -202,7 +202,7 @@ class TimelineEvent < ApplicationRecord
   end
 
   def startup
-    founders.first.startup
+    founders.includes(:startup).first.startup
   end
 
   def founder

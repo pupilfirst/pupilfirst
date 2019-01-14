@@ -5,22 +5,13 @@ module FacultyModule
       @faculty = faculty
     end
 
-    def timeline_events(school)
-      faculty_courses = @faculty.courses.where(school: school)
-      course_startups = Startup.joins(level: :course).where(levels: { courses: { id: faculty_courses.select(:id) } })
-
-      faculty_startups = @faculty.startups.joins(level: { course: :school })
-        .where(levels: { courses: { school: school } })
-
-      # The supplied faculty is concerned with submissions from the startups to which zhe is directly linked, and the
-      # startups that belong to the courses which zhe directly administer.
-      startup_ids = course_startups.pluck(:id) + faculty_startups.pluck(:id)
-      unique_startup_ids = startup_ids.uniq
-      founder_ids = Founder.where(startup: unique_startup_ids).pluck(:id)
+    def timeline_events(course)
+      founder_ids = Founder.where(startup: @faculty.reviewable_startups(course)).select(:id)
 
       TimelineEvent.not_auto_verified.joins(:timeline_event_owners)
+        .includes(:founders, :evaluation_criteria, :timeline_event_files, :startup_feedback, :timeline_event_owners)
+        .includes(:target_evaluation_criteria, target: :level)
         .where(timeline_event_owners: { founder_id: founder_ids })
-        .includes(:timeline_event_files, :startup_feedback, :target)
         .order(created_at: :DESC).limit(100).map { |timeline_event| timeline_event_fields(timeline_event) }
     end
 

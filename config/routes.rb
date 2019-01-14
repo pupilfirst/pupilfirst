@@ -119,10 +119,6 @@ Rails.application.routes.draw do
 
   # TODO: Remove these faculty routes as we no longer have 'faculty'. Always use the corresponding 'coaches' routes below.
 
-  scope 'coaches', module: 'coaches', as: 'coaches', controller: 'dashboard' do
-    get 'dashboard', action: 'index'
-  end
-
   scope 'coaches', controller: 'faculty' do
     get '/', action: 'index', as: 'coaches_index'
     get '/:id', action: 'show', as: 'coach'
@@ -204,6 +200,9 @@ Rails.application.routes.draw do
   # VR course at Sastra University landing page
   get 'sastra', to: 'home#sastra'
 
+  # PupilFirst landing page
+  get 'pupilfirst', to: 'home#pupilfirst'
+
   root 'home#index'
 
   # /slack redirected to /about/slack
@@ -232,6 +231,10 @@ Rails.application.routes.draw do
   scope 'changelog', as: 'changelog', controller: 'changelog' do
     get 'archive'
     get '(/:year)', action: 'index'
+  end
+
+  resources :courses, only: [] do
+    resource :coach_dashboard, controller: 'coach_dashboard', only: %i[show]
   end
 
   resource :impersonation, only: %i[destroy]

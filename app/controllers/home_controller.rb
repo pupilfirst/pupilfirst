@@ -45,6 +45,12 @@ class HomeController < ApplicationController
     end
   end
 
+  def pupilfirst
+    @skip_container = true
+    @hide_layout_header = true
+    render layout: 'tailwind'
+  end
+
   # GET /tour
   def tour
     @skip_container = true

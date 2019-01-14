@@ -35,7 +35,7 @@ feature 'Coach Dashboard' do
   end
 
   scenario 'coach visits dashboard', js: true do
-    sign_in_user coach.user, referer: coaches_dashboard_path
+    sign_in_user coach.user, referer: course_coach_dashboard_path(course)
 
     # ensure coach is on his dashboard
     expect(page).to have_selector('.side-panel__coach-name', text: coach.name)
@@ -58,7 +58,7 @@ feature 'Coach Dashboard' do
   end
 
   scenario 'coach uses the sidebar filter', js: true do
-    sign_in_user coach.user, referer: coaches_dashboard_path
+    sign_in_user coach.user, referer: course_coach_dashboard_path(course)
 
     # no filter applied by default
     expect(page).to_not have_selector('.startups-list__clear-filter-btn')
@@ -79,7 +79,7 @@ feature 'Coach Dashboard' do
   end
 
   scenario 'coach reviews all timeline events', js: true, pending: true do
-    sign_in_user coach.user, referer: coaches_dashboard_path
+    sign_in_user coach.user, referer: course_coach_dashboard_path(course)
 
     # mark the first event as not accepted
     within(".js-timeline-event-card__review-box-#{timeline_event_1.id}") do
@@ -168,7 +168,7 @@ feature 'Coach Dashboard' do
   end
 
   scenario 'coach add a feedback', js: true do
-    sign_in_user coach.user, referer: coaches_dashboard_path
+    sign_in_user coach.user, referer: course_coach_dashboard_path(course)
 
     within find(".timeline-event-card__container", match: :first) do
       # feedback form should be hidden by default

@@ -174,7 +174,7 @@ Rails.application.routes.draw do
     post 'webhook'
   end
 
-  # Custom founder profile page.
+  # Founder show
   scope 'students', controller: 'founders' do
     get '/:slug', action: 'show', as: 'student'
     get '/:slug/events/:page', action: 'paged_events', as: 'paged_events'

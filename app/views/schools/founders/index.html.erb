@@ -36,7 +36,16 @@
     <div>
       <h5>Dedicated Coaches:</h5>
       <% if team.faculty.length > 0 %>
-        <%= team.faculty.map(&:name).join(', ') %>
+        <ul>
+          <% team.faculty.each do |coach| %>
+            <li>
+              <%= coach.name %>
+              <%= button_to 'Remove', remove_coach_school_team_path(team.id, coach_id: coach.id),
+                class: 'bg-red-light hover:bg-red text-white py-1 px-2 rounded mt-1 mb-2'
+              %>
+            </li>
+          <% end%>
+        </ul>
       <% else %>
         None
       <% end %>

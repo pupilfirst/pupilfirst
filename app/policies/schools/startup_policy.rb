@@ -5,6 +5,8 @@ module Schools
       !record.course.ended?
     end
 
+    alias remove_coach? update?
+
     class Scope < Scope
       def resolve
         current_school.startups

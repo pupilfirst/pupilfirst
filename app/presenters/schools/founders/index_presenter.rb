@@ -8,7 +8,7 @@ module Schools
       end
 
       def teams
-        @course.startups.includes(:level, :founders, :faculty)
+        @course.startups.includes(:level, :founders, :faculty).order(:id)
       end
 
       def team?(startup)

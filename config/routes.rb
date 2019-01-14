@@ -45,15 +45,15 @@ Rails.application.routes.draw do
       resources :faculty, as: 'coaches', path: 'coaches', only: %i[index create destroy]
     end
 
-    resources :founders, as: 'students', path: 'students', only: [] do
+    resources :founders, as: 'students', path: 'students', except: %i[index] do
       collection do
         post 'team_up'
       end
     end
 
-    resources :founders, as: 'students', path: 'students', except: %i[index]
-
-    resources :startups, as: 'teams', path: 'teams', only: %i[update]
+    resources :startups, as: 'teams', path: 'teams', only: %i[update] do
+      post 'remove_coach', on: :member
+    end
   end
 
   resources :founders, only: %i[] do

@@ -56,7 +56,7 @@ class ApplicationController < ActionController::Base
 
   # TODO: Replace ApplicationController#current_school with a proper implementation to enable white-labeling.
   def current_school
-    School.first
+    request.domain.in?(Rails.application.secrets.pupilfirst_domains) ? nil : School.first
   end
 
   def current_coach
@@ -84,8 +84,7 @@ class ApplicationController < ActionController::Base
   # sets a permanent signed cookie. Additional options such as :tld_length can be passed via the options_hash
   # eg: set_cookie(:token, 'abcd', { 'tld_length' => 1 })
   def set_cookie(key, value, options_hash = {})
-    domain = Rails.env.production? ? '.sv.co' : :all
-    cookies.permanent.signed[key] = { value: value, domain: domain }.merge(options_hash)
+    cookies.permanent.signed[key] = { value: value }.merge(options_hash)
   end
 
   # read a signed cookie

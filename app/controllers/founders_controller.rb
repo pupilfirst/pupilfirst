@@ -1,17 +1,23 @@
 class FoundersController < ApplicationController
-  before_action :authenticate_founder!, except: :founder_profile
-  before_action :skip_container, only: %i[founder_profile fee fee_submit]
+  before_action :authenticate_founder!, except: %i[show paged_events timeline_event_show]
+  before_action :skip_container, only: %i[show fee fee_submit paged_events timeline_event_show]
   before_action :require_active_subscription, only: %i[edit update]
 
-  # GET /founders/:slug, GET /students/:slug
-  #
-  # TODO: FoundersController#founder_profile should probably be just #show.
-  def founder_profile
+  # GET /students/:slug
+  def show
     @founder = Founder.friendly.find(params[:slug])
-    authorize @founder
+    @meta_description = "#{@founder.name}: #{@founder.startup.name}"
 
-    @meta_description = "This is a detailed profile for #{@founder.fullname}, includes bio, resume, activity on Public Slack and Karma Points earned."
-    @timeline = Founders::ActivityTimelineService.new(@founder, params[:to])
+    # Hide founder events from everyone other than author of event.
+    @timeline_events = events_for_display.reject { |event| event.hidden_from?(current_founder) }
+    @timeline_events = Kaminari.paginate_array(@timeline_events).page(params[:page]).per(20)
+  end
+
+  # GET /students/:id/events/:page
+  def paged_events
+    # Reuse the founder_profile action, because that's what this page also shows.
+    show
+    render layout: false
   end
 
   # GET /founder/edit
@@ -31,7 +37,7 @@ class FoundersController < ApplicationController
     if @form.validate(params[:founders_edit])
       @form.save!
       flash[:success] = 'Your profile has been updated.'
-      redirect_to student_profile_path(slug: @founder.slug)
+      redirect_to student_path(slug: @founder.slug)
     else
       render 'edit'
     end
@@ -77,6 +83,20 @@ class FoundersController < ApplicationController
     end
   end
 
+  # GET /students/:id/:event_title/:event_id
+  def timeline_event_show
+    # Reuse the startup action, because that's what this page also shows.
+    show
+    @timeline_event_for_og = @founder.timeline_events.find(params[:event_id])
+    @meta_description = @timeline_event_for_og.description
+
+    unless TimelineEventPolicy.new(current_user, @timeline_event_for_og).show?
+      raise_not_found
+    end
+
+    render 'show'
+  end
+
   # POST /founders/:slug/select
   def select
     founder = authorize(Founder.friendly.find(params[:id]))
@@ -92,5 +112,14 @@ class FoundersController < ApplicationController
 
   def skip_container
     @skip_container = true
+  end
+
+  def events_for_display
+    # Only display verified of needs-improvement events if 'current_founder' is not the founder
+    if current_founder != @founder
+      @founder.timeline_events.passed.includes(:target, :timeline_event_files).order(:event_on, :updated_at).reverse_order
+    else
+      @founder.timeline_events.includes(:target, :timeline_event_files).order(:event_on, :updated_at).reverse_order
+    end
   end
 end

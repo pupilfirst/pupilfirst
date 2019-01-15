@@ -50,7 +50,7 @@
           ul.dropdown-menu
             - if policy(current_founder).founder_profile?
               li role="presentation"
-                = link_to student_profile_path(slug: current_founder.slug) do
+                = link_to student_path(slug: current_founder.slug) do
                   i.fa.fa-list-ul
                   | Profile
             - if policy(current_startup).billing?

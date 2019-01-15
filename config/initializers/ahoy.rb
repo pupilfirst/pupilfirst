@@ -33,7 +33,7 @@ Ahoy.user_method = :true_user
 Ahoy.geocode = false
 
 # Track visits across multiple subdomains.
-Ahoy.cookie_domain = Rails.env.production? ? '.sv.co' : :all
+# Ahoy.cookie_domain = :all
 
 Ahoy.api = true
 Ahoy.server_side_visits = :when_needed

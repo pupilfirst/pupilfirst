@@ -174,11 +174,12 @@ Rails.application.routes.draw do
     post 'webhook'
   end
 
-  # Custom founder profile page.
-  # # TODO: Remove this founder route as we no longer have 'founders'. Always use the corresponding 'student' route below.
-  get 'founders/:slug', to: 'founders#founder_profile', as: 'founder_profile'
-
-  get 'students/:slug', to: 'founders#founder_profile', as: 'student_profile'
+  # Founder show
+  scope 'students', controller: 'founders' do
+    get '/:slug', action: 'show', as: 'student'
+    get '/:slug/events/:page', action: 'paged_events', as: 'paged_events'
+    get '/:slug/e/:event_id/:event_title', action: 'timeline_event_show', as: 'student_timeline_event_show'
+  end
 
   # Story of startup village, accessed via about pages.
   get 'story', as: 'story', to: 'home#story'
@@ -198,6 +199,9 @@ Rails.application.routes.draw do
 
   # VR course at Sastra University landing page
   get 'sastra', to: 'home#sastra'
+
+  # PupilFirst landing page
+  get 'pupilfirst', to: 'home#pupilfirst'
 
   root 'home#index'
 

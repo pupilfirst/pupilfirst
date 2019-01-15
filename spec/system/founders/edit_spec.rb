@@ -79,7 +79,7 @@ feature 'Founder Edit' do
 
       expect(page).to have_text(founder_name)
       # expect(page).to have_link('Complete Your Profile')
-      expect(page).to have_selector('div.activity-section')
+      expect(page).to have_selector('div.profile-data')
 
       # Confirm that founder has, indeed, been updated.
       expect(founder.reload).to have_attributes(

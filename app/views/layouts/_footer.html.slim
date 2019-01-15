@@ -18,7 +18,7 @@ footer
                 / div
                 /   - if current_user
                 /     - if current_founder && policy(current_founder).founder_profile?
-                /       = link_to 'Profile', founder_profile_path(slug: current_founder.slug), id: 'footer-sitemap-profile-link', class: 'footer-column__link'
+                /       = link_to 'Profile', student_path(slug: current_founder.slug), id: 'footer-sitemap-profile-link', class: 'footer-column__link'
                 /     - else
                 /       = link_to 'Sign Out', destroy_user_session_path, method: :delete, id: 'footer-sitemap-sign-out-link', class: 'footer-column__link'
                 /   - else

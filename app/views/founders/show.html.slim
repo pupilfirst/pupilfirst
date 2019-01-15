@@ -1,7 +1,7 @@
 - content_for(:head) do
   title SV.CO Profile for #{@founder.fullname}
 
-#founder__founder-profile
+#founder__show
 
 .user-data-container
   .container
@@ -28,7 +28,7 @@
               - if !@founder.exited && @founder.profile_completion_percentage < 100
                 a.profile-complete-button href=edit_founder_url
                   ' Complete Your Profile
-        div class="col-md-#{@founder.startup&.logo.present? ? 7 : 10}"
+        .col-md-10
           .profile-data
             .profile-head.d-lg-flex
               .col-lg-6.profile-name.px-0.mt-2.mt-md-0.text-center.text-md-left
@@ -46,9 +46,6 @@
                     = @founder.startup.product_name
               - if @founder.social_url_present?
                 .col-lg-6.social-connect.px-0.mt-3.mt-lg-0.text-center.text-md-left.text-lg-right
-                  - if @founder.personal_website_url.present?
-                    a href=@founder.personal_website_url target='_blank' rel='noopener'
-                      i.fa.fa-globe
                   - if @founder.linkedin_url.present?
                     a href=@founder.linkedin_url target='_blank' rel='noopener'
                       i.fa.fa-linkedin
@@ -76,12 +73,12 @@
                 p.founder-about.pb-2
                   = @founder.about
                 .education-details
-                  - if @founder.startup.course.present?
+                  - if @founder.course.present?
                     span.course-name
                       i.fa.fa-book
                       | Course:
-                      strong.course-tooltip data-title=@founder.startup.course
-                        = @founder.startup.course
+                      strong.course-tooltip data-title=@founder.course
+                        = @founder.course
                   - if @founder.semester.present?
                     span.semester-name
                       i.fa.fa-flag
@@ -99,106 +96,79 @@
                   a.btn.btn-ghost-secondary.btn-with-icon.btn-xs target="_blank" href=short_url(@founder.resume_link) rel='noopener'
                     i.fa.fa-file-text-o
                     span View Resume
-        - if @founder.startup&.logo.present?
-          .col-md-3.startup-logo-profile.d-flex.align-items-center.justify-content-center.mt-3.mt-md-0
-            a.startup-logo-box href=product_url(@founder.startup.id, @founder.startup.slug)
-              = image_tag @founder.startup.logo.url, alt: 'Startup logo', class: 'img-fluid'
 
 .profile-bg.py-3
   .container
-    .activity-section
-      .activity-head.d-flex.align-items-center.justify-content-between
-        h3 Recent Activity
-        .activity-legend title="A summary of Timeline Events, Public Slack Messages and Karma Points."
-          span Less
-          ul.legend.list-unstyled
-            li.activity-blank
-            li.activity-low
-            li.activity-medium
-            li.activity-high
-          span More
-      .activity-content
-        - if @timeline.more_in_past?
-          = link_to "?to=#{(@timeline.past_date)}", class: 'btn btn-secondary founder-profile__activity-browse-button' do
-            i.fa.fa-backward
-            | &nbsp;Previous
+    .row
+      .col-lg-3.order-1.order-lg-2
+        #data-points
+          .data-icons
+            .row
+              .col-sm-6.col-md-12
+                .media.mb-3.align-items-center
+                  img.d-flex.mr-3 alt="Course icon" src="#{image_url 'founders/show/course-icon.png'}"
+                  .media-body
+                    h6.my-0 Course Name
+                    p.data-content #{@founder.startup.course.name}
+              .col-sm-6.col-md-12
+                .media.mb-3.align-items-center
+                  img.d-flex.mr-3 alt="Level icon" src="#{image_url 'founders/show/level-icon.png'}"
+                  .media-body
+                    h6.my-0 Level
+                    p.data-content #{@founder.startup.level.display_name}
+              - if @founder.personal_website_url.present?
+                .col-sm-6.col-md-12
+                  .media.mb-3.align-items-center
+                    img.d-flex.mr-3 alt="Website icon" src="#{image_url 'founders/show/website-icon.png'}"
+                    .media-body
+                      h6.my-0 Website
+                      p.data-content
+                        a href="#{@founder.personal_website_url}" target="_blank" rel="noopener"
+                          ' #{@founder.personal_website_url}
+                          i.fa.fa-external-link
+          .row
+            - if @founder.faculty.any?
+              .col-md-12.mt-4
+                h3 Mentors
+                hr
+                - @founder.faculty.each do |faculty|
+                  - if !faculty.inactive
+                    .data-faculty
+                      .media.align-items-center
+                        a.mr-3 href=faculty_url(faculty.slug)
+                          .faculty-image
+                            == avatar(faculty.name, faculty: faculty, background_shape: :square)
+                        .media-body
+                          .media-heading
+                            = link_to faculty.name, faculty_url(faculty.slug)
+                          p.designation #{faculty.title}
+                          - if faculty.linkedin_url?
+                            ul.faculty__social-links
+                              li
+                                a href="#{faculty.linkedin_url}" target='_blank'
+                                  i.fa.fa-linkedin-square
 
-        - if @timeline.more_in_future?
-          = link_to "?to=#{@timeline.future_date}", class: 'ml-md-1 btn btn-secondary founder-profile__activity-browse-button' do
-            i.fa.fa-forward
-            | &nbsp;Next
+      .col-lg-9.order-2.order-lg-1
+        - if @timeline_event_for_og.present?
+          .main-timeline
+            .tl-iteration
+              p#focused-event
+                | Focused Event
+              = image_tag 'founders/show/dash.png'
+            ul.pa-0
+              == render 'timeline_event', event: @timeline_event_for_og
+        - if @timeline_events.present?
+          .main-timeline
+            .tl-iteration
+              p
+                | Timeline
+              = image_tag 'founders/show/dash.png'
+            ul#timeline-list.pl-0
+              = render 'events_by_page', events: @timeline_events, page: 1
+        - else
+          .main-timeline
+            .tl-iteration
+              p
+                | No timeline events to show!
+              = image_tag 'founders/show/dash.png'
 
-        - activities = @timeline.activities
-
-        .activity-calendar
-          ul#activityTab.month-section.list-unstyled.nav.d-none
-            - activities.each do |month, data|
-              li
-                a.d-flex.justify-content-between data-toggle="tab" href="##{month.parameterize}" class="#{month == activities.keys.last ? 'active' : ''}"
-                  span.d-flex
-                    .month-name = month
-                    - data[:counts].each do |week_number, count_for_week|
-                      .week-section class=activity_class_for_count(count_for_week)
-                        span.week-name W#{week_number}
-                  span.arrow
-        .row
-          .col-lg-8.tab-content
-            - activities.each do |month, data|
-              .tab-pane id=month.parameterize class="#{month == activities.keys.last ? 'active in' : ''}"
-                - if data[:list].present?
-                  .timeline
-                    - data[:list].each do |data_entry|
-                      .timeline-data
-                        .timeline-box
-                          - if data_entry[:type] == :karma_point
-                            .timeline-date
-                              span.font-weight-600 = data_entry[:karma_point].created_at.strftime('%b %d, %Y')
-                            .timeline-badge-custom
-                            .timeline-panel
-                              .timeline-body
-                                p
-                                  ' Received #{data_entry[:karma_point].points}
-                                  ' Karma Points &mdash; #{data_entry[:karma_point].activity_type}
-                          - elsif data_entry[:type] == :public_slack_message
-                            .timeline-date
-                            .timeline-badge-custom
-                            .timeline-panel
-                              .timeline-body
-                                p
-                                  ' Posted #{data_entry[:count]}
-                                  ' message#{data_entry[:count] > 1 ? 's' : ''} on Public Slack.
-                          - else
-                            .timeline-date
-                              span.font-weight-600 = data_entry[:timeline_event].created_at.strftime('%b %d, %Y')
-                            .timeline-badge-custom
-                            .timeline-panel
-                              .timeline-body
-                                p
-                                  ' Updated timeline: #{data_entry[:timeline_event].title}.
-                - else
-                  .inactive-month
-                    p Student was inactive during this month.
-
-          .col-lg-4.all-activity-counts.d-lg-flex.flex-lg-column
-            .slack-messages
-              .all-activity-head.blue-head
-                h3.font-weight-400 Slack Messages
-              .all-activity-body.d-flex
-                .logo-block
-                  = image_tag 'founders/profile/slack-logo.png', class: 'img-fluid'
-                .activity-count-block
-                  h2.font-weight-300
-                    = @founder.public_slack_messages.count
-                    span messages
-                  p From #{@founder.created_at.strftime '%b %d, %Y'}
-            .karma-points
-              .all-activity-head.green-head
-                h3.font-weight-400 Karma Points
-              .all-activity-body.d-flex
-                .logo-block
-                  = image_tag 'founders/profile/karma-logo.png', class: 'img-fluid'
-                .activity-count-block
-                  h2.font-weight-300
-                    = @founder.karma_points.sum(:points)
-                    span points
-                  p From #{@founder.created_at.strftime '%b %d, %Y'}

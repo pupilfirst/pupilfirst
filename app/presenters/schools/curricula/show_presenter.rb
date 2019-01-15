@@ -10,6 +10,10 @@ module Schools
       def evaluation_criteria
         @course.evaluation_criteria.select(:id, :name, :description)
       end
+
+      def levels
+        @course.levels.select(:id, :name, :description, :number)
+      end
     end
   end
 end

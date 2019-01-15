@@ -44,6 +44,7 @@ Rails.application.routes.draw do
       resources :founders, as: 'students', path: 'students', only: %i[index create]
       resources :faculty, as: 'coaches', path: 'coaches', only: %i[index create destroy]
       resources :evaluation_criteria, only: %i[create]
+      resources :levels, only: %i[create]
     end
 
     resources :founders, as: 'students', path: 'students', except: %i[index] do
@@ -60,6 +61,8 @@ Rails.application.routes.draw do
     end
 
     resources :evaluation_criteria, only: %i[update destroy]
+
+    resources :levels, only: %i[update destroy]
   end
 
   resources :founders, only: %i[] do

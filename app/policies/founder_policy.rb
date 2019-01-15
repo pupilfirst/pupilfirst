@@ -20,6 +20,6 @@ class FounderPolicy < ApplicationPolicy
   end
 
   def select?
-    record.present? && user.founders.count > 1
+    record.present? && user.founders.where(id: record).present?
   end
 end

@@ -96,10 +96,6 @@
                   a.btn.btn-ghost-secondary.btn-with-icon.btn-xs target="_blank" href=short_url(@founder.resume_link) rel='noopener'
                     i.fa.fa-file-text-o
                     span View Resume
-        - if @founder.startup&.logo.present?
-          .col-md-3.startup-logo-profile.d-flex.align-items-center.justify-content-center.mt-3.mt-md-0
-            a.startup-logo-box href=product_url(@founder.startup.id, @founder.startup.slug)
-              = image_tag @founder.startup.logo.url, alt: 'Startup logo', class: 'img-fluid'
 
 .profile-bg.py-3
   .container

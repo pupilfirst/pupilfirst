@@ -5,7 +5,7 @@
 <% @presenter = Schools::Founders::IndexPresenter.new(self, @course) %>
 
 <% @presenter.teams.each do |team| %>
-  <div class="border m-2 p-2">
+  <div class="border-4 m-2 p-2">
     <div class="uppercase font-bold text-xs mt-3">
       Level <%= team.level.number %>
       <%= @presenter.team?(team) ? "- #{team.product_name}" : '' %>
@@ -34,7 +34,7 @@
       <% end %>
     </div>
     <div>
-      <h5>Dedicated Coaches:</h5>
+      <h5>Assigned Coaches:</h5>
       <% if team.faculty.length > 0 %>
         <ul>
           <% team.faculty.each do |coach| %>
@@ -48,6 +48,16 @@
         </ul>
       <% else %>
         None
+      <% end %>
+      <h5>Assign new coach:</h5>
+      <%= form_tag add_coach_school_team_path(team.id), class: 'mt-1' do %>
+        <%= text_field_tag "faculty[id]", nil, placeholder: 'Existing ID', class: 'border p-2' %>
+        <div class="mt-1 ml-4">OR</div>
+        <div class="mt-1">
+          <%= text_field_tag "faculty[name]", nil, placeholder: 'New Name', class: 'border p-2' %>
+          <%= text_field_tag "faculty[email]", nil, placeholder: 'New Email', class: 'border p-2' %>
+        </div>
+        <%= submit_tag 'Assign', class: 'border p-2 mt-2' %>
       <% end %>
     </div>
   </div>

@@ -52,7 +52,10 @@ Rails.application.routes.draw do
     end
 
     resources :startups, as: 'teams', path: 'teams', only: %i[update] do
-      post 'remove_coach', on: :member
+      member do
+        post 'add_coach'
+        post 'remove_coach'
+      end
     end
   end
 

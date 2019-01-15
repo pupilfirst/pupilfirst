@@ -6,6 +6,7 @@ module Schools
     end
 
     alias remove_coach? update?
+    alias add_coach? update?
 
     class Scope < Scope
       def resolve

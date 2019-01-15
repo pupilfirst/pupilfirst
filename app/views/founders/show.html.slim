@@ -28,7 +28,7 @@
               - if !@founder.exited && @founder.profile_completion_percentage < 100
                 a.profile-complete-button href=edit_founder_url
                   ' Complete Your Profile
-        div class="col-md-#{@founder.startup&.logo.present? ? 7 : 10}"
+        .col-md-10
           .profile-data
             .profile-head.d-lg-flex
               .col-lg-6.profile-name.px-0.mt-2.mt-md-0.text-center.text-md-left

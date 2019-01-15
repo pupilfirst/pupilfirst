@@ -1,10 +1,14 @@
 class HomeController < ApplicationController
   def index
-    @skip_container = true
-    @sitewide_notice = true if %w[startupvillage.in].include?(params[:redirect_from])
-    @hide_nav_links = false
+    if current_school.blank?
+      render 'pupilfirst', layout: 'tailwind'
+    else
+      @skip_container = true
+      @sitewide_notice = true if %w[startupvillage.in].include?(params[:redirect_from])
+      @hide_nav_links = false
 
-    render layout: 'home'
+      render layout: 'home'
+    end
   end
 
   def story

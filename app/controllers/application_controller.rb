@@ -56,7 +56,7 @@ class ApplicationController < ActionController::Base
 
   # TODO: Replace ApplicationController#current_school with a proper implementation to enable white-labeling.
   def current_school
-    School.first
+    request.domain.in?(Rails.application.secrets.pupilfirst_domains) ? nil : School.first
   end
 
   def current_coach

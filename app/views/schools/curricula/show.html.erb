@@ -1,1 +1,26 @@
-Curriculum editor for course (<%= @course.name %>) should go here.
+<% @presenter = Schools::Curricula::ShowPresenter.new(self, @course) %>
+<div class="border m-2 p-2"
+  <h5>Evaluation criteria for <%=  @course.name%></h5>
+  <ul>
+  <% @presenter.evaluation_criteria.each do |criterion| %>
+      <li>
+        <%= criterion.name %>
+        <%= button_to 'Delete', school_evaluation_criterion_path(criterion), method: :delete,
+          class: 'bg-red-light hover:bg-red text-white py-1 px-2 rounded mt-1 mb-2 text-sm',
+          form: { class: 'inline' }
+        %>
+        <%= form_for criterion, url: school_evaluation_criterion_path(criterion), class: 'mt-1' do |f| %>
+          <%= f.text_field :name, class: 'border p-2 ml-1' %>
+          <%= f.text_field :description, class: 'border p-2 ml-1' %>
+          <%= f.submit 'Update', class: 'border p-2 mb-4' %>
+        <% end %>
+      </li>
+  <% end %>
+  </ul>
+  <h5 class="text-green">Add new criteria:</h5>
+  <%= form_for EvaluationCriterion.new, url: school_course_evaluation_criteria_path(@course) do |f| %>
+    <%= f.text_field :name, class: 'border p-2' %>
+    <%= f.text_field :description, class: 'border p-2 ml-1' %>
+    <%= f.submit 'Add', class: 'border p-2 mb-4' %>
+  <% end %>
+</div>

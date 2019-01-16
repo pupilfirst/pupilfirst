@@ -37,8 +37,16 @@ class FacultyConnectSessionReminderJob < ApplicationJob
     @startup_name ||= connect_request.startup.product_name
   end
 
-  def startup_url
-    @startup_url ||= Rails.application.routes.url_helpers.product_url(connect_request.startup.id, connect_request.startup.slug)
+  def founder
+    @founder ||= connect_request.startup.founders.first
+  end
+
+  def founder_name
+    @founder_name ||= founder.name
+  end
+
+  def founder_url
+    @founder_url ||= Rails.application.routes.url_helpers.student_url(founder.slug)
   end
 
   def faculty_name
@@ -74,11 +82,11 @@ class FacultyConnectSessionReminderJob < ApplicationJob
 
   def reminder_for_faculty
     I18n.t('jobs.faculty_connect_session_reminder.faculty_reminder',
-      startup_url: startup_url, startup_name: startup_name, meeting_link: faculty_join_session_link, questions: questions)
+      founder_url: founder_url, founder_name: founder_name, meeting_link: faculty_join_session_link, questions: questions)
   end
 
   def reminder_for_ops_team
     I18n.t('jobs.faculty_connect_session_reminder.ops_team_reminder',
-      startup_url: startup_url, startup_name: startup_name, coach_url: coach_url, faculty_name: faculty_name)
+      founder_url: founder_url, founder_name: founder_name, coach_url: coach_url, faculty_name: faculty_name)
   end
 end

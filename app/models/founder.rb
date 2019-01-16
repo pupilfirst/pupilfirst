@@ -305,4 +305,11 @@ class Founder < ApplicationRecord
   def self.valid_semester_values
     %w[I II III IV V VI VII VIII Graduated Other]
   end
+
+  def faculty
+    return Faculty.none if startup.blank?
+
+    scope = Faculty.left_joins(:startups, :courses)
+    scope.where(startups: { id: startup }).or(scope.where(courses: { id: startup.level.course })).distinct
+  end
 end

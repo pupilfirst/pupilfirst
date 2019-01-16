@@ -4,7 +4,7 @@ Rollbar.configure do |config|
 
   config.access_token = ENV['ROLLBAR_ACCESS_TOKEN']
 
-  # Here we'll disable in 'test':
+  # We'll disable Rollbar in 'test' and 'development' environments.
   config.enabled = false if Rails.env.test? || Rails.env.development?
 
   # By default, Rollbar will try to call the `current_user` controller method
@@ -29,6 +29,9 @@ Rollbar.configure do |config|
   #
   # You can also specify a callable, which will be called with the exception instance.
   # config.exception_level_filters.merge!('MyCriticalException' => lambda { |e| 'critical' })
+
+  # Ignore 404-s.
+  config.exception_level_filters['ActionController::RoutingError'] = 'ignore'
 
   # Enable asynchronous reporting (uses girl_friday or Threading if girl_friday
   # is not installed)
@@ -55,4 +58,7 @@ Rollbar.configure do |config|
 
   # Scrub login_token from logs.
   config.scrub_fields |= [:login_token]
+
+  # Defer reporting errors.
+  config.use_delayed_job(queue: 'low_priority')
 end

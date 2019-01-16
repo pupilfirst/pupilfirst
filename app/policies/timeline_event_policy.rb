@@ -19,6 +19,18 @@ class TimelineEventPolicy < ApplicationPolicy
     true
   end
 
+  def show?
+    return false if record.blank?
+
+    # Public can see only passed team submissions.
+    if record.passed? && record.team_event?
+      return true
+    end
+
+    # Other submissions can be seen only by team members.
+    record.founders.where(id: current_founder).present?
+  end
+
   def review?
     coach = user.faculty
 

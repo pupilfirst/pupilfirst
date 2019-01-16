@@ -44,6 +44,7 @@ class TimelineEvent < ApplicationRecord
   scope :not_improved, -> { joins(:target).where(improved_timeline_event_id: nil) }
   scope :not_auto_verified, -> { joins(:evaluation_criteria).distinct }
   scope :auto_verified, -> { where.not(id: not_auto_verified) }
+  scope :passed, -> { where.not(passed_at: nil) }
   scope :evaluated_by_faculty, -> { where.not(evaluator_id: nil) }
 
   after_initialize :make_links_an_array
@@ -170,9 +171,8 @@ class TimelineEvent < ApplicationRecord
   end
 
   def share_url
-    Rails.application.routes.url_helpers.product_timeline_event_show_url(
-      id: startup.id,
-      slug: startup.slug,
+    Rails.application.routes.url_helpers.student_timeline_event_show_url(
+      slug: founder.slug,
       event_id: id,
       event_title: title.parameterize
     )
@@ -207,6 +207,14 @@ class TimelineEvent < ApplicationRecord
 
   def founder
     founders.first
+  end
+
+  def passed?
+    passed_at.present?
+  end
+
+  def team_event?
+    target.team_target?
   end
 
   private

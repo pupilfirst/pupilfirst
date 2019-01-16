@@ -84,6 +84,14 @@ let colors = {
   'pink-light': '#fa7ea8',
   'pink-lighter': '#ffbbca',
   'pink-lightest': '#ffebef',
+
+  'primary-darkest': '#001033',
+  'primary-darker': '#001A55',
+  'primary-dark': '#002988',
+  'primary': '#0038ba',
+  'primary-light': '#2E5CC6',
+  'primary-lighter': '#7392D9',
+  'primary-lightest': '#D0DAF2',
 }
 
 module.exports = {
@@ -167,7 +175,7 @@ module.exports = {
 
   tracking: {
     'tight': '-0.05em',
-    'normal': '0',
+    'normal': '0.01em',
     'wide': '0.05em',
   },
 
@@ -339,7 +347,7 @@ module.exports = {
   shadows: {
     default: '0 2px 4px 0 rgba(0,0,0,0.10)',
     'md': '0 4px 8px 0 rgba(0,0,0,0.12), 0 2px 4px 0 rgba(0,0,0,0.08)',
-    'lg': '0 15px 30px 0 rgba(0,0,0,0.11), 0 5px 15px 0 rgba(0,0,0,0.08)',
+    'lg': '0 10px 27px -5px rgba(50,50,93,0.20), 0 5px 15px -5px rgba(50,50,93,0.05)',
     'inner': 'inset 0 2px 4px 0 rgba(0,0,0,0.06)',
     'outline': '0 0 0 3px rgba(52,144,220,0.5)',
     'none': 'none',

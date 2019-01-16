@@ -323,7 +323,7 @@ ActiveAdmin.register Target do
       f.input :rubric, as: :file
       f.input :remote_rubric_url
       f.input :resubmittable
-      f.input :evaluation_criteria, as: :select, collection: EvaluationCriterion.all.map { |ec| [ec.display_name.to_s, ec.id] }, include_blank: 'No evaluation criteria'
+      f.input :evaluation_criteria, collection: EvaluationCriterion.all.map { |ec| [ec.display_name.to_s, ec.id] }
     end
 
     f.actions

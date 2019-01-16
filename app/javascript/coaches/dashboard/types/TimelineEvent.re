@@ -5,7 +5,7 @@ type t = {
   eventOn: DateTime.t,
   startupId: int,
   startupName: string,
-  founders: list(Founder.t),
+  founderIds: list(int),
   links: list(Link.t),
   files: list(File.t),
   image: option(string),
@@ -26,18 +26,18 @@ let decode = json =>
     eventOn: json |> field("eventOn", string) |> DateTime.parse,
     startupId: json |> field("startupId", int),
     startupName: json |> field("startupName", string),
-    founders: json |> field("founders", list(Founder.decode)),
+    founderIds: json |> field("founderIds", list(int)),
     links: json |> field("links", list(Link.decode)),
     files: json |> field("files", list(File.decode)),
     image: json |> field("image", nullable(string)) |> Js.Null.toOption,
-    latestFeedback:
-      json |> field("latestFeedback", nullable(string)) |> Js.Null.toOption,
+    latestFeedback: json |> field("latestFeedback", nullable(string)) |> Js.Null.toOption,
     evaluation: json |> field("evaluation", list(Grading.decode)),
     rubric: json |> field("rubric", nullable(string)) |> Js.Null.toOption,
   };
 
-let forStartupId = (startupId, tes) =>
-  tes |> List.filter(te => te.startupId == startupId);
+let forStartupId = (startupId, tes) => tes |> List.filter(te => te.startupId == startupId);
+
+let forFounderId = (founderId, tes) => tes |> List.filter(te => List.mem(founderId, te.founderIds));
 
 let id = t => t.id;
 
@@ -47,7 +47,7 @@ let description = t => t.description;
 
 let eventOn = t => t.eventOn;
 
-let founders = t => t.founders;
+let founderIds = t => t.founderIds;
 
 let startupName = t => t.startupName;
 
@@ -61,19 +61,13 @@ let latestFeedback = t => t.latestFeedback;
 
 let updateEvaluation = (evaluation, t) => {...t, evaluation};
 
-let updateFeedback = (latestFeedback, t) => {
-  ...t,
-  latestFeedback: Some(latestFeedback),
-};
+let updateFeedback = (latestFeedback, t) => {...t, latestFeedback: Some(latestFeedback)};
 
-let reviewPending = tes =>
-  tes |> List.filter(te => te.evaluation |> Grading.pending);
+let reviewPending = tes => tes |> List.filter(te => te.evaluation |> Grading.pending);
 
-let reviewComplete = tes =>
-  tes |> List.filter(te => ! (te.evaluation |> Grading.pending));
+let reviewComplete = tes => tes |> List.filter(te => ! (te.evaluation |> Grading.pending));
 
-let getReviewResult = (passGrade, t) =>
-  t.evaluation |> Grading.anyFail(passGrade) ? Failed : Passed;
+let getReviewResult = (passGrade, t) => t.evaluation |> Grading.anyFail(passGrade) ? Failed : Passed;
 
 let resultAsString = reviewResult =>
   switch (reviewResult) {

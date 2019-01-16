@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'rails_helper'
 
 feature 'Coach Dashboard' do
   include UserSpecHelper
@@ -41,11 +42,13 @@ feature 'Coach Dashboard' do
     expect(page).to have_selector('.side-panel__coach-name', text: coach.name)
     expect(page).to have_selector('.side-panel__coach-description', text: 'Pending reviews: 4')
 
-    # and his startups are listed properly on the sidebar
-    within('.startups-list__container') do
-      expect(page).to have_selector('.startups-list__item', count: 2)
-      expect(page).to have_selector('.startups-list__item-name', text: startup_1.product_name)
-      expect(page).to have_selector('.startups-list__item-name', text: startup_2.product_name)
+    # and his students are listed properly on the sidebar
+    within('.founders-list__container') do
+      expect(page).to have_selector('.founders-list__item', count: 4)
+      expect(page).to have_selector('.founders-list__item-name', text: startup_1.founders.first.name)
+      expect(page).to have_selector('.founders-list__item-name', text: startup_1.founders.second.name)
+      expect(page).to have_selector('.founders-list__item-name', text: startup_2.founders.first.name)
+      expect(page).to have_selector('.founders-list__item-name', text: startup_2.founders.second.name)
     end
 
     # and all the timeline events are listed (excluding the auto-verified one)
@@ -61,17 +64,17 @@ feature 'Coach Dashboard' do
     sign_in_user coach.user, referer: course_coach_dashboard_path(course)
 
     # no filter applied by default
-    expect(page).to_not have_selector('.startups-list__clear-filter-btn')
-    find('.startups-list__item-name', text: startup_1.product_name).click
+    expect(page).to_not have_selector('.founders-list__clear-filter-btn')
+    find('.founders-list__item-name', text: startup_1.founders.first.name).click
     # the list should now be filtered correctly
-    expect(page).to have_selector('.timeline-event-card__container', count: 2)
+    expect(page).to have_selector('.timeline-event-card__container', count: 1)
     expect(page).to have_selector('.timeline-event-card__description', text: timeline_event_1.description)
-    expect(page).to have_selector('.timeline-event-card__description', text: timeline_event_2.description)
+    expect(page).to_not have_selector('.timeline-event-card__description', text: timeline_event_2.description)
     expect(page).to_not have_selector('.timeline-event-card__description', text: timeline_event_3.description)
     expect(page).to_not have_selector('.timeline-event-card__description', text: timeline_event_4.description)
 
     # and the clear filter button visible
-    expect(page).to have_selector('.startups-list__clear-filter-btn')
+    expect(page).to have_selector('.founders-list__clear-filter-btn')
 
     # clearing the filter should display all events again
     click_on 'Clear Filter'

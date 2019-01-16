@@ -2,7 +2,7 @@
 
 type props = {
   coach: Coach.t,
-  startups: list(Startup.t),
+  founders: list(Founder.t),
   timelineEvents: list(TimelineEvent.t),
   authenticityToken: string,
   emptyIconUrl: string,
@@ -13,13 +13,13 @@ type props = {
 };
 
 type state = {
-  selectedStartupId: option(int),
+  selectedFounderId: option(int),
   timelineEvents: list(TimelineEvent.t),
 };
 
 type action =
-  | SelectStartup(int)
-  | ClearStartup
+  | SelectFounder(int)
+  | ClearFounder
   | ReplaceTE(TimelineEvent.t);
 
 let component = ReasonReact.reducerComponent("CoachDashboard");
@@ -27,7 +27,7 @@ let component = ReasonReact.reducerComponent("CoachDashboard");
 let make =
     (
       ~coach,
-      ~startups,
+      ~founders,
       ~timelineEvents,
       ~authenticityToken,
       ~emptyIconUrl,
@@ -38,41 +38,34 @@ let make =
       _children,
     ) => {
   ...component,
-  initialState: () => {selectedStartupId: None, timelineEvents},
+  initialState: () => {selectedFounderId: None, timelineEvents},
   reducer: (action, state) =>
     switch (action) {
-    | SelectStartup(id) =>
-      ReasonReact.Update({...state, selectedStartupId: Some(id)})
-    | ClearStartup => ReasonReact.Update({...state, selectedStartupId: None})
+    | SelectFounder(id) => ReasonReact.Update({...state, selectedFounderId: Some(id)})
+    | ClearFounder => ReasonReact.Update({...state, selectedFounderId: None})
     | ReplaceTE(newTE) =>
       ReasonReact.Update({
         ...state,
         timelineEvents:
           state.timelineEvents
-          |> List.map(oldTE =>
-               oldTE |> TimelineEvent.id == (newTE |> TimelineEvent.id) ?
-                 newTE : oldTE
-             ),
+          |> List.map(oldTE => oldTE |> TimelineEvent.id == (newTE |> TimelineEvent.id) ? newTE : oldTE),
       })
     },
   render: ({state, send}) => {
-    let selectStartupCB = id => send(SelectStartup(id));
-    let clearStartupCB = () => send(ClearStartup);
+    let selectFounderCB = id => send(SelectFounder(id));
+    let clearFounderCB = () => send(ClearFounder);
     let replaceTimelineEvent = te => send(ReplaceTE(te));
     <div className="coach-dashboard__container container">
       <div className="row">
         <div className="col-md-4">
           {
-            let pendingCount =
-              state.timelineEvents
-              |> TimelineEvent.reviewPending
-              |> List.length;
+            let pendingCount = state.timelineEvents |> TimelineEvent.reviewPending |> List.length;
             <SidePanel
               coach
-              startups
-              selectedStartupId=state.selectedStartupId
-              selectStartupCB
-              clearStartupCB
+              founders
+              selectedFounderId=state.selectedFounderId
+              selectFounderCB
+              clearFounderCB
               pendingCount
             />;
           }
@@ -80,7 +73,8 @@ let make =
         <div className="col-md-8">
           <TimelineEventsPanel
             timelineEvents=state.timelineEvents
-            selectedStartupId=state.selectedStartupId
+            founders
+            selectedFounderId=state.selectedFounderId
             replaceTimelineEvent
             authenticityToken
             emptyIconUrl
@@ -98,9 +92,8 @@ let make =
 let decode = json =>
   Json.Decode.{
     coach: json |> field("coach", Coach.decode),
-    startups: json |> field("startups", list(Startup.decode)),
-    timelineEvents:
-      json |> field("timelineEvents", list(TimelineEvent.decode)),
+    founders: json |> field("founders", list(Founder.decode)),
+    timelineEvents: json |> field("timelineEvents", list(TimelineEvent.decode)),
     authenticityToken: json |> field("authenticityToken", string),
     emptyIconUrl: json |> field("emptyIconUrl", string),
     notAcceptedIconUrl: json |> field("notAcceptedIconUrl", string),
@@ -116,7 +109,7 @@ let jsComponent =
       let props = jsProps |> decode;
       make(
         ~coach=props.coach,
-        ~startups=props.startups,
+        ~founders=props.founders,
         ~timelineEvents=props.timelineEvents,
         ~authenticityToken=props.authenticityToken,
         ~emptyIconUrl=props.emptyIconUrl,

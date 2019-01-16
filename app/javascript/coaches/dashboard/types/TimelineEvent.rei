@@ -22,6 +22,8 @@ let image: t => option(string);
 
 let forStartupId: (int, list(t)) => list(t);
 
+let forFounderId: (int, list(t)) => list(t);
+
 let reviewPending: list(t) => list(t);
 
 let reviewComplete: list(t) => list(t);
@@ -40,6 +42,6 @@ let resultAsString: reviewResult => string;
 
 let evaluation: t => list(Grading.t);
 
-let founders: t => list(Founder.t);
+let founderIds: t => list(int);
 
 let rubric: t => option(string);

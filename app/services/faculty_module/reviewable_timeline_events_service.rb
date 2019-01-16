@@ -23,7 +23,7 @@ module FacultyModule
         eventOn: timeline_event.event_on,
         startupId: timeline_event.founders.first&.startup_id,
         startupName: timeline_event.startup.product_name,
-        founders: timeline_event.founders.map { |founder| { id: founder.id, name: founder.name } },
+        founderIds: timeline_event.founders.map(&:id),
         links: timeline_event.links,
         files: timeline_event.timeline_event_files.map { |file| { title: file.title, id: file.id } },
         image: timeline_event.image? ? timeline_event.image.url : nil,

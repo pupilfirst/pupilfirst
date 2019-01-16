@@ -1,7 +1,7 @@
 module Schools
-  class LevelPolicy < ApplicationPolicy
+  class TargetGroupPolicy < ApplicationPolicy
     def create?
-      # All school admins can create new level.
+      # All school admins can create new target group.
       true
     end
 

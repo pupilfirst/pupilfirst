@@ -14,6 +14,10 @@ module Schools
       def levels
         @course.levels.select(:id, :name, :description, :number)
       end
+
+      def target_groups(level)
+        level.target_groups.select(:id, :name, :description, :sort_index, :milestone)
+      end
     end
   end
 end

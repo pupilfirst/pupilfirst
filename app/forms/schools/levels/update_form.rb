@@ -3,8 +3,8 @@ module Schools
     class UpdateForm < Reform::Form
       property :name, validates: { presence: true, length: { maximum: 250 } }
       property :description, validates: { presence: true, length: { maximum: 250 } }
-      property :number, validates: { presence: true }
       property :number, validates: { format: { with: /\A\d+\z/, message: "Not a valid number" } }
+
       validate :level_number_exists
 
       private

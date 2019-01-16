@@ -1,31 +1,31 @@
 <% @presenter = Schools::Curricula::ShowPresenter.new(self, @course) %>
 <div class="border m-2 p-2"
-  <h5>Evaluation criteria for <%=  @course.name%></h5>
-  <ul>
+<h5>Evaluation criteria for <%= @course.name %></h5>
+<ul>
   <% @presenter.evaluation_criteria.each do |criterion| %>
-      <li>
-        <%= criterion.name %>
-        <%= button_to 'Delete', school_evaluation_criterion_path(criterion), method: :delete,
-          class: 'bg-red-light hover:bg-red text-white py-1 px-2 rounded mt-1 mb-2 text-sm',
-          form: { class: 'inline' }
-        %>
-        <%= form_for criterion, url: school_evaluation_criterion_path(criterion), class: 'mt-1' do |f| %>
-          <%= f.text_field :name, class: 'border p-2 ml-1' %>
-          <%= f.text_field :description, class: 'border p-2 ml-1' %>
-          <%= f.submit 'Update', class: 'border p-2 mb-4' %>
-        <% end %>
-      </li>
+    <li>
+      <%= criterion.name %>
+      <%= button_to 'Delete', school_evaluation_criterion_path(criterion), method: :delete,
+        class: 'bg-red-light hover:bg-red text-white py-1 px-2 rounded mt-1 mb-2 text-sm',
+        form: { class: 'inline' }
+      %>
+      <%= form_for criterion, url: school_evaluation_criterion_path(criterion), class: 'mt-1' do |f| %>
+        <%= f.text_field :name, placeholder: "Name", class: 'border p-2 ml-1' %>
+        <%= f.text_field :description, placeholder: "Description", class: 'border p-2 ml-1' %>
+        <%= f.submit 'Update', class: 'border p-2 mb-4' %>
+      <% end %>
+    </li>
   <% end %>
-  </ul>
-  <h5 class="text-green">Add new criteria:</h5>
-  <%= form_for EvaluationCriterion.new, url: school_course_evaluation_criteria_path(@course) do |f| %>
-    <%= f.text_field :name, class: 'border p-2' %>
-    <%= f.text_field :description, class: 'border p-2 ml-1' %>
-    <%= f.submit 'Add', class: 'border p-2 mb-4' %>
-  <% end %>
+</ul>
+<h5 class="text-green">Add new criteria:</h5>
+<%= form_for EvaluationCriterion.new, url: school_course_evaluation_criteria_path(@course) do |f| %>
+  <%= f.text_field :name, placeholder: "Name", class: 'border p-2' %>
+  <%= f.text_field :description, placeholder: "Description", class: 'border p-2 ml-1' %>
+  <%= f.submit 'Add', class: 'border p-2 mb-4' %>
+<% end %>
 </div>
 <div class="border m-2 p-2"
-<h5>Levels for <%=  @course.name%></h5>
+<h5>Levels for <%= @course.name %></h5>
 <ul>
   <% @presenter.levels.each do |level| %>
     <li>
@@ -35,19 +35,50 @@
         form: { class: 'inline' }
       %>
       <%= form_for level, url: school_level_path(level), class: 'mt-1' do |f| %>
-        <%= f.text_field :name, class: 'border p-2 ml-1' %>
-        <%= f.text_field :description, class: 'border p-2 ml-1' %>
-        <%= f.text_field :number, class: 'border p-2 ml-1' %>
+        <%= f.text_field :name, placeholder: "Name", class: 'border p-2 ml-1' %>
+        <%= f.text_field :description, placeholder: "Description", class: 'border p-2 ml-1' %>
+        <%= f.number_field :number, placeholder: "Level number", class: 'border p-2 ml-1' %>
         <%= f.submit 'Update', class: 'border p-2 mb-4' %>
       <% end %>
+      <div class="border m-2 p-2">
+        <h5>Target groups in level: <%= level.name %></h5>
+        <ul>
+          <% @presenter.target_groups(level).each do |target_group| %>
+            <li>
+              <%= target_group.name %>
+              <%= button_to 'Delete', school_target_group_path(target_group), method: :delete,
+                class: 'bg-red-light hover:bg-red text-white py-1 px-2 rounded mt-1 mb-2 text-sm',
+                form: { class: 'inline' }
+              %>
+              <%= form_for target_group, url: school_target_group_path(target_group), class: 'mt-1' do |f| %>
+                <%= f.text_field :name, placeholder: "Name", class: 'border p-2 ml-1' %>
+                <%= f.text_field :description, placeholder: "Description", class: 'border p-2 ml-1' %>
+                <%= f.number_field :sort_index, placeholder: "Sort Index", class: 'border p-2 ml-1' %>
+                <%= f.check_box :milestone %>
+                <%= f.submit 'Update', class: 'border p-2 mb-4' %>
+              <% end %>
+            </li>
+          <% end %>
+          <div class="border m-2 p-2">
+            <h5 class="text-green">Add new target group:</h5>
+            <%= form_for TargetGroup.new, url: school_course_level_target_groups_path(@course, level) do |f| %>
+              <%= f.text_field :name, placeholder: "Name", class: 'border p-2' %>
+              <%= f.text_field :description, placeholder: "Description", class: 'border p-2 ml-1' %>
+              <%= f.number_field :sort_index, placeholder: "Sort Index", class: 'border p-2 ml-1' %>
+              <%= f.check_box :milestone %>
+              <%= f.submit 'Add', class: 'border p-2 mb-4' %>
+            <% end %>
+          </div>
+        </ul>
+      </div>
     </li>
   <% end %>
 </ul>
 <h5 class="text-green">Add new level:</h5>
 <%= form_for Level.new, url: school_course_levels_path(@course) do |f| %>
-  <%= f.text_field :name, class: 'border p-2' %>
-  <%= f.text_field :description, class: 'border p-2 ml-1' %>
-  <%= f.text_field :number, class: 'border p-2 ml-1' %>
+  <%= f.text_field :name,  placeholder: "Name", class: 'border p-2' %>
+  <%= f.text_field :description, placeholder: "Description", class: 'border p-2 ml-1' %>
+  <%= f.number_field :number, placeholder: "Level Number", class: 'border p-2 ml-1' %>
   <%= f.submit 'Add', class: 'border p-2 mb-4' %>
 <% end %>
 </div>

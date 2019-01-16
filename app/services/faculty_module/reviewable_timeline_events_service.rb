@@ -10,7 +10,7 @@ module FacultyModule
 
       TimelineEvent.not_auto_verified.joins(:timeline_event_owners)
         .includes(:founders, :evaluation_criteria, :timeline_event_files, :startup_feedback, :timeline_event_owners)
-        .includes(:target_evaluation_criteria, target: :level)
+        .includes(:target_evaluation_criteria, :timeline_event_grades, target: :level)
         .where(timeline_event_owners: { founder_id: founder_ids })
         .order(created_at: :DESC).limit(100).map { |timeline_event| timeline_event_fields(timeline_event) }
     end

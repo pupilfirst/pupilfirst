@@ -1,12 +1,14 @@
 class HomeController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: :paytm_callback
-
   def index
-    @skip_container = true
-    @sitewide_notice = true if %w[startupvillage.in].include?(params[:redirect_from])
-    @hide_nav_links = false
+    if current_school.blank?
+      render 'pupilfirst', layout: 'tailwind'
+    else
+      @skip_container = true
+      @sitewide_notice = true if %w[startupvillage.in].include?(params[:redirect_from])
+      @hide_nav_links = false
 
-    render layout: 'home'
+      render layout: 'home'
+    end
   end
 
   def story
@@ -47,6 +49,12 @@ class HomeController < ApplicationController
     end
   end
 
+  def pupilfirst
+    @skip_container = true
+    @hide_layout_header = true
+    render layout: 'tailwind'
+  end
+
   # GET /tour
   def tour
     @skip_container = true
@@ -73,11 +81,6 @@ class HomeController < ApplicationController
       format.json { render json: { policy: @terms_of_use_html } }
       format.html
     end
-  end
-
-  # TODO: Remove this route once PayTM is correctly configured with '/paytm/callback' as the redirect_url.
-  def paytm_callback
-    # There's nothing to load.
   end
 
   protected

@@ -1,11 +1,7 @@
 FactoryBot.define do
   factory :timeline_event do
-    startup
-    founder { startup.team_lead }
     description { Faker::Lorem.words(10).join ' ' }
     event_on { 1.month.from_now }
-    status { TimelineEvent::STATUS_PENDING }
-    status_updated_at { Time.zone.now }
     target
 
     factory :timeline_event_with_image do
@@ -21,8 +17,8 @@ FactoryBot.define do
       end
     end
 
-    trait :verified do
-      status { TimelineEvent::STATUS_VERIFIED }
+    trait :passed do
+      passed_at { 1.day.ago }
     end
   end
 end

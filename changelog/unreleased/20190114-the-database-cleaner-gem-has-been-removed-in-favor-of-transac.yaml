@@ -1,0 +1,6 @@
+---
+timestamp: '2019-01-14T07:13:20Z'
+title: The database cleaner gem has been removed, in favor of transactional fixtures
+  that now work fine with Rails 5.1.
+trello: https://trello.com/c/ENp92LtB
+private: true

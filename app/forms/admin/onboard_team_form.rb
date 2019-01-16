@@ -14,14 +14,14 @@ module Admin
     def save
       Founder.transaction do
         team = Startup.create!(product_name: team_name, level: level)
-        team_lead = Founder.where(email: team_lead_details.values.first).first_or_create!(user: user(team_lead_details.values.first))
-        team_lead.update!(name: team_lead_details.keys.first, startup: team)
-        team.update!(team_lead: team_lead)
+        team_lead_user = user(member_1_email)
+        team_lead_founder = Founder.create!(user: team_lead_user, name: member_1_name, startup: team)
+        team.update!(team_lead: team_lead_founder)
         member_details.each do |name, email|
           next if name.blank? || email.blank?
 
-          founder = Founder.where(email: email).first_or_create!(user: user(email))
-          founder.update!(name: name, startup: team)
+          member = user(email)
+          Founder.create!(user: member, name: name, startup: team)
         end
         team
       end
@@ -34,15 +34,9 @@ module Admin
     end
 
     def user(email)
-      u = User.with_email(email) || User.create!(email: email)
+      u = User.where(email: email).first_or_create!
       u.regenerate_login_token if u.login_token.blank?
       u
-    end
-
-    def team_lead_details
-      {
-        member_1_name => member_1_email
-      }
     end
 
     def member_details

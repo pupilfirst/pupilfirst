@@ -1,0 +1,9 @@
+= semantic_form_for form, url: admin_csv_student_importer_onboard_path, method: :post, html: { novalidate: false } do |f|
+  = f.semantic_errors
+  h2 CSV importer for onboarding student teams. (One student per team)
+  h3
+    a href='https://docs.google.com/spreadsheets/d/1GszqQ5WJLBmfvHwth1b85yPZudNddqCKon1LsQKh2Hg/edit?usp=sharing' target='_blank' rel='noopener' Sample CSV file
+  = f.inputs 'CSV Importer'
+    = f.input :file, as: :file
+    = f.input :course_id, as: :select, collection: Course.all
+  = f.submit 'Onboard'

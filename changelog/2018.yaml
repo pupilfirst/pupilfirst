@@ -1,5 +1,67 @@
 ---
 changelog:
+- timestamp: '2018-12-31T11:32:49Z'
+  changes:
+  - timestamp: '2018-12-24T08:52:20Z'
+    title: Categorization of startups (teams) into industries has been removed, since
+      this is no longer relevant.
+    trello: https://trello.com/c/BF1F34Ih
+    private: true
+    description: This removes the final `has_and_belongs_to_many` join table from
+      the database.
+  - timestamp: '2018-12-24T08:50:22Z'
+    title: Added a custom `/sastra` landing page for students of Sastra University.
+    trello: https://trello.com/c/qUwhcIql
+    private: true
+  - timestamp: '2018-12-24T08:48:24Z'
+    title: Targets can now be completed with quizzes - appropriate for targets that
+      mainly involve consuming content, and that do not require any complex action.
+    trello: https://trello.com/c/XfyXnOsI
+    private: false
+    category: feature
+  - timestamp: '2018-12-18T10:12:54Z'
+    title: Faculty (coaches) can now be assigned to courses, so that they can review
+      submissions from all students enrolled in the course.
+    trello: https://trello.com/c/JW5pkanx
+    private: false
+    description: While there aren't very many visible effects here, there are a lot
+      of changes under the hood. Faculty still needs to be manually assigned to a
+      course, since the reviewer assignment feature is now hidden (until the school
+      admin dashboard goes live).
+    category: feature
+  - timestamp: '2018-12-17T09:40:36Z'
+    title: The facebook share feature has been removed from the timeline event builder.
+    trello: https://trello.com/c/hCt66WwK
+    private: false
+    description: The Facebook share feature was designed for sharing major timeline
+      events associated with startup school on facebook wall. Removed this feature
+      as its no longer used.
+    category: feature
+  - timestamp: '2018-12-17T06:35:53Z'
+    title: Add `tailwindcss` to the build process to assist in designing new pages.
+    trello: https://trello.com/c/uuE7rk6o
+    private: true
+    description: This also updates `webpacker` gem to v4 (RC2), since latest updates
+      were required to make the addition smoother.
+  - timestamp: '2018-12-17T06:34:22Z'
+    title: Recreate `schools` table, but this time, to act as the whitelabeled tenant's
+      identifier.
+    trello: https://trello.com/c/4FqZaMnc
+    private: true
+  - timestamp: '2018-12-17T06:11:14Z'
+    title: Target groups can now be archived - doing so will also archive all targets
+      in the group.
+    trello: https://trello.com/c/YGAmv4gw
+    private: true
+    description: Creates a `TargetsGroups::ArchivalService` and a lot of specs for
+      uncovered code.
+    category: feature
+  - timestamp: '2018-12-17T06:08:31Z'
+    title: The field `email` has been removed from all tables except `users`.
+    trello: https://trello.com/c/Gs4KsK3q
+    private: true
+    description: Delegation has been set up in some tables to avoid having to write
+      _pass-through_ code.
 - timestamp: '2018-12-03T11:45:05Z'
   changes:
   - timestamp: '2018-11-27T09:17:32Z'

@@ -28,8 +28,8 @@ en:
   jobs:
     faculty_connect_session_reminder:
       founder_reminder: ":exclamation: *Reminder:* Your team (%{startup_name}) has an office hour with <%{coach_url}|%{faculty_name}> starting in 30 minutes! You can <%{meeting_link}|click here> to join the meeting when it's time."
-      faculty_reminder: ":exclamation: *Reminder:* You have an office hour with the founders of <%{startup_url}|%{startup_name}> starting in 30 minutes!\nThe founders plan to discuss the following questions:\n %{questions}\nYou can <%{meeting_link}|click here> to join the meeting when it's time."
-      ops_team_reminder: ":exclamation: *Reminder:* <%{startup_url}|%{startup_name}> has an office hour with <%{coach_url}|%{faculty_name}> starting in 30 minutes. Follow up!"
+      faculty_reminder: ":exclamation: *Reminder:* You have an office hour with <%{founder_url}|%{founder_name}> starting in 30 minutes!\nThe student plan to discuss the following questions:\n %{questions}\nYou can <%{meeting_link}|click here> to join the meeting when it's time."
+      ops_team_reminder: ":exclamation: *Reminder:* <%{founder_url}|%{founder_name}> has an office hour with <%{coach_url}|%{faculty_name}> starting in 30 minutes. Follow up!"
 
     timeline_events:
       description_update_notification:
@@ -237,8 +237,8 @@ en:
           description_html: "SV.CO regularly publishes stories showcasing the incredible work done by students."
           delta_verb: posted
         timeline_events:
-          heading: "Timeline Events Verified"
-          description_html: "We verify all timeline updates by our admitted teams to showcase their journey"
+          heading: "Submissions Evaluated"
+          description_html: "We evaluate all submissions by our admitted teams to guide them in their learning"
           delta_verb: sumbitted
         hours_of_learning:
           heading: "Hours of Learning"

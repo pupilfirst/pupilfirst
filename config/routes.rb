@@ -119,10 +119,6 @@ Rails.application.routes.draw do
 
   # TODO: Remove these faculty routes as we no longer have 'faculty'. Always use the corresponding 'coaches' routes below.
 
-  scope 'coaches', module: 'coaches', as: 'coaches', controller: 'dashboard' do
-    get 'dashboard', action: 'index'
-  end
-
   scope 'coaches', controller: 'faculty' do
     get '/', action: 'index', as: 'coaches_index'
     get '/:id', action: 'show', as: 'coach'
@@ -178,11 +174,12 @@ Rails.application.routes.draw do
     post 'webhook'
   end
 
-  # Custom founder profile page.
-  # # TODO: Remove this founder route as we no longer have 'founders'. Always use the corresponding 'student' route below.
-  get 'founders/:slug', to: 'founders#founder_profile', as: 'founder_profile'
-
-  get 'students/:slug', to: 'founders#founder_profile', as: 'student_profile'
+  # Founder show
+  scope 'students', controller: 'founders' do
+    get '/:slug', action: 'show', as: 'student'
+    get '/:slug/events/:page', action: 'paged_events', as: 'paged_events'
+    get '/:slug/e/:event_id/:event_title', action: 'timeline_event_show', as: 'student_timeline_event_show'
+  end
 
   # Story of startup village, accessed via about pages.
   get 'story', as: 'story', to: 'home#story', constraints: SvConstraint.new
@@ -202,6 +199,9 @@ Rails.application.routes.draw do
 
   # VR course at Sastra University landing page
   get 'sastra', to: 'home#sastra', constraints: SvConstraint.new
+
+  # PupilFirst landing page
+  get 'pupilfirst', to: 'home#pupilfirst'
 
   root 'home#index'
 
@@ -227,21 +227,17 @@ Rails.application.routes.draw do
     end
   end
 
-  scope 'paytm', as: 'paytm', controller: 'paytm' do
-    get 'pay'
-    post 'callback'
-  end
-
   # Public change log
   scope 'changelog', as: 'changelog', controller: 'changelog', constraints: SvConstraint.new do
     get 'archive'
     get '(/:year)', action: 'index'
   end
 
-  resource :impersonation, only: %i[destroy]
+  resources :courses, only: [] do
+    resource :coach_dashboard, controller: 'coach_dashboard', only: %i[show]
+  end
 
-  # TODO: Remove this route once PayTM is correctly configured with '/paytm/callback' as the redirect_url.
-  post '/', to: 'home#paytm_callback'
+  resource :impersonation, only: %i[destroy]
 
   scope 'intercom', as: 'intercom', controller: 'intercom', constraints: SvConstraint.new do
     post 'user_create', action: 'user_create_webhook'

@@ -7,18 +7,26 @@
   border: 1px solid $gray-border;
   box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.05);
 }
-
+.timeline-event-card__body {
+  flex: 1 1 auto;
+  padding: 0 15px;
+}
 .timeline-event-card__header {
   border-bottom: 1px solid $gray-border;
 }
 
 .timeline-event-card__header-title {
-  font-size: 0.875rem;
+  font-size: 1rem;
 }
 
-.timeline-event-card__header-subtext, .timeline-event-card__footer-subtext {
+.timeline-event-card__header-subtext,
+.timeline-event-card__footer-subtext {
   color: $light-grey-text;
   font-size: small;
+}
+
+.timeline-event-card__field-container {
+  background-color: $dark-primary-background;
 }
 
 .timeline-event-card__field-box {
@@ -40,13 +48,25 @@
 }
 
 .feedback-form__trix-container {
+  padding: 0 15px;
+
   trix-toolbar {
     .trix-button-row {
       flex-wrap: wrap;
     }
+    .trix-button--icon {
+      width: 1.875em;
+      height: 1.625em;
+    }
+    .trix-button-group {
+      border-color: #e5e5e5;
 
-    .trix-button-group--history-tools {
-      margin-left: 0;
+      &:not(:first-child) {
+        margin-left: 0px;
+      }
+    }
+    .trix-button {
+      border-bottom: 0;
     }
   }
 }
@@ -57,4 +77,29 @@
 
 .timeline-event-card__review-box {
   border-left: 1px solid $gray-border;
+}
+
+.timeline-event-card__link {
+  cursor: pointer;
+  color: $brand-secondary;
+}
+
+.timeline-event-card__review-box-header {
+  position: relative;
+  padding: 0 15px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.feedback-form__container {
+  position: relative;
+  border-radius: 0 0 10px 0;
+  border-top: 1px solid #e5e5e5;
+}
+.feedback-form__button {
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: #fafafa;
+    color: #0052cc;
+  }
 }

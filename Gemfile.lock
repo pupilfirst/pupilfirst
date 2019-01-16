@@ -237,7 +237,6 @@ GEM
     damerau-levenshtein (1.3.1)
     data_migrate (5.2.0)
       rails (>= 4.2)
-    database_cleaner (1.7.0)
     declarative (0.0.10)
     declarative-builder (0.1.0)
       declarative-option (< 0.2.0)
@@ -381,7 +380,7 @@ GEM
     has_scope (0.7.2)
       actionpack (>= 4.1)
       activesupport (>= 4.1)
-    hashdiff (0.3.7)
+    hashdiff (0.3.8)
     hashie (3.5.7)
     heapy (0.1.4)
     heroku-deflater (0.6.3)
@@ -409,7 +408,7 @@ GEM
     intercom (3.7.1)
     io-like (0.3.0)
     ipaddress (0.8.3)
-    jaro_winkler (1.5.1)
+    jaro_winkler (1.5.2)
     jbuilder (2.8.0)
       activesupport (>= 4.2.0)
       multi_json (>= 1.2)
@@ -494,8 +493,8 @@ GEM
     omniauth-github (1.3.0)
       omniauth (~> 1.5)
       omniauth-oauth2 (>= 1.4.0, < 2.0)
-    omniauth-google-oauth2 (0.5.4)
-      jwt (>= 1.5)
+    omniauth-google-oauth2 (0.6.0)
+      jwt (>= 2.0)
       omniauth (>= 1.1.1)
       omniauth-oauth2 (>= 1.5)
     omniauth-oauth2 (1.5.0)
@@ -685,7 +684,7 @@ GEM
     rspec-retry (0.6.1)
       rspec-core (> 3.3)
     rspec-support (3.8.0)
-    rubocop (0.61.1)
+    rubocop (0.62.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.5, != 2.5.1.1)
@@ -761,7 +760,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.5)
-    unicode-display_width (1.4.0)
+    unicode-display_width (1.4.1)
     uniform_notifier (1.12.1)
     url (0.3.2)
     url_mount (0.2.1)
@@ -781,7 +780,7 @@ GEM
       activemodel (>= 5.0)
       bindex (>= 0.4.0)
       railties (>= 5.0)
-    webmock (3.4.2)
+    webmock (3.5.1)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff
@@ -825,7 +824,6 @@ DEPENDENCIES
   combine_pdf (~> 1.0)
   dalli (~> 2.7)
   data_migrate (~> 5.1)
-  database_cleaner (~> 1.5)
   delayed-web (~> 0.4)
   delayed_job_active_record (~> 4.1)
   derailed_benchmarks (~> 1.3)
@@ -866,7 +864,7 @@ DEPENDENCIES
   oink (~> 0.10)
   omniauth-facebook (~> 5.0)
   omniauth-github (~> 1.2)
-  omniauth-google-oauth2 (~> 0.4)
+  omniauth-google-oauth2 (~> 0.6)
   overcommit (~> 0.38)
   pg (~> 1.0)
   postmark-rails (~> 0.15)
@@ -909,7 +907,7 @@ DEPENDENCIES
   rollbar (~> 2.14)
   rspec-rails (~> 3.5)
   rspec-retry (~> 0.5)
-  rubocop (~> 0.60)
+  rubocop (~> 0.62)
   sass-rails (~> 5.0)
   scarf (~> 0.2)
   scout_apm (~> 3.0.x)
@@ -928,11 +926,11 @@ DEPENDENCIES
   videojs_rails (~> 4.12)
   virtus (~> 1.0)
   web-console (~> 3.4)
-  webmock (~> 3.0)
+  webmock (~> 3.5)
   webpacker (= 4.0.0.rc.2)
 
 RUBY VERSION
-   ruby 2.5.3p105
+   ruby 2.6.0p0
 
 BUNDLED WITH
-   1.16.6
+   1.17.3

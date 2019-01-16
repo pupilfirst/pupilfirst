@@ -16,10 +16,10 @@ class ChangelogController < ApplicationController
 
   def changelog_year
     case params[:year]
-      when '2018', '2017'
+      when '2019', '2018', '2017'
         params[:year].to_i
       else
-        2018
+        Time.now.year
     end
   end
 end

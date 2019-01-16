@@ -1,0 +1,174 @@
+- content_for(:head) do
+  title SV.CO Profile for #{@founder.fullname}
+
+#founder__show
+
+.user-data-container
+  .container
+    .user-data-card
+      .row
+        .col-md-2.pr-md-0
+          #complete-profile-left.profile data-toggle='tooltip' data-placement='bottom' title="#{@founder == current_founder ? @founder.profile_completion_instruction : ''}"
+            .founder_profile__avatar
+              == avatar(@founder.name, founder: @founder, background_shape: :square)
+            - if current_founder == @founder && !@founder.exited
+              .progress-container
+                .progress.profile-progress
+                  - if @founder.profile_completion_percentage >= 80
+                    .progress-bar.profile-progress-bar.progress-bar-success aria-valuemax="100" aria-valuemin="0" aria-valuenow="#{@founder.profile_completion_percentage}" role="progressbar" style="width:#{@founder.profile_completion_percentage}%;"
+                  - elsif @founder.profile_completion_percentage >= 50
+                    .progress-bar.profile-progress-bar.progress-bar-info aria-valuemax="100" aria-valuemin="0" aria-valuenow="#{@founder.profile_completion_percentage}" role="progressbar" style="width:#{@founder.profile_completion_percentage}%;"
+                  - elsif @founder.profile_completion_percentage >= 30
+                    .progress-bar.profile-progress-bar.progress-bar-warning aria-valuemax="100" aria-valuemin="0" aria-valuenow="#{@founder.profile_completion_percentage}" role="progressbar" style="width:#{@founder.profile_completion_percentage}%;"
+                  - else
+                    .progress-bar.profile-progress-bar.progress-bar-danger aria-valuemax="100" aria-valuemin="0" aria-valuenow="#{@founder.profile_completion_percentage}" role="progressbar" style="width:#{@founder.profile_completion_percentage}%;"
+                span.progress-value
+                  = @founder.profile_completion_percentage
+                  | % complete
+              - if !@founder.exited && @founder.profile_completion_percentage < 100
+                a.profile-complete-button href=edit_founder_url
+                  ' Complete Your Profile
+        .col-md-10
+          .profile-data
+            .profile-head.d-lg-flex
+              .col-lg-6.profile-name.px-0.mt-2.mt-md-0.text-center.text-md-left
+                h2
+                  = @founder.fullname
+                  - if current_founder == @founder && !@founder.exited
+                    a.profile-edit-button href=edit_founder_url title="Edit Your Profile"
+                      i.fa.fa-pencil
+                      | Edit
+                - if @founder.startup.present?
+                  span.founder-roll
+                    - if @founder.roles.present?
+                      = @founder.roles.map { |role| t("models.founder.role.#{role}") }.join ', '
+                      ' &nbsp;at
+                    = @founder.startup.product_name
+              - if @founder.social_url_present?
+                .col-lg-6.social-connect.px-0.mt-3.mt-lg-0.text-center.text-md-left.text-lg-right
+                  - if @founder.linkedin_url.present?
+                    a href=@founder.linkedin_url target='_blank' rel='noopener'
+                      i.fa.fa-linkedin
+                  - if @founder.facebook_url.present?
+                    a href=@founder.facebook_url target='_blank' rel='noopener'
+                      i.fa.fa-facebook
+                  - if @founder.twitter_url.present?
+                    a href=@founder.twitter_url target='_blank' rel='noopener'
+                      i.fa.fa-twitter
+                  - if @founder.behance_url.present?
+                    a href=@founder.behance_url target='_blank' rel='noopener'
+                      i.fa.fa-behance
+                  - if @founder.github_url.present?
+                    a href=@founder.github_url target='_blank' rel='noopener'
+                      i.fa.fa-github
+                  - if @founder.angel_co_url.present?
+                    a href=@founder.angel_co_url target='_blank' rel='noopener'
+                      i.fa.fa-angellist
+                  - if @founder.blog_url.present?
+                    a href=@founder.blog_url target='_blank' rel='noopener'
+                      i.fa.fa-rss
+
+            .profile-detail.d-md-flex.pt-3
+              .col-md-9.profile-description.pl-0.text-center.text-md-left
+                p.founder-about.pb-2
+                  = @founder.about
+                .education-details
+                  - if @founder.course.present?
+                    span.course-name
+                      i.fa.fa-book
+                      | Course:
+                      strong.course-tooltip data-title=@founder.course
+                        = @founder.course
+                  - if @founder.semester.present?
+                    span.semester-name
+                      i.fa.fa-flag
+                      | Semester:
+                      strong
+                        = @founder.semester
+                  - if @founder.year_of_graduation.present?
+                    span.graduation-year
+                      i.fa.fa-graduation-cap
+                      | Year of Graduation:
+                      strong
+                        = @founder.year_of_graduation
+              .col-md-3.d-flex.resume-link-section.px-sm-0.mt-3.mt-md-0.justify-content-center.align-items-center
+                - if @founder.resume_link.present?
+                  a.btn.btn-ghost-secondary.btn-with-icon.btn-xs target="_blank" href=short_url(@founder.resume_link) rel='noopener'
+                    i.fa.fa-file-text-o
+                    span View Resume
+
+.profile-bg.py-3
+  .container
+    .row
+      .col-lg-3.order-1.order-lg-2
+        #data-points
+          .data-icons
+            .row
+              .col-sm-6.col-md-12
+                .media.mb-3.align-items-center
+                  img.d-flex.mr-3 alt="Course icon" src="#{image_url 'founders/show/course-icon.png'}"
+                  .media-body
+                    h6.my-0 Course Name
+                    p.data-content #{@founder.startup.course.name}
+              .col-sm-6.col-md-12
+                .media.mb-3.align-items-center
+                  img.d-flex.mr-3 alt="Level icon" src="#{image_url 'founders/show/level-icon.png'}"
+                  .media-body
+                    h6.my-0 Level
+                    p.data-content #{@founder.startup.level.display_name}
+              - if @founder.personal_website_url.present?
+                .col-sm-6.col-md-12
+                  .media.mb-3.align-items-center
+                    img.d-flex.mr-3 alt="Website icon" src="#{image_url 'founders/show/website-icon.png'}"
+                    .media-body
+                      h6.my-0 Website
+                      p.data-content
+                        a href="#{@founder.personal_website_url}" target="_blank" rel="noopener"
+                          ' #{@founder.personal_website_url}
+                          i.fa.fa-external-link
+          .row
+            - if @founder.faculty.any?
+              .col-md-12.mt-4
+                h3 Mentors
+                hr
+                - @founder.faculty.each do |faculty|
+                  - if !faculty.inactive
+                    .data-faculty
+                      .media.align-items-center
+                        a.mr-3 href=faculty_url(faculty.slug)
+                          .faculty-image
+                            == avatar(faculty.name, faculty: faculty, background_shape: :square)
+                        .media-body
+                          .media-heading
+                            = link_to faculty.name, faculty_url(faculty.slug)
+                          p.designation #{faculty.title}
+                          - if faculty.linkedin_url?
+                            ul.faculty__social-links
+                              li
+                                a href="#{faculty.linkedin_url}" target='_blank'
+                                  i.fa.fa-linkedin-square
+
+      .col-lg-9.order-2.order-lg-1
+        - if @timeline_event_for_og.present?
+          .main-timeline
+            .tl-iteration
+              p#focused-event
+                | Focused Event
+              = image_tag 'founders/show/dash.png'
+            ul.pa-0
+              == render 'timeline_event', event: @timeline_event_for_og
+        - if @timeline_events.present?
+          .main-timeline
+            .tl-iteration
+              p
+                | Timeline
+              = image_tag 'founders/show/dash.png'
+            ul#timeline-list.pl-0
+              = render 'events_by_page', events: @timeline_events, page: 1
+        - else
+          .main-timeline
+            .tl-iteration
+              p
+                | No timeline events to show!
+              = image_tag 'founders/show/dash.png'
+

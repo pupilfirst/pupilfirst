@@ -6,6 +6,7 @@ module Founders
         super(view_context)
       end
 
+      # rubocop:disable Metrics/AbcSize
       def react_props
         dashboard_data_service.props.merge(
           currentLevel: current_startup.level.slice(:id, :name, :number),
@@ -18,9 +19,13 @@ module Founders
           testMode: Rails.env.test?,
           initialTargetId: @overlay_target&.id,
           tourDashboard: tour_dashboard?,
-          sponsoredCourse: current_startup.level.course.sponsored
+          sponsoredCourse: current_startup.level.course.sponsored,
+          courseEnded: current_course.ended?,
+          passGrade: current_course.pass_grade,
+          maxGrade: current_course.max_grade
         )
       end
+      # rubocop:enable Metrics/AbcSize
 
       def tour_dashboard?
         return false if current_startup.level_zero?

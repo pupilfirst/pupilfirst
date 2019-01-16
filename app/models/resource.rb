@@ -28,6 +28,7 @@ class Resource < ApplicationRecord
 
   def exactly_one_source_must_be_present
     return if [file, video_embed, link].one?(&:present?)
+    return if persisted?
 
     errors[:base] << 'One and only one of a video embed, file or link must be present.'
   end
@@ -65,7 +66,11 @@ class Resource < ApplicationRecord
     end
   end
 
-  after_create do
+  after_create :notify_on_slack
+
+  def notify_on_slack
+    return unless Rails.env.production?
+
     Resources::AfterCreateNotificationJob.perform_later(self)
   end
 

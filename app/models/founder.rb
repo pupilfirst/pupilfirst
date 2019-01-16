@@ -28,9 +28,9 @@ class Founder < ApplicationRecord
 
   has_many :public_slack_messages, dependent: :nullify
   belongs_to :startup
+  has_one :level, through: :startup
   belongs_to :invited_startup, class_name: 'Startup', optional: true
   has_many :karma_points, dependent: :destroy
-  has_many :timeline_events, dependent: :nullify
   has_many :visits, as: :user, dependent: :nullify, inverse_of: :user
   has_many :ahoy_events, class_name: 'Ahoy::Event', as: :user, dependent: :nullify, inverse_of: :user
   has_many :platform_feedback, dependent: :nullify
@@ -40,8 +40,8 @@ class Founder < ApplicationRecord
   has_many :payments, dependent: :restrict_with_error
   belongs_to :resume_file, class_name: 'TimelineEventFile', optional: true
   has_many :active_admin_comments, as: :resource, class_name: 'ActiveAdmin::Comment', dependent: :destroy, inverse_of: :resource
-  has_many :latest_submission_records, dependent: :restrict_with_error
-  has_many :latest_submissions, through: :latest_submission_records, source: :timeline_event
+  has_many :timeline_event_owners, dependent: :destroy
+  has_many :timeline_events, through: :timeline_event_owners
 
   scope :admitted, -> { joins(:startup).merge(Startup.admitted) }
   scope :level_zero, -> { joins(:startup).merge(Startup.level_zero) }
@@ -242,6 +242,10 @@ class Founder < ApplicationRecord
     end
   end
 
+  def latest_submissions
+    timeline_events.where(latest: true)
+  end
+
   def connected_to_slack?
     return false if slack_access_token.blank?
 
@@ -299,5 +303,12 @@ class Founder < ApplicationRecord
 
   def self.valid_semester_values
     %w[I II III IV V VI VII VIII Graduated Other]
+  end
+
+  def faculty
+    return Faculty.none if startup.blank?
+
+    scope = Faculty.left_joins(:startups, :courses)
+    scope.where(startups: { id: startup }).or(scope.where(courses: { id: startup.level.course })).distinct
   end
 end

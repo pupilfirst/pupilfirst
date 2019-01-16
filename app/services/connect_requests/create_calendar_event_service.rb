@@ -42,14 +42,17 @@ module ConnectRequests
 
     def calendar_event_description
       <<~DESCRIPTION
-        Product: #{startup.display_name}
-        Timeline: #{Rails.application.routes.url_helpers.product_url(startup.id, startup.slug, host: 'https://www.sv.co')}
-        Team lead: #{startup.team_lead.fullname}
+        Student: #{@founder.fullname}
+        Timeline: #{Rails.application.routes.url_helpers.student_url(@founder.slug, host: 'https://www.sv.co')}
 
         Questions Asked:
 
         #{questions.delete("\r").to_json[1..-2]}
       DESCRIPTION
+    end
+
+    def founder
+      @founder ||= @connect_request.startup.founders.first
     end
 
     def attendees

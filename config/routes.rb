@@ -82,7 +82,7 @@ Rails.application.routes.draw do
   get 'product/edit', to: 'startups#edit', as: 'edit_product'
 
   scope 'products', controller: 'startups' do
-    get '/', action: 'index', as: 'products'
+    get '/', action: 'index', as: 'products', constraints: SvConstraint.new
     get '/:id(/:slug)', action: 'show', as: 'product'
     get '/:id/:slug/e/:event_id/:event_title', action: 'timeline_event_show', as: 'product_timeline_event_show'
   end
@@ -93,7 +93,7 @@ Rails.application.routes.draw do
     end
   end
 
-  scope 'about', as: 'about', controller: 'about' do
+  scope 'about', as: 'about', controller: 'about', constraints: SvConstraint.new do
     get '/', action: 'index'
     get 'slack'
     get 'media-kit'
@@ -140,16 +140,16 @@ Rails.application.routes.draw do
     patch ':id/feedback/comment/:token', action: 'comment_submit', as: 'comment_submit'
   end
 
-  scope 'talent', as: 'talent', controller: 'talent' do
+  scope 'talent', as: 'talent', controller: 'talent', constraints: SvConstraint.new do
     get '/', action: 'index'
     post 'contact'
   end
 
-  get 'join', to: redirect('/apply')
-  get 'apply', to: 'admissions#apply'
-  post 'apply', to: 'admissions#register'
+  get 'join', to: redirect('/apply'), constraints: SvConstraint.new
+  get 'apply', to: 'admissions#apply', constraints: SvConstraint.new
+  post 'apply', to: 'admissions#register', constraints: SvConstraint.new
 
-  scope 'admissions', as: 'admissions', controller: 'admissions' do
+  scope 'admissions', as: 'admissions', controller: 'admissions', constraints: SvConstraint.new do
     get 'screening'
     get 'screening_submit'
     post 'screening_submit_webhook'
@@ -162,14 +162,14 @@ Rails.application.routes.draw do
     patch 'update_founder'
   end
 
-  resources :prospective_applicants, only: %i[create]
+  resources :prospective_applicants, only: %i[create], constraints: SvConstraint.new
 
-  resources :colleges, only: :index
+  resources :colleges, only: :index, constraints: SvConstraint.new
 
   resource :platform_feedback, only: %i[create]
 
   # Redirect + webhook from Instamojo
-  scope 'instamojo', as: 'instamojo', controller: 'instamojo' do
+  scope 'instamojo', as: 'instamojo', controller: 'instamojo', constraints: SvConstraint.new do
     get 'redirect'
     post 'webhook'
   end
@@ -182,23 +182,23 @@ Rails.application.routes.draw do
   end
 
   # Story of startup village, accessed via about pages.
-  get 'story', as: 'story', to: 'home#story'
+  get 'story', as: 'story', to: 'home#story', constraints: SvConstraint.new
 
   # Previous transparency page re-directed to story
-  get 'transparency', to: redirect('/story')
+  get 'transparency', to: redirect('/story'), constraints: SvConstraint.new
 
   # Application process tour of SV.CO
-  get 'tour', to: 'home#tour'
+  get 'tour', to: 'home#tour', constraints: SvConstraint.new
 
   # Facebook School of Innovation at SV.CO landing page
-  get 'fb', to: 'home#fb'
-  get 'fb/vr-101', to: redirect('fb?apply=now')
+  get 'fb', to: 'home#fb', constraints: SvConstraint.new
+  get 'fb/vr-101', to: redirect('fb?apply=now'), constraints: SvConstraint.new
 
   # Apple iOS course at Manipal University landing page
-  get 'ios', to: 'home#ios'
+  get 'ios', to: 'home#ios', constraints: SvConstraint.new
 
   # VR course at Sastra University landing page
-  get 'sastra', to: 'home#sastra'
+  get 'sastra', to: 'home#sastra', constraints: SvConstraint.new
 
   # PupilFirst landing page
   get 'pupilfirst', to: 'home#pupilfirst'
@@ -206,7 +206,7 @@ Rails.application.routes.draw do
   root 'home#index'
 
   # /slack redirected to /about/slack
-  get '/slack', to: redirect('/about/slack')
+  get '/slack', to: redirect('/about/slack'), constraints: SvConstraint.new
 
   get '/dashboard', to: redirect('/student/dashboard')
 
@@ -228,7 +228,7 @@ Rails.application.routes.draw do
   end
 
   # Public change log
-  scope 'changelog', as: 'changelog', controller: 'changelog' do
+  scope 'changelog', as: 'changelog', controller: 'changelog', constraints: SvConstraint.new do
     get 'archive'
     get '(/:year)', action: 'index'
   end
@@ -239,27 +239,24 @@ Rails.application.routes.draw do
 
   resource :impersonation, only: %i[destroy]
 
-  scope 'intercom', as: 'intercom', controller: 'intercom' do
+  scope 'intercom', as: 'intercom', controller: 'intercom', constraints: SvConstraint.new do
     post 'user_create', action: 'user_create_webhook'
     post 'unsubscribe', action: 'email_unsubscribe_webhook'
   end
 
-  match '/trello/bug_webhook', to: 'trello#bug_webhook', via: :all
+  match '/trello/bug_webhook', to: 'trello#bug_webhook', via: :all, constraints: SvConstraint.new
 
-  post '/heroku/deploy_webhook', to: 'heroku#deploy_webhook'
+  post '/heroku/deploy_webhook', to: 'heroku#deploy_webhook', constraints: SvConstraint.new
 
   # Handle incoming unsubscribe webhooks from SendInBlue
   post '/send_in_blue/unsubscribe', to: 'send_in_blue#unsubscribe_webhook'
 
   # Handle redirects of short URLs.
-  get 'r/:unique_key', to: 'shortened_urls#redirect', as: 'short_redirect'
+  get 'r/:unique_key', to: 'shortened_urls#redirect', as: 'short_redirect', constraints: SvConstraint.new
 
-  scope 'stats', controller: 'product_metrics' do
+  scope 'stats', controller: 'product_metrics', constraints: SvConstraint.new do
     get '/', action: 'index', as: 'stats'
   end
 
   get '/school_admin', to: 'school_admins#dashboard'
-
-  # Handle shortener-gem form URLs for a while (backward compatibility).
-  get '/:unique_key', to: 'shortened_urls#redirect', constraints: { unique_key: /[0-9a-z]{5}/ }
 end

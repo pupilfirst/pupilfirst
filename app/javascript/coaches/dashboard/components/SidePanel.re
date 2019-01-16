@@ -4,7 +4,8 @@ let str = ReasonReact.string;
 
 let component = ReasonReact.statelessComponent("SidePanel");
 
-let make = (~coach, ~founders, ~selectedFounderId, ~selectFounderCB, ~clearFounderCB, ~pendingCount, _children) => {
+let make =
+    (~coach, ~teams, ~founders, ~selectedFounderId, ~selectFounderCB, ~clearFounderCB, ~pendingCount, _children) => {
   ...component,
   render: _self =>
     <div className="side-panel__container d-flex flex-column">
@@ -19,6 +20,6 @@ let make = (~coach, ~founders, ~selectedFounderId, ~selectFounderCB, ~clearFound
           </p>
         </div>
       </div>
-      <FoundersList founders selectedFounderId selectFounderCB clearFounderCB />
+      <FoundersList teams founders selectedFounderId selectFounderCB clearFounderCB />
     </div>,
 };

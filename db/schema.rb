@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_21_101920) do
+ActiveRecord::Schema.define(version: 2019_01_15_075418) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -149,6 +149,15 @@ ActiveRecord::Schema.define(version: 2018_12_21_101920) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
+  create_table "domains", force: :cascade do |t|
+    t.bigint "school_id"
+    t.string "fqdn"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["fqdn"], name: "index_domains_on_fqdn", unique: true
+    t.index ["school_id"], name: "index_domains_on_school_id"
   end
 
   create_table "engineering_metrics", id: :serial, force: :cascade do |t|
@@ -433,8 +442,6 @@ ActiveRecord::Schema.define(version: 2018_12_21_101920) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "subdomain"
-    t.string "domain"
   end
 
   create_table "shortened_urls", id: :serial, force: :cascade do |t|
@@ -765,6 +772,7 @@ ActiveRecord::Schema.define(version: 2018_12_21_101920) do
   add_foreign_key "connect_requests", "startups"
   add_foreign_key "connect_slots", "faculty"
   add_foreign_key "courses", "schools"
+  add_foreign_key "domains", "schools"
   add_foreign_key "faculty_course_enrollments", "courses"
   add_foreign_key "faculty_course_enrollments", "faculty"
   add_foreign_key "faculty_startup_enrollments", "faculty"

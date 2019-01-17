@@ -9,7 +9,7 @@ class CoachDashboardPresenter < ApplicationPresenter
       coach: { name: current_coach.name, id: current_coach.id, imageUrl: current_coach.image_url },
       founders: founders,
       teams: teams,
-      timelineEvents: FacultyModule::ReviewableTimelineEventsService.new(current_coach).timeline_events(@course),
+      timelineEvents: timeline_events,
       authenticityToken: view.form_authenticity_token,
       emptyIconUrl: view.image_url('coaches/dashboard/empty_icon.svg'),
       notAcceptedIconUrl: view.image_url('coaches/dashboard/not-accepted-icon.svg'),
@@ -43,6 +43,57 @@ class CoachDashboardPresenter < ApplicationPresenter
         name: startup.product_name
       }
     end
+  end
+
+  # Only load few latest pending timeline events initially.
+  def timeline_events
+    @timeline_events ||= TimelineEvent.pending_review.from_founders(founders.map { |f| f[:id] })
+      .includes(:timeline_event_owners, :timeline_event_files, :startup_feedback)
+      .includes(target: :level)
+      .includes(:target_evaluation_criteria, :evaluation_criteria)
+      .order(created_at: :DESC).limit(2).map { |timeline_event| timeline_event_fields(timeline_event) }
+  end
+
+  def timeline_event_fields(timeline_event)
+    {
+      id: timeline_event.id,
+      title: title(timeline_event),
+      description: timeline_event.description,
+      eventOn: timeline_event.event_on,
+      founderIds: founder_ids(timeline_event),
+      links: timeline_event.links,
+      files: files(timeline_event),
+      image: timeline_event.image? ? timeline_event.image.url : nil,
+      latestFeedback: timeline_event.startup_feedback&.last&.feedback,
+      evaluation: evaluation(timeline_event),
+      rubric: rubric(timeline_event)
+    }
+  end
+
+  def title(timeline_event)
+    timeline_event.target.level.short_name + ' | ' + timeline_event.target.title
+  end
+
+  def founder_ids(timeline_event)
+    timeline_event.timeline_event_owners.map(&:founder_id)
+  end
+
+  def files(timeline_event)
+    timeline_event.timeline_event_files.map { |file| { title: file.title, id: file.id } }
+  end
+
+  def evaluation(timeline_event)
+    timeline_event.evaluation_criteria.map do |criterion|
+      {
+        criterionId: criterion.id,
+        criterionName: criterion.name,
+        grade: nil
+      }
+    end
+  end
+
+  def rubric(timeline_event)
+    timeline_event.target.rubric_description
   end
 
   def grade_labels

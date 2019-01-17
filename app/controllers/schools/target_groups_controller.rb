@@ -2,13 +2,13 @@ module Schools
   class TargetGroupsController < SchoolsController
     before_action :target_group, except: :create
 
-    # POST /school/courses/:course_id/levels/:level_id/target_groups
+    # POST /school/levels/:level_id/target_groups(.:format)
     def create
       authorize(TargetGroup, policy_class: Schools::TargetGroupPolicy)
       form = ::Schools::TargetGroups::CreateForm.new(TargetGroup.new)
       if form.validate(create_params)
         form.save
-        redirect_back(fallback_location: school_course_curriculum_path(params[:course_id]))
+        redirect_back(fallback_location: school_course_curriculum_path(course))
       else
         raise form.errors.full_messages.join(', ')
       end
@@ -19,23 +19,16 @@ module Schools
       form = ::Schools::TargetGroups::UpdateForm.new(target_group)
       if form.validate(update_params)
         form.save
-        redirect_back(fallback_location: school_course_curriculum_path(level.course))
+        redirect_back(fallback_location: school_course_curriculum_path(course))
       else
         raise form.errors.full_messages.join(', ')
       end
     end
 
-    # DELETE /school/target_groups/:id
-    def destroy
-      course = level.course
-      target_group.destroy!
-      redirect_back(fallback_location: school_course_curriculum_path(course))
-    end
-
     private
 
-    def level
-      target_group.level
+    def course
+      Level.find(params[:level_id]).course
     end
 
     def target_group

@@ -1,0 +1,11 @@
+<div class="border m-2 p-2">
+  <h5 class="text-green">Update target:</h5>
+  <%= form_for @target, url: school_target_path(@target), class: 'mt-1' do |f| %>
+    <%= f.text_field :role, placeholder: "role", class: 'border p-2 ml-1' %>
+    <%= f.text_field :title, placeholder: "Title", class: 'border p-2 ml-1' %>
+    <%= f.text_field :description, placeholder: "Description", class: 'border p-2 ml-1' %>
+    <%= f.text_field :target_action_type, placeholder: "Target Action Type", class: 'border p-2 ml-1' %>
+    <%= f.number_field :sort_index, placeholder: "Sort Index", class: 'border p-2 ml-1' %>
+    <%= f.submit 'Update', class: 'border p-2 mb-4' %>
+  <% end %>
+</div>

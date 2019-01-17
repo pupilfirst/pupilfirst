@@ -9,9 +9,8 @@ module Schools
       form = ::Schools::Targets::CreateForm.new(@target)
 
       if form.validate(params[:target])
-        target = form.save
-        redirect_back(fallback_location: school_course_curriculum_path(target.course))
-        redirect_to school_course_curriculum_path(course)
+        form.save
+        redirect_to school_course_curriculum_path(@target.course)
       else
         raise form.errors.full_messages.join(', ')
       end
@@ -28,9 +27,8 @@ module Schools
       form = ::Schools::Targets::UpdateForm.new(@target)
 
       if form.validate(params[:target])
-        target = form.save
-        redirect_back(fallback_location: school_course_curriculum_path(target.course))
-        redirect_to school_course_curriculum_path(course)
+        form.save
+        redirect_to school_course_curriculum_path(@target.course)
       else
         raise form.errors.full_messages.join(', ')
       end

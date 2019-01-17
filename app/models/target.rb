@@ -90,6 +90,7 @@ class Target < ApplicationRecord
   validate :days_to_complete_or_session_at_should_be_present
 
   def days_to_complete_or_session_at_should_be_present
+    return if days_to_complete.blank? && session_at.blank?
     return if [days_to_complete, session_at].one?
 
     errors[:base] << 'One of days_to_complete, or session_at should be set.'

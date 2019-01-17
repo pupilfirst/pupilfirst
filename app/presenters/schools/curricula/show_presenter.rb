@@ -18,6 +18,10 @@ module Schools
       def target_groups(level)
         level.target_groups.select(:id, :name, :description, :sort_index, :milestone)
       end
+
+      def targets(target_group)
+        target_group.targets.select(:id, :role, :title, :description, :target_action_type, :sort_index)
+      end
     end
   end
 end

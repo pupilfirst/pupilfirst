@@ -45,7 +45,8 @@ Rails.application.routes.draw do
       resources :faculty, as: 'coaches', path: 'coaches', only: %i[index create destroy]
       resources :evaluation_criteria, only: %i[create]
       resources :levels, only: %i[create] do
-        resources :target_groups, only: %i[create]
+        resources :target_groups, only: %i[create] do
+        end
       end
     end
 
@@ -66,7 +67,11 @@ Rails.application.routes.draw do
 
     resources :levels, only: %i[update destroy]
 
-    resources :target_groups, only: %i[update destroy]
+    resources :target_groups, only: %i[update destroy] do
+      resources :targets, only: %i[create]
+    end
+
+    resources :targets, only: %i[update destroy]
   end
 
   resources :founders, only: %i[] do

@@ -56,11 +56,8 @@
 //= require components
 
 // Controller-specific
-//= require home
-//= require about
 //= require startups
 //= require talent
-//= require admissions
 //= require faculty
 //= require founders
 //= require story

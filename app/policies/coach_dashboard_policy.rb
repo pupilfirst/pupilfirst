@@ -3,6 +3,8 @@ class CoachDashboardPolicy < ApplicationPolicy
     record.present? && courses_with_dashboard.present? && record.in?(courses_with_dashboard)
   end
 
+  alias timeline_events? show?
+
   private
 
   def courses_with_dashboard

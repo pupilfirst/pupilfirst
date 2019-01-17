@@ -13,7 +13,9 @@ let founderFilter = (founderId, tes) =>
 let make =
     (
       ~timelineEvents,
-      ~moreToLoad,
+      ~hasMorePendingTEs,
+      ~hasMoreCompletedTEs,
+      ~loadMoreEventsCB,
       ~founders,
       ~selectedFounderId,
       ~replaceTimelineEvent,
@@ -34,6 +36,7 @@ let make =
       </ul>
       {
         let pendingTEs = timelineEvents |> founderFilter(selectedFounderId) |> TimelineEvent.reviewPending;
+        let loadMoreCB = (tes, hasMorePendingTEs) => loadMoreEventsCB(tes, hasMorePendingTEs, hasMoreCompletedTEs);
         if (pendingTEs |> List.length == 0) {
           <div className="timeline-events-panel__empty-notice p-4 mb-3">
             <img src=emptyIconUrl className="timeline-events-panel__empty-icon mx-auto" />
@@ -42,6 +45,8 @@ let make =
         } else {
           <TimelineEventsList
             timelineEvents=pendingTEs
+            hasMoreEvents=hasMorePendingTEs
+            loadMoreCB
             founders
             replaceTimelineEvent
             authenticityToken
@@ -51,16 +56,6 @@ let make =
             passGrade
           />;
         };
-      }
-      {
-        if (moreToLoad) {
-          <div className="btn btn-primary">
-            <i className="fa fa-cloud-download mr-1"/>
-            ("Load more"|> str)
-          </div>
-        } else {
-          ReasonReact.null
-        }
       }
       /*<h4 className="font-semibold mt-5 pb-2"> ("Complete" |> str) </h4>*/
       /*{*/

@@ -10,7 +10,8 @@ class CoachDashboardPresenter < ApplicationPresenter
       founders: founders,
       teams: teams,
       timelineEvents: timeline_events_service.timeline_events,
-      moreToLoad: timeline_events_service.more_to_load?,
+      hasMorePendingTEs: timeline_events_service.more_to_load?,
+      hasMoreCompletedTEs: evaluated_submissions_exist?,
       authenticityToken: view.form_authenticity_token,
       emptyIconUrl: view.image_url('coaches/dashboard/empty_icon.svg'),
       notAcceptedIconUrl: view.image_url('coaches/dashboard/not-accepted-icon.svg'),
@@ -48,6 +49,10 @@ class CoachDashboardPresenter < ApplicationPresenter
 
   def timeline_events_service
     @timeline_events_service ||= CoachDashboard::TimelineEventsDataService.new(current_coach, @course)
+  end
+
+  def evaluated_submissions_exist?
+    TimelineEvent.where(target: @course.targets, evaluator: current_coach).exists?
   end
 
   def grade_labels

@@ -234,7 +234,9 @@ Rails.application.routes.draw do
   end
 
   resources :courses, only: [] do
-    resource :coach_dashboard, controller: 'coach_dashboard', only: %i[show]
+    resource :coach_dashboard, controller: 'coach_dashboard', only: %i[show] do
+      get 'timeline_events'
+    end
   end
 
   resource :impersonation, only: %i[destroy]

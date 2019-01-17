@@ -5,6 +5,7 @@ type props = {
   founders: list(Founder.t),
   teams: list(Team.t),
   timelineEvents: list(TimelineEvent.t),
+  moreToLoad: bool,
   authenticityToken: string,
   emptyIconUrl: string,
   notAcceptedIconUrl: string,
@@ -31,6 +32,7 @@ let make =
       ~founders,
       ~teams,
       ~timelineEvents,
+      ~moreToLoad,
       ~authenticityToken,
       ~emptyIconUrl,
       ~notAcceptedIconUrl,
@@ -76,6 +78,7 @@ let make =
         <div className="col-md-8">
           <TimelineEventsPanel
             timelineEvents=state.timelineEvents
+            moreToLoad
             founders
             selectedFounderId=state.selectedFounderId
             replaceTimelineEvent
@@ -98,6 +101,7 @@ let decode = json =>
     founders: json |> field("founders", list(Founder.decode)),
     teams: json |> field("teams", list(Team.decode)),
     timelineEvents: json |> field("timelineEvents", list(TimelineEvent.decode)),
+    moreToLoad: json |> field("moreToLoad", bool),
     authenticityToken: json |> field("authenticityToken", string),
     emptyIconUrl: json |> field("emptyIconUrl", string),
     notAcceptedIconUrl: json |> field("notAcceptedIconUrl", string),
@@ -116,6 +120,7 @@ let jsComponent =
         ~founders=props.founders,
         ~teams=props.teams,
         ~timelineEvents=props.timelineEvents,
+        ~moreToLoad=props.moreToLoad,
         ~authenticityToken=props.authenticityToken,
         ~emptyIconUrl=props.emptyIconUrl,
         ~notAcceptedIconUrl=props.notAcceptedIconUrl,

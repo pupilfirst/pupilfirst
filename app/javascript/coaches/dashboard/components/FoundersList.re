@@ -53,7 +53,7 @@ let make = (~teams, ~founders, ~selectedFounderId, ~selectFounderCB, ~clearFound
         |> List.map(team => {
              let foundersInTeam = founders |> Founder.inTeam(team);
              if (foundersInTeam |> List.length > 1) {
-               <div className="founders-list__team-container">
+               <div className="founders-list__team-container" key=(team |> Team.id |> string_of_int)>
                  <div className="founders-list__team-name font-semibold"> (team |> Team.name |> str) </div>
                  (foundersInTeam |> founderButtons(selectedFounderId, selectFounderCB))
                </div>;

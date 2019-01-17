@@ -13,6 +13,7 @@ let founderFilter = (founderId, tes) =>
 let make =
     (
       ~timelineEvents,
+      ~moreToLoad,
       ~founders,
       ~selectedFounderId,
       ~replaceTimelineEvent,
@@ -50,6 +51,16 @@ let make =
             passGrade
           />;
         };
+      }
+      {
+        if (moreToLoad) {
+          <div className="btn btn-primary">
+            <i className="fa fa-cloud-download mr-1"/>
+            ("Load more"|> str)
+          </div>
+        } else {
+          ReasonReact.null
+        }
       }
       /*<h4 className="font-semibold mt-5 pb-2"> ("Complete" |> str) </h4>*/
       /*{*/

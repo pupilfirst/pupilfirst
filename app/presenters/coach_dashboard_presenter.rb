@@ -10,6 +10,7 @@ class CoachDashboardPresenter < ApplicationPresenter
       founders: founders,
       teams: teams,
       timelineEvents: timeline_events,
+      moreToLoad: more_to_load?,
       authenticityToken: view.form_authenticity_token,
       emptyIconUrl: view.image_url('coaches/dashboard/empty_icon.svg'),
       notAcceptedIconUrl: view.image_url('coaches/dashboard/not-accepted-icon.svg'),
@@ -51,7 +52,7 @@ class CoachDashboardPresenter < ApplicationPresenter
       .includes(:timeline_event_owners, :timeline_event_files, :startup_feedback)
       .includes(target: :level)
       .includes(:target_evaluation_criteria, :evaluation_criteria)
-      .order(created_at: :DESC).limit(2).map { |timeline_event| timeline_event_fields(timeline_event) }
+      .order(created_at: :DESC).limit(1).map { |timeline_event| timeline_event_fields(timeline_event) }
   end
 
   def timeline_event_fields(timeline_event)
@@ -94,6 +95,11 @@ class CoachDashboardPresenter < ApplicationPresenter
 
   def rubric(timeline_event)
     timeline_event.target.rubric_description
+  end
+
+  def more_to_load?
+    TimelineEvent.pending_review.from_founders(founders.map { |f| f[:id] })
+      .where.not(id: timeline_events.map { |te| te[:id] }).exists?
   end
 
   def grade_labels

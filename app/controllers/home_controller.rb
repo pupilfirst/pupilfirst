@@ -83,6 +83,38 @@ class HomeController < ApplicationController
     end
   end
 
+  # GET /oauth/:provider?from=FQDN&referer=
+  def oauth
+    # TODO: Consider validating the value of params[:from].
+    set_cookie(:oauth_origin, params[:xyz])
+
+    oauth_url_options = {
+      host: "www.pupilfirst.#{Rails.env.production? ? 'com' : 'localhost'}",
+      origin: params[:referer]
+    }
+
+    oauth_url = case params[:provider]
+      when 'developer'
+        user_developer_omniauth_authorize_url(oauth_url_options)
+      when 'google'
+        user_google_oauth2_omniauth_authorize_url(oauth_url_options)
+      when 'facebook'
+        user_facebook_omniauth_authorize_url(oauth_url_options)
+      when 'github'
+        user_github_omniauth_authorize_url(oauth_url_options)
+      else
+        raise "Invalid provider #{params[:provider]} supplied to oauth redirection route."
+    end
+
+    redirect_to oauth_url
+  end
+
+  # GET /oauth_unknown?email=
+  def oauth_unknown
+    flash[:notice] = "Your email address: #{params[:email]} is unregistered."
+    redirect_to new_user_session_path
+  end
+
   protected
 
   def background_image_number

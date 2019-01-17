@@ -26,17 +26,19 @@
         #sign-in-with-federated class=hidden_sign_in_class('federated')
           h3.text-center.mb-3 Sign in to SV.CO
 
+          - oauth_host = "www.pupilfirst.#{Rails.env.production? ? 'com' : 'localhost'}"
+
           - if Rails.env.development?
-            a.oauth-login.login-as-developer href=user_developer_omniauth_authorize_path(origin: params[:referer])
+            a.oauth-login.login-as-developer href=oauth_url(provider: 'developer', from: current_host, host: oauth_host)
               i.fa.fa-code.oauth-icon
               | Continue as Developer
-          a.oauth-login.login-with-google href=user_google_oauth2_omniauth_authorize_path(origin: params[:referer])
+          a.oauth-login.login-with-google href=oauth_url(provider: 'google', from: current_host, host: oauth_host)
             i.fa.fa-google.oauth-icon
             | Continue with Google
-          a.oauth-login.login-with-facebook href=user_facebook_omniauth_authorize_path(origin: params[:referer])
+          a.oauth-login.login-with-facebook href=oauth_url(provider: 'facebook', from: current_host, host: oauth_host)
             i.fa.fa-facebook.oauth-icon
             | Continue with Facebook
-          a.oauth-login.login-with-github href=user_github_omniauth_authorize_path(origin: params[:referer])
+          a.oauth-login.login-with-github href=oauth_url(provider: 'github', from: current_host, host: oauth_host)
             i.fa.fa-github.oauth-icon
             | Continue with Github
 

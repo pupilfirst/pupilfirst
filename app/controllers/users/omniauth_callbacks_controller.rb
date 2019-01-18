@@ -6,24 +6,20 @@ module Users
 
     # GET /users/auth/:action/callback
     def oauth_callback
-      email = email_from_auth_hash
+      @email = email_from_auth_hash
 
-      if email.blank?
+      if @email.blank?
         flash[:error] = email_blank_flash
         redirect_to new_user_session_path
         return
       end
 
-      user = User.with_email(email)
+      oauth_origin = read_cookie(:oauth_origin)
 
-      if user.present?
-        sign_in user
-        remember_me user
-        Users::ConfirmationService.new(user).execute
-        redirect_to origin || after_sign_in_path_for(user)
+      if oauth_origin.present?
+        sign_in_at_oauth_origin(oauth_origin)
       else
-        flash[:notice] = "Your email address: #{email} is not registered at SV.CO"
-        redirect_to new_user_session_path
+        sign_into_current_host
       end
     end
 
@@ -33,6 +29,46 @@ module Users
     alias developer oauth_callback
 
     private
+
+    def sign_in_at_oauth_origin(oauth_origin)
+      # Make sure the cookie isn't reused.
+      cookies.delete :oauth_origin
+
+      # Parse the JSON format that origin information is stored as.
+      origin = JSON.parse(oauth_origin, symbolize_names: true)
+
+      if user.present?
+        # Regenerate the login token.
+        user.regenerate_login_token
+
+        token_url_options = {
+          token: user.login_token,
+          host: origin[:fqdn]
+        }
+
+        token_url_options[:referer] = origin[:referer] if origin[:referer].present?
+
+        # Redirect user to sign in at the origin domain with newly generated token.
+        redirect_to user_token_url(token_url_options)
+      else
+        redirect_to oauth_unknown_url(host: origin[:fqdn], email: @email)
+      end
+    end
+
+    def sign_into_current_host
+      if user.present?
+        sign_in user
+        remember_me user
+        redirect_to origin || after_sign_in_path_for(user)
+      else
+        flash[:notice] = "Your email address: #{@email} is not registered at SV.CO"
+        redirect_to new_user_session_path
+      end
+    end
+
+    def user
+      @user ||= User.with_email(@email)
+    end
 
     # This is a hack to resolve the issue of flashing message 'You are already signed in' when signing in using OAuth.
     # For an unknown reason, the request env variable omniauth.origin defaults to the sign in path when no origin is

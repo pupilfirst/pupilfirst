@@ -13,6 +13,7 @@ class ApplicationController < ActionController::Base
   before_action :pretender
   before_action :cache_current_founder_in_current_user
 
+  helper_method :current_host
   helper_method :current_school
   helper_method :current_founder
   helper_method :current_startup
@@ -54,9 +55,26 @@ class ApplicationController < ActionController::Base
     @platform_feedback_for_form = PlatformFeedback.new(founder_id: current_founder.id)
   end
 
-  # TODO: Replace ApplicationController#current_school with a proper implementation to enable white-labeling.
+  def current_host
+    @current_host ||= request.host
+  end
+
+  # Returns nil, if on a PupilFirst page, or a School, if on a school domain. Raises an error if request is from an
+  # unknown domain.
   def current_school
-    request.domain.in?(Rails.application.secrets.pupilfirst_domains) ? nil : School.first
+    @current_school ||= begin
+      resolved_school = Domain.find_by(fqdn: current_host)&.school
+
+      if Rails.env.test?
+        School.first
+      elsif current_host.in?(Rails.application.secrets.pupilfirst_domains)
+        nil
+      elsif resolved_school.present?
+        resolved_school
+      else
+        raise "Received routed request from non-PupilFirst & unknown FQDN: #{current_host}"
+      end
+    end
   end
 
   def current_coach

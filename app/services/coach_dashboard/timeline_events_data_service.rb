@@ -1,6 +1,6 @@
 module CoachDashboard
   class TimelineEventsDataService
-    def initialize(faculty, course, review_status = :pending, excluded_ids = [], limit = 2)
+    def initialize(faculty, course, review_status = :pending, excluded_ids = [], limit = 50)
       @faculty = faculty
       @course = course
       @review_status = review_status

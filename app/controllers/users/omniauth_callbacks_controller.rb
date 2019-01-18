@@ -49,14 +49,16 @@ module Users
         raw_origin_data = read_cookie(:oauth_origin)
 
         # Parse the JSON format that origin information is stored as.
-        raw_origin_data.present? ? JSON.parse(raw_origin_data, symbolize_names: true) : nil
+        if raw_origin_data.present?
+          # Make sure the cookie isn't reused.
+          cookies.delete :oauth_origin
+
+          JSON.parse(raw_origin_data, symbolize_names: true)
+        end
       end
     end
 
     def sign_in_at_oauth_origin
-      # Make sure the cookie isn't reused.
-      cookies.delete :oauth_origin
-
       if user.present?
         # Regenerate the login token.
         user.regenerate_login_token

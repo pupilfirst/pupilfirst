@@ -83,30 +83,14 @@ class HomeController < ApplicationController
     end
   end
 
-  # GET /oauth/:provider?from=FQDN&referer=
+  # GET /oauth/:provider?fqdn=FQDN&referer=
   def oauth
-    # TODO: Consider validating the value of params[:from].
-    set_cookie(:oauth_origin, params[:xyz])
+    # Disallow routing OAuth results to unknown domains.
+    raise_not_found if Domain.find_by(fqdn: params[:fqdn]).blank?
 
-    oauth_url_options = {
-      host: "www.pupilfirst.#{Rails.env.production? ? 'com' : 'localhost'}",
-      origin: params[:referer]
-    }
+    set_cookie(:oauth_origin, { fqdn: params[:fqdn], referer: params[:referer] }.to_json)
 
-    oauth_url = case params[:provider]
-      when 'developer'
-        user_developer_omniauth_authorize_url(oauth_url_options)
-      when 'google'
-        user_google_oauth2_omniauth_authorize_url(oauth_url_options)
-      when 'facebook'
-        user_facebook_omniauth_authorize_url(oauth_url_options)
-      when 'github'
-        user_github_omniauth_authorize_url(oauth_url_options)
-      else
-        raise "Invalid provider #{params[:provider]} supplied to oauth redirection route."
-    end
-
-    redirect_to oauth_url
+    redirect_to oauth_url(params[:provider])
   end
 
   # GET /oauth_unknown?email=
@@ -116,6 +100,25 @@ class HomeController < ApplicationController
   end
 
   protected
+
+  def oauth_url(provider)
+    url_opts = {
+      host: "www.pupilfirst.#{Rails.env.production? ? 'com' : 'localhost'}"
+    }
+
+    case provider
+      when 'developer'
+        user_developer_omniauth_authorize_url(url_opts)
+      when 'google'
+        user_google_oauth2_omniauth_authorize_url(url_opts)
+      when 'facebook'
+        user_facebook_omniauth_authorize_url(url_opts)
+      when 'github'
+        user_github_omniauth_authorize_url(url_opts)
+      else
+        raise "Invalid provider #{provider} supplied to oauth redirection route."
+    end
+  end
 
   def background_image_number
     @background_image_number ||= begin

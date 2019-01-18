@@ -34,19 +34,24 @@ module Users
       # Make sure the cookie isn't reused.
       cookies.delete :oauth_origin
 
+      # Parse the JSON format that origin information is stored as.
+      origin = JSON.parse(oauth_origin, symbolize_names: true)
+
       if user.present?
         # Regenerate the login token.
         user.regenerate_login_token
 
         token_url_options = {
-          token: user.login_token, host: oauth_origin,
-          referer: origin
+          token: user.login_token,
+          host: origin[:fqdn]
         }
+
+        token_url_options[:referer] = origin[:referer] if origin[:referer].present?
 
         # Redirect user to sign in at the origin domain with newly generated token.
         redirect_to user_token_url(token_url_options)
       else
-        redirect_to oauth_unknown_url(host: oauth_origin, email: @email)
+        redirect_to oauth_unknown_url(host: origin[:fqdn], email: @email)
       end
     end
 

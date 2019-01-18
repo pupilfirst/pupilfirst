@@ -29,16 +29,16 @@
           - oauth_host = "www.pupilfirst.#{Rails.env.production? ? 'com' : 'localhost'}"
 
           - if Rails.env.development?
-            a.oauth-login.login-as-developer href=oauth_url(provider: 'developer', from: current_host, host: oauth_host)
+            a.oauth-login.login-as-developer href=oauth_url(provider: 'developer', fqdn: current_host, host: oauth_host)
               i.fa.fa-code.oauth-icon
               | Continue as Developer
-          a.oauth-login.login-with-google href=oauth_url(provider: 'google', from: current_host, host: oauth_host)
+          a.oauth-login.login-with-google href=oauth_url(provider: 'google', fqdn: current_host, host: oauth_host)
             i.fa.fa-google.oauth-icon
             | Continue with Google
-          a.oauth-login.login-with-facebook href=oauth_url(provider: 'facebook', from: current_host, host: oauth_host)
+          a.oauth-login.login-with-facebook href=oauth_url(provider: 'facebook', fqdn: current_host, host: oauth_host)
             i.fa.fa-facebook.oauth-icon
             | Continue with Facebook
-          a.oauth-login.login-with-github href=oauth_url(provider: 'github', from: current_host, host: oauth_host)
+          a.oauth-login.login-with-github href=oauth_url(provider: 'github', fqdn: current_host, host: oauth_host)
             i.fa.fa-github.oauth-icon
             | Continue with Github
 

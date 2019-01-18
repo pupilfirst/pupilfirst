@@ -13,9 +13,8 @@ class UserSignInForm < Reform::Form
     errors[:email] << 'Could not find user with this email'
   end
 
-  def save
-    response = Users::AuthenticationService.mail_login_token(email, referer, shared_device?)
-    raise "Unexpected error while emailing token to #{email}" unless response[:success]
+  def save(current_school, current_domain)
+    Users::MailLoginTokenService.new(current_school, current_domain, user, referer, shared_device?).execute
   end
 
   private

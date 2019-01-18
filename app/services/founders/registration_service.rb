@@ -44,15 +44,19 @@ module Founders
 
     def user
       @user ||= begin
-        u = User.with_email(@founder_params[:email]) || User.create!(email: @founder_params[:email])
-        u.regenerate_login_token if u.login_token.blank?
-        u
+        User.with_email(@founder_params[:email]) || User.create!(email: @founder_params[:email])
       end
     end
 
     # Send login email when all's done.
     def send_login_email(founder)
-      UserSessionMailer.send_login_token(founder.user, nil, true).deliver_later
+      school = founder.startup.course.school
+      domain = school.domains.first
+      user = founder.user
+      referer = nil
+      shared_device = true
+
+      Users::MailLoginTokenService.new(school, domain, user, referer, shared_device).execute
     end
 
     # Create or update user info on Intercom.

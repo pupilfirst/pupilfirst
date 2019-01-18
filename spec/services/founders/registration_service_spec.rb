@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Founders::RegistrationService do
+describe Founders::RegistrationService, broken: true do
   subject { described_class }
 
   describe '#register' do

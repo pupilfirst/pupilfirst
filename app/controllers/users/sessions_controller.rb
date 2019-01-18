@@ -21,7 +21,7 @@ module Users
 
       if verify_recaptcha(model: @form, secret_key: Rails.application.secrets.dig(:google, :recaptcha, :invisible, :secret_key))
         if @form.validate(sign_in_params)
-          @form.save
+          @form.save(current_school, current_domain)
         else
           @sign_in_error = true
           render 'new'
@@ -33,19 +33,18 @@ module Users
 
     # GET /user/token - link to sign_in user with token in params
     def token
-      response = Users::AuthenticationService.authenticate_token(params[:token])
-      if response[:success]
-        @user = User.find(response[:user_id])
+      user = Users::AuthenticationService.new(params[:token]).authenticate
 
-        sign_in @user
-        remember_me @user unless params[:shared_device] == 'true'
-        Users::ConfirmationService.new(@user).execute
+      if user.present?
+        sign_in user
+        remember_me(user) unless params[:shared_device] == 'true'
+        Users::ConfirmationService.new(user).execute
 
-        flash[:success] = response[:message]
-        redirect_to after_sign_in_path_for(@user)
+        flash[:success] = 'User authenticated successfully.'
+        redirect_to after_sign_in_path_for(user)
       else
-        # Show error and ask for re-authentication
-        flash[:error] = response[:message]
+        # Show an error message.
+        flash[:error] = 'User authentication failed. The link you followed appears to be invalid.'
         redirect_to new_user_session_path(referer: params[:referer])
       end
     end

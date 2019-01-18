@@ -1,7 +1,6 @@
 [%bs.raw {|require("./CoachDashboard.scss")|}];
 
 type props = {
-  coach: Coach.t,
   founders: list(Founder.t),
   teams: list(Team.t),
   timelineEvents: list(TimelineEvent.t),
@@ -33,7 +32,6 @@ let component = ReasonReact.reducerComponent("CoachDashboard");
 
 let make =
     (
-      ~coach,
       ~founders,
       ~teams,
       ~timelineEvents,
@@ -73,21 +71,10 @@ let make =
       send(AppendTEs(tes, hasMorePendingTEs, hasMoreCompletedTEs));
     <div className="coach-dashboard__container container">
       <div className="row">
-        <div className="col-md-4">
-          {
-            let pendingCount = state.timelineEvents |> TimelineEvent.reviewPending |> List.length;
-            <SidePanel
-              coach
-              teams
-              founders
-              selectedFounderId=state.selectedFounderId
-              selectFounderCB
-              clearFounderCB
-              pendingCount
-            />;
-          }
+        <div className="col-md-3">
+          <SidePanel teams founders selectedFounderId=state.selectedFounderId selectFounderCB clearFounderCB />
         </div>
-        <div className="col-md-8">
+        <div className="col-md-9">
           <TimelineEventsPanel
             timelineEvents=state.timelineEvents
             hasMorePendingTEs=state.hasMorePendingTEs
@@ -112,7 +99,6 @@ let make =
 
 let decode = json =>
   Json.Decode.{
-    coach: json |> field("coach", Coach.decode),
     founders: json |> field("founders", list(Founder.decode)),
     teams: json |> field("teams", list(Team.decode)),
     timelineEvents: json |> field("timelineEvents", list(TimelineEvent.decode)),
@@ -133,7 +119,6 @@ let jsComponent =
     jsProps => {
       let props = jsProps |> decode;
       make(
-        ~coach=props.coach,
         ~founders=props.founders,
         ~teams=props.teams,
         ~timelineEvents=props.timelineEvents,

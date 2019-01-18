@@ -6,7 +6,6 @@ class CoachDashboardPresenter < ApplicationPresenter
 
   def react_props
     {
-      coach: { name: current_coach.name, id: current_coach.id, imageUrl: current_coach.image_url },
       founders: founders,
       teams: teams,
       timelineEvents: timeline_events_service.timeline_events,

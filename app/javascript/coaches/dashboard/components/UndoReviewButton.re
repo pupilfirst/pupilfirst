@@ -25,7 +25,6 @@ let handleResponseJSON = (te, replaceTimelineEvent, json) =>
 
 let undoReview = (te, replaceTimelineEvent, _event) => {
   let id = te |> TimelineEvent.id |> string_of_int;
-  let payload = Js.Dict.empty();
   Js.Promise.(
     Fetch.fetchWithInit(
       "/timeline_events/" ++ id ++ "/undo_review",

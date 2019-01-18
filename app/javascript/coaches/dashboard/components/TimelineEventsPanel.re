@@ -92,46 +92,61 @@ let make =
     ) => {
   ...component,
   initialState: () => {selectedTab: PendingTab},
-  reducer: (action, state) =>
+  reducer: (action, _state) =>
     switch (action) {
-    | SwitchTab(selectedTab) => ReasonReact.Update({...state, selectedTab})
+    | SwitchTab(selectedTab) => ReasonReact.Update({selectedTab: selectedTab})
     },
-  render: ({state, send}) =>
+  render: ({state, send}) => {
+    let statusFilter =
+      switch (state.selectedTab) {
+      | PendingTab => TimelineEvent.reviewPending
+      | CompletedTab => TimelineEvent.reviewComplete
+      };
+    let pendingCount =
+      timelineEvents |> founderFilter(selectedFounderId) |> TimelineEvent.reviewPending |> List.length;
+    let timelineEvents = timelineEvents |> founderFilter(selectedFounderId) |> statusFilter;
     <div className="timeline-events-panel__container pt-4">
-      <ul className="nav nav-tabs">
-        <li className="nav-item" onClick=(_e => send(SwitchTab(PendingTab)))>
-          <div className=("nav-link" ++ (state.selectedTab == PendingTab ? " active" : ""))> ("Pending" |> str) </div>
-        </li>
-        <li className="nav-item" onClick=(_e => send(SwitchTab(CompletedTab)))>
-          <div className=("nav-link" ++ (state.selectedTab == CompletedTab ? " active" : ""))>
-            ("Complete" |> str)
-          </div>
-        </li>
-      </ul>
-      {
-        let statusFilter =
-          switch (state.selectedTab) {
-          | PendingTab => TimelineEvent.reviewPending
-          | CompletedTab => TimelineEvent.reviewComplete
-          };
-        let timelineEvents = timelineEvents |> founderFilter(selectedFounderId) |> statusFilter;
-        <TimelineEventsList
-          timelineEvents
-          founders
-          replaceTimelineEvent
-          authenticityToken
-          notAcceptedIconUrl
-          verifiedIconUrl
-          gradeLabels
-          passGrade
-          emptyIconUrl
-        />;
-      }
+      <div className="d-flex mb-3 timeline-events-panel__status-tab-container">
+        <div
+          className=(
+            "timeline-events-panel__status-tab"
+            ++ (state.selectedTab == PendingTab ? " timeline-events-panel__status-tab--active" : "")
+          )
+          onClick=(_e => send(SwitchTab(PendingTab)))>
+          ("Pending" |> str)
+          (
+            if (pendingCount > 0) {
+              <span className="badge"> (pendingCount |> string_of_int |> str) </span>;
+            } else {
+              ReasonReact.null;
+            }
+          )
+        </div>
+        <div
+          className=(
+            "timeline-events-panel__status-tab"
+            ++ (state.selectedTab == CompletedTab ? " timeline-events-panel__status-tab--active" : "")
+          )
+          onClick=(_e => send(SwitchTab(CompletedTab)))>
+          ("Reviewed" |> str)
+        </div>
+      </div>
+      <TimelineEventsList
+        timelineEvents
+        founders
+        replaceTimelineEvent
+        authenticityToken
+        notAcceptedIconUrl
+        verifiedIconUrl
+        gradeLabels
+        passGrade
+        emptyIconUrl
+      />
       (
         if (loadMoreVisible(state.selectedTab, hasMorePendingTEs, hasMoreCompletedTEs)) {
           let buttonText = state.selectedTab == PendingTab ? "Load more" : "Load earlier reviews";
           <div
-            className="btn btn-primary"
+            className="btn btn-primary mb-3"
             onClick=(
               _e => fetchEvents(state, timelineEvents, hasMorePendingTEs, hasMoreCompletedTEs, appendTEsCB, courseId)
             )>
@@ -142,5 +157,6 @@ let make =
           ReasonReact.null;
         }
       )
-    </div>,
+    </div>;
+  },
 };

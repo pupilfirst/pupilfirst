@@ -34,16 +34,19 @@ let make = (~teams, ~founders, ~selectedFounderId, ~selectFounderCB, ~clearFound
   ...component,
   render: _self =>
     <div className="founders-list__container">
-      <div className="founders-list__header d-flex p-4 align-items-center justify-content-between">
-        <h4 className="founders-list__header-title m-0 font-regular"> ("Your Students" |> str) </h4>
+      <div className="founders-list__header d-flex align-items-center justify-content-between">
+        <h4 className="founders-list__header-title m-0 font-regular">
+          <i className="fa fa-filter mr-1" />
+          ("Filter by student:" |> str)
+        </h4>
         <div className="founders-list__filter-btn-container">
           (
             switch (selectedFounderId) {
             | None => ReasonReact.null
             | Some(_id) =>
-              <button className="founders-list__clear-filter-btn p-0" onClick=(_event => clearFounderCB())>
-                ("Clear Filter" |> str)
-              </button>
+              <div className="founders-list__clear-filter-btn p-0" onClick=(_event => clearFounderCB())>
+                ("Clear" |> str)
+              </div>
             }
           )
         </div>

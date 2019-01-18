@@ -28,8 +28,8 @@ let founderFilter = (founderId, tes) =>
   | Some(id) => tes |> TimelineEvent.forFounderId(id)
   };
 
-let loadMoreVisible = (selectedTab, hasMorePendingTEs, hasMoreCompletedTEs) =>
-  selectedTab == PendingTab ? hasMorePendingTEs : hasMoreCompletedTEs;
+let loadMoreVisible = (selectedFounderId, selectedTab, hasMorePendingTEs, hasMoreCompletedTEs) =>
+  selectedFounderId == None && (selectedTab == PendingTab ? hasMorePendingTEs : hasMoreCompletedTEs);
 
 let handleResponseJSON = (state, hasMorePendingTEs, hasMoreCompletedTEs, appendTEsCB, json) =>
   switch (json |> Json.Decode.(field("error", nullable(string))) |> Js.Null.toOption) {
@@ -46,7 +46,7 @@ let fetchEvents = (state, tes, hasMorePendingTEs, hasMoreCompletedTEs, appendTEs
   let excludedIds =
     tes |> List.map(te => te |> TimelineEvent.id |> string_of_int) |> String.concat("&excludedIds[]=");
   let reviewStatus = state.selectedTab == PendingTab ? "pending" : "complete";
-  let params = "limit=1&reviewStatus=" ++ reviewStatus ++ "&excludedIds[]=" ++ excludedIds;
+  let params = "limit=20&reviewStatus=" ++ reviewStatus ++ "&excludedIds[]=" ++ excludedIds;
   Js.Promise.(
     Fetch.fetch("/courses/" ++ (courseId |> string_of_int) ++ "/coach_dashboard/timeline_events?" ++ params)
     |> then_(response =>
@@ -143,7 +143,7 @@ let make =
         emptyIconUrl
       />
       (
-        if (loadMoreVisible(state.selectedTab, hasMorePendingTEs, hasMoreCompletedTEs)) {
+        if (loadMoreVisible(selectedFounderId, state.selectedTab, hasMorePendingTEs, hasMoreCompletedTEs)) {
           let buttonText = state.selectedTab == PendingTab ? "Load more" : "Load earlier reviews";
           <div
             className="btn btn-primary mb-3"

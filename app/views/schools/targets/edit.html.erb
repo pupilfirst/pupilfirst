@@ -6,6 +6,36 @@
     <%= f.text_field :description, placeholder: "Description", class: 'border p-2 ml-1' %>
     <%= f.text_field :target_action_type, placeholder: "Target Action Type", class: 'border p-2 ml-1' %>
     <%= f.number_field :sort_index, placeholder: "Sort Index", class: 'border p-2 ml-1' %>
+    <%= f.text_field :resource_ids, placeholder: "Add resource ids", class: 'border p-2 ml-1' %>
     <%= f.submit 'Update', class: 'border p-2 mb-4' %>
+  <% end %>
+  <div class="mt-1">
+    <ul>
+      <h5>Resources</h5>
+      <% @target.resources.each do |resource| %>
+        <li>
+          <p>id:  <%= resource.id %></p>
+          <p>Name:  <%= resource.title %></p>
+          <p>Url:  <%= resource.description %></p>
+          <p>Link:  <%= resource.link %></p>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+  <div class="mt-1">
+    <h5>Last added resource (hacked for demo)</h5>
+    <p>id:  <%= Resource.last.id %></p>
+    <p>Name:  <%= Resource.last.title %></p>
+    <p>Url:  <%= Resource.last.description %></p>
+    <p>Link:  <%= Resource.last.link %></p>
+  </div>
+  <%= form_for Resource.new, url: school_resources_path do |f| %>
+    <div class="mt-1">
+      <h5 class="text-green">Add Resource</h5>
+      <%= f.text_field :title, placeholder: 'Title 1', class: 'border p-2' %>
+      <%= f.text_field :description, placeholder: 'Description 1', class: 'border p-2' %>
+      <%= f.text_field :link, placeholder: 'Link 1', class: 'border p-2' %>
+      <%= f.submit 'Add', class: 'border p-2 mb-4' %>
+    </div>
   <% end %>
 </div>

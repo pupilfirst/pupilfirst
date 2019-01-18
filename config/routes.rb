@@ -71,6 +71,8 @@ Rails.application.routes.draw do
     end
 
     resources :targets, only: %i[update edit]
+
+    resources :resources, only: %i[create]
   end
 
   resources :founders, only: %i[] do

@@ -37,8 +37,8 @@ module Schools
     protected
 
     def load_new_target
-      target_group = TargetGroup.find(params[:target_group_id])
-      @target = authorize Target.new(target_group: target_group, policy_class: Schools::TargetPolicy)
+      @target_group = TargetGroup.find(params[:target_group_id])
+      @target = authorize(Target.new(target_group: @target_group), policy_class: Schools::TargetPolicy)
     end
 
     def load_target

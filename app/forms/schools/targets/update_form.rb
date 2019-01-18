@@ -7,6 +7,7 @@ module Schools
       property :target_action_type, validates: { presence: true }
       property :target_group_id, validates: { presence: true }
       property :sort_index, validates: { presence: true }
+      property :resource_ids
 
       validate :target_group_exists
 

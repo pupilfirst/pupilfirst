@@ -9,17 +9,20 @@ module Users
       @email = email_from_auth_hash
 
       if @email.blank?
-        flash[:error] = email_blank_flash
-        redirect_to new_user_session_path
+        if oauth_origin.present?
+          redirect_to oauth_error_url(host: oauth_origin[:fqdn], error: "We're sorry, but we did not receive your email address from #{provider_name}")
+        else
+          flash[:error] = email_blank_flash
+          redirect_to new_user_session_path
+        end
+
         return
       end
 
-      oauth_origin = read_cookie(:oauth_origin)
-
       if oauth_origin.present?
-        sign_in_at_oauth_origin(oauth_origin)
+        sign_in_at_oauth_origin
       else
-        sign_into_current_host
+        sign_into_current_domain
       end
     end
 
@@ -28,14 +31,31 @@ module Users
     alias github oauth_callback
     alias developer oauth_callback
 
+    def failure
+      message = "Authentication was denied by #{oauth_origin[:provider].capitalize}. Please try again."
+
+      if oauth_origin.present?
+        redirect_to oauth_error_url(host: oauth_origin[:fqdn], error: message)
+      else
+        flash[:error] = message
+        redirect_to new_user_session_path
+      end
+    end
+
     private
 
-    def sign_in_at_oauth_origin(oauth_origin)
+    def oauth_origin
+      @oauth_origin ||= begin
+        raw_origin_data = read_cookie(:oauth_origin)
+
+        # Parse the JSON format that origin information is stored as.
+        raw_origin_data.present? ? JSON.parse(raw_origin_data, symbolize_names: true) : nil
+      end
+    end
+
+    def sign_in_at_oauth_origin
       # Make sure the cookie isn't reused.
       cookies.delete :oauth_origin
-
-      # Parse the JSON format that origin information is stored as.
-      origin = JSON.parse(oauth_origin, symbolize_names: true)
 
       if user.present?
         # Regenerate the login token.
@@ -43,19 +63,19 @@ module Users
 
         token_url_options = {
           token: user.login_token,
-          host: origin[:fqdn]
+          host: oauth_origin[:fqdn]
         }
 
-        token_url_options[:referer] = origin[:referer] if origin[:referer].present?
+        token_url_options[:referer] = oauth_origin[:referer] if oauth_origin[:referer].present?
 
         # Redirect user to sign in at the origin domain with newly generated token.
         redirect_to user_token_url(token_url_options)
       else
-        redirect_to oauth_unknown_url(host: origin[:fqdn], email: @email)
+        redirect_to oauth_error_url(host: oauth_origin[:fqdn], error: "Your email address: #{@email} is unregistered.")
       end
     end
 
-    def sign_into_current_host
+    def sign_into_current_domain
       if user.present?
         sign_in user
         remember_me user

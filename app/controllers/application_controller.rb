@@ -14,6 +14,7 @@ class ApplicationController < ActionController::Base
   before_action :cache_current_founder_in_current_user
 
   helper_method :current_host
+  helper_method :current_domain
   helper_method :current_school
   helper_method :current_founder
   helper_method :current_startup
@@ -59,11 +60,15 @@ class ApplicationController < ActionController::Base
     @current_host ||= request.host
   end
 
+  def current_domain
+    @current_domain ||= Domain.find_by(fqdn: current_host)
+  end
+
   # Returns nil, if on a PupilFirst page, or a School, if on a school domain. Raises an error if request is from an
   # unknown domain.
   def current_school
     @current_school ||= begin
-      resolved_school = Domain.find_by(fqdn: current_host)&.school
+      resolved_school = current_domain&.school
 
       if Rails.env.test?
         School.first

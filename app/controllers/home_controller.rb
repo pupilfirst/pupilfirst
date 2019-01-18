@@ -88,14 +88,18 @@ class HomeController < ApplicationController
     # Disallow routing OAuth results to unknown domains.
     raise_not_found if Domain.find_by(fqdn: params[:fqdn]).blank?
 
-    set_cookie(:oauth_origin, { fqdn: params[:fqdn], referer: params[:referer] }.to_json)
+    set_cookie(:oauth_origin, {
+      provider: params[:provider],
+      fqdn: params[:fqdn],
+      referer: params[:referer]
+    }.to_json)
 
     redirect_to oauth_url(params[:provider])
   end
 
-  # GET /oauth_unknown?email=
-  def oauth_unknown
-    flash[:notice] = "Your email address: #{params[:email]} is unregistered."
+  # GET /oauth_error?error=
+  def oauth_error
+    flash[:notice] = params[:error]
     redirect_to new_user_session_path
   end
 

@@ -97,7 +97,7 @@ module ProductMetrics
     end
 
     def count_timeline_events
-      TimelineEvent.evaluated_by_faculty.joins(:founders).where(founders: { startup: Startup.admitted })
+      TimelineEvent.evaluated_by_faculty.joins(:founders).where(founders: { startup: Startup.admitted }).uniq.count
     end
   end
 end

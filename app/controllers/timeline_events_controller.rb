@@ -56,7 +56,6 @@ class TimelineEventsController < ApplicationController
   def undo_review
     timeline_event = TimelineEvent.find(params[:id])
     authorize timeline_event
-
     if timeline_event.evaluator_id.blank?
       render json: { error: 'Event is pending review! Cannot undo.' }.to_json, status: :unprocessable_entity
       return

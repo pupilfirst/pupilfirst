@@ -138,5 +138,4 @@ let make = (~timelineEvent, ~replaceTimelineEvent, ~authenticityToken, _children
       )
     </div>;
   },
-  didUpdate: ({newSelf}) => Js.log("feedbackhtml: " ++ newSelf.state.feedbackHTML),
 };

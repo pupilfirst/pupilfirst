@@ -13,6 +13,7 @@ type props = {
   verifiedIconUrl: string,
   gradeLabels: list(GradeLabel.t),
   passGrade: int,
+  courseId: int,
 };
 
 type state = {
@@ -44,6 +45,7 @@ let make =
       ~verifiedIconUrl,
       ~gradeLabels,
       ~passGrade,
+      ~courseId,
       _children,
     ) => {
   ...component,
@@ -67,7 +69,7 @@ let make =
     let selectFounderCB = id => send(SelectFounder(id));
     let clearFounderCB = () => send(ClearFounder);
     let replaceTimelineEvent = te => send(ReplaceTE(te));
-    let loadMoreEventsCB = (tes, hasMorePendingTEs, hasMoreCompletedTEs) =>
+    let appendTEsCB = (tes, hasMorePendingTEs, hasMoreCompletedTEs) =>
       send(AppendTEs(tes, hasMorePendingTEs, hasMoreCompletedTEs));
     <div className="coach-dashboard__container container">
       <div className="row">
@@ -90,7 +92,7 @@ let make =
             timelineEvents=state.timelineEvents
             hasMorePendingTEs=state.hasMorePendingTEs
             hasMoreCompletedTEs=state.hasMoreCompletedTEs
-            loadMoreEventsCB
+            appendTEsCB
             founders
             selectedFounderId=state.selectedFounderId
             replaceTimelineEvent
@@ -100,6 +102,7 @@ let make =
             verifiedIconUrl
             gradeLabels
             passGrade
+            courseId
           />
         </div>
       </div>
@@ -121,6 +124,7 @@ let decode = json =>
     verifiedIconUrl: json |> field("verifiedIconUrl", string),
     gradeLabels: json |> field("gradeLabels", list(GradeLabel.decode)),
     passGrade: json |> field("passGrade", int),
+    courseId: json |> field("courseId", int),
   };
 
 let jsComponent =
@@ -141,6 +145,7 @@ let jsComponent =
         ~verifiedIconUrl=props.verifiedIconUrl,
         ~gradeLabels=props.gradeLabels,
         ~passGrade=props.passGrade,
+        ~courseId=props.courseId,
         [||],
       );
     },

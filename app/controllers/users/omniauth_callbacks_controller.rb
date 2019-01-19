@@ -32,12 +32,11 @@ module Users
     alias developer oauth_callback
 
     def failure
-      message = "Authentication was denied by #{oauth_origin[:provider].capitalize}. Please try again."
-
       if oauth_origin.present?
+        message = "Authentication was denied by #{oauth_origin[:provider].capitalize}. Please try again."
         redirect_to oauth_error_url(host: oauth_origin[:fqdn], error: message)
       else
-        flash[:error] = message
+        flash[:error] = 'Authentication was denied. Please try again.'
         redirect_to new_user_session_path
       end
     end

@@ -36,7 +36,7 @@ feature 'Timeline Builder' do
     find('.timeline-builder__textarea').set(description)
 
     # Pick a cover image.
-    attach_file 'Cover Image', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'users', 'college_id.jpg')), visible: false
+    attach_file 'Cover Image', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'users', 'college_id.jpg')), make_visible: true
 
     # Open the link form.
     find('.timeline-builder__upload-section-tab.link-upload').click

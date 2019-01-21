@@ -6,4 +6,5 @@ after 'development:schools' do
   sv.domains.where(fqdn: 'sv.localhost').first_or_create!
   sv.domains.where(fqdn: 'www.sv.localhost').first_or_create!
   sv.domains.where(fqdn: 'school.sv.localhost').first_or_create!
+  sv.domains.where(fqdn: 'sv.pupilfirst.localhost').first_or_create!
 end

@@ -33,6 +33,11 @@ class ApplicationController < ActionController::Base
   # Pundit authorization error should cause a 404.
   rescue_from Pundit::NotAuthorizedError, with: :raise_not_found
 
+  # Redirect all requests from unknown domains to service homepage.
+  rescue_from RequestFromUnknownDomain do
+    redirect_to 'https://www.pupilfirst.com'
+  end
+
   def raise_not_found
     raise ActionController::RoutingError, 'Not Found'
   end
@@ -77,7 +82,7 @@ class ApplicationController < ActionController::Base
       elsif resolved_school.present?
         resolved_school
       else
-        raise "Received routed request from non-PupilFirst & unknown FQDN: #{current_host}"
+        raise RequestFromUnknownDomain
       end
     end
   end

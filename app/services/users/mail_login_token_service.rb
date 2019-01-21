@@ -20,6 +20,9 @@ module Users
       # Make sure we generate a new token.
       @user.regenerate_login_token
 
+      # Update the time at which last login mail was sent.
+      @user.update!(login_mail_sent_at: Time.zone.now)
+
       school_name = @school&.name || 'PupilFirst'
       host = @domain&.fqdn || 'www.pupilfirst.com'
 

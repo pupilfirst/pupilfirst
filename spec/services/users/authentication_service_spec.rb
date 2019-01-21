@@ -6,7 +6,7 @@ describe Users::AuthenticationService do
   let(:secret_token) { SecureRandom.hex }
   let!(:user) { create :user, login_token: secret_token }
 
-  describe '.authenticate' do
+  describe '#authenticate' do
     context 'when token is invalid' do
       let(:supplied_token) { 'not_this' }
 

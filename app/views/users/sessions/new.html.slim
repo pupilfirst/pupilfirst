@@ -1,9 +1,7 @@
 - content_for :head do
   title SV.CO Sign In
 
-/ Load the Recaptcha API manually, because we're programmatically invoking the Invisible Recaptcha library.
-- unless Rails.env.test?
-  = javascript_include_tag 'https://www.google.com/recaptcha/api.js', nonce: true, async: true, defer: true
+- presenter = Users::Sessions::NewPresenter.new(self)
 
 .container.login-container.my-4.text-center
   / .row.flex-column-reverse.flex-md-row
@@ -24,7 +22,7 @@
         .sign-in-kid.mx-auto.mb-2
           = image_tag 'users/sessions/new/sign-in-kid.svg', class: 'img-fluid mx-auto'
         #sign-in-with-federated class=hidden_sign_in_class('federated')
-          h3.text-center.mb-3 Sign in to SV.CO
+          h3.text-center.mb-3 = presenter.federated_sign_in_heading
 
           - oauth_host = "www.pupilfirst.#{Rails.env.production? ? 'com' : 'localhost'}"
 
@@ -43,12 +41,12 @@
             | Continue with Github
 
         #sign-in-with-email.mb-3 class=hidden_sign_in_class('email')
-          h3.text-center.mb-3 Sign in with your SV.CO ID
+          h3.text-center.mb-3 = presenter.sign_in_with_email_heading
 
-          = form_for @form, url: user_send_login_email_path, html: { 'data-test': Rails.env.test? } do |f|
+          = form_for @form, url: user_send_login_email_path do |f|
             - if f.object.errors.present? && f.object.errors[:base].present?
               .alert.alert-warning.alert-dismissable.fade.show role='alert'
-                ul.mb-0
+                ul.mb-0.p-0.text-left style="list-style-type: none;"
                   - f.object.errors[:base].each do |error_message|
                     li #{error_message}
 
@@ -60,13 +58,15 @@
               - if f.object.errors[:email].present?
                 p.error-under-input = f.object.errors[:email].join(', ')
 
+            // Honeypot!
+            = f.text_field :username, placeholder: 'Please leave this field blank.', class: 'd-none'
+
             .remember-forgot.mt-1.mb-2
               .login-option.text-center
                 = f.check_box :shared_device, class: 'css-checkbox'
                 = f.label :shared_device, 'Are you using a shared device?', class: 'css-label'
 
             .text-center
-              div class='g-recaptcha' data-sitekey=Rails.application.secrets.dig(:google, :recaptcha, :invisible, :site_key) data-callback='handleSignInWithEmailButton' data-size='invisible' data-badge='inline'
               = f.submit 'Email me a link to sign in', class: 'btn btn-primary btn-md text-uppercase sign-in-btn'
 
         .switch-sign-in-method-links.text-center

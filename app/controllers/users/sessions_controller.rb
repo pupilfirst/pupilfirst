@@ -19,14 +19,10 @@ module Users
     def send_login_email
       @form = UserSignInForm.new(Reform::OpenForm.new)
 
-      if verify_recaptcha(model: @form, secret_key: Rails.application.secrets.dig(:google, :recaptcha, :invisible, :secret_key))
-        if @form.validate(sign_in_params)
-          @form.save(current_school, current_domain)
-        else
-          @sign_in_error = true
-          render 'new'
-        end
+      if @form.validate(params[:user_sign_in])
+        @form.save(current_school, current_domain)
       else
+        @sign_in_error = true
         render 'new'
       end
     end
@@ -60,10 +56,6 @@ module Users
 
     def skip_container
       @skip_container = true
-    end
-
-    def sign_in_params
-      params.require(:user_sign_in).permit(:email, :referer, :shared_device)
     end
   end
 end

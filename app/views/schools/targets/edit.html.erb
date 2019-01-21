@@ -20,6 +20,14 @@
           <p>Link:  <%= resource.link %></p>
         </li>
       <% end %>
+      <h5>Quiz</h5>
+      <% if @target.quiz.present? %>
+        <%= form_for @target.quiz, url: school_quizzes_path(@target.quiz), class: 'mt-1' do |f| %>
+          <%= f.number_field :id, placeholder: "Id", class: 'border p-2 ml-1' %>
+          <%= f.text_field :title, placeholder: "Title", class: 'border p-2 ml-1' %>
+          <%= f.submit 'Update', class: 'border p-2 mb-4' %>
+        <% end %>
+      <% end %>
     </ul>
   </div>
   <div class="mt-1">
@@ -35,6 +43,14 @@
       <%= f.text_field :title, placeholder: 'Title 1', class: 'border p-2' %>
       <%= f.text_field :description, placeholder: 'Description 1', class: 'border p-2' %>
       <%= f.text_field :link, placeholder: 'Link 1', class: 'border p-2' %>
+      <%= f.submit 'Add', class: 'border p-2 mb-4' %>
+    </div>
+  <% end %>
+  <%= form_for Quiz.new, url: school_target_quiz_path(@target) do |f| %>
+    <div class="mt-1">
+      <h5 class="text-green">Add Quiz</h5>
+      <%= f.text_field :title, placeholder: 'Title 1', class: 'border p-2' %>
+      <%= f.text_field :target_id, placeholder: 'Target id', class: 'border p-2' %>
       <%= f.submit 'Add', class: 'border p-2 mb-4' %>
     </div>
   <% end %>

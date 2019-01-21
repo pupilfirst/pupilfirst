@@ -70,9 +70,13 @@ Rails.application.routes.draw do
       resources :targets, only: %i[create new]
     end
 
-    resources :targets, only: %i[update edit]
+    resources :targets, only: %i[update edit] do
+      resource :quiz, only: %i[create]
+    end
 
     resources :resources, only: %i[create]
+
+    resource :quizzes, only: %i[update destroy]
   end
 
   resources :founders, only: %i[] do

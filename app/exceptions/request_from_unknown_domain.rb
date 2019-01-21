@@ -1,0 +1,2 @@
+class RequestFromUnknownDomain < StandardError
+end

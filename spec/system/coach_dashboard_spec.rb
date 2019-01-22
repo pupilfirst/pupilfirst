@@ -13,8 +13,11 @@ feature 'Coach Dashboard' do
   let(:evaluation_criterion) { create :evaluation_criterion, course: course }
 
   # ... a couple of startups and a couch.
-  let(:startup_1) { create :startup, level: level_1 }
-  let(:startup_2) { create :startup, level: level_1 }
+  let!(:startup_1) { create :startup, level: level_1 }
+  let!(:startup_2) { create :startup, level: level_1 }
+
+  let!(:founder_1) { create :founder, startup: startup_1 }
+  let!(:founder_2) { create :founder, startup: startup_2 }
   let(:coach) { create :faculty }
 
   # Create a couple of pending timeline events for the startups.

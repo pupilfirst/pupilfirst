@@ -66,7 +66,7 @@ feature 'Target Overlay' do
 
       # Within the header:
       within('.target-overlay__header') do
-        expect(page).to have_selector('.target-overlay-header__headline', text: "Team:#{target.title}")
+        expect(page).to have_selector('.target-overlay-header__headline', text: target.title)
       end
 
       # Within the status badge bar:
@@ -160,7 +160,7 @@ feature 'Target Overlay' do
       visit student_dashboard_path
     end
 
-    it 'displays the status for each founder' do
+    it 'displays the status for each founder', pending: true do
       find('.founder-dashboard-target-header__headline', text: target.title).click
 
       within('.target-overlay__content-rightbar') do

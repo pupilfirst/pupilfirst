@@ -59,7 +59,7 @@ feature 'Coach Dashboard' do
 
     # and the 'reviewed' tab is empty
     find('.timeline-events-panel__status-tab', text: 'Reviewed').click
-    expect(page).to have_selector('.timeline-events-panel__empty-notice', text: 'Nothing to show here!')
+    expect(page).to have_selector('.timeline-events-panel__empty-notice', text: 'There are no reviewed submissions in the list. Please try loading more.')
   end
 
   scenario 'coach uses the sidebar filter', js: true do
@@ -115,7 +115,7 @@ feature 'Coach Dashboard' do
     within all('.timeline-events-list__container').first do
       expect(page).to have_selector('.timeline-event-card__container', count: 4)
     end
-    expect(page).to have_selector('.timeline-events-panel__empty-notice', text: 'Nothing to show here!')
+    expect(page).to have_selector('.timeline-events-panel__empty-notice', text: 'There are no reviewed submissions in the list. Please try loading more.')
     expect(timeline_event_1.reload.status).to eq(TimelineEvent::STATUS_PENDING)
 
     # and the pending count updated

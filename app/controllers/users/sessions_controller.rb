@@ -8,7 +8,7 @@ module Users
     def new
       if current_user.present?
         flash[:alert] = 'You are already signed in.'
-        redirect_to root_url
+        redirect_to after_sign_in_path_for(current_user)
       else
         form_data = Reform::OpenForm.new(referer: params[:referer])
         @form = UserSignInForm.new(form_data)

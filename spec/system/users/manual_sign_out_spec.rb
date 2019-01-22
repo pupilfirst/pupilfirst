@@ -19,7 +19,7 @@ feature 'Manual User Sign Out' do
       visit edit_product_path
 
       # User should be signed out.
-      expect(page).to have_selector('#home__index')
+      expect(page).to have_selector('.sign-in-kid')
 
       # Log the user in again.
       user.regenerate_login_token
@@ -34,7 +34,7 @@ feature 'Manual User Sign Out' do
       visit edit_product_path
 
       # User should be signed out.
-      expect(page).to have_selector('#home__index')
+      expect(page).to have_selector('.sign-in-kid')
     end
   end
 
@@ -52,7 +52,7 @@ feature 'Manual User Sign Out' do
         visit edit_product_path
 
         # User should be signed out.
-        expect(page).to have_selector('#home__index')
+        expect(page).to have_selector('.sign-in-kid')
       end
     end
   end

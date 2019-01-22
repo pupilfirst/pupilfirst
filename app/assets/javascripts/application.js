@@ -57,7 +57,6 @@
 
 // Controller-specific
 //= require startups
-//= require talent
 //= require faculty
 //= require founders
 //= require story

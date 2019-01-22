@@ -164,7 +164,7 @@ class ApplicationController < ActionController::Base
 
     return if current_founder.present? && !current_founder.exited?
 
-    redirect_to root_path
+    redirect_to 'https://www.sv.co'
   end
 
   def pretender

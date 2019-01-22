@@ -2,12 +2,10 @@ class HomeController < ApplicationController
   def index
     if current_school.blank?
       render 'pupilfirst', layout: 'tailwind'
+    elsif current_user.present?
+      redirect_to after_sign_in_path_for(current_user)
     else
-      @skip_container = true
-      @sitewide_notice = true if %w[startupvillage.in].include?(params[:redirect_from])
-      @hide_nav_links = false
-
-      render layout: 'home'
+      redirect_to new_user_session_path
     end
   end
 

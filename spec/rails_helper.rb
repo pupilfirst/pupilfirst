@@ -110,7 +110,7 @@ Capybara.register_driver :headless_firefox do |app|
   Capybara::Selenium::Driver.new app, browser: :firefox, options: options
 end
 
-Capybara.javascript_driver = :headless_firefox
+Capybara.javascript_driver = ENV['JAVASCRIPT_DRIVER'].present? ? ENV['JAVASCRIPT_DRIVER'].to_sym : :chrome
 
 # Use rspec-retry to retry pesky intermittent failures.
 require 'rspec/retry'
@@ -133,8 +133,10 @@ Capybara.default_max_wait_time = 5
 require 'capybara-screenshot/rspec'
 Capybara::Screenshot.prune_strategy = { keep: 20 }
 
-Capybara::Screenshot.register_driver(:headless_chrome) do |driver, path|
-  driver.browser.save_screenshot(path)
+%i[chrome headless_chrome firefox headless_firefox].each do |driver_name|
+  Capybara::Screenshot.register_driver(driver_name) do |driver, path|
+    driver.browser.save_screenshot(path)
+  end
 end
 
 # Faker should use India as locale.

@@ -26,16 +26,16 @@
 
 <body data-env="<%= Rails.env %>">
 <div class="flex">
-  <div class="w-1/6">
+  <div class="hidden">
     <%= yield :nav %>
   </div>
-  <div class="w-5/6">
+  <div class="w-full">
     <% if content_for?(:subnav) %>
       <div class="flex">
-        <div class="w-1/6">
+        <div class="hidden">
           <%= yield :subnav %>
         </div>
-        <div class="w-5/6">
+        <div class="w-full">
           <%= yield %>
         </div>
     <% else %>

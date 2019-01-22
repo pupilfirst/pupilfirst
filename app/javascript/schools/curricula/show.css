@@ -1,0 +1,49 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+.global-sidebar {
+    width: 304px;
+}
+
+.global-sidebar__header {
+    width: 304px;
+    height: 108px;
+}
+
+.global-sidebar__primary-nav {
+    width: 64px;
+}
+
+.global-sidebar__secondary-nav {
+    width: 240px;
+}
+
+.target-group__container > :not(:last-child):before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: -80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    z-index: -1;
+    @apply .bg-grey-light;
+}
+
+.target-group__box {
+    z-index: 10;
+}
+
+.target-group__target {
+    width: 100%;
+    transition: all 0.2s;
+}
+
+.target-group__create, .target-group__target-create {
+    transition: all 0.2s;
+}
+
+.target-group__create:hover, .target-group__target-create:hover {
+    @apply .shadow-lg;
+}

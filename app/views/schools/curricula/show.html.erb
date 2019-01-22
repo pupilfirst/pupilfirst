@@ -1,88 +1,174 @@
-<% @presenter = Schools::Curricula::ShowPresenter.new(self, @course) %>
-<div class="border m-2 p-2"
-<h5>Evaluation criteria for <%= @course.name %></h5>
-<ul>
-  <% @presenter.evaluation_criteria.each do |criterion| %>
-    <li>
-      <%= criterion.name %>
-      <%= button_to 'Delete', school_evaluation_criterion_path(criterion), method: :delete,
-        class: 'bg-red-light hover:bg-red text-white py-1 px-2 rounded mt-1 mb-2 text-sm',
-        form: { class: 'inline' }
-      %>
-      <%= form_for criterion, url: school_evaluation_criterion_path(criterion), class: 'mt-1' do |f| %>
-        <%= f.text_field :name, placeholder: "Name", class: 'border p-2 ml-1' %>
-        <%= f.text_field :description, placeholder: "Description", class: 'border p-2 ml-1' %>
-        <%= f.submit 'Update', class: 'border p-2 mb-4' %>
-      <% end %>
-    </li>
-  <% end %>
-</ul>
-<h5 class="text-green">Add new criteria:</h5>
-<%= form_for EvaluationCriterion.new, url: school_course_evaluation_criteria_path(@course) do |f| %>
-  <%= f.text_field :name, placeholder: "Name", class: 'border p-2' %>
-  <%= f.text_field :description, placeholder: "Description", class: 'border p-2 ml-1' %>
-  <%= f.submit 'Add', class: 'border p-2 mb-4' %>
+<% content_for(:head) do %>
+  <%= stylesheet_pack_tag 'schools/curricula/show', media: 'all', 'data-turbolinks-track': 'reload' %>
 <% end %>
-</div>
-<div class="border m-2 p-2"
-<h5>Levels for <%= @course.name %></h5>
-<ul>
-  <% @presenter.levels.each do |level| %>
-    <li>
-      <%= level.name %>
-      <%= button_to 'Delete', school_level_path(level), method: :delete,
-        class: 'bg-red-light hover:bg-red text-white py-1 px-2 rounded mt-1 mb-2 text-sm',
-        form: { class: 'inline' }
-      %>
-      <%= form_for level, url: school_level_path(level), class: 'mt-1' do |f| %>
-        <%= f.text_field :name, placeholder: "Name", class: 'border p-2 ml-1' %>
-        <%= f.text_field :description, placeholder: "Description", class: 'border p-2 ml-1' %>
-        <%= f.number_field :number, placeholder: "Level number", class: 'border p-2 ml-1' %>
-        <%= f.submit 'Update', class: 'border p-2 mb-4' %>
-      <% end %>
-      <div class="border m-2 p-2">
-        <h5>Target groups in level: <%= level.name %></h5>
-        <ul>
-          <% @presenter.target_groups(level).each do |target_group| %>
-            <li>
-              <%= target_group.name %>
-              <%= form_for target_group, url: school_target_group_path(target_group), class: 'mt-1' do |f| %>
-                <%= f.text_field :name, placeholder: "Name", class: 'border p-2 ml-1' %>
-                <%= f.text_field :description, placeholder: "Description", class: 'border p-2 ml-1' %>
-                <%= f.number_field :sort_index, placeholder: "Sort Index", class: 'border p-2 ml-1' %>
-                <%= f.check_box :milestone %>
-                <%= f.submit 'Update', class: 'border p-2 mb-4' %>
+
+<% @presenter = Schools::Curricula::ShowPresenter.new(self, @course) %>
+
+<div class="font-sans antialiased h-screen flex">
+    <!-- Sidebar -->
+    <div class="bg-grey-darker global-sidebar__primary-nav text-purple-lighter flex-none p-4 hidden md:block">
+
+    </div>
+    <div class="bg-grey-lighter global-sidebar__secondary-nav text-purple-lighter flex-none w-64 pb-6 hidden md:block">
+
+    </div>
+    <!-- Right content -->
+    <div class="flex-1 flex flex-col bg-white overflow-hidden">
+        <!-- Top bar -->
+        <div class="border-b flex px-6 py-2 h-16 items-center justify-between">
+          <div class="inline-block relative w-64">
+            <select class="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-4 py-2 pr-8 rounded leading-tight focus:outline-none">
+              <option>Level 1</option>
+              <option>Level 2</option>
+              <option>Level 3</option>
+            </select>
+            <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+              <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+            </div>
+          </div>
+          <button class="bg-indigo-dark hover:bg-blue-dark text-white font-bold py-2 px-4 rounded focus:outline-none">
+            Create New Level
+          </button>
+        </div>
+        <!-- Content -->
+        <div class="px-6 py-4 flex-1 overflow-y-scroll">
+          <div class="target-group__container max-w-lg mt-5 mx-auto relative">
+            <div class="target-group__box relative mt-20 rounded-lg">
+              <div class="target-group__header bg-white p-4 border border-b-0 text-center rounded-lg rounded-b-none">
+                <div class="target-group__title">
+                  <h2>Target Group Title</h2>
+                </div>
+                <div class="target-group__description pt-2">
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  </p>
+                </div>
+              </div>
+              <div class="target-group__target bg-white border p-5">
+                <h5 class="font-semibold">This is a target</h5>
+              </div>
+              <div class="target-group__target-create bg-grey-lighter border-2 border-t-0 border-dashed p-5 rounded-lg rounded-t-none cursor-pointer">
+                <h5 class="font-semibold">Creat another target</h5>
+              </div>
+            </div>
+            <div class="target-group__box relative mt-20 rounded-lg">
+              <div class="target-group__header bg-white p-4 border border-b-0 text-center rounded-lg rounded-b-none">
+                <div class="target-group__title">
+                  <h2>Target Group Title</h2>
+                </div>
+                <div class="target-group__description pt-2">
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  </p>
+                </div>
+              </div>
+              <div class="target-group__target bg-white border p-5">
+                <h5 class="font-semibold">This is a target</h5>
+              </div>
+              <div class="target-group__target-create flex items-center bg-grey-lighter border-2 border-t-0 border-dashed p-5 rounded-lg rounded-t-none cursor-pointer">
+                <svg class="svg-icon w-8 h-8" viewBox="0 0 20 20">
+                  <path fill="#A8B7C7" d="M13.388,9.624h-3.011v-3.01c0-0.208-0.168-0.377-0.376-0.377S9.624,6.405,9.624,6.613v3.01H6.613c-0.208,0-0.376,0.168-0.376,0.376s0.168,0.376,0.376,0.376h3.011v3.01c0,0.208,0.168,0.378,0.376,0.378s0.376-0.17,0.376-0.378v-3.01h3.011c0.207,0,0.377-0.168,0.377-0.376S13.595,9.624,13.388,9.624z M10,1.344c-4.781,0-8.656,3.875-8.656,8.656c0,4.781,3.875,8.656,8.656,8.656c4.781,0,8.656-3.875,8.656-8.656C18.656,5.219,14.781,1.344,10,1.344z M10,17.903c-4.365,0-7.904-3.538-7.904-7.903S5.635,2.096,10,2.096S17.903,5.635,17.903,10S14.365,17.903,10,17.903z"></path>
+                </svg>
+                <h5 class="font-semibold ml-2">Creat another target</h5>
+              </div>
+            </div>
+            <div class="target-group__create flex items-center relative bg-grey-lighter border-2 border-dashed p-6 rounded-lg mt-20 cursor-pointer">
+              <svg class="svg-icon w-12 h-12" viewBox="0 0 20 20">
+                <path fill="#A8B7C7" d="M13.388,9.624h-3.011v-3.01c0-0.208-0.168-0.377-0.376-0.377S9.624,6.405,9.624,6.613v3.01H6.613c-0.208,0-0.376,0.168-0.376,0.376s0.168,0.376,0.376,0.376h3.011v3.01c0,0.208,0.168,0.378,0.376,0.378s0.376-0.17,0.376-0.378v-3.01h3.011c0.207,0,0.377-0.168,0.377-0.376S13.595,9.624,13.388,9.624z M10,1.344c-4.781,0-8.656,3.875-8.656,8.656c0,4.781,3.875,8.656,8.656,8.656c4.781,0,8.656-3.875,8.656-8.656C18.656,5.219,14.781,1.344,10,1.344z M10,17.903c-4.365,0-7.904-3.538-7.904-7.903S5.635,2.096,10,2.096S17.903,5.635,17.903,10S14.365,17.903,10,17.903z"></path>
+              </svg>
+              <h4 class="font-semibold ml-2">Creat another target group</h4>
+            </div>
+          </div>
+          <div class="mt-16 hidden">
+            <div class="border m-2 p-2"
+            <h5>Evaluation criteria for <%= @course.name %></h5>
+            <ul>
+              <% @presenter.evaluation_criteria.each do |criterion| %>
+                <li>
+                  <%= criterion.name %>
+                  <%= button_to 'Delete', school_evaluation_criterion_path(criterion), method: :delete,
+                    class: 'bg-red-light hover:bg-red text-white py-1 px-2 rounded mt-1 mb-2 text-sm',
+                    form: { class: 'inline' }
+                  %>
+                  <%= form_for criterion, url: school_evaluation_criterion_path(criterion), class: 'mt-1' do |f| %>
+                    <%= f.text_field :name, placeholder: "Name", class: 'border p-2 ml-1' %>
+                    <%= f.text_field :description, placeholder: "Description", class: 'border p-2 ml-1' %>
+                    <%= f.submit 'Update', class: 'border p-2 mb-4' %>
+                  <% end %>
+                </li>
               <% end %>
-              <ul>
-                <h5>Targets <%= link_to 'New', new_school_target_group_target_path(target_group) %></h5>
-                <% @presenter.targets(target_group).each do |target| %>
-                  <li>
-                    <h5>Target name: <%= target.title %>  <%= link_to 'Update', edit_school_target_path(target) %></h5>
-                  </li>
-                <% end %>
-              </ul>
-            </li>
-          <% end %>
-          <div class="border m-2 p-2">
-            <h5 class="text-green">Add new target group:</h5>
-            <%= form_for TargetGroup.new, url: school_level_target_groups_path(level) do |f| %>
+            </ul>
+            <h5 class="text-green">Add new criteria:</h5>
+            <%= form_for EvaluationCriterion.new, url: school_course_evaluation_criteria_path(@course) do |f| %>
               <%= f.text_field :name, placeholder: "Name", class: 'border p-2' %>
               <%= f.text_field :description, placeholder: "Description", class: 'border p-2 ml-1' %>
-              <%= f.number_field :sort_index, placeholder: "Sort Index", class: 'border p-2 ml-1' %>
-              <%= f.check_box :milestone %>
               <%= f.submit 'Add', class: 'border p-2 mb-4' %>
             <% end %>
+            </div>
+            <div class="border m-2 p-2"
+            <h5>Levels for <%= @course.name %></h5>
+            <ul>
+              <% @presenter.levels.each do |level| %>
+                <li>
+                  <%= level.name %>
+                  <%= button_to 'Delete', school_level_path(level), method: :delete,
+                    class: 'bg-red-light hover:bg-red text-white py-1 px-2 rounded mt-1 mb-2 text-sm',
+                    form: { class: 'inline' }
+                  %>
+                  <%= form_for level, url: school_level_path(level), class: 'mt-1' do |f| %>
+                    <%= f.text_field :name, placeholder: "Name", class: 'border p-2 ml-1' %>
+                    <%= f.text_field :description, placeholder: "Description", class: 'border p-2 ml-1' %>
+                    <%= f.number_field :number, placeholder: "Level number", class: 'border p-2 ml-1' %>
+                    <%= f.submit 'Update', class: 'border p-2 mb-4' %>
+                  <% end %>
+                  <div class="border m-2 p-2">
+                    <h5>Target groups in level: <%= level.name %></h5>
+                    <ul>
+                      <% @presenter.target_groups(level).each do |target_group| %>
+                        <li>
+                          <%= target_group.name %>
+                          <%= form_for target_group, url: school_target_group_path(target_group), class: 'mt-1' do |f| %>
+                            <%= f.text_field :name, placeholder: "Name", class: 'border p-2 ml-1' %>
+                            <%= f.text_field :description, placeholder: "Description", class: 'border p-2 ml-1' %>
+                            <%= f.number_field :sort_index, placeholder: "Sort Index", class: 'border p-2 ml-1' %>
+                            <%= f.check_box :milestone %>
+                            <%= f.submit 'Update', class: 'border p-2 mb-4' %>
+                          <% end %>
+                          <ul>
+                            <h5>Targets <%= link_to 'New', new_school_target_group_target_path(target_group) %></h5>
+                            <% @presenter.targets(target_group).each do |target| %>
+                              <li>
+                                <h5>Target name: <%= target.title %>  <%= link_to 'Update', edit_school_target_path(target) %></h5>
+                              </li>
+                            <% end %>
+                          </ul>
+                        </li>
+                      <% end %>
+                      <div class="border m-2 p-2">
+                        <h5 class="text-green">Add new target group:</h5>
+                        <%= form_for TargetGroup.new, url: school_level_target_groups_path(level) do |f| %>
+                          <%= f.text_field :name, placeholder: "Name", class: 'border p-2' %>
+                          <%= f.text_field :description, placeholder: "Description", class: 'border p-2 ml-1' %>
+                          <%= f.number_field :sort_index, placeholder: "Sort Index", class: 'border p-2 ml-1' %>
+                          <%= f.check_box :milestone %>
+                          <%= f.submit 'Add', class: 'border p-2 mb-4' %>
+                        <% end %>
+                      </div>
+                    </ul>
+                  </div>
+                </li>
+              <% end %>
+            </ul>
+            <h5 class="text-green">Add new level:</h5>
+            <%= form_for Level.new, url: school_course_levels_path(@course) do |f| %>
+              <%= f.text_field :name, placeholder: "Name", class: 'border p-2' %>
+              <%= f.text_field :description, placeholder: "Description", class: 'border p-2 ml-1' %>
+              <%= f.number_field :number, placeholder: "Level Number", class: 'border p-2 ml-1' %>
+              <%= f.submit 'Add', class: 'border p-2 mb-4' %>
+            <% end %>
+            </div>
           </div>
-        </ul>
-      </div>
-    </li>
-  <% end %>
-</ul>
-<h5 class="text-green">Add new level:</h5>
-<%= form_for Level.new, url: school_course_levels_path(@course) do |f| %>
-  <%= f.text_field :name, placeholder: "Name", class: 'border p-2' %>
-  <%= f.text_field :description, placeholder: "Description", class: 'border p-2 ml-1' %>
-  <%= f.number_field :number, placeholder: "Level Number", class: 'border p-2 ml-1' %>
-  <%= f.submit 'Add', class: 'border p-2 mb-4' %>
-<% end %>
+        </div>
+    </div>
 </div>
+

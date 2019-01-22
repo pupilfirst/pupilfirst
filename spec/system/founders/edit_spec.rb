@@ -11,7 +11,6 @@ feature 'Founder Edit' do
   let(:username) { Faker::Internet.user_name(founder_name, %w[-]) }
   let(:backlogs) { rand(10) }
   let(:semester) { %w[I II III IV V VI VII VIII].sample }
-  let(:course) { "#{%w[B-tech PG-diploma M-tech Bachelors].sample} in #{Faker::Lorem.word.capitalize}" }
   let(:roll_number) { "UNI00#{rand(10_000..19_998)}" }
   let(:roles) { %w[Product Design Engineering].sample(2) }
   let(:one_liner) { Faker::Lorem.sentence }
@@ -63,7 +62,6 @@ feature 'Founder Edit' do
       select "My college isn't listed", from: 'founders_edit_college_id'
       fill_in 'founders_edit_roll_number', with: roll_number
       attach_file 'founders_edit_college_identification', upload_path('users/college_id.jpg')
-      fill_in 'founders_edit_course', with: course
       select semester, from: 'founders_edit_semester'
       select (Time.zone.now.year + rand(4)).to_s, from: 'founders_edit_year_of_graduation'
       # fill_in 'founders_edit_backlog', with: backlogs
@@ -90,7 +88,6 @@ feature 'Founder Edit' do
         skype_id: username,
         communication_address: communication_address,
         roll_number: roll_number,
-        course: course,
         semester: semester,
         # backlog: backlogs,
         twitter_url: "https://twitter.com/#{username}",

@@ -4,11 +4,13 @@ module Schools
 
     # POST /school/courses/:course_id/levels
     def create
-      authorize(Level, policy_class: Schools::LevelPolicy)
-      form = ::Schools::Levels::CreateForm.new(Level.new)
-      if form.validate(create_params)
+      course = Course.find(params[:course_id])
+      new_level = authorize(Level.new(course: course), policy_class: Schools::LevelPolicy)
+
+      form = ::Schools::Levels::CreateForm.new(new_level)
+      if form.validate(params[:level])
         form.save
-        redirect_back(fallback_location: school_course_curriculum_path(params[:course_id]))
+        redirect_back(fallback_location: school_course_curriculum_path(course))
       else
         raise form.errors.full_messages.join(', ')
       end
@@ -17,7 +19,7 @@ module Schools
     # PATCH /school/levels/:id
     def update
       form = ::Schools::Levels::UpdateForm.new(level)
-      if form.validate(update_params)
+      if form.validate(params[:level])
         form.save
         redirect_back(fallback_location: school_course_curriculum_path(level.course))
       else
@@ -36,14 +38,6 @@ module Schools
 
     def level
       @level = authorize(Level.find(params[:id]), policy_class: Schools::LevelPolicy)
-    end
-
-    def create_params
-      params.require(:level).permit(:name, :description, :number).merge(course_id: params[:course_id])
-    end
-
-    def update_params
-      params.require(:level).permit(:name, :description, :number)
     end
   end
 end

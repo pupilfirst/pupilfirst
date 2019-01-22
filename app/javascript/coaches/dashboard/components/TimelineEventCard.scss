@@ -32,6 +32,7 @@
 .timeline-event-card__field-box {
   background-color: $dark-primary-background;
   border-left: 3px solid $light-primary;
+  overflow-wrap: break-word;
 }
 
 .timeline-event-card__field-header {

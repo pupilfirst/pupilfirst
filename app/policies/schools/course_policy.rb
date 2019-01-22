@@ -2,7 +2,7 @@ module Schools
   class CoursePolicy < ApplicationPolicy
     def show?
       # Can be shown to all school admins.
-      true
+      record.in?(current_school.courses)
     end
 
     def update?

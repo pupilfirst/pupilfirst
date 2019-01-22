@@ -70,9 +70,13 @@ Rails.application.routes.draw do
       resources :targets, only: %i[create new]
     end
 
-    resources :targets, only: %i[update edit]
+    resources :targets, only: %i[update edit] do
+      resource :quiz, only: %i[create]
+    end
 
     resources :resources, only: %i[create]
+
+    resource :quizzes, only: %i[update destroy]
   end
 
   resources :founders, only: %i[] do
@@ -300,4 +304,7 @@ Rails.application.routes.draw do
   end
 
   get '/school_admin', to: 'school_admins#dashboard'
+
+  get '/oauth/:provider', to: 'home#oauth', as: 'oauth', constraints: PupilFirstConstraint.new
+  get '/oauth_error', to: 'home#oauth_error', as: 'oauth_error'
 end

@@ -8,6 +8,7 @@ class CoachDashboardPresenter < ApplicationPresenter
     {
       coach: { name: current_coach.name, id: current_coach.id, imageUrl: current_coach.image_url },
       founders: founders,
+      teams: teams,
       timelineEvents: FacultyModule::ReviewableTimelineEventsService.new(current_coach).timeline_events(@course),
       authenticityToken: view.form_authenticity_token,
       emptyIconUrl: view.image_url('coaches/dashboard/empty_icon.svg'),
@@ -25,11 +26,21 @@ class CoachDashboardPresenter < ApplicationPresenter
   end
 
   def founders
-    Founder.where(startup: current_coach.reviewable_startups(@course)).map do |founder|
+    Founder.where(startup_id: teams.map { |t| t[:id] }).map do |founder|
       {
         id: founder.id,
         name: founder.name,
-        avatarUrl: avatar_url(founder)
+        avatarUrl: avatar_url(founder),
+        teamId: founder.startup_id
+      }
+    end
+  end
+
+  def teams
+    @teams ||= current_coach.reviewable_startups(@course).map do |startup|
+      {
+        id: startup.id,
+        name: startup.product_name
       }
     end
   end

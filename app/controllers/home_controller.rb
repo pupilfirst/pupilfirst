@@ -83,7 +83,46 @@ class HomeController < ApplicationController
     end
   end
 
+  # GET /oauth/:provider?fqdn=FQDN&referer=
+  def oauth
+    # Disallow routing OAuth results to unknown domains.
+    raise_not_found if Domain.find_by(fqdn: params[:fqdn]).blank?
+
+    set_cookie(:oauth_origin, {
+      provider: params[:provider],
+      fqdn: params[:fqdn],
+      referer: params[:referer]
+    }.to_json)
+
+    redirect_to oauth_url(params[:provider])
+  end
+
+  # GET /oauth_error?error=
+  def oauth_error
+    flash[:notice] = params[:error]
+    redirect_to new_user_session_path
+  end
+
   protected
+
+  def oauth_url(provider)
+    url_opts = {
+      host: "www.pupilfirst.#{Rails.env.production? ? 'com' : 'localhost'}"
+    }
+
+    case provider
+      when 'developer'
+        user_developer_omniauth_authorize_url(url_opts)
+      when 'google'
+        user_google_oauth2_omniauth_authorize_url(url_opts)
+      when 'facebook'
+        user_facebook_omniauth_authorize_url(url_opts)
+      when 'github'
+        user_github_omniauth_authorize_url(url_opts)
+      else
+        raise "Invalid provider #{provider} supplied to oauth redirection route."
+    end
+  end
 
   def background_image_number
     @background_image_number ||= begin

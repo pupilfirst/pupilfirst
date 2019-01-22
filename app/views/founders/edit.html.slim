@@ -34,7 +34,6 @@ title SV.CO Edit Profile for #{@founder.fullname}
               = image_tag(image_url, class: 'founder-edit__image-preview mb-2')
 
         = f.file_field :college_identification, label_class: 'col-form-label', label: 'College Identification', class: 'form-control', required: false, help: @founder.college_identification_hint
-        = f.text_field :course, label_class: 'col-form-label', placeholder: 'B-tech in Computer Science', required: false
         = f.select :semester, options_for_select(Founder.valid_semester_values), include_blank: 'Pick your semester', label_class: 'col-form-label'
         = f.select :year_of_graduation, options_for_select(2010..2025), include_blank: 'Pick the year when you graduate from college', label_class: 'col-form-label'
         / = f.number_field :backlog, placeholder: 'Zero, hopefully. :-)', label_class: 'col-form-label',

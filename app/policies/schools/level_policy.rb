@@ -2,7 +2,7 @@ module Schools
   class LevelPolicy < ApplicationPolicy
     def create?
       # All school admins can create new level.
-      true
+      CoursePolicy.new(user, record.course).update?
     end
 
     alias update? create?

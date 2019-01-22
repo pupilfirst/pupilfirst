@@ -371,6 +371,8 @@ GEM
       ruby-progressbar (~> 1.4)
     gaffe (1.2.0)
       rails (>= 4.0.0)
+    geckodriver-helper (0.23.0)
+      archive-zip (~> 0.7)
     geocoder (1.5.0)
     get_process_mem (0.2.3)
     globalid (0.4.1)
@@ -843,6 +845,7 @@ DEPENDENCIES
   friendly_id (~> 5.2)
   fuubar (~> 2.2)
   gaffe (~> 1.2)
+  geckodriver-helper (~> 0.23)
   google_calendar (= 0.6.4)!
   groupdate (~> 4.0)
   heroku-deflater (~> 0.6)

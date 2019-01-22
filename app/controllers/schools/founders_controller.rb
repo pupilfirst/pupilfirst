@@ -9,8 +9,7 @@ module Schools
 
     # POST /school/students/team_up?founder_ids=&team_name=
     def team_up
-      authorize(nil, policy_class: Schools::FounderPolicy)
-
+      authorize(founders.first, policy_class: Schools::FounderPolicy)
       form = Schools::Founders::TeamUpForm.new(OpenStruct.new)
 
       if form.validate(params)
@@ -52,6 +51,10 @@ module Schools
 
     def create_params
       params.permit(:course_id, :team_name, students: %i[name email])
+    end
+
+    def founders
+      Founder.where(id: JSON.parse(params[:founder_ids]))
     end
   end
 end

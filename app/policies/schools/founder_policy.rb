@@ -7,7 +7,7 @@ module Schools
 
     def team_up?
       # All school admins can team up founders as the course hasn't ended.
-      !record.ended?
+      !record.course.ended?
     end
 
     alias create? team_up?

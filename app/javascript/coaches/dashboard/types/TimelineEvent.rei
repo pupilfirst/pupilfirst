@@ -10,8 +10,6 @@ let eventOn: t => DateTime.t;
 
 let description: t => string;
 
-let startupName: t => string;
-
 let id: t => int;
 
 let links: t => list(Link.t);
@@ -19,8 +17,6 @@ let links: t => list(Link.t);
 let files: t => list(File.t);
 
 let image: t => option(string);
-
-let forStartupId: (int, list(t)) => list(t);
 
 let forFounderId: (int, list(t)) => list(t);
 

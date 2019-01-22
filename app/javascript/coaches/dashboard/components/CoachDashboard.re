@@ -3,6 +3,7 @@
 type props = {
   coach: Coach.t,
   founders: list(Founder.t),
+  teams: list(Team.t),
   timelineEvents: list(TimelineEvent.t),
   authenticityToken: string,
   emptyIconUrl: string,
@@ -28,6 +29,7 @@ let make =
     (
       ~coach,
       ~founders,
+      ~teams,
       ~timelineEvents,
       ~authenticityToken,
       ~emptyIconUrl,
@@ -62,6 +64,7 @@ let make =
             let pendingCount = state.timelineEvents |> TimelineEvent.reviewPending |> List.length;
             <SidePanel
               coach
+              teams
               founders
               selectedFounderId=state.selectedFounderId
               selectFounderCB
@@ -93,6 +96,7 @@ let decode = json =>
   Json.Decode.{
     coach: json |> field("coach", Coach.decode),
     founders: json |> field("founders", list(Founder.decode)),
+    teams: json |> field("teams", list(Team.decode)),
     timelineEvents: json |> field("timelineEvents", list(TimelineEvent.decode)),
     authenticityToken: json |> field("authenticityToken", string),
     emptyIconUrl: json |> field("emptyIconUrl", string),
@@ -110,6 +114,7 @@ let jsComponent =
       make(
         ~coach=props.coach,
         ~founders=props.founders,
+        ~teams=props.teams,
         ~timelineEvents=props.timelineEvents,
         ~authenticityToken=props.authenticityToken,
         ~emptyIconUrl=props.emptyIconUrl,

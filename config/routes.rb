@@ -304,4 +304,7 @@ Rails.application.routes.draw do
   end
 
   get '/school_admin', to: 'school_admins#dashboard'
+
+  get '/oauth/:provider', to: 'home#oauth', as: 'oauth', constraints: PupilFirstConstraint.new
+  get '/oauth_error', to: 'home#oauth_error', as: 'oauth_error'
 end

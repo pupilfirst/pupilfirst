@@ -99,13 +99,7 @@ let make =
               (timelineEvent |> TimelineEvent.title |> str)
             </h5>
             <h6 className="timeline-event-card__header-subtext font-regular mb-0">
-              (
-                (founders |> Founder.withIds(timelineEvent |> TimelineEvent.founderIds) |> Founder.founderNames)
-                ++ " ("
-                ++ (timelineEvent |> TimelineEvent.startupName)
-                ++ ")"
-                |> str
-              )
+              (founders |> Founder.withIds(timelineEvent |> TimelineEvent.founderIds) |> Founder.founderNames |> str)
               <span className="timeline-event-card__header-date-field pl-2 ml-2">
                 <i className="fa fa-calendar mr-1" />
                 (timelineEvent |> TimelineEvent.eventOn |> DateTime.format(DateTime.OnlyDate) |> str)

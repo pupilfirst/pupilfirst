@@ -3,8 +3,6 @@ type t = {
   title: string,
   description: string,
   eventOn: DateTime.t,
-  startupId: int,
-  startupName: string,
   founderIds: list(int),
   links: list(Link.t),
   files: list(File.t),
@@ -24,8 +22,6 @@ let decode = json =>
     title: json |> field("title", string),
     description: json |> field("description", string),
     eventOn: json |> field("eventOn", string) |> DateTime.parse,
-    startupId: json |> field("startupId", int),
-    startupName: json |> field("startupName", string),
     founderIds: json |> field("founderIds", list(int)),
     links: json |> field("links", list(Link.decode)),
     files: json |> field("files", list(File.decode)),
@@ -34,8 +30,6 @@ let decode = json =>
     evaluation: json |> field("evaluation", list(Grading.decode)),
     rubric: json |> field("rubric", nullable(string)) |> Js.Null.toOption,
   };
-
-let forStartupId = (startupId, tes) => tes |> List.filter(te => te.startupId == startupId);
 
 let forFounderId = (founderId, tes) => tes |> List.filter(te => List.mem(founderId, te.founderIds));
 
@@ -48,8 +42,6 @@ let description = t => t.description;
 let eventOn = t => t.eventOn;
 
 let founderIds = t => t.founderIds;
-
-let startupName = t => t.startupName;
 
 let links = t => t.links;
 

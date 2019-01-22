@@ -6,24 +6,23 @@ module Users
 
     # GET /users/auth/:action/callback
     def oauth_callback
-      email = email_from_auth_hash
+      @email = email_from_auth_hash
 
-      if email.blank?
-        flash[:error] = email_blank_flash
-        redirect_to new_user_session_path
+      if @email.blank?
+        if oauth_origin.present?
+          redirect_to oauth_error_url(host: oauth_origin[:fqdn], error: "We're sorry, but we did not receive your email address from #{provider_name}")
+        else
+          flash[:error] = email_blank_flash
+          redirect_to new_user_session_path
+        end
+
         return
       end
 
-      user = User.with_email(email)
-
-      if user.present?
-        sign_in user
-        remember_me user
-        Users::ConfirmationService.new(user).execute
-        redirect_to origin || after_sign_in_path_for(user)
+      if oauth_origin.present?
+        sign_in_at_oauth_origin
       else
-        flash[:notice] = "Your email address: #{email} is not registered at SV.CO"
-        redirect_to new_user_session_path
+        sign_into_current_domain
       end
     end
 
@@ -32,7 +31,65 @@ module Users
     alias github oauth_callback
     alias developer oauth_callback
 
+    def failure
+      if oauth_origin.present?
+        message = "Authentication was denied by #{oauth_origin[:provider].capitalize}. Please try again."
+        redirect_to oauth_error_url(host: oauth_origin[:fqdn], error: message)
+      else
+        flash[:error] = 'Authentication was denied. Please try again.'
+        redirect_to new_user_session_path
+      end
+    end
+
     private
+
+    def oauth_origin
+      @oauth_origin ||= begin
+        raw_origin_data = read_cookie(:oauth_origin)
+
+        # Parse the JSON format that origin information is stored as.
+        if raw_origin_data.present?
+          # Make sure the cookie isn't reused.
+          cookies.delete :oauth_origin
+
+          JSON.parse(raw_origin_data, symbolize_names: true)
+        end
+      end
+    end
+
+    def sign_in_at_oauth_origin
+      if user.present?
+        # Regenerate the login token.
+        user.regenerate_login_token
+
+        token_url_options = {
+          token: user.login_token,
+          host: oauth_origin[:fqdn]
+        }
+
+        token_url_options[:referer] = oauth_origin[:referer] if oauth_origin[:referer].present?
+
+        # Redirect user to sign in at the origin domain with newly generated token.
+        redirect_to user_token_url(token_url_options)
+      else
+        redirect_to oauth_error_url(host: oauth_origin[:fqdn], error: "Your email address: #{@email} is unregistered.")
+      end
+    end
+
+    def sign_into_current_domain
+      if user.present?
+        sign_in user
+        remember_me user
+        redirect_to origin || after_sign_in_path_for(user)
+      else
+        flash[:notice] = "Your email address: #{@email} is not registered at SV.CO"
+        redirect_to new_user_session_path
+      end
+    end
+
+    def user
+      @user ||= User.with_email(@email)
+    end
 
     # This is a hack to resolve the issue of flashing message 'You are already signed in' when signing in using OAuth.
     # For an unknown reason, the request env variable omniauth.origin defaults to the sign in path when no origin is

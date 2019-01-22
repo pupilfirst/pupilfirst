@@ -158,6 +158,7 @@ group :test do
   gem 'capybara-email', '~> 3.0' # Test ActionMailer and Mailer messages with Capybara
   gem 'selenium-webdriver', '~> 3.3'
   gem 'chromedriver-helper', '~> 2.1' # Easy installation and use of chromedriver, the Chromium project's selenium webdriver adapter.
+  gem 'geckodriver-helper', '~> 0.23' # Easy installation and use of geckodriver, that provides the HTTP API described by the WebDriver protocol to communicate with Gecko browsers, such as Firefox.
   gem 'capybara-screenshot', '~> 1.0' # Save screenshots on failure!
 end
 

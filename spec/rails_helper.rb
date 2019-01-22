@@ -88,9 +88,29 @@ RSpec.configure do |config|
   config.filter_run_excluding broken: true
 end
 
-Capybara.register_driver :selenium do |app|
+Capybara.register_driver :chrome do |app|
   Capybara::Selenium::Driver.new(app, browser: :chrome)
 end
+
+Capybara.register_driver :headless_chrome do |app|
+  options = Selenium::WebDriver::Chrome::Options.new
+  options.headless!
+
+  Capybara::Selenium::Driver.new app, browser: :chrome, options: options
+end
+
+Capybara.register_driver :firefox do |app|
+  Capybara::Selenium::Driver.new(app, browser: :firefox)
+end
+
+Capybara.register_driver :headless_firefox do |app|
+  options = Selenium::WebDriver::Firefox::Options.new
+  options.headless!
+
+  Capybara::Selenium::Driver.new app, browser: :firefox, options: options
+end
+
+Capybara.javascript_driver = ENV['JAVASCRIPT_DRIVER'].present? ? ENV['JAVASCRIPT_DRIVER'].to_sym : :chrome
 
 # Use rspec-retry to retry pesky intermittent failures.
 require 'rspec/retry'
@@ -112,6 +132,12 @@ Capybara.default_max_wait_time = 5
 # Save screenshots on failure (and more).
 require 'capybara-screenshot/rspec'
 Capybara::Screenshot.prune_strategy = { keep: 20 }
+
+%i[chrome headless_chrome firefox headless_firefox].each do |driver_name|
+  Capybara::Screenshot.register_driver(driver_name) do |driver, path|
+    driver.browser.save_screenshot(path)
+  end
+end
 
 # Faker should use India as locale.
 Faker::Config.locale = 'en-IND'

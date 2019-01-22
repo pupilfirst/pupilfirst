@@ -22,7 +22,7 @@ describe Users::MailLoginTokenService do
       open_email(user.email)
 
       expect(current_email.subject).to eq("Log in to #{school.name}")
-      expect(current_email.body).to include("#{domain.fqdn}/users/token?")
+      expect(current_email.body).to include("https://#{domain.fqdn}/users/token?")
       expect(current_email.body).to include("referer=#{CGI.escape(referer)}")
       expect(current_email.body).to include("token=#{user.reload.login_token}")
     end
@@ -38,7 +38,7 @@ describe Users::MailLoginTokenService do
         open_email(user.email)
 
         expect(current_email.subject).to eq("Log in to PupilFirst")
-        expect(current_email.body).to include('www.pupilfirst.com/users/token?')
+        expect(current_email.body).to include('https://www.pupilfirst.com/users/token?')
         expect(current_email.body).not_to include('referer=')
       end
     end

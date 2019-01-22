@@ -29,7 +29,8 @@ module Users
       url_options = {
         token: @user.login_token,
         shared_device: @shared_device,
-        host: host
+        host: host,
+        protocol: 'https'
       }
 
       url_options[:referer] = @referer if @referer.present?

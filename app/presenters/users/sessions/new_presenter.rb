@@ -1,18 +1,29 @@
 module Users
   module Sessions
     class NewPresenter < ApplicationPresenter
-      def sign_in_with_email_heading
-        "Sign in with your #{school_name} ID"
+      def initialize(view_context, sign_in_error)
+        @sign_in_error = sign_in_error
+        super(view_context)
       end
 
-      def federated_sign_in_heading
-        "Sign in to #{school_name}"
+      def school_name
+        @school_name ||= view.current_school&.name || 'PupilFirst'
+      end
+
+      def oauth_url(provider)
+        view.oauth_url(provider: provider, fqdn: view.current_host, host: oauth_host)
+      end
+
+      def hidden_sign_in_class(type, link: false)
+        add_class = type == 'federated' ? link : !link
+        add_class = !add_class if @sign_in_error
+        add_class ? 'd-none' : ''
       end
 
       private
 
-      def school_name
-        @school_name ||= view.current_school&.name || 'PupilFirst'
+      def oauth_host
+        @oauth_host ||= "www.pupilfirst.#{Rails.env.production? ? 'com' : 'localhost'}"
       end
     end
   end

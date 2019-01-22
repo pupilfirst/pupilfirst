@@ -18,7 +18,7 @@ let files: t => list(File.t);
 
 let image: t => option(string);
 
-let forFounderId: (int, list(t)) => list(t);
+let forFounder: (Founder.t, list(t)) => list(t);
 
 let reviewPending: list(t) => list(t);
 

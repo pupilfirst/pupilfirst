@@ -22,14 +22,14 @@ type action =
 
 let component = ReasonReact.reducerComponent("TimelineEventsPanel");
 
-let founderFilter = (founderId, tes) =>
-  switch (founderId) {
+let founderFilter = (founder, tes) =>
+  switch (founder) {
   | None => tes
-  | Some(id) => tes |> TimelineEvent.forFounderId(id)
+  | Some(founder) => tes |> TimelineEvent.forFounder(founder)
   };
 
-let loadMoreVisible = (selectedFounderId, selectedTab, hasMorePendingTEs, hasMoreCompletedTEs) =>
-  selectedFounderId == None && (selectedTab == PendingTab ? hasMorePendingTEs : hasMoreCompletedTEs);
+let loadMoreVisible = (selectedFounder, selectedTab, hasMorePendingTEs, hasMoreCompletedTEs) =>
+  selectedFounder == None && (selectedTab == PendingTab ? hasMorePendingTEs : hasMoreCompletedTEs);
 
 let handleResponseJSON = (state, hasMorePendingTEs, hasMoreCompletedTEs, appendTEsCB, json) =>
   switch (json |> Json.Decode.(field("error", nullable(string))) |> Js.Null.toOption) {
@@ -79,7 +79,7 @@ let make =
       ~hasMoreCompletedTEs,
       ~appendTEsCB,
       ~founders,
-      ~selectedFounderId,
+      ~selectedFounder,
       ~replaceTimelineEvent,
       ~authenticityToken,
       ~emptyIconUrl,
@@ -102,9 +102,8 @@ let make =
       | PendingTab => TimelineEvent.reviewPending
       | CompletedTab => TimelineEvent.reviewComplete
       };
-    let pendingCount =
-      timelineEvents |> founderFilter(selectedFounderId) |> TimelineEvent.reviewPending |> List.length;
-    let timelineEvents = timelineEvents |> founderFilter(selectedFounderId) |> statusFilter;
+    let pendingCount = timelineEvents |> founderFilter(selectedFounder) |> TimelineEvent.reviewPending |> List.length;
+    let timelineEvents = timelineEvents |> founderFilter(selectedFounder) |> statusFilter;
     <div className="timeline-events-panel__container pt-4">
       <div className="d-flex mb-3 timeline-events-panel__status-tab-container">
         <div
@@ -134,6 +133,8 @@ let make =
       <TimelineEventsList
         timelineEvents
         founders
+        selectedTabString=(state.selectedTab == PendingTab ? "pending" : "reviewed")
+        selectedFounder
         replaceTimelineEvent
         authenticityToken
         notAcceptedIconUrl
@@ -143,7 +144,7 @@ let make =
         emptyIconUrl
       />
       (
-        if (loadMoreVisible(selectedFounderId, state.selectedTab, hasMorePendingTEs, hasMoreCompletedTEs)) {
+        if (loadMoreVisible(selectedFounder, state.selectedTab, hasMorePendingTEs, hasMoreCompletedTEs)) {
           let buttonText = state.selectedTab == PendingTab ? "Load more" : "Load earlier reviews";
           <div
             className="btn btn-primary mb-3"

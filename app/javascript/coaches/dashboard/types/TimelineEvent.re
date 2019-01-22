@@ -31,7 +31,7 @@ let decode = json =>
     rubric: json |> field("rubric", nullable(string)) |> Js.Null.toOption,
   };
 
-let forFounderId = (founderId, tes) => tes |> List.filter(te => List.mem(founderId, te.founderIds));
+let forFounder = (founder, tes) => tes |> List.filter(te => List.mem(founder |> Founder.id, te.founderIds));
 
 let id = t => t.id;
 

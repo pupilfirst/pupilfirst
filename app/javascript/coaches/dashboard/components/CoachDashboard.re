@@ -16,14 +16,14 @@ type props = {
 };
 
 type state = {
-  selectedFounderId: option(int),
+  selectedFounder: option(Founder.t),
   timelineEvents: list(TimelineEvent.t),
   hasMorePendingTEs: bool,
   hasMoreCompletedTEs: bool,
 };
 
 type action =
-  | SelectFounder(int)
+  | SelectFounder(Founder.t)
   | ClearFounder
   | ReplaceTE(TimelineEvent.t)
   | AppendTEs(list(TimelineEvent.t), bool, bool);
@@ -47,11 +47,11 @@ let make =
       _children,
     ) => {
   ...component,
-  initialState: () => {selectedFounderId: None, timelineEvents, hasMorePendingTEs, hasMoreCompletedTEs},
+  initialState: () => {selectedFounder: None, timelineEvents, hasMorePendingTEs, hasMoreCompletedTEs},
   reducer: (action, state) =>
     switch (action) {
-    | SelectFounder(id) => ReasonReact.Update({...state, selectedFounderId: Some(id)})
-    | ClearFounder => ReasonReact.Update({...state, selectedFounderId: None})
+    | SelectFounder(founder) => ReasonReact.Update({...state, selectedFounder: Some(founder)})
+    | ClearFounder => ReasonReact.Update({...state, selectedFounder: None})
     | ReplaceTE(newTE) =>
       ReasonReact.Update({
         ...state,
@@ -64,7 +64,7 @@ let make =
       ReasonReact.Update({...state, timelineEvents, hasMorePendingTEs, hasMoreCompletedTEs});
     },
   render: ({state, send}) => {
-    let selectFounderCB = id => send(SelectFounder(id));
+    let selectFounderCB = founder => send(SelectFounder(founder));
     let clearFounderCB = () => send(ClearFounder);
     let replaceTimelineEvent = te => send(ReplaceTE(te));
     let appendTEsCB = (tes, hasMorePendingTEs, hasMoreCompletedTEs) =>
@@ -72,7 +72,7 @@ let make =
     <div className="coach-dashboard__container container">
       <div className="row">
         <div className="col-md-3">
-          <SidePanel teams founders selectedFounderId=state.selectedFounderId selectFounderCB clearFounderCB />
+          <SidePanel teams founders selectedFounder=state.selectedFounder selectFounderCB clearFounderCB />
         </div>
         <div className="col-md-9">
           <TimelineEventsPanel
@@ -81,7 +81,7 @@ let make =
             hasMoreCompletedTEs=state.hasMoreCompletedTEs
             appendTEsCB
             founders
-            selectedFounderId=state.selectedFounderId
+            selectedFounder=state.selectedFounder
             replaceTimelineEvent
             authenticityToken
             emptyIconUrl

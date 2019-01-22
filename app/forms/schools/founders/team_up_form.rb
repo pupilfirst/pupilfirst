@@ -21,7 +21,7 @@ module Schools
       end
 
       def save
-        Startups::TeamUpService.new(founders).team_up(team_name)
+        ::Startups::TeamUpService.new(founders).team_up(team_name)
       end
 
       private

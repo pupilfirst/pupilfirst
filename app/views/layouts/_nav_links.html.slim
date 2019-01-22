@@ -64,7 +64,7 @@
                   i.fa.fa-comment-o
                   | Submit Feedback
             - if policy(current_founder).select?
-              - current_user.founders.where.not(id: current_founder.id).each do |other_founder|
+              - current_user.founders.not_exited.where.not(id: current_founder.id).each do |other_founder|
                 li role="presentation"
                   = link_to(select_founder_path(other_founder), method: :post) do
                     i.fa.fa-university

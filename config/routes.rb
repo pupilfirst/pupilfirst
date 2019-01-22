@@ -93,14 +93,6 @@ Rails.application.routes.draw do
     end
   end
 
-  scope 'about', as: 'about', controller: 'about', constraints: SvConstraint.new do
-    get '/', action: 'index'
-    get 'slack'
-    get 'media-kit'
-    get 'leaderboard'
-    get 'contact'
-  end
-
   resources :faculty, only: %i[index show] do
     post 'connect', on: :member
     # get 'dashboard', to: 'faculty/dashboard#index'

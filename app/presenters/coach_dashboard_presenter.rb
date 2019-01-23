@@ -52,7 +52,9 @@ class CoachDashboardPresenter < ApplicationPresenter
   end
 
   def evaluated_submissions_exist?
-    TimelineEvent.where(target: @course.targets, evaluator: current_coach).exists?
+    TimelineEvent.joins(:founders).where(founders: { id: founders.map { |f| f[:id] } })
+      .where(target: @course.targets)
+      .where.not(evaluator: nil).exists?
   end
 
   def grade_labels

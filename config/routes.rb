@@ -82,7 +82,7 @@ Rails.application.routes.draw do
   get 'product/edit', to: 'startups#edit', as: 'edit_product'
 
   scope 'products', controller: 'startups' do
-    get '/', action: 'index', as: 'products', constraints: SvConstraint.new
+    get '/', action: 'index', as: 'products'
     get '/:id(/:slug)', action: 'show', as: 'product'
     get '/:id/:slug/e/:event_id/:event_title', action: 'timeline_event_show', as: 'product_timeline_event_show'
   end
@@ -132,7 +132,7 @@ Rails.application.routes.draw do
     patch ':id/feedback/comment/:token', action: 'comment_submit', as: 'comment_submit'
   end
 
-  scope 'admissions', as: 'admissions', controller: 'admissions', constraints: SvConstraint.new do
+  scope 'admissions', as: 'admissions', controller: 'admissions' do
     get 'screening'
     get 'screening_submit'
     post 'screening_submit_webhook'
@@ -145,14 +145,14 @@ Rails.application.routes.draw do
     patch 'update_founder'
   end
 
-  resources :prospective_applicants, only: %i[create], constraints: SvConstraint.new
+  resources :prospective_applicants, only: %i[create]
 
-  resources :colleges, only: :index, constraints: SvConstraint.new
+  resources :colleges, only: :index
 
   resource :platform_feedback, only: %i[create]
 
   # Redirect + webhook from Instamojo
-  scope 'instamojo', as: 'instamojo', controller: 'instamojo', constraints: SvConstraint.new do
+  scope 'instamojo', as: 'instamojo', controller: 'instamojo' do
     get 'redirect'
     post 'webhook'
   end
@@ -202,20 +202,20 @@ Rails.application.routes.draw do
 
   resource :impersonation, only: %i[destroy]
 
-  scope 'intercom', as: 'intercom', controller: 'intercom', constraints: SvConstraint.new do
+  scope 'intercom', as: 'intercom', controller: 'intercom' do
     post 'user_create', action: 'user_create_webhook'
     post 'unsubscribe', action: 'email_unsubscribe_webhook'
   end
 
-  match '/trello/bug_webhook', to: 'trello#bug_webhook', via: :all, constraints: SvConstraint.new
+  match '/trello/bug_webhook', to: 'trello#bug_webhook', via: :all
 
-  post '/heroku/deploy_webhook', to: 'heroku#deploy_webhook', constraints: SvConstraint.new
+  post '/heroku/deploy_webhook', to: 'heroku#deploy_webhook'
 
   # Handle incoming unsubscribe webhooks from SendInBlue
   post '/send_in_blue/unsubscribe', to: 'send_in_blue#unsubscribe_webhook'
 
   # Handle redirects of short URLs.
-  get 'r/:unique_key', to: 'shortened_urls#redirect', as: 'short_redirect', constraints: SvConstraint.new
+  get 'r/:unique_key', to: 'shortened_urls#redirect', as: 'short_redirect'
 
   get '/school_admin', to: 'school_admins#dashboard'
 

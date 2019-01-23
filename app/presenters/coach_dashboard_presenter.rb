@@ -63,11 +63,11 @@ class CoachDashboardPresenter < ApplicationPresenter
   end
 
   def avatar_url(founder)
-    founder.avatar_url || identicon_avatar(founder)
+    founder.avatar_url || initials_avatar(founder)
   end
 
-  def identicon_avatar(founder)
-    base64_logo = Founders::IdenticonLogoService.new(founder).base64_svg
-    "data:image/svg+xml;base64,#{base64_logo}"
+  def initials_avatar(founder)
+    logo = Scarf::InitialAvatar.new(founder.name)
+    "data:image/svg+xml;base64,#{Base64.encode64(logo.svg)}"
   end
 end

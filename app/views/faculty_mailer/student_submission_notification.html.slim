@@ -14,7 +14,7 @@
 
 = content_for :body do
   p
-    ' We have received a new submission from #{@founder.name}.
+    ' We have received a new submission from #{@submission_from}.
 
   - if @target.present?
     p The submission is for the target titled &ldquo;#{@target.title}&rdqo;

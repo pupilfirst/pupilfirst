@@ -18,7 +18,6 @@ describe VocalistPingJob do
     I18n.t(
       'services.karma_points.create.startup_slack_notification',
       points: 20,
-      startup_url: Rails.application.routes.url_helpers.startup_url(startup),
       startup_product_name: startup.product_name,
       activity_type: Faker::Lorem.sentence
     )

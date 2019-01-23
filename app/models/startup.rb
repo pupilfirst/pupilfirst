@@ -52,17 +52,6 @@ class Startup < ApplicationRecord
     %i[ransack_tagged_with]
   end
 
-  # Returns the latest verified timeline event that has an image attached to it.
-  #
-  # Do not return private events!
-  #
-  # @return TimelineEvent
-  def showcase_timeline_event
-    timeline_events.verified.order('event_on DESC').detect do |timeline_event|
-      !timeline_event.founder_event?
-    end
-  end
-
   # Returns startups that have accrued no karma points for last week (starting monday). If supplied a date, it
   # calculates for week bounded by that date.
   def self.inactive_for_week(date: 1.week.ago)
@@ -278,29 +267,6 @@ class Startup < ApplicationRecord
   # returns the date of the earliest verified timeline entry
   def earliest_team_event_date
     timeline_events.where.not(passed_at: nil).not_private.order(:event_on).first.try(:event_on)
-  end
-
-  # returns the date of the latest verified timeline entry
-  def latest_team_event_date
-    timeline_events.where.not(passed_at: nil).not_private.order(:event_on).last.try(:event_on)
-  end
-
-  def timeline_verified?
-    approved? && timeline_events.joins(:timeline_event_grades).exists?
-  end
-
-  def timeline_events_for_display(viewer)
-    events_for_display = timeline_events
-
-    # Only display verified of needs-improvement events if 'viewer' is not a member of this startup.
-    if viewer&.startup != self
-      events_for_display = events_for_display.where.not(passed_at: nil)
-    end
-
-    decorated_events = events_for_display.includes(:target, :timeline_event_files).order(:event_on, :updated_at).reverse_order.decorate
-
-    # Hide founder events from everyone other than author of event.
-    decorated_events.reject { |event| event.hidden_from?(viewer) }
   end
 
   def display_name

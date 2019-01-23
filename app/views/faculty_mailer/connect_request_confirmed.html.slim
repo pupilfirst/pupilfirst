@@ -5,9 +5,9 @@
   | The office hour request with team #{@connect_request.startup.product_name} has been confirmed.
 
 = content_for :title_button_text do
-  | View Startup Timeline
+  | View Student Profile
 
-= content_for(:title_button_link, product_url(@connect_request.startup.id, @connect_request.startup.slug))
+= content_for(:title_button_link, student_path(@connect_request.startup.team_lead.slug))
 
 = content_for :salutation do
   | Hello #{@connect_request.faculty.name},

@@ -59,32 +59,11 @@ Rails.application.routes.draw do
     post 'disconnect'
   end
 
-  # TODO: Remove these startup routes as we no longer have 'startups'. Always use the corresponding 'product' routes below.
-  resource :startup, only: %i[edit update] do
+  resource :startup, only: [] do
     member do
       post 'level_up'
       get 'billing'
     end
-  end
-
-  resources :startups, only: %i[index] do
-    member do
-      get 'events/:page', action: 'paged_events', as: 'paged_events'
-
-      # TODO: Preserve this path for a while to allow old shares to work. This has been replaced by timeline_event_show path below.
-      get ':event_title/:event_id', action: 'timeline_event_show'
-    end
-  end
-
-  get 'startups/:id(/:slug)', to: 'startups#show', as: 'timeline'
-  get 'startups/:id/:slug/e/:event_id/:event_title', to: 'startups#timeline_event_show', as: 'timeline_event_show'
-
-  get 'product/edit', to: 'startups#edit', as: 'edit_product'
-
-  scope 'products', controller: 'startups' do
-    get '/', action: 'index', as: 'products', constraints: SvConstraint.new
-    get '/:id(/:slug)', action: 'show', as: 'product'
-    get '/:id/:slug/e/:event_id/:event_title', action: 'timeline_event_show', as: 'product_timeline_event_show'
   end
 
   resources :timeline_event_files, only: [] do

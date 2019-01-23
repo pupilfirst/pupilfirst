@@ -6,16 +6,18 @@ class CoachDashboardPresenter < ApplicationPresenter
 
   def react_props
     {
-      coach: { name: current_coach.name, id: current_coach.id, imageUrl: current_coach.image_url },
       founders: founders,
       teams: teams,
-      timelineEvents: FacultyModule::ReviewableTimelineEventsService.new(current_coach).timeline_events(@course),
+      timelineEvents: timeline_events_service.timeline_events,
+      hasMorePendingTEs: timeline_events_service.more_to_load?,
+      hasMoreCompletedTEs: evaluated_submissions_exist?,
       authenticityToken: view.form_authenticity_token,
       emptyIconUrl: view.image_url('coaches/dashboard/empty_icon.svg'),
       notAcceptedIconUrl: view.image_url('coaches/dashboard/not-accepted-icon.svg'),
       verifiedIconUrl: view.image_url('coaches/dashboard/verified-icon.svg'),
       gradeLabels: grade_labels,
-      passGrade: @course.pass_grade
+      passGrade: @course.pass_grade,
+      courseId: @course.id
     }
   end
 
@@ -43,6 +45,14 @@ class CoachDashboardPresenter < ApplicationPresenter
         name: startup.product_name
       }
     end
+  end
+
+  def timeline_events_service
+    @timeline_events_service ||= CoachDashboard::TimelineEventsDataService.new(current_coach, @course)
+  end
+
+  def evaluated_submissions_exist?
+    TimelineEvent.where(target: @course.targets, evaluator: current_coach).exists?
   end
 
   def grade_labels

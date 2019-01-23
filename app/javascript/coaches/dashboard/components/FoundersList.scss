@@ -1,11 +1,7 @@
 @import "../../../shared/variables";
 
 .founders-list__header {
-  height: 4rem;
-  border-top: 1px solid $gray-border;
-  position: relative;
-  z-index: 1;
-  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem 1.5rem 0.5rem 1.5rem;
 }
 
 .founders-list__header-title {
@@ -54,9 +50,9 @@
   width: 100%;
   background-color: white;
   color: #138AFF;
-  line-height: 2rem;
   border: 0;
   cursor: pointer;
+  line-height: 0;
 
   &:hover, &:focus {
     color: blue;
@@ -65,11 +61,19 @@
 }
 
 .founders-list__team-container {
-  border-bottom: 1px solid $grey-border;
   margin-bottom: 1rem;
+  position: relative;
+  &:after {
+    position: absolute;
+    content: '';
+    width: 75%;
+    left: 12.5%;
+    height: 1px;
+    background-color: $grey-border;
+    bottom: -1rem;
+  }
 }
 
 .founders-list__team-name {
-  background-color: $light-grey-background;
-  padding: 1rem 1.5rem;
+  padding: 1rem 1.5rem 0.125rem 1.5rem;
 }

@@ -61,9 +61,6 @@ feature 'Target Overlay' do
 
       ## Ensure different components of the overlay display the appropriate details.
 
-      # Close the pnotify first.
-      find('.ui-pnotify').click
-
       # Within the header:
       within('.target-overlay__header') do
         expect(page).to have_selector('.target-overlay-header__headline', text: "Team:#{target.title}")
@@ -206,9 +203,6 @@ feature 'Target Overlay' do
         expect(page).to have_selector('.target-overlay-status-badge-bar__hint', text: 'Follow completion instructions and submit!')
       end
 
-      # Close pnotify first.
-      find('.ui-pnotify').click
-
       find('.target-overlay__status-badge-block').find('button.btn-timeline-builder').click
       expect(page).to have_selector('.timeline-builder__popup-body')
       find('.timeline-builder__textarea').set('Some description')
@@ -230,9 +224,6 @@ feature 'Target Overlay' do
       # The target must be pending.
       expect(page).to have_content('Pending')
       expect(page).to have_content('Follow completion instructions and submit!')
-
-      # Close pnotify first.
-      find('.ui-pnotify').click
 
       click_button('Take Quiz')
 

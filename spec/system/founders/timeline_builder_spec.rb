@@ -26,9 +26,6 @@ feature 'Timeline Builder' do
   scenario 'Founder submits an event', js: true do
     sign_in_user founder.user, referer: student_dashboard_path
 
-    # Close the PNotify message to ensure no overlap with other elements under test
-    find('.ui-pnotify').click
-
     first('.founder-dashboard-target__container').click
 
     click_button 'Submit'
@@ -58,7 +55,7 @@ feature 'Timeline Builder' do
 
     first('.js-timeline-builder__submit-button').click
 
-    expect(page).to have_content('Your timeline event will be reviewed soon')
+    expect(page).to have_content('Your submission will be reviewed soon.')
 
     te = TimelineEvent.last
 
@@ -85,9 +82,6 @@ feature 'Timeline Builder' do
   context 'Founder unsuccessful in submitting event', js: true do
     scenario 'Founder encounters errors when using timeline builder', js: true do
       sign_in_user founder.user, referer: student_dashboard_path
-
-      # Close the PNotify message to ensure no overlap with other elements under test
-      find('.ui-pnotify').click
 
       first('.founder-dashboard-target__container').click
 

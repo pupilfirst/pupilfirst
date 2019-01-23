@@ -358,6 +358,12 @@ export default class TimelineBuilder extends React.Component {
         $(".js-timeline-builder__submit-button").popover("show");
       });
     }
+
+    this.flashNotification(
+      "error",
+      "Oops",
+      "Something went wrong when trying to save your submission. Please try again."
+    );
   }
 
   handleSubmissionComplete() {
@@ -371,6 +377,22 @@ export default class TimelineBuilder extends React.Component {
 
     // hide the timeline builder
     $(".timeline-builder").modal("hide");
+
+    this.flashNotification(
+      "success",
+      "Submission received",
+      "Your submission will be reviewed soon."
+    );
+  }
+
+  flashNotification(notificationType, title, text) {
+    new PNotify({
+      title: title,
+      text: text,
+      type: notificationType,
+      mouse_reset: false,
+      buttons: { sticker: false, closer: false }
+    });
   }
 
   //ToDO: Investigate usage and add Sample Text

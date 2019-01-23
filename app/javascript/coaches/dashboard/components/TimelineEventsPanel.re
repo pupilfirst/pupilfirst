@@ -85,7 +85,7 @@ let emptyMessage = (selectedFounder, selectedTab, hasMorePendingTEs, hasMoreComp
   ++ " in the list."
   ++ (
     loadMoreVisible(selectedFounder, selectedTab, hasMorePendingTEs, hasMoreCompletedTEs) ?
-      "Please " ++ clearFilterText ++ "try loading more." : ""
+      " Please " ++ clearFilterText ++ "try loading more." : ""
   );
 };
 

@@ -7,14 +7,4 @@ feature 'Custom Error Pages' do
     expect(page).to have_text("The page you were looking for doesn't exist.")
     expect(page).to have_text('You may have mistyped the address, or the page may have moved.')
   end
-
-  scenario 'User visits page which raises an error' do
-    allow_any_instance_of(AboutController).to receive(:index).and_raise(ArgumentError)
-
-    visit about_path
-
-    expect(page).to have_text("We're sorry, but something went wrong.")
-    expect(page).to have_text('This could be because SV.CO is under active development!')
-    expect(page).to have_text('Please try again after a while, or contact us on our Public Slack Channel.')
-  end
 end

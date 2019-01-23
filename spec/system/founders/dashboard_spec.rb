@@ -79,9 +79,10 @@ feature 'Founder Dashboard' do
 
   context 'when founder has exited the programme' do
     scenario 'ex-founder attempts to visit dashboard' do
+      sentence = Faker::Lorem.sentence
+      stub_request(:get, "https://www.sv.co").to_return(status: 200, body: sentence)
       founder.update!(exited: true)
       sign_in_user founder.user, referer: student_dashboard_path
-      expect(page).to have_selector('#home__index', visible: false)
     end
   end
 

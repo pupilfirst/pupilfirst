@@ -53,7 +53,7 @@
 
             <div class="wrapped-input">
               <%= image_tag 'users/sessions/new/email.svg' %>
-              <%= f.text_field :email, required: true, placeholder: 'SV.CO ID (email)', maxlength: 250, type: 'email' %>
+              <%= f.text_field :email, required: true, placeholder: "#{presenter.school_name} ID (email)", maxlength: 250, type: 'email' %>
               <% if f.object.errors[:email].present? %>
                 <p class="error-under-input"><%= f.object.errors[:email].join(', ') %></p>
               <% end %>

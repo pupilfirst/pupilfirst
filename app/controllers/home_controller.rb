@@ -2,50 +2,10 @@ class HomeController < ApplicationController
   def index
     if current_school.blank?
       render 'pupilfirst', layout: 'tailwind'
+    elsif current_user.present?
+      redirect_to after_sign_in_path_for(current_user)
     else
-      @skip_container = true
-      @sitewide_notice = true if %w[startupvillage.in].include?(params[:redirect_from])
-      @hide_nav_links = false
-
-      render layout: 'home'
-    end
-  end
-
-  def story
-    @skip_container = true
-    render layout: 'application'
-  end
-
-  def fb
-    @skip_container = true
-    @hide_layout_header = true
-    @auto_open = params[:apply].present?.to_s
-    render layout: 'application'
-  end
-
-  def ios
-    @skip_container = true
-    @hide_layout_header = true
-
-    if current_user.present?
-      flash[:alert] = 'You are already signed in.'
-      redirect_to root_url
-    else
-      @form = UserSignInForm.new(Reform::OpenForm.new)
-      render layout: 'application'
-    end
-  end
-
-  def sastra
-    @skip_container = true
-    @hide_layout_header = true
-
-    if current_user.present?
-      flash[:alert] = 'You are already signed in.'
-      redirect_to root_url
-    else
-      @form = UserSignInForm.new(Reform::OpenForm.new)
-      render layout: 'application'
+      redirect_to new_user_session_path
     end
   end
 
@@ -53,12 +13,6 @@ class HomeController < ApplicationController
     @skip_container = true
     @hide_layout_header = true
     render layout: 'tailwind'
-  end
-
-  # GET /tour
-  def tour
-    @skip_container = true
-    render layout: 'application'
   end
 
   # GET /policies/privacy

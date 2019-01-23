@@ -65,8 +65,9 @@ feature 'Coach Dashboard' do
   scenario 'coach uses the sidebar filter', js: true do
     sign_in_user coach.user, referer: course_coach_dashboard_path(course)
 
-    # no filter applied by default
-    expect(page).to_not have_selector('.founders-list__clear-filter-btn')
+    # No filter applied by default, so there shouldn't be a button to clear the filter.
+    expect(page).not_to have_button('Clear')
+
     find('.founders-list__item-name', text: startup_1.founders.first.name).click
     # the list should now be filtered correctly
     expect(page).to have_selector('.timeline-event-card__container', count: 1)
@@ -75,11 +76,9 @@ feature 'Coach Dashboard' do
     expect(page).to_not have_selector('.timeline-event-card__description', text: timeline_event_3.description)
     expect(page).to_not have_selector('.timeline-event-card__description', text: timeline_event_4.description)
 
-    # and the clear filter button visible
-    expect(page).to have_selector('.founders-list__clear-filter-btn')
+    # Clearing the filter should display all events again
+    click_button 'Clear'
 
-    # clearing the filter should display all events again
-    find('.founders-list__clear-filter-btn').click
     expect(page).to have_selector('.timeline-event-card__container', count: 4)
   end
 

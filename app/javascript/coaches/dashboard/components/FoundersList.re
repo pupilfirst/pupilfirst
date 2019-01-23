@@ -41,9 +41,9 @@ let make = (~teams, ~founders, ~selectedFounder, ~selectFounderCB, ~clearFounder
             switch (selectedFounder) {
             | None => ReasonReact.null
             | Some(_founder) =>
-              <div className="founders-list__clear-filter-btn p-0" onClick=(_event => clearFounderCB())>
+              <button className="founders-list__clear-filter-btn p-0" onClick=(_event => clearFounderCB())>
                 ("Clear" |> str)
-              </div>
+              </button>
             }
           )
         </div>

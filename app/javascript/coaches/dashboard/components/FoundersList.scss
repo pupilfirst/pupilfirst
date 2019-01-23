@@ -7,6 +7,7 @@
 .founders-list__header-title {
   font-size: 0.875rem;
   color: #8C8C8C;
+  line-height: 21px;
 }
 
 .founders-list__item {
@@ -52,7 +53,7 @@
   color: #138AFF;
   border: 0;
   cursor: pointer;
-  line-height: 0;
+  line-height: 21px;
 
   &:hover, &:focus {
     color: blue;

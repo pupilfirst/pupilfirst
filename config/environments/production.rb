@@ -103,7 +103,7 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  config.action_mailer.default_url_options = { host: 'https://www.sv.co' }
+  config.action_mailer.default_url_options = { host: 'https://school.sv.co' }
 
   # In production, let's have carrierwave store using fog.
   config.carrier_wave_storage = :fog
@@ -112,7 +112,7 @@ Rails.application.configure do
   config.active_job.queue_adapter = :delayed_job
 
   # Roadie asset URL.
-  config.roadie.url_options = { host: 'www.sv.co', scheme: 'https' }
+  config.roadie.url_options = { host: 'school.sv.co', scheme: 'https' }
 
   # Do not display runtime information in production.
   config.middleware.delete(Rack::Runtime)
@@ -124,7 +124,7 @@ Rails.application.configure do
   # Add the rack-cors middleware to serve CORS header for static assets
   config.middleware.insert_before 0, Rack::Cors do
     allow do
-      origins %w[https://www.sv.co https://sv.co]
+      origins %w[https://www.sv.co https://sv.co https://school.sv.co]
       resource '*'
     end
 

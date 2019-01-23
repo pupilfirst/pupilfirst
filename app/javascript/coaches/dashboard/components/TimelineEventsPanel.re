@@ -72,6 +72,23 @@ let fetchEvents = (state, tes, hasMorePendingTEs, hasMoreCompletedTEs, appendTEs
   );
 };
 
+let emptyMessage = (selectedFounder, selectedTab, hasMorePendingTEs, hasMoreCompletedTEs) => {
+  let (fromText, clearFilterText) =
+    switch (selectedFounder) {
+    | None => ("", "")
+    | Some(founder) => ("from " ++ (founder |> Founder.name), "clear filter and ")
+    };
+  "There are no "
+  ++ (selectedTab == PendingTab ? "pending" : "reviewed")
+  ++ " submissions "
+  ++ fromText
+  ++ " in the list."
+  ++ (
+    loadMoreVisible(selectedFounder, selectedTab, hasMorePendingTEs, hasMoreCompletedTEs) ?
+      "Please " ++ clearFilterText ++ "try loading more." : ""
+  );
+};
+
 let make =
     (
       ~timelineEvents,
@@ -130,19 +147,25 @@ let make =
           ("Reviewed" |> str)
         </div>
       </div>
-      <TimelineEventsList
-        timelineEvents
-        founders
-        selectedTabString=(state.selectedTab == PendingTab ? "pending" : "reviewed")
-        selectedFounder
-        replaceTimelineEvent
-        authenticityToken
-        notAcceptedIconUrl
-        verifiedIconUrl
-        gradeLabels
-        passGrade
-        emptyIconUrl
-      />
+      (
+        if (timelineEvents |> List.length == 0) {
+          <div className="timeline-events-panel__empty-notice p-4 mb-3">
+            <img src=emptyIconUrl className="timeline-events-panel__empty-icon mx-auto" />
+            (emptyMessage(selectedFounder, state.selectedTab, hasMorePendingTEs, hasMoreCompletedTEs) |> str)
+          </div>;
+        } else {
+          <TimelineEventsList
+            timelineEvents
+            founders
+            replaceTimelineEvent
+            authenticityToken
+            notAcceptedIconUrl
+            verifiedIconUrl
+            gradeLabels
+            passGrade
+          />;
+        }
+      )
       (
         if (loadMoreVisible(selectedFounder, state.selectedTab, hasMorePendingTEs, hasMoreCompletedTEs)) {
           let buttonText = state.selectedTab == PendingTab ? "Load more" : "Load earlier reviews";

@@ -138,14 +138,6 @@ Rails.application.routes.draw do
     end
   end
 
-  scope 'about', as: 'about', controller: 'about', constraints: SvConstraint.new do
-    get '/', action: 'index'
-    get 'slack'
-    get 'media-kit'
-    get 'leaderboard'
-    get 'contact'
-  end
-
   resources :faculty, only: %i[index show] do
     post 'connect', on: :member
     # get 'dashboard', to: 'faculty/dashboard#index'
@@ -185,15 +177,6 @@ Rails.application.routes.draw do
     patch ':id/feedback/comment/:token', action: 'comment_submit', as: 'comment_submit'
   end
 
-  scope 'talent', as: 'talent', controller: 'talent', constraints: SvConstraint.new do
-    get '/', action: 'index'
-    post 'contact'
-  end
-
-  get 'join', to: redirect('/apply'), constraints: SvConstraint.new
-  get 'apply', to: 'admissions#apply', constraints: SvConstraint.new
-  post 'apply', to: 'admissions#register', constraints: SvConstraint.new
-
   scope 'admissions', as: 'admissions', controller: 'admissions', constraints: SvConstraint.new do
     get 'screening'
     get 'screening_submit'
@@ -226,32 +209,10 @@ Rails.application.routes.draw do
     get '/:slug/e/:event_id/:event_title', action: 'timeline_event_show', as: 'student_timeline_event_show'
   end
 
-  # Story of startup village, accessed via about pages.
-  get 'story', as: 'story', to: 'home#story', constraints: SvConstraint.new
-
-  # Previous transparency page re-directed to story
-  get 'transparency', to: redirect('/story'), constraints: SvConstraint.new
-
-  # Application process tour of SV.CO
-  get 'tour', to: 'home#tour', constraints: SvConstraint.new
-
-  # Facebook School of Innovation at SV.CO landing page
-  get 'fb', to: 'home#fb', constraints: SvConstraint.new
-  get 'fb/vr-101', to: redirect('fb?apply=now'), constraints: SvConstraint.new
-
-  # Apple iOS course at Manipal University landing page
-  get 'ios', to: 'home#ios', constraints: SvConstraint.new
-
-  # VR course at Sastra University landing page
-  get 'sastra', to: 'home#sastra', constraints: SvConstraint.new
-
   # PupilFirst landing page
   get 'pupilfirst', to: 'home#pupilfirst'
 
   root 'home#index'
-
-  # /slack redirected to /about/slack
-  get '/slack', to: redirect('/about/slack'), constraints: SvConstraint.new
 
   get '/dashboard', to: redirect('/student/dashboard')
 
@@ -273,7 +234,7 @@ Rails.application.routes.draw do
   end
 
   # Public change log
-  scope 'changelog', as: 'changelog', controller: 'changelog', constraints: SvConstraint.new do
+  scope 'changelog', as: 'changelog', controller: 'changelog' do
     get 'archive'
     get '(/:year)', action: 'index'
   end
@@ -300,10 +261,6 @@ Rails.application.routes.draw do
 
   # Handle redirects of short URLs.
   get 'r/:unique_key', to: 'shortened_urls#redirect', as: 'short_redirect', constraints: SvConstraint.new
-
-  scope 'stats', controller: 'product_metrics', constraints: SvConstraint.new do
-    get '/', action: 'index', as: 'stats'
-  end
 
   get '/school_admin', to: 'school_admins#dashboard'
 

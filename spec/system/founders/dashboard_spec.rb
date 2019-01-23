@@ -79,9 +79,10 @@ feature 'Founder Dashboard' do
 
   context 'when founder has exited the programme' do
     scenario 'ex-founder attempts to visit dashboard' do
+      sentence = Faker::Lorem.sentence
+      stub_request(:get, "https://www.sv.co").to_return(status: 200, body: sentence)
       founder.update!(exited: true)
       sign_in_user founder.user, referer: student_dashboard_path
-      expect(page).to have_selector('#home__index', visible: false)
     end
   end
 
@@ -109,9 +110,6 @@ feature 'Founder Dashboard' do
 
     # Check the product name displayed in the dashboard.
     expect(page).to have_selector('.founder-dashboard-header__product-title', text: startup.product_name)
-
-    # Close the PNotify message to ensure no overlap with other elements under test
-    find('.ui-pnotify').click
 
     # Founder can manually start a dashboard tour.
     find('.founder-dashboard-actionbar__show-more-menu-dots').click

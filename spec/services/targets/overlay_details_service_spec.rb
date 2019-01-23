@@ -35,7 +35,7 @@ describe Targets::OverlayDetailsService do
         facultyName: faculty.name,
         feedback: faculty_feedback.feedback,
         facultySlackUsername: faculty.slack_username,
-        facultyImageUrl: faculty.image_url
+        facultyImageUrl: faculty.initials_avatar
       }
 
       quiz_questions = [{

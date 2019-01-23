@@ -9,7 +9,6 @@ after 'development:courses' do
     key_skills: Faker::Lorem.words(3).join(', '),
     linkedin_url: 'https://linkedin.com',
     category: 'team',
-    image: Rails.root.join('spec/support/uploads/faculty/mickey_mouse.jpg').open,
     sort_index: 1,
     user: User.create(email: 'mickeymouse@example.com')
   )
@@ -25,7 +24,6 @@ after 'development:courses' do
     key_skills: Faker::Lorem.words(3).join(', '),
     linkedin_url: 'https://linkedin.com',
     category: 'team',
-    image: Rails.root.join('spec/support/uploads/faculty/minnie_mouse.jpg').open,
     sort_index: 2,
     user: User.create(email: 'minniemouse@example.com')
   )
@@ -41,7 +39,6 @@ after 'development:courses' do
     key_skills: Faker::Lorem.words(3).join(', '),
     linkedin_url: 'https://linkedin.com',
     category: 'developer_coaches',
-    image: Rails.root.join('spec/support/uploads/faculty/donald_duck.jpg').open,
     sort_index: 3,
     user: User.create(email: 'donaldduck@example.com')
   )
@@ -56,7 +53,6 @@ after 'development:courses' do
     title: 'Engineering Lead',
     key_skills: 'Looting, pillaging, etc.',
     category: 'visiting_coaches',
-    image: Rails.root.join('spec/support/uploads/faculty/jack_sparrow.png').open,
     user: User.create(email: 'goofy@example.com')
   )
   FacultyCourseEnrollment.create!(
@@ -69,7 +65,6 @@ after 'development:courses' do
     name: 'iOS Coach',
     title: 'Coaching Expert',
     category: 'developer_coaches',
-    image: Rails.root.join('spec/support/uploads/faculty/mickey_mouse.jpg').open,
     user: User.create(email: 'ioscoach@example.com')
   )
   FacultyCourseEnrollment.create!(

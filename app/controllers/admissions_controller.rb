@@ -1,41 +1,5 @@
 class AdmissionsController < ApplicationController
-  before_action :skip_container, only: %i[apply register team_members team_members_submit]
-
-  # GET /apply
-  def apply
-    @form = if Feature.active?(:admissions, current_user)
-      Founders::RegistrationForm.new(Founder.new)
-    else
-      ProspectiveApplicants::RegistrationForm.new(ProspectiveApplicant.new)
-    end
-
-    render layout: 'application'
-  end
-
-  # POST /apply
-  def register
-    @form = Founders::RegistrationForm.new(Founder.new)
-
-    if verify_recaptcha(model: @form, secret_key: Rails.application.secrets.dig(:google, :recaptcha, :invisible, :secret_key))
-      if @form.validate(params[:founders_registration])
-        begin
-          founder = @form.save
-        rescue Postmark::InvalidMessageError
-          @form.errors[:base] << t('admissions.register.email_error')
-        else
-          # Sign in user immediately to allow him to proceed to screening.
-          sign_in founder.user
-
-          redirect_to student_dashboard_path(from: 'register')
-          return
-        end
-      else
-        flash.now[:error] = 'There were problems with your submission. Please check the form and retry.'
-      end
-    end
-
-    render 'apply', layout: 'application'
-  end
+  before_action :skip_container, only: %i[team_members team_members_submit]
 
   # GET /admissions/screening
   def screening

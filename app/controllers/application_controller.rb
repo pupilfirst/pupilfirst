@@ -97,10 +97,10 @@ class ApplicationController < ActionController::Base
         founder_id = read_cookie(:founder_id)
 
         # Try to select founder from value stored in cookie.
-        founder = founder_id.present? ? current_user.founders.find_by(id: founder_id) : nil
+        founder = founder_id.present? ? current_user.founders.not_exited.find_by(id: founder_id) : nil
 
         # Return selected founder, if any, or return the first founder (if any).
-        founder.presence || current_user.founders.first
+        founder.presence || current_user.founders.not_exited.first
       end
     end
   end
@@ -164,7 +164,7 @@ class ApplicationController < ActionController::Base
 
     return if current_founder.present? && !current_founder.exited?
 
-    redirect_to root_path
+    redirect_to 'https://www.sv.co'
   end
 
   def pretender

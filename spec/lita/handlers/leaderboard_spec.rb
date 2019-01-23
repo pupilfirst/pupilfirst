@@ -5,7 +5,7 @@ require_relative '../../../lib/lita/handlers/leaderboard'
 describe Lita::Handlers::Leaderboard do
   include ActiveSupport::Testing::TimeHelpers
 
-  describe '#leaderboard' do
+  describe '#leaderboard', broken: true do
     let(:test_time) { Time.parse '2017-04-19 12:00:00 +0530' }
     let(:leaderboard_service_l1) { instance_double(Startups::LeaderboardService, leaderboard_with_change_in_rank: leaderboard_level_one) }
     let(:leaderboard_service_l2) { instance_double(Startups::LeaderboardService, leaderboard_with_change_in_rank: leaderboard_level_two) }

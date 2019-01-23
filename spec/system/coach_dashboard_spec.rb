@@ -42,8 +42,9 @@ feature 'Coach Dashboard' do
     sign_in_user coach.user, referer: course_coach_dashboard_path(course)
 
     # ensure coach is on his dashboard
-    expect(page).to have_selector('.side-panel__coach-name', text: coach.name)
-    expect(page).to have_selector('.side-panel__coach-description', text: 'Pending reviews: 4')
+    expect(page).to have_selector('.founders-list__header-title', text: 'Filter by student')
+    expect(page).to have_selector('.timeline-events-panel__status-tab', text: 'Pending')
+    expect(page).to have_selector('.timeline-events-panel__status-tab > .badge', text: '4')
 
     # and his students are listed properly on the sidebar
     within('.founders-list__container') do
@@ -59,8 +60,9 @@ feature 'Coach Dashboard' do
       expect(page).to have_selector('.timeline-event-card__container', count: 4)
     end
 
-    # and the 'complete' list is empty
-    expect(page).to have_selector('.timeline-events-panel__empty-notice', text: 'Nothing to show!')
+    # and the 'reviewed' tab is empty
+    find('.timeline-events-panel__status-tab', text: 'Reviewed').click
+    expect(page).to have_selector('.timeline-events-panel__empty-notice', text: 'There are no reviewed submissions in the list.')
   end
 
   scenario 'coach uses the sidebar filter', js: true do
@@ -80,7 +82,7 @@ feature 'Coach Dashboard' do
     expect(page).to have_selector('.founders-list__clear-filter-btn')
 
     # clearing the filter should display all events again
-    click_on 'Clear Filter'
+    find('.founders-list__clear-filter-btn').click
     expect(page).to have_selector('.timeline-event-card__container', count: 4)
   end
 
@@ -116,7 +118,7 @@ feature 'Coach Dashboard' do
     within all('.timeline-events-list__container').first do
       expect(page).to have_selector('.timeline-event-card__container', count: 4)
     end
-    expect(page).to have_selector('.timeline-events-panel__empty-notice', text: 'Nothing to show!')
+    expect(page).to have_selector('.timeline-events-panel__empty-notice', text: 'There are no reviewed submissions in the list. Please try loading more.')
     expect(timeline_event_1.reload.status).to eq(TimelineEvent::STATUS_PENDING)
 
     # and the pending count updated

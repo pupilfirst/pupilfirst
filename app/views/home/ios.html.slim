@@ -1,11 +1,6 @@
 - content_for :head do
   title Apple iOS course at Manipal University
 
-/ Load the Recaptcha API manually, because we're programmatically invoking the Invisible Recaptcha library.
-- unless Rails.env.test?
-  = javascript_include_tag 'https://www.google.com/recaptcha/api.js', nonce: true, async: true, defer: true
-
-
 .landing__container.p-3.p-lg-5
   .container
     .row.landing__sign-in-container
@@ -21,7 +16,7 @@
             br
             | Manipal University
 
-          = form_for @form, url: user_send_login_email_path, html: { 'data-test': Rails.env.test? } do |f|
+          = form_for @form, url: user_send_login_email_path do |f|
             - if f.object.errors.present? && f.object.errors[:base].present?
               .alert.alert-warning.alert-dismissable.fade.show role='alert'
                 ul.mb-0
@@ -42,5 +37,4 @@
                 = f.label :shared_device, 'Are you using a shared device?', class: 'css-label'
 
             .text-center
-              div class='g-recaptcha' data-sitekey=Rails.application.secrets.dig(:google, :recaptcha, :invisible, :site_key) data-callback='handleSignInWithEmailButton' data-size='invisible' data-badge='inline'
               = f.submit 'Email Me a Link to Sign In', class: 'btn btn-primary btn-lg d-inline-block font-semibold ios-landing__sign-in-btn'

@@ -1,9 +1,8 @@
 class UserSessionMailerPreview < ActionMailer::Preview
   def send_login_token
-    user = User.new(login_token: 'LOGIN_TOKEN')
-    referer = [Rails.application.routes.url_helpers.fee_founder_url, nil].sample
-    shared_device = true
+    school_name = 'PupilFirst'
+    login_url = Rails.application.routes.url_helpers.user_token_url(token: 'LOGIN_TOKEN', host: 'www.pupilfirst.localhost')
 
-    UserSessionMailer.send_login_token(user, referer, shared_device)
+    UserSessionMailer.send_login_token('johndoe@example.com', school_name, login_url)
   end
 end

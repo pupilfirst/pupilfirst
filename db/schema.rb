@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_15_075418) do
+ActiveRecord::Schema.define(version: 2019_01_21_075133) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -732,6 +732,7 @@ ActiveRecord::Schema.define(version: 2019_01_15_075418) do
     t.datetime "email_bounced_at"
     t.string "email_bounce_type"
     t.datetime "confirmed_at"
+    t.datetime "login_mail_sent_at"
   end
 
   create_table "visits", id: :uuid, default: nil, force: :cascade do |t|

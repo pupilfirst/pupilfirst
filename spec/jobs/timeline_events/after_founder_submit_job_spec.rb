@@ -38,7 +38,19 @@ describe TimelineEvents::AfterFounderSubmitJob do
 
         expect(current_email.subject).to eq("There is a new submission from #{startup.product_name}")
         expect(current_email.body).to include('New Submission from Student')
-        expect(current_email.body).to include("We have received a new submission from #{startup.team_lead.name}")
+        expect(current_email.body).to include("We have received a new submission from team #{startup.product_name}")
+      end
+
+      context 'when the submission was from a single founder' do
+        let(:timeline_event) { create :timeline_event, founders: [startup.team_lead] }
+
+        it 'sends a notification email mentioning submission from single founder' do
+          subject.perform_now(timeline_event)
+
+          open_email(faculty.email)
+
+          expect(current_email.body).to include("We have received a new submission from #{startup.team_lead.name}")
+        end
       end
     end
 

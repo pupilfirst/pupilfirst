@@ -164,7 +164,7 @@ export default class TargetOverlay extends React.Component {
   render() {
     const target = this.getTarget();
     const faculty = this.getFaculty(target);
-
+    const showFounderStatus = this.state.founderStatuses > 0;
     return (
       <div className="target-overlay__overlay">
         <div className="target-overlay__container mx-auto">
@@ -231,11 +231,11 @@ export default class TargetOverlay extends React.Component {
                         feedback={this.state.latestFeedback}
                       />
                     )}
-                    {target.role === "founder" &&
+                    {showFounderStatus &&
                       !this.props.hasSingleFounder && (
                         <div className="my-3 px-4">
                           <h5 className="target-overaly__status-title font-semibold">
-                            Completion Status:
+                            Pending Team Members:
                         </h5>
                           <FounderStatusPanel
                             founderDetails={this.props.founderDetails}

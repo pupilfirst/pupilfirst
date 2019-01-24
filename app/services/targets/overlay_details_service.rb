@@ -18,14 +18,9 @@ module Targets
     private
 
     def founder_statuses
-      return nil unless @target.founder_role?
-
-      @founder.startup.founders.not_exited.map do |founder|
-        {
-          id: founder.id,
-          status: Targets::StatusService.new(@target, founder).status
-        }
-      end
+      @founder.startup.founders.where.not(id: @founder).reject do |founder|
+        founder.timeline_events.where(target: @target).passed.exists?
+      end.map(&:id)
     end
 
     def latest_event_details

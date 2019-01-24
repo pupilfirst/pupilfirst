@@ -23,9 +23,7 @@ export default class FounderStatusPanel extends React.Component {
   render() {
     return (
       <div className="founder-dashboard__avatars ml-2">
-        {this.founderStatuses().map(founderStatus => {
-          const id = founderStatus.id;
-          const status = founderStatus.status;
+        {this.founderStatuses().map(id => {
           const founder = _.find(this.props.founderDetails, ["founderId", id]);
           const avatar = founder.avatar;
 
@@ -33,7 +31,7 @@ export default class FounderStatusPanel extends React.Component {
             <FounderBubble
               name={founder.founderName}
               avatar={avatar}
-              status={status}
+              status={"pending"}
               key={id + "-" + this.props.targetId}
             />
           );

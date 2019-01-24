@@ -52,7 +52,9 @@ class CoachDashboardPresenter < ApplicationPresenter
   end
 
   def evaluated_submissions_exist?
-    TimelineEvent.where(target: @course.targets, evaluator: current_coach).exists?
+    TimelineEvent.joins(:founders).where(founders: { id: founders.map { |f| f[:id] } })
+      .where(target: @course.targets)
+      .where.not(evaluator: nil).exists?
   end
 
   def grade_labels
@@ -61,11 +63,6 @@ class CoachDashboardPresenter < ApplicationPresenter
   end
 
   def avatar_url(founder)
-    founder.avatar_url || identicon_avatar(founder)
-  end
-
-  def identicon_avatar(founder)
-    base64_logo = Founders::IdenticonLogoService.new(founder).base64_svg
-    "data:image/svg+xml;base64,#{base64_logo}"
+    founder.avatar_url || founder.initials_avatar
   end
 end

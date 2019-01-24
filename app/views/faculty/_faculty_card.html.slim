@@ -6,7 +6,7 @@
         i.fa.fa-user
         | &nbsp;View Profile
 
-      = image_tag member.image_url
+      = image_tag member.image_or_avatar_url(background_shape: :square)
       - if connect_slots.exists?
         .available-marker
           i.fa.fa-check-circle

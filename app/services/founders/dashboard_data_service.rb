@@ -54,7 +54,7 @@ module Founders
     def faculty
       Faculty.team.all.as_json(
         only: %i[id name],
-        methods: :image_url
+        methods: :image_or_avatar_url
       )
     end
 

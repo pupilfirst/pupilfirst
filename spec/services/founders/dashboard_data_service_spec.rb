@@ -51,7 +51,7 @@ describe Founders::DashboardDataService do
           hash_including(level_0_session.slice(target_fields).merge(additional_target_fields(level_0_session, target_group_l0_2)))
         ]
 
-        team_members = Faculty.team.all.as_json(only: %i[id name], methods: %i[image_url]).map do |faculty_fields|
+        team_members = Faculty.team.all.as_json(only: %i[id name], methods: %i[image_or_avatar_url]).map do |faculty_fields|
           hash_including(faculty_fields)
         end
 
@@ -88,7 +88,7 @@ describe Founders::DashboardDataService do
           hash_including(level_3_target.slice(target_fields).merge(additional_target_fields(level_3_target, target_group_l3_1, :level_locked)))
         ]
 
-        team_members = Faculty.team.all.as_json(only: %i[id name], methods: %i[image_url]).map do |faculty_fields|
+        team_members = Faculty.team.all.as_json(only: %i[id name], methods: %i[image_or_avatar_url]).map do |faculty_fields|
           hash_including(faculty_fields)
         end
 

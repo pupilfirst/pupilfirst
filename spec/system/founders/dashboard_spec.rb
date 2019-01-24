@@ -111,9 +111,6 @@ feature 'Founder Dashboard' do
     # Check the product name displayed in the dashboard.
     expect(page).to have_selector('.founder-dashboard-header__product-title', text: startup.product_name)
 
-    # Close the PNotify message to ensure no overlap with other elements under test
-    find('.ui-pnotify').click
-
     # Founder can manually start a dashboard tour.
     find('.founder-dashboard-actionbar__show-more-menu-dots').click
     find('a[id=filter-targets-dropdown__tour-button]').click

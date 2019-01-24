@@ -16,7 +16,7 @@ let founderButtons = (selectedFounder, selectFounderCB, founders) =>
              "founders-list__item d-flex align-items-center"
          };
        <div className=buttonClasses key=(founder |> Founder.name) onClick=(_event => selectFounderCB(founder))>
-         <span className="founders-list__item-dp d-flex align-items-center p-1">
+         <span className="founders-list__item-dp d-flex align-items-center">
            <img src=(founder |> Founder.avatarUrl) className="img-fluid" />
          </span>
          <span className="founders-list__item-details d-flex flex-column px-3">
@@ -41,9 +41,9 @@ let make = (~teams, ~founders, ~selectedFounder, ~selectFounderCB, ~clearFounder
             switch (selectedFounder) {
             | None => ReasonReact.null
             | Some(_founder) =>
-              <div className="founders-list__clear-filter-btn p-0" onClick=(_event => clearFounderCB())>
+              <button className="founders-list__clear-filter-btn p-0" onClick=(_event => clearFounderCB())>
                 ("Clear" |> str)
-              </div>
+              </button>
             }
           )
         </div>

@@ -7,7 +7,7 @@
   .row
     .col-lg-3.col-md-5
       .faculty-profile-card
-        = image_tag @faculty.image_url, class: 'img-responsive faculty-profile-image'
+        = image_tag(@faculty.image_or_avatar_url(background_shape: :square), class: 'img-responsive faculty-profile-image')
 
         .faculty-profile-title
           h3.text-center.text-uppercase.font-semibold

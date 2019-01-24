@@ -311,4 +311,9 @@ class Founder < ApplicationRecord
     scope = Faculty.left_joins(:startups, :courses)
     scope.where(startups: { id: startup }).or(scope.where(courses: { id: startup.level.course })).distinct
   end
+
+  def initials_avatar
+    logo = Scarf::InitialAvatar.new(name)
+    "data:image/svg+xml;base64,#{Base64.encode64(logo.svg)}"
+  end
 end

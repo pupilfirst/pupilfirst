@@ -18,7 +18,6 @@ feature 'Connect Request Comment' do
     expect(page).to have_text('Do you have any additional feedback for SV.CO team?')
     fill_in 'Do you have any additional feedback for SV.CO team?', with: comment
     click_button 'Submit'
-    expect(page).to have_selector('#home__index')
     expect(connect_request.reload.comment_for_team).to eq(comment)
   end
 
@@ -27,7 +26,6 @@ feature 'Connect Request Comment' do
     expect(page).to have_text('Do you have any additional feedback for SV.CO team?')
     fill_in 'Do you have any additional feedback for SV.CO team?', with: comment
     click_button 'Submit'
-    expect(page).to have_selector('#home__index')
     expect(connect_request.reload.comment_for_faculty).to eq(comment)
   end
 end

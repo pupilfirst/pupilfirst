@@ -2,7 +2,7 @@ ActiveAdmin.register Startup do
   permit_params :product_name, :product_description, :legal_registered_name, :website, :logo, :facebook_link,
     :twitter_link, :created_at, :updated_at, :dropped_out, :registration_type, :agreement_signed_at,
     :presentation_link, :product_video_link, :wireframe_link, :prototype_link, :slug, :level_id,
-    :partnership_deed, :payment_reference, :agreements_verified, :team_lead_id, founder_ids: [], tag_list: []
+    :partnership_deed, :payment_reference, :agreements_verified, founder_ids: [], tag_list: []
 
   filter :product_name, as: :string
   filter :level_course_id, as: :select, label: 'Course', collection: -> { Course.all }
@@ -150,20 +150,6 @@ ActiveAdmin.register Startup do
     end
   end
 
-  member_action :change_admin, method: :patch do
-    Startup.transaction do
-      startup = Startup.friendly.find(params[:id])
-
-      # Add the new admin.
-      new_team_lead = startup.founders.friendly.find(params[:founder_id])
-      startup.update!(team_lead: new_team_lead)
-
-      flash[:success] = "The new team lead is now #{new_team_lead.display_name}"
-    end
-
-    redirect_to action: :show
-  end
-
   show title: :product_name do |startup|
     attributes_table do
       row :product_description do
@@ -242,10 +228,6 @@ ActiveAdmin.register Startup do
         link_to startup.prototype_link, startup.prototype_link if startup.prototype_link.present?
       end
 
-      row :phone do
-        startup.team_lead.try(:phone)
-      end
-
       row :address
       row :district
       row :state
@@ -268,21 +250,10 @@ ActiveAdmin.register Startup do
               span do
                 " &mdash; #{link_to 'Karma++'.html_safe, new_admin_karma_point_path(karma_point: { founder_id: founder.id })}".html_safe
               end
-
-              span do
-                if founder.team_lead?
-                  " &mdash; (Current Team Lead)".html_safe
-                else
-                  " &mdash; #{link_to('Make Team Lead', change_admin_admin_startup_path(founder_id: founder),
-                    method: :patch, data: { confirm: 'Are you sure you want to change the team lead for this startup?' })}".html_safe
-                end
-              end
             end
           end
         end
       end
-
-      row :team_lead
 
       row :invited_founders do
         div do

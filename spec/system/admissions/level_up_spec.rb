@@ -6,7 +6,7 @@ feature 'Admission Level up', broken: true do
   let(:course) { create :course }
   let(:level_0) { create :level, :zero, course: course }
   let(:startup) { create :startup, level: level_0 }
-  let(:founder) { startup.team_lead }
+  let(:founder) { startup.founders.first }
 
   let(:l0_target_group) { create :target_group, level: level_0, milestone: true }
   let!(:screening_target) { create :target, :admissions_screening, target_group: l0_target_group }

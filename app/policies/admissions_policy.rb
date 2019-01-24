@@ -25,10 +25,6 @@ class AdmissionsPolicy < ApplicationPolicy
     team_members?
   end
 
-  def team_lead?
-    team_members? && !current_founder.team_lead?
-  end
-
   def accept_invitation?
     # Authorization is handled in the controller using supplied token.
     true

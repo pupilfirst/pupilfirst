@@ -35,7 +35,7 @@ module PrivateSlack
 
     def team_members_list(founder)
       team = founder.startup.founders.each_with_object([]) do |f, list|
-        list << "#{team_member_string(f, list.count + 1)}#{founder.startup.team_lead == f ? ' - *Team Lead*' : ''}"
+        list << team_member_string(f, list.count + 1)
       end
 
       founder.startup.invited_founders.each do |f|

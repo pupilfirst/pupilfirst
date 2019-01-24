@@ -4,7 +4,7 @@ describe Founders::UpdatePendingPaymentService do
   subject { described_class.new(founder) }
 
   let(:startup) { create :startup }
-  let(:founder) { startup.team_lead }
+  let(:founder) { startup.founders.first }
   let(:request_payment_service) { instance_double(Instamojo::RequestPaymentService) }
   let(:verify_payment_request_service) { instance_double(Instamojo::VerifyPaymentRequestService) }
   let(:disable_payment_request_service) { instance_double(Instamojo::DisablePaymentRequestService) }

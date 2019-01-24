@@ -29,6 +29,7 @@ class Founder < ApplicationRecord
   has_many :public_slack_messages, dependent: :nullify
   belongs_to :startup
   has_one :level, through: :startup
+  has_one :course, through: :level
   belongs_to :invited_startup, class_name: 'Startup', optional: true
   has_many :karma_points, dependent: :destroy
   has_many :visits, as: :user, dependent: :nullify, inverse_of: :user
@@ -188,14 +189,9 @@ class Founder < ApplicationRecord
     startup.present? && startup.approved?
   end
 
-  # The option to create connect requests is restricted to team leads of approved startups.
+  # The option to create connect requests is restricted to tapproved startups.
   def can_connect?
-    startup.present? && startup.approved? && !level_zero? && team_lead?
-  end
-
-  # The option to view some info about creating connect requests is restricted to non-lead members of approved startups.
-  def can_view_connect?
-    startup.present? && startup.approved? && !level_zero? && !team_lead?
+    startup.present? && startup.approved? && !level_zero?
   end
 
   def pending_connect_request_for?(faculty)
@@ -278,10 +274,6 @@ class Founder < ApplicationRecord
       'Friend', 'Seniors', '#StartinCollege Event', 'Newspaper/Magazine', 'TV', 'SV.CO Blog', 'Instagram', 'Facebook',
       'Twitter', 'Microsoft Student Partner', 'Other (Please Specify)'
     ]
-  end
-
-  def team_lead?
-    startup&.team_lead_id == id
   end
 
   def self.valid_references

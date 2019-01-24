@@ -49,7 +49,7 @@ ActiveAdmin.register StartupFeedback do
       elsif startup_feedback.for_founder?
         link_to(
           'Email Founder Now',
-          email_feedback_admin_startup_feedback_path(startup_feedback, founder_id: startup_feedback.timeline_event.founder_id),
+          email_feedback_admin_startup_feedback_path(startup_feedback, founder_id: startup_feedback.timeline_event.founders.first.id),
           method: :post, data: { confirm: 'Are you sure you want to email this feedback to the founder?' }
         )
       else
@@ -66,7 +66,7 @@ ActiveAdmin.register StartupFeedback do
         span do
           button_to(
             'DM Founder Now',
-            slack_feedback_admin_startup_feedback_path(startup_feedback, founder_id: startup_feedback.timeline_event.founder_id),
+            slack_feedback_admin_startup_feedback_path(startup_feedback, founder_id: startup_feedback.timeline_event.founders.first.id),
             method: :post, data: { confirm: 'Are you sure you want to DM this feedback to the founder on slack?' }
           )
         end
@@ -132,7 +132,7 @@ ActiveAdmin.register StartupFeedback do
           div do
             link_to(
               "Send Email to founder (#{founder.fullname})",
-              email_feedback_admin_startup_feedback_path(startup_feedback, founder_id: startup_feedback.timeline_event.founder_id),
+              email_feedback_admin_startup_feedback_path(startup_feedback, founder_id: startup_feedback.timeline_event.founders.first.id),
               method: :post, data: { confirm: 'Are you sure you want to email this feedback to the founder?' },
               class: 'button'
             )
@@ -163,7 +163,7 @@ ActiveAdmin.register StartupFeedback do
           div do
             link_to(
               "Send DM to founder (#{founder.fullname})",
-              slack_feedback_admin_startup_feedback_path(startup_feedback, founder_id: startup_feedback.timeline_event.founder_id),
+              slack_feedback_admin_startup_feedback_path(startup_feedback, founder_id: startup_feedback.timeline_event.founders.first.id),
               method: :post, data: { confirm: 'Are you sure you want to DM this feedback to the founder on slack?' },
               class: 'button'
             )
@@ -227,7 +227,7 @@ ActiveAdmin.register StartupFeedback do
     if startup_feedback.for_founder?
       link_to(
         'Email Founder Now!',
-        email_feedback_admin_startup_feedback_path(startup_feedback, founder_id: startup_feedback.timeline_event.founder_id),
+        email_feedback_admin_startup_feedback_path(startup_feedback, founder_id: startup_feedback.timeline_event.founders.first.id),
         method: :post, data: { confirm: 'Are you sure you want to email this feedback to the founder?' }
       )
     else
@@ -243,7 +243,7 @@ ActiveAdmin.register StartupFeedback do
     if startup_feedback.for_founder?
       link_to(
         'DM Founder on Slack Now!',
-        slack_feedback_admin_startup_feedback_path(startup_feedback, founder_id: startup_feedback.timeline_event.founder_id),
+        slack_feedback_admin_startup_feedback_path(startup_feedback, founder_id: startup_feedback.timeline_event.founders.first.id),
         method: :post, data: { confirm: 'Are you sure you want to DM this feedback to the founder on slack?' }
       )
     else

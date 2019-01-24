@@ -14,9 +14,9 @@ feature 'Select another founder profile as the active profile' do
   let!(:target_s2) { create :target, target_group: target_group_s2 }
 
   # One team lead is also a founder in the other.
-  let!(:multi_founder_user) { startup_1.team_lead.user }
+  let!(:multi_founder_user) { startup_1.founders.first.user }
   let!(:founder_in_s2) { create :founder, startup: startup_2, user: multi_founder_user }
-  let(:single_founder_user) { startup_2.team_lead.user }
+  let(:single_founder_user) { startup_2.founders.first.user }
 
   scenario 'Multi-founder user can switch between courses' do
     sign_in_user multi_founder_user, referer: root_path

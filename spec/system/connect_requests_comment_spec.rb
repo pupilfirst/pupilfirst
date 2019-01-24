@@ -5,7 +5,7 @@ feature 'Connect Request Comment' do
 
   let(:faculty) { create :faculty }
   let(:startup) { create :startup, :subscription_active }
-  let(:founder) { startup.team_lead }
+  let(:founder) { startup.founders.first }
   let(:connect_slot) { create :connect_slot, faculty: faculty }
 
   let(:connect_request) { create :connect_request, connect_slot: connect_slot, startup: startup }

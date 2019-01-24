@@ -3,8 +3,8 @@ FactoryBot.define do
     product_name { ['Red Ramanujan', 'Blue Bell', 'Crimson Copernicus'].sample }
 
     after(:build) do |startup|
-      # Add a team lead.
-      startup.team_lead = create(:founder, startup: startup)
+      # Add a founder.
+      create(:founder, startup: startup)
     end
 
     level { create :level, :zero }
@@ -20,10 +20,8 @@ FactoryBot.define do
     program_started_on { rand(8.weeks).seconds.ago }
 
     after(:build) do |startup|
-      # Add a team lead.
-      startup.team_lead = create(:founder, startup: startup)
-
-      # Add another founder.
+      # Add two founder.
+      create(:founder, startup: startup)
       create(:founder, startup: startup)
     end
 

@@ -5,7 +5,8 @@ class FounderMailer < ApplicationMailer
   def connect_request_feedback(connect_request)
     @connect_request = connect_request
     @faculty = connect_request.faculty
-    @founder = connect_request.startup.team_lead
+    # TODO: Do we need to send this to each founder?
+    @founder = connect_request.startup.founders.first
     mail(to: @founder.email, subject: "Feedback for your recent office hour with coach #{@faculty.name}")
   end
 

@@ -4,7 +4,7 @@ FactoryBot.define do
     founder { startup.founders.first }
 
     after(:create) do |payment|
-      payment.update!(founder: payment.startup.team_lead) if payment.founder.blank?
+      payment.update!(founder: payment.startup.founders.first) if payment.founder.blank?
     end
 
     trait :requested do

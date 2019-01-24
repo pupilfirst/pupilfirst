@@ -49,7 +49,7 @@ ActiveAdmin.register Founder do
 
   permit_params :name, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :born_on,
     :communication_address, :identification_proof, :phone, :invitation_token, :college_id, :roll_number,
-    :course, :semester, :year_of_graduation, :twitter_url, :linkedin_url, :personal_website_url, :blog_url,
+    :college_course, :semester, :year_of_graduation, :twitter_url, :linkedin_url, :personal_website_url, :blog_url,
     :angel_co_url, :github_url, :behance_url, :gender, :skype_id, :exited, :id_proof_number,
     :id_proof_type, :parent_name, :permanent_address, :address_proof, :income_proof,
     :letter_from_parent, :coder, roles: [], tag_list: []
@@ -216,7 +216,7 @@ ActiveAdmin.register Founder do
       end
 
       column :roll_number
-      column :course
+      column :college_course
       column :semester
       column :year_of_graduation
 
@@ -323,7 +323,7 @@ ActiveAdmin.register Founder do
         link_to 'Download Avatar', founder.avatar.url if founder.avatar.present?
       end
 
-      row :course
+      row :college_course
       row :semester
       row :year_of_graduation
       row :backlog

@@ -22,7 +22,7 @@
     = f.input :avatar, as: :file
     = f.input :college_id, as: :select, input_html: { 'data-search-url' => colleges_url }, collection: f.object.college.present? ? [f.object.college] : []
     = f.input :roll_number
-    = f.input :course
+    = f.input :college_course
     = f.input :semester
     = f.input :year_of_graduation, as: :select, collection: 2014..2020
     = f.input :exited

@@ -447,17 +447,6 @@ ActiveAdmin.register Founder do
     active_admin_comments
   end
 
-  action_item :feedback, only: :show, if: proc { Founder.friendly.find(params[:id]).startup.present? } do
-    startup = Founder.friendly.find(params[:id]).startup
-
-    link_to(
-      'Record New Feedback',
-      new_admin_startup_feedback_path(
-        startup_feedback: { startup_id: Founder.friendly.find(params[:id]).startup.id, reference_url: product_url(startup.id, startup.slug) }
-      )
-    )
-  end
-
   action_item :impersonate, only: :show, if: proc { can? :impersonate, User } do
     link_to 'Impersonate', impersonate_admin_user_path(founder.user), method: :post
   end

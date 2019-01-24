@@ -58,23 +58,8 @@ ActiveAdmin.register Startup do
 
     actions do |startup|
       span do
-        link_to 'View Timeline', startup, target: '_blank', class: 'member_link', rel: 'noopener'
-      end
-
-      span do
         link_to 'View All Feedback',
           admin_startup_feedback_index_url('q[startup_id_eq]' => startup.id, commit: 'Filter'),
-          class: 'member_link'
-      end
-
-      span do
-        link_to 'Record New Feedback',
-          new_admin_startup_feedback_path(
-            startup_feedback: {
-              startup_id: startup.id,
-              reference_url: product_url(startup.id, startup.slug)
-            }
-          ),
           class: 'member_link'
       end
     end
@@ -84,7 +69,6 @@ ActiveAdmin.register Startup do
     column :product_name
     column :product_description
     column(:level) { |startup| startup.level.number }
-    column(:timeline_link) { |startup| product_url(startup.id, startup.slug) }
     column :presentation_link
     column :product_video_link
     column :wireframe_link
@@ -105,24 +89,6 @@ ActiveAdmin.register Startup do
       'View All Feedback',
       admin_startup_feedback_index_url('q[startup_id_eq]' => Startup.friendly.find(params[:id]).id, commit: 'Filter')
     )
-  end
-
-  action_item :record_feedback, only: :show do
-    startup = Startup.friendly.find(params[:id])
-
-    link_to(
-      'Record New Feedback',
-      new_admin_startup_feedback_path(
-        startup_feedback: {
-          startup_id: Startup.friendly.find(params[:id]).id,
-          reference_url: product_url(startup.id, startup.slug)
-        }
-      )
-    )
-  end
-
-  action_item :view_timeline, only: :show do
-    link_to('View Timeline', product_url(startup.id, startup.slug), target: '_blank', rel: 'noopener')
   end
 
   # TODO: rewrite as its only used for dropping out startups now

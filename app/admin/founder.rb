@@ -131,10 +131,6 @@ ActiveAdmin.register Founder do
       column :email
       column :phone
 
-      column :team_lead do |founder|
-        founder.team_lead? ? 'Yes' : 'No'
-      end
-
       column :stage do |founder|
         founder.startup&.admission_stage
       end
@@ -185,10 +181,6 @@ ActiveAdmin.register Founder do
       column :email
       column :name
 
-      column :team_lead do |founder|
-        founder.team_lead? ? 'Yes' : 'No'
-      end
-
       column :product do |founder|
         founder.startup&.product_name
       end
@@ -231,7 +223,6 @@ ActiveAdmin.register Founder do
       column :slack_username
       column(:skype_username, &:skype_id)
 
-      column :team_lead?
       column :slug
 
       column :resume, &:resume_link
@@ -288,9 +279,6 @@ ActiveAdmin.register Founder do
         end
       end
 
-      row :team_lead do
-        founder.team_lead? ? 'Yes' : 'No'
-      end
       row :about
       row :born_on
       row :parent_name

@@ -2,7 +2,6 @@ class VocalistPingForm < Reform::Form
   property :channel
   property :levels
   property :startups
-  property :team_leads_only
   property :founders
   property :message, validates: { presence: true }
 
@@ -10,7 +9,7 @@ class VocalistPingForm < Reform::Form
 
   def queue_pings(admin_user)
     recipient = [channel, startups, founders, levels].find(&:present?)
-    Admin::VocalistPingJob.perform_later(message, recipient_type, recipient, admin_user, team_leads_only)
+    Admin::VocalistPingJob.perform_later(message, recipient_type, recipient, admin_user)
   end
 
   def valid_channels

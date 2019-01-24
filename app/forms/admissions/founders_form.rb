@@ -18,7 +18,6 @@ module Admissions
     validate :maximum_three_team_members_allowed
     validate :do_not_repeat_team_members
     validate :team_member_must_have_college_id_or_text
-    validate :team_lead_cannot_be_deleted
     validate :current_team_member_cannot_be_deleted
     validate :cannot_invite_admitted_team_members
     validate :email_should_be_valid
@@ -34,11 +33,6 @@ module Admissions
       end
 
       errors[:base] << "It looks like you've attempted to invite users who have already joined the SV.CO program." if has_error
-    end
-
-    def team_lead_cannot_be_deleted
-      team_lead = founders.find { |founder| Founder.find_by(id: founder.id).team_lead? }
-      errors[:base] << 'Team lead cannot be deleted.' if team_lead.delete == 'on'
     end
 
     def current_team_member_cannot_be_deleted

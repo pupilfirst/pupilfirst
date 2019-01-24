@@ -5,7 +5,7 @@ feature 'Admission Screening', broken: true do
   include FounderSpecHelper
 
   let(:startup) { create :level_0_startup }
-  let(:founder) { startup.team_lead }
+  let(:founder) { startup.founders.first }
   let(:level_0) { create :level, :zero }
   let(:level_0_targets) { create :target_group, milestone: true, level: level_0 }
   let!(:screening_target) { create :target, :admissions_screening, link_to_complete: '/admissions/screening', target_group: level_0_targets }

@@ -28,17 +28,6 @@ describe Founders::AcceptInvitationService, broken: true do
           complete_target(founder, cofounder_addition_target)
         end
 
-        context 'when founder was the admin' do
-          before do
-            original_startup.update!(team_lead: founder)
-          end
-
-          it 'preserves the startup with another founder as team lead' do
-            Founders::AcceptInvitationService.new(founder).execute
-            expect(original_startup.reload.team_lead).to_not eq(founder)
-          end
-        end
-
         context 'when number of billable founders in old startup drops to one' do
           it 'resets the cofounder addition target' do
             expect do
@@ -56,9 +45,7 @@ describe Founders::AcceptInvitationService, broken: true do
 
       context 'when original startup becomes empty' do
         before do
-          # Get rid of the additional founder from original startup.
-          original_startup.update!(team_lead: founder)
-          original_startup.founders.where.not(id: founder.id).delete_all
+          original_startup.founders.delete_all
         end
 
         context 'when original startup had invitees' do

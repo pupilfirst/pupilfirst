@@ -11,7 +11,7 @@ after 'development:startups' do
   # A live subscription for 'Super Startup' and 'The Avengers'
   fee = Startups::FeeAndCouponDataService.new(super_startup).emi
   super_startup.payments.create!(
-    founder: super_startup.team_lead,
+    founder: super_startup.founders.first,
     amount: fee,
     paid_at: 1.week.ago,
     payment_type: Payment::TYPE_NORMAL,
@@ -21,7 +21,7 @@ after 'development:startups' do
 
   fee = Startups::FeeAndCouponDataService.new(avengers_startup).emi
   avengers_startup.payments.create!(
-    founder: avengers_startup.team_lead,
+    founder: avengers_startup.founders.first,
     amount: fee,
     paid_at: 28.days.ago,
     payment_type: Payment::TYPE_NORMAL,
@@ -31,7 +31,7 @@ after 'development:startups' do
 
   # ...plus a pending payment for 'The Avengers'
   avengers_startup.payments.create!(
-    founder: avengers_startup.team_lead,
+    founder: avengers_startup.founders.first,
     amount: fee,
     billing_start_at: 3.days.from_now,
     billing_end_at: 33.days.from_now
@@ -40,7 +40,7 @@ after 'development:startups' do
   # A live subscription for 'Justice League'
   fee = Startups::FeeAndCouponDataService.new(justice_league).emi
   justice_league.payments.create!(
-    founder: justice_league.team_lead,
+    founder: justice_league.founders.first,
     amount: fee,
     paid_at: 10.days.ago,
     payment_type: Payment::TYPE_NORMAL,

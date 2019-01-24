@@ -14,9 +14,6 @@ module Admin
     def save
       Founder.transaction do
         team = Startup.create!(product_name: team_name, level: level)
-        team_lead_user = user(member_1_email)
-        team_lead_founder = Founder.create!(user: team_lead_user, name: member_1_name, startup: team)
-        team.update!(team_lead: team_lead_founder)
         member_details.each do |name, email|
           next if name.blank? || email.blank?
 
@@ -41,6 +38,7 @@ module Admin
 
     def member_details
       {
+        member_1_name => member_1_email,
         member_2_name => member_2_email,
         member_3_name => member_3_email,
         member_4_name => member_4_email

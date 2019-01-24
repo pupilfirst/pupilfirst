@@ -67,10 +67,4 @@ describe Startup do
       expect(startup.facebook_link).to eq("http://facebook.com/gouthamvel")
     end
   end
-
-  describe '#phone' do
-    it "returns startup team leads's phone number" do
-      expect(subject.phone).to eq subject.team_lead.phone
-    end
-  end
 end

@@ -111,7 +111,7 @@ ActiveAdmin.register Resource do
 
     f.inputs 'Resource details' do
       f.input :level, label: 'Shared with Level', include_blank: 'Share with all levels'
-      f.input :startup, label: 'Shared with Startup', collection: f.object.startup.present? ? [[f.object.startup.name_with_team_lead, f.object.startup.id]] : []
+      f.input :startup, label: 'Shared with Startup', collection: f.object.startup.present? ? [[f.object.startup.product_name, f.object.startup.id]] : []
       f.input :file, as: :file
       f.input :thumbnail, as: :file
       f.input :title

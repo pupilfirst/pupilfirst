@@ -119,7 +119,6 @@ Rails.application.routes.draw do
     patch 'coupon_remove'
     get 'team_members'
     post 'team_members', action: 'team_members_submit'
-    post 'team_lead'
     get 'accept_invitation'
     patch 'update_founder'
   end

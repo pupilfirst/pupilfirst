@@ -3,12 +3,11 @@ module Admin
   class VocalistPingJob < ApplicationJob
     queue_as :low_priority
 
-    def perform(message, recipient_type, recipient, admin_user, team_leads_only)
+    def perform(message, recipient_type, recipient, admin_user)
       @message = message
       @recipient_type = recipient_type
       @recipient = recipient
       @admin_user = admin_user
-      @team_leads_only = (team_leads_only == '1')
 
       execute
     end
@@ -56,9 +55,9 @@ module Admin
         when 'founders'
           { 'founders' => Founder.find(@recipient).pluck(:name) }
         when 'startups'
-          { startups: Startup.find(@recipient).pluck(:name), team_leads_only: @team_leads_only }
+          { startups: Startup.find(@recipient).pluck(:name) }
         when 'levels'
-          { levels: Level.find(@recipient).pluck(:number), team_leads_only: @team_leads_only }
+          { levels: Level.find(@recipient).pluck(:number) }
         when 'channel'
           { channel: @recipient }
         else
@@ -72,13 +71,11 @@ module Admin
 
     def ping_startups
       founders = Founder.where(startup: @recipient)
-      founders = founders.where(id: Startup.where(id: @recipient).select(:team_lead_id)) if @team_leads_only
       service.post message: @message, founders: founders
     end
 
     def ping_levels
       founders = Founder.joins(startup: :level).where(startups: { level: @recipient })
-      founders = founders.where(id: Startup.select(:team_lead_id)) if @team_leads_only
       service.post message: @message, founders: founders
     end
 

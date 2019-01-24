@@ -39,9 +39,6 @@ module Startups
       @startup.founders.not_exited.each do |founder|
         Intercom::FounderTaggingJob.perform_later(founder, 'Moved to Level 1')
       end
-
-      # On Intercom, update the admission stage the team lead of startup.
-      Intercom::LevelZeroStageUpdateJob.perform_later(@startup.team_lead, Startup::ADMISSION_STAGE_ADMITTED)
     end
 
     def event_description

@@ -34,8 +34,8 @@ describe PublicSlack::PruneMembershipService do
         not_recent_expiry = create :payment, :paid, billing_end_at: 5.days.ago
 
         # These team leads should not be processed.
-        recent_expiry.startup.team_lead.update!(slack_user_id: rand(1_000_000))
-        not_recent_expiry.startup.team_lead.update!(slack_user_id: rand(1_000_000))
+        recent_expiry.startup.founders.first.update!(slack_user_id: rand(1_000_000))
+        not_recent_expiry.startup.founders.first.update!(slack_user_id: rand(1_000_000))
       end
 
       it 'requests her Slack removal, emails her about it and announces it on the channels' do

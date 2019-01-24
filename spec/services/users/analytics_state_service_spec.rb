@@ -7,7 +7,7 @@ describe Users::AnalyticsStateService, broken: true do
 
   let(:user) do
     # This service relies on being supplied a `current_user`, which would have `current_founder` set.
-    startup.team_lead.user.tap { |user| user.current_founder = startup.team_lead }
+    startup.founders.first.user.tap { |user| user.current_founder = startup.founders.first }
   end
 
   context 'when user is a founder' do
@@ -20,8 +20,8 @@ describe Users::AnalyticsStateService, broken: true do
 
       it 'returns email, name and basic startup details' do
         expect(subject.state).to eq(
-          email: startup.team_lead.email,
-          name: startup.team_lead.name,
+          email: startup.founders.first.email,
+          name: startup.founders.first.name,
           startup: {
             id: startup.id,
             admissions_stage: Users::AnalyticsStateService::ADMISSION_STAGE_SIGNED_UP,
@@ -32,11 +32,11 @@ describe Users::AnalyticsStateService, broken: true do
 
       context 'when the founder has completed screening' do
         it 'returns admission stage as screening_complete' do
-          complete_target(startup.team_lead, screening_target)
+          complete_target(startup.founders.first, screening_target)
 
           expect(subject.state).to eq(
-            email: startup.team_lead.email,
-            name: startup.team_lead.name,
+            email: startup.founders.first.email,
+            name: startup.founders.first.name,
             startup: {
               id: startup.id,
               admissions_stage: Users::AnalyticsStateService::ADMISSION_STAGE_SCREENING_COMPLETE,
@@ -48,13 +48,13 @@ describe Users::AnalyticsStateService, broken: true do
 
       context 'when founder has initiated payment' do
         it 'returns admission stage as payment_initiated' do
-          complete_target(startup.team_lead, screening_target)
-          complete_target(startup.team_lead, cofounder_addition_target)
+          complete_target(startup.founders.first, screening_target)
+          complete_target(startup.founders.first, cofounder_addition_target)
           create :payment, startup: startup
 
           expect(subject.state).to eq(
-            email: startup.team_lead.email,
-            name: startup.team_lead.name,
+            email: startup.founders.first.email,
+            name: startup.founders.first.name,
             startup: {
               id: startup.id,
               admissions_stage: Users::AnalyticsStateService::ADMISSION_STAGE_PAYMENT_INITIATED,
@@ -66,14 +66,14 @@ describe Users::AnalyticsStateService, broken: true do
 
       context 'when founder has completed payment' do
         it 'returns admission stage as payment_completed' do
-          complete_target(startup.team_lead, screening_target)
-          complete_target(startup.team_lead, cofounder_addition_target)
-          complete_target(startup.team_lead, fee_payment_target)
+          complete_target(startup.founders.first, screening_target)
+          complete_target(startup.founders.first, cofounder_addition_target)
+          complete_target(startup.founders.first, fee_payment_target)
           create :payment, :paid, startup: startup
 
           expect(subject.state).to eq(
-            email: startup.team_lead.email,
-            name: startup.team_lead.name,
+            email: startup.founders.first.email,
+            name: startup.founders.first.name,
             startup: {
               id: startup.id,
               admissions_stage: Users::AnalyticsStateService::ADMISSION_STAGE_PAYMENT_COMPLETED,
@@ -85,13 +85,13 @@ describe Users::AnalyticsStateService, broken: true do
 
       context 'when founder has bypassed payment' do
         it 'returns admission stage as payment_bypassed' do
-          complete_target(startup.team_lead, screening_target)
-          complete_target(startup.team_lead, cofounder_addition_target)
-          complete_target(startup.team_lead, fee_payment_target)
+          complete_target(startup.founders.first, screening_target)
+          complete_target(startup.founders.first, cofounder_addition_target)
+          complete_target(startup.founders.first, fee_payment_target)
 
           expect(subject.state).to eq(
-            email: startup.team_lead.email,
-            name: startup.team_lead.name,
+            email: startup.founders.first.email,
+            name: startup.founders.first.name,
             startup: {
               id: startup.id,
               admissions_stage: Users::AnalyticsStateService::ADMISSION_STAGE_PAYMENT_BYPASSED,
@@ -107,8 +107,8 @@ describe Users::AnalyticsStateService, broken: true do
 
       it 'returns admission stage as admitted' do
         expect(subject.state).to eq(
-          email: startup.team_lead.email,
-          name: startup.team_lead.name,
+          email: startup.founders.first.email,
+          name: startup.founders.first.name,
           startup: {
             id: startup.id,
             admissions_stage: Users::AnalyticsStateService::ADMISSION_STAGE_ADMITTED,

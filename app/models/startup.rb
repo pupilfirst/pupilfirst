@@ -90,7 +90,6 @@ class Startup < ApplicationRecord
 
   has_many :weekly_karma_points, dependent: :destroy
   has_many :resources, dependent: :destroy
-  belongs_to :team_lead, class_name: 'Founder', optional: true
   belongs_to :billing_state, class_name: 'State', optional: true
 
   # Faculty who can review this startup's timeline events.
@@ -226,10 +225,6 @@ class Startup < ApplicationRecord
     founders + Founder.non_founders
   end
 
-  def phone
-    team_lead.try(:phone)
-  end
-
   def cofounders(founder)
     founders - [founder]
   end
@@ -272,12 +267,6 @@ class Startup < ApplicationRecord
   def display_name
     label = product_name
     label += " (#{name})" if name.present?
-    label
-  end
-
-  def name_with_team_lead
-    label = product_name
-    label += " (#{team_lead.name})" if team_lead.present?
     label
   end
 

@@ -14,8 +14,7 @@
 
 = content_for :body do
   p
-    ' The office hour request created by #{@connect_request.startup.team_lead.fullname} of
-    ' #{link_to @connect_request.startup.display_name, @connect_request.startup} has just been confirmed for
+    ' The office hour request created by #{link_to @connect_request.startup.display_name, @connect_request.startup} has just been confirmed for
     strong #{@connect_request.connect_slot} IST.
 
   - meeting_url = connect_request_join_session_url(@connect_request, token: @connect_request.faculty.token)

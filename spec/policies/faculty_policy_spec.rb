@@ -20,27 +20,23 @@ describe FacultyPolicy do
       let(:startup) { create :startup }
 
       it 'denies access to founder' do
-        expect(subject).to_not permit(current_user(startup.team_lead), faculty)
+        expect(subject).to_not permit(current_user(startup.founders.first), faculty)
       end
     end
 
     context 'when startup has an active subscription' do
       let(:startup) { create :startup, :subscription_active }
 
-      it 'grants access to team-lead from active startup' do
-        expect(subject).to permit(current_user(startup.team_lead), faculty)
+      it 'grants access to founder' do
+        expect(subject).to permit(current_user(startup.founders.first), faculty)
       end
 
-      it 'grants access to non-team-lead from active startup' do
-        non_team_lead = startup.founders.find { |founder| !founder.team_lead? }
-        expect(subject).to permit(current_user(non_team_lead), faculty)
-      end
 
       context 'when faculty does not have available connect slots' do
         let!(:connect_request) { create :connect_request, connect_slot: connect_slot }
 
         it 'does not grant access to founder' do
-          expect(subject).not_to permit(current_user(startup.team_lead), faculty)
+          expect(subject).not_to permit(current_user(startup.founders.first), faculty)
         end
       end
     end

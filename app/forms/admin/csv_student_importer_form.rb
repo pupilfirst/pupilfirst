@@ -26,9 +26,8 @@ module Admin
         founder_data = row.to_hash
         Founder.transaction do
           team = Startup.create!(product_name: founder_data['name'], level: level)
-          team_lead_user = user(founder_data['email'])
-          team_lead_founder = Founder.create!(user: team_lead_user, name: founder_data['name'], startup: team)
-          team.update!(team_lead: team_lead_founder)
+          user = user(founder_data['email'])
+          Founder.create!(user: user, name: founder_data['name'], startup: team)
         end
       end
     end

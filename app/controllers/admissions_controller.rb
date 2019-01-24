@@ -89,13 +89,6 @@ class AdmissionsController < ApplicationController
     end
   end
 
-  # POST /admissions/team_lead
-  def team_lead
-    Founders::BecomeTeamLeadService.new(current_founder).execute
-    flash[:success] = 'You are now the team lead!'
-    redirect_back(fallback_location: admissions_team_members_path)
-  end
-
   # GET /admissions/accept_invitation?token=
   def accept_invitation
     authorize :admissions
@@ -110,7 +103,7 @@ class AdmissionsController < ApplicationController
       redirect_to root_path
     else
       Founders::AcceptInvitationService.new(founder).execute
-      flash[:success] = "You have successfully joined #{founder.reload.startup.team_lead.name}'s team"
+      flash[:success] = "You have successfully joined the '#{founder.reload.startup.product_name}' team."
       sign_in founder.user
       redirect_to student_dashboard_path(from: 'accept_invitation')
     end

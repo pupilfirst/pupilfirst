@@ -4,7 +4,7 @@ feature 'Connect to Slack' do
   include UserSpecHelper
 
   let(:startup) { create :startup, :subscription_active }
-  let(:founder) { startup.team_lead }
+  let(:founder) { startup.founders.first }
 
   scenario 'Founder connects profile to Slack' do
     pending 'Slack connect feature is hidden'

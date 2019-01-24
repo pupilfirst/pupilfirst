@@ -12,11 +12,11 @@ describe ResourcePolicy do
   let(:level_1_s1) { create :level, :two, course: course_1 }
 
   let(:startup) { create :startup, :subscription_active, level: level_1 }
-  let(:founder) { startup.founders.where.not(id: startup.team_lead_id).first }
+  let(:founder) { startup.founders.first }
 
   let(:user) do
     # This policy relies on being supplied a `current_user`, which would have `current_founder` set.
-    founder.user.tap { |user| user.current_founder = startup.team_lead }
+    founder.user.tap { |user| user.current_founder = startup.founders.first }
   end
 
   let!(:public_resource) { create :resource }

@@ -4,7 +4,7 @@ feature 'Founder Monthly Fee Payment' do
   include UserSpecHelper
 
   let(:startup) { create :startup }
-  let(:founder) { startup.team_lead }
+  let(:founder) { startup.founders.first }
   let(:long_url) { 'https://example.com/long' }
 
   context 'when there is no pending payment' do
@@ -21,8 +21,8 @@ feature 'Founder Monthly Fee Payment' do
       stub_request(:post, 'https://www.example.com/payment-requests/')
         .with(body: hash_including(
           amount: '8000.0',
-          buyer_name: startup.team_lead.name,
-          email: startup.team_lead.email
+          buyer_name: startup.founders.first.name,
+          email: startup.founders.first.email
         ))
         .to_return(body: {
           success: true,
@@ -43,14 +43,6 @@ feature 'Founder Monthly Fee Payment' do
       click_button 'Pay for 1 month'
       expect(page).to have_content({ long_url: long_url }.to_json)
     end
-
-    scenario 'non-admin visits fee page' do
-      pending 'Fee payment disabled'
-
-      non_admin_founder = startup.founders.where.not(id: startup.team_lead_id).first
-      sign_in_user non_admin_founder.user, referer: fee_founder_path
-      expect(page).to have_content('Please pay the membership fee to continue.')
-    end
   end
 
   context 'when there is a pending requested payment' do
@@ -68,8 +60,8 @@ feature 'Founder Monthly Fee Payment' do
         .with(body: hash_including(
           allow_repeated_payments: 'false',
           amount: '16000.0',
-          buyer_name: startup.team_lead.name,
-          email: startup.team_lead.email,
+          buyer_name: startup.founders.first.name,
+          email: startup.founders.first.email,
           purpose: 'Fee for SV.CO',
           redirect_url: 'http://localhost:3000/instamojo/redirect',
           send_email: 'false',

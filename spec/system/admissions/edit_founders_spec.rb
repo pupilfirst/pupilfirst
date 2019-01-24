@@ -5,7 +5,7 @@ feature 'Edit founders', broken: true do
   include FounderSpecHelper
 
   let(:startup) { create :level_0_startup }
-  let(:founder) { startup.team_lead }
+  let(:founder) { startup.founders.first }
   let(:level_0) { create :level, :zero }
   let!(:level_0_targets) { create :target_group, milestone: true, level: level_0 }
   let!(:screening_target) { create :target, :admissions_screening, target_group: level_0_targets }
@@ -28,7 +28,6 @@ feature 'Edit founders', broken: true do
     scenario 'founder adds a cofounder', js: true do
       sign_in_user(founder.user, referer: admissions_team_members_path)
 
-      expect(page).to have_content('You are the team lead.')
       expect(page).to have_selector('.founders-form__founder-content-box', count: 1)
 
       page.find('.founders-form__add-founder-button').click
@@ -73,27 +72,10 @@ feature 'Edit founders', broken: true do
       expect(current_email).to have_content('You have been invited to join a team')
     end
 
-    scenario 'a founder assumes role of team lead', js: true do
-      another_founder = create :founder, startup: startup
-
-      sign_in_user(another_founder.user, referer: admissions_team_members_path)
-
-      expect(page).to have_content("Your team lead is #{founder.name}.")
-
-      accept_alert do
-        click_button 'Become the team lead'
-      end
-
-      expect(page).to have_content('You are the team lead.')
-      expect(startup.reload.team_lead).to eq(another_founder)
-    end
-
     scenario 'founder invites another from a higher level', js: true do
-      admitted_lead = create(:startup).team_lead
+      admitted_lead = create(:startup).founders.first
 
       sign_in_user(founder.user, referer: admissions_team_members_path)
-
-      expect(page).to have_content('You are the team lead.')
 
       page.find('.founders-form__add-founder-button').click
 

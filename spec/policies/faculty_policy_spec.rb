@@ -31,7 +31,6 @@ describe FacultyPolicy do
         expect(subject).to permit(current_user(startup.founders.first), faculty)
       end
 
-
       context 'when faculty does not have available connect slots' do
         let!(:connect_request) { create :connect_request, connect_slot: connect_slot }
 

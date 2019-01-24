@@ -132,6 +132,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-lodash', '~> 4.17' # A modern JavaScript utility library delivering modularity, performance, & extras.
   gem 'rails-assets-typedjs', '~> 2.0' # A JavaScript Typing Animation Library.
   gem 'rails-assets-jquery.counterup', '~> 2.1' # Lightweight jQuery plugin that counts up to a targeted number when the number becomes visible.
+  gem 'rails-assets-jquery-sparkline', '= 2.1.3' # Generates sparklines (small inline charts) directly in the browser.
 end
 
 group :development do

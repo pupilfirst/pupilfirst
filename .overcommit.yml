@@ -6,6 +6,5 @@ PreCommit:
   TrailingWhitespace:
     enabled: true
     exclude:
-      - '**/vendor/**/*'
       - '**/*.svg'
       - 'app/javascript/**/*.bs.js'

@@ -3,40 +3,32 @@ import PropTypes from "prop-types";
 import FounderBubble from "./FounderBubble";
 
 export default class FounderStatusPanel extends React.Component {
-  founderStatuses() {
-    if (_.isObject(this.props.founderStatuses)) {
-      return this.props.founderStatuses;
-    } else {
-      return this.initialStatuses();
-    }
-  }
-
-  initialStatuses() {
-    return this.props.founderDetails.map(function(founderDetail) {
-      return {
-        id: founderDetail.founderId,
-        status: "loading"
-      };
-    });
-  }
-
   render() {
     return (
-      <div className="founder-dashboard__avatars ml-2">
-        {this.founderStatuses().map(id => {
-          const founder = _.find(this.props.founderDetails, ["founderId", id]);
-          const avatar = founder.avatar;
+      this.props.pendingFounderIds.length > 0 && (
+        <div className="my-3 px-4">
+          <h5 className="target-overaly__status-title font-semibold">
+            Pending Team Members:
+          </h5>
+          <div className="founder-dashboard__avatars ml-2">
+            {this.props.pendingFounderIds.map(id => {
+              const founder = _.find(this.props.founderDetails, [
+                "founderId",
+                id
+              ]);
+              const avatar = founder.avatar;
 
-          return (
-            <FounderBubble
-              name={founder.founderName}
-              avatar={avatar}
-              status={"pending"}
-              key={id + "-" + this.props.targetId}
-            />
-          );
-        }, this)}
-      </div>
+              return (
+                <FounderBubble
+                  name={founder.founderName}
+                  avatar={avatar}
+                  key={id + "-" + this.props.targetId}
+                />
+              );
+            }, this)}
+          </div>
+        </div>
+      )
     );
   }
 }
@@ -44,5 +36,5 @@ export default class FounderStatusPanel extends React.Component {
 FounderStatusPanel.propTypes = {
   founderDetails: PropTypes.array,
   targetId: PropTypes.number,
-  founderStatuses: PropTypes.array
+  pendingFounderIds: PropTypes.array
 };

@@ -22,7 +22,7 @@ describe Targets::OverlayDetailsService do
 
   describe '#all_details' do
     it 'returns the founder statuses, latest event, latest feedback and quiz' do
-      founder_statuses = [founder_2.id, founder_3.id]
+      pending_founder_ids = [founder_2.id, founder_3.id]
 
       event = {
         description: timeline_event.description,
@@ -54,8 +54,8 @@ describe Targets::OverlayDetailsService do
 
       all_details = subject.all_details
 
-      expect(all_details).to include(:founderStatuses, :latestEvent, :latestFeedback, :quizQuestions)
-      expect(all_details[:founderStatuses]).to match_array(founder_statuses)
+      expect(all_details).to include(:pendingFounderIds, :latestEvent, :latestFeedback, :quizQuestions)
+      expect(all_details[:pendingFounderIds]).to match_array(pending_founder_ids)
       expect(all_details[:latestEvent]).to eq(event)
       expect(all_details[:latestFeedback]).to eq(feedback)
       expect(all_details[:quizQuestions]).to match_array(quiz_questions)

@@ -18,7 +18,7 @@ export default class TargetOverlay extends React.Component {
         latestEvent: null,
         latestFeedback: null,
         linkedResources: null,
-        founderStatuses: [],
+        pendingFounderIds: [],
         grades: null,
         quizQuestions: null,
         showQuiz: false
@@ -147,7 +147,7 @@ export default class TargetOverlay extends React.Component {
       latestEvent: response.latestEvent,
       latestFeedback: response.latestFeedback,
       linkedResources: response.linkedResources,
-      founderStatuses: response.founderStatuses,
+      pendingFounderIds: response.pendingFounderIds,
       grades: response.grades,
       quizQuestions: response.quizQuestions
     });
@@ -166,7 +166,6 @@ export default class TargetOverlay extends React.Component {
   render() {
     const target = this.getTarget();
     const faculty = this.getFaculty(target);
-    const showFounderStatus = this.state.founderStatuses.length > 0;
     return (
       <div className="target-overlay__overlay">
         <div className="target-overlay__container mx-auto">
@@ -233,18 +232,12 @@ export default class TargetOverlay extends React.Component {
                       feedback={this.state.latestFeedback}
                     />
                   )}
-                  {showFounderStatus && (
-                    <div className="my-3 px-4">
-                      <h5 className="target-overaly__status-title font-semibold">
-                        Pending Team Members:
-                      </h5>
-                      <FounderStatusPanel
-                        founderDetails={this.props.founderDetails}
-                        founderStatuses={this.state.founderStatuses}
-                        targetId={this.targetId}
-                      />
-                    </div>
-                  )}
+
+                  <FounderStatusPanel
+                    founderDetails={this.props.founderDetails}
+                    pendingFounderIds={this.state.pendingFounderIds}
+                    targetId={this.targetId}
+                  />
                 </div>
               </div>
             )}

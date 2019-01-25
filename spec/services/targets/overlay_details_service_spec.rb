@@ -7,6 +7,7 @@ describe Targets::OverlayDetailsService do
   let(:startup) { create :startup }
   let(:founder_1) { startup.founders.first }
   let(:founder_2) { startup.founders.second }
+  let(:founder_3) { create :founder, startup: startup }
   let!(:timeline_event) { create :timeline_event_with_links, target: target, founders: [founder_1], passed_at: 1.day.ago, latest: true }
   let(:faculty) { create :faculty }
   let(:faculty_feedback) { create :startup_feedback, timeline_event: timeline_event, faculty: faculty, startup: startup }
@@ -21,7 +22,7 @@ describe Targets::OverlayDetailsService do
 
   describe '#all_details' do
     it 'returns the founder statuses, latest event, latest feedback and quiz' do
-      founder_statuses = [{ id: founder_1.id, status: :passed }, { id: founder_2.id, status: :pending }]
+      founder_statuses = [founder_2.id, founder_3.id]
 
       event = {
         description: timeline_event.description,

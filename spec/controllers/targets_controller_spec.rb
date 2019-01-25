@@ -12,7 +12,7 @@ describe TargetsController do
     create :timeline_event,
       target: completed_prerequisite_target,
       passed_at: 1.day.ago,
-      founders: [startup.team_lead],
+      founders: [startup.founders.first],
       latest: true
   end
 
@@ -22,7 +22,7 @@ describe TargetsController do
     create :timeline_event,
       target: founder_target,
       passed_at: 1.day.ago,
-      founders: [startup.team_lead],
+      founders: [startup.founders.first],
       latest: true
   end
 
@@ -36,7 +36,7 @@ describe TargetsController do
     end
 
     it 'redirects to the rubric URL when a founder is signed in' do
-      sign_in startup.team_lead.user
+      sign_in startup.founders.first.user
       get :download_rubric, params: { id: target.id }
       expect(response).to redirect_to(target.rubric_url)
     end
@@ -52,7 +52,7 @@ describe TargetsController do
 
     context 'when a founder is signed in' do
       before do
-        sign_in startup.team_lead.user
+        sign_in startup.founders.first.user
       end
 
       context 'when target has no prerequisite targets' do
@@ -77,7 +77,7 @@ describe TargetsController do
   # TODO: Probably remove this as we now use the 'details' action whose response includes the latest feedback
   describe 'GET startup_feedback', broken: true do
     before do
-      sign_in startup.team_lead.user
+      sign_in startup.founders.first.user
     end
 
     context 'when target has no feedback' do

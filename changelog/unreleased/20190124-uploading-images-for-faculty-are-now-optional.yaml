@@ -1,0 +1,6 @@
+---
+timestamp: '2019-01-24T10:13:29Z'
+title: Uploading images for faculty are now optional.
+trello: https://trello.com/c/McLTZHnt
+private: true
+description: When images are missing, we fallback to 'Initials' avatar.

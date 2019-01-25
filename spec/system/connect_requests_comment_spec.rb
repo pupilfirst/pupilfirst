@@ -5,7 +5,7 @@ feature 'Connect Request Comment' do
 
   let(:faculty) { create :faculty }
   let(:startup) { create :startup, :subscription_active }
-  let(:founder) { startup.team_lead }
+  let(:founder) { startup.founders.first }
   let(:connect_slot) { create :connect_slot, faculty: faculty }
 
   let(:connect_request) { create :connect_request, connect_slot: connect_slot, startup: startup }
@@ -18,7 +18,6 @@ feature 'Connect Request Comment' do
     expect(page).to have_text('Do you have any additional feedback for SV.CO team?')
     fill_in 'Do you have any additional feedback for SV.CO team?', with: comment
     click_button 'Submit'
-    expect(page).to have_selector('#home__index')
     expect(connect_request.reload.comment_for_team).to eq(comment)
   end
 
@@ -27,7 +26,6 @@ feature 'Connect Request Comment' do
     expect(page).to have_text('Do you have any additional feedback for SV.CO team?')
     fill_in 'Do you have any additional feedback for SV.CO team?', with: comment
     click_button 'Submit'
-    expect(page).to have_selector('#home__index')
     expect(connect_request.reload.comment_for_faculty).to eq(comment)
   end
 end

@@ -6,7 +6,7 @@ describe Founders::ActivityTimelineService do
   subject { described_class.new(founder, to) }
 
   let(:startup) { create :startup }
-  let(:founder) { startup.team_lead }
+  let(:founder) { startup.founders.first }
   let(:to) { nil }
 
   # Use this as reference time (replacement for Time.now).

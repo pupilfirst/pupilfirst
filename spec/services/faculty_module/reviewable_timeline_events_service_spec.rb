@@ -24,16 +24,16 @@ describe FacultyModule::ReviewableTimelineEventsService do
   let(:target_s2) { create :target, :for_startup, target_group: target_group_s2, evaluation_criteria: [evaluation_criterion_c2] }
 
   # Submission from Startup 1, reviewed by faculty through course enrollment.
-  let!(:reviewable_submission_1) { submit_target(startup_1.team_lead, target_s1_manual) }
+  let!(:reviewable_submission_1) { submit_target(startup_1.founders.first, target_s1_manual) }
 
   # Submission from Startup 1, for a target that is auto-verified.
-  let!(:non_reviewable_submission_1) { complete_target(startup_1.team_lead, target_s1_auto) }
+  let!(:non_reviewable_submission_1) { complete_target(startup_1.founders.first, target_s1_auto) }
 
   # Submission from Startup 2, reviewed by faculty directly.
-  let!(:reviewable_submission_2) { submit_target(startup_2.team_lead, target_s2) }
+  let!(:reviewable_submission_2) { submit_target(startup_2.founders.first, target_s2) }
 
   # Submission from Startup 3, not reviewed by faculty directly, or through course.
-  let!(:non_reviewable_submission_2) { submit_target(startup_3.team_lead, target_s2) }
+  let!(:non_reviewable_submission_2) { submit_target(startup_3.founders.first, target_s2) }
 
   before do
     # Faculty reviews course that Startup 1 is in.

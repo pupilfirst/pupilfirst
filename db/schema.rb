@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_21_075133) do
+ActiveRecord::Schema.define(version: 2019_01_24_094643) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -245,7 +245,7 @@ ActiveRecord::Schema.define(version: 2019_01_21_075133) do
     t.string "twitter_url"
     t.date "born_on"
     t.string "auth_token"
-    t.string "course"
+    t.string "college_course"
     t.string "semester"
     t.string "gender"
     t.string "phone"

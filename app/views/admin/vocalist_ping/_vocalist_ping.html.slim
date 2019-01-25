@@ -4,7 +4,6 @@
     = f.input :channel, collection: form.valid_channels, required: false
     = f.input :levels, collection: Level.all, required: false, multiple: true
     = f.input :startups, as: :select, collection: [], required: false, multiple: true
-    = f.input :team_leads_only, as: :boolean
     = f.input :founders, as: :select, collection: [], required: false, multiple: true
     = f.input :message, as: :text, placeholder: 'Enter what you would like vocalist to say!'
   = f.submit 'Send Ping'

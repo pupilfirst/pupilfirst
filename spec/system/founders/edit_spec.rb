@@ -63,7 +63,7 @@ feature 'Founder Edit' do
       select "My college isn't listed", from: 'founders_edit_college_id'
       fill_in 'founders_edit_roll_number', with: roll_number
       attach_file 'founders_edit_college_identification', upload_path('users/college_id.jpg')
-      fill_in 'founders_edit_course', with: course
+      fill_in 'founders_edit_college_course', with: course
       select semester, from: 'founders_edit_semester'
       select (Time.zone.now.year + rand(4)).to_s, from: 'founders_edit_year_of_graduation'
       # fill_in 'founders_edit_backlog', with: backlogs
@@ -90,7 +90,7 @@ feature 'Founder Edit' do
         skype_id: username,
         communication_address: communication_address,
         roll_number: roll_number,
-        course: course,
+        college_course: course,
         semester: semester,
         # backlog: backlogs,
         twitter_url: "https://twitter.com/#{username}",

@@ -26,11 +26,11 @@ describe Courses::CloneService do
   let(:new_name) { Faker::Lorem.words(2).join(' ') }
 
   before do
-    complete_target(startup_l1.team_lead, target_l1_1_1)
-    complete_target(startup_l2.team_lead, target_l1_1_1)
-    complete_target(startup_l2.team_lead, target_l1_1_2)
-    complete_target(startup_l2.team_lead, target_l1_2)
-    complete_target(startup_l2.team_lead, target_l2_1)
+    complete_target(startup_l1.founders.first, target_l1_1_1)
+    complete_target(startup_l2.founders.first, target_l1_1_1)
+    complete_target(startup_l2.founders.first, target_l1_1_2)
+    complete_target(startup_l2.founders.first, target_l1_2)
+    complete_target(startup_l2.founders.first, target_l2_1)
   end
 
   describe '#clone' do

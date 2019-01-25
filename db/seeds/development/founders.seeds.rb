@@ -21,9 +21,6 @@ after 'development:colleges', 'development:startups' do
     founder_john_doe = Founder.create!(john_doe_attributes.merge(
       startup: startup
     ))
-
-    # ...and make him the team lead of 'Unfinished Swan'.
-    startup.update!(team_lead: founder_john_doe) if startup.product_name == 'Unfinished Swan'
   end
 
   teams = {
@@ -56,7 +53,7 @@ after 'development:colleges', 'development:startups' do
   teams.each do |team_name, founders|
     startup = Startup.find_by(product_name: team_name)
 
-    founders.each do |team_lead, email, name, born_on, gender, phone|
+    founders.each do |email, name, born_on, gender, phone|
       user = User.where(email: email).first_or_create!
 
       founder = Founder.create!(
@@ -70,8 +67,6 @@ after 'development:colleges', 'development:startups' do
         identification_proof: File.open(image_path),
         startup: startup
       )
-
-      startup.update!(team_lead: founder) if team_lead
     end
   end
 end

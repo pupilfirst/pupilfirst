@@ -10,7 +10,7 @@ after 'development:founders', 'development:targets' do
   def complete_target(target, startup)
     te = TimelineEvent.create!(
       target: target,
-      founders: [startup.team_lead],
+      founders: [startup.founders.first],
       event_on: Time.now,
       description: Faker::Lorem.paragraph,
       latest: true

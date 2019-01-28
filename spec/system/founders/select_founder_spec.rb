@@ -13,7 +13,7 @@ feature 'Select another founder profile as the active profile' do
   let(:target_group_s2) { create :target_group, level: startup_2.level, milestone: true }
   let!(:target_s2) { create :target, target_group: target_group_s2 }
 
-  # One team lead is also a founder in the other.
+  # One student is also a member of another team.
   let!(:multi_founder_user) { startup_1.founders.first.user }
   let!(:founder_in_s2) { create :founder, startup: startup_2, user: multi_founder_user }
   let(:single_founder_user) { startup_2.founders.first.user }

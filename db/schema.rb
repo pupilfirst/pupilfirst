@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_24_094643) do
+ActiveRecord::Schema.define(version: 2019_01_29_055744) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -433,7 +433,10 @@ ActiveRecord::Schema.define(version: 2019_01_24_094643) do
     t.string "link"
     t.string "file_content_type"
     t.boolean "archived", default: false
+    t.bigint "course_id"
+    t.boolean "public", default: false
     t.index ["archived"], name: "index_resources_on_archived"
+    t.index ["course_id"], name: "index_resources_on_course_id"
     t.index ["level_id"], name: "index_resources_on_level_id"
     t.index ["slug"], name: "index_resources_on_slug"
     t.index ["startup_id"], name: "index_resources_on_startup_id"
@@ -520,7 +523,6 @@ ActiveRecord::Schema.define(version: 2019_01_24_094643) do
     t.string "admission_stage"
     t.date "timeline_updated_on"
     t.datetime "admission_stage_updated_at"
-    t.bigint "team_lead_id"
     t.integer "referral_reward_days", default: 0
     t.integer "undiscounted_founder_fee"
     t.text "billing_address"
@@ -531,7 +533,6 @@ ActiveRecord::Schema.define(version: 2019_01_24_094643) do
     t.index ["level_id"], name: "index_startups_on_level_id"
     t.index ["slug"], name: "index_startups_on_slug", unique: true
     t.index ["stage"], name: "index_startups_on_stage"
-    t.index ["team_lead_id"], name: "index_startups_on_team_lead_id"
   end
 
   create_table "states", id: :serial, force: :cascade do |t|
@@ -785,7 +786,6 @@ ActiveRecord::Schema.define(version: 2019_01_24_094643) do
   add_foreign_key "resources", "levels"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"
-  add_foreign_key "startups", "founders", column: "team_lead_id"
   add_foreign_key "startups", "levels"
   add_foreign_key "startups", "states", column: "billing_state_id"
   add_foreign_key "target_evaluation_criteria", "evaluation_criteria"

@@ -117,12 +117,6 @@ Rails.application.routes.draw do
 
   resource :platform_feedback, only: %i[create]
 
-  # Redirect + webhook from Instamojo
-  scope 'instamojo', as: 'instamojo', controller: 'instamojo' do
-    get 'redirect'
-    post 'webhook'
-  end
-
   # Founder show
   scope 'students', controller: 'founders' do
     get '/:slug', action: 'show', as: 'student'

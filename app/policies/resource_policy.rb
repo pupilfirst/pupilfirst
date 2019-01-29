@@ -8,28 +8,23 @@ class ResourcePolicy < ApplicationPolicy
   end
 
   def scope
-    Pundit.policy_scope!(user, Resource.left_joins(:level))
+    Pundit.policy_scope!(user, Resource.joins(:course))
   end
 
   class Scope < Scope
     def resolve
-      # Public resources for everyone.
-      resources = scope.where(level_id: nil, startup_id: nil)
+      # Public resources for the school.
+      resources = scope.where(public: true)
 
       current_founder = user&.current_founder
 
-      # Return public resources if current founder does not have active subscription...
-      return resources unless current_founder.present? && current_founder.subscription_active?
+      # Return public resources if current founder is not present
+      return resources if current_founder.blank?
 
       startup = current_founder.startup
 
-      return resources if startup.dropped_out?
-
-      # ...plus resources for the startup...
-      resources = resources.or(scope.where(startup: startup))
-
       # ...plus resources based on the startup's course...
-      resources = resources.or(scope.where('levels.course_id = ?', startup.course.id))
+      resources = resources.or(scope.where('course_id = ?', startup.course.id))
 
       # ...plus resources based on targets (for cloned courses)
       resources.or(scope.where(id: target_resource_ids(startup.course)))

@@ -1,5 +1,5 @@
 ActiveAdmin.register Resource do
-  permit_params :title, :description, :file, :thumbnail, :level_id, :startup_id, :video_embed, :link, :archived, tag_list: [], target_ids: []
+  permit_params :title, :description, :file, :thumbnail, :startup_id, :video_embed, :link, :archived, :public, :course_id, tag_list: [], target_ids: []
 
   controller do
     include DisableIntercom
@@ -17,10 +17,10 @@ ActiveAdmin.register Resource do
     label: 'Tags',
     collection: -> { Resource.tag_counts_on(:tags).pluck(:name).sort }
 
-  filter :level, collection: -> { Level.all.order(number: :asc) }
   filter :title
   filter :description
   filter :archived
+  filter :course
 
   batch_action :tag, form: proc { { tag: Resource.tag_counts_on(:tags).pluck(:name) } } do |ids, inputs|
     Resource.where(id: ids).each do |resource|
@@ -37,8 +37,6 @@ ActiveAdmin.register Resource do
     column 'Shared with' do |resource|
       if resource.startup.present?
         link_to resource.startup.product_name, admin_startup_path(resource.startup)
-      elsif resource.level.present?
-        link_to resource.level.display_name, admin_level_path(resource.level)
       else
         'Public'
       end
@@ -101,6 +99,8 @@ ActiveAdmin.register Resource do
       end
 
       row :archived
+      row :public
+      row :course
     end
   end
 
@@ -110,7 +110,6 @@ ActiveAdmin.register Resource do
     f.semantic_errors(*f.object.errors.keys)
 
     f.inputs 'Resource details' do
-      f.input :level, label: 'Shared with Level', include_blank: 'Share with all levels'
       f.input :startup, label: 'Shared with Startup', collection: f.object.startup.present? ? [[f.object.startup.product_name, f.object.startup.id]] : []
       f.input :file, as: :file
       f.input :thumbnail, as: :file
@@ -126,6 +125,8 @@ ActiveAdmin.register Resource do
 
       f.input :targets, collection: f.object.targets
       f.input :archived
+      f.input :course
+      f.input :public
     end
 
     f.actions

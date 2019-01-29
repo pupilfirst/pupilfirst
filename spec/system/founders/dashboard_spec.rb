@@ -39,7 +39,6 @@ feature 'Founder Dashboard' do
   let!(:not_accepted_target) { create :target, target_group: target_group_4, role: Target::ROLE_TEAM }
   let!(:needs_improvement_target) { create :target, target_group: target_group_4, role: Target::ROLE_TEAM }
   let!(:target_with_prerequisites) { create :target, target_group: target_group_4, prerequisite_targets: [pending_target], role: Target::ROLE_TEAM }
-  let!(:completed_fee_payment_target) { create :target, target_group: target_group_0, days_to_complete: 60, role: Target::ROLE_TEAM, key: Target::KEY_FEE_PAYMENT }
   let!(:level_5_target) { create :target, target_group: target_group_5, role: Target::ROLE_TEAM }
 
   # Create sessions for the 'Sessions' target group.
@@ -61,7 +60,6 @@ feature 'Founder Dashboard' do
     create(:timeline_event, founders: startup.founders, target: completed_target_3, passed_at: 1.day.ago)
     create(:timeline_event, founders: startup.founders, target: not_accepted_target, evaluator: faculty)
     create(:timeline_event, founders: startup.founders, target: needs_improvement_target, passed_at: 1.day.ago)
-    create(:timeline_event, founders: startup.founders, target: completed_fee_payment_target, passed_at: 1.day.ago)
 
     # Sign in with Founder - set dashboard toured to true to avoid the tour.
     founder.update!(dashboard_toured: dashboard_toured)

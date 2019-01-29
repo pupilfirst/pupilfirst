@@ -4,17 +4,12 @@
 = content_for :subtitle do
   | The office hour request with team #{@connect_request.startup.product_name} has been confirmed.
 
-= content_for :title_button_text do
-  | View Student Profile
-
-= content_for(:title_button_link, student_path(@connect_request.startup.team_lead.slug))
-
 = content_for :salutation do
   | Hello #{@connect_request.faculty.name},
 
 = content_for :body do
   p
-    ' The office hour request created by #{link_to @connect_request.startup.display_name, @connect_request.startup} has just been confirmed for
+    ' The office hour request created by #{@connect_request.startup.display_name} has just been confirmed for
     strong #{@connect_request.connect_slot} IST.
 
   - meeting_url = connect_request_join_session_url(@connect_request, token: @connect_request.faculty.token)

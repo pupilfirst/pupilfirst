@@ -18,6 +18,8 @@ class ResourcePolicy < ApplicationPolicy
 
       current_founder = user&.current_founder
 
+      return resources if current_founder.blank?
+
       startup = current_founder.startup
 
       return resources if startup.dropped_out?

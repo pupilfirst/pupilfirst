@@ -9,7 +9,6 @@ feature 'Target Overlay' do
   let!(:level_1) { create :level, :one, course: course }
   let!(:startup) { create :startup, level: level_1 }
   let!(:founder) { startup.founders.first }
-  let!(:founder_2) { create :founder, startup: startup }
   let!(:target_group_1) { create :target_group, level: level_1, milestone: true }
   let!(:target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM }
   let!(:prerequisite_target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM }

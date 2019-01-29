@@ -18,15 +18,18 @@ feature 'Select another founder profile as the active profile' do
   let!(:founder_in_s2) { create :founder, startup: startup_2, user: multi_founder_user }
   let(:single_founder_user) { startup_2.founders.first.user }
 
-  scenario 'Multi-founder user can switch between courses' do
+  scenario 'Multi-founder user can switch between courses', js: true do
     sign_in_user multi_founder_user, referer: root_path
 
+    # Switch to second course.
+    find(".logged-in-avatar-link").click
     click_link("#{startup_2.course.name} Course")
 
     expect(page).to have_selector('#founder-dashboard')
     expect(page).to have_content(startup_2.product_name)
 
     # ...and back to the first course?
+    find(".logged-in-avatar-link").click
     click_link("#{startup_1.course.name} Course")
 
     expect(page).to have_selector('#founder-dashboard')

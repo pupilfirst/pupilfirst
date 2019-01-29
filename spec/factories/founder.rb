@@ -6,6 +6,7 @@ FactoryBot.define do
     college
     reference { Founder.valid_references.sample }
     startup
+    dashboard_toured { true }
 
     trait(:connected_to_slack) do
       slack_user_id { 'SLACK_USER_ID' }

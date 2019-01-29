@@ -1,6 +1,6 @@
 class FounderPolicy < ApplicationPolicy
   def founder_profile?
-    record&.startup.present? && !record.level_zero?
+    record&.startup.present?
   end
 
   def edit?

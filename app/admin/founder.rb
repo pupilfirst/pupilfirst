@@ -25,7 +25,6 @@ ActiveAdmin.register Founder do
 
   scope :admitted, default: true
   scope :inactive
-  scope :level_zero
   scope :all
 
   filter :user_email, as: :string
@@ -68,57 +67,37 @@ ActiveAdmin.register Founder do
     selectable_column
     column :name
 
-    if params['scope'] == 'level_zero'
-      column :email
-      column :phone
-      column 'Admission Stage' do |founder|
-        founder.startup.admission_stage
-      end
+    column :product_name, sortable: 'founders.startup_id' do |founder|
+      if founder.startup.present?
+        a href: admin_startup_path(founder.startup) do
+          span do
+            founder.startup.try(:product_name)
+          end
 
-      column 'Screening Score' do |founder|
-        founder.screening_data.present? ? founder.screening_data['score'] : ''
-      end
-
-      column 'Coder' do |founder|
-        if !founder.coder.nil?
-          founder.coder? ? 'Yes' : 'No'
-        else
-          'NA'
-        end
-      end
-    else
-      column :product_name, sortable: 'founders.startup_id' do |founder|
-        if founder.startup.present?
-          a href: admin_startup_path(founder.startup) do
+          if founder.startup.name.present?
             span do
-              founder.startup.try(:product_name)
-            end
-
-            if founder.startup.name.present?
-              span do
-                " (#{founder.startup.name})"
-              end
+              " (#{founder.startup.name})"
             end
           end
         end
       end
+    end
 
-      column 'Total Karma (Personal)' do |founder|
-        points = founder.karma_points&.sum(:points)
-        if points.present?
-          link_to points, admin_karma_points_path(q: { founder_id_eq: founder.id })
-        else
-          'Not Available'
-        end
+    column 'Total Karma (Personal)' do |founder|
+      points = founder.karma_points&.sum(:points)
+      if points.present?
+        link_to points, admin_karma_points_path(q: { founder_id_eq: founder.id })
+      else
+        'Not Available'
       end
+    end
 
-      column 'Total Karma (Team)' do |founder|
-        points = founder.startup&.karma_points&.sum(:points)
-        if points.present?
-          link_to points, admin_karma_points_path(q: { startup_id_eq: founder.startup&.id })
-        else
-          'Not Available'
-        end
+    column 'Total Karma (Team)' do |founder|
+      points = founder.startup&.karma_points&.sum(:points)
+      if points.present?
+        link_to points, admin_karma_points_path(q: { startup_id_eq: founder.startup&.id })
+      else
+        'Not Available'
       end
     end
 
@@ -126,114 +105,62 @@ ActiveAdmin.register Founder do
   end
 
   csv do
-    if params['scope'] == 'level_zero'
-      column :name
-      column :email
-      column :phone
+    column :id
+    column :email
+    column :name
 
-      column :stage do |founder|
-        founder.startup&.admission_stage
-      end
-
-      column :stage_updated_at do |founder|
-        founder.startup&.admission_stage_updated_at
-      end
-
-      column :reference
-
-      column :college do |founder|
-        founder.college.present? ? founder.college.name : founder.college_text
-      end
-
-      column :state do |founder|
-        founder.college.present? ? founder.college.state.name : ''
-      end
-
-      column :created_at do |founder|
-        founder.startup.created_at.to_date
-      end
-
-      column 'Tags' do |founder|
-        founder.tags.map(&:name).join(';')
-      end
-
-      column :admission_stage do |founder|
-        founder.startup.admission_stage
-      end
-
-      column 'Screening Score' do |founder|
-        founder.screening_data.present? ? founder.screening_data['score'] : ''
-      end
-
-      column 'Comments' do |founder|
-        founder.active_admin_comments.map(&:body).join("\n\n")
-      end
-
-      column :coder do |founder|
-        if !founder.coder.nil?
-          founder.coder? ? 'Yes' : 'No'
-        else
-          'NA'
-        end
-      end
-    else
-      column :id
-      column :email
-      column :name
-
-      column :product do |founder|
-        founder.startup&.product_name
-      end
-
-      column :company do |founder|
-        founder.startup&.legal_registered_name
-      end
-
-      column :roles do |founder|
-        founder.roles.join ', '
-      end
-
-      column 'Total Karma (Personal)' do |founder|
-        founder.karma_points&.sum(:points) || 'Not Available'
-      end
-
-      column 'Total Karma (Team)' do |founder|
-        founder.startup&.karma_points&.sum(:points) || 'Not Available'
-      end
-
-      column :phone
-      column :gender
-      column :born_on
-      column :communication_address
-      column :about
-
-      column :college do |founder|
-        founder.college&.name
-      end
-
-      column :university do |founder|
-        founder.college&.university&.name
-      end
-
-      column :roll_number
-      column :college_course
-      column :semester
-      column :year_of_graduation
-
-      column :slack_username
-      column(:skype_username, &:skype_id)
-
-      column :slug
-
-      column :resume, &:resume_link
-      column :linkedin_url
-      column :twitter_url
-      column :personal_website_url
-      column :blog_url
-      column :angel_co_url
-      column :github_url
-      column :behance_url
+    column :product do |founder|
+      founder.startup&.product_name
     end
+
+    column :company do |founder|
+      founder.startup&.legal_registered_name
+    end
+
+    column :roles do |founder|
+      founder.roles.join ', '
+    end
+
+    column 'Total Karma (Personal)' do |founder|
+      founder.karma_points&.sum(:points) || 'Not Available'
+    end
+
+    column 'Total Karma (Team)' do |founder|
+      founder.startup&.karma_points&.sum(:points) || 'Not Available'
+    end
+
+    column :phone
+    column :gender
+    column :born_on
+    column :communication_address
+    column :about
+
+    column :college do |founder|
+      founder.college&.name
+    end
+
+    column :university do |founder|
+      founder.college&.university&.name
+    end
+
+    column :roll_number
+    column :college_course
+    column :semester
+    column :year_of_graduation
+
+    column :slack_username
+    column(:skype_username, &:skype_id)
+
+    column :slug
+
+    column :resume, &:resume_link
+    column :linkedin_url
+    column :twitter_url
+    column :personal_website_url
+    column :blog_url
+    column :angel_co_url
+    column :github_url
+    column :behance_url
   end
 
   member_action :remove_from_startup, method: :post do

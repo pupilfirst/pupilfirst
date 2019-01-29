@@ -23,7 +23,6 @@ ActiveAdmin.register Startup do
   scope :admitted, default: true
   scope :inactive_for_week
   scope :endangered
-  scope :level_zero
   scope :all
 
   controller do

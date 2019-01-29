@@ -23,9 +23,6 @@ module Payments
     private
 
     def invite_founders_to_slack
-      # This is not applicable to founders in level 0. They are yet to link their Slack account.
-      return if startup.level_zero?
-
       # Invite founder back to all channels on Slack.
       startup.founders.not_exited.each do |founder|
         Founders::InviteToSlackChannelsJob.perform_later(founder) if founder.slack_user_id.present?

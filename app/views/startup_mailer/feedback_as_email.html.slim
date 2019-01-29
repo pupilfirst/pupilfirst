@@ -21,12 +21,10 @@
 = content_for :body do
   - update_for = timeline_event.present? ? 'recent submission' : 'recent updates'
   - update_link = timeline_event.present? ? @startup_feedback.timeline_event.share_url : @startup_feedback.reference_url
-  - startup_update = (startup.level_zero? || update_link.blank?) ? (update_for + ' for target ') : link_to(update_for, update_link)
-  - target_info = startup.level_zero? ? target&.title : ''
 
   p
     ' Here is some feedback from
-    ' #{@startup_feedback.faculty.name} on your #{startup_update} <strong>#{target_info}</strong>:
+    ' #{@startup_feedback.faculty.name} on your #{link_to(update_for, update_link)}:
 
   blockquote = simple_format(@startup_feedback.feedback)
 

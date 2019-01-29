@@ -37,7 +37,6 @@ class Startup < ApplicationRecord
   end
 
   scope :admitted, -> { joins(:level).where('levels.number > ?', 0) }
-  scope :level_zero, -> { joins(:level).where(levels: { number: 0 }) }
   scope :approved, -> { where.not(dropped_out: true) }
   scope :dropped_out, -> { where(dropped_out: true) }
   scope :not_dropped_out, -> { where.not(dropped_out: true) }
@@ -291,10 +290,6 @@ class Startup < ApplicationRecord
     else
       ((present_week_number.to_f / 24) * 100).to_i
     end
-  end
-
-  def level_zero?
-    level.number.zero?
   end
 
   def subscription_active?

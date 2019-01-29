@@ -32,7 +32,7 @@ describe Faculty, type: :model do
   describe '#image_or_avatar_url' do
     context 'when the faculty has no uploaded image' do
       it 'returns a generated initials avatar' do
-        expect(faculty.image_or_avatar_url).to match(/data:image\/svg\+xml;base64.+/)
+        expect(faculty.image_or_avatar_url).to match(%r{data:image\/svg\+xml;base64.+})
       end
     end
 

@@ -42,12 +42,10 @@ ActiveAdmin.register Founder do
   filter :college_name_contains
   filter :roll_number
   filter :created_at, label: 'Registered on'
-  filter :coder, as: :boolean
-
   permit_params :name, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :born_on,
     :communication_address, :phone, :invitation_token, :college_id, :roll_number,
     :college_course, :semester, :year_of_graduation, :twitter_url, :linkedin_url, :personal_website_url, :blog_url,
-    :angel_co_url, :github_url, :behance_url, :gender, :skype_id, :exited, :parent_name, :coder, roles: [], tag_list: []
+    :angel_co_url, :github_url, :behance_url, :gender, :skype_id, :exited, :parent_name, roles: [], tag_list: []
 
   batch_action :tag, form: proc { { tag: Founder.tag_counts_on(:tags).pluck(:name) } } do |ids, inputs|
     Founder.where(id: ids).each do |founder|
@@ -254,13 +252,6 @@ ActiveAdmin.register Founder do
       # row :resume do |founder|
       #   link_to 'Download Resume', founder.resume_link if founder.resume_link.present?
       # end
-      row :coder do
-        if !founder.coder.nil?
-          founder.coder? ? 'Yes' : 'No'
-        else
-          'NA'
-        end
-      end
     end
 
     panel 'Social links' do

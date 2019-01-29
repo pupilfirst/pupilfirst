@@ -5,12 +5,6 @@ class FounderMailerPreview < ActionMailer::Preview
     FounderMailer.connect_request_feedback(ConnectRequest.first)
   end
 
-  def invite
-    founder = Founder.first
-    founder.invitation_token = 'TEST_TOKEN_VALUE'
-    FounderMailer.invite(founder, Startup.first)
-  end
-
   def slack_removal
     founder = Founder.first
     FounderMailer.slack_removal(founder)

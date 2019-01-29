@@ -25,7 +25,7 @@ feature 'Office Hour' do
   end
 
   context 'User is founder of approved startup' do
-    let(:startup) { create :startup, :subscription_active }
+    let(:startup) { create :startup }
     let(:founder) { startup.founders.where.not(id: startup.founders.first.id).first }
 
     context 'Team has a pending request with faculty' do

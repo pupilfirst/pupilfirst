@@ -38,7 +38,6 @@ class Founder < ApplicationRecord
   belongs_to :user
   belongs_to :college, optional: true
   has_one :university, through: :college
-  has_many :payments, dependent: :restrict_with_error
   belongs_to :resume_file, class_name: 'TimelineEventFile', optional: true
   has_many :active_admin_comments, as: :resource, class_name: 'ActiveAdmin::Comment', dependent: :destroy, inverse_of: :resource
   has_many :timeline_event_owners, dependent: :destroy
@@ -260,10 +259,6 @@ class Founder < ApplicationRecord
 
   delegate :level_zero?, to: :startup
   delegate :email, to: :user
-
-  def subscription_active?
-    startup&.subscription_active?
-  end
 
   def invited
     invited_startup.present?

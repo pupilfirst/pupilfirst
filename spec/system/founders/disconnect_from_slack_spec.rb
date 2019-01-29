@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'Disconnect from Slack' do
   include UserSpecHelper
 
-  let(:startup) { create :startup, :subscription_active }
+  let(:startup) { create :startup }
   let(:founder) { create :founder, :connected_to_slack }
 
   before do

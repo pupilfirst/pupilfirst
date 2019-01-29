@@ -6,7 +6,7 @@ module Startups
     end
 
     def execute
-      raise 'Maximum level reached - cannot level up.' unless next_level.present?
+      raise 'Maximum level reached - cannot level up.' if next_level.blank?
 
       level_up
     end

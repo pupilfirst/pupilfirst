@@ -3,7 +3,7 @@ require 'rails_helper'
 describe TargetsController do
   include Devise::Test::ControllerHelpers
 
-  let!(:startup) { create :startup, :subscription_active }
+  let!(:startup) { create :startup }
   let!(:target) { create :target, :with_rubric }
   let!(:pending_prerequisite_target) { create :target }
   let!(:completed_prerequisite_target) { create :target }

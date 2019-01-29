@@ -25,12 +25,6 @@ FactoryBot.define do
       create(:founder, startup: startup)
     end
 
-    trait(:subscription_active) do
-      after(:create) do |startup|
-        create :payment, :paid, startup: startup
-      end
-    end
-
     trait(:sponsored) { level { create :level, :one, :sponsored } }
   end
 end

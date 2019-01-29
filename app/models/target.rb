@@ -13,10 +13,9 @@ class Target < ApplicationRecord
   KEY_R1_SHOW_PREVIOUS_WORK = 'r1_show_previous_work'
   KEY_R2_TASK = 'r2_task'
   KEY_ATTEND_INTERVIEW = 'attend_interview'
-  KEY_FEE_PAYMENT = 'initial_fee_payment'
 
   def self.valid_keys
-    [KEY_SCREENING, KEY_COFOUNDER_ADDITION, KEY_R1_TASK, KEY_R1_SHOW_PREVIOUS_WORK, KEY_R2_TASK, KEY_ATTEND_INTERVIEW, KEY_FEE_PAYMENT].freeze
+    [KEY_SCREENING, KEY_COFOUNDER_ADDITION, KEY_R1_TASK, KEY_R1_SHOW_PREVIOUS_WORK, KEY_R2_TASK, KEY_ATTEND_INTERVIEW].freeze
   end
 
   STATUS_COMPLETE = :complete

@@ -18,9 +18,6 @@ class ResourcePolicy < ApplicationPolicy
 
       current_founder = user&.current_founder
 
-      # Return public resources if current founder does not have active subscription...
-      return resources unless current_founder.present? && current_founder.subscription_active?
-
       startup = current_founder.startup
 
       return resources if startup.dropped_out?

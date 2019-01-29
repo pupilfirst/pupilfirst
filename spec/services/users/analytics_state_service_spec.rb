@@ -13,7 +13,7 @@ describe Users::AnalyticsStateService, broken: true do
   context 'when user is a founder' do
     let!(:screening_target) { create :target, :admissions_screening }
     let!(:cofounder_addition_target) { create :target, :admissions_cofounder_addition }
-    let!(:fee_payment_target) { create :target, :admissions_fee_payment }
+    let!(:fee_payment_target) { create :target }
 
     context 'when founder signed up' do
       let(:startup) { create :level_0_startup }

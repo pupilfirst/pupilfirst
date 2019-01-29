@@ -1,6 +1,5 @@
 class FacultyController < ApplicationController
   before_action :validate_faculty, except: %i[index connect show]
-  before_action :require_active_subscription, only: %i[connect]
 
   # GET /faculty, GET /coaches
   def index

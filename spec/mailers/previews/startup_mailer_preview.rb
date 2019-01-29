@@ -31,9 +31,4 @@ class StartupMailerPreview < ActionMailer::Preview
 
     StartupMailer.connect_request_confirmed(connect_request)
   end
-
-  def payment_reminder
-    payment = Payment.new(billing_end_at: 5.days.from_now, startup: Startup.last)
-    StartupMailer.payment_reminder(payment)
-  end
 end

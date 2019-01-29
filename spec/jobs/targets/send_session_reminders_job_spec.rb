@@ -25,10 +25,9 @@ describe Targets::SendSessionRemindersJob do
   let(:level_2_s2) { create :level, :two, course: course_2 }
   let(:level_3_s2) { create :level, :three, course: course_2 }
 
-  let!(:startup_l1) { create :startup, :subscription_active, level: level_1 }
-  let!(:startup_l2) { create :startup, :subscription_active, level: level_2 }
-  let!(:startup_l2_inactive) { create :startup, level: level_2 }
-  let!(:startup_l3) { create :startup, :subscription_active, level: level_3 }
+  let!(:startup_l1) { create :startup, level: level_1 }
+  let!(:startup_l2) { create :startup, level: level_2 }
+  let!(:startup_l3) { create :startup, level: level_3 }
   let!(:startup_s2_l1) { create :startup, level: level_1_s2 }
   let!(:startup_s2_l2) { create :startup, level: level_2_s2 }
   let!(:startup_s2_l3) { create :startup, level: level_3_s2 }
@@ -57,8 +56,8 @@ describe Targets::SendSessionRemindersJob do
           expect(message_service).to receive(:post).with(message: expected_message, founder: founder)
         end
 
-        # Founders below session's level, or without active subscription should not receive notifications.
-        Founder.where(startup: [startup_l1, startup_l2_inactive]).each do |founder|
+        # Founders below session's level should not receive notifications.
+        Founder.where(startup: [startup_l1]).each do |founder|
           expect(message_service).not_to receive(:post).with(message: expected_message, founder: founder)
         end
 
@@ -103,7 +102,7 @@ describe Targets::SendSessionRemindersJob do
         end
 
         # Founders in other courses should not receive notifications.
-        Founder.where(startup: [startup_l1, startup_l2, startup_l2_inactive, startup_l3]).each do |founder|
+        Founder.where(startup: [startup_l1, startup_l2, startup_l3]).each do |founder|
           expect(message_service).not_to receive(:post).with(message: expected_message, founder: founder)
         end
 

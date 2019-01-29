@@ -82,15 +82,12 @@ class Startup < ApplicationRecord
 
   belongs_to :level
   has_one :course, through: :level
-  has_many :payments, dependent: :restrict_with_error
-  has_many :archived_payments, class_name: 'Payment', foreign_key: 'original_startup_id', dependent: :nullify, inverse_of: :original_startup
 
   has_one :coupon_usage, dependent: :destroy
   has_one :applied_coupon, through: :coupon_usage, source: :coupon
 
   has_many :weekly_karma_points, dependent: :destroy
   has_many :resources, dependent: :destroy
-  belongs_to :billing_state, class_name: 'State', optional: true
 
   # Faculty who can review this startup's timeline events.
   has_many :faculty_startup_enrollments, dependent: :destroy
@@ -297,20 +294,8 @@ class Startup < ApplicationRecord
     level.number.zero?
   end
 
-  def subscription_active?
-    level.course.sponsored || payments.where('billing_end_at > ?', Time.now).paid.exists?
-  end
-
   def self.admission_stages
     [ADMISSION_STAGE_SIGNED_UP, ADMISSION_STAGE_SELF_EVALUATION_COMPLETED, ADMISSION_STAGE_R1_TASK_PASSED, ADMISSION_STAGE_R2_TASK_PASSED, ADMISSION_STAGE_INTERVIEW_PASSED, ADMISSION_STAGE_FEE_PAID, ADMISSION_STAGE_ADMITTED].freeze
-  end
-
-  def active_payment
-    payments.paid.order(:billing_end_at).last
-  end
-
-  def subscription_end_date
-    active_payment&.billing_end_at
   end
 
   def timeline_events

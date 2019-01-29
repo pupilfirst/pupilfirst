@@ -1,0 +1,16 @@
+- content_for :head do
+  title SV.CO Apply Now
+
+.secondary-banner
+  .container
+    .text-center
+      h1 Update Team Details
+
+.container
+    .row.justify-content-md-center
+      .col.col-md-7
+        .text-center.mb-3.mt-4
+          h4.font-semibold.mb-2 Your team members
+
+        = react_component('FoundersForm', { authenticityToken: form_authenticity_token, founders: @form.founders_for_react, errors: @form.errors, collegesUrl: colleges_url, collegeNames: @form.college_names })
+

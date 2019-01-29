@@ -6,7 +6,7 @@ feature 'Timeline Builder' do
   let(:criterion) { create :evaluation_criterion, course: course }
   let(:level_one) { create :level, :one }
 
-  let(:startup) { create :startup, :subscription_active, level: level_one }
+  let(:startup) { create :startup, level: level_one }
   let(:founder) { create :founder, startup: startup }
 
   let(:target_group) { create :target_group, milestone: true, level: level_one }

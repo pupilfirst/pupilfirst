@@ -12,7 +12,7 @@ feature 'Resources' do
   let(:level_2_s2) { create :level, :two, course: course_2 }
 
   let(:founder) { create :founder }
-  let(:startup) { create :startup, :subscription_active, level: level_1 }
+  let(:startup) { create :startup, level: level_1 }
 
   let!(:public_resource) { create :resource }
   let!(:level_0_resource) { create :resource, level: level_0 }
@@ -113,7 +113,7 @@ feature 'Resources' do
       end
 
       context "founder is in second course" do
-        let(:startup) { create :startup, :subscription_active, level: level_2_s2 }
+        let(:startup) { create :startup, level: level_2_s2 }
 
         scenario 'Founder visits resources page' do
           visit resources_path

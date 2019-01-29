@@ -4,8 +4,8 @@ feature 'Select another founder profile as the active profile' do
   include UserSpecHelper
 
   # Two startups.
-  let(:startup_1) { create :startup, :subscription_active }
-  let(:startup_2) { create :startup, :subscription_active }
+  let(:startup_1) { create :startup }
+  let(:startup_2) { create :startup }
 
   # Add milestone target groups for both courses, so that the dashboard will render correctly.
   let(:target_group_s1) { create :target_group, level: startup_1.level, milestone: true }

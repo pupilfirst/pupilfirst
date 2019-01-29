@@ -2,7 +2,7 @@ ActiveAdmin.register Startup do
   permit_params :product_name, :product_description, :legal_registered_name, :website, :logo, :facebook_link,
     :twitter_link, :created_at, :updated_at, :dropped_out, :registration_type, :agreement_signed_at,
     :presentation_link, :product_video_link, :wireframe_link, :prototype_link, :slug, :level_id,
-    :partnership_deed, :payment_reference, :agreements_verified, founder_ids: [], tag_list: []
+    :partnership_deed, :agreements_verified, founder_ids: [], tag_list: []
 
   filter :product_name, as: :string
   filter :level_course_id, as: :select, label: 'Course', collection: -> { Course.all }
@@ -252,42 +252,6 @@ ActiveAdmin.register Startup do
 
       row :courier_name
       row :courier_number
-      row :payment_reference
-      row :undiscounted_founder_fee
-    end
-
-    if startup.level&.number&.positive? && !startup.level.course.sponsored?
-      panel 'Payment History' do
-        attributes_table_for startup do
-          row 'Subscription End Date' do
-            if startup.active_payment.present?
-              link_to startup.subscription_end_date.strftime('%b %d, %Y'), admin_payment_path(startup.active_payment)
-            end
-          end
-        end
-
-        table_for startup.payments.paid.order('billing_end_at DESC') do
-          column('Date') { |payment| payment.paid_at&.strftime('%d/%m/%Y') }
-          column('Subscription Period') do |payment|
-            start_date = payment.billing_start_at&.strftime('%b %d, %Y')
-            end_date = payment.billing_end_at&.strftime('%b %d, %Y')
-            "#{start_date} - #{end_date}"
-          end
-          column('Payment Type', &:payment_type)
-          column('Amount') { |payment| "&#8377;#{payment.amount}".html_safe }
-          column('Payee') do |payment|
-            payee = payment.founder
-            if payee.present?
-              link_to payee.name, admin_founder_path(payee)
-            else
-              'N/A'
-            end
-          end
-          column('Payment') do |payment|
-            link_to 'View', admin_payment_path(payment)
-          end
-        end
-      end
     end
 
     panel 'Technical details' do

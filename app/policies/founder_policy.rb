@@ -4,19 +4,11 @@ class FounderPolicy < ApplicationPolicy
   end
 
   def edit?
-    founder_profile? && record.subscription_active?
+    founder_profile?
   end
 
   def update?
     edit?
-  end
-
-  def fee?
-    record&.startup.present? && record.startup.payments.pending.any?
-  end
-
-  def fee_submit?
-    fee?
   end
 
   def select?

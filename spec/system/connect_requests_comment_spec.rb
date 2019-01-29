@@ -4,7 +4,7 @@ feature 'Connect Request Comment' do
   include UserSpecHelper
 
   let(:faculty) { create :faculty }
-  let(:startup) { create :startup, :subscription_active }
+  let(:startup) { create :startup }
   let(:founder) { startup.founders.first }
   let(:connect_slot) { create :connect_slot, faculty: faculty }
 

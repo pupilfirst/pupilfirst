@@ -16,16 +16,8 @@ describe FacultyPolicy do
       expect(subject).to_not permit(nil, faculty)
     end
 
-    context 'when startup does not have an active subscription' do
+    context 'when startup has founders' do
       let(:startup) { create :startup }
-
-      it 'denies access to founder' do
-        expect(subject).to_not permit(current_user(startup.founders.first), faculty)
-      end
-    end
-
-    context 'when startup has an active subscription' do
-      let(:startup) { create :startup, :subscription_active }
 
       it 'grants access to founder' do
         expect(subject).to permit(current_user(startup.founders.first), faculty)

@@ -11,7 +11,7 @@ describe ResourcePolicy do
   let(:level_2) { create :level, :two, course: course }
   let(:level_1_s1) { create :level, :two, course: course_1 }
 
-  let(:startup) { create :startup, :subscription_active, level: level_1 }
+  let(:startup) { create :startup, level: level_1 }
   let(:founder) { startup.founders.first }
 
   let(:user) do

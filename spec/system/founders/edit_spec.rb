@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'Founder Edit' do
   include UserSpecHelper
 
-  let(:startup) { create :startup, :subscription_active }
+  let(:startup) { create :startup }
   let(:founder) { create :founder, college: nil, college_text: 'Anon College of Engineering', born_on: 18.years.ago }
   let(:founder_name) { Faker::Name.name }
   let(:phone) { rand(9_876_543_210..9_876_553_209) }
@@ -130,22 +130,6 @@ feature 'Founder Edit' do
       sign_in_user(founder.user, referer: edit_founder_path)
 
       expect(page).to have_selector('#home__index', visible: false)
-    end
-  end
-
-  context 'Founder with inactive subscription attempts to edit his profile' do
-    let(:startup) { create :startup }
-
-    scenario 'founder visits the edit page' do
-      pending 'Fee payment disabled'
-
-      sign_in_user(founder.user, referer: edit_founder_path)
-
-      # Create a pending payment.
-      create :payment, startup: startup
-
-      sign_in_user(founder.user, referer: edit_founder_path)
-      expect(page).to have_content('Please pay the membership fee to continue.')
     end
   end
 

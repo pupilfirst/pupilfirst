@@ -18,7 +18,6 @@
     = f.input :registration_type, collection: Startup.valid_registration_types
     = f.input :address
     = f.input :slug
-    = f.input :payment_reference
     = f.input :tag_list,
       as: :select,
       collection: Startup.tag_counts_on(:tags).pluck(:name),

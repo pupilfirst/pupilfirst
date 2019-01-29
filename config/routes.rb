@@ -111,18 +111,6 @@ Rails.application.routes.draw do
     patch ':id/feedback/comment/:token', action: 'comment_submit', as: 'comment_submit'
   end
 
-  scope 'admissions', as: 'admissions', controller: 'admissions' do
-    get 'screening'
-    get 'screening_submit'
-    post 'screening_submit_webhook'
-    post 'coupon_submit'
-    patch 'coupon_remove'
-    get 'team_members'
-    post 'team_members', action: 'team_members_submit'
-    get 'accept_invitation'
-    patch 'update_founder'
-  end
-
   resources :prospective_applicants, only: %i[create]
 
   resources :colleges, only: :index

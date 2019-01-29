@@ -14,9 +14,6 @@ module Payments
       # ensure the subscription window starts from time of payment
       Payments::PostPaymentService.new(@payment).execute
 
-      # mark the payment target complete
-      Admissions::CompleteTargetService.new(@founder, Target::KEY_FEE_PAYMENT).execute
-
       # Fix the current Founder::FEE as the perpetual undiscounted_founder_fee for this startup.
       @startup.update!(undiscounted_founder_fee: Founder::FEE) if @startup.undiscounted_founder_fee.blank?
 

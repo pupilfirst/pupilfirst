@@ -1,5 +1,4 @@
 # This module is included in:
-#   Founders::RegistrationForm
 #   ProspectiveApplicants::RegistrationForm
 #
 module AdmissionsPrepopulatable

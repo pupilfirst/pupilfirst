@@ -159,12 +159,14 @@ class Faculty < ApplicationRecord
     (courses + startup_courses).uniq
   end
 
-  def initials_avatar(background_shape:)
-    logo = Scarf::InitialAvatar.new(name, background_shape: background_shape)
-    "data:image/svg+xml;base64,#{Base64.encode64(logo.svg)}"
+  def image_or_avatar_url(background_shape: :circle)
+    image_url || initials_avatar(background_shape)
   end
 
-  def image_or_avatar_url(background_shape: :circle)
-    image_url || initials_avatar(background_shape: background_shape)
+  private
+
+  def initials_avatar(background_shape)
+    logo = Scarf::InitialAvatar.new(name, background_shape: background_shape)
+    "data:image/svg+xml;base64,#{Base64.encode64(logo.svg)}"
   end
 end

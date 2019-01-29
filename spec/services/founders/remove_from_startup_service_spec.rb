@@ -8,16 +8,15 @@ describe Founders::RemoveFromStartupService do
   let(:founder_2) { startup.founders.where.not(id: founder.id).first }
 
   describe '#execute' do
-    context 'when the startup has a second co-founder' do
-      it 'removes the founder from the startup after re-assigning team lead' do
-        subject.execute
-        expect(founder.reload.exited).to eq(true)
+    context 'when the team has more than one student' do
+      it 'marks the student as exited' do
+        expect { subject.execute }.to(change { founder.reload.exited }.from(false).to(true))
       end
     end
 
-    context 'when the startup only has a single founder' do
+    context 'when the team only has a single student' do
       before do
-        # Remove the second founder from the startup
+        # Remove the second team member.
         founder_2.destroy
       end
 

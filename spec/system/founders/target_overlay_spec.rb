@@ -161,9 +161,8 @@ feature 'Target Overlay' do
       find('.founder-dashboard-target-header__headline', text: target.title).click
 
       within('.target-overlay__content-rightbar') do
-        expect(page).to have_selector('.target-overaly__status-title', text: 'Completion Status')
-        expect(page).to have_selector('.founder-dashboard__avatar-wrapper', count: 2)
-        # TODO: Also check if the right people have the right status. This is now blocked by the bug reported here: https://trello.com/c/P9RNQQ3N
+        expect(page).to have_selector('.target-overaly__status-title', text: 'Pending Team Members')
+        expect(page).to have_selector('.founder-dashboard__avatar-wrapper', count: 1)
       end
     end
   end

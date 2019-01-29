@@ -199,4 +199,7 @@ Rails.application.routes.draw do
 
   get '/oauth/:provider', to: 'home#oauth', as: 'oauth', constraints: PupilFirstConstraint.new
   get '/oauth_error', to: 'home#oauth_error', as: 'oauth_error'
+
+  # Allow developers to simulate the error pages.
+  get '/errors/:error_type', to: 'errors#simulate', constraints: DevelopmentConstraint.new
 end

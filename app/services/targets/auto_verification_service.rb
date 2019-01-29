@@ -7,7 +7,7 @@ module Targets
 
     def auto_verify
       @target.timeline_events.create!(
-        founders: [@founder],
+        founders: founders,
         description: description,
         event_on: Time.zone.now,
         passed_at: Time.zone.now,
@@ -19,6 +19,14 @@ module Targets
 
     def description
       "Target '#{@target.title}' was auto-verified"
+    end
+
+    def founders
+      if @target.founder_event?
+        [@founder]
+      else
+        @founder.startup.founders
+      end
     end
   end
 end

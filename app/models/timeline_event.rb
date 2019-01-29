@@ -36,7 +36,6 @@ class TimelineEvent < ApplicationRecord
   accepts_nested_attributes_for :timeline_event_files, allow_destroy: true
 
   scope :from_admitted_startups, -> { joins(:founders).where(founders: { startup: Startup.admitted }) }
-  scope :from_level_0_startups, -> { joins(:founders).where(founders: { startup: Startup.level_zero }) }
   scope :not_dropped_out, -> { joins(:founders).where(founders: { startup: Startup.not_dropped_out }) }
   scope :has_image, -> { where.not(image: nil) }
   scope :from_approved_startups, -> { joins(:founders).where(founders: { startup: Startup.approved }) }

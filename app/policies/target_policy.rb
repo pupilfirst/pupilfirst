@@ -1,6 +1,6 @@
 class TargetPolicy < ApplicationPolicy
   def download_rubric?
-    current_founder.present? && (current_founder.startup&.level_zero?)
+    current_founder.present?
   end
 
   alias prerequisite_targets? download_rubric?

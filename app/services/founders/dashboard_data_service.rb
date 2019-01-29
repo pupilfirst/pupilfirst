@@ -37,7 +37,7 @@ module Founders
     end
 
     def visible_levels
-      @visible_levels ||= startup.level_zero? ? course.levels.where(number: 0) : course.levels.where('levels.number >= ?', 1)
+      @visible_levels ||= course.levels.where('levels.number >= ?', 1)
     end
 
     def open_levels

@@ -15,7 +15,7 @@ after 'development:colleges', 'development:startups' do
   }
 
   # Add John Doe to teams in all three courses.
-  ['Unfinished Swan', 'Guardians of the Galaxy', 'iOS Startup'].each do |team_name|
+  ['Guardians of the Galaxy', 'iOS Startup'].each do |team_name|
     startup = Startup.find_by(product_name: team_name)
 
     founder_john_doe = Founder.create!(john_doe_attributes.merge(

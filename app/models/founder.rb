@@ -44,7 +44,6 @@ class Founder < ApplicationRecord
   has_many :timeline_events, through: :timeline_event_owners
 
   scope :admitted, -> { joins(:startup).merge(Startup.admitted) }
-  scope :level_zero, -> { joins(:startup).merge(Startup.level_zero) }
   scope :not_dropped_out, -> { joins(:startup).merge(Startup.not_dropped_out) }
   scope :startup_members, -> { where 'startup_id IS NOT NULL' }
   scope :missing_startups, -> { where('startup_id NOT IN (?)', Startup.pluck(:id)) }
@@ -177,20 +176,13 @@ class Founder < ApplicationRecord
     super || []
   end
 
-  # A simple flag, which returns true if the founder signed in less than 15 seconds ago.
-  def just_signed_in
-    return false if user.current_sign_in_at.blank?
-
-    user.current_sign_in_at > 15.seconds.ago
-  end
-
   def founder?
     startup.present? && startup.approved?
   end
 
   # The option to create connect requests is restricted to tapproved startups.
   def can_connect?
-    startup.present? && startup.approved? && !level_zero?
+    startup.present? && startup.approved?
   end
 
   def pending_connect_request_for?(faculty)
@@ -257,7 +249,6 @@ class Founder < ApplicationRecord
     required_fields.all? { |field| self[field].present? }
   end
 
-  delegate :level_zero?, to: :startup
   delegate :email, to: :user
 
   def invited

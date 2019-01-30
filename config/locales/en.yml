@@ -167,9 +167,6 @@ en:
       meta_description: "Get your queries answered directly by SV.CO team members, and mingle with the Startup Village community on our Public Slack Forum."
 
   admin:
-    coupon:
-      form:
-        update_warning: "WARNING: This coupon is in use by one or more teams. Please DO NOT make changes to reward details since this will affect all teams using this coupon."
     connect_request:
       cancel_request:
         warning:  "Are you sure you want to cancel this 'confirmed' connect request? Note that you will have to manually delete the associated Zoom meeting and Google calendar event!"

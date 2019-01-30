@@ -73,9 +73,6 @@ class Startup < ApplicationRecord
   belongs_to :level
   has_one :course, through: :level
 
-  has_one :coupon_usage, dependent: :destroy
-  has_one :applied_coupon, through: :coupon_usage, source: :coupon
-
   has_many :weekly_karma_points, dependent: :destroy
   has_many :resources, dependent: :destroy
 

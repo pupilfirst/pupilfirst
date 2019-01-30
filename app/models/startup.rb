@@ -187,13 +187,6 @@ class Startup < ApplicationRecord
     founders_list.each { |u| founders << u }
   end
 
-  def self.current_startups_split
-    {
-      'Approved' => approved.count,
-      'Dropped-out' => dropped_out.count
-    }
-  end
-
   def agreement_live?
     agreement_signed_at.present? ? agreement_signed_at > AGREEMENT_DURATION.years.ago : false
   end
@@ -229,17 +222,6 @@ class Startup < ApplicationRecord
       name,
       [name, :id]
     ]
-  end
-
-  ####
-  # Temporary mentor and investor checks which always return false
-  ####
-  def mentors?
-    false
-  end
-
-  def investors?
-    false
   end
 
   # returns the date of the earliest verified timeline entry

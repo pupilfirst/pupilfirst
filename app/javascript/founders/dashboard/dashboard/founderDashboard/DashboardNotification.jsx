@@ -3,11 +3,7 @@ import PropTypes from "prop-types";
 
 export default class DashboardNotification extends React.Component {
   eligibleNotificationTitle() {
-    if (this.currentLevelNumber() === 0) {
-      return "Congratulations! You are now an enrolled student at SV.CO.";
-    } else if (
-      this.currentLevelNumber() === this.props.rootProps.maxLevelNumber
-    ) {
+    if (this.currentLevelNumber() === this.props.rootProps.maxLevelNumber) {
       if (this.props.rootProps.sponsoredCourse) {
         return "Congratulations! You have completed all milestone targets in this course.";
       } else {
@@ -46,11 +42,7 @@ export default class DashboardNotification extends React.Component {
   }
 
   eligibleNotificationText() {
-    if (this.currentLevelNumber() === 0) {
-      return "You have successfully completed the first step in your journey with SV.CO. We are proud to have you join our collective. Hit Level Up to continue your journey and unlock a series of cool targets and sessions on the way.";
-    } else if (
-      this.currentLevelNumber() === this.props.rootProps.maxLevelNumber
-    ) {
+    if (this.currentLevelNumber() === this.props.rootProps.maxLevelNumber) {
       return (
         <div>
           <h4 className="font-regular light-grey-text">

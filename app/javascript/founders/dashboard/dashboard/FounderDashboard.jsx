@@ -177,7 +177,7 @@ export default class FounderDashboard extends React.Component {
         )}
 
         {this.state.activeTrackId !== "sessions" &&
-          this.props.currentLevel !== 0 && (
+          this.props.currentLevel.number !== 0 && (
             <ActionBar
               getAvailableTrackIds={this.availableTrackIds}
               rootProps={this.props}

@@ -12,8 +12,6 @@ module Startups
     def leaderboard(start_date: nil)
       week_start_date = start_date || last_week_start_date
 
-      raise 'Leaderboard cannot be generated for Level 0' if @level.number.zero?
-
       @leaderboard = Hash.new do |hash, key|
         hash[key] = rank_list(@level, week_start_date)
       end

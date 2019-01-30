@@ -10,7 +10,6 @@ feature 'Founder Dashboard' do
   let(:faculty) { create :faculty }
 
   # Levels.
-  let!(:level_0) { create :level, :zero, course: course }
   let!(:level_1) { create :level, :one, course: course }
   let!(:level_2) { create :level, :two, course: course }
   let!(:level_3) { create :level, :three, course: course }
@@ -23,7 +22,6 @@ feature 'Founder Dashboard' do
   let(:developer_track) { create :track, name: 'Developer', sort_index: 1 }
 
   # Target group we're interested in. Create milestone
-  let!(:target_group_0) { create :target_group, level: level_0, milestone: true, track: product_track }
   let!(:target_group_1) { create :target_group, level: level_1, milestone: true, track: product_track }
   let!(:target_group_2) { create :target_group, level: level_2, milestone: true, track: product_track }
   let!(:target_group_3) { create :target_group, level: level_3, milestone: true, track: product_track }

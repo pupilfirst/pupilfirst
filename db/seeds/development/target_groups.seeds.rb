@@ -11,9 +11,7 @@ after 'development:levels', 'development:tracks' do
     1 => ['Engineering & Design First Steps', 'Level Up'],
     2 => ['Put up a Coming Soon Page', 'Level Up'],
     3 => ['Get First Feedback', 'Level Up'],
-    4 => ['Reflect on your Progress', 'Level Up'],
-    5 => ['Welcome to SV.CO Developer Course', 'Admission Process'],
-    6 => ['Engineering & Design First Steps', 'Level Up']
+    4 => ['Reflect on your Progress', 'Level Up']
   }
 
   Level.all.each do |level|

@@ -139,7 +139,7 @@ let make =
                   |> Array.of_list
                   |> ReasonReact.array;
                 }
-                <UndoReviewButton timelineEvent replaceTimelineEvent />
+                <UndoReviewButton timelineEvent replaceTimelineEvent authenticityToken />
               </div>
           )
           <FeedbackForm timelineEvent replaceTimelineEvent authenticityToken />

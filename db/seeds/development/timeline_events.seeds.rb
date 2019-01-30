@@ -23,7 +23,7 @@ after 'development:founders', 'development:targets' do
       end
 
       # Grade the timeline event
-      TimelineEvents::GradingService.new(te).grade(startup.faculty.first, grades_for_criteria )
+      TimelineEvents::GradingService.new(te).grade(startup.course.faculty.first, grades_for_criteria )
     else
       te.update!(passed_at: Time.now)
     end

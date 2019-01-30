@@ -82,93 +82,58 @@ feature 'Coach Dashboard' do
     expect(page).to have_selector('.timeline-event-card__container', count: 4)
   end
 
-  scenario 'coach reviews all timeline events', js: true, pending: true do
+  scenario 'coach reviews a submission and then undo-s the review', js: true do
     sign_in_user coach.user, referer: course_coach_dashboard_path(course)
 
-    # mark the first event as not accepted
-    within(".js-timeline-event-card__review-box-#{timeline_event_1.id}") do
-      find("#review-form__status-input-not-accepted-#{timeline_event_1.id}").click
-      click_on 'Save Review'
+    # Grade the first event as 'Bad'.
+    within(".timeline-event-card__container", text: timeline_event_1.description) do
+      find('div[title="Bad"]').click
+      click_button 'Save Grading'
     end
 
-    # the event should have moved to the completed list
-    within all('.timeline-events-list__container').first do
-      expect(page).to have_selector('.timeline-event-card__container', count: 3)
-    end
-    # and the pending count updated
-    expect(page).to have_selector('.side-panel__coach-description', text: 'Pending reviews: 3')
+    # The event should have moved to the completed list.
+    expect(page).to have_selector('.timeline-event-card__container', count: 3)
 
-    within all('.timeline-events-list__container').last do
-      expect(page).to have_selector('.timeline-event-card__header-title', text: timeline_event_1.title)
-
-      # and should include the new status badge
-      expect(page).to have_selector('.review-status-badge__container--not-accepted')
-      # the event should have the new status
-      expect(timeline_event_1.reload.status).to eq(TimelineEvent::STATUS_NOT_ACCEPTED)
-
-      # undo the review
-      click_on 'Undo Review'
+    # And the pending count updated to 3.
+    within('.timeline-events-panel__status-tab--active') do
+      expect(page).to have_content('Pending')
+      expect(page).to have_content('3')
     end
 
-    # the event should have moved back to the pending list
-    within all('.timeline-events-list__container').first do
-      expect(page).to have_selector('.timeline-event-card__container', count: 4)
-    end
-    expect(page).to have_selector('.timeline-events-panel__empty-notice', text: 'There are no reviewed submissions in the list. Please try loading more.')
-    expect(timeline_event_1.reload.status).to eq(TimelineEvent::STATUS_PENDING)
+    # Switch to the 'Reviewed' tab.
+    find('.timeline-events-panel__status-tab', text: 'Reviewed').click
 
-    # and the pending count updated
-    expect(page).to have_selector('.side-panel__coach-description', text: 'Pending reviews: 4')
+    # One timeline event should be displayed.
+    expect(page).to have_selector('.timeline-event-card__container', count: 1)
 
-    # now mark the event as verified with a grade
-    within(".js-timeline-event-card__review-box-#{timeline_event_1.id}") do
-      # grade from should be hidden
-      expect(page).to_not have_selector('.js-review-form__grade-radios')
-      find("#review-form__status-input-verified-#{timeline_event_1.id}").click
-      # grade form should now be visible
-      expect(page).to have_selector('.js-review-form__grade-radios')
-      find("#review-form__grade-input-great-#{timeline_event_1.id}").click
-      click_on 'Save Review'
+    within('.timeline-event-card__container') do
+      # The event should have the failed status.
+      expect(page).to have_content('Failed')
+
+      # It should also list the selected grade for a criterion.
+      expect(page).to have_content("#{evaluation_criterion.name}: Bad")
     end
 
-    # the event should have moved to the completed list
-    within all('.timeline-events-list__container').first do
-      expect(page).to have_selector('.timeline-event-card__container', count: 3)
-    end
-    within all('.timeline-events-list__container').last do
-      expect(page).to have_selector('.timeline-event-card__header-title', text: timeline_event_1.title)
+    # The event should have the new status.
+    expect(timeline_event_1.reload.passed_at).to eq(nil)
+    expect(timeline_event_1.evaluator).to eq(coach)
 
-      # and should include the new status badge
-      expect(page).to have_selector('.review-status-badge__container--verified')
-      # the event should have the new status and grade
-      expect(timeline_event_1.reload.status).to eq(TimelineEvent::STATUS_VERIFIED)
-      expect(timeline_event_1.overall_grade_from_score).to eq('great')
-    end
+    # Undo the review.
+    click_button 'Undo Review'
 
-    # mark the remaining three as needs improvement
-    within(".js-timeline-event-card__review-box-#{timeline_event_2.id}") do
-      find("#review-form__status-input-needs-improvement-#{timeline_event_2.id}").click
-      click_on 'Save Review'
-    end
-    within(".js-timeline-event-card__review-box-#{timeline_event_3.id}") do
-      find("#review-form__status-input-needs-improvement-#{timeline_event_3.id}").click
-      click_on 'Save Review'
-    end
-    within(".js-timeline-event-card__review-box-#{timeline_event_4.id}") do
-      find("#review-form__status-input-needs-improvement-#{timeline_event_4.id}").click
-      click_on 'Save Review'
-    end
+    # The event should have moved back to the 'Pending' list.
+    expect(page).to have_content('There are no reviewed submissions in the list.')
+    find('.timeline-events-panel__status-tab', text: 'Pending').click
+    expect(page).to have_selector('.timeline-event-card__container', count: 4)
 
-    # the pending list should now be empty
-    expect(page).to have_selector('.timeline-events-panel__empty-notice', text: 'Nothing pending here!')
-    # and the completed list should have the right status badges
-    within('.timeline-events-list__container') do
-      expect(page).to have_selector('.timeline-event-card__container', count: 4)
-      expect(page).to have_selector('.review-status-badge__container--verified', count: 1)
-      expect(page).to have_selector('.review-status-badge__container--needs-improvement', count: 3)
+    # Timeline event should be pending again.
+    expect(timeline_event_1.reload.evaluator).to eq(nil)
+
+    # ...and the pending count updated.
+    within('.timeline-events-panel__status-tab--active') do
+      expect(page).to have_content('Pending')
+      expect(page).to have_content('4')
     end
-    # and the pending count should have updated
-    expect(page).to have_selector('.side-panel__coach-description', text: 'Pending reviews: 0')
   end
 
   scenario 'coach add a feedback', js: true do

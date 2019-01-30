@@ -2,7 +2,7 @@ ActiveAdmin.register Target do
   actions :all, except: [:destroy]
 
   permit_params :faculty_id, :role, :title, :description, :resource_url, :completion_instructions, :days_to_complete,
-    :slideshow_embed, :video_embed, :completed_at, :completion_comment, :rubric, :link_to_complete, :key, :archived,
+    :slideshow_embed, :video_embed, :completed_at, :completion_comment, :rubric, :link_to_complete, :archived,
     :remote_rubric_url, :target_group_id, :target_action_type, :points_earnable,
     :sort_index, :youtube_video_id, :session_at, :session_by, :call_to_action,
     prerequisite_target_ids: [], tag_list: [], evaluation_criterion_ids: []
@@ -91,7 +91,6 @@ ActiveAdmin.register Target do
 
     attributes_table do
       row :title
-      row :key
       row :session_at
 
       row :tags do |founder|
@@ -285,7 +284,6 @@ ActiveAdmin.register Target do
     f.inputs name: 'Target Details' do
       f.input :role, as: :select, collection: Target.valid_roles.map { |r| [t("models.target.role.#{r}"), r] }, include_blank: false
       f.input :title
-      f.input :key, as: :select, collection: Target.valid_keys
       f.input :session_at, as: :string, input_html: { class: 'date-time-picker', data: { format: 'Y-m-d H:i:s O' } }
       f.input :tag_list, as: :select, collection: Target.tag_counts_on(:tags).pluck(:name), multiple: true
 

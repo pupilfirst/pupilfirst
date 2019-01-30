@@ -18,15 +18,6 @@ class Startup < ApplicationRecord
   MAX_PITCH_CHARACTERS = 140 unless defined?(MAX_PITCH_CHARACTERS)
   MAX_PRODUCT_DESCRIPTION_CHARACTERS = 150
 
-  ADMISSION_STAGE_SIGNED_UP = 'Signed Up'
-  ADMISSION_STAGE_SELF_EVALUATION_COMPLETED = 'Self Evaluation Completed'
-  ADMISSION_STAGE_R1_TASK_PASSED = 'Round 1 Task Passed'
-  ADMISSION_STAGE_R2_TASK_PASSED = 'Round 2 Task Passed'
-  ADMISSION_STAGE_INTERVIEW_PASSED = 'Interview Passed'
-  ADMISSION_STAGE_PAYMENT_INITIATED = 'Payment Initiated'
-  ADMISSION_STAGE_FEE_PAID = 'Initial Payment Completed'
-  ADMISSION_STAGE_ADMITTED = 'Admitted'
-
   # agreement duration in years
   AGREEMENT_DURATION = 5
 
@@ -287,10 +278,6 @@ class Startup < ApplicationRecord
     else
       ((present_week_number.to_f / 24) * 100).to_i
     end
-  end
-
-  def self.admission_stages
-    [ADMISSION_STAGE_SIGNED_UP, ADMISSION_STAGE_SELF_EVALUATION_COMPLETED, ADMISSION_STAGE_R1_TASK_PASSED, ADMISSION_STAGE_R2_TASK_PASSED, ADMISSION_STAGE_INTERVIEW_PASSED, ADMISSION_STAGE_FEE_PAID, ADMISSION_STAGE_ADMITTED].freeze
   end
 
   def timeline_events

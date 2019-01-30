@@ -39,12 +39,4 @@
     = f.input :github_url
     = f.input :behance_url
 
-  = f.inputs 'Admissions Data'
-    = f.input :identification_proof, as: :file
-    = f.input :id_proof_type, as: :select, collection: Founder::ID_PROOF_TYPES
-    = f.input :id_proof_number
-    = f.input :permanent_address
-    = f.input :address_proof, as: :file
-    = f.input :income_proof, as: :file
-    = f.input :letter_from_parent, as: :file
   = f.submit

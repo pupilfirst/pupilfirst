@@ -34,22 +34,5 @@ FactoryBot.define do
     trait :with_rubric do
       rubric { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf')) }
     end
-
-    trait(:admissions_cofounder_addition) do
-      key { Target::KEY_COFOUNDER_ADDITION }
-      role { Target::ROLE_TEAM }
-      prerequisite_targets { [create(:target, :admissions_screening)] }
-    end
-
-    trait(:admissions_screening) do
-      key { Target::KEY_SCREENING }
-      role { Target::ROLE_TEAM }
-    end
-
-    trait(:admissions_attend_interview) do
-      role { Target::ROLE_TEAM }
-      key { Target::KEY_ATTEND_INTERVIEW }
-      prerequisite_targets { [create(:target, :admissions_cofounder_addition)] }
-    end
   end
 end

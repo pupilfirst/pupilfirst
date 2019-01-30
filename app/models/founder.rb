@@ -59,15 +59,10 @@ class Founder < ApplicationRecord
     admitted.where(exited: false).where.not(id: active_on_slack(Time.now.beginning_of_week, Time.now)).where.not(id: active_on_web(Time.now.beginning_of_week, Time.now))
   }
   scope :not_exited, -> { where.not(exited: true) }
-  scope :screening_score_above, ->(minimum_score) { where("(screening_data ->> 'score')::int >= ?", minimum_score) }
 
   # TODO: Remove all usages of method Founder.with_email and then delete it.
   def self.with_email(email)
     User.find_by(email: email)&.founders&.first
-  end
-
-  def self.ransackable_scopes(_auth)
-    %i[ransack_tagged_with screening_score_above]
   end
 
   def self.valid_gender_values

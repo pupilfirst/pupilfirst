@@ -42,15 +42,10 @@ ActiveAdmin.register Founder do
   filter :college_name_contains
   filter :roll_number
   filter :created_at, label: 'Registered on'
-  filter :screening_score_above, as: :number
-  filter :coder, as: :boolean
-
   permit_params :name, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :born_on,
-    :communication_address, :identification_proof, :phone, :invitation_token, :college_id, :roll_number,
+    :communication_address, :phone, :invitation_token, :college_id, :roll_number,
     :college_course, :semester, :year_of_graduation, :twitter_url, :linkedin_url, :personal_website_url, :blog_url,
-    :angel_co_url, :github_url, :behance_url, :gender, :skype_id, :exited, :id_proof_number,
-    :id_proof_type, :parent_name, :permanent_address, :address_proof, :income_proof,
-    :letter_from_parent, :coder, roles: [], tag_list: []
+    :angel_co_url, :github_url, :behance_url, :gender, :skype_id, :exited, :parent_name, roles: [], tag_list: []
 
   batch_action :tag, form: proc { { tag: Founder.tag_counts_on(:tags).pluck(:name) } } do |ids, inputs|
     Founder.where(id: ids).each do |founder|
@@ -257,57 +252,6 @@ ActiveAdmin.register Founder do
       # row :resume do |founder|
       #   link_to 'Download Resume', founder.resume_link if founder.resume_link.present?
       # end
-      row :coder do
-        if !founder.coder.nil?
-          founder.coder? ? 'Yes' : 'No'
-        else
-          'NA'
-        end
-      end
-      row :screening_data do |founder|
-        if founder.screening_data.present?
-          button id: 'screening-data-toggle-button', class: 'margin-bottom-10' do
-            'Show/Hide'
-          end
-          div id: 'founder-admission-screening-data', class: 'hide' do
-            div class: 'margin-bottom-10' do
-              h2 do
-                span "Score: "
-                span founder.screening_data['score'].to_s
-              end
-            end
-
-            question_answer = founder.screening_data['response']
-
-            question_answer.each do |response|
-              div class: 'admin-founders__question-and-answer' do
-                question = response['question']
-                question.gsub!('<br><br>', '<br>')
-                strong simple_format(question, class: 'admin-founders__question')
-
-                answer = response['answer']
-                div class: 'margin-left-10' do
-                  if answer.is_a?(Hash)
-                    if answer['label'].present?
-                      answer['label'].to_s
-                    elsif answer['labels'].present?
-                      ul do
-                        answer['labels'].each do |choice|
-                          li(choice.strip)
-                        end
-                      end
-                    else
-                      answer['other'].to_s
-                    end
-                  else
-                    answer
-                  end
-                end
-              end
-            end
-          end
-        end
-      end
     end
 
     panel 'Social links' do
@@ -319,34 +263,6 @@ ActiveAdmin.register Founder do
         row :angel_co_url
         row :github_url
         row :behance_url
-      end
-    end
-
-    panel 'Admissions Data' do
-      attributes_table_for founder do
-        row :identification_proof do
-          if founder.identification_proof.present?
-            link_to 'Click here to open in new window', founder.identification_proof.url, target: '_blank', rel: 'noopener'
-          end
-        end
-        row :id_proof_type
-        row :id_proof_number
-        row :permanent_address
-        row :address_proof do
-          if founder.address_proof.present?
-            link_to 'Click here to open in new window', founder.address_proof.url, target: '_blank', rel: 'noopener'
-          end
-        end
-        row :income_proof do
-          if founder.income_proof.present?
-            link_to 'Click here to open in new window', founder.income_proof.url, target: '_blank', rel: 'noopener'
-          end
-        end
-        row :letter_from_parent do
-          if founder.letter_from_parent.present?
-            link_to 'Click here to open in new window', founder.letter_from_parent.url, target: '_blank', rel: 'noopener'
-          end
-        end
       end
     end
 

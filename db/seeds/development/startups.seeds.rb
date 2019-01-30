@@ -4,8 +4,7 @@ after 'development:levels' do
   puts 'Seeding startups'
 
   # Load levels.
-  startup_course_level_1 = Level.find_by(name: 'Admissions')
-  startup_course_level_2 = Level.find_by(name: 'Wireframe')
+  startup_course_level_1 = Level.find_by(name: 'Wireframe')
   developer_course_level_1 = Level.find_by(name: 'Planning')
   vr_course_level_1 = Level.find_by(name: 'New Realities')
   ios_course_level_1 = Level.find_by(name: 'iOS First Level')
@@ -31,7 +30,7 @@ after 'development:levels' do
   # A second 'Avengers' startup.
   Startup.create!(
     name: 'The Avengers',
-    level: startup_course_level_2,
+    level: startup_course_level_1,
     product_name: 'The Avengers',
     product_description: 'Earths Mightiest Heroes joined forces to take on threats that were too big for any one hero to tackle.',
     agreement_signed_at: 2.years.ago,

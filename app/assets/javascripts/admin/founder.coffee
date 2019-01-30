@@ -43,12 +43,6 @@ setupSelect2ForFounderColleges = ->
           return { results: data }
         cache: true
 
-showScreeningDataOptionally = ->
-  $('#screening-data-toggle-button').click (event) ->
-    screeningData = $('#founder-admission-screening-data')
-    screeningData.toggle()
-
-
 $(document).on 'page:change', showTargetsOptionally
 $(document).on 'turbolinks:load', setupSelect2ForFounderTagList
 $(document).on 'turbolinks:before-cache', destroySelect2ForFounderTagList
@@ -56,7 +50,3 @@ $(document).on 'turbolinks:before-cache', destroySelect2ForFounderTagList
 $(document).on 'turbolinks:load', ->
   if $('.formtastic.founder').length
     setupSelect2ForFounderColleges()
-
-$(document).on 'turbolinks:load', ->
-  if $('.attributes_table.founder').length
-    showScreeningDataOptionally()

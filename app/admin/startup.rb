@@ -220,20 +220,6 @@ ActiveAdmin.register Startup do
         end
       end
 
-      row :invited_founders do
-        div do
-          if startup.invited_founders.exists?
-            startup.invited_founders.each do |founder|
-              div do
-                span do
-                  link_to founder.display_name, [:admin, founder]
-                end
-              end
-            end
-          end
-        end
-      end
-
       row :women_cofounders do
         startup.founders.where(gender: Founder::GENDER_FEMALE).count
       end

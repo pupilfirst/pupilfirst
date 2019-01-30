@@ -30,7 +30,6 @@ class Founder < ApplicationRecord
   belongs_to :startup
   has_one :level, through: :startup
   has_one :course, through: :level
-  belongs_to :invited_startup, class_name: 'Startup', optional: true
   has_many :karma_points, dependent: :destroy
   has_many :visits, as: :user, dependent: :nullify, inverse_of: :user
   has_many :ahoy_events, class_name: 'Ahoy::Event', as: :user, dependent: :nullify, inverse_of: :user
@@ -111,15 +110,6 @@ class Founder < ApplicationRecord
     name
   end
 
-  # TODO: Is this hack required?
-  attr_accessor :inviter_name
-  # Email is not required for an unregistered 'contact' founder.
-  #
-  # TODO: Possibly useless method.
-  def email_required?
-    invitation_token.blank?
-  end
-
   mount_uploader :avatar, AvatarUploader
 
   mount_uploader :college_identification, CollegeIdentificationUploader
@@ -130,7 +120,7 @@ class Founder < ApplicationRecord
   mount_uploader :income_proof, IncomeProofUploader
   mount_uploader :letter_from_parent, LetterFromParentUploader
 
-  normalize_attribute :startup_id, :invitation_token, :twitter_url, :linkedin_url, :name, :slack_username, :resume_url,
+  normalize_attribute :startup_id, :twitter_url, :linkedin_url, :name, :slack_username, :resume_url,
     :semester, :year_of_graduation, :gender, :id_proof_type
 
   before_save :capitalize_name_fragments
@@ -145,7 +135,6 @@ class Founder < ApplicationRecord
   end
 
   has_secure_token :auth_token
-  has_secure_token :invitation_token
 
   def display_name
     name.presence || email
@@ -245,10 +234,6 @@ class Founder < ApplicationRecord
   end
 
   delegate :email, to: :user
-
-  def invited
-    invited_startup.present?
-  end
 
   def self.reference_sources
     [

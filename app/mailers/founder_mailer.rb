@@ -10,14 +10,6 @@ class FounderMailer < ApplicationMailer
     mail(to: @founder.email, subject: "Feedback for your recent office hour with coach #{@faculty.name}")
   end
 
-  # Invite an applicant founder to join a startup.
-  def invite(founder, startup)
-    @founder = founder
-    @startup = startup
-
-    mail(to: founder.email, subject: 'You have been invited to join a team at SV.CO')
-  end
-
   # Inform founder when he is removed from slack due to subscription expiry
   def slack_removal(founder)
     @founder = founder

@@ -43,7 +43,7 @@ ActiveAdmin.register Founder do
   filter :roll_number
   filter :created_at, label: 'Registered on'
   permit_params :name, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :born_on,
-    :communication_address, :phone, :invitation_token, :college_id, :roll_number,
+    :communication_address, :phone, :college_id, :roll_number,
     :college_course, :semester, :year_of_graduation, :twitter_url, :linkedin_url, :personal_website_url, :blog_url,
     :angel_co_url, :github_url, :behance_url, :gender, :skype_id, :exited, :parent_name, roles: [], tag_list: []
 

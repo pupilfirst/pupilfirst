@@ -64,7 +64,6 @@ class Startup < ApplicationRecord
   end
 
   has_many :founders, dependent: :restrict_with_error
-  has_many :invited_founders, class_name: 'Founder', foreign_key: 'invited_startup_id', inverse_of: :invited_startup, dependent: :restrict_with_error
   has_many :timeline_events, dependent: :destroy
   has_many :startup_feedback, dependent: :destroy
   has_many :karma_points, dependent: :restrict_with_exception
@@ -252,10 +251,6 @@ class Startup < ApplicationRecord
     label = product_name
     label += " (#{name})" if name.present?
     label
-  end
-
-  def billing_founders_count
-    @billing_founders_count ||= founders.not_exited.count + invited_founders.count
   end
 
   def present_week_number

@@ -4,24 +4,27 @@ pdf_thumbnail_path = 'spec/support/uploads/resources/pdf-thumbnail.png'
 video_path = 'spec/support/uploads/resources/video-sample.mp4'
 video_thumbnail_path = 'spec/support/uploads/resources/video-thumbnail.png'
 
-after 'development:targets' do
+after 'development:targets', 'development:courses' do
   puts 'Seeding resources'
 
   target = Startup.find_by(name: 'The Avengers').level.target_groups.first.targets.first
+  course = target.course
 
   Resource.create!(
     file: Rails.root.join(pdf_path).open,
     thumbnail: Rails.root.join(pdf_thumbnail_path).open,
     title: 'Public PDF File',
     description: 'This is a public PDF file, meant to be accessible by everyone!',
-    targets: [target]
+    targets: [target],
+    course: course
   )
 
   Resource.create!(
     title: 'Public Link',
     description: 'This is a library entry with a link to an external resource',
     link: 'https://www.google.com',
-    targets: [target]
+    targets: [target],
+    course: course
   )
 
   Resource.create!(
@@ -29,7 +32,8 @@ after 'development:targets' do
     thumbnail: Rails.root.join(video_thumbnail_path).open,
     title: 'Public MP4 File',
     description: 'This is an MP4 video, which we should be able to stream.',
-    targets: [target]
+    targets: [target],
+    course: course
   )
 
   Resource.create!(
@@ -37,13 +41,15 @@ after 'development:targets' do
     thumbnail: Rails.root.join(video_thumbnail_path).open,
     title: 'Public Embedded Video',
     description: 'This is a YouTube embed. It should be playable from the page.',
-    targets: [target]
+    targets: [target],
+    course: course
   )
 
   Resource.create!(
     file: Rails.root.join(pdf_path).open,
     title: 'PDF for approved startups',
-    description: 'This is a restricted PDF file, meant to be accessible by approved startups!'
+    description: 'This is a restricted PDF file, meant to be accessible by approved startups!',
+    course: course
   )
 
   after 'development:levels' do
@@ -54,7 +60,7 @@ after 'development:targets' do
       thumbnail: Rails.root.join(pdf_thumbnail_path).open,
       title: 'PDF for level 1+ startups',
       description: 'This is a restricted PDF file, meant to be accessible by approved startups of level 1 and above.',
-      level: level_one
+      course: course
     )
   end
 end

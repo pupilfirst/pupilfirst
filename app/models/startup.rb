@@ -5,21 +5,12 @@ class Startup < ApplicationRecord
   include PrivateFilenameRetrievable
   acts_as_taggable
 
-  # For an explanation of these legacy values, see linked trello card.
-  #
-  # @see https://trello.com/c/SzqE6l8U
-  LEGACY_STARTUPS_COUNT = 849
-  LEGACY_INCUBATION_REQUESTS = 5281
-
   REGISTRATION_TYPE_PRIVATE_LIMITED = 'private_limited'
   REGISTRATION_TYPE_PARTNERSHIP = 'partnership'
   REGISTRATION_TYPE_LLP = 'llp' # Limited Liability Partnership
 
   MAX_PITCH_CHARACTERS = 140 unless defined?(MAX_PITCH_CHARACTERS)
   MAX_PRODUCT_DESCRIPTION_CHARACTERS = 150
-
-  # agreement duration in years
-  AGREEMENT_DURATION = 5
 
   COURSE_FEE = 50_000
 
@@ -31,9 +22,6 @@ class Startup < ApplicationRecord
   scope :approved, -> { where.not(dropped_out: true) }
   scope :dropped_out, -> { where(dropped_out: true) }
   scope :not_dropped_out, -> { where.not(dropped_out: true) }
-  scope :agreement_signed, -> { where 'agreement_signed_at IS NOT NULL' }
-  scope :agreement_live, -> { where('agreement_signed_at > ?', AGREEMENT_DURATION.years.ago) }
-  scope :agreement_expired, -> { where('agreement_signed_at < ?', AGREEMENT_DURATION.years.ago) }
 
   # Custom scope to allow AA to filter by intersection of tags.
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
@@ -186,8 +174,11 @@ class Startup < ApplicationRecord
     founders_list.each { |u| founders << u }
   end
 
-  def agreement_live?
-    agreement_signed_at.present? ? agreement_signed_at > AGREEMENT_DURATION.years.ago : false
+  def self.current_startups_split
+    {
+      'Approved' => approved.count,
+      'Dropped-out' => dropped_out.count
+    }
   end
 
   def founder?(founder)

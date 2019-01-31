@@ -14,7 +14,6 @@ after 'development:levels' do
     level: startup_course_level_1,
     product_name: 'Super Product',
     product_description: 'This really is a superb product! ;)',
-    agreement_signed_at: 18.months.ago,
     website: 'https://www.superstartup.in',
     logo: File.open(File.join(Rails.root, 'app/assets/images/mailer/logo-mailer.png')),
     presentation_link: 'https://slideshare.net/superstartupdeck',
@@ -33,7 +32,6 @@ after 'development:levels' do
     level: startup_course_level_1,
     product_name: 'The Avengers',
     product_description: 'Earths Mightiest Heroes joined forces to take on threats that were too big for any one hero to tackle.',
-    agreement_signed_at: 2.years.ago,
     website: 'https://www.example.org',
     program_started_on: 4.weeks.ago
   )
@@ -44,7 +42,6 @@ after 'development:levels' do
     level: developer_course_level_1,
     product_name: 'Justice League',
     product_description: 'The flying car',
-    agreement_signed_at: 2.years.ago,
     website: 'https://www.example.org',
     program_started_on: 2.weeks.ago
   )
@@ -55,7 +52,6 @@ after 'development:levels' do
     level: vr_course_level_1,
     product_name: 'Guardians of the Galaxy',
     product_description: 'The Quad Blasters are Star-Lords primary weapons in combat.',
-    agreement_signed_at: 1.years.ago,
     website: 'https://www.example.org',
     program_started_on: 1.weeks.ago
   )

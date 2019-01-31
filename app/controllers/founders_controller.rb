@@ -21,16 +21,13 @@ class FoundersController < ApplicationController
 
   # GET /founder/edit
   def edit
-    authorize current_founder
-    @founder = current_founder.decorate
+    @founder = authorize(current_founder)
     @form = Founders::EditForm.new(current_founder)
   end
 
   # PATCH /founder
   def update
-    authorize current_founder
-
-    @founder = current_founder.decorate
+    @founder = authorize(current_founder)
     @form = Founders::EditForm.new(current_founder)
 
     if @form.validate(params[:founders_edit])

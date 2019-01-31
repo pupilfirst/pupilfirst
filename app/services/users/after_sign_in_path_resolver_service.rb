@@ -11,7 +11,7 @@ module Users
     end
 
     def after_sign_in_path
-      faculty_path || admin_path || founder_path || root_path
+      faculty_path || admin_path || founder_path || exited_founder_path || root_path
     end
 
     private
@@ -33,6 +33,13 @@ module Users
       return if @user.founders.not_exited.blank?
 
       url_helpers.student_dashboard_path
+    end
+
+    def exited_founder_path
+      exited_founder = @user.founders.where(exited: true).first
+      return if exited_founder.blank?
+
+      url_helpers.student_path(exited_founder)
     end
 
     def root_path

@@ -5,11 +5,6 @@
         = image_tag resource.thumbnail.url
       - else
         = image_tag 'resources/shared/default-thumbnail.png', class: 'img-responsive'
-    - if resource.level_exclusive?
-      .level-exclusive
-        p.text-uppercase
-          | Level Exclusive
-
     .resource-content
       h4.mb-3
         = link_to truncate( resource.title, length: 50, separator: ' ' ), resource

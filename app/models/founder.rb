@@ -15,8 +15,6 @@ class Founder < ApplicationRecord
   COFOUNDER_ACCEPTED = 'accepted'
   COFOUNDER_REJECTED = 'rejected'
 
-  ID_PROOF_TYPES = ['Aadhaar Card', 'Driving License', 'Passport', 'Voters ID'].freeze
-
   # Monthly fee amount for founders.
   FEE = 4000
 
@@ -74,7 +72,6 @@ class Founder < ApplicationRecord
 
   validates :born_on, presence: true, allow_nil: true
   validates :gender, inclusion: { in: valid_gender_values }, allow_nil: true
-  validates :id_proof_type, inclusion: { in: ID_PROOF_TYPES }, allow_nil: true
 
   validate :age_more_than_18
 

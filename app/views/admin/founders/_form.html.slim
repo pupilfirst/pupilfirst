@@ -41,7 +41,6 @@
 
   = f.inputs 'Admissions Data'
     = f.input :identification_proof, as: :file
-    = f.input :id_proof_type, as: :select, collection: Founder::ID_PROOF_TYPES
     = f.input :id_proof_number
     = f.input :permanent_address
     = f.input :address_proof, as: :file

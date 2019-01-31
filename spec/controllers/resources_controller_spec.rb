@@ -1,8 +1,9 @@
 require 'rails_helper'
 
 describe ResourcesController do
-  let!(:binary_resource) { create :resource }
-  let!(:video_resource) { create :resource_video_file }
+  let!(:course) { create :course }
+  let!(:binary_resource) { create :resource, course: course, public: true }
+  let!(:video_resource) { create :resource_video_file, course: course, public: true }
 
   describe 'GET download' do
     it 'increments downloads of resource by 1' do

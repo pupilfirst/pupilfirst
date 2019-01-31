@@ -4,6 +4,7 @@ FactoryBot.define do
     thumbnail { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-thumbnail.png')) }
     title { Faker::Lorem.words(6).join ' ' }
     description { Faker::Lorem.words(12).join ' ' }
+    course
 
     factory :resource_video_file do
       file { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'support', 'uploads', 'resources', 'video-sample.mp4')) }

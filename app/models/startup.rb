@@ -64,7 +64,6 @@ class Startup < ApplicationRecord
   end
 
   has_many :founders, dependent: :restrict_with_error
-  has_many :timeline_events, dependent: :destroy
   has_many :startup_feedback, dependent: :destroy
   has_many :karma_points, dependent: :restrict_with_exception
   has_many :connect_requests, dependent: :destroy

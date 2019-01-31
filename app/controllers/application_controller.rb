@@ -1,8 +1,8 @@
 class ApplicationController < ActionController::Base
   include Pundit
 
-  # Prevent CSRF attacks by resetting user session. Note that this is different from the default of :exception.
-  protect_from_forgery with: :reset_session
+  # Prevent CSRF attacks by raising an exception. Note that this is different from the default of :null_session.
+  protect_from_forgery with: :exception
 
   # Activate pretender.
   impersonates :user

@@ -46,8 +46,8 @@ feature 'DM Startup Feedback' do
     sign_in_user(admin.user)
 
     # add slack info for founders
-    startup.founders.first.update!(slack_user_id: 'UABCDEF')
-    startup.founders.second.update!(slack_user_id: 'U123456')
+    startup.founders.first.update!(slack_user_id: 'UABCDEF', slack_username: 'jack')
+    startup.founders.second.update!(slack_user_id: 'U123456', slack_username: 'jill')
     startup.reload
   end
 
@@ -68,14 +68,19 @@ feature 'DM Startup Feedback' do
       expect(page).to have_text(startup_feedback.feedback)
     end
 
-    scenario 'Admin sends DM to all founders from the show page' do
+    scenario 'Admin sends DM to all founders from the show page', js: true do
       visit admin_startup_feedback_path(startup_feedback)
       expect(page).to have_text("Startup feedback ##{startup_feedback.id}")
-      click_on 'Send DM to all founders.'
 
+      accept_alert do
+        click_on 'Send DM to all founders.'
+      end
+
+      expect(page).to have_content("Your feedback has been sent as DM to:")
+      expect(page).to have_content("jack")
+      expect(page).to have_content("jill")
       expect(founder_1_request).to have_been_made.once
       expect(founder_2_request).to have_been_made.once
-      expect(page).to have_text("Startup feedback ##{startup_feedback.id}")
     end
 
     scenario 'Admin sends DM to a selected founder from the show page' do

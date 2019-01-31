@@ -23,12 +23,20 @@ let handleResponseJSON = (te, replaceTimelineEvent, json) =>
     |> replaceTimelineEvent;
   };
 
-let undoReview = (te, replaceTimelineEvent, _event) => {
+let undoReview = (te, replaceTimelineEvent, authenticityToken, _event) => {
   let id = te |> TimelineEvent.id |> string_of_int;
+  let payload = Js.Dict.empty();
+  Js.Dict.set(payload, "authenticity_token", authenticityToken |> Js.Json.string);
   Js.Promise.(
     Fetch.fetchWithInit(
       "/timeline_events/" ++ id ++ "/undo_review",
-      Fetch.RequestInit.make(~method_=Post, ~credentials=Fetch.SameOrigin, ()),
+      Fetch.RequestInit.make(
+        ~method_=Post,
+        ~body=Fetch.BodyInit.make(Js.Json.stringify(Js.Json.object_(payload))),
+        ~headers=Fetch.HeadersInit.make({"Content-Type": "application/json"}),
+        ~credentials=Fetch.SameOrigin,
+        (),
+      ),
     )
     |> then_(response =>
          if (Fetch.Response.ok(response) || Fetch.Response.status(response) == 422) {
@@ -51,12 +59,13 @@ let undoReview = (te, replaceTimelineEvent, _event) => {
   );
 };
 
-let make = (~timelineEvent, ~replaceTimelineEvent, _children) => {
+let make = (~timelineEvent, ~replaceTimelineEvent, ~authenticityToken, _children) => {
   ...component,
   render: _self =>
     <div className="d-flex justify-content-end">
       <button
-        className="btn btn-sm btn-default undo-review-btn" onClick=(undoReview(timelineEvent, replaceTimelineEvent))>
+        className="btn btn-sm btn-default undo-review-btn"
+        onClick=(undoReview(timelineEvent, replaceTimelineEvent, authenticityToken))>
         <i className="fa fa-undo mr-1" />
         ("Undo Review" |> str)
       </button>

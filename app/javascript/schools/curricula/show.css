@@ -2,6 +2,13 @@
     box-sizing: border-box;
 }
 
+body {
+    font-family: 'Nunito Sans', sans-serif;
+    color: #3A3F52;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
 .global-sidebar {
     width: 304px;
 }
@@ -19,7 +26,75 @@
     width: 240px;
 }
 
-.target-group__container > :not(:last-child):before {
+.blanket {
+    bottom: 0px;
+    left: 0px;
+    position: fixed;
+    right: 0px;
+    top: 0px;
+    z-index: 500;
+    background: rgba(9, 30, 66, 0.54);
+    transition: opacity 220ms ease 0s;
+}
+
+.drawer-right {
+    background-color: white;
+    display: flex;
+    height: 100vh;
+    right: 0px;
+    position: fixed;
+    top: 0px;
+    width: 45rem;
+    z-index: 501;
+    overflow-x: hidden;
+}
+
+.create-target-form {
+    background-color: #EDF3FA;
+}
+
+.resources-upload-tab__link {
+    cursor: pointer;
+}
+
+.resources-upload-tab__link--active {
+    background-color: #F2F8FF;
+    @apply border-l border-t border-r -mb-px rounded-t;
+}
+
+.resources-upload-tab__body {
+    background-color: #F2F8FF;
+}
+
+.input-file {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.input-file+label {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    background-color: #E6F1FF;
+    border-radius: 8px;
+    overflow: hidden;
+    padding: 0.5rem 1rem;
+}
+
+.input-file+label {
+    color: #66788A;
+    border: 1px dashed #D3D8E1;
+}
+
+.input-file:focus+label, .input-file.has-focus+label, .input-file+label:hover {
+    color: #A8B7C7;
+}
+
+.target-group__container> :not(:last-child):before {
     content: "";
     position: absolute;
     top: 0;
@@ -28,7 +103,7 @@
     transform: translateX(-50%);
     width: 4px;
     z-index: -1;
-    @apply .bg-grey-light;
+    @apply bg-grey-light;
 }
 
 .target-group__box {

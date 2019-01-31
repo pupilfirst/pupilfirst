@@ -7,27 +7,22 @@ class ResourcePolicy < ApplicationPolicy
     show?
   end
 
-  def scope
-    Pundit.policy_scope!(user, Resource.joins(:course))
-  end
-
   class Scope < Scope
     def resolve
-      # Public resources for the school.
-      resources = scope.where(public: true)
+      # Return nothing if visiting a PupilFirst page.
+      return scope.none if current_school.blank?
 
-      current_founder = user&.current_founder
+      resources = scope.live.joins(course: :school)
 
-      # Return public resources if current founder is not present
-      return resources if current_founder.blank?
+      public_resources = resources.where(schools: { id: current_school }).where(public: true)
 
-      startup = current_founder.startup
+      # Return only public resources in current school if no founder is signed in.
+      return public_resources if current_founder.blank?
 
-      # ...plus resources based on the startup's course...
-      resources = resources.or(scope.where('course_id = ?', startup.course.id))
-
-      # ...plus resources based on targets (for cloned courses)
-      resources.or(scope.where(id: target_resource_ids(startup.course)))
+      # Return public resources and private course resources where founder is member.
+      public_resources.or(
+        resources.where(courses: { id: current_founder.level.course }).where(public: false)
+      )
     end
 
     def target_resource_ids(course)

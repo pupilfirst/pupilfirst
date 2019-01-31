@@ -4,7 +4,7 @@ describe Courses::AssignReviewerService do
   subject { described_class.new(course) }
 
   let(:course) { create :course }
-  let(:faculty) { create :faculty }
+  let(:faculty) { create :faculty, school: course.school }
 
   describe '#assign' do
     context 'if the course is already assigned' do

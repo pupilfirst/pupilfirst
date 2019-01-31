@@ -49,7 +49,7 @@ class ApplicationController < ActionController::Base
     elsif resource.is_a?(AdminUser)
       super
     else
-      Users::AfterSignInPathResolverService.new(resource).after_sign_in_path
+      Users::AfterSignInPathResolverService.new(resource, current_school).after_sign_in_path
     end
   end
 
@@ -87,7 +87,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_coach
-    @current_coach ||= current_user&.faculty
+    @current_coach ||= current_user.present? ? current_user.faculty.find_by(school: current_school) : nil
   end
 
   def current_founder
@@ -142,7 +142,8 @@ class ApplicationController < ActionController::Base
     OpenStruct.new(
       current_user: current_user,
       current_founder: current_founder,
-      current_school: current_school
+      current_school: current_school,
+      current_coach: current_coach
     )
   end
 

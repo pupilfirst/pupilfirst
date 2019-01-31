@@ -12,6 +12,7 @@ class Faculty < ApplicationRecord
   has_secure_token
 
   belongs_to :user
+  belongs_to :school
   has_many :startup_feedback, dependent: :restrict_with_error
   has_many :targets, dependent: :restrict_with_error
   has_many :connect_slots, dependent: :destroy

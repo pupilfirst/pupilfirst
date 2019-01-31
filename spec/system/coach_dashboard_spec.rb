@@ -15,7 +15,7 @@ feature 'Coach Dashboard' do
   # ... a couple of startups and a couch.
   let(:startup_1) { create :startup, level: level_1 }
   let(:startup_2) { create :startup, level: level_1 }
-  let(:coach) { create :faculty }
+  let(:coach) { create :faculty, school: school }
 
   # Create a couple of pending timeline events for the startups.
   let!(:timeline_event_1) { create(:timeline_event, latest: true, target: target) }

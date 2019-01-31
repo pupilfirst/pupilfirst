@@ -17,7 +17,5 @@ FactoryBot.define do
     trait(:four) { number { 4 } }
     trait(:five) { number { 5 } }
     trait(:six) { number { 6 } }
-
-    trait(:sponsored) { course { create :course, sponsored: true } }
   end
 end

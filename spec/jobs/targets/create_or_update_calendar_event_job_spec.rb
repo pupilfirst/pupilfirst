@@ -12,7 +12,7 @@ describe Targets::CreateOrUpdateCalendarEventJob do
   end
 
   let(:course_1) { create :course }
-  let(:course_2) { create :course, sponsored: true }
+  let(:course_2) { create :course }
 
   let(:level_1) { create :level, :one, course: course_1 }
   let(:level_2) { create :level, :two, course: course_1 }

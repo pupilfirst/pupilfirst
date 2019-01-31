@@ -13,7 +13,5 @@ FactoryBot.define do
       create(:founder, startup: startup)
       create(:founder, startup: startup)
     end
-
-    trait(:sponsored) { level { create :level, :one, :sponsored } }
   end
 end

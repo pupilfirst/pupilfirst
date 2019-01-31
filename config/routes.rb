@@ -22,17 +22,7 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
 
   # TODO: Remove these founder routes as we no longer have 'founders'. Always use the corresponding 'student' routes below.
-  resource :founder, only: %i[edit update] do
-    member do
-      get 'fee'
-      post 'fee', action: 'fee_submit'
-
-      scope module: 'founders', controller: 'dashboard' do
-        get 'dashboard'
-        get 'dashboard/targets/:id(/:slug)', action: 'target_overlay', as: 'dashboard_target'
-      end
-    end
-  end
+  resource :founder, only: %i[edit update]
 
   resources :founders, only: %i[] do
     member do

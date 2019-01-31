@@ -16,7 +16,7 @@ describe Targets::SendSessionRemindersJob do
   end
 
   let(:course_1) { create :course }
-  let(:course_2) { create :course, sponsored: true }
+  let(:course_2) { create :course }
 
   let(:level_1) { create :level, :one, course: course_1 }
   let(:level_2) { create :level, :two, course: course_1 }
@@ -47,7 +47,7 @@ describe Targets::SendSessionRemindersJob do
   describe '#perform' do
     let(:expected_message) { build_expected_message(session_imminent) }
 
-    context 'when a session is imminenet for startups of unsponsored courses' do
+    context 'when a session is imminenet for startups' do
       let!(:session_imminent) { create :target, :session, session_at: 30.minutes.from_now, target_group: l2_target_group }
 
       it 'sends slack messages for imminent sessions to the appropriate founders' do
@@ -80,29 +80,6 @@ describe Targets::SendSessionRemindersJob do
 
       it 'does not send slack messages for imminent session' do
         Founder.where(startup: [startup_l2, startup_l3]).each do |founder|
-          expect(message_service).not_to receive(:post).with(message: expected_message, founder: founder)
-        end
-
-        subject.perform_now
-      end
-    end
-
-    context 'when session is in a course that is sponsored' do
-      let!(:session_imminent) { create :target, :session, session_at: 30.minutes.from_now, target_group: s2_l2_target_group }
-
-      it 'sends slack messages to founders in all startups at or above session level' do
-        # All founders in subscribed course in a startup at or above session level should get noticiations.
-        Founder.where(startup: [startup_s2_l2, startup_s2_l3]).each do |founder|
-          expect(message_service).to receive(:post).with(message: expected_message, founder: founder)
-        end
-
-        # Founders in subscribed course below session level should not get notifications.
-        Founder.where(startup: [startup_s2_l1]).each do |founder|
-          expect(message_service).not_to receive(:post).with(message: expected_message, founder: founder)
-        end
-
-        # Founders in other courses should not receive notifications.
-        Founder.where(startup: [startup_l1, startup_l2, startup_l3]).each do |founder|
           expect(message_service).not_to receive(:post).with(message: expected_message, founder: founder)
         end
 

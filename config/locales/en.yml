@@ -100,13 +100,6 @@ en:
         engineering: Engineering
         design: Design
 
-    payment:
-      status:
-        requested: Requested
-        paid: Paid
-        failed: Failed
-        not_requested: Not Requested
-
     startup:
       registration_type:
         private_limited: Private Limited
@@ -125,10 +118,6 @@ en:
         wow: 'Wow!'
 
   services:
-    public_slack:
-      prune_membership:
-        removal_notice: "I've just removed a few founders with expired subscriptions to keep this channel exclusive to active members."
-
     karma_points:
       create:
         founder_slack_notification: 'You have been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
@@ -147,14 +136,6 @@ en:
           The link to the session will be shared in the Collective Slack channel 15 minutes prior to the session.
 
           Here is the general format for the session: 20 minutes talk + 10 mins Q&A. Please use the Q&A option in Zoom to post any questions you might have. They will be answered at the end of the session by the speaker.
-
-  presenters:
-    startups:
-      billing:
-        subscription_notice:
-          expired: "Your SV.CO subscription expired on <span class='text-danger'>%{date}</span>!"
-          expiring_soon: "Your SV.CO subscription will expire on <span class='alert-text'>%{date}</span>."
-          active: "Your SV.CO subscription expires on <span class='brand-primary'>%{date}</span>."
 
   about:
     contact:

@@ -7,12 +7,11 @@ ActiveAdmin.register Course do
 
   filter :name
 
-  permit_params :name, :sponsored, :max_grade, :pass_grade, :grade_labels, :ends_at
+  permit_params :name, :max_grade, :pass_grade, :grade_labels, :ends_at
 
   form do |f|
     f.inputs do
       f.input :name
-      f.input :sponsored
       f.input :max_grade
       f.input :pass_grade
       f.input :grade_labels, as: :text, input_html: { value: f.object.grade_labels.to_json }

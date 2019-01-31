@@ -14,6 +14,6 @@ after 'development:schools' do
 
   Course.create!(name: 'Startup', max_grade: 5, pass_grade: 2, grade_labels: grade_labels, school: sv)
   Course.create!(name: 'Developer', max_grade: 5, pass_grade: 2, grade_labels: grade_labels, school: sv)
-  Course.create!(name: 'VR', sponsored: true, max_grade: 5, pass_grade: 2, grade_labels: grade_labels, school: sv)
-  Course.create!(name: 'iOS', sponsored: true, max_grade: 5, pass_grade: 3, grade_labels: grade_labels, school: sv)
+  Course.create!(name: 'VR', max_grade: 5, pass_grade: 2, grade_labels: grade_labels, school: sv)
+  Course.create!(name: 'iOS', max_grade: 5, pass_grade: 3, grade_labels: grade_labels, school: sv)
 end

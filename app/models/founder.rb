@@ -68,6 +68,10 @@ class Founder < ApplicationRecord
     [GENDER_MALE, GENDER_FEMALE, GENDER_OTHER]
   end
 
+  def self.ransackable_scopes(_auth)
+    %i[ransack_tagged_with]
+  end
+
   validates :born_on, presence: true, allow_nil: true
   validates :gender, inclusion: { in: valid_gender_values }, allow_nil: true
   validates :id_proof_type, inclusion: { in: ID_PROOF_TYPES }, allow_nil: true

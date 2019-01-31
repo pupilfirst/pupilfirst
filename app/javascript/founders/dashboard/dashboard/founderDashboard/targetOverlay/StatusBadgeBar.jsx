@@ -99,7 +99,7 @@ export default class StatusBadgeBar extends React.Component {
         </div>
         {Object.keys(grades).map(criterionId => {
           return (
-            <div>
+            <div key={criterionId}>
               <div className="target-overlay-grade-bar__header d-flex justify-content-between pb-1">
                 <div className="target-overlay-grade-bar__criterion-name">
                   {criteriaNames[criterionId]}

@@ -84,11 +84,7 @@ gem 'postmark-rails', '~> 0.15' # Official integration library for using Rails a
 # gem 'intercom-rails', '~> 0.4' # The easiest way to install Intercom in a Rails app.
 gem 'intercom', '~> 3.5' # Ruby bindings for the Intercom API
 gem 'jspdf-rails', '~> 1.0' # HTML5 client-side pdf generation - for certificates
-gem 'draper', '~> 3.0' # Decorators/View-Models for Rails Applications # TODO: Pre-release version for Rails 5 support. Upgrade to stable when available.
 gem 'responders', '~> 2.3' # A set of Rails responders to dry up your application (respond_to / with)
-gem 'prawn', '~> 2.1' # Used to generate dynmaic portions of agreement pdfs
-gem 'prawn-table', '~> 0.2' # Support for drawing tables in prawn pdfs
-gem 'combine_pdf', '~> 1.0' # Used to combine sections of agreement pdfs
 gem 'rollbar', '~> 2.14' # Exception tracking and logging from Ruby to Rollbar https://rollbar.com
 gem 'humanize', '~> 1.3' # Convert numbers to english words
 gem 'scarf', '~> 0.2' # A Ruby library for generating initial avatars and identicons.

@@ -1,8 +1,8 @@
 ActiveAdmin.register Startup do
   permit_params :product_name, :product_description, :legal_registered_name, :website, :logo, :facebook_link,
-    :twitter_link, :created_at, :updated_at, :dropped_out, :registration_type, :agreement_signed_at,
+    :twitter_link, :created_at, :updated_at, :dropped_out, :registration_type,
     :presentation_link, :product_video_link, :wireframe_link, :prototype_link, :slug, :level_id,
-    :partnership_deed, :payment_reference, :agreements_verified, founder_ids: [], tag_list: []
+    :partnership_deed, :payment_reference, founder_ids: [], tag_list: []
 
   filter :product_name, as: :string
   filter :level_course_id, as: :select, label: 'Course', collection: -> { Course.all }
@@ -81,7 +81,6 @@ ActiveAdmin.register Startup do
     column :district
     column :pin
     column :product_progress
-    column :agreement_signed_at
   end
 
   action_item :view_feedback, only: :show do
@@ -169,7 +168,6 @@ ActiveAdmin.register Startup do
         linked_tags(startup.tags)
       end
 
-      row :agreement_signed_at
       row :email
 
       row :logo do
@@ -242,7 +240,6 @@ ActiveAdmin.register Startup do
       row :registration_type
       row :address
       row :program_started_on
-      row :agreements_verified
 
       row :partnership_deed do
         if startup.partnership_deed.present?

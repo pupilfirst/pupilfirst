@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_29_055744) do
+ActiveRecord::Schema.define(version: 2019_01_31_094209) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -504,7 +504,6 @@ ActiveRecord::Schema.define(version: 2019_01_29_055744) do
     t.string "product_progress"
     t.string "presentation_link"
     t.string "pin"
-    t.datetime "agreement_signed_at"
     t.text "metadata"
     t.string "slug"
     t.string "stage"
@@ -515,7 +514,6 @@ ActiveRecord::Schema.define(version: 2019_01_29_055744) do
     t.boolean "dropped_out", default: false
     t.integer "level_id"
     t.date "program_started_on"
-    t.boolean "agreements_verified"
     t.string "courier_name"
     t.string "courier_number"
     t.string "partnership_deed"

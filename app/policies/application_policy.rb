@@ -1,10 +1,12 @@
 class ApplicationPolicy
-  attr_reader :user, :current_founder, :record
+  attr_reader :user, :record, :current_founder, :current_school
 
   def initialize(user, record)
-    @user = user
-    @current_founder = user&.current_founder
+    @pundit_user = user
+    @user = user.current_user
     @record = record
+    @current_founder = user.current_founder
+    @current_school = user.current_school
   end
 
   def index?
@@ -36,15 +38,17 @@ class ApplicationPolicy
   end
 
   def scope
-    Pundit.policy_scope!(user, record.class)
+    Pundit.policy_scope!(@pundit_user, record.class)
   end
 
   class Scope
-    attr_reader :user, :scope
+    attr_reader :user, :scope, :current_founder, :current_school
 
     def initialize(user, scope)
-      @user = user
+      @user = user.current_user
       @scope = scope
+      @current_founder = user.current_founder
+      @current_school = user.current_school
     end
 
     def resolve

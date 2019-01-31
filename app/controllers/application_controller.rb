@@ -11,7 +11,6 @@ class ApplicationController < ActionController::Base
   after_action :prepare_unobtrusive_flash
   before_action :sign_out_if_required
   before_action :pretender
-  before_action :cache_current_founder_in_current_user
 
   helper_method :current_host
   helper_method :current_domain
@@ -139,6 +138,14 @@ class ApplicationController < ActionController::Base
     @current_ability ||= ::Ability.new(true_user)
   end
 
+  def pundit_user
+    OpenStruct.new(
+      current_user: current_user,
+      current_founder: current_founder,
+      current_school: current_school
+    )
+  end
+
   private
 
   def require_active_subscription
@@ -152,10 +159,6 @@ class ApplicationController < ActionController::Base
     service = ::Users::ManualSignOutService.new(self, current_user)
     service.sign_out_if_required
     redirect_to root_url if service.signed_out?
-  end
-
-  def cache_current_founder_in_current_user
-    current_user&.current_founder = current_founder
   end
 
   def authenticate_founder!

@@ -69,6 +69,7 @@ class Startup < ApplicationRecord
 
   belongs_to :level
   has_one :course, through: :level
+  has_one :school, through: :course
   has_many :payments, dependent: :restrict_with_error
   has_many :archived_payments, class_name: 'Payment', foreign_key: 'original_startup_id', dependent: :nullify, inverse_of: :original_startup
 

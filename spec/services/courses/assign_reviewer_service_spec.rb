@@ -7,6 +7,14 @@ describe Courses::AssignReviewerService do
   let(:faculty) { create :faculty, school: course.school }
 
   describe '#assign' do
+    context 'if the faculty is in a different school' do
+      let(:faculty) { create :faculty }
+
+      it 'raises exception' do
+        expect { subject.assign(faculty) }.to raise_exception('Faculty must in same school as course')
+      end
+    end
+
     context 'if the course is already assigned' do
       before do
         create :faculty_course_enrollment, faculty: faculty, course: course

@@ -7,10 +7,6 @@ module FacultyHelper
     7.days.from_now.end_of_week.in_time_zone('Asia/Calcutta').strftime('%b %d')
   end
 
-  def active_tab(name)
-    @active_tab == name ? 'active' : nil
-  end
-
   def faculty_rating_stars(rating)
     # Round rating to nearest .5, or .0.
     rating = ((rating * 2).round / 2.0)

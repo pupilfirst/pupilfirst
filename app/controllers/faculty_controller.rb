@@ -1,21 +1,24 @@
 class FacultyController < ApplicationController
-  before_action :validate_faculty, except: %i[index connect show]
+  before_action :validate_faculty, only: %i[weekly_slots save_weekly_slots mark_unavailable slots_saved]
 
   # GET /faculty, GET /coaches
   def index
     @active_tab = params[:active_tab].presence || 'vr-coaches'
     @skip_container = true
+    @faculty = policy_scope(Faculty)
+
+    raise_not_found unless @faculty.exists?
   end
 
   # GET /faculty/:slug, GET /coaches/:slug
   def show
-    @faculty = Faculty.friendly.find(params[:id])
     @skip_container = true
+    @faculty = policy_scope(Faculty).friendly.find(params[:id])
   end
 
   # POST /faculty/:id/connect
   def connect
-    faculty = authorize(Faculty.friendly.find(params[:id]))
+    faculty = authorize(policy_scope(Faculty).friendly.find(params[:id]))
 
     questions = params[:connect_request][:questions]
     connect_slot = faculty.connect_slots.find(params[:connect_request][:connect_slot])

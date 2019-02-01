@@ -4,28 +4,45 @@ describe FacultyPolicy do
   subject { described_class }
 
   permissions :connect? do
-    let(:faculty) { create :faculty }
     let!(:connect_slot) { create :connect_slot, faculty: faculty, slot_at: 6.days.from_now }
+    let(:startup) { create :startup }
+    let(:faculty) { create :faculty, school: startup.school }
+    let(:current_founder) { startup.founders.first }
+    let!(:enrollment) { create :faculty_startup_enrollment, faculty: faculty, startup: startup }
 
-    it 'denies access to public' do
-      pundit_user = OpenStruct.new(current_user: nil)
-      expect(subject).to_not permit(pundit_user, faculty)
+    let(:pundit_user) do
+      OpenStruct.new(
+        current_user: current_founder&.user,
+        current_founder: current_founder,
+        current_school: current_founder&.school
+      )
     end
 
-    context 'when startup has founders' do
-      let(:startup) { create :startup }
-      let(:pundit_user) { OpenStruct.new(current_user: startup.founders.first.user, current_founder: startup.founders.first) }
+    it 'grants access to founder' do
+      expect(subject).to permit(pundit_user, faculty)
+    end
 
-      it 'grants access to founder' do
-        expect(subject).to permit(pundit_user, faculty)
+    context 'when accessed by the public' do
+      let(:current_founder) { nil }
+
+      it 'denies access' do
+        expect(subject).not_to permit(pundit_user, faculty)
       end
+    end
 
-      context 'when faculty does not have available connect slots' do
-        let!(:connect_request) { create :connect_request, connect_slot: connect_slot }
+    context 'when faculty does not have available connect slots' do
+      let!(:connect_request) { create :connect_request, connect_slot: connect_slot }
 
-        it 'does not grant access to founder' do
-          expect(subject).not_to permit(pundit_user, faculty)
-        end
+      it 'denies access' do
+        expect(subject).not_to permit(pundit_user, faculty)
+      end
+    end
+
+    context "when the faculty is not enrolled to review the teams's submissions" do
+      let!(:enrollment) { nil }
+
+      it 'denies access' do
+        expect(subject).not_to permit(pundit_user, faculty)
       end
     end
   end

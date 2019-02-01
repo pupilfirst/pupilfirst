@@ -130,8 +130,7 @@ module Founders
 
     def open_levels
       @open_levels ||= begin
-        levels = startup.course.levels.where('levels.number >= ?', 1)
-        levels.where(unlock_on: nil).or(levels.where('unlock_on <= ?', Date.today)).to_a
+        startup.course.levels.where(unlock_on: nil).or(startup.course.levels.where('unlock_on <= ?', Date.today)).to_a
       end
     end
 

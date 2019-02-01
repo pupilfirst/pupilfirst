@@ -4,7 +4,10 @@ import TargetsFilterOption from "./TargetsFilterOption";
 
 export default class TargetsFilter extends React.Component {
   levelOptions() {
-    let sortedLevels = _.sortBy(this.props.rootProps.levels, ["number"]);
+    // Exclude level 0 from the dropdown
+    let levels = this.props.rootProps.levels.filter(level => {return level.number > 0;});
+
+    let sortedLevels = _.sortBy(levels, ["number"]);
     return _.map(sortedLevels, level => {
       return (
         <TargetsFilterOption

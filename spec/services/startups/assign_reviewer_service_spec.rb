@@ -4,9 +4,17 @@ describe Startups::AssignReviewerService do
   subject { described_class.new(startup) }
 
   let(:startup) { create :startup }
-  let(:faculty) { create :faculty }
+  let(:faculty) { create :faculty, school: startup.school }
 
   describe '#assign' do
+    context 'if the faculty is in a different school' do
+      let(:faculty) { create :faculty }
+
+      it 'raises exception' do
+        expect { subject.assign(faculty) }.to raise_exception('Faculty must in same school as team')
+      end
+    end
+
     context 'if the direct enrollment already exists' do
       before do
         create :faculty_startup_enrollment, faculty: faculty, startup: startup

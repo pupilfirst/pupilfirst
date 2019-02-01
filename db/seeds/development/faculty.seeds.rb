@@ -74,7 +74,7 @@ after 'development:courses' do
   faculty = Faculty.create!(
     name: 'iOS Coach',
     title: 'Coaching Expert',
-    category: 'developer_coaches',
+    category: 'vr_coaches',
     user: User.create(email: 'ioscoach@example.com'),
     school: sv
   )

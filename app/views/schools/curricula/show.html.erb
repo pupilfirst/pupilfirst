@@ -184,6 +184,7 @@
         <form class="w-full">
           <div class="create-target-form__target-details mx-auto bg-white">
             <div class="max-w-md p-6 mx-auto">
+              <h5 class="uppercase text-center border-b border-grey-light pb-2 mb-4">Target Details</h5>
               <label class="block tracking-wide text-grey-darker text-xs font-semibold mb-2" for="title">
                 Title*
               </label>
@@ -232,13 +233,19 @@
               </div>
             </div>
           </div>
-          <div class="create-target-form__target-behaviour mx-auto pt-6">
-            <h5 class="uppercase text-center">Method of Target Completion</h5>
+          <div class="create-target-form__target-behaviour mx-auto">
             <div class="max-w-md p-6 mx-auto">
+              <h5 class="uppercase text-center border-b border-grey-light pb-2 mb-4">Method of Target Completion</h5>
               <label class="block tracking-wide text-grey-darker text-xs font-semibold mb-2" for="title">
                 Any prerequisite targets?
               </label>
-              <div class="flex">
+              <div class="select-list__item-selected flex items-center justify-between bg-grey-lightest text-xs text-grey-dark border rounded p-3 mb-2">
+                Selected prerequisite target
+                <button>
+                  <svg class="w-3" id="fa3b28d3-128c-4841-a4e9-49257a824d7b" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 15.99"><title>Artboard 2</title><path d="M13,1H9A1,1,0,0,0,8,0H6A1,1,0,0,0,5,1H1A1,1,0,0,0,0,2V3H14V2A1,1,0,0,0,13,1ZM11,13a1,1,0,1,1-2,0V7a1,1,0,0,1,2,0ZM8,13a1,1,0,1,1-2,0V7A1,1,0,0,1,8,7ZM5,13a1,1,0,1,1-2,0V7A1,1,0,0,1,5,7Zm8.5-9H.5a.5.5,0,0,0,0,1H1V15a1,1,0,0,0,1,1H12a1,1,0,0,0,1-1V5h.5a.5.5,0,0,0,0-1Z" fill="#525252"/></svg>
+                 </button>
+              </div>
+              <div class="flex mb-6">
                 <div class="flex-1 mr-3 relative">
                   <select class="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey">
                     <option>Select prerequisite target</option>
@@ -254,16 +261,100 @@
                   Add
                 </button>
               </div>
-            <div class="flex items-center">
+            <div class="flex items-center mb-6">
               <label class="block tracking-wide text-grey-darker text-xs font-semibold mr-6" for="title">
                 Is this target reviewed by a faculty?
               </label>
-              <div class="inline-flex">
-                <button class="bg-grey-light hover:bg-grey text-grey-darkest font-bold py-2 px-4 rounded-l-full">
+              <div class="inline-flex w-64 rounded-lg overflow-hidden border">
+                <button class="w-1/2 bg-white hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none">
                   Yes
                 </button>
-                <button class="bg-grey-light hover:bg-grey text-grey-darkest font-bold py-2 px-4 rounded-r-full">
+                <button class="w-1/2 bg-white border-l hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none">
                   No
+                </button>
+              </div>
+            </div>
+            <div class="mb-6">
+              <label class="block tracking-wide text-grey-darker text-xs font-semibold mr-6 mb-2" for="title">
+                Choose evaluation criteria from your list
+              </label>
+              <div class="select-list__item-selected flex items-center justify-between bg-grey-lightest text-xs text-grey-dark border rounded p-3 mb-2">
+                Selected criteria
+                <button>
+                  <svg class="w-3" id="fa3b28d3-128c-4841-a4e9-49257a824d7b" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 15.99"><title>Artboard 2</title><path d="M13,1H9A1,1,0,0,0,8,0H6A1,1,0,0,0,5,1H1A1,1,0,0,0,0,2V3H14V2A1,1,0,0,0,13,1ZM11,13a1,1,0,1,1-2,0V7a1,1,0,0,1,2,0ZM8,13a1,1,0,1,1-2,0V7A1,1,0,0,1,8,7ZM5,13a1,1,0,1,1-2,0V7A1,1,0,0,1,5,7Zm8.5-9H.5a.5.5,0,0,0,0,1H1V15a1,1,0,0,0,1,1H12a1,1,0,0,0,1-1V5h.5a.5.5,0,0,0,0-1Z" fill="#525252"/></svg>
+                </button>
+              </div>
+              <div class="flex relative">
+                <div class="select-list__group bg-white border rounded rounded-t-none shadow pb-2 w-full">
+                  <div class="px-3 pt-3 pb-2">
+                    <input class="appearance-none bg-transparent border-b w-full text-grey-darker pb-3 px-2 pl-0 leading-tight focus:outline-none" type="text" placeholder="Type to Search" aria-label="Search">
+                  </div>
+                  <div class="px-3 py-2 hover:bg-grey-lighter">Usability</div>
+                  <div class="px-3 py-2 hover:bg-grey-lighter">Quantity</div>
+                  <div class="px-3 py-2 hover:bg-grey-lighter">Learning Experience</div>
+                </div>
+              </div>
+            </div>
+            <div class="mb-6">
+              <label class="block tracking-wide text-grey-darker text-xs font-semibold mr-6 mb-3" for="title">
+                How do you want the student to complete the target?
+              </label>
+              <div class="flex -mx-2">
+                <div class="w-1/3 px-2">
+                  <button class="flex flex-col items-center bg-white border border-grey-light hover:bg-grey-lighter text-grey-darkest text-sm font-semibold focus:outline-none rounded p-4">
+                    <svg class="fill-current w-8 mb-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 29.4"><title>Asset 1</title><g id="bfe57d46-3bb7-42f0-b4e6-eccc9a02f1dd" data-name="Layer 2"><g id="ea523c13-a500-4391-9a0e-cf57c4f4a027" data-name="Layer 1"><path d="M6.35,5.89a.47.47,0,0,0-.46.46,1,1,0,1,1-1-1,.46.46,0,0,0,0-.92A1.94,1.94,0,1,0,6.81,6.35.46.46,0,0,0,6.35,5.89Z"/><path d="M6.35,11.29a.47.47,0,0,0-.46.46,1,1,0,1,1-1-1,.46.46,0,0,0,.46-.46.47.47,0,0,0-.46-.46,1.94,1.94,0,1,0,1.93,1.93A.46.46,0,0,0,6.35,11.29Z"/><path d="M11.75,12.28H8.32a.45.45,0,0,0-.46.46.46.46,0,0,0,.46.46h3.43a.46.46,0,0,0,.46-.46A.45.45,0,0,0,11.75,12.28Z"/><path d="M11.75,10.31H8.32a.46.46,0,0,0-.46.46.45.45,0,0,0,.46.46h3.43a.45.45,0,0,0,.46-.46A.46.46,0,0,0,11.75,10.31Z"/><path d="M10.77,17.68H8.32a.45.45,0,0,0-.46.46.46.46,0,0,0,.46.46h2.45a.46.46,0,0,0,.46-.46A.45.45,0,0,0,10.77,17.68Z"/><path d="M11.75,15.71H8.32a.46.46,0,0,0-.46.46.45.45,0,0,0,.46.46h3.43a.45.45,0,0,0,.46-.46A.46.46,0,0,0,11.75,15.71Z"/><path d="M16.17,6.87H8.32a.47.47,0,0,0,0,.93h7.85a.47.47,0,0,0,0-.93Z"/><path d="M14.21,4.91H8.32a.46.46,0,0,0-.46.46.45.45,0,0,0,.46.46h5.89a.46.46,0,0,0,.46-.46A.47.47,0,0,0,14.21,4.91Z"/><path d="M6.35,16.7a.46.46,0,0,0-.46.46,1,1,0,1,1-1-1,.46.46,0,0,0,.46-.46.47.47,0,0,0-.46-.46,1.94,1.94,0,1,0,1.93,1.94A.45.45,0,0,0,6.35,16.7Z"/><path d="M18.14,0H1.44A1.45,1.45,0,0,0,0,1.44V22.07a1.45,1.45,0,0,0,1.44,1.44H9.79a.47.47,0,0,0,.46-.46.46.46,0,0,0-.46-.46H1.44a.52.52,0,0,1-.52-.52V1.44A.52.52,0,0,1,1.44.92h16.7a.52.52,0,0,1,.52.52V16.67a.46.46,0,1,0,.92,0V1.44A1.45,1.45,0,0,0,18.14,0Z"/><path d="M22.48,18.67a1.75,1.75,0,0,0-1.19.33,1.67,1.67,0,0,0-2.45-.49,1.67,1.67,0,0,0-1.27-.82,1.7,1.7,0,0,0-.94.17V12a1.68,1.68,0,0,0-1.86-1.68,1.74,1.74,0,0,0-1.51,1.75V18L11.91,19.3A2.91,2.91,0,0,0,11.13,22l1,4.37a3.87,3.87,0,0,0,3.79,3H20.1A3.91,3.91,0,0,0,24,25.5V20.42A1.74,1.74,0,0,0,22.48,18.67Zm.6,6.83a3,3,0,0,1-3,3H16a3,3,0,0,1-2.9-2.29l-1-4.37A2,2,0,0,1,12.56,20l.7-.7v1.59a.46.46,0,0,0,.46.46.47.47,0,0,0,.46-.46V12.07a.81.81,0,0,1,.69-.83.71.71,0,0,1,.59.19.77.77,0,0,1,.25.57v8.1a.46.46,0,0,0,.46.46.45.45,0,0,0,.46-.46v-.73a.77.77,0,0,1,.26-.57.75.75,0,0,1,.59-.2.82.82,0,0,1,.69.84v1.15a.46.46,0,0,0,.92,0v-.73a.76.76,0,0,1,.25-.57.79.79,0,0,1,.6-.2.82.82,0,0,1,.68.84v1.15a.47.47,0,0,0,.93,0v-.73a.77.77,0,0,1,.84-.77.82.82,0,0,1,.69.84V25.5Z"/></g></g></svg>
+                    Simply mark the target as completed.
+                  </button>
+                </div>
+                <div class="w-1/3 px-2">
+                  <button class="flex flex-col items-center bg-white border border-grey-light hover:bg-grey-lighter text-grey-darkest text-sm font-semibold focus:outline-none rounded p-4">
+                    <svg class="fill-current w-8 mb-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 29.4"><title>Asset 1</title><g id="bfe57d46-3bb7-42f0-b4e6-eccc9a02f1dd" data-name="Layer 2"><g id="ea523c13-a500-4391-9a0e-cf57c4f4a027" data-name="Layer 1"><path d="M6.35,5.89a.47.47,0,0,0-.46.46,1,1,0,1,1-1-1,.46.46,0,0,0,0-.92A1.94,1.94,0,1,0,6.81,6.35.46.46,0,0,0,6.35,5.89Z"/><path d="M6.35,11.29a.47.47,0,0,0-.46.46,1,1,0,1,1-1-1,.46.46,0,0,0,.46-.46.47.47,0,0,0-.46-.46,1.94,1.94,0,1,0,1.93,1.93A.46.46,0,0,0,6.35,11.29Z"/><path d="M11.75,12.28H8.32a.45.45,0,0,0-.46.46.46.46,0,0,0,.46.46h3.43a.46.46,0,0,0,.46-.46A.45.45,0,0,0,11.75,12.28Z"/><path d="M11.75,10.31H8.32a.46.46,0,0,0-.46.46.45.45,0,0,0,.46.46h3.43a.45.45,0,0,0,.46-.46A.46.46,0,0,0,11.75,10.31Z"/><path d="M10.77,17.68H8.32a.45.45,0,0,0-.46.46.46.46,0,0,0,.46.46h2.45a.46.46,0,0,0,.46-.46A.45.45,0,0,0,10.77,17.68Z"/><path d="M11.75,15.71H8.32a.46.46,0,0,0-.46.46.45.45,0,0,0,.46.46h3.43a.45.45,0,0,0,.46-.46A.46.46,0,0,0,11.75,15.71Z"/><path d="M16.17,6.87H8.32a.47.47,0,0,0,0,.93h7.85a.47.47,0,0,0,0-.93Z"/><path d="M14.21,4.91H8.32a.46.46,0,0,0-.46.46.45.45,0,0,0,.46.46h5.89a.46.46,0,0,0,.46-.46A.47.47,0,0,0,14.21,4.91Z"/><path d="M6.35,16.7a.46.46,0,0,0-.46.46,1,1,0,1,1-1-1,.46.46,0,0,0,.46-.46.47.47,0,0,0-.46-.46,1.94,1.94,0,1,0,1.93,1.94A.45.45,0,0,0,6.35,16.7Z"/><path d="M18.14,0H1.44A1.45,1.45,0,0,0,0,1.44V22.07a1.45,1.45,0,0,0,1.44,1.44H9.79a.47.47,0,0,0,.46-.46.46.46,0,0,0-.46-.46H1.44a.52.52,0,0,1-.52-.52V1.44A.52.52,0,0,1,1.44.92h16.7a.52.52,0,0,1,.52.52V16.67a.46.46,0,1,0,.92,0V1.44A1.45,1.45,0,0,0,18.14,0Z"/><path d="M22.48,18.67a1.75,1.75,0,0,0-1.19.33,1.67,1.67,0,0,0-2.45-.49,1.67,1.67,0,0,0-1.27-.82,1.7,1.7,0,0,0-.94.17V12a1.68,1.68,0,0,0-1.86-1.68,1.74,1.74,0,0,0-1.51,1.75V18L11.91,19.3A2.91,2.91,0,0,0,11.13,22l1,4.37a3.87,3.87,0,0,0,3.79,3H20.1A3.91,3.91,0,0,0,24,25.5V20.42A1.74,1.74,0,0,0,22.48,18.67Zm.6,6.83a3,3,0,0,1-3,3H16a3,3,0,0,1-2.9-2.29l-1-4.37A2,2,0,0,1,12.56,20l.7-.7v1.59a.46.46,0,0,0,.46.46.47.47,0,0,0,.46-.46V12.07a.81.81,0,0,1,.69-.83.71.71,0,0,1,.59.19.77.77,0,0,1,.25.57v8.1a.46.46,0,0,0,.46.46.45.45,0,0,0,.46-.46v-.73a.77.77,0,0,1,.26-.57.75.75,0,0,1,.59-.2.82.82,0,0,1,.69.84v1.15a.46.46,0,0,0,.92,0v-.73a.76.76,0,0,1,.25-.57.79.79,0,0,1,.6-.2.82.82,0,0,1,.68.84v1.15a.47.47,0,0,0,.93,0v-.73a.77.77,0,0,1,.84-.77.82.82,0,0,1,.69.84V25.5Z"/></g></g></svg>
+                    Visit a link to complete the target.
+                  </button>
+                </div>
+                <div class="w-1/3 px-2">
+                  <button class="flex flex-col items-center bg-white border border-grey-light hover:bg-grey-lighter text-grey-darkest text-sm font-semibold focus:outline-none rounded p-4">
+                    <svg class="fill-current w-8 mb-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 29.4"><title>Asset 1</title><g id="bfe57d46-3bb7-42f0-b4e6-eccc9a02f1dd" data-name="Layer 2"><g id="ea523c13-a500-4391-9a0e-cf57c4f4a027" data-name="Layer 1"><path d="M6.35,5.89a.47.47,0,0,0-.46.46,1,1,0,1,1-1-1,.46.46,0,0,0,0-.92A1.94,1.94,0,1,0,6.81,6.35.46.46,0,0,0,6.35,5.89Z"/><path d="M6.35,11.29a.47.47,0,0,0-.46.46,1,1,0,1,1-1-1,.46.46,0,0,0,.46-.46.47.47,0,0,0-.46-.46,1.94,1.94,0,1,0,1.93,1.93A.46.46,0,0,0,6.35,11.29Z"/><path d="M11.75,12.28H8.32a.45.45,0,0,0-.46.46.46.46,0,0,0,.46.46h3.43a.46.46,0,0,0,.46-.46A.45.45,0,0,0,11.75,12.28Z"/><path d="M11.75,10.31H8.32a.46.46,0,0,0-.46.46.45.45,0,0,0,.46.46h3.43a.45.45,0,0,0,.46-.46A.46.46,0,0,0,11.75,10.31Z"/><path d="M10.77,17.68H8.32a.45.45,0,0,0-.46.46.46.46,0,0,0,.46.46h2.45a.46.46,0,0,0,.46-.46A.45.45,0,0,0,10.77,17.68Z"/><path d="M11.75,15.71H8.32a.46.46,0,0,0-.46.46.45.45,0,0,0,.46.46h3.43a.45.45,0,0,0,.46-.46A.46.46,0,0,0,11.75,15.71Z"/><path d="M16.17,6.87H8.32a.47.47,0,0,0,0,.93h7.85a.47.47,0,0,0,0-.93Z"/><path d="M14.21,4.91H8.32a.46.46,0,0,0-.46.46.45.45,0,0,0,.46.46h5.89a.46.46,0,0,0,.46-.46A.47.47,0,0,0,14.21,4.91Z"/><path d="M6.35,16.7a.46.46,0,0,0-.46.46,1,1,0,1,1-1-1,.46.46,0,0,0,.46-.46.47.47,0,0,0-.46-.46,1.94,1.94,0,1,0,1.93,1.94A.45.45,0,0,0,6.35,16.7Z"/><path d="M18.14,0H1.44A1.45,1.45,0,0,0,0,1.44V22.07a1.45,1.45,0,0,0,1.44,1.44H9.79a.47.47,0,0,0,.46-.46.46.46,0,0,0-.46-.46H1.44a.52.52,0,0,1-.52-.52V1.44A.52.52,0,0,1,1.44.92h16.7a.52.52,0,0,1,.52.52V16.67a.46.46,0,1,0,.92,0V1.44A1.45,1.45,0,0,0,18.14,0Z"/><path d="M22.48,18.67a1.75,1.75,0,0,0-1.19.33,1.67,1.67,0,0,0-2.45-.49,1.67,1.67,0,0,0-1.27-.82,1.7,1.7,0,0,0-.94.17V12a1.68,1.68,0,0,0-1.86-1.68,1.74,1.74,0,0,0-1.51,1.75V18L11.91,19.3A2.91,2.91,0,0,0,11.13,22l1,4.37a3.87,3.87,0,0,0,3.79,3H20.1A3.91,3.91,0,0,0,24,25.5V20.42A1.74,1.74,0,0,0,22.48,18.67Zm.6,6.83a3,3,0,0,1-3,3H16a3,3,0,0,1-2.9-2.29l-1-4.37A2,2,0,0,1,12.56,20l.7-.7v1.59a.46.46,0,0,0,.46.46.47.47,0,0,0,.46-.46V12.07a.81.81,0,0,1,.69-.83.71.71,0,0,1,.59.19.77.77,0,0,1,.25.57v8.1a.46.46,0,0,0,.46.46.45.45,0,0,0,.46-.46v-.73a.77.77,0,0,1,.26-.57.75.75,0,0,1,.59-.2.82.82,0,0,1,.69.84v1.15a.46.46,0,0,0,.92,0v-.73a.76.76,0,0,1,.25-.57.79.79,0,0,1,.6-.2.82.82,0,0,1,.68.84v1.15a.47.47,0,0,0,.93,0v-.73a.77.77,0,0,1,.84-.77.82.82,0,0,1,.69.84V25.5Z"/></g></g></svg>
+                    Take a quiz to complete the target.
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div>
+              <label class="block tracking-wide text-grey-darker text-xs font-semibold mb-2" for="Quiz question 1">
+                Prepare the quiz now.
+              </label>
+              <div class="flex bg-transparent items-center border-b border-b-1 border-grey-light py-2 mb-4 rounded">
+                <input class="appearance-none bg-transparent text-lg border-none w-full text-grey-darker mr-3 py-1 px-2 pl-0 leading-tight focus:outline-none" type="text" value="Type the question here…" placeholder="Type the question here…" aria-label="Quiz question">
+              </div>
+              <div class="flex flex-col bg-white mb-2 border rounded">
+                <div class="flex">
+                  <input class="appearance-none block w-full bg-white text-grey-darker text-sm rounded p-4 leading-tight focus:outline-none focus:bg-white focus:border-grey" id="answer option-1" type="text" value="Answer option 1" placeholder="Answer option 1">
+                  <button class="flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-grey hover:text-grey-darker text-xs py-1 px-3" type="button">
+                    Mark as correct
+                  </button>
+                  <button class="flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-grey hover:text-grey-darker text-xs py-1 px-3" type="button">
+                    Explain
+                  </button>
+                  <button class="flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-grey hover:text-grey-darker text-xs py-1 px-3" type="button">
+                    Delete
+                  </button>
+                </div>
+                <textarea class="appearance-none block w-full border-t border-t-1 border-grey-light bg-white text-grey-darker text-sm rounded rounded-t-none p-4 -mt-0 leading-tight focus:outline-none focus:bg-white focus:border-grey" id="title" placeholder="Type an answer explanation here." name="Description" rows="3"></textarea>
+              </div>
+              <input class="appearance-none block w-full bg-white text-grey-darker border border-grey-light text-sm rounded p-4 mb-2 leading-tight focus:outline-none focus:bg-white focus:border-grey" id="title" type="text" value="Answer option 2" placeholder="Answer option 2">
+              <button class="bg-white border w-full border-grey-light border-dashed text-left hover:bg-grey-lighter text-grey-darkest rounded text-sm italic focus:outline-none p-4">
+                Add another answer option
+              </button>
+              <div class="flex items-center py-3 cursor-pointer">
+                <svg class="svg-icon w-8 h-8" viewBox="0 0 20 20">
+                <path fill="#A8B7C7" d="M13.388,9.624h-3.011v-3.01c0-0.208-0.168-0.377-0.376-0.377S9.624,6.405,9.624,6.613v3.01H6.613c-0.208,0-0.376,0.168-0.376,0.376s0.168,0.376,0.376,0.376h3.011v3.01c0,0.208,0.168,0.378,0.376,0.378s0.376-0.17,0.376-0.378v-3.01h3.011c0.207,0,0.377-0.168,0.377-0.376S13.595,9.624,13.388,9.624z M10,1.344c-4.781,0-8.656,3.875-8.656,8.656c0,4.781,3.875,8.656,8.656,8.656c4.781,0,8.656-3.875,8.656-8.656C18.656,5.219,14.781,1.344,10,1.344z M10,17.903c-4.365,0-7.904-3.538-7.904-7.903S5.635,2.096,10,2.096S17.903,5.635,17.903,10S14.365,17.903,10,17.903z"></path>
+                </svg>
+                <h5 class="font-semibold ml-2">Add another question</h5>
+              </div>
+              <div class="flex">
+                <button class="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+                  Save All
                 </button>
               </div>
             </div>
@@ -272,5 +363,4 @@
       </div>
     </div>
   </div>
-
 </div>

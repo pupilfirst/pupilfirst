@@ -1,9 +1,9 @@
 *, *::before, *::after {
     box-sizing: border-box;
+    font-family: 'Nunito Sans', sans-serif;
 }
 
 body {
-    font-family: 'Nunito Sans', sans-serif;
     color: #3A3F52;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -121,4 +121,8 @@ body {
 
 .target-group__create:hover, .target-group__target-create:hover {
     @apply .shadow-lg;
+}
+
+.create-target-form__target-behaviour {
+    background-color: #EDF3FA;
 }

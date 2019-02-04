@@ -7,20 +7,57 @@ module Schools
         @course = course
       end
 
+      def react_props
+        {
+          course: course_data,
+          evaluationCriteria: evaluation_criteria,
+          levels: levels
+        }
+      end
+
+      def course_data
+        {
+          id: @course.id,
+          name: @course.name
+        }
+      end
+
       def evaluation_criteria
-        @course.evaluation_criteria.select(:id, :name, :description)
+        @course.evaluation_criteria.map do |criteria|
+          {
+            id: criteria.id,
+            name: criteria.name
+          }
+        end
       end
 
       def levels
-        @course.levels.select(:id, :name, :description, :number)
+        @course.levels.map do |level|
+          {
+            id: level.id,
+            name: level.name,
+            targetGroups: target_groups(level)
+          }
+        end
       end
 
       def target_groups(level)
-        level.target_groups.select(:id, :name, :description, :sort_index, :milestone)
+        level.target_groups.map do |target_group|
+          {
+            id: target_group.id,
+            name: target_group.name,
+            targets: targets(target_group)
+          }
+        end
       end
 
       def targets(target_group)
-        target_group.targets.select(:id, :role, :title, :description, :target_action_type, :sort_index)
+        target_group.targets.map do |target|
+          {
+            id: target.id,
+            title: target.title
+          }
+        end
       end
     end
   end

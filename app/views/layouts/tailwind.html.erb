@@ -25,24 +25,25 @@
 </head>
 
 <body data-env="<%= Rails.env %>">
-<div class="flex">
-  <div class="hidden">
-    <%= yield :nav %>
-  </div>
-  <div class="w-full">
-    <% if content_for?(:subnav) %>
-      <div class="flex">
-        <div class="hidden">
+
+<div class="font-sans antialiased h-screen flex">
+  <!-- Sidebar -->
+  <div class="flex w-full">
+    <div class="flex flex-column">
+      <div class="bg-grey-darker global-sidebar__primary-nav text-purple-lighter flex-none p-4 hidden md:block">
+        <%= yield :nav %>
+      </div>
+      <% if content_for?(:subnav) %>
+        <div class="bg-grey-lighter global-sidebar__secondary-nav text-purple-lighter flex-none w-64 pb-6 hidden md:block">
           <%= yield :subnav %>
         </div>
-        <div class="w-full">
+        </div>
+        <div className="flex flex-col bg-white overflow-hidden", style="width: 100%">
           <%= yield %>
         </div>
-    <% else %>
-      <%= yield %>
-    <% end %>
-    </div>
-  </div>
-</div>
+      <% else %>
+        <%= yield %>
+      <% end %>
+      </div>
 </body>
 </html>

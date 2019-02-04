@@ -4,83 +4,85 @@
   <title>Sign In | <%= presenter.school_name %></title>
 <% end %>
 
-<div class='container login-container my-4 text-center'>
-  <div class='row justify-content-md-center'>
-    <div class='col-md-7'>
-      <div class='content-box user-login mb-1 text-center'>
-        <div class='sign-in-kid mx-auto.mb-2'>
-          <%= image_tag 'users/sessions/new/sign-in-kid.svg', class: 'img-fluid mx-auto' %>
-        </div>
+<div id='users-sessions__new'>
+  <div class='container login-container my-4 text-center'>
+    <div class='row justify-content-md-center'>
+      <div class='col-md-7'>
+        <div class='content-box user-login mb-1 text-center'>
+          <div class='sign-in-kid mx-auto.mb-2'>
+            <%= image_tag 'users/sessions/new/sign-in-kid.svg', class: 'img-fluid mx-auto' %>
+          </div>
 
-        <div id='sign-in-with-federated' class="<%= presenter.hidden_sign_in_class('federated') %>">
-          <h3 class="text-center mb-3">Sign in to <%= presenter.school_name %></h3>
+          <div id='sign-in-with-federated' class="<%= presenter.hidden_sign_in_class('federated') %>">
+            <h3 class="text-center mb-3">Sign in to <%= presenter.school_name %></h3>
 
-          <% if Rails.env.development? %>
-            <a class="oauth-login login-as-developer" href="<%= presenter.oauth_url('developer') %>">
-              <i class="fa fa-code oauth-icon"></i>
-              Continue as Developer
+            <% if Rails.env.development? %>
+              <a class="oauth-login login-as-developer" href="<%= presenter.oauth_url('developer') %>">
+                <i class="fa fa-code oauth-icon"></i>
+                Continue as Developer
+              </a>
+            <% end %>
+            <a class="oauth-login login-with-google" href="<%= presenter.oauth_url('google') %>">
+              <i class="fa fa-google oauth-icon"></i>
+              Continue with Google
             </a>
-          <% end %>
-          <a class="oauth-login login-with-google" href="<%= presenter.oauth_url('google') %>">
-            <i class="fa fa-google oauth-icon"></i>
-            Continue with Google
-          </a>
-          <a class="oauth-login login-with-facebook" href="<%= presenter.oauth_url('facebook') %>">
-            <i class="fa fa-facebook oauth-icon"></i>
-            Continue with Facebook
-          </a>
-          <a class="oauth-login login-with-github" href="<%= presenter.oauth_url('github') %>">
-            <i class="fa fa-github oauth-icon"></i>
-            Continue with Github
-          </a>
-        </div>
+            <a class="oauth-login login-with-facebook" href="<%= presenter.oauth_url('facebook') %>">
+              <i class="fa fa-facebook oauth-icon"></i>
+              Continue with Facebook
+            </a>
+            <a class="oauth-login login-with-github" href="<%= presenter.oauth_url('github') %>">
+              <i class="fa fa-github oauth-icon"></i>
+              Continue with Github
+            </a>
+          </div>
 
-        <div id="sign-in-with-email" class="mb-3 <%= presenter.hidden_sign_in_class('email') %>">
-          <h3 class="text-center mb-3">Sign in with your <%= presenter.school_name %> ID</h3>
+          <div id="sign-in-with-email" class="mb-3 <%= presenter.hidden_sign_in_class('email') %>">
+            <h3 class="text-center mb-3">Sign in with your <%= presenter.school_name %> ID</h3>
 
-          <%= form_for @form, url: user_send_login_email_path do |f| %>
-            <% if f.object.errors.present? && f.object.errors[:base].present? %>
-              <div class="alert alert-warning alert-dismissable fade show" role='alert'>
-                <ul class="mb-0 p-0 text-left" style="list-style-type: none;">
-                  <% f.object.errors[:base].each do |error_message| %>
-                    <li><%= error_message %></li>
-                  <% end %>
-                </ul>
+            <%= form_for @form, url: user_send_login_email_path do |f| %>
+              <% if f.object.errors.present? && f.object.errors[:base].present? %>
+                <div class="alert alert-warning alert-dismissable fade show" role='alert'>
+                  <ul class="mb-0 p-0 text-left" style="list-style-type: none;">
+                    <% f.object.errors[:base].each do |error_message| %>
+                      <li><%= error_message %></li>
+                    <% end %>
+                  </ul>
+                </div>
+              <% end %>
+
+              <%= f.hidden_field :referer %>
+
+              <div class="wrapped-input">
+                <%= image_tag 'users/sessions/new/email.svg' %>
+                <%= f.text_field :email, required: true, placeholder: "#{presenter.school_name} ID (email)", maxlength: 250, type: 'email' %>
+                <% if f.object.errors[:email].present? %>
+                  <p class="error-under-input"><%= f.object.errors[:email].join(', ') %></p>
+                <% end %>
+              </div>
+
+              <%= f.text_field :username, placeholder: 'Please leave this field blank.', class: 'd-none' %>
+
+              <div class="remember-forgot mt-1 mb-2">
+                <div class="login-option text-center">
+                  <%= f.check_box :shared_device, class: 'css-checkbox' %>
+                  <%= f.label :shared_device, 'Are you using a shared device?', class: 'css-label' %>
+                </div>
+              </div>
+
+              <div class="text-center">
+                <%= f.submit 'Email me a link to sign in', class: 'btn btn-primary btn-md text-uppercase sign-in-btn' %>
               </div>
             <% end %>
+          </div>
 
-            <%= f.hidden_field :referer %>
-
-            <div class="wrapped-input">
-              <%= image_tag 'users/sessions/new/email.svg' %>
-              <%= f.text_field :email, required: true, placeholder: "#{presenter.school_name} ID (email)", maxlength: 250, type: 'email' %>
-              <% if f.object.errors[:email].present? %>
-                <p class="error-under-input"><%= f.object.errors[:email].join(', ') %></p>
-              <% end %>
-            </div>
-
-            <%= f.text_field :username, placeholder: 'Please leave this field blank.', class: 'd-none' %>
-
-            <div class="remember-forgot mt-1 mb-2">
-              <div class="login-option text-center">
-                <%= f.check_box :shared_device, class: 'css-checkbox' %>
-                <%= f.label :shared_device, 'Are you using a shared device?', class: 'css-label' %>
-              </div>
-            </div>
-
-            <div class="text-center">
-              <%= f.submit 'Email me a link to sign in', class: 'btn btn-primary btn-md text-uppercase sign-in-btn' %>
-            </div>
-          <% end %>
-        </div>
-
-        <div class="switch-sign-in-method-links text-center">
-          <a class="switch-to-email brand-secondary <%= presenter.hidden_sign_in_class('email', link: true) %>">
-            Sign in with email
-          </a>
-          <a class="switch-to-federated brand-secondary <%= presenter.hidden_sign_in_class('federated', link: true) %>">
-            Sign in with Google, Facebook, or Github
-          </a>
+          <div class="switch-sign-in-method-links text-center">
+            <a class="switch-to-email brand-secondary <%= presenter.hidden_sign_in_class('email', link: true) %>">
+              Sign in with email
+            </a>
+            <a class="switch-to-federated brand-secondary <%= presenter.hidden_sign_in_class('federated', link: true) %>">
+              Sign in with Google, Facebook, or Github
+            </a>
+          </div>
         </div>
       </div>
     </div>

@@ -5,8 +5,6 @@ class Resource < ApplicationRecord
   friendly_id :slug_candidates, use: %i[slugged finders]
   acts_as_taggable
 
-  belongs_to :startup, optional: true
-  belongs_to :level, optional: true
   belongs_to :course
   has_many :target_resources, dependent: :destroy
   has_many :targets, through: :target_resources

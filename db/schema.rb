@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_01_065448) do
+ActiveRecord::Schema.define(version: 2019_02_04_081140) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -383,9 +383,7 @@ ActiveRecord::Schema.define(version: 2019_02_01_065448) do
     t.datetime "updated_at", null: false
     t.integer "downloads", default: 0
     t.string "slug"
-    t.integer "startup_id"
     t.text "video_embed"
-    t.integer "level_id"
     t.string "link"
     t.string "file_content_type"
     t.boolean "archived", default: false
@@ -393,9 +391,7 @@ ActiveRecord::Schema.define(version: 2019_02_01_065448) do
     t.boolean "public", default: false
     t.index ["archived"], name: "index_resources_on_archived"
     t.index ["course_id"], name: "index_resources_on_course_id"
-    t.index ["level_id"], name: "index_resources_on_level_id"
     t.index ["slug"], name: "index_resources_on_slug"
-    t.index ["startup_id"], name: "index_resources_on_startup_id"
   end
 
   create_table "schools", force: :cascade do |t|
@@ -731,7 +727,6 @@ ActiveRecord::Schema.define(version: 2019_02_01_065448) do
   add_foreign_key "quiz_questions", "answer_options", column: "correct_answer_id"
   add_foreign_key "quiz_questions", "quizzes"
   add_foreign_key "quizzes", "targets"
-  add_foreign_key "resources", "levels"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"
   add_foreign_key "startups", "levels"

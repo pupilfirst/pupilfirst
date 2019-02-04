@@ -13,7 +13,8 @@ export default class FounderDashboard extends React.Component {
 
     this.state = {
       targets: props.targets,
-      chosenLevelId: props.currentLevel.id,
+      selectedLevel: props.currentLevel,
+      selectedTab: 'selectedLevel',
       timelineBuilderVisible: false,
       timelineBuilderParams: {
         targetId: null
@@ -52,7 +53,7 @@ export default class FounderDashboard extends React.Component {
 
   availableTrackIds(levelId = null) {
     if (levelId === null) {
-      levelId = this.state.chosenLevelId;
+      levelId = this.state.selectedLevel.id;
     }
 
     let targetGroupsInLevel = this.props.targetGroups.filter(targetGroup => {
@@ -176,8 +177,7 @@ export default class FounderDashboard extends React.Component {
           <DashboardNotification rootProps={this.props} />
         )}
 
-        {this.state.activeTrackId !== "sessions" &&
-          this.props.currentLevel.number !== 0 && (
+        {this.state.selectedTab === "selectedLevel" && (
             <ActionBar
               getAvailableTrackIds={this.availableTrackIds}
               rootProps={this.props}

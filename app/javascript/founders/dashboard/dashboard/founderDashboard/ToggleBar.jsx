@@ -49,16 +49,18 @@ export default class ToggleBar extends React.Component {
             className="btn-group founder-dashboard-togglebar__toggle-group"
             role="group"
           >
-            {this.tabsForTracks()}
-            { this.hasSessions() &&
-              <ToggleBarTab
-                key={'sessions-tab'}
-                trackId='sessions'
-                rootProps={this.props.rootProps}
-                rootState={this.props.rootState}
-                setRootState={this.props.setRootState}
-              />
-            }
+            <ToggleBarTab
+              level={this.props.rootState.selectedLevel}
+              rootProps={this.props.rootProps}
+              rootState={this.props.rootState}
+              setRootState={this.props.setRootState}
+            />
+            <ToggleBarTab
+              level={this.props.rootProps.levels.find(level => {return level.number === 0;})}
+              rootProps={this.props.rootProps}
+              rootState={this.props.rootState}
+              setRootState={this.props.setRootState}
+            />
           </div>
         </div>
 

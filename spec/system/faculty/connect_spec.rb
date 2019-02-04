@@ -3,7 +3,10 @@ require 'rails_helper'
 feature 'Office Hour' do
   include UserSpecHelper
 
-  let!(:faculty) { create :faculty }
+  let(:startup) { create :startup }
+  let(:founder) { startup.founders.first }
+  let!(:faculty) { create :faculty, school: startup.school }
+  let!(:unenrolled_faculty) { create :faculty, school: startup.school }
 
   # Three valid connect slots for faculty 1.
   let!(:connect_slot_1) { create :connect_slot, faculty: faculty, slot_at: 4.days.from_now }
@@ -13,20 +16,23 @@ feature 'Office Hour' do
   # One connect request using up one of the slots for faculty 1.
   let!(:connect_request) { create :connect_request, connect_slot: connect_slot_1 }
 
+  before do
+    # Create connect slots for the unenrolled faculty as well.
+    create :connect_slot, faculty: unenrolled_faculty, slot_at: 5.days.from_now
+  end
+
   scenario 'User visits faculty page' do
     visit coaches_index_path
 
-    # There should be three faculty cards.
-    expect(page).to have_selector('.faculty-card', count: 1)
+    # There should be a single faculty card.
+    expect(page).to have_selector('.faculty-card', count: 2)
 
-    # Two of these cards should have disabled connect buttons.
-    expect(page.find('.faculty-card', text: faculty.name)).to have_selector('.available-marker')
-    expect(page).to have_selector(".disabled.connect-link[title='Office hours are only available to active students']", count: 1)
+    # There should be no connect link on the page, since user isn't signed in.
+    expect(page).not_to have_selector('.connect-link')
   end
 
-  context 'User is founder of approved startup' do
-    let(:startup) { create :startup }
-    let(:founder) { startup.founders.where.not(id: startup.founders.first.id).first }
+  context 'When the user is a signed in founder' do
+    let!(:faculty_course_enrollment) { create :faculty_course_enrollment, faculty: faculty, course: startup.course }
 
     context 'Team has a pending request with faculty' do
       let!(:connect_request) { create :connect_request, connect_slot: connect_slot_1, startup: startup }

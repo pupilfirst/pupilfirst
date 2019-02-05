@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_31_103027) do
+ActiveRecord::Schema.define(version: 2019_02_04_081140) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -102,31 +102,10 @@ ActiveRecord::Schema.define(version: 2019_01_31_103027) do
     t.index ["faculty_id"], name: "index_connect_slots_on_faculty_id"
   end
 
-  create_table "coupon_usages", id: :serial, force: :cascade do |t|
-    t.integer "coupon_id"
-    t.integer "startup_id"
-    t.datetime "redeemed_at"
-    t.datetime "rewarded_at"
-    t.text "notes"
-    t.index ["coupon_id"], name: "index_coupon_usages_on_coupon_id"
-    t.index ["startup_id"], name: "index_coupon_usages_on_startup_id"
-  end
-
-  create_table "coupons", id: :serial, force: :cascade do |t|
-    t.string "code"
-    t.integer "discount_percentage"
-    t.integer "redeem_limit", default: 0
-    t.datetime "expires_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.text "instructions"
-  end
-
   create_table "courses", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "sponsored", default: false
     t.bigint "school_id"
     t.integer "max_grade"
     t.integer "pass_grade"
@@ -329,31 +308,6 @@ ActiveRecord::Schema.define(version: 2019_01_31_103027) do
     t.index ["number"], name: "index_levels_on_number"
   end
 
-  create_table "payments", id: :serial, force: :cascade do |t|
-    t.string "instamojo_payment_request_id"
-    t.string "instamojo_payment_request_status"
-    t.string "instamojo_payment_id"
-    t.string "instamojo_payment_status"
-    t.decimal "amount", precision: 9, scale: 2
-    t.decimal "fees", precision: 9, scale: 2
-    t.string "short_url"
-    t.string "long_url"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "webhook_received_at"
-    t.datetime "paid_at"
-    t.string "notes"
-    t.integer "founder_id"
-    t.integer "startup_id"
-    t.integer "original_startup_id"
-    t.datetime "billing_start_at"
-    t.datetime "billing_end_at"
-    t.string "payment_type"
-    t.index ["founder_id"], name: "index_payments_on_founder_id"
-    t.index ["original_startup_id"], name: "index_payments_on_original_startup_id"
-    t.index ["startup_id"], name: "index_payments_on_startup_id"
-  end
-
   create_table "platform_feedback", id: :serial, force: :cascade do |t|
     t.string "feedback_type"
     t.string "attachment"
@@ -429,9 +383,7 @@ ActiveRecord::Schema.define(version: 2019_01_31_103027) do
     t.datetime "updated_at", null: false
     t.integer "downloads", default: 0
     t.string "slug"
-    t.integer "startup_id"
     t.text "video_embed"
-    t.integer "level_id"
     t.string "link"
     t.string "file_content_type"
     t.boolean "archived", default: false
@@ -439,9 +391,7 @@ ActiveRecord::Schema.define(version: 2019_01_31_103027) do
     t.boolean "public", default: false
     t.index ["archived"], name: "index_resources_on_archived"
     t.index ["course_id"], name: "index_resources_on_course_id"
-    t.index ["level_id"], name: "index_resources_on_level_id"
     t.index ["slug"], name: "index_resources_on_slug"
-    t.index ["startup_id"], name: "index_resources_on_startup_id"
   end
 
   create_table "schools", force: :cascade do |t|
@@ -519,16 +469,11 @@ ActiveRecord::Schema.define(version: 2019_01_31_103027) do
     t.string "courier_name"
     t.string "courier_number"
     t.string "partnership_deed"
-    t.string "payment_reference"
     t.string "admission_stage"
     t.date "timeline_updated_on"
     t.datetime "admission_stage_updated_at"
     t.integer "referral_reward_days", default: 0
-    t.integer "undiscounted_founder_fee"
-    t.text "billing_address"
-    t.bigint "billing_state_id"
     t.bigint "faculty_id"
-    t.index ["billing_state_id"], name: "index_startups_on_billing_state_id"
     t.index ["faculty_id"], name: "index_startups_on_faculty_id"
     t.index ["level_id"], name: "index_startups_on_level_id"
     t.index ["slug"], name: "index_startups_on_slug", unique: true
@@ -779,16 +724,12 @@ ActiveRecord::Schema.define(version: 2019_01_31_103027) do
   add_foreign_key "founders", "colleges"
   add_foreign_key "founders", "users"
   add_foreign_key "levels", "courses"
-  add_foreign_key "payments", "founders"
-  add_foreign_key "payments", "startups"
   add_foreign_key "quiz_questions", "answer_options", column: "correct_answer_id"
   add_foreign_key "quiz_questions", "quizzes"
   add_foreign_key "quizzes", "targets"
-  add_foreign_key "resources", "levels"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"
   add_foreign_key "startups", "levels"
-  add_foreign_key "startups", "states", column: "billing_state_id"
   add_foreign_key "target_evaluation_criteria", "evaluation_criteria"
   add_foreign_key "target_evaluation_criteria", "targets"
   add_foreign_key "target_groups", "levels"

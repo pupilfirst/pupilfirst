@@ -1,5 +1,5 @@
 ActiveAdmin.register Resource do
-  permit_params :title, :description, :file, :thumbnail, :startup_id, :video_embed, :link, :archived, :public, :course_id, tag_list: [], target_ids: []
+  permit_params :title, :description, :file, :thumbnail, :video_embed, :link, :archived, :public, :course_id, tag_list: [], target_ids: []
 
   controller do
     include DisableIntercom
@@ -8,8 +8,6 @@ ActiveAdmin.register Resource do
       scoped_collection.friendly.find(params[:id])
     end
   end
-
-  filter :startup_product_name, as: :string, label: 'Product Name'
 
   filter :ransack_tagged_with,
     as: :select,
@@ -34,14 +32,8 @@ ActiveAdmin.register Resource do
   index do
     selectable_column
 
-    column 'Shared with' do |resource|
-      if resource.startup.present?
-        link_to resource.startup.product_name, admin_startup_path(resource.startup)
-      else
-        'Public'
-      end
-    end
-
+    column :public
+    column :course
     column :title
     column :downloads
 
@@ -54,16 +46,6 @@ ActiveAdmin.register Resource do
 
   show do
     attributes_table do
-      row 'Shared with' do |resource|
-        if resource.startup.present?
-          link_to resource.startup.product_name, admin_startup_path(resource.startup)
-        elsif resource.level.present?
-          link_to resource.level.display_name, admin_level_path(resource.level)
-        else
-          'Public'
-        end
-      end
-
       row :title
       row :downloads
 
@@ -110,7 +92,6 @@ ActiveAdmin.register Resource do
     f.semantic_errors(*f.object.errors.keys)
 
     f.inputs 'Resource details' do
-      f.input :startup, label: 'Shared with Startup', collection: f.object.startup.present? ? [[f.object.startup.product_name, f.object.startup.id]] : []
       f.input :file, as: :file
       f.input :thumbnail, as: :file
       f.input :title

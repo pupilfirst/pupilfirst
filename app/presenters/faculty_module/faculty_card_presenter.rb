@@ -7,11 +7,11 @@ module FacultyModule
     end
 
     def can_connect?
-      view.policy(@coach).connect?
+      @can_connect ||= view.policy(@coach).connect?
     end
 
-    def show_href
-      view.policy(@coach).show? ? view.coach_url(@coach) : '#'
+    def show?
+      @show ||= view.policy(@coach).show?
     end
   end
 end

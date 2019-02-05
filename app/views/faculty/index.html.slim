@@ -16,5 +16,5 @@
       ' We've assembled some of the best engineers from the industry as coaches to provide 1-on-1 guidance to students.
 
     .faculty-index__container.mx-auto
-      - @faculty.active.vr_coaches.each do |coach|
+      - @faculty.each do |coach|
         == render 'faculty_card', coach: coach

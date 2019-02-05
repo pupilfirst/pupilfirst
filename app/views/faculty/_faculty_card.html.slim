@@ -2,21 +2,24 @@
 
 .faculty-card.col-lg-3.col-md-4
   .faculty-card__box.content-box.p-0
-    a.faculty-image href=presenter.show_href
-      .btn.btn-primary.btn-view-profile
-        i.fa.fa-user
-        | &nbsp;View Profile
+    - if presenter.show?
+      a.faculty-image href=coach_path(coach)
+        .btn.btn-primary.btn-view-profile
+          i.fa.fa-user
+          | &nbsp;View Profile
 
-      = image_tag coach.image_or_avatar_url(background_shape: :square)
-      - if presenter.can_connect?
-        .available-marker
-          i.fa.fa-check-circle
-          | &nbsp;Available for Connect
+        = image_tag coach.image_or_avatar_url(background_shape: :square)
+    - else
+      .faculty-image
+        = image_tag coach.image_or_avatar_url(background_shape: :square)
 
     .faculty-card-info.d-flex.flex-column.align-items-center
       .faculty-card-info__content
         .faculty-card-info__name
-          = link_to coach.name, coach_url(coach)
+          - if presenter.show?
+            = link_to coach.name, coach_url(coach)
+          - else
+            = coach.name
 
         .faculty-card-info__title
           = coach.title

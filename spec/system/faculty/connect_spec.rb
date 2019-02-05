@@ -5,20 +5,19 @@ feature 'Office Hour' do
 
   let(:startup) { create :startup }
   let(:founder) { startup.founders.first }
-  let!(:faculty) { create :faculty, school: startup.school }
-  let!(:unenrolled_faculty) { create :faculty, school: startup.school }
+  let(:faculty) { create :faculty, school: startup.school, public: true }
+  let(:unenrolled_faculty) { create :faculty, school: startup.school, public: true }
+  let(:enrolled_hidden_faculty) { create :faculty, school: startup.school, public: false }
 
-  # Three valid connect slots for faculty 1.
-  let!(:connect_slot_1) { create :connect_slot, faculty: faculty, slot_at: 4.days.from_now }
-  let!(:connect_slot_2) { create :connect_slot, faculty: faculty, slot_at: 4.5.days.from_now }
-  let!(:connect_slot_3) { create :connect_slot, faculty: faculty, slot_at: 6.days.from_now }
-
-  # One connect request using up one of the slots for faculty 1.
-  let!(:connect_request) { create :connect_request, connect_slot: connect_slot_1 }
+  let!(:faculty_enrollment) { create :faculty_course_enrollment, faculty: faculty, course: startup.course }
+  let!(:hidden_faculty_enrollment) { create :faculty_course_enrollment, faculty: enrolled_hidden_faculty, course: startup.course }
 
   before do
-    # Create connect slots for the unenrolled faculty as well.
-    create :connect_slot, faculty: unenrolled_faculty, slot_at: 5.days.from_now
+    # Create connect slots for all faculty.
+    [faculty, unenrolled_faculty].each do |f|
+      create :connect_slot, faculty: f, slot_at: 5.days.from_now
+      create :connect_slot, faculty: f, slot_at: 6.days.from_now
+    end
   end
 
   scenario 'User visits faculty page' do
@@ -32,16 +31,13 @@ feature 'Office Hour' do
   end
 
   context 'When the user is a signed in founder' do
-    let!(:faculty_course_enrollment) { create :faculty_course_enrollment, faculty: faculty, course: startup.course }
-
     context 'Team has a pending request with faculty' do
-      let!(:connect_request) { create :connect_request, connect_slot: connect_slot_1, startup: startup }
+      let!(:connect_request) { create :connect_request, connect_slot: faculty.connect_slots.first, startup: startup }
 
       scenario 'Founder visits faculty page' do
         sign_in_user(founder.user, referer: coaches_index_path)
 
-        # Two cards should have disabled connect buttons with a special message.
-        expect(page).to have_selector('.available-marker', count: 1)
+        # One of the cards should have disabled connect buttons with a special message.
         expect(page).to have_selector(".disabled.connect-link[title='You already have a pending office hour request " \
             "with this coach. Please write to help@sv.co if you would like to reschedule.']", count: 1)
       end

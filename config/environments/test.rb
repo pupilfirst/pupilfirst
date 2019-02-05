@@ -49,6 +49,9 @@ Rails.application.configure do
   test_adapter = ActiveJob::QueueAdapters::TestAdapter.new
   test_adapter.perform_enqueued_jobs = true
   config.active_job.queue_adapter = test_adapter
+
+  # Store uploaded files on the local file system in a temporary directory.
+  config.active_storage.service = :test
 end
 
 Rails.application.default_url_options = Rails.application.config.action_mailer.default_url_options

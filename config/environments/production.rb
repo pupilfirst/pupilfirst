@@ -117,6 +117,9 @@ Rails.application.configure do
   # Do not display runtime information in production.
   config.middleware.delete(Rack::Runtime)
 
+  # Store files on Amazon S3.
+  config.active_storage.service = :amazon
+
   # Postmark
   config.action_mailer.delivery_method = :postmark
   config.action_mailer.postmark_settings = { api_token: ENV['POSTMARK_API_TOKEN'] }

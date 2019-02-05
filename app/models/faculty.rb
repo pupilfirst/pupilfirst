@@ -19,6 +19,7 @@ class Faculty < ApplicationRecord
   has_many :connect_requests, through: :connect_slots
   has_many :faculty_course_enrollments, dependent: :destroy
   has_many :courses, through: :faculty_course_enrollments
+  has_one_attached :image
 
   # Startups whose timeline events this faculty can review.
   has_many :faculty_startup_enrollments, dependent: :destroy

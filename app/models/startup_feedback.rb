@@ -3,6 +3,7 @@ class StartupFeedback < ApplicationRecord
   belongs_to :faculty
   belongs_to :timeline_event, optional: true
   attr_accessor :send_email, :event_id, :event_status
+  has_one_attached :attachment
 
   # mount uploader for attachment
   mount_uploader :attachment, StartupFeedbackAttachmentUploader

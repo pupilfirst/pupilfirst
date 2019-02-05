@@ -66,6 +66,8 @@ class Startup < ApplicationRecord
   has_many :faculty_startup_enrollments, dependent: :destroy
   has_many :faculty, through: :faculty_startup_enrollments
 
+  has_one_attached :logo
+
   # use the old name attribute as an alias for legal_registered_name
   alias_attribute :name, :legal_registered_name
 

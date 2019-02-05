@@ -1,5 +1,6 @@
 class TimelineEventFile < ApplicationRecord
   belongs_to :timeline_event
+  has_one_attached :file
 
   mount_uploader :file, TimelineEventFileUploader
 

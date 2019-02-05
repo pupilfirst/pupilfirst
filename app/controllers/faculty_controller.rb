@@ -13,7 +13,7 @@ class FacultyController < ApplicationController
   # GET /faculty/:slug, GET /coaches/:slug
   def show
     @skip_container = true
-    @faculty = policy_scope(Faculty).friendly.find(params[:id])
+    @faculty = authorize(policy_scope(Faculty).friendly.find(params[:id]))
   end
 
   # POST /faculty/:id/connect

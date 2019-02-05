@@ -3,6 +3,10 @@ class FacultyPolicy < ApplicationPolicy
     scope.exists?
   end
 
+  def show?
+    record.about.present?
+  end
+
   def connect?
     # Cannot connect if user doesn't have a student profile.
     return false if current_founder.blank?

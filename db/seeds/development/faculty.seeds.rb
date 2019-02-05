@@ -76,7 +76,8 @@ after 'development:courses' do
     title: 'Coaching Expert',
     category: 'vr_coaches',
     user: User.create(email: 'ioscoach@example.com'),
-    school: sv
+    school: sv,
+    about: "This is just a demo coach. The about field is required for Faculty#show to be available - that's why this text is here."
   )
 
   FacultyCourseEnrollment.create!(

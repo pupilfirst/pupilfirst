@@ -1,14 +1,14 @@
-- can_connect = policy(coach).connect?
+- presenter = FacultyModule::FacultyCardPresenter.new(self, coach)
 
 .faculty-card.col-lg-3.col-md-4
   .faculty-card__box.content-box.p-0
-    a.faculty-image href=coach_url(coach)
+    a.faculty-image href=presenter.show_href
       .btn.btn-primary.btn-view-profile
         i.fa.fa-user
         | &nbsp;View Profile
 
       = image_tag coach.image_or_avatar_url(background_shape: :square)
-      - if can_connect
+      - if presenter.can_connect?
         .available-marker
           i.fa.fa-check-circle
           | &nbsp;Available for Connect
@@ -30,5 +30,5 @@
             = link_to coach.linkedin_url, target: '_blank' do
               i.fa.fa-linkedin
 
-      - if can_connect
+      - if presenter.can_connect?
         == render 'connect_button', faculty: coach

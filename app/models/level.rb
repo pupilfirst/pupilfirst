@@ -6,7 +6,6 @@ class Level < ApplicationRecord
   has_many :startups, dependent: :restrict_with_error
   has_many :targets, through: :target_groups
   has_many :weekly_karma_points, dependent: :restrict_with_error
-  has_many :resources, dependent: :restrict_with_error
   belongs_to :course
 
   def display_name

@@ -21,22 +21,30 @@ let make = (~course, ~evaluationCriteria, ~levels, _children) => {
   reducer: (action, state) =>
     switch (action) {
     | SelectLevel(selectedLevel) =>
-      ReasonReact.Update({selectedLevel: levels |> List.hd})
+      ReasonReact.Update({selectedLevel: selectedLevel})
     },
   render: ({state, send}) => {
     let currentLevel = state.selectedLevel;
     <div>
-      <h1> {"Curriculum Editor" |> str} </h1>
-      /* <!-- Top bar --> */
       <div
         className="border-b flex px-6 py-2 h-16 items-center justify-between">
         <div className="inline-block relative w-64">
           <select
+            onChange={
+              event => {
+                let level_name =
+                  ReactDOMRe.domElementToObj(ReactEventRe.Form.target(event))##value;
+                send(SelectLevel(Level.selectLevel(levels, level_name)));
+              }
+            }
+            value={currentLevel |> Level.name}
             className="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-4 py-2 pr-8 rounded leading-tight focus:outline-none">
             {
               levels
               |> List.map(level =>
-                   <option> {level |> Level.name |> str} </option>
+                   <option value={level |> Level.name}>
+                     {level |> Level.name |> str}
+                   </option>
                  )
               |> Array.of_list
               |> ReasonReact.array

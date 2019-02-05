@@ -26,10 +26,10 @@
 
 <body data-env="<%= Rails.env %>">
 
-<div class="font-sans antialiased h-screen flex">
+<div class="font-sans antialiased flex">
   <!-- Sidebar -->
   <div class="flex w-full">
-    <div class="flex flex-column">
+    <div class="flex">
       <div class="bg-grey-darker global-sidebar__primary-nav text-purple-lighter flex-none p-4 hidden md:block">
         <%= yield :nav %>
       </div>
@@ -38,9 +38,7 @@
           <%= yield :subnav %>
         </div>
         </div>
-        <div className="flex flex-col bg-white overflow-hidden", style="width: 100%">
-          <%= yield %>
-        </div>
+        <%= yield %>
       <% else %>
         <%= yield %>
       <% end %>

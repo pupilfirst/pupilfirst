@@ -18,3 +18,6 @@ let decode = json =>
       json
       |> field("targetGroups", list(CurriculumEditor__TargetGroup.decode)),
   };
+
+let selectLevel = (levels, level_name) =>
+  levels |> List.find(q => q.name == level_name);

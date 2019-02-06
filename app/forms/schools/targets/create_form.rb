@@ -6,8 +6,13 @@ module Schools
       property :description, validates: { presence: true }
       property :target_action_type, validates: { presence: true }
       property :target_group_id, validates: { presence: true }
-      property :sort_index, validates: { presence: true }
+      property :sort_index
+      property :video_embed
+      property :slideshow_embed
       property :resource_ids
+      property :prerequisite_targets
+      property :evaluation_criteria
+      property :quiz
 
       validate :target_group_exists
 

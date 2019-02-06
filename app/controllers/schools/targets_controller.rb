@@ -7,7 +7,6 @@ module Schools
     def create
       # authorize(Target, policy_class: Schools::TargetPolicy)
       form = ::Schools::Targets::CreateForm.new(@target)
-
       if form.validate(params[:target])
         form.save
         redirect_to school_course_curriculum_path(@target.course)

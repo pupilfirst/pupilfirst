@@ -1,9 +1,10 @@
+- presenter = FacultyModule::IndexPresenter.new(self)
+
 - content_for :head
-  title SV.CO Coaches: The Best Product Talent in India
-  meta property="og:title" content="Coaches at SV.CO"
+  title Coaches | #{current_school.name}
+  meta property="og:title" content="Coaches at #{current_school.name}"
   meta property="og:type" content="website"
   meta property="og:url" content=coaches_index_url
-  meta property="og:image" content=image_url('home/index/program-learn-from-experts.jpg')
   meta property="fb:app_id" content=Rails.application.secrets.facebook.dig(:app_id)
 
 #faculty__index
@@ -12,8 +13,9 @@
   .container
     h1.page-header.header-light.text-center.mt-3 Coaches
 
-    p.faculty-index__introduction.text-xs-center.mx-auto
-      ' We've assembled some of the best engineers from the industry as coaches to provide 1-on-1 guidance to students.
+    - if presenter.coaches_subheading.present?
+      p.faculty-index__introduction.text-xs-center.mx-auto
+        = presenter.coaches_subheading
 
     .faculty-index__container.mx-auto
       - @faculty.each do |coach|

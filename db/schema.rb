@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_05_102215) do
+ActiveRecord::Schema.define(version: 2019_02_06_101853) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -395,6 +395,15 @@ ActiveRecord::Schema.define(version: 2019_02_05_102215) do
     t.index ["slug"], name: "index_resources_on_slug"
   end
 
+  create_table "school_strings", force: :cascade do |t|
+    t.bigint "school_id"
+    t.string "key"
+    t.text "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["school_id", "key"], name: "index_school_strings_on_school_id_and_key", unique: true
+  end
+
   create_table "schools", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -728,6 +737,7 @@ ActiveRecord::Schema.define(version: 2019_02_05_102215) do
   add_foreign_key "quiz_questions", "answer_options", column: "correct_answer_id"
   add_foreign_key "quiz_questions", "quizzes"
   add_foreign_key "quizzes", "targets"
+  add_foreign_key "school_strings", "schools"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"
   add_foreign_key "startups", "levels"

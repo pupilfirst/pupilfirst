@@ -129,7 +129,6 @@ Rails.application.routes.draw do
     get 'select2_search', on: :collection
 
     member do
-      get 'download_rubric'
       get 'prerequisite_targets'
       get 'startup_feedback'
       get 'details'

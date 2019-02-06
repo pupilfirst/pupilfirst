@@ -30,9 +30,5 @@ FactoryBot.define do
     trait :for_startup do
       role { Target::ROLE_TEAM }
     end
-
-    trait :with_rubric do
-      rubric { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf')) }
-    end
   end
 end

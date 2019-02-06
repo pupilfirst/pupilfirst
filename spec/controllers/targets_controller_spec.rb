@@ -4,7 +4,7 @@ describe TargetsController do
   include Devise::Test::ControllerHelpers
 
   let!(:startup) { create :startup }
-  let!(:target) { create :target, :with_rubric }
+  let!(:target) { create :target }
   let!(:pending_prerequisite_target) { create :target }
   let!(:completed_prerequisite_target) { create :target }
 
@@ -28,19 +28,6 @@ describe TargetsController do
 
   let!(:faculty) { create :faculty }
   let!(:target_feedback) { create :startup_feedback, timeline_event: completion_event_2, faculty: faculty, startup: startup }
-
-  describe 'GET download_rubric' do
-    it 'raises not found error when a founder is not signed in' do
-      get :download_rubric, params: { id: target.id }
-      expect(response).to redirect_to(new_user_session_path)
-    end
-
-    it 'redirects to the rubric URL when a founder is signed in' do
-      sign_in startup.founders.first.user
-      get :download_rubric, params: { id: target.id }
-      expect(response).to redirect_to(target.rubric_url)
-    end
-  end
 
   describe 'GET prerequisite_targets' do
     context 'founder is not signed in' do

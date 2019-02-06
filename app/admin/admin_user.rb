@@ -5,7 +5,7 @@ ActiveAdmin.register AdminUser do
 
   menu parent: 'Dashboard'
 
-  permit_params :fullname, :avatar, :admin_type, :faculty_id
+  permit_params :fullname, :admin_type, :faculty_id
 
   index do
     id_column
@@ -24,7 +24,6 @@ ActiveAdmin.register AdminUser do
   form do |f|
     f.inputs 'Admin Details' do
       f.input :fullname
-      f.input :avatar, as: :file
       f.input :admin_type, as: :select, collection: AdminUser.admin_user_types
       f.input :faculty
     end

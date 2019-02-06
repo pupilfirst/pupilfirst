@@ -8,8 +8,8 @@ class Resource < ApplicationRecord
   belongs_to :course
   has_many :target_resources, dependent: :destroy
   has_many :targets, through: :target_resources
-  has_one_attached :file
-  has_one_attached :thumbnail
+  has_one_attached :file_as
+  has_one_attached :thumbnail_as
 
   def slug_candidates
     [

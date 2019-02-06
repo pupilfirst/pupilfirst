@@ -18,11 +18,6 @@
   p <strong>Type:</strong> #{@platform_feedback.feedback_type}
   p <strong>Description:</strong> #{@platform_feedback.description}
 
-  - if @platform_feedback.attachment.present?
-    p
-      ' <strong>Attachment:</strong>
-      | #{link_to @platform_feedback.attachment_filename, redirect_to_attachment_admin_platform_feedback_url(@platform_feedback)}
-
   - if @platform_feedback.promoter_score.present?
     p <strong>Promoter Score:</strong> #{@platform_feedback.promoter_score}
 

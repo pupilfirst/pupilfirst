@@ -1,6 +1,6 @@
 class TimelineEventFile < ApplicationRecord
   belongs_to :timeline_event
-  has_one_attached :file
+  has_one_attached :file_as
 
   mount_uploader :file, TimelineEventFileUploader
 
@@ -16,3 +16,4 @@ class TimelineEventFile < ApplicationRecord
     'missing_in_development'
   end
 end
+q

@@ -66,7 +66,7 @@ class Startup < ApplicationRecord
   has_many :faculty_startup_enrollments, dependent: :destroy
   has_many :faculty, through: :faculty_startup_enrollments
 
-  has_one_attached :logo
+  has_one_attached :logo_as
 
   # use the old name attribute as an alias for legal_registered_name
   alias_attribute :name, :legal_registered_name
@@ -123,7 +123,6 @@ class Startup < ApplicationRecord
   end
 
   mount_uploader :logo, LogoUploader
-  mount_uploader :partnership_deed, PartnershipDeedUploader
   process_in_background :logo
 
   normalize_attribute :pitch, :product_description, :email, :phone

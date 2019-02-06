@@ -59,10 +59,8 @@ feature 'Founder Edit' do
 
       fill_in 'founders_edit_skype_id', with: username
       fill_in 'founders_edit_communication_address', with: communication_address
-      attach_file 'founders_edit_identification_proof', upload_path('resources/pdf-thumbnail.png')
       select "My college isn't listed", from: 'founders_edit_college_id'
       fill_in 'founders_edit_roll_number', with: roll_number
-      attach_file 'founders_edit_college_identification', upload_path('users/college_id.jpg')
       fill_in 'founders_edit_college_course', with: course
       select semester, from: 'founders_edit_semester'
       select (Time.zone.now.year + rand(4)).to_s, from: 'founders_edit_year_of_graduation'
@@ -104,8 +102,6 @@ feature 'Founder Edit' do
 
       expect(founder.avatar.file.filename).to eq('donald_duck.jpg')
       # expect(founder.roles).to match_array(roles.map(&:downcase))
-      expect(founder.identification_proof.file.filename).to eq('pdf-thumbnail.png')
-      expect(founder.college_identification.file.filename).to eq('college_id.jpg')
     end
 
     scenario 'Founder tries to submit invalid values' do

@@ -1,8 +1,7 @@
 ActiveAdmin.register Startup do
   permit_params :product_name, :product_description, :legal_registered_name, :website, :logo, :facebook_link,
     :twitter_link, :created_at, :updated_at, :dropped_out, :registration_type,
-    :presentation_link, :product_video_link, :wireframe_link, :prototype_link, :slug, :level_id,
-    :partnership_deed, founder_ids: [], tag_list: []
+    :presentation_link, :product_video_link, :wireframe_link, :prototype_link, :slug, :level_id, founder_ids: [], tag_list: []
 
   filter :product_name, as: :string
   filter :level_course_id, as: :select, label: 'Course', collection: -> { Course.all }
@@ -225,13 +224,6 @@ ActiveAdmin.register Startup do
       row :registration_type
       row :address
       row :program_started_on
-
-      row :partnership_deed do
-        if startup.partnership_deed.present?
-          link_to 'Click here to open in new window', startup.partnership_deed.url, target: '_blank', rel: 'noopener'
-        end
-      end
-
       row :courier_name
       row :courier_number
     end

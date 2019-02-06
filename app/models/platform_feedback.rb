@@ -1,11 +1,8 @@
 class PlatformFeedback < ApplicationRecord
   belongs_to :founder
   has_one :karma_point, as: :source, inverse_of: :source, dependent: :restrict_with_error
-  has_one_attached :attachment
 
   scope :scored, -> { where.not(promoter_score: nil) }
-
-  mount_uploader :attachment, PlatformFeedbackAttachmentUploader
 
   def self.types_of_feedback
     %w[Feature Suggestion Bug Other]

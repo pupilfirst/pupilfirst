@@ -21,5 +21,4 @@
       as: :select,
       collection: Startup.tag_counts_on(:tags).pluck(:name),
       multiple: true
-    = f.input :partnership_deed, as: :file
   = f.submit

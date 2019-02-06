@@ -8,10 +8,8 @@ module Founders
     property :roles
     property :skype_id
     property :communication_address, validates: { presence: true, length: { maximum: 250 } }
-    property :identification_proof
     property :college_id, validates: { presence: true }
     property :roll_number
-    property :college_identification, validates: { file_size: { less_than: 2.megabytes }, file_content_type: { allow: %w[image/jpeg image/png image/gif] }, raster_image: true }
     property :college_course
     property :semester, validates: { inclusion: Founder.valid_semester_values, allow_blank: true }
     property :year_of_graduation, validates: { inclusion: (1990..2025), allow_blank: true }
@@ -29,7 +27,7 @@ module Founders
     validate :roles_must_be_valid
     validate :age_more_than_18
 
-    delegate :avatar?, :college_identification?, to: :model
+    delegate :avatar?, to: :model
 
     def roles_must_be_valid
       roles.each do |role|

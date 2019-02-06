@@ -48,8 +48,6 @@ after 'development:colleges', 'development:startups' do
     ]
   }
 
-  image_path = File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'users', 'college_id.jpg'))
-
   teams.each do |team_name, founders|
     startup = Startup.find_by(product_name: team_name)
 
@@ -64,7 +62,6 @@ after 'development:colleges', 'development:startups' do
         phone: phone,
         roles: Founder.valid_roles.sample([1, 2].sample),
         communication_address: [Faker::Address.street_address, Faker::Address.city, Faker::Address.zip].join("\n"),
-        identification_proof: File.open(image_path),
         startup: startup
       )
     end

@@ -34,10 +34,8 @@ class Target < ApplicationRecord
   has_one :level, through: :target_group
   has_one :course, through: :target_group
   has_one :quiz, dependent: :restrict_with_error
-  has_one_attached :rubric
 
   acts_as_taggable
-  mount_uploader :rubric, RubricUploader
 
   scope :live, -> { joins(:target_group).where(archived: [false, nil]) }
   scope :founder, -> { where(role: ROLE_FOUNDER) }
@@ -130,10 +128,6 @@ class Target < ApplicationRecord
     role == Target::ROLE_FOUNDER
   end
 
-  def rubric_filename
-    rubric.sanitized_file.original_filename
-  end
-
   def status(founder)
     @status ||= {}
     @status[founder.id] ||= Targets::StatusService.new(self, founder).status
@@ -163,10 +157,6 @@ class Target < ApplicationRecord
     role == ROLE_FOUNDER
   end
 
-  def rubric?
-    target_evaluation_criteria.exists? || rubric_url.present?
-  end
-
   def quiz?
     quiz.present?
   end
@@ -174,9 +164,6 @@ class Target < ApplicationRecord
   def team_target?
     role == ROLE_TEAM
   end
-
-  # this is included in the target JSONs the DashboardDataService responds with
-  alias has_rubric rubric?
 
   # Returns the latest event linked to this target from a founder. If a team target, it responds with the latest event from the team
   def latest_linked_event(founder, exclude = nil)

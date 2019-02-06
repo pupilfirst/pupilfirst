@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_05_061555) do
+ActiveRecord::Schema.define(version: 2019_02_06_064018) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -257,7 +257,6 @@ ActiveRecord::Schema.define(version: 2019_02_05_061555) do
     t.string "slack_username"
     t.integer "university_id"
     t.string "roles"
-    t.string "college_identification"
     t.boolean "avatar_processing", default: false
     t.string "slack_user_id"
     t.string "personal_website_url"
@@ -269,7 +268,6 @@ ActiveRecord::Schema.define(version: 2019_02_05_061555) do
     t.string "resume_url"
     t.string "slug"
     t.string "about"
-    t.string "identification_proof"
     t.string "skype_id"
     t.boolean "exited", default: false
     t.integer "user_id"
@@ -282,11 +280,8 @@ ActiveRecord::Schema.define(version: 2019_02_05_061555) do
     t.string "parent_name"
     t.string "id_proof_type"
     t.string "id_proof_number"
-    t.string "income_proof"
-    t.string "letter_from_parent"
     t.string "college_contact"
     t.string "permanent_address"
-    t.string "address_proof"
     t.integer "invited_startup_id"
     t.integer "resume_file_id"
     t.string "slack_access_token"
@@ -489,7 +484,6 @@ ActiveRecord::Schema.define(version: 2019_02_05_061555) do
     t.date "program_started_on"
     t.string "courier_name"
     t.string "courier_number"
-    t.string "partnership_deed"
     t.string "admission_stage"
     t.date "timeline_updated_on"
     t.datetime "admission_stage_updated_at"
@@ -580,7 +574,6 @@ ActiveRecord::Schema.define(version: 2019_02_05_061555) do
     t.datetime "updated_at", null: false
     t.text "slideshow_embed"
     t.integer "faculty_id"
-    t.string "rubric"
     t.integer "days_to_complete"
     t.string "target_action_type"
     t.integer "target_group_id"

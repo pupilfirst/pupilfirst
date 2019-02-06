@@ -5,7 +5,7 @@ ActiveAdmin.register PlatformFeedback do
 
   menu parent: 'Dashboard', label: 'Platform Feedback'
 
-  permit_params :founder_id, :feedback_type, :description, :attachment, :promoter_score, :notes
+  permit_params :founder_id, :feedback_type, :description, :promoter_score, :notes
 
   filter :founder_name, as: :string
   filter :founder_email, as: :string
@@ -41,13 +41,6 @@ ActiveAdmin.register PlatformFeedback do
       row :feedback_type
       row :founder
       row :description
-
-      row :attachment do
-        if feedback.attachment.present?
-          link_to feedback.attachment_filename, feedback.attachment.url, target: '_blank', rel: 'noopener'
-        end
-      end
-
       row :promoter_score
 
       row :karma_point do
@@ -73,16 +66,5 @@ ActiveAdmin.register PlatformFeedback do
     platform_feedback.update(notes: params[:notes]) if params[:notes].present?
 
     redirect_to action: :show
-  end
-
-  member_action :redirect_to_attachment, method: :get do
-    platform_feedback = PlatformFeedback.find params[:id]
-
-    if platform_feedback.attachment.present?
-      redirect_to platform_feedback.attachment.url
-    else
-      flash[:error] = 'This entry has no attachment.'
-      redirect_to admin_platform_feedback_path(platform_feedback)
-    end
   end
 end

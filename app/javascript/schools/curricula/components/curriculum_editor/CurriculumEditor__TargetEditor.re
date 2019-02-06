@@ -15,7 +15,7 @@ type resourceId = int;
 
 type evaluvationCriteria = (int, string, bool);
 
-type prerequisiteTargetId = int;
+type prerequisiteTarget = (int, string, bool);
 
 type state = {
   title: string,
@@ -24,7 +24,7 @@ type state = {
   slideshowEmbed: string,
   resourceIds: list(resourceId),
   evaluvationCriterias: list(evaluvationCriteria),
-  prerequisiteTargetIds: list(prerequisiteTargetId),
+  prerequisiteTargets: list(prerequisiteTarget),
   quizId: int,
 };
 
@@ -33,7 +33,8 @@ type action =
   | UpdateDescription(string)
   | UpdateVideoEmbed(string)
   | UpdateSlideshowEmbed(string)
-  | UpdateEvaluvationCriterion(int, string, bool);
+  | UpdateEvaluvationCriterion(int, string, bool)
+  | UpdatePrerequisiteTargets(int, string, bool);
 
 let component =
   ReasonReact.reducerComponent("CurriculumEditor__TargetEditor");
@@ -103,7 +104,7 @@ let createTarget = (state, targetGroupId) => {
   );
 };
 
-let make = (~targetGroupId, ~evaluationCriteria, _children) => {
+let make = (~targetGroupId, ~evaluationCriteria, ~targets, _children) => {
   ...component,
   initialState: () => {
     title: "",
@@ -120,7 +121,12 @@ let make = (~targetGroupId, ~evaluationCriteria, _children) => {
              true,
            )
          ),
-    prerequisiteTargetIds: [],
+    prerequisiteTargets:
+      targets
+      |> List.filter(target => target |> Target.targetGroupId == 1)
+      |> List.map(_target =>
+           (_target |> Target.id, _target |> Target.title, false)
+         ),
     quizId: 0,
   },
   reducer: (action, state) =>
@@ -133,17 +139,26 @@ let make = (~targetGroupId, ~evaluationCriteria, _children) => {
     | UpdateSlideshowEmbed(slideshowEmbed) =>
       ReasonReact.Update({...state, slideshowEmbed})
     | UpdateEvaluvationCriterion(key, value, selected) =>
-      let oldEc =
+      let oldEC =
         state.evaluvationCriterias
         |> List.filter(((item, value, selected)) => item !== key);
       ReasonReact.Update({
         ...state,
-        evaluvationCriterias: [(key, value, selected), ...oldEc],
+        evaluvationCriterias: [(key, value, selected), ...oldEC],
+      });
+    | UpdatePrerequisiteTargets(key, value, selected) =>
+      let oldPT =
+        state.prerequisiteTargets
+        |> List.filter(((item, value, selected)) => item !== key);
+      ReasonReact.Update({
+        ...state,
+        prerequisiteTargets: [(key, value, selected), ...oldPT],
       });
     },
   render: ({state, send}) => {
-    let listOfItems = state.evaluvationCriterias;
-    let multiSelectCB = (key, value, selected) =>
+    let multiSelectPTCB = (key, value, selected) =>
+      send(UpdatePrerequisiteTargets(key, value, selected));
+    let multiSelectECCB = (key, value, selected) =>
       send(UpdateEvaluvationCriterion(key, value, selected));
     <div className="blanket">
       <div className="drawer-right">
@@ -303,38 +318,11 @@ let make = (~targetGroupId, ~evaluationCriteria, _children) => {
                   htmlFor="title">
                   {"Any prerequisite targets?" |> str}
                 </label>
-                <div
-                  className="select-list__item-selected flex items-center justify-between bg-grey-lightest text-xs text-grey-dark border rounded p-3 mb-2">
-                  {"Selected prerequisite target" |> str}
-                  <button
-                    /* <svg className="w-3" id="fa3b28d3-128c-4841-a4e9-49257a824d7b" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 15.99"><title>{"Artboard 2" |> str}</title><path d="M13,1H9A1,1,0,0,0,8,0H6A1,1,0,0,0,5,1H1A1,1,0,0,0,0,2V3H14V2A1,1,0,0,0,13,1ZM11,13a1,1,0,1,1-2,0V7a1,1,0,0,1,2,0ZM8,13a1,1,0,1,1-2,0V7A1,1,0,0,1,8,7ZM5,13a1,1,0,1,1-2,0V7A1,1,0,0,1,5,7Zm8.5-9H.5a.5.5,0,0,0,0,1H1V15a1,1,0,0,0,1,1H12a1,1,0,0,0,1-1V5h.5a.5.5,0,0,0,0-1Z" fill="#525252"/></svg> */
+                <div className="mb-6">
+                  <CurriculumEditor__SelectBox
+                    items={state.prerequisiteTargets}
+                    multiSelectCB=multiSelectPTCB
                   />
-                </div>
-                <div className="flex mb-6">
-                  <div className="flex-1 mr-3 relative">
-                    <select
-                      className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey">
-                      <option> {"Select prerequisite target" |> str} </option>
-                      <option> {"Prerequisite target 2" |> str} </option>
-                      <option> {"Prerequisite target 3" |> str} </option>
-                    </select>
-                    <div
-                      className="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
-                      <svg
-                        className="fill-current h-4 w-4"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20">
-                        <path
-                          d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                  <button
-                    className="bg-indigo-dark hover:bg-blue-dark text-white font-bold py-2 px-6
-                  rounded focus:outline-none">
-                    {"Add" |> str}
-                  </button>
                 </div>
                 <div className="flex items-center mb-6">
                   <label
@@ -360,7 +348,10 @@ let make = (~targetGroupId, ~evaluationCriteria, _children) => {
                     htmlFor="title">
                     {"Choose evaluation criteria from your list" |> str}
                   </label>
-                  <CurriculumEditor__SelectBox listOfItems multiSelectCB />
+                  <CurriculumEditor__SelectBox
+                    items={state.evaluvationCriterias}
+                    multiSelectCB=multiSelectECCB
+                  />
                 </div>
                 <div className="mb-6">
                   <label

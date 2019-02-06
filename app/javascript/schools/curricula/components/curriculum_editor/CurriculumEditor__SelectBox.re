@@ -2,29 +2,36 @@ let str = ReasonReact.string;
 
 open CurriculumEditor__Types;
 
-type item = (int, string);
-
-type state = {selectedItem: list(item)};
+type state = {searchKey: string};
 
 type action =
-  | AddItem(item);
+  | UpdateSearchKey(string);
 
 let component = ReasonReact.reducerComponent("CurriculumEditor__SelectBox");
 
-let make = (~listOfItems, ~multiSelectCB, _children) => {
+let make = (~items, ~multiSelectCB, _children) => {
   ...component,
-  initialState: () => {selectedItem: []},
+  initialState: () => {searchKey: ""},
   reducer: (action, state) =>
     switch (action) {
-    | AddItem(item) =>
-      ReasonReact.Update({selectedItem: [item, ...state.selectedItem]})
+    | UpdateSearchKey(searchKey) =>
+      ReasonReact.Update({searchKey: searchKey})
     },
-  render: ({state, send}) =>
+  render: ({state, send}) => {
+    let showSearch = items |> List.length >= 3;
+    let filteredList =
+      items
+      |> List.filter(((_key, value, selected)) =>
+           Js.String.includes(
+             String.lowercase(state.searchKey),
+             String.lowercase(value),
+           )
+         );
     <div>
       {
-        listOfItems
-        |> List.map(((_key, value, status)) =>
-             status ?
+        items
+        |> List.map(((_key, value, selected)) =>
+             selected ?
                <div
                  className="select-list__item-selected flex items-center justify-between bg-grey-lightest text-xs text-grey-dark border rounded p-3 mb-2">
                  {value |> str}
@@ -32,6 +39,7 @@ let make = (~listOfItems, ~multiSelectCB, _children) => {
                    onClick={
                      _event => {
                        ReactEvent.Mouse.preventDefault(_event);
+                       send(UpdateSearchKey(""));
                        multiSelectCB(_key, value, false);
                      }
                    }>
@@ -55,21 +63,34 @@ let make = (~listOfItems, ~multiSelectCB, _children) => {
       <div className="flex relative">
         <div
           className="select-list__group bg-white border rounded rounded-t-none shadow pb-2 w-full">
-          <div className="px-3 pt-3 pb-2">
-            <input
-              className="appearance-none bg-transparent border-b w-full text-grey-darker pb-3 px-2 pl-0 leading-tight focus:outline-none"
-              type_="text"
-              placeholder="Type to Search"
-            />
-          </div>
           {
-            listOfItems
-            |> List.map(((_key, value, status)) =>
-                 !status ?
+            showSearch ?
+              <div className="px-3 pt-3 pb-2">
+                <input
+                  className="appearance-none bg-transparent border-b w-full text-grey-darker pb-3 px-2 pl-0 leading-tight focus:outline-none"
+                  type_="text"
+                  placeholder="Type to Search"
+                  onChange={
+                    event =>
+                      send(
+                        UpdateSearchKey(
+                          ReactEvent.Form.target(event)##value,
+                        ),
+                      )
+                  }
+                />
+              </div> :
+              ReasonReact.null
+          }
+          {
+            filteredList
+            |> List.map(((_key, value, selected)) =>
+                 !selected ?
                    <div
                      onClick={
                        _event => {
                          ReactEvent.Mouse.preventDefault(_event);
+                         send(UpdateSearchKey(""));
                          multiSelectCB(_key, value, true);
                        }
                      }
@@ -83,5 +104,6 @@ let make = (~listOfItems, ~multiSelectCB, _children) => {
           }
         </div>
       </div>
-    </div>,
+    </div>;
+  },
 };

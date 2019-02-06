@@ -4,6 +4,8 @@ type props = {
   course: Course.t,
   evaluationCriteria: list(EvaluationCriteria.t),
   levels: list(Level.t),
+  targetGroups: list(TargetGroup.t),
+  targets: list(Target.t),
 };
 
 type state = {
@@ -20,7 +22,15 @@ let str = ReasonReact.string;
 
 let component = ReasonReact.reducerComponent("CurriculumController");
 
-let make = (~course, ~evaluationCriteria, ~levels, _children) => {
+let make =
+    (
+      ~course,
+      ~evaluationCriteria,
+      ~levels,
+      ~targetGroups,
+      ~targets,
+      _children,
+    ) => {
   ...component,
   initialState: () => {
     selectedLevel: levels |> List.rev |> List.hd,
@@ -36,13 +46,22 @@ let make = (~course, ~evaluationCriteria, ~levels, _children) => {
     },
   render: ({state, send}) => {
     let currentLevel = state.selectedLevel;
+    let targetGroupsInLevel =
+      targetGroups
+      |> List.filter(targetGroup =>
+           targetGroup |> TargetGroup.levelId == (currentLevel |> Level.id)
+         );
     let showTargetEditorCB = () =>
       send(ToggleTargetEditor(state.showTargetEditor));
     let targetGroupId = state.selectedTargetGroupId;
     <div>
       {
         state.showTargetEditor ?
-          <CurriculumEditor__TargetEditor targetGroupId evaluationCriteria /> :
+          <CurriculumEditor__TargetEditor
+            targetGroupId
+            evaluationCriteria
+            targets
+          /> :
           ReasonReact.null
       }
       <div
@@ -89,11 +108,11 @@ let make = (~course, ~evaluationCriteria, ~levels, _children) => {
         <div
           className="target-group__container max-w-lg mt-5 mx-auto relative">
           {
-            currentLevel
-            |> Level.targetGroups
+            targetGroupsInLevel
             |> List.map(targetGroup =>
                  <CurriculumEditor__TargetGroupList
                    targetGroup
+                   targets
                    showTargetEditorCB
                  />
                )
@@ -124,6 +143,8 @@ let decode = json =>
     evaluationCriteria:
       json |> field("evaluationCriteria", list(EvaluationCriteria.decode)),
     levels: json |> field("levels", list(Level.decode)),
+    targetGroups: json |> field("targetGroups", list(TargetGroup.decode)),
+    targets: json |> field("targets", list(Target.decode)),
   };
 
 let jsComponent =
@@ -135,6 +156,8 @@ let jsComponent =
         ~course=props.course,
         ~evaluationCriteria=props.evaluationCriteria,
         ~levels=props.levels,
+        ~targetGroups=props.targetGroups,
+        ~targets=props.targets,
         [||],
       );
     },

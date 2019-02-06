@@ -8,7 +8,7 @@ let component =
   ReasonReact.statelessComponent("CurriculumEditor__TargetGroupShow");
 
 Js.log("testing!");
-let make = (~targetGroup, _children) => {
+let make = (~targetGroup, ~showTargetEditorCB, _children) => {
   ...component,
   render: _self =>
     <div className="target-group__box relative mt-12 rounded-lg">
@@ -31,7 +31,8 @@ let make = (~targetGroup, _children) => {
         |> ReasonReact.array
       }
       <div
-        className="target-group__target-create flex items-center bg-grey-lighter border-2 border-t-0 border-dashed p-5 rounded-lg rounded-t-none cursor-pointer">
+        className="target-group__target-create flex items-center bg-grey-lighter border-2 border-t-0 border-dashed p-5 rounded-lg rounded-t-none cursor-pointer"
+        onClick={_event => showTargetEditorCB()}>
         <svg className="svg-icon w-8 h-8" viewBox="0 0 20 20">
           <path
             fill="#A8B7C7"

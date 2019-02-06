@@ -5,6 +5,8 @@ type t = {
 
 let name = t => t.name;
 
+let id = t => t.id;
+
 let decode = json =>
   Json.Decode.{
     name: json |> field("name", string),

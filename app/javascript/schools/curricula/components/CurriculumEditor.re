@@ -6,10 +6,15 @@ type props = {
   levels: list(Level.t),
 };
 
-type state = {selectedLevel: Level.t};
+type state = {
+  selectedLevel: Level.t,
+  showTargetEditor: bool,
+  selectedTargetGroupId: int,
+};
 
 type action =
-  | SelectLevel(Level.t);
+  | SelectLevel(Level.t)
+  | ToggleTargetEditor(bool);
 
 let str = ReasonReact.string;
 
@@ -17,23 +22,36 @@ let component = ReasonReact.reducerComponent("CurriculumController");
 
 let make = (~course, ~evaluationCriteria, ~levels, _children) => {
   ...component,
-  initialState: () => {selectedLevel: levels |> List.rev |> List.hd},
+  initialState: () => {
+    selectedLevel: levels |> List.rev |> List.hd,
+    showTargetEditor: false,
+    selectedTargetGroupId: 1,
+  },
   reducer: (action, state) =>
     switch (action) {
     | SelectLevel(selectedLevel) =>
-      ReasonReact.Update({selectedLevel: selectedLevel})
+      ReasonReact.Update({...state, selectedLevel})
+    | ToggleTargetEditor(showTargetEditor) =>
+      ReasonReact.Update({...state, showTargetEditor: !showTargetEditor})
     },
   render: ({state, send}) => {
     let currentLevel = state.selectedLevel;
-    <div className="flex-1 flex flex-col bg-white overflow-hidden">
+    let showTargetEditorCB = () =>
+      send(ToggleTargetEditor(state.showTargetEditor));
+    let targetGroupId = state.selectedTargetGroupId;
+    <div>
+      {
+        state.showTargetEditor ?
+          <CurriculumEditor__TargetEditor targetGroupId evaluationCriteria /> :
+          ReasonReact.null
+      }
       <div
         className="border-b flex px-6 py-2 h-16 items-center justify-between">
         <div className="inline-block relative w-64">
           <select
             onChange={
               event => {
-                let level_name =
-                  ReactDOMRe.domElementToObj(ReactEventRe.Form.target(event))##value;
+                let level_name = ReactEvent.Form.target(event)##value;
                 send(SelectLevel(Level.selectLevel(levels, level_name)));
               }
             }
@@ -74,7 +92,10 @@ let make = (~course, ~evaluationCriteria, ~levels, _children) => {
             currentLevel
             |> Level.targetGroups
             |> List.map(targetGroup =>
-                 <CurriculumEditor__TargetGroupShow targetGroup />
+                 <CurriculumEditor__TargetGroupList
+                   targetGroup
+                   showTargetEditorCB
+                 />
                )
             |> Array.of_list
             |> ReasonReact.array

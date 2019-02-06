@@ -25,7 +25,7 @@ let make = (~course, ~evaluationCriteria, ~levels, _children) => {
     },
   render: ({state, send}) => {
     let currentLevel = state.selectedLevel;
-    <div>
+    <div className="flex-1 flex flex-col bg-white overflow-hidden">
       <div
         className="border-b flex px-6 py-2 h-16 items-center justify-between">
         <div className="inline-block relative w-64">
@@ -80,7 +80,7 @@ let make = (~course, ~evaluationCriteria, ~levels, _children) => {
             |> ReasonReact.array
           }
           <div
-            className="target-group__create flex items-center relative bg-grey-lighter border-2 border-dashed p-6 rounded-lg mt-20 cursor-pointer">
+            className="target-group__create flex items-center relative bg-grey-lighter border-2 border-dashed p-6 z-10 rounded-lg mt-12 cursor-pointer">
             <svg className="svg-icon w-12 h-12" viewBox="0 0 20 20">
               <path
                 fill="#A8B7C7"

@@ -11,7 +11,7 @@ Js.log("testing!");
 let make = (~targetGroup, _children) => {
   ...component,
   render: _self =>
-    <div className="target-group__box relative mt-20 rounded-lg">
+    <div className="target-group__box relative mt-12 rounded-lg">
       <div
         className="target-group__header bg-white p-4 border border-b-0 text-center rounded-lg rounded-b-none">
         <div className="target-group__title">

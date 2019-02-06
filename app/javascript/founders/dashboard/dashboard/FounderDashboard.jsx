@@ -162,15 +162,21 @@ export default class FounderDashboard extends React.Component {
     return this.props.founderDetails.length < 2;
   }
 
+  levelZeroExists() {
+    return this.props.levels.filter(level => {return level.number === 0;}).length > 0;
+  }
+
   render() {
     return (
       <div className="founder-dashboard-container pb-5">
-        <ToggleBar
+        {this.levelZeroExists() && (
+          <ToggleBar
           availableTrackIds={this.availableTrackIds()}
           rootProps={this.props}
           rootState={this.state}
           setRootState={this.setRootState}
         />
+        )}
 
         {(this.props.courseEnded ||
           this.props.levelUpEligibility !== "not_eligible") && (

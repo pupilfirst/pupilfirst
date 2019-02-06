@@ -140,17 +140,18 @@ feature 'Founder Dashboard' do
   end
 
   context "when the founders's course has a Level 0 in it" do
-    let!(:level_0) { create :level, :zero, course: course }
-    let!(:target_group_1) { create :target_group, level: level_0 }
+    let(:level_0) { create :level, :zero, course: course }
+    let(:target_group_1) { create :target_group, level: level_0 }
+    let!(:level_0_target) { create :target, target_group: target_group_1, role: Target::ROLE_TEAM }
 
     scenario 'founder visits the dashboard', js: true do
       sign_in_user founder.user, referer: student_dashboard_path
       # Ensure the correct ToggleBar is visible
-      expect(page).to have_selector('.founder-dashboard-togglebar__toggle-btn', text: level_4.name)
-      expect(page).to have_selector('.founder-dashboard-togglebar__toggle-btn', text: level_0.name)
+      expect(page).to have_selector('.founder-dashboard-togglebar__toggle-btn', text: level_4.name.upcase)
+      expect(page).to have_selector('.founder-dashboard-togglebar__toggle-btn', text: level_0.name.upcase)
 
       # Go to the level 0 Tab
-      find('.founder-dashboard-togglebar__toggle-btn', text: level_0.name).click
+      find('.founder-dashboard-togglebar__toggle-btn', text: level_0.name.upcase).click
 
       # Ensure only the single level 0 displayed
       expect(page).to have_selector('.founder-dashboard-target-header__container', count: 1)

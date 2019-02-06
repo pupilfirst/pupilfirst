@@ -163,7 +163,7 @@ export default class FounderDashboard extends React.Component {
   }
 
   levelZeroExists() {
-    return this.props.levels.filter(level => {return level.number === 0;}).length > 0;
+    return (this.props.levels.filter(level => {return level.number === 0;}).length > 0);
   }
 
   render() {
@@ -171,7 +171,6 @@ export default class FounderDashboard extends React.Component {
       <div className="founder-dashboard-container pb-5">
         {this.levelZeroExists() && (
           <ToggleBar
-          availableTrackIds={this.availableTrackIds()}
           rootProps={this.props}
           rootState={this.state}
           setRootState={this.setRootState}

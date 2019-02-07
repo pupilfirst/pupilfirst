@@ -8,6 +8,6 @@ class CoachDashboardPolicy < ApplicationPolicy
   private
 
   def courses_with_dashboard
-    @courses_with_dashboard ||= user&.faculty&.courses_with_dashboard
+    @courses_with_dashboard ||= current_coach&.courses_with_dashboard
   end
 end

@@ -12,21 +12,6 @@ newConnectRequestFormHandler = ->
       questions.closest('.form-group').addClass('has-error')
       event.preventDefault()
 
-tabTitleManager = ->
-  if $('#faculty-nav').length > 0
-    # Javascript to enable link to tab
-    url = document.location.toString()
-
-    # Enable all tabs
-    $('.nav-tabs a').click (e) ->
-      $(e.target).tab('show')
-
-    # Change URL for tab change.
-    $('.nav-tabs a').on 'shown.bs.tab', (e) ->
-      tabName = $(e.target).data('target').split('#')[1]
-      updatedURL = "/coaches/filter/#{tabName}"
-      history.replaceState({turbolinks: true, url: updatedURL}, document.title, updatedURL)
-
 destroySelect2Inputs = ->
   connectSlotInput = $('#connect_request_connect_slot')
 
@@ -37,7 +22,6 @@ destroySelect2Inputs = ->
 $(document).on 'turbolinks:load', ->
   if $('#faculty__index').length
     newConnectRequestFormHandler()
-    tabTitleManager()
 
   if $('#faculty__index').length || $('#faculty__show').length
     select2ForConnectSlot()

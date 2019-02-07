@@ -58,9 +58,9 @@ class Startup < ApplicationRecord
 
   belongs_to :level
   has_one :course, through: :level
+  has_one :school, through: :course
 
   has_many :weekly_karma_points, dependent: :destroy
-  has_many :resources, dependent: :destroy
 
   # Faculty who can review this startup's timeline events.
   has_many :faculty_startup_enrollments, dependent: :destroy

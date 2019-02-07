@@ -19,7 +19,7 @@ feature 'Manual User Sign Out' do
       visit edit_founder_path
 
       # User should be signed out.
-      expect(page).to have_selector('.sign-in-kid')
+      expect(page).to have_selector('#users-sessions__new')
 
       # Log the user in again.
       user.regenerate_login_token
@@ -34,7 +34,7 @@ feature 'Manual User Sign Out' do
       visit edit_founder_path
 
       # User should be signed out.
-      expect(page).to have_selector('.sign-in-kid')
+      expect(page).to have_selector('#users-sessions__new')
     end
   end
 
@@ -52,7 +52,7 @@ feature 'Manual User Sign Out' do
         visit edit_founder_path
 
         # User should be signed out.
-        expect(page).to have_selector('.sign-in-kid')
+        expect(page).to have_selector('#users-sessions__new')
       end
     end
   end

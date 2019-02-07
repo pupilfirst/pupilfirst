@@ -4,5 +4,6 @@ FactoryBot.define do
     name { Faker::Name.name }
     title { Faker::Job.title }
     category { Faculty::CATEGORY_VR_COACHES }
+    school
   end
 end

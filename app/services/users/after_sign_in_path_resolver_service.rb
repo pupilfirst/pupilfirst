@@ -5,8 +5,9 @@ module Users
   class AfterSignInPathResolverService
     include RoutesResolvable
 
-    def initialize(user)
+    def initialize(user, current_school)
       @user = user
+      @current_school = current_school
       raise "Can only resolve paths for instances of User. Given #{resource.class}." unless @user.is_a?(User)
     end
 
@@ -17,7 +18,12 @@ module Users
     private
 
     def faculty_path
-      courses_with_review_dashboard = @user.faculty&.courses_with_dashboard
+      faculty = @user.faculty.find_by(school: @current_school)
+
+      return if faculty.blank?
+
+      courses_with_review_dashboard = faculty.courses_with_dashboard
+
       return if courses_with_review_dashboard.blank?
 
       url_helpers.course_coach_dashboard_path(courses_with_review_dashboard.first)

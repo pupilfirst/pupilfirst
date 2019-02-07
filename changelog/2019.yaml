@@ -1,5 +1,25 @@
 ---
 changelog:
+- timestamp: '2019-02-04T08:06:47Z'
+  changes:
+  - timestamp: '2019-02-04T08:00:22Z'
+    title: Improved the coach dashboard UI by splitting into pending and completed
+      tabs
+    trello: https://trello.com/c/qeFh6f57
+    private: false
+    description: The events in each tab will list the most recent events, and load
+      the remaining on demand using a button. The button will indicate a loading status
+      till the events are loaded.
+    category: ui
+  - timestamp: '2019-02-04T07:31:32Z'
+    title: Remove all concepts of billing and payment
+    trello: https://trello.com/c/HP6dZuDk
+    private: true
+    category: feature
+  - timestamp: '2019-01-31T09:45:25Z'
+    title: Removed all code related to the unused graduation flow for startup founders
+    trello: https://trello.com/c/MT7OveQI
+    private: true
 - timestamp: '2019-01-31T06:13:46Z'
   changes:
   - timestamp: '2019-01-24T10:14:53Z'
@@ -31,9 +51,9 @@ changelog:
     trello: https://trello.com/c/gW7bXD3v
     private: true
   - timestamp: '2019-01-07T06:18:47Z'
-    title: We have a new and flexible grading system! Course admins will now be
-      able to configure how they want to review student submissions. A sleek grade
-      bar will be visible on both the student and coach dashboards.
+    title: We have a new and flexible grading system! Course admins will now be able
+      to configure how they want to review student submissions. A sleek grade bar
+      will be visible on both the student and coach dashboards.
     trello: https://trello.com/c/uUGoqtzF
     private: false
     description: Every course will now have a grading system of 1 to max_grade with
@@ -62,14 +82,14 @@ changelog:
     category: bugfix
   - timestamp: '2019-01-22T04:14:53Z'
     title: The primary component from the team profile page - the timeline of students'
-      activity has been moved into the student profile page, and the team profile page
-      has been shut down.
+      activity has been moved into the student profile page, and the team profile
+      page has been shut down.
     trello: https://trello.com/c/EkwDEbWA
     private: false
   - timestamp: '2019-01-14T04:14:53Z'
-    title: Coaches can now be assigned directly to multiple courses so that they can review
-      submissions from all students taking the course. Previously they had to be individually
-      assigned to students (or teams) to gain review access.
+    title: Coaches can now be assigned directly to multiple courses so that they can
+      review submissions from all students taking the course. Previously they had
+      to be individually assigned to students (or teams) to gain review access.
     trello: https://trello.com/c/BkwnAKlN
     private: false
     category: feature

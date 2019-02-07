@@ -91,6 +91,12 @@ class Startup < ApplicationRecord
 
   validates :level, presence: true
 
+  validate :not_assigned_to_level_zero
+
+  def not_assigned_to_level_zero
+    errors[:level] << 'cannot be assigned to level zero' unless level.number.positive?
+  end
+
   # New set of validations for incubation wizard
   store :metadata, accessors: [:updated_from]
 

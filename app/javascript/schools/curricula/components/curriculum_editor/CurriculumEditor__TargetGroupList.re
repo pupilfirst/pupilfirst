@@ -2,8 +2,6 @@ open CurriculumEditor__Types;
 
 let str = ReasonReact.string;
 
-type props = {targetGroup: TargetGroup.t};
-
 let component =
   ReasonReact.statelessComponent("CurriculumEditor__TargetGroupShow");
 let make = (~targetGroup, ~targets, ~showTargetEditorCB, _children) => {

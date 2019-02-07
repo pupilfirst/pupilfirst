@@ -9,7 +9,6 @@ class Resource < ApplicationRecord
   has_many :target_resources, dependent: :destroy
   has_many :targets, through: :target_resources
   has_one_attached :file_as
-  has_one_attached :thumbnail_as
 
   def slug_candidates
     [
@@ -35,7 +34,6 @@ class Resource < ApplicationRecord
   end
 
   mount_uploader :file, ResourceFileUploader
-  mount_uploader :thumbnail, ResourceThumbnailUploader
 
   scope :public_resources, -> { where(course_id: nil).order('title') }
   # scope to search title

@@ -1,5 +1,5 @@
 ActiveAdmin.register Startup do
-  permit_params :product_name, :product_description, :legal_registered_name, :website, :logo, :facebook_link,
+  permit_params :product_name, :product_description, :legal_registered_name, :website, :facebook_link,
     :twitter_link, :created_at, :updated_at, :dropped_out, :registration_type,
     :presentation_link, :product_video_link, :wireframe_link, :prototype_link, :slug, :level_id, founder_ids: [], tag_list: []
 
@@ -167,11 +167,6 @@ ActiveAdmin.register Startup do
       end
 
       row :email
-
-      row :logo do
-        link_to(image_tag(startup.logo_url(:thumb)), startup.logo_url) if startup.logo.present?
-      end
-
       row :website
 
       row :presentation_link do

@@ -32,9 +32,6 @@ feature 'Timeline Builder' do
 
     find('.timeline-builder__textarea').set(description)
 
-    # Pick a cover image.
-    attach_file 'Cover Image', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'users', 'college_id.jpg')), make_visible: true
-
     # Open the link form.
     find('.timeline-builder__upload-section-tab.link-upload').click
     expect(page).to have_content('Please enter a full URL, starting with http(s).')
@@ -60,8 +57,6 @@ feature 'Timeline Builder' do
     te = TimelineEvent.last
 
     expect(te.description).to eq(description)
-    expect(te.image).to be_present
-
     expect(te.links.count).to eq(1)
 
     link = te.links.first

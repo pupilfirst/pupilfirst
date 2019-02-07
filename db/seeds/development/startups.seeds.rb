@@ -15,7 +15,6 @@ after 'development:levels' do
     product_name: 'Super Product',
     product_description: 'This really is a superb product! ;)',
     website: 'https://www.superstartup.in',
-    logo: File.open(File.join(Rails.root, 'app/assets/images/mailer/logo-mailer.png')),
     presentation_link: 'https://slideshare.net/superstartupdeck',
     legal_registered_name: 'SuperTech Ltd',
     twitter_link: 'https://twitter.com/superstartup',

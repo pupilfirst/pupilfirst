@@ -16,4 +16,3 @@ class TimelineEventFile < ApplicationRecord
     'missing_in_development'
   end
 end
-q

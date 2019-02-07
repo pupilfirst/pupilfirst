@@ -9,5 +9,7 @@ class RemoveFieldsForCarrierWaveUploads < ActiveRecord::Migration[5.2]
     remove_column :targets, :rubric, :string
     remove_column :admin_users, :avatar, :string
     remove_column :platform_feedback, :attachment, :string
+    remove_column :startups, :logo, :string
+    remove_column :resources, :thumbnail, :string
   end
 end

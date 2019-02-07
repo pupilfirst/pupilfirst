@@ -15,10 +15,6 @@ class TimelineEvent < ApplicationRecord
   belongs_to :evaluator, class_name: 'Faculty', optional: true
   has_many :timeline_event_owners, dependent: :destroy
   has_many :founders, through: :timeline_event_owners
-  has_one_attached :image_as
-
-  mount_uploader :image, TimelineImageUploader
-  process_in_background :image
 
   serialize :links
 

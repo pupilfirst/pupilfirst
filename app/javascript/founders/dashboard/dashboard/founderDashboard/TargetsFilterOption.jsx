@@ -12,10 +12,10 @@ export default class TargetsFilterOption extends React.Component {
   }
 
   handleClick() {
-    if (this.level.unlocked && this.level.id !== this.props.rootState.chosenLevelId) {
+    if (this.level.unlocked && this.level !== this.props.rootState.selectedLevel) {
       const trackIdsForLevel = this.props.getAvailableTrackIds(this.level.id);
       this.props.setRootState({
-        chosenLevelId: this.level.id,
+        selectedLevel: this.level,
         activeTrackId: trackIdsForLevel[0]
       });
     }

@@ -13,7 +13,8 @@ after 'development:courses' do
     category: 'team',
     sort_index: 1,
     user: User.create(email: 'mickeymouse@example.com'),
-    school: sv
+    school: sv,
+    public: true
   )
 
   FacultyCourseEnrollment.create!(
@@ -30,7 +31,8 @@ after 'development:courses' do
     category: 'team',
     sort_index: 2,
     user: User.create(email: 'minniemouse@example.com'),
-    school: sv
+    school: sv,
+    public: true
   )
 
   FacultyCourseEnrollment.create!(
@@ -47,7 +49,8 @@ after 'development:courses' do
     category: 'developer_coaches',
     sort_index: 3,
     user: User.create(email: 'donaldduck@example.com'),
-    school: sv
+    school: sv,
+    public: true
   )
 
   FacultyCourseEnrollment.create!(
@@ -62,7 +65,8 @@ after 'development:courses' do
     key_skills: 'Looting, pillaging, etc.',
     category: 'visiting_coaches',
     user: User.create(email: 'goofy@example.com'),
-    school: sv
+    school: sv,
+    public: true
   )
 
   FacultyCourseEnrollment.create!(
@@ -76,7 +80,9 @@ after 'development:courses' do
     title: 'Coaching Expert',
     category: 'vr_coaches',
     user: User.create(email: 'ioscoach@example.com'),
-    school: sv
+    school: sv,
+    about: "This is just a demo coach. The about field is required for Faculty#show to be available - that's why this text is here.",
+    public: true
   )
 
   FacultyCourseEnrollment.create!(

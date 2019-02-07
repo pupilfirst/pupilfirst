@@ -28,6 +28,7 @@ class Founder < ApplicationRecord
   belongs_to :startup
   has_one :level, through: :startup
   has_one :course, through: :level
+  has_one :school, through: :course
   has_many :karma_points, dependent: :destroy
   has_many :visits, as: :user, dependent: :nullify, inverse_of: :user
   has_many :ahoy_events, class_name: 'Ahoy::Event', as: :user, dependent: :nullify, inverse_of: :user

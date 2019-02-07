@@ -11,7 +11,7 @@ class ApplicationPolicy
   end
 
   def index?
-    false
+    scope.any?
   end
 
   def show?

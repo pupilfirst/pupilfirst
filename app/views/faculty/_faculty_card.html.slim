@@ -1,33 +1,37 @@
+- presenter = FacultyModule::FacultyCardPresenter.new(self, coach)
+
 .faculty-card.col-lg-3.col-md-4
   .faculty-card__box.content-box.p-0
-    - connect_slots = member.connect_slots.available_for_founder
-    a.faculty-image href=coach_url(member)
-      .btn.btn-primary.btn-view-profile
-        i.fa.fa-user
-        | &nbsp;View Profile
+    - if presenter.show?
+      a.faculty-image href=coach_path(coach)
+        .btn.btn-primary.btn-view-profile
+          i.fa.fa-user
+          | &nbsp;View Profile
 
-      = image_tag member.image_or_avatar_url(background_shape: :square)
-      - if connect_slots.exists?
-        .available-marker
-          i.fa.fa-check-circle
-          | &nbsp;Available for Connect
+        = image_tag coach.image_or_avatar_url(background_shape: :square)
+    - else
+      .faculty-image
+        = image_tag coach.image_or_avatar_url(background_shape: :square)
 
     .faculty-card-info.d-flex.flex-column.align-items-center
       .faculty-card-info__content
         .faculty-card-info__name
-          = link_to member.name, coach_url(member)
+          - if presenter.show?
+            = link_to coach.name, coach_url(coach)
+          - else
+            = coach.name
 
         .faculty-card-info__title
-          = member.title
+          = coach.title
 
-        - if member.key_skills.present?
+        - if coach.key_skills.present?
           .faculty-card-info__key-skills
-            = member.key_skills
+            = coach.key_skills
 
-        - if member.linkedin_url.present?
+        - if coach.linkedin_url.present?
           .faculty-links
-            = link_to member.linkedin_url, target: '_blank' do
+            = link_to coach.linkedin_url, target: '_blank' do
               i.fa.fa-linkedin
 
-      - if connect_slots.present?
-        == render 'connect_button', faculty: member
+      - if presenter.can_connect?
+        == render 'connect_button', faculty: coach

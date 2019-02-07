@@ -4,7 +4,10 @@ import TargetsFilterOption from "./TargetsFilterOption";
 
 export default class TargetsFilter extends React.Component {
   levelOptions() {
-    let sortedLevels = _.sortBy(this.props.rootProps.levels, ["number"]);
+    // Exclude level 0 from the dropdown
+    let levels = this.props.rootProps.levels.filter(level => {return level.number > 0;});
+
+    let sortedLevels = _.sortBy(levels, ["number"]);
     return _.map(sortedLevels, level => {
       return (
         <TargetsFilterOption
@@ -19,14 +22,6 @@ export default class TargetsFilter extends React.Component {
     });
   }
 
-  chosenLevel() {
-    return _.find(this.props.rootProps.levels, [
-      "id",
-      this.props.rootState.chosenLevelId
-    ]);
-  }
-
-
   render() {
     return (
       <div className="dropdown filter-targets-dropdown">
@@ -38,7 +33,7 @@ export default class TargetsFilter extends React.Component {
           className="d-flex btn btn-md px-3 filter-targets-dropdown__button align-items-center justify-content-between dropdown-toggle"
         >
           <span className="pr-3 filter-targets-dropdown__selection">
-            Level {this.chosenLevel().number}: {this.chosenLevel().name}
+            Level {this.props.rootState.selectedLevel.number}: {this.props.rootState.selectedLevel.name}
           </span>
 
           <span className="filter-targets-dropdown__arrow" />

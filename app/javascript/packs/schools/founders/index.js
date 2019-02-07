@@ -1,3 +1,4 @@
+import "schools/founders/index.css";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { jsComponent } from "../../../schools/founders/components/StudentAdditionPanel.bs";

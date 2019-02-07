@@ -1,5 +1,5 @@
 <% content_for(:nav) do %>
-  <ul>
+  <ul class="list-reset">
     <li class="border-b-2 mb-2 pb-2"><%= link_to('Overview', school_path) %></li>
     <% @courses.each do |course| %>
       <li><%= link_to course.name, school_course_path(course) %></li>

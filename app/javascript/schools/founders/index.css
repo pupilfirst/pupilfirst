@@ -1,0 +1,29 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+    font-family: 'Nunito Sans', sans-serif;
+}
+
+body {
+    color: #3A3F52;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.student-solo__card {
+    @apply rounded-lg mb-2;
+}
+
+.student-team__card {
+    position: relative;
+}
+
+.student-team__card:not(:last-child):before {
+    position: absolute;
+    content: '';
+    height: 1px;
+    width: 100%;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background: linear-gradient(to right, #E4E9F2 80%, #FFFFFF 100%);
+}

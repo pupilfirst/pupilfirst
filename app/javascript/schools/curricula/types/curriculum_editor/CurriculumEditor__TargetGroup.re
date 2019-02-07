@@ -1,16 +1,18 @@
 type t = {
   id: int,
   name: string,
-  targets: list(CurriculumEditor__Target.t),
+  levelId: int,
 };
+
+let levelId = t => t.levelId;
 
 let name = t => t.name;
 
-let targets = t => t.targets;
+let id = t => t.id;
 
 let decode = json =>
   Json.Decode.{
     id: json |> field("id", int),
     name: json |> field("name", string),
-    targets: json |> field("targets", list(CurriculumEditor__Target.decode)),
+    levelId: json |> field("levelId", int),
   };

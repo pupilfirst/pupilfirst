@@ -2,15 +2,16 @@ open CurriculumEditor__Types;
 
 let str = ReasonReact.string;
 
-type props = {targetGroup: TargetGroup.t};
-
 let component =
   ReasonReact.statelessComponent("CurriculumEditor__TargetGroupShow");
-
-Js.log("testing!");
-let make = (~targetGroup, _children) => {
+let make = (~targetGroup, ~targets, ~showTargetEditorCB, _children) => {
   ...component,
-  render: _self =>
+  render: _self => {
+    let targetsInTG =
+      targets
+      |> List.filter(target =>
+           target |> Target.targetGroupId == (targetGroup |> TargetGroup.id)
+         );
     <div className="target-group__box relative mt-12 rounded-lg">
       <div
         className="target-group__header bg-white p-4 border border-b-0 text-center rounded-lg rounded-b-none">
@@ -24,14 +25,14 @@ let make = (~targetGroup, _children) => {
         </div>
       </div>
       {
-        targetGroup
-        |> TargetGroup.targets
+        targetsInTG
         |> List.map(target => <CurriculumEditor__TargetShow target />)
         |> Array.of_list
         |> ReasonReact.array
       }
       <div
-        className="target-group__target-create flex items-center bg-grey-lighter border-2 border-t-0 border-dashed p-5 rounded-lg rounded-t-none cursor-pointer">
+        className="target-group__target-create flex items-center bg-grey-lighter border-2 border-t-0 border-dashed p-5 rounded-lg rounded-t-none cursor-pointer"
+        onClick={_event => showTargetEditorCB()}>
         <svg className="svg-icon w-8 h-8" viewBox="0 0 20 20">
           <path
             fill="#A8B7C7"
@@ -42,5 +43,6 @@ let make = (~targetGroup, _children) => {
           {"Creat another target" |> str}
         </h5>
       </div>
-    </div>,
+    </div>;
+  },
 };

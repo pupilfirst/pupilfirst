@@ -11,7 +11,9 @@ module Schools
         {
           course: course_data,
           evaluationCriteria: evaluation_criteria,
-          levels: levels
+          levels: levels,
+          targetGroups: target_groups,
+          targets: targets
         }
       end
 
@@ -35,27 +37,27 @@ module Schools
         @course.levels.map do |level|
           {
             id: level.id,
-            name: level.name,
-            targetGroups: target_groups(level)
+            name: level.name
           }
         end
       end
 
-      def target_groups(level)
-        level.target_groups.map do |target_group|
+      def target_groups
+        @course.target_groups.map do |target_group|
           {
             id: target_group.id,
             name: target_group.name,
-            targets: targets(target_group)
+            levelId: target_group.level.id
           }
         end
       end
 
-      def targets(target_group)
-        target_group.targets.map do |target|
+      def targets
+        @course.targets.map do |target|
           {
             id: target.id,
-            title: target.title
+            title: target.title,
+            targetGroupId: target.target_group.id
           }
         end
       end

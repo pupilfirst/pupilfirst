@@ -4,36 +4,73 @@ type props = {
   course: Course.t,
   evaluationCriteria: list(EvaluationCriteria.t),
   levels: list(Level.t),
+  targetGroups: list(TargetGroup.t),
+  targets: list(Target.t),
 };
 
-type state = {selectedLevel: Level.t};
+type state = {
+  selectedLevel: Level.t,
+  showTargetEditor: bool,
+  selectedTargetGroupId: int,
+};
 
 type action =
-  | SelectLevel(Level.t);
+  | SelectLevel(Level.t)
+  | ToggleTargetEditor(bool);
 
 let str = ReasonReact.string;
 
 let component = ReasonReact.reducerComponent("CurriculumController");
 
-let make = (~course, ~evaluationCriteria, ~levels, _children) => {
+let make =
+    (
+      ~course,
+      ~evaluationCriteria,
+      ~levels,
+      ~targetGroups,
+      ~targets,
+      _children,
+    ) => {
   ...component,
-  initialState: () => {selectedLevel: levels |> List.rev |> List.hd},
+  initialState: () => {
+    selectedLevel: levels |> List.rev |> List.hd,
+    showTargetEditor: false,
+    selectedTargetGroupId: 1,
+  },
   reducer: (action, state) =>
     switch (action) {
     | SelectLevel(selectedLevel) =>
-      ReasonReact.Update({selectedLevel: selectedLevel})
+      ReasonReact.Update({...state, selectedLevel})
+    | ToggleTargetEditor(showTargetEditor) =>
+      ReasonReact.Update({...state, showTargetEditor: !showTargetEditor})
     },
   render: ({state, send}) => {
     let currentLevel = state.selectedLevel;
-    <div className="flex-1 flex flex-col bg-white overflow-hidden">
+    let targetGroupsInLevel =
+      targetGroups
+      |> List.filter(targetGroup =>
+           targetGroup |> TargetGroup.levelId == (currentLevel |> Level.id)
+         );
+    let showTargetEditorCB = () =>
+      send(ToggleTargetEditor(state.showTargetEditor));
+    let targetGroupId = state.selectedTargetGroupId;
+    <div>
+      {
+        state.showTargetEditor ?
+          <CurriculumEditor__TargetEditor
+            targetGroupId
+            evaluationCriteria
+            targets
+          /> :
+          ReasonReact.null
+      }
       <div
         className="border-b flex px-6 py-2 h-16 items-center justify-between">
         <div className="inline-block relative w-64">
           <select
             onChange={
               event => {
-                let level_name =
-                  ReactDOMRe.domElementToObj(ReactEventRe.Form.target(event))##value;
+                let level_name = ReactEvent.Form.target(event)##value;
                 send(SelectLevel(Level.selectLevel(levels, level_name)));
               }
             }
@@ -71,10 +108,13 @@ let make = (~course, ~evaluationCriteria, ~levels, _children) => {
         <div
           className="target-group__container max-w-lg mt-5 mx-auto relative">
           {
-            currentLevel
-            |> Level.targetGroups
+            targetGroupsInLevel
             |> List.map(targetGroup =>
-                 <CurriculumEditor__TargetGroupShow targetGroup />
+                 <CurriculumEditor__TargetGroupList
+                   targetGroup
+                   targets
+                   showTargetEditorCB
+                 />
                )
             |> Array.of_list
             |> ReasonReact.array
@@ -103,6 +143,8 @@ let decode = json =>
     evaluationCriteria:
       json |> field("evaluationCriteria", list(EvaluationCriteria.decode)),
     levels: json |> field("levels", list(Level.decode)),
+    targetGroups: json |> field("targetGroups", list(TargetGroup.decode)),
+    targets: json |> field("targets", list(Target.decode)),
   };
 
 let jsComponent =
@@ -114,6 +156,8 @@ let jsComponent =
         ~course=props.course,
         ~evaluationCriteria=props.evaluationCriteria,
         ~levels=props.levels,
+        ~targetGroups=props.targetGroups,
+        ~targets=props.targets,
         [||],
       );
     },

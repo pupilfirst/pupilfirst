@@ -100,12 +100,6 @@ en:
         engineering: Engineering
         design: Design
 
-    startup:
-      registration_type:
-        private_limited: Private Limited
-        partnership: Partnership
-        llp: Limited Liability Partnership
-
     target:
       role:
         team: Team

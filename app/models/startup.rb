@@ -5,18 +5,7 @@ class Startup < ApplicationRecord
   include PrivateFilenameRetrievable
   acts_as_taggable
 
-  REGISTRATION_TYPE_PRIVATE_LIMITED = 'private_limited'
-  REGISTRATION_TYPE_PARTNERSHIP = 'partnership'
-  REGISTRATION_TYPE_LLP = 'llp' # Limited Liability Partnership
-
-  MAX_PITCH_CHARACTERS = 140 unless defined?(MAX_PITCH_CHARACTERS)
-  MAX_PRODUCT_DESCRIPTION_CHARACTERS = 150
-
   COURSE_FEE = 50_000
-
-  def self.valid_registration_types
-    [REGISTRATION_TYPE_PRIVATE_LIMITED, REGISTRATION_TYPE_PARTNERSHIP, REGISTRATION_TYPE_LLP]
-  end
 
   scope :admitted, -> { joins(:level).where('levels.number > ?', 0) }
   scope :approved, -> { where.not(dropped_out: true) }
@@ -69,25 +58,11 @@ class Startup < ApplicationRecord
   # use the old name attribute as an alias for legal_registered_name
   alias_attribute :name, :legal_registered_name
 
-  # TODO: probable stale attribute
-  attr_reader :validate_registration_type
-
   # Friendly ID!
   friendly_id :slug_candidates, use: :slugged
 
   validates :slug, format: { with: /\A[a-z0-9\-_]+\z/i }, allow_nil: true
   validates :product_name, presence: true
-
-  # TODO: probably stale
-  validates :registration_type, presence: true, if: ->(startup) { startup.validate_registration_type }
-  validates :registration_type, inclusion: { in: valid_registration_types }, allow_nil: true
-
-  # PIN Code is always 6 digits
-  validates :pin, numericality: { greater_than_or_equal_to: 100_000, less_than_or_equal_to: 999_999 }, allow_nil: true
-
-  validates :product_description, length: { maximum: MAX_PRODUCT_DESCRIPTION_CHARACTERS, message: "must be within #{MAX_PRODUCT_DESCRIPTION_CHARACTERS} characters" }
-
-  validates :pitch, length: { maximum: MAX_PITCH_CHARACTERS, message: "must be within #{MAX_PITCH_CHARACTERS} characters" }
 
   validates :level, presence: true
 
@@ -97,16 +72,7 @@ class Startup < ApplicationRecord
     errors[:level] << 'cannot be assigned to level zero' unless level.number.positive?
   end
 
-  # New set of validations for incubation wizard
-  store :metadata, accessors: [:updated_from]
-
   before_validation do
-    # Set registration_type to nil if its set as blank from backend.
-    self.registration_type = nil if registration_type.blank?
-
-    # If supplied \r\n for line breaks, replace those with just \n so that length validation works.
-    self.product_description = product_description.gsub("\r\n", "\n") if product_description
-
     # Default product name to 'Untitled Product' if absent
     self.product_name ||= 'Untitled Product'
   end
@@ -130,50 +96,7 @@ class Startup < ApplicationRecord
   mount_uploader :partnership_deed, PartnershipDeedUploader
   process_in_background :logo
 
-  normalize_attribute :pitch, :product_description, :email, :phone
-
-  normalize_attribute :website do |value|
-    case value
-      when '' then
-        nil
-      when nil then
-        nil
-      when %r{^https?://.*} then
-        value
-      else
-        "http://#{value}"
-    end
-  end
-
-  normalize_attribute :twitter_link do |value|
-    case value
-      when %r{^https?://(www\.)?twitter.com.*} then
-        value
-      when /^(www\.)?twitter\.com.*/ then
-        "https://#{value}"
-      when '' then
-        nil
-      when nil then
-        nil
-      else
-        "https://twitter.com/#{value}"
-    end
-  end
-
-  normalize_attribute :facebook_link do |value|
-    case value
-      when %r{^https?://(www\.)?facebook.com.*} then
-        value
-      when /^(www\.)?facebook\.com.*/ then
-        "https://#{value}"
-      when '' then
-        nil
-      when nil then
-        nil
-      else
-        "https://facebook.com/#{value}"
-    end
-  end
+  normalize_attribute :email, :phone
 
   def founder_ids=(list_of_ids)
     founders_list = Founder.find(list_of_ids.map(&:to_i).select { |e| e.is_a?(Integer) && e.positive? })
@@ -229,24 +152,6 @@ class Startup < ApplicationRecord
     label = product_name
     label += " (#{name})" if name.present?
     label
-  end
-
-  def present_week_number
-    return 1 if Date.today == program_started_on
-
-    days_elapsed = (Date.today - program_started_on)
-    weeks_elapsed = days_elapsed.to_f / 7
-
-    # Let's round up.
-    weeks_elapsed.ceil
-  end
-
-  def week_percentage
-    if present_week_number >= 24
-      100
-    else
-      ((present_week_number.to_f / 24) * 100).to_i
-    end
   end
 
   def timeline_events

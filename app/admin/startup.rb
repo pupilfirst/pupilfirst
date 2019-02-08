@@ -1,8 +1,7 @@
 ActiveAdmin.register Startup do
-  permit_params :product_name, :product_description, :legal_registered_name, :website, :logo, :facebook_link,
-    :twitter_link, :created_at, :updated_at, :dropped_out, :registration_type,
-    :presentation_link, :product_video_link, :wireframe_link, :prototype_link, :slug, :level_id,
-    :partnership_deed, founder_ids: [], tag_list: []
+  permit_params :product_name, :legal_registered_name, :logo,
+    :created_at, :updated_at, :dropped_out,
+    :slug, :level_id, :partnership_deed, founder_ids: [], tag_list: []
 
   filter :product_name, as: :string
   filter :level_course_id, as: :select, label: 'Course', collection: -> { Course.all }
@@ -15,8 +14,6 @@ ActiveAdmin.register Startup do
     collection: -> { Startup.tag_counts_on(:tags).pluck(:name).sort }
 
   filter :legal_registered_name
-  filter :website
-  filter :registration_type, as: :select, collection: -> { Startup.valid_registration_types }
   filter :dropped_out
   filter :created_at
 
@@ -66,20 +63,9 @@ ActiveAdmin.register Startup do
 
   csv do
     column :product_name
-    column :product_description
     column(:level) { |startup| startup.level.number }
-    column :presentation_link
-    column :product_video_link
-    column :wireframe_link
-    column :prototype_link
     column(:founders) { |startup| startup.founders.pluck(:name).join ', ' }
     column(:women_cofounders) { |startup| startup.founders.where(gender: Founder::GENDER_FEMALE).count }
-    column :pitch
-    column :website
-    column :registration_type
-    column :district
-    column :pin
-    column :product_progress
   end
 
   action_item :view_feedback, only: :show do
@@ -116,10 +102,6 @@ ActiveAdmin.register Startup do
 
   show title: :product_name do |startup|
     attributes_table do
-      row :product_description do
-        simple_format startup.product_description
-      end
-
       row :legal_registered_name
       row :dropped_out do
         div class: 'startup-status' do
@@ -150,7 +132,6 @@ ActiveAdmin.register Startup do
 
       row :level
       row :maximum_level
-      row :timeline_updated_on
       row :faculty do
         div do
           if startup.faculty.present?
@@ -173,35 +154,6 @@ ActiveAdmin.register Startup do
         link_to(image_tag(startup.logo_url(:thumb)), startup.logo_url) if startup.logo.present?
       end
 
-      row :website
-
-      row :presentation_link do
-        link_to startup.presentation_link, startup.presentation_link if startup.presentation_link.present?
-      end
-
-      row :product_video_link do
-        link_to startup.product_video_link, startup.product_video_link if startup.product_video_link.present?
-      end
-
-      row :wireframe_link do
-        link_to startup.wireframe_link, startup.wireframe_link if startup.wireframe_link.present?
-      end
-
-      row :prototype_link do
-        link_to startup.prototype_link, startup.prototype_link if startup.prototype_link.present?
-      end
-
-      row :address
-      row :district
-      row :state
-
-      row 'PIN Code' do
-        startup.pin
-      end
-
-      row :facebook_link
-      row :twitter_link
-
       row :founders do
         div do
           startup.founders.each do |founder|
@@ -222,18 +174,11 @@ ActiveAdmin.register Startup do
         startup.founders.where(gender: Founder::GENDER_FEMALE).count
       end
 
-      row :registration_type
-      row :address
-      row :program_started_on
-
       row :partnership_deed do
         if startup.partnership_deed.present?
           link_to 'Click here to open in new window', startup.partnership_deed.url, target: '_blank', rel: 'noopener'
         end
       end
-
-      row :courier_name
-      row :courier_number
     end
 
     panel 'Technical details' do

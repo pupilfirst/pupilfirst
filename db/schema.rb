@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_06_101853) do
+ActiveRecord::Schema.define(version: 2019_02_07_124815) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -451,43 +451,18 @@ ActiveRecord::Schema.define(version: 2019_02_06_101853) do
 
   create_table "startups", id: :serial, force: :cascade do |t|
     t.string "logo"
-    t.string "pitch"
-    t.string "website"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string "facebook_link"
-    t.string "twitter_link"
-    t.text "address"
-    t.string "registration_type"
     t.string "product_name"
-    t.text "product_description"
-    t.string "state"
-    t.string "district"
-    t.string "product_progress"
-    t.string "presentation_link"
-    t.string "pin"
-    t.text "metadata"
     t.string "slug"
-    t.string "stage"
     t.string "legal_registered_name"
-    t.string "wireframe_link"
-    t.string "prototype_link"
-    t.string "product_video_link"
     t.boolean "dropped_out", default: false
     t.integer "level_id"
-    t.date "program_started_on"
-    t.string "courier_name"
-    t.string "courier_number"
     t.string "partnership_deed"
-    t.string "admission_stage"
-    t.date "timeline_updated_on"
-    t.datetime "admission_stage_updated_at"
-    t.integer "referral_reward_days", default: 0
     t.bigint "faculty_id"
     t.index ["faculty_id"], name: "index_startups_on_faculty_id"
     t.index ["level_id"], name: "index_startups_on_level_id"
     t.index ["slug"], name: "index_startups_on_slug", unique: true
-    t.index ["stage"], name: "index_startups_on_stage"
   end
 
   create_table "states", id: :serial, force: :cascade do |t|

@@ -4,10 +4,7 @@
   .container
     .founder-dashboard-header__startup-profile
       .mx-auto.founder-dashboard-header__startup-logo-container.d-none.d-md-flex
-        - if current_startup.logo.present?
-          = image_tag "#{current_startup.logo_url}", class: 'founder-dashboard-header__startup-logo'
-        - else
-          = presenter.identicon_logo
+        = presenter.identicon_logo
       .founder-dashboard-header__product-details
         h3.founder-dashboard-header__product-title.font-semibold
           | #{current_startup.product_name}

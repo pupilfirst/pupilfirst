@@ -111,16 +111,6 @@ ActiveAdmin.register TimelineEvent do
   #   end
   # end
 
-  collection_action :review_timeline_events do
-    if can? :quick_review, TimelineEvent
-      @review_data = TimelineEvents::ReviewDataService.new.data
-      render 'review_timeline_events'
-    else
-      flash[:error] = 'Not authorized to access page.'
-      redirect_to admin_timeline_events_path
-    end
-  end
-
   action_item :view, only: :show do
     link_to('View Timeline Entry', timeline_event.share_url, target: '_blank', rel: 'noopener')
   end

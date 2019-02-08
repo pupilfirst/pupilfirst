@@ -16,9 +16,6 @@ class TimelineEvent < ApplicationRecord
   has_many :timeline_event_owners, dependent: :destroy
   has_many :founders, through: :timeline_event_owners
 
-  mount_uploader :image, TimelineImageUploader
-  process_in_background :image
-
   serialize :links
 
   delegate :founder_event?, to: :target

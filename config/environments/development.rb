@@ -74,6 +74,9 @@ Rails.application.configure do
 
   # Oink::Middleware logs memory and activerecord usage by default.
   config.middleware.use Oink::Middleware
+
+  # In development , let's have ActiveStorage store everything on local disk
+  config.active_storage.service = :local
 end
 
 Rails.application.default_url_options = Rails.application.config.action_mailer.default_url_options

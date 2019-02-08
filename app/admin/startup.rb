@@ -1,7 +1,7 @@
 ActiveAdmin.register Startup do
-  permit_params :product_name, :legal_registered_name, :logo,
+  permit_params :product_name, :legal_registered_name,
     :created_at, :updated_at, :dropped_out,
-    :slug, :level_id, :partnership_deed, founder_ids: [], tag_list: []
+    :slug, :level_id, founder_ids: [], tag_list: []
 
   filter :product_name, as: :string
   filter :level_course_id, as: :select, label: 'Course', collection: -> { Course.all }
@@ -150,10 +150,6 @@ ActiveAdmin.register Startup do
 
       row :email
 
-      row :logo do
-        link_to(image_tag(startup.logo_url(:thumb)), startup.logo_url) if startup.logo.present?
-      end
-
       row :founders do
         div do
           startup.founders.each do |founder|
@@ -172,12 +168,6 @@ ActiveAdmin.register Startup do
 
       row :women_cofounders do
         startup.founders.where(gender: Founder::GENDER_FEMALE).count
-      end
-
-      row :partnership_deed do
-        if startup.partnership_deed.present?
-          link_to 'Click here to open in new window', startup.partnership_deed.url, target: '_blank', rel: 'noopener'
-        end
       end
     end
 

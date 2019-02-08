@@ -43,7 +43,6 @@ module CoachDashboard
         founderIds: founder_ids(timeline_event),
         links: timeline_event.links,
         files: files(timeline_event),
-        image: timeline_event.image? ? timeline_event.image.url : nil,
         latestFeedback: timeline_event.startup_feedback&.last&.feedback,
         evaluation: evaluation(timeline_event),
         rubric: rubric(timeline_event)

@@ -7,7 +7,6 @@ export default class ContentBlock extends React.Component {
     this.prerequisiteLinks = this.prerequisiteLinks.bind(this);
     this.hasPendingPrerequisites = this.hasPendingPrerequisites.bind(this);
     this.resourceLinks = this.resourceLinks.bind(this);
-    this.rubricButtonText = this.rubricButtonText.bind(this);
   }
 
   prerequisiteLinks() {
@@ -78,12 +77,6 @@ export default class ContentBlock extends React.Component {
     );
   }
 
-  rubricButtonText() {
-    if (this.props.target.has_rubric && this.props.target.status === "complete")
-      return "Download Scoresheet";
-    else return "Download Rubric";
-  }
-
   render() {
     return (
       <div className="target-overlay-content-block">
@@ -111,21 +104,6 @@ export default class ContentBlock extends React.Component {
                 __html: this.props.target.description
               }}
             />
-
-            {this.props.target.has_rubric && (
-              <a
-                className="target-overlay__link mt-1"
-                target="_blank"
-                href={"/targets/" + this.props.target.id + "/download_rubric"}
-              >
-                <span className="target-overlay__link-icon">
-                  <i className="fa fa-download" />
-                </span>
-                <span className="target-overlay__link-text">
-                  {this.rubricButtonText()}
-                </span>
-              </a>
-            )}
           </div>
         </div>
 

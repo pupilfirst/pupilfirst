@@ -31,11 +31,31 @@ ActiveRecord::Schema.define(version: 2019_02_07_124815) do
     t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id"
   end
 
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.bigint "byte_size", null: false
+    t.string "checksum", null: false
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
   create_table "admin_users", id: :serial, force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string "username"
-    t.string "avatar"
     t.string "fullname"
     t.string "admin_type"
     t.integer "user_id"
@@ -237,7 +257,6 @@ ActiveRecord::Schema.define(version: 2019_02_07_124815) do
     t.string "slack_username"
     t.integer "university_id"
     t.string "roles"
-    t.string "college_identification"
     t.boolean "avatar_processing", default: false
     t.string "slack_user_id"
     t.string "personal_website_url"
@@ -249,7 +268,6 @@ ActiveRecord::Schema.define(version: 2019_02_07_124815) do
     t.string "resume_url"
     t.string "slug"
     t.string "about"
-    t.string "identification_proof"
     t.string "skype_id"
     t.boolean "exited", default: false
     t.integer "user_id"
@@ -262,11 +280,8 @@ ActiveRecord::Schema.define(version: 2019_02_07_124815) do
     t.string "parent_name"
     t.string "id_proof_type"
     t.string "id_proof_number"
-    t.string "income_proof"
-    t.string "letter_from_parent"
     t.string "college_contact"
     t.string "permanent_address"
-    t.string "address_proof"
     t.integer "invited_startup_id"
     t.integer "resume_file_id"
     t.string "slack_access_token"
@@ -311,7 +326,6 @@ ActiveRecord::Schema.define(version: 2019_02_07_124815) do
 
   create_table "platform_feedback", id: :serial, force: :cascade do |t|
     t.string "feedback_type"
-    t.string "attachment"
     t.text "description"
     t.integer "promoter_score"
     t.integer "founder_id"
@@ -377,7 +391,6 @@ ActiveRecord::Schema.define(version: 2019_02_07_124815) do
 
   create_table "resources", id: :serial, force: :cascade do |t|
     t.string "file"
-    t.string "thumbnail"
     t.string "title"
     t.text "description"
     t.datetime "created_at", null: false
@@ -450,7 +463,6 @@ ActiveRecord::Schema.define(version: 2019_02_07_124815) do
   end
 
   create_table "startups", id: :serial, force: :cascade do |t|
-    t.string "logo"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string "product_name"
@@ -458,7 +470,6 @@ ActiveRecord::Schema.define(version: 2019_02_07_124815) do
     t.string "legal_registered_name"
     t.boolean "dropped_out", default: false
     t.integer "level_id"
-    t.string "partnership_deed"
     t.bigint "faculty_id"
     t.index ["faculty_id"], name: "index_startups_on_faculty_id"
     t.index ["level_id"], name: "index_startups_on_level_id"
@@ -544,7 +555,6 @@ ActiveRecord::Schema.define(version: 2019_02_07_124815) do
     t.datetime "updated_at", null: false
     t.text "slideshow_embed"
     t.integer "faculty_id"
-    t.string "rubric"
     t.integer "days_to_complete"
     t.string "target_action_type"
     t.integer "target_group_id"
@@ -694,6 +704,7 @@ ActiveRecord::Schema.define(version: 2019_02_07_124815) do
     t.index ["week_starting_at", "level_id"], name: "index_weekly_karma_points_on_week_starting_at_and_level_id"
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "admin_users", "users"
   add_foreign_key "answer_options", "quiz_questions"
   add_foreign_key "connect_requests", "connect_slots"

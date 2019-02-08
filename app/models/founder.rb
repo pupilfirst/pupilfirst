@@ -40,6 +40,7 @@ class Founder < ApplicationRecord
   has_many :active_admin_comments, as: :resource, class_name: 'ActiveAdmin::Comment', dependent: :destroy, inverse_of: :resource
   has_many :timeline_event_owners, dependent: :destroy
   has_many :timeline_events, through: :timeline_event_owners
+  has_one_attached :avatar_as
 
   scope :admitted, -> { joins(:startup).merge(Startup.admitted) }
   scope :not_dropped_out, -> { joins(:startup).merge(Startup.not_dropped_out) }
@@ -114,14 +115,6 @@ class Founder < ApplicationRecord
 
   mount_uploader :avatar, AvatarUploader
 
-  mount_uploader :college_identification, CollegeIdentificationUploader
-  process_in_background :college_identification
-
-  mount_uploader :identification_proof, IdentificationProofUploader
-  mount_uploader :address_proof, AddressProofUploader
-  mount_uploader :income_proof, IncomeProofUploader
-  mount_uploader :letter_from_parent, LetterFromParentUploader
-
   normalize_attribute :startup_id, :twitter_url, :linkedin_url, :name, :slack_username, :resume_url,
     :semester, :year_of_graduation, :gender, :id_proof_type
 
@@ -181,15 +174,13 @@ class Founder < ApplicationRecord
   end
 
   # Returns the percentage of profile completion as an integer
-  # rubocop:disable Metrics/CyclomaticComplexity
   def profile_completion_percentage
     score = 30 # a default score given for required fields during registration
     # score += 15 if slack_user_id.present? # has a valid slack account associated
     # score += 10 if skype_id.present?
-    score += 25 if social_url_present? # has atleast 1 social media links
-    score += 15 if communication_address.present?
-    score += 15 if about.present?
-    score += 15 if identification_proof.present?
+    score += 30 if social_url_present? # has atleast 1 social media links
+    score += 20 if communication_address.present?
+    score += 20 if about.present?
     score
   end
 
@@ -200,10 +191,7 @@ class Founder < ApplicationRecord
     return 'Provide at-least one of your social profiles!' unless social_url_present?
     return 'Update your communication address!' if communication_address.blank?
     return 'Write a one-liner about yourself!' if about.blank?
-    return 'Upload your legal ID proof!' if identification_proof.blank?
   end
-
-  # rubocop:enable Metrics/CyclomaticComplexity
 
   # Should we give the founder a tour of the founder dashboard? If so, we shouldn't give it again.
   def tour_dashboard?
@@ -230,7 +218,7 @@ class Founder < ApplicationRecord
   end
 
   def profile_complete?
-    required_fields = %i[name roles born_on gender parent_name communication_address permanent_address address_proof phone id_proof_type id_proof_number identification_proof]
+    required_fields = %i[name roles born_on gender parent_name communication_address permanent_address phone id_proof_type id_proof_number]
 
     required_fields.all? { |field| self[field].present? }
   end

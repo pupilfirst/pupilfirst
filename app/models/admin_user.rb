@@ -7,10 +7,7 @@ class AdminUser < ApplicationRecord
   belongs_to :user
   has_one :faculty, through: :user
 
-  mount_uploader :avatar, AvatarUploader
-  process_in_background :avatar
-
-  normalize_attribute :fullname, :avatar
+  normalize_attribute :fullname
 
   def self.admin_user_types
     [TYPE_SUPERADMIN, TYPE_FACULTY]

@@ -4,10 +4,6 @@ FactoryBot.define do
     event_on { 1.month.from_now }
     target
 
-    factory :timeline_event_with_image do
-      image { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-thumbnail.png')) }
-    end
-
     factory :timeline_event_with_links do
       links do
         [

@@ -20,10 +20,7 @@
               = videojs_rails sources: { mp4: @stream_video}, class: 'embed-responsive-item'
         - else
           .col-md-3
-            - if @resource.thumbnail.present?
-              = image_tag @resource.thumbnail.url, class: "img-fluid"
-            - else
-              = image_tag 'resources/shared/default-thumbnail.png', class: "img-fluid"
+            = image_tag 'resources/shared/default-thumbnail.png', class: "img-fluid"
 
         .col-md-9.resource-description-and-links class="#{@stream_video ? 'px-0' : ''}"
           h3.mb-2.mt-sm-2.mt-3 #{@resource.title}

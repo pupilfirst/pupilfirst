@@ -6,7 +6,6 @@ type t = {
   founderIds: list(int),
   links: list(Link.t),
   files: list(File.t),
-  image: option(string),
   latestFeedback: option(string),
   evaluation: list(Grading.t),
   rubric: option(string),
@@ -25,13 +24,13 @@ let decode = json =>
     founderIds: json |> field("founderIds", list(int)),
     links: json |> field("links", list(Link.decode)),
     files: json |> field("files", list(File.decode)),
-    image: json |> field("image", nullable(string)) |> Js.Null.toOption,
     latestFeedback: json |> field("latestFeedback", nullable(string)) |> Js.Null.toOption,
     evaluation: json |> field("evaluation", list(Grading.decode)),
     rubric: json |> field("rubric", nullable(string)) |> Js.Null.toOption,
   };
 
-let forFounder = (founder, tes) => tes |> List.filter(te => List.mem(founder |> Founder.id, te.founderIds));
+let forFounder = (founder, tes) =>
+  tes |> List.filter(te => List.mem(founder |> Founder.id, te.founderIds));
 
 let id = t => t.id;
 
@@ -47,19 +46,23 @@ let links = t => t.links;
 
 let files = t => t.files;
 
-let image = t => t.image;
-
 let latestFeedback = t => t.latestFeedback;
 
 let updateEvaluation = (evaluation, t) => {...t, evaluation};
 
-let updateFeedback = (latestFeedback, t) => {...t, latestFeedback: Some(latestFeedback)};
+let updateFeedback = (latestFeedback, t) => {
+  ...t,
+  latestFeedback: Some(latestFeedback),
+};
 
-let reviewPending = tes => tes |> List.filter(te => te.evaluation |> Grading.pending);
+let reviewPending = tes =>
+  tes |> List.filter(te => te.evaluation |> Grading.pending);
 
-let reviewComplete = tes => tes |> List.filter(te => ! (te.evaluation |> Grading.pending));
+let reviewComplete = tes =>
+  tes |> List.filter(te => ! (te.evaluation |> Grading.pending));
 
-let getReviewResult = (passGrade, t) => t.evaluation |> Grading.anyFail(passGrade) ? Failed : Passed;
+let getReviewResult = (passGrade, t) =>
+  t.evaluation |> Grading.anyFail(passGrade) ? Failed : Passed;
 
 let resultAsString = reviewResult =>
   switch (reviewResult) {

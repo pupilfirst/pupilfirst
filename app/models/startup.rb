@@ -92,10 +92,6 @@ class Startup < ApplicationRecord
     dropped_out == true
   end
 
-  mount_uploader :logo, LogoUploader
-  mount_uploader :partnership_deed, PartnershipDeedUploader
-  process_in_background :logo
-
   normalize_attribute :email, :phone
 
   def founder_ids=(list_of_ids)

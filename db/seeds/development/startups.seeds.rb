@@ -13,7 +13,6 @@ after 'development:levels' do
   Startup.create!(
     level: startup_course_level_1,
     product_name: 'Super Product',
-    logo: File.open(File.join(Rails.root, 'app/assets/images/mailer/logo-mailer.png')),
     legal_registered_name: 'SuperTech Ltd'
   )
 

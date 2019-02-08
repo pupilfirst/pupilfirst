@@ -232,14 +232,6 @@ ActiveAdmin.register Founder do
 
       row :roll_number
 
-      row :college_identification do
-        if founder.college_identification.present?
-          link_to founder.college_identification.url do
-            image_tag founder.college_identification.thumb.url
-          end
-        end
-      end
-
       row :avatar do
         link_to 'Download Avatar', founder.avatar.url if founder.avatar.present?
       end

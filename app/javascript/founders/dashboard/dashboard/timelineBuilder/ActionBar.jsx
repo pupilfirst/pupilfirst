@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import SubmitButton from "./SubmitButton";
-import ImageButton from "./ImageButton";
 import DatePicker from "./DatePicker";
 
 export default class ActionBar extends React.Component {
@@ -91,12 +90,6 @@ export default class ActionBar extends React.Component {
     return (
       <div className="timeline-builder__submit-tabs">
         <div className="timeline-builder__upload-section">
-          <ImageButton
-            key={this.props.imageButtonKey}
-            coverImage={this.props.coverImage}
-            addDataCB={this.props.addDataCB}
-            disabled={this.disableTab()}
-          />
           <div
             className={this.formLinkClasses("link")}
             onClick={this.showLinkForm}
@@ -151,7 +144,6 @@ ActionBar.propTypes = {
   submitCB: PropTypes.func,
   coverImage: PropTypes.object,
   addDataCB: PropTypes.func,
-  imageButtonKey: PropTypes.string,
   selectedDate: PropTypes.string,
   addAttachmentCB: PropTypes.func,
   submissionProgress: PropTypes.number,
@@ -160,5 +152,5 @@ ActionBar.propTypes = {
   attachmentAllowed: PropTypes.bool,
   showDateError: PropTypes.bool,
   showEventTypeError: PropTypes.bool,
-  resetErrorsCB: PropTypes.func,
+  resetErrorsCB: PropTypes.func
 };

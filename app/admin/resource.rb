@@ -1,5 +1,5 @@
 ActiveAdmin.register Resource do
-  permit_params :title, :description, :file, :thumbnail, :video_embed, :link, :archived, :public, :course_id, tag_list: [], target_ids: []
+  permit_params :title, :description, :file, :video_embed, :link, :archived, :public, :course_id, tag_list: [], target_ids: []
 
   controller do
     include DisableIntercom
@@ -62,14 +62,6 @@ ActiveAdmin.register Resource do
         resource.link&.html_safe
       end
 
-      row :thumbnail do |resource|
-        if resource.thumbnail.present?
-          image_tag resource.thumbnail_url
-        else
-          image_tag 'resources/shared/default-thumbnail.png'
-        end
-      end
-
       row :file_content_type
       row :created_at
       row :updated_at
@@ -93,7 +85,6 @@ ActiveAdmin.register Resource do
 
     f.inputs 'Resource details' do
       f.input :file, as: :file
-      f.input :thumbnail, as: :file
       f.input :title
       f.input :description
       f.input :video_embed

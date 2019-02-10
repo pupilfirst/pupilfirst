@@ -1,13 +1,19 @@
 type t;
 
+let id: t => int;
+
 let answer: t => string;
 
 let description: t => option(string);
 
 let correctAnswer: t => bool;
 
-let empty: unit => t;
+let empty: int => t;
 
-let updateAnswer: (t, string) => t;
+let updateAnswer: (string, t) => t;
 
-let create: (string, option(string), bool) => t;
+let updateDescription: (option(string), t) => t;
+
+let markAsCorrect: t => t;
+
+let markAsIncorrect: t => t;

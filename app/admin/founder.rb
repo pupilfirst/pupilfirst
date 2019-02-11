@@ -40,12 +40,10 @@ ActiveAdmin.register Founder do
   filter :startup_id_null, as: :boolean, label: 'Without Startup'
   filter :roles_cont, as: :select, collection: -> { Founder.valid_roles }, label: 'Role'
   filter :college_name_contains
-  filter :roll_number
   filter :created_at, label: 'Registered on'
-  permit_params :name, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :born_on,
-    :communication_address, :phone, :college_id, :roll_number,
-    :college_course, :semester, :year_of_graduation, :twitter_url, :linkedin_url, :personal_website_url, :blog_url,
-    :angel_co_url, :github_url, :behance_url, :gender, :skype_id, :exited, :parent_name, roles: [], tag_list: []
+  permit_params :name, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :communication_address, :phone,
+    :college_id, :twitter_url, :linkedin_url, :personal_website_url, :blog_url, :angel_co_url, :github_url,
+    :behance_url, :gender, :skype_id, :exited, roles: [], tag_list: []
 
   batch_action :tag, form: proc { { tag: Founder.tag_counts_on(:tags).pluck(:name) } } do |ids, inputs|
     Founder.where(id: ids).each do |founder|
@@ -125,7 +123,6 @@ ActiveAdmin.register Founder do
 
     column :phone
     column :gender
-    column :born_on
     column :communication_address
     column :about
 
@@ -136,11 +133,6 @@ ActiveAdmin.register Founder do
     column :university do |founder|
       founder.college&.university&.name
     end
-
-    column :roll_number
-    column :college_course
-    column :semester
-    column :year_of_graduation
 
     column :slack_username
     column(:skype_username, &:skype_id)
@@ -168,7 +160,6 @@ ActiveAdmin.register Founder do
       row :slug
       row :email
       row :name
-      row :reference
 
       row :tags do |founder|
         linked_tags(founder.tags)
@@ -201,8 +192,6 @@ ActiveAdmin.register Founder do
       end
 
       row :about
-      row :born_on
-      row :parent_name
       row :gender
       row :slack_username
       row :slack_user_id
@@ -230,16 +219,10 @@ ActiveAdmin.register Founder do
         end
       end
 
-      row :roll_number
-
       row :avatar do
         link_to 'Download Avatar', founder.avatar.url if founder.avatar.present?
       end
 
-      row :college_course
-      row :semester
-      row :year_of_graduation
-      row :backlog
       row :exited
       # row :resume do |founder|
       #   link_to 'Download Resume', founder.resume_link if founder.resume_link.present?

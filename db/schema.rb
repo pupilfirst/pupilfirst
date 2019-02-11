@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_07_124815) do
+ActiveRecord::Schema.define(version: 2019_02_11_070232) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -235,25 +235,13 @@ ActiveRecord::Schema.define(version: 2019_02_07_124815) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string "avatar"
-    t.string "invitation_token"
-    t.datetime "invitation_created_at"
-    t.datetime "invitation_sent_at"
-    t.datetime "invitation_accepted_at"
-    t.integer "invitation_limit"
-    t.integer "invited_by_id"
-    t.string "invited_by_type"
     t.integer "startup_id"
     t.string "linkedin_url"
     t.string "twitter_url"
-    t.date "born_on"
     t.string "auth_token"
-    t.string "college_course"
-    t.string "semester"
     t.string "gender"
     t.string "phone"
     t.text "communication_address"
-    t.integer "year_of_graduation"
-    t.string "roll_number"
     t.string "slack_username"
     t.integer "university_id"
     t.string "roles"
@@ -274,24 +262,11 @@ ActiveRecord::Schema.define(version: 2019_02_07_124815) do
     t.integer "college_id"
     t.string "name"
     t.boolean "dashboard_toured"
-    t.integer "backlog"
-    t.string "reference"
     t.string "college_text"
-    t.string "parent_name"
-    t.string "id_proof_type"
-    t.string "id_proof_number"
-    t.string "college_contact"
     t.string "permanent_address"
-    t.integer "invited_startup_id"
     t.integer "resume_file_id"
     t.string "slack_access_token"
-    t.jsonb "screening_data"
-    t.boolean "coder"
-    t.index "((screening_data -> 'score'::text))", name: "index_founders_on_screening_data_score", using: :gin
     t.index ["college_id"], name: "index_founders_on_college_id"
-    t.index ["invitation_token"], name: "index_founders_on_invitation_token", unique: true
-    t.index ["invited_by_id"], name: "index_founders_on_invited_by_id"
-    t.index ["invited_startup_id"], name: "index_founders_on_invited_startup_id"
     t.index ["name"], name: "index_founders_on_name"
     t.index ["slug"], name: "index_founders_on_slug", unique: true
     t.index ["university_id"], name: "index_founders_on_university_id"

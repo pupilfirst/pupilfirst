@@ -12,19 +12,13 @@
 
     = f.input :roles, as: :check_boxes, collection: Founder.valid_roles
     = f.input :about
-    = f.input :born_on, as: :date_select, :start_year => 1920, :end_year => Date.today.year - 10
     = f.input :gender, as: :select, collection: Founder.valid_gender_values
-    = f.input :parent_name
     = f.input :startup, label: 'Product'
     = f.input :communication_address
     = f.input :skype_id, label: 'Skype Id'
     = f.input :resume_url
     = f.input :avatar, as: :file
     = f.input :college_id, as: :select, input_html: { 'data-search-url' => colleges_url }, collection: f.object.college.present? ? [f.object.college] : []
-    = f.input :roll_number
-    = f.input :college_course
-    = f.input :semester
-    = f.input :year_of_graduation, as: :select, collection: 2014..2020
     = f.input :exited
 
     / When creating a founder manually, let's skip the e-mail confirmation step.

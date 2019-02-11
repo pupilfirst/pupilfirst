@@ -75,24 +75,6 @@
                 p.founder-about.pb-2
                   = @founder.about
                 .education-details
-                  - if @founder.college_course.present?
-                    span.course-name
-                      i.fa.fa-book
-                      | Course:
-                      strong.course-tooltip data-title=@founder.college_course
-                        = @founder.college_course
-                  - if @founder.semester.present?
-                    span.semester-name
-                      i.fa.fa-flag
-                      | Semester:
-                      strong
-                        = @founder.semester
-                  - if @founder.year_of_graduation.present?
-                    span.graduation-year
-                      i.fa.fa-graduation-cap
-                      | Year of Graduation:
-                      strong
-                        = @founder.year_of_graduation
               .col-md-3.d-flex.resume-link-section.px-sm-0.mt-3.mt-md-0.justify-content-center.align-items-center
                 - if @founder.resume_link.present?
                   a.btn.btn-ghost-secondary.btn-with-icon.btn-xs target="_blank" href=short_url(@founder.resume_link) rel='noopener'

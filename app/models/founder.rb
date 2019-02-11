@@ -72,14 +72,7 @@ class Founder < ApplicationRecord
     %i[ransack_tagged_with]
   end
 
-  validates :born_on, presence: true, allow_nil: true
   validates :gender, inclusion: { in: valid_gender_values }, allow_nil: true
-
-  validate :age_more_than_18
-
-  def age_more_than_18
-    errors.add(:born_on, 'must be at least 18 years old') if born_on && born_on > 18.years.ago.end_of_year
-  end
 
   def admitted?
     startup.present? && startup.level.number.positive?
@@ -115,8 +108,7 @@ class Founder < ApplicationRecord
 
   mount_uploader :avatar, AvatarUploader
 
-  normalize_attribute :startup_id, :twitter_url, :linkedin_url, :name, :slack_username, :resume_url,
-    :semester, :year_of_graduation, :gender, :id_proof_type
+  normalize_attribute :startup_id, :twitter_url, :linkedin_url, :name, :slack_username, :resume_url, :gender
 
   before_save :capitalize_name_fragments
 
@@ -218,40 +210,12 @@ class Founder < ApplicationRecord
   end
 
   def profile_complete?
-    required_fields = %i[name roles born_on gender parent_name communication_address permanent_address phone id_proof_type id_proof_number]
+    required_fields = %i[name roles gender communication_address permanent_address phone]
 
     required_fields.all? { |field| self[field].present? }
   end
 
   delegate :email, to: :user
-
-  def self.reference_sources
-    [
-      'Friend', 'Seniors', '#StartinCollege Event', 'Newspaper/Magazine', 'TV', 'SV.CO Blog', 'Instagram', 'Facebook',
-      'Twitter', 'Microsoft Student Partner', 'Other (Please Specify)'
-    ]
-  end
-
-  def self.valid_references
-    [
-      'Friend',
-      'Seniors',
-      '#StartinCollege Event',
-      'Newspaper/Magazine',
-      'TV',
-      'SV.CO Blog',
-      'Instagram',
-      'Facebook',
-      'Twitter',
-      'Microsoft Student Partner',
-      'SV.CO Team Member',
-      'Other (Please Specify)'
-    ].freeze
-  end
-
-  def self.valid_semester_values
-    %w[I II III IV V VI VII VIII Graduated Other]
-  end
 
   def faculty
     return Faculty.none if startup.blank?

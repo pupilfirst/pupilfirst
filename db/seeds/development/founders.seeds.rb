@@ -9,7 +9,6 @@ after 'development:colleges', 'development:startups' do
   john_doe_attributes = {
     name: 'John Doe',
     phone: '9876543210',
-    reference: Founder.reference_sources.sample,
     college: College.first,
     user: john_doe,
   }
@@ -25,39 +24,38 @@ after 'development:colleges', 'development:startups' do
 
   teams = {
     'Super Product' => [
-      ['someone@sv.co', 'Some One', 20.years.ago, Founder::GENDER_MALE, 9876543210],
-      ['thedude@sv.co', 'Big Lebowski', 40.years.ago, Founder::GENDER_MALE, 9000000000],
-      ['thirdgal@sv.co', 'Gal Third', 30.years.ago, Founder::GENDER_FEMALE, 9898989898]
+      ['someone@sv.co', 'Some One', Founder::GENDER_MALE, 9876543210],
+      ['thedude@sv.co', 'Big Lebowski', Founder::GENDER_MALE, 9000000000],
+      ['thirdgal@sv.co', 'Gal Third', Founder::GENDER_FEMALE, 9898989898]
     ],
     'The Avengers' => [
-      ['widow@example.org', 'Janet Dyne', 25.years.ago, Founder::GENDER_FEMALE, 9222222222],
-      ['ironman@example.org', 'Anthony Edward Tony Stark', 40.years.ago, Founder::GENDER_MALE, 9333333333],
-      ['hulk@example.org', 'Robert Banner', 35.years.ago, Founder::GENDER_MALE, 9444444444],
-      ['thor@example.org', 'Thor Odinson', 30.years.ago, Founder::GENDER_MALE, 9555555555]
+      ['widow@example.org', 'Janet Dyne', Founder::GENDER_FEMALE, 9222222222],
+      ['ironman@example.org', 'Anthony Edward Tony Stark', Founder::GENDER_MALE, 9333333333],
+      ['hulk@example.org', 'Robert Banner', Founder::GENDER_MALE, 9444444444],
+      ['thor@example.org', 'Thor Odinson', Founder::GENDER_MALE, 9555555555]
     ],
     'Justice League' => [
-      ['superman@example.org', 'Superman', 25.years.ago, Founder::GENDER_FEMALE, 9666666666],
-      ['batman@example.org', 'Batman', 26.years.ago, Founder::GENDER_MALE, 9777777777]
+      ['superman@example.org', 'Superman', Founder::GENDER_FEMALE, 9666666666],
+      ['batman@example.org', 'Batman', Founder::GENDER_MALE, 9777777777]
     ],
     'Guardians of the Galaxy' => [
-      ['groot@example.org', 'Groot', 25.years.ago, Founder::GENDER_FEMALE, 9888888888],
-      ['rocket@example.org', 'Rocket Raccoon', 24.years.ago, Founder::GENDER_MALE, 9999999999]
+      ['groot@example.org', 'Groot', Founder::GENDER_FEMALE, 9888888888],
+      ['rocket@example.org', 'Rocket Raccoon', Founder::GENDER_MALE, 9999999999]
     ],
     'iOS Startup' => [
-      ['ios@example.org', 'iOS Guy', 25.years.ago, Founder::GENDER_MALE, 9876543200]
+      ['ios@example.org', 'iOS Guy', Founder::GENDER_MALE, 9876543200]
     ]
   }
 
   teams.each do |team_name, founders|
     startup = Startup.find_by(product_name: team_name)
 
-    founders.each do |email, name, born_on, gender, phone|
+    founders.each do |email, name, gender, phone|
       user = User.where(email: email).first_or_create!
 
       Founder.create!(
         user: user,
         name: name,
-        born_on: born_on,
         gender: gender,
         phone: phone,
         roles: Founder.valid_roles.sample([1, 2].sample),

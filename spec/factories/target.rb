@@ -1,7 +1,5 @@
 FactoryBot.define do
   factory :target do
-    initialize_with { key.present? ? Target.where(key: key).first_or_initialize(attributes) : Target.new(attributes) }
-
     title { Faker::Lorem.words(6).join ' ' }
     role { Target.valid_roles.sample }
     description { Faker::Lorem.words(200).join ' ' }
@@ -10,7 +8,6 @@ FactoryBot.define do
     target_group
     faculty { create :faculty, category: Faculty::CATEGORY_TEAM }
     sequence(:sort_index)
-    key { nil }
     session_at { nil }
 
     trait :archived do

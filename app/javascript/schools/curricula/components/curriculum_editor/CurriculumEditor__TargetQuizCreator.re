@@ -42,6 +42,13 @@ let make = _children => {
     let removeQuizQuestionCB = id => send(RemoveQuizQuestion(id));
     let updateQuizQuestionCB = (id, quizQuestion) =>
       send(UpdateQuizQuestion(id, quizQuestion));
+    let questionCanBeRemoved = state.quiz |> List.length > 1;
+    let isValidQuiz =
+      state.quiz
+      |> List.filter(quizQuestion =>
+           quizQuestion |> QuizQuestion.isValidQuizQuestion != true
+         )
+      |> List.length == 0;
     <div>
       <label
         className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
@@ -56,6 +63,7 @@ let make = _children => {
                quizQuestion
                updateQuizQuestionCB
                removeQuizQuestionCB
+               questionCanBeRemoved
              />
            )
         |> Array.of_list

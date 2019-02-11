@@ -8,7 +8,13 @@ let component =
   );
 
 let make =
-    (~quizQuestion, ~updateQuizQuestionCB, ~removeQuizQuestionCB, _children) => {
+    (
+      ~quizQuestion,
+      ~updateQuizQuestionCB,
+      ~removeQuizQuestionCB,
+      ~questionCanBeRemoved,
+      _children,
+    ) => {
   ...component,
   render: _self => {
     let updateQuestion = question =>
@@ -94,17 +100,21 @@ let make =
           {"Add another Answer Option" |> str}
         </h5>
       </div>
-      <button
-        className="flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-grey hover:text-grey-darker text-xs py-1 px-3"
-        type_="button"
-        onClick={
-          event => {
-            ReactEvent.Mouse.preventDefault(event);
-            removeQuizQuestionCB(quizQuestion |> QuizQuestion.id);
-          }
-        }>
-        {"Remove Quiz Question" |> str}
-      </button>
+      {
+        questionCanBeRemoved ?
+          <button
+            className="flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-grey hover:text-grey-darker text-xs py-1 px-3"
+            type_="button"
+            onClick={
+              event => {
+                ReactEvent.Mouse.preventDefault(event);
+                removeQuizQuestionCB(quizQuestion |> QuizQuestion.id);
+              }
+            }>
+            {"Remove Quiz Question" |> str}
+          </button> :
+          ReasonReact.null
+      }
     </div>;
   },
 };

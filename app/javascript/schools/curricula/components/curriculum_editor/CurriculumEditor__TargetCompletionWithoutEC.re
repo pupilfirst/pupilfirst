@@ -15,6 +15,11 @@ type action =
 let component =
   ReasonReact.reducerComponent("CurriculumEditor__TargetCompletionWithoutEC");
 
+let buttonClasses = completionType =>
+  completionType ?
+    "flex flex-col items-center bg-white border border-grey-light hover:bg-grey-lighter text-green text-sm font-semibold focus:outline-none rounded p-4" :
+    "flex flex-col items-center bg-white border border-grey-light hover:bg-grey-lighter text-grey-darkest text-sm font-semibold focus:outline-none rounded p-4";
+
 let make = _children => {
   ...component,
   initialState: () => {completionType: Quiz},
@@ -23,8 +28,7 @@ let make = _children => {
     | UpdatecompletionTypes(completionType) =>
       ReasonReact.Update({completionType: completionType})
     },
-  render: ({state, send}) => {
-    let targetsInTG = 1;
+  render: ({state, send}) =>
     <div>
       <div className="mb-6">
         <label
@@ -41,7 +45,9 @@ let make = _children => {
                   send(UpdatecompletionTypes(MarkAsComplete));
                 }
               }
-              className="flex flex-col items-center bg-white border border-grey-light hover:bg-grey-lighter text-grey-darkest text-sm font-semibold focus:outline-none rounded p-4">
+              className={
+                buttonClasses(state.completionType == MarkAsComplete)
+              }>
               <svg
                 className="fill-current w-8 mb-2"
                 xmlns="http://www.w3.org/2000/svg"
@@ -95,7 +101,9 @@ let make = _children => {
                   send(UpdatecompletionTypes(LinkToComplete));
                 }
               }
-              className="flex flex-col items-center bg-white border border-grey-light hover:bg-grey-lighter text-grey-darkest text-sm font-semibold focus:outline-none rounded p-4">
+              className={
+                buttonClasses(state.completionType == LinkToComplete)
+              }>
               <svg
                 className="fill-current w-8 mb-2"
                 xmlns="http://www.w3.org/2000/svg"
@@ -149,7 +157,7 @@ let make = _children => {
                   send(UpdatecompletionTypes(Quiz));
                 }
               }
-              className="flex flex-col items-center bg-white border border-grey-light hover:bg-grey-lighter text-grey-darkest text-sm font-semibold focus:outline-none rounded p-4">
+              className={buttonClasses(state.completionType == Quiz)}>
               <svg
                 className="fill-current w-8 mb-2"
                 xmlns="http://www.w3.org/2000/svg"
@@ -217,6 +225,5 @@ let make = _children => {
         | MarkAsComplete => ReasonReact.null
         }
       }
-    </div>;
-  },
+    </div>,
 };

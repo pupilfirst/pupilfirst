@@ -17,3 +17,5 @@ let updateDescription: (option(string), t) => t;
 let markAsCorrect: t => t;
 
 let markAsIncorrect: t => t;
+
+let isValidAnswerOption: t => bool;

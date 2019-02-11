@@ -55,3 +55,15 @@ let markAsCorrect = (id, t) => {
        );
   {...t, answerOptions: newAnswerOptions};
 };
+
+let isValidQuizQuestion = t => {
+  let validQuestion = t.question |> Js.String.trim |> Js.String.length >= 1;
+  let numberOfInvalidAnswerOptions =
+    t.answerOptions
+    |> List.filter(answerOption =>
+         answerOption
+         |> CurriculumEditor__AnswerOption.isValidAnswerOption != true
+       )
+    |> List.length;
+  validQuestion && numberOfInvalidAnswerOptions == 0;
+};

@@ -22,3 +22,6 @@ let updateDescription = (description, t) => {...t, description};
 let markAsCorrect = t => {...t, correctAnswer: true};
 
 let markAsIncorrect = t => {...t, correctAnswer: false};
+
+let isValidAnswerOption = t =>
+  t.answer |> Js.String.trim |> Js.String.length >= 1;

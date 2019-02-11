@@ -1,5 +1,5 @@
 ActiveAdmin.register Resource do
-  permit_params :title, :description, :file, :video_embed, :link, :archived, :public, :course_id, tag_list: [], target_ids: []
+  permit_params :title, :description, :file, :video_embed, :link, :archived, :public, :school_id, tag_list: [], target_ids: []
 
   controller do
     include DisableIntercom
@@ -18,7 +18,7 @@ ActiveAdmin.register Resource do
   filter :title
   filter :description
   filter :archived
-  filter :course
+  filter :school
 
   batch_action :tag, form: proc { { tag: Resource.tag_counts_on(:tags).pluck(:name) } } do |ids, inputs|
     Resource.where(id: ids).each do |resource|
@@ -33,7 +33,7 @@ ActiveAdmin.register Resource do
     selectable_column
 
     column :public
-    column :course
+    column :school
     column :title
     column :downloads
 
@@ -74,7 +74,7 @@ ActiveAdmin.register Resource do
 
       row :archived
       row :public
-      row :course
+      row :school
     end
   end
 
@@ -97,7 +97,7 @@ ActiveAdmin.register Resource do
 
       f.input :targets, collection: f.object.targets
       f.input :archived
-      f.input :course
+      f.input :school
       f.input :public
     end
 

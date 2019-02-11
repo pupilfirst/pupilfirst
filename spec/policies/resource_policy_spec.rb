@@ -4,9 +4,10 @@ describe ResourcePolicy do
   subject { described_class }
 
   let!(:school) { create :school }
+  let!(:school_2) { create :school }
   let!(:course_1) { create :course, school: school }
   let!(:course_2) { create :course, school: school }
-  let!(:course_3) { create :course }
+  let!(:course_3) { create :course, school: school_2 }
 
   let(:level_0) { create :level, :zero, course: course_1 }
   let(:level_1) { create :level, :one, course: course_1 }
@@ -24,13 +25,13 @@ describe ResourcePolicy do
     )
   end
 
-  let!(:public_resource) { create :resource, course: course_1, public: true }
-  let!(:resource_1_c1) { create :resource, course: course_1, public: false }
-  let!(:resource_2_c1) { create :resource, course: course_1, public: false }
-  let!(:resource_3_c1) { create :resource, course: course_1, public: false }
-  let!(:resource_1_c2) { create :resource, course: course_2, public: false }
-  let!(:resource_1_c3) { create :resource, course: course_3, public: true }
-  let!(:resource_2_c3) { create :resource, course: course_3, public: false }
+  let!(:public_resource) { create :resource, school: school, public: true }
+  let!(:resource_1_c1) { create :resource, school: school, public: false }
+  let!(:resource_2_c1) { create :resource, school: school, public: false }
+  let!(:resource_3_c1) { create :resource, school: school, public: false }
+  let!(:resource_1_c2) { create :resource, school: school, public: false }
+  let!(:resource_1_c3) { create :resource, school: school_2, public: true }
+  let!(:resource_2_c3) { create :resource, school: school_2, public: false }
 
   permissions :show? do
     context 'when founder is a member of course 1' do
@@ -42,10 +43,6 @@ describe ResourcePolicy do
         expect(subject).to permit(user, resource_1_c1)
         expect(subject).to permit(user, resource_2_c1)
         expect(subject).to permit(user, resource_3_c1)
-      end
-
-      it 'does not allow access to private resources in another course he is not part of from same school' do
-        expect(subject).to_not permit(user, resource_1_c2)
       end
 
       it 'does not allow access to any resource belonging to a different school' do

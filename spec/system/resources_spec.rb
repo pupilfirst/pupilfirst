@@ -3,8 +3,10 @@ require 'rails_helper'
 # WARNING: The following tests run with Webmock disabled - i.e., URL calls are let through. Make sure you mock possible
 # requests unless you want to let them through. This is required for JS tests to work.
 feature 'Resources' do
-  let(:course_1) { create :course }
-  let(:course_2) { create :course }
+  let(:school) { create :school }
+  let(:school_2) { create :school }
+  let(:course_1) { create :course, school: school }
+  let(:course_2) { create :course, school: school }
   let(:level_0) { create :level, :zero, course: course_1 }
   let(:level_1) { create :level, :one, course: course_1 }
   let(:level_2) { create :level, :two, course: course_1 }
@@ -14,12 +16,13 @@ feature 'Resources' do
   let(:founder) { create :founder }
   let(:startup) { create :startup, level: level_1 }
 
-  let!(:public_resource) { create :resource, course: course_1, public: true }
-  let!(:level_0_resource) { create :resource, course: course_1, public: false }
-  let!(:level_1_resource) { create :resource, course: course_1, public: false }
-  let!(:level_2_resource) { create :resource, course: course_1, public: false }
-  let!(:l1_s2_resource) { create :resource, course: course_2, public: false }
-  let!(:l2_s2_resource) { create :resource, course: course_2, public: false }
+  let!(:public_resource) { create :resource, school: school, public: true }
+  let!(:level_0_resource) { create :resource, school: school, public: false }
+  let!(:level_1_resource) { create :resource, school: school, public: false }
+  let!(:level_2_resource) { create :resource, school: school, public: false }
+  let!(:l1_s2_resource) { create :resource, school: school, public: false }
+  let!(:l2_s2_resource) { create :resource, school: school, public: false }
+  let!(:school_2_resource) { create :resource, school: school_2, public: true }
 
   scenario 'user visits resources page without signing in' do
     visit resources_path
@@ -42,7 +45,7 @@ feature 'Resources' do
   end
 
   context 'With a video resource' do
-    let!(:public_resource_2) { create :resource_video_file, course: course_1, public: true }
+    let!(:public_resource_2) { create :resource_video_file, school: school, public: true }
 
     scenario 'user can stream resource' do
       visit resources_path
@@ -54,7 +57,7 @@ feature 'Resources' do
   end
 
   context 'With a video embed resource' do
-    let!(:public_video_embed_resource) { create :resource_video_embed, course: course_1, public: true }
+    let!(:public_video_embed_resource) { create :resource_video_embed, school: school, public: true }
 
     scenario 'user can stream video embed' do
       visit resources_path
@@ -74,47 +77,25 @@ feature 'Resources' do
       visit user_token_path(token: founder.user.login_token, referer: resources_path)
     end
 
-    context "Founder's startup is in a course" do
+    context "Founder's startup is in a school" do
       scenario 'Founder visits resources page' do
         visit resources_path
 
         expect(page).to have_text('Please do not share these resources outside your founding team')
 
         # public resources + resources upto his level should be shown
-        expect(page).to have_selector('.resource-box', count: 4)
+        expect(page).to have_selector('.resource-box', count: 6)
         expect(page).to have_text(public_resource.title[0..25])
         expect(page).to have_text(level_0_resource.title[0..25])
         expect(page).to have_text(level_1_resource.title[0..25])
         expect(page).to have_text(level_2_resource.title[0..25])
+        expect(page).to have_text(l1_s2_resource.title[0..25])
+        expect(page).to have_text(l2_s2_resource.title[0..25])
 
-        # Should not have access to resource in course 2.
-        visit resource_path(l2_s2_resource)
+        # Should not have access to resource in another school.
+        visit resource_path(school_2_resource)
         # should be redirected to the index page
         expect(page).to have_text('Please do not share these resources outside your founding team')
-      end
-
-      context "founder is in second course" do
-        let(:startup) { create :startup, level: level_2_s2 }
-
-        scenario 'Founder visits resources page' do
-          visit resources_path
-
-          expect(page).to have_text('Please do not share these resources outside your founding team')
-
-          # Public resources + resources in course 2 should be shown. Resources from course 1 should not be visible.
-          expect(page).to have_selector('.resource-box', count: 3)
-          expect(page).to have_text(public_resource.title[0..25])
-          expect(page).not_to have_text(level_0_resource.title[0..25])
-          expect(page).not_to have_text(level_1_resource.title[0..25])
-          expect(page).not_to have_text(level_2_resource.title[0..25])
-          expect(page).to have_text(l1_s2_resource.title[0..25])
-          expect(page).to have_text(l2_s2_resource.title[0..25])
-
-          # Should not have access to resource in course 1.
-          visit resource_path(level_2_resource)
-          # should be redirected to the index page
-          expect(page).to have_text('Please do not share these resources outside your founding team')
-        end
       end
     end
   end

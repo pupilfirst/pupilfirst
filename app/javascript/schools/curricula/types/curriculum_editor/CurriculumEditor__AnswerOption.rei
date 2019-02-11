@@ -8,7 +8,7 @@ let description: t => option(string);
 
 let correctAnswer: t => bool;
 
-let empty: int => t;
+let empty: (int, bool) => t;
 
 let updateAnswer: (string, t) => t;
 

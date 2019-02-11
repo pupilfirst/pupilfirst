@@ -14,16 +14,15 @@ let empty = id => {
   id,
   question: "",
   answerOptions: [
-    CurriculumEditor__AnswerOption.empty(0),
-    CurriculumEditor__AnswerOption.empty(1)
-    |> CurriculumEditor__AnswerOption.markAsCorrect,
+    CurriculumEditor__AnswerOption.empty(0, true),
+    CurriculumEditor__AnswerOption.empty(1, false),
   ],
 };
 
 let updateQuestion = (question, t) => {...t, question};
 
 let newAnswerOption = (id, t) => {
-  let answerOption = CurriculumEditor__AnswerOption.empty(id);
+  let answerOption = CurriculumEditor__AnswerOption.empty(id, false);
   let newAnswerOptions =
     t.answerOptions |> List.rev |> List.append([answerOption]) |> List.rev;
   {...t, answerOptions: newAnswerOptions};
@@ -58,12 +57,18 @@ let markAsCorrect = (id, t) => {
 
 let isValidQuizQuestion = t => {
   let validQuestion = t.question |> Js.String.trim |> Js.String.length >= 1;
-  let numberOfInvalidAnswerOptions =
+  let hasZeroInvalidAnswerOptions =
     t.answerOptions
     |> List.filter(answerOption =>
          answerOption
          |> CurriculumEditor__AnswerOption.isValidAnswerOption != true
        )
-    |> List.length;
-  validQuestion && numberOfInvalidAnswerOptions == 0;
+    |> List.length == 0;
+  let hasOnlyOneCorrectAnswerOption =
+    t.answerOptions
+    |> List.filter(answerOption =>
+         answerOption |> CurriculumEditor__AnswerOption.correctAnswer == true
+       )
+    |> List.length == 1;
+  validQuestion && hasZeroInvalidAnswerOptions && hasOnlyOneCorrectAnswerOption;
 };

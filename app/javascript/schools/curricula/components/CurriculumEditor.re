@@ -110,7 +110,7 @@ let make =
           {
             targetGroupsInLevel
             |> List.map(targetGroup =>
-                 <CurriculumEditor__TargetGroupList
+                 <CurriculumEditor__TargetGroupShow
                    targetGroup
                    targets
                    showTargetEditorCB

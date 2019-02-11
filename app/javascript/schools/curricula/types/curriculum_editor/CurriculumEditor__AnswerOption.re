@@ -13,7 +13,12 @@ let description = t => t.description;
 
 let correctAnswer = t => t.correctAnswer;
 
-let empty = id => {id, answer: "", description: None, correctAnswer: false};
+let empty = (id, correctAnswer) => {
+  id,
+  answer: "",
+  description: None,
+  correctAnswer,
+};
 
 let updateAnswer = (answer, t) => {...t, answer};
 

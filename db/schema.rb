@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_11_072410) do
+ActiveRecord::Schema.define(version: 2019_02_11_084334) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -540,7 +540,6 @@ ActiveRecord::Schema.define(version: 2019_02_11_072410) do
     t.datetime "session_at"
     t.text "video_embed"
     t.datetime "last_session_at"
-    t.string "key"
     t.string "link_to_complete"
     t.boolean "archived", default: false
     t.string "youtube_video_id"
@@ -552,7 +551,6 @@ ActiveRecord::Schema.define(version: 2019_02_11_072410) do
     t.boolean "resubmittable", default: true
     t.index ["archived"], name: "index_targets_on_archived"
     t.index ["faculty_id"], name: "index_targets_on_faculty_id"
-    t.index ["key"], name: "index_targets_on_key"
     t.index ["session_at"], name: "index_targets_on_session_at"
   end
 

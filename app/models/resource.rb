@@ -6,6 +6,7 @@ class Resource < ApplicationRecord
   acts_as_taggable
 
   belongs_to :course
+  belongs_to :school, optional: true
   has_many :target_resources, dependent: :destroy
   has_many :targets, through: :target_resources
   has_one_attached :file_as

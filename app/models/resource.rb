@@ -14,7 +14,7 @@ class Resource < ApplicationRecord
   def slug_candidates
     [
       :title,
-      %i[title updated_at]
+      %i[title id]
     ]
   end
 

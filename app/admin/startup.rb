@@ -131,7 +131,6 @@ ActiveAdmin.register Startup do
       end
 
       row :level
-      row :maximum_level
       row :faculty do
         div do
           if startup.faculty.present?

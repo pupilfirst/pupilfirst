@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_07_124815) do
+ActiveRecord::Schema.define(version: 2019_02_11_072410) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -403,8 +403,10 @@ ActiveRecord::Schema.define(version: 2019_02_07_124815) do
     t.boolean "archived", default: false
     t.bigint "course_id"
     t.boolean "public", default: false
+    t.bigint "school_id"
     t.index ["archived"], name: "index_resources_on_archived"
     t.index ["course_id"], name: "index_resources_on_course_id"
+    t.index ["school_id"], name: "index_resources_on_school_id"
     t.index ["slug"], name: "index_resources_on_slug"
   end
 

@@ -2,71 +2,81 @@ open CurriculumEditor__Types;
 
 let str = ReasonReact.string;
 
+type state = {quiz: list(QuizQuestion.t)};
+
+type action =
+  | AddQuizQuestion
+  | UpdateQuizQuestion(int, QuizQuestion.t)
+  | RemoveQuizQuestion(int);
+
 let component =
-  ReasonReact.statelessComponent("CurriculumEditor__TargetQuizCreator");
+  ReasonReact.reducerComponent("CurriculumEditor__TargetQuizCreator");
+
 let make = _children => {
   ...component,
-  render: _self => {
-    let targetsInTG = 1;
+  initialState: () => {quiz: [QuizQuestion.empty(0)]},
+  reducer: (action, state) =>
+    switch (action) {
+    | AddQuizQuestion =>
+      let lastQuestionId =
+        state.quiz |> List.rev |> List.hd |> QuizQuestion.id;
+      ReasonReact.Update({
+        quiz:
+          state.quiz
+          |> List.rev
+          |> List.append([QuizQuestion.empty(lastQuestionId + 1)])
+          |> List.rev,
+      });
+    | UpdateQuizQuestion(id, quizQuestion) =>
+      let newQuiz =
+        state.quiz
+        |> List.map(a => a |> QuizQuestion.id == id ? quizQuestion : a);
+      ReasonReact.Update({quiz: newQuiz});
+
+    | RemoveQuizQuestion(id) =>
+      ReasonReact.Update({
+        quiz: state.quiz |> List.filter(a => a |> QuizQuestion.id !== id),
+      })
+    },
+  render: ({state, send}) => {
+    let removeQuizQuestionCB = id => send(RemoveQuizQuestion(id));
+    let updateQuizQuestionCB = (id, quizQuestion) =>
+      send(UpdateQuizQuestion(id, quizQuestion));
+    let questionCanBeRemoved = state.quiz |> List.length > 1;
+    let isValidQuiz =
+      state.quiz
+      |> List.filter(quizQuestion =>
+           quizQuestion |> QuizQuestion.isValidQuizQuestion != true
+         )
+      |> List.length == 0;
     <div>
       <label
         className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
         htmlFor="Quiz question 1">
         {"Prepare the quiz now." |> str}
       </label>
+      {
+        state.quiz
+        |> List.map(quizQuestion =>
+             <CurriculumEditor__TargetQuizQuestion
+               key={quizQuestion |> QuizQuestion.id |> string_of_int}
+               quizQuestion
+               updateQuizQuestionCB
+               removeQuizQuestionCB
+               questionCanBeRemoved
+             />
+           )
+        |> Array.of_list
+        |> ReasonReact.array
+      }
       <div
-        className="flex bg-transparent items-center border-b border-b-1 border-grey-light py-2 mb-4 rounded">
-        <input
-          className="appearance-none bg-transparent text-lg border-none w-full text-grey-darker mr-3 py-1 px-2 pl-0 leading-tight focus:outline-none"
-          type_="text"
-          value="Type the question here…"
-          placeholder="Type the question here…"
-        />
-      </div>
-      <div className="flex flex-col bg-white mb-2 border rounded">
-        <div className="flex">
-          <input
-            className="appearance-none block w-full bg-white text-grey-darker text-sm rounded p-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-            id="answer option-1"
-            type_="text"
-            value="Answer option 1"
-            placeholder="Answer option 1"
-          />
-          <button
-            className="flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-grey hover:text-grey-darker text-xs py-1 px-3"
-            type_="button">
-            {"Mark as correct" |> str}
-          </button>
-          <button
-            className="flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-grey hover:text-grey-darker text-xs py-1 px-3"
-            type_="button">
-            {"Explain" |> str}
-          </button>
-          <button
-            className="flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-grey hover:text-grey-darker text-xs py-1 px-3"
-            type_="button">
-            {"Delete" |> str}
-          </button>
-        </div>
-        <textarea
-          className="appearance-none block w-full border-t border-t-1 border-grey-light bg-white text-grey-darker text-sm rounded rounded-t-none p-4 -mt-0 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-          id="title"
-          placeholder="Type an answer explanation here."
-          rows=3
-        />
-      </div>
-      <input
-        className="appearance-none block w-full bg-white text-grey-darker border border-grey-light text-sm rounded p-4 mb-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-        id="title"
-        type_="text"
-        value="Answer option 2"
-        placeholder="Answer option 2"
-      />
-      <button
-        className="bg-white border w-full border-grey-light border-dashed text-left hover:bg-grey-lighter text-grey-darkest rounded text-sm italic focus:outline-none p-4">
-        {"Add another answer option" |> str}
-      </button>
-      <div className="flex items-center py-3 cursor-pointer">
+        onClick={
+          _event => {
+            ReactEvent.Mouse.preventDefault(_event);
+            send(AddQuizQuestion);
+          }
+        }
+        className="flex items-center py-3 cursor-pointer">
         <svg className="svg-icon w-8 h-8" viewBox="0 0 20 20">
           <path
             fill="#A8B7C7"
@@ -74,7 +84,7 @@ let make = _children => {
           />
         </svg>
         <h5 className="font-semibold ml-2">
-          {"Add another question" |> str}
+          {"Add another Question" |> str}
         </h5>
       </div>
     </div>;

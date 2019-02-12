@@ -1,7 +1,5 @@
 let str = ReasonReact.string;
 
-open CurriculumEditor__Types;
-
 type state = {searchKey: string};
 
 type action =
@@ -21,7 +19,7 @@ let make = (~items, ~multiSelectCB, _children) => {
     let showSearch = items |> List.length >= 3;
     let filteredList =
       items
-      |> List.filter(((_key, value, selected)) =>
+      |> List.filter(((_key, value, _)) =>
            Js.String.includes(
              String.lowercase(state.searchKey),
              String.lowercase(value),
@@ -33,6 +31,7 @@ let make = (~items, ~multiSelectCB, _children) => {
         |> List.map(((_key, value, selected)) =>
              selected ?
                <div
+                 key={_key |> string_of_int}
                  className="select-list__item-selected flex items-center justify-between bg-grey-lightest text-xs text-grey-dark border rounded p-3 mb-2">
                  {value |> str}
                  <button
@@ -87,6 +86,7 @@ let make = (~items, ~multiSelectCB, _children) => {
             |> List.map(((_key, value, selected)) =>
                  !selected ?
                    <div
+                     key={_key |> string_of_int}
                      onClick={
                        _event => {
                          ReactEvent.Mouse.preventDefault(_event);

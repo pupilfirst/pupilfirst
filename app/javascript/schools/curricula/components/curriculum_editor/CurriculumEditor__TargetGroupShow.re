@@ -26,7 +26,12 @@ let make = (~targetGroup, ~targets, ~showTargetEditorCB, _children) => {
       </div>
       {
         targetsInTG
-        |> List.map(target => <CurriculumEditor__TargetShow target />)
+        |> List.map(target =>
+             <CurriculumEditor__TargetShow
+               key={target |> Target.id |> string_of_int}
+               target
+             />
+           )
         |> Array.of_list
         |> ReasonReact.array
       }

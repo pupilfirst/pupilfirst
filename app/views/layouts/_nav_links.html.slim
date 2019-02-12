@@ -1,3 +1,5 @@
+- presenter = NavLinksPresenter.new(self)
+
 #sv-navbar.collapse.navbar-collapse.justify-content-end.navbar-link__container
   ul.navbar-nav.align-items-lg-center itemscope="itemscope" itemtype="http://www.schema.org/SiteNavigationElement"
     - unless current_founder
@@ -43,7 +45,7 @@
             .navbar__avatar-wrapper
               == avatar(current_founder.name, founder: current_founder)
           ul.dropdown-menu
-            - if policy(current_founder).founder_profile?
+            - if policy(current_founder).show?
               li role="presentation"
                 = link_to student_path(slug: current_founder.slug) do
                   i.fa.fa-list-ul
@@ -53,12 +55,11 @@
                 a href="#" data-toggle="modal" data-target="#platform-feedback-modal"
                   i.fa.fa-comment-o
                   | Submit Feedback
-            - if policy(current_founder).select?
-              - current_user.founders.not_exited.where.not(id: current_founder.id).each do |other_founder|
-                li role="presentation"
-                  = link_to(select_founder_path(other_founder), method: :post) do
-                    i.fa.fa-university
-                    = "#{other_founder.startup.course.name} Course"
+            - presenter.selectable_student_profiles.each do |other_founder|
+              li role="presentation"
+                = link_to(select_founder_path(other_founder), method: :post) do
+                  i.fa.fa-university
+                  = "#{other_founder.startup.course.name} Course"
             li role="presentation"
               = link_to destroy_user_session_path, method: :delete do
                 i.fa.fa-sign-out

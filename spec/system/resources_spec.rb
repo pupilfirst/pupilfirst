@@ -1,9 +1,7 @@
 require 'rails_helper'
 
-# WARNING: The following tests run with Webmock disabled - i.e., URL calls are let through. Make sure you mock possible
-# requests unless you want to let them through. This is required for JS tests to work.
 feature 'Resources' do
-  let(:school) { create :school }
+  let(:school) { create :school, :current }
   let(:school_2) { create :school }
   let(:course_1) { create :course, school: school }
   let(:course_2) { create :course, school: school }
@@ -94,7 +92,8 @@ feature 'Resources' do
 
         # Should not have access to resource in another school.
         visit resource_path(school_2_resource)
-        # should be redirected to the index page
+
+        # Should be redirected to the index page.
         expect(page).to have_text('Please do not share these resources outside your founding team')
       end
     end

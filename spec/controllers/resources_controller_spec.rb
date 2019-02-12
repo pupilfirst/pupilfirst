@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe ResourcesController do
-  let!(:school) { create :school }
+  let!(:school) { create :school, :current }
   let!(:course) { create :course, school: school }
   let!(:binary_resource) { create :resource, school: school, public: true }
   let!(:video_resource) { create :resource_video_file, school: school, public: true }

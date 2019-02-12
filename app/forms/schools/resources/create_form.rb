@@ -2,12 +2,15 @@ module Schools
   module Resources
     class CreateForm < Reform::Form
       property :title, validates: { presence: true, length: { maximum: 250 } }
-      property :description, validates: { presence: true }
-      property :link, validates: { presence: true }
+      # property :description
+      property :link
+      property :file
 
       def save
-        sync
-        model.save!
+        resource = Resource.new(title: title, description: title)
+        resource.file = file
+        resource.save!
+        resource
       end
     end
   end

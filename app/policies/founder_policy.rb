@@ -1,10 +1,19 @@
 class FounderPolicy < ApplicationPolicy
-  def founder_profile?
-    record&.startup.present?
+  def show?
+    startup = record&.startup
+    startup.present? && startup.school == current_school
+  end
+
+  def paged_events?
+    show?
+  end
+
+  def timeline_event_show?
+    show?
   end
 
   def edit?
-    founder_profile?
+    show? && record == current_founder
   end
 
   def update?
@@ -12,6 +21,6 @@ class FounderPolicy < ApplicationPolicy
   end
 
   def select?
-    record.present? && user.founders.where(id: record).present?
+    record.present?
   end
 end

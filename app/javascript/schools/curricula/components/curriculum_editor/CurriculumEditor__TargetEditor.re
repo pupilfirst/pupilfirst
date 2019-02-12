@@ -13,6 +13,15 @@ let str = ReasonReact.string;
 
 type resourceId = int;
 
+type resource =
+  | File
+  | Link(string);
+
+type resourceEntry =
+  | Unselected
+  | Unpersisted(resource)
+  | Persisted(resource);
+
 type methodOfCompletion =
   | NotSelected
   | Evaluated
@@ -20,11 +29,6 @@ type methodOfCompletion =
   | TakeQuiz
   | MarkAsComplete;
 
-/* type evaluationCriteria ={
-  id: int,
-  value: string,
-  selected: bool,
-}; */
 type evaluationCriteria = (int, string, bool);
 
 type prerequisiteTarget = (int, string, bool);
@@ -34,11 +38,12 @@ type state = {
   description: string,
   videoEmbed: string,
   slideshowEmbed: string,
-  resourceIds: list(resourceId),
   evaluationCriterias: list(evaluationCriteria),
   prerequisiteTargets: list(prerequisiteTarget),
   methodOfCompletion,
-  quizId: int,
+  quiz: list(QuizQuestion.t),
+  resourceEntry: list(resourceEntry),
+  resources: list(resource),
 };
 
 type action =
@@ -48,7 +53,11 @@ type action =
   | UpdateSlideshowEmbed(string)
   | UpdateEvaluationCriterion(int, string, bool)
   | UpdatePrerequisiteTargets(int, string, bool)
-  | UpdateMethodOfCompletion(methodOfCompletion);
+  | UpdateMethodOfCompletion(methodOfCompletion)
+  | AddQuizQuestion
+  | UpdateQuizQuestion(int, QuizQuestion.t)
+  | RemoveQuizQuestion(int)
+  | AddResource(resource);
 
 let component =
   ReasonReact.reducerComponent("CurriculumEditor__TargetEditor");
@@ -130,7 +139,7 @@ let make = (~targetGroupId, ~evaluationCriteria, ~targets, _children) => {
     description: "",
     videoEmbed: "",
     slideshowEmbed: "",
-    resourceIds: [],
+    resourceEntry: [Unselected],
     evaluationCriterias:
       evaluationCriteria
       |> List.map(criteria =>
@@ -146,8 +155,9 @@ let make = (~targetGroupId, ~evaluationCriteria, ~targets, _children) => {
       |> List.map(_target =>
            (_target |> Target.id, _target |> Target.title, false)
          ),
-    quizId: 0,
+    quiz: [QuizQuestion.empty(0)],
     methodOfCompletion: NotSelected,
+    resources: [],
   },
   reducer: (action, state) =>
     switch (action) {
@@ -176,16 +186,51 @@ let make = (~targetGroupId, ~evaluationCriteria, ~targets, _children) => {
       });
     | UpdateMethodOfCompletion(methodOfCompletion) =>
       ReasonReact.Update({...state, methodOfCompletion})
+    | AddQuizQuestion =>
+      let lastQuestionId =
+        state.quiz |> List.rev |> List.hd |> QuizQuestion.id;
+      ReasonReact.Update({
+        ...state,
+        quiz:
+          state.quiz
+          |> List.rev
+          |> List.append([QuizQuestion.empty(lastQuestionId + 1)])
+          |> List.rev,
+      });
+    | UpdateQuizQuestion(id, quizQuestion) =>
+      let newQuiz =
+        state.quiz
+        |> List.map(a => a |> QuizQuestion.id == id ? quizQuestion : a);
+      ReasonReact.Update({...state, quiz: newQuiz});
+
+    | RemoveQuizQuestion(id) =>
+      ReasonReact.Update({
+        ...state,
+        quiz: state.quiz |> List.filter(a => a |> QuizQuestion.id !== id),
+      })
+    | AddResource(resource) =>
+      ReasonReact.Update({...state, resources: [resource]})
     },
   render: ({state, send}) => {
     let multiSelectPrerequisiteTargetsCB = (key, value, selected) =>
       send(UpdatePrerequisiteTargets(key, value, selected));
     let multiSelectEvaluationCriterionCB = (key, value, selected) =>
       send(UpdateEvaluationCriterion(key, value, selected));
+    let removeQuizQuestionCB = id => send(RemoveQuizQuestion(id));
+    let updateQuizQuestionCB = (id, quizQuestion) =>
+      send(UpdateQuizQuestion(id, quizQuestion));
+    let questionCanBeRemoved = state.quiz |> List.length > 1;
+    let isValidQuiz =
+      state.quiz
+      |> List.filter(quizQuestion =>
+           quizQuestion |> QuizQuestion.isValidQuizQuestion != true
+         )
+      |> List.length == 0;
+
     <div className="blanket">
       <div className="drawer-right">
         <div className="create-target-form w-full">
-          <form className="w-full">
+          <div className="w-full">
             <div
               className="create-target-form__target-details mx-auto bg-white">
               <div className="max-w-md p-6 mx-auto">
@@ -290,31 +335,7 @@ let make = (~targetGroupId, ~evaluationCriteria, ~targets, _children) => {
                       </div>
                     </li>
                   </ul>
-                  <div
-                    className="resources-upload-tab__body p-5 border-l border-r border-b rounded rounded-tl-none rounded-tr-none">
-                    <input
-                      type_="file"
-                      id="file"
-                      className="input-file"
-                      multiple=true
-                    />
-                    <label
-                      className="flex items-center text-sm" htmlFor="file">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="17"
-                        fill="#9FB0CC"
-                        viewBox="0 0 20 17">
-                        <path
-                          d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"
-                        />
-                      </svg>
-                      <span className="ml-2">
-                        {"Choose a file &hellip;" |> str}
-                      </span>
-                    </label>
-                  </div>
+                  <CurriculumEditor__FileUploader />
                   <div className="flex items-center py-3 cursor-pointer">
                     <svg className="svg-icon w-8 h-8" viewBox="0 0 20 20">
                       <path
@@ -586,7 +607,50 @@ let make = (~targetGroupId, ~evaluationCriteria, ~targets, _children) => {
                       />
                     </div>
                   | MarkAsComplete => ReasonReact.null
-                  | TakeQuiz => <CurriculumEditor__TargetQuizCreator />
+                  | TakeQuiz =>
+                    <div>
+                      <label
+                        className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                        htmlFor="Quiz question 1">
+                        {"Prepare the quiz now." |> str}
+                      </label>
+                      {
+                        state.quiz
+                        |> List.map(quizQuestion =>
+                             <CurriculumEditor__TargetQuizQuestion
+                               key={
+                                 quizQuestion
+                                 |> QuizQuestion.id
+                                 |> string_of_int
+                               }
+                               quizQuestion
+                               updateQuizQuestionCB
+                               removeQuizQuestionCB
+                               questionCanBeRemoved
+                             />
+                           )
+                        |> Array.of_list
+                        |> ReasonReact.array
+                      }
+                      <div
+                        onClick=(
+                          _event => {
+                            ReactEvent.Mouse.preventDefault(_event);
+                            send(AddQuizQuestion);
+                          }
+                        )
+                        className="flex items-center py-3 cursor-pointer">
+                        <svg className="svg-icon w-8 h-8" viewBox="0 0 20 20">
+                          <path
+                            fill="#A8B7C7"
+                            d="M13.388,9.624h-3.011v-3.01c0-0.208-0.168-0.377-0.376-0.377S9.624,6.405,9.624,6.613v3.01H6.613c-0.208,0-0.376,0.168-0.376,0.376s0.168,0.376,0.376,0.376h3.011v3.01c0,0.208,0.168,0.378,0.376,0.378s0.376-0.17,0.376-0.378v-3.01h3.011c0.207,0,0.377-0.168,0.377-0.376S13.595,9.624,13.388,9.624z M10,1.344c-4.781,0-8.656,3.875-8.656,8.656c0,4.781,3.875,8.656,8.656,8.656c4.781,0,8.656-3.875,8.656-8.656C18.656,5.219,14.781,1.344,10,1.344z M10,17.903c-4.365,0-7.904-3.538-7.904-7.903S5.635,2.096,10,2.096S17.903,5.635,17.903,10S14.365,17.903,10,17.903z"
+                          />
+                        </svg>
+                        <h5 className="font-semibold ml-2">
+                          {"Add another Question" |> str}
+                        </h5>
+                      </div>
+                    </div>
                   | VisitLink =>
                     <div>
                       <label
@@ -613,7 +677,7 @@ let make = (~targetGroupId, ~evaluationCriteria, ~targets, _children) => {
                 {"Save All" |> str}
               </button>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </div>;

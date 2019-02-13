@@ -13,6 +13,8 @@ gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 gem 'activeadmin', '~> 1.4' # The administration framework for Ruby on Rails applications. https://activeadmin.info
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
 gem 'carrierwave', '~> 1.1' # One uploader to rule them all.
+gem 'active_storage_validations', '~> 0.6.1' # TODO: Condisder removing the gem once updgraded to Rails 6.0
+gem 'image_processing', '~> 1.2' # Gem to support variants in ActiveStorage
 
 # TODO: Switch to carrierwave_backgrounder from rubygems when a version (with support for Carrierwave v1) is released.
 # TODO: carrierwave_backgrounder is also holding back the version of mime-types in use. Check for updates.

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'DM Startup Feedback' do
+feature 'DM Startup Feedback', broken: true do
   include UserSpecHelper
 
   let!(:admin) { create :admin_user, admin_type: 'superadmin' }

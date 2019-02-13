@@ -157,7 +157,7 @@ feature 'Target Overlay' do
       visit student_dashboard_path
     end
 
-    it 'displays the status for each founder', pending: true do
+    it 'displays the status for each founder' do
       find('.founder-dashboard-target-header__headline', text: target.title).click
 
       within('.target-overlay__content-rightbar') do

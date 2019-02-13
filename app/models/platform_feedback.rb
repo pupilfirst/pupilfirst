@@ -4,8 +4,6 @@ class PlatformFeedback < ApplicationRecord
 
   scope :scored, -> { where.not(promoter_score: nil) }
 
-  mount_uploader :attachment, PlatformFeedbackAttachmentUploader
-
   def self.types_of_feedback
     %w[Feature Suggestion Bug Other]
   end

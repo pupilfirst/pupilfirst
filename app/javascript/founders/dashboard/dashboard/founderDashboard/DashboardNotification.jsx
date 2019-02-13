@@ -3,16 +3,8 @@ import PropTypes from "prop-types";
 
 export default class DashboardNotification extends React.Component {
   eligibleNotificationTitle() {
-    if (this.currentLevelNumber() === 0) {
-      return "Congratulations! You are now an enrolled student at SV.CO.";
-    } else if (
-      this.currentLevelNumber() === this.props.rootProps.maxLevelNumber
-    ) {
-      if (this.props.rootProps.sponsoredCourse) {
-        return "Congratulations! You have completed all milestone targets in this course.";
-      } else {
-        return "Congratulations! You are now part of our Alumni.";
-      }
+    if (this.currentLevelNumber() === this.props.rootProps.maxLevelNumber) {
+      return "Congratulations! You have completed all milestone targets in this course.";
     } else {
       return "Ready to Level Up!";
     }
@@ -23,34 +15,18 @@ export default class DashboardNotification extends React.Component {
   }
 
   eligibleNotificationSubText() {
-    if (this.props.rootProps.sponsoredCourse) {
-      return (
-        <p>
-          {" "}
-          Feel free to complete targets that you might have left out, read up on
-          attached links and resources, and work on the breadth and depth of
-          your skills.
-        </p>
-      );
-    } else {
-      return (
-        <p>
-          {" "}
-          Thanks for sharing your life experiences with SV.CO. Hope this has
-          been an awesome experience. For graduation options & access to the
-          Alumni network, write to{" "}
-          <a href="mailto:graduation@sv.co">graduation@sv.co</a>
-        </p>
-      );
-    }
+    return (
+      <p>
+        {" "}
+        Feel free to complete targets that you might have left out, read up on
+        attached links and resources, and work on the breadth and depth of
+        your skills.
+      </p>
+    );
   }
 
   eligibleNotificationText() {
-    if (this.currentLevelNumber() === 0) {
-      return "You have successfully completed the first step in your journey with SV.CO. We are proud to have you join our collective. Hit Level Up to continue your journey and unlock a series of cool targets and sessions on the way.";
-    } else if (
-      this.currentLevelNumber() === this.props.rootProps.maxLevelNumber
-    ) {
+    if (this.currentLevelNumber() === this.props.rootProps.maxLevelNumber) {
       return (
         <div>
           <h4 className="font-regular light-grey-text">
@@ -71,7 +47,7 @@ export default class DashboardNotification extends React.Component {
         {this.props.rootProps.courseEnded && (
           <div className="founder-dashboard-notification__box text-center p-3">
             <span className="founder-dashboard-notification__lock">
-              <i className="fa fa-2x fa-lock" />
+              <i className="fa fa-2x fa-lock"/>
             </span>
             <h3 className="brand-primary font-regular">
               The course has ended.
@@ -96,14 +72,14 @@ export default class DashboardNotification extends React.Component {
                 </div>
 
                 {this.currentLevelNumber() !==
-                  this.props.rootProps.maxLevelNumber && (
+                this.props.rootProps.maxLevelNumber && (
                   <form
                     className="mt-3"
                     action="/startup/level_up"
                     acceptCharset="UTF-8"
                     method="post"
                   >
-                    <input name="utf8" type="hidden" value="✓" />
+                    <input name="utf8" type="hidden" value="✓"/>
                     <input
                       type="hidden"
                       name="authenticity_token"
@@ -114,7 +90,7 @@ export default class DashboardNotification extends React.Component {
                       className="btn btn-with-icon btn-md btn-primary btn-founder-dashboard-level-up text-uppercase"
                       type="submit"
                     >
-                      <i className="fa fa-arrow-right" />
+                      <i className="fa fa-arrow-right"/>
                       Level Up
                     </button>
                   </form>
@@ -123,7 +99,7 @@ export default class DashboardNotification extends React.Component {
             )}
 
             {this.props.rootProps.levelUpEligibility ===
-              "cofounders_pending" && (
+            "cofounders_pending" && (
               <div className="founder-dashboard-notification__box text-center p-3">
                 <h3 className="brand-primary font-regular">
                   Almost ready to level up!

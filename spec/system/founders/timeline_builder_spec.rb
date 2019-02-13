@@ -6,7 +6,7 @@ feature 'Timeline Builder' do
   let(:criterion) { create :evaluation_criterion, course: course }
   let(:level_one) { create :level, :one }
 
-  let(:startup) { create :startup, :subscription_active, level: level_one }
+  let(:startup) { create :startup, level: level_one }
   let(:founder) { create :founder, startup: startup }
 
   let(:target_group) { create :target_group, milestone: true, level: level_one }
@@ -31,9 +31,6 @@ feature 'Timeline Builder' do
     click_button 'Submit'
 
     find('.timeline-builder__textarea').set(description)
-
-    # Pick a cover image.
-    attach_file 'Cover Image', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'users', 'college_id.jpg')), make_visible: true
 
     # Open the link form.
     find('.timeline-builder__upload-section-tab.link-upload').click
@@ -60,8 +57,6 @@ feature 'Timeline Builder' do
     te = TimelineEvent.last
 
     expect(te.description).to eq(description)
-    expect(te.image).to be_present
-
     expect(te.links.count).to eq(1)
 
     link = te.links.first

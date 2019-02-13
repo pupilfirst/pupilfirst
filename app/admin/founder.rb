@@ -25,7 +25,6 @@ ActiveAdmin.register Founder do
 
   scope :admitted, default: true
   scope :inactive
-  scope :level_zero
   scope :all
 
   filter :user_email, as: :string
@@ -38,21 +37,13 @@ ActiveAdmin.register Founder do
     collection: -> { Founder.tag_counts_on(:tags).pluck(:name).sort }
 
   filter :startup_level_id, as: :select, collection: -> { Level.all.order(number: :asc) }
-  filter :startup_admission_stage, as: :select, collection: -> { Startup.admission_stages }, label: 'Admission Stage'
   filter :startup_id_null, as: :boolean, label: 'Without Startup'
   filter :roles_cont, as: :select, collection: -> { Founder.valid_roles }, label: 'Role'
   filter :college_name_contains
-  filter :roll_number
   filter :created_at, label: 'Registered on'
-  filter :screening_score_above, as: :number
-  filter :coder, as: :boolean
-
-  permit_params :name, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :born_on,
-    :communication_address, :identification_proof, :phone, :invitation_token, :college_id, :roll_number,
-    :course, :semester, :year_of_graduation, :twitter_url, :linkedin_url, :personal_website_url, :blog_url,
-    :angel_co_url, :github_url, :behance_url, :gender, :skype_id, :exited, :id_proof_number,
-    :id_proof_type, :parent_name, :permanent_address, :address_proof, :income_proof,
-    :letter_from_parent, :coder, roles: [], tag_list: []
+  permit_params :name, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :communication_address, :phone,
+    :college_id, :twitter_url, :linkedin_url, :personal_website_url, :blog_url, :angel_co_url, :github_url,
+    :behance_url, :gender, :skype_id, :exited, roles: [], tag_list: []
 
   batch_action :tag, form: proc { { tag: Founder.tag_counts_on(:tags).pluck(:name) } } do |ids, inputs|
     Founder.where(id: ids).each do |founder|
@@ -68,57 +59,37 @@ ActiveAdmin.register Founder do
     selectable_column
     column :name
 
-    if params['scope'] == 'level_zero'
-      column :email
-      column :phone
-      column 'Admission Stage' do |founder|
-        founder.startup.admission_stage
-      end
+    column :product_name, sortable: 'founders.startup_id' do |founder|
+      if founder.startup.present?
+        a href: admin_startup_path(founder.startup) do
+          span do
+            founder.startup.try(:product_name)
+          end
 
-      column 'Screening Score' do |founder|
-        founder.screening_data.present? ? founder.screening_data['score'] : ''
-      end
-
-      column 'Coder' do |founder|
-        if !founder.coder.nil?
-          founder.coder? ? 'Yes' : 'No'
-        else
-          'NA'
-        end
-      end
-    else
-      column :product_name, sortable: 'founders.startup_id' do |founder|
-        if founder.startup.present?
-          a href: admin_startup_path(founder.startup) do
+          if founder.startup.name.present?
             span do
-              founder.startup.try(:product_name)
-            end
-
-            if founder.startup.name.present?
-              span do
-                " (#{founder.startup.name})"
-              end
+              " (#{founder.startup.name})"
             end
           end
         end
       end
+    end
 
-      column 'Total Karma (Personal)' do |founder|
-        points = founder.karma_points&.sum(:points)
-        if points.present?
-          link_to points, admin_karma_points_path(q: { founder_id_eq: founder.id })
-        else
-          'Not Available'
-        end
+    column 'Total Karma (Personal)' do |founder|
+      points = founder.karma_points&.sum(:points)
+      if points.present?
+        link_to points, admin_karma_points_path(q: { founder_id_eq: founder.id })
+      else
+        'Not Available'
       end
+    end
 
-      column 'Total Karma (Team)' do |founder|
-        points = founder.startup&.karma_points&.sum(:points)
-        if points.present?
-          link_to points, admin_karma_points_path(q: { startup_id_eq: founder.startup&.id })
-        else
-          'Not Available'
-        end
+    column 'Total Karma (Team)' do |founder|
+      points = founder.startup&.karma_points&.sum(:points)
+      if points.present?
+        link_to points, admin_karma_points_path(q: { startup_id_eq: founder.startup&.id })
+      else
+        'Not Available'
       end
     end
 
@@ -126,123 +97,56 @@ ActiveAdmin.register Founder do
   end
 
   csv do
-    if params['scope'] == 'level_zero'
-      column :name
-      column :email
-      column :phone
+    column :id
+    column :email
+    column :name
 
-      column :team_lead do |founder|
-        founder.team_lead? ? 'Yes' : 'No'
-      end
-
-      column :stage do |founder|
-        founder.startup&.admission_stage
-      end
-
-      column :stage_updated_at do |founder|
-        founder.startup&.admission_stage_updated_at
-      end
-
-      column :reference
-
-      column :college do |founder|
-        founder.college.present? ? founder.college.name : founder.college_text
-      end
-
-      column :state do |founder|
-        founder.college.present? ? founder.college.state.name : ''
-      end
-
-      column :created_at do |founder|
-        founder.startup.created_at.to_date
-      end
-
-      column 'Tags' do |founder|
-        founder.tags.map(&:name).join(';')
-      end
-
-      column :admission_stage do |founder|
-        founder.startup.admission_stage
-      end
-
-      column 'Screening Score' do |founder|
-        founder.screening_data.present? ? founder.screening_data['score'] : ''
-      end
-
-      column 'Comments' do |founder|
-        founder.active_admin_comments.map(&:body).join("\n\n")
-      end
-
-      column :coder do |founder|
-        if !founder.coder.nil?
-          founder.coder? ? 'Yes' : 'No'
-        else
-          'NA'
-        end
-      end
-    else
-      column :id
-      column :email
-      column :name
-
-      column :team_lead do |founder|
-        founder.team_lead? ? 'Yes' : 'No'
-      end
-
-      column :product do |founder|
-        founder.startup&.product_name
-      end
-
-      column :company do |founder|
-        founder.startup&.legal_registered_name
-      end
-
-      column :roles do |founder|
-        founder.roles.join ', '
-      end
-
-      column 'Total Karma (Personal)' do |founder|
-        founder.karma_points&.sum(:points) || 'Not Available'
-      end
-
-      column 'Total Karma (Team)' do |founder|
-        founder.startup&.karma_points&.sum(:points) || 'Not Available'
-      end
-
-      column :phone
-      column :gender
-      column :born_on
-      column :communication_address
-      column :about
-
-      column :college do |founder|
-        founder.college&.name
-      end
-
-      column :university do |founder|
-        founder.college&.university&.name
-      end
-
-      column :roll_number
-      column :course
-      column :semester
-      column :year_of_graduation
-
-      column :slack_username
-      column(:skype_username, &:skype_id)
-
-      column :team_lead?
-      column :slug
-
-      column :resume, &:resume_link
-      column :linkedin_url
-      column :twitter_url
-      column :personal_website_url
-      column :blog_url
-      column :angel_co_url
-      column :github_url
-      column :behance_url
+    column :product do |founder|
+      founder.startup&.product_name
     end
+
+    column :company do |founder|
+      founder.startup&.legal_registered_name
+    end
+
+    column :roles do |founder|
+      founder.roles.join ', '
+    end
+
+    column 'Total Karma (Personal)' do |founder|
+      founder.karma_points&.sum(:points) || 'Not Available'
+    end
+
+    column 'Total Karma (Team)' do |founder|
+      founder.startup&.karma_points&.sum(:points) || 'Not Available'
+    end
+
+    column :phone
+    column :gender
+    column :communication_address
+    column :about
+
+    column :college do |founder|
+      founder.college&.name
+    end
+
+    column :university do |founder|
+      founder.college&.university&.name
+    end
+
+    column :slack_username
+    column(:skype_username, &:skype_id)
+
+    column :slug
+
+    column :resume, &:resume_link
+    column :linkedin_url
+    column :twitter_url
+    column :personal_website_url
+    column :blog_url
+    column :angel_co_url
+    column :github_url
+    column :behance_url
   end
 
   show do
@@ -250,7 +154,6 @@ ActiveAdmin.register Founder do
       row :slug
       row :email
       row :name
-      row :reference
 
       row :tags do |founder|
         linked_tags(founder.tags)
@@ -278,12 +181,7 @@ ActiveAdmin.register Founder do
         end
       end
 
-      row :team_lead do
-        founder.team_lead? ? 'Yes' : 'No'
-      end
       row :about
-      row :born_on
-      row :parent_name
       row :gender
       row :slack_username
       row :slack_user_id
@@ -311,79 +209,14 @@ ActiveAdmin.register Founder do
         end
       end
 
-      row :roll_number
-
-      row :college_identification do
-        if founder.college_identification.present?
-          link_to founder.college_identification.url do
-            image_tag founder.college_identification.thumb.url
-          end
-        end
-      end
-
       row :avatar do
         link_to 'Download Avatar', founder.avatar.url if founder.avatar.present?
       end
 
-      row :course
-      row :semester
-      row :year_of_graduation
-      row :backlog
       row :exited
       # row :resume do |founder|
       #   link_to 'Download Resume', founder.resume_link if founder.resume_link.present?
       # end
-      row :coder do
-        if !founder.coder.nil?
-          founder.coder? ? 'Yes' : 'No'
-        else
-          'NA'
-        end
-      end
-      row :screening_data do |founder|
-        if founder.screening_data.present?
-          button id: 'screening-data-toggle-button', class: 'margin-bottom-10' do
-            'Show/Hide'
-          end
-          div id: 'founder-admission-screening-data', class: 'hide' do
-            div class: 'margin-bottom-10' do
-              h2 do
-                span "Score: "
-                span founder.screening_data['score'].to_s
-              end
-            end
-
-            question_answer = founder.screening_data['response']
-
-            question_answer.each do |response|
-              div class: 'admin-founders__question-and-answer' do
-                question = response['question']
-                question.gsub!('<br><br>', '<br>')
-                strong simple_format(question, class: 'admin-founders__question')
-
-                answer = response['answer']
-                div class: 'margin-left-10' do
-                  if answer.is_a?(Hash)
-                    if answer['label'].present?
-                      answer['label'].to_s
-                    elsif answer['labels'].present?
-                      ul do
-                        answer['labels'].each do |choice|
-                          li(choice.strip)
-                        end
-                      end
-                    else
-                      answer['other'].to_s
-                    end
-                  else
-                    answer
-                  end
-                end
-              end
-            end
-          end
-        end
-      end
     end
 
     panel 'Social links' do
@@ -398,34 +231,6 @@ ActiveAdmin.register Founder do
       end
     end
 
-    panel 'Admissions Data' do
-      attributes_table_for founder do
-        row :identification_proof do
-          if founder.identification_proof.present?
-            link_to 'Click here to open in new window', founder.identification_proof.url, target: '_blank', rel: 'noopener'
-          end
-        end
-        row :id_proof_type
-        row :id_proof_number
-        row :permanent_address
-        row :address_proof do
-          if founder.address_proof.present?
-            link_to 'Click here to open in new window', founder.address_proof.url, target: '_blank', rel: 'noopener'
-          end
-        end
-        row :income_proof do
-          if founder.income_proof.present?
-            link_to 'Click here to open in new window', founder.income_proof.url, target: '_blank', rel: 'noopener'
-          end
-        end
-        row :letter_from_parent do
-          if founder.letter_from_parent.present?
-            link_to 'Click here to open in new window', founder.letter_from_parent.url, target: '_blank', rel: 'noopener'
-          end
-        end
-      end
-    end
-
     panel 'Technical details' do
       attributes_table_for founder do
         row :id
@@ -435,17 +240,6 @@ ActiveAdmin.register Founder do
     end
 
     active_admin_comments
-  end
-
-  action_item :feedback, only: :show, if: proc { Founder.friendly.find(params[:id]).startup.present? } do
-    startup = Founder.friendly.find(params[:id]).startup
-
-    link_to(
-      'Record New Feedback',
-      new_admin_startup_feedback_path(
-        startup_feedback: { startup_id: Founder.friendly.find(params[:id]).startup.id, reference_url: product_url(startup.id, startup.slug) }
-      )
-    )
   end
 
   action_item :impersonate, only: :show, if: proc { can? :impersonate, User } do

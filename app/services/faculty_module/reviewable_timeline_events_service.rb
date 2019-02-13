@@ -24,7 +24,6 @@ module FacultyModule
         founderIds: timeline_event.founders.map(&:id),
         links: timeline_event.links,
         files: timeline_event.timeline_event_files.map { |file| { title: file.title, id: file.id } },
-        image: timeline_event.image? ? timeline_event.image.url : nil,
         latestFeedback: timeline_event.startup_feedback&.last&.feedback,
         evaluation: evaluation(timeline_event),
         rubric: rubric(timeline_event)

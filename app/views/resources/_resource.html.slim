@@ -1,15 +1,7 @@
 .col-lg-4.col-md-6
   .resource-box.content-box.pb-0
     .resource-thumbnail
-      - if resource.thumbnail.present?
-        = image_tag resource.thumbnail.url
-      - else
-        = image_tag 'resources/shared/default-thumbnail.png', class: 'img-responsive'
-    - if resource.level_exclusive?
-      .level-exclusive
-        p.text-uppercase
-          | Level Exclusive
-
+      = image_tag 'resources/shared/default-thumbnail.png', class: 'img-responsive'
     .resource-content
       h4.mb-3
         = link_to truncate( resource.title, length: 50, separator: ' ' ), resource

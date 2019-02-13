@@ -3,8 +3,8 @@ require 'rails_helper'
 describe TargetsController do
   include Devise::Test::ControllerHelpers
 
-  let!(:startup) { create :startup, :subscription_active }
-  let!(:target) { create :target, :with_rubric }
+  let!(:startup) { create :startup }
+  let!(:target) { create :target }
   let!(:pending_prerequisite_target) { create :target }
   let!(:completed_prerequisite_target) { create :target }
 
@@ -12,7 +12,7 @@ describe TargetsController do
     create :timeline_event,
       target: completed_prerequisite_target,
       passed_at: 1.day.ago,
-      founders: [startup.team_lead],
+      founders: [startup.founders.first],
       latest: true
   end
 
@@ -22,25 +22,12 @@ describe TargetsController do
     create :timeline_event,
       target: founder_target,
       passed_at: 1.day.ago,
-      founders: [startup.team_lead],
+      founders: [startup.founders.first],
       latest: true
   end
 
   let!(:faculty) { create :faculty }
   let!(:target_feedback) { create :startup_feedback, timeline_event: completion_event_2, faculty: faculty, startup: startup }
-
-  describe 'GET download_rubric' do
-    it 'raises not found error when a founder is not signed in' do
-      get :download_rubric, params: { id: target.id }
-      expect(response).to redirect_to(new_user_session_path)
-    end
-
-    it 'redirects to the rubric URL when a founder is signed in' do
-      sign_in startup.team_lead.user
-      get :download_rubric, params: { id: target.id }
-      expect(response).to redirect_to(target.rubric_url)
-    end
-  end
 
   describe 'GET prerequisite_targets' do
     context 'founder is not signed in' do
@@ -52,7 +39,7 @@ describe TargetsController do
 
     context 'when a founder is signed in' do
       before do
-        sign_in startup.team_lead.user
+        sign_in startup.founders.first.user
       end
 
       context 'when target has no prerequisite targets' do
@@ -77,7 +64,7 @@ describe TargetsController do
   # TODO: Probably remove this as we now use the 'details' action whose response includes the latest feedback
   describe 'GET startup_feedback', broken: true do
     before do
-      sign_in startup.team_lead.user
+      sign_in startup.founders.first.user
     end
 
     context 'when target has no feedback' do

@@ -7,7 +7,7 @@ module Targets
 
     def all_details
       {
-        founderStatuses: founder_statuses,
+        pendingFounderIds: pending_founder_ids,
         latestEvent: latest_event_details,
         latestFeedback: latest_feedback,
         linkedResources: linked_resources,
@@ -17,15 +17,10 @@ module Targets
 
     private
 
-    def founder_statuses
-      return nil unless @target.founder_role?
-
-      @founder.startup.founders.not_exited.map do |founder|
-        {
-          id: founder.id,
-          status: Targets::StatusService.new(@target, founder).status
-        }
-      end
+    def pending_founder_ids
+      @founder.startup.founders.where.not(id: @founder).reject do |founder|
+        founder.exited? || founder.timeline_events.where(target: @target).passed.exists?
+      end.map(&:id)
     end
 
     def latest_event_details

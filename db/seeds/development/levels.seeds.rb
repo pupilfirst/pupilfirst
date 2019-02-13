@@ -8,7 +8,7 @@ after 'development:courses' do
   vr_course = Course.find_by(name: 'VR')
   ios_course = Course.find_by(name: 'iOS')
 
-  Level.create!(number: 0, name: 'Admissions', course: startup_course)
+  Level.create!(number: 0, name: 'Sessions', course: startup_course)
   Level.create!(number: 1, name: 'Research', course: startup_course)
   Level.create!(number: 2, name: 'Wireframe', unlock_on: 1.month.ago, course: startup_course)
   Level.create!(number: 3, name: 'Prototype', unlock_on: 2.month.from_now, course: startup_course)

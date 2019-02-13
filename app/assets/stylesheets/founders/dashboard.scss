@@ -31,10 +31,15 @@
   background-color: white;
   color: $light-grey-text;
   padding: 1rem 1.875rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 300px;
 
   @include media-breakpoint-down(sm) {
     font-size: 0.75rem;
     padding: 1rem 0.5rem;
+    max-width: 130px;
   }
 
   &:hover {

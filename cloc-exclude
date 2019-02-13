@@ -1,7 +1,6 @@
 bin
 db/migrate
 public
-vendor
 changelog
 example.env
 log

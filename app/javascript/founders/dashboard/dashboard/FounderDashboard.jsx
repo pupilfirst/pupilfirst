@@ -13,7 +13,8 @@ export default class FounderDashboard extends React.Component {
 
     this.state = {
       targets: props.targets,
-      chosenLevelId: props.currentLevel.id,
+      selectedLevel: props.currentLevel,
+      selectedTab: 'selectedLevel',
       timelineBuilderVisible: false,
       timelineBuilderParams: {
         targetId: null
@@ -52,7 +53,7 @@ export default class FounderDashboard extends React.Component {
 
   availableTrackIds(levelId = null) {
     if (levelId === null) {
-      levelId = this.state.chosenLevelId;
+      levelId = this.state.selectedLevel.id;
     }
 
     let targetGroupsInLevel = this.props.targetGroups.filter(targetGroup => {
@@ -161,23 +162,27 @@ export default class FounderDashboard extends React.Component {
     return this.props.founderDetails.length < 2;
   }
 
+  levelZeroExists() {
+    return (this.props.levels.filter(level => {return level.number === 0;}).length > 0);
+  }
+
   render() {
     return (
       <div className="founder-dashboard-container pb-5">
-        <ToggleBar
-          availableTrackIds={this.availableTrackIds()}
+        {this.levelZeroExists() && (
+          <ToggleBar
           rootProps={this.props}
           rootState={this.state}
           setRootState={this.setRootState}
         />
+        )}
 
         {(this.props.courseEnded ||
           this.props.levelUpEligibility !== "not_eligible") && (
           <DashboardNotification rootProps={this.props} />
         )}
 
-        {this.state.activeTrackId !== "sessions" &&
-          this.props.currentLevel !== 0 && (
+        {this.state.selectedTab === "selectedLevel" && (
             <ActionBar
               getAvailableTrackIds={this.availableTrackIds}
               rootProps={this.props}

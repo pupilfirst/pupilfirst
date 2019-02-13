@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_21_075133) do
+ActiveRecord::Schema.define(version: 2019_02_11_084334) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -31,11 +31,31 @@ ActiveRecord::Schema.define(version: 2019_01_21_075133) do
     t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id"
   end
 
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.bigint "byte_size", null: false
+    t.string "checksum", null: false
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
   create_table "admin_users", id: :serial, force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string "username"
-    t.string "avatar"
     t.string "fullname"
     t.string "admin_type"
     t.integer "user_id"
@@ -102,31 +122,10 @@ ActiveRecord::Schema.define(version: 2019_01_21_075133) do
     t.index ["faculty_id"], name: "index_connect_slots_on_faculty_id"
   end
 
-  create_table "coupon_usages", id: :serial, force: :cascade do |t|
-    t.integer "coupon_id"
-    t.integer "startup_id"
-    t.datetime "redeemed_at"
-    t.datetime "rewarded_at"
-    t.text "notes"
-    t.index ["coupon_id"], name: "index_coupon_usages_on_coupon_id"
-    t.index ["startup_id"], name: "index_coupon_usages_on_startup_id"
-  end
-
-  create_table "coupons", id: :serial, force: :cascade do |t|
-    t.string "code"
-    t.integer "discount_percentage"
-    t.integer "redeem_limit", default: 0
-    t.datetime "expires_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.text "instructions"
-  end
-
   create_table "courses", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "sponsored", default: false
     t.bigint "school_id"
     t.integer "max_grade"
     t.integer "pass_grade"
@@ -199,7 +198,10 @@ ActiveRecord::Schema.define(version: 2019_01_21_075133) do
     t.string "slack_username"
     t.string "slack_user_id"
     t.bigint "user_id"
+    t.bigint "school_id"
+    t.boolean "public", default: false
     t.index ["category"], name: "index_faculty_on_category"
+    t.index ["school_id", "user_id"], name: "index_faculty_on_school_id_and_user_id", unique: true
     t.index ["slug"], name: "index_faculty_on_slug", unique: true
     t.index ["user_id"], name: "index_faculty_on_user_id"
   end
@@ -233,29 +235,16 @@ ActiveRecord::Schema.define(version: 2019_01_21_075133) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string "avatar"
-    t.string "invitation_token"
-    t.datetime "invitation_created_at"
-    t.datetime "invitation_sent_at"
-    t.datetime "invitation_accepted_at"
-    t.integer "invitation_limit"
-    t.integer "invited_by_id"
-    t.string "invited_by_type"
     t.integer "startup_id"
     t.string "linkedin_url"
     t.string "twitter_url"
-    t.date "born_on"
     t.string "auth_token"
-    t.string "course"
-    t.string "semester"
     t.string "gender"
     t.string "phone"
     t.text "communication_address"
-    t.integer "year_of_graduation"
-    t.string "roll_number"
     t.string "slack_username"
     t.integer "university_id"
     t.string "roles"
-    t.string "college_identification"
     t.boolean "avatar_processing", default: false
     t.string "slack_user_id"
     t.string "personal_website_url"
@@ -267,34 +256,17 @@ ActiveRecord::Schema.define(version: 2019_01_21_075133) do
     t.string "resume_url"
     t.string "slug"
     t.string "about"
-    t.string "identification_proof"
     t.string "skype_id"
     t.boolean "exited", default: false
     t.integer "user_id"
     t.integer "college_id"
     t.string "name"
     t.boolean "dashboard_toured"
-    t.integer "backlog"
-    t.string "reference"
     t.string "college_text"
-    t.string "parent_name"
-    t.string "id_proof_type"
-    t.string "id_proof_number"
-    t.string "income_proof"
-    t.string "letter_from_parent"
-    t.string "college_contact"
     t.string "permanent_address"
-    t.string "address_proof"
-    t.integer "invited_startup_id"
     t.integer "resume_file_id"
     t.string "slack_access_token"
-    t.jsonb "screening_data"
-    t.boolean "coder"
-    t.index "((screening_data -> 'score'::text))", name: "index_founders_on_screening_data_score", using: :gin
     t.index ["college_id"], name: "index_founders_on_college_id"
-    t.index ["invitation_token"], name: "index_founders_on_invitation_token", unique: true
-    t.index ["invited_by_id"], name: "index_founders_on_invited_by_id"
-    t.index ["invited_startup_id"], name: "index_founders_on_invited_startup_id"
     t.index ["name"], name: "index_founders_on_name"
     t.index ["slug"], name: "index_founders_on_slug", unique: true
     t.index ["university_id"], name: "index_founders_on_university_id"
@@ -327,34 +299,8 @@ ActiveRecord::Schema.define(version: 2019_01_21_075133) do
     t.index ["number"], name: "index_levels_on_number"
   end
 
-  create_table "payments", id: :serial, force: :cascade do |t|
-    t.string "instamojo_payment_request_id"
-    t.string "instamojo_payment_request_status"
-    t.string "instamojo_payment_id"
-    t.string "instamojo_payment_status"
-    t.decimal "amount", precision: 9, scale: 2
-    t.decimal "fees", precision: 9, scale: 2
-    t.string "short_url"
-    t.string "long_url"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "webhook_received_at"
-    t.datetime "paid_at"
-    t.string "notes"
-    t.integer "founder_id"
-    t.integer "startup_id"
-    t.integer "original_startup_id"
-    t.datetime "billing_start_at"
-    t.datetime "billing_end_at"
-    t.string "payment_type"
-    t.index ["founder_id"], name: "index_payments_on_founder_id"
-    t.index ["original_startup_id"], name: "index_payments_on_original_startup_id"
-    t.index ["startup_id"], name: "index_payments_on_startup_id"
-  end
-
   create_table "platform_feedback", id: :serial, force: :cascade do |t|
     t.string "feedback_type"
-    t.string "attachment"
     t.text "description"
     t.integer "promoter_score"
     t.integer "founder_id"
@@ -420,23 +366,30 @@ ActiveRecord::Schema.define(version: 2019_01_21_075133) do
 
   create_table "resources", id: :serial, force: :cascade do |t|
     t.string "file"
-    t.string "thumbnail"
     t.string "title"
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "downloads", default: 0
     t.string "slug"
-    t.integer "startup_id"
     t.text "video_embed"
-    t.integer "level_id"
     t.string "link"
     t.string "file_content_type"
     t.boolean "archived", default: false
+    t.boolean "public", default: false
+    t.bigint "school_id"
     t.index ["archived"], name: "index_resources_on_archived"
-    t.index ["level_id"], name: "index_resources_on_level_id"
+    t.index ["school_id"], name: "index_resources_on_school_id"
     t.index ["slug"], name: "index_resources_on_slug"
-    t.index ["startup_id"], name: "index_resources_on_startup_id"
+  end
+
+  create_table "school_strings", force: :cascade do |t|
+    t.bigint "school_id"
+    t.string "key"
+    t.text "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["school_id", "key"], name: "index_school_strings_on_school_id_and_key", unique: true
   end
 
   create_table "school_admins", force: :cascade do |t|
@@ -497,53 +450,17 @@ ActiveRecord::Schema.define(version: 2019_01_21_075133) do
   end
 
   create_table "startups", id: :serial, force: :cascade do |t|
-    t.string "logo"
-    t.string "pitch"
-    t.string "website"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string "facebook_link"
-    t.string "twitter_link"
-    t.text "address"
-    t.string "registration_type"
     t.string "product_name"
-    t.text "product_description"
-    t.string "state"
-    t.string "district"
-    t.string "product_progress"
-    t.string "presentation_link"
-    t.string "pin"
-    t.datetime "agreement_signed_at"
-    t.text "metadata"
     t.string "slug"
-    t.string "stage"
     t.string "legal_registered_name"
-    t.string "wireframe_link"
-    t.string "prototype_link"
-    t.string "product_video_link"
     t.boolean "dropped_out", default: false
     t.integer "level_id"
-    t.date "program_started_on"
-    t.boolean "agreements_verified"
-    t.string "courier_name"
-    t.string "courier_number"
-    t.string "partnership_deed"
-    t.string "payment_reference"
-    t.string "admission_stage"
-    t.date "timeline_updated_on"
-    t.datetime "admission_stage_updated_at"
-    t.bigint "team_lead_id"
-    t.integer "referral_reward_days", default: 0
-    t.integer "undiscounted_founder_fee"
-    t.text "billing_address"
-    t.bigint "billing_state_id"
     t.bigint "faculty_id"
-    t.index ["billing_state_id"], name: "index_startups_on_billing_state_id"
     t.index ["faculty_id"], name: "index_startups_on_faculty_id"
     t.index ["level_id"], name: "index_startups_on_level_id"
     t.index ["slug"], name: "index_startups_on_slug", unique: true
-    t.index ["stage"], name: "index_startups_on_stage"
-    t.index ["team_lead_id"], name: "index_startups_on_team_lead_id"
   end
 
   create_table "states", id: :serial, force: :cascade do |t|
@@ -625,7 +542,6 @@ ActiveRecord::Schema.define(version: 2019_01_21_075133) do
     t.datetime "updated_at", null: false
     t.text "slideshow_embed"
     t.integer "faculty_id"
-    t.string "rubric"
     t.integer "days_to_complete"
     t.string "target_action_type"
     t.integer "target_group_id"
@@ -634,7 +550,6 @@ ActiveRecord::Schema.define(version: 2019_01_21_075133) do
     t.datetime "session_at"
     t.text "video_embed"
     t.datetime "last_session_at"
-    t.string "key"
     t.string "link_to_complete"
     t.boolean "archived", default: false
     t.string "youtube_video_id"
@@ -646,7 +561,6 @@ ActiveRecord::Schema.define(version: 2019_01_21_075133) do
     t.boolean "resubmittable", default: true
     t.index ["archived"], name: "index_targets_on_archived"
     t.index ["faculty_id"], name: "index_targets_on_faculty_id"
-    t.index ["key"], name: "index_targets_on_key"
     t.index ["session_at"], name: "index_targets_on_session_at"
   end
 
@@ -775,6 +689,7 @@ ActiveRecord::Schema.define(version: 2019_01_21_075133) do
     t.index ["week_starting_at", "level_id"], name: "index_weekly_karma_points_on_week_starting_at_and_level_id"
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "admin_users", "users"
   add_foreign_key "answer_options", "quiz_questions"
   add_foreign_key "connect_requests", "connect_slots"
@@ -782,6 +697,7 @@ ActiveRecord::Schema.define(version: 2019_01_21_075133) do
   add_foreign_key "connect_slots", "faculty"
   add_foreign_key "courses", "schools"
   add_foreign_key "domains", "schools"
+  add_foreign_key "faculty", "schools"
   add_foreign_key "faculty_course_enrollments", "courses"
   add_foreign_key "faculty_course_enrollments", "faculty"
   add_foreign_key "faculty_startup_enrollments", "faculty"
@@ -789,19 +705,13 @@ ActiveRecord::Schema.define(version: 2019_01_21_075133) do
   add_foreign_key "founders", "colleges"
   add_foreign_key "founders", "users"
   add_foreign_key "levels", "courses"
-  add_foreign_key "payments", "founders"
-  add_foreign_key "payments", "startups"
   add_foreign_key "quiz_questions", "answer_options", column: "correct_answer_id"
   add_foreign_key "quiz_questions", "quizzes"
   add_foreign_key "quizzes", "targets"
-  add_foreign_key "resources", "levels"
-  add_foreign_key "school_admins", "schools"
-  add_foreign_key "school_admins", "users"
+  add_foreign_key "school_strings", "schools"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"
-  add_foreign_key "startups", "founders", column: "team_lead_id"
   add_foreign_key "startups", "levels"
-  add_foreign_key "startups", "states", column: "billing_state_id"
   add_foreign_key "target_evaluation_criteria", "evaluation_criteria"
   add_foreign_key "target_evaluation_criteria", "targets"
   add_foreign_key "target_groups", "levels"

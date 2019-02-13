@@ -18,7 +18,6 @@ export default class TimelineBuilder extends React.Component {
       showLinkForm: false,
       showFileForm: false,
       previousForm: null,
-      imageButtonKey: this.generateKey(),
       submissionProgress: null,
       submissionError: null,
       submissionSuccessful: false,
@@ -36,9 +35,6 @@ export default class TimelineBuilder extends React.Component {
     this.attachmentsCount = this.attachmentsCount.bind(this);
     this.addData = this.addData.bind(this);
     this.removeAttachment = this.removeAttachment.bind(this);
-    this.removeCoverImageFromHiddenForm = this.removeCoverImageFromHiddenForm.bind(
-      this
-    );
     this.removeFileFromHiddenForm = this.removeFileFromHiddenForm.bind(this);
     this.submit = this.submit.bind(this);
     this.xhrCallback = this.xhrCallback.bind(this);
@@ -190,10 +186,6 @@ export default class TimelineBuilder extends React.Component {
 
   removeAttachment(type, index) {
     switch (type) {
-      case "cover":
-        this.removeCoverImageFromHiddenForm();
-        this.setState({ coverImage: null });
-        break;
       case "link":
         let updatedLinks = this.state.links.slice();
         updatedLinks.splice(index, 1);
@@ -210,10 +202,6 @@ export default class TimelineBuilder extends React.Component {
           "Unable to handle instruction to remove attachment of type " + type
         );
     }
-  }
-
-  removeCoverImageFromHiddenForm() {
-    $('[name="timeline_event[image]"]').remove();
   }
 
   removeFileFromHiddenForm(identifier) {
@@ -484,7 +472,6 @@ export default class TimelineBuilder extends React.Component {
                 submitCB={this.submit}
                 addDataCB={this.addData}
                 coverImage={this.state.coverImage}
-                imageButtonKey={this.state.imageButtonKey}
                 selectedDate={this.state.date}
                 submissionProgress={this.state.submissionProgress}
                 attachmentAllowed={this.attachmentAllowed()}

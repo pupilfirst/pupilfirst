@@ -16,8 +16,6 @@ let links: t => list(Link.t);
 
 let files: t => list(File.t);
 
-let image: t => option(string);
-
 let forFounder: (Founder.t, list(t)) => list(t);
 
 let reviewPending: list(t) => list(t);

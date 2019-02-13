@@ -3,44 +3,41 @@ require 'rails_helper'
 feature 'Office Hour' do
   include UserSpecHelper
 
-  let!(:faculty) { create :faculty }
+  let(:startup) { create :startup }
+  let(:founder) { startup.founders.first }
+  let(:faculty) { create :faculty, school: startup.school, public: true }
+  let(:unenrolled_faculty) { create :faculty, school: startup.school, public: true }
+  let(:enrolled_hidden_faculty) { create :faculty, school: startup.school, public: false }
 
-  # Three valid connect slots for faculty 1.
-  let!(:connect_slot_1) { create :connect_slot, faculty: faculty, slot_at: 4.days.from_now }
-  let!(:connect_slot_2) { create :connect_slot, faculty: faculty, slot_at: 4.5.days.from_now }
-  let!(:connect_slot_3) { create :connect_slot, faculty: faculty, slot_at: 6.days.from_now }
+  let!(:faculty_enrollment) { create :faculty_course_enrollment, faculty: faculty, course: startup.course }
+  let!(:hidden_faculty_enrollment) { create :faculty_course_enrollment, faculty: enrolled_hidden_faculty, course: startup.course }
 
-  # One connect request using up one of the slots for faculty 1.
-  let!(:connect_request) { create :connect_request, connect_slot: connect_slot_1 }
+  before do
+    # Create connect slots for all faculty.
+    [faculty, unenrolled_faculty].each do |f|
+      create :connect_slot, faculty: f, slot_at: 5.days.from_now
+      create :connect_slot, faculty: f, slot_at: 6.days.from_now
+    end
+  end
 
   scenario 'User visits faculty page' do
     visit coaches_index_path
 
-    # There should be three faculty cards.
-    expect(page).to have_selector('.faculty-card', count: 1)
+    # There should be a single faculty card.
+    expect(page).to have_selector('.faculty-card', count: 2)
 
-    # Two of these cards should have disabled connect buttons.
-    expect(page.find('.faculty-card', text: faculty.name)).to have_selector('.available-marker')
-    expect(page).to have_selector(".disabled.connect-link[title='Office hours are only available to active students']", count: 1)
+    # There should be no connect link on the page, since user isn't signed in.
+    expect(page).not_to have_selector('.connect-link')
   end
 
-  context 'User is founder of approved startup' do
-    let(:startup) { create :startup, :subscription_active }
-    let(:founder) { startup.founders.where.not(id: startup.team_lead.id).first }
-
-    before do
-      # Create another founder in startup.
-      create :founder, startup: startup
-    end
-
+  context 'When the user is a signed in founder' do
     context 'Team has a pending request with faculty' do
-      let!(:connect_request) { create :connect_request, connect_slot: connect_slot_1, startup: startup }
+      let!(:connect_request) { create :connect_request, connect_slot: faculty.connect_slots.first, startup: startup }
 
       scenario 'Founder visits faculty page' do
         sign_in_user(founder.user, referer: coaches_index_path)
 
-        # Two cards should have disabled connect buttons with a special message.
-        expect(page).to have_selector('.available-marker', count: 1)
+        # One of the cards should have disabled connect buttons with a special message.
         expect(page).to have_selector(".disabled.connect-link[title='You already have a pending office hour request " \
             "with this coach. Please write to help@sv.co if you would like to reschedule.']", count: 1)
       end

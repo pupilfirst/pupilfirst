@@ -55,17 +55,6 @@ export default class ResourcesBar extends React.Component {
             <span>&nbsp;Learn More</span>
           </a>
         )}
-
-        {this.props.target.has_rubric && (
-          <a
-            className="btn btn-with-icon btn-sm btn-ghost-secondary text-uppercase mb-2"
-            target="_blank"
-            href={"/targets/" + this.props.target.id + "/download_rubric"}
-          >
-            <i className="fa fa-download" />
-            <span>&nbsp;Download Rubric</span>
-          </a>
-        )}
       </div>
     );
   }

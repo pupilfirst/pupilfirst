@@ -5,13 +5,14 @@ module Users
   class AfterSignInPathResolverService
     include RoutesResolvable
 
-    def initialize(user)
+    def initialize(user, current_school)
       @user = user
+      @current_school = current_school
       raise "Can only resolve paths for instances of User. Given #{resource.class}." unless @user.is_a?(User)
     end
 
-    def after_sign_in_path(school)
-      school_admin_path(school) || faculty_path || admin_path || founder_path || root_path
+    def after_sign_in_path
+      school_admin_path(school) || faculty_path || admin_path || founder_path || exited_founder_path || root_path
     end
 
     private
@@ -23,7 +24,12 @@ module Users
     end
 
     def faculty_path
-      courses_with_review_dashboard = @user.faculty&.courses_with_dashboard
+      faculty = @user.faculty.find_by(school: @current_school)
+
+      return if faculty.blank?
+
+      courses_with_review_dashboard = faculty.courses_with_dashboard
+
       return if courses_with_review_dashboard.blank?
 
       url_helpers.course_coach_dashboard_path(courses_with_review_dashboard.first)
@@ -39,6 +45,13 @@ module Users
       return if @user.founders.not_exited.blank?
 
       url_helpers.student_dashboard_path
+    end
+
+    def exited_founder_path
+      exited_founder = @user.founders.where(exited: true).first
+      return if exited_founder.blank?
+
+      url_helpers.student_path(exited_founder)
     end
 
     def root_path

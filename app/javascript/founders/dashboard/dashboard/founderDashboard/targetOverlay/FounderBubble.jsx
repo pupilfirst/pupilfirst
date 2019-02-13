@@ -7,31 +7,11 @@ export default class FounderBubble extends React.Component {
     this.showTooltip = this.showTooltip.bind(this);
   }
 
-  statusIcon() {
-    if (this.props.status === "passed") {
-      return "fa fa-check-circle brand-primary";
-    } else if (this.props.status === "loading") {
-      return "fa fa-refresh fa-spin brand-primary";
-    } else {
-      return "fa fa-exclamation-circle alert-text";
-    }
-  }
-
-  statusDescription() {
-    let name = this.props.name;
-    let status = this.props.status;
-    if (status === "loading") {
-      return "Fetching target status for " + name + ".";
-    } else if (status === "passed") {
-      return name + " has passed this target.";
-    } else {
-      return name + " is yet to pass this target!";
-    }
-  }
-
   showTooltip(event) {
     let element = $(event.target.closest("a"));
-    element.tooltip({ title: this.statusDescription() });
+    element.tooltip({
+      title: this.props.name + " is yet to pass this target!"
+    });
   }
 
   hideTooltip(event) {
@@ -47,7 +27,7 @@ export default class FounderBubble extends React.Component {
         onMouseLeave={this.hideTooltip}
       >
         <div className="founder-dashboard__avatar-check">
-          <i className={this.statusIcon()} />
+          <i className={"fa fa-exclamation-circle alert-text"} />
         </div>
 
         <span dangerouslySetInnerHTML={{ __html: this.props.avatar }} />
@@ -58,6 +38,5 @@ export default class FounderBubble extends React.Component {
 
 FounderBubble.propTypes = {
   name: PropTypes.string,
-  avatar: PropTypes.string,
-  status: PropTypes.string
+  avatar: PropTypes.string
 };

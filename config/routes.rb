@@ -22,17 +22,7 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
 
   # TODO: Remove these founder routes as we no longer have 'founders'. Always use the corresponding 'student' routes below.
-  resource :founder, only: %i[edit update] do
-    member do
-      get 'fee'
-      post 'fee', action: 'fee_submit'
-
-      scope module: 'founders', controller: 'dashboard' do
-        get 'dashboard'
-        get 'dashboard/targets/:id(/:slug)', action: 'target_overlay', as: 'dashboard_target'
-      end
-    end
-  end
+  resource :founder, only: %i[edit update]
 
   resource :school, only: %i[show update]
 
@@ -104,32 +94,10 @@ Rails.application.routes.draw do
     post 'disconnect'
   end
 
-  # TODO: Remove these startup routes as we no longer have 'startups'. Always use the corresponding 'product' routes below.
-  resource :startup, only: %i[edit update] do
+  resource :startup, only: [] do
     member do
       post 'level_up'
-      get 'billing'
     end
-  end
-
-  resources :startups, only: %i[index] do
-    member do
-      get 'events/:page', action: 'paged_events', as: 'paged_events'
-
-      # TODO: Preserve this path for a while to allow old shares to work. This has been replaced by timeline_event_show path below.
-      get ':event_title/:event_id', action: 'timeline_event_show'
-    end
-  end
-
-  get 'startups/:id(/:slug)', to: 'startups#show', as: 'timeline'
-  get 'startups/:id/:slug/e/:event_id/:event_title', to: 'startups#timeline_event_show', as: 'timeline_event_show'
-
-  get 'product/edit', to: 'startups#edit', as: 'edit_product'
-
-  scope 'products', controller: 'startups' do
-    get '/', action: 'index', as: 'products', constraints: SvConstraint.new
-    get '/:id(/:slug)', action: 'show', as: 'product'
-    get '/:id/:slug/e/:event_id/:event_title', action: 'timeline_event_show', as: 'product_timeline_event_show'
   end
 
   resources :timeline_event_files, only: [] do
@@ -177,30 +145,11 @@ Rails.application.routes.draw do
     patch ':id/feedback/comment/:token', action: 'comment_submit', as: 'comment_submit'
   end
 
-  scope 'admissions', as: 'admissions', controller: 'admissions', constraints: SvConstraint.new do
-    get 'screening'
-    get 'screening_submit'
-    post 'screening_submit_webhook'
-    post 'coupon_submit'
-    patch 'coupon_remove'
-    get 'team_members'
-    post 'team_members', action: 'team_members_submit'
-    post 'team_lead'
-    get 'accept_invitation'
-    patch 'update_founder'
-  end
+  resources :prospective_applicants, only: %i[create]
 
-  resources :prospective_applicants, only: %i[create], constraints: SvConstraint.new
-
-  resources :colleges, only: :index, constraints: SvConstraint.new
+  resources :colleges, only: :index
 
   resource :platform_feedback, only: %i[create]
-
-  # Redirect + webhook from Instamojo
-  scope 'instamojo', as: 'instamojo', controller: 'instamojo', constraints: SvConstraint.new do
-    get 'redirect'
-    post 'webhook'
-  end
 
   # Founder show
   scope 'students', controller: 'founders' do
@@ -225,7 +174,6 @@ Rails.application.routes.draw do
     get 'select2_search', on: :collection
 
     member do
-      get 'download_rubric'
       get 'prerequisite_targets'
       get 'startup_feedback'
       get 'details'
@@ -247,23 +195,26 @@ Rails.application.routes.draw do
 
   resource :impersonation, only: %i[destroy]
 
-  scope 'intercom', as: 'intercom', controller: 'intercom', constraints: SvConstraint.new do
+  scope 'intercom', as: 'intercom', controller: 'intercom' do
     post 'user_create', action: 'user_create_webhook'
     post 'unsubscribe', action: 'email_unsubscribe_webhook'
   end
 
-  match '/trello/bug_webhook', to: 'trello#bug_webhook', via: :all, constraints: SvConstraint.new
+  match '/trello/bug_webhook', to: 'trello#bug_webhook', via: :all
 
-  post '/heroku/deploy_webhook', to: 'heroku#deploy_webhook', constraints: SvConstraint.new
+  post '/heroku/deploy_webhook', to: 'heroku#deploy_webhook'
 
   # Handle incoming unsubscribe webhooks from SendInBlue
   post '/send_in_blue/unsubscribe', to: 'send_in_blue#unsubscribe_webhook'
 
   # Handle redirects of short URLs.
-  get 'r/:unique_key', to: 'shortened_urls#redirect', as: 'short_redirect', constraints: SvConstraint.new
+  get 'r/:unique_key', to: 'shortened_urls#redirect', as: 'short_redirect'
 
   get '/school_admin', to: 'school_admins#dashboard'
 
   get '/oauth/:provider', to: 'home#oauth', as: 'oauth', constraints: PupilFirstConstraint.new
   get '/oauth_error', to: 'home#oauth_error', as: 'oauth_error'
+
+  # Allow developers to simulate the error pages.
+  get '/errors/:error_type', to: 'errors#simulate', constraints: DevelopmentConstraint.new
 end

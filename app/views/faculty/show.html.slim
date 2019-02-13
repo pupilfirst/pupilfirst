@@ -7,7 +7,7 @@
   .row
     .col-lg-3.col-md-5
       .faculty-profile-card
-        = image_tag @faculty.image_url, class: 'img-responsive faculty-profile-image'
+        = image_tag(@faculty.image_or_avatar_url(background_shape: :square), class: 'img-responsive faculty-profile-image')
 
         .faculty-profile-title
           h3.text-center.text-uppercase.font-semibold
@@ -49,12 +49,13 @@
                 | About
               p #{@faculty.about}
 
-            .faculty-summary-section
-              h4.skills-icon.text-uppercase.font-semibold
-                | Skills
-              p.skill-box
-                - @faculty.key_skills.split(',').each do |skill|
-                  span = skill
+            - if @faculty.key_skills.present?
+              .faculty-summary-section
+                h4.skills-icon.text-uppercase.font-semibold
+                  | Skills
+                p.skill-box
+                  - @faculty.key_skills.split(',').each do |skill|
+                    span = skill
 
           - if sidebar_present?(@faculty)
             .col-lg-5.col-md-12.faculty-connect

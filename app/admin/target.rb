@@ -1,9 +1,8 @@
 ActiveAdmin.register Target do
   actions :all, except: [:destroy]
 
-  permit_params :faculty_id, :role, :title, :description, :resource_url, :completion_instructions, :days_to_complete,
-    :slideshow_embed, :video_embed, :completed_at, :completion_comment, :rubric, :link_to_complete, :key, :archived,
-    :remote_rubric_url, :target_group_id, :target_action_type, :points_earnable,
+  permit_params :faculty_id, :role, :title, :description, :rubric_description, :resource_url, :completion_instructions, :days_to_complete,
+    :slideshow_embed, :video_embed, :completed_at, :completion_comment, :link_to_complete, :archived, :target_group_id, :target_action_type, :points_earnable,
     :sort_index, :youtube_video_id, :session_at, :session_by, :call_to_action,
     prerequisite_target_ids: [], tag_list: [], evaluation_criterion_ids: []
 
@@ -91,7 +90,6 @@ ActiveAdmin.register Target do
 
     attributes_table do
       row :title
-      row :key
       row :session_at
 
       row :tags do |founder|
@@ -126,12 +124,6 @@ ActiveAdmin.register Target do
         end
       end
 
-      row :rubric do
-        if target.rubric.present?
-          link_to target.rubric_identifier, target.rubric.url
-        end
-      end
-
       row :description do
         target.description.html_safe
       end
@@ -159,6 +151,7 @@ ActiveAdmin.register Target do
       row :completion_comment
       row :link_to_complete
       row :resubmittable
+      row :rubric_description
       row :archived do
         div class: 'target-show__archival-status' do
           target.archived ? 'Yes' : 'No'
@@ -285,7 +278,6 @@ ActiveAdmin.register Target do
     f.inputs name: 'Target Details' do
       f.input :role, as: :select, collection: Target.valid_roles.map { |r| [t("models.target.role.#{r}"), r] }, include_blank: false
       f.input :title
-      f.input :key, as: :select, collection: Target.valid_keys
       f.input :session_at, as: :string, input_html: { class: 'date-time-picker', data: { format: 'Y-m-d H:i:s O' } }
       f.input :tag_list, as: :select, collection: Target.tag_counts_on(:tags).pluck(:name), multiple: true
 
@@ -320,10 +312,9 @@ ActiveAdmin.register Target do
       f.input :target_group, collection: TargetGroup.all.includes(:course, :level).order('courses.name ASC, levels.number ASC')
       f.input :sort_index
       f.input :days_to_complete
-      f.input :rubric, as: :file
-      f.input :remote_rubric_url
       f.input :resubmittable
       f.input :evaluation_criteria, collection: EvaluationCriterion.all.map { |ec| [ec.display_name.to_s, ec.id] }
+      f.input :rubric_description
     end
 
     f.actions

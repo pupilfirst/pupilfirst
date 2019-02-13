@@ -1,7 +1,6 @@
 class TimelineEventsController < ApplicationController
   before_action :authenticate_user!
   before_action :authenticate_founder!, except: %i[review undo_review send_feedback]
-  before_action :require_active_subscription, except: %i[create review undo_review send_feedback]
   # TODO: Move the above 'authorization' checks to policies.
 
   # POST /timeline_events

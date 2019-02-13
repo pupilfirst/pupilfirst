@@ -1,8 +1,8 @@
 class ApplicationController < ActionController::Base
   include Pundit
 
-  # Prevent CSRF attacks by resetting user session. Note that this is different from the default of :exception.
-  protect_from_forgery with: :reset_session
+  # Prevent CSRF attacks by raising an exception. Note that this is different from the default of :null_session.
+  protect_from_forgery with: :exception
 
   # Activate pretender.
   impersonates :user
@@ -11,7 +11,6 @@ class ApplicationController < ActionController::Base
   after_action :prepare_unobtrusive_flash
   before_action :sign_out_if_required
   before_action :pretender
-  before_action :cache_in_current_user
 
   helper_method :current_host
   helper_method :current_domain
@@ -50,7 +49,7 @@ class ApplicationController < ActionController::Base
     elsif resource.is_a?(AdminUser)
       super
     else
-      Users::AfterSignInPathResolverService.new(resource).after_sign_in_path(current_school)
+      Users::AfterSignInPathResolverService.new(resource, current_school).after_sign_in_path
     end
   end
 
@@ -76,7 +75,7 @@ class ApplicationController < ActionController::Base
       resolved_school = current_domain&.school
 
       if Rails.env.test?
-        School.first
+        School.find_by(name: 'test')
       elsif current_host.in?(Rails.application.secrets.pupilfirst_domains)
         nil
       elsif resolved_school.present?
@@ -88,7 +87,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_coach
-    @current_coach ||= current_user&.faculty
+    @current_coach ||= current_user.present? ? current_user.faculty.find_by(school: current_school) : nil
   end
 
   def current_founder
@@ -143,26 +142,21 @@ class ApplicationController < ActionController::Base
     @current_ability ||= ::Ability.new(true_user)
   end
 
-  private
-
-  def require_active_subscription
-    return if current_founder.subscription_active?
-
-    flash[:error] = 'You do not have an active subscription. Please renew your subscription and try again.'
-    redirect_to fee_founder_url
+  def pundit_user
+    OpenStruct.new(
+      current_user: current_user,
+      current_founder: current_founder,
+      current_school: current_school,
+      current_coach: current_coach
+    )
   end
+
+  private
 
   def sign_out_if_required
     service = ::Users::ManualSignOutService.new(self, current_user)
     service.sign_out_if_required
     redirect_to root_url if service.signed_out?
-  end
-
-  def cache_in_current_user
-    return if current_user.blank?
-
-    current_user.current_founder = current_founder
-    current_user.current_school = current_school
   end
 
   def authenticate_founder!

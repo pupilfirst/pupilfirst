@@ -18,7 +18,7 @@ export default class TargetOverlay extends React.Component {
         latestEvent: null,
         latestFeedback: null,
         linkedResources: null,
-        founderStatuses: null,
+        pendingFounderIds: [],
         grades: null,
         quizQuestions: null,
         showQuiz: false
@@ -69,7 +69,9 @@ export default class TargetOverlay extends React.Component {
 
   resubmissionAllowed() {
     let target = this.getTarget();
-    return !target.auto_verified && ["passed", "failed"].includes(target.status);
+    return (
+      !target.auto_verified && ["passed", "failed"].includes(target.status)
+    );
   }
 
   isPending() {
@@ -80,7 +82,7 @@ export default class TargetOverlay extends React.Component {
     if (this.props.currentLevel == 0) {
       $(".js-founder-dashboard__action-bar-add-event-button").popover("show");
 
-      setTimeout(function () {
+      setTimeout(function() {
         $(".js-founder-dashboard__action-bar-add-event-button").popover("hide");
       }, 3000);
     } else {
@@ -117,7 +119,7 @@ export default class TargetOverlay extends React.Component {
       headers: {
         "content-type": "application/json"
       }
-    }).then((response) => {
+    }).then(response => {
       if (response.ok) {
         new PNotify({
           title: "Done!",
@@ -145,7 +147,7 @@ export default class TargetOverlay extends React.Component {
       latestEvent: response.latestEvent,
       latestFeedback: response.latestFeedback,
       linkedResources: response.linkedResources,
-      founderStatuses: response.founderStatuses,
+      pendingFounderIds: response.pendingFounderIds,
       grades: response.grades,
       quizQuestions: response.quizQuestions
     });
@@ -164,7 +166,6 @@ export default class TargetOverlay extends React.Component {
   render() {
     const target = this.getTarget();
     const faculty = this.getFaculty(target);
-
     return (
       <div className="target-overlay__overlay">
         <div className="target-overlay__container mx-auto">
@@ -200,53 +201,46 @@ export default class TargetOverlay extends React.Component {
                 submitTargetCB={this.autoVerify}
               />
             ) : (
-                <div className="target-overlay__content-wrapper clearfix">
-                  <div className="col-md-8 target-overlay__content-leftbar">
-                    <ContentBlock
+              <div className="target-overlay__content-wrapper clearfix">
+                <div className="col-md-8 target-overlay__content-leftbar">
+                  <ContentBlock
+                    rootProps={this.props.rootProps}
+                    iconPaths={this.props.iconPaths}
+                    target={target}
+                    linkedResources={this.state.linkedResources}
+                  />
+                </div>
+                <div className="col-md-4 target-overlay__content-rightbar px-0">
+                  <div className="target-overlay__status-badge-block">
+                    <StatusBadgeBar
                       rootProps={this.props.rootProps}
-                      iconPaths={this.props.iconPaths}
+                      completeTargetCB={this.completeTarget}
                       target={target}
-                      linkedResources={this.state.linkedResources}
+                      openTimelineBuilderCB={this.props.openTimelineBuilderCB}
+                      autoVerifyCB={this.autoVerify}
+                      invertShowQuizCB={this.invertShowQuiz}
+                      isSubmittable={this.isSubmittable()}
+                      overlayLoaded={this.state.quizQuestions !== null}
                     />
                   </div>
-                  <div className="col-md-4 target-overlay__content-rightbar px-0">
-                    <div className="target-overlay__status-badge-block">
-                      <StatusBadgeBar
-                        rootProps={this.props.rootProps}
-                        completeTargetCB={this.completeTarget}
-                        target={target}
-                        openTimelineBuilderCB={this.props.openTimelineBuilderCB}
-                        autoVerifyCB={this.autoVerify}
-                        invertShowQuizCB={this.invertShowQuiz}
-                        isSubmittable={this.isSubmittable()}
-                        overlayLoaded={this.state.quizQuestions !== null}
-                      />
-                    </div>
 
-                    {_.isObject(faculty) && <FacultyBlock faculty={faculty} />}
+                  {_.isObject(faculty) && <FacultyBlock faculty={faculty} />}
 
-                    {this.state.latestEvent && (
-                      <TimelineEventPanel
-                        event={this.state.latestEvent}
-                        feedback={this.state.latestFeedback}
-                      />
-                    )}
-                    {target.role === "founder" &&
-                      !this.props.hasSingleFounder && (
-                        <div className="my-3 px-4">
-                          <h5 className="target-overaly__status-title font-semibold">
-                            Completion Status:
-                        </h5>
-                          <FounderStatusPanel
-                            founderDetails={this.props.founderDetails}
-                            founderStatuses={this.state.founderStatuses}
-                            targetId={this.targetId}
-                          />
-                        </div>
-                      )}
-                  </div>
+                  {this.state.latestEvent && (
+                    <TimelineEventPanel
+                      event={this.state.latestEvent}
+                      feedback={this.state.latestFeedback}
+                    />
+                  )}
+
+                  <FounderStatusPanel
+                    founderDetails={this.props.founderDetails}
+                    pendingFounderIds={this.state.pendingFounderIds}
+                    targetId={this.targetId}
+                  />
                 </div>
-              )}
+              </div>
+            )}
           </div>
         </div>
         <div className="target-overlay__mobile-fixed-navbar d-block d-md-none">

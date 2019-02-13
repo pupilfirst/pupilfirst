@@ -4,35 +4,12 @@ import TargetCollection from "./TargetCollection";
 
 export default class Targets extends React.Component {
   targetGroups() {
-    if (this.props.rootState.activeTrackId === "sessions") {
-      return _.filter(this.props.rootProps.targetGroups, ['name','Sessions'])
-    }
+    let levelToShow = (this.props.rootState.selectedTab === 'levelZero') ?
+      this.props.rootProps.levels.find(level => {return level.number == 0;}) :
+      this.props.rootState.selectedLevel;
 
-    let activeTrackId = null;
-
-    if (this.props.rootState.activeTrackId !== "default") {
-      activeTrackId = this.props.rootState.activeTrackId;
-    }
-
-    const chosenLevelId = this.props.rootState.chosenLevelId;
-
-    // Return target groups that are in the selected track.
-    const filteredTargetGroups = _.filter(this.props.rootProps.targetGroups, targetGroup => {
-      // Exclude the sessions group
-      if (targetGroup.name === 'Sessions') {
-        return false;
-      }
-
-      if (targetGroup.level.id !== chosenLevelId) {
-        return false;
-      }
-
-      // If target group is in a track, check if track ID matches. If not in track, the activeTrackID must be null.
-      if (_.isObject(targetGroup.track)) {
-        return targetGroup.track.id === activeTrackId;
-      } else {
-        return activeTrackId === null;
-      }
+    let filteredTargetGroups = this.props.rootProps.targetGroups.filter(targetGroup => {
+      return targetGroup.level.id === levelToShow.id;
     });
 
     return _.sortBy(filteredTargetGroups, ["sort_index"]);

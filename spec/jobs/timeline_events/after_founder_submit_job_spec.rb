@@ -5,7 +5,7 @@ describe TimelineEvents::AfterFounderSubmitJob do
 
   let(:faculty) { create :faculty }
   let(:inactive_faculty) { create :faculty, inactive: true }
-  let(:startup) { create :startup, :subscription_active }
+  let(:startup) { create :startup }
   let(:timeline_event) { create :timeline_event, founders: startup.founders }
   let(:mock_service) { instance_double(TimelineEvents::MarkAsImprovedTargetService, execute: nil) }
 
@@ -42,14 +42,14 @@ describe TimelineEvents::AfterFounderSubmitJob do
       end
 
       context 'when the submission was from a single founder' do
-        let(:timeline_event) { create :timeline_event, founders: [startup.team_lead] }
+        let(:timeline_event) { create :timeline_event, founders: [startup.founders.first] }
 
         it 'sends a notification email mentioning submission from single founder' do
           subject.perform_now(timeline_event)
 
           open_email(faculty.email)
 
-          expect(current_email.body).to include("We have received a new submission from #{startup.team_lead.name}")
+          expect(current_email.body).to include("We have received a new submission from #{startup.founders.first.name}")
         end
       end
     end

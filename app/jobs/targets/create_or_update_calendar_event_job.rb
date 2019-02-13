@@ -57,8 +57,6 @@ module Targets
       applicable_startups = Startup.where(level: eligible_levels)
 
       (applicable_startups.distinct.map do |startup|
-        next unless startup.subscription_active?
-
         startup.founders.map do |founder|
           {
             'email' => founder.email,

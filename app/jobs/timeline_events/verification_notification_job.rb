@@ -9,9 +9,6 @@ module TimelineEvents
       @timeline_event = timeline_event
       @startup = @timeline_event.startup
 
-      # not applicable for level zero startups
-      return if @startup.level_zero?
-
       @startup_url = Rails.application.routes.url_helpers.product_url(@startup.id, @startup.slug)
 
       # return if invoked for a pending event - Pending events have no associated notifications, yet

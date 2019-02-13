@@ -1,7 +1,7 @@
 class ResourcesController < ApplicationController
   # GET /library
   def index
-    resources = policy_scope(Resource.live.left_joins(:level)).includes(:tags)
+    resources = policy_scope(Resource)
     @form = Resources::FilterForm.new(Reform::OpenForm.new)
 
     filtered_resources, page = if @form.validate(filter_params)

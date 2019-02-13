@@ -1,3 +1,5 @@
+- presenter = NavLinksPresenter.new(self)
+
 #sv-navbar.collapse.navbar-collapse.justify-content-end.navbar-link__container
   ul.navbar-nav.align-items-lg-center itemscope="itemscope" itemtype="http://www.schema.org/SiteNavigationElement"
     - unless current_founder
@@ -22,11 +24,6 @@
     - if current_founder && !current_founder.exited && current_founder.startup.present?
       li.nav-item.navbar-nav__nav-item role="presentation"
         a.nav-item__link href="#{student_dashboard_url}" Dashboard
-    - if current_founder&.startup.present? && policy(current_founder.startup).show?
-      / li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
-        a#sv-navbar__timeline-link.nav-item__link href="#{product_url(current_founder.startup.id, current_founder.startup.slug)}" Timeline
-    / li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
-      = link_to 'Teams', startups_path, class: 'nav-item__link', id: 'sv-navbar__startups-link'
     / - unless current_founder
     /   li.nav-item.navbar-nav__nav-item role="presentation" itemprop="name"
     /     = link_to 'Invest/Hire', talent_path, class: 'nav-item__link', id: 'sv-navbar__talent-link'
@@ -48,27 +45,21 @@
             .navbar__avatar-wrapper
               == avatar(current_founder.name, founder: current_founder)
           ul.dropdown-menu
-            - if policy(current_founder).founder_profile?
+            - if policy(current_founder).show?
               li role="presentation"
                 = link_to student_path(slug: current_founder.slug) do
                   i.fa.fa-list-ul
                   | Profile
-            - if policy(current_startup).billing?
-              li role="presentation"
-                = link_to billing_startup_path do
-                  i.fa.fa-credit-card
-                  | Billing
             - if policy(PlatformFeedback).create?
               li role="presentation"
                 a href="#" data-toggle="modal" data-target="#platform-feedback-modal"
                   i.fa.fa-comment-o
                   | Submit Feedback
-            - if policy(current_founder).select?
-              - current_user.founders.not_exited.where.not(id: current_founder.id).each do |other_founder|
-                li role="presentation"
-                  = link_to(select_founder_path(other_founder), method: :post) do
-                    i.fa.fa-university
-                    = "#{other_founder.startup.course.name} Course"
+            - presenter.selectable_student_profiles.each do |other_founder|
+              li role="presentation"
+                = link_to(select_founder_path(other_founder), method: :post) do
+                  i.fa.fa-university
+                  = "#{other_founder.startup.course.name} Course"
             li role="presentation"
               = link_to destroy_user_session_path, method: :delete do
                 i.fa.fa-sign-out

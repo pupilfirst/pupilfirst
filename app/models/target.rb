@@ -7,18 +7,6 @@ class Target < ApplicationRecord
   # Need to allow these two to be read for AA form.
   attr_reader :startup_id, :founder_id
 
-  KEY_SCREENING = 'screening'
-  KEY_COFOUNDER_ADDITION = 'cofounder_addition'
-  KEY_R1_TASK = 'r1_task'
-  KEY_R1_SHOW_PREVIOUS_WORK = 'r1_show_previous_work'
-  KEY_R2_TASK = 'r2_task'
-  KEY_ATTEND_INTERVIEW = 'attend_interview'
-  KEY_FEE_PAYMENT = 'initial_fee_payment'
-
-  def self.valid_keys
-    [KEY_SCREENING, KEY_COFOUNDER_ADDITION, KEY_R1_TASK, KEY_R1_SHOW_PREVIOUS_WORK, KEY_R2_TASK, KEY_ATTEND_INTERVIEW, KEY_FEE_PAYMENT].freeze
-  end
-
   STATUS_COMPLETE = :complete
   STATUS_NEEDS_IMPROVEMENT = :needs_improvement
   STATUS_SUBMITTED = :submitted
@@ -48,7 +36,6 @@ class Target < ApplicationRecord
   has_one :quiz, dependent: :restrict_with_error
 
   acts_as_taggable
-  mount_uploader :rubric, RubricUploader
 
   scope :live, -> { joins(:target_group).where(archived: [false, nil]) }
   scope :founder, -> { where(role: ROLE_FOUNDER) }
@@ -128,7 +115,7 @@ class Target < ApplicationRecord
     end
   end
 
-  normalize_attribute :key, :slideshow_embed, :video_embed
+  normalize_attribute :slideshow_embed, :video_embed
 
   def display_name
     if target_group.present?
@@ -140,10 +127,6 @@ class Target < ApplicationRecord
 
   def founder_role?
     role == Target::ROLE_FOUNDER
-  end
-
-  def rubric_filename
-    rubric.sanitized_file.original_filename
   end
 
   def status(founder)
@@ -175,10 +158,6 @@ class Target < ApplicationRecord
     role == ROLE_FOUNDER
   end
 
-  def rubric?
-    target_evaluation_criteria.exists? || rubric_url.present?
-  end
-
   def quiz?
     quiz.present?
   end
@@ -186,9 +165,6 @@ class Target < ApplicationRecord
   def team_target?
     role == ROLE_TEAM
   end
-
-  # this is included in the target JSONs the DashboardDataService responds with
-  alias has_rubric rubric?
 
   # Returns the latest event linked to this target from a founder. If a team target, it responds with the latest event from the team
   def latest_linked_event(founder, exclude = nil)

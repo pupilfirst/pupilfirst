@@ -20,6 +20,6 @@ class PlatformFeedbackController < ApplicationController
   private
 
   def platform_feedback_params
-    params.require(:platform_feedback).permit(:founder_id, :feedback_type, :description, :attachment, :promoter_score)
+    params.require(:platform_feedback).permit(:founder_id, :feedback_type, :description, :promoter_score)
   end
 end

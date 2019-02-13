@@ -7,8 +7,8 @@ feature 'Target Overlay' do
   let(:course) { create :course }
   let(:criterion) { create :evaluation_criterion, course: course }
   let!(:level_1) { create :level, :one, course: course }
-  let!(:startup) { create :startup, :subscription_active, level: level_1 }
-  let!(:founder) { startup.team_lead }
+  let!(:startup) { create :startup, level: level_1 }
+  let!(:founder) { startup.founders.first }
   let!(:target_group_1) { create :target_group, level: level_1, milestone: true }
   let!(:target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM }
   let!(:prerequisite_target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM }
@@ -95,7 +95,7 @@ feature 'Target Overlay' do
       # Within the faculty box:
       within('.target-overlay__faculty-box') do
         expect(page).to have_text("Assigned by:\n#{target.faculty.name}")
-        expect(page).to have_selector(".target-overlay__faculty-avatar > img[src='#{target.faculty.image_url}']")
+        expect(page).to have_selector('.target-overlay__faculty-avatar > img')
       end
     end
 
@@ -139,7 +139,7 @@ feature 'Target Overlay' do
 
         # Latest Feedback.
         expect(page).to have_selector('.target-overlay-timeline-event-panel__feedback > p', text: feedback.feedback)
-        expect(page).to have_selector(".target-overlay-timeline-event-panel__feedback > div > span > img[src='#{faculty.image_url}']")
+        expect(page).to have_selector('.target-overlay-timeline-event-panel__feedback > div > span > img')
         expect(page).to have_selector('.target-overlay-timeline-event-panel__feedback > div > h6 > span', text: faculty.name)
 
         # Slack connect button.
@@ -161,9 +161,8 @@ feature 'Target Overlay' do
       find('.founder-dashboard-target-header__headline', text: target.title).click
 
       within('.target-overlay__content-rightbar') do
-        expect(page).to have_selector('.target-overaly__status-title', text: 'Completion Status')
-        expect(page).to have_selector('.founder-dashboard__avatar-wrapper', count: 2)
-        # TODO: Also check if the right people have the right status. This is now blocked by the bug reported here: https://trello.com/c/P9RNQQ3N
+        expect(page).to have_selector('.target-overaly__status-title', text: 'Pending Team Members')
+        expect(page).to have_selector('.founder-dashboard__avatar-wrapper', count: 1)
       end
     end
   end

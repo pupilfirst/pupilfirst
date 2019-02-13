@@ -151,7 +151,7 @@ ActiveAdmin.register ConnectRequest do
 
     f.inputs 'Connect Request Details' do
       f.input :connect_slot,
-        collection: (resource.persisted? ? ConnectSlot.available(optional_id: resource.connect_slot.id) : ConnectSlot.available).includes(:faculty),
+        collection: (resource.persisted? ? ConnectSlot.available.or(ConnectSlot.includes(:connect_request).where(id: resource.connect_slot.id)) : ConnectSlot.available).includes(:faculty),
         required: true
       f.input :startup, label: 'Product', collection: Startup.approved.order(:product_name), required: true
       f.input :questions

@@ -2,7 +2,6 @@ module Founders
   class DashboardController < ApplicationController
     before_action :authenticate_founder!
     before_action :skip_container
-    before_action :require_active_subscription, if: :startup_is_admitted
 
     # GET /founder/dashboard, GET /student/dashboard
     def dashboard
@@ -29,7 +28,7 @@ module Founders
     def startup_is_admitted
       return if current_founder.blank?
 
-      current_startup.present? && !current_startup.level_zero?
+      current_startup.present?
     end
 
     def skip_container

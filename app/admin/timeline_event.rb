@@ -8,7 +8,6 @@ ActiveAdmin.register TimelineEvent do
   filter :created_at
 
   scope :from_admitted_startups, default: true
-  scope :from_level_0_startups
   scope :all
 
   config.sort_order = 'updated_at_desc'
@@ -111,16 +110,6 @@ ActiveAdmin.register TimelineEvent do
   #     link_to 'Review Timeline Events', review_timeline_events_admin_timeline_events_path
   #   end
   # end
-
-  collection_action :review_timeline_events do
-    if can? :quick_review, TimelineEvent
-      @review_data = TimelineEvents::ReviewDataService.new.data
-      render 'review_timeline_events'
-    else
-      flash[:error] = 'Not authorized to access page.'
-      redirect_to admin_timeline_events_path
-    end
-  end
 
   action_item :view, only: :show do
     link_to('View Timeline Entry', timeline_event.share_url, target: '_blank', rel: 'noopener')

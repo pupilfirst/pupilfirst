@@ -1,5 +1,5 @@
 ActiveAdmin.register Resource do
-  permit_params :title, :description, :file, :thumbnail, :level_id, :startup_id, :video_embed, :link, :archived, tag_list: [], target_ids: []
+  permit_params :title, :description, :file, :video_embed, :link, :archived, :public, :school_id, tag_list: [], target_ids: []
 
   controller do
     include DisableIntercom
@@ -9,18 +9,16 @@ ActiveAdmin.register Resource do
     end
   end
 
-  filter :startup_product_name, as: :string, label: 'Product Name'
-
   filter :ransack_tagged_with,
     as: :select,
     multiple: true,
     label: 'Tags',
     collection: -> { Resource.tag_counts_on(:tags).pluck(:name).sort }
 
-  filter :level, collection: -> { Level.all.order(number: :asc) }
   filter :title
   filter :description
   filter :archived
+  filter :school
 
   batch_action :tag, form: proc { { tag: Resource.tag_counts_on(:tags).pluck(:name) } } do |ids, inputs|
     Resource.where(id: ids).each do |resource|
@@ -34,16 +32,8 @@ ActiveAdmin.register Resource do
   index do
     selectable_column
 
-    column 'Shared with' do |resource|
-      if resource.startup.present?
-        link_to resource.startup.product_name, admin_startup_path(resource.startup)
-      elsif resource.level.present?
-        link_to resource.level.display_name, admin_level_path(resource.level)
-      else
-        'Public'
-      end
-    end
-
+    column :public
+    column :school
     column :title
     column :downloads
 
@@ -56,16 +46,6 @@ ActiveAdmin.register Resource do
 
   show do
     attributes_table do
-      row 'Shared with' do |resource|
-        if resource.startup.present?
-          link_to resource.startup.product_name, admin_startup_path(resource.startup)
-        elsif resource.level.present?
-          link_to resource.level.display_name, admin_level_path(resource.level)
-        else
-          'Public'
-        end
-      end
-
       row :title
       row :downloads
 
@@ -82,14 +62,6 @@ ActiveAdmin.register Resource do
         resource.link&.html_safe
       end
 
-      row :thumbnail do |resource|
-        if resource.thumbnail.present?
-          image_tag resource.thumbnail_url
-        else
-          image_tag 'resources/shared/default-thumbnail.png'
-        end
-      end
-
       row :file_content_type
       row :created_at
       row :updated_at
@@ -101,6 +73,8 @@ ActiveAdmin.register Resource do
       end
 
       row :archived
+      row :public
+      row :school
     end
   end
 
@@ -110,10 +84,7 @@ ActiveAdmin.register Resource do
     f.semantic_errors(*f.object.errors.keys)
 
     f.inputs 'Resource details' do
-      f.input :level, label: 'Shared with Level', include_blank: 'Share with all levels'
-      f.input :startup, label: 'Shared with Startup', collection: f.object.startup.present? ? [[f.object.startup.name_with_team_lead, f.object.startup.id]] : []
       f.input :file, as: :file
-      f.input :thumbnail, as: :file
       f.input :title
       f.input :description
       f.input :video_embed
@@ -126,6 +97,8 @@ ActiveAdmin.register Resource do
 
       f.input :targets, collection: f.object.targets
       f.input :archived
+      f.input :school
+      f.input :public
     end
 
     f.actions

@@ -5,15 +5,15 @@ class Resource < ApplicationRecord
   friendly_id :slug_candidates, use: %i[slugged finders]
   acts_as_taggable
 
-  belongs_to :startup, optional: true
-  belongs_to :level, optional: true
+  belongs_to :school
   has_many :target_resources, dependent: :destroy
   has_many :targets, through: :target_resources
+  has_one_attached :file_as
 
   def slug_candidates
     [
       :title,
-      %i[title updated_at]
+      %i[title id]
     ]
   end
 
@@ -34,9 +34,8 @@ class Resource < ApplicationRecord
   end
 
   mount_uploader :file, ResourceFileUploader
-  mount_uploader :thumbnail, ResourceThumbnailUploader
 
-  scope :public_resources, -> { where(level_id: nil).order('title') }
+  scope :public_resources, -> { where(public: true).order('title') }
   # scope to search title
   scope :title_matches, ->(search_key) { where("lower(title) LIKE ?", "%#{search_key.downcase}%") }
 
@@ -47,10 +46,6 @@ class Resource < ApplicationRecord
 
   def self.ransackable_scopes(_auth)
     %i[ransack_tagged_with]
-  end
-
-  def level_exclusive?
-    level.present?
   end
 
   def stream?

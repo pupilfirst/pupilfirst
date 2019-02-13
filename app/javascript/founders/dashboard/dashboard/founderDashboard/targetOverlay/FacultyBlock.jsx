@@ -10,7 +10,7 @@ export default class FacultyBlock extends React.Component {
     return (
       <div className="target-overlay__faculty-box px-4 mt-3">
         <span className="target-overlay__faculty-avatar mr-2">
-          <img className="img-fluid" src={this.props.faculty.image_url} />
+          <img className="img-fluid" src={this.props.faculty.image_or_avatar_url} />
         </span>
 
         <h5 className="target-overlay__faculty-name m-0">

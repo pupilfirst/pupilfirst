@@ -7,38 +7,26 @@ class ResourcePolicy < ApplicationPolicy
     show?
   end
 
-  def scope
-    Pundit.policy_scope!(user, Resource.left_joins(:level))
-  end
-
   class Scope < Scope
     def resolve
-      # Public resources for everyone.
-      resources = scope.where(level_id: nil, startup_id: nil)
+      # Return nothing if visiting a PupilFirst page.
+      return scope.none if current_school.blank?
 
-      current_founder = user&.current_founder
+      resources = scope.live.joins(:school).left_joins(:targets)
 
-      # Return public resources if current founder does not have active subscription...
-      return resources unless current_founder.present? && current_founder.subscription_active?
+      public_resources = resources.where(schools: { id: current_school }).where(public: true)
 
-      startup = current_founder.startup
+      # Return only public resources in current school if no founder is signed in.
+      return public_resources if current_founder.blank?
 
-      return resources if startup.dropped_out?
+      # resources linked to targets of the course founder is enrolled in
+      target_linked_resources = resources.where(targets: { id: current_founder.course.targets.select(:id) })
 
-      # ...plus resources for the startup...
-      resources = resources.or(scope.where(startup: startup))
+      # private resources not linked to target
+      private_resources_without_target = resources.where(schools: { id: current_school }).where(public: false)
 
-      # ...plus resources based on the startup's course...
-      resources = resources.or(scope.where('levels.course_id = ?', startup.course.id))
-
-      # ...plus resources based on targets (for cloned courses)
-      resources.or(scope.where(id: target_resource_ids(startup.course)))
-    end
-
-    def target_resource_ids(course)
-      allowed_target_ids = course.targets.pluck(:id)
-
-      TargetResource.where(target_id: allowed_target_ids).pluck(:resource_id)
+      # Return public resources and private course resources where founder is member.
+      public_resources.or(target_linked_resources).or(private_resources_without_target)
     end
   end
 end

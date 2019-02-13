@@ -5,6 +5,8 @@ module Startups
     end
 
     def assign(faculty)
+      raise 'Faculty must in same school as team' if faculty.school != @startup.school
+
       return if faculty.startups.where(id: @startup).exists?
       return if faculty.courses.where(id: @startup.level.course).exists?
 

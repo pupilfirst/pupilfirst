@@ -3,15 +3,12 @@ require 'rails_helper'
 feature 'Founder Edit' do
   include UserSpecHelper
 
-  let(:startup) { create :startup, :subscription_active }
-  let(:founder) { create :founder, college: nil, college_text: 'Anon College of Engineering', born_on: 18.years.ago }
+  let(:startup) { create :startup }
+  let(:founder) { create :founder, college: nil, college_text: 'Anon College of Engineering' }
   let(:founder_name) { Faker::Name.name }
   let(:phone) { rand(9_876_543_210..9_876_553_209) }
   let(:communication_address) { Faker::Address.full_address }
   let(:username) { Faker::Internet.user_name(founder_name, %w[-]) }
-  let(:backlogs) { rand(10) }
-  let(:semester) { %w[I II III IV V VI VII VIII].sample }
-  let(:roll_number) { "UNI00#{rand(10_000..19_998)}" }
   let(:roles) { %w[Product Design Engineering].sample(2) }
   let(:one_liner) { Faker::Lorem.sentence }
 
@@ -30,13 +27,11 @@ feature 'Founder Edit' do
       expect(page).to have_text('Editing').and have_text('profile')
 
       fill_in 'founders_edit_name', with: ''
-      fill_in 'founders_edit_born_on', with: ''
       fill_in 'founders_edit_phone', with: ''
       fill_in 'founders_edit_communication_address', with: ''
       click_button 'Save Changes'
 
       expect(page).to have_content("Name can't be blank")
-      expect(page).to have_content("Born on can't be blank")
       expect(page).to have_content("Phone can't be blank")
       expect(page).to have_content("Communication address can't be blank")
     end
@@ -46,7 +41,6 @@ feature 'Founder Edit' do
       expect(page).to have_text('Editing').and have_text('profile')
 
       fill_in 'founders_edit_name', with: founder_name
-      fill_in 'founders_edit_born_on', with: '1997-01-15'
       fill_in 'founders_edit_phone', with: phone
       attach_file 'founders_edit_avatar', upload_path('faculty/donald_duck.jpg')
       fill_in 'founders_edit_about', with: one_liner
@@ -58,13 +52,7 @@ feature 'Founder Edit' do
 
       fill_in 'founders_edit_skype_id', with: username
       fill_in 'founders_edit_communication_address', with: communication_address
-      attach_file 'founders_edit_identification_proof', upload_path('resources/pdf-thumbnail.png')
       select "My college isn't listed", from: 'founders_edit_college_id'
-      fill_in 'founders_edit_roll_number', with: roll_number
-      attach_file 'founders_edit_college_identification', upload_path('users/college_id.jpg')
-      select semester, from: 'founders_edit_semester'
-      select (Time.zone.now.year + rand(4)).to_s, from: 'founders_edit_year_of_graduation'
-      # fill_in 'founders_edit_backlog', with: backlogs
       fill_in 'founders_edit_twitter_url', with: "https://twitter.com/#{username}"
       fill_in 'founders_edit_linkedin_url', with: "https://linkedin.com/#{username}"
       fill_in 'founders_edit_personal_website_url', with: "https://#{username}.com"
@@ -82,14 +70,10 @@ feature 'Founder Edit' do
       # Confirm that founder has, indeed, been updated.
       expect(founder.reload).to have_attributes(
         name: founder_name,
-        born_on: Date.parse('1997-01-15'),
         phone: phone.to_s,
         about: one_liner,
         skype_id: username,
         communication_address: communication_address,
-        roll_number: roll_number,
-        semester: semester,
-        # backlog: backlogs,
         twitter_url: "https://twitter.com/#{username}",
         linkedin_url: "https://linkedin.com/#{username}",
         personal_website_url: "https://#{username}.com",
@@ -101,20 +85,6 @@ feature 'Founder Edit' do
 
       expect(founder.avatar.file.filename).to eq('donald_duck.jpg')
       # expect(founder.roles).to match_array(roles.map(&:downcase))
-      expect(founder.identification_proof.file.filename).to eq('pdf-thumbnail.png')
-      expect(founder.college_identification.file.filename).to eq('college_id.jpg')
-    end
-
-    scenario 'Founder tries to submit invalid values' do
-      pending 'Backlog input is hidden'
-
-      sign_in_user(founder.user, referer: edit_founder_path)
-      expect(page).to have_text('Editing').and have_text('profile')
-
-      fill_in 'founders_edit_backlog', with: '-2'
-      click_button 'Save Changes'
-
-      expect(page).to have_content('Backlog must be greater than or equal to 0')
     end
   end
 
@@ -130,26 +100,9 @@ feature 'Founder Edit' do
     end
   end
 
-  context 'Founder with inactive subscription attempts to edit his profile' do
-    let(:startup) { create :startup }
-
-    scenario 'founder visits the edit page' do
-      pending 'Fee payment disabled'
-
-      sign_in_user(founder.user, referer: edit_founder_path)
-
-      # Create a pending payment.
-      create :payment, startup: startup
-
-      sign_in_user(founder.user, referer: edit_founder_path)
-      expect(page).to have_content('Please pay the membership fee to continue.')
-    end
-  end
-
   context 'founder has connected slack account' do
     let(:founder) do
       create(:founder, :connected_to_slack,
-        born_on: 18.years.ago,
         communication_address: 'Foo')
     end
 

@@ -6,58 +6,35 @@ export default class ToggleBarTab extends React.Component {
     super(props);
 
     this.handleClick = this.handleClick.bind(this);
-    this.track = this.loadTrack();
   }
 
   handleClick() {
-    if (this.isActiveTrack()) {
-      return;
-    }
-
-    this.props.setRootState({ activeTrackId: this.track.id });
+    let selectedTab = this.props.level.number == 0 ? 'levelZero' : 'selectedLevel' ;
+    this.props.setRootState({ selectedTab: selectedTab });
   }
 
-  loadTrack() {
-    let that = this;
-
-    if (this.props.trackId === "sessions") {
-      return {
-        id: "sessions",
-        name: "Sessions"
-      };
-    }
-    else if (this.props.trackId === "default") {
-      return {
-        id: "default",
-        name: "Targets"
-      };
-    }
-
-    return _.find(this.props.rootProps.tracks, track => {
-      return track.id === that.props.trackId;
-    });
-  }
-
-  isActiveTrack() {
-    return this.props.rootState.activeTrackId === this.track.id;
+  isSelectedTab() {
+    let isActiveLevelZero = this.props.rootState.selectedTab === 'levelZero' && this.props.level.number === 0;
+    let isActiveSelectedLevel =  this.props.rootState.selectedTab === 'selectedLevel' && this.props.rootState.selectedLevel === this.props.level;
+    return isActiveLevelZero || isActiveSelectedLevel;
   }
 
   labelClasses() {
     let classes = "btn founder-dashboard-togglebar__toggle-btn btn-md m-a-0";
-    return this.isActiveTrack() ? classes + " active" : classes;
+    return this.isSelectedTab() ? classes + " active" : classes;
   }
 
   render() {
     return (
       <div className={this.labelClasses()} onClick={this.handleClick}>
-        {this.track.name.toUpperCase()}
+        {this.props.level.name.toUpperCase()}
       </div>
     );
   }
 }
 
 ToggleBarTab.propTypes = {
-  trackId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  level: PropTypes.object.isRequired,
   rootProps: PropTypes.object.isRequired,
   rootState: PropTypes.object.isRequired,
   setRootState: PropTypes.func.isRequired

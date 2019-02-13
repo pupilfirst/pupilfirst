@@ -25,7 +25,8 @@ module Users
           category: Faculty::CATEGORY_VISITING_COACHES,
           image: Rails.root.join('spec', 'support', 'uploads', 'faculty', 'human.png').open,
           inactive: true,
-          user: user
+          user: user,
+          school: @startup.school
         )
 
         Startups::AssignReviewerService.new(@startup).assign(faculty)

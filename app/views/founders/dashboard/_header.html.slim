@@ -3,39 +3,27 @@
 .founder-dashboard-header__container
   .container
     .founder-dashboard-header__startup-profile
-      - if current_startup.level_zero?
-        .founder-dashboard-header__product-details
-          h1.founder-dashboard-header__welcome-title.font-semibold
-            ' Welcome to SV.CO Admissions!
-          .founder-dashboard-header__welcome-subtext
-            ' You will be taken through a four-step admission process.
-            br
-            ' Complete the tasks below to proceed.
-      - else
-        .mx-auto.founder-dashboard-header__startup-logo-container.d-none.d-md-flex
-          - if current_startup.logo.present?
-            = image_tag "#{current_startup.logo_url}", class: 'founder-dashboard-header__startup-logo'
-          - else
-            = presenter.identicon_logo
-        .founder-dashboard-header__product-details
-          h3.founder-dashboard-header__product-title.font-semibold
-            | #{current_startup.product_name}
-          / - if current_startup.name.present?
-          / .founder-dashboard__avatars.d-none.d-md-block
-            .d-none.d-md-block
-              - current_startup.founders.not_exited.each do |founder|
-                - url = policy(founder).founder_profile? ? student_path(founder.slug) : '#'
-                a.founder-dashboard__avatar-wrapper href=url
-                  = avatar(founder.name, founder: founder)
-            .d-sm-none.d-block
-              - if current_startup.founders.count > 4
-                - current_startup.founders.order(:id).limit(3).each do |founder|
-                  .founder-dashboard__avatar-wrapper
-                    = avatar(founder.name, founder: founder, version: :thumb)
-                .founder-avatar-bubble.text-center.remaining-founders
-                  span.remaining-founders-count
-                    | +#{current_startup.founders.count - 3}
-              - else
-                - current_startup.founders.each do |founder|
-                  .founder-dashboard__avatar-wrapper
-                    = avatar(founder.name, founder: founder, version: :thumb)
+      .mx-auto.founder-dashboard-header__startup-logo-container.d-none.d-md-flex
+        = presenter.identicon_logo
+      .founder-dashboard-header__product-details
+        h3.founder-dashboard-header__product-title.font-semibold
+          | #{current_startup.product_name}
+        / - if current_startup.name.present?
+        / .founder-dashboard__avatars.d-none.d-md-block
+          .d-none.d-md-block
+            - current_startup.founders.not_exited.each do |founder|
+              - url = policy(founder).founder_profile? ? student_path(founder.slug) : '#'
+              a.founder-dashboard__avatar-wrapper href=url
+                = avatar(founder.name, founder: founder)
+          .d-sm-none.d-block
+            - if current_startup.founders.count > 4
+              - current_startup.founders.order(:id).limit(3).each do |founder|
+                .founder-dashboard__avatar-wrapper
+                  = avatar(founder.name, founder: founder, version: :thumb)
+              .founder-avatar-bubble.text-center.remaining-founders
+                span.remaining-founders-count
+                  | +#{current_startup.founders.count - 3}
+            - else
+              - current_startup.founders.each do |founder|
+                .founder-dashboard__avatar-wrapper
+                  = avatar(founder.name, founder: founder, version: :thumb)

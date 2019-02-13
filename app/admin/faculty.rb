@@ -1,6 +1,6 @@
 ActiveAdmin.register Faculty do
   permit_params :name, :title, :key_skills, :linkedin_url, :category, :image, :sort_index, :self_service,
-    :current_commitment, :inactive, :about, :commitment, :compensation, :slack_username
+    :current_commitment, :inactive, :about, :commitment, :compensation, :slack_username, :public
 
   controller do
     include DisableIntercom
@@ -12,6 +12,7 @@ ActiveAdmin.register Faculty do
 
   filter :category, as: :select, collection: -> { Faculty.valid_categories }
   filter :name
+  filter :public
   filter :user_email, as: :string
   filter :title
   filter :key_skills
@@ -22,10 +23,13 @@ ActiveAdmin.register Faculty do
 
   index do
     selectable_column
+
     column :category
     column :name
     column :email
     column :sort_index
+    column :public
+
     actions
   end
 
@@ -40,6 +44,7 @@ ActiveAdmin.register Faculty do
       row :category
       row :image
       row :sort_index
+      row :public
       row :self_service
       row :inactive
       row :slack_username
@@ -74,6 +79,7 @@ ActiveAdmin.register Faculty do
       f.input :key_skills
       f.input :linkedin_url
       f.input :sort_index
+      f.input :public
       f.input :inactive
       f.input :self_service
       f.input :commitment, as: :select, collection: commitment_options, label_method: :first, value_method: :last

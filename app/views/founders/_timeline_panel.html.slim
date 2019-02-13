@@ -3,9 +3,6 @@
   - if event.founder_event?
     .hidden-marker href="#" data-toggle="tooltip" title="This event is not visible on the team's public timeline."
       i.fa.fa-user-secret
-  - if event.image?
-    .img-responsive.tl-event-image
-      = image_tag event.image_url
   .timeline-heading
     - if presenter.review_pending?
       .verified-status-notice href="#" data-toggle="tooltip" title="We will verify this event very soon! If you haven't heard from us in 24 hours, do ping us on Slack!"

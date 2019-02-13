@@ -6,7 +6,7 @@ describe Courses::CloneService do
   subject { described_class.new(course) }
 
   let(:school) { create :school }
-  let(:course) { create :course, sponsored: true, school: school }
+  let(:course) { create :course, school: school }
   let(:level_one) { create :level, :one, course: course }
   let(:level_two) { create :level, :two, course: course }
   let(:target_group_l1_1) { create :target_group, level: level_one, milestone: true }
@@ -26,11 +26,11 @@ describe Courses::CloneService do
   let(:new_name) { Faker::Lorem.words(2).join(' ') }
 
   before do
-    complete_target(startup_l1.team_lead, target_l1_1_1)
-    complete_target(startup_l2.team_lead, target_l1_1_1)
-    complete_target(startup_l2.team_lead, target_l1_1_2)
-    complete_target(startup_l2.team_lead, target_l1_2)
-    complete_target(startup_l2.team_lead, target_l2_1)
+    complete_target(startup_l1.founders.first, target_l1_1_1)
+    complete_target(startup_l2.founders.first, target_l1_1_1)
+    complete_target(startup_l2.founders.first, target_l1_1_2)
+    complete_target(startup_l2.founders.first, target_l1_2)
+    complete_target(startup_l2.founders.first, target_l2_1)
   end
 
   describe '#clone' do
@@ -46,7 +46,6 @@ describe Courses::CloneService do
 
       # New course should have same name as the old one.
       expect(new_course.name).to eq(new_name)
-      expect(new_course.sponsored).to eq(true)
       expect(new_course.school).to eq(course.school)
 
       # Levels, target groups, targets, and resources should have been cloned.

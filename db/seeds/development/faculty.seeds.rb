@@ -3,16 +3,20 @@ after 'development:courses' do
 
   puts 'Seeding faculty'
 
+  sv = School.find_by(name: 'SV.CO')
+
   faculty = Faculty.create!(
     name: 'Sanjay Vijayakumar',
     title: 'CEO',
     key_skills: Faker::Lorem.words(3).join(', '),
     linkedin_url: 'https://linkedin.com',
     category: 'team',
-    image: Rails.root.join('spec/support/uploads/faculty/mickey_mouse.jpg').open,
     sort_index: 1,
-    user: User.create(email: 'mickeymouse@example.com')
+    user: User.create(email: 'mickeymouse@example.com'),
+    school: sv,
+    public: true
   )
+
   FacultyCourseEnrollment.create!(
     safe_to_create: true,
     faculty: faculty,
@@ -25,10 +29,12 @@ after 'development:courses' do
     key_skills: Faker::Lorem.words(3).join(', '),
     linkedin_url: 'https://linkedin.com',
     category: 'team',
-    image: Rails.root.join('spec/support/uploads/faculty/minnie_mouse.jpg').open,
     sort_index: 2,
-    user: User.create(email: 'minniemouse@example.com')
+    user: User.create(email: 'minniemouse@example.com'),
+    school: sv,
+    public: true
   )
+
   FacultyCourseEnrollment.create!(
     safe_to_create: true,
     faculty: faculty,
@@ -41,10 +47,12 @@ after 'development:courses' do
     key_skills: Faker::Lorem.words(3).join(', '),
     linkedin_url: 'https://linkedin.com',
     category: 'developer_coaches',
-    image: Rails.root.join('spec/support/uploads/faculty/donald_duck.jpg').open,
     sort_index: 3,
-    user: User.create(email: 'donaldduck@example.com')
+    user: User.create(email: 'donaldduck@example.com'),
+    school: sv,
+    public: true
   )
+
   FacultyCourseEnrollment.create!(
     safe_to_create: true,
     faculty: faculty,
@@ -56,9 +64,11 @@ after 'development:courses' do
     title: 'Engineering Lead',
     key_skills: 'Looting, pillaging, etc.',
     category: 'visiting_coaches',
-    image: Rails.root.join('spec/support/uploads/faculty/jack_sparrow.png').open,
-    user: User.create(email: 'goofy@example.com')
+    user: User.create(email: 'goofy@example.com'),
+    school: sv,
+    public: true
   )
+
   FacultyCourseEnrollment.create!(
     safe_to_create: true,
     faculty: faculty,
@@ -68,10 +78,13 @@ after 'development:courses' do
   faculty = Faculty.create!(
     name: 'iOS Coach',
     title: 'Coaching Expert',
-    category: 'developer_coaches',
-    image: Rails.root.join('spec/support/uploads/faculty/mickey_mouse.jpg').open,
-    user: User.create(email: 'ioscoach@example.com')
+    category: 'vr_coaches',
+    user: User.create(email: 'ioscoach@example.com'),
+    school: sv,
+    about: "This is just a demo coach. The about field is required for Faculty#show to be available - that's why this text is here.",
+    public: true
   )
+
   FacultyCourseEnrollment.create!(
     safe_to_create: true,
     faculty: faculty,
@@ -82,7 +95,7 @@ after 'development:courses' do
     name: 'School Admin',
     title: 'School Admin',
     category: 'team',
-    image: Rails.root.join('spec/support/uploads/faculty/mickey_mouse.jpg').open,
-    user: User.find_by(email: 'admin@example.com')
+    user: User.find_by(email: 'admin@example.com'),
+    school: sv
   )
 end

@@ -55,7 +55,6 @@
 //= require components
 
 // Controller-specific
-//= require startups
 //= require faculty
 //= require founders
 //= require story

@@ -12,12 +12,14 @@ class Faculty < ApplicationRecord
   has_secure_token
 
   belongs_to :user
+  belongs_to :school
   has_many :startup_feedback, dependent: :restrict_with_error
   has_many :targets, dependent: :restrict_with_error
   has_many :connect_slots, dependent: :destroy
   has_many :connect_requests, through: :connect_slots
   has_many :faculty_course_enrollments, dependent: :destroy
   has_many :courses, through: :faculty_course_enrollments
+  has_one_attached :image_as
 
   # Startups whose timeline events this faculty can review.
   has_many :faculty_startup_enrollments, dependent: :destroy
@@ -51,7 +53,6 @@ class Faculty < ApplicationRecord
   validates :name, presence: true
   validates :title, presence: true
   validates :category, inclusion: { in: valid_categories }, presence: true
-  validates :image, presence: true
   validates :compensation, inclusion: { in: valid_compensation_values }, allow_blank: true
   validates :commitment, inclusion: { in: valid_commitment_values }, allow_blank: true
   validates :slug, format: { with: /\A[a-z0-9\-_]+\z/i }, allow_nil: true
@@ -158,5 +159,16 @@ class Faculty < ApplicationRecord
     startup_levels = Level.where(id: startups.select(:level_id))
     startup_courses = Course.where(id: startup_levels.select(:course_id))
     (courses + startup_courses).uniq
+  end
+
+  def image_or_avatar_url(background_shape: :circle)
+    image_url || initials_avatar(background_shape)
+  end
+
+  private
+
+  def initials_avatar(background_shape)
+    logo = Scarf::InitialAvatar.new(name, background_shape: background_shape)
+    "data:image/svg+xml;base64,#{Base64.encode64(logo.svg)}"
   end
 end

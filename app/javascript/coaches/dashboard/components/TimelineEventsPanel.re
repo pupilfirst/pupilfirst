@@ -15,10 +15,14 @@ type selectedTab =
   | PendingTab
   | CompletedTab;
 
-type state = {selectedTab};
+type state = {
+  selectedTab,
+  isLoadingMore: bool,
+};
 
 type action =
-  | SwitchTab(selectedTab);
+  | SwitchTab(selectedTab)
+  | UpdateLoading(bool);
 
 let component = ReasonReact.reducerComponent("TimelineEventsPanel");
 
@@ -42,7 +46,8 @@ let handleResponseJSON = (state, hasMorePendingTEs, hasMoreCompletedTEs, appendT
     appendTEsCB(newTEs, hasMorePendingTEs, hasMoreCompletedTEs);
   };
 
-let fetchEvents = (state, tes, hasMorePendingTEs, hasMoreCompletedTEs, appendTEsCB, courseId) => {
+let fetchEvents = (state, send, tes, hasMorePendingTEs, hasMoreCompletedTEs, appendTEsCB, courseId) => {
+  send(UpdateLoading(true));
   let excludedIds =
     tes |> List.map(te => te |> TimelineEvent.id |> string_of_int) |> String.concat("&excludedIds[]=");
   let reviewStatus = state.selectedTab == PendingTab ? "pending" : "complete";
@@ -57,15 +62,20 @@ let fetchEvents = (state, tes, hasMorePendingTEs, hasMoreCompletedTEs, appendTEs
          }
        )
     |> then_(json =>
-         json |> handleResponseJSON(state, hasMorePendingTEs, hasMoreCompletedTEs, appendTEsCB) |> resolve
+         {
+           json |> handleResponseJSON(state, hasMorePendingTEs, hasMoreCompletedTEs, appendTEsCB);
+           send(UpdateLoading(false));
+         }
+         |> resolve
        )
     |> catch(error =>
-         (
+         {
            switch (error |> handleApiError) {
            | Some(code) => Notification.error(code |> string_of_int, "Please try again")
            | None => Notification.error("Something went wrong", "Please try again")
-           }
-         )
+           };
+           send(UpdateLoading(false));
+         }
          |> resolve
        )
     |> ignore
@@ -85,7 +95,7 @@ let emptyMessage = (selectedFounder, selectedTab, hasMorePendingTEs, hasMoreComp
   ++ " in the list."
   ++ (
     loadMoreVisible(selectedFounder, selectedTab, hasMorePendingTEs, hasMoreCompletedTEs) ?
-      "Please " ++ clearFilterText ++ "try loading more." : ""
+      " Please " ++ clearFilterText ++ "try loading more." : ""
   );
 };
 
@@ -108,10 +118,11 @@ let make =
       _children,
     ) => {
   ...component,
-  initialState: () => {selectedTab: PendingTab},
-  reducer: (action, _state) =>
+  initialState: () => {selectedTab: PendingTab, isLoadingMore: false},
+  reducer: (action, state) =>
     switch (action) {
-    | SwitchTab(selectedTab) => ReasonReact.Update({selectedTab: selectedTab})
+    | SwitchTab(selectedTab) => ReasonReact.Update({...state, selectedTab})
+    | UpdateLoading(isLoadingMore) => ReasonReact.Update({...state, isLoadingMore})
     },
   render: ({state, send}) => {
     let statusFilter =
@@ -168,11 +179,22 @@ let make =
       )
       (
         if (loadMoreVisible(selectedFounder, state.selectedTab, hasMorePendingTEs, hasMoreCompletedTEs)) {
-          let buttonText = state.selectedTab == PendingTab ? "Load more" : "Load earlier reviews";
+          let buttonText =
+            state.isLoadingMore ?
+              "Loading..." : state.selectedTab == PendingTab ? "Load more" : "Load earlier reviews";
           <div
-            className="btn btn-primary mb-3"
+            className=("btn btn-primary mb-3" ++ (state.isLoadingMore ? " disabled" : ""))
             onClick=(
-              _e => fetchEvents(state, timelineEvents, hasMorePendingTEs, hasMoreCompletedTEs, appendTEsCB, courseId)
+              _e =>
+                fetchEvents(
+                  state,
+                  send,
+                  timelineEvents,
+                  hasMorePendingTEs,
+                  hasMoreCompletedTEs,
+                  appendTEsCB,
+                  courseId,
+                )
             )>
             <i className="fa fa-cloud-download mr-1" />
             (buttonText |> str)

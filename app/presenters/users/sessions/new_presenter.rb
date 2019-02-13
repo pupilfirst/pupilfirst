@@ -11,7 +11,12 @@ module Users
       end
 
       def oauth_url(provider)
-        view.oauth_url(provider: provider, fqdn: view.current_host, host: oauth_host)
+        if view.current_school.nil?
+          # If there is no school, this is a visit to a PupilFirst domain. Just supply a direct OAuth link.
+          OmniauthProviderUrlService.new(provider, view.current_host).oauth_url
+        else
+          view.oauth_url(provider: provider, fqdn: view.current_host, host: oauth_host)
+        end
       end
 
       def hidden_sign_in_class(type, link: false)

@@ -100,19 +100,6 @@ en:
         engineering: Engineering
         design: Design
 
-    payment:
-      status:
-        requested: Requested
-        paid: Paid
-        failed: Failed
-        not_requested: Not Requested
-
-    startup:
-      registration_type:
-        private_limited: Private Limited
-        partnership: Partnership
-        llp: Limited Liability Partnership
-
     target:
       role:
         team: Team
@@ -125,14 +112,10 @@ en:
         wow: 'Wow!'
 
   services:
-    public_slack:
-      prune_membership:
-        removal_notice: "I've just removed a few founders with expired subscriptions to keep this channel exclusive to active members."
-
     karma_points:
       create:
         founder_slack_notification: 'You have been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
-        startup_slack_notification: 'Your team <%{startup_url}|%{startup_product_name}> has been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
+        startup_slack_notification: 'Your team *%{startup_product_name}* has been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
 
     targets:
       create_or_update_calendar_event:
@@ -148,14 +131,6 @@ en:
 
           Here is the general format for the session: 20 minutes talk + 10 mins Q&A. Please use the Q&A option in Zoom to post any questions you might have. They will be answered at the end of the session by the speaker.
 
-  presenters:
-    startups:
-      billing:
-        subscription_notice:
-          expired: "Your SV.CO subscription expired on <span class='text-danger'>%{date}</span>!"
-          expiring_soon: "Your SV.CO subscription will expire on <span class='alert-text'>%{date}</span>."
-          active: "Your SV.CO subscription expires on <span class='brand-primary'>%{date}</span>."
-
   about:
     contact:
       meta_description: "Contact the SV.CO team at help@sv.co, or via our in-site chat. You can also mingle with the community on our Public Slack Forum."
@@ -167,9 +142,6 @@ en:
       meta_description: "Get your queries answered directly by SV.CO team members, and mingle with the Startup Village community on our Public Slack Forum."
 
   admin:
-    coupon:
-      form:
-        update_warning: "WARNING: This coupon is in use by one or more teams. Please DO NOT make changes to reward details since this will affect all teams using this coupon."
     connect_request:
       cancel_request:
         warning:  "Are you sure you want to cancel this 'confirmed' connect request? Note that you will have to manually delete the associated Zoom meeting and Google calendar event!"

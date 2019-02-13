@@ -2,12 +2,6 @@ class TargetsController < ApplicationController
   before_action :authenticate_founder!, except: :select2_search
   before_action :authenticate_user!, only: :select2_search
 
-  # GET /targets/:id/download_rubric
-  def download_rubric
-    target = authorize(Target.find(params[:id]))
-    redirect_to target.rubric_url
-  end
-
   # GET /targets/select2_search
   def select2_search
     raise_not_found if true_user.admin_user.blank?

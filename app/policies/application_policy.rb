@@ -1,15 +1,17 @@
 class ApplicationPolicy
-  attr_reader :user, :record, :current_founder, :current_school
+  attr_reader :user, :record, :current_founder, :current_school, :current_coach
 
   def initialize(user, record)
-    @user = user
+    @pundit_user = user
+    @user = user.current_user
     @record = record
-    @current_founder = user&.current_founder
-    @current_school = user&.current_school
+    @current_founder = user.current_founder
+    @current_school = user.current_school
+    @current_coach = user.current_coach
   end
 
   def index?
-    false
+    scope.any?
   end
 
   def show?
@@ -36,14 +38,19 @@ class ApplicationPolicy
     false
   end
 
+  def scope
+    Pundit.policy_scope!(@pundit_user, record.class)
+  end
+
   class Scope
-    attr_reader :user, :scope, :current_founder, :current_school
+    attr_reader :user, :scope, :current_founder, :current_school, :current_coach
 
     def initialize(user, scope)
-      @user = user
+      @user = user.current_user
       @scope = scope
-      @current_founder = user&.current_founder
-      @current_school = user&.current_school
+      @current_founder = user.current_founder
+      @current_school = user.current_school
+      @current_coach = user.current_coach
     end
 
     def resolve

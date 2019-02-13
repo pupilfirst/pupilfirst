@@ -41,7 +41,7 @@ class ConnectRequestController < ApplicationController
   def join_session
     @connect_request = ConnectRequest.find(params[:id])
 
-    unless ConnectRequestPolicy.new(current_user, @connect_request).join_session?(params[:token])
+    unless ConnectRequestPolicy.new(pundit_user, @connect_request).join_session?(params[:token])
       raise_not_found
     end
   end

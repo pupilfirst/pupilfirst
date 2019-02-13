@@ -16,9 +16,6 @@ class TimelineEvent < ApplicationRecord
   has_many :timeline_event_owners, dependent: :destroy
   has_many :founders, through: :timeline_event_owners
 
-  mount_uploader :image, TimelineImageUploader
-  process_in_background :image
-
   serialize :links
 
   delegate :founder_event?, to: :target
@@ -36,7 +33,6 @@ class TimelineEvent < ApplicationRecord
   accepts_nested_attributes_for :timeline_event_files, allow_destroy: true
 
   scope :from_admitted_startups, -> { joins(:founders).where(founders: { startup: Startup.admitted }) }
-  scope :from_level_0_startups, -> { joins(:founders).where(founders: { startup: Startup.level_zero }) }
   scope :not_dropped_out, -> { joins(:founders).where(founders: { startup: Startup.not_dropped_out }) }
   scope :has_image, -> { where.not(image: nil) }
   scope :from_approved_startups, -> { joins(:founders).where(founders: { startup: Startup.approved }) }

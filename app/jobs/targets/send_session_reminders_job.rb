@@ -34,8 +34,6 @@ module Targets
       applicable_startups = Startup.where(level: eligible_levels)
 
       applicable_startups.distinct.each do |startup|
-        next unless startup.subscription_active?
-
         startup.founders.each do |founder|
           response = message_service.post(message: message(session), founder: founder)
           service_errors << response.errors if response.errors.any?

@@ -3,27 +3,35 @@ require 'rails_helper'
 describe ResourcePolicy do
   subject { described_class }
 
-  let!(:course) { create :course }
-  let!(:course_1) { create :course }
+  let!(:school) { create :school }
+  let!(:school_2) { create :school }
+  let!(:course_1) { create :course, school: school }
+  let!(:course_2) { create :course, school: school }
+  let!(:course_3) { create :course, school: school_2 }
 
-  let(:level_0) { create :level, :zero, course: course }
-  let(:level_1) { create :level, :one, course: course }
-  let(:level_2) { create :level, :two, course: course }
-  let(:level_1_s1) { create :level, :two, course: course_1 }
+  let(:level_0) { create :level, :zero, course: course_1 }
+  let(:level_1) { create :level, :one, course: course_1 }
+  let(:level_2) { create :level, :two, course: course_1 }
+  let(:level_1_s1) { create :level, :two, course: course_2 }
 
-  let(:startup) { create :startup, :subscription_active, level: level_1 }
-  let(:founder) { startup.founders.where.not(id: startup.team_lead_id).first }
+  let(:startup) { create :startup, level: level_1 }
+  let(:founder) { startup.founders.first }
 
   let(:user) do
-    # This policy relies on being supplied a `current_user`, which would have `current_founder` set.
-    founder.user.tap { |user| user.current_founder = startup.team_lead }
+    OpenStruct.new(
+      current_user: startup.founders.first.user,
+      current_founder: startup.founders.first,
+      current_school: school
+    )
   end
 
-  let!(:public_resource) { create :resource }
-  let!(:level_0_resource) { create :resource, level: level_0 }
-  let!(:level_1_resource) { create :resource, level: level_1 }
-  let!(:level_2_resource) { create :resource, level: level_2 }
-  let!(:level_1_s1_resource) { create :resource, level: level_1_s1 }
+  let!(:public_resource) { create :resource, school: school, public: true }
+  let!(:resource_1_c1) { create :resource, school: school, public: false }
+  let!(:resource_2_c1) { create :resource, school: school, public: false }
+  let!(:resource_3_c1) { create :resource, school: school, public: false }
+  let!(:resource_1_c2) { create :resource, school: school, public: false }
+  let!(:resource_1_c3) { create :resource, school: school_2, public: true }
+  let!(:resource_2_c3) { create :resource, school: school_2, public: false }
 
   before do
     # Create another founder in startup.
@@ -31,46 +39,20 @@ describe ResourcePolicy do
   end
 
   permissions :show? do
-    context 'when founder belongs to level 1 approved startup' do
-      it 'allows access to public resource' do
+    context 'when founder is a member of course 1' do
+      it 'allows access to public resources in the school' do
         expect(subject).to permit(user, public_resource)
       end
 
-      it 'allows access to resources upto level 1' do
-        expect(subject).to permit(user, level_0_resource)
-        expect(subject).to permit(user, level_1_resource)
-        expect(subject).to permit(user, level_2_resource)
-        expect(subject).to_not permit(user, level_1_s1_resource)
-      end
-    end
-
-    context 'when founder belongs to dropped out startup' do
-      before do
-        startup.update!(dropped_out: true)
+      it 'allows access to all private resources in the course he is a member of' do
+        expect(subject).to permit(user, resource_1_c1)
+        expect(subject).to permit(user, resource_2_c1)
+        expect(subject).to permit(user, resource_3_c1)
       end
 
-      it 'allows access to public resource' do
-        expect(subject).to permit(user, public_resource)
-      end
-
-      it 'denies access to all approved resources' do
-        expect(subject).to_not permit(user, level_0_resource)
-        expect(subject).to_not permit(user, level_1_resource)
-        expect(subject).to_not permit(user, level_2_resource)
-      end
-    end
-
-    context "when the founder's subscription is inactive" do
-      let(:startup) { create :startup }
-
-      it 'allows access to public resource' do
-        expect(subject).to permit(user, public_resource)
-      end
-
-      it 'denies access to all approved resources' do
-        expect(subject).to_not permit(user, level_0_resource)
-        expect(subject).to_not permit(user, level_1_resource)
-        expect(subject).to_not permit(user, level_2_resource)
+      it 'does not allow access to any resource belonging to a different school' do
+        expect(subject).to_not permit(user, resource_1_c3)
+        expect(subject).to_not permit(user, resource_2_c3)
       end
     end
   end

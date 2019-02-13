@@ -36,16 +36,12 @@ module Founders
       end
     end
 
-    def visible_levels
-      @visible_levels ||= startup.level_zero? ? course.levels.where(number: 0) : course.levels.where('levels.number >= ?', 1)
-    end
-
     def open_levels
-      @open_levels ||= visible_levels.where(unlock_on: nil).or(visible_levels.where('unlock_on <= ?', Date.today))
+      @open_levels ||= course.levels.where(unlock_on: nil).or(course.levels.where('unlock_on <= ?', Date.today))
     end
 
     def levels_as_json
-      visible_levels.as_json(
+      course.levels.as_json(
         only: %i[id name number],
         methods: :unlocked
       )
@@ -54,7 +50,7 @@ module Founders
     def faculty
       Faculty.team.all.as_json(
         only: %i[id name],
-        methods: :image_url
+        methods: :image_or_avatar_url
       )
     end
 

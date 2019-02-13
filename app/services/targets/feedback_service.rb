@@ -12,7 +12,7 @@ module Targets
         facultyName: faculty.name,
         feedback: latest_feedback.feedback,
         facultySlackUsername: faculty.slack_username,
-        facultyImageUrl: faculty.image_url
+        facultyImageUrl: faculty.image_or_avatar_url
       }
     end
 

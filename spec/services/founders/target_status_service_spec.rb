@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Founders::TargetStatusService do
-  subject { described_class.new(startup.team_lead) }
+  subject { described_class.new(startup.founders.first) }
 
   # Let's create an course with 3 levels...
   let(:course) { create :course }
@@ -19,7 +19,7 @@ describe Founders::TargetStatusService do
   # Let's have a faculty and a startup in Level 2
   let(:faculty) { create :faculty }
   let(:startup) { create :startup, level: level_2 }
-  let(:founder) { startup.team_lead }
+  let(:founder) { startup.founders.first }
 
   # founder has passed l_1_target_1
   let!(:l_1_target_1) { create :target, target_group: l_1_target_group_1 }

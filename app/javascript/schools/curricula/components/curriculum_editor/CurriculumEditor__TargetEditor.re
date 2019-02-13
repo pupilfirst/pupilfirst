@@ -88,14 +88,15 @@ let createTarget = (state, targetGroupId) => {
     "slideshow_embed",
     state.slideshowEmbed |> Js.Json.string,
   );
+  /* Js.Dict.set(
+       payload,
+       "resource_ids",
+       resourceIds |> Json.Encode.(list(int)),
+     ); */
+  Js.Dict.set(payload, "resource_ids[]", "1" |> Js.Json.string);
   Js.Dict.set(
     payload,
-    "resource_ids",
-    resourceIds |> Json.Encode.(list(int)),
-  );
-  Js.Dict.set(
-    payload,
-    "prerequisite_targets",
+    "prerequisite_target_ids",
     prerequisiteTargetIds |> Json.Encode.(list(int)),
   );
 
@@ -103,7 +104,7 @@ let createTarget = (state, targetGroupId) => {
   | Evaluated =>
     Js.Dict.set(
       payload,
-      "evaluation_criteria",
+      "evaluation_criterion_ids",
       evaluationCriteriaIds |> Json.Encode.(list(int)),
     )
   | VisitLink =>

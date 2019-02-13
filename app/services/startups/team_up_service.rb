@@ -9,7 +9,6 @@ module Startups
         startup = Startup.create!(
           name: name,
           product_name: name,
-          team_lead: @founders.first,
           level: @founders.first.startup.level
         )
 

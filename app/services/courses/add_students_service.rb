@@ -16,8 +16,6 @@ module Courses
           user.regenerate_login_token if user.login_token.blank?
           Founder.create!(user: user, name: student.name, startup: team)
         end
-
-        team.update!(team_lead: team.founders.first)
       end
     end
   end

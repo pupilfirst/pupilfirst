@@ -10,8 +10,8 @@ module Schools
       property :video_embed
       property :slideshow_embed
       property :resource_ids
-      property :prerequisite_targets
-      property :evaluation_criteria
+      property :prerequisite_target_ids
+      property :evaluation_criterion_ids
       property :quiz
       property :link_to_complete
 
@@ -23,16 +23,23 @@ module Schools
 
       def save
         target = Target.new(
+          target_group: target_group,
           role: role,
           title: title,
           description: title,
           target_action_type: target_action_type,
           sort_index: sort_index
         )
-
-        # video_embed.present? ?
-        # link.present? ? resource.link = link : resource.file = file
+        target.video_embed = video_embed if video_embed.present?
+        target.slideshow_embed = slideshow_embed if slideshow_embed.present?
+        # target.resource_ids = resource_ids if resource_ids.present?
+        # target.prerequisite_target_ids = prerequisite_target_ids if prerequisite_target_ids.present?
+        # target.evaluation_criterion_ids = evaluation_criterion_ids if evaluation_criterion_ids.present?
         target.save!
+
+        # target.update(resource_ids: resource_ids) if resource_ids.present?
+        # target.update(prerequisite_target_ids: prerequisite_target_ids) if prerequisite_target_ids.present?
+        # target.update(evaluation_criterion_ids: evaluation_criterion_ids) if evaluation_criterion_ids.present?
         target
       end
 

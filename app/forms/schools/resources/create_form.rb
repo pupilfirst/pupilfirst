@@ -8,7 +8,7 @@ module Schools
 
       def save
         resource = Resource.new(title: title, description: title)
-        resource.file = file
+        link.present? ? resource.link = link : resource.file = file
         resource.save!
         resource
       end

@@ -11,17 +11,6 @@ let handleApiError =
 
 let str = ReasonReact.string;
 
-type resourceId = int;
-
-type resource =
-  | File
-  | Link(string);
-
-type resourceEntry =
-  | Unselected
-  | Unpersisted(resource)
-  | Persisted(resource);
-
 type methodOfCompletion =
   | NotSelected
   | Evaluated
@@ -29,35 +18,42 @@ type methodOfCompletion =
   | TakeQuiz
   | MarkAsComplete;
 
-type evaluationCriteria = (int, string, bool);
+type keyForStateUpdation =
+  | Title
+  | Description
+  | VideoEmbed
+  | SlideshowEmbed
+  | LinkToComplete;
+
+type evaluationCriterion = (int, string, bool);
 
 type prerequisiteTarget = (int, string, bool);
+
+type resource = (int, string);
 
 type state = {
   title: string,
   description: string,
   videoEmbed: string,
   slideshowEmbed: string,
-  evaluationCriterias: list(evaluationCriteria),
+  evaluationCriteria: list(evaluationCriterion),
   prerequisiteTargets: list(prerequisiteTarget),
   methodOfCompletion,
   quiz: list(QuizQuestion.t),
-  resourceEntry: list(resourceEntry),
   resources: list(resource),
+  linkToComplete: string,
 };
 
 type action =
-  | UpdateTitle(string)
-  | UpdateDescription(string)
-  | UpdateVideoEmbed(string)
-  | UpdateSlideshowEmbed(string)
+  | UpdateState(keyForStateUpdation, string)
   | UpdateEvaluationCriterion(int, string, bool)
   | UpdatePrerequisiteTargets(int, string, bool)
   | UpdateMethodOfCompletion(methodOfCompletion)
   | AddQuizQuestion
   | UpdateQuizQuestion(int, QuizQuestion.t)
   | RemoveQuizQuestion(int)
-  | AddResource(resource);
+  | AddResource(int, string)
+  | RemoveResource(int);
 
 let component =
   ReasonReact.reducerComponent("CurriculumEditor__TargetEditor");
@@ -74,21 +70,53 @@ let handleResponseJSON = json =>
 
 let createTarget = (state, targetGroupId) => {
   let payload = Js.Dict.empty();
+  let tg_id = targetGroupId |> string_of_int;
+  let resourceIds = state.resources |> List.map(((key, _)) => key);
+  let evaluationCriteriaIds =
+    state.evaluationCriteria |> List.map(((key, _, _)) => key);
+  let prerequisiteTargetIds =
+    state.evaluationCriteria |> List.map(((key, _, _)) => key);
+
   Js.Dict.set(payload, "role", "founder" |> Js.Json.string);
   Js.Dict.set(payload, "target_action_type", "Todo" |> Js.Json.string);
   Js.Dict.set(payload, "sort_index", 12 |> string_of_int |> Js.Json.string);
-
   Js.Dict.set(payload, "title", state.title |> Js.Json.string);
   Js.Dict.set(payload, "description", state.description |> Js.Json.string);
-
   Js.Dict.set(payload, "video_embed", state.videoEmbed |> Js.Json.string);
   Js.Dict.set(
     payload,
     "slideshow_embed",
     state.slideshowEmbed |> Js.Json.string,
   );
+  Js.Dict.set(
+    payload,
+    "resource_ids",
+    resourceIds |> Json.Encode.(list(int)),
+  );
+  Js.Dict.set(
+    payload,
+    "prerequisite_targets",
+    prerequisiteTargetIds |> Json.Encode.(list(int)),
+  );
 
-  let tg_id = targetGroupId |> string_of_int;
+  switch (state.methodOfCompletion) {
+  | Evaluated =>
+    Js.Dict.set(
+      payload,
+      "evaluation_criteria",
+      evaluationCriteriaIds |> Json.Encode.(list(int)),
+    )
+  | VisitLink =>
+    Js.Dict.set(
+      payload,
+      "link_to_complete",
+      state.linkToComplete |> Js.Json.string,
+    )
+  | TakeQuiz => ()
+  | MarkAsComplete => ()
+  | NotSelected => ()
+  };
+
   Js.Promise.(
     Fetch.fetchWithInit(
       "/school/target_groups/" ++ tg_id ++ "/targets",
@@ -139,8 +167,7 @@ let make = (~targetGroupId, ~evaluationCriteria, ~targets, _children) => {
     description: "",
     videoEmbed: "",
     slideshowEmbed: "",
-    resourceEntry: [Unselected],
-    evaluationCriterias:
+    evaluationCriteria:
       evaluationCriteria
       |> List.map(criteria =>
            (
@@ -157,24 +184,28 @@ let make = (~targetGroupId, ~evaluationCriteria, ~targets, _children) => {
          ),
     quiz: [QuizQuestion.empty(0)],
     methodOfCompletion: NotSelected,
-    resources: [],
+    resources: [(1, "a"), (2, "b")],
+    linkToComplete: "",
   },
   reducer: (action, state) =>
     switch (action) {
-    | UpdateTitle(title) => ReasonReact.Update({...state, title})
-    | UpdateDescription(description) =>
-      ReasonReact.Update({...state, description})
-    | UpdateVideoEmbed(videoEmbed) =>
-      ReasonReact.Update({...state, videoEmbed})
-    | UpdateSlideshowEmbed(slideshowEmbed) =>
-      ReasonReact.Update({...state, slideshowEmbed})
+    | UpdateState(keyForStateUpdation, string) =>
+      switch (keyForStateUpdation) {
+      | Title => ReasonReact.Update({...state, title: string})
+      | Description => ReasonReact.Update({...state, description: string})
+      | VideoEmbed => ReasonReact.Update({...state, videoEmbed: string})
+      | SlideshowEmbed =>
+        ReasonReact.Update({...state, slideshowEmbed: string})
+      | LinkToComplete =>
+        ReasonReact.Update({...state, linkToComplete: string})
+      }
     | UpdateEvaluationCriterion(key, value, selected) =>
       let oldEC =
-        state.evaluationCriterias
+        state.evaluationCriteria
         |> List.filter(((item, _, _)) => item !== key);
       ReasonReact.Update({
         ...state,
-        evaluationCriterias: [(key, value, selected), ...oldEC],
+        evaluationCriteria: [(key, value, selected), ...oldEC],
       });
     | UpdatePrerequisiteTargets(key, value, selected) =>
       let oldPT =
@@ -208,8 +239,15 @@ let make = (~targetGroupId, ~evaluationCriteria, ~targets, _children) => {
         ...state,
         quiz: state.quiz |> List.filter(a => a |> QuizQuestion.id !== id),
       })
-    | AddResource(resource) =>
-      ReasonReact.Update({...state, resources: [resource]})
+    | AddResource(key, value) =>
+      ReasonReact.Update({
+        ...state,
+        resources: [(key, value), ...state.resources],
+      })
+    | RemoveResource(key) =>
+      let newResources =
+        state.resources |> List.filter(((_key, _)) => _key !== key);
+      ReasonReact.Update({...state, resources: newResources});
     },
   render: ({state, send}) => {
     let multiSelectPrerequisiteTargetsCB = (key, value, selected) =>
@@ -220,6 +258,7 @@ let make = (~targetGroupId, ~evaluationCriteria, ~targets, _children) => {
     let updateQuizQuestionCB = (id, quizQuestion) =>
       send(UpdateQuizQuestion(id, quizQuestion));
     let questionCanBeRemoved = state.quiz |> List.length > 1;
+    let addResourceCB = (key, value) => send(AddResource(key, value));
     let isValidQuiz =
       state.quiz
       |> List.filter(quizQuestion =>
@@ -251,7 +290,10 @@ let make = (~targetGroupId, ~evaluationCriteria, ~targets, _children) => {
                   onChange={
                     event =>
                       send(
-                        UpdateTitle(ReactEvent.Form.target(event)##value),
+                        UpdateState(
+                          Title,
+                          ReactEvent.Form.target(event)##value,
+                        ),
                       )
                   }
                 />
@@ -267,7 +309,8 @@ let make = (~targetGroupId, ~evaluationCriteria, ~targets, _children) => {
                   onChange={
                     event =>
                       send(
-                        UpdateDescription(
+                        UpdateState(
+                          Description,
                           ReactEvent.Form.target(event)##value,
                         ),
                       )
@@ -288,7 +331,8 @@ let make = (~targetGroupId, ~evaluationCriteria, ~targets, _children) => {
                   onChange={
                     event =>
                       send(
-                        UpdateVideoEmbed(
+                        UpdateState(
+                          VideoEmbed,
                           ReactEvent.Form.target(event)##value,
                         ),
                       )
@@ -307,47 +351,49 @@ let make = (~targetGroupId, ~evaluationCriteria, ~targets, _children) => {
                   onChange={
                     event =>
                       send(
-                        UpdateSlideshowEmbed(
+                        UpdateState(
+                          SlideshowEmbed,
                           ReactEvent.Form.target(event)##value,
                         ),
                       )
                   }
                 />
-                <div className="create-target-form__resources">
-                  <label
-                    className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
-                    htmlFor="title">
-                    {"Resources" |> str}
-                  </label>
-                  <ul
-                    className="list-reset resources-upload-tab flex border-b">
-                    <li
-                      className="mr-1 resources-upload-tab__link resources-upload-tab__link--active">
-                      <div
-                        className="inline-block text-grey-darker p-4 text-xs font-semibold">
-                        {"Upload File" |> str}
-                      </div>
-                    </li>
-                    <li className="mr-1 resources-upload-tab__link">
-                      <div
-                        className="inline-block text-grey-darker p-4 text-xs hover:text-blue-darker font-semibold">
-                        {"Add URL" |> str}
-                      </div>
-                    </li>
-                  </ul>
-                  <CurriculumEditor__FileUploader />
-                  <div className="flex items-center py-3 cursor-pointer">
-                    <svg className="svg-icon w-8 h-8" viewBox="0 0 20 20">
-                      <path
-                        fill="#A8B7C7"
-                        d="M13.388,9.624h-3.011v-3.01c0-0.208-0.168-0.377-0.376-0.377S9.624,6.405,9.624,6.613v3.01H6.613c-0.208,0-0.376,0.168-0.376,0.376s0.168,0.376,0.376,0.376h3.011v3.01c0,0.208,0.168,0.378,0.376,0.378s0.376-0.17,0.376-0.378v-3.01h3.011c0.207,0,0.377-0.168,0.377-0.376S13.595,9.624,13.388,9.624z M10,1.344c-4.781,0-8.656,3.875-8.656,8.656c0,4.781,3.875,8.656,8.656,8.656c4.781,0,8.656-3.875,8.656-8.656C18.656,5.219,14.781,1.344,10,1.344z M10,17.903c-4.365,0-7.904-3.538-7.904-7.903S5.635,2.096,10,2.096S17.903,5.635,17.903,10S14.365,17.903,10,17.903z"
-                      />
-                    </svg>
-                    <h5 className="font-semibold ml-2">
-                      {"Add another resource" |> str}
-                    </h5>
-                  </div>
-                </div>
+                <label
+                  className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                  htmlFor="title">
+                  {"Resources" |> str}
+                </label>
+                {
+                  state.resources
+                  |> List.map(((_key, value)) =>
+                       <div
+                         key={_key |> string_of_int}
+                         className="select-list__item-selected flex items-center justify-between bg-grey-lightest text-xs text-grey-dark border rounded p-3 mb-2">
+                         {value |> str}
+                         <button
+                           onClick={
+                             _event => {
+                               ReactEvent.Mouse.preventDefault(_event);
+                               send(RemoveResource(_key));
+                             }
+                           }>
+                           <svg
+                             className="w-3"
+                             id="fa3b28d3-128c-4841-a4e9-49257a824d7b"
+                             xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 14 15.99">
+                             <path
+                               d="M13,1H9A1,1,0,0,0,8,0H6A1,1,0,0,0,5,1H1A1,1,0,0,0,0,2V3H14V2A1,1,0,0,0,13,1ZM11,13a1,1,0,1,1-2,0V7a1,1,0,0,1,2,0ZM8,13a1,1,0,1,1-2,0V7A1,1,0,0,1,8,7ZM5,13a1,1,0,1,1-2,0V7A1,1,0,0,1,5,7Zm8.5-9H.5a.5.5,0,0,0,0,1H1V15a1,1,0,0,0,1,1H12a1,1,0,0,0,1-1V5h.5a.5.5,0,0,0,0-1Z"
+                               fill="#525252"
+                             />
+                           </svg>
+                         </button>
+                       </div>
+                     )
+                  |> Array.of_list
+                  |> ReasonReact.array
+                }
+                <CurriculumEditor__ResourceUploader addResourceCB />
               </div>
             </div>
             <div className="create-target-form__target-behaviour mx-auto">
@@ -602,7 +648,7 @@ let make = (~targetGroupId, ~evaluationCriteria, ~targets, _children) => {
                         {"Choose evaluation criteria from your list" |> str}
                       </label>
                       <CurriculumEditor__SelectBox
-                        items={state.evaluationCriterias}
+                        items={state.evaluationCriteria}
                         multiSelectCB=multiSelectEvaluationCriterionCB
                       />
                     </div>
@@ -663,6 +709,15 @@ let make = (~targetGroupId, ~evaluationCriteria, ~targets, _children) => {
                         id="title"
                         type_="text"
                         placeholder="Paste link to complete"
+                        onChange=(
+                          event =>
+                            send(
+                              UpdateState(
+                                LinkToComplete,
+                                ReactEvent.Form.target(event)##value,
+                              ),
+                            )
+                        )
                       />
                     </div>
                   | NotSelected => ReasonReact.null

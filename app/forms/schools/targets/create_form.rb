@@ -13,6 +13,7 @@ module Schools
       property :prerequisite_targets
       property :evaluation_criteria
       property :quiz
+      property :link_to_complete
 
       validate :target_group_exists
 
@@ -21,8 +22,18 @@ module Schools
       end
 
       def save
-        sync
-        model.save!
+        target = Target.new(
+          role: role,
+          title: title,
+          description: title,
+          target_action_type: target_action_type,
+          sort_index: sort_index
+        )
+
+        # video_embed.present? ?
+        # link.present? ? resource.link = link : resource.file = file
+        target.save!
+        target
       end
 
       private

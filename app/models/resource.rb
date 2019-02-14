@@ -50,8 +50,13 @@ class Resource < ApplicationRecord
 
   def stream?
     return false if link.present?
+    return true if video_embed.present?
 
-    video_embed.present? || file_content_type&.end_with?('/mp4')
+    if file_as.attached?
+      file_as.content_type.end_with?('/mp4')
+    else
+      false
+    end
   end
 
   def file_url
@@ -76,12 +81,5 @@ class Resource < ApplicationRecord
   before_save do
     # Ensure titles are capitalized.
     self.title = title.titlecase(humanize: false, underscore: false)
-  end
-
-  after_commit do
-    # If the file attribute has changed, store its content_type to avoid lookup from S3.
-    if previous_changes.key?(:file_as)
-      update!(file_content_type: reload.file_as.content_type)
-    end
   end
 end

@@ -21,6 +21,7 @@ module Schools
         errors[:base] << 'Invalid Target Group id' if target_group.blank?
       end
 
+      # rubocop:disable Metrics/CyclomaticComplexity
       def save
         target = Target.new(
           target_group: target_group,
@@ -32,16 +33,14 @@ module Schools
         )
         target.video_embed = video_embed if video_embed.present?
         target.slideshow_embed = slideshow_embed if slideshow_embed.present?
-        # target.resource_ids = resource_ids if resource_ids.present?
-        # target.prerequisite_target_ids = prerequisite_target_ids if prerequisite_target_ids.present?
-        # target.evaluation_criterion_ids = evaluation_criterion_ids if evaluation_criterion_ids.present?
+        target.resource_ids = resource_ids if resource_ids.present?
+        target.prerequisite_target_ids = prerequisite_target_ids if prerequisite_target_ids.present?
+        target.evaluation_criterion_ids = evaluation_criterion_ids if evaluation_criterion_ids.present?
+        target.link_to_complete = link_to_complete if link_to_complete.present?
         target.save!
-
-        # target.update(resource_ids: resource_ids) if resource_ids.present?
-        # target.update(prerequisite_target_ids: prerequisite_target_ids) if prerequisite_target_ids.present?
-        # target.update(evaluation_criterion_ids: evaluation_criterion_ids) if evaluation_criterion_ids.present?
         target
       end
+      # rubocop:enable Metrics/CyclomaticComplexity
 
       private
 

@@ -45,6 +45,22 @@ Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
+service_bug_counter = 0
+
+begin
+  ActiveStorage::Blob.service = ActiveStorage::Service.configure(:test, test: { service: :Disk, root: Rails.root.join('tmp', 'storage') })
+
+  if service_bug_counter.zero?
+    puts "[NOTICE] Workaround for ActiveStorage::Blob.service assignment wasn't triggered. Consider removing it."
+  end
+rescue NoMethodError
+  raise "Exceeded the number of max retries to set `ActiveStorage::Blob.service`." if service_bug_counter >= 5
+
+  service_bug_counter += 1
+  puts "Encountered ActiveStorage::Blob.service assignment bug. Retrying (Attempt ##{service_bug_counter})..."
+  retry
+end
+
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = ::Rails.root.join('spec', 'fixtures')

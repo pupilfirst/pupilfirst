@@ -122,21 +122,17 @@ let make = (~teams, _children) => {
                       <div className="coaches-avatar-group">
                         <p className="mb-2 text-xs"> {"Coaches" |> str} </p>
                         <div className="flex items-center">
-                          <img
-                            className="w-6 h-6 rounded-full mr-2"
-                            src="https://pbs.twimg.com/profile_images/885868801232961537/b1F6H4KC_400x400.jpg"
-                            alt="Avatar of Jonathan Reinink"
-                          />
-                          <img
-                            className="w-6 h-6 rounded-full mr-2"
-                            src="https://pbs.twimg.com/profile_images/885868801232961537/b1F6H4KC_400x400.jpg"
-                            alt="Avatar of Jonathan Reinink"
-                          />
-                          <img
-                            className="w-6 h-6 rounded-full mr-2"
-                            src="https://pbs.twimg.com/profile_images/885868801232961537/b1F6H4KC_400x400.jpg"
-                            alt="Avatar of Jonathan Reinink"
-                          />
+                          {team
+                           |> Team.coaches
+                           |> List.map(coach =>
+                                <img
+                                  className="w-6 h-6 rounded-full mr-2"
+                                  src={coach |> Coach.avatarUrl}
+                                  alt="Avatar of Jonathan Reinink"
+                                />
+                              )
+                           |> Array.of_list
+                           |> ReasonReact.array}
                         </div>
                       </div>
                     </div>
@@ -150,49 +146,6 @@ let make = (~teams, _children) => {
               })
            |> Array.of_list
            |> ReasonReact.array}
-          <div className="student-solo__card cursor-pointer hover:bg-grey-lighter flex items-center shadow bg-white">
-            <div className="flex-1 w-3/5">
-              <div className="flex items-center">
-                <label className="block text-grey leading-tight font-bold px-4 py-5">
-                  <input className="leading-tight" type_="checkbox" />
-                </label>
-                <div className="flex items-center py-4 pr-4">
-                  <img
-                    className="w-10 h-10 rounded-full mr-4"
-                    src="https://pbs.twimg.com/profile_images/885868801232961537/b1F6H4KC_400x400.jpg"
-                    alt="Avatar of Jonathan Reinink"
-                  />
-                  <div className="text-sm">
-                    <p className="text-black font-semibold"> {"Bodhish Thomas" |> str} </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="flex w-2/5 items-center">
-              <div className="w-3/5 px-3">
-                <div className="coaches-avatar-group">
-                  <p className="mb-2 text-xs"> {"Coaches" |> str} </p>
-                  <div className="flex items-center">
-                    <img
-                      className="w-6 h-6 rounded-full mr-2"
-                      src="https://pbs.twimg.com/profile_images/885868801232961537/b1F6H4KC_400x400.jpg"
-                      alt="Avatar of Jonathan Reinink"
-                    />
-                    <img
-                      className="w-6 h-6 rounded-full mr-2"
-                      src="https://pbs.twimg.com/profile_images/885868801232961537/b1F6H4KC_400x400.jpg"
-                      alt="Avatar of Jonathan Reinink"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="w-2/5 text-center">
-                <span className="inline-flex rounded bg-indigo-lightest px-2 py-1 text-xs font-semibold">
-                  {"Level 1" |> str}
-                </span>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>,

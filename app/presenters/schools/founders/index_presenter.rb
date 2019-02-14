@@ -15,7 +15,8 @@ module Schools
         @course.startups.includes(:level, :founders, :faculty).order(:id).map do |team|
           {
             name: team.product_name,
-            students: student_details(team.founders)
+            students: student_details(team.founders),
+            coaches: (coach_details(team.faculty) + course_coaches).uniq
           }
         end
       end
@@ -32,12 +33,16 @@ module Schools
         end
       end
 
-      def team?(startup)
-        @team ||= Hash.new do |hash, s|
-          hash[s] = s.founders.length > 1
+      def coach_details(coaches)
+        coaches.map do |coach|
+          {
+            avatarUrl: coach.image_or_avatar_url
+          }
         end
+      end
 
-        @team[startup]
+      def course_coaches
+        @course_coaches ||= coach_details(@course.faculty)
       end
     end
   end

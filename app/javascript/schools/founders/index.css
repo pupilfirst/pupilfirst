@@ -15,6 +15,7 @@ body {
 
 .student-team__card {
     position: relative;
+    background-color: transparent;
 }
 
 .student-team__card:not(:last-child):before {

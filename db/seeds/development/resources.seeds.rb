@@ -1,5 +1,4 @@
 pdf_path = 'spec/support/uploads/resources/pdf-sample.pdf'
-
 video_path = 'spec/support/uploads/resources/video-sample.mp4'
 
 after 'development:targets' do
@@ -8,14 +7,16 @@ after 'development:targets' do
   target = Startup.find_by(name: 'The Avengers').level.target_groups.first.targets.first
   school = target.course.school
 
-  Resource.create!(
-    file: Rails.root.join(pdf_path).open,
+  r = Resource.new(
     title: 'Public PDF File',
     description: 'This is a public PDF file, meant to be accessible by everyone!',
     targets: [target],
     public: true,
     school: school
   )
+
+  r.file_as.attach(io: Rails.root.join(pdf_path).open, filename: 'pdf-sample.pdf')
+  r.save!
 
   Resource.create!(
     title: 'Public Link',
@@ -26,14 +27,16 @@ after 'development:targets' do
     school: school
   )
 
-  Resource.create!(
-    file: Rails.root.join(video_path).open,
+  r = Resource.new(
     title: 'Public MP4 File',
     description: 'This is an MP4 video, which we should be able to stream.',
     targets: [target],
     public: true,
     school: school
   )
+
+  r.file_as.attach(io: Rails.root.join(video_path).open, filename: 'video-sample.mp4')
+  r.save!
 
   Resource.create!(
     video_embed: '<iframe width="560" height="315" src="https://www.youtube.com/embed/nkzqJ-9u4Aw" frameborder="0" allowfullscreen></iframe>',
@@ -44,11 +47,13 @@ after 'development:targets' do
     school: school
   )
 
-  Resource.create!(
-    file: Rails.root.join(pdf_path).open,
+  r = Resource.new(
     title: 'PDF only for students',
     description: 'This is a restricted PDF file, meant to be accessible only by students',
     targets: [target],
     school: school
   )
+
+  r.file_as.attach(io: Rails.root.join(pdf_path).open, filename: 'pdf-sample.pdf')
+  r.save!
 end

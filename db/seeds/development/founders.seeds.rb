@@ -44,6 +44,15 @@ after 'development:colleges', 'development:startups' do
     ],
     'iOS Startup' => [
       ['ios@example.org', 'iOS Guy', Founder::GENDER_MALE, 9876543200]
+    ],
+    'iOS Startup 2' => [
+      ['ios_s2@example.org', 'iOS Guy s2', Founder::GENDER_MALE, 9876543300]
+    ],
+    'iOS Guy 2' => [
+      ['ios2@example.org', 'iOS Guy 2', Founder::GENDER_FEMALE, 9876543400]
+    ],
+    'iOS Guy 3' => [
+      ['ios3@example.org', 'iOS Guy 3', Founder::GENDER_MALE, 9876543500]
     ]
   }
 

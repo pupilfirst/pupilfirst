@@ -39,18 +39,11 @@ after 'development:levels' do
   )
 
   # Add startups in iOS course in level 1.
-  ['iOS Startup', 'iOS Guy 2', 'iOS Guy 3'].each do |startup_name|
+  ['iOS Startup', 'iOS Startup 2', 'iOS Guy 2', 'iOS Guy 3'].each do |startup_name|
     Startup.create!(
       name: startup_name,
       product_name: startup_name,
       level: ios_course_level_1
     )
   end
-
-  # Add one startup in iOS course in level 2.
-  Startup.create!(
-    name: 'iOS Startup',
-    level: ios_course_level_1,
-    product_name: 'iOS Startup'
-  )
 end

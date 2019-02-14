@@ -78,17 +78,21 @@ let make = (~teams, _children) => {
       <div className="px-6 pb-4 flex-1 bg-grey-lightest overflow-y-scroll">
         <div className="max-w-lg mx-auto relative">
           {teams
-           |> List.map(team =>
+           |> List.map(team => {
+                let isSingleFounder = team |> Team.students |> List.length == 1;
                 <div
                   key={team |> Team.name}
-                  className="student-team-container flex items-center shadow bg-white rounded-lg overflow-hidden mb-4">
+                  className={
+                    "student-team-container flex items-center shadow bg-white rounded-lg overflow-hidden mb-4"
+                    ++ (isSingleFounder ? " hover:bg-grey-lighter" : "")
+                  }>
                   <div className="flex-1 w-3/5">
                     {team
                      |> Team.students
                      |> List.map(student =>
                           <div
                             key={student |> Student.id |> string_of_int}
-                            className="student-team__card cursor-pointer hover:bg-grey-lighter flex items-center bg-white">
+                            className="student-team__card cursor-pointer flex items-center bg-white hover:bg-grey-lighter">
                             <div className="flex-1 w-3/5">
                               <div className="flex items-center">
                                 <label className="block text-grey leading-tight font-bold px-4 py-5">
@@ -106,33 +110,15 @@ let make = (~teams, _children) => {
                         )
                      |> Array.of_list
                      |> ReasonReact.array}
-                    <div
-                      className="student-team__card cursor-pointer hover:bg-grey-lighter flex items-center bg-white">
-                      <div className="flex-1 w-3/5">
-                        <div className="flex items-center">
-                          <label className="block text-grey leading-tight font-bold px-4 py-5">
-                            <input className="leading-tight" type_="checkbox" />
-                          </label>
-                          <div className="flex items-center py-4 pr-4">
-                            <img
-                              className="w-10 h-10 rounded-full mr-4"
-                              src="https://pbs.twimg.com/profile_images/885868801232961537/b1F6H4KC_400x400.jpg"
-                              alt="Avatar of Jonathan Reinink"
-                            />
-                            <div className="text-sm">
-                              <p className="text-black font-semibold"> {"Bodish Thomas" |> str} </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                   <div className="flex w-2/5 items-center">
                     <div className="w-3/5 py-4 px-3">
-                      <div className="students-team--name mb-5">
-                        <p className="mb-1 text-xs"> {"Team" |> str} </p>
-                        <h4> {team |> Team.name |> str} </h4>
-                      </div>
+                      {isSingleFounder ?
+                         ReasonReact.null :
+                         <div className="students-team--name mb-5">
+                           <p className="mb-1 text-xs"> {"Team" |> str} </p>
+                           <h4> {team |> Team.name |> str} </h4>
+                         </div>}
                       <div className="coaches-avatar-group">
                         <p className="mb-2 text-xs"> {"Coaches" |> str} </p>
                         <div className="flex items-center">
@@ -160,8 +146,8 @@ let make = (~teams, _children) => {
                       </span>
                     </div>
                   </div>
-                </div>
-              )
+                </div>;
+              })
            |> Array.of_list
            |> ReasonReact.array}
           <div className="student-solo__card cursor-pointer hover:bg-grey-lighter flex items-center shadow bg-white">

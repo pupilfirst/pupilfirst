@@ -163,7 +163,11 @@ class Faculty < ApplicationRecord
   end
 
   def image_or_avatar_url(background_shape: :circle)
-    image_as.attached? && Rails.application.routes.url_helpers.rails_blob_path(image_as, only_path: true) || initials_avatar(background_shape)
+    if image_as.attached?
+      Rails.application.routes.url_helpers.rails_blob_path(image_as, only_path: true)
+    else
+      initials_avatar(background_shape)
+    end
   end
 
   private

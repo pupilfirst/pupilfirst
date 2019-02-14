@@ -1,7 +1,7 @@
 ActiveAdmin.register TimelineEvent do
   actions :all, except: [:edit]
-  permit_params :description, :image, :event_on, :serialized_links,
-    :improved_timeline_event_id, timeline_event_files_attributes: %i[id title file private _destroy]
+  permit_params :description, :event_on, :serialized_links,
+    :improved_timeline_event_id, timeline_event_files_attributes: %i[id title file_as private _destroy]
 
   filter :founders_name, as: :string
   filter :evaluated
@@ -60,12 +60,7 @@ ActiveAdmin.register TimelineEvent do
 
     raise_not_found if timeline_event_file.blank?
 
-    redirect_to timeline_event_file.file.url
-  end
-
-  member_action :get_image do
-    timeline_event = TimelineEvent.find(params[:id])
-    redirect_to timeline_event.image.url
+    redirect_to timeline_event_file.file_url
   end
 
   member_action :save_feedback, method: :post do
@@ -143,7 +138,6 @@ ActiveAdmin.register TimelineEvent do
 
       f.input :founder, label: 'Founder', as: :select, collection: f.object.persisted? ? f.object.startup.founders : [], include_blank: false
       f.input :description
-      f.input :image
       f.input :event_on, as: :datepicker
 
       f.input :improved_timeline_event,
@@ -156,7 +150,7 @@ ActiveAdmin.register TimelineEvent do
     f.inputs 'Attached Files' do
       f.has_many :timeline_event_files, new_record: 'Add file', allow_destroy: true, heading: false do |t|
         t.input :title
-        t.input :file, hint: 'Select new file for upload'
+        t.input :file_as, hint: 'Select new file for upload'
         t.input :private
       end
     end
@@ -189,14 +183,6 @@ ActiveAdmin.register TimelineEvent do
       row('Founder') { timeline_event.founder }
       row :description do
         simple_format(timeline_event.description)
-      end
-
-      row :image do
-        if timeline_event.image.present?
-          link_to timeline_event.image.url do
-            image_tag timeline_event.image.url, width: '200px'
-          end
-        end
       end
 
       row :event_on

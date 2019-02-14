@@ -42,7 +42,7 @@ feature 'Founder Edit' do
 
       fill_in 'founders_edit_name', with: founder_name
       fill_in 'founders_edit_phone', with: phone
-      attach_file 'founders_edit_avatar', upload_path('faculty/donald_duck.jpg')
+      attach_file 'founders_edit_avatar_as', upload_path('faculty/donald_duck.jpg')
       fill_in 'founders_edit_about', with: one_liner
 
       # Choose two roles.
@@ -83,7 +83,7 @@ feature 'Founder Edit' do
         behance_url: "https://behance.net/#{username}"
       )
 
-      expect(founder.avatar.file.filename).to eq('donald_duck.jpg')
+      expect(founder.avatar_as.filename).to eq('donald_duck.jpg')
       # expect(founder.roles).to match_array(roles.map(&:downcase))
     end
   end

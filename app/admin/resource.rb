@@ -1,5 +1,5 @@
 ActiveAdmin.register Resource do
-  permit_params :title, :description, :file, :video_embed, :link, :archived, :public, :school_id, tag_list: [], target_ids: []
+  permit_params :title, :description, :file_as, :video_embed, :link, :archived, :public, :school_id, tag_list: [], target_ids: []
 
   controller do
     include DisableIntercom
@@ -48,6 +48,11 @@ ActiveAdmin.register Resource do
     attributes_table do
       row :title
       row :downloads
+      row :file do |resource|
+        if resource.file_as.attached?
+          link_to resource.file_as.filename, resource.file_url
+        end
+      end
 
       row :tags do |resource|
         linked_tags(resource.tags)
@@ -84,7 +89,7 @@ ActiveAdmin.register Resource do
     f.semantic_errors(*f.object.errors.keys)
 
     f.inputs 'Resource details' do
-      f.input :file, as: :file
+      f.input :file_as, as: :file
       f.input :title
       f.input :description
       f.input :video_embed

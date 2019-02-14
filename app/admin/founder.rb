@@ -220,7 +220,7 @@ ActiveAdmin.register Founder do
       end
 
       row :avatar do
-        link_to 'Download Avatar', founder.avatar.url if founder.avatar.present?
+        link_to 'Download Avatar', founder.avatar_url if founder.avatar_as.attached?
       end
 
       row :exited

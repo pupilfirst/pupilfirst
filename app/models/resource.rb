@@ -27,7 +27,7 @@ class Resource < ApplicationRecord
   validate :exactly_one_source_must_be_present
 
   def exactly_one_source_must_be_present
-    return if [file, video_embed, link].one?(&:present?)
+    return if [file_as.attached?, video_embed.present?, link.present?].one?
     return if persisted?
 
     errors[:base] << 'One and only one of a video embed, file or link must be present.'
@@ -54,6 +54,10 @@ class Resource < ApplicationRecord
     video_embed.present? || file_content_type&.end_with?('/mp4')
   end
 
+  def file_url
+    file_as.attached? && Rails.application.routes.url_helpers.rails_blob_path(file_as, only_path: true)
+  end
+
   def increment_downloads(user)
     update!(downloads: downloads + 1)
     if user.present?
@@ -76,8 +80,8 @@ class Resource < ApplicationRecord
 
   after_commit do
     # If the file attribute has changed, store its content_type to avoid lookup from S3.
-    if previous_changes.key?(:file)
-      update!(file_content_type: reload.file.content_type)
+    if previous_changes.key?(:file_as)
+      update!(file_content_type: reload.file_as.content_type)
     end
   end
 end

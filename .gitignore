@@ -12,6 +12,7 @@
 
 coverage
 public/uploads
+storage
 tags
 .tags*
 

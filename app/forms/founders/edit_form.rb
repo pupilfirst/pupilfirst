@@ -2,7 +2,7 @@ module Founders
   class EditForm < Reform::Form
     property :name, validates: { presence: true }
     property :phone, validates: { presence: true, mobile_number: true }
-    property :avatar, validates: { file_size: { less_than: 2.megabytes }, file_content_type: { allow: %w[image/jpeg image/png image/gif] }, raster_image: true }
+    property :avatar_as
     property :about, validates: { length: { maximum: 250 } }
     property :roles
     property :skype_id
@@ -19,8 +19,6 @@ module Founders
     # Custom validations.
     validate :college_must_exist
     validate :roles_must_be_valid
-
-    delegate :avatar?, to: :model
 
     def roles_must_be_valid
       roles.each do |role|

@@ -22,7 +22,7 @@ class ResourcesController < ApplicationController
     return unless params[:watch].present? && @resource.stream?
 
     @resource.increment_downloads(current_user)
-    @stream_video = @resource.file&.url || @resource.video_embed
+    @stream_video = @resource.file_url || @resource.video_embed
   rescue ActiveRecord::RecordNotFound, Pundit::NotAuthorizedError
     alert_message = 'Could not find the requested resource! '
 
@@ -39,7 +39,7 @@ class ResourcesController < ApplicationController
   def download
     resource = authorize(Resource.find(params[:id]))
     resource.increment_downloads(current_user)
-    redirect_to(resource.link.presence || resource.file.url)
+    redirect_to(resource.link.presence || resource.file_url)
   end
 
   private

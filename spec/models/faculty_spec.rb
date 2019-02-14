@@ -38,7 +38,8 @@ describe Faculty, type: :model do
 
     context 'when the faculty has an uploaded image' do
       before do
-        faculty.image = File.open(Rails.root.join('spec', 'support', 'uploads', 'faculty', 'donald_duck.jpg'))
+        # faculty_image = File.open(Rails.root.join('spec', 'support', 'uploads', 'faculty', 'donald_duck.jpg'))
+        faculty.image_as.attach(create_file_blob)
         faculty.save!
       end
 

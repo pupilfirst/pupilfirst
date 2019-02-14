@@ -57,10 +57,10 @@ Rails.application.routes.draw do
     end
 
     resources :target_groups, only: %i[update destroy] do
-      resources :targets, only: %i[create new]
+      resources :targets, only: %i[create]
     end
 
-    resources :targets, only: %i[update edit] do
+    resources :targets, only: %i[update] do
       resource :quiz, only: %i[create]
     end
 

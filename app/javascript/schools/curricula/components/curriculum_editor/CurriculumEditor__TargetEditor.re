@@ -73,9 +73,13 @@ let createTarget = (state, targetGroupId) => {
   let tg_id = targetGroupId |> string_of_int;
   let resourceIds = state.resources |> List.map(((key, _)) => key);
   let evaluationCriteriaIds =
-    state.evaluationCriteria |> List.map(((key, _, _)) => key);
+    state.evaluationCriteria
+    |> List.filter(((_, _, selected)) => selected == true)
+    |> List.map(((key, _, _)) => key);
   let prerequisiteTargetIds =
-    state.evaluationCriteria |> List.map(((key, _, _)) => key);
+    state.prerequisiteTargets
+    |> List.filter(((_, _, selected)) => selected == true)
+    |> List.map(((key, _, _)) => key);
 
   Js.Dict.set(payload, "role", "founder" |> Js.Json.string);
   Js.Dict.set(payload, "target_action_type", "Todo" |> Js.Json.string);
@@ -88,12 +92,12 @@ let createTarget = (state, targetGroupId) => {
     "slideshow_embed",
     state.slideshowEmbed |> Js.Json.string,
   );
-  /* Js.Dict.set(
-       payload,
-       "resource_ids",
-       resourceIds |> Json.Encode.(list(int)),
-     ); */
-  Js.Dict.set(payload, "resource_ids[]", "1" |> Js.Json.string);
+  Js.Dict.set(
+    payload,
+    "resource_ids",
+    resourceIds |> Json.Encode.(list(int)),
+  );
+
   Js.Dict.set(
     payload,
     "prerequisite_target_ids",

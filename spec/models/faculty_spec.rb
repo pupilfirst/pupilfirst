@@ -44,7 +44,7 @@ describe Faculty, type: :model do
       end
 
       it 'returns the image url' do
-        expect(faculty.image_or_avatar_url).to eq(faculty.image_url)
+        expect(faculty.image_or_avatar_url).to match(%r{rails/active_storage/blobs\/.+\.jpg})
       end
     end
   end

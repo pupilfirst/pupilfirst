@@ -7,8 +7,29 @@ module Schools
         @course = course
       end
 
+      def react_props
+        { teams: teams }
+      end
+
       def teams
-        @course.startups.includes(:level, :founders, :faculty).order(:id)
+        @course.startups.includes(:level, :founders, :faculty).order(:id).map do |team|
+          {
+            name: team.product_name,
+            students: student_details(team.founders)
+          }
+        end
+      end
+
+      private
+
+      def student_details(students)
+        students.map do |student|
+          {
+            id: student.id,
+            name: student.name,
+            avatarUrl: student.avatar_url || student.initials_avatar
+          }
+        end
       end
 
       def team?(startup)

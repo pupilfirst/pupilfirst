@@ -65,7 +65,7 @@ module Targets
           slug: resource.slug,
           canStream: resource.stream?,
           hasLink: resource.link.present?,
-          hasFile: resource.file.present?
+          hasFile: resource.file_as.attached?
         }
       end
     end

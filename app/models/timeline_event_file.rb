@@ -4,12 +4,11 @@ class TimelineEventFile < ApplicationRecord
 
   mount_uploader :file, TimelineEventFileUploader
 
-  validates :title, presence: true
   validates :file_as, attached: true
 
   # File is stored as private on S3. So we need to retrieve the name another way; not the usual column.file.filename.
   def filename
-    file.sanitized_file.original_filename
+    file_as.filename
   rescue Errno::ENOENT => e
     raise e unless Rails.env.development?
 
@@ -18,5 +17,13 @@ class TimelineEventFile < ApplicationRecord
 
   def file_url
     file_as.attached? && Rails.application.routes.url_helpers.rails_blob_path(file_as, only_path: true)
+  end
+
+  def title
+    file_as.metadata['title']
+  end
+
+  def private
+    file_as.metadata['private']
   end
 end

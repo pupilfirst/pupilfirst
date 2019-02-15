@@ -68,11 +68,11 @@ class TimelineEvent < ApplicationRecord
   end
 
   def files_metadata_json
-    timeline_event_files.map do |file|
+    timeline_event_files.map do |te_file|
       {
-        identifier: file.id,
-        title: file.title,
-        private: file.private?,
+        identifier: te_file.id,
+        title: te_file.file_as.metadata['title'],
+        private: te_file.file_as.metadata['private'],
         persisted: true
       }
     end.to_json

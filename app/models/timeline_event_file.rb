@@ -4,8 +4,8 @@ class TimelineEventFile < ApplicationRecord
 
   mount_uploader :file, TimelineEventFileUploader
 
-  validates :file, presence: true
   validates :title, presence: true
+  validates :file_as, attached: true
 
   # File is stored as private on S3. So we need to retrieve the name another way; not the usual column.file.filename.
   def filename

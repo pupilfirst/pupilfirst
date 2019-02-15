@@ -1,7 +1,7 @@
 module FacultyModule
   class IndexPresenter < ApplicationPresenter
     def coaches_subheading
-      view.current_school.school_strings.find_by(key: SchoolString::KEY_COACHES_INDEX_SUBHEADING)&.value
+      @coaches_subheading ||= view.current_school.school_strings.find_by(key: SchoolString::KEYS[:coaches_index_subheading])&.value
     end
   end
 end

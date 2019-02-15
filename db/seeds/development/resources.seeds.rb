@@ -14,7 +14,8 @@ after 'development:targets' do
     description: 'This is a public PDF file, meant to be accessible by everyone!',
     targets: [target],
     public: true,
-    school: school
+    school: school,
+    tag_list: %w(PDF)
   )
 
   Resource.create!(
@@ -23,7 +24,8 @@ after 'development:targets' do
     link: 'https://www.google.com',
     targets: [target],
     public: true,
-    school: school
+    school: school,
+    tag_list: %w(Link)
   )
 
   Resource.create!(
@@ -32,7 +34,8 @@ after 'development:targets' do
     description: 'This is an MP4 video, which we should be able to stream.',
     targets: [target],
     public: true,
-    school: school
+    school: school,
+    tag_list: %w(Video)
   )
 
   Resource.create!(
@@ -41,7 +44,8 @@ after 'development:targets' do
     description: 'This is a YouTube embed. It should be playable from the page.',
     targets: [target],
     public: true,
-    school: school
+    school: school,
+    tag_list: %w(Video)
   )
 
   Resource.create!(
@@ -49,6 +53,7 @@ after 'development:targets' do
     title: 'PDF only for students',
     description: 'This is a restricted PDF file, meant to be accessible only by students',
     targets: [target],
-    school: school
+    school: school,
+    tag_list: %w(PDF)
   )
 end

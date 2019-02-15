@@ -1,7 +1,5 @@
 .col-lg-4.col-md-6
   .resource-box.content-box.pb-0
-    .resource-thumbnail
-      = image_tag 'resources/shared/default-thumbnail.png', class: 'img-responsive'
     .resource-content
       h4.mb-3
         = link_to truncate( resource.title, length: 50, separator: ' ' ), resource
@@ -9,4 +7,3 @@
         = simple_format resource.description
       = render 'tags', resource: resource, fade: true
     == render 'links', resource: resource, playing: false
-    = link_to 'Read More', resource, class: 'resource-box__read-more font-semibold text-center'

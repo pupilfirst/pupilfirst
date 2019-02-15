@@ -6,9 +6,11 @@ type state = {selectedStudents: list(Student.t)};
 
 type action =
   | SelectStudent(Student.t)
-  | DeselectStudent(Student.t);
+  | DeselectStudent(Student.t)
+  | SelectAllStudents
+  | DeselectAllStudents;
 
-let selectedAcrossTeams = (selectedStudents, teams) => {
+let selectedAcrossTeams = selectedStudents => {
   selectedStudents |> List.map(s => s |> Student.teamId) |> List.sort_uniq((id1, id2) => id1 - id2) |> List.length > 1;
 };
 
@@ -20,7 +22,7 @@ let selectedPartialTeam = (selectedStudents, teams) => {
 let isGroupable = (selectedStudents, teams) => {
   selectedStudents
   |> List.length > 1
-  && (selectedAcrossTeams(selectedStudents, teams) || selectedPartialTeam(selectedStudents, teams));
+  && (selectedAcrossTeams(selectedStudents) || selectedPartialTeam(selectedStudents, teams));
 };
 
 let component = ReasonReact.reducerComponent("SA_StudentsPanel");
@@ -35,6 +37,9 @@ let make = (~teams, _children) => {
       ReasonReact.Update({
         selectedStudents: state.selectedStudents |> List.filter(s => Student.id(s) !== Student.id(student)),
       })
+    | SelectAllStudents =>
+      ReasonReact.Update({selectedStudents: teams |> List.map(t => t |> Team.students) |> List.flatten})
+    | DeselectAllStudents => ReasonReact.Update({selectedStudents: []})
     },
   render: ({state, send}) =>
     <div>
@@ -82,6 +87,17 @@ let make = (~teams, _children) => {
         <div
           className="max-w-lg bg-white mx-auto relative rounded rounded-b-none border-b py-2 px-3 mt-3 w-full flex items-center justify-between">
           <div className="flex">
+            <label className="block leading-tight mr-4 my-auto">
+              <input
+                className="leading-tight"
+                type_="checkbox"
+                checked={state.selectedStudents |> List.length > 0}
+                onChange={
+                  state.selectedStudents |> List.length > 0 ?
+                    _e => send(DeselectAllStudents) : (_e => send(SelectAllStudents))
+                }
+              />
+            </label>
             <button
               className="hover:bg-purple-dark text-purple-dark font-semibold hover:text-white focus:outline-none border border-dashed border-blue hover:border-transparent flex items-center px-2 py-1 rounded-lg cursor-pointer">
               <svg className="svg-icon w-6 h-6" viewBox="0 0 20 20">

@@ -72,7 +72,7 @@ let make = (~addResourceCB, _children) => {
       };
     };
 
-    let createFile = formData =>
+    let sendResource = formData =>
       Js.Promise.(
         Fetch.fetchWithInit(
           "/school/resources/",
@@ -115,7 +115,7 @@ let make = (~addResourceCB, _children) => {
       ReactEvent.Form.preventDefault(event);
       let element = ReactDOMRe._getElementById(formId);
       switch (element) {
-      | Some(element) => createFile(FormData.create(element))
+      | Some(element) => sendResource(FormData.create(element))
       | None => ()
       };
     };

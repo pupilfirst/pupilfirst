@@ -68,7 +68,7 @@ let handleResponseJSON = json =>
   | None => Notification.success("Success", "Target Created")
   };
 
-let createTarget = (state, targetGroupId) => {
+let createTarget = (state, authenticityToken, targetGroupId) => {
   let payload = Js.Dict.empty();
   let tg_id = targetGroupId |> string_of_int;
   let resourceIds = state.resources |> List.map(((key, _)) => key);
@@ -81,6 +81,11 @@ let createTarget = (state, targetGroupId) => {
     |> List.filter(((_, _, selected)) => selected == true)
     |> List.map(((key, _, _)) => key);
 
+  Js.Dict.set(
+    payload,
+    "authenticity_token",
+    authenticityToken |> Js.Json.string,
+  );
   Js.Dict.set(payload, "role", "founder" |> Js.Json.string);
   Js.Dict.set(payload, "target_action_type", "Todo" |> Js.Json.string);
   Js.Dict.set(payload, "sort_index", 12 |> string_of_int |> Js.Json.string);
@@ -102,6 +107,12 @@ let createTarget = (state, targetGroupId) => {
     payload,
     "prerequisite_target_ids",
     prerequisiteTargetIds |> Json.Encode.(list(int)),
+  );
+
+  Js.Dict.set(
+    payload,
+    "quiz",
+    state.quiz |> Json.Encode.(list(QuizQuestion.encoder)),
   );
 
   switch (state.methodOfCompletion) {
@@ -160,12 +171,26 @@ let createTarget = (state, targetGroupId) => {
   );
 };
 
+let facultyReviewButtonClasses = value =>
+   value ?
+     "w-1/2 bg-grey hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none" :
+     "w-1/2 bg-white border-l hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none";
+
+
 let completionButtonClasses = value =>
   value ?
     "flex flex-col items-center bg-white border border-grey-light hover:bg-grey-lighter text-green text-sm font-semibold focus:outline-none rounded p-4" :
     "flex flex-col items-center bg-white border border-grey-light hover:bg-grey-lighter text-grey-darkest text-sm font-semibold focus:outline-none rounded p-4";
 
-let make = (~targetGroupId, ~evaluationCriteria, ~targets, _children) => {
+let make =
+    (
+      ~targetGroupId,
+      ~evaluationCriteria,
+      ~targets,
+      ~authenticityToken,
+      ~hideEditorStateCB,
+      _children,
+    ) => {
   ...component,
   initialState: () => {
     title: "",
@@ -433,7 +458,7 @@ let make = (~targetGroupId, ~evaluationCriteria, ~targets, _children) => {
                           send(UpdateMethodOfCompletion(Evaluated));
                         }
                       }
-                      className="w-1/2 bg-white hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none">
+                      className={facultyReviewButtonClasses(state.methodOfCompletion == Evaluated)}>
                       {"Yes" |> str}
                     </button>
                     <button
@@ -443,7 +468,7 @@ let make = (~targetGroupId, ~evaluationCriteria, ~targets, _children) => {
                           send(UpdateMethodOfCompletion(MarkAsComplete));
                         }
                       }
-                      className="w-1/2 bg-white border-l hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none">
+                      className={facultyReviewButtonClasses((state.methodOfCompletion != Evaluated) && (state.methodOfCompletion != NotSelected ))}>
                       {"No" |> str}
                     </button>
                   </div>
@@ -732,7 +757,20 @@ let make = (~targetGroupId, ~evaluationCriteria, ~targets, _children) => {
             </div>
             <div className="flex">
               <button
-                onClick={_event => createTarget(state, targetGroupId)}
+                onClick={
+                  _ =>
+                  hideEditorStateCB()
+                }
+                className="bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+                {"Close" |> str}
+              </button>
+            </div>
+            <div className="flex">
+              <button
+                onClick={
+                  _event =>
+                    createTarget(state, authenticityToken, targetGroupId)
+                }
                 className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
                 {"Save All" |> str}
               </button>

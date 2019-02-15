@@ -1,7 +1,7 @@
 module Schools
   class TargetsController < SchoolsController
-    before_action :load_new_target, only: %w[new create]
-    before_action :load_target, only: %w[edit update]
+    before_action :load_new_target, only: %w[create]
+    before_action :load_target, only: %w[update]
 
     # POST /school/target_groups/:target_group_id/targets(.:format)
     def create
@@ -14,12 +14,6 @@ module Schools
         raise form.errors.full_messages.join(', ')
       end
     end
-
-    # GET /school/target_groups/:target_group_id/targets
-    def new; end
-
-    # GET /school/targets/:id/edit
-    def edit; end
 
     # PATCH /school/targets/:id
     def update

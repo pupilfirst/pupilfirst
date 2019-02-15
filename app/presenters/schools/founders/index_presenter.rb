@@ -14,6 +14,7 @@ module Schools
       def teams
         @course.startups.includes(:level, :founders, :faculty).order(:id).map do |team|
           {
+            id: team.id,
             name: team.product_name,
             students: student_details(team.founders),
             coaches: (coach_details(team.faculty) + course_coaches).uniq
@@ -28,7 +29,8 @@ module Schools
           {
             id: student.id,
             name: student.name,
-            avatarUrl: student.avatar_url || student.initials_avatar
+            avatarUrl: student.avatar_url || student.initials_avatar,
+            teamId: student.startup.id
           }
         end
       end

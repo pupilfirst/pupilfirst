@@ -1,12 +1,42 @@
 open StudentsPanel__Types;
 
-let component = ReasonReact.statelessComponent("SA_StudentsPanel");
-
 let str = ReasonReact.string;
+
+type state = {selectedStudents: list(Student.t)};
+
+type action =
+  | SelectStudent(Student.t)
+  | DeselectStudent(Student.t);
+
+let selectedAcrossTeams = (selectedStudents, teams) => {
+  selectedStudents |> List.map(s => s |> Student.teamId) |> List.sort_uniq((id1, id2) => id1 - id2) |> List.length > 1;
+};
+
+let selectedPartialTeam = (selectedStudents, teams) => {
+  let selectedTeam = teams |> List.find(t => Team.id(t) == (selectedStudents |> List.hd |> Student.teamId));
+  selectedStudents |> List.length < (selectedTeam |> Team.students |> List.length);
+};
+
+let isGroupable = (selectedStudents, teams) => {
+  selectedStudents
+  |> List.length > 1
+  && (selectedAcrossTeams(selectedStudents, teams) || selectedPartialTeam(selectedStudents, teams));
+};
+
+let component = ReasonReact.reducerComponent("SA_StudentsPanel");
 
 let make = (~teams, _children) => {
   ...component,
-  render: _self =>
+  initialState: () => {selectedStudents: []},
+  reducer: (action, state) =>
+    switch (action) {
+    | SelectStudent(student) => ReasonReact.Update({selectedStudents: [student, ...state.selectedStudents]})
+    | DeselectStudent(student) =>
+      ReasonReact.Update({
+        selectedStudents: state.selectedStudents |> List.filter(s => Student.id(s) !== Student.id(student)),
+      })
+    },
+  render: ({state, send}) =>
     <div>
       <div className="border-b flex px-6 py-2 items-center justify-between">
         <div className="inline-block relative w-64">
@@ -68,10 +98,12 @@ let make = (~teams, _children) => {
               className="bg-grey-lighter hover:bg-grey-light hover:text-grey-darker focus:outline-none text-grey-dark text-sm font-semibold py-2 px-4 rounded inline-flex items-center mx-2">
               {"Add tags" |> str}
             </button>
-            <button
-              className="bg-transparent hover:bg-purple-dark focus:outline-none text-purple-dark text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
-              {"Create new team" |> str}
-            </button>
+            {isGroupable(state.selectedStudents, teams) ?
+               <button
+                 className="bg-transparent hover:bg-purple-dark focus:outline-none text-purple-dark text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
+                 {"Group as Team" |> str}
+               </button> :
+               ReasonReact.null}
           </div>
         </div>
       </div>
@@ -89,14 +121,23 @@ let make = (~teams, _children) => {
                   <div className="flex-1 w-3/5">
                     {team
                      |> Team.students
-                     |> List.map(student =>
+                     |> List.map(student => {
+                          let isChecked = state.selectedStudents |> List.mem(student);
                           <div
                             key={student |> Student.id |> string_of_int}
                             className="student-team__card cursor-pointer flex items-center bg-white hover:bg-grey-lighter">
                             <div className="flex-1 w-3/5">
                               <div className="flex items-center">
                                 <label className="block text-grey leading-tight font-bold px-4 py-5">
-                                  <input className="leading-tight" type_="checkbox" />
+                                  <input
+                                    className="leading-tight"
+                                    type_="checkbox"
+                                    checked=isChecked
+                                    onChange={
+                                      isChecked ?
+                                        _e => send(DeselectStudent(student)) : (_e => send(SelectStudent(student)))
+                                    }
+                                  />
                                 </label>
                                 <div className="flex items-center py-4 pr-4">
                                   <img className="w-10 h-10 rounded-full mr-4" src={student |> Student.avatarUrl} />
@@ -106,8 +147,8 @@ let make = (~teams, _children) => {
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        )
+                          </div>;
+                        })
                      |> Array.of_list
                      |> ReasonReact.array}
                   </div>

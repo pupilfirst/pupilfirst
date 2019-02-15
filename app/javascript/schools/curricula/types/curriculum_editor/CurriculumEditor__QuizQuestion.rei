@@ -19,3 +19,5 @@ let replace: (int, CurriculumEditor__AnswerOption.t, t) => t;
 let markAsCorrect: (int, t) => t;
 
 let isValidQuizQuestion: t => bool;
+
+let encoder: t => Js.Json.t;

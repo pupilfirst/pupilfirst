@@ -19,3 +19,5 @@ let markAsCorrect: t => t;
 let markAsIncorrect: t => t;
 
 let isValidAnswerOption: t => bool;
+
+let encoder: t => Js.Json.t;

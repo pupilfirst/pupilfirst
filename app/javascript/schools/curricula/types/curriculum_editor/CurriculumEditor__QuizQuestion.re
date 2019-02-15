@@ -72,3 +72,15 @@ let isValidQuizQuestion = t => {
     |> List.length == 1;
   validQuestion && hasZeroInvalidAnswerOptions && hasOnlyOneCorrectAnswerOption;
 };
+
+let encoder = t =>
+  Json.Encode.(
+    object_([
+      ("question", t.question |> string),
+      (
+        "answerOption",
+        t.answerOptions
+        |> Json.Encode.(list(CurriculumEditor__AnswerOption.encoder)),
+      ),
+    ])
+  );

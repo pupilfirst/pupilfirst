@@ -2,7 +2,7 @@ module Schools
   class TargetPolicy < ApplicationPolicy
     def create?
       # Is this user allowed to create a target in the requested target group.
-      CoursePolicy.new(user, record.course).update?
+      CoursePolicy.new(@pundit_user, record.course).update?
     end
 
     alias update? create?

@@ -6,8 +6,8 @@ module Schools
       target_group = authorize(TargetGroup.new(level: level), policy_class: Schools::TargetGroupPolicy)
       form = ::Schools::TargetGroups::CreateForm.new(target_group)
       if form.validate(params[:target_group])
-        form.save
-        redirect_back(fallback_location: school_course_curriculum_path(target_group.course))
+        target_group = form.save
+        render json: { id: target_group.id, errors: nil }
       else
         raise form.errors.full_messages.join(', ')
       end

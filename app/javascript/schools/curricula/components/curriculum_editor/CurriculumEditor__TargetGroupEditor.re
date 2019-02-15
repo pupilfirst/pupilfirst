@@ -34,13 +34,15 @@ let handleResponseJSON = json =>
     |> Json.Decode.(field("error", nullable(string)))
     |> Js.Null.toOption
   ) {
-  | Some(error) => Notification.error("Something went wrong!", error)
+  | Some(error) => Notification.error("Something went wrong! bodhi", error)
   | None => Notification.success("Success", "Target Created")
   };
 
 let createTargetGroup = (authenticityToken, currentLevel, state) => {
   let payload = Js.Dict.empty();
   let level_id = currentLevel |> Level.id |> string_of_int;
+
+  let milestone = state.milestone == true ? "true" : "false";
 
   Js.Dict.set(
     payload,
@@ -50,7 +52,7 @@ let createTargetGroup = (authenticityToken, currentLevel, state) => {
   Js.Dict.set(payload, "sort_index", 12 |> string_of_int |> Js.Json.string);
   Js.Dict.set(payload, "name", state.title |> Js.Json.string);
   Js.Dict.set(payload, "description", state.description |> Js.Json.string);
-  /* Js.Dict.set(payload, "milestone", state.milestone |> Js.Json.bool; */
+  Js.Dict.set(payload, "milestone", milestone |> Js.Json.string);
 
   Js.Promise.(
     Fetch.fetchWithInit(

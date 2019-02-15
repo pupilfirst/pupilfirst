@@ -57,7 +57,6 @@ let make = (~addResourceCB, _children) => {
     let handleResponseJSON = json => {
       let id =
         json |> Json.Decode.(field("id", nullable(int))) |> Js.Null.toOption;
-      Js.log(id);
       switch (id) {
       | Some(id) => addResourceCB(id, state.title)
       | None => Notification.success("Success", "Target Created")

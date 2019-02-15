@@ -8,8 +8,8 @@ module Schools
       # authorize(Target, policy_class: Schools::TargetPolicy)
       form = ::Schools::Targets::CreateForm.new(@target)
       if form.validate(params)
-        form.save
-        redirect_to school_course_curriculum_path(@target.course)
+        target = form.save
+        render json: { id: target.id, errors: nil }
       else
         raise form.errors.full_messages.join(', ')
       end

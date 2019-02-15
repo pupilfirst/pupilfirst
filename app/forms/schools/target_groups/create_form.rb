@@ -21,8 +21,14 @@ module Schools
       end
 
       def save
-        sync
-        model.save!
+        target_group = TargetGroup.create!(
+          level: level,
+          name: name,
+          description: description,
+          sort_index: sort_index,
+          milestone: milestone
+        )
+        target_group
       end
 
       private

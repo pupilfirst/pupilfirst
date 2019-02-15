@@ -4,7 +4,7 @@ class FoundersController < ApplicationController
 
   # GET /students/:slug
   def show
-    @founder = Founder.friendly.find(params[:slug])
+    @founder = authorize(Founder.friendly.find(params[:slug]))
     # Show site wide notice to exited founders
     @sitewide_notice = @founder.exited? if @founder.user == current_user
     @meta_description = "#{@founder.name}: #{@founder.startup.name}"
@@ -56,7 +56,10 @@ class FoundersController < ApplicationController
 
   # POST /founders/:slug/select
   def select
-    founder = authorize(Founder.friendly.find(params[:id]))
+    # Use the scope from the presenter to ensure that conditions are met.
+    presenter = NavLinksPresenter.new(view_context)
+
+    founder = authorize(presenter.selectable_student_profiles.friendly.find(params[:id]))
     set_cookie(:founder_id, founder.id)
     redirect_to student_dashboard_url
   end

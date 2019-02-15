@@ -1,13 +1,26 @@
 class TimelineEventFilePolicy < ApplicationPolicy
   def download?
-    return true unless record.private?
-    return false if user.blank?
+    founders = record.timeline_event.founders
 
-    startup = record.timeline_event.startup
+    # Coach can view timeline event files.
+    return true if current_user_coaches?(record.timeline_event.target.course, founders)
 
-    is_a_coach = user.coached_startups.where(id: startup.id).exists?
-    is_a_member = current_founder&.startup.present?
+    # Team members linked directly to the timeline event can access attached files.
+    founders.where(id: current_founder).exists?
+  end
 
-    is_a_coach || is_a_member
+  private
+
+  def current_user_coaches?(course, founders)
+    return false if current_coach.blank?
+
+    # Current user is a coach if zhe has been linked as reviewer to entire course holding this TEF.
+    return true if current_coach.courses.where(id: course).exists?
+
+    startups = Startup.joins(:founders).where(founders: { id: founders })
+
+    # Current user is a coach if zhe has been linked as reviewer directly to any startup that TE founders are currently
+    # a part of.
+    current_coach.startups.where(id: startups).exists?
   end
 end

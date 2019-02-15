@@ -3,9 +3,12 @@ require 'rails_helper'
 feature 'Select another founder profile as the active profile' do
   include UserSpecHelper
 
-  # Two startups.
+  # Three teams, with two in the same school.
   let(:startup_1) { create :startup }
   let(:startup_2) { create :startup }
+  let(:another_school) { create :school }
+  let(:course_in_another_school) { create :course, school: another_school }
+  let(:startup_3) { create :startup, course: course_in_another_school }
 
   # Add milestone target groups for both courses, so that the dashboard will render correctly.
   let(:target_group_s1) { create :target_group, level: startup_1.level, milestone: true }
@@ -16,13 +19,19 @@ feature 'Select another founder profile as the active profile' do
   # One student is also a member of another team.
   let!(:multi_founder_user) { startup_1.founders.first.user }
   let!(:founder_in_s2) { create :founder, startup: startup_2, user: multi_founder_user }
+  let!(:founder_in_s3) { create :founder, startup: startup_3, user: multi_founder_user }
   let(:single_founder_user) { startup_2.founders.first.user }
 
-  scenario 'Multi-founder user can switch between courses', js: true do
+  scenario 'Multi-founder user can switch between courses in the same school', js: true do
     sign_in_user multi_founder_user, referer: root_path
 
-    # Switch to second course.
+    # Open the user avatar dropdown menu to see available courses.
     find(".logged-in-avatar-link").click
+
+    # There shouldn't be a link to switch to the third profile from another school.
+    expect(page).not_to have_link("#{startup_3.course.name} Course")
+
+    # Switch to second course.
     click_link("#{startup_2.course.name} Course")
 
     expect(page).to have_selector('#founder-dashboard')

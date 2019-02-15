@@ -75,7 +75,7 @@ class ApplicationController < ActionController::Base
       resolved_school = current_domain&.school
 
       if Rails.env.test?
-        School.first
+        School.find_by(name: 'test')
       elsif current_host.in?(Rails.application.secrets.pupilfirst_domains)
         nil
       elsif resolved_school.present?

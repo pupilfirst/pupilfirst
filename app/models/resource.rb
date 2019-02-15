@@ -36,8 +36,6 @@ class Resource < ApplicationRecord
   mount_uploader :file, ResourceFileUploader
 
   scope :public_resources, -> { where(public: true).order('title') }
-  # scope to search title
-  scope :title_matches, ->(search_key) { where("lower(title) LIKE ?", "%#{search_key.downcase}%") }
 
   # Custom scope to allow AA to filter by intersection of tags.
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }

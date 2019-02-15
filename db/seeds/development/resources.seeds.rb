@@ -12,7 +12,8 @@ after 'development:targets' do
     description: 'This is a public PDF file, meant to be accessible by everyone!',
     targets: [target],
     public: true,
-    school: school
+    school: school,
+    tag_list: %w(PDF)
   )
 
   r.file_as.attach(io: Rails.root.join(pdf_path).open, filename: 'pdf-sample.pdf')
@@ -24,7 +25,8 @@ after 'development:targets' do
     link: 'https://www.google.com',
     targets: [target],
     public: true,
-    school: school
+    school: school,
+    tag_list: %w(Link)
   )
 
   r = Resource.new(
@@ -32,7 +34,8 @@ after 'development:targets' do
     description: 'This is an MP4 video, which we should be able to stream.',
     targets: [target],
     public: true,
-    school: school
+    school: school,
+    tag_list: %w(Video)
   )
 
   r.file_as.attach(io: Rails.root.join(video_path).open, filename: 'video-sample.mp4')
@@ -44,14 +47,16 @@ after 'development:targets' do
     description: 'This is a YouTube embed. It should be playable from the page.',
     targets: [target],
     public: true,
-    school: school
+    school: school,
+    tag_list: %w(Video)
   )
 
   r = Resource.new(
     title: 'PDF only for students',
     description: 'This is a restricted PDF file, meant to be accessible only by students',
     targets: [target],
-    school: school
+    school: school,
+    tag_list: %w(PDF)
   )
 
   r.file_as.attach(io: Rails.root.join(pdf_path).open, filename: 'pdf-sample.pdf')

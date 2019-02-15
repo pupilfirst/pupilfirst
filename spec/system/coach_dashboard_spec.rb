@@ -5,7 +5,7 @@ feature 'Coach Dashboard' do
   include UserSpecHelper
 
   # Setup a course with a single founder target, ...
-  let(:school) { create :school }
+  let(:school) { create :school, :current }
   let(:course) { create :course, school: school }
   let(:level_1) { create :level, :one, course: course }
   let(:target_group) { create :target_group, level: level_1 }

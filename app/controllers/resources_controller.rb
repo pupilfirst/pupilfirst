@@ -23,16 +23,6 @@ class ResourcesController < ApplicationController
 
     @resource.increment_downloads(current_user)
     @stream_video = @resource.file_url || @resource.video_embed
-  rescue ActiveRecord::RecordNotFound, Pundit::NotAuthorizedError
-    alert_message = 'Could not find the requested resource! '
-
-    alert_message += if current_founder.present?
-      'You might not be authorized to view this resource.'
-    else
-      'Please try again after signing in as this could be a private resource.'
-    end
-
-    redirect_to resources_path, alert: alert_message
   end
 
   # GET /library/:id/download

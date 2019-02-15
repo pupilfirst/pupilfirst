@@ -22,11 +22,8 @@ class ResourcePolicy < ApplicationPolicy
       # resources linked to targets of the course founder is enrolled in
       target_linked_resources = resources.where(targets: { id: current_founder.course.targets.select(:id) })
 
-      # private resources not linked to target
-      private_resources_without_target = resources.where(schools: { id: current_school }).where(public: false)
-
       # Return public resources and private course resources where founder is member.
-      public_resources.or(target_linked_resources).or(private_resources_without_target)
+      public_resources.or(target_linked_resources)
     end
   end
 end

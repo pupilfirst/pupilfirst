@@ -13,7 +13,8 @@ module Schools
           evaluationCriteria: evaluation_criteria,
           levels: levels,
           targetGroups: target_groups,
-          targets: targets
+          targets: targets,
+          authenticityToken: view.form_authenticity_token
         }
       end
 

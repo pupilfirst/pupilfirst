@@ -6,7 +6,8 @@ feature 'Founder Dashboard' do
   # The basics.
   let(:course) { create :course }
   let!(:startup) { create :startup, level: level_4 }
-  let!(:founder) { create :founder, startup: startup }
+  let(:dashboard_toured) { true }
+  let!(:founder) { create :founder, startup: startup, dashboard_toured: dashboard_toured }
   let(:faculty) { create :faculty }
 
   # Levels.
@@ -35,8 +36,6 @@ feature 'Founder Dashboard' do
   let!(:target_with_prerequisites) { create :target, target_group: target_group_4, prerequisite_targets: [pending_target], role: Target::ROLE_TEAM }
   let!(:level_5_target) { create :target, target_group: target_group_5, role: Target::ROLE_TEAM }
 
-  let(:dashboard_toured) { true }
-
   before do
     # Timeline events to take targets to specific states.
     create(:timeline_event, founders: startup.founders, target: completed_target_1, passed_at: 1.day.ago)
@@ -44,18 +43,14 @@ feature 'Founder Dashboard' do
     create(:timeline_event, founders: startup.founders, target: completed_target_3, passed_at: 1.day.ago)
     create(:timeline_event, founders: startup.founders, target: not_accepted_target, evaluator: faculty)
     create(:timeline_event, founders: startup.founders, target: needs_improvement_target, passed_at: 1.day.ago)
-
-    # Sign in with Founder - set dashboard toured to true to avoid the tour.
-    founder.update!(dashboard_toured: dashboard_toured)
   end
 
   context 'when founder has not visited dashboard before' do
     let(:dashboard_toured) { false }
 
     scenario 'founder sees tour of dashboard', js: true do
-      # I expect to see the tour.
       sign_in_user founder.user, referer: student_dashboard_path
-      expect(page).to have_selector('.introjs-tooltipReferenceLayer', visible: false)
+      expect(page).to have_selector('.introjs-overlay')
     end
   end
 
@@ -71,6 +66,7 @@ feature 'Founder Dashboard' do
     before do
       course.update!(ends_at: 2.days.ago)
     end
+
     scenario 'founder visits the dashboard', js: true do
       sign_in_user founder.user, referer: student_dashboard_path
       expect(page).to have_selector('.founder-dashboard-notification__box')
@@ -83,22 +79,8 @@ feature 'Founder Dashboard' do
   scenario 'founder visits dashboard', js: true do
     sign_in_user founder.user, referer: student_dashboard_path
 
-    # There should be no tour.
-    expect(page).to_not have_selector('.introjs-tooltipReferenceLayer', visible: false)
-
     # Check the product name displayed in the dashboard.
     expect(page).to have_selector('.founder-dashboard-header__product-title', text: startup.product_name)
-
-    # Founder can manually start a dashboard tour.
-    find('.founder-dashboard-actionbar__show-more-menu-dots').click
-    find('a[id=filter-targets-dropdown__tour-button]').click
-
-    expect(page).to have_selector('.introjs-tooltipReferenceLayer', visible: false)
-
-    # End the tour. We're not interested in its contents.
-    within('.introjs-tooltip') do
-      find('.introjs-skipbutton').click
-    end
 
     find('.founder-dashboard-actionbar__box').click
 
@@ -136,6 +118,19 @@ feature 'Founder Dashboard' do
     # Ensure level 6 is displayed locked
     find('.filter-targets-dropdown__button').click
     expect(page).to have_selector('.filter-targets-dropdown__menu-item--disabled', text: "Level 6: #{locked_level_6.name}")
+  end
+
+  scenario 'founder can trigger the intro manually', js: true do
+    sign_in_user founder.user, referer: student_dashboard_path
+
+    # There should be no tour open right now.
+    expect(page).to_not have_selector('.introjs-tooltipReferenceLayer', visible: false)
+
+    # Founder can manually start a dashboard tour.
+    find('.founder-dashboard-actionbar__show-more-menu-dots').click
+    find('a[id=filter-targets-dropdown__tour-button]').click
+
+    expect(page).to have_selector('.introjs-tooltipReferenceLayer', visible: false)
   end
 
   context "when the founders's course has a Level 0 in it" do

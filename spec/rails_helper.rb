@@ -110,6 +110,10 @@ Capybara.register_driver :headless_firefox do |app|
   Capybara::Selenium::Driver.new app, browser: :firefox, options: options
 end
 
+if ENV['JAVASCRIPT_DRIVER'] == 'cuprite'
+  require "capybara/cuprite"
+end
+
 Capybara.javascript_driver = ENV['JAVASCRIPT_DRIVER'].present? ? ENV['JAVASCRIPT_DRIVER'].to_sym : :chrome
 
 # Use rspec-retry to retry pesky intermittent failures.
@@ -137,6 +141,10 @@ Capybara::Screenshot.prune_strategy = { keep: 20 }
   Capybara::Screenshot.register_driver(driver_name) do |driver, path|
     driver.browser.save_screenshot(path)
   end
+end
+
+Capybara::Screenshot.register_driver(:cuprite) do |driver, path|
+  driver.browser.render(path)
 end
 
 # Faker should use India as locale.

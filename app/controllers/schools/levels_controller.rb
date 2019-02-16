@@ -4,13 +4,13 @@ module Schools
 
     # POST /school/courses/:course_id/levels
     def create
-      course = Course.find(params[:course_id])
+      course = Course.find(params)
       new_level = authorize(Level.new(course: course), policy_class: Schools::LevelPolicy)
 
       form = ::Schools::Levels::CreateForm.new(new_level)
       if form.validate(params[:level])
-        form.save
-        redirect_back(fallback_location: school_course_curriculum_path(course))
+        level = form.save
+        render json: { id: level.id, errors: nil }
       else
         raise form.errors.full_messages.join(', ')
       end

@@ -17,7 +17,7 @@ module Schools
       def at_least_one_milestone_tg_exists
         return if level.target_groups.present?
 
-        errors[:base] << 'First target group should be milestone' if milestone.to_i.zero?
+        errors[:base] << 'First target group should be milestone' unless milestone
       end
 
       def save

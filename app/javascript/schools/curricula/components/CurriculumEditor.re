@@ -12,7 +12,8 @@ type props = {
 type editorState =
   | Hidden
   | ShowTargetEditor
-  | ShowTargetGroupEditor;
+  | ShowTargetGroupEditor
+  | ShowLevelEditor;
 
 type state = {
   selectedLevel: Level.t,
@@ -80,6 +81,12 @@ let make =
             authenticityToken
             hideEditorStateCB
           />
+        | ShowLevelEditor =>
+          <CurriculumEditor__LevelEditor
+            course
+            authenticityToken
+            hideEditorStateCB
+          />
         }
       }
       <div
@@ -118,7 +125,8 @@ let make =
           </div>
         </div>
         <button
-          className="bg-indigo-dark hover:bg-blue-dark text-white font-bold py-2 px-4 rounded focus:outline-none">
+          className="bg-indigo-dark hover:bg-blue-dark text-white font-bold py-2 px-4 rounded focus:outline-none"
+          onClick={_ => send(UpdateEditorState(ShowLevelEditor))}>
           {"Create New Level" |> str}
         </button>
       </div>
@@ -138,7 +146,7 @@ let make =
             |> ReasonReact.array
           }
           <div
-            onClick ={_ => send(UpdateEditorState(ShowTargetGroupEditor))}
+            onClick={_ => send(UpdateEditorState(ShowTargetGroupEditor))}
             className="target-group__create flex items-center relative bg-grey-lighter border-2 border-dashed p-6 z-10 rounded-lg mt-12 cursor-pointer">
             <svg className="svg-icon w-12 h-12" viewBox="0 0 20 20">
               <path

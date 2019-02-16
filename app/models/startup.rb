@@ -99,13 +99,6 @@ class Startup < ApplicationRecord
     founders_list.each { |u| founders << u }
   end
 
-  def self.current_startups_split
-    {
-      'Approved' => approved.count,
-      'Dropped-out' => dropped_out.count
-    }
-  end
-
   def founder?(founder)
     return false unless founder
 

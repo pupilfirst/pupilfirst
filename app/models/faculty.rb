@@ -116,7 +116,7 @@ class Faculty < ApplicationRecord
   def average_rating
     @average_rating ||= begin
       rated_sessions = connect_requests.where.not(rating_for_faculty: nil)
-      return nil if rated_sessions.count < 5
+      return nil if rated_sessions.load.size < 5
 
       ratings = rated_sessions.pluck(:rating_for_faculty)
       ratings.inject(:+).to_f / ratings.size

@@ -27,7 +27,7 @@ class FacultyMailer < ApplicationMailer
   #
   # @param timeline_event [TimelineEvent] Timeline event that was created just now.
   def student_submission_notification(timeline_event, faculty)
-    @submission_from = if timeline_event.founders.count == 1
+    @submission_from = if timeline_event.founders.load.size == 1
       timeline_event.founders.first.name
     else
       "team #{timeline_event.founders.first.startup.product_name}"

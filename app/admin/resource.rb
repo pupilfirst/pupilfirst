@@ -67,7 +67,6 @@ ActiveAdmin.register Resource do
         resource.link&.html_safe
       end
 
-      row :file_content_type
       row :created_at
       row :updated_at
 

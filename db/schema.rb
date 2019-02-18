@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_11_084334) do
+ActiveRecord::Schema.define(version: 2019_02_18_112627) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -374,7 +374,6 @@ ActiveRecord::Schema.define(version: 2019_02_11_084334) do
     t.string "slug"
     t.text "video_embed"
     t.string "link"
-    t.string "file_content_type"
     t.boolean "archived", default: false
     t.boolean "public", default: false
     t.bigint "school_id"

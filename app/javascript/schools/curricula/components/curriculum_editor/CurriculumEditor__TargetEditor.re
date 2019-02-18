@@ -172,10 +172,9 @@ let createTarget = (state, authenticityToken, targetGroupId) => {
 };
 
 let facultyReviewButtonClasses = value =>
-   value ?
-     "w-1/2 bg-grey hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none" :
-     "w-1/2 bg-white border-l hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none";
-
+  value ?
+    "w-1/2 bg-grey hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none" :
+    "w-1/2 bg-white border-l hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none";
 
 let completionButtonClasses = value =>
   value ?
@@ -188,7 +187,7 @@ let make =
       ~evaluationCriteria,
       ~targets,
       ~authenticityToken,
-      ~hideEditorStateCB,
+      ~hideEditorActionCB,
       _children,
     ) => {
   ...component,
@@ -458,7 +457,11 @@ let make =
                           send(UpdateMethodOfCompletion(Evaluated));
                         }
                       }
-                      className={facultyReviewButtonClasses(state.methodOfCompletion == Evaluated)}>
+                      className={
+                        facultyReviewButtonClasses(
+                          state.methodOfCompletion == Evaluated,
+                        )
+                      }>
                       {"Yes" |> str}
                     </button>
                     <button
@@ -468,7 +471,12 @@ let make =
                           send(UpdateMethodOfCompletion(MarkAsComplete));
                         }
                       }
-                      className={facultyReviewButtonClasses((state.methodOfCompletion != Evaluated) && (state.methodOfCompletion != NotSelected ))}>
+                      className={
+                        facultyReviewButtonClasses(
+                          state.methodOfCompletion != Evaluated
+                          && state.methodOfCompletion != NotSelected,
+                        )
+                      }>
                       {"No" |> str}
                     </button>
                   </div>
@@ -757,10 +765,7 @@ let make =
             </div>
             <div className="flex">
               <button
-                onClick={
-                  _ =>
-                  hideEditorStateCB()
-                }
+                onClick={_ => hideEditorActionCB()}
                 className="bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
                 {"Close" |> str}
               </button>

@@ -98,7 +98,7 @@ let milestoneButtonClasses = value =>
     "w-1/2 bg-white border-l hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none";
 
 let make =
-    (~currentLevelId, ~authenticityToken, ~hideEditorStateCB, _children) => {
+    (~currentLevelId, ~authenticityToken, ~hideEditorActionCB, _children) => {
   ...component,
   initialState: () => {title: "", description: "", milestone: false},
   reducer: (action, state) =>
@@ -199,7 +199,7 @@ let make =
                 </div>
                 <div className="flex">
                   <button
-                    onClick={_ => hideEditorStateCB()}
+                    onClick={_ => hideEditorActionCB()}
                     className="bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
                     {"Close" |> str}
                   </button>

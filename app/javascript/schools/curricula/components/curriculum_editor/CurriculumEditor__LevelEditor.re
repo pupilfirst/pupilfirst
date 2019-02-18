@@ -1,4 +1,5 @@
 open CurriculumEditor__Types;
+open SchoolAdmin__Utils;
 
 exception UnexpectedResponse(int);
 
@@ -28,7 +29,11 @@ type action =
 
 let component = ReasonReact.reducerComponent("CurriculumEditor__LevelEditor");
 
-let handleResponseJSON = json =>
+let handleResponseJSON = json => {
+  let id =
+    json
+    |> Json.Decode.(field("error", nullable(string)))
+    |> Js.Null.toOption;
   switch (
     json
     |> Json.Decode.(field("error", nullable(string)))
@@ -37,6 +42,10 @@ let handleResponseJSON = json =>
   | Some(error) => Notification.error("Something went wrong!!", error)
   | None => Notification.success("Success", "Target Created")
   };
+  Js.log(id);
+};
+
+let handleResponseCB = json => Js.log(json);
 
 let createLevel = (authenticityToken, course, state) => {
   let payload = Js.Dict.empty();
@@ -59,42 +68,8 @@ let createLevel = (authenticityToken, course, state) => {
   | None => ()
   };
 
-  Js.Promise.(
-    Fetch.fetchWithInit(
-      "/school/courses/" ++ course_id ++ "/levels",
-      Fetch.RequestInit.make(
-        ~method_=Post,
-        ~body=
-          Fetch.BodyInit.make(Js.Json.stringify(Js.Json.object_(payload))),
-        ~headers=Fetch.HeadersInit.make({"Content-Type": "application/json"}),
-        ~credentials=Fetch.SameOrigin,
-        (),
-      ),
-    )
-    |> then_(response =>
-         if (Fetch.Response.ok(response)
-             || Fetch.Response.status(response) == 422) {
-           response |> Fetch.Response.json;
-         } else {
-           Js.Promise.reject(
-             UnexpectedResponse(response |> Fetch.Response.status),
-           );
-         }
-       )
-    |> then_(json => handleResponseJSON(json) |> resolve)
-    |> catch(error =>
-         (
-           switch (error |> handleApiError) {
-           | Some(code) =>
-             Notification.error(code |> string_of_int, "Please try again")
-           | None =>
-             Notification.error("Something went wrong!", "Please try again")
-           }
-         )
-         |> resolve
-       )
-    |> ignore
-  );
+  let url = "/school/courses/" ++ course_id ++ "/levels";
+  Api.create(url, payload, handleResponseCB);
 };
 
 let updateLevel = (authenticityToken, levelId, state) => {
@@ -116,43 +91,8 @@ let updateLevel = (authenticityToken, levelId, state) => {
   | Some(date) => Js.Dict.set(payload, "unlock_on", date |> Js.Json.string)
   | None => ()
   };
-
-  Js.Promise.(
-    Fetch.fetchWithInit(
-      "/school/levels/" ++ levelId,
-      Fetch.RequestInit.make(
-        ~method_=Patch,
-        ~body=
-          Fetch.BodyInit.make(Js.Json.stringify(Js.Json.object_(payload))),
-        ~headers=Fetch.HeadersInit.make({"Content-Type": "application/json"}),
-        ~credentials=Fetch.SameOrigin,
-        (),
-      ),
-    )
-    |> then_(response =>
-         if (Fetch.Response.ok(response)
-             || Fetch.Response.status(response) == 422) {
-           response |> Fetch.Response.json;
-         } else {
-           Js.Promise.reject(
-             UnexpectedResponse(response |> Fetch.Response.status),
-           );
-         }
-       )
-    |> then_(json => handleResponseJSON(json) |> resolve)
-    |> catch(error =>
-         (
-           switch (error |> handleApiError) {
-           | Some(code) =>
-             Notification.error(code |> string_of_int, "Please try again")
-           | None =>
-             Notification.error("Something went wrong!", "Please try again")
-           }
-         )
-         |> resolve
-       )
-    |> ignore
-  );
+  let url = "/school/levels/" ++ levelId;
+  Api.update(url, payload, handleResponseCB);
 };
 
 let submitButton = (level, course, authenticityToken, state) =>
@@ -175,7 +115,7 @@ let submitButton = (level, course, authenticityToken, state) =>
   };
 
 let make =
-    (~level, ~course, ~authenticityToken, ~hideEditorStateCB, _children) => {
+    (~level, ~course, ~authenticityToken, ~hideEditorActionCB, _children) => {
   ...component,
   initialState: () => {
     name: level |> Level.name,
@@ -277,7 +217,7 @@ let make =
                 />
                 <div className="flex">
                   <button
-                    onClick={_ => hideEditorStateCB()}
+                    onClick={_ => hideEditorActionCB()}
                     className="bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
                     {"Close" |> str}
                   </button>

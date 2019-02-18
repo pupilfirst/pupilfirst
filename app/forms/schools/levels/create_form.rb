@@ -2,7 +2,6 @@ module Schools
   module Levels
     class CreateForm < Reform::Form
       property :name, validates: { presence: true, length: { maximum: 250 } }
-      property :description, validates: { presence: true, length: { maximum: 250 } }
       property :number, validates: { format: { with: /\A\d+\z/, message: "Not a valid number" } }
       property :course_id, validates: { presence: true }
       property :unlock_on
@@ -11,12 +10,13 @@ module Schools
       validate :level_number_exists
 
       def save
-        level = Level.create!(
+        level = Level.new(
           course: course,
           name: name,
-          description: description,
           number: number
         )
+        level.unlock_on = unlock_on if unlock_on.present?
+        level.save
         level
       end
 

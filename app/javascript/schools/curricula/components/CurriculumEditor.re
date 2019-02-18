@@ -13,7 +13,7 @@ type editorState =
   | Hidden
   | ShowTargetEditor
   | ShowTargetGroupEditor
-  | ShowLevelEditor;
+  | ShowLevelEditor(Level.t);
 
 type state = {
   selectedLevel: Level.t,
@@ -27,7 +27,7 @@ type action =
 
 let str = ReasonReact.string;
 
-let component = ReasonReact.reducerComponent("CurriculumController");
+let component = ReasonReact.reducerComponent("CurriculumEditor");
 
 let make =
     (
@@ -54,10 +54,15 @@ let make =
     },
   render: ({state, send}) => {
     let currentLevel = state.selectedLevel;
+    let currentLevelId =
+      switch (state.selectedLevel |> Level.id) {
+      | Some(id) => id
+      | None => 999
+      };
     let targetGroupsInLevel =
       targetGroups
       |> List.filter(targetGroup =>
-           targetGroup |> TargetGroup.levelId == (currentLevel |> Level.id)
+           targetGroup |> TargetGroup.levelId == currentLevelId
          );
     let showTargetEditorCB = () => send(UpdateEditorState(ShowTargetEditor));
     let hideEditorStateCB = () => send(UpdateEditorState(Hidden));
@@ -77,12 +82,13 @@ let make =
           />
         | ShowTargetGroupEditor =>
           <CurriculumEditor__TargetGroupEditor
-            currentLevel
+            currentLevelId
             authenticityToken
             hideEditorStateCB
           />
-        | ShowLevelEditor =>
+        | ShowLevelEditor(level) =>
           <CurriculumEditor__LevelEditor
+            level
             course
             authenticityToken
             hideEditorStateCB
@@ -104,7 +110,17 @@ let make =
             {
               levels
               |> List.map(level =>
-                   <option value={level |> Level.name}>
+                   <option
+                     key={
+                       (
+                         switch (level |> Level.id) {
+                         | Some(id) => id
+                         | None => 999
+                         }
+                       )
+                       |> string_of_int
+                     }
+                     value={level |> Level.name}>
                      {level |> Level.name |> str}
                    </option>
                  )
@@ -126,7 +142,16 @@ let make =
         </div>
         <button
           className="bg-indigo-dark hover:bg-blue-dark text-white font-bold py-2 px-4 rounded focus:outline-none"
-          onClick={_ => send(UpdateEditorState(ShowLevelEditor))}>
+          onClick={
+            _ => send(UpdateEditorState(ShowLevelEditor(currentLevel)))
+          }>
+          {"Edit Level" |> str}
+        </button>
+        <button
+          className="bg-indigo-dark hover:bg-blue-dark text-white font-bold py-2 px-4 rounded focus:outline-none"
+          onClick={
+            _ => send(UpdateEditorState(ShowLevelEditor(Level.empty(12))))
+          }>
           {"Create New Level" |> str}
         </button>
       </div>
@@ -137,6 +162,7 @@ let make =
             targetGroupsInLevel
             |> List.map(targetGroup =>
                  <CurriculumEditor__TargetGroupShow
+                   key={targetGroup |> TargetGroup.id |> string_of_int}
                    targetGroup
                    targets
                    showTargetEditorCB

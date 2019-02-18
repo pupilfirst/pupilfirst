@@ -38,9 +38,9 @@ let handleResponseJSON = json =>
   | None => Notification.success("Success", "Target Created")
   };
 
-let createTargetGroup = (authenticityToken, currentLevel, state) => {
+let createTargetGroup = (authenticityToken, currentLevelId, state) => {
   let payload = Js.Dict.empty();
-  let level_id = currentLevel |> Level.id |> string_of_int;
+  let level_id = currentLevelId |> string_of_int;
 
   let milestone = state.milestone == true ? "true" : "false";
 
@@ -97,7 +97,8 @@ let milestoneButtonClasses = value =>
     "w-1/2 bg-grey hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none" :
     "w-1/2 bg-white border-l hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none";
 
-let make = (~currentLevel, ~authenticityToken, ~hideEditorStateCB, _children) => {
+let make =
+    (~currentLevelId, ~authenticityToken, ~hideEditorStateCB, _children) => {
   ...component,
   initialState: () => {title: "", description: "", milestone: false},
   reducer: (action, state) =>
@@ -209,7 +210,7 @@ let make = (~currentLevel, ~authenticityToken, ~hideEditorStateCB, _children) =>
                       _event =>
                         createTargetGroup(
                           authenticityToken,
-                          currentLevel,
+                          currentLevelId,
                           state,
                         )
                     }

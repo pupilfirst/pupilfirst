@@ -38,7 +38,9 @@ module Schools
         @course.levels.map do |level|
           {
             id: level.id,
-            name: level.name
+            name: level.name,
+            levelNumber: level.number,
+            unlockOn: level.unlock_on
           }
         end
       end

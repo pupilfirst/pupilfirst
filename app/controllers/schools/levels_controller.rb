@@ -10,7 +10,7 @@ module Schools
       form = ::Schools::Levels::CreateForm.new(new_level)
       if form.validate(params[:level])
         level = form.save
-        render json: { id: level.id, errors: nil }
+        render json: { id: level.id, error: nil }
       else
         raise form.errors.full_messages.join(', ')
       end
@@ -21,7 +21,7 @@ module Schools
       form = ::Schools::Levels::UpdateForm.new(level)
       if form.validate(params[:level])
         level = form.save
-        render json: { id: level.id, errors: nil }
+        render json: { id: level.id, error: nil }
       else
         raise form.errors.full_messages.join(', ')
       end

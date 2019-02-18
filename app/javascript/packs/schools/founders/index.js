@@ -1,4 +1,5 @@
 import "schools/founders/index.css";
+import "schools/shared/shared.css";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { jsComponent } from "../../../schools/founders/components/SA_StudentsPanel.bs";

@@ -5,6 +5,7 @@ let str = ReasonReact.string;
 type state = {
   selectedStudents: list(Student.t),
   searchString: string,
+  formVisible: bool,
 };
 
 type action =
@@ -12,7 +13,8 @@ type action =
   | DeselectStudent(Student.t)
   | SelectAllStudents
   | DeselectAllStudents
-  | UpdateSearchString(string);
+  | UpdateSearchString(string)
+  | UpdateFormVisibility(bool);
 
 let selectedAcrossTeams = selectedStudents => {
   selectedStudents |> List.map(s => s |> Student.teamId) |> List.sort_uniq((id1, id2) => id1 - id2) |> List.length > 1;
@@ -48,7 +50,7 @@ let component = ReasonReact.reducerComponent("SA_StudentsPanel");
 
 let make = (~teams, _children) => {
   ...component,
-  initialState: () => {selectedStudents: [], searchString: ""},
+  initialState: () => {selectedStudents: [], searchString: "", formVisible: false},
   reducer: (action, state) =>
     switch (action) {
     | SelectStudent(student) =>
@@ -62,9 +64,65 @@ let make = (~teams, _children) => {
       ReasonReact.Update({...state, selectedStudents: teams |> List.map(t => t |> Team.students) |> List.flatten})
     | DeselectAllStudents => ReasonReact.Update({...state, selectedStudents: []})
     | UpdateSearchString(searchString) => ReasonReact.Update({...state, searchString})
+    | UpdateFormVisibility(formVisible) => ReasonReact.Update({...state, formVisible})
     },
   render: ({state, send}) =>
     <div>
+      {state.formVisible ?
+         <div className="blanket">
+           <div className="drawer-right">
+             <div className="create-target-form w-full">
+               <div className="w-full">
+                 <div className="create-target-form__target-details mx-auto bg-white">
+                   <div className="max-w-md p-6 mx-auto">
+                     <h5 className="uppercase text-center border-b border-grey-light pb-2 mb-4">
+                       {"Level Details" |> str}
+                     </h5>
+                     <label className="block tracking-wide text-grey-darker text-xs font-semibold mb-2" htmlFor="name">
+                       {"Level Name*  " |> str}
+                     </label>
+                     <input
+                       className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                       id="name"
+                       type_="text"
+                       placeholder="Type level name here"
+                     />
+                     <label className="block tracking-wide text-grey-darker text-xs font-semibold mb-2">
+                       {"Level Number*  " |> str}
+                     </label>
+                     <input
+                       className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                       id="level number"
+                       type_="number"
+                       placeholder="Type level number here"
+                     />
+                     <label className="block tracking-wide text-grey-darker text-xs font-semibold mb-2">
+                       {"Lock level*  " |> str}
+                     </label>
+                     <input
+                       className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                       id="level unlock date"
+                       type_="date"
+                     />
+                     <div className="flex">
+                       <button
+                         className="bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+                         {"Close" |> str}
+                       </button>
+                     </div>
+                     <div className="flex">
+                       <button
+                         className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+                         {"Create Level" |> str}
+                       </button>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+             </div>
+           </div>
+         </div> :
+         ReasonReact.null}
       <div className="border-b flex px-6 py-2 items-center justify-between">
         <div className="inline-block relative w-64">
           <select
@@ -138,6 +196,7 @@ let make = (~teams, _children) => {
             {state.selectedStudents |> List.length > 0 ?
                ReasonReact.null :
                <button
+                 onClick={_e => send(UpdateFormVisibility(true))}
                  className="hover:bg-purple-dark text-purple-dark font-semibold hover:text-white focus:outline-none border border-dashed border-blue hover:border-transparent flex items-center px-2 py-1 rounded-lg cursor-pointer">
                  <svg className="svg-icon w-6 h-6" viewBox="0 0 20 20">
                    <path

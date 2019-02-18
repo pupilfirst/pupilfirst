@@ -2,13 +2,17 @@ open StudentsPanel__Types;
 
 let str = ReasonReact.string;
 
-type state = {selectedStudents: list(Student.t)};
+type state = {
+  selectedStudents: list(Student.t),
+  searchString: string,
+};
 
 type action =
   | SelectStudent(Student.t)
   | DeselectStudent(Student.t)
   | SelectAllStudents
-  | DeselectAllStudents;
+  | DeselectAllStudents
+  | UpdateSearchString(string);
 
 let selectedAcrossTeams = selectedStudents => {
   selectedStudents |> List.map(s => s |> Student.teamId) |> List.sort_uniq((id1, id2) => id1 - id2) |> List.length > 1;
@@ -25,21 +29,35 @@ let isGroupable = (selectedStudents, teams) => {
   && (selectedAcrossTeams(selectedStudents) || selectedPartialTeam(selectedStudents, teams));
 };
 
+let filteredTeams = (searchString, teams) => {
+  teams
+  |> List.filter(team =>
+       team
+       |> Team.students
+       |> List.map(s => s |> Student.name)
+       |> List.filter(n => n |> String.lowercase |> Js.String.includes(searchString |> String.lowercase))
+       |> List.length > 0
+     );
+};
+
 let component = ReasonReact.reducerComponent("SA_StudentsPanel");
 
 let make = (~teams, _children) => {
   ...component,
-  initialState: () => {selectedStudents: []},
+  initialState: () => {selectedStudents: [], searchString: ""},
   reducer: (action, state) =>
     switch (action) {
-    | SelectStudent(student) => ReasonReact.Update({selectedStudents: [student, ...state.selectedStudents]})
+    | SelectStudent(student) =>
+      ReasonReact.Update({...state, selectedStudents: [student, ...state.selectedStudents]})
     | DeselectStudent(student) =>
       ReasonReact.Update({
+        ...state,
         selectedStudents: state.selectedStudents |> List.filter(s => Student.id(s) !== Student.id(student)),
       })
     | SelectAllStudents =>
-      ReasonReact.Update({selectedStudents: teams |> List.map(t => t |> Team.students) |> List.flatten})
-    | DeselectAllStudents => ReasonReact.Update({selectedStudents: []})
+      ReasonReact.Update({...state, selectedStudents: teams |> List.map(t => t |> Team.students) |> List.flatten})
+    | DeselectAllStudents => ReasonReact.Update({...state, selectedStudents: []})
+    | UpdateSearchString(searchString) => ReasonReact.Update({...state, searchString})
     },
   render: ({state, send}) =>
     <div>
@@ -98,6 +116,13 @@ let make = (~teams, _children) => {
                 }
               />
             </label>
+            <input
+              type_="search"
+              className="bg-white border rounded block appearance-none leading-normal mr-2"
+              placeholder="Search by student name..."
+              value={state.searchString}
+              onChange={event => send(UpdateSearchString(ReactEvent.Form.target(event)##value))}
+            />
             <button
               className="hover:bg-purple-dark text-purple-dark font-semibold hover:text-white focus:outline-none border border-dashed border-blue hover:border-transparent flex items-center px-2 py-1 rounded-lg cursor-pointer">
               <svg className="svg-icon w-6 h-6" viewBox="0 0 20 20">
@@ -125,7 +150,7 @@ let make = (~teams, _children) => {
       </div>
       <div className="px-6 pb-4 flex-1 bg-grey-lightest overflow-y-scroll">
         <div className="max-w-lg mx-auto relative">
-          {teams
+          {filteredTeams(state.searchString, teams)
            |> List.map(team => {
                 let isSingleFounder = team |> Team.students |> List.length == 1;
                 <div
@@ -158,7 +183,21 @@ let make = (~teams, _children) => {
                                 <div className="flex items-center py-4 pr-4">
                                   <img className="w-10 h-10 rounded-full mr-4" src={student |> Student.avatarUrl} />
                                   <div className="text-sm">
-                                    <p className="text-black font-semibold"> {student |> Student.name |> str} </p>
+                                    <p
+                                      className={
+                                        "text-black font-semibold inline-block "
+                                        ++ (
+                                          state.searchString
+                                          |> String.length > 0
+                                          && student
+                                          |> Student.name
+                                          |> String.lowercase
+                                          |> Js.String.includes(state.searchString |> String.lowercase) ?
+                                            "bg-yellow-light" : ""
+                                        )
+                                      }>
+                                      {student |> Student.name |> str}
+                                    </p>
                                   </div>
                                 </div>
                               </div>

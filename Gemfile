@@ -158,6 +158,7 @@ group :test do
   gem 'chromedriver-helper', '~> 2.1' # Easy installation and use of chromedriver, the Chromium project's selenium webdriver adapter.
   gem 'geckodriver-helper', '~> 0.23' # Easy installation and use of geckodriver, that provides the HTTP API described by the WebDriver protocol to communicate with Gecko browsers, such as Firefox.
   gem 'capybara-screenshot', '~> 1.0' # Save screenshots on failure!
+  gem "cuprite", '~> 0.5', require: false # Headless Chrome driver for Capybara.
 end
 
 group :development, :test do

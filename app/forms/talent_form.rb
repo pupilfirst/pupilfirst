@@ -24,11 +24,7 @@ class TalentForm < Reform::Form
       return
     end
 
-    valid_query_types_count = query_type.count do |type|
-      type.in? VALID_QUERY_TYPES
-    end
-
-    return if valid_query_types_count == query_type.count
+    return if (query_type - VALID_QUERY_TYPES).blank?
 
     errors[:query_type] << 'invalid types selected'
   end

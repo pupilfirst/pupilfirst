@@ -44,18 +44,9 @@ ActiveAdmin.register UserActivity do
       row :id
       row :user
 
-      row('Founder'.pluralize(user_activity.user.founders.count)) do |user_activity|
-        if user_activity.user.founders.exists?
-          if user_activity.user.founders.count > 1
-            ul do
-              user_activity.user.founders.each do |founder|
-                li link_to(founder.name, admin_founder_path(founder))
-              end
-            end
-          else
-            founder = user_activity.user.founders.first
-            link_to(founder.name, admin_founder_path(founder))
-          end
+      row('Founders') do |user_activity|
+        none_one_or_many(self, user_activity.user.founders.load) do |founder|
+          link_to("#{founder.name} (#{founder.course.name})", admin_founder_path(founder))
         end
       end
 

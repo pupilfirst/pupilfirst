@@ -1,0 +1,1 @@
+module Api = SchoolAdmin__Api;

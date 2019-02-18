@@ -71,9 +71,9 @@ let make = (~teams, _children) => {
       {state.formVisible ?
          <div className="blanket">
            <div className="drawer-right">
-             <div className="create-target-form w-full">
+             <div className="drawer-right-form w-full">
                <div className="w-full">
-                 <div className="create-target-form__target-details mx-auto bg-white">
+                 <div className="mx-auto bg-white">
                    <div className="max-w-md p-6 mx-auto">
                      <h5 className="uppercase text-center border-b border-grey-light pb-2 mb-4">
                        {"Level Details" |> str}

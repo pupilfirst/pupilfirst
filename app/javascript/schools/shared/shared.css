@@ -49,7 +49,7 @@ body {
     overflow-x: hidden;
 }
 
-.create-target-form {
+.drawer-right-form {
     background-color: #EDF3FA;
 }
 
@@ -121,8 +121,4 @@ body {
 
 .target-group__create:hover, .target-group__target-create:hover {
     @apply .shadow-lg;
-}
-
-.create-target-form__target-behaviour {
-    background-color: #EDF3FA;
 }

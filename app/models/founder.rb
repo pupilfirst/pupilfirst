@@ -254,8 +254,4 @@ class Founder < ApplicationRecord
         avatar_as
     end
   end
-
-  def avatar_url
-    avatar_as.attached? && Rails.application.routes.url_helpers.rails_blob_path(avatar_as, only_path: true)
-  end
 end

@@ -220,13 +220,14 @@ ActiveAdmin.register Founder do
       end
 
       row :avatar do
-        link_to 'Download Avatar', founder.avatar_url if founder.avatar_as.attached?
+        if founder.avatar_as.attached?
+          link_to(url_for(founder.avatar_as)) do
+            image_tag(url_for(founder.avatar_variant(:thumb)))
+          end
+        end
       end
 
       row :exited
-      # row :resume do |founder|
-      #   link_to 'Download Resume', founder.resume_link if founder.resume_link.present?
-      # end
     end
 
     panel 'Social links' do

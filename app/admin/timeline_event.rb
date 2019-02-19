@@ -209,7 +209,7 @@ ActiveAdmin.register TimelineEvent do
         column :title
 
         column :file do |timeline_event_file|
-          link_to timeline_event_file.filename, timeline_event_file.file.url, target: '_blank', rel: 'noopener'
+          link_to timeline_event_file.filename, url_for(timeline_event_file.file_as), target: '_blank', rel: 'noopener'
         end
 
         column :private

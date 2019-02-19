@@ -53,6 +53,16 @@ body {
     background-color: #EDF3FA;
 }
 
+.drawer-right-form__input {
+  margin-bottom: 2rem;
+}
+
+.drawer-right-form__error-msg {
+  color: red;
+  margin-top: -1.75rem;
+  margin-bottom: 0.715rem;
+}
+
 .resources-upload-tab__link {
     cursor: pointer;
 }

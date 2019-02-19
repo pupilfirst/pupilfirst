@@ -12,7 +12,7 @@ type props = {
 type editorAction =
   | Hidden
   | ShowTargetEditor
-  | ShowTargetGroupEditor
+  | ShowTargetGroupEditor(option(TargetGroup.t))
   | ShowLevelEditor(Level.editable);
 
 type state = {
@@ -20,12 +20,14 @@ type state = {
   editorAction,
   selectedTargetGroupId: int,
   levels: list(Level.persisted),
+  targetGroups: list(TargetGroup.t),
 };
 
 type action =
   | SelectLevel(Level.persisted)
   | UpdateEditorAction(editorAction)
-  | UpdateLevels(Level.persisted);
+  | UpdateLevels(Level.persisted)
+  | UpdateTargetGroups(TargetGroup.t);
 
 let str = ReasonReact.string;
 
@@ -46,6 +48,7 @@ let make =
     selectedLevel: levels |> List.rev |> List.hd,
     editorAction: Hidden,
     selectedTargetGroupId: 1,
+    targetGroups,
     levels,
   },
   reducer: (action, state) =>
@@ -54,6 +57,12 @@ let make =
       ReasonReact.Update({...state, selectedLevel})
     | UpdateEditorAction(editorAction) =>
       ReasonReact.Update({...state, editorAction})
+    | UpdateLevels(level) =>
+      let newLevels = state.levels |> List.append([level]);
+      ReasonReact.Update({...state, levels: newLevels});
+    | UpdateTargetGroups(targetGroup) =>
+      let newtargetGroups = state.targetGroups |> List.append([targetGroup]);
+      ReasonReact.Update({...state, targetGroups: newtargetGroups});
     },
   render: ({state, send}) => {
     let currentLevel = state.selectedLevel;
@@ -67,6 +76,10 @@ let make =
       send(UpdateEditorAction(ShowTargetEditor));
     let hideEditorActionCB = () => send(UpdateEditorAction(Hidden));
     let targetGroupId = state.selectedTargetGroupId;
+    let showTargetGroupEditorCB = targetGroup =>
+      send(UpdateEditorAction(ShowTargetGroupEditor(targetGroup)));
+    let updateTargetGroupsCB = targetGroup =>
+      send(UpdateTargetGroups(targetGroup));
     <div>
       {
         switch (state.editorAction) {
@@ -79,12 +92,24 @@ let make =
             authenticityToken
             hideEditorActionCB
           />
-        | ShowTargetGroupEditor =>
-          <CurriculumEditor__TargetGroupEditor
-            currentLevelId
-            authenticityToken
-            hideEditorActionCB
-          />
+        | ShowTargetGroupEditor(targetGroup) =>
+          switch (targetGroup) {
+          | Some(targetGroup) =>
+            <CurriculumEditor__TargetGroupEditor
+              targetGroup
+              currentLevelId
+              authenticityToken
+              updateTargetGroupsCB
+              hideEditorActionCB
+            />
+          | None =>
+            <CurriculumEditor__TargetGroupEditor
+              currentLevelId
+              authenticityToken
+              updateTargetGroupsCB
+              hideEditorActionCB
+            />
+          }
         | ShowLevelEditor(level) =>
           <CurriculumEditor__LevelEditor
             level
@@ -163,6 +188,7 @@ let make =
                    key={targetGroup |> TargetGroup.id |> string_of_int}
                    targetGroup
                    targets
+                   showTargetGroupEditorCB
                    showTargetEditorCB
                  />
                )
@@ -170,7 +196,9 @@ let make =
             |> ReasonReact.array
           }
           <div
-            onClick={_ => send(UpdateEditorAction(ShowTargetGroupEditor))}
+            onClick={
+              _ => send(UpdateEditorAction(ShowTargetGroupEditor(None)))
+            }
             className="target-group__create flex items-center relative bg-grey-lighter border-2 border-dashed p-6 z-10 rounded-lg mt-12 cursor-pointer">
             <svg className="svg-icon w-12 h-12" viewBox="0 0 20 20">
               <path

@@ -3,8 +3,7 @@ module Schools
     class CreateForm < Reform::Form
       property :name, validates: { presence: true, length: { maximum: 250 } }
       property :description, validates: { presence: true, length: { maximum: 250 } }
-      property :sort_index, validates: { presence: true }
-      property :milestone,  validates: { presence: true }
+      property :milestone, validates: { presence: true }
       property :level_id, validates: { presence: true }
 
       validate :level_exists
@@ -32,6 +31,11 @@ module Schools
       end
 
       private
+
+      def sort_index
+        max_index = level.target_groups.maximum(:sort_index)
+        max_index ? max_index + 1 : 1
+      end
 
       def level
         @level ||= Level.find_by(id: level_id)

@@ -1,98 +1,128 @@
 open CurriculumEditor__Types;
-
-exception UnexpectedResponse(int);
-
-let handleApiError =
-  [@bs.open]
-  (
-    fun
-    | UnexpectedResponse(code) => code
-  );
+open SchoolAdmin__Utils;
 
 let str = ReasonReact.string;
-
-type keyForStateUpdation =
-  | Title
-  | Description;
-
 type state = {
-  title: string,
+  name: string,
   description: string,
   milestone: bool,
+  saveDisabled: bool,
 };
 
 type action =
-  | UpdateState(keyForStateUpdation, string)
+  | UpdateName(string)
+  | UpdateDescription(string)
   | UpdateMilestone(bool);
 
-let component = ReasonReact.reducerComponent("CurriculumEditor__TargetGroupEditor");
+let component =
+  ReasonReact.reducerComponent("CurriculumEditor__TargetGroupEditor");
 
-let handleResponseJSON = json =>
-  switch (json |> Json.Decode.(field("error", nullable(string))) |> Js.Null.toOption) {
-  | Some(error) => Notification.error("Something went wrong! bodhi", error)
-  | None => Notification.success("Success", "Target Created")
-  };
+let handleResponseCB = (json, state) => {
+  Js.log(json);
+  Js.log(state.milestone);
+};
 
 let createTargetGroup = (authenticityToken, currentLevelId, state) => {
   let payload = Js.Dict.empty();
   let level_id = currentLevelId |> string_of_int;
-
   let milestone = state.milestone == true ? "true" : "false";
 
-  Js.Dict.set(payload, "authenticity_token", authenticityToken |> Js.Json.string);
-  Js.Dict.set(payload, "sort_index", 12 |> string_of_int |> Js.Json.string);
-  Js.Dict.set(payload, "name", state.title |> Js.Json.string);
+  Js.Dict.set(
+    payload,
+    "authenticity_token",
+    authenticityToken |> Js.Json.string,
+  );
+  Js.Dict.set(payload, "name", state.name |> Js.Json.string);
   Js.Dict.set(payload, "description", state.description |> Js.Json.string);
   Js.Dict.set(payload, "milestone", milestone |> Js.Json.string);
 
-  Js.Promise.(
-    Fetch.fetchWithInit(
-      "/school/levels/" ++ level_id ++ "/target_groups",
-      Fetch.RequestInit.make(
-        ~method_=Post,
-        ~body=Fetch.BodyInit.make(Js.Json.stringify(Js.Json.object_(payload))),
-        ~headers=Fetch.HeadersInit.make({"Content-Type": "application/json"}),
-        ~credentials=Fetch.SameOrigin,
-        (),
-      ),
-    )
-    |> then_(response =>
-         if (Fetch.Response.ok(response) || Fetch.Response.status(response) == 422) {
-           response |> Fetch.Response.json;
-         } else {
-           Js.Promise.reject(UnexpectedResponse(response |> Fetch.Response.status));
-         }
-       )
-    |> then_(json => handleResponseJSON(json) |> resolve)
-    |> catch(error =>
-         (
-           switch (error |> handleApiError) {
-           | Some(code) => Notification.error(code |> string_of_int, "Please try again")
-           | None => Notification.error("Something went wrong!", "Please try again")
-           }
-         )
-         |> resolve
-       )
-    |> ignore
-  );
+  let url = "/school/levels/" ++ level_id ++ "/target_groups";
+  Api.create(url, payload, state, handleResponseCB);
 };
+
+let updateTargetGroup = (authenticityToken, targetGroupId, state) => {
+  let payload = Js.Dict.empty();
+  let milestone = state.milestone == true ? "true" : "false";
+
+  Js.Dict.set(
+    payload,
+    "authenticity_token",
+    authenticityToken |> Js.Json.string,
+  );
+  Js.Dict.set(payload, "name", state.name |> Js.Json.string);
+  Js.Dict.set(payload, "description", state.description |> Js.Json.string);
+  Js.Dict.set(payload, "milestone", milestone |> Js.Json.string);
+
+  let url = "/school/target_groups/" ++ targetGroupId;
+  Api.update(url, payload, state, handleResponseCB);
+};
+
+let submitButton = (targetGroup, currentLevelId, authenticityToken, state) =>
+  switch (targetGroup) {
+  | Some(targetGroup) =>
+    let id = targetGroup |> TargetGroup.id;
+    <button
+      disabled={state.saveDisabled}
+      onClick=(
+        _event =>
+          updateTargetGroup(authenticityToken, id |> string_of_int, state)
+      )
+      className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+      {"Update Level" |> str}
+    </button>;
+
+  | None =>
+    <button
+      onClick=(
+        _event => createTargetGroup(authenticityToken, currentLevelId, state)
+      )
+      className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+      {"Create Level" |> str}
+    </button>
+  };
 
 let milestoneButtonClasses = value =>
   value ?
     "w-1/2 bg-grey hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none" :
     "w-1/2 bg-white border-l hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none";
 
-let make = (~currentLevelId, ~authenticityToken, ~hideEditorActionCB, _children) => {
+let make =
+    (
+      ~targetGroup=?,
+      ~currentLevelId,
+      ~authenticityToken,
+      ~updateTargetGroupsCB,
+      ~hideEditorActionCB,
+      _children,
+    ) => {
   ...component,
-  initialState: () => {title: "", description: "", milestone: false},
+  initialState: () =>
+    switch (targetGroup) {
+    | Some(targetGroup) => {
+        name: targetGroup |> TargetGroup.name,
+        description:
+          switch (targetGroup |> TargetGroup.description) {
+          | Some(description) => description
+          | None => ""
+          },
+        milestone: targetGroup |> TargetGroup.milestone,
+        saveDisabled: true,
+      }
+    | None => {
+        name: "",
+        description: "",
+        milestone: false,
+        saveDisabled: true,
+      }
+    },
   reducer: (action, state) =>
     switch (action) {
-    | UpdateState(keyForStateUpdation, string) =>
-      switch (keyForStateUpdation) {
-      | Title => ReasonReact.Update({...state, title: string})
-      | Description => ReasonReact.Update({...state, description: string})
-      }
-    | UpdateMilestone(milestone) => ReasonReact.Update({...state, milestone})
+    | UpdateName(name) =>
+      ReasonReact.Update({...state, name, saveDisabled: false})
+    | UpdateDescription(description) =>
+      ReasonReact.Update({...state, description, saveDisabled: false})
+    | UpdateMilestone(milestone) =>
+      ReasonReact.Update({...state, milestone, saveDisabled: false})
     },
   render: ({state, send}) =>
     <div className="blanket">
@@ -101,49 +131,76 @@ let make = (~currentLevelId, ~authenticityToken, ~hideEditorActionCB, _children)
           <div className="w-full">
             <div className="mx-auto bg-white">
               <div className="max-w-md p-6 mx-auto">
-                <h5 className="uppercase text-center border-b border-grey-light pb-2 mb-4">
+                <h5
+                  className="uppercase text-center border-b border-grey-light pb-2 mb-4">
                   {"Target Group Details" |> str}
                 </h5>
-                <label className="block tracking-wide text-grey-darker text-xs font-semibold mb-2" htmlFor="title">
+                <label
+                  className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                  htmlFor="name">
                   {"Title*  " |> str}
                 </label>
                 <input
                   className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                  id="title"
+                  id="name"
                   type_="text"
-                  placeholder="Type target group title here"
-                  onChange={event => send(UpdateState(Title, ReactEvent.Form.target(event)##value))}
+                  placeholder="Type target group name here"
+                  value={state.name}
+                  onChange={
+                    event =>
+                      send(UpdateName(ReactEvent.Form.target(event)##value))
+                  }
                 />
-                <label className="block tracking-wide text-grey-darker text-xs font-semibold mb-2" htmlFor="title">
-                  {" Description*" |> str}
+                <label
+                  className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                  htmlFor="description">
+                  {" Description" |> str}
                 </label>
                 <textarea
                   className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                  id="title"
+                  id="description"
                   placeholder="Type target group description"
-                  onChange={event => send(UpdateState(Description, ReactEvent.Form.target(event)##value))}
+                  value={state.description}
+                  onChange={
+                    event =>
+                      send(
+                        UpdateDescription(
+                          ReactEvent.Form.target(event)##value,
+                        ),
+                      )
+                  }
                   rows=5
                   cols=33
                 />
                 <div className="flex items-center mb-6">
-                  <label className="block tracking-wide text-grey-darker text-xs font-semibold mr-6" htmlFor="title">
+                  <label
+                    className="block tracking-wide text-grey-darker text-xs font-semibold mr-6">
                     {"Is this a milestone target?" |> str}
                   </label>
-                  <div className="inline-flex w-64 rounded-lg overflow-hidden border">
+                  <div
+                    className="inline-flex w-64 rounded-lg overflow-hidden border">
                     <button
-                      onClick={_event => {
-                        ReactEvent.Mouse.preventDefault(_event);
-                        send(UpdateMilestone(true));
-                      }}
-                      className={milestoneButtonClasses(state.milestone == true)}>
+                      onClick={
+                        _event => {
+                          ReactEvent.Mouse.preventDefault(_event);
+                          send(UpdateMilestone(true));
+                        }
+                      }
+                      className={
+                        milestoneButtonClasses(state.milestone == true)
+                      }>
                       {"Yes" |> str}
                     </button>
                     <button
-                      onClick={_event => {
-                        ReactEvent.Mouse.preventDefault(_event);
-                        send(UpdateMilestone(false));
-                      }}
-                      className={milestoneButtonClasses(state.milestone == false)}>
+                      onClick={
+                        _event => {
+                          ReactEvent.Mouse.preventDefault(_event);
+                          send(UpdateMilestone(false));
+                        }
+                      }
+                      className={
+                        milestoneButtonClasses(state.milestone == false)
+                      }>
                       {"No" |> str}
                     </button>
                   </div>
@@ -156,11 +213,14 @@ let make = (~currentLevelId, ~authenticityToken, ~hideEditorActionCB, _children)
                   </button>
                 </div>
                 <div className="flex">
-                  <button
-                    onClick={_event => createTargetGroup(authenticityToken, currentLevelId, state)}
-                    className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
-                    {"Save All" |> str}
-                  </button>
+                  {
+                    submitButton(
+                      targetGroup,
+                      currentLevelId,
+                      authenticityToken,
+                      state,
+                    )
+                  }
                 </div>
               </div>
             </div>

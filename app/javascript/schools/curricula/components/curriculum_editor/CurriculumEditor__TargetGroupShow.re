@@ -4,7 +4,14 @@ let str = ReasonReact.string;
 
 let component =
   ReasonReact.statelessComponent("CurriculumEditor__TargetGroupShow");
-let make = (~targetGroup, ~targets, ~showTargetEditorCB, _children) => {
+let make =
+    (
+      ~targetGroup,
+      ~targets,
+      ~showTargetGroupEditorCB,
+      ~showTargetEditorCB,
+      _children,
+    ) => {
   ...component,
   render: _self => {
     let targetsInTG =
@@ -14,13 +21,22 @@ let make = (~targetGroup, ~targets, ~showTargetEditorCB, _children) => {
          );
     <div className="target-group__box relative mt-12 rounded-lg">
       <div
-        className="target-group__header bg-white p-4 border border-b-0 text-center rounded-lg rounded-b-none">
+        className="target-group__header bg-white p-4 border border-b-0 text-center rounded-lg rounded-b-none"
+        onClick={_event => showTargetGroupEditorCB(Some(targetGroup))}>
         <div className="target-group__title">
           <h2> {targetGroup |> TargetGroup.name |> str} </h2>
         </div>
         <div className="target-group__description pt-2">
           <p>
-            {"Lorem ipsum dolor sit amet, consectetur adipiscing elit." |> str}
+            {
+              (
+                switch (targetGroup |> TargetGroup.description) {
+                | Some(description) => description
+                | None => ""
+                }
+              )
+              |> str
+            }
           </p>
         </div>
       </div>

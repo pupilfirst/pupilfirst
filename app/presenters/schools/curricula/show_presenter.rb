@@ -50,7 +50,9 @@ module Schools
           {
             id: target_group.id,
             name: target_group.name,
-            levelId: target_group.level.id
+            description: target_group.description,
+            levelId: target_group.level.id,
+            milestone: target_group.milestone
           }
         end
       end

@@ -3,8 +3,7 @@ module Schools
     class UpdateForm < Reform::Form
       property :name, validates: { presence: true, length: { maximum: 250 } }
       property :description, validates: { presence: true, length: { maximum: 250 } }
-      property :sort_index, validates: { presence: true }
-      property :milestone,  validates: { presence: true }
+      property :milestone, validates: { presence: true }
 
       validate :at_least_one_milestone_tg_exists
 
@@ -14,6 +13,15 @@ module Schools
         return unless level.target_groups.where(milestone: 'true').count.zero?
 
         errors[:base] << 'At least one target group must be milestone'
+      end
+
+      def save
+        target_group.name = name
+        target_group.milestone = milestone
+        target_group.description = description if description.present?
+        target_group.save!
+
+        target_group
       end
 
       private

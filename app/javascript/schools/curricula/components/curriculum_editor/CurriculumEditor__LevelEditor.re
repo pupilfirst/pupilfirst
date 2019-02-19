@@ -17,23 +17,7 @@ type action =
 
 let component = ReasonReact.reducerComponent("CurriculumEditor__LevelEditor");
 
-let handleResponseJSON = json => {
-  let id =
-    json
-    |> Json.Decode.(field("error", nullable(string)))
-    |> Js.Null.toOption;
-  switch (
-    json
-    |> Json.Decode.(field("error", nullable(string)))
-    |> Js.Null.toOption
-  ) {
-  | Some(error) => Notification.error("Something went wrong!!", error)
-  | None => Notification.success("Success", "Target Created")
-  };
-  Js.log(id);
-};
-
-let handleResponseCB = json => Js.log(json);
+let handleResponseCB = (json, state) => Js.log(json);
 
 let createLevel = (authenticityToken, course, state) => {
   let payload = Js.Dict.empty();
@@ -52,7 +36,7 @@ let createLevel = (authenticityToken, course, state) => {
   };
 
   let url = "/school/courses/" ++ course_id ++ "/levels";
-  Api.create(url, payload, handleResponseCB);
+  Api.create(url, payload, state, handleResponseCB);
 };
 
 let updateLevel = (authenticityToken, levelId, state) => {
@@ -70,7 +54,7 @@ let updateLevel = (authenticityToken, levelId, state) => {
   | None => ()
   };
   let url = "/school/levels/" ++ levelId;
-  Api.update(url, payload, handleResponseCB);
+  Api.update(url, payload, state, handleResponseCB);
 };
 
 let submitButton = (level, course, authenticityToken, state) =>

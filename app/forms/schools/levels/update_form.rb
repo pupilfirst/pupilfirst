@@ -5,8 +5,10 @@ module Schools
       property :unlock_on
 
       def save
-        level.update!(name: name)
-        level.update!(unlock_on: unlock_on) if unlock_on.present?
+        level.name = name
+        level.unlock_on = unlock_on if unlock_on.present?
+        level.save!
+
         level
       end
 

@@ -74,8 +74,9 @@ let updateLevel = (authenticityToken, levelId, state) => {
 };
 
 let submitButton = (level, course, authenticityToken, state) =>
-  switch (level |> Level.id) {
-  | Some(id) =>
+  switch (level) {
+  | `Persisted(persistedDetails, unpersistedDetails) =>
+    let id = `Persisted((persistedDetails, unpersistedDetails)) |> Level.id;
     <button
       disabled={state.saveDisabled}
       onClick=(
@@ -83,8 +84,9 @@ let submitButton = (level, course, authenticityToken, state) =>
       )
       className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
       {"Update Level" |> str}
-    </button>
-  | None =>
+    </button>;
+
+  | `Unpersisted(_unpersistedDetails) =>
     <button
       onClick=(_event => createLevel(authenticityToken, course, state))
       className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">

@@ -3,7 +3,7 @@ open CurriculumEditor__Types;
 type props = {
   course: Course.t,
   evaluationCriteria: list(EvaluationCriteria.t),
-  levels: list(Level.t),
+  levels: list(Level.persisted),
   targetGroups: list(TargetGroup.t),
   targets: list(Target.t),
   authenticityToken: string,
@@ -13,17 +13,19 @@ type editorAction =
   | Hidden
   | ShowTargetEditor
   | ShowTargetGroupEditor
-  | ShowLevelEditor(Level.t);
+  | ShowLevelEditor(Level.editable);
 
 type state = {
-  selectedLevel: Level.t,
+  selectedLevel: Level.persisted,
   editorAction,
   selectedTargetGroupId: int,
+  levels: list(Level.persisted),
 };
 
 type action =
-  | SelectLevel(Level.t)
-  | UpdateEditorAction(editorAction);
+  | SelectLevel(Level.persisted)
+  | UpdateEditorAction(editorAction)
+  | UpdateLevels(Level.persisted);
 
 let str = ReasonReact.string;
 
@@ -44,6 +46,7 @@ let make =
     selectedLevel: levels |> List.rev |> List.hd,
     editorAction: Hidden,
     selectedTargetGroupId: 1,
+    levels,
   },
   reducer: (action, state) =>
     switch (action) {
@@ -54,11 +57,7 @@ let make =
     },
   render: ({state, send}) => {
     let currentLevel = state.selectedLevel;
-    let currentLevelId =
-      switch (state.selectedLevel |> Level.id) {
-      | Some(id) => id
-      | None => 999
-      };
+    let currentLevelId = Level.id(currentLevel);
     let targetGroupsInLevel =
       targetGroups
       |> List.filter(targetGroup =>
@@ -68,7 +67,6 @@ let make =
       send(UpdateEditorAction(ShowTargetEditor));
     let hideEditorActionCB = () => send(UpdateEditorAction(Hidden));
     let targetGroupId = state.selectedTargetGroupId;
-
     <div>
       {
         switch (state.editorAction) {
@@ -112,15 +110,7 @@ let make =
               levels
               |> List.map(level =>
                    <option
-                     key={
-                       (
-                         switch (level |> Level.id) {
-                         | Some(id) => id
-                         | None => 999
-                         }
-                       )
-                       |> string_of_int
-                     }
+                     key={Level.id(level) |> string_of_int}
                      value={level |> Level.name}>
                      {level |> Level.name |> str}
                    </option>
@@ -144,14 +134,21 @@ let make =
         <button
           className="bg-indigo-dark hover:bg-blue-dark text-white font-bold py-2 px-4 rounded focus:outline-none"
           onClick={
-            _ => send(UpdateEditorAction(ShowLevelEditor(currentLevel)))
+            _ => {
+              let persistedLevel =
+                `Persisted((
+                  currentLevel |> Level.persistedDetails,
+                  currentLevel |> Level.unpersistedDetails,
+                ));
+              send(UpdateEditorAction(ShowLevelEditor(persistedLevel)));
+            }
           }>
           {"Edit Level" |> str}
         </button>
         <button
           className="bg-indigo-dark hover:bg-blue-dark text-white font-bold py-2 px-4 rounded focus:outline-none"
           onClick={
-            _ => send(UpdateEditorAction(ShowLevelEditor(Level.empty(12))))
+            _ => send(UpdateEditorAction(ShowLevelEditor(Level.empty())))
           }>
           {"Create New Level" |> str}
         </button>

@@ -13,6 +13,7 @@ module Schools
           name: name,
           number: next_level_number
         )
+
         level.unlock_on = unlock_on if unlock_on.present?
         level.save
         level
@@ -21,7 +22,7 @@ module Schools
       private
 
       def next_level_number
-        course.levels.pluck(:number).max + 1
+        course.levels.maximum(:number) + 1
       end
 
       def course_exists

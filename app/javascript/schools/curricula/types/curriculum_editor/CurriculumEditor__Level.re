@@ -1,28 +1,69 @@
-type t = {
-  id: option(int),
-  name: string,
+type persistedDetails = {
+  id: int,
   levelNumber: int,
+};
+
+type unpersistedDetails = {
+  name: string,
   unlockOn: option(string),
 };
 
-let id = t => t.id;
+type persisted = [ | `Persisted(persistedDetails, unpersistedDetails)];
 
-let name = t => t.name;
+type editable = [ persisted | `Unpersisted(unpersistedDetails)];
 
-let levelNumber = t => t.levelNumber;
-
-let unlockOn = t => t.unlockOn;
-
-let decode = json =>
-  Json.Decode.{
-    id: json |> field("id", nullable(int)) |> Js.Null.toOption,
-    name: json |> field("name", string),
-    levelNumber: json |> field("levelNumber", int),
-    unlockOn:
-      json |> field("unlockOn", nullable(string)) |> Js.Null.toOption,
+let unpersistedDetails = persisted =>
+  switch (persisted) {
+  | `Persisted(_pd, unpersistedDetails) => unpersistedDetails
   };
 
-let selectLevel = (levels, level_name) =>
-  levels |> List.find(q => q.name == level_name);
+let persistedDetails = persisted =>
+  switch (persisted) {
+  | `Persisted(persistedDetails, _ud) => persistedDetails
+  };
 
-let empty = levelNumber => {id: None, name: "", levelNumber, unlockOn: None};
+let id = persisted =>
+  switch (persisted) {
+  | `Persisted(persistedDetails, _ud) => persistedDetails.id
+  };
+
+let name = editable =>
+  switch (editable) {
+  | `Persisted(_pd, unpersistedDetails) => unpersistedDetails.name
+  | `Unpersisted(unpersistedDetails) => unpersistedDetails.name
+  };
+
+let levelNumber = persisted =>
+  switch (persisted) {
+  | `Persisted(persistedDetails, _ud) => persistedDetails.levelNumber
+  };
+
+let unlockOn = editable =>
+  switch (editable) {
+  | `Persisted(_pd, unpersistedDetails) => unpersistedDetails.unlockOn
+  | `Unpersisted(unpersistedDetails) => unpersistedDetails.unlockOn
+  };
+
+let decode = json =>
+  `Persisted((
+    Json.Decode.{
+      id: json |> field("id", int),
+      levelNumber: json |> field("levelNumber", int),
+    },
+    Json.Decode.{
+      name: json |> field("name", string),
+      unlockOn:
+        json |> field("unlockOn", nullable(string)) |> Js.Null.toOption,
+    },
+  ));
+
+let selectLevel = (levels, levelName) =>
+  levels
+  |> List.find(l =>
+       switch (l) {
+       | `Persisted(_pd, unpersistedDetails) =>
+         unpersistedDetails.name == levelName
+       }
+     );
+
+let empty = () => `Unpersisted({name: "", unlockOn: None});

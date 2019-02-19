@@ -7,17 +7,17 @@ let handleApiError =
     | UnexpectedResponse(code) => code
   );
 
-let handleResponseJSON = (json, responseCB, state) =>
+let handleResponseJSON = (json, responseCB) =>
   switch (
     json
     |> Json.Decode.(field("error", nullable(string)))
     |> Js.Null.toOption
   ) {
   | Some(error) => Notification.error("Something went wrong!!", error)
-  | None => responseCB(json, state)
+  | None => responseCB(json)
   };
 
-let create = (url, payload, state, responseCB) =>
+let create = (url, payload, responseCB) =>
   Js.Promise.(
     Fetch.fetchWithInit(
       url,
@@ -40,7 +40,7 @@ let create = (url, payload, state, responseCB) =>
            );
          }
        )
-    |> then_(json => handleResponseJSON(json, responseCB, state) |> resolve)
+    |> then_(json => handleResponseJSON(json, responseCB) |> resolve)
     |> catch(error =>
          (
            switch (error |> handleApiError) {
@@ -55,7 +55,7 @@ let create = (url, payload, state, responseCB) =>
     |> ignore
   );
 
-let update = (url, payload, state, responseCB) =>
+let update = (url, payload, responseCB) =>
   Js.Promise.(
     Fetch.fetchWithInit(
       url,
@@ -78,7 +78,7 @@ let update = (url, payload, state, responseCB) =>
            );
          }
        )
-    |> then_(json => handleResponseJSON(json, responseCB, state) |> resolve)
+    |> then_(json => handleResponseJSON(json, responseCB) |> resolve)
     |> catch(error =>
          (
            switch (error |> handleApiError) {

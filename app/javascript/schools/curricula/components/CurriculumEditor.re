@@ -61,17 +61,23 @@ let make =
       let newLevels = state.levels |> List.append([level]);
       ReasonReact.Update({...state, levels: newLevels});
     | UpdateTargetGroups(targetGroup) =>
-      let newtargetGroups = state.targetGroups |> List.append([targetGroup]);
-      ReasonReact.Update({...state, targetGroups: newtargetGroups});
+      let newtargetGroups =
+        targetGroup |> TargetGroup.updateList(state.targetGroups);
+      ReasonReact.Update({
+        ...state,
+        targetGroups: newtargetGroups,
+        editorAction: Hidden,
+      });
     },
   render: ({state, send}) => {
     let currentLevel = state.selectedLevel;
     let currentLevelId = Level.id(currentLevel);
     let targetGroupsInLevel =
-      targetGroups
+      state.targetGroups
       |> List.filter(targetGroup =>
            targetGroup |> TargetGroup.levelId == currentLevelId
-         );
+         )
+      |> TargetGroup.sort;
     let showTargetEditorCB = () =>
       send(UpdateEditorAction(ShowTargetEditor));
     let hideEditorActionCB = () => send(UpdateEditorAction(Hidden));

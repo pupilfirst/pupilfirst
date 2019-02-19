@@ -52,7 +52,9 @@ module Schools
             name: target_group.name,
             description: target_group.description,
             levelId: target_group.level.id,
-            milestone: target_group.milestone
+            milestone: target_group.milestone,
+            sortIndex: target_group.sort_index
+
           }
         end
       end

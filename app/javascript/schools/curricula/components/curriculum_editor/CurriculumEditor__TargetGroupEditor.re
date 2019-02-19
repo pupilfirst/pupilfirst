@@ -17,70 +17,6 @@ type action =
 let component =
   ReasonReact.reducerComponent("CurriculumEditor__TargetGroupEditor");
 
-let handleResponseCB = (json, state) => {
-  Js.log(json);
-  Js.log(state.milestone);
-};
-
-let createTargetGroup = (authenticityToken, currentLevelId, state) => {
-  let payload = Js.Dict.empty();
-  let level_id = currentLevelId |> string_of_int;
-  let milestone = state.milestone == true ? "true" : "false";
-
-  Js.Dict.set(
-    payload,
-    "authenticity_token",
-    authenticityToken |> Js.Json.string,
-  );
-  Js.Dict.set(payload, "name", state.name |> Js.Json.string);
-  Js.Dict.set(payload, "description", state.description |> Js.Json.string);
-  Js.Dict.set(payload, "milestone", milestone |> Js.Json.string);
-
-  let url = "/school/levels/" ++ level_id ++ "/target_groups";
-  Api.create(url, payload, state, handleResponseCB);
-};
-
-let updateTargetGroup = (authenticityToken, targetGroupId, state) => {
-  let payload = Js.Dict.empty();
-  let milestone = state.milestone == true ? "true" : "false";
-
-  Js.Dict.set(
-    payload,
-    "authenticity_token",
-    authenticityToken |> Js.Json.string,
-  );
-  Js.Dict.set(payload, "name", state.name |> Js.Json.string);
-  Js.Dict.set(payload, "description", state.description |> Js.Json.string);
-  Js.Dict.set(payload, "milestone", milestone |> Js.Json.string);
-
-  let url = "/school/target_groups/" ++ targetGroupId;
-  Api.update(url, payload, state, handleResponseCB);
-};
-
-let submitButton = (targetGroup, currentLevelId, authenticityToken, state) =>
-  switch (targetGroup) {
-  | Some(targetGroup) =>
-    let id = targetGroup |> TargetGroup.id;
-    <button
-      disabled={state.saveDisabled}
-      onClick=(
-        _event =>
-          updateTargetGroup(authenticityToken, id |> string_of_int, state)
-      )
-      className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
-      {"Update Level" |> str}
-    </button>;
-
-  | None =>
-    <button
-      onClick=(
-        _event => createTargetGroup(authenticityToken, currentLevelId, state)
-      )
-      className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
-      {"Create Level" |> str}
-    </button>
-  };
-
 let milestoneButtonClasses = value =>
   value ?
     "w-1/2 bg-grey hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none" :
@@ -124,7 +60,65 @@ let make =
     | UpdateMilestone(milestone) =>
       ReasonReact.Update({...state, milestone, saveDisabled: false})
     },
-  render: ({state, send}) =>
+  render: ({state, send}) => {
+    let handleResponseCB = json => {
+      let id = json |> Json.Decode.(field("id", int));
+      let sortIndex = json |> Json.Decode.(field("sortIndex", int));
+      let newTargetGroup =
+        TargetGroup.create(
+          id,
+          state.name,
+          Some(state.description),
+          state.milestone,
+          currentLevelId,
+          sortIndex,
+        );
+      updateTargetGroupsCB(newTargetGroup);
+    };
+
+    let createTargetGroup = () => {
+      let payload = Js.Dict.empty();
+      let level_id = currentLevelId |> string_of_int;
+      let milestone = state.milestone == true ? "true" : "false";
+
+      Js.Dict.set(
+        payload,
+        "authenticity_token",
+        authenticityToken |> Js.Json.string,
+      );
+      Js.Dict.set(payload, "name", state.name |> Js.Json.string);
+      Js.Dict.set(
+        payload,
+        "description",
+        state.description |> Js.Json.string,
+      );
+      Js.Dict.set(payload, "milestone", milestone |> Js.Json.string);
+
+      let url = "/school/levels/" ++ level_id ++ "/target_groups";
+      Api.create(url, payload, handleResponseCB);
+    };
+
+    let updateTargetGroup = targetGroupId => {
+      let payload = Js.Dict.empty();
+      let milestone = state.milestone == true ? "true" : "false";
+
+      Js.Dict.set(
+        payload,
+        "authenticity_token",
+        authenticityToken |> Js.Json.string,
+      );
+      Js.Dict.set(payload, "name", state.name |> Js.Json.string);
+      Js.Dict.set(
+        payload,
+        "description",
+        state.description |> Js.Json.string,
+      );
+      Js.Dict.set(payload, "milestone", milestone |> Js.Json.string);
+
+      let url = "/school/target_groups/" ++ targetGroupId;
+      Api.update(url, payload, handleResponseCB);
+    };
+
     <div className="blanket">
       <div className="drawer-right">
         <div className="drawer-right-form w-full">
@@ -214,12 +208,23 @@ let make =
                 </div>
                 <div className="flex">
                   {
-                    submitButton(
-                      targetGroup,
-                      currentLevelId,
-                      authenticityToken,
-                      state,
-                    )
+                    switch (targetGroup) {
+                    | Some(targetGroup) =>
+                      let id = targetGroup |> TargetGroup.id;
+                      <button
+                        disabled={state.saveDisabled}
+                        onClick=(_e => updateTargetGroup(id |> string_of_int))
+                        className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+                        {"Update Level" |> str}
+                      </button>;
+
+                    | None =>
+                      <button
+                        onClick=(_e => createTargetGroup())
+                        className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+                        {"Create Level" |> str}
+                      </button>
+                    }
                   }
                 </div>
               </div>
@@ -227,5 +232,6 @@ let make =
           </div>
         </div>
       </div>
-    </div>,
+    </div>;
+  },
 };

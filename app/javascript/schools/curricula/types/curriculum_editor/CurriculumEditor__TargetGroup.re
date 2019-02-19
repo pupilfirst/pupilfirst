@@ -2,8 +2,9 @@ type t = {
   id: int,
   name: string,
   description: option(string),
-  levelId: int,
   milestone: bool,
+  levelId: int,
+  sortIndex: int,
 };
 
 let id = t => t.id;
@@ -12,9 +13,11 @@ let name = t => t.name;
 
 let description = t => t.description;
 
+let milestone = t => t.milestone;
+
 let levelId = t => t.levelId;
 
-let milestone = t => t.milestone;
+let sortIndex = t => t.sortIndex;
 
 let decode = json =>
   Json.Decode.{
@@ -24,12 +27,23 @@ let decode = json =>
       json |> field("description", nullable(string)) |> Js.Null.toOption,
     levelId: json |> field("levelId", int),
     milestone: json |> field("milestone", bool),
+    sortIndex: json |> field("sortIndex", int),
   };
 
-/* let newt = (id, name, description, levelId, milestone) => {
-     id,
-     name,
-     description,
-     levelId,
-     milestone,
-   }; */
+let create = (id, name, description, milestone, levelId, sortIndex) => {
+  id,
+  name,
+  description,
+  milestone,
+  levelId,
+  sortIndex,
+};
+
+let updateList = (targetGroups, targetGroup) => {
+  let oldTargetGroups =
+    targetGroups |> List.filter(tg => tg.id !== targetGroup.id);
+  oldTargetGroups |> List.rev |> List.append([targetGroup]) |> List.rev;
+};
+
+let sort = targetGroups =>
+  targetGroups |> List.sort((x, y) => x.sortIndex - y.sortIndex);

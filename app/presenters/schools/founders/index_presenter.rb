@@ -12,7 +12,7 @@ module Schools
       end
 
       def teams
-        @course.startups.includes(:level, :founders, :faculty).order(:id).map do |team|
+        @course.startups.includes(:level, :faculty, founders: :user).order(:id).map do |team|
           {
             id: team.id,
             name: team.product_name,
@@ -30,7 +30,8 @@ module Schools
             id: student.id,
             name: student.name,
             avatarUrl: student.avatar_url || student.initials_avatar,
-            teamId: student.startup.id
+            teamId: student.startup.id,
+            email: student.user.email
           }
         end
       end

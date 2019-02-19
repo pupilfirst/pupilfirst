@@ -6,6 +6,7 @@ type state = {
   selectedStudents: list(Student.t),
   searchString: string,
   formVisible: bool,
+  clickedStudent: option(Student.t),
 };
 
 type action =
@@ -14,7 +15,8 @@ type action =
   | SelectAllStudents
   | DeselectAllStudents
   | UpdateSearchString(string)
-  | UpdateFormVisibility(bool);
+  | UpdateFormVisibility(bool)
+  | UpdateClickedStudent(option(Student.t));
 
 let selectedAcrossTeams = selectedStudents => {
   selectedStudents |> List.map(s => s |> Student.teamId) |> List.sort_uniq((id1, id2) => id1 - id2) |> List.length > 1;
@@ -46,11 +48,16 @@ let teamUp = () => {
   Js.log("Teaming up..");
 };
 
+let handleStudentClick = (send, student) => {
+  send(UpdateClickedStudent(Some(student)));
+  send(UpdateFormVisibility(true));
+};
+
 let component = ReasonReact.reducerComponent("SA_StudentsPanel");
 
 let make = (~teams, _children) => {
   ...component,
-  initialState: () => {selectedStudents: [], searchString: "", formVisible: false},
+  initialState: () => {selectedStudents: [], searchString: "", formVisible: false, clickedStudent: None},
   reducer: (action, state) =>
     switch (action) {
     | SelectStudent(student) =>
@@ -65,11 +72,13 @@ let make = (~teams, _children) => {
     | DeselectAllStudents => ReasonReact.Update({...state, selectedStudents: []})
     | UpdateSearchString(searchString) => ReasonReact.Update({...state, searchString})
     | UpdateFormVisibility(formVisible) => ReasonReact.Update({...state, formVisible})
+    | UpdateClickedStudent(clickedStudent) => ReasonReact.Update({...state, clickedStudent})
     },
   render: ({state, send}) => {
     <div>
       {let closeFormCB = () => send(UpdateFormVisibility(false))
-       state.formVisible ? <SA_StudentsPanel_StudentForm closeFormCB /> : ReasonReact.null}
+       state.formVisible ?
+         <SA_StudentsPanel_StudentForm closeFormCB student={state.clickedStudent} /> : ReasonReact.null}
       <div className="border-b flex px-6 py-2 items-center justify-between">
         <div className="inline-block relative w-64">
           <select
@@ -174,6 +183,7 @@ let make = (~teams, _children) => {
                           let isChecked = state.selectedStudents |> List.mem(student);
                           <div
                             key={student |> Student.id |> string_of_int}
+                            onClick={_e => handleStudentClick(send, student)}
                             className="student-team__card cursor-pointer flex items-center bg-white hover:bg-grey-lighter">
                             <div className="flex-1 w-3/5">
                               <div className="flex items-center">

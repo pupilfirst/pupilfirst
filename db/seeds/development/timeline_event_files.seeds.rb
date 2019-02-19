@@ -8,9 +8,10 @@ after 'development:timeline_events' do
 
   presentation_path = File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf'))
 
-  TimelineEventFile.create!(
+  tef = TimelineEventFile.new(
     timeline_event: timeline_event,
-    title: 'Improved presentation',
-    file: File.open(presentation_path)
+    title: 'Improved presentation'
   )
+
+  tef.file_as.attach(io: File.open(presentation_path), filename: 'pdf-sample.pdf')
 end

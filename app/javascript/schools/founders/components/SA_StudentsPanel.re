@@ -66,63 +66,10 @@ let make = (~teams, _children) => {
     | UpdateSearchString(searchString) => ReasonReact.Update({...state, searchString})
     | UpdateFormVisibility(formVisible) => ReasonReact.Update({...state, formVisible})
     },
-  render: ({state, send}) =>
+  render: ({state, send}) => {
     <div>
-      {state.formVisible ?
-         <div className="blanket">
-           <div className="drawer-right">
-             <div className="drawer-right-form w-full">
-               <div className="w-full">
-                 <div className="mx-auto bg-white">
-                   <div className="max-w-md p-6 mx-auto">
-                     <h5 className="uppercase text-center border-b border-grey-light pb-2 mb-4">
-                       {"Level Details" |> str}
-                     </h5>
-                     <label className="block tracking-wide text-grey-darker text-xs font-semibold mb-2" htmlFor="name">
-                       {"Level Name*  " |> str}
-                     </label>
-                     <input
-                       className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                       id="name"
-                       type_="text"
-                       placeholder="Type level name here"
-                     />
-                     <label className="block tracking-wide text-grey-darker text-xs font-semibold mb-2">
-                       {"Level Number*  " |> str}
-                     </label>
-                     <input
-                       className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                       id="level number"
-                       type_="number"
-                       placeholder="Type level number here"
-                     />
-                     <label className="block tracking-wide text-grey-darker text-xs font-semibold mb-2">
-                       {"Lock level*  " |> str}
-                     </label>
-                     <input
-                       className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                       id="level unlock date"
-                       type_="date"
-                     />
-                     <div className="flex">
-                       <button
-                         className="bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
-                         {"Close" |> str}
-                       </button>
-                     </div>
-                     <div className="flex">
-                       <button
-                         className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
-                         {"Create Level" |> str}
-                       </button>
-                     </div>
-                   </div>
-                 </div>
-               </div>
-             </div>
-           </div>
-         </div> :
-         ReasonReact.null}
+      {let closeFormCB = () => send(UpdateFormVisibility(false))
+       state.formVisible ? <SA_StudentsPanel_StudentForm closeFormCB /> : ReasonReact.null}
       <div className="border-b flex px-6 py-2 items-center justify-between">
         <div className="inline-block relative w-64">
           <select
@@ -306,7 +253,8 @@ let make = (~teams, _children) => {
            |> ReasonReact.array}
         </div>
       </div>
-    </div>,
+    </div>;
+  },
 };
 
 type props = {teams: list(Team.t)};

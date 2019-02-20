@@ -165,7 +165,3 @@ end
 
 # Faker should use India as locale.
 Faker::Config.locale = 'en-IND'
-
-FactoryBot::SyntaxRunner.class_eval do
-  include ActionDispatch::TestProcess
-end

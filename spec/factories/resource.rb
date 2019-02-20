@@ -6,7 +6,7 @@ FactoryBot.define do
     school
 
     factory :resource_video_file do
-      file_as { fixture_file_upload(Rails.root.join('spec', 'support', 'uploads', 'resources', 'video-sample.mp4')) }
+      file_as { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'support', 'uploads', 'resources', 'video-sample.mp4')) }
     end
 
     factory :resource_video_embed do

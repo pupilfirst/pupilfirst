@@ -21,10 +21,10 @@ module Schools
         errors[:base] << 'Invalid Target Group id' if target_group.blank?
       end
 
-      validate :only_one_method_of_completion
+      # validate :only_one_method_of_completion
 
       def save(target_params)
-        Targets::CreateOrUpdateService.new(model).create_or_update(target_params)
+        ::Targets::CreateOrUpdateService.new(model).create_or_update(target_params)
       end
 
       private

@@ -11,23 +11,24 @@ type props = {
 
 type editorAction =
   | Hidden
-  | ShowTargetEditor
+  | ShowTargetEditor(int, option(Target.t))
   | ShowTargetGroupEditor(option(TargetGroup.t))
   | ShowLevelEditor(Level.editable);
 
 type state = {
   selectedLevel: Level.persisted,
   editorAction,
-  selectedTargetGroupId: int,
   levels: list(Level.persisted),
   targetGroups: list(TargetGroup.t),
+  targets: list(Target.t),
 };
 
 type action =
   | SelectLevel(Level.persisted)
   | UpdateEditorAction(editorAction)
   | UpdateLevels(Level.persisted)
-  | UpdateTargetGroups(TargetGroup.t);
+  | UpdateTargetGroups(TargetGroup.t)
+  | UpdateTargets(Target.t);
 
 let str = ReasonReact.string;
 
@@ -47,9 +48,9 @@ let make =
   initialState: () => {
     selectedLevel: levels |> List.rev |> List.hd,
     editorAction: Hidden,
-    selectedTargetGroupId: 1,
     targetGroups,
     levels,
+    targets,
   },
   reducer: (action, state) =>
     switch (action) {
@@ -68,54 +69,57 @@ let make =
         targetGroups: newtargetGroups,
         editorAction: Hidden,
       });
+    | UpdateTargets(target) =>
+      let newtargets = target |> Target.updateList(state.targets);
+      ReasonReact.Update({
+        ...state,
+        targets: newtargets,
+        editorAction: Hidden,
+      });
     },
   render: ({state, send}) => {
+    let hideEditorActionCB = () => send(UpdateEditorAction(Hidden));
+
     let currentLevel = state.selectedLevel;
     let currentLevelId = Level.id(currentLevel);
+
     let targetGroupsInLevel =
       state.targetGroups
       |> List.filter(targetGroup =>
            targetGroup |> TargetGroup.levelId == currentLevelId
          )
       |> TargetGroup.sort;
-    let showTargetEditorCB = () =>
-      send(UpdateEditorAction(ShowTargetEditor));
-    let hideEditorActionCB = () => send(UpdateEditorAction(Hidden));
-    let targetGroupId = state.selectedTargetGroupId;
+
+    let showTargetEditorCB = (targetGroupId, target) =>
+      send(UpdateEditorAction(ShowTargetEditor(targetGroupId, target)));
     let showTargetGroupEditorCB = targetGroup =>
       send(UpdateEditorAction(ShowTargetGroupEditor(targetGroup)));
+
+    let updateTargetCB = target => send(UpdateTargets(target));
     let updateTargetGroupsCB = targetGroup =>
       send(UpdateTargetGroups(targetGroup));
     <div>
       {
         switch (state.editorAction) {
         | Hidden => ReasonReact.null
-        | ShowTargetEditor =>
+        | ShowTargetEditor(targetGroupId, target) =>
           <CurriculumEditor__TargetEditor
+            target
             targetGroupId
             evaluationCriteria
             targets
             authenticityToken
+            updateTargetCB
             hideEditorActionCB
           />
         | ShowTargetGroupEditor(targetGroup) =>
-          switch (targetGroup) {
-          | Some(targetGroup) =>
-            <CurriculumEditor__TargetGroupEditor
-              targetGroup
-              currentLevelId
-              authenticityToken
-              updateTargetGroupsCB
-              hideEditorActionCB
-            />
-          | None =>
-            <CurriculumEditor__TargetGroupEditor
-              currentLevelId
-              authenticityToken
-              updateTargetGroupsCB
-              hideEditorActionCB
-            />
-          }
+          <CurriculumEditor__TargetGroupEditor
+            targetGroup
+            currentLevelId
+            authenticityToken
+            updateTargetGroupsCB
+            hideEditorActionCB
+          />
         | ShowLevelEditor(level) =>
           <CurriculumEditor__LevelEditor
             level
@@ -193,7 +197,7 @@ let make =
                  <CurriculumEditor__TargetGroupShow
                    key={targetGroup |> TargetGroup.id |> string_of_int}
                    targetGroup
-                   targets
+                   targets={state.targets}
                    showTargetGroupEditorCB
                    showTargetEditorCB
                  />

@@ -6,3 +6,4 @@ module Target = CurriculumEditor__Target;
 module AnswerOption = CurriculumEditor__AnswerOption;
 module QuizQuestion = CurriculumEditor__QuizQuestion;
 module FormData = CurriculumEditor__FormData;
+module Resource = CurriculumEditor__Resource;

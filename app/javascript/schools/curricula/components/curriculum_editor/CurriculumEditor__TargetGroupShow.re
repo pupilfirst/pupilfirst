@@ -18,7 +18,8 @@ let make =
       targets
       |> List.filter(target =>
            target |> Target.targetGroupId == (targetGroup |> TargetGroup.id)
-         );
+         )
+      |> Target.sort;
     <div className="target-group__box relative mt-12 rounded-lg">
       <div
         className="target-group__header bg-white p-4 border border-b-0 text-center rounded-lg rounded-b-none"
@@ -46,6 +47,8 @@ let make =
              <CurriculumEditor__TargetShow
                key={target |> Target.id |> string_of_int}
                target
+               targetGroup
+               showTargetEditorCB
              />
            )
         |> Array.of_list
@@ -53,7 +56,9 @@ let make =
       }
       <div
         className="target-group__target-create flex items-center bg-grey-lighter border-2 border-t-0 border-dashed p-5 rounded-lg rounded-t-none cursor-pointer"
-        onClick={_event => showTargetEditorCB()}>
+        onClick={
+          _event => showTargetEditorCB(targetGroup |> TargetGroup.id, None)
+        }>
         <svg className="svg-icon w-8 h-8" viewBox="0 0 20 20">
           <path
             fill="#A8B7C7"

@@ -2,7 +2,7 @@ module Schools
   class ResourcePolicy < ApplicationPolicy
     def create?
       # Is this user allowed to create a Resource
-      # CoursePolicy.new(user, record.target.course).update?
+      # CoursePolicy.new(@pundit_user, record.course).update?
       true
     end
 

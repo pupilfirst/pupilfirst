@@ -16,9 +16,12 @@ let make = (~items, ~multiSelectCB, _children) => {
       ReasonReact.Update({searchKey: searchKey})
     },
   render: ({state, send}) => {
-    let showSearch = items |> List.length >= 3;
+    let selectedList =
+      items |> List.filter(((_, _, selected)) => selected == true);
+    let nonSelectedList =
+      items |> List.filter(((_, _, selected)) => selected == false);
     let filteredList =
-      items
+      nonSelectedList
       |> List.filter(((_key, value, _)) =>
            Js.String.includes(
              String.lowercase(state.searchKey),
@@ -27,9 +30,9 @@ let make = (~items, ~multiSelectCB, _children) => {
          );
     <div>
       {
-        items
-        |> List.map(((_key, value, selected)) =>
-             selected ?
+        selectedList |> List.length > 0 ?
+          selectedList
+          |> List.map(((_key, value, _)) =>
                <div
                  key={_key |> string_of_int}
                  className="select-list__item-selected flex items-center justify-between bg-grey-lightest text-xs text-grey-dark border rounded p-3 mb-2">
@@ -53,57 +56,68 @@ let make = (~items, ~multiSelectCB, _children) => {
                      />
                    </svg>
                  </button>
-               </div> :
-               ReasonReact.null
-           )
-        |> Array.of_list
-        |> ReasonReact.array
+               </div>
+             )
+          |> Array.of_list
+          |> ReasonReact.array :
+          <div
+            className="select-list__item-selected flex items-center justify-between bg-grey-lightest text-xs text-grey-dark border rounded p-3 mb-2">
+            {"None Selected" |> str}
+          </div>
       }
-      <div className="flex relative">
-        <div
-          className="select-list__group bg-white border rounded rounded-t-none shadow pb-2 w-full">
-          {
-            showSearch ?
-              <div className="px-3 pt-3 pb-2">
-                <input
-                  className="appearance-none bg-transparent border-b w-full text-grey-darker pb-3 px-2 pl-0 leading-tight focus:outline-none"
-                  type_="text"
-                  placeholder="Type to Search"
-                  onChange={
-                    event =>
-                      send(
-                        UpdateSearchKey(
-                          ReactEvent.Form.target(event)##value,
-                        ),
-                      )
-                  }
-                />
-              </div> :
-              ReasonReact.null
-          }
-          {
-            filteredList
-            |> List.map(((_key, value, selected)) =>
-                 !selected ?
-                   <div
-                     key={_key |> string_of_int}
-                     onClick={
-                       _event => {
-                         ReactEvent.Mouse.preventDefault(_event);
-                         send(UpdateSearchKey(""));
-                         multiSelectCB(_key, value, true);
-                       }
-                     }
-                     className="px-3 py-2 hover:bg-grey-lighter">
-                     {value |> str}
-                   </div> :
-                   ReasonReact.null
-               )
-            |> Array.of_list
-            |> ReasonReact.array
-          }
-        </div>
-      </div>
+      {
+        nonSelectedList |> List.length > 0 ?
+          <div className="flex relative">
+            <div
+              className="select-list__group bg-white border rounded rounded-t-none shadow pb-2 w-full">
+              {
+                nonSelectedList |> List.length > 3 ?
+                  <div className="px-3 pt-3 pb-2">
+                    <input
+                      className="appearance-none bg-transparent border-b w-full text-grey-darker pb-3 px-2 pl-0 leading-tight focus:outline-none"
+                      type_="text"
+                      placeholder="Type to Search"
+                      onChange={
+                        event =>
+                          send(
+                            UpdateSearchKey(
+                              ReactEvent.Form.target(event)##value,
+                            ),
+                          )
+                      }
+                    />
+                  </div> :
+                  ReasonReact.null
+              }
+              <div
+                className={
+                  nonSelectedList |> List.length > 3 ?
+                    "h-24 overflow-y-scroll" : ""
+                }>
+                {
+                  filteredList
+                  |> List.map(((_key, value, _)) =>
+                       <div
+                         key={_key |> string_of_int}
+                         onClick={
+                           _event => {
+                             ReactEvent.Mouse.preventDefault(_event);
+                             send(UpdateSearchKey(""));
+                             multiSelectCB(_key, value, true);
+                           }
+                         }
+                         className="px-3 py-2 hover:bg-grey-lighter">
+                         {value |> str}
+                       </div>
+                     )
+                  |> Array.of_list
+                  |> ReasonReact.array
+                }
+              </div>
+            </div>
+          </div> :
+          ReasonReact.null
+      }
     </div>;
   },
 };

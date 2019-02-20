@@ -24,7 +24,7 @@ let milestoneButtonClasses = value =>
 
 let make =
     (
-      ~targetGroup=?,
+      ~targetGroup,
       ~currentLevelId,
       ~authenticityToken,
       ~updateTargetGroupsCB,

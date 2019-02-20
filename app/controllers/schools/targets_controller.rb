@@ -5,11 +5,11 @@ module Schools
 
     # POST /school/target_groups/:target_group_id/targets(.:format)
     def create
-      # authorize(Target, policy_class: Schools::TargetPolicy)
-      form = ::Schools::Targets::CreateForm.new(@target)
-      if form.validate(params)
-        target = form.save
-        render json: { id: target.id, errors: nil }
+      form = ::Schools::Targets::CreateOrUpdateForm.new(@target)
+
+      if form.validate(params[:target])
+        target = form.save(params[:target])
+        render json: { id: target.id, sortIndex: target.sort_index, error: nil }
       else
         raise form.errors.full_messages.join(', ')
       end
@@ -17,11 +17,11 @@ module Schools
 
     # PATCH /school/targets/:id
     def update
-      form = ::Schools::Targets::UpdateForm.new(@target)
+      form = ::Schools::Targets::CreateOrUpdateForm.new(@target)
 
       if form.validate(params[:target])
-        form.save
-        redirect_to school_course_curriculum_path(@target.course)
+        target = form.save(params[:target])
+        render json: { id: target.id, sortIndex: target.sort_index, error: nil }
       else
         raise form.errors.full_messages.join(', ')
       end

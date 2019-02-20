@@ -1,29 +1,13 @@
 open CurriculumEditor__Types;
-
-exception UnexpectedResponse(int);
-
-let handleApiError =
-  [@bs.open]
-  (
-    fun
-    | UnexpectedResponse(code) => code
-  );
+open SchoolAdmin__Utils;
 
 let str = ReasonReact.string;
-
 type methodOfCompletion =
   | NotSelected
   | Evaluated
   | VisitLink
   | TakeQuiz
   | MarkAsComplete;
-
-type keyForStateUpdation =
-  | Title
-  | Description
-  | VideoEmbed
-  | SlideshowEmbed
-  | LinkToComplete;
 
 type evaluationCriterion = (int, string, bool);
 
@@ -42,10 +26,16 @@ type state = {
   quiz: list(QuizQuestion.t),
   resources: list(resource),
   linkToComplete: string,
+  role: string,
+  targetActionType: string,
 };
 
 type action =
-  | UpdateState(keyForStateUpdation, string)
+  | UpdateTitle(string)
+  | UpdateDescription(string)
+  | UpdateVideoEmbed(string)
+  | UpdateSlideshowEmbed(string)
+  | UpdateLinkToComplete(string)
   | UpdateEvaluationCriterion(int, string, bool)
   | UpdatePrerequisiteTargets(int, string, bool)
   | UpdateMethodOfCompletion(methodOfCompletion)
@@ -58,19 +48,26 @@ type action =
 let component =
   ReasonReact.reducerComponent("CurriculumEditor__TargetEditor");
 
-let handleResponseJSON = json =>
-  switch (
-    json
-    |> Json.Decode.(field("error", nullable(string)))
-    |> Js.Null.toOption
-  ) {
-  | Some(error) => Notification.error("Something went wrong!", error)
-  | None => Notification.success("Success", "Target Created")
+let handleMethodOfCompletion = target => {
+  let hasQuiz = target |> Target.quiz |> List.length > 0;
+  let hasEvaluationCriteria =
+    target |> Target.evaluationCriteria |> List.length > 0;
+  let hasLinkToComplete =
+    switch (target |> Target.linkToComplete) {
+    | Some(_) => true
+    | None => false
+    };
+  switch (hasEvaluationCriteria, hasQuiz, hasLinkToComplete) {
+  | (true, _y, _z) => Evaluated
+  | (_x, true, _z) => TakeQuiz
+  | (_x, _y, true) => MarkAsComplete
+  | (false, false, false) => MarkAsComplete
   };
+};
 
-let createTarget = (state, authenticityToken, targetGroupId) => {
+let setPayload = (state, target, authenticityToken) => {
   let payload = Js.Dict.empty();
-  let tg_id = targetGroupId |> string_of_int;
+  let targetData = Js.Dict.empty();
   let resourceIds = state.resources |> List.map(((key, _)) => key);
   let evaluationCriteriaIds =
     state.evaluationCriteria
@@ -86,89 +83,66 @@ let createTarget = (state, authenticityToken, targetGroupId) => {
     "authenticity_token",
     authenticityToken |> Js.Json.string,
   );
-  Js.Dict.set(payload, "role", "founder" |> Js.Json.string);
-  Js.Dict.set(payload, "target_action_type", "Todo" |> Js.Json.string);
-  Js.Dict.set(payload, "sort_index", 12 |> string_of_int |> Js.Json.string);
-  Js.Dict.set(payload, "title", state.title |> Js.Json.string);
-  Js.Dict.set(payload, "description", state.description |> Js.Json.string);
-  Js.Dict.set(payload, "video_embed", state.videoEmbed |> Js.Json.string);
+
+  switch (target) {
+  | Some(target) =>
+    Js.Dict.set(
+      targetData,
+      "sort_index",
+      target |> Target.sortIndex |> string_of_int |> Js.Json.string,
+    )
+  | None => ()
+  };
+  Js.Dict.set(targetData, "role", state.role |> Js.Json.string);
   Js.Dict.set(
-    payload,
+    targetData,
+    "target_action_type",
+    state.targetActionType |> Js.Json.string,
+  );
+  Js.Dict.set(targetData, "title", state.title |> Js.Json.string);
+  Js.Dict.set(targetData, "description", state.description |> Js.Json.string);
+  Js.Dict.set(targetData, "video_embed", state.videoEmbed |> Js.Json.string);
+  Js.Dict.set(
+    targetData,
     "slideshow_embed",
     state.slideshowEmbed |> Js.Json.string,
   );
   Js.Dict.set(
-    payload,
+    targetData,
     "resource_ids",
     resourceIds |> Json.Encode.(list(int)),
   );
 
   Js.Dict.set(
-    payload,
+    targetData,
     "prerequisite_target_ids",
     prerequisiteTargetIds |> Json.Encode.(list(int)),
-  );
-
-  Js.Dict.set(
-    payload,
-    "quiz",
-    state.quiz |> Json.Encode.(list(QuizQuestion.encoder)),
   );
 
   switch (state.methodOfCompletion) {
   | Evaluated =>
     Js.Dict.set(
-      payload,
+      targetData,
       "evaluation_criterion_ids",
       evaluationCriteriaIds |> Json.Encode.(list(int)),
     )
   | VisitLink =>
     Js.Dict.set(
-      payload,
+      targetData,
       "link_to_complete",
       state.linkToComplete |> Js.Json.string,
     )
-  | TakeQuiz => ()
+  | TakeQuiz =>
+    Js.Dict.set(
+      targetData,
+      "quiz",
+      state.quiz |> Json.Encode.(list(QuizQuestion.encoder)),
+    )
   | MarkAsComplete => ()
   | NotSelected => ()
   };
-
-  Js.Promise.(
-    Fetch.fetchWithInit(
-      "/school/target_groups/" ++ tg_id ++ "/targets",
-      Fetch.RequestInit.make(
-        ~method_=Post,
-        ~body=
-          Fetch.BodyInit.make(Js.Json.stringify(Js.Json.object_(payload))),
-        ~headers=Fetch.HeadersInit.make({"Content-Type": "application/json"}),
-        ~credentials=Fetch.SameOrigin,
-        (),
-      ),
-    )
-    |> then_(response =>
-         if (Fetch.Response.ok(response)
-             || Fetch.Response.status(response) == 422) {
-           response |> Fetch.Response.json;
-         } else {
-           Js.Promise.reject(
-             UnexpectedResponse(response |> Fetch.Response.status),
-           );
-         }
-       )
-    |> then_(json => handleResponseJSON(json) |> resolve)
-    |> catch(error =>
-         (
-           switch (error |> handleApiError) {
-           | Some(code) =>
-             Notification.error(code |> string_of_int, "Please try again")
-           | None =>
-             Notification.error("Something went wrong!", "Please try again")
-           }
-         )
-         |> resolve
-       )
-    |> ignore
-  );
+  Js.Dict.set(payload, "target", targetData |> Js.Json.object_);
+  payload;
 };
 
 let facultyReviewButtonClasses = value =>
@@ -183,51 +157,99 @@ let completionButtonClasses = value =>
 
 let make =
     (
+      ~target,
       ~targetGroupId,
       ~evaluationCriteria,
       ~targets,
       ~authenticityToken,
+      ~updateTargetCB,
       ~hideEditorActionCB,
       _children,
     ) => {
   ...component,
-  initialState: () => {
-    title: "",
-    description: "",
-    videoEmbed: "",
-    slideshowEmbed: "",
-    evaluationCriteria:
-      evaluationCriteria
-      |> List.map(criteria =>
-           (
-             criteria |> EvaluationCriteria.id,
-             criteria |> EvaluationCriteria.name,
-             true,
-           )
-         ),
-    prerequisiteTargets:
-      targets
-      |> List.filter(target => target |> Target.targetGroupId == 1)
-      |> List.map(_target =>
-           (_target |> Target.id, _target |> Target.title, false)
-         ),
-    quiz: [QuizQuestion.empty(0)],
-    methodOfCompletion: NotSelected,
-    resources: [(1, "a"), (2, "b")],
-    linkToComplete: "",
-  },
+  initialState: () =>
+    switch (target) {
+    | Some(target) => {
+        title: target |> Target.title,
+        description: target |> Target.title,
+        videoEmbed:
+          switch (target |> Target.videoEmbed) {
+          | Some(videoEmbed) => videoEmbed
+          | None => ""
+          },
+        slideshowEmbed:
+          switch (target |> Target.slideshowEmbed) {
+          | Some(slideshowEmbed) => slideshowEmbed
+          | None => ""
+          },
+        evaluationCriteria:
+          evaluationCriteria
+          |> List.map(criteria =>
+               (
+                 criteria |> EvaluationCriteria.id,
+                 criteria |> EvaluationCriteria.name,
+                 true,
+               )
+             ),
+        prerequisiteTargets:
+          targets
+          |> List.filter(target => target |> Target.targetGroupId == 1)
+          |> List.map(_target =>
+               (_target |> Target.id, _target |> Target.title, false)
+             ),
+        quiz: target |> Target.quiz,
+        resources:
+          target
+          |> Target.resources
+          |> List.map(r => (r |> Resource.id, r |> Resource.title)),
+        linkToComplete:
+          switch (target |> Target.linkToComplete) {
+          | Some(linkToComplete) => linkToComplete
+          | None => ""
+          },
+        role: target |> Target.role,
+        targetActionType: target |> Target.targetActionType,
+        methodOfCompletion: handleMethodOfCompletion(target),
+      }
+    | None => {
+        title: "",
+        description: "",
+        videoEmbed: "",
+        slideshowEmbed: "",
+        evaluationCriteria:
+          evaluationCriteria
+          |> List.map(criteria =>
+               (
+                 criteria |> EvaluationCriteria.id,
+                 criteria |> EvaluationCriteria.name,
+                 true,
+               )
+             ),
+        prerequisiteTargets:
+          targets
+          |> List.filter(target => target |> Target.targetGroupId == 1)
+          |> List.map(_target =>
+               (_target |> Target.id, _target |> Target.title, false)
+             ),
+        quiz: [QuizQuestion.empty(0)],
+        methodOfCompletion: NotSelected,
+        resources: [],
+        linkToComplete: "",
+        role: "founder",
+        targetActionType: "Todo",
+      }
+    },
   reducer: (action, state) =>
     switch (action) {
-    | UpdateState(keyForStateUpdation, string) =>
-      switch (keyForStateUpdation) {
-      | Title => ReasonReact.Update({...state, title: string})
-      | Description => ReasonReact.Update({...state, description: string})
-      | VideoEmbed => ReasonReact.Update({...state, videoEmbed: string})
-      | SlideshowEmbed =>
-        ReasonReact.Update({...state, slideshowEmbed: string})
-      | LinkToComplete =>
-        ReasonReact.Update({...state, linkToComplete: string})
-      }
+    | UpdateTitle(title) => ReasonReact.Update({...state, title})
+    | UpdateDescription(description) =>
+      ReasonReact.Update({...state, description})
+    | UpdateVideoEmbed(videoEmbed) =>
+      ReasonReact.Update({...state, videoEmbed})
+    | UpdateSlideshowEmbed(slideshowEmbed) =>
+      ReasonReact.Update({...state, slideshowEmbed})
+    | UpdateLinkToComplete(linkToComplete) =>
+      ReasonReact.Update({...state, linkToComplete})
     | UpdateEvaluationCriterion(key, value, selected) =>
       let oldEC =
         state.evaluationCriteria
@@ -294,6 +316,47 @@ let make =
            quizQuestion |> QuizQuestion.isValidQuizQuestion != true
          )
       |> List.length == 0;
+    let handleResponseCB = json => {
+      let id = json |> Json.Decode.(field("id", int));
+      let sortIndex = json |> Json.Decode.(field("sortIndex", int));
+      let evaluationCriteria =
+        state.evaluationCriteria |> List.map(((id, _, _)) => id);
+      let prerequisiteTargets =
+        state.evaluationCriteria |> List.map(((id, _, _)) => id);
+      let resources =
+        state.resources
+        |> List.map(((id, title)) => Resource.create(id, title));
+      let newTarget =
+        Target.create(
+          id,
+          targetGroupId,
+          state.title,
+          state.description,
+          Some(state.videoEmbed),
+          Some(state.slideshowEmbed),
+          evaluationCriteria,
+          prerequisiteTargets,
+          state.quiz,
+          resources,
+          Some(state.linkToComplete),
+          state.role,
+          state.targetActionType,
+          sortIndex,
+        );
+      updateTargetCB(newTarget);
+    };
+    let createTarget = () => {
+      let payload = setPayload(state, target, authenticityToken);
+      let tgId = targetGroupId |> string_of_int;
+      let url = "/school/target_groups/" ++ tgId ++ "/targets";
+      Api.create(url, payload, handleResponseCB);
+    };
+
+    let updateTarget = targetId => {
+      let payload = setPayload(state, target, authenticityToken);
+      let url = "/school/targets/" ++ (targetId |> string_of_int);
+      Api.update(url, payload, handleResponseCB);
+    };
 
     <div className="blanket">
       <div className="drawer-right">
@@ -315,13 +378,11 @@ let make =
                   id="title"
                   type_="text"
                   placeholder="Type target title here"
+                  value={state.title}
                   onChange={
                     event =>
                       send(
-                        UpdateState(
-                          Title,
-                          ReactEvent.Form.target(event)##value,
-                        ),
+                        UpdateTitle(ReactEvent.Form.target(event)##value),
                       )
                   }
                 />
@@ -334,11 +395,11 @@ let make =
                   className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                   id="title"
                   placeholder="Type target description"
+                  value={state.description}
                   onChange={
                     event =>
                       send(
-                        UpdateState(
-                          Description,
+                        UpdateDescription(
                           ReactEvent.Form.target(event)##value,
                         ),
                       )
@@ -356,11 +417,11 @@ let make =
                   id="title"
                   type_="text"
                   placeholder="Paste video embed code here"
+                  value={state.videoEmbed}
                   onChange={
                     event =>
                       send(
-                        UpdateState(
-                          VideoEmbed,
+                        UpdateVideoEmbed(
                           ReactEvent.Form.target(event)##value,
                         ),
                       )
@@ -376,11 +437,11 @@ let make =
                   id="title"
                   type_="text"
                   placeholder="Paste slideshow embed code here"
+                  value={state.slideshowEmbed}
                   onChange={
                     event =>
                       send(
-                        UpdateState(
-                          SlideshowEmbed,
+                        UpdateSlideshowEmbed(
                           ReactEvent.Form.target(event)##value,
                         ),
                       )
@@ -421,7 +482,10 @@ let make =
                   |> Array.of_list
                   |> ReasonReact.array
                 }
-                <CurriculumEditor__ResourceUploader addResourceCB />
+                <CurriculumEditor__ResourceUploader
+                  authenticityToken
+                  addResourceCB
+                />
               </div>
             </div>
             <div className="mx-auto">
@@ -746,11 +810,11 @@ let make =
                         id="title"
                         type_="text"
                         placeholder="Paste link to complete"
+                        value={state.linkToComplete}
                         onChange=(
                           event =>
                             send(
-                              UpdateState(
-                                LinkToComplete,
+                              UpdateLinkToComplete(
                                 ReactEvent.Form.target(event)##value,
                               ),
                             )
@@ -770,14 +834,23 @@ let make =
               </button>
             </div>
             <div className="flex">
-              <button
-                onClick={
-                  _event =>
-                    createTarget(state, authenticityToken, targetGroupId)
+              {
+                switch (target) {
+                | Some(target) =>
+                  <button
+                    onClick=(_e => updateTarget(target |> Target.id))
+                    className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+                    {"Update Target" |> str}
+                  </button>
+
+                | None =>
+                  <button
+                    onClick=(_e => createTarget())
+                    className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+                    {"Create Target" |> str}
+                  </button>
                 }
-                className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
-                {"Save All" |> str}
-              </button>
+              }
             </div>
           </div>
         </div>

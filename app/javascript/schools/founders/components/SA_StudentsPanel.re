@@ -8,12 +8,14 @@ type formVisible =
   | UpdateForm(Student.t);
 
 type state = {
+  teams: list(Team.t),
   selectedStudents: list(Student.t),
   searchString: string,
   formVisible,
 };
 
 type action =
+  | UpdateTeams(list(Team.t))
   | SelectStudent(Student.t)
   | DeselectStudent(Student.t)
   | SelectAllStudents
@@ -53,11 +55,12 @@ let teamUp = () => {
 
 let component = ReasonReact.reducerComponent("SA_StudentsPanel");
 
-let make = (~teams, _children) => {
+let make = (~teams, ~authenticityToken, _children) => {
   ...component,
-  initialState: () => {selectedStudents: [], searchString: "", formVisible: None},
+  initialState: () => {teams, selectedStudents: [], searchString: "", formVisible: None},
   reducer: (action, state) =>
     switch (action) {
+    | UpdateTeams(teams) => ReasonReact.Update({...state, teams})
     | SelectStudent(student) =>
       ReasonReact.Update({...state, selectedStudents: [student, ...state.selectedStudents]})
     | DeselectStudent(student) =>
@@ -74,10 +77,12 @@ let make = (~teams, _children) => {
   render: ({state, send}) => {
     <div>
       {let closeFormCB = () => send(UpdateFormVisible(None))
+       let submitFormCB = teams => {send(UpdateTeams(teams))
+                                    send(UpdateFormVisible(None))}
        switch (state.formVisible) {
        | None => ReasonReact.null
        | CreateForm => <SA_StudentsPanel_CreateForm closeFormCB />
-       | UpdateForm(student) => <SA_StudentsPanel_UpdateForm student closeFormCB />
+       | UpdateForm(student) => <SA_StudentsPanel_UpdateForm student closeFormCB submitFormCB authenticityToken />
        }}
       <div className="border-b flex px-6 py-2 items-center justify-between">
         <div className="inline-block relative w-64">
@@ -142,7 +147,7 @@ let make = (~teams, _children) => {
                  {"Add tags" |> str}
                </button> :
                ReasonReact.null}
-            {isGroupable(state.selectedStudents, teams) ?
+            {isGroupable(state.selectedStudents, state.teams) ?
                <button
                  onClick={_e => teamUp()}
                  className="bg-transparent hover:bg-purple-dark focus:outline-none text-purple-dark text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
@@ -167,7 +172,7 @@ let make = (~teams, _children) => {
       </div>
       <div className="px-6 pb-4 flex-1 bg-grey-lightest overflow-y-scroll">
         <div className="max-w-lg mx-auto relative">
-          {filteredTeams(state.searchString, teams)
+          {filteredTeams(state.searchString, state.teams)
            |> List.map(team => {
                 let isSingleFounder = team |> Team.students |> List.length == 1;
                 <div
@@ -268,15 +273,22 @@ let make = (~teams, _children) => {
   },
 };
 
-type props = {teams: list(Team.t)};
+type props = {
+  teams: list(Team.t),
+  authenticityToken: string,
+};
 
-let decode = json => Json.Decode.{teams: json |> field("teams", list(Team.decode))};
+let decode = json =>
+  Json.Decode.{
+    teams: json |> field("teams", list(Team.decode)),
+    authenticityToken: json |> field("authenticityToken", string),
+  };
 
 let jsComponent =
   ReasonReact.wrapReasonForJs(
     ~component,
     jsProps => {
       let props = jsProps |> decode;
-      make(~teams=props.teams, [||]);
+      make(~teams=props.teams, ~authenticityToken=props.authenticityToken, [||]);
     },
   );

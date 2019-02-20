@@ -37,11 +37,13 @@ module Schools
     # PATCH /school/students/:id
     def update
       student = authorize(students.find(params[:id]), policy_class: Schools::FounderPolicy)
+      @course = student.course
 
       form = Schools::Founders::EditForm.new(student)
       if form.validate(params[:founder])
         form.save
-        redirect_back(fallback_location: school_course_students_path(student.course))
+        presenter = Schools::Founders::IndexPresenter.new(view_context, @course)
+        render json: { teams: presenter.teams, error: nil }
       else
         raise form.errors.full_messages.join(', ')
       end

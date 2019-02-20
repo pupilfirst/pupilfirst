@@ -1,4 +1,5 @@
 open StudentsPanel__Types;
+open SchoolAdmin__Utils;
 
 type state = {
   name: string,
@@ -32,7 +33,26 @@ let formInvalid = state => {
   state.hasNameError || state.hasTeamNameError;
 };
 
-let make = (~student, ~closeFormCB, _children) => {
+let handleResponseCB = (submitCB, json) => {
+  Js.log("here");
+  Js.log(json);
+  let teams = json |> Json.Decode.(field("teams", list(Team.decode)));
+  Js.log(teams);
+  submitCB(teams);
+};
+
+let updateStudent = (student, state, authenticityToken, responseCB) => {
+  let payload = Js.Dict.empty();
+  Js.Dict.set(payload, "authenticity_token", authenticityToken |> Js.Json.string);
+  let updatedStudent = student |> Student.updateInfo(state.name, state.teamName);
+
+  Js.Dict.set(payload, "founder", updatedStudent |> Json.Encode.(Student.encode));
+
+  let url = "/school/students/" ++ (student |> Student.id |> string_of_int);
+  Api.update(url, payload, responseCB);
+};
+
+let make = (~student, ~closeFormCB, ~submitFormCB, ~authenticityToken, _children) => {
   ...component,
   initialState: () => {
     name: student |> Student.name,
@@ -97,6 +117,7 @@ let make = (~student, ~closeFormCB, _children) => {
                 </div>
                 <div className="flex">
                   <button
+                    onClick={_e => updateStudent(student, state, authenticityToken, handleResponseCB(submitFormCB))}
                     className={
                       "w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3"
                       ++ (formInvalid(state) ? " opacity-50 cursor-not-allowed" : "")

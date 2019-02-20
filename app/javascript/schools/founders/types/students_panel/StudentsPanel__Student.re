@@ -19,6 +19,8 @@ let teamName = t => t.teamName;
 
 let email = t => t.email;
 
+let updateInfo = (name, teamName, student) => {...student, name, teamName};
+
 let decode = json =>
   Json.Decode.{
     name: json |> field("name", string),
@@ -28,3 +30,15 @@ let decode = json =>
     teamName: json |> field("teamName", string),
     email: json |> field("email", string),
   };
+
+let encode = t =>
+  Json.Encode.(
+    object_([
+      ("id", t.id |> int),
+      ("name", t.name |> string),
+      ("avatar_url", t.avatarUrl |> string),
+      ("team_id", t.teamId |> int),
+      ("team_name", t.teamName |> string),
+      ("email", t.email |> string),
+    ])
+  );

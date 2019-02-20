@@ -8,7 +8,7 @@ module Schools
       end
 
       def react_props
-        { teams: teams }
+        { teams: teams, authenticityToken: view.form_authenticity_token }
       end
 
       def teams

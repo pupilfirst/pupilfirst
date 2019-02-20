@@ -2,10 +2,10 @@ open CurriculumEditor__Types;
 
 let str = ReasonReact.string;
 
-type state = {hasDescription: bool};
+type state = {hasHint: bool};
 
 type action =
-  | InvertHasDescription;
+  | InvertHasHint;
 
 let component =
   ReasonReact.reducerComponent("CurriculumEditor__TargetQuizAnswer");
@@ -20,15 +20,14 @@ let make =
       _children,
     ) => {
   ...component,
-  initialState: () => {hasDescription: false},
+  initialState: () => {hasHint: false},
   reducer: (action, state) =>
     switch (action) {
-    | InvertHasDescription =>
-      ReasonReact.Update({hasDescription: !state.hasDescription})
+    | InvertHasHint => ReasonReact.Update({hasHint: !state.hasHint})
     },
   render: ({state, send}) => {
-    let description =
-      switch (answerOption |> AnswerOption.description) {
+    let hint =
+      switch (answerOption |> AnswerOption.hint) {
       | Some(value) => value
       | None => ""
       };
@@ -40,6 +39,7 @@ let make =
             className="appearance-none block w-full bg-white text-grey-darker text-sm rounded p-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
             type_="text"
             placeholder="Answer option"
+            value={answerOption |> AnswerOption.answer}
             onChange={
               event =>
                 updateAnswerOptionCB(
@@ -70,7 +70,7 @@ let make =
             onClick={
               _event => {
                 ReactEvent.Mouse.preventDefault(_event);
-                send(InvertHasDescription);
+                send(InvertHasHint);
               }
             }
             className="flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-grey hover:text-grey-darker text-xs py-1 px-3"
@@ -94,17 +94,17 @@ let make =
           }
         </div>
         {
-          state.hasDescription ?
+          state.hasHint ?
             <textarea
               className="appearance-none block w-full border-t border-t-1 border-grey-light bg-white text-grey-darker text-sm rounded rounded-t-none p-4 -mt-0 leading-tight focus:outline-none focus:bg-white focus:border-grey"
               id="title"
               placeholder="Type an answer explanation here."
-              value=description
+              value=hint
               rows=3
               onBlur={
                 event => {
                   ReactEvent.Focus.preventDefault(event);
-                  send(InvertHasDescription);
+                  send(InvertHasHint);
                 }
               }
               onChange={
@@ -112,7 +112,7 @@ let make =
                   updateAnswerOptionCB(
                     answerOption |> AnswerOption.id,
                     answerOption
-                    |> AnswerOption.updateDescription(
+                    |> AnswerOption.updateHint(
                          Some(ReactEvent.Form.target(event)##value),
                        ),
                   )

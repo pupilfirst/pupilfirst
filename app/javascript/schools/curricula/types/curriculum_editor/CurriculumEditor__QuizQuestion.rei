@@ -6,6 +6,8 @@ let question: t => string;
 
 let answerOptions: t => list(CurriculumEditor__AnswerOption.t);
 
+let decode: Js.Json.t => t;
+
 let empty: int => t;
 
 let updateQuestion: (string, t) => t;

@@ -19,6 +19,15 @@ let empty = id => {
   ],
 };
 
+let decode = json =>
+  Json.Decode.{
+    id: json |> field("id", int),
+    question: json |> field("question", string),
+    answerOptions:
+      json
+      |> field("answerOptions", list(CurriculumEditor__AnswerOption.decode)),
+  };
+
 let updateQuestion = (question, t) => {...t, question};
 
 let newAnswerOption = (id, t) => {

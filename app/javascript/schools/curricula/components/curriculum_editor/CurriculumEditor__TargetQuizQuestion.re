@@ -61,6 +61,7 @@ let make =
           className="appearance-none bg-transparent text-lg border-none w-full text-grey-darker mr-3 py-1 px-2 pl-0 leading-tight focus:outline-none"
           type_="text"
           placeholder="Type the question here"
+          value={quizQuestion |> QuizQuestion.question}
           onChange={
             event => updateQuestion(ReactEvent.Form.target(event)##value)
           }

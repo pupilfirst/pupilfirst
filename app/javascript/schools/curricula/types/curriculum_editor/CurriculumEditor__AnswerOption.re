@@ -1,7 +1,7 @@
 type t = {
   id: int,
   answer: string,
-  description: option(string),
+  hint: option(string),
   correctAnswer: bool,
 };
 
@@ -9,20 +9,28 @@ let id = t => t.id;
 
 let answer = t => t.answer;
 
-let description = t => t.description;
+let hint = t => t.hint;
 
 let correctAnswer = t => t.correctAnswer;
+
+let decode = json =>
+  Json.Decode.{
+    id: json |> field("id", int),
+    answer: json |> field("answer", string),
+    hint: json |> field("hint", nullable(string)) |> Js.Null.toOption,
+    correctAnswer: json |> field("correctAnswer", bool),
+  };
 
 let empty = (id, correctAnswer) => {
   id,
   answer: "",
-  description: None,
+  hint: None,
   correctAnswer,
 };
 
 let updateAnswer = (answer, t) => {...t, answer};
 
-let updateDescription = (description, t) => {...t, description};
+let updateHint = (hint, t) => {...t, hint};
 
 let markAsCorrect = t => {...t, correctAnswer: true};
 
@@ -36,9 +44,9 @@ let encoder = t =>
     object_([
       ("answer", t.answer |> string),
       (
-        "description",
-        switch (t.description) {
-        | Some(description) => description |> string
+        "hint",
+        switch (t.hint) {
+        | Some(hint) => hint |> string
         | None => null
         },
       ),

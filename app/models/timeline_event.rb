@@ -175,10 +175,6 @@ class TimelineEvent < ApplicationRecord
     )
   end
 
-  def first_attachment_url
-    @first_attachment_url ||= first_file_url || first_link_url
-  end
-
   def days_elapsed
     start_date = startup.earliest_team_event_date
     return nil if start_date.blank?
@@ -212,16 +208,5 @@ class TimelineEvent < ApplicationRecord
 
   def privileged_founder?(founder)
     founder.present? && startup.founders.include?(founder)
-  end
-
-  def first_file_url
-    first_file = timeline_event_files.first
-    return if first_file.blank?
-
-    Rails.application.routes.url_helpers.download_timeline_event_file_url(first_file)
-  end
-
-  def first_link_url
-    links.first.try(:[], :url)
   end
 end

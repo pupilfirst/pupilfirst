@@ -13,16 +13,4 @@ class TimelineEventFile < ApplicationRecord
 
     'missing_in_development'
   end
-
-  def file_url
-    file_as.attached? && Rails.application.routes.url_helpers.rails_blob_path(file_as, only_path: true)
-  end
-
-  def title
-    file_as.metadata['title']
-  end
-
-  def private
-    file_as.metadata['private']
-  end
 end

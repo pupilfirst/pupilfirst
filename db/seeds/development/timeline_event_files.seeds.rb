@@ -8,12 +8,11 @@ after 'development:timeline_events' do
   presentation_path = File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf'))
 
   tef = TimelineEventFile.new(
-    timeline_event: timeline_event
+    timeline_event: timeline_event,
+    title: 'Improved presentation',
+    private: false
   )
 
   tef.file_as.attach(io: File.open(presentation_path), filename: 'pdf-sample.pdf')
   tef.save!
-
-  # Add metadata.
-  tef.file_as.blob.update(metadata: { title: 'Improved presentation', private: false })
 end

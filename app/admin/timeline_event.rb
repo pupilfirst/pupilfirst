@@ -54,15 +54,6 @@ ActiveAdmin.register TimelineEvent do
     head :ok
   end
 
-  member_action :get_attachment do
-    timeline_event = TimelineEvent.find(params[:id])
-    timeline_event_file = timeline_event.timeline_event_files.find_by(id: params[:timeline_event_file_id])
-
-    raise_not_found if timeline_event_file.blank?
-
-    redirect_to timeline_event_file.file_url
-  end
-
   member_action :save_feedback, method: :post do
     raise if params[:feedback].blank?
 

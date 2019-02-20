@@ -135,7 +135,9 @@ feature 'Target Overlay' do
 
         # Attachments.
         expect(page).to have_selector("a[href='https://www.example.com'] > .target-overlay__link--attachment-text", text: 'Some Link')
-        expect(page).to have_selector("a[href='#{timeline_event_file.file_url}'] > .target-overlay__link--attachment-text", text: timeline_event_file.title)
+
+        tef_path = Rails.application.routes.url_helpers.download_timeline_event_file_path(timeline_event_file)
+        expect(page).to have_selector("a[href='#{tef_path}'] > .target-overlay__link--attachment-text", text: timeline_event_file.title)
 
         # Latest Feedback.
         expect(page).to have_selector('.target-overlay-timeline-event-panel__feedback > p', text: feedback.feedback)
@@ -161,7 +163,7 @@ feature 'Target Overlay' do
       find('.founder-dashboard-target-header__headline', text: target.title).click
 
       within('.target-overlay__content-rightbar') do
-        expect(page).to have_selector('.target-overaly__status-title', text: 'Pending Team Members')
+        expect(page).to have_selector('.target-overlay__status-title', text: 'Pending Team Members')
         expect(page).to have_selector('.founder-dashboard__avatar-wrapper', count: 1)
       end
     end

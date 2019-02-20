@@ -79,11 +79,11 @@ module TimelineEvents
       files.each do |identifier, file|
         metadata = parsed_files_metadata[identifier]
 
-        te_file = timeline_event.timeline_event_files.create!(
-          file_as: file
+        timeline_event.timeline_event_files.create!(
+          file_as: file,
+          title: metadata['title'],
+          private: metadata['private']
         )
-
-        te_file.file_as.blob.update(metadata: metadata)
       end
     end
   end

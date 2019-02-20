@@ -3,6 +3,7 @@ type t = {
   name: string,
   students: list(StudentsPanel__Student.t),
   coaches: list(StudentsPanel__Coach.t),
+  levelNumber: int,
 };
 
 let id = t => t.id;
@@ -19,4 +20,7 @@ let decode = json =>
     name: json |> field("name", string),
     students: json |> field("students", list(StudentsPanel__Student.decode)),
     coaches: json |> field("coaches", list(StudentsPanel__Coach.decode)),
+    levelNumber: json |> field("levelNumber", int),
   };
+
+let levelNumber = t => t.levelNumber;

@@ -17,7 +17,8 @@ module Schools
             id: team.id,
             name: team.product_name,
             students: student_details(team.founders),
-            coaches: (coach_details(team.faculty) + course_coaches).uniq
+            coaches: (coach_details(team.faculty) + course_coaches).uniq,
+            levelNumber: team.level.number
           }
         end
       end

@@ -32,9 +32,17 @@ let selectedPartialTeam = (selectedStudents, teams) => {
   selectedStudents |> List.length < (selectedTeam |> Team.students |> List.length);
 };
 
+let selectedWithinLevel = (selectedStudents, teams) => {
+  let teamIds = selectedStudents |> List.map(student => student |> Student.teamId);
+  let selectedUniqTeams = teams |> List.filter(team => List.mem(team |> Team.id, teamIds));
+  let selectedLevelNumbers = selectedUniqTeams |> List.map(team => team |> Team.levelNumber);
+  selectedLevelNumbers |> List.sort_uniq((ln1, ln2) => ln1 - ln2) |> List.length == 1;
+};
+
 let isGroupable = (selectedStudents, teams) => {
   selectedStudents
   |> List.length > 1
+  && selectedWithinLevel(selectedStudents, teams)
   && (selectedAcrossTeams(selectedStudents) || selectedPartialTeam(selectedStudents, teams));
 };
 
@@ -69,7 +77,10 @@ let make = (~teams, ~authenticityToken, _children) => {
         selectedStudents: state.selectedStudents |> List.filter(s => Student.id(s) !== Student.id(student)),
       })
     | SelectAllStudents =>
-      ReasonReact.Update({...state, selectedStudents: teams |> List.map(t => t |> Team.students) |> List.flatten})
+      ReasonReact.Update({
+        ...state,
+        selectedStudents: state.teams |> List.map(t => t |> Team.students) |> List.flatten,
+      })
     | DeselectAllStudents => ReasonReact.Update({...state, selectedStudents: []})
     | UpdateSearchString(searchString) => ReasonReact.Update({...state, searchString})
     | UpdateFormVisible(formVisible) => ReasonReact.Update({...state, formVisible})
@@ -259,7 +270,7 @@ let make = (~teams, ~authenticityToken, _children) => {
                     </div>
                     <div className="w-2/5 text-center">
                       <span className="inline-flex rounded bg-indigo-lightest px-2 py-1 text-xs font-semibold">
-                        {"Level 1" |> str}
+                        {"Level " ++ (team |> Team.levelNumber |> string_of_int) |> str}
                       </span>
                     </div>
                   </div>

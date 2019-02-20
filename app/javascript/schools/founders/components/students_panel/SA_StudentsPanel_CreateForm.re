@@ -12,7 +12,7 @@ type action =
   | UpdateEmail(string)
   | UpdateErrors(bool, bool);
 
-let component = ReasonReact.reducerComponent("SA_StudentsPanel_StudentForm");
+let component = ReasonReact.reducerComponent("SA_StudentsPanel_CreateForm");
 
 let str = ReasonReact.string;
 
@@ -33,24 +33,9 @@ let formInvalid = state => {
   state.name == "" || state.email == "" || state.hasNameError || state.hasEmailError;
 };
 
-let make = (~closeFormCB, ~student, _children) => {
+let make = (~closeFormCB, _children) => {
   ...component,
-  initialState: () => {
-    name: {
-      switch (student) {
-      | None => ""
-      | Some(s) => s |> Student.name
-      };
-    },
-    email: {
-      switch (student) {
-      | None => ""
-      | Some(s) => s |> Student.email
-      };
-    },
-    hasNameError: false,
-    hasEmailError: false,
-  },
+  initialState: () => {name: "", email: "", hasNameError: false, hasEmailError: false},
   reducer: (action, state) => {
     switch (action) {
     | UpdateName(name) => ReasonReact.Update({...state, name})
@@ -91,7 +76,6 @@ let make = (~closeFormCB, ~student, _children) => {
                   id="level number"
                   type_="email"
                   placeholder="Student email here"
-                  disabled={student == None ? false : true}
                 />
                 {state.hasEmailError ?
                    <div className="drawer-right-form__error-msg"> {"not a valid email" |> str} </div> :
@@ -109,7 +93,7 @@ let make = (~closeFormCB, ~student, _children) => {
                       "w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3"
                       ++ (formInvalid(state) ? " opacity-50 cursor-not-allowed" : "")
                     }>
-                    {(student == None ? "Add Student" : "Update") |> str}
+                    {"Add Student" |> str}
                   </button>
                 </div>
               </div>

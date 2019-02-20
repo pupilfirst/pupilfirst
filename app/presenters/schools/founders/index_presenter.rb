@@ -31,6 +31,7 @@ module Schools
             name: student.name,
             avatarUrl: student.avatar_url || student.initials_avatar,
             teamId: student.startup.id,
+            teamName: student.startup.product_name,
             email: student.user.email
           }
         end

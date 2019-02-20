@@ -10,4 +10,6 @@ let avatarUrl: t => string;
 
 let teamId: t => int;
 
+let teamName: t => string;
+
 let email: t => string

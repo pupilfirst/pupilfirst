@@ -2,11 +2,15 @@ open StudentsPanel__Types;
 
 let str = ReasonReact.string;
 
+type formVisible =
+  | None
+  | CreateForm
+  | UpdateForm(Student.t);
+
 type state = {
   selectedStudents: list(Student.t),
   searchString: string,
-  formVisible: bool,
-  clickedStudent: option(Student.t),
+  formVisible,
 };
 
 type action =
@@ -15,8 +19,7 @@ type action =
   | SelectAllStudents
   | DeselectAllStudents
   | UpdateSearchString(string)
-  | UpdateFormVisibility(bool)
-  | UpdateClickedStudent(option(Student.t));
+  | UpdateFormVisible(formVisible);
 
 let selectedAcrossTeams = selectedStudents => {
   selectedStudents |> List.map(s => s |> Student.teamId) |> List.sort_uniq((id1, id2) => id1 - id2) |> List.length > 1;
@@ -48,16 +51,11 @@ let teamUp = () => {
   Js.log("Teaming up..");
 };
 
-let handleStudentClick = (send, student) => {
-  send(UpdateClickedStudent(Some(student)));
-  send(UpdateFormVisibility(true));
-};
-
 let component = ReasonReact.reducerComponent("SA_StudentsPanel");
 
 let make = (~teams, _children) => {
   ...component,
-  initialState: () => {selectedStudents: [], searchString: "", formVisible: false, clickedStudent: None},
+  initialState: () => {selectedStudents: [], searchString: "", formVisible: None},
   reducer: (action, state) =>
     switch (action) {
     | SelectStudent(student) =>
@@ -71,14 +69,16 @@ let make = (~teams, _children) => {
       ReasonReact.Update({...state, selectedStudents: teams |> List.map(t => t |> Team.students) |> List.flatten})
     | DeselectAllStudents => ReasonReact.Update({...state, selectedStudents: []})
     | UpdateSearchString(searchString) => ReasonReact.Update({...state, searchString})
-    | UpdateFormVisibility(formVisible) => ReasonReact.Update({...state, formVisible})
-    | UpdateClickedStudent(clickedStudent) => ReasonReact.Update({...state, clickedStudent})
+    | UpdateFormVisible(formVisible) => ReasonReact.Update({...state, formVisible})
     },
   render: ({state, send}) => {
     <div>
-      {let closeFormCB = () => send(UpdateFormVisibility(false))
-       state.formVisible ?
-         <SA_StudentsPanel_StudentForm closeFormCB student={state.clickedStudent} /> : ReasonReact.null}
+      {let closeFormCB = () => send(UpdateFormVisible(None))
+       switch (state.formVisible) {
+       | None => ReasonReact.null
+       | CreateForm => <SA_StudentsPanel_CreateForm closeFormCB />
+       | UpdateForm(student) => <SA_StudentsPanel_UpdateForm student closeFormCB />
+       }}
       <div className="border-b flex px-6 py-2 items-center justify-between">
         <div className="inline-block relative w-64">
           <select
@@ -152,7 +152,7 @@ let make = (~teams, _children) => {
             {state.selectedStudents |> List.length > 0 ?
                ReasonReact.null :
                <button
-                 onClick={_e => send(UpdateFormVisibility(true))}
+                 onClick={_e => send(UpdateFormVisible(CreateForm))}
                  className="hover:bg-purple-dark text-purple-dark font-semibold hover:text-white focus:outline-none border border-dashed border-blue hover:border-transparent flex items-center px-2 py-1 rounded-lg cursor-pointer">
                  <svg className="svg-icon w-6 h-6" viewBox="0 0 20 20">
                    <path
@@ -183,7 +183,6 @@ let make = (~teams, _children) => {
                           let isChecked = state.selectedStudents |> List.mem(student);
                           <div
                             key={student |> Student.id |> string_of_int}
-                            onClick={_e => handleStudentClick(send, student)}
                             className="student-team__card cursor-pointer flex items-center bg-white hover:bg-grey-lighter">
                             <div className="flex-1 w-3/5">
                               <div className="flex items-center">
@@ -198,7 +197,9 @@ let make = (~teams, _children) => {
                                     }
                                   />
                                 </label>
-                                <div className="flex items-center py-4 pr-4">
+                                <div
+                                  className="flex flex-1 items-center py-4 pr-4"
+                                  onClick={_e => send(UpdateFormVisible(UpdateForm(student)))}>
                                   <img className="w-10 h-10 rounded-full mr-4" src={student |> Student.avatarUrl} />
                                   <div className="text-sm">
                                     <p

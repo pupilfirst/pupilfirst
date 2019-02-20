@@ -19,17 +19,17 @@ class ResourcesController < ApplicationController
   def show
     @resource = authorize(Resource.find(params[:id]))
 
-    return unless params[:watch].present? && @resource.stream?
-
-    @resource.increment_downloads(current_user)
-    @stream_video = @resource.file_url || @resource.video_embed
+    # If this is a video, and user has requested that it be played, increment the download count.
+    @resource.increment_downloads(current_user) if params[:watch].present? && @resource.stream?
   end
 
   # GET /library/:id/download
   def download
     resource = authorize(Resource.find(params[:id]))
     resource.increment_downloads(current_user)
-    redirect_to(resource.link.presence || resource.file_url)
+    destination = resource.link.presence || Rails.application.routes.url_helpers.rails_blob_path(resource.file_as, only_path: true)
+
+    redirect_to(destination)
   end
 
   private

@@ -57,10 +57,6 @@ class Resource < ApplicationRecord
     end
   end
 
-  def file_url
-    file_as.attached? && Rails.application.routes.url_helpers.rails_blob_path(file_as, only_path: true)
-  end
-
   def increment_downloads(user)
     update!(downloads: downloads + 1)
     if user.present?

@@ -5,7 +5,7 @@
       | &nbsp; Visit
 
   - elsif resource.file_as.attached?
-    a.btn.btn-ghost-secondary.btn-sm.btn-with-icon.text-uppercase href=resource.file_url target='_blank'
+    a.btn.btn-ghost-secondary.btn-sm.btn-with-icon.text-uppercase href=download_resource_path(resource) target='_blank'
       i.fa.fa-download
       | &nbsp; Download
 

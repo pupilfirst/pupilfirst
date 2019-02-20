@@ -1,3 +1,5 @@
+- presenter = Resources::ShowPresenter.new(self, @resource)
+
 - content_for :head
   title #{@resource.title} | #{current_school.name}
 
@@ -12,14 +14,14 @@
   .col-md-10.mb-3
     .content-box
       .row
-        - if @stream_video
+        - if presenter.play_video?
           .embed-responsive.embed-responsive-16by9
-            - if @resource.video_embed.present?
-              = @resource.video_embed.html_safe
+            - if presenter.video_embed?
+              = presenter.video_embed
             - else
-              = videojs_rails sources: { mp4: @stream_video}, class: 'embed-responsive-item'
+              = videojs_rails sources: { mp4: presenter.stream_url }, class: 'embed-responsive-item'
 
-        .col-md-9.resource-description-and-links class="#{@stream_video ? 'px-0' : ''}"
+        .col-md-9.resource-description-and-links class="#{presenter.play_video? ? 'px-0' : ''}"
           h3.mb-2.mt-sm-2.mt-3 #{@resource.title}
 
           = simple_format @resource.description
@@ -27,4 +29,4 @@
           .my-2
             == render 'tags', resource: @resource, fade: false
 
-          == render 'links', resource: @resource, playing: @stream_video.present?
+          == render 'links', resource: @resource, playing: presenter.play_video?

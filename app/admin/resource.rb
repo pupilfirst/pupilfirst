@@ -48,9 +48,10 @@ ActiveAdmin.register Resource do
     attributes_table do
       row :title
       row :downloads
+
       row :file do |resource|
         if resource.file_as.attached?
-          link_to resource.file_as.filename, resource.file_url
+          link_to resource.file_as.filename, resource.file_as
         end
       end
 

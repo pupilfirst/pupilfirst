@@ -4,6 +4,9 @@ class ResourcePolicy < ApplicationPolicy
   end
 
   def download?
+    # Embedded videos cannot be downloaded.
+    return false if record.video_embed.present?
+
     show?
   end
 

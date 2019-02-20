@@ -2,21 +2,26 @@ open StudentsPanel__Types;
 
 let str = ReasonReact.string;
 
+type formVisible =
+  | None
+  | CreateForm
+  | UpdateForm(Student.t);
+
 type state = {
+  teams: list(Team.t),
   selectedStudents: list(Student.t),
   searchString: string,
-  formVisible: bool,
-  clickedStudent: option(Student.t),
+  formVisible,
 };
 
 type action =
+  | UpdateTeams(list(Team.t))
   | SelectStudent(Student.t)
   | DeselectStudent(Student.t)
   | SelectAllStudents
   | DeselectAllStudents
   | UpdateSearchString(string)
-  | UpdateFormVisibility(bool)
-  | UpdateClickedStudent(option(Student.t));
+  | UpdateFormVisible(formVisible);
 
 let selectedAcrossTeams = selectedStudents => {
   selectedStudents |> List.map(s => s |> Student.teamId) |> List.sort_uniq((id1, id2) => id1 - id2) |> List.length > 1;
@@ -27,9 +32,17 @@ let selectedPartialTeam = (selectedStudents, teams) => {
   selectedStudents |> List.length < (selectedTeam |> Team.students |> List.length);
 };
 
+let selectedWithinLevel = (selectedStudents, teams) => {
+  let teamIds = selectedStudents |> List.map(student => student |> Student.teamId);
+  let selectedUniqTeams = teams |> List.filter(team => List.mem(team |> Team.id, teamIds));
+  let selectedLevelNumbers = selectedUniqTeams |> List.map(team => team |> Team.levelNumber);
+  selectedLevelNumbers |> List.sort_uniq((ln1, ln2) => ln1 - ln2) |> List.length == 1;
+};
+
 let isGroupable = (selectedStudents, teams) => {
   selectedStudents
   |> List.length > 1
+  && selectedWithinLevel(selectedStudents, teams)
   && (selectedAcrossTeams(selectedStudents) || selectedPartialTeam(selectedStudents, teams));
 };
 
@@ -48,18 +61,14 @@ let teamUp = () => {
   Js.log("Teaming up..");
 };
 
-let handleStudentClick = (send, student) => {
-  send(UpdateClickedStudent(Some(student)));
-  send(UpdateFormVisibility(true));
-};
-
 let component = ReasonReact.reducerComponent("SA_StudentsPanel");
 
-let make = (~teams, _children) => {
+let make = (~teams, ~authenticityToken, _children) => {
   ...component,
-  initialState: () => {selectedStudents: [], searchString: "", formVisible: false, clickedStudent: None},
+  initialState: () => {teams, selectedStudents: [], searchString: "", formVisible: None},
   reducer: (action, state) =>
     switch (action) {
+    | UpdateTeams(teams) => ReasonReact.Update({...state, teams})
     | SelectStudent(student) =>
       ReasonReact.Update({...state, selectedStudents: [student, ...state.selectedStudents]})
     | DeselectStudent(student) =>
@@ -68,17 +77,24 @@ let make = (~teams, _children) => {
         selectedStudents: state.selectedStudents |> List.filter(s => Student.id(s) !== Student.id(student)),
       })
     | SelectAllStudents =>
-      ReasonReact.Update({...state, selectedStudents: teams |> List.map(t => t |> Team.students) |> List.flatten})
+      ReasonReact.Update({
+        ...state,
+        selectedStudents: state.teams |> List.map(t => t |> Team.students) |> List.flatten,
+      })
     | DeselectAllStudents => ReasonReact.Update({...state, selectedStudents: []})
     | UpdateSearchString(searchString) => ReasonReact.Update({...state, searchString})
-    | UpdateFormVisibility(formVisible) => ReasonReact.Update({...state, formVisible})
-    | UpdateClickedStudent(clickedStudent) => ReasonReact.Update({...state, clickedStudent})
+    | UpdateFormVisible(formVisible) => ReasonReact.Update({...state, formVisible})
     },
   render: ({state, send}) => {
     <div>
-      {let closeFormCB = () => send(UpdateFormVisibility(false))
-       state.formVisible ?
-         <SA_StudentsPanel_StudentForm closeFormCB student={state.clickedStudent} /> : ReasonReact.null}
+      {let closeFormCB = () => send(UpdateFormVisible(None))
+       let submitFormCB = teams => {send(UpdateTeams(teams))
+                                    send(UpdateFormVisible(None))}
+       switch (state.formVisible) {
+       | None => ReasonReact.null
+       | CreateForm => <SA_StudentsPanel_CreateForm closeFormCB />
+       | UpdateForm(student) => <SA_StudentsPanel_UpdateForm student closeFormCB submitFormCB authenticityToken />
+       }}
       <div className="border-b flex px-6 py-2 items-center justify-between">
         <div className="inline-block relative w-64">
           <select
@@ -142,7 +158,7 @@ let make = (~teams, _children) => {
                  {"Add tags" |> str}
                </button> :
                ReasonReact.null}
-            {isGroupable(state.selectedStudents, teams) ?
+            {isGroupable(state.selectedStudents, state.teams) ?
                <button
                  onClick={_e => teamUp()}
                  className="bg-transparent hover:bg-purple-dark focus:outline-none text-purple-dark text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
@@ -152,7 +168,7 @@ let make = (~teams, _children) => {
             {state.selectedStudents |> List.length > 0 ?
                ReasonReact.null :
                <button
-                 onClick={_e => send(UpdateFormVisibility(true))}
+                 onClick={_e => send(UpdateFormVisible(CreateForm))}
                  className="hover:bg-purple-dark text-purple-dark font-semibold hover:text-white focus:outline-none border border-dashed border-blue hover:border-transparent flex items-center px-2 py-1 rounded-lg cursor-pointer">
                  <svg className="svg-icon w-6 h-6" viewBox="0 0 20 20">
                    <path
@@ -167,7 +183,7 @@ let make = (~teams, _children) => {
       </div>
       <div className="px-6 pb-4 flex-1 bg-grey-lightest overflow-y-scroll">
         <div className="max-w-lg mx-auto relative">
-          {filteredTeams(state.searchString, teams)
+          {filteredTeams(state.searchString, state.teams)
            |> List.map(team => {
                 let isSingleFounder = team |> Team.students |> List.length == 1;
                 <div
@@ -183,7 +199,6 @@ let make = (~teams, _children) => {
                           let isChecked = state.selectedStudents |> List.mem(student);
                           <div
                             key={student |> Student.id |> string_of_int}
-                            onClick={_e => handleStudentClick(send, student)}
                             className="student-team__card cursor-pointer flex items-center bg-white hover:bg-grey-lighter">
                             <div className="flex-1 w-3/5">
                               <div className="flex items-center">
@@ -198,7 +213,9 @@ let make = (~teams, _children) => {
                                     }
                                   />
                                 </label>
-                                <div className="flex items-center py-4 pr-4">
+                                <div
+                                  className="flex flex-1 items-center py-4 pr-4"
+                                  onClick={_e => send(UpdateFormVisible(UpdateForm(student)))}>
                                   <img className="w-10 h-10 rounded-full mr-4" src={student |> Student.avatarUrl} />
                                   <div className="text-sm">
                                     <p
@@ -253,7 +270,7 @@ let make = (~teams, _children) => {
                     </div>
                     <div className="w-2/5 text-center">
                       <span className="inline-flex rounded bg-indigo-lightest px-2 py-1 text-xs font-semibold">
-                        {"Level 1" |> str}
+                        {"Level " ++ (team |> Team.levelNumber |> string_of_int) |> str}
                       </span>
                     </div>
                   </div>
@@ -267,15 +284,22 @@ let make = (~teams, _children) => {
   },
 };
 
-type props = {teams: list(Team.t)};
+type props = {
+  teams: list(Team.t),
+  authenticityToken: string,
+};
 
-let decode = json => Json.Decode.{teams: json |> field("teams", list(Team.decode))};
+let decode = json =>
+  Json.Decode.{
+    teams: json |> field("teams", list(Team.decode)),
+    authenticityToken: json |> field("authenticityToken", string),
+  };
 
 let jsComponent =
   ReasonReact.wrapReasonForJs(
     ~component,
     jsProps => {
       let props = jsProps |> decode;
-      make(~teams=props.teams, [||]);
+      make(~teams=props.teams, ~authenticityToken=props.authenticityToken, [||]);
     },
   );

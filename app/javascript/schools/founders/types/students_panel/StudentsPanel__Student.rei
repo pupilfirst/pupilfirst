@@ -10,4 +10,10 @@ let avatarUrl: t => string;
 
 let teamId: t => int;
 
-let email: t => string
+let teamName: t => string;
+
+let email: t => string;
+
+let updateInfo: (string, string, t) => t;
+
+let encode: t => Js.Json.t;

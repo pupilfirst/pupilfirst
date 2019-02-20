@@ -8,7 +8,7 @@ module Schools
       end
 
       def react_props
-        { teams: teams }
+        { teams: teams, authenticityToken: view.form_authenticity_token }
       end
 
       def teams
@@ -17,7 +17,8 @@ module Schools
             id: team.id,
             name: team.product_name,
             students: student_details(team.founders),
-            coaches: (coach_details(team.faculty) + course_coaches).uniq
+            coaches: (coach_details(team.faculty) + course_coaches).uniq,
+            levelNumber: team.level.number
           }
         end
       end
@@ -31,6 +32,7 @@ module Schools
             name: student.name,
             avatarUrl: student.avatar_url || student.initials_avatar,
             teamId: student.startup.id,
+            teamName: student.startup.product_name,
             email: student.user.email
           }
         end

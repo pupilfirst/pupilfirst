@@ -1,5 +1,5 @@
-# Mails sent out to members of the faculty.
-class FacultyMailer < ApplicationMailer
+# Mails sent out to coaches.
+class FacultyMailer < SchoolMailer
   # Mail sent to faculty once a connect request is confirmed.
   #
   # @param connect_request [ConnectRequest] Request that was just confirmed

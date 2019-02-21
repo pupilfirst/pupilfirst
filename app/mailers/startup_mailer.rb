@@ -1,5 +1,5 @@
-# Mails sent out to startups, as a whole.
-class StartupMailer < ApplicationMailer
+# Mails sent out to teams, as a whole.
+class StartupMailer < SchoolMailer
   def startup_dropped_out(startup)
     @startup = startup
     send_to = @startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }

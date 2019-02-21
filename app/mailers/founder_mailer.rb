@@ -1,4 +1,5 @@
-class FounderMailer < ApplicationMailer
+# Mails sent directly to students.
+class FounderMailer < SchoolMailer
   # Mail sent a little while after the a confirmed connect request meeting occured.
   #
   # @param connect_request [ConnectRequest] Request for a meeting which recently occurred.

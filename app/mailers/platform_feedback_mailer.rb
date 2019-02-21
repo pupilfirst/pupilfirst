@@ -1,4 +1,5 @@
-class PlatformFeedbackMailer < ApplicationMailer
+# Mails sent as a reaction to platform feedback.
+class PlatformFeedbackMailer < SchoolMailer
   def new_platform_feedback(platform_feedback)
     @platform_feedback = platform_feedback
 

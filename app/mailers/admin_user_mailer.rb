@@ -1,5 +1,5 @@
-# Mails sent out to admin users.
-class AdminUserMailer < ApplicationMailer
+# Mails sent out to PupilFirst super-admin users.
+class AdminUserMailer < PupilFirstMailer
   def vocalist_ping_results(message, recipient, admin_user, errors)
     @message = message
     @recipient = recipient

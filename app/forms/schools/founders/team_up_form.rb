@@ -2,7 +2,6 @@ module Schools
   module Founders
     class TeamUpForm < Reform::Form
       property :founder_ids, validates: { presence: true }, virtual: true
-      property :team_name, validates: { presence: true, length: { maximum: 250 } }, virtual: true
 
       validate :founders_must_be_in_same_level
       validate :at_least_one_founder
@@ -27,7 +26,11 @@ module Schools
       private
 
       def founders
-        Founder.where(id: JSON.parse(founder_ids))
+        Founder.where(id: founder_ids)
+      end
+
+      def team_name
+        [Faker::Color.color_name, Faker::Team.creature].join(' ')
       end
     end
   end

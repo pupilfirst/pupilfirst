@@ -1,4 +1,5 @@
 open StudentsPanel__Types;
+open SchoolAdmin__Utils;
 
 let str = ReasonReact.string;
 
@@ -57,8 +58,19 @@ let filteredTeams = (searchString, teams) => {
      );
 };
 
-let teamUp = () => {
-  Js.log("Teaming up..");
+let handleTeamUpResponse = (send, json) => {
+  let teams = json |> Json.Decode.(field("teams", list(Team.decode)));
+  send(UpdateTeams(teams));
+  send(DeselectAllStudents);
+};
+
+let teamUp = (students, responseCB, authenticityToken) => {
+  let payload = Js.Dict.empty();
+  Js.Dict.set(payload, "authenticity_token", authenticityToken |> Js.Json.string);
+  Js.Dict.set(payload, "founder_ids", students |> List.map(s => s |> Student.id) |> Json.Encode.(list(int)));
+
+  let url = "/school/students/team_up";
+  Api.create(url, payload, responseCB);
 };
 
 let component = ReasonReact.reducerComponent("SA_StudentsPanel");
@@ -160,7 +172,7 @@ let make = (~teams, ~authenticityToken, _children) => {
                ReasonReact.null}
             {isGroupable(state.selectedStudents, state.teams) ?
                <button
-                 onClick={_e => teamUp()}
+                 onClick={_e => teamUp(state.selectedStudents, handleTeamUpResponse(send), authenticityToken)}
                  className="bg-transparent hover:bg-purple-dark focus:outline-none text-purple-dark text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
                  {"Group as Team" |> str}
                </button> :

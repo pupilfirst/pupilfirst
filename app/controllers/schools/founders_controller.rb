@@ -14,7 +14,8 @@ module Schools
 
       if form.validate(params)
         startup = form.save
-        redirect_back(fallback_location: school_course_students_path(startup.course))
+        presenter = Schools::Founders::IndexPresenter.new(view_context, startup.course)
+        render json: { teams: presenter.teams, error: nil }
       else
         raise form.errors.full_messages.join(', ')
       end
@@ -56,7 +57,7 @@ module Schools
     end
 
     def founders
-      Founder.where(id: JSON.parse(params[:founder_ids]))
+      Founder.where(id: params[:founder_ids])
     end
   end
 end

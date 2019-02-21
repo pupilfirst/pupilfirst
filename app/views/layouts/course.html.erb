@@ -1,9 +1,20 @@
-<% content_for(:subnav) do %>
-  <ul>
-    <li><%= link_to('Students', school_course_students_path(@course)) %></li>
-    <li><%= link_to('Coaches', school_course_coaches_path(@course)) %></li>
-    <li><%= link_to('Curriculum', school_course_curriculum_path(@course)) %></li>
-  </ul>
+<% content_for(:nav) do %>
+  <div class="flex h-screen">
+    <div class="flex">
+      <div class="bg-grey-darker global-sidebar__primary-nav text-purple-lighter flex-none p-4 hidden md:block">
+        <li class="border-b-2 mb-2 pb-2"><%= link_to('Overview', school_path) %></li>
+        <li class="border-b-2 mb-2 pb-2"><%= link_to('Courses', '#') %></li>
+      </div>
+
+      <div class="bg-grey-lighter global-sidebar__secondary-nav text-purple-lighter flex-none w-64 pb-6 hidden md:block">
+        <ul>
+          <li><%= link_to('Students', school_course_students_path(@course)) %></li>
+          <li><%= link_to('Coaches', school_course_coaches_path(@course)) %></li>
+          <li><%= link_to('Curriculum', school_course_curriculum_path(@course)) %></li>
+        </ul>
+      </div>
+    </div>
+  </div>
 <% end %>
 
-<%= render template: 'layouts/school' %>
+<%= render template: 'layouts/tailwind' %>

@@ -28,20 +28,12 @@
 
 <div class="font-sans antialiased flex">
   <!-- Sidebar -->
-  <div class="flex w-full h-screen">
-    <div class="flex">
-      <div class="bg-grey-darker global-sidebar__primary-nav text-purple-lighter flex-none p-4 hidden md:block">
-        <%= yield :nav %>
-      </div>
-      <% if content_for?(:subnav) %>
-        <div class="bg-grey-lighter global-sidebar__secondary-nav text-purple-lighter flex-none w-64 pb-6 hidden md:block">
-          <%= yield :subnav %>
-        </div>
-      </div>
-        <%= yield %>
-      <% else %>
-        <%= yield %>
-      <% end %>
-    </div>
+
+  <%= yield :nav %>
+
+  <!-- Content -->
+  <%= yield %>
+</div>
+
 </body>
 </html>

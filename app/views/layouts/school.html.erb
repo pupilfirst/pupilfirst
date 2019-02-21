@@ -1,10 +1,14 @@
 <% content_for(:nav) do %>
-  <ul class="list-reset">
-    <li class="border-b-2 mb-2 pb-2"><%= link_to('Overview', school_path) %></li>
-    <% @courses.each do |course| %>
-      <li><%= link_to course.name, school_course_path(course) %></li>
-    <% end %>
-  </ul>
+    <div class="flex">
+      <div class="bg-grey-darker global-sidebar__primary-nav text-purple-lighter flex-none p-4 hidden md:block">
+        <ul class="list-reset">
+          <li class="border-b-2 mb-2 pb-2"><%= link_to('Overview', school_path) %></li>
+          <% @courses.each do |course| %>
+            <li><%= link_to course.name, school_course_path(course) %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
 <% end %>
 
 <%= render template: 'layouts/tailwind' %>

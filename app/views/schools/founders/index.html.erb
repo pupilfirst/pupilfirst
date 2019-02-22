@@ -4,6 +4,6 @@
 <% end %>
 
 <% @presenter = Schools::Founders::IndexPresenter.new(self, @course) %>
-<div id="sa-students-panel" class="flex-1 flex flex-col bg-white overflow-hidden"
+<div id="sa-students-panel" class="flex flex-1 h-screen"
      data-props="<%= @presenter.react_props.to_json %>"/>
 

@@ -17,7 +17,7 @@
     = f.input :communication_address
     = f.input :skype_id, label: 'Skype Id'
     = f.input :resume_url
-    = f.input :avatar_as, as: :file
+    = f.input :avatar, as: :file
     = f.input :college_id, as: :select, input_html: { 'data-search-url' => colleges_url }, collection: f.object.college.present? ? [f.object.college] : []
     = f.input :exited
 

@@ -1,7 +1,7 @@
 ActiveAdmin.register TimelineEvent do
   actions :all, except: [:edit]
   permit_params :description, :event_on, :serialized_links,
-    :improved_timeline_event_id, timeline_event_files_attributes: %i[id title file_as private _destroy]
+    :improved_timeline_event_id, timeline_event_files_attributes: %i[id title file private _destroy]
 
   filter :founders_name, as: :string
   filter :evaluated
@@ -141,7 +141,7 @@ ActiveAdmin.register TimelineEvent do
     f.inputs 'Attached Files' do
       f.has_many :timeline_event_files, new_record: 'Add file', allow_destroy: true, heading: false do |t|
         t.input :title
-        t.input :file_as, hint: 'Select new file for upload'
+        t.input :file, hint: 'Select new file for upload'
         t.input :private
       end
     end
@@ -200,7 +200,7 @@ ActiveAdmin.register TimelineEvent do
         column :title
 
         column :file do |timeline_event_file|
-          link_to timeline_event_file.filename, url_for(timeline_event_file.file_as), target: '_blank', rel: 'noopener'
+          link_to timeline_event_file.filename, url_for(timeline_event_file.file), target: '_blank', rel: 'noopener'
         end
 
         column :private

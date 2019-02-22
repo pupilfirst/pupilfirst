@@ -16,7 +16,7 @@ class Faculty < ApplicationRecord
   has_many :connect_requests, through: :connect_slots
   has_many :faculty_course_enrollments, dependent: :destroy
   has_many :courses, through: :faculty_course_enrollments
-  has_one_attached :image_as
+  has_one_attached :image
 
   # Startups whose timeline events this faculty can review.
   has_many :faculty_startup_enrollments, dependent: :destroy
@@ -53,7 +53,7 @@ class Faculty < ApplicationRecord
   validates :compensation, inclusion: { in: valid_compensation_values }, allow_blank: true
   validates :commitment, inclusion: { in: valid_commitment_values }, allow_blank: true
   validates :slug, format: { with: /\A[a-z0-9\-_]+\z/i }, allow_nil: true
-  validates :image_as, content_type: %w[image/png image/jpg image/jpeg image/gif], size: { less_than: 2.megabytes, message: 'is not given between size' }
+  validates :image, content_type: %w[image/png image/jpg image/jpeg image/gif], size: { less_than: 2.megabytes, message: 'is not given between size' }
 
   scope :active, -> { where.not(inactive: true) }
   scope :team, -> { where(category: CATEGORY_TEAM).order('sort_index ASC') }
@@ -160,8 +160,8 @@ class Faculty < ApplicationRecord
   end
 
   def image_or_avatar_url(background_shape: :circle)
-    if image_as.attached?
-      Rails.application.routes.url_helpers.rails_blob_path(image_as, only_path: true)
+    if image.attached?
+      Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true)
     else
       initials_avatar(background_shape)
     end

@@ -13,6 +13,6 @@ after 'development:timeline_events' do
     private: false
   )
 
-  tef.file_as.attach(io: File.open(presentation_path), filename: 'pdf-sample.pdf')
+  tef.file.attach(io: File.open(presentation_path), filename: 'pdf-sample.pdf')
   tef.save!
 end

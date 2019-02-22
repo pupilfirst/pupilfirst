@@ -41,7 +41,7 @@ ActiveAdmin.register Founder do
   filter :roles_cont, as: :select, collection: -> { Founder.valid_roles }, label: 'Role'
   filter :college_name_contains
   filter :created_at, label: 'Registered on'
-  permit_params :name, :remote_avatar_url, :avatar_as, :startup_id, :slug, :about, :communication_address, :phone,
+  permit_params :name, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :communication_address, :phone,
     :college_id, :twitter_url, :linkedin_url, :personal_website_url, :blog_url, :angel_co_url, :github_url,
     :behance_url, :gender, :skype_id, :exited, roles: [], tag_list: []
 
@@ -220,8 +220,8 @@ ActiveAdmin.register Founder do
       end
 
       row :avatar do
-        if founder.avatar_as.attached?
-          link_to(url_for(founder.avatar_as)) do
+        if founder.avatar.attached?
+          link_to(url_for(founder.avatar)) do
             image_tag(url_for(founder.avatar_variant(:thumb)))
           end
         end

@@ -2,7 +2,7 @@ module Founders
   class EditForm < Reform::Form
     property :name, validates: { presence: true }
     property :phone, validates: { presence: true, mobile_number: true }
-    property :avatar_as
+    property :avatar
     property :about, validates: { length: { maximum: 250 } }
     property :roles
     property :skype_id

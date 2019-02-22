@@ -40,7 +40,7 @@ class Founder < ApplicationRecord
   has_many :active_admin_comments, as: :resource, class_name: 'ActiveAdmin::Comment', dependent: :destroy, inverse_of: :resource
   has_many :timeline_event_owners, dependent: :destroy
   has_many :timeline_events, through: :timeline_event_owners
-  has_one_attached :avatar_as
+  has_one_attached :avatar
 
   scope :admitted, -> { joins(:startup).merge(Startup.admitted) }
   scope :not_dropped_out, -> { joins(:startup).merge(Startup.not_dropped_out) }
@@ -73,7 +73,7 @@ class Founder < ApplicationRecord
   end
 
   validates :gender, inclusion: { in: valid_gender_values }, allow_nil: true
-  validates :avatar_as, content_type: %w[image/png image/jpg image/jpeg image/gif], size: { less_than: 2.megabytes, message: 'is not given between size' }
+  validates :avatar, content_type: %w[image/png image/jpg image/jpeg image/gif], size: { less_than: 2.megabytes, message: 'is not given between size' }
 
   def admitted?
     startup.present? && startup.level.number.positive?
@@ -233,7 +233,7 @@ class Founder < ApplicationRecord
   def avatar_variant(version)
     case version
       when :mid
-        avatar_as.variant(combine_options:
+        avatar.variant(combine_options:
           {
             auto_orient: true,
             gravity: "center",
@@ -241,7 +241,7 @@ class Founder < ApplicationRecord
             crop: '200x200+0+0'
           })
       when :thumb
-        avatar_as.variant(combine_options:
+        avatar.variant(combine_options:
           {
             auto_orient: true,
             gravity: 'center',
@@ -249,7 +249,7 @@ class Founder < ApplicationRecord
             crop: '50x50+0+0'
           })
       else
-        avatar_as
+        avatar
     end
   end
 end

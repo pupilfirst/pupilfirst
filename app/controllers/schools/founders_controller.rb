@@ -21,7 +21,7 @@ module Schools
       end
     end
 
-    # POST /school/courses/:course_id/students?team_name=&students[]=
+    # POST /school/courses/:course_id/students?students[]=
     def create
       @course = authorize(courses.find(params[:course_id]), policy_class: Schools::FounderPolicy)
 
@@ -29,7 +29,8 @@ module Schools
 
       if form.validate(create_params)
         form.save
-        redirect_back(fallback_location: school_course_students_path(@course))
+        presenter = Schools::Founders::IndexPresenter.new(view_context, @course)
+        render json: { teams: presenter.teams, error: nil }
       else
         raise form.errors.full_messages.join(', ')
       end
@@ -53,7 +54,7 @@ module Schools
     private
 
     def create_params
-      params.permit(:course_id, :team_name, students: %i[name email])
+      params.permit(:course_id, students: %i[name email])
     end
 
     def founders

@@ -75,12 +75,12 @@ let teamUp = (students, responseCB, authenticityToken) => {
 
 let component = ReasonReact.reducerComponent("SA_StudentsPanel");
 
-let make = (~teams, ~authenticityToken, _children) => {
+let make = (~teams, ~courseId, ~authenticityToken, _children) => {
   ...component,
   initialState: () => {teams, selectedStudents: [], searchString: "", formVisible: None},
   reducer: (action, state) =>
     switch (action) {
-    | UpdateTeams(teams) => ReasonReact.Update({...state, teams})
+    | UpdateTeams(teams) => ReasonReact.Update({...state, teams: teams |> List.rev})
     | SelectStudent(student) =>
       ReasonReact.Update({...state, selectedStudents: [student, ...state.selectedStudents]})
     | DeselectStudent(student) =>
@@ -104,7 +104,7 @@ let make = (~teams, ~authenticityToken, _children) => {
                                     send(UpdateFormVisible(None))}
        switch (state.formVisible) {
        | None => ReasonReact.null
-       | CreateForm => <SA_StudentsPanel_CreateForm closeFormCB />
+       | CreateForm => <SA_StudentsPanel_CreateForm courseId closeFormCB submitFormCB authenticityToken />
        | UpdateForm(student) => <SA_StudentsPanel_UpdateForm student closeFormCB submitFormCB authenticityToken />
        }}
       <div className="border-b flex px-6 py-2 items-center justify-between">
@@ -188,7 +188,7 @@ let make = (~teams, ~authenticityToken, _children) => {
                      d="M13.388,9.624h-3.011v-3.01c0-0.208-0.168-0.377-0.376-0.377S9.624,6.405,9.624,6.613v3.01H6.613c-0.208,0-0.376,0.168-0.376,0.376s0.168,0.376,0.376,0.376h3.011v3.01c0,0.208,0.168,0.378,0.376,0.378s0.376-0.17,0.376-0.378v-3.01h3.011c0.207,0,0.377-0.168,0.377-0.376S13.595,9.624,13.388,9.624z M10,1.344c-4.781,0-8.656,3.875-8.656,8.656c0,4.781,3.875,8.656,8.656,8.656c4.781,0,8.656-3.875,8.656-8.656C18.656,5.219,14.781,1.344,10,1.344z M10,17.903c-4.365,0-7.904-3.538-7.904-7.903S5.635,2.096,10,2.096S17.903,5.635,17.903,10S14.365,17.903,10,17.903z"
                    />
                  </svg>
-                 <h5 className="font-semibold ml-2"> {"Add new Student" |> str} </h5>
+                 <h5 className="font-semibold ml-2"> {"Add New Students" |> str} </h5>
                </button>}
           </div>
         </div>
@@ -298,12 +298,14 @@ let make = (~teams, ~authenticityToken, _children) => {
 
 type props = {
   teams: list(Team.t),
+  courseId: int,
   authenticityToken: string,
 };
 
 let decode = json =>
   Json.Decode.{
     teams: json |> field("teams", list(Team.decode)),
+    courseId: json |> field("courseId", int),
     authenticityToken: json |> field("authenticityToken", string),
   };
 
@@ -312,6 +314,6 @@ let jsComponent =
     ~component,
     jsProps => {
       let props = jsProps |> decode;
-      make(~teams=props.teams, ~authenticityToken=props.authenticityToken, [||]);
+      make(~teams=props.teams, ~courseId=props.courseId, ~authenticityToken=props.authenticityToken, [||]);
     },
   );

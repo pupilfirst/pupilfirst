@@ -10,7 +10,9 @@ module Schools
       !record.course.ended?
     end
 
-    alias create? team_up?
+    def create?
+      !record.ended?
+    end
 
     def update?
       # School admins can edit details of students in their open courses.

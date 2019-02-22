@@ -4,17 +4,21 @@ module Courses
       @course = course
     end
 
-    def add(students_list, team_name = nil)
+    def add(students_list)
       first_level = @course.levels.find_by(number: 1)
-      team_name = students_list.first.name if team_name.blank?
 
       Course.transaction do
-        team = Startup.create!(product_name: team_name, level: first_level)
-
         students_list.each do |student|
           user = User.with_email(student.email) || User.create!(email: student.email)
           user.regenerate_login_token if user.login_token.blank?
-          Founder.create!(user: user, name: student.name, startup: team)
+
+          startup = Startup.create!(
+            name: student.name,
+            product_name: student.name,
+            level: first_level
+          )
+
+          Founder.create!(user: user, name: student.name, startup: startup)
         end
       end
     end

@@ -2,7 +2,6 @@ module Schools
   module Founders
     class CreateForm < Reform::Form
       property :course_id, validates: { presence: true }
-      property :team_name, validates: { length: { maximum: 250 } }, allow_nil: true
       collection :students, populate_if_empty: OpenStruct, virtual: true, default: [] do
         property :name, validates: { presence: true, length: { maximum: 250 } }
         property :email, validates: { presence: true, length: { maximum: 250 }, format: { with: EmailValidator::REGULAR_EXPRESSION, message: "doesn't look like an email" } }
@@ -11,7 +10,7 @@ module Schools
       validate :student_does_not_exist
 
       def save
-        ::Courses::AddStudentsService.new(course).add(students, team_name)
+        ::Courses::AddStudentsService.new(course).add(students)
       end
 
       private

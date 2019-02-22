@@ -34,10 +34,7 @@ let formInvalid = state => {
 };
 
 let handleResponseCB = (submitCB, json) => {
-  Js.log("here");
-  Js.log(json);
   let teams = json |> Json.Decode.(field("teams", list(Team.decode)));
-  Js.log(teams);
   submitCB(teams);
 };
 

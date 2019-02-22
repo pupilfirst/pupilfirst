@@ -47,6 +47,15 @@ let isGroupable = (selectedStudents, teams) => {
   && (selectedAcrossTeams(selectedStudents) || selectedPartialTeam(selectedStudents, teams));
 };
 
+let isMoveOutable = (selectedStudents, teams) => {
+  selectedStudents
+  |> List.length == 1
+  && teams
+  |> List.find(team => team |> Team.id == (selectedStudents |> List.hd |> Student.teamId))
+  |> Team.students
+  |> List.length > 1;
+};
+
 let filteredTeams = (searchString, teams) => {
   teams
   |> List.filter(team =>
@@ -62,7 +71,7 @@ let handleTeamUpResponse = (send, json) => {
   let teams = json |> Json.Decode.(field("teams", list(Team.decode)));
   send(UpdateTeams(teams));
   send(DeselectAllStudents);
-  Notification.success("Teamed Up!", "Selected students succesffully grouped.");
+  Notification.success("Success!", "Teams updated successfully");
 };
 
 let teamUp = (students, responseCB, authenticityToken) => {
@@ -177,6 +186,13 @@ let make = (~teams, ~courseId, ~authenticityToken, _children) => {
                    onClick={_e => teamUp(state.selectedStudents, handleTeamUpResponse(send), authenticityToken)}
                    className="bg-transparent hover:bg-purple-dark focus:outline-none text-purple-dark text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
                    {"Group as Team" |> str}
+                 </button> :
+                 ReasonReact.null}
+              {isMoveOutable(state.selectedStudents, state.teams) ?
+                 <button
+                   onClick={_e => teamUp(state.selectedStudents, handleTeamUpResponse(send), authenticityToken)}
+                   className="bg-transparent hover:bg-purple-dark focus:outline-none text-purple-dark text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
+                   {"Move out from Team" |> str}
                  </button> :
                  ReasonReact.null}
               {state.selectedStudents |> List.length > 0 ?

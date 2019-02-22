@@ -62,6 +62,7 @@ let handleTeamUpResponse = (send, json) => {
   let teams = json |> Json.Decode.(field("teams", list(Team.decode)));
   send(UpdateTeams(teams));
   send(DeselectAllStudents);
+  Notification.success("Teamed Up!", "Selected students succesffully grouped.");
 };
 
 let teamUp = (students, responseCB, authenticityToken) => {

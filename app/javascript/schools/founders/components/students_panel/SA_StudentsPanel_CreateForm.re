@@ -18,6 +18,7 @@ let formInvalid = state => {
 let handleResponseCB = (submitCB, json) => {
   let teams = json |> Json.Decode.(field("teams", list(Team.decode)));
   submitCB(teams);
+  Notification.success("Success", "Student(s) created succesffully");
 };
 
 let saveStudents = (students, courseId, authenticityToken, responseCB) => {

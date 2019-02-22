@@ -300,8 +300,11 @@ let make = (~teams, ~courseId, ~authenticityToken, _children) => {
                       </div>
                     </div>
                     <div className="w-2/5 text-center">
-                      <span className="inline-flex rounded bg-indigo-lightest px-2 py-1 text-xs font-semibold">
-                        {"Level " ++ (team |> Team.levelNumber |> string_of_int) |> str}
+                      <span className="inline-flex flex-col rounded bg-indigo-lightest px-2 py-1">
+                        <div className="text-xs"> {"Level" |> str} </div>
+                        <div className="text-xl font-semibold">
+                          {team |> Team.levelNumber |> string_of_int |> str}
+                        </div>
                       </span>
                     </div>
                   </div>

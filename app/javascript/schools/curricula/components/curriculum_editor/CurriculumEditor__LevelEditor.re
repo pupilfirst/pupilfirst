@@ -17,29 +17,7 @@ type action =
 
 let component = ReasonReact.reducerComponent("CurriculumEditor__LevelEditor");
 
-let handleResponseCB = json => Js.log(json);
-
-let createLevel = (authenticityToken, course, state) => {
-  let payload = Js.Dict.empty();
-  let course_id = course |> Course.id |> string_of_int;
-
-  Js.Dict.set(
-    payload,
-    "authenticity_token",
-    authenticityToken |> Js.Json.string,
-  );
-  Js.Dict.set(payload, "name", state.name |> Js.Json.string);
-
-  switch (state.unlockOn) {
-  | Some(date) => Js.Dict.set(payload, "unlock_on", date |> Js.Json.string)
-  | None => ()
-  };
-
-  let url = "/school/courses/" ++ course_id ++ "/levels";
-  Api.create(url, payload, handleResponseCB);
-};
-
-let updateLevel = (authenticityToken, levelId, state) => {
+let setPayload = (authenticityToken, state) => {
   let payload = Js.Dict.empty();
 
   Js.Dict.set(
@@ -53,39 +31,28 @@ let updateLevel = (authenticityToken, levelId, state) => {
   | Some(date) => Js.Dict.set(payload, "unlock_on", date |> Js.Json.string)
   | None => ()
   };
-  let url = "/school/levels/" ++ levelId;
-  Api.update(url, payload, handleResponseCB);
+  payload;
 };
-
-let submitButton = (level, course, authenticityToken, state) =>
-  switch (level) {
-  | `Persisted(persistedDetails, unpersistedDetails) =>
-    let id = `Persisted((persistedDetails, unpersistedDetails)) |> Level.id;
-    <button
-      disabled={state.saveDisabled}
-      onClick=(
-        _event => updateLevel(authenticityToken, id |> string_of_int, state)
-      )
-      className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
-      {"Update Level" |> str}
-    </button>;
-
-  | `Unpersisted(_unpersistedDetails) =>
-    <button
-      onClick=(_event => createLevel(authenticityToken, course, state))
-      className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
-      {"Create Level" |> str}
-    </button>
-  };
 
 let make =
-    (~level, ~course, ~authenticityToken, ~hideEditorActionCB, _children) => {
+    (
+      ~level,
+      ~course,
+      ~authenticityToken,
+      ~hideEditorActionCB,
+      ~updateLevelsCB,
+      _children,
+    ) => {
   ...component,
-  initialState: () => {
-    name: level |> Level.name,
-    unlockOn: level |> Level.unlockOn,
-    saveDisabled: true,
-  },
+  initialState: () =>
+    switch (level) {
+    | Some(level) => {
+        name: level |> Level.name,
+        unlockOn: level |> Level.unlockOn,
+        saveDisabled: true,
+      }
+    | None => {name: "", unlockOn: None, saveDisabled: true}
+    },
   reducer: (action, state) =>
     switch (action) {
     | UpdateState(keyForStateUpdation, string) =>
@@ -101,6 +68,33 @@ let make =
       }
     },
   render: ({state, send}) => {
+    let handleResponseCB = json => {
+      let id = json |> Json.Decode.(field("id", int));
+      let levelNumber = json |> Json.Decode.(field("levelNumber", int));
+      let newLevel =
+        Level.create(id, state.name, levelNumber, state.unlockOn);
+      updateLevelsCB(newLevel);
+    };
+
+    let createLevel = (authenticityToken, course, state) => {
+      let course_id = course |> Course.id |> string_of_int;
+      let url = "/school/courses/" ++ course_id ++ "/levels";
+      Api.create(
+        url,
+        setPayload(authenticityToken, state),
+        handleResponseCB,
+      );
+    };
+
+    let updateLevel = (authenticityToken, levelId, state) => {
+      let url = "/school/levels/" ++ levelId;
+      Api.update(
+        url,
+        setPayload(authenticityToken, state),
+        handleResponseCB,
+      );
+    };
+
     let unlockOn =
       switch (state.unlockOn) {
       | Some(date) => date
@@ -165,7 +159,35 @@ let make =
                   </button>
                 </div>
                 <div className="flex">
-                  {submitButton(level, course, authenticityToken, state)}
+                  {
+                    switch (level) {
+                    | Some(level) =>
+                      let id = level |> Level.id;
+                      <button
+                        disabled={state.saveDisabled}
+                        onClick=(
+                          _event =>
+                            updateLevel(
+                              authenticityToken,
+                              id |> string_of_int,
+                              state,
+                            )
+                        )
+                        className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+                        {"Update Level" |> str}
+                      </button>;
+
+                    | None =>
+                      <button
+                        onClick=(
+                          _event =>
+                            createLevel(authenticityToken, course, state)
+                        )
+                        className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+                        {"Create Level" |> str}
+                      </button>
+                    }
+                  }
                 </div>
               </div>
             </div>

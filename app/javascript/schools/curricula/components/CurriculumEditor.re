@@ -3,7 +3,7 @@ open CurriculumEditor__Types;
 type props = {
   course: Course.t,
   evaluationCriteria: list(EvaluationCriteria.t),
-  levels: list(Level.persisted),
+  levels: list(Level.t),
   targetGroups: list(TargetGroup.t),
   targets: list(Target.t),
   authenticityToken: string,
@@ -13,20 +13,20 @@ type editorAction =
   | Hidden
   | ShowTargetEditor(int, option(Target.t))
   | ShowTargetGroupEditor(option(TargetGroup.t))
-  | ShowLevelEditor(Level.editable);
+  | ShowLevelEditor(option(Level.t));
 
 type state = {
-  selectedLevel: Level.persisted,
+  selectedLevel: Level.t,
   editorAction,
-  levels: list(Level.persisted),
+  levels: list(Level.t),
   targetGroups: list(TargetGroup.t),
   targets: list(Target.t),
 };
 
 type action =
-  | SelectLevel(Level.persisted)
+  | SelectLevel(Level.t)
   | UpdateEditorAction(editorAction)
-  | UpdateLevels(Level.persisted)
+  | UpdateLevels(Level.t)
   | UpdateTargetGroups(TargetGroup.t)
   | UpdateTargets(Target.t);
 
@@ -59,8 +59,13 @@ let make =
     | UpdateEditorAction(editorAction) =>
       ReasonReact.Update({...state, editorAction})
     | UpdateLevels(level) =>
-      let newLevels = state.levels |> List.append([level]);
-      ReasonReact.Update({...state, levels: newLevels});
+      let newLevels = level |> Level.updateList(state.levels);
+      ReasonReact.Update({
+        ...state,
+        levels: newLevels,
+        editorAction: Hidden,
+        selectedLevel: level,
+      });
     | UpdateTargetGroups(targetGroup) =>
       let newtargetGroups =
         targetGroup |> TargetGroup.updateList(state.targetGroups);
@@ -79,10 +84,9 @@ let make =
     },
   render: ({state, send}) => {
     let hideEditorActionCB = () => send(UpdateEditorAction(Hidden));
-
     let currentLevel = state.selectedLevel;
     let currentLevelId = Level.id(currentLevel);
-
+    let updateLevelsCB = level => send(UpdateLevels(level));
     let targetGroupsInLevel =
       state.targetGroups
       |> List.filter(targetGroup =>
@@ -95,7 +99,6 @@ let make =
       send(UpdateEditorAction(ShowTargetEditor(targetGroupId, target)));
     let showTargetGroupEditorCB = targetGroup =>
       send(UpdateEditorAction(ShowTargetGroupEditor(targetGroup)));
-
     let updateTargetCB = target => send(UpdateTargets(target));
     let updateTargetGroupsCB = targetGroup =>
       send(UpdateTargetGroups(targetGroup));
@@ -108,7 +111,7 @@ let make =
             target
             targetGroupId
             evaluationCriteria
-            targets
+            targets={state.targets}
             targetGroupIdsInLevel
             authenticityToken
             updateTargetCB
@@ -128,6 +131,7 @@ let make =
             course
             authenticityToken
             hideEditorActionCB
+            updateLevelsCB
           />
         }
       }
@@ -138,13 +142,16 @@ let make =
             onChange={
               event => {
                 let level_name = ReactEvent.Form.target(event)##value;
-                send(SelectLevel(Level.selectLevel(levels, level_name)));
+                send(
+                  SelectLevel(Level.selectLevel(state.levels, level_name)),
+                );
               }
             }
             value={currentLevel |> Level.name}
             className="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-4 py-2 pr-8 rounded leading-tight focus:outline-none">
             {
-              levels
+              state.levels
+              |> Level.sort
               |> List.map(level =>
                    <option
                      key={Level.id(level) |> string_of_int}
@@ -171,22 +178,18 @@ let make =
         <button
           className="bg-indigo-dark hover:bg-blue-dark text-white font-bold py-2 px-4 rounded focus:outline-none"
           onClick={
-            _ => {
-              let persistedLevel =
-                `Persisted((
-                  currentLevel |> Level.persistedDetails,
-                  currentLevel |> Level.unpersistedDetails,
-                ));
-              send(UpdateEditorAction(ShowLevelEditor(persistedLevel)));
-            }
+            _ =>
+              send(
+                UpdateEditorAction(
+                  ShowLevelEditor(Some(state.selectedLevel)),
+                ),
+              )
           }>
           {"Edit Level" |> str}
         </button>
         <button
           className="bg-indigo-dark hover:bg-blue-dark text-white font-bold py-2 px-4 rounded focus:outline-none"
-          onClick={
-            _ => send(UpdateEditorAction(ShowLevelEditor(Level.empty())))
-          }>
+          onClick={_ => send(UpdateEditorAction(ShowLevelEditor(None)))}>
           {"Create New Level" |> str}
         </button>
       </div>

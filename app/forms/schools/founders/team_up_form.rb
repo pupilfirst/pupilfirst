@@ -30,7 +30,7 @@ module Schools
       end
 
       def team_name
-        [Faker::Color.color_name, Faker::Team.creature].join(' ')
+        Startups::ProductNameGeneratorService.new.fun_name
       end
     end
   end

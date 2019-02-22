@@ -107,8 +107,6 @@ gem 'recaptcha', '~> 4.6', require: 'recaptcha/rails'
 gem 'jwt', '~> 2.1' # Ruby implementation of the RFC 7519 OAuth JSON Web Token (JWT), used by Zoom API
 gem 'chartkick', '~> 3.0' # Create beautiful charts with one line of JavaScript.
 
-gem 'faker', '~> 1.7' # A library for generating fake data such as names, addresses, and phone numbers.
-
 # Rails assets!
 source 'https://rails-assets.org' do
   gem 'rails-assets-pnotify', '~> 3.0' # Superb notifications library. http://sciactive.github.io/pnotify/
@@ -161,6 +159,7 @@ group :test do
 end
 
 group :development, :test do
+  gem 'faker', '~> 1.7' # A library for generating fake data such as names, addresses, and phone numbers.
   gem 'rspec-rails', '~> 3.5' # Duh.
   gem 'coderay', '~> 1.1' # Pretty syntax highlighting on rspec failure snippets.
   gem 'pry-rails', '~> 0.3.5' # Pry debugger.

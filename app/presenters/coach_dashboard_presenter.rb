@@ -63,6 +63,10 @@ class CoachDashboardPresenter < ApplicationPresenter
   end
 
   def avatar_url(founder)
-    founder.avatar_url || founder.initials_avatar
+    if founder.avatar_as.attached?
+      view.url_for(founder.avatar_variant(:mid))
+    else
+      founder.initials_avatar
+    end
   end
 end

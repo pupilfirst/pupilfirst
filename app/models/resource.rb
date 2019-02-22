@@ -27,13 +27,11 @@ class Resource < ApplicationRecord
   validate :exactly_one_source_must_be_present
 
   def exactly_one_source_must_be_present
-    return if [file, video_embed, link].one?(&:present?)
+    return if [file_as.attached?, video_embed.present?, link.present?].one?
     return if persisted?
 
     errors[:base] << 'One and only one of a video embed, file or link must be present.'
   end
-
-  mount_uploader :file, ResourceFileUploader
 
   scope :public_resources, -> { where(public: true).order('title') }
 
@@ -48,8 +46,13 @@ class Resource < ApplicationRecord
 
   def stream?
     return false if link.present?
+    return true if video_embed.present?
 
-    video_embed.present? || file_content_type&.end_with?('/mp4')
+    if file_as.attached?
+      file_as.content_type.end_with?('/mp4')
+    else
+      false
+    end
   end
 
   def increment_downloads(user)
@@ -70,12 +73,5 @@ class Resource < ApplicationRecord
   before_save do
     # Ensure titles are capitalized.
     self.title = title.titlecase(humanize: false, underscore: false)
-  end
-
-  after_commit do
-    # If the file attribute has changed, store its content_type to avoid lookup from S3.
-    if previous_changes.key?(:file)
-      update!(file_content_type: reload.file.content_type)
-    end
   end
 end

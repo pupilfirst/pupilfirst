@@ -73,6 +73,7 @@ class Founder < ApplicationRecord
   end
 
   validates :gender, inclusion: { in: valid_gender_values }, allow_nil: true
+  validates :avatar_as, content_type: %w[image/png image/jpg image/jpeg image/gif], size: { less_than: 2.megabytes, message: 'is not given between size' }
 
   def admitted?
     startup.present? && startup.level.number.positive?
@@ -105,8 +106,6 @@ class Founder < ApplicationRecord
   def fullname
     name
   end
-
-  mount_uploader :avatar, AvatarUploader
 
   normalize_attribute :startup_id, :twitter_url, :linkedin_url, :name, :slack_username, :resume_url, :gender
 
@@ -227,5 +226,30 @@ class Founder < ApplicationRecord
   def initials_avatar
     logo = Scarf::InitialAvatar.new(name)
     "data:image/svg+xml;base64,#{Base64.encode64(logo.svg)}"
+  end
+
+  # ActiveStorage doesn't currently support ImageMagik default options for processing variants. Currently resized to get
+  # square proportions based on https://github.com/janko/image_processing/issues/39
+  def avatar_variant(version)
+    case version
+      when :mid
+        avatar_as.variant(combine_options:
+          {
+            auto_orient: true,
+            gravity: "center",
+            resize: '200x200^',
+            crop: '200x200+0+0'
+          })
+      when :thumb
+        avatar_as.variant(combine_options:
+          {
+            auto_orient: true,
+            gravity: 'center',
+            resize: '50x50^',
+            crop: '50x50+0+0'
+          })
+      else
+        avatar_as
+    end
   end
 end

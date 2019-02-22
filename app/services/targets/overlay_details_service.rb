@@ -1,5 +1,7 @@
 module Targets
   class OverlayDetailsService
+    include RoutesResolvable
+
     def initialize(target, founder)
       @target = target
       @founder = founder
@@ -47,7 +49,7 @@ module Targets
       return nil if latest_event.blank?
 
       attachments = latest_event.timeline_event_files.each_with_object([]) do |file, array|
-        array << { type: "file", title: file.title, url: file.file_url }
+        array << { type: "file", title: file.title, url: url_helpers.download_timeline_event_file_path(file) }
       end
 
       latest_event.links.each_with_object(attachments) do |link, array|
@@ -65,7 +67,7 @@ module Targets
           slug: resource.slug,
           canStream: resource.stream?,
           hasLink: resource.link.present?,
-          hasFile: resource.file.present?
+          hasFile: resource.file_as.attached?
         }
       end
     end

@@ -11,7 +11,6 @@ module TimelineEvents
     property :links
     property :files, virtual: true
     property :files_metadata, virtual: true
-    property :image
 
     validate :files_should_have_metadata
     validate :target_status_submittable
@@ -62,8 +61,7 @@ module TimelineEvents
           target: target,
           description: description,
           event_on: Time.zone.parse(event_on),
-          links: parsed_links,
-          image: image
+          links: parsed_links
         }
 
         timeline_event = TimelineEvents::CreateService.new(params, founder).execute
@@ -82,7 +80,7 @@ module TimelineEvents
         metadata = parsed_files_metadata[identifier]
 
         timeline_event.timeline_event_files.create!(
-          file: file,
+          file_as: file,
           title: metadata['title'],
           private: metadata['private']
         )

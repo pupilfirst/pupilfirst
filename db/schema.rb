@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_11_084334) do
+ActiveRecord::Schema.define(version: 2019_02_22_052829) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -183,7 +183,6 @@ ActiveRecord::Schema.define(version: 2019_02_11_084334) do
     t.string "key_skills"
     t.string "linkedin_url"
     t.string "category"
-    t.string "image"
     t.integer "sort_index"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -234,7 +233,6 @@ ActiveRecord::Schema.define(version: 2019_02_11_084334) do
   create_table "founders", id: :serial, force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string "avatar"
     t.integer "startup_id"
     t.string "linkedin_url"
     t.string "twitter_url"
@@ -365,7 +363,6 @@ ActiveRecord::Schema.define(version: 2019_02_11_084334) do
   end
 
   create_table "resources", id: :serial, force: :cascade do |t|
-    t.string "file"
     t.string "title"
     t.text "description"
     t.datetime "created_at", null: false
@@ -374,7 +371,6 @@ ActiveRecord::Schema.define(version: 2019_02_11_084334) do
     t.string "slug"
     t.text "video_embed"
     t.string "link"
-    t.string "file_content_type"
     t.boolean "archived", default: false
     t.boolean "public", default: false
     t.bigint "school_id"
@@ -554,7 +550,6 @@ ActiveRecord::Schema.define(version: 2019_02_11_084334) do
 
   create_table "timeline_event_files", id: :serial, force: :cascade do |t|
     t.integer "timeline_event_id"
-    t.string "file"
     t.boolean "private"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

@@ -27,9 +27,16 @@ destroySelect2Inputs = ->
 #  $('#founders_edit_roles').select2('destroy');
   $('#founders_edit_college_id').select2('destroy');
 
+showFileNameInAvatarField = ->
+  $('.custom-file-input').on 'change', ->
+    debugger
+    fileName = $(this).val().split('\\').pop()
+    $(this).next('.custom-file-label').addClass('selected').html fileName
+
 $(document).on 'turbolinks:load', ->
   if $('#founders_edit_college_id').length
     setupSelect2Inputs()
+    showFileNameInAvatarField()
 
 $(document).on 'turbolinks:before-cache', ->
   if $('#founders_edit_college_id').length > 0

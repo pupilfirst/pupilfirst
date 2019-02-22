@@ -261,3 +261,9 @@ en:
   talent:
     index:
       meta_description: "Hire, acqui-hire, invest and build a pipeline from India's best student developer talent. Discover great product developers for your company."
+
+  # These are custom error messages for the active_storage_validations gem.
+  errors:
+    messages:
+      content_type_invalid: "has an invalid content type"
+      limit_out_of_range: "total number is out of range"

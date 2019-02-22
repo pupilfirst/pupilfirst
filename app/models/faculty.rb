@@ -6,9 +6,6 @@ class Faculty < ApplicationRecord
   friendly_id :name, use: %i[slugged finders]
   normalize_attribute :name
 
-  mount_uploader :image, FacultyImageUploader
-  process_in_background :image
-
   has_secure_token
 
   belongs_to :user
@@ -56,6 +53,7 @@ class Faculty < ApplicationRecord
   validates :compensation, inclusion: { in: valid_compensation_values }, allow_blank: true
   validates :commitment, inclusion: { in: valid_commitment_values }, allow_blank: true
   validates :slug, format: { with: /\A[a-z0-9\-_]+\z/i }, allow_nil: true
+  validates :image_as, content_type: %w[image/png image/jpg image/jpeg image/gif], size: { less_than: 2.megabytes, message: 'is not given between size' }
 
   scope :active, -> { where.not(inactive: true) }
   scope :team, -> { where(category: CATEGORY_TEAM).order('sort_index ASC') }
@@ -162,7 +160,11 @@ class Faculty < ApplicationRecord
   end
 
   def image_or_avatar_url(background_shape: :circle)
-    image_url || initials_avatar(background_shape)
+    if image_as.attached?
+      Rails.application.routes.url_helpers.rails_blob_path(image_as, only_path: true)
+    else
+      initials_avatar(background_shape)
+    end
   end
 
   private

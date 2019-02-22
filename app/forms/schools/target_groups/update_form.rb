@@ -2,7 +2,7 @@ module Schools
   module TargetGroups
     class UpdateForm < Reform::Form
       property :name, validates: { presence: true, length: { maximum: 250 } }
-      property :description, validates: { presence: true, length: { maximum: 250 } }
+      property :description
       property :milestone, validates: { presence: true }
 
       validate :at_least_one_milestone_tg_exists

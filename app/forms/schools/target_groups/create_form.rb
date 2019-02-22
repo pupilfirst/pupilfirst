@@ -2,7 +2,7 @@ module Schools
   module TargetGroups
     class CreateForm < Reform::Form
       property :name, validates: { presence: true, length: { maximum: 250 } }
-      property :description, validates: { presence: true, length: { maximum: 250 } }
+      property :description
       property :milestone, validates: { presence: true }
       property :level_id, validates: { presence: true }
 

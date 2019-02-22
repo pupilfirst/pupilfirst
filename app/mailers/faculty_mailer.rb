@@ -5,7 +5,8 @@ class FacultyMailer < SchoolMailer
   # @param connect_request [ConnectRequest] Request that was just confirmed
   def connect_request_confirmed(connect_request)
     @connect_request = connect_request
-    mail(to: connect_request.faculty.email, subject: 'Office hour confirmed.')
+    @school = connect_request.faculty.school
+    roadie_mail({ from: from(@school), to: connect_request.faculty.email, subject: 'Office hour confirmed.' }, roadie_options_for(@school))
   end
 
   def request_next_week_slots(faculty)

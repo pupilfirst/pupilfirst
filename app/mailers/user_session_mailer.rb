@@ -4,27 +4,25 @@ class UserSessionMailer < ActionMailer::Base
   include Roadie::Rails::Mailer
 
   def send_login_token(email, school, login_url)
-    @school = school&.name || 'PupilFirst'
+    @school = school
+    @school_name = school.present? ? school.name : 'PupilFirst'
     @login_url = login_url
 
-    roadie_mail({ to: email, subject: "Log in to #{school_name}" }, roadie_options_for(school)) do |format|
+    roadie_mail({ from: from, to: email, subject: "Log in to #{@school_name}" }, roadie_options_for(school)) do |format|
       format.html { render layout: school.present? ? 'mail/school' : 'mail/pupil_first' }
     end
   end
 
   private
 
-  def roadie_options_for(school)
-    host, from = if school.present?
-      ["https://#{school.domains.first.fqdn}", "#{school.name} <noreply@pupilfirst.com>"]
-    else
-      ['https://www.pupilfirst.com', 'PupilFirst <noreply@pupilfirst.com>']
-    end
+  def from
+    "#{@school_name} <noreply@pupilfirst.com>"
+  end
 
+  def roadie_options_for(school)
     roadie_options.combine(
       url_options: {
-        host: host,
-        from: from
+        host: school.present? ? school.domains.first.fqdn : 'www.pupilfirst.com'
       }
     )
   end

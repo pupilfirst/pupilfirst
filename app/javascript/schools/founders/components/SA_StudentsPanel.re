@@ -90,7 +90,7 @@ let make = (~teams, ~courseId, ~authenticityToken, _children) => {
   initialState: () => {teams, selectedStudents: [], searchString: "", formVisible: None},
   reducer: (action, state) =>
     switch (action) {
-    | UpdateTeams(teams) => ReasonReact.Update({...state, teams: teams |> List.rev})
+    | UpdateTeams(teams) => ReasonReact.Update({...state, teams})
     | SelectStudent(student) =>
       ReasonReact.Update({...state, selectedStudents: [student, ...state.selectedStudents]})
     | DeselectStudent(student) =>
@@ -215,6 +215,7 @@ let make = (~teams, ~courseId, ~authenticityToken, _children) => {
       <div className="px-6 pb-4 flex-1 bg-grey-lightest overflow-y-scroll">
         <div className="max-w-lg mx-auto relative">
           {filteredTeams(state.searchString, state.teams)
+           |> List.sort((team1, team2) => Team.id(team2) - Team.id(team1))
            |> List.map(team => {
                 let isSingleFounder = team |> Team.students |> List.length == 1;
                 <div

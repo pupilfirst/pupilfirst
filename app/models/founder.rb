@@ -107,8 +107,6 @@ class Founder < ApplicationRecord
     name
   end
 
-  mount_uploader :avatar, AvatarUploader
-
   normalize_attribute :startup_id, :twitter_url, :linkedin_url, :name, :slack_username, :resume_url, :gender
 
   before_save :capitalize_name_fragments

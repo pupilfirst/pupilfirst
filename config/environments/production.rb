@@ -105,9 +105,6 @@ Rails.application.configure do
 
   config.action_mailer.default_url_options = { host: 'https://school.sv.co' }
 
-  # In production, let's have carrierwave store using fog.
-  config.carrier_wave_storage = :fog
-
   # Let's use delayed job in production to process background jobs.
   config.active_job.queue_adapter = :delayed_job
 

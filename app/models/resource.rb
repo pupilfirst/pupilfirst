@@ -33,8 +33,6 @@ class Resource < ApplicationRecord
     errors[:base] << 'One and only one of a video embed, file or link must be present.'
   end
 
-  mount_uploader :file, ResourceFileUploader
-
   scope :public_resources, -> { where(public: true).order('title') }
 
   # Custom scope to allow AA to filter by intersection of tags.

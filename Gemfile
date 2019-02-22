@@ -12,16 +12,8 @@ gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 
 gem 'activeadmin', '~> 1.4' # The administration framework for Ruby on Rails applications. https://activeadmin.info
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
-gem 'carrierwave', '~> 1.1' # One uploader to rule them all.
 gem 'active_storage_validations', '~> 0.6.1' # TODO: Condisder removing the gem once updgraded to Rails 6.0
 gem 'image_processing', '~> 1.2' # Gem to support variants in ActiveStorage
-
-# TODO: Switch to carrierwave_backgrounder from rubygems when a version (with support for Carrierwave v1) is released.
-# TODO: carrierwave_backgrounder is also holding back the version of mime-types in use. Check for updates.
-# Backgrounder for carrierwave.
-gem 'carrierwave_backgrounder', '= 0.4.2', github: 'harigopal/carrierwave_backgrounder', branch: 'rails-5-1'
-gem 'carrierwave-bombshelter', '~> 0.2' # Protects your carrierwave from image bombs (and such).
-gem 'fog-aws', '~> 3.0', require: 'fog/aws' # Required by Carrierwave to upload to S3.
 
 # Use Webpack to manage app-like JavaScript modules in Rails.
 gem 'webpacker', '= 4.0.0.rc.2'
@@ -31,7 +23,6 @@ gem 'devise', '~> 4.2' # User auth library.
 gem 'devise_invitable', '~> 1.7' # Allow invites to be sent out.
 gem 'jbuilder', '~> 2.6' # Standard part of Rails, but unused, since we don't have an API.
 gem 'jquery-rails', '~> 4.3' # JQuery on Rails.
-gem 'mini_magick', '~> 4.6' # Image processing.
 gem 'pg', '~> 1.0' # PostgreSQL support.
 gem 'sass-rails', '~> 5.0'
 gem 'slim', '~> 4.0' # Slim templating.

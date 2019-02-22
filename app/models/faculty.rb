@@ -6,9 +6,6 @@ class Faculty < ApplicationRecord
   friendly_id :name, use: %i[slugged finders]
   normalize_attribute :name
 
-  mount_uploader :image, FacultyImageUploader
-  process_in_background :image
-
   has_secure_token
 
   belongs_to :user

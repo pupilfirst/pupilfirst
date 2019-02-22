@@ -89,7 +89,8 @@ let make =
            targetGroup |> TargetGroup.levelId == currentLevelId
          )
       |> TargetGroup.sort;
-
+    let targetGroupIdsInLevel =
+      targetGroupsInLevel |> List.map(t => t |> TargetGroup.id);
     let showTargetEditorCB = (targetGroupId, target) =>
       send(UpdateEditorAction(ShowTargetEditor(targetGroupId, target)));
     let showTargetGroupEditorCB = targetGroup =>
@@ -108,6 +109,7 @@ let make =
             targetGroupId
             evaluationCriteria
             targets
+            targetGroupIdsInLevel
             authenticityToken
             updateTargetCB
             hideEditorActionCB

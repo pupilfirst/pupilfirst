@@ -60,9 +60,51 @@ let handleMethodOfCompletion = target => {
   switch (hasEvaluationCriteria, hasQuiz, hasLinkToComplete) {
   | (true, _y, _z) => Evaluated
   | (_x, true, _z) => TakeQuiz
-  | (_x, _y, true) => MarkAsComplete
+  | (_x, _y, true) => VisitLink
   | (false, false, false) => MarkAsComplete
   };
+};
+
+let eligibleTargets = (targets, targetGroupIds) =>
+  targets
+  |> List.filter(target =>
+       targetGroupIds |> List.mem(target |> Target.targetGroupId)
+     );
+
+let handleEC = (evaluationCriteria, target) => {
+  let selectedEcIds = target |> Target.evaluationCriteria |> Array.of_list;
+
+  evaluationCriteria
+  |> List.map(criterion => {
+       let criterionId = criterion |> EvaluationCriteria.id;
+       let selected =
+         selectedEcIds
+         |> Js.Array.findIndex(selectedCriterionId =>
+              criterionId == selectedCriterionId
+            )
+         > (-1);
+       (
+         criterion |> EvaluationCriteria.id,
+         criterion |> EvaluationCriteria.name,
+         selected,
+       );
+     });
+};
+
+let handlePT = (targets, target) => {
+  let selectedEcIds = target |> Target.prerequisiteTargets |> Array.of_list;
+
+  targets
+  |> List.map(criterion => {
+       let criterionId = criterion |> Target.id;
+       let selected =
+         selectedEcIds
+         |> Js.Array.findIndex(selectedCriterionId =>
+              criterionId == selectedCriterionId
+            )
+         > (-1);
+       (criterion |> Target.id, criterion |> Target.title, selected);
+     });
 };
 
 let setPayload = (state, target, authenticityToken) => {
@@ -161,6 +203,7 @@ let make =
       ~targetGroupId,
       ~evaluationCriteria,
       ~targets,
+      ~targetGroupIdsInLevel,
       ~authenticityToken,
       ~updateTargetCB,
       ~hideEditorActionCB,
@@ -182,21 +225,9 @@ let make =
           | Some(slideshowEmbed) => slideshowEmbed
           | None => ""
           },
-        evaluationCriteria:
-          evaluationCriteria
-          |> List.map(criteria =>
-               (
-                 criteria |> EvaluationCriteria.id,
-                 criteria |> EvaluationCriteria.name,
-                 true,
-               )
-             ),
+        evaluationCriteria: handleEC(evaluationCriteria, target),
         prerequisiteTargets:
-          targets
-          |> List.filter(target => target |> Target.targetGroupId == 1)
-          |> List.map(_target =>
-               (_target |> Target.id, _target |> Target.title, false)
-             ),
+          handlePT(eligibleTargets(targets, targetGroupIdsInLevel), target),
         quiz: target |> Target.quiz,
         resources:
           target
@@ -226,8 +257,7 @@ let make =
                )
              ),
         prerequisiteTargets:
-          targets
-          |> List.filter(target => target |> Target.targetGroupId == 1)
+          eligibleTargets(targets, targetGroupIdsInLevel)
           |> List.map(_target =>
                (_target |> Target.id, _target |> Target.title, false)
              ),
@@ -301,6 +331,14 @@ let make =
       ReasonReact.Update({...state, resources: newResources});
     },
   render: ({state, send}) => {
+    let targetEvaluated = () =>
+      switch (state.methodOfCompletion) {
+      | NotSelected => true
+      | Evaluated => true
+      | VisitLink => false
+      | TakeQuiz => false
+      | MarkAsComplete => false
+      };
     let multiSelectPrerequisiteTargetsCB = (key, value, selected) =>
       send(UpdatePrerequisiteTargets(key, value, selected));
     let multiSelectEvaluationCriterionCB = (key, value, selected) =>
@@ -319,13 +357,28 @@ let make =
     let handleResponseCB = json => {
       let id = json |> Json.Decode.(field("id", int));
       let sortIndex = json |> Json.Decode.(field("sortIndex", int));
-      let evaluationCriteria =
-        state.evaluationCriteria |> List.map(((id, _, _)) => id);
       let prerequisiteTargets =
-        state.evaluationCriteria |> List.map(((id, _, _)) => id);
+        state.prerequisiteTargets |> List.map(((id, _, _)) => id);
       let resources =
         state.resources
         |> List.map(((id, title)) => Resource.create(id, title));
+
+      let evaluationCriteria =
+        switch (state.methodOfCompletion) {
+        | Evaluated =>
+          state.evaluationCriteria |> List.map(((id, _, _)) => id)
+        | _ => []
+        };
+      let linkToComplete =
+        switch (state.methodOfCompletion) {
+        | VisitLink => Some(state.linkToComplete)
+        | _ => None
+        };
+      let quiz =
+        switch (state.methodOfCompletion) {
+        | TakeQuiz => state.quiz
+        | _ => []
+        };
       let newTarget =
         Target.create(
           id,
@@ -336,9 +389,9 @@ let make =
           Some(state.slideshowEmbed),
           evaluationCriteria,
           prerequisiteTargets,
-          state.quiz,
+          quiz,
           resources,
-          Some(state.linkToComplete),
+          linkToComplete,
           state.role,
           state.targetActionType,
           sortIndex,
@@ -535,18 +588,14 @@ let make =
                         }
                       }
                       className={
-                        facultyReviewButtonClasses(
-                          state.methodOfCompletion != Evaluated
-                          && state.methodOfCompletion != NotSelected,
-                        )
+                        facultyReviewButtonClasses(!targetEvaluated())
                       }>
                       {"No" |> str}
                     </button>
                   </div>
                 </div>
                 {
-                  state.methodOfCompletion == Evaluated
-                  || state.methodOfCompletion == NotSelected ?
+                  targetEvaluated() ?
                     ReasonReact.null :
                     <div>
                       <div className="mb-6">

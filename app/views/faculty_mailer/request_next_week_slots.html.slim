@@ -1,10 +1,10 @@
-- slots_url = weekly_slots_faculty_index_url(@faculty.token)
+- slots_url = weekly_slots_faculty_index_url(@faculty.token, **host_options)
 
 = content_for :title do
-  | Office Hour Slots
+  | Connect Session Slots
 
 = content_for :subtitle do
-  | Please review your office hour slots for the next week.
+  | Please review your connect session slots for the next week.
 
 = content_for :title_button_text do
   | Review Connect Slots

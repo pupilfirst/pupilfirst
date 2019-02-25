@@ -15,9 +15,11 @@ class AdminUserMailer < PupilFirstMailer
   end
 
   def google_calendar_invite_success(admin_user, target, html_link)
-    @target = target
     @admin_user = admin_user
+    @target = target
     @html_link = html_link
+    @school = target.target_group.level.course.school
+
     roadie_mail(to: admin_user.email, subject: 'Google Calendar invitations successfully sent!')
   end
 end

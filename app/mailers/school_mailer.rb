@@ -14,11 +14,11 @@ class SchoolMailer < ActionMailer::Base
     }
   end
 
-  def from(school)
-    "#{school.name} <noreply@pupilfirst.com>"
+  def from
+    "#{@school.name} <noreply@pupilfirst.com>"
   end
 
-  def roadie_options_for(school)
-    roadie_options.combine(url_options: { protocol: 'https', host: school.domains.first.fqdn })
+  def roadie_options_for_school
+    roadie_options.combine(url_options: { protocol: 'https', host: @school.domains.first.fqdn })
   end
 end

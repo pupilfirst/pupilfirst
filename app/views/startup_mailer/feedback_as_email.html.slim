@@ -1,10 +1,10 @@
 - startup = @startup_feedback.startup
 - timeline_event = @startup_feedback.timeline_event
 - target = @startup_feedback.timeline_event&.target
-- target_url = student_dashboard_target_url(target) if target.present?
+- target_url = student_dashboard_target_url(target, **host_options) if target.present?
 
 = content_for :title do
-  | Feedback from SV.CO
+  | Feedback from coach
 
 = content_for :subtitle do
   | #{@startup_feedback.faculty.name} has some feedback for you.
@@ -22,15 +22,9 @@
   - update_for = timeline_event.present? ? 'recent submission' : 'recent updates'
   - update_link = timeline_event.present? ? @startup_feedback.timeline_event.share_url : @startup_feedback.reference_url
 
-  p
-    ' Here is some feedback from
-    ' #{@startup_feedback.faculty.name} on your #{link_to(update_for, update_link)}:
+  p Here is some feedback from #{@startup_feedback.faculty.name} on your #{link_to(update_for, update_link)}:
 
   blockquote = simple_format(@startup_feedback.feedback)
 
   - if target.present?
-    p
-      ' You can view #{link_to 'the full feedback at SV&#x2024;CO'.html_safe, target_url}, including any files attached to the
-      | feedback.
-
-  p Feel free to reach out to us at #{mail_to 'help@sv.co'} in case of any queries.
+    p You can view #{link_to 'the full feedback'.html_safe, target_url}, including any files attached to the feedback.

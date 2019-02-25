@@ -1,7 +1,6 @@
 ActiveAdmin.register Startup do
-  permit_params :product_name, :legal_registered_name,
-    :created_at, :updated_at, :dropped_out,
-    :slug, :level_id, founder_ids: [], tag_list: []
+  permit_params :product_name, :legal_registered_name, :created_at, :updated_at, :slug,
+    :level_id, founder_ids: [], tag_list: []
 
   filter :product_name, as: :string
   filter :level_course_id, as: :select, label: 'Course', collection: -> { Course.all }
@@ -75,20 +74,6 @@ ActiveAdmin.register Startup do
     )
   end
 
-  # TODO: rewrite as its only used for dropping out startups now
-  member_action :custom_update, method: :put do
-    startup = Startup.friendly.find params[:id]
-    startup.update!(permitted_params[:startup])
-
-    case params[:email_to_send].to_sym
-      when :dropped_out
-        StartupMailer.startup_dropped_out(startup).deliver_later
-      # TODO: Re-write a mail welcoming the startup back after a drop-out ?
-    end
-
-    redirect_to action: :show
-  end
-
   member_action :get_all_startup_feedback do
     startup = Startup.friendly.find params[:id]
     feedback = startup.startup_feedback.order('updated_at desc')
@@ -106,27 +91,6 @@ ActiveAdmin.register Startup do
       row :dropped_out do
         div class: 'startup-status' do
           startup.dropped_out
-        end
-
-        div class: 'startup-status-buttons' do
-          unless startup.approved?
-            span do
-              button_to(
-                'Approve Startup',
-                custom_update_admin_startup_path(startup: { dropped_out: false }, email_to_send: :approval),
-                method: :put, data: { confirm: 'Are you sure you want to approve this startup?' }
-              )
-            end
-          end
-          unless startup.dropped_out?
-            span do
-              button_to(
-                'Drop-out Startup',
-                custom_update_admin_startup_path(startup: { dropped_out: true }, email_to_send: :dropped_out),
-                method: :put, data: { confirm: 'Are you sure you want to drop out this startup?' }
-              )
-            end
-          end
         end
       end
 

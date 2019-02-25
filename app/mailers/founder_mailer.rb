@@ -8,6 +8,8 @@ class FounderMailer < SchoolMailer
     @faculty = connect_request.faculty
     # TODO: Do we need to send this to each founder?
     @founder = connect_request.startup.founders.first
-    mail(to: @founder.email, subject: "Feedback for your recent office hour with coach #{@faculty.name}")
+    @school = @founder.school
+
+    mail(from: from, to: @founder.email, subject: "Feedback for your recent office hour with coach #{@faculty.name}")
   end
 end

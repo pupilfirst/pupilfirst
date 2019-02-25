@@ -9,6 +9,11 @@ describe TimelineEvents::AfterFounderSubmitJob do
   let(:timeline_event) { create :timeline_event, founders: startup.founders }
   let(:mock_service) { instance_double(TimelineEvents::MarkAsImprovedTargetService, execute: nil) }
 
+  before do
+    # Create domain for school.
+    create :domain, school: faculty.school
+  end
+
   describe '#perform' do
     before do
       allow(TimelineEvents::MarkAsImprovedTargetService).to receive(:new).and_return(mock_service)

@@ -2,20 +2,35 @@ open CurriculumEditor__Types;
 open SchoolAdmin__Utils;
 
 let str = ReasonReact.string;
-type keyForStateUpdation =
-  | Name
-  | UnlockOn;
-
 type state = {
   name: string,
   unlockOn: option(string),
+  hasNameError: bool,
+  hasDateError: bool,
   saveDisabled: bool,
 };
 
 type action =
-  | UpdateState(keyForStateUpdation, string);
+  | UpdateName(string, bool)
+  | UpdateUnlockOn(string, bool);
 
 let component = ReasonReact.reducerComponent("CurriculumEditor__LevelEditor");
+
+let updateName = (send, name) => {
+  let hasError = name |> String.length < 2;
+  send(UpdateName(name, hasError));
+};
+
+let updateUnlockOn = (send, date) => {
+  let regex = [%re
+    {|/^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/|}
+  ];
+  let hasError = !Js.Re.test(date, regex);
+  send(UpdateUnlockOn(date, hasError));
+};
+
+let saveDisabled = state =>
+  state.hasDateError || state.hasNameError || state.saveDisabled;
 
 let setPayload = (authenticityToken, state) => {
   let payload = Js.Dict.empty();
@@ -49,23 +64,29 @@ let make =
     | Some(level) => {
         name: level |> Level.name,
         unlockOn: level |> Level.unlockOn,
+        hasNameError: false,
+        hasDateError: false,
         saveDisabled: true,
       }
-    | None => {name: "", unlockOn: None, saveDisabled: true}
+    | None => {
+        name: "",
+        unlockOn: None,
+        hasNameError: false,
+        hasDateError: false,
+        saveDisabled: true,
+      }
     },
   reducer: (action, state) =>
     switch (action) {
-    | UpdateState(keyForStateUpdation, string) =>
-      switch (keyForStateUpdation) {
-      | Name =>
-        ReasonReact.Update({...state, name: string, saveDisabled: false})
-      | UnlockOn =>
-        ReasonReact.Update({
-          ...state,
-          unlockOn: Some(string),
-          saveDisabled: false,
-        })
-      }
+    | UpdateName(name, hasNameError) =>
+      ReasonReact.Update({...state, name, hasNameError, saveDisabled: false})
+    | UpdateUnlockOn(date, hasDateError) =>
+      ReasonReact.Update({
+        ...state,
+        unlockOn: Some(date),
+        hasDateError,
+        saveDisabled: false,
+      })
     },
   render: ({state, send}) => {
     let handleResponseCB = json => {
@@ -73,6 +94,11 @@ let make =
       let levelNumber = json |> Json.Decode.(field("levelNumber", int));
       let newLevel =
         Level.create(id, state.name, levelNumber, state.unlockOn);
+      switch (level) {
+      | Some(_) =>
+        Notification.success("Success", "Level updated succesffully")
+      | None => Notification.success("Success", "Level created succesffully")
+      };
       updateLevelsCB(newLevel);
     };
 
@@ -123,14 +149,16 @@ let make =
                   value={state.name}
                   onChange={
                     event =>
-                      send(
-                        UpdateState(
-                          Name,
-                          ReactEvent.Form.target(event)##value,
-                        ),
-                      )
+                      updateName(send, ReactEvent.Form.target(event)##value)
                   }
                 />
+                {
+                  state.hasNameError ?
+                    <div className="drawer-right-form__error-msg">
+                      {"not a valid name" |> str}
+                    </div> :
+                    ReasonReact.null
+                }
                 <label
                   className="block tracking-wide text-grey-darker text-xs font-semibold mb-2">
                   {"Lock level*  " |> str}
@@ -143,14 +171,19 @@ let make =
                   value=unlockOn
                   onChange={
                     event =>
-                      send(
-                        UpdateState(
-                          UnlockOn,
-                          ReactEvent.Form.target(event)##value,
-                        ),
+                      updateUnlockOn(
+                        send,
+                        ReactEvent.Form.target(event)##value,
                       )
                   }
                 />
+                {
+                  state.hasDateError ?
+                    <div className="drawer-right-form__error-msg">
+                      {"not a valid date" |> str}
+                    </div> :
+                    ReasonReact.null
+                }
                 <div className="flex">
                   <button
                     onClick={_ => hideEditorActionCB()}
@@ -164,7 +197,7 @@ let make =
                     | Some(level) =>
                       let id = level |> Level.id;
                       <button
-                        disabled={state.saveDisabled}
+                        disabled={saveDisabled(state)}
                         onClick=(
                           _event =>
                             updateLevel(
@@ -179,6 +212,7 @@ let make =
 
                     | None =>
                       <button
+                        disabled={saveDisabled(state)}
                         onClick=(
                           _event =>
                             createLevel(authenticityToken, course, state)

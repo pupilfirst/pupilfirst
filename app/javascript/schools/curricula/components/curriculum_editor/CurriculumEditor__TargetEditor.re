@@ -358,7 +358,9 @@ let make =
       let id = json |> Json.Decode.(field("id", int));
       let sortIndex = json |> Json.Decode.(field("sortIndex", int));
       let prerequisiteTargets =
-        state.prerequisiteTargets |> List.map(((id, _, _)) => id);
+        state.prerequisiteTargets
+        |> List.filter(((_, _, selected)) => selected)
+        |> List.map(((id, _, _)) => id);
       let resources =
         state.resources
         |> List.map(((id, title)) => Resource.create(id, title));
@@ -366,7 +368,9 @@ let make =
       let evaluationCriteria =
         switch (state.methodOfCompletion) {
         | Evaluated =>
-          state.evaluationCriteria |> List.map(((id, _, _)) => id)
+          state.evaluationCriteria
+          |> List.filter(((_, _, selected)) => selected)
+          |> List.map(((id, _, _)) => id)
         | _ => []
         };
       let linkToComplete =

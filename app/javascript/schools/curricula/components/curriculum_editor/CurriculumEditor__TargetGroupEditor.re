@@ -6,16 +6,38 @@ type state = {
   name: string,
   description: string,
   milestone: bool,
+  hasNameError: bool,
   saveDisabled: bool,
 };
 
 type action =
-  | UpdateName(string)
+  | UpdateName(string, bool)
   | UpdateDescription(string)
   | UpdateMilestone(bool);
 
 let component =
   ReasonReact.reducerComponent("CurriculumEditor__TargetGroupEditor");
+
+let updateName = (send, name) => {
+  let hasError = name |> String.length < 2;
+  send(UpdateName(name, hasError));
+};
+
+let saveDisabled = state => state.hasNameError || state.saveDisabled;
+
+let setPayload = (authenticityToken, state) => {
+  let payload = Js.Dict.empty();
+  let milestone = state.milestone == true ? "true" : "false";
+  Js.Dict.set(
+    payload,
+    "authenticity_token",
+    authenticityToken |> Js.Json.string,
+  );
+  Js.Dict.set(payload, "name", state.name |> Js.Json.string);
+  Js.Dict.set(payload, "description", state.description |> Js.Json.string);
+  Js.Dict.set(payload, "milestone", milestone |> Js.Json.string);
+  payload;
+};
 
 let milestoneButtonClasses = value =>
   value ?
@@ -42,19 +64,21 @@ let make =
           | None => ""
           },
         milestone: targetGroup |> TargetGroup.milestone,
+        hasNameError: false,
         saveDisabled: true,
       }
     | None => {
         name: "",
         description: "",
-        milestone: false,
+        milestone: true,
+        hasNameError: false,
         saveDisabled: true,
       }
     },
   reducer: (action, state) =>
     switch (action) {
-    | UpdateName(name) =>
-      ReasonReact.Update({...state, name, saveDisabled: false})
+    | UpdateName(name, hasNameError) =>
+      ReasonReact.Update({...state, name, hasNameError, saveDisabled: false})
     | UpdateDescription(description) =>
       ReasonReact.Update({...state, description, saveDisabled: false})
     | UpdateMilestone(milestone) =>
@@ -73,48 +97,24 @@ let make =
           currentLevelId,
           sortIndex,
         );
+      switch (targetGroup) {
+      | Some(_) =>
+        Notification.success("Success", "Target Group updated succesffully")
+      | None =>
+        Notification.success("Success", "Target Group created succesffully")
+      };
       updateTargetGroupsCB(newTargetGroup);
     };
 
     let createTargetGroup = () => {
-      let payload = Js.Dict.empty();
       let level_id = currentLevelId |> string_of_int;
-      let milestone = state.milestone == true ? "true" : "false";
-
-      Js.Dict.set(
-        payload,
-        "authenticity_token",
-        authenticityToken |> Js.Json.string,
-      );
-      Js.Dict.set(payload, "name", state.name |> Js.Json.string);
-      Js.Dict.set(
-        payload,
-        "description",
-        state.description |> Js.Json.string,
-      );
-      Js.Dict.set(payload, "milestone", milestone |> Js.Json.string);
-
+      let payload = setPayload(authenticityToken, state);
       let url = "/school/levels/" ++ level_id ++ "/target_groups";
       Api.create(url, payload, handleResponseCB);
     };
 
     let updateTargetGroup = targetGroupId => {
-      let payload = Js.Dict.empty();
-      let milestone = state.milestone == true ? "true" : "false";
-
-      Js.Dict.set(
-        payload,
-        "authenticity_token",
-        authenticityToken |> Js.Json.string,
-      );
-      Js.Dict.set(payload, "name", state.name |> Js.Json.string);
-      Js.Dict.set(
-        payload,
-        "description",
-        state.description |> Js.Json.string,
-      );
-      Js.Dict.set(payload, "milestone", milestone |> Js.Json.string);
-
+      let payload = setPayload(authenticityToken, state);
       let url = "/school/target_groups/" ++ targetGroupId;
       Api.update(url, payload, handleResponseCB);
     };
@@ -142,9 +142,16 @@ let make =
                   value={state.name}
                   onChange={
                     event =>
-                      send(UpdateName(ReactEvent.Form.target(event)##value))
+                      updateName(send, ReactEvent.Form.target(event)##value)
                   }
                 />
+                {
+                  state.hasNameError ?
+                    <div className="drawer-right-form__error-msg">
+                      {"not a valid Title" |> str}
+                    </div> :
+                    ReasonReact.null
+                }
                 <label
                   className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
                   htmlFor="description">
@@ -212,17 +219,18 @@ let make =
                     | Some(targetGroup) =>
                       let id = targetGroup |> TargetGroup.id;
                       <button
-                        disabled={state.saveDisabled}
+                        disabled={saveDisabled(state)}
                         onClick=(_e => updateTargetGroup(id |> string_of_int))
                         className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
-                        {"Update Level" |> str}
+                        {"Update Target Group" |> str}
                       </button>;
 
                     | None =>
                       <button
+                        disabled={saveDisabled(state)}
                         onClick=(_e => createTargetGroup())
                         className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
-                        {"Create Level" |> str}
+                        {"Create Target Group" |> str}
                       </button>
                     }
                   }

@@ -20,9 +20,18 @@ class UserSessionMailer < ActionMailer::Base
   end
 
   def roadie_options_for(school)
+    host = if school.present?
+      school.domains.primary.fqdn
+    elsif Rails.env.production?
+      'www.pupilfirst.com'
+    else
+      'www.pupilfirst.localhost'
+    end
+
     roadie_options.combine(
       url_options: {
-        host: school.present? ? school.domains.primary.fqdn : 'www.pupilfirst.com'
+        host: host,
+        protocol: Rails.env.production? ? 'https' : 'http'
       }
     )
   end

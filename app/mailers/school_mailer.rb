@@ -10,7 +10,7 @@ class SchoolMailer < ActionMailer::Base
   def host_options
     {
       host: @school.domains.primary.fqdn,
-      protocol: 'https'
+      protocol: Rails.env.production? ? 'https' : 'http'
     }
   end
 

@@ -13,6 +13,7 @@ type state = {
   selectedStudents: list(Student.t),
   searchString: string,
   formVisible,
+  selectedLevelNumber: option(int),
 };
 
 type action =
@@ -22,7 +23,8 @@ type action =
   | SelectAllStudents
   | DeselectAllStudents
   | UpdateSearchString(string)
-  | UpdateFormVisible(formVisible);
+  | UpdateFormVisible(formVisible)
+  | UpdateSelectedLevelNumber(option(int));
 
 let selectedAcrossTeams = selectedStudents => {
   selectedStudents |> List.map(s => s |> Student.teamId) |> List.sort_uniq((id1, id2) => id1 - id2) |> List.length > 1;
@@ -56,13 +58,18 @@ let isMoveOutable = (selectedStudents, teams) => {
   |> List.length > 1;
 };
 
-let filteredTeams = (searchString, teams) => {
-  teams
+let filteredTeams = state => {
+  let levelFilteredTeams =
+    switch (state.selectedLevelNumber) {
+    | None => state.teams
+    | Some(n) => state.teams |> List.filter(team => team |> Team.levelNumber == n)
+    };
+  levelFilteredTeams
   |> List.filter(team =>
        team
        |> Team.students
        |> List.map(s => s |> Student.name)
-       |> List.filter(n => n |> String.lowercase |> Js.String.includes(searchString |> String.lowercase))
+       |> List.filter(n => n |> String.lowercase |> Js.String.includes(state.searchString |> String.lowercase))
        |> List.length > 0
      );
 };
@@ -85,9 +92,9 @@ let teamUp = (students, responseCB, authenticityToken) => {
 
 let component = ReasonReact.reducerComponent("SA_StudentsPanel");
 
-let make = (~teams, ~courseId, ~authenticityToken, _children) => {
+let make = (~teams, ~courseId, ~authenticityToken, ~levels, _children) => {
   ...component,
-  initialState: () => {teams, selectedStudents: [], searchString: "", formVisible: None},
+  initialState: () => {teams, selectedStudents: [], searchString: "", formVisible: None, selectedLevelNumber: None},
   reducer: (action, state) =>
     switch (action) {
     | UpdateTeams(teams) => ReasonReact.Update({...state, teams})
@@ -106,6 +113,7 @@ let make = (~teams, ~courseId, ~authenticityToken, _children) => {
     | DeselectAllStudents => ReasonReact.Update({...state, selectedStudents: []})
     | UpdateSearchString(searchString) => ReasonReact.Update({...state, searchString})
     | UpdateFormVisible(formVisible) => ReasonReact.Update({...state, formVisible})
+    | UpdateSelectedLevelNumber(selectedLevelNumber) => ReasonReact.Update({...state, selectedLevelNumber})
     },
   render: ({state, send}) => {
     <div className="flex-1 flex flex-col bg-white overflow-hidden">
@@ -121,10 +129,26 @@ let make = (~teams, ~courseId, ~authenticityToken, _children) => {
         <div className="border-b flex px-6 py-2 items-center justify-between">
           <div className="inline-block relative w-64">
             <select
+              onChange={event => {
+                let level_number = ReactEvent.Form.target(event)##value;
+                send(UpdateSelectedLevelNumber(level_number == "all" ? None : Some(level_number |> int_of_string)));
+              }}
+              value={
+                switch (state.selectedLevelNumber) {
+                | None => "all"
+                | Some(n) => n |> string_of_int
+                }
+              }
               className="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-4 py-2 pr-8 rounded leading-tight leading-normal focus:outline-none">
-              <option> {"Level 1" |> str} </option>
-              <option> {"Level 2" |> str} </option>
-              <option> {"Level 3" |> str} </option>
+              <option value="all"> {"All levels" |> str} </option>
+              {levels
+               |> List.map(level =>
+                    <option value={level |> Level.number |> string_of_int}>
+                      {"Level " ++ (level |> Level.number |> string_of_int) ++ ": " ++ (level |> Level.name) |> str}
+                    </option>
+                  )
+               |> Array.of_list
+               |> ReasonReact.array}
             </select>
             <div className="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
               <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -214,7 +238,7 @@ let make = (~teams, ~courseId, ~authenticityToken, _children) => {
       </div>
       <div className="px-6 pb-4 flex-1 bg-grey-lightest overflow-y-scroll">
         <div className="max-w-lg mx-auto relative">
-          {filteredTeams(state.searchString, state.teams)
+          {filteredTeams(state)
            |> List.sort((team1, team2) => Team.id(team2) - Team.id(team1))
            |> List.map(team => {
                 let isSingleFounder = team |> Team.students |> List.length == 1;
@@ -322,6 +346,7 @@ let make = (~teams, ~courseId, ~authenticityToken, _children) => {
 type props = {
   teams: list(Team.t),
   courseId: int,
+  levels: list(Level.t),
   authenticityToken: string,
 };
 
@@ -329,6 +354,7 @@ let decode = json =>
   Json.Decode.{
     teams: json |> field("teams", list(Team.decode)),
     courseId: json |> field("courseId", int),
+    levels: json |> field("levels", list(Level.decode)),
     authenticityToken: json |> field("authenticityToken", string),
   };
 
@@ -337,6 +363,12 @@ let jsComponent =
     ~component,
     jsProps => {
       let props = jsProps |> decode;
-      make(~teams=props.teams, ~courseId=props.courseId, ~authenticityToken=props.authenticityToken, [||]);
+      make(
+        ~teams=props.teams,
+        ~courseId=props.courseId,
+        ~levels=props.levels,
+        ~authenticityToken=props.authenticityToken,
+        [||],
+      );
     },
   );

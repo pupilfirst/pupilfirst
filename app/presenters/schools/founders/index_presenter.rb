@@ -8,7 +8,7 @@ module Schools
       end
 
       def react_props
-        { teams: teams, courseId: @course.id, authenticityToken: view.form_authenticity_token }
+        { teams: teams, courseId: @course.id, levels: levels, authenticityToken: view.form_authenticity_token }
       end
 
       def teams
@@ -48,6 +48,15 @@ module Schools
 
       def course_coaches
         @course_coaches ||= coach_details(@course.faculty)
+      end
+
+      def levels
+        @levels ||= @course.levels.map do |level|
+          {
+            name: level.name,
+            number: level.number
+          }
+        end
       end
     end
   end

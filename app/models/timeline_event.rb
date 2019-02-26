@@ -71,8 +71,8 @@ class TimelineEvent < ApplicationRecord
     timeline_event_files.map do |te_file|
       {
         identifier: te_file.id,
-        title: te_file.file_as.metadata['title'],
-        private: te_file.file_as.metadata['private'],
+        title: te_file.title,
+        private: te_file.private?,
         persisted: true
       }
     end.to_json

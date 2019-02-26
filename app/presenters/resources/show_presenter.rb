@@ -19,7 +19,7 @@ module Resources
     end
 
     def stream_url
-      view.url_for(@resource.file_as)
+      view.url_for(@resource.file)
     end
   end
 end

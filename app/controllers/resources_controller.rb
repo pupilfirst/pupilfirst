@@ -27,7 +27,7 @@ class ResourcesController < ApplicationController
   def download
     resource = authorize(Resource.find(params[:id]))
     resource.increment_downloads(current_user)
-    destination = resource.link.presence || Rails.application.routes.url_helpers.rails_blob_path(resource.file_as, only_path: true)
+    destination = resource.link.presence || Rails.application.routes.url_helpers.rails_blob_path(resource.file, only_path: true)
 
     redirect_to(destination)
   end

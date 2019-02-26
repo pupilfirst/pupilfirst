@@ -8,7 +8,7 @@ class Resource < ApplicationRecord
   belongs_to :school
   has_many :target_resources, dependent: :destroy
   has_many :targets, through: :target_resources
-  has_one_attached :file_as
+  has_one_attached :file
 
   def slug_candidates
     [
@@ -27,7 +27,7 @@ class Resource < ApplicationRecord
   validate :exactly_one_source_must_be_present
 
   def exactly_one_source_must_be_present
-    return if [file_as.attached?, video_embed.present?, link.present?].one?
+    return if [file.attached?, video_embed.present?, link.present?].one?
     return if persisted?
 
     errors[:base] << 'One and only one of a video embed, file or link must be present.'
@@ -48,8 +48,8 @@ class Resource < ApplicationRecord
     return false if link.present?
     return true if video_embed.present?
 
-    if file_as.attached?
-      file_as.content_type.end_with?('/mp4')
+    if file.attached?
+      file.content_type.end_with?('/mp4')
     else
       false
     end

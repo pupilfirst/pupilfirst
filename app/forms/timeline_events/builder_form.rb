@@ -80,7 +80,7 @@ module TimelineEvents
         metadata = parsed_files_metadata[identifier]
 
         timeline_event.timeline_event_files.create!(
-          file_as: file,
+          file: file,
           title: metadata['title'],
           private: metadata['private']
         )

@@ -1,5 +1,5 @@
 ActiveAdmin.register Faculty do
-  permit_params :name, :title, :key_skills, :linkedin_url, :category, :image_as, :sort_index, :self_service,
+  permit_params :name, :title, :key_skills, :linkedin_url, :category, :image, :sort_index, :self_service,
     :current_commitment, :inactive, :about, :commitment, :compensation, :slack_username, :public
 
   controller do
@@ -42,7 +42,7 @@ ActiveAdmin.register Faculty do
       row :about
       row :key_skills
       row :category
-      row :image_as
+      row :image
       row :sort_index
       row :public
       row :self_service
@@ -75,7 +75,7 @@ ActiveAdmin.register Faculty do
       f.input :name
       f.input :title
       f.input :about
-      f.input :image_as, as: :file
+      f.input :image, as: :file
       f.input :key_skills
       f.input :linkedin_url
       f.input :sort_index

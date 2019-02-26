@@ -10,7 +10,7 @@ title SV.CO Edit Profile for #{@founder.fullname}
 
         = f.text_field :name, label_class: 'col-form-label', label: 'Name', required: true, maxlength: 255
         = f.telephone_field :phone, label_class: 'col-form-label', label: 'Phone Number', required: true, maxlength: 17, pattern: MobileNumberValidator::FORM_EXPRESSION
-        = f.file_field :avatar_as, label_class: 'col-form-label', label: 'Avatar', class: 'form-control', required: false
+        = f.file_field :avatar, label_class: 'col-form-label', label: 'Avatar', class: 'form-control', required: false
         = f.text_field :about, label_class: 'col-form-label', label: 'One-Liner', placeholder: 'One-liner about yourself', maxlength: 255, required: false
         = f.text_field :skype_id, label_class: 'col-form-label', label: 'Skype ID', required: false
         = f.text_area :communication_address, label_class: 'col-form-label'

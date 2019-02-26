@@ -16,7 +16,7 @@ after 'development:targets' do
     tag_list: %w(PDF)
   )
 
-  r.file_as.attach(io: Rails.root.join(pdf_path).open, filename: 'pdf-sample.pdf')
+  r.file.attach(io: Rails.root.join(pdf_path).open, filename: 'pdf-sample.pdf')
   r.save!
 
   Resource.create!(
@@ -38,7 +38,7 @@ after 'development:targets' do
     tag_list: %w(Video)
   )
 
-  r.file_as.attach(io: Rails.root.join(video_path).open, filename: 'video-sample.mp4')
+  r.file.attach(io: Rails.root.join(video_path).open, filename: 'video-sample.mp4')
   r.save!
 
   Resource.create!(
@@ -59,6 +59,6 @@ after 'development:targets' do
     tag_list: %w(PDF)
   )
 
-  r.file_as.attach(io: Rails.root.join(pdf_path).open, filename: 'pdf-sample.pdf')
+  r.file.attach(io: Rails.root.join(pdf_path).open, filename: 'pdf-sample.pdf')
   r.save!
 end

@@ -1,6 +1,6 @@
 *, *::before, *::after {
     box-sizing: border-box;
-    font-family: 'Nunito Sans', sans-serif;
+    font-family: 'Open Sans', sans-serif;
 }
 
 body {
@@ -13,13 +13,19 @@ body {
     width: 304px;
 }
 
-.global-sidebar__header {
-    width: 304px;
-    height: 108px;
+
+
+.global-sidebar__school-logo-container {
+    height: 3.5rem;
+}
+
+.global-sidebar__school-search__icon-box {
+    width: 3.5rem;
+    height: 3.5rem;
 }
 
 .global-sidebar__primary-nav {
-    width: 64px;
+    /* width: 64px; */
 }
 
 .global-sidebar__secondary-nav {
@@ -54,13 +60,13 @@ body {
 }
 
 .drawer-right-form__input {
-  margin-bottom: 2rem;
+    margin-bottom: 2rem;
 }
 
 .drawer-right-form__error-msg {
-  color: red;
-  margin-top: -1.75rem;
-  margin-bottom: 0.715rem;
+    color: red;
+    margin-top: -1.75rem;
+    margin-bottom: 0.715rem;
 }
 
 .resources-upload-tab__link {

@@ -9,7 +9,8 @@
 
   <!-- Styles -->
   <%= stylesheet_pack_tag 'tailwind', media: 'all', 'data-turbolinks-track': 'reload' %>
-  <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,600,700,800" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons"" rel="stylesheet">
 
   <!-- Scripts -->
   <%= javascript_pack_tag 'tailwind', 'data-turbolinks-track': 'reload', nonce: true %>
@@ -26,7 +27,7 @@
 
 <body data-env="<%= Rails.env %>">
 
-<div class="font-sans antialiased flex">
+<div class="font-sans antialiased flex h-screen">
   <!-- Sidebar -->
 
   <%= yield :nav %>

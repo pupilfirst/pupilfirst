@@ -13,6 +13,7 @@
     "cloc": "^2.3.2",
     "coffeescript": "1.12.7",
     "date-fns": "^1.29.0",
+    "material-design-icons": "^3.0.1",
     "pnotify": "^4.0.0-alpha.4",
     "postcss-scss": "^1.0.3",
     "prop-types": "^15.6.2",

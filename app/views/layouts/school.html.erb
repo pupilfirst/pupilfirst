@@ -1,11 +1,37 @@
+<% content_for(:head) do %>
+  <%= stylesheet_pack_tag 'schools/school/show', media: 'all', 'data-turbolinks-track': 'reload' %>
+<% end %>
 <% content_for(:nav) do %>
-    <div class="flex">
-      <div class="bg-grey-darker global-sidebar__primary-nav text-purple-lighter flex-none p-4 hidden md:block">
-        <ul class="list-reset">
-          <li class="border-b-2 mb-2 pb-2"><%= link_to('Overview', school_path) %></li>
-          <% @courses.each do |course| %>
-            <li><%= link_to course.name, school_course_path(course) %></li>
-          <% end %>
+    <div class="flex global-sidebar">
+      <div class="bg-grey-darker global-sidebar__primary-nav w-full flex-none hidden md:block">
+      <div class="global-sidebar__header border-r p-4 bg-white flex pb-3">
+        <div class="global-sidebar__school-logo-container flex items-center bg-white h-16 w-1/2 rounded">
+          <h3>Logo</h3>
+        </div>
+        <div class="flex global-sidebar__school-search rounded justify-end w-1/2">
+            <div class="global-sidebar__school-search__icon-box flex items-center justify-center border rounded w-16">
+              <i class="material-icons md-48">search</i>
+            </div>
+        </div>
+      </div>
+        <ul class="list-reset p-4">
+          <li class="">
+            <%= link_to school_path, class:'flex text-white py-3 font-semibold no-underline items-center' do%>
+              <i class="material-icons md-48 mr-2">vertical_split</i>
+              <span>Overview</span>
+              <% end %>
+          </li>
+          <li class="">
+            <%= link_to '#', class:'flex text-white py-3 font-semibold no-underline items-center' do%>
+                <i class="material-icons md-48 mr-2">description_outline</i>
+                <span>Courses</span>
+            <% end %>
+            </li>
+            <ul class="list-reset px-4 pb-4">
+              <% @courses.each do |course| %>
+              <li><%= link_to course.name, school_course_path(course), class:'block text-white py-3 font-semibold text-sm no-underline' %></li>
+              <% end %>
+            </ul>
         </ul>
       </div>
     </div>

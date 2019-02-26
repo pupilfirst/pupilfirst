@@ -23,7 +23,6 @@ module Users
       # Update the time at which last login mail was sent.
       @user.update!(login_mail_sent_at: Time.zone.now)
 
-      school_name = @school&.name || 'PupilFirst'
       host = @domain&.fqdn || 'www.pupilfirst.com'
 
       url_options = {
@@ -38,7 +37,7 @@ module Users
       login_url = url_helpers.user_token_url(url_options)
 
       # Send the email with link to sign in.
-      UserSessionMailer.send_login_token(@user.email, school_name, login_url).deliver_now
+      UserSessionMailer.send_login_token(@user.email, @school, login_url).deliver_now
     end
   end
 end

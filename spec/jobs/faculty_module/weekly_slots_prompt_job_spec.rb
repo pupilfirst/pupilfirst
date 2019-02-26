@@ -11,6 +11,9 @@ describe FacultyModule::WeeklySlotsPromptJob do
     create :connect_slot, slot_at: 1.5.weeks.ago, faculty: faculty_non_self_service
     create :connect_slot, slot_at: 1.5.weeks.ago, faculty: faculty_self_service
     create :connect_slot, slot_at: 1.5.weeks.ago, faculty: faculty_inactive
+
+    # Create a domain for school
+    create :domain, :primary, school: faculty_self_service.school
   end
 
   describe '#perform' do
@@ -23,7 +26,7 @@ describe FacultyModule::WeeklySlotsPromptJob do
 
       open_email(faculty_self_service.email)
 
-      expect(current_email).to have_content('Please review your office hour slots for the next week.')
+      expect(current_email).to have_content('Please review your connect session slots for the next week.')
     end
   end
 end

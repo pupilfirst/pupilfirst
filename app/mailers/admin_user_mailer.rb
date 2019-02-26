@@ -1,5 +1,5 @@
-# Mails sent out to admin users.
-class AdminUserMailer < ApplicationMailer
+# Mails sent out to PupilFirst super-admin users.
+class AdminUserMailer < PupilFirstMailer
   def vocalist_ping_results(message, recipient, admin_user, errors)
     @message = message
     @recipient = recipient
@@ -11,13 +11,15 @@ class AdminUserMailer < ApplicationMailer
       attachments[filename] = @errors
     end
 
-    mail(to: admin_user.email, subject: 'Vocalist ping job complete')
+    roadie_mail(to: admin_user.email, subject: 'Vocalist ping job complete')
   end
 
   def google_calendar_invite_success(admin_user, target, html_link)
-    @target = target
     @admin_user = admin_user
+    @target = target
     @html_link = html_link
-    mail(to: admin_user.email, subject: 'Google Calendar invitations successfully sent!')
+    @school = target.target_group.level.course.school
+
+    roadie_mail(to: admin_user.email, subject: 'Google Calendar invitations successfully sent!')
   end
 end

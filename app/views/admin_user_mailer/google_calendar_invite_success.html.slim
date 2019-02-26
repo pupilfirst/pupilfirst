@@ -10,7 +10,8 @@
 = content_for :body do
   p
     ' We've just completed creating (or updating) invitations for
-    | #{link_to "Target ##{@target.id}", admin_target_url(@target)} on Google Calendar.
+    code Target##{@target.id}
+    | &nbsp;on Google Calendar.
 
   p
     ' Here&rsquo;s a

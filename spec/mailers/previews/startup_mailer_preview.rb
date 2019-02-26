@@ -1,26 +1,17 @@
 class StartupMailerPreview < ActionMailer::Preview
-  def startup_dropped_out
-    startup = Startup.last
-    StartupMailer.startup_dropped_out(startup)
-  end
-
   def feedback_as_email
     startup_feedback = StartupFeedback.new(
       id: 1,
       feedback: "This is the feedback text.\nIt is multi-line.",
       timeline_event: TimelineEvent.new(
         id: 2,
-        startup: Startup.new(id: 4, slug: 'test-startup'),
+        founders: [Founder.first],
         target: Target.new(id: 1, title: 'Super Cool Target')
       ),
       faculty: Faculty.new(
         name: 'C V Raman'
       ),
-      startup: Startup.new(
-        id: 3,
-        # level: Level.new(number: 1)
-        level: Level.new(number: 0)
-      )
+      startup: Startup.first
     )
 
     StartupMailer.feedback_as_email(startup_feedback)

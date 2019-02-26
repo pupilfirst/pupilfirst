@@ -4,11 +4,6 @@
 = content_for :subtitle do
   | The feedback is of type <em>#{@platform_feedback.feedback_type}</em>.
 
-= content_for :title_button_text do
-  | View in Admin Interface
-
-= content_for(:title_button_link, admin_platform_feedback_url(@platform_feedback))
-
 = content_for :salutation do
   | Hello,
 
@@ -21,4 +16,4 @@
   - if @platform_feedback.promoter_score.present?
     p <strong>Promoter Score:</strong> #{@platform_feedback.promoter_score}
 
-  p Please login at SV&#x2024;CO as admin to follow up.
+  p Please sign into the admin interface to follow up.

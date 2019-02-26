@@ -3,8 +3,7 @@ type t = {
   targetGroupId: int,
   title: string,
   description: string,
-  videoEmbed: option(string),
-  slideshowEmbed: option(string),
+  youtubeVideoId: option(string),
   evaluationCriteria: list(int),
   prerequisiteTargets: list(int),
   quiz: list(CurriculumEditor__QuizQuestion.t),
@@ -23,9 +22,7 @@ let targetGroupId = t => t.targetGroupId;
 
 let description = t => t.description;
 
-let videoEmbed = t => t.videoEmbed;
-
-let slideshowEmbed = t => t.slideshowEmbed;
+let youtubeVideoId = t => t.youtubeVideoId;
 
 let evaluationCriteria = t => t.evaluationCriteria;
 
@@ -49,10 +46,8 @@ let decode = json =>
     targetGroupId: json |> field("targetGroupId", int),
     title: json |> field("title", string),
     description: json |> field("description", string),
-    videoEmbed:
-      json |> field("videoEmbed", nullable(string)) |> Js.Null.toOption,
-    slideshowEmbed:
-      json |> field("slideshowEmbed", nullable(string)) |> Js.Null.toOption,
+    youtubeVideoId:
+      json |> field("youtubeVideoId", nullable(string)) |> Js.Null.toOption,
     evaluationCriteria: json |> field("evaluationCriteria", list(int)),
     prerequisiteTargets: json |> field("prerequisiteTargets", list(int)),
     quiz: json |> field("quiz", list(CurriculumEditor__QuizQuestion.decode)),
@@ -76,8 +71,7 @@ let create =
       targetGroupId,
       title,
       description,
-      videoEmbed,
-      slideshowEmbed,
+      youtubeVideoId,
       evaluationCriteria,
       prerequisiteTargets,
       quiz,
@@ -91,8 +85,7 @@ let create =
   targetGroupId,
   title,
   description,
-  videoEmbed,
-  slideshowEmbed,
+  youtubeVideoId,
   evaluationCriteria,
   prerequisiteTargets,
   quiz,

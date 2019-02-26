@@ -10,8 +10,7 @@ module Targets
         @target.title = target_params[:title]
         @target.description = target_params[:title]
         @target.target_action_type = target_params[:target_action_type]
-        @target.video_embed = target_params[:video_embed]
-        @target.slideshow_embed = target_params[:slideshow_embed]
+        @target.youtube_video_id = target_params[:youtube_video_id]
         @target.resource_ids = target_params[:resource_ids]
         @target.prerequisite_target_ids = target_params[:prerequisite_target_ids]
         @target.evaluation_criterion_ids = target_params[:evaluation_criterion_ids]
@@ -23,6 +22,7 @@ module Targets
 
         @target.save!
 
+        destroy_quiz if @target.quiz.present?
         recreate_quiz(target_params[:quiz]) if target_params[:quiz].present?
 
         @target
@@ -45,6 +45,14 @@ module Targets
           end
         end
       end
+    end
+
+    def destroy_quiz
+      @target.quiz.quiz_questions.each do |quiz_question|
+        quiz_question.answer_options.delete_all
+      end
+      @target.quiz.quiz_questions.destroy_all
+      @target.quiz.destroy
     end
 
     def sort_index

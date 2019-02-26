@@ -164,6 +164,7 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
             id="title"
             type_="text"
             placeholder="Type target title here"
+            required=true
             onChange={
               event =>
                 send(UpdateTitle(ReactEvent.Form.target(event)##value))
@@ -175,13 +176,15 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
                 name="resource[file]"
                 type_="file"
                 id="file"
+                required=true
                 multiple=false
               /> :
               <input
                 className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                 name="resource[link]"
                 id="link"
-                type_="link"
+                type_="url"
+                required=true
                 placeholder="Paste file"
               />
           }

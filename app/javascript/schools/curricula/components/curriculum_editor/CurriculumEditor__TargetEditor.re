@@ -18,8 +18,7 @@ type resource = (int, string);
 type state = {
   title: string,
   description: string,
-  videoEmbed: string,
-  slideshowEmbed: string,
+  youtubeVideoId: string,
   evaluationCriteria: list(evaluationCriterion),
   prerequisiteTargets: list(prerequisiteTarget),
   methodOfCompletion,
@@ -28,14 +27,17 @@ type state = {
   linkToComplete: string,
   role: string,
   targetActionType: string,
+  hasTitleError: bool,
+  hasDescriptionError: bool,
+  hasYoutubeVideoIdError: bool,
+  hasLinktoCompleteError: bool,
 };
 
 type action =
-  | UpdateTitle(string)
-  | UpdateDescription(string)
-  | UpdateVideoEmbed(string)
-  | UpdateSlideshowEmbed(string)
-  | UpdateLinkToComplete(string)
+  | UpdateTitle(string, bool)
+  | UpdateDescription(string, bool)
+  | UpdateYoutubeVideoId(string, bool)
+  | UpdateLinkToComplete(string, bool)
   | UpdateEvaluationCriterion(int, string, bool)
   | UpdatePrerequisiteTargets(int, string, bool)
   | UpdateMethodOfCompletion(methodOfCompletion)
@@ -47,6 +49,45 @@ type action =
 
 let component =
   ReasonReact.reducerComponent("CurriculumEditor__TargetEditor");
+
+let updateTitle = (send, title) => {
+  let hasError = title |> String.length < 2;
+  send(UpdateTitle(title, hasError));
+};
+let updateDescription = (send, description) => {
+  let hasError = description |> String.length < 2;
+  send(UpdateDescription(description, hasError));
+};
+let updateYoutubeVideoId = (send, youtubeVideoId) => {
+  let hasError = youtubeVideoId |> String.length < 2;
+  send(UpdateYoutubeVideoId(youtubeVideoId, hasError));
+};
+let updateLinkToComplete = (send, link) => {
+  let regex = [%re
+    {|/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/|}
+  ];
+  let hasError = link |> String.length < 1 ? false : !Js.Re.test(link, regex);
+  send(UpdateLinkToComplete(link, hasError));
+};
+
+let saveDisabled = (state, isValidQuiz) => {
+  let hasMethordOfCompletionError =
+    switch (state.methodOfCompletion) {
+    | NotSelected => true
+    | Evaluated =>
+      state.evaluationCriteria
+      |> List.filter(((_, _, selected)) => selected)
+      |> List.length == 0
+    | VisitLink => state.hasLinktoCompleteError
+    | TakeQuiz => !isValidQuiz
+    | MarkAsComplete => false
+    };
+  state.hasTitleError
+  || state.hasDescriptionError
+  || state.hasYoutubeVideoIdError
+  || state.hasLinktoCompleteError
+  || hasMethordOfCompletionError;
+};
 
 let handleMethodOfCompletion = target => {
   let hasQuiz = target |> Target.quiz |> List.length > 0;
@@ -143,11 +184,10 @@ let setPayload = (state, target, authenticityToken) => {
   );
   Js.Dict.set(targetData, "title", state.title |> Js.Json.string);
   Js.Dict.set(targetData, "description", state.description |> Js.Json.string);
-  Js.Dict.set(targetData, "video_embed", state.videoEmbed |> Js.Json.string);
   Js.Dict.set(
     targetData,
-    "slideshow_embed",
-    state.slideshowEmbed |> Js.Json.string,
+    "youtube_video_id",
+    state.youtubeVideoId |> Js.Json.string,
   );
   Js.Dict.set(
     targetData,
@@ -215,14 +255,9 @@ let make =
     | Some(target) => {
         title: target |> Target.title,
         description: target |> Target.title,
-        videoEmbed:
-          switch (target |> Target.videoEmbed) {
-          | Some(videoEmbed) => videoEmbed
-          | None => ""
-          },
-        slideshowEmbed:
-          switch (target |> Target.slideshowEmbed) {
-          | Some(slideshowEmbed) => slideshowEmbed
+        youtubeVideoId:
+          switch (target |> Target.youtubeVideoId) {
+          | Some(youtubeVideoId) => youtubeVideoId
           | None => ""
           },
         evaluationCriteria: handleEC(evaluationCriteria, target),
@@ -241,12 +276,15 @@ let make =
         role: target |> Target.role,
         targetActionType: target |> Target.targetActionType,
         methodOfCompletion: handleMethodOfCompletion(target),
+        hasTitleError: false,
+        hasDescriptionError: false,
+        hasYoutubeVideoIdError: false,
+        hasLinktoCompleteError: false,
       }
     | None => {
         title: "",
         description: "",
-        videoEmbed: "",
-        slideshowEmbed: "",
+        youtubeVideoId: "",
         evaluationCriteria:
           evaluationCriteria
           |> List.map(criteria =>
@@ -267,19 +305,23 @@ let make =
         linkToComplete: "",
         role: "founder",
         targetActionType: "Todo",
+        hasTitleError: false,
+        hasDescriptionError: false,
+        hasYoutubeVideoIdError: false,
+        hasLinktoCompleteError: false,
       }
     },
   reducer: (action, state) =>
     switch (action) {
-    | UpdateTitle(title) => ReasonReact.Update({...state, title})
-    | UpdateDescription(description) =>
-      ReasonReact.Update({...state, description})
-    | UpdateVideoEmbed(videoEmbed) =>
-      ReasonReact.Update({...state, videoEmbed})
-    | UpdateSlideshowEmbed(slideshowEmbed) =>
-      ReasonReact.Update({...state, slideshowEmbed})
-    | UpdateLinkToComplete(linkToComplete) =>
-      ReasonReact.Update({...state, linkToComplete})
+    | UpdateTitle(title, hasTitleError) =>
+      ReasonReact.Update({...state, title, hasTitleError})
+    | UpdateDescription(description, hasDescriptionError) =>
+      ReasonReact.Update({...state, description, hasDescriptionError})
+    | UpdateYoutubeVideoId(youtubeVideoId, hasYoutubeVideoIdError) =>
+      ReasonReact.Update({...state, youtubeVideoId, hasYoutubeVideoIdError})
+
+    | UpdateLinkToComplete(linkToComplete, hasLinktoCompleteError) =>
+      ReasonReact.Update({...state, linkToComplete, hasLinktoCompleteError})
     | UpdateEvaluationCriterion(key, value, selected) =>
       let oldEC =
         state.evaluationCriteria
@@ -389,8 +431,7 @@ let make =
           targetGroupId,
           state.title,
           state.description,
-          Some(state.videoEmbed),
-          Some(state.slideshowEmbed),
+          Some(state.youtubeVideoId),
           evaluationCriteria,
           prerequisiteTargets,
           quiz,
@@ -400,6 +441,11 @@ let make =
           state.targetActionType,
           sortIndex,
         );
+      switch (target) {
+      | Some(_) =>
+        Notification.success("Success", "Target updated succesffully")
+      | None => Notification.success("Success", "Target created succesffully")
+      };
       updateTargetCB(newTarget);
     };
     let createTarget = () => {
@@ -438,11 +484,16 @@ let make =
                   value={state.title}
                   onChange={
                     event =>
-                      send(
-                        UpdateTitle(ReactEvent.Form.target(event)##value),
-                      )
+                      updateTitle(send, ReactEvent.Form.target(event)##value)
                   }
                 />
+                {
+                  state.hasTitleError ?
+                    <div className="drawer-right-form__error-msg">
+                      {"not a valid title" |> str}
+                    </div> :
+                    ReasonReact.null
+                }
                 <label
                   className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
                   htmlFor="title">
@@ -455,15 +506,21 @@ let make =
                   value={state.description}
                   onChange={
                     event =>
-                      send(
-                        UpdateDescription(
-                          ReactEvent.Form.target(event)##value,
-                        ),
+                      updateDescription(
+                        send,
+                        ReactEvent.Form.target(event)##value,
                       )
                   }
                   rows=5
                   cols=33
                 />
+                {
+                  state.hasDescriptionError ?
+                    <div className="drawer-right-form__error-msg">
+                      {"not a valid description" |> str}
+                    </div> :
+                    ReasonReact.null
+                }
                 <label
                   className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
                   htmlFor="title">
@@ -474,36 +531,22 @@ let make =
                   id="title"
                   type_="text"
                   placeholder="Paste video embed code here"
-                  value={state.videoEmbed}
+                  value={state.youtubeVideoId}
                   onChange={
                     event =>
-                      send(
-                        UpdateVideoEmbed(
-                          ReactEvent.Form.target(event)##value,
-                        ),
+                      updateYoutubeVideoId(
+                        send,
+                        ReactEvent.Form.target(event)##value,
                       )
                   }
                 />
-                <label
-                  className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
-                  htmlFor="title">
-                  {"Embed Slideshow" |> str}
-                </label>
-                <input
-                  className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                  id="title"
-                  type_="text"
-                  placeholder="Paste slideshow embed code here"
-                  value={state.slideshowEmbed}
-                  onChange={
-                    event =>
-                      send(
-                        UpdateSlideshowEmbed(
-                          ReactEvent.Form.target(event)##value,
-                        ),
-                      )
-                  }
-                />
+                {
+                  state.hasYoutubeVideoIdError ?
+                    <div className="drawer-right-form__error-msg">
+                      {"not a valid video embed" |> str}
+                    </div> :
+                    ReasonReact.null
+                }
                 <label
                   className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
                   htmlFor="title">
@@ -866,13 +909,19 @@ let make =
                         value={state.linkToComplete}
                         onChange=(
                           event =>
-                            send(
-                              UpdateLinkToComplete(
-                                ReactEvent.Form.target(event)##value,
-                              ),
+                            updateLinkToComplete(
+                              send,
+                              ReactEvent.Form.target(event)##value,
                             )
                         )
                       />
+                      {
+                        state.hasLinktoCompleteError ?
+                          <div className="drawer-right-form__error-msg">
+                            {"not a valid link" |> str}
+                          </div> :
+                          ReasonReact.null
+                      }
                     </div>
                   | NotSelected => ReasonReact.null
                   }
@@ -891,6 +940,7 @@ let make =
                 switch (target) {
                 | Some(target) =>
                   <button
+                    disabled={saveDisabled(state, isValidQuiz)}
                     onClick=(_e => updateTarget(target |> Target.id))
                     className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
                     {"Update Target" |> str}
@@ -898,6 +948,7 @@ let make =
 
                 | None =>
                   <button
+                    disabled={saveDisabled(state, isValidQuiz)}
                     onClick=(_e => createTarget())
                     className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
                     {"Create Target" |> str}

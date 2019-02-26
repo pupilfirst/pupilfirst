@@ -14,8 +14,11 @@ class SchoolMailer < ActionMailer::Base
     }
   end
 
-  def from
-    "#{@school.name} <noreply@pupilfirst.com>"
+  def from_options
+    options = { from: "#{@school.name} <noreply@pupilfirst.com>" }
+    reply_to = @school.school_strings.find_by(key: SchoolString::KEYS[:school_email_address])&.value
+    options[:reply_to] = reply_to if reply_to.present?
+    options
   end
 
   def roadie_options_for_school

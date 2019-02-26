@@ -5,7 +5,14 @@ class StartupMailer < SchoolMailer
     send_to = founder&.email || startup_feedback.startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
     @school = startup_feedback.startup.school
 
-    roadie_mail(from: from, to: send_to, subject: 'Feedback from Team SV')
+    roadie_mail(
+      {
+        to: send_to,
+        subject: 'Feedback from Team SV',
+        **from_options
+      },
+      roadie_options_for_school
+    )
   end
 
   # Mail sent to startup founders once a connect request is confirmed.
@@ -16,6 +23,13 @@ class StartupMailer < SchoolMailer
     send_to = connect_request.startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
     @school = connect_request.startup.school
 
-    roadie_mail(from: from, to: send_to, subject: 'Office hour confirmed.')
+    roadie_mail(
+      {
+        to: send_to,
+        subject: 'Office hour confirmed.',
+        **from_options
+      },
+      roadie_options_for_school
+    )
   end
 end

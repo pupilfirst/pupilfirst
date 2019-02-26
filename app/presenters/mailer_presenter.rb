@@ -11,7 +11,7 @@ class MailerPresenter < ApplicationPresenter
   end
 
   def school_url
-    "https://#{@school.domains.first.fqdn}"
+    "https://#{@school.domains.primary.fqdn}"
   end
 
   def logo?

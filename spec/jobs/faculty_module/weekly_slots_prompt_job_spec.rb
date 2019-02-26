@@ -13,7 +13,7 @@ describe FacultyModule::WeeklySlotsPromptJob do
     create :connect_slot, slot_at: 1.5.weeks.ago, faculty: faculty_inactive
 
     # Create a domain for school
-    create :domain, school: faculty_self_service.school
+    create :domain, :primary, school: faculty_self_service.school
   end
 
   describe '#perform' do

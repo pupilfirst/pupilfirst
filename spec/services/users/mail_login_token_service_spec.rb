@@ -5,7 +5,7 @@ describe Users::MailLoginTokenService do
 
   let(:user) { create :user }
   let(:school) { create :school }
-  let(:domain) { create :domain, school: school }
+  let(:domain) { create :domain, :primary, school: school }
   let(:shared_device) { [true, false].sample }
   let(:referer) { Faker::Internet.url(domain.fqdn) }
 

@@ -9,7 +9,7 @@ class SchoolMailer < ActionMailer::Base
 
   def host_options
     {
-      host: @school.domains.first.fqdn,
+      host: @school.domains.primary.fqdn,
       protocol: 'https'
     }
   end
@@ -19,6 +19,6 @@ class SchoolMailer < ActionMailer::Base
   end
 
   def roadie_options_for_school
-    roadie_options.combine(url_options: { protocol: 'https', host: @school.domains.first.fqdn })
+    roadie_options.combine(url_options: host_options)
   end
 end

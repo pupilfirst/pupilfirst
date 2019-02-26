@@ -22,7 +22,7 @@ class UserSessionMailer < ActionMailer::Base
   def roadie_options_for(school)
     roadie_options.combine(
       url_options: {
-        host: school.present? ? school.domains.first.fqdn : 'www.pupilfirst.com'
+        host: school.present? ? school.domains.primary.fqdn : 'www.pupilfirst.com'
       }
     )
   end

@@ -11,7 +11,7 @@ describe TimelineEvents::AfterFounderSubmitJob do
 
   before do
     # Create domain for school.
-    create :domain, school: faculty.school
+    create :domain, :primary, school: faculty.school
   end
 
   describe '#perform' do

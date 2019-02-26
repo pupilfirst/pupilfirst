@@ -35,7 +35,7 @@ feature 'Coach Dashboard' do
     timeline_event_4.founders << startup_2.founders.second
 
     # Create a domain for school.
-    create :domain, school: school
+    create :domain, :primary, school: school
   end
 
   scenario 'coach visits dashboard', js: true do

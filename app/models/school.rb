@@ -15,6 +15,13 @@ class School < ApplicationRecord
             gravity: "center",
             resize: '200x200>'
           })
+      when :thumb
+        logo.variant(combine_options:
+          {
+            auto_orient: true,
+            gravity: "center",
+            resize: '100x100>'
+          })
       else
         logo
     end

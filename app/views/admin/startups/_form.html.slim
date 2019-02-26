@@ -4,7 +4,6 @@
     = f.input :product_name, required: true
     = f.input :level, include_blank: false, required: true, collection: Level.where('number > ?',0)
     = f.input :legal_registered_name
-    = f.input :logo
     = f.input :founders, collection: Hash[@startup.possible_founders.map{ |b| [b.to_s,b.id] }], input_html: { style: "width: 400px;" }
     = f.input :slug
     = f.input :tag_list,

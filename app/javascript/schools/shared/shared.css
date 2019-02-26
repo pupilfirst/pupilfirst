@@ -13,23 +13,20 @@ body {
     width: 304px;
 }
 
-
-
 .global-sidebar__school-logo-container {
-    height: 3.5rem;
+    max-height: 3.5rem;
 }
 
 .global-sidebar__school-search__icon-box {
     width: 3.5rem;
     height: 3.5rem;
 }
-
 .global-sidebar__primary-nav {
-    /* width: 64px; */
+    @apply .w-full;
 }
 
-.global-sidebar__secondary-nav {
-    width: 240px;
+.global-sidebar__primary-nav--shrinked {
+    width: 64px;
 }
 
 .blanket {

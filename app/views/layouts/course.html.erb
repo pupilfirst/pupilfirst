@@ -1,18 +1,34 @@
+<% content_for(:head) do %>
+  <%= stylesheet_pack_tag 'schools/shared/shared', media: 'all', 'data-turbolinks-track': 'reload' %>
+<% end %>
 <% content_for(:nav) do %>
-  <div class="flex h-screen">
-    <div class="flex">
-      <div class="bg-grey-darker global-sidebar__primary-nav text-purple-lighter flex-none p-4 hidden md:block">
-        <li class="border-b-2 mb-2 pb-2"><%= link_to('Overview', school_path) %></li>
-        <li class="border-b-2 mb-2 pb-2"><%= link_to('Courses', '#') %></li>
+  <div class="flex global-sidebar">
+    <div class="bg-grey-darker global-sidebar__primary-nav global-sidebar__primary-nav--shrinked text-purple-lighter flex-none hidden md:block">
+    <div class="global-sidebar__header border-r p-4 bg-white flex pb-3">
+      <div class="global-sidebar__school-logo-container flex items-center bg-white rounded">
+        <h3>L</h3>
       </div>
+    </div>
+      <ul class="list-reset">
+        <li>
+          <%= link_to school_path, class:'flex text-white p-4 hover:bg-grey-darkest font-semibold no-underline items-center justify-center' do%>
+            <i class="material-icons md-48">vertical_split</i>
+          <% end %>
+        </li>
+        <li>
+          <%= link_to "#", class:'flex text-white p-4 hover:bg-grey-darkest font-semibold no-underline items-center justify-center' do%>
+            <i class="material-icons md-48">description</i>
+          <% end %>
+        </li>
+      </ul>
+    </div>
 
-      <div class="bg-grey-lighter global-sidebar__secondary-nav text-purple-lighter flex-none w-64 pb-6 hidden md:block">
-        <ul>
-          <li><%= link_to('Students', school_course_students_path(@course)) %></li>
-          <li><%= link_to('Coaches', school_course_coaches_path(@course)) %></li>
-          <li><%= link_to('Curriculum', school_course_curriculum_path(@course)) %></li>
-        </ul>
-      </div>
+    <div class="bg-grey-light global-sidebar__secondary-nav w-full text-purple-lighter pb-6 hidden md:block">
+      <ul class="list-reset p-4">
+        <li><%= link_to 'Students', school_course_students_path(@course), class:'flex text-indigo-darker py-3 px-4 hover:bg-grey-lighter font-semibold rounded no-underline items-center' %></li>
+        <li><%= link_to 'Coaches', school_course_coaches_path(@course), class:'flex text-indigo-darker py-3 px-4 hover:bg-grey-lighter font-semibold rounded no-underline items-center' %></li>
+        <li><%= link_to 'Curriculum', school_course_curriculum_path(@course), class:'flex text-indigo-darker py-3 px-4 hover:bg-grey-lighter font-semibold rounded no-underline items-center' %></li>
+      </ul>
     </div>
   </div>
 <% end %>

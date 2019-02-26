@@ -59,7 +59,8 @@ let updateDescription = (send, description) => {
   send(UpdateDescription(description, hasError));
 };
 let updateYoutubeVideoId = (send, youtubeVideoId) => {
-  let hasError = youtubeVideoId |> String.length < 2;
+  let lengthOfInput = youtubeVideoId |> String.length;
+  let hasError = lengthOfInput == 0 ? false : lengthOfInput < 5;
   send(UpdateYoutubeVideoId(youtubeVideoId, hasError));
 };
 let updateLinkToComplete = (send, link) => {
@@ -524,13 +525,13 @@ let make =
                 <label
                   className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
                   htmlFor="title">
-                  {"Embed Video" |> str}
+                  {"Youtube Video Id " |> str}
                 </label>
                 <input
                   className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                   id="title"
                   type_="text"
-                  placeholder="Paste video embed code here"
+                  placeholder="Example 58CPRi5kRe8"
                   value={state.youtubeVideoId}
                   onChange={
                     event =>

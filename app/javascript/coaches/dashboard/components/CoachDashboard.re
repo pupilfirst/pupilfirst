@@ -1,5 +1,7 @@
 [%bs.raw {|require("./CoachDashboard.scss")|}];
 
+open CoachDashboard__Types;
+
 type props = {
   founders: list(Founder.t),
   teams: list(Team.t),
@@ -47,35 +49,21 @@ let make =
       _children,
     ) => {
   ...component,
-  initialState: () => {
-    selectedFounder: None,
-    timelineEvents,
-    hasMorePendingTEs,
-    hasMoreCompletedTEs,
-  },
+  initialState: () => {selectedFounder: None, timelineEvents, hasMorePendingTEs, hasMoreCompletedTEs},
   reducer: (action, state) =>
     switch (action) {
-    | SelectFounder(founder) =>
-      ReasonReact.Update({...state, selectedFounder: Some(founder)})
+    | SelectFounder(founder) => ReasonReact.Update({...state, selectedFounder: Some(founder)})
     | ClearFounder => ReasonReact.Update({...state, selectedFounder: None})
     | ReplaceTE(newTE) =>
       ReasonReact.Update({
         ...state,
         timelineEvents:
           state.timelineEvents
-          |> List.map(oldTE =>
-               oldTE |> TimelineEvent.id == (newTE |> TimelineEvent.id) ?
-                 newTE : oldTE
-             ),
+          |> List.map(oldTE => oldTE |> TimelineEvent.id == (newTE |> TimelineEvent.id) ? newTE : oldTE),
       })
     | AppendTEs(newTEs, hasMorePendingTEs, hasMoreCompletedTEs) =>
       let timelineEvents = newTEs |> List.append(state.timelineEvents);
-      ReasonReact.Update({
-        ...state,
-        timelineEvents,
-        hasMorePendingTEs,
-        hasMoreCompletedTEs,
-      });
+      ReasonReact.Update({...state, timelineEvents, hasMorePendingTEs, hasMoreCompletedTEs});
     },
   render: ({state, send}) => {
     let selectFounderCB = founder => send(SelectFounder(founder));
@@ -86,13 +74,7 @@ let make =
     <div className="coach-dashboard__container container">
       <div className="row">
         <div className="col-md-3">
-          <SidePanel
-            teams
-            founders
-            selectedFounder={state.selectedFounder}
-            selectFounderCB
-            clearFounderCB
-          />
+          <SidePanel teams founders selectedFounder={state.selectedFounder} selectFounderCB clearFounderCB />
         </div>
         <div className="col-md-9">
           <TimelineEventsPanel
@@ -121,8 +103,7 @@ let decode = json =>
   Json.Decode.{
     founders: json |> field("founders", list(Founder.decode)),
     teams: json |> field("teams", list(Team.decode)),
-    timelineEvents:
-      json |> field("timelineEvents", list(TimelineEvent.decode)),
+    timelineEvents: json |> field("timelineEvents", list(TimelineEvent.decode)),
     hasMorePendingTEs: json |> field("hasMorePendingTEs", bool),
     hasMoreCompletedTEs: json |> field("hasMoreCompletedTEs", bool),
     authenticityToken: json |> field("authenticityToken", string),

@@ -47,7 +47,7 @@ let updateStudent = (student, state, authenticityToken, responseCB) => {
   Js.Dict.set(payload, "authenticity_token", authenticityToken |> Js.Json.string);
   let updatedStudent = student |> Student.updateInfo(state.name, state.teamName);
 
-  Js.Dict.set(payload, "founder", updatedStudent |> Json.Encode.(Student.encode));
+  Js.Dict.set(payload, "founder", updatedStudent |> Student.encode);
   Js.Dict.set(payload, "tags", state.tagsToApply |> Json.Encode.(list(string)));
 
   let url = "/school/students/" ++ (student |> Student.id |> string_of_int);

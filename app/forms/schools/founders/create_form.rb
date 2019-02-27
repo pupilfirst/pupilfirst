@@ -6,11 +6,12 @@ module Schools
         property :name, validates: { presence: true, length: { maximum: 250 } }
         property :email, validates: { presence: true, length: { maximum: 250 }, format: { with: EmailValidator::REGULAR_EXPRESSION, message: "doesn't look like an email" } }
       end
+      property :tags
 
       validate :student_does_not_exist
 
       def save
-        ::Courses::AddStudentsService.new(course).add(students)
+        ::Courses::AddStudentsService.new(course).add(students, tags)
       end
 
       private

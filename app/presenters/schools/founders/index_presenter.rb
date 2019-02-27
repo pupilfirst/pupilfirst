@@ -33,7 +33,8 @@ module Schools
             avatarUrl: student.avatar_url || student.initials_avatar,
             teamId: student.startup.id,
             teamName: student.startup.product_name,
-            email: student.user.email
+            email: student.user.email,
+            tags: student.tag_list & founder_tags
           }
         end
       end
@@ -60,7 +61,7 @@ module Schools
       end
 
       def founder_tags
-        @course.school.founder_tag_list
+        @founder_tags ||= @course.school.founder_tag_list
       end
     end
   end

@@ -5,6 +5,7 @@ type t = {
   teamId: int,
   teamName: string,
   email: string,
+  tags: list(string),
 };
 
 let name = t => t.name;
@@ -19,6 +20,8 @@ let teamName = t => t.teamName;
 
 let email = t => t.email;
 
+let tags = t => t.tags;
+
 let updateInfo = (name, teamName, student) => {...student, name, teamName};
 
 let decode = json =>
@@ -29,6 +32,7 @@ let decode = json =>
     teamId: json |> field("teamId", int),
     teamName: json |> field("teamName", string),
     email: json |> field("email", string),
+    tags: json |> field("tags", list(string)),
   };
 
 let encode = t =>

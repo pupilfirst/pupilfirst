@@ -14,6 +14,8 @@ let teamName: t => string;
 
 let email: t => string;
 
+let tags: t => list(string);
+
 let updateInfo: (string, string, t) => t;
 
 let encode: t => Js.Json.t;

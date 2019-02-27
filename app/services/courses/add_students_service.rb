@@ -4,7 +4,7 @@ module Courses
       @course = course
     end
 
-    def add(students_list)
+    def add(students_list, tags)
       first_level = @course.levels.find_by(number: 1)
 
       Course.transaction do
@@ -18,8 +18,13 @@ module Courses
             level: first_level
           )
 
-          Founder.create!(user: user, name: student.name, startup: startup)
+          founder = Founder.create!(user: user, name: student.name, startup: startup)
+          founder.tag_list << tags
+          founder.save!
         end
+        school = @course.school
+        school.founder_tag_list << tags
+        school.save!
       end
     end
   end

@@ -26,10 +26,11 @@ let handleResponseCB = (submitCB, json) => {
   Notification.success("Success", "Student(s) created succesffully");
 };
 
-let saveStudents = (students, courseId, authenticityToken, responseCB) => {
+let saveStudents = (state, courseId, authenticityToken, responseCB) => {
   let payload = Js.Dict.empty();
   Js.Dict.set(payload, "authenticity_token", authenticityToken |> Js.Json.string);
-  Js.Dict.set(payload, "students", students |> Json.Encode.(list(StudentInfo.encode)));
+  Js.Dict.set(payload, "students", state.studentsToAdd |> Json.Encode.(list(StudentInfo.encode)));
+  Js.Dict.set(payload, "tags", state.tagsToApply |> Json.Encode.(list(string)));
 
   let url = "/school/courses/" ++ (courseId |> string_of_int) ++ "/students";
   Api.create(url, payload, responseCB);
@@ -37,7 +38,7 @@ let saveStudents = (students, courseId, authenticityToken, responseCB) => {
 
 let make = (~courseId, ~closeFormCB, ~submitFormCB, ~founderTags, ~authenticityToken, _children) => {
   ...component,
-  initialState: () => {studentsToAdd: [StudentInfo.create("Abdul Jaleel", "ajaleelp@gmail.com")], tagsToApply: []},
+  initialState: () => {studentsToAdd: [], tagsToApply: []},
   reducer: (action, state) => {
     switch (action) {
     | AddStudentInfo(studentInfo) =>
@@ -59,7 +60,7 @@ let make = (~courseId, ~closeFormCB, ~submitFormCB, ~founderTags, ~authenticityT
           <button
             onClick={_e => closeFormCB()}
             className="flex items-center justify-center bg-white text-grey-darker font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
-            <i className="material-icons">{"close" |> str }</i>
+            <i className="material-icons"> {"close" |> str} </i>
           </button>
         </div>
         <div className="drawer-right-form w-full">
@@ -122,12 +123,7 @@ let make = (~courseId, ~closeFormCB, ~submitFormCB, ~founderTags, ~authenticityT
                      <div className="flex mt-4">
                        <button
                          onClick={_e =>
-                           saveStudents(
-                             state.studentsToAdd,
-                             courseId,
-                             authenticityToken,
-                             handleResponseCB(submitFormCB),
-                           )
+                           saveStudents(state, courseId, authenticityToken, handleResponseCB(submitFormCB))
                          }
                          className={
                            "w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3"

@@ -274,7 +274,7 @@ let make = (~teams, ~courseId, ~authenticityToken, ~levels, ~founderTags, _child
                                   className="flex flex-1 items-center py-4 pr-4"
                                   onClick={_e => send(UpdateFormVisible(UpdateForm(student)))}>
                                   <img className="w-10 h-10 rounded-full mr-4" src={student |> Student.avatarUrl} />
-                                  <div className="text-sm">
+                                  <div className="text-sm flex flex-col">
                                     <p
                                       className={
                                         "text-black font-semibold inline-block "
@@ -290,6 +290,18 @@ let make = (~teams, ~courseId, ~authenticityToken, ~levels, ~founderTags, _child
                                       }>
                                       {student |> Student.name |> str}
                                     </p>
+                                    <div className="flex mt-2">
+                                      {student
+                                       |> Student.tags
+                                       |> List.map(tag =>
+                                            <div
+                                              className="border border-indigo rounded mr-1 py-1 px-2 text-xs text-indigo">
+                                              {tag |> str}
+                                            </div>
+                                          )
+                                       |> Array.of_list
+                                       |> ReasonReact.array}
+                                    </div>
                                   </div>
                                 </div>
                               </div>

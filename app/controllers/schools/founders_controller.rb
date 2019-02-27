@@ -54,7 +54,7 @@ module Schools
     private
 
     def create_params
-      params.permit(:course_id, students: %i[name email])
+      params.permit(:course_id, tags: [], students: %i[name email])
     end
 
     def founders

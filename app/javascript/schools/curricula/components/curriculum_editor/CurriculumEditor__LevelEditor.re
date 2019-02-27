@@ -91,9 +91,8 @@ let make =
   render: ({state, send}) => {
     let handleResponseCB = json => {
       let id = json |> Json.Decode.(field("id", int));
-      let levelNumber = json |> Json.Decode.(field("levelNumber", int));
-      let newLevel =
-        Level.create(id, state.name, levelNumber, state.unlockOn);
+      let number = json |> Json.Decode.(field("number", int));
+      let newLevel = Level.create(id, state.name, number, state.unlockOn);
       switch (level) {
       | Some(_) =>
         Notification.success("Success", "Level updated succesffully")

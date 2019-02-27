@@ -156,7 +156,13 @@ let make =
                    <option
                      key={Level.id(level) |> string_of_int}
                      value={level |> Level.name}>
-                     {level |> Level.name |> str}
+                     {
+                       "Level "
+                       ++ (level |> Level.number |> string_of_int)
+                       ++ ": "
+                       ++ (level |> Level.name)
+                       |> str
+                     }
                    </option>
                  )
               |> Array.of_list

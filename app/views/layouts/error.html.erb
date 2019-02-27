@@ -1,0 +1,53 @@
+<% presenter = ErrorPresenter.new(self) %>
+
+<!doctype html>
+<html lang='en'>
+<head>
+  <!-- Begin critial tags. -->
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+  <!--
+  The above 3 meta tags *must* come first in the head; any other head
+  content must come *after* these tags.
+  -->
+
+  <title><%= presenter.page_title %></title>
+
+  <!-- Local Styles -->
+  <!-- <%= stylesheet_link_tag 'application' %> -->
+
+  <!-- Scripts -->
+  <!-- <%= javascript_include_tag 'application', nonce: true %> -->
+
+  <!-- Fonts -->
+  <!-- <link type='text/css' rel='stylesheet' href='//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,400italic,300italic'/> -->
+
+  <!-- <%= yield :head %> -->
+
+  <link rel="icon" href="<%= image_url('layouts/shared/favicon.png') %>"/>
+</head>
+
+<body>
+<%= yield %>
+
+<footer>
+  <% if presenter.contact_email.present? %>
+    <div>
+      <%= mail_to presenter.contact_email, 'Contact Support' %>
+    </div>
+  <% end %>
+
+  <div>
+    <%= link_to('/') do %>
+      <% if presenter.school_has_icon? %>
+        <%= image_tag(presenter.school_icon_url) %>
+      <% else %>
+        <%= presenter.site_name %>
+      <% end %>
+    <% end %>
+  </div>
+</footer>
+</body>
+</html>

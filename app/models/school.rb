@@ -5,6 +5,7 @@ class School < ApplicationRecord
   has_many :school_strings, dependent: :destroy
 
   has_one_attached :logo
+  has_one_attached :icon
 
   def logo_variant(variant)
     case variant
@@ -24,6 +25,20 @@ class School < ApplicationRecord
           })
       else
         logo
+    end
+  end
+
+  def icon_variant(variant)
+    case variant
+      when :thumb
+        icon.variant(combine_options:
+          {
+            auto_orient: true,
+            gravity: "center",
+            resize: '100x100>'
+          })
+      else
+        icon
     end
   end
 end

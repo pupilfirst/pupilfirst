@@ -102,6 +102,9 @@ RSpec.configure do |config|
 
   # Allow using broken flag to exclude tests
   config.filter_run_excluding broken: true
+
+  # Remember failures. Run only failed tests with the --only-failures flag.
+  config.example_status_persistence_file_path = "examples.txt"
 end
 
 Capybara.register_driver :chrome do |app|

@@ -22,7 +22,7 @@ let make =
       |> Target.sort;
     <div className="target-group__box relative mt-12 rounded-lg">
       <div
-        className="target-group__header bg-white p-4 border border-b-0 text-center rounded-lg rounded-b-none"
+        className="target-group__header hover:bg-grey-lighter bg-white p-4 border border-b-0 text-center rounded-lg rounded-b-none"
         onClick={_event => showTargetGroupEditorCB(Some(targetGroup))}>
         <div className="target-group__title">
           <h2> {targetGroup |> TargetGroup.name |> str} </h2>
@@ -66,7 +66,7 @@ let make =
           />
         </svg>
         <h5 className="font-semibold ml-2">
-          {"Creat another target" |> str}
+          {"Create another target" |> str}
         </h5>
       </div>
     </div>;

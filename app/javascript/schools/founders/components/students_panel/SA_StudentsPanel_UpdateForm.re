@@ -67,7 +67,14 @@ let make = (~student, ~closeFormCB, ~submitFormCB, ~authenticityToken, _children
   },
   render: ({state, send}) =>
     <div className="blanket">
-      <div className="drawer-right">
+      <div className="drawer-right relative">
+        <div className="drawer-right__close absolute">
+          <button
+            onClick={_e => closeFormCB()}
+            className="flex items-center justify-center bg-grey-lighter text-grey-darker font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
+            <i className="material-icons">{"close" |> str }</i>
+          </button>
+        </div>
         <div className="drawer-right-form w-full">
           <div className="w-full">
             <div className="mx-auto bg-white">
@@ -106,13 +113,6 @@ let make = (~student, ~closeFormCB, ~submitFormCB, ~authenticityToken, _children
                 {state.hasTeamNameError ?
                    <div className="drawer-right-form__error-msg"> {"not a valid team name" |> str} </div> :
                    ReasonReact.null}
-                <div className="flex">
-                  <button
-                    onClick={_e => closeFormCB()}
-                    className="bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
-                    {"Close" |> str}
-                  </button>
-                </div>
                 <div className="flex">
                   <button
                     onClick={_e => updateStudent(student, state, authenticityToken, handleResponseCB(submitFormCB))}

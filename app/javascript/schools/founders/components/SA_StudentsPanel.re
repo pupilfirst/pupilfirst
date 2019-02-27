@@ -201,7 +201,7 @@ let make = (~teams, ~courseId, ~authenticityToken, ~levels, ~studentTags, _child
               />
             </div>
             <div className="flex">
-              {state.selectedStudents |> List.length > 0 ?
+              {false ?
                  <button
                    className="bg-grey-lighter hover:bg-grey-light hover:text-grey-darker focus:outline-none text-grey-dark text-sm font-semibold py-2 px-4 rounded inline-flex items-center mx-2">
                    {"Add tags" |> str}

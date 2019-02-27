@@ -4,7 +4,7 @@ module Targets
       @target = target
     end
 
-    # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
+    # rubocop:disable Metrics/AbcSize
     def create_or_update(target_params)
       Target.transaction do
         @target.role = target_params[:role]
@@ -27,13 +27,13 @@ module Targets
 
         recreate_quiz(target_params[:quiz]) if target_params[:quiz].present?
 
-        archive_target(target_params[:archived]) if target_params[:archived].present?
+        archive_target(target_params[:archived])
 
         @target
       end
     end
 
-    # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
+    # rubocop:enable Metrics/AbcSize
 
     private
 
@@ -62,7 +62,11 @@ module Targets
     end
 
     def archive_target(archived)
-      archived ? ::Targets::ArchivalService.new(@target).archive : ::Targets::ArchivalService.new(@target).unarchive
+      if archived
+        ::Targets::ArchivalService.new(@target).archive
+      else
+        ::Targets::ArchivalService.new(@target).unarchive
+      end
     end
 
     def sort_index

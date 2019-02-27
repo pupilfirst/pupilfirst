@@ -29,7 +29,8 @@ type action =
   | UpdateEditorAction(editorAction)
   | UpdateLevels(Level.t)
   | UpdateTargetGroups(TargetGroup.t)
-  | UpdateTargets(Target.t)
+  | UpdateTarget(Target.t)
+  | UpdateTargets(list(Target.t))
   | ToggleShowArchived;
 
 let str = ReasonReact.string;
@@ -77,7 +78,7 @@ let make =
         targetGroups: newtargetGroups,
         editorAction: Hidden,
       });
-    | UpdateTargets(target) =>
+    | UpdateTarget(target) =>
       let newtargets = target |> Target.updateList(state.targets);
       ReasonReact.Update({
         ...state,
@@ -86,6 +87,7 @@ let make =
       });
     | ToggleShowArchived =>
       ReasonReact.Update({...state, showArchived: !state.showArchived})
+    | UpdateTargets(targets) => ReasonReact.Update({...state, targets})
     },
   render: ({state, send}) => {
     let hideEditorActionCB = () => send(UpdateEditorAction(Hidden));
@@ -98,15 +100,48 @@ let make =
            targetGroup |> TargetGroup.levelId == currentLevelId
          )
       |> TargetGroup.sort;
+    let targetGroupsToDisplay =
+      state.showArchived ?
+        targetGroupsInLevel :
+        targetGroupsInLevel |> List.filter(tg => !(tg |> TargetGroup.archived));
     let targetGroupIdsInLevel =
-      targetGroupsInLevel |> List.map(t => t |> TargetGroup.id);
+      targetGroupsInLevel
+      |> List.filter(tg => !(tg |> TargetGroup.archived))
+      |> List.map(tg => tg |> TargetGroup.id);
     let showTargetEditorCB = (targetGroupId, target) =>
       send(UpdateEditorAction(ShowTargetEditor(targetGroupId, target)));
     let showTargetGroupEditorCB = targetGroup =>
       send(UpdateEditorAction(ShowTargetGroupEditor(targetGroup)));
-    let updateTargetCB = target => send(UpdateTargets(target));
-    let updateTargetGroupsCB = targetGroup =>
+
+    let updateTargetCB = target => {
+      let targetGroup =
+        state.targetGroups |> TargetGroup.find(target |> Target.targetGroupId);
+
+      let newTargetGroup =
+        target |> Target.archived ?
+          targetGroup : targetGroup |> TargetGroup.archive(false);
+
+      send(UpdateTarget(target));
+      send(UpdateTargetGroups(newTargetGroup));
+    };
+
+    let updateTargetGroupsCB = targetGroup => {
+      targetGroup |> TargetGroup.archived ?
+        {
+          let targetIdsInTargerGroup =
+            state.targets
+            |> Target.targetIdsInTargetGroup(targetGroup |> TargetGroup.id);
+          let newTargets =
+            state.targets
+            |> List.map(target =>
+                 targetIdsInTargerGroup |> List.mem(target |> Target.id) ?
+                   Target.archive(target, true) : target
+               );
+          send(UpdateTargets(newTargets));
+        } :
+        ();
       send(UpdateTargetGroups(targetGroup));
+    };
     <div className="flex-1 flex flex-col bg-white overflow-hidden">
       {
         switch (state.editorAction) {
@@ -159,18 +194,18 @@ let make =
                 state.levels
                 |> Level.sort
                 |> List.map(level =>
-                    <option
-                      key={Level.id(level) |> string_of_int}
-                      value={level |> Level.name}>
-                      {
-                        "Level "
-                        ++ (level |> Level.number |> string_of_int)
-                        ++ ": "
-                        ++ (level |> Level.name)
-                        |> str
-                      }
-                    </option>
-                  )
+                     <option
+                       key={Level.id(level) |> string_of_int}
+                       value={level |> Level.name}>
+                       {
+                         "Level "
+                         ++ (level |> Level.number |> string_of_int)
+                         ++ ": "
+                         ++ (level |> Level.name)
+                         |> str
+                       }
+                     </option>
+                   )
                 |> Array.of_list
                 |> ReasonReact.array
               }
@@ -197,12 +232,14 @@ let make =
                   ),
                 )
             }>
-            <i className="material-icons">{"edit" |> str }</i>
+            <i className="material-icons"> {"edit" |> str} </i>
           </button>
           <button
             className="text-indigo-dark hover:bg-indigo-dark font-semibold text-sm hover:text-white focus:outline-none border border-dashed border-blue hover:border-transparent flex items-center px-2 py-1 ml-4 rounded-lg cursor-pointer"
             onClick={_ => send(UpdateEditorAction(ShowLevelEditor(None)))}>
-            <i className="material-icons mr-2">{"add_circle_outline" |> str}</i>
+            <i className="material-icons mr-2">
+              {"add_circle_outline" |> str}
+            </i>
             {"Create New Level" |> str}
           </button>
         </div>
@@ -216,7 +253,7 @@ let make =
         <div
           className="target-group__container max-w-lg mt-5 mx-auto relative">
           {
-            targetGroupsInLevel
+            targetGroupsToDisplay
             |> List.map(targetGroup =>
                  <CurriculumEditor__TargetGroupShow
                    key={targetGroup |> TargetGroup.id |> string_of_int}

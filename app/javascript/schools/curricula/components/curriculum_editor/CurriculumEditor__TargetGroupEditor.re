@@ -8,12 +8,14 @@ type state = {
   milestone: bool,
   hasNameError: bool,
   saveDisabled: bool,
+  isArchived: bool,
 };
 
 type action =
   | UpdateName(string, bool)
   | UpdateDescription(string)
-  | UpdateMilestone(bool);
+  | UpdateMilestone(bool)
+  | UpdateIsArchived(bool);
 
 let component =
   ReasonReact.reducerComponent("CurriculumEditor__TargetGroupEditor");
@@ -33,14 +35,15 @@ let setPayload = (authenticityToken, state) => {
     "authenticity_token",
     authenticityToken |> Js.Json.string,
   );
+  Js.Dict.set(payload, "archived", state.isArchived |> Js.Json.boolean);
   Js.Dict.set(payload, "name", state.name |> Js.Json.string);
   Js.Dict.set(payload, "description", state.description |> Js.Json.string);
   Js.Dict.set(payload, "milestone", milestone |> Js.Json.string);
   payload;
 };
 
-let milestoneButtonClasses = value =>
-  value ?
+let booleanButtonClasses = bool =>
+  bool ?
     "w-1/2 bg-grey hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none" :
     "w-1/2 bg-white border-l hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none";
 
@@ -66,6 +69,7 @@ let make =
         milestone: targetGroup |> TargetGroup.milestone,
         hasNameError: false,
         saveDisabled: true,
+        isArchived: targetGroup |> TargetGroup.archived,
       }
     | None => {
         name: "",
@@ -73,6 +77,7 @@ let make =
         milestone: true,
         hasNameError: false,
         saveDisabled: true,
+        isArchived: false,
       }
     },
   reducer: (action, state) =>
@@ -83,6 +88,8 @@ let make =
       ReasonReact.Update({...state, description, saveDisabled: false})
     | UpdateMilestone(milestone) =>
       ReasonReact.Update({...state, milestone, saveDisabled: false})
+    | UpdateIsArchived(isArchived) =>
+      ReasonReact.Update({...state, isArchived, saveDisabled: false})
     },
   render: ({state, send}) => {
     let handleResponseCB = json => {
@@ -96,6 +103,7 @@ let make =
           state.milestone,
           currentLevelId,
           sortIndex,
+          state.isArchived,
         );
       switch (targetGroup) {
       | Some(_) =>
@@ -125,7 +133,7 @@ let make =
           <button
             onClick={_ => hideEditorActionCB()}
             className="flex items-center justify-center bg-white text-grey-darker font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
-            <i className="material-icons">{"close" |> str }</i>
+            <i className="material-icons"> {"close" |> str} </i>
           </button>
         </div>
         <div className="drawer-right-form w-full">
@@ -195,7 +203,7 @@ let make =
                         }
                       }
                       className={
-                        milestoneButtonClasses(state.milestone == true)
+                        booleanButtonClasses(state.milestone == true)
                       }>
                       {"Yes" |> str}
                     </button>
@@ -207,12 +215,51 @@ let make =
                         }
                       }
                       className={
-                        milestoneButtonClasses(state.milestone == false)
+                        booleanButtonClasses(state.milestone == false)
                       }>
                       {"No" |> str}
                     </button>
                   </div>
                 </div>
+                {
+                  switch (targetGroup) {
+                  | Some(_) =>
+                    <div className="flex items-center mb-6">
+                      <label
+                        className="block tracking-wide text-grey-darker text-xs font-semibold mr-6">
+                        {"Is this target group archived" |> str}
+                      </label>
+                      <div
+                        className="inline-flex w-64 rounded-lg overflow-hidden border">
+                        <button
+                          onClick=(
+                            _event => {
+                              ReactEvent.Mouse.preventDefault(_event);
+                              send(UpdateIsArchived(true));
+                            }
+                          )
+                          className={
+                            booleanButtonClasses(state.isArchived == true)
+                          }>
+                          {"Yes" |> str}
+                        </button>
+                        <button
+                          onClick=(
+                            _event => {
+                              ReactEvent.Mouse.preventDefault(_event);
+                              send(UpdateIsArchived(false));
+                            }
+                          )
+                          className={
+                            booleanButtonClasses(state.isArchived == false)
+                          }>
+                          {"No" |> str}
+                        </button>
+                      </div>
+                    </div>
+                  | None => ReasonReact.null
+                  }
+                }
                 <div className="flex">
                   {
                     switch (targetGroup) {

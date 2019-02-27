@@ -8,11 +8,11 @@ module Schools
       end
 
       def react_props
-        { teams: teams, courseId: @course.id, levels: levels, founderTags: founder_tags, authenticityToken: view.form_authenticity_token }
+        { teams: teams, courseId: @course.id, levels: levels, studentTags: founder_tags, authenticityToken: view.form_authenticity_token }
       end
 
       def teams
-        @course.startups.includes(:level, :faculty, founders: :user).order(:id).map do |team|
+        @course.startups.includes(:level, :faculty, founders: %i[user taggings]).order(:id).map do |team|
           {
             id: team.id,
             name: team.product_name,

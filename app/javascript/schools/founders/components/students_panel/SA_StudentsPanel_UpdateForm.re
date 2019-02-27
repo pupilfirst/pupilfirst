@@ -6,12 +6,15 @@ type state = {
   teamName: string,
   hasNameError: bool,
   hasTeamNameError: bool,
+  tagsToApply: list(string),
 };
 
 type action =
   | UpdateName(string)
   | UpdateTeamName(string)
-  | UpdateErrors(bool, bool);
+  | UpdateErrors(bool, bool)
+  | AddTag(string)
+  | RemoveTag(string);
 
 let component = ReasonReact.reducerComponent("SA_StudentsPanel_UpdateForm");
 
@@ -45,24 +48,28 @@ let updateStudent = (student, state, authenticityToken, responseCB) => {
   let updatedStudent = student |> Student.updateInfo(state.name, state.teamName);
 
   Js.Dict.set(payload, "founder", updatedStudent |> Json.Encode.(Student.encode));
+  Js.Dict.set(payload, "tags", state.tagsToApply |> Json.Encode.(list(string)));
 
   let url = "/school/students/" ++ (student |> Student.id |> string_of_int);
   Api.update(url, payload, responseCB);
 };
 
-let make = (~student, ~closeFormCB, ~submitFormCB, ~authenticityToken, _children) => {
+let make = (~student, ~studentTags, ~closeFormCB, ~submitFormCB, ~authenticityToken, _children) => {
   ...component,
   initialState: () => {
     name: student |> Student.name,
     teamName: student |> Student.teamName,
     hasNameError: false,
     hasTeamNameError: false,
+    tagsToApply: student |> Student.tags,
   },
   reducer: (action, state) => {
     switch (action) {
     | UpdateName(name) => ReasonReact.Update({...state, name})
     | UpdateTeamName(teamName) => ReasonReact.Update({...state, teamName})
     | UpdateErrors(hasNameError, hasTeamNameError) => ReasonReact.Update({...state, hasNameError, hasTeamNameError})
+    | AddTag(tag) => ReasonReact.Update({...state, tagsToApply: [tag, ...state.tagsToApply]})
+    | RemoveTag(tag) => ReasonReact.Update({...state, tagsToApply: state.tagsToApply |> List.filter(t => t !== tag)})
     };
   },
   render: ({state, send}) =>
@@ -72,7 +79,7 @@ let make = (~student, ~closeFormCB, ~submitFormCB, ~authenticityToken, _children
           <button
             onClick={_e => closeFormCB()}
             className="flex items-center justify-center bg-grey-lighter text-grey-darker font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
-            <i className="material-icons">{"close" |> str }</i>
+            <i className="material-icons"> {"close" |> str} </i>
           </button>
         </div>
         <div className="drawer-right-form w-full">
@@ -113,6 +120,17 @@ let make = (~student, ~closeFormCB, ~submitFormCB, ~authenticityToken, _children
                 {state.hasTeamNameError ?
                    <div className="drawer-right-form__error-msg"> {"not a valid team name" |> str} </div> :
                    ReasonReact.null}
+                <div className="mt-6">
+                  <div className="border-b border-grey-light pb-2 mb-2">
+                    <span className="mr-1"> {"Tags applied:" |> str} </span>
+                  </div>
+                  {<SA_StudentsPanel_SearchableTagList
+                     unselectedTags={studentTags |> List.filter(tag => !(state.tagsToApply |> List.mem(tag)))}
+                     selectedTags={state.tagsToApply}
+                     addTagCB={tag => send(AddTag(tag))}
+                     removeTagCB={tag => send(RemoveTag(tag))}
+                   />}
+                </div>
                 <div className="flex">
                   <button
                     onClick={_e => updateStudent(student, state, authenticityToken, handleResponseCB(submitFormCB))}

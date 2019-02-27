@@ -42,7 +42,7 @@ module Schools
       @course = student.course
 
       form = Schools::Founders::EditForm.new(student)
-      if form.validate(params[:founder])
+      if form.validate(params[:founder].merge(tags: params[:tags]))
         form.save
         presenter = Schools::Founders::IndexPresenter.new(view_context, @course)
         render json: { teams: presenter.teams, error: nil }

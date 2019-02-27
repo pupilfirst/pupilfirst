@@ -36,7 +36,7 @@ let saveStudents = (state, courseId, authenticityToken, responseCB) => {
   Api.create(url, payload, responseCB);
 };
 
-let make = (~courseId, ~closeFormCB, ~submitFormCB, ~founderTags, ~authenticityToken, _children) => {
+let make = (~courseId, ~closeFormCB, ~submitFormCB, ~studentTags, ~authenticityToken, _children) => {
   ...component,
   initialState: () => {studentsToAdd: [], tagsToApply: []},
   reducer: (action, state) => {
@@ -107,18 +107,16 @@ let make = (~courseId, ~closeFormCB, ~submitFormCB, ~founderTags, ~authenticityT
                           |> ReasonReact.array
                         }}
                      </div>
-                     <div>
-                       <div className="mt-6">
-                         <div className="border-b border-grey-light pb-2 mb-2">
-                           <span className="mr-1"> {"Tags applied:" |> str} </span>
-                         </div>
-                         {<SA_StudentsPanel_SearchableTagList
-                            unselectedTags={founderTags |> List.filter(tag => !(state.tagsToApply |> List.mem(tag)))}
-                            selectedTags={state.tagsToApply}
-                            addTagCB={tag => send(AddTag(tag))}
-                            removeTagCB={tag => send(RemoveTag(tag))}
-                          />}
+                     <div className="mt-6">
+                       <div className="border-b border-grey-light pb-2 mb-2">
+                         <span className="mr-1"> {"Tags applied:" |> str} </span>
                        </div>
+                       {<SA_StudentsPanel_SearchableTagList
+                          unselectedTags={studentTags |> List.filter(tag => !(state.tagsToApply |> List.mem(tag)))}
+                          selectedTags={state.tagsToApply}
+                          addTagCB={tag => send(AddTag(tag))}
+                          removeTagCB={tag => send(RemoveTag(tag))}
+                        />}
                      </div>
                      <div className="flex mt-4">
                        <button

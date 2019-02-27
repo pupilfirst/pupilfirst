@@ -92,7 +92,7 @@ let teamUp = (students, responseCB, authenticityToken) => {
 
 let component = ReasonReact.reducerComponent("SA_StudentsPanel");
 
-let make = (~teams, ~courseId, ~authenticityToken, ~levels, ~founderTags, _children) => {
+let make = (~teams, ~courseId, ~authenticityToken, ~levels, ~studentTags, _children) => {
   ...component,
   initialState: () => {teams, selectedStudents: [], searchString: "", formVisible: None, selectedLevelNumber: None},
   reducer: (action, state) =>
@@ -122,8 +122,9 @@ let make = (~teams, ~courseId, ~authenticityToken, ~levels, ~founderTags, _child
                                     send(UpdateFormVisible(None))}
        switch (state.formVisible) {
        | None => ReasonReact.null
-       | CreateForm => <SA_StudentsPanel_CreateForm courseId closeFormCB submitFormCB founderTags authenticityToken />
-       | UpdateForm(student) => <SA_StudentsPanel_UpdateForm student closeFormCB submitFormCB authenticityToken />
+       | CreateForm => <SA_StudentsPanel_CreateForm courseId closeFormCB submitFormCB studentTags authenticityToken />
+       | UpdateForm(student) =>
+         <SA_StudentsPanel_UpdateForm student studentTags closeFormCB submitFormCB authenticityToken />
        }}
       <div>
         <div className="border-b flex px-6 py-2 items-center justify-between">
@@ -360,7 +361,7 @@ type props = {
   teams: list(Team.t),
   courseId: int,
   levels: list(Level.t),
-  founderTags: list(string),
+  studentTags: list(string),
   authenticityToken: string,
 };
 
@@ -369,7 +370,7 @@ let decode = json =>
     teams: json |> field("teams", list(Team.decode)),
     courseId: json |> field("courseId", int),
     levels: json |> field("levels", list(Level.decode)),
-    founderTags: json |> field("founderTags", list(string)),
+    studentTags: json |> field("studentTags", list(string)),
     authenticityToken: json |> field("authenticityToken", string),
   };
 
@@ -382,7 +383,7 @@ let jsComponent =
         ~teams=props.teams,
         ~courseId=props.courseId,
         ~levels=props.levels,
-        ~founderTags=props.founderTags,
+        ~studentTags=props.studentTags,
         ~authenticityToken=props.authenticityToken,
         [||],
       );

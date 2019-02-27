@@ -1,7 +1,7 @@
 ActiveAdmin.register School do
   actions :all, except: %i[new create destroy]
 
-  permit_params :logo, :icon
+  permit_params :logo_on_light_bg, :logo_on_dark_bg, :icon
 
   controller do
     include DisableIntercom
@@ -13,13 +13,23 @@ ActiveAdmin.register School do
     attributes_table do
       row :name
 
-      row :logo do
-        if school.logo.attached?
-          link_to(school.logo) do
+      row :logo_on_light_bg do
+        if school.logo_on_light_bg.attached?
+          link_to(school.logo_on_light_bg) do
             image_tag(url_for(school.logo_variant(:thumb)))
           end
         else
-          em('No logo attached')
+          em('Not attached')
+        end
+      end
+
+      row :logo_on_dark_bg do
+        if school.logo_on_dark_bg.attached?
+          link_to(school.logo_on_dark_bg) do
+            image_tag(url_for(school.logo_variant(:thumb, background: :dark)))
+          end
+        else
+          em('Not attached')
         end
       end
 
@@ -29,7 +39,7 @@ ActiveAdmin.register School do
             image_tag(url_for(school.icon_variant(:thumb)))
           end
         else
-          em('No icon attached')
+          em('Not attached')
         end
       end
 
@@ -42,7 +52,8 @@ ActiveAdmin.register School do
   form do |f|
     f.inputs 'School Details' do
       f.input :name, input_html: { disabled: true }
-      f.input :logo, as: :file, hint: f.object.logo.attached? ? "Upload another file to replace #{f.object.logo.filename}" : nil
+      f.input :logo_on_light_bg, as: :file, hint: f.object.logo_on_light_bg.attached? ? "Upload another file to replace #{f.object.logo.filename}" : nil
+      f.input :logo_on_dark_bg, as: :file, hint: f.object.logo_on_dark_bg.attached? ? "Upload another file to replace #{f.object.logo.filename}" : nil
       f.input :icon, as: :file, hint: f.object.icon.attached? ? "Upload another file to replace #{f.object.icon.filename}" : nil
     end
 

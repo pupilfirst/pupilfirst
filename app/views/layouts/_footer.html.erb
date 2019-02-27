@@ -1,0 +1,105 @@
+<% presenter = FooterPresenter.new(self) %>
+
+<footer>
+  <section class="footer-sitemap">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8">
+          <p class="footer-column__head font-bold"><%= presenter.school_name %></p>
+
+          <div class="row">
+            <div class="col-md-4">
+              <%= link_to 'About', 'https://www.sv.co/about', id: 'footer-sitemap-about-link', class: 'footer-column__link' %>
+            </div>
+
+            <div class="col-md-4">
+              <a id="footer-sitemap-blog-link" class="footer-column__link" href="http://blog.sv.co">Blog</a>
+            </div>
+
+            <div class="col-md-4">
+              <%= link_to 'Media Kit', 'https://www.sv.co/about/media-kit', id: 'footer-sitemap-mediakit-link', class: 'footer-column__link' %>
+            </div>
+
+            <div class="col-md-4">
+              <%= link_to 'Library', resources_path, id: 'footer-sitemap-resource-link', class: 'footer-column__link' %>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 mt-3 mt-md-0">
+          <div class="row">
+            <div class="col footer-column">
+              <p class="footer-column__head font-bold">CONTACT</p>
+
+              <address class="footer-column__address mb-1">
+                <p>
+                  SV.CO, #360, 6th Main Road
+                  <br/>
+                  1<sup>st</sup> Block, Koramangala, Bengaluru &mdash; 560034
+                </p>
+              </address>
+
+              <div class="footer-social-icons">
+                <a id="footer-connect-facebook-link" class="footer-social-link" href='https://www.facebook.com/svdotco' target='_blank' rel='noopener'>
+                  <i class="fa fa-facebook"></i>
+                </a>
+
+                <a id="footer-connect-twitter-link" class="footer-social-link" href='https://twitter.com/svdotco' target='_blank' rel='noopener'>
+                  <i class="fa fa-twitter"></i>
+                </a>
+
+                <a id="footer-connect-youtube-link" class="footer-social-link" href='https://www.youtube.com/c/svdotco' target='_blank' rel='noopener'>
+                  <i class="fa fa-youtube"></i>
+                </a>
+              </div>
+
+              <p>
+                Reach us at
+                <strong><%= link_to 'help@sv.co', 'mailto:help@sv.co', id: 'footer-connect-mail-link' %></strong>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="footer-bottom">
+    <div class="container">
+      <div class="row justify-content-between align-items-center footer-bottom__box">
+        <div class="col">
+          <a href="/">
+            <% if presenter.logo? %>
+              <img class="footer-bottom__logo" src="<%= presenter.logo_url %>" alt="Logo of <%= presenter.school_name %>"/>
+            <% else %>
+              <span><%= presenter.school_name %></span>
+            <% end %>
+          </a>
+        </div>
+
+        <div class="col text-right">
+          <a id="show-privacy-policy" class="footer-bottom__link cursor-pointer mr-3">Privacy Policy</a>
+          <a id="show-terms-of-use" class="cursor-pointer footer-bottom__link mr-3">Terms of Use</a>
+          <span class="footer-bottom__copyright mr-3">&copy; <%= Time.now.year %> <%= presenter.school_name %>.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</footer>
+
+<div id="policy-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title"></h4>
+        <button class="close" data-dismiss="modal" type="button">&times;</button>
+      </div>
+
+      <div class="modal-body"></div>
+
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

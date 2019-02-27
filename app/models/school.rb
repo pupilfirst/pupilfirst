@@ -4,10 +4,13 @@ class School < ApplicationRecord
   has_many :faculty, dependent: :destroy
   has_many :school_strings, dependent: :destroy
 
-  has_one_attached :logo
+  has_one_attached :logo_on_light_bg
+  has_one_attached :logo_on_dark_bg
   has_one_attached :icon
 
-  def logo_variant(variant)
+  def logo_variant(variant, background: :light)
+    logo = background == :light ? logo_on_light_bg : logo_on_dark_bg
+
     case variant
       when :mid
         logo.variant(combine_options:

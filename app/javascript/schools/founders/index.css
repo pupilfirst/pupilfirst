@@ -28,3 +28,8 @@ body {
     left: 0;
     background: linear-gradient(to right, #E4E9F2 80%, #FFFFFF 100%);
 }
+
+.searchable-tag-list__dropdown {
+  margin-top: -0.5rem;
+  width: 231px;
+}

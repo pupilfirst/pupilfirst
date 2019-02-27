@@ -92,7 +92,7 @@ let teamUp = (students, responseCB, authenticityToken) => {
 
 let component = ReasonReact.reducerComponent("SA_StudentsPanel");
 
-let make = (~teams, ~courseId, ~authenticityToken, ~levels, _children) => {
+let make = (~teams, ~courseId, ~authenticityToken, ~levels, ~founderTags, _children) => {
   ...component,
   initialState: () => {teams, selectedStudents: [], searchString: "", formVisible: None, selectedLevelNumber: None},
   reducer: (action, state) =>
@@ -122,7 +122,7 @@ let make = (~teams, ~courseId, ~authenticityToken, ~levels, _children) => {
                                     send(UpdateFormVisible(None))}
        switch (state.formVisible) {
        | None => ReasonReact.null
-       | CreateForm => <SA_StudentsPanel_CreateForm courseId closeFormCB submitFormCB authenticityToken />
+       | CreateForm => <SA_StudentsPanel_CreateForm courseId closeFormCB submitFormCB founderTags authenticityToken />
        | UpdateForm(student) => <SA_StudentsPanel_UpdateForm student closeFormCB submitFormCB authenticityToken />
        }}
       <div>
@@ -143,7 +143,8 @@ let make = (~teams, ~courseId, ~authenticityToken, ~levels, _children) => {
               <option value="all"> {"All levels" |> str} </option>
               {levels
                |> List.map(level =>
-                    <option value={level |> Level.number |> string_of_int}>
+                    <option
+                      key={level |> Level.number |> string_of_int} value={level |> Level.number |> string_of_int}>
                       {"Level " ++ (level |> Level.number |> string_of_int) ++ ": " ++ (level |> Level.name) |> str}
                     </option>
                   )
@@ -347,6 +348,7 @@ type props = {
   teams: list(Team.t),
   courseId: int,
   levels: list(Level.t),
+  founderTags: list(string),
   authenticityToken: string,
 };
 
@@ -355,6 +357,7 @@ let decode = json =>
     teams: json |> field("teams", list(Team.decode)),
     courseId: json |> field("courseId", int),
     levels: json |> field("levels", list(Level.decode)),
+    founderTags: json |> field("founderTags", list(string)),
     authenticityToken: json |> field("authenticityToken", string),
   };
 
@@ -367,6 +370,7 @@ let jsComponent =
         ~teams=props.teams,
         ~courseId=props.courseId,
         ~levels=props.levels,
+        ~founderTags=props.founderTags,
         ~authenticityToken=props.authenticityToken,
         [||],
       );

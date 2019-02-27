@@ -6,4 +6,6 @@ class School < ApplicationRecord
   has_many :domains, dependent: :destroy
   has_many :faculty, dependent: :destroy
   has_many :school_strings, dependent: :destroy
+
+  acts_as_taggable_on :founder_tags
 end

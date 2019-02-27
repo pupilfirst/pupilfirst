@@ -1,11 +1,16 @@
 open StudentsPanel__Types;
 open SchoolAdmin__Utils;
 
-type state = {studentsToAdd: list(StudentInfo.t)};
+type state = {
+  studentsToAdd: list(StudentInfo.t),
+  tagsToApply: list(string),
+};
 
 type action =
   | AddStudentInfo(StudentInfo.t)
-  | RemoveStudentInfo(StudentInfo.t);
+  | RemoveStudentInfo(StudentInfo.t)
+  | AddTag(string)
+  | RemoveTag(string);
 
 let component = ReasonReact.reducerComponent("SA_StudentsPanel_CreateForm");
 
@@ -30,17 +35,21 @@ let saveStudents = (students, courseId, authenticityToken, responseCB) => {
   Api.create(url, payload, responseCB);
 };
 
-let make = (~courseId, ~closeFormCB, ~submitFormCB, ~authenticityToken, _children) => {
+let make = (~courseId, ~closeFormCB, ~submitFormCB, ~founderTags, ~authenticityToken, _children) => {
   ...component,
-  initialState: () => {studentsToAdd: []},
+  initialState: () => {studentsToAdd: [StudentInfo.create("Abdul Jaleel", "ajaleelp@gmail.com")], tagsToApply: []},
   reducer: (action, state) => {
     switch (action) {
-    | AddStudentInfo(studentInfo) => ReasonReact.Update({studentsToAdd: [studentInfo, ...state.studentsToAdd]})
+    | AddStudentInfo(studentInfo) =>
+      ReasonReact.Update({...state, studentsToAdd: [studentInfo, ...state.studentsToAdd]})
     | RemoveStudentInfo(studentInfo) =>
       ReasonReact.Update({
+        ...state,
         studentsToAdd:
           state.studentsToAdd |> List.filter(s => StudentInfo.email(s) !== StudentInfo.email(studentInfo)),
       })
+    | AddTag(tag) => ReasonReact.Update({...state, tagsToApply: [tag, ...state.tagsToApply]})
+    | RemoveTag(tag) => ReasonReact.Update({...state, tagsToApply: state.tagsToApply |> List.filter(t => t !== tag)})
     };
   },
   render: ({state, send}) =>
@@ -97,7 +106,20 @@ let make = (~courseId, ~closeFormCB, ~submitFormCB, ~authenticityToken, _childre
                           |> ReasonReact.array
                         }}
                      </div>
-                     <div className="flex">
+                     <div>
+                       <div className="mt-6">
+                         <div className="border-b border-grey-light pb-2 mb-2">
+                           <span className="mr-1"> {"Tags applied:" |> str} </span>
+                         </div>
+                         {<SA_StudentsPanel_SearchableTagList
+                            unselectedTags={founderTags |> List.filter(tag => !(state.tagsToApply |> List.mem(tag)))}
+                            selectedTags={state.tagsToApply}
+                            addTagCB={tag => send(AddTag(tag))}
+                            removeTagCB={tag => send(RemoveTag(tag))}
+                          />}
+                       </div>
+                     </div>
+                     <div className="flex mt-4">
                        <button
                          onClick={_e =>
                            saveStudents(

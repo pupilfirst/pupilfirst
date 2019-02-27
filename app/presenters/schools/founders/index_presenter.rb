@@ -8,7 +8,7 @@ module Schools
       end
 
       def react_props
-        { teams: teams, courseId: @course.id, levels: levels, authenticityToken: view.form_authenticity_token }
+        { teams: teams, courseId: @course.id, levels: levels, founderTags: founder_tags, authenticityToken: view.form_authenticity_token }
       end
 
       def teams
@@ -57,6 +57,10 @@ module Schools
             number: level.number
           }
         end
+      end
+
+      def founder_tags
+        @course.school.founder_tag_list
       end
     end
   end

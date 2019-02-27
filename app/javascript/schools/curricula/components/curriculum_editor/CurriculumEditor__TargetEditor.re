@@ -113,7 +113,8 @@ let eligibleTargets = (targets, targetGroupIds) =>
   targets
   |> List.filter(target =>
        targetGroupIds |> List.mem(target |> Target.targetGroupId)
-     );
+     )
+  |> List.filter(target => !(target |> Target.archived));
 
 let handleEC = (evaluationCriteria, target) => {
   let selectedEcIds = target |> Target.evaluationCriteria |> Array.of_list;
@@ -972,7 +973,7 @@ let make =
                           onClick=(
                             _event => {
                               ReactEvent.Mouse.preventDefault(_event);
-                              send(UpdateIsArchived(true));
+                              send(UpdateIsArchived(false));
                             }
                           )
                           className={

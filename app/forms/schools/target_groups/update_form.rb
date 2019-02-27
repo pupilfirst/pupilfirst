@@ -4,6 +4,7 @@ module Schools
       property :name, validates: { presence: true, length: { maximum: 250 } }
       property :description
       property :milestone, validates: { presence: true }
+      property :archived
 
       validate :at_least_one_milestone_tg_exists
 
@@ -21,10 +22,16 @@ module Schools
         target_group.description = description if description.present?
         target_group.save!
 
+        archive_target_group(target_group, archived)
+
         target_group
       end
 
       private
+
+      def archive_target_group(target_group, archived)
+        archived ? ::TargetGroups::ArchivalService.new(target_group).archive : ::TargetGroups::ArchivalService.new(target_group).unarchive
+      end
 
       def target_group
         @target_group ||= TargetGroup.find_by(id: id)

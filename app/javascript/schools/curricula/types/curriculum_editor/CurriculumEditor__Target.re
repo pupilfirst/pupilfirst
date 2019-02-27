@@ -104,3 +104,10 @@ let create =
 
 let sort = targets =>
   targets |> List.sort((x, y) => x.sortIndex - y.sortIndex);
+
+let archive = (t, archived) => {...t, archived};
+
+let find = (id, targets) => targets |> List.find(t => t.id == id);
+
+let targetIdsInTargetGroup = (id, targets) =>
+  targets |> List.filter(t => t.targetGroupId == id) |> List.map(t => t.id);

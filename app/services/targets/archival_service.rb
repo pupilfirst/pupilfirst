@@ -14,6 +14,7 @@ module Targets
     end
 
     def unarchive
+      TargetGroups::ArchivalService.new(@target.target_group).unarchive
       @target.update!(archived: false)
     end
   end

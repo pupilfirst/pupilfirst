@@ -53,7 +53,8 @@ module Schools
             description: target_group.description,
             levelId: target_group.level_id,
             milestone: target_group.milestone,
-            sortIndex: target_group.sort_index
+            sortIndex: target_group.sort_index,
+            archived: target_group.archived
           }
         end
       end

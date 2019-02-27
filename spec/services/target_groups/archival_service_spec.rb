@@ -22,4 +22,11 @@ describe TargetGroups::ArchivalService do
       expect { subject.archive }.to change { target_group.reload.archived }.from(false).to(true)
     end
   end
+
+  describe '#unarchive' do
+    it 'unarchives the target group' do
+      subject.archive
+      expect { subject.unarchive }.to change { target_group.reload.archived }.from(true).to(false)
+    end
+  end
 end

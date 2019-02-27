@@ -5,6 +5,7 @@ type t = {
   milestone: bool,
   levelId: int,
   sortIndex: int,
+  archived: bool,
 };
 
 let id = t => t.id;
@@ -19,6 +20,8 @@ let levelId = t => t.levelId;
 
 let sortIndex = t => t.sortIndex;
 
+let archived = t => t.archived;
+
 let decode = json =>
   Json.Decode.{
     id: json |> field("id", int),
@@ -28,15 +31,17 @@ let decode = json =>
     levelId: json |> field("levelId", int),
     milestone: json |> field("milestone", bool),
     sortIndex: json |> field("sortIndex", int),
+    archived: json |> field("archived", bool),
   };
 
-let create = (id, name, description, milestone, levelId, sortIndex) => {
+let create = (id, name, description, milestone, levelId, sortIndex, archived) => {
   id,
   name,
   description,
   milestone,
   levelId,
   sortIndex,
+  archived,
 };
 
 let updateList = (targetGroups, targetGroup) => {
@@ -47,3 +52,7 @@ let updateList = (targetGroups, targetGroup) => {
 
 let sort = targetGroups =>
   targetGroups |> List.sort((x, y) => x.sortIndex - y.sortIndex);
+
+let archive = (archived, t) => {...t, archived};
+
+let find = (id, targetGroups) => targetGroups |> List.find(tg => tg.id == id);

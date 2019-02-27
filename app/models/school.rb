@@ -3,6 +3,7 @@ class School < ApplicationRecord
   has_many :domains, dependent: :destroy
   has_many :faculty, dependent: :destroy
   has_many :school_strings, dependent: :destroy
+  has_many :school_links, dependent: :destroy
 
   has_one_attached :logo_on_light_bg
   has_one_attached :logo_on_dark_bg

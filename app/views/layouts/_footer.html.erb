@@ -4,25 +4,15 @@
   <section class="footer-sitemap">
     <div class="container">
       <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-8 text-center text-md-left">
           <p class="footer-column__head font-bold"><%= presenter.school_name %></p>
 
           <div class="row">
-            <div class="col-md-4">
-              <%= link_to 'About', 'https://www.sv.co/about', id: 'footer-sitemap-about-link', class: 'footer-column__link' %>
-            </div>
-
-            <div class="col-md-4">
-              <a id="footer-sitemap-blog-link" class="footer-column__link" href="http://blog.sv.co">Blog</a>
-            </div>
-
-            <div class="col-md-4">
-              <%= link_to 'Media Kit', 'https://www.sv.co/about/media-kit', id: 'footer-sitemap-mediakit-link', class: 'footer-column__link' %>
-            </div>
-
-            <div class="col-md-4">
-              <%= link_to 'Library', resources_path, id: 'footer-sitemap-resource-link', class: 'footer-column__link' %>
-            </div>
+            <% presenter.nav_links.each do |nav_link| %>
+              <div class="col-md-4">
+                <%= link_to nav_link[:title], nav_link[:url], class: 'footer-column__link' %>
+              </div>
+            <% end %>
           </div>
         </div>
 
@@ -39,19 +29,15 @@
                 </p>
               </address>
 
-              <div class="footer-social-icons">
-                <a id="footer-connect-facebook-link" class="footer-social-link" href='https://www.facebook.com/svdotco' target='_blank' rel='noopener'>
-                  <i class="fa fa-facebook"></i>
-                </a>
-
-                <a id="footer-connect-twitter-link" class="footer-social-link" href='https://twitter.com/svdotco' target='_blank' rel='noopener'>
-                  <i class="fa fa-twitter"></i>
-                </a>
-
-                <a id="footer-connect-youtube-link" class="footer-social-link" href='https://www.youtube.com/c/svdotco' target='_blank' rel='noopener'>
-                  <i class="fa fa-youtube"></i>
-                </a>
-              </div>
+              <% if presenter.social_links.any? %>
+                <div class="footer-social-icons">
+                  <% presenter.social_links.each do |social_link| %>
+                    <a class="footer-social-link" href="<%= social_link[:url] %>" target='_blank' rel='noopener'>
+                      <i class="fa <%= presenter.social_icon(social_link[:url]) %>"></i>
+                    </a>
+                  <% end %>
+                </div>
+              <% end %>
 
               <p>
                 Reach us at

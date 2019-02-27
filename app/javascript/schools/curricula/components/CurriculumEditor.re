@@ -107,7 +107,7 @@ let make =
     let updateTargetCB = target => send(UpdateTargets(target));
     let updateTargetGroupsCB = targetGroup =>
       send(UpdateTargetGroups(targetGroup));
-    <div>
+    <div className="flex-1 flex flex-col bg-white overflow-hidden">
       {
         switch (state.editorAction) {
         | Hidden => ReasonReact.null
@@ -142,69 +142,72 @@ let make =
       }
       <div
         className="border-b flex px-6 py-2 h-16 items-center justify-between">
-        <div className="inline-block relative w-64">
-          <select
-            onChange={
-              event => {
-                let level_name = ReactEvent.Form.target(event)##value;
-                send(
-                  SelectLevel(Level.selectLevel(state.levels, level_name)),
-                );
+        <div className="flex">
+          <div className="inline-block relative w-64">
+            <select
+              onChange={
+                event => {
+                  let level_name = ReactEvent.Form.target(event)##value;
+                  send(
+                    SelectLevel(Level.selectLevel(state.levels, level_name)),
+                  );
+                }
               }
-            }
-            value={currentLevel |> Level.name}
-            className="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-4 py-2 pr-8 rounded leading-tight focus:outline-none">
-            {
-              state.levels
-              |> Level.sort
-              |> List.map(level =>
-                   <option
-                     key={Level.id(level) |> string_of_int}
-                     value={level |> Level.name}>
-                     {
-                       "Level "
-                       ++ (level |> Level.number |> string_of_int)
-                       ++ ": "
-                       ++ (level |> Level.name)
-                       |> str
-                     }
-                   </option>
-                 )
-              |> Array.of_list
-              |> ReasonReact.array
-            }
-          </select>
-          <div
-            className="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
-            <svg
-              className="fill-current h-4 w-4"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20">
-              <path
-                d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-              />
-            </svg>
+              value={currentLevel |> Level.name}
+              className="block appearance-none w-full bg-white border text-sm border-grey-light hover:border-grey px-4 py-2 pr-8 rounded-r-none leading-tight focus:outline-none">
+              {
+                state.levels
+                |> Level.sort
+                |> List.map(level =>
+                    <option
+                      key={Level.id(level) |> string_of_int}
+                      value={level |> Level.name}>
+                      {
+                        "Level "
+                        ++ (level |> Level.number |> string_of_int)
+                        ++ ": "
+                        ++ (level |> Level.name)
+                        |> str
+                      }
+                    </option>
+                  )
+                |> Array.of_list
+                |> ReasonReact.array
+              }
+            </select>
+            <div
+              className="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+              <svg
+                className="fill-current h-4 w-4"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20">
+                <path
+                  d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+                />
+              </svg>
+            </div>
           </div>
+          <button
+            className="flex text-grey-dark hover:text-grey-darkest text-sm font-bold border -ml-1 py-1 px-2 rounded-r focus:outline-none"
+            onClick={
+              _ =>
+                send(
+                  UpdateEditorAction(
+                    ShowLevelEditor(Some(state.selectedLevel)),
+                  ),
+                )
+            }>
+            <i className="material-icons">{"edit" |> str }</i>
+          </button>
+          <button
+            className="text-indigo-dark hover:bg-indigo-dark font-semibold text-sm hover:text-white focus:outline-none border border-dashed border-blue hover:border-transparent flex items-center px-2 py-1 ml-4 rounded-lg cursor-pointer"
+            onClick={_ => send(UpdateEditorAction(ShowLevelEditor(None)))}>
+            <i className="material-icons mr-2">{"add_circle_outline" |> str}</i>
+            {"Create New Level" |> str}
+          </button>
         </div>
         <button
-          className="bg-indigo-dark hover:bg-blue-dark text-white font-bold py-2 px-4 rounded focus:outline-none"
-          onClick={
-            _ =>
-              send(
-                UpdateEditorAction(
-                  ShowLevelEditor(Some(state.selectedLevel)),
-                ),
-              )
-          }>
-          {"Edit Level" |> str}
-        </button>
-        <button
-          className="bg-indigo-dark hover:bg-blue-dark text-white font-bold py-2 px-4 rounded focus:outline-none"
-          onClick={_ => send(UpdateEditorAction(ShowLevelEditor(None)))}>
-          {"Create New Level" |> str}
-        </button>
-        <button
-          className="bg-indigo-dark hover:bg-blue-dark text-white font-bold py-2 px-4 rounded focus:outline-none"
+          className="bg-indigo-lightest hover:bg-indigo text-indigo-dark text-sm hover:text-indigo-lightest font-semibold py-2 px-4 rounded focus:outline-none"
           onClick={_ => send(ToggleShowArchived)}>
           {(state.showArchived ? "Hide Archived" : "Show Archived") |> str}
         </button>

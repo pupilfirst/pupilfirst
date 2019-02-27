@@ -130,7 +130,7 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
                 send(UpdateResourceType(File));
               }
             }
-            className="inline-block text-grey-darker p-4 text-xs font-semibold">
+            className="inline-block text-grey-darker hover:text-indigo-darker p-4 text-xs font-semibold">
             {"Upload File" |> str}
           </div>
         </li>
@@ -142,7 +142,7 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
                 send(UpdateResourceType(Link));
               }
             }
-            className="inline-block text-grey-darker p-4 text-xs hover:text-blue-darker font-semibold">
+            className="inline-block text-grey-darker p-4 hover:text-indigo-darker text-xs font-semibold">
             {"Add URL" |> str}
           </div>
         </li>

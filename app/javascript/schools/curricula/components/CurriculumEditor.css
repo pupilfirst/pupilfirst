@@ -13,15 +13,6 @@ body {
   background-color: #edf3fa;
 }
 
-.resources-upload-tab__link {
-  cursor: pointer;
-}
-
-.resources-upload-tab__link--active {
-  background-color: #f2f8ff;
-  @apply border-l border-t border-r -mb-px rounded-t;
-}
-
 .resources-upload-tab__body {
   background-color: #f2f8ff;
 }
@@ -68,17 +59,4 @@ body {
 
 .target-group__box {
   z-index: 10;
-}
-
-.target-group__target {
-  width: 100%;
-  transition: all 0.2s;
-}
-
-.target-group__create, .target-group__target-create {
-  transition: all 0.2s;
-}
-
-.target-group__create:hover, .target-group__target-create:hover {
-  @apply .shadow-lg;
 }

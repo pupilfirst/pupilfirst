@@ -1,12 +1,12 @@
 class SchoolString < ApplicationRecord
-  KEY_COACHES_INDEX_SUBHEADING = -'coaches_index_subheading'
+  KEYS = {
+    coaches_index_subheading: 'coaches_index_subheading',
+    library_index_subheading: 'library_index_subheading',
+    school_email_address: 'school_email_address'
+  }.freeze
 
   belongs_to :school
 
-  def self.valid_school_string_keys
-    [KEY_COACHES_INDEX_SUBHEADING]
-  end
-
-  validates :key, presence: true, inclusion: { in: valid_school_string_keys }
+  validates :key, presence: true, inclusion: { in: KEYS.values }
   validates :value, presence: true
 end

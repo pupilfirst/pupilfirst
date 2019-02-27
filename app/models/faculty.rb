@@ -6,9 +6,6 @@ class Faculty < ApplicationRecord
   friendly_id :name, use: %i[slugged finders]
   normalize_attribute :name
 
-  mount_uploader :image, FacultyImageUploader
-  process_in_background :image
-
   has_secure_token
 
   belongs_to :user
@@ -19,7 +16,7 @@ class Faculty < ApplicationRecord
   has_many :connect_requests, through: :connect_slots
   has_many :faculty_course_enrollments, dependent: :destroy
   has_many :courses, through: :faculty_course_enrollments
-  has_one_attached :image_as
+  has_one_attached :image
 
   # Startups whose timeline events this faculty can review.
   has_many :faculty_startup_enrollments, dependent: :destroy
@@ -56,6 +53,7 @@ class Faculty < ApplicationRecord
   validates :compensation, inclusion: { in: valid_compensation_values }, allow_blank: true
   validates :commitment, inclusion: { in: valid_commitment_values }, allow_blank: true
   validates :slug, format: { with: /\A[a-z0-9\-_]+\z/i }, allow_nil: true
+  validates :image, content_type: %w[image/png image/jpg image/jpeg image/gif], size: { less_than: 2.megabytes, message: 'is not given between size' }
 
   scope :active, -> { where.not(inactive: true) }
   scope :team, -> { where(category: CATEGORY_TEAM).order('sort_index ASC') }
@@ -116,7 +114,7 @@ class Faculty < ApplicationRecord
   def average_rating
     @average_rating ||= begin
       rated_sessions = connect_requests.where.not(rating_for_faculty: nil)
-      return nil if rated_sessions.count < 5
+      return nil if rated_sessions.load.size < 5
 
       ratings = rated_sessions.pluck(:rating_for_faculty)
       ratings.inject(:+).to_f / ratings.size
@@ -162,7 +160,11 @@ class Faculty < ApplicationRecord
   end
 
   def image_or_avatar_url(background_shape: :circle)
-    image_url || initials_avatar(background_shape)
+    if image.attached?
+      Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true)
+    else
+      initials_avatar(background_shape)
+    end
   end
 
   private

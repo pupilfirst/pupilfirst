@@ -41,9 +41,10 @@ module ActiveAdmin
     end
 
     def none_one_or_many(view, resources)
-      return unless resources.exists?
+      # .blank? is used to preload the list.
+      return if resources.blank?
 
-      if resources.count > 1
+      if resources.size > 1
         view.ul do
           resources.each do |resource|
             view.li do

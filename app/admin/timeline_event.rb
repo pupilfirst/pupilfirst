@@ -1,6 +1,6 @@
 ActiveAdmin.register TimelineEvent do
   actions :all, except: [:edit]
-  permit_params :description, :image, :event_on, :serialized_links,
+  permit_params :description, :event_on, :serialized_links,
     :improved_timeline_event_id, timeline_event_files_attributes: %i[id title file private _destroy]
 
   filter :founders_name, as: :string
@@ -52,20 +52,6 @@ ActiveAdmin.register TimelineEvent do
     timeline_event.update!(description: params[:description])
     TimelineEvents::DescriptionUpdateNotificationJob.perform_later(timeline_event, old_description)
     head :ok
-  end
-
-  member_action :get_attachment do
-    timeline_event = TimelineEvent.find(params[:id])
-    timeline_event_file = timeline_event.timeline_event_files.find_by(id: params[:timeline_event_file_id])
-
-    raise_not_found if timeline_event_file.blank?
-
-    redirect_to timeline_event_file.file.url
-  end
-
-  member_action :get_image do
-    timeline_event = TimelineEvent.find(params[:id])
-    redirect_to timeline_event.image.url
   end
 
   member_action :save_feedback, method: :post do
@@ -143,7 +129,6 @@ ActiveAdmin.register TimelineEvent do
 
       f.input :founder, label: 'Founder', as: :select, collection: f.object.persisted? ? f.object.startup.founders : [], include_blank: false
       f.input :description
-      f.input :image
       f.input :event_on, as: :datepicker
 
       f.input :improved_timeline_event,
@@ -191,14 +176,6 @@ ActiveAdmin.register TimelineEvent do
         simple_format(timeline_event.description)
       end
 
-      row :image do
-        if timeline_event.image.present?
-          link_to timeline_event.image.url do
-            image_tag timeline_event.image.url, width: '200px'
-          end
-        end
-      end
-
       row :event_on
       row :evaluated
 
@@ -223,7 +200,7 @@ ActiveAdmin.register TimelineEvent do
         column :title
 
         column :file do |timeline_event_file|
-          link_to timeline_event_file.filename, timeline_event_file.file.url, target: '_blank', rel: 'noopener'
+          link_to timeline_event_file.filename, url_for(timeline_event_file.file), target: '_blank', rel: 'noopener'
         end
 
         column :private

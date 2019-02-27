@@ -12,7 +12,6 @@ after 'development:timeline_events', 'development:faculty' do
     reference_url: "http://sv.localhost/startups/#{graded_event.startup.slug}#event-#{graded_event.id}",
     startup: avengers,
     faculty: mickey,
-    activity_type: 'Feedback on presentation',
-    attachment: File.open(Rails.root.join('spec', 'support', 'uploads', 'faculty', 'mickey_mouse.jpg'))
+    activity_type: 'Feedback on presentation'
   )
 end

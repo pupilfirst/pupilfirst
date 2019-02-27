@@ -4,9 +4,4 @@ class FounderMailerPreview < ActionMailer::Preview
   def connect_request_feedback
     FounderMailer.connect_request_feedback(ConnectRequest.first)
   end
-
-  def slack_removal
-    founder = Founder.first
-    FounderMailer.slack_removal(founder)
-  end
 end

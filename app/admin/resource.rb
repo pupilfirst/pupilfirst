@@ -49,6 +49,12 @@ ActiveAdmin.register Resource do
       row :title
       row :downloads
 
+      row :file do |resource|
+        if resource.file.attached?
+          link_to resource.file.filename, resource.file
+        end
+      end
+
       row :tags do |resource|
         linked_tags(resource.tags)
       end
@@ -62,7 +68,6 @@ ActiveAdmin.register Resource do
         resource.link&.html_safe
       end
 
-      row :file_content_type
       row :created_at
       row :updated_at
 

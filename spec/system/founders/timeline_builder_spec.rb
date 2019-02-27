@@ -68,7 +68,7 @@ feature 'Timeline Builder' do
 
     file = te.timeline_event_files.first
     expect(file.title).to eq('A PDF File')
-    expect(file.file).to be_present
+    expect(file.file).to be_attached
     expect(file.private).to eq(false)
 
     expect(te.event_on).to eq(Date.today)

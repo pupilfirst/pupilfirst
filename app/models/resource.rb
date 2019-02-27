@@ -8,7 +8,7 @@ class Resource < ApplicationRecord
   belongs_to :school
   has_many :target_resources, dependent: :destroy
   has_many :targets, through: :target_resources
-  has_one_attached :file_as
+  has_one_attached :file
 
   def slug_candidates
     [
@@ -27,17 +27,13 @@ class Resource < ApplicationRecord
   validate :exactly_one_source_must_be_present
 
   def exactly_one_source_must_be_present
-    return if [file, video_embed, link].one?(&:present?)
+    return if [file.attached?, video_embed.present?, link.present?].one?
     return if persisted?
 
     errors[:base] << 'One and only one of a video embed, file or link must be present.'
   end
 
-  mount_uploader :file, ResourceFileUploader
-
   scope :public_resources, -> { where(public: true).order('title') }
-  # scope to search title
-  scope :title_matches, ->(search_key) { where("lower(title) LIKE ?", "%#{search_key.downcase}%") }
 
   # Custom scope to allow AA to filter by intersection of tags.
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
@@ -50,8 +46,13 @@ class Resource < ApplicationRecord
 
   def stream?
     return false if link.present?
+    return true if video_embed.present?
 
-    video_embed.present? || file_content_type&.end_with?('/mp4')
+    if file.attached?
+      file.content_type.end_with?('/mp4')
+    else
+      false
+    end
   end
 
   def increment_downloads(user)
@@ -61,23 +62,8 @@ class Resource < ApplicationRecord
     end
   end
 
-  after_create :notify_on_slack
-
-  def notify_on_slack
-    return unless Rails.env.production?
-
-    Resources::AfterCreateNotificationJob.perform_later(self)
-  end
-
   before_save do
     # Ensure titles are capitalized.
     self.title = title.titlecase(humanize: false, underscore: false)
-  end
-
-  after_commit do
-    # If the file attribute has changed, store its content_type to avoid lookup from S3.
-    if previous_changes.key?(:file)
-      update!(file_content_type: reload.file.content_type)
-    end
   end
 end

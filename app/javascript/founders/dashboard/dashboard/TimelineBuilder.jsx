@@ -438,7 +438,7 @@ export default class TimelineBuilder extends React.Component {
                 />
               </form>
 
-              <div class="position-relative py-4">
+              <div class="position-relative pb-4">
                 <TextArea
                   error={this.state.descriptionError}
                   resetErrorsCB={this.resetErrors}

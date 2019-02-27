@@ -1,9 +1,9 @@
 module Resources
   class FilterForm < Reform::Form
-    property :tags, allow_blank: true
-    property :search, allow_blank: true
-    property :created_after, validates: { inclusion: { in: proc { |form| form.date_filter_options } }, allow_blank: true }
-    property :page
+    property :tags, virtual: true
+    property :search, virtual: true
+    property :created_after, virtual: true, validates: { inclusion: { in: proc { |form| form.date_filter_options } }, allow_blank: true }
+    property :page, virtual: true
 
     # Custom Validations
     validate :page_number_should_be_valid
@@ -22,7 +22,7 @@ module Resources
 
     def page_number_should_be_valid
       return if page.blank?
-      return if page.to_i.to_s == page
+      return if page.to_i.positive?
 
       errors[:base] << 'Not a valid page number.'
     end

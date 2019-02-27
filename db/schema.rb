@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_11_084334) do
+ActiveRecord::Schema.define(version: 2019_02_26_072210) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -159,6 +159,7 @@ ActiveRecord::Schema.define(version: 2019_02_11_084334) do
     t.string "fqdn"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "primary", default: false
     t.index ["fqdn"], name: "index_domains_on_fqdn", unique: true
     t.index ["school_id"], name: "index_domains_on_school_id"
   end
@@ -183,7 +184,6 @@ ActiveRecord::Schema.define(version: 2019_02_11_084334) do
     t.string "key_skills"
     t.string "linkedin_url"
     t.string "category"
-    t.string "image"
     t.integer "sort_index"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -234,7 +234,6 @@ ActiveRecord::Schema.define(version: 2019_02_11_084334) do
   create_table "founders", id: :serial, force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string "avatar"
     t.integer "startup_id"
     t.string "linkedin_url"
     t.string "twitter_url"
@@ -365,7 +364,6 @@ ActiveRecord::Schema.define(version: 2019_02_11_084334) do
   end
 
   create_table "resources", id: :serial, force: :cascade do |t|
-    t.string "file"
     t.string "title"
     t.text "description"
     t.datetime "created_at", null: false
@@ -374,22 +372,12 @@ ActiveRecord::Schema.define(version: 2019_02_11_084334) do
     t.string "slug"
     t.text "video_embed"
     t.string "link"
-    t.string "file_content_type"
     t.boolean "archived", default: false
     t.boolean "public", default: false
     t.bigint "school_id"
     t.index ["archived"], name: "index_resources_on_archived"
     t.index ["school_id"], name: "index_resources_on_school_id"
     t.index ["slug"], name: "index_resources_on_slug"
-  end
-
-  create_table "school_strings", force: :cascade do |t|
-    t.bigint "school_id"
-    t.string "key"
-    t.text "value"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["school_id", "key"], name: "index_school_strings_on_school_id_and_key", unique: true
   end
 
   create_table "school_admins", force: :cascade do |t|
@@ -400,6 +388,15 @@ ActiveRecord::Schema.define(version: 2019_02_11_084334) do
     t.index ["school_id"], name: "index_school_admins_on_school_id"
     t.index ["user_id", "school_id"], name: "index_school_admins_on_user_id_and_school_id", unique: true
     t.index ["user_id"], name: "index_school_admins_on_user_id"
+  end
+
+  create_table "school_strings", force: :cascade do |t|
+    t.bigint "school_id"
+    t.string "key"
+    t.text "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["school_id", "key"], name: "index_school_strings_on_school_id_and_key", unique: true
   end
 
   create_table "schools", force: :cascade do |t|
@@ -566,7 +563,6 @@ ActiveRecord::Schema.define(version: 2019_02_11_084334) do
 
   create_table "timeline_event_files", id: :serial, force: :cascade do |t|
     t.integer "timeline_event_id"
-    t.string "file"
     t.boolean "private"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

@@ -7,14 +7,14 @@ module Resources
 
     def resources
       resources = @form.tags.present? ? @resources.tagged_with(@form.tags) : @resources
-      resources = filter_by_search(resources) if @form.search.present?
+      resources = filter_by_search_term(resources) if @form.search.present?
       @form.created_after.present? ? filter_by_date(resources) : resources
     end
 
     private
 
-    def filter_by_search(resources)
-      resources.title_matches(@form.search)
+    def filter_by_search_term(resources)
+      resources.where("lower(resources.title) LIKE ?", "%#{@form.search.downcase}%")
     end
 
     def filter_by_date(resources)

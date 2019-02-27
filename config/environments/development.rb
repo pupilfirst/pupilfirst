@@ -61,9 +61,6 @@ Rails.application.configure do
 
   config.action_mailer.default_url_options = { host: 'school.sv.localhost' }
 
-  # In development and test, let's have carrierwave store everything on local disk.
-  config.carrier_wave_storage = :file
-
   # for detecting n + 1 queries using Bullet
   Bullet.enable = true
   Bullet.bullet_logger = true

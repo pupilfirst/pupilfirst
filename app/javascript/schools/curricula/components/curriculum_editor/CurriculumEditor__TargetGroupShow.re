@@ -29,7 +29,7 @@ let make =
 
     <div className="target-group__box relative mt-12 rounded-lg">
       <div
-        className="target-group__header hover:bg-grey-lighter bg-white p-4 border border-b-0 text-center rounded-lg rounded-b-none"
+        className="target-group__header hover:bg-grey-lighter bg-white p-6 border border-b-0 text-center rounded-lg rounded-b-none"
         onClick={_event => showTargetGroupEditorCB(Some(targetGroup))}>
         <div className="target-group__title">
           <h2> {targetGroup |> TargetGroup.name |> str} </h2>
@@ -62,7 +62,7 @@ let make =
         |> ReasonReact.array
       }
       <div
-        className="target-group__target-create flex items-center bg-grey-lighter border-2 border-t-0 border-dashed p-5 rounded-lg rounded-t-none cursor-pointer"
+        className="target-group__target-create flex items-center bg-grey-lighter border-2 border-dashed p-5 rounded-lg rounded-t-none cursor-pointer"
         onClick={
           _event => showTargetEditorCB(targetGroup |> TargetGroup.id, None)
         }>

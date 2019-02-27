@@ -53,11 +53,13 @@ body {
 
 .drawer-right__close {
     left: -52px;
+    z-index: -1;
 }
 
 .drawer-right-form {
     background-color: #EDF3FA;
     overflow-x: hidden;
+    @apply .text-sm;
 }
 
 .drawer-right-form__input {
@@ -72,11 +74,12 @@ body {
 
 .resources-upload-tab__link {
     cursor: pointer;
+    @apply border-transparent border-l border-t border-r -mb-px rounded-t;
 }
 
 .resources-upload-tab__link--active {
     background-color: #F2F8FF;
-    @apply border-l border-t border-r -mb-px rounded-t;
+    @apply border-grey-light border-l border-t border-r -mb-px rounded-t;
 }
 
 .resources-upload-tab__body {
@@ -138,4 +141,24 @@ body {
 
 .target-group__create:hover, .target-group__target-create:hover {
     @apply .shadow-lg;
+}
+
+.select-list__item-selected {
+    animation: glowing 1200ms ease-in 1;
+    @apply .border-indigo-light;
+}
+
+@keyframes glowing {
+    0% {
+        @apply .border-indigo-lightest;
+        box-shadow: 0 0 -5px #7886D7;
+    }
+    50% {
+        @apply .border-indigo-lighter;
+        box-shadow: 0 0 10px #7886D7;
+    }
+    100% {
+        @apply .border-indigo-light;
+        box-shadow: 0 0 -5px #7886D7;
+    }
 }

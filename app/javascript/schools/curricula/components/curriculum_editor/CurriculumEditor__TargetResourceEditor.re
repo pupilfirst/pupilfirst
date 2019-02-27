@@ -16,10 +16,10 @@ let make = _children => {
       </label>
       <ul className="list-reset resources-upload-tab flex border-b">
         <li className="mr-1 resources-upload-tab__link resources-upload-tab__link--active">
-          <div className="inline-block text-grey-darker p-4 text-xs font-semibold"> {"Upload File" |> str} </div>
+          <div className="inline-block text-grey-darker hover:text-indigo-darker p-4 text-xs font-semibold"> {"Upload File" |> str} </div>
         </li>
         <li className="mr-1 resources-upload-tab__link">
-          <div className="inline-block text-grey-darker p-4 text-xs hover:text-blue-darker font-semibold">
+          <div className="inline-block text-grey-darker p-4 text-xs hover:text-indigo-darker font-semibold">
             {"Add URL" |> str}
           </div>
         </li>

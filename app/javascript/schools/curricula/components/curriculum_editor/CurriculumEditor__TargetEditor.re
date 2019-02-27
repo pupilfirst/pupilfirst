@@ -228,6 +228,11 @@ let setPayload = (state, target, authenticityToken) => {
   payload;
 };
 
+let handleQuiz = target => {
+  let quiz = target |> Target.quiz;
+  quiz |> List.length > 0 ? quiz : [QuizQuestion.empty(0)];
+};
+
 let facultyReviewButtonClasses = value =>
   value ?
     "w-1/2 bg-grey hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none" :
@@ -264,7 +269,7 @@ let make =
         evaluationCriteria: handleEC(evaluationCriteria, target),
         prerequisiteTargets:
           handlePT(eligibleTargets(targets, targetGroupIdsInLevel), target),
-        quiz: target |> Target.quiz,
+        quiz: handleQuiz(target),
         resources:
           target
           |> Target.resources

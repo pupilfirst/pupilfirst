@@ -139,7 +139,7 @@ let handleEC = (evaluationCriteria, target) => {
 let handlePT = (targets, target) => {
   let selectedEcIds = target |> Target.prerequisiteTargets |> Array.of_list;
 
-  targets
+  targets |> Target.removeTarget(target)
   |> List.map(criterion => {
        let criterionId = criterion |> Target.id;
        let selected =
@@ -476,7 +476,7 @@ let make =
       let url = "/school/targets/" ++ (targetId |> string_of_int);
       Api.update(url, payload, handleResponseCB);
     };
-
+    let showPrerequisiteTargets = state.prerequisiteTargets |> List.length > 0;
     <div className="blanket">
       <div className="drawer-right relative">
         <div className="drawer-right__close absolute">
@@ -617,17 +617,23 @@ let make =
                   className="uppercase text-center border-b border-grey-light pb-2 mb-4">
                   {"Method of Target Completion" |> str}
                 </h5>
-                <label
-                  className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
-                  htmlFor="title">
-                  {"Any prerequisite targets?" |> str}
-                </label>
-                <div className="mb-6">
-                  <CurriculumEditor__SelectBox
-                    items={state.prerequisiteTargets}
-                    multiSelectCB=multiSelectPrerequisiteTargetsCB
-                  />
-                </div>
+              {
+                  showPrerequisiteTargets ?
+                   <div>
+                    <label
+                      className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                      htmlFor="title">
+                      {"Any prerequisite targets?" |> str}
+                    </label>
+                    <div className="mb-6">
+                      <CurriculumEditor__SelectBox
+                        items={state.prerequisiteTargets}
+                        multiSelectCB=multiSelectPrerequisiteTargetsCB
+                      />
+                    </div>
+                    </div>
+                     : ReasonReact.null
+                }
                 <div className="flex items-center mb-6">
                   <label
                     className="block tracking-wide text-grey-darker text-xs font-semibold mr-6"
@@ -953,7 +959,7 @@ let make =
                     <div className="flex items-center mb-6">
                       <label
                         className="block tracking-wide text-grey-darker text-xs font-semibold mr-6">
-                        {"Is this target archived" |> str}
+                        {"Is this target archived?" |> str}
                       </label>
                       <div
                         className="inline-flex w-64 rounded-lg overflow-hidden border">

@@ -109,5 +109,8 @@ let archive = (t, archived) => {...t, archived};
 
 let find = (id, targets) => targets |> List.find(t => t.id == id);
 
+let removeTarget = (target, targets) =>
+  targets |> List.filter(t => t.id != target.id);
+
 let targetIdsInTargetGroup = (id, targets) =>
   targets |> List.filter(t => t.targetGroupId == id) |> List.map(t => t.id);

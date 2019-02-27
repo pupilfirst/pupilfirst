@@ -140,6 +140,7 @@ let make =
           send(UpdateTargets(newTargets));
         } :
         ();
+
       send(UpdateTargetGroups(targetGroup));
     };
     <div className="flex-1 flex flex-col bg-white overflow-hidden">

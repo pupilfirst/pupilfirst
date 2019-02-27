@@ -39,7 +39,7 @@ module Schools
           {
             id: level.id,
             name: level.name,
-            levelNumber: level.number,
+            number: level.number,
             unlockOn: level.unlock_on
           }
         end
@@ -73,7 +73,8 @@ module Schools
             linkToComplete: target.link_to_complete,
             role: target.role,
             targetActionType: target.target_action_type,
-            sortIndex: target.sort_index
+            sortIndex: target.sort_index,
+            archived: target.archived
           }
         end
       end

@@ -31,6 +31,7 @@ type state = {
   hasDescriptionError: bool,
   hasYoutubeVideoIdError: bool,
   hasLinktoCompleteError: bool,
+  isArchived: bool,
 };
 
 type action =
@@ -45,7 +46,8 @@ type action =
   | UpdateQuizQuestion(int, QuizQuestion.t)
   | RemoveQuizQuestion(int)
   | AddResource(int, string)
-  | RemoveResource(int);
+  | RemoveResource(int)
+  | UpdateIsArchived(bool);
 
 let component =
   ReasonReact.reducerComponent("CurriculumEditor__TargetEditor");
@@ -202,6 +204,8 @@ let setPayload = (state, target, authenticityToken) => {
     prerequisiteTargetIds |> Json.Encode.(list(int)),
   );
 
+  Js.Dict.set(targetData, "archived", state.isArchived |> Js.Json.boolean);
+
   switch (state.methodOfCompletion) {
   | Evaluated =>
     Js.Dict.set(
@@ -228,8 +232,13 @@ let setPayload = (state, target, authenticityToken) => {
   payload;
 };
 
-let facultyReviewButtonClasses = value =>
-  value ?
+let handleQuiz = target => {
+  let quiz = target |> Target.quiz;
+  quiz |> List.length > 0 ? quiz : [QuizQuestion.empty(0)];
+};
+
+let booleanButtonClasses = bool =>
+  bool ?
     "w-1/2 bg-grey hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none" :
     "w-1/2 bg-white border-l hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none";
 
@@ -264,7 +273,7 @@ let make =
         evaluationCriteria: handleEC(evaluationCriteria, target),
         prerequisiteTargets:
           handlePT(eligibleTargets(targets, targetGroupIdsInLevel), target),
-        quiz: target |> Target.quiz,
+        quiz: handleQuiz(target),
         resources:
           target
           |> Target.resources
@@ -281,6 +290,7 @@ let make =
         hasDescriptionError: false,
         hasYoutubeVideoIdError: false,
         hasLinktoCompleteError: false,
+        isArchived: target |> Target.archived,
       }
     | None => {
         title: "",
@@ -310,6 +320,7 @@ let make =
         hasDescriptionError: false,
         hasYoutubeVideoIdError: false,
         hasLinktoCompleteError: false,
+        isArchived: false,
       }
     },
   reducer: (action, state) =>
@@ -372,6 +383,8 @@ let make =
       let newResources =
         state.resources |> List.filter(((_key, _)) => _key !== key);
       ReasonReact.Update({...state, resources: newResources});
+    | UpdateIsArchived(isArchived) =>
+      ReasonReact.Update({...state, isArchived})
     },
   render: ({state, send}) => {
     let targetEvaluated = () =>
@@ -441,6 +454,7 @@ let make =
           state.role,
           state.targetActionType,
           sortIndex,
+          state.isArchived,
         );
       switch (target) {
       | Some(_) =>
@@ -463,7 +477,14 @@ let make =
     };
 
     <div className="blanket">
-      <div className="drawer-right">
+      <div className="drawer-right relative">
+        <div className="drawer-right__close absolute">
+          <button
+            onClick={_ => hideEditorActionCB()}
+            className="flex items-center justify-center bg-white text-grey-darker font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
+            <i className="material-icons"> {"close" |> str} </i>
+          </button>
+        </div>
         <div className="drawer-right-form w-full">
           <div className="w-full">
             <div className="mx-auto bg-white">
@@ -622,7 +643,7 @@ let make =
                         }
                       }
                       className={
-                        facultyReviewButtonClasses(
+                        booleanButtonClasses(
                           state.methodOfCompletion == Evaluated,
                         )
                       }>
@@ -635,9 +656,7 @@ let make =
                           send(UpdateMethodOfCompletion(MarkAsComplete));
                         }
                       }
-                      className={
-                        facultyReviewButtonClasses(!targetEvaluated())
-                      }>
+                      className={booleanButtonClasses(!targetEvaluated())}>
                       {"No" |> str}
                     </button>
                   </div>
@@ -927,14 +946,46 @@ let make =
                   | NotSelected => ReasonReact.null
                   }
                 }
+                {
+                  switch (target) {
+                  | Some(_) =>
+                    <div className="flex items-center mb-6">
+                      <label
+                        className="block tracking-wide text-grey-darker text-xs font-semibold mr-6">
+                        {"Is this target archived" |> str}
+                      </label>
+                      <div
+                        className="inline-flex w-64 rounded-lg overflow-hidden border">
+                        <button
+                          onClick=(
+                            _event => {
+                              ReactEvent.Mouse.preventDefault(_event);
+                              send(UpdateIsArchived(true));
+                            }
+                          )
+                          className={
+                            booleanButtonClasses(state.isArchived == true)
+                          }>
+                          {"Yes" |> str}
+                        </button>
+                        <button
+                          onClick=(
+                            _event => {
+                              ReactEvent.Mouse.preventDefault(_event);
+                              send(UpdateIsArchived(true));
+                            }
+                          )
+                          className={
+                            booleanButtonClasses(state.isArchived == false)
+                          }>
+                          {"No" |> str}
+                        </button>
+                      </div>
+                    </div>
+                  | None => ReasonReact.null
+                  }
+                }
               </div>
-            </div>
-            <div className="flex">
-              <button
-                onClick={_ => hideEditorActionCB()}
-                className="bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
-                {"Close" |> str}
-              </button>
             </div>
             <div className="flex">
               {

@@ -21,6 +21,7 @@ type state = {
   levels: list(Level.t),
   targetGroups: list(TargetGroup.t),
   targets: list(Target.t),
+  showArchived: bool,
 };
 
 type action =
@@ -28,7 +29,8 @@ type action =
   | UpdateEditorAction(editorAction)
   | UpdateLevels(Level.t)
   | UpdateTargetGroups(TargetGroup.t)
-  | UpdateTargets(Target.t);
+  | UpdateTargets(Target.t)
+  | ToggleShowArchived;
 
 let str = ReasonReact.string;
 
@@ -51,6 +53,7 @@ let make =
     targetGroups,
     levels,
     targets,
+    showArchived: false,
   },
   reducer: (action, state) =>
     switch (action) {
@@ -81,6 +84,8 @@ let make =
         targets: newtargets,
         editorAction: Hidden,
       });
+    | ToggleShowArchived =>
+      ReasonReact.Update({...state, showArchived: !state.showArchived})
     },
   render: ({state, send}) => {
     let hideEditorActionCB = () => send(UpdateEditorAction(Hidden));
@@ -156,7 +161,13 @@ let make =
                    <option
                      key={Level.id(level) |> string_of_int}
                      value={level |> Level.name}>
-                     {level |> Level.name |> str}
+                     {
+                       "Level "
+                       ++ (level |> Level.number |> string_of_int)
+                       ++ ": "
+                       ++ (level |> Level.name)
+                       |> str
+                     }
                    </option>
                  )
               |> Array.of_list
@@ -192,6 +203,11 @@ let make =
           onClick={_ => send(UpdateEditorAction(ShowLevelEditor(None)))}>
           {"Create New Level" |> str}
         </button>
+        <button
+          className="bg-indigo-dark hover:bg-blue-dark text-white font-bold py-2 px-4 rounded focus:outline-none"
+          onClick={_ => send(ToggleShowArchived)}>
+          {(state.showArchived ? "Hide Archived" : "Show Archived") |> str}
+        </button>
       </div>
       <div className="px-6 py-4 flex-1 overflow-y-scroll">
         <div
@@ -205,6 +221,7 @@ let make =
                    targets={state.targets}
                    showTargetGroupEditorCB
                    showTargetEditorCB
+                   showArchived={state.showArchived}
                  />
                )
             |> Array.of_list
@@ -222,7 +239,7 @@ let make =
               />
             </svg>
             <h4 className="font-semibold ml-2">
-              {"Creat another target group" |> str}
+              {"Create another target group" |> str}
             </h4>
           </div>
         </div>

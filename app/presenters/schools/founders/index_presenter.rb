@@ -30,7 +30,7 @@ module Schools
           {
             id: student.id,
             name: student.name,
-            avatarUrl: student.avatar_url || student.initials_avatar,
+            avatarUrl: avatar_url(student),
             teamId: student.startup.id,
             teamName: student.startup.product_name,
             email: student.user.email,
@@ -57,6 +57,14 @@ module Schools
             name: level.name,
             number: level.number
           }
+        end
+      end
+
+      def avatar_url(founder)
+        if founder.avatar.attached?
+          view.url_for(founder.avatar_variant(:mid))
+        else
+          founder.initials_avatar
         end
       end
 

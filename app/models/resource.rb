@@ -62,14 +62,6 @@ class Resource < ApplicationRecord
     end
   end
 
-  after_create :notify_on_slack
-
-  def notify_on_slack
-    return unless Rails.env.production?
-
-    Resources::AfterCreateNotificationJob.perform_later(self)
-  end
-
   before_save do
     # Ensure titles are capitalized.
     self.title = title.titlecase(humanize: false, underscore: false)

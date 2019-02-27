@@ -245,7 +245,7 @@ let make = (~teams, ~courseId, ~authenticityToken, ~levels, ~studentTags, _child
            |> List.map(team => {
                 let isSingleFounder = team |> Team.students |> List.length == 1;
                 <div
-                  key={team |> Team.name}
+                  key={team |> Team.id |> string_of_int}
                   className={
                     "student-team-container flex items-center shadow bg-white rounded-lg overflow-hidden mb-4"
                     ++ (isSingleFounder ? " hover:bg-grey-lighter" : "")
@@ -296,6 +296,7 @@ let make = (~teams, ~courseId, ~authenticityToken, ~levels, ~studentTags, _child
                                        |> Student.tags
                                        |> List.map(tag =>
                                             <div
+                                              key=tag
                                               className="border border-indigo rounded mr-1 py-1 px-2 text-xs text-indigo">
                                               {tag |> str}
                                             </div>

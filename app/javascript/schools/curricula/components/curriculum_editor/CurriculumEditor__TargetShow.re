@@ -2,8 +2,6 @@ open CurriculumEditor__Types;
 
 let str = ReasonReact.string;
 
-type props = {target: Target.t};
-
 let component =
   ReasonReact.statelessComponent("CurriculumEditor__TargetShow");
 

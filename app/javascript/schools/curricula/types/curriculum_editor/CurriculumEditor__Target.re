@@ -12,6 +12,7 @@ type t = {
   role: string,
   targetActionType: string,
   sortIndex: int,
+  archived: bool,
 };
 
 let id = t => t.id;
@@ -40,6 +41,8 @@ let targetActionType = t => t.targetActionType;
 
 let sortIndex = t => t.sortIndex;
 
+let archived = t => t.archived;
+
 let decode = json =>
   Json.Decode.{
     id: json |> field("id", int),
@@ -58,6 +61,7 @@ let decode = json =>
     role: json |> field("role", string),
     targetActionType: json |> field("targetActionType", string),
     sortIndex: json |> field("sortIndex", int),
+    archived: json |> field("archived", bool),
   };
 
 let updateList = (targets, target) => {
@@ -80,6 +84,7 @@ let create =
       role,
       targetActionType,
       sortIndex,
+      archived,
     ) => {
   id,
   targetGroupId,
@@ -94,6 +99,7 @@ let create =
   role,
   targetActionType,
   sortIndex,
+  archived,
 };
 
 let sort = targets =>

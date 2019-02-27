@@ -10,6 +10,7 @@ let make =
       ~targets,
       ~showTargetGroupEditorCB,
       ~showTargetEditorCB,
+      ~showArchived,
       _children,
     ) => {
   ...component,
@@ -20,6 +21,12 @@ let make =
            target |> Target.targetGroupId == (targetGroup |> TargetGroup.id)
          )
       |> Target.sort;
+
+    let targetsToDisplay =
+      showArchived ?
+        targetsInTG :
+        targetsInTG |> List.filter(target => !(target |> Target.archived));
+
     <div className="target-group__box relative mt-12 rounded-lg">
       <div
         className="target-group__header hover:bg-grey-lighter bg-white p-4 border border-b-0 text-center rounded-lg rounded-b-none"
@@ -42,7 +49,7 @@ let make =
         </div>
       </div>
       {
-        targetsInTG
+        targetsToDisplay
         |> List.map(target =>
              <CurriculumEditor__TargetShow
                key={target |> Target.id |> string_of_int}

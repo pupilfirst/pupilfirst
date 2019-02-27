@@ -13,6 +13,7 @@ module Schools
       property :evaluation_criterion_ids
       property :quiz
       property :link_to_complete
+      property :archived
 
       validate :target_group_exists
       validate :only_one_method_of_completion
@@ -22,7 +23,9 @@ module Schools
       end
 
       def only_one_method_of_completion
-        return if [evaluation_criterion_ids.present?, link_to_complete.present?, quiz.present?].one?
+        completion_criteria = [evaluation_criterion_ids.present?, link_to_complete.present?, quiz.present?]
+
+        return if completion_criteria.one? || completion_criteria.none?
 
         errors[:base] << 'More than one method of completion'
       end

@@ -83,7 +83,7 @@ feature 'Founder Edit' do
         behance_url: "https://behance.net/#{username}"
       )
 
-      expect(founder.avatar.file.filename).to eq('donald_duck.jpg')
+      expect(founder.avatar.filename).to eq('donald_duck.jpg')
       # expect(founder.roles).to match_array(roles.map(&:downcase))
     end
   end

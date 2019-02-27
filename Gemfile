@@ -12,14 +12,8 @@ gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 
 gem 'activeadmin', '~> 1.4' # The administration framework for Ruby on Rails applications. https://activeadmin.info
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
-gem 'carrierwave', '~> 1.1' # One uploader to rule them all.
-
-# TODO: Switch to carrierwave_backgrounder from rubygems when a version (with support for Carrierwave v1) is released.
-# TODO: carrierwave_backgrounder is also holding back the version of mime-types in use. Check for updates.
-# Backgrounder for carrierwave.
-gem 'carrierwave_backgrounder', '= 0.4.2', github: 'harigopal/carrierwave_backgrounder', branch: 'rails-5-1'
-gem 'carrierwave-bombshelter', '~> 0.2' # Protects your carrierwave from image bombs (and such).
-gem 'fog-aws', '~> 3.0', require: 'fog/aws' # Required by Carrierwave to upload to S3.
+gem 'active_storage_validations', '~> 0.6.1' # TODO: Condisder removing the gem once updgraded to Rails 6.0
+gem 'image_processing', '~> 1.2' # Gem to support variants in ActiveStorage
 
 # Use Webpack to manage app-like JavaScript modules in Rails.
 gem 'webpacker', '= 4.0.0.rc.2'
@@ -29,7 +23,6 @@ gem 'devise', '~> 4.2' # User auth library.
 gem 'devise_invitable', '~> 1.7' # Allow invites to be sent out.
 gem 'jbuilder', '~> 2.6' # Standard part of Rails, but unused, since we don't have an API.
 gem 'jquery-rails', '~> 4.3' # JQuery on Rails.
-gem 'mini_magick', '~> 4.6' # Image processing.
 gem 'pg', '~> 1.0' # PostgreSQL support.
 gem 'sass-rails', '~> 5.0'
 gem 'slim', '~> 4.0' # Slim templating.
@@ -46,7 +39,7 @@ gem 'bootstrap_form', '~> 4.0' # a Rails form builder that makes it super easy t
 # TODO: The zones list in the gem was outdated.
 # Have updated and submitted a PR (https://github.com/ralovets/valid_url/pull/10). Using a personal fork until it's merged.
 gem 'valid_url', '= 0.0.4', github: 'mahesh-krishnakumar/valid_url', branch: 'patch-1' # New url validataion gem
-gem 'roadie-rails', '~> 1.1' # CSS management for e-mails.
+gem 'roadie-rails', '~> 2.0' # CSS management for e-mails.
 gem 'puma', '~> 3.11' # The Puma ruby web server.
 gem 'rack-timeout', '~> 0.4' # Abort requests that are taking too long - recommended by Heroku to use with Puma
 gem 'delayed_job_active_record', '~> 4.1' # Delayed Job for deferring tasks.
@@ -103,7 +96,6 @@ gem 'file_validators', '~> 2.1' # Adds file validators to ActiveModel.
 gem 'diffy', '~> 3.2' # Easy Diffing in Ruby.
 gem 'pundit', '~> 2.0' # Minimal authorization through OO design and pure Ruby classes.
 gem 'rack-cors', '~> 1.0', require: 'rack/cors' # Rack Middleware for handling CORS, required to serve static assets such as fonts
-gem 'recaptcha', '~> 4.6', require: 'recaptcha/rails'
 gem 'jwt', '~> 2.1' # Ruby implementation of the RFC 7519 OAuth JSON Web Token (JWT), used by Zoom API
 gem 'chartkick', '~> 3.0' # Create beautiful charts with one line of JavaScript.
 
@@ -156,6 +148,7 @@ group :test do
   gem 'chromedriver-helper', '~> 2.1' # Easy installation and use of chromedriver, the Chromium project's selenium webdriver adapter.
   gem 'geckodriver-helper', '~> 0.23' # Easy installation and use of geckodriver, that provides the HTTP API described by the WebDriver protocol to communicate with Gecko browsers, such as Firefox.
   gem 'capybara-screenshot', '~> 1.0' # Save screenshots on failure!
+  gem "cuprite", '~> 0.5', require: false # Headless Chrome driver for Capybara.
 end
 
 group :development, :test do

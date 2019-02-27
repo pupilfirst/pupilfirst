@@ -181,12 +181,12 @@ class ApplicationController < ActionController::Base
   end
 
   def avatar(name, founder: nil, faculty: nil, version: :mid, background_shape: :circle)
-    if faculty.present? && faculty.image?
-      return helpers.image_tag(faculty.image_url).html_safe
+    if faculty.present? && faculty.image.attached?
+      return helpers.image_tag(faculty.image).html_safe
     end
 
-    if founder.present? && founder.avatar? && !founder.avatar_processing?
-      return helpers.image_tag(founder.avatar.public_send(version).url).html_safe
+    if founder.present? && founder.avatar.attached?
+      return helpers.image_tag(founder.avatar_variant(version)).html_safe
     end
 
     Scarf::InitialAvatar.new(

@@ -7,7 +7,7 @@
 = content_for :title_button_text do
   | Visit Dashboard
 
-= content_for(:title_button_link, course_coach_dashboard_url(@startup.course))
+= content_for(:title_button_link, course_coach_dashboard_url(@startup.course, **host_options))
 
 = content_for :salutation do
   | Hello #{@faculty.name},
@@ -17,7 +17,7 @@
     ' We have received a new submission from #{@submission_from}.
 
   - if @target.present?
-    p The submission is for the target titled &ldquo;#{@target.title}&rdqo;
+    p The submission is for the target titled &ldquo;<em>#{@target.title}</em>&rdquo;
 
   p Please visit your dashboard to review this submission.
 

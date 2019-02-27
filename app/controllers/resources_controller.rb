@@ -19,27 +19,17 @@ class ResourcesController < ApplicationController
   def show
     @resource = authorize(Resource.find(params[:id]))
 
-    return unless params[:watch].present? && @resource.stream?
-
-    @resource.increment_downloads(current_user)
-    @stream_video = @resource.file&.url || @resource.video_embed
-  rescue ActiveRecord::RecordNotFound, Pundit::NotAuthorizedError
-    alert_message = 'Could not find the requested resource! '
-
-    alert_message += if current_founder.present?
-      'You might not be authorized to view this resource.'
-    else
-      'Please try again after signing in as this could be a private resource.'
-    end
-
-    redirect_to resources_path, alert: alert_message
+    # If this is a video, and user has requested that it be played, increment the download count.
+    @resource.increment_downloads(current_user) if params[:watch].present? && @resource.stream?
   end
 
   # GET /library/:id/download
   def download
     resource = authorize(Resource.find(params[:id]))
     resource.increment_downloads(current_user)
-    redirect_to(resource.link.presence || resource.file.url)
+    destination = resource.link.presence || Rails.application.routes.url_helpers.rails_blob_path(resource.file, only_path: true)
+
+    redirect_to(destination)
   end
 
   private

@@ -16,6 +16,8 @@ class FacultyMailerPreview < ActionMailer::Preview
   def student_submission_notification
     founder = Founder.with_email('ios@example.org')
     timeline_event = founder.timeline_events.first
-    FacultyMailer.student_submission_notification(timeline_event)
+    faculty = founder.school.faculty.first
+
+    FacultyMailer.student_submission_notification(timeline_event, faculty)
   end
 end

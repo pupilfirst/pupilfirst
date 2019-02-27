@@ -34,7 +34,6 @@ class TimelineEvent < ApplicationRecord
 
   scope :from_admitted_startups, -> { joins(:founders).where(founders: { startup: Startup.admitted }) }
   scope :not_dropped_out, -> { joins(:founders).where(founders: { startup: Startup.not_dropped_out }) }
-  scope :has_image, -> { where.not(image: nil) }
   scope :from_approved_startups, -> { joins(:founders).where(founders: { startup: Startup.approved }) }
   scope :not_private, -> { joins(:target).where.not(targets: { role: Target::ROLE_FOUNDER }) }
   scope :not_improved, -> { joins(:target).where(improved_timeline_event_id: nil) }
@@ -69,11 +68,11 @@ class TimelineEvent < ApplicationRecord
   end
 
   def files_metadata_json
-    timeline_event_files.map do |file|
+    timeline_event_files.map do |te_file|
       {
-        identifier: file.id,
-        title: file.title,
-        private: file.private?,
+        identifier: te_file.id,
+        title: te_file.title,
+        private: te_file.private?,
         persisted: true
       }
     end.to_json
@@ -176,16 +175,6 @@ class TimelineEvent < ApplicationRecord
     )
   end
 
-  def image_filename
-    return if image.blank?
-
-    image&.sanitized_file&.original_filename
-  end
-
-  def first_attachment_url
-    @first_attachment_url ||= first_file_url || first_link_url
-  end
-
   def days_elapsed
     start_date = startup.earliest_team_event_date
     return nil if start_date.blank?
@@ -219,16 +208,5 @@ class TimelineEvent < ApplicationRecord
 
   def privileged_founder?(founder)
     founder.present? && startup.founders.include?(founder)
-  end
-
-  def first_file_url
-    first_file = timeline_event_files.first
-    return if first_file.blank?
-
-    Rails.application.routes.url_helpers.download_timeline_event_file_url(first_file)
-  end
-
-  def first_link_url
-    links.first.try(:[], :url)
   end
 end

@@ -42,9 +42,6 @@ Rails.application.configure do
 
   config.action_mailer.default_url_options = { host: 'localhost:3000' }
 
-  # In development and test, let's have carrierwave store everything on local disk.
-  config.carrier_wave_storage = :file
-
   # Override Rails 5's default of :async, and force jobs to run inline.
   test_adapter = ActiveJob::QueueAdapters::TestAdapter.new
   test_adapter.perform_enqueued_jobs = true

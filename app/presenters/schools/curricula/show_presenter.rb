@@ -39,7 +39,7 @@ module Schools
           {
             id: level.id,
             name: level.name,
-            levelNumber: level.number,
+            number: level.number,
             unlockOn: level.unlock_on
           }
         end

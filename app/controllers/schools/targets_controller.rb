@@ -11,7 +11,7 @@ module Schools
         target = form.save(params[:target])
         render json: { id: target.id, sortIndex: target.sort_index, error: nil }
       else
-        raise form.errors.full_messages.join(', ')
+        render json: { error: form.errors.full_messages.join(', ') }
       end
     end
 
@@ -23,7 +23,7 @@ module Schools
         target = form.save(params[:target])
         render json: { id: target.id, sortIndex: target.sort_index, error: nil }
       else
-        raise form.errors.full_messages.join(', ')
+        render json: { error: form.errors.full_messages.join(', ') }
       end
     end
 

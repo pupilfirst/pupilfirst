@@ -7,7 +7,7 @@ type state = {
   unlockOn: option(string),
   hasNameError: bool,
   hasDateError: bool,
-  saveDisabled: bool,
+  dirty: bool,
 };
 
 type action =
@@ -30,7 +30,7 @@ let updateUnlockOn = (send, date) => {
 };
 
 let saveDisabled = state =>
-  state.hasDateError || state.hasNameError || state.saveDisabled;
+  state.hasDateError || state.hasNameError || state.dirty;
 
 let setPayload = (authenticityToken, state) => {
   let payload = Js.Dict.empty();
@@ -66,26 +66,26 @@ let make =
         unlockOn: level |> Level.unlockOn,
         hasNameError: false,
         hasDateError: false,
-        saveDisabled: true,
+        dirty: true,
       }
     | None => {
         name: "",
         unlockOn: None,
         hasNameError: false,
         hasDateError: false,
-        saveDisabled: true,
+        dirty: true,
       }
     },
   reducer: (action, state) =>
     switch (action) {
     | UpdateName(name, hasNameError) =>
-      ReasonReact.Update({...state, name, hasNameError, saveDisabled: false})
+      ReasonReact.Update({...state, name, hasNameError, dirty: false})
     | UpdateUnlockOn(date, hasDateError) =>
       ReasonReact.Update({
         ...state,
         unlockOn: Some(date),
         hasDateError,
-        saveDisabled: false,
+        dirty: false,
       })
     },
   render: ({state, send}) => {
@@ -131,7 +131,7 @@ let make =
           <button
             onClick={_ => hideEditorActionCB()}
             className="flex items-center justify-center bg-white text-grey-darker font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
-            <i className="material-icons">{"close" |> str }</i>
+            <i className="material-icons"> {"close" |> str} </i>
           </button>
         </div>
         <div className="drawer-right-form w-full">

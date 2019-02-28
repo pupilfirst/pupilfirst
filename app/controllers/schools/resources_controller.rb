@@ -8,7 +8,7 @@ module Schools
         resource = form.save(school_id)
         render json: { id: resource.id, error: nil }
       else
-        raise form.errors.full_messages.join(', ')
+        render json: { error: form.errors.full_messages.join(', ') }
       end
     end
 

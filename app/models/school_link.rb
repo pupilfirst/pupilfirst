@@ -8,4 +8,5 @@ class SchoolLink < ApplicationRecord
   VALID_KINDS = [KIND_HEADER, KIND_FOOTER, KIND_SOCIAL].freeze
 
   validates :kind, inclusion: VALID_KINDS
+  validates :url, presence: true
 end

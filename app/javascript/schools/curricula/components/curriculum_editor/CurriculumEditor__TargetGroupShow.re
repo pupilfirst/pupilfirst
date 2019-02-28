@@ -4,6 +4,11 @@ let str = ReasonReact.string;
 
 let component =
   ReasonReact.statelessComponent("CurriculumEditor__TargetGroupShow");
+let archivedClasses = archived =>
+  archived ?
+    "target-group__header hover:bg-grey-lighter bg-green p-6 border border-b-0 text-center rounded-lg rounded-b-none" :
+    "target-group__header hover:bg-grey-lighter bg-white p-6 border border-b-0 text-center rounded-lg rounded-b-none";
+
 let make =
     (
       ~targetGroup,
@@ -15,6 +20,7 @@ let make =
     ) => {
   ...component,
   render: _self => {
+    let milestone = targetGroup |> TargetGroup.milestone;
     let targetsInTG =
       targets
       |> List.filter(target =>
@@ -29,8 +35,9 @@ let make =
 
     <div className="target-group__box relative mt-12 rounded-lg">
       <div
-        className="target-group__header hover:bg-grey-lighter bg-white p-6 border border-b-0 text-center rounded-lg rounded-b-none"
+        className={archivedClasses(targetGroup |> TargetGroup.archived)}
         onClick={_event => showTargetGroupEditorCB(Some(targetGroup))}>
+        {milestone ? <div> {"Milestone" |> str} </div> : ReasonReact.null}
         <div className="target-group__title">
           <h2> {targetGroup |> TargetGroup.name |> str} </h2>
         </div>

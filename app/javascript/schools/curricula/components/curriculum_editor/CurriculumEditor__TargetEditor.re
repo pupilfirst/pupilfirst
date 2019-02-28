@@ -85,8 +85,10 @@ let saveDisabled = (state, isValidQuiz) => {
     | TakeQuiz => !isValidQuiz
     | MarkAsComplete => false
     };
-  state.hasTitleError
-  || state.hasDescriptionError
+  state.title
+  |> String.length < 2
+  || state.description
+  |> String.length < 2
   || state.hasYoutubeVideoIdError
   || state.hasLinktoCompleteError
   || hasMethordOfCompletionError;
@@ -139,7 +141,8 @@ let handleEC = (evaluationCriteria, target) => {
 let handlePT = (targets, target) => {
   let selectedEcIds = target |> Target.prerequisiteTargets |> Array.of_list;
 
-  targets |> Target.removeTarget(target)
+  targets
+  |> Target.removeTarget(target)
   |> List.map(criterion => {
        let criterionId = criterion |> Target.id;
        let selected =
@@ -617,22 +620,22 @@ let make =
                   className="uppercase text-center border-b border-grey-light pb-2 mb-4">
                   {"Method of Target Completion" |> str}
                 </h5>
-              {
+                {
                   showPrerequisiteTargets ?
-                   <div>
-                    <label
-                      className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
-                      htmlFor="title">
-                      {"Any prerequisite targets?" |> str}
-                    </label>
-                    <div className="mb-6">
-                      <CurriculumEditor__SelectBox
-                        items={state.prerequisiteTargets}
-                        multiSelectCB=multiSelectPrerequisiteTargetsCB
-                      />
-                    </div>
-                    </div>
-                     : ReasonReact.null
+                    <div>
+                      <label
+                        className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                        htmlFor="title">
+                        {"Any prerequisite targets?" |> str}
+                      </label>
+                      <div className="mb-6">
+                        <CurriculumEditor__SelectBox
+                          items={state.prerequisiteTargets}
+                          multiSelectCB=multiSelectPrerequisiteTargetsCB
+                        />
+                      </div>
+                    </div> :
+                    ReasonReact.null
                 }
                 <div className="flex items-center mb-6">
                   <label

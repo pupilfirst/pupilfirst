@@ -7,7 +7,7 @@ type state = {
   description: string,
   milestone: bool,
   hasNameError: bool,
-  saveDisabled: bool,
+  dirty: bool,
   isArchived: bool,
 };
 
@@ -25,7 +25,7 @@ let updateName = (send, name) => {
   send(UpdateName(name, hasError));
 };
 
-let saveDisabled = state => state.hasNameError || state.saveDisabled;
+let saveDisabled = state => state.hasNameError || state.dirty;
 
 let setPayload = (authenticityToken, state) => {
   let payload = Js.Dict.empty();
@@ -68,7 +68,7 @@ let make =
           },
         milestone: targetGroup |> TargetGroup.milestone,
         hasNameError: false,
-        saveDisabled: true,
+        dirty: true,
         isArchived: targetGroup |> TargetGroup.archived,
       }
     | None => {
@@ -76,20 +76,20 @@ let make =
         description: "",
         milestone: true,
         hasNameError: false,
-        saveDisabled: true,
+        dirty: true,
         isArchived: false,
       }
     },
   reducer: (action, state) =>
     switch (action) {
     | UpdateName(name, hasNameError) =>
-      ReasonReact.Update({...state, name, hasNameError, saveDisabled: false})
+      ReasonReact.Update({...state, name, hasNameError, dirty: false})
     | UpdateDescription(description) =>
-      ReasonReact.Update({...state, description, saveDisabled: false})
+      ReasonReact.Update({...state, description, dirty: false})
     | UpdateMilestone(milestone) =>
-      ReasonReact.Update({...state, milestone, saveDisabled: false})
+      ReasonReact.Update({...state, milestone, dirty: false})
     | UpdateIsArchived(isArchived) =>
-      ReasonReact.Update({...state, isArchived, saveDisabled: false})
+      ReasonReact.Update({...state, isArchived, dirty: false})
     },
   render: ({state, send}) => {
     let handleResponseCB = json => {

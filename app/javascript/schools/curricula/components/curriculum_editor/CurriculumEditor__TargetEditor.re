@@ -32,6 +32,7 @@ type state = {
   hasYoutubeVideoIdError: bool,
   hasLinktoCompleteError: bool,
   isArchived: bool,
+  dirty: bool,
 };
 
 type action =
@@ -91,7 +92,8 @@ let saveDisabled = (state, isValidQuiz) => {
   |> String.length < 2
   || state.hasYoutubeVideoIdError
   || state.hasLinktoCompleteError
-  || hasMethordOfCompletionError;
+  || hasMethordOfCompletionError
+  || state.dirty;
 };
 
 let handleMethodOfCompletion = target => {
@@ -295,6 +297,7 @@ let make =
         hasYoutubeVideoIdError: false,
         hasLinktoCompleteError: false,
         isArchived: target |> Target.archived,
+        dirty: true,
       }
     | None => {
         title: "",
@@ -325,19 +328,35 @@ let make =
         hasYoutubeVideoIdError: false,
         hasLinktoCompleteError: false,
         isArchived: false,
+        dirty: true,
       }
     },
   reducer: (action, state) =>
     switch (action) {
     | UpdateTitle(title, hasTitleError) =>
-      ReasonReact.Update({...state, title, hasTitleError})
+      ReasonReact.Update({...state, title, hasTitleError, dirty: false})
     | UpdateDescription(description, hasDescriptionError) =>
-      ReasonReact.Update({...state, description, hasDescriptionError})
+      ReasonReact.Update({
+        ...state,
+        description,
+        hasDescriptionError,
+        dirty: false,
+      })
     | UpdateYoutubeVideoId(youtubeVideoId, hasYoutubeVideoIdError) =>
-      ReasonReact.Update({...state, youtubeVideoId, hasYoutubeVideoIdError})
+      ReasonReact.Update({
+        ...state,
+        youtubeVideoId,
+        hasYoutubeVideoIdError,
+        dirty: false,
+      })
 
     | UpdateLinkToComplete(linkToComplete, hasLinktoCompleteError) =>
-      ReasonReact.Update({...state, linkToComplete, hasLinktoCompleteError})
+      ReasonReact.Update({
+        ...state,
+        linkToComplete,
+        hasLinktoCompleteError,
+        dirty: false,
+      })
     | UpdateEvaluationCriterion(key, value, selected) =>
       let oldEC =
         state.evaluationCriteria
@@ -345,6 +364,7 @@ let make =
       ReasonReact.Update({
         ...state,
         evaluationCriteria: [(key, value, selected), ...oldEC],
+        dirty: false,
       });
     | UpdatePrerequisiteTargets(key, value, selected) =>
       let oldPT =
@@ -353,9 +373,10 @@ let make =
       ReasonReact.Update({
         ...state,
         prerequisiteTargets: [(key, value, selected), ...oldPT],
+        dirty: false,
       });
     | UpdateMethodOfCompletion(methodOfCompletion) =>
-      ReasonReact.Update({...state, methodOfCompletion})
+      ReasonReact.Update({...state, methodOfCompletion, dirty: false})
     | AddQuizQuestion =>
       let lastQuestionId =
         state.quiz |> List.rev |> List.hd |> QuizQuestion.id;
@@ -366,29 +387,32 @@ let make =
           |> List.rev
           |> List.append([QuizQuestion.empty(lastQuestionId + 1)])
           |> List.rev,
+        dirty: false,
       });
     | UpdateQuizQuestion(id, quizQuestion) =>
       let newQuiz =
         state.quiz
         |> List.map(a => a |> QuizQuestion.id == id ? quizQuestion : a);
-      ReasonReact.Update({...state, quiz: newQuiz});
+      ReasonReact.Update({...state, quiz: newQuiz, dirty: false});
 
     | RemoveQuizQuestion(id) =>
       ReasonReact.Update({
         ...state,
         quiz: state.quiz |> List.filter(a => a |> QuizQuestion.id !== id),
+        dirty: false,
       })
     | AddResource(key, value) =>
       ReasonReact.Update({
         ...state,
         resources: [(key, value), ...state.resources],
+        dirty: false,
       })
     | RemoveResource(key) =>
       let newResources =
         state.resources |> List.filter(((_key, _)) => _key !== key);
-      ReasonReact.Update({...state, resources: newResources});
+      ReasonReact.Update({...state, resources: newResources, dirty: false});
     | UpdateIsArchived(isArchived) =>
-      ReasonReact.Update({...state, isArchived})
+      ReasonReact.Update({...state, isArchived, dirty: false})
     },
   render: ({state, send}) => {
     let targetEvaluated = () =>

@@ -46,6 +46,25 @@ class FooterPresenter < ApplicationPresenter
     'fa-users'
   end
 
+  def address
+    @address ||= begin
+      raw_address = SchoolString.fetch(current_school, :address)
+      Kramdown::Document.new(raw_address).to_html if raw_address.present?
+    end
+  end
+
+  def email_address
+    @email_address ||= SchoolString.fetch(current_school, :email_address)
+  end
+
+  def privacy_policy?
+    SchoolString.saved?(current_school, :privacy_policy)
+  end
+
+  def terms_of_use?
+    SchoolString.saved?(current_school, :terms_of_use)
+  end
+
   private
 
   def current_school

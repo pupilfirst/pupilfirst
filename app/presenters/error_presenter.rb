@@ -10,7 +10,7 @@ class ErrorPresenter < ApplicationPresenter
   def contact_email
     @contact_email ||= begin
       if current_school.present?
-        current_school.school_strings.find_by(key: SchoolString::KEYS[:school_email_address])&.value
+        SchoolString.fetch(current_school, :email_address)
       end
     end
   end

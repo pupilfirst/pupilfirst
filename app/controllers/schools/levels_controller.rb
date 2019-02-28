@@ -12,7 +12,7 @@ module Schools
         level = form.save
         render json: { id: level.id, number: level.number, error: nil }
       else
-        raise form.errors.full_messages.join(', ')
+        render json: { error: form.errors.full_messages.join(', ') }
       end
     end
 
@@ -23,7 +23,7 @@ module Schools
         level = form.save
         render json: { id: level.id, levelNumber: level.number, error: nil }
       else
-        raise form.errors.full_messages.join(', ')
+        render json: { error: form.errors.full_messages.join(', ') }
       end
     end
 

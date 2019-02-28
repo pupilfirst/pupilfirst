@@ -9,7 +9,7 @@ module Schools
         target_group = form.save
         render json: { id: target_group.id, sortIndex: target_group.sort_index, error: nil }
       else
-        raise form.errors.full_messages.join(', ')
+        render json: { error: form.errors.full_messages.join(', ') }
       end
     end
 
@@ -21,7 +21,7 @@ module Schools
         target_group = form.save
         render json: { id: target_group.id, sortIndex: target_group.sort_index, error: nil }
       else
-        raise form.errors.full_messages.join(', ')
+        render json: { error: form.errors.full_messages.join(', ') }
       end
     end
   end

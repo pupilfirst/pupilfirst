@@ -31,6 +31,7 @@ type state = {
   hasDescriptionError: bool,
   hasYoutubeVideoIdError: bool,
   hasLinktoCompleteError: bool,
+  isValidQuiz: bool,
   isArchived: bool,
   dirty: bool,
 };
@@ -74,7 +75,7 @@ let updateLinkToComplete = (send, link) => {
   send(UpdateLinkToComplete(link, hasError));
 };
 
-let saveDisabled = (state, isValidQuiz) => {
+let saveDisabled = state => {
   let hasMethordOfCompletionError =
     switch (state.methodOfCompletion) {
     | NotSelected => true
@@ -83,7 +84,7 @@ let saveDisabled = (state, isValidQuiz) => {
       |> List.filter(((_, _, selected)) => selected)
       |> List.length == 0
     | VisitLink => state.hasLinktoCompleteError
-    | TakeQuiz => !isValidQuiz
+    | TakeQuiz => !state.isValidQuiz
     | MarkAsComplete => false
     };
   state.title
@@ -243,6 +244,13 @@ let handleQuiz = target => {
   quiz |> List.length > 0 ? quiz : [QuizQuestion.empty(0)];
 };
 
+let isValidQuiz = quiz =>
+  quiz
+  |> List.filter(quizQuestion =>
+       quizQuestion |> QuizQuestion.isValidQuizQuestion != true
+     )
+  |> List.length == 0;
+
 let booleanButtonClasses = bool =>
   bool ?
     "w-1/2 bg-grey hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none" :
@@ -298,6 +306,7 @@ let make =
         hasLinktoCompleteError: false,
         isArchived: target |> Target.archived,
         dirty: true,
+        isValidQuiz: true,
       }
     | None => {
         title: "",
@@ -329,6 +338,7 @@ let make =
         hasLinktoCompleteError: false,
         isArchived: false,
         dirty: true,
+        isValidQuiz: true,
       }
     },
   reducer: (action, state) =>
@@ -380,27 +390,37 @@ let make =
     | AddQuizQuestion =>
       let lastQuestionId =
         state.quiz |> List.rev |> List.hd |> QuizQuestion.id;
+
+      let quiz =
+        state.quiz
+        |> List.rev
+        |> List.append([QuizQuestion.empty(lastQuestionId + 1)])
+        |> List.rev;
       ReasonReact.Update({
         ...state,
-        quiz:
-          state.quiz
-          |> List.rev
-          |> List.append([QuizQuestion.empty(lastQuestionId + 1)])
-          |> List.rev,
+        quiz,
         dirty: false,
+        isValidQuiz: isValidQuiz(quiz),
       });
     | UpdateQuizQuestion(id, quizQuestion) =>
-      let newQuiz =
+      let quiz =
         state.quiz
         |> List.map(a => a |> QuizQuestion.id == id ? quizQuestion : a);
-      ReasonReact.Update({...state, quiz: newQuiz, dirty: false});
-
-    | RemoveQuizQuestion(id) =>
       ReasonReact.Update({
         ...state,
-        quiz: state.quiz |> List.filter(a => a |> QuizQuestion.id !== id),
+        quiz,
         dirty: false,
-      })
+        isValidQuiz: isValidQuiz(quiz),
+      });
+
+    | RemoveQuizQuestion(id) =>
+      let quiz = state.quiz |> List.filter(a => a |> QuizQuestion.id !== id);
+      ReasonReact.Update({
+        ...state,
+        quiz,
+        dirty: false,
+        isValidQuiz: isValidQuiz(quiz),
+      });
     | AddResource(key, value) =>
       ReasonReact.Update({
         ...state,
@@ -423,6 +443,12 @@ let make =
       | TakeQuiz => false
       | MarkAsComplete => false
       };
+
+    let validNumberOfEvaluationCriteria =
+      state.evaluationCriteria
+      |> List.filter(((_, _, selected)) => selected)
+      |> List.length != 0;
+    Js.log(validNumberOfEvaluationCriteria);
     let multiSelectPrerequisiteTargetsCB = (key, value, selected) =>
       send(UpdatePrerequisiteTargets(key, value, selected));
     let multiSelectEvaluationCriterionCB = (key, value, selected) =>
@@ -432,12 +458,6 @@ let make =
       send(UpdateQuizQuestion(id, quizQuestion));
     let questionCanBeRemoved = state.quiz |> List.length > 1;
     let addResourceCB = (key, value) => send(AddResource(key, value));
-    let isValidQuiz =
-      state.quiz
-      |> List.filter(quizQuestion =>
-           quizQuestion |> QuizQuestion.isValidQuizQuestion != true
-         )
-      |> List.length == 0;
     let handleResponseCB = json => {
       let id = json |> Json.Decode.(field("id", int));
       let sortIndex = json |> Json.Decode.(field("sortIndex", int));
@@ -898,6 +918,13 @@ let make =
                         htmlFor="title">
                         {"Choose evaluation criteria from your list" |> str}
                       </label>
+                      {
+                        validNumberOfEvaluationCriteria ?
+                          ReasonReact.null :
+                          <div className="drawer-right-form__error-msg">
+                            {"Atleast one has to be selected" |> str}
+                          </div>
+                      }
                       <CurriculumEditor__SelectBox
                         items={state.evaluationCriteria}
                         multiSelectCB=multiSelectEvaluationCriterionCB
@@ -911,6 +938,16 @@ let make =
                         htmlFor="Quiz question 1">
                         {"Prepare the quiz now." |> str}
                       </label>
+                      {
+                        state.isValidQuiz ?
+                          ReasonReact.null :
+                          <div className="drawer-right-form__error-msg">
+                            {
+                              "All questions must be filled in, and all questions should have at least two answers."
+                              |> str
+                            }
+                          </div>
+                      }
                       {
                         state.quiz
                         |> List.map(quizQuestion =>
@@ -1026,7 +1063,7 @@ let make =
                 switch (target) {
                 | Some(target) =>
                   <button
-                    disabled={saveDisabled(state, isValidQuiz)}
+                    disabled={saveDisabled(state)}
                     onClick=(_e => updateTarget(target |> Target.id))
                     className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
                     {"Update Target" |> str}
@@ -1034,7 +1071,7 @@ let make =
 
                 | None =>
                   <button
-                    disabled={saveDisabled(state, isValidQuiz)}
+                    disabled={saveDisabled(state)}
                     onClick=(_e => createTarget())
                     className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
                     {"Create Target" |> str}

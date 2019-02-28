@@ -72,6 +72,10 @@ body {
     margin-bottom: 0.715rem;
 }
 
+.course-faculty__list-item:hover .course-faculty__list-item-remove {
+    visibility: visible;
+}
+
 .resources-upload-tab__link {
     cursor: pointer;
     @apply border-transparent border-l border-t border-r -mb-px rounded-t;
@@ -144,21 +148,18 @@ body {
 }
 
 .select-list__item-selected {
-    animation: glowing 1200ms ease-in 1;
+    animation: glowing 500ms ease-in;
     @apply .border-indigo-light;
 }
 
 @keyframes glowing {
     0% {
-        @apply .border-indigo-lightest;
-        box-shadow: 0 0 -5px #7886D7;
+        box-shadow: 0 0 20px #7886D7;
     }
     50% {
-        @apply .border-indigo-lighter;
         box-shadow: 0 0 10px #7886D7;
     }
     100% {
-        @apply .border-indigo-light;
-        box-shadow: 0 0 -5px #7886D7;
+        box-shadow: 0 0 0 #7886D7;
     }
 }

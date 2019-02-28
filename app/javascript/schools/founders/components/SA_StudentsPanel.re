@@ -177,7 +177,7 @@ let make = (~teams, ~courseId, ~authenticityToken, ~levels, ~studentTags, _child
             </svg>
           </div>
         </div>
-        <div className="bg-grey-lightest flex px-6 mr-3 pb-3">
+        <div className="bg-grey-lightest flex px-6 pb-3 overflow-y-scroll">
           <div
             className="max-w-lg bg-white mx-auto relative rounded rounded-b-none border-b py-2 px-3 mt-3 w-full flex items-center justify-between">
             <div className="flex">

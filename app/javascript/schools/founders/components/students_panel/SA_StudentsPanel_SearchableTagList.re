@@ -30,11 +30,11 @@ let make = (~unselectedTags, ~selectedTags, ~addTagCB, ~removeTagCB, _children) 
     <div>
       {selectedTags |> List.length == 0 ?
          <div className="text-indigo"> {"None" |> str} </div> :
-         <div className="flex">
+         <div className="flex flex-wrap">
            {selectedTags
             |> List.sort(String.compare)
             |> List.map(tag => {
-                 let buttonClasses = "flex items-center px-2 py-1 rounded-lg mr-1 font-semibold focus:outline-none border border-dashed border-indigo text-white bg-indigo-dark border-transparent";
+                 let buttonClasses = "flex items-center px-2 py-1 my-1 rounded-lg mr-1 font-semibold focus:outline-none border border-dashed border-indigo text-white bg-indigo-dark border-transparent";
 
                  <div key=tag className=buttonClasses>
                    {tag |> str}

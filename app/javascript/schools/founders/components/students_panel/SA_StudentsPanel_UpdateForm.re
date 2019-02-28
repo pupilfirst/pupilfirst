@@ -131,7 +131,7 @@ let make = (~student, ~studentTags, ~closeFormCB, ~submitFormCB, ~authenticityTo
                      removeTagCB={tag => send(RemoveTag(tag))}
                    />}
                 </div>
-                <div className="flex">
+                <div className="flex flex-wrap">
                   <button
                     onClick={_e => updateStudent(student, state, authenticityToken, handleResponseCB(submitFormCB))}
                     className={

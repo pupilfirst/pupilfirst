@@ -1,7 +1,7 @@
 module Resources
   class IndexPresenter < ApplicationPresenter
     def library_subheading
-      @library_subheading ||= SchoolString.fetch(view.current_school, :library_index_subheading)
+      @library_subheading ||= SchoolString::LibraryIndexSubheading.for(view.current_school)
     end
 
     def results_caption

@@ -1,23 +1,33 @@
 class SchoolString < ApplicationRecord
-  KEYS = {
-    coaches_index_subheading: 'coaches_index_subheading',
-    library_index_subheading: 'library_index_subheading',
-    email_address: 'email_address',
-    address: 'address',
-    privacy_policy: 'privacy_policy',
-    terms_of_user: 'terms_of_use'
-  }.freeze
+  class Key
+    class << self
+      def key
+        name.demodulize.underscore
+      end
+
+      def for(school)
+        SchoolString.find_by(school: school, key: key)&.value
+      end
+
+      def saved?(school)
+        SchoolString.where(school: school, key: key).exists?
+      end
+    end
+  end
+
+  class CoachesIndexSubheading < Key; end
+  class LibraryIndexSubheading < Key; end
+  class EmailAddress < Key; end
+  class Address < Key; end
+  class PrivacyPolicy < Key; end
+  class TermsOfUse < Key; end
+
+  VALID_KEYS = [
+    CoachesIndexSubheading, LibraryIndexSubheading, EmailAddress, Address, PrivacyPolicy, TermsOfUse
+  ].map(&:key).freeze
 
   belongs_to :school
 
-  validates :key, presence: true, inclusion: { in: KEYS.values }
+  validates :key, presence: true, inclusion: { in: VALID_KEYS }
   validates :value, presence: true
-
-  def self.fetch(school, key)
-    find_by(school: school, key: key)&.value
-  end
-
-  def self.saved?(school, key)
-    where(school: school, key: key).exists?
-  end
 end

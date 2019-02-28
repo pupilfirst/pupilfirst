@@ -10,7 +10,7 @@ class ErrorPresenter < ApplicationPresenter
   def contact_email
     @contact_email ||= begin
       if current_school.present?
-        SchoolString.fetch(current_school, :email_address)
+        SchoolString::EmailAddress.for(current_school)
       end
     end
   end

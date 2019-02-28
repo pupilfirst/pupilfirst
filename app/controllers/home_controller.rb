@@ -17,7 +17,7 @@ class HomeController < ApplicationController
 
   # GET /policies/privacy
   def privacy
-    privacy_policy = SchoolString.fetch(current_school, :privacy_policy)
+    privacy_policy = SchoolString::PrivacyPolicy.for(current_school)
 
     raise_not_found if privacy_policy.blank?
 
@@ -31,7 +31,7 @@ class HomeController < ApplicationController
 
   # GET /policies/terms
   def terms
-    terms_of_use = SchoolString.fetch(current_school, :terms_of_use)
+    terms_of_use = SchoolString::TermsOfUse.for(current_school)
 
     raise_not_found if terms_of_use.blank?
 

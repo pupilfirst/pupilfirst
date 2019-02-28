@@ -1,5 +1,5 @@
 module Schools
-  module FacultyModule
+  module Coaches
     class CreateForm < Reform::Form
       property :email, validates: { email: true }, virtual: true
       property :name, validates: { presence: true, length: { maximum: 250 } }

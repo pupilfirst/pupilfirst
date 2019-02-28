@@ -1,0 +1,1 @@
+module Coach = CoachesPanel__Coach;

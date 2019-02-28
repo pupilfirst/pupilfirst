@@ -11,5 +11,11 @@ module Schools
     end
 
     alias destroy? create?
+
+    class Scope < Scope
+      def resolve
+        current_school.faculty
+      end
+    end
   end
 end

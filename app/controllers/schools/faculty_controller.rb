@@ -5,7 +5,7 @@ module Schools
     # GET /school/courses/:course_id/coaches
     def index
       @course = authorize(courses.find(params[:course_id]), policy_class: Schools::FacultyPolicy)
-      @form = Schools::FacultyModule::CreateForm.new(Faculty.new)
+      @form = Schools::Coaches::CreateForm.new(Faculty.new)
     end
 
     # POST /school/courses/:course_id/coaches

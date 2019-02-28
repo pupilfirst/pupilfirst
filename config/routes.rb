@@ -67,6 +67,8 @@ Rails.application.routes.draw do
     resources :resources, only: %i[create]
 
     resource :quizzes, only: %i[update destroy]
+
+    resources :faculty, as: 'coaches', path: 'coaches', only: %i[create]
   end
 
   resources :founders, only: %i[] do

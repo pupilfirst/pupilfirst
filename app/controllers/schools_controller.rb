@@ -24,4 +24,8 @@ class SchoolsController < ApplicationController
   def teams
     @teams ||= policy_scope(Startup, policy_scope_class: Schools::StartupPolicy::Scope)
   end
+
+  def coaches
+    @coaches ||= policy_scope(Faculty, policy_scope_class: Schools::FacultyPolicy::Scope)
+  end
 end

@@ -49,7 +49,7 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   def resource_csp
-    { media: %w[https://s3.amazonaws.com/private-assets-sv-co/ https://public-assets.sv.co/] }
+    { media: %w[https://s3.amazonaws.com/private-assets-sv-co/ https://public-assets.sv.co/ https://s3.amazonaws.com/uploads.pupilfirst.com/] }
   end
 
   def youtube_csp

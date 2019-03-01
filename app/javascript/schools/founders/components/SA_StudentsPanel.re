@@ -262,18 +262,20 @@ let make = (~teams, ~courseId, ~authenticityToken, ~levels, ~studentTags, _child
                    </button>}
               </div>
             </div>
-            <div className="border-t mt-2">
-              <div className="flex flex-col pt-2 pl-6">
-                <div className="mb-1"> {"Filters:" |> str} </div>
-                <SA_StudentsPanel_SearchableTagList
-                  unselectedTags={studentTags |> List.filter(tag => !(state.tagsFilteredBy |> List.mem(tag)))}
-                  selectedTags={state.tagsFilteredBy}
-                  addTagCB={tag => send(AddTagFilter(tag))}
-                  removeTagCB={tag => send(RemoveTagFilter(tag))}
-                  allowNewTags=false
-                />
-              </div>
-            </div>
+            {studentTags |> List.length > 0 ?
+               <div className="border-t mt-2">
+                 <div className="flex flex-col pt-2 pl-6">
+                   <div className="mb-1"> {"Filters:" |> str} </div>
+                   <SA_StudentsPanel_SearchableTagList
+                     unselectedTags={studentTags |> List.filter(tag => !(state.tagsFilteredBy |> List.mem(tag)))}
+                     selectedTags={state.tagsFilteredBy}
+                     addTagCB={tag => send(AddTagFilter(tag))}
+                     removeTagCB={tag => send(RemoveTagFilter(tag))}
+                     allowNewTags=false
+                   />
+                 </div>
+               </div> :
+               ReasonReact.null}
           </div>
         </div>
       </div>

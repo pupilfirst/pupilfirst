@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 feature 'Faculty Weekly Slots' do
-  let!(:faculty) { create :faculty, current_commitment: '20 mins per week for the first 6 months this year' }
+  let!(:faculty) { create :faculty, current_commitment: '20 mins per week for the first 6 months this year', school: school }
+  let(:school) { create :school, :current }
 
   context 'User hits weekly slots page url' do
     scenario 'User uses a random token identifier' do

@@ -1,7 +1,7 @@
 module Resources
   class IndexPresenter < ApplicationPresenter
     def library_subheading
-      @library_subheading ||= view.current_school.school_strings.find_by(key: SchoolString::KEYS[:library_index_subheading])&.value
+      @library_subheading ||= SchoolString::LibraryIndexSubheading.for(view.current_school)
     end
 
     def results_caption

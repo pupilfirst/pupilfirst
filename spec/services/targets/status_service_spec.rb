@@ -8,7 +8,7 @@ describe Targets::StatusService do
   let(:level_2) { create :level, :two, course: course }
   let(:startup) { create :startup, level: level_2 }
   let(:founder_1) { startup.founders.first }
-  let(:founder_2) { startup.founders.second }
+  let!(:founder_2) { create :founder, startup: startup }
   let(:target_group) { create :target_group, level: level_2 }
   let(:founder_target_1) { create :target, target_group: target_group, role: Target::ROLE_FOUNDER }
 

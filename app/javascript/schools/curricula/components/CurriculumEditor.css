@@ -1,0 +1,62 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  color: #3a3f52;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.create-target-form {
+  background-color: #edf3fa;
+}
+
+.resources-upload-tab__body {
+  background-color: #f2f8ff;
+}
+
+.input-file {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.input-file+label {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  background-color: #e6f1ff;
+  border-radius: 8px;
+  overflow: hidden;
+  padding: 0.5rem 1rem;
+}
+
+.input-file+label {
+  color: #66788a;
+  border: 1px dashed #d3d8e1;
+}
+
+.input-file:focus+label, .input-file.has-focus+label, .input-file+label:hover {
+  color: #a8b7c7;
+}
+
+.target-group__container> :not(:last-child):before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  z-index: -1;
+  @apply bg-grey-light;
+}
+
+.target-group__box {
+  z-index: 10;
+}

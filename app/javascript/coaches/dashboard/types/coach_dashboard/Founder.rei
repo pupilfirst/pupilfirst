@@ -1,3 +1,5 @@
+open CoachDashboard__Types;
+
 type t;
 
 let decode: Js.Json.t => t;

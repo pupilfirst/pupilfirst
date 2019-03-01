@@ -1,0 +1,366 @@
+<% content_for(:head) do %>
+  <%= stylesheet_pack_tag 'schools/curricula/show', media: 'all', 'data-turbolinks-track': 'reload' %>
+<% end %>
+
+<% @presenter = Schools::Curricula::ShowPresenter.new(self, @course) %>
+
+<div class="font-sans antialiased h-screen flex">
+  <!-- Sidebar -->
+  <div class="flex">
+    <div class="flex flex-column">
+      <div class="bg-grey-darker global-sidebar__primary-nav text-purple-lighter flex-none p-4 hidden md:block">
+
+      </div>
+      <div class="bg-grey-lighter global-sidebar__secondary-nav text-purple-lighter flex-none w-64 pb-6 hidden md:block">
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Right content -->
+  <div class="flex-1 flex flex-col bg-white overflow-hidden">
+      <!-- Top bar -->
+      <div class="border-b flex px-6 py-2 h-16 items-center justify-between">
+        <div class="inline-block relative w-64">
+          <select class="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-4 py-2 pr-8 rounded leading-tight focus:outline-none">
+            <option>Level 1</option>
+            <option>Level 2</option>
+            <option>Level 3</option>
+          </select>
+          <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+          </div>
+        </div>
+        <button class="bg-indigo-dark hover:bg-blue-dark text-white font-bold py-2 px-4 rounded focus:outline-none">
+          Create New Level
+        </button>
+      </div>
+      <!-- Content -->
+      <div class="px-6 py-4 flex-1 overflow-y-scroll">
+        <div class="target-group__container max-w-lg mt-5 mx-auto relative">
+          <div class="target-group__box relative mt-20 rounded-lg">
+            <div class="target-group__header bg-white p-4 border border-b-0 text-center rounded-lg rounded-b-none">
+              <div class="target-group__title">
+                <h2>Target Group Title</h2>
+              </div>
+              <div class="target-group__description pt-2">
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                </p>
+              </div>
+            </div>
+            <div class="target-group__target bg-white border p-5">
+              <h5 class="font-semibold">This is a target</h5>
+            </div>
+            <div class="target-group__target-create flex items-center bg-grey-lighter border-2 border-t-0 border-dashed p-5 rounded-lg rounded-t-none cursor-pointer">
+              <svg class="svg-icon w-8 h-8" viewBox="0 0 20 20">
+                <path fill="#A8B7C7" d="M13.388,9.624h-3.011v-3.01c0-0.208-0.168-0.377-0.376-0.377S9.624,6.405,9.624,6.613v3.01H6.613c-0.208,0-0.376,0.168-0.376,0.376s0.168,0.376,0.376,0.376h3.011v3.01c0,0.208,0.168,0.378,0.376,0.378s0.376-0.17,0.376-0.378v-3.01h3.011c0.207,0,0.377-0.168,0.377-0.376S13.595,9.624,13.388,9.624z M10,1.344c-4.781,0-8.656,3.875-8.656,8.656c0,4.781,3.875,8.656,8.656,8.656c4.781,0,8.656-3.875,8.656-8.656C18.656,5.219,14.781,1.344,10,1.344z M10,17.903c-4.365,0-7.904-3.538-7.904-7.903S5.635,2.096,10,2.096S17.903,5.635,17.903,10S14.365,17.903,10,17.903z"></path>
+              </svg>
+              <h5 class="font-semibold ml-2">Creat another target</h5>
+            </div>
+          </div>
+          <div class="target-group__box relative mt-20 rounded-lg">
+            <div class="target-group__header bg-white p-4 border border-b-0 text-center rounded-lg rounded-b-none">
+              <div class="target-group__title">
+                <h2>Target Group Title</h2>
+              </div>
+              <div class="target-group__description pt-2">
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                </p>
+              </div>
+            </div>
+            <div class="target-group__target bg-white border p-5">
+              <h5 class="font-semibold">This is a target</h5>
+            </div>
+            <div class="target-group__target-create flex items-center bg-grey-lighter border-2 border-t-0 border-dashed p-5 rounded-lg rounded-t-none cursor-pointer">
+              <svg class="svg-icon w-8 h-8" viewBox="0 0 20 20">
+                <path fill="#A8B7C7" d="M13.388,9.624h-3.011v-3.01c0-0.208-0.168-0.377-0.376-0.377S9.624,6.405,9.624,6.613v3.01H6.613c-0.208,0-0.376,0.168-0.376,0.376s0.168,0.376,0.376,0.376h3.011v3.01c0,0.208,0.168,0.378,0.376,0.378s0.376-0.17,0.376-0.378v-3.01h3.011c0.207,0,0.377-0.168,0.377-0.376S13.595,9.624,13.388,9.624z M10,1.344c-4.781,0-8.656,3.875-8.656,8.656c0,4.781,3.875,8.656,8.656,8.656c4.781,0,8.656-3.875,8.656-8.656C18.656,5.219,14.781,1.344,10,1.344z M10,17.903c-4.365,0-7.904-3.538-7.904-7.903S5.635,2.096,10,2.096S17.903,5.635,17.903,10S14.365,17.903,10,17.903z"></path>
+              </svg>
+              <h5 class="font-semibold ml-2">Creat another target</h5>
+            </div>
+          </div>
+          <div class="target-group__create flex items-center relative bg-grey-lighter border-2 border-dashed p-6 rounded-lg mt-20 cursor-pointer">
+            <svg class="svg-icon w-12 h-12" viewBox="0 0 20 20">
+              <path fill="#A8B7C7" d="M13.388,9.624h-3.011v-3.01c0-0.208-0.168-0.377-0.376-0.377S9.624,6.405,9.624,6.613v3.01H6.613c-0.208,0-0.376,0.168-0.376,0.376s0.168,0.376,0.376,0.376h3.011v3.01c0,0.208,0.168,0.378,0.376,0.378s0.376-0.17,0.376-0.378v-3.01h3.011c0.207,0,0.377-0.168,0.377-0.376S13.595,9.624,13.388,9.624z M10,1.344c-4.781,0-8.656,3.875-8.656,8.656c0,4.781,3.875,8.656,8.656,8.656c4.781,0,8.656-3.875,8.656-8.656C18.656,5.219,14.781,1.344,10,1.344z M10,17.903c-4.365,0-7.904-3.538-7.904-7.903S5.635,2.096,10,2.096S17.903,5.635,17.903,10S14.365,17.903,10,17.903z"></path>
+            </svg>
+            <h4 class="font-semibold ml-2">Creat another target group</h4>
+          </div>
+        </div>
+        <div class="mt-16 hidden">
+          <div class="border m-2 p-2"
+          <h5>Evaluation criteria for <%= @course.name %></h5>
+          <ul>
+            <% @presenter.evaluation_criteria.each do |criterion| %>
+              <li>
+                <%= criterion.name %>
+                <%= button_to 'Delete', school_evaluation_criterion_path(criterion), method: :delete,
+                  class: 'bg-red-light hover:bg-red text-white py-1 px-2 rounded mt-1 mb-2 text-sm',
+                  form: { class: 'inline' }
+                %>
+                <%= form_for criterion, url: school_evaluation_criterion_path(criterion), class: 'mt-1' do |f| %>
+                  <%= f.text_field :name, placeholder: "Name", class: 'border p-2 ml-1' %>
+                  <%= f.text_field :description, placeholder: "Description", class: 'border p-2 ml-1' %>
+                  <%= f.submit 'Update', class: 'border p-2 mb-4' %>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+          <h5 class="text-green">Add new criteria:</h5>
+          <%= form_for EvaluationCriterion.new, url: school_course_evaluation_criteria_path(@course) do |f| %>
+            <%= f.text_field :name, placeholder: "Name", class: 'border p-2' %>
+            <%= f.text_field :description, placeholder: "Description", class: 'border p-2 ml-1' %>
+            <%= f.submit 'Add', class: 'border p-2 mb-4' %>
+          <% end %>
+          </div>
+          <div class="border m-2 p-2"
+          <h5>Levels for <%= @course.name %></h5>
+          <ul>
+            <% @presenter.levels.each do |level| %>
+              <li>
+                <%= level.name %>
+                <%= button_to 'Delete', school_level_path(level), method: :delete,
+                  class: 'bg-red-light hover:bg-red text-white py-1 px-2 rounded mt-1 mb-2 text-sm',
+                  form: { class: 'inline' }
+                %>
+                <%= form_for level, url: school_level_path(level), class: 'mt-1' do |f| %>
+                  <%= f.text_field :name, placeholder: "Name", class: 'border p-2 ml-1' %>
+                  <%= f.text_field :description, placeholder: "Description", class: 'border p-2 ml-1' %>
+                  <%= f.number_field :number, placeholder: "Level number", class: 'border p-2 ml-1' %>
+                  <%= f.submit 'Update', class: 'border p-2 mb-4' %>
+                <% end %>
+                <div class="border m-2 p-2">
+                  <h5>Target groups in level: <%= level.name %></h5>
+                  <ul>
+                    <% @presenter.target_groups(level).each do |target_group| %>
+                      <li>
+                        <%= target_group.name %>
+                        <%= form_for target_group, url: school_target_group_path(target_group), class: 'mt-1' do |f| %>
+                          <%= f.text_field :name, placeholder: "Name", class: 'border p-2 ml-1' %>
+                          <%= f.text_field :description, placeholder: "Description", class: 'border p-2 ml-1' %>
+                          <%= f.number_field :sort_index, placeholder: "Sort Index", class: 'border p-2 ml-1' %>
+                          <%= f.check_box :milestone %>
+                          <%= f.submit 'Update', class: 'border p-2 mb-4' %>
+                        <% end %>
+                        <ul>
+                          <h5>Targets <%= link_to 'New', new_school_target_group_target_path(target_group) %></h5>
+                          <% @presenter.targets(target_group).each do |target| %>
+                            <li>
+                              <h5>Target name: <%= target.title %>  <%= link_to 'Update', edit_school_target_path(target) %></h5>
+                            </li>
+                          <% end %>
+                        </ul>
+                      </li>
+                    <% end %>
+                    <div class="border m-2 p-2">
+                      <h5 class="text-green">Add new target group:</h5>
+                      <%= form_for TargetGroup.new, url: school_level_target_groups_path(level) do |f| %>
+                        <%= f.text_field :name, placeholder: "Name", class: 'border p-2' %>
+                        <%= f.text_field :description, placeholder: "Description", class: 'border p-2 ml-1' %>
+                        <%= f.number_field :sort_index, placeholder: "Sort Index", class: 'border p-2 ml-1' %>
+                        <%= f.check_box :milestone %>
+                        <%= f.submit 'Add', class: 'border p-2 mb-4' %>
+                      <% end %>
+                    </div>
+                  </ul>
+                </div>
+              </li>
+            <% end %>
+          </ul>
+          <h5 class="text-green">Add new level:</h5>
+          <%= form_for Level.new, url: school_course_levels_path(@course) do |f| %>
+            <%= f.text_field :name, placeholder: "Name", class: 'border p-2' %>
+            <%= f.text_field :description, placeholder: "Description", class: 'border p-2 ml-1' %>
+            <%= f.number_field :number, placeholder: "Level Number", class: 'border p-2 ml-1' %>
+            <%= f.submit 'Add', class: 'border p-2 mb-4' %>
+          <% end %>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div class="blanket">
+    <div class="drawer-right">
+      <div class="create-target-form w-full">
+        <form class="w-full">
+          <div class="create-target-form__target-details mx-auto bg-white">
+            <div class="max-w-md p-6 mx-auto">
+              <h5 class="uppercase border-b border-grey-light pb-2 mb-4 pr-5 inline-block">Target Details</h5>
+              <label class="block tracking-wide text-grey-darker text-xs font-semibold mb-2" for="title">
+                Title*
+              </label>
+              <input class="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey" id="title" type="text" placeholder="Type target title here">
+
+              <label class="block tracking-wide text-grey-darker text-xs font-semibold mb-2" for="title">
+                Description*
+              </label>
+              <textarea class="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey" id="title" placeholder="Type target description" name="Description" rows="5" cols="33"></textarea>
+
+              <label class="block tracking-wide text-grey-darker text-xs font-semibold mb-2" for="title">
+                Embed Video
+              </label>
+              <input class="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey" id="title" type="text" placeholder="Paste video embed code here">
+
+              <label class="block tracking-wide text-grey-darker text-xs font-semibold mb-2" for="title">
+                Embed Slideshow
+              </label>
+              <input class="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey" id="title" type="text" placeholder="Paste slideshow embed code here">
+
+              <div class="create-target-form__resources">
+                <label class="block tracking-wide text-grey-darker text-xs font-semibold mb-2" for="title">
+                  Resources
+                </label>
+                <ul class="list-reset resources-upload-tab flex border-b">
+                  <li class="mr-1 resources-upload-tab__link resources-upload-tab__link--active">
+                    <div class="inline-block text-grey-darker p-4 text-xs font-semibold">Upload File</div>
+                  </li>
+                  <li class="mr-1 resources-upload-tab__link">
+                    <div class="inline-block text-grey-darker p-4 text-xs hover:text-blue-darker font-semibold">Add URL</div>
+                  </li>
+                </ul>
+                <div class="resources-upload-tab__body p-5 border-l border-r border-b rounded rounded-tl-none rounded-tr-none">
+                  <input type="file" name="file" id="file" class="input-file" multiple />
+                  <label class="flex items-center text-sm" for="file">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" fill="#9FB0CC" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg>
+                    <span class="ml-2">Choose a file&hellip;</span>
+                  </label>
+                </div>
+                <div class="flex items-center py-3 cursor-pointer">
+                  <svg class="svg-icon w-8 h-8" viewBox="0 0 20 20">
+                  <path fill="#A8B7C7" d="M13.388,9.624h-3.011v-3.01c0-0.208-0.168-0.377-0.376-0.377S9.624,6.405,9.624,6.613v3.01H6.613c-0.208,0-0.376,0.168-0.376,0.376s0.168,0.376,0.376,0.376h3.011v3.01c0,0.208,0.168,0.378,0.376,0.378s0.376-0.17,0.376-0.378v-3.01h3.011c0.207,0,0.377-0.168,0.377-0.376S13.595,9.624,13.388,9.624z M10,1.344c-4.781,0-8.656,3.875-8.656,8.656c0,4.781,3.875,8.656,8.656,8.656c4.781,0,8.656-3.875,8.656-8.656C18.656,5.219,14.781,1.344,10,1.344z M10,17.903c-4.365,0-7.904-3.538-7.904-7.903S5.635,2.096,10,2.096S17.903,5.635,17.903,10S14.365,17.903,10,17.903z"></path>
+                  </svg>
+                  <h5 class="font-semibold ml-2">Add another resource</h5>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="create-target-form__target-behaviour mx-auto">
+            <div class="max-w-md p-6 mx-auto">
+              <h5 class="uppercase border-b border-grey-light pb-2 mb-4 pr-5 inline-block">Method of Target Completion</h5>
+              <label class="block tracking-wide text-grey-darker text-xs font-semibold mb-2" for="title">
+                Any prerequisite targets?
+              </label>
+              <div class="select-list__item-selected flex items-center justify-between bg-grey-lightest text-xs text-grey-dark border rounded p-3 mb-2">
+                Selected prerequisite target
+                <button>
+                  <svg class="w-3" id="fa3b28d3-128c-4841-a4e9-49257a824d7b" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 15.99"><title>Artboard 2</title><path d="M13,1H9A1,1,0,0,0,8,0H6A1,1,0,0,0,5,1H1A1,1,0,0,0,0,2V3H14V2A1,1,0,0,0,13,1ZM11,13a1,1,0,1,1-2,0V7a1,1,0,0,1,2,0ZM8,13a1,1,0,1,1-2,0V7A1,1,0,0,1,8,7ZM5,13a1,1,0,1,1-2,0V7A1,1,0,0,1,5,7Zm8.5-9H.5a.5.5,0,0,0,0,1H1V15a1,1,0,0,0,1,1H12a1,1,0,0,0,1-1V5h.5a.5.5,0,0,0,0-1Z" fill="#525252"/></svg>
+                 </button>
+              </div>
+              <div class="flex mb-6">
+                <div class="flex-1 mr-3 relative">
+                  <select class="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey">
+                    <option>Select prerequisite target</option>
+                    <option>Prerequisite target 2</option>
+                    <option>Prerequisite target 3</option>
+                  </select>
+                  <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                  </div>
+                </div>
+                <button class="bg-indigo-dark hover:bg-blue-dark text-white font-bold py-2 px-6
+                 rounded focus:outline-none">
+                  Add
+                </button>
+              </div>
+            <div class="flex items-center mb-6">
+              <label class="block tracking-wide text-grey-darker text-xs font-semibold mr-6" for="title">
+                Is this target reviewed by a faculty?
+              </label>
+              <div class="inline-flex w-64 rounded-lg overflow-hidden border">
+                <button class="w-1/2 bg-white hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none">
+                  Yes
+                </button>
+                <button class="w-1/2 bg-white border-l hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none">
+                  No
+                </button>
+              </div>
+            </div>
+            <div class="mb-6">
+              <label class="block tracking-wide text-grey-darker text-xs font-semibold mr-6 mb-2" for="title">
+                Choose evaluation criteria from your list
+              </label>
+              <div class="select-list__item-selected flex items-center justify-between bg-grey-lightest text-xs text-grey-dark border rounded p-3 mb-2">
+                Selected criteria
+                <button>
+                  <svg class="w-3" id="fa3b28d3-128c-4841-a4e9-49257a824d7b" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 15.99"><title>Artboard 2</title><path d="M13,1H9A1,1,0,0,0,8,0H6A1,1,0,0,0,5,1H1A1,1,0,0,0,0,2V3H14V2A1,1,0,0,0,13,1ZM11,13a1,1,0,1,1-2,0V7a1,1,0,0,1,2,0ZM8,13a1,1,0,1,1-2,0V7A1,1,0,0,1,8,7ZM5,13a1,1,0,1,1-2,0V7A1,1,0,0,1,5,7Zm8.5-9H.5a.5.5,0,0,0,0,1H1V15a1,1,0,0,0,1,1H12a1,1,0,0,0,1-1V5h.5a.5.5,0,0,0,0-1Z" fill="#525252"/></svg>
+                </button>
+              </div>
+              <div class="flex relative">
+                <div class="select-list__group bg-white border rounded rounded-t-none shadow pb-2 w-full">
+                  <div class="px-3 pt-3 pb-2">
+                    <input class="appearance-none bg-transparent border-b w-full text-grey-darker pb-3 px-2 pl-0 leading-tight focus:outline-none" type="text" placeholder="Type to Search" aria-label="Search">
+                  </div>
+                  <div class="px-3 py-2 hover:bg-grey-lighter">Usability</div>
+                  <div class="px-3 py-2 hover:bg-grey-lighter">Quantity</div>
+                  <div class="px-3 py-2 hover:bg-grey-lighter">Learning Experience</div>
+                </div>
+              </div>
+            </div>
+            <div class="mb-6">
+              <label class="block tracking-wide text-grey-darker text-xs font-semibold mr-6 mb-3" for="title">
+                How do you want the student to complete the target?
+              </label>
+              <div class="flex -mx-2">
+                <div class="w-1/3 px-2">
+                  <button class="flex flex-col items-center bg-white border border-grey-light hover:bg-grey-lighter text-grey-darkest text-sm font-semibold focus:outline-none rounded p-4">
+                    <svg class="fill-current w-8 mb-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 29.4"><title>Asset 1</title><g id="bfe57d46-3bb7-42f0-b4e6-eccc9a02f1dd" data-name="Layer 2"><g id="ea523c13-a500-4391-9a0e-cf57c4f4a027" data-name="Layer 1"><path d="M6.35,5.89a.47.47,0,0,0-.46.46,1,1,0,1,1-1-1,.46.46,0,0,0,0-.92A1.94,1.94,0,1,0,6.81,6.35.46.46,0,0,0,6.35,5.89Z"/><path d="M6.35,11.29a.47.47,0,0,0-.46.46,1,1,0,1,1-1-1,.46.46,0,0,0,.46-.46.47.47,0,0,0-.46-.46,1.94,1.94,0,1,0,1.93,1.93A.46.46,0,0,0,6.35,11.29Z"/><path d="M11.75,12.28H8.32a.45.45,0,0,0-.46.46.46.46,0,0,0,.46.46h3.43a.46.46,0,0,0,.46-.46A.45.45,0,0,0,11.75,12.28Z"/><path d="M11.75,10.31H8.32a.46.46,0,0,0-.46.46.45.45,0,0,0,.46.46h3.43a.45.45,0,0,0,.46-.46A.46.46,0,0,0,11.75,10.31Z"/><path d="M10.77,17.68H8.32a.45.45,0,0,0-.46.46.46.46,0,0,0,.46.46h2.45a.46.46,0,0,0,.46-.46A.45.45,0,0,0,10.77,17.68Z"/><path d="M11.75,15.71H8.32a.46.46,0,0,0-.46.46.45.45,0,0,0,.46.46h3.43a.45.45,0,0,0,.46-.46A.46.46,0,0,0,11.75,15.71Z"/><path d="M16.17,6.87H8.32a.47.47,0,0,0,0,.93h7.85a.47.47,0,0,0,0-.93Z"/><path d="M14.21,4.91H8.32a.46.46,0,0,0-.46.46.45.45,0,0,0,.46.46h5.89a.46.46,0,0,0,.46-.46A.47.47,0,0,0,14.21,4.91Z"/><path d="M6.35,16.7a.46.46,0,0,0-.46.46,1,1,0,1,1-1-1,.46.46,0,0,0,.46-.46.47.47,0,0,0-.46-.46,1.94,1.94,0,1,0,1.93,1.94A.45.45,0,0,0,6.35,16.7Z"/><path d="M18.14,0H1.44A1.45,1.45,0,0,0,0,1.44V22.07a1.45,1.45,0,0,0,1.44,1.44H9.79a.47.47,0,0,0,.46-.46.46.46,0,0,0-.46-.46H1.44a.52.52,0,0,1-.52-.52V1.44A.52.52,0,0,1,1.44.92h16.7a.52.52,0,0,1,.52.52V16.67a.46.46,0,1,0,.92,0V1.44A1.45,1.45,0,0,0,18.14,0Z"/><path d="M22.48,18.67a1.75,1.75,0,0,0-1.19.33,1.67,1.67,0,0,0-2.45-.49,1.67,1.67,0,0,0-1.27-.82,1.7,1.7,0,0,0-.94.17V12a1.68,1.68,0,0,0-1.86-1.68,1.74,1.74,0,0,0-1.51,1.75V18L11.91,19.3A2.91,2.91,0,0,0,11.13,22l1,4.37a3.87,3.87,0,0,0,3.79,3H20.1A3.91,3.91,0,0,0,24,25.5V20.42A1.74,1.74,0,0,0,22.48,18.67Zm.6,6.83a3,3,0,0,1-3,3H16a3,3,0,0,1-2.9-2.29l-1-4.37A2,2,0,0,1,12.56,20l.7-.7v1.59a.46.46,0,0,0,.46.46.47.47,0,0,0,.46-.46V12.07a.81.81,0,0,1,.69-.83.71.71,0,0,1,.59.19.77.77,0,0,1,.25.57v8.1a.46.46,0,0,0,.46.46.45.45,0,0,0,.46-.46v-.73a.77.77,0,0,1,.26-.57.75.75,0,0,1,.59-.2.82.82,0,0,1,.69.84v1.15a.46.46,0,0,0,.92,0v-.73a.76.76,0,0,1,.25-.57.79.79,0,0,1,.6-.2.82.82,0,0,1,.68.84v1.15a.47.47,0,0,0,.93,0v-.73a.77.77,0,0,1,.84-.77.82.82,0,0,1,.69.84V25.5Z"/></g></g></svg>
+                    Simply mark the target as completed.
+                  </button>
+                </div>
+                <div class="w-1/3 px-2">
+                  <button class="flex flex-col items-center bg-white border border-grey-light hover:bg-grey-lighter text-grey-darkest text-sm font-semibold focus:outline-none rounded p-4">
+                    <svg class="fill-current w-8 mb-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 29.4"><title>Asset 1</title><g id="bfe57d46-3bb7-42f0-b4e6-eccc9a02f1dd" data-name="Layer 2"><g id="ea523c13-a500-4391-9a0e-cf57c4f4a027" data-name="Layer 1"><path d="M6.35,5.89a.47.47,0,0,0-.46.46,1,1,0,1,1-1-1,.46.46,0,0,0,0-.92A1.94,1.94,0,1,0,6.81,6.35.46.46,0,0,0,6.35,5.89Z"/><path d="M6.35,11.29a.47.47,0,0,0-.46.46,1,1,0,1,1-1-1,.46.46,0,0,0,.46-.46.47.47,0,0,0-.46-.46,1.94,1.94,0,1,0,1.93,1.93A.46.46,0,0,0,6.35,11.29Z"/><path d="M11.75,12.28H8.32a.45.45,0,0,0-.46.46.46.46,0,0,0,.46.46h3.43a.46.46,0,0,0,.46-.46A.45.45,0,0,0,11.75,12.28Z"/><path d="M11.75,10.31H8.32a.46.46,0,0,0-.46.46.45.45,0,0,0,.46.46h3.43a.45.45,0,0,0,.46-.46A.46.46,0,0,0,11.75,10.31Z"/><path d="M10.77,17.68H8.32a.45.45,0,0,0-.46.46.46.46,0,0,0,.46.46h2.45a.46.46,0,0,0,.46-.46A.45.45,0,0,0,10.77,17.68Z"/><path d="M11.75,15.71H8.32a.46.46,0,0,0-.46.46.45.45,0,0,0,.46.46h3.43a.45.45,0,0,0,.46-.46A.46.46,0,0,0,11.75,15.71Z"/><path d="M16.17,6.87H8.32a.47.47,0,0,0,0,.93h7.85a.47.47,0,0,0,0-.93Z"/><path d="M14.21,4.91H8.32a.46.46,0,0,0-.46.46.45.45,0,0,0,.46.46h5.89a.46.46,0,0,0,.46-.46A.47.47,0,0,0,14.21,4.91Z"/><path d="M6.35,16.7a.46.46,0,0,0-.46.46,1,1,0,1,1-1-1,.46.46,0,0,0,.46-.46.47.47,0,0,0-.46-.46,1.94,1.94,0,1,0,1.93,1.94A.45.45,0,0,0,6.35,16.7Z"/><path d="M18.14,0H1.44A1.45,1.45,0,0,0,0,1.44V22.07a1.45,1.45,0,0,0,1.44,1.44H9.79a.47.47,0,0,0,.46-.46.46.46,0,0,0-.46-.46H1.44a.52.52,0,0,1-.52-.52V1.44A.52.52,0,0,1,1.44.92h16.7a.52.52,0,0,1,.52.52V16.67a.46.46,0,1,0,.92,0V1.44A1.45,1.45,0,0,0,18.14,0Z"/><path d="M22.48,18.67a1.75,1.75,0,0,0-1.19.33,1.67,1.67,0,0,0-2.45-.49,1.67,1.67,0,0,0-1.27-.82,1.7,1.7,0,0,0-.94.17V12a1.68,1.68,0,0,0-1.86-1.68,1.74,1.74,0,0,0-1.51,1.75V18L11.91,19.3A2.91,2.91,0,0,0,11.13,22l1,4.37a3.87,3.87,0,0,0,3.79,3H20.1A3.91,3.91,0,0,0,24,25.5V20.42A1.74,1.74,0,0,0,22.48,18.67Zm.6,6.83a3,3,0,0,1-3,3H16a3,3,0,0,1-2.9-2.29l-1-4.37A2,2,0,0,1,12.56,20l.7-.7v1.59a.46.46,0,0,0,.46.46.47.47,0,0,0,.46-.46V12.07a.81.81,0,0,1,.69-.83.71.71,0,0,1,.59.19.77.77,0,0,1,.25.57v8.1a.46.46,0,0,0,.46.46.45.45,0,0,0,.46-.46v-.73a.77.77,0,0,1,.26-.57.75.75,0,0,1,.59-.2.82.82,0,0,1,.69.84v1.15a.46.46,0,0,0,.92,0v-.73a.76.76,0,0,1,.25-.57.79.79,0,0,1,.6-.2.82.82,0,0,1,.68.84v1.15a.47.47,0,0,0,.93,0v-.73a.77.77,0,0,1,.84-.77.82.82,0,0,1,.69.84V25.5Z"/></g></g></svg>
+                    Visit a link to complete the target.
+                  </button>
+                </div>
+                <div class="w-1/3 px-2">
+                  <button class="flex flex-col items-center bg-white border border-grey-light hover:bg-grey-lighter text-grey-darkest text-sm font-semibold focus:outline-none rounded p-4">
+                    <svg class="fill-current w-8 mb-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 29.4"><title>Asset 1</title><g id="bfe57d46-3bb7-42f0-b4e6-eccc9a02f1dd" data-name="Layer 2"><g id="ea523c13-a500-4391-9a0e-cf57c4f4a027" data-name="Layer 1"><path d="M6.35,5.89a.47.47,0,0,0-.46.46,1,1,0,1,1-1-1,.46.46,0,0,0,0-.92A1.94,1.94,0,1,0,6.81,6.35.46.46,0,0,0,6.35,5.89Z"/><path d="M6.35,11.29a.47.47,0,0,0-.46.46,1,1,0,1,1-1-1,.46.46,0,0,0,.46-.46.47.47,0,0,0-.46-.46,1.94,1.94,0,1,0,1.93,1.93A.46.46,0,0,0,6.35,11.29Z"/><path d="M11.75,12.28H8.32a.45.45,0,0,0-.46.46.46.46,0,0,0,.46.46h3.43a.46.46,0,0,0,.46-.46A.45.45,0,0,0,11.75,12.28Z"/><path d="M11.75,10.31H8.32a.46.46,0,0,0-.46.46.45.45,0,0,0,.46.46h3.43a.45.45,0,0,0,.46-.46A.46.46,0,0,0,11.75,10.31Z"/><path d="M10.77,17.68H8.32a.45.45,0,0,0-.46.46.46.46,0,0,0,.46.46h2.45a.46.46,0,0,0,.46-.46A.45.45,0,0,0,10.77,17.68Z"/><path d="M11.75,15.71H8.32a.46.46,0,0,0-.46.46.45.45,0,0,0,.46.46h3.43a.45.45,0,0,0,.46-.46A.46.46,0,0,0,11.75,15.71Z"/><path d="M16.17,6.87H8.32a.47.47,0,0,0,0,.93h7.85a.47.47,0,0,0,0-.93Z"/><path d="M14.21,4.91H8.32a.46.46,0,0,0-.46.46.45.45,0,0,0,.46.46h5.89a.46.46,0,0,0,.46-.46A.47.47,0,0,0,14.21,4.91Z"/><path d="M6.35,16.7a.46.46,0,0,0-.46.46,1,1,0,1,1-1-1,.46.46,0,0,0,.46-.46.47.47,0,0,0-.46-.46,1.94,1.94,0,1,0,1.93,1.94A.45.45,0,0,0,6.35,16.7Z"/><path d="M18.14,0H1.44A1.45,1.45,0,0,0,0,1.44V22.07a1.45,1.45,0,0,0,1.44,1.44H9.79a.47.47,0,0,0,.46-.46.46.46,0,0,0-.46-.46H1.44a.52.52,0,0,1-.52-.52V1.44A.52.52,0,0,1,1.44.92h16.7a.52.52,0,0,1,.52.52V16.67a.46.46,0,1,0,.92,0V1.44A1.45,1.45,0,0,0,18.14,0Z"/><path d="M22.48,18.67a1.75,1.75,0,0,0-1.19.33,1.67,1.67,0,0,0-2.45-.49,1.67,1.67,0,0,0-1.27-.82,1.7,1.7,0,0,0-.94.17V12a1.68,1.68,0,0,0-1.86-1.68,1.74,1.74,0,0,0-1.51,1.75V18L11.91,19.3A2.91,2.91,0,0,0,11.13,22l1,4.37a3.87,3.87,0,0,0,3.79,3H20.1A3.91,3.91,0,0,0,24,25.5V20.42A1.74,1.74,0,0,0,22.48,18.67Zm.6,6.83a3,3,0,0,1-3,3H16a3,3,0,0,1-2.9-2.29l-1-4.37A2,2,0,0,1,12.56,20l.7-.7v1.59a.46.46,0,0,0,.46.46.47.47,0,0,0,.46-.46V12.07a.81.81,0,0,1,.69-.83.71.71,0,0,1,.59.19.77.77,0,0,1,.25.57v8.1a.46.46,0,0,0,.46.46.45.45,0,0,0,.46-.46v-.73a.77.77,0,0,1,.26-.57.75.75,0,0,1,.59-.2.82.82,0,0,1,.69.84v1.15a.46.46,0,0,0,.92,0v-.73a.76.76,0,0,1,.25-.57.79.79,0,0,1,.6-.2.82.82,0,0,1,.68.84v1.15a.47.47,0,0,0,.93,0v-.73a.77.77,0,0,1,.84-.77.82.82,0,0,1,.69.84V25.5Z"/></g></g></svg>
+                    Take a quiz to complete the target.
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div>
+              <label class="block tracking-wide text-grey-darker text-xs font-semibold mb-2" for="Quiz question 1">
+                Prepare the quiz now.
+              </label>
+              <div class="flex bg-transparent items-center border-b border-b-1 border-grey-light py-2 mb-4 rounded">
+                <input class="appearance-none bg-transparent text-lg border-none w-full text-grey-darker mr-3 py-1 px-2 pl-0 leading-tight focus:outline-none" type="text" value="Type the question here…" placeholder="Type the question here…" aria-label="Quiz question">
+              </div>
+              <div class="flex flex-col bg-white mb-2 border rounded">
+                <div class="flex">
+                  <input class="appearance-none block w-full bg-white text-grey-darker text-sm rounded p-4 leading-tight focus:outline-none focus:bg-white focus:border-grey" id="answer option-1" type="text" value="Answer option 1" placeholder="Answer option 1">
+                  <button class="flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-grey hover:text-grey-darker text-xs py-1 px-3" type="button">
+                    Mark as correct
+                  </button>
+                  <button class="flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-grey hover:text-grey-darker text-xs py-1 px-3" type="button">
+                    Explain
+                  </button>
+                  <button class="flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-grey hover:text-grey-darker text-xs py-1 px-3" type="button">
+                    Delete
+                  </button>
+                </div>
+                <textarea class="appearance-none block w-full border-t border-t-1 border-grey-light bg-white text-grey-darker text-sm rounded rounded-t-none p-4 -mt-0 leading-tight focus:outline-none focus:bg-white focus:border-grey" id="title" placeholder="Type an answer explanation here." name="Description" rows="3"></textarea>
+              </div>
+              <input class="appearance-none block w-full bg-white text-grey-darker border border-grey-light text-sm rounded p-4 mb-2 leading-tight focus:outline-none focus:bg-white focus:border-grey" id="title" type="text" value="Answer option 2" placeholder="Answer option 2">
+              <button class="bg-white border w-full border-grey-light border-dashed text-left hover:bg-grey-lighter text-grey-darkest rounded text-sm italic focus:outline-none p-4">
+                Add another answer option
+              </button>
+              <div class="flex items-center py-3 cursor-pointer">
+                <svg class="svg-icon w-8 h-8" viewBox="0 0 20 20">
+                <path fill="#A8B7C7" d="M13.388,9.624h-3.011v-3.01c0-0.208-0.168-0.377-0.376-0.377S9.624,6.405,9.624,6.613v3.01H6.613c-0.208,0-0.376,0.168-0.376,0.376s0.168,0.376,0.376,0.376h3.011v3.01c0,0.208,0.168,0.378,0.376,0.378s0.376-0.17,0.376-0.378v-3.01h3.011c0.207,0,0.377-0.168,0.377-0.376S13.595,9.624,13.388,9.624z M10,1.344c-4.781,0-8.656,3.875-8.656,8.656c0,4.781,3.875,8.656,8.656,8.656c4.781,0,8.656-3.875,8.656-8.656C18.656,5.219,14.781,1.344,10,1.344z M10,17.903c-4.365,0-7.904-3.538-7.904-7.903S5.635,2.096,10,2.096S17.903,5.635,17.903,10S14.365,17.903,10,17.903z"></path>
+                </svg>
+                <h5 class="font-semibold ml-2">Add another question</h5>
+              </div>
+              <div class="flex">
+                <button class="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+                  Save All
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

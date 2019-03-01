@@ -90,4 +90,12 @@ after 'development:courses' do
     faculty: faculty,
     course: Course.find_by(name: 'iOS')
   )
+
+  Faculty.create!(
+    name: 'School Admin',
+    title: 'School Admin',
+    category: 'team',
+    user: User.find_by(email: 'admin@example.com'),
+    school: sv
+  )
 end

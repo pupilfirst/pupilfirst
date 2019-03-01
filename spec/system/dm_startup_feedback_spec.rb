@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'DM Startup Feedback' do
+feature 'DM Startup Feedback', broken: true do
   include UserSpecHelper
 
   let!(:admin) { create :admin_user, admin_type: 'superadmin' }
@@ -39,6 +39,9 @@ feature 'DM Startup Feedback' do
   end
 
   before :each do
+    # Create another founder in team.
+    create :founder, startup: startup
+
     # Stub the request to intercom - we don't care about this right now.
     stub_request(:any, /api\.intercom\.io/)
 

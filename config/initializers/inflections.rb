@@ -11,6 +11,7 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.irregular 'is', 'are'
   inflect.irregular 'was', 'were'
   inflect.irregular 'criterion', 'criteria' # this is required for our migration history to work.
+  inflect.irregular 'curriculum', 'curricula'
 end
 
 # These inflection rules are supported but not enabled by default:

@@ -380,6 +380,16 @@ ActiveRecord::Schema.define(version: 2019_02_26_072210) do
     t.index ["slug"], name: "index_resources_on_slug"
   end
 
+  create_table "school_admins", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "school_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["school_id"], name: "index_school_admins_on_school_id"
+    t.index ["user_id", "school_id"], name: "index_school_admins_on_user_id_and_school_id", unique: true
+    t.index ["user_id"], name: "index_school_admins_on_user_id"
+  end
+
   create_table "school_strings", force: :cascade do |t|
     t.bigint "school_id"
     t.string "key"
@@ -393,6 +403,8 @@ ActiveRecord::Schema.define(version: 2019_02_26_072210) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "subdomain"
+    t.string "domain"
   end
 
   create_table "shortened_urls", id: :serial, force: :cascade do |t|

@@ -149,12 +149,6 @@ ActiveAdmin.register Founder do
     column :behance_url
   end
 
-  member_action :remove_from_startup, method: :post do
-    founder = Founder.friendly.find params[:id]
-    Founders::RemoveFromStartupService.new(founder).execute
-    redirect_to action: :show
-  end
-
   show do
     attributes_table do
       row :slug
@@ -183,10 +177,6 @@ ActiveAdmin.register Founder do
                 " (#{founder.startup.name})"
               end
             end
-          end
-
-          span class: 'wrap-with-paranthesis' do
-            link_to 'Remove from Startup', remove_from_startup_admin_founder_path, method: :post, data: { confirm: 'Are you sure?' }
           end
         end
       end

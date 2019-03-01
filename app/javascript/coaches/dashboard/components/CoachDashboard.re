@@ -1,5 +1,7 @@
 [%bs.raw {|require("./CoachDashboard.scss")|}];
 
+open CoachDashboard__Types;
+
 type props = {
   founders: list(Founder.t),
   teams: list(Team.t),
@@ -72,16 +74,16 @@ let make =
     <div className="coach-dashboard__container container">
       <div className="row">
         <div className="col-md-3">
-          <SidePanel teams founders selectedFounder=state.selectedFounder selectFounderCB clearFounderCB />
+          <SidePanel teams founders selectedFounder={state.selectedFounder} selectFounderCB clearFounderCB />
         </div>
         <div className="col-md-9">
           <TimelineEventsPanel
-            timelineEvents=state.timelineEvents
-            hasMorePendingTEs=state.hasMorePendingTEs
-            hasMoreCompletedTEs=state.hasMoreCompletedTEs
+            timelineEvents={state.timelineEvents}
+            hasMorePendingTEs={state.hasMorePendingTEs}
+            hasMoreCompletedTEs={state.hasMoreCompletedTEs}
             appendTEsCB
             founders
-            selectedFounder=state.selectedFounder
+            selectedFounder={state.selectedFounder}
             replaceTimelineEvent
             authenticityToken
             emptyIconUrl

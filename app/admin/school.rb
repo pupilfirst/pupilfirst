@@ -12,7 +12,6 @@ ActiveAdmin.register School do
   show do |school|
     attributes_table do
       row :name
-
       row :logo do
         if school.logo.attached?
           link_to(school.logo) do
@@ -34,6 +33,9 @@ ActiveAdmin.register School do
       end
 
       row :id
+      row :founder_tags do
+        linked_tags(school.founder_tags)
+      end
       row :created_at
       row :updated_at
     end

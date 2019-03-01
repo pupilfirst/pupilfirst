@@ -1,3 +1,5 @@
+open CoachDashboard__Types;
+
 type t = {
   id: int,
   name: string,

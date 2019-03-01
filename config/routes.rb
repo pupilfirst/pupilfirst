@@ -24,6 +24,51 @@ Rails.application.routes.draw do
   # TODO: Remove these founder routes as we no longer have 'founders'. Always use the corresponding 'student' routes below.
   resource :founder, only: %i[edit update]
 
+  resource :school, only: %i[show update]
+
+  namespace :school, module: 'schools' do
+    resources :courses, only: %i[show update] do
+      post 'close', on: :member
+      # TODO: Use shallow routes here, where possible.
+      resource :curriculum, only: %i[show]
+      resources :founders, as: 'students', path: 'students', only: %i[index create]
+      resources :faculty, as: 'coaches', path: 'coaches', only: %i[index create destroy]
+      resources :evaluation_criteria, only: %i[create]
+      resources :levels, only: %i[create]
+    end
+
+    resources :founders, as: 'students', path: 'students', except: %i[index] do
+      collection do
+        post 'team_up'
+      end
+    end
+
+    resources :startups, as: 'teams', path: 'teams', only: %i[update] do
+      member do
+        post 'add_coach'
+        post 'remove_coach'
+      end
+    end
+
+    resources :evaluation_criteria, only: %i[update destroy]
+
+    resources :levels, only: %i[update destroy] do
+      resources :target_groups, only: %i[create]
+    end
+
+    resources :target_groups, only: %i[update destroy] do
+      resources :targets, only: %i[create]
+    end
+
+    resources :targets, only: %i[update] do
+      resource :quiz, only: %i[create]
+    end
+
+    resources :resources, only: %i[create]
+
+    resource :quizzes, only: %i[update destroy]
+  end
+
   resources :founders, only: %i[] do
     member do
       post 'select'

@@ -12,10 +12,16 @@ module Users
     end
 
     def after_sign_in_path
-      faculty_path || admin_path || founder_path || exited_founder_path || root_path
+      school_admin_path || faculty_path || admin_path || founder_path || exited_founder_path || root_path
     end
 
     private
+
+    def school_admin_path
+      return if @user.school_admins.find_by(school: @current_school).blank?
+
+      url_helpers.school_path
+    end
 
     def faculty_path
       faculty = @user.faculty.find_by(school: @current_school)

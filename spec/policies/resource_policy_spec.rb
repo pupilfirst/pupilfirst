@@ -43,6 +43,11 @@ describe ResourcePolicy do
   let!(:public_resource_s2) { create :resource, school: school_2, public: true }
   let!(:resource_1_s2) { create :resource, school: school_2, public: false, targets: [target_s2] }
 
+  before do
+    # Create another founder in startup.
+    create :founder, startup: startup
+  end
+
   permissions :show? do
     context 'when founder is a member of course 1' do
       it 'does not allow access to unlinked private resources in school' do

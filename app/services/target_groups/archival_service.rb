@@ -11,5 +11,9 @@ module TargetGroups
         @target_group.update!(safe_to_archive: true, archived: true)
       end
     end
+
+    def unarchive
+      @target_group.update!(archived: false)
+    end
   end
 end

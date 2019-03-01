@@ -63,7 +63,7 @@ feature 'Target Overlay' do
 
       # Within the header:
       within('.target-overlay__header') do
-        expect(page).to have_selector('.target-overlay-header__headline', text: "Team:#{target.title}")
+        expect(page).to have_selector('.target-overlay-header__headline', text: target.title)
       end
 
       # Within the status badge bar:

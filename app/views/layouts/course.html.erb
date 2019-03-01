@@ -1,0 +1,40 @@
+<% content_for(:head) do %>
+  <%= stylesheet_pack_tag 'schools/shared/shared', media: 'all', 'data-turbolinks-track': 'reload' %>
+<% end %>
+<% content_for(:nav) do %>
+  <div class="flex global-sidebar">
+    <div class="bg-grey-darker global-sidebar__primary-nav global-sidebar__primary-nav--shrinked text-purple-lighter flex-none hidden md:block">
+    <div class="global-sidebar__header border-r p-4 bg-white flex pb-3">
+      <div class="global-sidebar__school-logo-container flex items-center bg-white rounded">
+        <h3>L</h3>
+      </div>
+    </div>
+      <ul class="list-reset">
+<!--        <li>-->
+          <%#= link_to school_path, class:'flex text-white p-4 hover:bg-grey-darkest font-semibold no-underline items-center justify-center' do%>
+<!--            <i class="material-icons md-48">vertical_split</i>-->
+          <%# end %>
+<!--        </li>-->
+        <li>
+          <% classes = 'flex text-white p-4 hover:bg-grey-darkest font-semibold no-underline items-center justify-center' %>
+          <% classes += controller_name.in?(%w(curricula founders faculty)) ? ' bg-grey-darkest' : ''%>
+          <%= link_to school_path, class: classes do%>
+            <i class="material-icons md-48">description</i>
+          <% end %>
+        </li>
+      </ul>
+    </div>
+
+    <div class="bg-grey-light global-sidebar__secondary-nav w-full text-purple-lighter pb-6 hidden md:block">
+      <ul class="list-reset p-4">
+        <% default_classes = 'flex text-indigo-darker py-3 px-4 hover:bg-grey-lighter focus:bg-grey-lighter font-semibold rounded no-underline items-center my-1' %>
+        <% selected_classes = ' bg-grey-lighter' %>
+        <li><%= link_to 'Students', school_course_students_path(@course), class: (default_classes + (current_page?(school_course_students_path(@course)) ? selected_classes : '')) %></li>
+        <li><%= link_to 'Coaches', school_course_coaches_path(@course), class: (default_classes + (current_page?(school_course_coaches_path(@course)) ? selected_classes : '')) %></li>
+        <li><%= link_to 'Curriculum', school_course_curriculum_path(@course), class: (default_classes + (current_page?(school_course_curriculum_path(@course)) ? selected_classes : '')) %></li>
+      </ul>
+    </div>
+  </div>
+<% end %>
+
+<%= render template: 'layouts/tailwind' %>

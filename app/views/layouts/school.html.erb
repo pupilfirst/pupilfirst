@@ -22,16 +22,22 @@
               <%# end %>
 <!--          </li>-->
           <li>
+            <%= link_to '#', class:'flex text-white py-3 px-4 hover:bg-grey-darkest font-semibold no-underline items-center' do%>
+                <i class="material-icons md-48 mr-2">person</i>
+                <span>Coaches</span>
+            <% end %>
+          </li>
+          <li>
             <%= link_to '#', class:'flex text-white py-3 px-4 font-semibold no-underline items-center cursor-default' do%>
                 <i class="material-icons md-48 mr-2">description</i>
                 <span>Courses</span>
             <% end %>
-            </li>
             <ul class="list-reset px-4 pb-4 ml-4">
               <% @courses.each do |course| %>
               <li><%= link_to course.name, school_course_students_path(course), class:'block text-white py-3 px-4 hover:bg-grey-darkest rounded-lg font-semibold text-sm no-underline' %></li>
               <% end %>
             </ul>
+          </li>
         </ul>
       </div>
     </div>

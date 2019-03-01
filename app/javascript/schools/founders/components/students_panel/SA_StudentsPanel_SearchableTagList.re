@@ -54,7 +54,7 @@ let make = (~unselectedTags, ~selectedTags, ~addTagCB, ~removeTagCB, ~allowNewTa
         className="appearance-none block bg-white text-grey-darker border border-grey-light rounded py-3 px-4 my-2 focus:outline-none focus:bg-white focus:border-grey"
         id="tag"
         type_="text"
-        placeholder="Search or add new..."
+        placeholder={allowNewTags ? "Search or add new..." : "Select tags"}
       />
       {state.dropdownVisible ?
          <div className="border border-grey-light searchable-tag-list__dropdown pl-4">

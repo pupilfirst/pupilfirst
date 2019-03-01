@@ -14,6 +14,7 @@ type state = {
   searchString: string,
   formVisible,
   selectedLevelNumber: option(int),
+  tagsFilteredBy: list(string),
 };
 
 type action =
@@ -24,7 +25,9 @@ type action =
   | DeselectAllStudents
   | UpdateSearchString(string)
   | UpdateFormVisible(formVisible)
-  | UpdateSelectedLevelNumber(option(int));
+  | UpdateSelectedLevelNumber(option(int))
+  | AddTagFilter(string)
+  | RemoveTagFilter(string);
 
 let selectedAcrossTeams = selectedStudents => {
   selectedStudents |> List.map(s => s |> Student.teamId) |> List.sort_uniq((id1, id2) => id1 - id2) |> List.length > 1;
@@ -64,7 +67,19 @@ let filteredTeams = state => {
     | None => state.teams
     | Some(n) => state.teams |> List.filter(team => team |> Team.levelNumber == n)
     };
-  levelFilteredTeams
+  let tagFilteredTeams =
+    switch (state.tagsFilteredBy) {
+    | [] => levelFilteredTeams
+    | tags =>
+      levelFilteredTeams
+      |> List.filter(team =>
+           tags
+           |> List.for_all(tag =>
+                team |> Team.students |> List.map(student => student |> Student.tags) |> List.flatten |> List.mem(tag)
+              )
+         )
+    };
+  tagFilteredTeams
   |> List.filter(team =>
        team
        |> Team.students
@@ -94,7 +109,14 @@ let component = ReasonReact.reducerComponent("SA_StudentsPanel");
 
 let make = (~teams, ~courseId, ~authenticityToken, ~levels, ~studentTags, _children) => {
   ...component,
-  initialState: () => {teams, selectedStudents: [], searchString: "", formVisible: None, selectedLevelNumber: None},
+  initialState: () => {
+    teams,
+    selectedStudents: [],
+    searchString: "",
+    formVisible: None,
+    selectedLevelNumber: None,
+    tagsFilteredBy: [],
+  },
   reducer: (action, state) =>
     switch (action) {
     | UpdateTeams(teams) => ReasonReact.Update({...state, teams})
@@ -114,6 +136,9 @@ let make = (~teams, ~courseId, ~authenticityToken, ~levels, ~studentTags, _child
     | UpdateSearchString(searchString) => ReasonReact.Update({...state, searchString})
     | UpdateFormVisible(formVisible) => ReasonReact.Update({...state, formVisible})
     | UpdateSelectedLevelNumber(selectedLevelNumber) => ReasonReact.Update({...state, selectedLevelNumber})
+    | AddTagFilter(tag) => ReasonReact.Update({...state, tagsFilteredBy: [tag, ...state.tagsFilteredBy]})
+    | RemoveTagFilter(tag) =>
+      ReasonReact.Update({...state, tagsFilteredBy: state.tagsFilteredBy |> List.filter(t => t !== tag)})
     },
   render: ({state, send}) => {
     <div className="flex-1 flex flex-col bg-white overflow-hidden">
@@ -234,6 +259,21 @@ let make = (~teams, ~courseId, ~authenticityToken, ~levels, ~studentTags, _child
                    </svg>
                    <h5 className="font-semibold ml-2"> {"Add New Students" |> str} </h5>
                  </button>}
+            </div>
+          </div>
+        </div>
+        <div className="bg-grey-lightest flex px-6 mr-3 pb-3">
+          <div
+            className="max-w-lg bg-white mx-auto relative rounded rounded-b-none border-b py-2 px-3 w-full flex items-center justify-between">
+            <div className="flex flex-col">
+              <div className="mb-1"> {"Filtered by tags:" |> str} </div>
+              <SA_StudentsPanel_SearchableTagList
+                unselectedTags={studentTags |> List.filter(tag => !(state.tagsFilteredBy |> List.mem(tag)))}
+                selectedTags={state.tagsFilteredBy}
+                addTagCB={tag => send(AddTagFilter(tag))}
+                removeTagCB={tag => send(RemoveTagFilter(tag))}
+                allowNewTags=false
+              />
             </div>
           </div>
         </div>

@@ -17,7 +17,7 @@ let handleClick = (tag, send, clickCB) => {
 
 let component = ReasonReact.reducerComponent("SA_StudentsPanel_SearchableTagList");
 
-let make = (~unselectedTags, ~selectedTags, ~addTagCB, ~removeTagCB, _children) => {
+let make = (~unselectedTags, ~selectedTags, ~addTagCB, ~removeTagCB, ~allowNewTags, _children) => {
   ...component,
   initialState: () => {searchString: "", dropdownVisible: false},
   reducer: (action, state) => {
@@ -57,7 +57,8 @@ let make = (~unselectedTags, ~selectedTags, ~addTagCB, ~removeTagCB, _children) 
       />
       {state.dropdownVisible ?
          <div className="border border-grey-light searchable-tag-list__dropdown pl-4">
-           {List.append(selectedTags, unselectedTags)
+           {!allowNewTags
+            || List.append(selectedTags, unselectedTags)
             |> List.mem(state.searchString)
             || state.searchString
             |> String.length < 1 ?

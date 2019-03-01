@@ -63,6 +63,15 @@ class HomeController < ApplicationController
     redirect_to new_user_session_path
   end
 
+  # GET /favicon.ico
+  def favicon
+    if current_school.present? && current_school.icon.attached?
+      redirect_to view_context.url_for(current_school.icon_variant(:thumb))
+    else
+      redirect_to view_context.image_path('layouts/shared/favicon.png')
+    end
+  end
+
   protected
 
   def background_image_number

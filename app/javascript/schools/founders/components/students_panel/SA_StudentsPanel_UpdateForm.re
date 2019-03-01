@@ -36,9 +36,9 @@ let formInvalid = state => {
   state.hasNameError || state.hasTeamNameError;
 };
 
-let handleResponseCB = (submitCB, json) => {
+let handleResponseCB = (submitCB, state, json) => {
   let teams = json |> Json.Decode.(field("teams", list(Team.decode)));
-  submitCB(teams);
+  submitCB(teams, state.tagsToApply);
   Notification.success("Success", "Student updated succesffully");
 };
 
@@ -134,7 +134,9 @@ let make = (~student, ~studentTags, ~closeFormCB, ~submitFormCB, ~authenticityTo
                 </div>
                 <div className="flex">
                   <button
-                    onClick={_e => updateStudent(student, state, authenticityToken, handleResponseCB(submitFormCB))}
+                    onClick={_e =>
+                      updateStudent(student, state, authenticityToken, handleResponseCB(submitFormCB, state))
+                    }
                     className={
                       "w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3"
                       ++ (formInvalid(state) ? " opacity-50 cursor-not-allowed" : "")

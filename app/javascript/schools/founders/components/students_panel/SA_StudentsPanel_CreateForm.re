@@ -116,6 +116,7 @@ let make = (~courseId, ~closeFormCB, ~submitFormCB, ~studentTags, ~authenticityT
                           selectedTags={state.tagsToApply}
                           addTagCB={tag => send(AddTag(tag))}
                           removeTagCB={tag => send(RemoveTag(tag))}
+                          allowNewTags=true
                         />}
                      </div>
                      <div className="flex mt-4">

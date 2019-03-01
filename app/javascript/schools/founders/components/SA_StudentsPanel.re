@@ -14,6 +14,7 @@ type state = {
   searchString: string,
   formVisible,
   selectedLevelNumber: option(int),
+  tagsFilteredBy: list(string),
 };
 
 type action =
@@ -24,7 +25,9 @@ type action =
   | DeselectAllStudents
   | UpdateSearchString(string)
   | UpdateFormVisible(formVisible)
-  | UpdateSelectedLevelNumber(option(int));
+  | UpdateSelectedLevelNumber(option(int))
+  | AddTagFilter(string)
+  | RemoveTagFilter(string);
 
 let selectedAcrossTeams = selectedStudents => {
   selectedStudents |> List.map(s => s |> Student.teamId) |> List.sort_uniq((id1, id2) => id1 - id2) |> List.length > 1;
@@ -64,7 +67,19 @@ let filteredTeams = state => {
     | None => state.teams
     | Some(n) => state.teams |> List.filter(team => team |> Team.levelNumber == n)
     };
-  levelFilteredTeams
+  let tagFilteredTeams =
+    switch (state.tagsFilteredBy) {
+    | [] => levelFilteredTeams
+    | tags =>
+      levelFilteredTeams
+      |> List.filter(team =>
+           tags
+           |> List.for_all(tag =>
+                team |> Team.students |> List.map(student => student |> Student.tags) |> List.flatten |> List.mem(tag)
+              )
+         )
+    };
+  tagFilteredTeams
   |> List.filter(team =>
        team
        |> Team.students
@@ -94,7 +109,14 @@ let component = ReasonReact.reducerComponent("SA_StudentsPanel");
 
 let make = (~teams, ~courseId, ~authenticityToken, ~levels, ~studentTags, _children) => {
   ...component,
-  initialState: () => {teams, selectedStudents: [], searchString: "", formVisible: None, selectedLevelNumber: None},
+  initialState: () => {
+    teams,
+    selectedStudents: [],
+    searchString: "",
+    formVisible: None,
+    selectedLevelNumber: None,
+    tagsFilteredBy: [],
+  },
   reducer: (action, state) =>
     switch (action) {
     | UpdateTeams(teams) => ReasonReact.Update({...state, teams})
@@ -114,6 +136,9 @@ let make = (~teams, ~courseId, ~authenticityToken, ~levels, ~studentTags, _child
     | UpdateSearchString(searchString) => ReasonReact.Update({...state, searchString})
     | UpdateFormVisible(formVisible) => ReasonReact.Update({...state, formVisible})
     | UpdateSelectedLevelNumber(selectedLevelNumber) => ReasonReact.Update({...state, selectedLevelNumber})
+    | AddTagFilter(tag) => ReasonReact.Update({...state, tagsFilteredBy: [tag, ...state.tagsFilteredBy]})
+    | RemoveTagFilter(tag) =>
+      ReasonReact.Update({...state, tagsFilteredBy: state.tagsFilteredBy |> List.filter(t => t !== tag)})
     },
   render: ({state, send}) => {
     <div className="flex-1 flex flex-col bg-white overflow-hidden">
@@ -179,61 +204,75 @@ let make = (~teams, ~courseId, ~authenticityToken, ~levels, ~studentTags, _child
         </div>
         <div className="bg-grey-lightest flex px-6 mr-3 pb-3">
           <div
-            className="max-w-lg bg-white mx-auto relative rounded rounded-b-none border-b py-2 px-3 mt-3 w-full flex items-center justify-between">
-            <div className="flex">
-              <label className="block leading-tight mr-4 my-auto">
+            className="max-w-lg bg-white mx-auto relative rounded rounded-b-none border-b py-2 px-3 mt-3 w-full flex flex-col">
+            <div className="flex items-center justify-between">
+              <div className="flex">
+                <label className="block leading-tight mr-4 my-auto">
+                  <input
+                    className="leading-tight"
+                    type_="checkbox"
+                    checked={state.selectedStudents |> List.length > 0}
+                    onChange={
+                      state.selectedStudents |> List.length > 0 ?
+                        _e => send(DeselectAllStudents) : (_e => send(SelectAllStudents))
+                    }
+                  />
+                </label>
                 <input
-                  className="leading-tight"
-                  type_="checkbox"
-                  checked={state.selectedStudents |> List.length > 0}
-                  onChange={
-                    state.selectedStudents |> List.length > 0 ?
-                      _e => send(DeselectAllStudents) : (_e => send(SelectAllStudents))
-                  }
+                  type_="search"
+                  className="bg-white border rounded block appearance-none leading-normal mr-2"
+                  placeholder="Search by student name..."
+                  value={state.searchString}
+                  onChange={event => send(UpdateSearchString(ReactEvent.Form.target(event)##value))}
                 />
-              </label>
-              <input
-                type_="search"
-                className="bg-white border rounded block appearance-none leading-normal mr-2"
-                placeholder="Search by student name..."
-                value={state.searchString}
-                onChange={event => send(UpdateSearchString(ReactEvent.Form.target(event)##value))}
-              />
+              </div>
+              <div className="flex">
+                {false ?
+                   <button
+                     className="bg-grey-lighter hover:bg-grey-light hover:text-grey-darker focus:outline-none text-grey-dark text-sm font-semibold py-2 px-4 rounded inline-flex items-center mx-2">
+                     {"Add tags" |> str}
+                   </button> :
+                   ReasonReact.null}
+                {isGroupable(state.selectedStudents, state.teams) ?
+                   <button
+                     onClick={_e => teamUp(state.selectedStudents, handleTeamUpResponse(send), authenticityToken)}
+                     className="bg-transparent hover:bg-purple-dark focus:outline-none text-purple-dark text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
+                     {"Group as Team" |> str}
+                   </button> :
+                   ReasonReact.null}
+                {isMoveOutable(state.selectedStudents, state.teams) ?
+                   <button
+                     onClick={_e => teamUp(state.selectedStudents, handleTeamUpResponse(send), authenticityToken)}
+                     className="bg-transparent hover:bg-purple-dark focus:outline-none text-purple-dark text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
+                     {"Move out from Team" |> str}
+                   </button> :
+                   ReasonReact.null}
+                {state.selectedStudents |> List.length > 0 ?
+                   ReasonReact.null :
+                   <button
+                     onClick={_e => send(UpdateFormVisible(CreateForm))}
+                     className="hover:bg-purple-dark text-purple-dark font-semibold hover:text-white focus:outline-none border border-dashed border-blue hover:border-transparent flex items-center px-2 py-1 rounded-lg cursor-pointer">
+                     <svg className="svg-icon w-6 h-6" viewBox="0 0 20 20">
+                       <path
+                         fill="#A8B7C7"
+                         d="M13.388,9.624h-3.011v-3.01c0-0.208-0.168-0.377-0.376-0.377S9.624,6.405,9.624,6.613v3.01H6.613c-0.208,0-0.376,0.168-0.376,0.376s0.168,0.376,0.376,0.376h3.011v3.01c0,0.208,0.168,0.378,0.376,0.378s0.376-0.17,0.376-0.378v-3.01h3.011c0.207,0,0.377-0.168,0.377-0.376S13.595,9.624,13.388,9.624z M10,1.344c-4.781,0-8.656,3.875-8.656,8.656c0,4.781,3.875,8.656,8.656,8.656c4.781,0,8.656-3.875,8.656-8.656C18.656,5.219,14.781,1.344,10,1.344z M10,17.903c-4.365,0-7.904-3.538-7.904-7.903S5.635,2.096,10,2.096S17.903,5.635,17.903,10S14.365,17.903,10,17.903z"
+                       />
+                     </svg>
+                     <h5 className="font-semibold ml-2"> {"Add New Students" |> str} </h5>
+                   </button>}
+              </div>
             </div>
-            <div className="flex">
-              {false ?
-                 <button
-                   className="bg-grey-lighter hover:bg-grey-light hover:text-grey-darker focus:outline-none text-grey-dark text-sm font-semibold py-2 px-4 rounded inline-flex items-center mx-2">
-                   {"Add tags" |> str}
-                 </button> :
-                 ReasonReact.null}
-              {isGroupable(state.selectedStudents, state.teams) ?
-                 <button
-                   onClick={_e => teamUp(state.selectedStudents, handleTeamUpResponse(send), authenticityToken)}
-                   className="bg-transparent hover:bg-purple-dark focus:outline-none text-purple-dark text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
-                   {"Group as Team" |> str}
-                 </button> :
-                 ReasonReact.null}
-              {isMoveOutable(state.selectedStudents, state.teams) ?
-                 <button
-                   onClick={_e => teamUp(state.selectedStudents, handleTeamUpResponse(send), authenticityToken)}
-                   className="bg-transparent hover:bg-purple-dark focus:outline-none text-purple-dark text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
-                   {"Move out from Team" |> str}
-                 </button> :
-                 ReasonReact.null}
-              {state.selectedStudents |> List.length > 0 ?
-                 ReasonReact.null :
-                 <button
-                   onClick={_e => send(UpdateFormVisible(CreateForm))}
-                   className="hover:bg-purple-dark text-purple-dark font-semibold hover:text-white focus:outline-none border border-dashed border-blue hover:border-transparent flex items-center px-2 py-1 rounded-lg cursor-pointer">
-                   <svg className="svg-icon w-6 h-6" viewBox="0 0 20 20">
-                     <path
-                       fill="#A8B7C7"
-                       d="M13.388,9.624h-3.011v-3.01c0-0.208-0.168-0.377-0.376-0.377S9.624,6.405,9.624,6.613v3.01H6.613c-0.208,0-0.376,0.168-0.376,0.376s0.168,0.376,0.376,0.376h3.011v3.01c0,0.208,0.168,0.378,0.376,0.378s0.376-0.17,0.376-0.378v-3.01h3.011c0.207,0,0.377-0.168,0.377-0.376S13.595,9.624,13.388,9.624z M10,1.344c-4.781,0-8.656,3.875-8.656,8.656c0,4.781,3.875,8.656,8.656,8.656c4.781,0,8.656-3.875,8.656-8.656C18.656,5.219,14.781,1.344,10,1.344z M10,17.903c-4.365,0-7.904-3.538-7.904-7.903S5.635,2.096,10,2.096S17.903,5.635,17.903,10S14.365,17.903,10,17.903z"
-                     />
-                   </svg>
-                   <h5 className="font-semibold ml-2"> {"Add New Students" |> str} </h5>
-                 </button>}
+            <div className="border-t mt-2">
+              <div className="flex flex-col pt-2 pl-6">
+                <div className="mb-1"> {"Filters:" |> str} </div>
+                <SA_StudentsPanel_SearchableTagList
+                  unselectedTags={studentTags |> List.filter(tag => !(state.tagsFilteredBy |> List.mem(tag)))}
+                  selectedTags={state.tagsFilteredBy}
+                  addTagCB={tag => send(AddTagFilter(tag))}
+                  removeTagCB={tag => send(RemoveTagFilter(tag))}
+                  allowNewTags=false
+                />
+              </div>
             </div>
           </div>
         </div>

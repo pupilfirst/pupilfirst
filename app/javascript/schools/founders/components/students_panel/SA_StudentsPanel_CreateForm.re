@@ -20,9 +20,9 @@ let formInvalid = state => {
   state.studentsToAdd |> List.length < 1;
 };
 
-let handleResponseCB = (submitCB, json) => {
+let handleResponseCB = (submitCB, state, json) => {
   let teams = json |> Json.Decode.(field("teams", list(Team.decode)));
-  submitCB(teams);
+  submitCB(teams, state.tagsToApply);
   Notification.success("Success", "Student(s) created succesffully");
 };
 
@@ -122,7 +122,7 @@ let make = (~courseId, ~closeFormCB, ~submitFormCB, ~studentTags, ~authenticityT
                      <div className="flex mt-4">
                        <button
                          onClick={_e =>
-                           saveStudents(state, courseId, authenticityToken, handleResponseCB(submitFormCB))
+                           saveStudents(state, courseId, authenticityToken, handleResponseCB(submitFormCB, state))
                          }
                          className={
                            "w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3"

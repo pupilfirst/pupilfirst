@@ -14,6 +14,7 @@ type state = {
   searchString: string,
   formVisible,
   selectedLevelNumber: option(int),
+  tags: list(string),
   tagsFilteredBy: list(string),
 };
 
@@ -26,6 +27,7 @@ type action =
   | UpdateSearchString(string)
   | UpdateFormVisible(formVisible)
   | UpdateSelectedLevelNumber(option(int))
+  | AddNewTags(list(string))
   | AddTagFilter(string)
   | RemoveTagFilter(string);
 
@@ -116,6 +118,7 @@ let make = (~teams, ~courseId, ~authenticityToken, ~levels, ~studentTags, _child
     formVisible: None,
     selectedLevelNumber: None,
     tagsFilteredBy: [],
+    tags: studentTags,
   },
   reducer: (action, state) =>
     switch (action) {
@@ -139,17 +142,22 @@ let make = (~teams, ~courseId, ~authenticityToken, ~levels, ~studentTags, _child
     | AddTagFilter(tag) => ReasonReact.Update({...state, tagsFilteredBy: [tag, ...state.tagsFilteredBy]})
     | RemoveTagFilter(tag) =>
       ReasonReact.Update({...state, tagsFilteredBy: state.tagsFilteredBy |> List.filter(t => t !== tag)})
+    | AddNewTags(tags) =>
+      ReasonReact.Update({...state, tags: List.append(tags, state.tags) |> List.sort_uniq(String.compare)})
     },
   render: ({state, send}) => {
     <div className="flex-1 flex flex-col bg-white overflow-hidden">
       {let closeFormCB = () => send(UpdateFormVisible(None))
-       let submitFormCB = teams => {send(UpdateTeams(teams))
-                                    send(UpdateFormVisible(None))}
+       let submitFormCB = (teams, tags) =>
+         {send(UpdateTeams(teams))
+          send(AddNewTags(tags))
+          send(UpdateFormVisible(None))}
        switch (state.formVisible) {
        | None => ReasonReact.null
-       | CreateForm => <SA_StudentsPanel_CreateForm courseId closeFormCB submitFormCB studentTags authenticityToken />
+       | CreateForm =>
+         <SA_StudentsPanel_CreateForm courseId closeFormCB submitFormCB studentTags={state.tags} authenticityToken />
        | UpdateForm(student) =>
-         <SA_StudentsPanel_UpdateForm student studentTags closeFormCB submitFormCB authenticityToken />
+         <SA_StudentsPanel_UpdateForm student studentTags={state.tags} closeFormCB submitFormCB authenticityToken />
        }}
       <div>
         <div className="border-b flex px-6 py-2 items-center justify-between">
@@ -262,18 +270,20 @@ let make = (~teams, ~courseId, ~authenticityToken, ~levels, ~studentTags, _child
                    </button>}
               </div>
             </div>
-            <div className="border-t mt-2">
-              <div className="flex flex-col pt-2 pl-6">
-                <div className="mb-1"> {"Filters:" |> str} </div>
-                <SA_StudentsPanel_SearchableTagList
-                  unselectedTags={studentTags |> List.filter(tag => !(state.tagsFilteredBy |> List.mem(tag)))}
-                  selectedTags={state.tagsFilteredBy}
-                  addTagCB={tag => send(AddTagFilter(tag))}
-                  removeTagCB={tag => send(RemoveTagFilter(tag))}
-                  allowNewTags=false
-                />
-              </div>
-            </div>
+            {state.tags |> List.length > 0 ?
+               <div className="border-t mt-2">
+                 <div className="flex flex-col pt-2 pl-6">
+                   <div className="mb-1"> {"Filters:" |> str} </div>
+                   <SA_StudentsPanel_SearchableTagList
+                     unselectedTags={state.tags |> List.filter(tag => !(state.tagsFilteredBy |> List.mem(tag)))}
+                     selectedTags={state.tagsFilteredBy}
+                     addTagCB={tag => send(AddTagFilter(tag))}
+                     removeTagCB={tag => send(RemoveTagFilter(tag))}
+                     allowNewTags=false
+                   />
+                 </div>
+               </div> :
+               ReasonReact.null}
           </div>
         </div>
       </div>

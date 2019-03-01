@@ -1,4 +1,3 @@
-import "schools/shared/shared.css";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { jsComponent } from "../../../schools/curricula/components/CurriculumEditor.bs";

@@ -17,34 +17,6 @@ body {
   background-color: #f2f8ff;
 }
 
-.input-file {
-  width: 0.1px;
-  height: 0.1px;
-  opacity: 0;
-  overflow: hidden;
-  position: absolute;
-  z-index: -1;
-}
-
-.input-file+label {
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  cursor: pointer;
-  background-color: #e6f1ff;
-  border-radius: 8px;
-  overflow: hidden;
-  padding: 0.5rem 1rem;
-}
-
-.input-file+label {
-  color: #66788a;
-  border: 1px dashed #d3d8e1;
-}
-
-.input-file:focus+label, .input-file.has-focus+label, .input-file+label:hover {
-  color: #a8b7c7;
-}
-
 .target-group__container> :not(:last-child):before {
   content: "";
   position: absolute;

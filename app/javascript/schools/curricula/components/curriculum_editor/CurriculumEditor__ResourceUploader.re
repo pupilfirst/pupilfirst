@@ -160,10 +160,10 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
           className="resources-upload-tab__body p-5 border-l border-r border-b rounded rounded-tl-none rounded-tr-none">
           <input
             name="resource[title]"
-            className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+            className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
             id="title"
             type_="text"
-            placeholder="Type target title here"
+            placeholder="Type resource title here"
             required=true
             onChange={
               event =>
@@ -172,20 +172,29 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
           />
           {
             state.resourceType == File ?
+              <div className="input-file__container flex items-center relative mb-4">
+                <input
+                  className="input-file__input cursor-pointer px-4"
+                  name="resource[file]"
+                  type_="file"
+                  id="file"
+                  required=true
+                  multiple=false
+                />
+                <label
+                  className="input-file__label flex px-4 items-center font-semibold rounded text-sm"
+                  htmlFor="file">
+                  <i className="material-icons mr-2 text-grey-dark">{"file_upload" |> str}</i>
+                  {"Choose file to upload" |> str}
+                </label>
+              </div> :
               <input
-                name="resource[file]"
-                type_="file"
-                id="file"
-                required=true
-                multiple=false
-              /> :
-              <input
-                className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                 name="resource[link]"
                 id="link"
                 type_="url"
                 required=true
-                placeholder="Paste file"
+                placeholder="Paste URL here"
               />
           }
           <button

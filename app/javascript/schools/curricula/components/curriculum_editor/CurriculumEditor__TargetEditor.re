@@ -254,7 +254,7 @@ let isValidQuiz = quiz =>
 let booleanButtonClasses = bool =>
   bool ?
     "w-1/2 bg-grey hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none" :
-    "w-1/2 bg-white border-l hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none";
+    "w-1/2 bg-white hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none";
 
 let completionButtonClasses = value =>
   value ?

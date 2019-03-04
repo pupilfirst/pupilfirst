@@ -32,11 +32,16 @@ let make =
       | None => ""
       };
 
-    <div>
-      <div className="flex flex-col bg-white mb-2 border rounded">
+    <div className="relative">
+      <div className="quiz-maker__answer-option-pointer">
+      {answerOption |> AnswerOption.correctAnswer ?
+      <i className="material-icons">{"check_circle" |> str}</i>
+      : ReasonReact.null}
+      </div>
+      <div className="flex flex-col bg-white mb-2 border rounded ml-12">
         <div className="flex">
           <input
-            className="appearance-none block w-full bg-white text-grey-darker text-sm rounded p-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+            className="appearance-none block w-full bg-white text-grey-darker text-sm rounded px-4 py-3 leading-tight focus:outline-none focus:bg-white focus:border-grey"
             type_="text"
             placeholder="Answer option"
             value={answerOption |> AnswerOption.answer}

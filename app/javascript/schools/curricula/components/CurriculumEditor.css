@@ -1,14 +1,3 @@
-*, *::before, *::after {
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Open Sans', sans-serif;
-  color: #3a3f52;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
 .create-target-form {
   background-color: #edf3fa;
 }

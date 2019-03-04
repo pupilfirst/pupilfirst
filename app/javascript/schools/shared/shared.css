@@ -69,7 +69,6 @@ body {
 
 .drawer-right-form__error-msg {
     color: red;
-    margin-top: -1.75rem;
     margin-bottom: 0.715rem;
 }
 
@@ -140,6 +139,45 @@ body {
 
 .target-group__create:hover, .target-group__target-create:hover {
     @apply .shadow-lg;
+}
+
+.quiz-maker__question-container:hover .quiz-maker__question-remove-button {
+    visibility: visible;
+}
+
+.quiz-maker__question-container::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: calc(100% - 70px);
+    margin-top: 0.875rem;
+    bottom: 0;
+    width: 1px;
+    background: #afdcf8;
+    left: 1.5rem;
+}
+
+.quiz-maker__answer-option {}
+
+.quiz-maker__answer-option-pointer {
+    width: 1rem;
+    height: 1rem;
+    position: absolute;
+    color: #fff;
+    overflow: hidden;
+    background: #FFFFFF;
+    box-shadow: 0 0 0 1px #D3D8E1;
+    border-radius: 50%;
+    text-align: center;
+    left: 1rem;
+    top: 1rem;
+    margin: 0 0 0 1px;
+}
+
+.quiz-maker__answer-option-pointer--correct {
+    background: #10AB4C;
+    box-shadow: 0 0 0 1px #ffffff;
 }
 
 .select-list__item-selected {

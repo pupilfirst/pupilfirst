@@ -8,9 +8,7 @@ class FoundersController < ApplicationController
     # Show site wide notice to exited founders
     @sitewide_notice = @founder.exited? if @founder.user == current_user
     @meta_description = "#{@founder.name}: #{@founder.startup.name}"
-    # Hide founder events from everyone other than author of event.
-    @timeline_events = events_for_display.reject { |event| event.hidden_from?(current_founder) }
-    @timeline_events = Kaminari.paginate_array(@timeline_events).page(params[:page]).per(20)
+    @timeline_events = Kaminari.paginate_array(events_for_display).page(params[:page]).per(20)
   end
 
   # GET /students/:id/events/:page

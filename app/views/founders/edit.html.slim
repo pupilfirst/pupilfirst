@@ -1,8 +1,8 @@
 - content_for :head
-title SV.CO Edit Profile for #{@founder.fullname}
+title Edit Your Profile
 .container-md-center
   .content-box.my-3
-    h2.mb-3 Editing #{@founder.fullname}'s profile
+    h2.mb-3 Edit your profile
 
     = bootstrap_form_for(@form, url: founder_path, layout: :horizontal, label_col: 'col-sm-3', control_col: 'col-sm-9') do |f|
       .flex-column
@@ -14,11 +14,6 @@ title SV.CO Edit Profile for #{@founder.fullname}
         = f.text_field :about, label_class: 'col-form-label', label: 'One-Liner', placeholder: 'One-liner about yourself', maxlength: 255, required: false
         = f.text_field :skype_id, label_class: 'col-form-label', label: 'Skype ID', required: false
         = f.text_area :communication_address, label_class: 'col-form-label'
-
-        - college_collection = f.object.model.college.present? ? [f.object.model.college] : [OpenStruct.new(name: "My college isn't listed", id: 'other')]
-
-        = f.select :college_id, options_from_collection_for_select(college_collection, :id, :name),
-          { label_class: 'col-form-label', help: 'Please pick your college' }, { 'data-search-url' => colleges_url }
         = f.text_field :twitter_url, label_class: 'col-form-label', label: 'Twitter Profile URL', maxlength: 255, required: false
         = f.text_field :linkedin_url, label_class: 'col-form-label', label: 'LinkedIn Profile URL', maxlength: 255, required: false
         = f.text_field :personal_website_url, label_class: 'col-form-label', label: 'Personal Website URL', maxlength: 255, required: false

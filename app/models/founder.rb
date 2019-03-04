@@ -177,7 +177,6 @@ class Founder < ApplicationRecord
 
   # Return the 'next-applicable' profile completion instruction as a string
   def profile_completion_instruction
-    return 'Join the SV.CO Public Slack and update your slack username!' if slack_user_id.blank?
     return 'Update your Skype Id' if skype_id.blank?
     return 'Provide at-least one of your social profiles!' unless social_url_present?
     return 'Update your communication address!' if communication_address.blank?

@@ -1,11 +1,8 @@
 - presenter = Founders::TimelinePanelPresenter.new(event, @founder, current_founder)
 .timeline-panel
-  - if event.founder_event?
-    .hidden-marker href="#" data-toggle="tooltip" title="This event is not visible on the team's public timeline."
-      i.fa.fa-user-secret
   .timeline-heading
     - if presenter.review_pending?
-      .verified-status-notice href="#" data-toggle="tooltip" title="We will verify this event very soon! If you haven't heard from us in 24 hours, do ping us on Slack!"
+      .verified-status-notice
         i.fa.fa-exclamation-circle
         | &nbsp;Pending verification
     - elsif presenter.not_accepted?
@@ -47,8 +44,3 @@
           data: { confirm: 'This action cannot be reversed. Are you sure?' } do
           i.fa.fa-times
           | &nbsp;Delete
-      - else
-        .old-to-edit href="#" data-toggle="tooltip" title="To delete this event, please write to help@sv.co."
-          button.btn.btn-danger.btn-sm.btn-flat.btn-with-default-padding.disabled.margin-right-5.delete-link
-            i.fa.fa-times
-            | &nbsp;Delete

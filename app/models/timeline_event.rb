@@ -129,14 +129,6 @@ class TimelineEvent < ApplicationRecord
     minimum_point_for_target * multiplier
   end
 
-  # A hidden timeline event is not displayed to user if user isn't logged in, or isn't the founder linked to event.
-  def hidden_from?(viewer)
-    return false unless target.founder_event?
-    return true if viewer.blank?
-
-    founder != viewer
-  end
-
   def attachments_for_founder(founder)
     privileged = privileged_founder?(founder)
     attachments = []

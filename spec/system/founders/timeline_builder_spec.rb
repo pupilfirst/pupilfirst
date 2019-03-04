@@ -70,8 +70,6 @@ feature 'Timeline Builder' do
     expect(file.title).to eq('A PDF File')
     expect(file.file).to be_attached
     expect(file.private).to eq(false)
-
-    expect(te.event_on).to eq(Date.today)
   end
 
   context 'Founder unsuccessful in submitting event', js: true do

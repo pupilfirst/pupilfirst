@@ -46,9 +46,9 @@ module Targets
 
       # Return only the latest per assignee.
       if @target.founder_role?
-        linked_events.select('DISTINCT ON (founder_id) *').order('founder_id, event_on DESC').to_a
+        linked_events.select('DISTINCT ON (founder_id) *').order('founder_id, created_at DESC').to_a
       else
-        linked_events.select('DISTINCT ON (startup_id) *').order('startup_id, event_on DESC').to_a
+        linked_events.select('DISTINCT ON (startup_id) *').order('startup_id, created_at DESC').to_a
       end
     end
 

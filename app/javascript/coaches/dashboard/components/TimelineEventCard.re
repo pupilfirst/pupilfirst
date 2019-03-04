@@ -112,7 +112,7 @@ let make =
                 <i className="fa fa-calendar mr-1" />
                 (
                   timelineEvent
-                  |> TimelineEvent.eventOn
+                  |> TimelineEvent.createdAt
                   |> DateTime.format(DateTime.OnlyDate)
                   |> str
                 )

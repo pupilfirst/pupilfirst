@@ -20,7 +20,7 @@ module FacultyModule
         id: timeline_event.id,
         title: title(timeline_event),
         description: timeline_event.description,
-        eventOn: timeline_event.event_on,
+        createdAt: timeline_event.created_at,
         founderIds: timeline_event.founders.map(&:id),
         links: timeline_event.links,
         files: timeline_event.timeline_event_files.map { |file| { title: file.title, id: file.id } },

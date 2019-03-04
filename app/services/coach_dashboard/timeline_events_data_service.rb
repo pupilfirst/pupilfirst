@@ -39,7 +39,7 @@ module CoachDashboard
         id: timeline_event.id,
         title: title(timeline_event),
         description: timeline_event.description,
-        eventOn: timeline_event.event_on,
+        createdAt: timeline_event.created_at,
         founderIds: founder_ids(timeline_event),
         links: timeline_event.links,
         files: files(timeline_event),

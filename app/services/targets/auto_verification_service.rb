@@ -9,7 +9,6 @@ module Targets
       @target.timeline_events.create!(
         founders: founders,
         description: description,
-        event_on: Time.zone.now,
         passed_at: Time.zone.now,
         latest: true
       )

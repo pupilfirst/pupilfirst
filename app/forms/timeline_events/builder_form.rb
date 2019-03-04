@@ -7,7 +7,6 @@ module TimelineEvents
 
     property :target_id, validates: { presence: true }
     property :description, validates: { presence: true, length: { maximum: MAX_DESCRIPTION_CHARACTERS } }
-    property :event_on, validates: { presence: true }
     property :links
     property :files, virtual: true
     property :files_metadata, virtual: true
@@ -60,7 +59,6 @@ module TimelineEvents
         params = {
           target: target,
           description: description,
-          event_on: Time.zone.parse(event_on),
           links: parsed_links
         }
 

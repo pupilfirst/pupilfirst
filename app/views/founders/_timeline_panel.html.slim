@@ -19,9 +19,7 @@
     p.tl-date
       small
         i.fa.fa-calendar
-        ' &nbsp;#{event.event_on.strftime("%B %e, %Y")}
-        - if presenter.improved_event?
-          ' (#{event.days_elapsed.ordinalize} day)
+        ' &nbsp;#{event.created_at.strftime("%B %e, %Y")}
   .timeline-body
     .tl-body
       p #{simple_format(presenter.detailed_description)}

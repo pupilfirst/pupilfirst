@@ -119,21 +119,6 @@ h1.product-name {
   margin-right: 5px;
 }
 
-#timeline_event_event_on {
-  font-family: "Source Sans Pro", FontAwesome, sans-serif;
-  display: inline-block;
-  vertical-align: bottom;
-  width: 100px;
-  margin-right: 10px;
-  height: 34px;
-  padding: 0 10px;
-  border: 1px solid lightgray;
-
-  &.has-error {
-    border-color: #a94442;
-  }
-}
-
 // Datepicker customizations
 .dtpicker-buttonCont .dtpicker-button {
   background: $theme-light-green;

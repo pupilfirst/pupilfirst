@@ -15,7 +15,7 @@ module Schools
     # POST /school/teams/:id/add_coach
     def add_coach
       form = Schools::Startups::AddCoachForm.new(Faculty.new)
-      if form.validate(params[:faculty].merge(team_id: team.id))
+      if form.validate(params[:faculty].merge(team_id: team.id, school_id: current_school.id))
         form.save
         redirect_back(fallback_location: school_course_students_path(team.course))
       else

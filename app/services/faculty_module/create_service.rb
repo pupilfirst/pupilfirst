@@ -11,7 +11,7 @@ module FacultyModule
       User.transaction do
         user = User.where(email: @email).first_or_create!
 
-        return user.faculty if user.faculty.present?
+        return user.faculty.where(school: @school).first if user.faculty.present?
 
         Faculty.create!(
           user: user,

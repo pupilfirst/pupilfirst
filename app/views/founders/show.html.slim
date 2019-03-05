@@ -119,7 +119,7 @@
                   h3 Coach
                 hr
                 - @founder.faculty.each do |faculty|
-                  - if !faculty.inactive
+                  - if faculty.public
                     .data-faculty
                       .media.align-items-center
                         a.mr-3 href=faculty_url(faculty.slug)

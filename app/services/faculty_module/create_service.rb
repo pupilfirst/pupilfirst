@@ -17,8 +17,7 @@ module FacultyModule
           name: @name,
           category: Faculty::CATEGORY_VISITING_COACHES,
           title: 'Coach',
-          image: Rails.root.join('spec', 'support', 'uploads', 'faculty', 'mickey_mouse.jpg').open,
-          inactive: true
+          image: Rails.root.join('spec', 'support', 'uploads', 'faculty', 'mickey_mouse.jpg').open
         )
       end
     end

@@ -55,7 +55,6 @@ class Faculty < ApplicationRecord
   validates :slug, format: { with: /\A[a-z0-9\-_]+\z/i }, allow_nil: true
   validates :image, content_type: %w[image/png image/jpg image/jpeg image/gif], size: { less_than: 2.megabytes, message: 'is not given between size' }
 
-  scope :active, -> { where.not(inactive: true) }
   scope :team, -> { where(category: CATEGORY_TEAM).order('sort_index ASC') }
   scope :visiting_coaches, -> { where(category: CATEGORY_VISITING_COACHES).order('sort_index ASC') }
   scope :developer_coaches, -> { where(category: CATEGORY_DEVELOPER_COACHES).order('sort_index ASC') }
@@ -68,7 +67,7 @@ class Faculty < ApplicationRecord
   # Returns faculty members who have had connect slots in the past, but not 'after' a date.
   scope :recently_inactive, lambda { |after = Date.today.beginning_of_week|
     slotted_after_date = Faculty.joins(:connect_slots).where('connect_slots.slot_at > ?', after)
-    active.joins(:connect_slots).where.not(id: slotted_after_date).distinct
+    Faculty.joins(:connect_slots).where.not(id: slotted_after_date).distinct
   }
 
   # This method sets the label used for object by Active Admin.

@@ -24,7 +24,6 @@ module Users
           title: 'Test Account',
           category: Faculty::CATEGORY_VISITING_COACHES,
           image: Rails.root.join('spec', 'support', 'uploads', 'faculty', 'human.png').open,
-          inactive: true,
           user: user,
           school: @startup.school
         )

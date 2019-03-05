@@ -55,10 +55,9 @@ html lang='en'
                 span.icon-bar.middle-bar
                 span.icon-bar.bottom-bar
 
-            = render 'layouts/nav_links'
+            = render 'layouts/top_nav'
 
     == yield :header
-    == render 'layouts/platform_feedback' if current_founder
 
     - if @skip_container
       == yield

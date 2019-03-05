@@ -1,19 +1,19 @@
-- presenter = Layouts::NavLinksPresenter.new(self)
+- presenter = ::Layouts::NavLinksPresenter.new(self)
 
 #nav-links__navbar.collapse.navbar-collapse.justify-content-end.navbar-link__container
   ul.navbar-nav.align-items-lg-center itemscope="itemscope" itemtype="http://www.schema.org/SiteNavigationElement"
     - presenter.visible_links.each do |link|
       - if link[:dropdown]
-        == render 'nav_dropdown', dropdown: link
+        == render 'layouts/nav_dropdown', dropdown: link
 
       - else
-        == render 'nav_link', link: link
+        == render 'layouts/nav_link', link: link
 
     - if presenter.more_links.any?
-      == render 'nav_dropdown', dropdown: presenter.more_links
+      == render 'layouts/nav_dropdown', dropdown: presenter.more_links
 
-    - if current_user
-      - if current_founder
+    - if current_user.present?
+      - if current_founder.present?
         li.nav-item.navbar-nav__nav-item role="presentation" class="dropdown"
           a#navbar-profile-dropdown.navbar-profile-dropdown.dropdown-toggle.logged-in-avatar-link data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
             .navbar__avatar-wrapper
@@ -24,11 +24,6 @@
                 = link_to student_path(slug: current_founder.slug) do
                   i.fa.fa-list-ul
                   | Profile
-            - if policy(PlatformFeedback).create?
-              li role="presentation"
-                a href="#" data-toggle="modal" data-target="#platform-feedback-modal"
-                  i.fa.fa-comment-o
-                  | Submit Feedback
             - presenter.selectable_student_profiles.each do |other_founder|
               li role="presentation"
                 = link_to(select_founder_path(other_founder), method: :post) do

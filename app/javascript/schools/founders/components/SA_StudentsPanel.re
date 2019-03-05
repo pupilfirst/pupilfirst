@@ -289,118 +289,123 @@ let make = (~teams, ~courseId, ~authenticityToken, ~levels, ~studentTags, _child
       </div>
       <div className="px-6 pb-4 flex-1 bg-grey-lightest overflow-y-scroll">
         <div className="max-w-lg mx-auto relative">
-          {filteredTeams(state)
-           |> List.sort((team1, team2) => Team.id(team2) - Team.id(team1))
-           |> List.map(team => {
-                let isSingleFounder = team |> Team.students |> List.length == 1;
-                <div
-                  key={team |> Team.id |> string_of_int}
-                  className={
-                    "student-team-container flex items-center shadow bg-white rounded-lg overflow-hidden mb-4"
-                    ++ (isSingleFounder ? " hover:bg-grey-lighter" : "")
-                  }>
-                  <div className="flex-1 w-3/5">
-                    {team
-                     |> Team.students
-                     |> List.map(student => {
-                          let isChecked = state.selectedStudents |> List.mem(student);
-                          <div
-                            key={student |> Student.id |> string_of_int}
-                            className="student-team__card cursor-pointer flex items-center bg-white hover:bg-grey-lighter">
-                            <div className="flex-1 w-3/5">
-                              <div className="flex items-center">
-                                <label className="block text-grey leading-tight font-bold px-4 py-5">
-                                  <input
-                                    className="leading-tight"
-                                    type_="checkbox"
-                                    checked=isChecked
-                                    onChange={
-                                      isChecked ?
-                                        _e => send(DeselectStudent(student)) : (_e => send(SelectStudent(student)))
-                                    }
-                                  />
-                                </label>
-                                <div
-                                  className="flex flex-1 items-center py-4 pr-4"
-                                  onClick={_e => send(UpdateFormVisible(UpdateForm(student)))}>
-                                  <img className="w-10 h-10 rounded-full mr-4" src={student |> Student.avatarUrl} />
-                                  <div className="text-sm flex flex-col">
-                                    <p
-                                      className={
-                                        "text-black font-semibold inline-block "
-                                        ++ (
-                                          state.searchString
-                                          |> String.length > 0
-                                          && student
-                                          |> Student.name
-                                          |> String.lowercase
-                                          |> Js.String.includes(state.searchString |> String.lowercase) ?
-                                            "bg-yellow-light" : ""
-                                        )
-                                      }>
-                                      {student |> Student.name |> str}
-                                    </p>
-                                    <div className="flex mt-2">
-                                      {student
-                                       |> Student.tags
-                                       |> List.map(tag =>
-                                            <div
-                                              key=tag
-                                              className="border border-indigo rounded mr-1 py-1 px-2 text-xs text-indigo">
-                                              {tag |> str}
-                                            </div>
-                                          )
-                                       |> Array.of_list
-                                       |> ReasonReact.array}
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>;
-                        })
-                     |> Array.of_list
-                     |> ReasonReact.array}
-                  </div>
-                  <div className="flex w-2/5 items-center">
-                    <div className="w-3/5 py-4 px-3">
-                      {isSingleFounder ?
-                         ReasonReact.null :
-                         <div className="students-team--name mb-5">
-                           <p className="mb-1 text-xs"> {"Team" |> str} </p>
-                           <h4> {team |> Team.name |> str} </h4>
-                         </div>}
-                      <div className="coaches-avatar-group">
-                        <p className="mb-2 text-xs"> {"Coaches" |> str} </p>
-                        <div className="flex items-center">
-                          {team
-                           |> Team.coaches
-                           |> List.map(coach =>
-                                <img
-                                  key={coach |> Coach.avatarUrl}
-                                  className="w-6 h-6 rounded-full mr-2"
-                                  src={coach |> Coach.avatarUrl}
-                                  alt="Avatar of Jonathan Reinink"
-                                />
-                              )
-                           |> Array.of_list
-                           |> ReasonReact.array}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="w-2/5 text-center">
-                      <span className="inline-flex flex-col rounded bg-indigo-lightest px-2 py-1">
-                        <div className="text-xs"> {"Level" |> str} </div>
-                        <div className="text-xl font-semibold">
-                          {team |> Team.levelNumber |> string_of_int |> str}
-                        </div>
-                      </span>
-                    </div>
-                  </div>
-                </div>;
-              })
-           |> Array.of_list
-           |> ReasonReact.array}
+          {filteredTeams(state) |> List.length > 0 ?
+             {filteredTeams(state)
+              |> List.sort((team1, team2) => Team.id(team2) - Team.id(team1))
+              |> List.map(team => {
+                   let isSingleFounder = team |> Team.students |> List.length == 1;
+                   <div
+                     key={team |> Team.id |> string_of_int}
+                     className={
+                       "student-team-container flex items-center shadow bg-white rounded-lg overflow-hidden mb-4"
+                       ++ (isSingleFounder ? " hover:bg-grey-lighter" : "")
+                     }>
+                     <div className="flex-1 w-3/5">
+                       {team
+                        |> Team.students
+                        |> List.map(student => {
+                             let isChecked = state.selectedStudents |> List.mem(student);
+                             <div
+                               key={student |> Student.id |> string_of_int}
+                               className="student-team__card cursor-pointer flex items-center bg-white hover:bg-grey-lighter">
+                               <div className="flex-1 w-3/5">
+                                 <div className="flex items-center">
+                                   <label className="block text-grey leading-tight font-bold px-4 py-5">
+                                     <input
+                                       className="leading-tight"
+                                       type_="checkbox"
+                                       checked=isChecked
+                                       onChange={
+                                         isChecked ?
+                                           _e => send(DeselectStudent(student)) :
+                                           (_e => send(SelectStudent(student)))
+                                       }
+                                     />
+                                   </label>
+                                   <div
+                                     className="flex flex-1 items-center py-4 pr-4"
+                                     onClick={_e => send(UpdateFormVisible(UpdateForm(student)))}>
+                                     <img className="w-10 h-10 rounded-full mr-4" src={student |> Student.avatarUrl} />
+                                     <div className="text-sm flex flex-col">
+                                       <p
+                                         className={
+                                           "text-black font-semibold inline-block "
+                                           ++ (
+                                             state.searchString
+                                             |> String.length > 0
+                                             && student
+                                             |> Student.name
+                                             |> String.lowercase
+                                             |> Js.String.includes(state.searchString |> String.lowercase) ?
+                                               "bg-yellow-light" : ""
+                                           )
+                                         }>
+                                         {student |> Student.name |> str}
+                                       </p>
+                                       <div className="flex mt-2">
+                                         {student
+                                          |> Student.tags
+                                          |> List.map(tag =>
+                                               <div
+                                                 key=tag
+                                                 className="border border-indigo rounded mr-1 py-1 px-2 text-xs text-indigo">
+                                                 {tag |> str}
+                                               </div>
+                                             )
+                                          |> Array.of_list
+                                          |> ReasonReact.array}
+                                       </div>
+                                     </div>
+                                   </div>
+                                 </div>
+                               </div>
+                             </div>;
+                           })
+                        |> Array.of_list
+                        |> ReasonReact.array}
+                     </div>
+                     <div className="flex w-2/5 items-center">
+                       <div className="w-3/5 py-4 px-3">
+                         {isSingleFounder ?
+                            ReasonReact.null :
+                            <div className="students-team--name mb-5">
+                              <p className="mb-1 text-xs"> {"Team" |> str} </p>
+                              <h4> {team |> Team.name |> str} </h4>
+                            </div>}
+                         <div className="coaches-avatar-group">
+                           <p className="mb-2 text-xs"> {"Coaches" |> str} </p>
+                           <div className="flex items-center">
+                             {team
+                              |> Team.coaches
+                              |> List.map(coach =>
+                                   <img
+                                     key={coach |> Coach.avatarUrl}
+                                     className="w-6 h-6 rounded-full mr-2"
+                                     src={coach |> Coach.avatarUrl}
+                                     alt="Avatar of Jonathan Reinink"
+                                   />
+                                 )
+                              |> Array.of_list
+                              |> ReasonReact.array}
+                           </div>
+                         </div>
+                       </div>
+                       <div className="w-2/5 text-center">
+                         <span className="inline-flex flex-col rounded bg-indigo-lightest px-2 py-1">
+                           <div className="text-xs"> {"Level" |> str} </div>
+                           <div className="text-xl font-semibold">
+                             {team |> Team.levelNumber |> string_of_int |> str}
+                           </div>
+                         </span>
+                       </div>
+                     </div>
+                   </div>;
+                 })
+              |> Array.of_list
+              |> ReasonReact.array} :
+             <div className="shadow bg-white rounded-lg mb-4 p-4">
+               {"No student matches your seach/filter criteria." |> str}
+             </div>}
         </div>
       </div>
     </div>;

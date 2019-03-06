@@ -1,5 +1,5 @@
 module Layouts
-  class NavLinksPresenter < ApplicationPresenter
+  class TopNavPresenter < ApplicationPresenter
     def visible_links
       nav_links[0..2]
     end
@@ -7,7 +7,7 @@ module Layouts
     def more_links
       return [] if nav_links.length <= 3
 
-      nav_links[-(nav_links.length - 3)..-1]
+      { title: 'More', options: nav_links[-(nav_links.length - 3)..-1] }
     end
 
     def selectable_student_profiles

@@ -57,7 +57,7 @@ class FoundersController < ApplicationController
   # POST /founders/:slug/select
   def select
     # Use the scope from the presenter to ensure that conditions are met.
-    presenter = NavLinksPresenter.new(view_context)
+    presenter = ::Layouts::TopNavPresenter.new(view_context)
 
     founder = authorize(presenter.selectable_student_profiles.friendly.find(params[:id]))
     set_cookie(:founder_id, founder.id)

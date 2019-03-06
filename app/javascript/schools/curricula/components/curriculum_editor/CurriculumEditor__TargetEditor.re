@@ -263,7 +263,8 @@ let completionButtonClasses = value =>
   value ?
     "flex flex-col items-center bg-white border border-grey-light hover:bg-grey-lighter text-green text-sm font-semibold focus:outline-none rounded p-4" :
     "flex flex-col items-center bg-white border border-grey-light opacity-50 hover:bg-grey-lighter text-grey-darkest text-sm font-semibold focus:outline-none rounded p-4";
-
+let formClasses = value =>
+  value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full";
 let make =
     (
       ~target,
@@ -542,7 +543,7 @@ let make =
             <i className="material-icons"> {"close" |> str} </i>
           </button>
         </div>
-        <div className="drawer-right-form w-full">
+        <div className={formClasses(state.saving)}>
           <div className="w-full">
             <div className="mx-auto bg-white">
               <div className="max-w-md p-6 mx-auto">
@@ -959,13 +960,14 @@ let make =
                       }
                       {
                         state.quiz
-                        |> List.map(quizQuestion =>
+                        |> List.mapi((index, quizQuestion) =>
                              <CurriculumEditor__TargetQuizQuestion
                                key={
                                  quizQuestion
                                  |> QuizQuestion.id
                                  |> string_of_int
                                }
+                               questionNumber=index
                                quizQuestion
                                updateQuizQuestionCB
                                removeQuizQuestionCB

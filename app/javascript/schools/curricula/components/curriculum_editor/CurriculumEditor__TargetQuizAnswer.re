@@ -34,9 +34,11 @@ let make =
 
     <div className="relative">
       <div className="quiz-maker__answer-option-pointer">
-      {answerOption |> AnswerOption.correctAnswer ?
-      <i className="material-icons">{"check_circle" |> str}</i>
-      : ReasonReact.null}
+        {
+          answerOption |> AnswerOption.correctAnswer ?
+            <i className="material-icons"> {"check_circle" |> str} </i> :
+            ReasonReact.null
+        }
       </div>
       <div className="flex flex-col bg-white mb-2 border rounded ml-12">
         <div className="flex">
@@ -69,7 +71,11 @@ let make =
                 markAsCorrectCB(answerOption |> AnswerOption.id);
               }
             }>
-            {"Mark as correct" |> str}
+            {
+              answerOption |> AnswerOption.correctAnswer ?
+                <i className="material-icons"> {"check_circle" |> str} </i> :
+                "Mark as correct" |> str
+            }
           </button>
           <button
             onClick={

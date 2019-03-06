@@ -50,6 +50,8 @@ let setPayload = (authenticityToken, state) => {
   };
   payload;
 };
+let formClasses = value =>
+  value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full";
 
 let make =
     (
@@ -144,7 +146,7 @@ let make =
             <i className="material-icons"> {"close" |> str} </i>
           </button>
         </div>
-        <div className="drawer-right-form w-full">
+        <div className={formClasses(state.saving)}>
           <div className="w-full">
             <div className="mx-auto bg-white">
               <div className="max-w-md p-6 mx-auto">

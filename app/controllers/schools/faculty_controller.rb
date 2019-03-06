@@ -1,14 +1,14 @@
 module Schools
   class FacultyController < SchoolsController
-    layout 'course'
+    layout 'school'
 
-    # GET /school/courses/:course_id/coaches
-    def index
-      @course = authorize(courses.find(params[:course_id]), policy_class: Schools::FacultyPolicy)
+    # GET /school/coaches
+    def school_index
+      @school = authorize(current_school, policy_class: Schools::FacultyPolicy)
       @form = Schools::Coaches::CreateForm.new(Faculty.new)
     end
 
-    # POST /school/courses/:course_id/coaches
+    # POST /school/coaches
     def create
       index
 
@@ -20,7 +20,7 @@ module Schools
       end
     end
 
-    # DELETE /school/courses/:course_id/coaches/:id
+    # DELETE /school/coaches/:id
     def destroy
       coach = Faculty.find(params[:id])
       course = courses.find(params[:course_id])
@@ -30,6 +30,11 @@ module Schools
       ::Courses::UnassignReviewerService.new(course).unassign(coach)
 
       redirect_back(fallback_location: school_course_coaches_path(course))
+    end
+
+    def course_index
+      course = courses.find(params[:course_id])
+      @course = authorize(course, policy_class: Schools::FacultyPolicy)
     end
   end
 end

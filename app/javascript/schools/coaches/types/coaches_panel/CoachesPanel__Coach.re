@@ -3,6 +3,7 @@ type t = {
   name: string,
   imageUrl: string,
   email: string,
+  title: string,
 };
 
 let name = t => t.name;
@@ -13,6 +14,8 @@ let email = t => t.email;
 
 let imageUrl = t => t.imageUrl;
 
+let title = t => t.title;
+
 let updateInfo = (name, coach) => {...coach, name};
 
 let decode = json =>
@@ -21,6 +24,7 @@ let decode = json =>
     id: json |> field("id", int),
     imageUrl: json |> field("imageUrl", string),
     email: json |> field("email", string),
+    title: json |> field("title", string),
   };
 
 let encode = t =>
@@ -30,5 +34,6 @@ let encode = t =>
       ("name", t.name |> string),
       ("image_url", t.imageUrl |> string),
       ("email", t.email |> string),
+      ("title", t.email |> string),
     ])
   );

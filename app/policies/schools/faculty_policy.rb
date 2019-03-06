@@ -10,6 +10,14 @@ module Schools
       !record.ended?
     end
 
+    def school_index?
+      user.school_admins.where(school: record).present?
+    end
+
+    def course_index?
+      !record.ended?
+    end
+
     alias destroy? create?
 
     class Scope < Scope

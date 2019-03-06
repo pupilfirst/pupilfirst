@@ -1,13 +1,15 @@
-<a class="nav-item__link nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button">
-  <%= dropdown[:title] %>
-</a>
+<li class="nav-item navbar-nav__nav-item" role="presentation" class="dropdown">
+  <a id="<%= dropdown[:id] %>" class="nav-item__link nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button">
+    <%= dropdown[:title] %>
+  </a>
 
-<ul class="dropdown-menu">
-  <% dropdown[:options].each do |link| %>
-    <li>
-      <a class="dropdown-item" href="<%= link[:url] %>">
-        <%= link[:title] %>
-      </a>
-    </li>
-  <% end %>
-</ul>
+  <ul class="dropdown-menu" aria-labelledby="<%= dropdown[:id] %>">
+    <% dropdown[:options].each do |link| %>
+      <li>
+        <a class="dropdown-item" href="<%= link[:url] %>">
+          <%= link[:title] %>
+        </a>
+      </li>
+    <% end %>
+  </ul>
+</li>

@@ -3,12 +3,18 @@ require 'rails_helper'
 feature 'Top navigation bar' do
   include UserSpecHelper
 
-  let(:founder) { create :founder }
+  let(:student) { create :founder }
+  let(:coach) { create :faculty, school: student.school, user: student.user }
 
-  let!(:custom_link_1) { create :school_link, :header, school: founder.school }
-  let!(:custom_link_2) { create :school_link, :header, school: founder.school }
-  let!(:custom_link_3) { create :school_link, :header, school: founder.school }
-  let!(:custom_link_4) { create :school_link, :header, school: founder.school }
+  # Create a target so that dashoard can render.
+  # TODO: Remove this once we have a generic home page. The user can be sent there instead for this test.
+  let(:target_group) { create :target_group, level: student.level, milestone: true }
+  let!(:target) { create :target, target_group: target_group }
+
+  let!(:custom_link_1) { create :school_link, :header, school: student.school }
+  let!(:custom_link_2) { create :school_link, :header, school: student.school }
+  let!(:custom_link_3) { create :school_link, :header, school: student.school }
+  let!(:custom_link_4) { create :school_link, :header, school: student.school }
 
   it 'displays custom links on the navbar', js: true do
     visit new_user_session_path
@@ -30,27 +36,20 @@ feature 'Top navigation bar' do
   end
 
   context 'when the user is a school admin, coach, and student' do
-    let(:coach) { create :faculty, school: founder.school, user: founder.user }
-
     before do
-      # Create a target so that dashoard can render.
-      # TODO: Remove this once we have a generic home page. The user can be sent there instead for this test.
-      tg = create :target_group, level: founder.level, milestone: true
-      create :target, target_group: tg
-
       # Make the user a school admin.
-      create :school_admin, user: founder.user, school: founder.school
+      create :school_admin, user: student.user, school: student.school
 
       # Enroll the coach as reviewer for course that the same user (student) is in.
-      create :faculty_course_enrollment, faculty: coach, course: founder.course
+      create :faculty_course_enrollment, faculty: coach, course: student.course
     end
 
     it 'displays all main links on the navbar and puts custom links in the dropdown', js: true do
-      sign_in_user founder.user, referer: student_dashboard_path
+      sign_in_user student.user, referer: student_dashboard_path
 
       expect(page).to have_link('Admin', href: '/school')
-      expect(page).to have_link('Review', href: "/courses/#{founder.course.id}/coach_dashboard")
-      expect(page).to have_link('Dashboard', href: '/student/dashboard')
+      expect(page).to have_link('Review Submissions', href: "/courses/#{student.course.id}/coach_dashboard")
+      expect(page).to have_link('Student Dashboard', href: '/student/dashboard')
 
       # None of the custom links should be visible by default.
       expect(page).not_to have_link(custom_link_4.title, href: custom_link_4.url)
@@ -67,6 +66,53 @@ feature 'Top navigation bar' do
       expect(page).to have_link(custom_link_3.title, href: custom_link_3.url)
       expect(page).to have_link(custom_link_2.title, href: custom_link_2.url)
       expect(page).to have_link(custom_link_1.title, href: custom_link_1.url)
+    end
+  end
+
+  context 'when the user can review submissions from multiple courses' do
+    let(:another_course) { create :course, school: student.school }
+    let(:another_level) { create :level, course: another_course }
+    let(:another_student) { create :founder, level: another_level }
+
+    before do
+      # Enroll the coach as reviewer for course that 'student' is in.
+      create :faculty_course_enrollment, faculty: coach, course: student.course
+
+      # Enroll the coach as reviewer for team in another course in the same school.
+      create :faculty_startup_enrollment, faculty: coach, startup: another_student.startup
+    end
+
+    it 'displays review submission links in a dropdown', js: true do
+      sign_in_user student.user, referer: student_dashboard_path
+
+      # One of the custom options should be visible.
+      expect(page).to have_link(custom_link_4.title, href: custom_link_4.url)
+
+      # The other three custom options should not be visible.
+      expect(page).not_to have_link(custom_link_3.title, href: custom_link_3.url)
+      expect(page).not_to have_link(custom_link_2.title, href: custom_link_2.url)
+      expect(page).not_to have_link(custom_link_1.title, href: custom_link_1.url)
+
+      # However, they should be accessible in the 'More' dropdown.
+      within('#nav-links__navbar') do
+        click_link 'More'
+      end
+
+      expect(page).to have_link(custom_link_3.title, href: custom_link_3.url)
+      expect(page).to have_link(custom_link_2.title, href: custom_link_2.url)
+      expect(page).to have_link(custom_link_1.title, href: custom_link_1.url)
+
+      # Links to the review dashboard should not be visible.
+      expect(page).not_to have_link(student.course.name, href: "/courses/#{student.course.id}/coach_dashboard")
+      expect(page).not_to have_link(another_student.course.name, href: "/courses/#{another_student.course.id}/coach_dashboard")
+
+      # They should be in a 'Review Submissions' dropdown.
+      within('#nav-links__navbar') do
+        click_link 'Review Submissions'
+      end
+
+      expect(page).to have_link(student.course.name, href: "/courses/#{student.course.id}/coach_dashboard")
+      expect(page).to have_link(another_student.course.name, href: "/courses/#{another_student.course.id}/coach_dashboard")
     end
   end
 end

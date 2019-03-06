@@ -3,14 +3,14 @@
 <div id="nav-links__navbar" class="collapse navbar-collapse justify-content-end navbar-link__container">
   <ul class="navbar-nav align-items-lg-center" itemscope="itemscope" itemtype="http://www.schema.org/SiteNavigationElement">
     <% presenter.visible_links.each do |link| %>
-      <% if link[:dropdown] %>
+      <% if link[:options].present? %>
         <%= render 'layouts/nav_dropdown', dropdown: link %>
       <% else %>
         <%= render 'layouts/nav_link', link: link %>
       <% end %>
     <% end %>
 
-    <% if presenter.more_links.any? %>
+    <% if presenter.more_links.present? %>
       <%= render 'layouts/nav_dropdown', dropdown: presenter.more_links %>
     <% end %>
 
@@ -23,7 +23,7 @@
             </div>
           </a>
 
-          <ul class="dropdown-menu">
+          <ul class="dropdown-menu" aria-labelledby="navbar-profile-dropdown">
             <% if policy(current_founder).show? %>
               <li role="presentation">
                 <%= link_to student_path(slug: current_founder.slug) do %>

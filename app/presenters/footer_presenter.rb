@@ -32,7 +32,7 @@ class FooterPresenter < ApplicationPresenter
   end
 
   def logo_url
-    view.url_for(current_school.logo_variant(:thumb, background: :dark))
+    view.url_for(current_school.logo_variant(:mid, background: :dark))
   end
 
   # TODO: Write a better way to decide which icon to present

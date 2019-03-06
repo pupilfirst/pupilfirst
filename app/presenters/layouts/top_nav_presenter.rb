@@ -5,9 +5,15 @@ module Layouts
     end
 
     def more_links
-      return [] if nav_links.length <= 3
-
-      { title: 'More', options: nav_links[-(nav_links.length - 3)..-1] }
+      @more_links ||= begin
+        if nav_links.length > 3
+          {
+            title: 'More',
+            id: 'navbar-more-dropdown',
+            options: nav_links[-(nav_links.length - 3)..-1]
+          }
+        end
+      end
     end
 
     def selectable_student_profiles
@@ -50,17 +56,23 @@ module Layouts
 
       return if coach.blank? || courses.blank?
 
+      title = -'Review Submissions'
+
       if courses.count == 1
-        { title: 'Review', url: view.course_coach_dashboard_path(courses.first) }
+        { title: title, url: view.course_coach_dashboard_path(courses.first) }
       else
-        { title: 'Review', options: courses.map { |c| { title: c.name, url: view.course_coach_dashboard_path(c) } } }
+        {
+          title: title,
+          id: 'navbar-review-dropdown',
+          options: courses.map { |c| { title: c.name, url: view.course_coach_dashboard_path(c) } }
+        }
       end
     end
 
     def dashboard_link
       return if view.current_founder.blank? || view.current_founder.exited? || view.current_founder.startup.blank?
 
-      { title: 'Dashboard', url: view.student_dashboard_path }
+      { title: 'Student Dashboard', url: view.student_dashboard_path }
     end
   end
 end

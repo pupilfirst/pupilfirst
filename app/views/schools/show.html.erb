@@ -42,7 +42,7 @@
         <div class="flex flex-wrap items-stretch w-full school-overview__course-list">
             <% @presenter.course_details.each do |course| %>
               <div class="w-1/2 mb-4">
-                <div class="border rounded-lg bg-white shadow h-full">
+                <a class="block border rounded-lg bg-white shadow h-full cursor-pointer hover:border-indigo-dark no-underline text-black" href=<%= school_course_students_path(course[:id]) %>>
                   <div class="flex items-end justify-between border-b p-4 pt-6">
                     <h3 class="font-bold text-xl"><%= course[:name] %></h3>
                     <p class="text-sm"><%= course[:levels_count] %> Levels</p>
@@ -77,7 +77,7 @@
                       </div>
                     <% end %>
                   </div>
-                </div>
+                </a>
               </div>
             <% end %>
         </div>

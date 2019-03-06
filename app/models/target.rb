@@ -115,7 +115,7 @@ class Target < ApplicationRecord
     end
   end
 
-  normalize_attribute :slideshow_embed, :video_embed, :youtube_video_id
+  normalize_attribute :slideshow_embed, :video_embed, :youtube_video_id, :link_to_complete
 
   def display_name
     if target_group.present?

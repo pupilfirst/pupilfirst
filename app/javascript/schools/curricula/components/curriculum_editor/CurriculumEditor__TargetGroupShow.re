@@ -85,7 +85,7 @@ let make =
               />
             </svg>
             <h5 className="font-semibold ml-2">
-              {"Create another target" |> str}
+              {"Create a target" |> str}
             </h5>
           </div>
       }

@@ -8,11 +8,13 @@ type state = {
   hasNameError: bool,
   hasDateError: bool,
   dirty: bool,
+  saving: bool,
 };
 
 type action =
   | UpdateName(string, bool)
-  | UpdateUnlockOn(string, bool);
+  | UpdateUnlockOn(string, bool)
+  | UpdateSaving;
 
 let component = ReasonReact.reducerComponent("CurriculumEditor__LevelEditor");
 
@@ -30,7 +32,7 @@ let updateUnlockOn = (send, date) => {
 };
 
 let saveDisabled = state =>
-  state.hasDateError || state.hasNameError || state.dirty;
+  state.hasDateError || state.hasNameError || state.dirty || state.saving;
 
 let setPayload = (authenticityToken, state) => {
   let payload = Js.Dict.empty();
@@ -67,6 +69,7 @@ let make =
         hasNameError: false,
         hasDateError: false,
         dirty: true,
+        saving: false,
       }
     | None => {
         name: "",
@@ -74,6 +77,7 @@ let make =
         hasNameError: false,
         hasDateError: false,
         dirty: true,
+        saving: false,
       }
     },
   reducer: (action, state) =>
@@ -87,8 +91,10 @@ let make =
         hasDateError,
         dirty: false,
       })
+    | UpdateSaving => ReasonReact.Update({...state, saving: !state.saving})
     },
   render: ({state, send}) => {
+    let handleErrorCB = () => send(UpdateSaving);
     let handleResponseCB = json => {
       let id = json |> Json.Decode.(field("id", int));
       let number = json |> Json.Decode.(field("number", int));
@@ -102,21 +108,25 @@ let make =
     };
 
     let createLevel = (authenticityToken, course, state) => {
+      send(UpdateSaving);
       let course_id = course |> Course.id |> string_of_int;
       let url = "/school/courses/" ++ course_id ++ "/levels";
       Api.create(
         url,
         setPayload(authenticityToken, state),
         handleResponseCB,
+        handleErrorCB,
       );
     };
 
     let updateLevel = (authenticityToken, levelId, state) => {
+      send(UpdateSaving);
       let url = "/school/levels/" ++ levelId;
       Api.update(
         url,
         setPayload(authenticityToken, state),
         handleResponseCB,
+        handleErrorCB,
       );
     };
 

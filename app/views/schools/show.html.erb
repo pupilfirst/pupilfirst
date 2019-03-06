@@ -1,4 +1,85 @@
-<% @presenter = Schools::ShowPresenter.new(self) %>
+<% content_for(:head) do %>
+    <%= javascript_pack_tag 'schools/show', 'data-turbolinks-track': 'reload', nonce: true %>
+    <%= stylesheet_pack_tag 'schools/show', media: 'all', 'data-turbolinks-track': 'reload' %>
+<% end %>
 
-<p>Current school is <%= current_school.name %></p>
-<p>It has <%= @presenter.student_count %> students in it.</p>
+<% @presenter = Schools::ShowPresenter.new(self) %>
+<div class="flex-1 flex flex-col bg-grey-lighter">
+    <div class="w-full bg-white border border-b-1 border-t-0 border-l-0 border-r-0 p-12">
+        <div class="max-w-md mx-auto relative rounded border overflow-hidden rounded-lg shadow-lg mx-3">
+            <div class="school-overview__profile-cover bg-cover h-24 p-5">
+
+            </div>
+            <div class="flex px-5 pb-5 justify-between">
+                <div class="flex">
+                  <div class="school-overview__logo-container bg-white p-2 border rounded-lg -mt-16">
+
+                  </div>
+                  <div class="school-overview__school-name pl-3 p-3">
+                      <span class="uppercase text-sm">School</span>
+                      <h2 class=""><%= @presenter.school_details[:name] %></h2>
+                  </div>
+                </div>
+                <div class="flex rounded-lg border mt-2">
+                  <div class="w-1/2 border-r">
+                    <div class="p-3">
+                      <p>Students</p>
+                      <p><%= @presenter.school_details[:students_count] %></p>
+                    </div>
+                  </div>
+                  <div class="w-1/2">
+                    <div class="p-3">
+                      <p>Coaches</p>
+                      <p><%= @presenter.school_details[:coaches_count] %></p>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="max-w-md w-full mx-auto overflow-hidden my-8">
+        <h2 class="font-semibold mb-4 pb-2 border-b">Courses</h2>
+        <div class="flex flex-wrap items-stretch w-full school-overview__course-list">
+            <% @presenter.course_details.each do |course| %>
+              <div class="w-1/2 mb-4">
+                <div class="border rounded-lg bg-white shadow h-full">
+                  <div class="flex items-end justify-between border-b p-4 pt-6">
+                    <h3 class="font-bold text-xl"><%= course[:name] %></h3>
+                    <p class="text-sm"><%= course[:levels_count] %> Levels</p>
+                  </div>
+                  <div class="school-overview__course-list-card-count relative flex items-end bg-grey-lighter justify-between border-b">
+                    <div class="w-1/2">
+                      <div class="p-4">
+                        <p>Students</p>
+                        <p><%= course[:students_count] %></p>
+                      </div>
+                    </div>
+                    <div class="w-1/2">
+                      <div class="p-4">
+                        <p>Coaches</p>
+                        <p><%= course[:coaches_count] %></p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-end p-4 text-xs items-center">
+                    <% if course[:submissions_count] == 0 %>
+                      <i class="material-icons mr-1 text-sm text-grey-dark bg-grey-lighter p-1 rounded">inbox</i>
+                      <div class="text-grey-dark">No student submissions yet!</div>
+                    <% elsif course[:submissions_count] == course[:evaluated_submissions_count] %>
+                      <i class="material-icons mr-1 text-sm text-green-dark bg-green-lighter p-1 rounded">done</i>
+                      <div class="text-green-dark">
+                        <%= course[:evaluated_submissions_count] %>/<%= course[:evaluated_submissions_count] + course[:submissions_count] %> submissions reviewed.
+                      </div>
+                    <% else %>
+                      <i class="material-icons mr-1 text-sm text-orange-dark bg-orange-lighter p-1 rounded">alarm</i>
+                      <div class="text-orange-dark">
+                        <%= course[:evaluated_submissions_count] %>/<%= course[:evaluated_submissions_count] + course[:submissions_count] %> submissions reviewed.
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+        </div>
+    </div>
+</div>

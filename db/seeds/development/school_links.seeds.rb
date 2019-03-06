@@ -5,6 +5,8 @@ after 'development:schools' do
 
   # Header links
   sv.school_links.where(kind: 'header', title: 'About').first_or_create!(url: 'https://www.sv.co/about')
+  sv.school_links.where(kind: 'header', title: 'Library').first_or_create!(url: 'https://school.sv.co/library')
+  sv.school_links.where(kind: 'header', title: 'Blog').first_or_create!(url: 'https://blog.sv.co')
 
   # Footer links
   sv.school_links.where(kind: 'footer', title: 'About').first_or_create!(url: 'https://www.sv.co/about')

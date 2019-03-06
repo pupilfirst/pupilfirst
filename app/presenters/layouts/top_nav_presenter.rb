@@ -1,12 +1,16 @@
 module Layouts
   class TopNavPresenter < ApplicationPresenter
     def visible_links
-      nav_links[0..2]
+      if nav_links.length > 4
+        nav_links[0..2]
+      else
+        nav_links
+      end
     end
 
     def more_links
       @more_links ||= begin
-        if nav_links.length > 3
+        if nav_links.length > 4
           {
             title: 'More',
             id: 'navbar-more-dropdown',

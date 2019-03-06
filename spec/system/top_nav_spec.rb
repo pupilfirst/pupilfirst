@@ -19,20 +19,39 @@ feature 'Top navigation bar' do
   it 'displays custom links on the navbar', js: true do
     visit new_user_session_path
 
-    # Three should be visible directly.
+    # All four links should be visible.
     expect(page).to have_link(custom_link_4.title, href: custom_link_4.url)
     expect(page).to have_link(custom_link_3.title, href: custom_link_3.url)
     expect(page).to have_link(custom_link_2.title, href: custom_link_2.url)
-
-    # The last should be visible within a dropdown button.
-    expect(page).not_to have_link(custom_link_1.title, href: custom_link_1.url)
-
-    within('#nav-links__navbar') do
-      click_link 'More'
-    end
-
-    # The last link should now be visible.
     expect(page).to have_link(custom_link_1.title, href: custom_link_1.url)
+
+    # The 'More' option should not be visible.
+    expect(page).not_to have_link('More')
+  end
+
+  context 'when there are more than four custom links' do
+    let!(:custom_link_5) { create :school_link, :header, school: student.school }
+
+    it 'displays additional links in a "More" dropdown', js: true do
+      visit new_user_session_path
+
+      # Three links should be visible.
+      expect(page).to have_link(custom_link_5.title, href: custom_link_5.url)
+      expect(page).to have_link(custom_link_4.title, href: custom_link_4.url)
+      expect(page).to have_link(custom_link_3.title, href: custom_link_3.url)
+
+      # Other two should not be visible.
+      expect(page).not_to have_link(custom_link_2.title, href: custom_link_2.url)
+      expect(page).not_to have_link(custom_link_1.title, href: custom_link_1.url)
+
+      # They should be in the 'More' dropdown.
+      within('#nav-links__navbar') do
+        click_link 'More'
+      end
+
+      expect(page).to have_link(custom_link_2.title, href: custom_link_2.url)
+      expect(page).to have_link(custom_link_1.title, href: custom_link_1.url)
+    end
   end
 
   context 'when the user is a school admin, coach, and student' do

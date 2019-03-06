@@ -91,11 +91,24 @@ after 'development:courses' do
     course: Course.find_by(name: 'iOS')
   )
 
-  Faculty.create!(
+  admin_coach = Faculty.create!(
     name: 'School Admin',
     title: 'School Admin',
     category: 'team',
     user: User.find_by(email: 'admin@example.com'),
     school: sv
+  )
+
+  # Enroll admin@example.com as coach on iOS and VR courses.
+  FacultyCourseEnrollment.create!(
+    safe_to_create: true,
+    faculty: admin_coach,
+    course: Course.find_by(name: 'iOS')
+  )
+
+  FacultyCourseEnrollment.create!(
+    safe_to_create: true,
+    faculty: admin_coach,
+    course: Course.find_by(name: 'VR')
   )
 end

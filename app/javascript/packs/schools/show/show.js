@@ -1,1 +1,0 @@
-import "schools/show/show.css";

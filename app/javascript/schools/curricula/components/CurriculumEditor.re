@@ -37,6 +37,24 @@ let str = ReasonReact.string;
 
 let component = ReasonReact.reducerComponent("CurriculumEditor");
 
+let showArchivedButton = (targetGroupsInLevel, targets) => {
+  let tgIds = targetGroupsInLevel |> List.map(tg => tg |> TargetGroup.id);
+
+  let numberOfArchivedTargetGroupsInLevel =
+    targetGroupsInLevel
+    |> List.filter(tg => tg |> TargetGroup.archived)
+    |> List.length;
+  let numberOfArchivedTargetsInLevel =
+    targets
+    |> List.filter(target =>
+         tgIds |> List.mem(target |> Target.targetGroupId)
+       )
+    |> List.filter(target => target |> Target.archived)
+    |> List.length;
+
+  numberOfArchivedTargetGroupsInLevel > 0 || numberOfArchivedTargetsInLevel > 0;
+};
+
 let make =
     (
       ~course,
@@ -244,11 +262,15 @@ let make =
             {"Create New Level" |> str}
           </button>
         </div>
-        <button
-          className="bg-indigo-lightest hover:bg-indigo text-indigo-dark text-sm hover:text-indigo-lightest font-semibold py-2 px-4 rounded focus:outline-none"
-          onClick={_ => send(ToggleShowArchived)}>
-          {(state.showArchived ? "Hide Archived" : "Show Archived") |> str}
-        </button>
+        {
+          showArchivedButton(targetGroupsInLevel, state.targets) ?
+            <button
+              className="bg-indigo-lightest hover:bg-indigo text-indigo-dark text-sm hover:text-indigo-lightest font-semibold py-2 px-4 rounded focus:outline-none"
+              onClick={_ => send(ToggleShowArchived)}>
+              {(state.showArchived ? "Hide Archived" : "Show Archived") |> str}
+            </button> :
+            ReasonReact.null
+        }
       </div>
       <div className="px-6 py-4 flex-1 overflow-y-scroll">
         <div

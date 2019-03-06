@@ -1,0 +1,29 @@
+.school-overview__header {}
+
+.school-overview__logo-container {
+    width: 8rem;
+    height: 8rem;
+}
+
+.school-overview__profile-cover {
+    background-image: linear-gradient(#4519A5 0%, #2D126E 100%);
+}
+
+.school-overview__course-list>:nth-child(even) {
+    @apply .pl-3;
+}
+
+.school-overview__course-list>:nth-child(odd) {
+    @apply .pr-3;
+}
+
+.school-overview__course-list-card-count::before {
+    position: absolute;
+    content: '';
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 1px;
+    background-color: #e5e5e5;
+}

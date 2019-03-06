@@ -280,7 +280,7 @@ let make =
               />
             </svg>
             <h4 className="font-semibold ml-2">
-              {"Create another target group" |> str}
+              {"Create a target group" |> str}
             </h4>
           </div>
         </div>

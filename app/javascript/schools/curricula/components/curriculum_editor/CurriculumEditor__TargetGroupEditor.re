@@ -9,13 +9,15 @@ type state = {
   hasNameError: bool,
   dirty: bool,
   isArchived: bool,
+  saving: bool,
 };
 
 type action =
   | UpdateName(string, bool)
   | UpdateDescription(string)
   | UpdateMilestone(bool)
-  | UpdateIsArchived(bool);
+  | UpdateIsArchived(bool)
+  | UpdateSaving;
 
 let component =
   ReasonReact.reducerComponent("CurriculumEditor__TargetGroupEditor");
@@ -25,7 +27,7 @@ let updateName = (send, name) => {
   send(UpdateName(name, hasError));
 };
 
-let saveDisabled = state => state.hasNameError || state.dirty;
+let saveDisabled = state => state.hasNameError || state.dirty || state.saving;
 
 let setPayload = (authenticityToken, state) => {
   let payload = Js.Dict.empty();
@@ -70,6 +72,7 @@ let make =
         hasNameError: false,
         dirty: true,
         isArchived: targetGroup |> TargetGroup.archived,
+        saving: false,
       }
     | None => {
         name: "",
@@ -78,6 +81,7 @@ let make =
         hasNameError: false,
         dirty: true,
         isArchived: false,
+        saving: false,
       }
     },
   reducer: (action, state) =>
@@ -90,8 +94,10 @@ let make =
       ReasonReact.Update({...state, milestone, dirty: false})
     | UpdateIsArchived(isArchived) =>
       ReasonReact.Update({...state, isArchived, dirty: false})
+    | UpdateSaving => ReasonReact.Update({...state, saving: !state.saving})
     },
   render: ({state, send}) => {
+    let handleErrorCB = () => send(UpdateSaving);
     let handleResponseCB = json => {
       let id = json |> Json.Decode.(field("id", int));
       let sortIndex = json |> Json.Decode.(field("sortIndex", int));
@@ -115,16 +121,18 @@ let make =
     };
 
     let createTargetGroup = () => {
+      send(UpdateSaving);
       let level_id = currentLevelId |> string_of_int;
       let payload = setPayload(authenticityToken, state);
       let url = "/school/levels/" ++ level_id ++ "/target_groups";
-      Api.create(url, payload, handleResponseCB);
+      Api.create(url, payload, handleResponseCB, handleErrorCB);
     };
 
     let updateTargetGroup = targetGroupId => {
+      send(UpdateSaving);
       let payload = setPayload(authenticityToken, state);
       let url = "/school/target_groups/" ++ targetGroupId;
-      Api.update(url, payload, handleResponseCB);
+      Api.update(url, payload, handleResponseCB, handleErrorCB);
     };
 
     <div className="blanket">
@@ -191,7 +199,7 @@ let make =
                 <div className="flex items-center mb-6">
                   <label
                     className="block tracking-wide text-grey-darker text-xs font-semibold mr-6">
-                    {"Is this a milestone target?" |> str}
+                    {"Is this a milestone target group?" |> str}
                   </label>
                   <div
                     className="inline-flex w-64 rounded-lg overflow-hidden border">

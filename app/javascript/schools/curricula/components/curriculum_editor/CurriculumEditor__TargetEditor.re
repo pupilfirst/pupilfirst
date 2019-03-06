@@ -34,6 +34,7 @@ type state = {
   isValidQuiz: bool,
   isArchived: bool,
   dirty: bool,
+  saving: bool,
 };
 
 type action =
@@ -49,7 +50,8 @@ type action =
   | RemoveQuizQuestion(int)
   | AddResource(int, string)
   | RemoveResource(int)
-  | UpdateIsArchived(bool);
+  | UpdateIsArchived(bool)
+  | UpdateSaving;
 
 let component =
   ReasonReact.reducerComponent("CurriculumEditor__TargetEditor");
@@ -94,7 +96,8 @@ let saveDisabled = state => {
   || state.hasYoutubeVideoIdError
   || state.hasLinktoCompleteError
   || hasMethordOfCompletionError
-  || state.dirty;
+  || state.dirty
+  || state.saving;
 };
 
 let handleMethodOfCompletion = target => {
@@ -162,14 +165,19 @@ let setPayload = (state, target, authenticityToken) => {
   let payload = Js.Dict.empty();
   let targetData = Js.Dict.empty();
   let resourceIds = state.resources |> List.map(((key, _)) => key);
-  let evaluationCriteriaIds =
-    state.evaluationCriteria
-    |> List.filter(((_, _, selected)) => selected == true)
-    |> List.map(((key, _, _)) => key);
   let prerequisiteTargetIds =
     state.prerequisiteTargets
     |> List.filter(((_, _, selected)) => selected == true)
     |> List.map(((key, _, _)) => key);
+  let evaluationCriteriaIds =
+    state.methodOfCompletion == Evaluated ?
+      state.evaluationCriteria
+      |> List.filter(((_, _, selected)) => selected == true)
+      |> List.map(((key, _, _)) => key) :
+      [];
+  let linkToComplete =
+    state.methodOfCompletion == VisitLink ? state.linkToComplete : "";
+  let quiz = state.methodOfCompletion == TakeQuiz ? state.quiz : [];
 
   Js.Dict.set(
     payload,
@@ -213,28 +221,23 @@ let setPayload = (state, target, authenticityToken) => {
 
   Js.Dict.set(targetData, "archived", state.isArchived |> Js.Json.boolean);
 
-  switch (state.methodOfCompletion) {
-  | Evaluated =>
-    Js.Dict.set(
-      targetData,
-      "evaluation_criterion_ids",
-      evaluationCriteriaIds |> Json.Encode.(list(int)),
-    )
-  | VisitLink =>
-    Js.Dict.set(
-      targetData,
-      "link_to_complete",
-      state.linkToComplete |> Js.Json.string,
-    )
-  | TakeQuiz =>
-    Js.Dict.set(
-      targetData,
-      "quiz",
-      state.quiz |> Json.Encode.(list(QuizQuestion.encoder)),
-    )
-  | MarkAsComplete => ()
-  | NotSelected => ()
-  };
+  Js.Dict.set(
+    targetData,
+    "evaluation_criterion_ids",
+    evaluationCriteriaIds |> Json.Encode.(list(int)),
+  );
+
+  Js.Dict.set(
+    targetData,
+    "link_to_complete",
+    linkToComplete |> Js.Json.string,
+  );
+
+  Js.Dict.set(
+    targetData,
+    "quiz",
+    quiz |> Json.Encode.(list(QuizQuestion.encoder)),
+  );
   Js.Dict.set(payload, "target", targetData |> Js.Json.object_);
   payload;
 };
@@ -307,6 +310,7 @@ let make =
         isArchived: target |> Target.archived,
         dirty: true,
         isValidQuiz: true,
+        saving: false,
       }
     | None => {
         title: "",
@@ -339,6 +343,7 @@ let make =
         isArchived: false,
         dirty: true,
         isValidQuiz: true,
+        saving: false,
       }
     },
   reducer: (action, state) =>
@@ -433,6 +438,7 @@ let make =
       ReasonReact.Update({...state, resources: newResources, dirty: false});
     | UpdateIsArchived(isArchived) =>
       ReasonReact.Update({...state, isArchived, dirty: false})
+    | UpdateSaving => ReasonReact.Update({...state, saving: !state.saving})
     },
   render: ({state, send}) => {
     let targetEvaluated = () =>
@@ -458,6 +464,7 @@ let make =
       send(UpdateQuizQuestion(id, quizQuestion));
     let questionCanBeRemoved = state.quiz |> List.length > 1;
     let addResourceCB = (key, value) => send(AddResource(key, value));
+    let handleErrorCB = () => send(UpdateSaving);
     let handleResponseCB = json => {
       let id = json |> Json.Decode.(field("id", int));
       let sortIndex = json |> Json.Decode.(field("sortIndex", int));
@@ -512,16 +519,18 @@ let make =
       updateTargetCB(newTarget);
     };
     let createTarget = () => {
+      send(UpdateSaving);
       let payload = setPayload(state, target, authenticityToken);
       let tgId = targetGroupId |> string_of_int;
       let url = "/school/target_groups/" ++ tgId ++ "/targets";
-      Api.create(url, payload, handleResponseCB);
+      Api.create(url, payload, handleResponseCB, handleErrorCB);
     };
 
     let updateTarget = targetId => {
+      send(UpdateSaving);
       let payload = setPayload(state, target, authenticityToken);
       let url = "/school/targets/" ++ (targetId |> string_of_int);
-      Api.update(url, payload, handleResponseCB);
+      Api.update(url, payload, handleResponseCB, handleErrorCB);
     };
     let showPrerequisiteTargets = state.prerequisiteTargets |> List.length > 0;
     <div className="blanket">
@@ -974,7 +983,9 @@ let make =
                           }
                         )
                         className="flex items-center bg-grey-lighter hover:bg-grey-light border-2 border-dashed rounded-lg p-3 cursor-pointer mb-5">
-                        <i className="material-icons">{"add_circle_outline" |> str}</i>
+                        <i className="material-icons">
+                          {"add_circle_outline" |> str}
+                        </i>
                         <h5 className="font-semibold ml-2">
                           {"Add another Question" |> str}
                         </h5>

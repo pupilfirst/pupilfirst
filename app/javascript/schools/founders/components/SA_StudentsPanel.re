@@ -16,6 +16,7 @@ type state = {
   selectedLevelNumber: option(int),
   tags: list(string),
   tagsFilteredBy: list(string),
+  filterVisible: bool,
 };
 
 type action =
@@ -29,7 +30,8 @@ type action =
   | UpdateSelectedLevelNumber(option(int))
   | AddNewTags(list(string))
   | AddTagFilter(string)
-  | RemoveTagFilter(string);
+  | RemoveTagFilter(string)
+  | ToggleFilterVisibility;
 
 let selectedAcrossTeams = selectedStudents => {
   selectedStudents |> List.map(s => s |> Student.teamId) |> List.sort_uniq((id1, id2) => id1 - id2) |> List.length > 1;
@@ -119,6 +121,7 @@ let make = (~teams, ~courseId, ~authenticityToken, ~levels, ~studentTags, _child
     selectedLevelNumber: None,
     tagsFilteredBy: [],
     tags: studentTags,
+    filterVisible: false,
   },
   reducer: (action, state) =>
     switch (action) {
@@ -144,6 +147,7 @@ let make = (~teams, ~courseId, ~authenticityToken, ~levels, ~studentTags, _child
       ReasonReact.Update({...state, tagsFilteredBy: state.tagsFilteredBy |> List.filter(t => t !== tag)})
     | AddNewTags(tags) =>
       ReasonReact.Update({...state, tags: List.append(tags, state.tags) |> List.sort_uniq(String.compare)})
+    | ToggleFilterVisibility => ReasonReact.Update({...state, filterVisible: !state.filterVisible})
     },
   render: ({state, send}) => {
     <div className="flex-1 flex-col bg-white overflow-hidden">
@@ -283,8 +287,12 @@ let make = (~teams, ~courseId, ~authenticityToken, ~levels, ~studentTags, _child
                 onChange={event => send(UpdateSearchString(ReactEvent.Form.target(event)##value))}
               />
             </div>
+            <div onClick={_e => send(ToggleFilterVisibility)} className="flex text-indigo">
+              <div> {(state.filterVisible ? "Hide" : "Show") ++ " Filters" |> str} </div>
+              <i className="material-icons md-48"> {(state.filterVisible ? "expand_less" : "expand_more") |> str} </i>
+            </div>
           </div>
-          {state.tags |> List.length > 0 ?
+          {state.filterVisible && state.tags |> List.length > 0 ?
              <div className="border-t mt-2">
                <div className="flex flex-col pt-2 pl-2">
                  <div className="mb-1"> {"Filters:" |> str} </div>

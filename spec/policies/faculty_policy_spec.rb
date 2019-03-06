@@ -30,7 +30,7 @@ describe FacultyPolicy do
       end
     end
 
-    context 'when faculty does not have available connect slots' do
+    context 'when faculty does not have available connect slots or connect link' do
       let!(:connect_request) { create :connect_request, connect_slot: connect_slot }
 
       it 'denies access' do

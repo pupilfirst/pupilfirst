@@ -27,7 +27,6 @@ class TimelineEvent < ApplicationRecord
   GRADE_GREAT = 'great'
   GRADE_WOW = 'wow'
 
-  validates :event_on, presence: true
   validates :description, presence: true
 
   accepts_nested_attributes_for :timeline_event_files, allow_destroy: true
@@ -130,14 +129,6 @@ class TimelineEvent < ApplicationRecord
     minimum_point_for_target * multiplier
   end
 
-  # A hidden timeline event is not displayed to user if user isn't logged in, or isn't the founder linked to event.
-  def hidden_from?(viewer)
-    return false unless target.founder_event?
-    return true if viewer.blank?
-
-    founder != viewer
-  end
-
   def attachments_for_founder(founder)
     privileged = privileged_founder?(founder)
     attachments = []
@@ -164,7 +155,7 @@ class TimelineEvent < ApplicationRecord
   def improved_event_candidates
     founder_or_startup.timeline_events
       .where('created_at > ?', created_at)
-      .where.not(id: id).order('event_on DESC')
+      .where.not(id: id).order('created_at DESC')
   end
 
   def share_url
@@ -173,13 +164,6 @@ class TimelineEvent < ApplicationRecord
       event_id: id,
       event_title: title.parameterize
     )
-  end
-
-  def days_elapsed
-    start_date = startup.earliest_team_event_date
-    return nil if start_date.blank?
-
-    (event_on - start_date).to_i + 1
   end
 
   def overall_grade_from_score

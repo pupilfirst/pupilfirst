@@ -12,7 +12,7 @@ module Schools
     def create
       index
 
-      if @form.validate(params[:schools_faculty_module_create])
+      if @form.validate(params[:schools_faculty_module_create].merge(school_id: current_school.id))
         @form.save(@course)
         redirect_back(fallback_location: school_course_coaches_path(@course))
       else

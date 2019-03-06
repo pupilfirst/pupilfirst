@@ -1,29 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
 import SubmitButton from "./SubmitButton";
-import DatePicker from "./DatePicker";
-
 export default class ActionBar extends React.Component {
   constructor(props) {
     super(props);
 
     this.showLinkForm = this.showLinkForm.bind(this);
     this.showFileForm = this.showFileForm.bind(this);
-    this.showDateForm = this.showDateForm.bind(this);
     this.disableTab = this.disableTab.bind(this);
-    this.handleDate = this.handleDate.bind(this);
-    this.state = {
-      dateFormVisible: false
-    };
   }
 
-  componentDidUpdate() {
-    if (this.props.showDateError) {
-      $(".date-of-event").popover("show");
-    } else {
-      $(".date-of-event").popover("hide");
-    }
-  }
   formLinkClasses(type) {
     let classes = "";
 
@@ -33,9 +19,6 @@ export default class ActionBar extends React.Component {
     } else if (type == "file") {
       classes = "timeline-builder__upload-section-tab file-upload";
       classes += this.props.attachmentAllowed ? "" : " action-tab-disabled";
-    } else {
-      classes = "timeline-builder__upload-section-tab date-of-event";
-      classes += this.disableTab() ? " action-tab-disabled" : "";
     }
 
     if (this.props.currentForm == type) {
@@ -54,31 +37,6 @@ export default class ActionBar extends React.Component {
   showFileForm() {
     if (this.props.attachmentAllowed) {
       this.props.formClickedCB("file");
-    }
-  }
-
-  handleDate(date) {
-    this.setState({ dateFormVisible: false });
-    this.props.addAttachmentCB("date", {
-      value: date
-    });
-  }
-
-  showDateForm() {
-    if (this.state.dateFormVisible) {
-      this.setState({ dateFormVisible: false });
-    } else {
-      this.props.resetErrorsCB();
-      this.setState({ dateFormVisible: true });
-    }
-  }
-
-  dateLabel() {
-    if (this.props.selectedDate != null) {
-      let date = moment(this.props.selectedDate, "YYYY-MM-DD");
-      return date.format("MMM D");
-    } else {
-      return "Date";
     }
   }
 
@@ -104,26 +62,6 @@ export default class ActionBar extends React.Component {
             <i className="timeline-builder__upload-section-icon fa fa-file-text-o" />
             <span className="timeline-builder__tab-label">File</span>
           </div>
-
-          <div className="timeline-builder__date-picker-popup">
-            {this.state.dateFormVisible && (
-              <DatePicker handleDate={this.handleDate} />
-            )}
-          </div>
-          <div
-            className={this.formLinkClasses("date")}
-            onClick={this.showDateForm}
-            data-toggle="popover"
-            data-title="Date Missing!"
-            data-content="Please select a date for the event."
-            data-placement="bottom"
-            data-trigger="manual"
-          >
-            <i className="timeline-builder__upload-section-icon fa fa-calendar" />
-            <span className="timeline-builder__tab-label">
-              {this.dateLabel()}
-            </span>
-          </div>
         </div>
         <div className="d-flex timeline-builder__select-section">
           <SubmitButton
@@ -144,13 +82,11 @@ ActionBar.propTypes = {
   submitCB: PropTypes.func,
   coverImage: PropTypes.object,
   addDataCB: PropTypes.func,
-  selectedDate: PropTypes.string,
   addAttachmentCB: PropTypes.func,
   submissionProgress: PropTypes.number,
   submissionError: PropTypes.string,
   submissionSuccessful: PropTypes.bool,
   attachmentAllowed: PropTypes.bool,
-  showDateError: PropTypes.bool,
   showEventTypeError: PropTypes.bool,
   resetErrorsCB: PropTypes.func
 };

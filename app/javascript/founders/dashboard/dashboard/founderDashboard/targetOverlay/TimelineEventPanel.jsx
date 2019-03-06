@@ -63,11 +63,11 @@ export default class TimelineEventPanel extends React.Component {
           <div className="d-flex target-overlay-timeline-event-panel__header p-3">
             <div className="target-overlay-timeline-event-panel__header-date-box mr-2">
               <span className="target-overlay-timeline-event-panel__header-date text-uppercase font-semibold">
-                {moment(this.props.event.event_on).format("MMM")}
+                {moment(this.props.event.createdAt).format("MMM")}
               </span>
               <span className="target-overlay-timeline-event-panel__header-date--large font-semibold">
-                {moment(this.props.event.event_on).date()}/{moment(
-                  this.props.event.event_on
+                {moment(this.props.event.createdAt).date()}/{moment(
+                  this.props.event.createdAt
                 ).format("YY")}
               </span>
             </div>
@@ -75,9 +75,6 @@ export default class TimelineEventPanel extends React.Component {
               <h6 className="font-semibold brand-secondary mb-0">
                 {this.props.event.title}
               </h6>
-              <p className="target-overlay-timeline-event-panel__header-title-date">
-                Day {this.props.event.days_elapsed}
-              </p>
             </div>
           </div>
           <div className="target-overlay-timeline-event-panel__content">

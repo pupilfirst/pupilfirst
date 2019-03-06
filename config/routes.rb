@@ -22,7 +22,7 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
 
   # TODO: Remove these founder routes as we no longer have 'founders'. Always use the corresponding 'student' routes below.
-  resource :founder, only: %i[edit update]
+  resource :founder, path: 'student', only: %i[edit update]
 
   resource :school, only: %i[show update]
 

@@ -26,9 +26,8 @@ describe Targets::OverlayDetailsService do
 
       event = {
         description: timeline_event.description,
-        event_on: timeline_event.event_on,
+        createdAt: timeline_event.reload.created_at,
         title: timeline_event.title,
-        days_elapsed: timeline_event.days_elapsed,
         attachments: [{ type: 'link', title: 'Private URL', url: 'https://sv.co/private' }, { type: 'link', title: 'Public URL', url: 'https://google.com' }]
       }
 

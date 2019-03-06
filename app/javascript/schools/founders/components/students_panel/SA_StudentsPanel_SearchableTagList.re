@@ -17,7 +17,7 @@ let handleClick = (tag, send, clickCB) => {
 
 let component = ReasonReact.reducerComponent("SA_StudentsPanel_SearchableTagList");
 
-let make = (~unselectedTags, ~selectedTags, ~addTagCB, ~removeTagCB, _children) => {
+let make = (~unselectedTags, ~selectedTags, ~addTagCB, ~removeTagCB, ~allowNewTags, _children) => {
   ...component,
   initialState: () => {searchString: "", dropdownVisible: false},
   reducer: (action, state) => {
@@ -50,20 +50,22 @@ let make = (~unselectedTags, ~selectedTags, ~addTagCB, ~removeTagCB, _children) 
         value={state.searchString}
         onChange={event => send(UpdateSearchString(ReactEvent.Form.target(event)##value))}
         onFocus={_e => send(UpdateDropdownVisibility(true))}
+        onBlur={_e => send(UpdateDropdownVisibility(false))}
         className="appearance-none block bg-white text-grey-darker border border-grey-light rounded py-3 px-4 my-2 focus:outline-none focus:bg-white focus:border-grey"
         id="tag"
         type_="text"
-        placeholder="Search or add new..."
+        placeholder={allowNewTags ? "Search or add new..." : "Select tags"}
       />
       {state.dropdownVisible ?
          <div className="border border-grey-light searchable-tag-list__dropdown pl-4">
-           {List.append(selectedTags, unselectedTags)
+           {!allowNewTags
+            || List.append(selectedTags, unselectedTags)
             |> List.mem(state.searchString)
             || state.searchString
             |> String.length < 1 ?
               ReasonReact.null :
               <div
-                onClick={_e => handleClick(state.searchString, send, addTagCB)}
+                onMouseDown={_e => handleClick(state.searchString, send, addTagCB)}
                 className="my-3 hover:text-indigo cursor-pointer">
                 {state.searchString |> str}
                 <span className="text-grey ml-1"> {"(Add New)" |> str} </span>
@@ -75,7 +77,7 @@ let make = (~unselectedTags, ~selectedTags, ~addTagCB, ~removeTagCB, _children) 
                  <div
                    key=tag
                    className="my-3 hover:text-indigo cursor-pointer"
-                   onClick={_e => handleClick(tag, send, addTagCB)}>
+                   onMouseDown={_e => handleClick(tag, send, addTagCB)}>
                    {tag |> str}
                  </div>
                )

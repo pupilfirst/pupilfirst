@@ -50,11 +50,11 @@
                 = link_to student_path(slug: current_founder.slug) do
                   i.fa.fa-list-ul
                   | Profile
-            - if policy(PlatformFeedback).create?
-              li role="presentation"
-                a href="#" data-toggle="modal" data-target="#platform-feedback-modal"
-                  i.fa.fa-comment-o
-                  | Submit Feedback
+            / - if policy(PlatformFeedback).create?
+            /   li role="presentation"
+            /     a href="#" data-toggle="modal" data-target="#platform-feedback-modal"
+            /       i.fa.fa-comment-o
+            /       | Submit Feedback
             - presenter.selectable_student_profiles.each do |other_founder|
               li role="presentation"
                 = link_to(select_founder_path(other_founder), method: :post) do

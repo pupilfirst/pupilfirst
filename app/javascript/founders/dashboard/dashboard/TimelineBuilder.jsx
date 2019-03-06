@@ -13,7 +13,6 @@ export default class TimelineBuilder extends React.Component {
     this.state = {
       links: [],
       files: {},
-      date: this.today(),
       coverImage: null,
       showLinkForm: false,
       showFileForm: false,
@@ -22,7 +21,6 @@ export default class TimelineBuilder extends React.Component {
       submissionError: null,
       submissionSuccessful: false,
       descriptionError: null,
-      showDateError: false,
       showEventTypeError: false,
       showSelectedFileError: false,
       description: ""
@@ -66,7 +64,6 @@ export default class TimelineBuilder extends React.Component {
 
   destroyPopovers() {
     $(".js-timeline-builder__textarea").popover("dispose");
-    $(".date-of-event").popover("dispose");
     $(".js-timeline-builder__timeline-event-type-select-wrapper").popover(
       "dispose"
     );
@@ -177,8 +174,6 @@ export default class TimelineBuilder extends React.Component {
         coverImage: { title: "Cover Image" },
         imageButtonKey: this.generateKey()
       });
-    } else if (type == "date") {
-      this.setState({ date: properties.value });
     } else {
       console.warn("Unhandled attachment type: ", type);
     }
@@ -240,7 +235,6 @@ export default class TimelineBuilder extends React.Component {
 
       formData.append("timeline_event[target_id]", this.props.targetId);
       formData.append("timeline_event[description]", this.state.description);
-      formData.append("timeline_event[event_on]", this.state.date);
       formData.append(
         "timeline_event[links]",
         JSON.stringify(this.state.links)
@@ -308,18 +302,12 @@ export default class TimelineBuilder extends React.Component {
       return false;
     }
 
-    if (this.state.date == null) {
-      this.setState({ showDateError: true });
-      return false;
-    }
-
     return true;
   }
 
   resetErrors() {
     this.setState({
       descriptionError: null,
-      showDateError: false,
       showEventTypeError: false,
       showSelectedFileError: false
     });
@@ -395,10 +383,6 @@ export default class TimelineBuilder extends React.Component {
     this.setState({ description: description });
   }
 
-  today() {
-    return moment().format("YYYY-MM-DD");
-  }
-
   modalClasses() {
     let classes = "timeline-builder modal";
 
@@ -459,7 +443,6 @@ export default class TimelineBuilder extends React.Component {
                 currentForm={this.currentForm()}
                 previousForm={this.state.previousForm}
                 addAttachmentCB={this.addData}
-                selectedDate={this.state.date}
                 showSelectedFileError={this.state.showSelectedFileError}
                 resetErrorsCB={this.resetErrors}
                 hideFileForm={this.hideFileForm}
@@ -472,10 +455,8 @@ export default class TimelineBuilder extends React.Component {
                 submitCB={this.submit}
                 addDataCB={this.addData}
                 coverImage={this.state.coverImage}
-                selectedDate={this.state.date}
                 submissionProgress={this.state.submissionProgress}
                 attachmentAllowed={this.attachmentAllowed()}
-                showDateError={this.state.showDateError}
                 resetErrorsCB={this.resetErrors}
                 showEventTypeError={this.state.showEventTypeError}
                 submissionError={this.state.submissionError}

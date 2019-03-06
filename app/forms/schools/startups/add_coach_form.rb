@@ -5,13 +5,14 @@ module Schools
       property :email, virtual: true
       property :name
       property :team_id, virtual: true, validates: { presence: true }
+      property :school_id, virtual: true, validates: { presence: true }
 
       validates :email, email: true, unless: :existing_faculty
       validates :name, :email, presence: true, unless: :existing_faculty
       validate :team_exists
 
       def save
-        faculty = existing_faculty || ::FacultyModule::CreateService.new(email, name).create
+        faculty = existing_faculty || ::FacultyModule::CreateService.new(email, name, school).create
         ::Startups::AssignReviewerService.new(startup).assign(faculty)
       end
 
@@ -23,6 +24,10 @@ module Schools
 
       def startup
         @startup ||= Startup.find_by(id: team_id)
+      end
+
+      def school
+        @school ||= School.find_by(school_id)
       end
 
       def team_exists

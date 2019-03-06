@@ -6,7 +6,7 @@ type reviewResult =
 
 let title: t => string;
 
-let eventOn: t => DateTime.t;
+let createdAt: t => DateTime.t;
 
 let description: t => string;
 

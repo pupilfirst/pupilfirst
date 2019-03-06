@@ -1,6 +1,6 @@
 ActiveAdmin.register TimelineEvent do
   actions :all, except: [:edit]
-  permit_params :description, :event_on, :serialized_links,
+  permit_params :description, :serialized_links,
     :improved_timeline_event_id, timeline_event_files_attributes: %i[id title file private _destroy]
 
   filter :founders_name, as: :string
@@ -129,11 +129,10 @@ ActiveAdmin.register TimelineEvent do
 
       f.input :founder, label: 'Founder', as: :select, collection: f.object.persisted? ? f.object.startup.founders : [], include_blank: false
       f.input :description
-      f.input :event_on, as: :datepicker
 
       f.input :improved_timeline_event,
         as: :select,
-        collection: f.object.persisted? ? f.object.improved_event_candidates.map { |e| "#{e.title} (#{e.event_on.strftime('%b %d')})" } : []
+        collection: f.object.persisted? ? f.object.improved_event_candidates.map { |e| "#{e.title} (#{e.created_at.strftime('%b %d')})" } : []
 
       f.input :serialized_links, as: :hidden
     end
@@ -176,7 +175,6 @@ ActiveAdmin.register TimelineEvent do
         simple_format(timeline_event.description)
       end
 
-      row :event_on
       row :evaluated
 
       row('Linked Target') do

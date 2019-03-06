@@ -126,11 +126,10 @@ feature 'Target Overlay' do
       within('.target-overlay-timeline-event-panel__container') do
         expect(page).to have_selector('.target-overlay-timeline-event-panel__title', text: 'Latest Timeline Submission:')
         expect(page).to have_selector('.target-overlay-timeline-event-panel__header-title', text: timeline_event.title)
-        month_name = timeline_event.event_on.strftime('%b').upcase
+        month_name = timeline_event.created_at.strftime('%b').upcase
         expect(page).to have_selector('.target-overlay-timeline-event-panel__header-date', text: month_name)
-        date = "#{timeline_event.event_on.strftime('%e').strip}/#{timeline_event.event_on.strftime('%y')}"
+        date = "#{timeline_event.created_at.strftime('%e').strip}/#{timeline_event.created_at.strftime('%y')}"
         expect(page).to have_selector('.target-overlay-timeline-event-panel__header-date--large', text: date)
-        expect(page).to have_selector('.target-overlay-timeline-event-panel__header-title-date', text: 'Day 1')
         expect(page).to have_selector('.target-overlay-timeline-event-panel__content', text: timeline_event.description)
 
         # Attachments.

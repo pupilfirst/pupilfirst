@@ -27,7 +27,6 @@ module Layouts
         else
           view.current_user.founders
             .not_exited
-            .where.not(id: view.current_founder.id)
             .joins(:school).where(schools: { id: view.current_school })
         end
       end
@@ -74,9 +73,19 @@ module Layouts
     end
 
     def dashboard_link
-      return if view.current_founder.blank? || view.current_founder.exited? || view.current_founder.startup.blank?
+      return if view.current_founder.blank? || view.current_founder.exited?
 
-      { title: 'Student Dashboard', url: view.student_dashboard_path }
+      if selectable_student_profiles.load.count > 1
+        {
+          title: 'Student Dashboard',
+          id: 'navbar-student-dropdown',
+          options: selectable_student_profiles.map do |sp|
+            { title: "#{sp.course.name} Course", url: view.select_founder_path(sp), method: :post }
+          end
+        }
+      else
+        { title: 'Student Dashboard', url: view.student_dashboard_path }
+      end
     end
   end
 end

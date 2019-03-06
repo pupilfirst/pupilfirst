@@ -32,14 +32,6 @@
               </li>
             <% end %>
 
-            <% presenter.selectable_student_profiles.each do |other_founder| %>
-              <li role="presentation">
-                <%= link_to(select_founder_path(other_founder), method: :post) do %>
-                  <i class="fa fa-university"></i> <%= "#{other_founder.startup.course.name} Course" %>
-                <% end %>
-              </li>
-            <% end %>
-
             <li role="presentation">
               <%= link_to destroy_user_session_path, method: :delete do %>
                 <i class="fa fa-sign-out"></i> Logout

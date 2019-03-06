@@ -6,9 +6,9 @@
   <ul class="dropdown-menu" aria-labelledby="<%= dropdown[:id] %>">
     <% dropdown[:options].each do |link| %>
       <li>
-        <a class="dropdown-item" href="<%= link[:url] %>">
+        <%= link_to(link[:url], method: (link[:method] || :get), class: 'dropdown-item') do %>
           <%= link[:title] %>
-        </a>
+        <% end %>
       </li>
     <% end %>
   </ul>

@@ -134,4 +134,29 @@ feature 'Top navigation bar' do
       expect(page).to have_link(another_student.course.name, href: "/courses/#{another_student.course.id}/coach_dashboard")
     end
   end
+
+  context 'when the user is a student in multiple courses of the same school' do
+    let(:another_course) { create :course, school: student.school }
+    let(:another_level) { create :level, course: another_course }
+    let!(:another_student) { create :founder, level: another_level, user: student.user }
+
+    it 'displays the student dashboard link as a dropdown', js: true do
+      sign_in_user student.user, referer: student_dashboard_path
+
+      # The 'Student Dashboard' option should be an anchor link.
+      expect(page).to have_link('Student Dashboard', href: '#')
+
+      # The option to switch to different student profiles should not be immediately visible.
+      expect(page).not_to have_link("#{another_student.course.name} Course", href: "/founders/#{another_student.slug}/select")
+      expect(page).not_to have_link("#{student.course.name} Course", href: "/founders/#{student.slug}/select")
+
+      # But, visible within the dropdown.
+      within('#nav-links__navbar') do
+        click_link 'Student Dashboard'
+      end
+
+      expect(page).to have_link("#{another_student.course.name} Course", href: "/founders/#{another_student.slug}/select")
+      expect(page).to have_link("#{student.course.name} Course", href: "/founders/#{student.slug}/select")
+    end
+  end
 end

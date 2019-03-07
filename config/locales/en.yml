@@ -29,10 +29,6 @@ en:
       ops_team_reminder: ":exclamation: *Reminder:* <%{founder_url}|%{founder_name}> has an office hour with <%{coach_url}|%{faculty_name}> starting in 30 minutes. Follow up!"
 
     timeline_events:
-      description_update_notification:
-        heading: >
-          An SV.CO faculty member has updated the description in your timeline event (<%{event_url}|%{event_title}>).
-          See changes below:
       verification_notification:
         founder:
           verified:

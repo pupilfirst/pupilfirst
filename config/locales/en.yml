@@ -151,20 +151,6 @@ en:
         target_status: This indicates the present status of the target.
         final_message: That&rsquo;s it for now. If you have any doubts, don&rsquo;t hesitate to reach out to us for help.<br/><br/>Have fun!
 
-  startups:
-    show:
-      timeline_cards:
-        needs_improvement:
-          tooltip_text:
-            founder: We have verified this event, but you can do better! If you have time, submit a new revised event based on our feedback.
-            public: This event is verified by SV.CO but our Faculty submitted feedback asking for further improvements.
-          status_text: Needs Improvement
-        improved_later:
-          tooltip_text:
-            founder: Thank you for improving this event with a later event!
-            public: This event was improved upon with a later submission!
-          status_text: Improved Later
-
   # These are custom error messages for the active_storage_validations gem.
   errors:
     messages:

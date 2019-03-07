@@ -1,53 +1,29 @@
 <% presenter = ErrorPresenter.new(self) %>
 
-<!doctype html>
-<html lang='en'>
-<head>
-  <!-- Begin critial tags. -->
-  <meta charset="utf-8"/>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+<% content_for(:head) do %>
+  <%= stylesheet_pack_tag 'layouts/error', media: 'all', 'data-turbolinks-track': 'reload' %>
+<% end %>
 
-  <!--
-  The above 3 meta tags *must* come first in the head; any other head
-  content must come *after* these tags.
-  -->
+<% content_for(:wrapper) do %>
+  <%= yield %>
 
-  <title><%= presenter.page_title %></title>
-
-  <!-- Local Styles -->
-  <!-- <%= stylesheet_link_tag 'application' %> -->
-
-  <!-- Scripts -->
-  <!-- <%= javascript_include_tag 'application', nonce: true %> -->
-
-  <!-- Fonts -->
-  <!-- <link type='text/css' rel='stylesheet' href='//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,400italic,300italic'/> -->
-
-  <!-- <%= yield :head %> -->
-
-  <link rel="icon" href="/favicon.ico"/>
-</head>
-
-<body>
-<%= yield %>
-
-<footer>
-  <% if presenter.contact_email.present? %>
-    <div>
-      <%= mail_to presenter.contact_email, 'Contact Support' %>
-    </div>
-  <% end %>
-
-  <div>
-    <%= link_to('/') do %>
-      <% if presenter.school_has_icon? %>
-        <%= image_tag(presenter.school_icon_url) %>
-      <% else %>
-        <%= presenter.site_name %>
-      <% end %>
+  <footer>
+    <% if presenter.contact_email.present? %>
+      <div>
+        <%= mail_to presenter.contact_email, 'Contact Support' %>
+      </div>
     <% end %>
-  </div>
-</footer>
-</body>
-</html>
+
+    <div>
+      <%= link_to('/') do %>
+        <% if presenter.school_has_icon? %>
+          <%= image_tag(presenter.school_icon_url) %>
+        <% else %>
+          <%= presenter.site_name %>
+        <% end %>
+      <% end %>
+    </div>
+  </footer>
+<% end %>
+
+<%= render template: 'layouts/tailwind' %>

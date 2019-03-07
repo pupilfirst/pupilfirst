@@ -9,6 +9,7 @@ let component =
 
 let make =
     (
+      ~questionNumber,
       ~quizQuestion,
       ~updateQuizQuestionCB,
       ~removeQuizQuestionCB,
@@ -59,7 +60,7 @@ let make =
         <label
           className="block tracking-wide uppercase text-grey-darker text-xs font-semibold"
           htmlFor="Quiz question 1">
-          {"Question 1" |> str}
+          {"Question " ++ (questionNumber + 1 |> string_of_int) |> str}
         </label>
         <div className="quiz-maker__question-remove-button invisible">
           {
@@ -74,14 +75,13 @@ let make =
                     removeQuizQuestionCB(quizQuestion |> QuizQuestion.id);
                   }
                 }>
-                <i className="material-icons">{"delete_outline" |> str}</i>
+                <i className="material-icons"> {"delete_outline" |> str} </i>
               </button> :
               ReasonReact.null
           }
         </div>
       </div>
-      <div
-        className="flex relative items-center my-2">
+      <div className="flex relative items-center my-2">
         <input
           className="w-full text-grey-darker border rounded-lg p-4 leading-tight focus:outline-none"
           type_="text"
@@ -116,10 +116,10 @@ let make =
           }
         }
         className="cursor-pointer relative">
-        <div className="quiz-maker__answer-option-pointer">
-        </div>
-        <div className="flex items-center bg-white hover:bg-grey-lighter border rounded-lg ml-12 py-3 px-4">
-          <i className="material-icons">{"add_circle_outline" |> str}</i>
+        <div className="quiz-maker__answer-option-pointer" />
+        <div
+          className="flex items-center bg-white hover:bg-grey-lighter border rounded-lg ml-12 py-3 px-4">
+          <i className="material-icons"> {"add_circle_outline" |> str} </i>
           <h5 className="font-semibold ml-2 italic">
             {"Add another Answer Option" |> str}
           </h5>

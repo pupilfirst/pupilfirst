@@ -13,6 +13,7 @@ module Schools
       @course_details ||= begin
         current_school.courses.map do |course|
           {
+            id: course.id,
             name: course.name,
             levels_count: course.levels.count,
             students_count: course.founders.count,

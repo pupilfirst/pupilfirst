@@ -48,6 +48,8 @@ let booleanButtonClasses = bool =>
   bool ?
     "w-1/2 bg-grey hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none" :
     "w-1/2 bg-white border-l hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none";
+let formClasses = value =>
+  value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full";
 
 let make =
     (
@@ -134,7 +136,6 @@ let make =
       let url = "/school/target_groups/" ++ targetGroupId;
       Api.update(url, payload, handleResponseCB, handleErrorCB);
     };
-
     <div className="blanket">
       <div className="drawer-right relative">
         <div className="drawer-right__close absolute">
@@ -144,7 +145,7 @@ let make =
             <i className="material-icons"> {"close" |> str} </i>
           </button>
         </div>
-        <div className="drawer-right-form w-full">
+        <div className={formClasses(state.saving)}>
           <div className="w-full">
             <div className="mx-auto bg-white">
               <div className="max-w-md p-6 mx-auto">

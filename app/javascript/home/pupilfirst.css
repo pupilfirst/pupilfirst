@@ -5,10 +5,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.hero {
-  height: 28rem;
-}
-
 .hero__heading-text {
   font-size: 2.75rem;
   line-height: 0.91;
@@ -35,10 +31,13 @@ body {
 }
 
 @screen lg {
+  .hero {
+    height: 28rem;
+  }
   .hero__heading-text {
-    font-size: 3.875rem;
+    font-size: 3.75rem;
   }
   .hero__heading-text-xl {
-    font-size: 6.75rem;
+    font-size: 6.5rem;
   }
 }

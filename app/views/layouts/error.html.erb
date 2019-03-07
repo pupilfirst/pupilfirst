@@ -14,10 +14,10 @@
       </div>
     <% end %>
 
-    <div>
+    <div class="text-center">
       <%= link_to('/') do %>
         <% if presenter.school_has_icon? %>
-          <%= image_tag(presenter.school_icon_url) %>
+          <%= image_tag(presenter.school_icon_url, class: 'w-12') %>
         <% else %>
           <%= presenter.site_name %>
         <% end %>

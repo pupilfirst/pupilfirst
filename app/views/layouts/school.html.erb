@@ -1,7 +1,9 @@
 <% content_for(:head) do %>
   <%= stylesheet_pack_tag 'schools/shared/shared', media: 'all', 'data-turbolinks-track': 'reload' %>
 <% end %>
-<% content_for(:nav) do %>
+
+<% content_for(:wrapper) do %>
+  <div class="antialiased flex h-screen">
     <div class="flex global-sidebar">
       <div class="bg-grey-darker global-sidebar__primary-nav global-sidebar__primary-nav--expanded flex-none hidden md:block">
       <div class="global-sidebar__header border-r p-4 bg-white flex pb-3">
@@ -15,12 +17,12 @@
         </div>
       </div>
         <ul class="list-reset">
-<!--          <li>-->
+  <!--          <li>-->
             <%#= link_to school_path, class:'flex text-white py-3 px-4 hover:bg-grey-darkest font-semibold no-underline items-center' do%>
-<!--              <i class="material-icons md-48 mr-2">vertical_split</i>-->
-<!--              <span>Overview</span>-->
+  <!--              <i class="material-icons md-48 mr-2">vertical_split</i>-->
+  <!--              <span>Overview</span>-->
               <%# end %>
-<!--          </li>-->
+  <!--          </li>-->
           <li>
             <%= link_to '#', class:'flex text-white py-3 px-4 font-semibold no-underline items-center cursor-default' do%>
                 <i class="material-icons md-48 mr-2">description</i>
@@ -35,6 +37,9 @@
         </ul>
       </div>
     </div>
+
+    <%= yield %>
+  </div>
 <% end %>
 
 <%= render template: 'layouts/tailwind' %>

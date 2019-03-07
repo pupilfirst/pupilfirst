@@ -26,15 +26,10 @@
 </head>
 
 <body data-env="<%= Rails.env %>">
-
-<div class="font-sans antialiased flex h-screen">
-  <!-- Sidebar -->
-
-  <%= yield :nav %>
-
-  <!-- Content -->
-  <%= yield %>
-</div>
-
+  <% if content_for?(:wrapper) %>
+    <%= yield :wrapper %>
+  <% else %>
+    <%= yield %>
+  <% end %>
 </body>
 </html>

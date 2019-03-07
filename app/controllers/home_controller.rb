@@ -17,7 +17,11 @@ class HomeController < ApplicationController
 
   # GET /policies/privacy
   def privacy
-    privacy_policy = SchoolString::PrivacyPolicy.for(current_school)
+    privacy_policy = if current_school.present?
+      SchoolString::PrivacyPolicy.for(current_school)
+    else
+      File.read(Rails.root.join('privacy_policy.md'))
+    end
 
     raise_not_found if privacy_policy.blank?
 
@@ -31,7 +35,11 @@ class HomeController < ApplicationController
 
   # GET /policies/terms
   def terms
-    terms_of_use = SchoolString::TermsOfUse.for(current_school)
+    terms_of_use = if current_school.present?
+      SchoolString::TermsOfUse.for(current_school)
+    else
+      File.read(Rails.root.join('terms_of_use.md'))
+    end
 
     raise_not_found if terms_of_use.blank?
 

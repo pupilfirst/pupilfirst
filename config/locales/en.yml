@@ -262,6 +262,11 @@ en:
     index:
       meta_description: "Hire, acqui-hire, invest and build a pipeline from India's best student developer talent. Discover great product developers for your company."
 
+  presenters:
+    footer:
+      address_html: "#360, 6th Main Road<br/>1<sup>st</sup> Block, Koramangala,<br/>Bengaluru &mdash; 560034"
+      email_address: support@pupilfirst.com
+
   # These are custom error messages for the active_storage_validations gem.
   errors:
     messages:

@@ -287,7 +287,7 @@ let make =
           </div>
         </div>
       </div>
-      <div className="bg-grey-darker px-6">
+      <div className="bg-grey-darker px-3">
         <div
           className="max-w-lg h-16 bg-white mx-auto relative rounded border-b p-4 mt-3 w-full flex items-center justify-between shadow">
           <div className="flex">

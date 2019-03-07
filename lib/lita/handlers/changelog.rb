@@ -13,7 +13,7 @@ module Lita
       private
 
       def latest_changelog
-        salutation = "*Here are the latest changes on the SV.CO platform. Visit sv.co/changelog for more.*\n\n"
+        salutation = "*Here are the latest changes on the PupilFirst platform. Visit pupilfirst.com/changelog for more.*\n\n"
         salutation + latest_changes
       end
 

@@ -18,8 +18,10 @@
 
   <%= csrf_meta_tags %>
 
-  <meta name="description" content="<%= meta_description %>"/>
-  <meta property="og:description" content="<%= meta_description %>"/>
+  <% if presenter.meta_description.present? %>
+    <meta name="description" content="<%= presenter.meta_description %>"/>
+    <meta property="og:description" content="<%= presenter.meta_description %>"/>
+  <% end %>
 
   <%= yield :head %>
 

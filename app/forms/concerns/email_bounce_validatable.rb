@@ -12,7 +12,7 @@ module EmailBounceValidatable
     user = User.with_email(email)
     return unless user&.email_bounced?
 
-    errors[:base] << 'The email address you supplied cannot be used because an email we sent bounced. Please contact help@sv.co for more information.'
+    errors[:base] << "The email address you supplied cannot be used because an email we'd sent earlier bounced."
     errors[:email] << 'is an address which bounced'
   end
 end

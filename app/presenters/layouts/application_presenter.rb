@@ -17,5 +17,9 @@ module Layouts
         view.url_for(current_school.logo_variant(:mid))
       end
     end
+
+    def meta_description
+      @meta_description ||= Layouts::TailwindPresenter.new(view).meta_description
+    end
   end
 end

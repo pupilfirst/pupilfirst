@@ -22,8 +22,11 @@ class SchoolString < ApplicationRecord
   class PrivacyPolicy < Key; end
   class TermsOfUse < Key; end
 
+  # School description shouldn't contain double-quotes, since this is used as meta-description in layouts.
+  class Description < Key; end
+
   VALID_KEYS = [
-    CoachesIndexSubheading, LibraryIndexSubheading, EmailAddress, Address, PrivacyPolicy, TermsOfUse
+    CoachesIndexSubheading, LibraryIndexSubheading, EmailAddress, Address, PrivacyPolicy, TermsOfUse, Description
   ].map(&:key).freeze
 
   belongs_to :school

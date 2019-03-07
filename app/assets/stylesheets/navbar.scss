@@ -53,11 +53,14 @@
 
   .navbar-container {
     padding: 15px 0;
+    min-height: 80px;
   }
 
   .site-logo {
-    height: 55px;
+    max-height: 55px;
+    max-width: 160px;
   }
+
   .navbar-nav {
     .nav-item + .nav-item {
       margin-left: 2rem;

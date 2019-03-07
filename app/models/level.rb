@@ -8,6 +8,8 @@ class Level < ApplicationRecord
   has_many :weekly_karma_points, dependent: :restrict_with_error
   belongs_to :course
 
+  normalize_attribute :unlock_on
+
   def display_name
     "#{course.short_name}##{number}: #{name}"
   end

@@ -6,7 +6,7 @@ module Schools
 
       def save
         level.name = name
-        level.unlock_on = unlock_on if unlock_on.present?
+        level.unlock_on = unlock_on
         level.save!
 
         level

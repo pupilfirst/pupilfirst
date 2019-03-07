@@ -27,7 +27,7 @@ let updateName = (send, name) => {
   send(UpdateName(name, hasError));
 };
 
-let saveDisabled = state => state.hasNameError || state.dirty || state.saving;
+let saveDisabled = state => state.hasNameError || !state.dirty || state.saving;
 
 let setPayload = (authenticityToken, state) => {
   let payload = Js.Dict.empty();
@@ -72,7 +72,7 @@ let make =
           },
         milestone: targetGroup |> TargetGroup.milestone,
         hasNameError: false,
-        dirty: true,
+        dirty: false,
         isArchived: targetGroup |> TargetGroup.archived,
         saving: false,
       }
@@ -81,7 +81,7 @@ let make =
         description: "",
         milestone: true,
         hasNameError: false,
-        dirty: true,
+        dirty: false,
         isArchived: false,
         saving: false,
       }
@@ -89,13 +89,13 @@ let make =
   reducer: (action, state) =>
     switch (action) {
     | UpdateName(name, hasNameError) =>
-      ReasonReact.Update({...state, name, hasNameError, dirty: false})
+      ReasonReact.Update({...state, name, hasNameError, dirty: true})
     | UpdateDescription(description) =>
-      ReasonReact.Update({...state, description, dirty: false})
+      ReasonReact.Update({...state, description, dirty: true})
     | UpdateMilestone(milestone) =>
-      ReasonReact.Update({...state, milestone, dirty: false})
+      ReasonReact.Update({...state, milestone, dirty: true})
     | UpdateIsArchived(isArchived) =>
-      ReasonReact.Update({...state, isArchived, dirty: false})
+      ReasonReact.Update({...state, isArchived, dirty: true})
     | UpdateSaving => ReasonReact.Update({...state, saving: !state.saving})
     },
   render: ({state, send}) => {
@@ -115,9 +115,9 @@ let make =
         );
       switch (targetGroup) {
       | Some(_) =>
-        Notification.success("Success", "Target Group updated succesffully")
+        Notification.success("Success", "Target Group updated successfully")
       | None =>
-        Notification.success("Success", "Target Group created succesffully")
+        Notification.success("Success", "Target Group created successfully")
       };
       updateTargetGroupsCB(newTargetGroup);
     };
@@ -154,10 +154,11 @@ let make =
                   {"Target Group Details" |> str}
                 </h5>
                 <label
-                  className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                  className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
                   htmlFor="name">
-                  {"Title*  " |> str}
+                  {"Title" |> str}
                 </label>
+                <span> {"*" |> str} </span>
                 <input
                   className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                   id="name"
@@ -203,7 +204,7 @@ let make =
                     {"Is this a milestone target group?" |> str}
                   </label>
                   <div
-                    className="inline-flex w-64 rounded-lg overflow-hidden border">
+                    className="milestone inline-flex w-64 rounded-lg overflow-hidden border">
                     <button
                       onClick={
                         _event => {
@@ -239,7 +240,7 @@ let make =
                         {"Is this target group archived" |> str}
                       </label>
                       <div
-                        className="inline-flex w-64 rounded-lg overflow-hidden border">
+                        className="archived inline-flex w-64 rounded-lg overflow-hidden border">
                         <button
                           onClick=(
                             _event => {

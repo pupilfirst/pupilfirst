@@ -96,7 +96,7 @@ let saveDisabled = state => {
   || state.hasYoutubeVideoIdError
   || state.hasLinktoCompleteError
   || hasMethordOfCompletionError
-  || state.dirty
+  || !state.dirty
   || state.saving;
 };
 
@@ -282,7 +282,7 @@ let make =
     switch (target) {
     | Some(target) => {
         title: target |> Target.title,
-        description: target |> Target.title,
+        description: target |> Target.description,
         youtubeVideoId:
           switch (target |> Target.youtubeVideoId) {
           | Some(youtubeVideoId) => youtubeVideoId
@@ -309,7 +309,7 @@ let make =
         hasYoutubeVideoIdError: false,
         hasLinktoCompleteError: false,
         isArchived: target |> Target.archived,
-        dirty: true,
+        dirty: false,
         isValidQuiz: true,
         saving: false,
       }
@@ -342,7 +342,7 @@ let make =
         hasYoutubeVideoIdError: false,
         hasLinktoCompleteError: false,
         isArchived: false,
-        dirty: true,
+        dirty: false,
         isValidQuiz: true,
         saving: false,
       }
@@ -350,20 +350,20 @@ let make =
   reducer: (action, state) =>
     switch (action) {
     | UpdateTitle(title, hasTitleError) =>
-      ReasonReact.Update({...state, title, hasTitleError, dirty: false})
+      ReasonReact.Update({...state, title, hasTitleError, dirty: true})
     | UpdateDescription(description, hasDescriptionError) =>
       ReasonReact.Update({
         ...state,
         description,
         hasDescriptionError,
-        dirty: false,
+        dirty: true,
       })
     | UpdateYoutubeVideoId(youtubeVideoId, hasYoutubeVideoIdError) =>
       ReasonReact.Update({
         ...state,
         youtubeVideoId,
         hasYoutubeVideoIdError,
-        dirty: false,
+        dirty: true,
       })
 
     | UpdateLinkToComplete(linkToComplete, hasLinktoCompleteError) =>
@@ -371,7 +371,7 @@ let make =
         ...state,
         linkToComplete,
         hasLinktoCompleteError,
-        dirty: false,
+        dirty: true,
       })
     | UpdateEvaluationCriterion(key, value, selected) =>
       let oldEC =
@@ -380,7 +380,7 @@ let make =
       ReasonReact.Update({
         ...state,
         evaluationCriteria: [(key, value, selected), ...oldEC],
-        dirty: false,
+        dirty: true,
       });
     | UpdatePrerequisiteTargets(key, value, selected) =>
       let oldPT =
@@ -389,10 +389,10 @@ let make =
       ReasonReact.Update({
         ...state,
         prerequisiteTargets: [(key, value, selected), ...oldPT],
-        dirty: false,
+        dirty: true,
       });
     | UpdateMethodOfCompletion(methodOfCompletion) =>
-      ReasonReact.Update({...state, methodOfCompletion, dirty: false})
+      ReasonReact.Update({...state, methodOfCompletion, dirty: true})
     | AddQuizQuestion =>
       let lastQuestionId =
         state.quiz |> List.rev |> List.hd |> QuizQuestion.id;
@@ -405,7 +405,7 @@ let make =
       ReasonReact.Update({
         ...state,
         quiz,
-        dirty: false,
+        dirty: true,
         isValidQuiz: isValidQuiz(quiz),
       });
     | UpdateQuizQuestion(id, quizQuestion) =>
@@ -415,7 +415,7 @@ let make =
       ReasonReact.Update({
         ...state,
         quiz,
-        dirty: false,
+        dirty: true,
         isValidQuiz: isValidQuiz(quiz),
       });
 
@@ -424,21 +424,21 @@ let make =
       ReasonReact.Update({
         ...state,
         quiz,
-        dirty: false,
+        dirty: true,
         isValidQuiz: isValidQuiz(quiz),
       });
     | AddResource(key, value) =>
       ReasonReact.Update({
         ...state,
         resources: [(key, value), ...state.resources],
-        dirty: false,
+        dirty: true,
       })
     | RemoveResource(key) =>
       let newResources =
         state.resources |> List.filter(((_key, _)) => _key !== key);
-      ReasonReact.Update({...state, resources: newResources, dirty: false});
+      ReasonReact.Update({...state, resources: newResources, dirty: true});
     | UpdateIsArchived(isArchived) =>
-      ReasonReact.Update({...state, isArchived, dirty: false})
+      ReasonReact.Update({...state, isArchived, dirty: true})
     | UpdateSaving => ReasonReact.Update({...state, saving: !state.saving})
     },
   render: ({state, send}) => {
@@ -514,8 +514,8 @@ let make =
         );
       switch (target) {
       | Some(_) =>
-        Notification.success("Success", "Target updated succesffully")
-      | None => Notification.success("Success", "Target created succesffully")
+        Notification.success("Success", "Target updated successfully")
+      | None => Notification.success("Success", "Target created successfully")
       };
       updateTargetCB(newTarget);
     };
@@ -552,10 +552,11 @@ let make =
                   {"Target Details" |> str}
                 </h5>
                 <label
-                  className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                  className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
                   htmlFor="title">
-                  {"Title*  " |> str}
+                  {"Title" |> str}
                 </label>
+                <span> {"*" |> str} </span>
                 <input
                   className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                   id="title"
@@ -575,13 +576,14 @@ let make =
                     ReasonReact.null
                 }
                 <label
-                  className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
-                  htmlFor="title">
-                  {" Description*" |> str}
+                  className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                  htmlFor="description">
+                  {" Description" |> str}
                 </label>
+                <span> {"*" |> str} </span>
                 <textarea
                   className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                  id="title"
+                  id="description"
                   placeholder="Type target description"
                   value={state.description}
                   onChange={
@@ -603,12 +605,12 @@ let make =
                 }
                 <label
                   className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
-                  htmlFor="title">
+                  htmlFor="youtube">
                   {"Youtube Video Id " |> str}
                 </label>
                 <input
                   className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                  id="title"
+                  id="youtube"
                   type_="text"
                   placeholder="Example 58CPRi5kRe8"
                   value={state.youtubeVideoId}
@@ -629,13 +631,14 @@ let make =
                 }
                 <label
                   className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
-                  htmlFor="title">
+                  htmlFor="resources">
                   {"Resources" |> str}
                 </label>
                 {
                   state.resources
                   |> List.map(((_key, value)) =>
                        <div
+                         id="resources"
                          key={_key |> string_of_int}
                          className="select-list__item-selected flex items-center justify-between bg-grey-lightest text-xs text-grey-dark border rounded p-3 mb-2">
                          {value |> str}
@@ -679,10 +682,10 @@ let make =
                     <div>
                       <label
                         className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
-                        htmlFor="title">
+                        htmlFor="prerequisite_targets">
                         {"Any prerequisite targets?" |> str}
                       </label>
-                      <div className="mb-6">
+                      <div id="prerequisite_targets" className="mb-6">
                         <CurriculumEditor__SelectBox
                           items={state.prerequisiteTargets}
                           multiSelectCB=multiSelectPrerequisiteTargetsCB
@@ -694,10 +697,11 @@ let make =
                 <div className="flex items-center mb-6">
                   <label
                     className="block tracking-wide text-grey-darker text-xs font-semibold mr-6"
-                    htmlFor="title">
+                    htmlFor="evaluated">
                     {"Is this target reviewed by a faculty?" |> str}
                   </label>
                   <div
+                    id="evaluated"
                     className="inline-flex w-64 rounded-lg overflow-hidden border">
                     <button
                       onClick={
@@ -732,13 +736,13 @@ let make =
                       <div className="mb-6">
                         <label
                           className="block tracking-wide text-grey-darker text-xs font-semibold mr-6 mb-3"
-                          htmlFor="title">
+                          htmlFor="method_of_completion">
                           {
                             "How do you want the student to complete the target?"
                             |> str
                           }
                         </label>
-                        <div className="flex -mx-2">
+                        <div id="method_of_completion" className="flex -mx-2">
                           <div className="w-1/3 px-2">
                             <button
                               onClick={
@@ -922,10 +926,10 @@ let make =
                 {
                   switch (state.methodOfCompletion) {
                   | Evaluated =>
-                    <div className="mb-6">
+                    <div id="evaluation_criteria" className="mb-6">
                       <label
                         className="block tracking-wide text-grey-darker text-xs font-semibold mr-6 mb-2"
-                        htmlFor="title">
+                        htmlFor="evaluation_criteria">
                         {"Choose evaluation criteria from your list" |> str}
                       </label>
                       {
@@ -997,12 +1001,12 @@ let make =
                     <div>
                       <label
                         className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
-                        htmlFor="title">
+                        htmlFor="link_to_complete">
                         {"Link to complete*  " |> str}
                       </label>
                       <input
                         className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                        id="title"
+                        id="link_to_complete"
                         type_="text"
                         placeholder="Paste link to complete"
                         value={state.linkToComplete}
@@ -1030,10 +1034,12 @@ let make =
                   | Some(_) =>
                     <div className="flex items-center mb-6">
                       <label
-                        className="block tracking-wide text-grey-darker text-xs font-semibold mr-6">
+                        className="block tracking-wide text-grey-darker text-xs font-semibold mr-6"
+                        htmlFor="archived">
                         {"Is this target archived?" |> str}
                       </label>
                       <div
+                        id="archived"
                         className="inline-flex w-64 rounded-lg overflow-hidden border">
                         <button
                           onClick=(

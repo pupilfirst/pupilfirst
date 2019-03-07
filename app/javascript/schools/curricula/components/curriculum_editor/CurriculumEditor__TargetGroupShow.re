@@ -36,6 +36,7 @@ let make =
 
     <div className="target-group__box relative mt-12 rounded-lg">
       <div
+        id="target_group"
         className={archivedClasses(targetGroup |> TargetGroup.archived)}
         onClick={_event => showTargetGroupEditorCB(Some(targetGroup))}>
         {milestone ? <div> {"Milestone" |> str} </div> : ReasonReact.null}

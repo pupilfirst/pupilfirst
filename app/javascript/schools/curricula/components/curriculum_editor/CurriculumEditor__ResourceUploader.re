@@ -161,7 +161,7 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
           <input
             name="resource[title]"
             className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-            id="title"
+            id="resource_title"
             type_="text"
             placeholder="Type resource title here"
             required=true
@@ -172,7 +172,8 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
           />
           {
             state.resourceType == File ?
-              <div className="input-file__container flex items-center relative mb-4">
+              <div
+                className="input-file__container flex items-center relative mb-4">
                 <input
                   className="input-file__input cursor-pointer px-4"
                   name="resource[file]"
@@ -184,7 +185,9 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
                 <label
                   className="input-file__label flex px-4 items-center font-semibold rounded text-sm"
                   htmlFor="file">
-                  <i className="material-icons mr-2 text-grey-dark">{"file_upload" |> str}</i>
+                  <i className="material-icons mr-2 text-grey-dark">
+                    {"file_upload" |> str}
+                  </i>
                   {"Choose file to upload" |> str}
                 </label>
               </div> :

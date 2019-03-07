@@ -27,12 +27,14 @@ let updateUnlockOn = (send, date) => {
   let regex = [%re
     {|/^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/|}
   ];
-  let hasError = !Js.Re.test(date, regex);
+
+  let lengthOfInput = date |> String.length;
+  let hasError = lengthOfInput == 0 ? false : !Js.Re.test(date, regex);
   send(UpdateUnlockOn(date, hasError));
 };
 
 let saveDisabled = state =>
-  state.hasDateError || state.hasNameError || state.dirty || state.saving;
+  state.hasDateError || state.hasNameError || !state.dirty || state.saving;
 
 let setPayload = (authenticityToken, state) => {
   let payload = Js.Dict.empty();
@@ -46,7 +48,7 @@ let setPayload = (authenticityToken, state) => {
 
   switch (state.unlockOn) {
   | Some(date) => Js.Dict.set(payload, "unlock_on", date |> Js.Json.string)
-  | None => ()
+  | None => Js.Dict.set(payload, "unlock_on", "" |> Js.Json.string)
   };
   payload;
 };
@@ -70,7 +72,7 @@ let make =
         unlockOn: level |> Level.unlockOn,
         hasNameError: false,
         hasDateError: false,
-        dirty: true,
+        dirty: false,
         saving: false,
       }
     | None => {
@@ -78,20 +80,20 @@ let make =
         unlockOn: None,
         hasNameError: false,
         hasDateError: false,
-        dirty: true,
+        dirty: false,
         saving: false,
       }
     },
   reducer: (action, state) =>
     switch (action) {
     | UpdateName(name, hasNameError) =>
-      ReasonReact.Update({...state, name, hasNameError, dirty: false})
+      ReasonReact.Update({...state, name, hasNameError, dirty: true})
     | UpdateUnlockOn(date, hasDateError) =>
       ReasonReact.Update({
         ...state,
         unlockOn: Some(date),
         hasDateError,
-        dirty: false,
+        dirty: true,
       })
     | UpdateSaving => ReasonReact.Update({...state, saving: !state.saving})
     },
@@ -103,8 +105,8 @@ let make =
       let newLevel = Level.create(id, state.name, number, state.unlockOn);
       switch (level) {
       | Some(_) =>
-        Notification.success("Success", "Level updated succesffully")
-      | None => Notification.success("Success", "Level created succesffully")
+        Notification.success("Success", "Level updated successfully")
+      | None => Notification.success("Success", "Level created successfully")
       };
       updateLevelsCB(newLevel);
     };
@@ -155,10 +157,11 @@ let make =
                   {"Level Details" |> str}
                 </h5>
                 <label
-                  className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                  className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
                   htmlFor="name">
-                  {"Level Name*  " |> str}
+                  {"Level Name" |> str}
                 </label>
+                <span> {"*" |> str} </span>
                 <input
                   className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                   id="name"
@@ -178,12 +181,13 @@ let make =
                     ReasonReact.null
                 }
                 <label
-                  className="block tracking-wide text-grey-darker text-xs font-semibold mb-2">
-                  {"Lock level*  " |> str}
+                  className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                  htmlFor="date">
+                  {"Unlock level on" |> str}
                 </label>
                 <input
                   className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                  id="level unlock date"
+                  id="date"
                   type_="text"
                   placeholder="DD/MM/YYYY"
                   value=unlockOn

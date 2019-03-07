@@ -17,11 +17,5 @@ module Layouts
         view.url_for(current_school.logo_variant(:mid))
       end
     end
-
-    private
-
-    def current_school
-      @current_school ||= view.current_school
-    end
   end
 end

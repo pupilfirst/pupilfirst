@@ -28,11 +28,17 @@ class FooterPresenter < ApplicationPresenter
   end
 
   def logo?
+    return true if current_school.blank?
+
     current_school.logo_on_dark_bg.attached?
   end
 
   def logo_url
-    view.url_for(current_school.logo_variant(:mid, background: :dark))
+    if current_school.present?
+      view.url_for(current_school.logo_variant(:mid, background: :dark))
+    else
+      view.image_url('shared/pupilfirst-logo-white.svg')
+    end
   end
 
   # TODO: Write a better way to decide which icon to present
@@ -63,11 +69,5 @@ class FooterPresenter < ApplicationPresenter
 
   def terms_of_use?
     SchoolString::TermsOfUse.saved?(current_school)
-  end
-
-  private
-
-  def current_school
-    @current_school ||= view.current_school
   end
 end

@@ -1,7 +1,7 @@
 module Resources
   class IndexPresenter < ApplicationPresenter
     def library_subheading
-      @library_subheading ||= SchoolString::LibraryIndexSubheading.for(view.current_school)
+      @library_subheading ||= SchoolString::LibraryIndexSubheading.for(current_school)
     end
 
     def results_caption
@@ -9,7 +9,7 @@ module Resources
     end
 
     def zero_results_text
-      login_text = view.current_founder.blank? ? " or #{view.link_to('logging in', view.new_user_session_path, rel: 'nofollow')} to unlock private resources" : ''
+      login_text = current_founder.blank? ? " or #{view.link_to('logging in', view.new_user_session_path, rel: 'nofollow')} to unlock private resources" : ''
 
       view.t('resources.index.zero_results', tag_text: tag_text, search_text: search_text, login_text: login_text)
     end

@@ -1,5 +1,5 @@
 module Layouts
-  class TopNavPresenter < ApplicationPresenter
+  class TopNavPresenter < ::ApplicationPresenter
     def visible_links
       if nav_links.length > 4
         nav_links[0..2]
@@ -22,12 +22,12 @@ module Layouts
 
     def selectable_student_profiles
       @selectable_student_profiles ||= begin
-        if view.current_school.blank? || view.current_founder.blank?
+        if current_school.blank? || current_founder.blank?
           Founder.none
         else
-          view.current_user.founders
+          current_user.founders
             .not_exited
-            .joins(:school).where(schools: { id: view.current_school })
+            .joins(:school).where(schools: { id: current_school })
         end
       end
     end
@@ -40,7 +40,7 @@ module Layouts
         links = [admin_link, review_link, dashboard_link] - [nil]
 
         # ...and the custom links.
-        custom_links = SchoolLink.where(school: view.current_school, kind: SchoolLink::KIND_HEADER).map do |school_link|
+        custom_links = SchoolLink.where(school: current_school, kind: SchoolLink::KIND_HEADER).map do |school_link|
           { title: school_link.title, url: school_link.url }
         end
 
@@ -50,14 +50,13 @@ module Layouts
     end
 
     def admin_link
-      { title: 'Admin', url: '/school' } if view.policy(view.current_school).show?
+      { title: 'Admin', url: '/school' } if current_school.present? && view.policy(current_school).show?
     end
 
     def review_link
-      coach = view.current_coach
-      courses = coach&.courses_with_dashboard
+      courses = current_coach&.courses_with_dashboard
 
-      return if coach.blank? || courses.blank?
+      return if current_coach.blank? || courses.blank?
 
       title = -'Review Submissions'
 
@@ -73,7 +72,7 @@ module Layouts
     end
 
     def dashboard_link
-      return if view.current_founder.blank? || view.current_founder.exited?
+      return if current_founder.blank? || current_founder.exited?
 
       if selectable_student_profiles.load.count > 1
         {

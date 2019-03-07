@@ -1,6 +1,20 @@
 module Users
   module Sessions
     class NewPresenter < ApplicationPresenter
+      def icon?
+        return true if current_school.blank?
+
+        current_school.icon.attached?
+      end
+
+      def icon_url
+        if current_school.present?
+          view.url_for(current_school.icon_variant(:thumb))
+        else
+          view.image_path('shared/pupilfirst-icon.svg')
+        end
+      end
+
       def initialize(view_context, sign_in_error)
         @sign_in_error = sign_in_error
         super(view_context)

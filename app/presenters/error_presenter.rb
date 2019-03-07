@@ -28,10 +28,4 @@ class ErrorPresenter < ApplicationPresenter
       view.image_path('shared/pupilfirst-icon.svg')
     end
   end
-
-  private
-
-  def current_school
-    @current_school = view.current_school
-  end
 end

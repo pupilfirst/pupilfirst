@@ -23,6 +23,9 @@
 //= require datetimepicker
 //= require xdan_datetimepicker
 
+// Trix
+//= require trix
+
 // Local files
 //= require_tree ./admin
 

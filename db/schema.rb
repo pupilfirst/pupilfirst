@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_05_053141) do
+ActiveRecord::Schema.define(version: 2019_03_08_124110) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -191,7 +191,6 @@ ActiveRecord::Schema.define(version: 2019_03_05_053141) do
     t.boolean "self_service"
     t.string "current_commitment"
     t.string "slug"
-    t.boolean "inactive", default: false
     t.text "about"
     t.string "commitment"
     t.string "compensation"
@@ -596,7 +595,6 @@ ActiveRecord::Schema.define(version: 2019_03_05_053141) do
     t.text "links"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.date "event_on"
     t.integer "improved_timeline_event_id"
     t.integer "target_id"
     t.decimal "score", precision: 2, scale: 1

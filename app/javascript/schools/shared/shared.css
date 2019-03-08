@@ -9,6 +9,10 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+button:disabled, .disabled {
+    @apply .opacity-25 .cursor-not-allowed;
+}
+
 .global-sidebar {
     width: 304px;
 }

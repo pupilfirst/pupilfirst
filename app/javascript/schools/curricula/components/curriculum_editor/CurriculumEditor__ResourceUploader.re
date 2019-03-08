@@ -217,7 +217,7 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
                   <i className="material-icons mr-2 text-grey-dark">
                     {"file_upload" |> str}
                   </i>
-                  {state.fileName |> str}
+                  <span className="truncate">{state.fileName |> str}</span>
                 </label>
               </div> :
               <input

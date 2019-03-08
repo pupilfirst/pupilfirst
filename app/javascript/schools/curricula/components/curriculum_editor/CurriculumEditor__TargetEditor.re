@@ -1072,14 +1072,14 @@ let make =
                 }
               </div>
             </div>
-            <div className="flex">
+            <div className="flex max-w-md w-full px-6 pb-5 mx-auto">
               {
                 switch (target) {
                 | Some(target) =>
                   <button
                     disabled={saveDisabled(state)}
                     onClick=(_e => updateTarget(target |> Target.id))
-                    className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+                    className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none mt-3">
                     {"Update Target" |> str}
                   </button>
 
@@ -1087,7 +1087,7 @@ let make =
                   <button
                     disabled={saveDisabled(state)}
                     onClick=(_e => createTarget())
-                    className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+                    className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none mt-3">
                     {"Create Target" |> str}
                   </button>
                 }

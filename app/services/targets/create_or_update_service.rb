@@ -9,7 +9,7 @@ module Targets
       Target.transaction do
         @target.role = target_params[:role]
         @target.title = target_params[:title]
-        @target.description = target_params[:title]
+        @target.description = target_params[:description]
         @target.target_action_type = target_params[:target_action_type]
         @target.youtube_video_id = target_params[:youtube_video_id]
         @target.resource_ids = target_params[:resource_ids]

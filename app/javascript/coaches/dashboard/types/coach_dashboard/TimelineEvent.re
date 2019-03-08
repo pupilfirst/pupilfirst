@@ -2,7 +2,7 @@ type t = {
   id: int,
   title: string,
   description: string,
-  eventOn: DateTime.t,
+  createdAt: DateTime.t,
   founderIds: list(int),
   links: list(Link.t),
   files: list(File.t),
@@ -20,7 +20,7 @@ let decode = json =>
     id: json |> field("id", int),
     title: json |> field("title", string),
     description: json |> field("description", string),
-    eventOn: json |> field("eventOn", string) |> DateTime.parse,
+    createdAt: json |> field("createdAt", string) |> DateTime.parse,
     founderIds: json |> field("founderIds", list(int)),
     links: json |> field("links", list(Link.decode)),
     files: json |> field("files", list(File.decode)),
@@ -38,7 +38,7 @@ let title = t => t.title;
 
 let description = t => t.description;
 
-let eventOn = t => t.eventOn;
+let createdAt = t => t.createdAt;
 
 let founderIds = t => t.founderIds;
 

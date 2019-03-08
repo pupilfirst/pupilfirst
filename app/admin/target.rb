@@ -308,7 +308,7 @@ ActiveAdmin.register Target do
       f.input :completion_instructions
       f.input :call_to_action
       f.input :link_to_complete
-      f.input :faculty, collection: Faculty.active.order(:name), include_blank: 'No linked faculty'
+      f.input :faculty, collection: Faculty.order(:name), include_blank: 'No linked faculty'
       f.input :target_group, collection: TargetGroup.all.includes(:course, :level).order('courses.name ASC, levels.number ASC')
       f.input :sort_index
       f.input :days_to_complete

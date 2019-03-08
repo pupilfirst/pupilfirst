@@ -7,15 +7,17 @@ type state = {
   description: string,
   milestone: bool,
   hasNameError: bool,
-  saveDisabled: bool,
+  dirty: bool,
   isArchived: bool,
+  saving: bool,
 };
 
 type action =
   | UpdateName(string, bool)
   | UpdateDescription(string)
   | UpdateMilestone(bool)
-  | UpdateIsArchived(bool);
+  | UpdateIsArchived(bool)
+  | UpdateSaving;
 
 let component =
   ReasonReact.reducerComponent("CurriculumEditor__TargetGroupEditor");
@@ -25,7 +27,7 @@ let updateName = (send, name) => {
   send(UpdateName(name, hasError));
 };
 
-let saveDisabled = state => state.hasNameError || state.saveDisabled;
+let saveDisabled = state => state.hasNameError || !state.dirty || state.saving;
 
 let setPayload = (authenticityToken, state) => {
   let payload = Js.Dict.empty();
@@ -46,6 +48,8 @@ let booleanButtonClasses = bool =>
   bool ?
     "w-1/2 bg-grey hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none" :
     "w-1/2 bg-white border-l hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none";
+let formClasses = value =>
+  value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full";
 
 let make =
     (
@@ -68,30 +72,34 @@ let make =
           },
         milestone: targetGroup |> TargetGroup.milestone,
         hasNameError: false,
-        saveDisabled: true,
+        dirty: false,
         isArchived: targetGroup |> TargetGroup.archived,
+        saving: false,
       }
     | None => {
         name: "",
         description: "",
         milestone: true,
         hasNameError: false,
-        saveDisabled: true,
+        dirty: false,
         isArchived: false,
+        saving: false,
       }
     },
   reducer: (action, state) =>
     switch (action) {
     | UpdateName(name, hasNameError) =>
-      ReasonReact.Update({...state, name, hasNameError, saveDisabled: false})
+      ReasonReact.Update({...state, name, hasNameError, dirty: true})
     | UpdateDescription(description) =>
-      ReasonReact.Update({...state, description, saveDisabled: false})
+      ReasonReact.Update({...state, description, dirty: true})
     | UpdateMilestone(milestone) =>
-      ReasonReact.Update({...state, milestone, saveDisabled: false})
+      ReasonReact.Update({...state, milestone, dirty: true})
     | UpdateIsArchived(isArchived) =>
-      ReasonReact.Update({...state, isArchived, saveDisabled: false})
+      ReasonReact.Update({...state, isArchived, dirty: true})
+    | UpdateSaving => ReasonReact.Update({...state, saving: !state.saving})
     },
   render: ({state, send}) => {
+    let handleErrorCB = () => send(UpdateSaving);
     let handleResponseCB = json => {
       let id = json |> Json.Decode.(field("id", int));
       let sortIndex = json |> Json.Decode.(field("sortIndex", int));
@@ -107,26 +115,27 @@ let make =
         );
       switch (targetGroup) {
       | Some(_) =>
-        Notification.success("Success", "Target Group updated succesffully")
+        Notification.success("Success", "Target Group updated successfully")
       | None =>
-        Notification.success("Success", "Target Group created succesffully")
+        Notification.success("Success", "Target Group created successfully")
       };
       updateTargetGroupsCB(newTargetGroup);
     };
 
     let createTargetGroup = () => {
+      send(UpdateSaving);
       let level_id = currentLevelId |> string_of_int;
       let payload = setPayload(authenticityToken, state);
       let url = "/school/levels/" ++ level_id ++ "/target_groups";
-      Api.create(url, payload, handleResponseCB);
+      Api.create(url, payload, handleResponseCB, handleErrorCB);
     };
 
     let updateTargetGroup = targetGroupId => {
+      send(UpdateSaving);
       let payload = setPayload(authenticityToken, state);
       let url = "/school/target_groups/" ++ targetGroupId;
-      Api.update(url, payload, handleResponseCB);
+      Api.update(url, payload, handleResponseCB, handleErrorCB);
     };
-
     <div className="blanket">
       <div className="drawer-right relative">
         <div className="drawer-right__close absolute">
@@ -136,7 +145,7 @@ let make =
             <i className="material-icons"> {"close" |> str} </i>
           </button>
         </div>
-        <div className="drawer-right-form w-full">
+        <div className={formClasses(state.saving)}>
           <div className="w-full">
             <div className="mx-auto bg-white">
               <div className="max-w-md p-6 mx-auto">
@@ -145,10 +154,11 @@ let make =
                   {"Target Group Details" |> str}
                 </h5>
                 <label
-                  className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                  className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
                   htmlFor="name">
-                  {"Title*  " |> str}
+                  {"Title" |> str}
                 </label>
+                <span> {"*" |> str} </span>
                 <input
                   className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                   id="name"
@@ -191,10 +201,10 @@ let make =
                 <div className="flex items-center mb-6">
                   <label
                     className="block tracking-wide text-grey-darker text-xs font-semibold mr-6">
-                    {"Is this a milestone target?" |> str}
+                    {"Is this a milestone target group?" |> str}
                   </label>
                   <div
-                    className="inline-flex w-64 rounded-lg overflow-hidden border">
+                    className="milestone inline-flex w-64 rounded-lg overflow-hidden border">
                     <button
                       onClick={
                         _event => {
@@ -230,7 +240,7 @@ let make =
                         {"Is this target group archived" |> str}
                       </label>
                       <div
-                        className="inline-flex w-64 rounded-lg overflow-hidden border">
+                        className="archived inline-flex w-64 rounded-lg overflow-hidden border">
                         <button
                           onClick=(
                             _event => {

@@ -19,7 +19,7 @@ module Schools
       def save
         target_group.name = name
         target_group.milestone = milestone
-        target_group.description = description if description.present?
+        target_group.description = description
         target_group.save!
 
         archive_target_group(target_group, archived)

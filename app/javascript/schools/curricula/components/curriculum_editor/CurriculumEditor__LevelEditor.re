@@ -7,12 +7,14 @@ type state = {
   unlockOn: option(string),
   hasNameError: bool,
   hasDateError: bool,
-  saveDisabled: bool,
+  dirty: bool,
+  saving: bool,
 };
 
 type action =
   | UpdateName(string, bool)
-  | UpdateUnlockOn(string, bool);
+  | UpdateUnlockOn(string, bool)
+  | UpdateSaving;
 
 let component = ReasonReact.reducerComponent("CurriculumEditor__LevelEditor");
 
@@ -25,12 +27,14 @@ let updateUnlockOn = (send, date) => {
   let regex = [%re
     {|/^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/|}
   ];
-  let hasError = !Js.Re.test(date, regex);
+
+  let lengthOfInput = date |> String.length;
+  let hasError = lengthOfInput == 0 ? false : !Js.Re.test(date, regex);
   send(UpdateUnlockOn(date, hasError));
 };
 
 let saveDisabled = state =>
-  state.hasDateError || state.hasNameError || state.saveDisabled;
+  state.hasDateError || state.hasNameError || !state.dirty || state.saving;
 
 let setPayload = (authenticityToken, state) => {
   let payload = Js.Dict.empty();
@@ -44,10 +48,12 @@ let setPayload = (authenticityToken, state) => {
 
   switch (state.unlockOn) {
   | Some(date) => Js.Dict.set(payload, "unlock_on", date |> Js.Json.string)
-  | None => ()
+  | None => Js.Dict.set(payload, "unlock_on", "" |> Js.Json.string)
   };
   payload;
 };
+let formClasses = value =>
+  value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full";
 
 let make =
     (
@@ -66,57 +72,65 @@ let make =
         unlockOn: level |> Level.unlockOn,
         hasNameError: false,
         hasDateError: false,
-        saveDisabled: true,
+        dirty: false,
+        saving: false,
       }
     | None => {
         name: "",
         unlockOn: None,
         hasNameError: false,
         hasDateError: false,
-        saveDisabled: true,
+        dirty: false,
+        saving: false,
       }
     },
   reducer: (action, state) =>
     switch (action) {
     | UpdateName(name, hasNameError) =>
-      ReasonReact.Update({...state, name, hasNameError, saveDisabled: false})
+      ReasonReact.Update({...state, name, hasNameError, dirty: true})
     | UpdateUnlockOn(date, hasDateError) =>
       ReasonReact.Update({
         ...state,
         unlockOn: Some(date),
         hasDateError,
-        saveDisabled: false,
+        dirty: true,
       })
+    | UpdateSaving => ReasonReact.Update({...state, saving: !state.saving})
     },
   render: ({state, send}) => {
+    let handleErrorCB = () => send(UpdateSaving);
     let handleResponseCB = json => {
       let id = json |> Json.Decode.(field("id", int));
       let number = json |> Json.Decode.(field("number", int));
       let newLevel = Level.create(id, state.name, number, state.unlockOn);
       switch (level) {
       | Some(_) =>
-        Notification.success("Success", "Level updated succesffully")
-      | None => Notification.success("Success", "Level created succesffully")
+        Notification.success("Success", "Level updated successfully")
+      | None => Notification.success("Success", "Level created successfully")
       };
       updateLevelsCB(newLevel);
     };
 
     let createLevel = (authenticityToken, course, state) => {
+      send(UpdateSaving);
       let course_id = course |> Course.id |> string_of_int;
       let url = "/school/courses/" ++ course_id ++ "/levels";
       Api.create(
         url,
         setPayload(authenticityToken, state),
         handleResponseCB,
+        handleErrorCB,
       );
     };
 
     let updateLevel = (authenticityToken, levelId, state) => {
+      send(UpdateSaving);
       let url = "/school/levels/" ++ levelId;
       Api.update(
         url,
         setPayload(authenticityToken, state),
         handleResponseCB,
+        handleErrorCB,
       );
     };
 
@@ -131,10 +145,10 @@ let make =
           <button
             onClick={_ => hideEditorActionCB()}
             className="flex items-center justify-center bg-white text-grey-darker font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
-            <i className="material-icons">{"close" |> str }</i>
+            <i className="material-icons"> {"close" |> str} </i>
           </button>
         </div>
-        <div className="drawer-right-form w-full">
+        <div className={formClasses(state.saving)}>
           <div className="w-full">
             <div className="mx-auto bg-white">
               <div className="max-w-md p-6 mx-auto">
@@ -143,10 +157,11 @@ let make =
                   {"Level Details" |> str}
                 </h5>
                 <label
-                  className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                  className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
                   htmlFor="name">
-                  {"Level Name*  " |> str}
+                  {"Level Name" |> str}
                 </label>
+                <span> {"*" |> str} </span>
                 <input
                   className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                   id="name"
@@ -166,12 +181,13 @@ let make =
                     ReasonReact.null
                 }
                 <label
-                  className="block tracking-wide text-grey-darker text-xs font-semibold mb-2">
-                  {"Lock level*  " |> str}
+                  className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                  htmlFor="date">
+                  {"Unlock level on" |> str}
                 </label>
                 <input
                   className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                  id="level unlock date"
+                  id="date"
                   type_="text"
                   placeholder="DD/MM/YYYY"
                   value=unlockOn

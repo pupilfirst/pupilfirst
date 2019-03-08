@@ -67,7 +67,6 @@ AttachmentForm.propTypes = {
   currentForm: PropTypes.string,
   previousForm: PropTypes.string,
   addAttachmentCB: PropTypes.func,
-  selectedDate: PropTypes.string,
   showSelectedFileError: PropTypes.bool,
   resetErrorsCB: PropTypes.func,
   hideFileForm: PropTypes.func

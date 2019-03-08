@@ -1,6 +1,6 @@
 ActiveAdmin.register Faculty do
   permit_params :name, :title, :key_skills, :linkedin_url, :category, :image, :sort_index, :self_service,
-    :current_commitment, :inactive, :about, :commitment, :compensation, :slack_username, :public
+    :current_commitment, :notify_for_submission, :about, :commitment, :compensation, :slack_username, :public, :connect_link
 
   controller do
     include DisableIntercom
@@ -29,6 +29,7 @@ ActiveAdmin.register Faculty do
     column :email
     column :sort_index
     column :public
+    column :connect_link
 
     actions
   end
@@ -46,8 +47,9 @@ ActiveAdmin.register Faculty do
       row :sort_index
       row :public
       row :self_service
-      row :inactive
+      row :notify_for_submission
       row :slack_username
+      row :connect_link
 
       row :startups do
         none_one_or_many(self, faculty.startups) do |startup|
@@ -80,12 +82,13 @@ ActiveAdmin.register Faculty do
       f.input :linkedin_url
       f.input :sort_index
       f.input :public
-      f.input :inactive
+      f.input :notify_for_submission
       f.input :self_service
       f.input :commitment, as: :select, collection: commitment_options, label_method: :first, value_method: :last
       f.input :current_commitment
       f.input :compensation, as: :select, collection: Faculty.valid_compensation_values
       f.input :slack_username
+      f.input :connect_link
     end
 
     f.actions

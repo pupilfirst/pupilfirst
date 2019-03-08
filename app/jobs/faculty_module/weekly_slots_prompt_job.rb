@@ -4,7 +4,7 @@ module FacultyModule
 
     def perform
       # Prompt faculty to record available connect slots for the upcoming week
-      Faculty.active.where(self_service: true).each do |faculty|
+      Faculty.where(self_service: true, notify_for_submission: true).each do |faculty|
         # copy last available set of weekly slots
         faculty.copy_weekly_slots!
         Rails.logger.info "Sending Mail to #{faculty.name}"

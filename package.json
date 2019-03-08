@@ -8,30 +8,31 @@
     "babel-plugin-react-css-modules": "^3.3.2",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.21",
     "babel-preset-react": "^6.24.1",
-    "bootstrap": "4.1.2",
+    "bootstrap": "^4.3.1",
     "bs-fetch": "^0.3.0",
     "cloc": "^2.3.2",
     "coffeescript": "1.12.7",
     "date-fns": "^1.29.0",
-    "material-design-icons": "^3.0.1",
+    "material-design-icons-iconfont": "^4.0.5",
     "pnotify": "^4.0.0-alpha.4",
     "postcss-scss": "^1.0.3",
     "prop-types": "^15.6.2",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react_ujs": "^2.4.3",
+    "trix": "^1.1.0",
     "turbolinks": "^5.2.0",
     "vanilla-tilt": "^1.4.1",
     "webpack-merge": "^4.1.1"
   },
   "devDependencies": {
     "bs-platform": "^4.0.18",
-    "node-sass": "^4.7.2",
+    "node-sass": "^4.11.0",
     "prettier": "1.9.1",
     "reason-react": ">=0.5.3",
     "sass-loader": "^7.0.1",
     "tailwindcss": "^0.7.2",
-    "webpack-dev-server": "^3.1.10"
+    "webpack-dev-server": "^3.1.11"
   },
   "scripts": {
     "postinstall": "bsb -clean-world && bsb -make-world"

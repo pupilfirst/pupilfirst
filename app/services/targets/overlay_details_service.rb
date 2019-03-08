@@ -30,9 +30,8 @@ module Targets
 
       {
         description: latest_event.description,
-        event_on: latest_event.event_on,
+        createdAt: latest_event.created_at,
         title: latest_event.title,
-        days_elapsed: latest_event.days_elapsed,
         attachments: latest_event_attachments
       }
     end

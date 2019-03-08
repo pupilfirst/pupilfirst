@@ -134,7 +134,7 @@ class Startup < ApplicationRecord
 
   # returns the date of the earliest verified timeline entry
   def earliest_team_event_date
-    timeline_events.where.not(passed_at: nil).not_private.order(:event_on).first.try(:event_on)
+    timeline_events.where.not(passed_at: nil).not_private.order(:created_at).first.try(:created_at)
   end
 
   def display_name

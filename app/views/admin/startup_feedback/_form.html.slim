@@ -4,7 +4,7 @@
   = f.semantic_errors *f.object.errors.keys
   = f.inputs 'Feedback details' do
     = f.input :startup, collection: Startup.where.not(product_name: nil).order(:product_name), label: 'Product', required: true
-    = f.input :faculty, as: :select, required: true, collection: Faculty.active.order(:name), selected: @startup_feedback&.faculty&.id || current_admin_user&.faculty&.id
+    = f.input :faculty, as: :select, required: true, collection: Faculty.order(:name), selected: @startup_feedback&.faculty&.id || current_admin_user&.faculty&.id
     = f.hidden_field :feedback
     .label-replica
       ' Feedback for startup

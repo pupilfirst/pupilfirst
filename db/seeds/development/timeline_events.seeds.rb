@@ -11,7 +11,6 @@ after 'development:founders', 'development:targets' do
     te = TimelineEvent.create!(
       target: target,
       founders: [startup.founders.first],
-      event_on: Time.now,
       description: Faker::Lorem.paragraph,
       latest: true
     )
@@ -42,7 +41,6 @@ after 'development:founders', 'development:targets' do
 
   TimelineEvent.create!(
     founders: [ios_founder],
-    event_on: Time.now,
     description: 'This is a seeded pending submission for the iOS startup',
     target: ios_startup.course.targets.live.first,
     latest: true

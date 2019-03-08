@@ -4,7 +4,7 @@ feature 'Founder Edit' do
   include UserSpecHelper
 
   let(:startup) { create :startup }
-  let(:founder) { create :founder, college: nil, college_text: 'Anon College of Engineering' }
+  let(:founder) { create :founder }
   let(:founder_name) { Faker::Name.name }
   let(:phone) { rand(9_876_543_210..9_876_553_209) }
   let(:communication_address) { Faker::Address.full_address }
@@ -24,7 +24,7 @@ feature 'Founder Edit' do
     scenario 'Founder tries to submit a blank form' do
       sign_in_user(founder.user, referer: edit_founder_path)
 
-      expect(page).to have_text('Editing').and have_text('profile')
+      expect(page).to have_text('Edit').and have_text('profile')
 
       fill_in 'founders_edit_name', with: ''
       fill_in 'founders_edit_phone', with: ''
@@ -38,7 +38,7 @@ feature 'Founder Edit' do
 
     scenario 'Founder fills in all fields and submits' do
       sign_in_user(founder.user, referer: edit_founder_path)
-      expect(page).to have_text('Editing').and have_text('profile')
+      expect(page).to have_text('Edit').and have_text('profile')
 
       fill_in 'founders_edit_name', with: founder_name
       fill_in 'founders_edit_phone', with: phone
@@ -52,7 +52,6 @@ feature 'Founder Edit' do
 
       fill_in 'founders_edit_skype_id', with: username
       fill_in 'founders_edit_communication_address', with: communication_address
-      select "My college isn't listed", from: 'founders_edit_college_id'
       fill_in 'founders_edit_twitter_url', with: "https://twitter.com/#{username}"
       fill_in 'founders_edit_linkedin_url', with: "https://linkedin.com/#{username}"
       fill_in 'founders_edit_personal_website_url', with: "https://#{username}.com"

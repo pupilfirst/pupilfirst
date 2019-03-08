@@ -17,7 +17,7 @@ module Schools
         presenter = Schools::Founders::IndexPresenter.new(view_context, startup.course)
         render json: { teams: presenter.teams, error: nil }
       else
-        raise form.errors.full_messages.join(', ')
+        render json: { error: form.errors.full_messages.join(', ') }
       end
     end
 
@@ -32,7 +32,7 @@ module Schools
         presenter = Schools::Founders::IndexPresenter.new(view_context, @course)
         render json: { teams: presenter.teams, error: nil }
       else
-        raise form.errors.full_messages.join(', ')
+        render json: { error: form.errors.full_messages.join(', ') }
       end
     end
 
@@ -47,7 +47,7 @@ module Schools
         presenter = Schools::Founders::IndexPresenter.new(view_context, @course)
         render json: { teams: presenter.teams, error: nil }
       else
-        raise form.errors.full_messages.join(', ')
+        render json: { error: form.errors.full_messages.join(', ') }
       end
     end
 

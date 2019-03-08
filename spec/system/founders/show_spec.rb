@@ -32,8 +32,10 @@ feature 'Founder Show' do
     # Verified team event should be visible.
     expect(page).to have_text(timeline_event_2.description)
 
+    # Verified founder event should be visible.
+    expect(page).to have_text(timeline_event_1.description)
+
     # Other events should not be displayed.
-    expect(page).not_to have_text(timeline_event_1.description)
     expect(page).not_to have_text(timeline_event_3.description)
   end
 

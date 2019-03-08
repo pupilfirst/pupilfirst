@@ -34,10 +34,6 @@ module Founders
       @event.evaluator_id.present? && !@event.passed?
     end
 
-    def improved_event?
-      @founder.startup.earliest_team_event_date.present? && !@event.founder_event? && @event.passed?
-    end
-
     def founder?
       @current_founder && (@current_founder == @founder)
     end

@@ -7,7 +7,6 @@ module Founders
     property :roles
     property :skype_id
     property :communication_address, validates: { presence: true, length: { maximum: 250 } }
-    property :college_id, validates: { presence: true }
     property :twitter_url, validates: { url: true, allow_blank: true }
     property :linkedin_url, validates: { url: true, allow_blank: true }
     property :personal_website_url, validates: { url: true, allow_blank: true }
@@ -17,7 +16,6 @@ module Founders
     property :behance_url, validates: { url: true, allow_blank: true }
 
     # Custom validations.
-    validate :college_must_exist
     validate :roles_must_be_valid
 
     def roles_must_be_valid
@@ -30,19 +28,10 @@ module Founders
       end
     end
 
-    def college_must_exist
-      return if college_id.blank?
-      return if college_id == 'other'
-      return if College.find(college_id).present?
-
-      errors[:college_id] << 'is invalid'
-    end
-
     def save!
       name_updated = model.name != name
 
       sync
-      model.college_id = nil if college_id == 'other'
       model.save!
 
       # Update Slack profile name if the name has been updated.

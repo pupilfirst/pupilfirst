@@ -11,10 +11,9 @@ module Schools
         level = Level.new(
           course: course,
           name: name,
-          number: next_level_number
+          number: next_level_number,
+          unlock_on: unlock_on
         )
-
-        level.unlock_on = unlock_on if unlock_on.present?
         level.save
         level
       end

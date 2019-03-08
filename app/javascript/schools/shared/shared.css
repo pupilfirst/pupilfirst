@@ -9,6 +9,10 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+button:disabled, .disabled {
+    @apply .opacity-25 .cursor-not-allowed;
+}
+
 .global-sidebar {
     width: 304px;
 }
@@ -59,6 +63,7 @@ body {
 .drawer-right-form {
     background-color: #EDF3FA;
     overflow-x: hidden;
+    overflow-y: scroll;
     @apply .text-sm;
 }
 
@@ -68,7 +73,6 @@ body {
 
 .drawer-right-form__error-msg {
     color: red;
-    margin-top: -1.75rem;
     margin-bottom: 0.715rem;
 }
 
@@ -90,32 +94,30 @@ body {
     background-color: #F2F8FF;
 }
 
-.input-file {
-    width: 0.1px;
-    height: 0.1px;
+.input-file__input {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 43px;
+    margin: 0;
     opacity: 0;
-    overflow: hidden;
-    position: absolute;
-    z-index: -1;
 }
 
-.input-file+label {
+.input-file__label {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1;
+    height: 43px;
     text-overflow: ellipsis;
     white-space: nowrap;
-    cursor: pointer;
     background-color: #E6F1FF;
-    border-radius: 8px;
-    overflow: hidden;
-    padding: 0.5rem 1rem;
-}
-
-.input-file+label {
-    color: #66788A;
     border: 1px dashed #D3D8E1;
 }
 
-.input-file:focus+label, .input-file.has-focus+label, .input-file+label:hover {
-    color: #A8B7C7;
+.input-file__container:hover .input-file__label {
+    @apply .bg-grey-light;
 }
 
 .target-group__container> :not(:last-child):before {
@@ -145,6 +147,45 @@ body {
 
 .target-group__create:hover, .target-group__target-create:hover {
     @apply .shadow-lg;
+}
+
+.quiz-maker__question-container:hover .quiz-maker__question-remove-button {
+    visibility: visible;
+}
+
+.quiz-maker__question-container::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: calc(100% - 70px);
+    margin-top: 0.875rem;
+    bottom: 0;
+    width: 1px;
+    background: #afdcf8;
+    left: 1.5rem;
+}
+
+.quiz-maker__answer-option {}
+
+.quiz-maker__answer-option-pointer {
+    width: 1rem;
+    height: 1rem;
+    position: absolute;
+    color: #fff;
+    overflow: hidden;
+    background: #FFFFFF;
+    box-shadow: 0 0 0 1px #D3D8E1;
+    border-radius: 50%;
+    text-align: center;
+    left: 1rem;
+    top: 1rem;
+    margin: 0 0 0 1px;
+}
+
+.quiz-maker__answer-option-pointer--correct {
+    background: #10AB4C;
+    box-shadow: 0 0 0 1px #ffffff;
 }
 
 .select-list__item-selected {

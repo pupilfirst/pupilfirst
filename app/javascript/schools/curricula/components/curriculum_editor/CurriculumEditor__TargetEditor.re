@@ -31,7 +31,10 @@ type state = {
   hasDescriptionError: bool,
   hasYoutubeVideoIdError: bool,
   hasLinktoCompleteError: bool,
+  isValidQuiz: bool,
   isArchived: bool,
+  dirty: bool,
+  saving: bool,
 };
 
 type action =
@@ -47,7 +50,8 @@ type action =
   | RemoveQuizQuestion(int)
   | AddResource(int, string)
   | RemoveResource(int)
-  | UpdateIsArchived(bool);
+  | UpdateIsArchived(bool)
+  | UpdateSaving;
 
 let component =
   ReasonReact.reducerComponent("CurriculumEditor__TargetEditor");
@@ -73,7 +77,7 @@ let updateLinkToComplete = (send, link) => {
   send(UpdateLinkToComplete(link, hasError));
 };
 
-let saveDisabled = (state, isValidQuiz) => {
+let saveDisabled = state => {
   let hasMethordOfCompletionError =
     switch (state.methodOfCompletion) {
     | NotSelected => true
@@ -82,14 +86,18 @@ let saveDisabled = (state, isValidQuiz) => {
       |> List.filter(((_, _, selected)) => selected)
       |> List.length == 0
     | VisitLink => state.hasLinktoCompleteError
-    | TakeQuiz => !isValidQuiz
+    | TakeQuiz => !state.isValidQuiz
     | MarkAsComplete => false
     };
-  state.hasTitleError
-  || state.hasDescriptionError
+  state.title
+  |> String.length < 2
+  || state.description
+  |> String.length < 2
   || state.hasYoutubeVideoIdError
   || state.hasLinktoCompleteError
-  || hasMethordOfCompletionError;
+  || hasMethordOfCompletionError
+  || !state.dirty
+  || state.saving;
 };
 
 let handleMethodOfCompletion = target => {
@@ -139,7 +147,8 @@ let handleEC = (evaluationCriteria, target) => {
 let handlePT = (targets, target) => {
   let selectedEcIds = target |> Target.prerequisiteTargets |> Array.of_list;
 
-  targets |> Target.removeTarget(target)
+  targets
+  |> Target.removeTarget(target)
   |> List.map(criterion => {
        let criterionId = criterion |> Target.id;
        let selected =
@@ -156,14 +165,19 @@ let setPayload = (state, target, authenticityToken) => {
   let payload = Js.Dict.empty();
   let targetData = Js.Dict.empty();
   let resourceIds = state.resources |> List.map(((key, _)) => key);
-  let evaluationCriteriaIds =
-    state.evaluationCriteria
-    |> List.filter(((_, _, selected)) => selected == true)
-    |> List.map(((key, _, _)) => key);
   let prerequisiteTargetIds =
     state.prerequisiteTargets
     |> List.filter(((_, _, selected)) => selected == true)
     |> List.map(((key, _, _)) => key);
+  let evaluationCriteriaIds =
+    state.methodOfCompletion == Evaluated ?
+      state.evaluationCriteria
+      |> List.filter(((_, _, selected)) => selected == true)
+      |> List.map(((key, _, _)) => key) :
+      [];
+  let linkToComplete =
+    state.methodOfCompletion == VisitLink ? state.linkToComplete : "";
+  let quiz = state.methodOfCompletion == TakeQuiz ? state.quiz : [];
 
   Js.Dict.set(
     payload,
@@ -207,28 +221,23 @@ let setPayload = (state, target, authenticityToken) => {
 
   Js.Dict.set(targetData, "archived", state.isArchived |> Js.Json.boolean);
 
-  switch (state.methodOfCompletion) {
-  | Evaluated =>
-    Js.Dict.set(
-      targetData,
-      "evaluation_criterion_ids",
-      evaluationCriteriaIds |> Json.Encode.(list(int)),
-    )
-  | VisitLink =>
-    Js.Dict.set(
-      targetData,
-      "link_to_complete",
-      state.linkToComplete |> Js.Json.string,
-    )
-  | TakeQuiz =>
-    Js.Dict.set(
-      targetData,
-      "quiz",
-      state.quiz |> Json.Encode.(list(QuizQuestion.encoder)),
-    )
-  | MarkAsComplete => ()
-  | NotSelected => ()
-  };
+  Js.Dict.set(
+    targetData,
+    "evaluation_criterion_ids",
+    evaluationCriteriaIds |> Json.Encode.(list(int)),
+  );
+
+  Js.Dict.set(
+    targetData,
+    "link_to_complete",
+    linkToComplete |> Js.Json.string,
+  );
+
+  Js.Dict.set(
+    targetData,
+    "quiz",
+    quiz |> Json.Encode.(list(QuizQuestion.encoder)),
+  );
   Js.Dict.set(payload, "target", targetData |> Js.Json.object_);
   payload;
 };
@@ -238,16 +247,24 @@ let handleQuiz = target => {
   quiz |> List.length > 0 ? quiz : [QuizQuestion.empty(0)];
 };
 
+let isValidQuiz = quiz =>
+  quiz
+  |> List.filter(quizQuestion =>
+       quizQuestion |> QuizQuestion.isValidQuizQuestion != true
+     )
+  |> List.length == 0;
+
 let booleanButtonClasses = bool =>
   bool ?
     "w-1/2 bg-grey hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none" :
-    "w-1/2 bg-white border-l hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none";
+    "w-1/2 bg-white hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none";
 
 let completionButtonClasses = value =>
   value ?
     "flex flex-col items-center bg-white border border-grey-light hover:bg-grey-lighter text-green text-sm font-semibold focus:outline-none rounded p-4" :
-    "flex flex-col items-center bg-white border border-grey-light hover:bg-grey-lighter text-grey-darkest text-sm font-semibold focus:outline-none rounded p-4";
-
+    "flex flex-col items-center bg-white border border-grey-light opacity-50 hover:bg-grey-lighter text-grey-darkest text-sm font-semibold focus:outline-none rounded p-4";
+let formClasses = value =>
+  value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full";
 let make =
     (
       ~target,
@@ -265,7 +282,7 @@ let make =
     switch (target) {
     | Some(target) => {
         title: target |> Target.title,
-        description: target |> Target.title,
+        description: target |> Target.description,
         youtubeVideoId:
           switch (target |> Target.youtubeVideoId) {
           | Some(youtubeVideoId) => youtubeVideoId
@@ -292,6 +309,9 @@ let make =
         hasYoutubeVideoIdError: false,
         hasLinktoCompleteError: false,
         isArchived: target |> Target.archived,
+        dirty: false,
+        isValidQuiz: true,
+        saving: false,
       }
     | None => {
         title: "",
@@ -322,19 +342,37 @@ let make =
         hasYoutubeVideoIdError: false,
         hasLinktoCompleteError: false,
         isArchived: false,
+        dirty: false,
+        isValidQuiz: true,
+        saving: false,
       }
     },
   reducer: (action, state) =>
     switch (action) {
     | UpdateTitle(title, hasTitleError) =>
-      ReasonReact.Update({...state, title, hasTitleError})
+      ReasonReact.Update({...state, title, hasTitleError, dirty: true})
     | UpdateDescription(description, hasDescriptionError) =>
-      ReasonReact.Update({...state, description, hasDescriptionError})
+      ReasonReact.Update({
+        ...state,
+        description,
+        hasDescriptionError,
+        dirty: true,
+      })
     | UpdateYoutubeVideoId(youtubeVideoId, hasYoutubeVideoIdError) =>
-      ReasonReact.Update({...state, youtubeVideoId, hasYoutubeVideoIdError})
+      ReasonReact.Update({
+        ...state,
+        youtubeVideoId,
+        hasYoutubeVideoIdError,
+        dirty: true,
+      })
 
     | UpdateLinkToComplete(linkToComplete, hasLinktoCompleteError) =>
-      ReasonReact.Update({...state, linkToComplete, hasLinktoCompleteError})
+      ReasonReact.Update({
+        ...state,
+        linkToComplete,
+        hasLinktoCompleteError,
+        dirty: true,
+      })
     | UpdateEvaluationCriterion(key, value, selected) =>
       let oldEC =
         state.evaluationCriteria
@@ -342,6 +380,7 @@ let make =
       ReasonReact.Update({
         ...state,
         evaluationCriteria: [(key, value, selected), ...oldEC],
+        dirty: true,
       });
     | UpdatePrerequisiteTargets(key, value, selected) =>
       let oldPT =
@@ -350,42 +389,57 @@ let make =
       ReasonReact.Update({
         ...state,
         prerequisiteTargets: [(key, value, selected), ...oldPT],
+        dirty: true,
       });
     | UpdateMethodOfCompletion(methodOfCompletion) =>
-      ReasonReact.Update({...state, methodOfCompletion})
+      ReasonReact.Update({...state, methodOfCompletion, dirty: true})
     | AddQuizQuestion =>
       let lastQuestionId =
         state.quiz |> List.rev |> List.hd |> QuizQuestion.id;
+
+      let quiz =
+        state.quiz
+        |> List.rev
+        |> List.append([QuizQuestion.empty(lastQuestionId + 1)])
+        |> List.rev;
       ReasonReact.Update({
         ...state,
-        quiz:
-          state.quiz
-          |> List.rev
-          |> List.append([QuizQuestion.empty(lastQuestionId + 1)])
-          |> List.rev,
+        quiz,
+        dirty: true,
+        isValidQuiz: isValidQuiz(quiz),
       });
     | UpdateQuizQuestion(id, quizQuestion) =>
-      let newQuiz =
+      let quiz =
         state.quiz
         |> List.map(a => a |> QuizQuestion.id == id ? quizQuestion : a);
-      ReasonReact.Update({...state, quiz: newQuiz});
-
-    | RemoveQuizQuestion(id) =>
       ReasonReact.Update({
         ...state,
-        quiz: state.quiz |> List.filter(a => a |> QuizQuestion.id !== id),
-      })
+        quiz,
+        dirty: true,
+        isValidQuiz: isValidQuiz(quiz),
+      });
+
+    | RemoveQuizQuestion(id) =>
+      let quiz = state.quiz |> List.filter(a => a |> QuizQuestion.id !== id);
+      ReasonReact.Update({
+        ...state,
+        quiz,
+        dirty: true,
+        isValidQuiz: isValidQuiz(quiz),
+      });
     | AddResource(key, value) =>
       ReasonReact.Update({
         ...state,
         resources: [(key, value), ...state.resources],
+        dirty: true,
       })
     | RemoveResource(key) =>
       let newResources =
         state.resources |> List.filter(((_key, _)) => _key !== key);
-      ReasonReact.Update({...state, resources: newResources});
+      ReasonReact.Update({...state, resources: newResources, dirty: true});
     | UpdateIsArchived(isArchived) =>
-      ReasonReact.Update({...state, isArchived})
+      ReasonReact.Update({...state, isArchived, dirty: true})
+    | UpdateSaving => ReasonReact.Update({...state, saving: !state.saving})
     },
   render: ({state, send}) => {
     let targetEvaluated = () =>
@@ -396,6 +450,12 @@ let make =
       | TakeQuiz => false
       | MarkAsComplete => false
       };
+
+    let validNumberOfEvaluationCriteria =
+      state.evaluationCriteria
+      |> List.filter(((_, _, selected)) => selected)
+      |> List.length != 0;
+    Js.log(validNumberOfEvaluationCriteria);
     let multiSelectPrerequisiteTargetsCB = (key, value, selected) =>
       send(UpdatePrerequisiteTargets(key, value, selected));
     let multiSelectEvaluationCriterionCB = (key, value, selected) =>
@@ -405,12 +465,7 @@ let make =
       send(UpdateQuizQuestion(id, quizQuestion));
     let questionCanBeRemoved = state.quiz |> List.length > 1;
     let addResourceCB = (key, value) => send(AddResource(key, value));
-    let isValidQuiz =
-      state.quiz
-      |> List.filter(quizQuestion =>
-           quizQuestion |> QuizQuestion.isValidQuizQuestion != true
-         )
-      |> List.length == 0;
+    let handleErrorCB = () => send(UpdateSaving);
     let handleResponseCB = json => {
       let id = json |> Json.Decode.(field("id", int));
       let sortIndex = json |> Json.Decode.(field("sortIndex", int));
@@ -459,22 +514,24 @@ let make =
         );
       switch (target) {
       | Some(_) =>
-        Notification.success("Success", "Target updated succesffully")
-      | None => Notification.success("Success", "Target created succesffully")
+        Notification.success("Success", "Target updated successfully")
+      | None => Notification.success("Success", "Target created successfully")
       };
       updateTargetCB(newTarget);
     };
     let createTarget = () => {
+      send(UpdateSaving);
       let payload = setPayload(state, target, authenticityToken);
       let tgId = targetGroupId |> string_of_int;
       let url = "/school/target_groups/" ++ tgId ++ "/targets";
-      Api.create(url, payload, handleResponseCB);
+      Api.create(url, payload, handleResponseCB, handleErrorCB);
     };
 
     let updateTarget = targetId => {
+      send(UpdateSaving);
       let payload = setPayload(state, target, authenticityToken);
       let url = "/school/targets/" ++ (targetId |> string_of_int);
-      Api.update(url, payload, handleResponseCB);
+      Api.update(url, payload, handleResponseCB, handleErrorCB);
     };
     let showPrerequisiteTargets = state.prerequisiteTargets |> List.length > 0;
     <div className="blanket">
@@ -486,7 +543,7 @@ let make =
             <i className="material-icons"> {"close" |> str} </i>
           </button>
         </div>
-        <div className="drawer-right-form w-full">
+        <div className={formClasses(state.saving)}>
           <div className="w-full">
             <div className="mx-auto bg-white">
               <div className="max-w-md p-6 mx-auto">
@@ -495,10 +552,11 @@ let make =
                   {"Target Details" |> str}
                 </h5>
                 <label
-                  className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                  className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
                   htmlFor="title">
-                  {"Title*  " |> str}
+                  {"Title" |> str}
                 </label>
+                <span> {"*" |> str} </span>
                 <input
                   className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                   id="title"
@@ -518,13 +576,14 @@ let make =
                     ReasonReact.null
                 }
                 <label
-                  className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
-                  htmlFor="title">
-                  {" Description*" |> str}
+                  className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                  htmlFor="description">
+                  {" Description" |> str}
                 </label>
+                <span> {"*" |> str} </span>
                 <textarea
                   className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                  id="title"
+                  id="description"
                   placeholder="Type target description"
                   value={state.description}
                   onChange={
@@ -546,12 +605,12 @@ let make =
                 }
                 <label
                   className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
-                  htmlFor="title">
+                  htmlFor="youtube">
                   {"Youtube Video Id " |> str}
                 </label>
                 <input
                   className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                  id="title"
+                  id="youtube"
                   type_="text"
                   placeholder="Example 58CPRi5kRe8"
                   value={state.youtubeVideoId}
@@ -572,13 +631,14 @@ let make =
                 }
                 <label
                   className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
-                  htmlFor="title">
+                  htmlFor="resources">
                   {"Resources" |> str}
                 </label>
                 {
                   state.resources
                   |> List.map(((_key, value)) =>
                        <div
+                         id="resources"
                          key={_key |> string_of_int}
                          className="select-list__item-selected flex items-center justify-between bg-grey-lightest text-xs text-grey-dark border rounded p-3 mb-2">
                          {value |> str}
@@ -617,30 +677,31 @@ let make =
                   className="uppercase text-center border-b border-grey-light pb-2 mb-4">
                   {"Method of Target Completion" |> str}
                 </h5>
-              {
+                {
                   showPrerequisiteTargets ?
-                   <div>
-                    <label
-                      className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
-                      htmlFor="title">
-                      {"Any prerequisite targets?" |> str}
-                    </label>
-                    <div className="mb-6">
-                      <CurriculumEditor__SelectBox
-                        items={state.prerequisiteTargets}
-                        multiSelectCB=multiSelectPrerequisiteTargetsCB
-                      />
-                    </div>
-                    </div>
-                     : ReasonReact.null
+                    <div>
+                      <label
+                        className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                        htmlFor="prerequisite_targets">
+                        {"Any prerequisite targets?" |> str}
+                      </label>
+                      <div id="prerequisite_targets" className="mb-6">
+                        <CurriculumEditor__SelectBox
+                          items={state.prerequisiteTargets}
+                          multiSelectCB=multiSelectPrerequisiteTargetsCB
+                        />
+                      </div>
+                    </div> :
+                    ReasonReact.null
                 }
                 <div className="flex items-center mb-6">
                   <label
                     className="block tracking-wide text-grey-darker text-xs font-semibold mr-6"
-                    htmlFor="title">
+                    htmlFor="evaluated">
                     {"Is this target reviewed by a faculty?" |> str}
                   </label>
                   <div
+                    id="evaluated"
                     className="inline-flex w-64 rounded-lg overflow-hidden border">
                     <button
                       onClick={
@@ -675,13 +736,13 @@ let make =
                       <div className="mb-6">
                         <label
                           className="block tracking-wide text-grey-darker text-xs font-semibold mr-6 mb-3"
-                          htmlFor="title">
+                          htmlFor="method_of_completion">
                           {
                             "How do you want the student to complete the target?"
                             |> str
                           }
                         </label>
-                        <div className="flex -mx-2">
+                        <div id="method_of_completion" className="flex -mx-2">
                           <div className="w-1/3 px-2">
                             <button
                               onClick={
@@ -865,12 +926,19 @@ let make =
                 {
                   switch (state.methodOfCompletion) {
                   | Evaluated =>
-                    <div className="mb-6">
+                    <div id="evaluation_criteria" className="mb-6">
                       <label
                         className="block tracking-wide text-grey-darker text-xs font-semibold mr-6 mb-2"
-                        htmlFor="title">
+                        htmlFor="evaluation_criteria">
                         {"Choose evaluation criteria from your list" |> str}
                       </label>
+                      {
+                        validNumberOfEvaluationCriteria ?
+                          ReasonReact.null :
+                          <div className="drawer-right-form__error-msg">
+                            {"Atleast one has to be selected" |> str}
+                          </div>
+                      }
                       <CurriculumEditor__SelectBox
                         items={state.evaluationCriteria}
                         multiSelectCB=multiSelectEvaluationCriterionCB
@@ -879,20 +947,31 @@ let make =
                   | MarkAsComplete => ReasonReact.null
                   | TakeQuiz =>
                     <div>
-                      <label
-                        className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                      <h3
+                        className="block tracking-wide text-grey-darker font-semibold mb-2"
                         htmlFor="Quiz question 1">
                         {"Prepare the quiz now." |> str}
-                      </label>
+                      </h3>
+                      {
+                        state.isValidQuiz ?
+                          ReasonReact.null :
+                          <div className="drawer-right-form__error-msg">
+                            {
+                              "All questions must be filled in, and all questions should have at least two answers."
+                              |> str
+                            }
+                          </div>
+                      }
                       {
                         state.quiz
-                        |> List.map(quizQuestion =>
+                        |> List.mapi((index, quizQuestion) =>
                              <CurriculumEditor__TargetQuizQuestion
                                key={
                                  quizQuestion
                                  |> QuizQuestion.id
                                  |> string_of_int
                                }
+                               questionNumber=index
                                quizQuestion
                                updateQuizQuestionCB
                                removeQuizQuestionCB
@@ -909,13 +988,10 @@ let make =
                             send(AddQuizQuestion);
                           }
                         )
-                        className="flex items-center py-3 cursor-pointer">
-                        <svg className="svg-icon w-8 h-8" viewBox="0 0 20 20">
-                          <path
-                            fill="#A8B7C7"
-                            d="M13.388,9.624h-3.011v-3.01c0-0.208-0.168-0.377-0.376-0.377S9.624,6.405,9.624,6.613v3.01H6.613c-0.208,0-0.376,0.168-0.376,0.376s0.168,0.376,0.376,0.376h3.011v3.01c0,0.208,0.168,0.378,0.376,0.378s0.376-0.17,0.376-0.378v-3.01h3.011c0.207,0,0.377-0.168,0.377-0.376S13.595,9.624,13.388,9.624z M10,1.344c-4.781,0-8.656,3.875-8.656,8.656c0,4.781,3.875,8.656,8.656,8.656c4.781,0,8.656-3.875,8.656-8.656C18.656,5.219,14.781,1.344,10,1.344z M10,17.903c-4.365,0-7.904-3.538-7.904-7.903S5.635,2.096,10,2.096S17.903,5.635,17.903,10S14.365,17.903,10,17.903z"
-                          />
-                        </svg>
+                        className="flex items-center bg-grey-lighter hover:bg-grey-light border-2 border-dashed rounded-lg p-3 cursor-pointer mb-5">
+                        <i className="material-icons">
+                          {"add_circle_outline" |> str}
+                        </i>
                         <h5 className="font-semibold ml-2">
                           {"Add another Question" |> str}
                         </h5>
@@ -925,12 +1001,12 @@ let make =
                     <div>
                       <label
                         className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
-                        htmlFor="title">
+                        htmlFor="link_to_complete">
                         {"Link to complete*  " |> str}
                       </label>
                       <input
                         className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                        id="title"
+                        id="link_to_complete"
                         type_="text"
                         placeholder="Paste link to complete"
                         value={state.linkToComplete}
@@ -958,10 +1034,12 @@ let make =
                   | Some(_) =>
                     <div className="flex items-center mb-6">
                       <label
-                        className="block tracking-wide text-grey-darker text-xs font-semibold mr-6">
+                        className="block tracking-wide text-grey-darker text-xs font-semibold mr-6"
+                        htmlFor="archived">
                         {"Is this target archived?" |> str}
                       </label>
                       <div
+                        id="archived"
                         className="inline-flex w-64 rounded-lg overflow-hidden border">
                         <button
                           onClick=(
@@ -994,22 +1072,22 @@ let make =
                 }
               </div>
             </div>
-            <div className="flex">
+            <div className="flex max-w-md w-full px-6 pb-5 mx-auto">
               {
                 switch (target) {
                 | Some(target) =>
                   <button
-                    disabled={saveDisabled(state, isValidQuiz)}
+                    disabled={saveDisabled(state)}
                     onClick=(_e => updateTarget(target |> Target.id))
-                    className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+                    className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none mt-3">
                     {"Update Target" |> str}
                   </button>
 
                 | None =>
                   <button
-                    disabled={saveDisabled(state, isValidQuiz)}
+                    disabled={saveDisabled(state)}
                     onClick=(_e => createTarget())
-                    className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+                    className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none mt-3">
                     {"Create Target" |> str}
                   </button>
                 }

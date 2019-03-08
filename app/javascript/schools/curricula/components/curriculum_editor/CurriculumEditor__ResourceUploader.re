@@ -142,7 +142,7 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
     <div className={formClasses(state.saving)}>
       <ul className="list-reset resources-upload-tab flex border-b">
         <li className={resourcesUploadTabClasses(state.resourceType == File)}>
-          <div
+          <a
             onClick={
               _event => {
                 ReactEvent.Mouse.preventDefault(_event);
@@ -151,10 +151,10 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
             }
             className="inline-block text-grey-darker hover:text-indigo-darker p-4 text-xs font-semibold">
             {"Upload File" |> str}
-          </div>
+          </a>
         </li>
         <li className={resourcesUploadTabClasses(state.resourceType == Link)}>
-          <div
+          <a
             onClick={
               _event => {
                 ReactEvent.Mouse.preventDefault(_event);
@@ -163,7 +163,7 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
             }
             className="inline-block text-grey-darker p-4 hover:text-indigo-darker text-xs font-semibold">
             {"Add URL" |> str}
-          </div>
+          </a>
         </li>
       </ul>
       <form
@@ -217,7 +217,7 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
                   <i className="material-icons mr-2 text-grey-dark">
                     {"file_upload" |> str}
                   </i>
-                  <span className="truncate">{state.fileName |> str}</span>
+                  <span className="truncate"> {state.fileName |> str} </span>
                 </label>
               </div> :
               <input

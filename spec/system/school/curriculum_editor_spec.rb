@@ -104,14 +104,28 @@ feature 'Curriculum Editor' do
     expect(page).to have_text("TARGET DETAILS")
     fill_in 'Title', with: new_target_title
     fill_in 'Description', with: new_target_description
+    fill_in 'resource_title', with: 'A PDF File'
+    attach_file 'Choose file to upload', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf')), visible: false
+    click_button 'Add Resource'
+    expect(page).to have_text('Add Resource')
+    expect(page).to have_text('A PDF File')
+
+    find("a", text: "Add URL").click
+    fill_in 'resource_title', with: 'A Link'
+    fill_in 'link', with: 'https://www.sv.co'
+    click_button 'Add Resource'
+    expect(page).to have_text('Add Resource')
+    expect(page).to have_text('A Link')
+
     click_button 'Yes'
     click_button 'Create Target'
-    expect(page).to have_text("Target created successfully")
 
+    expect(page).to have_text("Target created successfully")
     target_group.reload
     target = target_group.targets.last
     expect(target.title).to eq(new_target_title)
     expect(target.description).to eq(new_target_description)
     expect(target.evaluation_criteria.last.name).to eq(evaluation_criterion.name)
+    expect(target.resources.count).to eq(2)
   end
 end

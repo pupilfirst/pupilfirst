@@ -1,6 +1,12 @@
 require 'rails_helper'
 
 feature 'User signing in by supplying email address' do
+  let!(:school) { create :school, :current }
+
+  before do
+    create :domain, :primary, school: school
+  end
+
   context 'when a user exists' do
     let(:user) { create :user }
 
@@ -49,7 +55,7 @@ feature 'User signing in by supplying email address' do
     scenario 'responds with an error message' do
       visit new_user_session_url
 
-      expect(page).to have_content('Sign in with your PupilFirst ID')
+      expect(page).to have_content("Sign in with your #{school.name} ID")
 
       fill_in 'user_sign_in[email]', with: 'unregistered@example.org'
 

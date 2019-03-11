@@ -124,11 +124,6 @@ $google-color: #dd4b39;
   @include media-breakpoint-down(sm) {
     padding: 30px 15px;
   }
-  .sign-in-kid {
-    img {
-      width: 80px;
-    }
-  }
 
   .wrapped-input {
     position: relative;
@@ -246,5 +241,11 @@ $google-color: #dd4b39;
     @include media-breakpoint-down(sm) {
       padding: 12px 40px;
     }
+  }
+}
+
+.user-sessions-new__icon {
+  img {
+    width: 80px;
   }
 }

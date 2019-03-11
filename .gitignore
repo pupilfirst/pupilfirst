@@ -38,3 +38,6 @@ npm-debug.log
 .DS_Store
 .bsb.lock
 *.bs.js
+
+# Ignore the examples file that tracks Rspec runs.
+examples.txt

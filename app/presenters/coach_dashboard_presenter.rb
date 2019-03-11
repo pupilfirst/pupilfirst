@@ -23,10 +23,6 @@ class CoachDashboardPresenter < ApplicationPresenter
 
   private
 
-  def current_coach
-    @current_coach ||= view.current_coach
-  end
-
   def founders
     Founder.where(startup_id: teams.map { |t| t[:id] }).map do |founder|
       {

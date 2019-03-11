@@ -1,0 +1,1 @@
+import "layouts/error.css";

@@ -7,7 +7,6 @@ class FoundersController < ApplicationController
     @founder = authorize(Founder.friendly.find(params[:slug]))
     # Show site wide notice to exited founders
     @sitewide_notice = @founder.exited? if @founder.user == current_user
-    @meta_description = "#{@founder.name}: #{@founder.startup.name}"
     @timeline_events = Kaminari.paginate_array(events_for_display).page(params[:page]).per(20)
   end
 
@@ -43,7 +42,6 @@ class FoundersController < ApplicationController
     # Reuse the startup action, because that's what this page also shows.
     show
     @timeline_event_for_og = @founder.timeline_events.find(params[:event_id])
-    @meta_description = @timeline_event_for_og.description
 
     unless TimelineEventPolicy.new(pundit_user, @timeline_event_for_og).show?
       raise_not_found
@@ -55,7 +53,7 @@ class FoundersController < ApplicationController
   # POST /founders/:slug/select
   def select
     # Use the scope from the presenter to ensure that conditions are met.
-    presenter = NavLinksPresenter.new(view_context)
+    presenter = ::Layouts::TopNavPresenter.new(view_context)
 
     founder = authorize(presenter.selectable_student_profiles.friendly.find(params[:id]))
     set_cookie(:founder_id, founder.id)

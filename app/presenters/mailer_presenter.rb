@@ -15,7 +15,7 @@ class MailerPresenter < ApplicationPresenter
   end
 
   def logo?
-    @school.logo.attached?
+    @school.logo_on_light_bg.attached?
   end
 
   def logo

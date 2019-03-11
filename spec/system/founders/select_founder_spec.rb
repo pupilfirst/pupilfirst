@@ -25,10 +25,19 @@ feature 'Select another founder profile as the active profile' do
   scenario 'Multi-founder user can switch between courses in the same school', js: true do
     sign_in_user multi_founder_user, referer: root_path
 
-    # Open the user avatar dropdown menu to see available courses.
-    find(".logged-in-avatar-link").click
+    # The links to switch to other student profiles should not be immediately visible.
+    expect(page).not_to have_link("#{startup_1.course.name} Course")
+    expect(page).not_to have_link("#{startup_2.course.name} Course")
 
-    # There shouldn't be a link to switch to the third profile from another school.
+    # They should be visible within the dropdown.
+    within('#nav-links__navbar') do
+      click_link 'Student Dashboard'
+    end
+
+    expect(page).to have_link("#{startup_1.course.name} Course")
+    expect(page).to have_link("#{startup_2.course.name} Course")
+
+    # There still shouldn't be a link to switch to the third profile from another school, though.
     expect(page).not_to have_link("#{startup_3.course.name} Course")
 
     # Switch to second course.
@@ -38,7 +47,10 @@ feature 'Select another founder profile as the active profile' do
     expect(page).to have_content(startup_2.product_name)
 
     # ...and back to the first course?
-    find(".logged-in-avatar-link").click
+    within('#nav-links__navbar') do
+      click_link 'Student Dashboard'
+    end
+
     click_link("#{startup_1.course.name} Course")
 
     expect(page).to have_selector('#founder-dashboard')
@@ -48,8 +60,6 @@ feature 'Select another founder profile as the active profile' do
   scenario 'Single-founder user does not have option to switch between courses' do
     sign_in_user single_founder_user, referer: root_path
 
-    Course.all.each do |course|
-      expect(page).not_to have_link("#{course.name} Course")
-    end
+    expect(page).to have_link("Student Dashboard", href: '/student/dashboard')
   end
 end

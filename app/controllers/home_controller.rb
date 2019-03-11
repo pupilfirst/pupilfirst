@@ -17,7 +17,14 @@ class HomeController < ApplicationController
 
   # GET /policies/privacy
   def privacy
-    privacy_policy = File.read(File.absolute_path(Rails.root.join('privacy_policy.md')))
+    privacy_policy = if current_school.present?
+      SchoolString::PrivacyPolicy.for(current_school)
+    else
+      File.read(Rails.root.join('privacy_policy.md'))
+    end
+
+    raise_not_found if privacy_policy.blank?
+
     @privacy_policy_html = Kramdown::Document.new(privacy_policy).to_html.html_safe
 
     respond_to do |format|
@@ -28,7 +35,14 @@ class HomeController < ApplicationController
 
   # GET /policies/terms
   def terms
-    terms_of_use = File.read(File.absolute_path(Rails.root.join('terms_of_use.md')))
+    terms_of_use = if current_school.present?
+      SchoolString::TermsOfUse.for(current_school)
+    else
+      File.read(Rails.root.join('terms_of_use.md'))
+    end
+
+    raise_not_found if terms_of_use.blank?
+
     @terms_of_use_html = Kramdown::Document.new(terms_of_use).to_html.html_safe
 
     respond_to do |format|
@@ -55,6 +69,15 @@ class HomeController < ApplicationController
   def oauth_error
     flash[:notice] = params[:error]
     redirect_to new_user_session_path
+  end
+
+  # GET /favicon.ico
+  def favicon
+    if current_school.present? && current_school.icon.attached?
+      redirect_to view_context.url_for(current_school.icon_variant(:thumb))
+    else
+      redirect_to view_context.image_path('layouts/shared/favicon.png')
+    end
   end
 
   protected

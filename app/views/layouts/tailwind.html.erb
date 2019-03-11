@@ -1,3 +1,5 @@
+<% presenter = ::Layouts::TailwindPresenter.new(self) %>
+
 <!DOCTYPE html>
 <html lang='en'>
 <head>
@@ -10,19 +12,21 @@
   <!-- Styles -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <%= stylesheet_pack_tag 'tailwind', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= stylesheet_pack_tag 'layouts/tailwind', media: 'all', 'data-turbolinks-track': 'reload' %>
 
   <!-- Scripts -->
-  <%= javascript_pack_tag 'tailwind', 'data-turbolinks-track': 'reload', nonce: true %>
+  <%= javascript_pack_tag 'layouts/tailwind', 'data-turbolinks-track': 'reload', nonce: true %>
 
   <%= csrf_meta_tags %>
 
-  <meta name="description" content="<%= meta_description %>"/>
-  <meta property="og:description" content="<%= meta_description %>"/>
+  <% if presenter.meta_description.present? %>
+    <meta name="description" content="<%= presenter.meta_description %>"/>
+    <meta property="og:description" content="<%= presenter.meta_description %>"/>
+  <% end %>
 
   <%= yield :head %>
 
-  <link rel="icon" href="<%= image_url('layouts/shared/favicon.png') %>"/>
+  <link rel="icon" href="/favicon.ico"/>
 </head>
 
 <body data-env="<%= Rails.env %>">

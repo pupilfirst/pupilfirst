@@ -42,11 +42,12 @@ export default class ReactTrixEditor extends Component {
     return (
       <div>
         <input id={input} value={initialValue} type="hidden" name="content" />
+
         <trix-editor
           id={this.id}
           input={input}
           placeholder={placeholder}
-          autofocus={autofocus}
+          autofocus={autofocus ? "autofocus" : null}
         />
       </div>
     );

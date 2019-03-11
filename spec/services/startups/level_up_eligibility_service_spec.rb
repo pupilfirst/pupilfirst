@@ -57,13 +57,13 @@ describe Startups::LevelUpEligibilityService do
       end
     end
 
-    context 'when only admin has submitted all milestone targets' do
+    context 'when only one student has submitted all milestone targets' do
       it "returns 'cofounders_pending'" do
         submit_target startup.founders.first, non_milestone_founder_target
         submit_target startup.founders.first, non_milestone_startup_target
         submit_target startup.founders.first, startup_target
 
-        # Only the admin has submitted the founder target.
+        # Only one student has submitted the individual target.
         create_timeline_event startup.founders.first, founder_target, passed: true
 
         expect(subject.eligibility).to eq('cofounders_pending')
@@ -78,31 +78,58 @@ describe Startups::LevelUpEligibilityService do
         expect(subject.eligibility).to eq('not_eligible')
       end
     end
-  end
 
-  describe '#eligible?' do
-    context 'when startup has completed all milestone targets' do
-      it 'returns true' do
-        submit_target startup.founders.first, founder_target
-        submit_target startup.founders.first, startup_target
+    context 'where there are no milestone target groups' do
+      let!(:milestone_targets) { create :target_group, level: level_1, milestone: false }
 
-        # Not all non-milestone targets need to be submitted.
-        submit_target startup.founders.first, non_milestone_startup_target
-
-        expect(subject.eligible?).to be true
+      it "returns 'not_eligible'" do
+        expect(subject.eligibility).to eq('not_eligible')
       end
     end
 
-    context 'when only admin has completed all milestone targets' do
-      it 'returns false' do
-        submit_target startup.founders.first, non_milestone_founder_target
-        submit_target startup.founders.first, non_milestone_startup_target
+    context 'when there are more than one milestone target groups' do
+      let!(:second_milestone_target_group) { create :target_group, level: level_1, milestone: true }
+      let!(:milestone_founder_target_g2) { create :target, :for_founders, target_group: second_milestone_target_group }
+
+      before do
+        # Submit all targets in the first milestone target group.
+        submit_target startup.founders.first, founder_target
         submit_target startup.founders.first, startup_target
+      end
 
-        # Only the admin has completed the founder target.
-        create_timeline_event startup.founders.first, founder_target, passed: true
+      context 'when the second milestone target group contains incomplete targets' do
+        it "returns 'not_eligible'" do
+          expect(subject.eligibility).to eq('not_eligible')
+        end
+      end
 
-        expect(subject.eligible?).to be false
+      context 'when the second milestone target group has also been fully completed' do
+        before do
+          # Submit target in the second milestone group.
+          submit_target startup.founders.first, milestone_founder_target_g2
+        end
+
+        it "returns 'eligible'" do
+          expect(subject.eligibility).to eq('eligible')
+        end
+      end
+    end
+  end
+
+  describe '#eligible?' do
+    context 'when eligibility is "eligible"' do
+      it 'returns true' do
+        allow(subject).to receive(:eligibility).and_return('eligible')
+        expect(subject.eligible?).to eq(true)
+      end
+    end
+
+    context 'when eligibility is not "eligible"' do
+      it 'returns false' do
+        %w[not_eligible cofounders_pending date_locked].each do |ineligible_marker|
+          allow(subject).to receive(:eligibility).and_return(ineligible_marker)
+          expect(subject.eligible?).to eq(false)
+        end
       end
     end
   end

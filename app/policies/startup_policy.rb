@@ -10,6 +10,7 @@ class StartupPolicy < ApplicationPolicy
 
       !current_founder.exited?
     end
+
     Startups::LevelUpEligibilityService.new(record, current_founder).eligible?
   end
 end

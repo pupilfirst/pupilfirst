@@ -7,6 +7,12 @@ let component =
     "CurriculumEditor__TargetQuizQuestionCreator",
   );
 
+let answerOptionId = (questionId, index) =>
+  "quiz_question_"
+  ++ questionId
+  ++ "_answer_option_"
+  ++ (index + 1 |> string_of_int);
+
 let make =
     (
       ~questionNumber,
@@ -54,13 +60,14 @@ let make =
     };
     let canBeDeleted =
       quizQuestion |> QuizQuestion.answerOptions |> List.length > 2;
+    let questionId = questionNumber + 1 |> string_of_int;
 
     <div className="quiz-maker__question-container relative my-4">
       <div className="flex items-end justify-between">
         <label
           className="block tracking-wide uppercase text-grey-darker text-xs font-semibold"
-          htmlFor="Quiz question 1">
-          {"Question " ++ (questionNumber + 1 |> string_of_int) |> str}
+          htmlFor={"quiz_question_" ++ questionId}>
+          {"Question " ++ questionId |> str}
         </label>
         <div className="quiz-maker__question-remove-button invisible">
           {
@@ -83,6 +90,7 @@ let make =
       </div>
       <div className="flex relative items-center my-2">
         <input
+          id={"quiz_question_" ++ questionId}
           className="w-full text-grey-darker border rounded-lg p-4 leading-tight focus:outline-none"
           type_="text"
           placeholder="Type the question here"
@@ -95,7 +103,7 @@ let make =
       {
         quizQuestion
         |> QuizQuestion.answerOptions
-        |> List.map(answerOption =>
+        |> List.mapi((index, answerOption) =>
              <CurriculumEditor__TargetQuizAnswer
                key={answerOption |> AnswerOption.id |> string_of_int}
                answerOption
@@ -103,6 +111,7 @@ let make =
                removeAnswerOptionCB
                canBeDeleted
                markAsCorrectCB
+               answerOptionId={answerOptionId(questionId, index)}
              />
            )
         |> Array.of_list
@@ -117,13 +126,13 @@ let make =
         }
         className="cursor-pointer relative">
         <div className="quiz-maker__answer-option-pointer" />
-        <div
+        <a
           className="flex items-center bg-white hover:bg-grey-lighter border rounded-lg ml-12 py-3 px-4">
           <i className="material-icons"> {"add_circle_outline" |> str} </i>
           <h5 className="font-semibold ml-2 italic">
             {"Add another Answer Option" |> str}
           </h5>
-        </div>
+        </a>
       </div>
     </div>;
   },

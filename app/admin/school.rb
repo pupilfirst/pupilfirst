@@ -55,8 +55,8 @@ ActiveAdmin.register School do
   form do |f|
     f.inputs 'School Details' do
       f.input :name, input_html: { disabled: true }
-      f.input :logo_on_light_bg, as: :file, hint: f.object.logo_on_light_bg.attached? ? "Upload another file to replace #{f.object.logo.filename}" : nil
-      f.input :logo_on_dark_bg, as: :file, hint: f.object.logo_on_dark_bg.attached? ? "Upload another file to replace #{f.object.logo.filename}" : nil
+      f.input :logo_on_light_bg, as: :file, hint: f.object.logo_on_light_bg.attached? ? "Upload another file to replace #{f.object.logo_on_light_bg.filename}" : nil
+      f.input :logo_on_dark_bg, as: :file, hint: f.object.logo_on_dark_bg.attached? ? "Upload another file to replace #{f.object.logo_on_dark_bg.filename}" : nil
       f.input :icon, as: :file, hint: f.object.icon.attached? ? "Upload another file to replace #{f.object.icon.filename}" : nil
     end
 

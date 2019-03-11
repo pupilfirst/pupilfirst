@@ -58,8 +58,7 @@ feature 'Curriculum Editor' do
   end
 
   scenario 'school admin create a course', js: true do
-    sign_in_user school_admin.user, referer: school_course_path(course)
-    click_link 'Curriculum'
+    sign_in_user school_admin.user, referer: school_course_curriculum_path(course)
 
     # he should be on the last level
     expect(page).to have_text("Level 2: " + level_2.name)
@@ -157,7 +156,7 @@ feature 'Curriculum Editor' do
     expect(target.description).to eq("<div>" + new_target_1_description + "</div>")
     expect(target.evaluation_criteria.last.name).to eq(evaluation_criterion.name)
     expect(target.resources.count).to eq(2)
-    expect(target.resources.pluck(:title)).to eq(['A PDF File', 'A Link'])
+    expect(target.resources.pluck(:title)).to match(['A PDF File', 'A Link'])
   end
 
   scenario "Admin creates a target with a link to complete", js: true do

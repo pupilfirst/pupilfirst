@@ -106,7 +106,7 @@ export default class TargetOverlay extends React.Component {
     });
   }
 
-  autoVerify() {
+  autoVerify(target) {
     const autoVerifyEndpoint =
       "/targets/" + this.props.targetId + "/auto_verify";
 
@@ -121,13 +121,29 @@ export default class TargetOverlay extends React.Component {
       }
     }).then(response => {
       if (response.ok) {
+        const hasLinkToComplete =
+          _.isString(target.link_to_complete) &&
+          target.link_to_complete.length > 0;
+
+        const [title, text] = hasLinkToComplete
+          ? ["Redirecting...", "Redirecting you to the link now..."]
+          : ["Done!", "This target has been marked as complete."];
+
         new PNotify({
-          title: "Done!",
-          text: "This target has been marked as complete.",
+          title: title,
+          text: text,
           type: "success"
         });
+
         this.completeTarget();
         this.state.showQuiz && this.invertShowQuiz();
+
+        if (hasLinkToComplete) {
+          // Take user to the link where zhe has to be sent.
+          window.setTimeout(() => {
+            window.location = target.link_to_complete;
+          }, 1000);
+        }
       } else {
         new PNotify({
           title: "Something went wrong!",

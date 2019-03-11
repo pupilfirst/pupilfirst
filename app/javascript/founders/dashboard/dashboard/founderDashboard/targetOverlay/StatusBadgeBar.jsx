@@ -36,7 +36,7 @@ export default class StatusBadgeBar extends React.Component {
       passed: "Passed on " + this.submissionDate(),
       failed: "Consider feedback and try re-submitting!",
       submitted: "Submitted on " + this.submissionDate(),
-      pending: "Follow completion instructions and submit!",
+      pending: "Follow instructions to complete this target!",
       level_locked: "You are yet to reach this level",
       milestone_locked: "Complete milestones in previous level first",
       prerequisite_locked: "Complete the prerequisites first"

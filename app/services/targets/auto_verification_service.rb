@@ -17,7 +17,7 @@ module Targets
     private
 
     def description
-      "Target '#{@target.title}' was auto-verified"
+      "Target '#{@target.title}' was automatically marked complete."
     end
 
     def founders

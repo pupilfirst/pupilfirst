@@ -8,7 +8,7 @@ feature 'Faculty Weekly Slots' do
     scenario 'User uses a random token identifier' do
       visit weekly_slots_faculty_index_path(SecureRandom.base58(24))
 
-      expect(page).to have_text("The page you were looking for doesn't exist.")
+      expect(page).to have_text("The page you were looking for doesn't exist")
       expect(page).to have_text('You may have mistyped the address, or the page may have moved.')
     end
 

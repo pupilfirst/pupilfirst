@@ -34,7 +34,7 @@ feature 'Resources' do
   scenario 'public visits private resource page' do
     visit resource_path(private_resource_c1)
 
-    expect(page).to have_content("The page you were looking for doesn't exist.")
+    expect(page).to have_content("The page you were looking for doesn't exist")
   end
 
   scenario 'user can download a public resource' do
@@ -87,10 +87,10 @@ feature 'Resources' do
 
       # Attempting to visit the show pages for such resources should 404.
       visit resource_path(public_resource_s2)
-      expect(page).to have_content("The page you were looking for doesn't exist.")
+      expect(page).to have_content("The page you were looking for doesn't exist")
 
       visit resource_path(private_resource_c2)
-      expect(page).to have_content("The page you were looking for doesn't exist.")
+      expect(page).to have_content("The page you were looking for doesn't exist")
     end
   end
 end

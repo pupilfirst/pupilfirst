@@ -24,5 +24,13 @@ module Schools
         end
       end
     end
+
+    def school_logo_path
+      if current_school.logo_on_light_bg.attached?
+        current_school.logo_variant("thumb")
+      else
+        'shared/pupilfirst-icon.svg'
+      end
+    end
   end
 end

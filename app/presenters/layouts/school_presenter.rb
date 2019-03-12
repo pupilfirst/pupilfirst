@@ -13,7 +13,11 @@ module Layouts
     end
 
     def school_logo_path
-      current_school.logo_variant("mid") || 'shared/pupilfirst-logo-white.svg'
+      if current_school.logo_on_light_bg.attached?
+        current_school.logo_variant("thumb")
+      else
+        'shared/pupilfirst-icon.svg'
+      end
     end
   end
 end

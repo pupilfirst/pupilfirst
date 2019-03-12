@@ -6,6 +6,7 @@ feature 'School Overview' do
   # Setup a course 1
   let!(:school) { create :school, :current }
   let!(:school_admin) { create :school_admin, school: school }
+
   let!(:course_1) { create :course, school: school }
   let!(:c1_coach) { create :faculty, school: school }
   let!(:c1_faculty_course_enrollment) { create :faculty_course_enrollment, faculty: c1_coach, course: course_1 }
@@ -49,7 +50,6 @@ feature 'School Overview' do
 
   scenario 'school admin visit the school overview', js: true do
     sign_in_user school_admin.user, referer: school_path
-
     expect(page).to have_text(school.name)
 
     # gets the overall students count in school

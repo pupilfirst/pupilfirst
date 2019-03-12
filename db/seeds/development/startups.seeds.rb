@@ -53,4 +53,11 @@ after 'development:levels' do
       level: ios_course_level_2
     )
   end
+
+  # A startup for Admin in VR course
+  Startup.create!(
+    name: 'School Admin',
+    level: vr_course_level_1,
+    product_name: 'School Admin'
+  )
 end

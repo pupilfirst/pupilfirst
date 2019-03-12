@@ -1,3 +1,4 @@
+<% presenter = ::Layouts::CoursePresenter.new(self) %>
 <% content_for(:head) do %>
   <%= stylesheet_pack_tag 'schools/shared/shared', media: 'all', 'data-turbolinks-track': 'reload' %>
 <% end %>
@@ -6,22 +7,43 @@
   <div class="antialiased flex h-screen">
     <div class="flex global-sidebar">
       <div class="bg-grey-darker global-sidebar__primary-nav global-sidebar__primary-nav--shrinked text-purple-lighter flex-none hidden md:block">
-      <div class="global-sidebar__header border-r p-4 bg-white flex pb-3">
-        <div class="global-sidebar__school-logo-container flex items-center bg-white rounded">
-          <h3>L</h3>
+        <div class="global-sidebar__header border-r p-4 bg-white flex pb-3">
+          <div class="global-sidebar__school-logo-container flex items-center bg-white rounded">
+            <%= link_to school_path do %>
+              <%= image_tag(presenter.school_icon_path, alt: current_school.name) %>
+            <% end %>
+          </div>
         </div>
-      </div>
         <ul class="list-reset">
-  <!--        <li>-->
-            <%#= link_to school_path, class:'flex text-white p-4 hover:bg-grey-darkest font-semibold no-underline items-center justify-center' do%>
-  <!--            <i class="material-icons md-48">vertical_split</i>-->
-            <%# end %>
-  <!--        </li>-->
+          <!--        <li>-->
+          <%#= link_to school_path, class:'flex text-white p-4 hover:bg-grey-darkest font-semibold no-underline items-center justify-center' do%>
+          <!--            <i class="material-icons md-48">vertical_split</i>-->
+          <%# end %>
+          <!--        </li>-->
           <li>
             <% classes = 'flex text-white p-4 hover:bg-grey-darkest font-semibold no-underline items-center justify-center' %>
-            <% classes += controller_name.in?(%w(curricula founders faculty)) ? ' bg-grey-darkest' : ''%>
-            <%= link_to school_path, class: classes do%>
+            <% classes += controller_name.in?(%w(curricula founders faculty)) ? ' bg-grey-darkest' : '' %>
+            <%= link_to school_path, class: classes do %>
               <i class="material-icons md-48">description</i>
+            <% end %>
+          </li>
+          <% if presenter.founder_profile?(@course) %>
+            <li>
+              <%= link_to student_dashboard_path, class: 'flex text-white py-3 px-4 font-semibold no-underline items-center cursor-default' do %>
+                <i class="material-icons md-48 mr-2">visibility</i>
+              <% end %>
+            </li>
+          <% end %>
+          <% if presenter.coach_profile?(@course) %>
+            <li>
+              <%= link_to course_coach_dashboard_path(@course), class: 'flex text-white py-3 px-4 font-semibold no-underline items-center cursor-default' do %>
+                <i class="material-icons md-48 mr-2">assignment_turned_in</i>
+              <% end %>
+            </li>
+          <% end %>
+          <li>
+            <%= link_to destroy_user_session_path, method: :delete, class: 'flex text-white py-3 px-4 font-semibold no-underline items-center cursor-default' do %>
+              <i class="material-icons md-48 mr-2">power_settings_new</i>
             <% end %>
           </li>
         </ul>

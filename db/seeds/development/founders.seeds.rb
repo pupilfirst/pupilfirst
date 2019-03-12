@@ -53,7 +53,10 @@ after 'development:colleges', 'development:startups' do
     ],
     'iOS Guy 3' => [
       ['ios3@example.org', 'iOS Guy 3', Founder::GENDER_MALE, 9876543500]
-    ]
+    ],
+  'School Admin' => [
+    ['admin@example.com', 'Test Profile', Founder::GENDER_MALE, 9876543500]
+  ]
   }
 
   teams.each do |team_name, founders|

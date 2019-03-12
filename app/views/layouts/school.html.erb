@@ -46,7 +46,7 @@
           <% end %>
           <% if presenter.coach_profile? %>
             <li>
-              <%= link_to presenter.coach_dashboard, class: 'flex text-white py-3 px-4 font-semibold no-underline items-center' do %>
+              <%= link_to presenter.coach_dashboard_path, class: 'flex text-white py-3 px-4 font-semibold no-underline items-center' do %>
                 <i class="material-icons md-48 mr-2">assignment_turned_in</i>
                 <span>Review Submissions</span>
               <% end %>

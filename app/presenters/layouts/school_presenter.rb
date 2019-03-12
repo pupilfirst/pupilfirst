@@ -8,8 +8,8 @@ module Layouts
       current_user.founders.joins(:school).where(schools: { id: current_school }).exists?
     end
 
-    def coach_dashboard
-      view.course_coach_dashboard_path(current_user.faculty.first.courses.first)
+    def coach_dashboard_path
+      view.course_coach_dashboard_path(current_user.faculty.joins(:school).where(schools: { id: current_school }).first.courses.first)
     end
 
     def school_logo_path

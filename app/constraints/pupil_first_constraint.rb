@@ -4,6 +4,6 @@ class PupilFirstConstraint
     return true if request.host.in? %w[127.0.0.1 www.example.com]
 
     # Match constraint if visiting an 'PupilFirst domain'.
-    request.host.in? %w[pupilfirst.localhost www.pupilfirst.localhost pupilfirst.com www.pupilfirst.com]
+    request.host.in?(Rails.application.secrets.pupilfirst_domains)
   end
 end

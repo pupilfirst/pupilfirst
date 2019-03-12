@@ -42,7 +42,7 @@ module Users
       private
 
       def oauth_host
-        @oauth_host ||= "www.pupilfirst.#{Rails.env.production? ? 'com' : 'localhost'}"
+        @oauth_host ||= "sso.pupilfirst.#{Rails.env.production? ? 'com' : 'localhost'}"
       end
     end
   end

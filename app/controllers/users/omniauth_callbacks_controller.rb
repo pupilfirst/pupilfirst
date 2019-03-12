@@ -82,7 +82,7 @@ module Users
         remember_me user
         redirect_to origin || after_sign_in_path_for(user)
       else
-        flash[:notice] = "Your email address: #{@email} is not registered at SV.CO"
+        flash[:notice] = "Your email address: #{@email} is unregistered."
         redirect_to new_user_session_path
       end
     end
@@ -124,7 +124,7 @@ module Users
         when 'Github'
           'Please <a href="https://github.com/settings/profile" target="_blank" rel="noopener">add a public email address to your Github profile</a> and try again.'
         when 'Facebook'
-          'Please <a href="https://www.facebook.com/settings?tab=applications" target="_blank" rel="noopener">remove SV.CO from your authorized apps list</a> and try signing in again.'
+          'Please <a href="https://www.facebook.com/settings?tab=applications" target="_blank" rel="noopener">remove \'PupilFirst\' from your authorized apps list</a> and try signing in again.'
         else
           'Please sign in using another method.'
       end

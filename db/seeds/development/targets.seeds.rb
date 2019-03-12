@@ -30,26 +30,38 @@ after 'development:target_groups', 'development:faculty' do
         target_group.targets.create!(days_to_complete: [7, 10, 14].sample, title: Faker::Lorem.sentence, role: Target.valid_roles.sample, target_group: target_group, description: paragraph, faculty: faculty, target_action_type: Target::TYPE_TODO, resubmittable: true)
       end
 
+      # Add a target with a link to complete.
+      target_group.targets.create!(title: Faker::Lorem.sentence, role: Target::ROLE_TEAM, description: paragraph, link_to_complete: 'https://www.example.com')
+
       # Session.
       target_group.targets.create!(title: Faker::Lorem.sentence, role: Target.valid_roles.sample, session_at: 1.month.ago, description: paragraph, video_embed: video_embed, target_action_type: Target::TYPE_ATTEND, resubmittable: false)
     end
   end
 
   # Assign evaluation criteria and rubric descriptions for few targets in different courses
-
   Target.joins(:level).where(levels: { number: 1, course_id: startup_course.id }).each do |target|
+    next if target.link_to_complete.present?
     target.target_evaluation_criteria.create!(evaluation_criterion: startup_course.evaluation_criteria.first)
   end
 
   Target.joins(:level).where(levels: { number: 2, course_id: developer_course.id }).each do |target|
+    next if target.link_to_complete.present?
     target.target_evaluation_criteria.create!(evaluation_criterion: developer_course.evaluation_criteria.first)
   end
 
   Target.joins(:level).where(levels: { number: 3, course_id: vr_course.id }).each do |target|
+    next if target.link_to_complete.present?
     target.target_evaluation_criteria.create!(evaluation_criterion: vr_course.evaluation_criteria.first)
   end
 
   Target.joins(:level).where(levels: { number: 1, course_id: ios_course.id }).each do |target|
+    next if target.link_to_complete.present?
+    target.target_evaluation_criteria.create!(evaluation_criterion: ios_course.evaluation_criteria.first)
+    target.update!(rubric_description: Faker::Lorem::paragraph)
+  end
+
+  Target.joins(:level).where(levels: { number: 1, course_id: ios_course.id }).each do |target|
+    next if target.link_to_complete.present?
     target.target_evaluation_criteria.create!(evaluation_criterion: ios_course.evaluation_criteria.first)
     target.update!(rubric_description: Faker::Lorem::paragraph)
   end

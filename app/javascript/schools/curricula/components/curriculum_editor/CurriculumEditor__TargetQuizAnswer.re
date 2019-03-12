@@ -17,6 +17,7 @@ let make =
       ~removeAnswerOptionCB,
       ~canBeDeleted,
       ~markAsCorrectCB,
+      ~answerOptionId,
       _children,
     ) => {
   ...component,
@@ -40,9 +41,12 @@ let make =
             ReasonReact.null
         }
       </div>
-      <div className="flex flex-col bg-white mb-2 border rounded ml-12">
+      <div
+        id={answerOptionId ++ "_block"}
+        className="flex flex-col bg-white mb-2 border rounded ml-12">
         <div className="flex">
           <input
+            id=answerOptionId
             className="appearance-none block w-full bg-white text-grey-darker text-sm rounded px-4 py-3 leading-tight focus:outline-none focus:bg-white focus:border-grey"
             type_="text"
             placeholder="Answer option"
@@ -108,16 +112,10 @@ let make =
           state.hasHint ?
             <textarea
               className="appearance-none block w-full border-t border-t-1 border-grey-light bg-white text-grey-darker text-sm rounded rounded-t-none p-4 -mt-0 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-              id="title"
+              id={answerOptionId ++ "_hint"}
               placeholder="Type an answer explanation here."
               value=hint
               rows=3
-              onBlur={
-                event => {
-                  ReactEvent.Focus.preventDefault(event);
-                  send(InvertHasHint);
-                }
-              }
               onChange={
                 event =>
                   updateAnswerOptionCB(

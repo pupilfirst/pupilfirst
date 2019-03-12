@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_05_053141) do
+ActiveRecord::Schema.define(version: 2019_03_08_124110) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -191,7 +191,6 @@ ActiveRecord::Schema.define(version: 2019_03_05_053141) do
     t.boolean "self_service"
     t.string "current_commitment"
     t.string "slug"
-    t.boolean "inactive", default: false
     t.text "about"
     t.string "commitment"
     t.string "compensation"
@@ -390,6 +389,16 @@ ActiveRecord::Schema.define(version: 2019_03_05_053141) do
     t.index ["school_id"], name: "index_school_admins_on_school_id"
     t.index ["user_id", "school_id"], name: "index_school_admins_on_user_id_and_school_id", unique: true
     t.index ["user_id"], name: "index_school_admins_on_user_id"
+  end
+
+  create_table "school_links", force: :cascade do |t|
+    t.bigint "school_id"
+    t.string "title"
+    t.string "url"
+    t.string "kind"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["school_id", "kind"], name: "index_school_links_on_school_id_and_kind"
   end
 
   create_table "school_strings", force: :cascade do |t|
@@ -596,7 +605,6 @@ ActiveRecord::Schema.define(version: 2019_03_05_053141) do
     t.text "links"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.date "event_on"
     t.integer "improved_timeline_event_id"
     t.integer "target_id"
     t.decimal "score", precision: 2, scale: 1
@@ -706,6 +714,7 @@ ActiveRecord::Schema.define(version: 2019_03_05_053141) do
   add_foreign_key "quiz_questions", "answer_options", column: "correct_answer_id"
   add_foreign_key "quiz_questions", "quizzes"
   add_foreign_key "quizzes", "targets"
+  add_foreign_key "school_links", "schools"
   add_foreign_key "school_strings", "schools"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"

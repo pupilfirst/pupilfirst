@@ -4,7 +4,7 @@ feature 'Custom Error Pages' do
   scenario 'User visits non-existent page' do
     visit '/non_existent_page'
 
-    expect(page).to have_text("The page you were looking for doesn't exist.")
+    expect(page).to have_text("The page you were looking for doesn't exist")
     expect(page).to have_text('You may have mistyped the address, or the page may have moved.')
   end
 
@@ -14,7 +14,6 @@ feature 'Custom Error Pages' do
     visit root_path
 
     expect(page).to have_text("We're sorry, but something went wrong.")
-    expect(page).to have_text('This could be because SV.CO is under active development!')
-    expect(page).to have_text('Please try again after a while.')
+    expect(page).to have_text('We track these errors automatically')
   end
 end

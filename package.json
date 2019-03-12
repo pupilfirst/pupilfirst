@@ -17,12 +17,12 @@
     "pnotify": "^4.0.0-alpha.4",
     "postcss-scss": "^1.0.3",
     "prop-types": "^15.6.2",
+    "@rails/ujs": "^6.0.0-alpha",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react_ujs": "^2.4.3",
     "trix": "^1.1.0",
     "turbolinks": "^5.2.0",
-    "vanilla-tilt": "^1.4.1",
     "webpack-merge": "^4.1.1"
   },
   "devDependencies": {

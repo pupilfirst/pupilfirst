@@ -1,12 +1,5 @@
 *, *::before, *::after {
     box-sizing: border-box;
-    font-family: 'Open Sans', sans-serif;
-}
-
-body {
-    color: #3A3F52;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
 }
 
 button:disabled, .disabled {

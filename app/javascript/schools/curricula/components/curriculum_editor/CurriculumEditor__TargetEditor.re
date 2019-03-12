@@ -61,7 +61,7 @@ let updateTitle = (send, title) => {
   send(UpdateTitle(title, hasError));
 };
 let updateDescription = (send, description) => {
-  let hasError = description |> String.length < 2;
+  let hasError = description |> String.length < 12;
   send(UpdateDescription(description, hasError));
 };
 let updateYoutubeVideoId = (send, youtubeVideoId) => {
@@ -455,7 +455,8 @@ let make =
       state.evaluationCriteria
       |> List.filter(((_, _, selected)) => selected)
       |> List.length != 0;
-    Js.log(validNumberOfEvaluationCriteria);
+
+    let updateDescriptionCB = updateDescription(send);
     let multiSelectPrerequisiteTargetsCB = (key, value, selected) =>
       send(UpdatePrerequisiteTargets(key, value, selected));
     let multiSelectEvaluationCriterionCB = (key, value, selected) =>
@@ -581,21 +582,15 @@ let make =
                   {" Description" |> str}
                 </label>
                 <span> {"*" |> str} </span>
-                <textarea
-                  className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                <div
                   id="description"
-                  placeholder="Type target description"
-                  value={state.description}
-                  onChange={
-                    event =>
-                      updateDescription(
-                        send,
-                        ReactEvent.Form.target(event)##value,
-                      )
-                  }
-                  rows=5
-                  cols=33
-                />
+                  className="target-editor__trix-container appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey">
+                  <TrixEditor
+                    onChange=updateDescriptionCB
+                    initialValue={state.description}
+                    placeholder="Type target description"
+                  />
+                </div>
                 {
                   state.hasDescriptionError ?
                     <div className="drawer-right-form__error-msg">
@@ -981,7 +976,7 @@ let make =
                         |> Array.of_list
                         |> ReasonReact.array
                       }
-                      <div
+                      <a
                         onClick=(
                           _event => {
                             ReactEvent.Mouse.preventDefault(_event);
@@ -995,15 +990,16 @@ let make =
                         <h5 className="font-semibold ml-2">
                           {"Add another Question" |> str}
                         </h5>
-                      </div>
+                      </a>
                     </div>
                   | VisitLink =>
                     <div>
                       <label
-                        className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                        className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
                         htmlFor="link_to_complete">
-                        {"Link to complete*  " |> str}
+                        {"Link to complete" |> str}
                       </label>
+                      <span> {"*" |> str} </span>
                       <input
                         className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                         id="link_to_complete"

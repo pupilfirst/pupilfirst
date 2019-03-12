@@ -17,12 +17,12 @@ export default class SubmitButton extends React.Component {
       return "Take Quiz";
     } else if (this.props.target.call_to_action) {
       return this.props.target.call_to_action;
+    } else if (this.hasLinkToComplete()) {
+      return this.isPending() ? "Visit" : "Revisit";
     } else if (this.canBeVerifiedAutomatically()) {
       return "Mark Complete";
-    } else if (!this.props.target.link_to_complete) {
-      return this.isPending() ? "Submit" : "Re-Submit";
     } else {
-      return this.isPending() ? "Complete" : "Update";
+      return this.isPending() ? "Submit" : "Re-Submit";
     }
   }
 
@@ -46,7 +46,7 @@ export default class SubmitButton extends React.Component {
     if (this.props.target.has_quiz) {
       this.props.invertShowQuizCB();
     } else if (this.canBeVerifiedAutomatically()) {
-      this.props.autoVerifyCB();
+      this.props.autoVerifyCB(this.props.target);
     } else {
       this.openTimelineBuilder();
     }
@@ -84,17 +84,8 @@ export default class SubmitButton extends React.Component {
     );
   }
 
-  submitLinkOrButton() {
-    if (this.hasLinkToComplete()) {
-      return (
-        <a
-          href={this.props.target.link_to_complete}
-          className={this.submitButtonClasses()}
-        >
-          {this.submitButtonContents()}
-        </a>
-      );
-    } else if (this.props.target.has_quiz && !this.props.overlayLoaded) {
+  takeQuizOrSubmitButton() {
+    if (this.props.target.has_quiz && !this.props.overlayLoaded) {
       return (
         <button
           disabled
@@ -112,7 +103,7 @@ export default class SubmitButton extends React.Component {
   }
 
   render() {
-    return <div className="pull-right"> {this.submitLinkOrButton()} </div>;
+    return <div className="pull-right"> {this.takeQuizOrSubmitButton()} </div>;
   }
 }
 

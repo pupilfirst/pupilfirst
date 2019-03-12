@@ -20,7 +20,7 @@ describe Targets::AutoVerificationService do
 
       expect(timeline_event.target).to eq(target)
       expect(timeline_event.founders).to eq([founder_1])
-      expect(timeline_event.description).to eq("Target '#{target.title}' was auto-verified")
+      expect(timeline_event.description).to eq("Target '#{target.title}' was automatically marked complete.")
       expect(timeline_event.latest).to eq(true)
     end
 

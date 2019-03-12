@@ -9,9 +9,11 @@
     <div class='row justify-content-md-center'>
       <div class='col-md-7'>
         <div class='content-box user-login mb-1 text-center'>
-          <div class='sign-in-kid mx-auto.mb-2'>
-            <%= image_tag 'users/sessions/new/sign-in-kid.svg', class: 'img-fluid mx-auto' %>
-          </div>
+          <% if presenter.icon? %>
+            <div class='user-sessions-new__icon mx-auto mb-2'>
+              <%= image_tag presenter.icon_url, class: 'img-fluid mx-auto' %>
+            </div>
+          <% end %>
 
           <div id='sign-in-with-federated' class="<%= presenter.hidden_sign_in_class('federated') %>">
             <h3 class="text-center mb-3">Sign in to <%= presenter.school_name %></h3>

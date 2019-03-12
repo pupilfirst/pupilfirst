@@ -34,14 +34,6 @@ module Founders
         view.current_startup.level.course
       end
 
-      def current_startup
-        view.current_startup
-      end
-
-      def current_founder
-        view.current_founder
-      end
-
       def icon_paths
         {
           personalTodo: view.image_path('founders/dashboard/target-type-icon-personal-todo.svg'),

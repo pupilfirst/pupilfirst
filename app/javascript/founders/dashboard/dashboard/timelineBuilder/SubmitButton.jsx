@@ -86,11 +86,11 @@ export default class SubmitButton extends React.Component {
   errorContent() {
     switch (this.props.submissionError) {
       case "5XX":
-        return "Oops! Something went wrong. The SV.CO team has been notified of this error. Please reload the page and try again, or contact us on Slack to speed us up!";
+        return "Oops! Something went wrong. Our team has been notified of this error. Please reload the page and try again, or contact us on Slack to speed us up!";
       case "offline":
         return "You are not connected to the internet. Please check your internet connection and try again.";
       default:
-        return "An unexpected error has occurred. Please refresh your page and try again. If this persists, please reach out to the SV.CO team for help.";
+        return "An unexpected error has occurred, and our team has been notified. Please refresh your page and try again.";
     }
   }
 

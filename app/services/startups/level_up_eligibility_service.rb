@@ -12,6 +12,7 @@ module Startups
     ELIGIBILITY_NOT_ELIGIBLE = -'not_eligible'
     ELIGIBILITY_COFOUNDERS_PENDING = -'cofounders_pending'
     ELIGIBILITY_DATE_LOCKED = -'date_locked'
+
     ELIGIBLE_STATUSES = [
       Targets::StatusService::STATUS_SUBMITTED,
       Targets::StatusService::STATUS_PASSED
@@ -23,15 +24,18 @@ module Startups
 
     def eligibility
       @eligibility ||= begin
-        all_targets_attempted = milestone_targets.all? do |target|
-          target_attempted?(target)
-        end
+        if milestone_targets.any?
+          all_targets_attempted = milestone_targets.all? do |target|
+            target_attempted?(target)
+          end
 
-        if all_targets_attempted
-          return ELIGIBILITY_COFOUNDERS_PENDING if @cofounders_pending
-          return ELIGIBILITY_DATE_LOCKED if next_level_unlock_date&.future?
+          if all_targets_attempted
+            return ELIGIBILITY_COFOUNDERS_PENDING if @cofounders_pending
 
-          return ELIGIBILITY_ELIGIBLE
+            return ELIGIBILITY_DATE_LOCKED if next_level_unlock_date&.future?
+
+            return ELIGIBILITY_ELIGIBLE
+          end
         end
 
         ELIGIBILITY_NOT_ELIGIBLE
@@ -48,7 +52,11 @@ module Startups
     private
 
     def milestone_targets
-      current_level.target_groups.find_by(milestone: true).targets.where(archived: false)
+      milestone_groups = current_level.target_groups.where(milestone: true)
+
+      return Target.none if milestone_groups.empty?
+
+      Target.where(target_group: milestone_groups).where(archived: false)
     end
 
     def target_attempted?(target)

@@ -37,16 +37,19 @@ feature 'Target Overlay' do
   let!(:q3_answer_2) { create :answer_option, quiz_question: quiz_question_3 }
 
   before do
+    # Set evaluation criteria for the main test target.
     target.evaluation_criteria << criterion
+
+    # Set correct answers for all quiz questions.
     quiz_question_1.update!(correct_answer: q1_answer_2)
     quiz_question_2.update!(correct_answer: q2_answer_4)
     quiz_question_3.update!(correct_answer: q3_answer_1)
-    founder.update!(dashboard_toured: true)
-    sign_in_user founder.user, referer: student_dashboard_path
   end
 
   context 'when the founder clicks on a pending target', js: true do
     it 'displays the target overlay with all target details' do
+      sign_in_user founder.user, referer: student_dashboard_path
+
       # The target should be listed on the dashboard.
       expect(page).to have_selector('.founder-dashboard-target-header__headline', text: target.title)
       # The dashboard should not have an overlay yet.
@@ -70,7 +73,7 @@ feature 'Target Overlay' do
       within('.target-overlay__status-badge-block') do
         expect(page).to have_selector('.target-overlay-status-badge-bar__badge-icon > i.fa-clock-o')
         expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > div > span', text: 'Pending')
-        expect(page).to have_selector('.target-overlay-status-badge-bar__hint', text: 'Follow completion instructions and submit!')
+        expect(page).to have_selector('.target-overlay-status-badge-bar__hint', text: 'Follow instructions to complete this target!')
       end
 
       # Test the submit button.
@@ -104,10 +107,11 @@ feature 'Target Overlay' do
 
       before do
         target.target_evaluation_criteria.delete_all
-        visit student_dashboard_path
       end
 
       it 'displays submit button with correct label' do
+        sign_in_user founder.user, referer: student_dashboard_path
+
         find('.founder-dashboard-target-header__headline', text: target.title).click
 
         # The submit button has 'Mark Complete' label
@@ -120,6 +124,8 @@ feature 'Target Overlay' do
     let!(:timeline_event) { create :timeline_event, target: target, founders: startup.founders, passed_at: 2.days.ago, links: [{ title: 'Some Link', url: 'https://www.example.com', private: false }], latest: true }
 
     it 'displays the latest submission and feedback for it' do
+      sign_in_user founder.user, referer: student_dashboard_path
+
       find('.founder-dashboard-target-header__headline', text: target.title).click
 
       # Within the timeline event panel:
@@ -155,10 +161,11 @@ feature 'Target Overlay' do
 
     before do
       timeline_event.founders << founder
-      visit student_dashboard_path
     end
 
     it 'displays the status for each founder' do
+      sign_in_user founder.user, referer: student_dashboard_path
+
       find('.founder-dashboard-target-header__headline', text: target.title).click
 
       within('.target-overlay__content-rightbar') do
@@ -172,10 +179,11 @@ feature 'Target Overlay' do
     context 'when the target has prerequisites' do
       before do
         target.prerequisite_targets << prerequisite_target
-        visit student_dashboard_path
       end
 
       it 'informs about the pending prerequisite' do
+        sign_in_user founder.user, referer: student_dashboard_path
+
         find('.founder-dashboard-target-header__headline', text: target.title).click
 
         # The target must be marked locked.
@@ -195,12 +203,15 @@ feature 'Target Overlay' do
 
   context 'when the founder submits a new timeline event', js: true do
     it 'changes the status to submitted right away' do
+      sign_in_user founder.user, referer: student_dashboard_path
+
       find('.founder-dashboard-target-header__headline', text: target.title).click
+
       # The target must be pending.
       within('.target-overlay__status-badge-block') do
         expect(page).to have_selector('.target-overlay-status-badge-bar__badge-icon > i.fa-clock-o')
         expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > div > span', text: 'Pending')
-        expect(page).to have_selector('.target-overlay-status-badge-bar__hint', text: 'Follow completion instructions and submit!')
+        expect(page).to have_selector('.target-overlay-status-badge-bar__hint', text: 'Follow instructions to complete this target!')
       end
 
       find('.target-overlay__status-badge-block').find('button.btn-timeline-builder').click
@@ -219,11 +230,13 @@ feature 'Target Overlay' do
 
   context 'when the founder submits a quiz target', js: true do
     it 'changes the status to completed right away' do
+      sign_in_user founder.user, referer: student_dashboard_path
+
       find('.founder-dashboard-target-header__headline', text: quiz_target.title).click
 
       # The target must be pending.
       expect(page).to have_content('Pending')
-      expect(page).to have_content('Follow completion instructions and submit!')
+      expect(page).to have_content('Follow instructions to complete this target!')
 
       click_button('Take Quiz')
 
@@ -256,6 +269,8 @@ feature 'Target Overlay' do
 
   context 'when the founder clicks the back button from the overlay', js: true do
     it 'takes him/her back to the dashboard' do
+      sign_in_user founder.user, referer: student_dashboard_path
+
       find('.founder-dashboard-target-header__headline', text: target.title).click
       expect(page).to have_selector('.target-overlay__overlay')
       expect(page).to have_current_path("/student/dashboard/targets/#{target.id}")
@@ -272,11 +287,31 @@ feature 'Target Overlay' do
   context 'when the course, the founder belongs has ended', js: true do
     before do
       course.update!(ends_at: 2.days.ago)
-      visit student_dashboard_path
     end
+
     it 'shows appropriate notice that the course has ended' do
+      sign_in_user founder.user, referer: student_dashboard_path
       find('.founder-dashboard-target-header__headline', text: target.title).click
       expect(page).to_not have_selector('.btn-timeline-builder')
+    end
+  end
+
+  context 'when there is a target with a link_to_visit' do
+    let(:link_to_complete) { "https://www.example.com/#{Faker::Lorem.word}" }
+    let!(:target_with_link) { create :target, target_group: target_group_1, link_to_complete: link_to_complete }
+
+    scenario 'founder clicks visit on a target with a link to complete', js: true do
+      sign_in_user founder.user, referer: student_dashboard_target_path(target_with_link)
+
+      click_button 'Visit'
+
+      expect(page).to have_content('Redirecting you to the link now')
+
+      # User should be redirected to the link_to_visit eventually.
+      expect(page).to have_current_path(link_to_complete, url: true)
+
+      # Target should now be complete for the user.
+      expect(target_with_link.status(founder)).to eq(Targets::StatusService::STATUS_PASSED)
     end
   end
 end

@@ -6,43 +6,53 @@ let str = ReasonReact.string;
 
 type formVisible =
   | None
-  | CreateForm
-  | UpdateForm(Coach.t);
+  | CoachEditor(option(Coach.t));
 
 type state = {
   coaches: list(Coach.t),
-  selectedCoach: list(Coach.t),
   searchString: string,
   formVisible,
 };
 
 type action =
-  | UpdateCoach(Coach.t)
-  | SelectCoach(Coach.t)
-  | DeselectCoach(Coach.t)
-  | UpdateSearchString(string)
+  | CreateCoach
   | UpdateFormVisible(formVisible);
 
 let component = ReasonReact.reducerComponent("SA_CoachesPanel");
 
 let make = (~coaches, ~schoolId, ~authenticityToken, _children) => {
   ...component,
-  initialState: () => {
-    coaches,
-    selectedCoach: [],
-    searchString: "",
-    formVisible: None,
-  },
+  initialState: () => {coaches, searchString: "", formVisible: None},
   reducer: (action, state) =>
     switch (action) {
-    | UpdateCoach(coach) => ReasonReact.Update({...state, coaches})
+    | UpdateFormVisible(formVisible) =>
+      ReasonReact.Update({...state, formVisible})
     },
-  render: ({state, send}) =>
+  render: ({state, send}) => {
+    let closeFormCB = () => send(UpdateFormVisible(None));
     <div className="flex flex-1 h-screen">
+      (
+        switch (state.formVisible) {
+        | None => ReasonReact.null
+        | CoachEditor(coach) =>
+          <SA_CoachesPanel_CoachEditor
+            schoolId
+            coach
+            closeFormCB
+            authenticityToken
+          />
+        }
+      )
       <div className="flex-1 flex flex-col bg-grey-lightest overflow-hidden">
         <div
           className="flex px-6 py-2 items-center justify-between overflow-y-scroll">
           <div
+            onClick=(
+              _event => {
+                ReactEvent.Mouse.preventDefault(_event);
+                send(UpdateFormVisible(CoachEditor(None)));
+              }
+            )
             className="max-w-md w-full flex mx-auto items-center justify-center relative bg-grey-lighter hover:bg-grey-light hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-12 cursor-pointer">
             <i className="material-icons"> ("add_circle_outline" |> str) </i>
             <h4 className="font-semibold ml-2"> ("Add New Coach" |> str) </h4>
@@ -57,7 +67,15 @@ let make = (~coaches, ~schoolId, ~authenticityToken, _children) => {
                    <div
                      className="flex items-center shadow bg-white rounded-lg overflow-hidden mb-4">
                      <div
-                       className="course-faculty__list-item flex w-full hover:bg-grey-lighter">
+                       className="course-faculty__list-item flex w-full hover:bg-grey-lighter"
+                       onClick=(
+                         _event => {
+                           ReactEvent.Mouse.preventDefault(_event);
+                           send(
+                             UpdateFormVisible(CoachEditor(Some(coach))),
+                           );
+                         }
+                       )>
                        <div className="flex flex-1 items-center py-4 px-4">
                          <img
                            className="w-10 h-10 rounded-full mr-4"
@@ -89,7 +107,8 @@ let make = (~coaches, ~schoolId, ~authenticityToken, _children) => {
           </div>
         </div>
       </div>
-    </div>,
+    </div>;
+  },
 };
 
 type props = {

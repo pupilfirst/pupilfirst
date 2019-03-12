@@ -12,6 +12,12 @@ let email: t => string;
 
 let title: t => string;
 
-let updateInfo: (string, t) => t;
+let linkedinUrl: t => option(string);
 
-let encode: t => Js.Json.t;
+let public: t => bool;
+
+let connectLink: t => option(string);
+
+let notifyForSubmission: t => bool;
+
+let updateInfo: (string, t) => t;

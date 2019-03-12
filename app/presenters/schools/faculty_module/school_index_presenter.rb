@@ -22,9 +22,13 @@ module Schools
           {
             id: faculty.id,
             name: faculty.name,
-            imageUrl: faculty.image_or_avatar_url,
             email: faculty.user.email,
-            title: faculty.title
+            title: faculty.title,
+            imageUrl: faculty.image_or_avatar_url,
+            linkedinUrl: faculty.linkedin_url,
+            public: faculty.public,
+            connectLink: faculty.connect_link,
+            notifyForSubmission: faculty.notify_for_submission
           }
         end
       end

@@ -4,6 +4,10 @@ type t = {
   imageUrl: string,
   email: string,
   title: string,
+  linkedinUrl: option(string),
+  public: bool,
+  connectLink: option(string),
+  notifyForSubmission: bool,
 };
 
 let name = t => t.name;
@@ -16,6 +20,14 @@ let imageUrl = t => t.imageUrl;
 
 let title = t => t.title;
 
+let linkedinUrl = t => t.linkedinUrl;
+
+let public = t => t.public;
+
+let connectLink = t => t.connectLink;
+
+let notifyForSubmission = t => t.notifyForSubmission;
+
 let updateInfo = (name, coach) => {...coach, name};
 
 let decode = json =>
@@ -25,15 +37,10 @@ let decode = json =>
     imageUrl: json |> field("imageUrl", string),
     email: json |> field("email", string),
     title: json |> field("title", string),
+    linkedinUrl:
+      json |> field("linkedinUrl", nullable(string)) |> Js.Null.toOption,
+    public: json |> field("public", bool),
+    connectLink:
+      json |> field("connectLink", nullable(string)) |> Js.Null.toOption,
+    notifyForSubmission: json |> field("notifyForSubmission", bool),
   };
-
-let encode = t =>
-  Json.Encode.(
-    object_([
-      ("id", t.id |> int),
-      ("name", t.name |> string),
-      ("image_url", t.imageUrl |> string),
-      ("email", t.email |> string),
-      ("title", t.email |> string),
-    ])
-  );

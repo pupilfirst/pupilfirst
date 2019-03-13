@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :school_link do
-    title { Faker::Lorem.word }
+    sequence(:title) { |n| "#{Faker::Lorem.word} #{n}" }
     url { |school_link| Faker::Internet.url(school_link.title) }
     school
 

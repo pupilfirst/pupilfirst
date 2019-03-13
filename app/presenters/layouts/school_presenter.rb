@@ -1,7 +1,7 @@
 module Layouts
   class SchoolPresenter < ::ApplicationPresenter
     def coach_profile?
-      current_user.faculty.joins(:school).where(schools: { id: current_school }).joins(:courses).exists?
+      coach_dashboard_path.present?
     end
 
     def founder_profile?
@@ -9,7 +9,17 @@ module Layouts
     end
 
     def coach_dashboard_path
-      view.course_coach_dashboard_path(current_user.faculty.joins(:school).where(schools: { id: current_school }).joins(:courses).first.courses.first)
+      @coach_dashboard_path ||= begin
+        faculty = current_user.faculty.find_by(school: current_school)
+
+        if faculty.present?
+          if faculty.courses.exists?
+            view.course_coach_dashboard_path(faculty.courses.first)
+          elsif faculty.startups.exists?
+            view.course_coach_dashboard_path(faculty.startups.first.course)
+          end
+        end
+      end
     end
 
     def school_logo_path

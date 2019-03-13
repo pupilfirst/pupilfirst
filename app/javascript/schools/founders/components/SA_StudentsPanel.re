@@ -233,7 +233,7 @@ let make =
           />
         };
       }
-      <div className="border-b px-6 py-2 items-center justify-between">
+      <div className="border-b px-6 py-2 items-center justify-between z-20 shadow">
         <div className="inline-block relative w-64">
           <select
             onChange={

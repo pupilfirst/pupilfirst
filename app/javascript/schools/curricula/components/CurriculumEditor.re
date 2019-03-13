@@ -195,7 +195,7 @@ let make =
         }
       }
       <div
-        className="border-b flex px-6 py-2 h-16 items-center justify-between">
+        className="border-b flex px-6 py-2 h-16 items-center justify-between z-20 shadow">
         <div className="flex">
           <div className="inline-block relative w-64">
             <select
@@ -272,7 +272,7 @@ let make =
             ReasonReact.null
         }
       </div>
-      <div className="px-6 py-4 flex-1 overflow-y-scroll">
+      <div className="px-6 py-4 flex-1 bg-grey-lightest overflow-y-scroll">
         <div
           className="target-group__container max-w-lg mt-5 mx-auto relative">
           {

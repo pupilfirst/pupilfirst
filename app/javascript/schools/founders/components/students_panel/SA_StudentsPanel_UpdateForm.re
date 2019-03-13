@@ -96,8 +96,10 @@ let make =
       })
     },
   render: ({state, send}) =>
-    <div className="blanket">
-      <div className="drawer-right relative">
+    <div>
+      <div className="blanket">
+      </div>
+      <div className="drawer-right">
         <div className="drawer-right__close absolute">
           <button
             onClick={_e => closeFormCB()}

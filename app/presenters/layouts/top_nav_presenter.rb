@@ -37,7 +37,7 @@ module Layouts
     def nav_links
       @nav_links ||= begin
         # User-based links...
-        links = [admin_link, review_link, dashboard_link] - [nil]
+        links = [admin_link, review_link, dashboard_link, leaderboard_link] - [nil]
 
         # ...and the custom links.
         custom_links = SchoolLink.where(school: current_school, kind: SchoolLink::KIND_HEADER).map do |school_link|
@@ -84,6 +84,17 @@ module Layouts
         }
       else
         { title: 'Student Dashboard', url: view.student_dashboard_path }
+      end
+    end
+
+    def leaderboard_link
+      return if current_founder.blank? || current_founder.exited?
+
+      course = current_founder.course
+      clp = Courses::LeaderboardPresenter.new(view, course, page: 0)
+
+      if clp.course_entries(clp.last_week_start_time, clp.last_week_end_time).exists?
+        { title: 'Leaderboard', url: view.leaderboard_course_path(course) }
       end
     end
   end

@@ -159,4 +159,17 @@ feature 'Top navigation bar' do
       expect(page).to have_link("#{student.course.name} Course", href: "/founders/#{student.slug}/select")
     end
   end
+
+  context 'when the user is a student in a course that has leaderboard entries in the past week' do
+    before do
+      clp = Courses::LeaderboardPresenter.new(:foo, student.course, page: 0)
+      create :leaderboard_entry, founder: student, period_from: clp.last_week_start_time, period_to: clp.last_week_end_time
+    end
+
+    it 'displays a link to the leaderboard' do
+      sign_in_user student.user, referer: student_dashboard_path
+
+      expect(page).to have_link('Leaderboard', href: "/courses/#{student.course.id}/leaderboard")
+    end
+  end
 end

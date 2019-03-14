@@ -1,7 +1,8 @@
 module Courses
   class LeaderboardPresenter < ApplicationPresenter
-    def initialize(view_context, course)
+    def initialize(view_context, course, page: nil)
       @course ||= course
+      @page = page
 
       super(view_context)
     end
@@ -90,6 +91,18 @@ module Courses
       end
     end
 
+    def last_week_start_time
+      week_beginning(leaderboard_at - 1.week).in_time_zone('Asia/Calcutta') + 12.hours
+    end
+
+    def last_week_end_time
+      week_beginning(leaderboard_at).in_time_zone('Asia/Calcutta') + 12.hours
+    end
+
+    def course_entries(from, to)
+      LeaderboardEntry.where(founder: founders, period_from: from, period_to: to)
+    end
+
     private
 
     def leaderboard_at
@@ -119,7 +132,7 @@ module Courses
       last_rank = 0
       last_score = BigDecimal::INFINITY
 
-      LeaderboardEntry.where(founder: founders, period_from: from, period_to: to).order(score: :DESC).each_with_object({}).with_index(1) do |(entry, entries), index|
+      course_entries(from, to).order(score: :DESC).each_with_object({}).with_index(1) do |(entry, entries), index|
         rank = entry.score < last_score ? index : last_rank
 
         entries[entry.founder.id] = { rank: rank, founder: entry.founder, score: entry.score }
@@ -127,14 +140,6 @@ module Courses
         last_rank = rank
         last_score = entry.score
       end
-    end
-
-    def last_week_end_time
-      week_beginning(leaderboard_at).in_time_zone('Asia/Calcutta') + 12.hours
-    end
-
-    def last_week_start_time
-      week_beginning(leaderboard_at - 1.week).in_time_zone('Asia/Calcutta') + 12.hours
     end
 
     def week_before_last_start_time

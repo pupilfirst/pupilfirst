@@ -142,10 +142,6 @@ class Target < ApplicationRecord
     status(founder) == STATUS_COMPLETE
   end
 
-  def stats_service
-    @stats_service ||= Targets::StatsService.new(self)
-  end
-
   def session?
     session_at.present?
   end

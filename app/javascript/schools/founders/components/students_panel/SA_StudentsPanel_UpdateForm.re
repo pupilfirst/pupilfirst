@@ -37,7 +37,7 @@ let handleErrorCB = () => ();
 let handleResponseCB = (submitCB, state, json) => {
   let teams = json |> Json.Decode.(field("teams", list(Team.decode)));
   submitCB(teams, state.tagsToApply);
-  Notification.success("Success", "Student updated succesffully");
+  Notification.success("Success", "Student updated successfully");
 };
 
 let updateStudent = (student, state, authenticityToken, responseCB) => {
@@ -97,8 +97,7 @@ let make =
     },
   render: ({state, send}) =>
     <div>
-      <div className="blanket">
-      </div>
+      <div className="blanket" />
       <div className="drawer-right">
         <div className="drawer-right__close absolute">
           <button
@@ -127,10 +126,11 @@ let make =
               </div>
               <div className="max-w-md p-6 mx-auto">
                 <label
-                  className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                  className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
                   htmlFor="name">
-                  {"Name*  " |> str}
+                  {"Name" |> str}
                 </label>
+                <span> {"*" |> str} </span>
                 <input
                   value={state.name}
                   onChange={
@@ -154,9 +154,11 @@ let make =
                     ReasonReact.null
                 }
                 <label
-                  className="block tracking-wide text-grey-darker text-xs font-semibold mb-2">
-                  {"Team Name*  " |> str}
+                  className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                  htmlFor="team_name">
+                  {"Team Name" |> str}
                 </label>
+                <span> {"*" |> str} </span>
                 <input
                   value={state.teamName}
                   onChange={

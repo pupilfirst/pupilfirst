@@ -19,7 +19,6 @@ ActiveAdmin.register Faculty do
   filter :linkedin_url
 
   scope :all
-  scope :recently_inactive
 
   index do
     selectable_column

@@ -1,8 +1,7 @@
 module Courses
   class LeaderboardPresenter < ApplicationPresenter
-    def initialize(view_context, course, leaderboard_at)
+    def initialize(view_context, course)
       @course ||= course
-      @leaderboard_at = leaderboard_at
 
       super(view_context)
     end
@@ -70,7 +69,39 @@ module Courses
       @inactive_students_count ||= founders.count - entries.count
     end
 
+    def previous_page?
+      page < 8
+    end
+
+    def next_page?
+      page.positive?
+    end
+
+    def previous_page_link
+      view.leaderboard_course_path(page: page + 1)
+      "?page=#{page + 1}"
+    end
+
+    def next_page_link
+      if page == 1
+        view.leaderboard_course_path
+      else
+        view.leaderboard_course_path(page: page - 1)
+      end
+    end
+
     private
+
+    def leaderboard_at
+      @leaderboard_at ||= Time.zone.now - page.weeks
+    end
+
+    def page
+      @page ||= begin
+        parsed_page = view.params[:page].to_i
+        parsed_page.between?(0, 12) ? parsed_page : 0
+      end
+    end
 
     def founders
       @course.founders.not_exited
@@ -99,15 +130,15 @@ module Courses
     end
 
     def last_week_end_time
-      week_beginning(@leaderboard_at).in_time_zone('Asia/Calcutta') + 12.hours
+      week_beginning(leaderboard_at).in_time_zone('Asia/Calcutta') + 12.hours
     end
 
     def last_week_start_time
-      week_beginning(@leaderboard_at - 1.week).in_time_zone('Asia/Calcutta') + 12.hours
+      week_beginning(leaderboard_at - 1.week).in_time_zone('Asia/Calcutta') + 12.hours
     end
 
     def week_before_last_start_time
-      week_beginning(@leaderboard_at - 2.weeks).in_time_zone('Asia/Calcutta') + 12.hours
+      week_beginning(leaderboard_at - 2.weeks).in_time_zone('Asia/Calcutta') + 12.hours
     end
 
     def week_beginning(time)

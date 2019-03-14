@@ -8,7 +8,7 @@ module Courses
     # @param period_from [ActiveSupport::TimeWithZone] Opening time for the leaderboard.
     # @param period_to [ActiveSupport::TimeWithZone] Closing time for the leaderboard.
     def execute(period_from, period_to)
-      founders = @course.founders.where(exited: false)
+      founders = @course.founders.where(exited: false, excluded_from_leaderboard: false)
       Rails.logger.info("Recording leaderboard entries for #{founders.count} students...")
 
       LeaderboardEntry.transaction do

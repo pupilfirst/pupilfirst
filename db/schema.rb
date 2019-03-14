@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_12_094802) do
+ActiveRecord::Schema.define(version: 2019_03_14_091320) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -266,6 +266,7 @@ ActiveRecord::Schema.define(version: 2019_03_12_094802) do
     t.string "permanent_address"
     t.integer "resume_file_id"
     t.string "slack_access_token"
+    t.boolean "excluded_from_leaderboard", default: false
     t.index ["college_id"], name: "index_founders_on_college_id"
     t.index ["name"], name: "index_founders_on_name"
     t.index ["slug"], name: "index_founders_on_slug", unique: true

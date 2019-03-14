@@ -166,10 +166,6 @@ class Faculty < ApplicationRecord
     end
   end
 
-  def connect_link?
-    connect_link.present?
-  end
-
   private
 
   def initials_avatar(background_shape)

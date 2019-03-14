@@ -5,8 +5,8 @@
     | Connect
 - else
   == render 'connect_modal', faculty: faculty
-  - if faculty.connect_link?
-    = link_to 'Connect', faculty.connect_link, class: button_classes, target: :_blank
+  - if faculty.connect_link.present?
+    = link_to 'Connect', faculty.connect_link, class: button_classes, target: '_blank'
   - else
     div data-toggle="modal" data-target="#faculty-connect-modal-#{faculty.id}" class=button_classes
       | Connect

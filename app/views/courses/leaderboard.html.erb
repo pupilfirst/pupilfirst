@@ -77,31 +77,7 @@
 
   <div class="col-4">
     <% if presenter.entries.any? %>
-      <% if presenter.toppers.present? %>
-        <h2 class="mt-4">
-          <%= presenter.toppers[:names] %> are at the top of the leaderboard this week, sharing a score of
-          <strong><%= presenter.toppers[:score] %></strong> points.
-        </h2>
-      <% else %>
-        <h2 class="mt-4">
-          <strong><%= presenter.topper[:founder].name %></strong>
-
-          <% if presenter.topper == presenter.newbie %>
-            enters the leaderboard at the top spot
-          <% else %>
-            is at the top of the leaderboard this week
-          <% end %>
-
-          with a score of <strong><%= presenter.topper[:score].humanize %></strong>!
-        </h2>
-
-        <h2>
-          <% if presenter.newbie != presenter.topper %>
-            <strong><%= presenter.newbie[:founder].name %></strong> is new on the leaderboard at rank
-            <strong><%= presenter.newbie[:rank] %></strong>
-          <% end %>
-        </h2>
-      <% end %>
+      <h2><%= presenter.heading %></h2>
 
       <h3 class="mt-3">
         Submissions from <strong><%= presenter.entries.count.humanize %></strong> students were evaluated to

@@ -24,26 +24,28 @@ module Courses
     end
 
     def toppers
-      @toppers ||= begin
-        students = entries.find_all { |e| e[:rank] == 1 }
-
-        if students.count > 1
-          names = students.map { |s| "<strong>#{s[:founder].name}</strong>" }
-          { names: names.to_sentence.html_safe, score: students.first[:score] }
-        end
-      end
+      @toppers ||= entries.find_all { |e| e[:rank] == 1 }
     end
 
-    def topper
-      @topper ||= begin
-        entries.first
+    def heading
+      if current_founder_is_topper?
+        return '<strong>You</strong> are at the top of the leaderboard. <strong>Congratulations!</strong>'.html_safe
       end
-    end
 
-    def newbie
-      @newbie ||= begin
-        entries.find { |entry| entry[:delta].blank? }
+      multiple_mid_text = 'are at the top of the leaderboard this week, sharing a score of '
+
+      h = if toppers.count == 1
+        "<strong>#{toppers.first[:founder].name}</strong> is at the top of the leaderboard this week with a score of "
+      elsif toppers.count < 4
+        names = toppers.map { |s| "<strong>#{s[:founder].name}</strong>" }
+        "#{names.to_sentence} #{multiple_mid_text}"
+      else
+        others_count = toppers.count - 2
+        names = toppers[0..1].map { |s| "<strong>#{s[:founder].name}</strong>" }
+        "#{names.join(', ')} and #{others_count} others #{multiple_mid_text}"
       end
+
+      (h + "<strong>#{top_score}</strong>.").html_safe
     end
 
     def entries
@@ -104,6 +106,14 @@ module Courses
     end
 
     private
+
+    def top_score
+      @top_score ||= toppers.first[:score]
+    end
+
+    def current_founder_is_topper?
+      current_founder.present? && current_founder.id.in?(toppers.map { |s| s[:founder].id })
+    end
 
     def leaderboard_at
       @leaderboard_at ||= Time.zone.now - page.weeks

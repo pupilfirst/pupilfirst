@@ -19,37 +19,13 @@ class Startup < ApplicationRecord
     %i[ransack_tagged_with]
   end
 
-  # Returns startups that have accrued no karma points for last week (starting monday). If supplied a date, it
-  # calculates for week bounded by that date.
-  def self.inactive_for_week(date: 1.week.ago)
-    date = date.in_time_zone('Asia/Calcutta')
-
-    # First, find everyone who doesn't fit the criteria.
-    startups_with_karma_ids = joins(:karma_points)
-      .where(karma_points: { created_at: (date.beginning_of_week + 18.hours)..(date.end_of_week + 18.hours) })
-      .pluck(:id)
-
-    # Filter them out.
-    approved.admitted.not_dropped_out.where.not(id: startups_with_karma_ids)
-  end
-
-  def self.endangered
-    startups_with_karma_ids = joins(:karma_points)
-      .where(karma_points: { created_at: 3.weeks.ago..Time.now })
-      .pluck(:id)
-    approved.admitted.not_dropped_out.where.not(id: startups_with_karma_ids)
-  end
-
   has_many :founders, dependent: :restrict_with_error
   has_many :startup_feedback, dependent: :destroy
-  has_many :karma_points, dependent: :restrict_with_exception
   has_many :connect_requests, dependent: :destroy
 
   belongs_to :level
   has_one :course, through: :level
   has_one :school, through: :course
-
-  has_many :weekly_karma_points, dependent: :destroy
 
   # Faculty who can review this startup's timeline events.
   has_many :faculty_startup_enrollments, dependent: :destroy

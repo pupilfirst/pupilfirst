@@ -113,11 +113,6 @@ en:
         email_address: support@pupilfirst.com
 
   services:
-    karma_points:
-      create:
-        founder_slack_notification: 'You have been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
-        startup_slack_notification: 'Your team *%{startup_product_name}* has been awarded *%{points}* karma points for: *%{activity_type}*. Congrats!'
-
     targets:
       create_or_update_calendar_event:
         title: 'Live Session: %{title}'

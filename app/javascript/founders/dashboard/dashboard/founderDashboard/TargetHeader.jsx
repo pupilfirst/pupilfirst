@@ -28,24 +28,6 @@ export default class TargetHeader extends React.Component {
     }
   }
 
-  pointsEarnable() {
-    if (
-      typeof this.target().points_earnable === "undefined" ||
-      this.target().points_earnable === null
-    ) {
-      return null;
-    } else {
-      return (
-        <div className="founder-dashboard-target-header__info-subtext founder-dashboard-target-header__karma-points font-regular d-none d-md-inline-block">
-          Karma Points:
-          <span className="founder-dashboard-target-header__info-value">
-            {this.target().points_earnable}
-          </span>
-        </div>
-      );
-    }
-  }
-
   targetDateString() {
     if (this.props.displayDate) {
       return this.sessionAtString();

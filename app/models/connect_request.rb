@@ -7,11 +7,12 @@ class ConnectRequest < ApplicationRecord
   belongs_to :connect_slot
   belongs_to :startup
 
-  has_one :karma_point, as: :source, dependent: :restrict_with_exception, inverse_of: :source
-
   scope :upcoming, -> { joins(:connect_slot).where('connect_slots.slot_at > ?', Time.now) }
   scope :completed, -> { joins(:connect_slot).where(status: STATUS_CONFIRMED).where('connect_slots.slot_at < ?', (Time.now - 20.minutes)) }
   scope :for_faculty, ->(faculty) { joins(:connect_slot).where(connect_slots: { faculty_id: faculty }) }
+  scope :requested, -> { where(status: STATUS_REQUESTED) }
+  scope :confirmed, -> { where(status: STATUS_CONFIRMED) }
+  scope :cancelled, -> { where(status: STATUS_CANCELLED) }
 
   delegate :faculty, :slot_at, to: :connect_slot
 
@@ -58,28 +59,5 @@ class ConnectRequest < ApplicationRecord
 
   def cancelled?
     status == STATUS_CANCELLED
-  end
-
-  scope :requested, -> { where(status: STATUS_REQUESTED) }
-  scope :confirmed, -> { where(status: STATUS_CONFIRMED) }
-  scope :cancelled, -> { where(status: STATUS_CANCELLED) }
-
-  def assign_karma_points(rating)
-    rating = rating.to_i
-    return false if rating < 3
-
-    if KarmaPoint.find_by(source: self).blank?
-      KarmaPoints::CreateService.new(self, points_for_rating(rating)).execute
-    end
-  end
-
-  private
-
-  def points_for_rating(rating)
-    {
-      3 => 10,
-      4 => 20,
-      5 => 40
-    }[rating]
   end
 end

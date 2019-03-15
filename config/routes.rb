@@ -52,11 +52,11 @@ Rails.application.routes.draw do
 
     resources :evaluation_criteria, only: %i[update destroy]
 
-    resources :levels, only: %i[update destroy] do
+    resources :levels, only: %i[update] do
       resources :target_groups, only: %i[create]
     end
 
-    resources :target_groups, only: %i[update destroy] do
+    resources :target_groups, only: %i[update] do
       resources :targets, only: %i[create]
     end
 
@@ -65,8 +65,6 @@ Rails.application.routes.draw do
     end
 
     resources :resources, only: %i[create]
-
-    resource :quizzes, only: %i[update destroy]
   end
 
   resources :founders, only: %i[] do

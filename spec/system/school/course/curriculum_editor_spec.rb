@@ -80,6 +80,7 @@ feature 'Curriculum Editor' do
     fill_in 'Unlock level on', with: date.day.to_s + "/" + date.month.to_s + "/" + date.year.to_s
     click_button 'Create Level'
     expect(page).to have_text("Level created successfully")
+    find('.ui-pnotify-container').click
 
     course.reload
     level = course.levels.last
@@ -92,6 +93,7 @@ feature 'Curriculum Editor' do
     fill_in 'Unlock level on', with: '', fill_options: { clear: :backspace }
     click_button 'Update Level'
     expect(page).to have_text("Level updated successfully")
+    find('.ui-pnotify-container').click
 
     level.reload
     expect(level.unlock_on).not_to eq(date)
@@ -104,6 +106,7 @@ feature 'Curriculum Editor' do
     click_button 'Yes'
     click_button 'Create Target Group'
     expect(page).to have_text("Target Group created successfully")
+    find('.ui-pnotify-container').click
 
     level.reload
     target_group = level.target_groups.last
@@ -121,6 +124,7 @@ feature 'Curriculum Editor' do
     end
     click_button 'Update Target Group'
     expect(page).to have_text("Target Group updated successfully")
+    find('.ui-pnotify-container').click
 
     target_group.reload
     expect(target_group.description).not_to eq(new_target_group_description)
@@ -150,6 +154,7 @@ feature 'Curriculum Editor' do
     click_button 'Create Target'
 
     expect(page).to have_text("Target created successfully")
+    find('.ui-pnotify-container').click
     target_group.reload
     target = target_group.targets.last
     expect(target.title).to eq(new_target_1_title)
@@ -176,6 +181,7 @@ feature 'Curriculum Editor' do
     click_button 'Create Target'
 
     expect(page).to have_text("Target created successfully")
+    find('.ui-pnotify-container').click
     expect(page).to have_text("Create a target")
     target = Target.find_by(title: new_target_3_title)
     expect(target.description).to eq("<div>" + new_target_3_description + "</div>")
@@ -227,6 +233,7 @@ feature 'Curriculum Editor' do
     click_button 'Create Target'
 
     expect(page).to have_text("Target created successfully")
+    find('.ui-pnotify-container').click
     expect(page).to have_text("Create a target")
     target = Target.find_by(title: new_target_4_title)
     expect(target.description).to eq("<div>" + new_target_4_description + "</div>")
@@ -250,6 +257,7 @@ feature 'Curriculum Editor' do
     click_button 'Update Target'
 
     expect(page).to have_text("Target updated successfully")
+    find('.ui-pnotify-container').click
     target.reload
     expect(target.evaluation_criteria).to eq([])
     expect(target.link_to_complete).to eq(nil)

@@ -55,6 +55,7 @@ feature 'Founders Index' do
     click_button 'Save List'
 
     expect(page).to have_text("Student(s) created successfully")
+    find('.ui-pnotify-container').click
     expect(page).to have_text(name_1)
     expect(page).to have_text(name_2)
     founder_1 = User.find_by(email: email_1).founders.first
@@ -68,6 +69,7 @@ feature 'Founders Index' do
     click_button 'Add to List'
     click_button 'Save List'
     expect(page).to have_text("Student(s) with given email(s) already exist in this course!")
+    find('.ui-pnotify-container').click
     click_button 'close'
 
     find("a", text: name_1).click
@@ -76,7 +78,26 @@ feature 'Founders Index' do
     fill_in 'Team Name', with: new_product_name, fill_options: { clear: :backspace }
     click_button 'Update Student'
     expect(page).to have_text("Student updated successfully")
+    find('.ui-pnotify-container').click
     founder_1.reload
     expect(founder_1.startup.product_name).to eq(new_product_name)
+
+    check "#{name_1}_checkbox"
+    check "#{name_2}_checkbox"
+    click_button 'Group as Team'
+    expect(page).to have_text("Teams updated successfully")
+    find('.ui-pnotify-container').click
+    founder_1.reload
+    founder_2.reload
+    expect(founder_1.startup.product_name).to eq(founder_2.startup.product_name)
+    expect(page).to have_text(founder_1.startup.product_name)
+
+    check "#{name_1}_checkbox"
+    click_button 'Move out from Team'
+    expect(page).to have_text("Teams updated successfully")
+    find('.ui-pnotify-container').click
+    founder_1.reload
+    founder_2.reload
+    expect(founder_1.startup.id).not_to eq(founder_2.startup.id)
   end
 end

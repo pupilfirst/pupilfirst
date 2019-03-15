@@ -161,4 +161,19 @@ feature 'Founder Dashboard' do
       expect(page).not_to have_content(target_group_4_archived.description)
     end
   end
+
+  context "when a user has more than one founder profile" do
+    let!(:school_2) { create :school }
+    let(:course_2) { create :course, school: school_2 }
+    let!(:c2_level_1) { create :level, :one, course: course_2 }
+    let!(:c2_startup) { create :startup, level: c2_level_1 }
+    let!(:c2_founder) { create :founder, startup: c2_startup, dashboard_toured: dashboard_toured }
+
+    scenario 'courses in other schools are not displayed', js: true do
+      sign_in_user founder.user, referer: student_dashboard_path
+
+      expect(page).not_to have_content('navbar-student-dropdown')
+      expect(page).to have_content(target_group_4.name)
+    end
+  end
 end

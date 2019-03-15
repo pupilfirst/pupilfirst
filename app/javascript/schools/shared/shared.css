@@ -147,7 +147,7 @@ button:disabled, .disabled {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    height: calc(100% - 70px);
+    height: calc(100% - 110px);
     margin-top: 0.875rem;
     bottom: 0;
     width: 1px;

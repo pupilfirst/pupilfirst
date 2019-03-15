@@ -62,7 +62,7 @@ let make =
       quizQuestion |> QuizQuestion.answerOptions |> List.length > 2;
     let questionId = questionNumber + 1 |> string_of_int;
 
-    <div className="quiz-maker__question-container relative my-4">
+    <div className="quiz-maker__question-container relative py-4">
       <div className="flex items-end justify-between">
         <label
           className="block tracking-wide uppercase text-grey-darker text-xs font-semibold"
@@ -91,7 +91,7 @@ let make =
       <div className="flex relative items-center my-2">
         <input
           id={"quiz_question_" ++ questionId}
-          className="w-full text-grey-darker border rounded-lg p-4 leading-tight focus:outline-none"
+          className="w-full text-grey-darker border rounded-lg p-4 focus:outline-none"
           type_="text"
           placeholder="Type the question here"
           value={quizQuestion |> QuizQuestion.question}

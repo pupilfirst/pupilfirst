@@ -40,7 +40,7 @@ module Layouts
         links = [admin_link, review_link, dashboard_link, leaderboard_link] - [nil]
 
         # ...and the custom links.
-        custom_links = SchoolLink.where(school: current_school, kind: SchoolLink::KIND_HEADER).map do |school_link|
+        custom_links = SchoolLink.where(school: current_school, kind: SchoolLink::KIND_HEADER).order(created_at: :DESC).map do |school_link|
           { title: school_link.title, url: school_link.url }
         end
 

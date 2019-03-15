@@ -21,7 +21,7 @@ let handleErrorCB = () => ();
 let handleResponseCB = (submitCB, state, json) => {
   let teams = json |> Json.Decode.(field("teams", list(Team.decode)));
   submitCB(teams, state.tagsToApply);
-  Notification.success("Success", "Student(s) created succesffully");
+  Notification.success("Success", "Student(s) created successfully");
 };
 
 let saveStudents = (state, courseId, authenticityToken, responseCB) => {
@@ -85,8 +85,9 @@ let make =
       })
     },
   render: ({state, send}) =>
-    <div className="blanket">
-      <div className="drawer-right relative">
+    <div>
+      <div className="blanket" />
+      <div className="drawer-right">
         <div className="drawer-right__close absolute">
           <button
             onClick={_e => closeFormCB()}

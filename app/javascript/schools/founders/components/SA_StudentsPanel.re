@@ -233,7 +233,8 @@ let make =
           />
         };
       }
-      <div className="border-b px-6 py-2 items-center justify-between">
+      <div
+        className="border-b px-6 py-2 items-center justify-between z-20 shadow">
         <div className="inline-block relative w-64">
           <select
             onChange={
@@ -303,7 +304,8 @@ let make =
                     (_e => send(SelectAllStudents))
                 }
               />
-              <span id="selected-students" className="ml-2 text-sm text-grey-dark">
+              <span
+                id="selected-students" className="ml-2 text-sm text-grey-dark">
                 {
                   let selectedCount = state.selectedStudents |> List.length;
                   let studentCount =
@@ -379,7 +381,8 @@ let make =
             }
           </div>
         </div>
-        <div className="max-w-lg bg-grey-lighter mx-auto relative rounded rounded-b-none border-b px-4 py-3 mt-3 w-full shadow">
+        <div
+          className="max-w-lg bg-grey-lighter mx-auto relative rounded rounded-b-none border-b px-4 py-3 mt-3 w-full shadow">
           <div className="flex items-center justify-between">
             <input
               type_="search"
@@ -389,9 +392,7 @@ let make =
               onChange={
                 event =>
                   send(
-                    UpdateSearchString(
-                      ReactEvent.Form.target(event)##value,
-                    ),
+                    UpdateSearchString(ReactEvent.Form.target(event)##value),
                   )
               }
             />
@@ -419,8 +420,8 @@ let make =
                     unselectedTags={
                       state.tags
                       |> List.filter(tag =>
-                            !(state.tagsFilteredBy |> List.mem(tag))
-                          )
+                           !(state.tagsFilteredBy |> List.mem(tag))
+                         )
                     }
                     selectedTags={state.tagsFilteredBy}
                     addTagCB={tag => send(AddTagFilter(tag))}
@@ -430,43 +431,51 @@ let make =
                 </div>
               </div> :
               ReasonReact.null
-            }
-          <div className="w-full overflow-y-auto bg-grey-lighter p-3 shadow rounded-b-lg">
+          }
+          <div
+            className="w-full overflow-y-auto bg-grey-lighter p-3 shadow rounded-b-lg">
             {
               filteredTeams(state) |> List.length > 0 ?
                 filteredTeams(state)
                 |> List.sort((team1, team2) =>
-                      Team.id(team2) - Team.id(team1)
-                    )
+                     Team.id(team2) - Team.id(team1)
+                   )
                 |> List.map(team => {
-                      let isSingleFounder =
-                        team |> Team.students |> List.length == 1;
-                      <div
-                        key={team |> Team.id |> string_of_int}
-                        className={
-                          "student-team-container flex items-center shadow bg-white rounded-lg mb-4 overflow-hidden"
-                          ++ (isSingleFounder ? " hover:bg-grey-lightest" : "")
-                        }>
-                        <div className="flex-1 w-3/5">
-                          {
-                            team
-                            |> Team.students
-                            |> List.map(student => {
+                     let isSingleFounder =
+                       team |> Team.students |> List.length == 1;
+                     <div
+                       key={team |> Team.id |> string_of_int}
+                       id={team |> Team.name}
+                       className={
+                         "student-team-container flex items-center shadow bg-white rounded-lg mb-4 overflow-hidden"
+                         ++ (isSingleFounder ? " hover:bg-grey-lightest" : "")
+                       }>
+                       <div className="flex-1 w-3/5">
+                         {
+                           team
+                           |> Team.students
+                           |> List.map(student => {
                                 let isChecked =
-                                  state.selectedStudents
-                                  |> List.mem(student);
+                                  state.selectedStudents |> List.mem(student);
                                 <div
-                                  key={
-                                    student |> Student.id |> string_of_int
-                                  }
+                                  key={student |> Student.id |> string_of_int}
+                                  id={student |> Student.name}
                                   className="student-team__card cursor-pointer flex items-center bg-white hover:bg-grey-lightest">
                                   <div className="flex-1 w-3/5">
                                     <div className="flex items-center">
                                       <label
-                                        className="block text-grey leading-tight font-bold px-4 py-5">
+                                        className="block text-grey leading-tight font-bold px-4 py-5"
+                                        htmlFor={
+                                          (student |> Student.name)
+                                          ++ "_checkbox"
+                                        }>
                                         <input
                                           className="leading-tight"
                                           type_="checkbox"
+                                          id={
+                                            (student |> Student.name)
+                                            ++ "_checkbox"
+                                          }
                                           checked=isChecked
                                           onChange={
                                             isChecked ?
@@ -483,8 +492,11 @@ let make =
                                           }
                                         />
                                       </label>
-                                      <div
+                                      <a
                                         className="flex flex-1 items-center py-4 pr-4"
+                                        id={
+                                          (student |> Student.name) ++ "_edit"
+                                        }
                                         onClick={
                                           _e =>
                                             send(
@@ -497,8 +509,7 @@ let make =
                                           className="w-10 h-10 rounded-full mr-4"
                                           src={student |> Student.avatarUrl}
                                         />
-                                        <div
-                                          className="text-sm flex flex-col">
+                                        <div className="text-sm flex flex-col">
                                           <p
                                             className={
                                               "text-black font-semibold inline-block "
@@ -509,9 +520,9 @@ let make =
                                                 |> Student.name
                                                 |> String.lowercase
                                                 |> Js.String.includes(
-                                                      state.searchString
-                                                      |> String.lowercase,
-                                                    ) ?
+                                                     state.searchString
+                                                     |> String.lowercase,
+                                                   ) ?
                                                   "bg-yellow-light" : ""
                                               )
                                             }>
@@ -522,47 +533,47 @@ let make =
                                               student
                                               |> Student.tags
                                               |> List.map(tag =>
-                                                    <div
-                                                      key=tag
-                                                      className="border border-indigo rounded mr-1 py-1 px-2 text-xs text-indigo">
-                                                      {tag |> str}
-                                                    </div>
-                                                  )
+                                                   <div
+                                                     key=tag
+                                                     className="border border-indigo rounded mr-1 py-1 px-2 text-xs text-indigo">
+                                                     {tag |> str}
+                                                   </div>
+                                                 )
                                               |> Array.of_list
                                               |> ReasonReact.array
                                             }
                                           </div>
                                         </div>
-                                      </div>
+                                      </a>
                                     </div>
                                   </div>
                                 </div>;
                               })
-                            |> Array.of_list
-                            |> ReasonReact.array
-                          }
-                        </div>
-                        <div className="flex w-2/5 items-center">
-                          <div className="w-3/5 py-4 px-3">
-                            {
-                              isSingleFounder ?
-                                ReasonReact.null :
-                                <div className="students-team--name mb-5">
-                                  <p className="mb-1 text-xs">
-                                    {"Team" |> str}
-                                  </p>
-                                  <h4> {team |> Team.name |> str} </h4>
-                                </div>
-                            }
-                            <div className="coaches-avatar-group">
-                              <p className="mb-2 text-xs">
-                                {"Coaches" |> str}
-                              </p>
-                              <div className="flex items-center">
-                                {
-                                  team
-                                  |> Team.coaches
-                                  |> List.map(coach =>
+                           |> Array.of_list
+                           |> ReasonReact.array
+                         }
+                       </div>
+                       <div className="flex w-2/5 items-center">
+                         <div className="w-3/5 py-4 px-3">
+                           {
+                             isSingleFounder ?
+                               ReasonReact.null :
+                               <div className="students-team--name mb-5">
+                                 <p className="mb-1 text-xs">
+                                   {"Team" |> str}
+                                 </p>
+                                 <h4> {team |> Team.name |> str} </h4>
+                               </div>
+                           }
+                           <div className="coaches-avatar-group">
+                             <p className="mb-2 text-xs">
+                               {"Coaches" |> str}
+                             </p>
+                             <div className="flex items-center">
+                               {
+                                 team
+                                 |> Team.coaches
+                                 |> List.map(coach =>
                                       <img
                                         key={coach |> Coach.avatarUrl}
                                         className="w-6 h-6 rounded-full mr-2"
@@ -570,41 +581,39 @@ let make =
                                         alt="Avatar of Jonathan Reinink"
                                       />
                                     )
-                                  |> Array.of_list
-                                  |> ReasonReact.array
-                                }
-                              </div>
-                            </div>
-                          </div>
-                          <div className="w-2/5 text-center">
-                            <span
-                              className="inline-flex flex-col rounded bg-indigo-lightest px-2 py-1">
-                              <div className="text-xs">
-                                {"Level" |> str}
-                              </div>
-                              <div className="text-xl font-semibold">
-                                {
-                                  team
-                                  |> Team.levelNumber
-                                  |> string_of_int
-                                  |> str
-                                }
-                              </div>
-                            </span>
-                          </div>
-                        </div>
-                      </div>;
-                    })
+                                 |> Array.of_list
+                                 |> ReasonReact.array
+                               }
+                             </div>
+                           </div>
+                         </div>
+                         <div className="w-2/5 text-center">
+                           <span
+                             className="inline-flex flex-col rounded bg-indigo-lightest px-2 py-1">
+                             <div className="text-xs"> {"Level" |> str} </div>
+                             <div className="text-xl font-semibold">
+                               {
+                                 team
+                                 |> Team.levelNumber
+                                 |> string_of_int
+                                 |> str
+                               }
+                             </div>
+                           </span>
+                         </div>
+                       </div>
+                     </div>;
+                   })
                 |> Array.of_list
                 |> ReasonReact.array :
                 <div className="shadow bg-white rounded-lg mb-4 p-4">
-                  {"No student matches your seach/filter criteria." |> str}
+                  {"No student matches your search/filter criteria." |> str}
                 </div>
             }
           </div>
         </div>
       </div>
-  </div>,
+    </div>,
 };
 
 type props = {

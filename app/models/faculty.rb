@@ -64,12 +64,6 @@ class Faculty < ApplicationRecord
   # hard-wired ids of our ops_team, kireeti: 19, bharat: 20. A flag for this might be an overkill?
   scope :ops_team, -> { where(id: [19, 20]) }
 
-  # Returns faculty members who have had connect slots in the past, but not 'after' a date.
-  scope :recently_inactive, lambda { |after = Date.today.beginning_of_week|
-    slotted_after_date = Faculty.joins(:connect_slots).where('connect_slots.slot_at > ?', after)
-    Faculty.joins(:connect_slots).where.not(id: slotted_after_date).distinct
-  }
-
   # This method sets the label used for object by Active Admin.
   def display_name
     name
@@ -164,10 +158,6 @@ class Faculty < ApplicationRecord
     else
       initials_avatar(background_shape)
     end
-  end
-
-  def connect_link?
-    connect_link.present?
   end
 
   private

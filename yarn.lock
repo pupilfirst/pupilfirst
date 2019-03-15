@@ -4638,9 +4638,9 @@ pkg-dir@^3.0.0:
   dependencies:
     find-up "^3.0.0"
 
-pnotify@^4.0.0-alpha.4:
-  version "4.0.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/pnotify/-/pnotify-4.0.0-alpha.4.tgz#3d5ab2906fdb24ed58f060014c148378a4508608"
+pnotify@^4.0.0-beta.2:
+  version "4.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/pnotify/-/pnotify-4.0.0-beta.2.tgz#990e684429b5630d3ff68a9612cdba04ff387c9f"
 
 pnp-webpack-plugin@^1.2.1:
   version "1.2.1"

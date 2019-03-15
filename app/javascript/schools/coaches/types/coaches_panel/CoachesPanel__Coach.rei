@@ -21,3 +21,19 @@ let connectLink: t => option(string);
 let notifyForSubmission: t => bool;
 
 let updateInfo: (string, t) => t;
+
+let updateList: (list(t), t) => list(t);
+
+let create:
+  (
+    int,
+    string,
+    string,
+    string,
+    string,
+    option(string),
+    bool,
+    option(string),
+    bool
+  ) =>
+  t;

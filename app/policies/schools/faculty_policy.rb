@@ -7,7 +7,7 @@ module Schools
 
     def create?
       # All school admins can add faculty as long as the course hasn't ended.
-      !record.ended?
+      record.present?
     end
 
     def school_index?

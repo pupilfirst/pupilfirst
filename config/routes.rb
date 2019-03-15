@@ -27,7 +27,7 @@ Rails.application.routes.draw do
   resource :school, only: %i[show update]
 
   namespace :school, module: 'schools' do
-    resources :faculty, only: %i[create destroy], as: 'coaches', path: 'coaches' do
+    resources :faculty, only: %i[create update destroy], as: 'coaches', path: 'coaches' do
       collection do
         get '/', action: 'school_index'
       end

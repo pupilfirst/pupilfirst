@@ -1,3 +1,3 @@
 module Coach = CoachesPanel__Coach;
 
-module CoachInfo = CoachesPanel__CoachInfo;
+module FormData = CoachesPanel_FormData;

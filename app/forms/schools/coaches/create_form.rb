@@ -4,12 +4,15 @@ module Schools
       property :email, validates: { email: true }, virtual: true
       property :name, validates: { presence: true, length: { maximum: 250 } }
       property :title, validates: { presence: true, length: { maximum: 250 } }
+      property :linkedin_url
+      property :connect_link
+      property :notify_for_submission
+      property :public
       property :school_id, virtual: true, validates: { presence: true }
 
-      def save(course)
+      def save
         Faculty.transaction do
-          faculty = ::FacultyModule::CreateService.new(email, name, title, school).create
-          ::Courses::AssignReviewerService.new(course).assign(faculty)
+          ::FacultyModule::CreateService.new(faculty_params).create
         end
       end
 
@@ -17,6 +20,19 @@ module Schools
 
       def school
         School.find_by(id: school_id)
+      end
+
+      def faculty_params
+        {
+          name: name,
+          email: email,
+          title: title,
+          school: school,
+          linkedin_url: linkedin_url,
+          connect_link: connect_link,
+          public: public,
+          notify_for_submission: notify_for_submission
+        }
       end
     end
   end

@@ -148,7 +148,7 @@ let make = (~teams, ~courseId, ~authenticityToken, ~levels, ~studentTags, _child
     },
   render: ({state, send}) =>
     <div className="flex flex-1 flex-col bg-white overflow-hidden">
-      {let closeFormCB = () => send(UpdateFormVisible(None))
+      {let closeFormCB = () => send(UpdateFormVisible(None));
        let submitFormCB = (teams, tags) =>
          {send(UpdateTeams(teams))
           send(AddNewTags(tags))

@@ -1,26 +1,25 @@
 module FacultyModule
   # TODO: Spec FacultyModule::CreateService
   class CreateService
-    def initialize(email, name, title, school)
-      @email = email
-      @name = name
-      @title = title
-      @school = school
+    def initialize(faculty_params)
+      @faculty_params = faculty_params
     end
 
     def create
       User.transaction do
-        user = User.where(email: @email).first_or_create!
+        user = User.where(email: @faculty_params[:email]).first_or_create!
 
-        return user.faculty.where(school: @school).first if user.faculty.where(school: @school).any?
+        return user.faculty.where(school: @faculty_params[:school]).first if user.faculty.where(school: @faculty_params[:school]).any?
 
         Faculty.create!(
           user: user,
-          name: @name,
+          name: @faculty_params[:name],
           category: Faculty::CATEGORY_VISITING_COACHES,
-          title: @title,
+          title: @faculty_params[:title],
           image: Rails.root.join('spec', 'support', 'uploads', 'faculty', 'mickey_mouse.jpg').open,
-          school: @school
+          school: @faculty_params[:school],
+          public: @faculty_params[:public],
+          notify_for_submission: @faculty_params[:notify_for_submission]
         )
       end
     end

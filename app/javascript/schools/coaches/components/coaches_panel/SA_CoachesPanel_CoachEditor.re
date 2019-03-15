@@ -2,6 +2,15 @@ open CoachesPanel__Types;
 
 open SchoolAdmin__Utils;
 
+exception UnexpectedResponse(int);
+
+let handleApiError =
+  [@bs.open]
+  (
+    fun
+    | UnexpectedResponse(code) => code
+  );
+
 type state = {
   name: string,
   imageUrl: string,
@@ -70,12 +79,6 @@ let updateConnectLink = (send, connectLink) => {
   send(UpdateConnectLink(connectLink, hasError));
 };
 
-let handleResponseCB = (submitCB, json) => {
-  let coaches = json |> Json.Decode.(field("coaches", list(Coach.decode)));
-  submitCB(coaches);
-  Notification.success("Success", "Coach(s) created succesffully");
-};
-
 let booleanButtonClasses = bool =>
   bool ?
     "w-1/2 bg-grey hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none" :
@@ -90,18 +93,15 @@ let saveDisabled = state =>
   || ! state.dirty
   || state.saving;
 
-let saveCoach = (state, schoolId, authenticityToken, responseCB) => {
-  let payload = Js.Dict.empty();
-  Js.Dict.set(
-    payload,
-    "authenticity_token",
-    authenticityToken |> Js.Json.string,
-  );
-  let url = "/school/courses/" ++ (schoolId |> string_of_int) ++ "/students";
-  Api.create(url, payload, responseCB);
-};
-
-let make = (~schoolId, ~coach, ~closeFormCB, ~authenticityToken, _children) => {
+let make =
+    (
+      ~schoolId,
+      ~coach,
+      ~closeFormCB,
+      ~updateCoachCB,
+      ~authenticityToken,
+      _children,
+    ) => {
   ...component,
   initialState: () =>
     switch (coach) {
@@ -177,32 +177,91 @@ let make = (~schoolId, ~coach, ~closeFormCB, ~authenticityToken, _children) => {
     | UpdateSaving => ReasonReact.Update({...state, saving: ! state.saving})
     },
   render: ({state, send}) => {
+    let formId = "coach-create-form";
+    let addCoach = json => {
+      let id = json |> Json.Decode.(field("id", int));
+      let imageUrl = json |> Json.Decode.(field("image_url", string));
+      let newCoach = Coach.create(id, state.name, imageUrl, state.email, state.title, Some(state.linkedinUrl), state.public, Some(state.connectLink), state.notifyForSubmission);
+      switch (coach) {
+        | Some(_) =>
+          Notification.success("Success", "Coach updated successfully")
+        | None => Notification.success("Success", "Coach created successfully")
+        };
+        updateCoachCB(newCoach);
+    }
     let avatarUploaderText = () =>
       switch (coach) {
       | Some(coach) => "Replace avatar of " ++ (coach |> Coach.name)
       | None => "Upload an avatar"
       };
-    let createCoach = (authenticityToken, schoolId, state) => {
-      send(UpdateSaving);
-      let url = "/school/courses/" ++ (schoolId |> string_of_int) ++ "/levels";
-      ();
-      /* Api.create(
-           url,
-           setPayload(authenticityToken, state),
-           handleResponseCB,
-           handleErrorCB,
-         ); */
+    let handleResponseJSON = json => {
+      let error =
+        json
+        |> Json.Decode.(field("error", nullable(string)))
+        |> Js.Null.toOption;
+      switch (error) {
+      | Some(err) => Notification.error("Something went wrong!", err)
+      | None => addCoach(json)
+      };
     };
-    let updateCoach = (authenticityToken, coachId, state) => {
+    let sendCoach = formData => {
+      let endPoint =
+        switch (coach) {
+        | Some(coach) =>
+          "/school/coaches/" ++ (coach |> Coach.id |> string_of_int)
+        | None => "/school/coaches/"
+        };
+      let httpMethod =
+        switch (coach) {
+        | Some(coach) => Fetch.Patch
+        | None => Fetch.Post
+        };
+      Js.Promise.(
+        Fetch.fetchWithInit(
+          endPoint,
+          Fetch.RequestInit.make(
+            ~method_=httpMethod,
+            ~body=Fetch.BodyInit.makeWithFormData(formData),
+            ~credentials=Fetch.SameOrigin,
+            (),
+          ),
+        )
+        |> then_(response =>
+             if (Fetch.Response.ok(response)
+                 || Fetch.Response.status(response) == 422) {
+               response |> Fetch.Response.json;
+             } else {
+               Js.Promise.reject(
+                 UnexpectedResponse(response |> Fetch.Response.status),
+               );
+             }
+           )
+        |> then_(json => handleResponseJSON(json) |> resolve)
+        |> catch(error =>
+             (
+               switch (error |> handleApiError) {
+               | Some(code) =>
+                 Notification.error(code |> string_of_int, "Please try again")
+               | None =>
+                 Notification.error(
+                   "Something went wrong!",
+                   "Please try again",
+                 )
+               }
+             )
+             |> resolve
+           )
+        |> ignore
+      );
+    };
+    let submitForm = event => {
+      ReactEvent.Form.preventDefault(event);
       send(UpdateSaving);
-      let url = "/school/levels/" ++ coachId;
-      ();
-      /* Api.update(
-           url,
-           setPayload(authenticityToken, state),
-           handleResponseCB,
-           handleErrorCB,
-         ); */
+      let element = ReactDOMRe._getElementById(formId);
+      switch (element) {
+      | Some(element) => sendCoach(FormData.create(element))
+      | None => ()
+      };
     };
     <div className="blanket">
       <div className="drawer-right relative">
@@ -221,244 +280,271 @@ let make = (~schoolId, ~coach, ~closeFormCB, ~authenticityToken, _children) => {
                   className="uppercase text-center border-b border-grey-light pb-2 mb-4">
                   ("Coach Details" |> str)
                 </h5>
-                <label
-                  className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
-                  htmlFor="name">
-                  ("Name" |> str)
-                </label>
-                <span> ("*" |> str) </span>
-                <input
-                  className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                  id="name"
-                  type_="text"
-                  placeholder="Coach Name"
-                  value=state.name
-                  onChange=(
-                    event =>
-                      updateName(send, ReactEvent.Form.target(event)##value)
-                  )
-                />
-                (
-                  state.hasNameError ?
-                    <div className="drawer-right-form__error-msg">
-                      ("not a valid name" |> str)
-                    </div> :
-                    ReasonReact.null
-                )
-                <label
-                  className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
-                  htmlFor="email">
-                  ("Email" |> str)
-                </label>
-                <span> ("*" |> str) </span>
-                <input
-                  className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                  id="email"
-                  type_="email"
-                  placeholder="Coach email address"
-                  value=state.email
-                  onChange=(
-                    event =>
-                      updateEmail(send, ReactEvent.Form.target(event)##value)
-                  )
-                />
-                (
-                  state.hasEmailError ?
-                    <div className="drawer-right-form__error-msg">
-                      ("not a valid email" |> str)
-                    </div> :
-                    ReasonReact.null
-                )
-                <label
-                  className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
-                  htmlFor="title">
-                  ("Title" |> str)
-                </label>
-                <span> ("*" |> str) </span>
-                <input
-                  className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                  id="title"
-                  type_="text"
-                  placeholder="Coach Title/Expertise"
-                  value=state.title
-                  onChange=(
-                    event =>
-                      updateTitle(send, ReactEvent.Form.target(event)##value)
-                  )
-                />
-                (
-                  state.hasTitleError ?
-                    <div className="drawer-right-form__error-msg">
-                      ("not a valid title" |> str)
-                    </div> :
-                    ReasonReact.null
-                )
-                <label
-                  className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
-                  htmlFor="linkedIn">
-                  ("LinkedIn" |> str)
-                </label>
-                <input
-                  className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                  id="linkedIn"
-                  type_="text"
-                  placeholder="LinkedIn Profile URL"
-                  value=state.linkedinUrl
-                />
-                (
-                  state.hasLinkedInUrlError ?
-                    <div className="drawer-right-form__error-msg">
-                      ("not a valid URL" |> str)
-                    </div> :
-                    ReasonReact.null
-                )
-                <label
-                  className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
-                  htmlFor="connectLink">
-                  ("Connect Link" |> str)
-                </label>
-                <input
-                  className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                  id="connectLink"
-                  type_="text"
-                  placeholder="Student connect request link for the coach"
-                  value=state.connectLink
-                />
-                (
-                  state.hasConnectLinkError ?
-                    <div className="drawer-right-form__error-msg">
-                      ("not a valid URL" |> str)
-                    </div> :
-                    ReasonReact.null
-                )
-                <div className="flex items-center mb-6">
-                  <label
-                    className="block w-1/2 tracking-wide text-grey-darker text-xs font-semibold mr-6"
-                    htmlFor="evaluated">
-                    ("Should the faculty profile be public?" |> str)
-                  </label>
-                  <div
-                    id="notification"
-                    className="inline-flex w-1/2 rounded-lg overflow-hidden border">
-                    <button
-                      onClick=(
-                        _event => {
-                          ReactEvent.Mouse.preventDefault(_event);
-                          send(UpdatePublic(true));
-                        }
-                      )
-                      className=(booleanButtonClasses(state.public))>
-                      ("Yes" |> str)
-                    </button>
-                    <button
-                      onClick=(
-                        _event => {
-                          ReactEvent.Mouse.preventDefault(_event);
-                          send(UpdatePublic(false));
-                        }
-                      )
-                      className=(booleanButtonClasses(! state.public))>
-                      ("No" |> str)
-                    </button>
-                  </div>
-                </div>
-                <div className="flex items-center mb-6">
-                  <label
-                    className="w-1/2 block tracking-wide text-grey-darker text-xs font-semibold mr-6"
-                    htmlFor="evaluated">
-                    (
-                      "Should the coach be notified of student submissions?"
-                      |> str
-                    )
-                  </label>
-                  <div
-                    id="notification"
-                    className="inline-flex w-1/2 rounded-lg overflow-hidden border">
-                    <button
-                      onClick=(
-                        _event => {
-                          ReactEvent.Mouse.preventDefault(_event);
-                          send(UpdateNotifyForSubmission(true));
-                        }
-                      )
-                      className=(
-                        booleanButtonClasses(state.notifyForSubmission)
-                      )>
-                      ("Yes" |> str)
-                    </button>
-                    <button
-                      onClick=(
-                        _event => {
-                          ReactEvent.Mouse.preventDefault(_event);
-                          send(UpdateNotifyForSubmission(false));
-                        }
-                      )
-                      className=(
-                        booleanButtonClasses(! state.notifyForSubmission)
-                      )>
-                      ("No" |> str)
-                    </button>
-                  </div>
-                </div>
-                <label
-                  className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
-                  htmlFor="avatarUploader">
-                  ("Avatar" |> str)
-                </label>
-                <div
-                  className="input-file__container flex items-center relative mb-4">
+                <form
+                  key=(Random.int(99999) |> string_of_int)
+                  id=formId
+                  onSubmit=(event => submitForm(event))>
                   <input
-                    disabled=false
-                    className="input-file__input cursor-pointer px-4"
-                    name="resource[file]"
-                    type_="file"
-                    id="file"
-                    required=true
-                    multiple=false
-                    onChange=(event => Js.log("Hey"))
+                    name="authenticity_token"
+                    type_="hidden"
+                    value=authenticityToken
                   />
                   <label
-                    className="input-file__label flex px-4 items-center font-semibold rounded text-sm"
-                    htmlFor="file">
-                    <i className="material-icons mr-2 text-grey-dark">
-                      ("file_upload" |> str)
-                    </i>
-                    <span className="truncate">
-                      (avatarUploaderText() |> str)
-                    </span>
+                    className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                    htmlFor="name">
+                    ("Name" |> str)
                   </label>
-                </div>
-                <div className="flex max-w-md w-full px-6 pb-5 mx-auto">
+                  <span> ("*" |> str) </span>
+                  <input
+                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    id="name"
+                    type_="text"
+                    name="faculty[name]"
+                    placeholder="Coach Name"
+                    value={state.name}
+                    onChange=(
+                      event =>
+                        updateName(
+                          send,
+                          ReactEvent.Form.target(event)##value,
+                        )
+                    )
+                  />
                   (
-                    switch (coach) {
-                    | Some(coach) =>
-                      let id = coach |> Coach.id;
-                      <button
-                        disabled=(saveDisabled(state))
-                        onClick=(
-                          _event =>
-                            updateCoach(
-                              authenticityToken,
-                              id |> string_of_int,
-                              state,
-                            )
-                        )
-                        className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none mt-3">
-                        ("Update Coach" |> str)
-                      </button>;
-                    | None =>
-                      <button
-                        disabled=(saveDisabled(state))
-                        onClick=(
-                          _event =>
-                            createCoach(authenticityToken, schoolId, state)
-                        )
-                        className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none mt-3">
-                        ("Create Coach" |> str)
-                      </button>
-                    }
+                    state.hasNameError ?
+                      <div className="drawer-right-form__error-msg">
+                        ("not a valid name" |> str)
+                      </div> :
+                      ReasonReact.null
                   )
-                </div>
+                  <label
+                    className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                    htmlFor="email">
+                    ("Email" |> str)
+                  </label>
+                  <span> ("*" |> str) </span>
+                  <input
+                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    id="email"
+                    type_="email"
+                    name="faculty[email]"
+                    placeholder="Coach email address"
+                    value={state.email}
+                    onChange=(
+                      event =>
+                        updateEmail(
+                          send,
+                          ReactEvent.Form.target(event)##value,
+                        )
+                    )
+                  />
+                  (
+                    state.hasEmailError ?
+                      <div className="drawer-right-form__error-msg">
+                        ("not a valid email" |> str)
+                      </div> :
+                      ReasonReact.null
+                  )
+                  <label
+                    className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                    htmlFor="title">
+                    ("Title" |> str)
+                  </label>
+                  <span> ("*" |> str) </span>
+                  <input
+                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    id="title"
+                    type_="text"
+                    name="faculty[title]"
+                    placeholder="Coach Title/Expertise"
+                    value={state.title}
+                    onChange=(
+                      event =>
+                        updateTitle(
+                          send,
+                          ReactEvent.Form.target(event)##value,
+                        )
+                    )
+                  />
+                  (
+                    state.hasTitleError ?
+                      <div className="drawer-right-form__error-msg">
+                        ("not a valid title" |> str)
+                      </div> :
+                      ReasonReact.null
+                  )
+                  <label
+                    className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                    htmlFor="linkedIn">
+                    ("LinkedIn" |> str)
+                  </label>
+                  <input
+                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    id="linkedIn"
+                    type_="text"
+                    name="faculty[linkedin_url]"
+                    placeholder="LinkedIn Profile URL"
+                    value={ state.linkedinUrl}
+                    onChange=(
+                      event =>
+                        updateLinkedInUrl(
+                          send,
+                          ReactEvent.Form.target(event)##value,
+                        )
+                    )
+                  />
+                  (
+                    state.hasLinkedInUrlError ?
+                      <div className="drawer-right-form__error-msg">
+                        ("not a valid URL" |> str)
+                      </div> :
+                      ReasonReact.null
+                  )
+                  <label
+                    className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                    htmlFor="connectLink">
+                    ("Connect Link" |> str)
+                  </label>
+                  <input
+                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    id="connectLink"
+                    type_="text"
+                    name="faculty[connect_link]"
+                    placeholder="Student connect request link for the coach"
+                    value={state.connectLink}
+                    onChange=(
+                      event =>
+                        updateConnectLink(
+                          send,
+                          ReactEvent.Form.target(event)##value,
+                        )
+                    )
+                  />
+                  (
+                    state.hasConnectLinkError ?
+                      <div className="drawer-right-form__error-msg">
+                        ("not a valid URL" |> str)
+                      </div> :
+                      ReasonReact.null
+                  )
+                  <div className="flex items-center mb-6">
+                    <label
+                      className="block w-1/2 tracking-wide text-grey-darker text-xs font-semibold mr-6"
+                      htmlFor="evaluated">
+                      ("Should the faculty profile be public?" |> str)
+                    </label>
+                    <div
+                      id="notification"
+                      className="inline-flex w-1/2 rounded-lg overflow-hidden border">
+                      <button
+                        onClick=(
+                          _event => {
+                            ReactEvent.Mouse.preventDefault(_event);
+                            send(UpdatePublic(true));
+                          }
+                        )
+                        name="faculty[public]"
+                        className=(booleanButtonClasses(state.public))>
+                        ("Yes" |> str)
+                      </button>
+                      <button
+                        onClick=(
+                          _event => {
+                            ReactEvent.Mouse.preventDefault(_event);
+                            send(UpdatePublic(false));
+                          }
+                        )
+                        className=(booleanButtonClasses(! state.public))>
+                        ("No" |> str)
+                      </button>
+                    </div>
+                  </div>
+                  <div className="flex items-center mb-6">
+                    <label
+                      className="w-1/2 block tracking-wide text-grey-darker text-xs font-semibold mr-6"
+                      htmlFor="evaluated">
+                      (
+                        "Should the coach be notified of student submissions?"
+                        |> str
+                      )
+                    </label>
+                    <div
+                      id="notification"
+                      className="inline-flex w-1/2 rounded-lg overflow-hidden border">
+                      <button
+                        onClick=(
+                          _event => {
+                            ReactEvent.Mouse.preventDefault(_event);
+                            send(UpdateNotifyForSubmission(true));
+                          }
+                        )
+                        name="faculty[notify_for_submission]"
+                        className=(
+                          booleanButtonClasses(state.notifyForSubmission)
+                        )>
+                        ("Yes" |> str)
+                      </button>
+                      <button
+                        onClick=(
+                          _event => {
+                            ReactEvent.Mouse.preventDefault(_event);
+                            send(UpdateNotifyForSubmission(false));
+                          }
+                        )
+                        className=(
+                          booleanButtonClasses(! state.notifyForSubmission)
+                        )>
+                        ("No" |> str)
+                      </button>
+                    </div>
+                  </div>
+                  /* <label
+                       className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                       htmlFor="avatarUploader">
+                       ("Avatar" |> str)
+                     </label>
+                     <div
+                       className="input-file__container flex items-center relative mb-4">
+                       <input
+                         disabled=false
+                         className="input-file__input cursor-pointer px-4"
+                         name="resource[file]"
+                         type_="file"
+                         id="file"
+                         required=true
+                         multiple=false
+                         onChange=(event => Js.log("Hey"))
+                       />
+                       <label
+                         className="input-file__label flex px-4 items-center font-semibold rounded text-sm"
+                         htmlFor="file">
+                         <i className="material-icons mr-2 text-grey-dark">
+                           ("file_upload" |> str)
+                         </i>
+                         <span className="truncate">
+                           (avatarUploaderText() |> str)
+                         </span>
+                       </label>
+                     </div> */
+                  <div className="flex max-w-md w-full px-6 pb-5 mx-auto">
+                    (
+                      switch (coach) {
+                      | Some(coach) =>
+                        <button
+                          disabled=(saveDisabled(state))
+                          className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none mt-3">
+                          ("Update Coach" |> str)
+                        </button>
+                      | None =>
+                        <button
+                          disabled=(saveDisabled(state))
+                          className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none mt-3">
+                          ("Create Coach" |> str)
+                        </button>
+                      }
+                    )
+                  </div>
+                </form>
               </div>
             </div>
           </div>

@@ -44,3 +44,31 @@ let decode = json =>
       json |> field("connectLink", nullable(string)) |> Js.Null.toOption,
     notifyForSubmission: json |> field("notifyForSubmission", bool),
   };
+
+let create =
+    (
+      id,
+      name,
+      imageUrl,
+      email,
+      title,
+      linkedinUrl,
+      public,
+      connectLink,
+      notifyForSubmission,
+    ) => {
+  id,
+  name,
+  imageUrl,
+  email,
+  title,
+  linkedinUrl,
+  public,
+  connectLink,
+  notifyForSubmission,
+};
+
+let updateList = (coaches, coach) => {
+  let oldList = coaches |> List.filter(t => t.id !== coach.id);
+  oldList |> List.rev |> List.append([coach]) |> List.rev;
+};

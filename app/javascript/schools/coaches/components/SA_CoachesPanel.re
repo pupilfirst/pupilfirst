@@ -15,8 +15,8 @@ type state = {
 };
 
 type action =
-  | CreateCoach
-  | UpdateFormVisible(formVisible);
+  | UpdateFormVisible(formVisible)
+  | UpdateCoaches(Coach.t);
 
 let component = ReasonReact.reducerComponent("SA_CoachesPanel");
 
@@ -27,9 +27,13 @@ let make = (~coaches, ~schoolId, ~authenticityToken, _children) => {
     switch (action) {
     | UpdateFormVisible(formVisible) =>
       ReasonReact.Update({...state, formVisible})
+    | UpdateCoaches(coach) =>
+      let newCoachesList = coach |> Coach.updateList(state.coaches);
+      ReasonReact.Update({...state, coaches: newCoachesList});
     },
   render: ({state, send}) => {
     let closeFormCB = () => send(UpdateFormVisible(None));
+    let updateCoachCB = coach => send(UpdateCoaches(coach));
     <div className="flex flex-1 h-screen">
       (
         switch (state.formVisible) {
@@ -39,6 +43,7 @@ let make = (~coaches, ~schoolId, ~authenticityToken, _children) => {
             schoolId
             coach
             closeFormCB
+            updateCoachCB
             authenticityToken
           />
         }

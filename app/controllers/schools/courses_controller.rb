@@ -1,10 +1,15 @@
 module Schools
   class CoursesController < SchoolsController
-    layout 'course'
+    layout 'course', except: :index
+    layout 'school', except: %i[show update close]
 
-    before_action :load_course
+    before_action :load_course, except: :index
 
     def show; end
+
+    def index
+      authorize current_school
+    end
 
     def update
       form = Schools::Courses::UpdateForm.new(@course)

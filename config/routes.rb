@@ -27,7 +27,7 @@ Rails.application.routes.draw do
   resource :school, only: %i[show update]
 
   namespace :school, module: 'schools' do
-    resources :courses, only: %i[show update] do
+    resources :courses, only: %i[index show update] do
       post 'close', on: :member
       # TODO: Use shallow routes here, where possible.
       resource :curriculum, only: %i[show]

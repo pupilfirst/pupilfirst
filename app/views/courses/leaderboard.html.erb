@@ -90,7 +90,7 @@
 
         <tbody>
         <% presenter.students.each do |student| %>
-          <tr>
+          <tr class="<%= student.current_student? ? 'leaderboard__current-student-row' : '' %>">
             <td class="leaderboard__rank">
               <span class="leaderboard__rank-number font-semibold px-3"><%= student.rank %></span>
             </td>

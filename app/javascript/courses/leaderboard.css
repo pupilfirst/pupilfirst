@@ -47,7 +47,6 @@
 .leaderboard__rank-number {
   margin-right: 5px;
   width: 20px;
-  font-weight: bold;
   display: inline-block;
   /*@include media-breakpoint-down (md) {*/
   /*display: block;*/
@@ -60,12 +59,18 @@
 .leaderboard__rank-change {
 }
 
+.leaderboard__rank-change-icon {
+  width: 1rem;
+  vertical-align: baseline;
+}
+
 .leaderboard__rank-change-new {
   background-color: #DFE7FE;
   border-radius: 2px;
   color: #6187F8;
   text-align: center;
-  padding: 2px 8px;
+  padding: 1px 6px 2px;
+  font-size: 0.75rem;
 }
 
 .leaderboard__rank-icon {
@@ -86,5 +91,7 @@
 }
 
 .leaderboard__rank-delta {
+  vertical-align: middle;
+  display: inline-block;
   /*color: darken($ light-grey-text, 10%);*/
 }

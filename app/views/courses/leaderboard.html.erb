@@ -81,7 +81,7 @@
         <% presenter.entries.each do |entry| %>
           <tr>
             <td class="leaderboard__rank">
-              <span class="leaderboard__rank-number"><%= entry[:rank] %></span>
+              <span class="leaderboard__rank-number font-semibold"><%= entry[:rank] %></span>
             </td>
             <td class="leaderboard__rank">
               <span class="leaderboard__rank-change">
@@ -94,7 +94,10 @@
             </td>
             <td><%= entry[:founder].name %></td>
             <td><%= presenter.level_number(entry[:founder])%></td>
-            <td><%= entry[:score] %></td>
+            <td>
+              <span class="font-semibold">
+                <%= entry[:score] %></td>
+              </span>
           </tr>
         <% end %>
         </tbody>

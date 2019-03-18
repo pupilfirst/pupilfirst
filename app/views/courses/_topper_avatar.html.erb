@@ -1,0 +1,7 @@
+<div class="leaderboard__winner-avatar rounded-circle bg-white mx-3 shadow">
+  <% if student.avatar.attached? %>
+    <%= image_tag(student.avatar_variant(:thumb)) %>
+  <% else %>
+    <%= image_tag(student.initials_avatar) %>
+  <% end %>
+</div>

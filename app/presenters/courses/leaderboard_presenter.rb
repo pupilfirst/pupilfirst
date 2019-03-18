@@ -19,6 +19,10 @@ module Courses
       last_week_start_time.strftime('%B %-d')
     end
 
+    def level_number(founder)
+      founder.startup.level.number
+    end
+
     def end_datestring
       last_week_end_time.strftime('%B %-d')
     end

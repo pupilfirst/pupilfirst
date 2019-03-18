@@ -5,52 +5,74 @@
   <%= stylesheet_pack_tag 'courses/leaderboard', 'data-turbolinks-track': 'reload' %>
 <% end %>
 
-<div class="row">
-  <div class="col-8">
-    <div class="clearfix mt-3">
-      <% if presenter.previous_page? %>
-        <div class="float-left">
-          <a class="btn btn-default" href="<%= presenter.previous_page_link %>">
-            <i class="fa fa-chevron-left"></i> Previous
-          </a>
+<div>
+  <div class="w-100 leaderboard__header-container mt-4 px-4 pb-4 text-center">
+    <div class="col-md-7 mx-auto">
+      <div class="leaderboard__header-title d-inline-block mx-auto p-3 shadow-lg">
+        <h4 class="font-bold">
+          Leaderboard
+        </h4>
+        <div class="d-flex align-items-center justify-content-between mt-3">
+          <% if presenter.previous_page? %>
+            <a class="btn btn-default" href="<%= presenter.previous_page_link %>">
+              <i class="fa fa-chevron-left"></i>
+            </a>
+          <% end %>
+          <span class="leaderboard__date-range px-3 font-semibold">
+            <%= presenter.start_datestring %> to <%= presenter.end_datestring %>
+          </span>
+          <% if presenter.next_page? %>
+            <a class="btn btn-default" href="<%= presenter.next_page_link %>">
+              <i class="fa fa-chevron-right"></i>
+            </a>
+          <% end %>
         </div>
-      <% end %>
-
-      <% if presenter.next_page? %>
-        <div class="float-right">
-          <a class="btn btn-default" href="<%= presenter.next_page_link %>">
-            Next <i class="fa fa-chevron-right"></i>
-          </a>
-        </div>
-      <% end %>
+      </div>
+      <div class="col">
+        <% if presenter.entries.any? %>
+          <div class="d-flex justify-content-center mt-5">
+            <div class="lealeaderboard__winner-avatar rounded-circle bg-white mx-3 shadow">
+            </div>
+            <div class="lealeaderboard__winner-avatar rounded-circle bg-white mx-3 shadow">
+            </div>
+          </div>
+          <h3 class="mt-3 text-white lealeaderboard__winner-title pb-2"><%= presenter.heading %></h3>
+          <div class="d-flex justify-content-center">
+            <div class="px-3 border-right">
+              <h5 class="mt-3 text-white">Active Students</h5>
+              <span class="text-white"><%= presenter.entries.count %></span>
+            </div>
+            <div class="px-3">
+              <h5 class="mt-3 text-white">Inactive Students</h5>
+              <span class="text-white"><%= presenter.inactive_students_count %></span>
+            </div>
+          </div>
+        <% end %>
+      </div>
     </div>
-
-    <h1>
-      Leaderboard
-      <span class="leaderboard__date-range font-semibold light-grey-text">
-    <%= presenter.start_datestring %> to <%= presenter.end_datestring %>
-  </span>
-    </h1>
-
-    <p class="mb-2">
+  </div>
+  <p class="leaderboard__notice mb-2 text-center p-2">
       Leaderboards are how we track progress for our students. They <strong>don't show</strong> the best students
       at <%= presenter.school_name %>.
       <br/>
       Rather, they show students <strong>who have improved the most</strong> compared to the previous leaderboard.
     </p>
 
-    <% if presenter.entries.empty? %>
-      <div class="leaderboard__inactive-startup-message pt-3">
-        <h4 class="font-semibold">
-          The leaderboard doesn&rsquo;t have any entries for this period.
-        </h4>
-      </div>
-    <% else %>
-      <table class="table table-striped">
-        <thead class="brand-secondary">
+  <% if presenter.entries.empty? %>
+    <div class="leaderboard__inactive-startup-message text-center bg-white border rounded-lg p-5 my-4">
+      <h4 class="font-semibold">
+        The leaderboard doesn&rsquo;t have any entries for this period.
+      </h4>
+    </div>
+  <% else %>
+    <div class="w-100 bg-white my-4 border leaderboard__table-container shadow">
+      <table class="table table-responsive-sm">
+        <thead class="brand-secondary light-grey-background">
         <tr>
           <th class="font-semibold">Rank</th>
+          <th class="font-semibold">Change</th>
           <th class="font-semibold">Student</th>
+          <th class="font-semibold">Level</th>
           <th class="font-semibold">Score</th>
         </tr>
         </thead>
@@ -60,37 +82,23 @@
           <tr>
             <td class="leaderboard__rank">
               <span class="leaderboard__rank-number"><%= entry[:rank] %></span>
-              <span class="leaderboard__rank-change">
-            <i class="fa fa-<%= entry[:delta_icon] %>"></i>
-            <span class="leaderboard__rank-delta"><%= entry[:delta] %></span>
-          </span>
             </td>
-
+            <td class="leaderboard__rank">
+              <span class="leaderboard__rank-change">
+                <i class="fa fa-<%= entry[:delta_icon] %>"></i>
+                <span class="leaderboard__rank-change-new">New</span>
+                <span class="leaderboard__rank-change-up"></span>
+                <span class="leaderboard__rank-change-down"></span>
+                <span class="leaderboard__rank-delta"><%= entry[:delta] %></span>
+              </span>
+            </td>
             <td><%= entry[:founder].name %></td>
+            <td><%= presenter.level_number(entry[:founder])%></td>
             <td><%= entry[:score] %></td>
           </tr>
         <% end %>
         </tbody>
       </table>
-    <% end %>
-  </div>
-
-  <div class="col-4">
-    <% if presenter.entries.any? %>
-      <h2><%= presenter.heading %></h2>
-
-      <h3 class="mt-3">
-        Submissions from <strong><%= presenter.entries.count.humanize %></strong> students were evaluated to
-        build this leaderboard.
-      </h3>
-
-      <h3 class="mt-3">
-        <% if presenter.inactive_students_count.positive? %>
-          There <%= 'is'.pluralize(presenter.inactive_students_count) %>
-          <strong><%= presenter.inactive_students_count.humanize %> <%= 'students'.pluralize(presenter.inactive_students_count) %></strong>
-          who <%= 'was'.pluralize(presenter.inactive_students_count) %> <strong>inactive</strong> during this period.
-        <% end %>
-      </h3>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
 </div>

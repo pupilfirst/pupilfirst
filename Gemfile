@@ -16,7 +16,7 @@ gem 'active_storage_validations', '~> 0.6.1' # TODO: Condisder removing the gem 
 gem 'image_processing', '~> 1.2' # Gem to support variants in ActiveStorage
 
 # Use Webpack to manage app-like JavaScript modules in Rails.
-gem 'webpacker', '= 4.0.0.rc.2'
+gem 'webpacker', '~> 4.0'
 
 gem 'coffee-rails', '~> 4.2.0' # Coffeescript on Rails.
 gem 'devise', '~> 4.2' # User auth library.

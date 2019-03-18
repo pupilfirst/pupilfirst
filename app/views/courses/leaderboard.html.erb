@@ -29,18 +29,31 @@
         </div>
       </div>
       <div class="col">
-        <% if presenter.entries.any? %>
+        <% if presenter.students.any? %>
           <div class="d-flex justify-content-center mt-5">
-            <div class="lealeaderboard__winner-avatar rounded-circle bg-white mx-3 shadow">
-            </div>
-            <div class="lealeaderboard__winner-avatar rounded-circle bg-white mx-3 shadow">
-            </div>
+            <% if presenter.toppers.count > 3 %>
+              <% presenter.toppers[0..1].each do |student| %>
+                <%= render 'topper_avatar', student: student %>
+              <% end %>
+            <% else %>
+              <% presenter.toppers.each do |student| %>
+                <%= render 'topper_avatar', student: student %>
+              <% end %>
+            <% end %>
+
+            <% if presenter.toppers.count > 3 %>
+              <div class="leaderboard__winner-avatar rounded-circle bg-white mx-3 shadow">
+                +<%= presenter.toppers.count - 2 %>
+              </div>
+            <% end %>
           </div>
-          <h3 class="mt-3 text-white lealeaderboard__winner-title pb-2"><%= presenter.heading %></h3>
+
+          <h3 class="mt-3 text-white leaderboard__winner-title pb-2"><%= presenter.heading %></h3>
+
           <div class="d-flex justify-content-center">
             <div class="px-3 border-right">
               <h5 class="mt-3 text-white">Active Students</h5>
-              <span class="text-white"><%= presenter.entries.count %></span>
+              <span class="text-white"><%= presenter.students.count %></span>
             </div>
             <div class="px-3">
               <h5 class="mt-3 text-white">Inactive Students</h5>
@@ -52,13 +65,11 @@
     </div>
   </div>
   <p class="leaderboard__notice mb-2 text-center p-2">
-      Leaderboards are how we track progress for our students. They <strong>don't show</strong> the best students
-      at <%= presenter.school_name %>.
-      <br/>
-      Rather, they show students <strong>who have improved the most</strong> compared to the previous leaderboard.
-    </p>
+    This leaderboard shows students <strong>who have improved the most</strong> compared
+    to the previous leaderboard.
+  </p>
 
-  <% if presenter.entries.empty? %>
+  <% if presenter.students.empty? %>
     <div class="leaderboard__inactive-startup-message text-center bg-white border rounded-lg p-5 my-4">
       <h4 class="font-semibold">
         The leaderboard doesn&rsquo;t have any entries for this period.
@@ -78,26 +89,20 @@
         </thead>
 
         <tbody>
-        <% presenter.entries.each do |entry| %>
+        <% presenter.students.each do |student| %>
           <tr>
             <td class="leaderboard__rank">
-              <span class="leaderboard__rank-number font-semibold"><%= entry[:rank] %></span>
+              <span class="leaderboard__rank-number"><%= student.rank %></span>
             </td>
             <td class="leaderboard__rank">
               <span class="leaderboard__rank-change">
-                <i class="fa fa-<%= entry[:delta_icon] %>"></i>
-                <span class="leaderboard__rank-change-new">New</span>
-                <span class="leaderboard__rank-change-up"></span>
-                <span class="leaderboard__rank-change-down"></span>
-                <span class="leaderboard__rank-delta"><%= entry[:delta] %></span>
+                <span class="<%= presenter.rank_change_class(student.delta) %>"><%= student.delta.blank? ? 'New' : '' %></span>
+                <span class="leaderboard__rank-delta"><%= student.delta %></span>
               </span>
             </td>
-            <td><%= entry[:founder].name %></td>
-            <td><%= presenter.level_number(entry[:founder])%></td>
-            <td>
-              <span class="font-semibold">
-                <%= entry[:score] %></td>
-              </span>
+            <td><%= student.name %></td>
+            <td><%= student.level_number %></td>
+            <td><%= student.score %></td>
           </tr>
         <% end %>
         </tbody>

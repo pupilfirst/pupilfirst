@@ -20,13 +20,13 @@
   border-radius: 8px;
 }
 
-.lealeaderboard__winner-avatar {
+.leaderboard__winner-avatar {
   width: 3.75rem;
   height: 3.75rem;
   border: 2px solid #ffffff;
 }
 
-.lealeaderboard__winner-title {
+.leaderboard__winner-title {
   border-bottom: 1px solid rgba(255, 255, 255, 0.4);
 }
 

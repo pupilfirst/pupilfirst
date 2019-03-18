@@ -1,5 +1,26 @@
 module Courses
   class LeaderboardPresenter < ApplicationPresenter
+    class Student < SimpleDelegator
+      attr_reader :score, :rank
+      attr_accessor :delta
+
+      def initialize(founder, score, rank, current_founder)
+        @score = score
+        @rank = rank
+        @current_founder = current_founder
+
+        super(founder)
+      end
+
+      def level_number
+        @level_number ||= level.number
+      end
+
+      def current_student?
+        @current_student ||= (id == @current_founder.id)
+      end
+    end
+
     def initialize(view_context, course, page: nil)
       @course ||= course
       @page = page
@@ -19,16 +40,12 @@ module Courses
       last_week_start_time.strftime('%B %-d')
     end
 
-    def level_number(founder)
-      founder.startup.level.number
-    end
-
     def end_datestring
       last_week_end_time.strftime('%B %-d')
     end
 
     def toppers
-      @toppers ||= entries.find_all { |e| e[:rank] == 1 }
+      @toppers ||= students.find_all { |e| e.rank == 1 }
     end
 
     def heading
@@ -39,41 +56,34 @@ module Courses
       multiple_mid_text = 'are at the top of the leaderboard this week, sharing a score of '
 
       h = if toppers.count == 1
-        "<strong>#{toppers.first[:founder].name}</strong> is at the top of the leaderboard this week with a score of "
+        "<strong>#{toppers.first.name}</strong> is at the top of the leaderboard this week with a score of "
       elsif toppers.count < 4
-        names = toppers.map { |s| "<strong>#{s[:founder].name}</strong>" }
+        names = toppers.map { |s| "<strong>#{s.name}</strong>" }
         "#{names.to_sentence} #{multiple_mid_text}"
       else
         others_count = toppers.count - 2
-        names = toppers[0..1].map { |s| "<strong>#{s[:founder].name}</strong>" }
+        names = toppers[0..1].map { |s| "<strong>#{s.name}</strong>" }
         "#{names.join(', ')} and #{others_count} others #{multiple_mid_text}"
       end
 
       (h + "<strong>#{top_score}</strong>.").html_safe
     end
 
-    def entries
-      @entries ||= begin
-        current_leaderboard.values.map do |entry|
-          last_entry_rank = last_leaderboard.dig(entry[:founder].id, :rank)
-
-          delta = if last_entry_rank.present?
-            last_entry_rank - entry[:rank]
+    def students
+      @students ||= begin
+        current_leaderboard.map do |student_id, student|
+          delta = if last_leaderboard[student_id].present?
+            last_leaderboard[student_id].rank - student.rank
           end
 
-          delta_icon = if delta.present?
-            delta.positive? ? 'chevron-up' : 'chevron-down'
-          else
-            'plus'
-          end
-
-          entry.merge(delta_icon: delta_icon, delta: delta)
+          student.delta = delta
+          student
         end
       end
     end
 
     def inactive_students_count
-      @inactive_students_count ||= founders.count - entries.count
+      @inactive_students_count ||= founders.count - students.count
     end
 
     def previous_page?
@@ -109,14 +119,26 @@ module Courses
       LeaderboardEntry.where(founder: founders, period_from: from, period_to: to)
     end
 
+    def rank_change_class(delta)
+      if delta.blank?
+        'leaderboard__rank-change-new'
+      elsif delta.zero?
+        'leaderboard__rank-change-none'
+      elsif delta.positive?
+        'leaderboard__rank-change-up'
+      else
+        'leaderboard__rank-change-down'
+      end
+    end
+
     private
 
     def top_score
-      @top_score ||= toppers.first[:score]
+      @top_score ||= toppers.first.score
     end
 
     def current_founder_is_topper?
-      current_founder.present? && current_founder.id.in?(toppers.map { |s| s[:founder].id })
+      current_founder.present? && current_founder.id.in?(toppers.map(&:id))
     end
 
     def leaderboard_at
@@ -135,21 +157,21 @@ module Courses
     end
 
     def current_leaderboard
-      @current_leaderboard ||= load_leaderboard_entries(last_week_start_time, last_week_end_time)
+      @current_leaderboard ||= ranked_students(last_week_start_time, last_week_end_time)
     end
 
     def last_leaderboard
-      @last_leaderboard ||= load_leaderboard_entries(week_before_last_start_time, last_week_start_time)
+      @last_leaderboard ||= ranked_students(week_before_last_start_time, last_week_start_time)
     end
 
-    def load_leaderboard_entries(from, to)
+    def ranked_students(from, to)
       last_rank = 0
       last_score = BigDecimal::INFINITY
 
-      course_entries(from, to).order(score: :DESC).each_with_object({}).with_index(1) do |(entry, entries), index|
+      course_entries(from, to).order(score: :DESC).each_with_object({}).with_index(1) do |(entry, students), index|
         rank = entry.score < last_score ? index : last_rank
 
-        entries[entry.founder.id] = { rank: rank, founder: entry.founder, score: entry.score }
+        students[entry.founder.id] = Student.new(entry.founder, entry.score, rank, current_founder)
 
         last_rank = rank
         last_score = entry.score

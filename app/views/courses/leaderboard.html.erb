@@ -6,7 +6,7 @@
 <% end %>
 
 <div>
-  <div class="w-100 leaderboard__header-container mt-4 px-4 pb-4 text-center">
+  <div class="w-100 leaderboard__header-container mt-4 md:px-4 pb-4 text-center">
     <div class="col-md-7 mx-auto">
       <div class="leaderboard__header-title d-inline-block mx-auto p-3 shadow-lg">
         <h4 class="font-bold">
@@ -14,16 +14,16 @@
         </h4>
         <div class="d-flex align-items-center justify-content-between mt-3">
           <% if presenter.previous_page? %>
-            <a class="btn btn-default" href="<%= presenter.previous_page_link %>">
-              <i class="fa fa-chevron-left"></i>
+            <a class="leaderboard__date-range-arrow d-flex align-items-center justify-content-center rounded-circle" href="<%= presenter.previous_page_link %>">
+              <i class="fa fa-angle-left"></i>
             </a>
           <% end %>
           <span class="leaderboard__date-range px-3 font-semibold">
             <%= presenter.start_datestring %> to <%= presenter.end_datestring %>
           </span>
           <% if presenter.next_page? %>
-            <a class="btn btn-default" href="<%= presenter.next_page_link %>">
-              <i class="fa fa-chevron-right"></i>
+            <a class="leaderboard__date-range-arrow d-flex align-items-center justify-content-center rounded-circle" href="<%= presenter.next_page_link %>">
+              <i class="fa fa-angle-right"></i>
             </a>
           <% end %>
         </div>
@@ -42,22 +42,22 @@
             <% end %>
 
             <% if presenter.toppers.count > 3 %>
-              <div class="leaderboard__winner-avatar rounded-circle bg-white mx-3 shadow">
+              <div class="leaderboard__winner-avatar d-flex align-items-center justify-content-center overflow-hidden rounded-circle bg-white mx-2 shadow">
                 +<%= presenter.toppers.count - 2 %>
               </div>
             <% end %>
           </div>
 
-          <h3 class="mt-3 text-white leaderboard__winner-title pb-2"><%= presenter.heading %></h3>
+          <h3 class="leaderboard__winner-title text-white pb-3 my-3"><%= presenter.heading %></h3>
 
-          <div class="d-flex justify-content-center">
-            <div class="px-3 border-right">
-              <h5 class="mt-3 text-white">Active Students</h5>
-              <span class="text-white"><%= presenter.students.count %></span>
+          <div class="leaderboard__students-count-container d-flex justify-content-center">
+            <div class="px-3">
+              <h5 class="my-1 font-regular text-white">Active Students</h5>
+              <span class="leaderboard__students-count text-white"><%= presenter.students.count %></span>
             </div>
             <div class="px-3">
-              <h5 class="mt-3 text-white">Inactive Students</h5>
-              <span class="text-white"><%= presenter.inactive_students_count %></span>
+              <h5 class="my-1 font-regular text-white">Inactive Students</h5>
+              <span class="leaderboard__students-count text-white"><%= presenter.inactive_students_count %></span>
             </div>
           </div>
         <% end %>
@@ -77,8 +77,8 @@
     </div>
   <% else %>
     <div class="w-100 bg-white my-4 border leaderboard__table-container shadow">
-      <table class="table table-responsive-sm">
-        <thead class="brand-secondary light-grey-background">
+      <table class="table table-responsive-sm mb-2">
+        <thead class="leaderboard__table-thead brand-secondary">
         <tr>
           <th class="font-semibold px-3">Rank</th>
           <th class="font-semibold">Change</th>
@@ -90,7 +90,7 @@
 
         <tbody>
         <% presenter.students.each do |student| %>
-          <tr class="<%= student.current_student? ? 'leaderboard__current-student-row' : '' %>">
+          <tr class="<%= student.current_student? ? 'leaderboard__current-student-row rounded' : '' %>">
             <td class="leaderboard__rank">
               <span class="leaderboard__rank-number font-semibold px-3"><%= student.rank %></span>
             </td>
@@ -108,6 +108,9 @@
                 </span>
                 <span class="leaderboard__rank-change-icon d-inline-block mr-1">
                   <%= image_tag 'courses/leaderboard/rank-change-up-double.svg', class: 'img-fluid', alt: 'Rank change up double' %>
+                </span>
+                <span class="leaderboard__rank-change-icon d-inline-block mr-1">
+                  <%= image_tag 'courses/leaderboard/rank-no-change.svg', class: 'img-fluid', alt: 'Rank no change' %>
                 </span>
                 <span class="leaderboard__rank-delta font-semibold"><%= student.delta %></span>
               </span>

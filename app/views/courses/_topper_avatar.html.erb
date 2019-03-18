@@ -1,7 +1,7 @@
-<div class="leaderboard__winner-avatar rounded-circle bg-white mx-3 shadow">
+<div class="leaderboard__winner-avatar overflow-hidden rounded-circle bg-white mx-2 shadow">
   <% if student.avatar.attached? %>
-    <%= image_tag(student.avatar_variant(:thumb)) %>
+    <%= image_tag (student.avatar_variant(:thumb)), class: 'img-fluid' %>
   <% else %>
-    <%= image_tag(student.initials_avatar) %>
+    <%= image_tag (student.initials_avatar), class: 'img-fluid' %>
   <% end %>
 </div>

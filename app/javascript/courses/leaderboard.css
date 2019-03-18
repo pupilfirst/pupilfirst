@@ -20,14 +20,27 @@
   border-radius: 8px;
 }
 
+.leaderboard__table-thead {
+  background-color: #F0EBEB;
+}
+
 .leaderboard__winner-avatar {
   width: 3.75rem;
   height: 3.75rem;
+  font-size: 1.875rem;
   border: 2px solid #ffffff;
 }
 
 .leaderboard__winner-title {
   border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.leaderboard__students-count-container>:first-child {
+  border-right: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.leaderboard__students-count {
+  font-size: 1.25rem;
 }
 
 .leaderboard__notice {
@@ -38,25 +51,33 @@
   box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.1);
 }
 
-.leaderboard__date-range {
-  /*@include media-breakpoint-down (sm) {*/
-  /*display: block;*/
-  /*}*/
+.leaderboard__current-student-row {
+  background-color: #6946AC;
+  color: #ffffff;
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.3);
+}
+
+.leaderboard__current-student-row>td {
+  border: 0;
+}
+
+.leaderboard__date-range-arrow {
+  width: 1.375rem;
+  height: 1.375rem;
+  color: #5D52AD;
+  border: 1px solid #5D52AD;
+}
+
+.leaderboard__date-range-arrow:hover {
+  color: #4F4694;
+  border: 1px solid #4F4694;
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.3);
 }
 
 .leaderboard__rank-number {
   margin-right: 5px;
   width: 20px;
   display: inline-block;
-  /*@include media-breakpoint-down (md) {*/
-  /*display: block;*/
-  /*width: auto;*/
-  /*margin: 0 auto 5px;*/
-  /*text-align: center;*/
-  /*}*/
-}
-
-.leaderboard__rank-change {
 }
 
 .leaderboard__rank-change-icon {
@@ -93,5 +114,4 @@
 .leaderboard__rank-delta {
   vertical-align: middle;
   display: inline-block;
-  /*color: darken($ light-grey-text, 10%);*/
 }

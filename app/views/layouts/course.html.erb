@@ -1,5 +1,6 @@
 <% presenter = ::Layouts::CoursePresenter.new(self) %>
 <% content_for(:head) do %>
+  <%= javascript_pack_tag 'layouts/courses', 'data-turbolinks-track': 'reload', nonce: true %>
   <%= stylesheet_pack_tag 'schools/shared/shared', media: 'all', 'data-turbolinks-track': 'reload' %>
 <% end %>
 
@@ -57,6 +58,9 @@
         <ul class="list-reset p-4">
           <% default_classes = 'flex text-indigo-darker py-3 px-4 hover:bg-grey-lighter focus:bg-grey-lighter font-semibold rounded no-underline items-center my-1' %>
           <% selected_classes = ' bg-grey-lighter' %>
+          <li>
+            <div id="layouts-courses" data-props="<%= presenter.react_props(@course).to_json %>"></div>
+          </li>
           <li><%= link_to 'Students', school_course_students_path(@course), class: (default_classes + (current_page?(school_course_students_path(@course)) ? selected_classes : '')) %></li>
           <li><%= link_to 'Coaches', school_course_coaches_path(@course), class: (default_classes + (current_page?(school_course_coaches_path(@course)) ? selected_classes : '')) %></li>
           <li><%= link_to 'Curriculum', school_course_curriculum_path(@course), class: (default_classes + (current_page?(school_course_curriculum_path(@course)) ? selected_classes : '')) %></li>

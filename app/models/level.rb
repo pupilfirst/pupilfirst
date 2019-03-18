@@ -5,7 +5,7 @@ class Level < ApplicationRecord
   has_many :target_groups, dependent: :restrict_with_error
   has_many :startups, dependent: :restrict_with_error
   has_many :targets, through: :target_groups
-  has_many :weekly_karma_points, dependent: :restrict_with_error
+
   belongs_to :course
 
   normalize_attribute :unlock_on

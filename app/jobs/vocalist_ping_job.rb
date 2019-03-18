@@ -16,6 +16,7 @@ class VocalistPingJob < ApplicationJob
         Founder.find(founder_id)
       end
     end
+
     recipients
   end
 end

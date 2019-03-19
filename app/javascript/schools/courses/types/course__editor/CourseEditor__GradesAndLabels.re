@@ -9,4 +9,6 @@ let label = t => t.label;
 
 let create = (grade, label) => {grade, label};
 
-let empty = grade => {grade, label: "Add Your Label"};
+let empty = grade => {grade, label: ""};
+
+let update = (label, t) => {...t, label};

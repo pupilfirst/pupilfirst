@@ -3,6 +3,7 @@ module Mutations
     argument :name, String, required: true
     argument :max_grade, Integer, required: true
     argument :pass_grade, Integer, required: true
+    argument :grades_and_labels, [Types::GradeAndLabelInputType], required: true
 
     description "Create a new course."
 

@@ -17,8 +17,35 @@ type state = {
 
 type action =
   | UpdateName(string, bool)
+  | UpdateMaxGrade(int)
+  | UpdatePassGrade(int)
+  | UpdateGradesAndLabels(GradesAndLabels.t)
   | UpdateEndsAt(string, bool)
   | UpdateSaving;
+
+/* module CreateCourseQuery = [%graphql
+     {|
+   mutation($name: String! $maxGrade: Int!, $passGrade: Int!, $gradesAndLabels: [GradeAndLabelInput]!) {
+     createCourse(name: $name, maxGrade: $maxGrade,passGrade: $passGrade, gradesAndLabels: $gradesAndLabels) {
+       course {
+         id
+       }
+       errors
+     }
+   }
+   |}
+   ];
+
+   let creteCourse = (state, send) => {
+     let courseQury =
+       CreateCourseQuery.make(
+         ~name=state.name,
+         ~maxGrade=state.maxGrade,
+         ~passGrade=state.passGrade,
+         ~gradesAndLabels=state.gradesAndLabels,
+       );
+     ();
+   }; */
 
 let component = ReasonReact.reducerComponent("CourseEditor__Form");
 
@@ -59,6 +86,8 @@ let setPayload = (authenticityToken, state) => {
 let formClasses = value =>
   value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full";
 
+let possibleGradeValues: list(int) = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
 let make =
     (
       ~course,
@@ -89,6 +118,14 @@ let make =
         gradesAndLabels: [
           GradesAndLabels.empty(1),
           GradesAndLabels.empty(2),
+          GradesAndLabels.empty(3),
+          GradesAndLabels.empty(4),
+          GradesAndLabels.empty(5),
+          GradesAndLabels.empty(6),
+          GradesAndLabels.empty(7),
+          GradesAndLabels.empty(8),
+          GradesAndLabels.empty(9),
+          GradesAndLabels.empty(10),
         ],
         hasNameError: false,
         hasDateError: false,
@@ -108,6 +145,18 @@ let make =
         dirty: true,
       })
     | UpdateSaving => ReasonReact.Update({...state, saving: !state.saving})
+    | UpdateMaxGrade(maxGrade) => ReasonReact.Update({...state, maxGrade})
+    | UpdatePassGrade(passGrade) => ReasonReact.Update({...state, passGrade})
+    | UpdateGradesAndLabels(gradesAndLabel) =>
+      let gradesAndLabels =
+        state.gradesAndLabels
+        |> List.map(gl =>
+             gl
+             |> GradesAndLabels.grade
+             == (gradesAndLabel |> GradesAndLabels.grade) ?
+               gradesAndLabel : gl
+           );
+      ReasonReact.Update({...state, gradesAndLabels});
     },
   render: ({state, send}) => {
     let handleErrorCB = () => send(UpdateSaving);
@@ -198,11 +247,79 @@ let make =
                 }
                 <label
                   className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                  htmlFor="max_grades">
+                  {"Max Grade" |> str}
+                </label>
+                <select
+                  onChange={
+                    event =>
+                      send(
+                        UpdateMaxGrade(
+                          ReactEvent.Form.target(event)##value
+                          |> int_of_string,
+                        ),
+                      )
+                  }
+                  value={state.maxGrade |> string_of_int}
+                  className="block appearance-none w-full bg-white border text-sm border-grey-light hover:border-grey px-4 py-2 pr-8 rounded-r-none leading-tight focus:outline-none">
+                  {
+                    possibleGradeValues
+                    |> List.filter(g => g != 1)
+                    |> List.map(possibleGradeValue =>
+                         <option value={possibleGradeValue |> string_of_int}>
+                           {possibleGradeValue |> string_of_int |> str}
+                         </option>
+                       )
+                    |> Array.of_list
+                    |> ReasonReact.array
+                  }
+                </select>
+                <label
+                  className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                  htmlFor="pass_grades">
+                  {"Pass Grades" |> str}
+                </label>
+                <select
+                  onChange={
+                    event =>
+                      send(
+                        UpdatePassGrade(
+                          ReactEvent.Form.target(event)##value
+                          |> int_of_string,
+                        ),
+                      )
+                  }
+                  value={state.passGrade |> string_of_int}
+                  className="block appearance-none w-full bg-white border text-sm border-grey-light hover:border-grey px-4 py-2 pr-8 rounded-r-none leading-tight focus:outline-none">
+                  {
+                    possibleGradeValues
+                    |> List.filter(g => g < state.maxGrade)
+                    |> List.map(possibleGradeValue =>
+                         <option value={possibleGradeValue |> string_of_int}>
+                           {possibleGradeValue |> string_of_int |> str}
+                         </option>
+                       )
+                    |> Array.of_list
+                    |> ReasonReact.array
+                  }
+                </select>
+                <label
+                  className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
                   htmlFor="grades">
                   {"Grades" |> str}
                 </label>
+                <button
+                  className="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded"
+                  onClick={_ => send(UpdateMaxGrade(state.maxGrade + 1))}>
+                  {"Add New Grade Label" |> str}
+                </button>
                 {
                   state.gradesAndLabels
+                  |> List.filter(gradesAndLabel =>
+                       gradesAndLabel
+                       |> GradesAndLabels.grade <= state.maxGrade
+                     )
+                  |> List.rev
                   |> List.map(gradesAndLabel =>
                        <div>
                          <span>
@@ -223,6 +340,17 @@ let make =
                            type_="text"
                            placeholder="Type Grade label"
                            value={gradesAndLabel |> GradesAndLabels.label}
+                           onChange={
+                             event =>
+                               send(
+                                 UpdateGradesAndLabels(
+                                   GradesAndLabels.update(
+                                     ReactEvent.Form.target(event)##value,
+                                     gradesAndLabel,
+                                   ),
+                                 ),
+                               )
+                           }
                          />
                        </div>
                      )

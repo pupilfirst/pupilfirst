@@ -91,30 +91,22 @@
         <tbody>
         <% presenter.students.each do |student| %>
           <tr class="<%= student.current_student? ? 'leaderboard__current-student-row rounded' : '' %>">
-            <td class="leaderboard__rank">
+            <td>
               <span class="leaderboard__rank-number font-semibold px-3"><%= student.rank %></span>
             </td>
-            <td class="leaderboard__rank">
-              <span class="leaderboard__rank-change">
-                <span class="<%= presenter.rank_change_class(student.delta) %>"><%= student.delta.blank? ? 'New' : '' %></span>
-                <span class="leaderboard__rank-change-icon d-inline-block mr-1">
-                  <%= image_tag 'courses/leaderboard/rank-change-up.svg', class: 'img-fluid', alt: 'Rank change up' %>
-                </span>
-                <span class="leaderboard__rank-change-icon d-inline-block mr-1">
-                  <%= image_tag 'courses/leaderboard/rank-change-down.svg', class: 'img-fluid', alt: 'Rank change down' %>
-                </span>
-                <span class="leaderboard__rank-change-icon d-inline-block mr-1">
-                  <%= image_tag 'courses/leaderboard/rank-change-down-double.svg', class: 'img-fluid', alt: 'Rank change down double' %>
-                </span>
-                <span class="leaderboard__rank-change-icon d-inline-block mr-1">
-                  <%= image_tag 'courses/leaderboard/rank-change-up-double.svg', class: 'img-fluid', alt: 'Rank change up double' %>
-                </span>
-                <span class="leaderboard__rank-change-icon d-inline-block mr-1">
-                  <%= image_tag 'courses/leaderboard/rank-no-change.svg', class: 'img-fluid', alt: 'Rank no change' %>
-                </span>
-                <span class="leaderboard__rank-delta font-semibold"><%= student.delta %></span>
-              </span>
+
+            <td>
+              <% if student.delta.blank? %>
+                <span class="leaderboard__rank-change-new">New</span>
+              <% else %>
+                  <span class="leaderboard__rank-change-icon d-inline-block mr-1">
+                    <%= presenter.rank_change_icon(student.delta) %>
+                  </span>
+              <% end %>
+
+              <span class="leaderboard__rank-delta font-semibold"><%= presenter.format_delta(student.delta) %></span>
             </td>
+
             <td><%= student.name %></td>
             <td><%= student.level_number %></td>
             <td><%= student.score %></td>

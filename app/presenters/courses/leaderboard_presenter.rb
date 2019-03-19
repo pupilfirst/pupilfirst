@@ -119,16 +119,24 @@ module Courses
       LeaderboardEntry.where(founder: founders, period_from: from, period_to: to)
     end
 
-    def rank_change_class(delta)
-      if delta.blank?
-        'leaderboard__rank-change-new'
-      elsif delta.zero?
-        'leaderboard__rank-change-none'
+    def rank_change_icon(delta)
+      if delta >= 5
+        view.image_tag('courses/leaderboard/rank-change-up-double.svg', class: 'img-fluid', alt: 'Rank change up double')
       elsif delta.positive?
-        'leaderboard__rank-change-up'
+        view.image_tag('courses/leaderboard/rank-change-up.svg', class: 'img-fluid', alt: 'Rank change up')
+      elsif delta.zero?
+        view.image_tag('courses/leaderboard/rank-no-change.svg', class: 'img-fluid', alt: 'Rank no change')
+      elsif delta > -5
+        view.image_tag('courses/leaderboard/rank-change-down.svg', class: 'img-fluid', alt: 'Rank change down')
       else
-        'leaderboard__rank-change-down'
+        view.image_tag('courses/leaderboard/rank-change-down-double.svg', class: 'img-fluid', alt: 'Rank change down double')
       end
+    end
+
+    def format_delta(delta)
+      return if delta.blank?
+
+      delta.negative? ? delta * -1 : delta
     end
 
     private

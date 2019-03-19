@@ -1,12 +1,9 @@
 module Types
   class QueryType < Types::BaseObject
-    field :school, Types::SchoolType, null: true do
-      description "Find a school by ID"
-      argument :id, ID, required: true
-    end
+    field :courses, [Types::CourseType], null: false
 
-    def school(id:)
-      School.find_by(id: id)
+    def courses
+      context[:current_school].courses
     end
   end
 end

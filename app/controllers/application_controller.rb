@@ -108,7 +108,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_startup
-    @current_startup ||= current_founder.startup
+    @current_startup ||= current_founder&.startup
   end
 
   def current_school_admin

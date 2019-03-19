@@ -3,43 +3,73 @@ open CourseEditor__Types;
 module CoursesQuery = [%graphql
   {|
   query {
-    school(id: 9){
+    courses{
+      id
       name
-      courses{
-        id
-        name
-      }
+      endsAt
+      maxGrade
+      passGrade
     }
   }
 |}
 ];
 
-type props = {
-  courses: list(Course.t),
-  authenticityToken: string,
-};
+type props = {authenticityToken: string};
 
 type editorAction =
   | Hidden
   | ShowForm(option(Course.t));
 
-type state = {editorAction};
+type state = {
+  editorAction,
+  courses: list(Course.t),
+};
 
 type action =
-  | UpdateEditorAction(editorAction);
+  | UpdateEditorAction(editorAction)
+  | UpdateCourses(list(Course.t));
 
 let str = ReasonReact.string;
 
 let component = ReasonReact.reducerComponent("CourseEditor");
 
-let make = (~courses, ~authenticityToken, _children) => {
+let make = (~authenticityToken, _children) => {
   ...component,
-  initialState: () => {editorAction: Hidden},
+  initialState: () => {editorAction: Hidden, courses: []},
   reducer: (action, state) =>
     switch (action) {
     | UpdateEditorAction(editorAction) =>
       ReasonReact.Update({...state, editorAction})
+    | UpdateCourses(courses) => ReasonReact.Update({...state, courses})
     },
+  didMount: ({send}) => {
+    let coursesQuery = CoursesQuery.make();
+    let response = coursesQuery |> GraphqlQuery.sendQuery;
+    response
+    |> Js.Promise.then_(result => {
+         let courses =
+           result##courses
+           |> Js.Array.map(rawCourse => {
+                let endsAt =
+                  switch (rawCourse##endsAt) {
+                  | Some(endsAt) => Some(endsAt |> Json.Decode.string)
+                  | None => None
+                  };
+
+                Course.create(
+                  rawCourse##id |> int_of_string,
+                  rawCourse##name,
+                  endsAt,
+                  rawCourse##maxGrade,
+                  rawCourse##passGrade,
+                );
+              })
+           |> Array.to_list;
+         send(UpdateCourses(courses));
+         Js.Promise.resolve();
+       })
+    |> ignore;
+  },
   render: ({state, send}) => {
     let hideEditorActionCB = () => send(UpdateEditorAction(Hidden));
     let updateCoursesCB = courses => ();
@@ -70,7 +100,7 @@ let make = (~courses, ~authenticityToken, _children) => {
           className="px-6 pb-4 mt-5 flex flex-1 bg-grey-lightest overflow-y-scroll">
           <div className="max-w-md w-full mx-auto relative">
             {
-              courses
+              state.courses
               |> Course.sort
               |> List.map(course =>
                    <div
@@ -98,7 +128,6 @@ let make = (~courses, ~authenticityToken, _children) => {
 
 let decode = json =>
   Json.Decode.{
-    courses: json |> field("courses", list(Course.decode)),
     authenticityToken: json |> field("authenticityToken", string),
   };
 
@@ -107,10 +136,6 @@ let jsComponent =
     ~component,
     jsProps => {
       let props = jsProps |> decode;
-      make(
-        ~courses=props.courses,
-        ~authenticityToken=props.authenticityToken,
-        [||],
-      );
+      make(~authenticityToken=props.authenticityToken, [||]);
     },
   );

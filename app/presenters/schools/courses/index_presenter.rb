@@ -7,7 +7,8 @@ module Schools
 
       def react_props
         {
-          courses: school_courses
+          courses: school_courses,
+          authenticityToken: view.form_authenticity_token
         }
       end
 
@@ -17,7 +18,11 @@ module Schools
         current_school.courses.map do |course|
           {
             id: course.id,
-            name: course.name
+            name: course.name,
+            maxGrage: course.max_grade,
+            passGrade: course.pass_grade,
+            gradeLabels: course.grade_labels,
+            endsAt: course.ends_at
           }
         end
       end

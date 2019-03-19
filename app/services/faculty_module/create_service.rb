@@ -18,6 +18,8 @@ module FacultyModule
           title: @faculty_params[:title],
           image: Rails.root.join('spec', 'support', 'uploads', 'faculty', 'mickey_mouse.jpg').open,
           school: @faculty_params[:school],
+          linkedin_url: @faculty_params[:linkedin_url],
+          connect_link: @faculty_params[:connect_link],
           public: @faculty_params[:public],
           notify_for_submission: @faculty_params[:notify_for_submission]
         )

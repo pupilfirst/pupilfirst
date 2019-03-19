@@ -8,6 +8,7 @@ module Schools
       property :connect_link
       property :notify_for_submission
       property :public
+      property :image
       property :school_id, virtual: true, validates: { presence: true }
 
       def save
@@ -31,6 +32,7 @@ module Schools
           linkedin_url: linkedin_url,
           connect_link: connect_link,
           public: public,
+          image: image,
           notify_for_submission: notify_for_submission
         }
       end

@@ -447,7 +447,8 @@ let make =
                     <div
                       id="notification"
                       className="inline-flex w-1/2 rounded-lg overflow-hidden border">
-                      <button
+                      <input
+                        type_="button"
                         onClick=(
                           _event => {
                             ReactEvent.Mouse.preventDefault(_event);
@@ -455,9 +456,8 @@ let make =
                           }
                         )
                         name="faculty[public]"
-                        className=(booleanButtonClasses(state.public))>
-                        ("Yes" |> str)
-                      </button>
+                        value="Yes"
+                        className=(booleanButtonClasses(state.public))/>
                       <button
                         onClick=(
                           _event => {

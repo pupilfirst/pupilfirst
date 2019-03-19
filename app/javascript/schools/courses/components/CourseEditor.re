@@ -1,5 +1,19 @@
 open CourseEditor__Types;
 
+module CoursesQuery = [%graphql
+  {|
+  query {
+    school(id: 9){
+      name
+      courses{
+        id
+        name
+      }
+    }
+  }
+|}
+];
+
 type props = {
   courses: list(Course.t),
   authenticityToken: string,

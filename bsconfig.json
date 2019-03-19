@@ -15,10 +15,7 @@
   ],
   "suffix": ".bs.js",
   "namespace": true,
-  "bs-dependencies": [
-    "reason-react",
-    "@glennsl/bs-json",
-    "bs-fetch"
-  ],
-  "refmt": 3
+  "bs-dependencies": ["reason-react", "@glennsl/bs-json", "bs-fetch"],
+  "refmt": 3,
+  "ppx-flags": ["graphql_ppx/ppx"]
 }

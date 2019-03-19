@@ -1,9 +1,9 @@
 class CoursePolicy < ApplicationPolicy
   def leaderboard?
-    true
+    # School admins can view the leaderboard.
+    return true if current_school_admin.present?
 
-    # return false if current_founder.blank?
-    #
-    # current_founder.course == record
+    # Students enrolled in the current course can view the leaderboard.
+    record.present? && record == current_founder&.course
   end
 end

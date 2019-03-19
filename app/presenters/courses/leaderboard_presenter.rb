@@ -17,7 +17,7 @@ module Courses
       end
 
       def current_student?
-        @current_student ||= (id == @current_founder.id)
+        @current_student ||= (id == @current_founder&.id)
       end
     end
 

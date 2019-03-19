@@ -18,6 +18,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_founder
   helper_method :current_startup
   helper_method :current_coach
+  helper_method :current_school_admin
 
   # When in production, respond to requests that ask for unhandled formats with 406.
   rescue_from ActionView::MissingTemplate do |exception|
@@ -112,7 +113,11 @@ class ApplicationController < ActionController::Base
   end
 
   def current_school_admin
-    @current_school_admin ||= current_user.school_admins.find_by(school: current_school)
+    @current_school_admin ||= begin
+      if current_user.present? && current_school.present?
+        current_user.school_admins.find_by(school: current_school)
+      end
+    end
   end
 
   # sets a permanent signed cookie. Additional options such as :tld_length can be passed via the options_hash
@@ -150,7 +155,8 @@ class ApplicationController < ActionController::Base
       current_user: current_user,
       current_founder: current_founder,
       current_school: current_school,
-      current_coach: current_coach
+      current_coach: current_coach,
+      current_school_admin: current_school_admin
     )
   end
 

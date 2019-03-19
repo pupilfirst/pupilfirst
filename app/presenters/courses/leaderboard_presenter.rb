@@ -63,7 +63,7 @@ module Courses
       else
         others_count = toppers.count - 2
         names = toppers[0..1].map { |s| "<strong>#{s.name}</strong>" }
-        "#{names.join(', ')} and #{others_count} others #{multiple_mid_text}"
+        "#{names.join(', ')} and <strong>#{others_count} others</strong> #{multiple_mid_text}"
       end
 
       (h + "<strong>#{top_score}</strong>.").html_safe

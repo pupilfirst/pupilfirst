@@ -447,8 +447,8 @@ let make =
                     <div
                       id="notification"
                       className="inline-flex w-1/2 rounded-lg overflow-hidden border">
-                      <input
-                        type_="button"
+                      <button
+                        type_="submit"
                         onClick=(
                           _event => {
                             ReactEvent.Mouse.preventDefault(_event);
@@ -456,8 +456,10 @@ let make =
                           }
                         )
                         name="faculty[public]"
-                        value="Yes"
-                        className=(booleanButtonClasses(state.public))/>
+                        value="true"
+                        className=(booleanButtonClasses(state.public))>
+                        ("Yes" |> str)
+                      </button>
                       <button
                         onClick=(
                           _event => {
@@ -468,6 +470,11 @@ let make =
                         className=(booleanButtonClasses(! state.public))>
                         ("No" |> str)
                       </button>
+                      <input
+                        type_="hidden"
+                        name="faculty[public]"
+                        value={state.public |> string_of_bool}
+                      />
                     </div>
                   </div>
                   <div className="flex items-center mb-6">
@@ -495,6 +502,7 @@ let make =
                         )>
                         ("Yes" |> str)
                       </button>
+
                       <button
                         onClick=(
                           _event => {
@@ -507,6 +515,11 @@ let make =
                         )>
                         ("No" |> str)
                       </button>
+                      <input
+                        type_="hidden"
+                        name="faculty[notify_for_submission]"
+                        value={state.notifyForSubmission |> string_of_bool}
+                      />
                     </div>
                   </div>
                   <label

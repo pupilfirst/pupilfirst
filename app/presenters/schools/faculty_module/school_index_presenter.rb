@@ -28,7 +28,8 @@ module Schools
             linkedinUrl: faculty.linkedin_url,
             public: faculty.public,
             connectLink: faculty.connect_link,
-            notifyForSubmission: faculty.notify_for_submission
+            notifyForSubmission: faculty.notify_for_submission,
+            imageFileName: faculty.image_filename
           }
         end
       end

@@ -24,6 +24,8 @@ let updateInfo: (string, t) => t;
 
 let updateList: (list(t), t) => list(t);
 
+let imageFileName: t => option(string);
+
 let create:
   (
     int,
@@ -34,6 +36,7 @@ let create:
     option(string),
     bool,
     option(string),
-    bool
+    bool,
+    option(string)
   ) =>
   t;

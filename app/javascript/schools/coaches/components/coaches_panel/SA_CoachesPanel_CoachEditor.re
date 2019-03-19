@@ -20,13 +20,14 @@ type state = {
   public: bool,
   connectLink: string,
   notifyForSubmission: bool,
+  imageFileName: string,
   dirty: bool,
   saving: bool,
   hasNameError: bool,
   hasTitleError: bool,
   hasEmailError: bool,
   hasLinkedInUrlError: bool,
-  hasConnectLinkError: bool,
+  hasConnectLinkError: bool
 };
 
 type action =
@@ -37,6 +38,7 @@ type action =
   | UpdateConnectLink(string, bool)
   | UpdatePublic(bool)
   | UpdateNotifyForSubmission(bool)
+  | UpdateImageFileName(string)
   | UpdateSaving;
 
 let component = ReasonReact.reducerComponent("SA_CoachesPanel_CoachEditor");
@@ -121,6 +123,7 @@ let make =
         hasTitleError: false,
         hasLinkedInUrlError: false,
         hasConnectLinkError: false,
+        imageFileName: ""
       }
     | Some(coach) => {
         name: coach |> Coach.name,
@@ -146,6 +149,11 @@ let make =
         hasTitleError: false,
         hasLinkedInUrlError: false,
         hasConnectLinkError: false,
+        imageFileName:
+          switch (coach |> Coach.imageFileName) {
+          | Some(imageFileName) => imageFileName
+          | None => ""
+          },
       }
     },
   reducer: (action, state) =>
@@ -175,25 +183,28 @@ let make =
     | UpdateNotifyForSubmission(notifyForSubmission) =>
       ReasonReact.Update({...state, notifyForSubmission, dirty: true})
     | UpdateSaving => ReasonReact.Update({...state, saving: ! state.saving})
+    | UpdateImageFileName(imageFileName) => ReasonReact.Update({...state, imageFileName, dirty: true})
     },
   render: ({state, send}) => {
     let formId = "coach-create-form";
     let addCoach = json => {
       let id = json |> Json.Decode.(field("id", int));
       let imageUrl = json |> Json.Decode.(field("image_url", string));
-      let newCoach = Coach.create(id, state.name, imageUrl, state.email, state.title, Some(state.linkedinUrl), state.public, Some(state.connectLink), state.notifyForSubmission);
+      let newCoach = Coach.create(id, state.name, imageUrl, state.email, state.title, Some(state.linkedinUrl), state.public, Some(state.connectLink), state.notifyForSubmission, Some(state.imageFileName));
       switch (coach) {
         | Some(_) =>
           Notification.success("Success", "Coach updated successfully")
         | None => Notification.success("Success", "Coach created successfully")
         };
-        updateCoachCB(newCoach);
+      updateCoachCB(newCoach);
+      closeFormCB();
     }
     let avatarUploaderText = () =>
-      switch (coach) {
-      | Some(coach) => "Replace avatar of " ++ (coach |> Coach.name)
-      | None => "Upload an avatar"
-      };
+      switch (state.imageFileName) {
+      | "" => "Upload an avatar"
+      | _ => "Replace avatar: " ++ state.imageFileName
+      }
+
     let handleResponseJSON = json => {
       let error =
         json
@@ -281,7 +292,7 @@ let make =
                   ("Coach Details" |> str)
                 </h5>
                 <form
-                  key=(Random.int(99999) |> string_of_int)
+                  key="xxx"
                   id=formId
                   onSubmit=(event => submitForm(event))>
                   <input
@@ -498,7 +509,7 @@ let make =
                       </button>
                     </div>
                   </div>
-                  /* <label
+                  <label
                        className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
                        htmlFor="avatarUploader">
                        ("Avatar" |> str)
@@ -506,14 +517,21 @@ let make =
                      <div
                        className="input-file__container flex items-center relative mb-4">
                        <input
-                         disabled=false
+                         disabled={state.saving}
                          className="input-file__input cursor-pointer px-4"
-                         name="resource[file]"
+                         name="faculty[image]"
                          type_="file"
                          id="file"
-                         required=true
+                         required=false
                          multiple=false
-                         onChange=(event => Js.log("Hey"))
+                         onChange={
+                          event =>
+                            send(
+                              UpdateImageFileName(
+                                ReactEvent.Form.target(event)##files[0]##name,
+                              ),
+                            )
+                        }
                        />
                        <label
                          className="input-file__label flex px-4 items-center font-semibold rounded text-sm"
@@ -525,7 +543,7 @@ let make =
                            (avatarUploaderText() |> str)
                          </span>
                        </label>
-                     </div> */
+                     </div>
                   <div className="flex max-w-md w-full px-6 pb-5 mx-auto">
                     (
                       switch (coach) {

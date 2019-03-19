@@ -67,7 +67,7 @@ let make = (~coaches, ~schoolId, ~authenticityToken, _children) => {
           className="px-6 pb-4 mt-5 flex flex-1 bg-grey-lightest overflow-y-scroll">
           <div className="max-w-md w-full mx-auto relative">
             (
-              coaches
+              state.coaches
               |> List.map(coach =>
                    <div
                      className="flex items-center shadow bg-white rounded-lg overflow-hidden mb-4">

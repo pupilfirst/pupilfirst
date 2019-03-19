@@ -5,6 +5,9 @@ let str = ReasonReact.string;
 
 type state = {
   name: string,
+  maxGrade: int,
+  passGrade: int,
+  gradesAndLabels: list(GradesAndLabels.t),
   endsAt: option(string),
   hasNameError: bool,
   hasDateError: bool,
@@ -70,6 +73,9 @@ let make =
     | Some(course) => {
         name: course |> Course.name,
         endsAt: course |> Course.endsAt,
+        maxGrade: course |> Course.maxGrade,
+        passGrade: course |> Course.passGrade,
+        gradesAndLabels: course |> Course.gradesAndLabels,
         hasNameError: false,
         hasDateError: false,
         dirty: false,
@@ -78,6 +84,12 @@ let make =
     | None => {
         name: "",
         endsAt: None,
+        maxGrade: 2,
+        passGrade: 1,
+        gradesAndLabels: [
+          GradesAndLabels.empty(1),
+          GradesAndLabels.empty(2),
+        ],
         hasNameError: false,
         hasDateError: false,
         dirty: false,
@@ -110,29 +122,6 @@ let make =
       };
       updateCoursesCB(newCourse);
     };
-    /*
-     let createCourse = (authenticityToken, course, state) => {
-       send(UpdateSaving);
-       let course_id = course |> Course.id |> string_of_int;
-       let url = "/school/courses/" ++ course_id ++ "/Courses";
-       Api.create(
-         url,
-         setPayload(authenticityToken, state),
-         handleResponseCB,
-         handleErrorCB,
-       );
-     };
-
-     let updateCourse = (authenticityToken, courseId, state) => {
-       send(UpdateSaving);
-       let url = "/school/Courses/" ++ courseId;
-       Api.update(
-         url,
-         setPayload(authenticityToken, state),
-         handleResponseCB,
-         handleErrorCB,
-       );
-     }; */
 
     let endsAt =
       switch (state.endsAt) {
@@ -206,6 +195,39 @@ let make =
                       {"not a valid date" |> str}
                     </div> :
                     ReasonReact.null
+                }
+                <label
+                  className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                  htmlFor="grades">
+                  {"Grades" |> str}
+                </label>
+                {
+                  state.gradesAndLabels
+                  |> List.map(gradesAndLabel =>
+                       <div>
+                         <span>
+                           {
+                             gradesAndLabel
+                             |> GradesAndLabels.grade
+                             |> string_of_int
+                             |> str
+                           }
+                         </span>
+                         <input
+                           className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                           id={
+                             gradesAndLabel
+                             |> GradesAndLabels.grade
+                             |> string_of_int
+                           }
+                           type_="text"
+                           placeholder="Type Grade label"
+                           value={gradesAndLabel |> GradesAndLabels.label}
+                         />
+                       </div>
+                     )
+                  |> Array.of_list
+                  |> ReasonReact.array
                 }
                 <div className="flex">
                   {

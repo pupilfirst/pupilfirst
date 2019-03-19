@@ -9,6 +9,10 @@ module CoursesQuery = [%graphql
       endsAt
       maxGrade
       passGrade
+      gradesAndLabels {
+        grade
+        label
+      }
     }
   }
 |}
@@ -55,6 +59,15 @@ let make = (~authenticityToken, _children) => {
                   | Some(endsAt) => Some(endsAt |> Json.Decode.string)
                   | None => None
                   };
+                let gradesAndLabels =
+                  rawCourse##gradesAndLabels
+                  |> Array.map(gradesAndLabel =>
+                       GradesAndLabels.create(
+                         gradesAndLabel##grade,
+                         gradesAndLabel##label,
+                       )
+                     )
+                  |> Array.to_list;
 
                 Course.create(
                   rawCourse##id |> int_of_string,
@@ -62,6 +75,7 @@ let make = (~authenticityToken, _children) => {
                   endsAt,
                   rawCourse##maxGrade,
                   rawCourse##passGrade,
+                  gradesAndLabels,
                 );
               })
            |> Array.to_list;

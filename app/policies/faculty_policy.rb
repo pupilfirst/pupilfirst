@@ -12,7 +12,7 @@ class FacultyPolicy < ApplicationPolicy
     return false if current_founder.blank?
 
     # Cannot connect if connect link is blank or doesn't have appropriate slots available.
-    return false unless record.connect_slots.available_for_founder.exists? || record.connect_link?
+    return false unless record.connect_slots.available_for_founder.exists? || record.connect_link.present?
 
     # It should be possible to connect to course-enrolled coaches.
     return true if record.courses.where(id: current_founder.startup.course).exists?

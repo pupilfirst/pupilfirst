@@ -1,5 +1,6 @@
+- presenter = Founders::ShowPresenter.new(self, @founder)
 - content_for(:head) do
-  title #{@founder.startup.course.name} Course Profile for #{@founder.fullname} | #{current_school.name}
+  title #{presenter.course_name} Course Profile for #{@founder.fullname} | #{current_school.name}
 - if @founder.exited?
   - content_for :sitewide_notice
     ' Your student profile for this course is locked, and cannot be updated.
@@ -27,7 +28,7 @@
                 span.progress-value
                   = @founder.profile_completion_percentage
                   | % complete
-              - if !@founder.exited && @founder.profile_completion_percentage < 100
+              - if presenter.incomplete_profile?
                 a.profile-complete-button href=edit_founder_url
                   ' Complete Your Profile
         .col-md-10
@@ -36,7 +37,7 @@
               .col-lg-6.profile-name.px-0.mt-2.mt-md-0.text-center.text-md-left
                 h2
                   = @founder.fullname
-                  - if current_founder == @founder && !@founder.exited
+                  - if presenter.edit_profile?
                     a.profile-edit-button href=edit_founder_url title="Edit Your Profile"
                       i.fa.fa-pencil
                       | Edit
@@ -111,29 +112,25 @@
                           ' #{@founder.personal_website_url}
                           i.fa.fa-external-link
           .row
-            - if @founder.faculty.any?
+            - if presenter.public_faculty.any?
               .col-md-12.mt-4
-                - if @founder.faculty.count > 1
-                  h3 Coaches
-                - else
-                  h3 Coach
+                h3 =presenter.faculty_display_text
                 hr
-                - @founder.faculty.each do |faculty|
-                  - if faculty.public
-                    .data-faculty
-                      .media.align-items-center
-                        a.mr-3 href=faculty_url(faculty.slug)
-                          .faculty-image
-                            == avatar(faculty.name, faculty: faculty, background_shape: :square)
-                        .media-body
-                          .media-heading
-                            = link_to faculty.name, faculty_url(faculty.slug)
-                          p.designation #{faculty.title}
-                          - if faculty.linkedin_url?
-                            ul.faculty__social-links
-                              li
-                                a href="#{faculty.linkedin_url}" target='_blank'
-                                  i.fa.fa-linkedin-square
+                - presenter.public_faculty.each do |faculty|
+                  .data-faculty
+                    .media.align-items-center
+                      a.mr-3 href=faculty_url(faculty.slug)
+                        .faculty-image
+                          == avatar(faculty.name, faculty: faculty, background_shape: :square)
+                      .media-body
+                        .media-heading
+                          = link_to faculty.name, faculty_url(faculty.slug)
+                        p.designation #{faculty.title}
+                        - if faculty.linkedin_url?
+                          ul.faculty__social-links
+                            li
+                              a href="#{faculty.linkedin_url}" target='_blank'
+                                i.fa.fa-linkedin-square
 
       .col-lg-9.order-2.order-lg-1
         - if @timeline_event_for_og.present?

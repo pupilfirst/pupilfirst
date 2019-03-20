@@ -27,13 +27,6 @@ module Schools
       end
     end
 
-    # DELETE /school/levels/:id
-    def destroy
-      course = level.course
-      level.destroy!
-      redirect_back(fallback_location: school_course_curriculum_path(course))
-    end
-
     private
 
     def level

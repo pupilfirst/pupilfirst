@@ -29,7 +29,6 @@ class Founder < ApplicationRecord
   has_one :level, through: :startup
   has_one :course, through: :level
   has_one :school, through: :course
-  has_many :karma_points, dependent: :destroy
   has_many :visits, as: :user, dependent: :nullify, inverse_of: :user
   has_many :ahoy_events, class_name: 'Ahoy::Event', as: :user, dependent: :nullify, inverse_of: :user
   has_many :platform_feedback, dependent: :nullify
@@ -40,6 +39,8 @@ class Founder < ApplicationRecord
   has_many :active_admin_comments, as: :resource, class_name: 'ActiveAdmin::Comment', dependent: :destroy, inverse_of: :resource
   has_many :timeline_event_owners, dependent: :destroy
   has_many :timeline_events, through: :timeline_event_owners
+  has_many :leaderboard_entries, dependent: :destroy
+
   has_one_attached :avatar
 
   scope :admitted, -> { joins(:startup).merge(Startup.admitted) }

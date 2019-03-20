@@ -3,9 +3,10 @@ require 'rails_helper'
 describe FacultyModule::WeeklySlotsPromptJob do
   subject { described_class }
 
-  let!(:faculty_non_self_service) { create :faculty, self_service: false, notify_for_submission: true }
-  let!(:faculty_self_service) { create :faculty, self_service: true, notify_for_submission: true }
-  let!(:another_faculty) { create :faculty, self_service: true }
+  let!(:school) { create :school }
+  let!(:faculty_non_self_service) { create :faculty, school: school, self_service: false }
+  let!(:faculty_self_service) { create :faculty, school: school, self_service: true }
+  let!(:another_faculty) { create :faculty, school: school, self_service: true }
 
   before do
     create :connect_slot, slot_at: 1.5.weeks.ago, faculty: faculty_non_self_service
@@ -13,7 +14,7 @@ describe FacultyModule::WeeklySlotsPromptJob do
     create :connect_slot, slot_at: 1.5.weeks.ago, faculty: another_faculty
 
     # Create a domain for school
-    create :domain, :primary, school: faculty_self_service.school
+    create :domain, :primary, school: school
   end
 
   describe '#perform' do
@@ -22,7 +23,7 @@ describe FacultyModule::WeeklySlotsPromptJob do
 
       expect(faculty_non_self_service.connect_slots.count).to eq(1)
       expect(faculty_self_service.connect_slots.count).to eq(2)
-      expect(another_faculty.connect_slots.count).to eq(1)
+      expect(another_faculty.connect_slots.count).to eq(2)
 
       open_email(faculty_self_service.email)
 

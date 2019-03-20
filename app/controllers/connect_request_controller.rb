@@ -16,7 +16,6 @@ class ConnectRequestController < ApplicationController
     load_comment_form_for_faculty
 
     @rating_recorded = true if @connect_request.update(rating_for_team: params[:rating])
-    @karma_points_added = true if @connect_request.assign_karma_points(params[:rating])
 
     render 'comment_form'
   end

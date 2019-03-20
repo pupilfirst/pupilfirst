@@ -24,7 +24,7 @@ feature 'Founder Edit' do
     scenario 'Founder tries to submit a blank form' do
       sign_in_user(founder.user, referer: edit_founder_path)
 
-      expect(page).to have_text('Edit').and have_text('profile')
+      expect(page).to have_text('Edit your profile')
 
       fill_in 'founders_edit_name', with: ''
       fill_in 'founders_edit_phone', with: ''

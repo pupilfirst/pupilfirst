@@ -175,7 +175,6 @@ ActiveAdmin.register TimelineEvent do
         end
       end
 
-      row :karma_point
       row :score
       row('Grade') do
         timeline_event.overall_grade_from_score if timeline_event.score.present?

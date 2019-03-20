@@ -139,8 +139,10 @@ let make =
       | Some(date) => date
       | None => ""
       };
-    <div className="blanket">
-      <div className="drawer-right relative">
+    <div>
+      <div className="blanket">
+      </div>
+      <div className="drawer-right">
         <div className="drawer-right__close absolute">
           <button
             onClick={_ => hideEditorActionCB()}

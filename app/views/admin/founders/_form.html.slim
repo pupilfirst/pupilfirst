@@ -20,6 +20,7 @@
     = f.input :avatar, as: :file
     = f.input :college_id, as: :select, input_html: { 'data-search-url' => colleges_url }, collection: f.object.college.present? ? [f.object.college] : []
     = f.input :exited
+    = f.input :excluded_from_leaderboard
 
     / When creating a founder manually, let's skip the e-mail confirmation step.
     /= f.input :confirmed_at, as: :hidden, input_html: { value: Time.now.utc.to_s }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_08_124110) do
+ActiveRecord::Schema.define(version: 2019_03_14_091320) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -266,6 +266,7 @@ ActiveRecord::Schema.define(version: 2019_03_08_124110) do
     t.string "permanent_address"
     t.integer "resume_file_id"
     t.string "slack_access_token"
+    t.boolean "excluded_from_leaderboard", default: false
     t.index ["college_id"], name: "index_founders_on_college_id"
     t.index ["name"], name: "index_founders_on_name"
     t.index ["slug"], name: "index_founders_on_slug", unique: true
@@ -285,6 +286,17 @@ ActiveRecord::Schema.define(version: 2019_03_08_124110) do
     t.index ["founder_id"], name: "index_karma_points_on_founder_id"
     t.index ["source_id"], name: "index_karma_points_on_source_id"
     t.index ["startup_id"], name: "index_karma_points_on_startup_id"
+  end
+
+  create_table "leaderboard_entries", force: :cascade do |t|
+    t.bigint "founder_id"
+    t.datetime "period_from", null: false
+    t.datetime "period_to", null: false
+    t.integer "score", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["founder_id", "period_from", "period_to"], name: "index_leaderboard_entries_on_founder_id_and_period", unique: true
+    t.index ["founder_id"], name: "index_leaderboard_entries_on_founder_id"
   end
 
   create_table "levels", id: :serial, force: :cascade do |t|
@@ -710,6 +722,7 @@ ActiveRecord::Schema.define(version: 2019_03_08_124110) do
   add_foreign_key "faculty_startup_enrollments", "startups"
   add_foreign_key "founders", "colleges"
   add_foreign_key "founders", "users"
+  add_foreign_key "leaderboard_entries", "founders"
   add_foreign_key "levels", "courses"
   add_foreign_key "quiz_questions", "answer_options", column: "correct_answer_id"
   add_foreign_key "quiz_questions", "quizzes"

@@ -15,5 +15,26 @@ module Layouts
         'layouts/shared/favicon.png'
       end
     end
+
+    def react_props(current_course)
+      {
+        courses: school_courses,
+        currentCourse: course_data(current_course)
+      }
+    end
+
+    def school_courses
+      current_school.courses.map do |course|
+        course_data(course)
+      end
+    end
+
+    def course_data(course)
+      {
+        id: course.id,
+        name: course.name,
+        path: view.school_course_students_path(course)
+      }
+    end
   end
 end

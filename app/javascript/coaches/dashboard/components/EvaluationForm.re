@@ -33,9 +33,10 @@ let handleResponseJSON = (te, markReviewedCB, json) =>
     |> Json.Decode.(field("error", nullable(string)))
     |> Js.Null.toOption
   ) {
-  | Some(error) => Notification.error("Something went wrong!", error)
+  | Some(error) =>
+    CoachDashboard__Notification.error("Something went wrong!", error)
   | None =>
-    Notification.success(
+    CoachDashboard__Notification.success(
       "Grading Recorded",
       "Submission reviewed and moved to completed",
     );
@@ -89,9 +90,15 @@ let sendReview = (state, te, markReviewedCB, authenticityToken) => {
          (
            switch (error |> handleApiError) {
            | Some(code) =>
-             Notification.error(code |> string_of_int, "Please try again")
+             CoachDashboard__Notification.error(
+               code |> string_of_int,
+               "Please try again",
+             )
            | None =>
-             Notification.error("Something went wrong!", "Please try again")
+             CoachDashboard__Notification.error(
+               "Something went wrong!",
+               "Please try again",
+             )
            }
          )
          |> resolve
@@ -138,25 +145,25 @@ let make =
         <div
           className="timeline-event-card__review-box-header py-3 mb-3 d-flex justify-content-between">
           <h5 className="timeline-event-card__field-header font-bold my-0">
-            ("Grading Sheet:" |> str)
+            {"Grading Sheet:" |> str}
           </h5>
-          (
+          {
             switch (timelineEvent |> TimelineEvent.rubric) {
             | Some(_rubric) =>
               <div
                 className="timeline-event-card__link"
                 onClick=(_event => send(ChangeView(Rubric)))>
-                ("View Rubric" |> str)
+                {"View Rubric" |> str}
               </div>
             | None => ReasonReact.null
             }
-          )
+          }
         </div>
-        (
+        {
           state.evaluation
           |> List.map(grading =>
                <GradeBar
-                 key=(grading |> Grading.criterionId |> string_of_int)
+                 key={grading |> Grading.criterionId |> string_of_int}
                  grading
                  gradeLabels
                  gradeSelectCB=(
@@ -167,10 +174,10 @@ let make =
              )
           |> Array.of_list
           |> ReasonReact.array
-        )
+        }
         <div className="grade-bar__save-container d-flex justify-content-end">
           <button
-            className=(saveButtonClasses(state.evaluation))
+            className={saveButtonClasses(state.evaluation)}
             onClick=(
               _event =>
                 handleClick(
@@ -180,7 +187,7 @@ let make =
                   authenticityToken,
                 )
             )>
-            ("Save Grading" |> str)
+            {"Save Grading" |> str}
           </button>
         </div>
       </div>
@@ -189,22 +196,22 @@ let make =
         <div
           className="timeline-event-card__review-box-header py-3 mb-3 d-flex justify-content-between">
           <h5 className="timeline-event-card__field-header font-bold my-0">
-            ("Rubric:" |> str)
+            {"Rubric:" |> str}
           </h5>
         </div>
         <div className="timeline-event-card__rubric-box py-3 pl-3">
-          (
+          {
             switch (timelineEvent |> TimelineEvent.rubric) {
             | Some(rubric) => rubric |> str
             | None => ReasonReact.null
             }
-          )
+          }
         </div>
         <div
           className="timeline-event-card__link pl-3"
           onClick=(_event => send(ChangeView(Form)))>
           <i className="fa fa-chevron-left mr-2" />
-          ("Back to Grading Sheet" |> str)
+          {"Back to Grading Sheet" |> str}
         </div>
       </div>
     },

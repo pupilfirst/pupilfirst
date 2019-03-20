@@ -34,7 +34,7 @@ describe TimelineEvents::UndoGradingService do
 
     context 'when the timeline event was not reviewed before' do
       it 'raises a pending review exception' do
-        expect { subject.execute }.to raise_error(TimelineEvents::GradingService::ReviewPendingException)
+        expect { subject.execute }.to raise_error(TimelineEvents::UndoGradingService::ReviewPendingException)
       end
     end
   end

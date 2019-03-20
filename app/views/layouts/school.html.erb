@@ -6,42 +6,45 @@
 <% content_for(:wrapper) do %>
   <div class="antialiased flex h-screen">
     <div class="flex global-sidebar">
-      <div class="bg-grey-darker global-sidebar__primary-nav global-sidebar__primary-nav--expanded flex-none hidden md:block">
-        <div class="global-sidebar__header border-r p-4 bg-white flex pb-3">
-          <div class="global-sidebar__school-logo-container flex items-center bg-white h-16 w-1/2 rounded">
-            <%= image_tag(presenter.school_logo_path, alt: current_school.name) %>
+      <div class="bg-grey-darker global-sidebar__primary-nav global-sidebar__primary-nav--expanded flex flex-col justify-between">
+        <div>
+          <div class="global-sidebar__header border-r p-4 bg-white flex pb-3">
+            <div class="global-sidebar__school-logo-container flex items-center bg-white h-16 w-1/2 rounded">
+              <%= image_tag(presenter.school_logo_path, alt: current_school.name) %>
+            </div>
+            <div class="flex global-sidebar__school-search rounded justify-end w-1/2">
+              <!--            <div class="global-sidebar__school-search__icon-box flex items-center justify-center border rounded w-16">-->
+              <!--              <i class="material-icons md-48">search</i>-->
+              <!--            </div>-->
+            </div>
           </div>
-          <div class="flex global-sidebar__school-search rounded justify-end w-1/2">
-            <!--            <div class="global-sidebar__school-search__icon-box flex items-center justify-center border rounded w-16">-->
-            <!--              <i class="material-icons md-48">search</i>-->
-            <!--            </div>-->
-          </div>
-        </div>
-        <ul class="list-reset">
-          <!--          <li>-->
-          <%#= link_to school_path, class:'flex text-white py-3 px-4 hover:bg-grey-darkest font-semibold no-underline items-center' do%>
-          <!--              <i class="material-icons md-48 mr-2">vertical_split</i>-->
-          <!--              <span>Overview</span>-->
-          <%# end %>
-          <!--          </li>-->
-          <li>
-            <%= link_to school_coaches_path, class:'flex text-white py-3 px-4 hover:bg-grey-darkest font-semibold no-underline items-center' do%>
+          <ul class="list-reset">
+            <!--          <li>-->
+            <%#= link_to school_path, class:'flex text-white py-3 px-4 hover:bg-grey-darkest font-semibold no-underline items-center' do%>
+            <!--              <i class="material-icons md-48 mr-2">vertical_split</i>-->
+            <!--              <span>Overview</span>-->
+            <%# end %>
+            <!--          </li>-->
+            <li>
+              <%= link_to school_coaches_path, class: 'flex text-white py-3 px-4 hover:bg-grey-darkest font-semibold no-underline items-center' do %>
                 <i class="material-icons md-48 mr-2">person</i>
                 <span>Coaches</span>
-            <% end %>
-          </li>
-          <li>
-            <%= link_to '#', class: 'flex text-white py-3 px-4 font-semibold no-underline items-center cursor-default' do %>
-              <i class="material-icons md-48 mr-2">description</i>
-              <span>Courses</span>
-            <% end %>
-          </li>
-          <ul class="list-reset px-4 pb-4 ml-4">
-            <% @courses.each do |course| %>
-              <li><%= link_to course.name, school_course_students_path(course), class: 'block text-white py-3 px-4 hover:bg-grey-darkest rounded-lg font-semibold text-sm no-underline' %></li>
-            <% end %>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to '#', class: 'flex text-white py-3 px-4 font-semibold no-underline items-center cursor-default' do %>
+                <i class="material-icons md-48 mr-2">description</i>
+                <span>Courses</span>
+              <% end %>
+              <ul class="list-reset px-4 pb-4 ml-4">
+                <% @courses.each do |course| %>
+                  <li><%= link_to course.name, school_course_students_path(course), class: 'block text-white py-3 px-4 hover:bg-grey-darkest rounded-lg font-semibold text-sm no-underline' %></li>
+                <% end %>
+              </ul>
+            </li>
           </ul>
-
+        </div>
+        <ul class="list-reset">
           <% if presenter.founder_profile? %>
             <li>
               <%= link_to student_dashboard_path, class: 'flex text-white py-3 px-4 font-semibold no-underline items-center' do %>

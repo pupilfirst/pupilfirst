@@ -6,6 +6,7 @@ class TimelineEventsController < ApplicationController
   # POST /timeline_events
   def create
     timeline_event = authorize(TimelineEvent.new)
+
     builder_form = TimelineEvents::BuilderForm.new(timeline_event)
     builder_form.founder = current_founder
 
@@ -19,8 +20,7 @@ class TimelineEventsController < ApplicationController
 
   # DELETE /timeline_events/:id
   def destroy
-    timeline_event = TimelineEvent.find(params[:id])
-    authorize timeline_event
+    timeline_event = authorize(TimelineEvent.find(params[:id]))
 
     timeline_event.destroy!
     flash[:success] = 'Timeline event deleted!'
@@ -30,36 +30,32 @@ class TimelineEventsController < ApplicationController
 
   # POST /timeline_events/:id/review
   def review
-    timeline_event = TimelineEvent.find(params[:id])
-    authorize timeline_event
+    timeline_event = authorize(TimelineEvent.find(params[:id]))
 
-    if !timeline_event.reviewed?
-      begin
-        # TODO: Probably replace this with a better encoder on the front-end.
-        grades = params[:evaluation].each_with_object({}) do |entry, result|
-          result[entry['criterionId'].to_i] = entry['grade'].to_i
-        end
-        TimelineEvents::GradingService.new(timeline_event).grade(current_coach, grades)
-        render json: { error: nil }, status: :ok
-      rescue TimelineEvents::ReviewInterfaceException => e
-        render json: { error: e.message, timelineEvent: nil }.to_json, status: :unprocessable_entity
+    begin
+      # TODO: Probably replace this with a better encoder on the front-end.
+      grades = params[:evaluation].each_with_object({}) do |entry, result|
+        result[entry['criterionId'].to_i] = entry['grade'].to_i
       end
-    else
-      # someone else already reviewed this event! Ask javascript to reload page.
-      render json: { error: 'Event no longer pending review! Refreshing your dashboard.', timelineEvent: nil }.to_json, status: :unprocessable_entity
+
+      TimelineEvents::GradingService.new(timeline_event).grade(current_coach, grades)
+      render json: { error: nil }, status: :ok
+    rescue TimelineEvents::GradingService::AlreadyReviewedException
+      render json: { error: 'Event no longer pending review! Try refreshing your dashboard.', timelineEvent: nil }.to_json, status: :unprocessable_entity
     end
   end
 
   # POST /timeline_events/:id/undo_review
   def undo_review
-    timeline_event = TimelineEvent.find(params[:id])
-    authorize timeline_event
-    if timeline_event.evaluator_id.blank?
+    timeline_event = authorize(TimelineEvent.find(params[:id]))
+
+    begin
+      TimelineEvents::UndoGradingService.new(timeline_event).execute
+    rescue TimelineEvents::UndoGradingService::ReviewPendingException
       render json: { error: 'Event is pending review! Cannot undo.' }.to_json, status: :unprocessable_entity
       return
     end
 
-    TimelineEvents::UndoGradingService.new(timeline_event).execute
     render json: { error: nil }, status: :ok
   end
 

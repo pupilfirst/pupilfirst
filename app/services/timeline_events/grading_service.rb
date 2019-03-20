@@ -1,5 +1,7 @@
 module TimelineEvents
   class GradingService
+    class AlreadyReviewedException < StandardError; end
+
     def initialize(timeline_event)
       @timeline_event = timeline_event
     end
@@ -7,8 +9,9 @@ module TimelineEvents
     # @param faculty [Faculty] Faculty who is evaluating the timeline event.
     # @param grades [Hash] Grades in this format: {evaluation_criterion_id: grade_integer, ...}
     def grade(faculty, grades)
-      raise TimelineEvents::GradingService::NotGradableException if evaluation_criteria.blank?
-      raise TimelineEvents::GradingService::InvalidGradesException unless valid_grading?(grades)
+      raise AlreadyReviewedException if @timeline_event.reviewed?
+      raise "Cannot grade TimelineEvent##{@timeline_event.id} without evaluation criteria" if evaluation_criteria.blank?
+      raise "Grading values supplied are invalid: #{grades.to_json}" unless valid_grading?(grades)
 
       TimelineEvent.transaction do
         evaluation_criteria.each do |criterion|

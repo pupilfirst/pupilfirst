@@ -2,17 +2,15 @@
 
 class TimelineEvent < ApplicationRecord
   belongs_to :target
+  belongs_to :improved_timeline_event, class_name: 'TimelineEvent', optional: true
+  belongs_to :evaluator, class_name: 'Faculty', optional: true
+
   has_many :target_evaluation_criteria, through: :target
   has_many :evaluation_criteria, through: :target_evaluation_criteria
-
-  has_one :karma_point, as: :source, dependent: :destroy, inverse_of: :source
   has_many :startup_feedback, dependent: :destroy
   has_many :timeline_event_files, dependent: :destroy
-
-  belongs_to :improved_timeline_event, class_name: 'TimelineEvent', optional: true
   has_one :improvement_of, class_name: 'TimelineEvent', foreign_key: 'improved_timeline_event_id', dependent: :nullify, inverse_of: :improved_timeline_event
   has_many :timeline_event_grades, dependent: :destroy
-  belongs_to :evaluator, class_name: 'Faculty', optional: true
   has_many :timeline_event_owners, dependent: :destroy
   has_many :founders, through: :timeline_event_owners
 

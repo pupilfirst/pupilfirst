@@ -75,24 +75,6 @@ ActiveAdmin.register Founder do
       end
     end
 
-    column 'Total Karma (Personal)' do |founder|
-      points = founder.karma_points&.sum(:points)
-      if points.present?
-        link_to points, admin_karma_points_path(q: { founder_id_eq: founder.id })
-      else
-        'Not Available'
-      end
-    end
-
-    column 'Total Karma (Team)' do |founder|
-      points = founder.startup&.karma_points&.sum(:points)
-      if points.present?
-        link_to points, admin_karma_points_path(q: { startup_id_eq: founder.startup&.id })
-      else
-        'Not Available'
-      end
-    end
-
     actions
   end
 
@@ -111,14 +93,6 @@ ActiveAdmin.register Founder do
 
     column :roles do |founder|
       founder.roles.join ', '
-    end
-
-    column 'Total Karma (Personal)' do |founder|
-      founder.karma_points&.sum(:points) || 'Not Available'
-    end
-
-    column 'Total Karma (Team)' do |founder|
-      founder.startup&.karma_points&.sum(:points) || 'Not Available'
     end
 
     column :phone

@@ -73,9 +73,6 @@ module Lita
         removed_reaction = reaction_to.reactions.where(slack_username: payload[:user].metadata['mention_name'], body: ":#{payload[:name]}:").first
         return if removed_reaction.blank?
 
-        # Delete karma points assigned to removed reaction, if any
-        KarmaPoint.where(source: removed_reaction).destroy_all
-
         # Delete the reaction to be removed
         removed_reaction.destroy
       end

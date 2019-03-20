@@ -20,20 +20,34 @@ describe TimelineEvents::GradingService do
   describe '#grade' do
     context 'when provided with an all pass grade' do
       let(:grades) { { evaluation_criterion_1.id => 2, evaluation_criterion_2.id => 3 } }
+
       it 'awards grades to timeline event for each of the evaluation criteria' do
         subject.grade(faculty, grades)
-        expect(timeline_event.timeline_event_grades.count).to eq(2)
+
+        expect(timeline_event.reload.timeline_event_grades.count).to eq(2)
         expect(timeline_event.timeline_event_grades.pluck(:evaluation_criterion_id)).to match_array([evaluation_criterion_1.id, evaluation_criterion_2.id])
         expect(timeline_event.passed_at).not_to eq(nil)
         expect(timeline_event.evaluator_id).to eq(faculty.id)
+      end
+
+      context 'when trying to grade again' do
+        it 'raises exception' do
+          subject.grade(faculty, grades)
+
+          expect do
+            TimelineEvents::GradingService.new(timeline_event.reload).grade(faculty, grades)
+          end.to raise_error(TimelineEvents::GradingService::AlreadyReviewedException)
+        end
       end
     end
 
     context 'when provided with a failed grade' do
       let(:grades) { { evaluation_criterion_1.id => 1, evaluation_criterion_2.id => 3 } }
+
       it 'awards grades to timeline event for each of the evaluation criteria' do
         subject.grade(faculty, grades)
-        expect(timeline_event.timeline_event_grades.count).to eq(2)
+
+        expect(timeline_event.reload.timeline_event_grades.count).to eq(2)
         expect(timeline_event.timeline_event_grades.pluck(:evaluation_criterion_id)).to match_array([evaluation_criterion_1.id, evaluation_criterion_2.id])
         expect(timeline_event.passed_at).to eq(nil)
         expect(timeline_event.evaluator_id).to eq(faculty.id)
@@ -42,15 +56,17 @@ describe TimelineEvents::GradingService do
 
     context 'when grades are not available for all criteria' do
       let(:grades) { { evaluation_criterion_1.id => 2 } }
+
       it 'it raises an invalid grade exception' do
-        expect { subject.grade(faculty, grades) }.to raise_error(TimelineEvents::GradingService::InvalidGradesException)
+        expect { subject.grade(faculty, grades) }.to raise_error("Grading values supplied are invalid: #{grades.to_json}")
       end
     end
 
     context 'when awarded grade is not within the allowed grades in a course' do
       let(:grades) { { evaluation_criterion_1.id => 2, evaluation_criterion_1.id => 5 } }
+
       it 'it raises an invalid grade exception' do
-        expect { subject.grade(faculty, grades) }.to raise_error(TimelineEvents::GradingService::InvalidGradesException)
+        expect { subject.grade(faculty, grades) }.to raise_error("Grading values supplied are invalid: #{grades.to_json}")
       end
     end
   end

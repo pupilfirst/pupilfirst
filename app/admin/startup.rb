@@ -17,8 +17,6 @@ ActiveAdmin.register Startup do
   filter :created_at
 
   scope :admitted, default: true
-  scope :inactive_for_week
-  scope :endangered
   scope :all
 
   controller do
@@ -119,10 +117,6 @@ ActiveAdmin.register Startup do
             div do
               span do
                 link_to founder.display_name, [:admin, founder]
-              end
-
-              span do
-                " &mdash; #{link_to 'Karma++'.html_safe, new_admin_karma_point_path(karma_point: { founder_id: founder.id })}".html_safe
               end
             end
           end

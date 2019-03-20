@@ -1,23 +1,5 @@
 module ActiveAdmin
   module ActiveAdminHelper
-    def sv_id_link(founder)
-      if founder.present?
-        link_to "#{founder.email} - #{founder.fullname} #{founder.phone.present? ? "(#{founder.phone}" : ''})", admin_founder_path(founder)
-      else
-        '<em>Missing, probably deleted.</em>'.html_safe
-      end
-    end
-
-    def founders_by_karma(level:, week_starting_at:)
-      week_end_date = week_starting_at + 1.week
-      Founder.joins(:startup, :karma_points)
-        .where(startups: { level_id: level.id })
-        .where(karma_points: { created_at: (week_starting_at..week_end_date) })
-        .group(:founder_id)
-        .sum(:points)
-        .sort_by { |_founder_id, points| points }.reverse
-    end
-
     # Returns links to tags separated by a separator string.
     def linked_tags(tags, separator: ', ')
       return if tags.blank?

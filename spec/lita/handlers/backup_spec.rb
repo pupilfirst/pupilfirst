@@ -131,14 +131,11 @@ describe Lita::Handlers::Backup do
       }
     end
 
-    let(:parent_message) { create :public_slack_message, timestamp: 'timestamp', channel: 'channel_name' }
-    let(:existing_reaction) { create :public_slack_message, slack_username: 'mention_name', body: ':reaction_type:', reaction_to: parent_message }
-    let!(:karma_point) { create :karma_point, source: existing_reaction }
+    let!(:parent_message) { create :public_slack_message, timestamp: 'timestamp', channel: 'channel_name' }
+    let!(:existing_reaction) { create :public_slack_message, slack_username: 'mention_name', body: ':reaction_type:', reaction_to: parent_message }
 
-    it 'removes reaction and associated karma point' do
-      subject.remove_reaction(payload)
-      expect(PublicSlackMessage.count).to eq(1)
-      expect(KarmaPoint.count).to eq(0)
+    it 'removes reaction' do
+      expect { subject.remove_reaction(payload) }.to(change { PublicSlackMessage.count }.from(2).to(1))
     end
 
     context 'reaction to be removed was not to a message' do
@@ -147,9 +144,7 @@ describe Lita::Handlers::Backup do
       end
 
       it 'does not modify anything' do
-        subject.remove_reaction(payload)
-        expect(PublicSlackMessage.count).to eq(2)
-        expect(KarmaPoint.count).to eq(1)
+        expect { subject.remove_reaction(payload) }.not_to(change { PublicSlackMessage.count })
       end
     end
 
@@ -161,19 +156,15 @@ describe Lita::Handlers::Backup do
       end
 
       it 'does not modify anything' do
-        subject.remove_reaction(payload)
-        expect(PublicSlackMessage.count).to eq(2)
-        expect(KarmaPoint.count).to eq(1)
+        expect { subject.remove_reaction(payload) }.not_to(change { PublicSlackMessage.count })
       end
     end
 
     context 'reaction to be removed could not be found' do
-      let(:existing_reaction) { create :public_slack_message, slack_username: 'mention_name', body: ':some_other_reaction_type:', reaction_to: parent_message }
+      let!(:existing_reaction) { create :public_slack_message, slack_username: 'mention_name', body: ':some_other_reaction_type:', reaction_to: parent_message }
 
       it 'does not modify anything' do
-        subject.remove_reaction(payload)
-        expect(PublicSlackMessage.count).to eq(2)
-        expect(KarmaPoint.count).to eq(1)
+        expect { subject.remove_reaction(payload) }.not_to(change { PublicSlackMessage.count })
       end
     end
   end

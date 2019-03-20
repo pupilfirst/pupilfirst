@@ -1,0 +1,78 @@
+.grade-label__input-head {
+    padding: 10px;
+}
+
+.grade__slider-track {
+    position: relative;
+    height: 10px;
+    background: #37adbf;
+}
+
+.grade__slider-track input {
+    width: 100%;
+    position: absolute;
+    top: 2px;
+    height: 0;
+    -webkit-appearance: none;
+}
+
+.grade__slider-track input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    margin: -8px 0 0;
+    border-radius: 50%;
+    background: #37adbf;
+    cursor: pointer;
+    border: 0 !important;
+}
+
+.grade__slider-track input::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 2px;
+    cursor: pointer;
+    background: linear-gradient(to bottom, #B4EC51 0%, #429321 100%);
+}
+
+.grade__slider-track input:focus {
+    background: none;
+    outline: none;
+}
+
+.grade__slider-labels {
+    padding: 0;
+    list-style: none;
+}
+
+.grade__slider-labels li {
+    position: relative;
+    text-align: center;
+    color: #b2b2b2;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.grade__slider-labels li::before {
+    position: absolute;
+    /* top: -25px; */
+    right: 0;
+    left: 0;
+    content: "";
+    margin: 0 auto;
+    width: 9px;
+    height: 9px;
+    background: #b2b2b2;
+    border-radius: 50%;
+}
+
+.range-labels.grade__slider-labels .active {
+    color: #37adbf;
+}
+
+.grade__slider-labels .selected::before {
+    background: #37adbf;
+}
+
+.grade__slider-labels .active.selected::before {
+    display: none;
+}

@@ -8,6 +8,7 @@ type state = {
   name: string,
   maxGrade: int,
   passGrade: int,
+  selectedGrade: int,
   gradesAndLabels: list(GradesAndLabels.t),
   endsAt: option(string),
   hasNameError: bool,
@@ -22,12 +23,13 @@ type action =
   | UpdatePassGrade(int)
   | UpdateGradesAndLabels(GradesAndLabels.t)
   | UpdateEndsAt(string, bool)
-  | UpdateSaving;
+  | UpdateSaving
+  | UpdateSelectedGrade(int);
 
-/* module CreateCourseQuery = [%graphql
-     {|
-   mutation($name: String! $maxGrade: Int!, $passGrade: Int!, $gradesAndLabels: [GradeAndLabelInput]!) {
-     createCourse(name: $name, maxGrade: $maxGrade,passGrade: $passGrade, gradesAndLabels: $gradesAndLabels) {
+module CreateCourseQuery = [%graphql
+  {|
+   mutation($name: String! $maxGrade: Int!, $passGrade: Int!, $gradesAndLabels: [GradeAndLabelInput!]!) {
+     createCourse(name: $name, maxGrade: $maxGrade,passGrade: $passGrade, gradesAndLabels: $gradesAndLabels ) {
        course {
          id
        }
@@ -35,18 +37,47 @@ type action =
      }
    }
    |}
-   ];
+];
 
-   let creteCourse = (state, send) => {
-     let courseQury =
-       CreateCourseQuery.make(
-         ~name=state.name,
-         ~maxGrade=state.maxGrade,
-         ~passGrade=state.passGrade,
-         ~gradesAndLabels=state.gradesAndLabels,
-       );
-     ();
-   }; */
+/* let creteCourse = (state, send) => {
+  let jsGradeAndLabelArray =
+    state.gradesAndLabels
+    |> List.filter(gradesAndLabel =>
+         gradesAndLabel |> GradesAndLabels.grade <= state.maxGrade
+       )
+    |> List.map(gl => gl |> GradesAndLabels.asJsType)
+    |> Array.of_list;
+
+  let createCourseQury =
+    CreateCourseQuery.make(
+      ~name=state.name,
+      ~maxGrade=state.maxGrade,
+      ~passGrade=state.passGrade,
+      ~gradesAndLabels=jsGradeAndLabelArray,
+    );
+  let response = createCourseQury |> GraphqlQuery.sendQuery;
+  response
+  |> Js.Promise.then_(result => {
+       let course =
+         result##course
+         |> Js.Array.map(rawCourse =>
+              Course.create(
+                rawCourse##id |> int_of_string,
+                state.name,
+                state.endsAt,
+                state.maxGrade,
+                state.passGrade,
+                state.gradesAndLabels,
+              )
+            )
+         |> Array.to_list;
+       let errors = result##errors;
+       Js.log(course);
+       Js.log(errors);
+       Js.Promise.resolve();
+     })
+  |> ignore;
+}; */
 
 let component = ReasonReact.reducerComponent("CourseEditor__Form");
 
@@ -110,28 +141,20 @@ let make =
         hasDateError: false,
         dirty: false,
         saving: false,
+        selectedGrade: course |> Course.maxGrade,
       }
     | None => {
         name: "",
         endsAt: None,
         maxGrade: 2,
         passGrade: 1,
-        gradesAndLabels: [
-          GradesAndLabels.empty(1),
-          GradesAndLabels.empty(2),
-          GradesAndLabels.empty(3),
-          GradesAndLabels.empty(4),
-          GradesAndLabels.empty(5),
-          GradesAndLabels.empty(6),
-          GradesAndLabels.empty(7),
-          GradesAndLabels.empty(8),
-          GradesAndLabels.empty(9),
-          GradesAndLabels.empty(10),
-        ],
+        gradesAndLabels:
+          possibleGradeValues |> List.map(i => GradesAndLabels.empty(i)),
         hasNameError: false,
         hasDateError: false,
         dirty: false,
         saving: false,
+        selectedGrade: 2,
       }
     },
   reducer: (action, state) =>
@@ -158,6 +181,8 @@ let make =
                gradesAndLabel : gl
            );
       ReasonReact.Update({...state, gradesAndLabels});
+    | UpdateSelectedGrade(selectedGrade) =>
+      ReasonReact.Update({...state, selectedGrade})
     },
   render: ({state, send}) => {
     let handleErrorCB = () => send(UpdateSaving);
@@ -276,10 +301,10 @@ let make =
                       possibleGradeValues
                       |> List.filter(g => g != 1)
                       |> List.map(possibleGradeValue =>
-                          <option value={possibleGradeValue |> string_of_int}>
-                            {possibleGradeValue |> string_of_int |> str}
-                          </option>
-                        )
+                           <option value={possibleGradeValue |> string_of_int}>
+                             {possibleGradeValue |> string_of_int |> str}
+                           </option>
+                         )
                       |> Array.of_list
                       |> ReasonReact.array
                     }
@@ -305,10 +330,10 @@ let make =
                       possibleGradeValues
                       |> List.filter(g => g < state.maxGrade)
                       |> List.map(possibleGradeValue =>
-                          <option value={possibleGradeValue |> string_of_int}>
-                            {possibleGradeValue |> string_of_int |> str}
-                          </option>
-                        )
+                           <option value={possibleGradeValue |> string_of_int}>
+                             {possibleGradeValue |> string_of_int |> str}
+                           </option>
+                         )
                       |> Array.of_list
                       |> ReasonReact.array
                     }
@@ -320,52 +345,62 @@ let make =
                   {"Grades" |> str}
                 </label>
                 <div className="flex">
-                  <div className="flex flex-col bg-white p-6 shadow items-center justify-center rounded w-full">
-                    <h2 className="grades__score-circle rounded-full h-24 w-24 flex items-center justify-center border-2 border-green-light p-4 mb-4">{"4/5" |> str}</h2>
+                  <div
+                    className="flex flex-col bg-white p-6 shadow items-center justify-center rounded w-full">
+                    <h2
+                      className="grades__score-circle rounded-full h-24 w-24 flex items-center justify-center border-2 border-green-light p-4 mb-4">
+                      {
+                        (state.selectedGrade |> string_of_int)
+                        ++ "/"
+                        ++ (state.maxGrade |> string_of_int)
+                        |> str
+                      }
+                    </h2>
                     <div>
                       {
-                      state.gradesAndLabels
-                      |> List.filter(gradesAndLabel =>
-                          gradesAndLabel
-                          |> GradesAndLabels.grade <= state.maxGrade
-                        )
-                      |> List.rev
-                      |> List.map(gradesAndLabel =>
-                          <div>
-                            <span className="grade-label__input-head">
-                              {
-                                gradesAndLabel
-                                |> GradesAndLabels.grade
-                                |> string_of_int
-                                |> str
-                              }
-                            </span>
-                            <input
-                              className="grades__label-input appearance-none inline-block bg-white text-grey-darker border border-grey-light rounded py-2 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                              id={
-                                gradesAndLabel
-                                |> GradesAndLabels.grade
-                                |> string_of_int
-                              }
-                              type_="text"
-                              placeholder="Type grade label"
-                              value={gradesAndLabel |> GradesAndLabels.label}
-                              onChange={
-                                event =>
-                                  send(
-                                    UpdateGradesAndLabels(
-                                      GradesAndLabels.update(
-                                        ReactEvent.Form.target(event)##value,
-                                        gradesAndLabel,
-                                      ),
-                                    ),
-                                  )
-                              }
-                            />
-                          </div>
-                        )
-                      |> Array.of_list
-                      |> ReasonReact.array
+                        state.gradesAndLabels
+                        |> List.filter(gradesAndLabel =>
+                             gradesAndLabel
+                             |> GradesAndLabels.grade == state.selectedGrade
+                           )
+                        |> List.map(gradesAndLabel =>
+                             <div>
+                               <span className="grade-label__input-head">
+                                 {
+                                   gradesAndLabel
+                                   |> GradesAndLabels.grade
+                                   |> string_of_int
+                                   |> str
+                                 }
+                               </span>
+                               <input
+                                 className="grades__label-input appearance-none inline-block bg-white text-grey-darker border border-grey-light rounded py-2 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                                 id={
+                                   gradesAndLabel
+                                   |> GradesAndLabels.grade
+                                   |> string_of_int
+                                 }
+                                 type_="text"
+                                 placeholder="Type grade label"
+                                 value={
+                                   gradesAndLabel |> GradesAndLabels.label
+                                 }
+                                 onChange={
+                                   event =>
+                                     send(
+                                       UpdateGradesAndLabels(
+                                         GradesAndLabels.update(
+                                           ReactEvent.Form.target(event)##value,
+                                           gradesAndLabel,
+                                         ),
+                                       ),
+                                     )
+                                 }
+                               />
+                             </div>
+                           )
+                        |> Array.of_list
+                        |> ReasonReact.array
                       }
                     </div>
                     <div className="grade__slider-container w-full">
@@ -374,75 +409,44 @@ let make =
                           className="w-full"
                           type_="range"
                           min=1
-                          max="10"
+                          step=1.0
+                          value={state.selectedGrade |> string_of_int}
+                          max={state.maxGrade |> string_of_int}
+                          onChange={
+                            event =>
+                              send(
+                                UpdateSelectedGrade(
+                                  ReactEvent.Form.target(event)##value
+                                  |> int_of_string,
+                                ),
+                              )
+                          }
                         />
                       </div>
-                      <ul className="grade__slider-labels flex justify-between">
-                        <li className="active selected">{"1" |> str}</li>
-                        <li>{"2" |> str}</li>
-                        <li>{"3" |> str}</li>
-                        <li>{"4" |> str}</li>
-                        <li>{"5" |> str}</li>
-                        <li>{"6" |> str}</li>
-                        <li>{"7" |> str}</li>
-                        <li>{"8" |> str}</li>
-                        <li>{"9" |> str}</li>
-                        <li>{"10" |> str}</li>
-                      </ul>
                     </div>
                   </div>
-                  <div className="w-2/5 hidden">
-                    <button
-                      className="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded"
-                      onClick={_ => send(UpdateMaxGrade(state.maxGrade + 1))}>
-                      {"Add New Grade Label" |> str}
-                    </button>
-                    {
-                      state.gradesAndLabels
-                      |> List.filter(gradesAndLabel =>
-                          gradesAndLabel
-                          |> GradesAndLabels.grade <= state.maxGrade
-                        )
-                      |> List.rev
-                      |> List.map(gradesAndLabel =>
-                          <div>
-                            <span className="grade-label__input-head">
-                              {
-                                gradesAndLabel
-                                |> GradesAndLabels.grade
-                                |> string_of_int
-                                |> str
-                              }
-                            </span>
-                            <input
-                              className="appearance-none inline-block bg-white text-grey-darker border border-grey-light rounded py-2 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                              id={
-                                gradesAndLabel
-                                |> GradesAndLabels.grade
-                                |> string_of_int
-                              }
-                              type_="text"
-                              placeholder="Type grade label"
-                              value={gradesAndLabel |> GradesAndLabels.label}
-                              onChange={
-                                event =>
-                                  send(
-                                    UpdateGradesAndLabels(
-                                      GradesAndLabels.update(
-                                        ReactEvent.Form.target(event)##value,
-                                        gradesAndLabel,
-                                      ),
-                                    ),
-                                  )
-                              }
-                            />
-                          </div>
-                        )
-                      |> Array.of_list
-                      |> ReasonReact.array
-                    }
-                  </div>
                 </div>
+                <ul className="mt-1 grade__slider-labels flex justify-between">
+                  {
+                    state.gradesAndLabels
+                    |> List.filter(gradesAndLabel =>
+                         gradesAndLabel
+                         |> GradesAndLabels.grade <= state.maxGrade
+                       )
+                    |> List.map(gradesAndLabel =>
+                         <li>
+                           {
+                             gradesAndLabel
+                             |> GradesAndLabels.grade
+                             |> string_of_int
+                             |> str
+                           }
+                         </li>
+                       )
+                    |> Array.of_list
+                    |> ReasonReact.array
+                  }
+                </ul>
                 <div className="flex">
                   {
                     switch (course) {
@@ -450,14 +454,6 @@ let make =
                       let id = course |> Course.id;
                       <button
                         disabled={saveDisabled(state)}
-                        /* onClick=(
-                             _event =>
-                               updateCourse(
-                                 authenticityToken,
-                                 id |> string_of_int,
-                                 state,
-                               )
-                           ) */
                         className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
                         {"Update Course" |> str}
                       </button>;
@@ -465,10 +461,6 @@ let make =
                     | None =>
                       <button
                         disabled={saveDisabled(state)}
-                        /* onClick=(
-                             _event =>
-                               createCourse(authenticityToken, course, state)
-                           ) */
                         className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
                         {"Create Course" |> str}
                       </button>

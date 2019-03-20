@@ -161,9 +161,10 @@ feature 'Top navigation bar' do
   end
 
   context 'when the user is a student in a course that has leaderboard entries in the past week' do
+    let(:lts) { LeaderboardTimeService.new }
+
     before do
-      clp = Courses::LeaderboardPresenter.new(:foo, student.course, page: 0)
-      create :leaderboard_entry, founder: student, period_from: clp.last_week_start_time, period_to: clp.last_week_end_time
+      create :leaderboard_entry, founder: student, period_from: lts.week_start, period_to: lts.week_end
     end
 
     it 'displays a link to the leaderboard' do

@@ -90,10 +90,16 @@ module Layouts
     def leaderboard_link
       return if current_founder.blank? || current_founder.exited?
 
+      lts = LeaderboardTimeService.new
       course = current_founder.course
-      clp = Courses::LeaderboardPresenter.new(view, course, page: 0)
 
-      if clp.course_entries(clp.last_week_start_time, clp.last_week_end_time).exists?
+      course_entries_last_week = LeaderboardEntry.joins(:course).where(
+        courses: { id: course },
+        period_from: lts.week_start,
+        period_to: lts.week_end
+      )
+
+      if course_entries_last_week.exists?
         { title: 'Leaderboard', url: view.leaderboard_course_path(course) }
       end
     end

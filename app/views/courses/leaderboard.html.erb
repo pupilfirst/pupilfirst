@@ -19,7 +19,7 @@
             </a>
           <% end %>
           <span class="leaderboard__date-range px-3 font-semibold">
-            <%= presenter.start_datestring %> to <%= presenter.end_datestring %>
+            <%= presenter.start_date %> to <%= presenter.end_date %>
           </span>
           <% if presenter.next_page? %>
             <a class="leaderboard__date-range-arrow d-flex align-items-center justify-content-center rounded-circle" href="<%= presenter.next_page_link %>">

@@ -14,14 +14,8 @@ class PopulateLeaderboardEntriesForSastraCourse < ActiveRecord::Migration[5.2]
     course.founders.where(name: STUDENTS_EXCLUDED_FROM_LEADERBOARD).update(excluded_from_leaderboard: true)
 
     (0..8).each do |week_number|
-      leaderboard_at = Time.zone.now - week_number.weeks
-
-      lp = Courses::LeaderboardPresenter.new(:foo, course, leaderboard_at)
-
-      period_from = lp.send(:last_week_start_time)
-      period_to = lp.send(:last_week_end_time)
-
-      Courses::CreateLeaderboardEntriesService.new(course).execute(period_from, period_to)
+      lts = LeaderboardTimeService.new(week_number)
+      Courses::CreateLeaderboardEntriesService.new(course).execute(lts.week_start, lts.week_end)
     end
   end
 

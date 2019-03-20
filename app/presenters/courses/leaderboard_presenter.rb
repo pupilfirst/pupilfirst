@@ -36,12 +36,12 @@ module Courses
       end
     end
 
-    def start_datestring
-      last_week_start_time.strftime('%B %-d')
+    def start_date
+      lts.week_start.strftime('%B %-d')
     end
 
-    def end_datestring
-      last_week_end_time.strftime('%B %-d')
+    def end_date
+      lts.week_end.strftime('%B %-d')
     end
 
     def toppers
@@ -107,14 +107,6 @@ module Courses
       end
     end
 
-    def last_week_start_time
-      week_beginning(leaderboard_at - 1.week).in_time_zone('Asia/Calcutta') + 12.hours
-    end
-
-    def last_week_end_time
-      week_beginning(leaderboard_at).in_time_zone('Asia/Calcutta') + 12.hours
-    end
-
     def course_entries(from, to)
       LeaderboardEntry.where(founder: founders, period_from: from, period_to: to)
     end
@@ -149,10 +141,6 @@ module Courses
       current_founder.present? && current_founder.id.in?(toppers.map(&:id))
     end
 
-    def leaderboard_at
-      @leaderboard_at ||= Time.zone.now - page.weeks
-    end
-
     def page
       @page ||= begin
         parsed_page = view.params[:page].to_i
@@ -160,16 +148,20 @@ module Courses
       end
     end
 
+    def lts
+      @lts ||= LeaderboardTimeService.new(page)
+    end
+
     def founders
       @course.founders.not_exited
     end
 
     def current_leaderboard
-      @current_leaderboard ||= ranked_students(last_week_start_time, last_week_end_time)
+      @current_leaderboard ||= ranked_students(lts.week_start, lts.week_end)
     end
 
     def last_leaderboard
-      @last_leaderboard ||= ranked_students(week_before_last_start_time, last_week_start_time)
+      @last_leaderboard ||= ranked_students(lts.last_week_start, lts.last_week_end)
     end
 
     def ranked_students(from, to)
@@ -184,26 +176,6 @@ module Courses
         last_rank = rank
         last_score = entry.score
       end
-    end
-
-    def week_before_last_start_time
-      week_beginning(leaderboard_at - 2.weeks).in_time_zone('Asia/Calcutta') + 12.hours
-    end
-
-    def week_beginning(time)
-      if monday?(time) && before_noon?(time)
-        (time - 1.day)
-      else
-        time
-      end.beginning_of_week
-    end
-
-    def monday?(time)
-      time.wday == 1
-    end
-
-    def before_noon?(time)
-      time.hour < 12
     end
   end
 end

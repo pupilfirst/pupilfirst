@@ -6,10 +6,14 @@ feature 'Course leaderboard' do
   let(:student) { create :founder }
   let(:other_team_1) { create :startup, level: student.level }
   let(:other_team_2) { create :startup, level: student.level }
+  let!(:excluded_team) { create :startup, level: student.level }
   let(:school_admin) { create :school_admin, school: student.school }
   let(:lts) { LeaderboardTimeService.new(0) }
 
   before do
+    # Exlcude some students from leaderboard.
+    excluded_team.founders.update(excluded_from_leaderboard: true)
+
     # Last week.
     create :leaderboard_entry, period_from: lts.week_start, period_to: lts.week_end, founder: student, score: 10
 
@@ -56,6 +60,14 @@ feature 'Course leaderboard' do
     other_team_2.founders.each do |absent_founder|
       expect(page).not_to have_content(absent_founder.name)
     end
+
+    # The leaderboard shouldn't include excluded-from-leaderboard students in counts.
+
+    # There should be 3 active students - 'student', and members of 'other_team_1'.
+    expect(page).to have_css('.leaderboard__students-count', text: '3')
+
+    # There should be 4 inactive students - other members of "student"'s team, and members of 'other_team_2'
+    expect(page).to have_css('.leaderboard__students-count', text: '4')
 
     # The leaderboard from two weeks ago should include all students.
     visit leaderboard_course_path(student.course, page: 1)

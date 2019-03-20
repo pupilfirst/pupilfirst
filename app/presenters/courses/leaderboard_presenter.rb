@@ -153,7 +153,7 @@ module Courses
     end
 
     def founders
-      @course.founders.not_exited
+      @course.founders.not_exited.where(excluded_from_leaderboard: false)
     end
 
     def current_leaderboard

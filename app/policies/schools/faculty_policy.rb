@@ -19,6 +19,7 @@ module Schools
     end
 
     alias destroy? create?
+    alias update? create?
 
     class Scope < Scope
       def resolve

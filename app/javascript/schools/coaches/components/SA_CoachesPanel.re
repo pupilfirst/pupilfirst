@@ -68,6 +68,7 @@ let make = (~coaches, ~schoolId, ~authenticityToken, _children) => {
           <div className="max-w-md w-full mx-auto relative">
             (
               state.coaches
+              |> List.sort((x, y) => (x |> Coach.id) - (y |> Coach.id))
               |> List.map(coach =>
                    <div
                      className="flex items-center shadow bg-white rounded-lg overflow-hidden mb-4">

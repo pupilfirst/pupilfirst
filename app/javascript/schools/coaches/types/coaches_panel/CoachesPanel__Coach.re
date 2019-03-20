@@ -77,5 +77,9 @@ let create =
 
 let updateList = (coaches, coach) => {
   let oldList = coaches |> List.filter(t => t.id !== coach.id);
-  oldList |> List.rev |> List.append([coach]) |> List.rev;
+  oldList
+  |> List.rev
+  |> List.append([coach])
+  |> List.rev
+  |> List.sort((x, y) => x.id - y.id);
 };

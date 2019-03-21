@@ -2,9 +2,11 @@ class UpdateCourseMutator < ApplicationMutator
   attr_accessor :id
   attr_accessor :name
   attr_accessor :grades_and_labels
+  attr_accessor :ends_at
 
   validates :name, presence: true
   validates :grades_and_labels, presence: true
+  validates :ends_at, presence: true
 
   validate :valid_course_id
   validate :correct_grades_and_labels
@@ -22,7 +24,7 @@ class UpdateCourseMutator < ApplicationMutator
   end
 
   def update_course
-    @course.update!(name: name, grade_labels: grade_labels)
+    @course.update!(name: name, grade_labels: grade_labels, ends_at: ends_at)
     @course
   end
 

@@ -2,9 +2,10 @@ module Mutations
   class UpdateCourse < GraphQL::Schema::Mutation
     argument :id, ID, required: true
     argument :name, String, required: true
+    argument :ends_at, String, required: true
     argument :grades_and_labels, [Types::GradeAndLabelInputType], required: true
 
-    description "Create a new course."
+    description "Update a course."
 
     field :course, Types::CourseType, null: false
 

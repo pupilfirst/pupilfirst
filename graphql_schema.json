@@ -300,6 +300,20 @@
                   "defaultValue": null
                 },
                 {
+                  "name": "endsAt",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
                   "name": "gradesAndLabels",
                   "description": null,
                   "type": {
@@ -336,7 +350,7 @@
             },
             {
               "name": "updateCourse",
-              "description": "Create a new course.",
+              "description": "Update a course.",
               "args": [
                 {
                   "name": "id",
@@ -354,6 +368,20 @@
                 },
                 {
                   "name": "name",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "endsAt",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",

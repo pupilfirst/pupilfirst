@@ -24,24 +24,19 @@ let sendQuery = q =>
     )
     |> Js.Promise.then_(resp =>
          if (Response.ok(resp)) {
-           Response.json(resp)
-           |> Js.Promise.then_(data =>
-                switch (Js.Json.decodeObject(data)) {
-                | Some(obj) =>
-                  Js.Dict.unsafeGet(obj, "data")
-                  |>
-                  q##parse
-                  |> Js.Promise.resolve
-                | None =>
-                  Js.Promise.reject(
-                    Graphql_error("Response is not an object"),
-                  )
-                }
-              );
+           Response.json(resp);
          } else {
            Js.Promise.reject(
              Graphql_error("Request failed: " ++ Response.statusText(resp)),
            );
+         }
+       )
+    |> Js.Promise.then_(json =>
+         switch (Js.Json.decodeObject(json)) {
+         | Some(obj) =>
+           Js.Dict.unsafeGet(obj, "data") |> q##parse |> Js.Promise.resolve
+         | None =>
+           Js.Promise.reject(Graphql_error("Response is not an object"))
          }
        )
   );

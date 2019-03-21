@@ -21,6 +21,12 @@ let gradesAndLabels = t => t.gradesAndLabels;
 
 let sort = courses => courses |> List.sort((x, y) => x.id - y.id);
 
+let updateList = (courses, course) => {
+  let oldCourses =
+  courses |> List.filter(c => c.id !== course.id);
+  oldCourses |> List.rev |> List.append([course]) |> List.rev;
+};
+
 let create = (id, name, endsAt, maxGrade, passGrade, gradesAndLabels) => {
   id,
   name,

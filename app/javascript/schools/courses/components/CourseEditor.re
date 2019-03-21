@@ -31,6 +31,7 @@ type state = {
 
 type action =
   | UpdateEditorAction(editorAction)
+  | UpdateCourse(Course.t)
   | UpdateCourses(list(Course.t));
 
 let str = ReasonReact.string;
@@ -45,6 +46,10 @@ let make = (~authenticityToken, _children) => {
     | UpdateEditorAction(editorAction) =>
       ReasonReact.Update({...state, editorAction})
     | UpdateCourses(courses) => ReasonReact.Update({...state, courses})
+    | UpdateCourse(course)=> {
+      let newCourses = course |> Course.updateList(state.courses);
+      ReasonReact.Update({...state, courses: newCourses})
+    }
     },
   didMount: ({send}) => {
     let coursesQuery = CoursesQuery.make();
@@ -86,7 +91,9 @@ let make = (~authenticityToken, _children) => {
   },
   render: ({state, send}) => {
     let hideEditorActionCB = () => send(UpdateEditorAction(Hidden));
-    let updateCoursesCB = courses => ();
+    let updateCoursesCB = course => {send(UpdateCourse(course))
+      send(UpdateEditorAction(Hidden));
+    };
     <div className="flex flex-1 h-screen">
       {
         switch (state.editorAction) {

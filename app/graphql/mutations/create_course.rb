@@ -7,8 +7,7 @@ module Mutations
 
     description "Create a new course."
 
-    field :course, Types::CourseType, null: true
-    field :errors, [String], null: false
+    field :course, Types::CourseType, null: false
 
     def self.accessible?(context)
       context[:current_user].present?

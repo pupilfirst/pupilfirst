@@ -196,7 +196,7 @@ let make =
       |> List.length;
     let timelineEvents =
       timelineEvents |> founderFilter(selectedFounder) |> statusFilter;
-    <div className="timeline-events-panel__container pt-4">
+    <div className="pt-4">
       <div className="d-flex mb-3 timeline-events-panel__status-tab-container">
         <div
           className={
@@ -210,9 +210,9 @@ let make =
           {"Pending" |> str}
           {
             if (pendingCount > 0) {
-              <span className="badge">
+              <div className="timeline-events-panel__status-tab-badge">
                 {pendingCount |> string_of_int |> str}
-              </span>;
+              </div>;
             } else {
               ReasonReact.null;
             }

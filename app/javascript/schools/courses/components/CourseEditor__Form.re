@@ -120,6 +120,16 @@ let formClasses = value =>
 
 let possibleGradeValues: list(int) = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
+let gradeBarBulletClasses = (selected, passed, empty) => {
+let classes = selected ? " grade-bar__pointer--selected" : " ";
+if (empty){
+classes ++ " grade-bar__pointer--pulse"
+}
+else{
+passed ? classes ++ " grade-bar__pointer--passed" : classes ++ " grade-bar__pointer--failed";
+}
+};
+
 let make =
     (
       ~course,
@@ -365,15 +375,7 @@ let make =
                            )
                         |> List.map(gradesAndLabel =>
                              <div>
-                               <span className="grade-label__input-head">
-                                 {
-                                   gradesAndLabel
-                                   |> GradesAndLabels.grade
-                                   |> string_of_int
-                                   |> str
-                                 }
-                               </span>
-                               <input
+                                <input
                                  className="grades__label-input appearance-none inline-block bg-white text-grey-darker border border-grey-light rounded py-2 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                                  id={
                                    gradesAndLabel
@@ -403,50 +405,63 @@ let make =
                         |> ReasonReact.array
                       }
                     </div>
-                    <div className="grade__slider-container w-full">
-                      <div className="grade__slider-track w-full">
-                        <input
-                          className="w-full"
-                          type_="range"
-                          min=1
-                          step=1.0
-                          value={state.selectedGrade |> string_of_int}
-                          max={state.maxGrade |> string_of_int}
-                          onChange={
-                            event =>
-                              send(
-                                UpdateSelectedGrade(
-                                  ReactEvent.Form.target(event)##value
-                                  |> int_of_string,
-                                ),
-                              )
-                          }
-                        />
-                      </div>
+                    <div className="grade-bar__container w-full mb-6">
+                      <ul className="grade-bar__track flex justify-between list-reset">
+                        {
+                          state.gradesAndLabels
+                          |> List.filter(gradesAndLabel =>
+                              gradesAndLabel
+                              |> GradesAndLabels.grade <= state.maxGrade
+                            )
+                          |> List.map(gradesAndLabel =>
+                              <li
+                                className="flex flex-1 grade-bar__track-segment justify-center items-center relative"
+                                onClick={_ => send(UpdateSelectedGrade(gradesAndLabel |> GradesAndLabels.grade))} >
+                                <span className="grade-bar__track-segment-title whitespace-no-wrap text-xs z-20">
+                                  {"Add grade label" |> str}
+                                </span>
+                                <div className={
+                                  "flex items-center justify-center z-10 grade-bar__pointer"
+                                ++
+                                gradeBarBulletClasses(
+                                  gradesAndLabel |> GradesAndLabels.grade == state.selectedGrade,
+                                  gradesAndLabel |> GradesAndLabels.grade >= state.passGrade,
+                                  (gradesAndLabel |> GradesAndLabels.label |> Js.String.trim |> Js.String.length) <= 1
+                                )
+                                }>
+                                  {
+                                    gradesAndLabel
+                                    |> GradesAndLabels.grade
+                                    |> string_of_int
+                                    |> str
+                                  }
+                                </div>
+                              </li>
+                            )
+                          |> Array.of_list
+                          |> ReasonReact.array
+                        }
+                      </ul>
+                    </div>
+                    <div className="flex justify-between items-center pt-6 pb-5">
+                        <div className="flex justify-center items-center mx-4">
+                          <span className="grade-bar__pointer-legend grade-bar__pointer-legend-failed">
+                          </span>
+                          <span className="ml-2 text-xs">{"Fail" |> str}</span>
+                        </div>
+                        <div className="flex justify-center items-center mx-4">
+                          <span className="grade-bar__pointer-legend grade-bar__pointer-legend-passed">
+                          </span>
+                          <span className="ml-2 text-xs">{"Passed" |> str}</span>
+                        </div>
+                        <div className="flex justify-center items-center mx-4">
+                          <span className="grade-bar__pointer-legend grade-bar__pointer--pulse">
+                          </span>
+                          <span className="ml-2 text-xs">{"Add grade label" |> str}</span>
+                        </div>
                     </div>
                   </div>
                 </div>
-                <ul className="mt-1 grade__slider-labels flex justify-between">
-                  {
-                    state.gradesAndLabels
-                    |> List.filter(gradesAndLabel =>
-                         gradesAndLabel
-                         |> GradesAndLabels.grade <= state.maxGrade
-                       )
-                    |> List.map(gradesAndLabel =>
-                         <li>
-                           {
-                             gradesAndLabel
-                             |> GradesAndLabels.grade
-                             |> string_of_int
-                             |> str
-                           }
-                         </li>
-                       )
-                    |> Array.of_list
-                    |> ReasonReact.array
-                  }
-                </ul>
                 <div className="flex">
                   {
                     switch (course) {

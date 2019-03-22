@@ -1,5 +1,6 @@
-open CourseEditor__Types;
 [%bs.raw {|require("./CourseEditor__Form.css")|}];
+
+open CourseEditor__Types;
 
 let str = ReasonReact.string;
 
@@ -60,7 +61,6 @@ let updateEndsAt = (send, date) => {
   let regex = [%re
     {|/^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/|}
   ];
-
   let lengthOfInput = date |> String.length;
   let hasError = lengthOfInput == 0 ? false : !Js.Re.test(date, regex);
   send(UpdateEndsAt(date, hasError));
@@ -101,6 +101,16 @@ let gradeBarBulletClasses = (selected, passed, empty) => {
   };
 };
 
+let updateMaxGrade = (value, state, send) =>
+  if (value <= state.passGrade) {
+    send(UpdatePassGrade(1));
+    send(UpdateSelectedGrade(value));
+    send(UpdateMaxGrade(value));
+  } else {
+    send(UpdateSelectedGrade(value));
+    send(UpdateMaxGrade(value));
+  };
+
 let handleResponseCB = (id, state, updateCoursesCB) => {
   let course =
     Course.create(
@@ -115,7 +125,8 @@ let handleResponseCB = (id, state, updateCoursesCB) => {
   updateCoursesCB(course);
 };
 
-let createCourse = (state, updateCoursesCB) => {
+let createCourse = (authenticityToken, state, send, updateCoursesCB) => {
+  send(UpdateSaving);
   let jsGradeAndLabelArray =
     state.gradesAndLabels
     |> List.filter(gradesAndLabel =>
@@ -139,7 +150,8 @@ let createCourse = (state, updateCoursesCB) => {
       ~gradesAndLabels=jsGradeAndLabelArray,
       (),
     );
-  let response = createCourseQuery |> GraphqlQuery.sendQuery;
+  let response =
+    createCourseQuery |> GraphqlQuery.sendQuery(authenticityToken);
 
   response
   |> Js.Promise.then_(result => {
@@ -153,7 +165,8 @@ let createCourse = (state, updateCoursesCB) => {
   |> ignore;
 };
 
-let updateCourse = (state, updateCoursesCB, course) => {
+let updateCourse = (authenticityToken, state, send, updateCoursesCB, course) => {
+  send(UpdateSaving);
   let jsGradeAndLabelArray =
     state.gradesAndLabels
     |> List.filter(gradesAndLabel =>
@@ -175,7 +188,8 @@ let updateCourse = (state, updateCoursesCB, course) => {
       ~gradesAndLabels=jsGradeAndLabelArray,
       (),
     );
-  let response = updateCourseQuery |> GraphqlQuery.sendQuery;
+  let response =
+    updateCourseQuery |> GraphqlQuery.sendQuery(authenticityToken);
 
   response
   |> Js.Promise.then_(result => {
@@ -306,7 +320,7 @@ let make =
                 <label
                   className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
                   htmlFor="date">
-                  {"Course ends on" |> str}
+                  {"Course ends at" |> str}
                 </label>
                 <input
                   className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
@@ -354,11 +368,11 @@ let make =
                       <select
                         onChange=(
                           event =>
-                            send(
-                              UpdateMaxGrade(
-                                ReactEvent.Form.target(event)##value
-                                |> int_of_string,
-                              ),
+                            updateMaxGrade(
+                              ReactEvent.Form.target(event)##value
+                              |> int_of_string,
+                              state,
+                              send,
                             )
                         )
                         value={state.maxGrade |> string_of_int}
@@ -368,6 +382,7 @@ let make =
                           |> List.filter(g => g != 1)
                           |> List.map(possibleGradeValue =>
                                <option
+                                 key={possibleGradeValue |> string_of_int}
                                  value={possibleGradeValue |> string_of_int}>
                                  {possibleGradeValue |> string_of_int |> str}
                                </option>
@@ -387,7 +402,7 @@ let make =
                     switch (course) {
                     | Some(_) =>
                       <span
-                        className="inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-grey px-3 py-2 leading-tight rounded-none focus:outline-none">
+                        className="inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue px-3 py-2 leading-tight rounded-none">
                         {state.passGrade |> string_of_int |> str}
                       </span>
                     | None =>
@@ -408,6 +423,7 @@ let make =
                           |> List.filter(g => g < state.maxGrade)
                           |> List.map(possibleGradeValue =>
                                <option
+                                 key={possibleGradeValue |> string_of_int}
                                  value={possibleGradeValue |> string_of_int}>
                                  {possibleGradeValue |> string_of_int |> str}
                                </option>
@@ -494,6 +510,11 @@ let make =
                              )
                           |> List.map(gradesAndLabel =>
                                <li
+                                 key={
+                                   gradesAndLabel
+                                   |> GradesAndLabels.grade
+                                   |> string_of_int
+                                 }
                                  className="flex flex-1 grade-bar__track-segment justify-center items-center relative"
                                  onClick={
                                    _ =>
@@ -588,7 +609,14 @@ let make =
                       <button
                         disabled={saveDisabled(state)}
                         onClick=(
-                          _ => updateCourse(state, updateCoursesCB, course)
+                          _ =>
+                            updateCourse(
+                              authenticityToken,
+                              state,
+                              send,
+                              updateCoursesCB,
+                              course,
+                            )
                         )
                         className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
                         {"Update Course" |> str}
@@ -597,7 +625,15 @@ let make =
                     | None =>
                       <button
                         disabled={saveDisabled(state)}
-                        onClick=(_ => createCourse(state, updateCoursesCB))
+                        onClick=(
+                          _ =>
+                            createCourse(
+                              authenticityToken,
+                              state,
+                              send,
+                              updateCoursesCB,
+                            )
+                        )
                         className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
                         {"Create Course" |> str}
                       </button>

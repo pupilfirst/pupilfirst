@@ -1,6 +1,10 @@
 exception Graphql_error(string);
 
-let sendQuery = q =>
+let sendQuery = (authenticityToken, q) => {
+  let headers = [
+    ("authenticity_token", authenticityToken),
+    ("Content-Type", "application/json"),
+  ];
   Bs_fetch.(
     fetchWithInit(
       "/graphql",
@@ -17,7 +21,8 @@ let sendQuery = q =>
         ~credentials=Include,
         ~headers=
           HeadersInit.makeWithArray([|
-            ("content-type", "application/json"),
+            ("X-CSRF-Token", authenticityToken),
+            ("Content-Type", "application/json"),
           |]),
         (),
       ),
@@ -40,3 +45,4 @@ let sendQuery = q =>
          }
        )
   );
+};

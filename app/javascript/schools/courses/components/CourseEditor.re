@@ -46,14 +46,13 @@ let make = (~authenticityToken, _children) => {
     | UpdateEditorAction(editorAction) =>
       ReasonReact.Update({...state, editorAction})
     | UpdateCourses(courses) => ReasonReact.Update({...state, courses})
-    | UpdateCourse(course)=> {
+    | UpdateCourse(course) =>
       let newCourses = course |> Course.updateList(state.courses);
-      ReasonReact.Update({...state, courses: newCourses})
-    }
+      ReasonReact.Update({...state, courses: newCourses});
     },
   didMount: ({send}) => {
     let coursesQuery = CoursesQuery.make();
-    let response = coursesQuery |> GraphqlQuery.sendQuery;
+    let response = coursesQuery |> GraphqlQuery.sendQuery(authenticityToken);
     response
     |> Js.Promise.then_(result => {
          let courses =
@@ -91,7 +90,8 @@ let make = (~authenticityToken, _children) => {
   },
   render: ({state, send}) => {
     let hideEditorActionCB = () => send(UpdateEditorAction(Hidden));
-    let updateCoursesCB = course => {send(UpdateCourse(course))
+    let updateCoursesCB = course => {
+      send(UpdateCourse(course));
       send(UpdateEditorAction(Hidden));
     };
     <div className="flex flex-1 h-screen">
@@ -125,6 +125,7 @@ let make = (~authenticityToken, _children) => {
               |> Course.sort
               |> List.map(course =>
                    <div
+                     key={course |> Course.id |> string_of_int}
                      className="shadow bg-white rounded-lg overflow-hidden mb-4 flex items-center hover:bg-grey-lighter py-4 px-4"
                      onClick={
                        _ =>

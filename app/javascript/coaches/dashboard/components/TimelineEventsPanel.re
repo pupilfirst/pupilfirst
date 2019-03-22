@@ -13,7 +13,7 @@ let str = ReasonReact.string;
 
 type selectedTab =
   | PendingTab
-  | CompletedTab;
+  | ReviewedTab;
 
 type state = {
   selectedTab,
@@ -32,10 +32,11 @@ let founderFilter = (founder, tes) =>
   | Some(founder) => tes |> TimelineEvent.forFounder(founder)
   };
 
-let loadMoreVisible =
-    (selectedFounder, selectedTab, hasMorePendingTEs, hasMoreCompletedTEs) =>
-  selectedFounder == None
-  && (selectedTab == PendingTab ? hasMorePendingTEs : hasMoreCompletedTEs);
+let loadMoreVisible = (selectedTab, hasMorePendingTEs, hasMoreCompletedTEs) =>
+  switch (selectedTab) {
+  | PendingTab => hasMorePendingTEs
+  | ReviewedTab => hasMoreCompletedTEs
+  };
 
 let handleResponseJSON =
     (state, hasMorePendingTEs, hasMoreCompletedTEs, appendTEsCB, json) =>
@@ -51,11 +52,20 @@ let handleResponseJSON =
       json
       |> Json.Decode.(field("timelineEvents", list(TimelineEvent.decode)));
     let moreToLoad = json |> Json.Decode.(field("moreToLoad", bool));
-    let hasMorePendingTEs =
-      state.selectedTab == PendingTab ? moreToLoad : hasMorePendingTEs;
-    let hasMoreCompletedTEs =
-      state.selectedTab == CompletedTab ? moreToLoad : hasMoreCompletedTEs;
-    appendTEsCB(newTEs, hasMorePendingTEs, hasMoreCompletedTEs);
+
+    let (newHasMorePendingTEs, newHasMoreCompletedTEs) =
+      switch (state.selectedTab) {
+      | PendingTab => (moreToLoad, hasMoreCompletedTEs)
+      | ReviewedTab => (hasMorePendingTEs, moreToLoad)
+      };
+
+    appendTEsCB(newTEs, newHasMorePendingTEs, newHasMoreCompletedTEs);
+  };
+
+let tabAsString = tab =>
+  switch (tab) {
+  | PendingTab => "pending"
+  | ReviewedTab => "reviewed"
   };
 
 let fetchEvents =
@@ -73,7 +83,7 @@ let fetchEvents =
     tes
     |> List.map(te => te |> TimelineEvent.id |> string_of_int)
     |> String.concat("&excludedIds[]=");
-  let reviewStatus = state.selectedTab == PendingTab ? "pending" : "complete";
+  let reviewStatus = tabAsString(state.selectedTab);
   let params =
     "limit=20&reviewStatus="
     ++ reviewStatus
@@ -142,19 +152,30 @@ let emptyMessage =
       )
     };
   "There are no "
-  ++ (selectedTab == PendingTab ? "pending" : "reviewed")
+  ++ tabAsString(PendingTab)
   ++ " submissions "
   ++ fromText
   ++ " in the list."
   ++ (
-    loadMoreVisible(
-      selectedFounder,
-      selectedTab,
-      hasMorePendingTEs,
-      hasMoreCompletedTEs,
-    ) ?
+    loadMoreVisible(selectedTab, hasMorePendingTEs, hasMoreCompletedTEs) ?
       " Please " ++ clearFilterText ++ "try loading more." : ""
   );
+};
+
+let pendingTabClasses = selectedTab => {
+  let classes = "timeline-events-panel__status-tab";
+  switch (selectedTab) {
+  | PendingTab => classes ++ " timeline-events-panel__status-tab--active"
+  | ReviewedTab => classes
+  };
+};
+
+let reviewedTabClasses = selectedTab => {
+  let classes = "timeline-events-panel__status-tab";
+  switch (selectedTab) {
+  | PendingTab => classes
+  | ReviewedTab => classes ++ " timeline-events-panel__status-tab--active"
+  };
 };
 
 let make =
@@ -187,25 +208,17 @@ let make =
     let statusFilter =
       switch (state.selectedTab) {
       | PendingTab => TimelineEvent.reviewPending
-      | CompletedTab => TimelineEvent.reviewComplete
+      | ReviewedTab => TimelineEvent.reviewComplete
       };
+    let founderTimelineEvents =
+      timelineEvents |> founderFilter(selectedFounder);
     let pendingCount =
-      timelineEvents
-      |> founderFilter(selectedFounder)
-      |> TimelineEvent.reviewPending
-      |> List.length;
-    let timelineEvents =
-      timelineEvents |> founderFilter(selectedFounder) |> statusFilter;
+      founderTimelineEvents |> TimelineEvent.reviewPending |> List.length;
+    let filteredTimelineEvents = founderTimelineEvents |> statusFilter;
     <div className="pt-4">
       <div className="d-flex mb-3 timeline-events-panel__status-tab-container">
         <div
-          className={
-            "timeline-events-panel__status-tab"
-            ++ (
-              state.selectedTab == PendingTab ?
-                " timeline-events-panel__status-tab--active" : ""
-            )
-          }
+          className={pendingTabClasses(state.selectedTab)}
           onClick={_e => send(SwitchTab(PendingTab))}>
           {"Pending" |> str}
           {
@@ -219,19 +232,13 @@ let make =
           }
         </div>
         <div
-          className={
-            "timeline-events-panel__status-tab"
-            ++ (
-              state.selectedTab == CompletedTab ?
-                " timeline-events-panel__status-tab--active" : ""
-            )
-          }
-          onClick={_e => send(SwitchTab(CompletedTab))}>
+          className={reviewedTabClasses(state.selectedTab)}
+          onClick={_e => send(SwitchTab(ReviewedTab))}>
           {"Reviewed" |> str}
         </div>
       </div>
       {
-        if (timelineEvents |> List.length == 0) {
+        if (filteredTimelineEvents |> List.length == 0) {
           <div className="timeline-events-panel__empty-notice p-4 mb-3">
             <img
               src=emptyIconUrl
@@ -249,7 +256,7 @@ let make =
           </div>;
         } else {
           <TimelineEventsList
-            timelineEvents
+            timelineEvents=filteredTimelineEvents
             founders
             replaceTimelineEvent
             authenticityToken
@@ -262,16 +269,12 @@ let make =
       }
       {
         if (loadMoreVisible(
-              selectedFounder,
               state.selectedTab,
               hasMorePendingTEs,
               hasMoreCompletedTEs,
             )) {
           let buttonText =
-            state.isLoadingMore ?
-              "Loading..." :
-              state.selectedTab == PendingTab ?
-                "Load more" : "Load earlier reviews";
+            state.isLoadingMore ? "Loading..." : "Load earlier submissions";
           <div
             className={
               "btn btn-primary mb-3"

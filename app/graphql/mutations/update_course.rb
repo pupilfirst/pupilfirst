@@ -17,9 +17,9 @@ module Mutations
       mutator = UpdateCourseMutator.new(params, context)
 
       if mutator.valid?
-        { course: mutator.update_course, errors: [] }
+        { course: mutator.update_course }
       else
-        { course: nil, errors: mutator.error_codes }
+        raise "Failed with error codes: #{mutator.error_codes.to_json}"
       end
     end
   end

@@ -4,9 +4,8 @@ class UpdateCourseMutator < ApplicationMutator
   attr_accessor :grades_and_labels
   attr_accessor :ends_at
 
-  validates :name, presence: true
-  validates :grades_and_labels, presence: true
-  validates :ends_at, presence: true
+  validates :name, presence: { message: 'NameBlank' }
+  validates :grades_and_labels, presence: { messaage: 'GradesAndLabelsBlank' }
 
   validate :valid_course_id
   validate :correct_grades_and_labels

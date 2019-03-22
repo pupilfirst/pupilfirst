@@ -111,7 +111,7 @@ let updateMaxGrade = (value, state, send) =>
     send(UpdateMaxGrade(value));
   };
 
-let handleResponseCB = (id, state, updateCoursesCB) => {
+let handleResponseCB = (id, state, updateCoursesCB, newCourse) => {
   let course =
     Course.create(
       id |> int_of_string,
@@ -121,7 +121,10 @@ let handleResponseCB = (id, state, updateCoursesCB) => {
       state.passGrade,
       state.gradesAndLabels,
     );
-  Notification.success("Success", "Course created successfully");
+  newCourse ?
+    Notification.success("Success", "Course created successfully") :
+    Notification.success("Success", "Course updated successfully");
+
   updateCoursesCB(course);
 };
 
@@ -159,6 +162,7 @@ let createCourse = (authenticityToken, state, send, updateCoursesCB) => {
          result##createCourse##course##id,
          state,
          updateCoursesCB,
+         true,
        );
        Js.Promise.resolve();
      })
@@ -197,6 +201,7 @@ let updateCourse = (authenticityToken, state, send, updateCoursesCB, course) => 
          result##updateCourse##course##id,
          state,
          updateCoursesCB,
+         false,
        );
        Js.Promise.resolve();
      })

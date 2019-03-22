@@ -124,7 +124,7 @@ let make = (~authenticityToken, _children) => {
               state.courses
               |> Course.sort
               |> List.map(course =>
-                   <div
+                   <a
                      key={course |> Course.id |> string_of_int}
                      className="shadow bg-white rounded-lg overflow-hidden mb-4 flex items-center hover:bg-grey-lighter py-4 px-4"
                      onClick={
@@ -132,11 +132,11 @@ let make = (~authenticityToken, _children) => {
                          send(UpdateEditorAction(ShowForm(Some(course))))
                      }>
                      <div className="text-sm">
-                       <p className="text-black font-semibold">
+                       <span className="text-black font-semibold">
                          {course |> Course.name |> str}
-                       </p>
+                       </span>
                      </div>
-                   </div>
+                   </a>
                  )
               |> Array.of_list
               |> ReasonReact.array

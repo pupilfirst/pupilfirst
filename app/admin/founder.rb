@@ -1,6 +1,10 @@
 ActiveAdmin.register Founder do
   actions :all, except: [:destroy]
 
+  permit_params :name, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :communication_address, :phone,
+    :college_id, :twitter_url, :linkedin_url, :personal_website_url, :blog_url, :angel_co_url, :github_url,
+    :behance_url, :gender, :skype_id, :exited, :excluded_from_leaderboard, roles: [], tag_list: []
+
   controller do
     include DisableIntercom
 
@@ -41,9 +45,6 @@ ActiveAdmin.register Founder do
   filter :roles_cont, as: :select, collection: -> { Founder.valid_roles }, label: 'Role'
   filter :college_name_contains
   filter :created_at, label: 'Registered on'
-  permit_params :name, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :communication_address, :phone,
-    :college_id, :twitter_url, :linkedin_url, :personal_website_url, :blog_url, :angel_co_url, :github_url,
-    :behance_url, :gender, :skype_id, :exited, roles: [], tag_list: []
 
   batch_action :tag, form: proc { { tag: Founder.tag_counts_on(:tags).pluck(:name) } } do |ids, inputs|
     Founder.where(id: ids).each do |founder|
@@ -75,24 +76,6 @@ ActiveAdmin.register Founder do
       end
     end
 
-    column 'Total Karma (Personal)' do |founder|
-      points = founder.karma_points&.sum(:points)
-      if points.present?
-        link_to points, admin_karma_points_path(q: { founder_id_eq: founder.id })
-      else
-        'Not Available'
-      end
-    end
-
-    column 'Total Karma (Team)' do |founder|
-      points = founder.startup&.karma_points&.sum(:points)
-      if points.present?
-        link_to points, admin_karma_points_path(q: { startup_id_eq: founder.startup&.id })
-      else
-        'Not Available'
-      end
-    end
-
     actions
   end
 
@@ -111,14 +94,6 @@ ActiveAdmin.register Founder do
 
     column :roles do |founder|
       founder.roles.join ', '
-    end
-
-    column 'Total Karma (Personal)' do |founder|
-      founder.karma_points&.sum(:points) || 'Not Available'
-    end
-
-    column 'Total Karma (Team)' do |founder|
-      founder.startup&.karma_points&.sum(:points) || 'Not Available'
     end
 
     column :phone
@@ -218,6 +193,7 @@ ActiveAdmin.register Founder do
       end
 
       row :exited
+      row :excluded_from_leaderboard
     end
 
     panel 'Social links' do

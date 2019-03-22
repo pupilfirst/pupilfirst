@@ -159,4 +159,18 @@ feature 'Top navigation bar' do
       expect(page).to have_link("#{student.course.name} Course", href: "/founders/#{student.slug}/select")
     end
   end
+
+  context 'when the user is a student in a course that has leaderboard entries in the past week' do
+    let(:lts) { LeaderboardTimeService.new }
+
+    before do
+      create :leaderboard_entry, founder: student, period_from: lts.week_start, period_to: lts.week_end
+    end
+
+    it 'displays a link to the leaderboard' do
+      sign_in_user student.user, referer: student_dashboard_path
+
+      expect(page).to have_link('Leaderboard', href: "/courses/#{student.course.id}/leaderboard")
+    end
+  end
 end

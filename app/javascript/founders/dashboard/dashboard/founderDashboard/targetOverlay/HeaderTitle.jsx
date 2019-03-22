@@ -14,24 +14,6 @@ export default class HeaderTitle extends React.Component {
     return this.props.target.role === "founder" ? "Individual" : "Team";
   }
 
-  pointsEarnable() {
-    if (
-      typeof this.props.target.points_earnable === "undefined" ||
-      this.props.target.points_earnable === null
-    ) {
-      return null;
-    } else {
-      return (
-        <div className="target-overlay-header__info-subtext target-overlay-header__karma-points font-regular d-none d-md-inline-block">
-          Karma Points:
-          <span className="target-overlay-header__info-value">
-            {this.props.target.points_earnable}
-          </span>
-        </div>
-      );
-    }
-  }
-
   targetDateString() {
     if (
       typeof this.props.target.session_at === "undefined" ||

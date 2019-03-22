@@ -1,0 +1,118 @@
+<% presenter = Courses::LeaderboardPresenter.new(self, @course) %>
+
+<% content_for(:head) do %>
+  <title>Leaderboard | <%= presenter.school_name %></title>
+  <%= stylesheet_pack_tag 'courses/leaderboard', 'data-turbolinks-track': 'reload' %>
+<% end %>
+
+<div>
+  <div class="w-100 leaderboard__header-container mt-4 md:px-4 pb-4 text-center">
+    <div class="col-md-7 mx-auto">
+      <div class="leaderboard__header-title d-inline-block mx-auto p-3 shadow-lg">
+        <h4 class="font-bold">
+          Leaderboard
+        </h4>
+        <div class="d-flex align-items-center justify-content-between mt-3">
+          <% if presenter.previous_page? %>
+            <a class="leaderboard__date-range-arrow d-flex align-items-center justify-content-center rounded-circle" href="<%= presenter.previous_page_link %>">
+              <i class="fa fa-angle-left"></i>
+            </a>
+          <% end %>
+          <span class="leaderboard__date-range px-3 font-semibold">
+            <%= presenter.start_date %> to <%= presenter.end_date %>
+          </span>
+          <% if presenter.next_page? %>
+            <a class="leaderboard__date-range-arrow d-flex align-items-center justify-content-center rounded-circle" href="<%= presenter.next_page_link %>">
+              <i class="fa fa-angle-right"></i>
+            </a>
+          <% end %>
+        </div>
+      </div>
+      <div class="col">
+        <% if presenter.students.any? %>
+          <div class="d-flex justify-content-center mt-5">
+            <% if presenter.toppers.count > 3 %>
+              <% presenter.toppers[0..1].each do |student| %>
+                <%= render 'topper_avatar', student: student %>
+              <% end %>
+            <% else %>
+              <% presenter.toppers.each do |student| %>
+                <%= render 'topper_avatar', student: student %>
+              <% end %>
+            <% end %>
+
+            <% if presenter.toppers.count > 3 %>
+              <div class="leaderboard__winner-avatar d-flex align-items-center justify-content-center overflow-hidden rounded-circle bg-white mx-2 shadow">
+                +<%= presenter.toppers.count - 2 %>
+              </div>
+            <% end %>
+          </div>
+
+          <h3 class="leaderboard__winner-title text-white pb-3 my-3"><%= presenter.heading %></h3>
+
+          <div class="leaderboard__students-count-container d-flex justify-content-center">
+            <div class="px-3">
+              <h5 class="my-1 font-regular text-white">Active Students</h5>
+              <span class="leaderboard__students-count text-white"><%= presenter.students.count %></span>
+            </div>
+            <div class="px-3">
+              <h5 class="my-1 font-regular text-white">Inactive Students</h5>
+              <span class="leaderboard__students-count text-white"><%= presenter.inactive_students_count %></span>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <p class="leaderboard__notice mb-2 text-center p-2">
+    This leaderboard shows students <strong>who have improved the most</strong> compared to the previous leaderboard.
+  </p>
+
+  <% if presenter.students.empty? %>
+    <div class="leaderboard__inactive-startup-message text-center bg-white border rounded-lg p-5 my-4">
+      <h4 class="font-semibold">
+        The leaderboard doesn&rsquo;t have any entries for this period.
+      </h4>
+    </div>
+  <% else %>
+    <div class="w-100 bg-white my-4 border leaderboard__table-container shadow">
+      <table class="table table-responsive-sm mb-2">
+        <thead class="leaderboard__table-thead brand-secondary">
+        <tr>
+          <th class="font-semibold px-3">Rank</th>
+          <th class="font-semibold">Change</th>
+          <th class="font-semibold">Student</th>
+          <th class="font-semibold">Level</th>
+          <th class="font-semibold">Score</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <% presenter.students.each do |student| %>
+          <tr class="<%= student.current_student? ? 'leaderboard__current-student-row rounded' : '' %>">
+            <td>
+              <span class="leaderboard__rank-number font-semibold px-3"><%= student.rank %></span>
+            </td>
+
+            <td>
+              <% if student.delta.blank? %>
+                <span class="leaderboard__rank-change-new">New</span>
+              <% else %>
+                  <span class="leaderboard__rank-change-icon d-inline-block mr-1">
+                    <%= presenter.rank_change_icon(student.delta) %>
+                  </span>
+              <% end %>
+
+              <span class="leaderboard__rank-delta font-semibold"><%= presenter.format_delta(student.delta) %></span>
+            </td>
+
+            <td><%= student.name %></td>
+            <td><%= student.level_number %></td>
+            <td><%= student.score %></td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</div>

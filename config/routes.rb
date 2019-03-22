@@ -223,4 +223,10 @@ Rails.application.routes.draw do
   get '/errors/:error_type', to: 'errors#simulate', constraints: DevelopmentConstraint.new
 
   get '/favicon.ico', to: 'home#favicon'
+
+  resources :courses, only: [] do
+    member do
+      get 'leaderboard', action: 'leaderboard'
+    end
+  end
 end

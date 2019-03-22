@@ -1,11 +1,13 @@
 module TimelineEvents
   class UndoGradingService
+    class ReviewPendingException < StandardError; end
+
     def initialize(timeline_event)
       @timeline_event = timeline_event
     end
 
     def execute
-      raise TimelineEvents::GradingService::ReviewPendingException unless @timeline_event.evaluator_id?
+      raise ReviewPendingException unless @timeline_event.evaluator_id?
 
       TimelineEvent.transaction do
         # Clear existing grades

@@ -1,5 +1,5 @@
 class ApplicationPolicy
-  attr_reader :user, :record, :current_founder, :current_school, :current_coach
+  attr_reader :user, :record, :current_founder, :current_school, :current_coach, :current_school_admin
 
   def initialize(user, record)
     @pundit_user = user
@@ -8,6 +8,7 @@ class ApplicationPolicy
     @current_founder = user.current_founder
     @current_school = user.current_school
     @current_coach = user.current_coach
+    @current_school_admin = user.current_school_admin
   end
 
   def index?
@@ -43,7 +44,7 @@ class ApplicationPolicy
   end
 
   class Scope
-    attr_reader :user, :scope, :current_founder, :current_school, :current_coach
+    attr_reader :user, :scope, :current_founder, :current_school, :current_coach, :current_school_admin
 
     def initialize(user, scope)
       @user = user.current_user
@@ -51,6 +52,7 @@ class ApplicationPolicy
       @current_founder = user.current_founder
       @current_school = user.current_school
       @current_coach = user.current_coach
+      @current_school_admin = user.current_school_admin
     end
 
     def resolve

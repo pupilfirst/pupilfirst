@@ -66,8 +66,22 @@ let updateEndsAt = (send, date) => {
   send(UpdateEndsAt(date, hasError));
 };
 
-let saveDisabled = state =>
-  state.hasDateError || state.hasNameError || !state.dirty || state.saving;
+let saveDisabled = state => {
+  let hasInvalidGrades =
+    state.gradesAndLabels
+    |> List.filter(gl => gl |> GradesAndLabels.grade <= state.maxGrade)
+    |> List.map(gl => gl |> GradesAndLabels.valid)
+    |> List.filter(value => !value)
+    |> ListUtils.isEmpty;
+
+  state.hasDateError
+  || state.hasNameError
+  || state.name
+  |> String.length < 2
+  || !state.dirty
+  || state.saving
+  || hasInvalidGrades;
+};
 
 let setPayload = (authenticityToken, state) => {
   let payload = Js.Dict.empty();

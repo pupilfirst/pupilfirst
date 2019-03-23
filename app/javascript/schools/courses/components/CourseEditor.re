@@ -124,19 +124,36 @@ let make = (~authenticityToken, _children) => {
               state.courses
               |> Course.sort
               |> List.map(course =>
-                   <a
-                     key={course |> Course.id |> string_of_int}
-                     className="shadow bg-white rounded-lg overflow-hidden mb-4 flex items-center hover:bg-grey-lighter py-4 px-4"
-                     onClick={
-                       _ =>
-                         send(UpdateEditorAction(ShowForm(Some(course))))
-                     }>
-                     <div className="text-sm">
-                       <span className="text-black font-semibold">
-                         {course |> Course.name |> str}
-                       </span>
+                   <div
+                     className="flex items-center shadow bg-white rounded-lg overflow-hidden mb-4">
+                     <div
+                       className="flex w-full"
+                       key={course |> Course.id |> string_of_int}>
+                       <a
+                         className="cursor-pointer flex flex-1 items-center py-4 px-4 hover:bg-grey-lighter"
+                         onClick={
+                           _ =>
+                             send(
+                               UpdateEditorAction(ShowForm(Some(course))),
+                             )
+                         }>
+                         <div className="text-sm">
+                           <span className="text-black font-semibold">
+                             {course |> Course.name |> str}
+                           </span>
+                         </div>
+                       </a>
+                       <a
+                         href={
+                           "/school/courses/"
+                           ++ (course |> Course.id |> string_of_int)
+                           ++ "/students"
+                         }
+                         className="hover:bg-grey-lighter items-center p-4 flex cursor-pointer no-underline">
+                         {"view" |> str}
+                       </a>
                      </div>
-                   </a>
+                   </div>
                  )
               |> Array.of_list
               |> ReasonReact.array

@@ -371,16 +371,16 @@ let make =
                   {"Grades" |> str}
                 </h5>
                 <div className="mb-4">
-                  <label
+                  <span
                     className="inline-block tracking-wide text-grey-darker text-sm font-semibold mr-2"
                     htmlFor="max_grades">
                     {"Maximum grade is" |> str}
-                  </label>
+                  </span>
                   {
                     switch (course) {
                     | Some(_) =>
                       <span
-                        className="inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-grey px-3 py-2 leading-tight rounded-none focus:outline-none">
+                        className="cursor-not-allowed inline-block bg-white border-b-2 text-2xl font-semibold text-center border-blue px-3 py-2 leading-tight rounded-none focus:outline-none">
                         {state.maxGrade |> string_of_int |> str}
                       </span>
                     | None =>
@@ -395,7 +395,7 @@ let make =
                             )
                         )
                         value={state.maxGrade |> string_of_int}
-                        className="inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-grey px-3 py-2 leading-tight rounded-none focus:outline-none">
+                        className="cursor-pointer inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-grey px-3 py-2 leading-tight rounded-none focus:outline-none">
                         {
                           possibleGradeValues
                           |> List.filter(g => g != 1)
@@ -412,16 +412,16 @@ let make =
                       </select>
                     }
                   }
-                  <label
+                  <span
                     className="inline-block tracking-wide text-grey-darker text-sm font-semibold mx-2"
                     htmlFor="pass_grades">
                     {"and the passing grade is" |> str}
-                  </label>
+                  </span>
                   {
                     switch (course) {
                     | Some(_) =>
                       <span
-                        className="inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue px-3 py-2 leading-tight rounded-none">
+                        className="cursor-not-allowed inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue px-3 py-2 leading-tight rounded-none">
                         {state.passGrade |> string_of_int |> str}
                       </span>
                     | None =>
@@ -436,7 +436,7 @@ let make =
                             )
                         )
                         value={state.passGrade |> string_of_int}
-                        className="inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-grey px-3 py-2 rounded-none leading-tight focus:outline-none">
+                        className="cursor-pointer inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-grey px-3 py-2 rounded-none leading-tight focus:outline-none">
                         {
                           possibleGradeValues
                           |> List.filter(g => g < state.maxGrade)
@@ -486,7 +486,7 @@ let make =
                                  |> string_of_int
                                }>
                                <input
-                                 className="grades__label-input appearance-none inline-block bg-white text-grey-darker border border-grey-light rounded py-2 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                                 className="text-center grades__label-input appearance-none inline-block bg-white text-grey-darker border border-grey-light rounded py-2 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                                  id={
                                    "label"
                                    ++ (

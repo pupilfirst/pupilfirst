@@ -1,0 +1,9 @@
+<% content_for(:head) do %>
+  <%= javascript_pack_tag 'schools/courses/index', 'data-turbolinks-track': 'reload', nonce: true %>
+  <%= stylesheet_pack_tag 'schools/courses/index', media: 'all', 'data-turbolinks-track': 'reload' %>
+<% end %>
+
+<% presenter = Schools::Courses::IndexPresenter.new(self) %>
+<div id="course-editor" class="flex flex-1 h-screen"
+     data-props="<%= presenter.react_props.to_json %>"></div>
+

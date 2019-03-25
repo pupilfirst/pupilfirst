@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  if Rails.env.development?
+    mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
+  end
+
+  post "/graphql", to: "graphql#execute"
+
   devise_for :users, only: %i[sessions omniauth_callbacks], controllers: { sessions: 'users/sessions', omniauth_callbacks: 'users/omniauth_callbacks' }
 
   devise_scope :user do
@@ -27,7 +33,7 @@ Rails.application.routes.draw do
   resource :school, only: %i[show update]
 
   namespace :school, module: 'schools' do
-    resources :courses, only: %i[show update] do
+    resources :courses, only: %i[index show update] do
       post 'close', on: :member
       # TODO: Use shallow routes here, where possible.
       resource :curriculum, only: %i[show]

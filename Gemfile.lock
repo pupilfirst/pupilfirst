@@ -351,6 +351,10 @@ GEM
     get_process_mem (0.2.3)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
+    graphiql-rails (1.7.0)
+      railties
+      sprockets-rails
+    graphql (1.9.3)
     groupdate (4.1.0)
       activesupport (>= 4.2)
     has_scope (0.7.2)
@@ -822,6 +826,8 @@ DEPENDENCIES
   gaffe (~> 1.2)
   geckodriver-helper (~> 0.23)
   google_calendar (= 0.6.4)!
+  graphiql-rails (~> 1.7)
+  graphql (~> 1.9)
   groupdate (~> 4.0)
   heroku-deflater (~> 0.6)
   humanize (~> 1.3)

@@ -372,7 +372,7 @@ let make =
             )) {
           let buttonText =
             state.isLoadingMore ? "Loading..." : "Load earlier submissions";
-          <div
+          <button
             className={
               "btn btn-primary mb-3"
               ++ (state.isLoadingMore ? " disabled" : "")
@@ -391,7 +391,7 @@ let make =
             }>
             <i className="fa fa-cloud-download mr-1" />
             {buttonText |> str}
-          </div>;
+          </button>;
         } else {
           ReasonReact.null;
         }

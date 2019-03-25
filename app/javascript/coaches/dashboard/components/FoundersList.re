@@ -74,14 +74,13 @@ let make =
       <div
         className={allStudentsOptionClasses(selectedFounder)}
         onClick={_event => clearFounderCB()}>
-        <span className="founders-list__item-details d-flex flex-column pr-3">
-          <span className="founders-list__item-name">
-            <span className="fa-stack founders-list__all-students-icon">
-              <i className="fa fa-circle fa-stack-2x" />
-              <i className="fa fa-inverse fa-users fa-stack-1x" />
-            </span>
-            <span className="pl-3"> {"All students" |> str} </span>
+        <span
+          className="founders-list__item-details d-flex flex-row align-items-center pr-3">
+          <span className="fa-stack founders-list__all-students-icon">
+            <i className="fa fa-circle fa-stack-2x" />
+            <i className="fa fa-inverse fa-users fa-stack-1x" />
           </span>
+          <span className="pl-3"> {"All students" |> str} </span>
         </span>
       </div>
       <div

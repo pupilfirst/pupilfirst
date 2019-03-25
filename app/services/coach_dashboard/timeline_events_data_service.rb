@@ -1,6 +1,6 @@
 module CoachDashboard
   class TimelineEventsDataService
-    def initialize(faculty, course, review_status = :pending, excluded_ids = [], limit = 50)
+    def initialize(faculty, course, review_status = :pending, excluded_ids = [], limit = 20)
       @faculty = faculty
       @course = course
       @review_status = review_status
@@ -9,24 +9,33 @@ module CoachDashboard
     end
 
     def timeline_events
-      @timeline_events ||= begin
-        filtered_events
-          .includes(:timeline_event_owners, :timeline_event_files, :startup_feedback)
-          .includes(target: :level)
-          .includes(:target_evaluation_criteria, :evaluation_criteria)
-          .order(created_at: :DESC).limit(@limit).map { |timeline_event| timeline_event_fields(timeline_event) }
-      end
+      @timeline_events ||= ordered_timeline_events.map { |timeline_event| timeline_event_fields(timeline_event) }
     end
 
     def more_to_load?
-      filtered_events.where.not(id: timeline_events.map { |te| te[:id] }).exists?
+      @more_to_load ||= filtered_events.where.not(id: ordered_timeline_events.pluck(:id)).exists?
+    end
+
+    def earliest_submission_date
+      @earliest_submission_date ||= more_to_load? ? ordered_timeline_events.last.created_at.strftime("%b %d, %Y") : nil
     end
 
     private
 
+    def ordered_timeline_events
+      @ordered_timeline_events ||= begin
+        filtered_events.includes(:timeline_event_owners, :timeline_event_files, :startup_feedback)
+          .includes(target: :level)
+          .includes(:target_evaluation_criteria, :evaluation_criteria)
+          .order(created_at: :DESC).limit(@limit)
+      end
+    end
+
     def filtered_events
-      timeline_events = @review_status == :pending ? TimelineEvent.pending_review : TimelineEvent.evaluated_by_faculty
-      timeline_events.from_founders(founders).where.not(id: @excluded_ids)
+      @filtered_events ||= begin
+        timeline_events = @review_status == :pending ? TimelineEvent.pending_review : TimelineEvent.evaluated_by_faculty
+        timeline_events.from_founders(founders).where.not(id: @excluded_ids)
+      end
     end
 
     def founders

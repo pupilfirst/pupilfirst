@@ -19,7 +19,7 @@ gem 'image_processing', '~> 1.2' # Gem to support variants in ActiveStorage
 gem 'webpacker', '~> 4.0'
 
 gem 'coffee-rails', '~> 4.2.0' # Coffeescript on Rails.
-gem 'devise', '~> 4.2' # User auth library.
+gem 'devise', '~> 4.6' # User auth library.
 gem 'devise_invitable', '~> 1.7' # Allow invites to be sent out.
 gem 'jbuilder', '~> 2.6' # Standard part of Rails, but unused, since we don't have an API.
 gem 'jquery-rails', '~> 4.3' # JQuery on Rails.

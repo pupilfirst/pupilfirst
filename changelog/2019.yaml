@@ -1,5 +1,41 @@
 ---
 changelog:
+- timestamp: '2019-03-25T12:17:47Z'
+  changes:
+  - timestamp: '2019-03-25T11:19:11Z'
+    title: Improved UX on coach review dashboard - this update allows coaches to search
+      for a student in their list, and to load previous submissions from students
+      when the filter is active. Messaging in these screens has also been improved.
+    trello: https://trello.com/c/WKPmsvBO
+    private: false
+    category: ui
+  - timestamp: '2019-03-25T09:41:41Z'
+    title: A beta version of a school administration interface is now live - this
+      will allow school admins to control all aspects of the courses they manage through
+      a modern UI.
+    trello: https://trello.com/c/MjyeG82g
+    private: false
+    description: Core features are still being added to the new interface, but it
+      is live, tested, and usable in its current state.
+    category: feature
+  - timestamp: '2019-03-25T09:38:27Z'
+    title: The weekly leaderboard feature, that shows top active students, has been
+      reinstated with a brand new design.
+    trello: https://trello.com/c/oRq9eyEZ
+    private: false
+    description: This change removes the old WeeklyKarmaPoints leaderboard implementation
+      and replaces it with a new one that simply counts grades received by the student
+      as a result of their submissions.
+    category: feature
+  - timestamp: '2019-03-11T12:17:55Z'
+    title: Targets which can be completed by visiting a link now _actually_ complete
+      when the link is visited.
+    trello: https://trello.com/c/cJOoHOgU
+    private: false
+    description: The feature seems to have never been properly implemented. This _completes_
+      the feature, causing a click on the _Visit_ button to complete the target, and
+      _then_ take the user to the stored URL.
+    category: bugfix
 - timestamp: '2019-02-04T08:06:47Z'
   changes:
   - timestamp: '2019-02-04T08:00:22Z'

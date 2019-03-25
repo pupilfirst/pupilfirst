@@ -1,8 +1,0 @@
----
-timestamp: '2019-03-25T11:19:11Z'
-title: Improved UX on coach review dashboard - this update allows coaches to search
-  for a student in their list, and to load previous submissions from students when
-  the filter is active. Messaging in these screens has also been improved.
-trello: https://trello.com/c/WKPmsvBO
-private: false
-category: ui

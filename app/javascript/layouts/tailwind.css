@@ -1,10 +1,10 @@
 @import "tailwindcss/preflight";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
-/* Custom Style */
 
+/* Custom Style */
 body {
-    font-family: 'proxima-nova', sans-serif;
+    font-family: 'Open Sans', sans-serif;
     color: #3A3F52;
     @apply .antialiased;
 }

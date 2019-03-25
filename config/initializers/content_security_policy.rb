@@ -57,7 +57,7 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   def style_sources
-    ['fonts.googleapis.com', 'https://assets.pupilfirst.com', 'https://use.typekit.net']
+    ['fonts.googleapis.com', 'https://assets.pupilfirst.com']
   end
 
   def connect_sources
@@ -67,7 +67,7 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   def font_sources
-    ['fonts.gstatic.com', intercom_csp[:font], 'https://assets.pupilfirst.com', 'https://use.typekit.net']
+    ['fonts.gstatic.com', intercom_csp[:font], 'https://assets.pupilfirst.com']
   end
 
   def child_sources

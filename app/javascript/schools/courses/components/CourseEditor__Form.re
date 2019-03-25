@@ -72,7 +72,7 @@ let saveDisabled = state => {
     |> List.filter(gl => gl |> GradesAndLabels.grade <= state.maxGrade)
     |> List.map(gl => gl |> GradesAndLabels.valid)
     |> List.filter(value => !value)
-    |> ListUtils.isEmpty;
+    |> ListUtils.isNotEmpty;
 
   state.hasDateError
   || state.hasNameError

@@ -32,14 +32,27 @@ let founderFilter = (founder, tes) =>
   | Some(founder) => tes |> TimelineEvent.forFounder(founder)
   };
 
-let loadMoreVisible = (selectedTab, hasMorePendingTEs, hasMoreCompletedTEs) =>
-  switch (selectedTab) {
-  | PendingTab => hasMorePendingTEs
-  | ReviewedTab => hasMoreCompletedTEs
+let loadMoreVisible =
+    (selectedTab, morePendingSubmissionsAfter, moreReviewedSubmissionsAfter) =>
+  switch (
+    selectedTab,
+    morePendingSubmissionsAfter,
+    moreReviewedSubmissionsAfter,
+  ) {
+  | (PendingTab, Some(_), _) => true
+  | (ReviewedTab, _, Some(_)) => true
+  | (PendingTab, _, _) => false
+  | (ReviewedTab, _, _) => false
   };
 
 let handleResponseJSON =
-    (state, hasMorePendingTEs, hasMoreCompletedTEs, appendTEsCB, json) =>
+    (
+      state,
+      morePendingSubmissionsAfter,
+      moreReviewedSubmissionsAfter,
+      appendTEsCB,
+      json,
+    ) =>
   switch (
     json
     |> Json.Decode.(field("error", nullable(string)))
@@ -51,15 +64,22 @@ let handleResponseJSON =
     let newTEs =
       json
       |> Json.Decode.(field("timelineEvents", list(TimelineEvent.decode)));
-    let moreToLoad = json |> Json.Decode.(field("moreToLoad", bool));
+    let moreSubmissionsAfter =
+      json
+      |> Json.Decode.(field("moreSubmissionsAfter", nullable(string)))
+      |> Js.Null.toOption;
 
-    let (newHasMorePendingTEs, newHasMoreCompletedTEs) =
+    let (newMorePendingSubmissionsAfter, newMoreReviewedSubmissionsAfter) =
       switch (state.selectedTab) {
-      | PendingTab => (moreToLoad, hasMoreCompletedTEs)
-      | ReviewedTab => (hasMorePendingTEs, moreToLoad)
+      | PendingTab => (moreSubmissionsAfter, moreReviewedSubmissionsAfter)
+      | ReviewedTab => (morePendingSubmissionsAfter, moreSubmissionsAfter)
       };
 
-    appendTEsCB(newTEs, newHasMorePendingTEs, newHasMoreCompletedTEs);
+    appendTEsCB(
+      newTEs,
+      newMorePendingSubmissionsAfter,
+      newMoreReviewedSubmissionsAfter,
+    );
   };
 
 let tabAsString = tab =>
@@ -73,8 +93,8 @@ let fetchEvents =
       state,
       send,
       tes,
-      hasMorePendingTEs,
-      hasMoreCompletedTEs,
+      morePendingSubmissionsAfter,
+      moreReviewedSubmissionsAfter,
       appendTEsCB,
       courseId,
     ) => {
@@ -111,8 +131,8 @@ let fetchEvents =
            json
            |> handleResponseJSON(
                 state,
-                hasMorePendingTEs,
-                hasMoreCompletedTEs,
+                morePendingSubmissionsAfter,
+                moreReviewedSubmissionsAfter,
                 appendTEsCB,
               );
            send(UpdateLoading(false));
@@ -141,25 +161,87 @@ let fetchEvents =
   );
 };
 
+let showingSubmissionsSince =
+    (
+      selectedTab,
+      earliestPendingSubmissionDate,
+      earliestReviewedSubmissionDate,
+    ) =>
+  switch (
+    selectedTab,
+    earliestPendingSubmissionDate,
+    earliestReviewedSubmissionDate,
+  ) {
+  | (PendingTab, Some(date), _)
+  | (ReviewedTab, _, Some(date)) =>
+    Some(
+      "Showing submissions since "
+      ++ date
+      ++ " - scroll to the bottom to load more.",
+    )
+  | (PendingTab, None, _) => None
+  | (ReviewedTab, _, None) => None
+  };
+
 let emptyMessage =
-    (selectedFounder, selectedTab, hasMorePendingTEs, hasMoreCompletedTEs) => {
-  let (fromText, clearFilterText) =
-    switch (selectedFounder) {
-    | None => ("", "")
-    | Some(founder) => (
-        "from " ++ (founder |> Founder.name),
-        "clear filter and ",
-      )
-    };
-  "There are no "
-  ++ tabAsString(PendingTab)
-  ++ " submissions "
-  ++ fromText
-  ++ " in the list."
-  ++ (
-    loadMoreVisible(selectedTab, hasMorePendingTEs, hasMoreCompletedTEs) ?
-      " Please " ++ clearFilterText ++ "try loading more." : ""
-  );
+    (
+      selectedFounder,
+      selectedTab,
+      morePendingSubmissionsAfter,
+      moreReviewedSubmissionsAfter,
+    ) => {
+  let reviewedDefaultMessage = "When you review submissions, they'll be shown in this section.";
+
+  switch (selectedFounder, selectedTab, moreReviewedSubmissionsAfter) {
+  | (None, ReviewedTab, Some(_date)) =>
+    <p>
+      {reviewedDefaultMessage |> str}
+      <br />
+      {" You can also load previously reviewed submissions." |> str}
+    </p>
+
+  | (None, ReviewedTab, None) => reviewedDefaultMessage |> str
+  | (selectedFounder, selectedTab, moreReviewedSubmissionsAfter) =>
+    let fromText =
+      switch (selectedFounder) {
+      | None => ""
+      | Some(founder) => "from " ++ (founder |> Founder.name)
+      };
+
+    let partOne =
+      "There are no "
+      ++ tabAsString(selectedTab)
+      ++ " submissions "
+      ++ fromText;
+
+    let earliestSubmissionDate =
+      switch (
+        selectedTab,
+        morePendingSubmissionsAfter,
+        moreReviewedSubmissionsAfter,
+      ) {
+      | (PendingTab, Some(date), _)
+      | (ReviewedTab, _, Some(date)) => Some(date)
+      | (PendingTab, _, _) => None
+      | (ReviewedTab, _, _) => None
+      };
+
+    let partTwo =
+      switch (earliestSubmissionDate) {
+      | Some(date) => " since " ++ date ++ "."
+      | None => "."
+      };
+
+    let partThree =
+      loadMoreVisible(
+        selectedTab,
+        morePendingSubmissionsAfter,
+        moreReviewedSubmissionsAfter,
+      ) ?
+        " Please try loading more." : "";
+
+    partOne ++ partTwo ++ partThree |> str;
+  };
 };
 
 let pendingTabClasses = selectedTab => {
@@ -181,8 +263,8 @@ let reviewedTabClasses = selectedTab => {
 let make =
     (
       ~timelineEvents,
-      ~hasMorePendingTEs,
-      ~hasMoreCompletedTEs,
+      ~morePendingSubmissionsAfter,
+      ~moreReviewedSubmissionsAfter,
       ~appendTEsCB,
       ~founders,
       ~selectedFounder,
@@ -238,6 +320,22 @@ let make =
         </div>
       </div>
       {
+        switch (
+          filteredTimelineEvents |> List.length == 0,
+          showingSubmissionsSince(
+            state.selectedTab,
+            morePendingSubmissionsAfter,
+            moreReviewedSubmissionsAfter,
+          ),
+        ) {
+        | (false, Some(message)) =>
+          <div className="alert alert-info"> {message |> str} </div>
+        | (true, Some(_m)) => ReasonReact.null
+        | (false, None)
+        | (true, None) => ReasonReact.null
+        }
+      }
+      {
         if (filteredTimelineEvents |> List.length == 0) {
           <div className="timeline-events-panel__empty-notice p-4 mb-3">
             <img
@@ -248,10 +346,9 @@ let make =
               emptyMessage(
                 selectedFounder,
                 state.selectedTab,
-                hasMorePendingTEs,
-                hasMoreCompletedTEs,
+                morePendingSubmissionsAfter,
+                moreReviewedSubmissionsAfter,
               )
-              |> str
             }
           </div>;
         } else {
@@ -270,8 +367,8 @@ let make =
       {
         if (loadMoreVisible(
               state.selectedTab,
-              hasMorePendingTEs,
-              hasMoreCompletedTEs,
+              morePendingSubmissionsAfter,
+              moreReviewedSubmissionsAfter,
             )) {
           let buttonText =
             state.isLoadingMore ? "Loading..." : "Load earlier submissions";
@@ -286,8 +383,8 @@ let make =
                   state,
                   send,
                   timelineEvents,
-                  hasMorePendingTEs,
-                  hasMoreCompletedTEs,
+                  morePendingSubmissionsAfter,
+                  moreReviewedSubmissionsAfter,
                   appendTEsCB,
                   courseId,
                 )

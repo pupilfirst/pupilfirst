@@ -1,5 +1,5 @@
 ActiveAdmin.register TimelineEvent do
-  actions :all, except: [:edit]
+  actions :index, :show
   permit_params :description, :serialized_links,
     :improved_timeline_event_id, timeline_event_files_attributes: %i[id title file private _destroy]
 
@@ -83,12 +83,6 @@ ActiveAdmin.register TimelineEvent do
     head :ok
   end
 
-  # action_item :review, only: :index do
-  #   if current_admin_user&.superadmin?
-  #     link_to 'Review Timeline Events', review_timeline_events_admin_timeline_events_path
-  #   end
-  # end
-
   action_item :view, only: :show do
     link_to('View Timeline Entry', timeline_event.share_url, target: '_blank', rel: 'noopener')
   end
@@ -108,40 +102,6 @@ ActiveAdmin.register TimelineEvent do
   collection_action :founders_for_startup do
     @startup = Startup.find params[:startup_id]
     render 'founders_for_startup.json.erb'
-  end
-
-  form do |f|
-    div id: 'timeline-event-founders-for-startup-url', 'data-url' => founders_for_startup_admin_timeline_events_url
-    f.semantic_errors(*f.object.errors.keys)
-
-    f.inputs 'Event Details' do
-      f.input :startup,
-        include_blank: true,
-        label: 'Product'
-
-      f.input :founder, label: 'Founder', as: :select, collection: f.object.persisted? ? f.object.startup.founders : [], include_blank: false
-      f.input :description
-
-      f.input :improved_timeline_event,
-        as: :select,
-        collection: f.object.persisted? ? f.object.improved_event_candidates.map { |e| "#{e.title} (#{e.created_at.strftime('%b %d')})" } : []
-
-      f.input :serialized_links, as: :hidden
-    end
-
-    f.inputs 'Attached Files' do
-      f.has_many :timeline_event_files, new_record: 'Add file', allow_destroy: true, heading: false do |t|
-        t.input :title
-        t.input :file, hint: 'Select new file for upload'
-        t.input :private
-      end
-    end
-
-    panel 'Attached Links', id: 'react-edit-attached-links' do
-      react_component 'TimelineEventLinksEditor', linksJSON: f.object.serialized_links
-    end
-
-    f.actions
   end
 
   show do |timeline_event|

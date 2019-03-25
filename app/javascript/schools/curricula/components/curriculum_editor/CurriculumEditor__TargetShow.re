@@ -7,7 +7,7 @@ let component =
 
 let archivedClasses = archived =>
   archived ?
-    "target-group__target hover:bg-grey-lighter bg-green border border-b-0 px-5 py-6" :
+    "target-group__target hover:bg-grey-lighter target-group__target--archived border border-b-0 px-5 py-4" :
     "target-group__target hover:bg-grey-lighter bg-white border border-b-0 px-5 py-6";
 
 let make = (~target, ~targetGroup, ~showTargetEditorCB, _children) => {

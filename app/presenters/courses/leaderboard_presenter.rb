@@ -112,13 +112,13 @@ module Courses
     end
 
     def rank_change_icon(delta)
-      if delta >= 5
+      if delta >= 10
         view.image_tag('courses/leaderboard/rank-change-up-double.svg', class: 'img-fluid', alt: 'Rank change up double')
       elsif delta.positive?
         view.image_tag('courses/leaderboard/rank-change-up.svg', class: 'img-fluid', alt: 'Rank change up')
       elsif delta.zero?
         view.image_tag('courses/leaderboard/rank-no-change.svg', class: 'img-fluid', alt: 'Rank no change')
-      elsif delta > -5
+      elsif delta > -10
         view.image_tag('courses/leaderboard/rank-change-down.svg', class: 'img-fluid', alt: 'Rank change down')
       else
         view.image_tag('courses/leaderboard/rank-change-down-double.svg', class: 'img-fluid', alt: 'Rank change down double')

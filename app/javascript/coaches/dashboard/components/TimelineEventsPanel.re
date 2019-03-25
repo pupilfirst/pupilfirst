@@ -321,7 +321,7 @@ let make =
       </div>
       {
         switch (
-          filteredTimelineEvents |> List.length == 0,
+          filteredTimelineEvents |> ListUtils.isEmpty,
           showingSubmissionsSince(
             state.selectedTab,
             morePendingSubmissionsAfter,
@@ -336,7 +336,7 @@ let make =
         }
       }
       {
-        if (filteredTimelineEvents |> List.length == 0) {
+        if (filteredTimelineEvents |> ListUtils.isEmpty) {
           <div className="timeline-events-panel__empty-notice p-4 mb-3">
             <img
               src=emptyIconUrl

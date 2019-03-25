@@ -31,10 +31,10 @@ after 'development:target_groups', 'development:faculty' do
       end
 
       # Add a target with a link to complete.
-      target_group.targets.create!(title: Faker::Lorem.sentence, role: Target::ROLE_TEAM, description: paragraph, link_to_complete: 'https://www.example.com')
+      target_group.targets.create!(title: Faker::Lorem.sentence, role: Target::ROLE_TEAM, description: paragraph, link_to_complete: 'https://www.example.com',  target_action_type: Target::TYPE_TODO)
 
       # Session.
-      target_group.targets.create!(title: Faker::Lorem.sentence, role: Target.valid_roles.sample, session_at: 1.month.ago, description: paragraph, video_embed: video_embed, target_action_type: Target::TYPE_ATTEND, resubmittable: false)
+      target_group.targets.create!(title: Faker::Lorem.sentence, role: Target.valid_roles.sample, session_at: 1.month.ago, description: paragraph, video_embed: video_embed, target_action_type: Target::TYPE_ATTEND, resubmittable: false, )
     end
   end
 

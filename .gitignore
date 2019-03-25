@@ -41,3 +41,6 @@ npm-debug.log
 
 # Ignore the examples file that tracks Rspec runs.
 examples.txt
+
+# Ignore .graphql_ppx_cache
+.graphql_ppx_cache

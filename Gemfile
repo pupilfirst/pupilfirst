@@ -97,6 +97,7 @@ gem 'pundit', '~> 2.0' # Minimal authorization through OO design and pure Ruby c
 gem 'rack-cors', '~> 1.0', require: 'rack/cors' # Rack Middleware for handling CORS, required to serve static assets such as fonts
 gem 'jwt', '~> 2.1' # Ruby implementation of the RFC 7519 OAuth JSON Web Token (JWT), used by Zoom API
 gem 'chartkick', '~> 3.0' # Create beautiful charts with one line of JavaScript.
+gem 'graphql', '~> 1.9' # Ruby implementation of GraphQL http://graphql-ruby.org
 
 # Rails assets!
 source 'https://rails-assets.org' do
@@ -136,6 +137,7 @@ group :development do
   gem 'oink', '~> 0.10' # Log parser to identify actions which significantly increase VM heap size
   gem 'logchange', '~> 1.0' # An alternative approach to managing a changelog.
   gem 'meta_request', '~> 0.4' # Chrome extension for Rails development. https://github.com/dejan/rails_panel
+  gem 'graphiql-rails', '~> 1.7'
 end
 
 group :test do

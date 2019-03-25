@@ -25,7 +25,7 @@
             <li>
               <% classes = 'flex text-white p-4 hover:bg-grey-darkest font-semibold no-underline items-center justify-center' %>
               <% classes += controller_name.in?(%w(curricula founders faculty)) ? ' bg-grey-darkest' : '' %>
-              <%= link_to school_path, class: classes do %>
+              <%= link_to school_courses_path, class: classes do %>
                 <i class="material-icons md-48">description</i>
               <% end %>
             </li>

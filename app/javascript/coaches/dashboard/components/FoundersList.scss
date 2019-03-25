@@ -1,16 +1,23 @@
 @import "../../../shared/variables";
 
-.founders-list__header {
-  padding: 1.5rem 1.5rem 0.5rem 1.5rem;
+.founder-list__search-container {
+  padding: 0.5rem 1.5rem;
 }
 
-.founders-list__header-title {
-  font-size: 0.875rem;
-  color: #8C8C8C;
-  line-height: 21px;
+.founder-list__search-input {
+  width: 100%;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  border: 1px solid lightgrey;
+}
+
+.founders-list__all-students-icon {
+  font-size: 1.55rem; // This sizes the icon approximately the same as avatars.
+  color: black;
 }
 
 .founders-list__item {
+  min-height: 2.75rem; // Same as the avatar.
   width: 100%;
   text-align: left;
   padding: 0.5rem 1.5rem;
@@ -46,21 +53,6 @@
   border-left: 3px solid $light-primary;
 }
 
-.founders-list__clear-filter-btn {
-  display: block;
-  width: 100%;
-  background-color: white;
-  color: #138AFF;
-  border: 0;
-  cursor: pointer;
-  line-height: 21px;
-
-  &:hover, &:focus {
-    color: blue;
-    outline: 0;
-  }
-}
-
 .founders-list__team-container {
   margin-bottom: 1rem;
   position: relative;
@@ -76,5 +68,9 @@
 }
 
 .founders-list__team-name {
-  padding: 1rem 1.5rem 0.125rem 1.5rem;
+  font-size: 75%;
+  text-transform: uppercase;
+  word-wrap: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

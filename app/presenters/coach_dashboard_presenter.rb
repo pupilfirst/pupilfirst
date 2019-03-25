@@ -6,11 +6,11 @@ class CoachDashboardPresenter < ApplicationPresenter
 
   def react_props
     {
-      founders: founders,
-      teams: teams,
+      founders: founder_details,
+      teams: team_details,
       timelineEvents: timeline_events_service.timeline_events,
-      hasMorePendingTEs: timeline_events_service.more_to_load?,
-      hasMoreCompletedTEs: evaluated_submissions_exist?,
+      morePendingSubmissionsAfter: timeline_events_service.earliest_submission_date,
+      moreReviewedSubmissionsAfter: evaluated_submissions_exist? ? Time.zone.now.strftime("%b %d, %Y") : nil,
       authenticityToken: view.form_authenticity_token,
       emptyIconUrl: view.image_url('coaches/dashboard/empty_icon.svg'),
       notAcceptedIconUrl: view.image_url('coaches/dashboard/not-accepted-icon.svg'),
@@ -23,8 +23,8 @@ class CoachDashboardPresenter < ApplicationPresenter
 
   private
 
-  def founders
-    Founder.where(startup_id: teams.map { |t| t[:id] }).map do |founder|
+  def founder_details
+    @founder_details ||= founders.map do |founder|
       {
         id: founder.id,
         name: founder.name,
@@ -34,8 +34,8 @@ class CoachDashboardPresenter < ApplicationPresenter
     end
   end
 
-  def teams
-    @teams ||= current_coach.reviewable_startups(@course).map do |startup|
+  def team_details
+    @team_details ||= teams.map do |startup|
       {
         id: startup.id,
         name: startup.product_name
@@ -43,12 +43,20 @@ class CoachDashboardPresenter < ApplicationPresenter
     end
   end
 
+  def founders
+    @founders ||= Founder.joins(:startup).where(startups: { id: teams })
+  end
+
+  def teams
+    @teams ||= current_coach.reviewable_startups(@course)
+  end
+
   def timeline_events_service
     @timeline_events_service ||= CoachDashboard::TimelineEventsDataService.new(current_coach, @course)
   end
 
   def evaluated_submissions_exist?
-    TimelineEvent.joins(:founders).where(founders: { id: founders.map { |f| f[:id] } })
+    TimelineEvent.joins(:founders).where(founders: { id: founders })
       .where(target: @course.targets)
       .where.not(evaluator: nil).exists?
   end

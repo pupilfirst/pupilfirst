@@ -41,18 +41,26 @@ feature 'Coach Dashboard' do
   scenario 'coach visits dashboard', js: true do
     sign_in_user coach.user, referer: course_coach_dashboard_path(course)
 
-    # ensure coach is on his dashboard
-    expect(page).to have_selector('.founders-list__header-title', text: 'Filter by student')
+    # Ensure coach is on the dashboard.
     expect(page).to have_selector('.timeline-events-panel__status-tab', text: 'Pending')
-    expect(page).to have_selector('.timeline-events-panel__status-tab > .badge', text: '4')
+    expect(page).to have_selector('.timeline-events-panel__status-tab-badge', text: '4')
 
-    # and his students are listed properly on the sidebar
+    # Students should be listed properly on the sidebar.
     within('.founders-list__container') do
-      expect(page).to have_selector('.founders-list__item', count: 4)
-      expect(page).to have_selector('.founders-list__item-name', text: startup_1.founders.first.name)
-      expect(page).to have_selector('.founders-list__item-name', text: startup_1.founders.second.name)
-      expect(page).to have_selector('.founders-list__item-name', text: startup_2.founders.first.name)
-      expect(page).to have_selector('.founders-list__item-name', text: startup_2.founders.second.name)
+      expect(page).to have_selector('.founders-list__item', count: 5)
+      expect(page).to have_selector('.founders-list__item', text: 'All students')
+      expect(page).to have_selector('.founders-list__item', text: startup_1.founders.first.name)
+      expect(page).to have_selector('.founders-list__item', text: startup_1.founders.second.name)
+      expect(page).to have_selector('.founders-list__item', text: startup_2.founders.first.name)
+      expect(page).to have_selector('.founders-list__item', text: startup_2.founders.second.name)
+
+      # Search input should be filter the list of students.
+      page.find('input').fill_in(with: startup_1.founders.first.name)
+
+      expect(page).to have_selector('.founders-list__item', count: 2)
+      expect(page).to have_selector('.founders-list__item', text: 'All students')
+      expect(page).to have_selector('.founders-list__item', text: startup_1.founders.first.name)
+      expect(page).not_to have_selector('.founders-list__item', text: startup_1.founders.second.name)
     end
 
     # and all the timeline events are listed (excluding the auto-verified one)
@@ -62,16 +70,15 @@ feature 'Coach Dashboard' do
 
     # and the 'reviewed' tab is empty
     find('.timeline-events-panel__status-tab', text: 'Reviewed').click
-    expect(page).to have_selector('.timeline-events-panel__empty-notice', text: 'There are no reviewed submissions in the list.')
+    expect(page).to have_selector('.timeline-events-panel__empty-notice', text: "When you review submissions, they'll be shown in this section")
   end
 
   scenario 'coach uses the sidebar filter', js: true do
     sign_in_user coach.user, referer: course_coach_dashboard_path(course)
 
-    # No filter applied by default, so there shouldn't be a button to clear the filter.
-    expect(page).not_to have_button('Clear')
+    # Filter submissions by picking a student.
+    find('.founders-list__item', text: startup_1.founders.first.name).click
 
-    find('.founders-list__item-name', text: startup_1.founders.first.name).click
     # the list should now be filtered correctly
     expect(page).to have_selector('.timeline-event-card__container', count: 1)
     expect(page).to have_selector('.timeline-event-card__description', text: timeline_event_1.description)
@@ -79,8 +86,8 @@ feature 'Coach Dashboard' do
     expect(page).to_not have_selector('.timeline-event-card__description', text: timeline_event_3.description)
     expect(page).to_not have_selector('.timeline-event-card__description', text: timeline_event_4.description)
 
-    # Clearing the filter should display all events again
-    click_button 'Clear'
+    # Clearing the filter should display all submissions again.
+    find('.founders-list__item', text: 'All students').click
 
     expect(page).to have_selector('.timeline-event-card__container', count: 4)
   end
@@ -106,11 +113,11 @@ feature 'Coach Dashboard' do
     # Switch to the 'Reviewed' tab.
     find('.timeline-events-panel__status-tab', text: 'Reviewed').click
 
-    # One timeline event should be displayed.
+    # One submission should be displayed.
     expect(page).to have_selector('.timeline-event-card__container', count: 1)
 
     within('.timeline-event-card__container') do
-      # The event should have the failed status.
+      # The submission should have the failed status.
       expect(page).to have_content('Failed')
 
       # It should also list the selected grade for a criterion.
@@ -121,11 +128,20 @@ feature 'Coach Dashboard' do
     expect(timeline_event_1.reload.passed_at).to eq(nil)
     expect(timeline_event_1.evaluator).to eq(coach)
 
+    # Check the reviewed list after reloading the page. It should be empty.
+    visit course_coach_dashboard_path(course)
+    find('.timeline-events-panel__status-tab', text: 'Reviewed').click
+    expect(page).not_to have_selector('.timeline-event-card__container', count: 1)
+
+    # Load previously reviewed submissions.
+    click_button 'Load earlier submissions'
+    expect(page).to have_selector('.timeline-event-card__container', count: 1)
+
     # Undo the review.
     click_button 'Undo Review'
 
     # The event should have moved back to the 'Pending' list.
-    expect(page).to have_content('There are no reviewed submissions in the list.')
+    expect(page).to have_content("When you review submissions, they'll be shown in this section.")
     find('.timeline-events-panel__status-tab', text: 'Pending').click
     expect(page).to have_selector('.timeline-event-card__container', count: 4)
 
@@ -139,7 +155,7 @@ feature 'Coach Dashboard' do
     end
   end
 
-  scenario 'coach add a feedback', js: true do
+  scenario 'coach sends some feedback', js: true do
     sign_in_user coach.user, referer: course_coach_dashboard_path(course)
 
     within find(".timeline-event-card__container", match: :first) do

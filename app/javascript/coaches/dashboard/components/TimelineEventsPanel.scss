@@ -1,8 +1,5 @@
 @import "../../../shared/variables";
 
-.timeline-events-panel__container {
-}
-
 .timeline-events-panel__empty-notice {
   text-align: center;
   background-color: white;
@@ -25,19 +22,24 @@
   font-size: larger;
   cursor: pointer;
   padding: 0.25rem 0.5rem;
+
   &:hover {
     color: $brand-primary;
   }
-  .badge {
-    background-color: $brand-primary;
-    margin-left: 0.5rem;
-    color: white;
-    font-size: small;
-    border-radius: 50%;
-    height: 1.25rem;
-    width: 1.25rem;
-    vertical-align: middle;
-  }
+}
+
+.timeline-events-panel__status-tab-badge {
+  background-color: $brand-primary;
+  margin-left: 0.4rem;
+  color: white;
+  font-size: small;
+  border-radius: 50%;
+  height: 1.25rem;
+  min-width: 1.25rem;
+  vertical-align: middle;
+  display: inline-block;
+  text-align: center;
+  padding: 0 0.4rem;
 }
 
 .timeline-events-panel__status-tab--active {

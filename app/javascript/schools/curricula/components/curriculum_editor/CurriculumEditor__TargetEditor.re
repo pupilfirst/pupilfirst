@@ -905,18 +905,22 @@ let make =
                   | NotSelected => ReasonReact.null
                   }
                 }
+              </div>
+            </div>
+            <div className="bg-white py-6">
+              <div className="flex max-w-md w-full justify-between items-center px-6 mx-auto">
                 {
                   switch (target) {
                   | Some(_) =>
-                    <div className="flex items-center mb-6">
+                    <div className="flex items-center flex-no-shrink">
                       <label
-                        className="block tracking-wide text-grey-darker text-xs font-semibold mr-6"
+                        className="block tracking-wide text-grey-darker text-xs font-semibold mr-3"
                         htmlFor="archived">
                         {"Is this target archived?" |> str}
                       </label>
                       <div
                         id="archived"
-                        className="inline-flex w-64 rounded-lg overflow-hidden border">
+                        className="inline-flex flex-no-shrink rounded-lg overflow-hidden border">
                         <button
                           onClick=(
                             _event => {
@@ -946,28 +950,30 @@ let make =
                   | None => ReasonReact.null
                   }
                 }
-              </div>
-            </div>
-            <div className="flex max-w-md w-full px-6 pb-5 mx-auto">
-              {
-                switch (target) {
-                | Some(target) =>
-                  <button
-                    disabled={saveDisabled(state)}
-                    onClick=(_e => updateTarget(target |> Target.id))
-                    className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none mt-3">
-                    {"Update Target" |> str}
-                  </button>
+                {
+                  switch (target) {
+                  | Some(target) =>
+                    <div className="w-auto">
+                      <button
+                        disabled={saveDisabled(state)}
+                        onClick=(_e => updateTarget(target |> Target.id))
+                        className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
+                        {"Update Target" |> str}
+                      </button>
+                    </div>
 
-                | None =>
-                  <button
-                    disabled={saveDisabled(state)}
-                    onClick=(_e => createTarget())
-                    className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none mt-3">
-                    {"Create Target" |> str}
-                  </button>
+                  | None =>
+                    <div className="w-full">
+                      <button
+                        disabled={saveDisabled(state)}
+                        onClick=(_e => createTarget())
+                        className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none mt-3">
+                        {"Create Target" |> str}
+                      </button>
+                    </div>
+                  }
                 }
-              }
+              </div>
             </div>
           </div>
         </div>

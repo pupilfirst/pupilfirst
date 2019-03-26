@@ -13,7 +13,6 @@ ActiveAdmin.register Startup do
     collection: -> { Startup.tag_counts_on(:tags).pluck(:name).sort }
 
   filter :legal_registered_name
-  filter :dropped_out
   filter :created_at
 
   scope :admitted, default: true
@@ -86,12 +85,6 @@ ActiveAdmin.register Startup do
   show title: :product_name do |startup|
     attributes_table do
       row :legal_registered_name
-      row :dropped_out do
-        div class: 'startup-status' do
-          startup.dropped_out
-        end
-      end
-
       row :level
       row :faculty do
         div do

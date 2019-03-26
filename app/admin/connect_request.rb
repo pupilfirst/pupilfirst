@@ -153,7 +153,7 @@ ActiveAdmin.register ConnectRequest do
       f.input :connect_slot,
         collection: (resource.persisted? ? ConnectSlot.available.or(ConnectSlot.includes(:connect_request).where(id: resource.connect_slot.id)) : ConnectSlot.available).includes(:faculty),
         required: true
-      f.input :startup, label: 'Product', collection: Startup.approved.order(:product_name), required: true
+      f.input :startup, label: 'Product', collection: Startup.order(:product_name), required: true
       f.input :questions
     end
 

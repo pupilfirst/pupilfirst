@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_14_091320) do
+ActiveRecord::Schema.define(version: 2019_03_26_073010) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -426,8 +426,6 @@ ActiveRecord::Schema.define(version: 2019_03_14_091320) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "subdomain"
-    t.string "domain"
   end
 
   create_table "shortened_urls", id: :serial, force: :cascade do |t|
@@ -565,7 +563,6 @@ ActiveRecord::Schema.define(version: 2019_03_14_091320) do
     t.integer "days_to_complete"
     t.string "target_action_type"
     t.integer "target_group_id"
-    t.integer "points_earnable"
     t.integer "sort_index", default: 999
     t.datetime "session_at"
     t.text "video_embed"
@@ -727,6 +724,8 @@ ActiveRecord::Schema.define(version: 2019_03_14_091320) do
   add_foreign_key "quiz_questions", "answer_options", column: "correct_answer_id"
   add_foreign_key "quiz_questions", "quizzes"
   add_foreign_key "quizzes", "targets"
+  add_foreign_key "school_admins", "schools"
+  add_foreign_key "school_admins", "users"
   add_foreign_key "school_links", "schools"
   add_foreign_key "school_strings", "schools"
   add_foreign_key "startup_feedback", "faculty"

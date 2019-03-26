@@ -21,10 +21,6 @@ class TimelineEvent < ApplicationRecord
 
   MAX_DESCRIPTION_CHARACTERS = 500
 
-  GRADE_GOOD = 'good'
-  GRADE_GREAT = 'great'
-  GRADE_WOW = 'wow'
-
   validates :description, presence: true
 
   accepts_nested_attributes_for :timeline_event_files, allow_destroy: true
@@ -112,19 +108,6 @@ class TimelineEvent < ApplicationRecord
 
   def public_link?
     links.reject { |l| l[:private] }.present?
-  end
-
-  def points_for_grade
-    minimum_point_for_target = target&.points_earnable
-    return minimum_point_for_target if grade.blank?
-
-    multiplier = {
-      GRADE_GOOD => 1,
-      GRADE_GREAT => 1.5,
-      GRADE_WOW => 2
-    }.with_indifferent_access[grade]
-
-    minimum_point_for_target * multiplier
   end
 
   def attachments_for_founder(founder)

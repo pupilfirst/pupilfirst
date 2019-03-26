@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_26_073010) do
+ActiveRecord::Schema.define(version: 2019_03_26_073948) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -272,20 +272,6 @@ ActiveRecord::Schema.define(version: 2019_03_26_073010) do
     t.index ["slug"], name: "index_founders_on_slug", unique: true
     t.index ["university_id"], name: "index_founders_on_university_id"
     t.index ["user_id"], name: "index_founders_on_user_id"
-  end
-
-  create_table "karma_points", id: :serial, force: :cascade do |t|
-    t.integer "founder_id"
-    t.integer "points"
-    t.string "activity_type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "source_id"
-    t.string "source_type"
-    t.integer "startup_id"
-    t.index ["founder_id"], name: "index_karma_points_on_founder_id"
-    t.index ["source_id"], name: "index_karma_points_on_source_id"
-    t.index ["startup_id"], name: "index_karma_points_on_startup_id"
   end
 
   create_table "leaderboard_entries", force: :cascade do |t|
@@ -694,16 +680,6 @@ ActiveRecord::Schema.define(version: 2019_03_26_073010) do
     t.index ["user_id", "user_type"], name: "index_visits_on_user_id_and_user_type"
   end
 
-  create_table "weekly_karma_points", id: :serial, force: :cascade do |t|
-    t.datetime "week_starting_at"
-    t.integer "startup_id"
-    t.integer "level_id"
-    t.integer "points"
-    t.index ["level_id"], name: "index_weekly_karma_points_on_level_id"
-    t.index ["startup_id"], name: "index_weekly_karma_points_on_startup_id"
-    t.index ["week_starting_at", "level_id"], name: "index_weekly_karma_points_on_week_starting_at_and_level_id"
-  end
-
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "admin_users", "users"
   add_foreign_key "answer_options", "quiz_questions"
@@ -740,6 +716,4 @@ ActiveRecord::Schema.define(version: 2019_03_26_073010) do
   add_foreign_key "timeline_event_files", "timeline_events"
   add_foreign_key "timeline_events", "faculty", column: "evaluator_id"
   add_foreign_key "user_activities", "users"
-  add_foreign_key "weekly_karma_points", "levels"
-  add_foreign_key "weekly_karma_points", "startups"
 end

@@ -67,8 +67,6 @@ en:
   libs:
     lita:
       handlers:
-        changelog:
-          help: Get a snippet of the latest changes on the SV.CO Platform
         leaderboard:
           help: Get the last published leaderboard for all levels in the collective.
         targets:

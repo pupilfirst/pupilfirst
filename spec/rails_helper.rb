@@ -15,7 +15,16 @@ require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 
 require 'webmock/rspec'
-WebMock.disable_net_connect!(allow_localhost: true) # Disable all net connections except ones to localhost
+
+# Disable all net connections except ones to localhost, and to locations the webdrivers gem downloads its binaries from.
+WebMock.disable_net_connect!(
+  allow_localhost: true,
+  allow: [
+    %r{github.com/mozilla/geckodriver/releases},
+    /github-production-release-asset/,
+    'chromedriver.storage.googleapis.com'
+  ]
+)
 
 # Let's spec emails.
 require 'capybara/email/rspec'
@@ -23,8 +32,8 @@ require 'capybara/email/rspec'
 # Let's spec policies.
 require 'pundit/rspec'
 
-# Let's inform Capybara / Selenium where chromedriver lives.
-require 'chromedriver-helper'
+# Load all web-drivers.
+require 'webdrivers'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are

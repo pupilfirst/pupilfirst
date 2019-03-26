@@ -161,7 +161,7 @@ feature 'Curriculum Editor' do
     expect(target.description).to eq("<div>" + new_target_1_description + "</div>")
     expect(target.evaluation_criteria.last.name).to eq(evaluation_criterion.name)
     expect(target.resources.count).to eq(2)
-    expect(target.resources.pluck(:title)).to match(['A PDF File', 'A Link'])
+    expect(target.resources.pluck(:title)).to match_array(['A PDF File', 'A Link'])
   end
 
   scenario "Admin creates a target with a link to complete", js: true do

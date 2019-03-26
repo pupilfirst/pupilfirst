@@ -22,7 +22,7 @@ module Courses
     end
 
     def initialize(view_context, course, page: nil)
-      @course ||= course
+      @course = course
       @page = page
 
       super(view_context)

@@ -38,7 +38,7 @@ let make =
         answerOption |> AnswerOption.correctAnswer ?
         <div className="quiz-maker__answer-option-pointer flex justify-center items-center quiz-maker__answer-option-pointer--correct"
         >
-          <img className="quiz-maker__answer-option-pointer-img" src=Icons.whiteCheck></img>
+          <Icon kind=Icon.Check size=2 />
         </div> :
         <div onClick={
               _event => {

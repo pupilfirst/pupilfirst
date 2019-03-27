@@ -2,13 +2,15 @@ let addIcon: string = [%raw "require('../images/add-circle-icon.svg')"];
 let deleteIcon: string = [%raw "require('../images/delete-icon.svg')"];
 let downIcon: string = [%raw "require('../images/down-arrow-icon.svg')"];
 let closeIcon: string = [%raw "require('../images/close-icon.svg')"];
+let checkIcon: string = [%raw "require('../images/check-white-icon.svg')"];
 
 type kind =
   | Add
   | Alert
   | Close
   | Delete
-  | Down;
+  | Down
+  | Check;
 
 let resolveIcon = kind =>
   switch (kind) {
@@ -17,6 +19,7 @@ let resolveIcon = kind =>
   | Close => closeIcon
   | Delete => deleteIcon
   | Down => downIcon
+  | Check => checkIcon
   };
 
 let component = ReasonReact.statelessComponent("Icon");

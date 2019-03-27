@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_26_073948) do
+ActiveRecord::Schema.define(version: 2019_03_27_075524) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -459,7 +459,6 @@ ActiveRecord::Schema.define(version: 2019_03_26_073948) do
     t.string "product_name"
     t.string "slug"
     t.string "legal_registered_name"
-    t.boolean "dropped_out", default: false
     t.integer "level_id"
     t.bigint "faculty_id"
     t.index ["faculty_id"], name: "index_startups_on_faculty_id"

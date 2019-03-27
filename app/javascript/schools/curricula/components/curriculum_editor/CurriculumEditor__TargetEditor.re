@@ -258,10 +258,12 @@ let isValidQuiz = quiz =>
      )
   |> List.length == 0;
 
-let booleanButtonClasses = bool =>
-  bool ?
-    "w-1/2 bg-grey hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none" :
-    "w-1/2 bg-white hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none";
+let booleanButtonClasses = bool =>{
+  let classes = "w-1/2 toggle-button__button hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none";
+  classes ++ (bool ?
+    " bg-grey" :
+    " bg-white");
+};
 
 let completionButtonClasses = value =>
   value ?
@@ -694,7 +696,7 @@ let make =
                   </label>
                   <div
                     id="evaluated"
-                    className="inline-flex w-64 rounded-lg overflow-hidden border">
+                    className="flex flex-no-shrink rounded-lg overflow-hidden border">
                     <button
                       onClick={
                         _event => {
@@ -920,7 +922,7 @@ let make =
                       </label>
                       <div
                         id="archived"
-                        className="inline-flex flex-no-shrink rounded-lg overflow-hidden border">
+                        className="flex flex-no-shrink rounded-lg overflow-hidden border">
                         <button
                           onClick=(
                             _event => {

@@ -34,13 +34,20 @@ let make =
       };
 
     <div className="relative">
-      <div className="quiz-maker__answer-option-pointer">
-        {
-          answerOption |> AnswerOption.correctAnswer ?
-            <i className="material-icons"> {"check_circle" |> str} </i> :
-            ReasonReact.null
-        }
-      </div>
+      {
+        answerOption |> AnswerOption.correctAnswer ?
+        <div className="quiz-maker__answer-option-pointer flex justify-center items-center quiz-maker__answer-option-pointer--correct"
+        >
+          <img className="quiz-maker__answer-option-pointer-img" src=Icons.whiteCheck></img>
+        </div> :
+        <div onClick={
+              _event => {
+                ReactEvent.Mouse.preventDefault(_event);
+                markAsCorrectCB(answerOption |> AnswerOption.id);
+              }}className="quiz-maker__answer-option-pointer cursor-pointer">
+          ReasonReact.null
+        </div>
+      }
       <div
         id={answerOptionId ++ "_block"}
         className="flex flex-col bg-white mb-2 border rounded ml-12">
@@ -65,8 +72,8 @@ let make =
           <button
             className={
               answerOption |> AnswerOption.correctAnswer ?
-                "flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-green hover:text-grey-darker text-xs py-1 px-3" :
-                "flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-grey hover:text-grey-darker text-xs py-1 px-3"
+                "w-28 flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-green font-semibold focus:outline-none text-xs py-1 px-2" :
+                "w-28 flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-grey hover:text-grey-darker focus:outline-none text-xs py-1 px-2"
             }
             type_="button"
             onClick={
@@ -77,7 +84,7 @@ let make =
             }>
             {
               answerOption |> AnswerOption.correctAnswer ?
-                <i className="material-icons"> {"check_circle" |> str} </i> :
+                "Correct Answer" |> str :
                 "Mark as correct" |> str
             }
           </button>
@@ -88,14 +95,14 @@ let make =
                 send(InvertHasHint);
               }
             }
-            className="flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-grey hover:text-grey-darker text-xs py-1 px-3"
+            className="flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-grey hover:text-grey-darker focus:outline-none text-xs py-1 px-2"
             type_="button">
             {"Explain" |> str}
           </button>
           {
             canBeDeleted ?
               <button
-                className="flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-grey hover:text-grey-darker text-xs py-1 px-3"
+                className="flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-grey hover:text-grey-darker focus:outline-none text-xs py-1 px-2"
                 type_="button"
                 onClick={
                   event => {
@@ -111,7 +118,7 @@ let make =
         {
           state.hasHint ?
             <textarea
-              className="appearance-none block w-full border-t border-t-1 border-grey-light bg-white text-grey-darker text-sm rounded rounded-t-none p-4 -mt-0 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+              className="appearance-none block w-full border-t border-t-1 border-grey-light bg-white text-grey-darker text-sm rounded rounded-t-none p-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
               id={answerOptionId ++ "_hint"}
               placeholder="Type an answer explanation here."
               value=hint

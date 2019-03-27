@@ -125,14 +125,15 @@ let make =
           }
         }
         className="cursor-pointer relative">
-        <div className="quiz-maker__answer-option-pointer" />
-        <a
-          className="flex items-center bg-white hover:bg-grey-lighter border rounded-lg ml-12 py-3 px-4">
+        <div className="quiz-maker__answer-option-pointer quiz-maker__answer-option-pointer--add">
           <i className="material-icons"> {"add_circle_outline" |> str} </i>
+        </div>
+        <span
+          className="flex items-center bg-white hover:bg-grey-lighter border rounded-lg ml-12 py-3 px-4">
           <h5 className="font-semibold ml-2 italic">
             {"Add another Answer Option" |> str}
           </h5>
-        </a>
+        </span>
       </div>
     </div>;
   },

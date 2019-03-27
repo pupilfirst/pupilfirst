@@ -8,9 +8,8 @@ type state = {
 };
 
 type action =
-  | UpdateName(string)
-  | UpdateEmail(string)
-  | UpdateErrors(bool, bool)
+  | UpdateName(string, bool)
+  | UpdateEmail(string, bool)
   | ResetForm;
 
 let component =
@@ -18,17 +17,15 @@ let component =
 
 let str = ReasonReact.string;
 
-let updateName = (send, state, name) => {
+let updateName = (send, name) => {
   let hasError = name |> String.length < 2;
-  send(UpdateName(name));
-  send(UpdateErrors(hasError, state.hasEmailError));
+  send(UpdateName(name, hasError));
 };
 
-let updateEmail = (send, state, email) => {
+let updateEmail = (send, email) => {
   let regex = [%re {|/.+@.+\..+/i|}];
   let hasError = !Js.Re.test(email, regex);
-  send(UpdateEmail(email));
-  send(UpdateErrors(state.hasNameError, hasError));
+  send(UpdateEmail(email, hasError));
 };
 
 let formInvalid = state =>
@@ -37,10 +34,11 @@ let formInvalid = state =>
   || state.hasNameError
   || state.hasEmailError;
 
-let handleAdd = (state, send, addToListCB) => {
-  addToListCB(StudentInfo.create(state.name, state.email));
-  send(ResetForm);
-};
+let handleAdd = (state, send, addToListCB) =>
+  if (!formInvalid(state)) {
+    addToListCB(StudentInfo.create(state.name, state.email));
+    send(ResetForm);
+  };
 
 let make = (~addToListCB, _children) => {
   ...component,
@@ -52,10 +50,10 @@ let make = (~addToListCB, _children) => {
   },
   reducer: (action, state) =>
     switch (action) {
-    | UpdateName(name) => ReasonReact.Update({...state, name})
-    | UpdateEmail(email) => ReasonReact.Update({...state, email})
-    | UpdateErrors(hasNameError, hasEmailError) =>
-      ReasonReact.Update({...state, hasNameError, hasEmailError})
+    | UpdateName(name, hasNameError) =>
+      ReasonReact.Update({...state, name, hasNameError})
+    | UpdateEmail(email, hasEmailError) =>
+      ReasonReact.Update({...state, email, hasEmailError})
     | ResetForm =>
       ReasonReact.Update({
         name: "",
@@ -66,58 +64,54 @@ let make = (~addToListCB, _children) => {
     },
   render: ({state, send}) =>
     <div className="bg-grey-lightest p-4">
-      <label
-        className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
-        htmlFor="name">
-        {"Name" |> str}
-      </label>
-      <span> {"*" |> str} </span>
-      <input
-        value={state.name}
-        onChange={
-          event =>
-            updateName(send, state, ReactEvent.Form.target(event)##value)
-        }
-        className="drawer-right-form__input appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-        id="name"
-        type_="text"
-        placeholder="Student name here"
-      />
-      {
-        state.hasNameError ?
-          <div className="drawer-right-form__error-msg">
-            {"not a valid name" |> str}
-          </div> :
-          ReasonReact.null
-      }
-      <label
-        className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
-        htmlFor="email">
-        {"Email" |> str}
-      </label>
-      <span> {"*" |> str} </span>
-      <input
-        value={state.email}
-        onChange={
-          event =>
-            updateEmail(send, state, ReactEvent.Form.target(event)##value)
-        }
-        className="drawer-right-form__input appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-        id="email"
-        type_="email"
-        placeholder="Student email here"
-      />
-      {
-        state.hasEmailError ?
-          <div className="drawer-right-form__error-msg">
-            {"not a valid email" |> str}
-          </div> :
-          ReasonReact.null
-      }
+      <div>
+        <label
+          className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
+          htmlFor="name">
+          {"Name" |> str}
+        </label>
+        <span> {"*" |> str} </span>
+        <input
+          value={state.name}
+          onChange={
+            event => updateName(send, ReactEvent.Form.target(event)##value)
+          }
+          className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+          id="name"
+          type_="text"
+          placeholder="Student name here"
+        />
+        <School__InputGroupError
+          message="is not valid"
+          active={state.hasNameError}
+        />
+      </div>
+      <div className="mt-6">
+        <label
+          className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
+          htmlFor="email">
+          {"Email" |> str}
+        </label>
+        <span> {"*" |> str} </span>
+        <input
+          value={state.email}
+          onChange={
+            event => updateEmail(send, ReactEvent.Form.target(event)##value)
+          }
+          className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+          id="email"
+          type_="email"
+          placeholder="Student email here"
+        />
+        <School__InputGroupError
+          message="is too short"
+          active={state.hasEmailError}
+        />
+      </div>
       <button
         onClick={_e => handleAdd(state, send, addToListCB)}
         className={
-          "bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3"
+          "bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-6"
           ++ (formInvalid(state) ? " opacity-50 cursor-not-allowed" : "")
         }>
         {"Add to List" |> str}

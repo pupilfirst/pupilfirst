@@ -79,7 +79,7 @@ let make =
               _event =>
                 showTargetEditorCB(targetGroup |> TargetGroup.id, None)
             }>
-            <img className="w-6 h-6" src=Icons.addIcon></img>
+            <Icon kind=Icon.Add size=6 />
             <h5 className="font-semibold ml-2">
               {"Create a target" |> str}
             </h5>

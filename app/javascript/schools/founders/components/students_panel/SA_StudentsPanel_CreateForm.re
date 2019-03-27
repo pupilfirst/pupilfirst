@@ -113,7 +113,10 @@ let make =
                     <div>
                       <div className="mt-6">
                         <div className="border-b border-grey-light pb-2 mb-4">
-                          {"Students List:" |> str}
+                          {
+                            "These new students will be added to the course:"
+                            |> str
+                          }
                         </div>
                         {
                           switch (state.studentsToAdd) {
@@ -142,7 +145,11 @@ let make =
                                        _event =>
                                          send(RemoveStudentInfo(studentInfo))
                                      )>
-                                     <img className="h-4 opacity-75" src=Icons.deleteIcon></img>
+                                     <Icon
+                                       kind=Icon.Delete
+                                       size=4
+                                       opacity=75
+                                     />
                                    </button>
                                  </div>
                                )
@@ -151,49 +158,47 @@ let make =
                           }
                         }
                       </div>
-                      <div className="mt-6">
-                        <div className="border-b border-grey-light pb-2 mb-2">
-                          <span className="mr-1">
-                            {"Tags applied:" |> str}
-                          </span>
-                        </div>
-                        <SA_StudentsPanel_SearchableTagList
-                          unselectedTags={
-                            studentTags
-                            |> List.filter(tag =>
-                                 !(state.tagsToApply |> List.mem(tag))
-                               )
-                          }
-                          selectedTags={state.tagsToApply}
-                          addTagCB={tag => send(AddTag(tag))}
-                          removeTagCB={tag => send(RemoveTag(tag))}
-                          allowNewTags=true
-                        />
-                      </div>
-                      <div className="flex mt-4">
-                        <button
-                          onClick={
-                            _e =>
-                              saveStudents(
-                                state,
-                                courseId,
-                                authenticityToken,
-                                handleResponseCB(submitFormCB, state),
-                              )
-                          }
-                          className={
-                            "w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3"
-                            ++ (
-                              formInvalid(state) ?
-                                " opacity-50 cursor-not-allowed" : ""
-                            )
-                          }>
-                          {"Save List" |> str}
-                        </button>
-                      </div>
                     </div> :
                     ReasonReact.null
                 }
+                <div className="mt-6">
+                  <span>
+                    {"Apply some tags to these new students:" |> str}
+                  </span>
+                  <SA_StudentsPanel_SearchableTagList
+                    unselectedTags={
+                      studentTags
+                      |> List.filter(tag =>
+                           !(state.tagsToApply |> List.mem(tag))
+                         )
+                    }
+                    selectedTags={state.tagsToApply}
+                    addTagCB={tag => send(AddTag(tag))}
+                    removeTagCB={tag => send(RemoveTag(tag))}
+                    allowNewTags=true
+                  />
+                </div>
+                <div className="flex mt-4">
+                  <button
+                    onClick={
+                      _e =>
+                        saveStudents(
+                          state,
+                          courseId,
+                          authenticityToken,
+                          handleResponseCB(submitFormCB, state),
+                        )
+                    }
+                    className={
+                      "w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3"
+                      ++ (
+                        formInvalid(state) ?
+                          " opacity-50 cursor-not-allowed" : ""
+                      )
+                    }>
+                    {"Save List" |> str}
+                  </button>
+                </div>
               </div>
             </div>
           </div>

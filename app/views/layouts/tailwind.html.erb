@@ -9,6 +9,8 @@
 
   <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags. -->
 
+  <%= yield :head %>
+
   <!-- Styles -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -23,8 +25,6 @@
     <meta name="description" content="<%= presenter.meta_description %>"/>
     <meta property="og:description" content="<%= presenter.meta_description %>"/>
   <% end %>
-
-  <%= yield :head %>
 
   <link rel="icon" href="/favicon.ico"/>
 </head>

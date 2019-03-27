@@ -1,9 +1,15 @@
 open CurriculumEditor__Types;
 open SchoolAdmin__Utils;
 
-let markIcon : string = [%raw "require('./images/target-complete-mark-icon.svg')"];
-let linkIcon : string = [%raw "require('./images/target-complete-link-icon.svg')"];
-let quizIcon : string = [%raw "require('./images/target-complete-quiz-icon.svg')"];
+let markIcon: string = [%raw
+  "require('./images/target-complete-mark-icon.svg')"
+];
+let linkIcon: string = [%raw
+  "require('./images/target-complete-link-icon.svg')"
+];
+let quizIcon: string = [%raw
+  "require('./images/target-complete-quiz-icon.svg')"
+];
 
 let str = ReasonReact.string;
 type methodOfCompletion =
@@ -542,8 +548,7 @@ let make =
     };
     let showPrerequisiteTargets = state.prerequisiteTargets |> List.length > 0;
     <div>
-      <div className="blanket">
-      </div>
+      <div className="blanket" />
       <div className="drawer-right">
         <div className="drawer-right__close absolute">
           <button
@@ -652,7 +657,7 @@ let make =
                                send(RemoveResource(_key));
                              }
                            }>
-                           <img className="h-4 opacity-75" src=Icons.deleteIcon></img>
+                           <Icon kind=Icon.Delete size=4 opacity=75 />
                          </button>
                        </div>
                      )
@@ -753,8 +758,8 @@ let make =
                                 )
                               }>
                               <div className="mb-1">
-                                <img className="w-12 h-12" src=markIcon></img>
-                                </div>
+                                <img className="w-12 h-12" src=markIcon />
+                              </div>
                               {"Simply mark the target as completed." |> str}
                             </button>
                           </div>
@@ -772,7 +777,7 @@ let make =
                                 )
                               }>
                               <div className="mb-1">
-                                <img className="w-12 h-12" src=linkIcon></img>
+                                <img className="w-12 h-12" src=linkIcon />
                               </div>
                               {"Visit a link to complete the target." |> str}
                             </button>
@@ -791,7 +796,7 @@ let make =
                                 )
                               }>
                               <div className="mb-1">
-                                <img className="w-12 h-12" src=quizIcon></img>
+                                <img className="w-12 h-12" src=quizIcon />
                               </div>
                               {"Take a quiz to complete the target." |> str}
                             </button>

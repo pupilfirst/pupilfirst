@@ -277,7 +277,7 @@ let make =
           </select>
           <div
             className="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
-            <img className="h-3 w-3" src=Icons.downIcon></img>
+            <Icon kind=Icon.Down size=3 />
           </div>
         </div>
       </div>

@@ -5,12 +5,15 @@ type state = {
   email: string,
   hasNameError: bool,
   hasEmailError: bool,
+  tagsToApply: list(string),
 };
 
 type action =
   | UpdateName(string, bool)
   | UpdateEmail(string, bool)
-  | ResetForm;
+  | ResetForm
+  | AddTag(string)
+  | RemoveTag(string);
 
 let component =
   ReasonReact.reducerComponent("SA_StudentsPanel_StudentInfoForm");
@@ -36,17 +39,20 @@ let formInvalid = state =>
 
 let handleAdd = (state, send, addToListCB) =>
   if (!formInvalid(state)) {
-    addToListCB(StudentInfo.create(state.name, state.email));
+    addToListCB(
+      StudentInfo.create(state.name, state.email, state.tagsToApply),
+    );
     send(ResetForm);
   };
 
-let make = (~addToListCB, _children) => {
+let make = (~addToListCB, ~studentTags, _children) => {
   ...component,
   initialState: () => {
     name: "",
     email: "",
     hasNameError: false,
     hasEmailError: false,
+    tagsToApply: [],
   },
   reducer: (action, state) =>
     switch (action) {
@@ -60,6 +66,17 @@ let make = (~addToListCB, _children) => {
         email: "",
         hasNameError: false,
         hasEmailError: false,
+        tagsToApply: state.tagsToApply,
+      })
+    | AddTag(tag) =>
+      ReasonReact.Update({
+        ...state,
+        tagsToApply: [tag, ...state.tagsToApply],
+      })
+    | RemoveTag(tag) =>
+      ReasonReact.Update({
+        ...state,
+        tagsToApply: state.tagsToApply |> List.filter(t => t !== tag),
       })
     },
   render: ({state, send}) =>
@@ -106,6 +123,23 @@ let make = (~addToListCB, _children) => {
         <School__InputGroupError
           message="is too short"
           active={state.hasEmailError}
+        />
+      </div>
+      <div className="mt-6">
+        <label
+          className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
+          htmlFor="email">
+          {"Tags" |> str}
+        </label>
+        <SA_StudentsPanel_SearchableTagList
+          unselectedTags={
+            studentTags
+            |> List.filter(tag => !(state.tagsToApply |> List.mem(tag)))
+          }
+          selectedTags={state.tagsToApply}
+          addTagCB={tag => send(AddTag(tag))}
+          removeTagCB={tag => send(RemoveTag(tag))}
+          allowNewTags=true
         />
       </div>
       <button

@@ -1,16 +1,11 @@
 open StudentsPanel__Types;
 open SchoolAdmin__Utils;
 
-type state = {
-  studentsToAdd: list(StudentInfo.t),
-  tagsToApply: list(string),
-};
+type state = {studentsToAdd: list(StudentInfo.t)};
 
 type action =
   | AddStudentInfo(StudentInfo.t)
-  | RemoveStudentInfo(StudentInfo.t)
-  | AddTag(string)
-  | RemoveTag(string);
+  | RemoveStudentInfo(StudentInfo.t);
 
 let component = ReasonReact.reducerComponent("SA_StudentsPanel_CreateForm");
 
@@ -20,7 +15,15 @@ let formInvalid = state => state.studentsToAdd |> List.length < 1;
 let handleErrorCB = () => ();
 let handleResponseCB = (submitCB, state, json) => {
   let teams = json |> Json.Decode.(field("teams", list(Team.decode)));
-  submitCB(teams, state.tagsToApply);
+
+  /* Extract tags from studentsToAdd */
+  let tags =
+    state.studentsToAdd
+    |> List.map(student => student |> StudentInfo.tags)
+    |> List.flatten
+    |> ListUtils.distinct;
+
+  submitCB(teams, tags);
   Notification.success("Success", "Student(s) created successfully");
 };
 
@@ -35,11 +38,6 @@ let saveStudents = (state, courseId, authenticityToken, responseCB) => {
     payload,
     "students",
     state.studentsToAdd |> Json.Encode.(list(StudentInfo.encode)),
-  );
-  Js.Dict.set(
-    payload,
-    "tags",
-    state.tagsToApply |> Json.Encode.(list(string)),
   );
 
   let url = "/school/courses/" ++ (courseId |> string_of_int) ++ "/students";
@@ -56,32 +54,20 @@ let make =
       _children,
     ) => {
   ...component,
-  initialState: () => {studentsToAdd: [], tagsToApply: []},
+  initialState: () => {studentsToAdd: []},
   reducer: (action, state) =>
     switch (action) {
     | AddStudentInfo(studentInfo) =>
       ReasonReact.Update({
-        ...state,
         studentsToAdd: [studentInfo, ...state.studentsToAdd],
       })
     | RemoveStudentInfo(studentInfo) =>
       ReasonReact.Update({
-        ...state,
         studentsToAdd:
           state.studentsToAdd
           |> List.filter(s =>
                StudentInfo.email(s) !== StudentInfo.email(studentInfo)
              ),
-      })
-    | AddTag(tag) =>
-      ReasonReact.Update({
-        ...state,
-        tagsToApply: [tag, ...state.tagsToApply],
-      })
-    | RemoveTag(tag) =>
-      ReasonReact.Update({
-        ...state,
-        tagsToApply: state.tagsToApply |> List.filter(t => t !== tag),
       })
     },
   render: ({state, send}) =>
@@ -107,76 +93,73 @@ let make =
                   addToListCB={
                     studentInfo => send(AddStudentInfo(studentInfo))
                   }
+                  studentTags
                 />
-                {
-                  state.studentsToAdd |> List.length > 0 ?
-                    <div>
-                      <div className="mt-6">
-                        <div className="border-b border-grey-light pb-2 mb-4">
+                <div>
+                  <div className="mt-6">
+                    <div
+                      className="inline-block tracking-wide text-grey-darker text-xs font-semibold">
+                      {
+                        "These new students will be added to the course:" |> str
+                      }
+                    </div>
+                    {
+                      switch (state.studentsToAdd) {
+                      | [] =>
+                        <div
+                          className="flex items-center justify-between bg-grey-lightest border rounded p-3 italic mt-2">
                           {
-                            "These new students will be added to the course:"
+                            "This list is empty! Add some students using the form above."
                             |> str
                           }
                         </div>
-                        {
-                          switch (state.studentsToAdd) {
-                          | [] => ReasonReact.null
-                          | studentInfos =>
-                            studentInfos
-                            |> List.map(studentInfo =>
-                                 <div
-                                   key={studentInfo |> StudentInfo.email}
-                                   className="select-list__item-selected flex items-center justify-between bg-grey-lightest border rounded p-3 mb-2">
-                                   <div className="flex items-center">
-                                     <div className="mr-1">
-                                       {studentInfo |> StudentInfo.name |> str}
-                                     </div>
-                                     <div className="text-xs text-grey-dark">
-                                       {
-                                         " ("
-                                         ++ (studentInfo |> StudentInfo.email)
-                                         ++ ")"
-                                         |> str
-                                       }
-                                     </div>
-                                   </div>
-                                   <button
-                                     onClick=(
-                                       _event =>
-                                         send(RemoveStudentInfo(studentInfo))
-                                     )>
-                                     <Icon
-                                       kind=Icon.Delete
-                                       size=4
-                                       opacity=75
-                                     />
-                                   </button>
+                      | studentInfos =>
+                        studentInfos
+                        |> List.map(studentInfo =>
+                             <div
+                               key={studentInfo |> StudentInfo.email}
+                               className="select-list__item-selected flex items-center justify-between bg-grey-lightest border rounded p-3 mt-2">
+                               <div
+                                 className="flex flex flex-wrap pr-3 items-center">
+                                 <div className="mr-1">
+                                   {studentInfo |> StudentInfo.name |> str}
                                  </div>
-                               )
-                            |> Array.of_list
-                            |> ReasonReact.array
-                          }
-                        }
-                      </div>
-                    </div> :
-                    ReasonReact.null
-                }
-                <div className="mt-6">
-                  <span>
-                    {"Apply some tags to these new students:" |> str}
-                  </span>
-                  <SA_StudentsPanel_SearchableTagList
-                    unselectedTags={
-                      studentTags
-                      |> List.filter(tag =>
-                           !(state.tagsToApply |> List.mem(tag))
-                         )
+                                 <div className="text-xs text-grey-dark">
+                                   {
+                                     " ("
+                                     ++ (studentInfo |> StudentInfo.email)
+                                     ++ ")"
+                                     |> str
+                                   }
+                                 </div>
+                                 {
+                                   studentInfo
+                                   |> StudentInfo.tags
+                                   |> List.map(tag =>
+                                        <div
+                                          key=tag
+                                          className="flex items-center px-2 py-1 border rounded-lg ml-1 text-sm font-semibold focus:outline-none bg-grey-light">
+                                          {tag |> str}
+                                        </div>
+                                      )
+                                   |> Array.of_list
+                                   |> ReasonReact.array
+                                 }
+                               </div>
+                               <button
+                                 onClick=(
+                                   _event =>
+                                     send(RemoveStudentInfo(studentInfo))
+                                 )>
+                                 <Icon kind=Icon.Delete size=4 opacity=75 />
+                               </button>
+                             </div>
+                           )
+                        |> Array.of_list
+                        |> ReasonReact.array
+                      }
                     }
-                    selectedTags={state.tagsToApply}
-                    addTagCB={tag => send(AddTag(tag))}
-                    removeTagCB={tag => send(RemoveTag(tag))}
-                    allowNewTags=true
-                  />
+                  </div>
                 </div>
                 <div className="flex mt-4">
                   <button

@@ -45,18 +45,18 @@ let make =
             {
               selectedTags
               |> List.sort(String.compare)
-              |> List.map(tag => {
-                   let buttonClasses = "flex items-center px-2 py-1 border rounded-lg mr-1 text-sm font-semibold focus:outline-none bg-grey-light";
-
-                   <div key=tag className=buttonClasses>
+              |> List.map(tag =>
+                   <div
+                     key=tag
+                     className="flex items-center px-2 py-1 border rounded-lg mr-1 text-sm font-semibold focus:outline-none bg-grey-light">
                      {tag |> str}
                      <i
                        className="material-icons cursor-pointer text-sm ml-1"
                        onClick={_e => handleClick(tag, send, removeTagCB)}>
                        {"close" |> str}
                      </i>
-                   </div>;
-                 })
+                   </div>
+                 )
               |> Array.of_list
               |> ReasonReact.array
             }

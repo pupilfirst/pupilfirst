@@ -124,16 +124,16 @@ let make =
             addAnswerOption();
           }
         }
-        className="cursor-pointer relative">
+        className="quiz-maker__answer-option cursor-pointer relative">
         <div className="quiz-maker__answer-option-pointer quiz-maker__answer-option-pointer--add">
-          <i className="material-icons"> {"add_circle_outline" |> str} </i>
+          <Icon kind=Icon.PlusCircle size="full" />
         </div>
-        <span
-          className="flex items-center bg-white hover:bg-grey-lighter border rounded-lg ml-12 py-3 px-4">
-          <h5 className="font-semibold ml-2 italic">
+        <a
+          className="flex items-center h-11 bg-white hover:bg-grey-lighter border rounded-lg ml-12 py-3 px-4">
+          <p className="text-xs">
             {"Add another Answer Option" |> str}
-          </h5>
-        </span>
+          </p>
+        </a>
       </div>
     </div>;
   },

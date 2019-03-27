@@ -38,7 +38,7 @@ let make =
         answerOption |> AnswerOption.correctAnswer ?
         <div className="quiz-maker__answer-option-pointer flex justify-center items-center quiz-maker__answer-option-pointer--correct"
         >
-          <Icon kind=Icon.Check size=2 />
+          <Icon kind=Icon.Check size="2" />
         </div> :
         <div onClick={
               _event => {
@@ -72,7 +72,7 @@ let make =
           <button
             className={
               answerOption |> AnswerOption.correctAnswer ?
-                "w-28 flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-green font-semibold focus:outline-none text-xs py-1 px-2" :
+                "w-28 flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-green font-semibold cursor-default focus:outline-none text-xs py-1 px-2" :
                 "w-28 flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-grey hover:text-grey-darker focus:outline-none text-xs py-1 px-2"
             }
             type_="button"

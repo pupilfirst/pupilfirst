@@ -657,7 +657,7 @@ let make =
                                send(RemoveResource(_key));
                              }
                            }>
-                           <Icon kind=Icon.Delete size=4 opacity=75 />
+                           <Icon kind=Icon.Delete size="4" opacity=75 />
                          </button>
                        </div>
                      )

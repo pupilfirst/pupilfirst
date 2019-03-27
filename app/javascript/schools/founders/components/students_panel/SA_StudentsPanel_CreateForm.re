@@ -147,7 +147,7 @@ let make =
                                      )>
                                      <Icon
                                        kind=Icon.Delete
-                                       size=4
+                                       size="4"
                                        opacity=75
                                      />
                                    </button>

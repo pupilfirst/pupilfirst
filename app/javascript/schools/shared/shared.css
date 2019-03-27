@@ -192,11 +192,16 @@ button:disabled, .disabled {
     width: 1.75rem;
     height: 1.75rem;
     left: 10px;
-    top: 5px;
+    top: 8px;
+    border: 0;
 }
 
-.quiz-maker__answer-option-pointer--add:hover {
+.quiz-maker__answer-option:hover .quiz-maker__answer-option-pointer--add {
     box-shadow: 0 3px 3px 1px rgba(0, 0, 0, 0.1);
+}
+
+.quiz-maker__answer-option:hover .quiz-maker__answer-option-pointer--add img {
+    filter: invert(1);
 }
 
 .quiz-maker__answer-option-pointer-img {

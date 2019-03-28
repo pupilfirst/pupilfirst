@@ -13,9 +13,14 @@ class CoachDashboardController < ApplicationController
       params[:excludedIds],
       params[:limit]
     )
-    timeline_events = service.timeline_events
-    more_to_load = service.more_to_load?
-    render json: { timelineEvents: timeline_events, moreToLoad: more_to_load, error: nil }
+
+    render(
+      json: {
+        timelineEvents: service.timeline_events,
+        moreSubmissionsAfter: service.earliest_submission_date,
+        error: nil
+      }
+    )
   end
 
   private

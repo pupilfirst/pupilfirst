@@ -2,7 +2,7 @@ ActiveAdmin.register Target do
   actions :all, except: [:destroy]
 
   permit_params :faculty_id, :role, :title, :description, :rubric_description, :resource_url, :completion_instructions, :days_to_complete,
-    :slideshow_embed, :video_embed, :completed_at, :completion_comment, :link_to_complete, :archived, :target_group_id, :target_action_type, :points_earnable,
+    :slideshow_embed, :video_embed, :completed_at, :completion_comment, :link_to_complete, :archived, :target_group_id, :target_action_type,
     :sort_index, :youtube_video_id, :session_at, :session_by, :call_to_action,
     prerequisite_target_ids: [], tag_list: [], evaluation_criterion_ids: []
 
@@ -112,7 +112,6 @@ ActiveAdmin.register Target do
       row :target_group
       row :sort_index
       row :target_action_type
-      row :points_earnable
 
       row :role do
         t("models.target.role.#{target.role}")
@@ -212,7 +211,6 @@ ActiveAdmin.register Target do
     end
 
     column :target_action_type
-    column :points_earnable
     column :role
 
     column :faculty do |target|
@@ -295,7 +293,6 @@ ActiveAdmin.register Target do
       end
 
       f.input :target_action_type, collection: Target.valid_target_action_types
-      f.input :points_earnable
 
       if presenter.valid_prerequisites.exists?
         f.input :prerequisite_targets, collection: presenter.valid_prerequisites

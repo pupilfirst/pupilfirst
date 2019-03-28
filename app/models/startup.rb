@@ -8,9 +8,6 @@ class Startup < ApplicationRecord
   COURSE_FEE = 50_000
 
   scope :admitted, -> { joins(:level).where('levels.number > ?', 0) }
-  scope :approved, -> { where.not(dropped_out: true) }
-  scope :dropped_out, -> { where(dropped_out: true) }
-  scope :not_dropped_out, -> { where.not(dropped_out: true) }
 
   # Custom scope to allow AA to filter by intersection of tags.
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
@@ -30,9 +27,6 @@ class Startup < ApplicationRecord
   # Faculty who can review this startup's timeline events.
   has_many :faculty_startup_enrollments, dependent: :destroy
   has_many :faculty, through: :faculty_startup_enrollments
-
-  # use the old name attribute as an alias for legal_registered_name
-  alias_attribute :name, :legal_registered_name
 
   # Friendly ID!
   friendly_id :slug_candidates, use: :slugged
@@ -59,14 +53,6 @@ class Startup < ApplicationRecord
   end
 
   after_create :regenerate_slug
-
-  def approved?
-    dropped_out != true
-  end
-
-  def dropped_out?
-    dropped_out == true
-  end
 
   normalize_attribute :email, :phone
 

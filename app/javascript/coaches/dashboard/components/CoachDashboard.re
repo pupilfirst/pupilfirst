@@ -6,8 +6,8 @@ type props = {
   founders: list(Founder.t),
   teams: list(Team.t),
   timelineEvents: list(TimelineEvent.t),
-  hasMorePendingTEs: bool,
-  hasMoreCompletedTEs: bool,
+  morePendingSubmissionsAfter: option(string),
+  moreReviewedSubmissionsAfter: option(string),
   authenticityToken: string,
   emptyIconUrl: string,
   notAcceptedIconUrl: string,
@@ -20,15 +20,15 @@ type props = {
 type state = {
   selectedFounder: option(Founder.t),
   timelineEvents: list(TimelineEvent.t),
-  hasMorePendingTEs: bool,
-  hasMoreCompletedTEs: bool,
+  morePendingSubmissionsAfter: option(string),
+  moreReviewedSubmissionsAfter: option(string),
 };
 
 type action =
   | SelectFounder(Founder.t)
   | ClearFounder
   | ReplaceTE(TimelineEvent.t)
-  | AppendTEs(list(TimelineEvent.t), bool, bool);
+  | AppendTEs(list(TimelineEvent.t), option(string), option(string));
 
 let component = ReasonReact.reducerComponent("CoachDashboard");
 
@@ -37,8 +37,8 @@ let make =
       ~founders,
       ~teams,
       ~timelineEvents,
-      ~hasMorePendingTEs,
-      ~hasMoreCompletedTEs,
+      ~morePendingSubmissionsAfter,
+      ~moreReviewedSubmissionsAfter,
       ~authenticityToken,
       ~emptyIconUrl,
       ~notAcceptedIconUrl,
@@ -49,38 +49,69 @@ let make =
       _children,
     ) => {
   ...component,
-  initialState: () => {selectedFounder: None, timelineEvents, hasMorePendingTEs, hasMoreCompletedTEs},
+  initialState: () => {
+    selectedFounder: None,
+    timelineEvents,
+    morePendingSubmissionsAfter,
+    moreReviewedSubmissionsAfter,
+  },
   reducer: (action, state) =>
     switch (action) {
-    | SelectFounder(founder) => ReasonReact.Update({...state, selectedFounder: Some(founder)})
+    | SelectFounder(founder) =>
+      ReasonReact.Update({...state, selectedFounder: Some(founder)})
     | ClearFounder => ReasonReact.Update({...state, selectedFounder: None})
     | ReplaceTE(newTE) =>
       ReasonReact.Update({
         ...state,
         timelineEvents:
           state.timelineEvents
-          |> List.map(oldTE => oldTE |> TimelineEvent.id == (newTE |> TimelineEvent.id) ? newTE : oldTE),
+          |> List.map(oldTE =>
+               oldTE |> TimelineEvent.id == (newTE |> TimelineEvent.id) ?
+                 newTE : oldTE
+             ),
       })
-    | AppendTEs(newTEs, hasMorePendingTEs, hasMoreCompletedTEs) =>
+    | AppendTEs(
+        newTEs,
+        morePendingSubmissionsAfter,
+        moreReviewedSubmissionsAfter,
+      ) =>
       let timelineEvents = newTEs |> List.append(state.timelineEvents);
-      ReasonReact.Update({...state, timelineEvents, hasMorePendingTEs, hasMoreCompletedTEs});
+      ReasonReact.Update({
+        ...state,
+        timelineEvents,
+        morePendingSubmissionsAfter,
+        moreReviewedSubmissionsAfter,
+      });
     },
   render: ({state, send}) => {
     let selectFounderCB = founder => send(SelectFounder(founder));
     let clearFounderCB = () => send(ClearFounder);
     let replaceTimelineEvent = te => send(ReplaceTE(te));
-    let appendTEsCB = (tes, hasMorePendingTEs, hasMoreCompletedTEs) =>
-      send(AppendTEs(tes, hasMorePendingTEs, hasMoreCompletedTEs));
+    let appendTEsCB =
+        (tes, morePendingSubmissionsAfter, moreReviewedSubmissionsAfter) =>
+      send(
+        AppendTEs(
+          tes,
+          morePendingSubmissionsAfter,
+          moreReviewedSubmissionsAfter,
+        ),
+      );
     <div className="coach-dashboard__container container">
       <div className="row">
         <div className="col-md-3">
-          <SidePanel teams founders selectedFounder={state.selectedFounder} selectFounderCB clearFounderCB />
+          <SidePanel
+            teams
+            founders
+            selectedFounder={state.selectedFounder}
+            selectFounderCB
+            clearFounderCB
+          />
         </div>
         <div className="col-md-9">
           <TimelineEventsPanel
             timelineEvents={state.timelineEvents}
-            hasMorePendingTEs={state.hasMorePendingTEs}
-            hasMoreCompletedTEs={state.hasMoreCompletedTEs}
+            morePendingSubmissionsAfter={state.morePendingSubmissionsAfter}
+            moreReviewedSubmissionsAfter={state.moreReviewedSubmissionsAfter}
             appendTEsCB
             founders
             selectedFounder={state.selectedFounder}
@@ -103,9 +134,16 @@ let decode = json =>
   Json.Decode.{
     founders: json |> field("founders", list(Founder.decode)),
     teams: json |> field("teams", list(Team.decode)),
-    timelineEvents: json |> field("timelineEvents", list(TimelineEvent.decode)),
-    hasMorePendingTEs: json |> field("hasMorePendingTEs", bool),
-    hasMoreCompletedTEs: json |> field("hasMoreCompletedTEs", bool),
+    timelineEvents:
+      json |> field("timelineEvents", list(TimelineEvent.decode)),
+    morePendingSubmissionsAfter:
+      json
+      |> field("morePendingSubmissionsAfter", nullable(string))
+      |> Js.Null.toOption,
+    moreReviewedSubmissionsAfter:
+      json
+      |> field("moreReviewedSubmissionsAfter", nullable(string))
+      |> Js.Null.toOption,
     authenticityToken: json |> field("authenticityToken", string),
     emptyIconUrl: json |> field("emptyIconUrl", string),
     notAcceptedIconUrl: json |> field("notAcceptedIconUrl", string),
@@ -124,8 +162,8 @@ let jsComponent =
         ~founders=props.founders,
         ~teams=props.teams,
         ~timelineEvents=props.timelineEvents,
-        ~hasMorePendingTEs=props.hasMorePendingTEs,
-        ~hasMoreCompletedTEs=props.hasMoreCompletedTEs,
+        ~morePendingSubmissionsAfter=props.morePendingSubmissionsAfter,
+        ~moreReviewedSubmissionsAfter=props.moreReviewedSubmissionsAfter,
         ~authenticityToken=props.authenticityToken,
         ~emptyIconUrl=props.emptyIconUrl,
         ~notAcceptedIconUrl=props.notAcceptedIconUrl,

@@ -7,7 +7,6 @@ module Startups
     def team_up(name)
       Startup.transaction do
         startup = Startup.create!(
-          name: name,
           product_name: name,
           level: @founders.first.startup.level
         )

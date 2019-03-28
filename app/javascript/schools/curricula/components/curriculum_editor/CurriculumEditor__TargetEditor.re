@@ -1,6 +1,16 @@
 open CurriculumEditor__Types;
 open SchoolAdmin__Utils;
 
+let markIcon: string = [%raw
+  "require('./images/target-complete-mark-icon.svg')"
+];
+let linkIcon: string = [%raw
+  "require('./images/target-complete-link-icon.svg')"
+];
+let quizIcon: string = [%raw
+  "require('./images/target-complete-quiz-icon.svg')"
+];
+
 let str = ReasonReact.string;
 type methodOfCompletion =
   | NotSelected
@@ -254,10 +264,12 @@ let isValidQuiz = quiz =>
      )
   |> List.length == 0;
 
-let booleanButtonClasses = bool =>
-  bool ?
-    "w-1/2 bg-grey hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none" :
-    "w-1/2 bg-white hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none";
+let booleanButtonClasses = bool =>{
+  let classes = "w-1/2 bg-white toggle-button__button hover:text-purple-dark text-sm font-semibold py-2 px-6 focus:outline-none";
+  classes ++ (bool ?
+    " text-purple shadow-inner" :
+    " text-grey-dark");
+};
 
 let completionButtonClasses = value =>
   value ?
@@ -536,8 +548,7 @@ let make =
     };
     let showPrerequisiteTargets = state.prerequisiteTargets |> List.length > 0;
     <div>
-      <div className="blanket">
-      </div>
+      <div className="blanket" />
       <div className="drawer-right">
         <div className="drawer-right__close absolute">
           <button
@@ -646,16 +657,7 @@ let make =
                                send(RemoveResource(_key));
                              }
                            }>
-                           <svg
-                             className="w-3"
-                             id="fa3b28d3-128c-4841-a4e9-49257a824d7b"
-                             xmlns="http://www.w3.org/2000/svg"
-                             viewBox="0 0 14 15.99">
-                             <path
-                               d="M13,1H9A1,1,0,0,0,8,0H6A1,1,0,0,0,5,1H1A1,1,0,0,0,0,2V3H14V2A1,1,0,0,0,13,1ZM11,13a1,1,0,1,1-2,0V7a1,1,0,0,1,2,0ZM8,13a1,1,0,1,1-2,0V7A1,1,0,0,1,8,7ZM5,13a1,1,0,1,1-2,0V7A1,1,0,0,1,5,7Zm8.5-9H.5a.5.5,0,0,0,0,1H1V15a1,1,0,0,0,1,1H12a1,1,0,0,0,1-1V5h.5a.5.5,0,0,0,0-1Z"
-                               fill="#525252"
-                             />
-                           </svg>
+                           <Icon kind=Icon.Delete size="4" opacity=75 />
                          </button>
                        </div>
                      )
@@ -699,7 +701,7 @@ let make =
                   </label>
                   <div
                     id="evaluated"
-                    className="inline-flex w-64 rounded-lg overflow-hidden border">
+                    className="flex toggle-button__group flex-no-shrink rounded-lg overflow-hidden border">
                     <button
                       onClick={
                         _event => {
@@ -755,48 +757,9 @@ let make =
                                   state.methodOfCompletion == MarkAsComplete,
                                 )
                               }>
-                              <svg
-                                className="fill-current w-8 mb-2"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 29.4">
-                                <g id="bfe57d46-3bb7-42f0-b4e6-eccc9a02f1dd">
-                                  <g id="ea523c13-a500-4391-9a0e-cf57c4f4a027">
-                                    <path
-                                      d="M6.35,5.89a.47.47,0,0,0-.46.46,1,1,0,1,1-1-1,.46.46,0,0,0,0-.92A1.94,1.94,0,1,0,6.81,6.35.46.46,0,0,0,6.35,5.89Z"
-                                    />
-                                    <path
-                                      d="M6.35,11.29a.47.47,0,0,0-.46.46,1,1,0,1,1-1-1,.46.46,0,0,0,.46-.46.47.47,0,0,0-.46-.46,1.94,1.94,0,1,0,1.93,1.93A.46.46,0,0,0,6.35,11.29Z"
-                                    />
-                                    <path
-                                      d="M11.75,12.28H8.32a.45.45,0,0,0-.46.46.46.46,0,0,0,.46.46h3.43a.46.46,0,0,0,.46-.46A.45.45,0,0,0,11.75,12.28Z"
-                                    />
-                                    <path
-                                      d="M11.75,10.31H8.32a.46.46,0,0,0-.46.46.45.45,0,0,0,.46.46h3.43a.45.45,0,0,0,.46-.46A.46.46,0,0,0,11.75,10.31Z"
-                                    />
-                                    <path
-                                      d="M10.77,17.68H8.32a.45.45,0,0,0-.46.46.46.46,0,0,0,.46.46h2.45a.46.46,0,0,0,.46-.46A.45.45,0,0,0,10.77,17.68Z"
-                                    />
-                                    <path
-                                      d="M11.75,15.71H8.32a.46.46,0,0,0-.46.46.45.45,0,0,0,.46.46h3.43a.45.45,0,0,0,.46-.46A.46.46,0,0,0,11.75,15.71Z"
-                                    />
-                                    <path
-                                      d="M16.17,6.87H8.32a.47.47,0,0,0,0,.93h7.85a.47.47,0,0,0,0-.93Z"
-                                    />
-                                    <path
-                                      d="M14.21,4.91H8.32a.46.46,0,0,0-.46.46.45.45,0,0,0,.46.46h5.89a.46.46,0,0,0,.46-.46A.47.47,0,0,0,14.21,4.91Z"
-                                    />
-                                    <path
-                                      d="M6.35,16.7a.46.46,0,0,0-.46.46,1,1,0,1,1-1-1,.46.46,0,0,0,.46-.46.47.47,0,0,0-.46-.46,1.94,1.94,0,1,0,1.93,1.94A.45.45,0,0,0,6.35,16.7Z"
-                                    />
-                                    <path
-                                      d="M18.14,0H1.44A1.45,1.45,0,0,0,0,1.44V22.07a1.45,1.45,0,0,0,1.44,1.44H9.79a.47.47,0,0,0,.46-.46.46.46,0,0,0-.46-.46H1.44a.52.52,0,0,1-.52-.52V1.44A.52.52,0,0,1,1.44.92h16.7a.52.52,0,0,1,.52.52V16.67a.46.46,0,1,0,.92,0V1.44A1.45,1.45,0,0,0,18.14,0Z"
-                                    />
-                                    <path
-                                      d="M22.48,18.67a1.75,1.75,0,0,0-1.19.33,1.67,1.67,0,0,0-2.45-.49,1.67,1.67,0,0,0-1.27-.82,1.7,1.7,0,0,0-.94.17V12a1.68,1.68,0,0,0-1.86-1.68,1.74,1.74,0,0,0-1.51,1.75V18L11.91,19.3A2.91,2.91,0,0,0,11.13,22l1,4.37a3.87,3.87,0,0,0,3.79,3H20.1A3.91,3.91,0,0,0,24,25.5V20.42A1.74,1.74,0,0,0,22.48,18.67Zm.6,6.83a3,3,0,0,1-3,3H16a3,3,0,0,1-2.9-2.29l-1-4.37A2,2,0,0,1,12.56,20l.7-.7v1.59a.46.46,0,0,0,.46.46.47.47,0,0,0,.46-.46V12.07a.81.81,0,0,1,.69-.83.71.71,0,0,1,.59.19.77.77,0,0,1,.25.57v8.1a.46.46,0,0,0,.46.46.45.45,0,0,0,.46-.46v-.73a.77.77,0,0,1,.26-.57.75.75,0,0,1,.59-.2.82.82,0,0,1,.69.84v1.15a.46.46,0,0,0,.92,0v-.73a.76.76,0,0,1,.25-.57.79.79,0,0,1,.6-.2.82.82,0,0,1,.68.84v1.15a.47.47,0,0,0,.93,0v-.73a.77.77,0,0,1,.84-.77.82.82,0,0,1,.69.84V25.5Z"
-                                    />
-                                  </g>
-                                </g>
-                              </svg>
+                              <div className="mb-1">
+                                <img className="w-12 h-12" src=markIcon />
+                              </div>
                               {"Simply mark the target as completed." |> str}
                             </button>
                           </div>
@@ -813,48 +776,9 @@ let make =
                                   state.methodOfCompletion == VisitLink,
                                 )
                               }>
-                              <svg
-                                className="fill-current w-8 mb-2"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 29.4">
-                                <g id="bfe57d46-3bb7-42f0-b4e6-eccc9a02f1dd">
-                                  <g id="ea523c13-a500-4391-9a0e-cf57c4f4a027">
-                                    <path
-                                      d="M6.35,5.89a.47.47,0,0,0-.46.46,1,1,0,1,1-1-1,.46.46,0,0,0,0-.92A1.94,1.94,0,1,0,6.81,6.35.46.46,0,0,0,6.35,5.89Z"
-                                    />
-                                    <path
-                                      d="M6.35,11.29a.47.47,0,0,0-.46.46,1,1,0,1,1-1-1,.46.46,0,0,0,.46-.46.47.47,0,0,0-.46-.46,1.94,1.94,0,1,0,1.93,1.93A.46.46,0,0,0,6.35,11.29Z"
-                                    />
-                                    <path
-                                      d="M11.75,12.28H8.32a.45.45,0,0,0-.46.46.46.46,0,0,0,.46.46h3.43a.46.46,0,0,0,.46-.46A.45.45,0,0,0,11.75,12.28Z"
-                                    />
-                                    <path
-                                      d="M11.75,10.31H8.32a.46.46,0,0,0-.46.46.45.45,0,0,0,.46.46h3.43a.45.45,0,0,0,.46-.46A.46.46,0,0,0,11.75,10.31Z"
-                                    />
-                                    <path
-                                      d="M10.77,17.68H8.32a.45.45,0,0,0-.46.46.46.46,0,0,0,.46.46h2.45a.46.46,0,0,0,.46-.46A.45.45,0,0,0,10.77,17.68Z"
-                                    />
-                                    <path
-                                      d="M11.75,15.71H8.32a.46.46,0,0,0-.46.46.45.45,0,0,0,.46.46h3.43a.45.45,0,0,0,.46-.46A.46.46,0,0,0,11.75,15.71Z"
-                                    />
-                                    <path
-                                      d="M16.17,6.87H8.32a.47.47,0,0,0,0,.93h7.85a.47.47,0,0,0,0-.93Z"
-                                    />
-                                    <path
-                                      d="M14.21,4.91H8.32a.46.46,0,0,0-.46.46.45.45,0,0,0,.46.46h5.89a.46.46,0,0,0,.46-.46A.47.47,0,0,0,14.21,4.91Z"
-                                    />
-                                    <path
-                                      d="M6.35,16.7a.46.46,0,0,0-.46.46,1,1,0,1,1-1-1,.46.46,0,0,0,.46-.46.47.47,0,0,0-.46-.46,1.94,1.94,0,1,0,1.93,1.94A.45.45,0,0,0,6.35,16.7Z"
-                                    />
-                                    <path
-                                      d="M18.14,0H1.44A1.45,1.45,0,0,0,0,1.44V22.07a1.45,1.45,0,0,0,1.44,1.44H9.79a.47.47,0,0,0,.46-.46.46.46,0,0,0-.46-.46H1.44a.52.52,0,0,1-.52-.52V1.44A.52.52,0,0,1,1.44.92h16.7a.52.52,0,0,1,.52.52V16.67a.46.46,0,1,0,.92,0V1.44A1.45,1.45,0,0,0,18.14,0Z"
-                                    />
-                                    <path
-                                      d="M22.48,18.67a1.75,1.75,0,0,0-1.19.33,1.67,1.67,0,0,0-2.45-.49,1.67,1.67,0,0,0-1.27-.82,1.7,1.7,0,0,0-.94.17V12a1.68,1.68,0,0,0-1.86-1.68,1.74,1.74,0,0,0-1.51,1.75V18L11.91,19.3A2.91,2.91,0,0,0,11.13,22l1,4.37a3.87,3.87,0,0,0,3.79,3H20.1A3.91,3.91,0,0,0,24,25.5V20.42A1.74,1.74,0,0,0,22.48,18.67Zm.6,6.83a3,3,0,0,1-3,3H16a3,3,0,0,1-2.9-2.29l-1-4.37A2,2,0,0,1,12.56,20l.7-.7v1.59a.46.46,0,0,0,.46.46.47.47,0,0,0,.46-.46V12.07a.81.81,0,0,1,.69-.83.71.71,0,0,1,.59.19.77.77,0,0,1,.25.57v8.1a.46.46,0,0,0,.46.46.45.45,0,0,0,.46-.46v-.73a.77.77,0,0,1,.26-.57.75.75,0,0,1,.59-.2.82.82,0,0,1,.69.84v1.15a.46.46,0,0,0,.92,0v-.73a.76.76,0,0,1,.25-.57.79.79,0,0,1,.6-.2.82.82,0,0,1,.68.84v1.15a.47.47,0,0,0,.93,0v-.73a.77.77,0,0,1,.84-.77.82.82,0,0,1,.69.84V25.5Z"
-                                    />
-                                  </g>
-                                </g>
-                              </svg>
+                              <div className="mb-1">
+                                <img className="w-12 h-12" src=linkIcon />
+                              </div>
                               {"Visit a link to complete the target." |> str}
                             </button>
                           </div>
@@ -871,48 +795,9 @@ let make =
                                   state.methodOfCompletion == TakeQuiz,
                                 )
                               }>
-                              <svg
-                                className="fill-current w-8 mb-2"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 29.4">
-                                <g id="bfe57d46-3bb7-42f0-b4e6-eccc9a02f1dd">
-                                  <g id="ea523c13-a500-4391-9a0e-cf57c4f4a027">
-                                    <path
-                                      d="M6.35,5.89a.47.47,0,0,0-.46.46,1,1,0,1,1-1-1,.46.46,0,0,0,0-.92A1.94,1.94,0,1,0,6.81,6.35.46.46,0,0,0,6.35,5.89Z"
-                                    />
-                                    <path
-                                      d="M6.35,11.29a.47.47,0,0,0-.46.46,1,1,0,1,1-1-1,.46.46,0,0,0,.46-.46.47.47,0,0,0-.46-.46,1.94,1.94,0,1,0,1.93,1.93A.46.46,0,0,0,6.35,11.29Z"
-                                    />
-                                    <path
-                                      d="M11.75,12.28H8.32a.45.45,0,0,0-.46.46.46.46,0,0,0,.46.46h3.43a.46.46,0,0,0,.46-.46A.45.45,0,0,0,11.75,12.28Z"
-                                    />
-                                    <path
-                                      d="M11.75,10.31H8.32a.46.46,0,0,0-.46.46.45.45,0,0,0,.46.46h3.43a.45.45,0,0,0,.46-.46A.46.46,0,0,0,11.75,10.31Z"
-                                    />
-                                    <path
-                                      d="M10.77,17.68H8.32a.45.45,0,0,0-.46.46.46.46,0,0,0,.46.46h2.45a.46.46,0,0,0,.46-.46A.45.45,0,0,0,10.77,17.68Z"
-                                    />
-                                    <path
-                                      d="M11.75,15.71H8.32a.46.46,0,0,0-.46.46.45.45,0,0,0,.46.46h3.43a.45.45,0,0,0,.46-.46A.46.46,0,0,0,11.75,15.71Z"
-                                    />
-                                    <path
-                                      d="M16.17,6.87H8.32a.47.47,0,0,0,0,.93h7.85a.47.47,0,0,0,0-.93Z"
-                                    />
-                                    <path
-                                      d="M14.21,4.91H8.32a.46.46,0,0,0-.46.46.45.45,0,0,0,.46.46h5.89a.46.46,0,0,0,.46-.46A.47.47,0,0,0,14.21,4.91Z"
-                                    />
-                                    <path
-                                      d="M6.35,16.7a.46.46,0,0,0-.46.46,1,1,0,1,1-1-1,.46.46,0,0,0,.46-.46.47.47,0,0,0-.46-.46,1.94,1.94,0,1,0,1.93,1.94A.45.45,0,0,0,6.35,16.7Z"
-                                    />
-                                    <path
-                                      d="M18.14,0H1.44A1.45,1.45,0,0,0,0,1.44V22.07a1.45,1.45,0,0,0,1.44,1.44H9.79a.47.47,0,0,0,.46-.46.46.46,0,0,0-.46-.46H1.44a.52.52,0,0,1-.52-.52V1.44A.52.52,0,0,1,1.44.92h16.7a.52.52,0,0,1,.52.52V16.67a.46.46,0,1,0,.92,0V1.44A1.45,1.45,0,0,0,18.14,0Z"
-                                    />
-                                    <path
-                                      d="M22.48,18.67a1.75,1.75,0,0,0-1.19.33,1.67,1.67,0,0,0-2.45-.49,1.67,1.67,0,0,0-1.27-.82,1.7,1.7,0,0,0-.94.17V12a1.68,1.68,0,0,0-1.86-1.68,1.74,1.74,0,0,0-1.51,1.75V18L11.91,19.3A2.91,2.91,0,0,0,11.13,22l1,4.37a3.87,3.87,0,0,0,3.79,3H20.1A3.91,3.91,0,0,0,24,25.5V20.42A1.74,1.74,0,0,0,22.48,18.67Zm.6,6.83a3,3,0,0,1-3,3H16a3,3,0,0,1-2.9-2.29l-1-4.37A2,2,0,0,1,12.56,20l.7-.7v1.59a.46.46,0,0,0,.46.46.47.47,0,0,0,.46-.46V12.07a.81.81,0,0,1,.69-.83.71.71,0,0,1,.59.19.77.77,0,0,1,.25.57v8.1a.46.46,0,0,0,.46.46.45.45,0,0,0,.46-.46v-.73a.77.77,0,0,1,.26-.57.75.75,0,0,1,.59-.2.82.82,0,0,1,.69.84v1.15a.46.46,0,0,0,.92,0v-.73a.76.76,0,0,1,.25-.57.79.79,0,0,1,.6-.2.82.82,0,0,1,.68.84v1.15a.47.47,0,0,0,.93,0v-.73a.77.77,0,0,1,.84-.77.82.82,0,0,1,.69.84V25.5Z"
-                                    />
-                                  </g>
-                                </g>
-                              </svg>
+                              <div className="mb-1">
+                                <img className="w-12 h-12" src=quizIcon />
+                              </div>
                               {"Take a quiz to complete the target." |> str}
                             </button>
                           </div>
@@ -1027,18 +912,22 @@ let make =
                   | NotSelected => ReasonReact.null
                   }
                 }
+              </div>
+            </div>
+            <div className="bg-white py-6">
+              <div className="flex max-w-md w-full justify-between items-center px-6 mx-auto">
                 {
                   switch (target) {
                   | Some(_) =>
-                    <div className="flex items-center mb-6">
+                    <div className="flex items-center flex-no-shrink">
                       <label
-                        className="block tracking-wide text-grey-darker text-xs font-semibold mr-6"
+                        className="block tracking-wide text-grey-darker text-xs font-semibold mr-3"
                         htmlFor="archived">
                         {"Is this target archived?" |> str}
                       </label>
                       <div
                         id="archived"
-                        className="inline-flex w-64 rounded-lg overflow-hidden border">
+                        className="flex toggle-button__group flex-no-shrink rounded-lg overflow-hidden border">
                         <button
                           onClick=(
                             _event => {
@@ -1068,28 +957,30 @@ let make =
                   | None => ReasonReact.null
                   }
                 }
-              </div>
-            </div>
-            <div className="flex max-w-md w-full px-6 pb-5 mx-auto">
-              {
-                switch (target) {
-                | Some(target) =>
-                  <button
-                    disabled={saveDisabled(state)}
-                    onClick=(_e => updateTarget(target |> Target.id))
-                    className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none mt-3">
-                    {"Update Target" |> str}
-                  </button>
+                {
+                  switch (target) {
+                  | Some(target) =>
+                    <div className="w-auto">
+                      <button
+                        disabled={saveDisabled(state)}
+                        onClick=(_e => updateTarget(target |> Target.id))
+                        className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
+                        {"Update Target" |> str}
+                      </button>
+                    </div>
 
-                | None =>
-                  <button
-                    disabled={saveDisabled(state)}
-                    onClick=(_e => createTarget())
-                    className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none mt-3">
-                    {"Create Target" |> str}
-                  </button>
+                  | None =>
+                    <div className="w-full">
+                      <button
+                        disabled={saveDisabled(state)}
+                        onClick=(_e => createTarget())
+                        className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none mt-3">
+                        {"Create Target" |> str}
+                      </button>
+                    </div>
+                  }
                 }
-              }
+              </div>
             </div>
           </div>
         </div>

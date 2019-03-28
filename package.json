@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "bs-platform": "^4.0.18",
+    "graphql_ppx": "^0.2.8",
     "node-sass": "^4.11.0",
     "prettier": "1.9.1",
     "reason-react": ">=0.6.0",

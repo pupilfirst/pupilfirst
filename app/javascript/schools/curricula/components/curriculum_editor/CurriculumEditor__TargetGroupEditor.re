@@ -46,8 +46,8 @@ let setPayload = (authenticityToken, state) => {
 
 let booleanButtonClasses = bool =>
   bool ?
-    "w-1/2 bg-grey hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none" :
-    "w-1/2 bg-white border-l hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none";
+    "w-1/2 bg-white text-purple hover:text-purple-dark shadow-inner text-sm font-semibold py-2 px-6 focus:outline-none" :
+    "w-1/2 bg-white text-grey-dark hover:text-purple-dark text-sm font-semibold py-2 px-6 focus:outline-none";
 let formClasses = value =>
   value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full";
 
@@ -150,63 +150,67 @@ let make =
         <div className={formClasses(state.saving)}>
           <div className="w-full">
             <div className="mx-auto bg-white">
-              <div className="max-w-md p-6 mx-auto">
+              <div className="max-w-md pt-6 px-6 mx-auto">
                 <h5
-                  className="uppercase text-center border-b border-grey-light pb-2 mb-4">
+                  className="uppercase text-center border-b border-grey-light pb-2">
                   {"Target Group Details" |> str}
                 </h5>
-                <label
-                  className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
-                  htmlFor="name">
-                  {"Title" |> str}
-                </label>
-                <span> {"*" |> str} </span>
-                <input
-                  className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                  id="name"
-                  type_="text"
-                  placeholder="Type target group name here"
-                  value={state.name}
-                  onChange={
-                    event =>
-                      updateName(send, ReactEvent.Form.target(event)##value)
-                  }
-                />
-                {
-                  state.hasNameError ?
-                    <div className="drawer-right-form__error-msg">
-                      {"not a valid Title" |> str}
-                    </div> :
-                    ReasonReact.null
-                }
-                <label
-                  className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
-                  htmlFor="description">
-                  {" Description" |> str}
-                </label>
-                <textarea
-                  className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                  id="description"
-                  placeholder="Type target group description"
-                  value={state.description}
-                  onChange={
-                    event =>
-                      send(
-                        UpdateDescription(
-                          ReactEvent.Form.target(event)##value,
-                        ),
-                      )
-                  }
-                  rows=5
-                  cols=33
-                />
-                <div className="flex items-center mb-6">
+                <div className="mt-6">
                   <label
-                    className="block tracking-wide text-grey-darker text-xs font-semibold mr-6">
+                    className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
+                    htmlFor="name">
+                    {"Title" |> str}
+                  </label>
+                  <span> {"*" |> str} </span>
+                  <input
+                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    id="name"
+                    type_="text"
+                    placeholder="Type target group name here"
+                    value={state.name}
+                    onChange={
+                      event =>
+                        updateName(send, ReactEvent.Form.target(event)##value)
+                    }
+                  />
+                  {
+                    state.hasNameError ?
+                      <div className="drawer-right-form__error-msg">
+                        {"not a valid Title" |> str}
+                      </div> :
+                      ReasonReact.null
+                  }
+                </div>
+                <div className="mt-6">
+                  <label
+                    className="block tracking-wide text-grey-darker text-xs font-semibold"
+                    htmlFor="description">
+                    {" Description" |> str}
+                  </label>
+                  <textarea
+                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    id="description"
+                    placeholder="Type target group description"
+                    value={state.description}
+                    onChange={
+                      event =>
+                        send(
+                          UpdateDescription(
+                            ReactEvent.Form.target(event)##value,
+                          ),
+                        )
+                    }
+                    rows=5
+                    cols=33
+                  />
+                </div>
+                <div className="flex items-center mt-6">
+                  <label
+                    className="block tracking-wide text-grey-darker text-xs font-semibold mr-3">
                     {"Is this a milestone target group?" |> str}
                   </label>
                   <div
-                    className="milestone inline-flex w-64 rounded-lg overflow-hidden border">
+                    className="milestone toggle-button__group inline-flex flex-no-shrink rounded-lg overflow-hidden border">
                     <button
                       onClick={
                         _event => {
@@ -233,64 +237,70 @@ let make =
                     </button>
                   </div>
                 </div>
-                {
-                  switch (targetGroup) {
-                  | Some(_) =>
-                    <div className="flex items-center mb-6">
-                      <label
-                        className="block tracking-wide text-grey-darker text-xs font-semibold mr-6">
-                        {"Is this target group archived" |> str}
-                      </label>
-                      <div
-                        className="archived inline-flex w-64 rounded-lg overflow-hidden border">
-                        <button
-                          onClick=(
-                            _event => {
-                              ReactEvent.Mouse.preventDefault(_event);
-                              send(UpdateIsArchived(true));
-                            }
-                          )
-                          className={
-                            booleanButtonClasses(state.isArchived == true)
-                          }>
-                          {"Yes" |> str}
-                        </button>
-                        <button
-                          onClick=(
-                            _event => {
-                              ReactEvent.Mouse.preventDefault(_event);
-                              send(UpdateIsArchived(false));
-                            }
-                          )
-                          className={
-                            booleanButtonClasses(state.isArchived == false)
-                          }>
-                          {"No" |> str}
-                        </button>
+              </div>
+              <div className="max-w-md p-6 mx-auto">
+                <div className="flex w-full justify-between items-center pt-6 border-t">
+                  {
+                    switch (targetGroup) {
+                    | Some(_) =>
+                      <div className="flex items-center mr-2">
+                        <label
+                          className="block tracking-wide text-grey-darker text-xs font-semibold mr-6">
+                          {"Is this target group archived" |> str}
+                        </label>
+                        <div
+                          className="toggle-button__group archived inline-flex flex-no-shrink rounded-lg overflow-hidden border">
+                          <button
+                            onClick=(
+                              _event => {
+                                ReactEvent.Mouse.preventDefault(_event);
+                                send(UpdateIsArchived(true));
+                              }
+                            )
+                            className={
+                              booleanButtonClasses(state.isArchived == true)
+                            }>
+                            {"Yes" |> str}
+                          </button>
+                          <button
+                            onClick=(
+                              _event => {
+                                ReactEvent.Mouse.preventDefault(_event);
+                                send(UpdateIsArchived(false));
+                              }
+                            )
+                            className={
+                              booleanButtonClasses(state.isArchived == false)
+                            }>
+                            {"No" |> str}
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  | None => ReasonReact.null
+                    | None => ReasonReact.null
+                    }
                   }
-                }
-                <div className="flex">
                   {
                     switch (targetGroup) {
                     | Some(targetGroup) =>
                       let id = targetGroup |> TargetGroup.id;
-                      <button
-                        disabled={saveDisabled(state)}
-                        onClick=(_e => updateTargetGroup(id |> string_of_int))
-                        className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
-                        {"Update Target Group" |> str}
-                      </button>;
+                      <div className="w-auto">
+                        <button
+                          disabled={saveDisabled(state)}
+                          onClick=(_e => updateTargetGroup(id |> string_of_int))
+                          className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none">
+                          {"Update Target Group" |> str}
+                        </button>
+                      </div>;
 
                     | None =>
-                      <button
-                        disabled={saveDisabled(state)}
-                        onClick=(_e => createTargetGroup())
-                        className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
-                        {"Create Target Group" |> str}
-                      </button>
+                      <div className="w-full">
+                        <button
+                          disabled={saveDisabled(state)}
+                          onClick=(_e => createTargetGroup())
+                          className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none">
+                          {"Create Target Group" |> str}
+                        </button>
+                      </div>
                     }
                   }
                 </div>

@@ -113,7 +113,10 @@ let make =
                     <div>
                       <div className="mt-6">
                         <div className="border-b border-grey-light pb-2 mb-4">
-                          {"Students List:" |> str}
+                          {
+                            "These new students will be added to the course:"
+                            |> str
+                          }
                         </div>
                         {
                           switch (state.studentsToAdd) {
@@ -142,16 +145,11 @@ let make =
                                        _event =>
                                          send(RemoveStudentInfo(studentInfo))
                                      )>
-                                     <svg
-                                       className="w-3"
-                                       id="fa3b28d3-128c-4841-a4e9-49257a824d7b"
-                                       xmlns="http://www.w3.org/2000/svg"
-                                       viewBox="0 0 14 15.99">
-                                       <path
-                                         d="M13,1H9A1,1,0,0,0,8,0H6A1,1,0,0,0,5,1H1A1,1,0,0,0,0,2V3H14V2A1,1,0,0,0,13,1ZM11,13a1,1,0,1,1-2,0V7a1,1,0,0,1,2,0ZM8,13a1,1,0,1,1-2,0V7A1,1,0,0,1,8,7ZM5,13a1,1,0,1,1-2,0V7A1,1,0,0,1,5,7Zm8.5-9H.5a.5.5,0,0,0,0,1H1V15a1,1,0,0,0,1,1H12a1,1,0,0,0,1-1V5h.5a.5.5,0,0,0,0-1Z"
-                                         fill="#525252"
-                                       />
-                                     </svg>
+                                     <Icon
+                                       kind=Icon.Delete
+                                       size="4"
+                                       opacity=75
+                                     />
                                    </button>
                                  </div>
                                )
@@ -160,49 +158,47 @@ let make =
                           }
                         }
                       </div>
-                      <div className="mt-6">
-                        <div className="border-b border-grey-light pb-2 mb-2">
-                          <span className="mr-1">
-                            {"Tags applied:" |> str}
-                          </span>
-                        </div>
-                        <SA_StudentsPanel_SearchableTagList
-                          unselectedTags={
-                            studentTags
-                            |> List.filter(tag =>
-                                 !(state.tagsToApply |> List.mem(tag))
-                               )
-                          }
-                          selectedTags={state.tagsToApply}
-                          addTagCB={tag => send(AddTag(tag))}
-                          removeTagCB={tag => send(RemoveTag(tag))}
-                          allowNewTags=true
-                        />
-                      </div>
-                      <div className="flex mt-4">
-                        <button
-                          onClick={
-                            _e =>
-                              saveStudents(
-                                state,
-                                courseId,
-                                authenticityToken,
-                                handleResponseCB(submitFormCB, state),
-                              )
-                          }
-                          className={
-                            "w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3"
-                            ++ (
-                              formInvalid(state) ?
-                                " opacity-50 cursor-not-allowed" : ""
-                            )
-                          }>
-                          {"Save List" |> str}
-                        </button>
-                      </div>
                     </div> :
                     ReasonReact.null
                 }
+                <div className="mt-6">
+                  <span>
+                    {"Apply some tags to these new students:" |> str}
+                  </span>
+                  <SA_StudentsPanel_SearchableTagList
+                    unselectedTags={
+                      studentTags
+                      |> List.filter(tag =>
+                           !(state.tagsToApply |> List.mem(tag))
+                         )
+                    }
+                    selectedTags={state.tagsToApply}
+                    addTagCB={tag => send(AddTag(tag))}
+                    removeTagCB={tag => send(RemoveTag(tag))}
+                    allowNewTags=true
+                  />
+                </div>
+                <div className="flex mt-4">
+                  <button
+                    onClick={
+                      _e =>
+                        saveStudents(
+                          state,
+                          courseId,
+                          authenticityToken,
+                          handleResponseCB(submitFormCB, state),
+                        )
+                    }
+                    className={
+                      "w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3"
+                      ++ (
+                        formInvalid(state) ?
+                          " opacity-50 cursor-not-allowed" : ""
+                      )
+                    }>
+                    {"Save List" |> str}
+                  </button>
+                </div>
               </div>
             </div>
           </div>

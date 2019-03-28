@@ -1,4 +1,4 @@
-ruby '2.6.1'
+ruby '2.6.2'
 
 source 'https://rubygems.org'
 
@@ -19,8 +19,7 @@ gem 'image_processing', '~> 1.2' # Gem to support variants in ActiveStorage
 gem 'webpacker', '~> 4.0'
 
 gem 'coffee-rails', '~> 4.2.0' # Coffeescript on Rails.
-gem 'devise', '~> 4.2' # User auth library.
-gem 'devise_invitable', '~> 1.7' # Allow invites to be sent out.
+gem 'devise', '~> 4.6' # User auth library.
 gem 'jbuilder', '~> 2.6' # Standard part of Rails, but unused, since we don't have an API.
 gem 'jquery-rails', '~> 4.3' # JQuery on Rails.
 gem 'pg', '~> 1.0' # PostgreSQL support.
@@ -54,9 +53,14 @@ gem 'unobtrusive_flash', '= 3.1.0', github: 'mobmewireless/unobtrusive_flash', b
 gem 'friendly_id', '~> 5.2' # Slugs for links. http://norman.github.io/friendly_id
 gem 'lita', '= 5.0.0', github: 'svdotco/lita', require: false # Lita without rack version limitation. TODO: Replace with official version when it drops rack < v2 limitation.
 gem 'lita-slack', '= 1.8.0', github: 'litaio/lita-slack', require: false # Lita adapter for Slack. TODO: removing github repo tracking when gem is updated
-gem 'kramdown', '~> 1.13' # kramdown is a fast, pure Ruby Markdown superset converter, using a strict syntax definition and supporting several common extensions. http://kramdown.gettalong.org
+gem 'kramdown', '~> 2.1' # kramdown is a fast, pure Ruby Markdown superset converter, using a strict syntax definition and supporting several common extensions. http://kramdown.gettalong.org
 gem 'gaffe', '~> 1.2' # Custom error pages. https://github.com/mirego/gaffe
+
 gem 'google_calendar', '= 0.6.4', github: 'northworld/google_calendar' # Thin wrapper over Google Calendar API.
+
+# This is a dependency of google_calendar. Lock the version to 0.4.0 to prevent introduction of sqlite3 into production dependencies.
+gem 'TimezoneParser', '= 0.4.0'
+
 gem 'groupdate', '~> 4.0' # The simplest way to group temporal data. https://github.com/ankane/groupdate
 gem 'videojs_rails', '~> 4.12' # Video JS for Rails 3.1+ Asset Pipeline. https://github.com/seanbehan/videojs_rails
 gem 'react-rails', '~> 2.2' # For automatically transforming JSX and using React in Rails.
@@ -79,7 +83,7 @@ gem 'intercom', '~> 3.5' # Ruby bindings for the Intercom API
 gem 'jspdf-rails', '~> 1.0' # HTML5 client-side pdf generation - for certificates
 gem 'responders', '~> 2.3' # A set of Rails responders to dry up your application (respond_to / with)
 gem 'rollbar', '~> 2.14' # Exception tracking and logging from Ruby to Rollbar https://rollbar.com
-gem 'humanize', '~> 1.3' # Convert numbers to english words
+gem 'humanize', '~> 2.1' # Convert numbers to english words
 gem 'scarf', '~> 0.2' # A Ruby library for generating initial avatars and identicons.
 gem 'descriptive_statistics', '~> 2.5', require: 'descriptive_statistics/safe' # Used to calculate basic stat measures such as std. deviation (eg: To calculate relative performance of startups)
 gem 'kaminari', '~> 1.0' # Scope & Engine based, clean, powerful, customizable and sophisticated paginator.
@@ -97,6 +101,7 @@ gem 'pundit', '~> 2.0' # Minimal authorization through OO design and pure Ruby c
 gem 'rack-cors', '~> 1.0', require: 'rack/cors' # Rack Middleware for handling CORS, required to serve static assets such as fonts
 gem 'jwt', '~> 2.1' # Ruby implementation of the RFC 7519 OAuth JSON Web Token (JWT), used by Zoom API
 gem 'chartkick', '~> 3.0' # Create beautiful charts with one line of JavaScript.
+gem 'graphql', '~> 1.9' # Ruby implementation of GraphQL http://graphql-ruby.org
 
 # Rails assets!
 source 'https://rails-assets.org' do
@@ -136,16 +141,16 @@ group :development do
   gem 'oink', '~> 0.10' # Log parser to identify actions which significantly increase VM heap size
   gem 'logchange', '~> 1.0' # An alternative approach to managing a changelog.
   gem 'meta_request', '~> 0.4' # Chrome extension for Rails development. https://github.com/dejan/rails_panel
+  gem 'graphiql-rails', '~> 1.7'
 end
 
 group :test do
   gem 'rspec-retry', '~> 0.5' # Retry randomly failing rspec example. https://github.com/NoRedInk/rspec-retry
-  gem 'factory_bot_rails', '~> 4.8' # A library for setting up Ruby objects as test data.
+  gem 'factory_bot_rails', '~> 5.0' # A library for setting up Ruby objects as test data.
   gem 'capybara', '~> 3.0' # For RSpec feature tests.
   gem 'capybara-email', '~> 3.0' # Test ActionMailer and Mailer messages with Capybara
   gem 'selenium-webdriver', '~> 3.3'
-  gem 'chromedriver-helper', '~> 2.1' # Easy installation and use of chromedriver, the Chromium project's selenium webdriver adapter.
-  gem 'geckodriver-helper', '~> 0.23' # Easy installation and use of geckodriver, that provides the HTTP API described by the WebDriver protocol to communicate with Gecko browsers, such as Firefox.
+  gem 'webdrivers', '~> 3.0' # Keep your Selenium WebDrivers updated automatically.
   gem 'capybara-screenshot', '~> 1.0' # Save screenshots on failure!
   gem "cuprite", '~> 0.5', require: false # Headless Chrome driver for Capybara.
 end
@@ -168,5 +173,5 @@ group :production do
   gem 'dalli', '~> 2.7' # High performance memcached client for Ruby. https://github.com/petergoldstein/dalli
   gem 'scout_apm', '~> 3.0.x' # detailed Rails application performance analysis.
   gem 'heroku-deflater', '~> 0.6' # Enable gzip compression on heroku, but don't compress images.
-  gem 'aws-sdk-s3', '~> 1.30.1 ', require: false
+  gem 'aws-sdk-s3', '~> 1.35 ', require: false
 end

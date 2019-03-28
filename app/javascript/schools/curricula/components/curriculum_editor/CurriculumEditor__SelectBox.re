@@ -46,16 +46,7 @@ let make = (~items, ~multiSelectCB, _children) => {
                        multiSelectCB(_key, value, false);
                      }
                    }>
-                   <svg
-                     className="w-3"
-                     id="fa3b28d3-128c-4841-a4e9-49257a824d7b"
-                     xmlns="http://www.w3.org/2000/svg"
-                     viewBox="0 0 14 15.99">
-                     <path
-                       d="M13,1H9A1,1,0,0,0,8,0H6A1,1,0,0,0,5,1H1A1,1,0,0,0,0,2V3H14V2A1,1,0,0,0,13,1ZM11,13a1,1,0,1,1-2,0V7a1,1,0,0,1,2,0ZM8,13a1,1,0,1,1-2,0V7A1,1,0,0,1,8,7ZM5,13a1,1,0,1,1-2,0V7A1,1,0,0,1,5,7Zm8.5-9H.5a.5.5,0,0,0,0,1H1V15a1,1,0,0,0,1,1H12a1,1,0,0,0,1-1V5h.5a.5.5,0,0,0,0-1Z"
-                       fill="#525252"
-                     />
-                   </svg>
+                   <Icon kind=Icon.Delete size="4" opacity=75 />
                  </button>
                </div>
              )

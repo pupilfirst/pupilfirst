@@ -21,17 +21,11 @@ class TimelineEvent < ApplicationRecord
 
   MAX_DESCRIPTION_CHARACTERS = 500
 
-  GRADE_GOOD = 'good'
-  GRADE_GREAT = 'great'
-  GRADE_WOW = 'wow'
-
   validates :description, presence: true
 
   accepts_nested_attributes_for :timeline_event_files, allow_destroy: true
 
   scope :from_admitted_startups, -> { joins(:founders).where(founders: { startup: Startup.admitted }) }
-  scope :not_dropped_out, -> { joins(:founders).where(founders: { startup: Startup.not_dropped_out }) }
-  scope :from_approved_startups, -> { joins(:founders).where(founders: { startup: Startup.approved }) }
   scope :not_private, -> { joins(:target).where.not(targets: { role: Target::ROLE_FOUNDER }) }
   scope :not_improved, -> { joins(:target).where(improved_timeline_event_id: nil) }
   scope :not_auto_verified, -> { joins(:evaluation_criteria).distinct }
@@ -114,19 +108,6 @@ class TimelineEvent < ApplicationRecord
     links.reject { |l| l[:private] }.present?
   end
 
-  def points_for_grade
-    minimum_point_for_target = target&.points_earnable
-    return minimum_point_for_target if grade.blank?
-
-    multiplier = {
-      GRADE_GOOD => 1,
-      GRADE_GREAT => 1.5,
-      GRADE_WOW => 2
-    }.with_indifferent_access[grade]
-
-    minimum_point_for_target * multiplier
-  end
-
   def attachments_for_founder(founder)
     privileged = privileged_founder?(founder)
     attachments = []
@@ -170,8 +151,14 @@ class TimelineEvent < ApplicationRecord
     { 1 => 'good', 2 => 'great', 3 => 'wow' }[score.floor]
   end
 
+  # TODO: Remove TimelineEvent#startup when possible.
   def startup
-    founders.includes(:startup).first.startup
+    first_founder = founders.first
+
+    raise "TimelineEvent##{id} does not have any linked founders" if first_founder.blank?
+
+    # TODO: This is a hack. Remove TimelineEvent#startup method after all of its usages have been deleted.
+    first_founder.startup
   end
 
   def founder

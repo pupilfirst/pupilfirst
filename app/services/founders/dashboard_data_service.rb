@@ -100,7 +100,7 @@ module Founders
     end
 
     def target_fields
-      %i[id role title description completion_instructions resource_url slideshow_embed video_embed youtube_video_id days_to_complete points_earnable resubmittable session_at link_to_complete call_to_action sort_index]
+      %i[id role title description completion_instructions resource_url slideshow_embed video_embed youtube_video_id days_to_complete resubmittable session_at link_to_complete call_to_action sort_index]
     end
 
     def targets_with_criteria

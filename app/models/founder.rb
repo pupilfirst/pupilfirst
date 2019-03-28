@@ -44,7 +44,6 @@ class Founder < ApplicationRecord
   has_one_attached :avatar
 
   scope :admitted, -> { joins(:startup).merge(Startup.admitted) }
-  scope :not_dropped_out, -> { joins(:startup).merge(Startup.not_dropped_out) }
   scope :startup_members, -> { where 'startup_id IS NOT NULL' }
   scope :missing_startups, -> { where('startup_id NOT IN (?)', Startup.pluck(:id)) }
   scope :non_founders, -> { where(startup_id: nil) }
@@ -148,12 +147,12 @@ class Founder < ApplicationRecord
   end
 
   def founder?
-    startup.present? && startup.approved?
+    startup.present?
   end
 
-  # The option to create connect requests is restricted to tapproved startups.
+  # The option to create connect requests is restricted to non exited founders
   def can_connect?
-    startup.present? && startup.approved?
+    startup.present? && !exited
   end
 
   def pending_connect_request_for?(faculty)

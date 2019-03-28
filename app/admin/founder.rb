@@ -88,10 +88,6 @@ ActiveAdmin.register Founder do
       founder.startup&.product_name
     end
 
-    column :company do |founder|
-      founder.startup&.legal_registered_name
-    end
-
     column :roles do |founder|
       founder.roles.join ', '
     end

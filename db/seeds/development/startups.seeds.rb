@@ -14,7 +14,6 @@ after 'development:levels' do
   Startup.create!(
     level: startup_course_level_1,
     product_name: 'Super Product',
-    legal_registered_name: 'SuperTech Ltd'
   )
 
   # A second 'Avengers' startup.

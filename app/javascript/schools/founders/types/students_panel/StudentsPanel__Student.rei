@@ -16,6 +16,8 @@ let email: t => string;
 
 let tags: t => list(string);
 
-let updateInfo: (string, string, t) => t;
+let updateInfo: (string, string, bool, t) => t;
 
 let encode: t => Js.Json.t;
+
+let exited: t => bool;

@@ -213,11 +213,11 @@ let make =
                     <div className="flex items-center flex-no-shrink">
                       <label
                         className="block tracking-wide text-grey-darker text-xs font-semibold mr-3"
-                        htmlFor="archived">
+                        htmlFor="dropped_out_buttons">
                         {"Has this student dropped out?" |> str}
                       </label>
                       <div
-                        id="archived"
+                        id="dropped_out_buttons"
                         className="flex flex-no-shrink rounded-lg overflow-hidden border">
                         <button
                           onClick={

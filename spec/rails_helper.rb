@@ -117,7 +117,15 @@ RSpec.configure do |config|
 end
 
 Capybara.register_driver :chrome do |app|
-  Capybara::Selenium::Driver.new(app, browser: :chrome)
+  Capybara::Selenium::Driver.new(
+    app,
+    browser: :chrome,
+    desired_capabilities: {
+      "chromeOptions" => {
+        "args" => %w[window-size=1024,768]
+      }
+    }
+  )
 end
 
 Capybara.register_driver :headless_chrome do |app|

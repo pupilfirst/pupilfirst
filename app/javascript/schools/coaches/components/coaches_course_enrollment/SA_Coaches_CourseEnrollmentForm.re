@@ -99,7 +99,7 @@ let make =
       Api.create(url, payload, handleResponseCB, handleErrorCB);
     };
     <div className="blanket">
-      <div className="drawer-right relative">
+      <div className="drawer-right">
         <div className="drawer-right__close absolute">
           <button
             onClick=(_e => closeFormCB())

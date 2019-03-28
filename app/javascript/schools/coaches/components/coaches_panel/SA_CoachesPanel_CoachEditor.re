@@ -280,7 +280,7 @@ let make =
       };
     };
     <div className="blanket">
-      <div className="drawer-right relative">
+      <div className="drawer-right">
         <div className="drawer-right__close absolute">
           <button
             onClick=(_e => closeFormCB())

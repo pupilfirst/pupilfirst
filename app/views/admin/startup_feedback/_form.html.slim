@@ -3,7 +3,7 @@
 = semantic_form_for [:admin, @startup_feedback] do |f|
   = f.semantic_errors *f.object.errors.keys
   = f.inputs 'Feedback details' do
-    = f.input :startup, collection: Startup.where.not(product_name: nil).order(:product_name), label: 'Product', required: true
+    = f.input :startup, collection: Startup.where.not(name: nil).order(:name), label: 'Product', required: true
     = f.input :faculty, as: :select, required: true, collection: Faculty.order(:name), selected: @startup_feedback&.faculty&.id || current_admin_user&.faculty&.id
     = f.hidden_field :feedback
     .label-replica
@@ -18,7 +18,7 @@
 
     - if timeline_event.present?
       = f.input :timeline_event_id, as: :hidden, input_html: { value: timeline_event.id }
-      div Timeline Event from #{timeline_event.startup.product_name} for type #{timeline_event.title} will be linked to this feedback.
+      div Timeline Event from #{timeline_event.startup.name} for type #{timeline_event.title} will be linked to this feedback.
 
   = f.submit
 br

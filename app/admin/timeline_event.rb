@@ -23,7 +23,7 @@ ActiveAdmin.register TimelineEvent do
       startup = timeline_event.startup
 
       a href: admin_startup_path(startup) do
-        span startup.product_name
+        span startup.name
       end
     end
 
@@ -106,7 +106,7 @@ ActiveAdmin.register TimelineEvent do
         startup = timeline_event.startup
 
         a href: admin_startup_path(startup) do
-          span startup.product_name
+          span startup.name
         end
       end
 

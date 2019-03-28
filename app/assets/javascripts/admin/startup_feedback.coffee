@@ -15,13 +15,13 @@ showStartupFeedback = ->
 onSuccess = (data, status) ->
   if data.feedback
     $("#feedback-table").show()
-    $("#feedback-list-title").html("Previous Feedback for #{data.product_name}")
+    $("#feedback-list-title").html("Previous Feedback for #{data.name}")
     $("#feedback-table-body").html("")
     $.each(data.feedback, appendRow)
     $( "tr:odd" ).addClass("odd")
     $( "tr:even" ).addClass("even")
   else
-    $("#feedback-list-title").html("#{data.startup_product_name} has no previous feedback.")
+    $("#feedback-list-title").html("#{data.startup_name} has no previous feedback.")
     $("#feedback-table").hide()
 
 appendRow = (index, feedback) ->

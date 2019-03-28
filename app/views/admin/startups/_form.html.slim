@@ -1,7 +1,7 @@
 = semantic_form_for [:admin, @startup] do |f|
   = f.semantic_errors *f.object.errors.keys
   = f.inputs 'Startup Details' do
-    = f.input :product_name, required: true
+    = f.input :name, required: true
     = f.input :level, include_blank: false, required: true, collection: Level.where('number > ?',0)
     = f.input :founders, collection: Hash[@startup.possible_founders.map{ |b| [b.to_s,b.id] }], input_html: { style: "width: 400px;" }
     = f.input :slug

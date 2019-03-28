@@ -13,37 +13,37 @@ after 'development:levels' do
   # Startup with live agreement.
   Startup.create!(
     level: startup_course_level_1,
-    product_name: 'Super Product',
+    name: 'Super Product',
   )
 
   # A second 'Avengers' startup.
   Startup.create!(
     level: startup_course_level_1,
-    product_name: 'The Avengers'
+    name: 'The Avengers'
   )
 
   # Third startup 'Justice League' for developer course
   Startup.create!(
     level: developer_course_level_1,
-    product_name: 'Justice League'
+    name: 'Justice League'
   )
 
   # Fourth startup 'Guardians of the Galaxy' for VR course
   Startup.create!(
     level: vr_course_level_1,
-    product_name: 'Guardians of the Galaxy'
+    name: 'Guardians of the Galaxy'
   )
 
   ['iOS Guy 2', 'iOS Guy 3'].each do |startup_name|
     Startup.create!(
-      product_name: startup_name,
+      name: startup_name,
       level: ios_course_level_1
     )
   end
 
   ['iOS Startup', 'iOS Startup 2'].each do |startup_name|
     Startup.create!(
-      product_name: startup_name,
+      name: startup_name,
       level: ios_course_level_2
     )
   end
@@ -51,6 +51,6 @@ after 'development:levels' do
   # A startup for Admin in VR course
   Startup.create!(
     level: vr_course_level_1,
-    product_name: 'School Admin'
+    name: 'School Admin'
   )
 end

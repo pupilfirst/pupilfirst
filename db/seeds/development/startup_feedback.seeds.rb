@@ -2,7 +2,7 @@ require_relative 'helper'
 
 after 'development:timeline_events', 'development:faculty' do
   puts 'Seeding startup_feedback'
-  avengers = Startup.find_by(product_name: 'The Avengers')
+  avengers = Startup.find_by(name: 'The Avengers')
 
   graded_event = TimelineEvent.joins(:timeline_event_grades).joins(:founders).where(founders: { id: avengers.founders.pluck(:id) }).last
   mickey = Faculty.find_by(name: 'Sanjay Vijayakumar')

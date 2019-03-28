@@ -46,7 +46,7 @@
                     - if @founder.roles.present?
                       = @founder.roles.map { |role| t("models.founder.role.#{role}") }.join ', '
                       ' &nbsp;at
-                    = @founder.startup.product_name
+                    = @founder.startup.name
               - if @founder.social_url_present?
                 .col-lg-6.social-connect.px-0.mt-3.mt-lg-0.text-center.text-md-left.text-lg-right
                   - if @founder.linkedin_url.present?

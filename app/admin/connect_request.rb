@@ -9,7 +9,7 @@ ActiveAdmin.register ConnectRequest do
   scope :cancelled
 
   filter :connect_slot_faculty_name, as: :string, label: 'Name of Faculty'
-  filter :startup_product_name, as: :string
+  filter :startup_name, as: :string
   filter :questions
   filter :status, as: :select, collection: -> { ConnectRequest.valid_statuses }
   filter :meeting_link
@@ -153,7 +153,7 @@ ActiveAdmin.register ConnectRequest do
       f.input :connect_slot,
         collection: (resource.persisted? ? ConnectSlot.available.or(ConnectSlot.includes(:connect_request).where(id: resource.connect_slot.id)) : ConnectSlot.available).includes(:faculty),
         required: true
-      f.input :startup, label: 'Product', collection: Startup.order(:product_name), required: true
+      f.input :startup, label: 'Product', collection: Startup.order(:name), required: true
       f.input :questions
     end
 
@@ -162,7 +162,7 @@ ActiveAdmin.register ConnectRequest do
 
   csv do
     column :startup do |connect_request|
-      connect_request.startup&.product_name
+      connect_request.startup&.name
     end
     column :faculty_name do |connect_request|
       connect_request.faculty&.name

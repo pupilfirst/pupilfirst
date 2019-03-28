@@ -32,7 +32,7 @@ class Startup < ApplicationRecord
   friendly_id :slug_candidates, use: :slugged
 
   validates :slug, format: { with: /\A[a-z0-9\-_]+\z/i }, allow_nil: true
-  validates :product_name, presence: true
+  validates :name, presence: true
 
   validates :level, presence: true
 
@@ -44,7 +44,7 @@ class Startup < ApplicationRecord
 
   before_validation do
     # Default product name to 'Untitled Product' if absent
-    self.product_name ||= 'Untitled Product'
+    self.name ||= 'Untitled Product'
   end
 
   before_destroy do
@@ -87,10 +87,10 @@ class Startup < ApplicationRecord
   # Try building a slug based on the following fields in
   # increasing order of specificity.
   def slug_candidates
-    name = product_name.parameterize
+    parameterized_name = name.parameterize
     [
-      name,
-      [name, :id]
+      parameterized_name,
+      [parameterized_name, :id]
     ]
   end
 
@@ -100,9 +100,7 @@ class Startup < ApplicationRecord
   end
 
   def display_name
-    label = product_name
-    label += " (#{name})" if name.present?
-    label
+    name
   end
 
   def timeline_events

@@ -5,7 +5,7 @@ module Startups
     end
 
     def base64_svg
-      logo = Scarf::Identicon.new "#{@startup.product_name}.#{@startup.id}", options
+      logo = Scarf::Identicon.new "#{@startup.name}.#{@startup.id}", options
       Base64.encode64(logo.to_blob)
     end
 
@@ -16,8 +16,8 @@ module Startups
     end
 
     def color
-      possible_color = @startup.product_name.split.first.downcase
-      possible_color.in?(ProductNameGeneratorService.new.colors) ? possible_color : nil
+      possible_color = @startup.name.split.first.downcase
+      possible_color.in?(NameGeneratorService.new.colors) ? possible_color : nil
     end
   end
 end

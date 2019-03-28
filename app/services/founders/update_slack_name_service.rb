@@ -24,7 +24,7 @@ module Founders
       {
         profile: {
           first_name: @founder.name,
-          last_name: "(#{@founder.startup.product_name})"
+          last_name: "(#{@founder.startup.name})"
         }.to_json
       }
     end

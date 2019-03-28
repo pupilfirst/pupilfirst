@@ -8,7 +8,7 @@ module Schools
 
       def save
         Founder.transaction do
-          model.startup.update!(product_name: team_name)
+          model.startup.update!(name: team_name)
           model.name = name
           model.tag_list = tags
           model.save!

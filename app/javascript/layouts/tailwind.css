@@ -8,3 +8,13 @@ body {
     color: #3A3F52;
     @apply .antialiased;
 }
+
+/* Gradients */
+@responsive {
+  .bg-gradient-primary-to-primary-dark-120 {
+    background-image: linear-gradient(120deg, config('colors.primary'), config('colors.primary-dark'));
+  }
+  .bg-gradient-secondary-to-secondary-dark-120 {
+    background-image: linear-gradient(120deg, config('colors.secondary'), config('colors.secondary-dark'));
+  }
+}

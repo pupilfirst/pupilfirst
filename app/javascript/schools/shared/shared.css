@@ -27,6 +27,20 @@ button:disabled, .disabled {
     width: 64px;
 }
 
+.global-sidebar__primary-nav-link {
+    @apply .flex .text-white .font-semibold .no-underline .items-center;
+}
+
+.global-sidebar__primary-nav-link:hover {
+    @apply .bg-primary-dark;
+}
+
+.global-sidebar__primary-nav-link--active {
+    background-color: white;
+    @apply .text-primary;
+    box-shadow: inset 4px 0 0 0 config('colors.yellow');
+}
+
 .blanket {
     bottom: 0px;
     left: 0px;

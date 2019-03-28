@@ -13,15 +13,24 @@ let str = ReasonReact.string;
 
 let formInvalid = state => state.studentsToAdd |> List.length < 1;
 let handleErrorCB = () => ();
+
+/* Get the tags applied to a list of students. */
+let appliedTags = students =>
+  students
+  |> List.map(student => student |> StudentInfo.tags)
+  |> List.flatten
+  |> ListUtils.distinct;
+
+/*
+ * This is a union of tags reported by the parent component, and tags currently applied to students listed in the form. This allows the
+ * form to suggest tags that haven't yet been persisted, but have been applied to at least one of the students in the list.
+ */
+let allKnownTags = (incomingTags, appliedTags) =>
+  incomingTags |> List.append(appliedTags) |> ListUtils.distinct;
+
 let handleResponseCB = (submitCB, state, json) => {
   let teams = json |> Json.Decode.(field("teams", list(Team.decode)));
-
-  /* Extract tags from studentsToAdd */
-  let tags =
-    state.studentsToAdd
-    |> List.map(student => student |> StudentInfo.tags)
-    |> List.flatten
-    |> ListUtils.distinct;
+  let tags = state.studentsToAdd |> appliedTags;
 
   submitCB(teams, tags);
   Notification.success("Success", "Student(s) created successfully");
@@ -93,7 +102,12 @@ let make =
                   addToListCB={
                     studentInfo => send(AddStudentInfo(studentInfo))
                   }
-                  studentTags
+                  studentTags={
+                    allKnownTags(
+                      studentTags,
+                      state.studentsToAdd |> appliedTags,
+                    )
+                  }
                 />
                 <div>
                   <div className="mt-6">

@@ -109,6 +109,19 @@ button:disabled, .disabled {
     @apply .bg-grey-light;
 }
 
+.toggle-button__group {
+    position: relative;
+}
+.toggle-button__group::before {
+    content:'';
+    position: absolute;
+    width: 1px;
+    height: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #dae1e7;
+}
+
 .toggle-button__button {
     transition: .3s cubic-bezier(0, 0, 0, 1);
 }

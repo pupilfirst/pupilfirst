@@ -264,10 +264,12 @@ let isValidQuiz = quiz =>
      )
   |> List.length == 0;
 
-let booleanButtonClasses = bool =>
-  bool ?
-    "w-1/2 bg-grey hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none" :
-    "w-1/2 bg-white hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none";
+let booleanButtonClasses = bool =>{
+  let classes = "w-1/2 bg-white toggle-button__button hover:text-purple-dark text-sm font-semibold py-2 px-6 focus:outline-none";
+  classes ++ (bool ?
+    " text-purple shadow-inner" :
+    " text-grey-dark");
+};
 
 let completionButtonClasses = value =>
   value ?
@@ -655,7 +657,7 @@ let make =
                                send(RemoveResource(_key));
                              }
                            }>
-                           <Icon kind=Icon.Delete size=4 opacity=75 />
+                           <Icon kind=Icon.Delete size="4" opacity=75 />
                          </button>
                        </div>
                      )
@@ -699,7 +701,7 @@ let make =
                   </label>
                   <div
                     id="evaluated"
-                    className="inline-flex w-64 rounded-lg overflow-hidden border">
+                    className="flex toggle-button__group flex-no-shrink rounded-lg overflow-hidden border">
                     <button
                       onClick={
                         _event => {
@@ -910,18 +912,22 @@ let make =
                   | NotSelected => ReasonReact.null
                   }
                 }
+              </div>
+            </div>
+            <div className="bg-white py-6">
+              <div className="flex max-w-md w-full justify-between items-center px-6 mx-auto">
                 {
                   switch (target) {
                   | Some(_) =>
-                    <div className="flex items-center mb-6">
+                    <div className="flex items-center flex-no-shrink">
                       <label
-                        className="block tracking-wide text-grey-darker text-xs font-semibold mr-6"
+                        className="block tracking-wide text-grey-darker text-xs font-semibold mr-3"
                         htmlFor="archived">
                         {"Is this target archived?" |> str}
                       </label>
                       <div
                         id="archived"
-                        className="inline-flex w-64 rounded-lg overflow-hidden border">
+                        className="flex toggle-button__group flex-no-shrink rounded-lg overflow-hidden border">
                         <button
                           onClick=(
                             _event => {
@@ -951,28 +957,30 @@ let make =
                   | None => ReasonReact.null
                   }
                 }
-              </div>
-            </div>
-            <div className="flex max-w-md w-full px-6 pb-5 mx-auto">
-              {
-                switch (target) {
-                | Some(target) =>
-                  <button
-                    disabled={saveDisabled(state)}
-                    onClick=(_e => updateTarget(target |> Target.id))
-                    className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none mt-3">
-                    {"Update Target" |> str}
-                  </button>
+                {
+                  switch (target) {
+                  | Some(target) =>
+                    <div className="w-auto">
+                      <button
+                        disabled={saveDisabled(state)}
+                        onClick=(_e => updateTarget(target |> Target.id))
+                        className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
+                        {"Update Target" |> str}
+                      </button>
+                    </div>
 
-                | None =>
-                  <button
-                    disabled={saveDisabled(state)}
-                    onClick=(_e => createTarget())
-                    className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none mt-3">
-                    {"Create Target" |> str}
-                  </button>
+                  | None =>
+                    <div className="w-full">
+                      <button
+                        disabled={saveDisabled(state)}
+                        onClick=(_e => createTarget())
+                        className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none mt-3">
+                        {"Create Target" |> str}
+                      </button>
+                    </div>
+                  }
                 }
-              }
+              </div>
             </div>
           </div>
         </div>

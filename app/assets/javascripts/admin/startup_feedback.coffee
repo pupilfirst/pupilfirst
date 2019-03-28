@@ -21,7 +21,7 @@ onSuccess = (data, status) ->
     $( "tr:odd" ).addClass("odd")
     $( "tr:even" ).addClass("even")
   else
-    $("#feedback-list-title").html("#{data.startup_name} has no previous feedback.")
+    $("#feedback-list-title").html("#{data.startup_product_name} has no previous feedback.")
     $("#feedback-table").hide()
 
 appendRow = (index, feedback) ->

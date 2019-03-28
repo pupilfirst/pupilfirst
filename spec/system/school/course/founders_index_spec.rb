@@ -63,6 +63,7 @@ feature 'Founders Index' do
     expect(founder_1.name).to eq(name_1)
     expect(founder_2.name).to eq(name_2)
 
+    # try adding an existing student
     click_button 'Add New Students'
     fill_in 'Name', with: name_1
     fill_in 'Email', with: email_1
@@ -72,6 +73,7 @@ feature 'Founders Index' do
     find('.ui-pnotify-container').click
     click_button 'close'
 
+    # Update a student
     find("a", text: name_1).click
     expect(page).to have_text(founder_1.name)
     expect(page).to have_text(founder_1.startup.product_name)
@@ -82,6 +84,7 @@ feature 'Founders Index' do
     founder_1.reload
     expect(founder_1.startup.product_name).to eq(new_product_name)
 
+    # Form a Team
     check "#{name_1}_checkbox"
     check "#{name_2}_checkbox"
     click_button 'Group as Team'
@@ -92,6 +95,7 @@ feature 'Founders Index' do
     expect(founder_1.startup.product_name).to eq(founder_2.startup.product_name)
     expect(page).to have_text(founder_1.startup.product_name)
 
+    # Move out from a team
     check "#{name_1}_checkbox"
     click_button 'Move out from Team'
     expect(page).to have_text("Teams updated successfully")
@@ -99,5 +103,19 @@ feature 'Founders Index' do
     founder_1.reload
     founder_2.reload
     expect(founder_1.startup.id).not_to eq(founder_2.startup.id)
+
+    # Mark a student as exited
+    founder = startup_2.founders.last
+    find("a", text: founder.name).click
+    expect(page).to have_text(founder.name)
+    expect(page).to have_text(founder.startup.product_name)
+    within("div#dropped_out_buttons") do
+      click_button 'Yes'
+    end
+    click_button 'Update Student'
+    expect(page).to have_text("Student updated successfully")
+    find('.ui-pnotify-container').click
+    founder.reload
+    expect(founder.exited).to eq(true)
   end
 end

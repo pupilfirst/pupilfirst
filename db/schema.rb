@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_27_075524) do
+ActiveRecord::Schema.define(version: 2019_03_28_100443) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -458,7 +458,6 @@ ActiveRecord::Schema.define(version: 2019_03_27_075524) do
     t.datetime "updated_at"
     t.string "product_name"
     t.string "slug"
-    t.string "legal_registered_name"
     t.integer "level_id"
     t.bigint "faculty_id"
     t.index ["faculty_id"], name: "index_startups_on_faculty_id"

@@ -66,12 +66,6 @@ ActiveAdmin.register Founder do
           span do
             founder.startup.try(:product_name)
           end
-
-          if founder.startup.name.present?
-            span do
-              " (#{founder.startup.name})"
-            end
-          end
         end
       end
     end
@@ -86,10 +80,6 @@ ActiveAdmin.register Founder do
 
     column :product do |founder|
       founder.startup&.product_name
-    end
-
-    column :company do |founder|
-      founder.startup&.legal_registered_name
     end
 
     column :roles do |founder|
@@ -145,12 +135,6 @@ ActiveAdmin.register Founder do
           a href: admin_startup_path(founder.startup) do
             span do
               founder.startup.try(:product_name)
-            end
-
-            if founder.startup.name.present?
-              span do
-                " (#{founder.startup.name})"
-              end
             end
           end
         end

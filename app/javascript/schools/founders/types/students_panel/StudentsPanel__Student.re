@@ -6,6 +6,7 @@ type t = {
   teamName: string,
   email: string,
   tags: list(string),
+  exited: bool,
 };
 
 let name = t => t.name;
@@ -22,7 +23,14 @@ let email = t => t.email;
 
 let tags = t => t.tags;
 
-let updateInfo = (name, teamName, student) => {...student, name, teamName};
+let exited = t => t.exited;
+
+let updateInfo = (name, teamName, exited, student) => {
+  ...student,
+  name,
+  teamName,
+  exited,
+};
 
 let decode = json =>
   Json.Decode.{
@@ -33,6 +41,7 @@ let decode = json =>
     teamName: json |> field("teamName", string),
     email: json |> field("email", string),
     tags: json |> field("tags", list(string)),
+    exited: json |> field("exited", bool),
   };
 
 let encode = t =>
@@ -44,5 +53,6 @@ let encode = t =>
       ("team_id", t.teamId |> int),
       ("team_name", t.teamName |> string),
       ("email", t.email |> string),
+      ("exited", t.exited |> bool),
     ])
   );

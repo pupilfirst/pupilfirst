@@ -7,6 +7,7 @@ type state = {
   hasNameError: bool,
   hasTeamNameError: bool,
   tagsToApply: list(string),
+  exited: bool,
 };
 
 type action =
@@ -14,7 +15,8 @@ type action =
   | UpdateTeamName(string)
   | UpdateErrors(bool, bool)
   | AddTag(string)
-  | RemoveTag(string);
+  | RemoveTag(string)
+  | UpdateExited(bool);
 
 let component = ReasonReact.reducerComponent("SA_StudentsPanel_UpdateForm");
 
@@ -48,7 +50,7 @@ let updateStudent = (student, state, authenticityToken, responseCB) => {
     authenticityToken |> Js.Json.string,
   );
   let updatedStudent =
-    student |> Student.updateInfo(state.name, state.teamName);
+    student |> Student.updateInfo(state.name, state.teamName, state.exited);
 
   Js.Dict.set(payload, "founder", updatedStudent |> Student.encode);
   Js.Dict.set(
@@ -59,6 +61,11 @@ let updateStudent = (student, state, authenticityToken, responseCB) => {
 
   let url = "/school/students/" ++ (student |> Student.id |> string_of_int);
   Api.update(url, payload, responseCB, handleErrorCB);
+};
+
+let booleanButtonClasses = bool => {
+  let classes = "w-1/2 toggle-button__button hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none";
+  classes ++ (bool ? " bg-grey" : " bg-white");
 };
 
 let make =
@@ -77,6 +84,7 @@ let make =
     hasNameError: false,
     hasTeamNameError: false,
     tagsToApply: student |> Student.tags,
+    exited: student |> Student.exited,
   },
   reducer: (action, state) =>
     switch (action) {
@@ -94,6 +102,7 @@ let make =
         ...state,
         tagsToApply: state.tagsToApply |> List.filter(t => t !== tag),
       })
+    | UpdateExited(exited) => ReasonReact.Update({...state, exited})
     },
   render: ({state, send}) =>
     <div>
@@ -198,26 +207,61 @@ let make =
                     allowNewTags=true
                   />
                 </div>
-                <div className="flex">
-                  <button
-                    onClick={
-                      _e =>
-                        updateStudent(
-                          student,
-                          state,
-                          authenticityToken,
-                          handleResponseCB(submitFormCB, state),
-                        )
-                    }
-                    className={
-                      "w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3"
-                      ++ (
-                        formInvalid(state) ?
-                          " opacity-50 cursor-not-allowed" : ""
-                      )
-                    }>
-                    {"Update Student" |> str}
-                  </button>
+                <div className="bg-white py-6">
+                  <div
+                    className="flex max-w-md w-full justify-between items-center px-6 mx-auto">
+                    <div className="flex items-center flex-no-shrink">
+                      <label
+                        className="block tracking-wide text-grey-darker text-xs font-semibold mr-3"
+                        htmlFor="dropped_out_buttons">
+                        {"Has this student dropped out?" |> str}
+                      </label>
+                      <div
+                        id="dropped_out_buttons"
+                        className="flex flex-no-shrink rounded-lg overflow-hidden border">
+                        <button
+                          onClick={
+                            _event => {
+                              ReactEvent.Mouse.preventDefault(_event);
+                              send(UpdateExited(true));
+                            }
+                          }
+                          className={
+                            booleanButtonClasses(state.exited == true)
+                          }>
+                          {"Yes" |> str}
+                        </button>
+                        <button
+                          onClick={
+                            _event => {
+                              ReactEvent.Mouse.preventDefault(_event);
+                              send(UpdateExited(false));
+                            }
+                          }
+                          className={
+                            booleanButtonClasses(state.exited == false)
+                          }>
+                          {"No" |> str}
+                        </button>
+                      </div>
+                    </div>
+                    <div className="w-auto">
+                      <button
+                        disabled={formInvalid(state)}
+                        onClick={
+                          _e =>
+                            updateStudent(
+                              student,
+                              state,
+                              authenticityToken,
+                              handleResponseCB(submitFormCB, state),
+                            )
+                        }
+                        className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
+                        {"Update Student" |> str}
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

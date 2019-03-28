@@ -151,7 +151,7 @@ let make =
                                    _event =>
                                      send(RemoveStudentInfo(studentInfo))
                                  )>
-                                 <Icon kind=Icon.Delete size=4 opacity=75 />
+                                 <Icon kind=Icon.Delete size="4" opacity=75 />
                                </button>
                              </div>
                            )

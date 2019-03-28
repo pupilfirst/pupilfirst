@@ -34,7 +34,8 @@ module Schools
             teamId: student.startup.id,
             teamName: student.startup.product_name,
             email: student.user.email,
-            tags: student.tag_list & founder_tags
+            tags: student.tag_list & founder_tags,
+            exited: student.exited
           }
         end
       end

@@ -46,6 +46,7 @@ Rails.application.routes.draw do
       resources :faculty, as: 'coaches', path: 'coaches', only: [] do
         collection do
           get '/', action: 'course_index'
+          post 'update_enrollments'
         end
 
         member do

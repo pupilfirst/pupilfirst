@@ -21,6 +21,7 @@ type state = {
   connectLink: string,
   notifyForSubmission: bool,
   imageFileName: string,
+  imageFileUpdated: bool,
   dirty: bool,
   saving: bool,
   hasNameError: bool,
@@ -39,6 +40,7 @@ type action =
   | UpdatePublic(bool)
   | UpdateNotifyForSubmission(bool)
   | UpdateImageFileName(string)
+  | UpdateImageFileUpdated(bool)
   | UpdateSaving;
 
 let component = ReasonReact.reducerComponent("SA_CoachesPanel_CoachEditor");
@@ -123,6 +125,7 @@ let make =
         hasTitleError: false,
         hasLinkedInUrlError: false,
         hasConnectLinkError: false,
+        imageFileUpdated: false,
         imageFileName: ""
       }
     | Some(coach) => {
@@ -149,6 +152,7 @@ let make =
         hasTitleError: false,
         hasLinkedInUrlError: false,
         hasConnectLinkError: false,
+        imageFileUpdated: false,
         imageFileName:
           switch (coach |> Coach.imageFileName) {
           | Some(imageFileName) => imageFileName
@@ -184,6 +188,7 @@ let make =
       ReasonReact.Update({...state, notifyForSubmission, dirty: true})
     | UpdateSaving => ReasonReact.Update({...state, saving: ! state.saving})
     | UpdateImageFileName(imageFileName) => ReasonReact.Update({...state, imageFileName, dirty: true})
+    | UpdateImageFileUpdated(imageFileUpdated) => ReasonReact.Update({...state, imageFileUpdated, dirty: true})
     },
   render: ({state, send}) => {
     let formId = "coach-create-form";
@@ -442,7 +447,7 @@ let make =
                     <label
                       className="block w-1/2 tracking-wide text-grey-darker text-xs font-semibold mr-6"
                       htmlFor="evaluated">
-                      ("Should the faculty profile be public?" |> str)
+                      ("Should the coach profile be public?" |> str)
                     </label>
                     <div
                       id="notification"
@@ -538,12 +543,14 @@ let make =
                          required=false
                          multiple=false
                          onChange={
-                          event =>
+                          event => {
+                            send(UpdateImageFileUpdated(true));
                             send(
                               UpdateImageFileName(
                                 ReactEvent.Form.target(event)##files[0]##name,
                               ),
-                            )
+                            );
+                          }
                         }
                        />
                        <label
@@ -557,6 +564,11 @@ let make =
                          </span>
                        </label>
                      </div>
+                  <input
+                        type_="hidden"
+                        name="faculty[image_updated]"
+                        value={state.imageFileUpdated |> string_of_bool}
+                  />
                   <div className="flex max-w-md w-full px-6 pb-5 mx-auto">
                     (
                       switch (coach) {

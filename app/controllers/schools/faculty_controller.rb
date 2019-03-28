@@ -49,6 +49,23 @@ module Schools
       render layout: 'course'
     end
 
+    # POST /school/courses/:course_id/coaches/update_enrollments
+    def update_enrollments
+      course = courses.find(params[:course_id])
+      @course = authorize(course, policy_class: Schools::FacultyPolicy)
+      enrolled_coach_ids = params[:coach_ids]
+      FacultyCourseEnrollment.transaction do
+        coaches = Faculty.where(id: enrolled_coach_ids)
+        FacultyCourseEnrollment.where(course: @course).destroy_all
+        coaches.each do |coach|
+          next if coach.id.in? course.faculty_ids
+
+          ::Courses::AssignReviewerService.new(course).assign(coach)
+        end
+        render json: { coach_ids: coaches.pluck(:id), error: nil }
+      end
+    end
+
     private
 
     def faculty

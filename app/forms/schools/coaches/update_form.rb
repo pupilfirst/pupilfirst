@@ -9,12 +9,14 @@ module Schools
       property :notify_for_submission
       property :public
       property :image
+      property :image_updated, virtual: true
       property :school_id, virtual: true, validates: { presence: true }
 
       def save
         Faculty.transaction do
           user = User.where(email: email).first_or_create!
           faculty.update!(faculty_params.merge(user: user))
+          faculty.image.attach(image) if image_updated
         end
 
         faculty
@@ -34,7 +36,6 @@ module Schools
           linkedin_url: linkedin_url,
           connect_link: connect_link,
           public: public,
-          image: image,
           notify_for_submission: notify_for_submission
         }
       end

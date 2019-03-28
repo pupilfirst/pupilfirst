@@ -1,0 +1,1 @@
+module Coach = CoachesCourseEnrollment__Coach;

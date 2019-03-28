@@ -20,6 +20,7 @@ module Schools
 
     alias destroy? create?
     alias update? create?
+    alias update_enrollments? create?
 
     class Scope < Scope
       def resolve

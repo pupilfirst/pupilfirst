@@ -55,12 +55,13 @@ let make =
     let closeFormCB = () => send(UpdateFormVisible(None));
     let updateCoachesCB = coachIds => send(UpdateCoaches(coachIds));
     let schoolCoaches = schoolCoaches;
-    let courseCoaches = schoolCoaches;
     <div className="flex flex-1 h-screen">
       (
         switch (state.formVisible) {
         | None => ReasonReact.null
         | CoachEnrollmentForm =>
+          let courseCoachIds =
+            state.courseCoaches |> List.map(coach => coach |> Coach.id);
           <SA_Coaches_CourseEnrollmentForm
             courseId
             courseCoachIds
@@ -68,7 +69,7 @@ let make =
             updateCoachesCB
             closeFormCB
             authenticityToken
-          />
+          />;
         }
       )
       <div className="flex-1 flex flex-col bg-grey-lightest overflow-hidden">

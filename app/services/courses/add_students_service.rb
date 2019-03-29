@@ -4,8 +4,10 @@ module Courses
       @course = course
     end
 
-    def add(students_list, tags)
+    def add(students_list)
       first_level = @course.levels.find_by(number: 1)
+
+      school = @course.school
 
       Course.transaction do
         students_list.each do |student|
@@ -18,11 +20,13 @@ module Courses
           )
 
           founder = Founder.create!(user: user, name: student.name, startup: startup)
-          founder.tag_list << tags
+          founder.tag_list << student.tags
           founder.save!
         end
-        school = @course.school
-        school.founder_tag_list << tags
+
+        # Add the tags to the school's list of founder tags. This is useful for retrieval in the school admin interface.
+        all_student_tags = students_list.map { |student| student.tags || [] }.flatten.uniq
+        school.founder_tag_list << all_student_tags
         school.save!
       end
     end

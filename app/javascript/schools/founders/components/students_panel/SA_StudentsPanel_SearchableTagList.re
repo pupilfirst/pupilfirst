@@ -1,22 +1,60 @@
 let str = ReasonReact.string;
 
-type state = {
-  searchString: string,
-  dropdownVisible: bool,
-};
+type state = {searchString: string};
 
 type action =
-  | UpdateSearchString(string)
-  | UpdateDropdownVisibility(bool);
+  | UpdateSearchString(string);
 
 let handleClick = (tag, send, clickCB) => {
   clickCB(tag);
   send(UpdateSearchString(""));
-  send(UpdateDropdownVisibility(false));
 };
 
 let component =
   ReasonReact.reducerComponent("SA_StudentsPanel_SearchableTagList");
+
+let search =
+    (state, send, allowNewTags, selectedTags, unselectedTags, addTagCB) =>
+  switch (state.searchString) {
+  | "" => []
+  | searchString =>
+    let allTags = List.append(selectedTags, unselectedTags);
+
+    /* If addition of tag is allowed, and it IS new, then display that option at the front. */
+    let initial =
+      if (allowNewTags && !(allTags |> List.mem(searchString))) {
+        [
+          <span
+            title={"Add new tag " ++ searchString}
+            key=searchString
+            onMouseDown=(_e => handleClick(searchString, send, addTagCB))
+            className="p-2 text-sm hover:text-indigo cursor-pointer">
+            {searchString |> str}
+            <span className="text-grey"> {" (New)" |> str} </span>
+          </span>,
+        ];
+      } else {
+        [];
+      };
+
+    let searchResults =
+      unselectedTags
+      |> List.filter(tag =>
+           tag |> String.lowercase |> Js.String.includes(state.searchString)
+         )
+      |> List.sort(String.compare)
+      |> List.map(tag =>
+           <span
+             title={"Pick tag " ++ tag}
+             key=tag
+             className="p-2 text-sm hover:text-indigo cursor-pointer"
+             onMouseDown=(_e => handleClick(tag, send, addTagCB))>
+             {tag |> str}
+           </span>
+         );
+
+    initial @ searchResults;
+  };
 
 let make =
     (
@@ -28,39 +66,49 @@ let make =
       _children,
     ) => {
   ...component,
-  initialState: () => {searchString: "", dropdownVisible: false},
+  initialState: () => {searchString: ""},
   reducer: (action, state) =>
     switch (action) {
     | UpdateSearchString(searchString) =>
-      ReasonReact.Update({...state, searchString})
-    | UpdateDropdownVisibility(dropdownVisible) =>
-      ReasonReact.Update({...state, dropdownVisible})
+      ReasonReact.Update({searchString: searchString})
     },
-  render: ({state, send}) =>
+  render: ({state, send}) => {
+    let results =
+      search(
+        state,
+        send,
+        allowNewTags,
+        selectedTags,
+        unselectedTags,
+        addTagCB,
+      );
     <div className="mt-2">
       {
-        selectedTags |> List.length == 0 ?
-          ReasonReact.null :
+        if (selectedTags |> ListUtils.isNotEmpty) {
           <div className="flex">
             {
               selectedTags
               |> List.sort(String.compare)
-              |> List.map(tag => {
-                   let buttonClasses = "flex items-center px-2 py-1 border rounded-lg mr-1 text-sm font-semibold focus:outline-none bg-grey-light";
-
-                   <div key=tag className=buttonClasses>
-                     {tag |> str}
-                     <i
-                       className="material-icons cursor-pointer text-sm ml-1"
+              |> List.map(tag =>
+                   <div
+                     key=tag
+                     className="flex items-center pl-2 border rounded-lg mr-1 text-sm font-semibold focus:outline-none bg-grey-light">
+                     <span> {tag |> str} </span>
+                     <span
+                       title={"Remove tag " ++ tag}
+                       className="cursor-pointer p-2"
                        onClick={_e => handleClick(tag, send, removeTagCB)}>
-                       {"close" |> str}
-                     </i>
-                   </div>;
-                 })
+                       <Icon kind=Icon.Close size="3" />
+                     </span>
+                   </div>
+                 )
               |> Array.of_list
               |> ReasonReact.array
             }
-          </div>
+          </div>;
+        } else {
+          ReasonReact.null;
+        }
       }
       <input
         value={state.searchString}
@@ -68,56 +116,23 @@ let make =
           event =>
             send(UpdateSearchString(ReactEvent.Form.target(event)##value))
         }
-        onFocus={_e => send(UpdateDropdownVisibility(true))}
-        onBlur={_e => send(UpdateDropdownVisibility(false))}
         className="appearance-none block bg-white text-grey-darker border border-grey-light rounded-lg w-full py-3 px-4 mt-2 focus:outline-none focus:bg-white focus:border-grey"
-        id="tag"
+        id="tags"
         type_="text"
-        placeholder={allowNewTags ? "Search or add new..." : "Select tags"}
+        placeholder={
+          allowNewTags ? "Search for, or add new tags" : "Select tags"
+        }
       />
       {
-        state.dropdownVisible ?
+        if (results |> ListUtils.isNotEmpty) {
           <div
             className="border border-grey-light bg-white mt-3 rounded-lg max-w-xs searchable-tag-list__dropdown relative px-4 py-2">
-            {
-              !allowNewTags
-              || List.append(selectedTags, unselectedTags)
-              |> List.mem(state.searchString)
-              || state.searchString
-              |> String.length < 1 ?
-                ReasonReact.null :
-                <div
-                  onMouseDown={
-                    _e => handleClick(state.searchString, send, addTagCB)
-                  }
-                  className="my-3 text-sm hover:text-indigo cursor-pointer">
-                  {state.searchString |> str}
-                  <span className="text-grey ml-1">
-                    {"(Add New)" |> str}
-                  </span>
-                </div>
-            }
-            {
-              unselectedTags
-              |> List.filter(tag =>
-                   tag
-                   |> String.lowercase
-                   |> Js.String.includes(state.searchString)
-                 )
-              |> List.sort(String.compare)
-              |> List.map(tag =>
-                   <div
-                     key=tag
-                     className="my-3 text-sm hover:text-indigo cursor-pointer"
-                     onMouseDown={_e => handleClick(tag, send, addTagCB)}>
-                     {tag |> str}
-                   </div>
-                 )
-              |> Array.of_list
-              |> ReasonReact.array
-            }
-          </div> :
-          ReasonReact.null
+            {results |> Array.of_list |> ReasonReact.array}
+          </div>;
+        } else {
+          ReasonReact.null;
+        }
       }
-    </div>,
+    </div>;
+  },
 };

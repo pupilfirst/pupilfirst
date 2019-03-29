@@ -128,7 +128,7 @@ let make = (~addToListCB, ~studentTags, _children) => {
       <div className="mt-6">
         <label
           className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
-          htmlFor="email">
+          htmlFor="tags">
           {"Tags" |> str}
         </label>
         <SA_StudentsPanel_SearchableTagList

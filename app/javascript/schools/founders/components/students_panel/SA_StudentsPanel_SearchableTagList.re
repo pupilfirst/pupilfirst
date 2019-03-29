@@ -25,6 +25,7 @@ let search =
       if (allowNewTags && !(allTags |> List.mem(searchString))) {
         [
           <span
+            title={"Add new tag " ++ searchString}
             key=searchString
             onMouseDown=(_e => handleClick(searchString, send, addTagCB))
             className="p-2 text-sm hover:text-indigo cursor-pointer">
@@ -44,6 +45,7 @@ let search =
       |> List.sort(String.compare)
       |> List.map(tag =>
            <span
+             title={"Pick tag " ++ tag}
              key=tag
              className="p-2 text-sm hover:text-indigo cursor-pointer"
              onMouseDown=(_e => handleClick(tag, send, addTagCB))>
@@ -93,6 +95,7 @@ let make =
                      className="flex items-center pl-2 border rounded-lg mr-1 text-sm font-semibold focus:outline-none bg-grey-light">
                      <span> {tag |> str} </span>
                      <span
+                       title={"Remove tag " ++ tag}
                        className="cursor-pointer p-2"
                        onClick={_e => handleClick(tag, send, removeTagCB)}>
                        <Icon kind=Icon.Close size="3" />
@@ -114,7 +117,7 @@ let make =
             send(UpdateSearchString(ReactEvent.Form.target(event)##value))
         }
         className="appearance-none block bg-white text-grey-darker border border-grey-light rounded-lg w-full py-3 px-4 mt-2 focus:outline-none focus:bg-white focus:border-grey"
-        id="tag"
+        id="tags"
         type_="text"
         placeholder={
           allowNewTags ? "Search for, or add new tags" : "Select tags"

@@ -205,7 +205,7 @@ let make =
       ReasonReact.Update({...state, filterVisible: !state.filterVisible})
     },
   render: ({state, send}) =>
-    <div className="flex flex-1 flex-col bg-white overflow-hidden">
+    <div className="flex flex-1 flex-col bg-grey-lightest overflow-hidden">
       {
         let closeFormCB = () => send(UpdateFormVisible(None));
         let submitFormCB = (teams, tags) => {
@@ -234,7 +234,7 @@ let make =
         };
       }
       <div
-        className="border-b px-6 py-2 items-center justify-between z-20 shadow">
+        className="border-b px-6 py-2 bg-white items-center justify-between z-20">
         <div className="inline-block relative w-64">
           <select
             onChange={
@@ -281,9 +281,9 @@ let make =
           </div>
         </div>
       </div>
-      <div className="bg-grey-darker px-3">
+      <div className="px-3">
         <div
-          className="max-w-lg h-16 bg-white mx-auto relative rounded border-b p-4 mt-3 w-full flex items-center justify-between shadow">
+          className="max-w-lg h-16 bg-white mx-auto relative rounded border-b p-4 mt-3 w-full flex items-center justify-between">
           <div className="flex">
             <label className="flex items-center leading-tight mr-4 my-auto">
               <input
@@ -372,7 +372,7 @@ let make =
           </div>
         </div>
         <div
-          className="max-w-lg bg-grey-lighter mx-auto relative rounded rounded-b-none border-b px-4 py-3 mt-3 w-full shadow">
+          className="max-w-lg bg-white mx-auto relative rounded rounded-b-none border-b px-4 py-3 mt-3 w-full">
           <div className="flex items-center justify-between">
             <input
               type_="search"
@@ -423,7 +423,7 @@ let make =
               ReasonReact.null
           }
           <div
-            className="w-full overflow-y-auto bg-grey-lighter p-3 shadow rounded-b-lg">
+            className="w-full overflow-y-auto p-3 rounded-b-lg">
             {
               filteredTeams(state) |> List.length > 0 ?
                 filteredTeams(state)

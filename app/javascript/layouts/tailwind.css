@@ -11,8 +11,8 @@ body {
 
 /* Gradients */
 @responsive {
-  .bg-gradient-primary-to-primary-dark-120 {
-    background-image: linear-gradient(120deg, config('colors.primary'), config('colors.primary-dark'));
+  .bg-gradient-primary-to-primary-darker-to-bottom {
+    background-image: linear-gradient(to bottom, config('colors.primary'), config('colors.primary-darker'));
   }
   .bg-gradient-secondary-to-secondary-dark-120 {
     background-image: linear-gradient(120deg, config('colors.secondary'), config('colors.secondary-dark'));

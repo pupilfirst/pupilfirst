@@ -80,7 +80,7 @@ module TimelineEvents
     def message_params
       {
         startup_url: @startup_url,
-        startup_product_name: @startup.product_name,
+        startup_name: @startup.name,
         event_url: @timeline_event.share_url,
         event_title: @timeline_event.title,
         event_description: @timeline_event.description,

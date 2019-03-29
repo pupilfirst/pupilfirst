@@ -52,7 +52,7 @@ ActiveAdmin.register Faculty do
 
       row :startups do
         none_one_or_many(self, faculty.startups) do |startup|
-          link_to startup.product_name, [:admin, startup]
+          link_to startup.name, [:admin, startup]
         end
       end
 

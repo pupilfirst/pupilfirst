@@ -4,7 +4,7 @@ video_path = 'spec/support/uploads/resources/video-sample.mp4'
 after 'development:targets' do
   puts 'Seeding resources'
 
-  target = Startup.find_by(product_name: 'The Avengers').level.target_groups.first.targets.first
+  target = Startup.find_by(name: 'The Avengers').level.target_groups.first.targets.first
   school = target.course.school
 
   r = Resource.new(

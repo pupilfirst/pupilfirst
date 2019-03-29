@@ -47,7 +47,7 @@ describe Zoom::CreateFacultyConnectService do
   end
 
   def topic
-    startup = connect_request.startup.product_name
+    startup = connect_request.startup.name
     faculty = connect_request.faculty.name
     "#{startup} / #{faculty} (Office Hour)"
   end

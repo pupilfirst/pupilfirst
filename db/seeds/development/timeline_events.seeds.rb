@@ -5,7 +5,7 @@ after 'development:founders', 'development:targets' do
 
   puts 'Seeding timeline_events'
 
-  avengers = Startup.find_by(product_name: 'The Avengers')
+  avengers = Startup.find_by(name: 'The Avengers')
 
   def complete_target(target, startup)
     te = TimelineEvent.create!(

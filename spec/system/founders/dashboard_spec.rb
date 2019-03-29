@@ -80,7 +80,7 @@ feature 'Founder Dashboard' do
     sign_in_user founder.user, referer: student_dashboard_path
 
     # Check the product name displayed in the dashboard.
-    expect(page).to have_selector('.founder-dashboard-header__product-title', text: startup.product_name)
+    expect(page).to have_selector('.founder-dashboard-header__product-title', text: startup.name)
 
     find('.founder-dashboard-actionbar__box').click
 

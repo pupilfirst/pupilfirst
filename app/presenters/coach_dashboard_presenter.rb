@@ -38,7 +38,7 @@ class CoachDashboardPresenter < ApplicationPresenter
     @team_details ||= teams.map do |startup|
       {
         id: startup.id,
-        name: startup.product_name
+        name: startup.name
       }
     end
   end

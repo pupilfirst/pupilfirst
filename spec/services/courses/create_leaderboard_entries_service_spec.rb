@@ -16,9 +16,9 @@ describe Courses::CreateLeaderboardEntriesService do
   let(:target_3) { create :target, :for_founders, target_group: target_group }
   let(:target_4) { create :target, :for_founders, target_group: target_group }
   let(:target_5) { create :target, :for_founders, target_group: target_group }
-  let(:startup_1) { create :startup, level: level_1, product_name: 's1' }
-  let(:startup_2) { create :startup, level: level_1, product_name: 's2' }
-  let(:startup_3) { create :startup, level: level_1, product_name: 's3' }
+  let(:startup_1) { create :startup, level: level_1, name: 's1' }
+  let(:startup_2) { create :startup, level: level_1, name: 's2' }
+  let(:startup_3) { create :startup, level: level_1, name: 's3' }
 
   let(:lts) { LeaderboardTimeService.new }
 

@@ -20,7 +20,7 @@ module Schools
       def teams(faculty)
         return 'All' if faculty.id.in?(course_faculty_ids)
 
-        faculty.startups.pluck(:product_name).join(', ')
+        faculty.startups.pluck(:name).join(', ')
       end
 
       private

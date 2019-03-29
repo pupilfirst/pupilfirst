@@ -25,7 +25,7 @@ module Admin
       student_data.each do |row|
         founder_data = row.to_hash
         Founder.transaction do
-          team = Startup.create!(product_name: founder_data['name'], level: level)
+          team = Startup.create!(name: founder_data['name'], level: level)
           user = user(founder_data['email'])
           Founder.create!(user: user, name: founder_data['name'], startup: team)
         end

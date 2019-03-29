@@ -17,7 +17,7 @@ module Founders
         results <<
           {
             id: search_result.id,
-            text: "#{search_result.name} (#{search_result.startup.product_name})"
+            text: "#{search_result.name} (#{search_result.startup.name})"
           }
       end
       select2_results

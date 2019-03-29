@@ -12,7 +12,7 @@ sendUserDataToInspectlet = ->
         email: state.email,
         name: state.name,
         startupId: startup['id'],
-        productName: startup['product_name']
+        productName: startup['name']
       }]
 
 $(document).on 'turbolinks:load', sendUserDataToInspectlet

@@ -1,7 +1,7 @@
 .container-md-center
   .content-box.my-4
     .text-center
-      - second_party = params[:token].present? ? @connect_request.startup.product_name : @connect_request.faculty.name
+      - second_party = params[:token].present? ? @connect_request.startup.name : @connect_request.faculty.name
       - if @connect_request.slot_at < 15.minutes.from_now
         h2.mb-0.message-emoticon
           | &#x1f450;

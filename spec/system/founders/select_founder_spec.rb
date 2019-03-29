@@ -44,7 +44,7 @@ feature 'Select another founder profile as the active profile' do
     click_link("#{startup_2.course.name} Course")
 
     expect(page).to have_selector('#founder-dashboard')
-    expect(page).to have_content(startup_2.product_name)
+    expect(page).to have_content(startup_2.name)
 
     # ...and back to the first course?
     within('#nav-links__navbar') do
@@ -54,7 +54,7 @@ feature 'Select another founder profile as the active profile' do
     click_link("#{startup_1.course.name} Course")
 
     expect(page).to have_selector('#founder-dashboard')
-    expect(page).to have_content(startup_1.product_name)
+    expect(page).to have_content(startup_1.name)
   end
 
   scenario 'Single-founder user does not have option to switch between courses' do

@@ -8,7 +8,7 @@
         - events_to_list = status == TimelineEvent::STATUS_NEEDS_IMPROVEMENT ? timeline_events.not_improved : timeline_events
         - if events_to_list.exists?
           - events_to_list.limit(10).includes(:startup).each do |timeline_event|
-            li = link_to "#{timeline_event.startup.product_name} - #{timeline_event.title}", admin_timeline_event_path(timeline_event)
+            li = link_to "#{timeline_event.startup.name} - #{timeline_event.title}", admin_timeline_event_path(timeline_event)
 
     .footer-spacer
 

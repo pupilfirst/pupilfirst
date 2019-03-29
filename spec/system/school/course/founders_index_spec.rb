@@ -21,7 +21,7 @@ feature 'Founders Index' do
   let!(:name_2) { (Faker::Lorem.words(3).join ' ').titleize }
   let!(:email_2) { Faker::Internet.email }
 
-  let!(:new_product_name) { (Faker::Lorem.words(4).join ' ').titleize }
+  let!(:new_name) { (Faker::Lorem.words(4).join ' ').titleize }
 
   before do
     # Create a domain for school
@@ -76,13 +76,13 @@ feature 'Founders Index' do
     # Update a student
     find("a", text: name_1).click
     expect(page).to have_text(founder_1.name)
-    expect(page).to have_text(founder_1.startup.product_name)
-    fill_in 'Team Name', with: new_product_name, fill_options: { clear: :backspace }
+    expect(page).to have_text(founder_1.startup.name)
+    fill_in 'Team Name', with: new_name, fill_options: { clear: :backspace }
     click_button 'Update Student'
     expect(page).to have_text("Student updated successfully")
     find('.ui-pnotify-container').click
     founder_1.reload
-    expect(founder_1.startup.product_name).to eq(new_product_name)
+    expect(founder_1.startup.name).to eq(new_name)
 
     # Form a Team
     check "#{name_1}_checkbox"
@@ -92,8 +92,8 @@ feature 'Founders Index' do
     find('.ui-pnotify-container').click
     founder_1.reload
     founder_2.reload
-    expect(founder_1.startup.product_name).to eq(founder_2.startup.product_name)
-    expect(page).to have_text(founder_1.startup.product_name)
+    expect(founder_1.startup.name).to eq(founder_2.startup.name)
+    expect(page).to have_text(founder_1.startup.name)
 
     # Move out from a team
     check "#{name_1}_checkbox"
@@ -108,7 +108,7 @@ feature 'Founders Index' do
     founder = startup_2.founders.last
     find("a", text: founder.name).click
     expect(page).to have_text(founder.name)
-    expect(page).to have_text(founder.startup.product_name)
+    expect(page).to have_text(founder.startup.name)
     within("div#dropped_out_buttons") do
       click_button 'Yes'
     end

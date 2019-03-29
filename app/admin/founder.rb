@@ -60,11 +60,11 @@ ActiveAdmin.register Founder do
     selectable_column
     column :name
 
-    column :product_name, sortable: 'founders.startup_id' do |founder|
+    column :team_name, sortable: 'founders.startup_id' do |founder|
       if founder.startup.present?
         a href: admin_startup_path(founder.startup) do
           span do
-            founder.startup.try(:product_name)
+            founder.startup.try(:name)
           end
         end
       end
@@ -79,7 +79,7 @@ ActiveAdmin.register Founder do
     column :name
 
     column :product do |founder|
-      founder.startup&.product_name
+      founder.startup&.name
     end
 
     column :roles do |founder|
@@ -130,11 +130,11 @@ ActiveAdmin.register Founder do
         end.join ', '
       end
 
-      row :product_name do |founder|
+      row :team_name do |founder|
         if founder.startup.present?
           a href: admin_startup_path(founder.startup) do
             span do
-              founder.startup.try(:product_name)
+              founder.startup.try(:name)
             end
           end
         end

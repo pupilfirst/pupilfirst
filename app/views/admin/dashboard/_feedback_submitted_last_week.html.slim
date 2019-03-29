@@ -6,7 +6,7 @@
   .content
     ol
       - startup_feedback_from_last_week.limit(10).each do |startup_feedback|
-        li = link_to "#{startup_feedback.faculty.name} - #{startup_feedback.startup.product_name}", admin_startup_feedback_path(startup_feedback)
+        li = link_to "#{startup_feedback.faculty.name} - #{startup_feedback.startup.name}", admin_startup_feedback_path(startup_feedback)
 
   .footer-spacer
 

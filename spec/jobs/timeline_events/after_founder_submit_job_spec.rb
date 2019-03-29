@@ -41,9 +41,9 @@ describe TimelineEvents::AfterFounderSubmitJob do
         # It should send an email to active faculty.
         open_email(faculty_with_notifications.email)
 
-        expect(current_email.subject).to eq("There is a new submission from #{startup.product_name}")
+        expect(current_email.subject).to eq("There is a new submission from #{startup.name}")
         expect(current_email.body).to include('New Submission from Student')
-        expect(current_email.body).to include("We have received a new submission from team #{startup.product_name}")
+        expect(current_email.body).to include("We have received a new submission from team #{startup.name}")
       end
 
       context 'when the submission was from a single founder' do

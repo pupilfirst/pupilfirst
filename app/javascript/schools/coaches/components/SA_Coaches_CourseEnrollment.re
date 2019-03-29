@@ -54,7 +54,6 @@ let make =
   render: ({state, send}) => {
     let closeFormCB = () => send(UpdateFormVisible(None));
     let updateCoachesCB = coachIds => send(UpdateCoaches(coachIds));
-    let schoolCoaches = schoolCoaches;
     <div className="flex flex-1 h-screen">
       (
         switch (state.formVisible) {

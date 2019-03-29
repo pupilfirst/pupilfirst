@@ -8,7 +8,15 @@ module Schools
       end
 
       def react_props
-        { teams: teams, courseId: @course.id, levels: levels, studentTags: founder_tags, authenticityToken: view.form_authenticity_token }
+        {
+          teams: teams,
+          courseId: @course.id,
+          courseCoachIds: @course.faculty.pluck(:id),
+          schoolCoaches: coach_details(@course.school.faculty),
+          levels: levels,
+          studentTags: founder_tags,
+          authenticityToken: view.form_authenticity_token
+        }
       end
 
       def teams
@@ -17,7 +25,7 @@ module Schools
             id: team.id,
             name: team.product_name,
             students: student_details(team.founders),
-            coaches: (coach_details(team.faculty) + course_coaches).uniq,
+            coaches: team.faculty.pluck(:id),
             levelNumber: team.level.number
           }
         end
@@ -43,6 +51,8 @@ module Schools
       def coach_details(coaches)
         coaches.map do |coach|
           {
+            id: coach.id,
+            name: coach.name,
             avatarUrl: coach.image_or_avatar_url
           }
         end

@@ -52,7 +52,7 @@ Rails.application.routes.draw do
       resources :faculty, as: 'coaches', path: 'coaches', only: [] do
         collection do
           get '/', action: 'course_index'
-          post 'update_enrollments'
+          post 'update_enrollments', action: 'update_course_enrollments'
         end
 
         member do
@@ -72,6 +72,12 @@ Rails.application.routes.draw do
       member do
         post 'add_coach'
         post 'remove_coach'
+      end
+
+      resources :faculty, as: 'coaches', path: 'coaches', only: [] do
+        collection do
+          post 'update_enrollments', action: 'update_startup_enrollments'
+        end
       end
     end
 

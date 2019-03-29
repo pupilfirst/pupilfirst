@@ -146,7 +146,16 @@ let teamUp = (students, responseCB, authenticityToken) => {
 let component = ReasonReact.reducerComponent("SA_StudentsPanel");
 
 let make =
-    (~teams, ~courseId, ~authenticityToken, ~levels, ~studentTags, _children) => {
+    (
+      ~teams,
+      ~courseId,
+      ~courseCoachIds,
+      ~schoolCoaches,
+      ~authenticityToken,
+      ~levels,
+      ~studentTags,
+      _children,
+    ) => {
   ...component,
   initialState: () => {
     teams,
@@ -363,7 +372,7 @@ let make =
                   onClick=(_e => send(UpdateFormVisible(CreateForm)))
                   className="hover:bg-purple-dark text-purple-dark font-semibold hover:text-white focus:outline-none border border-dashed border-blue hover:border-transparent flex items-center px-2 py-1 rounded-lg cursor-pointer">
                   <i className="material-icons mr-2">
-                    {"add_circle_outline" |> str}
+                    ("add_circle_outline" |> str)
                   </i>
                   <h5 className="font-semibold ml-2">
                     ("Add New Students" |> str)
@@ -561,9 +570,21 @@ let make =
                                ("Coaches" |> str)
                              </p>
                              <div className="flex items-center">
-                               (
-                                 team
-                                 |> Team.coaches
+                               {
+                                 let teamCoachIds =
+                                   List.append(
+                                     courseCoachIds,
+                                     team |> Team.coaches,
+                                   );
+                                 let teamCoaches =
+                                   schoolCoaches
+                                   |> List.filter(coach =>
+                                        teamCoachIds
+                                        |> List.exists(teamCoachId =>
+                                             teamCoachId == Coach.id(coach)
+                                           )
+                                      );
+                                 teamCoaches
                                  |> List.map(coach =>
                                       <img
                                         key=(coach |> Coach.avatarUrl)
@@ -573,8 +594,8 @@ let make =
                                       />
                                     )
                                  |> Array.of_list
-                                 |> ReasonReact.array
-                               )
+                                 |> ReasonReact.array;
+                               }
                              </div>
                            </div>
                          </div>
@@ -610,6 +631,8 @@ let make =
 type props = {
   teams: list(Team.t),
   courseId: int,
+  courseCoachIds: list(int),
+  schoolCoaches: list(Coach.t),
   levels: list(Level.t),
   studentTags: list(string),
   authenticityToken: string,
@@ -619,8 +642,10 @@ let decode = json =>
   Json.Decode.{
     teams: json |> field("teams", list(Team.decode)),
     courseId: json |> field("courseId", int),
+    courseCoachIds: json |> field("courseCoachIds", list(int)),
     levels: json |> field("levels", list(Level.decode)),
     studentTags: json |> field("studentTags", list(string)),
+    schoolCoaches: json |> field("schoolCoaches", list(Coach.decode)),
     authenticityToken: json |> field("authenticityToken", string),
   };
 
@@ -632,6 +657,8 @@ let jsComponent =
       make(
         ~teams=props.teams,
         ~courseId=props.courseId,
+        ~courseCoachIds=props.courseCoachIds,
+        ~schoolCoaches=props.schoolCoaches,
         ~levels=props.levels,
         ~studentTags=props.studentTags,
         ~authenticityToken=props.authenticityToken,

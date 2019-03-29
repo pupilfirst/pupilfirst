@@ -3,7 +3,6 @@ ActiveAdmin.register StartupFeedback do
   permit_params :feedback, :reference_url, :startup_id, :send_email, :faculty_id, :activity_type, :timeline_event_id
 
   filter :startup_product_name, as: :string
-  filter :startup_name, as: :string
   filter :faculty_name, as: :string
   filter :created_at
   filter :sent_at
@@ -25,12 +24,6 @@ ActiveAdmin.register StartupFeedback do
       if startup
         a href: admin_startup_path(startup) do
           span startup.product_name
-
-          if startup.name.present?
-            span class: 'wrap-with-paranthesis' do
-              startup.name
-            end
-          end
         end
       end
     end
@@ -92,12 +85,6 @@ ActiveAdmin.register StartupFeedback do
         if startup
           a href: admin_startup_path(startup) do
             span startup.product_name
-
-            if startup.name.present?
-              span class: 'wrap-with-paranthesis' do
-                startup.name
-              end
-            end
           end
         end
       end

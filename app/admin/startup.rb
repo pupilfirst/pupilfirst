@@ -1,5 +1,5 @@
 ActiveAdmin.register Startup do
-  permit_params :product_name, :legal_registered_name, :created_at, :updated_at, :slug,
+  permit_params :product_name, :created_at, :updated_at, :slug,
     :level_id, founder_ids: [], tag_list: []
 
   filter :product_name, as: :string
@@ -12,7 +12,6 @@ ActiveAdmin.register Startup do
     label: 'Tags',
     collection: -> { Startup.tag_counts_on(:tags).pluck(:name).sort }
 
-  filter :legal_registered_name
   filter :created_at
 
   scope :admitted, default: true
@@ -84,7 +83,6 @@ ActiveAdmin.register Startup do
 
   show title: :product_name do |startup|
     attributes_table do
-      row :legal_registered_name
       row :level
       row :faculty do
         div do

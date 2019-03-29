@@ -24,12 +24,6 @@ ActiveAdmin.register TimelineEvent do
 
       a href: admin_startup_path(startup) do
         span startup.product_name
-
-        if startup.name.present?
-          span class: 'wrap-with-paranthesis' do
-            startup.name
-          end
-        end
       end
     end
 
@@ -113,12 +107,6 @@ ActiveAdmin.register TimelineEvent do
 
         a href: admin_startup_path(startup) do
           span startup.product_name
-
-          if startup.name.present?
-            span class: 'wrap-with-paranthesis' do
-              startup.name
-            end
-          end
         end
       end
 

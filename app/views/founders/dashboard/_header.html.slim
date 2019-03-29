@@ -8,7 +8,7 @@
       .founder-dashboard-header__product-details
         h3.founder-dashboard-header__product-title.font-semibold
           | #{current_startup.product_name}
-        / - if current_startup.name.present?
+        / - if current_startup.product_name.present?
         / .founder-dashboard__avatars.d-none.d-md-block
           .d-none.d-md-block
             - current_startup.founders.not_exited.each do |founder|

@@ -13,7 +13,6 @@ module Courses
           user.regenerate_login_token if user.login_token.blank?
 
           startup = Startup.create!(
-            name: student.name,
             product_name: student.name,
             level: first_level
           )

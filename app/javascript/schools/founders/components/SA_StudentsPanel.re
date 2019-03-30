@@ -235,13 +235,20 @@ let make =
             authenticityToken
           />
         | UpdateForm(student) =>
+          let teamCoachIds =
+            teams
+            |> List.find(team => Team.id(team) == Student.teamId(student))
+            |> Team.coachIds;
           <SA_StudentsPanel_UpdateForm
             student
             studentTags=state.tags
+            teamCoachIds
+            courseCoachIds
+            schoolCoaches
             closeFormCB
             submitFormCB
             authenticityToken
-          />
+          />;
         };
       }
       <div
@@ -574,7 +581,7 @@ let make =
                                  let teamCoachIds =
                                    List.append(
                                      courseCoachIds,
-                                     team |> Team.coaches,
+                                     team |> Team.coachIds,
                                    );
                                  let teamCoaches =
                                    schoolCoaches

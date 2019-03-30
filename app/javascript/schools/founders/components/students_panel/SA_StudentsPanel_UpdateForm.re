@@ -2,6 +2,8 @@ open StudentsPanel__Types;
 
 open SchoolAdmin__Utils;
 
+type teamCoachlist = (int, string, bool);
+
 type state = {
   name: string,
   teamName: string,
@@ -9,6 +11,7 @@ type state = {
   hasTeamNameError: bool,
   tagsToApply: list(string),
   exited: bool,
+  teamCoaches: list(teamCoachlist),
 };
 
 type action =
@@ -17,7 +20,8 @@ type action =
   | UpdateErrors(bool, bool)
   | AddTag(string)
   | RemoveTag(string)
-  | UpdateExited(bool);
+  | UpdateExited(bool)
+  | UpdateCoachesList(int, string, bool);
 
 let component = ReasonReact.reducerComponent("SA_StudentsPanel_UpdateForm");
 
@@ -69,10 +73,35 @@ let booleanButtonClasses = bool => {
   classes ++ (bool ? " bg-grey" : " bg-white");
 };
 
+let handleEligibleTeamCoachList =
+    (schoolCoaches, courseCoachIds, teamCoachIds) => {
+  let selectedTeamCoachIds = teamCoachIds |> Array.of_list;
+  let allowedTeamCoaches =
+    schoolCoaches
+    |> List.filter(coach =>
+         ! (
+           courseCoachIds
+           |> List.exists(courseCoachId => courseCoachId == Coach.id(coach))
+         )
+       );
+  allowedTeamCoaches
+  |> List.map(coach => {
+       let coachId = coach |> Coach.id;
+       let selected =
+         selectedTeamCoachIds
+         |>
+         Js.Array.findIndex(selectedCoachId => coachId == selectedCoachId) > (-1);
+       (coach |> Coach.id, coach |> Coach.name, selected);
+     });
+};
+
 let make =
     (
       ~student,
       ~studentTags,
+      ~teamCoachIds,
+      ~courseCoachIds,
+      ~schoolCoaches,
       ~closeFormCB,
       ~submitFormCB,
       ~authenticityToken,
@@ -86,6 +115,12 @@ let make =
     hasTeamNameError: false,
     tagsToApply: student |> Student.tags,
     exited: student |> Student.exited,
+    teamCoaches:
+      handleEligibleTeamCoachList(
+        schoolCoaches,
+        courseCoachIds,
+        teamCoachIds,
+      ),
   },
   reducer: (action, state) =>
     switch (action) {
@@ -104,8 +139,17 @@ let make =
         tagsToApply: state.tagsToApply |> List.filter(t => t !== tag),
       })
     | UpdateExited(exited) => ReasonReact.Update({...state, exited})
+    | UpdateCoachesList(key, value, selected) =>
+      let oldCoach =
+        state.teamCoaches |> List.filter(((item, _, _)) => item !== key);
+      ReasonReact.Update({
+        ...state,
+        teamCoaches: [(key, value, selected), ...oldCoach],
+      });
     },
-  render: ({state, send}) =>
+  render: ({state, send}) => {
+    let multiSelectCoachEnrollmentsCB = (key, value, selected) =>
+      send(UpdateCoachesList(key, value, selected));
     <div>
       <div className="blanket" />
       <div className="drawer-right">
@@ -192,6 +236,52 @@ let make =
                     ReasonReact.null
                 )
                 <div className="mt-6">
+                  <div className="border-b border-grey-light pb-2 mb-2 ">
+                    <span
+                      className="inline-block mr-1 text-grey-darker text-xs font-semibold">
+                      ("Course Coaches:" |> str)
+                    </span>
+                    <div className="mt-2">
+                      (
+                        courseCoachIds |> List.length > 0 ?
+                          courseCoachIds
+                          |> List.map(coachId =>
+                               <div
+                                 key=(coachId |> string_of_int)
+                                 className="select-list__item-selected flex items-center justify-between bg-grey-lightest text-xs text-grey-dark border rounded p-3 mb-2">
+                                 (
+                                   schoolCoaches
+                                   |> List.find(coach =>
+                                        Coach.id(coach) == coachId
+                                      )
+                                   |> Coach.name
+                                   |> str
+                                 )
+                               </div>
+                             )
+                          |> Array.of_list
+                          |> ReasonReact.array :
+                          <div
+                            className="select-list__item-selected flex items-center justify-between bg-grey-lightest text-xs text-grey-dark border rounded p-3 mb-2">
+                            ("None Assigned" |> str)
+                          </div>
+                      )
+                    </div>
+                  </div>
+                  <div className="border-b border-grey-light pb-2 mb-2 ">
+                    <span
+                      className="inline-block mr-1 text-grey-darker text-xs font-semibold">
+                      ("Exclusive Team Coaches:" |> str)
+                    </span>
+                    <div className="mt-2">
+                      <SA_StudentsPanel_SelectBox
+                        items=state.teamCoaches
+                        multiSelectCB=multiSelectCoachEnrollmentsCB
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-6">
                   <div className="border-b border-grey-light pb-2 mb-2">
                     <span className="mr-1"> ("Tags applied:" |> str) </span>
                   </div>
@@ -269,5 +359,6 @@ let make =
           </div>
         </div>
       </div>
-    </div>,
+    </div>;
+  },
 };

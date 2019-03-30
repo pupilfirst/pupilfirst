@@ -12,7 +12,7 @@ module Schools
           teams: teams,
           courseId: @course.id,
           courseCoachIds: @course.faculty.pluck(:id),
-          schoolCoaches: coach_details(@course.school.faculty),
+          schoolCoaches: coach_details(@course.school.faculty.includes(:image_attachment)),
           levels: levels,
           studentTags: founder_tags,
           authenticityToken: view.form_authenticity_token
@@ -20,7 +20,7 @@ module Schools
       end
 
       def teams
-        @course.startups.includes(:level, :faculty, founders: %i[user taggings]).order(:id).map do |team|
+        @course.startups.includes(:level, :faculty, founders: %i[user taggings avatar_attachment]).order(:id).map do |team|
           {
             id: team.id,
             name: team.product_name,

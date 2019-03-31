@@ -12,6 +12,7 @@ type state = {
   tagsToApply: list(string),
   exited: bool,
   teamCoaches: list(teamCoachlist),
+  coachEnrollmentsChanged: bool,
 };
 
 type action =
@@ -56,6 +57,10 @@ let updateStudent = (student, state, authenticityToken, responseCB) => {
     "authenticity_token",
     authenticityToken |> Js.Json.string,
   );
+  let enrolledCoachIds =
+    state.teamCoaches
+    |> List.filter(((_, _, selected)) => selected == true)
+    |> List.map(((key, _, _)) => key);
   let updatedStudent =
     student |> Student.updateInfo(state.name, state.teamName, state.exited);
   Js.Dict.set(payload, "founder", updatedStudent |> Student.encode);
@@ -63,6 +68,16 @@ let updateStudent = (student, state, authenticityToken, responseCB) => {
     payload,
     "tags",
     state.tagsToApply |> Json.Encode.(list(string)),
+  );
+  Js.Dict.set(
+    payload,
+    "coach_ids",
+    enrolledCoachIds |> Json.Encode.(list(int)),
+  );
+  Js.Dict.set(
+    payload,
+    "clear_coaches",
+    List.length(enrolledCoachIds) < 1 |> Json.Encode.(bool),
   );
   let url = "/school/students/" ++ (student |> Student.id |> string_of_int);
   Api.update(url, payload, responseCB, handleErrorCB);
@@ -121,6 +136,7 @@ let make =
         courseCoachIds,
         teamCoachIds,
       ),
+    coachEnrollmentsChanged: false,
   },
   reducer: (action, state) =>
     switch (action) {
@@ -145,6 +161,7 @@ let make =
       ReasonReact.Update({
         ...state,
         teamCoaches: [(key, value, selected), ...oldCoach],
+        coachEnrollmentsChanged: true,
       });
     },
   render: ({state, send}) => {

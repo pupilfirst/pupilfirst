@@ -236,7 +236,7 @@ let make =
           />
         | UpdateForm(student) =>
           let teamCoachIds =
-            teams
+            state.teams
             |> List.find(team => Team.id(team) == Student.teamId(student))
             |> Team.coachIds;
           <SA_StudentsPanel_UpdateForm

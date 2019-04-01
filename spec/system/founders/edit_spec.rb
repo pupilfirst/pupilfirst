@@ -114,7 +114,7 @@ feature 'Founder Edit' do
       stub_request(:get, "https://slack.com/api/users.profile.set?#{{
         profile: {
           first_name: founder_name,
-          last_name: "(#{startup.product_name})"
+          last_name: "(#{startup.name})"
         }.to_json,
         token: 'SLACK_ACCESS_TOKEN'
       }.to_query}").to_return(body: { ok: true }.to_json)

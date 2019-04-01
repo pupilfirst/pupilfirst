@@ -23,7 +23,7 @@ module Schools
         @course.startups.includes(:level, :faculty, founders: %i[user taggings avatar_attachment]).order(:id).map do |team|
           {
             id: team.id,
-            name: team.product_name,
+            name: team.name,
             students: student_details(team.founders),
             coaches: team.faculty.pluck(:id),
             levelNumber: team.level.number
@@ -40,7 +40,7 @@ module Schools
             name: student.name,
             avatarUrl: avatar_url(student),
             teamId: student.startup.id,
-            teamName: student.startup.product_name,
+            teamName: student.startup.name,
             email: student.user.email,
             tags: student.tag_list & founder_tags,
             exited: student.exited

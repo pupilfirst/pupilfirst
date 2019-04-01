@@ -42,7 +42,13 @@ ActiveAdmin.register Faculty do
       row :about
       row :key_skills
       row :category
-      row :image
+
+      row :image do
+        if faculty.image.attached?
+          link_to(faculty.image.filename, url_for(faculty.image))
+        end
+      end
+
       row :sort_index
       row :public
       row :self_service
@@ -52,7 +58,7 @@ ActiveAdmin.register Faculty do
 
       row :startups do
         none_one_or_many(self, faculty.startups) do |startup|
-          link_to startup.product_name, [:admin, startup]
+          link_to startup.name, [:admin, startup]
         end
       end
 

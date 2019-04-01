@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Founders Index' do
+feature 'School students index' do
   include UserSpecHelper
 
   # Setup a course with a single founder target, ...
@@ -21,7 +21,7 @@ feature 'Founders Index' do
   let!(:name_2) { (Faker::Lorem.words(3).join ' ').titleize }
   let!(:email_2) { Faker::Internet.email }
 
-  let!(:new_product_name) { (Faker::Lorem.words(4).join ' ').titleize }
+  let!(:new_name) { (Faker::Lorem.words(4).join ' ').titleize }
 
   before do
     # Create a domain for school
@@ -41,10 +41,21 @@ feature 'Founders Index' do
 
     fill_in 'Name', with: name_1
     fill_in 'Email', with: email_1
+    fill_in 'Tags', with: 'abc'
+    find('span[title="Add new tag abc"]').click
+    fill_in 'Tags', with: 'def'
+    find('span[title="Add new tag def"]').click
     click_button 'Add to List'
 
     fill_in 'Name', with: name_2
     fill_in 'Email', with: email_2
+
+    # Remove both tags, then add one back - the unpersisted tag should be suggested.
+    find('span[title="Remove tag abc"]').click
+    find('span[title="Remove tag def"]').click
+    fill_in 'Tags', with: 'ab'
+    find('span[title="Pick tag abc"]').click
+
     click_button 'Add to List'
 
     expect(page).to have_text(name_1.to_s)
@@ -58,10 +69,14 @@ feature 'Founders Index' do
     find('.ui-pnotify-container').click
     expect(page).to have_text(name_1)
     expect(page).to have_text(name_2)
+
     founder_1 = User.find_by(email: email_1).founders.first
     founder_2 = User.find_by(email: email_2).founders.first
+
     expect(founder_1.name).to eq(name_1)
     expect(founder_2.name).to eq(name_2)
+    expect(founder_1.tag_list).to contain_exactly('abc', 'def')
+    expect(founder_2.tag_list).to contain_exactly('abc')
 
     # try adding an existing student
     click_button 'Add New Students'
@@ -76,13 +91,13 @@ feature 'Founders Index' do
     # Update a student
     find("a", text: name_1).click
     expect(page).to have_text(founder_1.name)
-    expect(page).to have_text(founder_1.startup.product_name)
-    fill_in 'Team Name', with: new_product_name, fill_options: { clear: :backspace }
+    expect(page).to have_text(founder_1.startup.name)
+    fill_in 'Team Name', with: new_name, fill_options: { clear: :backspace }
     click_button 'Update Student'
     expect(page).to have_text("Student updated successfully")
     find('.ui-pnotify-container').click
     founder_1.reload
-    expect(founder_1.startup.product_name).to eq(new_product_name)
+    expect(founder_1.startup.name).to eq(new_name)
 
     # Form a Team
     check "#{name_1}_checkbox"
@@ -92,8 +107,8 @@ feature 'Founders Index' do
     find('.ui-pnotify-container').click
     founder_1.reload
     founder_2.reload
-    expect(founder_1.startup.product_name).to eq(founder_2.startup.product_name)
-    expect(page).to have_text(founder_1.startup.product_name)
+    expect(founder_1.startup.name).to eq(founder_2.startup.name)
+    expect(page).to have_text(founder_1.startup.name)
 
     # Move out from a team
     check "#{name_1}_checkbox"
@@ -108,7 +123,7 @@ feature 'Founders Index' do
     founder = startup_2.founders.last
     find("a", text: founder.name).click
     expect(page).to have_text(founder.name)
-    expect(page).to have_text(founder.startup.product_name)
+    expect(page).to have_text(founder.startup.name)
     within("div#dropped_out_buttons") do
       click_button 'Yes'
     end

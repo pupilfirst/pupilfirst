@@ -61,7 +61,7 @@ class FacultyMailer < SchoolMailer
       # TODO: Replace with pick(:name) with Rails 6.
       timeline_event.founders.select(:name).first.name
     else
-      "team #{timeline_event.founders.first.startup.product_name}"
+      "team #{timeline_event.founders.first.startup.name}"
     end
 
     @startup = timeline_event.startup
@@ -71,7 +71,7 @@ class FacultyMailer < SchoolMailer
     roadie_mail(
       {
         to: faculty.email,
-        subject: "There is a new submission from #{@startup.product_name}",
+        subject: "There is a new submission from #{@startup.name}",
         **from_options
       },
       roadie_options_for_school

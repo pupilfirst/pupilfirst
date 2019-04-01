@@ -34,7 +34,7 @@ class FacultyConnectSessionReminderJob < ApplicationJob
   end
 
   def startup_name
-    @startup_name ||= connect_request.startup.product_name
+    @startup_name ||= connect_request.startup.name
   end
 
   def founder

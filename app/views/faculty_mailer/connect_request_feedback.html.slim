@@ -2,14 +2,14 @@
   | Feedback for Connect Session
 
 = content_for :subtitle do
-  | Please supply feedback for your recent session with #{@startup.product_name}.
+  | Please supply feedback for your recent session with #{@startup.name}.
 
 = content_for :salutation do
   | Hello #{@faculty.name},
 
 = content_for :body do
   p
-    ' Our records indicate that a session that was scheduled between you and #{@startup.product_name}, should have ended
+    ' Our records indicate that a session that was scheduled between you and #{@startup.name}, should have ended
     | recently. It would be a great help if you could supply some simple feedback on your experience.
 
   p

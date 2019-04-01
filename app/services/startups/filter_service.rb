@@ -16,7 +16,7 @@ module Startups
       search_term = "%#{@form.search.downcase}%"
 
       startups.where(
-        'product_name ILIKE ?',
+        'name ILIKE ?',
         search_term,
         search_term
       )

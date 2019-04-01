@@ -30,7 +30,7 @@ module Schools
       end
 
       def team_name
-        ::Startups::ProductNameGeneratorService.new.fun_name
+        ::Startups::NameGeneratorService.new.fun_name
       end
     end
   end

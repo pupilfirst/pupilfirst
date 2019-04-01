@@ -1,8 +1,8 @@
 ActiveAdmin.register Startup do
-  permit_params :product_name, :created_at, :updated_at, :slug,
+  permit_params :name, :created_at, :updated_at, :slug,
     :level_id, founder_ids: [], tag_list: []
 
-  filter :product_name, as: :string
+  filter :name, as: :string
   filter :level_course_id, as: :select, label: 'Course', collection: -> { Course.all }
   filter :level, collection: -> { Level.all.order(number: :asc) }
 
@@ -57,7 +57,7 @@ ActiveAdmin.register Startup do
   end
 
   csv do
-    column :product_name
+    column :name
     column(:level) { |startup| startup.level.number }
     column(:founders) { |startup| startup.founders.pluck(:name).join ', ' }
     column(:women_cofounders) { |startup| startup.founders.where(gender: Founder::GENDER_FEMALE).count }
@@ -76,12 +76,12 @@ ActiveAdmin.register Startup do
 
     respond_to do |format|
       format.json do
-        render json: { feedback: feedback, product_name: startup.product_name }
+        render json: { feedback: feedback, name: startup.name }
       end
     end
   end
 
-  show title: :product_name do |startup|
+  show title: :name do |startup|
     attributes_table do
       row :level
       row :faculty do

@@ -13,7 +13,7 @@ module Admin
 
     def save
       Founder.transaction do
-        team = Startup.create!(product_name: team_name, level: level)
+        team = Startup.create!(name: team_name, level: level)
         member_details.each do |name, email|
           next if name.blank? || email.blank?
 

@@ -37,7 +37,7 @@ describe TimelineEvents::VerificationNotificationJob, broken: true do
       event_title: timeline_event_for_startup.title,
       startup_url: startup_url,
       event_url: timeline_event_for_startup.share_url,
-      startup_product_name: startup.product_name
+      startup_name: startup.name
     )
   end
 
@@ -47,7 +47,7 @@ describe TimelineEvents::VerificationNotificationJob, broken: true do
       event_title: timeline_event_for_startup.title,
       event_url: timeline_event_for_startup.share_url,
       startup_url: startup_url,
-      startup_product_name: startup.product_name
+      startup_name: startup.name
     )
   end
 
@@ -55,7 +55,7 @@ describe TimelineEvents::VerificationNotificationJob, broken: true do
     I18n.t(
       'jobs.timeline_events.verification_notification.public.verified',
       startup_url: startup_url,
-      startup_product_name: startup.product_name,
+      startup_name: startup.name,
       event_url: timeline_event_for_startup.share_url,
       event_title: timeline_event_for_startup.title,
       event_description: timeline_event_for_startup.description,

@@ -27,6 +27,47 @@ button:disabled, .disabled {
     width: 64px;
 }
 
+.global-sidebar__primary-nav-link {
+    @apply .flex .text-white .font-semibold .no-underline .items-center;
+    position: relative;
+}
+
+.global-sidebar__primary-nav-link:hover {
+    @apply .bg-primary-darker;
+}
+
+.global-sidebar__primary-nav-link--active {
+    @apply .bg-grey-lighter .text-primary;
+    box-shadow: inset 4px 0 0 0 config('colors.yellow');
+    background-image: linear-gradient(to right, config('colors.white'), config('colors.grey-lighter'));
+}
+
+.global-sidebar__primary-nav-link--active:before, .global-sidebar__primary-nav-link--active:after {
+    content: "";
+    position: absolute;
+    right: 0;
+    width: 16px;
+    height: 16px;
+}
+.global-sidebar__primary-nav-link--active:before {
+    top: -16px;
+    border-radius: 0 0 50%;
+    border-width: 0px 20px 0 0;
+    box-shadow: 0px 10px config(colors.grey-lighter);
+    border-color: transparent;
+}
+.global-sidebar__primary-nav-link--active:after {
+    bottom: -16px;
+    border-radius: 0 50% 0;
+    border-width: 0 20px 0 0;
+    box-shadow: 0 -10px config(colors.grey-lighter);
+    border-color: transparent;
+}
+
+.global-sidebar__primary-nav-link--active:hover {
+    @apply .bg-grey-lighter .text-primary;
+}
+
 .blanket {
     bottom: 0px;
     left: 0px;

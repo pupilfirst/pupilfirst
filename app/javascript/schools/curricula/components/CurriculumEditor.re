@@ -161,7 +161,7 @@ let make =
 
       send(UpdateTargetGroups(targetGroup));
     };
-    <div className="flex-1 flex flex-col bg-white overflow-hidden">
+    <div className="flex-1 flex">
       {
         switch (state.editorAction) {
         | Hidden => ReasonReact.null
@@ -194,78 +194,78 @@ let make =
           />
         }
       }
-      <div
-        className="border-b flex px-6 py-2 h-16 items-center justify-between z-20 shadow">
-        <div className="flex">
-          <div className="inline-block relative w-64">
-            <select
-              onChange={
-                event => {
-                  let level_name = ReactEvent.Form.target(event)##value;
-                  send(
-                    SelectLevel(Level.selectLevel(state.levels, level_name)),
-                  );
+      <div className="px-6 pb-4 flex-1 bg-grey-lightest relative overflow-y-scroll">
+        <div
+        className="max-w-lg flex py-4 items-center sticky pin-t z-20 bg-grey-lightest border-b justify-between mx-auto">
+          <div className="flex">
+            <div className="inline-block relative w-64">
+              <select
+                onChange={
+                  event => {
+                    let level_name = ReactEvent.Form.target(event)##value;
+                    send(
+                      SelectLevel(Level.selectLevel(state.levels, level_name)),
+                    );
+                  }
                 }
-              }
-              value={currentLevel |> Level.name}
-              className="block appearance-none w-full bg-white border text-sm border-grey-light hover:border-grey px-4 py-2 pr-8 rounded-r-none leading-tight focus:outline-none">
-              {
-                state.levels
-                |> Level.sort
-                |> List.map(level =>
-                     <option
-                       key={Level.id(level) |> string_of_int}
-                       value={level |> Level.name}>
-                       {
-                         "Level "
-                         ++ (level |> Level.number |> string_of_int)
-                         ++ ": "
-                         ++ (level |> Level.name)
-                         |> str
-                       }
-                     </option>
-                   )
-                |> Array.of_list
-                |> ReasonReact.array
-              }
-            </select>
-            <div
-              className="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
-              <Icon kind=Icon.Down size="3" />
+                value={currentLevel |> Level.name}
+                className="block appearance-none w-full bg-white border text-sm border-grey-light hover:border-grey px-4 py-2 pr-8 rounded-r-none leading-tight focus:outline-none">
+                {
+                  state.levels
+                  |> Level.sort
+                  |> List.map(level =>
+                      <option
+                        key={Level.id(level) |> string_of_int}
+                        value={level |> Level.name}>
+                        {
+                          "Level "
+                          ++ (level |> Level.number |> string_of_int)
+                          ++ ": "
+                          ++ (level |> Level.name)
+                          |> str
+                        }
+                      </option>
+                    )
+                  |> Array.of_list
+                  |> ReasonReact.array
+                }
+              </select>
+              <div
+                className="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+                <Icon kind=Icon.Down size="3" />
+              </div>
             </div>
-          </div>
-          <button
-            className="flex text-grey-dark hover:text-grey-darkest text-sm font-bold border -ml-1 py-1 px-2 rounded-r focus:outline-none"
-            onClick={
-              _ =>
-                send(
-                  UpdateEditorAction(
-                    ShowLevelEditor(Some(state.selectedLevel)),
-                  ),
-                )
-            }>
-            <i className="material-icons"> {"edit" |> str} </i>
-          </button>
-          <button
-            className="text-indigo-dark hover:bg-indigo-dark font-semibold text-sm hover:text-white focus:outline-none border border-dashed border-blue hover:border-transparent flex items-center px-2 py-1 ml-4 rounded-lg cursor-pointer"
-            onClick={_ => send(UpdateEditorAction(ShowLevelEditor(None)))}>
-            <i className="material-icons mr-2">
-              {"add_circle_outline" |> str}
-            </i>
-            {"Create New Level" |> str}
-          </button>
-        </div>
-        {
-          showArchivedButton(targetGroupsInLevel, state.targets) ?
             <button
-              className="bg-indigo-lightest hover:bg-indigo text-indigo-dark text-sm hover:text-indigo-lightest font-semibold py-2 px-4 rounded focus:outline-none"
-              onClick={_ => send(ToggleShowArchived)}>
-              {(state.showArchived ? "Hide Archived" : "Show Archived") |> str}
-            </button> :
-            ReasonReact.null
-        }
-      </div>
-      <div className="px-6 py-4 flex-1 bg-grey-lightest overflow-y-scroll">
+              className="flex text-grey-dark hover:text-grey-darkest text-sm font-bold border -ml-1 py-1 px-2 rounded-r focus:outline-none"
+              onClick={
+                _ =>
+                  send(
+                    UpdateEditorAction(
+                      ShowLevelEditor(Some(state.selectedLevel)),
+                    ),
+                  )
+              }>
+              <i className="material-icons"> {"edit" |> str} </i>
+            </button>
+            <button
+              className="text-indigo-dark hover:bg-indigo-dark font-semibold text-sm hover:text-white focus:outline-none border border-dashed border-blue hover:border-transparent flex items-center px-2 py-1 ml-4 rounded-lg cursor-pointer"
+              onClick={_ => send(UpdateEditorAction(ShowLevelEditor(None)))}>
+              <i className="material-icons mr-2">
+                {"add_circle_outline" |> str}
+              </i>
+              {"Create New Level" |> str}
+            </button>
+          </div>
+          {
+            showArchivedButton(targetGroupsInLevel, state.targets) ?
+              <button
+                className="bg-indigo-lightest hover:bg-indigo text-indigo-dark text-sm hover:text-indigo-lightest font-semibold py-2 px-4 rounded focus:outline-none"
+                onClick={_ => send(ToggleShowArchived)}>
+                {(state.showArchived ? "Hide Archived" : "Show Archived") |> str}
+              </button> :
+              ReasonReact.null
+          }
+        </div>
         <div
           className="target-group__container max-w-lg mt-5 mx-auto relative">
           {

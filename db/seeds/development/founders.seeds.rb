@@ -14,7 +14,7 @@ after 'development:startups' do
 
   # Add John Doe to teams in all three courses.
   ['Guardians of the Galaxy', 'iOS Startup'].each do |team_name|
-    startup = Startup.find_by(product_name: team_name)
+    startup = Startup.find_by(name: team_name)
 
     founder_john_doe = Founder.create!(john_doe_attributes.merge(
       startup: startup
@@ -59,7 +59,7 @@ after 'development:startups' do
   }
 
   teams.each do |team_name, founders|
-    startup = Startup.find_by(product_name: team_name)
+    startup = Startup.find_by(name: team_name)
 
     founders.each do |email, name, gender, phone|
       user = User.where(email: email).first_or_create!

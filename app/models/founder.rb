@@ -131,7 +131,7 @@ class Founder < ApplicationRecord
   end
 
   def name_and_team
-    name + ' (' + startup.product_name + ')'
+    name + ' (' + startup.name + ')'
   end
 
   def to_s

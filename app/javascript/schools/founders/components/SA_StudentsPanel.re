@@ -596,7 +596,9 @@ let make =
                                         key=(coach |> Coach.avatarUrl)
                                         className="w-6 h-6 rounded-full mr-2"
                                         src=(coach |> Coach.avatarUrl)
-                                        alt="Avatar of Jonathan Reinink"
+                                        alt=(
+                                          "Avatar of " ++ (coach |> Coach.name)
+                                        )
                                       />
                                     )
                                  |> Array.of_list

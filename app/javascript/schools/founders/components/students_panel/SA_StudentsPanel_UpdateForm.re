@@ -300,7 +300,10 @@ let make =
                 </div>
                 <div className="mt-6">
                   <div className="border-b border-grey-light pb-2 mb-2">
-                    <span className="mr-1"> ("Tags applied:" |> str) </span>
+                    <span
+                      className="mr-1 text-grey-darker text-xs font-semibold">
+                      ("Tags applied:" |> str)
+                    </span>
                   </div>
                   <SA_StudentsPanel_SearchableTagList
                     unselectedTags=(

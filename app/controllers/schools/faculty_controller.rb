@@ -64,11 +64,6 @@ module Schools
       end
     end
 
-    # POST /school/courses/:course_id/teams/update_enrollments
-    def update_startup_enrollments; end
-
-    private
-
     def faculty
       @faculty = authorize(Faculty.find(params[:id]), policy_class: Schools::FacultyPolicy)
     end

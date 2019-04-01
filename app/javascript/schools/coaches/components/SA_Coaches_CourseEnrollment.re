@@ -1,7 +1,6 @@
 open CoachesCourseEnrollment__Types;
 
-open SchoolAdmin__Utils;
-
+/* open SchoolAdmin__Utils; */
 let str = ReasonReact.string;
 
 type formVisible =
@@ -10,6 +9,7 @@ type formVisible =
 
 type state = {
   courseCoaches: list(Coach.t),
+  teamCoaches: list(Coach.t),
   formVisible,
 };
 
@@ -36,6 +36,12 @@ let make =
            courseCoachIds
            |> List.exists(facultyId => facultyId == Coach.id(schoolCoach))
          ),
+    teamCoaches:
+      schoolCoaches
+      |> List.filter(schoolCoach =>
+           startupCoachIds
+           |> List.exists(facultyId => facultyId == Coach.id(schoolCoach))
+         ),
     formVisible: None,
   },
   reducer: (action, state) =>
@@ -49,7 +55,18 @@ let make =
              coachIds
              |> List.exists(coachId => coachId == Coach.id(schoolCoach))
            );
-      ReasonReact.Update({...state, courseCoaches: newCoachesList});
+      let newTeamCoaches =
+        state.teamCoaches
+        |> List.filter(teamCoach =>
+             ! (
+               newCoachesList |> List.exists(newCoach => newCoach == teamCoach)
+             )
+           );
+      ReasonReact.Update({
+        ...state,
+        courseCoaches: newCoachesList,
+        teamCoaches: newTeamCoaches,
+      });
     },
   render: ({state, send}) => {
     let closeFormCB = () => send(UpdateFormVisible(None));
@@ -84,15 +101,55 @@ let make =
             className="max-w-md w-full flex mx-auto items-center justify-center relative bg-grey-lighter hover:bg-grey-light hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-12 cursor-pointer">
             <i className="material-icons"> ("add_circle_outline" |> str) </i>
             <h4 className="font-semibold ml-2">
-              ("Assign Course Faculty" |> str)
+              ("Assign/Remove Course Faculty" |> str)
             </h4>
           </div>
         </div>
         <div
           className="px-6 pb-4 mt-5 flex flex-1 bg-grey-lightest overflow-y-scroll">
           <div className="max-w-md w-full mx-auto relative">
+            <div className="mb-5 w-full"> ("Course Coaches:" |> str) </div>
             (
               state.courseCoaches
+              |> List.sort((x, y) => (x |> Coach.id) - (y |> Coach.id))
+              |> List.map(coach =>
+                   <div
+                     className="flex items-center shadow bg-white rounded-lg overflow-hidden mb-4">
+                     <div
+                       className="course-faculty__list-item flex w-full hover:bg-grey-lighter">
+                       <div className="flex flex-1 items-center py-4 px-4">
+                         <img
+                           className="w-10 h-10 rounded-full mr-4"
+                           src=(coach |> Coach.imageUrl)
+                           alt="Avatar of Jonathan Reinink"
+                         />
+                         <div className="text-sm">
+                           <p className="text-black font-semibold">
+                             (coach |> Coach.name |> str)
+                           </p>
+                           <p
+                             className="text-grey-dark font-semibold text-xs mt-1">
+                             (coach |> Coach.title |> str)
+                           </p>
+                         </div>
+                       </div>
+                       <div
+                         className="course-faculty__list-item-remove items-center p-4 flex invisible cursor-pointer">
+                         <i className="material-icons">
+                           ("delete_outline" |> str)
+                         </i>
+                       </div>
+                     </div>
+                   </div>
+                 )
+              |> Array.of_list
+              |> ReasonReact.array
+            )
+            <div className="mb-5 w-full">
+              ("Student/Team Coaches:" |> str)
+            </div>
+            (
+              state.teamCoaches
               |> List.sort((x, y) => (x |> Coach.id) - (y |> Coach.id))
               |> List.map(coach =>
                    <div

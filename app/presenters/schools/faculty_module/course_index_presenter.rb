@@ -8,7 +8,13 @@ module Schools
       end
 
       def react_props
-        { courseCoachIds: course_faculty_ids, startupCoachIds: startup_faculty_ids, schoolCoaches: school_faculty_details, courseId: @course.id, authenticityToken: view.form_authenticity_token }
+        {
+          courseCoachIds: course_faculty_ids,
+          startupCoachIds: startup_faculty.pluck(:id),
+          schoolCoaches: school_faculty_details,
+          courseId: @course.id,
+          authenticityToken: view.form_authenticity_token
+        }
       end
 
       private
@@ -29,8 +35,8 @@ module Schools
         end
       end
 
-      def startup_faculty_ids
-        Faculty.left_joins(startups: :course).where(startups: { courses: { id: @course } }).pluck(:id)
+      def startup_faculty
+        Faculty.left_joins(startups: :course).where(startups: { courses: { id: @course } })
       end
 
       def course_faculty_ids

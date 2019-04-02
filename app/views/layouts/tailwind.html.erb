@@ -30,10 +30,12 @@
 </head>
 
 <body data-env="<%= Rails.env %>">
-  <% if content_for?(:wrapper) %>
-    <%= yield :wrapper %>
-  <% else %>
-    <%= yield %>
-  <% end %>
+<%= render 'layouts/pretender_tailwind' if @pretender %>
+
+<% if content_for?(:wrapper) %>
+  <%= yield :wrapper %>
+<% else %>
+  <%= yield %>
+<% end %>
 </body>
 </html>

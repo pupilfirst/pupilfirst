@@ -186,7 +186,7 @@ class ApplicationController < ActionController::Base
   end
 
   def pretender
-    @pretender = true if current_user != true_user
+    @pretender = (current_user != true_user)
   end
 
   def avatar(name, founder: nil, faculty: nil, version: :mid, background_shape: :circle)

@@ -49,7 +49,7 @@ let make = (~coaches, ~schoolId, ~authenticityToken, _children) => {
       <div className="flex-1 flex flex-col bg-grey-lightest overflow-hidden">
         <div
           className="flex px-6 py-2 items-center justify-between overflow-y-scroll">
-          <div
+          <button
             onClick=(
               _event => {
                 ReactEvent.Mouse.preventDefault(_event);
@@ -59,7 +59,7 @@ let make = (~coaches, ~schoolId, ~authenticityToken, _children) => {
             className="max-w-md w-full flex mx-auto items-center justify-center relative bg-grey-lighter hover:bg-grey-light hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-12 cursor-pointer">
             <i className="material-icons"> ("add_circle_outline" |> str) </i>
             <h4 className="font-semibold ml-2"> ("Add New Coach" |> str) </h4>
-          </div>
+          </button>
         </div>
         <div
           className="px-6 pb-4 mt-5 flex flex-1 bg-grey-lightest overflow-y-scroll">

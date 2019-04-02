@@ -11,7 +11,6 @@ class ResourcesController < ApplicationController
     end
 
     @resources = filtered_resources.page(page).per(9)
-    @resource_tags = @form.resource_tags
     @skip_container = true
   end
 

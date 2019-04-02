@@ -144,6 +144,12 @@ en:
         target_status: This indicates the present status of the target.
         final_message: That&rsquo;s it for now. If you have any doubts, don&rsquo;t hesitate to reach out to us for help.<br/><br/>Have fun!
 
+  resources:
+    index:
+      zero_results: There are no public resources in this library. You may need to be signed in to see private resources.
+      filter_zero_results: There are no resources with the current filter conditions. Try changing or clearing the filter.
+      filter_notice: Now showing resources that match the current filter. Clear the filter to see all available resources.
+
   # These are custom error messages for the active_storage_validations gem.
   errors:
     messages:

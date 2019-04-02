@@ -1,4 +1,4 @@
-- presenter = Resources::IndexPresenter.new(self)
+- presenter = Resources::IndexPresenter.new(self, @form, @resources)
 
 - content_for :head
   title Library | #{current_school.name}
@@ -16,7 +16,7 @@
   .resources.my-4
     .tag-filter
       = bootstrap_form_for(@form, layout: :inline, url: resources_url, method: :get) do |f|
-        = f.select :tags, options_for_select(@resource_tags, @form.tags), { include_blank: true, hide_label: true }, { multiple: true, class: 'tag-select' }
+        = f.select :tags, options_for_select(presenter.resource_tags, @form.tags), { include_blank: true, hide_label: true }, { multiple: true, class: 'tag-select' }
         = f.text_field :search, hide_label: true, value: @form.search, placeholder: 'Title contains', class: 'search-field'
         = f.select :created_after, options_for_select(@form.date_filter_options, @form.created_after), { include_blank: 'Added Anytime', hide_label: true }, { class: 'search-field' }
         .filter-buttons.d-flex.d-sm-flex
@@ -29,17 +29,13 @@
               | Clear
 
     .row
-      - if @resources.blank? || @form.errors.present?
+      - if presenter.notice?
         .col-md-12
           .alert.alert-warning.mt-4
-            = presenter.zero_results_text.html_safe
-      - else
-        - if @form.tags.present? || @form.search.present?
-          .col-md-12
-            p.show-result-text.mt-3
-              = presenter.results_caption
-        - @resources.each do |resource|
-          = render 'resource', resource: resource
+            = presenter.notice.html_safe
+
+      - @resources.each do |resource|
+        = render 'resource', resource: resource
 
   .d-flex.justify-content-center.my-4
     = paginate @resources, theme: 'twitter-bootstrap-4', window: 1

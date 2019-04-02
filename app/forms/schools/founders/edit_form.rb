@@ -4,6 +4,7 @@ module Schools
       property :name, validates: { presence: true }
       property :team_name, virtual: true, validates: { presence: true }
       property :exited, validates: { inclusion: { in: [true, false] } }
+      property :excluded_from_leaderboard, validates: { inclusion: { in: [true, false] } }
       property :tags
 
       def save
@@ -11,7 +12,9 @@ module Schools
           model.startup.update!(name: team_name)
           model.name = name
           model.tag_list = tags
+          model.excluded_from_leaderboard = excluded_from_leaderboard
           model.save!
+
           school = model.school
           school.founder_tag_list << tags
           school.save!

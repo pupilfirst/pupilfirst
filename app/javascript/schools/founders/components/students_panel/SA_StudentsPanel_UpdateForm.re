@@ -8,6 +8,7 @@ type state = {
   hasTeamNameError: bool,
   tagsToApply: list(string),
   exited: bool,
+  excludedFromLeaderboard: bool,
 };
 
 type action =
@@ -16,7 +17,8 @@ type action =
   | UpdateErrors(bool, bool)
   | AddTag(string)
   | RemoveTag(string)
-  | UpdateExited(bool);
+  | UpdateExited(bool)
+  | UpdateExcludedFromLeaderboard(bool);
 
 let component = ReasonReact.reducerComponent("SA_StudentsPanel_UpdateForm");
 
@@ -50,7 +52,13 @@ let updateStudent = (student, state, authenticityToken, responseCB) => {
     authenticityToken |> Js.Json.string,
   );
   let updatedStudent =
-    student |> Student.updateInfo(state.name, state.teamName, state.exited);
+    student
+    |> Student.updateInfo(
+         state.name,
+         state.teamName,
+         state.exited,
+         state.excludedFromLeaderboard,
+       );
 
   Js.Dict.set(payload, "founder", updatedStudent |> Student.encode);
   Js.Dict.set(
@@ -63,9 +71,9 @@ let updateStudent = (student, state, authenticityToken, responseCB) => {
   Api.update(url, payload, responseCB, handleErrorCB);
 };
 
-let booleanButtonClasses = bool => {
+let boolBtnClasses = selected => {
   let classes = "w-1/2 toggle-button__button hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none";
-  classes ++ (bool ? " bg-grey" : " bg-white");
+  classes ++ (selected ? " bg-grey" : " bg-white");
 };
 
 let make =
@@ -85,6 +93,7 @@ let make =
     hasTeamNameError: false,
     tagsToApply: student |> Student.tags,
     exited: student |> Student.exited,
+    excludedFromLeaderboard: student |> Student.excludedFromLeaderboard,
   },
   reducer: (action, state) =>
     switch (action) {
@@ -103,6 +112,8 @@ let make =
         tagsToApply: state.tagsToApply |> List.filter(t => t !== tag),
       })
     | UpdateExited(exited) => ReasonReact.Update({...state, exited})
+    | UpdateExcludedFromLeaderboard(excludedFromLeaderboard) =>
+      ReasonReact.Update({...state, excludedFromLeaderboard})
     },
   render: ({state, send}) =>
     <div>
@@ -134,66 +145,62 @@ let make =
                 </div>
               </div>
               <div className="max-w-md p-6 mx-auto">
-                <label
-                  className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
-                  htmlFor="name">
-                  {"Name" |> str}
-                </label>
-                <span> {"*" |> str} </span>
-                <input
-                  value={state.name}
-                  onChange={
-                    event =>
-                      updateName(
-                        send,
-                        state,
-                        ReactEvent.Form.target(event)##value,
-                      )
-                  }
-                  className="drawer-right-form__input appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                  id="name"
-                  type_="text"
-                  placeholder="Student name here"
-                />
-                {
-                  state.hasNameError ?
-                    <div className="drawer-right-form__error-msg">
-                      {"not a valid name" |> str}
-                    </div> :
-                    ReasonReact.null
-                }
-                <label
-                  className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
-                  htmlFor="team_name">
-                  {"Team Name" |> str}
-                </label>
-                <span> {"*" |> str} </span>
-                <input
-                  value={state.teamName}
-                  onChange={
-                    event =>
-                      updateTeamName(
-                        send,
-                        state,
-                        ReactEvent.Form.target(event)##value,
-                      )
-                  }
-                  className="drawer-right-form__input appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                  id="team_name"
-                  type_="text"
-                  placeholder="Team name here"
-                />
-                {
-                  state.hasTeamNameError ?
-                    <div className="drawer-right-form__error-msg">
-                      {"not a valid team name" |> str}
-                    </div> :
-                    ReasonReact.null
-                }
+                <div>
+                  <label
+                    className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                    htmlFor="name">
+                    {"Name" |> str}
+                  </label>
+                  <span> {"*" |> str} </span>
+                  <input
+                    value={state.name}
+                    onChange={
+                      event =>
+                        updateName(
+                          send,
+                          state,
+                          ReactEvent.Form.target(event)##value,
+                        )
+                    }
+                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    id="name"
+                    type_="text"
+                    placeholder="Student name here"
+                  />
+                  <School__InputGroupError
+                    message="is not a valid name"
+                    active={state.hasNameError}
+                  />
+                </div>
                 <div className="mt-6">
-                  <div className="border-b border-grey-light pb-2 mb-2">
-                    <span className="mr-1"> {"Tags applied:" |> str} </span>
-                  </div>
+                  <label
+                    className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                    htmlFor="team_name">
+                    {"Team Name" |> str}
+                  </label>
+                  <span> {"*" |> str} </span>
+                  <input
+                    value={state.teamName}
+                    onChange={
+                      event =>
+                        updateTeamName(
+                          send,
+                          state,
+                          ReactEvent.Form.target(event)##value,
+                        )
+                    }
+                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    id="team_name"
+                    type_="text"
+                    placeholder="Team name here"
+                  />
+                  <School__InputGroupError
+                    message="is not a valid team name"
+                    active={state.hasTeamNameError}
+                  />
+                </div>
+                <div className="mt-6">
+                  <div className="mb-2"> {"Tags applied:" |> str} </div>
                   <SA_StudentsPanel_SearchableTagList
                     unselectedTags={
                       studentTags
@@ -207,17 +214,55 @@ let make =
                     allowNewTags=true
                   />
                 </div>
-                <div className="bg-white py-6">
+                <div className="mt-6">
+                  <div className="flex items-center flex-no-shrink">
+                    <label
+                      className="block tracking-wide text-grey-darker text-xs font-semibold mr-3">
+                      {
+                        "Should this student be excluded from leaderboards?"
+                        |> str
+                      }
+                    </label>
+                    <div
+                      className="flex flex-no-shrink rounded-lg overflow-hidden border">
+                      <button
+                        onClick={
+                          _event => {
+                            ReactEvent.Mouse.preventDefault(_event);
+                            send(UpdateExcludedFromLeaderboard(true));
+                          }
+                        }
+                        className={
+                          boolBtnClasses(state.excludedFromLeaderboard)
+                        }>
+                        {"Yes" |> str}
+                      </button>
+                      <button
+                        onClick={
+                          _event => {
+                            ReactEvent.Mouse.preventDefault(_event);
+                            send(UpdateExcludedFromLeaderboard(false));
+                          }
+                        }
+                        className={
+                          boolBtnClasses(!state.excludedFromLeaderboard)
+                        }>
+                        {"No" |> str}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6 pl-16 bg-grey-lighter">
+                <div className="max-w-md px-6">
                   <div
-                    className="flex max-w-md w-full justify-between items-center px-6 mx-auto">
+                    className="flex max-w-md w-full justify-between items-center mx-auto">
                     <div className="flex items-center flex-no-shrink">
                       <label
-                        className="block tracking-wide text-grey-darker text-xs font-semibold mr-3"
-                        htmlFor="dropped_out_buttons">
+                        className="block tracking-wide text-grey-darker text-xs font-semibold mr-3">
                         {"Has this student dropped out?" |> str}
                       </label>
                       <div
-                        id="dropped_out_buttons"
                         className="flex flex-no-shrink rounded-lg overflow-hidden border">
                         <button
                           onClick={
@@ -226,9 +271,7 @@ let make =
                               send(UpdateExited(true));
                             }
                           }
-                          className={
-                            booleanButtonClasses(state.exited == true)
-                          }>
+                          className={boolBtnClasses(state.exited)}>
                           {"Yes" |> str}
                         </button>
                         <button
@@ -238,9 +281,7 @@ let make =
                               send(UpdateExited(false));
                             }
                           }
-                          className={
-                            booleanButtonClasses(state.exited == false)
-                          }>
+                          className={boolBtnClasses(!state.exited)}>
                           {"No" |> str}
                         </button>
                       </div>

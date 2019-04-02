@@ -30,8 +30,15 @@ module Schools
             name: faculty.name,
             email: faculty.user.email,
             title: faculty.title,
-            imageUrl: faculty.image_or_avatar_url
+            imageUrl: faculty.image_or_avatar_url,
+            teams: faculty_team_details(faculty)
           }
+        end
+      end
+
+      def faculty_team_details(faculty)
+        if faculty.startups.present?
+          faculty.startups.map { |startup| { name: startup.name } }
         end
       end
 

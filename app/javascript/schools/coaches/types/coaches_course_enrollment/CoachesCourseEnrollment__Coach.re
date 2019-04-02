@@ -4,6 +4,7 @@ type t = {
   imageUrl: string,
   email: string,
   title: string,
+  teams: option(list(CoachesCourseEnrollment__Team.t)),
 };
 
 let name = t => t.name;
@@ -16,6 +17,8 @@ let imageUrl = t => t.imageUrl;
 
 let title = t => t.title;
 
+let teams = t => t.teams;
+
 let decode = json =>
   Json.Decode.{
     name: json |> field("name", string),
@@ -23,22 +26,14 @@ let decode = json =>
     imageUrl: json |> field("imageUrl", string),
     email: json |> field("email", string),
     title: json |> field("title", string),
+    teams:
+      json
+      |> field(
+           "teams",
+           nullable(list(CoachesCourseEnrollment__Team.decode)),
+         )
+      |> Js.Null.toOption,
   };
-
-let create =
-    (
-      id,
-      name,
-      imageUrl,
-      email,
-      title,
-    ) => {
-  id,
-  name,
-  imageUrl,
-  email,
-  title,
-};
 
 let updateList = (coaches, coach) => {
   let oldList = coaches |> List.filter(t => t.id !== coach.id);

@@ -1,7 +1,5 @@
 open CoachesPanel__Types;
 
-open SchoolAdmin__Utils;
-
 let str = ReasonReact.string;
 
 type formVisible =
@@ -71,6 +69,7 @@ let make = (~coaches, ~schoolId, ~authenticityToken, _children) => {
               |> List.sort((x, y) => (x |> Coach.id) - (y |> Coach.id))
               |> List.map(coach =>
                    <div
+                     key=(coach |> Coach.id |> string_of_int)
                      className="flex items-center shadow bg-white rounded-lg overflow-hidden mb-4">
                      <div
                        className="course-faculty__list-item flex w-full hover:bg-grey-lighter"

@@ -114,6 +114,7 @@ let make =
               |> List.sort((x, y) => (x |> Coach.id) - (y |> Coach.id))
               |> List.map(coach =>
                    <div
+                     key=(coach |> Coach.id |> string_of_int)
                      className="flex items-center shadow bg-white rounded-lg overflow-hidden mb-4">
                      <div
                        className="course-faculty__list-item flex w-full hover:bg-grey-lighter">
@@ -145,14 +146,19 @@ let make =
               |> Array.of_list
               |> ReasonReact.array
             )
-            <div className="mb-5 w-full">
-              ("Student/Team Coaches:" |> str)
-            </div>
+            (
+              state.teamCoaches |> ListUtils.isEmpty ?
+                ReasonReact.null :
+                <div className="mb-5 w-full">
+                  ("Student/Team Coaches:" |> str)
+                </div>
+            )
             (
               state.teamCoaches
               |> List.sort((x, y) => (x |> Coach.id) - (y |> Coach.id))
               |> List.map(coach =>
                    <div
+                     key=(coach |> Coach.id |> string_of_int)
                      className="flex items-center shadow bg-white rounded-lg overflow-hidden mb-4">
                      <div
                        className="course-faculty__list-item flex w-full hover:bg-grey-lighter">
@@ -160,7 +166,7 @@ let make =
                          <img
                            className="w-10 h-10 rounded-full mr-4"
                            src=(coach |> Coach.imageUrl)
-                           alt="Avatar of Jonathan Reinink"
+                           alt=("Avatar of " ++ Coach.name(coach))
                          />
                          <div className="text-sm">
                            <p className="text-black font-semibold">
@@ -170,13 +176,24 @@ let make =
                              className="text-grey-dark font-semibold text-xs mt-1">
                              (coach |> Coach.title |> str)
                            </p>
+                           (
+                             switch (coach |> Coach.teams) {
+                             | None => ReasonReact.null
+                             | Some(teams) =>
+                               <p
+                                 className="text-grey-dark font-semibold text-xs mt-1">
+                                 (
+                                   "Teams: "
+                                   ++ (
+                                     List.map(team => Team.name(team), teams)
+                                     |> String.concat(" | ")
+                                   )
+                                   |> str
+                                 )
+                               </p>
+                             }
+                           )
                          </div>
-                       </div>
-                       <div
-                         className="course-faculty__list-item-remove items-center p-4 flex invisible cursor-pointer">
-                         <i className="material-icons">
-                           ("delete_outline" |> str)
-                         </i>
                        </div>
                      </div>
                    </div>

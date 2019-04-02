@@ -20,7 +20,7 @@ module Schools
       private
 
       def school_faculty
-        Faculty.where(school: @course.school).includes(:user, :image_attachment)
+        Faculty.where(school: @course.school).includes(:user, :image_attachment, faculty_startup_enrollments: :startup)
       end
 
       def school_faculty_details

@@ -70,7 +70,10 @@ let make =
     },
   render: ({state, send}) => {
     let closeFormCB = () => send(UpdateFormVisible(None));
-    let updateCoachesCB = coachIds => send(UpdateCoaches(coachIds));
+    let updateCoachesCB = coachIds => {
+      send(UpdateCoaches(coachIds));
+      send(UpdateFormVisible(None));
+    };
     <div className="flex flex-1 h-screen">
       (
         switch (state.formVisible) {
@@ -91,7 +94,7 @@ let make =
       <div className="flex-1 flex flex-col bg-grey-lightest overflow-hidden">
         <div
           className="flex px-6 py-2 items-center justify-between overflow-y-scroll">
-          <div
+          <button
             onClick=(
               _event => {
                 ReactEvent.Mouse.preventDefault(_event);
@@ -103,12 +106,27 @@ let make =
             <h4 className="font-semibold ml-2">
               ("Assign/Remove Course Faculty" |> str)
             </h4>
-          </div>
+          </button>
         </div>
+        (
+          state.teamCoaches
+          |> ListUtils.isEmpty
+          && state.courseCoaches
+          |> ListUtils.isEmpty ?
+            <div
+              className="flex justify-center bg-grey-lightest border rounded p-3 italic mt-2">
+              ("The course has no coaches assigned!" |> str)
+            </div> :
+            ReasonReact.null
+        )
         <div
           className="px-6 pb-4 mt-5 flex flex-1 bg-grey-lightest overflow-y-scroll">
           <div className="max-w-md w-full mx-auto relative">
-            <div className="mb-5 w-full"> ("Course Coaches:" |> str) </div>
+            (
+              state.courseCoaches |> ListUtils.isEmpty ?
+                ReasonReact.null :
+                <div className="mb-5 w-full"> ("Course Coaches:" |> str) </div>
+            )
             (
               state.courseCoaches
               |> List.sort((x, y) => (x |> Coach.id) - (y |> Coach.id))

@@ -5,8 +5,10 @@ feature 'Coaches Index' do
 
   # Setup a course with a single founder target, ...
   let!(:school) { create :school, :current }
+  let!(:school_1) { create :school, :current }
   let!(:coach_1) { create :faculty, school: school }
   let!(:coach_2) { create :faculty, school: school }
+  let!(:coach_3) { create :faculty, school: school_1 }
 
   let!(:new_coach_name) { Faker::Lorem.words(2).join ' ' }
   let!(:new_coach_email) { Faker::Internet.email }
@@ -29,6 +31,7 @@ feature 'Coaches Index' do
     expect(page).to have_text("Add New Coach")
     expect(page).to have_text(coach_1.name)
     expect(page).to have_text(coach_2.name)
+    expect(page).to_not have_text(coach_3.name)
 
     # Add a new course
     click_button 'Add New Coach'
@@ -41,7 +44,7 @@ feature 'Coaches Index' do
 
     click_button 'Create Coach'
 
-    expect(page).to have_text("Coach created successfully")
+    expect(page).to have_text('Coach created successfully')
     find('.ui-pnotify-container').click
     expect(page).to have_text(new_coach_name)
     coach = Faculty.last
@@ -55,7 +58,7 @@ feature 'Coaches Index' do
     fill_in 'Name', with: updated_coach_name
     fill_in 'Title', with: updated_coach_title
     click_button 'Update Coach'
-    expect(page).to have_text("Coach updated successfully")
+    expect(page).to have_text('Coach updated successfully')
     coach.reload
     expect(coach.name).to eq(updated_coach_name)
     expect(coach.title).to eq(updated_coach_title)

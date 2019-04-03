@@ -7,7 +7,7 @@
 <% content_for(:wrapper) do %>
   <div class="antialiased flex">
     <div class="flex global-sidebar h-screen">
-      <div class="bg-gradient-primary-to-primary-darker-to-bottom global-sidebar__primary-nav global-sidebar__primary-nav--shrinked text-purple-lighter flex flex-col justify-between">
+      <div class="bg-white global-sidebar__primary-nav global-sidebar__primary-nav--shrinked border-r text-purple-lighter flex flex-col justify-between">
         <div>
           <div class="global-sidebar__header mx-auto">
             <div class="global-sidebar__school-logo-container flex items-center justify-center m-2">
@@ -34,20 +34,20 @@
         <ul class="list-reset">
           <% if presenter.founder_profile?(@course) %>
             <li>
-              <%= link_to student_dashboard_path, class: 'flex text-white py-3 px-4 hover:bg-primary-darkest font-semibold no-underline items-center' do %>
+              <%= link_to student_dashboard_path, class: 'flex py-3 px-4 hover:bg-grey-lighter font-semibold no-underline items-center' do %>
                 <i class="material-icons">visibility</i>
               <% end %>
             </li>
           <% end %>
           <% if presenter.coach_profile?(@course) %>
             <li>
-              <%= link_to course_coach_dashboard_path(@course), class: 'flex text-white py-3 px-4 hover:bg-primary-darkest font-semibold no-underline items-center' do %>
+              <%= link_to course_coach_dashboard_path(@course), class: 'flex py-3 px-4 hover:bg-grey-lighter font-semibold no-underline items-center' do %>
                 <i class="material-icons">assignment_turned_in</i>
               <% end %>
             </li>
           <% end %>
           <li>
-            <%= link_to destroy_user_session_path, method: :delete, class: 'flex text-white py-3 px-4 hover:bg-primary-darkest font-semibold no-underline items-center' do %>
+            <%= link_to destroy_user_session_path, method: :delete, class: 'flex py-3 px-4 hover:bg-grey-lighter font-semibold no-underline items-center justify-center' do %>
               <i class="material-icons">power_settings_new</i>
             <% end %>
           </li>

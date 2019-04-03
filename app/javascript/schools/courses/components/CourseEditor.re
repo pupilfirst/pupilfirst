@@ -94,7 +94,7 @@ let make = (~authenticityToken, _children) => {
       send(UpdateCourse(course));
       send(UpdateEditorAction(Hidden));
     };
-    <div className="flex flex-1 h-screen">
+    <div className="flex flex-1 h-screen bg-grey-lighter overflow-y-scroll">
       {
         switch (state.editorAction) {
         | Hidden => ReasonReact.null
@@ -107,9 +107,8 @@ let make = (~authenticityToken, _children) => {
           />
         }
       }
-      <div className="flex-1 flex flex-col bg-grey-lightest overflow-hidden">
-        <div
-          className="flex px-6 py-2 items-center justify-between overflow-y-scroll">
+      <div className="flex-1 flex flex-col">
+        <div className="flex px-6 py-2 items-center justify-between">
           <button
             className="max-w-md w-full flex mx-auto items-center justify-center relative bg-grey-lighter hover:bg-grey-light hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-20 cursor-pointer"
             onClick={_ => send(UpdateEditorAction(ShowForm(None)))}>
@@ -117,15 +116,14 @@ let make = (~authenticityToken, _children) => {
             <h4 className="font-semibold ml-2"> {"Add New Course" |> str} </h4>
           </button>
         </div>
-        <div
-          className="px-6 pb-4 mt-5 flex flex-1 bg-grey-lightest overflow-y-scroll">
+        <div className="px-6 pb-4 mt-5 flex flex-1">
           <div className="max-w-md w-full mx-auto relative">
             {
               state.courses
               |> Course.sort
               |> List.map(course =>
                    <div
-                     className="flex items-center shadow bg-white rounded-lg overflow-hidden mb-4">
+                     className="flex items-center shadow bg-white rounded-lg mb-4">
                      <div
                        className="flex w-full"
                        key={course |> Course.id |> string_of_int}>

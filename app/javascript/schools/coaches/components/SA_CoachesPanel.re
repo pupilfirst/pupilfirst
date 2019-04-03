@@ -94,12 +94,6 @@ let make = (~coaches, ~authenticityToken, _children) => {
                            </p>
                          </div>
                        </div>
-                       <div
-                         className="course-faculty__list-item-remove items-center p-4 flex invisible cursor-pointer">
-                         <i className="material-icons">
-                           {"delete_outline" |> str}
-                         </i>
-                       </div>
                      </div>
                    </div>
                  )

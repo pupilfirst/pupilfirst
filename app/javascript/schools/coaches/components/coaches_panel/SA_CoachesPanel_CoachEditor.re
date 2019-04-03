@@ -65,7 +65,7 @@ let updateTitle = (send, title) => {
 
 let updateLinkedInUrl = (send, linkedinUrl) => {
   let regex = [%re
-    {|/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/|}
+    {|/(https?)?:?(\/\/)?(([w]{3}||\w\w)\.)?linkedin.com(\w+:{0,1}\w*@)?(\S+)(:([0-9])+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/|}
   ];
   let hasError =
     linkedinUrl |> String.length < 1 ?
@@ -412,7 +412,7 @@ let make =
                   (
                     state.hasLinkedInUrlError ?
                       <div className="drawer-right-form__error-msg">
-                        ("not a valid URL" |> str)
+                        ("not a valid LinkedIn URL" |> str)
                       </div> :
                       ReasonReact.null
                   )

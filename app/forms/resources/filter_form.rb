@@ -32,7 +32,7 @@ module Resources
     end
 
     def resource_tags
-      Resource.tag_counts_on(:tags).pluck(:name)
+      @resource_tags ||= Resource.tag_counts_on(:tags).pluck(:name)
     end
   end
 end

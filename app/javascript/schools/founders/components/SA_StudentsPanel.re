@@ -299,337 +299,356 @@ let make =
           </div>
         </div>
       </div>
-      <div className="px-3">
-        <div
-          className="max-w-lg h-16 bg-white mx-auto relative rounded border-b p-4 mt-3 w-full flex items-center justify-between">
-          <div className="flex">
-            <label className="flex items-center leading-tight mr-4 my-auto">
+      <div className="overflow-y-scroll">
+        <div className="px-3">
+          <div
+            className="max-w-lg h-16 bg-white mx-auto relative rounded border-b p-4 mt-3 w-full flex items-center justify-between">
+            <div className="flex">
+              <label className="flex items-center leading-tight mr-4 my-auto">
+                <input
+                  className="leading-tight"
+                  type_="checkbox"
+                  htmlFor="selected-students"
+                  checked=(state.selectedStudents |> List.length > 0)
+                  onChange=(
+                    state.selectedStudents |> List.length > 0 ?
+                      _e => send(DeselectAllStudents) :
+                      (_e => send(SelectAllStudents))
+                  )
+                />
+                <span
+                  id="selected-students"
+                  className="ml-2 text-sm text-grey-dark">
+                  {
+                    let selectedCount = state.selectedStudents |> List.length;
+                    let studentCount =
+                      filteredTeams(state)
+                      |> List.map(team => team |> Team.students)
+                      |> List.flatten
+                      |> List.length;
+                    selectedCount > 0 ?
+                      (selectedCount |> string_of_int) ++ " selected" |> str :
+                      (studentCount |> string_of_int) ++ " students" |> str;
+                  }
+                </span>
+              </label>
+            </div>
+            <div className="flex">
+              (
+                false ?
+                  <button
+                    className="bg-grey-lighter hover:bg-grey-light hover:text-grey-darker focus:outline-none text-grey-dark text-sm font-semibold py-2 px-4 rounded inline-flex items-center mx-2">
+                    ("Add tags" |> str)
+                  </button> :
+                  ReasonReact.null
+              )
+              (
+                isGroupable(state.selectedStudents, state.teams) ?
+                  <button
+                    onClick=(
+                      _e =>
+                        teamUp(
+                          state.selectedStudents,
+                          handleTeamUpResponse(send),
+                          authenticityToken,
+                        )
+                    )
+                    className="bg-transparent hover:bg-purple-dark focus:outline-none text-purple-dark text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
+                    ("Group as Team" |> str)
+                  </button> :
+                  ReasonReact.null
+              )
+              (
+                isMoveOutable(state.selectedStudents, state.teams) ?
+                  <button
+                    onClick=(
+                      _e =>
+                        teamUp(
+                          state.selectedStudents,
+                          handleTeamUpResponse(send),
+                          authenticityToken,
+                        )
+                    )
+                    className="bg-transparent hover:bg-purple-dark focus:outline-none text-purple-dark text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
+                    ("Move out from Team" |> str)
+                  </button> :
+                  ReasonReact.null
+              )
+              (
+                state.selectedStudents |> List.length > 0 ?
+                  ReasonReact.null :
+                  <button
+                    onClick=(_e => send(UpdateFormVisible(CreateForm)))
+                    className="hover:bg-purple-dark text-purple-dark font-semibold hover:text-white focus:outline-none border border-dashed border-blue hover:border-transparent flex items-center px-2 py-1 rounded-lg cursor-pointer">
+                    <i className="material-icons mr-2">
+                      ("add_circle_outline" |> str)
+                    </i>
+                    <h5 className="font-semibold ml-2">
+                      ("Add New Students" |> str)
+                    </h5>
+                  </button>
+              )
+            </div>
+          </div>
+          <div
+            className="max-w-lg bg-white mx-auto relative rounded rounded-b-none border-b px-4 py-3 mt-3 w-full">
+            <div className="flex items-center justify-between">
               <input
-                className="leading-tight"
-                type_="checkbox"
-                htmlFor="selected-students"
-                checked=(state.selectedStudents |> List.length > 0)
+                type_="search"
+                className="bg-white border rounded-lg block w-64 text-sm appearance-none leading-normal mr-2 px-3 py-2"
+                placeholder="Search by student name..."
+                value=state.searchString
                 onChange=(
-                  state.selectedStudents |> List.length > 0 ?
-                    _e => send(DeselectAllStudents) :
-                    (_e => send(SelectAllStudents))
+                  event =>
+                    send(
+                      UpdateSearchString(
+                        ReactEvent.Form.target(event)##value,
+                      ),
+                    )
                 )
               />
-              <span
-                id="selected-students" className="ml-2 text-sm text-grey-dark">
-                {
-                  let selectedCount = state.selectedStudents |> List.length;
-                  let studentCount =
-                    filteredTeams(state)
-                    |> List.map(team => team |> Team.students)
-                    |> List.flatten
-                    |> List.length;
-                  selectedCount > 0 ?
-                    (selectedCount |> string_of_int) ++ " selected" |> str :
-                    (studentCount |> string_of_int) ++ " students" |> str;
-                }
-              </span>
-            </label>
-          </div>
-          <div className="flex">
-            (
-              false ?
-                <button
-                  className="bg-grey-lighter hover:bg-grey-light hover:text-grey-darker focus:outline-none text-grey-dark text-sm font-semibold py-2 px-4 rounded inline-flex items-center mx-2">
-                  ("Add tags" |> str)
-                </button> :
-                ReasonReact.null
-            )
-            (
-              isGroupable(state.selectedStudents, state.teams) ?
-                <button
-                  onClick=(
-                    _e =>
-                      teamUp(
-                        state.selectedStudents,
-                        handleTeamUpResponse(send),
-                        authenticityToken,
-                      )
+              <div
+                onClick=(_e => send(ToggleFilterVisibility))
+                className="flex text-indigo items-center">
+                <p className="text-sm font-semibold mr-1">
+                  (
+                    (state.filterVisible ? "Hide" : "Show") ++ " Filters" |> str
                   )
-                  className="bg-transparent hover:bg-purple-dark focus:outline-none text-purple-dark text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
-                  ("Group as Team" |> str)
-                </button> :
-                ReasonReact.null
-            )
-            (
-              isMoveOutable(state.selectedStudents, state.teams) ?
-                <button
-                  onClick=(
-                    _e =>
-                      teamUp(
-                        state.selectedStudents,
-                        handleTeamUpResponse(send),
-                        authenticityToken,
-                      )
+                </p>
+                <i className="material-icons md-48">
+                  (
+                    (state.filterVisible ? "expand_less" : "expand_more") |> str
                   )
-                  className="bg-transparent hover:bg-purple-dark focus:outline-none text-purple-dark text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
-                  ("Move out from Team" |> str)
-                </button> :
-                ReasonReact.null
-            )
-            (
-              state.selectedStudents |> List.length > 0 ?
-                ReasonReact.null :
-                <button
-                  onClick=(_e => send(UpdateFormVisible(CreateForm)))
-                  className="hover:bg-purple-dark text-purple-dark font-semibold hover:text-white focus:outline-none border border-dashed border-blue hover:border-transparent flex items-center px-2 py-1 rounded-lg cursor-pointer">
-                  <i className="material-icons mr-2">
-                    ("add_circle_outline" |> str)
-                  </i>
-                  <h5 className="font-semibold ml-2">
-                    ("Add New Students" |> str)
-                  </h5>
-                </button>
-            )
-          </div>
-        </div>
-        <div
-          className="max-w-lg bg-white mx-auto relative rounded rounded-b-none border-b px-4 py-3 mt-3 w-full">
-          <div className="flex items-center justify-between">
-            <input
-              type_="search"
-              className="bg-white border rounded-lg block w-64 text-sm appearance-none leading-normal mr-2 px-3 py-2"
-              placeholder="Search by student name..."
-              value=state.searchString
-              onChange=(
-                event =>
-                  send(
-                    UpdateSearchString(ReactEvent.Form.target(event)##value),
-                  )
-              )
-            />
-            <div
-              onClick=(_e => send(ToggleFilterVisibility))
-              className="flex text-indigo items-center">
-              <p className="text-sm font-semibold mr-1">
-                ((state.filterVisible ? "Hide" : "Show") ++ " Filters" |> str)
-              </p>
-              <i className="material-icons md-48">
-                ((state.filterVisible ? "expand_less" : "expand_more") |> str)
-              </i>
+                </i>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="flex bg-grey-lightest h-full pb-6">
-        <div className="flex flex-col max-w-lg mx-auto w-full">
-          (
-            state.filterVisible && state.tags |> List.length > 0 ?
-              <div className="px-4 py-3 border-b bg-grey-lighter shadow">
-                <div className="flex flex-col pt-2">
-                  <div className="mb-1 text-sm"> ("Filters:" |> str) </div>
-                  <SA_StudentsPanel_SearchableTagList
-                    unselectedTags=(
-                      state.tags
-                      |> List.filter(tag =>
-                           ! (state.tagsFilteredBy |> List.mem(tag))
-                         )
-                    )
-                    selectedTags=state.tagsFilteredBy
-                    addTagCB=(tag => send(AddTagFilter(tag)))
-                    removeTagCB=(tag => send(RemoveTagFilter(tag)))
-                    allowNewTags=false
-                  />
-                </div>
-              </div> :
-              ReasonReact.null
-          )
-          <div className="w-full overflow-y-auto p-3 rounded-b-lg">
+        <div className="flex bg-grey-lightest pb-6">
+          <div className="flex flex-col max-w-lg mx-auto w-full">
             (
-              filteredTeams(state) |> List.length > 0 ?
-                filteredTeams(state)
-                |> List.sort((team1, team2) =>
-                     Team.id(team2) - Team.id(team1)
-                   )
-                |> List.map(team => {
-                     let isSingleFounder =
-                       team |> Team.students |> List.length == 1;
-                     <div
-                       key=(team |> Team.id |> string_of_int)
-                       id=(team |> Team.name)
-                       className=(
-                         "student-team-container flex items-center shadow bg-white rounded-lg mb-4 overflow-hidden"
-                         ++ (isSingleFounder ? " hover:bg-grey-lightest" : "")
-                       )>
-                       <div className="flex-1 w-3/5">
-                         (
-                           team
-                           |> Team.students
-                           |> List.map(student => {
-                                let isChecked =
-                                  state.selectedStudents |> List.mem(student);
-                                <div
-                                  key=(student |> Student.id |> string_of_int)
-                                  id=(student |> Student.name)
-                                  className="student-team__card cursor-pointer flex items-center bg-white hover:bg-grey-lightest">
-                                  <div className="flex-1 w-3/5">
-                                    <div className="flex items-center">
-                                      <label
-                                        className="block text-grey leading-tight font-bold px-4 py-5"
-                                        htmlFor=(
-                                          (student |> Student.name)
-                                          ++ "_checkbox"
-                                        )>
-                                        <input
-                                          className="leading-tight"
-                                          type_="checkbox"
-                                          id=(
+              state.filterVisible && state.tags |> List.length > 0 ?
+                <div className="px-4 py-3 border-b bg-grey-lighter shadow">
+                  <div className="flex flex-col pt-2">
+                    <div className="mb-1 text-sm"> ("Filters:" |> str) </div>
+                    <SA_StudentsPanel_SearchableTagList
+                      unselectedTags=(
+                        state.tags
+                        |> List.filter(tag =>
+                             ! (state.tagsFilteredBy |> List.mem(tag))
+                           )
+                      )
+                      selectedTags=state.tagsFilteredBy
+                      addTagCB=(tag => send(AddTagFilter(tag)))
+                      removeTagCB=(tag => send(RemoveTagFilter(tag)))
+                      allowNewTags=false
+                    />
+                  </div>
+                </div> :
+                ReasonReact.null
+            )
+            <div className="w-full py-3 rounded-b-lg">
+              (
+                filteredTeams(state) |> List.length > 0 ?
+                  filteredTeams(state)
+                  |> List.sort((team1, team2) =>
+                       Team.id(team2) - Team.id(team1)
+                     )
+                  |> List.map(team => {
+                       let isSingleFounder =
+                         team |> Team.students |> List.length == 1;
+                       <div
+                         key=(team |> Team.id |> string_of_int)
+                         id=(team |> Team.name)
+                         className=(
+                           "student-team-container flex items-center shadow bg-white rounded-lg mb-4 overflow-hidden"
+                           ++ (
+                             isSingleFounder ? " hover:bg-grey-lightest" : ""
+                           )
+                         )>
+                         <div className="flex-1 w-3/5">
+                           (
+                             team
+                             |> Team.students
+                             |> List.map(student => {
+                                  let isChecked =
+                                    state.selectedStudents
+                                    |> List.mem(student);
+                                  <div
+                                    key=(
+                                      student |> Student.id |> string_of_int
+                                    )
+                                    id=(student |> Student.name)
+                                    className="student-team__card cursor-pointer flex items-center bg-white hover:bg-grey-lightest">
+                                    <div className="flex-1 w-3/5">
+                                      <div className="flex items-center">
+                                        <label
+                                          className="block text-grey leading-tight font-bold px-4 py-5"
+                                          htmlFor=(
                                             (student |> Student.name)
                                             ++ "_checkbox"
-                                          )
-                                          checked=isChecked
-                                          onChange=(
-                                            isChecked ?
-                                              _e =>
-                                                send(
-                                                  DeselectStudent(student),
-                                                ) :
-                                              (
+                                          )>
+                                          <input
+                                            className="leading-tight"
+                                            type_="checkbox"
+                                            id=(
+                                              (student |> Student.name)
+                                              ++ "_checkbox"
+                                            )
+                                            checked=isChecked
+                                            onChange=(
+                                              isChecked ?
                                                 _e =>
                                                   send(
-                                                    SelectStudent(student),
-                                                  )
+                                                    DeselectStudent(student),
+                                                  ) :
+                                                (
+                                                  _e =>
+                                                    send(
+                                                      SelectStudent(student),
+                                                    )
+                                                )
+                                            )
+                                          />
+                                        </label>
+                                        <a
+                                          className="flex flex-1 items-center py-4 pr-4"
+                                          id=(
+                                            (student |> Student.name)
+                                            ++ "_edit"
+                                          )
+                                          onClick=(
+                                            _e =>
+                                              send(
+                                                UpdateFormVisible(
+                                                  UpdateForm(student),
+                                                ),
                                               )
+                                          )>
+                                          <img
+                                            className="w-10 h-10 rounded-full mr-4"
+                                            src=(student |> Student.avatarUrl)
+                                          />
+                                          <div
+                                            className="text-sm flex flex-col">
+                                            <p
+                                              className=(
+                                                "text-black font-semibold inline-block "
+                                                ++ (
+                                                  state.searchString
+                                                  |> String.length > 0
+                                                  && student
+                                                  |> Student.name
+                                                  |> String.lowercase
+                                                  |> Js.String.includes(
+                                                       state.searchString
+                                                       |> String.lowercase,
+                                                     ) ?
+                                                    "bg-yellow-light" : ""
+                                                )
+                                              )>
+                                              (student |> Student.name |> str)
+                                            </p>
+                                            <div className="flex">
+                                              (
+                                                student
+                                                |> Student.tags
+                                                |> List.map(tag =>
+                                                     <div
+                                                       key=tag
+                                                       className="border border-indigo rounded mt-2 mr-1 py-1 px-2 text-xs text-indigo">
+                                                       (tag |> str)
+                                                     </div>
+                                                   )
+                                                |> Array.of_list
+                                                |> ReasonReact.array
+                                              )
+                                            </div>
+                                          </div>
+                                        </a>
+                                      </div>
+                                    </div>
+                                  </div>;
+                                })
+                             |> Array.of_list
+                             |> ReasonReact.array
+                           )
+                         </div>
+                         <div className="flex w-2/5 items-center">
+                           <div className="w-3/5 py-4 px-3">
+                             (
+                               isSingleFounder ?
+                                 ReasonReact.null :
+                                 <div className="students-team--name mb-5">
+                                   <p className="mb-1 text-xs">
+                                     ("Team" |> str)
+                                   </p>
+                                   <h4> (team |> Team.name |> str) </h4>
+                                 </div>
+                             )
+                             <div className="coaches-avatar-group">
+                               <p className="mb-2 text-xs">
+                                 ("Coaches" |> str)
+                               </p>
+                               <div className="flex items-center">
+                                 {
+                                   let teamCoachIds =
+                                     List.append(
+                                       courseCoachIds,
+                                       team |> Team.coachIds,
+                                     );
+                                   let teamCoaches =
+                                     schoolCoaches
+                                     |> List.filter(coach =>
+                                          teamCoachIds
+                                          |> List.exists(teamCoachId =>
+                                               teamCoachId == Coach.id(coach)
+                                             )
+                                        );
+                                   teamCoaches
+                                   |> List.map(coach =>
+                                        <img
+                                          key=(coach |> Coach.avatarUrl)
+                                          className="w-6 h-6 rounded-full mr-2"
+                                          src=(coach |> Coach.avatarUrl)
+                                          alt=(
+                                            "Avatar of "
+                                            ++ (coach |> Coach.name)
                                           )
                                         />
-                                      </label>
-                                      <a
-                                        className="flex flex-1 items-center py-4 pr-4"
-                                        id=(
-                                          (student |> Student.name) ++ "_edit"
-                                        )
-                                        onClick=(
-                                          _e =>
-                                            send(
-                                              UpdateFormVisible(
-                                                UpdateForm(student),
-                                              ),
-                                            )
-                                        )>
-                                        <img
-                                          className="w-10 h-10 rounded-full mr-4"
-                                          src=(student |> Student.avatarUrl)
-                                        />
-                                        <div className="text-sm flex flex-col">
-                                          <p
-                                            className=(
-                                              "text-black font-semibold inline-block "
-                                              ++ (
-                                                state.searchString
-                                                |> String.length > 0
-                                                && student
-                                                |> Student.name
-                                                |> String.lowercase
-                                                |> Js.String.includes(
-                                                     state.searchString
-                                                     |> String.lowercase,
-                                                   ) ?
-                                                  "bg-yellow-light" : ""
-                                              )
-                                            )>
-                                            (student |> Student.name |> str)
-                                          </p>
-                                          <div className="flex mt-2">
-                                            (
-                                              student
-                                              |> Student.tags
-                                              |> List.map(tag =>
-                                                   <div
-                                                     key=tag
-                                                     className="border border-indigo rounded mr-1 py-1 px-2 text-xs text-indigo">
-                                                     (tag |> str)
-                                                   </div>
-                                                 )
-                                              |> Array.of_list
-                                              |> ReasonReact.array
-                                            )
-                                          </div>
-                                        </div>
-                                      </a>
-                                    </div>
-                                  </div>
-                                </div>;
-                              })
-                           |> Array.of_list
-                           |> ReasonReact.array
-                         )
-                       </div>
-                       <div className="flex w-2/5 items-center">
-                         <div className="w-3/5 py-4 px-3">
-                           (
-                             isSingleFounder ?
-                               ReasonReact.null :
-                               <div className="students-team--name mb-5">
-                                 <p className="mb-1 text-xs">
-                                   ("Team" |> str)
-                                 </p>
-                                 <h4> (team |> Team.name |> str) </h4>
+                                      )
+                                   |> Array.of_list
+                                   |> ReasonReact.array;
+                                 }
                                </div>
-                           )
-                           <div className="coaches-avatar-group">
-                             <p className="mb-2 text-xs">
-                               ("Coaches" |> str)
-                             </p>
-                             <div className="flex items-center">
-                               {
-                                 let teamCoachIds =
-                                   List.append(
-                                     courseCoachIds,
-                                     team |> Team.coachIds,
-                                   );
-                                 let teamCoaches =
-                                   schoolCoaches
-                                   |> List.filter(coach =>
-                                        teamCoachIds
-                                        |> List.exists(teamCoachId =>
-                                             teamCoachId == Coach.id(coach)
-                                           )
-                                      );
-                                 teamCoaches
-                                 |> List.map(coach =>
-                                      <img
-                                        key=(coach |> Coach.avatarUrl)
-                                        className="w-6 h-6 rounded-full mr-2"
-                                        src=(coach |> Coach.avatarUrl)
-                                        alt=(
-                                          "Avatar of " ++ (coach |> Coach.name)
-                                        )
-                                      />
-                                    )
-                                 |> Array.of_list
-                                 |> ReasonReact.array;
-                               }
                              </div>
                            </div>
+                           <div className="w-2/5 text-center">
+                             <span
+                               className="inline-flex flex-col rounded bg-indigo-lightest px-2 py-1">
+                               <div className="text-xs">
+                                 ("Level" |> str)
+                               </div>
+                               <div className="text-xl font-semibold">
+                                 (
+                                   team
+                                   |> Team.levelNumber
+                                   |> string_of_int
+                                   |> str
+                                 )
+                               </div>
+                             </span>
+                           </div>
                          </div>
-                         <div className="w-2/5 text-center">
-                           <span
-                             className="inline-flex flex-col rounded bg-indigo-lightest px-2 py-1">
-                             <div className="text-xs"> ("Level" |> str) </div>
-                             <div className="text-xl font-semibold">
-                               (
-                                 team
-                                 |> Team.levelNumber
-                                 |> string_of_int
-                                 |> str
-                               )
-                             </div>
-                           </span>
-                         </div>
-                       </div>
-                     </div>;
-                   })
-                |> Array.of_list
-                |> ReasonReact.array :
-                <div className="shadow bg-white rounded-lg mb-4 p-4">
-                  ("No student matches your search/filter criteria." |> str)
-                </div>
-            )
+                       </div>;
+                     })
+                  |> Array.of_list
+                  |> ReasonReact.array :
+                  <div className="shadow bg-white rounded-lg mb-4 p-4">
+                    ("No student matches your search/filter criteria." |> str)
+                  </div>
+              )
+            </div>
           </div>
         </div>
       </div>

@@ -19,20 +19,20 @@
             </div>
           </div>
           <ul class="list-reset">
-            </li>
-              <%= link_to school_path, class:'global-sidebar__primary-nav-link py-4 px-6' do%>
+            <li>
+              <%= link_to school_path, class: presenter.nav_link_classes(school_path) do %>
                 <i class="material-icons md-48 mr-2">vertical_split</i>
                 <span>Overview</span>
               <% end %>
             </li>
             <li>
-              <%= link_to school_coaches_path, class: 'global-sidebar__primary-nav-link py-4 px-6' do %>
+              <%= link_to school_coaches_path, class: presenter.nav_link_classes(school_coaches_path) do %>
                 <i class="material-icons md-48 mr-2">person</i>
                 <span>Coaches</span>
               <% end %>
             </li>
             <li>
-              <%= link_to school_courses_path, class: 'global-sidebar__primary-nav-link py-4 px-6' do %>
+              <%= link_to school_courses_path, class: presenter.nav_link_classes(school_courses_path) do %>
                 <i class="material-icons md-48 mr-2">description</i>
                 <span>Courses</span>
               <% end %>

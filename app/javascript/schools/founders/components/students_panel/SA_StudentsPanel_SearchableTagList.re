@@ -1,13 +1,10 @@
 let str = ReasonReact.string;
 
-type state = {searchString: string};
-
-type action =
-  | UpdateSearchString(string);
+type state = string;
 
 let handleClick = (tag, send, clickCB) => {
   clickCB(tag);
-  send(UpdateSearchString(""));
+  send("");
 };
 
 let component =
@@ -15,7 +12,7 @@ let component =
 
 let search =
     (state, send, allowNewTags, selectedTags, unselectedTags, addTagCB) =>
-  switch (state.searchString) {
+  switch (state) {
   | "" => []
   | searchString =>
     let allTags = List.append(selectedTags, unselectedTags);
@@ -38,7 +35,7 @@ let search =
     let searchResults =
       unselectedTags
       |> List.filter(tag =>
-           tag |> String.lowercase |> Js.String.includes(state.searchString)
+           tag |> String.lowercase |> Js.String.includes(state)
          )
       |> List.sort(String.compare)
       |> List.map(tag =>
@@ -63,12 +60,8 @@ let make =
       _children,
     ) => {
   ...component,
-  initialState: () => {searchString: ""},
-  reducer: (action, state) =>
-    switch (action) {
-    | UpdateSearchString(searchString) =>
-      ReasonReact.Update({searchString: searchString})
-    },
+  initialState: () => "",
+  reducer: (searchString, _state) => ReasonReact.Update(searchString),
   render: ({state, send}) => {
     let results =
       search(
@@ -108,11 +101,8 @@ let make =
         }
       )
       <input
-        value=state.searchString
-        onChange=(
-          event =>
-            send(UpdateSearchString(ReactEvent.Form.target(event)##value))
-        )
+        value=state
+        onChange=(event => send(ReactEvent.Form.target(event)##value))
         className="appearance-none block bg-white text-grey-darker border border-grey-light rounded-lg w-full py-3 px-4 mt-2 focus:outline-none focus:bg-white focus:border-grey"
         id="tags"
         type_="text"

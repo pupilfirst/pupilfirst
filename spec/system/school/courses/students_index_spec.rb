@@ -21,7 +21,7 @@ feature 'School students index' do
   let!(:name_2) { (Faker::Lorem.words(3).join ' ').titleize }
   let!(:email_2) { Faker::Internet.email }
 
-  let!(:new_name) { (Faker::Lorem.words(4).join ' ').titleize }
+  let!(:new_team_name) { (Faker::Lorem.words(4).join ' ').titleize }
 
   before do
     # Create a domain for school
@@ -92,16 +92,21 @@ feature 'School students index' do
     find("a", text: name_1).click
     expect(page).to have_text(founder_1.name)
     expect(page).to have_text(founder_1.startup.name)
-    fill_in 'Team Name', with: new_name, fill_options: { clear: :backspace }
+    fill_in 'Name', with: founder_1.name + " Jr."
+    fill_in 'Team Name', with: new_team_name, fill_options: { clear: :backspace }
+    find('button[title="Exclude this student from the leaderboard"]').click
     click_button 'Update Student'
+
     expect(page).to have_text("Student updated successfully")
     find('.ui-pnotify-container').click
-    founder_1.reload
-    expect(founder_1.startup.name).to eq(new_name)
+
+    expect(founder_1.reload.name).to end_with('Jr.')
+    expect(founder_1.startup.name).to eq(new_team_name)
+    expect(founder_1.excluded_from_leaderboard).to eq(true)
 
     # Form a Team
-    check "#{name_1}_checkbox"
-    check "#{name_2}_checkbox"
+    check "select-student-#{founder_1.id}"
+    check "select-student-#{founder_2.id}"
     click_button 'Group as Team'
     expect(page).to have_text("Teams updated successfully")
     find('.ui-pnotify-container').click
@@ -111,7 +116,7 @@ feature 'School students index' do
     expect(page).to have_text(founder_1.startup.name)
 
     # Move out from a team
-    check "#{name_1}_checkbox"
+    check "select-student-#{founder_1.id}"
     click_button 'Move out from Team'
     expect(page).to have_text("Teams updated successfully")
     find('.ui-pnotify-container').click
@@ -124,10 +129,9 @@ feature 'School students index' do
     find("a", text: founder.name).click
     expect(page).to have_text(founder.name)
     expect(page).to have_text(founder.startup.name)
-    within("div#dropped_out_buttons") do
-      click_button 'Yes'
-    end
+    find('button[title="Prevent this student from accessing the course"]').click
     click_button 'Update Student'
+
     expect(page).to have_text("Student updated successfully")
     find('.ui-pnotify-container').click
     founder.reload

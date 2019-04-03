@@ -226,6 +226,7 @@ let make =
                     <div
                       className="flex flex-no-shrink rounded-lg overflow-hidden border">
                       <button
+                        title="Exclude this student from the leaderboard"
                         onClick={
                           _event => {
                             ReactEvent.Mouse.preventDefault(_event);
@@ -238,6 +239,7 @@ let make =
                         {"Yes" |> str}
                       </button>
                       <button
+                        title="Include this student in the leaderboard"
                         onClick={
                           _event => {
                             ReactEvent.Mouse.preventDefault(_event);
@@ -265,6 +267,7 @@ let make =
                       <div
                         className="flex flex-no-shrink rounded-lg overflow-hidden border">
                         <button
+                          title="Prevent this student from accessing the course"
                           onClick={
                             _event => {
                               ReactEvent.Mouse.preventDefault(_event);
@@ -275,6 +278,7 @@ let make =
                           {"Yes" |> str}
                         </button>
                         <button
+                          title="Allow this student to access the course"
                           onClick={
                             _event => {
                               ReactEvent.Mouse.preventDefault(_event);

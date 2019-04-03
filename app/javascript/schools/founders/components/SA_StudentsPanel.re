@@ -422,8 +422,7 @@ let make =
               </div> :
               ReasonReact.null
           }
-          <div
-            className="w-full overflow-y-auto p-3 rounded-b-lg">
+          <div className="w-full overflow-y-auto p-3 rounded-b-lg">
             {
               filteredTeams(state) |> List.length > 0 ?
                 filteredTeams(state)
@@ -447,6 +446,9 @@ let make =
                            |> List.map(student => {
                                 let isChecked =
                                   state.selectedStudents |> List.mem(student);
+                                let checkboxId =
+                                  "select-student-"
+                                  ++ (student |> Student.id |> string_of_int);
                                 <div
                                   key={student |> Student.id |> string_of_int}
                                   id={student |> Student.name}
@@ -455,17 +457,11 @@ let make =
                                     <div className="flex items-center">
                                       <label
                                         className="block text-grey leading-tight font-bold px-4 py-5"
-                                        htmlFor={
-                                          (student |> Student.name)
-                                          ++ "_checkbox"
-                                        }>
+                                        htmlFor=checkboxId>
                                         <input
                                           className="leading-tight"
                                           type_="checkbox"
-                                          id={
-                                            (student |> Student.name)
-                                            ++ "_checkbox"
-                                          }
+                                          id=checkboxId
                                           checked=isChecked
                                           onChange={
                                             isChecked ?

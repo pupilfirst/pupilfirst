@@ -23,9 +23,13 @@ feature 'School students index' do
 
   let!(:new_name) { (Faker::Lorem.words(4).join ' ').titleize }
 
+  let!(:course_coach) { create :faculty, school: school }
+  let!(:coach) { create :faculty, school: school }
+
   before do
     # Create a domain for school
     create :domain, :primary, school: school
+    FacultyCourseEnrollment.create(faculty: course_coach, course: course)
   end
 
   scenario 'school admin visits a course index', js: true do
@@ -132,5 +136,20 @@ feature 'School students index' do
     find('.ui-pnotify-container').click
     founder.reload
     expect(founder.exited).to eq(true)
+
+    # Assign a coach to a team
+    founder = startup_2.founders.last
+    find("a", text: founder.name).click
+    expect(page).to have_text('Course Coaches')
+    expect(page).to have_text('Exclusive Team Coaches')
+    expect(page).to have_text(course_coach.name)
+    within '.select-list__group' do
+      find('.px-3', text: coach.name).click
+    end
+    click_button 'Update Student'
+    expect(page).to have_text("Student updated successfully")
+    find('.ui-pnotify-container').click
+    founder.reload
+    expect(founder.startup.faculty.last).to eq(coach)
   end
 end

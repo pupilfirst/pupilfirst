@@ -41,26 +41,32 @@ feature 'Coaches Index' do
     fill_in 'Title', with: new_coach_title
     fill_in 'LinkedIn', with: 'https://www.linkedin.com/xyz'
     fill_in 'Connect Link', with: 'https://www.connect.com/xyz'
+    attach_file 'faculty[image]', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'faculty', 'human.png')), visible: false
 
     click_button 'Create Coach'
 
     expect(page).to have_text('Coach created successfully')
     find('.ui-pnotify-container').click
     expect(page).to have_text(new_coach_name)
+
     coach = Faculty.last
+
     expect(coach.name).to eq(new_coach_name)
     expect(coach.title).to eq(new_coach_title)
     expect(coach.user.email).to eq(new_coach_email)
     expect(coach.linkedin_url).to eq('https://www.linkedin.com/xyz')
     expect(coach.connect_link).to eq('https://www.connect.com/xyz')
+    expect(coach.image.attached?).to eq(true)
+    expect(coach.image.filename).to eq('human.png')
 
     find("p", text: new_coach_name).click
     fill_in 'Name', with: updated_coach_name
     fill_in 'Title', with: updated_coach_title
     click_button 'Update Coach'
+
     expect(page).to have_text('Coach updated successfully')
-    coach.reload
-    expect(coach.name).to eq(updated_coach_name)
+
+    expect(coach.reload.name).to eq(updated_coach_name)
     expect(coach.title).to eq(updated_coach_title)
   end
 end

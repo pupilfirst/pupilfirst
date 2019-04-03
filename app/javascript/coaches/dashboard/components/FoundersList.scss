@@ -1,6 +1,12 @@
 @import "../../../shared/variables";
 
 .founder-list__search-container {
+  box-shadow: 2px 0px 10px 0px rgba(0, 0, 0, 0.04);
+  border: 1px solid $gray-border;
+  border-width: 0 1px 0 1px;
+}
+
+.founder-list__search-container {
   padding: 0.5rem 1.5rem;
 }
 

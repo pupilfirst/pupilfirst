@@ -45,6 +45,19 @@ feature 'Coach Dashboard' do
     expect(page).to have_selector('.timeline-events-panel__status-tab', text: 'Pending')
     expect(page).to have_selector('.timeline-events-panel__status-tab-badge', text: '4')
 
+    # All timeline events should be listed (excluding the auto-verified one)
+    within('.timeline-events-list__container') do
+      expect(page).to have_selector('.timeline-event-card__container', count: 4)
+    end
+
+    # The 'reviewed' tab should be empty
+    find('.timeline-events-panel__status-tab', text: 'Reviewed').click
+    expect(page).to have_selector('.timeline-events-panel__empty-notice', text: "When you review submissions, they'll be shown in this section")
+  end
+
+  scenario 'coach uses the sidebar filter', js: true do
+    sign_in_user coach.user, referer: course_coach_dashboard_path(course)
+
     # Students should be listed properly on the sidebar.
     within('.founders-list__container') do
       expect(page).to have_selector('.founders-list__item', count: 5)
@@ -61,20 +74,9 @@ feature 'Coach Dashboard' do
       expect(page).to have_selector('.founders-list__item', text: 'All students')
       expect(page).to have_selector('.founders-list__item', text: startup_1.founders.first.name)
       expect(page).not_to have_selector('.founders-list__item', text: startup_1.founders.second.name)
+      expect(page).not_to have_selector('.founders-list__item', text: startup_2.founders.first.name)
+      expect(page).not_to have_selector('.founders-list__item', text: startup_2.founders.second.name)
     end
-
-    # and all the timeline events are listed (excluding the auto-verified one)
-    within('.timeline-events-list__container') do
-      expect(page).to have_selector('.timeline-event-card__container', count: 4)
-    end
-
-    # and the 'reviewed' tab is empty
-    find('.timeline-events-panel__status-tab', text: 'Reviewed').click
-    expect(page).to have_selector('.timeline-events-panel__empty-notice', text: "When you review submissions, they'll be shown in this section")
-  end
-
-  scenario 'coach uses the sidebar filter', js: true do
-    sign_in_user coach.user, referer: course_coach_dashboard_path(course)
 
     # Filter submissions by picking a student.
     find('.founders-list__item', text: startup_1.founders.first.name).click
@@ -90,6 +92,12 @@ feature 'Coach Dashboard' do
     find('.founders-list__item', text: 'All students').click
 
     expect(page).to have_selector('.timeline-event-card__container', count: 4)
+
+    # The students listed on the sidebar should also have reverted to original.
+    expect(page).to have_selector('.founders-list__item', text: startup_1.founders.first.name)
+    expect(page).to have_selector('.founders-list__item', text: startup_1.founders.second.name)
+    expect(page).to have_selector('.founders-list__item', text: startup_2.founders.first.name)
+    expect(page).to have_selector('.founders-list__item', text: startup_2.founders.second.name)
   end
 
   scenario 'coach reviews a submission and then undo-s the review', js: true do

@@ -56,6 +56,12 @@ let founderNameMatches = (searchString, founder) => {
   };
 };
 
+let handleAllStudentsClick = (send, clearFounderCB, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
+  send("");
+  clearFounderCB() |> ignore;
+};
+
 let make =
     (
       ~teams,
@@ -70,10 +76,10 @@ let make =
   reducer: (searchString, _state: string) =>
     ReasonReact.Update(searchString),
   render: ({state, send}) =>
-    <div className="founders-list__container py-3">
+    <div className="founders-list__container py-3 h-100 bg-white">
       <div
         className={allStudentsOptionClasses(selectedFounder)}
-        onClick={_event => clearFounderCB()}>
+        onClick={handleAllStudentsClick(send, clearFounderCB)}>
         <span
           className="founders-list__item-details d-flex flex-row align-items-center pr-3">
           <span className="fa-stack founders-list__all-students-icon">

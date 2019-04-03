@@ -99,7 +99,7 @@ let make =
     <div className="coach-dashboard__container container">
       <div className="row">
         <div className="col-md-3">
-          <SidePanel
+          <FoundersList
             teams
             founders
             selectedFounder={state.selectedFounder}

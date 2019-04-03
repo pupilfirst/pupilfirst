@@ -412,6 +412,8 @@ ActiveRecord::Schema.define(version: 2019_03_28_124013) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "subdomain"
+    t.string "domain"
   end
 
   create_table "shortened_urls", id: :serial, force: :cascade do |t|
@@ -698,8 +700,6 @@ ActiveRecord::Schema.define(version: 2019_03_28_124013) do
   add_foreign_key "quiz_questions", "answer_options", column: "correct_answer_id"
   add_foreign_key "quiz_questions", "quizzes"
   add_foreign_key "quizzes", "targets"
-  add_foreign_key "school_admins", "schools"
-  add_foreign_key "school_admins", "users"
   add_foreign_key "school_links", "schools"
   add_foreign_key "school_strings", "schools"
   add_foreign_key "startup_feedback", "faculty"

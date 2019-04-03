@@ -23,6 +23,11 @@
               <% end %>
             </li>
             <li>
+              <%= link_to school_coaches_path, class:'global-sidebar__primary-nav-link p-4 justify-center' do%>
+                <i class="material-icons md-48">person</i>
+              <% end %>
+            </li>
+            <li>
               <% classes = 'global-sidebar__primary-nav-link p-4 justify-center' %>
               <% classes += controller_name.in?(%w(curricula founders faculty)) ? ' global-sidebar__primary-nav-link--active' : '' %>
               <%= link_to school_courses_path, class: classes do %>

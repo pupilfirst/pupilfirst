@@ -33,14 +33,33 @@ Rails.application.routes.draw do
   resource :school, only: %i[show update]
 
   namespace :school, module: 'schools' do
+    resources :faculty, only: %i[create update destroy], as: 'coaches', path: 'coaches' do
+      collection do
+        get '/', action: 'school_index'
+      end
+    end
+
     resources :courses, only: %i[index show update] do
-      post 'close', on: :member
-      # TODO: Use shallow routes here, where possible.
+      member do
+        post 'close'
+      end
+
       resource :curriculum, only: %i[show]
       resources :founders, as: 'students', path: 'students', only: %i[index create]
-      resources :faculty, as: 'coaches', path: 'coaches', only: %i[index create destroy]
       resources :evaluation_criteria, only: %i[create]
       resources :levels, only: %i[create]
+
+      resources :faculty, as: 'coaches', path: 'coaches', only: [] do
+        collection do
+          get '/', action: 'course_index'
+          post 'update_enrollments', action: 'update_course_enrollments'
+        end
+
+        member do
+          post 'enroll'
+          post 'leave'
+        end
+      end
     end
 
     resources :founders, as: 'students', path: 'students', except: %i[index] do
@@ -53,6 +72,12 @@ Rails.application.routes.draw do
       member do
         post 'add_coach'
         post 'remove_coach'
+      end
+
+      resources :faculty, as: 'coaches', path: 'coaches', only: [] do
+        collection do
+          post 'update_enrollments', action: 'update_startup_enrollments'
+        end
       end
     end
 

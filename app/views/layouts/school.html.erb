@@ -26,6 +26,12 @@
               <% end %>
             </li>
             <li>
+              <%= link_to school_coaches_path, class: presenter.nav_link_classes(school_coaches_path) do %>
+                <i class="material-icons md-48 mr-2">person</i>
+                <span>Coaches</span>
+              <% end %>
+            </li>
+            <li>
               <%= link_to school_courses_path, class: presenter.nav_link_classes(school_courses_path) do %>
                 <i class="material-icons mr-2">description</i>
                 <span>Courses</span>

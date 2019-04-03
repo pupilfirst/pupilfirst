@@ -1,10 +1,5 @@
 module Schools
   class FacultyPolicy < ApplicationPolicy
-    def index?
-      # All school admins can list faculty (coaches) in a course.
-      true
-    end
-
     def create?
       # All school admins can add faculty as long as the course hasn't ended.
       record.present?
@@ -14,14 +9,13 @@ module Schools
       user.school_admins.where(school: record).present?
     end
 
-    def course_index?
+    def update_course_enrollments?
       !record.ended?
     end
 
+    alias course_index? school_index?
     alias destroy? create?
     alias update? create?
-    alias update_course_enrollments? create?
-    alias update_startup_enrollments? create?
 
     class Scope < Scope
       def resolve

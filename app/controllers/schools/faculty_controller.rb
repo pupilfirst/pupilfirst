@@ -44,8 +44,8 @@ module Schools
     end
 
     def course_index
-      course = courses.find(params[:course_id])
-      @course = authorize(course, policy_class: Schools::FacultyPolicy)
+      @course = courses.find(params[:course_id])
+      authorize(current_school, policy_class: Schools::FacultyPolicy)
       render layout: 'course'
     end
 

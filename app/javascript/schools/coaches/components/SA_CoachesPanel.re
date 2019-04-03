@@ -18,7 +18,7 @@ type action =
 
 let component = ReasonReact.reducerComponent("SA_CoachesPanel");
 
-let make = (~coaches, ~schoolId, ~authenticityToken, _children) => {
+let make = (~coaches, ~authenticityToken, _children) => {
   ...component,
   initialState: () => {coaches, searchString: "", formVisible: None},
   reducer: (action, state) =>
@@ -38,7 +38,6 @@ let make = (~coaches, ~schoolId, ~authenticityToken, _children) => {
         | None => ReasonReact.null
         | CoachEditor(coach) =>
           <SA_CoachesPanel_CoachEditor
-            schoolId
             coach
             closeFormCB
             updateCoachCB
@@ -119,13 +118,11 @@ let make = (~coaches, ~schoolId, ~authenticityToken, _children) => {
 type props = {
   coaches: list(Coach.t),
   authenticityToken: string,
-  schoolId: int,
 };
 
 let decode = json =>
   Json.Decode.{
     coaches: json |> field("coaches", list(Coach.decode)),
-    schoolId: json |> field("schoolId", int),
     authenticityToken: json |> field("authenticityToken", string),
   };
 
@@ -136,7 +133,6 @@ let jsComponent =
       let props = jsProps |> decode;
       make(
         ~coaches=props.coaches,
-        ~schoolId=props.schoolId,
         ~authenticityToken=props.authenticityToken,
         [||],
       );

@@ -1,7 +1,5 @@
 open CoachesPanel__Types;
 
-open SchoolAdmin__Utils;
-
 exception UnexpectedResponse(int);
 
 let handleApiError =
@@ -99,7 +97,6 @@ let saveDisabled = state =>
 
 let make =
     (
-      ~schoolId,
       ~coach,
       ~closeFormCB,
       ~updateCoachCB,
@@ -229,7 +226,7 @@ let make =
         };
       let httpMethod =
         switch (coach) {
-        | Some(coach) => Fetch.Patch
+        | Some(_coach) => Fetch.Patch
         | None => Fetch.Post
         };
       Js.Promise.(
@@ -572,7 +569,7 @@ let make =
                   <div className="flex max-w-md w-full px-6 pb-5 mx-auto">
                     (
                       switch (coach) {
-                      | Some(coach) =>
+                      | Some(_coach) =>
                         <button
                           disabled=(saveDisabled(state))
                           className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none mt-3">

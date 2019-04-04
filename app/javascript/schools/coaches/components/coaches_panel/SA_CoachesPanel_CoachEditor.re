@@ -318,13 +318,10 @@ let make =
                         )
                     )
                   />
-                  (
-                    state.hasNameError ?
-                      <div className="drawer-right-form__error-msg">
-                        ("not a valid name" |> str)
-                      </div> :
-                      ReasonReact.null
-                  )
+                  <School__InputGroupError
+                    message="is not a valid name"
+                    active={state.hasNameError}
+                  />
                   <label
                     className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
                     htmlFor="email">
@@ -346,13 +343,10 @@ let make =
                         )
                     )
                   />
-                  (
-                    state.hasEmailError ?
-                      <div className="drawer-right-form__error-msg">
-                        ("not a valid email" |> str)
-                      </div> :
-                      ReasonReact.null
-                  )
+                  <School__InputGroupError
+                    message="is not a valid email"
+                    active={state.hasEmailError}
+                  />
                   <label
                     className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
                     htmlFor="title">
@@ -374,13 +368,10 @@ let make =
                         )
                     )
                   />
-                  (
-                    state.hasTitleError ?
-                      <div className="drawer-right-form__error-msg">
-                        ("not a valid title" |> str)
-                      </div> :
-                      ReasonReact.null
-                  )
+                  <School__InputGroupError
+                    message="is not a valid title"
+                    active={state.hasTitleError}
+                  />
                   <label
                     className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
                     htmlFor="linkedIn">
@@ -402,11 +393,10 @@ let make =
                     )
                   />
                   (
-                    state.hasLinkedInUrlError ?
-                      <div className="drawer-right-form__error-msg">
-                        ("not a valid LinkedIn URL" |> str)
-                      </div> :
-                      ReasonReact.null
+                    <School__InputGroupError
+                    message="is not a valid LinkedIn URL"
+                    active={state.hasLinkedInUrlError}
+                  />
                   )
                   <label
                     className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
@@ -428,13 +418,11 @@ let make =
                         )
                     )
                   />
-                  (
-                    state.hasConnectLinkError ?
-                      <div className="drawer-right-form__error-msg">
-                        ("not a valid URL" |> str)
-                      </div> :
-                      ReasonReact.null
-                  )
+                    <School__InputGroupError
+                    message="is not a valid connect url"
+                    active={state.hasConnectLinkError}
+                  />
+
                   <div className="flex items-center mb-6">
                     <label
                       className="block w-1/2 tracking-wide text-grey-darker text-xs font-semibold mr-6"

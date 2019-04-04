@@ -45,7 +45,7 @@ let make = (~coaches, ~authenticityToken, _children) => {
           />
         }
       }
-      <div className="flex-1 flex flex-col bg-grey-lightest">
+      <div className="flex-1 flex flex-col">
         <div className="flex px-6 py-2 items-center justify-between">
           <button
             onClick={
@@ -59,7 +59,7 @@ let make = (~coaches, ~authenticityToken, _children) => {
             <h4 className="font-semibold ml-2"> {"Add New Coach" |> str} </h4>
           </button>
         </div>
-        <div className="px-6 pb-4 mt-5 flex flex-1 bg-grey-lightest">
+        <div className="px-6 pb-4 mt-5 flex flex-1">
           <div className="max-w-md w-full mx-auto relative">
             {
               state.coaches

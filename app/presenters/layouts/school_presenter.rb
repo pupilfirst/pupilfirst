@@ -31,7 +31,7 @@ module Layouts
     end
 
     def nav_link_classes(path)
-      default_classes = "global-sidebar__primary-nav-link py-4 px-6"
+      default_classes = "global-sidebar__primary-nav-link py-4 px-5"
       view.current_page?(path) ? default_classes + " global-sidebar__primary-nav-link--active" : default_classes
     end
   end

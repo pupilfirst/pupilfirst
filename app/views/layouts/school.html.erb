@@ -6,9 +6,9 @@
 <% content_for(:wrapper) do %>
   <div class="antialiased flex h-screen overflow-hidden">
     <div class="flex global-sidebar">
-      <div class="bg-white global-sidebar__primary-nav global-sidebar__primary-nav--expanded border-r flex flex-col justify-between">
+      <div class="bg-gradient-primary-dark-to-primary-darker-to-bottom global-sidebar__primary-nav global-sidebar__primary-nav--expanded flex flex-col justify-between overflow-y-auto">
         <div>
-          <div class="global-sidebar__header px-6 py-3 shadow bg-white flex">
+          <div class="global-sidebar__header px-5 py-2 relative z-20 border-r border-b bg-white flex h-16 items-center">
             <div class="global-sidebar__school-logo-container flex items-center bg-white h-12 w-2/5 rounded">
               <%= image_tag(presenter.school_logo_path, alt: current_school.name) %>
             </div>
@@ -38,7 +38,7 @@
               <% end %>
               <ul class="list-reset pr-4 pb-4 ml-10 mt-1">
                 <% @courses.each do |course| %>
-                  <li><%= link_to course.name, school_course_students_path(course), class: 'block py-3 px-4 hover:bg-grey-lighter rounded font-semibold text-xs no-underline' %></li>
+                  <li><%= link_to course.name, school_course_students_path(course), class: 'block text-white py-3 px-4 hover:bg-primary-darker rounded font-semibold text-xs no-underline' %></li>
                 <% end %>
               </ul>
             </li>
@@ -47,7 +47,7 @@
         <ul class="list-reset">
           <% if presenter.founder_profile? %>
             <li>
-              <%= link_to student_dashboard_path, class: 'flex text-sm py-4 px-6 hover:bg-grey-lighter font-semibold no-underline items-center' do %>
+              <%= link_to student_dashboard_path, class: 'flex text-white text-sm py-4 px-5 hover:bg-primary-darkest font-semibold no-underline items-center' do %>
                 <i class="material-icons text-sm">visibility</i>
                 <span class="ml-2">Student Dashboard</span>
               <% end %>
@@ -55,14 +55,14 @@
           <% end %>
           <% if presenter.coach_profile? %>
             <li>
-              <%= link_to presenter.coach_dashboard_path, class: 'flex text-sm py-4 px-6 hover:bg-grey-lighter font-semibold no-underline items-center' do %>
+              <%= link_to presenter.coach_dashboard_path, class: 'flex text-white text-sm py-4 px-5 hover:bg-primary-darkest font-semibold no-underline items-center' do %>
                 <i class="material-icons text-sm">assignment_turned_in</i>
                 <span class="ml-2">Review Submissions</span>
               <% end %>
             </li>
           <% end %>
           <li>
-            <%= link_to destroy_user_session_path, method: :delete, class: 'flex text-sm py-4 px-6 hover:bg-grey-lighter font-semibold no-underline items-center' do %>
+            <%= link_to destroy_user_session_path, method: :delete, class: 'flex text-white text-sm py-4 px-5 hover:bg-primary-darkest font-semibold no-underline items-center' do %>
               <i class="material-icons text-sm">power_settings_new</i>
               <span class="ml-2">Log Out</span>
             <% end %>

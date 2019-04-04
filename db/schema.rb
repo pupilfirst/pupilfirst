@@ -103,14 +103,6 @@ ActiveRecord::Schema.define(version: 2019_04_04_065158) do
     t.index ["user_id"], name: "index_answers_on_user_id"
   end
 
-  create_table "channels", force: :cascade do |t|
-    t.string "name"
-    t.bigint "school_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["school_id"], name: "index_channels_on_school_id"
-  end
-
   create_table "colleges", id: :serial, force: :cascade do |t|
     t.string "name"
     t.string "also_known_as"
@@ -122,6 +114,14 @@ ActiveRecord::Schema.define(version: 2019_04_04_065158) do
     t.integer "university_id"
     t.index ["state_id"], name: "index_colleges_on_state_id"
     t.index ["university_id"], name: "index_colleges_on_university_id"
+  end
+
+  create_table "community", force: :cascade do |t|
+    t.string "name"
+    t.bigint "school_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["school_id"], name: "index_community_on_school_id"
   end
 
   create_table "connect_requests", id: :serial, force: :cascade do |t|
@@ -374,12 +374,12 @@ ActiveRecord::Schema.define(version: 2019_04_04_065158) do
   create_table "questions", force: :cascade do |t|
     t.string "title"
     t.text "description"
-    t.bigint "channel_id"
+    t.bigint "community_id"
     t.bigint "user_id"
     t.bigint "targets_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["channel_id"], name: "index_questions_on_channel_id"
+    t.index ["community_id"], name: "index_questions_on_community_id"
     t.index ["targets_id"], name: "index_questions_on_targets_id"
     t.index ["user_id"], name: "index_questions_on_user_id"
   end

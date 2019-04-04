@@ -17,7 +17,7 @@ module Schools
             name: course.name,
             levels_count: course.levels.count,
             students_count: course.founders.count,
-            coaches_count: course.faculty.count + FacultyStartupEnrollment.where(startup: course.startups).count,
+            coaches_count: course.faculty.count + Faculty.joins(startups: :level).where(levels: { course: course }).uniq.count,
             submissions_count: TimelineEvent.not_auto_verified.where(target: course.targets).count,
             evaluated_submissions_count: TimelineEvent.evaluated_by_faculty.where(target: course.targets).count
           }

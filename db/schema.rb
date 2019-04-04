@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_28_124013) do
+ActiveRecord::Schema.define(version: 2019_04_04_065158) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -74,6 +74,16 @@ ActiveRecord::Schema.define(version: 2019_03_28_124013) do
     t.index ["visit_id"], name: "index_ahoy_events_on_visit_id"
   end
 
+  create_table "answer_claps", force: :cascade do |t|
+    t.integer "count"
+    t.bigint "answer_id"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["answer_id"], name: "index_answer_claps_on_answer_id"
+    t.index ["user_id"], name: "index_answer_claps_on_user_id"
+  end
+
   create_table "answer_options", force: :cascade do |t|
     t.bigint "quiz_question_id"
     t.string "value"
@@ -81,6 +91,24 @@ ActiveRecord::Schema.define(version: 2019_03_28_124013) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["quiz_question_id"], name: "index_answer_options_on_quiz_question_id"
+  end
+
+  create_table "answers", force: :cascade do |t|
+    t.text "description"
+    t.bigint "question_id"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["question_id"], name: "index_answers_on_question_id"
+    t.index ["user_id"], name: "index_answers_on_user_id"
+  end
+
+  create_table "channels", force: :cascade do |t|
+    t.string "name"
+    t.bigint "school_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["school_id"], name: "index_channels_on_school_id"
   end
 
   create_table "colleges", id: :serial, force: :cascade do |t|
@@ -341,6 +369,19 @@ ActiveRecord::Schema.define(version: 2019_03_28_124013) do
     t.string "timestamp"
     t.integer "reaction_to_id"
     t.index ["founder_id"], name: "index_public_slack_messages_on_founder_id"
+  end
+
+  create_table "questions", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.bigint "channel_id"
+    t.bigint "user_id"
+    t.bigint "targets_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["channel_id"], name: "index_questions_on_channel_id"
+    t.index ["targets_id"], name: "index_questions_on_targets_id"
+    t.index ["user_id"], name: "index_questions_on_user_id"
   end
 
   create_table "quiz_questions", force: :cascade do |t|

@@ -2,8 +2,9 @@ class AddTablesForCommunity < ActiveRecord::Migration[5.2]
   def up
     create_table :community do |t|
       t.string :name
+      t.string :slug
       t.references :school
-
+      t.index :slug, unique: true
       t.timestamps
     end
 

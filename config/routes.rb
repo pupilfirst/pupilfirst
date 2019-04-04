@@ -73,6 +73,9 @@ Rails.application.routes.draw do
     resources :resources, only: %i[create]
   end
 
+  resources :community, only: %i[show] do
+  end
+
   resources :founders, only: %i[] do
     member do
       post 'select'

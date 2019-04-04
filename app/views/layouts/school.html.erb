@@ -31,7 +31,7 @@
                 <span>Courses</span>
               <% end %>
               <ul class="list-reset pr-4 pb-4 ml-10 mt-1">
-                <% @courses.each do |course| %>
+                <% current_school.courses.each do |course| %>
                   <li><%= link_to course.name, school_course_students_path(course), class: 'block text-white py-3 px-4 hover:bg-primary-darker rounded font-semibold text-sm no-underline' %></li>
                 <% end %>
               </ul>

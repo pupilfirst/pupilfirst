@@ -118,10 +118,12 @@ ActiveRecord::Schema.define(version: 2019_04_04_065158) do
 
   create_table "community", force: :cascade do |t|
     t.string "name"
+    t.string "slug"
     t.bigint "school_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["school_id"], name: "index_community_on_school_id"
+    t.index ["slug"], name: "index_community_on_slug", unique: true
   end
 
   create_table "connect_requests", id: :serial, force: :cascade do |t|

@@ -11,7 +11,7 @@ after 'development:schools', 'development:founders' do
     question = Question.create!(
       title: Faker::Lorem.sentence,
       description: Faker::Lorem.sentence,
-      community: community,
+      community_dashboard: community,
       user: user
     )
     answer = Answer.create!(

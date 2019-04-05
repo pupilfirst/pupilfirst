@@ -11,7 +11,7 @@ class AddTablesForCommunity < ActiveRecord::Migration[5.2]
     create_table :questions do |t|
       t.string :title
       t.text :description
-      t.references :community
+      t.references :community_dashboard
       t.references :user
       t.references :targets
 

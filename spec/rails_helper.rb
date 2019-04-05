@@ -1,11 +1,17 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV['RACK_ENV'] = ENV['RAILS_ENV'] ||= 'test'
 
-# Enable coverage checking by Codecov and Simplecov.
-if ENV['CI'] == 'true' || ENV['COVERAGE'] == 'true'
+# Enable coverage checking when requested.
+if ENV['COVERAGE'] == 'true'
   require 'simplecov'
-  require 'codecov'
-  SimpleCov.formatter = SimpleCov::Formatter::Codecov
+
+  # Also send coverage data to Codecov if running in a CI.
+  if ENV['CI'] == 'true'
+    require 'codecov'
+
+    SimpleCov.formatter = SimpleCov::Formatter::Codecov
+  end
+
   SimpleCov.start('rails')
 end
 

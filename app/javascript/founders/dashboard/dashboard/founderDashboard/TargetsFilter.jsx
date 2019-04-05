@@ -5,7 +5,7 @@ import TargetsFilterOption from "./TargetsFilterOption";
 export default class TargetsFilter extends React.Component {
   levelOptions() {
     // Exclude level 0 from the dropdown
-    let levels = this.props.rootProps.levels.filter(level => {return level.number > 0;});
+    let levels = this.props.rootProps.levels.filter(level => { return level.number > 0; });
 
     let sortedLevels = _.sortBy(levels, ["number"]);
     return _.map(sortedLevels, level => {
@@ -13,7 +13,6 @@ export default class TargetsFilter extends React.Component {
         <TargetsFilterOption
           key={level.id}
           levelId={level.id}
-          getAvailableTrackIds={this.props.getAvailableTrackIds}
           rootProps={this.props.rootProps}
           rootState={this.props.rootState}
           setRootState={this.props.setRootState}
@@ -48,7 +47,6 @@ export default class TargetsFilter extends React.Component {
 }
 
 TargetsFilter.propTypes = {
-  getAvailableTrackIds: PropTypes.func.isRequired,
   rootProps: PropTypes.object.isRequired,
   rootState: PropTypes.object.isRequired,
   setRootState: PropTypes.func.isRequired

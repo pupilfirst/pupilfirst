@@ -23,9 +23,6 @@ export default class FounderDashboard extends React.Component {
       tourDashboard: props.tourDashboard
     };
 
-    // Pick initial track from list of computed track IDs.
-    this.state.activeTrackId = this.availableTrackIds()[0];
-
     this.setRootState = this.setRootState.bind(this);
     this.chooseTab = this.chooseTab.bind(this);
     this.closeTimelineBuilder = this.closeTimelineBuilder.bind(this);
@@ -34,7 +31,6 @@ export default class FounderDashboard extends React.Component {
     this.targetOverlayCloseCB = this.targetOverlayCloseCB.bind(this);
     this.selectTargetCB = this.selectTargetCB.bind(this);
     this.handlePopState = this.handlePopState.bind(this);
-    this.availableTrackIds = this.availableTrackIds.bind(this);
     this.hasSingleFounder = this.hasSingleFounder.bind(this);
   }
 
@@ -49,42 +45,6 @@ export default class FounderDashboard extends React.Component {
         callback();
       }
     });
-  }
-
-  availableTrackIds(levelId = null) {
-    if (levelId === null) {
-      levelId = this.state.selectedLevel.id;
-    }
-
-    let targetGroupsInLevel = this.props.targetGroups.filter(targetGroup => {
-      return targetGroup.level.id === levelId;
-    });
-
-    let availableTrackIds = _.uniq(
-      targetGroupsInLevel.map(targetGroup => {
-        if (_.isObject(targetGroup.track)) {
-          return targetGroup.track.id;
-        } else {
-          return "default";
-        }
-      })
-    );
-
-    let sortedTracks = _.sortBy(this.props.tracks, ["sort_index"]);
-
-    let filteredAndSortedTracks = _.filter(sortedTracks, track => {
-      return availableTrackIds.includes(track.id);
-    });
-
-    let sortedTrackIds = filteredAndSortedTracks.map(track => {
-      return track.id;
-    });
-
-    if (availableTrackIds.includes("default")) {
-      return sortedTrackIds.concat(["default"]);
-    }
-
-    return sortedTrackIds;
   }
 
   componentDidMount() {
@@ -128,8 +88,8 @@ export default class FounderDashboard extends React.Component {
     if (targetIndex === -1) {
       console.error(
         "Could not find target with ID " +
-          targetId +
-          " in list of known targets."
+        targetId +
+        " in list of known targets."
       );
 
       return;
@@ -163,7 +123,7 @@ export default class FounderDashboard extends React.Component {
   }
 
   levelZeroExists() {
-    return (this.props.levels.filter(level => {return level.number === 0;}).length > 0);
+    return (this.props.levels.filter(level => {  return level.number === 0 ; }).length > 0);
   }
 
   render() {
@@ -171,25 +131,24 @@ export default class FounderDashboard extends React.Component {
       <div className="founder-dashboard-container pb-5">
         {this.levelZeroExists() && (
           <ToggleBar
-          rootProps={this.props}
-          rootState={this.state}
-          setRootState={this.setRootState}
-        />
-        )}
-
-        {(this.props.courseEnded ||
-          this.props.levelUpEligibility !== "not_eligible") && (
-          <DashboardNotification rootProps={this.props} />
-        )}
-
-        {this.state.selectedTab === "selectedLevel" && (
-            <ActionBar
-              getAvailableTrackIds={this.availableTrackIds}
               rootProps={this.props}
               rootState={this.state}
               setRootState={this.setRootState}
             />
-          )}
+        )}
+
+        {(this.props.courseEnded ||
+          this.props.levelUpEligibility !== "not_eligible") && (
+              <DashboardNotification rootProps={this.props} />
+            )}
+
+        {this.state.selectedTab === "selectedLevel" && (
+          <ActionBar
+            rootProps={this.props}
+            rootState={this.state}
+            setRootState={this.setRootState}
+          />
+        )}
 
         <Targets
           rootProps={this.props}
@@ -233,7 +192,6 @@ FounderDashboard.propTypes = {
   levels: PropTypes.array.isRequired,
   faculty: PropTypes.array.isRequired,
   targetGroups: PropTypes.array.isRequired,
-  tracks: PropTypes.array.isRequired,
   currentLevel: PropTypes.object.isRequired,
   authenticityToken: PropTypes.string,
   levelUpEligibility: PropTypes.oneOf([

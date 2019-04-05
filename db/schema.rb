@@ -413,8 +413,6 @@ ActiveRecord::Schema.define(version: 2019_04_05_061711) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "subdomain"
-    t.string "domain"
   end
 
   create_table "shortened_urls", id: :serial, force: :cascade do |t|
@@ -516,11 +514,9 @@ ActiveRecord::Schema.define(version: 2019_04_05_061711) do
     t.integer "sort_index"
     t.boolean "milestone"
     t.integer "level_id"
-    t.bigint "track_id"
     t.boolean "archived", default: false
     t.index ["level_id"], name: "index_target_groups_on_level_id"
     t.index ["sort_index"], name: "index_target_groups_on_sort_index"
-    t.index ["track_id"], name: "index_target_groups_on_track_id"
   end
 
   create_table "target_prerequisites", id: :serial, force: :cascade do |t|
@@ -609,13 +605,6 @@ ActiveRecord::Schema.define(version: 2019_04_05_061711) do
     t.boolean "latest"
   end
 
-  create_table "tracks", force: :cascade do |t|
-    t.string "name"
-    t.integer "sort_index", default: 0
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "universities", id: :serial, force: :cascade do |t|
     t.string "name"
     t.integer "state_id"
@@ -701,6 +690,8 @@ ActiveRecord::Schema.define(version: 2019_04_05_061711) do
   add_foreign_key "quiz_questions", "answer_options", column: "correct_answer_id"
   add_foreign_key "quiz_questions", "quizzes"
   add_foreign_key "quizzes", "targets"
+  add_foreign_key "school_admins", "schools"
+  add_foreign_key "school_admins", "users"
   add_foreign_key "school_links", "schools"
   add_foreign_key "school_strings", "schools"
   add_foreign_key "startup_feedback", "faculty"
@@ -709,7 +700,6 @@ ActiveRecord::Schema.define(version: 2019_04_05_061711) do
   add_foreign_key "target_evaluation_criteria", "evaluation_criteria"
   add_foreign_key "target_evaluation_criteria", "targets"
   add_foreign_key "target_groups", "levels"
-  add_foreign_key "target_groups", "tracks"
   add_foreign_key "target_resources", "resources"
   add_foreign_key "target_resources", "targets"
   add_foreign_key "timeline_event_files", "timeline_events"

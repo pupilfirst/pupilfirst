@@ -7,7 +7,13 @@ class SchoolsController < ApplicationController
   # Enforce authorization with Pundit in all school administration routes.
   after_action :verify_authorized
 
+  # GET /school
   def show
+    authorize current_school
+  end
+
+  # GET /school/customize
+  def customize
     authorize current_school
   end
 

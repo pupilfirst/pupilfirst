@@ -363,8 +363,8 @@ let make =
                   </div>
                 </div>
               </div>
-              <div className="p-6 pl-16 bg-grey-lighter">
-                <div className="max-w-md px-6">
+              <div className="p-6 bg-grey-lighter">
+                <div className="max-w-md px-6 mx-auto">
                   <div
                     className="flex max-w-md w-full justify-between items-center mx-auto">
                     <div className="flex items-center flex-no-shrink">

@@ -26,7 +26,7 @@ type state = {
   hasTitleError: bool,
   hasEmailError: bool,
   hasLinkedInUrlError: bool,
-  hasConnectLinkError: bool
+  hasConnectLinkError: bool,
 };
 
 type action =
@@ -52,7 +52,7 @@ let updateName = (send, name) => {
 
 let updateEmail = (send, email) => {
   let regex = [%re {|/.+@.+\..+/i|}];
-  let hasError = ! Js.Re.test(email, regex);
+  let hasError = !Js.Re.test(email, regex);
   send(UpdateEmail(email, hasError));
 };
 
@@ -67,7 +67,7 @@ let updateLinkedInUrl = (send, linkedinUrl) => {
   ];
   let hasError =
     linkedinUrl |> String.length < 1 ?
-      false : ! Js.Re.test(linkedinUrl, regex);
+      false : !Js.Re.test(linkedinUrl, regex);
   send(UpdateLinkedInUrl(linkedinUrl, hasError));
 };
 
@@ -77,7 +77,7 @@ let updateConnectLink = (send, connectLink) => {
   ];
   let hasError =
     connectLink |> String.length < 1 ?
-      false : ! Js.Re.test(connectLink, regex);
+      false : !Js.Re.test(connectLink, regex);
   send(UpdateConnectLink(connectLink, hasError));
 };
 
@@ -92,7 +92,7 @@ let saveDisabled = state =>
   || state.hasEmailError
   || state.hasLinkedInUrlError
   || state.hasConnectLinkError
-  || ! state.dirty
+  || !state.dirty
   || state.saving;
 
 let make =
@@ -101,7 +101,7 @@ let make =
       ~closeFormCB,
       ~updateCoachCB,
       ~authenticityToken,
-      _children,
+      _children
     ) => {
   ...component,
   initialState: () =>
@@ -123,7 +123,7 @@ let make =
         hasTitleError: false,
         hasLinkedInUrlError: false,
         hasConnectLinkError: false,
-        imageFileName: ""
+        imageFileName: "",
       }
     | Some(coach) => {
         name: coach |> Coach.name,
@@ -183,29 +183,44 @@ let make =
       ReasonReact.Update({...state, public, dirty: true})
     | UpdateNotifyForSubmission(notifyForSubmission) =>
       ReasonReact.Update({...state, notifyForSubmission, dirty: true})
-    | UpdateSaving => ReasonReact.Update({...state, saving: ! state.saving})
-    | UpdateImageFileName(imageFileName) => ReasonReact.Update({...state, imageFileName, dirty: true})
-    | UpdateExited(exited) => ReasonReact.Update({...state, exited, dirty: true})
+    | UpdateSaving => ReasonReact.Update({...state, saving: !state.saving})
+    | UpdateImageFileName(imageFileName) =>
+      ReasonReact.Update({...state, imageFileName, dirty: true})
+    | UpdateExited(exited) =>
+      ReasonReact.Update({...state, exited, dirty: true})
     },
   render: ({state, send}) => {
     let formId = "coach-create-form";
     let addCoach = json => {
       let id = json |> Json.Decode.(field("id", int));
       let imageUrl = json |> Json.Decode.(field("image_url", string));
-      let newCoach = Coach.create(id, state.name, imageUrl, state.email, state.title, Some(state.linkedinUrl), state.public, Some(state.connectLink), state.notifyForSubmission, state.exited, Some(state.imageFileName));
+      let newCoach =
+        Coach.create(
+          id,
+          state.name,
+          imageUrl,
+          state.email,
+          state.title,
+          Some(state.linkedinUrl),
+          state.public,
+          Some(state.connectLink),
+          state.notifyForSubmission,
+          state.exited,
+          Some(state.imageFileName),
+        );
       switch (coach) {
-        | Some(_) =>
-          Notification.success("Success", "Coach updated successfully")
-        | None => Notification.success("Success", "Coach created successfully")
-        };
+      | Some(_) =>
+        Notification.success("Success", "Coach updated successfully")
+      | None => Notification.success("Success", "Coach created successfully")
+      };
       updateCoachCB(newCoach);
       closeFormCB();
-    }
+    };
     let avatarUploaderText = () =>
       switch (state.imageFileName) {
       | "" => "Upload an avatar"
       | _ => "Replace avatar: " ++ state.imageFileName
-      }
+      };
 
     let handleResponseJSON = json => {
       let error =
@@ -280,9 +295,9 @@ let make =
       <div className="drawer-right">
         <div className="drawer-right__close absolute">
           <button
-            onClick=(_e => closeFormCB())
+            onClick={_e => closeFormCB()}
             className="flex items-center justify-center bg-white text-grey-darker font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
-            <i className="material-icons"> ("close" |> str) </i>
+            <i className="material-icons"> {"close" |> str} </i>
           </button>
         </div>
         <div className="drawer-right-form w-full">
@@ -291,23 +306,23 @@ let make =
               <div className="max-w-md p-6 mx-auto">
                 <h5
                   className="uppercase text-center border-b border-grey-light pb-2 mb-4">
-                  ("Coach Details" |> str)
+                  {"Coach Details" |> str}
                 </h5>
-                <form
-                  key="xxx"
-                  id=formId
-                  onSubmit=(event => submitForm(event))>
-                  <input
-                    name="authenticity_token"
-                    type_="hidden"
-                    value=authenticityToken
-                  />
+              </div>
+              <form
+                key="xxx" id=formId onSubmit={event => submitForm(event)}>
+                <input
+                  name="authenticity_token"
+                  type_="hidden"
+                  value=authenticityToken
+                />
+                <div className="max-w-md p-6 mx-auto">
                   <label
                     className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
                     htmlFor="name">
-                    ("Name" |> str)
+                    {"Name" |> str}
                   </label>
-                  <span> ("*" |> str) </span>
+                  <span> {"*" |> str} </span>
                   <input
                     className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                     id="name"
@@ -315,13 +330,13 @@ let make =
                     name="faculty[name]"
                     placeholder="Coach Name"
                     value={state.name}
-                    onChange=(
+                    onChange={
                       event =>
                         updateName(
                           send,
                           ReactEvent.Form.target(event)##value,
                         )
-                    )
+                    }
                   />
                   <School__InputGroupError
                     message="is not a valid name"
@@ -330,9 +345,9 @@ let make =
                   <label
                     className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
                     htmlFor="email">
-                    ("Email" |> str)
+                    {"Email" |> str}
                   </label>
-                  <span> ("*" |> str) </span>
+                  <span> {"*" |> str} </span>
                   <input
                     className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                     id="email"
@@ -340,13 +355,13 @@ let make =
                     name="faculty[email]"
                     placeholder="Coach email address"
                     value={state.email}
-                    onChange=(
+                    onChange={
                       event =>
                         updateEmail(
                           send,
                           ReactEvent.Form.target(event)##value,
                         )
-                    )
+                    }
                   />
                   <School__InputGroupError
                     message="is not a valid email"
@@ -355,9 +370,9 @@ let make =
                   <label
                     className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
                     htmlFor="title">
-                    ("Title" |> str)
+                    {"Title" |> str}
                   </label>
-                  <span> ("*" |> str) </span>
+                  <span> {"*" |> str} </span>
                   <input
                     className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                     id="title"
@@ -365,13 +380,13 @@ let make =
                     name="faculty[title]"
                     placeholder="Coach Title/Expertise"
                     value={state.title}
-                    onChange=(
+                    onChange={
                       event =>
                         updateTitle(
                           send,
                           ReactEvent.Form.target(event)##value,
                         )
-                    )
+                    }
                   />
                   <School__InputGroupError
                     message="is not a valid title"
@@ -380,7 +395,7 @@ let make =
                   <label
                     className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
                     htmlFor="linkedIn">
-                    ("LinkedIn" |> str)
+                    {"LinkedIn" |> str}
                   </label>
                   <input
                     className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
@@ -388,25 +403,23 @@ let make =
                     type_="text"
                     name="faculty[linkedin_url]"
                     placeholder="LinkedIn Profile URL"
-                    value={ state.linkedinUrl}
-                    onChange=(
+                    value={state.linkedinUrl}
+                    onChange={
                       event =>
                         updateLinkedInUrl(
                           send,
                           ReactEvent.Form.target(event)##value,
                         )
-                    )
+                    }
                   />
-                  (
-                    <School__InputGroupError
+                  <School__InputGroupError
                     message="is not a valid LinkedIn URL"
                     active={state.hasLinkedInUrlError}
                   />
-                  )
                   <label
                     className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
                     htmlFor="connectLink">
-                    ("Connect Link" |> str)
+                    {"Connect Link" |> str}
                   </label>
                   <input
                     className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
@@ -415,50 +428,49 @@ let make =
                     name="faculty[connect_link]"
                     placeholder="Student connect request link for the coach"
                     value={state.connectLink}
-                    onChange=(
+                    onChange={
                       event =>
                         updateConnectLink(
                           send,
                           ReactEvent.Form.target(event)##value,
                         )
-                    )
+                    }
                   />
-                    <School__InputGroupError
+                  <School__InputGroupError
                     message="is not a valid connect url"
                     active={state.hasConnectLinkError}
                   />
-
                   <div className="flex items-center mb-6">
                     <label
                       className="block w-1/2 tracking-wide text-grey-darker text-xs font-semibold mr-6"
                       htmlFor="evaluated">
-                      ("Should the coach profile be public?" |> str)
+                      {"Should the coach profile be public?" |> str}
                     </label>
                     <div
                       id="notification"
                       className="inline-flex w-1/2 rounded-lg overflow-hidden border">
                       <button
                         type_="submit"
-                        onClick=(
+                        onClick={
                           _event => {
                             ReactEvent.Mouse.preventDefault(_event);
                             send(UpdatePublic(true));
                           }
-                        )
+                        }
                         name="faculty[public]"
                         value="true"
-                        className=(booleanButtonClasses(state.public))>
-                        ("Yes" |> str)
+                        className={booleanButtonClasses(state.public)}>
+                        {"Yes" |> str}
                       </button>
                       <button
-                        onClick=(
+                        onClick={
                           _event => {
                             ReactEvent.Mouse.preventDefault(_event);
                             send(UpdatePublic(false));
                           }
-                        )
-                        className=(booleanButtonClasses(! state.public))>
-                        ("No" |> str)
+                        }
+                        className={booleanButtonClasses(!state.public)}>
+                        {"No" |> str}
                       </button>
                       <input
                         type_="hidden"
@@ -471,39 +483,38 @@ let make =
                     <label
                       className="w-1/2 block tracking-wide text-grey-darker text-xs font-semibold mr-6"
                       htmlFor="evaluated">
-                      (
+                      {
                         "Should the coach be notified of student submissions?"
                         |> str
-                      )
+                      }
                     </label>
                     <div
                       id="notification"
                       className="inline-flex w-1/2 rounded-lg overflow-hidden border">
                       <button
-                        onClick=(
+                        onClick={
                           _event => {
                             ReactEvent.Mouse.preventDefault(_event);
                             send(UpdateNotifyForSubmission(true));
                           }
-                        )
+                        }
                         name="faculty[notify_for_submission]"
-                        className=(
+                        className={
                           booleanButtonClasses(state.notifyForSubmission)
-                        )>
-                        ("Yes" |> str)
+                        }>
+                        {"Yes" |> str}
                       </button>
-
                       <button
-                        onClick=(
+                        onClick={
                           _event => {
                             ReactEvent.Mouse.preventDefault(_event);
                             send(UpdateNotifyForSubmission(false));
                           }
-                        )
-                        className=(
-                          booleanButtonClasses(! state.notifyForSubmission)
-                        )>
-                        ("No" |> str)
+                        }
+                        className={
+                          booleanButtonClasses(!state.notifyForSubmission)
+                        }>
+                        {"No" |> str}
                       </button>
                       <input
                         type_="hidden"
@@ -513,119 +524,112 @@ let make =
                     </div>
                   </div>
                   <label
-                       className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
-                       htmlFor="avatarUploader">
-                       ("Avatar" |> str)
-                     </label>
-                     <div
-                       className="input-file__container flex items-center relative mb-4">
-                       <input
-                         disabled={state.saving}
-                         className="input-file__input cursor-pointer px-4"
-                         name="faculty[image]"
-                         type_="file"
-                         id="coach_avatar"
-                         required=false
-                         multiple=false
-                         onChange={
-                          event => {
-                            send(
-                              UpdateImageFileName(
-                                ReactEvent.Form.target(event)##files[0]##name,
-                              ),
-                            );
-                          }
+                    className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                    htmlFor="avatarUploader">
+                    {"Avatar" |> str}
+                  </label>
+                  <div
+                    className="input-file__container flex items-center relative mb-4">
+                    <input
+                      disabled={state.saving}
+                      className="input-file__input cursor-pointer px-4"
+                      name="faculty[image]"
+                      type_="file"
+                      id="coach_avatar"
+                      required=false
+                      multiple=false
+                      onChange={
+                        event =>
+                          send(
+                            UpdateImageFileName(
+                              ReactEvent.Form.target(event)##files[0]##name,
+                            ),
+                          )
+                      }
+                    />
+                    <label
+                      className="input-file__label flex px-4 items-center font-semibold rounded text-sm"
+                      htmlFor="file">
+                      <i className="material-icons mr-2 text-grey-dark">
+                        {"file_upload" |> str}
+                      </i>
+                      <span className="truncate">
+                        {avatarUploaderText() |> str}
+                      </span>
+                    </label>
+                  </div>
+                </div>
+                <div className="p-6 bg-grey-lighter">
+                  <div className="max-w-md px-6 mx-auto">
+                    <div
+                      className="flex max-w-md w-full justify-between items-center mx-auto">
+                      {
+                        switch (coach) {
+                        | Some(_coach) =>
+                          <div className="flex items-center flex-no-shrink">
+                            <label
+                              className="block tracking-wide text-grey-darker text-xs font-semibold mr-3"
+                              htmlFor="evaluated">
+                              {"Has the coach exited the school?" |> str}
+                            </label>
+                            <div
+                              id="exited"
+                              className="flex flex-no-shrink rounded-lg overflow-hidden border">
+                              <button
+                                onClick=(
+                                  _event => {
+                                    ReactEvent.Mouse.preventDefault(_event);
+                                    send(UpdateExited(true));
+                                  }
+                                )
+                                name="faculty[exited]"
+                                className={
+                                  booleanButtonClasses(state.exited)
+                                }>
+                                {"Yes" |> str}
+                              </button>
+                              <button
+                                onClick=(
+                                  _event => {
+                                    ReactEvent.Mouse.preventDefault(_event);
+                                    send(UpdateExited(false));
+                                  }
+                                )
+                                className={
+                                  booleanButtonClasses(!state.exited)
+                                }>
+                                {"No" |> str}
+                              </button>
+                              <input
+                                type_="hidden"
+                                name="faculty[exited]"
+                                value={state.exited |> string_of_bool}
+                              />
+                            </div>
+                          </div>
+                        | None => ReasonReact.null
                         }
-                       />
-                       <label
-                         className="input-file__label flex px-4 items-center font-semibold rounded text-sm"
-                         htmlFor="file">
-                         <i className="material-icons mr-2 text-grey-dark">
-                           ("file_upload" |> str)
-                         </i>
-                         <span className="truncate">
-                           (avatarUploaderText() |> str)
-                         </span>
-                       </label>
-                     </div>
-                     <div className="p-6 pl-16 bg-grey-lighter">
-                        <div className="max-w-md px-6">
-                        <div
-                        className="flex max-w-md w-full justify-between items-center mx-auto">
-                      { switch(coach)
-                        {
-                      | Some(_coach) =>
-
-                     <div className="flex items-center flex-no-shrink">
-                      <label
-                       className="block tracking-wide text-grey-darker text-xs font-semibold mr-3"
-                       htmlFor="evaluated">
-                       (
-                         "Has the coach exited the school?"
-                         |> str
-                       )
-                     </label>
-                     <div
-                       id="exited"
-                       className="flex flex-no-shrink rounded-lg overflow-hidden border">
-                       <button
-                         onClick=(
-                           _event => {
-                             ReactEvent.Mouse.preventDefault(_event);
-                             send(UpdateExited(true));
-                           }
-                         )
-                         name="faculty[exited]"
-                         className=(
-                           booleanButtonClasses(state.exited)
-                         )>
-                         ("Yes" |> str)
-                       </button>
-
-                       <button
-                         onClick=(
-                           _event => {
-                             ReactEvent.Mouse.preventDefault(_event);
-                             send(UpdateExited(false));
-                           }
-                         )
-                         className=(
-                           booleanButtonClasses(! state.exited)
-                         )>
-                         ("No" |> str)
-                       </button>
-                       <input
-                         type_="hidden"
-                         name="faculty[exited]"
-                         value={state.exited |> string_of_bool}
-                       />
-                     </div>
-                   </div>
-                   | None => ReasonReact.null}
-                          }
-                    <div className="w-auto">
-                      (
+                      }
+                      {
                         switch (coach) {
                         | Some(_coach) =>
                           <button
-                            disabled=(saveDisabled(state))
-                            className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
-                            ("Update Coach" |> str)
+                            disabled={saveDisabled(state)}
+                            className="w-auto bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
+                            {"Update Coach" |> str}
                           </button>
                         | None =>
                           <button
-                            disabled=(saveDisabled(state))
+                            disabled={saveDisabled(state)}
                             className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
-                            ("Create Coach" |> str)
+                            {"Create Coach" |> str}
                           </button>
                         }
-                      )
+                      }
                     </div>
                   </div>
-                  </div>
-                  </div>
-                </form>
-              </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>

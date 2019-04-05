@@ -10,7 +10,6 @@ module Founders
         levels: levels_as_json,
         faculty: faculty,
         targetGroups: target_groups,
-        tracks: tracks,
         criteriaNames: criteria_names,
         gradeLabels: course.grade_labels
       }
@@ -58,12 +57,8 @@ module Founders
       TargetGroup.joins(:level).where(level: open_levels, archived: false)
         .as_json(
           only: %i[id name description milestone sort_index],
-          include: { track: { only: :id }, level: { only: :id } }
+          include: { level: { only: :id } }
         )
-    end
-
-    def tracks
-      Track.all.as_json(only: %i[id name sort_index])
     end
 
     def criteria_names

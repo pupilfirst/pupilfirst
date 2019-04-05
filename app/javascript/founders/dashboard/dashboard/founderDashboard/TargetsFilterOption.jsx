@@ -13,10 +13,8 @@ export default class TargetsFilterOption extends React.Component {
 
   handleClick() {
     if (this.level.unlocked && this.level !== this.props.rootState.selectedLevel) {
-      const trackIdsForLevel = this.props.getAvailableTrackIds(this.level.id);
       this.props.setRootState({
-        selectedLevel: this.level,
-        activeTrackId: trackIdsForLevel[0]
+        selectedLevel: this.level
       });
     }
   }
@@ -67,7 +65,6 @@ export default class TargetsFilterOption extends React.Component {
 
 TargetsFilterOption.propTypes = {
   levelId: PropTypes.number,
-  getAvailableTrackIds: PropTypes.func.isRequired,
   rootProps: PropTypes.object.isRequired,
   rootState: PropTypes.object.isRequired,
   setRootState: PropTypes.func.isRequired

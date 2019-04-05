@@ -15,6 +15,7 @@ class ApplicationPresenter
     :current_founder,
     :current_startup,
     :current_coach,
+    :current_school_admin,
     to: :view
   )
 end

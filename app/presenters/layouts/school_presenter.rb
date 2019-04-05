@@ -1,5 +1,9 @@
 module Layouts
   class SchoolPresenter < ::ApplicationPresenter
+    def show_admin_routes?
+      current_school_admin.present?
+    end
+
     def coach_profile?
       coach_dashboard_path.present?
     end
@@ -19,6 +23,16 @@ module Layouts
             view.course_coach_dashboard_path(faculty.startups.first.course)
           end
         end
+      end
+    end
+
+    def community_ids
+      if current_school_admin || coach_profile?
+        current_school.community.pluck(:id)
+      elsif current_founder.present?
+        current_user.founders.joins(course: :school).where(schools: { id: current_school }).pluck('courses.community_id').compact
+      else
+        []
       end
     end
 

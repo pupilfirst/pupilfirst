@@ -10,7 +10,7 @@ module Mutations
     field :course, Types::CourseType, null: false
 
     def self.accessible?(context)
-      context[:current_user].present?
+      context[:current_school_admin].present?
     end
 
     def resolve(params)

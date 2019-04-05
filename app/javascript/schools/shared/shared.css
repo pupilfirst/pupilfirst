@@ -78,8 +78,20 @@ button:disabled, .disabled {
     right: 0px;
     position: fixed;
     top: 0px;
-    width: 48rem;
+    width: 100%;
     z-index: 501;
+}
+
+@screen md {
+    .drawer-right {
+        @apply .w-4/5;
+    }
+}
+
+@screen xl {
+    .drawer-right {
+        width: 48rem;
+    }
 }
 
 .drawer-right__close {

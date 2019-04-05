@@ -194,9 +194,10 @@ let make =
           />
         }
       }
-      <div className="px-6 pb-4 flex-1 bg-grey-lightest relative overflow-y-scroll">
+      <div
+        className="px-6 pb-4 flex-1 bg-grey-lightest relative overflow-y-scroll">
         <div
-        className="max-w-lg flex py-4 items-center sticky pin-t z-20 bg-grey-lightest border-b justify-between mx-auto">
+          className="max-w-lg flex py-4 items-center relative md:sticky pin-t z-20 bg-grey-lightest border-b justify-between mx-auto">
           <div className="flex">
             <div className="inline-block relative w-64">
               <select
@@ -204,7 +205,9 @@ let make =
                   event => {
                     let level_name = ReactEvent.Form.target(event)##value;
                     send(
-                      SelectLevel(Level.selectLevel(state.levels, level_name)),
+                      SelectLevel(
+                        Level.selectLevel(state.levels, level_name),
+                      ),
                     );
                   }
                 }
@@ -214,18 +217,18 @@ let make =
                   state.levels
                   |> Level.sort
                   |> List.map(level =>
-                      <option
-                        key={Level.id(level) |> string_of_int}
-                        value={level |> Level.name}>
-                        {
-                          "Level "
-                          ++ (level |> Level.number |> string_of_int)
-                          ++ ": "
-                          ++ (level |> Level.name)
-                          |> str
-                        }
-                      </option>
-                    )
+                       <option
+                         key={Level.id(level) |> string_of_int}
+                         value={level |> Level.name}>
+                         {
+                           "Level "
+                           ++ (level |> Level.number |> string_of_int)
+                           ++ ": "
+                           ++ (level |> Level.name)
+                           |> str
+                         }
+                       </option>
+                     )
                   |> Array.of_list
                   |> ReasonReact.array
                 }
@@ -261,7 +264,10 @@ let make =
               <button
                 className="bg-indigo-lightest hover:bg-indigo text-indigo-dark text-sm hover:text-indigo-lightest font-semibold py-2 px-4 rounded focus:outline-none"
                 onClick={_ => send(ToggleShowArchived)}>
-                {(state.showArchived ? "Hide Archived" : "Show Archived") |> str}
+                {
+                  (state.showArchived ? "Hide Archived" : "Show Archived")
+                  |> str
+                }
               </button> :
               ReasonReact.null
           }

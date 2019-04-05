@@ -6,6 +6,7 @@ class Course < ApplicationRecord
   validate :grade_labels_must_match_grades
 
   belongs_to :school
+  belongs_to :community, optional: true
   has_many :levels, dependent: :restrict_with_error
   has_many :startups, through: :levels
   has_many :founders, through: :startups

@@ -33,9 +33,12 @@ class AddTablesForCommunity < ActiveRecord::Migration[5.2]
 
       t.timestamps
     end
+
+    add_reference :courses, :community
   end
 
   def down
+    remove_reference :courses, :community
     drop_table :community
     drop_table :questions
     drop_table :answers

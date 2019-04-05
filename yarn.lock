@@ -1432,6 +1432,11 @@ bs-platform@^4.0.18:
   version "4.0.18"
   resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-4.0.18.tgz#d17b8693ba1f714d9b27e0ddb365f2069ba4b8a0"
 
+bs-webapi@^0.13.6:
+  version "0.13.6"
+  resolved "https://registry.yarnpkg.com/bs-webapi/-/bs-webapi-0.13.6.tgz#5dace034c1e9bc82c114966395ac9c0466b54e79"
+  integrity sha512-oFIndcvO8NeBNEjIzvspv6D7t0qmaZereVl201OQ3lwjV5QUA8V9UdxHvyMt3VBhShvYEGuVIQ/GGET/AU2qeg==
+
 buffer-from@^1.0.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/buffer-from/-/buffer-from-1.1.1.tgz#32713bc028f75c02fdb710d7c7bcec1f2c6070ef"

@@ -20,7 +20,7 @@ module Schools
       private
 
       def school_faculty
-        Faculty.where(school: @course.school).includes(:user, :image_attachment, :startups)
+        Faculty.where(school: @course.school).where.not(exited: true).includes(:user, :image_attachment, :startups)
       end
 
       def school_faculty_details
@@ -43,7 +43,7 @@ module Schools
       end
 
       def startup_faculty
-        Faculty.left_joins(startups: :course).where(startups: { courses: { id: @course } })
+        Faculty.left_joins(startups: :course).where(startups: { courses: { id: @course } }).where.not(exited: true)
       end
 
       def course_faculty_ids

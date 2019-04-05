@@ -29,6 +29,7 @@ module Schools
             public: faculty.public,
             connectLink: faculty.connect_link,
             notifyForSubmission: faculty.notify_for_submission,
+            exited: faculty.exited,
             imageFileName: faculty.image_filename
           }
         end

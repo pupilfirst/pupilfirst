@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_28_124013) do
+ActiveRecord::Schema.define(version: 2019_04_05_061711) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -201,6 +201,7 @@ ActiveRecord::Schema.define(version: 2019_03_28_124013) do
     t.boolean "public", default: false
     t.string "connect_link"
     t.boolean "notify_for_submission", default: false
+    t.boolean "exited", default: false
     t.index ["category"], name: "index_faculty_on_category"
     t.index ["school_id", "user_id"], name: "index_faculty_on_school_id_and_user_id", unique: true
     t.index ["slug"], name: "index_faculty_on_slug", unique: true

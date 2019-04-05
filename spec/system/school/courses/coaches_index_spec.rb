@@ -14,6 +14,7 @@ feature 'Course Coaches Index' do
   let!(:coach_3) { create :faculty, school: school }
   let!(:coach_4) { create :faculty, school: school }
   let!(:coach_5) { create :faculty, school: school_2 }
+  let!(:coach_6) { create :faculty, school: school, exited: true }
 
   let!(:level) { create :level, course: course_2 }
   let!(:startup) { create :startup, level: level }
@@ -69,6 +70,7 @@ feature 'Course Coaches Index' do
     click_button 'Assign/Remove Course Faculty'
 
     within '.select-list__group' do
+      expect(page).to_not have_text(coach_6.name)
       find('.px-3', text: coach_3.name).click
     end
 

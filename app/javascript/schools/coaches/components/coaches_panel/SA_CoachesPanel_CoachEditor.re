@@ -16,6 +16,7 @@ type state = {
   title: string,
   linkedinUrl: string,
   public: bool,
+  exited: bool,
   connectLink: string,
   notifyForSubmission: bool,
   imageFileName: string,
@@ -37,6 +38,7 @@ type action =
   | UpdatePublic(bool)
   | UpdateNotifyForSubmission(bool)
   | UpdateImageFileName(string)
+  | UpdateExited(bool)
   | UpdateSaving;
 
 let component = ReasonReact.reducerComponent("SA_CoachesPanel_CoachEditor");
@@ -113,6 +115,7 @@ let make =
         public: false,
         connectLink: "",
         notifyForSubmission: false,
+        exited: false,
         dirty: false,
         saving: false,
         hasNameError: false,
@@ -139,6 +142,7 @@ let make =
           | None => ""
           },
         notifyForSubmission: coach |> Coach.notifyForSubmission,
+        exited: coach |> Coach.exited,
         dirty: false,
         saving: false,
         hasNameError: false,
@@ -181,13 +185,14 @@ let make =
       ReasonReact.Update({...state, notifyForSubmission, dirty: true})
     | UpdateSaving => ReasonReact.Update({...state, saving: ! state.saving})
     | UpdateImageFileName(imageFileName) => ReasonReact.Update({...state, imageFileName, dirty: true})
+    | UpdateExited(exited) => ReasonReact.Update({...state, exited, dirty: true})
     },
   render: ({state, send}) => {
     let formId = "coach-create-form";
     let addCoach = json => {
       let id = json |> Json.Decode.(field("id", int));
       let imageUrl = json |> Json.Decode.(field("image_url", string));
-      let newCoach = Coach.create(id, state.name, imageUrl, state.email, state.title, Some(state.linkedinUrl), state.public, Some(state.connectLink), state.notifyForSubmission, Some(state.imageFileName));
+      let newCoach = Coach.create(id, state.name, imageUrl, state.email, state.title, Some(state.linkedinUrl), state.public, Some(state.connectLink), state.notifyForSubmission, state.exited, Some(state.imageFileName));
       switch (coach) {
         | Some(_) =>
           Notification.success("Success", "Coach updated successfully")
@@ -543,23 +548,81 @@ let make =
                          </span>
                        </label>
                      </div>
-                  <div className="flex max-w-md w-full px-6 pb-5 mx-auto">
-                    (
-                      switch (coach) {
+                     <div className="p-6 pl-16 bg-grey-lighter">
+                        <div className="max-w-md px-6">
+                        <div
+                        className="flex max-w-md w-full justify-between items-center mx-auto">
+                      { switch(coach)
+                        {
                       | Some(_coach) =>
-                        <button
-                          disabled=(saveDisabled(state))
-                          className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none mt-3">
-                          ("Update Coach" |> str)
-                        </button>
-                      | None =>
-                        <button
-                          disabled=(saveDisabled(state))
-                          className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none mt-3">
-                          ("Create Coach" |> str)
-                        </button>
-                      }
-                    )
+
+                     <div className="flex items-center flex-no-shrink">
+                      <label
+                       className="block tracking-wide text-grey-darker text-xs font-semibold mr-3"
+                       htmlFor="evaluated">
+                       (
+                         "Has the coach exited the school?"
+                         |> str
+                       )
+                     </label>
+                     <div
+                       id="exited"
+                       className="flex flex-no-shrink rounded-lg overflow-hidden border">
+                       <button
+                         onClick=(
+                           _event => {
+                             ReactEvent.Mouse.preventDefault(_event);
+                             send(UpdateExited(true));
+                           }
+                         )
+                         name="faculty[exited]"
+                         className=(
+                           booleanButtonClasses(state.exited)
+                         )>
+                         ("Yes" |> str)
+                       </button>
+
+                       <button
+                         onClick=(
+                           _event => {
+                             ReactEvent.Mouse.preventDefault(_event);
+                             send(UpdateExited(false));
+                           }
+                         )
+                         className=(
+                           booleanButtonClasses(! state.exited)
+                         )>
+                         ("No" |> str)
+                       </button>
+                       <input
+                         type_="hidden"
+                         name="faculty[exited]"
+                         value={state.exited |> string_of_bool}
+                       />
+                     </div>
+                   </div>
+                   | None => ReasonReact.null}
+                          }
+                    <div className="w-auto">
+                      (
+                        switch (coach) {
+                        | Some(_coach) =>
+                          <button
+                            disabled=(saveDisabled(state))
+                            className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
+                            ("Update Coach" |> str)
+                          </button>
+                        | None =>
+                          <button
+                            disabled=(saveDisabled(state))
+                            className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
+                            ("Create Coach" |> str)
+                          </button>
+                        }
+                      )
+                    </div>
+                  </div>
+                  </div>
                   </div>
                 </form>
               </div>

@@ -6,6 +6,7 @@ type t = {
   title: string,
   linkedinUrl: option(string),
   public: bool,
+  exited: bool,
   connectLink: option(string),
   notifyForSubmission: bool,
   imageFileName: option(string),
@@ -29,6 +30,8 @@ let connectLink = t => t.connectLink;
 
 let notifyForSubmission = t => t.notifyForSubmission;
 
+let exited = t => t.exited;
+
 let imageFileName = t => t.imageFileName;
 
 let updateInfo = (name, coach) => {...coach, name};
@@ -46,6 +49,7 @@ let decode = json =>
     connectLink:
       json |> field("connectLink", nullable(string)) |> Js.Null.toOption,
     notifyForSubmission: json |> field("notifyForSubmission", bool),
+    exited: json |> field("exited", bool),
     imageFileName:
       json |> field("imageFileName", nullable(string)) |> Js.Null.toOption,
   };
@@ -61,6 +65,7 @@ let create =
       public,
       connectLink,
       notifyForSubmission,
+      exited,
       imageFileName,
     ) => {
   id,
@@ -72,6 +77,7 @@ let create =
   public,
   connectLink,
   notifyForSubmission,
+  exited,
   imageFileName,
 };
 

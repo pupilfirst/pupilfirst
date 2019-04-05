@@ -7,6 +7,7 @@ module Schools
       property :linkedin_url
       property :connect_link
       property :notify_for_submission
+      property :exited
       property :public
       property :image, virtual: true, validates: { file_content_type: { allow: ['image/jpeg', 'image/png'] }, file_size: { less_than: 2.gigabytes } }
       property :school_id, virtual: true, validates: { presence: true }
@@ -17,6 +18,8 @@ module Schools
           model.update!(faculty_params.merge(user: user))
           model.image.attach(image) if image.present?
         end
+
+        clear_faculty_enrollments if model.exited?
 
         model
       end
@@ -35,12 +38,18 @@ module Schools
           linkedin_url: linkedin_url,
           connect_link: connect_link,
           public: public,
-          notify_for_submission: notify_for_submission
+          notify_for_submission: notify_for_submission,
+          exited: exited
         }
       end
 
       def faculty
         @faculty ||= Faculty.find_by(id: id)
+      end
+
+      def clear_faculty_enrollments
+        FacultyCourseEnrollment.where(faculty: faculty).destroy_all
+        FacultyStartupEnrollment.where(faculty: faculty).destroy_all
       end
     end
   end

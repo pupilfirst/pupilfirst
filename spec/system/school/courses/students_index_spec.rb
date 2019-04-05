@@ -25,6 +25,7 @@ feature 'School students index' do
 
   let!(:course_coach) { create :faculty, school: school }
   let!(:coach) { create :faculty, school: school }
+  let!(:exited_coach) { create :faculty, school: school, exited: true }
 
   before do
     # Create a domain for school
@@ -148,6 +149,7 @@ feature 'School students index' do
     expect(page).to have_text('Exclusive Team Coaches')
     expect(page).to have_text(course_coach.name)
     within '.select-list__group' do
+      expect(page).to_not have_text(exited_coach.name)
       find('.px-3', text: coach.name).click
     end
     click_button 'Update Student'

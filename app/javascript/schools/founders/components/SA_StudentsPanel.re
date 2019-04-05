@@ -606,7 +606,7 @@ let make =
                                    |> List.map(coach =>
                                         <img
                                           key={coach |> Coach.avatarUrl}
-                                          className="w-6 h-6 rounded-full mr-2"
+                                          className="w-6 h-6 rounded-full mr-1"
                                           src={coach |> Coach.avatarUrl}
                                           alt={
                                             "Avatar of "

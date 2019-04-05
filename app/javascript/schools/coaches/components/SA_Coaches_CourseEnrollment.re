@@ -123,94 +123,108 @@ let make =
             {
               state.courseCoaches |> ListUtils.isEmpty ?
                 ReasonReact.null :
-                <div className="mb-5 w-full"> {"Course Coaches:" |> str} </div>
+                <h4 className="w-full"> {"Course Coaches:" |> str} </h4>
             }
-            {
-              state.courseCoaches
-              |> List.sort((x, y) => (x |> Coach.id) - (y |> Coach.id))
-              |> List.map(coach =>
-                   <div
-                     key={coach |> Coach.id |> string_of_int}
-                     className="flex items-center shadow bg-white rounded-lg mb-4">
+            <div className="flex mt-4 -mx-3 flex-wrap">
+              {
+                state.courseCoaches
+                |> List.sort((x, y) => (x |> Coach.id) - (y |> Coach.id))
+                |> List.map(coach =>
                      <div
-                       className="course-faculty__list-item flex w-full hover:bg-grey-lighter">
-                       <div className="flex flex-1 items-center py-4 px-4">
-                         <img
-                           className="w-10 h-10 rounded-full mr-4"
-                           src={coach |> Coach.imageUrl}
-                           alt="Avatar of Jonathan Reinink"
-                         />
-                         <div className="text-sm">
-                           <p className="text-black font-semibold">
-                             {coach |> Coach.name |> str}
-                           </p>
-                           <p
-                             className="text-grey-dark font-semibold text-xs mt-1">
-                             {coach |> Coach.title |> str}
-                           </p>
+                       key={coach |> Coach.id |> string_of_int}
+                       className="flex w-1/2 flex-no-shrink items-center mb-5 px-3">
+                       <div
+                         className="course-faculty__list-item shadow bg-white rounded-lg flex w-full">
+                         <div className="flex flex-1 items-center py-4 px-4">
+                           <img
+                             className="w-10 h-10 rounded-full mr-4"
+                             src={coach |> Coach.imageUrl}
+                             alt="Avatar of Jonathan Reinink"
+                           />
+                           <div className="text-sm">
+                             <p className="text-black font-semibold">
+                               {coach |> Coach.name |> str}
+                             </p>
+                             <p
+                               className="text-grey-dark font-semibold text-xs mt-1">
+                               {coach |> Coach.title |> str}
+                             </p>
+                           </div>
                          </div>
                        </div>
                      </div>
-                   </div>
-                 )
-              |> Array.of_list
-              |> ReasonReact.array
-            }
+                   )
+                |> Array.of_list
+                |> ReasonReact.array
+              }
+            </div>
             {
               state.teamCoaches |> ListUtils.isEmpty ?
                 ReasonReact.null :
-                <div className="mb-5 w-full">
+                <h4 className="mt-5 w-full">
                   {"Student/Team Coaches:" |> str}
-                </div>
+                </h4>
             }
-            {
-              state.teamCoaches
-              |> List.sort((x, y) => (x |> Coach.id) - (y |> Coach.id))
-              |> List.map(coach =>
-                   <div
-                     key={coach |> Coach.id |> string_of_int}
-                     className="flex items-center shadow bg-white rounded-lg overflow-hidden mb-4">
+            <div className="flex mt-4 -mx-3 items-start flex-wrap">
+              {
+                state.teamCoaches
+                |> List.sort((x, y) => (x |> Coach.id) - (y |> Coach.id))
+                |> List.map(coach =>
                      <div
-                       className="course-faculty__list-item flex w-full hover:bg-grey-lighter">
-                       <div className="flex flex-1 items-center py-4 px-4">
-                         <img
-                           className="w-10 h-10 rounded-full mr-4"
-                           src={coach |> Coach.imageUrl}
-                           alt={"Avatar of " ++ Coach.name(coach)}
-                         />
-                         <div className="text-sm">
-                           <p className="text-black font-semibold">
-                             {coach |> Coach.name |> str}
-                           </p>
-                           <p
-                             className="text-grey-dark font-semibold text-xs mt-1">
-                             {coach |> Coach.title |> str}
-                           </p>
+                       key={coach |> Coach.id |> string_of_int}
+                       className="flex w-1/2 items-center mb-4 px-3">
+                       <div
+                         className="course-faculty__list-item shadow bg-white overflow-hidden rounded-lg flex flex-col w-full">
+                         <div
+                           className="flex flex-1 items-center pt-4 pb-3 px-4">
+                           <img
+                             className="w-10 h-10 rounded-full mr-4"
+                             src={coach |> Coach.imageUrl}
+                             alt={"Avatar of " ++ Coach.name(coach)}
+                           />
+                           <div className="text-sm">
+                             <p className="text-black font-semibold">
+                               {coach |> Coach.name |> str}
+                             </p>
+                             <p
+                               className="text-grey-dark font-semibold text-xs mt-1">
+                               {coach |> Coach.title |> str}
+                             </p>
+                           </div>
+                         </div>
+                         <div className="pt-3 pb-4 px-4">
+                           <h5
+                             className="font-semibold text-grey-dark border-b pb-1">
+                             {"Teams" |> str}
+                           </h5>
                            {
                              switch (coach |> Coach.teams) {
                              | None => ReasonReact.null
                              | Some(teams) =>
-                               <p
-                                 className="text-grey-dark font-semibold text-xs mt-1">
+                               <div
+                                 className="flex flex-wrap text-grey-dark font-semibold text-xs mt-1">
                                  {
-                                   "Teams: "
-                                   ++ (
-                                     List.map(team => Team.name(team), teams)
-                                     |> String.concat(" | ")
-                                   )
-                                   |> str
+                                   teams
+                                   |> List.map(team =>
+                                        <span
+                                          className="p-1 border rounded bg-primary-lightest mt-1 mr-1">
+                                          {Team.name(team) |> str}
+                                        </span>
+                                      )
+                                   |> Array.of_list
+                                   |> ReasonReact.array
                                  }
-                               </p>
+                               </div>
                              }
                            }
                          </div>
                        </div>
                      </div>
-                   </div>
-                 )
-              |> Array.of_list
-              |> ReasonReact.array
-            }
+                   )
+                |> Array.of_list
+                |> ReasonReact.array
+              }
+            </div>
           </div>
         </div>
       </div>

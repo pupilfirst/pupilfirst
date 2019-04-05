@@ -1,0 +1,8 @@
+<% content_for(:tail) do %>
+  <%= javascript_pack_tag 'schools/SchoolCustomizePack', nonce: true %>
+  <%= stylesheet_pack_tag 'schools/SchoolCustomizePack', media: 'all' %>
+<% end %>
+
+<% presenter = Schools::CustomizePresenter.new(self) %>
+
+<div id="react-root" data-json-props="<%= presenter.json_props %>"></div>

@@ -30,7 +30,9 @@ Rails.application.routes.draw do
   # TODO: Remove these founder routes as we no longer have 'founders'. Always use the corresponding 'student' routes below.
   resource :founder, path: 'student', only: %i[edit update]
 
-  resource :school, only: %i[show update]
+  resource :school, only: %i[show update] do
+    get 'customize'
+  end
 
   namespace :school, module: 'schools' do
     resources :faculty, only: %i[create update destroy], as: 'coaches', path: 'coaches' do

@@ -4,4 +4,8 @@ class SchoolPolicy < ApplicationPolicy
 
     user.school_admins.where(school: record).present?
   end
+
+  def customize?
+    show?
+  end
 end

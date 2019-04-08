@@ -13,7 +13,7 @@ ActiveAdmin.register User do
     include DisableIntercom
 
     def scoped_collection
-      super.includes({ founders: { startup: :course } }, :faculty, :admin_user)
+      super.includes({ founders: { startup: :course } }, { faculty: :school }, :admin_user)
     end
   end
 
@@ -26,7 +26,12 @@ ActiveAdmin.register User do
       render('founders', user: user) if user.founders.exists?
     end
 
-    column :faculty
+    column :faculty do |user|
+      none_one_or_many(self, user.faculty) do |faculty|
+        link_to "#{faculty.name} (#{faculty.school.name})", admin_faculty_path(faculty)
+      end
+    end
+
     column :admin_user
 
     actions
@@ -41,7 +46,12 @@ ActiveAdmin.register User do
       end
 
       row :admin_user
-      row :faculty
+
+      row :faculty do |user|
+        none_one_or_many(self, user.faculty) do |faculty|
+          link_to "#{faculty.name} (#{faculty.school.name})", admin_faculty_path(faculty)
+        end
+      end
 
       row :sign_out_at_next_request do |user|
         if user.sign_out_at_next_request?

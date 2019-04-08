@@ -1,18 +1,19 @@
 @import "tailwindcss/preflight";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
-
 /* Custom Style */
+
 body {
-    font-family: 'Open Sans', sans-serif;
-    color: #3A3F52;
-    @apply .antialiased;
+  font-family: 'Open Sans', sans-serif;
+  color: #3A3F52;
+  @apply .antialiased;
 }
 
 /* Gradients */
+
 @responsive {
-  .bg-gradient-primary-to-primary-darker-to-bottom {
-    background-image: linear-gradient(to bottom, config('colors.primary'), config('colors.primary-darker'));
+  .bg-gradient-primary-dark-to-primary-darker-to-bottom {
+    background-image: linear-gradient(to bottom, config('colors.primary-dark'), config('colors.primary-darker'));
   }
   .bg-gradient-secondary-to-secondary-dark-120 {
     background-image: linear-gradient(120deg, config('colors.secondary'), config('colors.secondary-dark'));

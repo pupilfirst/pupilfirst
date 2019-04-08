@@ -7,6 +7,7 @@ type t = {
   email: string,
   tags: list(string),
   exited: bool,
+  excludedFromLeaderboard: bool,
 };
 
 let name = t => t.name;
@@ -25,11 +26,14 @@ let tags = t => t.tags;
 
 let exited = t => t.exited;
 
-let updateInfo = (name, teamName, exited, student) => {
-  ...student,
+let excludedFromLeaderboard = t => t.excludedFromLeaderboard;
+
+let updateInfo = (name, teamName, exited, excludedFromLeaderboard, t) => {
+  ...t,
   name,
   teamName,
   exited,
+  excludedFromLeaderboard,
 };
 
 let decode = json =>
@@ -42,6 +46,7 @@ let decode = json =>
     email: json |> field("email", string),
     tags: json |> field("tags", list(string)),
     exited: json |> field("exited", bool),
+    excludedFromLeaderboard: json |> field("excludedFromLeaderboard", bool),
   };
 
 let encode = t =>
@@ -54,5 +59,6 @@ let encode = t =>
       ("team_name", t.teamName |> string),
       ("email", t.email |> string),
       ("exited", t.exited |> bool),
+      ("excluded_from_leaderboard", t.excludedFromLeaderboard |> bool),
     ])
   );

@@ -13,7 +13,8 @@ class GraphqlController < ApplicationController
       current_coach: current_school,
       current_domain: current_domain,
       current_host: current_host,
-      current_startup: current_startup
+      current_startup: current_startup,
+      current_school_admin: current_school_admin
     }
 
     result = SvappSchema.execute(query, variables: variables, context: context, operation_name: operation_name)

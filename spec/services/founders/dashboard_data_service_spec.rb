@@ -12,16 +12,14 @@ describe Founders::DashboardDataService do
   let(:course_2_level) { create :level, :one, course: course_2 }
   let!(:startup) { create :startup, level: level_2 }
   let!(:founder) { create :founder, startup: startup }
-  let!(:track_1) { create :track }
-  let!(:track_2) { create :track }
   let!(:evaluation_criterion_course_1) { create :evaluation_criterion, course: course_1 }
   let!(:evaluation_criterion_course_2) { create :evaluation_criterion, course: course_2 }
-  let!(:target_group_l1_1) { create :target_group, level: level_1, milestone: true, track: track_1 }
-  let!(:target_group_l1_2) { create :target_group, level: level_1, track: track_2 }
-  let!(:target_group_l2_1) { create :target_group, level: level_2, milestone: true, track: track_1 }
-  let!(:target_group_l2_2) { create :target_group, level: level_2, track: track_2 }
-  let!(:target_group_l3_1) { create :target_group, level: unlocked_level_3, track: track_1 }
-  let!(:target_group_l4_1) { create :target_group, level: locked_level_4, track: track_1 }
+  let!(:target_group_l1_1) { create :target_group, level: level_1, milestone: true }
+  let!(:target_group_l1_2) { create :target_group, level: level_1 }
+  let!(:target_group_l2_1) { create :target_group, level: level_2, milestone: true }
+  let!(:target_group_l2_2) { create :target_group, level: level_2 }
+  let!(:target_group_l3_1) { create :target_group, level: unlocked_level_3 }
+  let!(:target_group_l4_1) { create :target_group, level: locked_level_4 }
   let(:course_2_target_group) { create :target_group, level: course_2_level }
   let!(:course_2_target) { create :target, target_group: course_2_target_group }
   let!(:level_1_target) { create :target, target_group: target_group_l1_1 }
@@ -36,11 +34,11 @@ describe Founders::DashboardDataService do
   describe '#props' do
     it 'includes data from all open levels' do
       expected_target_groups = [
-        hash_including(target_group_l1_1.slice(target_group_fields).merge(track: { id: track_1.id }, level: { id: level_1.id })),
-        hash_including(target_group_l1_2.slice(target_group_fields).merge(track: { id: track_2.id }, level: { id: level_1.id })),
-        hash_including(target_group_l2_1.slice(target_group_fields).merge(track: { id: track_1.id }, level: { id: level_2.id })),
-        hash_including(target_group_l2_2.slice(target_group_fields).merge(track: { id: track_2.id }, level: { id: level_2.id })),
-        hash_including(target_group_l3_1.slice(target_group_fields).merge(track: { id: track_1.id }, level: { id: unlocked_level_3.id }))
+        hash_including(target_group_l1_1.slice(target_group_fields).merge(level: { id: level_1.id })),
+        hash_including(target_group_l1_2.slice(target_group_fields).merge(level: { id: level_1.id })),
+        hash_including(target_group_l2_1.slice(target_group_fields).merge(level: { id: level_2.id })),
+        hash_including(target_group_l2_2.slice(target_group_fields).merge(level: { id: level_2.id })),
+        hash_including(target_group_l3_1.slice(target_group_fields).merge(level: { id: unlocked_level_3.id }))
       ]
 
       expected_targets = [
@@ -59,12 +57,11 @@ describe Founders::DashboardDataService do
 
       props = subject.props
 
-      expect(props.keys).to match_array(%i[faculty levels targetGroups targets tracks criteriaNames gradeLabels])
+      expect(props.keys).to match_array(%i[faculty levels targetGroups targets criteriaNames gradeLabels])
       expect(props[:faculty]).to match_array(team_members)
       expect(props[:levels]).to match_array(level_fields(level_1, level_2, unlocked_level_3, locked_level_4))
       expect(props[:targetGroups]).to match_array(expected_target_groups)
       expect(props[:targets]).to match_array(expected_targets)
-      expect(props[:tracks]).to match_array(track_fields(track_1, track_2))
       expect(props[:criteriaNames]).to eq(evaluation_criterion_course_1.id => evaluation_criterion_course_1.name)
       expect(props[:gradeLabels]).to eq(course_1.grade_labels)
     end
@@ -73,12 +70,6 @@ describe Founders::DashboardDataService do
   def level_fields(*levels)
     levels.map do |level|
       hash_including(level.slice(:id, :name, :number))
-    end
-  end
-
-  def track_fields(*tracks)
-    tracks.map do |track|
-      hash_including(track.slice(:id, :name, :sort_index))
     end
   end
 

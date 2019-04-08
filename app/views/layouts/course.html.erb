@@ -5,13 +5,13 @@
 <% end %>
 
 <% content_for(:wrapper) do %>
-  <div class="antialiased flex">
-    <div class="flex global-sidebar h-screen">
-      <div class="bg-gradient-primary-to-primary-darker-to-bottom global-sidebar__primary-nav global-sidebar__primary-nav--shrinked text-purple-lighter flex flex-col justify-between">
+  <div class="antialiased flex h-screen overflow-hidden">
+    <div class="flex global-sidebar">
+      <div class="bg-gradient-primary-dark-to-primary-darker-to-bottom global-sidebar__primary-nav global-sidebar__primary-nav--shrinked text-purple-lighter flex flex-col justify-between">
         <div>
           <div class="global-sidebar__header mx-auto">
-            <div class="global-sidebar__school-logo-container flex items-center justify-center m-2">
-              <%= link_to school_path, class: 'p-2 bg-white h-12 w-12 rounded' do %>
+            <div class="global-sidebar__school-logo-container flex items-center justify-center w-16 h-16">
+              <%= link_to school_path, class: 'p-2 bg-white flex items-center justify-center p-2 m-2 rounded' do %>
                 <%= image_tag(presenter.school_icon_path, alt: current_school.name) %>
               <% end %>
             </div>
@@ -20,6 +20,11 @@
             <li>
               <%= link_to school_path, class:'global-sidebar__primary-nav-link p-4 justify-center' do%>
                 <i class="material-icons md-48">vertical_split</i>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to school_coaches_path, class:'global-sidebar__primary-nav-link p-4 justify-center' do%>
+                <i class="material-icons md-48">person</i>
               <% end %>
             </li>
             <li>
@@ -34,29 +39,29 @@
         <ul class="list-reset">
           <% if presenter.founder_profile?(@course) %>
             <li>
-              <%= link_to student_dashboard_path, class: 'flex text-white py-3 px-4 hover:bg-primary-darkest font-semibold no-underline items-center' do %>
+              <%= link_to student_dashboard_path, class: 'flex text-white py-3 px-4 hover:bg-primary-darkest font-semibold no-underline items-center justify-center' do %>
                 <i class="material-icons">visibility</i>
               <% end %>
             </li>
           <% end %>
           <% if presenter.coach_profile?(@course) %>
             <li>
-              <%= link_to course_coach_dashboard_path(@course), class: 'flex text-white py-3 px-4 hover:bg-primary-darkest font-semibold no-underline items-center' do %>
+              <%= link_to course_coach_dashboard_path(@course), class: 'flex text-white py-3 px-4 hover:bg-primary-darkest font-semibold no-underline items-center justify-center' do %>
                 <i class="material-icons">assignment_turned_in</i>
               <% end %>
             </li>
           <% end %>
           <li>
-            <%= link_to destroy_user_session_path, method: :delete, class: 'flex text-white py-3 px-4 hover:bg-primary-darkest font-semibold no-underline items-center' do %>
+            <%= link_to destroy_user_session_path, method: :delete, class: 'flex text-white py-3 px-4 hover:bg-primary-darkest font-semibold no-underline items-center justify-center' do %>
               <i class="material-icons">power_settings_new</i>
             <% end %>
           </li>
         </ul>
       </div>
 
-      <div class="bg-grey-lighter global-sidebar__secondary-nav w-full border-r border-grey-light pb-6 hidden md:block">
+      <div class="bg-grey-lighter global-sidebar__secondary-nav w-full border-r border-grey-light pb-6 overflow-y-auto">
         <ul class="list-reset p-4">
-          <% default_classes = 'flex text-indigo-darker py-3 px-4 hover:bg-grey-light focus:bg-grey-light font-semibold rounded no-underline items-center my-1' %>
+          <% default_classes = 'flex text-indigo-darker text-sm py-3 px-4 hover:bg-grey-light focus:bg-grey-light font-semibold rounded no-underline items-center my-1' %>
           <% selected_classes = ' bg-grey-light' %>
           <li>
             <div id="layouts-courses" data-props="<%= presenter.react_props(@course).to_json %>"></div>

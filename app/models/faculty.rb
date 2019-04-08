@@ -160,6 +160,14 @@ class Faculty < ApplicationRecord
     end
   end
 
+  def connect_link?
+    connect_link.present?
+  end
+
+  def image_filename
+    image.attached? ? image.blob.filename.to_s : nil
+  end
+
   private
 
   def initials_avatar(background_shape)

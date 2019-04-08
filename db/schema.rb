@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_04_065158) do
+ActiveRecord::Schema.define(version: 2019_04_05_061711) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -233,6 +233,7 @@ ActiveRecord::Schema.define(version: 2019_04_04_065158) do
     t.boolean "public", default: false
     t.string "connect_link"
     t.boolean "notify_for_submission", default: false
+    t.boolean "exited", default: false
     t.index ["category"], name: "index_faculty_on_category"
     t.index ["school_id", "user_id"], name: "index_faculty_on_school_id_and_user_id", unique: true
     t.index ["slug"], name: "index_faculty_on_slug", unique: true
@@ -457,6 +458,8 @@ ActiveRecord::Schema.define(version: 2019_04_04_065158) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "subdomain"
+    t.string "domain"
   end
 
   create_table "shortened_urls", id: :serial, force: :cascade do |t|
@@ -558,11 +561,9 @@ ActiveRecord::Schema.define(version: 2019_04_04_065158) do
     t.integer "sort_index"
     t.boolean "milestone"
     t.integer "level_id"
-    t.bigint "track_id"
     t.boolean "archived", default: false
     t.index ["level_id"], name: "index_target_groups_on_level_id"
     t.index ["sort_index"], name: "index_target_groups_on_sort_index"
-    t.index ["track_id"], name: "index_target_groups_on_track_id"
   end
 
   create_table "target_prerequisites", id: :serial, force: :cascade do |t|
@@ -651,13 +652,6 @@ ActiveRecord::Schema.define(version: 2019_04_04_065158) do
     t.boolean "latest"
   end
 
-  create_table "tracks", force: :cascade do |t|
-    t.string "name"
-    t.integer "sort_index", default: 0
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "universities", id: :serial, force: :cascade do |t|
     t.string "name"
     t.integer "state_id"
@@ -743,8 +737,6 @@ ActiveRecord::Schema.define(version: 2019_04_04_065158) do
   add_foreign_key "quiz_questions", "answer_options", column: "correct_answer_id"
   add_foreign_key "quiz_questions", "quizzes"
   add_foreign_key "quizzes", "targets"
-  add_foreign_key "school_admins", "schools"
-  add_foreign_key "school_admins", "users"
   add_foreign_key "school_links", "schools"
   add_foreign_key "school_strings", "schools"
   add_foreign_key "startup_feedback", "faculty"
@@ -753,7 +745,6 @@ ActiveRecord::Schema.define(version: 2019_04_04_065158) do
   add_foreign_key "target_evaluation_criteria", "evaluation_criteria"
   add_foreign_key "target_evaluation_criteria", "targets"
   add_foreign_key "target_groups", "levels"
-  add_foreign_key "target_groups", "tracks"
   add_foreign_key "target_resources", "resources"
   add_foreign_key "target_resources", "targets"
   add_foreign_key "timeline_event_files", "timeline_events"

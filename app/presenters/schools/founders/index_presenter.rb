@@ -8,16 +8,24 @@ module Schools
       end
 
       def react_props
-        { teams: teams, courseId: @course.id, levels: levels, studentTags: founder_tags, authenticityToken: view.form_authenticity_token }
+        {
+          teams: teams,
+          courseId: @course.id,
+          courseCoachIds: @course.faculty.pluck(:id),
+          schoolCoaches: coach_details(@course.school.faculty.where.not(exited: true).includes(:image_attachment)),
+          levels: levels,
+          studentTags: founder_tags,
+          authenticityToken: view.form_authenticity_token
+        }
       end
 
       def teams
-        @course.startups.includes(:level, :faculty, founders: %i[user taggings]).order(:id).map do |team|
+        @course.startups.includes(:level, :faculty, founders: %i[user taggings avatar_attachment]).order(:id, 'founders.id').map do |team|
           {
             id: team.id,
             name: team.name,
             students: student_details(team.founders),
-            coaches: (coach_details(team.faculty) + course_coaches).uniq,
+            coaches: team.faculty.pluck(:id),
             levelNumber: team.level.number
           }
         end
@@ -35,7 +43,8 @@ module Schools
             teamName: student.startup.name,
             email: student.user.email,
             tags: student.tag_list & founder_tags,
-            exited: student.exited
+            exited: student.exited,
+            excludedFromLeaderboard: student.excluded_from_leaderboard
           }
         end
       end
@@ -43,6 +52,8 @@ module Schools
       def coach_details(coaches)
         coaches.map do |coach|
           {
+            id: coach.id,
+            name: coach.name,
             avatarUrl: coach.image_or_avatar_url
           }
         end

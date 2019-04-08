@@ -58,7 +58,6 @@ export default class ActionBar extends React.Component {
       <div className="founder-dashboard-actionbar__container px-2 mx-auto pt-4 pt-md-5">
         <div className="founder-dashboard-actionbar__box d-flex justify-content-between">
           <TargetsFilter
-            getAvailableTrackIds={this.props.getAvailableTrackIds}
             rootProps={this.props.rootProps}
             rootState={this.props.rootState}
             setRootState={this.props.setRootState}
@@ -93,7 +92,6 @@ export default class ActionBar extends React.Component {
 }
 
 ActionBar.propTypes = {
-  getAvailableTrackIds: PropTypes.func.isRequired,
   rootProps: PropTypes.object.isRequired,
   rootState: PropTypes.object.isRequired,
   setRootState: PropTypes.func.isRequired

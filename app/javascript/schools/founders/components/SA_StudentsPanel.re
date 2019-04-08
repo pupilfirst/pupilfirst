@@ -1,4 +1,5 @@
 open StudentsPanel__Types;
+
 open SchoolAdmin__Utils;
 
 let str = ReasonReact.string;
@@ -123,7 +124,9 @@ let handleTeamUpResponse = (send, json) => {
   send(DeselectAllStudents);
   Notification.success("Success!", "Teams updated successfully");
 };
+
 let handleErrorCB = () => ();
+
 let teamUp = (students, responseCB, authenticityToken) => {
   let payload = Js.Dict.empty();
   Js.Dict.set(
@@ -136,7 +139,6 @@ let teamUp = (students, responseCB, authenticityToken) => {
     "founder_ids",
     students |> List.map(s => s |> Student.id) |> Json.Encode.(list(int)),
   );
-
   let url = "/school/students/team_up";
   Api.create(url, payload, responseCB, handleErrorCB);
 };
@@ -144,7 +146,16 @@ let teamUp = (students, responseCB, authenticityToken) => {
 let component = ReasonReact.reducerComponent("SA_StudentsPanel");
 
 let make =
-    (~teams, ~courseId, ~authenticityToken, ~levels, ~studentTags, _children) => {
+    (
+      ~teams,
+      ~courseId,
+      ~courseCoachIds,
+      ~schoolCoaches,
+      ~authenticityToken,
+      ~levels,
+      ~studentTags,
+      _children,
+    ) => {
   ...component,
   initialState: () => {
     teams,
@@ -224,13 +235,20 @@ let make =
             authenticityToken
           />
         | UpdateForm(student) =>
+          let teamCoachIds =
+            state.teams
+            |> List.find(team => Team.id(team) == Student.teamId(student))
+            |> Team.coachIds;
           <SA_StudentsPanel_UpdateForm
             student
             studentTags={state.tags}
+            teamCoachIds
+            courseCoachIds
+            schoolCoaches
             closeFormCB
             submitFormCB
             authenticityToken
-          />
+          />;
         };
       }
       <div
@@ -308,7 +326,6 @@ let make =
                       |> List.map(team => team |> Team.students)
                       |> List.flatten
                       |> List.length;
-
                     selectedCount > 0 ?
                       (selectedCount |> string_of_int) ++ " selected" |> str :
                       (studentCount |> string_of_int) ++ " students" |> str;
@@ -457,6 +474,9 @@ let make =
                                   let isChecked =
                                     state.selectedStudents
                                     |> List.mem(student);
+                                  let checkboxId =
+                                    "select-student-"
+                                    ++ (student |> Student.id |> string_of_int);
                                   <div
                                     key={
                                       student |> Student.id |> string_of_int
@@ -467,17 +487,11 @@ let make =
                                       <div className="flex items-center">
                                         <label
                                           className="block text-grey leading-tight font-bold px-4 py-5"
-                                          htmlFor={
-                                            (student |> Student.name)
-                                            ++ "_checkbox"
-                                          }>
+                                          htmlFor=checkboxId>
                                           <input
                                             className="leading-tight"
                                             type_="checkbox"
-                                            id={
-                                              (student |> Student.name)
-                                              ++ "_checkbox"
-                                            }
+                                            id=checkboxId
                                             checked=isChecked
                                             onChange={
                                               isChecked ?
@@ -575,18 +589,33 @@ let make =
                                </p>
                                <div className="flex items-center">
                                  {
-                                   team
-                                   |> Team.coaches
+                                   let teamCoachIds =
+                                     List.append(
+                                       courseCoachIds,
+                                       team |> Team.coachIds,
+                                     );
+                                   let teamCoaches =
+                                     schoolCoaches
+                                     |> List.filter(coach =>
+                                          teamCoachIds
+                                          |> List.exists(teamCoachId =>
+                                               teamCoachId == Coach.id(coach)
+                                             )
+                                        );
+                                   teamCoaches
                                    |> List.map(coach =>
                                         <img
                                           key={coach |> Coach.avatarUrl}
-                                          className="w-6 h-6 rounded-full mr-2"
+                                          className="w-6 h-6 rounded-full mr-1"
                                           src={coach |> Coach.avatarUrl}
-                                          alt="Avatar of Jonathan Reinink"
+                                          alt={
+                                            "Avatar of "
+                                            ++ (coach |> Coach.name)
+                                          }
                                         />
                                       )
                                    |> Array.of_list
-                                   |> ReasonReact.array
+                                   |> ReasonReact.array;
                                  }
                                </div>
                              </div>
@@ -626,6 +655,8 @@ let make =
 type props = {
   teams: list(Team.t),
   courseId: int,
+  courseCoachIds: list(int),
+  schoolCoaches: list(Coach.t),
   levels: list(Level.t),
   studentTags: list(string),
   authenticityToken: string,
@@ -635,8 +666,10 @@ let decode = json =>
   Json.Decode.{
     teams: json |> field("teams", list(Team.decode)),
     courseId: json |> field("courseId", int),
+    courseCoachIds: json |> field("courseCoachIds", list(int)),
     levels: json |> field("levels", list(Level.decode)),
     studentTags: json |> field("studentTags", list(string)),
+    schoolCoaches: json |> field("schoolCoaches", list(Coach.decode)),
     authenticityToken: json |> field("authenticityToken", string),
   };
 
@@ -648,6 +681,8 @@ let jsComponent =
       make(
         ~teams=props.teams,
         ~courseId=props.courseId,
+        ~courseCoachIds=props.courseCoachIds,
+        ~schoolCoaches=props.schoolCoaches,
         ~levels=props.levels,
         ~studentTags=props.studentTags,
         ~authenticityToken=props.authenticityToken,

@@ -1,4 +1,4 @@
-after 'development:schools', 'development:founders' do
+after 'development:schools', 'development:founders', 'development:courses' do
   puts 'Seeding community'
 
   school = School.find_by(name: 'SV.CO')
@@ -11,7 +11,7 @@ after 'development:schools', 'development:founders' do
     question = Question.create!(
       title: Faker::Lorem.sentence,
       description: Faker::Lorem.sentence,
-      community_dashboard: community,
+      community: community,
       user: user
     )
     answer = Answer.create!(
@@ -25,4 +25,6 @@ after 'development:schools', 'development:founders' do
       user: [john_doe, groot, rocket].sample
     )
   end
+  course = Course.find_by(name: "VR")
+  course.update!(community: community)
 end

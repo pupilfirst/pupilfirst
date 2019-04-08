@@ -54,7 +54,7 @@ Rails.application.routes.draw do
       resources :faculty, as: 'coaches', path: 'coaches', only: [] do
         collection do
           get '/', action: 'course_index'
-          post 'update_enrollments', action: 'update_course_enrollments'
+          post 'update_enrollments'
         end
 
         member do
@@ -67,19 +67,6 @@ Rails.application.routes.draw do
     resources :founders, as: 'students', path: 'students', except: %i[index] do
       collection do
         post 'team_up'
-      end
-    end
-
-    resources :startups, as: 'teams', path: 'teams', only: %i[update] do
-      member do
-        post 'add_coach'
-        post 'remove_coach'
-      end
-
-      resources :faculty, as: 'coaches', path: 'coaches', only: [] do
-        collection do
-          post 'update_enrollments', action: 'update_startup_enrollments'
-        end
       end
     end
 

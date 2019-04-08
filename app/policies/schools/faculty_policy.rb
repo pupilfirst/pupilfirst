@@ -9,7 +9,7 @@ module Schools
       user.school_admins.where(school: record).present?
     end
 
-    def update_course_enrollments?
+    def update_enrollments?
       !record.ended?
     end
 

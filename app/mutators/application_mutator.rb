@@ -3,6 +3,8 @@ class ApplicationMutator
 
   attr_reader :context
 
+  validate :must_be_authorized
+
   def initialize(attributes, context)
     @context = context
     assign_attributes(attributes)

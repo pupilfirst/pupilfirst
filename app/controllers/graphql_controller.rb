@@ -2,6 +2,8 @@ class GraphqlController < ApplicationController
   skip_forgery_protection
 
   def execute
+    raise 'Only schools have access to GraphQL API' if current_school.blank?
+
     variables = ensure_hash(params[:variables])
     query = params[:query]
     operation_name = params[:operationName]

@@ -1,14 +1,14 @@
 module Types
   class QueryType < Types::BaseObject
     field :courses, [Types::CourseType], null: false
-    field :community, [Types::CommunityType], null: false
+    # field :community, [Types::CommunityType], null: false
 
     def courses
-      context[:current_school].courses
+      CoursesResolver.new(context).collection
     end
 
-    def community
-      context[:current_school].community
-    end
+    # def community(id:)
+    #   CommunitiesResolver.new(context).member(id)
+    # end
   end
 end

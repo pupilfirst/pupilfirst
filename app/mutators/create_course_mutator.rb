@@ -1,4 +1,6 @@
 class CreateCourseMutator < ApplicationMutator
+  include AuthorizeSchoolAdmin
+
   attr_accessor :name
   attr_accessor :max_grade
   attr_accessor :pass_grade

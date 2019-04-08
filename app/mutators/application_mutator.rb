@@ -19,4 +19,8 @@ class ApplicationMutator
   def current_school
     context[:current_school]
   end
+
+  def current_school_admin
+    context[:current_school_admin]
+  end
 end

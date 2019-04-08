@@ -50,7 +50,7 @@ module Schools
     end
 
     # POST /school/courses/:course_id/coaches/update_enrollments
-    def update_course_enrollments
+    def update_enrollments
       course = courses.find(params[:course_id])
       @course = authorize(course, policy_class: Schools::FacultyPolicy)
       enrolled_coach_ids = params[:coach_ids]

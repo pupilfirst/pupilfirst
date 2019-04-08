@@ -125,7 +125,9 @@ let make =
                 ReasonReact.null :
                 <h4 className="w-full"> {"Course Coaches:" |> str} </h4>
             }
-            <div className="flex mt-4 -mx-3 flex-wrap">
+            <div
+              className="flex mt-4 -mx-3 flex-wrap"
+              ariaLabel="List of course coaches">
               {
                 state.courseCoaches
                 |> List.sort((x, y) => (x |> Coach.id) - (y |> Coach.id))
@@ -139,7 +141,7 @@ let make =
                            <img
                              className="w-10 h-10 rounded-full mr-4"
                              src={coach |> Coach.imageUrl}
-                             alt="Avatar of Jonathan Reinink"
+                             alt={"Avatar of " ++ (coach |> Coach.name)}
                            />
                            <div className="text-sm">
                              <p className="text-black font-semibold">

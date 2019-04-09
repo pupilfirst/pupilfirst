@@ -68,13 +68,11 @@ let handleResponseJSON =
       json
       |> Json.Decode.(field("moreSubmissionsAfter", nullable(string)))
       |> Js.Null.toOption;
-
     let (newMorePendingSubmissionsAfter, newMoreReviewedSubmissionsAfter) =
       switch (state.selectedTab) {
       | PendingTab => (moreSubmissionsAfter, moreReviewedSubmissionsAfter)
       | ReviewedTab => (morePendingSubmissionsAfter, moreSubmissionsAfter)
       };
-
     appendTEsCB(
       newTEs,
       newMorePendingSubmissionsAfter,
@@ -191,15 +189,13 @@ let emptyMessage =
       moreReviewedSubmissionsAfter,
     ) => {
   let reviewedDefaultMessage = "When you review submissions, they'll be shown in this section.";
-
   switch (selectedFounder, selectedTab, moreReviewedSubmissionsAfter) {
   | (None, ReviewedTab, Some(_date)) =>
     <p>
-      {reviewedDefaultMessage |> str}
+      (reviewedDefaultMessage |> str)
       <br />
-      {" You can also load previously reviewed submissions." |> str}
+      (" You can also load previously reviewed submissions." |> str)
     </p>
-
   | (None, ReviewedTab, None) => reviewedDefaultMessage |> str
   | (selectedFounder, selectedTab, moreReviewedSubmissionsAfter) =>
     let fromText =
@@ -207,13 +203,11 @@ let emptyMessage =
       | None => ""
       | Some(founder) => "from " ++ (founder |> Founder.name)
       };
-
     let partOne =
       "There are no "
       ++ tabAsString(selectedTab)
       ++ " submissions "
       ++ fromText;
-
     let earliestSubmissionDate =
       switch (
         selectedTab,
@@ -225,13 +219,11 @@ let emptyMessage =
       | (PendingTab, _, _) => None
       | (ReviewedTab, _, _) => None
       };
-
     let partTwo =
       switch (earliestSubmissionDate) {
       | Some(date) => " since " ++ date ++ "."
       | None => "."
       };
-
     let partThree =
       loadMoreVisible(
         selectedTab,
@@ -239,7 +231,6 @@ let emptyMessage =
         moreReviewedSubmissionsAfter,
       ) ?
         " Please try loading more." : "";
-
     partOne ++ partTwo ++ partThree |> str;
   };
 };
@@ -300,26 +291,26 @@ let make =
     <div className="pt-4">
       <div className="d-flex mb-3 timeline-events-panel__status-tab-container">
         <div
-          className={pendingTabClasses(state.selectedTab)}
-          onClick={_e => send(SwitchTab(PendingTab))}>
-          {"Pending" |> str}
-          {
+          className=(pendingTabClasses(state.selectedTab))
+          onClick=(_e => send(SwitchTab(PendingTab)))>
+          ("Pending" |> str)
+          (
             if (pendingCount > 0) {
               <div className="timeline-events-panel__status-tab-badge">
-                {pendingCount |> string_of_int |> str}
+                (pendingCount |> string_of_int |> str)
               </div>;
             } else {
               ReasonReact.null;
             }
-          }
+          )
         </div>
         <div
-          className={reviewedTabClasses(state.selectedTab)}
-          onClick={_e => send(SwitchTab(ReviewedTab))}>
-          {"Reviewed" |> str}
+          className=(reviewedTabClasses(state.selectedTab))
+          onClick=(_e => send(SwitchTab(ReviewedTab)))>
+          ("Reviewed" |> str)
         </div>
       </div>
-      {
+      (
         switch (
           filteredTimelineEvents |> ListUtils.isEmpty,
           showingSubmissionsSince(
@@ -329,27 +320,27 @@ let make =
           ),
         ) {
         | (false, Some(message)) =>
-          <div className="alert alert-info"> {message |> str} </div>
+          <div className="alert alert-info"> (message |> str) </div>
         | (true, Some(_m)) => ReasonReact.null
         | (false, None)
         | (true, None) => ReasonReact.null
         }
-      }
-      {
+      )
+      (
         if (filteredTimelineEvents |> ListUtils.isEmpty) {
           <div className="timeline-events-panel__empty-notice p-4 mb-3">
             <img
               src=emptyIconUrl
               className="timeline-events-panel__empty-icon mx-auto"
             />
-            {
+            (
               emptyMessage(
                 selectedFounder,
                 state.selectedTab,
                 morePendingSubmissionsAfter,
                 moreReviewedSubmissionsAfter,
               )
-            }
+            )
           </div>;
         } else {
           <TimelineEventsList
@@ -363,8 +354,8 @@ let make =
             passGrade
           />;
         }
-      }
-      {
+      )
+      (
         if (loadMoreVisible(
               state.selectedTab,
               morePendingSubmissionsAfter,
@@ -373,11 +364,11 @@ let make =
           let buttonText =
             state.isLoadingMore ? "Loading..." : "Load earlier submissions";
           <button
-            className={
+            className=(
               "btn btn-primary mb-3"
               ++ (state.isLoadingMore ? " disabled" : "")
-            }
-            onClick={
+            )
+            onClick=(
               _e =>
                 fetchEvents(
                   state,
@@ -388,14 +379,14 @@ let make =
                   appendTEsCB,
                   courseId,
                 )
-            }>
+            )>
             <i className="fa fa-cloud-download mr-1" />
-            {buttonText |> str}
+            (buttonText |> str)
           </button>;
         } else {
           ReasonReact.null;
         }
-      }
+      )
     </div>;
   },
 };

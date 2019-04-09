@@ -24,9 +24,10 @@ module CoachDashboard
 
     def ordered_timeline_events
       @ordered_timeline_events ||= begin
-        filtered_events.includes(:timeline_event_owners, :timeline_event_files, :startup_feedback)
+        filtered_events.includes(:timeline_event_owners, :timeline_event_files, :startup_feedback, :timeline_event_grades)
           .includes(target: :level)
           .includes(:target_evaluation_criteria, :evaluation_criteria)
+          .includes(evaluator: :image_attachment)
           .order(created_at: :DESC).limit(@limit)
       end
     end
@@ -54,7 +55,8 @@ module CoachDashboard
         files: files(timeline_event),
         latestFeedback: timeline_event.startup_feedback&.last&.feedback,
         evaluation: evaluation(timeline_event),
-        rubric: rubric(timeline_event)
+        rubric: rubric(timeline_event),
+        evaluator: evaluator(timeline_event)
       }
     end
 
@@ -86,6 +88,10 @@ module CoachDashboard
 
     def rubric(timeline_event)
       timeline_event.target.rubric_description
+    end
+
+    def evaluator(timeline_event)
+      timeline_event.evaluator&.name
     end
   end
 end

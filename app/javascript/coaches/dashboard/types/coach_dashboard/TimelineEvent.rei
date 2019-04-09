@@ -39,3 +39,5 @@ let evaluation: t => list(Grading.t);
 let founderIds: t => list(int);
 
 let rubric: t => option(string);
+
+let evaluator: t => option(string);

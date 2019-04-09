@@ -2,6 +2,6 @@
   <%= javascript_pack_tag 'communities/CommunityDashboardPack', nonce: true %>
 <% end %>
 
-<% presenter = Communities::ShowPresenter.new(self) %>
+<% presenter = Communities::ShowPresenter.new(self, @community) %>
 
-<div id="react-root" data-json-props="<%= presenter.json_props %>"></div>
+<div id="react-root" class="flex flex-1 h-screen" data-json-props="<%= presenter.json_props %>"></div>

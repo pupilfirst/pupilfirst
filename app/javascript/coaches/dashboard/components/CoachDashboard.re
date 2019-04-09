@@ -15,6 +15,7 @@ type props = {
   gradeLabels: list(GradeLabel.t),
   passGrade: int,
   courseId: int,
+  coachName: string,
 };
 
 type state = {
@@ -46,6 +47,7 @@ let make =
       ~gradeLabels,
       ~passGrade,
       ~courseId,
+      ~coachName,
       _children,
     ) => {
   ...component,
@@ -123,6 +125,7 @@ let make =
             gradeLabels
             passGrade
             courseId
+            coachName
           />
         </div>
       </div>
@@ -151,6 +154,7 @@ let decode = json =>
     gradeLabels: json |> field("gradeLabels", list(GradeLabel.decode)),
     passGrade: json |> field("passGrade", int),
     courseId: json |> field("courseId", int),
+    coachName: json |> field("coachName", string),
   };
 
 let jsComponent =
@@ -171,6 +175,7 @@ let jsComponent =
         ~gradeLabels=props.gradeLabels,
         ~passGrade=props.passGrade,
         ~courseId=props.courseId,
+        ~coachName=props.coachName,
         [||],
       );
     },

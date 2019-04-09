@@ -28,6 +28,8 @@ let latestFeedback: t => option(string);
 
 let updateFeedback: (string, t) => t;
 
+let updateEvaluator: (string, t) => t;
+
 let updateEvaluation: (list(Grading.t), t) => t;
 
 let getReviewResult: (int, t) => reviewResult;

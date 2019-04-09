@@ -1,4 +1,4 @@
-open CoachesPanel__Types;
+open CoachesSchoolIndex__Types;
 
 let str = ReasonReact.string;
 
@@ -37,7 +37,7 @@ let make = (~coaches, ~authenticityToken, _children) => {
         switch (state.formVisible) {
         | None => ReasonReact.null
         | CoachEditor(coach) =>
-          <SA_CoachesPanel_CoachEditor
+          <SA_Coaches_CoachEditor
             coach
             closeFormCB
             updateCoachCB

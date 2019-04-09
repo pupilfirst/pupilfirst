@@ -1,6 +1,6 @@
 class AddTablesForCommunity < ActiveRecord::Migration[5.2]
   def up
-    create_table :community do |t|
+    create_table :communities do |t|
       t.string :name
       t.string :slug
       t.references :school
@@ -11,7 +11,7 @@ class AddTablesForCommunity < ActiveRecord::Migration[5.2]
     create_table :questions do |t|
       t.string :title
       t.text :description
-      t.references :community
+      t.references :communities
       t.references :user
       t.references :targets
 
@@ -39,7 +39,7 @@ class AddTablesForCommunity < ActiveRecord::Migration[5.2]
 
   def down
     remove_reference :courses, :community
-    drop_table :community
+    drop_table :communities
     drop_table :questions
     drop_table :answers
     drop_table :answer_claps

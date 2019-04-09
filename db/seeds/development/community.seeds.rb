@@ -11,7 +11,7 @@ after 'development:schools', 'development:founders', 'development:courses' do
     question = Question.create!(
       title: Faker::Lorem.sentence,
       description: Faker::Lorem.sentence,
-      community: community,
+      communities: community,
       user: user
     )
     answer = Answer.create!(
@@ -26,5 +26,5 @@ after 'development:schools', 'development:founders', 'development:courses' do
     )
   end
   course = Course.find_by(name: "VR")
-  course.update!(community: community)
+  course.update!(communities: community)
 end

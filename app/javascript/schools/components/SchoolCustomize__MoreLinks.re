@@ -31,7 +31,9 @@ let make = (~links, _children) => {
     | moreLinks =>
       [
         <div
-          className="border p-4" onClick={toggleState(send)} key="more-links">
+          className="border p-4 cursor-pointer"
+          onClick={toggleState(send)}
+          key="more-links">
           <span> {"More" |> str} </span>
         </div>,
         ...additionalLinks(state, moreLinks),

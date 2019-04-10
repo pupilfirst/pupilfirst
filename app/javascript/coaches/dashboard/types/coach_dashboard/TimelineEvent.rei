@@ -28,6 +28,8 @@ let latestFeedback: t => option(string);
 
 let updateFeedback: (string, t) => t;
 
+let updateEvaluator: (string, t) => t;
+
 let updateEvaluation: (list(Grading.t), t) => t;
 
 let getReviewResult: (int, t) => reviewResult;
@@ -39,3 +41,5 @@ let evaluation: t => list(Grading.t);
 let founderIds: t => list(int);
 
 let rubric: t => option(string);
+
+let evaluator: t => option(string);

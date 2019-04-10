@@ -21,7 +21,7 @@ describe Startups::TeamUpService do
       last_startup = Startup.last
 
       # New startup has expected properties.
-      expect(last_startup.founders.pluck(:id)).to eq(founders.pluck(:id))
+      expect(last_startup.founders.pluck(:id)).to match_array(founders.pluck(:id))
       expect(last_startup.name).to eq(team_name)
 
       expect(founder_1.reload.startup.founders.count).to eq(4)

@@ -118,6 +118,7 @@ let make =
       ~replaceTimelineEvent,
       ~authenticityToken,
       ~passGrade,
+      ~coachName,
       _children,
     ) => {
   ...component,
@@ -179,13 +180,17 @@ let make =
           <button
             className={saveButtonClasses(state.evaluation)}
             onClick=(
-              _event =>
+              _event => {
+                let te =
+                  timelineEvent |> TimelineEvent.updateEvaluator(coachName);
                 handleClick(
                   state,
-                  timelineEvent,
+                  te,
                   replaceTimelineEvent,
                   authenticityToken,
-                )
+                );
+                ();
+              }
             )>
             {"Save Grading" |> str}
           </button>

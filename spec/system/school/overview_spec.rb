@@ -53,37 +53,43 @@ feature 'School Overview' do
     expect(page).to have_text(school.name)
 
     # gets the overall students count in school
-    within("div#school_students_count") do
+    within("div[data-t='school students']") do
       expect(page).to have_text(12)
     end
 
     # gets the overall coaches count in school
-    within("div#school_coaches_count") do
+    within("div[data-t='school coaches']") do
       expect(page).to have_text(3)
     end
 
     # gets the overall course overview for course 1
-    within("div#school_course_1") do
+    within("div[data-t='#{course_1.name} details']") do
       expect(page).to have_text(course_1.name)
       expect(page).to have_text("2 Levels")
-      within("div#school_course_1_students") do
+
+      within("div[data-t='#{course_1.name} students']") do
         expect(page).to have_text(6)
       end
-      within("div#school_course_1_coaches") do
+
+      within("div[data-t='#{course_1.name} coaches']") do
         expect(page).to have_text(1)
       end
+
       expect(page).to have_text("1/4 submissions reviewed.")
     end
 
     # gets the overall course overview for course 2
-    within("div#school_course_2") do
+    within("div[data-t='#{course_2.name} details']") do
       expect(page).to have_text(course_2.name)
-      within("div#school_course_2_students") do
+
+      within("div[data-t='#{course_2.name} students']") do
         expect(page).to have_text(6)
       end
-      within("div#school_course_2_coaches") do
+
+      within("div[data-t='#{course_2.name} coaches']") do
         expect(page).to have_text(2)
       end
+
       expect(page).to have_text("4/4 submissions reviewed.")
     end
   end

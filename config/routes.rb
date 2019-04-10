@@ -41,11 +41,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :courses, only: %i[index show update] do
-      member do
-        post 'close'
-      end
-
+    resources :courses, only: %i[index] do
       resource :curriculum, only: %i[show]
       resources :founders, as: 'students', path: 'students', only: %i[index create]
       resources :evaluation_criteria, only: %i[create]
@@ -55,11 +51,6 @@ Rails.application.routes.draw do
         collection do
           get '/', action: 'course_index'
           post 'update_enrollments'
-        end
-
-        member do
-          post 'enroll'
-          post 'leave'
         end
       end
     end

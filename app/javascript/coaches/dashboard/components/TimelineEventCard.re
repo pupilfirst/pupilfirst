@@ -87,6 +87,7 @@ let make =
       ~verifiedIconUrl,
       ~gradeLabels,
       ~passGrade,
+      ~coachName,
       _children,
     ) => {
   ...component,
@@ -145,6 +146,7 @@ let make =
                 replaceTimelineEvent
                 authenticityToken
                 passGrade
+                coachName
               /> :
               <div className="w-100">
                 <ReviewStatusBadge
@@ -168,14 +170,37 @@ let make =
                   |> Array.of_list
                   |> ReasonReact.array;
                 }
-                <UndoReviewButton
-                  timelineEvent
-                  replaceTimelineEvent
-                  authenticityToken
-                />
+                <div
+                  className="timeline-event-card__evaluator-details row flex-row-reverse w-full justify-content-between px-3">
+                  <div className="col-12 col-md-auto">
+                    <UndoReviewButton
+                      timelineEvent
+                      replaceTimelineEvent
+                      authenticityToken
+                    />
+                  </div>
+                  <div className="col-12 col-md-auto">
+                    {
+                      switch (timelineEvent |> TimelineEvent.evaluator) {
+                      | Some(evaluator) =>
+                        <div className="text-center sm:text-left">
+                          <h6
+                            className="timeline-event-card__evaluator-title mb-0">
+                            {"Reviewed by:" |> str}
+                          </h6>
+                          <div className="timeline-event-card__evaluator-name">
+                            {evaluator |> str}
+                          </div>
+                        </div>
+                      | None => ReasonReact.null
+                      }
+                    }
+                  </div>
+                </div>
               </div>
           }
           <FeedbackForm timelineEvent replaceTimelineEvent authenticityToken />
+          <div />
         </div>
       </div>
     </div>,

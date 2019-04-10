@@ -1,4 +1,5 @@
 @import "../../../shared/variables";
+@import "../../../shared/bootstrapMixins";
 
 .timeline-event-card__container {
   margin-bottom: 1rem;
@@ -46,6 +47,17 @@
 .timeline-event-card__field-attachments-title {
   font-size: 0.75rem;
   color: $light-grey-text;
+}
+
+.timeline-event-card__evaluator-title {
+  font-size: 0.725rem;
+
+  @include media-breakpoint-down(md) {
+    margin-top: 0.5rem;
+  }
+}
+.timeline-event-card__evaluator-name {
+  font-size: 0.75rem;
 }
 
 .feedback-form__trix-container {

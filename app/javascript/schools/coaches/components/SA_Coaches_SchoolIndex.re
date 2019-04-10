@@ -1,4 +1,4 @@
-open CoachesPanel__Types;
+open CoachesSchoolIndex__Types;
 
 let str = ReasonReact.string;
 
@@ -33,64 +33,64 @@ let make = (~coaches, ~authenticityToken, _children) => {
     let closeFormCB = () => send(UpdateFormVisible(None));
     let updateCoachCB = coach => send(UpdateCoaches(coach));
     <div className="flex flex-1 h-screen overflow-y-scroll">
-      (
+      {
         switch (state.formVisible) {
         | None => ReasonReact.null
         | CoachEditor(coach) =>
-          <SA_CoachesPanel_CoachEditor
+          <SA_Coaches_CoachEditor
             coach
             closeFormCB
             updateCoachCB
             authenticityToken
           />
         }
-      )
+      }
       <div className="flex-1 flex flex-col">
         <div className="flex px-6 py-2 items-center justify-between">
           <button
-            onClick=(
+            onClick={
               _event => {
                 ReactEvent.Mouse.preventDefault(_event);
                 send(UpdateFormVisible(CoachEditor(None)));
               }
-            )
+            }
             className="max-w-md w-full flex mx-auto items-center justify-center relative bg-grey-lighter hover:bg-grey-light hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-12 cursor-pointer">
-            <i className="material-icons"> ("add_circle_outline" |> str) </i>
-            <h4 className="font-semibold ml-2"> ("Add New Coach" |> str) </h4>
+            <i className="material-icons"> {"add_circle_outline" |> str} </i>
+            <h4 className="font-semibold ml-2"> {"Add New Coach" |> str} </h4>
           </button>
         </div>
         <div className="px-6 pb-4 mt-5 flex flex-1">
           <div className="max-w-md w-full mx-auto relative">
-            (
+            {
               state.coaches
               |> List.sort((x, y) => (x |> Coach.id) - (y |> Coach.id))
               |> List.map(coach =>
                    <div
-                     key=(coach |> Coach.id |> string_of_int)
+                     key={coach |> Coach.id |> string_of_int}
                      className="flex items-center shadow bg-white rounded-lg mb-4">
                      <div
                        className="course-faculty__list-item flex w-full hover:bg-grey-lighter"
-                       onClick=(
+                       onClick={
                          _event => {
                            ReactEvent.Mouse.preventDefault(_event);
                            send(
                              UpdateFormVisible(CoachEditor(Some(coach))),
                            );
                          }
-                       )>
+                       }>
                        <div className="flex flex-1 items-center py-4 px-4">
                          <img
                            className="w-10 h-10 rounded-full mr-4"
-                           src=(coach |> Coach.imageUrl)
-                           alt="Avatar of Jonathan Reinink"
+                           src={coach |> Coach.imageUrl}
+                           alt={"Avatar of " ++ (coach |> Coach.name)}
                          />
                          <div className="text-sm">
                            <p className="text-black font-semibold">
-                             (coach |> Coach.name |> str)
+                             {coach |> Coach.name |> str}
                            </p>
                            <p
                              className="text-grey-dark font-semibold text-xs mt-1">
-                             (coach |> Coach.title |> str)
+                             {coach |> Coach.title |> str}
                            </p>
                          </div>
                        </div>
@@ -99,7 +99,7 @@ let make = (~coaches, ~authenticityToken, _children) => {
                  )
               |> Array.of_list
               |> ReasonReact.array
-            )
+            }
           </div>
         </div>
       </div>

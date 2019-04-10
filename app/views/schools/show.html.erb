@@ -22,13 +22,13 @@
                 </div>
                 <div class="flex rounded-lg border mt-2">
                   <div class="w-1/2 border-r">
-                    <div id="school_students_count" class="p-3">
+                    <div data-t="school students" class="p-3">
                       <p>Students</p>
                       <p><%= @presenter.school_details[:students_count] %></p>
                     </div>
                   </div>
                   <div class="w-1/2">
-                    <div id="school_coaches_count" class="p-3">
+                    <div data-t="school coaches" class="p-3">
                       <p>Coaches</p>
                       <p><%= @presenter.school_details[:coaches_count] %></p>
                     </div>
@@ -41,20 +41,20 @@
         <h2 class="font-semibold mb-4 pb-2 border-b">Courses</h2>
         <div class="flex flex-wrap items-stretch w-full school-overview__course-list">
             <% @presenter.course_details.each_with_index do |course, index| %>
-              <div id="school_course_<%= index +1 %>" class="w-1/2 mb-4">
+              <div data-t="<%= course[:name] %> details" class="w-1/2 mb-4">
                 <a class="block border rounded-lg bg-white shadow h-full cursor-pointer hover:border-indigo-dark no-underline text-black" href=<%= school_course_students_path(course[:id]) %>>
                   <div class="flex items-end justify-between border-b p-4 pt-6">
                     <h3 class="font-bold text-xl"><%= course[:name] %></h3>
                     <p class="text-sm"><%= course[:levels_count] %> Levels</p>
                   </div>
                   <div class="school-overview__course-list-card-count relative flex items-end bg-grey-lighter justify-between border-b">
-                    <div id="school_course_<%= index +1 %>_students" class="w-1/2">
+                    <div data-t="<%= course[:name] %> students" class="w-1/2">
                       <div class="p-4">
                         <p>Students</p>
                         <p><%= course[:students_count] %></p>
                       </div>
                     </div>
-                    <div id="school_course_<%= index +1 %>_coaches" class="w-1/2">
+                    <div data-t="<%= course[:name] %> coaches" class="w-1/2">
                       <div class="p-4">
                         <p>Coaches</p>
                         <p><%= course[:coaches_count] %></p>

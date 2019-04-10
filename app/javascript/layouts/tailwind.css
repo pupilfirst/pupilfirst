@@ -9,6 +9,36 @@ body {
   @apply .antialiased;
 }
 
+/* Button */
+
+.btn {
+  @apply inline-flex items-center whitespace-no-wrap text-sm font-semibold py-2 px-4 rounded;
+}
+
+.btn-primary {
+  @apply bg-primary text-white shadow;
+}
+
+.btn-primary:hover {
+  @apply bg-primary-dark;
+}
+
+.btn-primary:focus {
+  @apply bg-primary-darker outline-none;
+}
+
+.btn-small {
+  @apply py-1 px-3 text-xs;
+}
+
+.btn-normal {
+  @apply py-2 px-4 text-sm;
+}
+
+.btn-large {
+  @apply py-3 px-5 text-base;
+}
+
 /* Gradients */
 
 @responsive {

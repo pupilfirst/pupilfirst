@@ -161,7 +161,15 @@ let make =
 
       send(UpdateTargetGroups(targetGroup));
     };
-    <div className="flex-1 flex">
+    <div className="flex-1 flex flex-col">
+      <div className="bg-white p-4 md:hidden shadow border-b">
+        <button
+          className="hamburger hamburger--arrow hover:bg-grey-lighter focus:outline-none">
+          <span className="hamburger-box">
+            <span className="hamburger-inner" />
+          </span>
+        </button>
+      </div>
       {
         switch (state.editorAction) {
         | Hidden => ReasonReact.null
@@ -199,7 +207,7 @@ let make =
         <div
           className="max-w-lg flex py-4 items-center relative md:sticky pin-t z-20 bg-grey-lightest border-b justify-between mx-auto">
           <div className="flex">
-            <div className="inline-block relative w-64">
+            <div className="inline-block relative w-auto md:w-64">
               <select
                 onChange={
                   event => {
@@ -212,7 +220,7 @@ let make =
                   }
                 }
                 value={currentLevel |> Level.name}
-                className="block appearance-none w-full bg-white border text-sm border-grey-light hover:border-grey px-4 py-2 pr-8 rounded-r-none leading-tight focus:outline-none">
+                className="block appearance-none w-full bg-white border text-sm border-grey-light hover:border-grey px-4 py-3 pr-8 rounded-r-none leading-tight focus:outline-none">
                 {
                   state.levels
                   |> Level.sort
@@ -234,12 +242,12 @@ let make =
                 }
               </select>
               <div
-                className="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+                className="pointer-events-none absolute pin-y pin-r flex items-center px-3 text-grey-darker">
                 <Icon kind=Icon.Down size="3" />
               </div>
             </div>
             <button
-              className="flex text-grey-dark hover:text-grey-darkest text-sm font-bold border -ml-1 py-1 px-2 rounded-r focus:outline-none"
+              className="flex text-grey-dark hover:text-grey-darkest text-sm font-bold border border-l-0 py-1 px-2 rounded-r focus:outline-none"
               onClick={
                 _ =>
                   send(
@@ -251,12 +259,12 @@ let make =
               <i className="material-icons"> {"edit" |> str} </i>
             </button>
             <button
-              className="text-indigo-dark hover:bg-indigo-dark font-semibold text-sm hover:text-white focus:outline-none border border-dashed border-blue hover:border-transparent flex items-center px-2 py-1 ml-4 rounded-lg cursor-pointer"
+              className="btn btn-primary ml-4"
               onClick={_ => send(UpdateEditorAction(ShowLevelEditor(None)))}>
-              <i className="material-icons mr-2">
+              <i className="material-icons mr-1 text-xl">
                 {"add_circle_outline" |> str}
               </i>
-              {"Create New Level" |> str}
+              {"Create Level" |> str}
             </button>
           </div>
           {

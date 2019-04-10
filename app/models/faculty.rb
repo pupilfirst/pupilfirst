@@ -4,8 +4,6 @@ class Faculty < ApplicationRecord
   # use name as slug
   include FriendlyId
   friendly_id :name, use: %i[slugged finders]
-  normalize_attribute :name
-
   has_secure_token
 
   belongs_to :user
@@ -16,7 +14,6 @@ class Faculty < ApplicationRecord
   has_many :connect_requests, through: :connect_slots
   has_many :faculty_course_enrollments, dependent: :destroy
   has_many :courses, through: :faculty_course_enrollments
-  has_one_attached :image
 
   # Startups whose timeline events this faculty can review.
   has_many :faculty_startup_enrollments, dependent: :destroy
@@ -47,13 +44,10 @@ class Faculty < ApplicationRecord
     [COMMITMENT_PART_TIME, COMMITMENT_FULL_TIME]
   end
 
-  validates :name, presence: true
-  validates :title, presence: true
   validates :category, inclusion: { in: valid_categories }, presence: true
   validates :compensation, inclusion: { in: valid_compensation_values }, allow_blank: true
   validates :commitment, inclusion: { in: valid_commitment_values }, allow_blank: true
   validates :slug, format: { with: /\A[a-z0-9\-_]+\z/i }, allow_nil: true
-  validates :image, content_type: %w[image/png image/jpg image/jpeg image/gif], size: { less_than: 2.megabytes, message: 'is not given between size' }
 
   scope :team, -> { where(category: CATEGORY_TEAM).order('sort_index ASC') }
   scope :visiting_coaches, -> { where(category: CATEGORY_VISITING_COACHES).order('sort_index ASC') }
@@ -63,6 +57,16 @@ class Faculty < ApplicationRecord
   scope :available_for_connect, -> { where(category: [CATEGORY_TEAM, CATEGORY_VISITING_COACHES, CATEGORY_ALUMNI, CATEGORY_VR_COACHES]) }
   # hard-wired ids of our ops_team, kireeti: 19, bharat: 20. A flag for this might be an overkill?
   scope :ops_team, -> { where(id: [19, 20]) }
+
+  delegate :gender, :phone, :communication_address, :title, :key_skills, :about,
+    :resume_url, :blog_url, :personal_website_url, :linkedin_url, :twitter_url, :facebook_url,
+    :angel_co_url, :github_url, :behance_url, :skype_id, to: :user_profile
+
+  delegate :email, to: :user
+
+  def user_profile
+    @user_profile ||= school.user_profiles.find_by(user_id: user_id)
+  end
 
   # This method sets the label used for object by Active Admin.
   def display_name
@@ -140,8 +144,6 @@ class Faculty < ApplicationRecord
     self.slack_user_id = slack_username.present? ? @new_slack_user_id : nil
   end
 
-  delegate :email, to: :user
-
   def reviewable_startups(course)
     course.in?(courses) ? course.startups.admitted : course.startups.admitted.merge(startups)
   end
@@ -153,8 +155,8 @@ class Faculty < ApplicationRecord
   end
 
   def image_or_avatar_url(background_shape: :circle)
-    if image.attached?
-      Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true)
+    if user_profile.avatar.attached?
+      Rails.application.routes.url_helpers.rails_blob_path(user_profile.avatar, only_path: true)
     else
       initials_avatar(background_shape)
     end
@@ -165,7 +167,7 @@ class Faculty < ApplicationRecord
   end
 
   def image_filename
-    image.attached? ? image.blob.filename.to_s : nil
+    user_profile.avatar.attached? ? user_profile.avatar.blob.filename.to_s : nil
   end
 
   private

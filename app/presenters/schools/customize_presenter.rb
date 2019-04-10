@@ -34,7 +34,7 @@ module Schools
       {
         logoOnLightBg: current_school.logo_on_light_bg.attached? ? view.url_for(current_school.logo_on_light_bg) : nil,
         logoOnDarkBg: current_school.logo_on_dark_bg.attached? ? view.url_for(current_school.logo_on_dark_bg) : nil,
-        icon: current_school.icon.attached? ? view.url_for(current_school.icon) : nil
+        icon: current_school.icon.attached? ? view.url_for(current_school.icon) : view.image_path('layouts/shared/favicon.png')
       }
     end
 

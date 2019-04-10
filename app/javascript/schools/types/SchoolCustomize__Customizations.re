@@ -10,7 +10,7 @@ type schoolStrings = {
 type schoolImages = {
   logoOnLightBg: option(string),
   logoOnDarkBg: option(string),
-  icon: option(string),
+  icon: string,
 };
 
 type t = {
@@ -51,7 +51,7 @@ let decodeImages = json =>
       json |> field("logoOnLightBg", nullable(string)) |> Js.Null.toOption,
     logoOnDarkBg:
       json |> field("logoOnDarkBg", nullable(string)) |> Js.Null.toOption,
-    icon: json |> field("icon", nullable(string)) |> Js.Null.toOption,
+    icon: json |> field("icon", string),
   };
 
 let decodeLink = json =>

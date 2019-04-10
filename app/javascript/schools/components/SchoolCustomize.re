@@ -4,7 +4,23 @@ open SchoolCustomize__Types;
 
 let str = ReasonReact.string;
 
-let component = ReasonReact.statelessComponent("SchoolCustomize");
+type editor =
+  | LinksEditor
+  | ImagesEditor
+  | ContactsEditor
+  | PrivacyPolicyEditor
+  | TermsOfUseEditor;
+
+type state = {
+  visibleEditor: option(editor),
+  customizations: Customizations.t,
+};
+
+type action =
+  | ShowEditor(editor)
+  | CloseEditor;
+
+let component = ReasonReact.reducerComponent("SchoolCustomize");
 
 let headerLogo = (schoolName, logoOnLightBg) =>
   <div className="h-12">
@@ -91,128 +107,168 @@ let footerLogo = (schoolName, logoOnDarkBg) =>
     }
   </div>;
 
-let editIcon = additionalClasses =>
+let editIcon = (additionalClasses, clickHandler) =>
   <div
     className={
-      "bg-grey-darker text-white p-1 rounded-lg flex items-center "
+      "cursor-pointer bg-grey-darker text-white p-1 rounded-lg flex items-center "
       ++ additionalClasses
-    }>
+    }
+    onClick=clickHandler>
     <i className="material-icons text-xl"> {"edit" |> str} </i>
   </div>;
 
+let showEditor = (editor, send, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
+  send(ShowEditor(editor));
+};
+
+let editor = (state, send) =>
+  switch (state.visibleEditor) {
+  | Some(LinksEditor) =>
+    let headerLinks = state.customizations |> Customizations.headerLinks;
+    let footerLinks = state.customizations |> Customizations.footerLinks;
+    let socialLinks = state.customizations |> Customizations.socialLinks;
+
+    <SchoolCustomize__LinksEditor
+      headerLinks
+      footerLinks
+      socialLinks
+      closeEditorCB=(() => send(CloseEditor))
+    />;
+  | _ => ReasonReact.null
+  };
+
 let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
   ...component,
-  render: _self =>
-    <div className="px-6 pt-6">
-      <div className="font-bold"> {"Header" |> str} </div>
-      <div className="border rounded-lg p-6 flex justify-between mt-3 w-2/3">
-        <div className="flex items-center">
-          {
-            headerLogo(
-              schoolName,
-              customizations |> Customizations.logoOnLightBg,
-            )
-          }
-          {editIcon("ml-6")}
-        </div>
-        <div className="flex items-center">
-          {headerLinks(customizations |> Customizations.headerLinks)}
-          {editIcon("ml-3")}
-          <div className="ml-8 w-12 h-12 border rounded-full bg-grey" />
-        </div>
-      </div>
-      <div className="mt-6 font-bold"> {"Footer" |> str} </div>
-      <div className="mt-3 w-2/3">
-        <div className="bg-grey-darkest rounded-t-lg text-white p-6 flex">
-          <div className="w-1/2">
-            <div className="flex items-center">
-              <span className="uppercase font-bold text-sm">
-                {"Sitemap" |> str}
-              </span>
-              {editIcon("ml-3")}
-            </div>
-            {sitemap(customizations |> Customizations.footerLinks)}
-          </div>
-          <div className="w-1/2">
-            <div className="flex">
-              <div className="w-1/2">
-                <div className="flex items-center">
-                  <span className="uppercase font-bold text-sm">
-                    {"Social" |> str}
-                  </span>
-                  {editIcon("ml-3")}
-                </div>
-                {socialLinks(customizations |> Customizations.socialLinks)}
-              </div>
-              <div className="w-1/2">
-                <div className="flex items-center">
-                  <span className="uppercase font-bold text-sm">
-                    {"Contact" |> str}
-                  </span>
-                  {editIcon("ml-3")}
-                </div>
-                {address(customizations |> Customizations.address)}
-                {emailAddress(customizations |> Customizations.emailAddress)}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          className="bg-black rounded-b-lg text-white p-6 flex justify-between">
+  initialState: () => {visibleEditor: Some(LinksEditor), customizations},
+  reducer: (action, state) =>
+    switch (action) {
+    | ShowEditor(editor) =>
+      ReasonReact.Update({...state, visibleEditor: Some(editor)})
+    | CloseEditor => ReasonReact.Update({...state, visibleEditor: None})
+    },
+  render: ({state, send}) =>
+    <div>
+      <div className="px-6 pt-6">
+        <div className="font-bold"> {"Header" |> str} </div>
+        <div className="border rounded-lg p-6 flex justify-between mt-3 w-2/3">
           <div className="flex items-center">
             {
-              footerLogo(
+              headerLogo(
                 schoolName,
-                customizations |> Customizations.logoOnDarkBg,
+                state.customizations |> Customizations.logoOnLightBg,
               )
             }
-            {editIcon("ml-3")}
+            {editIcon("ml-6", showEditor(ImagesEditor, send))}
           </div>
-          <div className="flex items-center text-sm">
-            <div> {"Privacy Policy" |> str} </div>
-            {editIcon("ml-3")}
-            <div className="ml-8"> {"Terms of Use" |> str} </div>
-            {editIcon("ml-3")}
-            <div className="ml-8 flex items-center">
-              <i className="material-icons text-base">
-                {"copyright" |> str}
-              </i>
-              <span className="ml-1">
-                {
-                  (
-                    Js.Date.make()
-                    |> Js.Date.getFullYear
-                    |> int_of_float
-                    |> string_of_int
-                  )
-                  ++ " "
-                  ++ schoolName
-                  |> str
-                }
-              </span>
+          <div className="flex items-center">
+            {headerLinks(state.customizations |> Customizations.headerLinks)}
+            {editIcon("ml-3", showEditor(LinksEditor, send))}
+            <div className="ml-8 w-12 h-12 border rounded-full bg-grey" />
+          </div>
+        </div>
+        <div className="mt-6 font-bold"> {"Footer" |> str} </div>
+        <div className="mt-3 w-2/3">
+          <div className="bg-grey-darkest rounded-t-lg text-white p-6 flex">
+            <div className="w-1/2">
+              <div className="flex items-center">
+                <span className="uppercase font-bold text-sm">
+                  {"Sitemap" |> str}
+                </span>
+                {editIcon("ml-3", showEditor(LinksEditor, send))}
+              </div>
+              {sitemap(state.customizations |> Customizations.footerLinks)}
+            </div>
+            <div className="w-1/2">
+              <div className="flex">
+                <div className="w-1/2">
+                  <div className="flex items-center">
+                    <span className="uppercase font-bold text-sm">
+                      {"Social" |> str}
+                    </span>
+                    {editIcon("ml-3", showEditor(LinksEditor, send))}
+                  </div>
+                  {
+                    socialLinks(
+                      state.customizations |> Customizations.socialLinks,
+                    )
+                  }
+                </div>
+                <div className="w-1/2">
+                  <div className="flex items-center">
+                    <span className="uppercase font-bold text-sm">
+                      {"Contact" |> str}
+                    </span>
+                    {editIcon("ml-3", showEditor(ContactsEditor, send))}
+                  </div>
+                  {address(state.customizations |> Customizations.address)}
+                  {
+                    emailAddress(
+                      state.customizations |> Customizations.emailAddress,
+                    )
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="bg-black rounded-b-lg text-white p-6 flex justify-between">
+            <div className="flex items-center">
+              {
+                footerLogo(
+                  schoolName,
+                  state.customizations |> Customizations.logoOnDarkBg,
+                )
+              }
+              {editIcon("ml-3", showEditor(ImagesEditor, send))}
+            </div>
+            <div className="flex items-center text-sm">
+              <div> {"Privacy Policy" |> str} </div>
+              {editIcon("ml-3", showEditor(PrivacyPolicyEditor, send))}
+              <div className="ml-8"> {"Terms of Use" |> str} </div>
+              {editIcon("ml-3", showEditor(TermsOfUseEditor, send))}
+              <div className="ml-8 flex items-center">
+                <i className="material-icons text-base">
+                  {"copyright" |> str}
+                </i>
+                <span className="ml-1">
+                  {
+                    (
+                      Js.Date.make()
+                      |> Js.Date.getFullYear
+                      |> int_of_float
+                      |> string_of_int
+                    )
+                    ++ " "
+                    ++ schoolName
+                    |> str
+                  }
+                </span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="mt-6 font-bold"> {"Icon" |> str} </div>
-      <div className="mt-3 w-1/4">
-        <div className="bg-grey rounded-t-lg h-12 flex items-end">
-          <div className="w-full flex items-center">
-            <div className="h-3 w-3 rounded-full bg-red-lightest ml-4" />
-            <div className="h-3 w-3 rounded-full bg-yellow-lightest ml-2" />
-            <div className="h-3 w-3 rounded-full bg-green-lightest ml-2" />
-            <div
-              className="p-3 ml-4 bg-grey-lighter rounded-t-lg flex items-center">
-              <img
-                src={customizations |> Customizations.icon}
-                className="h-5 w-5"
-              />
-              <span className="ml-2"> {schoolName |> str} </span>
+        <div className="mt-6 font-bold"> {"Icon" |> str} </div>
+        <div className="mt-3 w-1/4">
+          <div className="bg-grey rounded-t-lg h-12 flex items-end">
+            <div className="w-full flex items-center">
+              <div className="h-3 w-3 rounded-full bg-red-lightest ml-4" />
+              <div className="h-3 w-3 rounded-full bg-yellow-lightest ml-2" />
+              <div className="h-3 w-3 rounded-full bg-green-lightest ml-2" />
+              <div
+                className="p-3 ml-4 bg-grey-lighter rounded-t-lg flex items-center">
+                <img
+                  src={state.customizations |> Customizations.icon}
+                  className="h-5 w-5"
+                />
+                <span className="ml-2"> {schoolName |> str} </span>
+              </div>
+              {editIcon("ml-2", showEditor(ImagesEditor, send))}
             </div>
-            {editIcon("ml-2")}
           </div>
+          <div className="bg-grey-lighter h-16" />
         </div>
-        <div className="bg-grey-lighter h-16" />
       </div>
+      {editor(state, send)}
     </div>,
 };

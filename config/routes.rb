@@ -170,6 +170,8 @@ Rails.application.routes.draw do
   # PupilFirst landing page
   get 'pupilfirst', to: 'home#pupilfirst'
 
+  get 'styleguide', to: 'home#styleguide'
+
   root 'home#index'
 
   get '/dashboard', to: redirect('/student/dashboard')

@@ -15,6 +15,24 @@ body {
   @apply inline-flex items-center whitespace-no-wrap text-sm font-semibold py-2 px-4 rounded;
 }
 
+.btn:focus {
+  @apply outline-none;
+}
+
+/* Button Styles */
+
+.btn-default {
+  @apply bg-grey-lighter text-grey-dark;
+}
+
+.btn-default:hover {
+  @apply bg-primary-lightest text-primary-light;
+}
+
+.btn-default:focus {
+  @apply bg-primary-lightest text-primary;
+}
+
 .btn-primary {
   @apply bg-primary text-white shadow;
 }
@@ -24,19 +42,63 @@ body {
 }
 
 .btn-primary:focus {
-  @apply bg-primary-darker outline-none;
+  @apply bg-primary-darker;
+}
+
+.btn-secondary {
+  @apply bg-secondary text-white;
+}
+
+.btn-secondary:hover {
+  @apply bg-secondary-dark;
+}
+
+.btn-secondary:focus {
+  @apply bg-secondary-darker;
+}
+
+.btn-success {
+  @apply bg-green text-white;
+}
+
+.btn-success:hover {
+  @apply bg-green-dark;
+}
+
+.btn-success:focus {
+  @apply bg-green-darker;
+}
+
+.btn-danger {
+  @apply bg-red text-white;
+}
+
+.btn-danger:hover {
+  @apply bg-red-dark;
+}
+
+.btn-danger:focus {
+  @apply bg-red-darker;
+}
+
+button:disabled, .disabled {
+  @apply cursor-not-allowed bg-grey-lighter text-grey-light shadow-none;
+}
+
+button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
+  @apply bg-grey-lighter text-grey-light;
 }
 
 .btn-small {
-  @apply py-1 px-3 text-xs;
+  @apply py-1 px-3 text-xs h-6;
 }
 
 .btn-normal {
-  @apply py-2 px-4 text-sm;
+  @apply py-2 px-4 text-sm h-8;
 }
 
 .btn-large {
-  @apply py-3 px-5 text-base;
+  @apply py-2 px-5 text-base h-10;
 }
 
 /* Gradients */

@@ -2,7 +2,7 @@ class PopulateUserDetails < ActiveRecord::Migration[5.2]
   def up
     School.all.each do |school|
       school.founders.each do |founder|
-        UserProfile.where(school: school, user: founder.user).first_or_create!(
+        user_profile = UserProfile.where(school: school, user: founder.user).first_or_create!(
           name: founder.name,
           gender: founder.gender,
           phone: founder.phone,
@@ -19,15 +19,33 @@ class PopulateUserDetails < ActiveRecord::Migration[5.2]
           behance_url: founder.behance_url,
           skype_id: founder.skype_id
         )
+
+        next unless founder.avatar.attached?
+
+        ActiveStorage::Attachment.where(
+          name: 'avatar',
+          record: user_profile
+        ).first_or_create!(
+          blob: founder.avatar.blob
+        )
       end
 
       school.faculty.each do |faculty|
-        UserProfile.where(school: school, user: faculty.user).first_or_create!(
+        user_profile = UserProfile.where(school: school, user: faculty.user).first_or_create!(
           name: faculty.name,
           title: faculty.title,
           key_skills: faculty.key_skills,
           about: faculty.about,
           linkedin_url: faculty.linkedin_url,
+        )
+
+        next unless faculty.image.attached?
+
+        ActiveStorage::Attachment.where(
+          name: 'avatar',
+          record: user_profile
+        ).first_or_create!(
+          blob: faculty.image.blob
         )
       end
     end

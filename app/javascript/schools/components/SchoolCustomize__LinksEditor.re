@@ -47,7 +47,8 @@ let showLinks = links =>
   links
   |> List.map(((title, url)) =>
        <div
-         className="flex items-center justify-between bg-grey-lightest text-xs text-grey-darkest border rounded p-3 mt-2">
+         className="flex items-center justify-between bg-grey-lightest text-xs text-grey-darkest border rounded p-3 mt-2"
+         key=url>
          <div className="flex items-center">
            <span> {title |> str} </span>
            <i className="material-icons text-base ml-1">
@@ -65,7 +66,8 @@ let socialMediaLinks = links =>
   links
   |> List.map(url =>
        <div
-         className="flex items-center justify-between bg-grey-lightest text-xs text-grey-darkest border rounded p-3 mt-2">
+         className="flex items-center justify-between bg-grey-lightest text-xs text-grey-darkest border rounded p-3 mt-2"
+         key=url>
          <code> {url |> str} </code>
          <button> <Icon kind=Icon.Delete size="4" /> </button>
        </div>
@@ -183,50 +185,52 @@ let make =
                   </div>
                 </div>
               </div>
-              {
-                if (state |> titleInputVisible) {
-                  <div className="mt-3">
-                    <label
-                      className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
-                      htmlFor="email">
-                      {"Title" |> str}
-                    </label>
-                    <input
-                      className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                      id="link-title"
-                      type_="text"
-                      placeholder="What is the title that you'd like to display for this link?"
-                      onChange={handleTitleChange(send)}
-                      value={state.title}
-                      maxLength=24
-                    />
-                    <School__InputGroupError
-                      message="can't be empty"
-                      active={state.titleInvalid}
-                    />
-                  </div>;
-                } else {
-                  ReasonReact.null;
+              <div className="flex mt-3">
+                {
+                  if (state |> titleInputVisible) {
+                    <div className="flex-grow mr-4">
+                      <label
+                        className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
+                        htmlFor="email">
+                        {"Title" |> str}
+                      </label>
+                      <input
+                        className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                        id="link-title"
+                        type_="text"
+                        placeholder="A short title for this link"
+                        onChange={handleTitleChange(send)}
+                        value={state.title}
+                        maxLength=24
+                      />
+                      <School__InputGroupError
+                        message="can't be empty"
+                        active={state.titleInvalid}
+                      />
+                    </div>;
+                  } else {
+                    ReasonReact.null;
+                  }
                 }
-              }
-              <div className="mt-3">
-                <label
-                  className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
-                  htmlFor="link-full-url">
-                  {"Full URL" |> str}
-                </label>
-                <input
-                  className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                  id="link-full-url"
-                  type_="text"
-                  placeholder="Type full URL here, staring with https://"
-                  onChange={handleUrlChange(send)}
-                  value={state.url}
-                />
-                <School__InputGroupError
-                  message="is not a valid URL"
-                  active={state.urlInvalid}
-                />
+                <div className="flex-grow">
+                  <label
+                    className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
+                    htmlFor="link-full-url">
+                    {"Full URL" |> str}
+                  </label>
+                  <input
+                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    id="link-full-url"
+                    type_="text"
+                    placeholder="Full URL, staring with https://"
+                    onChange={handleUrlChange(send)}
+                    value={state.url}
+                  />
+                  <School__InputGroupError
+                    message="is not a valid URL"
+                    active={state.urlInvalid}
+                  />
+                </div>
               </div>
               <button
                 disabled={addLinkDisabled(state)}

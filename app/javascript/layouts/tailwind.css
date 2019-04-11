@@ -82,11 +82,11 @@ body {
 }
 
 button:disabled, .disabled {
-  @apply cursor-not-allowed bg-grey-lighter text-grey-light shadow-none;
+  @apply cursor-not-allowed bg-grey-light text-grey-darker shadow-none;
 }
 
 button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
-  @apply bg-grey-lighter text-grey-light;
+  @apply bg-grey-light text-grey-darker;
 }
 
 .btn-small {

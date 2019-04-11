@@ -10,71 +10,123 @@ button:disabled, .disabled {
     width: 264px;
 }
 
-.toggle {
-    position: relative;
-    display: block;
-    width: 40px;
-    height: 20px;
-    cursor: pointer;
+/* Tiggle swicth */
+
+.toggle-label {
+    @apply relative block w-10 h-5 cursor-pointer;
     -webkit-tap-highlight-color: transparent;
     transform: translate3d(0, 0, 0);
 }
 
-.toggle:before {
+.toggle-label:before {
     content: "";
+    @apply relative block bg-grey;
     position: relative;
     top: 3px;
     left: 3px;
     width: 34px;
     height: 14px;
-    display: block;
-    background: #9A9999;
     border-radius: 8px;
     transition: background 0.2s ease;
 }
 
-.toggle span {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 20px;
-    height: 20px;
-    display: block;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 3px 8px rgba(154, 153, 153, 0.5);
+.toggle-label span {
+    @apply absolute w-5 h-5 pin-t pin-l block bg-white shadow-md rounded-full;
     transition: all 0.2s ease;
 }
 
-.toggle span:before {
+.toggle-label span:before {
     content: "";
-    position: absolute;
-    display: block;
+    @apply absolute block w-14 h-14 bg-primary-light pointer-events-none opacity-100 rounded-full;
     margin: -18px;
-    width: 56px;
-    height: 56px;
-    background: rgba(79, 46, 220, 0.5);
-    border-radius: 50%;
     transform: scale(0);
-    opacity: 1;
-    pointer-events: none;
 }
 
-#cbx:checked+.toggle:before {
-    background: #947ADA;
+.toggle-input:checked+.toggle-label:before {
+    @apply bg-primary-light;
 }
 
-#cbx:checked+.toggle span {
-    background: #4F2EDC;
+.toggle-input:checked+.toggle-label span {
+    @apply bg-primary;
     transform: translateX(20px);
     transition: all 0.2s cubic-bezier(0.8, 0.4, 0.3, 1.25), background 0.15s ease;
     box-shadow: 0 3px 8px rgba(79, 46, 220, 0.2);
 }
 
-#cbx:checked+.toggle span:before {
+.toggle-input:checked+.toggle-label span:before {
     transform: scale(1);
     opacity: 0;
     transition: all 0.4s ease;
+}
+
+/* Checkbox */
+
+.checkbox-label {
+    @apply select-none .cursor-pointer;
+}
+
+.checkbox-label span {
+    @apply inline-block align-middle;
+    transform: translate3d(0, 0, 0);
+}
+
+.checkbox-label span:first-child {
+    @apply relative rounded align-middle border;
+    width: 18px;
+    height: 18px;
+    transform: scale(1);
+    transition: all 0.2s ease;
+}
+
+.checkbox-label span:first-child svg {
+    position: absolute;
+    top: 3px;
+    left: 2px;
+    fill: none;
+    stroke: #FFFFFF;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 16px;
+    stroke-dashoffset: 16px;
+    transition: all 0.3s ease;
+    transition-delay: 0.1s;
+    transform: translate3d(0, 0, 0);
+}
+
+.checkbox-label span:first-child:before {
+    content: "";
+    @apply bg-primary w-full h-full block opacity-100 rounded-full;
+    transform: scale(0);
+}
+
+.checkbox-label span:last-child {
+    padding-left: 8px;
+}
+
+.checkbox-label:hover span:first-child {
+    @apply bg-primary-lightest border-primary;
+}
+
+.checkbox-input:checked+.checkbox-label span:first-child {
+    @apply bg-primary border-primary;
+    animation: wave 0.4s ease;
+}
+
+.checkbox-input:checked+.checkbox-label span:first-child svg {
+    stroke-dashoffset: 0;
+}
+
+.checkbox-input:checked+.checkbox-label span:first-child:before {
+    transform: scale(3.5);
+    opacity: 0;
+    transition: all 0.6s ease;
+}
+
+@keyframes {
+    50% {
+        transform: scale(0.9);
+    }
 }
 
 .global-sidebar__primary-nav {
@@ -304,7 +356,24 @@ button:disabled, .disabled {
 }
 
 .toggle-button__button {
+    @apply w-1/2 bg-white text-sm font-semibold py-2 px-6 text-grey-dark;
     transition: .3s cubic-bezier(0, 0, 0, 1);
+}
+
+.toggle-button__button:hover {
+    @apply bg-primary-lightest text-purple-dark;
+}
+
+.toggle-button__button:focus {
+    @apply outline-none;
+}
+
+.toggle-button__button--active {
+    @apply bg-primary-dark text-white shadow-inner;
+}
+
+.toggle-button__button--active:hover {
+    @apply bg-primary-dark text-white shadow-inner;
 }
 
 .target-group__container> :not(:last-child):before {

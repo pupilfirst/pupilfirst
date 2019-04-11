@@ -1,3 +1,7 @@
+<% presenter = ::Layouts::SchoolPresenter.new(self) %>
+<% content_for(:head) do %>
+  <%= stylesheet_pack_tag 'schools/shared/shared', media: 'all', 'data-turbolinks-track': 'reload' %>
+<% end %>
 
 <% content_for(:wrapper) do %>
   <div class="antialiased flex h-screen overflow-hidden">

@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Founder < ApplicationRecord
-  extend FriendlyId
-
   include PrivateFilenameRetrievable
 
   acts_as_taggable
@@ -59,7 +57,7 @@ class Founder < ApplicationRecord
 
   delegate :name, :gender, :phone, :communication_address, :title, :key_skills, :about,
     :resume_url, :blog_url, :personal_website_url, :linkedin_url, :twitter_url, :facebook_url,
-    :angel_co_url, :github_url, :behance_url, :skype_id, to: :user_profile
+    :angel_co_url, :github_url, :behance_url, :skype_id, :avatar_variant, to: :user_profile
 
   def user_profile
     @user_profile ||= school.user_profiles.find_by(user_id: user_id)
@@ -81,24 +79,6 @@ class Founder < ApplicationRecord
   before_validation do
     # Remove blank roles, if any.
     roles.delete('')
-  end
-
-  friendly_id :slug_candidates, use: :slugged
-
-  def slug_candidates
-    [
-      %i[name],
-      %i[name id]
-    ]
-  end
-
-  # Remove dashes separating slug candidates.
-  def normalize_friendly_id(_string)
-    super.delete '-'
-  end
-
-  def should_generate_new_friendly_id?
-    name_changed? || saved_change_to_name? || super
   end
 
   # TODO: Remove this method when all instance of it being used are gone. https://trello.com/c/yh0Mkfir
@@ -212,8 +192,4 @@ class Founder < ApplicationRecord
     logo = Scarf::InitialAvatar.new(name)
     "data:image/svg+xml;base64,#{Base64.encode64(logo.svg)}"
   end
-
-  # ActiveStorage doesn't currently support ImageMagik default options for processing variants. Currently resized to get
-  # square proportions based on https://github.com/janko/image_processing/issues/39
-  delegate :avatar_variant, to: :user_profile
 end

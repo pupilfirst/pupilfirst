@@ -28,7 +28,9 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
 
   # TODO: Remove these founder routes as we no longer have 'founders'. Always use the corresponding 'student' routes below.
-  resource :founder, path: 'student', only: %i[edit update]
+  # resource :founder, path: 'student', only: %i[edit update]
+
+  resource :user_profile, only: %i[edit update]
 
   resource :school, only: %i[show update] do
     get 'customize'
@@ -162,9 +164,9 @@ Rails.application.routes.draw do
 
   # Founder show
   scope 'students', controller: 'founders' do
-    get '/:slug', action: 'show', as: 'student'
-    get '/:slug/events/:page', action: 'paged_events', as: 'paged_events'
-    get '/:slug/e/:event_id/:event_title', action: 'timeline_event_show', as: 'student_timeline_event_show'
+    get '/:id(/:slug)', action: 'show', as: 'student'
+    get '/:id/events/:page', action: 'paged_events', as: 'paged_events'
+    get '/:id/e/:event_id(/:event_title)', action: 'timeline_event_show', as: 'student_timeline_event_show'
   end
 
   # PupilFirst landing page

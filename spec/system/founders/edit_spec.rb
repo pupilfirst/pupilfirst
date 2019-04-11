@@ -22,13 +22,13 @@ feature 'Founder Edit' do
 
   context 'Active founder visits edit page of his profile' do
     scenario 'Founder tries to submit a blank form' do
-      sign_in_user(founder.user, referer: edit_founder_path)
+      sign_in_user(founder.user, referer: edit_user_profile_path)
 
       expect(page).to have_text('Edit your profile')
 
-      fill_in 'founders_edit_name', with: ''
-      fill_in 'founders_edit_phone', with: ''
-      fill_in 'founders_edit_communication_address', with: ''
+      fill_in 'user_profiles_edit_name', with: ''
+      fill_in 'user_profiles_edit_phone', with: ''
+      fill_in 'user_profiles_edit_communication_address', with: ''
       click_button 'Save Changes'
 
       expect(page).to have_content("Name can't be blank")
@@ -37,28 +37,28 @@ feature 'Founder Edit' do
     end
 
     scenario 'Founder fills in all fields and submits' do
-      sign_in_user(founder.user, referer: edit_founder_path)
+      sign_in_user(founder.user, referer: edit_user_profile_path)
       expect(page).to have_text('Edit').and have_text('profile')
 
-      fill_in 'founders_edit_name', with: founder_name
-      fill_in 'founders_edit_phone', with: phone
-      attach_file 'founders_edit_avatar', upload_path('faculty/donald_duck.jpg')
-      fill_in 'founders_edit_about', with: one_liner
+      fill_in 'user_profiles_edit_name', with: founder_name
+      fill_in 'user_profiles_edit_phone', with: phone
+      attach_file 'user_profiles_edit_avatar', upload_path('faculty/donald_duck.jpg')
+      fill_in 'user_profiles_edit_about', with: one_liner
 
       # Choose two roles.
       # roles.each do |role|
-      #   select role, from: 'founders_edit_roles'
+      #   select role, from: 'user_profiles_edit_roles'
       # end
 
-      fill_in 'founders_edit_skype_id', with: username
-      fill_in 'founders_edit_communication_address', with: communication_address
-      fill_in 'founders_edit_twitter_url', with: "https://twitter.com/#{username}"
-      fill_in 'founders_edit_linkedin_url', with: "https://linkedin.com/#{username}"
-      fill_in 'founders_edit_personal_website_url', with: "https://#{username}.com"
-      fill_in 'founders_edit_blog_url', with: "https://blog.#{username}.com"
-      fill_in 'founders_edit_angel_co_url', with: "https://angel.co/#{username}"
-      fill_in 'founders_edit_github_url', with: "https://github.com/#{username}"
-      fill_in 'founders_edit_behance_url', with: "https://behance.net/#{username}"
+      fill_in 'user_profiles_edit_skype_id', with: username
+      fill_in 'user_profiles_edit_communication_address', with: communication_address
+      fill_in 'user_profiles_edit_twitter_url', with: "https://twitter.com/#{username}"
+      fill_in 'user_profiles_edit_linkedin_url', with: "https://linkedin.com/#{username}"
+      fill_in 'user_profiles_edit_personal_website_url', with: "https://#{username}.com"
+      fill_in 'user_profiles_edit_blog_url', with: "https://blog.#{username}.com"
+      fill_in 'user_profiles_edit_angel_co_url', with: "https://angel.co/#{username}"
+      fill_in 'user_profiles_edit_github_url', with: "https://github.com/#{username}"
+      fill_in 'user_profiles_edit_behance_url', with: "https://behance.net/#{username}"
 
       click_button 'Save Changes'
 
@@ -93,7 +93,7 @@ feature 'Founder Edit' do
     end
 
     scenario 'founder visits the edit page', js: true do
-      sign_in_user(founder.user, referer: edit_founder_path)
+      sign_in_user(founder.user, referer: edit_user_profile_path)
 
       expect(page).to have_selector('#home__index', visible: false)
     end
@@ -119,9 +119,9 @@ feature 'Founder Edit' do
         token: 'SLACK_ACCESS_TOKEN'
       }.to_query}").to_return(body: { ok: true }.to_json)
 
-      sign_in_user(founder.user, referer: edit_founder_path)
+      sign_in_user(founder.user, referer: edit_user_profile_path)
 
-      fill_in 'founders_edit_name', with: founder_name
+      fill_in 'user_profiles_edit_name', with: founder_name
 
       click_button 'Save Changes'
 

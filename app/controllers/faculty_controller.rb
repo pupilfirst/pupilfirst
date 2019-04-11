@@ -10,15 +10,15 @@ class FacultyController < ApplicationController
     raise_not_found unless @faculty.exists?
   end
 
-  # GET /faculty/:slug, GET /coaches/:slug
+  # GET /faculty/:id, GET /coaches/:id
   def show
     @skip_container = true
-    @faculty = authorize(policy_scope(Faculty).friendly.find(params[:id]))
+    @faculty = authorize(policy_scope(Faculty).find(params[:id]))
   end
 
   # POST /faculty/:id/connect
   def connect
-    faculty = authorize(policy_scope(Faculty).friendly.find(params[:id]))
+    faculty = authorize(policy_scope(Faculty).find(params[:id]))
 
     questions = params[:connect_request][:questions]
     connect_slot = faculty.connect_slots.find(params[:connect_request][:connect_slot])

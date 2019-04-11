@@ -31,7 +31,8 @@ class PopulateUserDetails < ActiveRecord::Migration[5.2]
       end
 
       school.faculty.each do |faculty|
-        user_profile = UserProfile.where(school: school, user: faculty.user).first_or_create!(
+        user_profile = UserProfile.where(school: school, user: faculty.user).first_or_create!
+        user_profile.update!(
           name: faculty.name,
           title: faculty.title,
           key_skills: faculty.key_skills,

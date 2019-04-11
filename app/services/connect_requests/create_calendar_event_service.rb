@@ -43,7 +43,7 @@ module ConnectRequests
     def calendar_event_description
       <<~DESCRIPTION
         Student: #{@founder.fullname}
-        Timeline: #{Rails.application.routes.url_helpers.student_url(@founder.slug, host: 'https://www.sv.co')}
+        Timeline: #{Rails.application.routes.url_helpers.student_url(@founder.id, host: 'https://www.sv.co')}
 
         Questions Asked:
 

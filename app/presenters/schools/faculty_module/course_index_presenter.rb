@@ -20,7 +20,7 @@ module Schools
       private
 
       def school_faculty
-        Faculty.where(school: @course.school).where.not(exited: true).includes(:user, :image_attachment, :startups)
+        Faculty.where(school: @course.school).where.not(exited: true).includes(:user, :startups, user_profiles: { avatar_attachment: :blob })
       end
 
       def school_faculty_details

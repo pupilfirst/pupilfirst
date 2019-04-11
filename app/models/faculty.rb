@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 class Faculty < ApplicationRecord
-  # use name as slug
-  include FriendlyId
-  friendly_id :name, use: %i[slugged finders]
   has_secure_token
 
   belongs_to :user
@@ -14,6 +11,7 @@ class Faculty < ApplicationRecord
   has_many :connect_requests, through: :connect_slots
   has_many :faculty_course_enrollments, dependent: :destroy
   has_many :courses, through: :faculty_course_enrollments
+  has_many :user_profiles, through: :user
 
   # Startups whose timeline events this faculty can review.
   has_many :faculty_startup_enrollments, dependent: :destroy
@@ -47,7 +45,6 @@ class Faculty < ApplicationRecord
   validates :category, inclusion: { in: valid_categories }, presence: true
   validates :compensation, inclusion: { in: valid_compensation_values }, allow_blank: true
   validates :commitment, inclusion: { in: valid_commitment_values }, allow_blank: true
-  validates :slug, format: { with: /\A[a-z0-9\-_]+\z/i }, allow_nil: true
 
   scope :team, -> { where(category: CATEGORY_TEAM).order('sort_index ASC') }
   scope :visiting_coaches, -> { where(category: CATEGORY_VISITING_COACHES).order('sort_index ASC') }
@@ -58,14 +55,14 @@ class Faculty < ApplicationRecord
   # hard-wired ids of our ops_team, kireeti: 19, bharat: 20. A flag for this might be an overkill?
   scope :ops_team, -> { where(id: [19, 20]) }
 
-  delegate :gender, :phone, :communication_address, :title, :key_skills, :about,
+  delegate :name, :gender, :phone, :communication_address, :title, :key_skills, :about,
     :resume_url, :blog_url, :personal_website_url, :linkedin_url, :twitter_url, :facebook_url,
     :angel_co_url, :github_url, :behance_url, :skype_id, to: :user_profile
 
   delegate :email, to: :user
 
   def user_profile
-    @user_profile ||= school.user_profiles.find_by(user_id: user_id)
+    @user_profile ||= user_profiles.find_by(school_id: school_id)
   end
 
   # This method sets the label used for object by Active Admin.
@@ -168,6 +165,10 @@ class Faculty < ApplicationRecord
 
   def image_filename
     user_profile.avatar.attached? ? user_profile.avatar.blob.filename.to_s : nil
+  end
+
+  def image
+    user_profile.avatar
   end
 
   private

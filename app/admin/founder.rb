@@ -1,7 +1,7 @@
 ActiveAdmin.register Founder do
   actions :all, except: [:destroy]
 
-  permit_params :name, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :communication_address, :phone,
+  permit_params :name, :remote_avatar_url, :avatar, :startup_id, :about, :communication_address, :phone,
     :college_id, :twitter_url, :linkedin_url, :personal_website_url, :blog_url, :angel_co_url, :github_url,
     :behance_url, :gender, :skype_id, :exited, :excluded_from_leaderboard, roles: [], tag_list: []
 
@@ -101,9 +101,6 @@ ActiveAdmin.register Founder do
 
     column :slack_username
     column(:skype_username, &:skype_id)
-
-    column :slug
-
     column :resume, &:resume_link
     column :linkedin_url
     column :twitter_url
@@ -116,7 +113,6 @@ ActiveAdmin.register Founder do
 
   show do
     attributes_table do
-      row :slug
       row :email
       row :name
 

@@ -10,7 +10,7 @@ feature 'DM Startup Feedback', broken: true do
 
   let!(:slack_message_for_founder_1) do
     salutation = "Hey! You have some feedback from #{startup_feedback.faculty.name} on your <#{startup_feedback.reference_url}|recent update>.\n"
-    feedback_url = Rails.application.routes.url_helpers.student_url(startup_feedback.startup.founders.first.slug, show_feedback: startup_feedback.id)
+    feedback_url = Rails.application.routes.url_helpers.student_url(startup_feedback.startup.founders.first.id, show_feedback: startup_feedback.id)
     coach_url = 'slack://user?team=XYZ1234&id=ABCDEFG'
     feedback_text = "<#{feedback_url}|Click here> to view the feedback.\n"
     ping_faculty = "<#{coach_url}|Discuss with Coach> about this feedback."
@@ -19,7 +19,7 @@ feature 'DM Startup Feedback', broken: true do
 
   let!(:slack_message_for_founder_2) do
     salutation = "Hey! You have some feedback from #{startup_feedback.faculty.name} on your <#{startup_feedback.reference_url}|recent update>.\n"
-    feedback_url = Rails.application.routes.url_helpers.student_url(startup_feedback.startup.founders.second.slug, show_feedback: startup_feedback.id)
+    feedback_url = Rails.application.routes.url_helpers.student_url(startup_feedback.startup.founders.second.id, show_feedback: startup_feedback.id)
     coach_url = 'slack://user?team=XYZ1234&id=ABCDEFG'
     feedback_text = "<#{feedback_url}|Click here> to view the feedback.\n"
     ping_faculty = "<#{coach_url}|Discuss with Coach> about this feedback."

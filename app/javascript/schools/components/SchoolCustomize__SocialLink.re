@@ -1,6 +1,6 @@
 let component = ReasonReact.statelessComponent("SchoolCustomize__SocialLink");
 
-let make = (~link, _children) => {
+let make = (~url, _children) => {
   ...component,
   render: _self =>
     <div

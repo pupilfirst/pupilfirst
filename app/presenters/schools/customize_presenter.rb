@@ -39,15 +39,25 @@ module Schools
     end
 
     def header_links
-      current_school.school_links.where(kind: SchoolLink::KIND_HEADER).as_json(only: %i[title url])
+      links = current_school.school_links.where(kind: SchoolLink::KIND_HEADER).as_json(only: %i[id title url])
+      with_string_ids(links)
     end
 
     def footer_links
-      current_school.school_links.where(kind: SchoolLink::KIND_FOOTER).as_json(only: %i[title url])
+      links = current_school.school_links.where(kind: SchoolLink::KIND_FOOTER).as_json(only: %i[id title url])
+      with_string_ids(links)
     end
 
     def social_links
-      current_school.school_links.where(kind: SchoolLink::KIND_SOCIAL).pluck(:url)
+      links = current_school.school_links.where(kind: SchoolLink::KIND_SOCIAL).as_json(only: %i[id url])
+      with_string_ids(links)
+    end
+
+    def with_string_ids(links)
+      links.map do |link|
+        link['id'] = link['id'].to_s
+        link
+      end
     end
   end
 end

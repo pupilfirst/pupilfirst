@@ -12,8 +12,8 @@ let toggleState = (send, event) => {
 let additionalLinks = (linksVisible, links) =>
   if (linksVisible) {
     links
-    |> List.map(((title, _)) =>
-         <div className="border p-4" key=title>
+    |> List.map(((id, title, _)) =>
+         <div className="border p-4" key=id>
            <span> {title |> str} </span>
          </div>
        );

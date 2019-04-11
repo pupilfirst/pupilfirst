@@ -1,3 +1,5 @@
+open SchoolCustomize__Types;
+
 let str = ReasonReact.string;
 
 type kind =
@@ -45,10 +47,10 @@ let handleCloseEditor = (cb, event) => {
 
 let showLinks = links =>
   links
-  |> List.map(((title, url)) =>
+  |> List.map(((id, title, url)) =>
        <div
          className="flex items-center justify-between bg-grey-lightest text-xs text-grey-darkest border rounded p-3 mt-2"
-         key=url>
+         key=id>
          <div className="flex items-center">
            <span> {title |> str} </span>
            <i className="material-icons text-base ml-1">
@@ -64,10 +66,10 @@ let showLinks = links =>
 
 let socialMediaLinks = links =>
   links
-  |> List.map(url =>
+  |> List.map(((id, url)) =>
        <div
          className="flex items-center justify-between bg-grey-lightest text-xs text-grey-darkest border rounded p-3 mt-2"
-         key=url>
+         key=id>
          <code> {url |> str} </code>
          <button> <Icon kind=Icon.Delete size="4" /> </button>
        </div>
@@ -99,18 +101,75 @@ let addLinkDisabled = state =>
     true;
   };
 
-let handleAddLink = (state, send, event) => {
+module CreateSchoolLinkQuery = [%graphql
+  {|
+  mutation($kind: String!, $title: String, $url: String!) {
+    createSchoolLink(kind: $kind, title: $title, url: $url) {
+      schoolLink {
+        id
+      }
+    }
+  }
+|}
+];
+
+let cacheLink = (state, addLinkCB, id) =>
+  (
+    switch (state.kind) {
+    | HeaderLink => Customizations.HeaderLink(id, state.title, state.url)
+    | FooterLink => Customizations.FooterLink(id, state.title, state.url)
+    | SocialLink => Customizations.SocialLink(id, state.url)
+    }
+  )
+  |> addLinkCB;
+
+let handleAddLink = (state, send, authenticityToken, addLinkCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
 
   if (addLinkDisabled(state)) {
-    ();
+    (); /* Do nothing! */
   } else {
-    Js.log("boo!");
+    (
+      switch (state.kind) {
+      | HeaderLink =>
+        CreateSchoolLinkQuery.make(
+          ~kind="header",
+          ~title=state.title,
+          ~url=state.url,
+          (),
+        )
+      | FooterLink =>
+        CreateSchoolLinkQuery.make(
+          ~kind="footer",
+          ~title=state.title,
+          ~url=state.url,
+          (),
+        )
+      | SocialLink =>
+        CreateSchoolLinkQuery.make(~kind="social", ~url=state.url, ())
+      }
+    )
+    |> GraphqlQuery.sendQuery(authenticityToken)
+    |> Js.Promise.then_(response => {
+         response##createSchoolLink##schoolLink##id
+         |> cacheLink(state, addLinkCB);
+         Js.Promise.resolve();
+       })
+    |> ignore;
   };
 };
 
 let make =
-    (~closeEditorCB, ~headerLinks, ~footerLinks, ~socialLinks, _children) => {
+    (
+      ~closeEditorCB,
+      ~headerLinks,
+      ~footerLinks,
+      ~socialLinks,
+      ~authenticityToken,
+      ~addLinkCB,
+      ~removeLinkCB,
+      _children,
+    ) => {
   ...component,
   initialState: () => {
     kind: HeaderLink,
@@ -234,7 +293,9 @@ let make =
               </div>
               <button
                 disabled={addLinkDisabled(state)}
-                onClick={handleAddLink(state, send)}
+                onClick={
+                  handleAddLink(state, send, authenticityToken, addLinkCB)
+                }
                 className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
                 {"Add a New Link" |> str}
               </button>

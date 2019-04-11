@@ -18,7 +18,9 @@ type state = {
 
 type action =
   | ShowEditor(editor)
-  | CloseEditor;
+  | CloseEditor
+  | AddLink(Customizations.link)
+  | RemoveLink(Customizations.link);
 
 let component = ReasonReact.reducerComponent("SchoolCustomize");
 
@@ -32,8 +34,8 @@ let headerLogo = (schoolName, logoOnLightBg) =>
     }
   </div>;
 
-let headerLink = ((title, _)) =>
-  <div className="ml-8 cursor-default" key=title>
+let headerLink = ((id, title, _)) =>
+  <div className="ml-8 cursor-default" key=id>
     <span> {title |> str} </span>
   </div>;
 
@@ -57,8 +59,8 @@ let sitemap = links =>
   <div className="flex flex-wrap">
     {
       links
-      |> List.map(((title, _)) =>
-           <div className="w-1/3 pr-4 mt-3 text-sm" key=title>
+      |> List.map(((id, title, _)) =>
+           <div className="w-1/3 pr-4 mt-3 text-sm" key=id>
              {title |> str}
            </div>
          )
@@ -71,7 +73,7 @@ let socialLinks = links =>
   <div className="flex flex-wrap">
     {
       links
-      |> List.map(link => <SchoolCustomize__SocialLink link key=link />)
+      |> List.map(((id, url)) => <SchoolCustomize__SocialLink url key=id />)
       |> Array.of_list
       |> ReasonReact.array
     }
@@ -122,7 +124,7 @@ let showEditor = (editor, send, event) => {
   send(ShowEditor(editor));
 };
 
-let editor = (state, send) =>
+let editor = (state, send, authenticityToken) =>
   switch (state.visibleEditor) {
   | Some(LinksEditor) =>
     let headerLinks = state.customizations |> Customizations.headerLinks;
@@ -134,6 +136,9 @@ let editor = (state, send) =>
       footerLinks
       socialLinks
       closeEditorCB=(() => send(CloseEditor))
+      authenticityToken
+      addLinkCB=(link => send(AddLink(link)))
+      removeLinkCB=(link => send(RemoveLink(link)))
     />;
   | _ => ReasonReact.null
   };
@@ -146,6 +151,17 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
     | ShowEditor(editor) =>
       ReasonReact.Update({...state, visibleEditor: Some(editor)})
     | CloseEditor => ReasonReact.Update({...state, visibleEditor: None})
+    | AddLink(link) =>
+      ReasonReact.Update({
+        ...state,
+        customizations: state.customizations |> Customizations.addLink(link),
+      })
+    | RemoveLink(link) =>
+      ReasonReact.Update({
+        ...state,
+        customizations:
+          state.customizations |> Customizations.removeLink(link),
+      })
     },
   render: ({state, send}) =>
     <div>
@@ -269,6 +285,6 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
           <div className="bg-grey-lighter h-16" />
         </div>
       </div>
-      {editor(state, send)}
+      {editor(state, send, authenticityToken)}
     </div>,
 };

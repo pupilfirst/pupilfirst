@@ -621,6 +621,14 @@ let make =
                     </div>
                   </div>
                 </div>
+                <div className="mt-3 mb-3 text-xs">
+                  <span>
+                    {
+                      "NOTE: Maximum grade and passing grade once created cannot be modified for a course. Only grade labels will be allowed modification"
+                      |> str
+                    }
+                  </span>
+                </div>
                 <div className="flex">
                   {
                     switch (course) {

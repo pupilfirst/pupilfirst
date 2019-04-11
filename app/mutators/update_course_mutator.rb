@@ -1,4 +1,6 @@
 class UpdateCourseMutator < ApplicationMutator
+  include AuthorizeSchoolAdmin
+
   attr_accessor :id
   attr_accessor :name
   attr_accessor :grades_and_labels

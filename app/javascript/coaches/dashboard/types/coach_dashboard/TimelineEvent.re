@@ -59,11 +59,13 @@ let updateFeedback = (latestFeedback, t) => {
   latestFeedback: Some(latestFeedback),
 };
 
+let updateEvaluator = (evaluator, t) => {...t, evaluator: Some(evaluator)};
+
 let reviewPending = tes =>
   tes |> List.filter(te => te.evaluation |> Grading.pending);
 
 let reviewComplete = tes =>
-  tes |> List.filter(te => ! (te.evaluation |> Grading.pending));
+  tes |> List.filter(te => !(te.evaluation |> Grading.pending));
 
 let getReviewResult = (passGrade, t) =>
   t.evaluation |> Grading.anyFail(passGrade) ? Failed : Passed;

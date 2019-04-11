@@ -4,7 +4,7 @@ type t = {
   imageUrl: string,
   email: string,
   title: string,
-  teams: option(list(CoachesCourseEnrollment__Team.t)),
+  teams: option(list(CoachesCourseIndex__Team.t)),
 };
 
 let name = t => t.name;
@@ -28,10 +28,7 @@ let decode = json =>
     title: json |> field("title", string),
     teams:
       json
-      |> field(
-           "teams",
-           nullable(list(CoachesCourseEnrollment__Team.decode)),
-         )
+      |> field("teams", nullable(list(CoachesCourseIndex__Team.decode)))
       |> Js.Null.toOption,
   };
 

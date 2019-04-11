@@ -9,10 +9,6 @@ module Mutations
 
     field :course, Types::CourseType, null: false
 
-    def self.accessible?(context)
-      context[:current_school_admin].present?
-    end
-
     def resolve(params)
       mutator = UpdateCourseMutator.new(params, context)
 

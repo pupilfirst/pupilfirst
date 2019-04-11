@@ -128,6 +128,9 @@ feature 'Coach Dashboard' do
       # The submission should have the failed status.
       expect(page).to have_content('Failed')
 
+      # The submission should have the reviewer name.
+      expect(page).to have_content(coach.name)
+
       # It should also list the selected grade for a criterion.
       expect(page).to have_content("#{evaluation_criterion.name}: Bad")
     end

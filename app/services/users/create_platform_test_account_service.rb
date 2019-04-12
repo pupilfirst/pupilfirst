@@ -36,7 +36,7 @@ module Users
     private
 
     def create_user_profile(user)
-      user_profile = UserProfile.first_or_create!(user: user, school: @startup.school)
+      user_profile = UserProfile.where(user: user, school: @startup.school).first_or_create!
       user_profile.update!(name: @name, title: 'Test Account')
     end
   end

@@ -19,7 +19,7 @@ module Admin
 
           member = user(email)
 
-          user_profile = UserProfile.first_or_create!(user: member, school: level.course.school)
+          UserProfile.where(user: member, school: level.course.school).first_or_create!
           user_profile.update!(name: name)
 
           Founder.create!(user: member, startup: team)

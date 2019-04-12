@@ -1,3 +1,7 @@
+type createLinkError = [ | `InvalidUrl | `InvalidLengthTitle | `InvalidKind];
+
+exception CreateLinkFailure(array(createLinkError));
+
 open SchoolCustomize__Types;
 
 let str = ReasonReact.string;
@@ -14,12 +18,18 @@ type state = {
   titleInvalid: bool,
   urlInvalid: bool,
   formDirty: bool,
+  adding: bool,
+  deleting: list(Customizations.linkId),
 };
 
 type action =
   | UpdateKind(kind)
   | UpdateTitle(string, bool)
-  | UpdateUrl(string, bool);
+  | UpdateUrl(string, bool)
+  | DisableForm
+  | EnableForm
+  | ClearForm
+  | DisableDelete(Customizations.linkId);
 
 let component = ReasonReact.reducerComponent("SchoolCustomize__LinksEditor");
 
@@ -45,7 +55,42 @@ let handleCloseEditor = (cb, event) => {
   cb();
 };
 
-let showLinks = links =>
+module DestroySchoolLinkQuery = [%graphql
+  {|
+  mutation($id: ID!) {
+    destroySchoolLink(id: $id) {
+      success
+    }
+  }
+  |}
+];
+
+let handleDelete =
+    (state, send, authenticityToken, removeLinkCB, kind, id, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
+
+  if (state.deleting |> List.mem(id)) {
+    (); /* Do nothing if this link is already being deleted. */
+  } else {
+    send(DisableDelete(id));
+
+    DestroySchoolLinkQuery.make(~id, ())
+    |> GraphqlQuery.sendQuery(authenticityToken)
+    |> Js.Promise.then_(_response => {
+         let linkToDelete =
+           switch (kind) {
+           | HeaderLink => Customizations.HeaderLink(id, "", "")
+           | FooterLink => Customizations.FooterLink(id, "", "")
+           | SocialLink => Customizations.SocialLink(id, "")
+           };
+         removeLinkCB(linkToDelete);
+         Js.Promise.resolve();
+       })
+    |> ignore;
+  };
+};
+
+let showLinks = (state, send, authenticityToken, removeLinkCB, kind, links) =>
   links
   |> List.map(((id, title, url)) =>
        <div
@@ -58,20 +103,52 @@ let showLinks = links =>
            </i>
            <code className="ml-1"> {url |> str} </code>
          </div>
-         <button> <Icon kind=Icon.Delete size="4" /> </button>
+         <button
+           onClick={
+             handleDelete(
+               state,
+               send,
+               authenticityToken,
+               removeLinkCB,
+               kind,
+               id,
+             )
+           }>
+           <Icon
+             kind=Icon.Delete
+             size="4"
+             rotate={state.deleting |> List.mem(id)}
+           />
+         </button>
        </div>
      )
   |> Array.of_list
   |> ReasonReact.array;
 
-let socialMediaLinks = links =>
+let socialMediaLinks = (state, send, authenticityToken, removeLinkCB, links) =>
   links
   |> List.map(((id, url)) =>
        <div
          className="flex items-center justify-between bg-grey-lightest text-xs text-grey-darkest border rounded p-3 mt-2"
          key=id>
          <code> {url |> str} </code>
-         <button> <Icon kind=Icon.Delete size="4" /> </button>
+         <button
+           onClick={
+             handleDelete(
+               state,
+               send,
+               authenticityToken,
+               removeLinkCB,
+               SocialLink,
+               id,
+             )
+           }>
+           <Icon
+             kind=Icon.Delete
+             size="4"
+             rotate={state.deleting |> List.mem(id)}
+           />
+         </button>
        </div>
      )
   |> Array.of_list
@@ -89,8 +166,12 @@ let kindClasses = selected => {
   classes ++ (selected ? " bg-white" : " bg-grey-light");
 };
 
+let addLinkText = adding => adding ? "Adding new link..." : "Add a New Link";
+
 let addLinkDisabled = state =>
-  if (state.formDirty) {
+  if (state.adding) {
+    true;
+  } else if (state.formDirty) {
     switch (state.kind) {
     | HeaderLink
     | FooterLink =>
@@ -104,16 +185,17 @@ let addLinkDisabled = state =>
 module CreateSchoolLinkQuery = [%graphql
   {|
   mutation($kind: String!, $title: String, $url: String!) {
-    createSchoolLink(kind: $kind, title: $title, url: $url) {
+    createSchoolLink(kind: $kind, title: $title, url: $url) @bsVariant {
       schoolLink {
         id
       }
+      errors
     }
   }
 |}
 ];
 
-let cacheLink = (state, addLinkCB, id) =>
+let displayNewLink = (state, addLinkCB, id) =>
   (
     switch (state.kind) {
     | HeaderLink => Customizations.HeaderLink(id, state.title, state.url)
@@ -123,12 +205,38 @@ let cacheLink = (state, addLinkCB, id) =>
   )
   |> addLinkCB;
 
+let handleCreateLinkFailure = send =>
+  [@bs.open]
+  (
+    fun
+    | CreateLinkFailure(errors) => {
+        errors
+        |> Array.iter(error => {
+             let (title, message) =
+               switch (error) {
+               | `InvalidUrl => (
+                   "Invalid URL",
+                   "It looks like the URL you've entered isn't valid. Please check, and try again.",
+                 )
+               | `InvalidKind => ("InvalidKind", "")
+               | `InvalidLengthTitle => ("InvalidLengthTitle", "")
+               };
+
+             Notification.error(title, message);
+           });
+
+        send(EnableForm);
+        Js.Promise.resolve();
+      }
+  );
+
 let handleAddLink = (state, send, authenticityToken, addLinkCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
 
   if (addLinkDisabled(state)) {
     (); /* Do nothing! */
   } else {
+    send(DisableForm);
     (
       switch (state.kind) {
       | HeaderLink =>
@@ -150,11 +258,22 @@ let handleAddLink = (state, send, authenticityToken, addLinkCB, event) => {
       }
     )
     |> GraphqlQuery.sendQuery(authenticityToken)
-    |> Js.Promise.then_(response => {
-         response##createSchoolLink##schoolLink##id
-         |> cacheLink(state, addLinkCB);
-         Js.Promise.resolve();
-       })
+    |> Js.Promise.then_(response =>
+         switch (response##createSchoolLink) {
+         | `SchoolLink(schoolLink) =>
+           schoolLink##id |> displayNewLink(state, addLinkCB);
+           send(ClearForm);
+           Notification.success("Done!", "A custom link has been added.");
+           Js.Promise.resolve();
+         | `Errors(errors) => Js.Promise.reject(CreateLinkFailure(errors))
+         }
+       )
+    |> Js.Promise.catch(error =>
+         switch (error |> handleCreateLinkFailure(send)) {
+         | Some(x) => x
+         | None => Js.Promise.resolve()
+         }
+       )
     |> ignore;
   };
 };
@@ -178,6 +297,8 @@ let make =
     titleInvalid: false,
     urlInvalid: false,
     formDirty: false,
+    adding: false,
+    deleting: [],
   },
   reducer: (action, state) =>
     switch (action) {
@@ -197,6 +318,12 @@ let make =
         urlInvalid: invalid,
         formDirty: true,
       })
+    | DisableForm => ReasonReact.Update({...state, adding: true})
+    | EnableForm => ReasonReact.Update({...state, adding: false})
+    | ClearForm =>
+      ReasonReact.Update({...state, adding: false, title: "", url: ""})
+    | DisableDelete(linkId) =>
+      ReasonReact.Update({...state, deleting: [linkId, ...state.deleting]})
     },
   render: ({state, send}) =>
     <div>
@@ -297,7 +424,7 @@ let make =
                   handleAddLink(state, send, authenticityToken, addLinkCB)
                 }
                 className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
-                {"Add a New Link" |> str}
+                {state.adding |> addLinkText |> str}
               </button>
               <h5
                 className="uppercase text-center border-b border-grey-light pb-2 mt-6">
@@ -307,17 +434,43 @@ let make =
                 className="inline-block tracking-wide text-grey-darker text-xs font-semibold mt-4">
                 {"Header Links" |> str}
               </label>
-              {showLinks(headerLinks)}
+              {
+                showLinks(
+                  state,
+                  send,
+                  authenticityToken,
+                  removeLinkCB,
+                  HeaderLink,
+                  headerLinks,
+                )
+              }
               <label
                 className="block tracking-wide text-grey-darker text-xs font-semibold mt-4">
                 {"Footer Links" |> str}
               </label>
-              {showLinks(footerLinks)}
+              {
+                showLinks(
+                  state,
+                  send,
+                  authenticityToken,
+                  removeLinkCB,
+                  FooterLink,
+                  footerLinks,
+                )
+              }
               <label
                 className="block tracking-wide text-grey-darker text-xs font-semibold mt-4">
                 {"Social Media Links" |> str}
               </label>
-              {socialMediaLinks(socialLinks)}
+              {
+                socialMediaLinks(
+                  state,
+                  send,
+                  authenticityToken,
+                  removeLinkCB,
+                  socialLinks,
+                )
+              }
             </div>
           </div>
         </div>

@@ -6,8 +6,8 @@ class CreateSchoolLinkMutator < ApplicationMutator
   attr_accessor :url
 
   validates :kind, inclusion: { in: SchoolLink::VALID_KINDS, message: 'InvalidKind' }
-  validates :title, presence: { message: 'MaxGradeBlank' }, length: { minimum: 1, maximum: 24 }
-  validates :url, url: true, presence: true
+  validates :title, length: { minimum: 1, maximum: 24, message: 'InvalidLengthTitle' }, allow_nil: true
+  validates :url, url: { message: 'InvalidUrl' }, presence: { message: 'BlankUrl' }
 
   def create_school_link
     params = case kind

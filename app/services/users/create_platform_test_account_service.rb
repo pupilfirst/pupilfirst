@@ -13,17 +13,16 @@ module Users
 
         Rails.logger.info("User with email address '#{@email}' created: ##{user.id}.")
 
+        create_user_profile(user)
+
         # Create the founder in the startup.
-        founder = Founder.create!(user: user, name: @name, startup: @startup)
+        founder = Founder.create!(user: user, startup: @startup)
 
         Rails.logger.info("Founder for user created: ##{founder.id}, and added to Startup##{@startup.id}.")
 
         # Create a faculty and add as coach for startup.
         faculty = Faculty.create!(
-          name: @name,
-          title: 'Test Account',
           category: Faculty::CATEGORY_VISITING_COACHES,
-          image: Rails.root.join('spec', 'support', 'uploads', 'faculty', 'human.png').open,
           user: user,
           school: @startup.school
         )
@@ -32,6 +31,13 @@ module Users
 
         Rails.logger.info("Faculty for user created: ##{faculty.id}), and added as coach for Startup##{@startup.id}.")
       end
+    end
+
+    private
+
+    def create_user_profile(user)
+      user_profile = UserProfile.first_or_create!(user: user, school: @startup.school)
+      user_profile.update!(name: @name, title: 'Test Account')
     end
   end
 end

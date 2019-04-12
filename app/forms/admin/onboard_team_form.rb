@@ -18,7 +18,11 @@ module Admin
           next if name.blank? || email.blank?
 
           member = user(email)
-          Founder.create!(user: member, name: name, startup: team)
+
+          user_profile = UserProfile.first_or_create!(user: member, school: level.course.school)
+          user_profile.update!(name: name)
+
+          Founder.create!(user: member, startup: team)
         end
         team
       end

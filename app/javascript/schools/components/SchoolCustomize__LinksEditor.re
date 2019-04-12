@@ -65,8 +65,7 @@ module DestroySchoolLinkQuery = [%graphql
   |}
 ];
 
-let handleDelete =
-    (state, send, authenticityToken, removeLinkCB, kind, id, event) => {
+let handleDelete = (state, send, authenticityToken, removeLinkCB, id, event) => {
   event |> ReactEvent.Mouse.preventDefault;
 
   if (state.deleting |> List.mem(id)) {
@@ -77,13 +76,7 @@ let handleDelete =
     DestroySchoolLinkQuery.make(~id, ())
     |> GraphqlQuery.sendQuery(authenticityToken)
     |> Js.Promise.then_(_response => {
-         let linkToDelete =
-           switch (kind) {
-           | HeaderLink => Customizations.HeaderLink(id, "", "")
-           | FooterLink => Customizations.FooterLink(id, "", "")
-           | SocialLink => Customizations.SocialLink(id, "")
-           };
-         removeLinkCB(linkToDelete);
+         removeLinkCB(id);
          Js.Promise.resolve();
        })
     |> ignore;
@@ -97,51 +90,25 @@ let showLinks = (state, send, authenticityToken, removeLinkCB, kind, links) =>
          className="flex items-center justify-between bg-grey-lightest text-xs text-grey-darkest border rounded p-3 mt-2"
          key=id>
          <div className="flex items-center">
-           <span> {title |> str} </span>
-           <i className="material-icons text-base ml-1">
-             {"arrow_forward" |> str}
-           </i>
-           <code className="ml-1"> {url |> str} </code>
+           {
+             switch (kind) {
+             | HeaderLink
+             | FooterLink =>
+               [|
+                 <span> {title |> str} </span>,
+                 <i className="material-icons text-base ml-1">
+                   {"arrow_forward" |> str}
+                 </i>,
+                 <code className="ml-1"> {url |> str} </code>,
+               |]
+               |> ReasonReact.array
+             | SocialLink => <code> {url |> str} </code>
+             }
+           }
          </div>
          <button
            onClick={
-             handleDelete(
-               state,
-               send,
-               authenticityToken,
-               removeLinkCB,
-               kind,
-               id,
-             )
-           }>
-           <Icon
-             kind=Icon.Delete
-             size="4"
-             rotate={state.deleting |> List.mem(id)}
-           />
-         </button>
-       </div>
-     )
-  |> Array.of_list
-  |> ReasonReact.array;
-
-let socialMediaLinks = (state, send, authenticityToken, removeLinkCB, links) =>
-  links
-  |> List.map(((id, url)) =>
-       <div
-         className="flex items-center justify-between bg-grey-lightest text-xs text-grey-darkest border rounded p-3 mt-2"
-         key=id>
-         <code> {url |> str} </code>
-         <button
-           onClick={
-             handleDelete(
-               state,
-               send,
-               authenticityToken,
-               removeLinkCB,
-               SocialLink,
-               id,
-             )
+             handleDelete(state, send, authenticityToken, removeLinkCB, id)
            }>
            <Icon
              kind=Icon.Delete
@@ -281,9 +248,7 @@ let handleAddLink = (state, send, authenticityToken, addLinkCB, event) => {
 let make =
     (
       ~closeEditorCB,
-      ~headerLinks,
-      ~footerLinks,
-      ~socialLinks,
+      ~customizations,
       ~authenticityToken,
       ~addLinkCB,
       ~removeLinkCB,
@@ -325,7 +290,11 @@ let make =
     | DisableDelete(linkId) =>
       ReasonReact.Update({...state, deleting: [linkId, ...state.deleting]})
     },
-  render: ({state, send}) =>
+  render: ({state, send}) => {
+    let headerLinks = customizations |> Customizations.headerLinks;
+    let footerLinks = customizations |> Customizations.footerLinks;
+    let socialLinks = customizations |> Customizations.socialLinks;
+
     <div>
       <div className="blanket" />
       <div className="drawer-right">
@@ -441,7 +410,7 @@ let make =
                   authenticityToken,
                   removeLinkCB,
                   HeaderLink,
-                  headerLinks,
+                  headerLinks |> Customizations.unpackLinks,
                 )
               }
               <label
@@ -455,7 +424,7 @@ let make =
                   authenticityToken,
                   removeLinkCB,
                   FooterLink,
-                  footerLinks,
+                  footerLinks |> Customizations.unpackLinks,
                 )
               }
               <label
@@ -463,17 +432,19 @@ let make =
                 {"Social Media Links" |> str}
               </label>
               {
-                socialMediaLinks(
+                showLinks(
                   state,
                   send,
                   authenticityToken,
                   removeLinkCB,
-                  socialLinks,
+                  SocialLink,
+                  socialLinks |> Customizations.unpackLinks,
                 )
               }
             </div>
           </div>
         </div>
       </div>
-    </div>,
+    </div>;
+  },
 };

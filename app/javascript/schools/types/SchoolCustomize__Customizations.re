@@ -17,18 +17,16 @@ type linkId = string;
 type title = string;
 type url = string;
 
-type t = {
-  schoolStrings,
-  schoolImages,
-  headerLinks: list((linkId, title, url)),
-  footerLinks: list((linkId, title, url)),
-  socialLinks: list((linkId, url)),
-};
-
 type link =
   | HeaderLink(linkId, title, url)
   | FooterLink(linkId, title, url)
   | SocialLink(linkId, url);
+
+type t = {
+  schoolStrings,
+  schoolImages,
+  links: list(link),
+};
 
 let logoOnLightBg = t => t.schoolImages.logoOnLightBg;
 let logoOnDarkBg = t => t.schoolImages.logoOnDarkBg;
@@ -39,52 +37,63 @@ let emailAddress = t => t.schoolStrings.emailAddress;
 let privacyPolicy = t => t.schoolStrings.privacyPolicy;
 let termsOfUse = t => t.schoolStrings.termsOfUse;
 
-let headerLinks = t => t.headerLinks;
-let footerLinks = t => t.footerLinks;
-let socialLinks = t => t.socialLinks;
+let links = t => t.links;
 
-let addLink = (link, t) =>
-  switch (link) {
-  | HeaderLink(id, title, url) => {
-      ...t,
-      headerLinks: [(id, title, url), ...t.headerLinks],
-    }
-  | FooterLink(id, title, url) => {
-      ...t,
-      footerLinks: [(id, title, url), ...t.footerLinks],
-    }
-  | SocialLink(id, url) => {
-      ...t,
-      socialLinks: [(id, url), ...t.socialLinks],
-    }
-  };
+let headerLinks = t =>
+  t.links
+  |> List.filter(l =>
+       switch (l) {
+       | HeaderLink(_, _, _) => true
+       | FooterLink(_, _, _) => false
+       | SocialLink(_, _) => false
+       }
+     );
 
-let removeLink = (link, t) => {
-  let linkWithoutId = (id, link) => {
-    let (linkId, _, _) = link;
-    linkId != id;
-  };
+let footerLinks = t =>
+  t.links
+  |> List.filter(l =>
+       switch (l) {
+       | HeaderLink(_, _, _) => false
+       | FooterLink(_, _, _) => true
+       | SocialLink(_, _) => false
+       }
+     );
 
-  switch (link) {
-  | HeaderLink(id, _, _) => {
-      ...t,
-      headerLinks: t.headerLinks |> List.filter(linkWithoutId(id)),
-    }
-  | FooterLink(id, _, _) => {
-      ...t,
-      footerLinks: t.footerLinks |> List.filter(linkWithoutId(id)),
-    }
-  | SocialLink(id, _) => {
-      ...t,
-      socialLinks:
-        t.socialLinks
-        |> List.filter(link => {
-             let (linkId, _) = link;
-             linkId != id;
-           }),
-    }
-  };
+let socialLinks = t =>
+  t.links
+  |> List.filter(l =>
+       switch (l) {
+       | HeaderLink(_, _, _) => false
+       | FooterLink(_, _, _) => false
+       | SocialLink(_, _) => true
+       }
+     );
+
+let unpackLinks = links =>
+  links
+  |> List.map(l =>
+       switch (l) {
+       | HeaderLink(id, title, url)
+       | FooterLink(id, title, url) => (id, title, url)
+       | SocialLink(id, url) => (id, "", url)
+       }
+     );
+
+let addLink = (link, t) => {...t, links: [link, ...t.links]};
+
+let removeLink = (linkId, t) => {
+  ...t,
+  links:
+    t.links
+    |> List.filter(l =>
+         switch (l) {
+         | HeaderLink(id, _, _)
+         | FooterLink(id, _, _) => id != linkId
+         | SocialLink(id, _) => id != linkId
+         }
+       ),
 };
+
 let decodeStrings = json =>
   Json.Decode.{
     address: json |> field("address", nullable(string)) |> Js.Null.toOption,
@@ -105,21 +114,26 @@ let decodeImages = json =>
     icon: json |> field("icon", string),
   };
 
-let decodeLink = json =>
-  Json.Decode.(
-    field("id", string, json),
-    field("title", string, json),
-    field("url", string, json),
-  );
+let decodeLink = json => {
+  let (kind, id, title, url) =
+    Json.Decode.(
+      field("kind", string, json),
+      field("id", string, json),
+      field("title", string, json),
+      field("url", string, json),
+    );
 
-let decodeLinkWithoutTitle = json =>
-  Json.Decode.(field("id", string, json), field("url", string, json));
+  switch (kind) {
+  | "header" => HeaderLink(id, title, url)
+  | "footer" => FooterLink(id, title, url)
+  | "social" => SocialLink(id, url)
+  | unknownKind => raise(UnknownKindOfLink(unknownKind))
+  };
+};
 
 let decode = json =>
   Json.Decode.{
     schoolStrings: json |> field("strings", decodeStrings),
     schoolImages: json |> field("images", decodeImages),
-    headerLinks: json |> field("headerLinks", list(decodeLink)),
-    footerLinks: json |> field("footerLinks", list(decodeLink)),
-    socialLinks: json |> field("socialLinks", list(decodeLinkWithoutTitle)),
+    links: json |> field("links", list(decodeLink)),
   };

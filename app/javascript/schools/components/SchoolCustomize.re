@@ -20,7 +20,7 @@ type action =
   | ShowEditor(editor)
   | CloseEditor
   | AddLink(Customizations.link)
-  | RemoveLink(Customizations.link);
+  | RemoveLink(Customizations.linkId);
 
 let component = ReasonReact.reducerComponent("SchoolCustomize");
 
@@ -73,7 +73,9 @@ let socialLinks = links =>
   <div className="flex flex-wrap">
     {
       links
-      |> List.map(((id, url)) => <SchoolCustomize__SocialLink url key=id />)
+      |> List.map(((id, _title, url)) =>
+           <SchoolCustomize__SocialLink url key=id />
+         )
       |> Array.of_list
       |> ReasonReact.array
     }
@@ -127,19 +129,13 @@ let showEditor = (editor, send, event) => {
 let editor = (state, send, authenticityToken) =>
   switch (state.visibleEditor) {
   | Some(LinksEditor) =>
-    let headerLinks = state.customizations |> Customizations.headerLinks;
-    let footerLinks = state.customizations |> Customizations.footerLinks;
-    let socialLinks = state.customizations |> Customizations.socialLinks;
-
     <SchoolCustomize__LinksEditor
-      headerLinks
-      footerLinks
-      socialLinks
+      customizations={state.customizations}
       closeEditorCB=(() => send(CloseEditor))
       authenticityToken
       addLinkCB=(link => send(AddLink(link)))
-      removeLinkCB=(link => send(RemoveLink(link)))
-    />;
+      removeLinkCB=(linkId => send(RemoveLink(linkId)))
+    />
   | _ => ReasonReact.null
   };
 
@@ -156,11 +152,11 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
         ...state,
         customizations: state.customizations |> Customizations.addLink(link),
       })
-    | RemoveLink(link) =>
+    | RemoveLink(linkId) =>
       ReasonReact.Update({
         ...state,
         customizations:
-          state.customizations |> Customizations.removeLink(link),
+          state.customizations |> Customizations.removeLink(linkId),
       })
     },
   render: ({state, send}) =>
@@ -178,7 +174,13 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
             {editIcon("ml-6", showEditor(ImagesEditor, send))}
           </div>
           <div className="flex items-center">
-            {headerLinks(state.customizations |> Customizations.headerLinks)}
+            {
+              headerLinks(
+                state.customizations
+                |> Customizations.headerLinks
+                |> Customizations.unpackLinks,
+              )
+            }
             {editIcon("ml-3", showEditor(LinksEditor, send))}
             <div className="ml-8 w-12 h-12 border rounded-full bg-grey" />
           </div>
@@ -193,7 +195,13 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                 </span>
                 {editIcon("ml-3", showEditor(LinksEditor, send))}
               </div>
-              {sitemap(state.customizations |> Customizations.footerLinks)}
+              {
+                sitemap(
+                  state.customizations
+                  |> Customizations.footerLinks
+                  |> Customizations.unpackLinks,
+                )
+              }
             </div>
             <div className="w-1/2">
               <div className="flex">
@@ -206,7 +214,9 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                   </div>
                   {
                     socialLinks(
-                      state.customizations |> Customizations.socialLinks,
+                      state.customizations
+                      |> Customizations.socialLinks
+                      |> Customizations.unpackLinks,
                     )
                   }
                 </div>

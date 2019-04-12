@@ -6,9 +6,7 @@ module Schools
         customizations: {
           strings: school_strings,
           images: school_images,
-          headerLinks: header_links,
-          footerLinks: footer_links,
-          socialLinks: social_links
+          links: school_links
         },
         schoolName: current_school.name
       }.to_json
@@ -38,23 +36,8 @@ module Schools
       }
     end
 
-    def header_links
-      links = current_school.school_links.where(kind: SchoolLink::KIND_HEADER).as_json(only: %i[id title url])
-      with_string_ids(links)
-    end
-
-    def footer_links
-      links = current_school.school_links.where(kind: SchoolLink::KIND_FOOTER).as_json(only: %i[id title url])
-      with_string_ids(links)
-    end
-
-    def social_links
-      links = current_school.school_links.where(kind: SchoolLink::KIND_SOCIAL).as_json(only: %i[id url])
-      with_string_ids(links)
-    end
-
-    def with_string_ids(links)
-      links.map do |link|
+    def school_links
+      current_school.school_links.as_json(only: %i[kind id title url]).map do |link|
         link['id'] = link['id'].to_s
         link
       end

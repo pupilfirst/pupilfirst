@@ -95,11 +95,15 @@ let showLinks = (state, send, authenticityToken, removeLinkCB, kind, links) =>
              | HeaderLink
              | FooterLink =>
                [|
-                 <span> {title |> str} </span>,
-                 <i className="material-icons text-base ml-1">
+                 <span key="link-editor-entry__title"> {title |> str} </span>,
+                 <i
+                   key="link-editor-entry__icon"
+                   className="material-icons text-base ml-1">
                    {"arrow_forward" |> str}
                  </i>,
-                 <code className="ml-1"> {url |> str} </code>,
+                 <code key="link-editor-entry__url" className="ml-1">
+                   {url |> str}
+                 </code>,
                |]
                |> ReasonReact.array
              | SocialLink => <code> {url |> str} </code>
@@ -245,8 +249,30 @@ let handleAddLink = (state, send, authenticityToken, addLinkCB, event) => {
   };
 };
 
+let linksTitle = kind =>
+  (
+    switch (kind) {
+    | HeaderLink => "Current Header Links"
+    | FooterLink => "Current Sitemap Links"
+    | SocialLink => "Current Social Media Links"
+    }
+  )
+  |> str;
+
+let unpackLinks = (kind, customizations) =>
+  customizations
+  |> (
+    switch (kind) {
+    | HeaderLink => Customizations.headerLinks
+    | FooterLink => Customizations.footerLinks
+    | SocialLink => Customizations.socialLinks
+    }
+  )
+  |> Customizations.unpackLinks;
+
 let make =
     (
+      ~kind,
       ~closeEditorCB,
       ~customizations,
       ~authenticityToken,
@@ -256,7 +282,7 @@ let make =
     ) => {
   ...component,
   initialState: () => {
-    kind: HeaderLink,
+    kind,
     title: "",
     url: "",
     titleInvalid: false,
@@ -290,11 +316,7 @@ let make =
     | DisableDelete(linkId) =>
       ReasonReact.Update({...state, deleting: [linkId, ...state.deleting]})
     },
-  render: ({state, send}) => {
-    let headerLinks = customizations |> Customizations.headerLinks;
-    let footerLinks = customizations |> Customizations.footerLinks;
-    let socialLinks = customizations |> Customizations.socialLinks;
-
+  render: ({state, send}) =>
     <div>
       <div className="blanket" />
       <div className="drawer-right">
@@ -310,13 +332,13 @@ let make =
             <div className="max-w-md p-6 mx-auto">
               <h5
                 className="uppercase text-center border-b border-grey-light pb-2">
-                {"Add a Link" |> str}
+                {"Manage custom links" |> str}
               </h5>
               <div className="mt-3">
                 <label
                   className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
                   htmlFor="email">
-                  {"Location of Custom Link" |> str}
+                  {"Location of Link" |> str}
                 </label>
                 <div className="flex">
                   <div
@@ -329,7 +351,7 @@ let make =
                       kindClasses(state.kind == FooterLink) ++ " ml-2"
                     }
                     onClick={handleKindChange(send, FooterLink)}>
-                    {"Footer" |> str}
+                    {"Footer Sitemap" |> str}
                   </div>
                   <div
                     className={
@@ -340,6 +362,20 @@ let make =
                   </div>
                 </div>
               </div>
+              <label
+                className="inline-block tracking-wide text-grey-darker text-xs font-semibold mt-4">
+                {linksTitle(state.kind)}
+              </label>
+              {
+                showLinks(
+                  state,
+                  send,
+                  authenticityToken,
+                  removeLinkCB,
+                  state.kind,
+                  unpackLinks(state.kind, customizations),
+                )
+              }
               <div className="flex mt-3">
                 {
                   if (state |> titleInputVisible) {
@@ -353,7 +389,7 @@ let make =
                         className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                         id="link-title"
                         type_="text"
-                        placeholder="A short title for this link"
+                        placeholder="A short title for a new link"
                         onChange={handleTitleChange(send)}
                         value={state.title}
                         maxLength=24
@@ -395,56 +431,9 @@ let make =
                 className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
                 {state.adding |> addLinkText |> str}
               </button>
-              <h5
-                className="uppercase text-center border-b border-grey-light pb-2 mt-6">
-                {"Current Links" |> str}
-              </h5>
-              <label
-                className="inline-block tracking-wide text-grey-darker text-xs font-semibold mt-4">
-                {"Header Links" |> str}
-              </label>
-              {
-                showLinks(
-                  state,
-                  send,
-                  authenticityToken,
-                  removeLinkCB,
-                  HeaderLink,
-                  headerLinks |> Customizations.unpackLinks,
-                )
-              }
-              <label
-                className="block tracking-wide text-grey-darker text-xs font-semibold mt-4">
-                {"Footer Links" |> str}
-              </label>
-              {
-                showLinks(
-                  state,
-                  send,
-                  authenticityToken,
-                  removeLinkCB,
-                  FooterLink,
-                  footerLinks |> Customizations.unpackLinks,
-                )
-              }
-              <label
-                className="block tracking-wide text-grey-darker text-xs font-semibold mt-4">
-                {"Social Media Links" |> str}
-              </label>
-              {
-                showLinks(
-                  state,
-                  send,
-                  authenticityToken,
-                  removeLinkCB,
-                  SocialLink,
-                  socialLinks |> Customizations.unpackLinks,
-                )
-              }
             </div>
           </div>
         </div>
       </div>
-    </div>;
-  },
+    </div>,
 };

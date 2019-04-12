@@ -5,7 +5,7 @@ open SchoolCustomize__Types;
 let str = ReasonReact.string;
 
 type editor =
-  | LinksEditor
+  | LinksEditor(SchoolCustomize__LinksEditor.kind)
   | ImagesEditor
   | ContactsEditor
   | PrivacyPolicyEditor
@@ -128,8 +128,9 @@ let showEditor = (editor, send, event) => {
 
 let editor = (state, send, authenticityToken) =>
   switch (state.visibleEditor) {
-  | Some(LinksEditor) =>
+  | Some(LinksEditor(kind)) =>
     <SchoolCustomize__LinksEditor
+      kind
       customizations={state.customizations}
       closeEditorCB=(() => send(CloseEditor))
       authenticityToken
@@ -141,7 +142,7 @@ let editor = (state, send, authenticityToken) =>
 
 let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
   ...component,
-  initialState: () => {visibleEditor: Some(LinksEditor), customizations},
+  initialState: () => {visibleEditor: None, customizations},
   reducer: (action, state) =>
     switch (action) {
     | ShowEditor(editor) =>
@@ -181,7 +182,15 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                 |> Customizations.unpackLinks,
               )
             }
-            {editIcon("ml-3", showEditor(LinksEditor, send))}
+            {
+              editIcon(
+                "ml-3",
+                showEditor(
+                  LinksEditor(SchoolCustomize__LinksEditor.HeaderLink),
+                  send,
+                ),
+              )
+            }
             <div className="ml-8 w-12 h-12 border rounded-full bg-grey" />
           </div>
         </div>
@@ -193,7 +202,15 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                 <span className="uppercase font-bold text-sm">
                   {"Sitemap" |> str}
                 </span>
-                {editIcon("ml-3", showEditor(LinksEditor, send))}
+                {
+                  editIcon(
+                    "ml-3",
+                    showEditor(
+                      LinksEditor(SchoolCustomize__LinksEditor.FooterLink),
+                      send,
+                    ),
+                  )
+                }
               </div>
               {
                 sitemap(
@@ -210,7 +227,17 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                     <span className="uppercase font-bold text-sm">
                       {"Social" |> str}
                     </span>
-                    {editIcon("ml-3", showEditor(LinksEditor, send))}
+                    {
+                      editIcon(
+                        "ml-3",
+                        showEditor(
+                          LinksEditor(
+                            SchoolCustomize__LinksEditor.SocialLink,
+                          ),
+                          send,
+                        ),
+                      )
+                    }
                   </div>
                   {
                     socialLinks(

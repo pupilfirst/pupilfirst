@@ -9,7 +9,6 @@ feature 'Founder Edit' do
   let(:phone) { rand(9_876_543_210..9_876_553_209) }
   let(:communication_address) { Faker::Address.full_address }
   let(:username) { Faker::Internet.user_name(founder_name, %w[-]) }
-  let(:roles) { %w[Product Design Engineering].sample(2) }
   let(:one_liner) { Faker::Lorem.sentence }
 
   def upload_path(file)
@@ -44,12 +43,6 @@ feature 'Founder Edit' do
       fill_in 'user_profiles_edit_phone', with: phone
       attach_file 'user_profiles_edit_avatar', upload_path('faculty/donald_duck.jpg')
       fill_in 'user_profiles_edit_about', with: one_liner
-
-      # Choose two roles.
-      # roles.each do |role|
-      #   select role, from: 'user_profiles_edit_roles'
-      # end
-
       fill_in 'user_profiles_edit_skype_id', with: username
       fill_in 'user_profiles_edit_communication_address', with: communication_address
       fill_in 'user_profiles_edit_twitter_url', with: "https://twitter.com/#{username}"
@@ -63,7 +56,6 @@ feature 'Founder Edit' do
       click_button 'Save Changes'
 
       expect(page).to have_text(founder_name)
-      # expect(page).to have_link('Complete Your Profile')
       expect(page).to have_selector('div.profile-data')
 
       # Confirm that founder has, indeed, been updated.
@@ -83,50 +75,6 @@ feature 'Founder Edit' do
       )
 
       expect(founder.avatar.filename).to eq('donald_duck.jpg')
-      # expect(founder.roles).to match_array(roles.map(&:downcase))
-    end
-  end
-
-  context 'Exited founder attempts to edit his profile' do
-    before do
-      founder.update!(exited: true)
-    end
-
-    scenario 'founder visits the edit page', js: true do
-      sign_in_user(founder.user, referer: edit_user_profile_path)
-
-      expect(page).to have_selector('#home__index', visible: false)
-    end
-  end
-
-  context 'founder has connected slack account' do
-    let(:founder) do
-      create(:founder, :connected_to_slack,
-        communication_address: 'Foo')
-    end
-
-    scenario 'founder updates his name' do
-      # Stub the access token lookup.
-      stub_request(:get, 'https://slack.com/api/auth.test?token=SLACK_ACCESS_TOKEN')
-        .to_return(body: { ok: true }.to_json)
-
-      # Stub the calls to update profile name on Slack for all founders.
-      stub_request(:get, "https://slack.com/api/users.profile.set?#{{
-        profile: {
-          first_name: founder_name,
-          last_name: "(#{startup.name})"
-        }.to_json,
-        token: 'SLACK_ACCESS_TOKEN'
-      }.to_query}").to_return(body: { ok: true }.to_json)
-
-      sign_in_user(founder.user, referer: edit_user_profile_path)
-
-      fill_in 'user_profiles_edit_name', with: founder_name
-
-      click_button 'Save Changes'
-
-      expect(page).to have_content(founder_name)
-      expect(founder.reload.name).to eq(founder_name)
     end
   end
 end

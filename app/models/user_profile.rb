@@ -12,13 +12,14 @@ class UserProfile < ApplicationRecord
 
   has_one_attached :avatar
 
+  alias image avatar
+
   def self.valid_gender_values
     [GENDER_MALE, GENDER_FEMALE, GENDER_OTHER]
   end
 
   validates :gender, inclusion: { in: valid_gender_values }, allow_nil: true
   validates :avatar, content_type: %w[image/png image/jpg image/jpeg image/gif], size: { less_than: 2.megabytes, message: 'is not given between size' }
-  validates :name, presence: true
 
   before_save :capitalize_name_fragments
 

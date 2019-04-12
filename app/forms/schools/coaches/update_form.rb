@@ -2,9 +2,9 @@ module Schools
   module Coaches
     class UpdateForm < Reform::Form
       property :email, validates: { email: true }, virtual: true
-      property :name, validates: { presence: true, length: { maximum: 250 } }
+      property :name, validates: { presence: true, length: { maximum: 250 } }, virtual: true
       property :title, validates: { presence: true, length: { maximum: 250 } }
-      property :linkedin_url
+      property :linkedin_url, virtual: true
       property :connect_link
       property :notify_for_submission
       property :exited
@@ -16,7 +16,10 @@ module Schools
         Faculty.transaction do
           user = User.where(email: email).first_or_create!
           model.update!(faculty_params.merge(user: user))
-          model.image.attach(image) if image.present?
+
+          user_profile = UserProfile.where(user: user, school: school).first_or_create!
+          user_profile.update!(user_profile_params)
+          user_profile.avatar.attach(image) if image.present?
         end
 
         clear_faculty_enrollments if model.exited?
@@ -30,12 +33,17 @@ module Schools
         School.find_by(id: school_id)
       end
 
-      def faculty_params
+      def user_profile_params
         {
           name: name,
           title: title,
+          linkedin_url: linkedin_url
+        }
+      end
+
+      def faculty_params
+        {
           school: school,
-          linkedin_url: linkedin_url,
           connect_link: connect_link,
           public: public,
           notify_for_submission: notify_for_submission,

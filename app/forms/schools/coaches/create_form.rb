@@ -2,13 +2,13 @@ module Schools
   module Coaches
     class CreateForm < Reform::Form
       property :email, validates: { email: true }, virtual: true
-      property :name, validates: { presence: true, length: { maximum: 250 } }
-      property :title, validates: { presence: true, length: { maximum: 250 } }
-      property :linkedin_url
+      property :name, validates: { presence: true, length: { maximum: 250 } }, virtual: true
+      property :title, validates: { presence: true, length: { maximum: 250 } }, virtual: true
+      property :linkedin_url, virtual: true
       property :connect_link
       property :notify_for_submission
       property :public
-      property :image
+      property :image, virtual: true
       property :school_id, virtual: true, validates: { presence: true }
 
       def save

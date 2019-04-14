@@ -9,6 +9,14 @@ class CreateSchoolLinkMutator < ApplicationMutator
   validates :title, length: { minimum: 1, maximum: 24, message: 'InvalidLengthTitle' }, allow_nil: true
   validates :url, url: { message: 'InvalidUrl' }, presence: { message: 'BlankUrl' }
 
+  validate :title_conditionally_required
+
+  def title_conditionally_required
+    return if title.present? || kind == SchoolLink::KIND_SOCIAL
+
+    errors[:base] << 'BlankTitle'
+  end
+
   def create_school_link
     params = case kind
       when SchoolLink::KIND_HEADER, SchoolLink::KIND_FOOTER

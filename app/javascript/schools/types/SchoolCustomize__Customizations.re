@@ -115,13 +115,19 @@ let decodeImages = json =>
   };
 
 let decodeLink = json => {
-  let (kind, id, title, url) =
+  let (kind, id, url) =
     Json.Decode.(
       field("kind", string, json),
       field("id", string, json),
-      field("title", string, json),
       field("url", string, json),
     );
+
+  let title =
+    switch (kind) {
+    | "header"
+    | "footer" => Json.Decode.(field("title", string, json))
+    | _ => ""
+    };
 
   switch (kind) {
   | "header" => HeaderLink(id, title, url)

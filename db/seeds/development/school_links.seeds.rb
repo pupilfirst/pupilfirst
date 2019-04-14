@@ -17,8 +17,8 @@ after 'development:schools' do
   sv.school_links.where(kind: 'footer', title: 'Contact Us').first_or_create!(url: 'http://sv.localhost/about/contact')
 
   # Social links
-  sv.school_links.where(kind: 'social', title: 'Facebook').first_or_create!(url: 'https://www.facebook.com/svdotco')
-  sv.school_links.where(kind: 'social', title: 'Twitter').first_or_create!(url: 'https://twitter.com/svdotco')
-  sv.school_links.where(kind: 'social', title: 'YouTube').first_or_create!(url: 'https://www.youtube.com/c/svdotco')
-  sv.school_links.where(kind: 'social', title: 'Instagram').first_or_create!(url: 'https://www.instagram.com/svdotco')
+  sv.school_links.where(kind: 'social', url: 'https://www.facebook.com/svdotco').first_or_create!
+  sv.school_links.where(kind: 'social', url: 'https://twitter.com/svdotco').first_or_create!
+  sv.school_links.where(kind: 'social', url: 'https://www.youtube.com/c/svdotco').first_or_create!
+  sv.school_links.where(kind: 'social', url: 'https://www.instagram.com/svdotco').first_or_create!
 end

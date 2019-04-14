@@ -741,6 +741,12 @@
               "description": "Supplied URL is not valid",
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "BlankTitle",
+              "description": "Title is required for \"header\" and \"footer\" links",
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "possibleTypes": null

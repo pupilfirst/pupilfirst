@@ -133,6 +133,7 @@ let editor = (state, send, authenticityToken) =>
         switch (editor) {
         | LinksEditor(kind) =>
           <SchoolCustomize__LinksEditor
+            key="sc-drawer__links-editor"
             kind
             customizations={state.customizations}
             authenticityToken
@@ -141,11 +142,13 @@ let editor = (state, send, authenticityToken) =>
           />
         | AgreementsEditor(kind) =>
           <SchoolCustomize__AgreementsEditor
+            key="sc-drawer__agreements-editor"
             kind
             customizations={state.customizations}
             authenticityToken
           />
-        | _ => <div> {"Not yet implemented" |> str} </div>
+        | _ =>
+          <div key="sc-drawer__todo"> {"Not yet implemented" |> str} </div>
         }
       }
     </SchoolCustomize__EditorDrawer>

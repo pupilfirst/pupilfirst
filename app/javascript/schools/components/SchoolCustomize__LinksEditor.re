@@ -1,4 +1,9 @@
-type createLinkError = [ | `InvalidUrl | `InvalidLengthTitle | `InvalidKind];
+type createLinkError = [
+  | `InvalidUrl
+  | `InvalidLengthTitle
+  | `InvalidKind
+  | `BlankTitle
+];
 
 exception CreateLinkFailure(array(createLinkError));
 
@@ -191,6 +196,7 @@ let handleCreateLinkFailure = send =>
                  )
                | `InvalidKind => ("InvalidKind", "")
                | `InvalidLengthTitle => ("InvalidLengthTitle", "")
+               | `BlankTitle => ("BlankTitle", "")
                };
 
              Notification.error(title, message);
@@ -359,7 +365,7 @@ let make =
         )
       }
       <SchoolAdmin__DisablingCover disabled={state.adding}>
-        <div className="flex mt-3">
+        <div className="flex mt-3" key="sc-links-editor__form-body">
           {
             if (state |> titleInputVisible) {
               <div className="flex-grow mr-4">
@@ -407,6 +413,7 @@ let make =
           </div>
         </div>
         <button
+          key="sc-links-editor__form-button"
           disabled={addLinkDisabled(state)}
           onClick={handleAddLink(state, send, authenticityToken, addLinkCB)}
           className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">

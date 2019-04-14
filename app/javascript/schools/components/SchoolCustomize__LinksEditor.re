@@ -273,7 +273,6 @@ let unpackLinks = (kind, customizations) =>
 let make =
     (
       ~kind,
-      ~closeEditorCB,
       ~customizations,
       ~authenticityToken,
       ~addLinkCB,
@@ -318,122 +317,101 @@ let make =
     },
   render: ({state, send}) =>
     <div>
-      <div className="blanket" />
-      <div className="drawer-right">
-        <div className="drawer-right__close absolute">
-          <button
-            onClick={handleCloseEditor(closeEditorCB)}
-            className="flex items-center justify-center bg-white text-grey-darker font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
-            <i className="material-icons"> {"close" |> str} </i>
-          </button>
-        </div>
-        <div className="w-full overflow-scroll">
-          <div className="mx-auto bg-white">
-            <div className="max-w-md p-6 mx-auto">
-              <h5
-                className="uppercase text-center border-b border-grey-light pb-2">
-                {"Manage custom links" |> str}
-              </h5>
-              <div className="mt-3">
-                <label
-                  className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
-                  htmlFor="email">
-                  {"Location of Link" |> str}
-                </label>
-                <div className="flex">
-                  <div
-                    className={kindClasses(state.kind == HeaderLink)}
-                    onClick={handleKindChange(send, HeaderLink)}>
-                    {"Header" |> str}
-                  </div>
-                  <div
-                    className={
-                      kindClasses(state.kind == FooterLink) ++ " ml-2"
-                    }
-                    onClick={handleKindChange(send, FooterLink)}>
-                    {"Footer Sitemap" |> str}
-                  </div>
-                  <div
-                    className={
-                      kindClasses(state.kind == SocialLink) ++ " ml-2"
-                    }
-                    onClick={handleKindChange(send, SocialLink)}>
-                    {"Social" |> str}
-                  </div>
-                </div>
-              </div>
-              <label
-                className="inline-block tracking-wide text-grey-darker text-xs font-semibold mt-4">
-                {linksTitle(state.kind)}
-              </label>
-              {
-                showLinks(
-                  state,
-                  send,
-                  authenticityToken,
-                  removeLinkCB,
-                  state.kind,
-                  unpackLinks(state.kind, customizations),
-                )
-              }
-              <div className="flex mt-3">
-                {
-                  if (state |> titleInputVisible) {
-                    <div className="flex-grow mr-4">
-                      <label
-                        className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
-                        htmlFor="email">
-                        {"Title" |> str}
-                      </label>
-                      <input
-                        className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                        id="link-title"
-                        type_="text"
-                        placeholder="A short title for a new link"
-                        onChange={handleTitleChange(send)}
-                        value={state.title}
-                        maxLength=24
-                      />
-                      <School__InputGroupError
-                        message="can't be empty"
-                        active={state.titleInvalid}
-                      />
-                    </div>;
-                  } else {
-                    ReasonReact.null;
-                  }
-                }
-                <div className="flex-grow">
-                  <label
-                    className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
-                    htmlFor="link-full-url">
-                    {"Full URL" |> str}
-                  </label>
-                  <input
-                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-                    id="link-full-url"
-                    type_="text"
-                    placeholder="Full URL, staring with https://"
-                    onChange={handleUrlChange(send)}
-                    value={state.url}
-                  />
-                  <School__InputGroupError
-                    message="is not a valid URL"
-                    active={state.urlInvalid}
-                  />
-                </div>
-              </div>
-              <button
-                disabled={addLinkDisabled(state)}
-                onClick={
-                  handleAddLink(state, send, authenticityToken, addLinkCB)
-                }
-                className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
-                {state.adding |> addLinkText |> str}
-              </button>
-            </div>
+      <h5 className="uppercase text-center border-b border-grey-light pb-2">
+        {"Manage custom links" |> str}
+      </h5>
+      <div className="mt-3">
+        <label
+          className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
+          htmlFor="email">
+          {"Location of Link" |> str}
+        </label>
+        <div className="flex">
+          <div
+            className={kindClasses(state.kind == HeaderLink)}
+            onClick={handleKindChange(send, HeaderLink)}>
+            {"Header" |> str}
+          </div>
+          <div
+            className={kindClasses(state.kind == FooterLink) ++ " ml-2"}
+            onClick={handleKindChange(send, FooterLink)}>
+            {"Footer Sitemap" |> str}
+          </div>
+          <div
+            className={kindClasses(state.kind == SocialLink) ++ " ml-2"}
+            onClick={handleKindChange(send, SocialLink)}>
+            {"Social" |> str}
           </div>
         </div>
       </div>
+      <label
+        className="inline-block tracking-wide text-grey-darker text-xs font-semibold mt-4">
+        {linksTitle(state.kind)}
+      </label>
+      {
+        showLinks(
+          state,
+          send,
+          authenticityToken,
+          removeLinkCB,
+          state.kind,
+          unpackLinks(state.kind, customizations),
+        )
+      }
+      <SchoolAdmin__DisablingCover disabled={state.adding}>
+        <div className="flex mt-3">
+          {
+            if (state |> titleInputVisible) {
+              <div className="flex-grow mr-4">
+                <label
+                  className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
+                  htmlFor="email">
+                  {"Title" |> str}
+                </label>
+                <input
+                  className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                  id="link-title"
+                  type_="text"
+                  placeholder="A short title for a new link"
+                  onChange={handleTitleChange(send)}
+                  value={state.title}
+                  maxLength=24
+                />
+                <School__InputGroupError
+                  message="can't be empty"
+                  active={state.titleInvalid}
+                />
+              </div>;
+            } else {
+              ReasonReact.null;
+            }
+          }
+          <div className="flex-grow">
+            <label
+              className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
+              htmlFor="link-full-url">
+              {"Full URL" |> str}
+            </label>
+            <input
+              className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+              id="link-full-url"
+              type_="text"
+              placeholder="Full URL, staring with https://"
+              onChange={handleUrlChange(send)}
+              value={state.url}
+            />
+            <School__InputGroupError
+              message="is not a valid URL"
+              active={state.urlInvalid}
+            />
+          </div>
+        </div>
+        <button
+          disabled={addLinkDisabled(state)}
+          onClick={handleAddLink(state, send, authenticityToken, addLinkCB)}
+          className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+          {state.adding |> addLinkText |> str}
+        </button>
+      </SchoolAdmin__DisablingCover>
     </div>,
 };

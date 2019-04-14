@@ -8,8 +8,7 @@ type editor =
   | LinksEditor(SchoolCustomize__LinksEditor.kind)
   | ImagesEditor
   | ContactsEditor
-  | PrivacyPolicyEditor
-  | TermsOfUseEditor;
+  | AgreementsEditor(SchoolCustomize__AgreementsEditor.kind);
 
 type state = {
   visibleEditor: option(editor),
@@ -128,16 +127,30 @@ let showEditor = (editor, send, event) => {
 
 let editor = (state, send, authenticityToken) =>
   switch (state.visibleEditor) {
-  | Some(LinksEditor(kind)) =>
-    <SchoolCustomize__LinksEditor
-      kind
-      customizations={state.customizations}
-      closeEditorCB=(() => send(CloseEditor))
-      authenticityToken
-      addLinkCB=(link => send(AddLink(link)))
-      removeLinkCB=(linkId => send(RemoveLink(linkId)))
-    />
-  | _ => ReasonReact.null
+  | Some(editor) =>
+    <SchoolCustomize__EditorDrawer closeDrawerCB=(() => send(CloseEditor))>
+      {
+        switch (editor) {
+        | LinksEditor(kind) =>
+          <SchoolCustomize__LinksEditor
+            kind
+            customizations={state.customizations}
+            authenticityToken
+            addLinkCB=(link => send(AddLink(link)))
+            removeLinkCB=(linkId => send(RemoveLink(linkId)))
+          />
+        | AgreementsEditor(kind) =>
+          <SchoolCustomize__AgreementsEditor
+            kind
+            customizations={state.customizations}
+            authenticityToken
+          />
+        | _ => <div> {"Not yet implemented" |> str} </div>
+        }
+      }
+    </SchoolCustomize__EditorDrawer>
+
+  | None => ReasonReact.null
   };
 
 let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
@@ -277,9 +290,29 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
             </div>
             <div className="flex items-center text-sm">
               <div> {"Privacy Policy" |> str} </div>
-              {editIcon("ml-3", showEditor(PrivacyPolicyEditor, send))}
+              {
+                editIcon(
+                  "ml-3",
+                  showEditor(
+                    AgreementsEditor(
+                      SchoolCustomize__AgreementsEditor.PrivacyPolicy,
+                    ),
+                    send,
+                  ),
+                )
+              }
               <div className="ml-8"> {"Terms of Use" |> str} </div>
-              {editIcon("ml-3", showEditor(TermsOfUseEditor, send))}
+              {
+                editIcon(
+                  "ml-3",
+                  showEditor(
+                    AgreementsEditor(
+                      SchoolCustomize__AgreementsEditor.TermsOfUse,
+                    ),
+                    send,
+                  ),
+                )
+              }
               <div className="ml-8 flex items-center">
                 <i className="material-icons text-base">
                   {"copyright" |> str}

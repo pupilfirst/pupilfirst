@@ -9,10 +9,8 @@ module Changelog
       'bugfix' => 'Bugfixes'
     }.freeze
 
-    # @param show_private [TrueClass, FalseClass] Set to true to show private changelog entries.
-    def initialize(year, show_private)
+    def initialize(year)
       @year = year
-      @show_private = show_private
     end
 
     # @return [Array] Array of changelog entries grouped by week. See method documentation for details.
@@ -58,14 +56,9 @@ module Changelog
 
     def categorized_entries(release)
       changes = release['changes'].each_with_object(template) do |change, hash|
-        next if change['private'] && !@show_private
+        next if change['private']
 
-        entry = { title: change['title'], private: change['private'] }
-
-        if @show_private
-          entry[:description] = change['description'] if change['description'].present?
-          entry[:trello] = [change['trello']].flatten if change['trello'].present?
-        end
+        entry = { title: change['title'] }
 
         hash[hash_category(change['category'])] << entry
       end

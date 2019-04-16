@@ -177,6 +177,7 @@ let make =
                 </div>
                 <div className="flex mt-4">
                   <button
+                    disabled={state.studentsToAdd |> ListUtils.isEmpty}
                     onClick={
                       _e =>
                         saveStudents(

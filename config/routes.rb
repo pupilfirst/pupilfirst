@@ -79,6 +79,7 @@ Rails.application.routes.draw do
   end
 
   resources :communities, only: %i[show] do
+    resources :questions
   end
 
   resources :founders, only: %i[] do

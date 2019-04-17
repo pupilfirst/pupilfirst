@@ -1,0 +1,63 @@
+<% presenter = Questions::ShowPresenter.new(self, @question) %>
+<div class="flex flex-1 h-screen bg-grey-lighter overflow-y-scroll">
+  <div class="flex-1 flex flex-col">
+    <div class="flex-col px-6 py-2 items-center justify-between">
+      <div class="max-w-md w-full flex mx-auto items-center justify-center relative shadow bg-white rounded-lg mb-4">
+        <div class="flex w-full">
+          <div class="flex flex-1 items-center py-4 px-4">
+            <div class="text-sm">
+              <span class="text-black font-semibold">
+                <%= @question.title %>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="max-w-md w-full flex mx-auto items-center justify-center relative shadow bg-white rounded-lg mb-4">
+        <div class="flex w-full  py-4 px-4">
+          <div class="flex w-1/6 text-center justify-center">
+            <div class="mt-4">
+              <i class="material-icons">thumb_up</i>
+              <div class="mt-2"> 12</div>
+            </div>
+          </div>
+          <div class="w-5/6 leading-normal text-sm">
+                  <span class="">
+                    <%= @question.description %>
+                  </span>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+    <div class="px-6 pb-4 mt-5 flex flex-1">
+      <div class="max-w-md w-full mx-auto relative">
+        <div>
+          <span class="text-black font-semibold">
+            Answers
+          </span>
+        </div>
+        <% presenter.answers.map do |answer| %>
+          <div class="flex items-center shadow bg-white rounded-lg my-4">
+            <div class="flex w-full  py-4 px-4">
+              <div class="flex w-1/6 text-center justify-center">
+                <div class="mt-4">
+                  <i class="material-icons">thumb_up</i>
+                  <div class="mt-2"> <%= presenter.answer_claps(answer) %></div>
+                </div>
+              </div>
+              <div class="w-5/6 leading-normal text-sm">
+                  <span class="">
+                    <%= answer.description %>
+                  </span>
+              </div>
+
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

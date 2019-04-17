@@ -5,14 +5,21 @@ after 'development:courses' do
 
   sv = School.find_by(name: 'SV.CO')
 
-  faculty = Faculty.create!(
+  sanjay = User.create(email: 'mickeymouse@example.com')
+
+  UserProfile.create!(
+    user: sanjay,
+    school: sv,
     name: 'Sanjay Vijayakumar',
     title: 'CEO',
+    linkedin_url: 'https://linkedin.com'
+  )
+
+  faculty = Faculty.create!(
     key_skills: Faker::Lorem.words(3).join(', '),
-    linkedin_url: 'https://linkedin.com',
     category: 'team',
     sort_index: 1,
-    user: User.create(email: 'mickeymouse@example.com'),
+    user: sanjay,
     school: sv,
     public: true
   )
@@ -23,14 +30,23 @@ after 'development:courses' do
     course: Course.find_by(name: 'Startup')
   )
 
-  faculty = Faculty.create!(
+
+  vishnu = User.create(email: 'minniemouse@example.com')
+
+  UserProfile.create!(
+    user: vishnu,
+    school: sv,
     name: 'Vishnu Gopal',
     title: 'CTO',
-    key_skills: Faker::Lorem.words(3).join(', '),
     linkedin_url: 'https://linkedin.com',
+
+  )
+
+  faculty = Faculty.create!(
+    key_skills: Faker::Lorem.words(3).join(', '),
     category: 'team',
     sort_index: 2,
-    user: User.create(email: 'minniemouse@example.com'),
+    user: vishnu,
     school: sv,
     public: true
   )
@@ -41,14 +57,21 @@ after 'development:courses' do
     course: Course.find_by(name: 'Developer')
   )
 
-  faculty = Faculty.create!(
+  gautham = User.create(email: 'donaldduck@example.com')
+
+  UserProfile.create!(
+    user: gautham,
+    school: sv,
     name: 'Gautham',
     title: 'COO',
-    key_skills: Faker::Lorem.words(3).join(', '),
     linkedin_url: 'https://linkedin.com',
+  )
+
+  faculty = Faculty.create!(
+    key_skills: Faker::Lorem.words(3).join(', '),
     category: 'developer_coaches',
     sort_index: 3,
-    user: User.create(email: 'donaldduck@example.com'),
+    user: gautham,
     school: sv,
     public: true
   )
@@ -59,12 +82,19 @@ after 'development:courses' do
     course: Course.find_by(name: 'Startup')
   )
 
-  faculty = Faculty.create!(
+  hari = User.create(email: 'goofy@example.com')
+
+  UserProfile.create!(
+    user: hari,
+    school: sv,
     name: 'Hari Gopal',
     title: 'Engineering Lead',
+  )
+
+  faculty = Faculty.create!(
     key_skills: 'Looting, pillaging, etc.',
     category: 'visiting_coaches',
-    user: User.create(email: 'goofy@example.com'),
+    user: hari,
     school: sv,
     public: true
   )
@@ -75,13 +105,20 @@ after 'development:courses' do
     course: Course.find_by(name: 'VR')
   )
 
-  faculty = Faculty.create!(
+  ios_coach = User.create(email: 'ioscoach@example.com')
+
+  UserProfile.create!(
+    user: ios_coach,
+    school: sv,
     name: 'iOS Coach',
     title: 'Coaching Expert',
-    category: 'vr_coaches',
-    user: User.create(email: 'ioscoach@example.com'),
-    school: sv,
     about: "This is just a demo coach. The about field is required for Faculty#show to be available - that's why this text is here.",
+  )
+
+  faculty = Faculty.create!(
+    category: 'vr_coaches',
+    user: ios_coach,
+    school: sv,
     public: true
   )
 
@@ -91,11 +128,18 @@ after 'development:courses' do
     course: Course.find_by(name: 'iOS')
   )
 
-  admin_coach = Faculty.create!(
+  admin = User.find_by(email: 'admin@example.com')
+
+  UserProfile.create!(
+    user: admin,
+    school: sv,
     name: 'School Admin',
     title: 'School Admin',
+  )
+
+  admin_coach = Faculty.create!(
     category: 'team',
-    user: User.find_by(email: 'admin@example.com'),
+    user: admin,
     school: sv
   )
 

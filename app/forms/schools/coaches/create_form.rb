@@ -8,7 +8,7 @@ module Schools
       property :connect_link
       property :notify_for_submission
       property :public
-      property :image, virtual: true
+      property :image, virtual: true, validates: { file_content_type: { allow: ['image/jpeg', 'image/png'] }, file_size: { less_than: 2.megabytes } }
       property :school_id, virtual: true, validates: { presence: true }
 
       def save

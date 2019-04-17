@@ -1,4 +1,4 @@
-open CoachesCourseEnrollment__Types;
+open CoachesCourseIndex__Types;
 
 open SchoolAdmin__Utils;
 
@@ -25,8 +25,8 @@ let handleEnrollmentChange = (schoolCoaches, courseCoachIds) => {
        let coachId = coach |> Coach.id;
        let selected =
          selectedCoachIds
-         |>
-         Js.Array.findIndex(selectedCoachId => coachId == selectedCoachId) > (-1);
+         |> Js.Array.findIndex(selectedCoachId => coachId == selectedCoachId)
+         > (-1);
        (coach |> Coach.id, coach |> Coach.name, selected);
      });
 };
@@ -74,7 +74,7 @@ let make =
         ...state,
         courseCoaches: [(key, value, selected), ...oldCoach],
       });
-    | UpdateSaving => ReasonReact.Update({...state, saving: ! state.saving})
+    | UpdateSaving => ReasonReact.Update({...state, saving: !state.saving})
     },
   render: ({state, send}) => {
     let showCoachesList = schoolCoaches |> List.length > 0;
@@ -102,9 +102,9 @@ let make =
       <div className="drawer-right">
         <div className="drawer-right__close absolute">
           <button
-            onClick=(_e => closeFormCB())
+            onClick={_e => closeFormCB()}
             className="flex items-center justify-center bg-white text-grey-darker font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
-            <i className="material-icons"> ("close" |> str) </i>
+            <i className="material-icons"> {"close" |> str} </i>
           </button>
         </div>
         <div className="drawer-right-form w-full">
@@ -113,26 +113,26 @@ let make =
               <div className="max-w-md p-6 mx-auto">
                 <h5
                   className="uppercase text-center border-b border-grey-light pb-2 mb-4">
-                  ("COACHES ENROLLMENT FOR THE COURSE" |> str)
+                  {"COACHES ENROLLMENT FOR THE COURSE" |> str}
                 </h5>
-                (
+                {
                   showCoachesList ?
                     <div>
                       <div id="course_coaches" className="mb-6">
                         <CurriculumEditor__SelectBox
-                          items=state.courseCoaches
+                          items={state.courseCoaches}
                           multiSelectCB=multiSelectCoachEnrollmentsCB
                         />
                       </div>
                     </div> :
                     ReasonReact.null
-                )
+                }
               </div>
               <div className="flex max-w-md w-full px-6 pb-5 mx-auto">
                 <button
-                  onClick=(_e => updateCourseCoaches(courseId, state))
+                  onClick={_e => updateCourseCoaches(courseId, state)}
                   className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
-                  ("Update Course Coaches" |> str)
+                  {"Update Course Coaches" |> str}
                 </button>
               </div>
             </div>

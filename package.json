@@ -12,7 +12,7 @@
     "bootstrap": "^4.3.1",
     "bs-fetch": "^0.3.0",
     "bs-webapi": "^0.13.6",
-    "cloc": "^2.3.2",
+    "cloc": "^2.4.0",
     "coffeescript": "1.12.7",
     "date-fns": "^1.29.0",
     "material-design-icons-iconfont": "^4.0.5",

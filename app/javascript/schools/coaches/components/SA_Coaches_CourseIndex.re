@@ -1,4 +1,4 @@
-open CoachesCourseEnrollment__Types;
+open CoachesCourseIndex__Types;
 
 /* open SchoolAdmin__Utils; */
 let str = ReasonReact.string;

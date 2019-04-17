@@ -6,23 +6,8 @@ module Communities
       @community = community
     end
 
-    def json_props
-      {
-        authenticityToken: view.form_authenticity_token,
-        questions: questions
-      }.to_json
-    end
-
-    private
-
     def questions
-      @community.questions.map do |question|
-        {
-          id: question.id,
-          title: question.title,
-          description: question.description
-        }
-      end
+      @community.questions
     end
   end
 end

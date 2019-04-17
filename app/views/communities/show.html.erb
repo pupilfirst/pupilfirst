@@ -1,7 +1,34 @@
-<% content_for(:tail) do %>
-  <%= javascript_pack_tag 'communities/CommunityDashboardPack', nonce: true %>
-<% end %>
-
 <% presenter = Communities::ShowPresenter.new(self, @community) %>
 
-<div id="react-root" class="flex flex-1 h-screen" data-json-props="<%= presenter.json_props %>"></div>
+
+<div class="flex flex-1 h-screen bg-grey-lighter overflow-y-scroll">
+  <div class="flex-1 flex flex-col">
+    <div class="flex px-6 py-2 items-center justify-between">
+      <button
+        class="max-w-md w-full flex mx-auto items-center justify-center relative bg-grey-lighter hover:bg-grey-light hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-20 cursor-pointer">
+        <i class="material-icons">add_circle_outline</i>
+        <h4 class="font-semibold ml-2">
+          Ask a new question
+        </h4>
+      </button>
+    </div>
+    <div class="px-6 pb-4 mt-5 flex flex-1">
+      <div class="max-w-md w-full mx-auto relative">
+
+        <% presenter.questions.map do |question| %>
+          <div class="flex items-center shadow bg-white rounded-lg mb-4">
+            <div class="flex w-full">
+              <a class="cursor-pointer flex flex-1 items-center py-4 px-4 hover:bg-grey-lighter">
+                <div class="text-sm">
+                  <span class="text-black font-semibold">
+                    <%= question.title %>
+                  </span>
+                </div>
+              </a>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

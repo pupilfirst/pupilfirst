@@ -12,5 +12,9 @@ module Questions
     def answer_claps(answer)
       answer.answer_claps.pluck(:count).sum
     end
+
+    def stars
+      @question.answers.count
+    end
   end
 end

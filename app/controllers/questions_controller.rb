@@ -1,5 +1,5 @@
 class QuestionsController < ApplicationController
-  layout 'school'
+  layout 'community'
 
   def show
     @question = authorize(Question.find(params[:id]))

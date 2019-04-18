@@ -1,5 +1,5 @@
 class CommunitiesController < ApplicationController
-  layout 'school'
+  layout 'community'
 
   # GET /communities/:id
   def show

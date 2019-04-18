@@ -1,0 +1,77 @@
+<% presenter = ::Layouts::FooterPresenter.new(self) %>
+
+<footer>
+  <section class="bg-grey-darkest text-white px-6 py-10 flex justify-center">
+    <div class="w-3/5">
+      <div class="flex flex-col items-left">
+        <span class="uppercase font-bold text-sm p-2">SITEMAP</span>
+
+        <div class="w-full flex flex-row flex-wrap text-xs">
+          <% presenter.nav_links.each do |nav_link| %>
+            <div class="py-1 w-1/3">
+              <%= link_to nav_link[:title], nav_link[:url], class: "no-underline m-2 text-white" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+    </div>
+    <div class="w-2/6">
+      <div class="text-xs">
+        <% if presenter.address.present? %>
+          <p class="uppercase font-bold text-sm py-2">CONTACT</p>
+
+          <address class="text-xs font-normal leading-loose">
+            <%= presenter.address.html_safe %>
+          </address>
+        <% end %>
+
+        <% if presenter.social_links.any? %>
+          <div class="">
+            <% presenter.social_links.each do |social_link| %>
+              <a class="text-white no-underline pointer-cursor pr-2" href="<%= social_link[:url] %>" target='_blank' rel='noopener'>
+                <!--                <i class="fa <%#= presenter.social_icon(social_link[:url]) %>"></i>-->
+                <i class="material-icons text-4xl">add_circle</i>
+              </a>
+            <% end %>
+          </div>
+        <% end %>
+        <div class="text-xs py-1">
+          <% if presenter.email_address.present? %>
+            <p>Reach us at
+              <strong><%= mail_to presenter.email_address, presenter.email_address, class: "text-white font-bold no-underline pointer-cursor" %></strong>.
+            </p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="w-full">
+    <div class="bg-black">
+      <div class="flex flex-row justify-between items-center">
+        <div class="text-center w-1/4 m-4">
+          <a class="ml-10" href="/">
+            <% if presenter.logo? %>
+              <img class="w-27" src="<%= presenter.logo_url %>" alt="Logo of <%= presenter.school_name %>"/>
+            <% else %>
+              <span><%= presenter.school_name %></span>
+            <% end %>
+          </a>
+        </div>
+
+        <div class="w-2/5 text-center text-xs font-hairline">
+          <% if presenter.privacy_policy? %>
+            <a id="show-privacy-policy" class="text-grey-lightest cursor-pointer mr-3">Privacy Policy</a>
+          <% end %>
+
+          <% if presenter.terms_of_use? %>
+            <a id="show-terms-of-use" class="text-grey-lightest cursor-pointer mr-3">Terms of Use</a>
+          <% end %>
+
+          <span class="text-grey-light mr-3">&copy; <%= Time.now.year %> <%= presenter.school_name %>.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</footer>

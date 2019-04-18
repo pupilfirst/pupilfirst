@@ -1,6 +1,6 @@
-<% content_for(:wrapper) do %>
-  <div class="antialiased flex h-screen overflow-hidden">
-    <%= yield %>
-  </div>
+
+<% content_for(:tail) do %>
+  <%= render 'layouts/footer_tailwind' %>
 <% end %>
+
 <%= render template: 'layouts/tailwind' %>

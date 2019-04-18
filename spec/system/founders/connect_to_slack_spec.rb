@@ -9,7 +9,7 @@ feature 'Connect to Slack' do
   scenario 'Founder connects profile to Slack' do
     pending 'Slack connect feature is hidden'
 
-    sign_in_user founder.user, referer: edit_founder_path
+    sign_in_user founder.user, referer: edit_user_profile_path
 
     expect(page).to have_content('Keep your profile name on Slack up-to-date, in the required format')
 

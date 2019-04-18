@@ -1,15 +1,9 @@
 # frozen_string_literal: true
 
 class Founder < ApplicationRecord
-  extend FriendlyId
-
   include PrivateFilenameRetrievable
 
   acts_as_taggable
-
-  GENDER_MALE = 'male'
-  GENDER_FEMALE = 'female'
-  GENDER_OTHER = 'other'
 
   COFOUNDER_PENDING = 'pending'
   COFOUNDER_ACCEPTED = 'accepted'
@@ -59,21 +53,24 @@ class Founder < ApplicationRecord
   }
   scope :not_exited, -> { where.not(exited: true) }
 
+  delegate :email, to: :user
+
+  delegate :name, :gender, :phone, :communication_address, :title, :key_skills, :about,
+    :resume_url, :blog_url, :personal_website_url, :linkedin_url, :twitter_url, :facebook_url,
+    :angel_co_url, :github_url, :behance_url, :skype_id, :avatar, :avatar_variant, to: :user_profile
+
+  def user_profile
+    @user_profile ||= school.user_profiles.find_by(user_id: user_id)
+  end
+
   # TODO: Remove all usages of method Founder.with_email and then delete it.
   def self.with_email(email)
     User.find_by(email: email)&.founders&.first
   end
 
-  def self.valid_gender_values
-    [GENDER_MALE, GENDER_FEMALE, GENDER_OTHER]
-  end
-
   def self.ransackable_scopes(_auth)
     %i[ransack_tagged_with]
   end
-
-  validates :gender, inclusion: { in: valid_gender_values }, allow_nil: true
-  validates :avatar, content_type: %w[image/png image/jpg image/jpeg image/gif], size: { less_than: 2.megabytes, message: 'is not given between size' }
 
   def admitted?
     startup.present? && startup.level.number.positive?
@@ -84,41 +81,12 @@ class Founder < ApplicationRecord
     roles.delete('')
   end
 
-  friendly_id :slug_candidates, use: :slugged
-
-  def slug_candidates
-    [
-      %i[name],
-      %i[name id]
-    ]
-  end
-
-  # Remove dashes separating slug candidates.
-  def normalize_friendly_id(_string)
-    super.delete '-'
-  end
-
-  def should_generate_new_friendly_id?
-    name_changed? || saved_change_to_name? || super
-  end
-
   # TODO: Remove this method when all instance of it being used are gone. https://trello.com/c/yh0Mkfir
   def fullname
     name
   end
 
-  normalize_attribute :startup_id, :twitter_url, :linkedin_url, :name, :slack_username, :resume_url, :gender
-
-  before_save :capitalize_name_fragments
-
-  def capitalize_name_fragments
-    return unless name_changed?
-
-    self.name = name.split.map do |name_fragment|
-      name_fragment[0] = name_fragment[0].capitalize
-      name_fragment
-    end.join(' ')
-  end
+  normalize_attribute :startup_id, :slack_username
 
   has_secure_token :auth_token
 
@@ -213,8 +181,6 @@ class Founder < ApplicationRecord
     required_fields.all? { |field| self[field].present? }
   end
 
-  delegate :email, to: :user
-
   def faculty
     return Faculty.none if startup.blank?
 
@@ -225,30 +191,5 @@ class Founder < ApplicationRecord
   def initials_avatar
     logo = Scarf::InitialAvatar.new(name)
     "data:image/svg+xml;base64,#{Base64.encode64(logo.svg)}"
-  end
-
-  # ActiveStorage doesn't currently support ImageMagik default options for processing variants. Currently resized to get
-  # square proportions based on https://github.com/janko/image_processing/issues/39
-  def avatar_variant(version)
-    case version
-      when :mid
-        avatar.variant(combine_options:
-          {
-            auto_orient: true,
-            gravity: "center",
-            resize: '200x200^',
-            crop: '200x200+0+0'
-          })
-      when :thumb
-        avatar.variant(combine_options:
-          {
-            auto_orient: true,
-            gravity: 'center',
-            resize: '50x50^',
-            crop: '50x50+0+0'
-          })
-      else
-        avatar
-    end
   end
 end

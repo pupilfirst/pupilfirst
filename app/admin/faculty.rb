@@ -2,11 +2,13 @@ ActiveAdmin.register Faculty do
   permit_params :name, :title, :key_skills, :linkedin_url, :category, :image, :sort_index, :self_service,
     :current_commitment, :notify_for_submission, :about, :commitment, :compensation, :slack_username, :public, :connect_link
 
+  actions :index, :show
+
   controller do
     include DisableIntercom
 
     def find_resource
-      scoped_collection.friendly.find(params[:id])
+      scoped_collection.find(params[:id])
     end
   end
 

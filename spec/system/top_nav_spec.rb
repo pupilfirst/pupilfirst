@@ -147,16 +147,16 @@ feature 'Top navigation bar' do
       expect(page).to have_link('Student Dashboard', href: '#')
 
       # The option to switch to different student profiles should not be immediately visible.
-      expect(page).not_to have_link("#{another_student.course.name} Course", href: "/founders/#{another_student.slug}/select")
-      expect(page).not_to have_link("#{student.course.name} Course", href: "/founders/#{student.slug}/select")
+      expect(page).not_to have_link("#{another_student.course.name} Course", href: "/founders/#{another_student.id}/select")
+      expect(page).not_to have_link("#{student.course.name} Course", href: "/founders/#{student.id}/select")
 
       # But, visible within the dropdown.
       within('#nav-links__navbar') do
         click_link 'Student Dashboard'
       end
 
-      expect(page).to have_link("#{another_student.course.name} Course", href: "/founders/#{another_student.slug}/select")
-      expect(page).to have_link("#{student.course.name} Course", href: "/founders/#{student.slug}/select")
+      expect(page).to have_link("#{another_student.course.name} Course", href: "/founders/#{another_student.id}/select")
+      expect(page).to have_link("#{student.course.name} Course", href: "/founders/#{student.id}/select")
     end
   end
 

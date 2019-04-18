@@ -1,10 +1,10 @@
-module Founders
+module UserProfiles
   class EditForm < Reform::Form
     property :name, validates: { presence: true }
     property :phone, validates: { presence: true, mobile_number: true }
-    property :avatar
+    property :avatar, virtual: true, validates: { file_content_type: { allow: ['image/jpeg', 'image/png'] }, file_size: { less_than: 2.gigabytes } }
     property :about, validates: { length: { maximum: 250 } }
-    property :roles
+    # property :roles
     property :skype_id
     property :communication_address, validates: { presence: true, length: { maximum: 250 } }
     property :twitter_url, validates: { url: true, allow_blank: true }
@@ -15,27 +15,28 @@ module Founders
     property :github_url, validates: { url: true, allow_blank: true }
     property :behance_url, validates: { url: true, allow_blank: true }
 
-    # Custom validations.
-    validate :roles_must_be_valid
-
-    def roles_must_be_valid
-      roles.each do |role|
-        next if role.blank?
-
-        unless Founder.valid_roles.include?(role)
-          errors.add(:roles, 'contained unrecognized value')
-        end
+    def save!
+      UserProfile.transaction do
+        model.update!(user_profile_params)
+        model.avatar.attach(avatar) if avatar.present?
       end
     end
 
-    def save!
-      name_updated = model.name != name
-
-      sync
-      model.save!
-
-      # Update Slack profile name if the name has been updated.
-      Founders::UpdateSlackNameJob.perform_later(model.reload) if name_updated
+    def user_profile_params
+      {
+        name: name,
+        phone: phone,
+        about: about,
+        skype_id: skype_id,
+        communication_address: communication_address,
+        twitter_url: twitter_url,
+        linkedin_url: linkedin_url,
+        personal_website_url: personal_website_url,
+        blog_url: blog_url,
+        angel_co_url: angel_co_url,
+        github_url: github_url,
+        behance_url: behance_url
+      }
     end
   end
 end

@@ -21,7 +21,7 @@ feature 'Founder Show' do
   let!(:timeline_event_3) { create :timeline_event, target: target_3, founders: [founder] }
 
   scenario 'Public user visits a student profile' do
-    visit student_path(founder.slug)
+    visit student_path(founder.id)
     # ensure founder is on his profile
     expect(page).to have_text(founder.fullname)
     # ensure course name displayed is correct
@@ -40,7 +40,7 @@ feature 'Founder Show' do
   end
 
   scenario 'Active founder visits his profile' do
-    sign_in_user(founder.user, referer: student_path(founder.slug))
+    sign_in_user(founder.user, referer: student_path(founder.id))
 
     # All events should be visible.
     expect(page).to have_text(timeline_event_1.description)

@@ -92,12 +92,12 @@ let make =
   render: _self =>
     <div className="d-flex justify-content-end">
       <button
-        className="btn btn-sm btn-default undo-review-btn"
-        onClick={
+        className="btn btn-sm btn-default undo-review-btn mx-0"
+        onClick=(
           undoReview(timelineEvent, replaceTimelineEvent, authenticityToken)
-        }>
+        )>
         <i className="fa fa-undo mr-1" />
-        {"Undo Review" |> str}
+        ("Undo Review" |> str)
       </button>
     </div>,
 };

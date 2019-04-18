@@ -17,7 +17,8 @@ class CoachDashboardPresenter < ApplicationPresenter
       verifiedIconUrl: view.image_url('coaches/dashboard/verified-icon.svg'),
       gradeLabels: grade_labels,
       passGrade: @course.pass_grade,
-      courseId: @course.id
+      courseId: @course.id,
+      coachName: current_coach.name
     }
   end
 

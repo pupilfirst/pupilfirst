@@ -2,9 +2,9 @@ class FoundersController < ApplicationController
   before_action :authenticate_founder!, except: %i[show paged_events timeline_event_show]
   before_action :skip_container, only: %i[show paged_events timeline_event_show]
 
-  # GET /students/:slug
+  # GET /students/:id
   def show
-    @founder = authorize(Founder.friendly.find(params[:slug]))
+    @founder = authorize(Founder.find(params[:id]))
     # Show site wide notice to exited founders
     @sitewide_notice = @founder.exited? if @founder.user == current_user
     @timeline_events = Kaminari.paginate_array(events_for_display).page(params[:page]).per(20)
@@ -31,7 +31,7 @@ class FoundersController < ApplicationController
     if @form.validate(params[:founders_edit])
       @form.save!
       flash[:success] = 'Your profile has been updated.'
-      redirect_to student_path(slug: @founder.slug)
+      redirect_to student_path(id: @founder.id)
     else
       render 'edit'
     end
@@ -50,12 +50,12 @@ class FoundersController < ApplicationController
     render 'show'
   end
 
-  # POST /founders/:slug/select
+  # POST /founders/:id/select
   def select
     # Use the scope from the presenter to ensure that conditions are met.
     presenter = ::Layouts::TopNavPresenter.new(view_context)
 
-    founder = authorize(presenter.selectable_student_profiles.friendly.find(params[:id]))
+    founder = authorize(presenter.selectable_student_profiles.find(params[:id]))
     set_cookie(:founder_id, founder.id)
     redirect_to student_dashboard_url
   end

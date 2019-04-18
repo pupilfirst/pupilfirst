@@ -3,7 +3,6 @@ module Schools
     # GET /school/coaches
     def school_index
       @school = authorize(current_school, policy_class: Schools::FacultyPolicy)
-      @form = Schools::Coaches::CreateForm.new(Faculty.new)
       render layout: 'school'
     end
 

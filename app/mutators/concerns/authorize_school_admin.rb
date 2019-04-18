@@ -1,9 +1,9 @@
 module AuthorizeSchoolAdmin
-  extend ActiveSupport::Concern
+  include ActiveSupport::Concern
 
-  def must_be_authorized
+  def authorize
     return if current_school_admin.present?
 
-    raise 'User is not a school admin'
+    raise UnauthorizedMutationException
   end
 end

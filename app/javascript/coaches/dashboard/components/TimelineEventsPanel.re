@@ -68,13 +68,11 @@ let handleResponseJSON =
       json
       |> Json.Decode.(field("moreSubmissionsAfter", nullable(string)))
       |> Js.Null.toOption;
-
     let (newMorePendingSubmissionsAfter, newMoreReviewedSubmissionsAfter) =
       switch (state.selectedTab) {
       | PendingTab => (moreSubmissionsAfter, moreReviewedSubmissionsAfter)
       | ReviewedTab => (morePendingSubmissionsAfter, moreSubmissionsAfter)
       };
-
     appendTEsCB(
       newTEs,
       newMorePendingSubmissionsAfter,
@@ -191,7 +189,6 @@ let emptyMessage =
       moreReviewedSubmissionsAfter,
     ) => {
   let reviewedDefaultMessage = "When you review submissions, they'll be shown in this section.";
-
   switch (selectedFounder, selectedTab, moreReviewedSubmissionsAfter) {
   | (None, ReviewedTab, Some(_date)) =>
     <p>
@@ -199,7 +196,6 @@ let emptyMessage =
       <br />
       {" You can also load previously reviewed submissions." |> str}
     </p>
-
   | (None, ReviewedTab, None) => reviewedDefaultMessage |> str
   | (selectedFounder, selectedTab, moreReviewedSubmissionsAfter) =>
     let fromText =
@@ -207,13 +203,11 @@ let emptyMessage =
       | None => ""
       | Some(founder) => "from " ++ (founder |> Founder.name)
       };
-
     let partOne =
       "There are no "
       ++ tabAsString(selectedTab)
       ++ " submissions "
       ++ fromText;
-
     let earliestSubmissionDate =
       switch (
         selectedTab,
@@ -225,13 +219,11 @@ let emptyMessage =
       | (PendingTab, _, _) => None
       | (ReviewedTab, _, _) => None
       };
-
     let partTwo =
       switch (earliestSubmissionDate) {
       | Some(date) => " since " ++ date ++ "."
       | None => "."
       };
-
     let partThree =
       loadMoreVisible(
         selectedTab,
@@ -239,7 +231,6 @@ let emptyMessage =
         moreReviewedSubmissionsAfter,
       ) ?
         " Please try loading more." : "";
-
     partOne ++ partTwo ++ partThree |> str;
   };
 };
@@ -276,6 +267,7 @@ let make =
       ~gradeLabels,
       ~passGrade,
       ~courseId,
+      ~coachName,
       _children,
     ) => {
   ...component,
@@ -361,6 +353,7 @@ let make =
             verifiedIconUrl
             gradeLabels
             passGrade
+            coachName
           />;
         }
       }

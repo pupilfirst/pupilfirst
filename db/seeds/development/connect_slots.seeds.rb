@@ -3,8 +3,8 @@ require_relative 'helper'
 after 'development:faculty' do
   puts 'Seeding connect_slots'
 
-  mickey = Faculty.find_by(name: 'Sanjay Vijayakumar')
-  minnie = Faculty.find_by(name: 'Vishnu Gopal')
+  mickey = User.find_by(email: 'mickeymouse@example.com').faculty.first
+  minnie = User.find_by(email: 'minniemouse@example.com').faculty.first
   day = 6.days.from_now.beginning_of_day
   past_week = 6.days.ago.beginning_of_day
   past_month = 1.month.ago.beginning_of_day

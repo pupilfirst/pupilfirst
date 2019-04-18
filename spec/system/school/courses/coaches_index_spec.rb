@@ -50,8 +50,11 @@ feature 'Course Coaches Index' do
 
     click_button 'Update Course Coaches'
 
-    expect(page).to have_text(coach_3.name)
-    expect(course_1.faculty.count).to eq(3)
+    within('div[aria-label="List of course coaches"]') do
+      expect(page).to have_text(coach_3.name)
+    end
+
+    expect(course_1.reload.faculty.count).to eq(3)
   end
 
   before do

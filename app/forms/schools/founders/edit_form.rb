@@ -11,13 +11,17 @@ module Schools
 
       def save
         Founder.transaction do
+          school = model.school
+
+          user_profile = UserProfile.find_by(user: model.user, school: school)
+          user_profile.name = name
+          user_profile.save!
+
           model.startup.update!(name: team_name)
-          model.name = name
           model.tag_list = tags
           model.excluded_from_leaderboard = excluded_from_leaderboard
           model.save!
 
-          school = model.school
           school.founder_tag_list << tags
           school.save!
 

@@ -8,6 +8,8 @@ class School < ApplicationRecord
   has_many :school_strings, dependent: :destroy
   has_many :school_links, dependent: :destroy
   has_many :community, dependent: :destroy
+  has_many :user_profiles, dependent: :destroy
+
   acts_as_taggable_on :founder_tags
 
   has_one_attached :logo_on_light_bg

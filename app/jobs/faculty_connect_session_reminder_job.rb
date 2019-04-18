@@ -46,7 +46,7 @@ class FacultyConnectSessionReminderJob < ApplicationJob
   end
 
   def founder_url
-    @founder_url ||= Rails.application.routes.url_helpers.student_url(founder.slug)
+    @founder_url ||= Rails.application.routes.url_helpers.student_url(founder.id)
   end
 
   def faculty_name

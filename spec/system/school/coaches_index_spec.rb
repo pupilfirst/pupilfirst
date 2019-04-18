@@ -51,7 +51,7 @@ feature 'Coaches Index' do
 
     coach = Faculty.last
 
-    expect(coach.name).to eq(new_coach_name)
+    expect(coach.name).to eq(new_coach_name.titleize)
     expect(coach.title).to eq(new_coach_title)
     expect(coach.user.email).to eq(new_coach_email)
     expect(coach.linkedin_url).to eq('https://www.linkedin.com/xyz')
@@ -66,7 +66,7 @@ feature 'Coaches Index' do
 
     expect(page).to have_text('Coach updated successfully')
 
-    expect(coach.reload.name).to eq(updated_coach_name)
-    expect(coach.title).to eq(updated_coach_title)
+    expect(coach.user_profile.reload.name).to eq(updated_coach_name.titleize)
+    expect(coach.reload.title).to eq(updated_coach_title)
   end
 end

@@ -1,7 +1,7 @@
 ActiveAdmin.register Founder do
-  actions :all, except: [:destroy]
+  actions :index, :show
 
-  permit_params :name, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :communication_address, :phone,
+  permit_params :name, :remote_avatar_url, :avatar, :startup_id, :about, :communication_address, :phone,
     :college_id, :twitter_url, :linkedin_url, :personal_website_url, :blog_url, :angel_co_url, :github_url,
     :behance_url, :gender, :skype_id, :exited, :excluded_from_leaderboard, roles: [], tag_list: []
 
@@ -17,7 +17,7 @@ ActiveAdmin.register Founder do
     end
 
     def find_resource
-      scoped_collection.friendly.find(params[:id])
+      scoped_collection.find(params[:id])
     end
   end
 
@@ -101,9 +101,6 @@ ActiveAdmin.register Founder do
 
     column :slack_username
     column(:skype_username, &:skype_id)
-
-    column :slug
-
     column :resume, &:resume_link
     column :linkedin_url
     column :twitter_url
@@ -116,7 +113,6 @@ ActiveAdmin.register Founder do
 
   show do
     attributes_table do
-      row :slug
       row :email
       row :name
 
@@ -205,10 +201,6 @@ ActiveAdmin.register Founder do
 
   action_item :impersonate, only: :show, if: proc { can? :impersonate, User } do
     link_to 'Impersonate', impersonate_admin_user_path(founder.user), method: :post
-  end
-
-  action_item :public_slack_messages, only: :show, if: proc { Founder.friendly.find(params[:id]).slack_username.present? } do
-    link_to 'Public Slack Messages', admin_public_slack_messages_path(q: { founder_id_eq: params[:id] })
   end
 
   form partial: 'admin/founders/form'

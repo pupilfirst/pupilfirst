@@ -15,11 +15,31 @@
         <% presenter.questions.map do |question| %>
           <div class="flex items-center shadow bg-white rounded-lg mb-4">
             <div class="flex w-full">
-              <a class="cursor-pointer flex flex-1 items-center py-4 px-4 hover:bg-grey-lighter">
-                <div class="text-sm">
-                  <span class="text-black font-semibold">
+              <a class="cursor-pointer justify-between no-underline flex flex-1 items-center py-4 px-4 hover:bg-grey-lighter"
+                 href=<%= community_question_path(question.id) %>>
+                <div class="text-black">
+                  <div class="text-sm font-semibold">
                     <%= question.title %>
-                  </span>
+                  </div>
+                  <div class="text-xs mt-2">
+                    <span>asked by</span>
+                    <span class="font-semibold"><%= presenter.user_name(question) %> </span>
+                    <span>on <%= presenter.time(question) %> </span>
+                  </div>
+                </div>
+                <div class="flex flex-row text-black">
+                  <div class="p-2 text-center">
+                    <i class="material-icons">message</i>
+                    <p><%= presenter.comments_count(question) %></p>
+                  </div>
+                  <div class="p-2 text-center">
+                    <i class="material-icons">favorite</i>
+                    <p><%= presenter.comment_claps(question) %></p>
+                  </div>
+                  <div class="p-2 text-center">
+                    <i class="material-icons">access_time</i>
+                    <p><%= presenter.activity(question) %></p>
+                  </div>
                 </div>
               </a>
             </div>

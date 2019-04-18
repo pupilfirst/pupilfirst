@@ -1,14 +1,14 @@
 <% presenter = ::Layouts::FooterPresenter.new(self) %>
 
 <footer>
-  <section class="bg-grey-darkest text-white px-6 py-10 flex justify-center">
-    <div class="w-3/5">
+  <section class="bg-grey-darkest text-white p-6 flex justify-center">
+    <div class="pt-2 w-3/5">
       <div class="flex flex-col items-left">
         <span class="uppercase font-bold text-sm p-2">SITEMAP</span>
 
         <div class="w-full flex flex-row flex-wrap text-xs">
           <% presenter.nav_links.each do |nav_link| %>
-            <div class="py-1 w-1/3">
+            <div class="py-1 w-1/3 hover:font-bold">
               <%= link_to nav_link[:title], nav_link[:url], class: "no-underline m-2 text-white" %>
             </div>
           <% end %>
@@ -16,7 +16,7 @@
       </div>
 
     </div>
-    <div class="w-2/6">
+    <div class="pt-2 w-2/6">
       <div class="text-xs">
         <% if presenter.address.present? %>
           <p class="uppercase font-bold text-sm py-2">CONTACT</p>
@@ -27,7 +27,7 @@
         <% end %>
 
         <% if presenter.social_links.any? %>
-          <div class="">
+          <div class="py-2">
             <% presenter.social_links.each do |social_link| %>
               <a class="text-white no-underline pointer-cursor pr-2" href="<%= social_link[:url] %>" target='_blank' rel='noopener'>
                 <!--                <i class="fa <%#= presenter.social_icon(social_link[:url]) %>"></i>-->

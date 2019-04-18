@@ -1,0 +1,89 @@
+<% presenter = ::Layouts::TopNavPresenter.new(self) %>
+
+<section id="header" class="header">
+  <div class="w-full">
+    <nav class="bg-white p-6 flex justify-center">
+      <div class="flex text-center w-1/4 ml-4">
+        <a class="w-32" href="<%= root_path %>">
+          <% if presenter.logo? %>
+            <img class="site-logo" src="<%= presenter.logo_url %>" alt='Logo of <%= presenter.school_name %>'/>
+          <% else %>
+            <span class="navbar__text-logo"><%= presenter.school_name %></span>
+          <% end %>
+        </a>
+      </div>
+      <div class="flex flex-row w-3/5 items-center text-right">
+        <% presenter.visible_links.each do |link| %>
+          <% if link[:options].present? %>
+            <%#= render 'layouts/nav_dropdown', dropdown: link %>
+          <% else %>
+            <div class="p-2">
+              <%= link_to(link[:title], link[:url], class: 'no-underline pointer-cursor', itemprop: 'url') %>
+            </div>
+          <% end %>
+        <% end %>
+
+        <%# unless @hide_nav_links %>
+        <!--        <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#nav-links__navbar">-->
+        <!--          <span class="sr-only">Toggle navigation</span>-->
+        <!--          <span class="icon-bar top-bar"></span>-->
+        <!--          <span class="icon-bar middle-bar"></span>-->
+        <!--          <span class="icon-bar bottom-bar"></span>-->
+        <!--        </button>-->
+        <%# end %>
+
+        <!--      <div id="nav-links__navbar" class="collapse navbar-collapse justify-content-end navbar-link__container">-->
+        <!--        <ul class="navbar-nav align-items-lg-center" itemscope="itemscope" itemtype="http://www.schema.org/SiteNavigationElement">-->
+        <%# presenter.visible_links.each do |link| %>
+        <%# if link[:options].present? %>
+        <%#= render 'layouts/nav_dropdown', dropdown: link %>
+        <%# else %>
+        <%#= render 'layouts/nav_link', link: link %>
+        <%# end %>
+        <%# end %>
+
+        <%# if presenter.more_links.present? %>
+        <%#= render 'layouts/nav_dropdown', dropdown: presenter.more_links %>
+        <%# end %>
+
+        <%# if current_user.present? %>
+        <%# if current_founder.present? %>
+        <!--              <li class="nav-item navbar-nav__nav-item" role="presentation" class="dropdown">-->
+        <!--                <a id="navbar-profile-dropdown" class="navbar-profile-dropdown dropdown-toggle logged-in-avatar-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">-->
+        <!--                  <div class="w-10">-->
+        <%#= avatar(current_founder.name, founder: current_founder) %>
+        <!--                  </div>-->
+        <!--                </a>-->
+
+        <!--                <ul class="dropdown-menu" aria-labelledby="navbar-profile-dropdown">-->
+        <%# if policy(current_founder).show? %>
+        <!--                    <li role="presentation">-->
+        <%#= link_to student_path(id: current_founder.id) do %>
+        <!--                        <i class="fa fa-list-ul"></i> Profile-->
+        <%# end %>
+        <!--                    </li>-->
+        <%# end %>
+
+        <!--                  <li role="presentation">-->
+        <%#= link_to destroy_user_session_path, method: :delete do %>
+        <!--                      <i class="fa fa-sign-out"></i> Logout-->
+        <%# end %>
+        <!--                  </li>-->
+        <!--                </ul>-->
+        <!--              </li>-->
+        <%# else %>
+        <!--              <li class="nav-item" role="presentation">-->
+        <%#= link_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'btn btn-sm btn-ghost-secondary btn-signin', id: 'sv-navbar__sign-out' %>
+        <!--              </li>-->
+        <%# end %>
+        <%# else %>
+        <!--            <li class="nav-item" role="presentation" itemprop="name">-->
+        <%#= link_to 'Sign In', new_user_session_path, class: 'btn btn-sm btn-ghost-secondary btn-signin', rel: 'nofollow', itemprop: 'url', id: 'sv-navbar__sign-in' %>
+        <!--            </li>-->
+        <%# end %>
+        <!--        </ul>-->
+        <!--      </div>-->
+      </div>
+    </nav>
+  </div>
+</section>

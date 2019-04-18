@@ -6,7 +6,7 @@ after 'development:startups' do
   # Seed an applicant.
   john_doe = User.create(email: 'johndoe@example.com')
 
-  UserProfile.create!(user: john_doe, school: School.first, name: 'John Doe', phone: '9876543210')
+  UserProfile.create!(user: john_doe, school: School.first, name: 'John Doe', phone: '9876543210', title: "The Unknown")
 
   # Add John Doe to teams in all three courses.
   ['Guardians of the Galaxy', 'iOS Startup'].each do |team_name|

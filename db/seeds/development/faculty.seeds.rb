@@ -11,7 +11,7 @@ after 'development:courses' do
     user: sanjay,
     school: sv,
     name: 'Sanjay Vijayakumar',
-    title: 'CEO',
+    title: 'CEO SV.CO',
     linkedin_url: 'https://linkedin.com'
   )
 
@@ -63,7 +63,7 @@ after 'development:courses' do
     user: gautham,
     school: sv,
     name: 'Gautham',
-    title: 'COO',
+    title: 'COO SV.CO',
     linkedin_url: 'https://linkedin.com',
   )
 

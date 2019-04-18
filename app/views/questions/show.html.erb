@@ -1,7 +1,9 @@
 <% presenter = Questions::ShowPresenter.new(self, @question) %>
 <div class="flex flex-1 h-screen bg-grey-lighter overflow-y-scroll">
   <div class="flex-1 flex flex-col">
+
     <div class="flex-col px-6 py-2 items-center justify-between">
+      <a href=" <%= community_path(@question.community.id) %>"> back</a>
       <div class="max-w-md w-full flex mx-auto items-center justify-center relative shadow bg-white rounded-lg mb-4">
         <div class="flex w-full">
           <div class="flex flex-1 items-center py-4 px-4">
@@ -18,14 +20,24 @@
         <div class="flex w-full  py-4 px-4">
           <div class="flex w-1/6 text-center justify-center">
             <div class="mt-4">
-              <i class="material-icons">stars</i>
-              <div class="mt-2"><%= presenter.stars %></div>
+              <i class="material-icons">message</i>
+              <div class="mt-2"><%= presenter.answers_count %></div>
             </div>
           </div>
           <div class="w-5/6 leading-normal text-sm">
                   <span class="">
                     <%= @question.description %>
                   </span>
+            <div class="pt-2 flex flex-row">
+              <div class="w-16">
+                <%= image_tag(presenter.user_image(@question.user), alt: current_school.name) %>
+              </div>
+              <div class="pl-2">
+                <p class="text-xs">Asked on <%= presenter.time(@question) %> by</p>
+                <p class="font-semibold"><%= presenter.name(@question.user) %> </p>
+                <p><%= presenter.title(@question.user) %> </p>
+              </div>
+            </div>
           </div>
 
         </div>
@@ -44,16 +56,23 @@
             <div class="flex w-full  py-4 px-4">
               <div class="flex w-1/6 text-center justify-center">
                 <div class="mt-4">
-                  <i class="material-icons">thumb_up</i>
+                  <i class="material-icons">favorite</i>
                   <div class="mt-2"> <%= presenter.answer_claps(answer) %></div>
                 </div>
               </div>
               <div class="w-5/6 leading-normal text-sm">
-                  <span class="">
-                    <%= answer.description %>
-                  </span>
+                <span class=""><%= answer.description %></span>
+                <div class="pt-2 flex flex-row">
+                  <div class="w-16">
+                    <%= image_tag(presenter.user_image(answer.user), alt: current_school.name) %>
+                  </div>
+                  <div class="pl-2">
+                    <p class="text-xs">answered on <%= presenter.time(answer) %> by</p>
+                    <p class="font-semibold"><%= presenter.name(answer.user) %> </p>
+                    <p><%= presenter.title(answer.user) %> </p>
+                  </div>
+                </div>
               </div>
-
             </div>
           </div>
         <% end %>

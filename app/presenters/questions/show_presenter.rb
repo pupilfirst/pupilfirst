@@ -6,15 +6,43 @@ module Questions
     end
 
     def answers
-      @question.answers
+      @question.answers.joins(:answer_claps).order("count").reverse_order
     end
 
     def answer_claps(answer)
       answer.answer_claps.pluck(:count).sum
     end
 
-    def stars
+    def answers_count
       @question.answers.count
+    end
+
+    def time(object)
+      object.created_at.to_formatted_s(:long)
+    end
+
+    def user_image(user)
+      profile = user_profile(user)
+      profile.avatar.attached? ? profile.avatar.blob : profile.initials_avatar(:square)
+    end
+
+    def name(user)
+      user_profile(user).name
+    end
+
+    def title(user)
+      title = user_profile(user).title
+      title_text = title.present? ? ", #{title}" : ""
+
+      if user.faculty.present?
+        "Faculty #{title_text}"
+      else
+        "Student #{title_text}"
+      end
+    end
+
+    def user_profile(user)
+      user.user_profiles.where(school: current_school).first
     end
   end
 end

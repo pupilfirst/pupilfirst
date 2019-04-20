@@ -2,13 +2,14 @@
 <div class="flex bg-grey-lighter">
   <div class="flex-1 flex flex-col">
     <div class="flex px-6 py-2 items-center justify-between">
-      <button
-        class="max-w-md w-full flex mx-auto items-center justify-center relative bg-grey-lighter hover:bg-grey-light hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-20 cursor-pointer">
+      <a class="no-underline max-w-md w-full flex mx-auto items-center justify-center relative bg-grey-lighter hover:bg-grey-light hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-20 cursor-pointer"
+         href=<%= new_community_question_path(@community.id) %>
+      >
         <i class="material-icons">add_circle_outline</i>
         <h4 class="font-semibold ml-2">
           Ask a new question
         </h4>
-      </button>
+      </a>
     </div>
     <div class="px-6 pb-4 mt-5 flex flex-1">
       <div class="max-w-md w-full mx-auto relative">

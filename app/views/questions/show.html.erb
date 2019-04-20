@@ -3,7 +3,9 @@
   <div class="flex-1 flex flex-col">
 
     <div class="flex-col px-6 py-2 items-center justify-between">
-      <a href=" <%= community_path(@question.community.id) %>"> back</a>
+      <div class="max-w-md w-full flex justify-center mb-4">
+        <a href=" <%= community_path(@question.community.id) %>"> back</a>
+      </div>
       <div class="max-w-md w-full flex mx-auto items-center justify-center relative shadow bg-white rounded-lg mb-4">
         <div class="flex w-full">
           <div class="flex flex-1 items-center py-4 px-4">
@@ -15,7 +17,6 @@
           </div>
         </div>
       </div>
-
       <div class="max-w-md w-full flex mx-auto items-center justify-center relative shadow bg-white rounded-lg mb-4">
         <div class="flex w-full  py-4 px-4">
           <div class="flex w-1/6 text-center justify-center">
@@ -39,10 +40,12 @@
               </div>
             </div>
           </div>
-
         </div>
       </div>
-
+      <div class="max-w-md w-full flex justify-center mb-4">
+        <a class="cursor-pointer no-underline hover:bg-grey-lighter"
+           href=<%= edit_question_path(@question.id) %>>Edit</a>
+      </div>
     </div>
     <div class="px-6 pb-4 mt-5 flex flex-1">
       <div class="max-w-md w-full mx-auto relative">

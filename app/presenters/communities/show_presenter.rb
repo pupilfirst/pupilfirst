@@ -7,7 +7,7 @@ module Communities
     end
 
     def questions
-      @community.questions
+      @community.questions.includes(:user).order("created_at").reverse_order
     end
 
     def time(question)
@@ -27,7 +27,8 @@ module Communities
     end
 
     def activity(question)
-      time_diff = ((Time.now - question.answers.last.updated_at) / 1.minute).round
+      time = question.answers&.last&.updated_at || question.updated_at
+      time_diff = ((Time.now - time) / 1.minute).round
 
       if time_diff < 60
         "#{time_diff} M"

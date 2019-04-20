@@ -17,7 +17,7 @@
           <div class="flex items-center shadow bg-white rounded-lg mb-4">
             <div class="flex w-full">
               <a class="cursor-pointer justify-between no-underline flex flex-1 items-center py-4 px-4 hover:bg-grey-lighter"
-                 href=<%= community_question_path(question.id) %>>
+                 href=<%= community_question_path(@community.id, question.id) %>>
                 <div class="text-black">
                   <div class="text-sm font-semibold">
                     <%= question.title %>

@@ -5,8 +5,16 @@ module Questions
       @question = question
     end
 
+    def show_edit_button?
+      @question.user == current_user
+    end
+
+    def show_answer_edit?(answer)
+      answer.user == current_user
+    end
+
     def answers
-      @question.answers.joins(:answer_claps).order("count").reverse_order
+      @question.answers.includes([:answer_claps, user: :faculty]).order("answer_claps.count DESC NULLS LAST")
     end
 
     def answer_claps(answer)

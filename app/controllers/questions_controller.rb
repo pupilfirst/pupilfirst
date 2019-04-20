@@ -7,6 +7,7 @@ class QuestionsController < ApplicationController
   def show
     @question = authorize(Question.find(params[:id]))
     raise_not_found if @question.blank?
+    @answer = Answer.new(question: @question, user: current_user)
   end
 
   def new

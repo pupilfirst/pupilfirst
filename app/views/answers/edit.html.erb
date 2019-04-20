@@ -1,28 +1,21 @@
 <div class="flex flex-1 bg-grey-lighter">
   <div class="flex-1 flex flex-col">
     <div class="mt-4 max-w-md w-full flex justify-center">
-      <a href=" <%= community_path(@question.community.id) %>">back</a>
+      <a href=" <%= community_question_path(@question.community_id, @question.id) %>"> back</a>
     </div>
-    <div class="mt-4 max-w-md w-full flex mx-auto items-center justify-center relative shadow bg-white rounded-lg">
+    <div class="my-4 max-w-md w-full flex mx-auto items-center justify-center relative shadow bg-white rounded-lg">
       <div class="flex w-full  py-4 px-4">
         <div class="w-full flex flex-col">
-          <%= form_for @question, url: question_path(@question.id) do |f| %>
+          <%= form_for @answer, url: answer_path(@answer.id) do |f| %>
             <h5
               class="uppercase text-center border-b border-grey-light pb-2 mb-4">
-              Edit Question
+              Edit Answer
             </h5>
-            <%= f.label :title, class: "inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2" %>
-            <%= f.text_field :title, required: true, maxlength: 255, class: "appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey" %>
             <%= f.label :description, class: "inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2" %>
             <%= f.text_area :description, required: true, minlength: 50, class: "appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey" %>
             <%= f.submit class: "w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none" %>
           <% end %>
         </div>
-      </div>
-    </div>
-    <div class="m-4 flex w-full justify-center text-center">
-      <div class="max-w-md w-full">
-        don’t worry—you can edit your question after it’s posted, too.
       </div>
     </div>
   </div>

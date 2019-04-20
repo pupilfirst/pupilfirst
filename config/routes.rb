@@ -84,7 +84,11 @@ Rails.application.routes.draw do
     resources :questions, only: %i[create new show]
   end
 
-  resources :questions, only: %i[edit update destroy]
+  resources :questions, only: %i[edit update destroy] do
+    resources :answers, only: :create
+  end
+
+  resources :answers, only: %i[edit update destroy]
 
   resources :founders, only: %i[] do
     member do

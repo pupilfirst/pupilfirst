@@ -1,4 +1,4 @@
-<% presenter = Communities::ShowPresenter.new(self, @community) %>
+<% presenter = Communities::ShowPresenter.new(self, @community, @questions) %>
 <div class="flex bg-grey-lighter">
   <div class="flex-1 flex flex-col">
     <div class="flex px-6 py-2 items-center justify-between">
@@ -13,7 +13,7 @@
     </div>
     <div class="px-6 pb-4 mt-5 flex flex-1">
       <div class="max-w-md w-full mx-auto relative">
-        <% presenter.questions.map do |question| %>
+        <% @questions.map do |question| %>
           <div class="flex items-center shadow bg-white rounded-lg mb-4">
             <div class="flex w-full">
               <a class="cursor-pointer justify-between no-underline flex flex-1 items-center py-4 px-4 hover:bg-grey-lighter"
@@ -29,24 +29,36 @@
                   </div>
                 </div>
                 <div class="flex flex-row text-black">
-                  <div class="p-2 text-center">
-                    <i class="material-icons">message</i>
-                    <p><%= presenter.comments_count(question) %></p>
-                  </div>
-                  <div class="p-2 text-center">
-                    <i class="material-icons">favorite</i>
-                    <p><%= presenter.comment_claps(question) %></p>
-                  </div>
-                  <div class="p-2 text-center">
-                    <i class="material-icons">access_time</i>
-                    <p><%= presenter.activity(question) %></p>
-                  </div>
+                  <% if presenter.unanswered_questions?(question) %>
+                    <div>New!</div>
+                  <% else %>
+                    <div class="p-2 text-center">
+                      <i class="material-icons">message</i>
+                      <p><%= presenter.comments_count(question) %></p>
+                    </div>
+                    <div class="p-2 text-center">
+                      <i class="material-icons">favorite</i>
+                      <p><%= presenter.comment_claps(question) %></p>
+                    </div>
+                    <div class="p-2 text-center">
+                      <i class="material-icons">access_time</i>
+                      <p><%= presenter.activity(question) %></p>
+                    </div>
+                  <% end %>
                 </div>
               </a>
             </div>
           </div>
         <% end %>
       </div>
+    </div>
+    <div class="max-w-md w-full flex flex-row mx-auto justify-center mb-4">
+      <% if presenter.show_prev_page? %>
+        <a class="block no-underline hover:text-white hover:bg-blue text-blue px-3 py-2" href=<%= presenter.prev_page_path %>>Previous</a>
+      <% end %>
+      <% if presenter.show_next_page? %>
+        <a class="block no-underline hover:text-white hover:bg-blue text-blue px-3 py-2" href=<%= presenter.next_page_path %>>Next</a>
+      <% end %>
     </div>
   </div>
 </div>

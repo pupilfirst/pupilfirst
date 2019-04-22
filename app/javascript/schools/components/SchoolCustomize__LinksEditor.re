@@ -175,8 +175,6 @@ let displayNewLink = (state, addLinkCB, id) =>
 module CreateLinkError = {
   type t = [ | `InvalidUrl | `InvalidLengthTitle | `InvalidKind | `BlankTitle];
 
-  exception Errors(array(t));
-
   let notification = error =>
     switch (error) {
     | `InvalidUrl => (
@@ -227,7 +225,7 @@ let handleAddLink = (state, send, authenticityToken, addLinkCB, event) => {
            Notification.success("Done!", "A custom link has been added.");
            Js.Promise.resolve();
          | `Errors(errors) =>
-           Js.Promise.reject(CreateLinkError.Errors(errors))
+           Js.Promise.reject(CreateLinkErrorHandler.Errors(errors))
          }
        )
     |> CreateLinkErrorHandler.catch(() => send(EnableForm))

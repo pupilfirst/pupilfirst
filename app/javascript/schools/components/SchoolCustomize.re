@@ -166,13 +166,7 @@ let editor = (state, send, authenticityToken) =>
 
 let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
   ...component,
-  initialState: () => {
-    visibleEditor:
-      Some(
-        AgreementsEditor(SchoolCustomize__AgreementsEditor.PrivacyPolicy),
-      ),
-    customizations,
-  },
+  initialState: () => {visibleEditor: None, customizations},
   reducer: (action, state) =>
     switch (action) {
     | ShowEditor(editor) =>

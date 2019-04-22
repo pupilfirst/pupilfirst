@@ -1,15 +1,16 @@
 module type Error = {
   type t;
-  exception Errors(array(t));
   let notification: t => (string, string);
 };
 
 module Make = (Error: Error) => {
+  exception Errors(array(Error.t));
+
   let handler = () =>
     [@bs.open]
     (
       fun
-      | Error.Errors(errors) =>
+      | Errors(errors) =>
         errors
         |> Array.iter(error => {
              let (title, message) = Error.notification(error);

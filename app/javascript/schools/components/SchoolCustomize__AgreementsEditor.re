@@ -60,8 +60,6 @@ module UpdateSchoolStringQuery = [%graphql
 module UpdateSchoolStringError = {
   type t = [ | `InvalidKey | `InvalidLengthValue];
 
-  exception Errors(array(t));
-
   let notification = error =>
     switch (error) {
     | `InvalidKey => ("InvalidKey", "")
@@ -84,14 +82,12 @@ let handleUpdateAgreement =
     ) => {
   event |> ReactEvent.Mouse.preventDefault;
   send(BeginUpdate);
-  let query =
-    UpdateSchoolStringQuery.make(
-      ~key=kind |> kindToKey,
-      ~value=state.agreement,
-      (),
-    );
 
-  query
+  UpdateSchoolStringQuery.make(
+    ~key=kind |> kindToKey,
+    ~value=state.agreement,
+    (),
+  )
   |> GraphqlQuery.sendQuery(authenticityToken)
   |> Js.Promise.then_(result =>
        switch (result##updateSchoolString##errors) {
@@ -100,13 +96,19 @@ let handleUpdateAgreement =
            "Done!",
            kindToString(kind) ++ " has been updated.",
          );
+         switch (kind) {
+         | PrivacyPolicy => updatePrivacyPolicyCB(state.agreement)
+         | TermsOfUse => updateTermsOfUseCB(state.agreement)
+         };
          send(DoneUpdating);
          Js.Promise.resolve();
-       | errors => Js.Promise.reject(UpdateSchoolStringError.Errors(errors))
+       | errors =>
+         Js.Promise.reject(UpdateSchoolStringErrorHandler.Errors(errors))
        }
      )
   |> UpdateSchoolStringErrorHandler.catch(() => send(ErrorOccured))
   |> ignore;
+  ();
 };
 
 let updateAgreementDisabled = state => !state.formDirty;

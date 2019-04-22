@@ -1,12 +1,3 @@
-type createLinkError = [
-  | `InvalidUrl
-  | `InvalidLengthTitle
-  | `InvalidKind
-  | `BlankTitle
-];
-
-exception CreateLinkFailure(array(createLinkError));
-
 open SchoolCustomize__Types;
 
 let str = ReasonReact.string;
@@ -181,31 +172,24 @@ let displayNewLink = (state, addLinkCB, id) =>
   )
   |> addLinkCB;
 
-let handleCreateLinkFailure = send =>
-  [@bs.open]
-  (
-    fun
-    | CreateLinkFailure(errors) => {
-        errors
-        |> Array.iter(error => {
-             let (title, message) =
-               switch (error) {
-               | `InvalidUrl => (
-                   "Invalid URL",
-                   "It looks like the URL you've entered isn't valid. Please check, and try again.",
-                 )
-               | `InvalidKind => ("InvalidKind", "")
-               | `InvalidLengthTitle => ("InvalidLengthTitle", "")
-               | `BlankTitle => ("BlankTitle", "")
-               };
+module CreateLinkError = {
+  type t = [ | `InvalidUrl | `InvalidLengthTitle | `InvalidKind | `BlankTitle];
 
-             Notification.error(title, message);
-           });
+  exception Errors(array(t));
 
-        send(EnableForm);
-        Js.Promise.resolve();
-      }
-  );
+  let notification = error =>
+    switch (error) {
+    | `InvalidUrl => (
+        "Invalid URL",
+        "It looks like the URL you've entered isn't valid. Please check, and try again.",
+      )
+    | `InvalidKind => ("InvalidKind", "")
+    | `InvalidLengthTitle => ("InvalidLengthTitle", "")
+    | `BlankTitle => ("BlankTitle", "")
+    };
+};
+
+module CreateLinkErrorHandler = GraphqlErrorHandler.Make(CreateLinkError);
 
 let handleAddLink = (state, send, authenticityToken, addLinkCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
@@ -242,15 +226,11 @@ let handleAddLink = (state, send, authenticityToken, addLinkCB, event) => {
            send(ClearForm);
            Notification.success("Done!", "A custom link has been added.");
            Js.Promise.resolve();
-         | `Errors(errors) => Js.Promise.reject(CreateLinkFailure(errors))
+         | `Errors(errors) =>
+           Js.Promise.reject(CreateLinkError.Errors(errors))
          }
        )
-    |> Js.Promise.catch(error =>
-         switch (error |> handleCreateLinkFailure(send)) {
-         | Some(x) => x
-         | None => Js.Promise.resolve()
-         }
-       )
+    |> CreateLinkErrorHandler.catch(() => send(EnableForm))
     |> ignore;
   };
 };

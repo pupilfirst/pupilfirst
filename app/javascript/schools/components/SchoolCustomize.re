@@ -19,7 +19,9 @@ type action =
   | ShowEditor(editor)
   | CloseEditor
   | AddLink(Customizations.link)
-  | RemoveLink(Customizations.linkId);
+  | RemoveLink(Customizations.linkId)
+  | UpdateTermsOfUse(string)
+  | UpdatePrivacyPolicy(string);
 
 let component = ReasonReact.reducerComponent("SchoolCustomize");
 
@@ -145,6 +147,12 @@ let editor = (state, send, authenticityToken) =>
             key="sc-drawer__agreements-editor"
             kind
             customizations={state.customizations}
+            updatePrivacyPolicyCB=(
+              agreement => send(UpdatePrivacyPolicy(agreement))
+            )
+            updateTermsOfUseCB=(
+              agreement => send(UpdateTermsOfUse(agreement))
+            )
             authenticityToken
           />
         | _ =>
@@ -158,7 +166,13 @@ let editor = (state, send, authenticityToken) =>
 
 let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
   ...component,
-  initialState: () => {visibleEditor: None, customizations},
+  initialState: () => {
+    visibleEditor:
+      Some(
+        AgreementsEditor(SchoolCustomize__AgreementsEditor.PrivacyPolicy),
+      ),
+    customizations,
+  },
   reducer: (action, state) =>
     switch (action) {
     | ShowEditor(editor) =>
@@ -174,6 +188,19 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
         ...state,
         customizations:
           state.customizations |> Customizations.removeLink(linkId),
+      })
+    | UpdatePrivacyPolicy(agreement) =>
+      ReasonReact.Update({
+        ...state,
+        customizations:
+          state.customizations
+          |> Customizations.updatePrivacyPolicy(agreement),
+      })
+    | UpdateTermsOfUse(agreement) =>
+      ReasonReact.Update({
+        ...state,
+        customizations:
+          state.customizations |> Customizations.updateTermsOfUse(agreement),
       })
     },
   render: ({state, send}) =>

@@ -7,7 +7,7 @@ module Mutations
     description "Create a school link."
 
     field :school_link, Types::SchoolLink, null: true
-    field :errors, [Types::CreateLinkError], null: true
+    field :errors, [Types::CreateSchoolLinkError], null: true
 
     def resolve(params)
       mutator = CreateSchoolLinkMutator.new(params, context)

@@ -94,6 +94,22 @@ let removeLink = (linkId, t) => {
        ),
 };
 
+let updatePrivacyPolicy = (privacyPolicy, t) => {
+  ...t,
+  schoolStrings: {
+    ...t.schoolStrings,
+    privacyPolicy: Some(privacyPolicy),
+  },
+};
+
+let updateTermsOfUse = (termsOfUse, t) => {
+  ...t,
+  schoolStrings: {
+    ...t.schoolStrings,
+    termsOfUse: Some(termsOfUse),
+  },
+};
+
 let decodeStrings = json =>
   Json.Decode.{
     address: json |> field("address", nullable(string)) |> Js.Null.toOption,

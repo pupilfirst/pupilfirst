@@ -1,5 +1,20 @@
 ---
 changelog:
+- timestamp: '2019-04-22T08:33:51Z'
+  changes:
+  - timestamp: '2019-04-22T06:50:58Z'
+    title: The name of reviewer is now mentioned on the coach review dashboard, for
+      submissions that have already been reviewed.
+    category: ui
+  - timestamp: '2019-04-08T05:24:14Z'
+    title: Coaches can now be added to schools and enrolled to courses or teams using
+      the school administration interface.
+    trello: https://trello.com/c/nSQ2H07M
+    private: false
+    description: This allows adding or updating coaches from school/coaches. Coach
+      enrollments for a course or for a team can be updated from course/:id/coaches
+      and course/:id/teams respectively.
+    category: feature
 - timestamp: '2019-03-25T12:17:47Z'
   changes:
   - timestamp: '2019-03-25T11:19:11Z'
@@ -113,7 +128,6 @@ changelog:
     title: Auto-verified targets now behave correctly when they're also team targets
       (completed together as group). The platform used to assume that such targets
       were always individually completed.
-    trello:
     private: false
     category: bugfix
   - timestamp: '2019-01-22T04:14:53Z'

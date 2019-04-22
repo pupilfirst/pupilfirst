@@ -59,7 +59,7 @@ class FacultyMailer < SchoolMailer
 
     @submission_from = if timeline_event.founders.count == 1
       # TODO: Replace with pick(:name) with Rails 6.
-      timeline_event.founders.select(:name).first.name
+      timeline_event.founders.first.name
     else
       "team #{timeline_event.founders.first.startup.name}"
     end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_05_061711) do
+ActiveRecord::Schema.define(version: 2019_04_09_084817) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -622,6 +622,32 @@ ActiveRecord::Schema.define(version: 2019_04_05_061711) do
     t.index ["user_id"], name: "index_user_activities_on_user_id"
   end
 
+  create_table "user_profiles", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "school_id"
+    t.string "name"
+    t.string "gender"
+    t.string "phone"
+    t.string "communication_address"
+    t.string "title"
+    t.string "key_skills"
+    t.text "about"
+    t.string "resume_url"
+    t.string "blog_url"
+    t.string "personal_website_url"
+    t.string "linkedin_url"
+    t.string "twitter_url"
+    t.string "facebook_url"
+    t.string "angel_co_url"
+    t.string "github_url"
+    t.string "behance_url"
+    t.string "skype_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["school_id", "user_id"], name: "index_user_profiles_on_school_id_and_user_id", unique: true
+    t.index ["user_id"], name: "index_user_profiles_on_user_id"
+  end
+
   create_table "users", id: :serial, force: :cascade do |t|
     t.string "email"
     t.string "login_token"
@@ -705,4 +731,6 @@ ActiveRecord::Schema.define(version: 2019_04_05_061711) do
   add_foreign_key "timeline_event_files", "timeline_events"
   add_foreign_key "timeline_events", "faculty", column: "evaluator_id"
   add_foreign_key "user_activities", "users"
+  add_foreign_key "user_profiles", "schools"
+  add_foreign_key "user_profiles", "users"
 end

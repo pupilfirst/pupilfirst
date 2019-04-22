@@ -7,6 +7,7 @@ class School < ApplicationRecord
   has_many :faculty, dependent: :destroy
   has_many :school_strings, dependent: :destroy
   has_many :school_links, dependent: :destroy
+  has_many :user_profiles, dependent: :destroy
 
   acts_as_taggable_on :founder_tags
 

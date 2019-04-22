@@ -1,9 +1,0 @@
----
-timestamp: '2019-04-08T05:24:14Z'
-title: Implemented coach pages for creation and managing enrollments in school admin
-trello: https://trello.com/c/nSQ2H07M
-private: false
-description: This allows adding or updating coaches from school/coaches. Coach enrollments
-  for a course or for a team can be updated from course/:id/coaches and course/:id/teams
-  respectively.
-category: feature

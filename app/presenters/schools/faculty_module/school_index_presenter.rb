@@ -8,7 +8,7 @@ module Schools
       end
 
       def faculty
-        Faculty.where(school: @school).includes(:user, image_attachment: :blob)
+        Faculty.where(school: @school).includes(:user)
       end
 
       def react_props

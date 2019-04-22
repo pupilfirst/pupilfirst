@@ -221,7 +221,9 @@ let make =
         |> Json.Decode.(field("error", nullable(string)))
         |> Js.Null.toOption;
       switch (error) {
-      | Some(err) => Notification.error("Something went wrong!", err)
+      | Some(err) =>
+        send(UpdateSaving);
+        Notification.error("Something went wrong!", err);
       | None => addCoach(json)
       };
     };
@@ -262,12 +264,17 @@ let make =
              (
                switch (error |> handleApiError) {
                | Some(code) =>
-                 Notification.error(code |> string_of_int, "Please try again")
+                 send(UpdateSaving);
+                 Notification.error(
+                   code |> string_of_int,
+                   "Please try again",
+                 );
                | None =>
+                 send(UpdateSaving);
                  Notification.error(
                    "Something went wrong!",
                    "Please try again",
-                 )
+                 );
                }
              )
              |> resolve

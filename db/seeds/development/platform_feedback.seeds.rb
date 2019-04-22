@@ -3,7 +3,7 @@ require_relative 'helper'
 after 'development:founders' do
   puts 'Seeding platform_feedback'
 
-  founder = Founder.find_by name: 'Some One'
+  founder = User.find_by(email: 'someone@sv.co').founders.first
 
   PlatformFeedback.create!(
     founder: founder,

@@ -1,7 +1,7 @@
 after 'development:founders' do
   puts 'Seeding leaderboard entries (idempotent)'
 
-  john_doe = Founder.find_by(name: 'John Doe')
+  john_doe = User.find_by(email: 'johndoe@example.com').founders.first
   other_founders = john_doe.course.founders.where.not(id: john_doe)
 
   # Add entries for last week

@@ -8,7 +8,7 @@ let make = (~disabled, children) => {
         if (disabled) {
           <div
             className="absolute w-full h-full bg-white opacity-50 z-20 flex items-center justify-center">
-            {"Loading" |> ReasonReact.string}
+            {"Loading..." |> ReasonReact.string}
           </div>;
         } else {
           ReasonReact.null;

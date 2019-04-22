@@ -20,9 +20,7 @@ let make = (~closeDrawerCB, children) => {
           </button>
         </div>
         <div className="w-full overflow-scroll">
-          <div className="mx-8 mt-8 bg-white">
-            {children |> ReasonReact.array}
-          </div>
+          {children |> ReasonReact.array}
         </div>
       </div>
     </div>,

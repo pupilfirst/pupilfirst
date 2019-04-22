@@ -128,7 +128,7 @@ let showEditor = (editor, send, event) => {
 let editor = (state, send, authenticityToken) =>
   switch (state.visibleEditor) {
   | Some(editor) =>
-    <SchoolCustomize__EditorDrawer closeDrawerCB=(() => send(CloseEditor))>
+    <SchoolAdmin__EditorDrawer closeDrawerCB=(() => send(CloseEditor))>
       {
         switch (editor) {
         | LinksEditor(kind) =>
@@ -151,7 +151,7 @@ let editor = (state, send, authenticityToken) =>
           <div key="sc-drawer__todo"> {"Not yet implemented" |> str} </div>
         }
       }
-    </SchoolCustomize__EditorDrawer>
+    </SchoolAdmin__EditorDrawer>
 
   | None => ReasonReact.null
   };

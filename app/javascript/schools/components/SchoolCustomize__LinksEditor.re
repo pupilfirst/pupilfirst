@@ -322,7 +322,7 @@ let make =
       ReasonReact.Update({...state, deleting: [linkId, ...state.deleting]})
     },
   render: ({state, send}) =>
-    <div>
+    <div className="mt-8 mx-8">
       <h5 className="uppercase text-center border-b border-grey-light pb-2">
         {"Manage custom links" |> str}
       </h5>

@@ -100,6 +100,13 @@ let make =
         ++ "/coaches/update_enrollments";
       Api.create(url, payload, handleResponseCB, handleErrorCB);
     };
+
+    let saveDisabled =
+      state.courseCoaches
+      |> List.filter(((_, _, selected)) => selected)
+      |> ListUtils.isEmpty
+      || state.saving;
+
     <div className="blanket">
       <div className="drawer-right">
         <div className="drawer-right__close absolute">
@@ -132,6 +139,7 @@ let make =
               </div>
               <div className="flex max-w-md w-full px-6 pb-5 mx-auto">
                 <button
+                  disabled=saveDisabled
                   onClick={_e => updateCourseCoaches(courseId, state)}
                   className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
                   {"Add Course Coaches" |> str}

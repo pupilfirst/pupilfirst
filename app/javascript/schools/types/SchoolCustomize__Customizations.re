@@ -94,11 +94,17 @@ let removeLink = (linkId, t) => {
        ),
 };
 
+let optionalString = s =>
+  switch (s |> String.trim) {
+  | "" => None
+  | nonEmptyString => Some(nonEmptyString)
+  };
+
 let updatePrivacyPolicy = (privacyPolicy, t) => {
   ...t,
   schoolStrings: {
     ...t.schoolStrings,
-    privacyPolicy: Some(privacyPolicy),
+    privacyPolicy: privacyPolicy |> optionalString,
   },
 };
 
@@ -106,7 +112,7 @@ let updateTermsOfUse = (termsOfUse, t) => {
   ...t,
   schoolStrings: {
     ...t.schoolStrings,
-    termsOfUse: Some(termsOfUse),
+    termsOfUse: termsOfUse |> optionalString,
   },
 };
 
@@ -114,7 +120,7 @@ let updateAddress = (address, t) => {
   ...t,
   schoolStrings: {
     ...t.schoolStrings,
-    address: Some(address),
+    address: address |> optionalString,
   },
 };
 
@@ -122,7 +128,7 @@ let updateEmailAddress = (emailAddress, t) => {
   ...t,
   schoolStrings: {
     ...t.schoolStrings,
-    emailAddress: Some(emailAddress),
+    emailAddress: emailAddress |> optionalString,
   },
 };
 

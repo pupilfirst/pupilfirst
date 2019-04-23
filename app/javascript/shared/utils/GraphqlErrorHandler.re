@@ -23,7 +23,12 @@ module Make = (Error: Error) => {
     |> Js.Promise.catch(error => {
          switch (error |> handler()) {
          | Some(_x) => callback()
-         | None => ()
+         | None =>
+           Notification.error(
+             "Something went wrong!",
+             "An unexpected error has occurred, and our team has been notified about this. Please reload the page and try again.",
+           );
+           callback();
          };
          Js.Promise.resolve();
        });

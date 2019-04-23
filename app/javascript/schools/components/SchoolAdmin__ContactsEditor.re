@@ -41,18 +41,8 @@ module UpdateContactDetailsQuery = [%graphql
   |}
 ];
 
-module UpdateSchoolStringError = {
-  type t = [ | `InvalidKey | `InvalidLengthValue];
-
-  let notification = error =>
-    switch (error) {
-    | `InvalidKey => ("InvalidKey", "")
-    | `InvalidLengthValue => ("InvalidLengthValue", "")
-    };
-};
-
 module UpdateSchoolStringErrorHandler =
-  GraphqlErrorHandler.Make(UpdateSchoolStringError);
+  GraphqlErrorHandler.Make(SchoolCustomize__UpdateSchoolStringError);
 
 let handleUpdateContactDetails =
     (

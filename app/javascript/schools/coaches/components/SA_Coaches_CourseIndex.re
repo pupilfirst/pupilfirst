@@ -103,7 +103,7 @@ let make =
             className="max-w-md w-full flex mx-auto items-center justify-center relative bg-grey-lighter hover:bg-grey-light hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-12 cursor-pointer">
             <i className="material-icons"> {"add_circle_outline" |> str} </i>
             <h4 className="font-semibold ml-2">
-              {"Assign/Remove Course Faculty" |> str}
+              {"Assign Course Faculty" |> str}
             </h4>
           </button>
         </div>

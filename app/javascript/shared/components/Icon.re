@@ -3,6 +3,7 @@ let deleteIcon: string = [%raw "require('../images/delete-icon.svg')"];
 let downIcon: string = [%raw "require('../images/down-arrow-icon.svg')"];
 let closeIcon: string = [%raw "require('../images/close-icon.svg')"];
 let checkIcon: string = [%raw "require('../images/check-white-icon.svg')"];
+let editIcon: string = [%raw "require('../images/edit-icon.svg')"];
 
 type kind =
   | Alert
@@ -10,6 +11,7 @@ type kind =
   | Close
   | Delete
   | Down
+  | Edit
   | PlusCircle;
 
 let resolveIcon = kind =>
@@ -19,6 +21,7 @@ let resolveIcon = kind =>
   | Close => closeIcon
   | Delete => deleteIcon
   | Down => downIcon
+  | Edit => editIcon
   | PlusCircle => plusCircleIcon
   };
 

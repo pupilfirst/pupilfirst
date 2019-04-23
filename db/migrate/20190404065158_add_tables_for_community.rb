@@ -11,7 +11,7 @@ class AddTablesForCommunity < ActiveRecord::Migration[5.2]
     create_table :questions do |t|
       t.string :title
       t.text :description
-      t.references :communities
+      t.references :community
       t.references :user
       t.references :targets
 
@@ -34,6 +34,14 @@ class AddTablesForCommunity < ActiveRecord::Migration[5.2]
       t.timestamps
     end
 
+    create_table :comments do |t|
+      t.text :value
+      t.references :commentable, polymorphic: true, index: true
+      t.references :user
+
+      t.timestamps
+    end
+
     add_reference :courses, :community
   end
 
@@ -43,5 +51,6 @@ class AddTablesForCommunity < ActiveRecord::Migration[5.2]
     drop_table :questions
     drop_table :answers
     drop_table :answer_claps
+    drop_table :comments
   end
 end

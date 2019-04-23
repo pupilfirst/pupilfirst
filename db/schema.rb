@@ -116,6 +116,17 @@ ActiveRecord::Schema.define(version: 2019_04_09_084817) do
     t.index ["university_id"], name: "index_colleges_on_university_id"
   end
 
+  create_table "comments", force: :cascade do |t|
+    t.text "value"
+    t.string "commentable_type"
+    t.bigint "commentable_id"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable_type_and_commentable_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
   create_table "communities", force: :cascade do |t|
     t.string "name"
     t.string "slug"

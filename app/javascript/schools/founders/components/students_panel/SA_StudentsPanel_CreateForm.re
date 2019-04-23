@@ -11,7 +11,7 @@ let component = ReasonReact.reducerComponent("SA_StudentsPanel_CreateForm");
 
 let str = ReasonReact.string;
 
-let formInvalid = state => state.studentsToAdd |> List.length < 1;
+let formInvalid = state => state.studentsToAdd |> ListUtils.isEmpty;
 let handleErrorCB = () => ();
 
 /* Get the tags applied to a list of students. */
@@ -177,7 +177,7 @@ let make =
                 </div>
                 <div className="flex mt-4">
                   <button
-                    disabled={state.studentsToAdd |> ListUtils.isEmpty}
+                    disabled={formInvalid(state)}
                     onClick={
                       _e =>
                         saveStudents(

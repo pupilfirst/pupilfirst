@@ -227,6 +227,11 @@ let make =
       | None => addCoach(json)
       };
     };
+    let errorNotification = error =>
+      switch (error |> handleApiError) {
+      | Some(code) => code |> string_of_int
+      | None => "Something went wrong!"
+      };
     let sendCoach = formData => {
       let endPoint =
         switch (coach) {
@@ -261,22 +266,13 @@ let make =
            )
         |> then_(json => handleResponseJSON(json) |> resolve)
         |> catch(error =>
-             (
-               switch (error |> handleApiError) {
-               | Some(code) =>
-                 send(UpdateSaving);
-                 Notification.error(
-                   code |> string_of_int,
-                   "Please try again",
-                 );
-               | None =>
-                 send(UpdateSaving);
-                 Notification.error(
-                   "Something went wrong!",
-                   "Please try again",
-                 );
-               }
-             )
+             {
+               Notification.error(
+                 errorNotification(error),
+                 "Please try again",
+               );
+               send(UpdateSaving);
+             }
              |> resolve
            )
         |> ignore

@@ -117,11 +117,11 @@ let footerLogo = (schoolName, logoOnDarkBg) =>
 let editIcon = (additionalClasses, clickHandler) =>
   <div
     className={
-      "cursor-pointer bg-grey-darker text-white p-1 rounded-lg flex items-center "
+      "cursor-pointer bg-grey-darker hover:bg-primary text-white p-2 rounded-lg flex items-center "
       ++ additionalClasses
     }
     onClick=clickHandler>
-    <i className="material-icons text-xl"> {"edit" |> str} </i>
+    <i className="fas fa-pen-nib text-lg" />
   </div>;
 
 let showEditor = (editor, send, event) => {
@@ -363,9 +363,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                 )
               }
               <div className="ml-8 flex items-center">
-                <i className="material-icons text-base">
-                  {"copyright" |> str}
-                </i>
+                <i className="far fa-copyright" />
                 <span className="ml-1">
                   {
                     (

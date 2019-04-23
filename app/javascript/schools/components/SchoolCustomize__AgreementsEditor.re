@@ -148,7 +148,8 @@ let make =
           <label
             className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
             htmlFor="agreements-editor__value">
-            {"Body of Agreement (Markdown)" |> str}
+            {"Body of Agreement " |> str}
+            <i className="fab fa-markdown text-base" />
           </label>
           <textarea
             maxLength=10000

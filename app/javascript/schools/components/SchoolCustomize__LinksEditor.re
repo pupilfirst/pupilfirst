@@ -94,12 +94,9 @@ let showLinks = (state, send, authenticityToken, removeLinkCB, kind, links) =>
                  <span key="link-editor-entry__title"> {title |> str} </span>,
                  <i
                    key="link-editor-entry__icon"
-                   className="material-icons text-base ml-1">
-                   {"arrow_forward" |> str}
-                 </i>,
-                 <code key="link-editor-entry__url" className="ml-1">
-                   {url |> str}
-                 </code>,
+                   className="far fa-link mx-2"
+                 />,
+                 <code key="link-editor-entry__url"> {url |> str} </code>,
                |]
                |> ReasonReact.array
              | SocialLink => <code> {url |> str} </code>

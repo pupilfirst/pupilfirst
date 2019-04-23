@@ -16,10 +16,10 @@ let make = (~closeDrawerCB, children) => {
               }
             }
             className="flex items-center justify-center bg-white text-grey-darker font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
-            <i className="material-icons"> {"close" |> ReasonReact.string} </i>
+            <i className="fal fa-times text-2xl" />
           </button>
         </div>
-        <div className="w-full overflow-scroll">
+        <div className="w-full overflow-y-scroll">
           {children |> ReasonReact.array}
         </div>
       </div>

@@ -140,7 +140,8 @@ let make =
           <label
             className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
             htmlFor="contacts-editor__address">
-            {"Contact Address" |> str}
+            {"Contact Address " |> str}
+            <i className="fab fa-markdown text-base" />
           </label>
           <textarea
             maxLength=1000

@@ -3,6 +3,7 @@
   "private": true,
   "dependencies": {
     "@babel/preset-react": "^7.0.0",
+    "@fortawesome/fontawesome-pro": "^5.8.1",
     "@glennsl/bs-json": "^3.0.0",
     "@rails/ujs": "^6.0.0-alpha",
     "@rails/webpacker": "https://github.com/rails/webpacker",

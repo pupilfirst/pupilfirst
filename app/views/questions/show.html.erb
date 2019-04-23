@@ -42,6 +42,18 @@
           </div>
         </div>
       </div>
+
+      <div class="max-w-md w-full flex flex-col mx-auto items-center justify-center text-left pl-10">
+        <% @question.comments.each do |comment| %>
+          <div class="w-full border-t-2 py-2 text-xs">
+            <%= comment.value %>
+            <span class="font-semibold"> - <%= presenter.name(comment.user) %></span>
+          </div>
+        <% end %>
+        <div class="w-full border-t-2 py-2 text-xs font-semibold">
+          Add a comment
+        </div>
+      </div>
       <% if presenter.show_edit_button? %>
         <div class="max-w-md w-full flex justify-center mb-4">
           <a class="cursor-pointer no-underline hover:bg-grey-lighter"
@@ -89,6 +101,17 @@
               <% end %>
             </div>
           <% end %>
+          <div class="max-w-md w-full flex flex-col mx-auto items-center justify-center text-left pl-10">
+            <% answer.comments.each do |comment| %>
+              <div class="w-full border-t-2 py-2 text-xs">
+                <%= comment.value %>
+                <span class="font-semibold"> - <%= presenter.name(comment.user) %></span>
+              </div>
+            <% end %>
+            <div class="w-full border-t-2 py-2 text-xs font-semibold">
+              Add a comment
+            </div>
+          </div>
         <% end %>
         <div class="mt-4 max-w-md w-full flex mx-auto items-center justify-center relative shadow bg-white rounded-lg">
           <div class="flex w-full  py-4 px-4">

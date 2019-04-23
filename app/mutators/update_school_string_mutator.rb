@@ -10,11 +10,11 @@ class UpdateSchoolStringMutator < ApplicationMutator
   def update_school_string
     SchoolString.transaction do
       if value.present?
-        school_string = SchoolString.where(school: current_school, key: key).first_or_create!
+        school_string = SchoolString.where(school: current_school, key: key).first_or_initialize
         school_string.value = value.strip
         school_string.save!
       else
-        SchoolString.where(school: current_school, key: key).destroy!
+        SchoolString.where(school: current_school, key: key).destroy_all
       end
     end
   end

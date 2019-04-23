@@ -2,7 +2,7 @@ let component = ReasonReact.statelessComponent("SchoolAdmin__DisablingCover");
 
 let make = (~disabled, ~containerClasses="", children) => {
   ...component,
-  render: self =>
+  render: _self =>
     <div className={"relative " ++ containerClasses}>
       {
         if (disabled) {

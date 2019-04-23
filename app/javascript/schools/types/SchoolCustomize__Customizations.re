@@ -110,6 +110,22 @@ let updateTermsOfUse = (termsOfUse, t) => {
   },
 };
 
+let updateAddress = (address, t) => {
+  ...t,
+  schoolStrings: {
+    ...t.schoolStrings,
+    address: Some(address),
+  },
+};
+
+let updateEmailAddress = (emailAddress, t) => {
+  ...t,
+  schoolStrings: {
+    ...t.schoolStrings,
+    emailAddress: Some(emailAddress),
+  },
+};
+
 let decodeStrings = json =>
   Json.Decode.{
     address: json |> field("address", nullable(string)) |> Js.Null.toOption,

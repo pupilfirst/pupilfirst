@@ -1,7 +1,3 @@
-type updateSchoolStringError = [ | `InvalidKey | `InvalidLengthValue];
-
-exception UpdateSchoolStringFailure(array(updateSchoolStringError));
-
 open SchoolCustomize__Types;
 
 [%bs.raw {|require("./SchoolCustomize__AgreementsEditor.css")|}];
@@ -161,13 +157,13 @@ let make =
           className="mt-3 flex flex-col flex-1">
           <label
             className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
-            htmlFor="email">
+            htmlFor="agreements-editor__value">
             {"Body of Agreement (Markdown)" |> str}
           </label>
           <textarea
             maxLength=10000
             className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey flex-1"
-            id="link-full-url"
+            id="agreements-editor__value"
             placeholder="Leave the agreement body empty to hide the footer link."
             onChange={handleAgreementChange(send)}
             value={state.agreement}

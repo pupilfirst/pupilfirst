@@ -21,7 +21,9 @@ type action =
   | AddLink(Customizations.link)
   | RemoveLink(Customizations.linkId)
   | UpdateTermsOfUse(string)
-  | UpdatePrivacyPolicy(string);
+  | UpdatePrivacyPolicy(string)
+  | UpdateAddress(string)
+  | UpdateEmailAddress(string);
 
 let component = ReasonReact.reducerComponent("SchoolCustomize");
 
@@ -87,7 +89,7 @@ let address = a =>
   | Some(a) =>
     <div
       className="text-sm mt-3 leading-normal"
-      dangerouslySetInnerHTML={"__html": a}
+      dangerouslySetInnerHTML={"__html": a |> Markdown.parse}
     />
   | None => ReasonReact.null
   };
@@ -155,6 +157,16 @@ let editor = (state, send, authenticityToken) =>
             )
             authenticityToken
           />
+        | ContactsEditor =>
+          <SchoolAdmin__ContactsEditor
+            key="sc-drawer__contacts-editor"
+            customizations={state.customizations}
+            updateAddressCB=(address => send(UpdateAddress(address)))
+            updateEmailAddressCB=(
+              emailAddress => send(UpdateEmailAddress(emailAddress))
+            )
+            authenticityToken
+          />
         | _ =>
           <div key="sc-drawer__todo"> {"Not yet implemented" |> str} </div>
         }
@@ -195,6 +207,19 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
         ...state,
         customizations:
           state.customizations |> Customizations.updateTermsOfUse(agreement),
+      })
+    | UpdateAddress(address) =>
+      ReasonReact.Update({
+        ...state,
+        customizations:
+          state.customizations |> Customizations.updateAddress(address),
+      })
+    | UpdateEmailAddress(emailAddress) =>
+      ReasonReact.Update({
+        ...state,
+        customizations:
+          state.customizations
+          |> Customizations.updateEmailAddress(emailAddress),
       })
     },
   render: ({state, send}) =>

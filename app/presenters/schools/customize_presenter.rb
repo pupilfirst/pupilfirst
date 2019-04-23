@@ -16,16 +16,11 @@ module Schools
 
     def school_strings
       {
-        address: address,
+        address: SchoolString::Address.for(current_school),
         emailAddress: SchoolString::EmailAddress.for(current_school),
         privacyPolicy: SchoolString::PrivacyPolicy.for(current_school),
         termsOfUse: SchoolString::TermsOfUse.for(current_school)
       }
-    end
-
-    def address
-      a = SchoolString::Address.for(current_school)
-      a.present? ? view.simple_format(a) : nil
     end
 
     def school_images

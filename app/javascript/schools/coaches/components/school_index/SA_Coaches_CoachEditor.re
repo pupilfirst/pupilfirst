@@ -266,13 +266,22 @@ let make =
            )
         |> then_(json => handleResponseJSON(json) |> resolve)
         |> catch(error =>
-             {
-               Notification.error(
-                 errorNotification(error),
-                 "Please try again",
-               );
-               send(UpdateSaving);
-             }
+             (
+               switch (error |> handleApiError) {
+               | Some(code) =>
+                 send(UpdateSaving);
+                 Notification.error(
+                   code |> string_of_int,
+                   "Please try again",
+                 );
+               | None =>
+                 send(UpdateSaving);
+                 Notification.error(
+                   "Something went wrong!",
+                   "Please try again",
+                 );
+               }
+             )
              |> resolve
            )
         |> ignore

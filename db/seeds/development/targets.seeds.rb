@@ -59,10 +59,4 @@ after 'development:target_groups', 'development:faculty' do
     target.target_evaluation_criteria.create!(evaluation_criterion: ios_course.evaluation_criteria.first)
     target.update!(rubric_description: Faker::Lorem::paragraph)
   end
-
-  Target.joins(:level).where(levels: { number: 1, course_id: ios_course.id }).each do |target|
-    next if target.link_to_complete.present?
-    target.target_evaluation_criteria.create!(evaluation_criterion: ios_course.evaluation_criteria.first)
-    target.update!(rubric_description: Faker::Lorem::paragraph)
-  end
 end

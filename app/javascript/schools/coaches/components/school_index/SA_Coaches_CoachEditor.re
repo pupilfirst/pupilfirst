@@ -221,10 +221,17 @@ let make =
         |> Json.Decode.(field("error", nullable(string)))
         |> Js.Null.toOption;
       switch (error) {
-      | Some(err) => Notification.error("Something went wrong!", err)
+      | Some(err) =>
+        send(UpdateSaving);
+        Notification.error("Something went wrong!", err);
       | None => addCoach(json)
       };
     };
+    let errorNotification = error =>
+      switch (error |> handleApiError) {
+      | Some(code) => code |> string_of_int
+      | None => "Something went wrong!"
+      };
     let sendCoach = formData => {
       let endPoint =
         switch (coach) {
@@ -259,17 +266,13 @@ let make =
            )
         |> then_(json => handleResponseJSON(json) |> resolve)
         |> catch(error =>
-             (
-               switch (error |> handleApiError) {
-               | Some(code) =>
-                 Notification.error(code |> string_of_int, "Please try again")
-               | None =>
-                 Notification.error(
-                   "Something went wrong!",
-                   "Please try again",
-                 )
-               }
-             )
+             {
+               Notification.error(
+                 errorNotification(error),
+                 "Please try again",
+               );
+               send(UpdateSaving);
+             }
              |> resolve
            )
         |> ignore

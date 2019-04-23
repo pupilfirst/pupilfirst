@@ -622,9 +622,10 @@ let make =
                   </div>
                 </div>
                 <div className="mt-3 mb-3 text-xs">
-                  <span>
+                  <span className="leading-normal">
+                    <strong> {"Important:" |> str} </strong>
                     {
-                      "NOTE: Maximum grade and passing grade once created cannot be modified for a course. Only grade labels will be allowed modification"
+                      " The values for maximum and passing grades cannot be modified once a course is created. Labels given to each grade can be edited later on."
                       |> str
                     }
                   </span>

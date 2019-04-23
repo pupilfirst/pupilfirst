@@ -21,7 +21,7 @@ feature 'Disconnect from Slack' do
     stub_request(:get, 'https://slack.com/api/auth.revoke?token=SLACK_ACCESS_TOKEN')
       .to_return(body: { ok: true }.to_json)
 
-    sign_in_user founder.user, referer: edit_founder_path
+    sign_in_user founder.user, referer: edit_user_profile_path
 
     expect(page).to have_content('Your username on Slack is SLACK_USERNAME.')
 

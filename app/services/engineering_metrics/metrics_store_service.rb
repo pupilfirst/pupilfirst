@@ -51,32 +51,9 @@ module EngineeringMetrics
     # Use linguist to store programming-language
     def record_language_split
       root_path = File.absolute_path(Rails.root)
-      prepare_repository(root_path)
-      stats = `cd #{root_path} && yarn run --silent cloc --vcs=git --exclude-list-file=cloc-exclude --exclude-lang=Markdown --yaml --quiet`
+      stats = `cd #{root_path} && yarn run --silent cloc app/ lib/ spec/ db/seeds/ --exclude-lang=Markdown --yaml -q`
       current_entry.metrics[:loc] = YAML.safe_load(stats).except('header', 'SUM')
       current_entry.save!
-    end
-
-    # This method creates a new Git repository in the root of the app. This is requires for cloc to work (quickly),
-    # since it can use the 'git ls-files' command to quickly get the list of files to scan.
-    def prepare_repository(root_path)
-      return unless Rails.env.production?
-
-      commands = <<~COMMANDS
-        cd #{root_path}
-        git init
-        git config user.name "Vocalist"
-        git config user.email "hosting@sv.co"
-
-        git add app/ spec/ config/ lib/
-        git add db/schema.rb db/seeds
-        git add .overcommit.yml .rubocop.yml codecov.yml
-        git add Gemfile Rakefile package.json app.json
-
-        git commit -m "Cloc commit"
-      COMMANDS
-
-      system(commands)
     end
 
     def record_github_stats

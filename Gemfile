@@ -1,4 +1,4 @@
-ruby '2.6.2'
+ruby '2.6.3'
 
 source 'https://rubygems.org'
 
@@ -6,7 +6,7 @@ source 'https://rubygems.org'
 git_source(:github) { |repository_path| "https://github.com/#{repository_path}.git" }
 
 # Ruby on Rails. http://rubyonrails.org
-gem 'rails', '~> 5.2.2'
+gem 'rails', '~> 5.2.3'
 
 gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 

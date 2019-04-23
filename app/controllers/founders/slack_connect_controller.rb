@@ -27,7 +27,7 @@ module Founders
         flash[:error] = 'Did not receive authorization from Slack.'
       end
 
-      redirect_to edit_founder_path
+      redirect_to edit_user_profile_path
     end
 
     # POST /founders/slack/disconnect
@@ -37,7 +37,7 @@ module Founders
       slack_connect_service = Founders::SlackConnectService.new(current_founder)
       slack_connect_service.disconnect
       flash[:success] = 'Your SV.CO account has been disconnected from your Slack account.'
-      redirect_to edit_founder_path
+      redirect_to edit_user_profile_path
     end
   end
 end

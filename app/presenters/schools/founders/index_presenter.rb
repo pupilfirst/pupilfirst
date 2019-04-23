@@ -12,7 +12,7 @@ module Schools
           teams: teams,
           courseId: @course.id,
           courseCoachIds: @course.faculty.pluck(:id),
-          schoolCoaches: coach_details(@course.school.faculty.where.not(exited: true).includes(:image_attachment)),
+          schoolCoaches: coach_details(@course.school.faculty.where.not(exited: true).includes(user_profiles: { avatar_attachment: :blob })),
           levels: levels,
           studentTags: founder_tags,
           authenticityToken: view.form_authenticity_token

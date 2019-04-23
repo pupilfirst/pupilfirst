@@ -3,13 +3,13 @@ class ChangelogController < ApplicationController
   def index
     @year = changelog_year
     @skip_container = true
-    @changelog_releases = Changelog::ChangesService.new(@year, current_user&.admin_user.present?).releases
+    @changelog_releases = Changelog::ChangesService.new(@year).releases
   end
 
   # GET /changelog/archive
   def archive
     @skip_container = true
-    @changelog = File.read(File.absolute_path(Rails.root.join('CHANGELOG.md')))
+    @changelog = File.read(File.absolute_path(Rails.root.join('changelog', 'archive', 'CHANGELOG.md')))
   end
 
   private

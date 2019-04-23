@@ -105,8 +105,8 @@ feature 'School students index' do
     expect(page).to have_text("Student updated successfully")
     find('.ui-pnotify-container').click
 
-    expect(founder_1.reload.name).to end_with('Jr.')
-    expect(founder_1.startup.name).to eq(new_team_name)
+    expect(founder_1.user_profile.reload.name).to end_with('Jr.')
+    expect(founder_1.reload.startup.name).to eq(new_team_name)
     expect(founder_1.excluded_from_leaderboard).to eq(true)
 
     # Form a Team

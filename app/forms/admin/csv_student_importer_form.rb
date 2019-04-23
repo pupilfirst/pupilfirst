@@ -27,7 +27,9 @@ module Admin
         Founder.transaction do
           team = Startup.create!(name: founder_data['name'], level: level)
           user = user(founder_data['email'])
-          Founder.create!(user: user, name: founder_data['name'], startup: team)
+          user_profile = UserProfile.where(user: user, school: level.course.school).first_or_create!
+          user_profile.update!(name: founder_data['name'])
+          Founder.create!(user: user, startup: team)
         end
       end
     end

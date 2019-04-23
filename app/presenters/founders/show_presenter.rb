@@ -18,7 +18,7 @@ module Founders
     end
 
     def public_faculty
-      @founder.faculty.where(public: false)
+      @founder.faculty.where(public: true)
     end
 
     def faculty_display_text

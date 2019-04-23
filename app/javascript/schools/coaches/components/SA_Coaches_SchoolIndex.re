@@ -70,7 +70,7 @@ let make = (~coaches, ~authenticityToken, _children) => {
                      className="flex items-center shadow bg-white rounded-lg mb-4">
                      <div className="course-faculty__list-item flex w-full">
                        <div
-                         className="flex flex-1 items-center justify-between cursor-pointer py-4 px-4 hover:bg-grey-lighter"
+                         className="course-faculty__list-item-details flex flex-1 items-center justify-between cursor-pointer py-4 px-4 hover:bg-grey-lighter"
                          onClick={
                            _event => {
                              ReactEvent.Mouse.preventDefault(_event);
@@ -96,13 +96,9 @@ let make = (~coaches, ~authenticityToken, _children) => {
                            </div>
                          </div>
                          <div
-                           className="w-7 course-faculty__list-item-edit flex items-center justify-center">
-                           <Icon kind=Icon.Edit size="4" opacity=75 />
+                           className="w-7 course-faculty__list-item-edit flex items-center justify-center invisible">
+                           <Icon kind=Icon.Edit size="4" />
                          </div>
-                       </div>
-                       <div
-                         className="w-15 text-xs course-faculty__list-item-remove cursor-pointer flex items-center justify-center hover:bg-grey-lightest">
-                         <Icon kind=Icon.Delete size="4" opacity=75 />
                        </div>
                      </div>
                    </div>

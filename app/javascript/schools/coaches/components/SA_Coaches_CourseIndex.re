@@ -134,23 +134,29 @@ let make =
                 |> List.map(coach =>
                      <div
                        key={coach |> Coach.id |> string_of_int}
-                       className="flex w-1/2 flex-no-shrink items-center mb-5 px-3">
+                       className="flex w-1/2 flex-no-shrink mb-5 px-3">
                        <div
                          className="course-faculty__list-item shadow bg-white rounded-lg flex w-full">
-                         <div className="flex flex-1 items-center py-4 px-4">
-                           <img
-                             className="w-10 h-10 rounded-full mr-4"
-                             src={coach |> Coach.imageUrl}
-                             alt={"Avatar of " ++ (coach |> Coach.name)}
-                           />
-                           <div className="text-sm">
-                             <p className="text-black font-semibold">
-                               {coach |> Coach.name |> str}
-                             </p>
-                             <p
-                               className="text-grey-dark font-semibold text-xs mt-1">
-                               {coach |> Coach.title |> str}
-                             </p>
+                         <div className="flex flex-1 justify-between">
+                           <div className="flex py-4 px-4">
+                             <img
+                               className="w-10 h-10 rounded-full mr-4"
+                               src={coach |> Coach.imageUrl}
+                               alt={"Avatar of " ++ (coach |> Coach.name)}
+                             />
+                             <div className="text-sm">
+                               <p className="text-black font-semibold mt-1">
+                                 {coach |> Coach.name |> str}
+                               </p>
+                               <p
+                                 className="text-grey-dark font-semibold text-xs mt-1">
+                                 {coach |> Coach.title |> str}
+                               </p>
+                             </div>
+                           </div>
+                           <div
+                             className="w-10 text-xs course-faculty__list-item-remove cursor-pointer flex items-center justify-center hover:bg-grey-lighter">
+                             <Icon kind=Icon.Delete size="4" />
                            </div>
                          </div>
                        </div>
@@ -177,21 +183,26 @@ let make =
                        className="flex w-1/2 items-center mb-4 px-3">
                        <div
                          className="course-faculty__list-item shadow bg-white overflow-hidden rounded-lg flex flex-col w-full">
-                         <div
-                           className="flex flex-1 items-center pt-4 pb-3 px-4">
-                           <img
-                             className="w-10 h-10 rounded-full mr-4"
-                             src={coach |> Coach.imageUrl}
-                             alt={"Avatar of " ++ Coach.name(coach)}
-                           />
-                           <div className="text-sm">
-                             <p className="text-black font-semibold">
-                               {coach |> Coach.name |> str}
-                             </p>
-                             <p
-                               className="text-grey-dark font-semibold text-xs mt-1">
-                               {coach |> Coach.title |> str}
-                             </p>
+                         <div className="flex flex-1 justify-between">
+                           <div className="flex pt-4 pb-3 px-4">
+                             <img
+                               className="w-10 h-10 rounded-full mr-4"
+                               src={coach |> Coach.imageUrl}
+                               alt={"Avatar of " ++ Coach.name(coach)}
+                             />
+                             <div className="text-sm">
+                               <p className="text-black font-semibold">
+                                 {coach |> Coach.name |> str}
+                               </p>
+                               <p
+                                 className="text-grey-dark font-semibold text-xs mt-1">
+                                 {coach |> Coach.title |> str}
+                               </p>
+                             </div>
+                           </div>
+                           <div
+                             className="w-10 text-xs course-faculty__list-item-remove cursor-pointer flex items-center justify-center hover:bg-grey-lighter">
+                             <Icon kind=Icon.Delete size="4" />
                            </div>
                          </div>
                          <div className="pt-3 pb-4 px-4">

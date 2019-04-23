@@ -55,11 +55,10 @@ module Schools
       enrolled_coach_ids = params[:coach_ids]
       FacultyCourseEnrollment.transaction do
         coaches = Faculty.where(id: enrolled_coach_ids).includes(:school)
-        FacultyCourseEnrollment.where(course: @course).destroy_all
         coaches.each do |coach|
           ::Courses::AssignReviewerService.new(course).assign(coach)
         end
-        render json: { coach_ids: coaches.pluck(:id), error: nil }
+        render json: { coach_ids: @course.faculty.pluck(:id), error: nil }
       end
     end
 

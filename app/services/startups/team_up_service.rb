@@ -14,13 +14,9 @@ module Startups
         )
 
         # the new team formed should have all team coaches assigned for the current teams
-        if old_startup_faculty.present?
-          old_startup_faculty.each do |faculty|
-            FacultyStartupEnrollment.create!(startup: startup, faculty: faculty, safe_to_create: true)
-          end
+        old_startup_faculty.each do |faculty|
+          FacultyStartupEnrollment.create!(startup: startup, faculty: faculty, safe_to_create: true)
         end
-
-        old_startup_ids = @founders.pluck(:startup_id)
 
         @founders.update(startup: startup)
 
@@ -38,11 +34,12 @@ module Startups
     private
 
     def old_startup_faculty
-      old_startup_ids = @founders.pluck(:startup_id)
       current_faculty_enrollments = FacultyStartupEnrollment.where(startup_id: old_startup_ids)
-      if current_faculty_enrollments.exists?
-        Faculty.where(id: current_faculty_enrollments.pluck(:faculty_id).uniq)
-      end
+      Faculty.where(id: current_faculty_enrollments.select(:faculty_id).distinct)
+    end
+
+    def old_startup_ids
+      @old_startup_ids ||= @founders.pluck(:startup_id)
     end
   end
 end

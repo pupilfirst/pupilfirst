@@ -1,4 +1,5 @@
 open CoachesCourseIndex__Types;
+open SchoolAdmin__Utils;
 
 /* open SchoolAdmin__Utils; */
 let str = ReasonReact.string;
@@ -15,9 +16,10 @@ type state = {
 
 type action =
   | UpdateFormVisible(formVisible)
-  | UpdateCoaches(list(int));
+  | UpdateCoaches(list(int))
+  | RemoveCoach(int);
 
-let component = ReasonReact.reducerComponent("SA_Coaches_CourseEnrollment");
+let component = ReasonReact.reducerComponent("SA_Coaches_CourseIndex");
 
 let make =
     (
@@ -67,12 +69,53 @@ let make =
         courseCoaches: newCoachesList,
         teamCoaches: newTeamCoaches,
       });
+    | RemoveCoach(coachId) =>
+      ReasonReact.Update({
+        ...state,
+        courseCoaches:
+          state.courseCoaches
+          |> List.filter(courseCoach => Coach.id(courseCoach) !== coachId),
+        teamCoaches:
+          state.teamCoaches
+          |> List.filter(teamCoach => Coach.id(teamCoach) !== coachId),
+      })
     },
   render: ({state, send}) => {
     let closeFormCB = () => send(UpdateFormVisible(None));
     let updateCoachesCB = coachIds => {
       send(UpdateCoaches(coachIds));
       send(UpdateFormVisible(None));
+    };
+    let handleErrorCB = () =>
+      Notification.error(
+        "Coach enrollment could not be deleted",
+        "Please try again",
+      );
+    let handleResponseCB = json => {
+      let coachId = json |> Json.Decode.(field("coach_id", int));
+      send(RemoveCoach(coachId));
+      Notification.success(
+        "Success",
+        "Coach enrollment deleted successfully",
+      );
+    };
+    let removeCoach = coach => {
+      let url =
+        "/school/courses/"
+        ++ (courseId |> string_of_int)
+        ++ "/coaches/delete_enrollments";
+      let payload = Js.Dict.empty();
+      Js.Dict.set(
+        payload,
+        "authenticity_token",
+        authenticityToken |> Js.Json.string,
+      );
+      Js.Dict.set(
+        payload,
+        "coach_id",
+        coach |> Coach.id |> string_of_int |> Js.Json.string,
+      );
+      Api.create(url, payload, handleResponseCB, handleErrorCB);
     };
     <div className="flex flex-1 h-screen overflow-y-scroll">
       {
@@ -136,6 +179,7 @@ let make =
                        key={coach |> Coach.id |> string_of_int}
                        className="flex w-1/2 flex-no-shrink mb-5 px-3">
                        <div
+                         id={coach |> Coach.name}
                          className="course-faculty__list-item shadow bg-white rounded-lg flex w-full">
                          <div className="flex flex-1 justify-between">
                            <div className="flex py-4 px-4">
@@ -156,7 +200,15 @@ let make =
                            </div>
                            <div
                              className="w-10 text-xs course-faculty__list-item-remove cursor-pointer flex items-center justify-center hover:bg-grey-lighter">
-                             <Icon kind=Icon.Delete size="4" />
+                             <button
+                               onClick={
+                                 _event => {
+                                   ReactEvent.Mouse.preventDefault(_event);
+                                   removeCoach(coach);
+                                 }
+                               }>
+                               <Icon kind=Icon.Delete size="4" />
+                             </button>
                            </div>
                          </div>
                        </div>
@@ -202,7 +254,15 @@ let make =
                            </div>
                            <div
                              className="w-10 text-xs course-faculty__list-item-remove cursor-pointer flex items-center justify-center hover:bg-grey-lighter">
-                             <Icon kind=Icon.Delete size="4" />
+                             <button
+                               onClick={
+                                 _event => {
+                                   ReactEvent.Mouse.preventDefault(_event);
+                                   removeCoach(coach);
+                                 }
+                               }>
+                               <Icon kind=Icon.Delete size="4" />
+                             </button>
                            </div>
                          </div>
                          <div className="pt-3 pb-4 px-4">

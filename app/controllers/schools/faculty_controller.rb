@@ -30,16 +30,16 @@ module Schools
       end
     end
 
-    # DELETE /school/coaches/:id
-    def destroy
-      coach = Faculty.find(params[:id])
+    # POST /school/courses/:course_id/coaches/delete_enrollments
+    def delete_enrollments
+      coach = Faculty.find(params[:coach_id])
       course = courses.find(params[:course_id])
+      authorize(current_school, policy_class: Schools::FacultyPolicy)
 
-      authorize([course, coach], policy_class: Schools::FacultyPolicy)
-
-      ::Courses::UnassignReviewerService.new(course).unassign(coach)
-
-      redirect_back(fallback_location: school_course_coaches_path(course))
+      FacultyCourseEnrollment.transaction do
+        ::Courses::UnassignReviewerService.new(course).unassign(coach)
+        render json: { coach_id: coach.id, error: nil }
+      end
     end
 
     def course_index

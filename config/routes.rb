@@ -53,6 +53,7 @@ Rails.application.routes.draw do
         collection do
           get '/', action: 'course_index'
           post 'update_enrollments'
+          post 'delete_enrollments'
         end
       end
     end

@@ -41,7 +41,7 @@ type action =
   | UpdateExited(bool)
   | UpdateSaving;
 
-let component = ReasonReact.reducerComponent("SA_CoachesPanel_CoachEditor");
+let component = ReasonReact.reducerComponent("SA_Coaches_CoachEditor");
 
 let str = ReasonReact.string;
 

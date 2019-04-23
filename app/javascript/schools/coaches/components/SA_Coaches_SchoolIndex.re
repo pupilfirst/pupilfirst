@@ -16,7 +16,7 @@ type action =
   | UpdateFormVisible(formVisible)
   | UpdateCoaches(Coach.t);
 
-let component = ReasonReact.reducerComponent("SA_CoachesPanel");
+let component = ReasonReact.reducerComponent("SA_Coaches_SchoolIndex");
 
 let make = (~coaches, ~authenticityToken, _children) => {
   ...component,

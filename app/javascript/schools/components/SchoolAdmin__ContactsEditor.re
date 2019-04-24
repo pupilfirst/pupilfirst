@@ -4,7 +4,7 @@ let str = ReasonReact.string;
 
 type action =
   | UpdateAddress(string)
-  | UpdateEmailAddress(string)
+  | UpdateEmailAddress(string, bool)
   | BeginUpdate
   | ErrorOccured
   | DoneUpdating;
@@ -12,6 +12,7 @@ type action =
 type state = {
   address: string,
   emailAddress: string,
+  emailAddressInvalid: bool,
   updating: bool,
   formDirty: bool,
 };
@@ -95,7 +96,12 @@ let handleUpdateContactDetails =
   ();
 };
 
-let updateContactDetailsDisabled = state => !state.formDirty;
+let updateButtonDisabled = state =>
+  if (state.updating) {
+    true;
+  } else {
+    !state.formDirty || state.emailAddressInvalid;
+  };
 
 let optionToString = o =>
   switch (o) {
@@ -116,6 +122,7 @@ let make =
     address: customizations |> Customizations.address |> optionToString,
     emailAddress:
       customizations |> Customizations.emailAddress |> optionToString,
+    emailAddressInvalid: false,
     updating: false,
     formDirty: false,
   },
@@ -123,8 +130,13 @@ let make =
     switch (action) {
     | UpdateAddress(address) =>
       ReasonReact.Update({...state, address, formDirty: true})
-    | UpdateEmailAddress(emailAddress) =>
-      ReasonReact.Update({...state, emailAddress, formDirty: true})
+    | UpdateEmailAddress(emailAddress, invalid) =>
+      ReasonReact.Update({
+        ...state,
+        emailAddress,
+        emailAddressInvalid: invalid,
+        formDirty: true,
+      })
     | BeginUpdate => ReasonReact.Update({...state, updating: true})
     | ErrorOccured => ReasonReact.Update({...state, updating: false})
     | DoneUpdating =>
@@ -168,15 +180,24 @@ let make =
             placeholder="Leave the email address empty to hide the footer link."
             onChange={
               handleInputChange(emailAddress =>
-                send(UpdateEmailAddress(emailAddress))
+                send(
+                  UpdateEmailAddress(
+                    emailAddress,
+                    emailAddress |> EmailUtils.isInvalid(~allowBlank=true),
+                  ),
+                )
               )
             }
             value={state.emailAddress}
           />
+          <School__InputGroupError
+            message="is not a valid email address"
+            active={state.emailAddressInvalid}
+          />
         </div>
         <button
           key="contacts-editor__update-button"
-          disabled={updateContactDetailsDisabled(state)}
+          disabled={updateButtonDisabled(state)}
           onClick={
             handleUpdateContactDetails(
               state,

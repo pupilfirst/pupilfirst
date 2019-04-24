@@ -1,4 +1,5 @@
 open CoachesCourseIndex__Types;
+open SchoolAdmin__Utils;
 
 /* open SchoolAdmin__Utils; */
 let str = ReasonReact.string;
@@ -11,13 +12,16 @@ type state = {
   courseCoaches: list(Coach.t),
   teamCoaches: list(Coach.t),
   formVisible,
+  saving: bool,
 };
 
 type action =
   | UpdateFormVisible(formVisible)
-  | UpdateCoaches(list(int));
+  | UpdateCoaches(list(int))
+  | RemoveCoach(int)
+  | UpdateSaving;
 
-let component = ReasonReact.reducerComponent("SA_Coaches_CourseEnrollment");
+let component = ReasonReact.reducerComponent("SA_Coaches_CourseIndex");
 
 let make =
     (
@@ -43,6 +47,7 @@ let make =
            |> List.exists(facultyId => facultyId == Coach.id(schoolCoach))
          ),
     formVisible: None,
+    saving: false,
   },
   reducer: (action, state) =>
     switch (action) {
@@ -67,12 +72,58 @@ let make =
         courseCoaches: newCoachesList,
         teamCoaches: newTeamCoaches,
       });
+    | RemoveCoach(coachId) =>
+      ReasonReact.Update({
+        ...state,
+        courseCoaches:
+          state.courseCoaches
+          |> List.filter(courseCoach => Coach.id(courseCoach) !== coachId),
+        teamCoaches:
+          state.teamCoaches
+          |> List.filter(teamCoach => Coach.id(teamCoach) !== coachId),
+      })
+    | UpdateSaving => ReasonReact.Update({...state, saving: !state.saving})
     },
   render: ({state, send}) => {
     let closeFormCB = () => send(UpdateFormVisible(None));
     let updateCoachesCB = coachIds => {
       send(UpdateCoaches(coachIds));
       send(UpdateFormVisible(None));
+    };
+    let handleErrorCB = () => {
+      send(UpdateSaving);
+      Notification.error(
+        "Coach enrollment could not be deleted",
+        "Please try again",
+      );
+    };
+    let handleResponseCB = json => {
+      send(UpdateSaving);
+      let coachId = json |> Json.Decode.(field("coach_id", int));
+      send(RemoveCoach(coachId));
+      Notification.success(
+        "Success",
+        "Coach enrollment deleted successfully",
+      );
+    };
+    let removeCoach = coach => {
+      send(UpdateSaving);
+      let url =
+        "/school/courses/"
+        ++ (courseId |> string_of_int)
+        ++ "/coaches/delete_enrollments";
+      let payload = Js.Dict.empty();
+      Js.Dict.set(
+        payload,
+        "authenticity_token",
+        authenticityToken |> Js.Json.string,
+      );
+      Js.Dict.set(
+        payload,
+        "coach_id",
+        coach |> Coach.id |> string_of_int |> Js.Json.string,
+      );
+      Api.create(url, payload, handleResponseCB, handleErrorCB);
     };
     <div className="flex flex-1 h-screen overflow-y-scroll">
       {
@@ -103,7 +154,7 @@ let make =
             className="max-w-md w-full flex mx-auto items-center justify-center relative bg-grey-lighter hover:bg-grey-light hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-12 cursor-pointer">
             <i className="material-icons"> {"add_circle_outline" |> str} </i>
             <h4 className="font-semibold ml-2">
-              {"Assign/Remove Course Faculty" |> str}
+              {"Assign Coaches to Course" |> str}
             </h4>
           </button>
         </div>
@@ -134,23 +185,39 @@ let make =
                 |> List.map(coach =>
                      <div
                        key={coach |> Coach.id |> string_of_int}
-                       className="flex w-1/2 flex-no-shrink items-center mb-5 px-3">
+                       className="flex w-1/2 flex-no-shrink mb-5 px-3">
                        <div
+                         id={coach |> Coach.name}
                          className="course-faculty__list-item shadow bg-white rounded-lg flex w-full">
-                         <div className="flex flex-1 items-center py-4 px-4">
-                           <img
-                             className="w-10 h-10 rounded-full mr-4"
-                             src={coach |> Coach.imageUrl}
-                             alt={"Avatar of " ++ (coach |> Coach.name)}
-                           />
-                           <div className="text-sm">
-                             <p className="text-black font-semibold">
-                               {coach |> Coach.name |> str}
-                             </p>
-                             <p
-                               className="text-grey-dark font-semibold text-xs mt-1">
-                               {coach |> Coach.title |> str}
-                             </p>
+                         <div className="flex flex-1 justify-between">
+                           <div className="flex py-4 px-4">
+                             <img
+                               className="w-10 h-10 rounded-full mr-4"
+                               src={coach |> Coach.imageUrl}
+                               alt={"Avatar of " ++ (coach |> Coach.name)}
+                             />
+                             <div className="text-sm">
+                               <p className="text-black font-semibold mt-1">
+                                 {coach |> Coach.name |> str}
+                               </p>
+                               <p
+                                 className="text-grey-dark font-semibold text-xs mt-1">
+                                 {coach |> Coach.title |> str}
+                               </p>
+                             </div>
+                           </div>
+                           <div
+                             className="w-10 text-xs course-faculty__list-item-remove cursor-pointer flex items-center justify-center hover:bg-grey-lighter">
+                             <button
+                               disabled={state.saving}
+                               onClick={
+                                 _event => {
+                                   ReactEvent.Mouse.preventDefault(_event);
+                                   removeCoach(coach);
+                                 }
+                               }>
+                               <Icon kind=Icon.Delete size="4" />
+                             </button>
                            </div>
                          </div>
                        </div>
@@ -177,21 +244,35 @@ let make =
                        className="flex w-1/2 items-center mb-4 px-3">
                        <div
                          className="course-faculty__list-item shadow bg-white overflow-hidden rounded-lg flex flex-col w-full">
-                         <div
-                           className="flex flex-1 items-center pt-4 pb-3 px-4">
-                           <img
-                             className="w-10 h-10 rounded-full mr-4"
-                             src={coach |> Coach.imageUrl}
-                             alt={"Avatar of " ++ Coach.name(coach)}
-                           />
-                           <div className="text-sm">
-                             <p className="text-black font-semibold">
-                               {coach |> Coach.name |> str}
-                             </p>
-                             <p
-                               className="text-grey-dark font-semibold text-xs mt-1">
-                               {coach |> Coach.title |> str}
-                             </p>
+                         <div className="flex flex-1 justify-between">
+                           <div className="flex pt-4 pb-3 px-4">
+                             <img
+                               className="w-10 h-10 rounded-full mr-4"
+                               src={coach |> Coach.imageUrl}
+                               alt={"Avatar of " ++ Coach.name(coach)}
+                             />
+                             <div className="text-sm">
+                               <p className="text-black font-semibold">
+                                 {coach |> Coach.name |> str}
+                               </p>
+                               <p
+                                 className="text-grey-dark font-semibold text-xs mt-1">
+                                 {coach |> Coach.title |> str}
+                               </p>
+                             </div>
+                           </div>
+                           <div
+                             className="w-10 text-xs course-faculty__list-item-remove cursor-pointer flex items-center justify-center hover:bg-grey-lighter">
+                             <button
+                               disabled={state.saving}
+                               onClick={
+                                 _event => {
+                                   ReactEvent.Mouse.preventDefault(_event);
+                                   removeCoach(coach);
+                                 }
+                               }>
+                               <Icon kind=Icon.Delete size="4" />
+                             </button>
                            </div>
                          </div>
                          <div className="pt-3 pb-4 px-4">

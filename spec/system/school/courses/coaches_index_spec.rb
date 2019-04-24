@@ -32,23 +32,23 @@ feature 'Course Coaches Index' do
     sign_in_user school_admin.user, referer: school_course_coaches_path(course_1)
 
     # list all coaches
-    expect(page).to have_text("Assign/Remove Course Faculty")
+    expect(page).to have_text('Assign Coaches to Course')
     expect(page).to have_text(coach_1.name)
     expect(page).to have_text(coach_2.name)
     expect(course_1.faculty.count).to eq(2)
 
-    click_button 'Assign/Remove Course Faculty'
+    click_button 'Assign Coaches to Course'
 
-    expect(page).to have_selector('.select-list__item-selected', count: 2)
-    expect(page).to have_selector('.select-list__item-selected', text: coach_1.name)
-    expect(page).to have_selector('.select-list__item-selected', text: coach_2.name)
+    expect(page).to have_selector('.select-list__item-selected', count: 1)
 
     within '.select-list__group' do
       expect(page).to_not have_selector('.px-3', text: coach_5.name)
+      expect(page).to_not have_selector('.px-3', text: coach_1.name)
+      expect(page).to_not have_selector('.px-3', text: coach_2.name)
       find('.px-3', text: coach_3.name).click
     end
 
-    click_button 'Update Course Coaches'
+    click_button 'Add Course Coaches'
 
     within('div[aria-label="List of course coaches"]') do
       expect(page).to have_text(coach_3.name)
@@ -70,14 +70,14 @@ feature 'Course Coaches Index' do
     expect(page).to have_text(startup.name)
     expect(startup.faculty.count).to eq(1)
 
-    click_button 'Assign/Remove Course Faculty'
+    click_button 'Assign Coaches to Course'
 
     within '.select-list__group' do
       expect(page).to_not have_text(coach_6.name)
       find('.px-3', text: coach_3.name).click
     end
 
-    click_button 'Update Course Coaches'
+    click_button 'Add Course Coaches'
 
     expect(page).to have_text('Course Coaches')
     expect(page).to_not have_text(startup.name)

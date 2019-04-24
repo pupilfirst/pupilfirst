@@ -80,10 +80,7 @@ let updateYoutubeVideoId = (send, youtubeVideoId) => {
   send(UpdateYoutubeVideoId(youtubeVideoId, hasError));
 };
 let updateLinkToComplete = (send, link) => {
-  let regex = [%re
-    {|/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/|}
-  ];
-  let hasError = link |> String.length < 1 ? false : !Js.Re.test(link, regex);
+  let hasError = UrlUtils.isInvalid(link);
   send(UpdateLinkToComplete(link, hasError));
 };
 

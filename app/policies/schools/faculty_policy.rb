@@ -14,7 +14,7 @@ module Schools
     end
 
     alias course_index? school_index?
-    alias destroy? create?
+    alias delete_enrollments? school_index?
     alias update? create?
 
     class Scope < Scope

@@ -18,17 +18,19 @@ let component =
 
 let str = ReasonReact.string;
 
-let handleEnrollmentChange = (schoolCoaches, courseCoachIds) => {
-  let selectedCoachIds = courseCoachIds |> Array.of_list;
-  schoolCoaches
-  |> List.map(coach => {
-       let coachId = coach |> Coach.id;
-       let selected =
-         selectedCoachIds
-         |> Js.Array.findIndex(selectedCoachId => coachId == selectedCoachId)
-         > (-1);
-       (coach |> Coach.id, coach |> Coach.name, selected);
-     });
+let handleCoachAdditionList = (schoolCoaches, courseCoachIds) => {
+  let addableCoaches =
+    schoolCoaches
+    |> List.filter(schoolCoach =>
+         !(
+           courseCoachIds
+           |> List.exists(courseCoachId =>
+                courseCoachId == Coach.id(schoolCoach)
+              )
+         )
+       );
+  addableCoaches
+  |> List.map(coach => (coach |> Coach.id, coach |> Coach.name, false));
 };
 
 let setPayload = (state, authenticityToken) => {
@@ -62,7 +64,7 @@ let make =
     ) => {
   ...component,
   initialState: () => {
-    courseCoaches: handleEnrollmentChange(schoolCoaches, courseCoachIds),
+    courseCoaches: handleCoachAdditionList(schoolCoaches, courseCoachIds),
     saving: false,
   },
   reducer: (action, state) =>
@@ -98,6 +100,13 @@ let make =
         ++ "/coaches/update_enrollments";
       Api.create(url, payload, handleResponseCB, handleErrorCB);
     };
+
+    let saveDisabled =
+      state.courseCoaches
+      |> List.filter(((_, _, selected)) => selected)
+      |> ListUtils.isEmpty
+      || state.saving;
+
     <div className="blanket">
       <div className="drawer-right">
         <div className="drawer-right__close absolute">
@@ -113,7 +122,7 @@ let make =
               <div className="max-w-md p-6 mx-auto">
                 <h5
                   className="uppercase text-center border-b border-grey-light pb-2 mb-4">
-                  {"COACHES ENROLLMENT FOR THE COURSE" |> str}
+                  {"ADD NEW COACHES TO THE COURSE" |> str}
                 </h5>
                 {
                   showCoachesList ?
@@ -130,9 +139,10 @@ let make =
               </div>
               <div className="flex max-w-md w-full px-6 pb-5 mx-auto">
                 <button
+                  disabled=saveDisabled
                   onClick={_e => updateCourseCoaches(courseId, state)}
                   className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
-                  {"Update Course Coaches" |> str}
+                  {"Add Course Coaches" |> str}
                 </button>
               </div>
             </div>

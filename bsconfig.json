@@ -22,7 +22,8 @@
     "bs-webapi"
   ],
   "refmt": 3,
-  "ppx-flags": [
-    "graphql_ppx/ppx"
-  ]
+  "ppx-flags": ["graphql_ppx/ppx"],
+  "warnings": {
+    "error": "+8"
+  }
 }

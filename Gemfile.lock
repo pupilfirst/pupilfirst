@@ -347,7 +347,7 @@ GEM
     graphiql-rails (1.7.0)
       railties
       sprockets-rails
-    graphql (1.9.3)
+    graphql (1.9.4)
     groupdate (4.1.1)
       activesupport (>= 4.2)
     has_scope (0.7.2)

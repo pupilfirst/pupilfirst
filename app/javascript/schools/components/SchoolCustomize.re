@@ -186,7 +186,7 @@ let editor = (state, send, authenticityToken) =>
 
 let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
   ...component,
-  initialState: () => {visibleEditor: Some(ImagesEditor), customizations},
+  initialState: () => {visibleEditor: None, customizations},
   reducer: (action, state) =>
     switch (action) {
     | ShowEditor(editor) =>

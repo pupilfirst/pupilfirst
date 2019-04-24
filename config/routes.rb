@@ -34,6 +34,7 @@ Rails.application.routes.draw do
 
   resource :school, only: %i[show update] do
     get 'customize'
+    post 'images'
   end
 
   namespace :school, module: 'schools' do

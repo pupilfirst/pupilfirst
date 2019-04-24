@@ -12,6 +12,14 @@ module Schools
       }.to_json
     end
 
+    def school_images
+      {
+        logoOnLightBg: current_school.logo_on_light_bg.attached? ? file_details(current_school.logo_on_light_bg) : nil,
+        logoOnDarkBg: current_school.logo_on_dark_bg.attached? ? file_details(current_school.logo_on_dark_bg) : nil,
+        icon: current_school.icon.attached? ? file_details(current_school.icon) : { url: view.image_path('layouts/shared/favicon.png'), filename: 'pupilfirst_icon.png' }
+      }
+    end
+
     private
 
     def school_strings
@@ -23,11 +31,10 @@ module Schools
       }
     end
 
-    def school_images
+    def file_details(file)
       {
-        logoOnLightBg: current_school.logo_on_light_bg.attached? ? view.url_for(current_school.logo_on_light_bg) : nil,
-        logoOnDarkBg: current_school.logo_on_dark_bg.attached? ? view.url_for(current_school.logo_on_dark_bg) : nil,
-        icon: current_school.icon.attached? ? view.url_for(current_school.icon) : view.image_path('layouts/shared/favicon.png')
+        url: view.url_for(file),
+        filename: file.filename
       }
     end
 

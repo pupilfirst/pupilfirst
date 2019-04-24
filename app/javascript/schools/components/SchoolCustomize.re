@@ -24,7 +24,7 @@ type action =
   | UpdatePrivacyPolicy(string)
   | UpdateAddress(string)
   | UpdateEmailAddress(string)
-  | UpdateImages(option(string), option(string), string);
+  | UpdateImages(Js.Json.t);
 
 let component = ReasonReact.reducerComponent("SchoolCustomize");
 
@@ -32,7 +32,8 @@ let headerLogo = (schoolName, logoOnLightBg) =>
   <div className="h-12">
     {
       switch (logoOnLightBg) {
-      | Some(logo) => <img className="h-full" src=logo />
+      | Some(logo) =>
+        <img className="h-full" src={logo |> Customizations.url} />
       | None => <span> {schoolName |> str} </span>
       }
     }
@@ -109,7 +110,8 @@ let footerLogo = (schoolName, logoOnDarkBg) =>
   <div className="h-8">
     {
       switch (logoOnDarkBg) {
-      | Some(logo) => <img className="h-full" src=logo />
+      | Some(logo) =>
+        <img className="h-full" src={logo |> Customizations.url} />
       | None => <span> {schoolName |> str} </span>
       }
     }
@@ -172,10 +174,7 @@ let editor = (state, send, authenticityToken) =>
           <SchoolCustomize__ImagesEditor
             key="sc-drawer__images-editor"
             customizations={state.customizations}
-            updateImagesCB=(
-              (logoOnLightBg, logoOnDarkBg, icon) =>
-                send(UpdateImages(logoOnLightBg, logoOnDarkBg, icon))
-            )
+            updateImagesCB=(json => send(UpdateImages(json)))
             authenticityToken
           />
         }
@@ -187,7 +186,7 @@ let editor = (state, send, authenticityToken) =>
 
 let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
   ...component,
-  initialState: () => {visibleEditor: None, customizations},
+  initialState: () => {visibleEditor: Some(ImagesEditor), customizations},
   reducer: (action, state) =>
     switch (action) {
     | ShowEditor(editor) =>
@@ -230,12 +229,11 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
           state.customizations
           |> Customizations.updateEmailAddress(emailAddress),
       })
-    | UpdateImages(logoOnLightBg, logoOnDarkBg, icon) =>
+    | UpdateImages(json) =>
       ReasonReact.Update({
         ...state,
         customizations:
-          state.customizations
-          |> Customizations.updateImages(logoOnLightBg, logoOnDarkBg, icon),
+          state.customizations |> Customizations.updateImages(json),
       })
     },
   render: ({state, send}) =>
@@ -407,7 +405,11 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
               <div
                 className="p-3 ml-4 bg-grey-lighter rounded-t-lg flex items-center">
                 <img
-                  src={state.customizations |> Customizations.icon}
+                  src={
+                    state.customizations
+                    |> Customizations.icon
+                    |> Customizations.url
+                  }
                   className="h-5 w-5"
                 />
                 <span className="ml-2"> {schoolName |> str} </span>

@@ -17,6 +17,24 @@ class SchoolsController < ApplicationController
     authorize current_school
   end
 
+  # POST /school/images
+  def images
+    authorize current_school
+
+    form = Schools::ImagesForm.new(current_school)
+
+    if form.validate(params)
+      form.save
+
+      image_details = Schools::CustomizePresenter.new(view_context).school_images
+      image_details[:error] = nil
+
+      render json: image_details
+    else
+      render json: { error: form.errors.full_messages.join(", ") }
+    end
+  end
+
   private
 
   def courses

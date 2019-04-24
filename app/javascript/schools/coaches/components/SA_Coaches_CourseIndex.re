@@ -12,12 +12,14 @@ type state = {
   courseCoaches: list(Coach.t),
   teamCoaches: list(Coach.t),
   formVisible,
+  saving: bool,
 };
 
 type action =
   | UpdateFormVisible(formVisible)
   | UpdateCoaches(list(int))
-  | RemoveCoach(int);
+  | RemoveCoach(int)
+  | UpdateSaving;
 
 let component = ReasonReact.reducerComponent("SA_Coaches_CourseIndex");
 
@@ -45,6 +47,7 @@ let make =
            |> List.exists(facultyId => facultyId == Coach.id(schoolCoach))
          ),
     formVisible: None,
+    saving: false,
   },
   reducer: (action, state) =>
     switch (action) {
@@ -79,6 +82,7 @@ let make =
           state.teamCoaches
           |> List.filter(teamCoach => Coach.id(teamCoach) !== coachId),
       })
+    | UpdateSaving => ReasonReact.Update({...state, saving: !state.saving})
     },
   render: ({state, send}) => {
     let closeFormCB = () => send(UpdateFormVisible(None));
@@ -86,12 +90,15 @@ let make =
       send(UpdateCoaches(coachIds));
       send(UpdateFormVisible(None));
     };
-    let handleErrorCB = () =>
+    let handleErrorCB = () => {
+      send(UpdateSaving);
       Notification.error(
         "Coach enrollment could not be deleted",
         "Please try again",
       );
+    };
     let handleResponseCB = json => {
+      send(UpdateSaving);
       let coachId = json |> Json.Decode.(field("coach_id", int));
       send(RemoveCoach(coachId));
       Notification.success(
@@ -100,6 +107,7 @@ let make =
       );
     };
     let removeCoach = coach => {
+      send(UpdateSaving);
       let url =
         "/school/courses/"
         ++ (courseId |> string_of_int)
@@ -201,6 +209,7 @@ let make =
                            <div
                              className="w-10 text-xs course-faculty__list-item-remove cursor-pointer flex items-center justify-center hover:bg-grey-lighter">
                              <button
+                               disabled={state.saving}
                                onClick={
                                  _event => {
                                    ReactEvent.Mouse.preventDefault(_event);
@@ -255,6 +264,7 @@ let make =
                            <div
                              className="w-10 text-xs course-faculty__list-item-remove cursor-pointer flex items-center justify-center hover:bg-grey-lighter">
                              <button
+                               disabled={state.saving}
                                onClick={
                                  _event => {
                                    ReactEvent.Mouse.preventDefault(_event);

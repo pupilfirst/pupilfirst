@@ -23,7 +23,8 @@ type action =
   | UpdateTermsOfUse(string)
   | UpdatePrivacyPolicy(string)
   | UpdateAddress(string)
-  | UpdateEmailAddress(string);
+  | UpdateEmailAddress(string)
+  | UpdateImages(option(string), option(string), string);
 
 let component = ReasonReact.reducerComponent("SchoolCustomize");
 
@@ -158,7 +159,7 @@ let editor = (state, send, authenticityToken) =>
             authenticityToken
           />
         | ContactsEditor =>
-          <SchoolAdmin__ContactsEditor
+          <SchoolCustomize__ContactsEditor
             key="sc-drawer__contacts-editor"
             customizations={state.customizations}
             updateAddressCB=(address => send(UpdateAddress(address)))
@@ -167,8 +168,16 @@ let editor = (state, send, authenticityToken) =>
             )
             authenticityToken
           />
-        | _ =>
-          <div key="sc-drawer__todo"> {"Not yet implemented" |> str} </div>
+        | ImagesEditor =>
+          <SchoolCustomize__ImagesEditor
+            key="sc-drawer__images-editor"
+            customizations={state.customizations}
+            updateImagesCB=(
+              (logoOnLightBg, logoOnDarkBg, icon) =>
+                send(UpdateImages(logoOnLightBg, logoOnDarkBg, icon))
+            )
+            authenticityToken
+          />
         }
       }
     </SchoolAdmin__EditorDrawer>
@@ -220,6 +229,13 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
         customizations:
           state.customizations
           |> Customizations.updateEmailAddress(emailAddress),
+      })
+    | UpdateImages(logoOnLightBg, logoOnDarkBg, icon) =>
+      ReasonReact.Update({
+        ...state,
+        customizations:
+          state.customizations
+          |> Customizations.updateImages(logoOnLightBg, logoOnDarkBg, icon),
       })
     },
   render: ({state, send}) =>

@@ -132,6 +132,15 @@ let updateEmailAddress = (emailAddress, t) => {
   },
 };
 
+let updateImages = (logoOnLightBg, logoOnDarkBg, icon, t) => {
+  ...t,
+  schoolImages: {
+    logoOnLightBg,
+    logoOnDarkBg,
+    icon,
+  },
+};
+
 let decodeStrings = json =>
   Json.Decode.{
     address: json |> field("address", nullable(string)) |> Js.Null.toOption,

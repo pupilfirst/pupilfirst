@@ -83,4 +83,31 @@ feature 'Course Coaches Index' do
     expect(page).to_not have_text(startup.name)
     expect(startup.faculty.count).to eq(0)
   end
+
+  scenario 'school admin removes a startup coach', js: true do
+    sign_in_user school_admin.user, referer: school_course_coaches_path(course_2)
+
+    # list all coaches
+    expect(page).to have_text('Student/Team Coaches')
+    expect(page).to have_text(coach_3.name)
+    expect(page).to have_text(startup.name)
+    expect(startup.faculty.count).to eq(1)
+
+    find("div[aria-label='Delete #{coach_3.name}']").click
+
+    expect(page).to_not have_text(coach_3.name)
+    expect(startup.faculty.count).to eq(0)
+  end
+
+  scenario 'school admin removes a course coach', js: true do
+    sign_in_user school_admin.user, referer: school_course_coaches_path(course_1)
+
+    # list all coaches
+    expect(page).to have_text('Course Coaches')
+    expect(page).to have_text(coach_1.name)
+
+    find("div[aria-label='Delete #{coach_1.name}']").click
+    expect(page).to_not have_text(coach_1.name)
+    expect(course_1.faculty.count).to eq(1)
+  end
 end

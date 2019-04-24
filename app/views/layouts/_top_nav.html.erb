@@ -26,7 +26,7 @@
           <ul class="dropdown-menu" aria-labelledby="navbar-profile-dropdown">
             <% if policy(current_founder).show? %>
               <li role="presentation">
-                <%= link_to student_path(id: current_founder.id) do %>
+                <%= link_to student_path(id: current_founder.id, slug: current_founder.name.parameterize) do %>
                   <i class="fa fa-list-ul"></i> Profile
                 <% end %>
               </li>

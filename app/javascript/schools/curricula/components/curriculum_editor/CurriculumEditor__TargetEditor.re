@@ -80,10 +80,7 @@ let updateYoutubeVideoId = (send, youtubeVideoId) => {
   send(UpdateYoutubeVideoId(youtubeVideoId, hasError));
 };
 let updateLinkToComplete = (send, link) => {
-  let regex = [%re
-    {|/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/|}
-  ];
-  let hasError = link |> String.length < 1 ? false : !Js.Re.test(link, regex);
+  let hasError = UrlUtils.isInvalid(link);
   send(UpdateLinkToComplete(link, hasError));
 };
 
@@ -264,11 +261,9 @@ let isValidQuiz = quiz =>
      )
   |> List.length == 0;
 
-let booleanButtonClasses = bool =>{
+let booleanButtonClasses = bool => {
   let classes = "w-1/2 bg-white toggle-button__button hover:text-purple-dark text-sm font-semibold py-2 px-6 focus:outline-none";
-  classes ++ (bool ?
-    " text-purple shadow-inner" :
-    " text-grey-dark");
+  classes ++ (bool ? " text-purple shadow-inner" : " text-grey-dark");
 };
 
 let completionButtonClasses = value =>
@@ -915,7 +910,8 @@ let make =
               </div>
             </div>
             <div className="bg-white py-6">
-              <div className="flex max-w-md w-full justify-between items-center px-6 mx-auto">
+              <div
+                className="flex max-w-md w-full justify-between items-center px-6 mx-auto">
                 {
                   switch (target) {
                   | Some(_) =>

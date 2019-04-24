@@ -33,12 +33,12 @@ let handleResponseJSON = (json, responseCB, errorCB) =>
   | None => responseCB(json)
   };
 
-let create = (url, payload, responseCB, errorCB) =>
+let execute = (url, payload, responseCB, errorCB, method) =>
   Js.Promise.(
     Fetch.fetchWithInit(
       url,
       Fetch.RequestInit.make(
-        ~method_=Post,
+        ~method_=method,
         ~body=
           Fetch.BodyInit.make(Js.Json.stringify(Js.Json.object_(payload))),
         ~headers=Fetch.HeadersInit.make({"Content-Type": "application/json"}),
@@ -56,25 +56,8 @@ let create = (url, payload, responseCB, errorCB) =>
     |> ignore
   );
 
+let create = (url, payload, responseCB, errorCB) =>
+  execute(url, payload, responseCB, errorCB, Post);
+
 let update = (url, payload, responseCB, errorCB) =>
-  Js.Promise.(
-    Fetch.fetchWithInit(
-      url,
-      Fetch.RequestInit.make(
-        ~method_=Patch,
-        ~body=
-          Fetch.BodyInit.make(Js.Json.stringify(Js.Json.object_(payload))),
-        ~headers=Fetch.HeadersInit.make({"Content-Type": "application/json"}),
-        ~credentials=Fetch.SameOrigin,
-        (),
-      ),
-    )
-    |> then_(response => acceptOrRejectResponse(response))
-    |> then_(json =>
-         handleResponseJSON(json, responseCB, errorCB) |> resolve
-       )
-    |> catch(error =>
-         handleResponseError(error |> handleApiError) |> resolve
-       )
-    |> ignore
-  );
+  execute(url, payload, responseCB, errorCB, Patch);

@@ -13,7 +13,7 @@ after 'development:schools' do
     .first_or_create!(value: 'help@sv.co')
 
   sv.school_strings.where(key: 'address')
-    .first_or_create!(value: "SV.CO, #360, 6th Main Road  \n1<sup>st</sup> Block, Koramangala, Bengaluru &mdash; 560034")
+    .first_or_create!(value: "SV.CO, #360, 6th Main Road  \n1<sup>st</sup> Block, Koramangala  \nBengaluru &mdash; 560034")
 
   sv.school_strings.where(key: 'description')
     .first_or_create!(value: "SV.CO's 6-month product school for student developers helps them build modern tech-products with industry-guidance and get premium jobs.")

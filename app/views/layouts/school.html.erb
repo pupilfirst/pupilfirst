@@ -13,27 +13,33 @@
               <%= image_tag(presenter.school_logo_path, alt: current_school.name) %>
             </div>
             <div class="flex global-sidebar__school-search rounded justify-end w-1/2">
-              <!--            <div class="global-sidebar__school-search__icon-box flex items-center justify-center border rounded w-16">-->
-              <!--              <i class="material-icons md-48">search</i>-->
-              <!--            </div>-->
+<!--                          <div class="global-sidebar__school-search__icon-box flex items-center justify-center border rounded w-16">-->
+<!--                            <i class="fas fa-search"></i>-->
+<!--                          </div>-->
             </div>
           </div>
           <ul class="list-reset">
             <li>
               <%= link_to school_path, class: presenter.nav_link_classes(school_path) do %>
-                <i class="material-icons mr-2">vertical_split</i>
+                <i class="fas fa-eye fa-fw text-xl mr-2"></i>
                 <span>Overview</span>
               <% end %>
             </li>
             <li>
               <%= link_to school_coaches_path, class: presenter.nav_link_classes(school_coaches_path) do %>
-                <i class="material-icons md-48 mr-2">person</i>
+                <i class="fas fa-chalkboard-teacher fa-fw text-xl mr-2"></i>
                 <span>Coaches</span>
               <% end %>
             </li>
             <li>
+              <%= link_to customize_school_path, class: presenter.nav_link_classes(customize_school_path) do %>
+                <i class="fas fa-cog fa-fw text-xl mr-2"></i>
+                <span>Settings</span>
+              <% end %>
+            </li>
+            <li>
               <%= link_to school_courses_path, class: presenter.nav_link_classes(school_courses_path) do %>
-                <i class="material-icons mr-2">description</i>
+                <i class="fas fa-books fa-fw text-xl mr-2"></i>
                 <span>Courses</span>
               <% end %>
               <ul class="list-reset pr-4 pb-4 ml-10 mt-1">
@@ -48,7 +54,7 @@
           <% if presenter.founder_profile? %>
             <li>
               <%= link_to student_dashboard_path, class: 'flex text-white text-sm py-4 px-5 hover:bg-primary-darkest font-semibold no-underline items-center' do %>
-                <i class="material-icons text-sm">visibility</i>
+                <i class="fas fa-user-graduate fa-fw"></i>
                 <span class="ml-2">Student Dashboard</span>
               <% end %>
             </li>
@@ -56,14 +62,14 @@
           <% if presenter.coach_profile? %>
             <li>
               <%= link_to presenter.coach_dashboard_path, class: 'flex text-white text-sm py-4 px-5 hover:bg-primary-darkest font-semibold no-underline items-center' do %>
-                <i class="material-icons text-sm">assignment_turned_in</i>
+                <i class="fas fa-clipboard-check fa-fw"></i>
                 <span class="ml-2">Review Submissions</span>
               <% end %>
             </li>
           <% end %>
           <li>
             <%= link_to destroy_user_session_path, method: :delete, class: 'flex text-white text-sm py-4 px-5 hover:bg-primary-darkest font-semibold no-underline items-center' do %>
-              <i class="material-icons text-sm">power_settings_new</i>
+              <i class="fas fa-sign-out fa-fw"></i>
               <span class="ml-2">Log Out</span>
             <% end %>
           </li>

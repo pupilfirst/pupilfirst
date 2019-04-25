@@ -15,3 +15,10 @@ let parseJsonAttribute = (~id="react-root", ~attribute="data-json-props", ()) =>
     }
   )
   |> Json.parseOrRaise;
+
+module FormData = {
+  type t = Fetch.formData;
+
+  [@bs.new] external create: Dom.element => t = "FormData";
+  [@bs.send] external append: (t, 'a) => unit = "append";
+};

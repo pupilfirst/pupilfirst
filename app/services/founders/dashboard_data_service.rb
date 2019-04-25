@@ -8,7 +8,6 @@ module Founders
       {
         targets: targets,
         levels: levels_as_json,
-        faculty: faculty,
         targetGroups: target_groups,
         criteriaNames: criteria_names,
         gradeLabels: course.grade_labels
@@ -18,14 +17,13 @@ module Founders
     private
 
     def targets
-      applicable_targets = Target.live.joins(target_group: :level).where(target_groups: { level: open_levels }).includes(:faculty)
+      applicable_targets = Target.live.joins(target_group: :level).where(target_groups: { level: open_levels })
 
       # Load basic data about targets from database.
       loaded_targets = applicable_targets.as_json(
         only: target_fields,
         include: {
-          target_group: { only: :id },
-          faculty: { only: :id }
+          target_group: { only: :id }
         }
       )
 
@@ -43,13 +41,6 @@ module Founders
       course.levels.as_json(
         only: %i[id name number],
         methods: :unlocked
-      )
-    end
-
-    def faculty
-      Faculty.team.all.as_json(
-        only: %i[id name],
-        methods: :image_or_avatar_url
       )
     end
 

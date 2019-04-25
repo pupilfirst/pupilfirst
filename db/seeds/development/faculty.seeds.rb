@@ -12,11 +12,11 @@ after 'development:courses' do
     school: sv,
     name: 'Sanjay Vijayakumar',
     title: 'CEO SV.CO',
-    linkedin_url: 'https://linkedin.com'
+    linkedin_url: 'https://linkedin.com',
+    key_skills: Faker::Lorem.words(3).join(', ')
   )
 
   faculty = Faculty.create!(
-    key_skills: Faker::Lorem.words(3).join(', '),
     category: 'team',
     sort_index: 1,
     user: sanjay,
@@ -39,11 +39,10 @@ after 'development:courses' do
     name: 'Vishnu Gopal',
     title: 'CTO',
     linkedin_url: 'https://linkedin.com',
-
+    key_skills: Faker::Lorem.words(3).join(', ')
   )
 
   faculty = Faculty.create!(
-    key_skills: Faker::Lorem.words(3).join(', '),
     category: 'team',
     sort_index: 2,
     user: vishnu,
@@ -65,10 +64,10 @@ after 'development:courses' do
     name: 'Gautham',
     title: 'COO SV.CO',
     linkedin_url: 'https://linkedin.com',
+    key_skills: Faker::Lorem.words(3).join(', ')
   )
 
   faculty = Faculty.create!(
-    key_skills: Faker::Lorem.words(3).join(', '),
     category: 'developer_coaches',
     sort_index: 3,
     user: gautham,
@@ -89,10 +88,10 @@ after 'development:courses' do
     school: sv,
     name: 'Hari Gopal',
     title: 'Engineering Lead',
+    key_skills: 'Looting, pillaging, etc.'
   )
 
   faculty = Faculty.create!(
-    key_skills: 'Looting, pillaging, etc.',
     category: 'visiting_coaches',
     user: hari,
     school: sv,

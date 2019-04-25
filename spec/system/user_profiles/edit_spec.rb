@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Founder Edit' do
+feature 'User Profile Edit' do
   include UserSpecHelper
 
   let(:startup) { create :startup }
@@ -9,7 +9,7 @@ feature 'Founder Edit' do
   let(:phone) { rand(9_876_543_210..9_876_553_209) }
   let(:communication_address) { Faker::Address.full_address }
   let(:username) { Faker::Internet.user_name(founder_name, %w[-]) }
-  let(:one_liner) { Faker::Lorem.sentence }
+  let(:about) { Faker::Lorem.paragraphs.join(" ") }
 
   def upload_path(file)
     File.absolute_path(Rails.root.join('spec', 'support', 'uploads', file))
@@ -42,7 +42,7 @@ feature 'Founder Edit' do
       fill_in 'user_profiles_edit_name', with: founder_name
       fill_in 'user_profiles_edit_phone', with: phone
       attach_file 'user_profiles_edit_avatar', upload_path('faculty/donald_duck.jpg')
-      fill_in 'user_profiles_edit_about', with: one_liner
+      fill_in 'user_profiles_edit_about', with: about
       fill_in 'user_profiles_edit_skype_id', with: username
       fill_in 'user_profiles_edit_communication_address', with: communication_address
       fill_in 'user_profiles_edit_twitter_url', with: "https://twitter.com/#{username}"
@@ -62,7 +62,7 @@ feature 'Founder Edit' do
       expect(founder.reload).to have_attributes(
         name: founder_name,
         phone: phone.to_s,
-        about: one_liner,
+        about: about,
         skype_id: username,
         communication_address: communication_address,
         twitter_url: "https://twitter.com/#{username}",

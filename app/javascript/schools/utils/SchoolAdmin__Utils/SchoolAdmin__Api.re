@@ -14,67 +14,71 @@ let acceptOrRejectResponse = response =>
     Js.Promise.reject(UnexpectedResponse(response |> Fetch.Response.status));
   };
 
-let handleResponseError = error =>
-  switch (error |> handleApiError) {
-  | Some(code) =>
-    Notification.error(code |> string_of_int, "Please try again")
-  | None => Notification.error("Something went wrong!", "Please try again")
-  };
+let handleResponseError = error => {
+  let message = "Our team has been notified of this error. Please reload the page and try again.";
 
-let handleResponseJSON = (json, responseCB, errorCB) =>
-  switch (
+  switch (error |> handleApiError) {
+  | Some(code) => Notification.error(code |> string_of_int, message)
+  | None => Notification.error("An unexpected error occurred", message)
+  };
+};
+
+let handleResponseJSON = (json, responseCB, errorCB) => {
+  let error =
     json
     |> Json.Decode.(field("error", nullable(string)))
-    |> Js.Null.toOption
-  ) {
+    |> Js.Null.toOption;
+
+  switch (error) {
   | Some(error) =>
-    Notification.error("Something went wrong!!", error);
+    Notification.error("Something went wrong!", error);
     errorCB();
   | None => responseCB(json)
   };
+};
+
+let handleResponse = (responseCB, errorCB, promise) =>
+  Js.Promise.(
+    promise
+    |> then_(response => acceptOrRejectResponse(response))
+    |> then_(json =>
+         handleResponseJSON(json, responseCB, errorCB) |> resolve
+       )
+    |> catch(error => {
+         errorCB();
+         handleResponseError(error |> handleApiError) |> resolve;
+       })
+    |> ignore
+  );
+
+let sendPayload = (url, payload, responseCB, errorCB, method) =>
+  Fetch.fetchWithInit(
+    url,
+    Fetch.RequestInit.make(
+      ~method_=method,
+      ~body=
+        Fetch.BodyInit.make(Js.Json.stringify(Js.Json.object_(payload))),
+      ~headers=Fetch.HeadersInit.make({"Content-Type": "application/json"}),
+      ~credentials=Fetch.SameOrigin,
+      (),
+    ),
+  )
+  |> handleResponse(responseCB, errorCB);
+
+let sendFormData = (url, formData, responseCB, errorCB) =>
+  Fetch.fetchWithInit(
+    url,
+    Fetch.RequestInit.make(
+      ~method_=Post,
+      ~body=Fetch.BodyInit.makeWithFormData(formData),
+      ~credentials=Fetch.SameOrigin,
+      (),
+    ),
+  )
+  |> handleResponse(responseCB, errorCB);
 
 let create = (url, payload, responseCB, errorCB) =>
-  Js.Promise.(
-    Fetch.fetchWithInit(
-      url,
-      Fetch.RequestInit.make(
-        ~method_=Post,
-        ~body=
-          Fetch.BodyInit.make(Js.Json.stringify(Js.Json.object_(payload))),
-        ~headers=Fetch.HeadersInit.make({"Content-Type": "application/json"}),
-        ~credentials=Fetch.SameOrigin,
-        (),
-      ),
-    )
-    |> then_(response => acceptOrRejectResponse(response))
-    |> then_(json =>
-         handleResponseJSON(json, responseCB, errorCB) |> resolve
-       )
-    |> catch(error =>
-         handleResponseError(error |> handleApiError) |> resolve
-       )
-    |> ignore
-  );
+  sendPayload(url, payload, responseCB, errorCB, Post);
 
 let update = (url, payload, responseCB, errorCB) =>
-  Js.Promise.(
-    Fetch.fetchWithInit(
-      url,
-      Fetch.RequestInit.make(
-        ~method_=Patch,
-        ~body=
-          Fetch.BodyInit.make(Js.Json.stringify(Js.Json.object_(payload))),
-        ~headers=Fetch.HeadersInit.make({"Content-Type": "application/json"}),
-        ~credentials=Fetch.SameOrigin,
-        (),
-      ),
-    )
-    |> then_(response => acceptOrRejectResponse(response))
-    |> then_(json =>
-         handleResponseJSON(json, responseCB, errorCB) |> resolve
-       )
-    |> catch(error =>
-         handleResponseError(error |> handleApiError) |> resolve
-       )
-    |> ignore
-  );
+  sendPayload(url, payload, responseCB, errorCB, Patch);

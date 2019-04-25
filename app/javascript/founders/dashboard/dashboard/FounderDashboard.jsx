@@ -190,7 +190,6 @@ export default class FounderDashboard extends React.Component {
 FounderDashboard.propTypes = {
   targets: PropTypes.array.isRequired,
   levels: PropTypes.array.isRequired,
-  faculty: PropTypes.array.isRequired,
   targetGroups: PropTypes.array.isRequired,
   currentLevel: PropTypes.object.isRequired,
   authenticityToken: PropTypes.string,

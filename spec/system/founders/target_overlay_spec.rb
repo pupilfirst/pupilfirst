@@ -94,12 +94,6 @@ feature 'Target Overlay' do
         expect(page).to have_link(resource_video_embed.title.to_s, href: "/library/#{resource_video_embed.slug}?watch=true")
         expect(page).to have_link(resource_link.title.to_s, href: "/library/#{resource_link.slug}/download")
       end
-
-      # Within the faculty box:
-      within('.target-overlay__faculty-box') do
-        expect(page).to have_text("Assigned by:\n#{target.faculty.name}")
-        expect(page).to have_selector('.target-overlay__faculty-avatar > img')
-      end
     end
 
     context 'when the target is auto verified' do

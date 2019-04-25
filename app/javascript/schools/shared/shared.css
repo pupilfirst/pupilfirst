@@ -103,7 +103,7 @@ button:disabled, .disabled {
     margin-bottom: 0.715rem;
 }
 
-.course-faculty__list-item:hover .course-faculty__list-item-remove {
+.course-faculty__list-item-details:hover .course-faculty__list-item-edit {
     visibility: visible;
 }
 

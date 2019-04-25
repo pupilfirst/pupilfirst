@@ -1,5 +1,3 @@
-open CurriculumEditor__Types;
-
 exception UnexpectedResponse(int);
 
 let handleApiError =
@@ -134,7 +132,7 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
       send(UpdateSaving);
       let element = ReactDOMRe._getElementById(formId);
       switch (element) {
-      | Some(element) => sendResource(FormData.create(element))
+      | Some(element) => sendResource(DomUtils.FormData.create(element))
       | None => ()
       };
     };

@@ -3,7 +3,7 @@ module UserProfiles
     property :name, validates: { presence: true }
     property :phone, validates: { presence: true, mobile_number: true }
     property :avatar, virtual: true, validates: { file_content_type: { allow: ['image/jpeg', 'image/png'] }, file_size: { less_than: 2.gigabytes } }
-    property :about, validates: { length: { maximum: 250 } }
+    property :about, validates: { length: { maximum: 1000 } }
     # property :roles
     property :skype_id
     property :communication_address, validates: { presence: true, length: { maximum: 250 } }

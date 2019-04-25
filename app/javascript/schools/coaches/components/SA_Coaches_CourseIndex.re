@@ -1,4 +1,5 @@
 open CoachesCourseIndex__Types;
+open SchoolAdmin__Utils;
 
 /* open SchoolAdmin__Utils; */
 let str = ReasonReact.string;
@@ -11,13 +12,16 @@ type state = {
   courseCoaches: list(Coach.t),
   teamCoaches: list(Coach.t),
   formVisible,
+  saving: bool,
 };
 
 type action =
   | UpdateFormVisible(formVisible)
-  | UpdateCoaches(list(int));
+  | UpdateCoaches(list(int))
+  | RemoveCoach(int)
+  | UpdateSaving;
 
-let component = ReasonReact.reducerComponent("SA_Coaches_CourseEnrollment");
+let component = ReasonReact.reducerComponent("SA_Coaches_CourseIndex");
 
 let make =
     (
@@ -43,6 +47,7 @@ let make =
            |> List.exists(facultyId => facultyId == Coach.id(schoolCoach))
          ),
     formVisible: None,
+    saving: false,
   },
   reducer: (action, state) =>
     switch (action) {
@@ -67,6 +72,17 @@ let make =
         courseCoaches: newCoachesList,
         teamCoaches: newTeamCoaches,
       });
+    | RemoveCoach(coachId) =>
+      ReasonReact.Update({
+        ...state,
+        courseCoaches:
+          state.courseCoaches
+          |> List.filter(courseCoach => Coach.id(courseCoach) !== coachId),
+        teamCoaches:
+          state.teamCoaches
+          |> List.filter(teamCoach => Coach.id(teamCoach) !== coachId),
+      })
+    | UpdateSaving => ReasonReact.Update({...state, saving: !state.saving})
     },
   render: ({state, send}) => {
     let closeFormCB = () => send(UpdateFormVisible(None));
@@ -74,163 +90,230 @@ let make =
       send(UpdateCoaches(coachIds));
       send(UpdateFormVisible(None));
     };
-    <div className="flex flex-1 h-screen overflow-y-scroll">
-      {
-        switch (state.formVisible) {
-        | None => ReasonReact.null
-        | CoachEnrollmentForm =>
-          let courseCoachIds =
-            state.courseCoaches |> List.map(coach => coach |> Coach.id);
-          <SA_Coaches_CourseEnrollmentForm
-            courseId
-            courseCoachIds
-            schoolCoaches
-            updateCoachesCB
-            closeFormCB
-            authenticityToken
-          />;
-        }
-      }
-      <div className="flex-1 flex flex-col bg-grey-lightest">
-        <div className="flex px-6 py-2 items-center justify-between">
-          <button
-            onClick={
-              _event => {
-                ReactEvent.Mouse.preventDefault(_event);
-                send(UpdateFormVisible(CoachEnrollmentForm));
-              }
-            }
-            className="max-w-md w-full flex mx-auto items-center justify-center relative bg-grey-lighter hover:bg-grey-light hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-12 cursor-pointer">
-            <i className="material-icons"> {"add_circle_outline" |> str} </i>
-            <h4 className="font-semibold ml-2">
-              {"Assign/Remove Course Faculty" |> str}
-            </h4>
-          </button>
-        </div>
+    let handleErrorCB = () => {
+      send(UpdateSaving);
+      Notification.error(
+        "Coach enrollment could not be deleted",
+        "Please try again",
+      );
+    };
+    let handleResponseCB = json => {
+      send(UpdateSaving);
+      let coachId = json |> Json.Decode.(field("coach_id", int));
+      send(RemoveCoach(coachId));
+      Notification.success(
+        "Success",
+        "Coach enrollment deleted successfully",
+      );
+    };
+    let removeCoach = coach => {
+      send(UpdateSaving);
+      let url =
+        "/school/courses/"
+        ++ (courseId |> string_of_int)
+        ++ "/coaches/delete_enrollments";
+      let payload = Js.Dict.empty();
+      Js.Dict.set(
+        payload,
+        "authenticity_token",
+        authenticityToken |> Js.Json.string,
+      );
+      Js.Dict.set(
+        payload,
+        "coach_id",
+        coach |> Coach.id |> string_of_int |> Js.Json.string,
+      );
+      Api.create(url, payload, handleResponseCB, handleErrorCB);
+    };
+    <SchoolAdmin__DisablingCover
+      containerClasses="w-full" disabled={state.saving}>
+      <div
+        key="School admin coaches course index"
+        className="flex flex-1 h-screen overflow-y-scroll">
         {
-          state.teamCoaches
-          |> ListUtils.isEmpty
-          && state.courseCoaches
-          |> ListUtils.isEmpty ?
-            <div
-              className="flex justify-center bg-grey-lightest border rounded p-3 italic mt-2">
-              {"The course has no coaches assigned!" |> str}
-            </div> :
-            ReasonReact.null
+          switch (state.formVisible) {
+          | None => ReasonReact.null
+          | CoachEnrollmentForm =>
+            let courseCoachIds =
+              state.courseCoaches |> List.map(coach => coach |> Coach.id);
+            <SA_Coaches_CourseEnrollmentForm
+              courseId
+              courseCoachIds
+              schoolCoaches
+              updateCoachesCB
+              closeFormCB
+              authenticityToken
+            />;
+          }
         }
-        <div className="px-6 pb-4 mt-5 flex flex-1 bg-grey-lightest">
-          <div className="max-w-md w-full mx-auto relative">
-            {
-              state.courseCoaches |> ListUtils.isEmpty ?
-                ReasonReact.null :
-                <h4 className="w-full"> {"Course Coaches:" |> str} </h4>
-            }
-            <div
-              className="flex mt-4 -mx-3 flex-wrap"
-              ariaLabel="List of course coaches">
-              {
-                state.courseCoaches
-                |> List.sort((x, y) => (x |> Coach.id) - (y |> Coach.id))
-                |> List.map(coach =>
-                     <div
-                       key={coach |> Coach.id |> string_of_int}
-                       className="flex w-1/2 flex-no-shrink items-center mb-5 px-3">
-                       <div
-                         className="course-faculty__list-item shadow bg-white rounded-lg flex w-full">
-                         <div className="flex flex-1 items-center py-4 px-4">
-                           <img
-                             className="w-10 h-10 rounded-full mr-4"
-                             src={coach |> Coach.imageUrl}
-                             alt={"Avatar of " ++ (coach |> Coach.name)}
-                           />
-                           <div className="text-sm">
-                             <p className="text-black font-semibold">
-                               {coach |> Coach.name |> str}
-                             </p>
-                             <p
-                               className="text-grey-dark font-semibold text-xs mt-1">
-                               {coach |> Coach.title |> str}
-                             </p>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                   )
-                |> Array.of_list
-                |> ReasonReact.array
+        <div className="flex-1 flex flex-col bg-grey-lightest">
+          <div className="flex px-6 py-2 items-center justify-between">
+            <button
+              onClick={
+                _event => {
+                  ReactEvent.Mouse.preventDefault(_event);
+                  send(UpdateFormVisible(CoachEnrollmentForm));
+                }
               }
-            </div>
-            {
-              state.teamCoaches |> ListUtils.isEmpty ?
-                ReasonReact.null :
-                <h4 className="mt-5 w-full">
-                  {"Student/Team Coaches:" |> str}
-                </h4>
-            }
-            <div className="flex mt-4 -mx-3 items-start flex-wrap">
+              className="max-w-md w-full flex mx-auto items-center justify-center relative bg-grey-lighter hover:bg-grey-light hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-12 cursor-pointer">
+              <i className="material-icons"> {"add_circle_outline" |> str} </i>
+              <h4 className="font-semibold ml-2">
+                {"Assign Coaches to Course" |> str}
+              </h4>
+            </button>
+          </div>
+          {
+            state.teamCoaches
+            |> ListUtils.isEmpty
+            && state.courseCoaches
+            |> ListUtils.isEmpty ?
+              <div
+                className="flex justify-center bg-grey-lightest border rounded p-3 italic mx-auto max-w-md w-full">
+                {"The course has no coaches assigned!" |> str}
+              </div> :
+              ReasonReact.null
+          }
+          <div className="px-6 pb-4 mt-5 flex flex-1 bg-grey-lightest">
+            <div className="max-w-md w-full mx-auto relative">
               {
-                state.teamCoaches
-                |> List.sort((x, y) => (x |> Coach.id) - (y |> Coach.id))
-                |> List.map(coach =>
-                     <div
-                       key={coach |> Coach.id |> string_of_int}
-                       className="flex w-1/2 items-center mb-4 px-3">
+                state.courseCoaches |> ListUtils.isEmpty ?
+                  ReasonReact.null :
+                  <h4 className="w-full"> {"Course Coaches:" |> str} </h4>
+              }
+              <div
+                className="flex mt-4 -mx-3 flex-wrap"
+                ariaLabel="List of course coaches">
+                {
+                  state.courseCoaches
+                  |> List.sort((x, y) => (x |> Coach.id) - (y |> Coach.id))
+                  |> List.map(coach =>
                        <div
-                         className="course-faculty__list-item shadow bg-white overflow-hidden rounded-lg flex flex-col w-full">
+                         key={coach |> Coach.id |> string_of_int}
+                         className="flex w-1/2 flex-no-shrink mb-5 px-3">
                          <div
-                           className="flex flex-1 items-center pt-4 pb-3 px-4">
-                           <img
-                             className="w-10 h-10 rounded-full mr-4"
-                             src={coach |> Coach.imageUrl}
-                             alt={"Avatar of " ++ Coach.name(coach)}
-                           />
-                           <div className="text-sm">
-                             <p className="text-black font-semibold">
-                               {coach |> Coach.name |> str}
-                             </p>
-                             <p
-                               className="text-grey-dark font-semibold text-xs mt-1">
-                               {coach |> Coach.title |> str}
-                             </p>
+                           id={coach |> Coach.name}
+                           className="course-faculty__list-item shadow bg-white rounded-lg flex w-full">
+                           <div className="flex flex-1 justify-between">
+                             <div className="flex py-4 px-4">
+                               <img
+                                 className="w-10 h-10 rounded-full mr-4"
+                                 src={coach |> Coach.imageUrl}
+                                 alt={"Avatar of " ++ (coach |> Coach.name)}
+                               />
+                               <div className="text-sm">
+                                 <p className="text-black font-semibold mt-1">
+                                   {coach |> Coach.name |> str}
+                                 </p>
+                                 <p
+                                   className="text-grey-dark font-semibold text-xs mt-1">
+                                   {coach |> Coach.title |> str}
+                                 </p>
+                               </div>
+                             </div>
+                             <div
+                               className="w-10 text-xs course-faculty__list-item-remove cursor-pointer flex items-center justify-center hover:bg-grey-lighter"
+                               ariaLabel={"Delete " ++ (coach |> Coach.name)}
+                               onClick={
+                                 _event => {
+                                   ReactEvent.Mouse.preventDefault(_event);
+                                   removeCoach(coach);
+                                 }
+                               }>
+                               <Icon kind=Icon.Delete size="4" />
+                             </div>
                            </div>
                          </div>
-                         <div className="pt-3 pb-4 px-4">
-                           <h5
-                             className="font-semibold text-grey-dark border-b pb-1">
-                             {"Teams" |> str}
-                           </h5>
-                           {
-                             switch (coach |> Coach.teams) {
-                             | None => ReasonReact.null
-                             | Some(teams) =>
-                               <div
-                                 className="flex flex-wrap text-grey-dark font-semibold text-xs mt-1">
-                                 {
-                                   teams
-                                   |> List.map(team =>
-                                        <span
-                                          className="p-1 border rounded bg-primary-lightest mt-1 mr-1">
-                                          {Team.name(team) |> str}
-                                        </span>
-                                      )
-                                   |> Array.of_list
-                                   |> ReasonReact.array
-                                 }
+                       </div>
+                     )
+                  |> Array.of_list
+                  |> ReasonReact.array
+                }
+              </div>
+              {
+                state.teamCoaches |> ListUtils.isEmpty ?
+                  ReasonReact.null :
+                  <h4 className="mt-5 w-full">
+                    {"Student/Team Coaches:" |> str}
+                  </h4>
+              }
+              <div className="flex mt-4 -mx-3 items-start flex-wrap">
+                {
+                  state.teamCoaches
+                  |> List.sort((x, y) => (x |> Coach.id) - (y |> Coach.id))
+                  |> List.map(coach =>
+                       <div
+                         key={coach |> Coach.id |> string_of_int}
+                         className="flex w-1/2 items-center mb-4 px-3">
+                         <div
+                           className="course-faculty__list-item shadow bg-white overflow-hidden rounded-lg flex flex-col w-full">
+                           <div className="flex flex-1 justify-between">
+                             <div className="flex pt-4 pb-3 px-4">
+                               <img
+                                 className="w-10 h-10 rounded-full mr-4"
+                                 src={coach |> Coach.imageUrl}
+                                 alt={"Avatar of " ++ Coach.name(coach)}
+                               />
+                               <div className="text-sm">
+                                 <p className="text-black font-semibold">
+                                   {coach |> Coach.name |> str}
+                                 </p>
+                                 <p
+                                   className="text-grey-dark font-semibold text-xs mt-1">
+                                   {coach |> Coach.title |> str}
+                                 </p>
                                </div>
+                             </div>
+                             <div
+                               ariaLabel={"Delete " ++ (coach |> Coach.name)}
+                               className="w-10 text-xs course-faculty__list-item-remove cursor-pointer flex items-center justify-center hover:bg-grey-lighter"
+                               onClick={
+                                 _event => {
+                                   ReactEvent.Mouse.preventDefault(_event);
+                                   removeCoach(coach);
+                                 }
+                               }>
+                               <Icon kind=Icon.Delete size="4" />
+                             </div>
+                           </div>
+                           <div className="pt-3 pb-4 px-4">
+                             <h5
+                               className="font-semibold text-grey-dark border-b pb-1">
+                               {"Teams" |> str}
+                             </h5>
+                             {
+                               switch (coach |> Coach.teams) {
+                               | None => ReasonReact.null
+                               | Some(teams) =>
+                                 <div
+                                   className="flex flex-wrap text-grey-dark font-semibold text-xs mt-1">
+                                   {
+                                     teams
+                                     |> List.map(team =>
+                                          <span
+                                            key={"Team " ++ Team.name(team)}
+                                            className="p-1 border rounded bg-primary-lightest mt-1 mr-1">
+                                            {Team.name(team) |> str}
+                                          </span>
+                                        )
+                                     |> Array.of_list
+                                     |> ReasonReact.array
+                                   }
+                                 </div>
+                               }
                              }
-                           }
+                           </div>
                          </div>
                        </div>
-                     </div>
-                   )
-                |> Array.of_list
-                |> ReasonReact.array
-              }
+                     )
+                  |> Array.of_list
+                  |> ReasonReact.array
+                }
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>;
+    </SchoolAdmin__DisablingCover>;
   },
 };
 

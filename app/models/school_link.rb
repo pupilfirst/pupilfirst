@@ -9,4 +9,6 @@ class SchoolLink < ApplicationRecord
 
   validates :kind, inclusion: VALID_KINDS
   validates :url, presence: true
+
+  normalize_attribute :title
 end

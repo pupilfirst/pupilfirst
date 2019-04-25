@@ -16,7 +16,7 @@ type action =
   | UpdateFormVisible(formVisible)
   | UpdateCoaches(Coach.t);
 
-let component = ReasonReact.reducerComponent("SA_CoachesPanel");
+let component = ReasonReact.reducerComponent("SA_Coaches_SchoolIndex");
 
 let make = (~coaches, ~authenticityToken, _children) => {
   ...component,
@@ -68,30 +68,36 @@ let make = (~coaches, ~authenticityToken, _children) => {
                    <div
                      key={coach |> Coach.id |> string_of_int}
                      className="flex items-center shadow bg-white rounded-lg mb-4">
-                     <div
-                       className="course-faculty__list-item flex w-full hover:bg-grey-lighter"
-                       onClick={
-                         _event => {
-                           ReactEvent.Mouse.preventDefault(_event);
-                           send(
-                             UpdateFormVisible(CoachEditor(Some(coach))),
-                           );
-                         }
-                       }>
-                       <div className="flex flex-1 items-center py-4 px-4">
-                         <img
-                           className="w-10 h-10 rounded-full mr-4"
-                           src={coach |> Coach.imageUrl}
-                           alt={"Avatar of " ++ (coach |> Coach.name)}
-                         />
-                         <div className="text-sm">
-                           <p className="text-black font-semibold">
-                             {coach |> Coach.name |> str}
-                           </p>
-                           <p
-                             className="text-grey-dark font-semibold text-xs mt-1">
-                             {coach |> Coach.title |> str}
-                           </p>
+                     <div className="course-faculty__list-item flex w-full">
+                       <div
+                         className="course-faculty__list-item-details flex flex-1 items-center justify-between cursor-pointer py-4 px-4 hover:bg-grey-lighter"
+                         onClick={
+                           _event => {
+                             ReactEvent.Mouse.preventDefault(_event);
+                             send(
+                               UpdateFormVisible(CoachEditor(Some(coach))),
+                             );
+                           }
+                         }>
+                         <div className="flex">
+                           <img
+                             className="w-10 h-10 rounded-full mr-4"
+                             src={coach |> Coach.imageUrl}
+                             alt={"Avatar of " ++ (coach |> Coach.name)}
+                           />
+                           <div className="text-sm">
+                             <p className="text-black font-semibold">
+                               {coach |> Coach.name |> str}
+                             </p>
+                             <p
+                               className="text-grey-dark font-semibold text-xs mt-1">
+                               {coach |> Coach.title |> str}
+                             </p>
+                           </div>
+                         </div>
+                         <div
+                           className="w-7 course-faculty__list-item-edit flex items-center justify-center invisible">
+                           <Icon kind=Icon.Edit size="4" />
                          </div>
                        </div>
                      </div>

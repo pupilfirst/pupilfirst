@@ -6,7 +6,6 @@ import HeaderTitle from "./targetOverlay/HeaderTitle";
 import StatusBadgeBar from "./targetOverlay/StatusBadgeBar";
 import SubmitButton from "./targetOverlay/SubmitButton";
 import TimelineEventPanel from "./targetOverlay/TimelineEventPanel";
-import FacultyBlock from "./targetOverlay/FacultyBlock";
 import { jsComponent as QuizComponent } from "../../components/Quiz__Root.bs";
 
 export default class TargetOverlay extends React.Component {
@@ -28,7 +27,6 @@ export default class TargetOverlay extends React.Component {
     this.updateDetails = this.updateDetails.bind(this);
     this.openTimelineBuilder = this.openTimelineBuilder.bind(this);
     this.completeTarget = this.completeTarget.bind(this);
-    this.getFaculty = this.getFaculty.bind(this);
     this.getTarget = this.getTarget.bind(this);
     this.autoVerify = this.autoVerify.bind(this);
     this.invertShowQuiz = this.invertShowQuiz.bind(this);
@@ -168,20 +166,8 @@ export default class TargetOverlay extends React.Component {
       quizQuestions: response.quizQuestions
     });
   }
-
-  getFaculty(target) {
-    const targetFaculty = target.faculty;
-
-    if (_.isObject(targetFaculty)) {
-      return _.find(this.props.rootProps.faculty, faculty => {
-        return faculty.id === targetFaculty.id;
-      });
-    }
-  }
-
   render() {
     const target = this.getTarget();
-    const faculty = this.getFaculty(target);
     return (
       <div className="target-overlay__overlay">
         <div className="target-overlay__container mx-auto">
@@ -239,8 +225,6 @@ export default class TargetOverlay extends React.Component {
                       overlayLoaded={this.state.quizQuestions !== null}
                     />
                   </div>
-
-                  {_.isObject(faculty) && <FacultyBlock faculty={faculty} />}
 
                   {this.state.latestEvent && (
                     <TimelineEventPanel

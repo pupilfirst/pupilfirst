@@ -41,7 +41,7 @@ type action =
   | UpdateExited(bool)
   | UpdateSaving;
 
-let component = ReasonReact.reducerComponent("SA_CoachesPanel_CoachEditor");
+let component = ReasonReact.reducerComponent("SA_Coaches_CoachEditor");
 
 let str = ReasonReact.string;
 
@@ -283,7 +283,7 @@ let make =
       send(UpdateSaving);
       let element = ReactDOMRe._getElementById(formId);
       switch (element) {
-      | Some(element) => sendCoach(FormData.create(element))
+      | Some(element) => sendCoach(DomUtils.FormData.create(element))
       | None => ()
       };
     };

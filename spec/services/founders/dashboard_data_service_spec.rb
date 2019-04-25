@@ -51,14 +51,9 @@ describe Founders::DashboardDataService do
         hash_including(level_3_target.slice(target_fields).merge(additional_target_fields(level_3_target, target_group_l3_1, :level_locked)))
       ]
 
-      team_members = Faculty.team.all.as_json(only: %i[id name], methods: %i[image_or_avatar_url]).map do |faculty_fields|
-        hash_including(faculty_fields)
-      end
-
       props = subject.props
 
-      expect(props.keys).to match_array(%i[faculty levels targetGroups targets criteriaNames gradeLabels])
-      expect(props[:faculty]).to match_array(team_members)
+      expect(props.keys).to match_array(%i[levels targetGroups targets criteriaNames gradeLabels])
       expect(props[:levels]).to match_array(level_fields(level_1, level_2, unlocked_level_3, locked_level_4))
       expect(props[:targetGroups]).to match_array(expected_target_groups)
       expect(props[:targets]).to match_array(expected_targets)
@@ -84,7 +79,6 @@ describe Founders::DashboardDataService do
   def additional_target_fields(target, target_group, status = :pending)
     fields = {
       target_group: { id: target_group.id },
-      faculty: { id: target.faculty.id },
       status: status,
       submitted_at: target_status_service.submitted_at(target.id),
       grades: target_status_service.grades(target.id),

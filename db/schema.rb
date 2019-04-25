@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_09_084817) do
+ActiveRecord::Schema.define(version: 2019_04_24_141919) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -222,10 +222,6 @@ ActiveRecord::Schema.define(version: 2019_04_09_084817) do
   end
 
   create_table "faculty", id: :serial, force: :cascade do |t|
-    t.string "name"
-    t.string "title"
-    t.string "key_skills"
-    t.string "linkedin_url"
     t.string "category"
     t.integer "sort_index"
     t.datetime "created_at", null: false
@@ -233,8 +229,6 @@ ActiveRecord::Schema.define(version: 2019_04_09_084817) do
     t.string "token"
     t.boolean "self_service"
     t.string "current_commitment"
-    t.string "slug"
-    t.text "about"
     t.string "commitment"
     t.string "compensation"
     t.string "slack_username"
@@ -247,7 +241,6 @@ ActiveRecord::Schema.define(version: 2019_04_09_084817) do
     t.boolean "exited", default: false
     t.index ["category"], name: "index_faculty_on_category"
     t.index ["school_id", "user_id"], name: "index_faculty_on_school_id_and_user_id", unique: true
-    t.index ["slug"], name: "index_faculty_on_slug", unique: true
     t.index ["user_id"], name: "index_faculty_on_user_id"
   end
 
@@ -280,40 +273,20 @@ ActiveRecord::Schema.define(version: 2019_04_09_084817) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer "startup_id"
-    t.string "linkedin_url"
-    t.string "twitter_url"
     t.string "auth_token"
-    t.string "gender"
-    t.string "phone"
-    t.text "communication_address"
     t.string "slack_username"
     t.integer "university_id"
     t.string "roles"
-    t.boolean "avatar_processing", default: false
     t.string "slack_user_id"
-    t.string "personal_website_url"
-    t.string "blog_url"
-    t.string "facebook_url"
-    t.string "angel_co_url"
-    t.string "github_url"
-    t.string "behance_url"
-    t.string "resume_url"
-    t.string "slug"
-    t.string "about"
-    t.string "skype_id"
     t.boolean "exited", default: false
     t.integer "user_id"
     t.integer "college_id"
-    t.string "name"
     t.boolean "dashboard_toured"
     t.string "college_text"
-    t.string "permanent_address"
     t.integer "resume_file_id"
     t.string "slack_access_token"
     t.boolean "excluded_from_leaderboard", default: false
     t.index ["college_id"], name: "index_founders_on_college_id"
-    t.index ["name"], name: "index_founders_on_name"
-    t.index ["slug"], name: "index_founders_on_slug", unique: true
     t.index ["university_id"], name: "index_founders_on_university_id"
     t.index ["user_id"], name: "index_founders_on_user_id"
   end

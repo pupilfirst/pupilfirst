@@ -26,7 +26,7 @@ module Questions
 
     def answer_data
       @answer_data ||=
-        @question.answers.map do |answer|
+        @question.answers.select(:id, :description, :user_id).map do |answer|
           {
             id: answer.id,
             description: answer.description,
@@ -41,7 +41,7 @@ module Questions
     end
 
     def comments_for_answers
-      Comment.where(commentable_type: "Answer", commentable_id: @answer_data.pluck(:id)).map(&method(:comment_data))
+      Comment.where(commentable_type: 'Answer', commentable_id: @answer_data.pluck(:id)).map(&method(:comment_data))
     end
 
     def comment_data(comment)
@@ -51,12 +51,12 @@ module Questions
         user_id: comment.user_id,
         commentableType: comment.commentable_type,
         commentableId: comment.commentable_id
-
       }
     end
 
     def user_data
-      user_ids = ([@question.id] + @answer_data.pluck(:userId) + @comments.pluck(:userId)).uniq
+      user_ids = [@question.id, answer_data.pluck(:userId), comments.pluck(:userId)].flatten.uniq
+
       UserProfile.where(user_id: user_ids, school: current_school).map do |user_profile|
         {
           id: user_profile.user_id,

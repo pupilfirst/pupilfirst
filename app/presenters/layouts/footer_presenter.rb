@@ -49,11 +49,13 @@ module Layouts
       @address ||= begin
         raw_address = SchoolString::Address.for(current_school)
 
-        parser = MarkdownIt::Parser.new(:commonmark)
-          .use(MotionMarkdownItPlugins::Sub)
-          .use(MotionMarkdownItPlugins::Sup)
+        if raw_address.present?
+          parser = MarkdownIt::Parser.new(:commonmark)
+            .use(MotionMarkdownItPlugins::Sub)
+            .use(MotionMarkdownItPlugins::Sup)
 
-        parser.render(raw_address)
+          parser.render(raw_address)
+        end
       end
     end
 

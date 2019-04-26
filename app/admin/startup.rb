@@ -113,10 +113,6 @@ ActiveAdmin.register Startup do
           end
         end
       end
-
-      row :women_cofounders do
-        startup.founders.where(gender: Founder::GENDER_FEMALE).count
-      end
     end
 
     panel 'Technical details' do

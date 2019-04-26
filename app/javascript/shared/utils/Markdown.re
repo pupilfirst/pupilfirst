@@ -1,3 +1,6 @@
-[@bs.module "./markdown"] external parseFunction: string => string = "default";
+type options = Js.Json.t;
 
-let parse = markdown => markdown |> parseFunction;
+[@bs.module] external jsParse: (string, options) => string = "marked";
+
+let parse = (markdown, ~sanitize=true, ()) =>
+  jsParse(markdown, Json.Encode.(object_([("sanitize", bool(sanitize))])));

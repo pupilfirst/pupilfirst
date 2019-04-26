@@ -54,6 +54,8 @@ gem 'friendly_id', '~> 5.2' # Slugs for links. http://norman.github.io/friendly_
 gem 'lita', '= 5.0.0', github: 'svdotco/lita', require: false # Lita without rack version limitation. TODO: Replace with official version when it drops rack < v2 limitation.
 gem 'lita-slack', '= 1.8.0', github: 'litaio/lita-slack', require: false # Lita adapter for Slack. TODO: removing github repo tracking when gem is updated
 gem 'kramdown', '~> 2.1' # kramdown is a fast, pure Ruby Markdown superset converter, using a strict syntax definition and supporting several common extensions. http://kramdown.gettalong.org
+gem 'motion-markdown-it', '~> 8.4.1' # Ruby version of Markdown-it (a CommonMark compliant extensible parser).
+gem 'motion-markdown-it-plugins', '~> 8.4.2' # Plugins for motion-markdown-it.
 gem 'gaffe', '~> 1.2' # Custom error pages. https://github.com/mirego/gaffe
 
 gem 'google_calendar', '= 0.6.4', github: 'northworld/google_calendar' # Thin wrapper over Google Calendar API.

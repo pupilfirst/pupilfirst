@@ -16,7 +16,9 @@
     "cloc": "^2.4.0",
     "coffeescript": "1.12.7",
     "date-fns": "^1.29.0",
-    "marked": "^0.6.2",
+    "markdown-it": "^8.4.2",
+    "markdown-it-sub": "^1.0.0",
+    "markdown-it-sup": "^1.0.0",
     "material-design-icons-iconfont": "^4.0.5",
     "pnotify": "^4.0.0",
     "postcss-scss": "^2.0.0",
@@ -24,6 +26,7 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react_ujs": "^2.4.3",
+    "sanitize-html": "^1.20.1",
     "trix": "^1.1.0",
     "turbolinks": "^5.2.0",
     "webpack-merge": "^4.1.1"

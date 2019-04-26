@@ -91,9 +91,7 @@ let address = a =>
   | Some(a) =>
     <div
       className="text-sm mt-3 leading-normal"
-      dangerouslySetInnerHTML={
-        "__html": Markdown.parse(a, ~sanitize=false, ()),
-      }
+      dangerouslySetInnerHTML={"__html": a |> Markdown.parse}
     />
   | None => ReasonReact.null
   };

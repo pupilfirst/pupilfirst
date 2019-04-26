@@ -1,8 +1,25 @@
 <% presenter = Communities::ShowPresenter.new(self, @community, @questions) %>
-<div class="flex bg-grey-lighter">
+<% content_for(:head) do %>
+  <title>Community</title>
+  <%= stylesheet_pack_tag 'communities/show', media: 'all', 'data-turbolinks-track': 'reload' %>
+<% end %>
+
+
+<div class="bg-grey-lightest">
+  <div class="community-hero__container flex bg-white border-b border-primary-lighter">
+    <div class="max-w-lg w-full flex flex-col items-center justify-center mx-auto">
+      <h1 class="text-center font-normal text-4xl leading-tight">
+        Welcome to the
+        <span class="block font-bold text-5xl">VR Community</span>
+      </h1>
+      <div class="max-w-sm flex w-full mt-3">
+        <input class="appearance-none block w-full shadow bg-white text-grey-darker border border-primary-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-primary-light focus:shadow-md" id="name" placeholder="Search" type="text" value="">
+      </div>
+    </div>
+  </div>
   <div class="flex-1 flex flex-col">
     <div class="flex px-6 py-2 items-center justify-between">
-      <a class="no-underline max-w-md w-full flex mx-auto items-center justify-center relative bg-grey-lighter hover:bg-grey-light hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-20 cursor-pointer"
+      <a class="no-underline max-w-lg w-full flex mx-auto items-center justify-center relative bg-grey-lightest hover:bg-grey-lighter border-2 border-dashed p-6 rounded-lg mt-10 cursor-pointer"
          href=<%= new_community_question_path(@community.id) %>
       >
         <i class="material-icons">add_circle_outline</i>
@@ -12,47 +29,46 @@
       </a>
     </div>
     <div class="px-6 pb-4 mt-5 flex flex-1">
-      <div class="max-w-md w-full mx-auto relative">
-        <% @questions.map do |question| %>
-          <div class="flex items-center shadow bg-white rounded-lg mb-4">
-            <div class="flex w-full">
-              <a class="cursor-pointer justify-between no-underline flex flex-1 items-center py-4 px-4 hover:bg-grey-lighter"
-                 href=<%= community_question_path(@community.id, question.id) %>>
-                <div class="text-black">
-                  <div class="text-sm font-semibold">
-                    <%= question.title %>
+      <div class="max-w-lg w-full mx-auto relative">
+        <div class="community-question-list-container shadow bg-white rounded-lg mb-4">
+          <% @questions.map do |question| %>
+            <div class="flex items-center border-b">
+              <div class="flex w-full">
+                <a class="cursor-pointer justify-between no-underline flex flex-1 items-center p-6 hover:bg-grey-lightest"
+                  href=<%= community_question_path(@community.id, question.id) %>>
+                  <div class="text-black">
+                    <div class="text-sm font-semibold">
+                      <%= question.title %>
+                    </div>
+                    <div class="text-xs mt-2">
+                      <span>Asked by</span>
+                      <span class="font-semibold"><%= presenter.user_name(question) %> </span>
+                      <span>on <%= presenter.time(question) %> </span>
+                      <span class="border-l pl-2 ml-2">Last updated <%= presenter.activity(question) %> ago</span>
+                    </div>
                   </div>
-                  <div class="text-xs mt-2">
-                    <span>asked by</span>
-                    <span class="font-semibold"><%= presenter.user_name(question) %> </span>
-                    <span>on <%= presenter.time(question) %> </span>
+                  <div class="flex flex-row text-black">
+                    <% if presenter.unanswered_questions?(question) %>
+                      <div>New!</div>
+                    <% else %>
+                      <div class="px-4 text-center">
+                        <i class="fal fa-thumbs-up text-xl text-grey-dark"></i>
+                        <p class="text-xs pt-1"><%= presenter.comment_claps(question) %></p>
+                      </div>
+                      <div class="px-2 text-center">
+                        <i class="fal fa-comment-lines text-xl text-grey-dark"></i>
+                        <p class="text-xs pt-1"><%= presenter.comments_count(question) %></p>
+                      </div>
+                    <% end %>
                   </div>
-                </div>
-                <div class="flex flex-row text-black">
-                  <% if presenter.unanswered_questions?(question) %>
-                    <div>New!</div>
-                  <% else %>
-                    <div class="p-2 text-center">
-                      <i class="material-icons">message</i>
-                      <p><%= presenter.comments_count(question) %></p>
-                    </div>
-                    <div class="p-2 text-center">
-                      <i class="material-icons">favorite</i>
-                      <p><%= presenter.comment_claps(question) %></p>
-                    </div>
-                    <div class="p-2 text-center">
-                      <i class="material-icons">access_time</i>
-                      <p><%= presenter.activity(question) %></p>
-                    </div>
-                  <% end %>
-                </div>
-              </a>
+                </a>
+              </div>
             </div>
-          </div>
-        <% end %>
+          <% end %>
+        </div>
       </div>
     </div>
-    <div class="max-w-md w-full flex flex-row mx-auto justify-center mb-4">
+    <div class="max-w-lg w-full flex flex-row mx-auto justify-center mb-4">
       <% if presenter.show_prev_page? %>
         <a class="block no-underline hover:text-white hover:bg-blue text-blue px-3 py-2" href=<%= presenter.prev_page_path %>>Previous</a>
       <% end %>

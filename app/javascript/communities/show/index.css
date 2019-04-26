@@ -1,0 +1,11 @@
+.community-hero__container {
+  height: 22rem;
+  background-image: url('./community-bg.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.community-question-list-container>:last-child {
+  border: none;
+}

@@ -5,52 +5,64 @@ module Questions
       @question = question
     end
 
-    def show_edit_button?
-      @question.user == current_user
+    def json_props
+      {
+        authenticityToken: view.form_authenticity_token,
+        questions: question_data,
+        answers: answer_data,
+        comments: comments,
+        userData: user_data
+      }.to_json
     end
 
-    def show_answer_edit?(answer)
-      answer.user == current_user
+    def question_data
+      {
+        id: @question.id,
+        title: @question.title,
+        description: @question.description,
+        userId: @question.user_id
+      }
     end
 
-    def answers
-      @question.answers.includes([:answer_claps, user: :faculty]).order("answer_claps.count DESC NULLS LAST")
+    def answer_data
+      @answer_data ||=
+        @question.answers.map do |answer|
+          {
+            id: answer.id,
+            description: answer.description,
+            userId: answer.user_id
+          }
+        end
     end
 
-    def answer_claps(answer)
-      answer.answer_claps.pluck(:count).sum
+    def comments
+      @comments ||=
+        @question.comments.map(&method(:comment_data)) + comments_for_answers
     end
 
-    def answers_count
-      @question.answers.count
+    def comments_for_answers
+      Comment.where(commentable_type: "Answer", commentable_id: @answer_data.pluck(:id)).map(&method(:comment_data))
     end
 
-    def time(object)
-      object.created_at.to_formatted_s(:long)
+    def comment_data(comment)
+      {
+        id: comment.id,
+        value: comment.value,
+        user_id: comment.user_id,
+        commentableType: comment.commentable_type,
+        commentableId: comment.commentable_id
+
+      }
     end
 
-    def user_image(user)
-      profile = user_profile(user)
-      profile.avatar.attached? ? profile.avatar.blob : profile.initials_avatar(:square)
-    end
-
-    def name(user)
-      user_profile(user).name
-    end
-
-    def title(user)
-      title = user_profile(user).title
-      title_text = title.present? ? ", #{title}" : ""
-
-      if user.faculty.present?
-        "Faculty #{title_text}"
-      else
-        "Student #{title_text}"
+    def user_data
+      user_ids = ([@question.id] + @answer_data.pluck(:userId) + @comments.pluck(:userId)).uniq
+      UserProfile.where(user_id: user_ids, school: current_school).map do |user_profile|
+        {
+          id: user_profile.user_id,
+          name: user_profile.name
+        }
       end
-    end
-
-    def user_profile(user)
-      user.user_profiles.where(school: current_school).first
     end
   end
 end

@@ -1,10 +1,29 @@
 type t = {
-  id: int,
+  userId: int,
   name: string,
+  avatarUrl: string,
+  title: string,
 };
 
 let decode = json =>
   Json.Decode.{
-    id: json |> field("id", int),
+    userId: json |> field("userId", int),
     name: json |> field("name", string),
+    avatarUrl: json |> field("avatarUrl", string),
+    title: json |> field("title", string),
   };
+
+let name = t => t.name;
+
+let avatarUrl = t => t.avatarUrl;
+
+let title = t => t.title;
+
+let user = (userId, users) =>
+  users |> List.find(user => user.userId == userId);
+
+let userName = (userId, users) =>
+  users |> List.find(user => user.userId == userId) |> name;
+
+let userAvatarUrl = (userId, users) =>
+  users |> List.find(user => user.userId == userId) |> avatarUrl;

@@ -26,16 +26,6 @@ module Layouts
       end
     end
 
-    def community_ids
-      if current_school_admin || coach_profile?
-        current_school.community.pluck(:id)
-      elsif current_founder.present?
-        current_user.founders.joins(course: :school).where(schools: { id: current_school }).pluck('courses.community_id').compact
-      else
-        []
-      end
-    end
-
     def school_logo_path
       if current_school.logo_on_light_bg.attached?
         current_school.logo_variant("thumb")

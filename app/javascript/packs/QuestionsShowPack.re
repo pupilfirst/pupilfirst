@@ -25,6 +25,8 @@ ReactDOMRe.renderToElementWithId(
     authenticityToken={props.authenticityToken}
     question={props.question}
     answers={props.answers}
+    comments={props.comments}
+    userData={props.userData}
   />,
   "react-root",
 );

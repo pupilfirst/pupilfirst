@@ -51,11 +51,10 @@ let headerLinks = links => {
     | fourOrLessLinks => (fourOrLessLinks, [])
     };
 
-  visibleLinks
-  |> List.map(l => headerLink(l))
-  |> List.rev_append([
-       <SchoolCustomize__MoreLinks links=dropdownLinks key="more-links" />,
-     ])
+  (visibleLinks |> List.map(l => headerLink(l)))
+  ->List.append([
+      <SchoolCustomize__MoreLinks links=dropdownLinks key="more-links" />,
+    ])
   |> Array.of_list
   |> ReasonReact.array;
 };

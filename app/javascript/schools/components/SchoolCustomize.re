@@ -116,12 +116,13 @@ let footerLogo = (schoolName, logoOnDarkBg) =>
     }
   </div>;
 
-let editIcon = (additionalClasses, clickHandler) =>
+let editIcon = (additionalClasses, clickHandler, title) =>
   <div
     className={
       "cursor-pointer bg-grey-darker hover:bg-primary text-white p-2 rounded-lg flex items-center "
       ++ additionalClasses
     }
+    title
     onClick=clickHandler>
     <i className="fas fa-pen-nib text-lg" />
   </div>;
@@ -247,7 +248,13 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                 state.customizations |> Customizations.logoOnLightBg,
               )
             }
-            {editIcon("ml-6", showEditor(ImagesEditor, send))}
+            {
+              editIcon(
+                "ml-6",
+                showEditor(ImagesEditor, send),
+                "Edit logo (on light backgrounds)",
+              )
+            }
           </div>
           <div className="flex items-center">
             {
@@ -264,6 +271,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                   LinksEditor(SchoolCustomize__LinksEditor.HeaderLink),
                   send,
                 ),
+                "Edit header links",
               )
             }
             <div className="ml-8 w-12 h-12 border rounded-full bg-grey" />
@@ -284,6 +292,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                       LinksEditor(SchoolCustomize__LinksEditor.FooterLink),
                       send,
                     ),
+                    "Edit footer links",
                   )
                 }
               </div>
@@ -311,6 +320,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                           ),
                           send,
                         ),
+                        "Edit social media links",
                       )
                     }
                   </div>
@@ -327,7 +337,13 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                     <span className="uppercase font-bold text-sm">
                       {"Contact" |> str}
                     </span>
-                    {editIcon("ml-3", showEditor(ContactsEditor, send))}
+                    {
+                      editIcon(
+                        "ml-3",
+                        showEditor(ContactsEditor, send),
+                        "Edit contact details",
+                      )
+                    }
                   </div>
                   {address(state.customizations |> Customizations.address)}
                   {
@@ -348,7 +364,13 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                   state.customizations |> Customizations.logoOnDarkBg,
                 )
               }
-              {editIcon("ml-3", showEditor(ImagesEditor, send))}
+              {
+                editIcon(
+                  "ml-3",
+                  showEditor(ImagesEditor, send),
+                  "Edit logo (on dark backgrounds)",
+                )
+              }
             </div>
             <div className="flex items-center text-sm">
               <div> {"Privacy Policy" |> str} </div>
@@ -361,6 +383,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                     ),
                     send,
                   ),
+                  "Edit privacy policy",
                 )
               }
               <div className="ml-8"> {"Terms of Use" |> str} </div>
@@ -373,6 +396,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                     ),
                     send,
                   ),
+                  "Edit terms of use",
                 )
               }
               <div className="ml-8 flex items-center">
@@ -413,7 +437,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                 />
                 <span className="ml-2"> {schoolName |> str} </span>
               </div>
-              {editIcon("ml-2", showEditor(ImagesEditor, send))}
+              {editIcon("ml-2", showEditor(ImagesEditor, send), "Edit icon")}
             </div>
           </div>
           <div className="bg-grey-lighter h-16" />

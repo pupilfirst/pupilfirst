@@ -15,6 +15,7 @@ class SchoolsController < ApplicationController
   # GET /school/customize
   def customize
     authorize current_school
+    render layout: 'settings'
   end
 
   # POST /school/images

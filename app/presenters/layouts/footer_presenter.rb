@@ -57,7 +57,14 @@ module Layouts
       @address ||= begin
         if current_school.present?
           raw_address = SchoolString::Address.for(current_school)
-          Kramdown::Document.new(raw_address).to_html if raw_address.present?
+
+          if raw_address.present?
+            parser = MarkdownIt::Parser.new(:commonmark)
+              .use(MotionMarkdownItPlugins::Sub)
+              .use(MotionMarkdownItPlugins::Sup)
+
+            parser.render(raw_address)
+          end
         else
           view.t('presenters.layouts.footer.address_html')
         end

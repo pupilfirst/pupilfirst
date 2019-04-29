@@ -23,7 +23,7 @@
                 <p class="footer-column__head font-bold">CONTACT</p>
 
                 <address class="footer-column__address mb-1">
-                  <%= presenter.address.html_safe %>
+                  <%= sanitize(presenter.address) %>
                 </address>
               <% end %>
 

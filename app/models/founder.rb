@@ -176,7 +176,7 @@ class Founder < ApplicationRecord
   end
 
   def profile_complete?
-    required_fields = %i[name roles gender communication_address permanent_address phone]
+    required_fields = %i[name roles gender communication_address phone]
 
     required_fields.all? { |field| self[field].present? }
   end

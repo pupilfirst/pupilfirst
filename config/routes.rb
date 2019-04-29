@@ -34,6 +34,7 @@ Rails.application.routes.draw do
 
   resource :school, only: %i[show update] do
     get 'customize'
+    post 'images'
   end
 
   namespace :school, module: 'schools' do
@@ -138,7 +139,7 @@ Rails.application.routes.draw do
 
   scope 'coaches', controller: 'faculty' do
     get '/', action: 'index', as: 'coaches_index'
-    get '/:id', action: 'show', as: 'coach'
+    get '/:id(/:slug)', action: 'show', as: 'coach'
     get '/filter/:active_tab', action: 'index'
   end
 

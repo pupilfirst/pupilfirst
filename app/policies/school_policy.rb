@@ -8,4 +8,8 @@ class SchoolPolicy < ApplicationPolicy
   def customize?
     show?
   end
+
+  def images?
+    customize?
+  end
 end

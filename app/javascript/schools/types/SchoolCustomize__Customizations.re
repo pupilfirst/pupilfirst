@@ -7,10 +7,15 @@ type schoolStrings = {
   termsOfUse: option(string),
 };
 
+type file = {
+  url: string,
+  filename: string,
+};
+
 type schoolImages = {
-  logoOnLightBg: option(string),
-  logoOnDarkBg: option(string),
-  icon: string,
+  logoOnLightBg: option(file),
+  logoOnDarkBg: option(file),
+  icon: file,
 };
 
 type linkId = string;
@@ -31,6 +36,9 @@ type t = {
 let logoOnLightBg = t => t.schoolImages.logoOnLightBg;
 let logoOnDarkBg = t => t.schoolImages.logoOnDarkBg;
 let icon = t => t.schoolImages.icon;
+
+let url = file => file.url;
+let filename = file => file.filename;
 
 let address = t => t.schoolStrings.address;
 let emailAddress = t => t.schoolStrings.emailAddress;
@@ -79,7 +87,7 @@ let unpackLinks = links =>
        }
      );
 
-let addLink = (link, t) => {...t, links: [link, ...t.links]};
+let addLink = (link, t) => {...t, links: t.links @ [link]};
 
 let removeLink = (linkId, t) => {
   ...t,
@@ -132,14 +140,24 @@ let updateEmailAddress = (emailAddress, t) => {
   },
 };
 
-let updateImages = (logoOnLightBg, logoOnDarkBg, icon, t) => {
-  ...t,
-  schoolImages: {
-    logoOnLightBg,
-    logoOnDarkBg,
-    icon,
-  },
-};
+let decodeFile = json =>
+  Json.Decode.{
+    url: json |> field("url", string),
+    filename: json |> field("filename", string),
+  };
+
+let decodeImages = json =>
+  Json.Decode.{
+    logoOnLightBg:
+      json
+      |> field("logoOnLightBg", nullable(decodeFile))
+      |> Js.Null.toOption,
+    logoOnDarkBg:
+      json |> field("logoOnDarkBg", nullable(decodeFile)) |> Js.Null.toOption,
+    icon: json |> field("icon", decodeFile),
+  };
+
+let updateImages = (json, t) => {...t, schoolImages: json |> decodeImages};
 
 let decodeStrings = json =>
   Json.Decode.{
@@ -150,15 +168,6 @@ let decodeStrings = json =>
       json |> field("privacyPolicy", nullable(string)) |> Js.Null.toOption,
     termsOfUse:
       json |> field("termsOfUse", nullable(string)) |> Js.Null.toOption,
-  };
-
-let decodeImages = json =>
-  Json.Decode.{
-    logoOnLightBg:
-      json |> field("logoOnLightBg", nullable(string)) |> Js.Null.toOption,
-    logoOnDarkBg:
-      json |> field("logoOnDarkBg", nullable(string)) |> Js.Null.toOption,
-    icon: json |> field("icon", string),
   };
 
 let decodeLink = json => {

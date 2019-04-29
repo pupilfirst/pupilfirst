@@ -3,11 +3,20 @@ open SchoolCustomize__Types;
 let str = ReasonReact.string;
 
 type action =
+  | SelectLogoOnLightBgFile(string, bool)
+  | SelectLogoOnDarkBgFile(string, bool)
+  | SelectIconFile(string, bool)
   | BeginUpdate
   | ErrorOccured
   | DoneUpdating;
 
 type state = {
+  logoOnLightBgFilename: option(string),
+  logoOnLightBgInvalid: bool,
+  logoOnDarkBgFilename: option(string),
+  logoOnDarkBgInvalid: bool,
+  iconFilename: option(string),
+  iconInvalid: bool,
   updating: bool,
   formDirty: bool,
 };
@@ -16,72 +25,296 @@ let component = ReasonReact.reducerComponent("SchoolCustomize__ImagesEditor");
 
 let updateButtonText = updating => updating ? "Updating..." : "Update Images";
 
-let handleUpdateImages =
-    (state, send, authenticityToken, updateImagesCB, event) => {
-  event |> ReactEvent.Mouse.preventDefault;
+let formId = "sc-images-editor__form";
+
+let handleUpdateImages = (send, updateImagesCB, event) => {
+  event |> ReactEvent.Form.preventDefault;
   send(BeginUpdate);
+
+  let element = ReactDOMRe._getElementById(formId);
+  switch (element) {
+  | Some(element) =>
+    SchoolAdmin__Api.sendFormData(
+      "/school/images",
+      DomUtils.FormData.create(element),
+      json => {
+        Notification.success(
+          "Done!",
+          "Images have been updated successfully.",
+        );
+        updateImagesCB(json);
+        send(DoneUpdating);
+      },
+      () => send(ErrorOccured),
+    )
+  | None => ()
+  };
 };
 
 let updateButtonDisabled = state =>
   if (state.updating) {
     true;
   } else {
-    !state.formDirty;
+    !state.formDirty
+    || state.logoOnLightBgInvalid
+    || state.logoOnDarkBgInvalid
+    || state.iconInvalid;
   };
+
+let optionalImageLabelText = (image, selectedFilename) =>
+  switch (selectedFilename) {
+  | Some(name) =>
+    <span>
+      {"You have selected " |> str}
+      <code className="mr-1"> {name |> str} </code>
+      {" to replace the current image." |> str}
+    </span>
+  | None =>
+    switch (image) {
+    | Some(existingImage) =>
+      <span>
+        {"Please pick a file to replace " |> str}
+        <code> {existingImage |> Customizations.filename |> str} </code>
+      </span>
+    | None => "Please choose an image file to customize" |> str
+    }
+  };
+
+let iconLabelText = (icon, iconFilename) =>
+  switch (iconFilename) {
+  | Some(name) =>
+    <span>
+      {"You have selected " |> str}
+      <code className="mr-1"> {name |> str} </code>
+      {" to replace the current icon." |> str}
+    </span>
+  | None =>
+    <span>
+      {"Please pick a file to replace " |> str}
+      <code> {icon |> Customizations.filename |> str} </code>
+    </span>
+  };
+
+let maxAllowedSize = 2 * 1024 * 1024;
+
+let isInvalidImageFile = image =>
+  (
+    switch (image##_type) {
+    | "image/jpeg"
+    | "image/png" => false
+    | _ => true
+    }
+  )
+  ||
+  image##size > maxAllowedSize;
+
+let updateLogoOnLightBg = (send, event) => {
+  let imageFile = ReactEvent.Form.target(event)##files[0];
+  send(
+    SelectLogoOnLightBgFile(imageFile##name, imageFile |> isInvalidImageFile),
+  );
+};
+
+let updateLogoOnDarkBg = (send, event) => {
+  let imageFile = ReactEvent.Form.target(event)##files[0];
+  send(
+    SelectLogoOnDarkBgFile(imageFile##name, imageFile |> isInvalidImageFile),
+  );
+};
+
+let updateIcon = (send, event) => {
+  let imageFile = ReactEvent.Form.target(event)##files[0];
+  send(SelectIconFile(imageFile##name, imageFile |> isInvalidImageFile));
+};
 
 let make = (~customizations, ~updateImagesCB, ~authenticityToken, _children) => {
   ...component,
-  initialState: () => {updating: false, formDirty: false},
+  initialState: () => {
+    logoOnLightBgFilename: None,
+    logoOnLightBgInvalid: false,
+    logoOnDarkBgFilename: None,
+    logoOnDarkBgInvalid: false,
+    iconFilename: None,
+    iconInvalid: false,
+    updating: false,
+    formDirty: false,
+  },
   reducer: (action, state) =>
     switch (action) {
+    | SelectLogoOnLightBgFile(name, invalid) =>
+      ReasonReact.Update({
+        ...state,
+        logoOnLightBgFilename: Some(name),
+        logoOnLightBgInvalid: invalid,
+        formDirty: true,
+      })
+    | SelectLogoOnDarkBgFile(name, invalid) =>
+      ReasonReact.Update({
+        ...state,
+        logoOnDarkBgFilename: Some(name),
+        logoOnDarkBgInvalid: invalid,
+        formDirty: true,
+      })
+    | SelectIconFile(name, invalid) =>
+      ReasonReact.Update({
+        ...state,
+        iconFilename: Some(name),
+        iconInvalid: invalid,
+        formDirty: true,
+      })
     | BeginUpdate => ReasonReact.Update({...state, updating: true})
     | ErrorOccured => ReasonReact.Update({...state, updating: false})
     | DoneUpdating =>
-      ReasonReact.Update({...state, updating: false, formDirty: false})
+      ReasonReact.Update({
+        updating: false,
+        formDirty: false,
+        logoOnLightBgFilename: None,
+        logoOnLightBgInvalid: false,
+        logoOnDarkBgFilename: None,
+        logoOnDarkBgInvalid: false,
+        iconFilename: None,
+        iconInvalid: false,
+      })
     },
-  render: ({state, send}) =>
-    <div className="mx-8 pt-8">
+  render: ({state, send}) => {
+    let logoOnLightBg = customizations |> Customizations.logoOnLightBg;
+    let logoOnDarkBg = customizations |> Customizations.logoOnDarkBg;
+    let icon = customizations |> Customizations.icon;
+
+    <form
+      className="mx-8 pt-8"
+      id=formId
+      key="sc-images-editor__form"
+      onSubmit={handleUpdateImages(send, updateImagesCB)}>
+      <input
+        name="authenticity_token"
+        type_="hidden"
+        value=authenticityToken
+      />
       <h5 className="uppercase text-center border-b border-grey-light pb-2">
-        {"Manage Contact Details" |> str}
+        {"Manage Images" |> str}
       </h5>
       <SchoolAdmin__DisablingCover disabled={state.updating}>
-        <div key="contacts-editor__address-input-group" className="mt-3">
+        <div
+          key="sc-images-editor__logo-on-light-bg-input-group"
+          className="mt-4">
           <label
-            className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
-            htmlFor="contacts-editor__address">
-            {"Contact Address " |> str}
-            <i className="fab fa-markdown text-base" />
+            className="block tracking-wide text-grey-darker text-xs font-semibold"
+            htmlFor="sc-images-editor__logo-on-light-bg-input">
+            {"Logo on a light background" |> str}
           </label>
-          <textarea
-            maxLength=1000
-            className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-            id="contacts-editor__address"
-            placeholder="Leave the address empty to hide the footer section."
+          <div
+            className="input-file__container flex items-center relative mt-2">
+            <input
+              disabled={state.updating}
+              className="input-file__input cursor-pointer px-4"
+              name="logo_on_light_bg"
+              type_="file"
+              accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
+              id="sc-images-editor__logo-on-light-bg-input"
+              required=false
+              multiple=false
+              onChange={updateLogoOnLightBg(send)}
+            />
+            <label
+              className="input-file__label flex px-4 items-center font-semibold rounded text-sm"
+              htmlFor="sc-images-editor__logo-on-light-bg-input">
+              <i className="fas fa-upload" />
+              <span className="ml-2 truncate">
+                {
+                  optionalImageLabelText(
+                    logoOnLightBg,
+                    state.logoOnLightBgFilename,
+                  )
+                }
+              </span>
+            </label>
+          </div>
+          <School__InputGroupError
+            message="must be a JPEG / PNG under 2 MB in size"
+            active={state.logoOnLightBgInvalid}
           />
         </div>
-        <div key="contacts-editor__email-address-input-group" className="mt-3">
+        <div
+          key="sc-images-editor__logo-on-dark-bg-input-group" className="mt-4">
           <label
-            className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
-            htmlFor="contacts-editor__email-address">
-            {"Email Address" |> str}
+            className="block tracking-wide text-grey-darker text-xs font-semibold"
+            htmlFor="sc-images-editor__logo-on-dark-bg-input">
+            {"Logo on a dark background" |> str}
           </label>
-          <input
-            type_="text"
-            maxLength=250
-            className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
-            id="contacts-editor__email-address"
-            placeholder="Leave the email address empty to hide the footer link."
+          <div
+            className="input-file__container flex items-center relative mt-2">
+            <input
+              disabled={state.updating}
+              className="input-file__input cursor-pointer px-4"
+              name="logo_on_dark_bg"
+              type_="file"
+              accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
+              id="sc-images-editor__logo-on-dark-bg-input"
+              required=false
+              multiple=false
+              onChange={updateLogoOnDarkBg(send)}
+            />
+            <label
+              className="input-file__label flex px-4 items-center font-semibold rounded text-sm"
+              htmlFor="sc-images-editor__logo-on-dark-bg-input">
+              <i className="fas fa-upload" />
+              <span className="ml-2 truncate">
+                {
+                  optionalImageLabelText(
+                    logoOnDarkBg,
+                    state.logoOnDarkBgFilename,
+                  )
+                }
+              </span>
+            </label>
+          </div>
+          <School__InputGroupError
+            message="must be a JPEG / PNG under 2 MB in size"
+            active={state.logoOnDarkBgInvalid}
+          />
+        </div>
+        <div key="sc-images-editor__icon-input-group" className="mt-4">
+          <label
+            className="block tracking-wide text-grey-darker text-xs font-semibold"
+            htmlFor="sc-images-editor__icon-input">
+            {"Icon" |> str}
+          </label>
+          <div
+            className="input-file__container flex items-center relative mt-2">
+            <input
+              disabled={state.updating}
+              className="input-file__input cursor-pointer px-4"
+              name="icon"
+              type_="file"
+              accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
+              id="sc-images-editor__icon-input"
+              required=false
+              multiple=false
+              onChange={updateIcon(send)}
+            />
+            <label
+              className="input-file__label flex px-4 items-center font-semibold rounded text-sm"
+              htmlFor="sc-images-editor__icon-input">
+              <i className="fas fa-upload" />
+              <span className="ml-2 truncate">
+                {iconLabelText(icon, state.iconFilename)}
+              </span>
+            </label>
+          </div>
+          <School__InputGroupError
+            message="must be a JPEG / PNG under 2 MB in size"
+            active={state.iconInvalid}
           />
         </div>
         <button
-          key="contacts-editor__update-button"
+          type_="submit"
+          key="sc-images-editor__update-button"
           disabled={updateButtonDisabled(state)}
-          onClick={
-            handleUpdateImages(state, send, authenticityToken, updateImagesCB)
-          }
           className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
           {updateButtonText(state.updating) |> str}
         </button>
       </SchoolAdmin__DisablingCover>
-    </div>,
+    </form>;
+  },
 };

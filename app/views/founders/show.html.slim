@@ -126,7 +126,7 @@
                         .media-heading
                           = link_to faculty.name, faculty_url(faculty.id)
                         p.designation #{faculty.title}
-                        - if faculty.linkedin_url?
+                        - if faculty.linkedin_url.present?
                           ul.faculty__social-links
                             li
                               a href="#{faculty.linkedin_url}" target='_blank'

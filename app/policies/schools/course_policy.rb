@@ -12,6 +12,12 @@ module Schools
 
     alias close? update?
 
+    def delete_coach_enrollment?
+      record.in?(current_school.courses) && !record.ended?
+    end
+
+    alias update_coach_enrollments? delete_coach_enrollment?
+
     class Scope < Scope
       def resolve
         current_school.courses

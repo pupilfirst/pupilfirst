@@ -111,7 +111,7 @@ let make =
       let url =
         "/school/courses/"
         ++ (courseId |> string_of_int)
-        ++ "/coaches/delete_enrollments";
+        ++ "/delete_coach_enrollment";
       let payload = Js.Dict.empty();
       Js.Dict.set(
         payload,

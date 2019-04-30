@@ -97,7 +97,7 @@ let make =
       let url =
         "/school/courses/"
         ++ (courseId |> string_of_int)
-        ++ "/coaches/update_enrollments";
+        ++ "/update_coach_enrollments";
       Api.create(url, payload, handleResponseCB, handleErrorCB);
     };
 

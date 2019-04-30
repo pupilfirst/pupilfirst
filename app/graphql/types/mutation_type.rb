@@ -5,5 +5,7 @@ module Types
     field :create_school_link, mutation: Mutations::CreateSchoolLink, null: false
     field :destroy_school_link, mutation: Mutations::DestroySchoolLink, null: false
     field :update_school_string, mutation: Mutations::UpdateSchoolString, null: false
+    field :create_comment, mutation: Mutations::CreateComment, null: false
+    field :create_answer, mutation: Mutations::CreateAnswer, null: false
   end
 end

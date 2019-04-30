@@ -1,17 +1,17 @@
 type t = {
-  id: int,
+  id: string,
   value: string,
-  userId: int,
-  commentableId: int,
+  userId: string,
+  commentableId: string,
   commentableType: string,
 };
 
 let decode = json =>
   Json.Decode.{
-    id: json |> field("id", int),
+    id: json |> field("id", string),
     value: json |> field("value", string),
-    userId: json |> field("userId", int),
-    commentableId: json |> field("commentableId", int),
+    userId: json |> field("userId", string),
+    commentableId: json |> field("commentableId", string),
     commentableType: json |> field("commentableType", string),
   };
 
@@ -32,3 +32,14 @@ let commentsForAnswer = (answerId, comments) =>
   comments
   |> List.filter(comment => comment.commentableType == "Answer")
   |> List.filter(comment => comment.commentableId == answerId);
+
+let addComment = (comments, comment) =>
+  comments |> List.rev |> List.append([comment]) |> List.rev;
+
+let create = (id, value, userId, commentableId, commentableType) => {
+  id,
+  value,
+  userId,
+  commentableId,
+  commentableType,
+};

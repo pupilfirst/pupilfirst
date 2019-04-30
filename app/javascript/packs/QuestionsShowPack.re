@@ -7,6 +7,7 @@ type props = {
   answers: list(Answer.t),
   comments: list(Comment.t),
   userData: list(UserData.t),
+  currentUserId: string,
 };
 
 let decodeProps = json =>
@@ -16,6 +17,7 @@ let decodeProps = json =>
     answers: json |> field("answers", list(Answer.decode)),
     comments: json |> field("comments", list(Comment.decode)),
     userData: json |> field("userData", list(UserData.decode)),
+    currentUserId: json |> field("currentUserId", string),
   };
 
 let props = DomUtils.parseJsonAttribute() |> decodeProps;
@@ -27,6 +29,7 @@ ReactDOMRe.renderToElementWithId(
     answers={props.answers}
     comments={props.comments}
     userData={props.userData}
+    currentUserId={props.currentUserId}
   />,
   "react-root",
 );

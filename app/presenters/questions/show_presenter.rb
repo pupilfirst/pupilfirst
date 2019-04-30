@@ -11,16 +11,17 @@ module Questions
         questions: question_data,
         answers: answer_data,
         comments: comments,
-        userData: user_data
+        userData: user_data,
+        currentUserId: current_user.id.to_s
       }.to_json
     end
 
     def question_data
       {
-        id: @question.id,
+        id: @question.id.to_s,
         title: @question.title,
         description: @question.description,
-        userId: @question.user_id,
+        userId: @question.user_id.to_s,
         createdAt: created_at(@question)
       }
     end
@@ -29,9 +30,9 @@ module Questions
       @answer_data ||=
         @question.answers.select(:id, :description, :user_id, :created_at).map do |answer|
           {
-            id: answer.id,
+            id: answer.id.to_s,
             description: answer.description,
-            userId: answer.user_id,
+            userId: answer.user_id.to_s,
             createdAt: created_at(answer)
           }
         end
@@ -43,25 +44,27 @@ module Questions
     end
 
     def comments_for_answers
-      Comment.where(commentable_type: 'Answer', commentable_id: @answer_data.pluck(:id)).map(&method(:comment_data))
+      Comment.where(commentable_type: Comment::COMMENTABLE_TYPE_ANSWER, commentable_id: @answer_data.pluck(:id))
+        .map(&method(:comment_data))
     end
 
     def comment_data(comment)
       {
-        id: comment.id,
+        id: comment.id.to_s,
         value: comment.value,
-        userId: comment.user_id,
+        userId: comment.user_id.to_s,
         commentableType: comment.commentable_type,
-        commentableId: comment.commentable_id
+        commentableId: comment.commentable_id.to_s
       }
     end
 
     def user_data
-      user_ids = [@question.id, answer_data.pluck(:userId), comments.pluck(:userId)].flatten.uniq
+      user_ids = [@question.id, answer_data.pluck(:userId), comments.pluck(:userId), current_user.id].flatten.uniq
 
-      UserProfile.where(user_id: user_ids, school: current_school).includes([:avatar_attachment, user: :faculty]).map do |user_profile|
+      UserProfile.where(user_id: user_ids, school: current_school)
+        .includes([:avatar_attachment, user: :faculty]).map do |user_profile|
         {
-          userId: user_profile.user_id,
+          userId: user_profile.user_id.to_s,
           name: user_profile.name,
           avatarUrl: avatar_url(user_profile),
           title: title(user_profile)

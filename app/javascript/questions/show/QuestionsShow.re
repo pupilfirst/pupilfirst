@@ -5,7 +5,9 @@ open QuestionsShow__Types;
 let str = React.string;
 
 type action =
-  | ToggleShowAnswers;
+  | ToggleShowAnswers
+  | AddComment(Comment.t)
+  | AddAnswer(Answer.t);
 type state = {
   answers: list(Answer.t),
   comments: list(Comment.t),
@@ -16,15 +18,36 @@ type state = {
 let reducer = (state, action) =>
   switch (action) {
   | ToggleShowAnswers => {...state, showAnswers: !state.showAnswers}
+  | AddComment(comment) => {
+      ...state,
+      comments: Comment.addComment(state.comments, comment),
+    }
+  | AddAnswer(answer) => {
+      ...state,
+      answers: Answer.addAnswer(state.answers, answer),
+    }
   };
 
 [@react.component]
-let make = (~authenticityToken, ~question, ~answers, ~comments, ~userData) => {
+let make =
+    (
+      ~authenticityToken,
+      ~question,
+      ~answers,
+      ~comments,
+      ~userData,
+      ~currentUserId,
+    ) => {
   let (state, dispatch) =
     React.useReducer(
       reducer,
       {showAnswers: true, answers, comments, userData},
     );
+  let addCommentCB = comment => dispatch(AddComment(comment));
+  let addAnswerCB = answer => {
+    dispatch(AddAnswer(answer));
+    dispatch(ToggleShowAnswers);
+  };
   <div className="flex flex-1 bg-grey-lighter">
     <div className="flex-1 flex flex-col">
       <div className="flex-col px-6 py-2 items-center justify-between">
@@ -48,7 +71,7 @@ let make = (~authenticityToken, ~question, ~answers, ~comments, ~userData) => {
                   <i className="fal fa-comment-lines text-xl text-grey-dark" />
                   <p className="text-xs pt-1">
                     {
-                      comments
+                      state.comments
                       |> Comment.commentsForQuestion
                       |> List.length
                       |> string_of_int
@@ -67,8 +90,15 @@ let make = (~authenticityToken, ~question, ~answers, ~comments, ~userData) => {
           </div>
         </div>
         <QuestionsShow__CommentShow
-          comments={comments |> Comment.commentsForQuestion}
+          comments={state.comments |> Comment.commentsForQuestion}
           userData
+        />
+        <QuestionsShow__AddComment
+          authenticityToken
+          commentableType="Question"
+          commentableId={question |> Question.id}
+          addCommentCB
+          currentUserId
         />
         <div
           className="max-w-md w-full justify-center mx-auto mb-4 py-4 border-b-2">
@@ -77,7 +107,8 @@ let make = (~authenticityToken, ~question, ~answers, ~comments, ~userData) => {
               {
                 (
                   state.showAnswers ?
-                    (answers |> List.length |> string_of_int) ++ " Answers" :
+                    (state.answers |> List.length |> string_of_int)
+                    ++ " Answers" :
                     "Add Your Answer"
                 )
                 |> str
@@ -92,13 +123,14 @@ let make = (~authenticityToken, ~question, ~answers, ~comments, ~userData) => {
         </div>
         {
           state.showAnswers ?
-            answers
+            state.answers
             |> List.map(answer => {
                  let userProfile =
                    userData |> UserData.user(answer |> Answer.userId);
                  let commentsForAnswer =
-                   comments |> Comment.commentsForAnswer(answer |> Answer.id);
-                 <div className="flex flex-col">
+                   state.comments
+                   |> Comment.commentsForAnswer(answer |> Answer.id);
+                 <div className="flex flex-col" key={answer |> Answer.id}>
                    <div
                      className="max-w-md w-full flex mx-auto items-center justify-center relative shadow bg-white rounded-lg mt-4">
                      <div className="flex w-full">
@@ -132,11 +164,23 @@ let make = (~authenticityToken, ~question, ~answers, ~comments, ~userData) => {
                      comments=commentsForAnswer
                      userData
                    />
+                   <QuestionsShow__AddComment
+                     authenticityToken
+                     commentableType="Answer"
+                     commentableId={answer |> Answer.id}
+                     addCommentCB
+                     currentUserId
+                   />
                  </div>;
                })
             |> Array.of_list
             |> ReasonReact.array :
-            <QuestionsShow__AddAnswer question />
+            <QuestionsShow__AddAnswer
+              question
+              authenticityToken
+              currentUserId
+              addAnswerCB
+            />
         }
       </div>
     </div>

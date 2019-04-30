@@ -37,6 +37,7 @@ let make = (~links, _children) => {
     | [] => ReasonReact.null
     | moreLinks =>
       <div
+        title="Show more links"
         className="ml-8 cursor-pointer relative"
         onClick={toggleState(send)}
         key="more-links">

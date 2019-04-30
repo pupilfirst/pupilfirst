@@ -53,10 +53,11 @@ Rails.application.routes.draw do
       resources :faculty, as: 'coaches', path: 'coaches', only: [] do
         collection do
           get '/', action: 'course_index'
-          post 'update_enrollments'
-          post 'delete_enrollments'
         end
       end
+
+      post 'delete_coach_enrollment'
+      post 'update_coach_enrollments'
     end
 
     resources :founders, as: 'students', path: 'students', except: %i[index] do

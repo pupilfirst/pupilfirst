@@ -1,7 +1,7 @@
 let component =
   ReasonReact.statelessComponent("SchoolCustomize__EditorDrawer");
 
-let make = (~closeDrawerCB, children) => {
+let make = (~closeDrawerCB, ~closeButtonTitle="Close Editor", children) => {
   ...component,
   render: _self =>
     <div>
@@ -15,6 +15,7 @@ let make = (~closeDrawerCB, children) => {
                 closeDrawerCB();
               }
             }
+            title=closeButtonTitle
             className="flex items-center justify-center bg-white text-grey-darker font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
             <i className="fal fa-times text-2xl" />
           </button>

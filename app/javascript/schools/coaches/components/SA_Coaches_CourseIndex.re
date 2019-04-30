@@ -147,21 +147,28 @@ let make =
           }
         }
         <div className="flex-1 flex flex-col bg-grey-lightest">
-          <div className="flex px-6 py-2 items-center justify-between">
-            <button
-              onClick={
-                _event => {
-                  ReactEvent.Mouse.preventDefault(_event);
-                  send(UpdateFormVisible(CoachEnrollmentForm));
-                }
-              }
-              className="max-w-md w-full flex mx-auto items-center justify-center relative bg-grey-lighter hover:bg-grey-light hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-12 cursor-pointer">
-              <i className="material-icons"> {"add_circle_outline" |> str} </i>
-              <h4 className="font-semibold ml-2">
-                {"Assign Coaches to Course" |> str}
-              </h4>
-            </button>
-          </div>
+          {
+            List.length(schoolCoaches) == List.length(state.courseCoaches)
+            || ListUtils.isEmpty(schoolCoaches) ?
+              ReasonReact.null :
+              <div className="flex px-6 py-2 items-center justify-between">
+                <button
+                  onClick={
+                    _event => {
+                      ReactEvent.Mouse.preventDefault(_event);
+                      send(UpdateFormVisible(CoachEnrollmentForm));
+                    }
+                  }
+                  className="max-w-md w-full flex mx-auto items-center justify-center relative bg-grey-lighter hover:bg-grey-light hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-12 cursor-pointer">
+                  <i className="material-icons">
+                    {"add_circle_outline" |> str}
+                  </i>
+                  <h4 className="font-semibold ml-2">
+                    {"Assign Coaches to Course" |> str}
+                  </h4>
+                </button>
+              </div>
+          }
           {
             state.teamCoaches
             |> ListUtils.isEmpty

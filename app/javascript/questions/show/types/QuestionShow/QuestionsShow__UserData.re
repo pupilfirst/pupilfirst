@@ -1,5 +1,5 @@
 type t = {
-  userId: int,
+  userId: string,
   name: string,
   avatarUrl: string,
   title: string,
@@ -7,7 +7,7 @@ type t = {
 
 let decode = json =>
   Json.Decode.{
-    userId: json |> field("userId", int),
+    userId: json |> field("userId", string),
     name: json |> field("name", string),
     avatarUrl: json |> field("avatarUrl", string),
     title: json |> field("title", string),

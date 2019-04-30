@@ -1,17 +1,17 @@
 type t = {
-  id: int,
+  id: string,
   title: string,
   description: string,
-  userId: int,
+  userId: string,
   createdAt: string,
 };
 
 let decode = json =>
   Json.Decode.{
-    id: json |> field("id", int),
+    id: json |> field("id", string),
     title: json |> field("title", string),
     description: json |> field("description", string),
-    userId: json |> field("userId", int),
+    userId: json |> field("userId", string),
     createdAt: json |> field("createdAt", string),
   };
 

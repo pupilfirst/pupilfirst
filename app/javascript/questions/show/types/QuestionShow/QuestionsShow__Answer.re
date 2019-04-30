@@ -1,15 +1,15 @@
 type t = {
-  id: int,
+  id: string,
   description: string,
-  userId: int,
+  userId: string,
   createdAt: string,
 };
 
 let decode = json =>
   Json.Decode.{
-    id: json |> field("id", int),
+    id: json |> field("id", string),
     description: json |> field("description", string),
-    userId: json |> field("userId", int),
+    userId: json |> field("userId", string),
     createdAt: json |> field("createdAt", string),
   };
 
@@ -20,3 +20,13 @@ let createdAt = t => t.createdAt;
 let description = t => t.description;
 
 let userId = t => t.userId;
+
+let addAnswer = (answers, answer) =>
+  answers |> List.rev |> List.append([answer]) |> List.rev;
+
+let create = (id, description, userId, createdAt) => {
+  id,
+  description,
+  userId,
+  createdAt,
+};

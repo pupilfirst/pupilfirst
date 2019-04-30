@@ -133,4 +133,57 @@ feature 'School Customization' do
     expect(social_links.first.title).to eq(nil)
     expect(social_links.first.url).to eq('http://twitter.com')
   end
+
+  scenario 'school admin customizes strings', js: true do
+    sign_in_user school_admin.user, referer: customize_school_path
+
+    expect(page).to have_content("Add an address?")
+    expect(page).to have_content("Add a contact email?")
+
+    # Edit basic contact details.
+    find('div[title="Edit contact details"]').click
+
+    address = Faker::Address.full_address
+    email = Faker::Internet.email
+
+    fill_in 'Contact Address', with: address
+    fill_in 'Email Address', with: email
+
+    click_button 'Update Contact Details'
+
+    expect(page).to have_content('Contact details have been updated')
+    find('.ui-pnotify-container').click
+
+    find('button[title="Close Editor"]').click
+
+    expect(page).not_to have_content("Add an address?")
+    expect(page).not_to have_content("Add a contact email?")
+
+    expect(SchoolString::Address.for(school)).to eq(address)
+    expect(SchoolString::EmailAddress.for(school)).to eq(email)
+
+    # Edit privacy policy.
+    find('div[title="Edit privacy policy"]').click
+
+    privacy_policy = Faker::Lorem.paragraphs(2).join("\n\n")
+
+    fill_in('Body of Agreement', with: privacy_policy)
+    click_button 'Update Privacy Policy'
+    expect(page).to have_content('Privacy Policy has been updated')
+    find('.ui-pnotify-container').click
+
+    find('button[title="Close Editor"]').click
+
+    # Edit terms of use.
+    find('div[title="Edit terms of use"]').click
+
+    terms_of_use = Faker::Lorem.paragraphs(2).join("\n\n")
+
+    fill_in('Body of Agreement', with: terms_of_use)
+    click_button 'Update Terms of Use'
+    expect(page).to have_content('Terms of Use has been updated')
+
+    expect(SchoolString::PrivacyPolicy.for(school)).to eq(privacy_policy)
+    expect(SchoolString::TermsOfUse.for(school)).to eq(terms_of_use)
+  end
 end

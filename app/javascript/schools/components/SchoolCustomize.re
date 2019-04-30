@@ -117,7 +117,7 @@ let address = a =>
   | None =>
     <div
       className="border border-grey rounded-lg italic text-grey-light cursor-default text-sm max-w-fc mt-3 py-2 px-4">
-      {"Add your address?" |> str}
+      {"Add an address?" |> str}
     </div>
   };
 

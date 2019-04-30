@@ -29,15 +29,13 @@ type action =
 let component = ReasonReact.reducerComponent("SchoolCustomize");
 
 let headerLogo = (schoolName, logoOnLightBg) =>
-  <div className="h-12">
-    {
-      switch (logoOnLightBg) {
-      | Some(logo) =>
-        <img className="h-full" src={logo |> Customizations.url} />
-      | None => <span> {schoolName |> str} </span>
-      }
-    }
-  </div>;
+  switch (logoOnLightBg) {
+  | Some(logo) =>
+    <div className="h-12">
+      <img className="h-full" src={logo |> Customizations.url} />
+    </div>
+  | None => <span className="text-2xl font-bold"> {schoolName |> str} </span>
+  };
 
 let headerLink = ((id, title, _)) =>
   <div className="ml-8 cursor-default" key=id>
@@ -51,39 +49,63 @@ let headerLinks = links => {
     | fourOrLessLinks => (fourOrLessLinks, [])
     };
 
-  (visibleLinks |> List.map(l => headerLink(l)))
-  ->List.append([
-      <SchoolCustomize__MoreLinks links=dropdownLinks key="more-links" />,
-    ])
-  |> Array.of_list
-  |> ReasonReact.array;
+  switch (visibleLinks) {
+  | [] =>
+    <div
+      className="border border-grey-light rounded-lg italic text-grey-dark cursor-default text-sm py-2 px-4">
+      {"You can customize links on the header." |> str}
+    </div>
+  | visibleLinks =>
+    (visibleLinks |> List.map(l => headerLink(l)))
+    ->List.append([
+        <SchoolCustomize__MoreLinks links=dropdownLinks key="more-links" />,
+      ])
+    |> Array.of_list
+    |> ReasonReact.array
+  };
 };
 
 let sitemap = links =>
-  <div className="flex flex-wrap">
-    {
-      links
-      |> List.map(((id, title, _)) =>
-           <div className="w-1/3 pr-4 mt-3 text-sm" key=id>
-             {title |> str}
-           </div>
-         )
-      |> Array.of_list
-      |> ReasonReact.array
-    }
-  </div>;
+  switch (links) {
+  | [] =>
+    <div
+      className="border border-grey rounded-lg italic text-grey-light cursor-default text-sm max-w-fc mt-3 py-2 px-4">
+      {"You can customize links in the footer." |> str}
+    </div>
+  | links =>
+    <div className="flex flex-wrap">
+      {
+        links
+        |> List.map(((id, title, _)) =>
+             <div className="w-1/3 pr-4 mt-3 text-sm" key=id>
+               {title |> str}
+             </div>
+           )
+        |> Array.of_list
+        |> ReasonReact.array
+      }
+    </div>
+  };
 
 let socialLinks = links =>
-  <div className="flex flex-wrap">
-    {
-      links
-      |> List.map(((id, _title, url)) =>
-           <SchoolCustomize__SocialLink url key=id />
-         )
-      |> Array.of_list
-      |> ReasonReact.array
-    }
-  </div>;
+  switch (links) {
+  | [] =>
+    <div
+      className="border border-grey rounded-lg italic text-grey-light cursor-default text-sm max-w-fc mt-3 py-2 px-4">
+      {"Add social media links?" |> str}
+    </div>
+  | links =>
+    <div className="flex flex-wrap">
+      {
+        links
+        |> List.map(((id, _title, url)) =>
+             <SchoolCustomize__SocialLink url key=id />
+           )
+        |> Array.of_list
+        |> ReasonReact.array
+      }
+    </div>
+  };
 
 let address = a =>
   switch (a) {
@@ -92,7 +114,11 @@ let address = a =>
       className="text-sm mt-3 leading-normal"
       dangerouslySetInnerHTML={"__html": a |> Markdown.parse}
     />
-  | None => ReasonReact.null
+  | None =>
+    <div
+      className="border border-grey rounded-lg italic text-grey-light cursor-default text-sm max-w-fc mt-3 py-2 px-4">
+      {"Add your address?" |> str}
+    </div>
   };
 
 let emailAddress = email =>
@@ -102,19 +128,18 @@ let emailAddress = email =>
       {"React us at " |> str}
       <span className="font-bold"> {email |> str} </span>
     </div>
-  | None => ReasonReact.null
+  | None =>
+    <div
+      className="border border-grey rounded-lg italic text-grey-light cursor-default text-sm max-w-fc mt-4 py-2 px-4">
+      {"Add a contact email?" |> str}
+    </div>
   };
 
 let footerLogo = (schoolName, logoOnDarkBg) =>
-  <div className="h-8">
-    {
-      switch (logoOnDarkBg) {
-      | Some(logo) =>
-        <img className="h-full" src={logo |> Customizations.url} />
-      | None => <span> {schoolName |> str} </span>
-      }
-    }
-  </div>;
+  switch (logoOnDarkBg) {
+  | Some(logo) => <img className="h-8" src={logo |> Customizations.url} />
+  | None => <span className="text-xl font-bold"> {schoolName |> str} </span>
+  };
 
 let editIcon = (additionalClasses, clickHandler, title) =>
   <div

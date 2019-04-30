@@ -29,15 +29,13 @@ type action =
 let component = ReasonReact.reducerComponent("SchoolCustomize");
 
 let headerLogo = (schoolName, logoOnLightBg) =>
-  <div className="h-12">
-    {
-      switch (logoOnLightBg) {
-      | Some(logo) =>
-        <img className="h-full" src={logo |> Customizations.url} />
-      | None => <span> {schoolName |> str} </span>
-      }
-    }
-  </div>;
+  switch (logoOnLightBg) {
+  | Some(logo) =>
+    <div className="h-12">
+      <img className="h-full" src={logo |> Customizations.url} />
+    </div>
+  | None => <span className="text-2xl font-bold"> {schoolName |> str} </span>
+  };
 
 let headerLink = ((id, title, _)) =>
   <div className="ml-8 cursor-default" key=id>
@@ -51,39 +49,63 @@ let headerLinks = links => {
     | fourOrLessLinks => (fourOrLessLinks, [])
     };
 
-  (visibleLinks |> List.map(l => headerLink(l)))
-  ->List.append([
-      <SchoolCustomize__MoreLinks links=dropdownLinks key="more-links" />,
-    ])
-  |> Array.of_list
-  |> ReasonReact.array;
+  switch (visibleLinks) {
+  | [] =>
+    <div
+      className="border border-grey-light rounded-lg italic text-grey-dark cursor-default text-sm py-2 px-4">
+      {"You can customize links on the header." |> str}
+    </div>
+  | visibleLinks =>
+    (visibleLinks |> List.map(l => headerLink(l)))
+    ->List.append([
+        <SchoolCustomize__MoreLinks links=dropdownLinks key="more-links" />,
+      ])
+    |> Array.of_list
+    |> ReasonReact.array
+  };
 };
 
 let sitemap = links =>
-  <div className="flex flex-wrap">
-    {
-      links
-      |> List.map(((id, title, _)) =>
-           <div className="w-1/3 pr-4 mt-3 text-sm" key=id>
-             {title |> str}
-           </div>
-         )
-      |> Array.of_list
-      |> ReasonReact.array
-    }
-  </div>;
+  switch (links) {
+  | [] =>
+    <div
+      className="border border-grey rounded-lg italic text-grey-light cursor-default text-sm max-w-fc mt-3 py-2 px-4">
+      {"You can customize links in the footer." |> str}
+    </div>
+  | links =>
+    <div className="flex flex-wrap">
+      {
+        links
+        |> List.map(((id, title, _)) =>
+             <div className="w-1/3 pr-4 mt-3 text-sm" key=id>
+               {title |> str}
+             </div>
+           )
+        |> Array.of_list
+        |> ReasonReact.array
+      }
+    </div>
+  };
 
 let socialLinks = links =>
-  <div className="flex flex-wrap">
-    {
-      links
-      |> List.map(((id, _title, url)) =>
-           <SchoolCustomize__SocialLink url key=id />
-         )
-      |> Array.of_list
-      |> ReasonReact.array
-    }
-  </div>;
+  switch (links) {
+  | [] =>
+    <div
+      className="border border-grey rounded-lg italic text-grey-light cursor-default text-sm max-w-fc mt-3 py-2 px-4">
+      {"Add social media links?" |> str}
+    </div>
+  | links =>
+    <div className="flex flex-wrap">
+      {
+        links
+        |> List.map(((id, _title, url)) =>
+             <SchoolCustomize__SocialLink url key=id />
+           )
+        |> Array.of_list
+        |> ReasonReact.array
+      }
+    </div>
+  };
 
 let address = a =>
   switch (a) {
@@ -92,7 +114,11 @@ let address = a =>
       className="text-sm mt-3 leading-normal"
       dangerouslySetInnerHTML={"__html": a |> Markdown.parse}
     />
-  | None => ReasonReact.null
+  | None =>
+    <div
+      className="border border-grey rounded-lg italic text-grey-light cursor-default text-sm max-w-fc mt-3 py-2 px-4">
+      {"Add an address?" |> str}
+    </div>
   };
 
 let emailAddress = email =>
@@ -102,26 +128,26 @@ let emailAddress = email =>
       {"React us at " |> str}
       <span className="font-bold"> {email |> str} </span>
     </div>
-  | None => ReasonReact.null
+  | None =>
+    <div
+      className="border border-grey rounded-lg italic text-grey-light cursor-default text-sm max-w-fc mt-4 py-2 px-4">
+      {"Add a contact email?" |> str}
+    </div>
   };
 
 let footerLogo = (schoolName, logoOnDarkBg) =>
-  <div className="h-8">
-    {
-      switch (logoOnDarkBg) {
-      | Some(logo) =>
-        <img className="h-full" src={logo |> Customizations.url} />
-      | None => <span> {schoolName |> str} </span>
-      }
-    }
-  </div>;
+  switch (logoOnDarkBg) {
+  | Some(logo) => <img className="h-8" src={logo |> Customizations.url} />
+  | None => <span className="text-xl font-bold"> {schoolName |> str} </span>
+  };
 
-let editIcon = (additionalClasses, clickHandler) =>
+let editIcon = (additionalClasses, clickHandler, title) =>
   <div
     className={
       "cursor-pointer bg-grey-darker hover:bg-primary text-white p-2 rounded-lg flex items-center "
       ++ additionalClasses
     }
+    title
     onClick=clickHandler>
     <i className="fas fa-pen-nib text-lg" />
   </div>;
@@ -247,7 +273,13 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                 state.customizations |> Customizations.logoOnLightBg,
               )
             }
-            {editIcon("ml-6", showEditor(ImagesEditor, send))}
+            {
+              editIcon(
+                "ml-6",
+                showEditor(ImagesEditor, send),
+                "Edit logo (on light backgrounds)",
+              )
+            }
           </div>
           <div className="flex items-center">
             {
@@ -264,6 +296,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                   LinksEditor(SchoolCustomize__LinksEditor.HeaderLink),
                   send,
                 ),
+                "Edit header links",
               )
             }
             <div className="ml-8 w-12 h-12 border rounded-full bg-grey" />
@@ -284,6 +317,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                       LinksEditor(SchoolCustomize__LinksEditor.FooterLink),
                       send,
                     ),
+                    "Edit footer links",
                   )
                 }
               </div>
@@ -311,6 +345,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                           ),
                           send,
                         ),
+                        "Edit social media links",
                       )
                     }
                   </div>
@@ -327,7 +362,13 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                     <span className="uppercase font-bold text-sm">
                       {"Contact" |> str}
                     </span>
-                    {editIcon("ml-3", showEditor(ContactsEditor, send))}
+                    {
+                      editIcon(
+                        "ml-3",
+                        showEditor(ContactsEditor, send),
+                        "Edit contact details",
+                      )
+                    }
                   </div>
                   {address(state.customizations |> Customizations.address)}
                   {
@@ -348,7 +389,13 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                   state.customizations |> Customizations.logoOnDarkBg,
                 )
               }
-              {editIcon("ml-3", showEditor(ImagesEditor, send))}
+              {
+                editIcon(
+                  "ml-3",
+                  showEditor(ImagesEditor, send),
+                  "Edit logo (on dark backgrounds)",
+                )
+              }
             </div>
             <div className="flex items-center text-sm">
               <div> {"Privacy Policy" |> str} </div>
@@ -361,6 +408,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                     ),
                     send,
                   ),
+                  "Edit privacy policy",
                 )
               }
               <div className="ml-8"> {"Terms of Use" |> str} </div>
@@ -373,6 +421,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                     ),
                     send,
                   ),
+                  "Edit terms of use",
                 )
               }
               <div className="ml-8 flex items-center">
@@ -413,7 +462,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                 />
                 <span className="ml-2"> {schoolName |> str} </span>
               </div>
-              {editIcon("ml-2", showEditor(ImagesEditor, send))}
+              {editIcon("ml-2", showEditor(ImagesEditor, send), "Edit icon")}
             </div>
           </div>
           <div className="bg-grey-lighter h-16" />

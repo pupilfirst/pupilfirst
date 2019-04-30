@@ -79,44 +79,57 @@ let handleDelete = (state, send, authenticityToken, removeLinkCB, id, event) => 
   };
 };
 
+let deleteIconClasses = deleting =>
+  deleting ? "fas fa-spinner fa-pulse" : "far fa-trash-alt";
+
 let showLinks = (state, send, authenticityToken, removeLinkCB, kind, links) =>
-  links
-  |> List.map(((id, title, url)) =>
-       <div
-         className="flex items-center justify-between bg-grey-lightest text-xs text-grey-darkest border rounded p-3 mt-2"
-         key=id>
-         <div className="flex items-center">
-           {
-             switch (kind) {
-             | HeaderLink
-             | FooterLink =>
-               [|
-                 <span key="link-editor-entry__title"> {title |> str} </span>,
-                 <i
-                   key="link-editor-entry__icon"
-                   className="far fa-link mx-2"
-                 />,
-                 <code key="link-editor-entry__url"> {url |> str} </code>,
-               |]
-               |> ReasonReact.array
-             | SocialLink => <code> {url |> str} </code>
+  switch (links) {
+  | [] =>
+    <div
+      className="border border-grey-light rounded italic text-grey-dark text-xs cursor-default mt-2 p-3">
+      {"There are no custom links here. Add some?" |> str}
+    </div>
+  | links =>
+    links
+    |> List.map(((id, title, url)) =>
+         <div
+           className="flex items-center justify-between bg-grey-lightest text-xs text-grey-darkest border rounded pl-3 mt-2"
+           key=id>
+           <div className="flex items-center">
+             {
+               switch (kind) {
+               | HeaderLink
+               | FooterLink =>
+                 [|
+                   <span key="link-editor-entry__title">
+                     {title |> str}
+                   </span>,
+                   <i
+                     key="link-editor-entry__icon"
+                     className="far fa-link mx-2"
+                   />,
+                   <code key="link-editor-entry__url"> {url |> str} </code>,
+                 |]
+                 |> ReasonReact.array
+               | SocialLink => <code> {url |> str} </code>
+               }
              }
-           }
+           </div>
+           <button
+             title={"Delete " ++ url}
+             onClick={
+               handleDelete(state, send, authenticityToken, removeLinkCB, id)
+             }
+             className="p-3">
+             <FaIcon
+               classes={deleteIconClasses(state.deleting |> List.mem(id))}
+             />
+           </button>
          </div>
-         <button
-           onClick={
-             handleDelete(state, send, authenticityToken, removeLinkCB, id)
-           }>
-           <Icon
-             kind=Icon.Delete
-             size="4"
-             rotate={state.deleting |> List.mem(id)}
-           />
-         </button>
-       </div>
-     )
-  |> Array.of_list
-  |> ReasonReact.array;
+       )
+    |> Array.of_list
+    |> ReasonReact.array
+  };
 
 let titleInputVisible = state =>
   switch (state.kind) {
@@ -303,22 +316,24 @@ let make =
       </h5>
       <div className="mt-3">
         <label
-          className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
-          htmlFor="email">
+          className="inline-block tracking-wide text-grey-darker text-xs font-semibold">
           {"Location of Link" |> str}
         </label>
         <div className="flex">
           <div
+            title="Show header links"
             className={kindClasses(state.kind == HeaderLink)}
             onClick={handleKindChange(send, HeaderLink)}>
             {"Header" |> str}
           </div>
           <div
+            title="Show footer links"
             className={kindClasses(state.kind == FooterLink) ++ " ml-2"}
             onClick={handleKindChange(send, FooterLink)}>
             {"Footer Sitemap" |> str}
           </div>
           <div
+            title="Show social media links"
             className={kindClasses(state.kind == SocialLink) ++ " ml-2"}
             onClick={handleKindChange(send, SocialLink)}>
             {"Social" |> str}
@@ -346,7 +361,7 @@ let make =
               <div className="flex-grow mr-4">
                 <label
                   className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
-                  htmlFor="email">
+                  htmlFor="link-title">
                   {"Title" |> str}
                 </label>
                 <input

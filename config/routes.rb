@@ -214,8 +214,6 @@ Rails.application.routes.draw do
     post 'unsubscribe', action: 'email_unsubscribe_webhook'
   end
 
-  match '/trello/bug_webhook', to: 'trello#bug_webhook', via: :all
-
   post '/heroku/deploy_webhook', to: 'heroku#deploy_webhook'
 
   # Handle incoming unsubscribe webhooks from SendInBlue

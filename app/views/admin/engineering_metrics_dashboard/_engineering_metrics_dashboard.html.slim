@@ -6,11 +6,6 @@
   #engineering-metrics-dashboard__deploys data-chart-data=@presenter.trend(:deploys).to_json
 
 .engineering-metrics-dashboard__graph-container
-  h2.margin-top-20 Bugs
-
-  #engineering-metrics-dashboard__bugs data-chart-data=@presenter.trend(:bugs).to_json
-
-.engineering-metrics-dashboard__graph-container
   h2.margin-top-20 Git commits
 
   #engineering-metrics-dashboard__commit-trend data-chart-data=@presenter.commit_trend.to_json

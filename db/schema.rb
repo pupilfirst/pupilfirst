@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_24_141919) do
+ActiveRecord::Schema.define(version: 2019_05_01_081657) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -280,18 +280,6 @@ ActiveRecord::Schema.define(version: 2019_04_24_141919) do
     t.datetime "updated_at"
     t.text "notes"
     t.index ["founder_id"], name: "index_platform_feedback_on_founder_id"
-  end
-
-  create_table "product_metrics", force: :cascade do |t|
-    t.string "category"
-    t.integer "value"
-    t.integer "delta_period"
-    t.integer "delta_value"
-    t.string "assignment_mode"
-    t.bigint "faculty_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["faculty_id"], name: "index_product_metrics_on_faculty_id"
   end
 
   create_table "prospective_applicants", id: :serial, force: :cascade do |t|

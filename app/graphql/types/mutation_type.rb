@@ -7,5 +7,7 @@ module Types
     field :update_school_string, mutation: Mutations::UpdateSchoolString, null: false
     field :create_comment, mutation: Mutations::CreateComment, null: false
     field :create_answer, mutation: Mutations::CreateAnswer, null: false
+    field :create_answer_like, mutation: Mutations::CreateAnswerLike, null: false
+    field :destroy_answer_like, mutation: Mutations::DestroyAnswerLike, null: false
   end
 end

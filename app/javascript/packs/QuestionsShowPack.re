@@ -7,6 +7,7 @@ type props = {
   answers: list(Answer.t),
   comments: list(Comment.t),
   userData: list(UserData.t),
+  likes: list(Like.t),
   currentUserId: string,
 };
 
@@ -17,6 +18,7 @@ let decodeProps = json =>
     answers: json |> field("answers", list(Answer.decode)),
     comments: json |> field("comments", list(Comment.decode)),
     userData: json |> field("userData", list(UserData.decode)),
+    likes: json |> field("likes", list(Like.decode)),
     currentUserId: json |> field("currentUserId", string),
   };
 
@@ -29,6 +31,7 @@ ReactDOMRe.renderToElementWithId(
     answers={props.answers}
     comments={props.comments}
     userData={props.userData}
+    likes={props.likes}
     currentUserId={props.currentUserId}
   />,
   "react-root",

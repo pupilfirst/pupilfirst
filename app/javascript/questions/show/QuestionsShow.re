@@ -6,12 +6,13 @@ let str = React.string;
 
 type action =
   | AddComment(Comment.t)
-  | AddAnswer(Answer.t);
+  | AddAnswer(Answer.t)
+  | AddLike(Like.t)
+  | RemoveLike(string);
 type state = {
   answers: list(Answer.t),
   comments: list(Comment.t),
-  userData: list(UserData.t),
-  showAnswers: bool,
+  likes: list(Like.t),
 };
 
 let reducer = (state, action) =>
@@ -24,6 +25,8 @@ let reducer = (state, action) =>
       ...state,
       answers: Answer.addAnswer(state.answers, answer),
     }
+  | AddLike(like) => {...state, likes: state.likes |> Like.addLike(like)}
+  | RemoveLike(id) => {...state, likes: state.likes |> Like.removeLike(id)}
   };
 
 [@react.component]
@@ -34,15 +37,15 @@ let make =
       ~answers,
       ~comments,
       ~userData,
+      ~likes,
       ~currentUserId,
     ) => {
   let (state, dispatch) =
-    React.useReducer(
-      reducer,
-      {showAnswers: true, answers, comments, userData},
-    );
+    React.useReducer(reducer, {answers, comments, likes});
   let addCommentCB = comment => dispatch(AddComment(comment));
   let addAnswerCB = answer => dispatch(AddAnswer(answer));
+  let addLikeCB = like => dispatch(AddLike(like));
+  let removeLikeCB = id => dispatch(RemoveLike(id));
   <div className="flex flex-1 bg-grey-lighter">
     <div className="flex-1 flex flex-col">
       <div className="flex-col px-6 py-2 items-center justify-between">
@@ -131,17 +134,29 @@ let make =
                        />
                        <div className="flex flex-row justify-between px-6">
                          <div className="px-2 pt-6 text-center">
-                           <i
-                             className="fal fa-comment-lines text-xl text-grey-dark"
-                           />
-                           <p className="text-xs pt-1">
-                             {
-                               commentsForAnswer
-                               |> List.length
-                               |> string_of_int
-                               |> str
-                             }
-                           </p>
+                           <div className="flex flex-row">
+                             <QuestionsShow__LikeManager
+                               authenticityToken
+                               likes={state.likes}
+                               answerId={answer |> Answer.id}
+                               currentUserId
+                               addLikeCB
+                               removeLikeCB
+                             />
+                             <div className="ml-4">
+                               <i
+                                 className="fal fa-comment-lines text-xl text-grey-dark"
+                               />
+                               <p className="text-xs pt-1">
+                                 {
+                                   commentsForAnswer
+                                   |> List.length
+                                   |> string_of_int
+                                   |> str
+                                 }
+                               </p>
+                             </div>
+                           </div>
                          </div>
                          <QuestionsShow__UserShow
                            userProfile

@@ -12,6 +12,7 @@ module Questions
         answers: answer_data,
         comments: comments,
         userData: user_data,
+        likes: likes,
         currentUserId: current_user.id.to_s
       }.to_json
     end
@@ -68,6 +69,16 @@ module Questions
           name: user_profile.name,
           avatarUrl: avatar_url(user_profile),
           title: title(user_profile)
+        }
+      end
+    end
+
+    def likes
+      AnswerLike.where(answer_id: answer_data.pluck(:id)).map do |like|
+        {
+          id: like.id.to_s,
+          answerId: like.answer_id.to_s,
+          userId: like.user_id.to_s
         }
       end
     end

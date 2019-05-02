@@ -38,7 +38,8 @@ let str = React.string;
 [@react.component]
 let make = (~question, ~authenticityToken, ~currentUserId, ~addAnswerCB) => {
   let (description, setDescription) = React.useState(() => "");
-  let (enableForm, setEnableForm) = React.useState(() => true);
+  let (saving, setSaving) = React.useState(() => false);
+
   let dateTime =
     currentTime() |> DateTime.parse |> DateTime.format(DateTime.DateAndTime);
 
@@ -47,12 +48,21 @@ let make = (~question, ~authenticityToken, ~currentUserId, ~addAnswerCB) => {
   let handleResponseCB = id => {
     let answer = Answer.create(id, description, currentUserId, dateTime);
     setDescription(_ => "");
+    Js.log(saving);
+    Js.log("formSaving b");
+    setSaving(_ => !saving);
+    Js.log(saving);
     addAnswerCB(answer);
   };
   let handleCreateAnswer = event => {
     event |> ReactEvent.Mouse.preventDefault;
 
     if (validAnswer) {
+      Js.log(saving);
+      setSaving(_ => true);
+      Js.log("formSaving a");
+      Js.log(saving);
+
       CreateAnswerQuery.make(
         ~description,
         ~questionId=question |> Question.id,
@@ -69,7 +79,10 @@ let make = (~question, ~authenticityToken, ~currentUserId, ~addAnswerCB) => {
              Js.Promise.reject(CreateAnswerErrorHandler.Errors(errors))
            }
          )
-      |> CreateAnswerErrorHandler.catch(() => setEnableForm(_ => !enableForm))
+      |> CreateAnswerErrorHandler.catch(() => {
+           setSaving(_ => false);
+           Js.log("saving c");
+         })
       |> ignore;
     } else {
       ();
@@ -80,8 +93,10 @@ let make = (~question, ~authenticityToken, ~currentUserId, ~addAnswerCB) => {
     className="mt-4 max-w-md w-full flex mx-auto items-center justify-center relative shadow bg-white rounded-lg">
     <div className="flex w-full  py-4 px-4">
       <div className="w-full flex flex-col">
-        <div>
+        <SchoolAdmin__DisablingCover disabled=saving>
           <input
+            placeholder="Add your Answer"
+            value=description
             onChange={
               event => setDescription(ReactEvent.Form.target(event)##value)
             }
@@ -92,7 +107,7 @@ let make = (~question, ~authenticityToken, ~currentUserId, ~addAnswerCB) => {
             className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
             {"Add Your Answer" |> str}
           </button>
-        </div>
+        </SchoolAdmin__DisablingCover>
       </div>
     </div>
   </div>;

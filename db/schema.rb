@@ -74,14 +74,13 @@ ActiveRecord::Schema.define(version: 2019_04_24_141919) do
     t.index ["visit_id"], name: "index_ahoy_events_on_visit_id"
   end
 
-  create_table "answer_claps", force: :cascade do |t|
-    t.integer "count"
+  create_table "answer_likes", force: :cascade do |t|
     t.bigint "answer_id"
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["answer_id"], name: "index_answer_claps_on_answer_id"
-    t.index ["user_id"], name: "index_answer_claps_on_user_id"
+    t.index ["answer_id"], name: "index_answer_likes_on_answer_id"
+    t.index ["user_id"], name: "index_answer_likes_on_user_id"
   end
 
   create_table "answer_options", force: :cascade do |t|

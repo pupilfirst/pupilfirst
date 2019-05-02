@@ -26,8 +26,7 @@ class AddTablesForCommunity < ActiveRecord::Migration[5.2]
       t.timestamps
     end
 
-    create_table :answer_claps do |t|
-      t.integer :count
+    create_table :answer_likes do |t|
       t.references :answer
       t.references :user
 
@@ -50,7 +49,7 @@ class AddTablesForCommunity < ActiveRecord::Migration[5.2]
     drop_table :communities
     drop_table :questions
     drop_table :answers
-    drop_table :answer_claps
+    drop_table :answer_likes
     drop_table :comments
   end
 end

@@ -19,8 +19,8 @@ module Communities
       question.answers.count
     end
 
-    def comment_claps(question)
-      question.answers.joins(:answer_claps).pluck(:count).sum
+    def comment_likes(question)
+      question.answers.joins(:answer_likes).count
     end
 
     def activity(question)
@@ -28,13 +28,13 @@ module Communities
       time_diff = ((Time.now - time) / 1.minute).round
 
       if time_diff < 60
-        "#{time_diff} M"
+        "#{time_diff} minute"
       elsif time_diff < 1440
-        "#{(time_diff / 60).round} H"
+        "#{(time_diff / 60).round} hour"
       elsif time_diff < 525_600
-        "#{(time_diff / 1440).round} D"
+        "#{(time_diff / 1440).round} Day"
       else
-        "#{(time_diff / 525_600).round} Y"
+        "#{(time_diff / 525_600).round} Year"
       end
     end
 

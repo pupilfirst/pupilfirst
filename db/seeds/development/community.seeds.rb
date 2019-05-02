@@ -26,8 +26,7 @@ after 'development:schools', 'development:founders', 'development:faculty', 'dev
           question: question,
           user: user_2
         )
-        AnswerClap.create!(
-          count: rand(1..10),
+        AnswerLike.create!(
           answer: answer,
           user: [john_doe, mickey, groot, rocket, donald].sample
         )

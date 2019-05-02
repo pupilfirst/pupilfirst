@@ -36,7 +36,7 @@ class AnswersController < ApplicationController
   def destroy
     @answer = authorize(Answer.find(params[:id]))
     question = @answer.question
-    @answer.answer_claps.delete_all
+    @answer.answer_likes.delete_all
     @answer.delete
     redirect_to community_question_path(question.community_id, question.id)
   end

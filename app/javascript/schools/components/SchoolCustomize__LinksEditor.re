@@ -339,7 +339,7 @@ let make =
           unpackLinks(state.kind, customizations),
         )
       }
-      <SchoolAdmin__DisablingCover.Jsx2 disabled={state.adding}>
+      <DisablingCover.Jsx2 disabled={state.adding}>
         <div className="flex mt-3" key="sc-links-editor__form-body">
           {
             if (state |> titleInputVisible) {
@@ -394,6 +394,6 @@ let make =
           className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
           {state.adding |> addLinkText |> str}
         </button>
-      </SchoolAdmin__DisablingCover.Jsx2>
+      </DisablingCover.Jsx2>
     </div>,
 };

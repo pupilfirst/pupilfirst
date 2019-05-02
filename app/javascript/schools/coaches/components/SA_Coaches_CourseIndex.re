@@ -125,8 +125,7 @@ let make =
       );
       Api.create(url, payload, handleResponseCB, handleErrorCB);
     };
-    <SchoolAdmin__DisablingCover.Jsx2
-      containerClasses="w-full" disabled={state.saving}>
+    <DisablingCover.Jsx2 containerClasses="w-full" disabled={state.saving}>
       <div
         key="School admin coaches course index"
         className="flex flex-1 h-screen overflow-y-scroll">
@@ -313,7 +312,7 @@ let make =
           </div>
         </div>
       </div>
-    </SchoolAdmin__DisablingCover.Jsx2>;
+    </DisablingCover.Jsx2>;
   },
 };
 

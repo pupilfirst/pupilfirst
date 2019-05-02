@@ -194,7 +194,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken, _children) => 
       <h5 className="uppercase text-center border-b border-grey-light pb-2">
         {"Manage Images" |> str}
       </h5>
-      <SchoolAdmin__DisablingCover.Jsx2 disabled={state.updating}>
+      <DisablingCover.Jsx2 disabled={state.updating}>
         <div
           key="sc-images-editor__logo-on-light-bg-input-group"
           className="mt-4">
@@ -314,7 +314,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken, _children) => 
           className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
           {updateButtonText(state.updating) |> str}
         </button>
-      </SchoolAdmin__DisablingCover.Jsx2>
+      </DisablingCover.Jsx2>
     </form>;
   },
 };

@@ -140,7 +140,7 @@ let make =
       <h5 className="uppercase text-center border-b border-grey-light pb-2">
         {"Manage " ++ (kind |> kindToString) |> str}
       </h5>
-      <SchoolAdmin__DisablingCover.Jsx2
+      <DisablingCover.Jsx2
         disabled={state.updating} containerClasses="flex flex-col flex-1">
         <div
           key="agreements-editor__input-group"
@@ -176,6 +176,6 @@ let make =
           className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
           {updateAgreementText(state.updating, kind) |> str}
         </button>
-      </SchoolAdmin__DisablingCover.Jsx2>
+      </DisablingCover.Jsx2>
     </div>,
 };

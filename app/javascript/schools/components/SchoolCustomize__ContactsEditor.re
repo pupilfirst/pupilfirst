@@ -147,7 +147,7 @@ let make =
       <h5 className="uppercase text-center border-b border-grey-light pb-2">
         {"Manage Contact Details" |> str}
       </h5>
-      <SchoolAdmin__DisablingCover disabled={state.updating}>
+      <SchoolAdmin__DisablingCover.Jsx2 disabled={state.updating}>
         <div key="contacts-editor__address-input-group" className="mt-3">
           <label
             className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
@@ -210,6 +210,6 @@ let make =
           className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
           {updateContactDetailsButtonText(state.updating) |> str}
         </button>
-      </SchoolAdmin__DisablingCover>
+      </SchoolAdmin__DisablingCover.Jsx2>
     </div>,
 };

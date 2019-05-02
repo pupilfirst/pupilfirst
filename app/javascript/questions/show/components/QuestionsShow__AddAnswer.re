@@ -48,9 +48,7 @@ let make = (~question, ~authenticityToken, ~currentUserId, ~addAnswerCB) => {
   let handleResponseCB = id => {
     let answer = Answer.create(id, description, currentUserId, dateTime);
     setDescription(_ => "");
-    Js.log(saving);
-    Js.log("formSaving b");
-    setSaving(_ => !saving);
+    setSaving(_ => false);
     Js.log(saving);
     addAnswerCB(answer);
   };
@@ -58,10 +56,7 @@ let make = (~question, ~authenticityToken, ~currentUserId, ~addAnswerCB) => {
     event |> ReactEvent.Mouse.preventDefault;
 
     if (validAnswer) {
-      Js.log(saving);
       setSaving(_ => true);
-      Js.log("formSaving a");
-      Js.log(saving);
 
       CreateAnswerQuery.make(
         ~description,
@@ -79,10 +74,7 @@ let make = (~question, ~authenticityToken, ~currentUserId, ~addAnswerCB) => {
              Js.Promise.reject(CreateAnswerErrorHandler.Errors(errors))
            }
          )
-      |> CreateAnswerErrorHandler.catch(() => {
-           setSaving(_ => false);
-           Js.log("saving c");
-         })
+      |> CreateAnswerErrorHandler.catch(() => setSaving(_ => false))
       |> ignore;
     } else {
       ();

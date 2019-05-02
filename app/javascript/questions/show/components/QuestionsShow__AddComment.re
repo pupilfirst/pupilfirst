@@ -92,8 +92,7 @@ let make =
       ();
     };
   };
-  <div
-    className="md:w-1/3 w-full flex flex-col mx-auto items-center justify-center">
+  <div className="w-full flex flex-col mx-auto items-center justify-center">
     <div className="w-full">
       <div className="flex flex-row">
         <input

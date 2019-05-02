@@ -49,7 +49,7 @@ after 'development:target_groups', 'development:faculty' do
     target.target_evaluation_criteria.create!(evaluation_criterion: developer_course.evaluation_criteria.first)
   end
 
-  Target.joins(:level).where(levels: { number: 3, course_id: vr_course.id }).each do |target|
+  Target.joins(:level).where(levels: { number: 1, course_id: vr_course.id }).each do |target|
     next if target.link_to_complete.present?
     target.target_evaluation_criteria.create!(evaluation_criterion: vr_course.evaluation_criteria.first)
   end

@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import SubmitButton from "./SubmitButton";
+const UndoButton = require("./TargetOverlay__UndoButton.bs.js").make;
 
 export default class StatusBadgeBar extends React.Component {
   statusClass() {
@@ -55,6 +56,10 @@ export default class StatusBadgeBar extends React.Component {
     return moment(this.props.target.submitted_at).format("MMM D");
   }
 
+  canUndo() {
+    return this.props.target.status === "submitted";
+  }
+
   statusContents() {
     return (
       <div
@@ -81,6 +86,15 @@ export default class StatusBadgeBar extends React.Component {
               invertShowQuizCB={this.props.invertShowQuizCB}
               overlayLoaded={this.props.overlayLoaded}
             />
+          )}
+
+          {this.canUndo() && (
+            <div>
+              <UndoButton
+                undoSubmissionCB={this.props.undoSubmissionCB}
+                targetId={this.props.target.id}
+              />
+            </div>
           )}
         </div>
       </div>

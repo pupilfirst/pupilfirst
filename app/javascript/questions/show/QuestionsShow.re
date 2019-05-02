@@ -122,9 +122,13 @@ let make =
                    className="max-w-md w-full flex mx-auto items-center justify-center relative shadow bg-white rounded-lg mt-4">
                    <div className="flex w-full">
                      <div className="flex flex-1 flex-col">
-                       <div className="py-4 px-6 leading-normal text-sm">
-                         {answer |> Answer.description |> str}
-                       </div>
+                       <div
+                         className="py-4 px-6 leading-normal text-sm"
+                         dangerouslySetInnerHTML={
+                           "__html":
+                             answer |> Answer.description |> Markdown.parse,
+                         }
+                       />
                        <div className="flex flex-row justify-between px-6">
                          <div className="px-2 pt-6 text-center">
                            <i

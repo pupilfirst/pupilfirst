@@ -52,7 +52,7 @@ let make =
       ~currentUserId,
     ) => {
   let (value, setValue) = React.useState(() => "");
-  let (enableForm, setEnableForm) = React.useState(() => true);
+  let (saving, setSaving) = React.useState(() => false);
   let validComment = value |> Js.String.length > 1;
 
   let handleResponseCB = id => {
@@ -65,6 +65,7 @@ let make =
         commentableType,
       );
     setValue(_ => "");
+    setSaving(_ => false);
     addCommentCB(comment);
   };
 
@@ -72,6 +73,7 @@ let make =
     event |> ReactEvent.Mouse.preventDefault;
 
     if (validComment) {
+      setSaving(_ => true);
       CreateCommentQuery.make(~value, ~commentableId, ~commentableType, ())
       |> GraphqlQuery.sendQuery(authenticityToken)
       |> Js.Promise.then_(response =>
@@ -84,9 +86,7 @@ let make =
              Js.Promise.reject(CreateCommentErrorHandler.Errors(errors))
            }
          )
-      |> CreateCommentErrorHandler.catch(() =>
-           setEnableForm(_ => !enableForm)
-         )
+      |> CreateCommentErrorHandler.catch(() => setSaving(_ => false))
       |> ignore;
     } else {
       ();
@@ -94,7 +94,7 @@ let make =
   };
   <div className="w-full flex flex-col mx-auto items-center justify-center">
     <div className="w-full">
-      <div className="flex flex-row">
+      <DisablingCover disabled=saving containerClasses="flex flex-row">
         <input
           placeholder="Add your comment"
           value
@@ -110,7 +110,7 @@ let make =
             </button> :
             ReasonReact.null
         }
-      </div>
+      </DisablingCover>
     </div>
   </div>;
 };

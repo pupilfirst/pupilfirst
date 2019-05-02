@@ -86,7 +86,8 @@ let make = (~question, ~authenticityToken, ~currentUserId, ~addAnswerCB) => {
     <div className="flex w-full  py-4 px-4">
       <div className="w-full flex flex-col">
         <DisablingCover disabled=saving>
-          <input
+          <textarea
+            maxLength=1000
             placeholder="Add your Answer"
             value=description
             onChange={

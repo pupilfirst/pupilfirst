@@ -17,7 +17,7 @@ let make =
     ) => {
   let (showMore, setShowMore) = React.useState(() => false);
   <div
-    className="md:w-1/3 w-full flex flex-col mx-auto items-center justify-center">
+    className="max-w-md w-full flex flex-col mx-auto items-center justify-center px-4">
     {
       comments
       |> List.mapi((index, comment) =>

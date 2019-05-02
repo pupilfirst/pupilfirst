@@ -15,7 +15,6 @@ $(document).on 'turbolinks:load', ->
     chartAdditionDeletion()
     chartLanguages()
     chartDataByType('deploys')
-    chartDataByType('bugs')
     chartDataByType('commit-trend')
     chartDataByType('language-trend')
     chartDataByType('coverage')

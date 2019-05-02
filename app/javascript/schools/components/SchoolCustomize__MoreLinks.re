@@ -38,7 +38,7 @@ let make = (~links, _children) => {
     | moreLinks =>
       <div
         title="Show more links"
-        className="ml-8 cursor-pointer relative"
+        className="ml-6 font-semibold text-sm cursor-pointer relative"
         onClick={toggleState(send)}
         key="more-links">
         <span> {"More" |> str} </span>

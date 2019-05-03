@@ -13,7 +13,6 @@ class AddTablesForCommunity < ActiveRecord::Migration[5.2]
       t.text :description
       t.references :community
       t.references :user
-      t.references :targets
 
       t.timestamps
     end
@@ -31,6 +30,11 @@ class AddTablesForCommunity < ActiveRecord::Migration[5.2]
       t.references :user
 
       t.timestamps
+    end
+
+    create_table :target_question do |t|
+      t.references :question
+      t.references :target
     end
 
     create_table :comments do |t|

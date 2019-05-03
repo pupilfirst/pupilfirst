@@ -34,6 +34,8 @@ class Target < ApplicationRecord
   has_one :level, through: :target_group
   has_one :course, through: :target_group
   has_one :quiz, dependent: :restrict_with_error
+  has_many :target_questions, dependent: :destroy
+  has_many :questions, through: :target_questions
 
   acts_as_taggable
 

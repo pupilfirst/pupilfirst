@@ -364,11 +364,9 @@ ActiveRecord::Schema.define(version: 2019_04_24_141919) do
     t.text "description"
     t.bigint "community_id"
     t.bigint "user_id"
-    t.bigint "targets_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["community_id"], name: "index_questions_on_community_id"
-    t.index ["targets_id"], name: "index_questions_on_targets_id"
     t.index ["user_id"], name: "index_questions_on_user_id"
   end
 
@@ -552,6 +550,13 @@ ActiveRecord::Schema.define(version: 2019_04_24_141919) do
     t.integer "prerequisite_target_id"
     t.index ["prerequisite_target_id"], name: "index_target_prerequisites_on_prerequisite_target_id"
     t.index ["target_id"], name: "index_target_prerequisites_on_target_id"
+  end
+
+  create_table "target_question", force: :cascade do |t|
+    t.bigint "question_id"
+    t.bigint "target_id"
+    t.index ["question_id"], name: "index_target_question_on_question_id"
+    t.index ["target_id"], name: "index_target_question_on_target_id"
   end
 
   create_table "target_resources", force: :cascade do |t|

@@ -5,4 +5,7 @@ class Question < ApplicationRecord
   has_many :answers, dependent: :restrict_with_error
   has_many :comments, as: :commentable, dependent: :restrict_with_error
   has_one :school, through: :community
+
+  has_many :target_questions, dependent: :destroy
+  has_many :targets, through: :target_questions
 end

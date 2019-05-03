@@ -39,6 +39,7 @@ let make =
       ~userData,
       ~likes,
       ~currentUserId,
+      ~communityPath,
     ) => {
   let (state, dispatch) =
     React.useReducer(reducer, {answers, comments, likes});
@@ -50,7 +51,7 @@ let make =
     <div className="flex-1 flex flex-col">
       <div className="flex-col px-6 py-2 items-center justify-between">
         <div className="max-w-md w-full flex justify-center mb-4">
-          <a href="#"> {React.string("back")} </a>
+          <a href=communityPath> {React.string("back")} </a>
         </div>
         <div
           className="max-w-md w-full flex mx-auto items-center justify-center relative shadow bg-white rounded-lg">

@@ -1,10 +1,11 @@
 module Communities
   class ShowPresenter < ApplicationPresenter
-    def initialize(view_context, community, questions)
+    def initialize(view_context, community, questions, search)
       super(view_context)
 
       @community = community
       @questions = questions
+      @search = search
     end
 
     def time(question)
@@ -43,19 +44,30 @@ module Communities
     end
 
     def show_next_page?
+      return false if @questions.blank?
+
       !@questions.last_page?
     end
 
     def next_page_path
-      view.community_path(@community.id, page: @questions.next_page)
+      view.community_path(@community.id, **page_params(:next))
     end
 
     def prev_page_path
-      view.community_path(@community.id, page: @questions.prev_page)
+      view.community_path(@community.id, **page_params(:previous))
     end
 
     def unanswered_questions?(question)
       question.answers.none?
+    end
+
+    def page_params(direction)
+      page = direction == :next ? @questions.next_page : @questions.prev_page
+
+      kwargs = { page: page }
+      kwargs[:search] = @search if @search.present?
+      kwargs[:target_id] = @target.id if @target.present?
+      kwargs
     end
   end
 end

@@ -46,7 +46,7 @@ let iconClasses = (liked, saving) => {
   classes
   ++ (
     if (saving) {
-      " fas fa-spinner";
+      " fas fa-spinner-third fa-spin";
     } else if (liked) {
       " fas fa-thumbs-up cursor-pointer";
     } else {
@@ -75,9 +75,8 @@ let make =
   };
   let handleAnswerLike = event => {
     event |> ReactEvent.Mouse.preventDefault;
-
+    setSaving(_ => true);
     if (liked) {
-      setSaving(_ => true);
       let id =
         Like.likeByCurrentUser(answerId, currentUserId, likes)
         |> List.hd
@@ -86,7 +85,7 @@ let make =
       |> GraphqlQuery.sendQuery(authenticityToken)
       |> Js.Promise.then_(_response => {
            removeLikeCB(id);
-           Notification.success("Done!", "Like has been removed.");
+           setSaving(_ => false);
            Js.Promise.resolve();
          })
       |> ignore;
@@ -97,7 +96,6 @@ let make =
            switch (response##createAnswerLike) {
            | `AnswerLikeId(answerLikeId) =>
              handleCreateResponse(answerLikeId);
-             Notification.success("Done!", "Like has been saved.");
              Js.Promise.resolve();
            | `Errors(errors) =>
              Js.Promise.reject(CreateAnswerLikeErrorHandler.Errors(errors))
@@ -110,7 +108,7 @@ let make =
 
   <div className="ml-4">
     <div onClick=handleAnswerLike>
-      <div className={iconClasses(liked, saving)}>
+      <div key={iconClasses(liked, saving)}>
         <i className={iconClasses(liked, saving)} />
       </div>
     </div>

@@ -49,7 +49,7 @@ let make =
       |> List.length > 3
       && showMore
       || comments
-      |> List.length < 3
+      |> List.length <= 3
       && !showMore ?
         <QuestionsShow__AddComment
           authenticityToken

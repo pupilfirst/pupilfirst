@@ -2,6 +2,7 @@ require 'rails_helper'
 
 feature 'School Customization' do
   include UserSpecHelper
+  include NotificationHelper
 
   # Setup a course with a single founder target, ...
   let!(:school) { create :school, :current }
@@ -55,7 +56,7 @@ feature 'School Customization' do
       fill_in "Full URL", with: "http://example.com/#{link_number}"
       click_button "Add a New Link"
       expect(page).to have_selector("button[title='Delete http://example.com/#{link_number}']")
-      find('.ui-pnotify-container').click
+      dismiss_notification
     end
 
     header_links = school.school_links.where(kind: SchoolLink::KIND_HEADER)
@@ -74,7 +75,7 @@ feature 'School Customization' do
     fill_in "Full URL", with: "http://example.com/5"
     click_button "Add a New Link"
     expect(page).to have_selector("button[title='Delete http://example.com/5']")
-    find('.ui-pnotify-container').click
+    dismiss_notification
 
     find('button[title="Close Editor"]').click
 
@@ -104,7 +105,7 @@ feature 'School Customization' do
     fill_in "Title", with: "Test Footer Link"
     fill_in "Full URL", with: "http://example.com/footer"
     click_button "Add a New Link"
-    find('.ui-pnotify-container').click
+    dismiss_notification
 
     expect(page).to have_selector("button[title='Delete http://example.com/footer']")
 
@@ -112,7 +113,7 @@ feature 'School Customization' do
 
     fill_in "Full URL", with: "http://twitter.com"
     click_button "Add a New Link"
-    find('.ui-pnotify-container').click
+    dismiss_notification
 
     expect(page).to have_selector("button[title='Delete http://twitter.com']")
 
@@ -152,7 +153,7 @@ feature 'School Customization' do
     click_button 'Update Contact Details'
 
     expect(page).to have_content('Contact details have been updated')
-    find('.ui-pnotify-container').click
+    dismiss_notification
 
     find('button[title="Close Editor"]').click
 
@@ -170,7 +171,7 @@ feature 'School Customization' do
     fill_in('Body of Agreement', with: privacy_policy)
     click_button 'Update Privacy Policy'
     expect(page).to have_content('Privacy Policy has been updated')
-    find('.ui-pnotify-container').click
+    dismiss_notification
 
     find('button[title="Close Editor"]').click
 

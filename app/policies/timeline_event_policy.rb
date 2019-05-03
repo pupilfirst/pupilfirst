@@ -6,19 +6,6 @@ class TimelineEventPolicy < ApplicationPolicy
     true
   end
 
-  def destroy?
-    # User who cannot create, cannot destroy.
-    return false unless create?
-
-    # Do not allow destruction of passed timeline events, or one.
-    return false if record.passed_at?
-
-    # Do not allow destruction of timeline events with startup feedback.
-    return false if record.startup_feedback.present?
-
-    true
-  end
-
   def show?
     return false if record.blank?
 

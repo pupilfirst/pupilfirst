@@ -1,9 +1,7 @@
 module AuthorizeSchoolAdmin
   include ActiveSupport::Concern
 
-  def authorize
-    return if current_school_admin.present?
-
-    raise UnauthorizedMutationException
+  def authorized?
+    current_school_admin.present?
   end
 end

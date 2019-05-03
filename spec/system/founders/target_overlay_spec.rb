@@ -196,7 +196,9 @@ feature 'Target Overlay' do
   end
 
   context 'when the founder submits a new timeline event', js: true do
-    it 'changes the status to submitted right away' do
+    let(:bad_description) { 'Sum deskripshun. Oops. Typoos aplenty.' }
+
+    it 'changes the status to submitted right away, and can be un-done' do
       sign_in_user founder.user, referer: student_dashboard_path
 
       find('.founder-dashboard-target-header__headline', text: target.title).click
@@ -210,7 +212,7 @@ feature 'Target Overlay' do
 
       find('.target-overlay__status-badge-block').find('button.btn-timeline-builder').click
       expect(page).to have_selector('.timeline-builder__popup-body')
-      find('.timeline-builder__textarea').set('Some description')
+      find('.timeline-builder__textarea').set(bad_description)
       find('.js-timeline-builder__submit-button').click
 
       # The target status badge must now say submitted.
@@ -219,6 +221,21 @@ feature 'Target Overlay' do
         expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > div > span', text: 'Submitted')
         expect(page).to have_selector('.target-overlay-status-badge-bar__hint', text: "Submitted on #{Date.today.strftime('%b %-e')}")
       end
+
+      last_timeline_event = target.timeline_events.joins(:founders).where(founders: { id: founder }).last
+
+      expect(last_timeline_event.description).to eq(bad_description)
+
+      # The submission can be un-done.
+      click_button('Undo')
+
+      # The target must be set to pending.
+      within('.target-overlay__status-badge-block') do
+        expect(page).to have_selector('.target-overlay-status-badge-bar__badge-content > div > span', text: 'Pending')
+      end
+
+      # The submission should have been deleted.
+      expect(TimelineEvent.find_by(id: last_timeline_event.id)).to eq(nil)
     end
   end
 

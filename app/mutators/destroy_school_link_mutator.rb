@@ -11,7 +11,7 @@ class DestroySchoolLinkMutator < ApplicationMutator
     @school_link ||= current_school.school_links.find_by(id: id)
   end
 
-  def authorize
-    raise UnauthorizedMutationException if current_school_admin.blank? || school_link.blank?
+  def authorized?
+    current_school_admin.present? && school_link.present?
   end
 end

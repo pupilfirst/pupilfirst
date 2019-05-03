@@ -31,14 +31,14 @@ let component = ReasonReact.reducerComponent("SchoolCustomize");
 let headerLogo = (schoolName, logoOnLightBg) =>
   switch (logoOnLightBg) {
   | Some(logo) =>
-    <div className="h-12">
+    <div className="h-10">
       <img className="h-full" src={logo |> Customizations.url} />
     </div>
   | None => <span className="text-2xl font-bold"> {schoolName |> str} </span>
   };
 
 let headerLink = ((id, title, _)) =>
-  <div className="ml-8 cursor-default" key=id>
+  <div className="ml-6 text-sm font-semibold cursor-default" key=id>
     <span> {title |> str} </span>
   </div>;
 
@@ -144,12 +144,13 @@ let footerLogo = (schoolName, logoOnDarkBg) =>
 let editIcon = (additionalClasses, clickHandler, title) =>
   <div
     className={
-      "cursor-pointer bg-grey-darker hover:bg-primary text-white p-2 rounded-lg flex items-center "
+      "cursor-pointer bg-primary-lightest border border-primary-light text-primary hover:bg-primary-lighter hover:border-primary hover:text-primary-dark p-2  rounded flex items-center "
       ++ additionalClasses
     }
     title
     onClick=clickHandler>
-    <i className="fas fa-pen-nib text-lg" />
+    <i className="fas fa-pencil text-xs" />
+    <span className="text-xs font-semibold ml-2"> {"Edit" |> str} </span>
   </div>;
 
 let showEditor = (editor, send, event) => {
@@ -263,10 +264,11 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
     },
   render: ({state, send}) =>
     <div>
-      <div className="px-6 pt-6">
+      <div className="px-6 pt-6 w-full xl:max-w-2xl mx-auto">
         <div className="font-bold"> {"Header" |> str} </div>
-        <div className="border rounded-lg p-6 flex justify-between mt-3 w-2/3">
-          <div className="flex items-center">
+        <div
+          className="border rounded-lg px-5 py-4 flex justify-between mt-3 shadow">
+          <div className="flex items-center bg-grey-lighter rounded p-2">
             {
               headerLogo(
                 schoolName,
@@ -282,107 +284,121 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
             }
           </div>
           <div className="flex items-center">
-            {
-              headerLinks(
-                state.customizations
-                |> Customizations.headerLinks
-                |> Customizations.unpackLinks,
-              )
-            }
-            {
-              editIcon(
-                "ml-3",
-                showEditor(
-                  LinksEditor(SchoolCustomize__LinksEditor.HeaderLink),
-                  send,
-                ),
-                "Edit header links",
-              )
-            }
-            <div className="ml-8 w-12 h-12 border rounded-full bg-grey" />
-          </div>
-        </div>
-        <div className="mt-6 font-bold"> {"Footer" |> str} </div>
-        <div className="mt-3 w-2/3">
-          <div className="bg-grey-darkest rounded-t-lg text-white p-6 flex">
-            <div className="w-1/2">
-              <div className="flex items-center">
-                <span className="uppercase font-bold text-sm">
-                  {"Sitemap" |> str}
-                </span>
-                {
-                  editIcon(
-                    "ml-3",
-                    showEditor(
-                      LinksEditor(SchoolCustomize__LinksEditor.FooterLink),
-                      send,
-                    ),
-                    "Edit footer links",
-                  )
-                }
-              </div>
+            <div
+              className="school-customize__header-links flex items-center bg-grey-lighter rounded px-3 py-2 h-full">
               {
-                sitemap(
+                headerLinks(
                   state.customizations
-                  |> Customizations.footerLinks
+                  |> Customizations.headerLinks
                   |> Customizations.unpackLinks,
                 )
               }
+              {
+                editIcon(
+                  "ml-3",
+                  showEditor(
+                    LinksEditor(SchoolCustomize__LinksEditor.HeaderLink),
+                    send,
+                  ),
+                  "Edit header links",
+                )
+              }
+            </div>
+            <div className="ml-6 w-12 h-12 rounded-full bg-grey-light" />
+          </div>
+        </div>
+        <div className="mt-6 font-bold"> {"Footer" |> str} </div>
+        <div className="mt-3 w-full">
+          <div
+            className="school-customize__footer-top-container rounded-t-lg text-white p-6 flex">
+            <div className="w-1/2">
+              <div
+                className="p-3 bg-black border border-dashed border-grey-darkest rounded h-full mr-2">
+                <div className="flex items-center">
+                  <span className="uppercase font-bold text-sm">
+                    {"Sitemap" |> str}
+                  </span>
+                  {
+                    editIcon(
+                      "ml-3",
+                      showEditor(
+                        LinksEditor(SchoolCustomize__LinksEditor.FooterLink),
+                        send,
+                      ),
+                      "Edit footer links",
+                    )
+                  }
+                </div>
+                {
+                  sitemap(
+                    state.customizations
+                    |> Customizations.footerLinks
+                    |> Customizations.unpackLinks,
+                  )
+                }
+              </div>
             </div>
             <div className="w-1/2">
               <div className="flex">
                 <div className="w-1/2">
-                  <div className="flex items-center">
-                    <span className="uppercase font-bold text-sm">
-                      {"Social" |> str}
-                    </span>
-                    {
-                      editIcon(
-                        "ml-3",
-                        showEditor(
-                          LinksEditor(
-                            SchoolCustomize__LinksEditor.SocialLink,
+                  <div
+                    className="p-3 bg-black border border-dashed border-grey-darkest rounded h-full mr-2">
+                    <div className="flex items-center">
+                      <span className="uppercase font-bold text-sm">
+                        {"Social" |> str}
+                      </span>
+                      {
+                        editIcon(
+                          "ml-3",
+                          showEditor(
+                            LinksEditor(
+                              SchoolCustomize__LinksEditor.SocialLink,
+                            ),
+                            send,
                           ),
-                          send,
-                        ),
-                        "Edit social media links",
+                          "Edit social media links",
+                        )
+                      }
+                    </div>
+                    {
+                      socialLinks(
+                        state.customizations
+                        |> Customizations.socialLinks
+                        |> Customizations.unpackLinks,
                       )
                     }
                   </div>
-                  {
-                    socialLinks(
-                      state.customizations
-                      |> Customizations.socialLinks
-                      |> Customizations.unpackLinks,
-                    )
-                  }
                 </div>
                 <div className="w-1/2">
-                  <div className="flex items-center">
-                    <span className="uppercase font-bold text-sm">
-                      {"Contact" |> str}
-                    </span>
+                  <div
+                    className="p-3 bg-black border border-dashed border-grey-darkest rounded h-full">
+                    <div className="flex items-center">
+                      <span className="uppercase font-bold text-sm">
+                        {"Contact" |> str}
+                      </span>
+                      {
+                        editIcon(
+                          "ml-3",
+                          showEditor(ContactsEditor, send),
+                          "Edit contact details",
+                        )
+                      }
+                    </div>
+                    {address(state.customizations |> Customizations.address)}
                     {
-                      editIcon(
-                        "ml-3",
-                        showEditor(ContactsEditor, send),
-                        "Edit contact details",
+                      emailAddress(
+                        state.customizations |> Customizations.emailAddress,
                       )
                     }
                   </div>
-                  {address(state.customizations |> Customizations.address)}
-                  {
-                    emailAddress(
-                      state.customizations |> Customizations.emailAddress,
-                    )
-                  }
                 </div>
               </div>
             </div>
           </div>
           <div
-            className="bg-black rounded-b-lg text-white p-6 flex justify-between">
-            <div className="flex items-center">
+            className="school-customize__footer-bottom-container rounded-b-lg text-white p-6 flex justify-between">
+            <div
+              className="flex items-center bg-black border border-dashed border-grey-darkest rounded p-2">
               {
                 footerLogo(
                   schoolName,
@@ -398,33 +414,39 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
               }
             </div>
             <div className="flex items-center text-sm">
-              <div> {"Privacy Policy" |> str} </div>
-              {
-                editIcon(
-                  "ml-3",
-                  showEditor(
-                    AgreementsEditor(
-                      SchoolCustomize__AgreementsEditor.PrivacyPolicy,
+              <div
+                className="flex items-center bg-black border border-dashed border-grey-darkest rounded p-2">
+                <div> {"Privacy Policy" |> str} </div>
+                {
+                  editIcon(
+                    "ml-3",
+                    showEditor(
+                      AgreementsEditor(
+                        SchoolCustomize__AgreementsEditor.PrivacyPolicy,
+                      ),
+                      send,
                     ),
-                    send,
-                  ),
-                  "Edit privacy policy",
-                )
-              }
-              <div className="ml-8"> {"Terms of Use" |> str} </div>
-              {
-                editIcon(
-                  "ml-3",
-                  showEditor(
-                    AgreementsEditor(
-                      SchoolCustomize__AgreementsEditor.TermsOfUse,
+                    "Edit privacy policy",
+                  )
+                }
+              </div>
+              <div
+                className="flex items-center bg-black border border-dashed border-grey-darkest rounded p-2 ml-6">
+                <div> {"Terms of Use" |> str} </div>
+                {
+                  editIcon(
+                    "ml-3",
+                    showEditor(
+                      AgreementsEditor(
+                        SchoolCustomize__AgreementsEditor.TermsOfUse,
+                      ),
+                      send,
                     ),
-                    send,
-                  ),
-                  "Edit terms of use",
-                )
-              }
-              <div className="ml-8 flex items-center">
+                    "Edit terms of use",
+                  )
+                }
+              </div>
+              <div className="ml-6 flex items-center">
                 <i className="far fa-copyright" />
                 <span className="ml-1">
                   {
@@ -444,14 +466,14 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
           </div>
         </div>
         <div className="mt-6 font-bold"> {"Icon" |> str} </div>
-        <div className="mt-3 w-1/4">
-          <div className="bg-grey rounded-t-lg h-12 flex items-end">
-            <div className="w-full flex items-center">
-              <div className="h-3 w-3 rounded-full bg-red-lightest ml-4" />
-              <div className="h-3 w-3 rounded-full bg-yellow-lightest ml-2" />
-              <div className="h-3 w-3 rounded-full bg-green-lightest ml-2" />
+        <div className="mt-3 w-2/4 max-w-sm">
+          <div className="bg-grey-light rounded-t-lg h-12 flex items-end">
+            <div className="w-full flex items-center pr-3">
+              <div className="h-3 w-3 rounded-full bg-grey ml-4" />
+              <div className="h-3 w-3 rounded-full bg-grey ml-2" />
+              <div className="h-3 w-3 rounded-full bg-grey ml-2" />
               <div
-                className="p-3 ml-4 bg-grey-lighter rounded-t-lg flex items-center">
+                className="p-3 ml-4 bg-grey-lightest rounded-t-lg flex items-center">
                 <img
                   src={
                     state.customizations
@@ -460,12 +482,16 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                   }
                   className="h-5 w-5"
                 />
-                <span className="ml-2"> {schoolName |> str} </span>
+                <span className="ml-1 text-sm font-semibold">
+                  {schoolName |> str}
+                </span>
               </div>
               {editIcon("ml-2", showEditor(ImagesEditor, send), "Edit icon")}
             </div>
           </div>
-          <div className="bg-grey-lighter h-16" />
+          <div
+            className="bg-grey-lightest border border-t-0 h-16 rounded-b-lg"
+          />
         </div>
       </div>
       {editor(state, send, authenticityToken)}

@@ -1,3 +1,11 @@
-.school-customize__something {
-  color: black;
+.school-customize__header-links>:first-child {
+  @apply ml-0;
+}
+
+.school-customize__footer-top-container {
+  background-color: #271F33;
+}
+
+.school-customize__footer-bottom-container {
+  background-color: #1C1626;
 }

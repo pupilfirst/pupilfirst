@@ -9,4 +9,4 @@
 
 <% presenter = Schools::CustomizePresenter.new(self) %>
 
-<div class="w-full" id="react-root" data-json-props="<%= presenter.json_props %>"></div>
+<div class="w-full overflow-y-auto" id="react-root" data-json-props="<%= presenter.json_props %>"></div>

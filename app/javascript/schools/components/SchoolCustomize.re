@@ -31,8 +31,8 @@ let component = ReasonReact.reducerComponent("SchoolCustomize");
 let headerLogo = (schoolName, logoOnLightBg) =>
   switch (logoOnLightBg) {
   | Some(logo) =>
-    <div className="h-10">
-      <img className="h-full" src={logo |> Customizations.url} />
+    <div className="w-30">
+      <img className="w-full" src={logo |> Customizations.url} />
     </div>
   | None => <span className="text-2xl font-bold"> {schoolName |> str} </span>
   };

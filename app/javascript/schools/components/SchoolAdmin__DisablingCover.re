@@ -9,7 +9,7 @@ let make = (~disabled, ~containerClasses="", children) => {
           [|
             <div
               key="school-admin-disabling-cover__blanket"
-              className="absolute w-full h-full bg-white opacity-50 z-20 flex items-center justify-center"
+              className="absolute w-full h-full bg-white opacity-75 z-20 flex items-center justify-center"
             />,
             <div
               key="school-admin-disabling-cover__body"

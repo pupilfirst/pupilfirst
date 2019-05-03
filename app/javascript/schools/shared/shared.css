@@ -129,6 +129,37 @@ button:disabled, .disabled {
     }
 }
 
+/* Tabs */
+
+.nav-tab-item {
+    position: relative;
+}
+
+.nav-tab-item:first-child {
+    @apply rounded-tl;
+}
+
+.nav-tab-item:last-child {
+    @apply rounded-tr;
+}
+
+.nav-tab-item--selected:before {
+    @apply absolute w-full pin-t pin-l;
+    content: '';
+    height: 3px;
+    background-color: config('colors.primary');
+}
+
+.nav-tab-item--selected:after {
+    position: absolute;
+    content: '';
+    bottom: -2px;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    background-color: white;
+}
+
 /* Loading Spinner */
 
 .loading-spinner {

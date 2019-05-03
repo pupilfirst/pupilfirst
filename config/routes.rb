@@ -94,7 +94,7 @@ Rails.application.routes.draw do
     get 'dashboard/targets/:id(/:slug)', action: 'target_overlay', as: 'dashboard_target'
   end
 
-  resources :timeline_events, only: %i[create destroy] do
+  resources :timeline_events, only: %i[create] do
     member do
       post 'review'
       post 'undo_review'

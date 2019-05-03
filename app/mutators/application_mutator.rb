@@ -24,11 +24,12 @@ class ApplicationMutator
   end
 
   def valid?
-    authorize
+    raise UnauthorizedMutationException unless authorized?
+
     super
   end
 
-  def authorize
-    raise 'Please implement the "authorize" method in the mutator class.'
+  def authorized?
+    raise 'Please implement the "authorized?" method in the mutator class.'
   end
 end

@@ -79,7 +79,9 @@ export default class StatusBadgeBar extends React.Component {
           {this.props.isSubmittable && (
             <SubmitButton
               rootProps={this.props.rootProps}
-              completeTargetCB={this.props.completeTargetCB}
+              completeTargetCB={() => {
+                this.props.updateTargetStatusCB("passed");
+              }}
               target={this.props.target}
               openTimelineBuilderCB={this.props.openTimelineBuilderCB}
               autoVerifyCB={this.props.autoVerifyCB}
@@ -89,12 +91,13 @@ export default class StatusBadgeBar extends React.Component {
           )}
 
           {this.canUndo() && (
-            <div>
-              <UndoButton
-                undoSubmissionCB={this.props.undoSubmissionCB}
-                targetId={this.props.target.id}
-              />
-            </div>
+            <UndoButton
+              authenticityToken={this.props.rootProps.authenticityToken}
+              undoSubmissionCB={() => {
+                this.props.updateTargetStatusCB("pending");
+              }}
+              targetId={this.props.target.id}
+            />
           )}
         </div>
       </div>
@@ -173,7 +176,7 @@ export default class StatusBadgeBar extends React.Component {
 StatusBadgeBar.propTypes = {
   target: PropTypes.object,
   rootProps: PropTypes.object,
-  completeTargetCB: PropTypes.func,
+  updateTargetStatusCB: PropTypes.func.isRequired,
   openTimlineBuilderCB: PropTypes.func,
   isSubmittable: PropTypes.bool,
   autoVerifyCB: PropTypes.func.isRequired,

@@ -8,6 +8,9 @@ import SubmitButton from "./targetOverlay/SubmitButton";
 import TimelineEventPanel from "./targetOverlay/TimelineEventPanel";
 import { jsComponent as QuizComponent } from "../../components/Quiz__Root.bs";
 
+const UndoButton = require("./targetOverlay/TargetOverlay__UndoButton.bs.js")
+  .make;
+
 export default class TargetOverlay extends React.Component {
   constructor(props) {
     super(props);
@@ -27,6 +30,7 @@ export default class TargetOverlay extends React.Component {
     this.updateDetails = this.updateDetails.bind(this);
     this.openTimelineBuilder = this.openTimelineBuilder.bind(this);
     this.completeTarget = this.completeTarget.bind(this);
+    this.updateTargetStatus = this.updateTargetStatus.bind(this);
     this.getTarget = this.getTarget.bind(this);
     this.autoVerify = this.autoVerify.bind(this);
     this.invertShowQuiz = this.invertShowQuiz.bind(this);
@@ -54,26 +58,22 @@ export default class TargetOverlay extends React.Component {
     document.body.classList.remove("scroll-lock");
   }
 
-  isSubmittable() {
+  isSubmittable(target) {
+    const isPending = target.status === "pending";
+
+    const isResubmittable =
+      target.resubmittable &&
+      !target.auto_verified &&
+      ["passed", "failed"].includes(target.status);
+
     return (
       !this.props.courseEnded &&
-      (this.isPending() || this.isReSubmittable() || this.state.showQuiz)
+      (isPending || isResubmittable || this.state.showQuiz)
     );
   }
 
-  isReSubmittable() {
-    return this.getTarget().resubmittable && this.resubmissionAllowed();
-  }
-
-  resubmissionAllowed() {
-    let target = this.getTarget();
-    return (
-      !target.auto_verified && ["passed", "failed"].includes(target.status)
-    );
-  }
-
-  isPending() {
-    return this.getTarget().status === "pending";
+  canUndo(target) {
+    return target.status === "submitted";
   }
 
   openTimelineBuilder() {
@@ -88,7 +88,7 @@ export default class TargetOverlay extends React.Component {
     }
   }
 
-  completeTarget() {
+  updateTargetStatus(status) {
     const updatedTargets = _.cloneDeep(this.props.rootState.targets);
 
     const targetIndex = _.findIndex(updatedTargets, [
@@ -96,12 +96,19 @@ export default class TargetOverlay extends React.Component {
       this.props.targetId
     ]);
 
-    updatedTargets[targetIndex].status = "passed";
-    updatedTargets[targetIndex].submitted_at = new moment();
+    updatedTargets[targetIndex].status = status;
+
+    if (status === "passed") {
+      updatedTargets[targetIndex].submitted_at = new moment();
+    }
     const that = this;
     this.props.setRootState({ targets: updatedTargets }, () => {
       that.reloadDetails();
     });
+  }
+
+  completeTarget() {
+    this.updateTargetStatus("passed");
   }
 
   autoVerify(target) {
@@ -216,12 +223,12 @@ export default class TargetOverlay extends React.Component {
                   <div className="target-overlay__status-badge-block">
                     <StatusBadgeBar
                       rootProps={this.props.rootProps}
-                      completeTargetCB={this.completeTarget}
+                      updateTargetStatusCB={this.updateTargetStatus}
                       target={target}
                       openTimelineBuilderCB={this.props.openTimelineBuilderCB}
                       autoVerifyCB={this.autoVerify}
                       invertShowQuizCB={this.invertShowQuiz}
-                      isSubmittable={this.isSubmittable()}
+                      isSubmittable={this.isSubmittable(target)}
                       overlayLoaded={this.state.quizQuestions !== null}
                     />
                   </div>
@@ -268,6 +275,15 @@ export default class TargetOverlay extends React.Component {
                 autoVerifyCB={this.autoVerify}
                 invertShowQuizCB={this.invertShowQuiz}
                 overlayLoaded={this.state.quizQuestions !== null}
+              />
+            )}
+            {this.canUndo(target) && (
+              <UndoButton
+                authenticityToken={this.props.rootProps.authenticityToken}
+                undoSubmissionCB={() => {
+                  this.updateTargetStatus("pending");
+                }}
+                targetId={target.id}
               />
             )}
           </div>

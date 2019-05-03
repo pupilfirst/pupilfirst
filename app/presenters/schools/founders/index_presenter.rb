@@ -20,7 +20,7 @@ module Schools
       end
 
       def teams
-        @course.startups.includes(:level, :faculty, founders: %i[user taggings avatar_attachment]).order(:id, 'founders.id').map do |team|
+        @course.startups.includes(:level, :faculty, :faculty_startup_enrollments, founders: [:user, :taggings, :school, avatar_attachment: :blob]).order(:id, 'founders.id').map do |team|
           {
             id: team.id,
             name: team.name,

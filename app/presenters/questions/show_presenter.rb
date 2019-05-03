@@ -13,7 +13,8 @@ module Questions
         comments: comments,
         userData: user_data,
         likes: likes,
-        currentUserId: current_user.id.to_s
+        currentUserId: current_user.id.to_s,
+        communityPath: view.community_path(@question.community)
       }.to_json
     end
 

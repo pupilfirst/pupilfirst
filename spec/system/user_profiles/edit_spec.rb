@@ -31,8 +31,6 @@ feature 'User Profile Edit' do
       click_button 'Save Changes'
 
       expect(page).to have_content("Name can't be blank")
-      expect(page).to have_content("Phone can't be blank")
-      expect(page).to have_content("Communication address can't be blank")
     end
 
     scenario 'Founder fills in all fields and submits' do

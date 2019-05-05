@@ -39,6 +39,7 @@ let str = React.string;
 let make = (~question, ~authenticityToken, ~currentUserId, ~addAnswerCB) => {
   let (description, setDescription) = React.useState(() => "");
   let (saving, setSaving) = React.useState(() => false);
+  let updateDescriptionCB = description => setDescription(_ => description);
 
   let dateTime =
     currentTime() |> DateTime.parse |> DateTime.format(DateTime.DateAndTime);
@@ -86,14 +87,9 @@ let make = (~question, ~authenticityToken, ~currentUserId, ~addAnswerCB) => {
     <div className="flex w-full  py-4 px-4">
       <div className="w-full flex flex-col">
         <DisablingCover disabled=saving>
-          <textarea
-            maxLength=1000
-            placeholder="Add your Answer"
-            value=description
-            onChange={
-              event => setDescription(ReactEvent.Form.target(event)##value)
-            }
-            className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+          <MarkDownEditor
+            placeholderText="Add your Answer"
+            updateDescriptionCB
           />
           <button
             onClick=handleCreateAnswer

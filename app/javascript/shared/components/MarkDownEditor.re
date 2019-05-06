@@ -7,6 +7,23 @@ external getElementById: string => element = "";
 [@bs.get] external selectionEnd: element => int = "";
 [@bs.get] external value: element => string = "";
 
+module TextArea = {
+  open Webapi.Dom;
+
+  external unsafeAsHtmlInputElement: Dom.element => Dom.htmlInputElement =
+    "%identity";
+
+  let element = () =>
+    document
+    |> Document.getElementById("mytextarea")
+    |> OptionUtils.unwrapUnsafely
+    |> unsafeAsHtmlInputElement;
+
+  let selectionStart = () => element() |> HtmlInputElement.selectionStart;
+
+  let selectionEnd = () => element() |> HtmlInputElement.selectionEnd;
+};
+
 type action =
   | Bold
   | Italics
@@ -14,50 +31,76 @@ type action =
 
 let str = React.string;
 
+let handleClick =
+    (description, setDescription, updateDescriptionCB, action, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
+
+  let actionString =
+    switch (action) {
+    | Bold => "**"
+    | Italics => "*"
+    | Code => "`"
+    };
+
+  let start = TextArea.selectionStart();
+  let finish = TextArea.selectionEnd();
+  let sel = Js.String.substring(~from=start, ~to_=finish, description);
+
+  let newText =
+    if (start != finish) {
+      Js.String.substring(~from=0, ~to_=start, description)
+      ++ actionString
+      ++ sel
+      ++ actionString
+      ++ Js.String.substring(
+           ~from=finish,
+           ~to_=description |> Js.String.length,
+           description,
+         );
+    } else {
+      description
+      ++ (
+        switch (action) {
+        | Bold => "**strong text**"
+        | Italics => "*emphasized text*"
+        | Code => "`enter code here`"
+        }
+      );
+    };
+  setDescription(_ => newText);
+  updateDescriptionCB(newText);
+};
+
+let buttonTitle = action =>
+  switch (action) {
+  | Bold => "Bold"
+  | Italics => "Italics"
+  | Code => "Code"
+  };
+
+let buttons = (description, setDescription, updateDescriptionCB) =>
+  [|Bold, Italics, Code|]
+  |> Array.map(action =>
+       <button
+         className="border p-2"
+         key={action |> buttonTitle}
+         onClick={
+           handleClick(
+             description,
+             setDescription,
+             updateDescriptionCB,
+             action,
+           )
+         }>
+         {action |> buttonTitle |> str}
+       </button>
+     )
+  |> React.array;
+
 [@react.component]
 let make = (~placeholderText, ~updateDescriptionCB) => {
   let (description, setDescription) = React.useState(() => "");
   let (showPreview, setShowPreview) = React.useState(() => false);
-
-  let handleClick = (action, event) => {
-    event |> ReactEvent.Mouse.preventDefault;
-
-    let actionString =
-      switch (action) {
-      | Bold => "**"
-      | Italics => "*"
-      | Code => "`"
-      };
-    let textAreaElement = getElementById("mytextarea");
-    let start = selectionStart(textAreaElement);
-    let finish = selectionEnd(textAreaElement);
-    let inputText = value(textAreaElement);
-    let sel = Js.String.substring(~from=start, ~to_=finish, inputText);
-
-    let newText =
-      if (start != finish) {
-        Js.String.substring(~from=0, ~to_=start, inputText)
-        ++ actionString
-        ++ sel
-        ++ actionString
-        ++ Js.String.substring(
-             ~from=finish,
-             ~to_=inputText |> Js.String.length,
-             inputText,
-           );
-      } else {
-        inputText
-        ++ (
-          switch (action) {
-          | Bold => "**strong text**"
-          | Italics => "*emphasized text*"
-          | Code => "`enter code here`"
-          }
-        );
-      };
-    setDescription(_ => newText);
-    updateDescriptionCB(newText);
-  };
 
   <div>
     <div className="flex w-full justify-between py-2">
@@ -65,15 +108,7 @@ let make = (~placeholderText, ~updateDescriptionCB) => {
         showPreview ?
           <div> {"Preview" |> str} </div> :
           <div className="flex w-full ">
-            <button className="border p-2" onClick={handleClick(Bold)}>
-              {"Bold" |> str}
-            </button>
-            <button className="border p-2" onClick={handleClick(Italics)}>
-              {"Italics" |> str}
-            </button>
-            <button className="border p-2" onClick={handleClick(Code)}>
-              {"Code" |> str}
-            </button>
+            {buttons(description, setDescription, updateDescriptionCB)}
           </div>
       }
       <button

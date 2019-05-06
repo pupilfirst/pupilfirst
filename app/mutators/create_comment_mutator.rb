@@ -19,7 +19,7 @@ class CreateCommentMutator < ApplicationMutator
     comment.id
   end
 
-  def authorize
+  def authorized?
     # Can't comment at PupilFirst.
     raise UnauthorizedMutationException if current_school.blank?
 
@@ -28,6 +28,8 @@ class CreateCommentMutator < ApplicationMutator
 
     # Can only comment on commentables in the same school.
     raise UnauthorizedMutationException if commentable&.school != current_school
+
+    true
   end
 
   private

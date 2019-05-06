@@ -19,7 +19,7 @@ class CreateAnswerMutator < ApplicationMutator
     answer.id
   end
 
-  def authorize
+  def authorized?
     # Can't answer at PupilFirst.
     raise UnauthorizedMutationException if current_school.blank?
 
@@ -28,6 +28,8 @@ class CreateAnswerMutator < ApplicationMutator
 
     # Can only answer questions in the same school.
     raise UnauthorizedMutationException if question&.school != current_school
+
+    true
   end
 
   private

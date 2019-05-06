@@ -9,7 +9,7 @@ class DestroyAnswerLikeMutator < ApplicationMutator
     answer_like.destroy!
   end
 
-  def authorize
+  def authorized?
     # Can't unlike at PupilFirst.
     raise UnauthorizedMutationException if current_school.blank?
 
@@ -21,6 +21,8 @@ class DestroyAnswerLikeMutator < ApplicationMutator
 
     # Only a the liked user can can unlike.
     raise UnauthorizedMutationException if answer_like&.user != current_user
+
+    true
   end
 
   private

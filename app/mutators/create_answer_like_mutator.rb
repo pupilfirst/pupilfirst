@@ -21,7 +21,7 @@ class CreateAnswerLikeMutator < ApplicationMutator
     like.id
   end
 
-  def authorize
+  def authorized?
     # Can't comment at PupilFirst.
     raise UnauthorizedMutationException if current_school.blank?
 
@@ -30,6 +30,8 @@ class CreateAnswerLikeMutator < ApplicationMutator
 
     # Can only like on answers in the same school.
     raise UnauthorizedMutationException if answer&.school != current_school
+
+    true
   end
 
   private

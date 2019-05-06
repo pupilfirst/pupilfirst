@@ -10,6 +10,259 @@ button:disabled, .disabled {
     width: 264px;
 }
 
+/* Tiggle swicth */
+
+.toggle-label {
+    @apply relative block w-10 h-5 cursor-pointer;
+    -webkit-tap-highlight-color: transparent;
+    transform: translate3d(0, 0, 0);
+}
+
+.toggle-label:before {
+    content: "";
+    @apply relative block bg-grey;
+    position: relative;
+    top: 3px;
+    left: 3px;
+    width: 34px;
+    height: 14px;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+}
+
+.toggle-label span {
+    @apply absolute w-5 h-5 pin-t pin-l block bg-white shadow-md rounded-full;
+    transition: all 0.2s ease;
+}
+
+.toggle-label span:before {
+    content: "";
+    @apply absolute block w-14 h-14 bg-primary-light pointer-events-none opacity-100 rounded-full;
+    margin: -18px;
+    transform: scale(0);
+}
+
+.toggle-input:checked+.toggle-label:before {
+    @apply bg-primary-light;
+}
+
+.toggle-input:checked+.toggle-label span {
+    @apply bg-primary;
+    transform: translateX(20px);
+    transition: all 0.2s cubic-bezier(0.8, 0.4, 0.3, 1.25), background 0.15s ease;
+    box-shadow: 0 3px 8px rgba(79, 46, 220, 0.2);
+}
+
+.toggle-input:checked+.toggle-label span:before {
+    transform: scale(1);
+    opacity: 0;
+    transition: all 0.4s ease;
+}
+
+/* Checkbox */
+
+.checkbox-label {
+    @apply select-none .cursor-pointer;
+}
+
+.checkbox-label span {
+    @apply inline-block align-middle;
+    transform: translate3d(0, 0, 0);
+}
+
+.checkbox-label span:first-child {
+    @apply relative rounded align-middle border;
+    width: 18px;
+    height: 18px;
+    transform: scale(1);
+    transition: all 0.2s ease;
+}
+
+.checkbox-label span:first-child svg {
+    position: absolute;
+    top: 3px;
+    left: 2px;
+    fill: none;
+    stroke: #FFFFFF;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 16px;
+    stroke-dashoffset: 16px;
+    transition: all 0.3s ease;
+    transition-delay: 0.1s;
+    transform: translate3d(0, 0, 0);
+}
+
+.checkbox-label span:first-child:before {
+    content: "";
+    @apply bg-primary w-full h-full block opacity-100 rounded-full;
+    transform: scale(0);
+}
+
+.checkbox-label span:last-child {
+    padding-left: 8px;
+}
+
+.checkbox-label:hover span:first-child {
+    @apply bg-primary-lightest border-primary;
+}
+
+.checkbox-input:checked+.checkbox-label span:first-child {
+    @apply bg-primary border-primary;
+    animation: wave 0.4s ease;
+}
+
+.checkbox-input:checked+.checkbox-label span:first-child svg {
+    stroke-dashoffset: 0;
+}
+
+.checkbox-input:checked+.checkbox-label span:first-child:before {
+    transform: scale(3.5);
+    opacity: 0;
+    transition: all 0.6s ease;
+}
+
+@keyframes {
+    50% {
+        transform: scale(0.9);
+    }
+}
+
+/* Tabs */
+
+.nav-tab-item {
+    position: relative;
+}
+
+.nav-tab-item:first-child {
+    @apply rounded-tl;
+}
+
+.nav-tab-item:last-child {
+    @apply rounded-tr;
+}
+
+.nav-tab-item--selected:before {
+    @apply absolute w-full pin-t pin-l;
+    content: '';
+    height: 3px;
+    background-color: config('colors.primary');
+}
+
+.nav-tab-item--selected:after {
+    position: absolute;
+    content: '';
+    bottom: -2px;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    background-color: white;
+}
+
+/* Loading Spinner */
+
+.loading-spinner {
+    width: 66px;
+    height: 66px;
+    -webkit-animation: contanim 2s linear infinite;
+    animation: contanim 2s linear infinite;
+}
+
+.loading-spinner svg {
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    position: absolute;
+    -webkit-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+}
+
+.loading-spinner svg:nth-child(1) circle {
+    stroke: #6025C0;
+    stroke-dasharray: 1, 300;
+    stroke-dashoffset: 0;
+    -webkit-animation: strokeanim 3s calc(.2s * (1)) ease infinite;
+    animation: strokeanim 3s calc(.2s * (1)) ease infinite;
+    -webkit-transform-origin: center center;
+    transform-origin: center center;
+}
+
+.loading-spinner svg:nth-child(2) circle {
+    stroke: #F61067;
+    stroke-dasharray: 1, 300;
+    stroke-dashoffset: 0;
+    -webkit-animation: strokeanim 3s calc(.2s * (2)) ease infinite;
+    animation: strokeanim 3s calc(.2s * (2)) ease infinite;
+    -webkit-transform-origin: center center;
+    transform-origin: center center;
+}
+
+.loading-spinner svg:nth-child(3) circle {
+    stroke: #FFAB00;
+    stroke-dasharray: 1, 300;
+    stroke-dashoffset: 0;
+    -webkit-animation: strokeanim 3s calc(.2s * (3)) ease infinite;
+    animation: strokeanim 3s calc(.2s * (3)) ease infinite;
+    -webkit-transform-origin: center center;
+    transform-origin: center center;
+}
+
+.loading-spinner svg:nth-child(4) circle {
+    stroke: #1F0D40;
+    stroke-dasharray: 1, 300;
+    stroke-dashoffset: 0;
+    -webkit-animation: strokeanim 3s calc(.2s * (4)) ease infinite;
+    animation: strokeanim 3s calc(.2s * (4)) ease infinite;
+    -webkit-transform-origin: center center;
+    transform-origin: center center;
+}
+
+@-webkit-keyframes strokeanim {
+    0% {
+        stroke-dasharray: 1, 300;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 120, 300;
+        stroke-dashoffset: -58.548324585;
+    }
+    100% {
+        stroke-dasharray: 120, 300;
+        stroke-dashoffset: -175.6449737549;
+    }
+}
+
+@keyframes strokeanim {
+    0% {
+        stroke-dasharray: 1, 300;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 120, 300;
+        stroke-dashoffset: -58.548324585;
+    }
+    100% {
+        stroke-dasharray: 120, 300;
+        stroke-dashoffset: -175.6449737549;
+    }
+}
+
+@-webkit-keyframes contanim {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes contanim {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
 .global-sidebar__primary-nav {
     @apply .w-full;
 }
@@ -78,8 +331,20 @@ button:disabled, .disabled {
     right: 0px;
     position: fixed;
     top: 0px;
-    width: 48rem;
+    width: 100%;
     z-index: 501;
+}
+
+@screen md {
+    .drawer-right {
+        @apply .w-4/5;
+    }
+}
+
+@screen xl {
+    .drawer-right {
+        width: 48rem;
+    }
 }
 
 .drawer-right__close {
@@ -103,7 +368,70 @@ button:disabled, .disabled {
     margin-bottom: 0.715rem;
 }
 
-.course-faculty__list-item-details:hover .course-faculty__list-item-edit {
+.hamburger {
+    @apply p-4 inline-block .cursor-pointer;
+    transition-property: opacity, filter;
+    transition-duration: 0.15s;
+    transition-timing-function: linear;
+    overflow: visible;
+}
+
+.hamburger:hover {
+    opacity: 0.7;
+}
+
+.hamburger.is-active:hover {
+    opacity: 0.7;
+}
+
+.hamburger.is-active .hamburger-inner, .hamburger.is-active .hamburger-inner::before, .hamburger.is-active .hamburger-inner::after {
+    @apply bg-grey-darker;
+}
+
+.hamburger-box {
+    width: 20px;
+    height: 14px;
+    @apply relative inline-block;
+}
+
+.hamburger-inner {
+    display: block;
+    top: 50%;
+}
+
+.hamburger-inner, .hamburger-inner::before, .hamburger-inner::after {
+    width: 20px;
+    height: 2px;
+    background-color: #000;
+    border-radius: 4px;
+    position: absolute;
+    transition-property: transform;
+    transition-duration: 0.15s;
+    transition-timing-function: ease;
+}
+
+.hamburger-inner::before, .hamburger-inner::after {
+    content: "";
+    display: block;
+}
+
+.hamburger-inner::before {
+    top: -6px;
+}
+
+.hamburger-inner::after {
+    bottom: -6px;
+}
+
+.hamburger--arrow.is-active .hamburger-inner::before {
+    transform: translate3d(-6px, 3px, 0) rotate(-45deg) scale(0.5, 1);
+}
+
+.hamburger--arrow.is-active .hamburger-inner::after {
+    transform: translate3d(-6px, -3px, 0) rotate(45deg) scale(0.5, 1);
+}
+
+.course-faculty__list-item:hover .course-faculty__list-item-remove {
     visibility: visible;
 }
 
@@ -162,7 +490,24 @@ button:disabled, .disabled {
 }
 
 .toggle-button__button {
+    @apply w-1/2 bg-white text-sm font-semibold py-2 px-6 text-grey-dark;
     transition: .3s cubic-bezier(0, 0, 0, 1);
+}
+
+.toggle-button__button:hover {
+    @apply bg-primary-lightest text-purple-dark;
+}
+
+.toggle-button__button:focus {
+    @apply outline-none;
+}
+
+.toggle-button__button--active {
+    @apply bg-primary-dark text-white shadow-inner;
+}
+
+.toggle-button__button--active:hover {
+    @apply bg-primary-dark text-white shadow-inner;
 }
 
 .target-group__container> :not(:last-child):before {

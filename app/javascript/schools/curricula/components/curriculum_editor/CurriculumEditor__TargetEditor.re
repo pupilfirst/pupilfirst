@@ -262,8 +262,8 @@ let isValidQuiz = quiz =>
   |> List.length == 0;
 
 let booleanButtonClasses = bool => {
-  let classes = "w-1/2 bg-white toggle-button__button hover:text-purple-dark text-sm font-semibold py-2 px-6 focus:outline-none";
-  classes ++ (bool ? " text-purple shadow-inner" : " text-grey-dark");
+  let classes = "toggle-button__button";
+  classes ++ (bool ? " toggle-button__button--active" : " text-grey-dark");
 };
 
 let completionButtonClasses = value =>

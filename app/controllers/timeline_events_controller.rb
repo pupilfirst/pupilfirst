@@ -18,16 +18,6 @@ class TimelineEventsController < ApplicationController
     end
   end
 
-  # DELETE /timeline_events/:id
-  def destroy
-    timeline_event = authorize(TimelineEvent.find(params[:id]))
-
-    timeline_event.destroy!
-    flash[:success] = 'Timeline event deleted!'
-
-    redirect_back(fallback_location: student_path(current_founder.id))
-  end
-
   # POST /timeline_events/:id/review
   def review
     timeline_event = authorize(TimelineEvent.find(params[:id]))

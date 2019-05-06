@@ -173,6 +173,10 @@ class TimelineEvent < ApplicationRecord
     target.team_target?
   end
 
+  def pending_review?
+    passed_at.blank? && evaluator_id.blank?
+  end
+
   private
 
   def privileged_founder?(founder)

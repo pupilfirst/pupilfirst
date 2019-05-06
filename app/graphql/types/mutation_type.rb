@@ -9,5 +9,6 @@ module Types
     field :create_answer, mutation: Mutations::CreateAnswer, null: false
     field :create_answer_like, mutation: Mutations::CreateAnswerLike, null: false
     field :destroy_answer_like, mutation: Mutations::DestroyAnswerLike, null: false
+    field :undo_submission, mutation: Mutations::UndoSubmission, null: false
   end
 end

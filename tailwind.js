@@ -85,9 +85,9 @@ let colors = {
   'primary-lighter': '#D3BFF3',
   'primary-lightest': '#F0EAFB',
 
-  'secondary-darkest': '#1F0D40',
-  'secondary-darker': '#35156B',
-  'secondary-dark': '#4D1E9A',
+  'secondary-darkest': '#4A031E',
+  'secondary-darker': '#7B0531',
+  'secondary-dark': '#AC0645',
   'secondary': '#F61067',
   'secondary-light': '#F95392',
   'secondary-lighter': '#FCB5D0',

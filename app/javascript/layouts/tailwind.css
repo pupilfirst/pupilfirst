@@ -1,21 +1,128 @@
 @import "tailwindcss/preflight";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+
+/* Custom utilities */
+
+.max-w-fc {
+  max-width: fit-content;
+}
+
 /* Custom Style */
 
 body {
-  font-family: 'Open Sans', sans-serif;
-  color: #3A3F52;
+  font-family: "Open Sans", sans-serif;
+  color: #3a3f52;
   @apply .antialiased;
+}
+
+/* Button */
+
+.btn {
+  @apply flex items-center whitespace-no-wrap text-sm font-semibold py-2 px-4 rounded;
+}
+
+.btn:focus {
+  @apply outline-none;
+}
+
+/* Button Styles */
+
+.btn-default {
+  @apply bg-grey-lighter text-grey-dark;
+}
+
+.btn-default:hover {
+  @apply bg-primary-lightest text-primary-light;
+}
+
+.btn-default:focus {
+  @apply bg-primary-lightest text-primary;
+}
+
+.btn-primary {
+  @apply bg-primary text-white shadow;
+}
+
+.btn-primary:hover {
+  @apply bg-primary-dark;
+}
+
+.btn-primary:focus {
+  @apply bg-primary-darker;
+}
+
+.btn-secondary {
+  @apply bg-secondary text-white;
+}
+
+.btn-secondary:hover {
+  @apply bg-secondary-dark;
+}
+
+.btn-secondary:focus {
+  @apply bg-secondary-darker;
+}
+
+.btn-success {
+  @apply bg-green text-white;
+}
+
+.btn-success:hover {
+  @apply bg-green-dark;
+}
+
+.btn-success:focus {
+  @apply bg-green-darker;
+}
+
+.btn-danger {
+  @apply bg-red text-white;
+}
+
+.btn-danger:hover {
+  @apply bg-red-dark;
+}
+
+.btn-danger:focus {
+  @apply bg-red-darker;
+}
+
+button:disabled, .disabled {
+  @apply cursor-not-allowed bg-grey-light text-grey-darker shadow-none;
+}
+
+button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
+  @apply bg-grey-light text-grey-darker;
+}
+
+.btn-small {
+  @apply py-1 px-3 text-xs h-6;
+}
+
+.btn-normal {
+  @apply py-2 px-4 text-sm h-8;
+}
+
+.btn-large {
+  @apply py-2 px-5 text-base h-10;
 }
 
 /* Gradients */
 
 @responsive {
   .bg-gradient-primary-dark-to-primary-darker-to-bottom {
-    background-image: linear-gradient(to bottom, config('colors.primary-dark'), config('colors.primary-darker'));
+    background-image: linear-gradient(
+      to bottom,
+      config("colors.primary-dark"),
+      config("colors.primary-darker")
+    );
   }
   .bg-gradient-secondary-to-secondary-dark-120 {
-    background-image: linear-gradient(120deg, config('colors.secondary'), config('colors.secondary-dark'));
+    background-image: linear-gradient(
+      120deg,
+      config("colors.secondary"),
+      config("colors.secondary-dark")
+    );
   }
 }

@@ -53,10 +53,11 @@ Rails.application.routes.draw do
       resources :faculty, as: 'coaches', path: 'coaches', only: [] do
         collection do
           get '/', action: 'course_index'
-          post 'update_enrollments'
-          post 'delete_enrollments'
         end
       end
+
+      post 'delete_coach_enrollment'
+      post 'update_coach_enrollments'
     end
 
     resources :founders, as: 'students', path: 'students', except: %i[index] do
@@ -103,7 +104,7 @@ Rails.application.routes.draw do
     get 'dashboard/targets/:id(/:slug)', action: 'target_overlay', as: 'dashboard_target'
   end
 
-  resources :timeline_events, only: %i[create destroy] do
+  resources :timeline_events, only: %i[create] do
     member do
       post 'review'
       post 'undo_review'
@@ -184,6 +185,8 @@ Rails.application.routes.draw do
   # PupilFirst landing page
   get 'pupilfirst', to: 'home#pupilfirst'
 
+  get 'styleguide', to: 'home#styleguide'
+
   root 'home#index'
 
   get '/dashboard', to: redirect('/student/dashboard')
@@ -222,8 +225,6 @@ Rails.application.routes.draw do
     post 'user_create', action: 'user_create_webhook'
     post 'unsubscribe', action: 'email_unsubscribe_webhook'
   end
-
-  match '/trello/bug_webhook', to: 'trello#bug_webhook', via: :all
 
   post '/heroku/deploy_webhook', to: 'heroku#deploy_webhook'
 

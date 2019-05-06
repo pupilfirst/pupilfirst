@@ -6,7 +6,7 @@
 
 <% content_for(:wrapper) do %>
   <div class="antialiased flex h-screen overflow-hidden">
-    <div class="flex global-sidebar">
+    <div class="global-sidebar hidden md:flex">
       <div class="bg-gradient-primary-dark-to-primary-darker-to-bottom global-sidebar__primary-nav global-sidebar__primary-nav--shrinked text-purple-lighter flex flex-col justify-between">
         <div>
           <div class="global-sidebar__header mx-auto">
@@ -77,7 +77,6 @@
         </ul>
       </div>
     </div>
-
     <%= yield %>
   </div>
 <% end %>

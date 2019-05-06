@@ -69,7 +69,7 @@ let handleUpdateContactDetails =
          result##updateEmailAddress##errors,
        ) {
        | ([||], [||]) =>
-         Notification.success("Done!", "Contact details has been updated.");
+         Notification.success("Done!", "Contact details have been updated.");
          updateAddressCB(state.address);
          updateEmailAddressCB(state.emailAddress);
          send(DoneUpdating);

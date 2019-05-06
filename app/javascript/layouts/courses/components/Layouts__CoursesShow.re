@@ -23,17 +23,18 @@ let make = (~courses, ~currentCourse, _children) => {
       ReasonReact.Update({showDropDown: !state.showDropDown})
     },
   render: ({state, send}) =>
-    <div className="flex-1 flex flex-col bg-white overflow-hidden mb-3">
+    <div className="flex-1 flex flex-col bg-white mb-3">
       <div className="inline-block relative">
         <button
           onClick={_ => send(ToggleShowDropDown)}
-          className="appearance-none flex items-center text-white font-medium bg-blue hover:bg-blue-dark px-4 py-2 rounded w-full">
+          className="appearance-none flex items-center justify-between font-medium relative px-4 py-2 rounded w-full">
           {currentCourse |> Course.name |> str}
           <i className="material-icons"> {"arrow_drop_down" |> str} </i>
         </button>
         {
           state.showDropDown ?
-            <div className="bg-white shadow rounded border overflow-hidden">
+            <div
+              className="bg-white shadow-lg rounded-b-lg border absolute overflow-hidden min-w-full w-auto z-50">
               {
                 courses
                 |> Course.sort
@@ -42,7 +43,7 @@ let make = (~courses, ~currentCourse, _children) => {
                    )
                 |> List.map(course =>
                      <a
-                       className="no-underline block px-4 py-3 border-b text-grey-darkest bg-white hover:text-white hover:bg-blue whitespace-no-wrap"
+                       className="no-underline block px-4 py-3 text-xs font-semibold text-grey-darkest border-b border-grey-lighter bg-white hover:text-primary hover:bg-grey-lighter whitespace-no-wrap"
                        key={course |> Course.id |> string_of_int}
                        href={course |> Course.path}>
                        {course |> Course.name |> str}

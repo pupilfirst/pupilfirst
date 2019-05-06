@@ -87,7 +87,7 @@ let unpackLinks = links =>
        }
      );
 
-let addLink = (link, t) => {...t, links: [link, ...t.links]};
+let addLink = (link, t) => {...t, links: t.links @ [link]};
 
 let removeLink = (linkId, t) => {
   ...t,

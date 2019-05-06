@@ -121,12 +121,6 @@ after 'development:courses' do
     public: true
   )
 
-  FacultyCourseEnrollment.create!(
-    safe_to_create: true,
-    faculty: faculty,
-    course: Course.find_by(name: 'iOS')
-  )
-
   admin = User.find_by(email: 'admin@example.com')
 
   admin_profile = UserProfile.where(user: admin, school: sv).first_or_create!

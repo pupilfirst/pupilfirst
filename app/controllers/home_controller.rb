@@ -15,6 +15,12 @@ class HomeController < ApplicationController
     render layout: 'tailwind'
   end
 
+  def styleguide
+    @skip_container = true
+    @hide_layout_header = true
+    render layout: 'tailwind'
+  end
+
   # GET /policies/privacy
   def privacy
     privacy_policy = if current_school.present?

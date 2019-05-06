@@ -307,13 +307,15 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken, _children) => 
             active={state.iconInvalid}
           />
         </div>
-        <button
-          type_="submit"
-          key="sc-images-editor__update-button"
-          disabled={updateButtonDisabled(state)}
-          className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
-          {updateButtonText(state.updating) |> str}
-        </button>
+        <div className="flex justify-end">
+          <button
+            type_="submit"
+            key="sc-images-editor__update-button"
+            disabled={updateButtonDisabled(state)}
+            className="btn btn-primary btn-large mt-6">
+            {updateButtonText(state.updating) |> str}
+          </button>
+        </div>
       </DisablingCover.Jsx2>
     </form>;
   },

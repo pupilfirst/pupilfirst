@@ -15,9 +15,22 @@ class UserProfilesController < ApplicationController
     if @form.validate(params[:user_profiles_edit])
       @form.save!
       flash[:success] = 'Your profile has been updated.'
-      redirect_to student_path(id: current_founder.id)
+      redirect_to resolve_after_save_path
     else
       render 'edit'
+    end
+  end
+
+  private
+
+  def resolve_after_save_path
+    if current_founder.present?
+      student_path(current_founder)
+
+    elsif current_coach.present?
+      coach_path(current_coach)
+    else
+      root_path
     end
   end
 end

@@ -8,7 +8,7 @@ let test = (value, url) => {
 let iconClass = url =>
   switch (url) {
   | url when url |> test("twitter") => "fab fa-twitter"
-  | url when url |> test("facebook") => "fab fa-facebook"
+  | url when url |> test("facebook") => "fab fa-facebook-f"
   | url when url |> test("instagram") => "fab fa-instagram"
   | url when url |> test("youtube") => "fab fa-youtube"
   | url when url |> test("linkedin") => "fab fa-linkedin"
@@ -24,7 +24,7 @@ let make = (~url, _children) => {
   ...component,
   render: _self =>
     <div
-      className="h-12 w-12 border-0 rounded-full bg-grey-lightest mr-3 mt-3 flex items-center justify-center">
-      <i className={"text-black text-2xl " ++ iconClass(url)} />
+      className="h-9 w-9 border-0 rounded-full bg-grey-lightest mr-3 mt-3 flex items-center justify-center">
+      <i className={"text-black text-xl " ++ iconClass(url)} />
     </div>,
 };

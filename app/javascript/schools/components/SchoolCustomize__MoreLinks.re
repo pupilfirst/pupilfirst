@@ -11,14 +11,21 @@ let toggleState = (send, event) => {
 
 let additionalLinks = (linksVisible, links) =>
   if (linksVisible) {
-    links
-    |> List.map(((id, title, _)) =>
-         <div className="border p-4" key=id>
-           <span> {title |> str} </span>
-         </div>
-       );
+    <div
+      className="border-2 border-grey-lighter rounded-lg absolute w-48 bg-white mt-2">
+      {
+        links
+        |> List.map(((id, title, _)) =>
+             <div key=id className="p-2 cursor-default">
+               <span> {title |> str} </span>
+             </div>
+           )
+        |> Array.of_list
+        |> ReasonReact.array
+      }
+    </div>;
   } else {
-    [];
+    ReasonReact.null;
   };
 
 let make = (~links, _children) => {
@@ -29,16 +36,14 @@ let make = (~links, _children) => {
     switch (links) {
     | [] => ReasonReact.null
     | moreLinks =>
-      [
-        <div
-          className="border p-4 cursor-pointer"
-          onClick={toggleState(send)}
-          key="more-links">
-          <span> {"More" |> str} </span>
-        </div>,
-        ...additionalLinks(state, moreLinks),
-      ]
-      |> Array.of_list
-      |> ReasonReact.array
+      <div
+        title="Show more links"
+        className="ml-6 font-semibold text-sm cursor-pointer relative"
+        onClick={toggleState(send)}
+        key="more-links">
+        <span> {"More" |> str} </span>
+        <i className="fas fa-angle-down ml-1" />
+        {additionalLinks(state, moreLinks)}
+      </div>
     },
 };

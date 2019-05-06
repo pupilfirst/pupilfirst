@@ -5,8 +5,8 @@ class CommunitiesController < ApplicationController
   def show
     @community = authorize(Community.find(params[:id]))
     @search = params[:search]
-    @questions = Kaminari.paginate_array(scoped_questions.includes(%i[user answers])
-      .order("answers.updated_at DESC NULLs FIRST")).page(page).per(10)
+    @questions = scoped_questions.includes(%i[user answers])
+      .order("last_activity_at DESC NULLs FIRST").page(page).per(10)
 
     raise_not_found if @community.blank?
   end

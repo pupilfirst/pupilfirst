@@ -25,17 +25,11 @@ module Communities
     end
 
     def activity(question)
-      time = question.answers&.first&.updated_at || question.updated_at
-      time_diff = ((Time.now - time) / 1.minute).round
-
-      if time_diff < 60
-        "#{time_diff} minute"
-      elsif time_diff < 1440
-        "#{(time_diff / 60).round} hour"
-      elsif time_diff < 525_600
-        "#{(time_diff / 1440).round} Day"
+      if question.last_activity_at.blank?
+        "New Question"
       else
-        "#{(time_diff / 525_600).round} Year"
+        time_diff = ((Time.now - question.last_activity_at) / 1.minute).round
+        "Last updated #{time_string(time_diff)} ago"
       end
     end
 
@@ -68,6 +62,20 @@ module Communities
       kwargs[:search] = @search if @search.present?
       kwargs[:target_id] = @target.id if @target.present?
       kwargs
+    end
+
+    private
+
+    def time_string(time)
+      if time < 60
+        "#{time} minute"
+      elsif time < 1440
+        "#{(time / 60).round} hour"
+      elsif time < 525_600
+        "#{(time / 1440).round} Day"
+      else
+        "#{(time / 525_600).round} Year"
+      end
     end
   end
 end

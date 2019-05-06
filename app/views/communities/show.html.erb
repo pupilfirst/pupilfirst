@@ -47,7 +47,7 @@
                       <span>Asked by</span>
                       <span class="font-semibold"><%= presenter.user_name(question) %> </span>
                       <span>on <%= presenter.time(question) %> </span>
-                      <span class="border-l pl-2 ml-2">Last updated <%= presenter.activity(question) %> ago</span>
+                      <span class="border-l pl-2 ml-2"><%= presenter.activity(question) %></span>
                     </div>
                   </div>
                   <div class="flex flex-row text-black">

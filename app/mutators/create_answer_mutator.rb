@@ -13,6 +13,9 @@ class CreateAnswerMutator < ApplicationMutator
       description: description,
       question: question
     )
+    # rubocop:disable Rails/SkipsModelValidations
+    question.touch(:last_activity_at)
+    # rubocop:enable Rails/SkipsModelValidations
     answer.id
   end
 

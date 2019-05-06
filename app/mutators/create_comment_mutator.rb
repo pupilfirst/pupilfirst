@@ -15,6 +15,7 @@ class CreateCommentMutator < ApplicationMutator
       commentable: commentable,
       value: value
     )
+    update_last_activity_for_question if commentable_type == Comment::COMMENTABLE_TYPE_QUESTION
     comment.id
   end
 
@@ -30,6 +31,12 @@ class CreateCommentMutator < ApplicationMutator
   end
 
   private
+
+  def update_last_activity_for_question
+    # rubocop:disable Rails/SkipsModelValidations
+    @commentable.touch(:last_activity_at)
+    # rubocop:enable Rails/SkipsModelValidations
+  end
 
   def commentable
     @commentable ||= case commentable_type

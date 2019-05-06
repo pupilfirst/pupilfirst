@@ -34,6 +34,7 @@ after 'development:schools', 'development:founders', 'development:faculty', 'dev
           user: [john_doe, mickey, groot, rocket, donald].sample,
           value: Faker::Lorem.paragraph(sentence_count = 4, supplemental = false, random_sentences_to_add = 5)
         )
+        question.touch(:last_activity_at)
       end
 
       [john_doe, mickey, groot, rocket, donald].each do |user_3|

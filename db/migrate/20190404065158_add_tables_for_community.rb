@@ -14,6 +14,8 @@ class AddTablesForCommunity < ActiveRecord::Migration[5.2]
       t.references :community
       t.references :user
 
+      t.datetime :last_activity_at
+
       t.timestamps
     end
 
@@ -32,7 +34,7 @@ class AddTablesForCommunity < ActiveRecord::Migration[5.2]
       t.timestamps
     end
 
-    create_table :target_question do |t|
+    create_table :target_questions do |t|
       t.references :question
       t.references :target
     end
@@ -55,5 +57,6 @@ class AddTablesForCommunity < ActiveRecord::Migration[5.2]
     drop_table :answers
     drop_table :answer_likes
     drop_table :comments
+    drop_table :target_question
   end
 end

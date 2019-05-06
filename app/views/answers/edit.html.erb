@@ -1,12 +1,12 @@
 <div class="flex flex-1 bg-grey-lighter">
   <div class="flex-1 flex flex-col">
     <div class="mt-4 max-w-md w-full flex justify-center">
-      <a href=" <%= community_question_path(@question.community_id, @question.id) %>"> back</a>
+      <a href=" <%= question_path(@question) %>"> back</a>
     </div>
     <div class="my-4 max-w-md w-full flex mx-auto items-center justify-center relative shadow bg-white rounded-lg">
       <div class="flex w-full  py-4 px-4">
         <div class="w-full flex flex-col">
-          <%= form_for @answer, url: answer_path(@answer.id) do |f| %>
+          <%= form_for @answer, url: answer_path(@answer) do |f| %>
             <h5
               class="uppercase text-center border-b border-grey-light pb-2 mb-4">
               Edit Answer

@@ -1,11 +1,12 @@
 module Communities
   class ShowPresenter < ApplicationPresenter
-    def initialize(view_context, community, questions, search)
+    def initialize(view_context, community, questions, search, target)
       super(view_context)
 
       @community = community
       @questions = questions
       @search = search
+      @target = target
     end
 
     def time(question)

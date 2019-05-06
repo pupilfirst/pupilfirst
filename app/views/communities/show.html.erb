@@ -1,4 +1,4 @@
-<% presenter = Communities::ShowPresenter.new(self, @community, @questions, @search) %>
+<% presenter = Communities::ShowPresenter.new(self, @community, @questions, @search, @target) %>
 <% content_for(:head) do %>
   <title>Community</title>
   <%= stylesheet_pack_tag 'communities/show', media: 'all', 'data-turbolinks-track': 'reload' %>
@@ -14,6 +14,9 @@
       <div class="max-w-sm flex w-full mt-3">
 
         <%= form_tag community_path(@community), method: 'get', class: "w-full flex flex-row" do %>
+          <% if @target.present? %>
+            <%= hidden_field_tag "target_id",@target.id %>
+          <% end %>
           <%= text_field_tag :search, @search, placeholder: "Search...", class: "appearance-none block w-full shadow bg-white text-grey-darker border border-primary-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-primary-light focus:shadow-md" %>
           <%= submit_tag "search" %>
         <% end %>
@@ -21,9 +24,17 @@
     </div>
   </div>
   <div class="flex-1 flex flex-col">
-    <div class="flex px-6 py-2 items-center justify-between">
+    <% if @target.present? %>
+      <div class="mt-4 flex items-start py-4 px-6 max-w-lg w-full mx-auto px-2 border-2 border-dashed p-6 justify-between">
+        <div class="font-semibold"> Target:  <%= @target.title %></div>
+        <a class="no-underline cursor-pointer"
+           href=<%= community_path(@community) %>
+        >Clear Filter </a>
+      </div>
+    <% end %>
+    <div class="flex px-6 pb-2 items-center justify-between">
       <a class="no-underline max-w-lg w-full flex mx-auto items-center justify-center relative bg-grey-lightest hover:bg-grey-lighter border-2 border-dashed p-6 rounded-lg mt-10 cursor-pointer"
-         href=<%= new_community_question_path(@community.id) %>
+         href=<%= new_community_question_path(@community) %>
       >
         <i class="material-icons">add_circle_outline</i>
         <h4 class="font-semibold ml-2">
@@ -38,7 +49,7 @@
             <div class="flex items-center border-b">
               <div class="flex w-full">
                 <a class="cursor-pointer justify-between no-underline flex flex-1 items-center p-6 hover:bg-grey-lightest"
-                   href=<%= community_question_path(@community.id, question.id) %>>
+                   href=<%= question_path(question) %>>
                   <div class="text-black">
                     <div class="text-sm font-semibold">
                       <%= question.title %>

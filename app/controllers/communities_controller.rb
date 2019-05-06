@@ -29,10 +29,14 @@ class CommunitiesController < ApplicationController
   end
 
   def filtered_question
-    if params[:target_id].present?
-      @community.questions.where(target_id: params[:target_id])
+    if params[:target_id].present? && target.present?
+      target.questions.where(community: @community)
     else
       @community.questions
     end
+  end
+
+  def target
+    @target ||= Target.find_by(id: params[:target_id])
   end
 end

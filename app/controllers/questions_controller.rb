@@ -25,7 +25,7 @@ class QuestionsController < ApplicationController
     form = Questions::CreateOrUpdateForm.new(question)
     if form.validate(question_params)
       new_question = form.save
-      redirect_to community_question_path(@community.id, new_question.id)
+      redirect_to question_path(new_question)
     else
       raise form.errors.full_messages.join(', ')
     end
@@ -36,7 +36,7 @@ class QuestionsController < ApplicationController
     form = Questions::CreateOrUpdateForm.new(question)
     if form.validate(question_params)
       form.save
-      redirect_to community_question_path(question.community_id, question.id)
+      redirect_to question_path(question)
     else
       raise form.errors.full_messages.join(', ')
     end

@@ -83,10 +83,10 @@ Rails.application.routes.draw do
   end
 
   resources :communities, only: %i[show] do
-    resources :questions, only: %i[create new show]
+    resources :questions, only: %i[create new]
   end
 
-  resources :questions, only: %i[edit update destroy] do
+  resources :questions, only: %i[show edit update destroy] do
     resources :answers, only: :create
   end
 

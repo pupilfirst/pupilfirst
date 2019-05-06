@@ -1,7 +1,6 @@
 @import "tailwindcss/preflight";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
-
 /* Custom utilities */
 
 .max-w-fc {
@@ -23,7 +22,7 @@ body {
 }
 
 .btn:focus {
-  @apply outline-none;
+  @apply outline-none shadow-inner;
 }
 
 /* Button Styles */
@@ -41,7 +40,7 @@ body {
 }
 
 .btn-primary {
-  @apply bg-primary text-white shadow;
+  @apply bg-primary text-white;
 }
 
 .btn-primary:hover {
@@ -49,7 +48,7 @@ body {
 }
 
 .btn-primary:focus {
-  @apply bg-primary-darker;
+  @apply bg-primary-dark shadow-inner;
 }
 
 .btn-secondary {
@@ -61,7 +60,7 @@ body {
 }
 
 .btn-secondary:focus {
-  @apply bg-secondary-darker;
+  @apply bg-secondary-dark;
 }
 
 .btn-success {
@@ -73,7 +72,7 @@ body {
 }
 
 .btn-success:focus {
-  @apply bg-green-darker;
+  @apply bg-green-dark;
 }
 
 .btn-danger {
@@ -85,7 +84,7 @@ body {
 }
 
 .btn-danger:focus {
-  @apply bg-red-darker;
+  @apply bg-red-dark;
 }
 
 button:disabled, .disabled {
@@ -112,17 +111,9 @@ button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
 
 @responsive {
   .bg-gradient-primary-dark-to-primary-darker-to-bottom {
-    background-image: linear-gradient(
-      to bottom,
-      config("colors.primary-dark"),
-      config("colors.primary-darker")
-    );
+    background-image: linear-gradient( to bottom, config("colors.primary-dark"), config("colors.primary-darker"));
   }
   .bg-gradient-secondary-to-secondary-dark-120 {
-    background-image: linear-gradient(
-      120deg,
-      config("colors.secondary"),
-      config("colors.secondary-dark")
-    );
+    background-image: linear-gradient( 120deg, config("colors.secondary"), config("colors.secondary-dark"));
   }
 }

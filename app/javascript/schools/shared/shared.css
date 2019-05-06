@@ -10,7 +10,7 @@ button:disabled, .disabled {
     width: 264px;
 }
 
-/* Tiggle swicth */
+/* Tiggle switch */
 
 .toggle-label {
     @apply relative block w-10 h-5 cursor-pointer;

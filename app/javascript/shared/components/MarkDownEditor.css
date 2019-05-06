@@ -1,0 +1,13 @@
+/* MarkDOwn Editor */
+
+.markdown-button-group {
+  @apply border rounded;
+}
+
+.markdown-button-group__button {
+  @apply border-r px-3 flex items-center whitespace-no-wrap text-sm font-semibold py-2;
+}
+
+.markdown-button-group__button:last-child {
+  @apply border-r-0;
+}

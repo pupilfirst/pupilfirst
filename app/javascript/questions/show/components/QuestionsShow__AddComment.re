@@ -53,7 +53,7 @@ let make =
     ) => {
   let (value, setValue) = React.useState(() => "");
   let (saving, setSaving) = React.useState(() => false);
-  let validComment = value |> Js.String.length > 1;
+  let validComment = value != "";
 
   let handleResponseCB = id => {
     let comment =
@@ -93,19 +93,19 @@ let make =
     };
   };
   <div className="w-full flex flex-col mx-auto items-center justify-center">
-    <div className="w-full">
+    <div className="w-full border border-t-0 rounded-b overflow-hidden">
       <DisablingCover disabled=saving containerClasses="flex flex-row">
         <input
           placeholder="Add your comment"
           value
           onChange={event => setValue(ReactEvent.Form.target(event)##value)}
-          className="w-3/5 text-left border appearance-none block w-full leading-tight focus:outline-none focus:bg-white focus:border-grey"
+          className="text-left bg-grey-lightest text-sm py-3 px-4 rounded-b appearance-none block w-full leading-tight focus:outline-none focus:bg-white focus:border-grey"
         />
         {
           validComment ?
             <button
               onClick=handleCreateComment
-              className="w-2/5 border-2 border-primary-lighter py-1 px-3 flex mx-auto appearance-none text-center">
+              className="flex items-center whitespace-no-wrap text-sm font-semibold py-2 px-4 btn-primary appearance-none focus:outline-none text-center">
               {"Comment" |> str}
             </button> :
             ReasonReact.null

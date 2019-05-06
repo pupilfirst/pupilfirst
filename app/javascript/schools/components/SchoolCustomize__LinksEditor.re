@@ -121,7 +121,7 @@ let showLinks = (state, send, authenticityToken, removeLinkCB, kind, links) =>
                handleDelete(state, send, authenticityToken, removeLinkCB, id)
              }
              className="p-3">
-             <FaIcon
+             <FaIcon.Jsx2
                classes={deleteIconClasses(state.deleting |> List.mem(id))}
              />
            </button>

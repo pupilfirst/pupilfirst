@@ -1,5 +1,6 @@
 <% content_for(:tail) do %>
   <%= javascript_pack_tag 'QuestionsShowPack', nonce: true %>
+  <%= stylesheet_pack_tag 'QuestionsShowPack', media: 'all', 'data-turbolinks-track': 'reload' %>
 <% end %>
 
 <% presenter = Questions::ShowPresenter.new(self, @question) %>

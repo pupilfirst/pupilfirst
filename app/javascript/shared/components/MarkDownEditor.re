@@ -1,4 +1,5 @@
 [@bs.config {jsx: 3}];
+[%bs.raw {|require("./MarkDownEditor.css")|}];
 
 type element;
 [@bs.scope "document"] [@bs.val]
@@ -78,12 +79,20 @@ let buttonTitle = action =>
   | Code => "Code"
   };
 
+let buttonIcon = action =>
+  switch (action) {
+  | Bold => <i className="far fa-bold" />
+  | Italics => <i className="far fa-italic" />
+  | Code => <i className="far fa-code" />
+  };
+
 let buttons = (description, setDescription, updateDescriptionCB) =>
   [|Bold, Italics, Code|]
   |> Array.map(action =>
        <button
-         className="border p-2"
+         className="markdown-button-group__button hover:bg-primary-lightest hover:text-primary-light focus:outline-none focus:text-primary-dark"
          key={action |> buttonTitle}
+         title={action |> buttonTitle}
          onClick={
            handleClick(
              description,
@@ -92,7 +101,7 @@ let buttons = (description, setDescription, updateDescriptionCB) =>
              action,
            )
          }>
-         {action |> buttonTitle |> str}
+         {action |> buttonIcon}
        </button>
      )
   |> React.array;
@@ -106,15 +115,24 @@ let make = (~placeholderText, ~updateDescriptionCB) => {
     <div className="flex w-full justify-between py-2">
       {
         showPreview ?
-          <div> {"Preview" |> str} </div> :
-          <div className="flex w-full ">
+          <p className="font-semibold text-sm"> {"Preview" |> str} </p> :
+          <div className="flex markdown-button-group">
             {buttons(description, setDescription, updateDescriptionCB)}
           </div>
       }
       <button
-        className="border p-2"
+        className="btn btn-default"
         onClick={_ => setShowPreview(_ => !showPreview)}>
-        {(showPreview ? "Edit" : "Preview") |> str}
+        <span>
+          {
+            showPreview ?
+              <FaIcon classes="far fa-edit" /> :
+              <FaIcon classes="far fa-eye" />
+          }
+        </span>
+        <span className="ml-2">
+          {(showPreview ? "Edit" : "Preview") |> str}
+        </span>
       </button>
     </div>
     {
@@ -126,12 +144,13 @@ let make = (~placeholderText, ~updateDescriptionCB) => {
         <textarea
           id="mytextarea"
           maxLength=1000
+          rows=6
           placeholder=placeholderText
           value=description
           onChange={
             event => setDescription(ReactEvent.Form.target(event)##value)
           }
-          className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+          className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
         />
     }
   </div>;

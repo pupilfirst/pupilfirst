@@ -1,0 +1,17 @@
+.community-answer-container {
+  @apply relative pb-8;
+}
+
+.community-answer-container>::after {
+  @apply relative h-13 inline-block text-center pin-b w-full pt-3;
+  content: '...';
+  line-height: 1;
+  color: config(colors.grey-dark);
+  font-size: 30px;
+  letter-spacing: .6em;
+}
+
+.community-answer-container>:last-child::after {
+  content: '';
+  height: 0;
+}

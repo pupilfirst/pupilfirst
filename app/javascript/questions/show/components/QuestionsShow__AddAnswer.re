@@ -83,19 +83,20 @@ let make = (~question, ~authenticityToken, ~currentUserId, ~addAnswerCB) => {
   };
 
   <div
-    className="mt-4 max-w-md w-full flex mx-auto items-center justify-center relative shadow bg-white rounded-lg">
-    <div className="flex w-full  py-4 px-4">
+    className="mt-4 my-8 max-w-lg w-full flex mx-auto items-center justify-center relative shadow border bg-white rounded-lg">
+    <div className="flex w-full py-4 px-4">
       <div className="w-full flex flex-col">
         <DisablingCover disabled=saving>
           <MarkDownEditor
-            placeholderText="Add your Answer"
+            placeholderText="Type your Answer"
             updateDescriptionCB
           />
-          <button
-            onClick=handleCreateAnswer
-            className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
-            {"Add Your Answer" |> str}
-          </button>
+          <div className="flex justify-end mt-3">
+            <button
+              onClick=handleCreateAnswer className="btn btn-primary btn-large">
+              {"Post Your Answer" |> str}
+            </button>
+          </div>
         </DisablingCover>
       </div>
     </div>

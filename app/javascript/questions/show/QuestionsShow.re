@@ -207,7 +207,7 @@ let make =
         </div>
         {
           showAnswersCreateComponent(
-            answers,
+            state.answers,
             state.showAnswerCreate,
             currentUserId,
           ) ?

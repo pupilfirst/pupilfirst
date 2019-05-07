@@ -9,11 +9,14 @@ type action =
   | AddComment(Comment.t)
   | AddAnswer(Answer.t)
   | AddLike(Like.t)
-  | RemoveLike(string);
+  | RemoveLike(string)
+  | UpdateShowAnswerCreate(bool);
+
 type state = {
   answers: list(Answer.t),
   comments: list(Comment.t),
   likes: list(Like.t),
+  showAnswerCreate: bool,
 };
 
 let reducer = (state, action) =>
@@ -28,6 +31,14 @@ let reducer = (state, action) =>
     }
   | AddLike(like) => {...state, likes: state.likes |> Like.addLike(like)}
   | RemoveLike(id) => {...state, likes: state.likes |> Like.removeLike(id)}
+  | UpdateShowAnswerCreate(bool) => {...state, showAnswerCreate: bool}
+  };
+
+let showAnswersCreateComponent = (answers, showAnswerCreate, currentUserId) =>
+  if (showAnswerCreate) {
+    true;
+  } else {
+    answers |> Answer.answerFromUser(currentUserId) |> ListUtils.isEmpty;
   };
 
 [@react.component]
@@ -43,9 +54,15 @@ let make =
       ~communityPath,
     ) => {
   let (state, dispatch) =
-    React.useReducer(reducer, {answers, comments, likes});
+    React.useReducer(
+      reducer,
+      {answers, comments, likes, showAnswerCreate: false},
+    );
   let addCommentCB = comment => dispatch(AddComment(comment));
-  let addAnswerCB = answer => dispatch(AddAnswer(answer));
+  let addAnswerCB = answer => {
+    dispatch(AddAnswer(answer));
+    dispatch(UpdateShowAnswerCreate(false));
+  };
   let addLikeCB = like => dispatch(AddLike(like));
   let removeLikeCB = id => dispatch(RemoveLike(id));
   <div className="flex flex-1 bg-grey-lightest">
@@ -187,12 +204,27 @@ let make =
             |> ReasonReact.array
           }
         </div>
-        <QuestionsShow__AddAnswer
-          question
-          authenticityToken
-          currentUserId
-          addAnswerCB
-        />
+        {
+          showAnswersCreateComponent(
+            answers,
+            state.showAnswerCreate,
+            currentUserId,
+          ) ?
+            <QuestionsShow__AddAnswer
+              question
+              authenticityToken
+              currentUserId
+              addAnswerCB
+            /> :
+            <div
+              className="mt-4 my-8 max-w-lg w-full flex mx-auto justify-left">
+              <button
+                className="btn btn-primary btn-large"
+                onClick={_ => dispatch(UpdateShowAnswerCreate(true))}>
+                {"Add another answer" |> str}
+              </button>
+            </div>
+        }
       </div>
     </div>
   </div>;

@@ -32,6 +32,11 @@ type action =
 
 let str = React.string;
 
+let updateDescription = (description, setDescription, updateDescriptionCB) => {
+  setDescription(_ => description);
+  updateDescriptionCB(description);
+};
+
 let handleClick =
     (description, setDescription, updateDescriptionCB, action, event) => {
   event |> ReactEvent.Mouse.preventDefault;
@@ -68,8 +73,7 @@ let handleClick =
         }
       );
     };
-  setDescription(_ => newText);
-  updateDescriptionCB(newText);
+  updateDescription(newText, setDescription, updateDescriptionCB);
 };
 
 let buttonTitle = action =>
@@ -107,10 +111,9 @@ let buttons = (description, setDescription, updateDescriptionCB) =>
   |> React.array;
 
 [@react.component]
-let make = (~placeholderText, ~updateDescriptionCB) => {
+let make = (~placeholderText, ~updateDescriptionCB, ~submitCB) => {
   let (description, setDescription) = React.useState(() => "");
   let (showPreview, setShowPreview) = React.useState(() => false);
-
   <div>
     <div className="flex w-full justify-between py-2">
       {
@@ -120,20 +123,24 @@ let make = (~placeholderText, ~updateDescriptionCB) => {
             {buttons(description, setDescription, updateDescriptionCB)}
           </div>
       }
-      <button
-        className="btn btn-default"
-        onClick={_ => setShowPreview(_ => !showPreview)}>
-        <span>
-          {
-            showPreview ?
-              <FaIcon classes="far fa-edit" /> :
-              <FaIcon classes="far fa-eye" />
-          }
-        </span>
-        <span className="ml-2">
-          {(showPreview ? "Edit" : "Preview") |> str}
-        </span>
-      </button>
+      {
+        description != "" ?
+          <button
+            className="btn btn-default"
+            onClick={_ => setShowPreview(_ => !showPreview)}>
+            <span>
+              {
+                showPreview ?
+                  <FaIcon classes="far fa-edit" /> :
+                  <FaIcon classes="far fa-eye" />
+              }
+            </span>
+            <span className="ml-2">
+              {(showPreview ? "Edit" : "Preview") |> str}
+            </span>
+          </button> :
+          React.null
+      }
     </div>
     {
       showPreview ?
@@ -148,10 +155,23 @@ let make = (~placeholderText, ~updateDescriptionCB) => {
           placeholder=placeholderText
           value=description
           onChange={
-            event => setDescription(ReactEvent.Form.target(event)##value)
+            event =>
+              updateDescription(
+                ReactEvent.Form.target(event)##value,
+                setDescription,
+                updateDescriptionCB,
+              )
           }
           className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
         />
     }
+    <div className="flex justify-end mt-3">
+      <button
+        disabled={description == ""}
+        onClick=submitCB
+        className="btn btn-primary btn-large">
+        {"Post Your Answer" |> str}
+      </button>
+    </div>
   </div>;
 };

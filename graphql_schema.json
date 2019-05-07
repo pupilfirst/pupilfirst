@@ -1204,7 +1204,7 @@
           "interfaces": null,
           "enumValues": [
             {
-              "name": "InvalidLengthAnswer",
+              "name": "InvalidLengthValue",
               "description": "Supplied comment must be greater than 1 characters in length",
               "isDeprecated": false,
               "deprecationReason": null

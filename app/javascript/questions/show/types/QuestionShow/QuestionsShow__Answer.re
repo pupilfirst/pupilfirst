@@ -24,6 +24,9 @@ let userId = t => t.userId;
 let addAnswer = (answers, answer) =>
   answers |> List.rev |> List.append([answer]) |> List.rev;
 
+let answerFromUser = (userId, answers) =>
+  answers |> List.filter(answer => answer.userId == userId);
+
 let create = (id, description, userId, createdAt) => {
   id,
   description,

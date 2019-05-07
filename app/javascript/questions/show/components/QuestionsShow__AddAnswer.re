@@ -16,11 +16,11 @@ module CreateAnswerQuery = [%graphql
 ];
 
 module CreateAnswerError = {
-  type t = [ | `InvalidLengthAnswer | `BlankQuestionId];
+  type t = [ | `InvalidLengthValue | `BlankQuestionId];
 
   let notification = error =>
     switch (error) {
-    | `InvalidLengthAnswer => (
+    | `InvalidLengthValue => (
         "InvalidLengthValue",
         "Supplied comment must be greater than 1 characters in length",
       )
@@ -33,18 +33,18 @@ module CreateAnswerError = {
 
 module CreateAnswerErrorHandler = GraphqlErrorHandler.Make(CreateAnswerError);
 
+let dateTime =
+currentTime() |> DateTime.parse |> DateTime.format(DateTime.DateAndTime);
+
 let str = React.string;
 
 [@react.component]
 let make = (~question, ~authenticityToken, ~currentUserId, ~addAnswerCB) => {
   let (description, setDescription) = React.useState(() => "");
   let (saving, setSaving) = React.useState(() => false);
-  let updateDescriptionCB = description => setDescription(_ => description);
-
-  let dateTime =
-    currentTime() |> DateTime.parse |> DateTime.format(DateTime.DateAndTime);
-
-  let validAnswer = description == "";
+  let updateDescriptionCB = description => {
+    setDescription(_ => description);
+  };
 
   let handleResponseCB = id => {
     let answer = Answer.create(id, description, currentUserId, dateTime);
@@ -55,8 +55,7 @@ let make = (~question, ~authenticityToken, ~currentUserId, ~addAnswerCB) => {
   };
   let handleCreateAnswer = event => {
     event |> ReactEvent.Mouse.preventDefault;
-
-    if (validAnswer) {
+    if (description != "") {
       setSaving(_ => true);
 
       CreateAnswerQuery.make(
@@ -78,7 +77,7 @@ let make = (~question, ~authenticityToken, ~currentUserId, ~addAnswerCB) => {
       |> CreateAnswerErrorHandler.catch(() => setSaving(_ => false))
       |> ignore;
     } else {
-      Js.log(description);
+      Notification.error("Empty", "Answer cant be blank");
     };
   };
 
@@ -90,13 +89,8 @@ let make = (~question, ~authenticityToken, ~currentUserId, ~addAnswerCB) => {
           <MarkDownEditor
             placeholderText="Type your Answer"
             updateDescriptionCB
+            submitCB={handleCreateAnswer}
           />
-          <div className="flex justify-end mt-3">
-            <button
-              onClick=handleCreateAnswer className="btn btn-primary btn-large">
-              {"Post Your Answer" |> str}
-            </button>
-          </div>
         </DisablingCover>
       </div>
     </div>

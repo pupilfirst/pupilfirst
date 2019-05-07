@@ -44,7 +44,7 @@ let make = (~question, ~authenticityToken, ~currentUserId, ~addAnswerCB) => {
   let dateTime =
     currentTime() |> DateTime.parse |> DateTime.format(DateTime.DateAndTime);
 
-  let validAnswer = description |> Js.String.length > 1;
+  let validAnswer = description == "";
 
   let handleResponseCB = id => {
     let answer = Answer.create(id, description, currentUserId, dateTime);
@@ -78,7 +78,7 @@ let make = (~question, ~authenticityToken, ~currentUserId, ~addAnswerCB) => {
       |> CreateAnswerErrorHandler.catch(() => setSaving(_ => false))
       |> ignore;
     } else {
-      ();
+      Js.log(description);
     };
   };
 

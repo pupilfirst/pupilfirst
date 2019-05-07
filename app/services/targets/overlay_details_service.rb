@@ -13,11 +13,25 @@ module Targets
         latestEvent: latest_event_details,
         latestFeedback: latest_feedback,
         linkedResources: linked_resources,
-        quizQuestions: quiz_questions
+        quizQuestions: quiz_questions,
+        questions: questions
       }
     end
 
     private
+
+    def questions
+      if @target.questions.any?
+        @target.questions.order("last_activity_at DESC NULLs FIRST").first(3) do |question|
+          {
+            id: question.id,
+            title: question.title
+          }
+        end
+      else
+        []
+      end
+    end
 
     def pending_founder_ids
       @founder.startup.founders.where.not(id: @founder).reject do |founder|

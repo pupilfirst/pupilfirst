@@ -184,6 +184,8 @@ export default class FounderDashboard extends React.Component {
             openTimelineBuilderCB={this.openTimelineBuilder}
             hasSingleFounder={this.hasSingleFounder()}
             courseEnded={this.props.courseEnded}
+            questions={this.props.questions}
+            communityPath={this.props.communityPath}
           />
         )}
       </div>
@@ -210,5 +212,6 @@ FounderDashboard.propTypes = {
   initialTargetId: PropTypes.number,
   testMode: PropTypes.bool,
   tourDashboard: PropTypes.bool,
-  courseEnded: PropTypes.bool
+  courseEnded: PropTypes.bool,
+  communityPath: PropTypes.string.isRequired
 };

@@ -20,7 +20,8 @@ module Founders
           tourDashboard: tour_dashboard?,
           courseEnded: current_course.ended?,
           passGrade: current_course.pass_grade,
-          maxGrade: current_course.max_grade
+          maxGrade: current_course.max_grade,
+          communityPath: community_path
         )
       end
 
@@ -31,7 +32,16 @@ module Founders
       private
 
       def current_course
-        view.current_startup.level.course
+        @current_course ||= view.current_startup.level.course
+      end
+
+      def community_path
+        @community = current_course.community
+        if @community.present?
+          view.community_path(@community)
+        else
+          ""
+        end
       end
 
       def icon_paths

@@ -11,6 +11,9 @@ import { jsComponent as QuizComponent } from "../../components/Quiz__Root.bs";
 const UndoButton = require("./targetOverlay/TargetOverlay__UndoButton.bs.js")
   .make;
 
+const TargetQuestionIndex = require("./targetOverlay/TargetOverlay__TargetQuestionIndex.bs.js")
+  .make;
+
 export default class TargetOverlay extends React.Component {
   constructor(props) {
     super(props);
@@ -23,7 +26,8 @@ export default class TargetOverlay extends React.Component {
         pendingFounderIds: [],
         grades: null,
         quizQuestions: null,
-        showQuiz: false
+        showQuiz: false,
+        loading: true
       }
     );
 
@@ -170,7 +174,9 @@ export default class TargetOverlay extends React.Component {
       linkedResources: response.linkedResources,
       pendingFounderIds: response.pendingFounderIds,
       grades: response.grades,
-      quizQuestions: response.quizQuestions
+      quizQuestions: response.quizQuestions,
+      questions: response.questions,
+      loading: false
     });
   }
   render() {
@@ -250,6 +256,14 @@ export default class TargetOverlay extends React.Component {
             )}
           </div>
         </div>
+        {this.props.communityPath != "" && (
+          <TargetQuestionIndex
+            targetId={target.id}
+            questions={this.state.questions}
+            loading={this.state.loading}
+            communityPath={this.props.communityPath}
+          />
+        )}
         <div className="target-overlay__mobile-fixed-navbar d-block d-md-none">
           <button
             type="button"
@@ -303,5 +317,6 @@ TargetOverlay.propTypes = {
   closeCB: PropTypes.func,
   iconPaths: PropTypes.object,
   hasSingleFounder: PropTypes.bool,
-  courseEnded: PropTypes.bool
+  courseEnded: PropTypes.bool,
+  communityPath: PropTypes.string.isRequired
 };

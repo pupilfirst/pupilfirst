@@ -48,7 +48,7 @@ let iconClasses = (liked, saving) => {
     if (saving) {
       " fas fa-spinner-third fa-spin";
     } else if (liked) {
-      " fas fa-thumbs-up cursor-pointer";
+      " fas fa-thumbs-up cursor-pointer text-yellow";
     } else {
       " fal fa-thumbs-up cursor-pointer";
     }
@@ -106,20 +106,20 @@ let make =
     };
   };
 
-  <div className="ml-4">
-    <div onClick=handleAnswerLike>
+  <div className="mr-2">
+    <div className="pt-2 px-2 cursor-pointer" onClick=handleAnswerLike>
       <div key={iconClasses(liked, saving)}>
         <i className={iconClasses(liked, saving)} />
       </div>
+      <p className="text-xs py-1">
+        {
+          likes
+          |> Like.likesForAnswer(answerId)
+          |> List.length
+          |> string_of_int
+          |> str
+        }
+      </p>
     </div>
-    <p className="text-xs pt-1">
-      {
-        likes
-        |> Like.likesForAnswer(answerId)
-        |> List.length
-        |> string_of_int
-        |> str
-      }
-    </p>
   </div>;
 };

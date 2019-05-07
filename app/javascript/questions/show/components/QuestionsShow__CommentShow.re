@@ -16,13 +16,13 @@ let make =
       ~currentUserId,
     ) => {
   let (showMore, setShowMore) = React.useState(() => false);
-  <div
-    className="max-w-lg w-full flex flex-col mx-auto items-center justify-center px-8">
+  <ul
+    className="list-reset max-w-lg w-full flex flex-col mx-auto items-center justify-center px-5 md:px-8">
     {
       comments
       |> List.mapi((index, comment) =>
            index < (showMore ? comments |> List.length : 3) ?
-             <div
+             <li
                key={comment |> Comment.id}
                className="w-full text-left border border-t-0">
                <div
@@ -39,7 +39,7 @@ let make =
                    }
                  </span>
                </div>
-             </div> :
+             </li> :
              ReasonReact.null
          )
       |> Array.of_list
@@ -65,10 +65,10 @@ let make =
       comments |> List.length > 3 && !showMore ?
         <a
           onClick={_ => setShowMore(_ => !showMore)}
-          className="bg-grey-lightest rounded-full cursor-pointer border py-1 px-2 px-1 flex mx-auto appearance-none text-xs font-semibold hover:bg-primary-lightest hover:text-primary">
+          className="bg-grey-lighter rounded-full cursor-pointer border py-1 px-3 flex mx-auto appearance-none text-xs font-semibold hover:bg-primary-lightest hover:text-primary -mt-3">
           {(showMore ? "Show Less" : "Show More") |> str}
         </a> :
         ReasonReact.null
     }
-  </div>;
+  </ul>;
 };

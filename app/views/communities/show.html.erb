@@ -5,20 +5,22 @@
 <% end %>
 
 <div class="bg-grey-lightest">
-  <div class="community-hero__container flex bg-white border-b border-primary-lighter">
-    <div class="max-w-lg w-full flex flex-col items-center justify-center mx-auto">
-      <h1 class="text-center font-normal text-4xl leading-tight">
+  <div class="community-hero__container flex bg-white border-b border-primary-lighter py-8">
+    <div class="max-w-lg w-full flex flex-col items-center justify-center mx-auto px-3 md:px-0">
+      <h1 class="text-center font-normal text-2xl md:text-4xl leading-tight">
         Welcome to the
-        <span class="block font-bold text-5xl">VR Community</span>
+        <span class="block font-bold text-3xl md:text-5xl">VR Community</span>
       </h1>
       <div class="max-w-sm flex w-full mt-3">
 
-        <%= form_tag community_path(@community), method: 'get', class: "w-full flex flex-row" do %>
+        <%= form_tag community_path(@community), method: 'get', class: "w-full flex flex-row justify-between items-center relative" do %>
           <% if @target.present? %>
             <%= hidden_field_tag "target_id",@target.id %>
           <% end %>
-          <%= text_field_tag :search, @search, placeholder: "Search...", class: "appearance-none block w-full shadow bg-white text-grey-darker border border-primary-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-primary-light focus:shadow-md" %>
-          <%= submit_tag "search" %>
+          <%= text_field_tag :search, @search, placeholder: "Search...", class: "appearance-none block w-full shadow bg-white text-grey-darker border border-primary-lighter rounded py-3 pl-4 pr-12 leading-tight focus:outline-none focus:bg-white focus:border-primary-light focus:shadow-md" %>
+          <%= button_tag(type: "submit", class: "absolute pin-r w-8 h-8 mr-3 rounded-full bg-grey-lighter text-grey-dark hover:bg-primary-lightest hover:text-primary flex items-center justify-center focus:outline-none focus:text-primary") do %>
+            <i title="Search" class="far fa-arrow-right text-lg"></i>
+           <% end %>
         <% end %>
       </div>
     </div>
@@ -32,38 +34,44 @@
         >Clear Filter </a>
       </div>
     <% end %>
-    <div class="flex px-6 pb-2 items-center justify-between">
-      <a class="no-underline max-w-lg w-full flex mx-auto items-center justify-center relative bg-grey-lightest hover:bg-grey-lighter border-2 border-dashed p-6 rounded-lg mt-10 cursor-pointer"
-         href=<%= new_community_question_path(@community) %>
-      >
-        <i class="material-icons">add_circle_outline</i>
-        <h4 class="font-semibold ml-2">
-          Ask a new question
-        </h4>
-      </a>
+    <div class="community-ask-button-container flex max-w-lg mx-auto px-6 mt-10 items-center justify-center w-full relative">
+      <div class="bg-grey-lightest px-1 z-10">
+        <a class="no-underline btn btn-primary btn-large"
+          href=<%= new_community_question_path(@community) %>
+        >
+          <i class="fal fa-plus-circle text-lg"></i>
+          <span class="font-semibold ml-2">
+            Ask a question
+          </span>
+        </a>
+      </div>
     </div>
-    <div class="px-6 pb-4 mt-5 flex flex-1">
+    <div class="px-3 md:px-6 pb-4 mt-5 flex flex-1">
       <div class="max-w-lg w-full mx-auto relative">
         <div class="community-question-list-container shadow bg-white rounded-lg mb-4">
           <% @questions.map do |question| %>
             <div class="flex items-center border-b">
               <div class="flex w-full">
-                <a class="cursor-pointer justify-between no-underline flex flex-1 items-center p-6 hover:bg-grey-lightest"
+                <a class="cursor-pointer justify-between no-underline flex flex-1 items-center p-4 md:p-6 hover:bg-grey-lightest"
                    href=<%= question_path(question) %>>
                   <div class="text-black">
-                    <div class="text-sm font-semibold">
+                    <div class="text-sm font-semibold leading-tight">
                       <%= question.title %>
                     </div>
-                    <div class="text-xs mt-2">
+                    <div class="text-xs mt-1 md:mt-2">
                       <span>Asked by</span>
                       <span class="font-semibold"><%= presenter.user_name(question) %> </span>
-                      <span>on <%= presenter.time(question) %> </span>
-                      <span class="border-l pl-2 ml-2"><%= presenter.activity(question) %></span>
+                      <span class="hidden md:inline-block">on <%= presenter.time(question) %> </span>
+                      <span class="block md:inline-block md:border-l mt-1 md:mt-0 md:pl-2 md:ml-2">
+                        <span>
+                          <%= presenter.activity(question) %>
+                        </span>
+                      </span>
                     </div>
                   </div>
-                  <div class="flex flex-row text-black">
+                  <div class="flex flex-row text-black ml-2">
                     <% if presenter.unanswered_questions?(question) %>
-                      <div>New!</div>
+                      <div class="bg-green-dark text-white px-2 py-1 text-xs font-semibold rounded-sm">New!</div>
                     <% else %>
                       <div class="px-4 text-center">
                         <i class="fal fa-thumbs-up text-xl text-grey-dark"></i>
@@ -85,12 +93,22 @@
         </div>
       </div>
     </div>
-    <div class="max-w-lg w-full flex flex-row mx-auto justify-center mb-4">
+    <div class="max-w-lg w-full flex flex-row mx-auto justify-center pb-8">
       <% if presenter.show_prev_page? %>
-        <a class="block no-underline hover:text-white hover:bg-blue text-blue px-3 py-2" href=<%= presenter.prev_page_path %>>Previous</a>
+        <a class="block btn btn-default no-underline border shadow mx-2" href=<%= presenter.prev_page_path %>>
+        <i class="far fa-arrow-left"></i>
+        <span class="ml-2">
+          Prev
+        </span>
+        </a>
       <% end %>
       <% if presenter.show_next_page? %>
-        <a class="block no-underline hover:text-white hover:bg-blue text-blue px-3 py-2" href=<%= presenter.next_page_path %>>Next</a>
+        <a class="block btn btn-default no-underline border shadow mx-2" href=<%= presenter.next_page_path %>>
+        <span class="mr-2">
+          Next
+        </span>
+        <i class="far fa-arrow-right"></i>
+        </a>
       <% end %>
     </div>
   </div>

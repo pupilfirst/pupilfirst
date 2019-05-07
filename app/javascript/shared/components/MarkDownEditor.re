@@ -115,10 +115,10 @@ let make = (~placeholderText, ~updateDescriptionCB, ~submitCB) => {
   let (description, setDescription) = React.useState(() => "");
   let (showPreview, setShowPreview) = React.useState(() => false);
   <div>
-    <div className="flex w-full justify-between py-2">
+    <div className="flex w-full justify-between items-center py-2">
       {
         showPreview ?
-          <p className="font-semibold text-sm"> {"Preview" |> str} </p> :
+          <p className="font-semibold text-sm pl-3"> {"Preview" |> str} </p> :
           <div className="flex markdown-button-group">
             {buttons(description, setDescription, updateDescriptionCB)}
           </div>
@@ -145,7 +145,7 @@ let make = (~placeholderText, ~updateDescriptionCB, ~submitCB) => {
     {
       showPreview ?
         <div
-          className="py-4 px-6 leading-normal text-sm"
+          className="p-3 leading-normal text-sm markdown-body"
           dangerouslySetInnerHTML={"__html": description |> Markdown.parse}
         /> :
         <textarea
@@ -162,10 +162,10 @@ let make = (~placeholderText, ~updateDescriptionCB, ~submitCB) => {
                 updateDescriptionCB,
               )
           }
-          className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+          className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded p-3 leading-tight focus:outline-none focus:bg-white focus:border-grey"
         />
     }
-    <div className="flex justify-end mt-3">
+    <div className="flex justify-end pt-3 border-t">
       <button
         disabled={description == ""}
         onClick=submitCB

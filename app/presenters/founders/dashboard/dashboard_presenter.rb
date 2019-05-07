@@ -32,7 +32,7 @@ module Founders
       private
 
       def current_course
-        @current_course ||= view.current_startup.level.course
+        view.current_startup.level.course
       end
 
       def community_path

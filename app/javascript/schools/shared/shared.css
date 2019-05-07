@@ -2,10 +2,6 @@
     box-sizing: border-box;
 }
 
-button:disabled, .disabled {
-    @apply .opacity-25 .cursor-not-allowed;
-}
-
 .global-sidebar {
     width: 264px;
 }
@@ -333,6 +329,19 @@ button:disabled, .disabled {
     top: 0px;
     width: 100%;
     z-index: 501;
+}
+
+/* Community */
+
+.community-ask-button-container:before {
+    @apply absolute;
+    content: '';
+    height: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgb(255, 255, 255);
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(191, 184, 204, 1) 50%, rgba(255, 255, 255, 0) 100%);
+    width: 100%;
 }
 
 @screen md {

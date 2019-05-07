@@ -93,13 +93,14 @@ let make =
     };
   };
   <div className="w-full flex flex-col mx-auto items-center justify-center">
-    <div className="w-full border border-t-0 rounded-b overflow-hidden">
+    <div
+      className="w-full border rounded-b border-dashed border-grey border-t-0 overflow-hidden focus:border-grey-dark">
       <DisablingCover disabled=saving containerClasses="flex flex-row">
         <input
           placeholder="Add your comment"
           value
           onChange={event => setValue(ReactEvent.Form.target(event)##value)}
-          className="text-left bg-grey-lightest text-sm py-3 px-4 rounded-b appearance-none block w-full leading-tight focus:outline-none focus:bg-white focus:border-grey"
+          className="community-qa-comment__input text-xs text-left bg-grey-lighter py-3 px-4 rounded-b appearance-none block w-full leading-tight hover:bg-grey-lightest focus:outline-none focus:bg-white focus:border-grey"
         />
         {
           validComment ?

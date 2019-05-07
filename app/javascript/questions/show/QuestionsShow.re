@@ -67,9 +67,12 @@ let make =
   let removeLikeCB = id => dispatch(RemoveLike(id));
   <div className="flex flex-1 bg-grey-lightest">
     <div className="flex-1 flex flex-col">
-      <div className="flex-col px-6 py-2 items-center justify-between">
-        <div className="max-w-lg w-full mx-auto mb-4">
-          <a href=communityPath> {React.string("Back")} </a>
+      <div className="flex-col px-3 md:px-6 py-2 items-center justify-between">
+        <div className="max-w-lg w-full mx-auto mt-5 pb-2">
+          <a className="btn btn-default no-underline" href=communityPath>
+            <i className="far fa-arrow-left" />
+            <span className="ml-2"> {React.string("Back")} </span>
+          </a>
         </div>
         <div
           className="max-w-lg w-full flex mx-auto items-center justify-center relative shadow bg-white border rounded-lg">
@@ -86,7 +89,7 @@ let make =
               <div className="flex flex-row justify-between px-6 pb-6">
                 <div className="pr-2 pt-6 text-center">
                   <i className="fal fa-comment-lines text-xl text-grey-dark" />
-                  <p className="text-xs pt-1">
+                  <p className="text-xs py-1">
                     {
                       state.comments
                       |> Comment.commentsForQuestion
@@ -101,6 +104,7 @@ let make =
                     userData |> UserData.user(question |> Question.userId)
                   }
                   createdAt={question |> Question.createdAt}
+                  textForTimeStamp="Asked"
                 />
               </div>
             </div>
@@ -116,7 +120,7 @@ let make =
           currentUserId
         />
         <div
-          className="max-w-lg w-full justify-center mx-auto mb-4 py-4 border-b-2">
+          className="max-w-lg w-full justify-center mx-auto mb-4 pt-5 pb-2 border-b">
           <div className="flex justify-between items-end">
             <span className="text-lg font-semibold">
               {
@@ -125,10 +129,6 @@ let make =
                 |> str
               }
             </span>
-            <a
-              className="bg-indigo-dark hover:bg-blue-dark text-white font-bold py-2 px-4 shadow rounded focus:outline-none">
-              {"Add-your-answer" |> str}
-            </a>
           </div>
         </div>
         <div className="community-answer-container">
@@ -148,15 +148,15 @@ let make =
                      <div className="flex w-full">
                        <div className="flex flex-1 flex-col">
                          <div
-                           className="py-4 px-6 leading-normal text-sm"
+                           className="py-4 px-6 leading-normal text-sm markdown-body"
                            dangerouslySetInnerHTML={
                              "__html":
                                answer |> Answer.description |> Markdown.parse,
                            }
                          />
                          <div
-                           className="flex flex-row justify-between px-6 pb-4">
-                           <div className="px-2 pt-6 text-center">
+                           className="flex flex-row justify-between items-center px-6 pb-4">
+                           <div className="pt-4 text-center">
                              <div className="flex flex-row">
                                <QuestionsShow__LikeManager
                                  authenticityToken
@@ -166,11 +166,11 @@ let make =
                                  addLikeCB
                                  removeLikeCB
                                />
-                               <div className="ml-4">
+                               <div className="mr-2 pt-2 px-2">
                                  <i
                                    className="fal fa-comment-lines text-xl text-grey-dark"
                                  />
-                                 <p className="text-xs pt-1">
+                                 <p className="text-xs py-1">
                                    {
                                      commentsForAnswer
                                      |> List.length
@@ -184,6 +184,7 @@ let make =
                            <QuestionsShow__UserShow
                              userProfile
                              createdAt={answer |> Answer.createdAt}
+                             textForTimeStamp="Answered"
                            />
                          </div>
                        </div>
@@ -217,12 +218,14 @@ let make =
               addAnswerCB
             /> :
             <div
-              className="mt-4 my-8 max-w-lg w-full flex mx-auto justify-left">
-              <button
-                className="btn btn-primary btn-large"
-                onClick={_ => dispatch(UpdateShowAnswerCreate(true))}>
-                {"Add another answer" |> str}
-              </button>
+              className="community-ask-button-container mt-4 my-8 max-w-lg w-full flex mx-auto justify-center">
+              <div className="bg-grey-lightest px-1 z-10">
+                <button
+                  className="btn btn-primary btn-large"
+                  onClick={_ => dispatch(UpdateShowAnswerCreate(true))}>
+                  {"Add another answer" |> str}
+                </button>
+              </div>
             </div>
         }
       </div>

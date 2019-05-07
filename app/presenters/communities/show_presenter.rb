@@ -27,10 +27,10 @@ module Communities
 
     def activity(question)
       if question.last_activity_at.blank?
-        "New Question"
+        ""
       else
         time_diff = ((Time.now - question.last_activity_at) / 1.minute).round
-        "Last updated #{time_string(time_diff)} ago"
+        "<span class='hidden md:inline-block'>updated </span><i class='fal fa-history mr-1 md:hidden'></i> #{time_string(time_diff)} <span> ago </span>".html_safe
       end
     end
 

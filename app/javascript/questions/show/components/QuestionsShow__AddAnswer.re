@@ -34,7 +34,7 @@ module CreateAnswerError = {
 module CreateAnswerErrorHandler = GraphqlErrorHandler.Make(CreateAnswerError);
 
 let dateTime =
-currentTime() |> DateTime.parse |> DateTime.format(DateTime.DateAndTime);
+  currentTime() |> DateTime.parse |> DateTime.format(DateTime.DateAndTime);
 
 let str = React.string;
 
@@ -42,9 +42,7 @@ let str = React.string;
 let make = (~question, ~authenticityToken, ~currentUserId, ~addAnswerCB) => {
   let (description, setDescription) = React.useState(() => "");
   let (saving, setSaving) = React.useState(() => false);
-  let updateDescriptionCB = description => {
-    setDescription(_ => description);
-  };
+  let updateDescriptionCB = description => setDescription(_ => description);
 
   let handleResponseCB = id => {
     let answer = Answer.create(id, description, currentUserId, dateTime);
@@ -89,7 +87,7 @@ let make = (~question, ~authenticityToken, ~currentUserId, ~addAnswerCB) => {
           <MarkDownEditor
             placeholderText="Type your Answer"
             updateDescriptionCB
-            submitCB={handleCreateAnswer}
+            submitCB=handleCreateAnswer
           />
         </DisablingCover>
       </div>

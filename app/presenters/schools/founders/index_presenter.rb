@@ -11,8 +11,10 @@ module Schools
         {
           teams: teams,
           courseId: @course.id,
+          students: students,
+          userDetails: user_details,
           courseCoachIds: @course.faculty.pluck(:id),
-          schoolCoaches: coach_details(@course.school.faculty.where.not(exited: true).includes(user_profiles: { avatar_attachment: :blob })),
+          schoolCoaches: coach_details,
           levels: levels,
           studentTags: founder_tags,
           authenticityToken: view.form_authenticity_token
@@ -20,47 +22,51 @@ module Schools
       end
 
       def teams
-        @course.startups.includes(:level, :faculty, :faculty_startup_enrollments, founders: [:user, :taggings, :school, avatar_attachment: :blob]).order(:id, 'founders.id').map do |team|
+        @course.startups.includes(:level, :faculty_startup_enrollments).order(:id).map do |team|
           {
             id: team.id,
             name: team.name,
-            students: student_details(team.founders),
-            coaches: team.faculty.pluck(:id),
+            coaches: team.faculty_startup_enrollments.pluck(:faculty_id),
             levelNumber: team.level.number
+          }
+        end
+      end
+
+      def students
+        @students ||=
+          @course.founders.includes(:user, taggings: :tag).map do |student|
+            {
+              id: student.id,
+              email: student.user.email,
+              teamId: student.startup_id,
+              tags: student.taggings.map { |tagging| tagging.tag.name },
+              exited: student.exited,
+              excludedFromLeaderboard: student.excluded_from_leaderboard,
+              userId: student.user_id
+            }
+          end
+      end
+
+      def user_details
+        UserProfile.with_attached_avatar.where(user_id: (students.pluck(:userId) + coach_details.pluck(:userId)), school: current_school).map do |profile|
+          {
+            userId: profile.user_id,
+            name: profile.name,
+            avatarUrl: avatar_url(profile)
           }
         end
       end
 
       private
 
-      def student_details(students)
-        students.map do |student|
-          {
-            id: student.id,
-            name: student.name,
-            avatarUrl: avatar_url(student),
-            teamId: student.startup.id,
-            teamName: student.startup.name,
-            email: student.user.email,
-            tags: student.tag_list & founder_tags,
-            exited: student.exited,
-            excludedFromLeaderboard: student.excluded_from_leaderboard
-          }
-        end
-      end
-
-      def coach_details(coaches)
-        coaches.map do |coach|
-          {
-            id: coach.id,
-            name: coach.name,
-            avatarUrl: coach.image_or_avatar_url
-          }
-        end
-      end
-
-      def course_coaches
-        @course_coaches ||= coach_details(@course.faculty)
+      def coach_details
+        @coach_details ||=
+          current_school.faculty.where.not(exited: true).map do |coach|
+            {
+              id: coach.id,
+              userId: coach.user_id
+            }
+          end
       end
 
       def levels
@@ -72,16 +78,16 @@ module Schools
         end
       end
 
-      def avatar_url(founder)
-        if founder.avatar.attached?
-          view.url_for(founder.avatar_variant(:mid))
+      def avatar_url(user_profile)
+        if user_profile.avatar.attached?
+          view.url_for(user_profile.avatar_variant(:mid))
         else
-          founder.initials_avatar
+          user_profile.initials_avatar
         end
       end
 
       def founder_tags
-        @founder_tags ||= @course.school.founder_tag_list
+        @founder_tags ||= current_school.founder_tag_list
       end
     end
   end

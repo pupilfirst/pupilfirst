@@ -11,7 +11,9 @@ type formVisible =
 
 type state = {
   teams: list(Team.t),
+  students: list(Student.t),
   selectedStudents: list(Student.t),
+  userProfiles: list(UserProfile.t),
   searchString: string,
   formVisible,
   selectedLevelNumber: option(int),
@@ -40,14 +42,19 @@ let selectedAcrossTeams = selectedStudents =>
   |> List.sort_uniq((id1, id2) => id1 - id2)
   |> List.length > 1;
 
-let selectedPartialTeam = (selectedStudents, teams) => {
+let studentsInTeam= (students, team) => {
+  students |> List.filter(student => (Student.teamId(student) === Team.id(team)));
+}
+
+let selectedPartialTeam = (selectedStudents, teams, students) => {
   let selectedTeam =
     teams
     |> List.find(t =>
          Team.id(t) == (selectedStudents |> List.hd |> Student.teamId)
        );
+  let studentsInSelectedTeam = studentsInTeam(students, selectedTeam);
   selectedStudents
-  |> List.length < (selectedTeam |> Team.students |> List.length);
+  |> List.length < (studentsInSelectedTeam |> List.length);
 };
 
 let selectedWithinLevel = (selectedStudents, teams) => {
@@ -62,23 +69,29 @@ let selectedWithinLevel = (selectedStudents, teams) => {
   |> List.length == 1;
 };
 
-let isGroupable = (selectedStudents, teams) =>
+let isGroupable = (selectedStudents, teams, students) =>
   selectedStudents
   |> List.length > 1
   && selectedWithinLevel(selectedStudents, teams)
   && (
     selectedAcrossTeams(selectedStudents)
-    || selectedPartialTeam(selectedStudents, teams)
+    || selectedPartialTeam(selectedStudents, teams, students)
   );
 
-let isMoveOutable = (selectedStudents, teams) =>
+let studentUserProfile = (userProfiles, student) =>
+  userProfiles |> List.find( profile => UserProfile.userId(profile) === Student.userId(student));
+
+  let coachUserProfile = (userProfiles, coach) =>
+  userProfiles |> List.find( profile => UserProfile.userId(profile) === Coach.userId(coach));
+
+let isMoveOutable = (selectedStudents, teams, students) =>
   selectedStudents
   |> List.length == 1
   && teams
   |> List.find(team =>
        team |> Team.id == (selectedStudents |> List.hd |> Student.teamId)
      )
-  |> Team.students
+  |> studentsInTeam(students)
   |> List.length > 1;
 
 let filteredTeams = state => {
@@ -97,7 +110,7 @@ let filteredTeams = state => {
            tags
            |> List.for_all(tag =>
                 team
-                |> Team.students
+                |> studentsInTeam(state.students)
                 |> List.map(student => student |> Student.tags)
                 |> List.flatten
                 |> List.mem(tag)
@@ -107,8 +120,8 @@ let filteredTeams = state => {
   tagFilteredTeams
   |> List.filter(team =>
        team
-       |> Team.students
-       |> List.map(s => s |> Student.name)
+       |> studentsInTeam(state.students)
+       |> List.map(s => s |> studentUserProfile(state.userProfiles) |> UserProfile.name)
        |> List.filter(n =>
             n
             |> String.lowercase
@@ -149,6 +162,8 @@ let make =
     (
       ~teams,
       ~courseId,
+      ~students,
+      ~userProfiles,
       ~courseCoachIds,
       ~schoolCoaches,
       ~authenticityToken,
@@ -159,6 +174,8 @@ let make =
   ...component,
   initialState: () => {
     teams,
+    students,
+    userProfiles,
     selectedStudents: [],
     searchString: "",
     formVisible: None,
@@ -186,7 +203,7 @@ let make =
       ReasonReact.Update({
         ...state,
         selectedStudents:
-          state.teams |> List.map(t => t |> Team.students) |> List.flatten,
+          state.teams |> List.map(t => t |> studentsInTeam(state.students)) |> List.flatten,
       })
     | DeselectAllStudents =>
       ReasonReact.Update({...state, selectedStudents: []})
@@ -239,10 +256,13 @@ let make =
             state.teams
             |> List.find(team => Team.id(team) == Student.teamId(student))
             |> Team.coachIds;
+
           <SA_StudentsPanel_UpdateForm
             student
+            teams
             studentTags={state.tags}
             teamCoachIds
+            userProfiles
             courseCoachIds
             schoolCoaches
             closeFormCB
@@ -323,7 +343,7 @@ let make =
                     let selectedCount = state.selectedStudents |> List.length;
                     let studentCount =
                       filteredTeams(state)
-                      |> List.map(team => team |> Team.students)
+                      |> List.map(team => team |> studentsInTeam(state.students))
                       |> List.flatten
                       |> List.length;
                     selectedCount > 0 ?
@@ -343,7 +363,7 @@ let make =
                   ReasonReact.null
               }
               {
-                isGroupable(state.selectedStudents, state.teams) ?
+                isGroupable(state.selectedStudents, state.teams, students) ?
                   <button
                     onClick={
                       _e =>
@@ -359,7 +379,7 @@ let make =
                   ReasonReact.null
               }
               {
-                isMoveOutable(state.selectedStudents, state.teams) ?
+                isMoveOutable(state.selectedStudents, state.teams, students) ?
                   <button
                     onClick={
                       _e =>
@@ -456,7 +476,7 @@ let make =
                      )
                   |> List.map(team => {
                        let isSingleFounder =
-                         team |> Team.students |> List.length == 1;
+                         team |> studentsInTeam(state.students) |> List.length == 1;
                        <div
                          key={team |> Team.id |> string_of_int}
                          id={team |> Team.name}
@@ -469,7 +489,7 @@ let make =
                          <div className="flex-1 w-3/5">
                            {
                              team
-                             |> Team.students
+                             |> studentsInTeam(state.students)
                              |> List.map(student => {
                                   let isChecked =
                                     state.selectedStudents
@@ -481,7 +501,7 @@ let make =
                                     key={
                                       student |> Student.id |> string_of_int
                                     }
-                                    id={student |> Student.name}
+                                    id={student |> studentUserProfile(state.userProfiles) |> UserProfile.name}
                                     className="student-team__card cursor-pointer flex items-center bg-white hover:bg-grey-lightest">
                                     <div className="flex-1 w-3/5">
                                       <div className="flex items-center">
@@ -511,7 +531,7 @@ let make =
                                         <a
                                           className="flex flex-1 items-center py-4 pr-4"
                                           id={
-                                            (student |> Student.name)
+                                            (student |> studentUserProfile(state.userProfiles) |> UserProfile.name)
                                             ++ "_edit"
                                           }
                                           onClick={
@@ -524,7 +544,7 @@ let make =
                                           }>
                                           <img
                                             className="w-10 h-10 rounded-full mr-4"
-                                            src={student |> Student.avatarUrl}
+                                            src={student |> studentUserProfile(state.userProfiles) |> UserProfile.avatarUrl}
                                           />
                                           <div
                                             className="text-sm flex flex-col">
@@ -535,7 +555,8 @@ let make =
                                                   state.searchString
                                                   |> String.length > 0
                                                   && student
-                                                  |> Student.name
+                                                  |> studentUserProfile(state.userProfiles)
+                                                  |> UserProfile.name
                                                   |> String.lowercase
                                                   |> Js.String.includes(
                                                        state.searchString
@@ -544,7 +565,7 @@ let make =
                                                     "bg-yellow-light" : ""
                                                 )
                                               }>
-                                              {student |> Student.name |> str}
+                                              {student |> studentUserProfile(state.userProfiles) |> UserProfile.name |> str}
                                             </p>
                                             <div className="flex">
                                               {
@@ -605,12 +626,12 @@ let make =
                                    teamCoaches
                                    |> List.map(coach =>
                                         <img
-                                          key={coach |> Coach.avatarUrl}
+                                          key={coach |> Coach.userId |> string_of_int}
                                           className="w-6 h-6 rounded-full mr-1"
-                                          src={coach |> Coach.avatarUrl}
+                                          src={coach |> coachUserProfile(state.userProfiles) |> UserProfile.avatarUrl}
                                           alt={
                                             "Avatar of "
-                                            ++ (coach |> Coach.name)
+                                            ++ (coach |> coachUserProfile(state.userProfiles) |> UserProfile.name)
                                           }
                                         />
                                       )
@@ -655,6 +676,8 @@ let make =
 type props = {
   teams: list(Team.t),
   courseId: int,
+  students: list(Student.t),
+  userProfiles: list(UserProfile.t),
   courseCoachIds: list(int),
   schoolCoaches: list(Coach.t),
   levels: list(Level.t),
@@ -666,10 +689,12 @@ let decode = json =>
   Json.Decode.{
     teams: json |> field("teams", list(Team.decode)),
     courseId: json |> field("courseId", int),
+    students: json |> field("students", list(Student.decode)),
+    userProfiles: json |> field("userProfiles", list(UserProfile.decode)),
     courseCoachIds: json |> field("courseCoachIds", list(int)),
+    schoolCoaches: json |> field("schoolCoaches", list(Coach.decode)),
     levels: json |> field("levels", list(Level.decode)),
     studentTags: json |> field("studentTags", list(string)),
-    schoolCoaches: json |> field("schoolCoaches", list(Coach.decode)),
     authenticityToken: json |> field("authenticityToken", string),
   };
 
@@ -681,7 +706,9 @@ let jsComponent =
       make(
         ~teams=props.teams,
         ~courseId=props.courseId,
+        ~students=props.students,
         ~courseCoachIds=props.courseCoachIds,
+        ~userProfiles=props.userProfiles,
         ~schoolCoaches=props.schoolCoaches,
         ~levels=props.levels,
         ~studentTags=props.studentTags,

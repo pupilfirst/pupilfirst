@@ -12,7 +12,7 @@ module Schools
           teams: teams,
           courseId: @course.id,
           students: students,
-          userDetails: user_details,
+          userProfiles: user_profiles,
           courseCoachIds: @course.faculty.pluck(:id),
           schoolCoaches: coach_details,
           levels: levels,
@@ -26,7 +26,7 @@ module Schools
           {
             id: team.id,
             name: team.name,
-            coaches: team.faculty_startup_enrollments.pluck(:faculty_id),
+            coachIds: team.faculty_startup_enrollments.pluck(:faculty_id),
             levelNumber: team.level.number
           }
         end
@@ -47,8 +47,8 @@ module Schools
           end
       end
 
-      def user_details
-        UserProfile.with_attached_avatar.where(user_id: (students.pluck(:userId) + coach_details.pluck(:userId)), school: current_school).map do |profile|
+      def user_profiles
+        UserProfile.with_attached_avatar.where(user_id: (students.pluck(:userId) + coach_details.pluck(:userId)), school: current_school).uniq.map do |profile|
           {
             userId: profile.user_id,
             name: profile.name,

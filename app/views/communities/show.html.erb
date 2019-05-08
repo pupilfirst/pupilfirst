@@ -53,7 +53,7 @@
             <div class="flex items-center border-b">
               <div class="flex w-full">
                 <a class="cursor-pointer justify-between no-underline flex flex-1 items-center p-4 md:p-6 hover:bg-grey-lightest"
-                   href=<%= question_path(question) %>>
+                   href=<%= question_path(question.id, question.title.parameterize) %>>
                   <div class="text-black">
                     <div class="text-sm font-semibold leading-tight">
                       <%= question.title %>
@@ -70,7 +70,7 @@
                     </div>
                   </div>
                   <div class="flex flex-row text-black ml-2">
-                    <% if presenter.unanswered_questions?(question) %>
+                    <% if presenter.new_question?(question) %>
                       <div class="bg-green-dark text-white px-2 py-1 text-xs font-semibold rounded-sm">New!</div>
                     <% else %>
                       <div class="px-4 text-center">

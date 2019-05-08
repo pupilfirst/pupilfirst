@@ -52,8 +52,8 @@ module Communities
       view.community_path(@community.id, **page_params(:previous))
     end
 
-    def unanswered_questions?(question)
-      question.answers.none?
+    def new_question?(question)
+      question.last_activity_at.blank?
     end
 
     def page_params(direction)

@@ -84,14 +84,10 @@ Rails.application.routes.draw do
   end
 
   resources :communities, only: %i[show] do
-    resources :questions, only: %i[create new]
+    resources :questions, only: %i[new]
   end
 
-  resources :questions, only: %i[show edit update destroy] do
-    resources :answers, only: :create
-  end
-
-  resources :answers, only: %i[edit update destroy]
+  get 'questions/:id(/:title)', controller: "questions", action: "show", as: "question"
 
   resources :founders, only: %i[] do
     member do

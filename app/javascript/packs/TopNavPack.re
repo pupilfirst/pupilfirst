@@ -22,4 +22,4 @@ open QuestionsShow__Types;
 
 /* let props = DomUtils.parseJsonAttribute() |> decodeProps; */
 
-ReactDOMRe.renderToElementWithId(<TopNav name="test" />, "react-root");
+ReactDOMRe.renderToElementWithId(<TopNav name="test" />, "nav-bar-props");

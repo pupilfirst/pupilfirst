@@ -9,7 +9,7 @@ module CoachDashboard
     end
 
     def timeline_events
-      @timeline_events ||= ordered_timeline_events.map { |timeline_event| timeline_event_fields(timeline_event) }
+      @timeline_events ||= ordered_timeline_events.map(&method(:timeline_event_fields))
     end
 
     def more_to_load?

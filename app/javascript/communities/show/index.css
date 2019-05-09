@@ -3,7 +3,7 @@
   background-image: url('./community-bg.svg');
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: center 10%;
 }
 
 @screen md {

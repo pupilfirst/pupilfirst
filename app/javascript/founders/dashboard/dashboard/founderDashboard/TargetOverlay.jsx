@@ -84,7 +84,7 @@ export default class TargetOverlay extends React.Component {
     if (this.props.currentLevel == 0) {
       $(".js-founder-dashboard__action-bar-add-event-button").popover("show");
 
-      setTimeout(function() {
+      setTimeout(function () {
         $(".js-founder-dashboard__action-bar-add-event-button").popover("hide");
       }, 3000);
     } else {
@@ -216,44 +216,44 @@ export default class TargetOverlay extends React.Component {
                 submitTargetCB={this.autoVerify}
               />
             ) : (
-              <div className="target-overlay__content-wrapper clearfix">
-                <div className="col-md-8 target-overlay__content-leftbar">
-                  <ContentBlock
-                    rootProps={this.props.rootProps}
-                    iconPaths={this.props.iconPaths}
-                    target={target}
-                    linkedResources={this.state.linkedResources}
-                  />
-                </div>
-                <div className="col-md-4 target-overlay__content-rightbar px-0">
-                  <div className="target-overlay__status-badge-block">
-                    <StatusBadgeBar
+                <div className="target-overlay__content-wrapper clearfix">
+                  <div className="col-md-8 target-overlay__content-leftbar">
+                    <ContentBlock
                       rootProps={this.props.rootProps}
-                      updateTargetStatusCB={this.updateTargetStatus}
+                      iconPaths={this.props.iconPaths}
                       target={target}
-                      openTimelineBuilderCB={this.props.openTimelineBuilderCB}
-                      autoVerifyCB={this.autoVerify}
-                      invertShowQuizCB={this.invertShowQuiz}
-                      isSubmittable={this.isSubmittable(target)}
-                      overlayLoaded={this.state.quizQuestions !== null}
+                      linkedResources={this.state.linkedResources}
                     />
                   </div>
+                  <div className="col-md-4 target-overlay__content-rightbar px-0">
+                    <div className="target-overlay__status-badge-block">
+                      <StatusBadgeBar
+                        rootProps={this.props.rootProps}
+                        updateTargetStatusCB={this.updateTargetStatus}
+                        target={target}
+                        openTimelineBuilderCB={this.props.openTimelineBuilderCB}
+                        autoVerifyCB={this.autoVerify}
+                        invertShowQuizCB={this.invertShowQuiz}
+                        isSubmittable={this.isSubmittable(target)}
+                        overlayLoaded={this.state.quizQuestions !== null}
+                      />
+                    </div>
 
-                  {this.state.latestEvent && (
-                    <TimelineEventPanel
-                      event={this.state.latestEvent}
-                      feedback={this.state.latestFeedback}
+                    {this.state.latestEvent && (
+                      <TimelineEventPanel
+                        event={this.state.latestEvent}
+                        feedback={this.state.latestFeedback}
+                      />
+                    )}
+
+                    <FounderStatusPanel
+                      founderDetails={this.props.founderDetails}
+                      pendingFounderIds={this.state.pendingFounderIds}
+                      targetId={this.targetId}
                     />
-                  )}
-
-                  <FounderStatusPanel
-                    founderDetails={this.props.founderDetails}
-                    pendingFounderIds={this.state.pendingFounderIds}
-                    targetId={this.targetId}
-                  />
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
         </div>
         {this.props.communityPath != "" && (

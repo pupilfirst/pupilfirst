@@ -6,11 +6,13 @@ class CoachDashboardController < ApplicationController
   end
 
   def timeline_events
+    excluded_ids = params[:excludedIds].present? ? params[:excludedIds].split(',') : []
+
     service = CoachDashboard::TimelineEventsDataService.new(
       current_coach,
       @course,
       params[:reviewStatus].to_sym,
-      params[:excludedIds],
+      excluded_ids,
       params[:limit]
     )
 

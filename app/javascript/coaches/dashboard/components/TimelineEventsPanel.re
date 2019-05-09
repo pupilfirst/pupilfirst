@@ -97,16 +97,21 @@ let fetchEvents =
       courseId,
     ) => {
   send(UpdateLoading(true));
-  let excludedIds =
-    tes
-    |> List.map(te => te |> TimelineEvent.id |> string_of_int)
-    |> String.concat("&excludedIds[]=");
+  let excludedIdsQueryString =
+    switch (tes) {
+    | [] => ""
+    | tes =>
+      "&excludedIds="
+      ++ (
+        tes
+        |> List.map(te => te |> TimelineEvent.id |> string_of_int)
+        |> String.concat(",")
+      )
+    };
+
   let reviewStatus = tabAsString(state.selectedTab);
   let params =
-    "limit=20&reviewStatus="
-    ++ reviewStatus
-    ++ "&excludedIds[]="
-    ++ excludedIds;
+    "limit=20&reviewStatus=" ++ reviewStatus ++ excludedIdsQueryString;
   Js.Promise.(
     Fetch.fetch(
       "/courses/"

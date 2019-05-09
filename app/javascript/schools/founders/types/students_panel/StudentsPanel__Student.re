@@ -22,7 +22,7 @@ let exited = t => t.exited;
 
 let excludedFromLeaderboard = t => t.excludedFromLeaderboard;
 
-let updateInfo = (name, teamName, exited, excludedFromLeaderboard, t) => {
+let updateInfo = (exited, excludedFromLeaderboard, t) => {
   ...t,
   exited,
   excludedFromLeaderboard,
@@ -39,11 +39,13 @@ let decode = json =>
     excludedFromLeaderboard: json |> field("excludedFromLeaderboard", bool),
   };
 
-let encode = t =>
+let encode = (name, teamName, t) =>
   Json.Encode.(
     object_([
       ("id", t.id |> int),
       ("team_id", t.teamId |> int),
+      ("name", name |> string),
+      ("team_name", teamName |> string),
       ("email", t.email |> string),
       ("exited", t.exited |> bool),
       ("excluded_from_leaderboard", t.excludedFromLeaderboard |> bool),

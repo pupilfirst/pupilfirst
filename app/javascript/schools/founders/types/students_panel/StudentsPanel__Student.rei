@@ -12,9 +12,9 @@ let email: t => string;
 
 let tags: t => list(string);
 
-let updateInfo: (string, string, bool, bool, t) => t;
+let updateInfo: (bool, bool, t) => t;
 
-let encode: t => Js.Json.t;
+let encode: (string, string, t) => Js.Json.t;
 
 let exited: t => bool;
 

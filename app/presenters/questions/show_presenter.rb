@@ -61,7 +61,7 @@ module Questions
     end
 
     def user_data
-      user_ids = [@question.id, answer_data.pluck(:userId), comments.pluck(:userId), current_user.id].flatten.uniq
+      user_ids = [@question.user_id, answer_data.pluck(:userId), comments.pluck(:userId), current_user.id].flatten.uniq
 
       UserProfile.where(user_id: user_ids, school: current_school)
         .includes([:avatar_attachment, user: :faculty]).map do |user_profile|

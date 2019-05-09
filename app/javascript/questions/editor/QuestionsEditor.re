@@ -4,8 +4,8 @@ let str = React.string;
 
 module CreateQuestionQuery = [%graphql
   {|
-  mutation($title: String!, $description: String!, $communityId: ID!) {
-    createQuestion(description: $description, title: $title, communityId: $communityId) @bsVariant {
+  mutation($title: String!, $description: String!, $communityId: ID!, $targetId: ID) {
+    createQuestion(description: $description, title: $title, communityId: $communityId, targetId: $targetId) @bsVariant {
       questionId
       errors
     }
@@ -51,37 +51,59 @@ let handleResponseCB = (id, title) => {
 module CreateQuestionErrorHandler =
   GraphqlErrorHandler.Make(CreateQuestionError);
 
+let handleCreateQuestion =
+    (
+      title,
+      description,
+      communityId,
+      authenticityToken,
+      setSaving,
+      target,
+      event,
+    ) => {
+  event |> ReactEvent.Mouse.preventDefault;
+  if (description != "") {
+    setSaving(_ => true);
+
+    (
+      switch (target) {
+      | Some(target) =>
+        CreateQuestionQuery.make(
+          ~description,
+          ~title,
+          ~communityId,
+          ~targetId=target |> QuestionsEditor__Target.id,
+          (),
+        )
+      | None =>
+        CreateQuestionQuery.make(~description, ~title, ~communityId, ())
+      }
+    )
+    |> GraphqlQuery.sendQuery(authenticityToken)
+    |> Js.Promise.then_(response =>
+         switch (response##createQuestion) {
+         | `QuestionId(questionId) =>
+           handleResponseCB(questionId, title);
+           Notification.success("Done!", "Question has been saved.");
+           Js.Promise.resolve();
+         | `Errors(errors) =>
+           Js.Promise.reject(CreateQuestionErrorHandler.Errors(errors))
+         }
+       )
+    |> CreateQuestionErrorHandler.catch(() => setSaving(_ => false))
+    |> ignore;
+  } else {
+    Notification.error("Empty", "Answer cant be blank");
+  };
+};
+
 [@react.component]
-let make = (~authenticityToken, ~communityId, ~communityPath) => {
+let make = (~authenticityToken, ~communityId, ~communityPath, ~target) => {
   let (saving, setSaving) = React.useState(() => false);
   let (description, setDescription) = React.useState(() => "");
   let (title, setTitle) = React.useState(() => "");
   let updateDescriptionCB = description => setDescription(_ => description);
   let saveDisabled = description == "" || title == "";
-
-  let handleCreateQuestion = event => {
-    event |> ReactEvent.Mouse.preventDefault;
-    if (description != "") {
-      setSaving(_ => true);
-
-      CreateQuestionQuery.make(~description, ~title, ~communityId, ())
-      |> GraphqlQuery.sendQuery(authenticityToken)
-      |> Js.Promise.then_(response =>
-           switch (response##createQuestion) {
-           | `QuestionId(questionId) =>
-             handleResponseCB(questionId, title);
-             Notification.success("Done!", "Question has been saved.");
-             Js.Promise.resolve();
-           | `Errors(errors) =>
-             Js.Promise.reject(CreateQuestionErrorHandler.Errors(errors))
-           }
-         )
-      |> CreateQuestionErrorHandler.catch(() => setSaving(_ => false))
-      |> ignore;
-    } else {
-      Notification.error("Empty", "Answer cant be blank");
-    };
-  };
 
   <div className="flex flex-1 bg-grey-lightest">
     <div className="flex-1 flex flex-col">
@@ -91,6 +113,24 @@ let make = (~authenticityToken, ~communityId, ~communityPath) => {
           <span className="ml-2"> {React.string("Back")} </span>
         </a>
       </div>
+      {
+        switch (target) {
+        | Some(target) =>
+          <div className="max-w-lg w-full mt-5 mx-auto px-3 md:px-0">
+            <div
+              className="flex py-4 px-4 md:px-6 w-full bg-yellow-lightest border border-dashed border-yellow-light rounded justify-between items-center">
+              <p className="w-3/5 md:w-4/5 font-semibold text-sm">
+                {"Target:" ++ (target |> QuestionsEditor__Target.title) |> str}
+              </p>
+              <a
+                className="no-underline bg-yellow-lightest border border-yellow-light px-3 py-2 hover:bg-yellow-lighter rounded-lg cursor-pointer text-xs font-semibold">
+                {"Clear" |> str}
+              </a>
+            </div>
+          </div>
+        | None => React.null
+        }
+      }
       <div
         className="mt-4 my-8 max-w-lg w-full flex mx-auto items-center justify-center relative shadow border bg-white rounded-lg">
         <div className="flex w-full flex-col py-4 px-4">
@@ -99,10 +139,12 @@ let make = (~authenticityToken, ~communityId, ~communityPath) => {
             {"Ask a new Question" |> str}
           </h5>
           <label
-            className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2">
-            {"Titile" |> str}
+            className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+            htmlFor="title">
+            {"Title" |> str}
           </label>
           <input
+            id="title"
             className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
             onChange={
               event => setTitle(ReactEvent.Form.target(event)##value)
@@ -112,14 +154,23 @@ let make = (~authenticityToken, ~communityId, ~communityPath) => {
           <div className="w-full flex flex-col">
             <DisablingCover disabled=saving>
               <MarkDownEditor
-                placeholderText="Type your Answer"
+                placeholderText="Explain your answer"
                 updateDescriptionCB
               />
             </DisablingCover>
             <div className="flex justify-start pt-3 border-t">
               <button
                 disabled=saveDisabled
-                onClick=handleCreateQuestion
+                onClick={
+                  handleCreateQuestion(
+                    title,
+                    description,
+                    communityId,
+                    authenticityToken,
+                    setSaving,
+                    target,
+                  )
+                }
                 className="btn btn-primary btn-large">
                 {"Post Your Answer" |> str}
               </button>

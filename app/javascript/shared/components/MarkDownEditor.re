@@ -67,9 +67,9 @@ let handleClick =
       description
       ++ (
         switch (action) {
-        | Bold => "**strong text**"
-        | Italics => "*emphasized text*"
-        | Code => "`enter code here`"
+        | Bold => " **strong text** "
+        | Italics => " *emphasized text* "
+        | Code => " `enter code here` "
         }
       );
     };
@@ -111,7 +111,7 @@ let buttons = (description, setDescription, updateDescriptionCB) =>
   |> React.array;
 
 [@react.component]
-let make = (~placeholderText, ~updateDescriptionCB, ~submitCB=?) => {
+let make = (~placeholderText, ~updateDescriptionCB) => {
   let (description, setDescription) = React.useState(() => "");
   let (showPreview, setShowPreview) = React.useState(() => false);
   <div>
@@ -164,20 +164,6 @@ let make = (~placeholderText, ~updateDescriptionCB, ~submitCB=?) => {
           }
           className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded p-3 leading-tight focus:outline-none focus:bg-white focus:border-grey"
         />
-    }
-    {
-      switch (submitCB) {
-      | Some(submitCallBack) =>
-        <div className="flex justify-end pt-3 border-t">
-          <button
-            disabled={description == ""}
-            onClick=submitCallBack
-            className="btn btn-primary btn-large">
-            {"Post Your Answer" |> str}
-          </button>
-        </div>
-      | None => React.null
-      }
     }
   </div>;
 };

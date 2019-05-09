@@ -3,6 +3,6 @@
   <%= javascript_pack_tag 'QuestionsEditorPack', nonce: true %>
 <% end %>
 
-<% presenter = Questions::NewPresenter.new(self, @community) %>
+<% presenter = Questions::NewPresenter.new(self, @community, @target) %>
 
 <div class="w-full" id="questions-editor" data-json-props="<%= presenter.json_props %>"></div>

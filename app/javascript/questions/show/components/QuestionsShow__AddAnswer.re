@@ -87,9 +87,16 @@ let make = (~question, ~authenticityToken, ~currentUserId, ~addAnswerCB) => {
           <MarkDownEditor
             placeholderText="Type your Answer"
             updateDescriptionCB
-            submitCB=handleCreateAnswer
           />
         </DisablingCover>
+        <div className="flex justify-end pt-3 border-t">
+          <button
+            disabled={description == ""}
+            onClick=handleCreateAnswer
+            className="btn btn-primary btn-large">
+            {"Post Your Answer" |> str}
+          </button>
+        </div>
       </div>
     </div>
   </div>;

@@ -3,6 +3,7 @@ module Mutations
     argument :title, String, required: true
     argument :description, String, required: true
     argument :community_id, ID, required: true
+    argument :target_id, ID, required: false
 
     description "Create a new question"
 

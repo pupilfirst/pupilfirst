@@ -161,7 +161,7 @@ let showEditor = (editor, send, event) => {
 let editor = (state, send, authenticityToken) =>
   switch (state.visibleEditor) {
   | Some(editor) =>
-    <SchoolAdmin__EditorDrawer closeDrawerCB=(() => send(CloseEditor))>
+    <SchoolAdmin__EditorDrawer.Jsx2 closeDrawerCB=(() => send(CloseEditor))>
       {
         switch (editor) {
         | LinksEditor(kind) =>
@@ -205,7 +205,7 @@ let editor = (state, send, authenticityToken) =>
           />
         }
       }
-    </SchoolAdmin__EditorDrawer>
+    </SchoolAdmin__EditorDrawer.Jsx2>
 
   | None => ReasonReact.null
   };

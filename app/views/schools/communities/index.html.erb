@@ -1,0 +1,7 @@
+<% content_for(:tail) do %>
+  <%= javascript_pack_tag 'SchoolCommunitiesPack', 'data-turbolinks-track': 'reload', nonce: true %>
+<% end %>
+
+<% presenter = Schools::Communities::IndexPresenter.new(self, @school) %>
+<div id="school-communities" class="flex flex-1 h-screen" data-json-props="<%= presenter.react_props %>"></div>
+

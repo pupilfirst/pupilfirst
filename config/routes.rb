@@ -81,6 +81,8 @@ Rails.application.routes.draw do
     end
 
     resources :resources, only: %i[create]
+
+    resources :communities, only: %i[index]
   end
 
   resources :communities, only: %i[show] do

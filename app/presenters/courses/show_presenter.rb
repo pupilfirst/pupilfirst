@@ -6,7 +6,7 @@ module Courses
     end
 
     def json_props
-      {
+      camelize_keys(
         authenticity_token: view.form_authenticity_token,
         school_name: current_school.name,
         course: course_details,
@@ -17,7 +17,7 @@ module Courses
         team: current_student.startup.name,
         students: students,
         user_profiles: user_profiles
-      }.to_json
+      ).to_json
     end
 
     def page_title

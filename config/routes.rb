@@ -203,7 +203,11 @@ Rails.application.routes.draw do
     get '(/:year)', action: 'index'
   end
 
-  resources :courses, only: [] do
+  resources :courses, only: %i[show] do
+    member do
+      get 'leaderboard', action: 'leaderboard'
+    end
+
     resource :coach_dashboard, controller: 'coach_dashboard', only: %i[show] do
       get 'timeline_events'
     end
@@ -233,10 +237,4 @@ Rails.application.routes.draw do
   get '/errors/:error_type', to: 'errors#simulate', constraints: DevelopmentConstraint.new
 
   get '/favicon.ico', to: 'home#favicon'
-
-  resources :courses, only: [] do
-    member do
-      get 'leaderboard', action: 'leaderboard'
-    end
-  end
 end

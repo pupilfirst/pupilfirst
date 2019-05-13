@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_03_073450) do
+ActiveRecord::Schema.define(version: 2019_05_09_105650) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -120,6 +120,17 @@ ActiveRecord::Schema.define(version: 2019_05_03_073450) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["faculty_id"], name: "index_connect_slots_on_faculty_id"
+  end
+
+  create_table "content_blocks", force: :cascade do |t|
+    t.bigint "target_id"
+    t.string "block_type"
+    t.json "content"
+    t.integer "sort_index"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["block_type"], name: "index_content_blocks_on_block_type"
+    t.index ["target_id"], name: "index_content_blocks_on_target_id"
   end
 
   create_table "courses", force: :cascade do |t|
@@ -654,6 +665,7 @@ ActiveRecord::Schema.define(version: 2019_05_03_073450) do
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"
   add_foreign_key "connect_slots", "faculty"
+  add_foreign_key "content_blocks", "targets"
   add_foreign_key "courses", "schools"
   add_foreign_key "domains", "schools"
   add_foreign_key "faculty", "schools"

@@ -48,7 +48,11 @@ let handleErrorCB = () => ();
 
 let handleResponseCB = (submitCB, state, json) => {
   let teams = json |> Json.Decode.(field("teams", list(Team.decode)));
-  submitCB(teams, state.tagsToApply);
+  let students =
+    json |> Json.Decode.(field("students", list(Student.decode)));
+  let userProfiles =
+    json |> Json.Decode.(field("userProfiles", list(UserProfile.decode)));
+  submitCB(teams, students, userProfiles, state.tagsToApply);
   Notification.success("Success", "Student updated successfully");
 };
 
@@ -64,14 +68,12 @@ let updateStudent = (student, state, authenticityToken, responseCB) => {
     |> List.filter(((_, _, selected)) => selected == true)
     |> List.map(((key, _, _)) => key);
   let updatedStudent =
-    student
-    |> Student.updateInfo(
-         state.name,
-         state.teamName,
-         state.exited,
-         state.excludedFromLeaderboard,
-       );
-  Js.Dict.set(payload, "founder", updatedStudent |> Student.encode);
+    student |> Student.updateInfo(state.exited, state.excludedFromLeaderboard);
+  Js.Dict.set(
+    payload,
+    "founder",
+    Student.encode(state.name, state.teamName, updatedStudent),
+  );
   Js.Dict.set(
     payload,
     "tags",
@@ -97,7 +99,7 @@ let boolBtnClasses = selected => {
 };
 
 let handleEligibleTeamCoachList =
-    (schoolCoaches, courseCoachIds, teamCoachIds) => {
+    (schoolCoaches, courseCoachIds, teamCoachIds, userProfiles) => {
   let selectedTeamCoachIds = teamCoachIds |> Array.of_list;
   let allowedTeamCoaches =
     schoolCoaches
@@ -114,16 +116,38 @@ let handleEligibleTeamCoachList =
          selectedTeamCoachIds
          |> Js.Array.findIndex(selectedCoachId => coachId == selectedCoachId)
          > (-1);
-       (coach |> Coach.id, coach |> Coach.name, selected);
+       let coachUserProfile =
+         userProfiles
+         |> List.find(profile =>
+              UserProfile.userId(profile) === Coach.userId(coach)
+            );
+       (coach |> Coach.id, coachUserProfile |> UserProfile.name, selected);
      });
 };
+
+let coachUserProfile = (userProfiles, coach) =>
+  userProfiles
+  |> List.find(profile =>
+       UserProfile.userId(profile) === Coach.userId(coach)
+     );
+
+let studentUserProfile = (userProfiles, student) =>
+  userProfiles
+  |> List.find(profile =>
+       UserProfile.userId(profile) === Student.userId(student)
+     );
+
+let studentTeam = (teams, student) =>
+  teams |> List.find(team => Team.id(team) === Student.teamId(student));
 
 let make =
     (
       ~student,
+      ~teams,
       ~studentTags,
       ~teamCoachIds,
       ~courseCoachIds,
+      ~userProfiles,
       ~schoolCoaches,
       ~closeFormCB,
       ~submitFormCB,
@@ -132,8 +156,8 @@ let make =
     ) => {
   ...component,
   initialState: () => {
-    name: student |> Student.name,
-    teamName: student |> Student.teamName,
+    name: student |> studentUserProfile(userProfiles) |> UserProfile.name,
+    teamName: student |> studentTeam(teams) |> Team.name,
     hasNameError: false,
     hasTeamNameError: false,
     tagsToApply: student |> Student.tags,
@@ -143,6 +167,7 @@ let make =
         schoolCoaches,
         courseCoachIds,
         teamCoachIds,
+        userProfiles,
       ),
     coachEnrollmentsChanged: false,
     excludedFromLeaderboard: student |> Student.excludedFromLeaderboard,
@@ -178,6 +203,11 @@ let make =
   render: ({state, send}) => {
     let multiSelectCoachEnrollmentsCB = (key, value, selected) =>
       send(UpdateCoachesList(key, value, selected));
+    let studentUserProfile =
+      userProfiles
+      |> List.find(profile =>
+           UserProfile.userId(profile) === Student.userId(student)
+         );
     <div>
       <div className="blanket" />
       <div className="drawer-right">
@@ -195,11 +225,11 @@ let make =
                 className="flex items-centre py-6 pl-16 mb-4 bg-grey-lighter">
                 <img
                   className="w-12 h-12 rounded-full mr-4"
-                  src={student |> Student.avatarUrl}
+                  src={studentUserProfile |> UserProfile.avatarUrl}
                 />
                 <div className="text-sm flex flex-col justify-center">
                   <div className="text-black font-bold inline-block">
-                    {student |> Student.name |> str}
+                    {studentUserProfile |> UserProfile.name |> str}
                   </div>
                   <div className="text-grey-dark inline-block">
                     {student |> Student.email |> str}
@@ -280,7 +310,8 @@ let make =
                                    |> List.find(coach =>
                                         Coach.id(coach) == coachId
                                       )
-                                   |> Coach.name
+                                   |> coachUserProfile(userProfiles)
+                                   |> UserProfile.name
                                    |> str
                                  }
                                </div>

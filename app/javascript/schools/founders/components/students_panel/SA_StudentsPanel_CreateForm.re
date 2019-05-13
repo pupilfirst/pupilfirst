@@ -30,9 +30,13 @@ let allKnownTags = (incomingTags, appliedTags) =>
 
 let handleResponseCB = (submitCB, state, json) => {
   let teams = json |> Json.Decode.(field("teams", list(Team.decode)));
+  let students =
+    json |> Json.Decode.(field("students", list(Student.decode)));
+  let userProfiles =
+    json |> Json.Decode.(field("userProfiles", list(UserProfile.decode)));
   let tags = state.studentsToAdd |> appliedTags;
 
-  submitCB(teams, tags);
+  submitCB(teams, students, userProfiles, tags);
   Notification.success("Success", "Student(s) created successfully");
 };
 

@@ -3,7 +3,7 @@ class ApplicationPresenter
     @view = view_context
   end
 
-  protected
+  private
 
   attr_reader :view
 
@@ -17,4 +17,8 @@ class ApplicationPresenter
     :current_coach,
     to: :view
   )
+
+  def camelize_keys(hash)
+    hash.deep_transform_keys { |k| k.to_s.camelize(:lower) }
+  end
 end

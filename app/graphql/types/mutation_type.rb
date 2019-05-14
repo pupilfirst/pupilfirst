@@ -11,5 +11,7 @@ module Types
     field :destroy_answer_like, mutation: Mutations::DestroyAnswerLike, null: false
     field :undo_submission, mutation: Mutations::UndoSubmission, null: false
     field :create_question, mutation: Mutations::CreateQuestion, null: false
+    field :create_community, mutation: Mutations::CreateCommunity, null: false
+    field :update_community, mutation: Mutations::UpdateCommunity, null: false
   end
 end

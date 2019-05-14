@@ -10,8 +10,8 @@ let make = (~authenticityToken, ~communities, ~courses) => {
 
   <div className="flex-1 flex flex-col">
     <SchoolAdmin__EditorDrawer
-      closeDrawerCB={() => setDrawerVisible(_ => !drawerVisible)}>
-      <SchoolCommunities__Editor authenticityToken />
+      closeDrawerCB={() => setDrawerVisible(_ => false)}>
+      <SchoolCommunities__Editor authenticityToken courses />
     </SchoolAdmin__EditorDrawer>
     <div className="flex px-6 py-2 items-center justify-between">
       <button

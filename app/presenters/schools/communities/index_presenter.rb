@@ -11,25 +11,36 @@ module Schools
         {
           authenticityToken: view.form_authenticity_token,
           communities: communities,
-          courses: courses
+          courses: courses,
+          connections: connections
         }.to_json
       end
 
       def communities
-        @school.communities.map do |community|
-          {
-            id: community.id.to_s,
-            name: community.name
-          }
-        end
+        @communities ||=
+          @school.communities.map do |community|
+            {
+              id: community.id.to_s,
+              name: community.name,
+              targetLinkable: community.target_linkable
+            }
+          end
       end
 
       def courses
         @school.courses.map do |course|
           {
             id: course.id.to_s,
-            name: course.name,
-            communityId: course.community_id.present? ? course.community_id.to_s : nil
+            name: course.name
+          }
+        end
+      end
+
+      def connections
+        CommunityCourseConnection.where(community: communities.pluck(:id)).map do |connection|
+          {
+            communityId: connection.community_id.to_s,
+            courseId: connection.course_id.to_s
           }
         end
       end

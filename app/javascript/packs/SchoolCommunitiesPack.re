@@ -4,6 +4,7 @@ type props = {
   authenticityToken: string,
   communities: list(SchoolCommunities__Community.t),
   courses: list(SchoolCommunities__Course.t),
+  connections: list(SchoolCommunities__Connection.t),
 };
 
 let decodeProps = json =>
@@ -13,6 +14,9 @@ let decodeProps = json =>
       json |> field("communities", list(SchoolCommunities__Community.decode)),
     courses:
       json |> field("courses", list(SchoolCommunities__Course.decode)),
+    connections:
+      json
+      |> field("connections", list(SchoolCommunities__Connection.decode)),
   };
 
 let props =
@@ -28,6 +32,7 @@ ReactDOMRe.renderToElementWithId(
     authenticityToken={props.authenticityToken}
     communities={props.communities}
     courses={props.courses}
+    connections={props.connections}
   />,
   "school-communities",
 );

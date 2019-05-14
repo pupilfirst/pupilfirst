@@ -652,7 +652,7 @@ let make =
                                send(RemoveResource(_key));
                              }
                            }>
-                           <Icon kind=Icon.Delete size="4" opacity=75 />
+                           <Icon.Jsx2 kind=Icon.Delete size="4" opacity=75 />
                          </button>
                        </div>
                      )
@@ -680,7 +680,7 @@ let make =
                         {"Any prerequisite targets?" |> str}
                       </label>
                       <div id="prerequisite_targets" className="mb-6">
-                        <CurriculumEditor__SelectBox
+                        <School__SelectBox.Jsx2
                           items={state.prerequisiteTargets}
                           multiSelectCB=multiSelectPrerequisiteTargetsCB
                         />
@@ -816,7 +816,7 @@ let make =
                             {"Atleast one has to be selected" |> str}
                           </div>
                       }
-                      <CurriculumEditor__SelectBox
+                      <School__SelectBox.Jsx2
                         items={state.evaluationCriteria}
                         multiSelectCB=multiSelectEvaluationCriterionCB
                       />

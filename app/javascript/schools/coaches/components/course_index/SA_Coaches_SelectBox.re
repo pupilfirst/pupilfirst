@@ -46,7 +46,7 @@ let make = (~items, ~multiSelectCB, _children) => {
                        multiSelectCB(_key, value, false);
                      }
                    }>
-                   <Icon kind=Icon.Delete size="4" opacity=75 />
+                   <Icon.Jsx2 kind=Icon.Delete size="4" opacity=75 />
                  </button>
                </div>
              )

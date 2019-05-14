@@ -128,7 +128,7 @@ let make =
                   showCoachesList ?
                     <div>
                       <div id="course_coaches" className="mb-6">
-                        <CurriculumEditor__SelectBox
+                        <School__SelectBox.Jsx2
                           items={state.courseCoaches}
                           multiSelectCB=multiSelectCoachEnrollmentsCB
                         />

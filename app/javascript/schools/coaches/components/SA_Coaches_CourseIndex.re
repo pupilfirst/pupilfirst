@@ -225,7 +225,7 @@ let make =
                                    removeCoach(coach);
                                  }
                                }>
-                               <Icon kind=Icon.Delete size="4" />
+                               <Icon.Jsx2 kind=Icon.Delete size="4" />
                              </div>
                            </div>
                          </div>
@@ -278,7 +278,7 @@ let make =
                                    removeCoach(coach);
                                  }
                                }>
-                               <Icon kind=Icon.Delete size="4" />
+                               <Icon.Jsx2 kind=Icon.Delete size="4" />
                              </div>
                            </div>
                            <div className="pt-3 pb-4 px-4">

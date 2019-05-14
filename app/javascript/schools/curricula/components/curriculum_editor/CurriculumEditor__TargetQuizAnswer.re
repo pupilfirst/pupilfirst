@@ -36,17 +36,20 @@ let make =
     <div className="relative">
       {
         answerOption |> AnswerOption.correctAnswer ?
-        <div className="quiz-maker__answer-option-pointer flex justify-center items-center quiz-maker__answer-option-pointer--correct"
-        >
-          <Icon kind=Icon.Check size="2" />
-        </div> :
-        <div onClick={
+          <div
+            className="quiz-maker__answer-option-pointer flex justify-center items-center quiz-maker__answer-option-pointer--correct">
+            <Icon.Jsx2 kind=Icon.Check size="2" />
+          </div> :
+          <div
+            onClick={
               _event => {
                 ReactEvent.Mouse.preventDefault(_event);
                 markAsCorrectCB(answerOption |> AnswerOption.id);
-              }}className="quiz-maker__answer-option-pointer cursor-pointer">
-          ReasonReact.null
-        </div>
+              }
+            }
+            className="quiz-maker__answer-option-pointer cursor-pointer">
+            ReasonReact.null
+          </div>
       }
       <div
         id={answerOptionId ++ "_block"}
@@ -84,8 +87,7 @@ let make =
             }>
             {
               answerOption |> AnswerOption.correctAnswer ?
-                "Correct Answer" |> str :
-                "Mark as correct" |> str
+                "Correct Answer" |> str : "Mark as correct" |> str
             }
           </button>
           <button

@@ -97,7 +97,7 @@ let make = (~coaches, ~authenticityToken, _children) => {
                          </div>
                          <div
                            className="w-7 course-faculty__list-item-edit flex items-center justify-center invisible">
-                           <Icon kind=Icon.Edit size="4" />
+                           <Icon.Jsx2 kind=Icon.Edit size="4" />
                          </div>
                        </div>
                      </div>

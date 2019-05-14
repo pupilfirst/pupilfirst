@@ -1,12 +1,9 @@
-<% presenter = Courses::ShowPresenter.new(self, @course) %>
-
 <% content_for(:head) do %>
-  <title><%= presenter.page_title %></title>
+  <title><%= @presenter.page_title %></title>
 <% end %>
 
 <% content_for(:tail) do %>
   <%= javascript_pack_tag 'CoursesShowPack', nonce: true %>
 <% end %>
 
-<div id="react-root" data-json-props="<%= presenter.json_props %>">
-</div>
+<div id="react-root" data-json-props="<%= @presenter.json_props %>"></div>

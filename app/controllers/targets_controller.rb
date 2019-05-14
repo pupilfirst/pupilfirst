@@ -1,6 +1,15 @@
 class TargetsController < ApplicationController
+  include CamelizeKeys
+
   before_action :authenticate_founder!, except: :select2_search
   before_action :authenticate_user!, only: :select2_search
+
+  # GET /targets/:id/(:slug)
+  def show
+    target = authorize(Target.find(params[:id]))
+    @presenter = Targets::ShowPresenter.new(view_context, target)
+    render 'courses/show', layout: 'tailwind'
+  end
 
   # GET /targets/select2_search
   def select2_search
@@ -33,6 +42,12 @@ class TargetsController < ApplicationController
     end
 
     render json: startup_feedback
+  end
+
+  # GET /targets/:id/details
+  def details_v2
+    target = authorize(Target.find(params[:id]))
+    render json: camelize_keys(Targets::DetailsService.new(target, current_founder).details)
   end
 
   # GET /targets/:id/details

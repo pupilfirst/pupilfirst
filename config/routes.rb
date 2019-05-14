@@ -186,14 +186,16 @@ Rails.application.routes.draw do
     get 'terms'
   end
 
-  resources :targets, only: [] do
+  resources :targets, only: %i[show] do
     get 'select2_search', on: :collection
 
     member do
       get 'prerequisite_targets'
       get 'startup_feedback'
       get 'details'
+      get 'details_v2'
       post 'auto_verify'
+      get ':slug', action: 'show'
     end
   end
 

@@ -6,7 +6,17 @@ module Courses
     end
 
     def json_props
-      camelize_keys(
+      camelize_keys(props).to_json
+    end
+
+    def page_title
+      "#{@course.name} | #{current_school.name}"
+    end
+
+    private
+
+    def props
+      {
         authenticity_token: view.form_authenticity_token,
         school_name: current_school.name,
         course: course_details,
@@ -15,13 +25,10 @@ module Courses
         targets: targets,
         submissions: submissions,
         team: current_student.startup.name,
-        students: students,
+        students: team_members.map(&:attributes),
+        coaches: faculty.map(&:attributes),
         user_profiles: user_profiles
-      ).to_json
-    end
-
-    def page_title
-      "#{@course.name} | #{current_school.name}"
+      }
     end
 
     def course_details
@@ -54,22 +61,28 @@ module Courses
       end
     end
 
-    def students
-      team_members.pluck(:id, :user_id)
+    def faculty
+      @faculty ||= begin
+        scope = Faculty.left_joins(:startups, :courses)
+
+        scope.where(startups: { id: current_student.startup })
+          .or(scope.where(courses: { id: @course }))
+          .distinct.select(:id, :user_id).load
+      end
+    end
+
+    def team_members
+      @team_members ||= current_student.startup.founders.select(:id, :user_id).load
     end
 
     def user_profiles
-      UserProfile.where(school: current_school, user_id: team_members.pluck(:user_id)).with_attached_avatar.map do |user_profile|
+      user_ids = (team_members.pluck(:user_id) + faculty.pluck(:user_id)).uniq
+
+      UserProfile.where(school: current_school, user_id: user_ids).with_attached_avatar.map do |user_profile|
         profile = user_profile.attributes.slice('user_id', 'name')
         profile['avatar_url'] = view.url_for(user_profile.avatar_variant(:thumb)) if user_profile.avatar.attached?
         profile
       end
-    end
-
-    private
-
-    def team_members
-      @team_members ||= current_student.startup.founders.load
     end
 
     def current_student

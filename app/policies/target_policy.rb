@@ -1,4 +1,10 @@
 class TargetPolicy < ApplicationPolicy
+  def show?
+    current_founder.present? && current_founder.course == record.course
+  end
+
+  alias details_v2? show?
+
   def prerequisite_targets?
     current_founder.present?
   end

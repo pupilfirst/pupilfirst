@@ -47,5 +47,5 @@ after 'development:schools', 'development:founders', 'development:faculty', 'dev
   end
 
   course = Course.find_by(name: "VR")
-  course.update!(community: community)
+  CommunityCourseConnection.create!(course: course, community: community)
 end

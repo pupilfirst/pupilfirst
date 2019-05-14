@@ -128,12 +128,18 @@ ActiveRecord::Schema.define(version: 2019_05_03_073450) do
 
   create_table "communities", force: :cascade do |t|
     t.string "name"
-    t.string "slug"
+    t.boolean "target_linkable", default: false
     t.bigint "school_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["school_id"], name: "index_communities_on_school_id"
-    t.index ["slug"], name: "index_communities_on_slug", unique: true
+  end
+
+  create_table "community_course_connections", force: :cascade do |t|
+    t.bigint "community_id"
+    t.bigint "course_id"
+    t.index ["community_id"], name: "index_community_course_connections_on_community_id"
+    t.index ["course_id", "community_id"], name: "index_community_course_connection_on_course_id_and_community_id", unique: true
   end
 
   create_table "connect_requests", id: :serial, force: :cascade do |t|
@@ -171,8 +177,6 @@ ActiveRecord::Schema.define(version: 2019_05_03_073450) do
     t.integer "pass_grade"
     t.json "grade_labels"
     t.datetime "ends_at"
-    t.bigint "community_id"
-    t.index ["community_id"], name: "index_courses_on_community_id"
     t.index ["school_id"], name: "index_courses_on_school_id"
   end
 
@@ -536,7 +540,7 @@ ActiveRecord::Schema.define(version: 2019_05_03_073450) do
     t.bigint "question_id"
     t.bigint "target_id"
     t.index ["question_id"], name: "index_target_questions_on_question_id"
-    t.index ["target_id"], name: "index_target_questions_on_target_id"
+    t.index ["target_id", "question_id"], name: "index_target_questions_on_target_id_and_question_id", unique: true
   end
 
   create_table "target_resources", force: :cascade do |t|
@@ -712,6 +716,9 @@ ActiveRecord::Schema.define(version: 2019_05_03_073450) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "admin_users", "users"
   add_foreign_key "answer_options", "quiz_questions"
+  add_foreign_key "communities", "schools"
+  add_foreign_key "community_course_connections", "communities"
+  add_foreign_key "community_course_connections", "courses"
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"
   add_foreign_key "connect_slots", "faculty"
@@ -739,6 +746,8 @@ ActiveRecord::Schema.define(version: 2019_05_03_073450) do
   add_foreign_key "target_evaluation_criteria", "evaluation_criteria"
   add_foreign_key "target_evaluation_criteria", "targets"
   add_foreign_key "target_groups", "levels"
+  add_foreign_key "target_questions", "questions"
+  add_foreign_key "target_questions", "targets"
   add_foreign_key "target_resources", "resources"
   add_foreign_key "target_resources", "targets"
   add_foreign_key "timeline_event_files", "timeline_events"

@@ -90,7 +90,7 @@ let make =
         <div className="drawer-right__close absolute">
           <button
             onClick={_e => closeFormCB()}
-            className="flex items-center justify-center bg-white text-grey-darker font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
+            className="flex items-center justify-center bg-white text-grey-800 font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
             <i className="material-icons"> {"close" |> str} </i>
           </button>
         </div>
@@ -116,7 +116,7 @@ let make =
                 <div>
                   <div className="mt-6">
                     <div
-                      className="inline-block tracking-wide text-grey-darker text-xs font-semibold">
+                      className="inline-block tracking-wide text-grey-800 text-xs font-semibold">
                       {
                         "These new students will be added to the course:" |> str
                       }

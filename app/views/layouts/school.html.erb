@@ -6,7 +6,7 @@
 <% content_for(:wrapper) do %>
   <div class="antialiased flex h-screen overflow-hidden">
     <div class="flex global-sidebar">
-      <div class="bg-gradient-primary-600-to-primary-darker-to-bottom global-sidebar__primary-nav global-sidebar__primary-nav--expanded flex flex-col justify-between overflow-y-auto">
+      <div class="bg-gradient-primary-600-to-primary-800-to-bottom global-sidebar__primary-nav global-sidebar__primary-nav--expanded flex flex-col justify-between overflow-y-auto">
         <div>
           <div class="global-sidebar__header px-5 py-2 relative z-20 border-r border-b bg-white flex h-16 items-center">
             <div class="global-sidebar__school-logo-container flex items-center bg-white h-12 w-2/5 rounded">
@@ -44,7 +44,7 @@
               <% end %>
               <ul class="list-reset pr-4 pb-4 ml-10 mt-1">
                 <% @courses.each do |course| %>
-                  <li><%= link_to course.name, school_course_students_path(course), class: 'block text-white py-3 px-4 hover:bg-primary-darker rounded font-semibold text-xs no-underline' %></li>
+                  <li><%= link_to course.name, school_course_students_path(course), class: 'block text-white py-3 px-4 hover:bg-primary-800 rounded font-semibold text-xs no-underline' %></li>
                 <% end %>
               </ul>
             </li>

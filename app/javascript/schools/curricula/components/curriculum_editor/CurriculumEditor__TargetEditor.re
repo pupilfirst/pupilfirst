@@ -548,7 +548,7 @@ let make =
         <div className="drawer-right__close absolute">
           <button
             onClick={_ => hideEditorActionCB()}
-            className="flex items-center justify-center bg-white text-grey-darker font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
+            className="flex items-center justify-center bg-white text-grey-800 font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
             <i className="material-icons"> {"close" |> str} </i>
           </button>
         </div>
@@ -561,13 +561,13 @@ let make =
                   {"Target Details" |> str}
                 </h5>
                 <label
-                  className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                  className="inline-block tracking-wide text-grey-800 text-xs font-semibold mb-2"
                   htmlFor="title">
                   {"Title" |> str}
                 </label>
                 <span> {"*" |> str} </span>
                 <input
-                  className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                  className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                   id="title"
                   type_="text"
                   placeholder="Type target title here"
@@ -585,14 +585,14 @@ let make =
                     ReasonReact.null
                 }
                 <label
-                  className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                  className="inline-block tracking-wide text-grey-800 text-xs font-semibold mb-2"
                   htmlFor="description">
                   {" Description" |> str}
                 </label>
                 <span> {"*" |> str} </span>
                 <div
                   id="description"
-                  className="target-editor__trix-container appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey">
+                  className="target-editor__trix-container appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey">
                   <TrixEditor
                     onChange=updateDescriptionCB
                     initialValue={state.description}
@@ -607,12 +607,12 @@ let make =
                     ReasonReact.null
                 }
                 <label
-                  className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                  className="block tracking-wide text-grey-800 text-xs font-semibold mb-2"
                   htmlFor="youtube">
                   {"Youtube Video Id " |> str}
                 </label>
                 <input
-                  className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                  className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                   id="youtube"
                   type_="text"
                   placeholder="Example 58CPRi5kRe8"
@@ -633,7 +633,7 @@ let make =
                     ReasonReact.null
                 }
                 <label
-                  className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                  className="block tracking-wide text-grey-800 text-xs font-semibold mb-2"
                   htmlFor="resources">
                   {"Resources" |> str}
                 </label>
@@ -675,7 +675,7 @@ let make =
                   showPrerequisiteTargets ?
                     <div>
                       <label
-                        className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                        className="block tracking-wide text-grey-800 text-xs font-semibold mb-2"
                         htmlFor="prerequisite_targets">
                         {"Any prerequisite targets?" |> str}
                       </label>
@@ -690,7 +690,7 @@ let make =
                 }
                 <div className="flex items-center mb-6">
                   <label
-                    className="block tracking-wide text-grey-darker text-xs font-semibold mr-6"
+                    className="block tracking-wide text-grey-800 text-xs font-semibold mr-6"
                     htmlFor="evaluated">
                     {"Is this target reviewed by a faculty?" |> str}
                   </label>
@@ -729,7 +729,7 @@ let make =
                     <div>
                       <div className="mb-6">
                         <label
-                          className="block tracking-wide text-grey-darker text-xs font-semibold mr-6 mb-3"
+                          className="block tracking-wide text-grey-800 text-xs font-semibold mr-6 mb-3"
                           htmlFor="method_of_completion">
                           {
                             "How do you want the student to complete the target?"
@@ -805,7 +805,7 @@ let make =
                   | Evaluated =>
                     <div id="evaluation_criteria" className="mb-6">
                       <label
-                        className="block tracking-wide text-grey-darker text-xs font-semibold mr-6 mb-2"
+                        className="block tracking-wide text-grey-800 text-xs font-semibold mr-6 mb-2"
                         htmlFor="evaluation_criteria">
                         {"Choose evaluation criteria from your list" |> str}
                       </label>
@@ -825,7 +825,7 @@ let make =
                   | TakeQuiz =>
                     <div>
                       <h3
-                        className="block tracking-wide text-grey-darker font-semibold mb-2"
+                        className="block tracking-wide text-grey-800 font-semibold mb-2"
                         htmlFor="Quiz question 1">
                         {"Prepare the quiz now." |> str}
                       </h3>
@@ -877,13 +877,13 @@ let make =
                   | VisitLink =>
                     <div>
                       <label
-                        className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                        className="inline-block tracking-wide text-grey-800 text-xs font-semibold mb-2"
                         htmlFor="link_to_complete">
                         {"Link to complete" |> str}
                       </label>
                       <span> {"*" |> str} </span>
                       <input
-                        className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                        className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                         id="link_to_complete"
                         type_="text"
                         placeholder="Paste link to complete"
@@ -917,7 +917,7 @@ let make =
                   | Some(_) =>
                     <div className="flex items-center flex-no-shrink">
                       <label
-                        className="block tracking-wide text-grey-darker text-xs font-semibold mr-3"
+                        className="block tracking-wide text-grey-800 text-xs font-semibold mr-3"
                         htmlFor="archived">
                         {"Is this target archived?" |> str}
                       </label>

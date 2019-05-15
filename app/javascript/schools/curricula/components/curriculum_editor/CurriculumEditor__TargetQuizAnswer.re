@@ -54,7 +54,7 @@ let make =
         <div className="flex">
           <input
             id=answerOptionId
-            className="appearance-none block w-full bg-white text-grey-darker text-sm rounded px-4 py-3 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+            className="appearance-none block w-full bg-white text-grey-800 text-sm rounded px-4 py-3 leading-tight focus:outline-none focus:bg-white focus:border-grey"
             type_="text"
             placeholder="Answer option"
             value={answerOption |> AnswerOption.answer}
@@ -73,7 +73,7 @@ let make =
             className={
               answerOption |> AnswerOption.correctAnswer ?
                 "w-28 flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-green font-semibold cursor-default focus:outline-none text-xs py-1 px-2" :
-                "w-28 flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-grey hover:text-grey-darker focus:outline-none text-xs py-1 px-2"
+                "w-28 flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-grey hover:text-grey-800 focus:outline-none text-xs py-1 px-2"
             }
             type_="button"
             onClick={
@@ -95,14 +95,14 @@ let make =
                 send(InvertHasHint);
               }
             }
-            className="flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-grey hover:text-grey-darker focus:outline-none text-xs py-1 px-2"
+            className="flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-grey hover:text-grey-800 focus:outline-none text-xs py-1 px-2"
             type_="button">
             {"Explain" |> str}
           </button>
           {
             canBeDeleted ?
               <button
-                className="flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-grey hover:text-grey-darker focus:outline-none text-xs py-1 px-2"
+                className="flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-grey hover:text-grey-800 focus:outline-none text-xs py-1 px-2"
                 type_="button"
                 onClick={
                   event => {
@@ -118,7 +118,7 @@ let make =
         {
           state.hasHint ?
             <textarea
-              className="appearance-none block w-full border-t border-t-1 border-grey-400 bg-white text-grey-darker text-sm rounded rounded-t-none p-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+              className="appearance-none block w-full border-t border-t-1 border-grey-400 bg-white text-grey-800 text-sm rounded rounded-t-none p-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
               id={answerOptionId ++ "_hint"}
               placeholder="Type an answer explanation here."
               value=hint

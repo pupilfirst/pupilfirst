@@ -143,7 +143,7 @@ let make =
         <div className="drawer-right__close absolute">
           <button
             onClick={_ => hideEditorActionCB()}
-            className="flex items-center justify-center bg-white text-grey-darker font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
+            className="flex items-center justify-center bg-white text-grey-800 font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
             <i className="material-icons"> {"close" |> str} </i>
           </button>
         </div>
@@ -157,13 +157,13 @@ let make =
                 </h5>
                 <div className="mt-6">
                   <label
-                    className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
+                    className="inline-block tracking-wide text-grey-800 text-xs font-semibold"
                     htmlFor="name">
                     {"Title" |> str}
                   </label>
                   <span> {"*" |> str} </span>
                   <input
-                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                     id="name"
                     type_="text"
                     placeholder="Type target group name here"
@@ -183,12 +183,12 @@ let make =
                 </div>
                 <div className="mt-6">
                   <label
-                    className="block tracking-wide text-grey-darker text-xs font-semibold"
+                    className="block tracking-wide text-grey-800 text-xs font-semibold"
                     htmlFor="description">
                     {" Description" |> str}
                   </label>
                   <textarea
-                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                     id="description"
                     placeholder="Type target group description"
                     value={state.description}
@@ -206,7 +206,7 @@ let make =
                 </div>
                 <div className="flex items-center mt-6">
                   <label
-                    className="block tracking-wide text-grey-darker text-xs font-semibold mr-3">
+                    className="block tracking-wide text-grey-800 text-xs font-semibold mr-3">
                     {"Is this a milestone target group?" |> str}
                   </label>
                   <div
@@ -245,7 +245,7 @@ let make =
                     | Some(_) =>
                       <div className="flex items-center mr-2">
                         <label
-                          className="block tracking-wide text-grey-darker text-xs font-semibold mr-6">
+                          className="block tracking-wide text-grey-800 text-xs font-semibold mr-6">
                           {"Is this target group archived" |> str}
                         </label>
                         <div

@@ -147,7 +147,7 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
                 updateResourceType(state, send, File);
               }
             }
-            className="inline-block text-grey-darker hover:text-indigo-darker p-4 text-xs font-semibold">
+            className="inline-block text-grey-800 hover:text-indigo-800 p-4 text-xs font-semibold">
             {"Upload File" |> str}
           </a>
         </li>
@@ -159,7 +159,7 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
                 updateResourceType(state, send, Link);
               }
             }
-            className="inline-block text-grey-darker p-4 hover:text-indigo-darker text-xs font-semibold">
+            className="inline-block text-grey-800 p-4 hover:text-indigo-800 text-xs font-semibold">
             {"Add URL" |> str}
           </a>
         </li>
@@ -178,7 +178,7 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
           <input
             disabled={state.saving}
             name="resource[title]"
-            className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+            className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
             id="resource_title"
             type_="text"
             placeholder="Type resource title here"
@@ -220,7 +220,7 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
               </div> :
               <input
                 disabled={state.saving}
-                className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                 name="resource[link]"
                 id="link"
                 type_="url"

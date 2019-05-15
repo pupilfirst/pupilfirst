@@ -150,14 +150,14 @@ let make =
       <SchoolAdmin__DisablingCover disabled={state.updating}>
         <div key="contacts-editor__address-input-group" className="mt-3">
           <label
-            className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
+            className="inline-block tracking-wide text-grey-800 text-xs font-semibold"
             htmlFor="contacts-editor__address">
             {"Contact Address " |> str}
             <i className="fab fa-markdown text-base" />
           </label>
           <textarea
             maxLength=1000
-            className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+            className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
             id="contacts-editor__address"
             placeholder="Leave the address empty to hide the footer section."
             onChange={
@@ -168,14 +168,14 @@ let make =
         </div>
         <div key="contacts-editor__email-address-input-group" className="mt-3">
           <label
-            className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
+            className="inline-block tracking-wide text-grey-800 text-xs font-semibold"
             htmlFor="contacts-editor__email-address">
             {"Email Address" |> str}
           </label>
           <input
             type_="text"
             maxLength=250
-            className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+            className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
             id="contacts-editor__email-address"
             placeholder="Leave the email address empty to hide the footer link."
             onChange={

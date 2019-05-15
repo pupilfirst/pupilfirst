@@ -277,7 +277,7 @@ button:disabled, .disabled {
 }
 
 .global-sidebar__primary-nav-link:hover {
-    @apply .bg-primary-darker;
+    @apply .bg-primary-800;
 }
 
 .global-sidebar__primary-nav-link--active {
@@ -385,7 +385,7 @@ button:disabled, .disabled {
 }
 
 .hamburger.is-active .hamburger-inner, .hamburger.is-active .hamburger-inner::before, .hamburger.is-active .hamburger-inner::after {
-    @apply bg-grey-darker;
+    @apply bg-grey-800;
 }
 
 .hamburger-box {

@@ -336,7 +336,7 @@ let make =
             }
           </select>
           <div
-            className="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+            className="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-800">
             <Icon kind=Icon.Down size="3" />
           </div>
         </div>
@@ -381,7 +381,7 @@ let make =
               {
                 false ?
                   <button
-                    className="bg-grey-200er:bg-grey-400 hover:text-grey-darker focus:outline-none text-grey-600 text-sm font-semibold py-2 px-4 rounded inline-flex items-center mx-2">
+                    className="bg-grey-200er:bg-grey-400 hover:text-grey-800 focus:outline-none text-grey-600 text-sm font-semibold py-2 px-4 rounded inline-flex items-center mx-2">
                     {"Add tags" |> str}
                   </button> :
                   ReasonReact.null

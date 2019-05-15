@@ -7,7 +7,7 @@
 <% content_for(:wrapper) do %>
   <div class="antialiased flex h-screen overflow-hidden">
     <div class="global-sidebar hidden md:flex">
-      <div class="bg-gradient-primary-600-to-primary-darker-to-bottom global-sidebar__primary-nav global-sidebar__primary-nav--shrinked text-purple-200 flex flex-col justify-between">
+      <div class="bg-gradient-primary-600-to-primary-800-to-bottom global-sidebar__primary-nav global-sidebar__primary-nav--shrinked text-purple-200 flex flex-col justify-between">
         <div>
           <div class="global-sidebar__header mx-auto">
             <div class="global-sidebar__school-logo-container flex items-center justify-center w-16 h-16">
@@ -66,7 +66,7 @@
 
       <div class="bg-grey-200 global-sidebar__secondary-nav w-full border-r border-grey-400 pb-6 overflow-y-auto">
         <ul class="list-reset p-4">
-          <% default_classes = 'flex text-indigo-darker text-sm py-3 px-4 hover:bg-grey-400 focus:bg-grey-400 font-semibold rounded no-underline items-center my-1' %>
+          <% default_classes = 'flex text-indigo-800 text-sm py-3 px-4 hover:bg-grey-400 focus:bg-grey-400 font-semibold rounded no-underline items-center my-1' %>
           <% selected_classes = ' bg-grey-400' %>
           <li>
             <div id="layouts-courses" data-props="<%= presenter.react_props(@course).to_json %>"></div>

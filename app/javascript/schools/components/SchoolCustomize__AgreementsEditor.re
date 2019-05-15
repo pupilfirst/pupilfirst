@@ -146,14 +146,14 @@ let make =
           key="agreements-editor__input-group"
           className="mt-3 flex flex-col flex-1">
           <label
-            className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
+            className="inline-block tracking-wide text-grey-800 text-xs font-semibold"
             htmlFor="agreements-editor__value">
             {"Body of Agreement " |> str}
             <i className="fab fa-markdown text-base" />
           </label>
           <textarea
             maxLength=10000
-            className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey flex-1"
+            className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey flex-1"
             id="agreements-editor__value"
             placeholder="Leave the agreement body empty to hide the footer link."
             onChange={handleAgreementChange(send)}

@@ -214,7 +214,7 @@ let make =
         <div className="drawer-right__close absolute">
           <button
             onClick={_e => closeFormCB()}
-            className="flex items-center justify-center bg-grey-200 text-grey-darker font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
+            className="flex items-center justify-center bg-grey-200 text-grey-800 font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
             <i className="material-icons"> {"close" |> str} </i>
           </button>
         </div>
@@ -239,7 +239,7 @@ let make =
               <div className="max-w-md p-6 mx-auto">
                 <div>
                   <label
-                    className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                    className="inline-block tracking-wide text-grey-800 text-xs font-semibold mb-2"
                     htmlFor="name">
                     {"Name" |> str}
                   </label>
@@ -254,7 +254,7 @@ let make =
                           ReactEvent.Form.target(event)##value,
                         )
                     }
-                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                     id="name"
                     type_="text"
                     placeholder="Student name here"
@@ -266,7 +266,7 @@ let make =
                 </div>
                 <div className="mt-6">
                   <label
-                    className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                    className="inline-block tracking-wide text-grey-800 text-xs font-semibold mb-2"
                     htmlFor="team_name">
                     {"Team Name" |> str}
                   </label>
@@ -281,7 +281,7 @@ let make =
                           ReactEvent.Form.target(event)##value,
                         )
                     }
-                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                     id="team_name"
                     type_="text"
                     placeholder="Team name here"
@@ -294,7 +294,7 @@ let make =
                 <div className="mt-6">
                   <div className="border-b border-grey-400 pb-2 mb-2 ">
                     <span
-                      className="inline-block mr-1 text-grey-darker text-xs font-semibold">
+                      className="inline-block mr-1 text-grey-800 text-xs font-semibold">
                       {"Course Coaches:" |> str}
                     </span>
                     <div className="mt-2">
@@ -327,7 +327,7 @@ let make =
                   </div>
                   <div className="border-b border-grey-400 pb-2 mb-2 ">
                     <span
-                      className="inline-block mr-1 text-grey-darker text-xs font-semibold">
+                      className="inline-block mr-1 text-grey-800 text-xs font-semibold">
                       {"Exclusive Team Coaches:" |> str}
                     </span>
                     <div className="mt-2">
@@ -356,7 +356,7 @@ let make =
                 <div className="mt-6">
                   <div className="flex items-center flex-no-shrink">
                     <label
-                      className="block tracking-wide text-grey-darker text-xs font-semibold mr-3">
+                      className="block tracking-wide text-grey-800 text-xs font-semibold mr-3">
                       {
                         "Should this student be excluded from leaderboards?"
                         |> str
@@ -400,7 +400,7 @@ let make =
                     className="flex max-w-md w-full justify-between items-center mx-auto">
                     <div className="flex items-center flex-no-shrink">
                       <label
-                        className="block tracking-wide text-grey-darker text-xs font-semibold mr-3">
+                        className="block tracking-wide text-grey-800 text-xs font-semibold mr-3">
                         {"Has this student dropped out?" |> str}
                       </label>
                       <div

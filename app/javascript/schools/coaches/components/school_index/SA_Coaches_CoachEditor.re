@@ -301,7 +301,7 @@ let make =
         <div className="drawer-right__close absolute">
           <button
             onClick={_e => closeFormCB()}
-            className="flex items-center justify-center bg-white text-grey-darker font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
+            className="flex items-center justify-center bg-white text-grey-800 font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
             <i className="material-icons"> {"close" |> str} </i>
           </button>
         </div>
@@ -322,13 +322,13 @@ let make =
                 />
                 <div className="max-w-md p-6 mx-auto">
                   <label
-                    className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                    className="inline-block tracking-wide text-grey-800 text-xs font-semibold mb-2"
                     htmlFor="name">
                     {"Name" |> str}
                   </label>
                   <span> {"*" |> str} </span>
                   <input
-                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                     id="name"
                     type_="text"
                     name="faculty[name]"
@@ -347,13 +347,13 @@ let make =
                     active={state.hasNameError}
                   />
                   <label
-                    className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                    className="inline-block tracking-wide text-grey-800 text-xs font-semibold mb-2"
                     htmlFor="email">
                     {"Email" |> str}
                   </label>
                   <span> {"*" |> str} </span>
                   <input
-                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                     id="email"
                     type_="email"
                     name="faculty[email]"
@@ -372,13 +372,13 @@ let make =
                     active={state.hasEmailError}
                   />
                   <label
-                    className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                    className="inline-block tracking-wide text-grey-800 text-xs font-semibold mb-2"
                     htmlFor="title">
                     {"Title" |> str}
                   </label>
                   <span> {"*" |> str} </span>
                   <input
-                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                     id="title"
                     type_="text"
                     name="faculty[title]"
@@ -397,12 +397,12 @@ let make =
                     active={state.hasTitleError}
                   />
                   <label
-                    className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                    className="inline-block tracking-wide text-grey-800 text-xs font-semibold mb-2"
                     htmlFor="linkedIn">
                     {"LinkedIn" |> str}
                   </label>
                   <input
-                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                     id="linkedIn"
                     type_="text"
                     name="faculty[linkedin_url]"
@@ -421,12 +421,12 @@ let make =
                     active={state.hasLinkedInUrlError}
                   />
                   <label
-                    className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                    className="inline-block tracking-wide text-grey-800 text-xs font-semibold mb-2"
                     htmlFor="connectLink">
                     {"Connect Link" |> str}
                   </label>
                   <input
-                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                     id="connectLink"
                     type_="text"
                     name="faculty[connect_link]"
@@ -446,7 +446,7 @@ let make =
                   />
                   <div className="flex items-center mb-6">
                     <label
-                      className="block w-1/2 tracking-wide text-grey-darker text-xs font-semibold mr-6"
+                      className="block w-1/2 tracking-wide text-grey-800 text-xs font-semibold mr-6"
                       htmlFor="evaluated">
                       {"Should the coach profile be public?" |> str}
                     </label>
@@ -485,7 +485,7 @@ let make =
                   </div>
                   <div className="flex items-center mb-6">
                     <label
-                      className="w-1/2 block tracking-wide text-grey-darker text-xs font-semibold mr-6"
+                      className="w-1/2 block tracking-wide text-grey-800 text-xs font-semibold mr-6"
                       htmlFor="evaluated">
                       {
                         "Should the coach be notified of student submissions?"
@@ -528,7 +528,7 @@ let make =
                     </div>
                   </div>
                   <label
-                    className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                    className="block tracking-wide text-grey-800 text-xs font-semibold mb-2"
                     htmlFor="avatarUploader">
                     {"Avatar" |> str}
                   </label>
@@ -572,7 +572,7 @@ let make =
                         | Some(_coach) =>
                           <div className="flex items-center flex-no-shrink">
                             <label
-                              className="block tracking-wide text-grey-darker text-xs font-semibold mr-3"
+                              className="block tracking-wide text-grey-800 text-xs font-semibold mr-3"
                               htmlFor="evaluated">
                               {"Has the coach left the school?" |> str}
                             </label>

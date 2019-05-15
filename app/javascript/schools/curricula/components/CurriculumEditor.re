@@ -241,7 +241,7 @@ let make =
                 }
               </select>
               <div
-                className="pointer-events-none absolute pin-y pin-r flex items-center px-3 text-grey-darker">
+                className="pointer-events-none absolute pin-y pin-r flex items-center px-3 text-grey-800">
                 <Icon kind=Icon.Down size="3" />
               </div>
             </div>

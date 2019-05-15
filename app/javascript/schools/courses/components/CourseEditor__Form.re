@@ -300,7 +300,7 @@ let make =
         <div className="drawer-right__close absolute">
           <button
             onClick={_ => hideEditorActionCB()}
-            className="flex items-center justify-center bg-white text-grey-darker font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
+            className="flex items-center justify-center bg-white text-grey-800 font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
             <i className="material-icons"> {"close" |> str} </i>
           </button>
         </div>
@@ -313,13 +313,13 @@ let make =
                   {"Course Details" |> str}
                 </h5>
                 <label
-                  className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                  className="inline-block tracking-wide text-grey-800 text-xs font-semibold mb-2"
                   htmlFor="name">
                   {"Course Name" |> str}
                 </label>
                 <span> {"*" |> str} </span>
                 <input
-                  className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                  className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                   id="name"
                   type_="text"
                   placeholder="Type course name here"
@@ -337,12 +337,12 @@ let make =
                     ReasonReact.null
                 }
                 <label
-                  className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                  className="block tracking-wide text-grey-800 text-xs font-semibold mb-2"
                   htmlFor="date">
                   {"Course ends at" |> str}
                 </label>
                 <input
-                  className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                  className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                   id="date"
                   type_="text"
                   placeholder="DD/MM/YYYY"
@@ -372,7 +372,7 @@ let make =
                 </h5>
                 <div className="mb-4">
                   <span
-                    className="inline-block tracking-wide text-grey-darker text-sm font-semibold mr-2"
+                    className="inline-block tracking-wide text-grey-800 text-sm font-semibold mr-2"
                     htmlFor="max_grades">
                     {"Maximum grade is" |> str}
                   </span>
@@ -413,7 +413,7 @@ let make =
                     }
                   }
                   <span
-                    className="inline-block tracking-wide text-grey-darker text-sm font-semibold mx-2"
+                    className="inline-block tracking-wide text-grey-800 text-sm font-semibold mx-2"
                     htmlFor="pass_grades">
                     {"and the passing grade is" |> str}
                   </span>
@@ -455,7 +455,7 @@ let make =
                   }
                 </div>
                 <label
-                  className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                  className="block tracking-wide text-grey-800 text-xs font-semibold mb-2"
                   htmlFor="grades">
                   {"Grades" |> str}
                 </label>
@@ -486,7 +486,7 @@ let make =
                                  |> string_of_int
                                }>
                                <input
-                                 className="text-center grades__label-input appearance-none inline-block bg-white text-grey-darker border border-grey-400 rounded py-2 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                                 className="text-center grades__label-input appearance-none inline-block bg-white text-grey-800 border border-grey-400 rounded py-2 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                                  id={
                                    "label"
                                    ++ (

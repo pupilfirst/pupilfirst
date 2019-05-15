@@ -65,7 +65,7 @@ let make =
     <div className="quiz-maker__question-container relative py-4">
       <div className="flex items-end justify-between">
         <label
-          className="block tracking-wide uppercase text-grey-darker text-xs font-semibold"
+          className="block tracking-wide uppercase text-grey-800 text-xs font-semibold"
           htmlFor={"quiz_question_" ++ questionId}>
           {"Question " ++ questionId |> str}
         </label>
@@ -73,7 +73,7 @@ let make =
           {
             questionCanBeRemoved ?
               <button
-                className="flex items-center flex-no-shrink bg-white px-1 rounded-lg text-grey-600 hover:text-grey-darker text-xs"
+                className="flex items-center flex-no-shrink bg-white px-1 rounded-lg text-grey-600 hover:text-grey-800 text-xs"
                 type_="button"
                 title="Remove Quiz Question"
                 onClick={
@@ -91,7 +91,7 @@ let make =
       <div className="flex relative items-center my-2">
         <input
           id={"quiz_question_" ++ questionId}
-          className="w-full text-grey-darker border rounded-lg p-4 focus:outline-none"
+          className="w-full text-grey-800 border rounded-lg p-4 focus:outline-none"
           type_="text"
           placeholder="Type the question here"
           value={quizQuestion |> QuizQuestion.question}

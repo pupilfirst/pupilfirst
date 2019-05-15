@@ -66,7 +66,7 @@ let make = (~items, ~multiSelectCB, _children) => {
                 nonSelectedList |> List.length > 3 ?
                   <div className="px-3 pt-3 pb-2">
                     <input
-                      className="appearance-none bg-transparent border-b w-full text-grey-darker pb-3 px-2 pl-0 leading-tight focus:outline-none"
+                      className="appearance-none bg-transparent border-b w-full text-grey-800 pb-3 px-2 pl-0 leading-tight focus:outline-none"
                       type_="text"
                       placeholder="Type to Search"
                       onChange={

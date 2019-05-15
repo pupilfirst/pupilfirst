@@ -380,7 +380,7 @@ let make =
                     value={state.title}
                     maxLength=24
                   />
-                  <School__InputGroupError
+                  <School__InputGroupError.Jsx2
                     message="can't be empty"
                     active={state.titleInvalid}
                   />
@@ -403,7 +403,7 @@ let make =
                 onChange={handleUrlChange(send)}
                 value={state.url}
               />
-              <School__InputGroupError
+              <School__InputGroupError.Jsx2
                 message="is not a valid URL"
                 active={state.urlInvalid}
               />

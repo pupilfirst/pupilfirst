@@ -98,7 +98,7 @@ let make = (~addToListCB, ~studentTags, _children) => {
           type_="text"
           placeholder="Student name here"
         />
-        <School__InputGroupError
+        <School__InputGroupError.Jsx2
           message="is not valid"
           active={state.hasNameError}
         />
@@ -120,7 +120,7 @@ let make = (~addToListCB, ~studentTags, _children) => {
           type_="email"
           placeholder="Student email here"
         />
-        <School__InputGroupError
+        <School__InputGroupError.Jsx2
           message="is too short"
           active={state.hasEmailError}
         />

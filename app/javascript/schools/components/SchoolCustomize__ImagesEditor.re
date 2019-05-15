@@ -230,7 +230,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken, _children) => 
               </span>
             </label>
           </div>
-          <School__InputGroupError
+          <School__InputGroupError.Jsx2
             message="must be a JPEG / PNG under 2 MB in size"
             active={state.logoOnLightBgInvalid}
           />
@@ -269,7 +269,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken, _children) => 
               </span>
             </label>
           </div>
-          <School__InputGroupError
+          <School__InputGroupError.Jsx2
             message="must be a JPEG / PNG under 2 MB in size"
             active={state.logoOnDarkBgInvalid}
           />
@@ -302,7 +302,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken, _children) => 
               </span>
             </label>
           </div>
-          <School__InputGroupError
+          <School__InputGroupError.Jsx2
             message="must be a JPEG / PNG under 2 MB in size"
             active={state.iconInvalid}
           />

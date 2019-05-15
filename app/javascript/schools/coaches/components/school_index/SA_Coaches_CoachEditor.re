@@ -342,7 +342,7 @@ let make =
                         )
                     }
                   />
-                  <School__InputGroupError
+                  <School__InputGroupError.Jsx2
                     message="is not a valid name"
                     active={state.hasNameError}
                   />
@@ -367,7 +367,7 @@ let make =
                         )
                     }
                   />
-                  <School__InputGroupError
+                  <School__InputGroupError.Jsx2
                     message="is not a valid email"
                     active={state.hasEmailError}
                   />
@@ -392,7 +392,7 @@ let make =
                         )
                     }
                   />
-                  <School__InputGroupError
+                  <School__InputGroupError.Jsx2
                     message="is not a valid title"
                     active={state.hasTitleError}
                   />
@@ -416,7 +416,7 @@ let make =
                         )
                     }
                   />
-                  <School__InputGroupError
+                  <School__InputGroupError.Jsx2
                     message="is not a valid LinkedIn URL"
                     active={state.hasLinkedInUrlError}
                   />
@@ -440,7 +440,7 @@ let make =
                         )
                     }
                   />
-                  <School__InputGroupError
+                  <School__InputGroupError.Jsx2
                     message="is not a valid connect url"
                     active={state.hasConnectLinkError}
                   />

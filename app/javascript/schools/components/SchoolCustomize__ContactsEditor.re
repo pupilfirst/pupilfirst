@@ -190,7 +190,7 @@ let make =
             }
             value={state.emailAddress}
           />
-          <School__InputGroupError
+          <School__InputGroupError.Jsx2
             message="is not a valid email address"
             active={state.emailAddressInvalid}
           />

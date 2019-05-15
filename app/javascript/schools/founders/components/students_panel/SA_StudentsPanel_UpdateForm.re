@@ -229,7 +229,7 @@ let make =
                     type_="text"
                     placeholder="Student name here"
                   />
-                  <School__InputGroupError
+                  <School__InputGroupError.Jsx2
                     message="is not a valid name"
                     active={state.hasNameError}
                   />
@@ -256,7 +256,7 @@ let make =
                     type_="text"
                     placeholder="Team name here"
                   />
-                  <School__InputGroupError
+                  <School__InputGroupError.Jsx2
                     message="is not a valid team name"
                     active={state.hasTeamNameError}
                   />

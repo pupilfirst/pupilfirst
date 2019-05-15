@@ -94,7 +94,7 @@ let make = (~authenticityToken, _children) => {
       send(UpdateCourse(course));
       send(UpdateEditorAction(Hidden));
     };
-    <div className="flex flex-1 h-screen bg-grey-lighter overflow-y-scroll">
+    <div className="flex flex-1 h-screen bg-grey-200 overflow-y-scroll">
       {
         switch (state.editorAction) {
         | Hidden => ReasonReact.null
@@ -110,7 +110,7 @@ let make = (~authenticityToken, _children) => {
       <div className="flex-1 flex flex-col">
         <div className="flex px-6 py-2 items-center justify-between">
           <button
-            className="max-w-md w-full flex mx-auto items-center justify-center relative bg-grey-lighter hover:bg-grey-light hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-20 cursor-pointer"
+            className="max-w-md w-full flex mx-auto items-center justify-center relative bg-grey-200hter hover:bg-grey-light hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-20 cursor-pointer"
             onClick={_ => send(UpdateEditorAction(ShowForm(None)))}>
             <i className="material-icons"> {"add_circle_outline" |> str} </i>
             <h4 className="font-semibold ml-2"> {"Add New Course" |> str} </h4>
@@ -128,7 +128,7 @@ let make = (~authenticityToken, _children) => {
                        className="flex w-full"
                        key={course |> Course.id |> string_of_int}>
                        <a
-                         className="cursor-pointer flex flex-1 items-center py-4 px-4 hover:bg-grey-lighter"
+                         className="cursor-pointer flex flex-1 items-center py-4 px-4 hover:bg-grey-200hter"
                          onClick={
                            _ =>
                              send(
@@ -147,7 +147,7 @@ let make = (~authenticityToken, _children) => {
                            ++ (course |> Course.id |> string_of_int)
                            ++ "/students"
                          }
-                         className="hover:bg-grey-lighter items-center p-4 flex cursor-pointer no-underline">
+                         className="hover:bg-grey-200 items-center p-4 flex cursor-pointer no-underline">
                          {"view" |> str}
                        </a>
                      </div>

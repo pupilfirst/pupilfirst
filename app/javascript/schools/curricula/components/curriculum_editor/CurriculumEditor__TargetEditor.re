@@ -268,8 +268,8 @@ let booleanButtonClasses = bool => {
 
 let completionButtonClasses = value =>
   value ?
-    "flex flex-col items-center bg-white border border-grey-light hover:bg-grey-lighter text-green text-sm font-semibold focus:outline-none rounded p-4" :
-    "flex flex-col items-center bg-white border border-grey-light opacity-50 hover:bg-grey-lighter text-grey-darkest text-sm font-semibold focus:outline-none rounded p-4";
+    "flex flex-col items-center bg-white border border-grey-light hover:bg-grey-200t-green text-sm font-semibold focus:outline-none rounded p-4" :
+    "flex flex-col items-center bg-white border border-grey-light opacity-50 hover:bg-grey-200 text-grey-darkest text-sm font-semibold focus:outline-none rounded p-4";
 let formClasses = value =>
   value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full";
 let make =
@@ -643,7 +643,7 @@ let make =
                        <div
                          id="resources"
                          key={_key |> string_of_int}
-                         className="select-list__item-selected flex items-center justify-between bg-grey-lightest text-xs text-grey-dark border rounded p-3 mb-2">
+                         className="select-list__item-selected flex items-center justify-between bg-grey-100 text-xs text-grey-dark border rounded p-3 mb-2">
                          {value |> str}
                          <button
                            onClick={
@@ -865,7 +865,7 @@ let make =
                             send(AddQuizQuestion);
                           }
                         )
-                        className="flex items-center bg-grey-lighter hover:bg-grey-light border-2 border-dashed rounded-lg p-3 cursor-pointer mb-5">
+                        className="flex items-center bg-grey-200 hover:bg-grey-light border-2 border-dashed rounded-lg p-3 cursor-pointer mb-5">
                         <i className="material-icons">
                           {"add_circle_outline" |> str}
                         </i>

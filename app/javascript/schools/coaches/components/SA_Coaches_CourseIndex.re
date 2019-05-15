@@ -146,7 +146,7 @@ let make =
             />;
           }
         }
-        <div className="flex-1 flex flex-col bg-grey-lightest">
+        <div className="flex-1 flex flex-col bg-grey-100">
           {
             List.length(schoolCoaches) == List.length(state.courseCoaches)
             || ListUtils.isEmpty(schoolCoaches) ?
@@ -159,7 +159,7 @@ let make =
                       send(UpdateFormVisible(CoachEnrollmentForm));
                     }
                   }
-                  className="max-w-md w-full flex mx-auto items-center justify-center relative bg-grey-lighter hover:bg-grey-light hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-12 cursor-pointer">
+                  className="max-w-md w-full flex mx-auto items-center justify-center relative bg-grey-200 hover:bg-grey-light hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-12 cursor-pointer">
                   <i className="material-icons">
                     {"add_circle_outline" |> str}
                   </i>
@@ -175,12 +175,12 @@ let make =
             && state.courseCoaches
             |> ListUtils.isEmpty ?
               <div
-                className="flex justify-center bg-grey-lightest border rounded p-3 italic mx-auto max-w-md w-full">
+                className="flex justify-center bg-grey-100 border rounded p-3 italic mx-auto max-w-md w-full">
                 {"The course has no coaches assigned!" |> str}
               </div> :
               ReasonReact.null
           }
-          <div className="px-6 pb-4 mt-5 flex flex-1 bg-grey-lightest">
+          <div className="px-6 pb-4 mt-5 flex flex-1 bg-grey-100">
             <div className="max-w-md w-full mx-auto relative">
               {
                 state.courseCoaches |> ListUtils.isEmpty ?
@@ -218,7 +218,7 @@ let make =
                                </div>
                              </div>
                              <div
-                               className="w-10 text-xs course-faculty__list-item-remove cursor-pointer flex items-center justify-center hover:bg-grey-lighter"
+                               className="w-10 text-xs course-faculty__list-item-remove cursor-pointer flex items-center justify-center hover:bg-grey-200"
                                ariaLabel={"Delete " ++ (coach |> Coach.name)}
                                onClick={
                                  _event => {
@@ -272,7 +272,7 @@ let make =
                              </div>
                              <div
                                ariaLabel={"Delete " ++ (coach |> Coach.name)}
-                               className="w-10 text-xs course-faculty__list-item-remove cursor-pointer flex items-center justify-center hover:bg-grey-lighter"
+                               className="w-10 text-xs course-faculty__list-item-remove cursor-pointer flex items-center justify-center hover:bg-grey-200"
                                onClick={
                                  _event => {
                                    ReactEvent.Mouse.preventDefault(_event);
@@ -298,7 +298,7 @@ let make =
                                      |> List.map(team =>
                                           <span
                                             key={"Team " ++ Team.name(team)}
-                                            className="p-1 border rounded bg-primary-lightest mt-1 mr-1">
+                                            className="p-1 border rounded bg-primary-100 mt-1 mr-1">
                                             {Team.name(team) |> str}
                                           </span>
                                         )

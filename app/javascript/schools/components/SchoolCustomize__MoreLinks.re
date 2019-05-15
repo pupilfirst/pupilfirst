@@ -12,7 +12,7 @@ let toggleState = (send, event) => {
 let additionalLinks = (linksVisible, links) =>
   if (linksVisible) {
     <div
-      className="border-2 border-grey-lighter rounded-lg absolute w-48 bg-white mt-2">
+      className="border-2 border-grey-200 rounded-lg absolute w-48 bg-white mt-2">
       {
         links
         |> List.map(((id, title, _)) =>

@@ -36,7 +36,7 @@ let make = (~items, ~multiSelectCB, _children) => {
           |> List.map(((_key, value, _)) =>
                <div
                  key={_key |> string_of_int}
-                 className="select-list__item-selected flex items-center justify-between bg-grey-lightest text-xs text-grey-dark border rounded p-3 mb-2">
+                 className="select-list__item-selected flex items-center justify-between bg-grey-100 text-xs text-grey-dark border rounded p-3 mb-2">
                  {value |> str}
                  <button
                    onClick={
@@ -53,7 +53,7 @@ let make = (~items, ~multiSelectCB, _children) => {
           |> Array.of_list
           |> ReasonReact.array :
           <div
-            className="select-list__item-selected flex items-center justify-between bg-grey-lightest text-xs text-grey-dark border rounded p-3 mb-2">
+            className="select-list__item-selected flex items-center justify-between bg-grey-100 text-xs text-grey-dark border rounded p-3 mb-2">
             {"None Selected" |> str}
           </div>
       }
@@ -98,7 +98,7 @@ let make = (~items, ~multiSelectCB, _children) => {
                              multiSelectCB(_key, value, true);
                            }
                          }
-                         className="px-3 py-2 hover:bg-grey-lighter">
+                         className="px-3 py-2 hover:bg-grey-200">
                          {value |> str}
                        </div>
                      )

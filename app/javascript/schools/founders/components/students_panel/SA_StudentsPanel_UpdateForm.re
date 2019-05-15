@@ -214,7 +214,7 @@ let make =
         <div className="drawer-right__close absolute">
           <button
             onClick={_e => closeFormCB()}
-            className="flex items-center justify-center bg-grey-lighter text-grey-darker font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
+            className="flex items-center justify-center bg-grey-200 text-grey-darker font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
             <i className="material-icons"> {"close" |> str} </i>
           </button>
         </div>
@@ -222,7 +222,7 @@ let make =
           <div className="w-full">
             <div className="mx-auto bg-white">
               <div
-                className="flex items-centre py-6 pl-16 mb-4 bg-grey-lighter">
+                className="flex items-centre py-6 pl-16 mb-4 bg-grey-200">
                 <img
                   className="w-12 h-12 rounded-full mr-4"
                   src={studentUserProfile |> UserProfile.avatarUrl}
@@ -304,7 +304,7 @@ let make =
                           |> List.map(coachId =>
                                <div
                                  key={coachId |> string_of_int}
-                                 className="select-list__item-selected flex items-center justify-between bg-grey-lightest text-xs text-grey-dark border rounded p-3 mb-2">
+                                 className="select-list__item-selected flex items-center justify-between bg-grey-100 text-xs text-grey-dark border rounded p-3 mb-2">
                                  {
                                    schoolCoaches
                                    |> List.find(coach =>
@@ -319,7 +319,7 @@ let make =
                           |> Array.of_list
                           |> ReasonReact.array :
                           <div
-                            className="select-list__item-selected flex items-center justify-between bg-grey-lightest text-xs text-grey-dark border rounded p-3 mb-2">
+                            className="select-list__item-selected flex items-center justify-between bg-grey-100 text-xs text-grey-dark border rounded p-3 mb-2">
                             {"None Assigned" |> str}
                           </div>
                       }
@@ -394,7 +394,7 @@ let make =
                   </div>
                 </div>
               </div>
-              <div className="p-6 bg-grey-lighter">
+              <div className="p-6 bg-grey-200">
                 <div className="max-w-md px-6 mx-auto">
                   <div
                     className="flex max-w-md w-full justify-between items-center mx-auto">

@@ -6,8 +6,8 @@ let component =
   ReasonReact.statelessComponent("CurriculumEditor__TargetGroupShow");
 let archivedClasses = archived =>
   archived ?
-    "target-group__header hover:bg-grey-lighter target-group__header--archived p-6 border border-b-0 text-center rounded-lg rounded-b-none" :
-    "target-group__header hover:bg-grey-lighter bg-white p-6 border border-b-0 text-center rounded-lg rounded-b-none";
+    "target-group__header hover:bg-grey-200 target-group__header--archived p-6 border border-b-0 text-center rounded-lg rounded-b-none" :
+    "target-group__header hover:bg-grey-200hter bg-white p-6 border border-b-0 text-center rounded-lg rounded-b-none";
 
 let make =
     (
@@ -74,7 +74,7 @@ let make =
         targetGroupArchived ?
           ReasonReact.null :
           <div
-            className="target-group__target-create flex items-center bg-grey-lighter border-2 border-dashed p-5 rounded-lg rounded-t-none cursor-pointer"
+            className="target-group__target-create flex items-center bg-grey-200 border-2 border-dashed p-5 rounded-lg rounded-t-none cursor-pointer"
             onClick={
               _event =>
                 showTargetEditorCB(targetGroup |> TargetGroup.id, None)

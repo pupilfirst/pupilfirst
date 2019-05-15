@@ -24,7 +24,7 @@ let make = (~url, _children) => {
   ...component,
   render: _self =>
     <div
-      className="h-9 w-9 border-0 rounded-full bg-grey-lightest mr-3 mt-3 flex items-center justify-center">
+      className="h-9 w-9 border-0 rounded-full bg-grey-100 mr-3 mt-3 flex items-center justify-center">
       <i className={"text-black text-xl " ++ iconClass(url)} />
     </div>,
 };

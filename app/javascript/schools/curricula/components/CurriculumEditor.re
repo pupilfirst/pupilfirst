@@ -164,7 +164,7 @@ let make =
     <div className="flex-1 flex flex-col">
       <div className="bg-white p-4 md:hidden shadow border-b">
         <button
-          className="hamburger hamburger--arrow hover:bg-grey-lighter focus:outline-none">
+          className="hamburger hamburger--arrow hover:bg-grey-200us:outline-none">
           <span className="hamburger-box">
             <span className="hamburger-inner" />
           </span>
@@ -202,10 +202,9 @@ let make =
           />
         }
       }
-      <div
-        className="px-6 pb-4 flex-1 bg-grey-lightest relative overflow-y-scroll">
+      <div className="px-6 pb-4 flex-1 bg-grey-100 relative overflow-y-scroll">
         <div
-          className="max-w-lg flex py-4 items-center relative md:sticky pin-t z-20 bg-grey-lightest border-b justify-between mx-auto">
+          className="max-w-lg flex py-4 items-center relative md:sticky pin-t z-20 bg-grey-100 border-b justify-between mx-auto">
           <div className="flex">
             <div className="inline-block relative w-auto md:w-64">
               <select
@@ -270,7 +269,7 @@ let make =
           {
             showArchivedButton(targetGroupsInLevel, state.targets) ?
               <button
-                className="bg-indigo-lightest hover:bg-indigo text-indigo-dark text-sm hover:text-indigo-lightest font-semibold py-2 px-4 rounded focus:outline-none"
+                className="bg-indigo-100 hover:bg-indigo text-indigo-dark text-sm hover:text-indigo-100 font-semibold py-2 px-4 rounded focus:outline-none"
                 onClick={_ => send(ToggleShowArchived)}>
                 {
                   (state.showArchived ? "Hide Archived" : "Show Archived")
@@ -301,7 +300,7 @@ let make =
             onClick={
               _ => send(UpdateEditorAction(ShowTargetGroupEditor(None)))
             }
-            className="target-group__create flex items-center relative bg-grey-lighter border-2 border-dashed p-6 z-10 rounded-lg mt-12 cursor-pointer">
+            className="target-group__create flex items-center relative bg-grey-200 border-2 border-dashed p-6 z-10 rounded-lg mt-12 cursor-pointer">
             <Icon kind=Icon.PlusCircle size="8" />
             <h4 className="font-semibold ml-2">
               {"Create a target group" |> str}

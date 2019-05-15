@@ -144,7 +144,7 @@ let footerLogo = (schoolName, logoOnDarkBg) =>
 let editIcon = (additionalClasses, clickHandler, title) =>
   <div
     className={
-      "cursor-pointer bg-primary-lightest border border-primary-light text-primary hover:bg-primary-lighter hover:border-primary hover:text-primary-dark p-2  rounded flex items-center "
+      "cursor-pointer bg-primary-100 border border-primary-light text-primary hover:bg-primary-200er:border-primary hover:text-primary-dark p-2  rounded flex items-center "
       ++ additionalClasses
     }
     title
@@ -268,7 +268,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
         <div className="font-bold"> {"Header" |> str} </div>
         <div
           className="border rounded-lg px-5 py-4 flex justify-between mt-3 shadow">
-          <div className="flex items-center bg-grey-lighter rounded p-2">
+          <div className="flex items-center bg-grey-200 rounded p-2">
             {
               headerLogo(
                 schoolName,
@@ -285,7 +285,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
           </div>
           <div className="flex items-center">
             <div
-              className="school-customize__header-links flex items-center bg-grey-lighter rounded px-3 py-2 h-full">
+              className="school-customize__header-links flex items-center bg-grey-200 rounded px-3 py-2 h-full">
               {
                 headerLinks(
                   state.customizations
@@ -473,7 +473,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
               <div className="h-3 w-3 rounded-full bg-grey ml-2" />
               <div className="h-3 w-3 rounded-full bg-grey ml-2" />
               <div
-                className="p-3 ml-4 bg-grey-lightest rounded-t-lg flex items-center">
+                className="p-3 ml-4 bg-grey-100 rounded-t-lg flex items-center">
                 <img
                   src={
                     state.customizations
@@ -489,9 +489,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
               {editIcon("ml-2", showEditor(ImagesEditor, send), "Edit icon")}
             </div>
           </div>
-          <div
-            className="bg-grey-lightest border border-t-0 h-16 rounded-b-lg"
-          />
+          <div className="bg-grey-100 border border-t-0 h-16 rounded-b-lg" />
         </div>
       </div>
       {editor(state, send, authenticityToken)}

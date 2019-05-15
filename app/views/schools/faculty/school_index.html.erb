@@ -3,5 +3,5 @@
   <%= stylesheet_pack_tag 'schools/coaches/school_index', media: 'all', 'data-turbolinks-track': 'reload' %>
 <% end %>
 <% @presenter = Schools::FacultyModule::SchoolIndexPresenter.new(self, @school) %>
-<div id="sa-coaches-panel" class=" flex flex-1 h-screen bg-grey-lighter"
+<div id="sa-coaches-panel" class=" flex flex-1 h-screen bg-grey-200"
      data-props="<%= @presenter.react_props.to_json %>"/>

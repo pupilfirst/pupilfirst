@@ -1,7 +1,6 @@
-@import "tailwindcss/preflight";
+@import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
-
 /* Custom utilities */
 
 .max-w-fc {
@@ -29,15 +28,15 @@ body {
 /* Button Styles */
 
 .btn-default {
-  @apply bg-grey-lighter text-grey-dark;
+  @apply bg-grey-200 text-grey-dark;
 }
 
 .btn-default:hover {
-  @apply bg-primary-lightest text-primary-light;
+  @apply bg-primary-100 text-primary-light;
 }
 
 .btn-default:focus {
-  @apply bg-primary-lightest text-primary;
+  @apply bg-primary-100 text-primary;
 }
 
 .btn-primary {
@@ -112,17 +111,9 @@ button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
 
 @responsive {
   .bg-gradient-primary-dark-to-primary-darker-to-bottom {
-    background-image: linear-gradient(
-      to bottom,
-      config("colors.primary-dark"),
-      config("colors.primary-darker")
-    );
+    background-image: linear-gradient( to bottom, theme("colors.primary-dark"), theme("colors.primary-darker"));
   }
   .bg-gradient-secondary-to-secondary-dark-120 {
-    background-image: linear-gradient(
-      120deg,
-      config("colors.secondary"),
-      config("colors.secondary-dark")
-    );
+    background-image: linear-gradient( 120deg, theme("colors.secondary"), theme("colors.secondary-dark"));
   }
 }

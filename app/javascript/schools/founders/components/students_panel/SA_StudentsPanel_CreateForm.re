@@ -125,7 +125,7 @@ let make =
                       switch (state.studentsToAdd) {
                       | [] =>
                         <div
-                          className="flex items-center justify-between bg-grey-lightest border rounded p-3 italic mt-2">
+                          className="flex items-center justify-between bg-grey-100 border rounded p-3 italic mt-2">
                           {
                             "This list is empty! Add some students using the form above."
                             |> str
@@ -136,7 +136,7 @@ let make =
                         |> List.map(studentInfo =>
                              <div
                                key={studentInfo |> StudentInfo.email}
-                               className="select-list__item-selected flex items-center justify-between bg-grey-lightest border rounded p-3 mt-2">
+                               className="select-list__item-selected flex items-center justify-between bg-grey-100 border rounded p-3 mt-2">
                                <div
                                  className="flex flex flex-wrap pr-3 items-center">
                                  <div className="mr-1">

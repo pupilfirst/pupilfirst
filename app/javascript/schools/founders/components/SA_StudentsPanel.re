@@ -255,7 +255,7 @@ let make =
       ReasonReact.Update({...state, filterVisible: !state.filterVisible})
     },
   render: ({state, send}) =>
-    <div className="flex flex-1 flex-col bg-grey-lightest overflow-hidden">
+    <div className="flex flex-1 flex-col bg-grey-100 overflow-hidden">
       {
         let closeFormCB = () => send(UpdateFormVisible(None));
         let submitFormCB = (teams, students, userProfiles, tags) => {
@@ -381,7 +381,7 @@ let make =
               {
                 false ?
                   <button
-                    className="bg-grey-lighter hover:bg-grey-light hover:text-grey-darker focus:outline-none text-grey-dark text-sm font-semibold py-2 px-4 rounded inline-flex items-center mx-2">
+                    className="bg-grey-200er:bg-grey-light hover:text-grey-darker focus:outline-none text-grey-dark text-sm font-semibold py-2 px-4 rounded inline-flex items-center mx-2">
                     {"Add tags" |> str}
                   </button> :
                   ReasonReact.null
@@ -472,11 +472,11 @@ let make =
             </div>
           </div>
         </div>
-        <div className="flex bg-grey-lightest pb-6">
+        <div className="flex bg-grey-100 pb-6">
           <div className="flex flex-col max-w-lg mx-auto w-full">
             {
               state.filterVisible && state.tags |> List.length > 0 ?
-                <div className="px-4 py-3 border-b bg-grey-lighter shadow">
+                <div className="px-4 py-3 border-b bg-grey-200 shadow">
                   <div className="flex flex-col pt-2">
                     <div className="mb-1 text-sm"> {"Filters:" |> str} </div>
                     <SA_StudentsPanel_SearchableTagList
@@ -512,9 +512,7 @@ let make =
                          id={team |> Team.name}
                          className={
                            "student-team-container flex items-center shadow bg-white rounded-lg mb-4 overflow-hidden"
-                           ++ (
-                             isSingleFounder ? " hover:bg-grey-lightest" : ""
-                           )
+                           ++ (isSingleFounder ? " hover:bg-grey-100" : "")
                          }>
                          <div className="flex-1 w-3/5">
                            {
@@ -538,7 +536,7 @@ let make =
                                          )
                                       |> UserProfile.name
                                     }
-                                    className="student-team__card cursor-pointer flex items-center bg-white hover:bg-grey-lightest">
+                                    className="student-team__card cursor-pointer flex items-center bg-white hover:bg-grey-100">
                                     <div className="flex-1 w-3/5">
                                       <div className="flex items-center">
                                         <label
@@ -716,7 +714,7 @@ let make =
                            </div>
                            <div className="w-2/5 text-center">
                              <span
-                               className="inline-flex flex-col rounded bg-indigo-lightest px-2 py-1">
+                               className="inline-flex flex-col rounded bg-indigo-100 px-2 py-1">
                                <div className="text-xs">
                                  {"Level" |> str}
                                </div>

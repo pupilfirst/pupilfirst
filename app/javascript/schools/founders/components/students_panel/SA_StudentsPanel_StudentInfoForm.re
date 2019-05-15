@@ -80,7 +80,7 @@ let make = (~addToListCB, ~studentTags, _children) => {
       })
     },
   render: ({state, send}) =>
-    <div className="bg-grey-lightest p-4">
+    <div className="bg-grey-100 p-4">
       <div>
         <label
           className="inline-block tracking-wide text-grey-darker text-xs font-semibold"

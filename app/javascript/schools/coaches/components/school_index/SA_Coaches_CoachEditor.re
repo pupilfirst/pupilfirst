@@ -563,7 +563,7 @@ let make =
                     </label>
                   </div>
                 </div>
-                <div className="p-6 bg-grey-lighter">
+                <div className="p-6 bg-grey-200">
                   <div className="max-w-md px-6 mx-auto">
                     <div
                       className="flex max-w-md w-full justify-between items-center mx-auto">

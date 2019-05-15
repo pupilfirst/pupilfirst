@@ -1,10 +1,11 @@
 module Schools
   module Founders
     class IndexPresenter < ApplicationPresenter
-      def initialize(view_context, course)
+      def initialize(view_context, course, inactive: false)
         super(view_context)
 
         @course = course
+        @inactive = inactive
       end
 
       def react_props
@@ -22,7 +23,7 @@ module Schools
       end
 
       def teams
-        @course.startups.includes(:level, :faculty_startup_enrollments).order(:id).map do |team|
+        startups.includes(:level, :faculty_startup_enrollments).order(:id).map do |team|
           {
             id: team.id,
             name: team.name,
@@ -34,7 +35,7 @@ module Schools
 
       def students
         @students ||=
-          @course.founders.includes(:user, taggings: :tag).map do |student|
+          founders.includes(:user, taggings: :tag).map do |student|
             {
               id: student.id,
               email: student.user.email,
@@ -88,6 +89,14 @@ module Schools
 
       def founder_tags
         @founder_tags ||= current_school.founder_tag_list
+      end
+
+      def startups
+        @startups ||= @inactive ? @course.startups.inactive : @course.startups.active
+      end
+
+      def founders
+        @founders ||= Founder.where(startup: startups)
       end
     end
   end

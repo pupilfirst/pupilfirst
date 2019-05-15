@@ -8,6 +8,8 @@ class Startup < ApplicationRecord
   COURSE_FEE = 50_000
 
   scope :admitted, -> { joins(:level).where('levels.number > ?', 0) }
+  scope :inactive, -> { where('access_ends_at < ?', Time.now) }
+  scope :active, -> { where('access_ends_at > ?', Time.now).or(where(access_ends_at: nil)) }
 
   # Custom scope to allow AA to filter by intersection of tags.
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }

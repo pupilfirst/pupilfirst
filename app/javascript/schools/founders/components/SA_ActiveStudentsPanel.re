@@ -294,7 +294,7 @@ let make =
         };
       }
       <div
-        className="border-b px-6 py-2 bg-white items-center justify-between z-20">
+        className="border-b px-6 py-2 bg-white flex items-center justify-between z-20">
         <div className="inline-block relative w-64">
           <select
             onChange={
@@ -339,6 +339,17 @@ let make =
             className="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
             <Icon kind=Icon.Down size="3" />
           </div>
+        </div>
+        <div>
+          <a
+            className="btn btn-default no-underline"
+            href={
+              "/school/courses/"
+              ++ string_of_int(courseId)
+              ++ "/inactive_students"
+            }>
+            {"Inactive Students" |> str}
+          </a>
         </div>
       </div>
       <div className="overflow-y-scroll">

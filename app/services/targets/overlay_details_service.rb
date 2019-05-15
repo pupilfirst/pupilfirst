@@ -14,6 +14,7 @@ module Targets
         latestFeedback: latest_feedback,
         linkedResources: linked_resources,
         quizQuestions: quiz_questions,
+        communities: community_details,
         questions: questions
       }
     end
@@ -21,15 +22,28 @@ module Targets
     private
 
     def questions
-      if @target.questions.any?
-        @target.questions.order("last_activity_at DESC NULLs FIRST").first(3) do |question|
+      communities.map do |community|
+        community.questions.joins(:targets).where(targets: { id: @target })
+          .order("last_activity_at DESC NULLs FIRST").first(3).map do |question|
           {
             id: question.id,
-            title: question.title
+            title: question.title,
+            communityId: question.community_id
           }
         end
-      else
-        []
+      end.flatten
+    end
+
+    def communities
+      @target.course.communities.where(target_linkable: true)
+    end
+
+    def community_details
+      communities.map do |community|
+        {
+          id: community.id,
+          name: community.name
+        }
       end
     end
 

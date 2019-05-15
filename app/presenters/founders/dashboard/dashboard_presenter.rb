@@ -21,7 +21,7 @@ module Founders
           courseEnded: current_course.ended?,
           passGrade: current_course.pass_grade,
           maxGrade: current_course.max_grade,
-          communityPath: community_path
+          communityEnabled: community_enabled
         )
       end
 
@@ -35,13 +35,8 @@ module Founders
         view.current_startup.level.course
       end
 
-      def community_path
-        @community = current_course.community
-        if @community.present?
-          view.community_path(@community)
-        else
-          ""
-        end
+      def community_enabled
+        current_course.communities.where(target_linkable: true).any?
       end
 
       def icon_paths

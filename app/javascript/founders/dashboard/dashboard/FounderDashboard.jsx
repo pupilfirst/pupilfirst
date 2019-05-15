@@ -185,7 +185,7 @@ export default class FounderDashboard extends React.Component {
             hasSingleFounder={this.hasSingleFounder()}
             courseEnded={this.props.courseEnded}
             questions={this.props.questions}
-            communityPath={this.props.communityPath}
+            communityEnabled={this.props.communityEnabled}
           />
         )}
       </div>
@@ -213,5 +213,5 @@ FounderDashboard.propTypes = {
   testMode: PropTypes.bool,
   tourDashboard: PropTypes.bool,
   courseEnded: PropTypes.bool,
-  communityPath: PropTypes.string.isRequired
+  communityEnabled: PropTypes.bool.isRequired
 };

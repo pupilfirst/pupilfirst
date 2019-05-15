@@ -181,6 +181,7 @@ let make =
       ~updateCommunitiesCB,
     ) => {
   let (saving, setSaving) = React.useState(() => false);
+  let (dirty, setDirty) = React.useState(() => false);
   let (name, setName) =
     React.useState(() =>
       switch (community) {
@@ -201,7 +202,7 @@ let make =
       |> List.map(course =>
            (
              course |> Course.id |> int_of_string,
-             course |> Course.name,
+             (course |> Course.name) ++ " Course",
              switch (community) {
              | Some(community) =>
                connections
@@ -222,7 +223,10 @@ let make =
     let oldCourses =
       courseState |> List.filter(((courseId, _, _)) => courseId !== id);
     setCourseState(_ => [(id, name, selected), ...oldCourses]);
+    setDirty(_ => true);
   };
+
+  let saveDisabled = name == "" || !dirty;
 
   <div className="mx-8 pt-8">
     <h5 className="uppercase text-center border-b border-grey-light pb-2">
@@ -230,46 +234,72 @@ let make =
     </h5>
     <DisablingCover disabled=saving>
       <div key="communities-editor" className="mt-3">
-        <label
-          className="inline-block tracking-wide text-grey-darker text-xs font-semibold mt-4"
-          htmlFor="communities-editor__name">
-          {"Name" |> str}
-        </label>
-        <input
-          value=name
-          onChange={event => setName(ReactEvent.Form.target(event)##value)}
-          id="communities-editor__name"
-          className="appearance-none h-10 mt-2 block w-full text-grey-darker border border-grey-light rounded py-2 px-4 text-sm bg-grey-lightest hover:bg-grey-lighter focus:outline-none focus:bg-white focus:border-primary-light"
-        />
-        <label
-          className="inline-block tracking-wide text-grey-darker text-xs font-semibold mt-4"
-          htmlFor="communities-editor__course-list">
-          {
-            "Allow students to ask questions about targets in this community?"
-            |> str
-          }
-        </label>
-        <div
-          className="flex toggle-button__group flex-no-shrink rounded-lg overflow-hidden border mt-2">
-          <button
-            onClick={_ => setTargetLinkable(_ => true)}
-            className={booleanButtonClasses(targetLinkable == true)}>
-            {"Yes" |> str}
-          </button>
-          <button
-            onClick={_ => setTargetLinkable(_ => false)}
-            className={booleanButtonClasses(targetLinkable == false)}>
-            {"No" |> str}
-          </button>
+        <div className="mt-2">
+          <label
+            className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
+            htmlFor="communities-editor__name">
+            {"Name" |> str}
+          </label>
+          <input
+            value=name
+            onChange={
+              event => {
+                setName(ReactEvent.Form.target(event)##value);
+                setDirty(_ => true);
+              }
+            }
+            id="communities-editor__name"
+            className="appearance-none h-10 mt-2 block w-full text-grey-darker border border-grey-light rounded py-2 px-4 text-sm bg-grey-lightest hover:bg-grey-lighter focus:outline-none focus:bg-white focus:border-primary-light"
+          />
+          <School__InputGroupError
+            message="is not a valid name"
+            active={dirty ? name == "" : false}
+          />
         </div>
-        <label
-          className="inline-block tracking-wide text-grey-darker text-xs font-semibold mt-4 mb-2"
-          htmlFor="communities-editor__course-targetLinkable">
-          {"Course" |> str}
-        </label>
-        <School__SelectBox items=courseState multiSelectCB />
+        <div className="flex items-center mt-6">
+          <label
+            className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
+            htmlFor="communities-editor__course-list">
+            {
+              "Allow students to ask questions about targets in this community?"
+              |> str
+            }
+          </label>
+          <div
+            className="flex toggle-button__group flex-no-shrink rounded-lg overflow-hidden border ml-2">
+            <button
+              onClick={
+                _ => {
+                  setDirty(_ => true);
+                  setTargetLinkable(_ => true);
+                }
+              }
+              className={booleanButtonClasses(targetLinkable == true)}>
+              {"Yes" |> str}
+            </button>
+            <button
+              onClick={
+                _ => {
+                  setDirty(_ => true);
+                  setTargetLinkable(_ => false);
+                }
+              }
+              className={booleanButtonClasses(targetLinkable == false)}>
+              {"No" |> str}
+            </button>
+          </div>
+        </div>
+        <div className="mt-4">
+          <label
+            className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+            htmlFor="communities-editor__course-targetLinkable">
+            {"Give Access to students from" |> str}
+          </label>
+          <School__SelectBox items=courseState multiSelectCB />
+        </div>
       </div>
       <button
+        disabled=saveDisabled
         onClick={
           handleQuery(
             name,
@@ -294,7 +324,6 @@ let make =
           )
           |> str
         }
-        {"Create a new community" |> str}
       </button>
     </DisablingCover>
   </div>;

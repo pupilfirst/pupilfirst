@@ -236,10 +236,10 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken, _children) => 
           />
         </div>
         <div
-          key="sc-images-editor__logo-on-dark-bg-input-group" className="mt-4">
+          key="sc-images-editor__logo-on-600-bg-input-group" className="mt-4">
           <label
             className="block tracking-wide text-grey-darker text-xs font-semibold"
-            htmlFor="sc-images-editor__logo-on-dark-bg-input">
+            htmlFor="sc-images-editor__logo-on-600-bg-input">
             {"Logo on a dark background" |> str}
           </label>
           <div
@@ -250,14 +250,14 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken, _children) => 
               name="logo_on_dark_bg"
               type_="file"
               accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
-              id="sc-images-editor__logo-on-dark-bg-input"
+              id="sc-images-editor__logo-on-600-bg-input"
               required=false
               multiple=false
               onChange={updateLogoOnDarkBg(send)}
             />
             <label
               className="input-file__label flex px-4 items-center font-semibold rounded text-sm"
-              htmlFor="sc-images-editor__logo-on-dark-bg-input">
+              htmlFor="sc-images-editor__logo-on-600-bg-input">
               <i className="fas fa-upload" />
               <span className="ml-2 truncate">
                 {

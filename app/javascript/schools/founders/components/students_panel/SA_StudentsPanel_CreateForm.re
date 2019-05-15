@@ -142,7 +142,7 @@ let make =
                                  <div className="mr-1">
                                    {studentInfo |> StudentInfo.name |> str}
                                  </div>
-                                 <div className="text-xs text-grey-dark">
+                                 <div className="text-xs text-grey-600">
                                    {
                                      " ("
                                      ++ (studentInfo |> StudentInfo.email)
@@ -192,7 +192,7 @@ let make =
                         )
                     }
                     className={
-                      "w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3"
+                      "w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none mt-3"
                       ++ (
                         formInvalid(state) ?
                           " opacity-50 cursor-not-allowed" : ""

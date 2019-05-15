@@ -7,7 +7,7 @@
 <div class="flex-1 flex flex-col bg-grey-200 overflow-y-auto">
     <div class="w-full p-12">
         <div class="max-w-md mx-auto relative rounded border overflow-hidden rounded-lg shadow-lg mx-3">
-            <div class="bg-gradient-secondary-to-secondary-dark-120 bg-cover h-24 p-5">
+            <div class="bg-gradient-secondary-to-secondary-600-120 bg-cover h-24 p-5">
 
             </div>
             <div class="flex px-5 pb-5 bg-white justify-between">
@@ -42,7 +42,7 @@
         <div class="flex flex-wrap items-stretch w-full school-overview__course-list">
             <% @presenter.course_details.each_with_index do |course, index| %>
               <div data-t="<%= course[:name] %> details" class="w-1/2 mb-4">
-                <a class="block border rounded-lg bg-white shadow h-full cursor-pointer hover:border-indigo-dark no-underline text-black" href=<%= school_course_students_path(course[:id]) %>>
+                <a class="block border rounded-lg bg-white shadow h-full cursor-pointer hover:border-indigo-600 no-underline text-black" href=<%= school_course_students_path(course[:id]) %>>
                   <div class="flex items-end justify-between border-b p-4 pt-6">
                     <h3 class="font-bold text-xl"><%= course[:name] %></h3>
                     <p class="text-sm"><%= course[:levels_count] %> Levels</p>
@@ -63,16 +63,16 @@
                   </div>
                   <div class="flex items-end p-4 text-xs items-center">
                     <% if course[:submissions_count] == 0 %>
-                      <i class="material-icons mr-1 text-sm text-grey-dark bg-grey-200 p-1 rounded">inbox</i>
-                      <div class="text-grey-dark">No student submissions yet!</div>
+                      <i class="material-icons mr-1 text-sm text-grey-600 bg-grey-200 p-1 rounded">inbox</i>
+                      <div class="text-grey-600">No student submissions yet!</div>
                     <% elsif course[:submissions_count] == course[:evaluated_submissions_count] %>
-                      <i class="material-icons mr-1 text-sm text-green-dark bg-green-200 p-1 rounded">done</i>
-                      <div class="text-green-dark">
+                      <i class="material-icons mr-1 text-sm text-green-600 bg-green-200 p-1 rounded">done</i>
+                      <div class="text-green-600">
                         <%= course[:evaluated_submissions_count] %>/<%= course[:submissions_count] %> submissions reviewed.
                       </div>
                     <% else %>
-                      <i class="material-icons mr-1 text-sm text-orange-dark bg-orange-200 p-1 rounded">alarm</i>
-                      <div class="text-orange-dark">
+                      <i class="material-icons mr-1 text-sm text-orange-600 bg-orange-200 p-1 rounded">alarm</i>
+                      <div class="text-orange-600">
                         <%= course[:evaluated_submissions_count] %>/<%= course[:submissions_count] %> submissions reviewed.
                       </div>
                     <% end %>

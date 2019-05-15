@@ -490,12 +490,12 @@ button:disabled, .disabled {
 }
 
 .toggle-button__button {
-    @apply w-1/2 bg-white text-sm font-semibold py-2 px-6 text-grey-dark;
+    @apply w-1/2 bg-white text-sm font-semibold py-2 px-6 text-grey-600;
     transition: .3s cubic-bezier(0, 0, 0, 1);
 }
 
 .toggle-button__button:hover {
-    @apply bg-primary-100 text-purple-dark;
+    @apply bg-primary-100 text-purple-600;
 }
 
 .toggle-button__button:focus {
@@ -503,11 +503,11 @@ button:disabled, .disabled {
 }
 
 .toggle-button__button--active {
-    @apply bg-primary-dark text-white shadow-inner;
+    @apply bg-primary-600 text-white shadow-inner;
 }
 
 .toggle-button__button--active:hover {
-    @apply bg-primary-dark text-white shadow-inner;
+    @apply bg-primary-600 text-white shadow-inner;
 }
 
 .target-group__container> :not(:last-child):before {

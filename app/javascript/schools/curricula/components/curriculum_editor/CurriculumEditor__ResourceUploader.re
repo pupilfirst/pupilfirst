@@ -212,7 +212,7 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
                 <label
                   className="input-file__label flex px-4 items-center font-semibold rounded text-sm"
                   htmlFor="file">
-                  <i className="material-icons mr-2 text-grey-dark">
+                  <i className="material-icons mr-2 text-grey-600">
                     {"file_upload" |> str}
                   </i>
                   <span className="truncate"> {state.fileName |> str} </span>
@@ -230,7 +230,7 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
           }
           <button
             disabled={state.saving}
-            className="bg-indigo-dark hover:bg-grey text-white text-sm font-semibold py-2 px-6 focus:outline-none">
+            className="bg-indigo-600 hover:bg-grey text-white text-sm font-semibold py-2 px-6 focus:outline-none">
             {(state.saving ? "Uploading" : "Add Resource") |> str}
           </button>
         </div>

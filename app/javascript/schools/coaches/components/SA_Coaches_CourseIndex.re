@@ -212,7 +212,7 @@ let make =
                                    {coach |> Coach.name |> str}
                                  </p>
                                  <p
-                                   className="text-grey-dark font-semibold text-xs mt-1">
+                                   className="text-grey-600 font-semibold text-xs mt-1">
                                    {coach |> Coach.title |> str}
                                  </p>
                                </div>
@@ -265,7 +265,7 @@ let make =
                                    {coach |> Coach.name |> str}
                                  </p>
                                  <p
-                                   className="text-grey-dark font-semibold text-xs mt-1">
+                                   className="text-grey-600 font-semibold text-xs mt-1">
                                    {coach |> Coach.title |> str}
                                  </p>
                                </div>
@@ -284,7 +284,7 @@ let make =
                            </div>
                            <div className="pt-3 pb-4 px-4">
                              <h5
-                               className="font-semibold text-grey-dark border-b pb-1">
+                               className="font-semibold text-grey-600 border-b pb-1">
                                {"Teams" |> str}
                              </h5>
                              {
@@ -292,7 +292,7 @@ let make =
                                | None => ReasonReact.null
                                | Some(teams) =>
                                  <div
-                                   className="flex flex-wrap text-grey-dark font-semibold text-xs mt-1">
+                                   className="flex flex-wrap text-grey-600 font-semibold text-xs mt-1">
                                    {
                                      teams
                                      |> List.map(team =>

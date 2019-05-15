@@ -263,7 +263,7 @@ let isValidQuiz = quiz =>
 
 let booleanButtonClasses = bool => {
   let classes = "toggle-button__button";
-  classes ++ (bool ? " toggle-button__button--active" : " text-grey-dark");
+  classes ++ (bool ? " toggle-button__button--active" : " text-grey-600");
 };
 
 let completionButtonClasses = value =>
@@ -643,7 +643,7 @@ let make =
                        <div
                          id="resources"
                          key={_key |> string_of_int}
-                         className="select-list__item-selected flex items-center justify-between bg-grey-100 text-xs text-grey-dark border rounded p-3 mb-2">
+                         className="select-list__item-selected flex items-center justify-between bg-grey-100 text-xs text-grey-600 border rounded p-3 mb-2">
                          {value |> str}
                          <button
                            onClick={
@@ -960,7 +960,7 @@ let make =
                       <button
                         disabled={saveDisabled(state)}
                         onClick=(_e => updateTarget(target |> Target.id))
-                        className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
+                        className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
                         {"Update Target" |> str}
                       </button>
                     </div>
@@ -970,7 +970,7 @@ let make =
                       <button
                         disabled={saveDisabled(state)}
                         onClick=(_e => createTarget())
-                        className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none mt-3">
+                        className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 shadow rounded focus:outline-none mt-3">
                         {"Create Target" |> str}
                       </button>
                     </div>

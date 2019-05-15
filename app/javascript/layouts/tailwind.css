@@ -44,7 +44,7 @@ body {
 }
 
 .btn-primary:hover {
-  @apply bg-primary-dark;
+  @apply bg-primary-600;
 }
 
 .btn-primary:focus {
@@ -56,7 +56,7 @@ body {
 }
 
 .btn-secondary:hover {
-  @apply bg-secondary-dark;
+  @apply bg-secondary-600;
 }
 
 .btn-secondary:focus {
@@ -68,7 +68,7 @@ body {
 }
 
 .btn-success:hover {
-  @apply bg-green-dark;
+  @apply bg-green-600;
 }
 
 .btn-success:focus {
@@ -80,7 +80,7 @@ body {
 }
 
 .btn-danger:hover {
-  @apply bg-red-dark;
+  @apply bg-red-600;
 }
 
 .btn-danger:focus {
@@ -110,10 +110,10 @@ button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
 /* Gradients */
 
 @responsive {
-  .bg-gradient-primary-dark-to-primary-darker-to-bottom {
-    background-image: linear-gradient( to bottom, theme("colors.primary-dark"), theme("colors.primary-darker"));
+  .bg-gradient-primary-600-to-primary-darker-to-bottom {
+    background-image: linear-gradient( to bottom, theme("colors.primary-600"), theme("colors.primary-darker"));
   }
-  .bg-gradient-secondary-to-secondary-dark-120 {
-    background-image: linear-gradient( 120deg, theme("colors.secondary"), theme("colors.secondary-dark"));
+  .bg-gradient-secondary-to-secondary-600-120 {
+    background-image: linear-gradient( 120deg, theme("colors.secondary"), theme("colors.secondary-600"));
   }
 }

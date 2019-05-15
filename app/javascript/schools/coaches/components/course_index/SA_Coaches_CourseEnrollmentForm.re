@@ -141,7 +141,7 @@ let make =
                 <button
                   disabled=saveDisabled
                   onClick={_e => updateCourseCoaches(courseId, state)}
-                  className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
+                  className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
                   {"Add Course Coaches" |> str}
                 </button>
               </div>

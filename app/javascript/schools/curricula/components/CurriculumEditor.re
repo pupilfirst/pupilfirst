@@ -246,7 +246,7 @@ let make =
               </div>
             </div>
             <button
-              className="flex text-grey-dark hover:text-grey-darkest text-sm font-bold border border-l-0 py-1 px-2 rounded-r focus:outline-none"
+              className="flex text-grey-600 hover:text-grey-darkest text-sm font-bold border border-l-0 py-1 px-2 rounded-r focus:outline-none"
               onClick={
                 _ =>
                   send(
@@ -269,7 +269,7 @@ let make =
           {
             showArchivedButton(targetGroupsInLevel, state.targets) ?
               <button
-                className="bg-indigo-100 hover:bg-indigo text-indigo-dark text-sm hover:text-indigo-100 font-semibold py-2 px-4 rounded focus:outline-none"
+                className="bg-indigo-100 hover:bg-indigo text-indigo-600 text-sm hover:text-indigo-100 font-semibold py-2 px-4 rounded focus:outline-none"
                 onClick={_ => send(ToggleShowArchived)}>
                 {
                   (state.showArchived ? "Hide Archived" : "Show Archived")

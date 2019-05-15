@@ -207,7 +207,7 @@ let make =
               updateEmailAddressCB,
             )
           }
-          className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+          className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
           {updateContactDetailsButtonText(state.updating) |> str}
         </button>
       </SchoolAdmin__DisablingCover>

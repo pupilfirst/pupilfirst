@@ -360,7 +360,7 @@ let make =
                 />
                 <span
                   id="selected-students"
-                  className="ml-2 text-sm text-grey-dark">
+                  className="ml-2 text-sm text-grey-600">
                   {
                     let selectedCount = state.selectedStudents |> List.length;
                     let studentCount =
@@ -381,7 +381,7 @@ let make =
               {
                 false ?
                   <button
-                    className="bg-grey-200er:bg-grey-400 hover:text-grey-darker focus:outline-none text-grey-dark text-sm font-semibold py-2 px-4 rounded inline-flex items-center mx-2">
+                    className="bg-grey-200er:bg-grey-400 hover:text-grey-darker focus:outline-none text-grey-600 text-sm font-semibold py-2 px-4 rounded inline-flex items-center mx-2">
                     {"Add tags" |> str}
                   </button> :
                   ReasonReact.null
@@ -397,7 +397,7 @@ let make =
                           authenticityToken,
                         )
                     }
-                    className="bg-transparent hover:bg-purple-dark focus:outline-none text-purple-dark text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
+                    className="bg-transparent hover:bg-purple-600 focus:outline-none text-purple-600 text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
                     {"Group as Team" |> str}
                   </button> :
                   ReasonReact.null
@@ -417,7 +417,7 @@ let make =
                           authenticityToken,
                         )
                     }
-                    className="bg-transparent hover:bg-purple-dark focus:outline-none text-purple-dark text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
+                    className="bg-transparent hover:bg-purple-600 focus:outline-none text-purple-600 text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
                     {"Move out from Team" |> str}
                   </button> :
                   ReasonReact.null
@@ -427,7 +427,7 @@ let make =
                   ReasonReact.null :
                   <button
                     onClick={_e => send(UpdateFormVisible(CreateForm))}
-                    className="hover:bg-purple-dark text-purple-dark font-semibold hover:text-white focus:outline-none border border-dashed border-blue hover:border-transparent flex items-center px-2 py-1 rounded-lg cursor-pointer">
+                    className="hover:bg-purple-600 text-purple-600 font-semibold hover:text-white focus:outline-none border border-dashed border-blue hover:border-transparent flex items-center px-2 py-1 rounded-lg cursor-pointer">
                     <i className="material-icons mr-2">
                       {"add_circle_outline" |> str}
                     </i>

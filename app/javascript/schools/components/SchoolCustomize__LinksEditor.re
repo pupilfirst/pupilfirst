@@ -86,7 +86,7 @@ let showLinks = (state, send, authenticityToken, removeLinkCB, kind, links) =>
   switch (links) {
   | [] =>
     <div
-      className="border border-grey-400 rounded italic text-grey-dark text-xs cursor-default mt-2 p-3">
+      className="border border-grey-400 rounded italic text-grey-600 text-xs cursor-default mt-2 p-3">
       {"There are no custom links here. Add some?" |> str}
     </div>
   | links =>
@@ -144,7 +144,7 @@ let kindClasses = selected => {
   ++ (
     selected ?
       " nav-tab-item--selected text-primary-500 bg-white hover:bg-white hover:text-primary-500" :
-      " text-grey-dark"
+      " text-grey-600"
   );
 };
 

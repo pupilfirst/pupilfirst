@@ -231,7 +231,7 @@ let make =
                   <div className="text-black font-bold inline-block">
                     {studentUserProfile |> UserProfile.name |> str}
                   </div>
-                  <div className="text-grey-dark inline-block">
+                  <div className="text-grey-600 inline-block">
                     {student |> Student.email |> str}
                   </div>
                 </div>
@@ -304,7 +304,7 @@ let make =
                           |> List.map(coachId =>
                                <div
                                  key={coachId |> string_of_int}
-                                 className="select-list__item-selected flex items-center justify-between bg-grey-100 text-xs text-grey-dark border rounded p-3 mb-2">
+                                 className="select-list__item-selected flex items-center justify-between bg-grey-100 text-xs text-grey-600 border rounded p-3 mb-2">
                                  {
                                    schoolCoaches
                                    |> List.find(coach =>
@@ -319,7 +319,7 @@ let make =
                           |> Array.of_list
                           |> ReasonReact.array :
                           <div
-                            className="select-list__item-selected flex items-center justify-between bg-grey-100 text-xs text-grey-dark border rounded p-3 mb-2">
+                            className="select-list__item-selected flex items-center justify-between bg-grey-100 text-xs text-grey-600 border rounded p-3 mb-2">
                             {"None Assigned" |> str}
                           </div>
                       }
@@ -441,7 +441,7 @@ let make =
                               handleResponseCB(submitFormCB, state),
                             )
                         }
-                        className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
+                        className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
                         {"Update Student" |> str}
                       </button>
                     </div>

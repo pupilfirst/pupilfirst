@@ -554,7 +554,7 @@ let make =
                     <label
                       className="input-file__label flex px-4 items-center font-semibold rounded text-sm"
                       htmlFor="file">
-                      <i className="material-icons mr-2 text-grey-dark">
+                      <i className="material-icons mr-2 text-grey-600">
                         {"file_upload" |> str}
                       </i>
                       <span className="truncate">
@@ -617,13 +617,13 @@ let make =
                         | Some(_coach) =>
                           <button
                             disabled={saveDisabled(state)}
-                            className="w-auto bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
+                            className="w-auto bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
                             {"Update Coach" |> str}
                           </button>
                         | None =>
                           <button
                             disabled={saveDisabled(state)}
-                            className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
+                            className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
                             {"Create Coach" |> str}
                           </button>
                         }

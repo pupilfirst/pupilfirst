@@ -90,7 +90,7 @@ let make = (~coaches, ~authenticityToken, _children) => {
                                {coach |> Coach.name |> str}
                              </p>
                              <p
-                               className="text-grey-dark font-semibold text-xs mt-1">
+                               className="text-grey-600 font-semibold text-xs mt-1">
                                {coach |> Coach.title |> str}
                              </p>
                            </div>

@@ -46,8 +46,8 @@ let setPayload = (authenticityToken, state) => {
 
 let booleanButtonClasses = bool =>
   bool ?
-    "w-1/2 bg-white text-purple hover:text-purple-dark shadow-inner text-sm font-semibold py-2 px-6 focus:outline-none" :
-    "w-1/2 bg-white text-grey-dark hover:text-purple-dark text-sm font-semibold py-2 px-6 focus:outline-none";
+    "w-1/2 bg-white text-purple hover:text-purple-600 shadow-inner text-sm font-semibold py-2 px-6 focus:outline-none" :
+    "w-1/2 bg-white text-grey-600 hover:text-purple-600 text-sm font-semibold py-2 px-6 focus:outline-none";
 let formClasses = value =>
   value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full";
 
@@ -287,7 +287,7 @@ let make =
                         <button
                           disabled={saveDisabled(state)}
                           onClick=(_e => updateTargetGroup(id |> string_of_int))
-                          className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none">
+                          className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none">
                           {"Update Target Group" |> str}
                         </button>
                       </div>;
@@ -297,7 +297,7 @@ let make =
                         <button
                           disabled={saveDisabled(state)}
                           onClick=(_e => createTargetGroup())
-                          className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none">
+                          className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none">
                           {"Create Target Group" |> str}
                         </button>
                       </div>

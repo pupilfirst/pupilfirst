@@ -145,7 +145,7 @@ let make = (~addToListCB, ~studentTags, _children) => {
       <button
         onClick={_e => handleAdd(state, send, addToListCB)}
         className={
-          "bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-6"
+          "bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none mt-6"
           ++ (formInvalid(state) ? " opacity-50 cursor-not-allowed" : "")
         }>
         {"Add to List" |> str}

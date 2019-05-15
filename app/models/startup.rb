@@ -108,4 +108,8 @@ class Startup < ApplicationRecord
   def timeline_events
     TimelineEvent.joins(:timeline_event_owners).where(timeline_event_owners: { founder: founders })
   end
+
+  def active?
+    access_ends_at.blank? || (access_ends_at > Time.now)
+  end
 end

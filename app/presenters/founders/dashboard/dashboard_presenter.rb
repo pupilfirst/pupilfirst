@@ -18,7 +18,7 @@ module Founders
           testMode: Rails.env.test?,
           initialTargetId: @overlay_target&.id,
           tourDashboard: tour_dashboard?,
-          courseEnded: current_course.ended?,
+          courseEnded: course_ended?,
           passGrade: current_course.pass_grade,
           maxGrade: current_course.max_grade
         )
@@ -32,6 +32,10 @@ module Founders
 
       def current_course
         view.current_startup.level.course
+      end
+
+      def course_ended?
+        current_course.ended? || !current_founder.startup.active?
       end
 
       def icon_paths

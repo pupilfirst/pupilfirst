@@ -86,7 +86,7 @@ let showLinks = (state, send, authenticityToken, removeLinkCB, kind, links) =>
   switch (links) {
   | [] =>
     <div
-      className="border border-grey-light rounded italic text-grey-dark text-xs cursor-default mt-2 p-3">
+      className="border border-grey-400 rounded italic text-grey-dark text-xs cursor-default mt-2 p-3">
       {"There are no custom links here. Add some?" |> str}
     </div>
   | links =>
@@ -139,7 +139,7 @@ let titleInputVisible = state =>
   };
 
 let kindClasses = selected => {
-  let classes = "nav-tab-item border-t border-grey-light cursor-pointer w-1/3 appearance-none flex justify-center items-center w-full text-sm text-center text-grey-darker bg-grey-100 hover:bg-grey-200 hover:text-grey-darkest py-3 px-4 font-semibold leading-tight focus:outline-none focus:bg-grey-100";
+  let classes = "nav-tab-item border-t border-grey-400 cursor-pointer w-1/3 appearance-none flex justify-center items-center w-full text-sm text-center text-grey-darker bg-grey-100 hover:bg-grey-200 hover:text-grey-darkest py-3 px-4 font-semibold leading-tight focus:outline-none focus:bg-grey-100";
   classes
   ++ (
     selected ?
@@ -316,7 +316,7 @@ let make =
     },
   render: ({state, send}) =>
     <div className="mt-8 mx-8">
-      <h5 className="uppercase text-center border-b border-grey-light pb-2">
+      <h5 className="uppercase text-center border-b border-grey-400 pb-2">
         {"Manage custom links" |> str}
       </h5>
       <div className="mt-3">
@@ -325,7 +325,7 @@ let make =
           {"Location of Link" |> str}
         </label>
         <div
-          className="flex bg-white border border-t-0 border-grey-light rounded-t mt-2">
+          className="flex bg-white border border-t-0 border-grey-400 rounded-t mt-2">
           <div
             title="Show header links"
             className={kindClasses(state.kind == HeaderLink)}
@@ -372,7 +372,7 @@ let make =
                     {"Title" |> str}
                   </label>
                   <input
-                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                     id="link-title"
                     type_="text"
                     placeholder="A short title for a new link"
@@ -396,7 +396,7 @@ let make =
                 {"Full URL" |> str}
               </label>
               <input
-                className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white"
+                className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white"
                 id="link-full-url"
                 type_="text"
                 placeholder="Full URL, staring with https://"

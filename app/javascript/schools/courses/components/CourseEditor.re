@@ -110,7 +110,7 @@ let make = (~authenticityToken, _children) => {
       <div className="flex-1 flex flex-col">
         <div className="flex px-6 py-2 items-center justify-between">
           <button
-            className="max-w-md w-full flex mx-auto items-center justify-center relative bg-grey-200hter hover:bg-grey-light hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-20 cursor-pointer"
+            className="max-w-md w-full flex mx-auto items-center justify-center relative bg-grey-200hter hover:bg-grey-400 hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-20 cursor-pointer"
             onClick={_ => send(UpdateEditorAction(ShowForm(None)))}>
             <i className="material-icons"> {"add_circle_outline" |> str} </i>
             <h4 className="font-semibold ml-2"> {"Add New Course" |> str} </h4>

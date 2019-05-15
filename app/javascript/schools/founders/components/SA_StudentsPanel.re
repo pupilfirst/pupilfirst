@@ -314,7 +314,7 @@ let make =
               | Some(n) => n |> string_of_int
               }
             }
-            className="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-4 py-2 pr-8 rounded leading-tight leading-normal focus:outline-none">
+            className="block appearance-none w-full bg-white border border-grey-400 hover:border-grey px-4 py-2 pr-8 rounded leading-tight leading-normal focus:outline-none">
             <option value="all"> {"All levels" |> str} </option>
             {
               levels
@@ -381,7 +381,7 @@ let make =
               {
                 false ?
                   <button
-                    className="bg-grey-200er:bg-grey-light hover:text-grey-darker focus:outline-none text-grey-dark text-sm font-semibold py-2 px-4 rounded inline-flex items-center mx-2">
+                    className="bg-grey-200er:bg-grey-400 hover:text-grey-darker focus:outline-none text-grey-dark text-sm font-semibold py-2 px-4 rounded inline-flex items-center mx-2">
                     {"Add tags" |> str}
                   </button> :
                   ReasonReact.null
@@ -610,7 +610,7 @@ let make =
                                                        state.searchString
                                                        |> String.lowercase,
                                                      ) ?
-                                                    "bg-yellow-light" : ""
+                                                    "bg-yellow-400" : ""
                                                 )
                                               }>
                                               {

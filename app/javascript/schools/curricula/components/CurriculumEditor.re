@@ -219,7 +219,7 @@ let make =
                   }
                 }
                 value={currentLevel |> Level.name}
-                className="block appearance-none w-full bg-white border text-sm border-grey-light hover:border-grey px-4 py-3 pr-8 rounded-r-none leading-tight focus:outline-none">
+                className="block appearance-none w-full bg-white border text-sm border-grey-400 hover:border-grey px-4 py-3 pr-8 rounded-r-none leading-tight focus:outline-none">
                 {
                   state.levels
                   |> Level.sort

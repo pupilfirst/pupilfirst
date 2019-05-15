@@ -121,7 +121,7 @@ let make =
             <div className="mx-auto bg-white">
               <div className="max-w-md p-6 mx-auto">
                 <h5
-                  className="uppercase text-center border-b border-grey-light pb-2 mb-4">
+                  className="uppercase text-center border-b border-grey-400 pb-2 mb-4">
                   {"ADD NEW COACHES TO THE COURSE" |> str}
                 </h5>
                 {

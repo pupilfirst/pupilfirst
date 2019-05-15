@@ -61,10 +61,10 @@
         </ul>
       </div>
 
-      <div class="bg-grey-200 global-sidebar__secondary-nav w-full border-r border-grey-light pb-6 overflow-y-auto">
+      <div class="bg-grey-200 global-sidebar__secondary-nav w-full border-r border-grey-400 pb-6 overflow-y-auto">
         <ul class="list-reset p-4">
-          <% default_classes = 'flex text-indigo-darker text-sm py-3 px-4 hover:bg-grey-light focus:bg-grey-light font-semibold rounded no-underline items-center my-1' %>
-          <% selected_classes = ' bg-grey-light' %>
+          <% default_classes = 'flex text-indigo-darker text-sm py-3 px-4 hover:bg-grey-400 focus:bg-grey-400 font-semibold rounded no-underline items-center my-1' %>
+          <% selected_classes = ' bg-grey-400' %>
           <li><%= link_to 'Customization', customize_school_path, class: (default_classes + selected_classes) %></li>
           <li><span class="<%= default_classes + " cursor-not-allowed" %>" title="Under construction">Domains</span></li>
           <li><span class="<%= default_classes + " cursor-not-allowed" %>" title="Under construction">Homepage</span></li>

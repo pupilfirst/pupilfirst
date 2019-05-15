@@ -118,7 +118,7 @@ let make =
         {
           state.hasHint ?
             <textarea
-              className="appearance-none block w-full border-t border-t-1 border-grey-light bg-white text-grey-darker text-sm rounded rounded-t-none p-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+              className="appearance-none block w-full border-t border-t-1 border-grey-400 bg-white text-grey-darker text-sm rounded rounded-t-none p-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
               id={answerOptionId ++ "_hint"}
               placeholder="Type an answer explanation here."
               value=hint

@@ -99,7 +99,7 @@ let make =
             <div className="mx-auto bg-white">
               <div className="max-w-md p-6 mx-auto">
                 <h5
-                  className="uppercase text-center border-b border-grey-light pb-2 mb-4">
+                  className="uppercase text-center border-b border-grey-400 pb-2 mb-4">
                   {"Student Details" |> str}
                 </h5>
                 <SA_StudentsPanel_StudentInfoForm
@@ -156,7 +156,7 @@ let make =
                                    |> List.map(tag =>
                                         <div
                                           key=tag
-                                          className="flex items-center px-2 py-1 border rounded-lg ml-1 text-sm font-semibold focus:outline-none bg-grey-light">
+                                          className="flex items-center px-2 py-1 border rounded-lg ml-1 text-sm font-semibold focus:outline-none bg-grey-400">
                                           {tag |> str}
                                         </div>
                                       )

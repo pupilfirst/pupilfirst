@@ -14,7 +14,7 @@ let make = (~disabled, ~containerClasses="", children) => {
             <div
               key="school-admin-disabling-cover__body"
               className="absolute w-full h-full z-20 flex items-center justify-center">
-              <span className="p-3 border bg-grey-light rounded-full">
+              <span className="p-3 border bg-grey-400 rounded-full">
                 {"Loading..." |> ReasonReact.string}
               </span>
             </div>,

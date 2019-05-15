@@ -37,13 +37,13 @@ button:disabled, .disabled {
 
 .toggle-label span:before {
     content: "";
-    @apply absolute block w-14 h-14 bg-primary-light pointer-events-none opacity-100 rounded-full;
+    @apply absolute block w-14 h-14 bg-primary-400 pointer-events-none opacity-100 rounded-full;
     margin: -18px;
     transform: scale(0);
 }
 
 .toggle-input:checked+.toggle-label:before {
-    @apply bg-primary-light;
+    @apply bg-primary-400;
 }
 
 .toggle-input:checked+.toggle-label span {
@@ -442,7 +442,7 @@ button:disabled, .disabled {
 
 .resources-upload-tab__link--active {
     background-color: #F2F8FF;
-    @apply border-grey-light border-l border-t border-r -mb-px rounded-t;
+    @apply border-grey-400 border-l border-t border-r -mb-px rounded-t;
 }
 
 .resources-upload-tab__body {
@@ -472,7 +472,7 @@ button:disabled, .disabled {
 }
 
 .input-file__container:hover .input-file__label {
-    @apply .bg-grey-light;
+    @apply .bg-grey-400;
 }
 
 .toggle-button__group {
@@ -519,7 +519,7 @@ button:disabled, .disabled {
     transform: translateX(-50%);
     width: 4px;
     z-index: -1;
-    @apply bg-grey-light;
+    @apply bg-grey-400;
 }
 
 .target-group__box {
@@ -611,7 +611,7 @@ button:disabled, .disabled {
 
 .select-list__item-selected {
     animation: glowing 500ms ease-in;
-    @apply .border-indigo-light;
+    @apply .border-indigo-400;
 }
 
 @keyframes glowing {

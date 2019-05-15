@@ -93,7 +93,7 @@ let make = (~addToListCB, ~studentTags, _children) => {
           onChange={
             event => updateName(send, ReactEvent.Form.target(event)##value)
           }
-          className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+          className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
           id="name"
           type_="text"
           placeholder="Student name here"
@@ -115,7 +115,7 @@ let make = (~addToListCB, ~studentTags, _children) => {
           onChange={
             event => updateEmail(send, ReactEvent.Form.target(event)##value)
           }
-          className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+          className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
           id="email"
           type_="email"
           placeholder="Student email here"

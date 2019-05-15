@@ -309,7 +309,7 @@ let make =
             <div className="mx-auto bg-white">
               <div className="max-w-md p-6 mx-auto">
                 <h5
-                  className="uppercase text-center border-b border-grey-light pb-2 mb-4">
+                  className="uppercase text-center border-b border-grey-400 pb-2 mb-4">
                   {"Course Details" |> str}
                 </h5>
                 <label
@@ -319,7 +319,7 @@ let make =
                 </label>
                 <span> {"*" |> str} </span>
                 <input
-                  className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                  className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                   id="name"
                   type_="text"
                   placeholder="Type course name here"
@@ -342,7 +342,7 @@ let make =
                   {"Course ends at" |> str}
                 </label>
                 <input
-                  className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                  className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                   id="date"
                   type_="text"
                   placeholder="DD/MM/YYYY"
@@ -367,7 +367,7 @@ let make =
             <div className="mx-auto">
               <div className="max-w-md p-6 mx-auto">
                 <h5
-                  className="uppercase text-center border-b border-grey-light pb-2 mb-4">
+                  className="uppercase text-center border-b border-grey-400 pb-2 mb-4">
                   {"Grades" |> str}
                 </h5>
                 <div className="mb-4">
@@ -463,7 +463,7 @@ let make =
                   <div
                     className="flex flex-col bg-white p-6 shadow items-center justify-center rounded w-full">
                     <h2
-                      className="grades__score-circle rounded-full h-24 w-24 flex items-center justify-center border-2 border-green-light p-4 mb-4">
+                      className="grades__score-circle rounded-full h-24 w-24 flex items-center justify-center border-2 border-green-400 p-4 mb-4">
                       {
                         (state.selectedGrade |> string_of_int)
                         ++ "/"
@@ -486,7 +486,7 @@ let make =
                                  |> string_of_int
                                }>
                                <input
-                                 className="text-center grades__label-input appearance-none inline-block bg-white text-grey-darker border border-grey-light rounded py-2 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                                 className="text-center grades__label-input appearance-none inline-block bg-white text-grey-darker border border-grey-400 rounded py-2 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                                  id={
                                    "label"
                                    ++ (

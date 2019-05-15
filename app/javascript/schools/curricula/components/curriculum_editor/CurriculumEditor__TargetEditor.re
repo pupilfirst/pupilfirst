@@ -268,8 +268,8 @@ let booleanButtonClasses = bool => {
 
 let completionButtonClasses = value =>
   value ?
-    "flex flex-col items-center bg-white border border-grey-light hover:bg-grey-200t-green text-sm font-semibold focus:outline-none rounded p-4" :
-    "flex flex-col items-center bg-white border border-grey-light opacity-50 hover:bg-grey-200 text-grey-darkest text-sm font-semibold focus:outline-none rounded p-4";
+    "flex flex-col items-center bg-white border border-grey-400 hover:bg-grey-200t-green text-sm font-semibold focus:outline-none rounded p-4" :
+    "flex flex-col items-center bg-white border border-grey-400 opacity-50 hover:bg-grey-200 text-grey-darkest text-sm font-semibold focus:outline-none rounded p-4";
 let formClasses = value =>
   value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full";
 let make =
@@ -557,7 +557,7 @@ let make =
             <div className="mx-auto bg-white">
               <div className="max-w-md p-6 mx-auto">
                 <h5
-                  className="uppercase text-center border-b border-grey-light pb-2 mb-4">
+                  className="uppercase text-center border-b border-grey-400 pb-2 mb-4">
                   {"Target Details" |> str}
                 </h5>
                 <label
@@ -567,7 +567,7 @@ let make =
                 </label>
                 <span> {"*" |> str} </span>
                 <input
-                  className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                  className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                   id="title"
                   type_="text"
                   placeholder="Type target title here"
@@ -592,7 +592,7 @@ let make =
                 <span> {"*" |> str} </span>
                 <div
                   id="description"
-                  className="target-editor__trix-container appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey">
+                  className="target-editor__trix-container appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey">
                   <TrixEditor
                     onChange=updateDescriptionCB
                     initialValue={state.description}
@@ -612,7 +612,7 @@ let make =
                   {"Youtube Video Id " |> str}
                 </label>
                 <input
-                  className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                  className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                   id="youtube"
                   type_="text"
                   placeholder="Example 58CPRi5kRe8"
@@ -668,7 +668,7 @@ let make =
             <div className="mx-auto">
               <div className="max-w-md p-6 mx-auto">
                 <h5
-                  className="uppercase text-center border-b border-grey-light pb-2 mb-4">
+                  className="uppercase text-center border-b border-grey-400 pb-2 mb-4">
                   {"Method of Target Completion" |> str}
                 </h5>
                 {
@@ -865,7 +865,7 @@ let make =
                             send(AddQuizQuestion);
                           }
                         )
-                        className="flex items-center bg-grey-200 hover:bg-grey-light border-2 border-dashed rounded-lg p-3 cursor-pointer mb-5">
+                        className="flex items-center bg-grey-200 hover:bg-grey-400 border-2 border-dashed rounded-lg p-3 cursor-pointer mb-5">
                         <i className="material-icons">
                           {"add_circle_outline" |> str}
                         </i>
@@ -883,7 +883,7 @@ let make =
                       </label>
                       <span> {"*" |> str} </span>
                       <input
-                        className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                        className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                         id="link_to_complete"
                         type_="text"
                         placeholder="Paste link to complete"

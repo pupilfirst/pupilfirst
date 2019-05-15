@@ -159,7 +159,7 @@ let make =
                       send(UpdateFormVisible(CoachEnrollmentForm));
                     }
                   }
-                  className="max-w-md w-full flex mx-auto items-center justify-center relative bg-grey-200 hover:bg-grey-light hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-12 cursor-pointer">
+                  className="max-w-md w-full flex mx-auto items-center justify-center relative bg-grey-200 hover:bg-grey-400 hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-12 cursor-pointer">
                   <i className="material-icons">
                     {"add_circle_outline" |> str}
                   </i>

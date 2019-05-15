@@ -52,7 +52,7 @@ let headerLinks = links => {
   switch (visibleLinks) {
   | [] =>
     <div
-      className="border border-grey-light rounded-lg italic text-grey-dark cursor-default text-sm py-2 px-4">
+      className="border border-grey-400 rounded-lg italic text-grey-dark cursor-default text-sm py-2 px-4">
       {"You can customize links on the header." |> str}
     </div>
   | visibleLinks =>
@@ -69,7 +69,7 @@ let sitemap = links =>
   switch (links) {
   | [] =>
     <div
-      className="border border-grey rounded-lg italic text-grey-light cursor-default text-sm max-w-fc mt-3 py-2 px-4">
+      className="border border-grey rounded-lg italic text-grey-400 cursor-default text-sm max-w-fc mt-3 py-2 px-4">
       {"You can customize links in the footer." |> str}
     </div>
   | links =>
@@ -91,7 +91,7 @@ let socialLinks = links =>
   switch (links) {
   | [] =>
     <div
-      className="border border-grey rounded-lg italic text-grey-light cursor-default text-sm max-w-fc mt-3 py-2 px-4">
+      className="border border-grey rounded-lg italic text-grey-400 cursor-default text-sm max-w-fc mt-3 py-2 px-4">
       {"Add social media links?" |> str}
     </div>
   | links =>
@@ -116,7 +116,7 @@ let address = a =>
     />
   | None =>
     <div
-      className="border border-grey rounded-lg italic text-grey-light cursor-default text-sm max-w-fc mt-3 py-2 px-4">
+      className="border border-grey rounded-lg italic text-grey-400 cursor-default text-sm max-w-fc mt-3 py-2 px-4">
       {"Add an address?" |> str}
     </div>
   };
@@ -130,7 +130,7 @@ let emailAddress = email =>
     </div>
   | None =>
     <div
-      className="border border-grey rounded-lg italic text-grey-light cursor-default text-sm max-w-fc mt-4 py-2 px-4">
+      className="border border-grey rounded-lg italic text-grey-400 cursor-default text-sm max-w-fc mt-4 py-2 px-4">
       {"Add a contact email?" |> str}
     </div>
   };
@@ -144,7 +144,7 @@ let footerLogo = (schoolName, logoOnDarkBg) =>
 let editIcon = (additionalClasses, clickHandler, title) =>
   <div
     className={
-      "cursor-pointer bg-primary-100 border border-primary-light text-primary hover:bg-primary-200er:border-primary hover:text-primary-dark p-2  rounded flex items-center "
+      "cursor-pointer bg-primary-100 border border-primary-400 text-primary hover:bg-primary-200er:border-primary hover:text-primary-dark p-2  rounded flex items-center "
       ++ additionalClasses
     }
     title
@@ -304,7 +304,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                 )
               }
             </div>
-            <div className="ml-6 w-12 h-12 rounded-full bg-grey-light" />
+            <div className="ml-6 w-12 h-12 rounded-full bg-grey-400" />
           </div>
         </div>
         <div className="mt-6 font-bold"> {"Footer" |> str} </div>
@@ -467,7 +467,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
         </div>
         <div className="mt-6 font-bold"> {"Icon" |> str} </div>
         <div className="mt-3 w-2/4 max-w-sm">
-          <div className="bg-grey-light rounded-t-lg h-12 flex items-end">
+          <div className="bg-grey-400 rounded-t-lg h-12 flex items-end">
             <div className="w-full flex items-center pr-3">
               <div className="h-3 w-3 rounded-full bg-grey ml-4" />
               <div className="h-3 w-3 rounded-full bg-grey ml-2" />

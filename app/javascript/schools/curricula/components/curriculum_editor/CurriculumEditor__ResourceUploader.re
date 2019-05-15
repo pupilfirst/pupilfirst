@@ -178,7 +178,7 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
           <input
             disabled={state.saving}
             name="resource[title]"
-            className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+            className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
             id="resource_title"
             type_="text"
             placeholder="Type resource title here"
@@ -220,7 +220,7 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
               </div> :
               <input
                 disabled={state.saving}
-                className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                 name="resource[link]"
                 id="link"
                 type_="url"

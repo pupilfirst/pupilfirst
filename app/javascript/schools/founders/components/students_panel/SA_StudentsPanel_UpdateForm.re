@@ -254,7 +254,7 @@ let make =
                           ReactEvent.Form.target(event)##value,
                         )
                     }
-                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                     id="name"
                     type_="text"
                     placeholder="Student name here"
@@ -281,7 +281,7 @@ let make =
                           ReactEvent.Form.target(event)##value,
                         )
                     }
-                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
                     id="team_name"
                     type_="text"
                     placeholder="Team name here"
@@ -292,7 +292,7 @@ let make =
                   />
                 </div>
                 <div className="mt-6">
-                  <div className="border-b border-grey-light pb-2 mb-2 ">
+                  <div className="border-b border-grey-400 pb-2 mb-2 ">
                     <span
                       className="inline-block mr-1 text-grey-darker text-xs font-semibold">
                       {"Course Coaches:" |> str}
@@ -325,7 +325,7 @@ let make =
                       }
                     </div>
                   </div>
-                  <div className="border-b border-grey-light pb-2 mb-2 ">
+                  <div className="border-b border-grey-400 pb-2 mb-2 ">
                     <span
                       className="inline-block mr-1 text-grey-darker text-xs font-semibold">
                       {"Exclusive Team Coaches:" |> str}

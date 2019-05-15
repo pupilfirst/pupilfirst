@@ -143,7 +143,7 @@ let kindClasses = selected => {
   classes
   ++ (
     selected ?
-      " nav-tab-item--selected text-primary bg-white hover:bg-white hover:text-primary" :
+      " nav-tab-item--selected text-primary-500 bg-white hover:bg-white hover:text-primary-500" :
       " text-grey-dark"
   );
 };

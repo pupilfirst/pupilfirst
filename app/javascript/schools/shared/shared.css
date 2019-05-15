@@ -47,7 +47,7 @@ button:disabled, .disabled {
 }
 
 .toggle-input:checked+.toggle-label span {
-    @apply bg-primary;
+    @apply bg-primary-500;
     transform: translateX(20px);
     transition: all 0.2s cubic-bezier(0.8, 0.4, 0.3, 1.25), background 0.15s ease;
     box-shadow: 0 3px 8px rgba(79, 46, 220, 0.2);
@@ -96,7 +96,7 @@ button:disabled, .disabled {
 
 .checkbox-label span:first-child:before {
     content: "";
-    @apply bg-primary w-full h-full block opacity-100 rounded-full;
+    @apply bg-primary-500 w-full h-full block opacity-100 rounded-full;
     transform: scale(0);
 }
 
@@ -105,11 +105,11 @@ button:disabled, .disabled {
 }
 
 .checkbox-label:hover span:first-child {
-    @apply bg-primary-100 border-primary;
+    @apply bg-primary-100 border-primary-500;
 }
 
 .checkbox-input:checked+.checkbox-label span:first-child {
-    @apply bg-primary border-primary;
+    @apply bg-primary-500 border-primary-500;
     animation: wave 0.4s ease;
 }
 
@@ -281,7 +281,7 @@ button:disabled, .disabled {
 }
 
 .global-sidebar__primary-nav-link--active {
-    @apply .bg-grey-200 .text-primary;
+    @apply .bg-gray-200 .text-primary-500;
     box-shadow: inset 4px 0 0 0 theme('colors.yellow');
     background-image: linear-gradient(to right, theme('colors.white'), theme('colors.grey-200'));
 }
@@ -311,7 +311,7 @@ button:disabled, .disabled {
 }
 
 .global-sidebar__primary-nav-link--active:hover {
-    @apply .bg-grey-200 .text-primary;
+    @apply .bg-gray-200 .text-primary-500;
 }
 
 .blanket {

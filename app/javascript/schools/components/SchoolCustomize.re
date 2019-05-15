@@ -144,7 +144,7 @@ let footerLogo = (schoolName, logoOnDarkBg) =>
 let editIcon = (additionalClasses, clickHandler, title) =>
   <div
     className={
-      "cursor-pointer bg-primary-100 border border-primary-400 text-primary hover:bg-primary-200er:border-primary hover:text-primary-dark p-2  rounded flex items-center "
+      "cursor-pointer bg-primary-100 border border-primary-400 text-primary-500 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-dark p-2 rounded flex items-center "
       ++ additionalClasses
     }
     title

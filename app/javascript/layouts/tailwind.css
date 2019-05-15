@@ -28,7 +28,7 @@ body {
 /* Button Styles */
 
 .btn-default {
-  @apply bg-grey-200 text-grey-dark;
+  @apply bg-gray-200 text-gray-600;
 }
 
 .btn-default:hover {
@@ -36,11 +36,11 @@ body {
 }
 
 .btn-default:focus {
-  @apply bg-primary-100 text-primary;
+  @apply bg-primary-100 text-primary-500;
 }
 
 .btn-primary {
-  @apply bg-primary text-white shadow;
+  @apply bg-primary-500 text-white shadow;
 }
 
 .btn-primary:hover {

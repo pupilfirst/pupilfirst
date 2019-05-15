@@ -6,5 +6,6 @@ module Types
     field :destroy_school_link, mutation: Mutations::DestroySchoolLink, null: false
     field :update_school_string, mutation: Mutations::UpdateSchoolString, null: false
     field :undo_submission, mutation: Mutations::UndoSubmission, null: false
+    field :complete_target, mutation: Mutations::CompleteTarget, null: false
   end
 end

@@ -313,7 +313,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
             className="school-customize__footer-top-container rounded-t-lg text-white p-6 flex">
             <div className="w-1/2">
               <div
-                className="p-3 bg-black border border-dashed border-grey-darkest rounded h-full mr-2">
+                className="p-3 bg-black border border-dashed border-grey-900 rounded h-full mr-2">
                 <div className="flex items-center">
                   <span className="uppercase font-bold text-sm">
                     {"Sitemap" |> str}
@@ -342,7 +342,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
               <div className="flex">
                 <div className="w-1/2">
                   <div
-                    className="p-3 bg-black border border-dashed border-grey-darkest rounded h-full mr-2">
+                    className="p-3 bg-black border border-dashed border-grey-900 rounded h-full mr-2">
                     <div className="flex items-center">
                       <span className="uppercase font-bold text-sm">
                         {"Social" |> str}
@@ -371,7 +371,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                 </div>
                 <div className="w-1/2">
                   <div
-                    className="p-3 bg-black border border-dashed border-grey-darkest rounded h-full">
+                    className="p-3 bg-black border border-dashed border-grey-900 rounded h-full">
                     <div className="flex items-center">
                       <span className="uppercase font-bold text-sm">
                         {"Contact" |> str}
@@ -398,7 +398,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
           <div
             className="school-customize__footer-bottom-container rounded-b-lg text-white p-6 flex justify-between">
             <div
-              className="flex items-center bg-black border border-dashed border-grey-darkest rounded p-2">
+              className="flex items-center bg-black border border-dashed border-grey-900 rounded p-2">
               {
                 footerLogo(
                   schoolName,
@@ -415,7 +415,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
             </div>
             <div className="flex items-center text-sm">
               <div
-                className="flex items-center bg-black border border-dashed border-grey-darkest rounded p-2">
+                className="flex items-center bg-black border border-dashed border-grey-900 rounded p-2">
                 <div> {"Privacy Policy" |> str} </div>
                 {
                   editIcon(
@@ -431,7 +431,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                 }
               </div>
               <div
-                className="flex items-center bg-black border border-dashed border-grey-darkest rounded p-2 ml-6">
+                className="flex items-center bg-black border border-dashed border-grey-900 rounded p-2 ml-6">
                 <div> {"Terms of Use" |> str} </div>
                 {
                   editIcon(

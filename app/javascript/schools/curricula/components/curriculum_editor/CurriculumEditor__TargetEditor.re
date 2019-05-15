@@ -269,7 +269,7 @@ let booleanButtonClasses = bool => {
 let completionButtonClasses = value =>
   value ?
     "flex flex-col items-center bg-white border border-grey-400 hover:bg-grey-200t-green text-sm font-semibold focus:outline-none rounded p-4" :
-    "flex flex-col items-center bg-white border border-grey-400 opacity-50 hover:bg-grey-200 text-grey-darkest text-sm font-semibold focus:outline-none rounded p-4";
+    "flex flex-col items-center bg-white border border-grey-400 opacity-50 hover:bg-grey-200 text-grey-900 text-sm font-semibold focus:outline-none rounded p-4";
 let formClasses = value =>
   value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full";
 let make =

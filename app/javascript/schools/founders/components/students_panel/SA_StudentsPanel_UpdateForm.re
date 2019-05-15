@@ -94,7 +94,7 @@ let updateStudent = (student, state, authenticityToken, responseCB) => {
 };
 
 let boolBtnClasses = selected => {
-  let classes = "w-1/2 toggle-button__button hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none";
+  let classes = "w-1/2 toggle-button__button hover:bg-grey text-grey-900 text-sm font-semibold py-2 px-6 focus:outline-none";
   classes ++ (selected ? " bg-grey" : " bg-white");
 };
 

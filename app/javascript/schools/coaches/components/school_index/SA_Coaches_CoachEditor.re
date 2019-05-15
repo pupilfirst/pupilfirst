@@ -83,8 +83,8 @@ let updateConnectLink = (send, connectLink) => {
 
 let booleanButtonClasses = bool =>
   bool ?
-    "w-1/2 bg-grey hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none" :
-    "w-1/2 bg-white hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none";
+    "w-1/2 bg-grey hover:bg-grey text-grey-900 text-sm font-semibold py-2 px-6 focus:outline-none" :
+    "w-1/2 bg-white hover:bg-grey text-grey-900 text-sm font-semibold py-2 px-6 focus:outline-none";
 
 let saveDisabled = state =>
   state.hasTitleError

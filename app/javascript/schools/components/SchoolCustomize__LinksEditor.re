@@ -93,7 +93,7 @@ let showLinks = (state, send, authenticityToken, removeLinkCB, kind, links) =>
     links
     |> List.map(((id, title, url)) =>
          <div
-           className="flex items-center justify-between bg-grey-100 text-xs text-grey-darkest border rounded pl-3 mt-2"
+           className="flex items-center justify-between bg-grey-100 text-xs text-grey-900 border rounded pl-3 mt-2"
            key=id>
            <div className="flex items-center">
              {
@@ -139,7 +139,7 @@ let titleInputVisible = state =>
   };
 
 let kindClasses = selected => {
-  let classes = "nav-tab-item border-t border-grey-400 cursor-pointer w-1/3 appearance-none flex justify-center items-center w-full text-sm text-center text-grey-800 bg-grey-100 hover:bg-grey-200 hover:text-grey-darkest py-3 px-4 font-semibold leading-tight focus:outline-none focus:bg-grey-100";
+  let classes = "nav-tab-item border-t border-grey-400 cursor-pointer w-1/3 appearance-none flex justify-center items-center w-full text-sm text-center text-grey-800 bg-grey-100 hover:bg-grey-200 hover:text-grey-900 py-3 px-4 font-semibold leading-tight focus:outline-none focus:bg-grey-100";
   classes
   ++ (
     selected ?

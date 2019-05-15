@@ -246,7 +246,7 @@ let make =
               </div>
             </div>
             <button
-              className="flex text-grey-600 hover:text-grey-darkest text-sm font-bold border border-l-0 py-1 px-2 rounded-r focus:outline-none"
+              className="flex text-grey-600 hover:text-grey-900 text-sm font-bold border border-l-0 py-1 px-2 rounded-r focus:outline-none"
               onClick={
                 _ =>
                   send(

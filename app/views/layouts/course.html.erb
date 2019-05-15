@@ -44,20 +44,20 @@
         <ul class="list-reset">
           <% if presenter.founder_profile?(@course) %>
             <li>
-              <%= link_to student_dashboard_path, class: 'flex text-white py-4 hover:bg-primary-darkest font-semibold no-underline items-center justify-center' do %>
+              <%= link_to student_dashboard_path, class: 'flex text-white py-4 hover:bg-primary-900 font-semibold no-underline items-center justify-center' do %>
                 <i class="fas fa-user-graduate fa-fw text-sm"></i>
               <% end %>
             </li>
           <% end %>
           <% if presenter.coach_profile?(@course) %>
             <li>
-              <%= link_to course_coach_dashboard_path(@course), class: 'flex text-white py-4 hover:bg-primary-darkest font-semibold no-underline items-center justify-center' do %>
+              <%= link_to course_coach_dashboard_path(@course), class: 'flex text-white py-4 hover:bg-primary-900 font-semibold no-underline items-center justify-center' do %>
                 <i class="fas fa-clipboard-check fa-fw text-sm"></i>
               <% end %>
             </li>
           <% end %>
           <li>
-            <%= link_to destroy_user_session_path, method: :delete, class: 'flex text-white py-4 hover:bg-primary-darkest font-semibold no-underline items-center justify-center' do %>
+            <%= link_to destroy_user_session_path, method: :delete, class: 'flex text-white py-4 hover:bg-primary-900 font-semibold no-underline items-center justify-center' do %>
               <i class="fas fa-sign-out fa-fw text-sm"></i>
             <% end %>
           </li>

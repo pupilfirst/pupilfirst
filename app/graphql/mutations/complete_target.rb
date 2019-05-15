@@ -4,17 +4,14 @@ module Mutations
 
     description "Mark a un-reviewed target as complete"
 
-    field :success, Boolean, null: false
+    field :errors, [String], null: false
 
     def resolve(params)
       mutator = CompleteTargetMutator.new(params, context)
 
-      if mutator.valid?
-        mutator.complete target
-        { success: true }
-      else
-        { success: false }
-      end
+      mutator.complete target if mutator.valid?
+
+      { errors: mutator.error_codes }
     end
   end
 end

@@ -3,7 +3,7 @@ class CoursesController < ApplicationController
   def show
     @course = authorize(Course.find(params[:id]))
     @presenter = Courses::ShowPresenter.new(view_context, @course)
-    render layout: 'tailwind'
+    render layout: 'student_course'
   end
 
   # GET /courses/:id/leaderboard?weeks_before=

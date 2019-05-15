@@ -8,7 +8,7 @@ class TargetsController < ApplicationController
   def show
     target = authorize(Target.find(params[:id]))
     @presenter = Targets::ShowPresenter.new(view_context, target)
-    render 'courses/show', layout: 'tailwind'
+    render 'courses/show', layout: 'student_course'
   end
 
   # GET /targets/select2_search

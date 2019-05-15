@@ -3,7 +3,6 @@ class CompleteTargetMutator < ApplicationMutator
 
   validates :target_id, presence: true
 
-  validate :must_be_auto_complete_target
   validate :must_be_incomplete
 
   def complete_target
@@ -11,12 +10,6 @@ class CompleteTargetMutator < ApplicationMutator
   end
 
   private
-
-  def must_be_auto_complete_target
-    return if timeline_event.pending_review?
-
-    errors[:base] << 'ReviewRequired'
-  end
 
   def must_be_incomplete
     return if current_founder.timeline_events.where(target: target).empty?
@@ -28,7 +21,7 @@ class CompleteTargetMutator < ApplicationMutator
     @target ||= Target.live.find_by(id: target_id)
   end
 
-  # Founders who can access an un-reviewed target.
+  # Target must be non-reviewed and student must have access to target.
   def authorized?
     current_founder.present? && target.present? &&
       target.evaluation_criteria.blank? &&

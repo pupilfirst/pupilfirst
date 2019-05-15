@@ -6,4 +6,6 @@
   <%= javascript_pack_tag 'CoursesShowPack', nonce: true %>
 <% end %>
 
-<div id="react-root" data-json-props="<%= @presenter.json_props %>"></div>
+<% content_for(:inner_wrapper) do %>
+  <div id="react-root" data-json-props="<%= @presenter.props_to_json %>"></div>
+<% end %>

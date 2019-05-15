@@ -5,10 +5,6 @@ module Courses
       super(view_context)
     end
 
-    def json_props
-      camelize_keys(props).to_json
-    end
-
     def page_title
       "#{@course.name} | #{current_school.name}"
     end
@@ -32,7 +28,13 @@ module Courses
     end
 
     def course_details
-      @course.attributes.slice('id', 'name', 'max_grade', 'pass_grade', 'grade_labels', 'ends_at')
+      details = @course.attributes.slice('id', 'name', 'max_grade', 'pass_grade', 'ends_at')
+
+      details['grade_labels'] = @course.grade_labels.map do |key, value|
+        { grade: key, label: value }
+      end
+
+      details
     end
 
     def levels
@@ -48,10 +50,10 @@ module Courses
     end
 
     def targets
-      attributes = 'id', 'role', 'title', 'target_group_id', 'sort_index', 'resubmittable'
+      attributes = %w[id role title target_group_id sort_index resubmittable]
 
-      @course.targets.where(archived: false).select(attributes).map do |target|
-        target.attributes.slice(attributes)
+      @course.targets.where(archived: false).select(*attributes).map do |target|
+        target.attributes.slice(*attributes)
       end
     end
 
@@ -80,7 +82,7 @@ module Courses
 
       UserProfile.where(school: current_school, user_id: user_ids).with_attached_avatar.map do |user_profile|
         profile = user_profile.attributes.slice('user_id', 'name')
-        profile['avatar_url'] = view.url_for(user_profile.avatar_variant(:thumb)) if user_profile.avatar.attached?
+        profile['avatar_url'] = user_profile.avatar.attached? ? view.url_for(user_profile.avatar_variant(:thumb)) : nil
         profile
       end
     end

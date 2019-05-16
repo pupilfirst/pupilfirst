@@ -548,8 +548,8 @@ let make =
         <div className="drawer-right__close absolute">
           <button
             onClick={_ => hideEditorActionCB()}
-            className="flex items-center justify-center bg-white text-gray-800 font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
-            <i className="material-icons"> {"close" |> str} </i>
+            className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none mt-4">
+            <i className="fal fa-times text-xl" />
           </button>
         </div>
         <div className={formClasses(state.saving)}>
@@ -866,9 +866,7 @@ let make =
                           }
                         )
                         className="flex items-center bg-gray-200 hover:bg-gray-400 border-2 border-dashed rounded-lg p-3 cursor-pointer mb-5">
-                        <i className="material-icons">
-                          {"add_circle_outline" |> str}
-                        </i>
+                        <i className="far fa-plus-circle text-lg" />
                         <h5 className="font-semibold ml-2">
                           {"Add another Question" |> str}
                         </h5>

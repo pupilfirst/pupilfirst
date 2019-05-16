@@ -301,8 +301,8 @@ let make =
         <div className="drawer-right__close absolute">
           <button
             onClick={_e => closeFormCB()}
-            className="flex items-center justify-center bg-white text-gray-800 font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
-            <i className="material-icons"> {"close" |> str} </i>
+            className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none mt-4">
+            <i className="fal fa-times text-xl" />
           </button>
         </div>
         <div className="drawer-right-form w-full">
@@ -554,9 +554,9 @@ let make =
                     <label
                       className="input-file__label flex px-4 items-center font-semibold rounded text-sm"
                       htmlFor="file">
-                      <i className="material-icons mr-2 text-gray-600">
-                        {"file_upload" |> str}
-                      </i>
+                      <i
+                        className="fas fa-upload mr-2 text-gray-600 text-lg"
+                      />
                       <span className="truncate">
                         {avatarUploaderText() |> str}
                       </span>

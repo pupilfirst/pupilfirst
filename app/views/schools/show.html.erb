@@ -63,15 +63,15 @@
                   </div>
                   <div class="flex items-end p-4 text-xs items-center">
                     <% if course[:submissions_count] == 0 %>
-                      <i class="material-icons mr-1 text-sm text-gray-600 bg-gray-200 p-1 rounded">inbox</i>
+                      <i class="fal fa-inbox mr-2 text-2xl text-gray-600 bg-gray-200 p-1 rounded"></i>
                       <div class="text-gray-600">No student submissions yet!</div>
                     <% elsif course[:submissions_count] == course[:evaluated_submissions_count] %>
-                      <i class="material-icons mr-1 text-sm text-green-600 bg-green-200 p-1 rounded">done</i>
+                      <i class="fal fa-badge-check mr-2 text-2xl text-green-600 bg-green-200 p-1 rounded"></i>
                       <div class="text-green-600">
                         <%= course[:evaluated_submissions_count] %>/<%= course[:submissions_count] %> submissions reviewed.
                       </div>
                     <% else %>
-                      <i class="material-icons mr-1 text-sm text-orange-600 bg-orange-200 p-1 rounded">alarm</i>
+                      <i class="fal fa-alarm-clock mr-2 text-2xl text-orange-600 bg-orange-200 p-1 rounded"></i>
                       <div class="text-orange-600">
                         <%= course[:evaluated_submissions_count] %>/<%= course[:submissions_count] %> submissions reviewed.
                       </div>

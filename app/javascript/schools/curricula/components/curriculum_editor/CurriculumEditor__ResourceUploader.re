@@ -212,9 +212,7 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
                 <label
                   className="input-file__label flex px-4 items-center font-semibold rounded text-sm"
                   htmlFor="file">
-                  <i className="material-icons mr-2 text-gray-600">
-                    {"file_upload" |> str}
-                  </i>
+                  <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
                   <span className="truncate"> {state.fileName |> str} </span>
                 </label>
               </div> :

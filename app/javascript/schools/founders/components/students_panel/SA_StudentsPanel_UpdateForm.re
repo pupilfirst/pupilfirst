@@ -214,15 +214,14 @@ let make =
         <div className="drawer-right__close absolute">
           <button
             onClick={_e => closeFormCB()}
-            className="flex items-center justify-center bg-gray-200 text-gray-800 font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
-            <i className="material-icons"> {"close" |> str} </i>
+            className="flex items-center justify-center bg-gray-200 text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none mt-4">
+            <i className="fal fa-times text-xl" />
           </button>
         </div>
         <div className="drawer-right-form w-full">
           <div className="w-full">
             <div className="mx-auto bg-white">
-              <div
-                className="flex items-centre py-6 pl-16 mb-4 bg-gray-200">
+              <div className="flex items-centre py-6 pl-16 mb-4 bg-gray-200">
                 <img
                   className="w-12 h-12 rounded-full mr-4"
                   src={studentUserProfile |> UserProfile.avatarUrl}

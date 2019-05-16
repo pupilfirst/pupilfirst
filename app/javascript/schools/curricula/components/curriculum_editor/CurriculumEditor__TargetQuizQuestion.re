@@ -73,7 +73,7 @@ let make =
           {
             questionCanBeRemoved ?
               <button
-                className="flex items-center flex-no-shrink bg-white px-1 rounded-lg text-gray-600 hover:text-gray-800 text-xs"
+                className="flex items-center flex-no-shrink bg-white p-2 rounded-lg text-gray-600 hover:text-gray-700 text-xs"
                 type_="button"
                 title="Remove Quiz Question"
                 onClick={
@@ -82,7 +82,7 @@ let make =
                     removeQuizQuestionCB(quizQuestion |> QuizQuestion.id);
                   }
                 }>
-                <i className="material-icons"> {"delete_outline" |> str} </i>
+                <i className="fas fa-trash-alt text-lg" />
               </button> :
               ReasonReact.null
           }

@@ -255,14 +255,12 @@ let make =
                     ),
                   )
               }>
-              <i className="material-icons"> {"edit" |> str} </i>
+              <i className="fas fa-pencil" />
             </button>
             <button
               className="btn btn-primary ml-4"
               onClick={_ => send(UpdateEditorAction(ShowLevelEditor(None)))}>
-              <i className="material-icons mr-1 text-xl">
-                {"add_circle_outline" |> str}
-              </i>
+              <i className="fal fa-layer-plus mr-2 text-lg" />
               {"Create Level" |> str}
             </button>
           </div>

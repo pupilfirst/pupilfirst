@@ -427,13 +427,9 @@ let make =
                   ReasonReact.null :
                   <button
                     onClick={_e => send(UpdateFormVisible(CreateForm))}
-                    className="hover:bg-purple-600 text-purple-600 font-semibold hover:text-white focus:outline-none border border-dashed border-blue hover:border-transparent flex items-center px-2 py-1 rounded-lg cursor-pointer">
-                    <i className="material-icons mr-2">
-                      {"add_circle_outline" |> str}
-                    </i>
-                    <h5 className="font-semibold ml-2">
-                      {"Add New Students" |> str}
-                    </h5>
+                    className="btn btn-primary ml-4">
+                    <i className="far fa-user-plus mr-2" />
+                    <span> {"Add New Students" |> str} </span>
                   </button>
               }
             </div>
@@ -463,11 +459,15 @@ let make =
                     (state.filterVisible ? "Hide" : "Show") ++ " Filters" |> str
                   }
                 </p>
-                <i className="material-icons md-48">
-                  {
-                    (state.filterVisible ? "expand_less" : "expand_more") |> str
+                <FaIcon
+                  classes={
+                    "far ml-1 text-sm"
+                    ++ (
+                      state.filterVisible ?
+                        " fa-chevron-up" : " fa-chevron-down"
+                    )
                   }
-                </i>
+                />
               </div>
             </div>
           </div>

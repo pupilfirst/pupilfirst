@@ -29,7 +29,7 @@ let make = (~courses, ~currentCourse, _children) => {
           onClick={_ => send(ToggleShowDropDown)}
           className="appearance-none flex items-center justify-between font-medium relative px-4 py-2 rounded w-full">
           {currentCourse |> Course.name |> str}
-          <i className="material-icons"> {"arrow_drop_down" |> str} </i>
+          <i className="far fa-chevron-down text-gray-600" />
         </button>
         {
           state.showDropDown ?

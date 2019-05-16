@@ -255,7 +255,7 @@ let make =
       ReasonReact.Update({...state, filterVisible: !state.filterVisible})
     },
   render: ({state, send}) =>
-    <div className="flex flex-1 flex-col bg-grey-lightest overflow-hidden">
+    <div className="flex flex-1 flex-col bg-gray-100 overflow-hidden">
       {
         let closeFormCB = () => send(UpdateFormVisible(None));
         let submitFormCB = (teams, students, userProfiles, tags) => {
@@ -314,7 +314,7 @@ let make =
               | Some(n) => n |> string_of_int
               }
             }
-            className="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-4 py-2 pr-8 rounded leading-tight leading-normal focus:outline-none">
+            className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded leading-tight leading-normal focus:outline-none">
             <option value="all"> {"All levels" |> str} </option>
             {
               levels
@@ -336,7 +336,7 @@ let make =
             }
           </select>
           <div
-            className="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+            className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-800">
             <Icon kind=Icon.Down size="3" />
           </div>
         </div>
@@ -344,7 +344,7 @@ let make =
       <div className="overflow-y-scroll">
         <div className="px-3">
           <div
-            className="max-w-lg h-16 bg-white mx-auto relative rounded border-b p-4 mt-3 w-full flex items-center justify-between">
+            className="max-w-3xl h-16 bg-white mx-auto relative rounded border-b p-4 mt-3 w-full flex items-center justify-between">
             <div className="flex">
               <label className="flex items-center leading-tight mr-4 my-auto">
                 <input
@@ -360,7 +360,7 @@ let make =
                 />
                 <span
                   id="selected-students"
-                  className="ml-2 text-sm text-grey-dark">
+                  className="ml-2 text-sm text-gray-600">
                   {
                     let selectedCount = state.selectedStudents |> List.length;
                     let studentCount =
@@ -381,7 +381,7 @@ let make =
               {
                 false ?
                   <button
-                    className="bg-grey-lighter hover:bg-grey-light hover:text-grey-darker focus:outline-none text-grey-dark text-sm font-semibold py-2 px-4 rounded inline-flex items-center mx-2">
+                    className="bg-gray-200 hover:bg-gray-400 hover:text-gray-800 focus:outline-none text-gray-600 text-sm font-semibold py-2 px-4 rounded inline-flex items-center mx-2">
                     {"Add tags" |> str}
                   </button> :
                   ReasonReact.null
@@ -397,7 +397,7 @@ let make =
                           authenticityToken,
                         )
                     }
-                    className="bg-transparent hover:bg-purple-dark focus:outline-none text-purple-dark text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
+                    className="bg-transparent hover:bg-purple-600 focus:outline-none text-purple-600 text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
                     {"Group as Team" |> str}
                   </button> :
                   ReasonReact.null
@@ -417,7 +417,7 @@ let make =
                           authenticityToken,
                         )
                     }
-                    className="bg-transparent hover:bg-purple-dark focus:outline-none text-purple-dark text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
+                    className="bg-transparent hover:bg-purple-600 focus:outline-none text-purple-600 text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
                     {"Move out from Team" |> str}
                   </button> :
                   ReasonReact.null
@@ -427,19 +427,15 @@ let make =
                   ReasonReact.null :
                   <button
                     onClick={_e => send(UpdateFormVisible(CreateForm))}
-                    className="hover:bg-purple-dark text-purple-dark font-semibold hover:text-white focus:outline-none border border-dashed border-blue hover:border-transparent flex items-center px-2 py-1 rounded-lg cursor-pointer">
-                    <i className="material-icons mr-2">
-                      {"add_circle_outline" |> str}
-                    </i>
-                    <h5 className="font-semibold ml-2">
-                      {"Add New Students" |> str}
-                    </h5>
+                    className="btn btn-primary ml-4">
+                    <i className="far fa-user-plus mr-2" />
+                    <span> {"Add New Students" |> str} </span>
                   </button>
               }
             </div>
           </div>
           <div
-            className="max-w-lg bg-white mx-auto relative rounded rounded-b-none border-b px-4 py-3 mt-3 w-full">
+            className="max-w-3xl bg-white mx-auto relative rounded rounded-b-none border-b px-4 py-3 mt-3 w-full">
             <div className="flex items-center justify-between">
               <input
                 type_="search"
@@ -463,20 +459,24 @@ let make =
                     (state.filterVisible ? "Hide" : "Show") ++ " Filters" |> str
                   }
                 </p>
-                <i className="material-icons md-48">
-                  {
-                    (state.filterVisible ? "expand_less" : "expand_more") |> str
+                <FaIcon
+                  classes={
+                    "far ml-1 text-sm"
+                    ++ (
+                      state.filterVisible ?
+                        " fa-chevron-up" : " fa-chevron-down"
+                    )
                   }
-                </i>
+                />
               </div>
             </div>
           </div>
         </div>
-        <div className="flex bg-grey-lightest pb-6">
-          <div className="flex flex-col max-w-lg mx-auto w-full">
+        <div className="flex bg-gray-100 pb-6">
+          <div className="flex flex-col max-w-3xl mx-auto w-full">
             {
               state.filterVisible && state.tags |> List.length > 0 ?
-                <div className="px-4 py-3 border-b bg-grey-lighter shadow">
+                <div className="px-4 py-3 border-b bg-gray-200 shadow">
                   <div className="flex flex-col pt-2">
                     <div className="mb-1 text-sm"> {"Filters:" |> str} </div>
                     <SA_StudentsPanel_SearchableTagList
@@ -512,9 +512,7 @@ let make =
                          id={team |> Team.name}
                          className={
                            "student-team-container flex items-center shadow bg-white rounded-lg mb-4 overflow-hidden"
-                           ++ (
-                             isSingleFounder ? " hover:bg-grey-lightest" : ""
-                           )
+                           ++ (isSingleFounder ? " hover:bg-gray-100" : "")
                          }>
                          <div className="flex-1 w-3/5">
                            {
@@ -538,11 +536,11 @@ let make =
                                          )
                                       |> UserProfile.name
                                     }
-                                    className="student-team__card cursor-pointer flex items-center bg-white hover:bg-grey-lightest">
+                                    className="student-team__card cursor-pointer flex items-center bg-white hover:bg-gray-100">
                                     <div className="flex-1 w-3/5">
                                       <div className="flex items-center">
                                         <label
-                                          className="block text-grey leading-tight font-bold px-4 py-5"
+                                          className="block text-gray-500 leading-tight font-bold px-4 py-5"
                                           htmlFor=checkboxId>
                                           <input
                                             className="leading-tight"
@@ -612,7 +610,7 @@ let make =
                                                        state.searchString
                                                        |> String.lowercase,
                                                      ) ?
-                                                    "bg-yellow-light" : ""
+                                                    "bg-yellow-400" : ""
                                                 )
                                               }>
                                               {
@@ -716,7 +714,7 @@ let make =
                            </div>
                            <div className="w-2/5 text-center">
                              <span
-                               className="inline-flex flex-col rounded bg-indigo-lightest px-2 py-1">
+                               className="inline-flex flex-col rounded bg-indigo-100 px-2 py-1">
                                <div className="text-xs">
                                  {"Level" |> str}
                                </div>

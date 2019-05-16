@@ -4,13 +4,13 @@
 <% end %>
 
 <% if params[:subscribed] == 'true' %>
-  <div class="bg-green-lighter p-2 text-center">
+  <div class="bg-green-200 p-2 text-center">
     <span class="font-bold">Thank you!</span> We'll let you know when PupilFirst is open for registration.
   </div>
 <% end %>
 
 <header class="home-header">
-  <div class="container max-w-2xl mx-auto px-4">
+  <div class="container max-w-6xl mx-auto px-4">
     <nav class="flex py-5 justify-between items-center">
       <%= image_tag 'home/pupilfirst/pupilfirst-logo.svg', class: 'w-48', alt: 'PupilFirst' %>
     </nav>
@@ -19,7 +19,7 @@
 
 <main>
   <section class="hero border-b flex">
-    <div class="container max-w-2xl mx-auto px-4 flex items-center flex-wrap overflow-hidden">
+    <div class="container max-w-6xl mx-auto px-4 flex items-center flex-wrap overflow-hidden">
       <div class="w-full lg:w-1/2"><h1 class="hero__heading-text font-bold">Focus on your
         <span class="block hero__heading-text-xl font-extrabold">students.</span></h1>
 
@@ -27,10 +27,10 @@
           PupilFirst gives you a proven method to keep your students engaged while keeping you, the teacher, always in
           the loop.</p>
 
-        <form class="w-full max-w-sm" method="POST" action="https://sibforms.com/serve/MUIEAGPNGj-sxJ4rcBsLfEVQheyk0pW1uv74C9DZDUzNgua_sy1KA0XrcSQ1ZhIwZjwR8bW1JHTtKn3OgmkPiSDivnNJlHNlSJDlKmfZiS-e5RN-FjKgZdvapznPHp06t4iQv1BHtKP6fLRgd-soT3GwabwXgYD-o1q0m5FC5m1yvaNoy7NdfiUTTxtBErSGB2p4GUo8hCb_WIeQ">
+        <form class="w-full max-w-md" method="POST" action="https://sibforms.com/serve/MUIEAGPNGj-sxJ4rcBsLfEVQheyk0pW1uv74C9DZDUzNgua_sy1KA0XrcSQ1ZhIwZjwR8bW1JHTtKn3OgmkPiSDivnNJlHNlSJDlKmfZiS-e5RN-FjKgZdvapznPHp06t4iQv1BHtKP6fLRgd-soT3GwabwXgYD-o1q0m5FC5m1yvaNoy7NdfiUTTxtBErSGB2p4GUo8hCb_WIeQ">
           <div class="flex py-4">
-            <input name="defaultEMAIL" autocomplete="off" required aria-label="Email" class="flex-1 appearance-none block border w-full bg-grey-lighter text-grey-darkest rounded-tl-lg rounded-bl-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey" placeholder="Enter your email address" type="email"/>
-            <button class="flex-none bg-primary uppercase hover:bg-primary-dark focus:outline-none focus:bg-primary-darker text-sm text-white font-bold py-3 px-4 rounded-tr-lg rounded-br-lg tracking-normal" type="submit">
+            <input name="defaultEMAIL" autocomplete="off" required aria-label="Email" class="flex-1 appearance-none block border w-full bg-gray-200 text-gray-900 rounded-tl-lg rounded-bl-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray" placeholder="Enter your email address" type="email"/>
+            <button class="flex-none bg-primary-500 uppercase hover:bg-primary-600 focus:outline-none focus:bg-primary-800 text-sm text-white font-bold py-3 px-4 rounded-tr-lg rounded-br-lg tracking-normal" type="submit">
               Notify me
             </button>
           </div>
@@ -44,7 +44,7 @@
   </section>
 
   <section class="content flex">
-    <div class="container max-w-2xl mx-auto px-4 py-20 flex flex-wrap">
+    <div class="container max-w-6xl mx-auto px-4 py-20 flex flex-wrap">
       <div class="w-full lg:w-1/2">
         <p class="leading-normal mb-8">Teachers can have decades of experience dealing with students and their
           needs offline. But online teaching is a different beast, involving new issues such as demotivation among
@@ -60,14 +60,14 @@
       <div class="w-full md:w-3/5 lg:w-1/2 mx-auto">
         <div class="content__register bg-white flex items-center text-center shadow-lg p-4 lg:p-10 lg:ml-20">
           <div>
-            <div class="rounded-full bg-indigo-lighter h-24 w-24 mx-auto mt-4 mb-5"></div>
+            <div class="rounded-full bg-indigo-200 h-24 w-24 mx-auto mt-4 mb-5"></div>
             <h2 class="text-2xl font-bold leading-tight">Want to see everything you can do on PupilFirst?</h2>
             <a class="font-semibold py-8 inline-block" href="#" target="_blank">Check out how it works</a>
             <p>or reach out to us - we'd be happy to have a chat.</p>
             <form class="w-full max-w-sm" method="POST" action="https://sibforms.com/serve/MUIEAGPNGj-sxJ4rcBsLfEVQheyk0pW1uv74C9DZDUzNgua_sy1KA0XrcSQ1ZhIwZjwR8bW1JHTtKn3OgmkPiSDivnNJlHNlSJDlKmfZiS-e5RN-FjKgZdvapznPHp06t4iQv1BHtKP6fLRgd-soT3GwabwXgYD-o1q0m5FC5m1yvaNoy7NdfiUTTxtBErSGB2p4GUo8hCb_WIeQ">
               <div class="flex py-4">
-                <input name="defaultEMAIL" aria-label="Email" class="flex-1 appearance-none block border w-full bg-grey-lighter text-grey-darkest rounded-tl-lg rounded-bl-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey" placeholder="Enter your email address" type="email"/>
-                <button class="flex-none bg-primary uppercase hover:bg-primary-dark focus:outline-none focus:bg-primary-darker text-sm text-white font-bold py-3 px-4 rounded-tr-lg rounded-br-lg tracking-normal" type="submit">
+                <input name="defaultEMAIL" aria-label="Email" class="flex-1 appearance-none block border w-full bg-gray-200 text-gray-900 rounded-tl-lg rounded-bl-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray" placeholder="Enter your email address" type="email"/>
+                <button class="flex-none bg-primary-500 uppercase hover:bg-primary-600 focus:outline-none focus:bg-primary-800 text-sm text-white font-bold py-3 px-4 rounded-tr-lg rounded-br-lg tracking-normal" type="submit">
                   Notify me
                 </button>
               </div>
@@ -79,10 +79,10 @@
   </section>
 </main>
 
-<footer class="bg-primary-darkest">
-  <div class="container max-w-2xl mx-auto px-4 py-6 flex items-center justify-between">
+<footer class="bg-primary-900">
+  <div class="container max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
     <%= image_tag 'home/pupilfirst/pupilfirst-logo-footer.svg', class: 'w-32 opacity-75', alt: 'PupilFirst' %>
-    <ul class="footer__social-list flex list-reset">
+    <ul class="footer__social-list flex">
       <li>
         <a class="footer__social-list__icon inline-block opacity-75" href="#">
           <%= image_tag 'home/pupilfirst/facebook-social-icon.svg', class:'w-6', alt: 'PupilFirst' %>

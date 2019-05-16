@@ -164,7 +164,7 @@ let make =
     <div className="flex-1 flex flex-col">
       <div className="bg-white p-4 md:hidden shadow border-b">
         <button
-          className="hamburger hamburger--arrow hover:bg-grey-lighter focus:outline-none">
+          className="hamburger hamburger--arrow hover:bg-gray-200 focus:outline-none">
           <span className="hamburger-box">
             <span className="hamburger-inner" />
           </span>
@@ -202,10 +202,9 @@ let make =
           />
         }
       }
-      <div
-        className="px-6 pb-4 flex-1 bg-grey-lightest relative overflow-y-scroll">
+      <div className="px-6 pb-4 flex-1 bg-gray-100 relative overflow-y-scroll">
         <div
-          className="max-w-lg flex py-4 items-center relative md:sticky pin-t z-20 bg-grey-lightest border-b justify-between mx-auto">
+          className="max-w-3xl flex py-4 items-center relative md:sticky top-0 z-20 bg-gray-100 border-b justify-between mx-auto">
           <div className="flex">
             <div className="inline-block relative w-auto md:w-64">
               <select
@@ -220,7 +219,7 @@ let make =
                   }
                 }
                 value={currentLevel |> Level.name}
-                className="block appearance-none w-full bg-white border text-sm border-grey-light hover:border-grey px-4 py-3 pr-8 rounded-r-none leading-tight focus:outline-none">
+                className="block appearance-none w-full bg-white border text-sm border-gray-400 hover:border-gray-500 px-4 py-3 pr-8 rounded-r-none leading-tight focus:outline-none">
                 {
                   state.levels
                   |> Level.sort
@@ -242,12 +241,12 @@ let make =
                 }
               </select>
               <div
-                className="pointer-events-none absolute pin-y pin-r flex items-center px-3 text-grey-darker">
+                className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-800">
                 <Icon kind=Icon.Down size="3" />
               </div>
             </div>
             <button
-              className="flex text-grey-dark hover:text-grey-darkest text-sm font-bold border border-l-0 py-1 px-2 rounded-r focus:outline-none"
+              className="flex text-gray-600 hover:text-gray-900 text-sm font-bold border border-l-0 py-1 px-2 rounded-r focus:outline-none"
               onClick={
                 _ =>
                   send(
@@ -256,21 +255,19 @@ let make =
                     ),
                   )
               }>
-              <i className="material-icons"> {"edit" |> str} </i>
+              <i title="edit" className="fas fa-pencil" />
             </button>
             <button
               className="btn btn-primary ml-4"
               onClick={_ => send(UpdateEditorAction(ShowLevelEditor(None)))}>
-              <i className="material-icons mr-1 text-xl">
-                {"add_circle_outline" |> str}
-              </i>
-              {"Create Level" |> str}
+              <i className="fal fa-layer-plus mr-2 text-lg" />
+              <span> {"Create Level" |> str} </span>
             </button>
           </div>
           {
             showArchivedButton(targetGroupsInLevel, state.targets) ?
               <button
-                className="bg-indigo-lightest hover:bg-indigo text-indigo-dark text-sm hover:text-indigo-lightest font-semibold py-2 px-4 rounded focus:outline-none"
+                className="bg-indigo-100 hover:bg-indigo text-indigo-600 text-sm hover:text-indigo-100 font-semibold py-2 px-4 rounded focus:outline-none"
                 onClick={_ => send(ToggleShowArchived)}>
                 {
                   (state.showArchived ? "Hide Archived" : "Show Archived")
@@ -281,7 +278,7 @@ let make =
           }
         </div>
         <div
-          className="target-group__container max-w-lg mt-5 mx-auto relative">
+          className="target-group__container max-w-3xl mt-5 mx-auto relative">
           {
             targetGroupsToDisplay
             |> List.map(targetGroup =>
@@ -301,7 +298,7 @@ let make =
             onClick={
               _ => send(UpdateEditorAction(ShowTargetGroupEditor(None)))
             }
-            className="target-group__create flex items-center relative bg-grey-lighter border-2 border-dashed p-6 z-10 rounded-lg mt-12 cursor-pointer">
+            className="target-group__create flex items-center relative bg-gray-200 border-2 border-dashed p-6 z-10 rounded-lg mt-12 cursor-pointer">
             <Icon kind=Icon.PlusCircle size="8" />
             <h4 className="font-semibold ml-2">
               {"Create a target group" |> str}

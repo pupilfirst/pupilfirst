@@ -78,7 +78,7 @@ feature 'Curriculum Editor' do
     expect(page).to have_text("Level Name")
     fill_in 'Level Name', with: new_level_name
     fill_in 'Unlock level on', with: date.day.to_s + "/" + date.month.to_s + "/" + date.year.to_s
-    click_button 'Create Level'
+    click_button 'Create New Level'
     expect(page).to have_text("Level created successfully")
     find('.ui-pnotify-container').click
 
